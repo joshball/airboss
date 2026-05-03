@@ -60,12 +60,6 @@ export const HANDBOOK_DOC_EDITIONS: Record<string, Record<string, string>> = {
 	iph: {
 		'8083-16B': 'FAA-H-8083-16B',
 	},
-	'amt-general': {
-		'8083-30B': 'FAA-H-8083-30B',
-	},
-	'amt-powerplant': {
-		'8083-32B': 'FAA-H-8083-32B',
-	},
 	// Non-FAA-H-numbered FAA pamphlet (Tips on Mountain Flying). Edition slug
 	// = `mtn-2003` (current public FAA-hosted version is undated; traced to
 	// the early-2000s authoring window). On-disk dir uses uppercase to match

@@ -127,14 +127,7 @@ describe('DOC_ID_TO_FRIENDLY', () => {
 	it('covers every doc_id in the canonical YAML', () => {
 		// Authoritative list per scripts/sources/config/handbooks-extras.yaml. If
 		// this drifts, ingest.test.ts fails before the live YAML can mismatch.
-		const expected = [
-			'faa-h-8083-2',
-			'faa-h-8083-9',
-			'faa-h-8083-15',
-			'faa-h-8083-16',
-			'faa-h-8083-30',
-			'faa-h-8083-32',
-		];
+		const expected = ['faa-h-8083-2', 'faa-h-8083-9', 'faa-h-8083-15', 'faa-h-8083-16'];
 		for (const docId of expected) {
 			expect(DOC_ID_TO_FRIENDLY[docId]).toBeDefined();
 		}
@@ -377,11 +370,7 @@ describe('runHandbooksExtrasIngest -- live cache (smoke)', () => {
 		'ingests all 5 active cached handbooks against the live YAML',
 		async () => {
 			// Use the live YAML so this also validates that the YAML and
-			// DOC_ID_TO_FRIENDLY agree. AMT-G/P are deferred via YAML
-			// commenting (see scripts/sources/config/handbooks-extras.yaml);
-			// they remain in DOC_ID_TO_FRIENDLY for one-line un-deferral but
-			// are not part of the active corpus, so the expected ingested
-			// count is 5, not 7.
+			// DOC_ID_TO_FRIENDLY agree.
 			_setHandbooksExtrasYamlPath(null);
 			const report = await runHandbooksExtrasIngest({ cacheRoot: liveCache, derivativeRoot: tempDerivative });
 			expect(report.ingested).toBe(5);

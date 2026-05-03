@@ -161,7 +161,7 @@ This is the sequenced path to "everything readable as section-tree" excluding ne
 
 | # | WP | Status | Effect |
 |---|----|--------|--------|
-| 1 | AMT-G/P removal | 🟡 in flight (dispatched 2026-05-03) | -2 corpus entries; cleanup |
+| 1 | AMT-G/P removal | ✅ shipped (#505) | -2 corpus entries |
 | 2 | Cleanup sweep | ❌ not started | Reconcile YAML cards (`ac-25-7`, `ac-61-65`, `ac-91-21-1`, `ac-120-71`); delete dupes; PCG decision; orphan delete |
 | 3 | RMH section-tree promotion | ❌ not started | RMH chapter-tree from `RiskMgmtHdbk-TOC.md` |
 | 4 | mtn-flying section-tree promotion (from override) | ❌ not started | Parse the existing `body_override` markdown into a section-tree manifest |

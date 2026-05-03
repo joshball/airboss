@@ -48,9 +48,8 @@ export interface ManifestSection {
  * The `body_path` + `body_sha256` + `page_count` fields are populated by the
  * `handbooks-extras` pipeline (`libs/sources/src/handbooks-extras/`) for
  * whole-doc-only Class C handbooks (`risk-management`, `ifh`, `iph`,
- * `amt-general`, `amt-powerplant`, `aviation-instructor`). Chapter-aware
- * handbooks leave them undefined and supply per-section body paths via
- * `sections[]`.
+ * `aviation-instructor`, `tips-mountain-flying`). Chapter-aware handbooks
+ * leave them undefined and supply per-section body paths via `sections[]`.
  */
 export interface ManifestFile {
 	readonly document_slug: string;

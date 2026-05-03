@@ -1,10 +1,16 @@
 /**
  * Catalogue of FAA aviation handbooks scanned by `bun run sources discover-errata`.
  *
- * Covers all 17 handbooks the FAA publishes today, even though airboss only
+ * Covers the 15 pilot-relevant FAA aviation handbooks, even though airboss only
  * ingests a subset (PHAK, AFH, AvWX). The discovery scan is cheap (one HTML
  * GET per parent page on a weekly trigger) and the cost of missing a handbook
  * onboarding signal is far higher than the cost of one extra HTTP request.
+ *
+ * AMT-General (FAA-H-8083-30) and AMT-Powerplant (FAA-H-8083-32) -- the two
+ * pure maintenance-technician handbooks -- are intentionally out of scope for
+ * airboss (no pilot-training relevance). AMT-Airframe stays on the catalogue
+ * because the FAA still publishes it; we keep the discovery signal even
+ * though we don't currently ingest it.
  *
  * Each entry indicates `actionable` (handbook has an ingestion plugin under
  * `tools/handbook-ingest/ingest/handbooks/<slug>.py`) or `signal-only` (no
@@ -55,8 +61,8 @@ export interface HandbookCatalogueEntry {
 export const COMMON_ERRATA_TOKENS: readonly string[] = ['addendum', 'errata', 'change', 'summary_of_changes'];
 
 /**
- * The 17 FAA aviation handbooks. Order is alphabetical by slug; insertion
- * order is preserved when the discovery scan iterates the catalogue.
+ * The 15 pilot-relevant FAA aviation handbooks. Order is alphabetical by slug;
+ * insertion order is preserved when the discovery scan iterates the catalogue.
  */
 export const HANDBOOK_CATALOGUE: readonly HandbookCatalogueEntry[] = [
 	{
@@ -94,24 +100,6 @@ export const HANDBOOK_CATALOGUE: readonly HandbookCatalogueEntry[] = [
 		parentPageUrl: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aircraft/amt_airframe_handbook',
 		tier: DISCOVERY_TIERS.SIGNAL_ONLY,
 		filenameTokens: ['airframe', 'amt', '8083-31'],
-	},
-	{
-		slug: 'amt-general',
-		title: 'Aviation Maintenance Technician Handbook -- General',
-		docId: 'FAA-H-8083-30',
-		currentEdition: 'FAA-H-8083-30B',
-		parentPageUrl: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aircraft/amt_general_handbook',
-		tier: DISCOVERY_TIERS.SIGNAL_ONLY,
-		filenameTokens: ['amt_general', 'amt-general', '8083-30'],
-	},
-	{
-		slug: 'amt-powerplant',
-		title: 'Aviation Maintenance Technician Handbook -- Powerplant',
-		docId: 'FAA-H-8083-32',
-		currentEdition: 'FAA-H-8083-32B',
-		parentPageUrl: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aircraft/amt_powerplant_handbook',
-		tier: DISCOVERY_TIERS.SIGNAL_ONLY,
-		filenameTokens: ['powerplant', '8083-32'],
 	},
 	{
 		slug: 'avwx',
@@ -214,11 +202,11 @@ export const HANDBOOK_CATALOGUE: readonly HandbookCatalogueEntry[] = [
 	},
 ];
 
-if (HANDBOOK_CATALOGUE.length !== 17) {
+if (HANDBOOK_CATALOGUE.length !== 15) {
 	throw new Error(
-		`HANDBOOK_CATALOGUE must contain exactly 17 entries (one per FAA aviation handbook); ` +
-			`got ${HANDBOOK_CATALOGUE.length}. Update the catalogue, then update the spec / PR ` +
-			`description to match.`,
+		`HANDBOOK_CATALOGUE must contain exactly 15 entries (one per pilot-relevant FAA aviation ` +
+			`handbook); got ${HANDBOOK_CATALOGUE.length}. Update the catalogue, then update the ` +
+			`spec / PR description to match.`,
 	);
 }
 

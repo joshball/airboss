@@ -66,14 +66,6 @@ export const DOC_DISPLAY: Record<string, { readonly short: string; readonly form
 		short: 'IPH',
 		formal: 'Instrument Procedures Handbook',
 	},
-	'amt-general': {
-		short: 'AMT-G',
-		formal: 'Aviation Maintenance Technician Handbook -- General',
-	},
-	'amt-powerplant': {
-		short: 'AMT-P',
-		formal: 'Aviation Maintenance Technician Handbook -- Powerplant',
-	},
 };
 
 export interface IngestOneHandbookArgs {

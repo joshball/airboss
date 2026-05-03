@@ -1619,7 +1619,7 @@ export const REFERENCE_SECTION_LEVELS = {
 	APPENDIX: 'appendix',
 	/** AIM Pilot/Controller Glossary entry (top-level, flat). */
 	GLOSSARY: 'glossary',
-	/** Whole-doc handbooks (post-#384 risk-mgmt, instructor, IFH, IPH, AMT-G, AMT-P). */
+	/** Whole-doc handbooks (post-#384 risk-mgmt, instructor, IFH, IPH, mtn-tips). */
 	DOCUMENT: 'document',
 	/**
 	 * FAA Advisory Circular whole-document body (WP-AC). One row per AC at

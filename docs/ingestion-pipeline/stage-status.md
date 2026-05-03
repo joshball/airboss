@@ -1,6 +1,6 @@
 # Stage status
 
-Per-corpus pipeline status across the five ingestion stages. Snapshot date: 2026-05-03.
+Per-corpus pipeline status across the five ingestion stages. Snapshot date: 2026-05-04.
 
 For *what* each stage means, see [pipeline.md](pipeline.md). For the per-asset cache inventory, see [inventory.md](inventory.md).
 
@@ -21,7 +21,7 @@ The line between stages 3 and 4 is what makes a reference go from "useful link" 
 | Corpus | Sourced | Extracted | Catalogued | Seeded | Cross-linked |
 | ------ | ------- | --------- | ---------- | ------ | ------------ |
 | Handbooks (PHAK / AFH / AVWX) | ✅ | ✅ | ✅ | ✅ section-tree | partial |
-| Handbooks-extras (RMH / AIH / IFH / IPH / mtn-tips, plus deferred AMT-G/P) | ✅ | ✅ | ✅ | ✅ whole-doc | minimal |
+| Handbooks-extras (RMH / AIH / IFH / IPH / mtn-tips) | ✅ | ✅ | ✅ | ✅ whole-doc | minimal |
 | AIM | ✅ | ✅ | ✅ | ✅ section-tree | not yet |
 | **CFR (14 + 49)** | ✅ | ✅ (3 manifests, 11 cards) | ✅ | **✅ section-tree NEW (#491)** | not yet |
 | AC | ✅ | partial (9 manifests, 17 cards) | ✅ | ❌ | not yet |
@@ -38,7 +38,7 @@ For example, AC has 9 on-disk manifests covering specific advisory circulars (61
 
 ## Readable reference count
 
-**22 readable references on `/library`** as of 2026-05-03:
+**20 readable references on `/library`** as of 2026-05-04:
 
 ### Section-tree readable (15)
 
@@ -61,7 +61,7 @@ For example, AC has 9 on-disk manifests covering specific advisory circulars (61
 | 49 CFR Part 830 | 2026-04 | 6 | Section-tree (WP-CFR) |
 | 49 CFR Part 1552 | 2026-04 | 16 | Section-tree (WP-CFR) |
 
-### Whole-doc readable (7)
+### Whole-doc readable (5)
 
 | Reference | Edition | Notes |
 | --------- | ------- | ----- |
@@ -69,8 +69,6 @@ For example, AC has 9 on-disk manifests covering specific advisory circulars (61
 | Aviation Instructor | 8083-9 | Whole-doc |
 | IFH | 8083-15B | Whole-doc |
 | IPH | 8083-16B | Whole-doc |
-| AMT-General | 8083-30B | Whole-doc (ingestion deferred per `handbooks-extras.yaml`; bytes still present and seeded) |
-| AMT-Powerplant | 8083-32B | Whole-doc (same deferral) |
 | Tips on Mountain Flying | mtn-2003 | Whole-doc, hand-curated body via `body_override` (#489) |
 
 ## Near-term gaps

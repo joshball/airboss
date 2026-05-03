@@ -8,9 +8,9 @@
  * `<repo>/handbooks/<friendly-slug>/<faa-dir>/`, and registers entries in
  * the @ab/sources registry. Idempotent.
  *
- * Closes library-broad-extraction-survey gap 5 -- the six Class C
- * whole-doc-only handbooks (risk-management, aviation-instructor, IFH,
- * IPH, AMT-G, AMT-P) had no register pipeline before this command.
+ * Closes library-broad-extraction-survey gap 5 -- the Class C whole-doc-only
+ * handbooks (risk-management, aviation-instructor, IFH, IPH, mtn-tips)
+ * had no register pipeline before this command.
  */
 
 import { runIngestCli } from '@ab/sources/handbooks-extras';

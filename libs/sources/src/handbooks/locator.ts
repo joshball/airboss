@@ -27,7 +27,7 @@ import type { LocatorError, ParsedHandbooksLocator, ParsedLocator } from '../typ
  * extending `DOC_EDITIONS` in `resolver.ts`.
  *
  * The first three (`phak`, `afh`, `avwx`) are chapter-aware Class A/C handbooks
- * with per-chapter PDFs and section-level extraction. The remaining six are
+ * with per-chapter PDFs and section-level extraction. The remainder are
  * whole-doc-only Class C handbooks ingested via the `handbooks-extras`
  * pipeline (`libs/sources/src/handbooks-extras/`); they have no chapter splits
  * and only the `<doc>/<edition>` whole-doc locator form has a registry entry.
@@ -40,8 +40,6 @@ export const HANDBOOK_DOC_SLUGS: readonly string[] = [
 	'aviation-instructor',
 	'ifh',
 	'iph',
-	'amt-general',
-	'amt-powerplant',
 	'tips-mountain-flying',
 ];
 
