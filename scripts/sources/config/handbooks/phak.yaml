@@ -12,6 +12,10 @@ publisher: FAA
 # values must be valid `AviationTopic` members. Drives subject grouping
 # at /library.
 subjects: [aerodynamics, aircraft-systems, weather]
+# Library-by-cert placement. Forwarded to `study.reference.primary_cert`
+# by the seeder; null = cert-agnostic. Closed vocabulary -- value must
+# be one of CERT_APPLICABILITY_VALUES.
+primary_cert: private
 
 # -----------------------------------------------------------------------------
 # Source download (TS downloader)

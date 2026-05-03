@@ -89,6 +89,7 @@ def test_full_config_round_trips_dismissed_field(monkeypatch: pytest.MonkeyPatch
         'title': 'PHAK',
         'kind': 'handbook',
         'source_url': 'https://www.faa.gov/x.pdf',
+        'subjects': ['weather'],
         'dismissed_errata': [
             {
                 'url': 'https://www.faa.gov/sites/x/y/false-positive.pdf',

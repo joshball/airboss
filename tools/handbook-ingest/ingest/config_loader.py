@@ -78,6 +78,25 @@ PAGE_LABEL_WALK_BACK_DEFAULT = 5
 # fixes. Each value is a printed FAA page reference verbatim, e.g. "17-100".
 CHAPTER_OVERRIDE_KEYS = frozenset({"faa_page_start", "faa_page_end"})
 
+# Allowed `primary_cert` values. Mirrors `CERT_APPLICABILITIES` in
+# `libs/constants/src/reference-tags.ts`. The TS-side schema validates the
+# manifest against the same list; keeping the Python set in sync at write
+# time avoids producing a manifest the seeder will later reject.
+PRIMARY_CERT_VALUES = frozenset(
+    {
+        "student",
+        "sport",
+        "recreational",
+        "private",
+        "instrument",
+        "commercial",
+        "cfi",
+        "cfii",
+        "atp",
+        "all",
+    }
+)
+
 # NOTE: `prompt.chapter_text_max_chars` has no module-level default.
 # The value is empirical (longest chapter * 1.2, rounded up to next 25K) and
 # must be set explicitly in any handbook YAML configured for
@@ -142,6 +161,12 @@ class HandbookConfig:
     # Library-index aviation-topic subjects (1..3 entries). Required so that
     # re-running ingest doesn't drop the field from the manifest.
     subjects: list[str] = field(default_factory=list)
+    # Optional library-by-cert placement. Mirrors `referenceEntrySchema.primary_cert`
+    # in `scripts/db/seed-references.ts` and the section-tree manifest schema
+    # in `libs/bc/study/src/manifest-validation.ts`. The seeder forwards this
+    # to `study.reference.primary_cert`; the DB CHECK constraint is the
+    # storage safety net. None / null = cert-agnostic.
+    primary_cert: str | None = None
     # Per chapter-source-ingestion WP: optional whole-doc descriptor (when
     # present, supersedes `source_url` for download-side use). The TS
     # downloader reads `whole_doc.url`; legacy code reads `source_url`. Both
@@ -169,12 +194,17 @@ class HandbookConfig:
     # strategies. Required when either strategy is selected; ignored
     # otherwise.
     toc_file: str | None = None
-    # Library-by-cert placement (mirrors the field the manifest schema
-    # accepts). One of `CERT_APPLICABILITY_VALUES` or null. Optional --
-    # legacy YAMLs may omit it and rely on a YAML override file or a
-    # post-processed manifest patch. New section-tree handbooks should
-    # declare it here so the manifest is the canonical placement source.
-    primary_cert: str | None = None
+    # Optional regex applied to L1 bookmark titles when
+    # `outline_strategy: bookmark`. When set, only L1 entries whose title
+    # matches survive in the outline; their L2/L3 descendants ride along.
+    # All other L1 entries (and their descendants) are dropped before the
+    # chapter counter ticks, so chapter ordinals match the printed handbook
+    # numbering. Used when a publisher's bookmark tree intermixes
+    # front-matter / back-matter L1 entries (Preface, Introduction, Glossary,
+    # Index, Appendix Introduction) with the chapters proper. Example for
+    # RMH: `'^(Chapter \\d+|Appendix [A-Z])\\b'`. None disables the filter
+    # (default), preserving the legacy "every L1 is a chapter" behavior.
+    bookmark_chapter_filter: str | None = None
     # Per-chapter title corrections when the auto-detector produces a partial
     # or wrong title. Keyed by chapter number (string in YAML); applied after
     # the content scan in detect_outline_from_text.
@@ -357,14 +387,10 @@ def load_config(document_slug: str) -> HandbookConfig:
             f"(got {len(subjects_raw)}). See AVIATION_TOPIC_VALUES in libs/constants."
         )
 
-    # Optional `primary_cert:` -- mirrors the manifest schema field. Validation
-    # is light (string or null); the canonical enum check lives in the seeders.
-    primary_cert_raw = raw.get("primary_cert", None)
-    if primary_cert_raw is not None and not isinstance(primary_cert_raw, str):
-        raise ConfigError(
-            f"{config_path}: 'primary_cert' must be a string or null "
-            f"(got {type(primary_cert_raw).__name__})."
-        )
+    primary_cert = _load_primary_cert(raw.get("primary_cert"), config_path)
+    bookmark_chapter_filter = _load_bookmark_chapter_filter(
+        raw.get("bookmark_chapter_filter"), config_path
+    )
 
     # Optional `toc_file:` -- relative path to a hand-extracted TOC markdown.
     # Required when outline_strategy or section_strategy is `toc-file-sidecar`.
@@ -392,6 +418,7 @@ def load_config(document_slug: str) -> HandbookConfig:
         kind=raw.get("kind", "handbook"),
         source_url=source_url,
         subjects=[str(s) for s in subjects_raw],
+        primary_cert=primary_cert,
         whole_doc=whole_doc,
         chapter_pdfs=chapter_pdfs,
         excluded_assets=[str(s) for s in excluded_assets_raw],
@@ -402,7 +429,7 @@ def load_config(document_slug: str) -> HandbookConfig:
         table_prefix_pattern=raw.get("table_prefix_pattern", r"Table (\d+)-(\d+)\."),
         outline_strategy=outline_strategy,
         toc_file=(toc_file_raw.strip() if isinstance(toc_file_raw, str) and toc_file_raw.strip() else None),
-        primary_cert=primary_cert_raw,
+        bookmark_chapter_filter=bookmark_chapter_filter,
         title_overrides={str(k): str(v) for k, v in (raw.get("title_overrides") or {}).items()},
         section_strategy=section_strategy,
         chapter_text_max_chars=(
@@ -667,3 +694,57 @@ def _load_extraction_hints(raw: object, config_path: Path) -> list[str]:
             )
         out.append(cleaned)
     return out
+
+
+def _load_primary_cert(raw: object, config_path: Path) -> str | None:
+    """Parse the YAML ``primary_cert:`` field.
+
+    None / missing produces None (cert-agnostic). When set, the value must
+    be one of :data:`PRIMARY_CERT_VALUES`. The TS-side schema in
+    ``libs/bc/study/src/manifest-validation.ts`` re-validates against the
+    same list when the manifest is consumed by the seeder; keeping the two
+    in sync is part of the migration to YAML-as-source-of-truth (#390).
+    """
+    if raw is None:
+        return None
+    if not isinstance(raw, str):
+        raise ConfigError(
+            f"primary_cert in {config_path} must be a string or null; "
+            f"got {type(raw).__name__}."
+        )
+    if raw not in PRIMARY_CERT_VALUES:
+        raise ConfigError(
+            f"primary_cert={raw!r} in {config_path} is not one of "
+            f"{sorted(PRIMARY_CERT_VALUES)!r}."
+        )
+    return raw
+
+
+def _load_bookmark_chapter_filter(raw: object, config_path: Path) -> str | None:
+    """Parse the YAML ``bookmark_chapter_filter:`` field.
+
+    Optional regex. None / missing disables the filter. When set, must be
+    a non-empty string that compiles as a Python regex. The matcher applies
+    to L1 bookmark titles in :func:`outline.parse_outline` to filter out
+    front-matter / back-matter bookmarks (Preface, Glossary, Index, ...).
+    """
+    if raw is None:
+        return None
+    if not isinstance(raw, str):
+        raise ConfigError(
+            f"bookmark_chapter_filter in {config_path} must be a string or null; "
+            f"got {type(raw).__name__}."
+        )
+    cleaned = raw.strip()
+    if not cleaned:
+        raise ConfigError(
+            f"bookmark_chapter_filter in {config_path} is empty; omit the "
+            f"field instead of leaving an empty string."
+        )
+    try:
+        re.compile(cleaned)
+    except re.error as exc:
+        raise ConfigError(
+            f"bookmark_chapter_filter in {config_path} is not a valid regex: {exc}"
+        ) from exc
+    return cleaned

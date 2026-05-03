@@ -44,6 +44,7 @@ title: Test Handbook
 publisher: FAA
 kind: handbook
 source_url: https://example.invalid/test.pdf
+subjects: [weather]
 """
 
 
@@ -224,3 +225,94 @@ def test_extraction_hints_rejects_non_list(tmp_path: Path, monkeypatch) -> None:
     with pytest.raises(ConfigError) as excinfo:
         load_config("test")
     assert "must be a list of strings" in str(excinfo.value)
+
+
+# ----- primary_cert -----------------------------------------------------------
+
+
+def test_primary_cert_default_none(tmp_path: Path, monkeypatch) -> None:
+    body = _VALID_HEADER + "section_strategy: toc\n"
+    _seed_yaml(tmp_path, "test", body, monkeypatch)
+    config = load_config("test")
+    assert config.primary_cert is None
+
+
+def test_primary_cert_loaded_when_present(tmp_path: Path, monkeypatch) -> None:
+    body = _VALID_HEADER + "section_strategy: toc\nprimary_cert: private\n"
+    _seed_yaml(tmp_path, "test", body, monkeypatch)
+    config = load_config("test")
+    assert config.primary_cert == "private"
+
+
+def test_primary_cert_explicit_null(tmp_path: Path, monkeypatch) -> None:
+    body = _VALID_HEADER + "section_strategy: toc\nprimary_cert: null\n"
+    _seed_yaml(tmp_path, "test", body, monkeypatch)
+    config = load_config("test")
+    assert config.primary_cert is None
+
+
+def test_primary_cert_rejects_unknown_value(tmp_path: Path, monkeypatch) -> None:
+    body = _VALID_HEADER + "section_strategy: toc\nprimary_cert: bogus\n"
+    _seed_yaml(tmp_path, "test", body, monkeypatch)
+    with pytest.raises(ConfigError) as excinfo:
+        load_config("test")
+    assert "primary_cert='bogus'" in str(excinfo.value)
+
+
+def test_primary_cert_rejects_non_string(tmp_path: Path, monkeypatch) -> None:
+    body = _VALID_HEADER + "section_strategy: toc\nprimary_cert: 7\n"
+    _seed_yaml(tmp_path, "test", body, monkeypatch)
+    with pytest.raises(ConfigError) as excinfo:
+        load_config("test")
+    assert "primary_cert" in str(excinfo.value)
+
+
+# ----- bookmark_chapter_filter ------------------------------------------------
+
+
+def test_bookmark_chapter_filter_default_none(tmp_path: Path, monkeypatch) -> None:
+    body = _VALID_HEADER + "section_strategy: toc\n"
+    _seed_yaml(tmp_path, "test", body, monkeypatch)
+    config = load_config("test")
+    assert config.bookmark_chapter_filter is None
+
+
+def test_bookmark_chapter_filter_loaded_when_present(
+    tmp_path: Path, monkeypatch
+) -> None:
+    body = (
+        _VALID_HEADER
+        + "section_strategy: toc\n"
+        + "bookmark_chapter_filter: '^(Chapter \\d+|Appendix [A-Z])\\b'\n"
+    )
+    _seed_yaml(tmp_path, "test", body, monkeypatch)
+    config = load_config("test")
+    assert config.bookmark_chapter_filter == r"^(Chapter \d+|Appendix [A-Z])\b"
+
+
+def test_bookmark_chapter_filter_rejects_invalid_regex(
+    tmp_path: Path, monkeypatch
+) -> None:
+    body = (
+        _VALID_HEADER
+        + "section_strategy: toc\n"
+        + "bookmark_chapter_filter: '['\n"  # unterminated bracket
+    )
+    _seed_yaml(tmp_path, "test", body, monkeypatch)
+    with pytest.raises(ConfigError) as excinfo:
+        load_config("test")
+    assert "not a valid regex" in str(excinfo.value)
+
+
+def test_bookmark_chapter_filter_rejects_empty_string(
+    tmp_path: Path, monkeypatch
+) -> None:
+    body = (
+        _VALID_HEADER
+        + "section_strategy: toc\n"
+        + "bookmark_chapter_filter: ''\n"
+    )
+    _seed_yaml(tmp_path, "test", body, monkeypatch)
+    with pytest.raises(ConfigError) as excinfo:
+        load_config("test")
+    assert "is empty" in str(excinfo.value)
