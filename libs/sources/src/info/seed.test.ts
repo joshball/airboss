@@ -102,7 +102,7 @@ describe('seedInfoFromManifest', () => {
 		const report = await seedInfoFromManifest();
 		expect(report.entriesRegistered).toBeGreaterThan(0);
 		expect(report.skipReasons).toEqual([]);
-		const known = 'airboss-ref:info/21010' as SourceId;
+		const known = 'airboss-ref:info/23001' as SourceId;
 		expect(productionRegistry.hasEntry(known)).toBe(true);
 	});
 });

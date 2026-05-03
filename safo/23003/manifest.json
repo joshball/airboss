@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "kind": "safo",
+  "corpus": "safo",
+  "bulletin_id": "23003",
+  "title": "Carriage of Battery Powered Mobility Aids (BPMA) on aircraft",
+  "publisher": "FAA",
+  "publication_date": "2023-04-19",
+  "audience": null,
+  "source_url": "https://www.faa.gov/sites/faa.gov/files/SAFO23003.pdf",
+  "source_sha256": "31472a6aa0e9fb0871a698b18d56d253c5ab1ac3069a76f3043c27d6b13a0013",
+  "fetched_at": "2026-05-03T21:41:34.860Z",
+  "page_count": 2,
+  "body_path": "safo/23003/safo-23003.md",
+  "body_sha256": "1b3ced010b7ffc04e5a545f9e6e65c51262d639d7237912b4ef837203bc49d17",
+  "sections": [
+    {
+      "code": "subject",
+      "ordinal": 0,
+      "title": "Subject",
+      "source_locator": "SAFO 23003 -- Subject",
+      "body_path": "safo/23003/sections/00-subject.md",
+      "content_hash": "5509d1c14f3d181b8e3d30d0f8ff67e610e09e27ea57a603a4d93d6050a8ce79"
+    },
+    {
+      "code": "purpose",
+      "ordinal": 1,
+      "title": "Purpose",
+      "source_locator": "SAFO 23003 -- Purpose",
+      "body_path": "safo/23003/sections/01-purpose.md",
+      "content_hash": "907a6625b2c71e419dd5c1204214bd606ec4546039c3a97760c3e2147ab41746"
+    },
+    {
+      "code": "background",
+      "ordinal": 2,
+      "title": "Background",
+      "source_locator": "SAFO 23003 -- Background",
+      "body_path": "safo/23003/sections/02-background.md",
+      "content_hash": "da5ad9829db780e93863452bdc5af2743ba0e58e3f61ffba16b8f1c5d62ffa95"
+    },
+    {
+      "code": "discussion",
+      "ordinal": 3,
+      "title": "Discussion",
+      "source_locator": "SAFO 23003 -- Discussion",
+      "body_path": "safo/23003/sections/03-discussion.md",
+      "content_hash": "8aa1380fd2182234545da15b3a915114662cabe33d482c8dbc9cba9bbabb83b4"
+    },
+    {
+      "code": "recommended-action",
+      "ordinal": 4,
+      "title": "Recommended Action",
+      "source_locator": "SAFO 23003 -- Recommended Action",
+      "body_path": "safo/23003/sections/04-recommended-action.md",
+      "content_hash": "fe792c01fdc0a91129299c9a217e767a4c9e2ecffafbc2a461eb76885d993e5b"
+    },
+    {
+      "code": "contact",
+      "ordinal": 5,
+      "title": "Contact",
+      "source_locator": "SAFO 23003 -- Contact",
+      "body_path": "safo/23003/sections/05-contact.md",
+      "content_hash": "c6a7ebee72893e8f425795486bdfa756bbb443da507102dd506c2a93de3e3e15"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+# FAA Information for Operators (InFOs) referenced by airboss content.
+#
+# Sibling to `safos.yaml`. InFOs are advisory bulletins from FAA Flight
+# Standards Service; they share the same 1-3 page format, 5-digit id, and
+# immutable-post-publication semantics as SAFOs.
+#
+# Slug shape: `info-<NNNNN>`. Edition: `InFO <NNNNN>`.
+
+references:
+  - slug: info-23001
+    kind: info
+    edition: InFO 23001
+    title: 'Use of Aircraft Approach Category During Instrument Approach Operations'
+    publisher: FAA
+    url: https://www.faa.gov/sites/faa.gov/files/InFO23001.pdf
+    subjects: [procedures, performance]
+    primary_cert: null
+
+  - slug: info-23006
+    kind: info
+    edition: InFO 23006
+    title: 'Special Airworthiness Information Bulletins (SAIB) AIR 21-19R1: Incorrect Breakaway Pin Installations'
+    publisher: FAA
+    url: https://www.faa.gov/sites/faa.gov/files/InFO23006.pdf
+    subjects: [maintenance, certification]
+    primary_cert: null
+
+  - slug: info-24001
+    kind: info
+    edition: InFO 24001
+    title: 'NWS Real-Time Mesoscale Analysis (RTMA)'
+    publisher: FAA
+    url: https://www.faa.gov/sites/faa.gov/files/InFO24001.pdf
+    subjects: [weather]
+    primary_cert: null
+
+  - slug: info-25001
+    kind: info
+    edition: InFO 25001
+    title: 'Work Flexibility for Lactating Flightcrew Members Onboard Aircraft'
+    publisher: FAA
+    url: https://www.faa.gov/sites/faa.gov/files/InFO25001.pdf
+    subjects: [human-factors, medical]
+    primary_cert: null

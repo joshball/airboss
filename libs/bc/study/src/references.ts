@@ -856,19 +856,26 @@ export async function upsertReference(input: UpsertReferenceInput, db: Db = defa
 	// the manifest-phase adapters (which know the per-kind level vocabulary
 	// and pass `sectionSchema`) and the YAML phase (which doesn't carry the
 	// vocabulary and would otherwise overwrite it back to `{ levels: [] }`).
-	// On conflict, only overwrite `sectionSchema` if the caller supplied one;
-	// otherwise preserve whatever the manifest phase already attached.
+	// On conflict, only overwrite caller-controlled fields when they were
+	// actually supplied; passing `undefined` should preserve the existing DB
+	// value rather than blanking it. This lets the manifest-phase seeders
+	// (AC, ACS, NTSB-ALJ, SAFO, InFO) leave subjects + primary_cert alone so
+	// the YAML-phase values survive when the manifest phase runs second.
 	const onConflictSet: Record<string, unknown> = {
 		kind: input.kind,
 		title: input.title,
 		publisher: input.publisher ?? 'FAA',
 		url: input.url ?? null,
-		subjects,
-		primaryCert: input.primaryCert ?? null,
 		metadata,
 		seedOrigin: input.seedOrigin ?? null,
 		updatedAt: new Date(),
 	};
+	if (input.subjects !== undefined) {
+		onConflictSet.subjects = subjects;
+	}
+	if (input.primaryCert !== undefined) {
+		onConflictSet.primaryCert = input.primaryCert ?? null;
+	}
 	if (input.sectionSchema !== undefined) {
 		onConflictSet.sectionSchema = sectionSchema;
 	}

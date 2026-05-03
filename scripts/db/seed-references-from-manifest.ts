@@ -71,7 +71,9 @@ import { seedAcManifest } from '../../libs/bc/study/src/seeders/ac';
 import { seedAcsManifest } from '../../libs/bc/study/src/seeders/acs';
 import { seedAimManifest } from '../../libs/bc/study/src/seeders/aim';
 import { seedCfrManifest } from '../../libs/bc/study/src/seeders/cfr';
+import { seedInfoManifest } from '../../libs/bc/study/src/seeders/info';
 import { seedNtsbAljManifest } from '../../libs/bc/study/src/seeders/ntsb-alj';
+import { seedSafoManifest } from '../../libs/bc/study/src/seeders/safo';
 import { seedSectionTreeManifest } from '../../libs/bc/study/src/seeders/section-tree';
 import { emptySummary, type SeedContext, type SeedSummary } from '../../libs/bc/study/src/seeders/types';
 import { seedWholeDocManifest } from '../../libs/bc/study/src/seeders/whole-doc';
@@ -84,7 +86,7 @@ const REPO_ROOT = resolve(HERE, '..', '..');
  * relative to the repo root; the seeder enumerates `<dir>/<doc>/<edition>/
  * manifest.json` under it. Add new corpora here as their WPs land.
  */
-const CORPUS_DIRS = ['handbooks', 'aim', 'ac', 'regulations', 'acs', 'ntsb-alj'] as const;
+const CORPUS_DIRS = ['handbooks', 'aim', 'ac', 'regulations', 'acs', 'safo', 'info', 'ntsb-alj'] as const;
 
 /**
  * Corpora where the single-doc layout (`<corpus>/<child>/manifest.json`)
@@ -92,10 +94,12 @@ const CORPUS_DIRS = ['handbooks', 'aim', 'ac', 'regulations', 'acs', 'ntsb-alj']
  * should key on `<child>`, not on `<corpus>`). ACS is the canonical case --
  * each ACS publication has its own slug under `acs/<slug>/`. AIM, by
  * contrast, treats `aim/<edition>/` as editions of one logical document
- * (slug = `aim`). Listed by membership rather than auto-detected so the
- * convention stays explicit.
+ * (slug = `aim`). SAFOs and InFOs follow the ACS convention: each bulletin
+ * id under `safo/<id>/` is its own logical document (immutable post-
+ * publication, no edition grouping). Listed by membership rather than
+ * auto-detected so the convention stays explicit.
  */
-const SINGLE_DOC_KEY_BY_CHILD: ReadonlySet<string> = new Set(['acs']);
+const SINGLE_DOC_KEY_BY_CHILD: ReadonlySet<string> = new Set(['acs', 'safo', 'info']);
 
 /**
  * Corpora that are rolling publications (not editioned): the dispatcher
@@ -226,6 +230,10 @@ async function dispatchManifest(manifestPath: string, context: SeedContext, summ
 			return seedCfrManifest(manifest, { manifestAbsPath: manifestPath }, context, summary);
 		case 'acs':
 			return [await seedAcsManifest(manifest, context, summary)];
+		case 'safo':
+			return [await seedSafoManifest(manifest, context, summary)];
+		case 'info':
+			return [await seedInfoManifest(manifest, context, summary)];
 		case 'ntsb-alj':
 			return [await seedNtsbAljManifest(manifest, context, summary)];
 	}

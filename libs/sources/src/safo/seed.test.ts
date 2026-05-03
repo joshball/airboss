@@ -30,12 +30,12 @@ describe('seedSafoFromManifest', () => {
 		writeFileSync(
 			manifestPath,
 			`safo:
-  - id: '21002'
-    canonical_short: SAFO 21002
-    canonical_formal: FAA Safety Alert for Operators 21002
-    canonical_title: FAA SAFO 21002
+  - id: '23001'
+    canonical_short: SAFO 23001
+    canonical_formal: FAA Safety Alert for Operators 23001
+    canonical_title: FAA SAFO 23001
     editions:
-      - id: '2021'
+      - id: '2023'
         lifecycle: accepted
 `,
 			'utf-8',
@@ -45,7 +45,7 @@ describe('seedSafoFromManifest', () => {
 		expect(report.entriesRegistered).toBe(1);
 		expect(report.skipReasons).toEqual([]);
 
-		const id = 'airboss-ref:safo/21002' as SourceId;
+		const id = 'airboss-ref:safo/23001' as SourceId;
 		expect(productionRegistry.hasEntry(id)).toBe(true);
 		expect(productionRegistry.getEntry(id)?.lifecycle).toBe('accepted');
 	});
@@ -102,7 +102,7 @@ describe('seedSafoFromManifest', () => {
 		const report = await seedSafoFromManifest();
 		expect(report.entriesRegistered).toBeGreaterThan(0);
 		expect(report.skipReasons).toEqual([]);
-		const known = 'airboss-ref:safo/21002' as SourceId;
+		const known = 'airboss-ref:safo/23001' as SourceId;
 		expect(productionRegistry.hasEntry(known)).toBe(true);
 	});
 });

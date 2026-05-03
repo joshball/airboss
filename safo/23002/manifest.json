@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "kind": "safo",
+  "corpus": "safo",
+  "bulletin_id": "23002",
+  "title": "Aviation Safety Call to Action",
+  "publisher": "FAA",
+  "publication_date": "2023-03-22",
+  "audience": null,
+  "source_url": "https://www.faa.gov/sites/faa.gov/files/SAFO23002.pdf",
+  "source_sha256": "4c1ed67b5abaa758cea5bcef03b4d232ad2de2e19a3f5be5c19bd7f4509e53f4",
+  "fetched_at": "2026-05-03T21:41:34.860Z",
+  "page_count": 2,
+  "body_path": "safo/23002/safo-23002.md",
+  "body_sha256": "a797fc278469527c7950328b40b161df310231e42e2ba6ec90f5d31ba7335a6e",
+  "sections": [
+    {
+      "code": "subject",
+      "ordinal": 0,
+      "title": "Subject",
+      "source_locator": "SAFO 23002 -- Subject",
+      "body_path": "safo/23002/sections/00-subject.md",
+      "content_hash": "0f6f6c75ad73551ab7a8e25c20289e0e64230ffefdbca9828471515c13d5f7a1"
+    },
+    {
+      "code": "purpose",
+      "ordinal": 1,
+      "title": "Purpose",
+      "source_locator": "SAFO 23002 -- Purpose",
+      "body_path": "safo/23002/sections/01-purpose.md",
+      "content_hash": "642d9538e12c5d17df070967414f5d9cef4a37a17353fc4b4203a07e8783f6a4"
+    },
+    {
+      "code": "background",
+      "ordinal": 2,
+      "title": "Background",
+      "source_locator": "SAFO 23002 -- Background",
+      "body_path": "safo/23002/sections/02-background.md",
+      "content_hash": "e2720b5bf7c98aa9737a02fbc08a480074b4f0eeba4f2936287e4b45e1d607e9"
+    },
+    {
+      "code": "discussion",
+      "ordinal": 3,
+      "title": "Discussion",
+      "source_locator": "SAFO 23002 -- Discussion",
+      "body_path": "safo/23002/sections/03-discussion.md",
+      "content_hash": "5e861a53b100b0c53de9e707e5323178322663bb1375b269a39415c280669ff7"
+    },
+    {
+      "code": "recommended-action",
+      "ordinal": 4,
+      "title": "Recommended Action",
+      "source_locator": "SAFO 23002 -- Recommended Action",
+      "body_path": "safo/23002/sections/04-recommended-action.md",
+      "content_hash": "c14b964e72691250c99d1a9995c938d81188e1a251cbd2d7baa18d73e5eb1063"
+    },
+    {
+      "code": "contact",
+      "ordinal": 5,
+      "title": "Contact",
+      "source_locator": "SAFO 23002 -- Contact",
+      "body_path": "safo/23002/sections/05-contact.md",
+      "content_hash": "257fb8eaae48de39a13eddcefc780abfbc6949fa76d7eb8a3e1ea875a2eaba9a"
+    }
+  ]
+}

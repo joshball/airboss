@@ -519,6 +519,26 @@ export const ROUTES = {
 	/** Named opinion section reader inside an ALJ ruling. */
 	FLIGHTBAG_NTSB_ALJ_SECTION: (caseNumber: string, section: string) =>
 		`/ntsb-alj/${encodeURIComponent(caseNumber)}/${encodeURIComponent(section)}` as const,
+	/**
+	 * Safety Alert for Operators (SAFO) reader (WP-SAFO-INFO). Whole-bulletin
+	 * landing for a single SAFO id; deep links into named bulletin sections
+	 * are added when the flightbag SAFO page lands. Until the flightbag has a
+	 * dedicated SAFO reader, the URI bridge falls back to `FLIGHTBAG_HOME`
+	 * via `urlForReference()`; this constant is reserved so callers can switch
+	 * to the canonical path in one place when the page exists.
+	 */
+	FLIGHTBAG_SAFO: (id: string) => `/safo/${encodeURIComponent(id)}` as const,
+	/** Named section reader inside a SAFO bulletin. */
+	FLIGHTBAG_SAFO_SECTION: (id: string, section: string) =>
+		`/safo/${encodeURIComponent(id)}/${encodeURIComponent(section)}` as const,
+	/**
+	 * Information for Operators (InFO) reader (WP-SAFO-INFO). Sibling to
+	 * `FLIGHTBAG_SAFO`; same shape, different FAA program.
+	 */
+	FLIGHTBAG_INFO: (id: string) => `/info/${encodeURIComponent(id)}` as const,
+	/** Named section reader inside an InFO bulletin. */
+	FLIGHTBAG_INFO_SECTION: (id: string, section: string) =>
+		`/info/${encodeURIComponent(id)}/${encodeURIComponent(section)}` as const,
 } as const;
 
 /**

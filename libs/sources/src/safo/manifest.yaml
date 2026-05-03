@@ -3,30 +3,62 @@
 # Source of truth: ADR 019 §1.2 ("SAFO") + §2.6 (registry population).
 # Loaded by `seedSafoFromManifest` in `seed.ts`.
 #
-# Locator shape: 5-digit `<YY><sequence>` id, e.g. `23004` = 2023 sequence 004.
+# Locator shape: 5-digit `<YY><sequence>` id, e.g. `23001` = 2023 sequence 001.
 # SAFOs are immutable post-publication; no `?at=` pin is required.
+#
+# Adding a new SAFO:
+#   1. Add to `scripts/sources/config/safo.yaml` (downloader URL inventory).
+#   2. Run the SAFO ingest (`bun run sources register safo`).
+#   3. Add the row to this file.
+#   4. Add the row to `course/references/safos.yaml`.
+#   5. Register the (bulletin id -> document_slug, edition) mapping in
+#      `libs/sources/src/safo/seed-mapping.ts`.
 
 safo:
-  - id: '21002'
-    canonical_short: SAFO 21002
-    canonical_formal: FAA Safety Alert for Operators 21002
-    canonical_title: FAA SAFO 21002
-    editions:
-      - id: '2021'
-        lifecycle: accepted
-
-  - id: '22004'
-    canonical_short: SAFO 22004
-    canonical_formal: FAA Safety Alert for Operators 22004
-    canonical_title: FAA SAFO 22004
-    editions:
-      - id: '2022'
-        lifecycle: accepted
-
   - id: '23001'
     canonical_short: SAFO 23001
     canonical_formal: FAA Safety Alert for Operators 23001
     canonical_title: FAA SAFO 23001
     editions:
       - id: '2023'
+        lifecycle: accepted
+
+  - id: '23002'
+    canonical_short: SAFO 23002
+    canonical_formal: FAA Safety Alert for Operators 23002
+    canonical_title: FAA SAFO 23002
+    editions:
+      - id: '2023'
+        lifecycle: accepted
+
+  - id: '23003'
+    canonical_short: SAFO 23003
+    canonical_formal: FAA Safety Alert for Operators 23003
+    canonical_title: FAA SAFO 23003
+    editions:
+      - id: '2023'
+        lifecycle: accepted
+
+  - id: '23004'
+    canonical_short: SAFO 23004
+    canonical_formal: FAA Safety Alert for Operators 23004
+    canonical_title: FAA SAFO 23004
+    editions:
+      - id: '2023'
+        lifecycle: accepted
+
+  - id: '24002'
+    canonical_short: SAFO 24002
+    canonical_formal: FAA Safety Alert for Operators 24002
+    canonical_title: FAA SAFO 24002
+    editions:
+      - id: '2024'
+        lifecycle: accepted
+
+  - id: '25001'
+    canonical_short: SAFO 25001
+    canonical_formal: FAA Safety Alert for Operators 25001
+    canonical_title: FAA SAFO 25001
+    editions:
+      - id: '2025'
         lifecycle: accepted

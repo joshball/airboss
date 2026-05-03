@@ -135,18 +135,10 @@ These are tracked as TODO: a corpus-build WP per row.
 
 | Corpus | Common name | Stage | Notes |
 |--------|-------------|-------|-------|
-| SAFO | FAA Safety Alerts For Operators | ❌ no card, no pipeline | Estimated 30-50 docs; WP-SAFO not started |
-| InFO | FAA Information For Operators | ❌ no card, no pipeline | Estimated 20-30 docs; WP-INFO not started |
-<<<<<<< HEAD
+| SAFO | FAA Safety Alerts For Operators | ✅ registry seed + per-bulletin cards (6 seeded; manual curation per Phase 1) | WP-SAFO shipped 2026-05-03 — `airboss-ref:safo/<id>`, shared bulletin seeder, registry resolver, manifest-validation `kind: 'safo'` discriminator + section-tree adapter |
+| InFO | FAA Information For Operators | ✅ registry seed + per-bulletin cards (4 seeded; manual curation per Phase 1) | WP-INFO shipped 2026-05-03 — `airboss-ref:info/<id>`, shared bulletin seeder, registry resolver, manifest-validation `kind: 'info'` discriminator + section-tree adapter |
 | Chief Counsel | FAA Office of Chief Counsel legal interpretations | ⚠️ registry-only (v1) | ~17 most-cited interpretations + 1 NTSB Board order seeded via `libs/sources/src/interp/manifest.yaml` (WP-CC v1, 2026-05-03). Citation chips resolve and link out to the FAA AGC index page. Full pipeline (rendered bodies, extractor, dedicated render route) deferred -- see `docs/work-packages/wp-cc/spec.md`. |
-| NTSB ALJ | NTSB administrative law judge rulings | ❌ no card, no pipeline | WP-NTSB-ALJ not started |
-||||||| parent of c889f8e6 (docs(references): track WP-NTSB-ALJ shipped status in references roadmap)
-| Chief Counsel | FAA Office of Chief Counsel legal interpretations | ❌ no card, no pipeline | Estimated 100-200 published opinions; WP-CC not started — highest pedagogical leverage |
-| NTSB ALJ | NTSB administrative law judge rulings | ❌ no card, no pipeline | WP-NTSB-ALJ not started |
-=======
-| Chief Counsel | FAA Office of Chief Counsel legal interpretations | ❌ no card, no pipeline | Estimated 100-200 published opinions; WP-CC not started — highest pedagogical leverage |
 | NTSB ALJ | NTSB administrative law judge rulings | ✅ registry seed + per-ruling cards (3 seeded; manual curation per Phase 1) | WP-NTSB-ALJ shipped 2026-05-03 — `airboss-ref:ntsb-alj/<case-number>`, manifest seeder, registry resolver, manifest-validation discriminator + section-tree adapter |
->>>>>>> c889f8e6 (docs(references): track WP-NTSB-ALJ shipped status in references roadmap)
 | FAA Order 8900.1 Vol 5 | Flight Standards Information Management System (Airman Cert) | ❌ deferred | Trigger to revisit: CFI content needs Vol 5 |
 | FAA Safety Briefing | FAA magazine archive | ❌ deferred | Low priority |
 | 217 long-tail CFR-14 parts | Part 27 (helicopter), Part 33 (engine), etc. | ❌ out of scope | Engineering rules pilots don't cite |
@@ -200,17 +192,9 @@ This is the sequenced path to "everything readable as section-tree" excluding ne
 | 9 | AC link-only stubs (12 cards) | ✅ shipped (WP-AC-LINK-ONLY, Wave 6) | YAML `url:` added for the 12 link-only ACs; library cards + citation chips deep-link to the FAA-hosted PDF (was the AC index landing). Body extraction (section-tree) is downstream WP-AC-FULL. |
 | 9b | AC section-tree extraction (12 link-only) | ❌ not started -- WP-AC-FULL | Add to download config + extract + section-tree seed |
 | 10 | ACS link-only completion | ✅ shipped (WP-ACS-LINK-ONLY, Wave 6) | CFII PTS (`cfii-airplane-pts-9e`, `kind: pts`) and ACS Companion Guide (`faa-g-acs-2-companion-guide`, `kind: other`) already had `url:` in YAML; status flipped from link-only to link-only stub (Sourced) |
-| 11 | New corpora — WP-SAFO + WP-INFO | ❌ not started | Pipelines are nearly identical; can be combined |
-<<<<<<< HEAD
+| 11 | New corpora — WP-SAFO + WP-INFO | ✅ shipped 2026-05-03 | Combined as one WP (identical pipeline shape). Registry resolver + manifest-validation `kind: 'safo'`/`kind: 'info'` + shared bulletin section-tree adapter; 6 SAFOs + 4 InFOs manually curated; URI scheme `airboss-ref:safo/<id>` and `airboss-ref:info/<id>` |
 | 12 | New corpora — WP-CC | ⚠️ v1 (registry-only) shipped | 17 most-cited Chief Counsel interpretations + 1 NTSB Board order in registry; full pipeline (extractor + rendered bodies + render route) deferred |
-| 13 | New corpora — WP-NTSB-ALJ | ❌ not started | Different data model from FAA pubs |
-||||||| parent of c889f8e6 (docs(references): track WP-NTSB-ALJ shipped status in references roadmap)
-| 12 | New corpora — WP-CC | ❌ not started | Highest pedagogical leverage |
-| 13 | New corpora — WP-NTSB-ALJ | ❌ not started | Different data model from FAA pubs |
-=======
-| 12 | New corpora — WP-CC | ❌ not started | Highest pedagogical leverage |
 | 13 | New corpora — WP-NTSB-ALJ | ✅ shipped 2026-05-03 | Registry resolver + manifest-validation `kind: 'ntsb-alj'` + section-tree adapter; 3 cases manually curated; URI scheme `airboss-ref:ntsb-alj/<case-number>` |
->>>>>>> c889f8e6 (docs(references): track WP-NTSB-ALJ shipped status in references roadmap)
 
 After 1-10: every cataloged FAA pilot-track publication is a readable section-tree. After 11-13: extended with auxiliary corpora.
 

@@ -661,6 +661,102 @@ export const acsManifestSchema = z.object({
 export type AcsManifest = z.infer<typeof acsManifestSchema>;
 
 /**
+ * SAFO / InFO bulletin id regex. 5 digits = 2-digit year + 3-digit sequence
+ * (e.g. `23001`). Matches `parseSafoLocator` / `parseInfoLocator` in
+ * `libs/sources/src/{safo,info}/locator.ts`.
+ */
+const BULLETIN_ID_REGEX = /^[0-9]{2}[0-9]{3}$/;
+
+/**
+ * One section row inside a SAFO / InFO manifest's `sections[]`. Bulletins
+ * are short (1-3 pages); typically the body is a single section, but when
+ * the bulletin carries internal headings (Discussion, Recommended Action,
+ * Background) each becomes its own row at depth 0 (flat tree).
+ *
+ * No nested depths: SAFOs/InFOs are short enough that a flat list of
+ * sections under the bulletin captures the structure.
+ */
+export const bulletinManifestSectionSchema = z.object({
+	/** Stable slug derived from the heading (kebab-case, e.g. `discussion`). */
+	code: z.string().regex(/^[a-z0-9][a-z0-9-]*[a-z0-9]$|^[a-z0-9]$/, {
+		message: 'bulletin section code must be lowercase kebab-case (e.g. `discussion`)',
+	}),
+	/** Position in document order (0-indexed). */
+	ordinal: z.number().int().nonnegative(),
+	/** Human-readable heading. */
+	title: z.string().min(1),
+	/** Locator string surfaced on the row (e.g. `SAFO 23001 -- Discussion`). */
+	source_locator: z.string().min(1),
+	/** Repo-relative path to the per-section markdown body file. */
+	body_path: selfDescribingPath,
+	/** SHA-256 hex digest of the markdown body file. */
+	content_hash: z.string().regex(/^[0-9a-f]{64}$/i),
+});
+export type BulletinManifestSection = z.infer<typeof bulletinManifestSectionSchema>;
+
+/**
+ * Common shape for SAFO / InFO manifests. Both corpora share an identical
+ * pipeline (short FAA bulletins, 5-digit `<YY><sequence>` id, single PDF,
+ * flat structure); the only thing that differs is the `kind` literal and the
+ * `corpus` literal. The factory keeps the shape locked to one definition.
+ *
+ * Two seeding modes:
+ *
+ *   - `sections === []`     -> single-row body (whole-bulletin) at depth 0,
+ *                              level `'bulletin'`, code `'1'`. The `body_path`
+ *                              becomes that single row's content_md and the
+ *                              manifest's `body_sha256` is the content_hash.
+ *   - `sections.length > 0` -> one row per section at depth 0, flat under the
+ *                              reference. The `body_path` is still recorded for
+ *                              audit but the seeder writes one row per
+ *                              `sections[]` entry. `level` is always `'bulletin'`
+ *                              (no deeper hierarchy).
+ *
+ * Subjects + primary_cert are NOT carried on the manifest -- those live on the
+ * YAML rows in `course/references/{safos,infos}.yaml` (seed phase precedes the
+ * handbooks phase per `seed-all.ts`).
+ */
+function makeBulletinManifestSchema<K extends 'safo' | 'info'>(corpusKind: K) {
+	return z.object({
+		kind: z.literal(corpusKind),
+		schema_version: z.number().int().positive().optional(),
+		corpus: z.literal(corpusKind),
+		/** 5-digit `<YY><sequence>` (e.g. `23001`). */
+		bulletin_id: z.string().regex(BULLETIN_ID_REGEX),
+		title: z.string().min(1),
+		publisher: z.string().min(1).default('FAA'),
+		/** ISO date when the SAFO/InFO was published; nullable when not detectable. */
+		publication_date: z
+			.string()
+			.regex(/^\d{4}-\d{2}-\d{2}$/)
+			.nullable(),
+		/** Optional FAA-published target audience (e.g. `Air carriers, repair stations`). */
+		audience: z.string().min(1).nullable().default(null),
+		source_url: z.string().url(),
+		source_sha256: z.string().regex(/^[0-9a-f]{64}$/i),
+		fetched_at: z.string().datetime({ offset: true }),
+		page_count: z.number().int().positive(),
+		body_path: selfDescribingPath,
+		body_sha256: z.string().regex(/^[0-9a-f]{64}$/i),
+		sections: z.array(bulletinManifestSectionSchema).default([]),
+	});
+}
+
+/**
+ * SAFO manifest (`kind: 'safo'`, WP-SAFO-INFO). One per SAFO under
+ * `<repo>/safo/<id>/manifest.json`.
+ */
+export const safoManifestSchema = makeBulletinManifestSchema('safo');
+export type SafoManifest = z.infer<typeof safoManifestSchema>;
+
+/**
+ * InFO manifest (`kind: 'info'`, WP-SAFO-INFO). One per InFO under
+ * `<repo>/info/<id>/manifest.json`.
+ */
+export const infoManifestSchema = makeBulletinManifestSchema('info');
+export type InfoManifest = z.infer<typeof infoManifestSchema>;
+
+/**
  * CFR manifest source-file entry (post-WP-CFR). Title 49's content is
  * assembled from multiple eCFR Versioner downloads (one per Part), so
  * `sources[]` carries every contributing fetch alongside the primary one.
@@ -821,9 +917,9 @@ export type NtsbAljManifest = z.infer<typeof ntsbAljManifestSchema>;
  * Top-level shape of `<corpus>/<doc>/<edition>/manifest.json`. Discriminated
  * union over manifest kind: section-tree (`kind: 'handbook'`), whole-doc
  * (`kind: 'whole-doc'`), AIM (`kind: 'aim'`), AC (`kind: 'ac'`), CFR
- * (`kind: 'cfr'`), ACS (`kind: 'acs'`), or NTSB-ALJ ruling
- * (`kind: 'ntsb-alj'`). The seed dispatches on the discriminator to choose
- * the right adapter.
+ * (`kind: 'cfr'`), ACS (`kind: 'acs'`), SAFO (`kind: 'safo'`), InFO
+ * (`kind: 'info'`), or NTSB-ALJ ruling (`kind: 'ntsb-alj'`). The seed
+ * dispatches on the discriminator to choose the right adapter.
  */
 export const manifestSchema = z.discriminatedUnion('kind', [
 	sectionTreeManifestSchema,
@@ -832,6 +928,8 @@ export const manifestSchema = z.discriminatedUnion('kind', [
 	acManifestSchema,
 	cfrManifestSchema,
 	acsManifestSchema,
+	safoManifestSchema,
+	infoManifestSchema,
 	ntsbAljManifestSchema,
 ]);
 export type Manifest = z.infer<typeof manifestSchema>;
@@ -874,6 +972,15 @@ const pcgLocatorSchema = z.object({
 
 const detailLocatorSchema = z.object({
 	detail: z.string().min(1).optional(),
+});
+
+/**
+ * SAFO / InFO citation locator. Bulletins are short flat documents; the only
+ * deeper-than-document anchor is an internal section slug (matches
+ * {@link bulletinManifestSectionSchema} `code`).
+ */
+const bulletinLocatorSchema = z.object({
+	section: z.string().min(1).optional(),
 });
 
 /** Pre-WP freeform shape -- three string fields, no `kind` discriminator. */
@@ -952,6 +1059,20 @@ export const structuredCitationSchema = z.discriminatedUnion('kind', [
 		kind: z.literal(REFERENCE_KINDS.POH),
 		reference_id: z.string().min(1),
 		locator: detailLocatorSchema,
+		note: z.string().optional(),
+		...structuredCitationCommonShape,
+	}),
+	z.object({
+		kind: z.literal(REFERENCE_KINDS.SAFO),
+		reference_id: z.string().min(1),
+		locator: bulletinLocatorSchema,
+		note: z.string().optional(),
+		...structuredCitationCommonShape,
+	}),
+	z.object({
+		kind: z.literal(REFERENCE_KINDS.INFO),
+		reference_id: z.string().min(1),
+		locator: bulletinLocatorSchema,
 		note: z.string().optional(),
 		...structuredCitationCommonShape,
 	}),

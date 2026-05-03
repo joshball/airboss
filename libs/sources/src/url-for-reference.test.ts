@@ -127,12 +127,40 @@ describe('urlForReference -- ntsb-alj', () => {
 	});
 });
 
+describe('urlForReference -- safo', () => {
+	it('maps a SAFO URI to FLIGHTBAG_SAFO', () => {
+		expect(urlForReference(id('airboss-ref:safo/23001'))).toBe(ROUTES.FLIGHTBAG_SAFO('23001'));
+	});
+
+	it('strips the ?at= pin before mapping', () => {
+		expect(urlForReference(id('airboss-ref:safo/23004?at=2023'))).toBe(ROUTES.FLIGHTBAG_SAFO('23004'));
+	});
+
+	it('falls back to home for malformed SAFO locators', () => {
+		expect(urlForReference(id('airboss-ref:safo/abcde'))).toBe(ROUTES.FLIGHTBAG_HOME);
+	});
+});
+
+describe('urlForReference -- info', () => {
+	it('maps an InFO URI to FLIGHTBAG_INFO', () => {
+		expect(urlForReference(id('airboss-ref:info/23006'))).toBe(ROUTES.FLIGHTBAG_INFO('23006'));
+	});
+
+	it('strips the ?at= pin before mapping', () => {
+		expect(urlForReference(id('airboss-ref:info/22008?at=2022'))).toBe(ROUTES.FLIGHTBAG_INFO('22008'));
+	});
+
+	it('falls back to home for malformed InFO locators', () => {
+		expect(urlForReference(id('airboss-ref:info/abc'))).toBe(ROUTES.FLIGHTBAG_HOME);
+	});
+});
+
 describe('urlForReference -- error cases', () => {
 	it('returns FLIGHTBAG_HOME for non-airboss-ref strings', () => {
 		expect(urlForReference(id('https://example.com/foo'))).toBe(ROUTES.FLIGHTBAG_HOME);
 	});
 
-	it('returns FLIGHTBAG_HOME for unknown corpora', () => {
-		expect(urlForReference(id('airboss-ref:safo/23004'))).toBe(ROUTES.FLIGHTBAG_HOME);
+	it('returns FLIGHTBAG_HOME for unknown corpora (e.g. asrs)', () => {
+		expect(urlForReference(id('airboss-ref:asrs/1234567'))).toBe(ROUTES.FLIGHTBAG_HOME);
 	});
 });

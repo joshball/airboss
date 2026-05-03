@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "kind": "info",
+  "corpus": "info",
+  "bulletin_id": "24001",
+  "title": "National Weather Service (NWS) Real-Time Mesoscale Analysis (RTMA)",
+  "publisher": "FAA",
+  "publication_date": "2024-01-03",
+  "audience": null,
+  "source_url": "https://www.faa.gov/sites/faa.gov/files/InFO24001.pdf",
+  "source_sha256": "8bc32cb94af062fd4774693cfd10489f0d05b09652c1d8892940d1bc33ffabf8",
+  "fetched_at": "2026-05-03T21:41:34.862Z",
+  "page_count": 3,
+  "body_path": "info/24001/info-24001.md",
+  "body_sha256": "774dfe8dfc326ba8ec89b21633134a8758c39ca2a628ac30dddbf18c09962769",
+  "sections": [
+    {
+      "code": "subject",
+      "ordinal": 0,
+      "title": "Subject",
+      "source_locator": "InFO 24001 -- Subject",
+      "body_path": "info/24001/sections/00-subject.md",
+      "content_hash": "fb40e7fd9115c72852f579af5867fd096dce7410cf00633c67cc0dd3ac98bad2"
+    },
+    {
+      "code": "purpose",
+      "ordinal": 1,
+      "title": "Purpose",
+      "source_locator": "InFO 24001 -- Purpose",
+      "body_path": "info/24001/sections/01-purpose.md",
+      "content_hash": "c0c2f7623098b5221f7640f7a68a0d04c798e44011e5d1698c65dc0074349046"
+    },
+    {
+      "code": "background",
+      "ordinal": 2,
+      "title": "Background",
+      "source_locator": "InFO 24001 -- Background",
+      "body_path": "info/24001/sections/02-background.md",
+      "content_hash": "a38b6f4d55df5ba6d41119674f73724a5199ab5f04a8cbf0f9b82fd79d33383f"
+    },
+    {
+      "code": "discussion",
+      "ordinal": 3,
+      "title": "Discussion",
+      "source_locator": "InFO 24001 -- Discussion",
+      "body_path": "info/24001/sections/03-discussion.md",
+      "content_hash": "6a8539762312ab8d1392bf60efc33ca1116815a3827a474f3ec494f8edd880d2"
+    },
+    {
+      "code": "recommended-action",
+      "ordinal": 4,
+      "title": "Recommended Action",
+      "source_locator": "InFO 24001 -- Recommended Action",
+      "body_path": "info/24001/sections/04-recommended-action.md",
+      "content_hash": "5c61156f1e8cf5b795edddd778c7f596a3082ab0d5e08ec769b4a0caedaf63f2"
+    },
+    {
+      "code": "contact",
+      "ordinal": 5,
+      "title": "Contact",
+      "source_locator": "InFO 24001 -- Contact",
+      "body_path": "info/24001/sections/05-contact.md",
+      "content_hash": "9e4e7f382afe8b02b1c18a62c0a49494bdef4d5bbd102fa3a6072f6c138f0ab3"
+    }
+  ]
+}

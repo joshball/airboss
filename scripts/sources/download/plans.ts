@@ -40,7 +40,9 @@ import {
 	loadAimConfig,
 	loadHandbookConfig,
 	loadHandbooksExtrasConfig,
+	loadInfoConfig,
 	loadRegsConfig,
+	loadSafoConfig,
 } from '../config/loader';
 import type { AimConfig, AncillaryConfig, ChapterPdfsConfig, HandbookConfig } from '../config/schemas';
 import type { CliArgs, Corpus } from './args';
@@ -157,6 +159,20 @@ export async function buildPlans(args: CliArgs, root: string, opts: BuildPlansOp
 		}
 	}
 
+	if (args.corpora.has('safo')) {
+		const safo = loadSafoConfig();
+		for (const entry of safo.entries) {
+			plans.push(flatPlan('safo', entry.doc_id, entry.edition, entry.url, entry.filename, root));
+		}
+	}
+
+	if (args.corpora.has('info')) {
+		const info = loadInfoConfig();
+		for (const entry of info.entries) {
+			plans.push(flatPlan('info', entry.doc_id, entry.edition, entry.url, entry.filename, root));
+		}
+	}
+
 	if (args.corpora.has('handbooks')) {
 		// Per-handbook configs (Class A1/A2 + Class C handbooks with their own
 		// per-edition cache dir) always run. Whole-doc + chapter PDFs + ancillary
@@ -225,7 +241,7 @@ export function buildEcfrUrl(target: RegsTarget, ecfrBase = 'https://www.ecfr.go
 }
 
 function flatPlan(
-	corpus: 'ac' | 'acs' | 'handbooks',
+	corpus: 'ac' | 'acs' | 'handbooks' | 'safo' | 'info',
 	docId: string,
 	edition: string | null,
 	url: string,

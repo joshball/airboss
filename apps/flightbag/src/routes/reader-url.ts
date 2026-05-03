@@ -47,10 +47,15 @@ export function readerUrlFor(kind: ReferenceKind, documentSlug: string, edition:
 		case REFERENCE_KINDS.ACS:
 		case REFERENCE_KINDS.PTS:
 			return ROUTES.FLIGHTBAG_ACS(documentSlug);
+		case REFERENCE_KINDS.SAFO:
+		case REFERENCE_KINDS.INFO:
 		case REFERENCE_KINDS.PCG:
 		case REFERENCE_KINDS.NTSB:
 		case REFERENCE_KINDS.POH:
 		case REFERENCE_KINDS.OTHER:
+			// SAFO + InFO bulletins ship registry-only in WP-SAFO-INFO; the
+			// flightbag reader doesn't have a per-bulletin page yet, so the
+			// library card stays inert until that surface lands.
 			return null;
 	}
 }
