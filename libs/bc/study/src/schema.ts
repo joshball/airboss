@@ -19,9 +19,13 @@ import { bauthUser } from '@ab/auth/schema';
 import {
 	ACS_TRIAD_VALUES,
 	AIRPLANE_CLASS_VALUES,
+	ASSESSMENT_METHODS,
+	type AssessmentMethod,
 	AVIATION_TOPIC_VALUES,
 	BLOOM_LEVEL_VALUES,
 	CARD_FEEDBACK_SIGNAL_VALUES,
+	CARD_KIND_VALUES,
+	CARD_KINDS,
 	CARD_STATE_VALUES,
 	CARD_STATUS_VALUES,
 	CARD_STATUSES,
@@ -335,6 +339,14 @@ export const card = studySchema.table(
 		domain: text('domain').notNull(),
 		tags: jsonb('tags').$type<string[]>().notNull().default([]),
 		cardType: text('card_type').notNull(),
+		/**
+		 * Knowledge-axis card kind (evidence-kind-data-layer WP). Independent of
+		 * `cardType` (presentation form). Drives the per-evidence-kind partition
+		 * in `mastery.ts`'s `recall` vs `calculation` gates. Defaults to
+		 * `recall` because recall is the dominant kind today; the migration
+		 * relies on this default for metadata-only ALTER on existing rows.
+		 */
+		kind: text('kind').notNull().default(CARD_KINDS.RECALL),
 		sourceType: text('source_type').notNull().default(CONTENT_SOURCES.PERSONAL),
 		sourceRef: text('source_ref'),
 		/**
@@ -378,7 +390,12 @@ export const card = studySchema.table(
 		// enforce REFERENCES (id, user_id) on dependent tables. See
 		// docs/work-packages/card-state-fk-tightening/spec.md.
 		cardIdUserUnique: unique('card_id_user_unique').on(t.id, t.userId),
+		// Per-(user, kind) probe so the `getCardsForNodeByKind` helper and the
+		// mastery.ts recall vs calculation partition queries don't fan out
+		// across the user's whole card pool. evidence-kind-data-layer WP.
+		cardUserKindIdx: index('card_user_kind_idx').on(t.userId, t.kind),
 		cardTypeCheck: check('card_type_check', sql.raw(`"card_type" IN (${inList(CARD_TYPE_VALUES)})`)),
+		cardKindCheck: check('card_kind_check', sql.raw(`"kind" IN (${inList(CARD_KIND_VALUES)})`)),
 		sourceTypeCheck: check('card_source_type_check', sql.raw(`"source_type" IN (${inList(CONTENT_SOURCE_VALUES)})`)),
 		statusCheck: check('card_status_check', sql.raw(`"status" IN (${inList(CARD_STATUS_VALUES)})`)),
 	}),
@@ -562,6 +579,19 @@ export const scenario = studySchema.table(
 		nodeId: text('node_id').references(() => knowledgeNode.id, { onDelete: 'set null' }),
 		isEditable: boolean('is_editable').notNull().default(true),
 		regReferences: jsonb('reg_references').$type<string[]>().notNull().default([]),
+		/**
+		 * Per-scenario assessment-method tags (evidence-kind-data-layer WP).
+		 * Drives the per-evidence-kind partition in `mastery.ts`'s `scenario`
+		 * vs `demonstration` gates: a scenario tagged `['scenario','demonstration']`
+		 * contributes the same rep attempts to both gates. Defaults to
+		 * `['scenario']` so the cutover matches today's "every rep is judgment"
+		 * behavior. BC-level validation (libs/bc/study/src/validation.ts)
+		 * enforces non-empty + values in ASSESSMENT_METHOD_VALUES + uniqueness.
+		 */
+		assessmentMethods: jsonb('assessment_methods')
+			.$type<AssessmentMethod[]>()
+			.notNull()
+			.default([ASSESSMENT_METHODS.SCENARIO]),
 		status: text('status').notNull().default(SCENARIO_STATUSES.ACTIVE),
 		/** Dev-seed marker. NULL on production rows. */
 		seedOrigin: text('seed_origin'),
@@ -658,6 +688,53 @@ export type KnowledgeEdgeRow = typeof knowledgeEdge.$inferSelect;
 export type NewKnowledgeEdgeRow = typeof knowledgeEdge.$inferInsert;
 
 /**
+ * Free-response teaching prompts (evidence-kind-data-layer WP). The substrate
+ * for CFI-style "explain or demonstrate" evidence: one row authors a prompt
+ * tied to a knowledge node; session_item_result rows with
+ * `item_kind='teaching-exercise'` resolve back via `teaching_exercise_id`.
+ *
+ * Mirrors the scenario shape (id, userId, title, prompt, nodeId, isEditable,
+ * status, seedOrigin, createdAt) but keeps its own table because teaching is
+ * a free-response prompt, not a multiple-choice decision rep -- reusing
+ * `scenario` would force NULL `scenario_option` rows and break the
+ * `scenario_option_correct_unique` invariant.
+ */
+export const teachingExercise = studySchema.table(
+	'teaching_exercise',
+	{
+		id: text('id').primaryKey(),
+		userId: text('user_id')
+			.notNull()
+			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
+		title: text('title').notNull(),
+		prompt: text('prompt').notNull(),
+		domain: text('domain').notNull(),
+		/**
+		 * Optional knowledge-graph node id. Mirrors `card.nodeId` and
+		 * `scenario.nodeId`: NULL = personal teaching exercise (does not
+		 * contribute to any node's gate); non-NULL = graph-linked, picks up
+		 * node-scoped mastery aggregation. `set null` on delete keeps history
+		 * attached to the exercise even if the node is renamed or removed.
+		 */
+		nodeId: text('node_id').references(() => knowledgeNode.id, { onDelete: 'set null' }),
+		isEditable: boolean('is_editable').notNull().default(true),
+		status: text('status').notNull().default(SCENARIO_STATUSES.ACTIVE),
+		/** Dev-seed marker. NULL on production rows. */
+		seedOrigin: text('seed_origin'),
+		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+	},
+	(t) => ({
+		// (user_id, node_id) covers the per-node teaching gate query in
+		// mastery.ts and the per-user authoring browse in the BC.
+		teachingExerciseUserNodeIdx: index('teaching_exercise_user_node_idx').on(t.userId, t.nodeId),
+		statusCheck: check('teaching_exercise_status_check', sql.raw(`"status" IN (${inList(SCENARIO_STATUS_VALUES)})`)),
+	}),
+);
+
+export type TeachingExerciseRow = typeof teachingExercise.$inferSelect;
+export type NewTeachingExerciseRow = typeof teachingExercise.$inferInsert;
+
+/**
  * A single presented slot in a session. Stored inline on `study.session.items`
  * as an ordered jsonb array so the whole batch commits atomically. See spec
  * "SessionItem shape" for the rationale.
@@ -680,6 +757,13 @@ export type SessionItem =
 	| {
 			kind: 'node_start';
 			nodeId: string;
+			slice: SessionSlice;
+			reasonCode: SessionReasonCode;
+			reasonDetail?: string;
+	  }
+	| {
+			kind: 'teaching-exercise';
+			teachingExerciseId: string;
 			slice: SessionSlice;
 			reasonCode: SessionReasonCode;
 			reasonDetail?: string;
@@ -843,6 +927,15 @@ export const sessionItemResult = studySchema.table(
 		 * scan the whole slot table.
 		 */
 		nodeId: text('node_id').references(() => knowledgeNode.id, { onDelete: 'set null' }),
+		/**
+		 * Optional pointer to a teaching-exercise prompt. Set when
+		 * `item_kind='teaching-exercise'` (BC-level invariant; a CHECK ties
+		 * the two so the schema enforces `(item_kind = 'teaching-exercise') =
+		 * (teaching_exercise_id IS NOT NULL)`). `set null` on delete keeps
+		 * the historical attempt row attached even if the prompt is removed.
+		 * evidence-kind-data-layer WP.
+		 */
+		teachingExerciseId: text('teaching_exercise_id').references(() => teachingExercise.id, { onDelete: 'set null' }),
 		reviewId: text('review_id').references(() => review.id, { onDelete: 'set null' }),
 		skipKind: text('skip_kind'),
 		/** Free-text detail when an item is skipped because its source was deleted etc. */
@@ -904,6 +997,12 @@ export const sessionItemResult = studySchema.table(
 		// deleted option for `ON DELETE set null`. Partial because the column
 		// is null on every non-rep slot (the majority of rows).
 		sirChosenOptionIdx: index('sir_chosen_option_idx').on(t.chosenOptionId).where(sql`${t.chosenOptionId} is not null`),
+		// Covers the FK back-reference for teaching-exercise rows; partial
+		// because the column is NULL on every non-teaching slot. Mirrors the
+		// chosen_option index pattern. evidence-kind-data-layer WP.
+		sirTeachingExerciseIdx: index('sir_teaching_exercise_idx')
+			.on(t.teachingExerciseId)
+			.where(sql`${t.teachingExerciseId} is not null`),
 		itemKindCheck: check('sir_item_kind_check', sql.raw(`"item_kind" IN (${inList(SESSION_ITEM_KIND_VALUES)})`)),
 		sliceCheck: check('sir_slice_check', sql.raw(`"slice" IN (${inList(SESSION_SLICE_VALUES)})`)),
 		reasonCodeCheck: check(

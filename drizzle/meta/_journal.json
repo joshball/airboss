@@ -15,6 +15,13 @@
       "when": 1777741237333,
       "tag": "0001_hangar_invitation",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1777850320123,
+      "tag": "0002_evidence_kind_data_layer",
+      "breakpoints": true
     }
   ]
 }

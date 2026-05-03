@@ -144,8 +144,13 @@ const bySlice = $derived.by<Record<SessionSlice, SessionItem[]>>(() => {
 								<a class="id id-link" href={ROUTES.KNOWLEDGE_SLUG(item.nodeId)}>{item.nodeId}</a>
 							{:else if item.kind === SESSION_ITEM_KINDS.CARD}
 								<a class="id id-link" href={ROUTES.MEMORY_CARD(item.cardId)}>{item.cardId}</a>
-							{:else}
+							{:else if item.kind === SESSION_ITEM_KINDS.REP}
 								<a class="id id-link" href={ROUTES.REP_DETAIL(item.scenarioId)}>{item.scenarioId}</a>
+							{:else}
+								<!-- teaching-exercise: engine does not yet generate them (evidence-kind-data-layer
+								     ships the substrate; runtime pickup is a follow-on WP). Render the id as
+								     plain text until that WP adds a `/teaching/[id]` route. -->
+								<span class="id">{item.teachingExerciseId}</span>
 							{/if}
 						</li>
 					{/each}
