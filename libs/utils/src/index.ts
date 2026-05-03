@@ -29,6 +29,7 @@ export {
 	generateSyllabusId,
 	generateSyllabusNodeId,
 	generateSyllabusNodeLinkId,
+	generateTeachingExerciseId,
 } from './ids';
 export { createLogger, type Logger } from './logger';
 export { escapeHtml, extractImageUrls, normalizeHandbookAssetPath, renderMarkdown } from './markdown';

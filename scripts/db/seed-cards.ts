@@ -24,7 +24,16 @@ import { readFileSync } from 'node:fs';
 import { relative } from 'node:path';
 import { bauthUser } from '@ab/auth/schema';
 import { card, createCard } from '@ab/bc-study';
-import { CARD_TYPES, CONTENT_SOURCES, DEV_DB_HOST_PATTERN, DEV_DB_URL, ENV_VARS } from '@ab/constants';
+import {
+	CARD_KIND_VALUES,
+	CARD_KINDS,
+	CARD_TYPES,
+	type CardKind,
+	CONTENT_SOURCES,
+	DEV_DB_HOST_PATTERN,
+	DEV_DB_URL,
+	ENV_VARS,
+} from '@ab/constants';
 import { and, eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
@@ -40,6 +49,13 @@ interface ParsedCard {
 	front: string;
 	back: string;
 	cardType: string;
+	/**
+	 * Knowledge-axis kind (recall vs calculation). yaml-cards authors that
+	 * leave the field unset land in `recall`; explicit `kind: calculation`
+	 * flips a card into the calculation partition for mastery aggregation
+	 * (evidence-kind-data-layer WP).
+	 */
+	kind: CardKind;
 	tags: string[];
 }
 
@@ -58,6 +74,7 @@ export interface SeedCardsResult {
 }
 
 const cardTypeSet = new Set<string>(Object.values(CARD_TYPES));
+const cardKindSet = new Set<string>(CARD_KIND_VALUES);
 
 function splitFrontmatter(text: string): { yaml: string; body: string } | null {
 	if (!text.startsWith(`${FRONTMATTER_DELIM}\n`)) return null;
@@ -102,13 +119,21 @@ function extractCardsFromBody(body: string, relPath: string): ParsedCard[] {
 			if (!cardTypeSet.has(cardType)) {
 				throw new Error(`${relPath}: yaml-cards[${j}].cardType '${cardType}' is not in CARD_TYPES`);
 			}
+			// yaml-cards `kind:` is optional; default to recall (the dominant
+			// knowledge axis on PPL-flavored content). Explicit `kind: calculation`
+			// flips the card into the calculation partition.
+			const rawKind = typeof rec.kind === 'string' ? rec.kind : CARD_KINDS.RECALL;
+			if (!cardKindSet.has(rawKind)) {
+				throw new Error(`${relPath}: yaml-cards[${j}].kind '${rawKind}' is not in CARD_KIND_VALUES`);
+			}
+			const kind = rawKind as CardKind;
 			const tags: string[] = [];
 			if (Array.isArray(rec.tags)) {
 				for (const tag of rec.tags) {
 					if (typeof tag === 'string' && tag.trim() !== '') tags.push(tag.trim());
 				}
 			}
-			cards.push({ front: rec.front.trim(), back: rec.back.trim(), cardType, tags });
+			cards.push({ front: rec.front.trim(), back: rec.back.trim(), cardType, kind, tags });
 		}
 		i = end + 1;
 	}
@@ -177,6 +202,7 @@ export async function seedCardsForUser(userEmail: string): Promise<SeedCardsResu
 						back: c.back,
 						domain: node.domain,
 						cardType: c.cardType,
+						kind: c.kind,
 						tags: c.tags,
 						sourceType: CONTENT_SOURCES.COURSE,
 						sourceRef: node.nodeId,
