@@ -11,3108 +11,3108 @@
       "kind": "chapter",
       "code": "1",
       "title": "Air Navigation",
-      "body_path": "aim/2026-04/chapter-1/index.md",
+      "body_path": "aim/2026-04/01-air-navigation/00-air-navigation.md",
       "content_hash": "b00d14e568954943422d317f24ec4899423d1edd6ab62370d609a76ab2ce14d5"
     },
     {
       "kind": "chapter",
       "code": "2",
       "title": "Aeronautical Lighting and Other Airport Visual Aids",
-      "body_path": "aim/2026-04/chapter-2/index.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/00-aeronautical-lighting-and-other-airport-visual-a.md",
       "content_hash": "c6d4e7b22ff17b8e1590bd4bcc3ed2550200b431274222be724b8e4e83a52b77"
     },
     {
       "kind": "chapter",
       "code": "3",
       "title": "Airspace",
-      "body_path": "aim/2026-04/chapter-3/index.md",
+      "body_path": "aim/2026-04/03-airspace/00-airspace.md",
       "content_hash": "b473c88c322e3c2bb622b91fc10e684cc48c1fb7befa2f381bc111f35f69ed49"
     },
     {
       "kind": "chapter",
       "code": "4",
       "title": "Air Traffic Control",
-      "body_path": "aim/2026-04/chapter-4/index.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/00-air-traffic-control.md",
       "content_hash": "12e4d8753727c41f5262674d28c47155f1f37fe4295cb22064801fa7d614a02b"
     },
     {
       "kind": "chapter",
       "code": "5",
       "title": "Air Traffic Procedures",
-      "body_path": "aim/2026-04/chapter-5/index.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/00-air-traffic-procedures.md",
       "content_hash": "4b66d6856bef2b8e1afe9cb8565fa7f8cea6b1b5978d4db8f874ce9a627ad0b1"
     },
     {
       "kind": "chapter",
       "code": "6",
       "title": "Emergency Procedures",
-      "body_path": "aim/2026-04/chapter-6/index.md",
+      "body_path": "aim/2026-04/06-emergency-procedures/00-emergency-procedures.md",
       "content_hash": "e5548cef65a946191ceb6a11de7214582d4c06a2b83a563c7228cc3ce3bf7c3f"
     },
     {
       "kind": "chapter",
       "code": "7",
       "title": "Safety of Flight",
-      "body_path": "aim/2026-04/chapter-7/index.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/00-safety-of-flight.md",
       "content_hash": "2c7f2771ae16a2eac397b424e976d6aeb5d9f1bf423d05408e7e09fdacb22560"
     },
     {
       "kind": "chapter",
       "code": "8",
       "title": "Medical Facts for Pilots",
-      "body_path": "aim/2026-04/chapter-8/index.md",
+      "body_path": "aim/2026-04/08-medical-facts-for-pilots/00-medical-facts-for-pilots.md",
       "content_hash": "baf9500e616a416b06d993cf56a16175d5f334b533cb4c0514464b5e1c0af5ac"
     },
     {
       "kind": "chapter",
       "code": "9",
       "title": "Aeronautical Charts and Related Publications",
-      "body_path": "aim/2026-04/chapter-9/index.md",
+      "body_path": "aim/2026-04/09-aeronautical-charts-and-related-publications/00-aeronautical-charts-and-related-publications.md",
       "content_hash": "3b7e0aef908d6247aaca962093995c62ae5eba79cd1f756c87a20da439ee3837"
     },
     {
       "kind": "chapter",
       "code": "10",
       "title": "Helicopter Operations",
-      "body_path": "aim/2026-04/chapter-10/index.md",
+      "body_path": "aim/2026-04/10-helicopter-operations/00-helicopter-operations.md",
       "content_hash": "1b1d6e6d907d7a7911ca49a5351cc2d0ff1a5238d4e4386338fd48bceea0e29e"
     },
     {
       "kind": "section",
       "code": "1-1",
       "title": "Navigation Aids",
-      "body_path": "aim/2026-04/chapter-1/section-1/index.md",
+      "body_path": "aim/2026-04/01-air-navigation/01-navigation-aids/00-navigation-aids.md",
       "content_hash": "43eb82f6f423b74518a7675092dcaaa95cc4500e2ee1e7d2bf64b3538a1bdbb7"
     },
     {
       "kind": "section",
       "code": "1-2",
       "title": "Performance-Based Navigation (PBN) and Area Navigation (RNAV)",
-      "body_path": "aim/2026-04/chapter-1/section-2/index.md",
+      "body_path": "aim/2026-04/01-air-navigation/02-performance-based-navigation-pbn-and-area-naviga/00-performance-based-navigation-pbn-and-area-naviga.md",
       "content_hash": "cf03660b45be75fb429fbee069bf9964eb6ebbebd83a86cdbf188e4e58423aea"
     },
     {
       "kind": "section",
       "code": "2-1",
       "title": "Airport Lighting Aids",
-      "body_path": "aim/2026-04/chapter-2/section-1/index.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/01-airport-lighting-aids/00-airport-lighting-aids.md",
       "content_hash": "7a0349784213a166dfd208d99393efa0756a293b2f4d0c2f01570871a4afc0f8"
     },
     {
       "kind": "section",
       "code": "2-2",
       "title": "Air Navigation and Obstruction Lighting",
-      "body_path": "aim/2026-04/chapter-2/section-2/index.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/02-air-navigation-and-obstruction-lighting/00-air-navigation-and-obstruction-lighting.md",
       "content_hash": "4e48519672848bdec40efc1c5585d9db8de0d52e6fc81e130707c2425904f527"
     },
     {
       "kind": "section",
       "code": "2-3",
       "title": "Airport Marking Aids and Signs",
-      "body_path": "aim/2026-04/chapter-2/section-3/index.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/03-airport-marking-aids-and-signs/00-airport-marking-aids-and-signs.md",
       "content_hash": "675f47334ef7f200e27894e5389977b513f7ccab7482db2a8c04a1c332c7a210"
     },
     {
       "kind": "section",
       "code": "3-1",
       "title": "General",
-      "body_path": "aim/2026-04/chapter-3/section-1/index.md",
+      "body_path": "aim/2026-04/03-airspace/01-general/00-general.md",
       "content_hash": "3c9cc81f33d4e1529f559381d400f87363fc42b060111ceb77dc0273c4f10e3e"
     },
     {
       "kind": "section",
       "code": "3-2",
       "title": "Controlled Airspace",
-      "body_path": "aim/2026-04/chapter-3/section-2/index.md",
+      "body_path": "aim/2026-04/03-airspace/02-controlled-airspace/00-controlled-airspace.md",
       "content_hash": "423e46c13cafb29e4e3015c340237966ae360dbd6d10077c73b43ee902cff83a"
     },
     {
       "kind": "section",
       "code": "3-3",
       "title": "Class G Airspace",
-      "body_path": "aim/2026-04/chapter-3/section-3/index.md",
+      "body_path": "aim/2026-04/03-airspace/03-class-g-airspace/00-class-g-airspace.md",
       "content_hash": "4581ff3cdf81579ec8ab1e742c78676599f2baacf35d243f62268bb1c56ea0e4"
     },
     {
       "kind": "section",
       "code": "3-4",
       "title": "Special Use Airspace",
-      "body_path": "aim/2026-04/chapter-3/section-4/index.md",
+      "body_path": "aim/2026-04/03-airspace/04-special-use-airspace/00-special-use-airspace.md",
       "content_hash": "418cac7cade08105b4935cac756af213e59828218854abb78f50c2fcf9fe80b5"
     },
     {
       "kind": "section",
       "code": "3-5",
       "title": "Other Airspace Areas",
-      "body_path": "aim/2026-04/chapter-3/section-5/index.md",
+      "body_path": "aim/2026-04/03-airspace/05-other-airspace-areas/00-other-airspace-areas.md",
       "content_hash": "1d8dc7b263c12d7812dadb4988f6b0d7180ba5bb934bc2f55cdced6d3da2677f"
     },
     {
       "kind": "section",
       "code": "4-1",
       "title": "Services Available to Pilots",
-      "body_path": "aim/2026-04/chapter-4/section-1/index.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/01-services-available-to-pilots/00-services-available-to-pilots.md",
       "content_hash": "ecd79335dc2292355719031116d7202c8858f47888da75e45aa347d394f7f99d"
     },
     {
       "kind": "section",
       "code": "4-2",
       "title": "Radio Communications Phraseology and Techniques",
-      "body_path": "aim/2026-04/chapter-4/section-2/index.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/02-radio-communications-phraseology-and-techniques/00-radio-communications-phraseology-and-techniques.md",
       "content_hash": "c395bde937bedb438dbe102bcc6d189d04ae8aa89586c41345a59b67b3c51cba"
     },
     {
       "kind": "section",
       "code": "4-3",
       "title": "Airport Operations",
-      "body_path": "aim/2026-04/chapter-4/section-3/index.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/03-airport-operations/00-airport-operations.md",
       "content_hash": "ba5c702b3cb8873df24f109169e5ebaeb5dcd0f9424cda72579861b4b65f9b39"
     },
     {
       "kind": "section",
       "code": "4-4",
       "title": "ATC Clearances and Aircraft Separation",
-      "body_path": "aim/2026-04/chapter-4/section-4/index.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/04-atc-clearances-and-aircraft-separation/00-atc-clearances-and-aircraft-separation.md",
       "content_hash": "576b852ccddf82511067ba80bd3b205279f2e7ebadf6d4a3eb205a8318131ceb"
     },
     {
       "kind": "section",
       "code": "4-5",
       "title": "Surveillance Systems",
-      "body_path": "aim/2026-04/chapter-4/section-5/index.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/05-surveillance-systems/00-surveillance-systems.md",
       "content_hash": "0d223418e44c0f9aad3d10f0d2775cc704bdf9bdce98cfff7441ae343687988a"
     },
     {
       "kind": "section",
       "code": "4-6",
       "title": "Operational Policy/Procedures for Reduced Vertical Separation Minimum (RVSM) in the Domestic U.S., Alaska, Offshore Airspace and the San Juan FIR",
-      "body_path": "aim/2026-04/chapter-4/section-6/index.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/06-operational-policy-procedures-for-reduced-vertic/00-operational-policy-procedures-for-reduced-vertic.md",
       "content_hash": "ba154643180480a14d3a986a4c76aa4b2c5f977c8ee8ddebe68bf1189e29be60"
     },
     {
       "kind": "section",
       "code": "4-7",
       "title": "Operational Policy/Procedures for the Gulf of Mexico 50 NM Lateral Separation Initiative",
-      "body_path": "aim/2026-04/chapter-4/section-7/index.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/07-operational-policy-procedures-for-the-gulf-of-me/00-operational-policy-procedures-for-the-gulf-of-me.md",
       "content_hash": "d4affe0acd2457f8afb60106f958773021fd120803d759ab1465f415256488b1"
     },
     {
       "kind": "section",
       "code": "5-1",
       "title": "Preflight",
-      "body_path": "aim/2026-04/chapter-5/section-1/index.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/01-preflight/00-preflight.md",
       "content_hash": "e8602dc7dcb6e06a9b8ef013fb22976bc117ab639a7aff8e34f2344d1fd0afb7"
     },
     {
       "kind": "section",
       "code": "5-2",
       "title": "Departure Procedures",
-      "body_path": "aim/2026-04/chapter-5/section-2/index.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/02-departure-procedures/00-departure-procedures.md",
       "content_hash": "d722860524cefd8fec1ca7dbdb527c51dfe17079fcb7eb72933b1b5c405a46b6"
     },
     {
       "kind": "section",
       "code": "5-3",
       "title": "En Route Procedures",
-      "body_path": "aim/2026-04/chapter-5/section-3/index.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/03-en-route-procedures/00-en-route-procedures.md",
       "content_hash": "5f8abeebef60a845d94ab4dd91e93703446dbeee1db7714eb7fc5ca35a1f8877"
     },
     {
       "kind": "section",
       "code": "5-4",
       "title": "Arrival Procedures",
-      "body_path": "aim/2026-04/chapter-5/section-4/index.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/04-arrival-procedures/00-arrival-procedures.md",
       "content_hash": "4415306ac1c46612732c19bdef6a4adfcb37bccd2b5a0788eee27a39230a8680"
     },
     {
       "kind": "section",
       "code": "5-5",
       "title": "Pilot/Controller Roles and Responsibilities",
-      "body_path": "aim/2026-04/chapter-5/section-5/index.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/05-pilot-controller-roles-and-responsibilities/00-pilot-controller-roles-and-responsibilities.md",
       "content_hash": "8c026f53988bcad9642b2be0a3774309c8b689611adf4f15da4a0e6be08b0f9b"
     },
     {
       "kind": "section",
       "code": "5-6",
       "title": "National Security and Interception Procedures",
-      "body_path": "aim/2026-04/chapter-5/section-6/index.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/06-national-security-and-interception-procedures/00-national-security-and-interception-procedures.md",
       "content_hash": "cf36c02a8c70f3b4d0bfd7fe1f444f2954658e7b443c403dd9bfa39cce08a459"
     },
     {
       "kind": "section",
       "code": "6-1",
       "title": "Genera",
-      "body_path": "aim/2026-04/chapter-6/section-1/index.md",
+      "body_path": "aim/2026-04/06-emergency-procedures/01-genera/00-genera.md",
       "content_hash": "c7e74afc5447200be89f656bdc9a9eac7a78a97f185cb2233d8f6c89dd770d20"
     },
     {
       "kind": "section",
       "code": "6-2",
       "title": "Emergency Services Available to Pilots",
-      "body_path": "aim/2026-04/chapter-6/section-2/index.md",
+      "body_path": "aim/2026-04/06-emergency-procedures/02-emergency-services-available-to-pilots/00-emergency-services-available-to-pilots.md",
       "content_hash": "91285851c5971e61abcace06904c7c12d5567d641452cbe7f0c5cb354c6cfd04"
     },
     {
       "kind": "section",
       "code": "6-3",
       "title": "Distress and Urgency Procedures",
-      "body_path": "aim/2026-04/chapter-6/section-3/index.md",
+      "body_path": "aim/2026-04/06-emergency-procedures/03-distress-and-urgency-procedures/00-distress-and-urgency-procedures.md",
       "content_hash": "4c4cba458d83b8d7462695882925e0cd7e96204f02ab9fda19ec8888e5f07023"
     },
     {
       "kind": "section",
       "code": "6-4",
       "title": "Two‐way Radio Communications Failure",
-      "body_path": "aim/2026-04/chapter-6/section-4/index.md",
+      "body_path": "aim/2026-04/06-emergency-procedures/04-two-way-radio-communications-failure/00-two-way-radio-communications-failure.md",
       "content_hash": "c1bd434a9d987bdcffc589ce4ed12414c215bc9fe5f14d1cdd969e3b6e7a4bea"
     },
     {
       "kind": "section",
       "code": "6-5",
       "title": "Aircraft Rescue and Fire Fighting Communications",
-      "body_path": "aim/2026-04/chapter-6/section-5/index.md",
+      "body_path": "aim/2026-04/06-emergency-procedures/05-aircraft-rescue-and-fire-fighting-communications/00-aircraft-rescue-and-fire-fighting-communications.md",
       "content_hash": "b0cdd16464c061300c4e6e85adbab86ea84c2dbde2beff9cf2af53279c78974f"
     },
     {
       "kind": "section",
       "code": "7-1",
       "title": "Meteorology",
-      "body_path": "aim/2026-04/chapter-7/section-1/index.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/00-meteorology.md",
       "content_hash": "8f7166aa183e3e865991dbe5de785ef3f1fc7084c1e06cfa53234dfd4e737a14"
     },
     {
       "kind": "section",
       "code": "7-2",
       "title": "Altimeter Setting Procedures",
-      "body_path": "aim/2026-04/chapter-7/section-2/index.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/02-altimeter-setting-procedures/00-altimeter-setting-procedures.md",
       "content_hash": "1195589fc27089a9506228eeda86caff838592091d724a85b58af9d97fb205fc"
     },
     {
       "kind": "section",
       "code": "7-3",
       "title": "Wake Turbulence",
-      "body_path": "aim/2026-04/chapter-7/section-3/index.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/03-wake-turbulence/00-wake-turbulence.md",
       "content_hash": "b3b11e696c8b8630c72645cb53a76666adcdb9dc925ec9d4cc3aebb2b453c2fc"
     },
     {
       "kind": "section",
       "code": "7-4",
       "title": "Bird Hazards and Flight Over National Refuges, Parks, and Forests",
-      "body_path": "aim/2026-04/chapter-7/section-4/index.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/04-bird-hazards-and-flight-over-national-refuges-pa/00-bird-hazards-and-flight-over-national-refuges-pa.md",
       "content_hash": "ec864a84cd525af9c44a3437fcfeef824891d80fc027be5224fc2ee07cdf487d"
     },
     {
       "kind": "section",
       "code": "7-5",
       "title": "Potential Flight Hazards",
-      "body_path": "aim/2026-04/chapter-7/section-5/index.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/05-potential-flight-hazards/00-potential-flight-hazards.md",
       "content_hash": "fd4f2ec56a445fe4c66468daac607b4d7ada5811e8781913e23a7c64d2e731b5"
     },
     {
       "kind": "section",
       "code": "7-6",
       "title": "Safety, Accident, and Hazard Reports",
-      "body_path": "aim/2026-04/chapter-7/section-6/index.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/06-safety-accident-and-hazard-reports/00-safety-accident-and-hazard-reports.md",
       "content_hash": "9ae4010bdda497cbd9aebfb3d76e309d80b575c2b5cb614fb5909a2da8ad2325"
     },
     {
       "kind": "section",
       "code": "8-1",
       "title": "Fitness for Flight",
-      "body_path": "aim/2026-04/chapter-8/section-1/index.md",
+      "body_path": "aim/2026-04/08-medical-facts-for-pilots/01-fitness-for-flight/00-fitness-for-flight.md",
       "content_hash": "5e7b8e96b538ed03ad4cdf5d4e6c40ede01a1ca6a092366fbfc54b42d51c6459"
     },
     {
       "kind": "section",
       "code": "9-1",
       "title": "Types of Charts Available",
-      "body_path": "aim/2026-04/chapter-9/section-1/index.md",
+      "body_path": "aim/2026-04/09-aeronautical-charts-and-related-publications/01-types-of-charts-available/00-types-of-charts-available.md",
       "content_hash": "b76bc6cb20dbfd19e49ac9d6e636c67fcae7c6b2ffbe5738d1cff09f705a699c"
     },
     {
       "kind": "section",
       "code": "10-1",
       "title": "Helicopter IFR Operations",
-      "body_path": "aim/2026-04/chapter-10/section-1/index.md",
+      "body_path": "aim/2026-04/10-helicopter-operations/01-helicopter-ifr-operations/00-helicopter-ifr-operations.md",
       "content_hash": "313475b87f39fabd7ae6ba6deb3ba2def9e5003870256b89b145212b4f3da2db"
     },
     {
       "kind": "section",
       "code": "10-2",
       "title": "Special Operations",
-      "body_path": "aim/2026-04/chapter-10/section-2/index.md",
+      "body_path": "aim/2026-04/10-helicopter-operations/02-special-operations/00-special-operations.md",
       "content_hash": "e4b1de6af28cd1eb224b855be5803736eb1e3b0542d8a80131d11b92f3555bb8"
     },
     {
       "kind": "paragraph",
       "code": "1-1-1",
       "title": "General",
-      "body_path": "aim/2026-04/chapter-1/section-1/paragraph-1.md",
+      "body_path": "aim/2026-04/01-air-navigation/01-navigation-aids/01-general.md",
       "content_hash": "bba4e8c62a02e30c8a55091bdd156a98adf845b4d10ca8c4d5472dc574995d15"
     },
     {
       "kind": "paragraph",
       "code": "1-1-2",
       "title": "Nondirectional Radio Beacon (NDB)",
-      "body_path": "aim/2026-04/chapter-1/section-1/paragraph-2.md",
+      "body_path": "aim/2026-04/01-air-navigation/01-navigation-aids/02-nondirectional-radio-beacon-ndb.md",
       "content_hash": "d8729705a6d46fcf77a134561eeab3c070c8c74cea784286fc255d0de3399ad6"
     },
     {
       "kind": "paragraph",
       "code": "1-1-3",
       "title": "VHF Omni-directional Range (VOR)",
-      "body_path": "aim/2026-04/chapter-1/section-1/paragraph-3.md",
+      "body_path": "aim/2026-04/01-air-navigation/01-navigation-aids/03-vhf-omni-directional-range-vor.md",
       "content_hash": "5559a60ef4e32130ec0ad54128f30c80b58721a9bef8d9cc33b3ae0ed3cca218"
     },
     {
       "kind": "paragraph",
       "code": "1-1-4",
       "title": "VOR Receiver Check",
-      "body_path": "aim/2026-04/chapter-1/section-1/paragraph-4.md",
+      "body_path": "aim/2026-04/01-air-navigation/01-navigation-aids/04-vor-receiver-check.md",
       "content_hash": "42d31c4c214c991d926f6a4330c4a6e37963f9a67227a9b297f1962e918c580f"
     },
     {
       "kind": "paragraph",
       "code": "1-1-5",
       "title": "Tactical Air Navigation (TACAN)",
-      "body_path": "aim/2026-04/chapter-1/section-1/paragraph-5.md",
+      "body_path": "aim/2026-04/01-air-navigation/01-navigation-aids/05-tactical-air-navigation-tacan.md",
       "content_hash": "49dc9b9b3e9358c1b1ee40f256ca70902f46e8232c0e08fc11e482e66837b111"
     },
     {
       "kind": "paragraph",
       "code": "1-1-6",
       "title": "VHF Omni-directional Range/Tactical Air Navigation (VORTAC)",
-      "body_path": "aim/2026-04/chapter-1/section-1/paragraph-6.md",
+      "body_path": "aim/2026-04/01-air-navigation/01-navigation-aids/06-vhf-omni-directional-range-tactical-air-navigati.md",
       "content_hash": "1bc02ca23a4e5e55194cb71046acbee38d526d0edc4a2bdaac6cc08130ea8909"
     },
     {
       "kind": "paragraph",
       "code": "1-1-7",
       "title": "Distance Measuring Equipment (DME)",
-      "body_path": "aim/2026-04/chapter-1/section-1/paragraph-7.md",
+      "body_path": "aim/2026-04/01-air-navigation/01-navigation-aids/07-distance-measuring-equipment-dme.md",
       "content_hash": "7335f94661bd6dafc98846fbfacae421ec828f3e71bbab28a8b1231095c50110"
     },
     {
       "kind": "paragraph",
       "code": "1-1-8",
       "title": "Navigational Aid (NAVAID) Service Volumes",
-      "body_path": "aim/2026-04/chapter-1/section-1/paragraph-8.md",
+      "body_path": "aim/2026-04/01-air-navigation/01-navigation-aids/08-navigational-aid-navaid-service-volumes.md",
       "content_hash": "d3465c6b1fbb7dca3ac70ca3b0022d4030bfa74c04b825407f72068469f6c1b6"
     },
     {
       "kind": "paragraph",
       "code": "1-1-9",
       "title": "Instrument Landing System (ILS)",
-      "body_path": "aim/2026-04/chapter-1/section-1/paragraph-9.md",
+      "body_path": "aim/2026-04/01-air-navigation/01-navigation-aids/09-instrument-landing-system-ils.md",
       "content_hash": "88aa6c0b6df94f1931a0bb47b8c71abd0691c53f3410e10bdd04cf0134adaa14"
     },
     {
       "kind": "paragraph",
       "code": "1-1-10",
       "title": "Simplified Directional Facility (SDF)",
-      "body_path": "aim/2026-04/chapter-1/section-1/paragraph-10.md",
+      "body_path": "aim/2026-04/01-air-navigation/01-navigation-aids/10-simplified-directional-facility-sdf.md",
       "content_hash": "2978d173b63f2939591cc5c597bb45858a2a2fb46c54b8485405302143f912c2"
     },
     {
       "kind": "paragraph",
       "code": "1-1-11",
       "title": "NAVAID Identifier Removal During Maintenance",
-      "body_path": "aim/2026-04/chapter-1/section-1/paragraph-11.md",
+      "body_path": "aim/2026-04/01-air-navigation/01-navigation-aids/11-navaid-identifier-removal-during-maintenance.md",
       "content_hash": "0f5deaf53c45ac7ed91112c83b9237a88d0e9bcaa3907c576073e65f02e518ff"
     },
     {
       "kind": "paragraph",
       "code": "1-1-12",
       "title": "NAVAIDs with Voice",
-      "body_path": "aim/2026-04/chapter-1/section-1/paragraph-12.md",
+      "body_path": "aim/2026-04/01-air-navigation/01-navigation-aids/12-navaids-with-voice.md",
       "content_hash": "a905c8e98cfca0f5ca41e77aca2050a6ad966158fa67bd87bf747b360cdebb7e"
     },
     {
       "kind": "paragraph",
       "code": "1-1-13",
       "title": "User Reports Requested on NAVAID or Global Navigation Satellite System (GNSS) Performance or Interference",
-      "body_path": "aim/2026-04/chapter-1/section-1/paragraph-13.md",
+      "body_path": "aim/2026-04/01-air-navigation/01-navigation-aids/13-user-reports-requested-on-navaid-or-global-navig.md",
       "content_hash": "870f5571045d7341214e50c7c95121a5b2d068e21282122ce87a2128e6adf28f"
     },
     {
       "kind": "paragraph",
       "code": "1-1-14",
       "title": "LORAN",
-      "body_path": "aim/2026-04/chapter-1/section-1/paragraph-14.md",
+      "body_path": "aim/2026-04/01-air-navigation/01-navigation-aids/14-loran.md",
       "content_hash": "f17f9beecab138484167924c629698dfdf08184ff0ce0703f06db8ebe8894932"
     },
     {
       "kind": "paragraph",
       "code": "1-1-15",
       "title": "Inertial Reference Unit (IRU), Inertial Navigation System (INS), and Attitude Heading Reference System (AHRS)",
-      "body_path": "aim/2026-04/chapter-1/section-1/paragraph-15.md",
+      "body_path": "aim/2026-04/01-air-navigation/01-navigation-aids/15-inertial-reference-unit-iru-inertial-navigation.md",
       "content_hash": "1ac0a5360d8b9dbde3a7f96669de05fb47b57b4b99180d7c6bad5ea6c018224f"
     },
     {
       "kind": "paragraph",
       "code": "1-1-16",
       "title": "Doppler Radar",
-      "body_path": "aim/2026-04/chapter-1/section-1/paragraph-16.md",
+      "body_path": "aim/2026-04/01-air-navigation/01-navigation-aids/16-doppler-radar.md",
       "content_hash": "80e34f56c0e79e4ed9f0b685930225fa9b6e6e8bc64c086fd90ca188a314147c"
     },
     {
       "kind": "paragraph",
       "code": "1-1-17",
       "title": "Global Positioning System (GPS)",
-      "body_path": "aim/2026-04/chapter-1/section-1/paragraph-17.md",
+      "body_path": "aim/2026-04/01-air-navigation/01-navigation-aids/17-global-positioning-system-gps.md",
       "content_hash": "bd32fdf4f0d8b40b3953474554b2e81539d46bc28614c382f543c969619914ff"
     },
     {
       "kind": "paragraph",
       "code": "1-1-18",
       "title": "Wide Area Augmentation System (WAAS)",
-      "body_path": "aim/2026-04/chapter-1/section-1/paragraph-18.md",
+      "body_path": "aim/2026-04/01-air-navigation/01-navigation-aids/18-wide-area-augmentation-system-waas.md",
       "content_hash": "11ea54a8c43c120d5d8d4cb3c251ac6e9aaf9fae243d3c191b4a9301def88d94"
     },
     {
       "kind": "paragraph",
       "code": "1-1-19",
       "title": "Ground Based Augmentation System (GBAS) Landing System (GLS)",
-      "body_path": "aim/2026-04/chapter-1/section-1/paragraph-19.md",
+      "body_path": "aim/2026-04/01-air-navigation/01-navigation-aids/19-ground-based-augmentation-system-gbas-landing-sy.md",
       "content_hash": "564fddea99637a617c14bc5363e482f6eaa056280e381fe524da489aeaa1b827"
     },
     {
       "kind": "paragraph",
       "code": "1-1-20",
       "title": "Precision Approach Systems other than ILS and GLS",
-      "body_path": "aim/2026-04/chapter-1/section-1/paragraph-20.md",
+      "body_path": "aim/2026-04/01-air-navigation/01-navigation-aids/20-precision-approach-systems-other-than-ils-and-gl.md",
       "content_hash": "cfca6f56da68458f43d95ed6af8f96dbeeaaefbb285e9745f8cd575ccc61f8e7"
     },
     {
       "kind": "paragraph",
       "code": "1-2-1",
       "title": "General",
-      "body_path": "aim/2026-04/chapter-1/section-2/paragraph-1.md",
+      "body_path": "aim/2026-04/01-air-navigation/02-performance-based-navigation-pbn-and-area-naviga/01-general.md",
       "content_hash": "3698ab0da6e064e12cc5219506c92df5e91a2875ab56ba661446a59dc9b9af9c"
     },
     {
       "kind": "paragraph",
       "code": "1-2-2",
       "title": "Required Navigation Performance (RNP)",
-      "body_path": "aim/2026-04/chapter-1/section-2/paragraph-2.md",
+      "body_path": "aim/2026-04/01-air-navigation/02-performance-based-navigation-pbn-and-area-naviga/02-required-navigation-performance-rnp.md",
       "content_hash": "43f07f680a839c920ce4fc496fa66e5fc58c712e5f155dfc66814852dbd93424"
     },
     {
       "kind": "paragraph",
       "code": "1-2-3",
       "title": "Use of Suitable Area Navigation (RNAV) Systems on Conventional Procedures and Routes",
-      "body_path": "aim/2026-04/chapter-1/section-2/paragraph-3.md",
+      "body_path": "aim/2026-04/01-air-navigation/02-performance-based-navigation-pbn-and-area-naviga/03-use-of-suitable-area-navigation-rnav-systems-on.md",
       "content_hash": "eb4f7a978256c1933136b046d6dc49b7bf85505363f47da4546eac6a39258db7"
     },
     {
       "kind": "paragraph",
       "code": "1-2-4",
       "title": "Pilots and Air Traffic Controllers Recognizing Interference or Spoofing",
-      "body_path": "aim/2026-04/chapter-1/section-2/paragraph-4.md",
+      "body_path": "aim/2026-04/01-air-navigation/02-performance-based-navigation-pbn-and-area-naviga/04-pilots-and-air-traffic-controllers-recognizing-i.md",
       "content_hash": "ebfcadc301fe503813d40198d2acd7c704b413b9db640bac8144aad3b3e011c0"
     },
     {
       "kind": "paragraph",
       "code": "2-1-1",
       "title": "Approach Light Systems (ALS)",
-      "body_path": "aim/2026-04/chapter-2/section-1/paragraph-1.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/01-airport-lighting-aids/01-approach-light-systems-als.md",
       "content_hash": "a395eed96c3efa2bae174c353e9f6fc59ba50f3354c1d257ad1293c76ff2c945"
     },
     {
       "kind": "paragraph",
       "code": "2-1-2",
       "title": "Visual Glideslope Indicators",
-      "body_path": "aim/2026-04/chapter-2/section-1/paragraph-2.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/01-airport-lighting-aids/02-visual-glideslope-indicators.md",
       "content_hash": "2ea8fa28b396d02ab86b73491659d493a3b55a5d691ebcd1881a31f3509ed32f"
     },
     {
       "kind": "paragraph",
       "code": "2-1-3",
       "title": "Runway End Identifier Lights (REIL)",
-      "body_path": "aim/2026-04/chapter-2/section-1/paragraph-3.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/01-airport-lighting-aids/03-runway-end-identifier-lights-reil.md",
       "content_hash": "c966b9b46ac148bb39f1c0eb4b82b5e601a5e709f7aa7e950636685094e941e2"
     },
     {
       "kind": "paragraph",
       "code": "2-1-4",
       "title": "Runway Edge Light Systems",
-      "body_path": "aim/2026-04/chapter-2/section-1/paragraph-4.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/01-airport-lighting-aids/04-runway-edge-light-systems.md",
       "content_hash": "6489354dd4fb5f7cfaaf9596f616ddf8c2cd2c48847ebac2e1cbab60d1697b76"
     },
     {
       "kind": "paragraph",
       "code": "2-1-5",
       "title": "In-runway Lighting",
-      "body_path": "aim/2026-04/chapter-2/section-1/paragraph-5.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/01-airport-lighting-aids/05-in-runway-lighting.md",
       "content_hash": "baf1fe17773cb57bef61e5c3752c94a11be2f92a1086a14ff0caa102fc9b3b3f"
     },
     {
       "kind": "paragraph",
       "code": "2-1-6",
       "title": "Runway Status Light (RWSL) System",
-      "body_path": "aim/2026-04/chapter-2/section-1/paragraph-6.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/01-airport-lighting-aids/06-runway-status-light-rwsl-system.md",
       "content_hash": "3f6a6ea064dea76cb724188db6881b7222241ecd94cd55eee616ae41496254b8"
     },
     {
       "kind": "paragraph",
       "code": "2-1-7",
       "title": "Stand­Alone Final Approach Runway Occupancy Signal (FAROS)",
-      "body_path": "aim/2026-04/chapter-2/section-1/paragraph-7.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/01-airport-lighting-aids/07-stand-alone-final-approach-runway-occupancy-sign.md",
       "content_hash": "df14fbf4c94e8de76979b919340b36e7f29ae5b1f96b41fa3013cd3432c67c0d"
     },
     {
       "kind": "paragraph",
       "code": "2-1-8",
       "title": "Control of Lighting Systems",
-      "body_path": "aim/2026-04/chapter-2/section-1/paragraph-8.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/01-airport-lighting-aids/08-control-of-lighting-systems.md",
       "content_hash": "1b4a0a8b373297058090a1b1de7a866d6eb74107a8edc88e58b3b385762267cf"
     },
     {
       "kind": "paragraph",
       "code": "2-1-9",
       "title": "Pilot Control of Airport Lighting",
-      "body_path": "aim/2026-04/chapter-2/section-1/paragraph-9.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/01-airport-lighting-aids/09-pilot-control-of-airport-lighting.md",
       "content_hash": "3b55265934fb8016ba890b2179368eeca5292fda2610ba86b013242937364098"
     },
     {
       "kind": "paragraph",
       "code": "2-1-10",
       "title": "Airport/Heliport Beacons",
-      "body_path": "aim/2026-04/chapter-2/section-1/paragraph-10.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/01-airport-lighting-aids/10-airport-heliport-beacons.md",
       "content_hash": "82364d0880eae9d1e90df5254475b88eaed36e3fb7ee12901aa714dd45210a61"
     },
     {
       "kind": "paragraph",
       "code": "2-1-11",
       "title": "Taxiway Lights",
-      "body_path": "aim/2026-04/chapter-2/section-1/paragraph-11.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/01-airport-lighting-aids/11-taxiway-lights.md",
       "content_hash": "e52a7f51775e20b7257a7a4aa3cca6cf2674cd6ae383d87f609b56c47b1ad783"
     },
     {
       "kind": "paragraph",
       "code": "2-2-1",
       "title": "Aeronautical Light Beacons",
-      "body_path": "aim/2026-04/chapter-2/section-2/paragraph-1.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/02-air-navigation-and-obstruction-lighting/01-aeronautical-light-beacons.md",
       "content_hash": "dfdac613c7e69e6921215781a49fb838f1a517ee63617f9e8f4664a5c976ec13"
     },
     {
       "kind": "paragraph",
       "code": "2-2-2",
       "title": "Code Beacons and Course Lights",
-      "body_path": "aim/2026-04/chapter-2/section-2/paragraph-2.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/02-air-navigation-and-obstruction-lighting/02-code-beacons-and-course-lights.md",
       "content_hash": "290054e75e2deee725cc6d5b698f2f6df18e32a03ebe477dd8ee555ef7755010"
     },
     {
       "kind": "paragraph",
       "code": "2-2-3",
       "title": "Obstruction Lights",
-      "body_path": "aim/2026-04/chapter-2/section-2/paragraph-3.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/02-air-navigation-and-obstruction-lighting/03-obstruction-lights.md",
       "content_hash": "b9d6a685f92e8fa67b79157ae4ba7fcc9027dfacb770f0842946a9a4ee6d78ad"
     },
     {
       "kind": "paragraph",
       "code": "2-3-1",
       "title": "General",
-      "body_path": "aim/2026-04/chapter-2/section-3/paragraph-1.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/03-airport-marking-aids-and-signs/01-general.md",
       "content_hash": "3c9cc81f33d4e1529f559381d400f87363fc42b060111ceb77dc0273c4f10e3e"
     },
     {
       "kind": "paragraph",
       "code": "2-3-2",
       "title": "Airport Pavement Markings",
-      "body_path": "aim/2026-04/chapter-2/section-3/paragraph-2.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/03-airport-marking-aids-and-signs/02-airport-pavement-markings.md",
       "content_hash": "cae05e6312d6fc8cdfa1737e0e3416e22da7a617ef7949b52ff99e4b5dca666a"
     },
     {
       "kind": "paragraph",
       "code": "2-3-3",
       "title": "Runway Markings",
-      "body_path": "aim/2026-04/chapter-2/section-3/paragraph-3.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/03-airport-marking-aids-and-signs/03-runway-markings.md",
       "content_hash": "220aa92c4e6c54715dbebbe6a485b91c9f094929156845c888f56fd43369ae86"
     },
     {
       "kind": "paragraph",
       "code": "2-3-4",
       "title": "Taxiway Markings",
-      "body_path": "aim/2026-04/chapter-2/section-3/paragraph-4.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/03-airport-marking-aids-and-signs/04-taxiway-markings.md",
       "content_hash": "4f5b20e1e943044fd7d6d415df49d7f7ffb8fb5972cae4d36527961c3b6ad8c3"
     },
     {
       "kind": "paragraph",
       "code": "2-3-5",
       "title": "Holding Position Markings",
-      "body_path": "aim/2026-04/chapter-2/section-3/paragraph-5.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/03-airport-marking-aids-and-signs/05-holding-position-markings.md",
       "content_hash": "77a816bab105519251dfaa64a3b7de0dd9c455fee65f1cc0879fe2583043e1d4"
     },
     {
       "kind": "paragraph",
       "code": "2-3-6",
       "title": "Other Markings",
-      "body_path": "aim/2026-04/chapter-2/section-3/paragraph-6.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/03-airport-marking-aids-and-signs/06-other-markings.md",
       "content_hash": "12d7b33fdb88066ef1c18947997b653f7dd240e0d7a5853a21a2b242ca720b3b"
     },
     {
       "kind": "paragraph",
       "code": "2-3-7",
       "title": "Airport Signs",
-      "body_path": "aim/2026-04/chapter-2/section-3/paragraph-7.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/03-airport-marking-aids-and-signs/07-airport-signs.md",
       "content_hash": "e002c8730d207e3dc91eb2d7b63350427225c1c586982cebb6a14363929505e8"
     },
     {
       "kind": "paragraph",
       "code": "2-3-8",
       "title": "Mandatory Instruction Signs",
-      "body_path": "aim/2026-04/chapter-2/section-3/paragraph-8.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/03-airport-marking-aids-and-signs/08-mandatory-instruction-signs.md",
       "content_hash": "5a6b079979a38904f636eaee6e419234f0ba3e6184175d1204d2229a72196d61"
     },
     {
       "kind": "paragraph",
       "code": "2-3-9",
       "title": "Location Signs",
-      "body_path": "aim/2026-04/chapter-2/section-3/paragraph-9.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/03-airport-marking-aids-and-signs/09-location-signs.md",
       "content_hash": "267050ccda5a01c560a6f620ee58aa328c6388b7fa176113f15b830139d53bac"
     },
     {
       "kind": "paragraph",
       "code": "2-3-10",
       "title": "Direction Signs",
-      "body_path": "aim/2026-04/chapter-2/section-3/paragraph-10.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/03-airport-marking-aids-and-signs/10-direction-signs.md",
       "content_hash": "7efb3777ea20118827f73e9e37be750cfaf18e10eabebc12a20de9aaa9e1994a"
     },
     {
       "kind": "paragraph",
       "code": "2-3-11",
       "title": "Destination Signs",
-      "body_path": "aim/2026-04/chapter-2/section-3/paragraph-11.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/03-airport-marking-aids-and-signs/11-destination-signs.md",
       "content_hash": "4d31d588be384da85a3ac73dfc1fab3cdc05509d3e9cfd82abaabda0f69b1ae6"
     },
     {
       "kind": "paragraph",
       "code": "2-3-12",
       "title": "Information Signs",
-      "body_path": "aim/2026-04/chapter-2/section-3/paragraph-12.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/03-airport-marking-aids-and-signs/12-information-signs.md",
       "content_hash": "d37266474c347f3cafa82784271312c390ddc634bb391d25e71e7081e54f8b00"
     },
     {
       "kind": "paragraph",
       "code": "2-3-13",
       "title": "Runway Distance Remaining Signs",
-      "body_path": "aim/2026-04/chapter-2/section-3/paragraph-13.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/03-airport-marking-aids-and-signs/13-runway-distance-remaining-signs.md",
       "content_hash": "77020f7c2fb708326a648250c19d32fe295eb2442b604b75fe29b99d73a98f52"
     },
     {
       "kind": "paragraph",
       "code": "2-3-14",
       "title": "Aircraft Arresting Systems",
-      "body_path": "aim/2026-04/chapter-2/section-3/paragraph-14.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/03-airport-marking-aids-and-signs/14-aircraft-arresting-systems.md",
       "content_hash": "9c3ca10521be09155d1d8cca0666074899b447b97c0c4e80a88f811ad723efbe"
     },
     {
       "kind": "paragraph",
       "code": "2-3-15",
       "title": "Security Identifications Display Area (Airport Ramp Area)",
-      "body_path": "aim/2026-04/chapter-2/section-3/paragraph-15.md",
+      "body_path": "aim/2026-04/02-aeronautical-lighting-and-other-airport-visual-a/03-airport-marking-aids-and-signs/15-security-identifications-display-area-airport-ra.md",
       "content_hash": "fc74c86bac8cf2ae9a60d6b3a664c6e2d6d5488745690bb2f3582075aef66d0b"
     },
     {
       "kind": "paragraph",
       "code": "3-1-1",
       "title": "General",
-      "body_path": "aim/2026-04/chapter-3/section-1/paragraph-1.md",
+      "body_path": "aim/2026-04/03-airspace/01-general/01-general.md",
       "content_hash": "a6865b6cddee8df427da31a3172cb6fa531c0140adf009fc75bb4eb31f3a77b9"
     },
     {
       "kind": "paragraph",
       "code": "3-1-2",
       "title": "General Dimensions of Airspace Segments",
-      "body_path": "aim/2026-04/chapter-3/section-1/paragraph-2.md",
+      "body_path": "aim/2026-04/03-airspace/01-general/02-general-dimensions-of-airspace-segments.md",
       "content_hash": "b0bc3c83a392ea8a92f5fffd6d3e47c441fb9ead57c6d9c2563d5b66ff36a4c0"
     },
     {
       "kind": "paragraph",
       "code": "3-1-3",
       "title": "Hierarchy of Overlapping Airspace Designations",
-      "body_path": "aim/2026-04/chapter-3/section-1/paragraph-3.md",
+      "body_path": "aim/2026-04/03-airspace/01-general/03-hierarchy-of-overlapping-airspace-designations.md",
       "content_hash": "aa6969ce8f040bfe056951ba551a7a3a51083625d121ff0a44576b6963d2cd42"
     },
     {
       "kind": "paragraph",
       "code": "3-1-4",
       "title": "Basic VFR Weather Minimums",
-      "body_path": "aim/2026-04/chapter-3/section-1/paragraph-4.md",
+      "body_path": "aim/2026-04/03-airspace/01-general/04-basic-vfr-weather-minimums.md",
       "content_hash": "74a3616ce61934ad84a6fb01ec884d690bc2f36ccb1ae2cabe1d75a2e0ce0fc2"
     },
     {
       "kind": "paragraph",
       "code": "3-1-5",
       "title": "VFR Cruising Altitudes and Flight Levels",
-      "body_path": "aim/2026-04/chapter-3/section-1/paragraph-5.md",
+      "body_path": "aim/2026-04/03-airspace/01-general/05-vfr-cruising-altitudes-and-flight-levels.md",
       "content_hash": "e6d4fbe4030df9b70c6fbef3f20f1e9478450f1bd93388aa407df9a81aca4537"
     },
     {
       "kind": "paragraph",
       "code": "3-2-1",
       "title": "General",
-      "body_path": "aim/2026-04/chapter-3/section-2/paragraph-1.md",
+      "body_path": "aim/2026-04/03-airspace/02-controlled-airspace/01-general.md",
       "content_hash": "a5e88efeac5c0b21891e62b57c7f96bda23cd8775fac0eaa501e4a1fc3f8edfb"
     },
     {
       "kind": "paragraph",
       "code": "3-2-2",
       "title": "Class A Airspace",
-      "body_path": "aim/2026-04/chapter-3/section-2/paragraph-2.md",
+      "body_path": "aim/2026-04/03-airspace/02-controlled-airspace/02-class-a-airspace.md",
       "content_hash": "002020c5a4ccd570643dfd8ecc68d53589ce01df0cd8c3eb388e13353ed475f1"
     },
     {
       "kind": "paragraph",
       "code": "3-2-3",
       "title": "Class B Airspace",
-      "body_path": "aim/2026-04/chapter-3/section-2/paragraph-3.md",
+      "body_path": "aim/2026-04/03-airspace/02-controlled-airspace/03-class-b-airspace.md",
       "content_hash": "30267777344b1495d75d14f1a05bc0b483cf724b7b84f4879e1f8759c1a59d3f"
     },
     {
       "kind": "paragraph",
       "code": "3-2-4",
       "title": "Class C Airspace",
-      "body_path": "aim/2026-04/chapter-3/section-2/paragraph-4.md",
+      "body_path": "aim/2026-04/03-airspace/02-controlled-airspace/04-class-c-airspace.md",
       "content_hash": "f76630eab186a7a2a0f4bed0028e533adca107b634628ed41a5dedb2028fb6a5"
     },
     {
       "kind": "paragraph",
       "code": "3-2-5",
       "title": "Class D Airspace",
-      "body_path": "aim/2026-04/chapter-3/section-2/paragraph-5.md",
+      "body_path": "aim/2026-04/03-airspace/02-controlled-airspace/05-class-d-airspace.md",
       "content_hash": "93e210f72ba1399a98ab071fbab073de76347086e047ac9297f7d8e6576236e0"
     },
     {
       "kind": "paragraph",
       "code": "3-2-6",
       "title": "Class E Airspace",
-      "body_path": "aim/2026-04/chapter-3/section-2/paragraph-6.md",
+      "body_path": "aim/2026-04/03-airspace/02-controlled-airspace/06-class-e-airspace.md",
       "content_hash": "222fe33bf45d138daeb1424c89f294a4c55d3c4fae9054021c2d84742fe5f2c9"
     },
     {
       "kind": "paragraph",
       "code": "3-3-1",
       "title": "General",
-      "body_path": "aim/2026-04/chapter-3/section-3/paragraph-1.md",
+      "body_path": "aim/2026-04/03-airspace/03-class-g-airspace/01-general.md",
       "content_hash": "3c9cc81f33d4e1529f559381d400f87363fc42b060111ceb77dc0273c4f10e3e"
     },
     {
       "kind": "paragraph",
       "code": "3-3-2",
       "title": "VFR Requirements",
-      "body_path": "aim/2026-04/chapter-3/section-3/paragraph-2.md",
+      "body_path": "aim/2026-04/03-airspace/03-class-g-airspace/02-vfr-requirements.md",
       "content_hash": "1fbe0beb0eef389f30ebaa830992b349184a07e941658406e91c65595aa99b50"
     },
     {
       "kind": "paragraph",
       "code": "3-3-3",
       "title": "IFR Requirements",
-      "body_path": "aim/2026-04/chapter-3/section-3/paragraph-3.md",
+      "body_path": "aim/2026-04/03-airspace/03-class-g-airspace/03-ifr-requirements.md",
       "content_hash": "2fd7da35577365dc96bef0d484db114d7b80b72a8afa685cea6bca2e81f6c738"
     },
     {
       "kind": "paragraph",
       "code": "3-4-1",
       "title": "General",
-      "body_path": "aim/2026-04/chapter-3/section-4/paragraph-1.md",
+      "body_path": "aim/2026-04/03-airspace/04-special-use-airspace/01-general.md",
       "content_hash": "88dcd17d878dcefd644aebaf1e5de239794f32d383b1cfbb9573d6cf92602661"
     },
     {
       "kind": "paragraph",
       "code": "3-4-2",
       "title": "Prohibited Areas",
-      "body_path": "aim/2026-04/chapter-3/section-4/paragraph-2.md",
+      "body_path": "aim/2026-04/03-airspace/04-special-use-airspace/02-prohibited-areas.md",
       "content_hash": "78804aed6139d3feca383c3de3e8d5fe89b0f331c31101387690db3eb9558f2e"
     },
     {
       "kind": "paragraph",
       "code": "3-4-3",
       "title": "Restricted Areas",
-      "body_path": "aim/2026-04/chapter-3/section-4/paragraph-3.md",
+      "body_path": "aim/2026-04/03-airspace/04-special-use-airspace/03-restricted-areas.md",
       "content_hash": "3d120a8bd1d24d3a481654fd294b2e0514b60b96abb56845f540b05d0bd6466a"
     },
     {
       "kind": "paragraph",
       "code": "3-4-4",
       "title": "Warning Areas",
-      "body_path": "aim/2026-04/chapter-3/section-4/paragraph-4.md",
+      "body_path": "aim/2026-04/03-airspace/04-special-use-airspace/04-warning-areas.md",
       "content_hash": "8f7b1e8ce2fbad8c62b2ef68febd9bdd254a009464d38b9221e2ee8cf68c3157"
     },
     {
       "kind": "paragraph",
       "code": "3-4-5",
       "title": "Military Operations Areas",
-      "body_path": "aim/2026-04/chapter-3/section-4/paragraph-5.md",
+      "body_path": "aim/2026-04/03-airspace/04-special-use-airspace/05-military-operations-areas.md",
       "content_hash": "a2b2c5042eff800c535cff563a87464fa9accb2066cb4f44f059b6ca1e089ea8"
     },
     {
       "kind": "paragraph",
       "code": "3-4-6",
       "title": "Alert Areas",
-      "body_path": "aim/2026-04/chapter-3/section-4/paragraph-6.md",
+      "body_path": "aim/2026-04/03-airspace/04-special-use-airspace/06-alert-areas.md",
       "content_hash": "502315aed87c070908c7fe8e2475aed91250c929b20c0996f8b9cc17e51381e1"
     },
     {
       "kind": "paragraph",
       "code": "3-4-7",
       "title": "Controlled Firing Areas",
-      "body_path": "aim/2026-04/chapter-3/section-4/paragraph-7.md",
+      "body_path": "aim/2026-04/03-airspace/04-special-use-airspace/07-controlled-firing-areas.md",
       "content_hash": "5c23246f95b6a012aa356ac5ab1f076e48117a1336b08485a255f41284339f01"
     },
     {
       "kind": "paragraph",
       "code": "3-4-8",
       "title": "National Security Areas",
-      "body_path": "aim/2026-04/chapter-3/section-4/paragraph-8.md",
+      "body_path": "aim/2026-04/03-airspace/04-special-use-airspace/08-national-security-areas.md",
       "content_hash": "2f2daf5ce0c8c69a1492103db4ea007c82d50da67cfbe3ac8d862c4830cea88f"
     },
     {
       "kind": "paragraph",
       "code": "3-5-1",
       "title": "Airport Advisory/Information Services",
-      "body_path": "aim/2026-04/chapter-3/section-5/paragraph-1.md",
+      "body_path": "aim/2026-04/03-airspace/05-other-airspace-areas/01-airport-advisory-information-services.md",
       "content_hash": "cbce1c96cf16fe1a1703aaad6096d05d06aecb7581a79b01059f6188070fd61e"
     },
     {
       "kind": "paragraph",
       "code": "3-5-2",
       "title": "Military Training Routes",
-      "body_path": "aim/2026-04/chapter-3/section-5/paragraph-2.md",
+      "body_path": "aim/2026-04/03-airspace/05-other-airspace-areas/02-military-training-routes.md",
       "content_hash": "26c2b2efc5d78df03fb85213ee00cdf9fb74e0e3327e9df2ddb4612a47c780b4"
     },
     {
       "kind": "paragraph",
       "code": "3-5-3",
       "title": "Temporary Flight Restrictions",
-      "body_path": "aim/2026-04/chapter-3/section-5/paragraph-3.md",
+      "body_path": "aim/2026-04/03-airspace/05-other-airspace-areas/03-temporary-flight-restrictions.md",
       "content_hash": "aba9692e6dabb30a8289d0a769802601c4e1c679587fb7b9c95403ac08eb737e"
     },
     {
       "kind": "paragraph",
       "code": "3-5-4",
       "title": "Parachute Jump Aircraft Operations",
-      "body_path": "aim/2026-04/chapter-3/section-5/paragraph-4.md",
+      "body_path": "aim/2026-04/03-airspace/05-other-airspace-areas/04-parachute-jump-aircraft-operations.md",
       "content_hash": "e35362f28f4b4d5838eb6fa8339f8490e4b84e695b3d49f8e596f4cebb4eb4a6"
     },
     {
       "kind": "paragraph",
       "code": "3-5-5",
       "title": "Published VFR Routes",
-      "body_path": "aim/2026-04/chapter-3/section-5/paragraph-5.md",
+      "body_path": "aim/2026-04/03-airspace/05-other-airspace-areas/05-published-vfr-routes.md",
       "content_hash": "707b323ccd0ddc6b5240a9eec893b631a3c40e27d7d77dd7641511e020490010"
     },
     {
       "kind": "paragraph",
       "code": "3-5-6",
       "title": "Terminal Radar Service Area (TRSA)",
-      "body_path": "aim/2026-04/chapter-3/section-5/paragraph-6.md",
+      "body_path": "aim/2026-04/03-airspace/05-other-airspace-areas/06-terminal-radar-service-area-trsa.md",
       "content_hash": "4d0620316566a997209da83697fbbb2838dbf4f95bb5606ac24ec3f5efaecc99"
     },
     {
       "kind": "paragraph",
       "code": "3-5-7",
       "title": "Special Air Traffic Rules (SATR) and Special Flight Rules Area (SFRA)",
-      "body_path": "aim/2026-04/chapter-3/section-5/paragraph-7.md",
+      "body_path": "aim/2026-04/03-airspace/05-other-airspace-areas/07-special-air-traffic-rules-satr-and-special-fligh.md",
       "content_hash": "d0feaa80844b213c89e52aeee3003e1440dbf0e82562d38b194dcc1e41f2540e"
     },
     {
       "kind": "paragraph",
       "code": "3-5-8",
       "title": "Weather Reconnaissance Area (WRA)",
-      "body_path": "aim/2026-04/chapter-3/section-5/paragraph-8.md",
+      "body_path": "aim/2026-04/03-airspace/05-other-airspace-areas/08-weather-reconnaissance-area-wra.md",
       "content_hash": "fa0edd949434a0abe84c76dd755e13fba14264f07ec99c8fbc8572036aed5cc0"
     },
     {
       "kind": "paragraph",
       "code": "4-1-1",
       "title": "Air Route Traffic Control Centers",
-      "body_path": "aim/2026-04/chapter-4/section-1/paragraph-1.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/01-services-available-to-pilots/01-air-route-traffic-control-centers.md",
       "content_hash": "bcccafbf9aa073b82c846b8dfacbfe440f1576bed58bd86ce992021652ad732a"
     },
     {
       "kind": "paragraph",
       "code": "4-1-2",
       "title": "Control Towers",
-      "body_path": "aim/2026-04/chapter-4/section-1/paragraph-2.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/01-services-available-to-pilots/02-control-towers.md",
       "content_hash": "4ce84ce584565ca15126d4e6cbedb05d3852a847843574d3cfb372f4cdd09c0f"
     },
     {
       "kind": "paragraph",
       "code": "4-1-3",
       "title": "Flight Service Stations",
-      "body_path": "aim/2026-04/chapter-4/section-1/paragraph-3.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/01-services-available-to-pilots/03-flight-service-stations.md",
       "content_hash": "bddcddf18cab10b7556918d137557eefdb0988ab6e76116788b263d37cc72b99"
     },
     {
       "kind": "paragraph",
       "code": "4-1-4",
       "title": "Recording and Monitoring",
-      "body_path": "aim/2026-04/chapter-4/section-1/paragraph-4.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/01-services-available-to-pilots/04-recording-and-monitoring.md",
       "content_hash": "d27307a57647818d2f61375966cea3dd0332391bcb40da7c053a027f2ae0658f"
     },
     {
       "kind": "paragraph",
       "code": "4-1-5",
       "title": "Communications Release of IFR Aircraft Landing at an Airport Without an Operating Control Tower",
-      "body_path": "aim/2026-04/chapter-4/section-1/paragraph-5.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/01-services-available-to-pilots/05-communications-release-of-ifr-aircraft-landing-a.md",
       "content_hash": "809ff3bfd0ffda1fd44052a1a023bea6a946cece2e480f01c8ab49cf4d26fd11"
     },
     {
       "kind": "paragraph",
       "code": "4-1-6",
       "title": "Pilot Visits to Air Traffic Facilities",
-      "body_path": "aim/2026-04/chapter-4/section-1/paragraph-6.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/01-services-available-to-pilots/06-pilot-visits-to-air-traffic-facilities.md",
       "content_hash": "79dab788c3543c05418105b103f3d3c812057c314bf82e36d441c71bedd4034f"
     },
     {
       "kind": "paragraph",
       "code": "4-1-7",
       "title": "Operation Rain Check",
-      "body_path": "aim/2026-04/chapter-4/section-1/paragraph-7.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/01-services-available-to-pilots/07-operation-rain-check.md",
       "content_hash": "f9c7d33959429009fb432f1fbba2125e37a8fabacc8f3e512c319d9f01f8d6f6"
     },
     {
       "kind": "paragraph",
       "code": "4-1-8",
       "title": "Approach Control Service for VFR Arriving Aircraft",
-      "body_path": "aim/2026-04/chapter-4/section-1/paragraph-8.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/01-services-available-to-pilots/08-approach-control-service-for-vfr-arriving-aircra.md",
       "content_hash": "4e2cf599eb7f25f2400f61ff2dd5c1a572e6ea34278eb77a691cf56413dd725b"
     },
     {
       "kind": "paragraph",
       "code": "4-1-9",
       "title": "Traffic Advisory Practices at Airports Without Operating Control Towers",
-      "body_path": "aim/2026-04/chapter-4/section-1/paragraph-9.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/01-services-available-to-pilots/09-traffic-advisory-practices-at-airports-without-o.md",
       "content_hash": "519830126de22050d32172bc1b93c9ad2272c1e2b0f999595c78bab7706b8782"
     },
     {
       "kind": "paragraph",
       "code": "4-1-10",
       "title": "IFR Approaches/Ground Vehicle Operations",
-      "body_path": "aim/2026-04/chapter-4/section-1/paragraph-10.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/01-services-available-to-pilots/10-ifr-approaches-ground-vehicle-operations.md",
       "content_hash": "5093df9a3731bc55b708e25cf90b84f563e389b724ff3932488bab5b4464a952"
     },
     {
       "kind": "paragraph",
       "code": "4-1-11",
       "title": "Designated UNICOM/MULTICOM Frequencies",
-      "body_path": "aim/2026-04/chapter-4/section-1/paragraph-11.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/01-services-available-to-pilots/11-designated-unicom-multicom-frequencies.md",
       "content_hash": "cfba68d7c974988478a0e5c966d78247cc14cb68dcdc4579c1abd675c217ffc5"
     },
     {
       "kind": "paragraph",
       "code": "4-1-12",
       "title": "Use of UNICOM for ATC Purposes",
-      "body_path": "aim/2026-04/chapter-4/section-1/paragraph-12.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/01-services-available-to-pilots/12-use-of-unicom-for-atc-purposes.md",
       "content_hash": "4784703d29b7b2fefe86ef2470f5aefa769ebfc09e90b2af5ac04b2106ad7af2"
     },
     {
       "kind": "paragraph",
       "code": "4-1-13",
       "title": "Automatic Terminal Information Service (ATIS)",
-      "body_path": "aim/2026-04/chapter-4/section-1/paragraph-13.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/01-services-available-to-pilots/13-automatic-terminal-information-service-atis.md",
       "content_hash": "80b48d4ec002607216ad2b616c9b0d6b1e711f5e51a289d1bc1616b48622a450"
     },
     {
       "kind": "paragraph",
       "code": "4-1-14",
       "title": "Automatic Flight Information Service (AFIS) - Alaska FSSs Only",
-      "body_path": "aim/2026-04/chapter-4/section-1/paragraph-14.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/01-services-available-to-pilots/14-automatic-flight-information-service-afis-alaska.md",
       "content_hash": "871ae59e28a23e4fe3c423ef33c64b3dfc984ba760a79266a4d777c831066ff6"
     },
     {
       "kind": "paragraph",
       "code": "4-1-15",
       "title": "Radar Traffic Information Service",
-      "body_path": "aim/2026-04/chapter-4/section-1/paragraph-15.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/01-services-available-to-pilots/15-radar-traffic-information-service.md",
       "content_hash": "873410568e6771ca139854b84b0a19c14daffe4c3157d998b846e033ac0fbe8c"
     },
     {
       "kind": "paragraph",
       "code": "4-1-16",
       "title": "Safety Alert",
-      "body_path": "aim/2026-04/chapter-4/section-1/paragraph-16.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/01-services-available-to-pilots/16-safety-alert.md",
       "content_hash": "126ffec9d219207a00e1d47c61f6804f6134fe840bdd633c7e36d9daeb052826"
     },
     {
       "kind": "paragraph",
       "code": "4-1-17",
       "title": "Radar Assistance to VFR Aircraft",
-      "body_path": "aim/2026-04/chapter-4/section-1/paragraph-17.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/01-services-available-to-pilots/17-radar-assistance-to-vfr-aircraft.md",
       "content_hash": "4ae7e5073d4220502021184413d657ed425cd9a64e15eb9164d344cf3362c65c"
     },
     {
       "kind": "paragraph",
       "code": "4-1-18",
       "title": "Terminal Radar Services for VFR Aircraft",
-      "body_path": "aim/2026-04/chapter-4/section-1/paragraph-18.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/01-services-available-to-pilots/18-terminal-radar-services-for-vfr-aircraft.md",
       "content_hash": "a1fb53314cef8933367ffbb9add04f110379994773e840974d7c0968538ffe3b"
     },
     {
       "kind": "paragraph",
       "code": "4-1-19",
       "title": "Tower En Route Control (TEC)",
-      "body_path": "aim/2026-04/chapter-4/section-1/paragraph-19.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/01-services-available-to-pilots/19-tower-en-route-control-tec.md",
       "content_hash": "f328161a467cdbf1c87a31c56046f6f87f15fbceb03800a3f53a59626b5732ef"
     },
     {
       "kind": "paragraph",
       "code": "4-1-20",
       "title": "Transponder Operation",
-      "body_path": "aim/2026-04/chapter-4/section-1/paragraph-20.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/01-services-available-to-pilots/20-transponder-operation.md",
       "content_hash": "4ac01157997dab2fab7795466b3257ca4a4dde50378a2475875323fa1ef0d69b"
     },
     {
       "kind": "paragraph",
       "code": "4-1-21",
       "title": "Airport Reservation Operations and Special Traffic Management Programs",
-      "body_path": "aim/2026-04/chapter-4/section-1/paragraph-21.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/01-services-available-to-pilots/21-airport-reservation-operations-and-special-traff.md",
       "content_hash": "44a3626dd55487f22c158763b3f5de3ecb9fa11b2884ba6632a09bf7e789d6c8"
     },
     {
       "kind": "paragraph",
       "code": "4-1-22",
       "title": "Requests for Waivers and Authorizations from Title 14, Code of Federal Regulations (14 CFR)",
-      "body_path": "aim/2026-04/chapter-4/section-1/paragraph-22.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/01-services-available-to-pilots/22-requests-for-waivers-and-authorizations-from-tit.md",
       "content_hash": "3e9b9f28169d87e2b081ebeab213786428783e94e13387d205b0567b0d55daf4"
     },
     {
       "kind": "paragraph",
       "code": "4-1-23",
       "title": "Weather System Processor",
-      "body_path": "aim/2026-04/chapter-4/section-1/paragraph-23.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/01-services-available-to-pilots/23-weather-system-processor.md",
       "content_hash": "7a4cd53c0c1df71551654870a957b7e38dc0cd8ca3b5e5ede684596a5268d3d7"
     },
     {
       "kind": "paragraph",
       "code": "4-2-1",
       "title": "General",
-      "body_path": "aim/2026-04/chapter-4/section-2/paragraph-1.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/02-radio-communications-phraseology-and-techniques/01-general.md",
       "content_hash": "59ae24fcba95922bf27505c80b6f5b430f60b9519453c04219d65b72a10dc80d"
     },
     {
       "kind": "paragraph",
       "code": "4-2-2",
       "title": "Radio Technique",
-      "body_path": "aim/2026-04/chapter-4/section-2/paragraph-2.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/02-radio-communications-phraseology-and-techniques/02-radio-technique.md",
       "content_hash": "6241261caf85fc73084c963da7b1d5b18cdb6482ea0201837d9780a1734f8f5c"
     },
     {
       "kind": "paragraph",
       "code": "4-2-3",
       "title": "Contact Procedures",
-      "body_path": "aim/2026-04/chapter-4/section-2/paragraph-3.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/02-radio-communications-phraseology-and-techniques/03-contact-procedures.md",
       "content_hash": "1023a309f9d5cb30c619e2fa38fbeb158d9406263c2d5363ea3bfa6cd3f23d75"
     },
     {
       "kind": "paragraph",
       "code": "4-2-4",
       "title": "Aircraft Call Signs",
-      "body_path": "aim/2026-04/chapter-4/section-2/paragraph-4.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/02-radio-communications-phraseology-and-techniques/04-aircraft-call-signs.md",
       "content_hash": "de04a89203787ad02b88ca3bc15b303c7901454e650c5b9d731ec3dad758f290"
     },
     {
       "kind": "paragraph",
       "code": "4-2-5",
       "title": "Description of Interchange or Leased Aircraft",
-      "body_path": "aim/2026-04/chapter-4/section-2/paragraph-5.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/02-radio-communications-phraseology-and-techniques/05-description-of-interchange-or-leased-aircraft.md",
       "content_hash": "d3684e0bf1a86fc1621bbbc4f254381c17ead43b8a0247cac78a0491c67118aa"
     },
     {
       "kind": "paragraph",
       "code": "4-2-6",
       "title": "Ground Station Call Signs",
-      "body_path": "aim/2026-04/chapter-4/section-2/paragraph-6.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/02-radio-communications-phraseology-and-techniques/06-ground-station-call-signs.md",
       "content_hash": "76102f9c4631915fd715aa9cd9f51ccfd60b00c2a1ed8895bd84052ed2010c89"
     },
     {
       "kind": "paragraph",
       "code": "4-2-7",
       "title": "Phonetic Alphabet",
-      "body_path": "aim/2026-04/chapter-4/section-2/paragraph-7.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/02-radio-communications-phraseology-and-techniques/07-phonetic-alphabet.md",
       "content_hash": "5abea62f52f4b025bbdf986013fed8ca86bdb96652b7674106e6f8a07fe7daa1"
     },
     {
       "kind": "paragraph",
       "code": "4-2-8",
       "title": "Figures",
-      "body_path": "aim/2026-04/chapter-4/section-2/paragraph-8.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/02-radio-communications-phraseology-and-techniques/08-figures.md",
       "content_hash": "644cbebf8511c42d92cae15bebd61702d01f051952c3e1aba16adfc1efe9a39b"
     },
     {
       "kind": "paragraph",
       "code": "4-2-9",
       "title": "Altitudes and Flight Levels",
-      "body_path": "aim/2026-04/chapter-4/section-2/paragraph-9.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/02-radio-communications-phraseology-and-techniques/09-altitudes-and-flight-levels.md",
       "content_hash": "79f0a606b7b39857f0a39978b998f3b52f69eb3162bffb2f3f6738e62ef2cc74"
     },
     {
       "kind": "paragraph",
       "code": "4-2-10",
       "title": "Directions",
-      "body_path": "aim/2026-04/chapter-4/section-2/paragraph-10.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/02-radio-communications-phraseology-and-techniques/10-directions.md",
       "content_hash": "8a5dc02748a3d244699c78030cd996b6c9fb14e87d139b7cc430e0da8054ed1a"
     },
     {
       "kind": "paragraph",
       "code": "4-2-11",
       "title": "Speeds",
-      "body_path": "aim/2026-04/chapter-4/section-2/paragraph-11.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/02-radio-communications-phraseology-and-techniques/11-speeds.md",
       "content_hash": "d177e8e06c2fc9d20b1ef35b6c923fa899a59457ad8bb9a9c989d04f61c9b41c"
     },
     {
       "kind": "paragraph",
       "code": "4-2-12",
       "title": "Time",
-      "body_path": "aim/2026-04/chapter-4/section-2/paragraph-12.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/02-radio-communications-phraseology-and-techniques/12-time.md",
       "content_hash": "33f83f2ddc7ff5147ecf19a01f59d4414d50be36268aea4d5128f096e358a5b4"
     },
     {
       "kind": "paragraph",
       "code": "4-2-13",
       "title": "Communications with Tower when Aircraft Transmitter or Receiver or Both are Inoperative",
-      "body_path": "aim/2026-04/chapter-4/section-2/paragraph-13.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/02-radio-communications-phraseology-and-techniques/13-communications-with-tower-when-aircraft-transmit.md",
       "content_hash": "348a700ed06bb287d10a38b93d24bcdfb6ffbda06c9ce3465d8b02bea88d7fe3"
     },
     {
       "kind": "paragraph",
       "code": "4-2-14",
       "title": "Communications for VFR Flights",
-      "body_path": "aim/2026-04/chapter-4/section-2/paragraph-14.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/02-radio-communications-phraseology-and-techniques/14-communications-for-vfr-flights.md",
       "content_hash": "a49b45f553034186b4f36775395959c2101871756c48e3afd2d26eeb7deebb34"
     },
     {
       "kind": "paragraph",
       "code": "4-3-1",
       "title": "General",
-      "body_path": "aim/2026-04/chapter-4/section-3/paragraph-1.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/03-airport-operations/01-general.md",
       "content_hash": "828ded29be9d88e68d966ec45d922061282e58d13fb349a1a4389c7d8f59be4c"
     },
     {
       "kind": "paragraph",
       "code": "4-3-2",
       "title": "Airports with an Operating Control Tower",
-      "body_path": "aim/2026-04/chapter-4/section-3/paragraph-2.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/03-airport-operations/02-airports-with-an-operating-control-tower.md",
       "content_hash": "d66a65866af91dd5db876200fd027b0cf0929559bc310c370c286a5bcbfccb36"
     },
     {
       "kind": "paragraph",
       "code": "4-3-3",
       "title": "Traffic Patterns",
-      "body_path": "aim/2026-04/chapter-4/section-3/paragraph-3.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/03-airport-operations/03-traffic-patterns.md",
       "content_hash": "876b06b3c1a6007067441cc8eafca630554bba46c9064140d3cbc76cc7f8d20e"
     },
     {
       "kind": "paragraph",
       "code": "4-3-4",
       "title": "Visual Indicators at Airports Without an Operating Control Tower",
-      "body_path": "aim/2026-04/chapter-4/section-3/paragraph-4.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/03-airport-operations/04-visual-indicators-at-airports-without-an-operati.md",
       "content_hash": "2809b14aa109568916160986d5ce11b85972658ea2c7703fe769e7573fd16492"
     },
     {
       "kind": "paragraph",
       "code": "4-3-5",
       "title": "Unexpected Maneuvers in the Airport Traffic Pattern",
-      "body_path": "aim/2026-04/chapter-4/section-3/paragraph-5.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/03-airport-operations/05-unexpected-maneuvers-in-the-airport-traffic-patt.md",
       "content_hash": "ddf0d6c46f43275be69f267e5ec7ff76c801130647b4cc1a70ce82bd0d76c2ce"
     },
     {
       "kind": "paragraph",
       "code": "4-3-6",
       "title": "Use of Runways/Declared Distances",
-      "body_path": "aim/2026-04/chapter-4/section-3/paragraph-6.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/03-airport-operations/06-use-of-runways-declared-distances.md",
       "content_hash": "1d1b1ccf150a881315b604478e275570bfd9485bcacaa91695c060f0e625977f"
     },
     {
       "kind": "paragraph",
       "code": "4-3-7",
       "title": "Low Level Wind Shear/Microburst Detection Systems",
-      "body_path": "aim/2026-04/chapter-4/section-3/paragraph-7.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/03-airport-operations/07-low-level-wind-shear-microburst-detection-system.md",
       "content_hash": "f7ebf86e9f267d479a302daae23b023c8c812c06237379b362d875580512790d"
     },
     {
       "kind": "paragraph",
       "code": "4-3-8",
       "title": "Braking Action Reports and Advisories",
-      "body_path": "aim/2026-04/chapter-4/section-3/paragraph-8.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/03-airport-operations/08-braking-action-reports-and-advisories.md",
       "content_hash": "41cdd1f64face65c71a64286f8360f9395e11414e7c59f7015a65d0287d87f1d"
     },
     {
       "kind": "paragraph",
       "code": "4-3-9",
       "title": "Runway Condition Reports",
-      "body_path": "aim/2026-04/chapter-4/section-3/paragraph-9.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/03-airport-operations/09-runway-condition-reports.md",
       "content_hash": "ea9ba697653672c50ca3dce2fe4410096786cd8ca34fa2400c3a55902354ffa3"
     },
     {
       "kind": "paragraph",
       "code": "4-3-10",
       "title": "Intersection Takeoffs",
-      "body_path": "aim/2026-04/chapter-4/section-3/paragraph-10.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/03-airport-operations/10-intersection-takeoffs.md",
       "content_hash": "866052e4a5d3bc654cc359be802b5bc842bb9490bfba3367ed662ce01553de99"
     },
     {
       "kind": "paragraph",
       "code": "4-3-11",
       "title": "Pilot Responsibilities When Conducting Land and Hold Short Operations (LAHSO)",
-      "body_path": "aim/2026-04/chapter-4/section-3/paragraph-11.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/03-airport-operations/11-pilot-responsibilities-when-conducting-land-and.md",
       "content_hash": "e29fa861a6c0ab88b0329b423e032f1507b0dbf3a01b6bf1deb90dbe9716b0a8"
     },
     {
       "kind": "paragraph",
       "code": "4-3-12",
       "title": "Low Approach",
-      "body_path": "aim/2026-04/chapter-4/section-3/paragraph-12.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/03-airport-operations/12-low-approach.md",
       "content_hash": "8c2c50eaf5c236c0d8f6bdde78e65d651e9c2622ea0ac0d8d489dbef90553227"
     },
     {
       "kind": "paragraph",
       "code": "4-3-13",
       "title": "Traffic Control Light Signals",
-      "body_path": "aim/2026-04/chapter-4/section-3/paragraph-13.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/03-airport-operations/13-traffic-control-light-signals.md",
       "content_hash": "39830afe3e38b5331bcc5ea4d7c825a7f654369a1d2bc2c71132896b2cf5369a"
     },
     {
       "kind": "paragraph",
       "code": "4-3-14",
       "title": "Communications",
-      "body_path": "aim/2026-04/chapter-4/section-3/paragraph-14.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/03-airport-operations/14-communications.md",
       "content_hash": "24a721ea0934b027a043138e07fc751845e0065bef9db3161f6bb13fff676055"
     },
     {
       "kind": "paragraph",
       "code": "4-3-15",
       "title": "Gate Holding Due to Departure Delays",
-      "body_path": "aim/2026-04/chapter-4/section-3/paragraph-15.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/03-airport-operations/15-gate-holding-due-to-departure-delays.md",
       "content_hash": "26eb05aa05a72be1b3563cff9535cbc949a2535d4a634471b88d6f8d7a6eb255"
     },
     {
       "kind": "paragraph",
       "code": "4-3-16",
       "title": "VFR Flights in Terminal Areas",
-      "body_path": "aim/2026-04/chapter-4/section-3/paragraph-16.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/03-airport-operations/16-vfr-flights-in-terminal-areas.md",
       "content_hash": "f2c082c883d5ba646de6c918c78212f3d3757ba9b4c28b123285e41d96f32e2f"
     },
     {
       "kind": "paragraph",
       "code": "4-3-17",
       "title": "VFR Helicopter Operations at Controlled Airports",
-      "body_path": "aim/2026-04/chapter-4/section-3/paragraph-17.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/03-airport-operations/17-vfr-helicopter-operations-at-controlled-airports.md",
       "content_hash": "67c2018586ee604921d14fbb20fbc06a23bda1fc6340478aa29a994669ce2e5d"
     },
     {
       "kind": "paragraph",
       "code": "4-3-18",
       "title": "Taxiing",
-      "body_path": "aim/2026-04/chapter-4/section-3/paragraph-18.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/03-airport-operations/18-taxiing.md",
       "content_hash": "8dcadf370a9e555120d34d16a9cb678abc07cb250a0494720ef0479c1cf12a5c"
     },
     {
       "kind": "paragraph",
       "code": "4-3-19",
       "title": "Taxi During Low Visibility",
-      "body_path": "aim/2026-04/chapter-4/section-3/paragraph-19.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/03-airport-operations/19-taxi-during-low-visibility.md",
       "content_hash": "059e08998b55e8a2b1f240003897491ad800756b42d31fa814f82b14134241b4"
     },
     {
       "kind": "paragraph",
       "code": "4-3-20",
       "title": "Exiting the Runway After Landing",
-      "body_path": "aim/2026-04/chapter-4/section-3/paragraph-20.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/03-airport-operations/20-exiting-the-runway-after-landing.md",
       "content_hash": "46ccbc7e0c32ee27378c20a0f81e26171cd9ab6d48adf09f09f82ee35f3dffd3"
     },
     {
       "kind": "paragraph",
       "code": "4-3-21",
       "title": "Practice Instrument Approaches",
-      "body_path": "aim/2026-04/chapter-4/section-3/paragraph-21.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/03-airport-operations/21-practice-instrument-approaches.md",
       "content_hash": "196c349bf2ceb501134ac8a8b29ffb7be3058335355052245c5af38de9fc00b9"
     },
     {
       "kind": "paragraph",
       "code": "4-3-22",
       "title": "Option Approach",
-      "body_path": "aim/2026-04/chapter-4/section-3/paragraph-22.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/03-airport-operations/22-option-approach.md",
       "content_hash": "2aa1935b0ee514579dcba386af4925bcf1576c52350151f94c832e12467a014b"
     },
     {
       "kind": "paragraph",
       "code": "4-3-23",
       "title": "Use of Aircraft Lights",
-      "body_path": "aim/2026-04/chapter-4/section-3/paragraph-23.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/03-airport-operations/23-use-of-aircraft-lights.md",
       "content_hash": "98be6fd5d39ddedab3f245f52498728e1d5987aa6f5ca69010f60f4797663090"
     },
     {
       "kind": "paragraph",
       "code": "4-3-24",
       "title": "Flight Inspection/`Flight Check' Aircraft in Terminal Areas",
-      "body_path": "aim/2026-04/chapter-4/section-3/paragraph-24.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/03-airport-operations/24-flight-inspection-flight-check-aircraft-in-termi.md",
       "content_hash": "e0b5e48deea9d75317c25033f1a1e1494a2fbbf2fd586c45ddac76b9b3a9453e"
     },
     {
       "kind": "paragraph",
       "code": "4-3-25",
       "title": "Hand Signals",
-      "body_path": "aim/2026-04/chapter-4/section-3/paragraph-25.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/03-airport-operations/25-hand-signals.md",
       "content_hash": "a88b1009405e4b10bcc84002d57693fed1eadbcfc08282b8aebec97338561c41"
     },
     {
       "kind": "paragraph",
       "code": "4-3-26",
       "title": "Operations at Uncontrolled Airports With Automated Surface Observing System (ASOS)/Automated Weather Sensor System(AWSS)/Automated Weather Observing System (AWOS)",
-      "body_path": "aim/2026-04/chapter-4/section-3/paragraph-26.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/03-airport-operations/26-operations-at-uncontrolled-airports-with-automat.md",
       "content_hash": "e970d492e6afa1d7f32f2ec80879fea5bbf023c06b4aff0addcb29e41365248c"
     },
     {
       "kind": "paragraph",
       "code": "4-4-1",
       "title": "Clearance",
-      "body_path": "aim/2026-04/chapter-4/section-4/paragraph-1.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/04-atc-clearances-and-aircraft-separation/01-clearance.md",
       "content_hash": "fdae9482b446a1d04dbae380a496e6033d558981339434c3ce8240883f6833bf"
     },
     {
       "kind": "paragraph",
       "code": "4-4-2",
       "title": "Clearance Prefix",
-      "body_path": "aim/2026-04/chapter-4/section-4/paragraph-2.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/04-atc-clearances-and-aircraft-separation/02-clearance-prefix.md",
       "content_hash": "b8b0c47add47aea0e82d3db8f8ea22910f046bd7cfa1f46303a3a15df0a7433e"
     },
     {
       "kind": "paragraph",
       "code": "4-4-3",
       "title": "Clearance Items",
-      "body_path": "aim/2026-04/chapter-4/section-4/paragraph-3.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/04-atc-clearances-and-aircraft-separation/03-clearance-items.md",
       "content_hash": "6fc86c3f65f41d9aba052eb47fafc53e6ee357510b64a5302345c01325714d39"
     },
     {
       "kind": "paragraph",
       "code": "4-4-4",
       "title": "Amended Clearances",
-      "body_path": "aim/2026-04/chapter-4/section-4/paragraph-4.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/04-atc-clearances-and-aircraft-separation/04-amended-clearances.md",
       "content_hash": "caabd6b22a1bece7263e99c3b5d89863f7aa34a807a5e4d5f437915cd299c3c8"
     },
     {
       "kind": "paragraph",
       "code": "4-4-5",
       "title": "Coded Departure Route (CDR)",
-      "body_path": "aim/2026-04/chapter-4/section-4/paragraph-5.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/04-atc-clearances-and-aircraft-separation/05-coded-departure-route-cdr.md",
       "content_hash": "2537cb124a13abb377d87d9c93119566b38a7669ac7f4d53a689d65d8434afa5"
     },
     {
       "kind": "paragraph",
       "code": "4-4-6",
       "title": "Special VFR Clearances",
-      "body_path": "aim/2026-04/chapter-4/section-4/paragraph-6.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/04-atc-clearances-and-aircraft-separation/06-special-vfr-clearances.md",
       "content_hash": "aca7a30af0870cd2f037f78ba5c01240ea08a27ceaf7ce6ede6d2d42351b2b05"
     },
     {
       "kind": "paragraph",
       "code": "4-4-7",
       "title": "Pilot Responsibility upon Clearance Issuance",
-      "body_path": "aim/2026-04/chapter-4/section-4/paragraph-7.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/04-atc-clearances-and-aircraft-separation/07-pilot-responsibility-upon-clearance-issuance.md",
       "content_hash": "42b37d1c192764acd1314ed5ffe5877d18afbf32c55c69fbb7393ae3aab07ad5"
     },
     {
       "kind": "paragraph",
       "code": "4-4-8",
       "title": "IFR Clearance VFR-on-top",
-      "body_path": "aim/2026-04/chapter-4/section-4/paragraph-8.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/04-atc-clearances-and-aircraft-separation/08-ifr-clearance-vfr-on-top.md",
       "content_hash": "1940aafa4cc046378b7f92efa753e965272ebe97f5fcba8c92b8c373d700ca26"
     },
     {
       "kind": "paragraph",
       "code": "4-4-9",
       "title": "VFR/IFR Flights",
-      "body_path": "aim/2026-04/chapter-4/section-4/paragraph-9.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/04-atc-clearances-and-aircraft-separation/09-vfr-ifr-flights.md",
       "content_hash": "db11ccaf74fc72ae74c538de9c72fe2fedf4311540d8cdadb1a29ac00e594bea"
     },
     {
       "kind": "paragraph",
       "code": "4-4-10",
       "title": "Adherence to Clearance",
-      "body_path": "aim/2026-04/chapter-4/section-4/paragraph-10.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/04-atc-clearances-and-aircraft-separation/10-adherence-to-clearance.md",
       "content_hash": "75aee245fcdc5083ed51e5d1054b772aeaef7a53d3a9bea5b1a1a61b86b8608f"
     },
     {
       "kind": "paragraph",
       "code": "4-4-11",
       "title": "IFR Separation Standards",
-      "body_path": "aim/2026-04/chapter-4/section-4/paragraph-11.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/04-atc-clearances-and-aircraft-separation/11-ifr-separation-standards.md",
       "content_hash": "6c75b44d62ea0ff94e446efb3e16fa93a8aa382ba253bc894c813beb31be27c1"
     },
     {
       "kind": "paragraph",
       "code": "4-4-12",
       "title": "Speed Adjustments",
-      "body_path": "aim/2026-04/chapter-4/section-4/paragraph-12.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/04-atc-clearances-and-aircraft-separation/12-speed-adjustments.md",
       "content_hash": "a69d6303bfa2cdf557d33e8bb64472222bd8be325b1ed214fdf8afe9cc8e8124"
     },
     {
       "kind": "paragraph",
       "code": "4-4-13",
       "title": "Runway Separation",
-      "body_path": "aim/2026-04/chapter-4/section-4/paragraph-13.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/04-atc-clearances-and-aircraft-separation/13-runway-separation.md",
       "content_hash": "f1a030c2cdd757a50b046b3523cfe51d2d528ed685510b5b769f597a44e1f442"
     },
     {
       "kind": "paragraph",
       "code": "4-4-14",
       "title": "Visual Separation",
-      "body_path": "aim/2026-04/chapter-4/section-4/paragraph-14.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/04-atc-clearances-and-aircraft-separation/14-visual-separation.md",
       "content_hash": "305efc8d0dfaa0934ea88e92dc3e13344cd1e8536503417d34a92ae43fc016a9"
     },
     {
       "kind": "paragraph",
       "code": "4-4-15",
       "title": "Use of Visual Clearing Procedures",
-      "body_path": "aim/2026-04/chapter-4/section-4/paragraph-15.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/04-atc-clearances-and-aircraft-separation/15-use-of-visual-clearing-procedures.md",
       "content_hash": "b863db6ff8a48bf72925be1e15c09a27b5a8cc803a32a77c0e822e0e3a59bfd7"
     },
     {
       "kind": "paragraph",
       "code": "4-4-16",
       "title": "Traffic Alert and Collision Avoidance System (TCAS I & II)",
-      "body_path": "aim/2026-04/chapter-4/section-4/paragraph-16.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/04-atc-clearances-and-aircraft-separation/16-traffic-alert-and-collision-avoidance-system-tca.md",
       "content_hash": "5ed7cd7b6ad2e7040c8f2b41f227758704e0c3914de280f8a9a70da09d0ffbc9"
     },
     {
       "kind": "paragraph",
       "code": "4-4-17",
       "title": "Traffic Information Service (TIS)",
-      "body_path": "aim/2026-04/chapter-4/section-4/paragraph-17.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/04-atc-clearances-and-aircraft-separation/17-traffic-information-service-tis.md",
       "content_hash": "ae9e0765c2ec618cad2cf8e4f5f64a2e0050bee0a639fa3ba18b17caeb228be5"
     },
     {
       "kind": "paragraph",
       "code": "4-5-1",
       "title": "Radar",
-      "body_path": "aim/2026-04/chapter-4/section-5/paragraph-1.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/05-surveillance-systems/01-radar.md",
       "content_hash": "6af6f3d6d5e6fb35292b268c45492f807815fb52a0b49a8319da5c21ebc9d182"
     },
     {
       "kind": "paragraph",
       "code": "4-5-2",
       "title": "Air Traffic Control Radar Beacon System (ATCRBS)",
-      "body_path": "aim/2026-04/chapter-4/section-5/paragraph-2.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/05-surveillance-systems/02-air-traffic-control-radar-beacon-system-atcrbs.md",
       "content_hash": "28142e4290063a2a8343170e1f60f8bf68a3f8dedcf215f6ec3218f671eea4fb"
     },
     {
       "kind": "paragraph",
       "code": "4-5-3",
       "title": "Surveillance Radar",
-      "body_path": "aim/2026-04/chapter-4/section-5/paragraph-3.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/05-surveillance-systems/03-surveillance-radar.md",
       "content_hash": "3e9510bb63088f1c2bcdb31dfdbe2a79a9e3387adc5009885949fe7df8ff66b7"
     },
     {
       "kind": "paragraph",
       "code": "4-5-4",
       "title": "Precision Approach Radar (PAR)",
-      "body_path": "aim/2026-04/chapter-4/section-5/paragraph-4.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/05-surveillance-systems/04-precision-approach-radar-par.md",
       "content_hash": "f0d2461f728529519c7f7389a91acd293fb1c595a951cd1f37bd56f70f2c8970"
     },
     {
       "kind": "paragraph",
       "code": "4-5-5",
       "title": "Airport Surface Detection Equipment (ASDE-X)/Airport Surface Surveillance Capability (ASSC)",
-      "body_path": "aim/2026-04/chapter-4/section-5/paragraph-5.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/05-surveillance-systems/05-airport-surface-detection-equipment-asde-x-airpo.md",
       "content_hash": "7838d17a0447c7065cfa53c44a283e7c8214573d24ea591d6f98256e64df887b"
     },
     {
       "kind": "paragraph",
       "code": "4-5-6",
       "title": "Traffic Information Service (TIS)",
-      "body_path": "aim/2026-04/chapter-4/section-5/paragraph-6.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/05-surveillance-systems/06-traffic-information-service-tis.md",
       "content_hash": "102b9a7d16f28d6be983f858037652a4e0fa8828a1c285503b1fc912bc26be49"
     },
     {
       "kind": "paragraph",
       "code": "4-5-7",
       "title": "Automatic Dependent Surveillance-Broadcast (ADS-B) Services",
-      "body_path": "aim/2026-04/chapter-4/section-5/paragraph-7.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/05-surveillance-systems/07-automatic-dependent-surveillance-broadcast-ads-b.md",
       "content_hash": "de5f25c845f5d4a94d71ecc0a71d353e67c09cd4e85a86e0844b1a235b195f74"
     },
     {
       "kind": "paragraph",
       "code": "4-5-8",
       "title": "Traffic Information Service- Broadcast (TIS-B)",
-      "body_path": "aim/2026-04/chapter-4/section-5/paragraph-8.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/05-surveillance-systems/08-traffic-information-service-broadcast-tis-b.md",
       "content_hash": "ebe322873455f14f092e36bb9e72e6d55fa63f184687a4507ba5b55ddf414df6"
     },
     {
       "kind": "paragraph",
       "code": "4-5-9",
       "title": "Flight Information Service- Broadcast (FIS-B)",
-      "body_path": "aim/2026-04/chapter-4/section-5/paragraph-9.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/05-surveillance-systems/09-flight-information-service-broadcast-fis-b.md",
       "content_hash": "cd1ed20526a95cd728a98d03d8d624765c20b71e2daf5bf4155de842a958154e"
     },
     {
       "kind": "paragraph",
       "code": "4-5-10",
       "title": "Automatic Dependent Surveillance-Rebroadcast (ADS-R)",
-      "body_path": "aim/2026-04/chapter-4/section-5/paragraph-10.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/05-surveillance-systems/10-automatic-dependent-surveillance-rebroadcast-ads.md",
       "content_hash": "8a9b6f3b21ba1e77300849896a290a9268f8a651cf2d563d71a6eba7dca7e0be"
     },
     {
       "kind": "paragraph",
       "code": "4-6-1",
       "title": "Applicability and RVSM Mandate (Date/Time and Area)",
-      "body_path": "aim/2026-04/chapter-4/section-6/paragraph-1.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/06-operational-policy-procedures-for-reduced-vertic/01-applicability-and-rvsm-mandate-date-time-and-are.md",
       "content_hash": "92651f50bd5c40656b9b7f41c9c2017f91bf929f80a80b569459076b489a2789"
     },
     {
       "kind": "paragraph",
       "code": "4-6-2",
       "title": "Flight Level Orientation Scheme",
-      "body_path": "aim/2026-04/chapter-4/section-6/paragraph-2.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/06-operational-policy-procedures-for-reduced-vertic/02-flight-level-orientation-scheme.md",
       "content_hash": "62faf3c77a7f78af64ccadbf41a3729919949b4c6c27039f21f7e785a6ef5c80"
     },
     {
       "kind": "paragraph",
       "code": "4-6-3",
       "title": "Aircraft and Operator Approval Policy/Procedures, RVSM Monitoring and Databases for Aircraft and Operator Approval",
-      "body_path": "aim/2026-04/chapter-4/section-6/paragraph-3.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/06-operational-policy-procedures-for-reduced-vertic/03-aircraft-and-operator-approval-policy-procedures.md",
       "content_hash": "4688f756e13c514e72c1dd22269197067983ec8fda5ff1eb3641e08e8504f64f"
     },
     {
       "kind": "paragraph",
       "code": "4-6-4",
       "title": "Flight Planning into RVSM Airspace",
-      "body_path": "aim/2026-04/chapter-4/section-6/paragraph-4.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/06-operational-policy-procedures-for-reduced-vertic/04-flight-planning-into-rvsm-airspace.md",
       "content_hash": "4c73b3bbda9f6a9432ee1f3afc88eff9abacde771bac07f7303e6fa4a5d326e6"
     },
     {
       "kind": "paragraph",
       "code": "4-6-5",
       "title": "Pilot RVSM Operating Practices and Procedures",
-      "body_path": "aim/2026-04/chapter-4/section-6/paragraph-5.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/06-operational-policy-procedures-for-reduced-vertic/05-pilot-rvsm-operating-practices-and-procedures.md",
       "content_hash": "43dc9b9be2fbae5ccdd1477746b372e796d06c39fafc05b7f0b0f1ac99881cfa"
     },
     {
       "kind": "paragraph",
       "code": "4-6-6",
       "title": "Guidance on Severe Turbulence and Mountain Wave Activity (MWA)",
-      "body_path": "aim/2026-04/chapter-4/section-6/paragraph-6.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/06-operational-policy-procedures-for-reduced-vertic/06-guidance-on-severe-turbulence-and-mountain-wave.md",
       "content_hash": "92005499f1b80e642c132a05d30b6528dacd1cabde753574098bccaf1aa66776"
     },
     {
       "kind": "paragraph",
       "code": "4-6-7",
       "title": "Guidance on Wake Turbulence",
-      "body_path": "aim/2026-04/chapter-4/section-6/paragraph-7.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/06-operational-policy-procedures-for-reduced-vertic/07-guidance-on-wake-turbulence.md",
       "content_hash": "d22096608d71a561de052b2b82124316c3f31cc42791fb6c3b0f7b129da750ff"
     },
     {
       "kind": "paragraph",
       "code": "4-6-8",
       "title": "Pilot/Controller Phraseology",
-      "body_path": "aim/2026-04/chapter-4/section-6/paragraph-8.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/06-operational-policy-procedures-for-reduced-vertic/08-pilot-controller-phraseology.md",
       "content_hash": "dbc68cc81fa3b6a3812b6f6edc520196cbc0d2cb881ddeebd1801be79a3e5c07"
     },
     {
       "kind": "paragraph",
       "code": "4-6-9",
       "title": "Contingency Actions: Weather Encounters and Aircraft System Failures that Occur After Entry into RVSM Airspace",
-      "body_path": "aim/2026-04/chapter-4/section-6/paragraph-9.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/06-operational-policy-procedures-for-reduced-vertic/09-contingency-actions-weather-encounters-and-aircr.md",
       "content_hash": "9481dc27744084e00a78b25459818b43a95db62e68f575fc1c6b799d4e6d8154"
     },
     {
       "kind": "paragraph",
       "code": "4-6-10",
       "title": "Procedures for Accommodation of Non-RVSM Aircraft",
-      "body_path": "aim/2026-04/chapter-4/section-6/paragraph-10.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/06-operational-policy-procedures-for-reduced-vertic/10-procedures-for-accommodation-of-non-rvsm-aircraf.md",
       "content_hash": "1d67d409515fe11bd147fa900790aea05fa4e9e44a8a209508f83f117957f2fe"
     },
     {
       "kind": "paragraph",
       "code": "4-6-11",
       "title": "Non-RVSM Aircraft Requesting Climb to and Descent from Flight Levels Above RVSM Airspace Without Intermediate Level Off",
-      "body_path": "aim/2026-04/chapter-4/section-6/paragraph-11.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/06-operational-policy-procedures-for-reduced-vertic/11-non-rvsm-aircraft-requesting-climb-to-and-descen.md",
       "content_hash": "7acef60db7374e5bccc80b02a5f76068cc20e9a62eefd2b2c2502b3ec2791d00"
     },
     {
       "kind": "paragraph",
       "code": "4-7-1",
       "title": "Introduction and Background",
-      "body_path": "aim/2026-04/chapter-4/section-7/paragraph-1.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/07-operational-policy-procedures-for-the-gulf-of-me/01-introduction-and-background.md",
       "content_hash": "6f952bba9a28fc3b92029ebde096c555d2c15bff73cd8aff0de46401368a184b"
     },
     {
       "kind": "paragraph",
       "code": "4-7-2",
       "title": "Lateral Separation Minima Applied",
-      "body_path": "aim/2026-04/chapter-4/section-7/paragraph-2.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/07-operational-policy-procedures-for-the-gulf-of-me/02-lateral-separation-minima-applied.md",
       "content_hash": "511cd9ccd87a32eee5c41b67474c85b378c049b4c4917c034e8ed78b5ea984f4"
     },
     {
       "kind": "paragraph",
       "code": "4-7-3",
       "title": "Operation on Routes on the Periphery of the Gulf of Mexico CTAs",
-      "body_path": "aim/2026-04/chapter-4/section-7/paragraph-3.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/07-operational-policy-procedures-for-the-gulf-of-me/03-operation-on-routes-on-the-periphery-of-the-gulf.md",
       "content_hash": "cb70c73e30ca2c7428607f13f425142890ba9b4952614e17c7196e6cf77b1dfb"
     },
     {
       "kind": "paragraph",
       "code": "4-7-4",
       "title": "Provisions for Non-RNP 10 Aircraft (Not Authorized RNP 10 or RNP 4)",
-      "body_path": "aim/2026-04/chapter-4/section-7/paragraph-4.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/07-operational-policy-procedures-for-the-gulf-of-me/04-provisions-for-non-rnp-10-aircraft-not-authorize.md",
       "content_hash": "297f1a455cada46fb7f0a42a18683a913ca7ac61b30c36b141b08ad2856d1758"
     },
     {
       "kind": "paragraph",
       "code": "4-7-5",
       "title": "Operator Action",
-      "body_path": "aim/2026-04/chapter-4/section-7/paragraph-5.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/07-operational-policy-procedures-for-the-gulf-of-me/05-operator-action.md",
       "content_hash": "b33c03f3fa2879e4f7691ead4c840441363cf605c1a6178859d5e02d6d58eadf"
     },
     {
       "kind": "paragraph",
       "code": "4-7-6",
       "title": "RNP 10 or RNP 4 Authorization: Policy and Procedures for Aircraft and Operators",
-      "body_path": "aim/2026-04/chapter-4/section-7/paragraph-6.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/07-operational-policy-procedures-for-the-gulf-of-me/06-rnp-10-or-rnp-4-authorization-policy-and-procedu.md",
       "content_hash": "2c5b5c850715baea01bf5a9536a6a8a4192ae5d14372057b2a504a411067d846"
     },
     {
       "kind": "paragraph",
       "code": "4-7-7",
       "title": "Flight Planning Requirements",
-      "body_path": "aim/2026-04/chapter-4/section-7/paragraph-7.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/07-operational-policy-procedures-for-the-gulf-of-me/07-flight-planning-requirements.md",
       "content_hash": "027532872bfee4297bdd1c15a67d0146397e45f3471ce98cf3c4c06f701f453c"
     },
     {
       "kind": "paragraph",
       "code": "4-7-8",
       "title": "Pilot and Dispatcher Procedures: Basic and In­flight Contingency Procedures",
-      "body_path": "aim/2026-04/chapter-4/section-7/paragraph-8.md",
+      "body_path": "aim/2026-04/04-air-traffic-control/07-operational-policy-procedures-for-the-gulf-of-me/08-pilot-and-dispatcher-procedures-basic-and-in-fli.md",
       "content_hash": "b06b8b40a3d5e3b63c8570ae4544bd23fd08b2a931c7d50c381ff2d3d5916c5d"
     },
     {
       "kind": "paragraph",
       "code": "5-1-1",
       "title": "Preflight Preparation",
-      "body_path": "aim/2026-04/chapter-5/section-1/paragraph-1.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/01-preflight/01-preflight-preparation.md",
       "content_hash": "2158920f3231fc6f09f8de54cc32d6b5ff8a10346b36b65ac3136a857ff1ed3f"
     },
     {
       "kind": "paragraph",
       "code": "5-1-2",
       "title": "Follow IFR Procedures Even When Operating VFR",
-      "body_path": "aim/2026-04/chapter-5/section-1/paragraph-2.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/01-preflight/02-follow-ifr-procedures-even-when-operating-vfr.md",
       "content_hash": "0b283d3216f40d83dc81c546454e580e59529a7235a8c49a5bc0a880b9d55299"
     },
     {
       "kind": "paragraph",
       "code": "5-1-3",
       "title": "Notice to Airmen (NOTAM) System",
-      "body_path": "aim/2026-04/chapter-5/section-1/paragraph-3.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/01-preflight/03-notice-to-airmen-notam-system.md",
       "content_hash": "35d0096973c1cc44412af8cb71bdf00b47fc921b7b24f7e08d9ccbcccc1ace9f"
     },
     {
       "kind": "paragraph",
       "code": "5-1-4",
       "title": "Flight Plan - VFR Flights",
-      "body_path": "aim/2026-04/chapter-5/section-1/paragraph-4.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/01-preflight/04-flight-plan-vfr-flights.md",
       "content_hash": "223679d78a1ce8bfdc8b280b6c3ce4739607ed28bd554bd8629c3cc0f1d1ac50"
     },
     {
       "kind": "paragraph",
       "code": "5-1-5",
       "title": "Operational Information System (OIS)",
-      "body_path": "aim/2026-04/chapter-5/section-1/paragraph-5.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/01-preflight/05-operational-information-system-ois.md",
       "content_hash": "4bfa91f69d6b7d1c4ab009ee617ebed9d147021c26a8f919c1149123bdc18b8e"
     },
     {
       "kind": "paragraph",
       "code": "5-1-6",
       "title": "Flight Plan- Defense VFR (DVFR) Flights",
-      "body_path": "aim/2026-04/chapter-5/section-1/paragraph-6.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/01-preflight/06-flight-plan-defense-vfr-dvfr-flights.md",
       "content_hash": "e687653d549aa9dcb375d16f37baf9f9c1bffa411f58b24349d65e16d0ed8907"
     },
     {
       "kind": "paragraph",
       "code": "5-1-7",
       "title": "Composite Flight Plan (VFR/IFR Flights)",
-      "body_path": "aim/2026-04/chapter-5/section-1/paragraph-7.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/01-preflight/07-composite-flight-plan-vfr-ifr-flights.md",
       "content_hash": "2eea8945e8a8c8b5236d5193aaead1d9e618b0892fdb1e4ca786d1a9fa24c8a0"
     },
     {
       "kind": "paragraph",
       "code": "5-1-8",
       "title": "Flight Plan (FAA Form 7233-1)- Domestic IFR Flights",
-      "body_path": "aim/2026-04/chapter-5/section-1/paragraph-8.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/01-preflight/08-flight-plan-faa-form-7233-1-domestic-ifr-flights.md",
       "content_hash": "c54c36ad36165c7787e86fc1355a4d182b6c8a1d16cfe7baf5bc22df0d97a527"
     },
     {
       "kind": "paragraph",
       "code": "5-1-9",
       "title": "International Flight Plan (FAA Form 7233-4)- IFR Flights (For Domestic or International Flights)",
-      "body_path": "aim/2026-04/chapter-5/section-1/paragraph-9.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/01-preflight/09-international-flight-plan-faa-form-7233-4-ifr-fl.md",
       "content_hash": "5ab547eb94556bb07ab7724c4751c1a1906d8ed3e6cfb51d70e5eec08f22cfef"
     },
     {
       "kind": "paragraph",
       "code": "5-1-10",
       "title": "IFR Operations to High Altitude Destinations",
-      "body_path": "aim/2026-04/chapter-5/section-1/paragraph-10.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/01-preflight/10-ifr-operations-to-high-altitude-destinations.md",
       "content_hash": "f7b293cc79c00f4a7db0b9ff1f3ecf43c1993eb285a38a9174fdc2803ce593d4"
     },
     {
       "kind": "paragraph",
       "code": "5-1-11",
       "title": "Flights Outside the U.S. and U.S. Territories",
-      "body_path": "aim/2026-04/chapter-5/section-1/paragraph-11.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/01-preflight/11-flights-outside-the-u-s-and-u-s-territories.md",
       "content_hash": "e3c6ba9fcced3098d6ece0ee97f0214ec41aa2d9bb9eb0863ce5f79cb3540790"
     },
     {
       "kind": "paragraph",
       "code": "5-1-12",
       "title": "Change in Flight Plan",
-      "body_path": "aim/2026-04/chapter-5/section-1/paragraph-12.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/01-preflight/12-change-in-flight-plan.md",
       "content_hash": "58a36d692fb82e22bc3702377e4132f01c65fb39ddc7c98044e5f27161cc7cf0"
     },
     {
       "kind": "paragraph",
       "code": "5-1-13",
       "title": "Change in Proposed Departure Time",
-      "body_path": "aim/2026-04/chapter-5/section-1/paragraph-13.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/01-preflight/13-change-in-proposed-departure-time.md",
       "content_hash": "5fd6fa4e5f50cb688d788e5f4ded294d6359d685989da6bd96688a7c9b9eea2f"
     },
     {
       "kind": "paragraph",
       "code": "5-1-14",
       "title": "Closing VFR/DVFR Flight Plans",
-      "body_path": "aim/2026-04/chapter-5/section-1/paragraph-14.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/01-preflight/14-closing-vfr-dvfr-flight-plans.md",
       "content_hash": "a17bba01c9fe05ba5702d860956a6a6fcda65129197024ef699e92c7a267da9c"
     },
     {
       "kind": "paragraph",
       "code": "5-1-15",
       "title": "Canceling IFR Flight Plan",
-      "body_path": "aim/2026-04/chapter-5/section-1/paragraph-15.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/01-preflight/15-canceling-ifr-flight-plan.md",
       "content_hash": "29b8896ab409c7db0857b9fd48f79850728a25ac347cd76cf8c6f3b58448a556"
     },
     {
       "kind": "paragraph",
       "code": "5-1-16",
       "title": "RNAV and RNP Operations",
-      "body_path": "aim/2026-04/chapter-5/section-1/paragraph-16.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/01-preflight/16-rnav-and-rnp-operations.md",
       "content_hash": "a2924bcf927d7e8483bf307dab799f71323e538db5d7a1ebfecb4cac815603b9"
     },
     {
       "kind": "paragraph",
       "code": "5-1-17",
       "title": "Cold Temperature Operations",
-      "body_path": "aim/2026-04/chapter-5/section-1/paragraph-17.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/01-preflight/17-cold-temperature-operations.md",
       "content_hash": "0e0087325c844e4c4e871b87b6d6c4a7da3dca21cd9e46a765a4134f69331a87"
     },
     {
       "kind": "paragraph",
       "code": "5-2-1",
       "title": "Pre‐taxi Clearance Procedures",
-      "body_path": "aim/2026-04/chapter-5/section-2/paragraph-1.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/02-departure-procedures/01-pre-taxi-clearance-procedures.md",
       "content_hash": "56d54fe7743a8ae6b828ac47a850815aeafd350a878a99065c9e64a2033f08f4"
     },
     {
       "kind": "paragraph",
       "code": "5-2-2",
       "title": "Automated Pre-Departure Clearance Procedures",
-      "body_path": "aim/2026-04/chapter-5/section-2/paragraph-2.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/02-departure-procedures/02-automated-pre-departure-clearance-procedures.md",
       "content_hash": "7e8d5d27b625677bbd4aa349b097c409d7774804bb1b868bce907bc08f5cb5c6"
     },
     {
       "kind": "paragraph",
       "code": "5-2-3",
       "title": "Taxi Clearance",
-      "body_path": "aim/2026-04/chapter-5/section-2/paragraph-3.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/02-departure-procedures/03-taxi-clearance.md",
       "content_hash": "e24294daec3cf4648e10cb8a3a0ef4cf09d4dcdbe421f6eaf4b671a08d6296ee"
     },
     {
       "kind": "paragraph",
       "code": "5-2-4",
       "title": "Line Up and Wait (LUAW)",
-      "body_path": "aim/2026-04/chapter-5/section-2/paragraph-4.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/02-departure-procedures/04-line-up-and-wait-luaw.md",
       "content_hash": "29bd876817e18b6eefa2e2f681b1b8743b960293db34dd5012662556db6353a5"
     },
     {
       "kind": "paragraph",
       "code": "5-2-5",
       "title": "Abbreviated IFR Departure Clearance (Cleared",
-      "body_path": "aim/2026-04/chapter-5/section-2/paragraph-5.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/02-departure-procedures/05-abbreviated-ifr-departure-clearance-cleared.md",
       "content_hash": "623794fffeac6c9cbe0f5b274392389d36960f126a4ba8bda5971888c29a16a5"
     },
     {
       "kind": "paragraph",
       "code": "5-2-6",
       "title": "Departure Restrictions, Clearance Void Times, Hold for Release, and Release Times",
-      "body_path": "aim/2026-04/chapter-5/section-2/paragraph-6.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/02-departure-procedures/06-departure-restrictions-clearance-void-times-hold.md",
       "content_hash": "3420b8807cf98c2bb1a1ed4c87d5efd4bde6ecb67904930f8bb713348c8b154f"
     },
     {
       "kind": "paragraph",
       "code": "5-2-7",
       "title": "Departure Control",
-      "body_path": "aim/2026-04/chapter-5/section-2/paragraph-7.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/02-departure-procedures/07-departure-control.md",
       "content_hash": "c5a16dfdaab85c83684aa2b454d895dae25a0be555c3d9a79f5549feafefc6c8"
     },
     {
       "kind": "paragraph",
       "code": "5-2-8",
       "title": "Instrument Departure Procedures (DP) - Obstacle Departure Procedures (ODP) and Standard Instrument Departures (SID)",
-      "body_path": "aim/2026-04/chapter-5/section-2/paragraph-8.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/02-departure-procedures/08-instrument-departure-procedures-dp-obstacle-depa.md",
       "content_hash": "0936bf5fb0085b534715a46584b0eb94e5e3d8be883363b707a3752c9b89f821"
     },
     {
       "kind": "paragraph",
       "code": "5-3-1",
       "title": "ARTCC Communications",
-      "body_path": "aim/2026-04/chapter-5/section-3/paragraph-1.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/03-en-route-procedures/01-artcc-communications.md",
       "content_hash": "c0cd456cf8986353096d8294709b9133266cc851e190cdc84f0fc95d9721eff9"
     },
     {
       "kind": "paragraph",
       "code": "5-3-2",
       "title": "Position Reporting",
-      "body_path": "aim/2026-04/chapter-5/section-3/paragraph-2.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/03-en-route-procedures/02-position-reporting.md",
       "content_hash": "e4f7d3f950e327939deb2621afc157afa002c23f13021826286b091c15ff6d6c"
     },
     {
       "kind": "paragraph",
       "code": "5-3-3",
       "title": "Additional Reports",
-      "body_path": "aim/2026-04/chapter-5/section-3/paragraph-3.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/03-en-route-procedures/03-additional-reports.md",
       "content_hash": "06f37caf491b1b807bd82f7bac7c7459fac65e06e3b384701092c4fa99ab0630"
     },
     {
       "kind": "paragraph",
       "code": "5-3-4",
       "title": "Airways and Route Systems",
-      "body_path": "aim/2026-04/chapter-5/section-3/paragraph-4.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/03-en-route-procedures/04-airways-and-route-systems.md",
       "content_hash": "c03f7043101829fc720a923be61395e232d2eb8be51ed583a42bac9fa1ec9368"
     },
     {
       "kind": "paragraph",
       "code": "5-3-5",
       "title": "Airway or Route Course Changes",
-      "body_path": "aim/2026-04/chapter-5/section-3/paragraph-5.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/03-en-route-procedures/05-airway-or-route-course-changes.md",
       "content_hash": "e5052996a5369f214da1f98b3149402709028d28118ed48e56761ec7ea516b0d"
     },
     {
       "kind": "paragraph",
       "code": "5-3-6",
       "title": "Changeover Points (COPs)",
-      "body_path": "aim/2026-04/chapter-5/section-3/paragraph-6.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/03-en-route-procedures/06-changeover-points-cops.md",
       "content_hash": "b8c6a3bcaa3d29b59a15846c8932a17987888e66c875ea99ea005908c9946e6b"
     },
     {
       "kind": "paragraph",
       "code": "5-3-7",
       "title": "Minimum Turning Altitude (MTA)",
-      "body_path": "aim/2026-04/chapter-5/section-3/paragraph-7.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/03-en-route-procedures/07-minimum-turning-altitude-mta.md",
       "content_hash": "77822b0865658413567b12189fb0977a24c2b502b6b84ae71b90809c54da6246"
     },
     {
       "kind": "paragraph",
       "code": "5-3-8",
       "title": "Holding",
-      "body_path": "aim/2026-04/chapter-5/section-3/paragraph-8.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/03-en-route-procedures/08-holding.md",
       "content_hash": "3d0b315e8d0939022a007763de019221d0b668dc0c299d6c5ea837a1d6d0f49b"
     },
     {
       "kind": "paragraph",
       "code": "5-4-1",
       "title": "Standard Terminal Arrival (STAR) Procedures",
-      "body_path": "aim/2026-04/chapter-5/section-4/paragraph-1.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/04-arrival-procedures/01-standard-terminal-arrival-star-procedures.md",
       "content_hash": "b64ea8709ba682d0f91b33d67aa7782bcb8817a6cde502079f56a007a2339149"
     },
     {
       "kind": "paragraph",
       "code": "5-4-2",
       "title": "Local Flow Traffic Management Program",
-      "body_path": "aim/2026-04/chapter-5/section-4/paragraph-2.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/04-arrival-procedures/02-local-flow-traffic-management-program.md",
       "content_hash": "60f06a26581fdceb6a42fe680c7f3eada202fb50eaffd23f771209e5c19fd2dc"
     },
     {
       "kind": "paragraph",
       "code": "5-4-3",
       "title": "Approach Control",
-      "body_path": "aim/2026-04/chapter-5/section-4/paragraph-3.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/04-arrival-procedures/03-approach-control.md",
       "content_hash": "0a9dec72b7d5475f583464b49abfdb840db308df1dc843844277450cdc1dfeed"
     },
     {
       "kind": "paragraph",
       "code": "5-4-4",
       "title": "Advance Information on Instrument Approach",
-      "body_path": "aim/2026-04/chapter-5/section-4/paragraph-4.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/04-arrival-procedures/04-advance-information-on-instrument-approach.md",
       "content_hash": "925e3d034d990400f56480d143d8a3952006ee06e681d7b29d66da3aa2050236"
     },
     {
       "kind": "paragraph",
       "code": "5-4-5",
       "title": "Instrument Approach Procedure (IAP) Charts",
-      "body_path": "aim/2026-04/chapter-5/section-4/paragraph-5.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/04-arrival-procedures/05-instrument-approach-procedure-iap-charts.md",
       "content_hash": "11cd7fb68fdf2ebb45d55cffbec069e5888476c6e5bf36f590bf4427268b90e1"
     },
     {
       "kind": "paragraph",
       "code": "5-4-6",
       "title": "Approach Clearance",
-      "body_path": "aim/2026-04/chapter-5/section-4/paragraph-6.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/04-arrival-procedures/06-approach-clearance.md",
       "content_hash": "5e3641a9d1db0033e0933372c5a6fcb6bf72ed2a4c006877bad9aaae77715950"
     },
     {
       "kind": "paragraph",
       "code": "5-4-7",
       "title": "Instrument Approach Procedures",
-      "body_path": "aim/2026-04/chapter-5/section-4/paragraph-7.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/04-arrival-procedures/07-instrument-approach-procedures.md",
       "content_hash": "29472697245e1e74787eb07549011a82ced2806801acb3fcc9eebb4f41b76fd5"
     },
     {
       "kind": "paragraph",
       "code": "5-4-8",
       "title": "Special Instrument Approach Procedures",
-      "body_path": "aim/2026-04/chapter-5/section-4/paragraph-8.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/04-arrival-procedures/08-special-instrument-approach-procedures.md",
       "content_hash": "bdffa2b48802d08b23f59d3d2ea6f070bd38dcef4fd16df1fb92b93ccc9fb3e5"
     },
     {
       "kind": "paragraph",
       "code": "5-4-9",
       "title": "Procedure Turn and Hold-in-lieu of Procedure Turn",
-      "body_path": "aim/2026-04/chapter-5/section-4/paragraph-9.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/04-arrival-procedures/09-procedure-turn-and-hold-in-lieu-of-procedure-tur.md",
       "content_hash": "60deb5c4ae2c931677eb900acb4b89a4d9672ec9adcc3fafe76212659823f912"
     },
     {
       "kind": "paragraph",
       "code": "5-4-10",
       "title": "Timed Approaches from a Holding Fix",
-      "body_path": "aim/2026-04/chapter-5/section-4/paragraph-10.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/04-arrival-procedures/10-timed-approaches-from-a-holding-fix.md",
       "content_hash": "28308e8dfa54d5d9df91f4387f7d1250d7deb2d0f1db0fb5345470bf93dbbe61"
     },
     {
       "kind": "paragraph",
       "code": "5-4-11",
       "title": "Radar Approaches",
-      "body_path": "aim/2026-04/chapter-5/section-4/paragraph-11.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/04-arrival-procedures/11-radar-approaches.md",
       "content_hash": "3daa4b2869a9da081f130a2cedcb459ff7c506a729210a5847f51b7e6249f1c7"
     },
     {
       "kind": "paragraph",
       "code": "5-4-12",
       "title": "Radar Monitoring of Instrument Approaches",
-      "body_path": "aim/2026-04/chapter-5/section-4/paragraph-12.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/04-arrival-procedures/12-radar-monitoring-of-instrument-approaches.md",
       "content_hash": "d5959ecd8426a5655f423fef2b0ae7f7444f348f32afdf0e1d56dc0bd59557de"
     },
     {
       "kind": "paragraph",
       "code": "5-4-13",
       "title": "ILS Approaches to Parallel Runways",
-      "body_path": "aim/2026-04/chapter-5/section-4/paragraph-13.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/04-arrival-procedures/13-ils-approaches-to-parallel-runways.md",
       "content_hash": "5d11093a87283b60a6b013f6e496e4ecf3d1d07a274b956c25025071e36a6d41"
     },
     {
       "kind": "paragraph",
       "code": "5-4-14",
       "title": "Parallel ILS Approaches (Dependent) (See FIG 5-4-21.)",
-      "body_path": "aim/2026-04/chapter-5/section-4/paragraph-14.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/04-arrival-procedures/14-parallel-ils-approaches-dependent-see-fig-5-4-21.md",
       "content_hash": "7855d7e431f9da5d4ff4be99f541dc6061e0fcd0e2eaf78a794fcb90ac2dfe54"
     },
     {
       "kind": "paragraph",
       "code": "5-4-15",
       "title": "Simultaneous (Parallel) Independent ILS/RNAV/GLS Approaches (See FIG 5-4-22.)",
-      "body_path": "aim/2026-04/chapter-5/section-4/paragraph-15.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/04-arrival-procedures/15-simultaneous-parallel-independent-ils-rnav-gls-a.md",
       "content_hash": "6139a67c2742ccc650ce678e7db7561e63b3101fc5189868f69671d0a3d81f70"
     },
     {
       "kind": "paragraph",
       "code": "5-4-16",
       "title": "Simultaneous Close Parallel ILS PRM/RNAV PRM/GLS PRM Approaches and Simultaneous Offset Instrument Approaches (SOIA) (See FIG 5-4-23.)",
-      "body_path": "aim/2026-04/chapter-5/section-4/paragraph-16.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/04-arrival-procedures/16-simultaneous-close-parallel-ils-prm-rnav-prm-gls.md",
       "content_hash": "0ad1db9999f761498cb2f6c2da6a659bf723ca4114a63e5daafba11b83a18cbd"
     },
     {
       "kind": "paragraph",
       "code": "5-4-17",
       "title": "Simultaneous Converging Instrument Approaches",
-      "body_path": "aim/2026-04/chapter-5/section-4/paragraph-17.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/04-arrival-procedures/17-simultaneous-converging-instrument-approaches.md",
       "content_hash": "30f97dd5b1d450a16c83a7144498d00b2283d332265cb6d70f13f453a6fc263d"
     },
     {
       "kind": "paragraph",
       "code": "5-4-18",
       "title": "RNP AR Instrument Approach Procedures",
-      "body_path": "aim/2026-04/chapter-5/section-4/paragraph-18.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/04-arrival-procedures/18-rnp-ar-instrument-approach-procedures.md",
       "content_hash": "c4016fdfda82934ae31a620ede252d8483588a0e276ea54f97901af3167e7208"
     },
     {
       "kind": "paragraph",
       "code": "5-4-19",
       "title": "Side-step Maneuver",
-      "body_path": "aim/2026-04/chapter-5/section-4/paragraph-19.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/04-arrival-procedures/19-side-step-maneuver.md",
       "content_hash": "48ba651a135a7f2bf15f09a5bfde14d67d7dead166ba71da5e16d4832d74ab06"
     },
     {
       "kind": "paragraph",
       "code": "5-4-20",
       "title": "Approach and Landing Minimums",
-      "body_path": "aim/2026-04/chapter-5/section-4/paragraph-20.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/04-arrival-procedures/20-approach-and-landing-minimums.md",
       "content_hash": "0b5755e31559023fb44c66408d8120644ba426273e44809d64b932560eb82e84"
     },
     {
       "kind": "paragraph",
       "code": "5-4-21",
       "title": "Missed Approach",
-      "body_path": "aim/2026-04/chapter-5/section-4/paragraph-21.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/04-arrival-procedures/21-missed-approach.md",
       "content_hash": "6e9f511a3cbbb726761e61c2e59e360ec2b7d6217ef4930dfdf2b8d41bcaf492"
     },
     {
       "kind": "paragraph",
       "code": "5-4-22",
       "title": "Use of Enhanced Flight Vision Systems (EFVS) on Instrument Approaches",
-      "body_path": "aim/2026-04/chapter-5/section-4/paragraph-22.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/04-arrival-procedures/22-use-of-enhanced-flight-vision-systems-efvs-on-in.md",
       "content_hash": "f8b14e95d8e8cc0daf12a117dd8b3e32ffc6dbf1c84572dbd17729c60525532f"
     },
     {
       "kind": "paragraph",
       "code": "5-4-23",
       "title": "Visual Approach",
-      "body_path": "aim/2026-04/chapter-5/section-4/paragraph-23.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/04-arrival-procedures/23-visual-approach.md",
       "content_hash": "c4891b4b27f2a440f1746abb48e184e1cfa1d253499b17562435f88a45b97a0c"
     },
     {
       "kind": "paragraph",
       "code": "5-4-24",
       "title": "Charted Visual Flight Procedure (CVFP)",
-      "body_path": "aim/2026-04/chapter-5/section-4/paragraph-24.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/04-arrival-procedures/24-charted-visual-flight-procedure-cvfp.md",
       "content_hash": "84fbf3a3606f6601821aa43c5469ae1a5058be0c2ca0bbdd0cd7ac681bb5c5a0"
     },
     {
       "kind": "paragraph",
       "code": "5-4-25",
       "title": "Contact Approach",
-      "body_path": "aim/2026-04/chapter-5/section-4/paragraph-25.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/04-arrival-procedures/25-contact-approach.md",
       "content_hash": "ecfadbc17c915eee2ea35998b13d0ad4d141e45230eeb9eb8d5ad01c31d5cc73"
     },
     {
       "kind": "paragraph",
       "code": "5-4-26",
       "title": "Landing Priority",
-      "body_path": "aim/2026-04/chapter-5/section-4/paragraph-26.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/04-arrival-procedures/26-landing-priority.md",
       "content_hash": "af49c6f69316b009dfd1c546c77de3b979fd0198598e14000407b94f6568afff"
     },
     {
       "kind": "paragraph",
       "code": "5-4-27",
       "title": "Overhead Approach Maneuver",
-      "body_path": "aim/2026-04/chapter-5/section-4/paragraph-27.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/04-arrival-procedures/27-overhead-approach-maneuver.md",
       "content_hash": "22f6f01627bfd88aaf06c808529f6be256d60137daa55ecda0d5e65a80af338b"
     },
     {
       "kind": "paragraph",
       "code": "5-5-1",
       "title": "General",
-      "body_path": "aim/2026-04/chapter-5/section-5/paragraph-1.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/05-pilot-controller-roles-and-responsibilities/01-general.md",
       "content_hash": "296490da271bd786a1d2489477e05550310b7d768c91d68dd83ae92f4ac89fcf"
     },
     {
       "kind": "paragraph",
       "code": "5-5-2",
       "title": "Air Traffic Clearance",
-      "body_path": "aim/2026-04/chapter-5/section-5/paragraph-2.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/05-pilot-controller-roles-and-responsibilities/02-air-traffic-clearance.md",
       "content_hash": "bd1ec494cd2dc00272627d32b18ce44c575aebb973f34da0c5135e326834dc82"
     },
     {
       "kind": "paragraph",
       "code": "5-5-3",
       "title": "Contact Approach",
-      "body_path": "aim/2026-04/chapter-5/section-5/paragraph-3.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/05-pilot-controller-roles-and-responsibilities/03-contact-approach.md",
       "content_hash": "d511a78c5623fc550dbaf4991c6bfb7c1295112f411539738ffa41a29a1a6a3f"
     },
     {
       "kind": "paragraph",
       "code": "5-5-4",
       "title": "Instrument Approach",
-      "body_path": "aim/2026-04/chapter-5/section-5/paragraph-4.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/05-pilot-controller-roles-and-responsibilities/04-instrument-approach.md",
       "content_hash": "0f20b617bca368a5f74400d2787755671415f677890f2bada2e100fe796ac575"
     },
     {
       "kind": "paragraph",
       "code": "5-5-5",
       "title": "Missed Approach",
-      "body_path": "aim/2026-04/chapter-5/section-5/paragraph-5.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/05-pilot-controller-roles-and-responsibilities/05-missed-approach.md",
       "content_hash": "f21fa500a92c13975f14f37fd2e5220c5e7a99184de8c4d319bca6f9ed03a900"
     },
     {
       "kind": "paragraph",
       "code": "5-5-6",
       "title": "Radar Vectors",
-      "body_path": "aim/2026-04/chapter-5/section-5/paragraph-6.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/05-pilot-controller-roles-and-responsibilities/06-radar-vectors.md",
       "content_hash": "3867a570dbff42ad91ead95c21564bbcf8b783f48654ae3995c1106ad3ec446d"
     },
     {
       "kind": "paragraph",
       "code": "5-5-7",
       "title": "Safety Alert",
-      "body_path": "aim/2026-04/chapter-5/section-5/paragraph-7.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/05-pilot-controller-roles-and-responsibilities/07-safety-alert.md",
       "content_hash": "66cc0f42277319e4e31a0d448297e0315d42eb136ea0a420ceecdad35877c9bb"
     },
     {
       "kind": "paragraph",
       "code": "5-5-8",
       "title": "See and Avoid",
-      "body_path": "aim/2026-04/chapter-5/section-5/paragraph-8.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/05-pilot-controller-roles-and-responsibilities/08-see-and-avoid.md",
       "content_hash": "4df6d1c1bb3007331a5d2d9c7056ff8d3ec3d6c112e3745d0416b343f34d70e6"
     },
     {
       "kind": "paragraph",
       "code": "5-5-9",
       "title": "Speed Adjustments",
-      "body_path": "aim/2026-04/chapter-5/section-5/paragraph-9.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/05-pilot-controller-roles-and-responsibilities/09-speed-adjustments.md",
       "content_hash": "35c752046c1225de527a9983cee2add1b292339195845060cfd5c971cfaeca58"
     },
     {
       "kind": "paragraph",
       "code": "5-5-10",
       "title": "Traffic Advisories (Traffic Information)",
-      "body_path": "aim/2026-04/chapter-5/section-5/paragraph-10.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/05-pilot-controller-roles-and-responsibilities/10-traffic-advisories-traffic-information.md",
       "content_hash": "d556ca19d4e9cc2cb603b4fb231b156fb583ded0aff2e843008357a6e4d69eb7"
     },
     {
       "kind": "paragraph",
       "code": "5-5-11",
       "title": "Visual Approach",
-      "body_path": "aim/2026-04/chapter-5/section-5/paragraph-11.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/05-pilot-controller-roles-and-responsibilities/11-visual-approach.md",
       "content_hash": "f82c8adf274f7901ed1e96ac8d344afbfedea7ca6af5241f565300d1b4bcec2d"
     },
     {
       "kind": "paragraph",
       "code": "5-5-12",
       "title": "Visual Separation",
-      "body_path": "aim/2026-04/chapter-5/section-5/paragraph-12.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/05-pilot-controller-roles-and-responsibilities/12-visual-separation.md",
       "content_hash": "39dae09418a458dd966a405bb8c88fb0847d0f9a8b486bbca116c0b5d9ed5d9c"
     },
     {
       "kind": "paragraph",
       "code": "5-5-13",
       "title": "VFR‐on‐top",
-      "body_path": "aim/2026-04/chapter-5/section-5/paragraph-13.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/05-pilot-controller-roles-and-responsibilities/13-vfr-on-top.md",
       "content_hash": "effd9dba2f3ea23df7a36ba79af2f4941d3ac4c27abc3cee0363c55db8365e98"
     },
     {
       "kind": "paragraph",
       "code": "5-5-14",
       "title": "Instrument Departures",
-      "body_path": "aim/2026-04/chapter-5/section-5/paragraph-14.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/05-pilot-controller-roles-and-responsibilities/14-instrument-departures.md",
       "content_hash": "554e4b1b0115a441b3f0d36155b474e5a17fffcc34bc88b7e32efbc281580bcb"
     },
     {
       "kind": "paragraph",
       "code": "5-5-15",
       "title": "Minimum Fuel Advisory",
-      "body_path": "aim/2026-04/chapter-5/section-5/paragraph-15.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/05-pilot-controller-roles-and-responsibilities/15-minimum-fuel-advisory.md",
       "content_hash": "f99497e941af98666fd59c7c1c532cb0ce3264a9a95767b7e21ec4feca15fb9f"
     },
     {
       "kind": "paragraph",
       "code": "5-5-16",
       "title": "RNAV and RNP Operations",
-      "body_path": "aim/2026-04/chapter-5/section-5/paragraph-16.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/05-pilot-controller-roles-and-responsibilities/16-rnav-and-rnp-operations.md",
       "content_hash": "8bcd68f71e5679b0af0eb4648364fdb94b7f3b528215fcabd318fd8a7607607f"
     },
     {
       "kind": "paragraph",
       "code": "5-6-1",
       "title": "National Security",
-      "body_path": "aim/2026-04/chapter-5/section-6/paragraph-1.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/06-national-security-and-interception-procedures/01-national-security.md",
       "content_hash": "437e530432abc49d723f4d6a31a15c4cd08c2113f9c0b66e92b7a6677891aba0"
     },
     {
       "kind": "paragraph",
       "code": "5-6-2",
       "title": "National Security Requirements",
-      "body_path": "aim/2026-04/chapter-5/section-6/paragraph-2.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/06-national-security-and-interception-procedures/02-national-security-requirements.md",
       "content_hash": "d4bb1d8ce47e5cab8c0f186f43daf3e42a284cfedcceb76df918bea6957b044d"
     },
     {
       "kind": "paragraph",
       "code": "5-6-3",
       "title": "Definitions",
-      "body_path": "aim/2026-04/chapter-5/section-6/paragraph-3.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/06-national-security-and-interception-procedures/03-definitions.md",
       "content_hash": "3ad0a64424e1494272af1427887e3261735a181cbdce239ac2b108204df51bef"
     },
     {
       "kind": "paragraph",
       "code": "5-6-4",
       "title": "ADIZ Requirements",
-      "body_path": "aim/2026-04/chapter-5/section-6/paragraph-4.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/06-national-security-and-interception-procedures/04-adiz-requirements.md",
       "content_hash": "86a7a4d47e0e960e6c8ac8b545819084e3d912c13a9875f83d23f123791b2cd3"
     },
     {
       "kind": "paragraph",
       "code": "5-6-5",
       "title": "Civil Aircraft Operations To or From U.S. Territorial Airspace",
-      "body_path": "aim/2026-04/chapter-5/section-6/paragraph-5.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/06-national-security-and-interception-procedures/05-civil-aircraft-operations-to-or-from-u-s-territo.md",
       "content_hash": "fc1072d2b902ff1eef4bff3eda92f154c51f06cc5cc78410e1de3eb579d3c63a"
     },
     {
       "kind": "paragraph",
       "code": "5-6-6",
       "title": "Civil Aircraft Operations Within U.S. Territorial Airspace",
-      "body_path": "aim/2026-04/chapter-5/section-6/paragraph-6.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/06-national-security-and-interception-procedures/06-civil-aircraft-operations-within-u-s-territorial.md",
       "content_hash": "71f2e0e1512ae21fa7596854dec5c17ea2471d87255655a2dc301ecbafff307b"
     },
     {
       "kind": "paragraph",
       "code": "5-6-7",
       "title": "Civil Aircraft Operations Transiting U.S. Territorial Airspace",
-      "body_path": "aim/2026-04/chapter-5/section-6/paragraph-7.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/06-national-security-and-interception-procedures/07-civil-aircraft-operations-transiting-u-s-territo.md",
       "content_hash": "dfc2e44bcee52620264a0371a2ea77234abdcb19165717668e8e1a965fd57fac"
     },
     {
       "kind": "paragraph",
       "code": "5-6-8",
       "title": "Foreign State Aircraft Operations",
-      "body_path": "aim/2026-04/chapter-5/section-6/paragraph-8.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/06-national-security-and-interception-procedures/08-foreign-state-aircraft-operations.md",
       "content_hash": "785b82e035404e9c6fd4aae9c35471344c0c563fcd5c9df1dfe997a6f054fd85"
     },
     {
       "kind": "paragraph",
       "code": "5-6-9",
       "title": "FAA/TSA Airspace Waivers",
-      "body_path": "aim/2026-04/chapter-5/section-6/paragraph-9.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/06-national-security-and-interception-procedures/09-faa-tsa-airspace-waivers.md",
       "content_hash": "6b6f5386cfb1d343a961ded853275c18012274e12b727c9f848a6b7bdc9744c7"
     },
     {
       "kind": "paragraph",
       "code": "5-6-10",
       "title": "TSA Aviation Security Programs",
-      "body_path": "aim/2026-04/chapter-5/section-6/paragraph-10.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/06-national-security-and-interception-procedures/10-tsa-aviation-security-programs.md",
       "content_hash": "a8e74301b459b615fa7b53f5f934ad94156b8cc34a02cfc106bffc8d9b363ce9"
     },
     {
       "kind": "paragraph",
       "code": "5-6-11",
       "title": "FAA Flight Routing Authorizations",
-      "body_path": "aim/2026-04/chapter-5/section-6/paragraph-11.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/06-national-security-and-interception-procedures/11-faa-flight-routing-authorizations.md",
       "content_hash": "47570f3e92b30bf3bdd7df1eae35672644c3d3cfe1201de20aa09b17aae4003c"
     },
     {
       "kind": "paragraph",
       "code": "5-6-12",
       "title": "Emergency Security Control of Air Traffic (ESCAT)",
-      "body_path": "aim/2026-04/chapter-5/section-6/paragraph-12.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/06-national-security-and-interception-procedures/12-emergency-security-control-of-air-traffic-escat.md",
       "content_hash": "e8b1dc1148c6e77a35435a90af1c8eed05ec631aa85da361a0a8b18a9424d762"
     },
     {
       "kind": "paragraph",
       "code": "5-6-13",
       "title": "Interception Procedures",
-      "body_path": "aim/2026-04/chapter-5/section-6/paragraph-13.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/06-national-security-and-interception-procedures/13-interception-procedures.md",
       "content_hash": "13ff88138917c53da79e67a687f0b3a675fe211db999fc71958881c26c34ba2e"
     },
     {
       "kind": "paragraph",
       "code": "5-6-14",
       "title": "Law Enforcement Operations by Civil and Military Organizations",
-      "body_path": "aim/2026-04/chapter-5/section-6/paragraph-14.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/06-national-security-and-interception-procedures/14-law-enforcement-operations-by-civil-and-military.md",
       "content_hash": "cb3f0d57e1f89e9227fe7d6128d85ca6ea824fd81893d2c74fbb2cf79d45a032"
     },
     {
       "kind": "paragraph",
       "code": "5-6-15",
       "title": "Interception Signals",
-      "body_path": "aim/2026-04/chapter-5/section-6/paragraph-15.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/06-national-security-and-interception-procedures/15-interception-signals.md",
       "content_hash": "31e658513ffa91305cdd9162b20b22372f0617dea18ac73758503a0f83b03545"
     },
     {
       "kind": "paragraph",
       "code": "5-6-16",
       "title": "ADIZ Boundaries and Designated Mountainous Areas (See FIG 5-6-3.)",
-      "body_path": "aim/2026-04/chapter-5/section-6/paragraph-16.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/06-national-security-and-interception-procedures/16-adiz-boundaries-and-designated-mountainous-areas.md",
       "content_hash": "5f3aece88cfd00d2221a8e11ade8c29dcb7353256a729fb09be84f2bec2022d0"
     },
     {
       "kind": "paragraph",
       "code": "5-6-17",
       "title": "Visual Warning System (VWS)",
-      "body_path": "aim/2026-04/chapter-5/section-6/paragraph-17.md",
+      "body_path": "aim/2026-04/05-air-traffic-procedures/06-national-security-and-interception-procedures/17-visual-warning-system-vws.md",
       "content_hash": "95c9f173bd7af23abb2f16ddbd2e2f1079c0c3dae0ca646a31ab7604b0cdc4a6"
     },
     {
       "kind": "paragraph",
       "code": "6-1-1",
       "title": "Pilot Responsibility and Authority",
-      "body_path": "aim/2026-04/chapter-6/section-1/paragraph-1.md",
+      "body_path": "aim/2026-04/06-emergency-procedures/01-genera/01-pilot-responsibility-and-authority.md",
       "content_hash": "7fa2818a7a98ea34177491e16062652e833786f5d348a6dc8a5e220a64cc3808"
     },
     {
       "kind": "paragraph",
       "code": "6-1-2",
       "title": "Emergency Condition- Request Assistance Immediately",
-      "body_path": "aim/2026-04/chapter-6/section-1/paragraph-2.md",
+      "body_path": "aim/2026-04/06-emergency-procedures/01-genera/02-emergency-condition-request-assistance-immediate.md",
       "content_hash": "42abe7d839d60cc24f0645bd891991ead3d2495f35626b27f21116742cddaa84"
     },
     {
       "kind": "paragraph",
       "code": "6-2-1",
       "title": "Radar Service for VFR Aircraft in Difficulty",
-      "body_path": "aim/2026-04/chapter-6/section-2/paragraph-1.md",
+      "body_path": "aim/2026-04/06-emergency-procedures/02-emergency-services-available-to-pilots/01-radar-service-for-vfr-aircraft-in-difficulty.md",
       "content_hash": "037fff54aa3350ca621512cabc624fb320ca55f0eed2c685121fbd201f38d518"
     },
     {
       "kind": "paragraph",
       "code": "6-2-2",
       "title": "Transponder Emergency Operation",
-      "body_path": "aim/2026-04/chapter-6/section-2/paragraph-2.md",
+      "body_path": "aim/2026-04/06-emergency-procedures/02-emergency-services-available-to-pilots/02-transponder-emergency-operation.md",
       "content_hash": "3de787a42b561d466b32bfb5a42283b3db8b4b1a1cdf0c3047a3d1fbce247b11"
     },
     {
       "kind": "paragraph",
       "code": "6-2-3",
       "title": "Intercept and Escort",
-      "body_path": "aim/2026-04/chapter-6/section-2/paragraph-3.md",
+      "body_path": "aim/2026-04/06-emergency-procedures/02-emergency-services-available-to-pilots/03-intercept-and-escort.md",
       "content_hash": "9bc6551b9d4c395c307198b42027f33fa09fc0fee891421b2a6e03db2e99a81a"
     },
     {
       "kind": "paragraph",
       "code": "6-2-4",
       "title": "Emergency Locator Transmitter (ELT)",
-      "body_path": "aim/2026-04/chapter-6/section-2/paragraph-4.md",
+      "body_path": "aim/2026-04/06-emergency-procedures/02-emergency-services-available-to-pilots/04-emergency-locator-transmitter-elt.md",
       "content_hash": "af46fc64397fd6fe0b50842f48e164a1c9ad3578a68aba45fd6c6f520e54b1fc"
     },
     {
       "kind": "paragraph",
       "code": "6-2-5",
       "title": "FAA K-9 Explosives Detection Team Program",
-      "body_path": "aim/2026-04/chapter-6/section-2/paragraph-5.md",
+      "body_path": "aim/2026-04/06-emergency-procedures/02-emergency-services-available-to-pilots/05-faa-k-9-explosives-detection-team-program.md",
       "content_hash": "059fe84d3124b4fce0365294f09a809a30fa3b81165bf2a8aa3fda44880e3134"
     },
     {
       "kind": "paragraph",
       "code": "6-2-6",
       "title": "Search and Rescue",
-      "body_path": "aim/2026-04/chapter-6/section-2/paragraph-6.md",
+      "body_path": "aim/2026-04/06-emergency-procedures/02-emergency-services-available-to-pilots/06-search-and-rescue.md",
       "content_hash": "831bdb8006b63f5f96c9fd7b0e210b49ee08cd73a29fbd88a7377c4f8edab3af"
     },
     {
       "kind": "paragraph",
       "code": "6-3-1",
       "title": "Distress and Urgency Communications",
-      "body_path": "aim/2026-04/chapter-6/section-3/paragraph-1.md",
+      "body_path": "aim/2026-04/06-emergency-procedures/03-distress-and-urgency-procedures/01-distress-and-urgency-communications.md",
       "content_hash": "e4fa766638ed421d3aace1bf4942861ad3ff8920eb93b92926c22b0530139149"
     },
     {
       "kind": "paragraph",
       "code": "6-3-2",
       "title": "Obtaining Emergency Assistance",
-      "body_path": "aim/2026-04/chapter-6/section-3/paragraph-2.md",
+      "body_path": "aim/2026-04/06-emergency-procedures/03-distress-and-urgency-procedures/02-obtaining-emergency-assistance.md",
       "content_hash": "90129cd87a4f4e5cda1e7a6c596404511ce7d4f21076f18a6f8e729cb2447128"
     },
     {
       "kind": "paragraph",
       "code": "6-3-3",
       "title": "Ditching Procedures",
-      "body_path": "aim/2026-04/chapter-6/section-3/paragraph-3.md",
+      "body_path": "aim/2026-04/06-emergency-procedures/03-distress-and-urgency-procedures/03-ditching-procedures.md",
       "content_hash": "d41d40353123b0edbbce3081a3049101f82ab504b6f4cda7feace0d4eaabe31b"
     },
     {
       "kind": "paragraph",
       "code": "6-3-4",
       "title": "Special Emergency (Air Piracy)",
-      "body_path": "aim/2026-04/chapter-6/section-3/paragraph-4.md",
+      "body_path": "aim/2026-04/06-emergency-procedures/03-distress-and-urgency-procedures/04-special-emergency-air-piracy.md",
       "content_hash": "333e1b5bb174915cea5a7f2f5c751040fec5bb0d8f1154ff7b6fabbb780a4c24"
     },
     {
       "kind": "paragraph",
       "code": "6-3-5",
       "title": "Fuel Dumping",
-      "body_path": "aim/2026-04/chapter-6/section-3/paragraph-5.md",
+      "body_path": "aim/2026-04/06-emergency-procedures/03-distress-and-urgency-procedures/05-fuel-dumping.md",
       "content_hash": "d3e000a7946a9fa0eaa945d67f4b6c06b78964b694cb2ddcd0107099d96780ac"
     },
     {
       "kind": "paragraph",
       "code": "6-4-1",
       "title": "Two‐way Radio Communications Failure",
-      "body_path": "aim/2026-04/chapter-6/section-4/paragraph-1.md",
+      "body_path": "aim/2026-04/06-emergency-procedures/04-two-way-radio-communications-failure/01-two-way-radio-communications-failure.md",
       "content_hash": "b44d15f2267806b34c65ec38da1290de9f6a90c66301ab0df8b29b1443b571c7"
     },
     {
       "kind": "paragraph",
       "code": "6-4-2",
       "title": "Transponder Operation During Two‐way Communications Failure",
-      "body_path": "aim/2026-04/chapter-6/section-4/paragraph-2.md",
+      "body_path": "aim/2026-04/06-emergency-procedures/04-two-way-radio-communications-failure/02-transponder-operation-during-two-way-communicati.md",
       "content_hash": "19cc4c7601eb1576d15a81e301bb934bbbe0d3fdec93b8d0d2a8d064422fd31b"
     },
     {
       "kind": "paragraph",
       "code": "6-4-3",
       "title": "Reestablishing Radio Contact",
-      "body_path": "aim/2026-04/chapter-6/section-4/paragraph-3.md",
+      "body_path": "aim/2026-04/06-emergency-procedures/04-two-way-radio-communications-failure/03-reestablishing-radio-contact.md",
       "content_hash": "cb14663bd47ade563ffff4895304554fbfb840b61c4cca836e7213b64f35d4b1"
     },
     {
       "kind": "paragraph",
       "code": "6-5-1",
       "title": "Discrete Emergency Frequency",
-      "body_path": "aim/2026-04/chapter-6/section-5/paragraph-1.md",
+      "body_path": "aim/2026-04/06-emergency-procedures/05-aircraft-rescue-and-fire-fighting-communications/01-discrete-emergency-frequency.md",
       "content_hash": "80042816759ead2be63fceeb71383af8115a5ed698c43918605c96cf83042948"
     },
     {
       "kind": "paragraph",
       "code": "6-5-2",
       "title": "Radio Call Signs",
-      "body_path": "aim/2026-04/chapter-6/section-5/paragraph-2.md",
+      "body_path": "aim/2026-04/06-emergency-procedures/05-aircraft-rescue-and-fire-fighting-communications/02-radio-call-signs.md",
       "content_hash": "c865fad3d218ef96c01847cb6d23a1bf1bad0c932a7a1ebda1ae968b02e6639f"
     },
     {
       "kind": "paragraph",
       "code": "6-5-3",
       "title": "ARFF Emergency Hand Signals",
-      "body_path": "aim/2026-04/chapter-6/section-5/paragraph-3.md",
+      "body_path": "aim/2026-04/06-emergency-procedures/05-aircraft-rescue-and-fire-fighting-communications/03-arff-emergency-hand-signals.md",
       "content_hash": "40205095bc037570291960f6a424ff66f17eb4edb0ebc5a6995b7697f49165be"
     },
     {
       "kind": "paragraph",
       "code": "7-1-1",
       "title": "National Weather Service Aviation Weather Service Program",
-      "body_path": "aim/2026-04/chapter-7/section-1/paragraph-1.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/01-national-weather-service-aviation-weather-servic.md",
       "content_hash": "91fbafb64ad2e704973a3d5888129f4a78394da463a6bd4d7cd0832bba245dfc"
     },
     {
       "kind": "paragraph",
       "code": "7-1-2",
       "title": "FAA Weather Services",
-      "body_path": "aim/2026-04/chapter-7/section-1/paragraph-2.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/02-faa-weather-services.md",
       "content_hash": "6c5998b98bdd246567f6d4805e4176d661ebd4ebca7eff4486e224f6375e0ff0"
     },
     {
       "kind": "paragraph",
       "code": "7-1-3",
       "title": "Use of Aviation Weather Products",
-      "body_path": "aim/2026-04/chapter-7/section-1/paragraph-3.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/03-use-of-aviation-weather-products.md",
       "content_hash": "52719e58b74a64155521ffde7f40bcf1a2d9b927f499946181b8ff709cd24537"
     },
     {
       "kind": "paragraph",
       "code": "7-1-4",
       "title": "Graphical Forecasts for Aviation (GFA)",
-      "body_path": "aim/2026-04/chapter-7/section-1/paragraph-4.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/04-graphical-forecasts-for-aviation-gfa.md",
       "content_hash": "13d8a4d818c42e682922c900e28e14ce9644081cad7a2eff241cf581748e0c63"
     },
     {
       "kind": "paragraph",
       "code": "7-1-5",
       "title": "Preflight Briefing",
-      "body_path": "aim/2026-04/chapter-7/section-1/paragraph-5.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/05-preflight-briefing.md",
       "content_hash": "f9fd48829a68c346fcf0c5367f51d65006a8bf424b37d9b19055cc01cd36cb6c"
     },
     {
       "kind": "paragraph",
       "code": "7-1-6",
       "title": "Inflight Aviation Weather Advisories",
-      "body_path": "aim/2026-04/chapter-7/section-1/paragraph-6.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/06-inflight-aviation-weather-advisories.md",
       "content_hash": "69c76ae1b7c4465b8e774da5f277dc27e9f1fa8174d9afaec1356b9851260e6f"
     },
     {
       "kind": "paragraph",
       "code": "7-1-7",
       "title": "Categorical Outlooks",
-      "body_path": "aim/2026-04/chapter-7/section-1/paragraph-7.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/07-categorical-outlooks.md",
       "content_hash": "663dfc4fcc1e7c720ac4a21133266921812461dbba91aecbe7d5f71ccffc7177"
     },
     {
       "kind": "paragraph",
       "code": "7-1-8",
       "title": "Telephone Information Briefing Service (TIBS)",
-      "body_path": "aim/2026-04/chapter-7/section-1/paragraph-8.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/08-telephone-information-briefing-service-tibs.md",
       "content_hash": "8c9812d205cd15e97eabc2273163b15a6acf7199f17b312b30a2bf0d91bd4ba8"
     },
     {
       "kind": "paragraph",
       "code": "7-1-9",
       "title": "Transcribed Weather Broadcast (TWEB) (Alaska Only)",
-      "body_path": "aim/2026-04/chapter-7/section-1/paragraph-9.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/09-transcribed-weather-broadcast-tweb-alaska-only.md",
       "content_hash": "2af973455e67478a0063805a3047827cde94f2ef2bdea4c94016c3c8ea0cf83d"
     },
     {
       "kind": "paragraph",
       "code": "7-1-10",
       "title": "Inflight Weather Broadcasts",
-      "body_path": "aim/2026-04/chapter-7/section-1/paragraph-10.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/10-inflight-weather-broadcasts.md",
       "content_hash": "b0ec6fb27235f91e7d93ae263c96166f2e5ca57377d1b538664c411381f3e5c9"
     },
     {
       "kind": "paragraph",
       "code": "7-1-11",
       "title": "Flight Information Services (FIS)",
-      "body_path": "aim/2026-04/chapter-7/section-1/paragraph-11.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/11-flight-information-services-fis.md",
       "content_hash": "3d11c7ca01062492fad2beac4ddbf7509ce7dfb3c6bdfcbb089caf87ab11377c"
     },
     {
       "kind": "paragraph",
       "code": "7-1-12",
       "title": "Weather Observing Programs",
-      "body_path": "aim/2026-04/chapter-7/section-1/paragraph-12.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/12-weather-observing-programs.md",
       "content_hash": "8aa0993dbc67b5306a6e3cba69e7bf1a270970ac36a4fb804e58befbc8de0983"
     },
     {
       "kind": "paragraph",
       "code": "7-1-13",
       "title": "Weather Radar Services",
-      "body_path": "aim/2026-04/chapter-7/section-1/paragraph-13.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/13-weather-radar-services.md",
       "content_hash": "d8648d2dae6db9b8410da13908e1ec4960bb11bb630305ea3b76336f972db5b2"
     },
     {
       "kind": "paragraph",
       "code": "7-1-14",
       "title": "ATC Inflight Weather Avoidance Assistance",
-      "body_path": "aim/2026-04/chapter-7/section-1/paragraph-14.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/14-atc-inflight-weather-avoidance-assistance.md",
       "content_hash": "c65d423cae57d0c034f071ac4d3ebd60986c72e2c75ac3ffc13441d09c602886"
     },
     {
       "kind": "paragraph",
       "code": "7-1-15",
       "title": "Runway Visual Range (RVR)",
-      "body_path": "aim/2026-04/chapter-7/section-1/paragraph-15.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/15-runway-visual-range-rvr.md",
       "content_hash": "32c385f6ce72a13e49a5629a7507cd8e25fb23b15650c88c218539c09922a82f"
     },
     {
       "kind": "paragraph",
       "code": "7-1-16",
       "title": "Reporting of Cloud Heights",
-      "body_path": "aim/2026-04/chapter-7/section-1/paragraph-16.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/16-reporting-of-cloud-heights.md",
       "content_hash": "d54a34e0fd4cfb0bdb06c67d2f922e479eb97cc8ed56e9d7e980dab515859bb7"
     },
     {
       "kind": "paragraph",
       "code": "7-1-17",
       "title": "Reporting Prevailing Visibility",
-      "body_path": "aim/2026-04/chapter-7/section-1/paragraph-17.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/17-reporting-prevailing-visibility.md",
       "content_hash": "50deff5fa0c335e4c894b9ef4423da404a7e891ebd31e455b760386620efc249"
     },
     {
       "kind": "paragraph",
       "code": "7-1-18",
       "title": "Estimating Intensity of Rain and Ice Pellets",
-      "body_path": "aim/2026-04/chapter-7/section-1/paragraph-18.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/18-estimating-intensity-of-rain-and-ice-pellets.md",
       "content_hash": "8318712e6e455732481d1944ca06699018b9174f2090f087c7e0236cfc1b8c31"
     },
     {
       "kind": "paragraph",
       "code": "7-1-19",
       "title": "Estimating Intensity of Snow or Drizzle (Based on Visibility)",
-      "body_path": "aim/2026-04/chapter-7/section-1/paragraph-19.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/19-estimating-intensity-of-snow-or-drizzle-based-on.md",
       "content_hash": "d9711ceaa0c1bafb15d2b637cf5f01575cfe04181c061746ceaee0d3ac2878d7"
     },
     {
       "kind": "paragraph",
       "code": "7-1-20",
       "title": "Pilot Weather Reports (PIREPs)",
-      "body_path": "aim/2026-04/chapter-7/section-1/paragraph-20.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/20-pilot-weather-reports-pireps.md",
       "content_hash": "5c360d708ffa0894907272bb2bce93bf187501c3f6885653f6f1aa8e247f7212"
     },
     {
       "kind": "paragraph",
       "code": "7-1-21",
       "title": "PIREPs Relating to Airframe Icing",
-      "body_path": "aim/2026-04/chapter-7/section-1/paragraph-21.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/21-pireps-relating-to-airframe-icing.md",
       "content_hash": "c78fb89e86fe7fa1a4debcdbc93eb36d3fee6f4b7e33339d014f4fe5fe06e295"
     },
     {
       "kind": "paragraph",
       "code": "7-1-22",
       "title": "Definitions of Inflight Icing Terms",
-      "body_path": "aim/2026-04/chapter-7/section-1/paragraph-22.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/22-definitions-of-inflight-icing-terms.md",
       "content_hash": "f3813f5265f8bbe722020e557463785a8ad5d2a406a0d87b66405d7b857b29cb"
     },
     {
       "kind": "paragraph",
       "code": "7-1-23",
       "title": "PIREPs Relating to Turbulence",
-      "body_path": "aim/2026-04/chapter-7/section-1/paragraph-23.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/23-pireps-relating-to-turbulence.md",
       "content_hash": "b65a1b5593fcd25fbada0e96b968fd2141963da2f82bf8f55c723e22f1ba870c"
     },
     {
       "kind": "paragraph",
       "code": "7-1-24",
       "title": "Wind Shear PIREPs",
-      "body_path": "aim/2026-04/chapter-7/section-1/paragraph-24.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/24-wind-shear-pireps.md",
       "content_hash": "af1e75418ec65359efcf2711fbfef481a68ec3f19f210a84f81e0d7b404e692f"
     },
     {
       "kind": "paragraph",
       "code": "7-1-25",
       "title": "Clear Air Turbulence (CAT) PIREPs",
-      "body_path": "aim/2026-04/chapter-7/section-1/paragraph-25.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/25-clear-air-turbulence-cat-pireps.md",
       "content_hash": "36bba9e575a615f4067bee991c0fec32cd6601416dfdccfe5eed52e852697af1"
     },
     {
       "kind": "paragraph",
       "code": "7-1-26",
       "title": "Microbursts",
-      "body_path": "aim/2026-04/chapter-7/section-1/paragraph-26.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/26-microbursts.md",
       "content_hash": "ecfc905c978c776798c99ab485e3337da8480b0600c570ed06de229b97a2bed1"
     },
     {
       "kind": "paragraph",
       "code": "7-1-27",
       "title": "PIREPs Relating to Volcanic Ash Activity",
-      "body_path": "aim/2026-04/chapter-7/section-1/paragraph-27.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/27-pireps-relating-to-volcanic-ash-activity.md",
       "content_hash": "dc2132dda02c15598a4c55de02eabed3e01113e8324f530de0eb6a1a43772ae7"
     },
     {
       "kind": "paragraph",
       "code": "7-1-28",
       "title": "Thunderstorms",
-      "body_path": "aim/2026-04/chapter-7/section-1/paragraph-28.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/28-thunderstorms.md",
       "content_hash": "078fbdcfbd718e95be00f93953a7bfc1f7be094a751fa3271341a4bbadc864da"
     },
     {
       "kind": "paragraph",
       "code": "7-1-29",
       "title": "Thunderstorm Flying",
-      "body_path": "aim/2026-04/chapter-7/section-1/paragraph-29.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/29-thunderstorm-flying.md",
       "content_hash": "eb055ebb772a4e2e8570f4aeb82b89fbaecf4ed9914dc18ea1be7903e29f3fe0"
     },
     {
       "kind": "paragraph",
       "code": "7-1-30",
       "title": "Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)",
-      "body_path": "aim/2026-04/chapter-7/section-1/paragraph-30.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/30-key-to-aerodrome-forecast-taf-and-aviation-routi.md",
       "content_hash": "bcc7d69adb10c869c17fdbf19601faa7776edd1bdff90958e8a9afd2166b2a17"
     },
     {
       "kind": "paragraph",
       "code": "7-1-31",
       "title": "International Civil Aviation Organization (ICAO) Weather Formats",
-      "body_path": "aim/2026-04/chapter-7/section-1/paragraph-31.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/01-meteorology/31-international-civil-aviation-organization-icao-w.md",
       "content_hash": "f5bc5acf54a102d4fd1adf825251fc9d17486cd577cdeae84a3614e308bceb81"
     },
     {
       "kind": "paragraph",
       "code": "7-2-1",
       "title": "General",
-      "body_path": "aim/2026-04/chapter-7/section-2/paragraph-1.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/02-altimeter-setting-procedures/01-general.md",
       "content_hash": "14bf4372865084d6979a3f207e6a521f41d8b04b5d672cbdbaa0836fb0fe11c0"
     },
     {
       "kind": "paragraph",
       "code": "7-2-2",
       "title": "Procedures",
-      "body_path": "aim/2026-04/chapter-7/section-2/paragraph-2.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/02-altimeter-setting-procedures/02-procedures.md",
       "content_hash": "f1cc804a7159d2aec3e3929a9557fe935986a615e8b2765c662b55fdf5806620"
     },
     {
       "kind": "paragraph",
       "code": "7-2-3",
       "title": "Altimeter Errors",
-      "body_path": "aim/2026-04/chapter-7/section-2/paragraph-3.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/02-altimeter-setting-procedures/03-altimeter-errors.md",
       "content_hash": "7947741eaa432d158f62b5e3e55cf5cf77ff794a90523474f5d4231550011b41"
     },
     {
       "kind": "paragraph",
       "code": "7-2-4",
       "title": "High Barometric Pressure",
-      "body_path": "aim/2026-04/chapter-7/section-2/paragraph-4.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/02-altimeter-setting-procedures/04-high-barometric-pressure.md",
       "content_hash": "d6c20d952a26046110078b9836d430aac0d6981b2bb5767eda0879ae575719b1"
     },
     {
       "kind": "paragraph",
       "code": "7-2-5",
       "title": "Low Barometric Pressure",
-      "body_path": "aim/2026-04/chapter-7/section-2/paragraph-5.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/02-altimeter-setting-procedures/05-low-barometric-pressure.md",
       "content_hash": "276fd0c6e9f053941583e5acac6c78b8d7b0f222ccee8a2c0af15335931434cc"
     },
     {
       "kind": "paragraph",
       "code": "7-3-1",
       "title": "General",
-      "body_path": "aim/2026-04/chapter-7/section-3/paragraph-1.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/03-wake-turbulence/01-general.md",
       "content_hash": "d9c693bc9976a65bd6f97107605f66b10b36c1738daaf7cdb7695c520da8aea4"
     },
     {
       "kind": "paragraph",
       "code": "7-3-2",
       "title": "Vortex Generation",
-      "body_path": "aim/2026-04/chapter-7/section-3/paragraph-2.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/03-wake-turbulence/02-vortex-generation.md",
       "content_hash": "56487e3f94afaac26949af45e6373e17ee31a8dc8d61e2eaf33fc6d4273c9be1"
     },
     {
       "kind": "paragraph",
       "code": "7-3-3",
       "title": "Vortex Strength",
-      "body_path": "aim/2026-04/chapter-7/section-3/paragraph-3.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/03-wake-turbulence/03-vortex-strength.md",
       "content_hash": "c677f9ae0db1494259c2562158bcf74182f56ad980ad28b346d02b0bb36b4906"
     },
     {
       "kind": "paragraph",
       "code": "7-3-4",
       "title": "Vortex Behavior",
-      "body_path": "aim/2026-04/chapter-7/section-3/paragraph-4.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/03-wake-turbulence/04-vortex-behavior.md",
       "content_hash": "6ddb6ad63088190aaa35f249270d26e1f88cdd45ae055c6f79849bcacce594bb"
     },
     {
       "kind": "paragraph",
       "code": "7-3-5",
       "title": "Operations Problem Areas",
-      "body_path": "aim/2026-04/chapter-7/section-3/paragraph-5.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/03-wake-turbulence/05-operations-problem-areas.md",
       "content_hash": "49b665476ca10a0f92905c404ae8bcfe95dcbeaf8854668757b8426076579dc2"
     },
     {
       "kind": "paragraph",
       "code": "7-3-6",
       "title": "Vortex Avoidance Procedures",
-      "body_path": "aim/2026-04/chapter-7/section-3/paragraph-6.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/03-wake-turbulence/06-vortex-avoidance-procedures.md",
       "content_hash": "35f38f08689e81e70a4129bd8960deb9449676ba01caffddfd550e0324f1bcf5"
     },
     {
       "kind": "paragraph",
       "code": "7-3-7",
       "title": "Helicopters",
-      "body_path": "aim/2026-04/chapter-7/section-3/paragraph-7.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/03-wake-turbulence/07-helicopters.md",
       "content_hash": "0ce351199d2c187ca535ce7ee78fc8370cb7df634dd926257bd20c5d26cd3c76"
     },
     {
       "kind": "paragraph",
       "code": "7-3-8",
       "title": "Pilot Responsibility",
-      "body_path": "aim/2026-04/chapter-7/section-3/paragraph-8.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/03-wake-turbulence/08-pilot-responsibility.md",
       "content_hash": "fa46437cf8aa4a91b8475003e2c4ba661a2ebc4aef2ae24d5d0482b942df3fc0"
     },
     {
       "kind": "paragraph",
       "code": "7-3-9",
       "title": "Air Traffic Wake Turbulence Separations",
-      "body_path": "aim/2026-04/chapter-7/section-3/paragraph-9.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/03-wake-turbulence/09-air-traffic-wake-turbulence-separations.md",
       "content_hash": "e0cf1d2229ce8405251ef2047ab09bb591ec4e5c69ffcb184c813b1c28ac0c50"
     },
     {
       "kind": "paragraph",
       "code": "7-4-1",
       "title": "Migratory Bird Activity",
-      "body_path": "aim/2026-04/chapter-7/section-4/paragraph-1.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/04-bird-hazards-and-flight-over-national-refuges-pa/01-migratory-bird-activity.md",
       "content_hash": "36ff84ab02985ddfa286c92d92a7902778e0364ab978fb28f35a6e7d793ff78e"
     },
     {
       "kind": "paragraph",
       "code": "7-4-2",
       "title": "Reducing Bird Strike Risks",
-      "body_path": "aim/2026-04/chapter-7/section-4/paragraph-2.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/04-bird-hazards-and-flight-over-national-refuges-pa/02-reducing-bird-strike-risks.md",
       "content_hash": "1baab469b0de603c1c86c28e594c7407bd868407590ed5bf28327ebd6c96322d"
     },
     {
       "kind": "paragraph",
       "code": "7-4-3",
       "title": "Reporting Bird Strikes",
-      "body_path": "aim/2026-04/chapter-7/section-4/paragraph-3.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/04-bird-hazards-and-flight-over-national-refuges-pa/03-reporting-bird-strikes.md",
       "content_hash": "33617aa32d1a83961520ec5dc932e91c3b765115b9ea51ea7956ab243613ee6d"
     },
     {
       "kind": "paragraph",
       "code": "7-4-4",
       "title": "Reporting Bird and Other Wildlife Activities",
-      "body_path": "aim/2026-04/chapter-7/section-4/paragraph-4.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/04-bird-hazards-and-flight-over-national-refuges-pa/04-reporting-bird-and-other-wildlife-activities.md",
       "content_hash": "05ebe793551a63898ac7bfeeeaf9ba5d595e1cd1b2032dc5aa699a1004a7c070"
     },
     {
       "kind": "paragraph",
       "code": "7-4-5",
       "title": "Pilot Advisories on Bird and Other Wildlife Hazards",
-      "body_path": "aim/2026-04/chapter-7/section-4/paragraph-5.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/04-bird-hazards-and-flight-over-national-refuges-pa/05-pilot-advisories-on-bird-and-other-wildlife-haza.md",
       "content_hash": "84257a017b8b260f9b1f808e96c67fb1cd2e7a304597c2f69f49369337756652"
     },
     {
       "kind": "paragraph",
       "code": "7-4-6",
       "title": "Flights Over Charted U.S. Wildlife Refuges, Parks, and Forest Service Areas",
-      "body_path": "aim/2026-04/chapter-7/section-4/paragraph-6.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/04-bird-hazards-and-flight-over-national-refuges-pa/06-flights-over-charted-u-s-wildlife-refuges-parks.md",
       "content_hash": "05bf47be34ef5607fdfa32006d622842127ec55bb2480f41fb33bf1b9e8beee6"
     },
     {
       "kind": "paragraph",
       "code": "7-5-1",
       "title": "Accident Cause Factors",
-      "body_path": "aim/2026-04/chapter-7/section-5/paragraph-1.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/05-potential-flight-hazards/01-accident-cause-factors.md",
       "content_hash": "fcb5d440ebf1bb53277309a632731557005fdf5dd614a8f2673eb5feced6bab1"
     },
     {
       "kind": "paragraph",
       "code": "7-5-2",
       "title": "VFR in Congested Areas",
-      "body_path": "aim/2026-04/chapter-7/section-5/paragraph-2.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/05-potential-flight-hazards/02-vfr-in-congested-areas.md",
       "content_hash": "1ba6b953767b07af291615a318f428b2a6409a6089e0b99ee913586d5f8c1c5a"
     },
     {
       "kind": "paragraph",
       "code": "7-5-3",
       "title": "Obstructions To Flight",
-      "body_path": "aim/2026-04/chapter-7/section-5/paragraph-3.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/05-potential-flight-hazards/03-obstructions-to-flight.md",
       "content_hash": "d811313d72a3733165a6c92d4b36b612dcebe52acacc24e977ad48794ae1eda7"
     },
     {
       "kind": "paragraph",
       "code": "7-5-4",
       "title": "Avoid Flight Beneath Unmanned Balloons",
-      "body_path": "aim/2026-04/chapter-7/section-5/paragraph-4.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/05-potential-flight-hazards/04-avoid-flight-beneath-unmanned-balloons.md",
       "content_hash": "d9a147174939942b901217ccbe6271ef239e6843b20aa37f85212e91cbf6bc05"
     },
     {
       "kind": "paragraph",
       "code": "7-5-5",
       "title": "Unmanned Aircraft Systems",
-      "body_path": "aim/2026-04/chapter-7/section-5/paragraph-5.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/05-potential-flight-hazards/05-unmanned-aircraft-systems.md",
       "content_hash": "c593d3fdea0dcdcff965be971a4cea5c88e0a1975b42455333c04f05d4ab7db5"
     },
     {
       "kind": "paragraph",
       "code": "7-5-6",
       "title": "Mountain Flying",
-      "body_path": "aim/2026-04/chapter-7/section-5/paragraph-6.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/05-potential-flight-hazards/06-mountain-flying.md",
       "content_hash": "5e086111f6e0db294742957f0bde99d9c1b5b79e080bb5d70a1e011b0246f4ac"
     },
     {
       "kind": "paragraph",
       "code": "7-5-7",
       "title": "Use of Runway Half-way Signs at Unimproved Airports",
-      "body_path": "aim/2026-04/chapter-7/section-5/paragraph-7.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/05-potential-flight-hazards/07-use-of-runway-half-way-signs-at-unimproved-airpo.md",
       "content_hash": "ae58f078f0badcaf350e878e171c33720ffec077a7058221bcb2250c873fcbe8"
     },
     {
       "kind": "paragraph",
       "code": "7-5-8",
       "title": "Seaplane Safety",
-      "body_path": "aim/2026-04/chapter-7/section-5/paragraph-8.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/05-potential-flight-hazards/08-seaplane-safety.md",
       "content_hash": "cff2046b03a57cde0d8528d766c7197a63f14db9bf39d9956c9b94c1b056b0f4"
     },
     {
       "kind": "paragraph",
       "code": "7-5-9",
       "title": "Flight Operations in Volcanic Ash",
-      "body_path": "aim/2026-04/chapter-7/section-5/paragraph-9.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/05-potential-flight-hazards/09-flight-operations-in-volcanic-ash.md",
       "content_hash": "222fc02151e12458414e175a1f69d9d3969cfe9a20238e78df0341e8c871a630"
     },
     {
       "kind": "paragraph",
       "code": "7-5-10",
       "title": "Emergency Airborne Inspection of Other Aircraft",
-      "body_path": "aim/2026-04/chapter-7/section-5/paragraph-10.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/05-potential-flight-hazards/10-emergency-airborne-inspection-of-other-aircraft.md",
       "content_hash": "a9fa633760a8a9f15fcdef063e74d836f82dce77720a2d3c91bcbce9d8611e66"
     },
     {
       "kind": "paragraph",
       "code": "7-5-11",
       "title": "Precipitation Static",
-      "body_path": "aim/2026-04/chapter-7/section-5/paragraph-11.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/05-potential-flight-hazards/11-precipitation-static.md",
       "content_hash": "7655f142b5e6ded791977eaa20d8f82a376726ee5c3534379d1023360ae7ebb5"
     },
     {
       "kind": "paragraph",
       "code": "7-5-12",
       "title": "Light Amplification by Stimulated Emission of Radiation (Laser) Operations and Reporting Illumination of Aircraft",
-      "body_path": "aim/2026-04/chapter-7/section-5/paragraph-12.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/05-potential-flight-hazards/12-light-amplification-by-stimulated-emission-of-ra.md",
       "content_hash": "baffe6f43854cbbc29b784a18d57982c0c65c9b9174ebd6fda39a81387a410f9"
     },
     {
       "kind": "paragraph",
       "code": "7-5-13",
       "title": "Flying in Flat Light and White Out Conditions",
-      "body_path": "aim/2026-04/chapter-7/section-5/paragraph-13.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/05-potential-flight-hazards/13-flying-in-flat-light-and-white-out-conditions.md",
       "content_hash": "5dfb5c93ea0de549a2c57215885f019baea392788319b70c762b69f5294aa215"
     },
     {
       "kind": "paragraph",
       "code": "7-5-14",
       "title": "Operations in Ground Icing Conditions",
-      "body_path": "aim/2026-04/chapter-7/section-5/paragraph-14.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/05-potential-flight-hazards/14-operations-in-ground-icing-conditions.md",
       "content_hash": "5a4d3e1f630a77481c7365a510822f089950a6b083a18d8aad2b1492e96ffe31"
     },
     {
       "kind": "paragraph",
       "code": "7-5-15",
       "title": "Avoid Flight in the Vicinity of Exhaust Plumes (Smoke Stacks and Cooling Towers)",
-      "body_path": "aim/2026-04/chapter-7/section-5/paragraph-15.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/05-potential-flight-hazards/15-avoid-flight-in-the-vicinity-of-exhaust-plumes-s.md",
       "content_hash": "ed4c8f4e33c9246b37c5c0389a66292608ebd96ed1571af07b9e9de0cc549890"
     },
     {
       "kind": "paragraph",
       "code": "7-6-1",
       "title": "Aviation Safety Reporting Program",
-      "body_path": "aim/2026-04/chapter-7/section-6/paragraph-1.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/06-safety-accident-and-hazard-reports/01-aviation-safety-reporting-program.md",
       "content_hash": "76a996ff55e0646c8fe517e2de46d3ebd2a643b0d1748ea059e8995b931486c2"
     },
     {
       "kind": "paragraph",
       "code": "7-6-2",
       "title": "Aircraft Accident and Incident Reporting",
-      "body_path": "aim/2026-04/chapter-7/section-6/paragraph-2.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/06-safety-accident-and-hazard-reports/02-aircraft-accident-and-incident-reporting.md",
       "content_hash": "e3cf84b56a9b8ab3c30cad93ca6ef482765554408bc350539de03cc3c0e84890"
     },
     {
       "kind": "paragraph",
       "code": "7-6-3",
       "title": "Near Midair Collision Reporting",
-      "body_path": "aim/2026-04/chapter-7/section-6/paragraph-3.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/06-safety-accident-and-hazard-reports/03-near-midair-collision-reporting.md",
       "content_hash": "03eb7f0f7f724ef531916bfdf3417c3b412f0a488ae3595b9bb60879ffb42e70"
     },
     {
       "kind": "paragraph",
       "code": "7-6-4",
       "title": "Unidentified Flying Object (UFO) Reports",
-      "body_path": "aim/2026-04/chapter-7/section-6/paragraph-4.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/06-safety-accident-and-hazard-reports/04-unidentified-flying-object-ufo-reports.md",
       "content_hash": "5658d0e132098fe4e75a1282e7f86fe36d6cbb2fa97addb7482b2c163e6fcd2e"
     },
     {
       "kind": "paragraph",
       "code": "7-6-5",
       "title": "Safety Alerts For Operators (SAFO) and Information For Operators (InFO)",
-      "body_path": "aim/2026-04/chapter-7/section-6/paragraph-5.md",
+      "body_path": "aim/2026-04/07-safety-of-flight/06-safety-accident-and-hazard-reports/05-safety-alerts-for-operators-safo-and-information.md",
       "content_hash": "2a505768521e3b2221d8ea28ad73b5822e08e164f796969936d4ae7ce2b2ccc9"
     },
     {
       "kind": "paragraph",
       "code": "8-1-1",
       "title": "Fitness For Flight",
-      "body_path": "aim/2026-04/chapter-8/section-1/paragraph-1.md",
+      "body_path": "aim/2026-04/08-medical-facts-for-pilots/01-fitness-for-flight/01-fitness-for-flight.md",
       "content_hash": "5560070a63fcb02e2aecf33c0489812dbe4a9c452ceb126b31efa226fa7d0f35"
     },
     {
       "kind": "paragraph",
       "code": "8-1-2",
       "title": "Effects of Altitude",
-      "body_path": "aim/2026-04/chapter-8/section-1/paragraph-2.md",
+      "body_path": "aim/2026-04/08-medical-facts-for-pilots/01-fitness-for-flight/02-effects-of-altitude.md",
       "content_hash": "76a2cdbc5079a9334551eb9f6016c9365c1776e4f026c25f045f12dca3210e75"
     },
     {
       "kind": "paragraph",
       "code": "8-1-3",
       "title": "Hyperventilation in Flight",
-      "body_path": "aim/2026-04/chapter-8/section-1/paragraph-3.md",
+      "body_path": "aim/2026-04/08-medical-facts-for-pilots/01-fitness-for-flight/03-hyperventilation-in-flight.md",
       "content_hash": "c324dbd39911def4512183423b746131a8a7cca11481082f60b8bbd649524cee"
     },
     {
       "kind": "paragraph",
       "code": "8-1-4",
       "title": "Carbon Monoxide Poisoning in Flight",
-      "body_path": "aim/2026-04/chapter-8/section-1/paragraph-4.md",
+      "body_path": "aim/2026-04/08-medical-facts-for-pilots/01-fitness-for-flight/04-carbon-monoxide-poisoning-in-flight.md",
       "content_hash": "d8cdb46f3eb86b06f572177d6a5a974811ae5b3b7434a73b0a1db95e7c027736"
     },
     {
       "kind": "paragraph",
       "code": "8-1-5",
       "title": "Illusions in Flight",
-      "body_path": "aim/2026-04/chapter-8/section-1/paragraph-5.md",
+      "body_path": "aim/2026-04/08-medical-facts-for-pilots/01-fitness-for-flight/05-illusions-in-flight.md",
       "content_hash": "7dbc9d658148520b843a7818413a59d37a9ad8faedd68a74b75960beee05f271"
     },
     {
       "kind": "paragraph",
       "code": "8-1-6",
       "title": "Vision in Flight",
-      "body_path": "aim/2026-04/chapter-8/section-1/paragraph-6.md",
+      "body_path": "aim/2026-04/08-medical-facts-for-pilots/01-fitness-for-flight/06-vision-in-flight.md",
       "content_hash": "91e4f30180ebf75cfe3d6aa4b512955497c1b241c98dfecf80e3acda6f23e652"
     },
     {
       "kind": "paragraph",
       "code": "8-1-7",
       "title": "Aerobatic Flight",
-      "body_path": "aim/2026-04/chapter-8/section-1/paragraph-7.md",
+      "body_path": "aim/2026-04/08-medical-facts-for-pilots/01-fitness-for-flight/07-aerobatic-flight.md",
       "content_hash": "d2e4da5fd865c9969ba3c8b5866f123057b15f9516ab478d7aa3efcfb6e2535d"
     },
     {
       "kind": "paragraph",
       "code": "8-1-8",
       "title": "Judgment Aspects of Collision Avoidance",
-      "body_path": "aim/2026-04/chapter-8/section-1/paragraph-8.md",
+      "body_path": "aim/2026-04/08-medical-facts-for-pilots/01-fitness-for-flight/08-judgment-aspects-of-collision-avoidance.md",
       "content_hash": "628749d9c50e6f2dc8b39cc45518ba5436f4f4df0e10274e13d8edb5a96f94f9"
     },
     {
       "kind": "paragraph",
       "code": "9-1-1",
       "title": "General",
-      "body_path": "aim/2026-04/chapter-9/section-1/paragraph-1.md",
+      "body_path": "aim/2026-04/09-aeronautical-charts-and-related-publications/01-types-of-charts-available/01-general.md",
       "content_hash": "945fbaff7cfadbf8b8cd9e6e6c707ee68956046436e51c3278a2e1fa362f8342"
     },
     {
       "kind": "paragraph",
       "code": "9-1-2",
       "title": "Obtaining Aeronautical Charts",
-      "body_path": "aim/2026-04/chapter-9/section-1/paragraph-2.md",
+      "body_path": "aim/2026-04/09-aeronautical-charts-and-related-publications/01-types-of-charts-available/02-obtaining-aeronautical-charts.md",
       "content_hash": "b12f66671113da176f541c6d57eb5ccf304d6c375e0dd9c5c7e99b924ce1cc6e"
     },
     {
       "kind": "paragraph",
       "code": "9-1-3",
       "title": "Selected Charts and Products Available",
-      "body_path": "aim/2026-04/chapter-9/section-1/paragraph-3.md",
+      "body_path": "aim/2026-04/09-aeronautical-charts-and-related-publications/01-types-of-charts-available/03-selected-charts-and-products-available.md",
       "content_hash": "95df63de837b3c46939b4061e5b070db6fd17a336d19175a65842f7569ffaf5a"
     },
     {
       "kind": "paragraph",
       "code": "9-1-4",
       "title": "General Description of Each Chart Series",
-      "body_path": "aim/2026-04/chapter-9/section-1/paragraph-4.md",
+      "body_path": "aim/2026-04/09-aeronautical-charts-and-related-publications/01-types-of-charts-available/04-general-description-of-each-chart-series.md",
       "content_hash": "4fd1b4e893ba2fda6a7fc597ad1063f806e23ba47067f67fdb6ff51b1348ba6a"
     },
     {
       "kind": "paragraph",
       "code": "9-1-5",
       "title": "Where and How to Get Charts of Foreign Areas",
-      "body_path": "aim/2026-04/chapter-9/section-1/paragraph-5.md",
+      "body_path": "aim/2026-04/09-aeronautical-charts-and-related-publications/01-types-of-charts-available/05-where-and-how-to-get-charts-of-foreign-areas.md",
       "content_hash": "9ecd620e05cea3bf973f3c2ef3685090f926baf2c891a0b00a10f2e4fe09c36c"
     },
     {
       "kind": "paragraph",
       "code": "10-1-1",
       "title": "Helicopter Flight Control Systems",
-      "body_path": "aim/2026-04/chapter-10/section-1/paragraph-1.md",
+      "body_path": "aim/2026-04/10-helicopter-operations/01-helicopter-ifr-operations/01-helicopter-flight-control-systems.md",
       "content_hash": "7db8d7572da659c846f7f5e27bab1a30e6210d55cc22d099e0890c1f24fb5bfb"
     },
     {
       "kind": "paragraph",
       "code": "10-1-2",
       "title": "Helicopter Instrument Approaches",
-      "body_path": "aim/2026-04/chapter-10/section-1/paragraph-2.md",
+      "body_path": "aim/2026-04/10-helicopter-operations/01-helicopter-ifr-operations/02-helicopter-instrument-approaches.md",
       "content_hash": "ec04cf5973215fb36fe0f8a8da9594e62fd898abe06dd1b23b47087e5edf5035"
     },
     {
       "kind": "paragraph",
       "code": "10-1-3",
       "title": "Helicopter Approach Procedures to VFR Heliports",
-      "body_path": "aim/2026-04/chapter-10/section-1/paragraph-3.md",
+      "body_path": "aim/2026-04/10-helicopter-operations/01-helicopter-ifr-operations/03-helicopter-approach-procedures-to-vfr-heliports.md",
       "content_hash": "b34e786cc93020a888b3eba332e6fd9eb09a0192cc91f4d66732a70c44a58bd2"
     },
     {
       "kind": "paragraph",
       "code": "10-1-4",
       "title": "The Gulf of Mexico Grid System",
-      "body_path": "aim/2026-04/chapter-10/section-1/paragraph-4.md",
+      "body_path": "aim/2026-04/10-helicopter-operations/01-helicopter-ifr-operations/04-the-gulf-of-mexico-grid-system.md",
       "content_hash": "d4260482dd5a20c6eac821215cbc9d670679e17b2f17500534bd39247b3b7709"
     },
     {
       "kind": "paragraph",
       "code": "10-2-1",
       "title": "Offshore Helicopter Operations",
-      "body_path": "aim/2026-04/chapter-10/section-2/paragraph-1.md",
+      "body_path": "aim/2026-04/10-helicopter-operations/02-special-operations/01-offshore-helicopter-operations.md",
       "content_hash": "069fa25b27c01297e93620e9464f3531d187e24c815b71ed07f5ebf876fcf8b9"
     },
     {
       "kind": "paragraph",
       "code": "10-2-2",
       "title": "Helicopter Night VFR Operations",
-      "body_path": "aim/2026-04/chapter-10/section-2/paragraph-2.md",
+      "body_path": "aim/2026-04/10-helicopter-operations/02-special-operations/02-helicopter-night-vfr-operations.md",
       "content_hash": "95d10f49b4e42f2b494d1e246b80c6da263bc53266485333fdc02c431d16f78a"
     },
     {
       "kind": "paragraph",
       "code": "10-2-3",
       "title": "Landing Zone Safety",
-      "body_path": "aim/2026-04/chapter-10/section-2/paragraph-3.md",
+      "body_path": "aim/2026-04/10-helicopter-operations/02-special-operations/03-landing-zone-safety.md",
       "content_hash": "bd7de67bd36a523c717c5ea4a89c0526fee400b7aaf4e7cc37e6f176154a415f"
     },
     {
       "kind": "paragraph",
       "code": "10-2-4",
       "title": "Emergency Medical Service (EMS) Multiple Helicopter Operations",
-      "body_path": "aim/2026-04/chapter-10/section-2/paragraph-4.md",
+      "body_path": "aim/2026-04/10-helicopter-operations/02-special-operations/04-emergency-medical-service-ems-multiple-helicopte.md",
       "content_hash": "7ac9e8d9a145efc54b2d100134cc018f51e27494e96d53f33f10edfb6d791c01"
     },
     {
