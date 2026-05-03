@@ -1,8 +1,135 @@
 <script lang="ts">
-import RenderedSection from '@ab/library/RenderedSection.svelte';
+import { ROUTES } from '@ab/constants';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
 </script>
 
-<RenderedSection title={data.title} id={data.uri} body={data.body} />
+<svelte:head>
+	<title>{data.reference.title} -- Flightbag</title>
+</svelte:head>
+
+<nav aria-label="Breadcrumb" class="crumbs">
+	<a href={ROUTES.FLIGHTBAG_HOME}>Flightbag</a> &raquo; <span>{data.reference.title}</span>
+</nav>
+
+<header class="page-header">
+	<h1>{data.reference.title}</h1>
+	<p class="meta">
+		<span class="edition">{data.reference.edition}</span>
+		<span class="publisher">{data.reference.publisher}</span>
+	</p>
+	{#if data.reference.subjects.length > 0}
+		<p class="subjects">
+			{#each data.reference.subjects as subject (subject)}
+				<span class="subject">{subject}</span>
+			{/each}
+		</p>
+	{/if}
+</header>
+
+{#if data.chapters.length === 0}
+	<p class="empty">This handbook has no chapter rows in the catalog yet.</p>
+{:else}
+	<section aria-label="Chapters">
+		<h2>Chapters</h2>
+		<ol class="chapters">
+			{#each data.chapters as chapter (chapter.id)}
+				<li>
+					<a href={chapter.href}>
+						<span class="chapter-code">Chapter {chapter.code}</span>
+						<span class="chapter-title">{chapter.title}</span>
+						{#if chapter.faaPageStart}
+							<span class="chapter-pages">pp. {chapter.faaPageStart}{chapter.faaPageEnd ? `..${chapter.faaPageEnd}` : ''}</span>
+						{/if}
+					</a>
+				</li>
+			{/each}
+		</ol>
+	</section>
+{/if}
+
+<style>
+	.crumbs {
+		color: var(--ink-muted);
+		margin-bottom: var(--space-sm);
+		font-size: var(--font-size-sm);
+	}
+	.crumbs a {
+		color: inherit;
+	}
+
+	.page-header {
+		margin-bottom: var(--space-lg);
+	}
+	.page-header h1 {
+		margin: 0 0 var(--space-xs);
+		font-size: var(--font-size-2xl);
+		font-weight: var(--font-weight-bold);
+	}
+	.meta {
+		margin: 0 0 var(--space-xs);
+		display: flex;
+		gap: var(--space-sm);
+		color: var(--ink-muted);
+		font-size: var(--font-size-sm);
+	}
+	.edition {
+		font-family: var(--font-family-mono);
+	}
+	.subjects {
+		margin: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-2xs);
+	}
+	.subject {
+		font-size: var(--font-size-xs);
+		color: var(--ink-muted);
+		padding: var(--space-2xs) var(--space-xs);
+		background: var(--surface-sunken);
+		border-radius: var(--radius-sm);
+	}
+
+	.chapters {
+		list-style: none;
+		padding: 0;
+		margin: var(--space-sm) 0 0 0;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2xs);
+	}
+	.chapters a {
+		display: flex;
+		align-items: baseline;
+		gap: var(--space-sm);
+		padding: var(--space-sm) var(--space-md);
+		border-radius: var(--radius-md);
+		border: 1px solid var(--edge-default);
+		background: var(--surface-raised);
+		color: inherit;
+		text-decoration: none;
+	}
+	.chapters a:hover,
+	.chapters a:focus-visible {
+		border-color: var(--action-default-edge);
+	}
+	.chapter-code {
+		font-family: var(--font-family-mono);
+		color: var(--ink-muted);
+		min-width: 6rem;
+	}
+	.chapter-title {
+		flex: 1;
+		font-weight: var(--font-weight-medium);
+	}
+	.chapter-pages {
+		color: var(--ink-muted);
+		font-family: var(--font-family-mono);
+		font-size: var(--font-size-sm);
+	}
+	.empty {
+		color: var(--ink-muted);
+		font-style: italic;
+	}
+</style>

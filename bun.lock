@@ -51,11 +51,14 @@
     "apps/flightbag": {
       "name": "@ab/flightbag",
       "dependencies": {
+        "@ab/aviation": "workspace:*",
+        "@ab/bc-study": "workspace:*",
         "@ab/constants": "workspace:*",
         "@ab/db": "workspace:*",
         "@ab/library": "workspace:*",
         "@ab/sources": "workspace:*",
         "@ab/themes": "workspace:*",
+        "@ab/types": "workspace:*",
         "@ab/ui": "workspace:*",
         "@ab/utils": "workspace:*",
       },

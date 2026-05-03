@@ -40,12 +40,16 @@ describe('urlForReference -- aim', () => {
 		expect(urlForReference(id('airboss-ref:aim/5-1-7'))).toBe(ROUTES.FLIGHTBAG_AIM_PARAGRAPH('5', '1', '7'));
 	});
 
-	it('falls back to home for chapter-only AIM URIs (no leaf route yet)', () => {
-		expect(urlForReference(id('airboss-ref:aim/5'))).toBe(ROUTES.FLIGHTBAG_HOME);
+	it('maps an AIM chapter URI to FLIGHTBAG_AIM_CHAPTER', () => {
+		expect(urlForReference(id('airboss-ref:aim/5'))).toBe(ROUTES.FLIGHTBAG_AIM_CHAPTER('5'));
 	});
 
-	it('falls back to home for AIM glossary entries (no leaf route yet)', () => {
-		expect(urlForReference(id('airboss-ref:aim/glossary/pilot-in-command'))).toBe(ROUTES.FLIGHTBAG_HOME);
+	it('maps an AIM section URI to FLIGHTBAG_AIM_SECTION', () => {
+		expect(urlForReference(id('airboss-ref:aim/5-1'))).toBe(ROUTES.FLIGHTBAG_AIM_SECTION('5', '1'));
+	});
+
+	it('falls back to AIM landing for AIM glossary entries (no leaf route yet)', () => {
+		expect(urlForReference(id('airboss-ref:aim/glossary/pilot-in-command'))).toBe(ROUTES.FLIGHTBAG_AIM);
 	});
 });
 
@@ -64,8 +68,8 @@ describe('urlForReference -- regs (CFR)', () => {
 		);
 	});
 
-	it('falls back to home for whole-Part CFR URIs (no leaf route yet)', () => {
-		expect(urlForReference(id('airboss-ref:regs/cfr-14/91'))).toBe(ROUTES.FLIGHTBAG_HOME);
+	it('maps a whole-Part CFR URI to the Part landing', () => {
+		expect(urlForReference(id('airboss-ref:regs/cfr-14/91'))).toBe(ROUTES.FLIGHTBAG_CFR_PART('14', '91'));
 	});
 });
 
@@ -78,8 +82,14 @@ describe('urlForReference -- ac', () => {
 		expect(urlForReference(id('airboss-ref:ac/91-21.1/d'))).toBe(ROUTES.FLIGHTBAG_AC('91-21.1', 'd'));
 	});
 
-	it('section / change AC URIs resolve to the parent revision', () => {
-		expect(urlForReference(id('airboss-ref:ac/61-65/j/section-3'))).toBe(ROUTES.FLIGHTBAG_AC('61-65', 'j'));
+	it('section AC URIs resolve to the chapter view', () => {
+		expect(urlForReference(id('airboss-ref:ac/61-65/j/section-3'))).toBe(
+			ROUTES.FLIGHTBAG_AC_CHAPTER('61-65', 'j', '3'),
+		);
+	});
+
+	it('change AC URIs resolve to the parent AC landing', () => {
+		expect(urlForReference(id('airboss-ref:ac/61-65/j/change-1'))).toBe(ROUTES.FLIGHTBAG_AC('61-65', 'j'));
 	});
 });
 
@@ -96,8 +106,8 @@ describe('urlForReference -- acs', () => {
 		);
 	});
 
-	it('falls back to home for whole-publication ACS URIs (no leaf route yet)', () => {
-		expect(urlForReference(id('airboss-ref:acs/ppl-airplane-6c'))).toBe(ROUTES.FLIGHTBAG_HOME);
+	it('whole-publication ACS URI maps to the publication landing', () => {
+		expect(urlForReference(id('airboss-ref:acs/ppl-airplane-6c'))).toBe(ROUTES.FLIGHTBAG_ACS('ppl-airplane-6c'));
 	});
 });
 

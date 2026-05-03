@@ -43,6 +43,18 @@ const config = {
 			'@ab/sources/*': '../../libs/sources/src/*',
 			'@ab/library': '../../libs/library/src/index.ts',
 			'@ab/library/*': '../../libs/library/src/*',
+			'@ab/bc-study': '../../libs/bc/study/src/index.ts',
+			'@ab/bc-study/*': '../../libs/bc/study/src/*',
+			'@ab/aviation': '../../libs/aviation/src/index.ts',
+			'@ab/aviation/*': '../../libs/aviation/src/*',
+			// Deep imports the BC layer reaches for. Listed here so flightbag's
+			// svelte-check can type-check the BC module graph end-to-end.
+			'@ab/auth': '../../libs/auth/src/index.ts',
+			'@ab/auth/*': '../../libs/auth/src/*',
+			'@ab/audit': '../../libs/audit/src/index.ts',
+			'@ab/audit/*': '../../libs/audit/src/*',
+			'@ab/bc-hangar': '../../libs/bc/hangar/src/index.ts',
+			'@ab/bc-hangar/*': '../../libs/bc/hangar/src/*',
 		},
 		env: {
 			dir: '../../',

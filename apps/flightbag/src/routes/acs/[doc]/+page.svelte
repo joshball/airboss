@@ -6,7 +6,7 @@ let { data }: { data: PageData } = $props();
 </script>
 
 <svelte:head>
-	<title>{data.reference.title}</title>
+	<title>{data.reference.title} -- Flightbag</title>
 </svelte:head>
 
 <nav aria-label="Breadcrumb" class="crumbs">
@@ -21,36 +21,20 @@ let { data }: { data: PageData } = $props();
 	</p>
 </header>
 
-{#if data.chapters.length === 0}
-	<section class="callout">
-		<h2>Read on faa.gov</h2>
+<section class="callout">
+	<h2>Read on faa.gov</h2>
+	<p>
+		The FAA's Airman Certification Standards portal is the authoritative source for ACS publications. Per-task
+		content is on the airboss roadmap; until then, the FAA's PDF is the canonical reference.
+	</p>
+	{#if data.reference.externalUrl}
 		<p>
-			This advisory circular's per-chapter content isn't ingested into the flightbag reader yet. The FAA's AC
-			index is the authoritative source.
+			<a class="external-link" href={data.reference.externalUrl} target="_blank" rel="noopener noreferrer">
+				Open ACS portal &rarr;
+			</a>
 		</p>
-		{#if data.reference.externalUrl}
-			<p>
-				<a class="external-link" href={data.reference.externalUrl} target="_blank" rel="noopener noreferrer">
-					Open on faa.gov &rarr;
-				</a>
-			</p>
-		{/if}
-	</section>
-{:else}
-	<section aria-label="Chapters">
-		<h2>Contents</h2>
-		<ol class="chapters">
-			{#each data.chapters as chapter (chapter.id)}
-				<li>
-					<a href={chapter.href}>
-						<span class="chapter-code">Ch {chapter.code}</span>
-						<span class="chapter-title">{chapter.title}</span>
-					</a>
-				</li>
-			{/each}
-		</ol>
-	</section>
-{/if}
+	{/if}
+</section>
 
 <style>
 	.crumbs {
@@ -65,7 +49,7 @@ let { data }: { data: PageData } = $props();
 		margin: 0 0 var(--space-xs);
 	}
 	.meta {
-		margin: 0;
+		margin: 0 0 var(--space-md);
 		display: flex;
 		gap: var(--space-sm);
 		color: var(--ink-muted);
@@ -73,33 +57,6 @@ let { data }: { data: PageData } = $props();
 	}
 	.edition {
 		font-family: var(--font-family-mono);
-	}
-	.chapters {
-		list-style: none;
-		padding: 0;
-		margin: var(--space-sm) 0 0;
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-2xs);
-	}
-	.chapters a {
-		display: flex;
-		gap: var(--space-sm);
-		padding: var(--space-sm) var(--space-md);
-		border-radius: var(--radius-md);
-		border: 1px solid var(--edge-default);
-		background: var(--surface-raised);
-		color: inherit;
-		text-decoration: none;
-	}
-	.chapters a:hover,
-	.chapters a:focus-visible {
-		border-color: var(--action-default-edge);
-	}
-	.chapter-code {
-		font-family: var(--font-family-mono);
-		color: var(--ink-muted);
-		min-width: 4rem;
 	}
 	.callout {
 		padding: var(--space-md);

@@ -84,9 +84,14 @@ function urlForAim(locator: string): string {
 	if (aim.chapter !== undefined && aim.section !== undefined && aim.paragraph !== undefined) {
 		return ROUTES.FLIGHTBAG_AIM_PARAGRAPH(aim.chapter, aim.section, aim.paragraph);
 	}
-	// Glossary entries, appendices, and chapter/section-only AIM URIs have no
-	// flightbag route yet; fall back to home until the reader supports them.
-	return ROUTES.FLIGHTBAG_HOME;
+	if (aim.chapter !== undefined && aim.section !== undefined) {
+		return ROUTES.FLIGHTBAG_AIM_SECTION(aim.chapter, aim.section);
+	}
+	if (aim.chapter !== undefined) {
+		return ROUTES.FLIGHTBAG_AIM_CHAPTER(aim.chapter);
+	}
+	// Glossary entries / appendices fall back to the AIM landing.
+	return ROUTES.FLIGHTBAG_AIM;
 }
 
 function urlForRegs(locator: string): string {
@@ -95,8 +100,9 @@ function urlForRegs(locator: string): string {
 	const regs = result.regs;
 	if (regs === undefined) return ROUTES.FLIGHTBAG_HOME;
 	if (regs.section === undefined) {
-		// Whole-Part and subpart shapes have no flightbag route yet.
-		return ROUTES.FLIGHTBAG_HOME;
+		// Whole-Part / subpart shapes route to the Part landing (umbrella card
+		// + section TOC when ingested).
+		return ROUTES.FLIGHTBAG_CFR_PART(regs.title, regs.part);
 	}
 	return ROUTES.FLIGHTBAG_CFR_SECTION(regs.title, regs.part, regs.section);
 }
@@ -106,9 +112,12 @@ function urlForAc(locator: string): string {
 	if (result.kind === 'error') return ROUTES.FLIGHTBAG_HOME;
 	const ac = result.ac;
 	if (ac === undefined) return ROUTES.FLIGHTBAG_HOME;
-	// Section / change shapes resolve to the parent AC for now -- the reader
-	// has no per-section page yet (AC promotion to section-tree is a
-	// downstream WP). Whole-doc AC always has a route.
+	// `section-<n>` URI carries one number; in the DB the AC chapter row's
+	// code is that number. Route to the chapter view.
+	if (ac.section !== undefined) {
+		return ROUTES.FLIGHTBAG_AC_CHAPTER(ac.docNumber, ac.revision, ac.section);
+	}
+	// Change identifiers route to the whole-doc landing for now.
 	return ROUTES.FLIGHTBAG_AC(ac.docNumber, ac.revision);
 }
 
@@ -120,6 +129,9 @@ function urlForAcs(locator: string): string {
 	if (acs.area !== undefined && acs.task !== undefined) {
 		return ROUTES.FLIGHTBAG_ACS_TASK(acs.slug, acs.area, acs.task);
 	}
-	// Whole-publication and area-only ACS URIs have no flightbag route yet.
+	// Whole-publication and area-only ACS URIs route to the publication landing.
+	if (acs.slug !== undefined) {
+		return ROUTES.FLIGHTBAG_ACS(acs.slug);
+	}
 	return ROUTES.FLIGHTBAG_HOME;
 }
