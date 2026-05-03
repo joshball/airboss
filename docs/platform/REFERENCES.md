@@ -204,11 +204,26 @@ Today, the `/library/...` reader routes live in `apps/study/`. That works for no
 **Migration sequence (after section-tree promotions land):**
 
 1. Stand up `apps/flightbag/` with the existing `/library/...` routes from study moved over (plus the new `flightbag/...` URL prefix).
-2. Add `urlForReference()` helper in `libs/library/` that other apps import.
-3. Rewire study's citation chips from in-app `/library/...` URLs to `flightbag/...` URLs.
-4. Sim/FIRC/etc. citation surfaces use the helper from day one — no per-app reader to maintain.
+2. Add flightbag URL constants in `libs/constants/src/routes.ts` under `ROUTES.FLIGHTBAG_*`.
+3. Add `urlForReference(uri)` helper in `libs/sources/` that turns an `airboss-ref:` URI into a flightbag URL via the constants.
+4. Add citation rendering primitives in `libs/library/` (`<RenderedSection>`, `<CitationChip>`).
+5. Rewire study's citation chips from in-app `/library/...` URLs to `flightbag/...` URLs.
+6. Sim/FIRC/etc. citation surfaces use `urlForReference()` from day one — no per-app reader to maintain.
 
 The hangar admin dashboard (TOC validation UI, per-reference stage view) stays in hangar per the management-fits-content-authoring rule. See [docs/platform/IDEAS.md](IDEAS.md) under Technical Approaches.
+
+### Routing layer — where URL strings live
+
+Strict rule (per [CLAUDE.md](../../CLAUDE.md) "All routes go through `ROUTES`"): no inline path strings anywhere.
+
+| Concern | Lives in | Why |
+|---------|----------|-----|
+| URL string templates | `libs/constants/src/routes.ts` (`ROUTES.FLIGHTBAG_*`) | Single source of truth for every route in airboss; all apps already follow this |
+| URI-to-URL bridge | `libs/sources/src/url-for-reference.ts` (`urlForReference(uri)`) | Lives next to the resolvers that own the `airboss-ref:` URI scheme; calls into `libs/constants/` for the URL template |
+| Rendering primitives | `libs/library/` (new, future) | `<RenderedSection>`, `<CitationChip>`; flightbag-specific rendering knowledge, no URL business |
+| The flightbag app | `apps/flightbag/` (new, future) | Consumes the above |
+
+Citation surfaces in study, sim, hangar, etc. import `urlForReference` from `@ab/sources`; never construct a flightbag URL inline. CI will catch regressions via grep for the forbidden patterns (`'/handbook/'`, `'/cfr/'`, `'/ac/'`, `'/acs/'`, `'/aim/'`) in app source files.
 
 ## Anchors
 
