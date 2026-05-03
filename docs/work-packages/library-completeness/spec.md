@@ -15,6 +15,8 @@ revision_history:
 
 A discussion document. The user ratifies each numbered point before any implementation. Six sections, each ending with explicit ratification points.
 
+> **Snapshot status: see [status.md](status.md)** for the current per-WP status, the manifest-vs-card gap detail (which the spec's snapshot didn't fully address), and the sequenced near-term path to "all-FAA-references-readable" (post-2026-05-03 session).
+
 This is **v2**. v1 recommended Option C (`library_entry` projection table). [review.md](review.md) argued -- correctly -- that Option C ships a workaround instead of fixing the root cause. v2 replaces §1 with a substrate rename + relax + generalize approach. §§2-5 are unchanged; §6 folds WP-V + WP-VS into a single substrate WP.
 
 ## TL;DR

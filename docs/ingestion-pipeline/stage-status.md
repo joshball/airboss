@@ -103,3 +103,4 @@ The two duplicate-slug bugs (`aih` / `faa-h-8083-2`) match the pattern fixed by 
 - [inventory.md](inventory.md): per-asset cached source listing (auto-generated)
 - [ADR 019](../decisions/019-reference-identifier-system/decision.md): `airboss-ref:` URI scheme
 - [WP library-substrate](../work-packages/library-substrate/spec.md): the substrate that made section-tree vs whole-doc dispatchable
+- [WP library-completeness status](../work-packages/library-completeness/status.md): per-WP status against the spec's recommended sequence, full manifest-vs-card gap detail
