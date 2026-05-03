@@ -36,6 +36,7 @@ const SUITE_TOKEN = Math.floor(Math.random() * 0x100_000_000)
 const HANDBOOKS_DIR = join(REPO_ROOT, 'handbooks');
 const AIM_DIR = join(REPO_ROOT, 'aim');
 const AC_DIR = join(REPO_ROOT, 'ac');
+const REGS_DIR = join(REPO_ROOT, 'regulations');
 
 interface Fixture {
 	slug: string;
@@ -521,6 +522,204 @@ describe('seedReferencesFromManifest', () => {
 		// Scope to this AC's on-disk directory so unrelated fixtures don't run
 		// (the AIM orphan test would otherwise throw first under {} filter).
 		await expect(seedReferencesFromManifest({ documentSlug: docSlug })).rejects.toThrow(/no DB mapping/);
+	});
+
+	it('CFR manifest seeds matching parts and skips long-tail parts', async () => {
+		// Synthetic title=14 + parts that don't exist in the production cfr-titles
+		// YAML, so we can pre-insert a test reference and verify the seeder finds
+		// it by slug. Part 99999 mimics the long-tail parts that should be skipped.
+		const partKey = `99-${SUITE_TOKEN.replace(/[a-f]/g, '').slice(0, 4) || '1'}`;
+		const skippedPartKey = `999-${SUITE_TOKEN.replace(/[a-f]/g, '').slice(0, 4) || '2'}`;
+		const titleNumber = '14';
+		const documentSlug = `${titleNumber}cfr${partKey}`;
+		const edition = 'current';
+		const dirSlug = `test-${SUITE_TOKEN}-cfr-14`;
+		const editionDate = '2026-04-22';
+
+		// Pre-insert the reference row (mimics what cfr-titles.yaml seeds in
+		// production). The CFR seed adapter only attaches sections to existing
+		// references; without this row, it would skip `partKey` too.
+		await db.insert(reference).values({
+			id: `ref_test_${SUITE_TOKEN}_cfr`,
+			kind: 'cfr',
+			documentSlug,
+			edition,
+			title: `${titleNumber} CFR Part ${partKey} -- Test`,
+			publisher: 'FAA',
+			url: `https://www.ecfr.gov/current/title-${titleNumber}/part-${partKey}`,
+			subjects: ['regulations'],
+			primaryCert: null,
+			sectionSchema: { levels: [] },
+			metadata: {},
+		});
+		fixtures.push({ slug: documentSlug, corpusDir: HANDBOOKS_DIR }); // dummy corpusDir for cleanup
+
+		const editionDir = join(REGS_DIR, dirSlug, editionDate);
+		mkdirSync(join(editionDir, partKey), { recursive: true });
+		const body1 = `# §${partKey}.1\n\nTest section A body.\n`;
+		const body2 = `# §${partKey}.3\n\nTest section B body.\n`;
+		writeFileSync(join(editionDir, partKey, `${partKey}-1.md`), body1);
+		writeFileSync(join(editionDir, partKey, `${partKey}-3.md`), body2);
+		const hash1 = sha256Hex(body1);
+		const hash2 = sha256Hex(body2);
+
+		writeFileSync(
+			join(editionDir, 'manifest.json'),
+			JSON.stringify({
+				schemaVersion: 1,
+				kind: 'cfr',
+				title: titleNumber,
+				editionSlug: '2026',
+				editionDate,
+				sourceUrl: 'file:///test.xml',
+				sourceSha256: 'a'.repeat(64),
+				fetchedAt: '2026-04-30T22:31:18.124Z',
+				partCount: 2,
+				subpartCount: 0,
+				sectionCount: 2,
+			}),
+		);
+		writeFileSync(
+			join(editionDir, 'sections.json'),
+			JSON.stringify({
+				schemaVersion: 1,
+				edition: '2026',
+				sectionsByPart: {
+					[partKey]: [
+						{
+							id: `airboss-ref:regs/cfr-${titleNumber}/${partKey}/3`,
+							canonical_short: `§${partKey}.3`,
+							canonical_title: 'Section B',
+							last_amended_date: '2024-08-01',
+							body_path: `${partKey}/${partKey}-3.md`,
+							body_sha256: hash2,
+						},
+						{
+							id: `airboss-ref:regs/cfr-${titleNumber}/${partKey}/1`,
+							canonical_short: `§${partKey}.1`,
+							canonical_title: 'Section A',
+							last_amended_date: '2024-08-01',
+							body_path: `${partKey}/${partKey}-1.md`,
+							body_sha256: hash1,
+						},
+					],
+					// Long-tail Part with no DB row -- the seeder must SKIP it
+					// without raising an error. No body files written either.
+					[skippedPartKey]: [
+						{
+							id: `airboss-ref:regs/cfr-${titleNumber}/${skippedPartKey}/1`,
+							canonical_short: `§${skippedPartKey}.1`,
+							canonical_title: 'Long-tail (should be skipped)',
+							last_amended_date: '2024-01-01',
+							body_path: `${skippedPartKey}/${skippedPartKey}-1.md`,
+							body_sha256: 'd'.repeat(64),
+						},
+					],
+				},
+			}),
+		);
+
+		// Track on-disk fixture for cleanup.
+		fixtures.push({ slug: dirSlug, corpusDir: REGS_DIR });
+
+		const summary = await seedReferencesFromManifest({ documentSlug: dirSlug });
+		expect(summary.editionsProcessed).toBe(1);
+		expect(summary.sectionsTouched).toBe(2);
+		expect(summary.sectionsChanged).toBe(2);
+
+		const refRow = (await db.select().from(reference).where(eq(reference.documentSlug, documentSlug)))[0];
+		expect(refRow).toBeDefined();
+		if (!refRow) return;
+		expect(refRow.kind).toBe('cfr');
+		expect(refRow.sectionSchema).toEqual({
+			levels: ['part', 'subpart', 'section', 'paragraph', 'subparagraph', 'clause'],
+			strictSequence: false,
+		});
+
+		const sections = await db.select().from(referenceSection).where(eq(referenceSection.referenceId, refRow.id));
+		expect(sections).toHaveLength(2);
+		const codes = sections.map((s) => s.code).sort();
+		expect(codes).toEqual([`§${partKey}.1`, `§${partKey}.3`]);
+		const sectionA = sections.find((s) => s.code === `§${partKey}.1`);
+		expect(sectionA?.level).toBe('section');
+		expect(sectionA?.depth).toBe(0);
+		expect(sectionA?.parentId).toBeNull();
+		expect(sectionA?.contentMd).toBe(body1);
+		expect(sectionA?.contentHash).toBe(hash1);
+
+		// No reference row created for the long-tail Part.
+		const longTailSlug = `${titleNumber}cfr${skippedPartKey}`;
+		const skippedRefs = await db.select().from(reference).where(eq(reference.documentSlug, longTailSlug));
+		expect(skippedRefs).toHaveLength(0);
+
+		// Idempotent re-run: zero changes.
+		const second = await seedReferencesFromManifest({ documentSlug: dirSlug });
+		expect(second.sectionsTouched).toBe(2);
+		expect(second.sectionsChanged).toBe(0);
+	});
+
+	it('CFR manifest throws when a referenced body file is missing', async () => {
+		const partKey = `97-${SUITE_TOKEN.replace(/[a-f]/g, '').slice(0, 4) || '1'}`;
+		const documentSlug = `14cfr${partKey}`;
+		const edition = 'current';
+		const dirSlug = `test-${SUITE_TOKEN}-cfr-missing`;
+		const editionDate = '2026-04-22';
+
+		await db.insert(reference).values({
+			id: `ref_test_missing_${SUITE_TOKEN}`,
+			kind: 'cfr',
+			documentSlug,
+			edition,
+			title: `14 CFR Part ${partKey} -- Test missing`,
+			publisher: 'FAA',
+			url: `https://www.ecfr.gov/current/title-14/part-${partKey}`,
+			subjects: ['regulations'],
+			primaryCert: null,
+			sectionSchema: { levels: [] },
+			metadata: {},
+		});
+		fixtures.push({ slug: documentSlug, corpusDir: HANDBOOKS_DIR });
+		fixtures.push({ slug: dirSlug, corpusDir: REGS_DIR });
+
+		const editionDir = join(REGS_DIR, dirSlug, editionDate);
+		mkdirSync(editionDir, { recursive: true });
+		writeFileSync(
+			join(editionDir, 'manifest.json'),
+			JSON.stringify({
+				schemaVersion: 1,
+				kind: 'cfr',
+				title: '14',
+				editionSlug: '2026',
+				editionDate,
+				sourceUrl: 'file:///test.xml',
+				sourceSha256: 'a'.repeat(64),
+				fetchedAt: '2026-04-30T22:31:18.124Z',
+				partCount: 1,
+				subpartCount: 0,
+				sectionCount: 1,
+			}),
+		);
+		writeFileSync(
+			join(editionDir, 'sections.json'),
+			JSON.stringify({
+				schemaVersion: 1,
+				edition: '2026',
+				sectionsByPart: {
+					[partKey]: [
+						{
+							id: `airboss-ref:regs/cfr-14/${partKey}/1`,
+							canonical_short: `§${partKey}.1`,
+							canonical_title: 'Missing body section',
+							last_amended_date: '2024-01-01',
+							body_path: `${partKey}/${partKey}-1.md`,
+							body_sha256: 'e'.repeat(64),
+						},
+					],
+				},
+			}),
+		);
+
+		await expect(seedReferencesFromManifest({ documentSlug: dirSlug })).rejects.toThrow(/missing body file/);
 	});
 
 	it('supersede chain wires older edition to the newest', async () => {

@@ -510,16 +510,92 @@ export const acManifestSchema = z.object({
 export type AcManifest = z.infer<typeof acManifestSchema>;
 
 /**
+ * CFR manifest source-file entry (post-WP-CFR). Title 49's content is
+ * assembled from multiple eCFR Versioner downloads (one per Part), so
+ * `sources[]` carries every contributing fetch alongside the primary one.
+ * Mirrors the `ManifestSource` shape written by `derivative-writer.ts`.
+ */
+export const cfrManifestSourceSchema = z.object({
+	url: z.string().url(),
+	sha256: z.string().regex(/^[0-9a-f]{64}$/i),
+});
+export type CfrManifestSource = z.infer<typeof cfrManifestSourceSchema>;
+
+/**
+ * CFR manifest (`kind: 'cfr'`, WP-CFR). Top-level descriptor for one CFR
+ * Title at one edition. Shape mirrors `ManifestRecord` in
+ * `libs/sources/src/regs/derivative-writer.ts`. The per-section data lives
+ * in a sibling `sections.json` (see `cfrSectionsFileSchema`); this schema
+ * only validates the top-level descriptor that the dispatcher discriminates
+ * on.
+ *
+ * Slug + edition aren't on the top-level manifest -- the seeder computes
+ * `document_slug = '<title>cfr<part>'` per Part from `sectionsByPart`, and
+ * the edition is `editionSlug` (year-only, e.g. `'2026'`). Doesn't carry
+ * `subjects` / `primary_cert` either; those live on the per-Part YAML rows
+ * in `course/references/cfr-titles.yaml` and survive seed via
+ * `upsertReference`'s null-default-on-conflict path.
+ */
+export const cfrManifestSchema = z.object({
+	kind: z.literal('cfr'),
+	schemaVersion: z.literal(1),
+	title: z.enum(['14', '49']),
+	editionSlug: z.string().min(1).max(64),
+	editionDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+	sourceUrl: z.string().url(),
+	sourceSha256: z.string().regex(/^[0-9a-f]{64}$/i),
+	fetchedAt: z.string().datetime({ offset: true }),
+	partCount: z.number().int().nonnegative(),
+	subpartCount: z.number().int().nonnegative(),
+	sectionCount: z.number().int().nonnegative(),
+	sources: z.array(cfrManifestSourceSchema).optional(),
+});
+export type CfrManifest = z.infer<typeof cfrManifestSchema>;
+
+/**
+ * One section entry inside `sections.json -> sectionsByPart[part][i]`.
+ * Mirrors `SectionEntry` in `libs/sources/src/regs/derivative-writer.ts`.
+ */
+export const cfrSectionEntrySchema = z.object({
+	id: z.string().regex(/^airboss-ref:regs\/cfr-(?:14|49)\/.+$/),
+	canonical_short: z.string().min(1),
+	canonical_title: z.string().min(1),
+	last_amended_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+	body_path: z.string().min(1),
+	body_sha256: z.string().regex(/^[0-9a-f]{64}$/i),
+});
+export type CfrSectionEntry = z.infer<typeof cfrSectionEntrySchema>;
+
+/**
+ * `sections.json` shape (sibling to the CFR `manifest.json`). Keyed by Part
+ * number string (e.g. `'91'`); each value is an array of section entries
+ * (sorted by FAA ordinal, descending in the on-disk file but the seeder
+ * doesn't depend on the order).
+ *
+ * Validated SEPARATELY from `manifestSchema` because it isn't part of the
+ * `kind` discriminator -- it's a per-corpus data file the CFR seed adapter
+ * loads alongside the top-level manifest.
+ */
+export const cfrSectionsFileSchema = z.object({
+	schemaVersion: z.literal(1),
+	edition: z.string().min(1).max(64),
+	sectionsByPart: z.record(z.string(), z.array(cfrSectionEntrySchema)),
+});
+export type CfrSectionsFile = z.infer<typeof cfrSectionsFileSchema>;
+
+/**
  * Top-level shape of `<corpus>/<doc>/<edition>/manifest.json`. Discriminated
  * union over manifest kind: section-tree (`kind: 'handbook'`), whole-doc
- * (`kind: 'whole-doc'`), AIM (`kind: 'aim'`), or AC (`kind: 'ac'`). The seed
- * dispatches on the discriminator to choose the right adapter.
+ * (`kind: 'whole-doc'`), AIM (`kind: 'aim'`), AC (`kind: 'ac'`), or CFR
+ * (`kind: 'cfr'`). The seed dispatches on the discriminator to choose the
+ * right adapter.
  */
 export const manifestSchema = z.discriminatedUnion('kind', [
 	sectionTreeManifestSchema,
 	wholeDocManifestSchema,
 	aimManifestSchema,
 	acManifestSchema,
+	cfrManifestSchema,
 ]);
 export type Manifest = z.infer<typeof manifestSchema>;
 

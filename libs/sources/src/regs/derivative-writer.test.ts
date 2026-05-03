@@ -76,6 +76,7 @@ describe('writeDerivativeTree', () => {
 		writeDerivativeTree(buildInput());
 		const manifest = JSON.parse(readFileSync(join(tmpRoot, 'cfr-14/2026-01-01/manifest.json'), 'utf-8'));
 		expect(manifest.schemaVersion).toBe(1);
+		expect(manifest.kind).toBe('cfr');
 		expect(manifest.title).toBe('14');
 		expect(manifest.editionSlug).toBe('2026');
 		expect(manifest.editionDate).toBe('2026-01-01');

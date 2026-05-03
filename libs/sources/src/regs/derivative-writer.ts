@@ -49,6 +49,15 @@ export interface ManifestSource {
 
 export interface ManifestRecord {
 	readonly schemaVersion: 1;
+	/**
+	 * Manifest discriminator (WP-CFR). Distinguishes CFR manifests from the
+	 * other corpora's manifests when the seeder reads them through the
+	 * `manifestSchema` discriminated union in
+	 * `libs/bc/study/src/manifest-validation.ts`. Always emitted by the
+	 * writer so re-runs always carry it; the on-disk manifest backfill
+	 * landed in the same WP.
+	 */
+	readonly kind: 'cfr';
 	readonly title: '14' | '49';
 	readonly editionSlug: string;
 	readonly editionDate: string;
@@ -155,6 +164,7 @@ export function writeDerivativeTree(input: DerivativeWriteInput): DerivativeWrit
 	// 5. manifest.json
 	const manifest: ManifestRecord = {
 		schemaVersion: 1,
+		kind: 'cfr',
 		title: input.title,
 		editionSlug: input.editionSlug,
 		editionDate: input.editionDate,
