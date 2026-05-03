@@ -1,9 +1,9 @@
 /**
  * `handbooks-extras` corpus public surface.
  *
- * Six FAA whole-doc-only Class C handbooks (risk-management,
- * aviation-instructor, ifh, iph, amt-general, amt-powerplant) registered
- * under the same `handbooks` corpus as PHAK/AFH/AvWX. The chapter-aware
+ * Several FAA whole-doc-only Class C handbooks (risk-management,
+ * aviation-instructor, ifh, iph, tips-mountain-flying) registered under
+ * the same `handbooks` corpus as PHAK/AFH/AvWX. The chapter-aware
  * handbooks ingest cannot service these (no per-chapter PDFs from the
  * publisher); this module fills the gap.
  *

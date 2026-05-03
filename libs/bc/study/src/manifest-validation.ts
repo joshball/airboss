@@ -24,7 +24,7 @@
  *   - `kind: 'handbook'`   -- section-tree shape (PHAK / AFH / AVWX). Walks
  *                             chapter/section/subsection trees.
  *   - `kind: 'whole-doc'`  -- single-row shape (post-#384 risk-mgmt,
- *                             instructor, IFH, IPH, AMT-G, AMT-P). Body
+ *                             instructor, IFH, IPH, mtn-tips). Body
  *                             stored on a single `reference_section` row at
  *                             depth 0, level 'document'.
  *

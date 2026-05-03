@@ -2,7 +2,7 @@
  * Unit tests for the `bun run sources discover-errata` modules.
  *
  * Covers:
- *   - Catalogue invariants (17 handbooks, every entry has the required fields)
+ *   - Catalogue invariants (15 handbooks, every entry has the required fields)
  *   - Argument parser
  *   - HTML scrape fixture (the FAA's actual AFH and PHAK markup, frozen at
  *     2026-04-28 -- see fixtures dir)
@@ -55,9 +55,9 @@ import {
 // ---------------------------------------------------------------------------
 
 describe('HANDBOOK_CATALOGUE', () => {
-	it('contains exactly 17 entries', () => {
-		expect(HANDBOOK_CATALOGUE.length).toBe(17);
-		expect(ALL_HANDBOOK_SLUGS.length).toBe(17);
+	it('contains exactly 15 entries', () => {
+		expect(HANDBOOK_CATALOGUE.length).toBe(15);
+		expect(ALL_HANDBOOK_SLUGS.length).toBe(15);
 	});
 
 	it('every entry has a unique slug', () => {
@@ -396,7 +396,7 @@ describe('freshness gate', () => {
 	it('treats a sentinel inside the window as fresh', () => {
 		writeLastRun(cacheRoot, {
 			ranAt: new Date('2026-04-28T00:00:00Z').toISOString(),
-			handbooksScanned: 17,
+			handbooksScanned: 15,
 			candidatesFound: 0,
 		});
 		const now = Date.parse('2026-04-28T01:00:00Z');
@@ -406,7 +406,7 @@ describe('freshness gate', () => {
 	it('treats a sentinel older than the window as stale', () => {
 		writeLastRun(cacheRoot, {
 			ranAt: '2026-04-01T00:00:00Z',
-			handbooksScanned: 17,
+			handbooksScanned: 15,
 			candidatesFound: 0,
 		});
 		const now = Date.parse('2026-04-28T00:00:00Z');
@@ -415,7 +415,7 @@ describe('freshness gate', () => {
 
 	it('round-trips writeLastRun + readLastRun', () => {
 		const now = '2026-04-28T00:00:00Z';
-		writeLastRun(cacheRoot, { ranAt: now, handbooksScanned: 17, candidatesFound: 3 });
+		writeLastRun(cacheRoot, { ranAt: now, handbooksScanned: 15, candidatesFound: 3 });
 		const back = readLastRun(cacheRoot);
 		expect(back?.ranAt).toBe(now);
 		expect(back?.candidatesFound).toBe(3);

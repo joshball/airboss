@@ -42,7 +42,7 @@ export const DISCOVER_HELP_TEXT = `bun run sources discover-errata [options]
 
   Options:
     --doc=<slug>[,<slug>]  Restrict scan to specific handbook slugs.
-                           Default = all 17 catalogued handbooks.
+                           Default = all 15 catalogued handbooks.
     --force                Skip the 7-day freshness gate.
     --dry-run              Skip GitHub issue creation; print what would happen.
     --cache-root=<path>    Override AIRBOSS_HANDBOOK_CACHE for this run.

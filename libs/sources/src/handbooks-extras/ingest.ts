@@ -5,9 +5,9 @@
  * library-broad-extraction-survey gap 5, and
  * `docs/work-packages/handbooks-extras-ingestion/spec.md`.
  *
- * Six FAA handbooks ship as whole-doc-only PDFs (no per-chapter PDFs from
- * the publisher): risk management, aviation instructor, IFH, IPH, AMT-G,
- * AMT-P. The chapter-aware `handbooks` ingest at
+ * Several FAA handbooks ship as whole-doc-only PDFs (no per-chapter PDFs
+ * from the publisher): risk management, aviation instructor, IFH, IPH,
+ * tips on mountain flying. The chapter-aware `handbooks` ingest at
  * `libs/sources/src/handbooks/ingest.ts` walks a Python-extracted manifest
  * with `sections[]`; that pipeline never produced one for these six. This
  * module fills that gap by mirroring AC's whole-doc pipeline:
@@ -77,8 +77,6 @@ export const DOC_ID_TO_FRIENDLY: Readonly<
 	'faa-h-8083-9': { slug: 'aviation-instructor', editionSlug: '8083-9', faaDir: 'FAA-H-8083-9' },
 	'faa-h-8083-15': { slug: 'ifh', editionSlug: '8083-15B', faaDir: 'FAA-H-8083-15B' },
 	'faa-h-8083-16': { slug: 'iph', editionSlug: '8083-16B', faaDir: 'FAA-H-8083-16B' },
-	'faa-h-8083-30': { slug: 'amt-general', editionSlug: '8083-30B', faaDir: 'FAA-H-8083-30B' },
-	'faa-h-8083-32': { slug: 'amt-powerplant', editionSlug: '8083-32B', faaDir: 'FAA-H-8083-32B' },
 	// Non-H-numbered FAA pamphlet. Synthetic doc_id since FAA never assigned
 	// a Handbook number to Tips on Mountain Flying.
 	'faa-mtn-tips': { slug: 'tips-mountain-flying', editionSlug: 'mtn-2003', faaDir: 'MTN-2003' },
@@ -96,8 +94,6 @@ const FRIENDLY_DISPLAY: Readonly<Record<string, { readonly short: string; readon
 	'aviation-instructor': { short: 'AIH', formal: "Aviation Instructor's Handbook" },
 	ifh: { short: 'IFH', formal: 'Instrument Flying Handbook' },
 	iph: { short: 'IPH', formal: 'Instrument Procedures Handbook' },
-	'amt-general': { short: 'AMT-G', formal: 'Aviation Maintenance Technician Handbook -- General' },
-	'amt-powerplant': { short: 'AMT-P', formal: 'Aviation Maintenance Technician Handbook -- Powerplant' },
 	'tips-mountain-flying': { short: 'MTN', formal: 'Tips on Mountain Flying' },
 };
 

@@ -10,9 +10,9 @@
  *                              chapter/section/subsection tree, plus
  *                              per-section figure rows.
  *   - `kind: 'whole-doc'`  -> whole-doc adapter (post-#384 handbooks-extras
- *                              risk-mgmt / instructor / IFH / IPH / AMT-G /
- *                              AMT-P). Produces ONE reference_section row at
- *                              depth 0, level 'document'.
+ *                              risk-mgmt / instructor / IFH / IPH /
+ *                              mtn-tips). Produces ONE reference_section row
+ *                              at depth 0, level 'document'.
  *   - `kind: 'aim'`        -> AIM adapter. Walks a flat entries[] and builds
  *                              the chapter/section/paragraph tree from
  *                              dotted code prefixes; appendices + glossary

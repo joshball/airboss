@@ -32,7 +32,7 @@ The `bun run sources` dispatcher prints a help index. Each subcommand has `--hel
 - [scripts/sources/config/ac.yaml](../../scripts/sources/config/ac.yaml) — Advisory Circulars
 - [scripts/sources/config/acs.yaml](../../scripts/sources/config/acs.yaml) — Airman Certification Standards
 - [scripts/sources/config/handbooks/](../../scripts/sources/config/handbooks/) — chapter-aware handbooks (PHAK, AFH, AVWX)
-- [scripts/sources/config/handbooks-extras.yaml](../../scripts/sources/config/handbooks-extras.yaml) — whole-doc handbooks (RMH, AIH, IFH, IPH, mtn-tips, AMT-G/P)
+- [scripts/sources/config/handbooks-extras.yaml](../../scripts/sources/config/handbooks-extras.yaml) — whole-doc handbooks (RMH, AIH, IFH, IPH, mtn-tips)
 
 **Why two YAML conventions for handbooks.** Chapter-aware handbooks have per-chapter PDFs from the publisher and get the full TOC-driven section pipeline (Strategy A in [section-extraction-strategies.md](section-extraction-strategies.md)). Whole-doc handbooks ship as a single monolithic PDF with no per-chapter download — the chapter-aware pipeline can't ingest them, so they fall through to a simpler whole-doc loader.
 
@@ -44,7 +44,7 @@ The `bun run sources` dispatcher prints a help index. Each subcommand has `--hel
 
 ```bash
 bun run sources download                              # everything except handbook extras
-bun run sources download --include-handbooks-extras   # also fetch RMH/AIH/IFH/IPH/AMT-G/AMT-P
+bun run sources download --include-handbooks-extras   # also fetch RMH/AIH/IFH/IPH/mtn-tips
 bun run sources download --only handbooks             # one corpus only
 bun run sources download --dry-run                    # show plan, fetch nothing
 ```
