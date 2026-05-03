@@ -145,8 +145,14 @@ const HANDBOOK_PATTERNS: readonly HandbookPattern[] = [
 	},
 	{
 		regex: /\b(?:AIH|Aviation Instructor's Handbook|FAA-H-8083-9[A-Z]?)\b/i,
-		slug: 'aih',
-		defaultEdition: 'FAA-H-8083-9B',
+		// Matches the canonical row seeded by the handbooks-extras pipeline
+		// (`libs/sources/src/handbooks-extras/ingest.ts`). The legacy
+		// `(aih, FAA-H-8083-9B)` pair was retired with
+		// `course/references/handbooks-noningested.yaml` -- using it here
+		// would re-create a synthetic dupe of the authored row.
+		slug: 'aviation-instructor',
+		defaultEdition: '8083-9',
+		pinDefaultEdition: true,
 		title: "Aviation Instructor's Handbook",
 		url: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/aviation_instructors_handbook',
 	},
@@ -181,9 +187,15 @@ const HANDBOOK_PATTERNS: readonly HandbookPattern[] = [
 	},
 	{
 		regex: /\bFAA-H-8083-2[A-Z]?\b/i,
-		slug: 'faa-h-8083-2',
-		defaultEdition: 'FAA-H-8083-2A',
+		// Matches the canonical row seeded by the handbooks-extras pipeline.
+		// The legacy `(faa-h-8083-2, FAA-H-8083-2A)` pair was retired with
+		// `course/references/handbooks-noningested.yaml` -- using it here
+		// would re-create a synthetic dupe of the authored row.
+		slug: 'risk-management',
+		defaultEdition: '8083-2A',
+		pinDefaultEdition: true,
 		title: 'Risk Management Handbook',
+		url: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/risk_management_handbook',
 	},
 ];
 
