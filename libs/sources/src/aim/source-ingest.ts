@@ -26,9 +26,9 @@
  * Derivative layout (output) -- consumed by `derivative-reader.ts`:
  *
  *   <derivativeRoot>/<edition>/manifest.json
- *   <derivativeRoot>/<edition>/chapter-<N>/index.md                  (when a body exists; here always empty for now)
- *   <derivativeRoot>/<edition>/chapter-<N>/section-<M>/index.md      (idem)
- *   <derivativeRoot>/<edition>/chapter-<N>/section-<M>/paragraph-<K>.md
+ *   <derivativeRoot>/<edition>/<NN>-<chapter-slug>/00-<chapter-slug>.md                                (chapter overview)
+ *   <derivativeRoot>/<edition>/<NN>-<chapter-slug>/<MM>-<section-slug>/00-<section-slug>.md           (section overview)
+ *   <derivativeRoot>/<edition>/<NN>-<chapter-slug>/<MM>-<section-slug>/<KK>-<paragraph-slug>.md       (paragraph)
  *   <derivativeRoot>/<edition>/glossary/<slug>.md
  *   <derivativeRoot>/<edition>/appendix-<N>.md
  */
@@ -204,6 +204,29 @@ function ensureDir(path: string): void {
 }
 
 /**
+ * Slug rule mirrors `tools/handbook-ingest/ingest/normalize.py:_title_slug`:
+ * lowercase, runs of non-alphanumeric -> `-`, strip leading/trailing `-`,
+ * truncate to 48 chars, fallback `'section'`. Kept identical so the AIM
+ * emitter and the chapter-aware Python emitter produce paths a uniform
+ * downstream walker can consume.
+ */
+const TITLE_SLUG_PATTERN = /[^a-z0-9]+/g;
+const TITLE_SLUG_MAX_LENGTH = 48;
+
+function titleSlug(title: string): string {
+	const slug = title
+		.toLowerCase()
+		.replace(TITLE_SLUG_PATTERN, '-')
+		.replace(/^-+|-+$/g, '');
+	return (slug.length > 0 ? slug : 'section').slice(0, TITLE_SLUG_MAX_LENGTH);
+}
+
+/** Zero-pad an ordinal to 2 digits (`'1'` -> `'01'`, `'10'` -> `'10'`). */
+function padOrdinal(value: string): string {
+	return value.padStart(2, '0');
+}
+
+/**
  * Write the AIM derivative tree and manifest from an extracted PDF.
  * Returns the manifest entries as written; caller can then register via
  * `runAimIngest`.
@@ -220,50 +243,75 @@ export function writeAimDerivatives(args: {
 
 	const entries: ManifestEntry[] = [];
 
-	// Chapters
+	// Build slug lookups so child writes can inherit their parents' slugged
+	// directory names without relying on a second pass over `extracted`.
+	const chapterSlugByNum = new Map<string, string>();
 	for (const ch of extracted.chapters) {
-		const dir = join(editionRoot, `chapter-${ch.num}`);
+		chapterSlugByNum.set(ch.num, titleSlug(ch.title));
+	}
+	const sectionSlugByCode = new Map<string, string>();
+	for (const sec of extracted.sections) {
+		sectionSlugByCode.set(sec.code, titleSlug(sec.title));
+	}
+
+	// Chapters: `<NN>-<chapter-slug>/00-<chapter-slug>.md`
+	for (const ch of extracted.chapters) {
+		const chSlug = chapterSlugByNum.get(ch.num) ?? titleSlug(ch.title);
+		const chDirName = `${padOrdinal(ch.num)}-${chSlug}`;
+		const dir = join(editionRoot, chDirName);
 		ensureDir(dir);
-		const bodyPath = join(dir, 'index.md');
+		const bodyFilename = `00-${chSlug}.md`;
+		const bodyPath = join(dir, bodyFilename);
 		const body = ch.body.length > 0 ? ch.body : `# ${ch.title}\n`;
 		writeIfChanged(bodyPath, body);
 		entries.push({
 			kind: 'chapter',
 			code: ch.num,
 			title: ch.title,
-			body_path: `aim/${edition}/chapter-${ch.num}/index.md`,
+			body_path: `aim/${edition}/${chDirName}/${bodyFilename}`,
 			content_hash: sha256(body),
 		});
 	}
 
-	// Sections
+	// Sections: `<NN>-<chapter-slug>/<MM>-<section-slug>/00-<section-slug>.md`
 	for (const sec of extracted.sections) {
-		const dir = join(editionRoot, `chapter-${sec.chapter}`, `section-${sec.section}`);
+		const chSlug = chapterSlugByNum.get(sec.chapter) ?? 'section';
+		const secSlug = sectionSlugByCode.get(sec.code) ?? titleSlug(sec.title);
+		const chDirName = `${padOrdinal(sec.chapter)}-${chSlug}`;
+		const secDirName = `${padOrdinal(sec.section)}-${secSlug}`;
+		const dir = join(editionRoot, chDirName, secDirName);
 		ensureDir(dir);
-		const bodyPath = join(dir, 'index.md');
+		const bodyFilename = `00-${secSlug}.md`;
+		const bodyPath = join(dir, bodyFilename);
 		const body = sec.body.length > 0 ? sec.body : `# ${sec.title}\n`;
 		writeIfChanged(bodyPath, body);
 		entries.push({
 			kind: 'section',
 			code: sec.code,
 			title: sec.title,
-			body_path: `aim/${edition}/chapter-${sec.chapter}/section-${sec.section}/index.md`,
+			body_path: `aim/${edition}/${chDirName}/${secDirName}/${bodyFilename}`,
 			content_hash: sha256(body),
 		});
 	}
 
-	// Paragraphs
+	// Paragraphs: `<NN>-<chapter-slug>/<MM>-<section-slug>/<KK>-<paragraph-slug>.md`
 	for (const p of extracted.paragraphs) {
-		const dir = join(editionRoot, `chapter-${p.chapter}`, `section-${p.section}`);
+		const chSlug = chapterSlugByNum.get(p.chapter) ?? 'section';
+		const secSlug = sectionSlugByCode.get(`${p.chapter}-${p.section}`) ?? 'section';
+		const pSlug = titleSlug(p.title);
+		const chDirName = `${padOrdinal(p.chapter)}-${chSlug}`;
+		const secDirName = `${padOrdinal(p.section)}-${secSlug}`;
+		const dir = join(editionRoot, chDirName, secDirName);
 		ensureDir(dir);
-		const bodyPath = join(dir, `paragraph-${p.paragraph}.md`);
+		const bodyFilename = `${padOrdinal(p.paragraph)}-${pSlug}.md`;
+		const bodyPath = join(dir, bodyFilename);
 		const body = p.body.length > 0 ? `# ${p.title}\n\n${p.body}\n` : `# ${p.title}\n`;
 		writeIfChanged(bodyPath, body);
 		entries.push({
 			kind: 'paragraph',
 			code: p.code,
 			title: p.title,
-			body_path: `aim/${edition}/chapter-${p.chapter}/section-${p.section}/paragraph-${p.paragraph}.md`,
+			body_path: `aim/${edition}/${chDirName}/${secDirName}/${bodyFilename}`,
 			content_hash: sha256(body),
 		});
 	}
