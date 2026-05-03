@@ -3,6 +3,7 @@ import type { Snippet } from 'svelte';
 import { tick } from 'svelte';
 import { createFocusTrap, type FocusTrap } from '../lib/focus-trap';
 import type { ButtonSize, ButtonVariant } from './Button.svelte';
+import Spinner from './Spinner.svelte';
 
 /**
  * Two-step confirm control for destructive actions ("Archive", "Skip
@@ -33,6 +34,8 @@ let {
 	triggerVariant = 'ghost',
 	confirmVariant = 'danger',
 	disabled = false,
+	loading = false,
+	loadingLabel,
 	onConfirm,
 	formAction,
 	formMethod = 'POST',
@@ -46,6 +49,15 @@ let {
 	triggerVariant?: ButtonVariant;
 	confirmVariant?: ButtonVariant;
 	disabled?: boolean;
+	/**
+	 * Reflect server-mutation in flight on the Confirm button. While loading,
+	 * the Confirm button shows a spinner, swaps its label to `loadingLabel`
+	 * (defaulting to `${confirmLabel}...`), and the Cancel button is disabled
+	 * so the user cannot back out mid-submit. Pair with `use:enhance` on the
+	 * parent form so `loading` flips on submit and back off on response.
+	 */
+	loading?: boolean;
+	loadingLabel?: string;
 	onConfirm?: () => void;
 	formAction?: string;
 	formMethod?: 'GET' | 'POST';
@@ -54,6 +66,7 @@ let {
 } = $props();
 
 let confirming = $state(false);
+const resolvedLoadingLabel = $derived(loadingLabel ?? `${confirmLabel}...`);
 let triggerEl = $state<HTMLButtonElement | null>(null);
 let confirmEl = $state<HTMLButtonElement | null>(null);
 let panelEl = $state<HTMLDivElement | null>(null);
@@ -161,9 +174,17 @@ $effect(() => {
 					bind:this={confirmEl}
 					type="submit"
 					class="btn v-{confirmVariant} s-{size}"
+					disabled={loading}
 					data-testid="confirmaction-confirm"
+					data-state={loading ? 'loading' : 'idle'}
+					aria-live="polite"
 				>
-					{confirmLabel}
+					{#if loading}
+						<Spinner size="sm" tone={confirmVariant === 'ghost' ? 'default' : 'inverse'} ariaLabel={resolvedLoadingLabel} />
+						<span>{resolvedLoadingLabel}</span>
+					{:else}
+						{confirmLabel}
+					{/if}
 				</button>
 			</form>
 		{:else}
@@ -171,16 +192,25 @@ $effect(() => {
 				bind:this={confirmEl}
 				type="button"
 				class="btn v-{confirmVariant} s-{size}"
+				disabled={loading}
 				data-testid="confirmaction-confirm"
+				data-state={loading ? 'loading' : 'idle'}
+				aria-live="polite"
 				onclick={runCallback}
 			>
-				{confirmLabel}
+				{#if loading}
+					<Spinner size="sm" tone={confirmVariant === 'ghost' ? 'default' : 'inverse'} ariaLabel={resolvedLoadingLabel} />
+					<span>{resolvedLoadingLabel}</span>
+				{:else}
+					{confirmLabel}
+				{/if}
 			</button>
 		{/if}
 		<button
 			type="button"
 			class="btn v-ghost s-{size}"
 			data-testid="confirmaction-cancel"
+			disabled={loading}
 			onclick={cancel}
 		>
 			{cancelLabel}

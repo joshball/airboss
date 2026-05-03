@@ -89,12 +89,12 @@ $effect(() => {
 
 <Dialog
 	bind:open
-	ariaLabel="Share this card"
+	ariaLabelledby="sharepopover-title"
 	size="md"
 	onClose={close}
 >
 	{#snippet header()}
-		<h2 data-testid="sharepopover-title">Share this card</h2>
+		<h2 id="sharepopover-title" data-testid="sharepopover-title">Share this card</h2>
 	{/snippet}
 
 	{#snippet body()}
@@ -104,7 +104,7 @@ $effect(() => {
 			class="visually-hidden"
 		></span>
 		<div class="actions">
-			<button type="button" class="action" onclick={copy} aria-live="polite" data-testid="sharepopover-copy">
+			<button type="button" class="action" onclick={copy} data-testid="sharepopover-copy">
 				<span class="action-label">{copied ? 'Copied!' : 'Copy card link'}</span>
 				<span class="action-desc">
 					{copied ? 'The public card URL is on your clipboard.' : 'Public link to this card.'}
@@ -116,6 +116,16 @@ $effect(() => {
 				<span class="action-desc">Flag a problem; we'll ask you for a comment.</span>
 			</button>
 		</div>
+
+		<!--
+			Status mirror lives in a sibling node so the announcement role belongs
+			to a status region rather than to the button. Re-announces only when
+			the textContent changes (`aria-atomic="true"`), so a screen reader
+			doesn't double-fire on the button label flip.
+		-->
+		<span class="copy-status" role="status" aria-live="polite" aria-atomic="true" data-testid="sharepopover-copy-status">
+			{copied ? 'Copied to clipboard.' : ''}
+		</span>
 
 		{#if copyError}
 			<p class="error" role="alert" data-testid="sharepopover-error">{copyError}</p>
@@ -187,6 +197,12 @@ $effect(() => {
 		color: var(--signal-danger, var(--action-hazard-hover));
 		font-size: var(--font-size-sm);
 		margin: 0;
+	}
+
+	.copy-status {
+		font-size: var(--font-size-xs);
+		color: var(--ink-subtle);
+		min-height: 1.25em;
 	}
 
 	.visually-hidden {

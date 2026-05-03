@@ -28,12 +28,33 @@ let {
 
 const resolvedActive = $derived(active || tabs[0]?.id || '');
 
+let panelEl = $state<HTMLDivElement | null>(null);
+
+/**
+ * After a tab activation that came from a user gesture (click or arrow key),
+ * make sure the panel content is visible. On small viewports the new panel
+ * may render off-screen with no indication; nudging it into view on
+ * activation matches the WAI-ARIA tabs pattern's intent. Honors
+ * `prefers-reduced-motion` so we don't smooth-scroll for users who opted
+ * out of motion.
+ */
+function ensurePanelVisible(): void {
+	if (typeof window === 'undefined' || !panelEl) return;
+	const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+	panelEl.scrollIntoView({ block: 'nearest', behavior: reduced ? 'auto' : 'smooth' });
+}
+
+function activate(id: string): void {
+	active = id;
+	requestAnimationFrame(ensurePanelVisible);
+}
+
 function focusByOffset(currentId: string, delta: number): void {
 	const enabled = tabs.filter((t) => !t.disabled);
 	const idx = enabled.findIndex((t) => t.id === currentId);
 	if (idx === -1) return;
 	const next = enabled[(idx + delta + enabled.length) % enabled.length];
-	active = next.id;
+	activate(next.id);
 	requestAnimationFrame(() => {
 		const el = document.getElementById(`tab-${next.id}`);
 		el?.focus();
@@ -56,7 +77,7 @@ function handleKeyDown(event: KeyboardEvent, id: string): void {
 			event.preventDefault();
 			const first = tabs.find((t) => !t.disabled);
 			if (first) {
-				active = first.id;
+				activate(first.id);
 				document.getElementById(`tab-${first.id}`)?.focus();
 			}
 			break;
@@ -66,7 +87,7 @@ function handleKeyDown(event: KeyboardEvent, id: string): void {
 			const enabled = tabs.filter((t) => !t.disabled);
 			const last = enabled[enabled.length - 1];
 			if (last) {
-				active = last.id;
+				activate(last.id);
 				document.getElementById(`tab-${last.id}`)?.focus();
 			}
 			break;
@@ -91,7 +112,7 @@ function handleKeyDown(event: KeyboardEvent, id: string): void {
 				disabled={t.disabled}
 				data-testid={`tabs-item-${t.id}`}
 				data-state={t.disabled ? 'disabled' : selected ? 'active' : 'idle'}
-				onclick={() => (active = t.id)}
+				onclick={() => activate(t.id)}
 				onkeydown={(e) => handleKeyDown(e, t.id)}
 			>
 				{t.label}
@@ -99,6 +120,7 @@ function handleKeyDown(event: KeyboardEvent, id: string): void {
 		{/each}
 	</div>
 	<div
+		bind:this={panelEl}
 		class="panel"
 		id="panel-{resolvedActive}"
 		role="tabpanel"

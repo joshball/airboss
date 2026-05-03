@@ -39,6 +39,11 @@ const isBinaryVisual = $derived(currentKind === SOURCE_KINDS.BINARY_VISUAL);
 function fieldError(key: string): string | undefined {
 	return fieldErrors[key];
 }
+
+/** Stable id for the error <p> tied to a field via `aria-describedby`. */
+function errId(inputId: string): string {
+	return `${inputId}-err`;
+}
 </script>
 
 <div class="form-layout">
@@ -61,21 +66,30 @@ function fieldError(key: string): string | undefined {
 				readonly={mode === 'edit'}
 				required
 				autocomplete="off"
+				aria-invalid={fieldError('id') ? 'true' : undefined}
+				aria-describedby={fieldError('id') ? errId('src-id') : undefined}
 			/>
 			<p class="hint">Lowercase slug, e.g. <code>cfr-14</code>, <code>aim-2026-01</code>.</p>
-			{#if fieldError('id')}<p class="err">{fieldError('id')}</p>{/if}
+			{#if fieldError('id')}<p class="err" id={errId('src-id')}>{fieldError('id')}</p>{/if}
 		</div>
 
 		<div class="field">
 			<label for="src-type">Source type</label>
-			<select id="src-type" name="type" required bind:value={currentType}>
+			<select
+				id="src-type"
+				name="type"
+				required
+				bind:value={currentType}
+				aria-invalid={fieldError('type') ? 'true' : undefined}
+				aria-describedby={fieldError('type') ? errId('src-type') : 'src-type-hint'}
+			>
 				<option value="" selected={initial.type === ''}>-- pick one --</option>
 				{#each SOURCE_TYPE_VALUES as value (value)}
 					<option {value}>{SOURCE_TYPE_LABELS[value]}</option>
 				{/each}
 			</select>
-			{#if fieldError('type')}<p class="err">{fieldError('type')}</p>{/if}
-			<p class="hint">
+			{#if fieldError('type')}<p class="err" id={errId('src-type')}>{fieldError('type')}</p>{/if}
+			<p class="hint" id="src-type-hint">
 				Kind: <code class="kind-chip">{currentKind}</code>. Binary-visual sources (sectional charts, plates)
 				use the non-textual panel below instead of the extraction pipeline.
 			</p>
@@ -84,58 +98,112 @@ function fieldError(key: string): string | undefined {
 
 	<div class="field">
 		<label for="src-title">Title</label>
-		<input id="src-title" name="title" type="text" value={initial.title} required />
-		{#if fieldError('title')}<p class="err">{fieldError('title')}</p>{/if}
+		<input
+			id="src-title"
+			name="title"
+			type="text"
+			value={initial.title}
+			required
+			aria-invalid={fieldError('title') ? 'true' : undefined}
+			aria-describedby={fieldError('title') ? errId('src-title') : undefined}
+		/>
+		{#if fieldError('title')}<p class="err" id={errId('src-title')}>{fieldError('title')}</p>{/if}
 	</div>
 
 	<div class="grid">
 		<div class="field">
 			<label for="src-version">Version</label>
-			<input id="src-version" name="version" type="text" value={initial.version} required />
+			<input
+				id="src-version"
+				name="version"
+				type="text"
+				value={initial.version}
+				required
+				aria-invalid={fieldError('version') ? 'true' : undefined}
+				aria-describedby={fieldError('version') ? errId('src-version') : undefined}
+			/>
 			<p class="hint">e.g. <code>revised-2026-01-01</code>.</p>
-			{#if fieldError('version')}<p class="err">{fieldError('version')}</p>{/if}
+			{#if fieldError('version')}<p class="err" id={errId('src-version')}>{fieldError('version')}</p>{/if}
 		</div>
 
 		<div class="field">
 			<label for="src-format">Format</label>
-			<select id="src-format" name="format" required>
+			<select
+				id="src-format"
+				name="format"
+				required
+				aria-invalid={fieldError('format') ? 'true' : undefined}
+				aria-describedby={fieldError('format') ? errId('src-format') : undefined}
+			>
 				{#each FORMATS as value (value)}
 					<option {value} selected={initial.format === value}>{value}</option>
 				{/each}
 			</select>
-			{#if fieldError('format')}<p class="err">{fieldError('format')}</p>{/if}
+			{#if fieldError('format')}<p class="err" id={errId('src-format')}>{fieldError('format')}</p>{/if}
 		</div>
 	</div>
 
 	<div class="field">
 		<label for="src-url">URL</label>
-		<input id="src-url" name="url" type="url" value={initial.url} required />
+		<input
+			id="src-url"
+			name="url"
+			type="url"
+			value={initial.url}
+			required
+			aria-invalid={fieldError('url') ? 'true' : undefined}
+			aria-describedby={fieldError('url') ? errId('src-url') : undefined}
+		/>
 		<p class="hint">Canonical URL so the user can cross-check the live source.</p>
-		{#if fieldError('url')}<p class="err">{fieldError('url')}</p>{/if}
+		{#if fieldError('url')}<p class="err" id={errId('src-url')}>{fieldError('url')}</p>{/if}
 	</div>
 
 	<div class="field">
 		<label for="src-path">Path</label>
-		<input id="src-path" name="path" type="text" value={initial.path} required />
+		<input
+			id="src-path"
+			name="path"
+			type="text"
+			value={initial.path}
+			required
+			aria-invalid={fieldError('path') ? 'true' : undefined}
+			aria-describedby={fieldError('path') ? errId('src-path') : undefined}
+		/>
 		<p class="hint">Path relative to the hangar blob root (<code>hangar-blobs/</code> under the developer cache).</p>
-		{#if fieldError('path')}<p class="err">{fieldError('path')}</p>{/if}
+		{#if fieldError('path')}<p class="err" id={errId('src-path')}>{fieldError('path')}</p>{/if}
 	</div>
 
 	<div class="grid">
 		<div class="field">
 			<label for="src-checksum">Checksum</label>
-			<input id="src-checksum" name="checksum" type="text" value={initial.checksum} required />
+			<input
+				id="src-checksum"
+				name="checksum"
+				type="text"
+				value={initial.checksum}
+				required
+				aria-invalid={fieldError('checksum') ? 'true' : undefined}
+				aria-describedby={fieldError('checksum') ? errId('src-checksum') : undefined}
+			/>
 			<p class="hint">
 				SHA-256 of the downloaded binary. Use <code>pending-download</code> until the fetch lands.
 			</p>
-			{#if fieldError('checksum')}<p class="err">{fieldError('checksum')}</p>{/if}
+			{#if fieldError('checksum')}<p class="err" id={errId('src-checksum')}>{fieldError('checksum')}</p>{/if}
 		</div>
 
 		<div class="field">
 			<label for="src-downloaded">Downloaded at</label>
-			<input id="src-downloaded" name="downloadedAt" type="text" value={initial.downloadedAt} required />
+			<input
+				id="src-downloaded"
+				name="downloadedAt"
+				type="text"
+				value={initial.downloadedAt}
+				required
+				aria-invalid={fieldError('downloadedAt') ? 'true' : undefined}
+				aria-describedby={fieldError('downloadedAt') ? errId('src-downloaded') : undefined}
+			/>
 			<p class="hint">ISO-8601 or <code>pending-download</code>.</p>
-			{#if fieldError('downloadedAt')}<p class="err">{fieldError('downloadedAt')}</p>{/if}
+			{#if fieldError('downloadedAt')}<p class="err" id={errId('src-downloaded')}>{fieldError('downloadedAt')}</p>{/if}
 		</div>
 
 		<div class="field">
@@ -148,8 +216,10 @@ function fieldError(key: string): string | undefined {
 				step="1"
 				value={initial.sizeBytes}
 				placeholder="optional"
+				aria-invalid={fieldError('sizeBytes') ? 'true' : undefined}
+				aria-describedby={fieldError('sizeBytes') ? errId('src-size') : undefined}
 			/>
-			{#if fieldError('sizeBytes')}<p class="err">{fieldError('sizeBytes')}</p>{/if}
+			{#if fieldError('sizeBytes')}<p class="err" id={errId('src-size')}>{fieldError('sizeBytes')}</p>{/if}
 		</div>
 	</div>
 
@@ -171,8 +241,10 @@ function fieldError(key: string): string | undefined {
 						value={initial.bvRegion ?? ''}
 						placeholder="e.g. Denver"
 						required
+						aria-invalid={fieldError('bv_region') ? 'true' : undefined}
+						aria-describedby={fieldError('bv_region') ? errId('src-region') : undefined}
 					/>
-					{#if fieldError('bv_region')}<p class="err">{fieldError('bv_region')}</p>{/if}
+					{#if fieldError('bv_region')}<p class="err" id={errId('src-region')}>{fieldError('bv_region')}</p>{/if}
 				</div>
 				<div class="field">
 					<label for="src-cadence">Cadence (days)</label>
@@ -183,8 +255,10 @@ function fieldError(key: string): string | undefined {
 						min="1"
 						step="1"
 						value={initial.bvCadenceDays ?? String(SECTIONAL_CADENCE_DAYS)}
+						aria-invalid={fieldError('bv_cadence_days') ? 'true' : undefined}
+						aria-describedby={fieldError('bv_cadence_days') ? errId('src-cadence') : undefined}
 					/>
-					{#if fieldError('bv_cadence_days')}<p class="err">{fieldError('bv_cadence_days')}</p>{/if}
+					{#if fieldError('bv_cadence_days')}<p class="err" id={errId('src-cadence')}>{fieldError('bv_cadence_days')}</p>{/if}
 				</div>
 			</div>
 			<div class="field">
@@ -196,9 +270,11 @@ function fieldError(key: string): string | undefined {
 					value={initial.bvIndexUrl ?? ''}
 					placeholder="https://aeronav.faa.gov/visual/"
 					required
+					aria-invalid={fieldError('bv_index_url') ? 'true' : undefined}
+					aria-describedby={fieldError('bv_index_url') ? errId('src-index-url') : 'src-index-url-hint'}
 				/>
-				<p class="hint">Upstream page the resolver scrapes for the current edition date.</p>
-				{#if fieldError('bv_index_url')}<p class="err">{fieldError('bv_index_url')}</p>{/if}
+				<p class="hint" id="src-index-url-hint">Upstream page the resolver scrapes for the current edition date.</p>
+				{#if fieldError('bv_index_url')}<p class="err" id={errId('src-index-url')}>{fieldError('bv_index_url')}</p>{/if}
 			</div>
 		</fieldset>
 	{:else}

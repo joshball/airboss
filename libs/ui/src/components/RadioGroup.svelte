@@ -33,8 +33,18 @@ let {
 	ariaLabel?: string;
 } = $props();
 
+/**
+ * Find the closest grouping element. Prefer the inner `role="radiogroup"`
+ * when present (caller passed `ariaLabel` only), else fall back to the
+ * `<fieldset>` root which is the platform-native group when a `<legend>`
+ * is rendered.
+ */
+function findGroupRoot(el: HTMLElement): Element | null {
+	return el.closest('[role="radiogroup"]') ?? el.closest('fieldset');
+}
+
 function focusByOffset(current: HTMLInputElement, delta: number): void {
-	const root = current.closest('[role="radiogroup"]');
+	const root = findGroupRoot(current);
 	if (!root) return;
 	const radios = Array.from(root.querySelectorAll<HTMLInputElement>('input[type="radio"]:not([disabled])'));
 	const idx = radios.indexOf(current);
@@ -59,7 +69,7 @@ function handleKeyDown(event: KeyboardEvent): void {
 			break;
 		case 'Home': {
 			event.preventDefault();
-			const root = target.closest('[role="radiogroup"]');
+			const root = findGroupRoot(target);
 			const first = root?.querySelector<HTMLInputElement>('input[type="radio"]:not([disabled])');
 			first?.focus();
 			first?.click();
@@ -67,7 +77,7 @@ function handleKeyDown(event: KeyboardEvent): void {
 		}
 		case 'End': {
 			event.preventDefault();
-			const root = target.closest('[role="radiogroup"]');
+			const root = findGroupRoot(target);
 			const all = root?.querySelectorAll<HTMLInputElement>('input[type="radio"]:not([disabled])');
 			const last = all?.[all.length - 1];
 			last?.focus();
@@ -78,9 +88,18 @@ function handleKeyDown(event: KeyboardEvent): void {
 }
 </script>
 
+<!--
+	Single source of truth for the accessible name: when a `legend` is
+	provided, the fieldset's <legend> is the only labelling element (no
+	`aria-label` on either fieldset or the inner row). When no legend is
+	provided, fall back to the caller's `ariaLabel` on the fieldset and tag
+	the inner list with `role="radiogroup"` so AT users still hear the
+	grouping. Avoids the prior pattern where AT could double-announce or
+	prefer the inner aria-label over the legend.
+-->
 <fieldset
 	class="rg o-{orientation}"
-	aria-label={ariaLabel}
+	aria-label={legend ? undefined : ariaLabel}
 	{disabled}
 	data-testid="radiogroup-root"
 	data-orientation={orientation}
@@ -89,7 +108,12 @@ function handleKeyDown(event: KeyboardEvent): void {
 	{#if legend}
 		<legend class="legend" data-testid="radiogroup-legend">{legend}</legend>
 	{/if}
-	<div class="list" role="radiogroup" aria-label={legend ?? ariaLabel} data-testid="radiogroup-list">
+	<div
+		class="list"
+		role={legend ? undefined : 'radiogroup'}
+		aria-label={legend ? undefined : ariaLabel}
+		data-testid="radiogroup-list"
+	>
 		{#each options as opt (opt.value)}
 			<label
 				class="row"
