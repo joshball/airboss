@@ -326,7 +326,7 @@ export async function runInventory(opts: RunInventoryOptions = {}): Promise<numb
 	// Operators that want a wall-clock timestamp can pass `--now`; default is
 	// the date portion only.
 	const generatedAt = opts.generatedAt ?? new Date().toISOString().slice(0, 10);
-	const outputPath = opts.outputPath ?? join(process.cwd(), 'docs', 'sources', 'INVENTORY.md');
+	const outputPath = opts.outputPath ?? join(process.cwd(), 'docs', 'ingestion-pipeline', 'inventory.md');
 	const content = buildInventory(cacheRoot, generatedAt);
 	mkdirSync(dirname(outputPath), { recursive: true });
 	writeFileSync(outputPath, content, 'utf-8');
