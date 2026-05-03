@@ -1,0 +1,196 @@
+# References roadmap
+
+The single canonical list of every FAA reference document airboss ingests, with current state and target state. Updated on every PR that lands or moves a reference along the pipeline.
+
+> **This is THE list.** When something disagrees with this doc, this doc wins or the doc is wrong. No other "list of references" lives anywhere else; if you find one, replace it with a link here.
+
+## Snapshot
+
+**Last updated:** 2026-05-03 (live snapshot — auto-update on each library PR)
+
+**Readable in-app today:** 36 references
+**Total tracked:** ~50 references across all corpora
+**Target shape:** every reference is a section-tree (whole-doc retired, with one possible exception: mountain-flying)
+
+## Stage definitions (short version)
+
+1. **Sourced** — source PDF/HTML cached in `~/Documents/airboss-handbook-cache/`
+2. **Extracted** — markdown body files + `manifest.json` in `<corpus>/<doc>/<edition>/` in repo
+3. **Catalogued** — DB row in `study.reference`; card on `/library`
+4. **Readable** — DB rows in `study.reference_section` with `content_md` populated; "Read in-app" badge on `/library`
+5. **Section-tree shape** — the `manifest.json` declares chapter / section / paragraph / element hierarchy (vs whole-doc single body)
+
+For the longer pipeline writeup see [docs/ingestion-pipeline/pipeline.md](../ingestion-pipeline/pipeline.md).
+
+## The list
+
+### Handbooks (chapter-aware section trees)
+
+| FAA number | Common name | Abbrev | Stage | Target | Notes |
+|------------|-------------|--------|-------|--------|-------|
+| FAA-H-8083-25C | Pilot's Handbook of Aeronautical Knowledge | PHAK | ✅ readable, section-tree | (unchanged) | 17 chapters, 850 sections |
+| FAA-H-8083-3C | Airplane Flying Handbook | AFH | ✅ readable, section-tree | (unchanged) | 18 chapters, 531 sections |
+| FAA-H-8083-28B | Aviation Weather Handbook | AVWX | ✅ readable, section-tree | (unchanged) | 28 chapters, 480 sections |
+
+### Whole-doc handbooks → promote to section-tree
+
+| FAA number | Common name | Abbrev | Stage | Target | Notes |
+|------------|-------------|--------|-------|--------|-------|
+| FAA-H-8083-2A | Risk Management Handbook | RMH | ⚠️ readable, whole-doc | section-tree | TOC extracted at `RiskMgmtHdbk-TOC.md`; 8 chapters; promotion WP pending |
+| FAA-H-8083-9 | Aviation Instructor's Handbook | AIH | ⚠️ readable, whole-doc | section-tree | Per-chapter PDFs published by FAA; promotion WP pending |
+| FAA-H-8083-15B | Instrument Flying Handbook | IFH | ⚠️ readable, whole-doc | section-tree | TOC extracted at `InstrumentFlyingHandbookToc.md`; 11+ chapters; promotion WP pending |
+| FAA-H-8083-16B | Instrument Procedures Handbook | IPH | ⚠️ readable, whole-doc | section-tree | Per-chapter PDFs + standalone TOC PDF published; promotion WP pending |
+| FAA-P-8740-60 | Tips on Mountain Flying | MTN | ⚠️ readable, whole-doc | section-tree (or stay whole-doc) | 16-page pamphlet with `body_override` to a hand-curated markdown; the override already has `## Chapter` headings — could be parsed into section-tree without re-extracting |
+
+**Removed from corpus 2026-05-03**: AMT-General (FAA-H-8083-30B) and AMT-Powerplant (FAA-H-8083-32B). Maintenance technician handbooks; not pilot-training relevant.
+
+### AIM
+
+| FAA number | Common name | Abbrev | Stage | Target | Notes |
+|------------|-------------|--------|-------|--------|-------|
+| FAA AIM 2026-04 | Aeronautical Information Manual | AIM | ✅ readable, section-tree | (unchanged) | 10 chapters, 38 sections, 396 paragraphs, 297 glossary terms, 3 appendices |
+
+### Code of Federal Regulations
+
+11 of ~226 Title 14 parts and 2 of Title 49 parts cataloged + readable. The 217 long-tail Title 14 parts (engineering rules: Part 27 helicopter cert, Part 33 engine cert, etc.) are intentionally out of scope per WP-CFR.
+
+| Reference | Title | Stage | Sections |
+|-----------|-------|-------|----------|
+| 14 CFR Part 14 | Equal Access to Justice Act rules | ✅ readable, section-tree | 19 |
+| 14 CFR Part 23 | Airworthiness Standards (Normal Category) | ✅ readable, section-tree | 68 |
+| 14 CFR Part 61 | Pilot/Instructor Certification | ✅ readable, section-tree | 149 |
+| 14 CFR Part 68 | BasicMed | ✅ readable, section-tree | 6 |
+| 14 CFR Part 71 | Class A/B/C/D/E Airspace | ✅ readable, section-tree | 15 |
+| 14 CFR Part 73 | Special Use Airspace | ✅ readable, section-tree | 11 |
+| 14 CFR Part 91 | General Operating and Flight Rules | ✅ readable, section-tree | 286 |
+| 14 CFR Part 135 | Commuter and On-Demand Operations | ✅ readable, section-tree | 200 |
+| 14 CFR Part 141 | Pilot Schools | ✅ readable, section-tree | 49 |
+| 49 CFR Part 830 | NTSB Accident Reporting | ✅ readable, section-tree | 6 |
+| 49 CFR Part 1552 | TSA Alien Flight Student Program | ✅ readable, section-tree | 16 |
+
+CFR is structurally section-tree (per-Part references with section rows underneath). All 11 cataloged Parts are readable.
+
+### Advisory Circulars
+
+9 cached and readable as whole-doc. 12 link-only cards need download. All ACs to be promoted to section-tree where the document has internal structure.
+
+| FAA number | Common name | Stage | Target |
+|------------|-------------|-------|--------|
+| AC 00-6B | Aviation Weather | ⚠️ readable, whole-doc | section-tree |
+| AC 25-7D | Flight Test Guide for Transport Category Airplanes | ⚠️ readable, whole-doc | section-tree (engineering doc — keep but section it) |
+| AC 61-65J | Certification: Pilots and Flight/Ground Instructors | ⚠️ readable, whole-doc | section-tree |
+| AC 61-83J | Industry-Conducted Flight Instructor Refresher Course | ⚠️ readable, whole-doc | section-tree |
+| AC 61-98D | Flight Review and IPC Currency | ⚠️ readable, whole-doc | section-tree |
+| AC 90-66C | Non-Towered Airport Flight Operations | ⚠️ readable, whole-doc | section-tree |
+| AC 91-21.1D | Use of Portable Electronic Devices Aboard Aircraft | ⚠️ readable, whole-doc | section-tree |
+| AC 91-79A | Mitigating Runway Overrun | ⚠️ readable, whole-doc | section-tree |
+| AC 120-71B | SOPs and Pilot Monitoring Duties | ⚠️ readable, whole-doc | section-tree |
+| AC 00-24 | Thunderstorms | ❌ link-only | full pipeline + section-tree |
+| AC 00-45 | Aviation Weather Services | ❌ link-only | full pipeline + section-tree |
+| AC 60-22 | Aeronautical Decision Making | ❌ link-only | full pipeline + section-tree |
+| AC 61-27 | Instrument Flying Handbook (legacy AC, superseded by FAA-H-8083-15) | ❌ link-only | (decide: ingest or drop, since superseded) |
+| AC 61-67 | Stall and Spin Awareness Training | ❌ link-only | full pipeline + section-tree |
+| AC 61-84 | Role of Preflight Preparation | ❌ link-only | full pipeline + section-tree |
+| AC 61-134 | GA Controlled Flight Into Terrain Awareness | ❌ link-only | full pipeline + section-tree |
+| AC 90-100 | RNAV Operations | ❌ link-only | full pipeline + section-tree |
+| AC 91-23 | Pilot's Weight and Balance Handbook | ❌ link-only | full pipeline + section-tree |
+| AC 91-44 | ELT Maintenance Practices | ❌ link-only | full pipeline + section-tree |
+| AC 91-74 | Flight in Icing Conditions | ❌ link-only | full pipeline + section-tree |
+| AC 91-75 | Attitude Indicator | ❌ link-only | full pipeline + section-tree |
+
+### Airman Certification Standards
+
+5 cataloged and readable as section-tree (publication → area → task → element). 2 link-only.
+
+| FAA number | Common name | Stage |
+|------------|-------------|-------|
+| FAA-S-ACS-6C | Private Pilot — Airplane | ✅ readable, section-tree (603 sections) |
+| FAA-S-ACS-7B | Commercial Pilot — Airplane | ✅ readable, section-tree (548 sections) |
+| FAA-S-ACS-8C | Instrument Rating — Airplane | ✅ readable, section-tree (174 sections) |
+| FAA-S-ACS-11A | Airline Transport Pilot — Airplane | ✅ readable, section-tree (485 sections) |
+| FAA-S-ACS-25 | Flight Instructor — Airplane | ⚠️ readable, but data thin — FAA didn't carry K/R/S codes (100 sections, 0 elements) |
+| FAA-S-ACS-9E | Flight Instructor – Instrument Airplane PTS (CFII) | ❌ link-only — PTS not ACS, different doc shape |
+| FAA-G-ACS-2 | ACS Companion Guide for Pilots | ❌ link-only — no manifest, not in download config |
+
+### New corpora (not yet in pipeline)
+
+These are tracked as TODO: a corpus-build WP per row.
+
+| Corpus | Common name | Stage | Notes |
+|--------|-------------|-------|-------|
+| SAFO | FAA Safety Alerts For Operators | ❌ no card, no pipeline | Estimated 30-50 docs; WP-SAFO not started |
+| InFO | FAA Information For Operators | ❌ no card, no pipeline | Estimated 20-30 docs; WP-INFO not started |
+| Chief Counsel | FAA Office of Chief Counsel legal interpretations | ❌ no card, no pipeline | Estimated 100-200 published opinions; WP-CC not started — highest pedagogical leverage |
+| NTSB ALJ | NTSB administrative law judge rulings | ❌ no card, no pipeline | WP-NTSB-ALJ not started |
+| FAA Order 8900.1 Vol 5 | Flight Standards Information Management System (Airman Cert) | ❌ deferred | Trigger to revisit: CFI content needs Vol 5 |
+| FAA Safety Briefing | FAA magazine archive | ❌ deferred | Low priority |
+| 217 long-tail CFR-14 parts | Part 27 (helicopter), Part 33 (engine), etc. | ❌ out of scope | Engineering rules pilots don't cite |
+
+### Umbrella references (not pipelinable)
+
+These are intentional link-only cards for citation purposes. They will not get manifests or `reference_section` rows.
+
+| Card slug | Why |
+|-----------|-----|
+| `ntsb` (umbrella) | Per-report ingestion is WP-NTSB-ALJ; the umbrella stays as fallback |
+| `poh-afm` | Per-aircraft, user-uploaded; different feature |
+| `aopa-air-safety-institute` | External resource |
+| `faa-p-8740-36` | FAA pamphlet, low priority |
+| `faa-order-8260-3` | Could be ingested, low priority |
+| `faa-approach-plates` | Per-airport, separate workflow |
+| `jeppesen-faa-charts` | External, separate workflow |
+| `rogers-d-f` | Academic citation |
+| `generic-acs` | Citation fallback for "ACS" without specific edition |
+| `generic-pts` | Citation fallback for "PTS" without specific edition |
+
+### Cleanup candidates (cruft)
+
+These exist in the DB and should be deleted or reconciled.
+
+| Row | Issue | Action |
+|-----|-------|--------|
+| `aim` edition `current` | Orphan placeholder; the real AIM is `2026-04` | Delete |
+| `aih` (FAA-H-8083-9B) in `handbooks-noningested.yaml` | Dupe of `aviation-instructor 8083-9` | Delete row |
+| `faa-h-8083-2` (2A) in `handbooks-noningested.yaml` | Dupe of `risk-management 8083-2A` | Delete row |
+| `afh` (FAA-H-8083-3B) in `handbooks-noningested.yaml` | Prior AFH edition kept for citation resolution | Decide: keep vs migrate citations to 3C |
+| `pcg` (Pilot/Controller Glossary) umbrella card | Already inside AIM as glossary entries | Decide: delete card or own corpus |
+
+## Roadmap (in priority order)
+
+This is the sequenced path to "everything readable as section-tree" excluding new corpora. Each row is a separate WP.
+
+| # | WP | Status | Effect |
+|---|----|--------|--------|
+| 1 | AMT-G/P removal | 🟡 in flight (dispatched 2026-05-03) | -2 corpus entries; cleanup |
+| 2 | Cleanup sweep | ❌ not started | Reconcile YAML cards (`ac-25-7`, `ac-61-65`, `ac-91-21-1`, `ac-120-71`); delete dupes; PCG decision; orphan delete |
+| 3 | RMH section-tree promotion | ❌ not started | RMH chapter-tree from `RiskMgmtHdbk-TOC.md` |
+| 4 | mtn-flying section-tree promotion (from override) | ❌ not started | Parse the existing `body_override` markdown into a section-tree manifest |
+| 5 | AIH section-tree promotion (chapter-PDF download + extract) | ❌ not started | Per-chapter PDFs available from FAA |
+| 6 | IFH section-tree promotion | ❌ not started | TOC extracted at `InstrumentFlyingHandbookToc.md`; chapter PDFs may exist |
+| 7 | IPH section-tree promotion | ❌ not started | Per-chapter PDFs + standalone TOC PDF available |
+| 8 | AC section-tree promotion (existing 9) | ❌ not started | Replace whole-doc seeder with section-tree; per-AC TOC parse |
+| 9 | AC section-tree extraction (12 link-only) | ❌ not started | Add to download config + extract + section-tree seed |
+| 10 | ACS link-only completion | ❌ not started | `cfii-airplane-pts-9e` (PTS), `faa-g-acs-2-companion-guide` |
+| 11 | New corpora — WP-SAFO + WP-INFO | ❌ not started | Pipelines are nearly identical; can be combined |
+| 12 | New corpora — WP-CC | ❌ not started | Highest pedagogical leverage |
+| 13 | New corpora — WP-NTSB-ALJ | ❌ not started | Different data model from FAA pubs |
+
+After 1-10: every cataloged FAA pilot-track publication is a readable section-tree. After 11-13: extended with auxiliary corpora.
+
+## How to use this doc
+
+- **Authoring a citation?** Find the doc in the list. If it's `✅ readable, section-tree`, you can deep-link by chapter / section / paragraph using `airboss-ref:`. If it's `⚠️ whole-doc`, you can only link to the document.
+- **Adding a new reference?** Add the row in the appropriate section. If it's a known new doc, mark stage and target. If a new corpus, add to "New corpora" with a TODO. Then PR.
+- **Shipping a WP that changes a reference's state?** Update the row in the same PR. The "Last updated" line at the top should match the latest reference change.
+- **Confused about state?** Run `find handbooks aim ac acs -name 'manifest.json' | xargs -I{} jq -r '.kind + ":" + (.title // "?")' {}` for a live snapshot from disk. Should match this doc.
+
+## Anchors
+
+- [docs/ingestion-pipeline/pipeline.md](../ingestion-pipeline/pipeline.md) — pipeline writeup
+- [docs/ingestion-pipeline/stage-status.md](../ingestion-pipeline/stage-status.md) — per-corpus stage view (more granular)
+- [docs/work-packages/library-completeness/](../work-packages/library-completeness/) — substrate WP that built the foundation
+- [docs/decisions/019-reference-identifier-system/decision.md](../decisions/019-reference-identifier-system/decision.md) — `airboss-ref:` URI scheme
+- TOC working files at repo root (will move into per-WP dirs):
+  - `RiskMgmtHdbk-TOC.md`
+  - `InstrumentFlyingHandbookToc.md`
+  - `AviationWeatherHandbook.md` (AVWX, already section-tree)
