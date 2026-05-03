@@ -510,6 +510,7 @@ export const NAV_LABELS = {
 	KNOWLEDGE: 'Knowledge',
 	GLOSSARY: 'Glossary',
 	LIBRARY: 'Library',
+	FLIGHTBAG: 'Flightbag',
 	CALIBRATION: 'Calibration',
 	HELP: 'Help',
 	HELP_INDEX: 'Help index',

@@ -17,6 +17,14 @@ test.describe('dashboard', () => {
 		await expect(nav.locator('summary').filter({ hasText: 'Memory' })).toBeVisible();
 		await expect(nav.getByRole('link', { name: 'Reps' })).toBeVisible();
 		await expect(nav.getByRole('link', { name: 'Calibration' })).toBeVisible();
+		// Flightbag link points at the cross-subdomain flightbag app, derived
+		// from the live request URL so dev and prod both work without a
+		// hardcoded origin. Assert it's there with an absolute href that
+		// resolves to the flightbag subdomain.
+		const flightbag = nav.getByRole('link', { name: 'Flightbag' });
+		await expect(flightbag).toBeVisible();
+		const flightbagHref = await flightbag.getAttribute('href');
+		expect(flightbagHref).toMatch(/^https?:\/\/flightbag\./);
 	});
 
 	test('root path redirects to dashboard', async ({ page }) => {
