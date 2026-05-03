@@ -1,0 +1,174 @@
+# Aviation Instructor's Handbook (AIH)
+#
+# Source: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/aviation_instructors_handbook/aviation_instructors_handbook.pdf
+# Edition: FAA-H-8083-9 (2020; current bound edition as of 2026-05). The FAA
+#   index page lists the publication date 2020 with no revision letter, so
+#   the edition slug stays bare (`8083-9`) rather than `8083-9A`.
+#
+# Errata: none on the FAA index page as of 2026-05-03. The empty `errata: []`
+#   list below is a deliberate placeholder so discovery scans can report
+#   "none found" rather than "field missing" (ADR 020).
+
+document_slug: aviation-instructor
+edition: FAA-H-8083-9
+kind: handbook
+title: "Aviation Instructor's Handbook"
+publisher: FAA
+# Library-index aviation-topic subjects (1..3). Closed vocabulary -- values
+# must be valid `AviationTopic` members. Drives subject grouping at /library.
+# Mirrors the prior handbooks-extras row that this YAML supersedes.
+subjects: [training-ops, human-factors]
+# Library-by-cert placement. Forwarded to `study.reference.primary_cert`
+# by the seeder; null = cert-agnostic. Closed vocabulary -- value must
+# be one of CERT_APPLICABILITY_VALUES. The Python config loader on
+# main does not currently read this field for chapter-aware handbooks
+# (PHAK / AFH / AVWX manifests carry primary_cert via a separate
+# register backfill). Authored here for forward-compatibility with the
+# YAML-driven primary_cert flow landing in WP-RMH.
+primary_cert: cfi
+
+# -----------------------------------------------------------------------------
+# Source download (TS downloader)
+# -----------------------------------------------------------------------------
+
+# Whole-doc PDF (kept alongside chapter PDFs for cross-chapter reference).
+whole_doc:
+  url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/aviation_instructors_handbook/aviation_instructors_handbook.pdf
+  filename: FAA-H-8083-9.pdf
+
+# Per-chapter PDFs. AIH is Class A2 (chapter PDFs + separately-distributed
+# ancillaries: cover, acknowledgments, preface, four appendices, glossary,
+# index). Direct URL pattern -- the publisher's
+# aviation_instructors_handbook/ index links chapter PDFs directly.
+#
+# AIH file-ordinal sequence: cover=00, acknowledgments=01, preface=02,
+# ch1=03, ch2=04, ..., ch10=12, appA=13, appB=14, appC=15, appD=16,
+# glossary=17, index=18. The {N} placeholder is the chapter ordinal (1..10);
+# {NN} is the zero-padded file ordinal (chapter ordinal + file_ordinal_offset).
+chapter_pdfs:
+  direct_pattern: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/aviation_instructors_handbook/{NN}_aih_chapter_{N}.pdf
+  chapter_count: 10
+  file_ordinal_offset: 2
+  # Note: AIH splits front matter into three separate PDFs (cover,
+  # acknowledgments, preface). The downloader's ancillary-identity model
+  # keys on `(kind, appendix_id)` which collapses three `kind: front`
+  # rows onto one cache slot. The front matter is already preserved in
+  # the whole-doc PDF (`aviation_instructors_handbook.pdf`), so we
+  # intentionally skip the per-segment front PDFs here. Section
+  # extraction reads chapter PDFs directly; front matter is not on the
+  # extraction path. Appendices, glossary, and index get distinct
+  # cache slots via `appendix_id` and unique `kind` values.
+  ancillary:
+    - kind: appendix
+      appendix_id: A
+      url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/aviation_instructors_handbook/13_aih_appendix_a.pdf
+    - kind: appendix
+      appendix_id: B
+      url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/aviation_instructors_handbook/14_aih_appendix_b.pdf
+    - kind: appendix
+      appendix_id: C
+      url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/aviation_instructors_handbook/15_aih_appendix_c.pdf
+    - kind: appendix
+      appendix_id: D
+      url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/aviation_instructors_handbook/16_aih_appendix_d.pdf
+    - kind: glossary
+      url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/aviation_instructors_handbook/17_aih_glossary.pdf
+    - kind: index
+      url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/aviation_instructors_handbook/18_aih_index.pdf
+
+# URL-substring patterns the downloader skips even if the publisher serves
+# them. Default empty; documented for future use.
+excluded_assets: []
+
+# Legacy field used by the Python ingest tool when whole_doc is absent.
+source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/aviation_instructors_handbook/aviation_instructors_handbook.pdf
+expected_pages: 228
+# Front matter (cover, acknowledgments, preface) sits before chapter 1, which
+# starts at PDF page 5. The bookmark-driven outline strategy already pins each
+# chapter to its starting PDF page, so page_offset is not load-bearing here --
+# the printed-page resolver reads the FAA `<chap>-<page>` header (e.g. `1-1`,
+# `2-18`) directly from the body.
+page_offset: 0
+# AIH ships proper PDF bookmarks (551 entries, depths 1-5) with chapter titles
+# in the canonical "Chapter N: Title" form and clean section / subsection
+# titles. The bookmark strategy produces the right tree without a content
+# scan. Levels deeper than 3 (subsubsection) are dropped by parse_outline
+# since the schema caps at chapter / section / subsection. 132 depth-4
+# entries plus 3 depth-5 entries collapse; spot-check chapter 1 (Use of
+# Resources subdivisions) and chapter 9 to confirm no critical content
+# loss.
+outline_strategy: bookmark
+outline_overrides: []
+title_overrides: {}
+figure_prefix_pattern: 'Figure (\d+)-(\d+)\.'
+table_prefix_pattern: 'Table (\d+)-(\d+)\.'
+
+# -----------------------------------------------------------------------------
+# Section-tree extraction
+# -----------------------------------------------------------------------------
+
+# `toc` = deterministic Python parser; `prompt` = paste-and-run Claude Code
+# flow; `compare` = diff the prompt JSONs against TOC. See
+# docs/ingestion-pipeline/section-extraction-prompt-strategy.md.
+section_strategy: toc
+
+# AIH's printed Table of Contents spans pp.1-2 of the front-matter (the
+# preface PDF) and is not laid out in the canonical right-column form the
+# TOC parser expects. We pin section_strategy=toc for symmetry, but the
+# upstream `outline_strategy: bookmark` already produced the section rows
+# from the rich embedded outline. The TOC parser may run for completeness;
+# if its output duplicates the bookmark tree the merge step picks the
+# bookmark form. Mirrors AVWX exactly.
+toc:
+  page_start: 1
+  page_end: 4
+  pattern: right_column
+
+# AIH chapter cover pages typeset the chapter heading in plain (not red)
+# Arial-Bold; section headings inside a chapter are also Arial-Bold. The
+# bookmark tree is the source of truth; body verification stays off. The
+# bookmark + content-scan combination already pins chapter ranges
+# correctly without a heading-style fingerprint.
+heading_style:
+  body_font_size: 10.0
+  heading_min_size_ratio: 1.10
+  heading_color_hex: '#000000'
+  heading_match_threshold: 0.85
+  verify_in_body: false
+
+# Per-chapter input cap for the plaintext sidecar the prompt strategy reads.
+# AIH is small (228-page handbook, 10 chapters); the longest chapter is
+# easily under 100K chars. Cap conservatively at 150,000 to match AVWX
+# (which sized to 150,000 for a 514-page handbook). Re-measure with
+# tools/handbook-ingest/measure_chapter_sizes.py if a future edition
+# restyles. Unused under section_strategy=toc; required to be present
+# only when section_strategy=prompt.
+prompt:
+  chapter_text_max_chars: 150000
+
+# AIH chapter cover pages typeset the inline "Chapter N: Title" heading on
+# the same page that carries the FAA `<chap>-<page>` footer (e.g. p5 has
+# both "Chapter 1: Risk Management..." and the footer "1-1"). The strip
+# removes this leading sentinel so the chapter overview body doesn't open
+# with a stutter. Same shape as AFH.
+chapter_cover_strip:
+  enabled: true
+  max_lines: 6
+
+page_label_walk_back: 5
+chapter_overrides: {}
+
+# Declarative errata list. Each entry is one FAA-published amendment to
+# this edition, applied via `bun run sources extract handbooks
+# aviation-instructor --apply-errata <id>`. AIH (2020 edition) has no
+# published errata as of 2026-05-03; the empty list is a deliberate
+# placeholder so the field is uniform across handbooks and discovery
+# scans report "none found" rather than "field missing". See ADR 020.
+errata: []
+
+# Discovery dismissal stop-list. Each entry silences a candidate that
+# `bun run sources discover-errata` would otherwise re-flag every week.
+# Schema: at least one of `url` or `sha256`; optional `reason` is a
+# free-form audit note. Dismissal is honored across re-runs; the
+# discovery dispatcher will not re-open a GitHub issue for the URL.
+dismissed_errata: []

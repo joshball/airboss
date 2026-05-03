@@ -31,16 +31,14 @@ For the longer pipeline writeup see [docs/ingestion-pipeline/pipeline.md](../ing
 | FAA-H-8083-25C | Pilot's Handbook of Aeronautical Knowledge | PHAK | ✅ readable, section-tree | (unchanged) | 17 chapters, 850 sections |
 | FAA-H-8083-3C | Airplane Flying Handbook | AFH | ✅ readable, section-tree | (unchanged) | 18 chapters, 531 sections |
 | FAA-H-8083-28B | Aviation Weather Handbook | AVWX | ✅ readable, section-tree | (unchanged) | 28 chapters, 480 sections |
-| FAA-H-8083-16B | Instrument Procedures Handbook | IPH | ✅ readable, section-tree | (unchanged) | 7 chapters, 84 sections, 228 subsections (Class A2 promotion shipped via WP-IPH-section-tree) |
+| FAA-H-8083-9 | Aviation Instructor's Handbook | AIH | ✅ readable, section-tree | (unchanged) | 18 L1 entries (10 chapters + acks/preface + 4 appendices + glossary + index), 155 sections, 246 subsections (WP-AIH 2026-05-03) |
+| FAA-H-8083-16B | Instrument Procedures Handbook | IPH | ✅ readable, section-tree | (unchanged) | 7 chapters, 84 sections, 228 subsections (WP-IPH-section-tree 2026-05-03) |
 
 ### Whole-doc handbooks → promote to section-tree
 
 | FAA number | Common name | Abbrev | Stage | Target | Notes |
 |------------|-------------|--------|-------|--------|-------|
-| FAA-H-8083-2A | Risk Management Handbook | RMH | ⚠️ readable, whole-doc | section-tree | TOC extracted at `RiskMgmtHdbk-TOC.md`; 8 chapters; promotion WP pending |
-| FAA-H-8083-9 | Aviation Instructor's Handbook | AIH | ⚠️ readable, whole-doc | section-tree | Per-chapter PDFs published by FAA; promotion WP pending |
-| FAA-H-8083-15B | Instrument Flying Handbook | IFH | ✅ readable, section-tree | -- | Promoted via WP-IFH-SECTION-TREE; toc-file-sidecar strategy parses `docs/work-packages/whole-doc-promotion/source-tocs/ifh.md`; 11 chapters / 587 sections; chapters 6 / 7 model the printed-TOC Section I (analog) / Section II (electronic flight display) split as two L1 sections per chapter; 3 FAA amendment PDFs queued for follow-up under ADR 020 errata flow |
-| FAA-P-8740-60 | Tips on Mountain Flying | MTN | ✅ readable, section-tree | (unchanged) | 12 chapters / 36 sections promoted from `body_override` markdown via the `handbooks-extras` ingest's section-tree branch (WP-MTN-section-tree, 2026-05-03) |
+| FAA-H-8083-2A | Risk Management Handbook | RMH | ⚠️ readable, whole-doc | section-tree | TOC extracted at `source-tocs/rmh.md`; 8 chapters; promotion WP in flight |
 
 **Removed from corpus 2026-05-03**: AMT-General (FAA-H-8083-30B) and AMT-Powerplant (FAA-H-8083-32B). Maintenance technician handbooks; not pilot-training relevant.
 
@@ -168,7 +166,7 @@ This is the sequenced path to "everything readable as section-tree" excluding ne
 | 2 | Cleanup sweep | ✅ shipped | Reconciled 4 AC YAML rows (`ac-25-7`, `ac-61-65`, `ac-91-21-1`, `ac-120-71`); retired `aih`/`faa-h-8083-2` dupes from `handbooks-noningested.yaml` + re-pointed migrator; reframed PCG umbrella as citation-fallback; pinned AIM migrator to canonical edition + orphan cleanup script |
 | 3 | RMH section-tree promotion | ❌ not started | RMH chapter-tree from `RiskMgmtHdbk-TOC.md` |
 | 4 | mtn-flying section-tree promotion (from override) | ✅ shipped (WP-MTN-section-tree) | 12 chapters / 36 sections; markdown-to-manifest parser added to handbooks-extras ingest |
-| 5 | AIH section-tree promotion (chapter-PDF download + extract) | ❌ not started | Per-chapter PDFs available from FAA |
+| 5 | AIH section-tree promotion (chapter-PDF download + extract) | ✅ shipped (WP-AIH) | 18 L1 entries / 155 sections / 246 subsections; replaces whole-doc card |
 | 6 | IFH section-tree promotion | ✅ shipped (WP-IFH-SECTION-TREE) | TOC parsed via new `toc-file-sidecar` strategy; 11 chapters / 587 sections; Section I/II quirk modeled as two L1 sections per chapter |
 | 7 | IPH section-tree promotion | ✅ shipped (WP-IPH-section-tree) | Class A2 chapter-aware ingest with TOC parse from whole-doc PDF pp.12-16; 7 chapters / 84 sections / 228 subsections |
 | 8 | AC section-tree promotion (existing 9) | ❌ not started | Replace whole-doc seeder with section-tree; per-AC TOC parse |

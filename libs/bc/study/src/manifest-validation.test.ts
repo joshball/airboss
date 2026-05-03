@@ -609,7 +609,7 @@ describe('on-disk manifest fixtures (every shipped handbook)', () => {
 		{ slug: 'iph', edition: 'FAA-H-8083-16B', kind: 'whole-doc' },
 		{ slug: 'ifh', edition: 'FAA-H-8083-15B', kind: 'whole-doc' },
 		{ slug: 'risk-management', edition: 'FAA-H-8083-2A', kind: 'whole-doc' },
-		{ slug: 'aviation-instructor', edition: 'FAA-H-8083-9', kind: 'whole-doc' },
+		{ slug: 'aviation-instructor', edition: 'FAA-H-8083-9', kind: 'handbook' },
 	] as const;
 
 	for (const { slug, edition, kind } of HANDBOOK_FIXTURES) {

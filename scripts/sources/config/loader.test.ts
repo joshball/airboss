@@ -36,7 +36,7 @@ describe('loadAcsConfig', () => {
 });
 
 describe('loadHandbooksExtrasConfig', () => {
-	it('loads 5 entries (8083-2, -9, -15, -16, mtn-tips with verified URLs)', () => {
+	it('loads 3 entries (8083-2, -16, mtn-tips with verified URLs)', () => {
 		const ex = loadHandbooksExtrasConfig();
 		// Originally 8 entries from HANDBOOKS_EXTRAS_TARGETS; 4 were dropped on
 		// 2026-04-29 because their canonical URLs returned 404. AMT-G (8083-30)
@@ -44,12 +44,14 @@ describe('loadHandbooksExtrasConfig', () => {
 		// out of scope (maintenance technician corpus, no pilot-training
 		// relevance). 8083-27 (Sport Pilot) and 8083-34 (Risk Management for GA)
 		// remain dropped -- no longer on the FAA aviation handbooks index. The
-		// mountain-flying pamphlet (faa-mtn-tips) was added 2026-05-02 as a
-		// fifth active entry. The verifier catches stale URLs at HEAD time, so
-		// the YAML stays a deterministic source-of-truth.
-		expect(ex.entries).toHaveLength(5);
+		// mountain-flying pamphlet (faa-mtn-tips) was added 2026-05-02. IFH
+		// (8083-15) was promoted to section-tree by WP-IFH-section-tree. AIH
+		// (8083-9) was promoted out of handbooks-extras to the chapter-aware
+		// path on 2026-05-03 (WP-AIH). The verifier catches stale URLs at HEAD
+		// time, so the YAML stays a deterministic source-of-truth.
+		expect(ex.entries).toHaveLength(3);
 		const ids = ex.entries.map((e) => e.doc_id).sort();
-		expect(ids).toEqual(['faa-h-8083-15', 'faa-h-8083-16', 'faa-h-8083-2', 'faa-h-8083-9', 'faa-mtn-tips']);
+		expect(ids).toEqual(['faa-h-8083-16', 'faa-h-8083-2', 'faa-mtn-tips']);
 	});
 });
 

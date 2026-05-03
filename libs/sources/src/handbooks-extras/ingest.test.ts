@@ -127,10 +127,11 @@ describe('DOC_ID_TO_FRIENDLY', () => {
 	it('covers every doc_id in the canonical YAML', () => {
 		// Authoritative list per scripts/sources/config/handbooks-extras.yaml. If
 		// this drifts, ingest.test.ts fails before the live YAML can mismatch.
-		// IFH (faa-h-8083-15) and IPH (faa-h-8083-16) were migrated to the
-		// chapter-aware Class A2 pipeline per WP-IFH-SECTION-TREE and
-		// WP-IPH-section-tree (2026-05-03); they are intentionally not in this list.
-		const expected = ['faa-h-8083-2', 'faa-h-8083-9'];
+		// AIH (faa-h-8083-9), IFH (faa-h-8083-15), and IPH (faa-h-8083-16) were
+		// all migrated to the chapter-aware Class A2 pipeline on 2026-05-03
+		// (WP-AIH / WP-IFH-SECTION-TREE / WP-IPH-section-tree); they are
+		// intentionally not in this list.
+		const expected = ['faa-h-8083-2'];
 		for (const docId of expected) {
 			expect(DOC_ID_TO_FRIENDLY[docId]).toBeDefined();
 		}
@@ -384,8 +385,10 @@ describe('runHandbooksExtrasIngest -- live cache (smoke)', () => {
 			expect(report.ingested).toBe(3);
 			expect(report.skipped).toBe(0);
 			expect(report.promotionBatchId).not.toBeNull();
-			// Each derivative has a manifest + body
-			for (const slug of ['risk-management', 'aviation-instructor', 'tips-mountain-flying']) {
+			// Each derivative has a manifest + body. AIH/IFH/IPH all promoted
+			// to the chapter-aware path on 2026-05-03 (WP-AIH/WP-IFH/WP-IPH);
+			// only RMH and mtn-tips remain in this ingest path.
+			for (const slug of ['risk-management', 'tips-mountain-flying']) {
 				const dir = join(tempDerivative, slug);
 				expect(existsSync(dir)).toBe(true);
 			}
