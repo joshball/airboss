@@ -244,6 +244,69 @@ export interface ExtrasManifestFile extends ManifestFile {
 	readonly primary_cert: CertApplicability | null;
 }
 
+/**
+ * One section row inside `ExtrasSectionTreeManifestFile.sections[]`.
+ *
+ * Distinct from `ManifestSection` (which targets the chapter-aware Python
+ * pipeline that always emits FAA-printed page references) because override-
+ * driven docs may have no per-section page numbers (e.g. mtn-tips, the 1999
+ * scanned pamphlet). Allows `faa_page_start`/`faa_page_end` to be `null`,
+ * matching `handbookManifestSectionSchema` in
+ * `libs/bc/study/src/manifest-validation.ts`.
+ */
+export interface ExtrasSectionRow {
+	readonly level: 'chapter' | 'section' | 'subsection';
+	readonly code: string;
+	readonly ordinal: number;
+	readonly parent_code: string | null;
+	readonly title: string;
+	readonly faa_page_start: string | null;
+	readonly faa_page_end: string | null;
+	readonly source_locator: string;
+	readonly body_path: string;
+	readonly content_hash: string;
+	readonly has_figures: boolean;
+	readonly has_tables: boolean;
+}
+
+/**
+ * Section-tree variant of the handbooks-extras derivative manifest, emitted
+ * when the YAML row's `body_override` markdown carries `## ` chapter headings.
+ * Same fields as `ExtrasManifestFile` minus `body_path` / `body_sha256`
+ * (sections each carry their own per-row body path + content hash) plus a
+ * `figures: []` array required by `sectionTreeManifestSchema`. The downstream
+ * seeder dispatches on `kind: 'handbook'` and routes to `seedSectionTreeManifest`.
+ *
+ * `extraction.section_strategy.kind` is `'override-md'` -- distinct from the
+ * Python pipeline's `'toc'` / `'prompt'` / `'bookmark'` strategies so a
+ * future audit can tell which path produced a given manifest.
+ */
+export interface ExtrasSectionTreeManifestFile {
+	readonly document_slug: string;
+	readonly edition: string;
+	readonly kind: 'handbook';
+	readonly title: string;
+	readonly publisher: string;
+	readonly source_url: string;
+	readonly source_checksum: string;
+	readonly fetched_at: string;
+	readonly sections: readonly ExtrasSectionRow[];
+	readonly figures: readonly unknown[];
+	readonly warnings: readonly unknown[];
+	readonly subjects: readonly AviationTopic[];
+	readonly primary_cert: CertApplicability | null;
+	readonly extraction: {
+		readonly section_strategy: {
+			readonly kind: 'override-md';
+			readonly config: Record<string, unknown>;
+		};
+	};
+	/** Page count carried so the reader can still display "X pages" in the library card. */
+	readonly page_count: number;
+	readonly doc_id: string;
+	readonly faa_edition: string | null;
+}
+
 // ---------------------------------------------------------------------------
 // Corpus-level index
 // ---------------------------------------------------------------------------

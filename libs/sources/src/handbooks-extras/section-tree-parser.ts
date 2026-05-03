@@ -93,7 +93,10 @@ const TITLE_SLUG_MAX_LENGTH = 48;
  * indistinguishable to downstream walkers.
  */
 export function titleSlug(title: string): string {
-	const slug = title.toLowerCase().replace(TITLE_SLUG_PATTERN, '-').replace(/^-+|-+$/g, '');
+	const slug = title
+		.toLowerCase()
+		.replace(TITLE_SLUG_PATTERN, '-')
+		.replace(/^-+|-+$/g, '');
 	return (slug.length > 0 ? slug : 'section').slice(0, TITLE_SLUG_MAX_LENGTH);
 }
 
@@ -145,9 +148,7 @@ export function parseOverrideToSectionTree(markdown: string): ParseResult {
 		throw new OverrideParseError('override has no `# ` document title heading');
 	}
 	if (h1Hits.length > 1) {
-		throw new OverrideParseError(
-			`override has ${h1Hits.length} \`# \` headings; expected exactly one document title`,
-		);
+		throw new OverrideParseError(`override has ${h1Hits.length} \`# \` headings; expected exactly one document title`);
 	}
 	const docTitle = h1Hits[0]?.title ?? '';
 
@@ -238,7 +239,6 @@ export function parseOverrideToSectionTree(markdown: string): ParseResult {
 			}
 			const body = sliceBody(lines, startLine, endLine);
 			chapter.sections.push({ title: h.title, slug: sectionSlug, body });
-			continue;
 		}
 	}
 
