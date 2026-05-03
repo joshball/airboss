@@ -153,7 +153,7 @@ def apply_errata(
 
     applied: list[AppliedSection] = []
     for patch in patches:
-        applied.append(_apply_one_patch(config, errata, patch))
+        applied.append(_apply_one_patch(config, errata, patch, manifest))
 
     applied_at = datetime.now(tz=UTC).isoformat()
     _update_manifest(
@@ -323,6 +323,43 @@ def _load_manifest(manifest_path: Path) -> dict[str, object]:
     return json.loads(manifest_path.read_text(encoding="utf-8"))
 
 
+def _chapter_slug_from_manifest(manifest: dict[str, object], chapter_padded: str) -> str:
+    """Look up the chapter slug for the given 2-digit padded chapter code.
+
+    The manifest stores chapter codes unpadded (`'1'`, not `'01'`); errata
+    patches carry the padded form (`'01'`). We int-compare so both shapes
+    line up. Falls back to `'section'` only if the manifest is missing the
+    chapter -- defensive; the chapter row is guaranteed by the section-tree
+    schema.
+    """
+    sections = manifest.get("sections")
+    if not isinstance(sections, list):
+        return "section"
+    try:
+        target = int(chapter_padded)
+    except ValueError:
+        return "section"
+    for entry in sections:
+        if not isinstance(entry, dict):
+            continue
+        if entry.get("level") != "chapter":
+            continue
+        code = entry.get("code")
+        if not isinstance(code, str):
+            continue
+        try:
+            if int(code) != target:
+                continue
+        except ValueError:
+            continue
+        title = entry.get("title")
+        if not isinstance(title, str):
+            return "section"
+        slug = re.sub(r"[^a-z0-9]+", "-", title.lower()).strip("-")
+        return (slug or "section")[:48]
+    return "section"
+
+
 def _find_manifest_errata_entry(manifest: dict[str, object], errata_id: str) -> dict[str, object] | None:
     raw = manifest.get("errata")
     if not isinstance(raw, list):
@@ -365,9 +402,10 @@ def _apply_one_patch(
     config: HandbookConfig,
     errata: ErrataConfig,
     patch: ErrataPatch,
+    manifest: dict[str, object],
 ) -> AppliedSection:
     """Locate the section, edit its markdown, write the sidecar note."""
-    section_path = _locate_section_markdown(config, patch)
+    section_path = _locate_section_markdown(config, patch, manifest)
     raw = section_path.read_text(encoding="utf-8")
     frontmatter, body = _split_frontmatter(raw)
     section_code = _section_code_from_frontmatter(frontmatter, patch)
@@ -398,7 +436,11 @@ def _apply_one_patch(
     )
 
 
-def _locate_section_markdown(config: HandbookConfig, patch: ErrataPatch) -> Path:
+def _locate_section_markdown(
+    config: HandbookConfig,
+    patch: ErrataPatch,
+    manifest: dict[str, object],
+) -> Path:
     """Find the section .md file matching the patch's chapter + section anchor.
 
     Two-pass: first score every candidate by anchor similarity; then if
@@ -406,7 +448,10 @@ def _locate_section_markdown(config: HandbookConfig, patch: ErrataPatch) -> Path
     whether the patch's `target_page` is contained in the file's
     frontmatter `faa_pages` range.
     """
-    chapter_dir = edition_root(config.document_slug, config.edition) / patch.chapter
+    chapter_slug = _chapter_slug_from_manifest(manifest, patch.chapter)
+    chapter_dir = (
+        edition_root(config.document_slug, config.edition) / f"{patch.chapter}-{chapter_slug}"
+    )
     if not chapter_dir.is_dir():
         raise ErrataApplyError(
             f"Chapter directory not found: {chapter_dir}. Cannot apply patch for "
@@ -427,7 +472,11 @@ def _locate_section_markdown(config: HandbookConfig, patch: ErrataPatch) -> Path
     # anchors so subsection candidates inherit a parent-match bonus.
     md_files: list[tuple[Path, dict[str, object]]] = []
     for md_path in sorted(chapter_dir.glob("*.md")):
-        if md_path.name == "index.md":
+        # Skip the chapter overview file (`00-<chapter-slug>.md`) per the
+        # rename-generic-content-files convention. We pair the structural
+        # `00-` prefix with semantic slug equality so a future chapter that
+        # has a regular section coincidentally numbered `00` is not mis-skipped.
+        if md_path.name.startswith("00-") and md_path.stem.removeprefix("00-") == chapter_slug:
             continue
         if md_path.suffix == ".md" and md_path.stem.endswith(".errata"):
             continue

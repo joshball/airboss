@@ -92,7 +92,7 @@ prompt:
   chapter_text_max_chars: 150000
 
 # AvWX chapter cover pages typeset a "Chapter N, Title" banner that
-# bleeds into the chapter index.md until stripped. Same shape as PHAK /
+# bleeds into the chapter overview body until stripped. Same shape as PHAK /
 # AFH; the strip recognizes the comma form via the broadened regex.
 chapter_cover_strip:
   enabled: true

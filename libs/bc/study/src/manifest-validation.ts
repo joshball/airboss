@@ -90,7 +90,7 @@ export const handbookSectionFrontmatterSchema = z.object({
 	handbook: z.string().regex(DOCUMENT_SLUG_REGEX),
 	edition: z.string().min(1).max(64),
 	chapter_number: z.number().int().nonnegative(),
-	/** NULL on a chapter-level `index.md`; required for sections / subsections. */
+	/** NULL on a chapter-level overview file; required for sections / subsections. */
 	section_number: z.number().int().nonnegative().optional(),
 	subsection_number: z.number().int().nonnegative().optional(),
 	section_title: z.string().min(1),
@@ -341,8 +341,8 @@ export type SectionTreeManifest = z.infer<typeof sectionTreeManifestSchema>;
 
 /**
  * Whole-doc manifest (`kind: 'whole-doc'`). Post-#384 handbooks-extras
- * shape. Body lives in a single file (`document.md`); the seeder produces
- * **one** `reference_section` row at depth 0, level `'document'`.
+ * shape. Body lives in a single file (`<document_slug>-<edition>.md`); the
+ * seeder produces **one** `reference_section` row at depth 0, level `'document'`.
  *
  * No `sections[]` or `figures[]` arrays. Subjects + primary_cert are
  * optional here (they can ride on the YAML seed row instead).

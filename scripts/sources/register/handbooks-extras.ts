@@ -18,7 +18,8 @@ import { runIngestCli } from '@ab/sources/handbooks-extras';
 export const HELP = `bun run sources register handbooks-extras [--cache=<path>] [--out=<path>]
 
   Walk the handbooks-extras cache (default $AIRBOSS_HANDBOOK_CACHE/handbooks/),
-  extract each whole-doc PDF, write per-doc manifest.json + document.md under
+  extract each whole-doc PDF, write per-doc manifest.json +
+  <friendly-slug>-<editionSlug>.md under
   <repo>/handbooks/<friendly-slug>/<faa-dir>/, and register entries into the
   @ab/sources registry. The downloader populates the cache; this command
   reads it and is idempotent.

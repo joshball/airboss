@@ -72,6 +72,13 @@ def write_outputs(
     manifest_sections: list[dict[str, object]] = []
     sections_written = 0
 
+    # Chapter-slug lookup: non-chapter nodes need their parent chapter's slug
+    # to produce `<NN>-<chapter-slug>/` directory names matching what the
+    # rename-generic-content-files migration put on disk.
+    chapter_slug_by_code: dict[str, str] = {
+        node.code: _title_slug(node.title) for node in outline_nodes if node.level == "chapter"
+    }
+
     for node in outline_nodes:
         body = bodies_by_code.get(node.code)
         if body is None:
@@ -84,7 +91,7 @@ def write_outputs(
         section_tables.sort(key=lambda t: t.ordinal)
 
         markdown_text = _compose_markdown(config, node, body, section_figs, section_tables)
-        out_path = _resolve_output_path(root, node)
+        out_path = _resolve_output_path(root, node, chapter_slug_by_code)
         ensure_dir(out_path.parent)
         out_path.write_text(markdown_text, encoding="utf-8")
 
@@ -174,16 +181,32 @@ def write_outputs(
     )
 
 
-def _resolve_output_path(root: Path, node: OutlineNode) -> Path:
-    """`<root>/<chapter>/index.md` for chapters; `<root>/<chapter>/<section>.md` for the rest."""
+def _resolve_output_path(
+    root: Path,
+    node: OutlineNode,
+    chapter_slug_by_code: dict[str, str],
+) -> Path:
+    """Compute the on-disk path per the rename-generic-content-files convention.
+
+    Chapter overview: `<root>/<NN>-<chapter-slug>/00-<chapter-slug>.md`.
+    Section / subsection: `<root>/<NN>-<chapter-slug>/<MM[-PP]>-<title-slug>.md`.
+
+    The chapter slug is looked up from `chapter_slug_by_code`, keyed on the
+    bare chapter code (`'1'`, not `'01'`). Falls back to `'section'` only if
+    a non-chapter node has no recorded parent chapter (defensive; outline
+    builder guarantees one).
+    """
     code_parts = node.code.split(".")
-    chapter = code_parts[0].zfill(2)
+    chapter_code = code_parts[0]
+    chapter = chapter_code.zfill(2)
+    chapter_slug = chapter_slug_by_code.get(chapter_code, "section")
+    chapter_dir_name = f"{chapter}-{chapter_slug}"
     if node.level == "chapter":
-        return root / chapter / "index.md"
+        return root / chapter_dir_name / f"00-{chapter_slug}.md"
     section_filename_parts = code_parts[1:]
     file_slug = "-".join(p.zfill(2) for p in section_filename_parts)
     title_slug = _title_slug(node.title)
-    return root / chapter / f"{file_slug}-{title_slug}.md"
+    return root / chapter_dir_name / f"{file_slug}-{title_slug}.md"
 
 
 def _source_locator(config: HandbookConfig, node: OutlineNode, body: SectionBody) -> str:
@@ -212,7 +235,7 @@ def _source_locator(config: HandbookConfig, node: OutlineNode, body: SectionBody
 def _strip_cover_residue(body_md: str, chapter_title: str, max_lines: int) -> str:
     """Drop chapter-cover boilerplate from a chapter's body markdown.
 
-    Two FAA cover-page styles bleed into the chapter index.md:
+    Two FAA cover-page styles bleed into the chapter overview body:
 
     - **PHAK style** -- chapter title repeated, a `Chapter N` sentinel, and
       an `Introduction` header before the first body paragraph.
