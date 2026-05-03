@@ -74,14 +74,14 @@ For the handbook corpus this means:
 ```text
 # In the repo (committed):
 handbooks/phak/8083-25C/
-  manifest.json                                 <- inline (audit metadata: source_url, source_sha256, fetched_at)
-  12/
-    index.md                                    <- inline (chapter overview)
-    03-atmospheric-pressure.md                  <- inline (section markdown)
+  manifest.json                                                <- inline (audit metadata: source_url, source_sha256, fetched_at)
+  12-weather-theory/
+    00-weather-theory.md                                       <- inline (chapter overview)
+    03-atmospheric-pressure.md                                 <- inline (section markdown)
   figures/
-    fig-12-7-pressure-altitude.png              <- inline
+    fig-12-7-pressure-altitude.png                             <- inline
   tables/
-    tbl-12-3-density-altitude.html              <- inline
+    tbl-12-3-density-altitude.html                             <- inline
 
 # On Joshua's laptop only (cached, gitignored):
 ~/Documents/airboss-handbook-cache/handbooks/phak/8083-25C/

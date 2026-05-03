@@ -63,7 +63,7 @@ PHAK FAA-H-8083-25C run produced **850 rows** (17 chapter + 418 L1 sections + 41
 
 - **Sub-headings not in the TOC.** Some chapters have prose-level sub-headings (smaller bold text) that the TOC doesn't list. The TOC strategy can't see them. Estimated impact: <5% of body content; not load-bearing for citation precision in v1.
 - **TOC depth > 3.** Some FAA TOCs indent four levels (e.g., "Hazards" under "Thunderstorms" under "Fronts" under "Weather Systems" in chapter 12). The schema's CHECK constraint on `handbook_section.code` (`^[0-9]+(\.[0-9]+){0,2}$`) caps depth at 3. Both strategies clamp deeper indents to L2 under the nearest L1 ancestor. If we ever need 4-level support, that's an ADR + schema migration; today it's not blocking any user-facing behavior.
-- **Cover-page residue.** Each chapter's first page repeats the chapter title + "Chapter N" + sometimes a standalone "Introduction" heading before the body proper. The pipeline's `chapter_cover_strip` config strips these from chapter `index.md` (effective on all 17 PHAK chapters). Tunable via `phak.yaml`.
+- **Cover-page residue.** Each chapter's first page repeats the chapter title + "Chapter N" + sometimes a standalone "Introduction" heading before the body proper. The pipeline's `chapter_cover_strip` config strips these from the chapter overview body (`00-<chapter-slug>.md`) (effective on all 17 PHAK chapters). Tunable via `phak.yaml`.
 - **Figure captions in body.** Some FAA handbooks style figure captions in a way that resembles a section heading. The font-fingerprint verification step catches most; surviving false positives appear as "ghost sections" with no body content. Manifest warnings flag them.
 
 ### When to fall back

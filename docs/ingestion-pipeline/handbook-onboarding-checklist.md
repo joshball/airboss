@@ -123,7 +123,7 @@ Most warnings are non-fatal but worth reading. Systematic patterns hint at confi
 
 ### Step 6. Spot-check chapters
 
-Pick 3 chapters. Open `$REPO_ROOT/handbooks/<doc>/<edition>/<NN>/index.md` and a per-section markdown. Verify the body text looks correct (not garbled, not truncated, not empty).
+Pick 3 chapters. Open `$REPO_ROOT/handbooks/<doc>/<edition>/<NN>-<chapter-slug>/00-<chapter-slug>.md` and a per-section markdown. Verify the body text looks correct (not garbled, not truncated, not empty).
 
 ### Step 7. Run the LLM strategy if appropriate
 

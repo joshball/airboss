@@ -207,13 +207,13 @@ repo**; extracted derivatives stay inline.
 ```text
 # In the repo (committed inline derivatives):
 handbooks/<doc>/<edition>/
-  manifest.json                (chapters, sections, figures, hashes, warnings, extraction metadata)
-  <chapter>/
-    index.md                   (chapter overview)
-    <section>.md               (per-section markdown + frontmatter)
-    _chapter_plaintext.txt     (prompt-flow sidecar; only when strategy=prompt|compare)
-    _llm_section_tree.json     (prompt-flow output, written by sub-agents)
-    _model_self_report.txt     (prompt-flow output, one line; e.g. "claude-opus-4-7")
+  manifest.json                                 (chapters, sections, figures, hashes, warnings, extraction metadata)
+  <NN>-<chapter-slug>/
+    00-<chapter-slug>.md                        (chapter overview)
+    <NN>-<MM>-<section-slug>.md                 (per-section markdown + frontmatter)
+    _chapter_plaintext.txt                      (prompt-flow sidecar; only when strategy=prompt|compare)
+    _llm_section_tree.json                      (prompt-flow output, written by sub-agents)
+    _model_self_report.txt                      (prompt-flow output, one line; e.g. "claude-opus-4-7")
   figures/
     fig-<chapter>-<n>-<slug>.png
   tables/

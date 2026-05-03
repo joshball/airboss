@@ -33,7 +33,7 @@ Locator scheme: `airboss-ref:handbooks/<friendly-slug>/<edition-slug>` -- piggy-
 Implementation:
 
 - New `libs/sources/src/handbooks-extras/` lib module:
-  - `ingest.ts` -- walks the YAML, reads cached PDFs, extracts text, writes per-doc manifest + `document.md` derivatives, registers `SourceEntry` + `Edition` per doc, atomic batch promotion to `accepted`.
+  - `ingest.ts` -- walks the YAML, reads cached PDFs, extracts text, writes per-doc manifest + `<friendly-slug>-<editionSlug>.md` body derivatives, registers `SourceEntry` + `Edition` per doc, atomic batch promotion to `accepted`.
   - `derivative-reader.ts` -- types + readers for the YAML inventory, the cache-side downloader manifest, and the corpus-level index.
   - `index.ts` -- public surface (no resolver registration; reuses `handbooks`).
   - `ingest.test.ts` -- unit tests against fake caches plus a smoke test against the live developer cache.
@@ -57,7 +57,7 @@ Implementation:
 - `bun run sources register handbooks-extras` reports `scanned=6 ingested=6 skipped=0` against a fully-cached developer machine, OR an explicit per-doc skip reason citing missing cache for any unfetched docs.
 - Re-running the same command reports `ingested=0 alreadyAccepted=6` (idempotent).
 - Each ingested handbook yields:
-  - `handbooks/<friendly-slug>/<faa-dir>/document.md` -- whole-doc body markdown.
+  - `handbooks/<friendly-slug>/<faa-dir>/<friendly-slug>-<editionSlug>.md` -- whole-doc body markdown.
   - `handbooks/<friendly-slug>/<faa-dir>/manifest.json` -- carries `document_slug`, `edition`, `body_path`, `body_sha256`, `page_count`, `source_url`, `source_checksum`, `fetched_at`, `doc_id`, `faa_edition`, plus an empty `sections[]`.
 - Corpus-level audit index at `handbooks/handbooks-extras-index.json` lists one entry per ingested handbook.
 - Six new entries appear in the runtime `SOURCES` table under the `handbooks` corpus, IDs of the form `airboss-ref:handbooks/<friendly-slug>/<edition-slug>`.

@@ -34,7 +34,7 @@ Each manifest is a flat whole-doc shape:
   "source_sha256": "...",
   "fetched_at": "2026-04-27T21:20:43.205Z",
   "page_count": 49,
-  "body_path": "ac/61-98/d/document.md",
+  "body_path": "ac/61-98/d/ac-61-98-d.md",
   "body_sha256": "...",
   "sections": [],
   "changes": []

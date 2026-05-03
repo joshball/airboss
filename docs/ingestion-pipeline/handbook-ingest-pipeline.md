@@ -38,7 +38,7 @@ FAA URL  ->  cached source bytes  ->  outline  ->  per-section markdown
 The output side falls into three trees:
 
 1. **Source cache** (`$HANDBOOK_CACHE_ROOT`, gitignored, developer-local). Source PDFs and any chapter / errata variants. One directory per corpus: `handbooks/`, `ac/`, `acs/`, `aim/`, `regulations/`. Per-corpus or per-edition `manifest.json` records what's there.
-2. **Inline derivative tree** (`$REPO_ROOT/handbooks/<doc>/<edition>/`, committed to git). Per-chapter directories with `index.md`, per-section markdown, figure PNGs, table HTML, and a `manifest.json` describing the extraction.
+2. **Inline derivative tree** (`$REPO_ROOT/handbooks/<doc>/<edition>/`, committed to git). Per-chapter directories named `<NN>-<chapter-slug>/` containing a chapter overview (`00-<chapter-slug>.md`), per-section markdown, figure PNGs, table HTML, and a `manifest.json` describing the extraction.
 3. **Run artifacts** (`$REPO_ROOT/tools/handbook-ingest/prompts-out/<doc>/<edition>/`, committed). Prompt sets emitted for the no-API-key LLM flow, plus archived snapshots per run.
 
 Comparison reports land at `$REPO_ROOT/tools/handbook-ingest/reports/`.
@@ -131,11 +131,11 @@ Sub-phases:
 
    ```text
    $REPO_ROOT/handbooks/<doc>/<edition>/
-     <NN>/
-       index.md                    # chapter intro
+     <NN>-<chapter-slug>/
+       00-<chapter-slug>.md        # chapter intro
        <ordinal>-<slug>.md         # per-section markdown
-       figures/                    # PNGs
-       tables/                     # HTML fragments
+     figures/                      # PNGs (corpus-level, not nested per-chapter)
+     tables/                       # HTML fragments (corpus-level)
      manifest.json                 # records source SHA, warnings, derivative shape
    ```
 

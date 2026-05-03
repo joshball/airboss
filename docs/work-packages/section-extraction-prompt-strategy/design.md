@@ -37,7 +37,7 @@ Replace the API-driven LLM section-extraction path (`sections_via_llm.py` + the 
 
 ## Constraints
 
-- **`handbooks/<doc>/<edition>/` stays the artifact home for chapter content.** Chapter dirs already hold `index.md`, `<NN>-*.md`, figures, tables. The chapter-plaintext sidecar (`_chapter_plaintext.txt`) and section-tree JSON (`_llm_section_tree.json`) live next to those, named with a leading underscore so the seed/normalize pass ignores them.
+- **`handbooks/<doc>/<edition>/` stays the artifact home for chapter content.** Chapter dirs already hold `00-<chapter-slug>.md`, `<NN>-*.md`, figures, tables. The chapter-plaintext sidecar (`_chapter_plaintext.txt`) and section-tree JSON (`_llm_section_tree.json`) live next to those, named with a leading underscore so the seed/normalize pass ignores them.
 - **`prompts-out/` is committed, not gitignored.** It's audit material.
 - **Templates are pure substitution.** Per-chapter prompts derive from a chapter template by substituting title/sidecar-path/page-range; orchestrator from an orchestrator template; parameters/contract are copied verbatim. No conditional logic per handbook.
 - **CLI verbosity is opinionated.** Every section header in the output explains WHAT/WHY/HOW. No silent steps.
@@ -118,8 +118,8 @@ handbooks/<doc>/<edition>/<NN>/
                                     #     extracted from whole-doc PDF page range, capped at
                                     #     chapter_text_max_chars (per-handbook in YAML).
   _llm_section_tree.json            # written by the agent that processes the chapter prompt
-  index.md                          # (existing)
-  <NN>-*.md                         # (existing)
+  00-<chapter-slug>.md              # (existing chapter overview)
+  <NN>-*.md                         # (existing per-section markdown)
 ```
 
 **Why these two files live with the chapter, not under `prompts-out/`:** they're chapter-scoped artifacts (sidecar bound to chapter content; JSON bound to chapter content). Putting them under `prompts-out/<run-id>/` would force the agent prompts to embed run-ids in paths, which means re-runs invalidate everything and the `manifest.json` consumer has to know the latest run-id. By keeping them at chapter scope, every consumer (manifest, compare pipeline, future strategies) reads from a stable location.

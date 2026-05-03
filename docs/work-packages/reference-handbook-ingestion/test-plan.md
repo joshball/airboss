@@ -26,10 +26,10 @@ review_status: pending
 `tests/fixtures/handbooks/phak-fixture/` contains:
 
 - `manifest.json` -- 1 chapter (`code: '1'`) with 2 sections (`1.1`, `1.2`) and 1 subsection (`1.2.1`); `source_url` set; `fetched_at` set.
-- `01/index.md` -- chapter body
-- `01/01-introduction.md` -- section 1.1 body
-- `01/02-history.md` -- section 1.2 body
-- `01/02-01-mail-route.md` -- subsection 1.2.1 body
+- `01-introduction-to-flying/00-introduction-to-flying.md` -- chapter body
+- `01-introduction-to-flying/01-introduction.md` -- section 1.1 body
+- `01-introduction-to-flying/02-history-of-flight.md` -- section 1.2 body
+- `01-introduction-to-flying/02-01-transcontinental-air-mail-route.md` -- subsection 1.2.1 body
 
 The fixture is small enough that ingest runs in milliseconds and tests can exercise every path without a real handbook.
 
