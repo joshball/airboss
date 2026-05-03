@@ -14,6 +14,7 @@ TypeScript half of the repo (one file per concern).
 from __future__ import annotations
 
 from .afh import AfhHandbook
+from .aviation_instructor import AviationInstructorHandbook
 from .avwx import AvwxHandbook
 from .base import (
     ErrataConfig,
@@ -28,6 +29,7 @@ REGISTRY: dict[str, type[HandbookPlugin]] = {
     'phak': PhakHandbook,
     'afh': AfhHandbook,
     'avwx': AvwxHandbook,
+    'aviation-instructor': AviationInstructorHandbook,
 }
 
 
@@ -58,4 +60,5 @@ __all__ = [
     'PhakHandbook',
     'AfhHandbook',
     'AvwxHandbook',
+    'AviationInstructorHandbook',
 ]
