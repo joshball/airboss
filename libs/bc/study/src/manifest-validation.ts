@@ -468,10 +468,68 @@ const AC_REVISION_REGEX = /^[a-z]$/;
 const AC_DOC_SLUG_REGEX = /^[0-9]+(?:[-.][0-9]+)*$/;
 
 /**
+ * Level vocabulary for AC section-tree manifests (WP-AC-PROMOTE). Inline
+ * rather than imported from constants so it stays scoped to this shape --
+ * other corpora's manifests use different vocabulary.
+ */
+const AC_SECTION_TREE_LEVELS = ['chapter', 'section', 'subsection'] as const;
+
+/**
+ * AC section code shape. Three forms:
+ *   - chapter integer (`'1'`, `'42'`)
+ *   - dotted decimal (`'1.1'`, `'1.1.1'`)
+ *   - appendix container (`'appendix-a'`, `'appendix-1'`)
+ *
+ * The appendix prefix lets the reader render appendix-specific chrome
+ * without ambiguating against numeric chapter codes. Codes like
+ * `'appendix-a.1'` are reserved for future depth in appendix bodies but
+ * are accepted by this regex for forward compatibility.
+ */
+const AC_SECTION_CODE_REGEX = /^(?:\d+(?:\.\d+){0,2}|appendix-[a-z0-9]+(?:\.\d+(?:\.\d+)?)?)$/;
+
+/**
+ * One section row inside an AC manifest's `sections[]` (WP-AC-PROMOTE).
+ * Mirrors the `handbookManifestSectionSchema` shape so both corpora share
+ * a section-tree contract; the seeder dispatches on `kind: 'ac'` and walks
+ * the array in document order.
+ */
+export const acManifestSectionSchema = z.object({
+	level: z.enum(AC_SECTION_TREE_LEVELS),
+	code: z.string().regex(AC_SECTION_CODE_REGEX),
+	ordinal: z.number().int().nonnegative(),
+	parent_code: z.string().regex(AC_SECTION_CODE_REGEX).nullable(),
+	title: z.string().min(1),
+	/**
+	 * FAA-printed page references where available. ACs frequently lack a
+	 * stable printed page number per chapter (some run sequentially through
+	 * the doc), so both fields are nullable.
+	 */
+	faa_page_start: z.string().min(1).nullable(),
+	faa_page_end: z.string().min(1).nullable(),
+	source_locator: z.string().min(1),
+	/** Repo-relative path to the per-section markdown file. */
+	body_path: selfDescribingPath,
+	/** SHA-256 hex digest of the markdown body file. */
+	content_hash: z.string().regex(/^[0-9a-f]{64}$/i),
+});
+export type AcManifestSection = z.infer<typeof acManifestSectionSchema>;
+
+/**
  * AC manifest (`kind: 'ac'`). One per `(doc_slug, revision)` pair under
- * `<repo>/ac/<doc_slug>/<revision>/manifest.json`. The seed adapter consumes
- * the whole-document body (`body_path`) and produces ONE `reference_section`
- * row at depth 0, level `'circular'`, code `'1'`.
+ * `<repo>/ac/<doc_slug>/<revision>/manifest.json`. The seed adapter
+ * dispatches on `sections[].length`:
+ *
+ *   - `sections === []`  -> whole-doc behavior (preserved). The `body_path`
+ *                          becomes a single `reference_section` row at
+ *                          depth 0, level `'circular'`, code `'1'`.
+ *   - `sections.length > 0` -> section-tree behavior (WP-AC-PROMOTE). The
+ *                              `body_path` is still recorded for audit but
+ *                              the seeder writes one row per `sections[]`
+ *                              entry into the chapter / section / subsection
+ *                              tree. The CIRCULAR root row is replaced with
+ *                              the chapter rows; the manifest's `body_sha256`
+ *                              tracks the full document body for change
+ *                              detection.
  *
  * Distinct from the `whole-doc` shape because AC manifests carry a different
  * vocabulary (`doc_slug`/`revision` vs `document_slug`/`edition`) and a
@@ -479,11 +537,6 @@ const AC_DOC_SLUG_REGEX = /^[0-9]+(?:[-.][0-9]+)*$/;
  * NOT carried on the manifest -- those live on the YAML row in
  * `course/references/advisory-circulars.yaml` and survive seed via
  * `upsertReference`'s null-defaulting on conflict.
- *
- * `sections[]` and `changes[]` are validated as arrays of unknown today; AC
- * section + change extraction is a follow-up WP. The fields are required
- * (with default empty array) so the writer always emits them and forward-
- * compatibility plumbing stays simple.
  */
 export const acManifestSchema = z.object({
 	kind: z.literal('ac'),
@@ -504,7 +557,7 @@ export const acManifestSchema = z.object({
 	page_count: z.number().int().positive(),
 	body_path: selfDescribingPath,
 	body_sha256: z.string().regex(/^[0-9a-f]{64}$/i),
-	sections: z.array(z.unknown()).default([]),
+	sections: z.array(acManifestSectionSchema).default([]),
 	changes: z.array(z.unknown()).default([]),
 });
 export type AcManifest = z.infer<typeof acManifestSchema>;

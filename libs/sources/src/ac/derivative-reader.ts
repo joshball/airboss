@@ -61,11 +61,23 @@ export interface AcManifestFile {
 	readonly changes: readonly AcManifestChange[];
 }
 
+/**
+ * One section row inside an AC manifest's `sections[]`. Mirrors the
+ * handbook section shape so the manifest writer + seeder share a contract;
+ * see `acManifestSectionSchema` in `libs/bc/study/src/manifest-validation.ts`
+ * for the authoritative validator.
+ */
 export interface AcManifestSection {
-	readonly section: string;
+	readonly level: 'chapter' | 'section' | 'subsection';
+	readonly code: string;
+	readonly ordinal: number;
+	readonly parent_code: string | null;
 	readonly title: string;
+	readonly faa_page_start: string | null;
+	readonly faa_page_end: string | null;
+	readonly source_locator: string;
 	readonly body_path: string;
-	readonly body_sha256: string;
+	readonly content_hash: string;
 }
 
 export interface AcManifestChange {

@@ -1,0 +1,203 @@
+19.6   Hazards. A thunderstorm can pack just about every aviation weather hazard into one
+       vicious bundle. These hazards include: lightning, adverse winds, downbursts, turbulence,
+       icing, hail, rapid altimeter changes, static electricity, and tornadoes.
+
+19.6.1 Lightning. Every thunderstorm produces lightning and thunder by definition. Lightning
+       is a visible electrical discharge produced by a thunderstorm. The discharge may occur
+       within or between clouds, between the cloud and air, between a cloud and the ground,
+       or between the ground and a cloud.
+
+       Lightning can damage or disable an aircraft. It can puncture the skin of an aircraft. It can
+       damage communication and electronic navigational equipment. Nearby lightning can
+       blind the pilot, rendering him or her momentarily unable to navigate either by instrument
+       or by visual reference. Nearby lightning can also induce permanent errors in the magnetic
+       compass. Lightning discharges, even distant ones, can disrupt radio communications
+       on low and medium frequencies. Lightning has been suspected of igniting fuel vapors,
+       causing explosion; however, serious accidents due to lightning strikes are extremely rare.
+
+19.6.2 Adverse Wind. Adverse winds are always found within thunderstorms and often many
+       miles away from the precipitation area. Crosswinds, gusts, and variable winds/sudden
+       wind shifts can lead to a crash during takeoffs, approaches, and landings. The area along
+       and immediately behind the gust front is particularly dangerous because this is where
+       rapid and sometimes drastic changes in surface winds occur.
+
+19.6.3 Downburst. Shower and thunderstorm cells sometimes produce intense downdrafts called
+       downbursts that create strong, often damaging winds. Downbursts (see Figure 19-7) can
+       create hazardous conditions for pilots and have been responsible for many low-level wind
+       shear accidents. Smaller, shorter-lived downbursts are called microbursts.
+
+       A downburst is especially dangerous to airplanes when it is encountered when climbing
+       from takeoff or approaching to land. During this phase, the aircraft is operating
+       at relatively slow speeds. A major change of wind velocity can lead to loss of lift and
+       a crash.
+
+
+                                              19-6
+
+8/23/16                                                                              AC 00-6B
+
+
+                            Figure 19-7. Downburst Life Cycle
+
+
+      A microburst is particularly dangerous during landing if the pilot has reduced power and
+      lowered the nose in response to the headwind shear (see Figure 19-8). This leaves the
+      aircraft in a nose-low, power-low configuration when the tailwind shear occurs, which
+      makes recovery more difficult. It can cause the airplane to stall or land short of the
+      runway.
+
+                           Figure 19-8. Landing in a Microburst
+
+
+                                            19-7
+
+8/23/16                                                                                AC 00-6B
+
+
+       Pilots should be alert for indications of a microburst early in the approach phase, and
+       ready to initiate a missed approach at the first indication. However, it may be impossible
+       to recover from a microburst encounter at low altitude.
+
+19.6.4 Turbulence. Turbulence is present in all thunderstorms. Severe or extreme turbulence
+       is common. Gust loads can be severe enough to stall an aircraft at maneuvering speed
+       or to cause structural damage at cruising speed. The strongest turbulence occurs with
+       shear between updrafts and downdrafts. Outside the cumulonimbus cloud, turbulence has
+       been encountered several thousand feet above, and 20 miles laterally from, a severe
+       storm.
+
+       The wind-shear zone between the gust front and surrounding air is very turbulent
+       airspace. Oftentimes, the surface position of the gust front is denoted by a line of dust
+       or debris along the ground, or a line of spray along bodies of water. Sometimes the
+       gust front shear zone is denoted by a shelf cloud (see Figure 19-9), which forms as warm,
+       moist air is lifted by the gust front. Shelf clouds are most common with multicell line
+       thunderstorms.
+
+                        Figure 19-9. Thunderstorm with Shelf Cloud
+
+
+19.6.5 Icing. Thunderstorms produce abundant supercooled liquid water above the freezing
+       level. When temperature in the upward current cools to about -15 °C, much of the
+       remaining water vapor sublimates as ice crystals; and above this level, the amount
+       of supercooled water decreases. However, supercooled water can exist at temperatures
+       as cold as -40 °C in the presence of vigorous upward vertical motion, such
+       as in a thunderstorm updraft.
+
+
+                                              19-8
+
+8/23/16                                                                                  AC 00-6B
+
+
+       Supercooled water freezes on impact with an aircraft. Clear icing can occur at any
+       altitude above the freezing level, but at high levels, icing may be rime or mixed rime and
+       clear. The abundance of supercooled water makes clear icing very rapid between 0 °C
+       and -15 °C, and encounters can be frequent in a cluster of cells. Thunderstorm icing can
+       be extremely hazardous.
+
+19.6.6 Hail. Hail is precipitation in the form of balls or other irregular lumps of ice produced
+       by thunderstorms. Thunderstorms that are characterized by strong updrafts, large
+       supercooled liquid water contents, large cloud-drop sizes, and great vertical height are
+       favorable to hail formation.
+
+       An individual unit of hail is called a hailstone. Hailstones can range in size from a pea
+       (0.25 inch diameter) to larger than a softball (4.5 inch diameter). Hailstones that are
+       3/4 inch in diameter and larger can cause significant damage to aircraft and make
+       it difficult to control. A hailstone was collected at Vivian, South Dakota,
+       on July 23, 2010, that measured 8 inches in diameter, 18.62 inches in circumference, and
+       weighed 1.93 pounds (see Figure 19-10).
+
+                    Figure 19-10. Vivian, South Dakota Record Hailstone
+
+
+       Hail is most frequently found in the interior of continents within the mid-latitudes and
+       generally confined to higher elevations within the tropics. In the United States, hail
+       is most common across the Great Plains region east of the Rocky Mountains. Hail is more
+       common aloft and at higher elevations because the stones begin to melt when they fall
+       below the freezing level, and the smaller stones may melt into raindrops before they
+       reach the surface.
+
+
+                                               19-9
+
+8/23/16                                                                                   AC 00-6B
+
+
+       When viewed from the air, it is evident that hail falls in paths known as hail swaths. They
+       can range in size from a few acres to an area 10 miles wide and 100 miles long. Piles
+       of hail in hail swaths have been deep enough to require a snow plow to remove them, and
+       occasionally hail drifts have been reported.
+
+19.6.7 Rapid Altimeter Changes. Pressure usually falls rapidly with the approach
+       of a thunderstorm, then rises sharply with gust frontal passage and arrival of heavy rain
+       showers in the cold downdraft, falling back to normal as the storm moves away. This
+       cycle of pressure change may occur in as little as 15 minutes.
+
+19.6.8 Static Electricity. Static electricity, a steady, high level of noise in radio receivers,
+       is caused by intense corona discharges from sharp metallic points and edges of flying
+       aircraft. It is encountered often in the vicinity of thunderstorms. When an aircraft flies
+       through clouds, precipitation, or a concentration of solid particles (e.g., ice, sand, or
+       dust), it accumulates a charge of static electricity. The electricity discharges onto a
+       nearby surface or into the air, causing a noisy disturbance at lower frequencies.
+
+       The corona discharge is weakly luminous and may be seen at night. Although it has
+       a rather eerie appearance, it is harmless. It was named “St. Elmo’s Fire”
+       by Mediterranean sailors, who saw the brushy discharge at the top of ship masts.
+
+19.6.9 Tornado. A tornado is a violently rotating column of air in contact with the ground, either
+       pendant from a cumuliform cloud or underneath a cumuliform cloud, and often (but not
+       always) visible as a funnel cloud. When tornadoes do occur without any visible funnel
+       cloud, debris at the surface is usually the indication of the existence of an intense
+       circulation in contact with the ground. A waterspout is any tornado occurring over a body
+       of water.
+
+       Tornadoes can occur almost anywhere in the world, but are most common in the central
+       and eastern United States during spring afternoons and evenings. They typically last only
+       a few minutes and travel a few miles, but can persist for more than 90 minutes and track
+       more than 100 miles in extreme cases.
+
+       On a local scale, the tornado is the most intense of all atmospheric circulations. Its vortex
+       is typically a few hundred yards in diameter, but can range in width from less than
+       10 yards to over 2 miles. Wind speeds are typically estimated on the basis of wind
+       damage using the Enhanced Fujita Scale (Enhanced F Scale) (see Table 19-1).
+
+
+                                               19-10
+
+8/23/16                                                                                                          AC 00-6B
+
+
+          Table 19-1. Enhanced Fujita Scale (Enhanced F Scale) for Tornado Damage
+
+                                      3 Second Wind Gust
+  EF-Rating            Class                                              Description           Relative Frequency
+                                         mph             km/h
+
+     EF-0              Weak             65-85          105-137                 Gale                       53.5%
+
+     EF-1              Weak            86-110          138-177                Weak                        31.6%
+
+     EF-2              Strong         111-135          178-217               Strong                       10.7%
+
+     EF-3              Strong         136-165          218-266               Severe                        3.4%
+
+     EF-4             Violent         166-200          267-322            Devastating                      0.7%
+
+     EF-5             Violent           >200              >322             Incredible                     <0.1%
+
+ Note: The Enhanced F Scale is a set of wind estimates (not measurements) based on damage. The 3 second gust is not the
+ same wind as in METAR/SPECI surface observations.
+ Note: Confirmed tornadoes with no reported damage (i.e., those that remain in open fields) are always rated EF-0.
+
+
+        Over 80 percent of all U.S. tornadoes are produced by supercell thunderstorms. Multiple
+        tornado occurrences associated with a particular large-scale weather system is termed
+        a tornado outbreak. On rare occasions, one supercell can produce multiple tornadoes over
+        many hours.
+
+        An aircraft entering a tornado is almost certain to suffer structural damage. The tornado
+        vortex has been documented to extend to the cloud top in violent tornadoes.
+
+
+                                                           19-11
+
+8/23/16                                                                                 AC 00-6B

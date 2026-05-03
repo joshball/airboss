@@ -1,0 +1,1 @@
+10.5.2 The minimum period authorized to present a core topic lesson is 45 minutes.

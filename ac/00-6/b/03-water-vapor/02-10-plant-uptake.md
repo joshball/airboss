@@ -1,0 +1,1 @@
+3.2.10 Plant Uptake. Plant uptake is water taken from the groundwater flow and soil moisture.
