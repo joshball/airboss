@@ -115,7 +115,7 @@ const VALID_WHOLE_DOC = {
 	publisher: 'FAA',
 	source_url: 'https://www.faa.gov/risk-mgmt.pdf',
 	fetched_at: '2026-04-26T00:00:00.000+00:00',
-	body_path: 'handbooks/risk-management/FAA-H-8083-2A/risk-management-8083-2A.md',
+	body_path: 'handbooks/risk-management/FAA-H-8083-2A/risk-management-FAA-H-8083-2A.md',
 	body_sha256: 'b'.repeat(64),
 	page_count: 80,
 	doc_id: 'faa-h-8083-2',

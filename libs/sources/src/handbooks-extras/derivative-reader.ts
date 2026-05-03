@@ -13,7 +13,7 @@
  *                             read `primary` here for source_url + sha)
  *
  *   In repo derivatives (`<repo>/handbooks/<friendly-slug>/<faa-dir>/`):
- *     - `<friendly-slug>-<editionSlug>.md`  full whole-doc body markdown
+ *     - `<friendly-slug>-<faaDir>.md`       full whole-doc body markdown
  *     - `manifest.json`                     `ExtrasManifestFile` extends the chapter-aware
  *                                           `ManifestFile` with `body_path` + empty
  *                                           `sections[]` so the existing handbooks
@@ -58,8 +58,8 @@ export interface ExtrasYamlEntry {
 	 * `pdftotext` extraction. Use for whole-doc handbooks where OCR output
 	 * is too poor to be useful (e.g. older scanned pamphlets). The PDF still
 	 * provides `page_count` and the cache manifest still tracks the source
-	 * bytes, but the produced `document.md` is the override file's content
-	 * verbatim.
+	 * bytes, but the produced `<slug>-<faaDir>.md` body file is the override
+	 * file's content verbatim.
 	 */
 	readonly body_override?: string;
 	/**

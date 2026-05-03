@@ -49,7 +49,7 @@ The pamphlet exposes one assumption in the handbooks substrate: the `EDITION_PAT
 - `libs/sources/src/handbooks/resolver.ts` -- one entry in `HANDBOOK_DOC_EDITIONS`.
 - `libs/sources/src/handbooks/url.ts` -- one entry in `HANDBOOK_LIVE_URLS`.
 - Cache: `~/Documents/airboss-handbook-cache/handbooks/faa-mtn-tips/faa-mtn-tips.pdf` + `manifest.json` (created by the fetch step).
-- Inline derivative: `handbooks/tips-mountain-flying/MTN-2003/tips-mountain-flying-mtn-2003.md` + `manifest.json` (created by `bun run sources register --include-handbooks-extras`).
+- Inline derivative: `handbooks/tips-mountain-flying/MTN-2003/tips-mountain-flying-MTN-2003.md` + `manifest.json` (created by `bun run sources register --include-handbooks-extras`).
 - Manifest backfill: `subjects` + `primary_cert` (per post-WP-SUB convention; the ingest pipeline doesn't author these, the WP author does).
 
 ## Acceptance

@@ -22,7 +22,7 @@
  *      friendly slug + edition slug (`risk-management` + `8083-2A`) via
  *      `DOC_ID_TO_FRIENDLY` -- the locator/registry vocabulary.
  *   5. Write derivatives under `<repo>/handbooks/<friendly-slug>/<faaDir>/`:
- *        - `<friendly-slug>-<editionSlug>.md`   full whole-doc markdown
+ *        - `<friendly-slug>-<faaDir>.md`        full whole-doc markdown
  *        - `manifest.json`                      `ManifestFile` with `body_path` + empty
  *                                               `sections[]` (so the existing `handbooks`
  *                                               resolver picks up whole-doc references).
@@ -318,7 +318,7 @@ export async function runHandbooksExtrasIngest(args: IngestArgs): Promise<Ingest
 
 			const docDir = join(args.derivativeRoot, extra.slug, extra.faaDir);
 			ensureDir(docDir);
-			const bodyFilename = `${extra.slug}-${extra.editionSlug}.md`;
+			const bodyFilename = `${extra.slug}-${extra.faaDir}.md`;
 			const bodyPath = join(docDir, bodyFilename);
 			writeIfChanged(bodyPath, documentBody);
 
@@ -433,7 +433,7 @@ const USAGE = `usage:
 
   Walk the handbooks-extras cache (default: $AIRBOSS_HANDBOOK_CACHE/handbooks/
   or ~/Documents/airboss-handbook-cache/handbooks/), extract each whole-doc
-  PDF, write per-doc manifest.json + <friendly-slug>-<editionSlug>.md under
+  PDF, write per-doc manifest.json + <friendly-slug>-<faaDir>.md under
   <repo>/handbooks/<friendly-slug>/<faa-dir>/, and register entries into the
   @ab/sources registry. Idempotent.
 `;
