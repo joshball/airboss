@@ -48,7 +48,13 @@
  *   bun scripts/db/migrate-references-to-structured.ts --dry-run
  */
 
-import { CITATION_FRAMINGS, type CitationFraming, REFERENCE_KINDS, type ReferenceKind } from '@ab/constants';
+import {
+	AIM_CURRENT_EDITION,
+	CITATION_FRAMINGS,
+	type CitationFraming,
+	REFERENCE_KINDS,
+	type ReferenceKind,
+} from '@ab/constants';
 import { client, db as defaultDb } from '@ab/db/connection';
 import type { LegacyCitation, StructuredCitation } from '@ab/types';
 import { isStructuredCitation } from '@ab/types';
@@ -412,7 +418,12 @@ export function reshapeLegacyCitation(legacy: LegacyCitation): ReshapedCitation 
 		const resolved: ResolvedReference = {
 			kind: REFERENCE_KINDS.AIM,
 			documentSlug: 'aim',
-			edition: 'current',
+			// Pin to the on-disk edition so the migrator resolves to the
+			// authored row from `aim/<edition>/manifest.json` instead of
+			// upserting a synthetic `(aim, current)` orphan. When the FAA
+			// publishes a new AIM, bump AIM_CURRENT_EDITION in libs/constants
+			// in the same PR as the new on-disk edition.
+			edition: AIM_CURRENT_EDITION,
 			title: 'Aeronautical Information Manual',
 			url: 'https://www.faa.gov/air_traffic/publications/atpubs/aim_html/',
 		};
