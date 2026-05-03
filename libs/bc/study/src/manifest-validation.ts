@@ -510,6 +510,104 @@ export const acManifestSchema = z.object({
 export type AcManifest = z.infer<typeof acManifestSchema>;
 
 /**
+ * ACS publication slug regex (manifest-side). Matches the locked-Q7 publication
+ * slug format used under `acs/<slug>/manifest.json`: lowercase kebab-case,
+ * begins with `<rating>-airplane-<edition>` (e.g. `ppl-airplane-6c`,
+ * `cfi-airplane-25`). The seed adapter computes the YAML/DB slug by inserting
+ * `-acs-` before the trailing edition suffix; that mapping lives in
+ * `libs/sources/src/acs/seed-mapping.ts`.
+ */
+const ACS_MANIFEST_SLUG_REGEX = /^[a-z0-9][a-z0-9-]*[a-z0-9]$/;
+
+/** Two-digit zero-padded area ordinal (matches the locked-Q7 derivative shape). */
+const ACS_AREA_PADDED_REGEX = /^[0-9]{2}$/;
+
+/** Single lowercase letter task identifier. */
+const ACS_TASK_LETTER_REGEX = /^[a-z]$/;
+
+/** Two-digit zero-padded element ordinal. */
+const ACS_ELEMENT_ORDINAL_REGEX = /^[0-9]{2}$/;
+
+/** ACS triad letter (Knowledge / Risk management / Skill). */
+const ACS_TRIAD_VALUES = ['k', 'r', 's'] as const;
+
+/**
+ * One element entry inside an ACS task. Elements are short bullets carrying a
+ * full FAA code (`PA.I.A.K1`) and a one-sentence title; the body markdown for
+ * an element lives within the parent task's body file. The seed adapter
+ * produces one `reference_section` row per element at depth 3, level
+ * `'element'`, with no `content_md`.
+ */
+export const acsManifestElementSchema = z.object({
+	triad: z.enum(ACS_TRIAD_VALUES),
+	ordinal: z.string().regex(ACS_ELEMENT_ORDINAL_REGEX),
+	code: z.string().min(1),
+	title: z.string().min(1),
+});
+export type AcsManifestElement = z.infer<typeof acsManifestElementSchema>;
+
+/**
+ * One task entry inside an ACS area. Carries the per-task body markdown (the
+ * citable read surface) plus the element bullets. The seed adapter produces
+ * one `reference_section` row per task at depth 2, level `'task'`, with
+ * `content_md` from the body file and `content_hash` from `body_sha256`.
+ */
+export const acsManifestTaskSchema = z.object({
+	task: z.string().regex(ACS_TASK_LETTER_REGEX),
+	title: z.string().min(1),
+	body_path: selfDescribingPath,
+	body_sha256: z.string().regex(/^[0-9a-f]{64}$/i),
+	elements: z.array(acsManifestElementSchema),
+});
+export type AcsManifestTask = z.infer<typeof acsManifestTaskSchema>;
+
+/**
+ * One Area of Operation inside an ACS publication. Container row -- the seed
+ * adapter produces one `reference_section` at depth 1, level `'area'`, with
+ * no `content_md` (the area body sits on its child task rows).
+ */
+export const acsManifestAreaSchema = z.object({
+	area: z.string().regex(ACS_AREA_PADDED_REGEX),
+	title: z.string().min(1),
+	tasks: z.array(acsManifestTaskSchema),
+});
+export type AcsManifestArea = z.infer<typeof acsManifestAreaSchema>;
+
+/**
+ * ACS manifest (`kind: 'acs'`, WP-ACS-V). Top-level descriptor for one ACS
+ * publication. Shape mirrors `AcsManifestFile` in
+ * `libs/sources/src/acs/derivative-reader.ts`.
+ *
+ * Slug + edition are NOT on the top-level manifest in the form the DB carries
+ * them. The on-disk `slug` is the locked-Q7 publication slug
+ * (`<rating>-airplane-<edition>`); the seed adapter computes the DB
+ * `document_slug` (`<rating>-airplane-acs-<edition>`) and DB `edition`
+ * (`FAA-S-ACS-<UPPER-EDITION>`) via the registry at
+ * `libs/sources/src/acs/seed-mapping.ts`. Subjects + primary_cert are NOT
+ * carried on the manifest -- those live on the YAML row in
+ * `course/references/acs-pts.yaml` and survive seed via `upsertReference`'s
+ * null-default-on-conflict path (same pattern as AC).
+ */
+export const acsManifestSchema = z.object({
+	kind: z.literal('acs'),
+	schema_version: z.number().int().positive().optional(),
+	corpus: z.literal('acs'),
+	slug: z.string().regex(ACS_MANIFEST_SLUG_REGEX),
+	title: z.string().min(1),
+	publisher: z.literal('FAA'),
+	publication_date: z
+		.string()
+		.regex(/^\d{4}-\d{2}-\d{2}$/)
+		.nullable(),
+	source_url: z.string().url(),
+	source_sha256: z.string().regex(/^[0-9a-f]{64}$/i),
+	fetched_at: z.string().datetime({ offset: true }),
+	page_count: z.number().int().positive(),
+	areas: z.array(acsManifestAreaSchema),
+});
+export type AcsManifest = z.infer<typeof acsManifestSchema>;
+
+/**
  * CFR manifest source-file entry (post-WP-CFR). Title 49's content is
  * assembled from multiple eCFR Versioner downloads (one per Part), so
  * `sources[]` carries every contributing fetch alongside the primary one.
@@ -586,9 +684,9 @@ export type CfrSectionsFile = z.infer<typeof cfrSectionsFileSchema>;
 /**
  * Top-level shape of `<corpus>/<doc>/<edition>/manifest.json`. Discriminated
  * union over manifest kind: section-tree (`kind: 'handbook'`), whole-doc
- * (`kind: 'whole-doc'`), AIM (`kind: 'aim'`), AC (`kind: 'ac'`), or CFR
- * (`kind: 'cfr'`). The seed dispatches on the discriminator to choose the
- * right adapter.
+ * (`kind: 'whole-doc'`), AIM (`kind: 'aim'`), AC (`kind: 'ac'`), CFR
+ * (`kind: 'cfr'`), or ACS (`kind: 'acs'`). The seed dispatches on the
+ * discriminator to choose the right adapter.
  */
 export const manifestSchema = z.discriminatedUnion('kind', [
 	sectionTreeManifestSchema,
@@ -596,6 +694,7 @@ export const manifestSchema = z.discriminatedUnion('kind', [
 	aimManifestSchema,
 	acManifestSchema,
 	cfrManifestSchema,
+	acsManifestSchema,
 ]);
 export type Manifest = z.infer<typeof manifestSchema>;
 
