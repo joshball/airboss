@@ -1,9 +1,20 @@
-# Pilot/Controller Glossary (PCG).
+# Pilot/Controller Glossary (PCG) -- citation-fallback umbrella.
 #
-# The AIM ships as a real reference via aim/<edition>/manifest.json (WP-AIM)
-# and is no longer carried as a YAML placeholder here. The PCG remains as a
-# placeholder until WP-PCG migrates it to its own manifest-driven corpus
-# (per ADR 019 §1.2 the PCG is its own corpus distinct from the AIM).
+# The PCG's 297 glossary terms ship as `kind: 'glossary'` rows inside the
+# AIM (`aim/2026-04/manifest.json`, seeded by WP-AIM), so the umbrella
+# carries no readable content of its own. It exists to match the migration's
+# hardcoded `(slug='pcg', edition='current')` resolver in
+# `scripts/db/migrate-references-to-structured.ts:421-437`. Without this
+# authored row, any legacy citation with a bare `PCG` source would upsert
+# a synthetic row stamped with `MIGRATION_SEED_ORIGIN`.
+#
+# This is the same pattern as `generic-acs` / `generic-pts` in
+# `other-publications.yaml`: an umbrella that absorbs unspecific citations
+# until they're updated to point at specific AIM glossary entries.
+#
+# Retire trigger: every legacy `PCG` citation has been re-pointed at a
+# specific AIM glossary term (paragraph reference under AIM PCG sections),
+# AND the migration's PCG resolver is removed. Then this file goes too.
 
 references:
   - slug: pcg
