@@ -41,10 +41,10 @@ All 5 promotions shipped 2026-05-03. Every whole-doc handbook is now section-tre
 
 After all 5 promotion WPs land:
 
-| WP | Effect | Spec |
-|----|--------|------|
-| WP-EXTRAS-RETIRE | Delete `handbooks-extras` corpus + `kind: 'whole-doc'` | [spec](../work-packages/wp-handbooks-extras-retire/spec.md) |
-| WP-AC-PROMOTE | Promote the 9 existing ACs from whole-doc to section-tree | (no spec yet — author when triggered) |
+| WP | Effect | Spec / Status |
+|----|--------|---------------|
+| WP-EXTRAS-RETIRE | Slim `handbooks-extras` corpus to mtn-tips only; archive WP dirs | ✅ partial-shipped 2026-05-03 ([spec](../work-packages/wp-handbooks-extras-retire/spec.md)) -- full retirement deferred until `body_override` ports to chapter-aware path |
+| WP-AC-PROMOTE | Promote the 9 existing ACs from whole-doc to section-tree | 🟡 in flight ([spec](../work-packages/wp-ac-promote-to-section-tree/spec.md)) |
 
 ### Wave 5 — Citation migration
 

@@ -1,68 +1,44 @@
-# Handbook extras (whole-doc only, no chapter splits available).
+# Handbook extras -- single-doc residual corpus.
 #
-# Optional handbooks the downloader fetches when --include-handbooks-extras is set.
-# These are all Class C handbooks (whole-doc only) per the chapter-source-ingestion
-# spec; the publisher does not ship per-chapter PDFs for any of them.
+# Originally a multi-handbook corpus for whole-doc-only Class C handbooks.
+# As of Wave 2 (2026-05-03), every FAA-H-* handbook has been promoted to the
+# chapter-aware Class A2 pipeline at `scripts/sources/config/handbooks/<slug>.yaml`.
+# Only Tips on Mountain Flying remains here because it's a unique case:
+# scanned 1999 pamphlet with unusable OCR; uses a hand-curated `body_override`
+# markdown that the chapter-aware pipeline doesn't support.
 #
-# Class A handbooks (PHAK, AFH, IPH, helicopter, glider, balloon, instructors)
-# live in `handbooks/<slug>.yaml` -- they get the full whole-doc + chapter-PDF
-# treatment. AVWX (Class C with chapter-PDFs unavailable) lives in `handbooks/`
-# alongside the others for symmetry.
+# Promoted out (no longer in this YAML; see `scripts/sources/config/handbooks/<slug>.yaml`):
+#   - faa-h-8083-2 Risk Management Handbook (WP-RMH, 2026-05-03)
+#   - faa-h-8083-9 Aviation Instructor's Handbook (WP-AIH, 2026-05-03)
+#   - faa-h-8083-15 Instrument Flying Handbook (WP-IFH-SECTION-TREE, 2026-05-03)
+#   - faa-h-8083-16 Instrument Procedures Handbook (WP-IPH-section-tree, 2026-05-03)
 #
-# URLs verified 2026-04-29 by HEAD against faa.gov.
+# Removed from corpus entirely (not pilot-training relevant):
+#   - faa-h-8083-30 AMT-General (#505, 2026-05-03)
+#   - faa-h-8083-32 AMT-Powerplant (#505, 2026-05-03)
 #
-# Confirmed dropped (no current canonical whole-doc PDF on the FAA
-# Aviation Handbooks & Manuals index page):
-#   - faa-h-8083-27 Sport Pilot Handbook (publication retired; not on
-#     /regulations_policies/handbooks_manuals/aviation index)
-#   - faa-h-8083-34 Risk Management Handbook for GA Pilots (retired and
-#     superseded by FAA-H-8083-2A; not on the FAA aviation index)
-# When current URLs surface, add the entries back here. The verifier
-# (`bun run sources verify-urls`) catches stale URLs at HEAD time, so this
-# YAML stays a deterministic source-of-truth.
+# Confirmed never re-added (no current canonical FAA whole-doc PDF):
+#   - faa-h-8083-27 Sport Pilot Handbook (publication retired)
+#   - faa-h-8083-34 Risk Management Handbook for GA Pilots (superseded by 8083-2A)
 #
-# Promoted to section-tree (no longer in this YAML; live at
-# `scripts/sources/config/handbooks/<slug>.yaml`):
-#   - faa-h-8083-2 Risk Management Handbook (WP-RMH, 2026-05)
+# When mtn-tips's body_override mechanism gets ported to the chapter-aware
+# pipeline (see WP-EXTRAS-RETIRE follow-up), this entire YAML + the
+# `libs/sources/src/handbooks-extras/` module can be deleted.
 
 base_url: https://www.faa.gov/sites/faa.gov/files
 
 # Per-row metadata:
-#   subjects:     1-3 entries from AVIATION_TOPIC_VALUES (libs/constants/src/reference-tags.ts).
-#                 Required; the loader rejects rows without it.
-#   primary_cert: null (cert-agnostic) or one of CERT_APPLICABILITY_VALUES. Required;
-#                 the loader rejects rows where the field is missing entirely. Use
-#                 explicit `null` for cert-agnostic handbooks.
-#
-# These values flow through `bun run sources register handbooks-extras` into every
-# produced manifest.json so the post-WP-SUB seeder picks them up. Don't author the
-# fields directly in the produced manifests -- they get overwritten on the next
-# register run.
+#   subjects:     1-3 entries from AVIATION_TOPIC_VALUES.
+#   primary_cert: null (cert-agnostic) or one of CERT_APPLICABILITY_VALUES.
 
 entries:
-  # `faa-h-8083-2` (Risk Management Handbook) was promoted to the
-  # chapter-aware `handbooks/risk-management.yaml` config on 2026-05
-  # (WP-RMH). The chapter-aware path handles fetch + extract + register;
-  # the row no longer belongs in handbooks-extras.
-  # `faa-h-8083-9` (Aviation Instructor's Handbook) was promoted to the
-  # chapter-aware `handbooks/aviation-instructor.yaml` config on
-  # 2026-05-03 (WP-AIH). The chapter-aware path handles fetch + extract
-  # + register; the row no longer belongs in handbooks-extras.
-  # IFH (faa-h-8083-15) was promoted to section-tree by WP-IFH-SECTION-TREE
-  # and now lives at scripts/sources/config/handbooks/ifh.yaml.
-  # IPH (faa-h-8083-16) was promoted to section-tree by WP-IPH-section-tree
-  # and now lives at scripts/sources/config/handbooks/iph.yaml.
-  # Non-FAA-H-numbered FAA pamphlet. Synthetic doc_id since FAA never assigned
-  # a Handbook number to Tips on Mountain Flying. Edition '2003' is the YAML
-  # value (the locator slug is `mtn-2003`); current FAA-hosted version is
-  # undated on the cover but traces to the early-2000s authoring window.
+  # Non-FAA-H-numbered FAA pamphlet. 1999 scanned PDF; OCR is unusable.
+  # Section-tree comes from parsing the hand-curated `body_override` markdown
+  # at `scripts/sources/config/handbooks-extras-overrides/faa-mtn-tips.md`.
   - doc_id: faa-mtn-tips
     edition: '2003'
     url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/tips_on_mountain_flying.pdf
     filename: tips_on_mountain_flying.pdf
     subjects: [performance, weather, emergencies]
     primary_cert: null
-    # OCR output for this 1999 scanned pamphlet is too poor to be useful
-    # (broken hyphens, garbled glyphs, lost heading hierarchy). The override
-    # is a hand-transcribed markdown copy validated against the source PDF.
     body_override: scripts/sources/config/handbooks-extras-overrides/faa-mtn-tips.md

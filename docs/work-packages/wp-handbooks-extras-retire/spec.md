@@ -1,15 +1,19 @@
 ---
-title: 'Spec: WP-EXTRAS-RETIRE -- retire the handbooks-extras corpus after promotions land'
+title: 'Spec: WP-EXTRAS-RETIRE -- slim the handbooks-extras corpus to mtn-tips only'
 product: study
 feature: wp-handbooks-extras-retire
 type: spec
-status: draft
-review_status: pending
+status: shipped-partial
+review_status: done
 ---
 
-# WP-EXTRAS-RETIRE: retire the `handbooks-extras` corpus
+> **Outcome (2026-05-03):** SLIM, not full retire. Retiring the whole corpus would require porting `body_override` + section-tree parser to the chapter-aware pipeline for one document (mtn-tips). That's bad ROI. The corpus is slimmed to its minimum: one entry (mtn-tips), historical-context comments preserved, archived WP dirs.
 
-After the 5 whole-doc promotions (WP-MTN, WP-RMH, WP-AIH, WP-IPH, WP-IFH) ship, every entry in `scripts/sources/config/handbooks-extras.yaml` will have been migrated to the regular `handbooks/` corpus. The `handbooks-extras` corpus becomes empty and can be retired entirely.
+**Original goal:** after the 5 whole-doc promotions (WP-MTN, WP-RMH, WP-AIH, WP-IPH, WP-IFH) ship, every entry in `scripts/sources/config/handbooks-extras.yaml` will have been migrated to the regular `handbooks/` corpus. The `handbooks-extras` corpus becomes empty and can be retired entirely.
+
+**What actually happened:** WP-MTN's design call (PR #527) kept mtn-tips in handbooks-extras with section-tree shape rather than moving it. mtn-tips is the unique case: scanned 1999 pamphlet with unusable OCR + hand-curated `body_override` markdown. The chapter-aware pipeline doesn't support `body_override`, so the only way to fully retire handbooks-extras is to either port body_override to the chapter-aware pipeline (one consumer, real work) or delete mtn-tips entirely (no — it's a useful pilot-training pamphlet).
+
+**This WP slims handbooks-extras to its minimum** and defers full retirement to a future WP that ports `body_override` to the chapter-aware path.
 
 ## Why retire (rather than leave empty)
 
