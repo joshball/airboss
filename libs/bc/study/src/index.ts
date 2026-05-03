@@ -231,9 +231,17 @@ export {
 } from './library-by-cert';
 export {
 	type AcManifest,
+	type AcsManifest,
+	type AcsManifestArea,
+	type AcsManifestElement,
+	type AcsManifestTask,
 	type AimManifest,
 	type AimManifestEntry,
 	acManifestSchema,
+	acsManifestAreaSchema,
+	acsManifestElementSchema,
+	acsManifestSchema,
+	acsManifestTaskSchema,
 	aimManifestEntrySchema,
 	aimManifestSchema,
 	type CfrManifest,

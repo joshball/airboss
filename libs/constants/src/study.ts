@@ -1606,7 +1606,8 @@ export const LIBRARY_EXPANDED_SUBJECTS_KEY = 'library:expanded-subjects';
  * Other corpora declare their own level vocabulary on
  * `reference.section_schema.levels`. Examples: whole-doc handbooks ->
  * `['document']`; CFR -> `['subpart','section','paragraph','subparagraph','clause']`;
- * AIM -> `['chapter','section','paragraph']`; ACS -> `['task','element']`.
+ * AIM -> `['chapter','section','paragraph']`; ACS ->
+ * `['publication','area','task','element']`.
  */
 export const REFERENCE_SECTION_LEVELS = {
 	CHAPTER: 'chapter',
@@ -1656,6 +1657,33 @@ export const REFERENCE_SECTION_LEVELS = {
 	 * lands.
 	 */
 	CLAUSE: 'clause',
+	/**
+	 * ACS publication container row (WP-ACS-V). One row per publication at
+	 * depth 0; carries no `content_md` (the body sits on its child task rows).
+	 * Distinct from `document` so the renderer can dispatch ACS-specific
+	 * chrome (Area / Task tree expansion, element bullets) without confusing
+	 * an ACS publication with a whole-doc handbook.
+	 */
+	PUBLICATION: 'publication',
+	/**
+	 * ACS Area of Operation (WP-ACS-V). Depth 1 under the publication; code is
+	 * the FAA Roman numeral (e.g. `'I'`, `'XII'`). Container row -- carries
+	 * the area title but no body markdown.
+	 */
+	AREA: 'area',
+	/**
+	 * ACS Task (WP-ACS-V). Depth 2 under the publication; code is
+	 * `<area-roman>.<task-letter>` (e.g. `'I.A'`). Carries the task body
+	 * markdown -- the citable read surface for an ACS task.
+	 */
+	TASK: 'task',
+	/**
+	 * ACS Element (WP-ACS-V). Depth 3 under the publication; code is the full
+	 * FAA element identifier (`'PA.I.A.K1'`). Leaf -- no `content_md`;
+	 * elements are bullets within the parent task body, anchored as DB rows
+	 * for citation interop.
+	 */
+	ELEMENT: 'element',
 } as const;
 
 export type ReferenceSectionLevel = (typeof REFERENCE_SECTION_LEVELS)[keyof typeof REFERENCE_SECTION_LEVELS];
@@ -1675,6 +1703,10 @@ export const REFERENCE_SECTION_LEVEL_LABELS: Record<ReferenceSectionLevel, strin
 	[REFERENCE_SECTION_LEVELS.SUBPART]: 'Subpart',
 	[REFERENCE_SECTION_LEVELS.SUBPARAGRAPH]: 'Subparagraph',
 	[REFERENCE_SECTION_LEVELS.CLAUSE]: 'Clause',
+	[REFERENCE_SECTION_LEVELS.PUBLICATION]: 'Publication',
+	[REFERENCE_SECTION_LEVELS.AREA]: 'Area',
+	[REFERENCE_SECTION_LEVELS.TASK]: 'Task',
+	[REFERENCE_SECTION_LEVELS.ELEMENT]: 'Element',
 };
 
 /**
