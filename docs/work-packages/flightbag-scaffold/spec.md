@@ -1,11 +1,12 @@
 ---
-status: in-progress
+status: ready-for-review
 trigger: REFERENCES.md "Future architecture" section -> stand up `apps/flightbag/` as the canonical reader app
 source: docs/platform/REFERENCES.md (decision 2026-05-03)
 related:
   - docs/platform/REFERENCES.md
   - docs/platform/IDEAS.md (apps/flightbag references reader app)
   - docs/decisions/019-reference-identifier-system/decision.md
+  - docs/products/flightbag/VISION.md
 ---
 
 # Scaffold `apps/flightbag/` + `libs/library/` + URL helpers

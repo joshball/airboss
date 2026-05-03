@@ -6,7 +6,7 @@ The single canonical list of every FAA reference document airboss ingests, with 
 
 ## Snapshot
 
-**Last updated:** 2026-05-03 (live snapshot — auto-update on each library PR)
+**Last updated:** 2026-05-03 (live snapshot — auto-update on each library PR; flightbag scaffold landed)
 
 **Readable in-app today:** 36 references (40 with the references cleanup sweep — 4 AC YAML rows added so subjects + primary_cert render)
 **Total tracked:** ~50 references across all corpora
@@ -187,9 +187,11 @@ After 1-10: every cataloged FAA pilot-track publication is a readable section-tr
 - **Shipping a WP that changes a reference's state?** Update the row in the same PR. The "Last updated" line at the top should match the latest reference change.
 - **Confused about state?** Run `find handbooks aim ac acs -name 'manifest.json' | xargs -I{} jq -r '.kind + ":" + (.title // "?")' {}` for a live snapshot from disk. Should match this doc.
 
-## Future architecture: `apps/flightbag/` as the canonical viewer
+## Current architecture: `apps/flightbag/` as the canonical viewer (scaffolded 2026-05-03)
 
-Today, the `/library/...` reader routes live in `apps/study/`. That works for now but creates a problem: when sim, FIRC, or a future avionics app needs to deep-link to a citation (e.g. PHAK §2.3), they either build their own reader (different URL per app for the same content) or link to study's URL (cross-app dependency). Citations need to be **shareable across surfaces**, including links a user copies from sim and pastes elsewhere.
+Today, the `/library/...` reader routes still live in `apps/study/` while the new `apps/flightbag/` scaffold proves the cross-surface deep-link pipe end-to-end. The migration of study's reader routes is a separate WP (see migration sequence below).
+
+The original problem: when sim, FIRC, or a future avionics app needs to deep-link to a citation (e.g. PHAK §2.3), they either build their own reader (different URL per app for the same content) or link to study's URL (cross-app dependency). Citations need to be **shareable across surfaces**, including links a user copies from sim and pastes elsewhere.
 
 **Decision (2026-05-03):** stand up `apps/flightbag/` as a dedicated reader app. Other apps link to flightbag URLs from their citation chips. Single canonical URL space; deep-linkable from anywhere; future-proofed for sim, FIRC, avionics, and an eventual public web surface (see ADR 019 §1 on `airboss-ref:` URI durability).
 
@@ -199,19 +201,23 @@ Today, the `/library/...` reader routes live in `apps/study/`. That works for no
 
 | Concern | App | Notes |
 |---------|-----|-------|
-| Public-facing reader (deep-linkable) | `apps/flightbag/` | URLs like `flightbag/handbook/phak/8083-25C/2/3`, `flightbag/cfr/14/91/103`, `flightbag/acs/ppl-airplane/area-1/task-A`. No admin UI here. |
-| Admin / management dashboard | `apps/hangar/admin/references/` | TOC validation, per-reference status, force-reingest, stage-status visibility. Admin-only. Reads from `@ab/sources` + `study.reference`. |
-| Citation rendering primitives | `libs/library/` (new) | `<RenderedSection>`, `<CitationChip>`, `urlForReference(uri)`. Used by flightbag (renders), study/sim/etc. (link). |
+| Public-facing reader (deep-linkable) | `apps/flightbag/` (scaffolded) | URLs like `flightbag/handbook/phak/8083-25C/2/3`, `flightbag/cfr/14/91/103`, `flightbag/acs/ppl-airplane-6c/area/1/task/A`. No admin UI here. |
+| Admin / management dashboard | `apps/hangar/admin/references/` (planned) | TOC validation, per-reference status, force-reingest, stage-status visibility. Admin-only. Reads from `@ab/sources` + `study.reference`. |
+| Citation rendering primitives | `libs/library/` (scaffolded) | `<RenderedSection>`, `<CitationChip>` -- stub today, full markdown + figure resolution + adjacency in follow-on WPs. Used by flightbag (renders) + study/sim/etc. (link). |
+| URI -> URL bridge | `libs/sources/src/url-for-reference.ts` (shipped) | `urlForReference(uri)` parses an `airboss-ref:` URI and dispatches to the matching `ROUTES.FLIGHTBAG_*`. |
+| URL templates | `libs/constants/src/routes.ts` (`ROUTES.FLIGHTBAG_*`, shipped) | Single source of truth for every flightbag URL. |
 | Data layer | `libs/sources/` (existing) | Resolvers, manifests, registry, URI scheme. Unchanged. |
 
-**Migration sequence (after section-tree promotions land):**
+**Migration sequence:**
 
-1. Stand up `apps/flightbag/` with the existing `/library/...` routes from study moved over (plus the new `flightbag/...` URL prefix).
-2. Add flightbag URL constants in `libs/constants/src/routes.ts` under `ROUTES.FLIGHTBAG_*`.
-3. Add `urlForReference(uri)` helper in `libs/sources/` that turns an `airboss-ref:` URI into a flightbag URL via the constants.
-4. Add citation rendering primitives in `libs/library/` (`<RenderedSection>`, `<CitationChip>`).
-5. Rewire study's citation chips from in-app `/library/...` URLs to `flightbag/...` URLs.
-6. Sim/FIRC/etc. citation surfaces use `urlForReference()` from day one — no per-app reader to maintain.
+1. ✅ Stand up `apps/flightbag/` scaffold with placeholder routes for handbook (3 depths) / aim / cfr / ac / acs. (PR #520, 2026-05-03)
+2. ✅ Add flightbag URL constants in `libs/constants/src/routes.ts` under `ROUTES.FLIGHTBAG_*`. (PR #520)
+3. ✅ Add `urlForReference(uri)` helper in `libs/sources/` that turns an `airboss-ref:` URI into a flightbag URL via the constants. (PR #520)
+4. ✅ Add citation rendering primitives in `libs/library/` (`<RenderedSection>`, `<CitationChip>`) as stubs. (PR #520)
+5. ❌ Wire flightbag's placeholder load functions to the real `@ab/sources` resolvers and render section bodies. (separate WP -- the "real reader" implementation pass)
+6. ❌ Migrate study's `/library/...` routes into flightbag and retire them from study. (separate WP)
+7. ❌ Rewire study's citation chips from in-app `/library/...` URLs to `urlForReference(uri)`. (`docs/work-packages/citation-chips-flightbag-migration/`)
+8. ❌ Sim/FIRC/etc. citation surfaces use `urlForReference()` from day one — no per-app reader to maintain. (lands with each app's first citation surface.)
 
 The hangar admin dashboard (TOC validation UI, per-reference stage view) stays in hangar per the management-fits-content-authoring rule. See [docs/platform/IDEAS.md](IDEAS.md) under Technical Approaches.
 
@@ -223,8 +229,8 @@ Strict rule (per [CLAUDE.md](../../CLAUDE.md) "All routes go through `ROUTES`"):
 |---------|----------|-----|
 | URL string templates | `libs/constants/src/routes.ts` (`ROUTES.FLIGHTBAG_*`) | Single source of truth for every route in airboss; all apps already follow this |
 | URI-to-URL bridge | `libs/sources/src/url-for-reference.ts` (`urlForReference(uri)`) | Lives next to the resolvers that own the `airboss-ref:` URI scheme; calls into `libs/constants/` for the URL template |
-| Rendering primitives | `libs/library/` (new, future) | `<RenderedSection>`, `<CitationChip>`; flightbag-specific rendering knowledge, no URL business |
-| The flightbag app | `apps/flightbag/` (new, future) | Consumes the above |
+| Rendering primitives | `libs/library/` (scaffolded 2026-05-03) | `<RenderedSection>`, `<CitationChip>`; flightbag-specific rendering knowledge, no URL business |
+| The flightbag app | `apps/flightbag/` (scaffolded 2026-05-03) | Consumes the above |
 
 Citation surfaces in study, sim, hangar, etc. import `urlForReference` from `@ab/sources`; never construct a flightbag URL inline. CI will catch regressions via grep for the forbidden patterns (`'/handbook/'`, `'/cfr/'`, `'/ac/'`, `'/acs/'`, `'/aim/'`) in app source files.
 
