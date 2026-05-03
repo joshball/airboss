@@ -8,11 +8,60 @@ critical: 6
 major: 58
 minor: 75
 nit: 27
+status: unread
+review_status: pending
 ---
 
 # 10x Review -- Chunk 1: study-app surfaces
 
 11 reviewers, all complete.
+
+## Final close-out as of 2026-05-04
+
+Re-audited every per-category file against current main. Tally:
+
+| Severity | Closed | Open  | Total |
+| -------- | -----: | ----: | ----: |
+| CRITICAL |      1 |     5 |     6 |
+| MAJOR    |     27 |    31 |    58 |
+| MINOR    |     35 |    40 |    75 |
+| NIT      |     12 |    15 |    27 |
+| **TOTAL**|  **75**|**91** |**166**|
+
+(Note: original critical tally rolled the (dev)-group security finding in -- that was scoped as MAJOR in the security review file but recorded as critical in the index frontmatter. Actual headline criticals on entry were 5: 3 a11y + 1 testing + 1 backend.)
+
+### Per-category close-out
+
+| Category     | Closed | Open | Status   | Headline open items                                                                                                  |
+| ------------ | -----: | ---: | -------- | -------------------------------------------------------------------------------------------------------------------- |
+| correctness  |     11 |    3 | done     | memory-review undo numeric key; heartbeat local accumulator; handbook-asset symlink defence                          |
+| security     |      4 |    5 | done     | (dev) prod gate landed in this PR; remaining are seed/edition charset caps + content-type allowlist                  |
+| perf         |      1 |   10 | pending  | five MAJOR N+1 batch helpers (convergent with backend), help-registry code-split, library aggregators                |
+| architecture |      6 |   11 | done     | library / knowledge / session aggregator BCs, group-by enums to constants, handbook-asset to libs                    |
+| a11y         |     14 |    7 | pending  | MapPanel labels (CRITICAL); radiogroup keyboard nav (CRITICAL); read-suggestion preamble (CRITICAL); aria-controls   |
+| patterns     |     11 |    0 | done     | all clean                                                                                                            |
+| testing      |     17 |    4 | done     | savedDeck seeding; cleanup-guard removal; per-test fresh user for memory/review; reps-test ordering                  |
+| dx           |      4 |   14 | pending  | handbook .catch -> typed errors; "verb entity failed" log sweep; login 5xx branch; discovery log level promotion     |
+| ux           |      5 |   13 | pending  | library card-state indicator; topic 404 -> soft empty; Skip Permanently confirm copy; form-error consistency         |
+| svelte       |      2 |    6 | pending  | route-level CSS extraction (work-package); effect-mirror -> derived; module-scoped timers -> $effect cleanup         |
+| backend      |      9 |    9 | done     | CRITICAL memory/review GET-mutation; the N+1 cluster (credentials, lens/handbook, goals, syllabus area drill-down)   |
+
+### Closed-by-rewrite
+
+- `apps/study/src/routes/(app)/memory/[id]/+page.svelte` -- 1172 lines -> 49 lines via `_panels/` extraction. The architecture MAJOR + svelte MAJOR (CSS proliferation) + svelte MAJOR (setTimeout cleanup) all closed for this file.
+- `apps/study/src/routes/(app)/session/start/+page.svelte` -- 883 lines -> 87 lines.
+- `apps/study/src/routes/(app)/library/regulations/**` -- five route files collapsed into thin BC adapters via `getRegulationsView`. Closes architecture MAJOR (bucket->slug duplication), architecture MAJOR (slug-shape parsers), patterns MAJOR (magic-string discriminants), correctness MAJOR (switch exhaustiveness).
+
+### Remaining open by next-action trigger
+
+- **Convergent N+1 cluster** (5 perf MAJORs + 6 backend MAJORs): single root-cause -- per-batch BC helpers (`getCredentialMasteryMap`, `getHandbookProgressMap`, `getNodesCitingSectionsBatch`, `getCredentialsByIds`, `getCitationsForSyllabusNodes`, `getKnowledgeNodesForSyllabusLeaves`). One work package, six BC helpers, six route updates.
+- **Log-quality sweep** (~6 dx items): mechanical pass replacing `'<func> threw'` with `'<verb> <entity> failed'` and aligning user-visible noun-phrase across logs + `fail()` messages.
+- **Heartbeat correctness tail** (3 correctness items): rating numeric key, local accumulator on POST failure, handbook-asset symlink defence. Three small follow-ons.
+- **Library completeness UX** (4 ux items + 1 architecture): card-state indicator, topic 404 -> soft empty, regulations empty buckets, isReadable hardcoded. All gated on the library-completeness Wave-2 spec decision.
+- **Route-level CSS extraction** (1 svelte MAJOR): work-package scope -- extract Card / Toast / ScoreMeta / BadgeStatus primitives into `libs/ui`. Token migration is a finishing pass per project rule.
+- **(app)/+layout effect-mirror** (1 svelte MAJOR + 1 svelte MINOR): replace mirror effects with optimistic-override `$derived` + nullable pending state.
+- **Backend CRITICAL** (memory/review GET-mutation): single-route fix -- redirect to a Start prompt with form action; never mint a session in `load`.
+- **3 of 3 a11y CRITICAL**: MapPanel `aria-label` + drop `role="cell"`; radiogroup roving-tabindex (or convert to native fieldset); read-suggestion preamble.
 
 ## Summary table
 
