@@ -11,7 +11,9 @@
 #
 # URLs verified 2026-04-29 by HEAD against faa.gov.
 #
-# Re-added 2026-04-29 after follow-up search:
+# Re-added 2026-04-29 after follow-up search, then deferred 2026-05-03
+# (commented out below; maintenance-technician corpus, no pilot-training
+# relevance):
 #   - faa-h-8083-30 AMT General Handbook (30B at amtg_handbook.pdf)
 #   - faa-h-8083-32 AMT Powerplant Handbook (32B at amt_powerplant_handbook.pdf)
 #
@@ -64,18 +66,24 @@ entries:
     filename: FAA-H-8083-16B.pdf
     subjects: [procedures, navigation, flight-instruments]
     primary_cert: instrument
-  - doc_id: faa-h-8083-30
-    edition: '30B'
-    url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/amtg_handbook.pdf
-    filename: amtg_handbook.pdf
-    subjects: [aircraft-systems]
-    primary_cert: null
-  - doc_id: faa-h-8083-32
-    edition: '32B'
-    url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/amt_powerplant_handbook.pdf
-    filename: amt_powerplant_handbook.pdf
-    subjects: [aircraft-systems]
-    primary_cert: null
+  # AMT corpus deferred 2026-05-03: maintenance technician handbooks, no
+  # pilot-training relevance. The PDF cache and any prior ingest output stay
+  # in place; un-deferring is a one-line YAML uncomment plus a `bun run
+  # sources download --include-handbooks-extras` to refresh. The
+  # DOC_ID_TO_FRIENDLY mapping in libs/sources/src/handbooks-extras/ingest.ts
+  # is intentionally retained for the same reason.
+  # - doc_id: faa-h-8083-30
+  #   edition: '30B'
+  #   url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/amtg_handbook.pdf
+  #   filename: amtg_handbook.pdf
+  #   subjects: [aircraft-systems]
+  #   primary_cert: null
+  # - doc_id: faa-h-8083-32
+  #   edition: '32B'
+  #   url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/amt_powerplant_handbook.pdf
+  #   filename: amt_powerplant_handbook.pdf
+  #   subjects: [aircraft-systems]
+  #   primary_cert: null
   # Non-FAA-H-numbered FAA pamphlet. Synthetic doc_id since FAA never assigned
   # a Handbook number to Tips on Mountain Flying. Edition '2003' is the YAML
   # value (the locator slug is `mtn-2003`); current FAA-hosted version is
