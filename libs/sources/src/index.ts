@@ -77,5 +77,11 @@ export {
 	substituteTokens,
 	toSerializable,
 } from './render/index.ts';
+export {
+	cachedSourcePdfExists,
+	describeSourcePdf,
+	resolveCachedSourcePdfPath,
+	type SourcePdfDescriptor,
+} from './source-pdf.ts';
 export * from './types.ts';
 export { urlForReference } from './url-for-reference.ts';

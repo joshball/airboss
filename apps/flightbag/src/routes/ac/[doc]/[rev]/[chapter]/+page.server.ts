@@ -7,8 +7,9 @@
  */
 
 import { getHandbookChapter, getReferenceByDocument, listChapterSections, listReferences } from '@ab/bc-study';
-import { REFERENCE_KINDS, ROUTES } from '@ab/constants';
+import { REFERENCE_KINDS, type ReferenceKind, ROUTES } from '@ab/constants';
 import { error } from '@sveltejs/kit';
+import { buildSourceLinks } from '../../../../../lib/source-links';
 import type { PageServerLoad } from './$types';
 
 const DOC_SHAPE = /^[a-z0-9.-]+$/i;
@@ -35,8 +36,16 @@ export const load: PageServerLoad = async ({ params }) => {
 
 	const sections = await listChapterSections(chapter.id);
 
+	const sourceLinks = buildSourceLinks({
+		kind: ref.kind as ReferenceKind,
+		documentSlug: ref.documentSlug,
+		edition: ref.edition,
+		url: ref.url,
+	});
+
 	return {
 		uri: `airboss-ref:ac/${params.doc}/${params.rev}/section-${params.chapter}`,
+		sourceLinks,
 		reference: {
 			id: ref.id,
 			edition: ref.edition,

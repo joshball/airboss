@@ -10,6 +10,7 @@
 import { getReferenceByDocument, listAllSectionsForReference } from '@ab/bc-study';
 import { externalUrlForReference, REFERENCE_KINDS, type ReferenceKind } from '@ab/constants';
 import { error } from '@sveltejs/kit';
+import { buildSourceLinks } from '../../../lib/source-links';
 import type { PageServerLoad } from './$types';
 
 const SLUG_SHAPE = /^[a-z0-9-]+$/i;
@@ -25,8 +26,16 @@ export const load: PageServerLoad = async ({ params }) => {
 
 	const sections = await listAllSectionsForReference(ref.id);
 
+	const sourceLinks = buildSourceLinks({
+		kind: ref.kind as ReferenceKind,
+		documentSlug: ref.documentSlug,
+		edition: ref.edition,
+		url: ref.url,
+	});
+
 	return {
 		uri: `airboss-ref:acs/${ref.documentSlug}`,
+		sourceLinks,
 		reference: {
 			id: ref.id,
 			documentSlug: ref.documentSlug,

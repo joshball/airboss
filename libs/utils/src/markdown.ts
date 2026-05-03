@@ -92,6 +92,237 @@ export function extractImageUrls(md: string): string[] {
 }
 
 /**
+ * Find a `Figure X-Y` reference in a chunk of text and return the ordinal as
+ * a normalised string. Matches `Figure 2-5`, `Figure 12-3` (handbook style),
+ * and `Figure 2-5.` / `Figure 2-5,` (with trailing punctuation). Returns the
+ * ordinal piece (`2-5`) or `null` when no figure reference is present.
+ *
+ * Lifted out of `RenderedSection` so the regex is one-place-only and easy to
+ * unit test against new handbook section bodies as they're ingested.
+ */
+const FIGURE_REF_RE = /Figure\s+(\d+(?:-\d+)?(?:\.[A-Z])?)/g;
+export function findFigureReferences(text: string): readonly string[] {
+	const out: string[] = [];
+	const seen = new Set<string>();
+	const re = new RegExp(FIGURE_REF_RE.source, 'g');
+	let match: RegExpExecArray | null = re.exec(text);
+	while (match !== null) {
+		const ord = match[1];
+		if (ord !== undefined && !seen.has(ord)) {
+			seen.add(ord);
+			out.push(ord);
+		}
+		match = re.exec(text);
+	}
+	return out;
+}
+
+/**
+ * Inject `![caption](assetPath)` blocks into the body markdown at the first
+ * paragraph that references each figure. The renderer already converts block
+ * image syntax to `<figure>`, so injection is a simple string splice rather
+ * than HTML manipulation.
+ *
+ * Algorithm:
+ *
+ * 1. Split body into paragraph blocks (blank-line separated).
+ * 2. For each paragraph, find any `Figure X-Y` references the figures map
+ *    knows about. Append the corresponding `![caption](path)` blocks after
+ *    the paragraph's blank-line break.
+ * 3. Each figure is injected at most once, even if the section's prose
+ *    references it multiple times. A figure that isn't referenced anywhere
+ *    in the body is left for the caller to render at the bottom.
+ *
+ * Returns:
+ *   - `body`: the markdown with inline image blocks spliced in at first ref.
+ *   - `injected`: ordinal-keyed set of figures injected into the body.
+ *
+ * Whether to render unused figures at the bottom is the caller's call -- this
+ * helper just picks up the first-reference work.
+ */
+export function injectFigureRefs(
+	body: string,
+	figuresByOrdinal: ReadonlyMap<string, { caption: string; assetPath: string }>,
+): { body: string; injected: ReadonlySet<string> } {
+	if (figuresByOrdinal.size === 0) return { body, injected: new Set() };
+
+	const paragraphs = body.split(/\n{2,}/);
+	const injected = new Set<string>();
+	const out: string[] = [];
+
+	for (const para of paragraphs) {
+		out.push(para);
+		const ords = findFigureReferences(para);
+		for (const ord of ords) {
+			if (injected.has(ord)) continue;
+			const fig = figuresByOrdinal.get(ord);
+			if (fig === undefined) continue;
+			injected.add(ord);
+			// Reserve a path prefix the asset streamer recognises -- if the figure's
+			// `assetPath` already starts with `handbooks/` (the seed convention), we
+			// preserve the absolute leading slash by ensuring exactly one. Otherwise
+			// we pass the path through unchanged for the caller's URL rewriter.
+			const url = fig.assetPath.startsWith('/') ? fig.assetPath : `/${fig.assetPath}`;
+			out.push(`![${fig.caption.replace(/[\r\n]+/g, ' ').trim()}](${url})`);
+		}
+	}
+
+	return { body: out.join('\n\n'), injected };
+}
+
+/**
+ * One parsed `key: value` entry from a leading YAML frontmatter block. The
+ * order of the array preserves the operator's authoring order so the metadata
+ * disclosure UI can render the keys exactly as written.
+ */
+export interface FrontmatterEntry {
+	readonly key: string;
+	readonly value: string;
+}
+
+/**
+ * Result of `parseFrontmatter`. `entries` is the parsed key-value pairs in
+ * source order (empty when no frontmatter was present or parsing failed);
+ * `body` is the markdown after the closing `---` fence.
+ *
+ * Parsing is deliberately permissive: this is not a full YAML implementation.
+ * Handbook section frontmatter is flat `key: value` pairs (strings, numbers,
+ * URLs, hyphenated FAA page tokens). Anything more complex (lists, nested
+ * objects, multi-line scalars) is treated as malformed and the entry is
+ * skipped. If no entries can be extracted from a fenced block, the helper
+ * falls back to "no frontmatter found" and the body is left unchanged.
+ */
+export interface ParsedFrontmatter {
+	readonly entries: ReadonlyArray<FrontmatterEntry>;
+	readonly body: string;
+}
+
+/**
+ * Parse a leading YAML frontmatter block (`---\n...\n---\n`) from a markdown
+ * string. The handbook-section seed produces section bodies whose first lines
+ * are a YAML metadata block describing the source PDF; the renderer needs the
+ * block stripped from the body (so it doesn't leak as paragraph text) AND the
+ * parsed contents available so a "Metadata" disclosure panel can surface the
+ * operator-authored fields (`source_url`, `faa_pages`, etc.).
+ *
+ * No-op when the input does not start with `---` followed by a newline; never
+ * strips anything past the first closing fence so a body that legitimately
+ * starts with a horizontal rule (`---` on its own line followed by content
+ * not framed as YAML) is left intact when there is no closing fence.
+ *
+ * Returns `{ entries: [], body: md }` for inputs without frontmatter or with
+ * malformed frontmatter (e.g. unclosed fence, no parseable lines). The caller
+ * uses an empty `entries` array as the signal to skip rendering the panel.
+ */
+export function parseFrontmatter(md: string): ParsedFrontmatter {
+	if (!md.startsWith('---')) return { entries: [], body: md };
+	// Require a newline after the opening fence so a body like `--- foo` is not
+	// mistaken for frontmatter. The opening fence can be `---\n` or `---\r\n`.
+	const afterOpen = md.charCodeAt(3);
+	if (afterOpen !== 0x0a /* \n */ && afterOpen !== 0x0d /* \r */) return { entries: [], body: md };
+	const end = md.indexOf('\n---', 3);
+	if (end < 0) return { entries: [], body: md };
+	// Slice past `\n---` and any trailing newline characters before the body.
+	// Handles repeated LF or CRLF newlines (frontmatter-then-blank-line is the
+	// canonical author-side shape).
+	const body = md.slice(end + 4).replace(/^(?:\r?\n)+/, '');
+	const inner = md.slice(4, end); // between the opening fence + opening newline and the `\n---` close
+	const entries = parseFlatYamlEntries(inner);
+	return { entries, body };
+}
+
+/**
+ * Strip a leading YAML frontmatter block from a markdown string. Thin wrapper
+ * around `parseFrontmatter` that discards the parsed entries; preserved for
+ * call sites that only need the body (e.g. tests that pre-date the parser).
+ */
+export function stripFrontmatter(md: string): string {
+	return parseFrontmatter(md).body;
+}
+
+/**
+ * Parse a flat YAML key-value block. Handles:
+ *
+ *   - `key: value` (whitespace around the colon trimmed)
+ *   - quoted values (`key: "value"`, `key: 'value'`) -- quotes stripped
+ *   - empty values (`key:` -> empty string)
+ *   - URLs and hyphenated values (split on the FIRST colon, not every colon)
+ *
+ * Lines that don't match the `^\s*[A-Za-z0-9_-]+\s*:` shape are skipped (so
+ * comments, blank lines, and YAML directives don't break parsing). Repeated
+ * keys: last write wins for the value, but order is preserved at first
+ * occurrence (matches YAML's typical interpretation closely enough for the
+ * operator-authored frontmatter we render).
+ */
+function parseFlatYamlEntries(block: string): ReadonlyArray<FrontmatterEntry> {
+	const entries: FrontmatterEntry[] = [];
+	const indexByKey = new Map<string, number>();
+	for (const rawLine of block.split(/\r?\n/)) {
+		const line = rawLine.trim();
+		if (line === '' || line.startsWith('#')) continue;
+		const match = line.match(/^([A-Za-z0-9_-]+)\s*:\s*(.*)$/);
+		if (!match) continue;
+		const key = match[1] ?? '';
+		const rawValue = (match[2] ?? '').trim();
+		if (key === '') continue;
+		const value = stripYamlScalarQuotes(rawValue);
+		const existing = indexByKey.get(key);
+		if (existing !== undefined) {
+			entries[existing] = { key, value };
+		} else {
+			indexByKey.set(key, entries.length);
+			entries.push({ key, value });
+		}
+	}
+	return entries;
+}
+
+function stripYamlScalarQuotes(value: string): string {
+	if (value.length >= 2) {
+		const first = value.charAt(0);
+		const last = value.charAt(value.length - 1);
+		if ((first === '"' && last === '"') || (first === "'" && last === "'")) {
+			return value.slice(1, -1);
+		}
+	}
+	return value;
+}
+
+/**
+ * Drop the body's leading H1 line when it duplicates the section title. The
+ * section-render path emits the title in a `<h1>` from the page title field;
+ * if the body's first non-blank line is also a top-level heading naming the
+ * same thing, the page renders the title twice. This helper removes that one
+ * duplicate, preserving any subsequent H1s and all other heading levels.
+ *
+ * Match is case-insensitive and whitespace-normalised so cosmetic differences
+ * (extra spaces, capitalised vs title-case) still dedupe.
+ */
+export function dedupeFirstHeading(md: string, title: string): string {
+	const lines = md.split('\n');
+	let i = 0;
+	while (i < lines.length && lines[i]?.trim() === '') i++;
+	const leadingBlanks = i;
+	const firstLine = lines[i];
+	if (firstLine === undefined) return md;
+	const headingMatch = firstLine.match(/^#\s+(.*)$/);
+	if (!headingMatch) return md;
+	const headingText = (headingMatch[1] ?? '').trim();
+	if (normalizeHeading(headingText) !== normalizeHeading(title)) return md;
+	// Drop the heading line, the optional blank line beneath it, and the
+	// leading blank lines that preceded the heading -- both sides of the
+	// duplicate heading are visual noise once the heading is gone.
+	lines.splice(i, 1);
+	if (lines[i]?.trim() === '') lines.splice(i, 1);
+	if (leadingBlanks > 0) lines.splice(0, leadingBlanks);
+	return lines.join('\n');
+}
+
+function normalizeHeading(s: string): string {
+	return s.replace(/\s+/g, ' ').trim().toLowerCase();
+}
+
+/**
  * Normalize a handbook asset path to a comparable canonical form by stripping
  * the optional leading `/handbooks/`, `handbooks/`, `/handbook-asset/`, or
  * `handbook-asset/` prefix. The resulting path is asset-relative and stable
