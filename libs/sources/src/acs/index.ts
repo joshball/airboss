@@ -29,4 +29,10 @@ export type { CliArgs, IngestArgs, IngestReport } from './ingest.ts';
 export { PHASE_9_REVIEWER_ID, parseCliArgs, runAcsIngest, runIngestCli } from './ingest.ts';
 export { ACS_PUBLICATION_SLUGS, formatAcsLocator, parseAcsLocator } from './locator.ts';
 export { ACS_CORPUS, ACS_RESOLVER, getAcsDerivativeRoot, setAcsDerivativeRoot } from './resolver.ts';
+export {
+	__acs_seed_mapping_internal__,
+	type AcsSeedMappingEntry,
+	getAcsSeedMapping,
+	listAcsSeedMappings,
+} from './seed-mapping.ts';
 export { ACS_PUBLICATION_LIVE_URLS, ACS_TEST_STANDARDS_INDEX_URL, getAcsLiveUrl } from './url.ts';
