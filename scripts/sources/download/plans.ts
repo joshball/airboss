@@ -45,6 +45,7 @@ import {
 import type { AimConfig, AncillaryConfig, ChapterPdfsConfig, HandbookConfig } from '../config/schemas';
 import type { CliArgs, Corpus } from './args';
 import { fetchEcfrTitles, latestAmendedOnFor } from './ecfr';
+import { readHandbookManifestFile } from './manifest';
 
 export { SCHEMA_VERSION, USER_AGENT } from './constants';
 
@@ -102,6 +103,24 @@ interface BuildPlansOptions {
 	) => Promise<readonly { ordinal: number; pageUrl: string; pdfUrl: string }[]>;
 }
 
+interface BuildHandbookPlansOptions extends BuildPlansOptions {
+	/**
+	 * When true, skip the per-handbook manifest cache check and always run the
+	 * two-hop scraper. Plumbed from `--rescrape` for operator escape-hatch use.
+	 */
+	readonly rescrape?: boolean;
+}
+
+/**
+ * Local shape returned by the cached-manifest pre-check. Mirrors the resolver
+ * tuple so the call site is unchanged.
+ */
+interface CachedChapterUrls {
+	readonly ordinal: number;
+	readonly pageUrl: string;
+	readonly pdfUrl: string;
+}
+
 export async function buildPlans(args: CliArgs, root: string, opts: BuildPlansOptions = {}): Promise<DownloadPlan[]> {
 	const plans: DownloadPlan[] = [];
 
@@ -142,9 +161,10 @@ export async function buildPlans(args: CliArgs, root: string, opts: BuildPlansOp
 		// Per-handbook configs (Class A1/A2 + Class C handbooks with their own
 		// per-edition cache dir) always run. Whole-doc + chapter PDFs + ancillary
 		// PDFs all flow through one path.
+		const handbookOpts: BuildHandbookPlansOptions = { ...opts, rescrape: args.rescrape };
 		for (const slug of listHandbookSlugs()) {
 			const hb = loadHandbookConfig(slug);
-			plans.push(...(await buildHandbookPlans(hb, root, opts)));
+			plans.push(...(await buildHandbookPlans(hb, root, handbookOpts)));
 		}
 		// Legacy whole-doc-only handbooks (gated by --include-handbooks-extras
 		// since they're a long tail and we don't want to fetch them on every
@@ -239,7 +259,11 @@ function flatPlan(
 // Per-handbook plan generation
 // ---------------------------------------------------------------------------
 
-async function buildHandbookPlans(hb: HandbookConfig, root: string, opts: BuildPlansOptions): Promise<DownloadPlan[]> {
+async function buildHandbookPlans(
+	hb: HandbookConfig,
+	root: string,
+	opts: BuildHandbookPlansOptions,
+): Promise<DownloadPlan[]> {
 	const plans: DownloadPlan[] = [];
 	const slug = hb.document_slug;
 	const edition = hb.edition;
@@ -284,7 +308,7 @@ async function buildChapterPdfPlans(
 	hb: HandbookConfig,
 	chapterPdfs: ChapterPdfsConfig,
 	editionRoot: string,
-	opts: BuildPlansOptions,
+	opts: BuildHandbookPlansOptions,
 ): Promise<DownloadPlan[]> {
 	const plans: DownloadPlan[] = [];
 	const offset = chapterPdfs.file_ordinal_offset;
@@ -303,17 +327,31 @@ async function buildChapterPdfPlans(
 			resolved.push({ ordinal: n, pdfUrl: url, pageUrl: null });
 		}
 	} else if ('index_url' in chapterPdfs && chapterPdfs.index_url !== undefined) {
-		// Two-hop scrape. Network resolution happens inside the scraper; tests
-		// inject `opts.resolveChapterUrls` to avoid hitting the live FAA.
-		const resolver =
-			opts.resolveChapterUrls ??
-			(async (indexUrl: string, pagePattern: string, chapterCount: number) => {
-				const { resolveChapterUrls } = await import('./scrape');
-				return resolveChapterUrls(indexUrl, pagePattern, chapterCount, opts.fetchImpl);
-			});
-		const list = await resolver(chapterPdfs.index_url, chapterPdfs.chapter_page_pattern, chapterPdfs.chapter_count);
-		for (const r of list) {
-			resolved.push({ ordinal: r.ordinal, pdfUrl: r.pdfUrl, pageUrl: r.pageUrl });
+		// Two-hop scrape path. Three resolution strategies, in order:
+		//   1. Cached manifest. If the per-handbook manifest at
+		//      `<editionRoot>/manifest.json` already lists every chapter with both
+		//      `chapter_page_url` and `source_url` populated, reuse those URLs --
+		//      every operator run otherwise pays 1 + chapterCount sequential GETs.
+		//      `--rescrape` forces the live scrape (operator escape hatch when the
+		//      FAA changes URL structure mid-edition).
+		//   2. Test-injected resolver (`opts.resolveChapterUrls`).
+		//   3. Live two-hop scrape via `./scrape`.
+		const cached = opts.rescrape !== true ? readCachedChapterUrls(editionRoot, chapterPdfs.chapter_count) : null;
+		if (cached !== null) {
+			for (const r of cached) {
+				resolved.push({ ordinal: r.ordinal, pdfUrl: r.pdfUrl, pageUrl: r.pageUrl });
+			}
+		} else {
+			const resolver =
+				opts.resolveChapterUrls ??
+				(async (indexUrl: string, pagePattern: string, chapterCount: number) => {
+					const { resolveChapterUrls } = await import('./scrape');
+					return resolveChapterUrls(indexUrl, pagePattern, chapterCount, opts.fetchImpl);
+				});
+			const list = await resolver(chapterPdfs.index_url, chapterPdfs.chapter_page_pattern, chapterPdfs.chapter_count);
+			for (const r of list) {
+				resolved.push({ ordinal: r.ordinal, pdfUrl: r.pdfUrl, pageUrl: r.pageUrl });
+			}
 		}
 	}
 
@@ -336,6 +374,33 @@ async function buildChapterPdfPlans(
 	}
 
 	return plans;
+}
+
+/**
+ * Read the per-handbook manifest and return cached chapter URLs if (and only
+ * if) every chapter row has both `source_url` and `chapter_page_url` populated
+ * AND the row count matches the configured `chapter_count`. Any partial cache
+ * (count mismatch, missing field, missing manifest) returns null so the caller
+ * falls back to the live scrape.
+ *
+ * Mirrors the manifest-scoping rule used by `manifestPathFor`: chapter-aware
+ * handbooks live at `<editionRoot>/manifest.json`.
+ */
+function readCachedChapterUrls(editionRoot: string, chapterCount: number): readonly CachedChapterUrls[] | null {
+	const manifestPath = join(editionRoot, 'manifest.json');
+	const manifest = readHandbookManifestFile(manifestPath);
+	if (manifest === null) return null;
+	const chapters = manifest.chapters;
+	if (chapters === undefined || chapters.length !== chapterCount) return null;
+	const out: CachedChapterUrls[] = [];
+	for (let n = 1; n <= chapterCount; n += 1) {
+		const row = chapters.find((c) => c.ordinal === n);
+		if (row === undefined) return null;
+		if (typeof row.chapter_page_url !== 'string' || row.chapter_page_url.length === 0) return null;
+		if (typeof row.source_url !== 'string' || row.source_url.length === 0) return null;
+		out.push({ ordinal: n, pageUrl: row.chapter_page_url, pdfUrl: row.source_url });
+	}
+	return out;
 }
 
 function buildAncillaryPlan(
