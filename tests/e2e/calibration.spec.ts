@@ -1,8 +1,20 @@
-import { expect, test } from '@playwright/test';
+import { test as baseTest, expect } from '@playwright/test';
 import { ROUTES } from '../../libs/constants/src';
+import { test as freshUserTest } from './fixtures/fresh-user';
 
-test.describe('calibration', () => {
-	test('loads with heading and one of the two valid layouts', async ({ page }) => {
+// `loads with heading and one of the two valid layouts` runs against the
+// shared dev-seed (Abby), whose review history populates the calibration
+// page, so the assertion exercises the populated layout.
+//
+// `empty state links to review + rep session` previously called
+// `test.skip(...)` whenever the seeded user had data; that branch never ran
+// in CI because Abby's seed always fills it. The freshUser fixture sidesteps
+// the coupling: each fixture user has zero confidence ratings, so the page
+// renders the empty state deterministically and the CTAs are always
+// asserted against.
+
+baseTest.describe('calibration (shared seed)', () => {
+	baseTest('loads with heading and one of the two valid layouts', async ({ page }) => {
 		await page.goto(ROUTES.CALIBRATION);
 		await expect(page.getByRole('heading', { name: 'Calibration', exact: true })).toBeVisible();
 
@@ -13,13 +25,16 @@ test.describe('calibration', () => {
 
 		await expect(emptyHeading.or(bucketHeading).first()).toBeVisible();
 	});
+});
 
-	test('empty state links to review + rep session', async ({ page }) => {
+freshUserTest.describe('calibration (fresh user)', () => {
+	freshUserTest('empty state links to review + rep session', async ({ page, freshUser }) => {
+		// `freshUser` ensures login + zero confidence-rated reviews/SIRs, so the
+		// calibration page deterministically renders the empty-state path.
+		expect(freshUser.id).toBeDefined();
 		await page.goto(ROUTES.CALIBRATION);
-		const emptyHeading = page.getByRole('heading', { name: /not enough data/i });
-		if (!(await emptyHeading.isVisible().catch(() => false))) {
-			test.skip(true, 'learner already has calibration data -- empty-state CTAs not present');
-		}
+		await expect(page.getByRole('heading', { name: 'Calibration', exact: true })).toBeVisible();
+		await expect(page.getByRole('heading', { name: /not enough data/i })).toBeVisible();
 		await expect(page.getByRole('link', { name: /start a review/i })).toBeVisible();
 		await expect(page.getByRole('link', { name: /start a rep session/i })).toBeVisible();
 	});
