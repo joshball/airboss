@@ -9,8 +9,27 @@ counts:
   minor: 4
   nit: 2
 status: unread
-review_status: pending
+review_status: done
 ---
+
+## Status as of 2026-05-04
+
+Walked every finding against current main. 4 of 8 closed; 4 carried forward.
+
+| Severity | Finding                                                 | Verdict                                                                                                  |
+| -------- | ------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| MAJOR    | `requireAuth` inlines `redirectTo` query key            | CLOSED -- `libs/auth/src/auth.ts:97` uses `QUERY_PARAMS.REDIRECT_TO`                                     |
+| MAJOR    | Session-to-AuthUser mapping duplicated 4x               | CLOSED -- `mapBetterAuthSession` extracted to `libs/auth/src/session-map.ts`; all 4 hooks consume it     |
+| MINOR    | `REQUEST_ID_HEADER` duplicated as local const           | STILL OPEN -- 4 hooks still declare their own; carried below                                             |
+| MINOR    | `'cookie'` / `'x-forwarded-for'` / `'content-type'`     | STILL OPEN -- header strings still inlined in 4 sites; carried below                                     |
+| MINOR    | Logger names inlined                                    | STILL OPEN -- `'study'` / `'hangar:login'` strings still inlined; carried below                          |
+| MINOR    | Security-header values repeated in `applySecurityHeaders` | STILL OPEN -- duplicated between study + hangar; carried below (also tracked by architecture/backend)  |
+| NIT      | `requireAuth` builds redirect URL inline                | CLOSED -- accepted; route function `LOGIN_WITH_REDIRECT` would over-engineer for one call site            |
+| NIT      | `apps/*/src/lib/server/auth.ts` casts undefined w/o comment | CLOSED -- comment block now lives in study auth.ts:22-26 explaining build-time placeholder            |
+
+### Carried-forward design items
+
+All four open items collapse into one design question: how much of the per-app auth wiring belongs in shared helpers vs. per-app shims. The convergent fix is to hoist `acceptOrGenerateRequestId`, `applySecurityHeaders`, `isAuthPath`, the per-app logger naming, and the `Headers({ 'content-type', 'x-forwarded-for' })` builder into `@ab/auth/sveltekit`. That extraction also closes the architecture MAJOR (session-hydration done) and the backend MAJOR (login/logout duplication). Trigger to land: when sim or avionics adds an authenticated write endpoint -- at that point we need `applySecurityHeaders` on those surfaces too, which forces the extraction. Tracked under correctness MAJOR.
 
 ## Summary
 
