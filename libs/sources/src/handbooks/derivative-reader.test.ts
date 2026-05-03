@@ -108,6 +108,6 @@ describe('bodyPathForSection', () => {
 		const section = manifestSectionForLocator(m, parseHandbook('phak/8083-25C/1/2'));
 		if (section === null) throw new Error('expected section');
 		const path = bodyPathForSection(section, FIXTURE_ROOT);
-		expect(path).toBe(join(FIXTURE_ROOT, 'phak/FAA-H-8083-25C/01/02-history-of-flight.md'));
+		expect(path).toBe(join(FIXTURE_ROOT, 'phak/FAA-H-8083-25C/01-introduction-to-flying/02-history-of-flight.md'));
 	});
 });
