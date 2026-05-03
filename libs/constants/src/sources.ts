@@ -78,6 +78,30 @@ export const SOURCE_ACTION_LIMITS = {
 } as const;
 
 /**
+ * Per-corpus parallel-execution cap for `bun run sources download`.
+ *
+ * 4 is the polite default; the FAA serves chapters from the same host
+ * (`www.faa.gov`), so unbounded `Promise.all` would hammer them and risk
+ * triggering edge-cache rate limits. Operators can override via
+ * `--concurrency=N` (validated against `SOURCE_DOWNLOAD_CONCURRENCY_MAX`).
+ *
+ * Wall-clock impact for PHAK 13 chapters at 4-way concurrency: ~3.5x the
+ * serial floor (vs the prior 13x). For two-hop scrape (1 index GET + 12
+ * chapter-page GETs + 12 chapter-PDF GETs), the same cap applies because
+ * the manifest cache (see `buildChapterPdfPlans`) skips the scrape entirely
+ * on the steady-state path.
+ */
+export const SOURCE_DOWNLOAD_CONCURRENCY = 4;
+
+/**
+ * Hard upper bound on `--concurrency=N`. Refuses values that would saturate
+ * the FAA host or exhaust the local fetch socket pool. 16 is well below the
+ * typical OS default (~1024) but high enough that an operator on a fast link
+ * can opt-in past the polite default.
+ */
+export const SOURCE_DOWNLOAD_CONCURRENCY_MAX = 16;
+
+/**
  * Hostname allowlist for the source-fetch redirect chain.
  *
  * Every download / discovery / scrape URL traces back to a YAML config under

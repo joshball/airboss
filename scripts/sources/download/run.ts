@@ -13,6 +13,7 @@ import { ALL_CORPORA, type CliArgs, HELP_TEXT, parseArgs } from './args';
 import { executePlan, runVerify } from './execute';
 import { dropPartialDownloads, partialLogPath, planIdKey, readPartialDownloads } from './partial-log';
 import { buildPlans, type DownloadPlan } from './plans';
+import { runPlansBounded } from './pool';
 import { type CorpusResult, printSummary, printVerifyTable } from './summary';
 
 export interface RunOptions {
@@ -92,9 +93,13 @@ export async function runDownloadSources(opts: RunOptions = {}): Promise<number>
 		console.log(`\n${corpus}:`);
 		const result = results.find((r) => r.corpus === corpus);
 		if (result === undefined) continue;
-		for (const plan of corpusPlans) {
-			await executePlan(plan, args, result, args.dryRun ? undefined : { cacheRoot });
-		}
+		// Bounded-concurrency execution. Per-plan output via `describePlan` is
+		// self-identifying; interleave is the trade-off for ~limit-x wall-clock.
+		// Errors in one plan never cancel siblings -- `executePlan` swallows them
+		// into `result.errors`, never throws. The end-of-corpus summary still
+		// prints sequentially after all workers drain.
+		const ctx = args.dryRun ? undefined : { cacheRoot };
+		await runPlansBounded(corpusPlans, args.concurrency, (plan) => executePlan(plan, args, result, ctx));
 	}
 
 	printSummary(results, cacheRoot, args.dryRun);

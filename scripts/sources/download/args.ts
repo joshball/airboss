@@ -6,6 +6,8 @@
  * sibling modules.
  */
 
+import { SOURCE_DOWNLOAD_CONCURRENCY, SOURCE_DOWNLOAD_CONCURRENCY_MAX } from '@ab/constants';
+
 export type Corpus = 'regs' | 'aim' | 'ac' | 'acs' | 'handbooks';
 
 export const ALL_CORPORA: readonly Corpus[] = ['regs', 'aim', 'ac', 'acs', 'handbooks'] as const;
@@ -20,6 +22,18 @@ export interface CliArgs {
 	readonly verify: boolean;
 	readonly help: boolean;
 	readonly noColor: boolean;
+	/**
+	 * Force the two-hop scrape path even when the per-handbook manifest already
+	 * carries cached chapter URLs. Operator escape hatch when the FAA changes
+	 * URL structure mid-edition.
+	 */
+	readonly rescrape: boolean;
+	/**
+	 * Per-corpus parallel-execution cap. Defaults to `SOURCE_DOWNLOAD_CONCURRENCY`
+	 * (4); operator can override via `--concurrency=N` up to
+	 * `SOURCE_DOWNLOAD_CONCURRENCY_MAX` (16).
+	 */
+	readonly concurrency: number;
 }
 
 export function isCorpus(s: string): s is Corpus {
@@ -36,6 +50,8 @@ export function parseArgs(argv: readonly string[]): CliArgs {
 	let verify = false;
 	let help = false;
 	let noColor = false;
+	let rescrape = false;
+	let concurrency: number = SOURCE_DOWNLOAD_CONCURRENCY;
 
 	for (const arg of argv) {
 		if (arg === '--help' || arg === '-h') {
@@ -66,6 +82,10 @@ export function parseArgs(argv: readonly string[]): CliArgs {
 			noColor = true;
 			continue;
 		}
+		if (arg === '--rescrape') {
+			rescrape = true;
+			continue;
+		}
 		if (arg.startsWith('--corpus=')) {
 			const requested = arg
 				.slice('--corpus='.length)
@@ -90,6 +110,20 @@ export function parseArgs(argv: readonly string[]): CliArgs {
 			editionDate = value;
 			continue;
 		}
+		if (arg.startsWith('--concurrency=')) {
+			const raw = arg.slice('--concurrency='.length);
+			const parsed = Number.parseInt(raw, 10);
+			if (!Number.isFinite(parsed) || String(parsed) !== raw) {
+				throw new Error(`--concurrency must be an integer, got "${raw}"`);
+			}
+			if (parsed < 1 || parsed > SOURCE_DOWNLOAD_CONCURRENCY_MAX) {
+				throw new Error(
+					`--concurrency must be between 1 and ${SOURCE_DOWNLOAD_CONCURRENCY_MAX} (inclusive), got ${parsed}`,
+				);
+			}
+			concurrency = parsed;
+			continue;
+		}
 		throw new Error(`unknown argument: ${arg}`);
 	}
 
@@ -103,6 +137,8 @@ export function parseArgs(argv: readonly string[]): CliArgs {
 		verify,
 		help,
 		noColor,
+		rescrape,
+		concurrency,
 	};
 }
 
@@ -118,6 +154,8 @@ Flags:
   --force-refresh              Ignore existing cache, re-download
   --include-handbooks-extras   Add 8083-2/9/15/16/27/30/32/34
   --edition-date=YYYY-MM-DD    eCFR snapshot date (default: per-title latest_amended_on)
+  --concurrency=N              Per-corpus parallel download cap (1..16, default 4)
+  --rescrape                   Force two-hop chapter URL scrape even when manifest is cached
   --verbose                    Log every URL attempt + redirects
   --no-color                   Disable ANSI color in output (also honors NO_COLOR env)
   --help                       Show this help

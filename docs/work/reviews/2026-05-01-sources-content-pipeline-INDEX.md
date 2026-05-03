@@ -5,6 +5,7 @@ date: 2026-05-01
 reviewers: 9
 status: pending
 review_status: done
+closed_2026-05-04: C6 (concurrency) + C7 (URL cache) follow-up
 ---
 
 # Sources & content pipeline — 10x review (chunk 4)
@@ -40,9 +41,9 @@ Stack detected: SvelteKit + Svelte 5 + Bun + TypeScript + Drizzle/PostgreSQL + V
 - [schema](2026-05-01-sources-content-pipeline-schema.md)
 - [backend](2026-05-01-sources-content-pipeline-backend.md)
 
-## Status as of 2026-05-03 (audited against `12120dec`)
+## Status as of 2026-05-03 (audited against `12120dec`; C6/C7 closed 2026-05-04)
 
-The original punch list (above table) is closed except for two perf items. Each verdict below was re-grepped against the working tree on `origin/main@12120dec`.
+The original punch list (above table) is fully closed. Each verdict below was re-grepped against the working tree on `origin/main@12120dec`; C6 + C7 closed in a follow-up landing the bounded-concurrency worker pool + manifest-cached chapter URL resolver.
 
 ### Closed criticals (8 of 10)
 
@@ -77,13 +78,11 @@ I. **Snapshot CLI hydrates the registry before generating.** `runSnapshotCli` at
 
 J. **`writeIfChanged` hoisted to a shared util.** `libs/sources/src/io/write-if-changed.ts:38` (note `:12` describes the hoist from `regs/derivative-writer.ts`); consumed by `libs/sources/src/aim/source-ingest.ts:40,266-360`, `libs/sources/src/handbooks-extras/ingest.ts:45,323,344`, `libs/sources/src/ac/ingest.ts:32,342,364,432`, and `libs/sources/src/regs/derivative-writer.ts:15,107,113,136,147,160,183`. Tests at `libs/sources/src/io/write-if-changed.test.ts` (#414).
 
-### Still open (2 of 141)
+### Closed perf items (now 10 of 10)
 
-- **C6 -- Chapter PDFs download serially, not in parallel.** Verified `for (const plan of corpusPlans) { await executePlan(plan, ...) }` at `scripts/sources/download/run.ts:95-97`. ADR 022's wall-clock-parity claim remains unrealized; per-corpus + per-plan throughput is operator wall time today. **Trigger:** revisit on the next handbook-ingest cycle (when an operator pulls a fresh handbook edition and notices the run is dominated by serial GETs); cap concurrency to a small N to respect the FAA documentLibrary host allowlist + body-size cap. Documentation-only close-out for chunk 4; no fix in this PR.
+- **C6 -- Chapter PDFs download serially, not in parallel.** Closed via the bounded-concurrency worker pool in `scripts/sources/download/pool.ts` and the parallel dispatch at `scripts/sources/download/run.ts:97-104`. Default concurrency `SOURCE_DOWNLOAD_CONCURRENCY = 4` (constants in `libs/constants/src/sources.ts:80-101`); operator override via `--concurrency=N` validated against `SOURCE_DOWNLOAD_CONCURRENCY_MAX = 16`. Errors in one plan never cancel siblings (`executePlan` swallows into `result.errors` + the partial-download log). Tests: `scripts/sources/download/pool.test.ts`, `scripts/sources/download/run.parallel.test.ts`.
 
-- **C7 -- Two-hop scrape resolves chapter URLs on every plan-build, not cached between runs.** Verified: a `resolveChapterUrls` test seam exists at `scripts/sources/download/plans.ts:98,307-312` (so unit tests can stub the live FAA), but the resolved URLs are not persisted to `manifest.json` between operator runs -- every `bun sources download handbooks` pays 1+chapterCount sequential GETs. **Trigger:** ride along with C6; once parallelization lands, also cache the resolved URLs in the per-handbook manifest with a freshness-gated re-scrape (mirror the existing 7-day errata-discovery gate at `run.ts:112-114`). Documentation-only close-out for chunk 4; no fix in this PR.
-
-Both deferrals are concrete (next-handbook-ingest trigger), not "consider later" (CLAUDE.md "No undecided future work"). The fix scope is one work package because both items share the chapter-download code path; a follow-up `wp-handbook-download-parallelism` is the natural carrier.
+- **C7 -- Two-hop scrape resolves chapter URLs on every plan-build, not cached between runs.** Closed by reading the per-handbook manifest before invoking the resolver (`buildChapterPdfPlans` in `scripts/sources/download/plans.ts:286-340`). When every chapter row carries both `chapter_page_url` and `source_url` AND row count matches `chapter_count`, the live scrape is skipped entirely. Operator escape hatch: `--rescrape` forces the live scrape even with a complete cache. Tests in `scripts/sources/download/plans.cache.test.ts` pin all four resolution branches (cached, missing manifest, partial cache, --rescrape).
 
 ### Strengths confirmed across reviewers
 
@@ -108,4 +107,4 @@ If that drift lands, it needs a real `ALTER TABLE ... RENAME` migration plus a c
 
 ## Next step
 
-Closed. 8 of 10 criticals + 10 of 10 major clusters landed across PRs #401, #402, #403, #405, #407, #408, #409, #413, #414, #429, #434, #454, #458, #471, #474, #477, #482. The two remaining items (C6, C7) are deferred to a `wp-handbook-download-parallelism` work package with a "next handbook ingest cycle" trigger; both are perf-only and not user-visible until an operator re-pulls a chapter-aware handbook.
+Closed. 10 of 10 criticals + 10 of 10 major clusters landed across PRs #401, #402, #403, #405, #407, #408, #409, #413, #414, #429, #434, #454, #458, #471, #474, #477, #482, plus the C6/C7 follow-up. No remaining open items in this review.
