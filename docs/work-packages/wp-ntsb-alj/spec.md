@@ -3,7 +3,7 @@ title: 'Spec: WP-NTSB-ALJ -- NTSB administrative law judge rulings'
 product: study
 feature: wp-ntsb-alj
 type: spec
-status: draft
+status: shipped
 review_status: pending
 ---
 

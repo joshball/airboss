@@ -73,7 +73,7 @@ Each is independent; can run in parallel. All are larger builds (new corpus pipe
 |----|--------|------|
 | WP-SAFO + WP-INFO | SAFOs + InFOs (combined; identical pipeline shape) | [spec](../work-packages/wp-safo-info/spec.md) |
 | WP-CC | FAA Chief Counsel legal interpretations | [spec](../work-packages/wp-cc/spec.md) |
-| WP-NTSB-ALJ | NTSB administrative law judge rulings | [spec](../work-packages/wp-ntsb-alj/spec.md) |
+| WP-NTSB-ALJ | NTSB administrative law judge rulings | ✅ shipped 2026-05-03 ([spec](../work-packages/wp-ntsb-alj/spec.md)) — registry resolver + manifest-validation `kind: 'ntsb-alj'` + section-tree adapter; 3 cases manually curated |
 
 ### Wave 8 — Future / deferred
 
