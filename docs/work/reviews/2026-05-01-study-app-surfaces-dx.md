@@ -8,7 +8,34 @@ critical: 0
 major: 6
 minor: 8
 nit: 4
+status: unread
+review_status: pending
 ---
+
+## Status as of 2026-05-04
+
+Re-greped main. 4 of 18 closed; 14 still-open. The convergent log-quality cluster ("X threw" vs "verb entity failed") is the dominant remainder.
+
+| Severity | Finding | Verdict | Evidence |
+| -------- | ------- | ------- | -------- |
+| MAJOR    | handbook routes silently turn DB failures into 404s | STILL OPEN | `apps/study/src/routes/(app)/library/handbook/[slug]/[chapter]/+page.server.ts:40,43,113,115,128,130,148,150,165` -- still `.catch(() => null)` then `error(404, ...)`. Next: typed `ReferenceNotFoundError` (already exists; chapter-lens loader uses it correctly), drop `.catch(() => null)`; let real failures hit `handleError` |
+| MAJOR    | Error log messages are non-grep-friendly verbs | STILL OPEN | `memory/[id]/+page.server.ts:113,142,194,224` still `'updateCard threw'` etc. Next: mechanical sweep -- replace `'<func> threw'` with `'<verb> <entity> failed'` matching the user-visible noun phrase |
+| MAJOR    | handbook 404 messages leak slugs to learners | CLOSED | `library/handbook/[slug]/[chapter]/+page.server.ts:35,41` -- `'Handbook not found.'` (no slug echo). Same pattern across handbook + section + topic + cert + regulations 404s |
+| MAJOR    | login 500-path masks better-auth response shape | STILL OPEN | `login/+page.server.ts:62-84` still doesn't branch on `>= 500` for an explicit "service trouble" surface. Next: branch on status, log error + return service-error message on 5xx |
+| MAJOR    | discovery spawn errors logged at `warn`, not `error` | STILL OPEN | `apps/study/src/lib/server/discovery.ts:56,62` -- still `log.warn`. Next: promote both branches to `log.error` |
+| MAJOR    | 5xx during sign-out logs but no body snippet | STILL OPEN | `logout/+page.server.ts` 5xx path still doesn't snapshot body. Next: capture `(await authResponse.text()).slice(0, 200)` |
+| MINOR    | Banned-user log uses `warn` per-request (no rate limit) | STILL OPEN | `hooks.server.ts:133-139` still `log.warn` per-request. Next: downgrade to `info`, sample, or wire counter |
+| MINOR    | applySecurityHeaders swallows misconfiguration | STILL OPEN | catch is bare with no log on non-TypeError. Next: catch with `if (!(err instanceof TypeError)) log.error(...)` |
+| MINOR    | requireAuth called repeatedly per action | CLOSED (verified-cheap) | `requireAuth` reads `event.locals.user`; the auth round-trip is in the hook. No real cost; defensive double-call left in place |
+| MINOR    | Card-page client-side fetch nested try/catch loses context | STILL OPEN | `apps/study/src/routes/(app)/memory/[id]/+page.svelte` shrunk to 49 lines; the citation fetch logic moved into `_panels/CardCitationsPanel.svelte`. Re-audit there as part of the log-quality sweep |
+| MINOR    | session start `previewSession` error has no metadata | CLOSED | `session/start/+page.server.ts:79-83` -- `metadata: { mode, focus, cert, seedPresent: seed !== undefined }` |
+| MINOR    | handbook redirect uses 308 with no logging | STILL OPEN | `handbooks/[...rest]/+server.ts` still no log. Next: `log.info('legacy handbooks redirect', { metadata: { from, to } })` |
+| MINOR    | `narrow` and `coerceEnum` patterns duplicated across page servers | STILL OPEN | `coerceEnum<T>` reimplemented in `plans/[id]/+page.server.ts:34` and `plans/new/+page.server.ts:22`. Next: pick `narrow` from `@ab/utils`, replace per-route helpers |
+| NIT      | cards/[id] server load doesn't tag a logger | STILL OPEN | dx polish; trigger: anonymous-traffic 5xx investigation |
+| NIT      | error message inconsistencies for "not found" goals | CLOSED | `goals/[id]/+page.server.ts:63,153,172,185` -- all uniform `'Goal not found.'` |
+| NIT      | handbook-asset 404 generic for three distinct cases | STILL OPEN | route still returns generic 404 for traversal vs missing vs not-a-file. Next: `log.warn('handbook-asset path-escape attempt', ...)` for traversal branch only |
+| NIT      | appearance/theme POST 400 paths don't log | STILL OPEN | low-priority telemetry |
+| NIT      | RenderedLesson re-derives map and html on every prop change | STILL OPEN (low priority) | needs runes-inspector verification before action |
 
 ## Summary
 

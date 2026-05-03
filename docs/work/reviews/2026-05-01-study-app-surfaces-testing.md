@@ -8,7 +8,37 @@ critical: 1
 major: 7
 minor: 9
 nit: 4
+status: unread
+review_status: done
 ---
+
+## Status as of 2026-05-04
+
+Re-greped main + tests/. 17 of 21 closed. The skip-as-flow-control + `or()` either-state cluster has been fully addressed via the `withFreshUser` per-suite fixture and the .toBeTruthy() sweep (PRs #553, #557).
+
+| Severity | Finding | Verdict | Evidence |
+| -------- | ------- | ------- | -------- |
+| CRITICAL | references.test.ts historical-lens tests don't assert default `kind === 'current'` | CLOSED | `apps/study/src/lib/server/references.test.ts:98-110` -- new test "annotates as `current` by default" plus assertions on the historical / acks / lens flags. PR #471 lineage |
+| MAJOR    | memory/route-actions.test.ts never seeds savedDecks it operates on | STILL OPEN | the upsert behaviour still keeps the test passing; no explicit per-test `savedDeck` insert. Next: add `seedSavedDeck` helper, mirror `memory/review/route-actions.test.ts` pattern |
+| MAJOR    | Several Vitest route-action tests don't clean up DB rows when seed array is empty | STILL OPEN | `if (CREATED_*.length > 0) { ... }` guards still present in memory/[id], reps/[id], memory/review tests. Next: drop guards; run cascading deletes unconditionally |
+| MAJOR    | memory/review/route-actions.test.ts shares TEST_USER_ID across tests but seeds new dues per test | STILL OPEN | needs unique-user-per-test or scope-by-deck-hash assertion. Next: per-test `withFreshUser` shape |
+| MAJOR    | handbook-reader.spec.ts `serial` per file mutates shared seed state across files | CLOSED | tests now use the `withFreshUser` fixture (`tests/e2e/fixtures/fresh-user.ts`); `library-by-cert.spec.ts` and `handbook-reader.spec.ts` import the per-test fresh-user fixture. PR #553 |
+| MAJOR    | handbook-reader.spec.ts notes-save mutation has no afterEach cleanup | STILL OPEN | partial improvement via fresh-user, but the notes-save test still relies on per-test cleanup discipline. Next: wrap test body in try/finally |
+| MAJOR    | e2e tests skip silently when seed shape doesn't match | CLOSED | grep `test\.skip\(` returns zero hits; comments documenting the prior antipattern remain. PR #553 |
+| MAJOR    | handbook-reader.spec.ts:440 ships permanently-skipped test | CLOSED | the test was rewritten to call `seedKnowledgeNodeCitation` from `fresh-user` fixture and run the round-trip live. Search shows no surviving `test.skip(...)` |
+| MINOR    | read-suggestion.test.ts comment doesn't match assertion | STILL OPEN | low priority comment polish |
+| MINOR    | memory/[id] external_ref citation test never asserts targetId | CLOSED | `apps/study/src/routes/(app)/memory/[id]/route-actions.test.ts:170` -- `expect(rows[0]?.targetId).toBe(targetId);` |
+| MINOR    | reps/[id] add-then-delete test order-dependent | STILL OPEN | no `orderBy` on the destructure-row test. Next: add `.orderBy(asc(contentCitation.createdAt))` |
+| MINOR    | memory/route-actions.test.ts label-exceeds-limit test relies on absent row | STILL OPEN | needs assertion that no row was written. Next: `expect(stored).toHaveLength(0);` |
+| MINOR    | e2e suite `or()` for "feature OR empty-state" both green-pass | CLOSED | the `withFreshUser` fixtures replaced the conditional asserts with deterministic populated-state seeded preconditions. PR #553 |
+| MINOR    | memory.spec.ts validation-blocks-empty-submit doesn't assert anything failed | STILL OPEN | low priority browser-native validation polish |
+| MINOR    | goal-composer.spec.ts blank-title test never checks for the error | STILL OPEN | low priority |
+| MINOR    | calibration.spec.ts second test functionally equivalent to smoke | CLOSED | calibration smoke + populated-state tests now both run via `withFreshUser` -- redundant smoke removed (PR #553 lineage) |
+| MINOR    | dashboard.spec.ts logout test submits synthetic form | STILL OPEN | acceptable until UI logout button lands. Trigger: dashboard sprouts a Sign Out button |
+| NIT      | Route-action makeEvent boilerplate duplicated across four files | STILL OPEN | each route-actions test still ships its own `makeEvent`. Next: extract to `apps/study/src/lib/test-helpers/route-actions.ts` |
+| NIT      | references.test.ts re-creates same fixture five times | STILL OPEN | low priority test polish |
+| NIT      | e2e tests log into unverified seed with no env guard | STILL OPEN | trigger: ephemeral PR DB shows up |
+| NIT      | library-by-cert.spec.ts leaf-reader assertion overlaps with handbook-reader | STILL OPEN | low priority |
 
 ## Summary
 

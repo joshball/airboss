@@ -8,7 +8,27 @@ critical: 0
 major: 5
 minor: 5
 nit: 1
+status: unread
+review_status: pending
 ---
+
+## Status as of 2026-05-04
+
+Re-greped main against every finding. 1 of 11 closed; 10 still-open. All five MAJOR N+1 patterns remain -- the convergent fix (per-batch BC helpers) hasn't landed. Tracked in INDEX as the Wave-2 root-cause cluster.
+
+| Severity | Finding | Verdict | Evidence |
+| -------- | ------- | ------- | -------- |
+| MAJOR    | Triple-nested N+1 in syllabus area drill-down | STILL OPEN | `apps/study/src/routes/(app)/credentials/[slug]/areas/[areaCode]/+page.server.ts:79-93` -- still `tasks.map -> elements.map -> Promise.all([2])`. Next: add `getCitationsForSyllabusNodes(elementIds)` + `getKnowledgeNodesForSyllabusLeaves(elementIds)` BC batchers |
+| MAJOR    | N+1 over handbook editions in lens index | STILL OPEN | `lens/handbook/+page.server.ts:17-22` still per-handbook `getHandbookProgress`. Next: `getHandbookProgressForUser(userId, refIds)` BC |
+| MAJOR    | Per-section N+1 inside chapter lens | STILL OPEN | `lens/handbook/[doc]/[chapter]/+page.server.ts:62-75` still per-section `getNodesCitingSection`. Next: `getNodesCitingSections(referenceId, chapter, sections[])` BC |
+| MAJOR    | N+1 over goal prereqs and credentials | STILL OPEN | `credentials/+page.server.ts:28-34`, `credentials/[slug]/+page.server.ts:74-79`, `goals/[id]/+page.server.ts:76-88` -- all the per-row reads still in place. Next: same root cluster as backend MAJOR (mastery map + getCredentialsByIds + parallelize syllabi loop) |
+| MAJOR    | Eager full help registry shipped to every signed-in page bundle | STILL OPEN | `(app)/+layout.svelte:19` still imports `'$lib/help/register'` for side effect. Next: lazy-load registration inside `/help/*` routes only, OR split metadata from body content for code-splitting |
+| MINOR    | Library landing fans out three queries when two would do | STILL OPEN | `library/+page.server.ts:84-107` still does the three-query reduce. Tied to architecture-MAJOR `getLibraryLandingPayload` |
+| MINOR    | `listReferences()` called four times across regulations route stack | STILL OPEN (improved) | regulations routes now go through `getRegulationsView`, but library landing + aircraft still do `listReferences()` + filter. Next: `listReferencesByKind(kind)` BC + use existing `getReferenceByDocument(slug)` for aircraft loader |
+| MINOR    | Reference detail does sequential `getReferenceById` calls | STILL OPEN | `library/regulations/[kind]/[group]/[section]/+page.server.ts` still extra getReferenceById. Next: widen the BC view payload to include supersededById |
+| MINOR    | Knowledge node detail also calls listReferences includeSuperseded | STILL OPEN | `knowledge/[slug]/+page.server.ts:115` still pulls full reference table. Next: `getReferencesByIds(ids, { includeSuperseded: true })` |
+| MINOR    | parseMarkdown runs sequentially across help-page sections | STILL OPEN | `help/[id]/+page.ts:11-13` still sequential. One-line `Promise.all(...)` fix |
+| NIT      | (dev)/references fixture loader does file IO on every request | STILL OPEN | dev-only; trivial. Trigger: someone adds a fourth fixture and feels the rebuild lag |
 
 ## Summary
 
