@@ -14,9 +14,9 @@ Where each item from [spec.md §6 (Recommended sequence)](spec.md#6-recommended-
 
 ## Headline
 
-**22 references readable in-app today.** That's PHAK + AFH + AVWX + AIM + 11 CFR parts + 7 whole-doc handbooks. The in-app-readable list grew by 12 in the 2026-05-03 session (WP-CFR shipped 11; rename WP touched AMT-G/P naming).
+**31 references readable in-app today.** That's PHAK + AFH + AVWX + AIM + 11 CFR parts + 7 whole-doc handbooks + 9 ACs. The in-app-readable list grew by 9 ACs after WP-AC shipped (#480, 2026-05-02); the 2026-05-03 session added 12 more (WP-CFR shipped 11; rename WP touched AMT-G/P naming).
 
-**~37 references catalogued but NOT readable.** Cards exist on `/library` (showing "external link"); no `reference_section` rows seeded.
+**~28 references catalogued but NOT readable.** Cards exist on `/library` (showing "external link"); no `reference_section` rows seeded.
 
 **Manifest-vs-card gap is bigger than I described in [stage-status.md](../../ingestion-pipeline/stage-status.md).** The earlier snapshot reported "9 manifests, 17 AC cards" as if the gap was just adapter wiring. The real gap has three flavors:
 
@@ -32,7 +32,7 @@ Where each item from [spec.md §6 (Recommended sequence)](spec.md#6-recommended-
 | 2 | **WP-MTN** (Mountain Flying pamphlet) | ✅ Shipped 2026-05-03 | Hand-cleaned override at `scripts/sources/config/handbooks-extras-overrides/faa-mtn-tips.md` via the `body_override` mechanism (#489); seeded as whole-doc | — |
 | 3 | **WP-AIM** | ✅ Shipped (pre-session) | 744 entries (10 chapters + 38 sections + 396 paragraphs + 297 glossary terms + 3 appendices) seeded as section-tree | — |
 | 4 | **WP-CFR-V** (CFR seed) | ✅ Shipped 2026-05-03 (#491) | 825 sections across 11 references; `kind: 'cfr'` schema + `seedCfrManifest` adapter + dispatcher case + `kind: 'cfr'` backfilled on 3 manifests | — |
-| 5 | **WP-AC-V** (AC visibility) | 🟡 Partial — gap still open | 9 of the 17 AC cards have on-disk manifests (extracted + registered into `@ab/sources`). Schema discriminator + seed adapter NOT yet built. | Need `kind: 'ac'` schema, `seedAcManifest` adapter, dispatcher case. PLUS: 12 cards with NO manifest (need download + extract first) — see "AC gap detail" below. PLUS: 3 manifests have no card yet (`120-71`, `25-7`, `61-65`). |
+| 5 | **WP-AC-V** (AC visibility) | ✅ Shipped 2026-05-02 (#480) | All 9 on-disk AC manifests seed as readable references via `kind: 'ac'` schema + `seedAcManifest` adapter + dispatcher case + `seed-mapping.ts` registry (9 entries). Manifest phase upserts the reference rows for all 9 manifests; the YAML phase enriches the 5 that match an existing YAML row. | The 4 manifests with no YAML row (`25-7`, `61-65`, `91-21-1`, `120-71`) seed as readable cards but with empty subjects + null primary_cert until YAML reconciliation lands. The 12 cards with NO manifest still need WP-AC-FULL (download + extract). |
 | 6 | **WP-ACS-V** (ACS visibility) | 🟡 Partial — gap still open | 5 of the 7 ACS cards have on-disk manifests. Schema + adapter NOT yet built. | Need `kind: 'acs'` schema (deepest tree of any corpus: publication → area → task → element), `seedAcsManifest` adapter, dispatcher case. PLUS: 2 cards lack manifests (`cfii-airplane-pts-9e`, `faa-g-acs-2-companion-guide`). PLUS: ACS slug edition mapping (gap 2 from broad survey) needs reconciliation. |
 | 7 | **WP-CC** (Chief Counsel) | ❌ Not started | Has umbrella card via `course/references/other-publications.yaml` | New corpus pipeline: source/extract/register. ADR 019 already provisions the URI. |
 | 8 | **WP-NTSB-ALJ** | ❌ Not started | Has umbrella card via `course/references/ntsb.yaml` | New corpus pipeline. NTSB has its own data model (accident reports, recommendations, factual reports). |
@@ -43,7 +43,7 @@ Where each item from [spec.md §6 (Recommended sequence)](spec.md#6-recommended-
 
 ## AC gap detail (the manifest-vs-card mismatch)
 
-`course/references/advisory-circulars.yaml` lists 17 AC cards. `find ac -name manifest.json` returns 9 on-disk manifests. The set difference is asymmetric:
+`course/references/advisory-circulars.yaml` lists 17 AC cards. `find ac -name manifest.json` returns 9 on-disk manifests. As of WP-AC (#480) the seed adapter dispatches every on-disk manifest, so all 9 ACs are readable in-app. The remaining gap is asymmetric:
 
 ### 12 cards with NO manifest (need full pipeline: download → extract → register → seed)
 
@@ -64,15 +64,18 @@ Where each item from [spec.md §6 (Recommended sequence)](spec.md#6-recommended-
 
 These need to be added to `scripts/sources/config/ac.yaml` first, then `bun run sources download && bun run sources register ac` produces manifests, THEN the seed adapter can wire them into `reference_section`.
 
-### 3 manifests with NO card (extracted but un-catalogued)
+### 4 manifests with NO YAML row (seeded readable, but missing curated metadata)
 
-| Manifest | Status |
-| -------- | ------ |
-| ac/120-71/b | Crew Resource Management Training. Pilot-relevant; missing from YAML, should be added. |
-| ac/25-7/d | Flight Test Guide for Certification of Transport Category Airplanes. NOT pilot-facing (engineering doc); probably should NOT have a card. |
-| ac/61-65/j | Certification: Pilots and Flight and Ground Instructors. Major pilot-facing AC; missing from YAML, MUST be added. |
+These all seed as readable references via the manifest phase (`seedAcManifest` upserts on `(document_slug, edition)`), but the YAML phase has no row to enrich them with subjects + `primary_cert`. They appear on `/library` with empty subjects.
 
-Of these three, two should get YAML cards (`120-71`, `61-65`) and one should be removed from cache (`25-7` is a Part 25 transport-category cert doc, not pilot-facing).
+| Manifest | DB slug / edition | Status |
+| -------- | ----------------- | ------ |
+| ac/120-71/b | `ac-120-71` / `AC 120-71B` | SOPs and Pilot Monitoring Duties. Pilot-relevant; missing from YAML, should be added. |
+| ac/25-7/d   | `ac-25-7` / `AC 25-7D`     | Flight Test Guide for Certification of Transport Category Airplanes. NOT pilot-facing (engineering doc); probably should NOT have a card. |
+| ac/61-65/j  | `ac-61-65` / `AC 61-65J`   | Certification: Pilots and Flight and Ground Instructors. Major pilot-facing AC; missing from YAML, MUST be added. |
+| ac/91-21-1/d | `ac-91-21-1` / `AC 91.21-1D` | Use of Portable Electronic Devices Aboard Aircraft. Pilot-relevant; missing from YAML, should be added. |
+
+Of these four, three should get YAML cards (`120-71`, `61-65`, `91-21-1`); one should either get a non-pilot-facing card or be removed from cache (`25-7` is a Part 25 transport-category cert doc, not pilot-facing). Tracked as the AC YAML reconciliation in the "Sequencing" section below.
 
 ## ACS gap detail
 
@@ -142,31 +145,26 @@ None block library completeness.
 
 Per spec §6 ratified order, with current detail and per-task estimate of complexity (NOT time):
 
-### Near-term — 4-5 PRs to "all-FAA-references-readable" land
+### Near-term — 3-4 PRs to "all-FAA-references-readable" land
 
-1. **WP-AC-V** (extract + seed the 9 already-cached ACs)
-   - Tasks: add `kind: 'ac'` discriminator to `manifest-validation.ts` + `seedAcManifest` adapter (whole-doc per AC) + dispatcher case + backfill `kind: 'ac'` on 9 manifests + tests
-   - Pattern matches handbooks-extras (whole-doc per AC), reference is WP-MTN (#489)
-   - Adds 9 readable references; remaining 8 cards stay link-only until WP-AC-FULL adds them to download config
-   - Scope: ~6 commits, ~400 LOC, similar to WP-CFR
-2. **WP-ACS-V** (extract + seed the 5 already-cached ACS)
+1. **WP-ACS-V** (extract + seed the 5 already-cached ACS)
    - Tasks: add `kind: 'acs'` discriminator (section-tree, 4 levels deep) + `seedAcsManifest` adapter + dispatcher case + slug-edition mapping fix (broad-survey gap 2) + tests
    - Pattern is novel (deepest tree), reference is WP-CFR (#491) for the section-tree dispatcher pattern
    - Adds 5 readable references; remaining 2 cards stay link-only
    - Scope: bigger than AC because of the 4-level tree + slug mapping
-3. **PCG decision** — delete YAML row OR promote to its own corpus. Small.
-4. **WP-AC-FULL** (download + extract the 12 link-only AC cards)
+2. **PCG decision** — delete YAML row OR promote to its own corpus. Small.
+3. **WP-AC-FULL** (download + extract the 12 link-only AC cards)
    - Tasks: add 12 entries to `scripts/sources/config/ac.yaml` + `bun run sources download` (operator action) + extract + register + content-only adds
-   - Adds 12 readable references; total AC readable = 21 of 17 catalogued + 4 new from un-catalogued manifests = audit pass needed
-3. **AC YAML reconciliation** (orthogonal to WP-AC-V):
-   - Add `ac-120-71` and `ac-61-65` cards to YAML (manifests already exist)
-   - Decide on `ac-25-7` (Part 25 cert doc, probably remove from cache)
-4. **`study.reference` dupe-row sweep** (per IDEAS.md entry):
+   - Adds 12 readable references; total AC readable will be 21 (17 YAML + 4 manifest-only)
+4. **AC YAML reconciliation** (orthogonal to WP-AC-FULL):
+   - Add `ac-120-71`, `ac-61-65`, and `ac-91-21-1` cards to YAML (manifests already shipped via #480)
+   - Decide on `ac-25-7` (Part 25 cert doc, probably remove from cache or tag as engineering-only)
+5. **`study.reference` dupe-row sweep** (per IDEAS.md entry):
    - Delete `aim`/`current` orphan, `aih`/`9B` dupe, `faa-h-8083-2`/`2A` dupe
    - Decide on `afh`/`3B` (intentional supersede chain, or delete)
    - Pattern matches PR #461
 
-After the above 4-5 PRs land: roughly **40+ readable references** out of ~49 catalogued. Remaining link-only: NTSB umbrella, POH umbrella, `other-publications.yaml` umbrellas (intentional).
+After the above PRs land: roughly **40+ readable references** out of ~49 catalogued. Remaining link-only: NTSB umbrella, POH umbrella, `other-publications.yaml` umbrellas (intentional).
 
 ### Medium-term — new-corpus pipelines
 
@@ -196,20 +194,19 @@ After the above 4-5 PRs land: roughly **40+ readable references** out of ~49 cat
 
 If the goal is "every catalogued card on `/library` shows 'Read in-app' (cross-linking deferred)":
 
-| Path | Refs unlocked | Effort |
-| ---- | ------------ | ------ |
-| Today | 22 | shipped |
-| + WP-AC-V | +9 (31) | small |
-| + WP-ACS-V | +5 (36) | medium |
-| + AC YAML reconciliation | +2 (38) | tiny |
-| + WP-AC-FULL | +12 (50) | small (download+content) |
-| + PCG decision | +/- 1 | tiny |
-| + dupe-row cleanup | -3 to -4 (37-46 net) | tiny |
-| + WP-SAFO + WP-INFO | +50-80 (~95-125) | medium |
-| + WP-CC | +100-200 (~195-325) | big |
-| + WP-NTSB-ALJ | +N (varies on scope) | big |
+| Path                     | Refs unlocked         | Effort                   |
+| ------------------------ | --------------------- | ------------------------ |
+| Today (incl. WP-AC #480) | 31                    | shipped                  |
+| + WP-ACS-V               | +5 (36)               | medium                   |
+| + AC YAML reconciliation | +0 (already readable) | tiny (metadata only)     |
+| + WP-AC-FULL             | +12 (48)              | small (download+content) |
+| + PCG decision           | +/- 1                 | tiny                     |
+| + dupe-row cleanup       | -3 to -4 (37-44 net)  | tiny                     |
+| + WP-SAFO + WP-INFO      | +50-80 (~95-125)      | medium                   |
+| + WP-CC                  | +100-200 (~195-325)   | big                      |
+| + WP-NTSB-ALJ            | +N (varies on scope)  | big                      |
 
-After WP-AC-V + WP-ACS-V + AC reconciliation + cleanup: **~40 references readable, covering all FAA pilot-track publications already on disk**. That's the "ship-without-new-corpus-builds" target.
+After WP-ACS-V + AC reconciliation + WP-AC-FULL + cleanup: **~40 references readable, covering all FAA pilot-track publications already on disk**. That's the "ship-without-new-corpus-builds" target.
 
 ## Anchors
 
