@@ -28,6 +28,7 @@
 
 import { expect, test } from '@playwright/test';
 import { ROUTES } from '../../libs/constants/src';
+import { seedPohReference } from './fixtures/fresh-user';
 
 // PHAK leaf-reader anchors -- mirrors tests/e2e/handbook-reader.spec.ts so
 // the canonical readable section stays the same across e2e suites.
@@ -143,14 +144,30 @@ test.describe('library-by-cert: handbook reader', () => {
 });
 
 test.describe('library-by-cert: aircraft spine', () => {
+	// Test-scoped POH reference. The dev seed includes the `poh-afm` umbrella
+	// row, but earlier this assertion called `test.skip(...)` whenever that
+	// row was missing. Seeding via the fixture removes the coupling: the
+	// row is guaranteed before the test runs and torn down after, so the
+	// aircraft-spine path is exercised every run.
+	let teardownPoh: (() => Promise<void>) | null = null;
+
+	test.beforeAll(async () => {
+		const seeded = await seedPohReference({
+			documentSlug: 'e2e-poh-aircraft-spine',
+			title: 'E2E aircraft-spine POH',
+		});
+		teardownPoh = seeded.teardown;
+	});
+
+	test.afterAll(async () => {
+		if (teardownPoh) await teardownPoh();
+	});
+
 	test('/library/aircraft/<seeded-poh> renders the umbrella card', async ({ page }) => {
-		// Find a real POH slug from the landing page rather than hardcoding a
-		// brand-specific value; the seed's POH inventory may evolve, but the
-		// landing page always exposes whatever's seeded as `aircraft-card`s.
 		await page.goto(ROUTES.LIBRARY);
 		const aircraftLinks = page.locator('a.aircraft-card');
-		const count = await aircraftLinks.count();
-		test.skip(count === 0, 'no POH/AFM rows seeded -- aircraft spine has nothing to load');
+		// At least one card must surface -- the fixture guarantees a POH row.
+		expect(await aircraftLinks.count()).toBeGreaterThan(0);
 
 		const href = await aircraftLinks.first().getAttribute('href');
 		expect(href, 'aircraft card should expose an href').not.toBeNull();

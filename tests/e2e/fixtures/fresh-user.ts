@@ -48,6 +48,7 @@ import {
 	goal,
 	goalSyllabus,
 	knowledgeNode,
+	reference,
 	review,
 	scenario,
 	session,
@@ -266,6 +267,85 @@ export async function seedKnowledgeNodeCitation(
 		};
 
 		return { fixture: { nodeId: id, nodeTitle: title }, teardown };
+	} finally {
+		await client.end();
+	}
+}
+
+export interface PohReferenceFixture {
+	referenceId: string;
+	documentSlug: string;
+	title: string;
+}
+
+export interface SeedPohReferenceOptions {
+	documentSlug?: string;
+	edition?: string;
+	title?: string;
+}
+
+/**
+ * Insert a `study.reference` row with `kind=poh` so the library landing
+ * page surfaces the aircraft-spine card. Returns the row id and a teardown
+ * closure. Used by the library-by-cert aircraft spine test, which needs at
+ * least one `a.aircraft-card` link to follow but only cares that the row
+ * resolves -- not which manufacturer it belongs to.
+ *
+ * Idempotent on re-seed: looks for an existing row by `documentSlug` and
+ * reuses its id. The teardown only deletes rows the seeder actually
+ * inserted.
+ */
+export async function seedPohReference(
+	options: SeedPohReferenceOptions = {},
+): Promise<{ fixture: PohReferenceFixture; teardown: () => Promise<void> }> {
+	const { client, db } = openConnection();
+	try {
+		const documentSlug = options.documentSlug ?? `e2e-fixture-poh-${generateAuthId()}`;
+		const edition = options.edition ?? 'aircraft-specific';
+		const title = options.title ?? 'E2E fixture POH/AFM';
+		const id = `ref_${generateAuthId()}`;
+		const now = new Date();
+
+		const existing = await db
+			.select({ id: reference.id })
+			.from(reference)
+			.where(eq(reference.documentSlug, documentSlug))
+			.limit(1);
+
+		if (existing[0]) {
+			// Don't take ownership of a row we didn't create; only delete on
+			// teardown if we are the inserter.
+			return {
+				fixture: { referenceId: existing[0].id, documentSlug, title },
+				teardown: async () => {
+					/* no-op: pre-existing row */
+				},
+			};
+		}
+
+		await db.insert(reference).values({
+			id,
+			kind: 'poh',
+			documentSlug,
+			edition,
+			title,
+			publisher: 'E2E fixture',
+			subjects: ['aircraft-systems'],
+			seedOrigin: E2E_FIXTURE_DATA_ORIGIN,
+			createdAt: now,
+			updatedAt: now,
+		});
+
+		const teardown = async (): Promise<void> => {
+			const cleanup = openConnection();
+			try {
+				await cleanup.db.delete(reference).where(eq(reference.id, id));
+			} finally {
+				await cleanup.client.end();
+			}
+		};
+
+		return { fixture: { referenceId: id, documentSlug, title }, teardown };
 	} finally {
 		await client.end();
 	}
