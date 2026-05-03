@@ -17,19 +17,26 @@ import { bauthUser } from '@ab/auth/schema';
 import {
 	ACS_TRIAD,
 	ASSESSMENT_METHODS,
+	type AssessmentMethod,
+	CARD_KINDS,
 	CARD_TYPES,
+	type CardKind,
 	CERT_APPLICABILITIES,
 	CONTENT_SOURCES,
 	DIFFICULTIES,
 	DOMAINS,
 	NODE_MASTERY_GATES,
+	SCENARIO_STATUSES,
+	SESSION_ITEM_KINDS,
+	SESSION_REASON_CODES,
+	SESSION_SLICES,
 	STABILITY_MASTERED_DAYS,
 	SYLLABUS_KINDS,
 	SYLLABUS_NODE_LEVELS,
 	SYLLABUS_STATUSES,
 } from '@ab/constants';
 import { db } from '@ab/db/connection';
-import { createId, generateAuthId } from '@ab/utils';
+import { createId, generateAuthId, generateSessionItemResultId, generateTeachingExerciseId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
 import { describe, expect, it } from 'vitest';
 import { createCard } from './cards';
@@ -53,8 +60,9 @@ import {
 	syllabus,
 	syllabusNode,
 	syllabusNodeLink,
+	teachingExercise,
 } from './schema';
-import { seedRepAttempt } from './test-support';
+import { seedRepAttempt, seedRepTestPlan } from './test-support';
 
 // ---------------------------------------------------------------------------
 // Pure helpers
@@ -324,6 +332,7 @@ async function teardownFixture(fx: MasteryFixture): Promise<void> {
 	await db.delete(session).where(eq(session.userId, fx.userId));
 	await db.delete(studyPlan).where(eq(studyPlan.userId, fx.userId));
 	await db.delete(scenario).where(eq(scenario.userId, fx.userId));
+	await db.delete(teachingExercise).where(eq(teachingExercise.userId, fx.userId));
 	await db.delete(cardState).where(eq(cardState.userId, fx.userId));
 	await db.delete(card).where(eq(card.userId, fx.userId));
 	await db.delete(syllabusNodeLink).where(eq(syllabusNodeLink.knowledgeNodeId, fx.nodeKId));
@@ -345,14 +354,21 @@ async function withFixture<T>(fn: (fx: MasteryFixture) => Promise<T>): Promise<T
 	}
 }
 
-async function seedAttachedCards(userId: string, nodeId: string, total: number, masteredCount: number): Promise<void> {
+async function seedAttachedCards(
+	userId: string,
+	nodeId: string,
+	total: number,
+	masteredCount: number,
+	kind: CardKind = CARD_KINDS.RECALL,
+): Promise<void> {
 	for (let i = 0; i < total; i++) {
 		const c = await createCard({
 			userId,
-			front: `Front ${nodeId}-${i}`,
-			back: `Back ${nodeId}-${i}`,
+			front: `Front ${nodeId}-${kind}-${i}`,
+			back: `Back ${nodeId}-${kind}-${i}`,
 			domain: DOMAINS.AIRSPACE,
 			cardType: CARD_TYPES.BASIC,
+			kind,
 			nodeId,
 		});
 		const stability = i < masteredCount ? STABILITY_MASTERED_DAYS + 10 : 1;
@@ -360,10 +376,16 @@ async function seedAttachedCards(userId: string, nodeId: string, total: number, 
 	}
 }
 
-async function seedAttachedReps(userId: string, nodeId: string, attempts: number, correct: number): Promise<void> {
+async function seedAttachedReps(
+	userId: string,
+	nodeId: string,
+	attempts: number,
+	correct: number,
+	assessmentMethods: readonly AssessmentMethod[] = [ASSESSMENT_METHODS.SCENARIO],
+): Promise<void> {
 	const sc = await createScenario({
 		userId,
-		title: `Mastery scenario ${nodeId}`,
+		title: `Mastery scenario ${nodeId} ${assessmentMethods.join('+')}`,
 		situation: 'Situation',
 		options: [
 			{ id: 'a', text: 'A', isCorrect: true, outcome: 'ok', whyNot: '' },
@@ -374,6 +396,7 @@ async function seedAttachedReps(userId: string, nodeId: string, attempts: number
 		difficulty: DIFFICULTIES.INTERMEDIATE,
 		sourceType: CONTENT_SOURCES.PERSONAL,
 		nodeId,
+		assessmentMethods,
 	});
 	const now = Date.now();
 	for (let i = 0; i < attempts; i++) {
@@ -382,6 +405,78 @@ async function seedAttachedReps(userId: string, nodeId: string, attempts: number
 			scenarioId: sc.id,
 			isCorrect: i < correct,
 			completedAt: new Date(now + i),
+		});
+	}
+}
+
+/**
+ * Seed teaching-exercise reps: one teaching_exercise row attached to the
+ * node, plus N completed session_item_result rows pointing at it. Used by
+ * the teaching-gate partition tests in Phase 5 of evidence-kind-data-layer.
+ */
+async function seedAttachedTeachingExerciseReps(
+	userId: string,
+	nodeId: string,
+	attempts: number,
+	correct: number,
+): Promise<void> {
+	const exerciseId = generateTeachingExerciseId();
+	const now = new Date();
+	await db.insert(teachingExercise).values({
+		id: exerciseId,
+		userId,
+		title: `Mastery teaching exercise ${nodeId}`,
+		prompt: 'Explain this concept to a student.',
+		domain: DOMAINS.AIRSPACE,
+		nodeId,
+		isEditable: true,
+		status: SCENARIO_STATUSES.ACTIVE,
+		seedOrigin: 'mastery-test',
+		createdAt: now,
+	});
+	// Reuse the user's active study plan if one exists (seedRepAttempt may
+	// have already minted one); otherwise seedRepTestPlan creates the
+	// minimal row. The one-active-plan partial UNIQUE index would reject a
+	// second active plan otherwise.
+	const planId = await seedRepTestPlan(userId);
+	const sessionId = createId('ses');
+	await db.insert(session).values({
+		id: sessionId,
+		userId,
+		planId,
+		mode: 'mixed',
+		focusOverride: null,
+		certOverride: null,
+		sessionLength: attempts,
+		items: [],
+		seed: 'mastery-test',
+		startedAt: now,
+		completedAt: now,
+		seedOrigin: 'mastery-test',
+	});
+	for (let i = 0; i < attempts; i++) {
+		await db.insert(sessionItemResult).values({
+			id: generateSessionItemResultId(),
+			sessionId,
+			userId,
+			slotIndex: i,
+			itemKind: SESSION_ITEM_KINDS.TEACHING_EXERCISE,
+			slice: SESSION_SLICES.STRENGTHEN,
+			reasonCode: SESSION_REASON_CODES.STRENGTHEN_MASTERY_DROP,
+			cardId: null,
+			scenarioId: null,
+			nodeId: null,
+			teachingExerciseId: exerciseId,
+			reviewId: null,
+			skipKind: null,
+			reasonDetail: null,
+			chosenOptionId: null,
+			isCorrect: i < correct,
+			confidence: null,
+			answerMs: null,
+			presentedAt: new Date(now.getTime() + i),
+			completedAt: new Date(now.getTime() + i),
+			seedOrigin: 'mastery-test',
 		});
 	}
 }
@@ -479,6 +574,112 @@ describe('isLeafMastered -- integration', () => {
 			expect(map.get(fx.leafKId)?.mastered).toBe(true);
 			expect(map.get(fx.leafSId)?.mastered).toBe(true);
 			expect(map.get(fx.leafSTeachingId)?.mastered).toBe(false);
+		});
+	});
+});
+
+// ---------------------------------------------------------------------------
+// Phase 5 of evidence-kind-data-layer: real per-kind partition queries
+// (recall vs calculation, scenario vs demonstration, teaching) replace the
+// not_applicable shims. Tests below exercise each partition end-to-end.
+// ---------------------------------------------------------------------------
+
+describe('per-kind partitions -- card.kind', () => {
+	it('recall-only cards on a node report recall=pass and calculation=not_applicable', async () => {
+		await withFixture(async (fx) => {
+			await seedAttachedCards(fx.userId, fx.nodeKId, 4, 4, CARD_KINDS.RECALL);
+			const state = await getNodeEvidenceState(fx.userId, fx.nodeKId);
+			expect(state.recall).toBe(NODE_MASTERY_GATES.PASS);
+			expect(state.calculation).toBe(NODE_MASTERY_GATES.NOT_APPLICABLE);
+		});
+	});
+
+	it('calculation-only cards on a node report calculation=pass and recall=not_applicable', async () => {
+		await withFixture(async (fx) => {
+			await seedAttachedCards(fx.userId, fx.nodeKId, 4, 4, CARD_KINDS.CALCULATION);
+			const state = await getNodeEvidenceState(fx.userId, fx.nodeKId);
+			expect(state.calculation).toBe(NODE_MASTERY_GATES.PASS);
+			expect(state.recall).toBe(NODE_MASTERY_GATES.NOT_APPLICABLE);
+		});
+	});
+
+	it('mixed kinds on the same node: both gates pass independently', async () => {
+		await withFixture(async (fx) => {
+			await seedAttachedCards(fx.userId, fx.nodeKId, 4, 4, CARD_KINDS.RECALL);
+			await seedAttachedCards(fx.userId, fx.nodeKId, 4, 4, CARD_KINDS.CALCULATION);
+			const state = await getNodeEvidenceState(fx.userId, fx.nodeKId);
+			expect(state.recall).toBe(NODE_MASTERY_GATES.PASS);
+			expect(state.calculation).toBe(NODE_MASTERY_GATES.PASS);
+		});
+	});
+
+	it('K leaf with calc-only cards reads as not-mastered (recommended K=recall mapping)', async () => {
+		await withFixture(async (fx) => {
+			await seedAttachedCards(fx.userId, fx.nodeKId, 4, 4, CARD_KINDS.CALCULATION);
+			const result = await isLeafMastered(fx.userId, fx.leafKId);
+			expect(result.mastered).toBe(false);
+			expect(result.missingKinds).toContain(ASSESSMENT_METHODS.RECALL);
+		});
+	});
+});
+
+describe('per-kind partitions -- scenario.assessment_methods', () => {
+	it('demonstration-only scenario reports demonstration=pass and scenario=not_applicable', async () => {
+		await withFixture(async (fx) => {
+			await seedAttachedReps(fx.userId, fx.nodeSId, 4, 4, [ASSESSMENT_METHODS.DEMONSTRATION]);
+			const state = await getNodeEvidenceState(fx.userId, fx.nodeSId);
+			expect(state.demonstration).toBe(NODE_MASTERY_GATES.PASS);
+			expect(state.scenario).toBe(NODE_MASTERY_GATES.NOT_APPLICABLE);
+		});
+	});
+
+	it('hybrid scenario tagged [scenario, demonstration] satisfies both gates', async () => {
+		await withFixture(async (fx) => {
+			await seedAttachedReps(fx.userId, fx.nodeSId, 4, 4, [
+				ASSESSMENT_METHODS.SCENARIO,
+				ASSESSMENT_METHODS.DEMONSTRATION,
+			]);
+			const state = await getNodeEvidenceState(fx.userId, fx.nodeSId);
+			expect(state.scenario).toBe(NODE_MASTERY_GATES.PASS);
+			expect(state.demonstration).toBe(NODE_MASTERY_GATES.PASS);
+		});
+	});
+
+	it('S leaf masters via demonstration-only reps (skill mapping accepts either)', async () => {
+		await withFixture(async (fx) => {
+			await seedAttachedReps(fx.userId, fx.nodeSId, 4, 4, [ASSESSMENT_METHODS.DEMONSTRATION]);
+			const result = await isLeafMastered(fx.userId, fx.leafSId);
+			expect(result.mastered).toBe(true);
+			expect(result.byEvidenceKind[ASSESSMENT_METHODS.DEMONSTRATION]).toBe(NODE_MASTERY_GATES.PASS);
+		});
+	});
+});
+
+describe('per-kind partitions -- teaching gate', () => {
+	it('teaching-exercise reps on a node drive teaching=pass', async () => {
+		await withFixture(async (fx) => {
+			await seedAttachedTeachingExerciseReps(fx.userId, fx.nodeSId, 4, 4);
+			const state = await getNodeEvidenceState(fx.userId, fx.nodeSId);
+			expect(state.teaching).toBe(NODE_MASTERY_GATES.PASS);
+		});
+	});
+
+	it('S leaf with requires_teaching=true: cards + reps + teaching exercises -> mastered', async () => {
+		await withFixture(async (fx) => {
+			await seedAttachedReps(fx.userId, fx.nodeSId, 4, 4);
+			await seedAttachedTeachingExerciseReps(fx.userId, fx.nodeSId, 4, 4);
+			const result = await isLeafMastered(fx.userId, fx.leafSTeachingId);
+			expect(result.mastered).toBe(true);
+			expect(result.byEvidenceKind[ASSESSMENT_METHODS.TEACHING]).toBe(NODE_MASTERY_GATES.PASS);
+			expect(result.missingKinds).toEqual([]);
+		});
+	});
+
+	it('node with zero teaching exercises authored reports teaching=not_applicable', async () => {
+		await withFixture(async (fx) => {
+			await seedAttachedReps(fx.userId, fx.nodeSId, 4, 4);
+			const state = await getNodeEvidenceState(fx.userId, fx.nodeSId);
+			expect(state.teaching).toBe(NODE_MASTERY_GATES.NOT_APPLICABLE);
 		});
 	});
 });
