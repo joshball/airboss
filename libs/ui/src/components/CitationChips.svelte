@@ -133,4 +133,10 @@ let { items, editable = false, removeAction, removeLabel = 'Remove citation' }: 
 	.citation-remove:hover {
 		color: var(--action-hazard-active);
 	}
+
+	.citation-remove:focus-visible {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
+		border-radius: var(--radius-xs);
+	}
 </style>

@@ -53,6 +53,9 @@ function handleWindowKey(event: KeyboardEvent): void {
 	class="trigger"
 	onclick={toggleFromButton}
 	aria-label="Open search"
+	aria-haspopup="dialog"
+	aria-expanded={open}
+	aria-controls="helpsearch-palette"
 	data-testid="helpsearch-trigger"
 	data-state={open ? 'open' : 'closed'}
 >

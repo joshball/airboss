@@ -79,6 +79,17 @@ function closeLegend(): void {
 </script>
 
 <div class="pfd-frame" data-aircraft={selectedAircraftId}>
+	<button
+		type="button"
+		class="help-chip"
+		aria-label="Open keyboard shortcuts"
+		aria-expanded={legendOpen}
+		data-testid="pfd-help-chip"
+		onclick={() => (legendOpen = !legendOpen)}
+	>
+		<kbd>?</kbd>
+		<span class="help-chip-label">shortcuts</span>
+	</button>
 	<div class="pfd-grid" aria-label="Primary Flight Display">
 		<div class="pfd-slot slot-asi">
 			<AirspeedTape airspeedKnots={tick.rendered.airspeedKnots} {arcs} />
@@ -110,11 +121,49 @@ function closeLegend(): void {
 
 <style>
 	.pfd-frame {
+		position: relative;
 		display: flex;
 		flex-direction: column;
 		flex: 1;
 		min-height: 0;
 		background: var(--surface-page, var(--surface-panel));
+	}
+
+	.help-chip {
+		position: absolute;
+		top: var(--space-sm);
+		right: var(--space-sm);
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2xs);
+		padding: var(--space-2xs) var(--space-sm);
+		background: var(--surface-raised);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-sm);
+		color: var(--ink-muted);
+		font-size: var(--font-size-xs);
+		cursor: pointer;
+		z-index: 1;
+	}
+
+	.help-chip:hover {
+		color: var(--ink-body);
+		border-color: var(--edge-strong);
+	}
+
+	.help-chip:focus-visible {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
+	}
+
+	.help-chip kbd {
+		font-family: var(--font-family-mono);
+		font-size: var(--font-size-xs);
+	}
+
+	.help-chip-label {
+		text-transform: uppercase;
+		letter-spacing: var(--letter-spacing-caps);
 	}
 
 	.pfd-grid {

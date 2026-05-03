@@ -140,6 +140,11 @@ function setValue(key: string, value: number): void {
 		width: 100%;
 	}
 
+	input[type='range']:focus-visible {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
+	}
+
 	.actions {
 		display: flex;
 		justify-content: flex-end;
@@ -155,8 +160,12 @@ function setValue(key: string, value: number): void {
 		cursor: pointer;
 	}
 
-	.reset:hover,
-	.reset:focus-visible {
+	.reset:hover {
 		border-color: var(--action-default);
+	}
+
+	.reset:focus-visible {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
 	}
 </style>
