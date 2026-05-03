@@ -105,8 +105,9 @@ const resolvedRel = $derived(rel ?? (target === '_blank' ? 'noopener noreferrer'
 			onclick?.(event);
 		}}
 	>
-		{#if loading && loadingLabel}
-			{loadingLabel}
+		{#if loading}
+			<span class="btn-spinner" aria-hidden="true"></span>
+			{#if loadingLabel}{loadingLabel}{:else}{@render children()}{/if}
 		{:else}
 			{@render children()}
 		{/if}
@@ -126,8 +127,9 @@ const resolvedRel = $derived(rel ?? (target === '_blank' ? 'noopener noreferrer'
 		data-state={loading ? 'loading' : isDisabled ? 'disabled' : 'idle'}
 		onclick={onclick}
 	>
-		{#if loading && loadingLabel}
-			{loadingLabel}
+		{#if loading}
+			<span class="btn-spinner" aria-hidden="true"></span>
+			{#if loadingLabel}{loadingLabel}{:else}{@render children()}{/if}
 		{:else}
 			{@render children()}
 		{/if}
@@ -135,6 +137,35 @@ const resolvedRel = $derived(rel ?? (target === '_blank' ? 'noopener noreferrer'
 {/if}
 
 <style>
+	/*
+	 * Inline spinner shown whenever `loading` is true so the user gets a
+	 * visible feedback cue regardless of whether the caller passed
+	 * `loadingLabel`. CSS-only to avoid mounting a Svelte component for
+	 * every loading button. Honors `prefers-reduced-motion` by holding
+	 * the rotation steady.
+	 */
+	.btn-spinner {
+		display: inline-block;
+		width: 0.75em;
+		height: 0.75em;
+		border: 2px solid currentColor;
+		border-right-color: transparent;
+		border-radius: 50%;
+		animation: btn-spinner-rotate 0.8s linear infinite;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.btn-spinner {
+			animation: none;
+		}
+	}
+
+	@keyframes btn-spinner-rotate {
+		to {
+			transform: rotate(360deg);
+		}
+	}
+
 	.btn {
 		display: inline-flex;
 		align-items: center;
