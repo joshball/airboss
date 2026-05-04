@@ -18,9 +18,12 @@
  */
 
 import { SECONDS_PER_YEAR } from '@ab/constants';
+import { createLogger } from '@ab/utils';
 import type { Cookies, RequestHandler } from '@sveltejs/kit';
 import { error, json } from '@sveltejs/kit';
 import { isThemePreference, parseThemePreference, THEME_COOKIE, type ThemePreference } from '../resolve';
+
+const log = createLogger('themes:picker');
 
 export {
 	forcedAppearanceFor,
@@ -81,17 +84,29 @@ export function createThemeEndpoint(options: CreateThemeEndpointOptions = {}): R
 	const secure = !options.dev;
 	const requireAuth = options.requireAuth === true;
 	return async ({ request, cookies, locals }) => {
-		if (requireAuth && !(locals as { user?: unknown } | undefined)?.user) {
+		const ctx = locals as { user?: { id?: string } | null; requestId?: string } | undefined;
+		if (requireAuth && !ctx?.user) {
 			throw error(401, 'sign-in required');
 		}
 		let payload: unknown;
 		try {
 			payload = await request.json();
 		} catch {
+			// Bad payloads from a stale client bundle are noise unless the rate
+			// climbs; `info` lets the responder spot the rate without paging.
+			log.info('theme payload not JSON', {
+				requestId: ctx?.requestId,
+				userId: ctx?.user?.id ?? null,
+			});
 			throw error(400, 'invalid JSON');
 		}
 		const value = (payload as { value?: unknown } | null)?.value;
 		if (!isThemePreference(value)) {
+			log.info('theme value invalid', {
+				requestId: ctx?.requestId,
+				userId: ctx?.user?.id ?? null,
+				metadata: { value: typeof value === 'string' ? value : typeof value },
+			});
 			throw error(400, 'invalid theme value');
 		}
 		cookies.set(THEME_COOKIE, value, {

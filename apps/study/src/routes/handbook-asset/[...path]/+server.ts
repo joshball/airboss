@@ -16,9 +16,11 @@
 import { createReadStream, existsSync, statSync } from 'node:fs';
 import { dirname, extname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createLogger } from '@ab/utils';
 import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
+const log = createLogger('study:handbook-asset');
 const HERE = dirname(fileURLToPath(import.meta.url));
 // apps/study/src/routes/handbook-asset/[...path] -> repo root is six levels up.
 const REPO_ROOT = resolve(HERE, '..', '..', '..', '..', '..', '..');
@@ -34,9 +36,17 @@ const CONTENT_TYPES: Record<string, string> = {
 	'.html': 'text/html; charset=utf-8',
 };
 
-export const GET: RequestHandler = async ({ params }) => {
+export const GET: RequestHandler = async ({ params, locals }) => {
 	const requested = resolve(HANDBOOKS_DIR, params.path);
 	if (!requested.startsWith(`${HANDBOOKS_DIR}/`) && requested !== HANDBOOKS_DIR) {
+		// Log path-escape attempts only -- typos and stale links don't escape
+		// HANDBOOKS_DIR. A spike in this line is the signal someone is fuzzing
+		// the catch-all for traversal; the missing-file branches stay quiet.
+		log.warn('handbook-asset path-escape attempt', {
+			requestId: locals.requestId,
+			userId: locals.user?.id ?? null,
+			metadata: { requested: params.path },
+		});
 		throw error(404, 'Not found');
 	}
 	if (!existsSync(requested)) throw error(404, 'Not found');
