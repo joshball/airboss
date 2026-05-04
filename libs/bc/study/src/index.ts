@@ -2,6 +2,9 @@
 // and the polymorphic content-citation surface (folded in from the former
 // citations package; see docs/work-packages/bc-citations-coupling/).
 
+// Cross-file error classes (shared by 2+ modules in the BC).
+export { SourceRefRequiredError, UpsertReturnedNoRowError } from './errors';
+
 export type {
 	CalibrationBucket,
 	CalibrationPageData,
@@ -57,6 +60,7 @@ export {
 	type AuditReport,
 	auditCitations,
 	CitationNotFoundError,
+	CitationNotOwnedError,
 	CitationSourceNotFoundError,
 	CitationTargetNotFoundError,
 	CitationValidationError,
@@ -91,6 +95,7 @@ export type {
 export {
 	CredentialNotFoundError,
 	CredentialPrereqCycleError,
+	CredentialPrereqUnresolvedNodesError,
 	getCertsCoveredBy,
 	getCredentialById,
 	getCredentialBySlug,

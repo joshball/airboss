@@ -40,6 +40,7 @@ import { getCorpusResolver, isParseError, parseIdentifier } from '@ab/sources';
 import type { StructuredCitation } from '@ab/types';
 import { and, asc, eq, inArray } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
+import { UpsertReturnedNoRowError } from './errors';
 import {
 	type KnowledgeNodeRow,
 	knowledgeNode,
@@ -571,7 +572,7 @@ export async function upsertSyllabus(input: NewSyllabusRow, db: Db = defaultDb):
 			},
 		})
 		.returning();
-	if (!row) throw new Error(`upsertSyllabus failed for ${input.id}`);
+	if (!row) throw new UpsertReturnedNoRowError('syllabus', input.id);
 	return row;
 }
 
@@ -603,7 +604,7 @@ export async function upsertSyllabusNode(input: NewSyllabusNodeRow, db: Db = def
 			},
 		})
 		.returning();
-	if (!row) throw new Error(`upsertSyllabusNode failed for ${input.id}`);
+	if (!row) throw new UpsertReturnedNoRowError('syllabus_node', input.id);
 	return row;
 }
 
