@@ -143,6 +143,10 @@ def write_outputs(
 
     manifest_sections: list[dict[str, object]] = []
     sections_written = 0
+    # Warnings for raw-HTML table fallbacks that survived in section bodies.
+    # `_compose_markdown` records one per HTML-embedded table so the hangar
+    # triage dashboard can target the conversion gaps.
+    tablish_block_warnings: list[TableWarning] = []
 
     # Chapter-slug lookup: non-chapter nodes need their parent chapter's slug
     # to produce `<NN>-<chapter-slug>/` directory names matching what the
@@ -162,7 +166,9 @@ def write_outputs(
         section_tables = tables_by_section.get(node.code, [])
         section_tables.sort(key=lambda t: t.ordinal)
 
-        markdown_text = _compose_markdown(config, node, body, section_figs, section_tables)
+        markdown_text = _compose_markdown(
+            config, node, body, section_figs, section_tables, tablish_block_warnings
+        )
         out_path = _resolve_output_path(root, node, chapter_slug_by_code)
         ensure_dir(out_path.parent)
         out_path.write_text(markdown_text, encoding="utf-8")
@@ -200,7 +206,7 @@ def write_outputs(
     ]
 
     manifest_warnings: list[dict[str, object]] = []
-    for w in (*figure_warnings, *table_warnings):
+    for w in (*figure_warnings, *table_warnings, *tablish_block_warnings):
         if w.code not in ALLOWED_WARNING_CODES:
             # Hard-fail loudly: an unrecognized code means the emitter and
             # the validator drifted. Add the code to ALLOWED_WARNING_CODES
@@ -437,7 +443,16 @@ def _compose_markdown(
     body: SectionBody,
     figures: list[FigureRecord],
     tables: list[TableRecord],
+    tablish_block_warnings: list[TableWarning],
 ) -> str:
+    """Compose one section's markdown body.
+
+    `tablish_block_warnings` is appended-to (caller-owned list) every time a
+    table falls back to the raw-HTML embed because conversion failed -- this
+    is the `tablish-block-not-converted` signal the WP-HANDBOOK-RE-EXTRACTION-V2
+    success criterion measures (every raw HTML table block in section markdown
+    counts as a fixable warning).
+    """
     code_parts = node.code.split(".")
     frontmatter: dict[str, object] = {
         "handbook": config.document_slug,
@@ -466,10 +481,33 @@ def _compose_markdown(
         lines.append("")
     for tab in tables:
         rel = relative_to_repo(tab.asset_path)
-        lines.append(f'<div class="handbook-table" data-source="/{rel}">')
-        lines.append(tab.asset_path.read_text(encoding="utf-8"))
-        lines.append("</div>")
-        lines.append("")
+        if tab.markdown_text:
+            # Simple table: inline markdown table with a one-line "open
+            # original" link to the standalone HTML for fidelity-fallback
+            # access through the reader's `/handbook-asset/[...path]` route.
+            lines.append(tab.markdown_text)
+            lines.append("")
+            lines.append(f'<a class="handbook-table-source" href="/{rel}">Open original</a>')
+            lines.append("")
+        else:
+            # Complex table: embed the standalone HTML inline so the reader
+            # surfaces the printed shape verbatim. Record a
+            # `tablish-block-not-converted` warning so the hangar dashboard
+            # can target the table for manual review.
+            tablish_block_warnings.append(
+                TableWarning(
+                    code='tablish-block-not-converted',
+                    section_code=node.code,
+                    message=(
+                        f"Table {tab.ordinal} in §{node.code} kept as raw HTML embed: "
+                        f"{tab.complexity_reason or 'conversion declined'}."
+                    ),
+                )
+            )
+            lines.append(f'<div class="handbook-table" data-source="/{rel}">')
+            lines.append(tab.asset_path.read_text(encoding="utf-8"))
+            lines.append("</div>")
+            lines.append("")
     return "\n".join(lines).rstrip() + "\n"
 
 
