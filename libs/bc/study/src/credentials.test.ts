@@ -22,6 +22,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
 	CredentialNotFoundError,
 	CredentialPrereqCycleError,
+	CredentialPrereqUnresolvedNodesError,
 	getCertsCoveredBy,
 	getCredentialBySlug,
 	getCredentialIdsCoveredBy,
@@ -125,6 +126,40 @@ describe('validateCredentialDag', () => {
 			// The DFS-found cycle starts and ends on the same node.
 			expect(err.cycle[0]).toBe(err.cycle[err.cycle.length - 1]);
 		}
+	});
+});
+
+describe('CredentialPrereqUnresolvedNodesError', () => {
+	// This class is the typed sibling of CredentialPrereqCycleError used when
+	// Kahn's-algorithm cannot drain every node but DFS does not find a
+	// walkable cycle from the chosen entry point. Today the algorithm always
+	// finds a cycle when one exists, so triggering this branch end-to-end
+	// requires a synthetic graph that's hard to author. The structural
+	// assertions below pin the public contract callers depend on so a future
+	// algorithm change cannot silently weaken the typed-error surface.
+
+	it('exposes the unresolved id list as a public readonly field', () => {
+		const err = new CredentialPrereqUnresolvedNodesError(['a', 'b', 'c']);
+		expect(err.unresolved).toEqual(['a', 'b', 'c']);
+	});
+
+	it('error.name is stable for log search', () => {
+		expect(new CredentialPrereqUnresolvedNodesError([]).name).toBe('CredentialPrereqUnresolvedNodesError');
+	});
+
+	it('is distinct from CredentialPrereqCycleError so callers can discriminate', () => {
+		const unresolved = new CredentialPrereqUnresolvedNodesError(['a']);
+		expect(unresolved).not.toBeInstanceOf(CredentialPrereqCycleError);
+	});
+
+	it('extends Error so legacy `instanceof Error` catches still work', () => {
+		expect(new CredentialPrereqUnresolvedNodesError(['a'])).toBeInstanceOf(Error);
+	});
+
+	it('message contains the unresolved ids for plain-text log scans', () => {
+		const err = new CredentialPrereqUnresolvedNodesError(['cred_a', 'cred_b']);
+		expect(err.message).toContain('cred_a');
+		expect(err.message).toContain('cred_b');
 	});
 });
 

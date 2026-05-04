@@ -16,7 +16,7 @@
 
 import { CITATION_SOURCE_TYPES, CITATION_TARGET_TYPES, EXTERNAL_REF_TARGET_DELIMITER } from '@ab/constants';
 import { describe, expect, it } from 'vitest';
-import { resolveCitationSources, resolveCitationTargets } from './citations';
+import { CitationNotFoundError, CitationNotOwnedError, resolveCitationSources, resolveCitationTargets } from './citations';
 import type { ContentCitationRow } from './schema';
 
 interface FakeQueryResult<T> {
@@ -149,5 +149,31 @@ describe('resolveCitationSources', () => {
 		expect(first.source.exists).toBe(false);
 		expect(first.source.id).toBe('card_ghost');
 		expect(first.source.label).toBe('card_ghost');
+	});
+});
+
+describe('CitationNotOwnedError', () => {
+	// `deleteCitation` raises this when the row exists but belongs to another
+	// user. Routes collapse it to 404 (alongside CitationNotFoundError) for
+	// security obfuscation; the BC log retains the discrimination so the 2am
+	// operator can tell "row right there, wrong owner" from "never existed."
+
+	it('exposes citationId + userId as public readonly fields', () => {
+		const err = new CitationNotOwnedError('cit_01', 'user_42');
+		expect(err.citationId).toBe('cit_01');
+		expect(err.userId).toBe('user_42');
+	});
+
+	it('error.name is stable for log search', () => {
+		expect(new CitationNotOwnedError('cit_01', 'user_42').name).toBe('CitationNotOwnedError');
+	});
+
+	it('is distinct from CitationNotFoundError so the BC log can discriminate', () => {
+		const notOwned = new CitationNotOwnedError('cit_01', 'user_42');
+		expect(notOwned).not.toBeInstanceOf(CitationNotFoundError);
+	});
+
+	it('extends Error so legacy `instanceof Error` catches still work', () => {
+		expect(new CitationNotOwnedError('cit_01', 'user_42')).toBeInstanceOf(Error);
 	});
 });
