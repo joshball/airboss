@@ -216,102 +216,28 @@ Well-constructed frame homes could have damage to roof
 shingles, vinyl siding, soffit panels, and gutters. Failure of
 aluminum, screened-in, swimming pool enclosures can occur.
 
-![Figure 17-3. A Shear Line and an Induced Trough Caused by a Polar High Pushing into the Subtropics 
-A shear line, also shown in Figure 17-3, results when a semipermanent high splits into two cells, inducing 
-a trough. These shear lines are zones of convergence creating forced upward motion. Consequently, 
-considerable](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-1-00-a-shear-line-and-an-induced-trough-caused-by-a-p.png)
+![Figure 17-3. A Shear Line and an Induced Trough Caused by a Polar High Pushing into the Subtropics](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-1-00-a-shear-line-and-an-induced-trough-caused-by-a-p.png)
 
-![Figure 17-4. A TUTT Moves Eastward Across the Hawaiian Islands 
-17.3.3 Tropical Wave 
-Tropical waves (also called easterly waves) are common tropical weather disturbances, normally occurring 
-in the trade wind belt. In the Northern Hemisphere, they usually develop in the southeastern perimeter of 
-subtropical high-pres](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-3-00-a-tutt-moves-eastward-across-the-hawaiian-island.png)
+![Figure 17-4. A TUTT Moves Eastward Across the Hawaiian Islands](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-3-00-a-tutt-moves-eastward-across-the-hawaiian-island.png)
 
-![Figure 17-5. A Northern Hemisphere Easterly Wave Progressing from A–B 
- 
-Figure 17-6. Vertical Cross-Section Along Line A–B in Figure 17-5 
-17.3.4 West African Disturbance Line (WADL) 
-On occasion, a line of convection similar to a squall line moves westward off the continent at tropical 
-latitudes into the oceanic tra](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-4-00-a-northern-hemisphere-easterly-wave-progressing-.png)
+![Figure 17-5. A Northern Hemisphere Easterly Wave Progressing from A–B](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-4-00-a-northern-hemisphere-easterly-wave-progressing-.png)
 
-![Figure 17-6. Vertical Cross-Section Along Line A–B in Figure 17-5 
-17.3.4 West African Disturbance Line (WADL) 
-On occasion, a line of convection similar to a squall line moves westward off the continent at tropical 
-latitudes into the oceanic trade winds. In the North Atlantic, this is known as the West African Distur](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-4-01-vertical-cross-section-along-line-a-b-in-figure-.png)
+![Figure 17-6. Vertical Cross-Section Along Line A–B in Figure 17-5](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-4-01-vertical-cross-section-along-line-a-b-in-figure-.png)
 
-![Figure 17-7. The Tracks of Nearly 150 Years of Tropical Cyclones and Their Strength Weave Across the Globe 
-17.3.5.2 Movement 
-Tropical cyclones in the Northern Hemisphere usually move in a direction between west and northwest 
-while in low latitudes. As these storms move toward the mid-latitudes, they come under the i](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-5-00-the-tracks-of-nearly-150-years-of-tropical-cyclo.png)
+![Figure 17-7. The Tracks of Nearly 150 Years of Tropical Cyclones and Their Strength Weave Across the Globe](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-5-00-the-tracks-of-nearly-150-years-of-tropical-cyclo.png)
 
-![Figure 17-8. Radar Image of Hurricane Katrina Observed at New Orleans, Louisiana, on August 29, 2005 
- 
-Figure 17-9. Hurricane Andrew Observed by Satellite in 1992](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-5-01-radar-image-of-hurricane-katrina-observed-at-new.png)
+![Figure 17-8. Radar Image of Hurricane Katrina Observed at New Orleans, Louisiana, on August 29, 2005](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-5-01-radar-image-of-hurricane-katrina-observed-at-new.png)
 
 ![Figure 17-9. Hurricane Andrew Observed by Satellite in 1992](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-5-02-hurricane-andrew-observed-by-satellite-in-1992.png)
 
-<div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-17-3-00-wind-speed-and-characteristic-house-damage-for-t.html">
-<table><caption>Table 17-1. Wind Speed and Characteristic House Damage for the Saffir-Simpson Hurricane Wind Scale 
-Saffir-Simpson 
-Hurricane 
-Wind Scale 
-Wind Speed 
-Characteristic House Damage 
-5 
-≥157 mph 
-≥137 kt</caption><thead><tr><th>Saffir-Simpson
-Hurricane
-Wind Scale</th><th>Wind Speed</th><th>Characteristic House Damage</th></tr></thead><tbody><tr><td>5</td><td>≥157 mph
-≥137 kt
-≥252 km/h</td><td>Almost complete destruction of all mobile homes will occur,
-regardless of age or construction. A high percentage of frame
-homes will be destroyed, with total roof failure and wall collapse.
-Extensive damage to roof covers, windows, and doors will occur.
-Large amounts of windborne debris will be lofted into the air.
-Windborne debris damage will occur to nearly all unprotected
-windows and many protected windows.</td></tr><tr><td>4</td><td>130–156 mph
-113–136 kt
-209–251 km/h</td><td>Nearly all older (pre-1994 construction) mobile homes will be
-destroyed. A high percentage of newer mobile homes also will be
-destroyed. Poorly constructed frame homes can sustain complete
-collapse of all walls as well as the loss of the roof structure.
-Well-built homes also can sustain severe damage with loss of most
-of the roof structure and/or some exterior walls. Extensive damage
-to roof coverings, windows, and doors will occur. Large amounts
-of windborne debris will be lofted into the air. Windborne debris
-damage will break most unprotected windows and penetrate some
-protected windows.</td></tr><tr><td>3</td><td>111–129 mph
-96–112 kt
-178–208 km/h</td><td>Nearly all older (pre-1994 construction) mobile homes will be
-destroyed. Newer mobile homes will sustain severe damage with
-potential for complete roof failure and wall collapse. Poorly
-constructed frame homes can be destroyed by the removal of the
-roof and exterior walls. Unprotected windows will be broken by
-flying debris. Well-built frame homes can experience major
-damage involving the removal of roof decking and gable ends.</td></tr><tr><td>2</td><td>96–110 mph
-83–95 kt
-154–177 km/h</td><td>Older (mainly pre-1994 construction) mobile homes have a very
-high chance of being destroyed, and the flying debris generated
-can shred nearby mobile homes. Newer mobile homes can also be
-destroyed. Poorly constructed frame homes have a high chance of
-having their roof structures removed, especially if they are not
-anchored properly. Unprotected windows will have a high
-probability of being broken by flying debris. Well-constructed
-frame homes could sustain major roof and siding damage. Failure
-of aluminum, screened-in, swimming pool enclosures will be
-common.</td></tr><tr><td>1</td><td>74–95 mph
-64–82 kt
-119–153 km/h</td><td>Older (mainly pre-1994 construction) mobile homes could be
-destroyed, especially if they are not anchored properly as they tend
-to shift or roll off their foundations. Newer mobile homes that are
-anchored properly can sustain damage involving the removal of
-shingle or metal roof coverings, and loss of vinyl siding, as well as
-damage to carports, sunrooms, or lanais. Some poorly constructed
-frame homes can experience major damage, involving loss of the
-roof covering and damage to gable ends, as well as the removal of
-porch coverings and awnings. Unprotected windows may break if
-struck by flying debris. Masonry chimneys can be toppled.
-Well-constructed frame homes could have damage to roof
-shingles, vinyl siding, soffit panels, and gutters. Failure of
-aluminum, screened-in, swimming pool enclosures can occur.</td></tr></tbody></table>
-</div>
+**Table 17-1.** Wind Speed and Characteristic House Damage for the Saffir-Simpson Hurricane Wind Scale Saffir-Simpson Hurricane Wind Scale Wind Speed Characteristic House Damage 5 ≥157 mph ≥137 kt
+
+| Saffir-Simpson<br>Hurricane<br>Wind Scale | Wind Speed | Characteristic House Damage |
+| --- | --- | --- |
+| 5 | ≥157 mph<br>≥137 kt<br>≥252 km/h | Almost complete destruction of all mobile homes will occur,<br>regardless of age or construction. A high percentage of frame<br>homes will be destroyed, with total roof failure and wall collapse.<br>Extensive damage to roof covers, windows, and doors will occur.<br>Large amounts of windborne debris will be lofted into the air.<br>Windborne debris damage will occur to nearly all unprotected<br>windows and many protected windows. |
+| 4 | 130–156 mph<br>113–136 kt<br>209–251 km/h | Nearly all older (pre-1994 construction) mobile homes will be<br>destroyed. A high percentage of newer mobile homes also will be<br>destroyed. Poorly constructed frame homes can sustain complete<br>collapse of all walls as well as the loss of the roof structure.<br>Well-built homes also can sustain severe damage with loss of most<br>of the roof structure and/or some exterior walls. Extensive damage<br>to roof coverings, windows, and doors will occur. Large amounts<br>of windborne debris will be lofted into the air. Windborne debris<br>damage will break most unprotected windows and penetrate some<br>protected windows. |
+| 3 | 111–129 mph<br>96–112 kt<br>178–208 km/h | Nearly all older (pre-1994 construction) mobile homes will be<br>destroyed. Newer mobile homes will sustain severe damage with<br>potential for complete roof failure and wall collapse. Poorly<br>constructed frame homes can be destroyed by the removal of the<br>roof and exterior walls. Unprotected windows will be broken by<br>flying debris. Well-built frame homes can experience major<br>damage involving the removal of roof decking and gable ends. |
+| 2 | 96–110 mph<br>83–95 kt<br>154–177 km/h | Older (mainly pre-1994 construction) mobile homes have a very<br>high chance of being destroyed, and the flying debris generated<br>can shred nearby mobile homes. Newer mobile homes can also be<br>destroyed. Poorly constructed frame homes have a high chance of<br>having their roof structures removed, especially if they are not<br>anchored properly. Unprotected windows will have a high<br>probability of being broken by flying debris. Well-constructed<br>frame homes could sustain major roof and siding damage. Failure<br>of aluminum, screened-in, swimming pool enclosures will be<br>common. |
+| 1 | 74–95 mph<br>64–82 kt<br>119–153 km/h | Older (mainly pre-1994 construction) mobile homes could be<br>destroyed, especially if they are not anchored properly as they tend<br>to shift or roll off their foundations. Newer mobile homes that are<br>anchored properly can sustain damage involving the removal of<br>shingle or metal roof coverings, and loss of vinyl siding, as well as<br>damage to carports, sunrooms, or lanais. Some poorly constructed<br>frame homes can experience major damage, involving loss of the<br>roof covering and damage to gable ends, as well as the removal of<br>porch coverings and awnings. Unprotected windows may break if<br>struck by flying debris. Masonry chimneys can be toppled.<br>Well-constructed frame homes could have damage to roof<br>shingles, vinyl siding, soffit panels, and gutters. Failure of<br>aluminum, screened-in, swimming pool enclosures can occur. |
+
+<a class="handbook-table-source" href="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-17-3-00-wind-speed-and-characteristic-house-damage-for-t.html">Open original</a>

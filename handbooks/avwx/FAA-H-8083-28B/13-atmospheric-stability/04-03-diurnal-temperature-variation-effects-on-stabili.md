@@ -31,8 +31,4 @@ Several stability indices and other quantities exist that evaluate atmospheric s
 convective storms. The most common of these are Lifted Index (LI) and Convective Available Potential
 Energy (CAPE).
 
-![Figure 13-8. Diurnal Temperature Variation Effects on Stability 
-13.5 Measurements of Stability 
-Several stability indices and other quantities exist that evaluate atmospheric stability and the potential for 
-convective storms. The most common of these are Lifted Index (LI) and Convective Available Potential 
-Energy (C](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-4-3-00-diurnal-temperature-variation-effects-on-stabili.png)
+![Figure 13-8. Diurnal Temperature Variation Effects on Stability](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-4-3-00-diurnal-temperature-variation-effects-on-stabili.png)

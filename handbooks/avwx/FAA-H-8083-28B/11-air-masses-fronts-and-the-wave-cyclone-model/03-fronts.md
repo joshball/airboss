@@ -121,21 +121,13 @@ Embedded thunderstorms, rain, and fog are likely to occur.
 
 Figure 11-8. Occluded Front
 
-![Figure 11-3. Lake Effect 
-11.3 Fronts 
-Air masses can control the weather for a relatively long time period ranging from days to months. Most 
-weather occurs along the periphery of these air masses at boundaries called fronts. A front is a boundary or 
-transition zone between two air masses. Fronts are classified by wh](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-00-lake-effect-11-3-fronts-air-masses-can-control-t.png)
+![Figure 11-3. Lake Effect](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-00-lake-effect.png)
 
 ![Figure 11-4. Fronts](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-01-fronts.png)
 
 ![Figure 11-5. Warm Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-1-00-warm-front.png)
 
-![Figure 11-6. Cold Front 
-11.3.3 Stationary Front 
-When the forces of two air masses are relatively equal, the boundary or front that separates them remains 
-stationary and influences the local weather for days. This front is called a stationary front. Stationary frontal 
-slope can vary, but clouds and precipitation wou](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-3-00-cold-front-11-3-3-stationary-front-when-the-forc.png)
+![Figure 11-6. Cold Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-3-00-cold-front.png)
 
 ![Figure 11-7. Stationary Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-3-01-stationary-front.png)
 

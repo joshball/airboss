@@ -177,10 +177,20 @@ Information, contains detailed information concerning FIS-B meteorological produ
 Airspace; Chapter 4, Air Traffic Control; and Chapter 5, Air Traffic Procedures, contain information on
 Special Use Airspace (SUA), TFR, and NOTAM products.
 
-<div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-3-00-untitled.html">
-<table><thead><tr><th>Historically, Flight Service has been the primary source for obtaining preflight briefings. Today, increasing</th><th></th></tr></thead><tbody><tr><td>numbers of pilots are using online weather resources to obtain weather information through government or</td><td></td></tr><tr><td>commercial providers. Pilots may receive a regulatory compliant briefing without contacting Flight Service.</td><td></td></tr><tr><td>Pilots who prefer to contact Flight Service are encouraged to conduct a self-briefing prior to calling.</td><td></td></tr><tr><td>Conducting a self-briefing before contacting Flight Service provides familiarity of weather conditions</td><td></td></tr><tr><td>applicable to the route of flight and promotes a better understanding of weather information.</td><td></td></tr></tbody></table>
-</div>
+| Historically, Flight Service has been the primary source for obtaining preflight briefings. Today, increasing |
+| --- |
+| numbers of pilots are using online weather resources to obtain weather information through government or |
+| commercial providers. Pilots may receive a regulatory compliant briefing without contacting Flight Service. |
+| Pilots who prefer to contact Flight Service are encouraged to conduct a self-briefing prior to calling. |
+| Conducting a self-briefing before contacting Flight Service provides familiarity of weather conditions |
+| applicable to the route of flight and promotes a better understanding of weather information. |
 
-<div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-3-01-untitled.html">
-<table><thead><tr><th>FSS specialists are qualified and certified as Pilot Weather Briefers by the FAA. They are not authorized</th><th></th></tr></thead><tbody><tr><td>to make original forecasts but are certified to translate and interpret available weather information directly</td><td></td></tr><tr><td>into terms describing the weather conditions that can be expected at the departure, along the route of flight,</td><td></td></tr><tr><td>and at the destination.</td><td></td></tr></tbody></table>
-</div>
+<a class="handbook-table-source" href="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-3-00-untitled.html">Open original</a>
+
+| FSS specialists are qualified and certified as Pilot Weather Briefers by the FAA. They are not authorized |
+| --- |
+| to make original forecasts but are certified to translate and interpret available weather information directly |
+| into terms describing the weather conditions that can be expected at the departure, along the route of flight, |
+| and at the destination. |
+
+<a class="handbook-table-source" href="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-3-01-untitled.html">Open original</a>

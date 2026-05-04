@@ -76,7 +76,9 @@ THRESHOLD. DURATION TO BE SHORT-LIVED
 NXT ADVISORY:
 NO FURTHER ADVISORIES=
 
-<div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-26-7-3-00-untitled.html">
-<table><thead><tr><th>Format</th><th>Explanation</th><th>Examples</th></tr></thead><tbody><tr><td>RMK:</td><td>Remarks (RMK).</td><td>Additional information</td></tr><tr><td>NXT ADVISORY:</td><td>Date/time when the next (NXT)
-scheduled advisory will be issued.</td><td>2010418/0700Z</td></tr></tbody></table>
-</div>
+| Format | Explanation | Examples |
+| --- | --- | --- |
+| RMK: | Remarks (RMK). | Additional information |
+| NXT ADVISORY: | Date/time when the next (NXT)<br>scheduled advisory will be issued. | 2010418/0700Z |
+
+<a class="handbook-table-source" href="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-26-7-3-00-untitled.html">Open original</a>

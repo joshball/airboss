@@ -69,8 +69,4 @@ masses are characterized by very cold surface air, very low humidity, and strong
 inversions. Occasionally, air from unfrozen ocean areas flows northward over the Arctic. These intrusions
 of moist, cold air account for most of the infrequent wintertime cloudiness and precipitation in the Arctic.
 
-![Figure 21-1. The Arctic Circle 
-21.2 Climate, Air Masses, and Fronts 
-There are a number of factors that influence Arctic climate. Climate of any region, especially in the Arctic, 
-is largely determined by the amount of energy received from the Sun; however, local characteristics of the 
-area, such as mountains and ice](/handbooks/avwx/FAA-H-8083-28B/figures/fig-21-2-1-00-the-arctic-circle-21-2-climate-air-masses-and-fr.png)
+![Figure 21-1. The Arctic Circle](/handbooks/avwx/FAA-H-8083-28B/figures/fig-21-2-1-00-the-arctic-circle.png)

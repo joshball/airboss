@@ -657,132 +657,53 @@ KALO
 30.10
 Figure 25-25. RTMA Surface Temperature and Altimeter Setting Example
 
-![Figure 25-1. Weather Observation Sources 
-25.2.2 Analysis 
-Analysis is the drawing and interpretation of the patterns of various elements on a weather chart. It is an 
-essential part of the forecast process. If meteorologists do not know what is currently occurring, it is nearly 
-impossible to predict what will happen](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-1-00-weather-observation-sources-25-2-2-analysis-anal.png)
+![Figure 25-1. Weather Observation Sources](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-1-00-weather-observation-sources.png)
 
 ![Figure 25-2. Analysis Procedure Step 1: Determine the Optimal Contour Interval and Values to be Analyzed](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-2-01-analysis-procedure-step-1-determine-the-optimal-.png)
 
-![Figure 25-3. Analysis Procedure Step 2: Draw the Isopleths and Extrema 
-25.2.2.1.3 Step 3: Identify Significant Weather Features 
-The third (and final) step is to interpret significant weather features. The conventional labels for extrema 
-are H (high) and L (low) for pressure and height, W (warm) and K (cold) for temp](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-2-01-analysis-procedure-step-1-determine-the-optimal-.png)
+![Figure 25-3. Analysis Procedure Step 2: Draw the Isopleths and Extrema](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-2-01-analysis-procedure-step-1-determine-the-optimal-.png)
 
-![Figure 25-4. Analysis Procedure Step 3: Interpret Significant Weather Features 
-25.2.3 Surface Analysis Chart 
-The WPC in College Park, MD, produces a variety of surface analysis charts for North America that are 
-available on their website. The WPC’s surface analysis is also available on the AWC’s and other providers’](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-00-analysis-procedure-step-3-interpret-significant-.png)
+![For surface analysis charts, positions and types of fronts are shown by symbols in Figure 25-4. The symbols  on the front indicate the type of front and point in the direction toward which the front is moving. Two short lines across a front indicate a change in front type.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-03-the-symbols-on-the-front-indicate-the-type-of-fr.png)
 
-![Figure 25-5. Schematic of Surface Chart Pressure Patterns 
-Figure 25-7 is one example of several surface analysis products available on the WPC’s website. 
-Some of the WPC’s surface analysis charts are combined with radar or satellite imagery (see Figure 25-8 
-and Figure 25-9) as well as having different background fea](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-01-schematic-of-surface-chart-pressure-patterns-fig.png)
+![Figure 25-4. Analysis Procedure Step 3: Interpret Significant Weather Features](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-00-analysis-procedure-step-3-interpret-significant-.png)
 
-![Figure 25-6. NWS Surface Analysis Chart Symbols 
-25.2.3.3 Examples 
- 
-Figure 25-7. Example of a Surface Chart with Surface Observations](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-02-nws-surface-analysis-chart-symbols-25-2-3-3-exam.png)
+![Figure 25-5. Schematic of Surface Chart Pressure Patterns](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-01-schematic-of-surface-chart-pressure-patterns.png)
+
+![Figure 25-6. NWS Surface Analysis Chart Symbols](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-02-nws-surface-analysis-chart-symbols.png)
 
 ![Figure 25-7. Example of a Surface Chart with Surface Observations](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-03-example-of-a-surface-chart-with-surface-observat.png)
 
-![Figure 25-8. Surface Analysis with Radar Composite Example 
- 
-Figure 25-9. Surface Analysis with Satellite Composite Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-04-surface-analysis-with-radar-composite-example-fi.png)
+![Figure 25-8. Surface Analysis with Radar Composite Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-04-surface-analysis-with-radar-composite-example.png)
 
 ![Figure 25-9. Surface Analysis with Satellite Composite Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-05-surface-analysis-with-satellite-composite-exampl.png)
 
-![Figure 25-10. NWS Surface Analysis Chart Station Plot Model 
- 
-Figure 25-11. NWS Surface Analysis Chart Ship/Buoy Plot Model](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-06-nws-surface-analysis-chart-station-plot-model-fi.png)
+![Figure 25-10. NWS Surface Analysis Chart Station Plot Model](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-06-nws-surface-analysis-chart-station-plot-model.png)
 
 ![Figure 25-11. NWS Surface Analysis Chart Ship/Buoy Plot Model](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-07-nws-surface-analysis-chart-ship-buoy-plot-model.png)
 
-![Figure 25-12. NWS Surface Analysis Chart for Aviation Interests Station Plot Model 
-25.2.3.4.1 Station Identifier 
-The format of the station identifier depends on the observing platform: 
-• 
-Ship: Typically, four or five characters. If five characters, then the fifth will usually be a digit. 
-• 
-Buoy: Whether drifting](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-08-nws-surface-analysis-chart-for-aviation-interest.png)
+![Figure 25-12. NWS Surface Analysis Chart for Aviation Interests Station Plot Model](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-08-nws-surface-analysis-chart-for-aviation-interest.png)
 
-![Figure 25-13. NWS Surface Analysis Chart Common Weather Symbols 
-25.2.3.4.5 Wind 
-Wind is plotted in increments of 5 kt. The wind direction is referenced to true north and is depicted by a 
-stem (line) pointed in the direction from which the wind is blowing. Wind speed is determined by adding 
-the values of the flags (](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-09-nws-surface-analysis-chart-common-weather-symbol.png)
+![Figure 25-13. NWS Surface Analysis Chart Common Weather Symbols](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-09-nws-surface-analysis-chart-common-weather-symbol.png)
 
-![Figure 25-14. NWS Surface Analysis Chart Sample Wind Symbols 
-25.2.3.4.6 Ceiling 
-Ceiling is plotted in hundreds of feet AGL. 
-25.2.3.4.7 Visibility 
-Surface visibility is plotted in whole statute miles. 
-25.2.3.4.8 Pressure 
-Sea level pressure is plotted in tenths of millibars, with the first two digits (generally 10](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-10-nws-surface-analysis-chart-sample-wind-symbols-2.png)
+![Figure 25-14. NWS Surface Analysis Chart Sample Wind Symbols](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-10-nws-surface-analysis-chart-sample-wind-symbols.png)
 
-![Figure 25-15. NWS Surface Analysis Chart Pressure Trends 
-25.2.3.4.10 Sky Cover 
-The approximate amount of sky cover can be determined by the circle at the center of the station plot. The 
-amount that the circle is filled reflects the amount of sky covered by clouds. Figure 25-16 contains the 
-common cloud cover depict](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-11-nws-surface-analysis-chart-pressure-trends-25-2-.png)
+![Figure 25-15. NWS Surface Analysis Chart Pressure Trends](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-11-nws-surface-analysis-chart-pressure-trends.png)
 
 ![Figure 25-16. NWS Surface Analysis Chart Sky Cover Symbols](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-12-nws-surface-analysis-chart-sky-cover-symbols.png)
 
-![Figure 25-17. Unified Surface Analysis Chart Example 
- 
-Figure 25-18. Unified Surface Analysis Chart Example (Enlarged Area) 
-25.2.4.2 Analysis Symbols 
-Unified Surface Analysis Charts use the symbols shown in Figure 25-6. 
-25.2.5 AAWU Surface Chart 
-The NWS Unified Surface Analysis Chart covers the Alaska area. The AA](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-5-00-unified-surface-analysis-chart-example-figure-25.png)
+![Figure 25-17. Unified Surface Analysis Chart Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-5-00-unified-surface-analysis-chart-example.png)
 
-![Figure 25-18. Unified Surface Analysis Chart Example (Enlarged Area) 
-25.2.4.2 Analysis Symbols 
-Unified Surface Analysis Charts use the symbols shown in Figure 25-6. 
-25.2.5 AAWU Surface Chart 
-The NWS Unified Surface Analysis Chart covers the Alaska area. The AAWU also provides a fixed area 
-image of the Unified Surf](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-5-01-unified-surface-analysis-chart-example-enlarged-.png)
+![Figure 25-18. Unified Surface Analysis Chart Example (Enlarged Area)](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-5-01-unified-surface-analysis-chart-example-enlarged-.png)
 
-![Figure 25-20. Schematic of 500 mb Constant-Pressure Chart 
-Table 25-3. Common Constant-Pressure Charts 
-Chart 
-Pressure Altitude (approximate) 
-Feet (ft) 
-Meters (m) 
-100 mb 
-53,000 ft 
-16,000 m 
-150 mb 
-45,000 ft 
-13,500 m 
-200 mb 
-39,000 ft 
-12,000 m 
-250 mb 
-34,000 ft 
-10,500 m 
-300 mb 
-30,000 ft 
-9,000 m 
-500 mb 
-1](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-1-00-schematic-of-500-mb-constant-pressure-chart-tabl.png)
+![Figure 25-19. Unified Surface Analysis Chart Example with Fixed Area Coverage over Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-1-00-schematic-of-500-mb-constant-pressure-chart.png)
 
-![Figure 25-21. Example of a 500 mb Constant-Pressure Chart 
-Constant pressure level forecasts are used to provide an overview of weather patterns at specified times and 
-pressure altitudes and are the source for wind and temperature aloft forecasts. 
-Pressure patterns cause and characterize much of the weather. Typicall](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-2-00-example-of-a-500-mb-constant-pressure-chart-cons.png)
+![Figure 25-20. Schematic of 500 mb Constant-Pressure Chart](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-2-00-example-of-a-500-mb-constant-pressure-chart.png)
 
-![Figure 25-22. Skew-T Diagram Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-2-01-skew-t-diagram-example.png)
+![Figure 25-21. Example of a 500 mb Constant-Pressure Chart](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-2-01-skew-t-diagram-example.png)
 
-![Figure 25-23. Skew-T Diagram—Multiple Freezing Level Example 
-25.3.2.3.2 Cloud Top Example 
-Figure 25-24 is the radiosonde observation from Vandenberg Space Force Base (VSFB), California, for 
-1200 UTC for a typical coastal stratus cloud. 
- 
-At about 950 mb, the temperature profile (bold red line) and dewpoint profile](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-2-02-skew-t-diagram-multiple-freezing-level-example-2.png)
+![Figure 25-22. Skew-T Diagram Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-2-02-skew-t-diagram-multiple-freezing-level-example.png)
 
-![Figure 25-24. Skew-T Diagram—Cloud Top Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-2-03-skew-t-diagram-cloud-top-example.png)
+![Figure 25-23. Skew-T Diagram—Multiple Freezing Level Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-2-03-skew-t-diagram-cloud-top-example.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-25-00-common-isopleths-isopleth-variable-definition-is.html">
 <table><caption>Table 25-1. Common Isopleths 
@@ -795,9 +716,9 @@ A line connecting points of equal or constant pressure.
 Contour Line (also 
 called Isoheight) 
 Height 
-A line of consta</caption><thead><tr><th></th><th>Isopleth</th><th></th><th></th><th>Variable</th><th></th><th></th><th>Definition</th><th></th></tr></thead><tbody><tr><td>Isobar</td><td></td><td></td><td>Pressure</td><td></td><td></td><td>A line connecting points of equal or constant pressure.</td><td></td><td></td></tr><tr><td>Contour Line (also
+A line of consta</caption><thead><tr><th></th><th>Isopleth</th><th></th><th></th><th>Variable</th><th></th><th></th><th>Definition</th></tr></thead><tbody><tr><td>Isobar</td><td></td><td></td><td>Pressure</td><td></td><td></td><td>A line connecting points of equal or constant pressure.</td><td></td></tr><tr><td>Contour Line (also
 called Isoheight)</td><td></td><td></td><td>Height</td><td></td><td></td><td>A line of constant elevation above MSL of a defined surface,
-typically a constant-pressure surface.</td><td></td><td></td></tr><tr><td>Isotherm</td><td></td><td></td><td>Temperature</td><td></td><td></td><td>A line connecting points of equal or constant temperature.</td><td></td><td></td></tr><tr><td>Isotach</td><td></td><td></td><td>Wind Speed</td><td></td><td></td><td>A line connecting points of equal wind speed.</td><td></td><td></td></tr><tr><td>Isohume</td><td></td><td></td><td>Humidity</td><td></td><td></td><td>A line drawn through points of equal humidity.</td><td></td><td></td></tr><tr><td>Isodrosotherm</td><td></td><td></td><td>Dewpoint</td><td></td><td></td><td>A line connecting points of equal dewpoint.</td><td></td><td></td></tr></tbody></table>
+typically a constant-pressure surface.</td><td></td></tr><tr><td>Isotherm</td><td></td><td></td><td>Temperature</td><td></td><td></td><td>A line connecting points of equal or constant temperature.</td><td></td></tr><tr><td>Isotach</td><td></td><td></td><td>Wind Speed</td><td></td><td></td><td>A line connecting points of equal wind speed.</td><td></td></tr><tr><td>Isohume</td><td></td><td></td><td>Humidity</td><td></td><td></td><td>A line drawn through points of equal humidity.</td><td></td></tr><tr><td>Isodrosotherm</td><td></td><td></td><td>Dewpoint</td><td></td><td></td><td>A line connecting points of equal dewpoint.</td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-25-01-common-weather-chart-symbols-feature-symbol-defi.html">
@@ -808,14 +729,14 @@ Definition
 Low 
  
 A minimum of atmospheric pressure in two dimensions (closed 
-isobars) on a surface chart, or a minimum of height (closed</caption><thead><tr><th></th><th>Feature</th><th></th><th></th><th>Symbol</th><th></th><th></th><th>Definition</th><th></th></tr></thead><tbody><tr><td>Low</td><td></td><td></td><td></td><td></td><td></td><td>A minimum of atmospheric pressure in two dimensions (closed
+isobars) on a surface chart, or a minimum of height (closed</caption><thead><tr><th></th><th>Feature</th><th></th><th></th><th>Symbol</th><th></th><th></th><th>Definition</th></tr></thead><tbody><tr><td>Low</td><td></td><td></td><td></td><td></td><td></td><td>A minimum of atmospheric pressure in two dimensions (closed
 isobars) on a surface chart, or a minimum of height (closed
-contours) on a constant-pressure chart. Also known as a cyclone.</td><td></td><td></td></tr><tr><td>High</td><td></td><td></td><td></td><td></td><td></td><td>A maximum of atmospheric pressure in two dimensions (closed
+contours) on a constant-pressure chart. Also known as a cyclone.</td><td></td></tr><tr><td>High</td><td></td><td></td><td></td><td></td><td></td><td>A maximum of atmospheric pressure in two dimensions (closed
 isobars) on a surface chart, or a maximum of height (closed
 contours) on a constant-pressure chart. Also known as an
-anticyclone.</td><td></td><td></td></tr><tr><td>Trough</td><td></td><td></td><td></td><td></td><td></td><td>An elongated area of relatively low atmospheric pressure or height.</td><td></td><td></td></tr><tr><td>Ridge</td><td></td><td></td><td></td><td></td><td></td><td>An elongated area of relatively high atmospheric pressure or
+anticyclone.</td><td></td></tr><tr><td>Trough</td><td></td><td></td><td></td><td></td><td></td><td>An elongated area of relatively low atmospheric pressure or height.</td><td></td></tr><tr><td>Ridge</td><td></td><td></td><td></td><td></td><td></td><td>An elongated area of relatively high atmospheric pressure or
 height. May also be used as reference to other meteorological
-quantities, such as temperature and dewpoint.</td><td></td><td></td></tr></tbody></table>
+quantities, such as temperature and dewpoint.</td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-25-02-common-constant-pressure-charts-chart-pressure-a.html">
@@ -833,5 +754,5 @@ Meters (m)
 200 mb 
 39,000 ft 
 12,000 m 
-250 m</caption><thead><tr><th>Chart</th><th></th><th></th><th></th><th>Pressure Altitude (approximate)</th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td>Feet (ft)</td><td></td><td></td><td>Meters (m)</td><td></td></tr><tr><td></td><td>100 mb</td><td></td><td>53,000 ft</td><td></td><td></td><td>16,000 m</td><td></td><td></td></tr><tr><td></td><td>150 mb</td><td></td><td>45,000 ft</td><td></td><td></td><td>13,500 m</td><td></td><td></td></tr><tr><td></td><td>200 mb</td><td></td><td>39,000 ft</td><td></td><td></td><td>12,000 m</td><td></td><td></td></tr><tr><td></td><td>250 mb</td><td></td><td>34,000 ft</td><td></td><td></td><td>10,500 m</td><td></td><td></td></tr><tr><td></td><td>300 mb</td><td></td><td>30,000 ft</td><td></td><td></td><td>9,000 m</td><td></td><td></td></tr><tr><td></td><td>500 mb</td><td></td><td>18,000 ft</td><td></td><td></td><td>5,500 m</td><td></td><td></td></tr><tr><td></td><td>700 mb</td><td></td><td>10,000 ft</td><td></td><td></td><td>3,000 m</td><td></td><td></td></tr><tr><td></td><td>850 mb</td><td></td><td>5,000 ft</td><td></td><td></td><td>1,500 m</td><td></td><td></td></tr><tr><td></td><td>925 mb</td><td></td><td>2,500 ft</td><td></td><td></td><td>750 m</td><td></td><td></td></tr></tbody></table>
+250 m</caption><thead><tr><th>Chart</th><th></th><th></th><th></th><th>Pressure Altitude (approximate)</th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td>Feet (ft)</td><td></td><td></td><td>Meters (m)</td></tr><tr><td></td><td>100 mb</td><td></td><td>53,000 ft</td><td></td><td></td><td>16,000 m</td><td></td></tr><tr><td></td><td>150 mb</td><td></td><td>45,000 ft</td><td></td><td></td><td>13,500 m</td><td></td></tr><tr><td></td><td>200 mb</td><td></td><td>39,000 ft</td><td></td><td></td><td>12,000 m</td><td></td></tr><tr><td></td><td>250 mb</td><td></td><td>34,000 ft</td><td></td><td></td><td>10,500 m</td><td></td></tr><tr><td></td><td>300 mb</td><td></td><td>30,000 ft</td><td></td><td></td><td>9,000 m</td><td></td></tr><tr><td></td><td>500 mb</td><td></td><td>18,000 ft</td><td></td><td></td><td>5,500 m</td><td></td></tr><tr><td></td><td>700 mb</td><td></td><td>10,000 ft</td><td></td><td></td><td>3,000 m</td><td></td></tr><tr><td></td><td>850 mb</td><td></td><td>5,000 ft</td><td></td><td></td><td>1,500 m</td><td></td></tr><tr><td></td><td>925 mb</td><td></td><td>2,500 ft</td><td></td><td></td><td>750 m</td><td></td></tr></tbody></table>
 </div>

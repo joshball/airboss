@@ -23,8 +23,4 @@ AP typically appears as speckled or blotchy high-reflectivity echoes. When anima
 thunderstorms; differentiating between the two is determined by animating the images. Thunderstorms
 move with a smooth, continuous motion while AP appears to “bloom up” and dissipate randomly.
 
-![Figure 15-16. WSR-88D Weather Radar Angel Example 
-15.2.13 Anomalous Propagation (AP) 
-AP (see Figure 15-17) is an extended pattern of ground echoes caused by superrefraction of the radar beam. 
-Superrefraction causes the radar beam to bend downward and strike the ground. It differs from ground 
-clutter because it can](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-13-00-wsr-88d-weather-radar-angel-example-15-2-13-anom.png)
+![Figure 15-16. WSR-88D Weather Radar Angel Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-13-00-wsr-88d-weather-radar-angel-example.png)

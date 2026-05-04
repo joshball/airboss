@@ -55,6 +55,12 @@ final decision as to whether the flight can be conducted safely rests solely wit
 receiving a “VFR flight not recommended” statement, the non-IFR rated pilot will need to make a
 “go or no go” decision. This decision should be based on weighing the current and forecast weather
 
-<div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-3-1-00-untitled.html">
-<table><thead><tr><th>Historically, Flight Service has been the primary source for obtaining preflight briefings. Today, increasing</th><th></th></tr></thead><tbody><tr><td>numbers of pilots are using online weather resources to obtain weather information through government or</td><td></td></tr><tr><td>commercial providers. Pilots may receive a regulatory compliant briefing without contacting Flight Service.</td><td></td></tr><tr><td>Pilots who prefer to contact Flight Service are encouraged to conduct a self-briefing prior to calling.</td><td></td></tr><tr><td>Conducting a self-briefing before contacting Flight Service provides familiarity of weather conditions</td><td></td></tr><tr><td>applicable to the route of flight and promotes a better understanding of weather information.</td><td></td></tr></tbody></table>
-</div>
+| Historically, Flight Service has been the primary source for obtaining preflight briefings. Today, increasing |
+| --- |
+| numbers of pilots are using online weather resources to obtain weather information through government or |
+| commercial providers. Pilots may receive a regulatory compliant briefing without contacting Flight Service. |
+| Pilots who prefer to contact Flight Service are encouraged to conduct a self-briefing prior to calling. |
+| Conducting a self-briefing before contacting Flight Service provides familiarity of weather conditions |
+| applicable to the route of flight and promotes a better understanding of weather information. |
+
+<a class="handbook-table-source" href="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-3-1-00-untitled.html">Open original</a>

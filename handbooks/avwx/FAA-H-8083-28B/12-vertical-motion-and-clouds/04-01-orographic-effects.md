@@ -76,15 +76,15 @@ Change
 Dewpoint 
 Change 
 Relative 
-Humi</caption><thead><tr><th>Parcel</th><th></th><th></th><th></th><th>Unsaturated</th><th></th><th></th><th></th><th></th><th>Saturated</th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td>Temperature
+Humi</caption><thead><tr><th>Parcel</th><th></th><th></th><th></th><th>Unsaturated</th><th></th><th></th><th></th><th></th><th>Saturated</th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td>Temperature
 Change</td><td></td><td>Dewpoint
 Change</td><td>Relative
 Humidity</td><td></td><td>Temperature
 Change</td><td></td><td>Dewpoint
 Change</td><td>Relative
-Humidity</td><td></td></tr><tr><td>Ascending
+Humidity</td></tr><tr><td>Ascending
 (rising)</td><td></td><td></td><td>-3°C/1,000 ft</td><td></td><td>-0.5°C/1,000 ft</td><td>Increases</td><td></td><td>-1.2°C to
 -3°C/1,000 ft</td><td></td><td>Identical to
 temperature
-change</td><td>100%</td><td></td></tr><tr><td></td><td>Descending</td><td></td><td>+3°C/1,000 ft</td><td></td><td>+0.5°C/1,000 ft</td><td>Decreases</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>(subsiding)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+change</td><td>100%</td></tr><tr><td></td><td>Descending</td><td></td><td>+3°C/1,000 ft</td><td></td><td>+0.5°C/1,000 ft</td><td>Decreases</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>(subsiding)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
 </div>

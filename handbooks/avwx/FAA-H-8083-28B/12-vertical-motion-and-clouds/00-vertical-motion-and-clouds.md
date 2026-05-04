@@ -224,32 +224,15 @@ Surface–6,500 ft (0–2 km)
 
 ![Figure 12-1. Unsaturated Ascending/Descending Air Parcel Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-2-00-unsaturated-ascending-descending-air-parcel-exam.png)
 
-![Figure 12-2. Ascending Air Parcel That Becomes Saturated Example 
-In Figure 12-2, at the surface the air parcel has a temperature of 18°C and a dewpoint of 13°C, indicating 
-that it is unsaturated. As the parcel ascends, its temperature decreases at the dry adiabatic lapse rate of 3°C 
-per 1,000 ft, while the dewpoint](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-3-00-ascending-air-parcel-that-becomes-saturated-exam.png)
+![Figure 12-2. Ascending Air Parcel That Becomes Saturated Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-3-00-ascending-air-parcel-that-becomes-saturated-exam.png)
 
-![Figure 12-3. Descending Air Parcel Example 
-At 5,000 ft, both the temperature and dewpoint of the air parcel are 6°C, indicating that it is saturated. As 
-the parcel descends, it quickly becomes unsaturated. Its temperature increases 3°C per 1,000 ft, while its 
-dewpoint increases at 0.5°C per 1,000 ft. The temperature](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-3-01-descending-air-parcel-example-at-5-000-ft-both-t.png)
+![Figure 12-3. Descending Air Parcel Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-3-01-descending-air-parcel-example.png)
 
-![Figure 12-4. Orographic Effects Example 
-The air parcel begins with a temperature of 15°C, dewpoint of 10°C, and a relative humidity of 80 percent 
-at 2,000 ft. As the parcel is lifted on the windward slope, the temperature cools at the dry adiabatic lapse 
-rate of 3°C per 1,000 ft, and the dewpoint cools at a rate of](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-2-00-orographic-effects-example-the-air-parcel-begins.png)
+![Figure 12-4. Orographic Effects Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-2-00-orographic-effects-example.png)
 
-![Figure 12-5. Frictional Effects 
-12.4.3 Frontal Lift 
-Frontal lift (see Figure 12-6) occurs when the cold, denser air wedges under the warm, less dense air, 
-plowing it upward, and/or the warmer air rides up and over the colder air in a process called overrunning. 
-Clouds and precipitation will form given sufficient li](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-3-00-frictional-effects-12-4-3-frontal-lift-frontal-l.png)
+![Figure 12-5. Frictional Effects](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-3-00-frictional-effects.png)
 
-![Figure 12-6. Frontal Lift 
-12.4.4 Buoyancy 
-Air near the ground can warm at different rates depending on the insular properties of the ground with 
-which it is in contact. A newly plowed field will warm faster than an adjacent lake. These temperature 
-differences result in different densities, allowing the warm air to](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-3-01-frontal-lift-12-4-4-buoyancy-air-near-the-ground.png)
+![Figure 12-6. Frontal Lift](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-3-01-frontal-lift.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-12-00-air-parcel-vertical-motion-characteristics-parce.html">
 <table><caption>Table 12-1. Air Parcel Vertical Motion Characteristics 
@@ -267,17 +250,17 @@ Change
 Dewpoint 
 Change 
 Relative 
-Humi</caption><thead><tr><th>Parcel</th><th></th><th></th><th></th><th>Unsaturated</th><th></th><th></th><th></th><th></th><th>Saturated</th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td>Temperature
+Humi</caption><thead><tr><th>Parcel</th><th></th><th></th><th></th><th>Unsaturated</th><th></th><th></th><th></th><th></th><th>Saturated</th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td>Temperature
 Change</td><td></td><td>Dewpoint
 Change</td><td>Relative
 Humidity</td><td></td><td>Temperature
 Change</td><td></td><td>Dewpoint
 Change</td><td>Relative
-Humidity</td><td></td></tr><tr><td>Ascending
+Humidity</td></tr><tr><td>Ascending
 (rising)</td><td></td><td></td><td>-3°C/1,000 ft</td><td></td><td>-0.5°C/1,000 ft</td><td>Increases</td><td></td><td>-1.2°C to
 -3°C/1,000 ft</td><td></td><td>Identical to
 temperature
-change</td><td>100%</td><td></td></tr><tr><td></td><td>Descending</td><td></td><td>+3°C/1,000 ft</td><td></td><td>+0.5°C/1,000 ft</td><td>Decreases</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>(subsiding)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+change</td><td>100%</td></tr><tr><td></td><td>Descending</td><td></td><td>+3°C/1,000 ft</td><td></td><td>+0.5°C/1,000 ft</td><td>Decreases</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>(subsiding)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-12-01-cloud-forms-cirri-form-high-level-clouds-that-fo.html">
@@ -290,20 +273,20 @@ appearance bu</caption><thead><tr><th>Cirri-form</th><th></th><th>High-level clo
 composed of ice crystals. High-level clouds are typically thin and white in
 appearance but can create an array of colors when the Sun is low on the
 horizon. Cirrus generally occur in fair weather and point in the direction of air
-movement at their elevation.</th><th></th></tr></thead><tbody><tr><td>Nimbo-form</td><td></td><td>Nimbus comes from the Latin word meaning “rain.” These clouds typically
+movement at their elevation.</th></tr></thead><tbody><tr><td>Nimbo-form</td><td></td><td>Nimbus comes from the Latin word meaning “rain.” These clouds typically
 form between 7,000 and 15,000 ft (2,100 to 4,600 m) and bring steady
 precipitation. As the clouds thicken and precipitation begins to fall, the bases
-of the clouds tend to lower toward the ground.</td><td></td></tr><tr><td>Cumuli-form</td><td></td><td>Clouds that look like white, fluffy cotton balls or heaps and show the vertical
+of the clouds tend to lower toward the ground.</td></tr><tr><td>Cumuli-form</td><td></td><td>Clouds that look like white, fluffy cotton balls or heaps and show the vertical
 motion or thermal uplift of air taking place in the atmosphere. The level at
 which condensation and cloud formation begins is indicated by a flat cloud
 base, and its height will depend upon the humidity of the rising air. The more
 humid the air, the lower the cloud base. The tops of these clouds can reach
-over 60,000 ft (18,000 m).</td><td></td></tr><tr><td>Strati-form</td><td></td><td>Stratus is Latin for “layer” or “blanket.” The clouds consist of a featureless
+over 60,000 ft (18,000 m).</td></tr><tr><td>Strati-form</td><td></td><td>Stratus is Latin for “layer” or “blanket.” The clouds consist of a featureless
 low layer that can cover the entire sky like a blanket, bringing generally gray
 and dull weather. The cloud bases are usually only a few hundred feet above
 the ground. When stratus clouds move over hills and mountains, they are able
 to reach ground level and are thus called fog. Also, as fog lifts off the ground
-due to daytime heating, the fog forms a layer of low stratus clouds.</td><td></td></tr><tr><td></td><td>Source: NWS JetStream – Online School for Weather</td><td></td><td></td></tr></tbody></table>
+due to daytime heating, the fog forms a layer of low stratus clouds.</td></tr><tr><td></td><td>Source: NWS JetStream – Online School for Weather</td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-12-02-approximate-height-of-cloud-bases-above-the-surf.html">
@@ -315,5 +298,5 @@ Tropical Regions
 High Clouds 
 10,000–25,000 ft (3–8 km) 
 16,500–40,000 ft (5–13 km) 
-20,000–6</caption><thead><tr><th></th><th>Level</th><th></th><th></th><th>Polar Regions</th><th></th><th></th><th>Temperate Regions</th><th></th><th></th><th>Tropical Regions</th><th></th></tr></thead><tbody><tr><td></td><td>High Clouds</td><td></td><td>10,000–25,000 ft (3–8 km)</td><td></td><td></td><td>16,500–40,000 ft (5–13 km)</td><td></td><td></td><td>20,000–60,000 ft (6–18 km)</td><td></td><td></td></tr><tr><td></td><td>Middle Clouds</td><td></td><td>6,500–13,000 ft (2–4 km)</td><td></td><td></td><td>6,500–23,000 ft (2–7 km)</td><td></td><td></td><td>6,500–25,000 ft (2–8 km)</td><td></td><td></td></tr><tr><td></td><td>Low Clouds</td><td></td><td>Surface–6,500 ft (0–2 km)</td><td></td><td></td><td>Surface–6,500 ft (0–2 km)</td><td></td><td></td><td>Surface–6,500 ft (0–2 km)</td><td></td><td></td></tr></tbody></table>
+20,000–6</caption><thead><tr><th>Level</th><th></th><th></th><th>Polar Regions</th><th></th><th></th><th>Temperate Regions</th><th></th><th></th><th>Tropical Regions</th></tr></thead><tbody><tr><td>High Clouds</td><td></td><td>10,000–25,000 ft (3–8 km)</td><td></td><td></td><td>16,500–40,000 ft (5–13 km)</td><td></td><td></td><td>20,000–60,000 ft (6–18 km)</td><td></td></tr><tr><td>Middle Clouds</td><td></td><td>6,500–13,000 ft (2–4 km)</td><td></td><td></td><td>6,500–23,000 ft (2–7 km)</td><td></td><td></td><td>6,500–25,000 ft (2–8 km)</td><td></td></tr><tr><td>Low Clouds</td><td></td><td>Surface–6,500 ft (0–2 km)</td><td></td><td></td><td>Surface–6,500 ft (0–2 km)</td><td></td><td></td><td>Surface–6,500 ft (0–2 km)</td><td></td></tr></tbody></table>
 </div>

@@ -53,13 +53,6 @@ There are several patterns of upper-level winds that are associated with CAT. On
 trough. CAT is found most frequently at, and just upwind of, the base of the trough, especially just
 downwind of an area of strong temperature advection. Another area of the trough in which to suspect CAT
 
-![Figure 19-5. Wind Shear Turbulence 
-19.2.3.1 Temperature Inversion 
-A temperature inversion is a layer of the atmosphere in which temperature increases with altitude. 
-Inversions commonly occur within the lowest few thousand feet above ground due to nighttime radiational 
-cooling, along frontal zones, and when cold air](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-3-00-wind-shear-turbulence-19-2-3-1-temperature-inver.png)
+![Figure 19-5. Wind Shear Turbulence](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-3-00-wind-shear-turbulence.png)
 
-![Figure 19-6. Wind Shear Turbulence Associated with a Temperature Inversion 
-19.2.3.2 Clear-Air Turbulence (CAT) 
-CAT is defined as sudden severe turbulence occurring in cloudless regions that causes violent buffeting of 
-aircraft. CAT is a higher altitude turbulence (normally above 15,000 ft) particularly between the c](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-3-01-wind-shear-turbulence-associated-with-a-temperat.png)
+![Figure 19-6. Wind Shear Turbulence Associated with a Temperature Inversion](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-3-01-wind-shear-turbulence-associated-with-a-temperat.png)

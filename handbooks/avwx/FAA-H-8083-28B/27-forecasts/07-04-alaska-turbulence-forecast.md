@@ -21,9 +21,4 @@ severe (SEV) turbulence (refer to SIGMETs for occasional or greater severe turbu
 Separate graphics are provided for low-level (defined for this product as FL180 and below) and high-level
 (defined for this product as above FL180) turbulence.
 
-![Figure 27-6. Alaska Icing Forecast Example 
-27.7.4 Alaska Turbulence Forecast 
-The Turbulence Forecast graphic (see Figure 27-7) depicts areas of significant turbulence at specified valid 
-times. 
-Areas of isolated (ISOL) moderate (MOD) turbulence are shaded yellow, areas of occasional (OCNL) or 
-continuous (CONS) mode](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-4-00-alaska-icing-forecast-example-27-7-4-alaska-turb.png)
+![Figure 27-6. Alaska Icing Forecast Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-4-00-alaska-icing-forecast-example.png)

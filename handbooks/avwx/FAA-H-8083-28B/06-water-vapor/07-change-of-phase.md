@@ -77,15 +77,9 @@ The amount of energy associated with latent heat exchange should not be understa
 releases 52 million trillion (5.2 x 1019) joules per day as water vapor condenses into clouds and precipitation.
 This is equivalent to about 40 times the total worldwide energy consumption per day in 2005!
 
-![Figure 6-3. Temperature-Dewpoint Spread Effect on Relative Humidity 
-Relative humidity depends on the temperature-dewpoint spread. In Figure 6-3, dewpoint is constant, but 
-temperature decreases from left to right. On the left panel relative humidity is 50 percent, indicating that 
-the air parcel could hold twice as mu](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-7-00-temperature-dewpoint-spread-effect-on-relative-h.png)
+![Figure 6-3. Temperature-Dewpoint Spread Effect on Relative Humidity](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-7-00-temperature-dewpoint-spread-effect-on-relative-h.png)
 
-![Figure 6-4. Latent Heat Transactions When Water Undergoes Phase Transition 
-Heat is exchanged between water and its environment during phase transition. Although the temperature of 
-the environment changes in response, the temperature of the water undergoing the phase transition remains 
-constant until the phase change](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-7-1-00-latent-heat-transactions-when-water-undergoes-ph.png)
+![Figure 6-4. Latent Heat Transactions When Water Undergoes Phase Transition](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-7-1-00-latent-heat-transactions-when-water-undergoes-ph.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-6-7-00-latent-heat-of-water-at-0-c-latent-heat-type-ene.html">
 <table><caption>Table 6-1. Latent Heat of Water at 0 °C 
@@ -98,5 +92,5 @@ Latent heat of vaporization
 2,501 
 Latent heat of fusion 
 334 
-The amount of ener</caption><thead><tr><th>Latent Heat Type</th><th></th><th>Energy Exchange</th><th></th></tr></thead><tbody><tr><td></td><td></td><td>(J/g)</td><td></td></tr><tr><td>Latent heat of sublimation</td><td>2,834</td><td></td><td></td></tr><tr><td>Latent heat of vaporization</td><td>2,501</td><td></td><td></td></tr><tr><td>Latent heat of fusion</td><td>334</td><td></td><td></td></tr></tbody></table>
+The amount of ener</caption><thead><tr><th>Latent Heat Type</th><th></th><th>Energy Exchange</th></tr></thead><tbody><tr><td></td><td></td><td>(J/g)</td></tr><tr><td>Latent heat of sublimation</td><td>2,834</td><td></td></tr><tr><td>Latent heat of vaporization</td><td>2,501</td><td></td></tr><tr><td>Latent heat of fusion</td><td>334</td><td></td></tr></tbody></table>
 </div>

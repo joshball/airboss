@@ -55,6 +55,8 @@ Because weather is the most common reason for air traffic delays and rerouting, 
 support the ATCSCC. These meteorologists, called National Aviation Meteorologists, coordinate NWS
 operations in support of traffic flow management within the NAS.
 
-<div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-2-3-1-00-untitled.html">
-<table><thead><tr><th>Per Title 49 of the United States Code (49 U.S.C.) § 44720, Meteorological Services, the FAA establishes</th><th></th></tr></thead><tbody><tr><td>all requirements for aviation weather reports and forecasts.</td><td></td></tr></tbody></table>
-</div>
+| Per Title 49 of the United States Code (49 U.S.C.) § 44720, Meteorological Services, the FAA establishes |
+| --- |
+| all requirements for aviation weather reports and forecasts. |
+
+<a class="handbook-table-source" href="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-2-3-1-00-untitled.html">Open original</a>

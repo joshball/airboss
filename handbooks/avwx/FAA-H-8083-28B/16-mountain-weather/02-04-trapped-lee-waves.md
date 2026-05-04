@@ -56,14 +56,6 @@ the mountain range. This separates a turbulent wake region below mountaintop lev
 6 Durran, D. R., & Klemp, J. B. (1983). A compressible model for the simulation of moist mountain waves. Monthly
 Weather Review, 111, 2341-2361.
 
-![Figure 16-7. Schematic of the Strong Shear Zone Associated with a Hydraulic Jump in a Mountain Wave 
-16.2.4 Trapped Lee Waves 
-In the preceding section, an important type of mountain wave that propagates (i.e., transports its energy) 
-vertically was discussed. Next, consider a second type of mountain wave, often manife](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-4-00-schematic-of-the-strong-shear-zone-associated-wi.png)
+![Figure 16-7. Schematic of the Strong Shear Zone Associated with a Hydraulic Jump in a Mountain Wave](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-4-00-schematic-of-the-strong-shear-zone-associated-wi.png)
 
-![Figure 16-5. 
- 
-(Source: Durran and Klemp, 1983)6 
-Figure 16-8. Computer Simulation of Trapped Lee Waves Behind a 300-m-High Mountain 
-This class of wave presents less turbulence hazard at high altitude than do breaking vertically propagating 
-waves, because the wave amplitude decreases with height within the “trapping](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-4-01-source-durran-and-klemp-1983-6-figure-16-8-compu.png)
+![in Figure 16-5.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-4-01-untitled.png)

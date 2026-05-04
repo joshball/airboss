@@ -30,10 +30,6 @@ the highest elevation angle. This region above the radar is known as the “cone
 
 Figure 15-12. Cone of Silence
 
-![Figure 15-11. Ducting 
-15.2.8 Radar Beam Overshooting and Undershooting 
-Radar beam overshooting may occur because the lowest radar beam can be higher than the top of 
-precipitation. This will most likely occur with stratiform precipitation and low-topped convection. For 
-example, at a distance of 124 NM from the radar](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-8-00-ducting-15-2-8-radar-beam-overshooting-and-under.png)
+![Figure 15-11. Ducting](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-8-00-ducting.png)
 
 ![Figure 15-12. Cone of Silence](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-8-01-cone-of-silence.png)

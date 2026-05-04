@@ -26,10 +26,4 @@ As previously discussed, air pressure decreases with height in the atmosphere. T
 decreases with height (see Figure 8-9). In the atmosphere, pressure has the greatest effect on density in the
 vertical direction.
 
-![Figure 8-8. Volume’s Effects on Density 
-8.3.2 Changes in Density 
-In general, the density of an air parcel can be changed by changing its mass, pressure, or temperature. 
-Boyle’s law says that the density of an ideal gas (ρ, the Greek letter rho) is given by: 
-𝜌= 𝑀𝑃
-𝑅𝑇 
-Where M is the molar mass, P is the pressure, R](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-3-2-00-volume-s-effects-on-density-8-3-2-changes-in-den.png)
+![Figure 8-8. Volume’s Effects on Density](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-3-2-00-volume-s-effects-on-density.png)

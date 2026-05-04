@@ -32,7 +32,4 @@ the Earth would be unable to maintain a constant average temperature. About 35°
 hemispheres is where incoming and outgoing radiation is equal. This implies there is annual net cooling at
 higher latitudes and net warming at lower latitudes; however, this is untrue. The excess heat in the tropics
 
-![Figure 7-5. Solar Zenith Angle Variations with Latitude 
-The emission of terrestrial radiation also varies by latitude, but less so than the absorption of solar radiation. 
-Terrestrial radiation emission decreases with increasing latitude due to a drop in temperature with latitude. 
-Thus, at higher latitudes, the annua](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-4-00-solar-zenith-angle-variations-with-latitude-the-.png)
+![Figure 7-5. Solar Zenith Angle Variations with Latitude](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-4-00-solar-zenith-angle-variations-with-latitude.png)

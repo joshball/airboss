@@ -25,6 +25,4 @@ in Figure 10-9. This is called the geostrophic wind.
 
 Figure 10-8. Geostrophic Wind
 
-![Figure 10-9. This is called the geostrophic wind. 
- 
-Figure 10-8. Geostrophic Wind](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-4-00-this-is-called-the-geostrophic-wind-figure-10-8-.png)
+![in Figure 10-9. This is called the geostrophic wind.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-4-00-this-is-called-the-geostrophic-wind.png)

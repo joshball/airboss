@@ -921,20 +921,30 @@ Part 2:
 Weather Theory and Aviation
 Hazards
 
-<div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-00-weather-element-thunderstorm-type-text-t-graphic.html">
-<table><caption>Table 3-4. Weather Element: Thunderstorm 
-Type: text (T), graphic (G), image (I), voice (V) 
-Thunderstorm 
-Information 
-Contained In: 
-Type 
-Summary 
-Observations 
-  
-  
-METAR and SPECI 
-(ASOS, AWOS,</caption><thead><tr><th>Acronym/Abbreviation</th><th>Definition</th></tr></thead><tbody><tr><td>TCF</td><td>Traffic Flow Management Convective Forecast</td></tr><tr><td>Temp</td><td>Temperature</td></tr><tr><td>TS</td><td>Thunderstorm</td></tr><tr><td>TSRA</td><td>Thunderstorm with Rain</td></tr><tr><td>T-Storm</td><td>Thunderstorm</td></tr><tr><td>Turb</td><td>Turbulence</td></tr><tr><td>VA</td><td>Volcanic Ash</td></tr><tr><td>VAA</td><td>Volcanic Ash Advisory</td></tr><tr><td>VAR</td><td>Volcanic Activity Report</td></tr><tr><td>VC</td><td>Vicinity</td></tr><tr><td>VCFG</td><td>Fog in the Vicinity</td></tr><tr><td>VCTS</td><td>Thunderstorm in the Vicinity</td></tr><tr><td>VFR</td><td>Visual Flight Rules</td></tr><tr><td>WAFS</td><td>World Area Forecast System</td></tr><tr><td>WDSPR DS</td><td>Widespread Dust Storms</td></tr><tr><td>WDSPR SS</td><td>Widespread Sandstorms</td></tr><tr><td>Wx or WX</td><td>Weather</td></tr><tr><td>Z</td><td>Zulu</td></tr></tbody></table>
-</div>
+**Table 3-4.** Weather Element: Thunderstorm Type: text (T), graphic (G), image (I), voice (V) Thunderstorm Information Contained In: Type Summary Observations METAR and SPECI (ASOS, AWOS,
+
+| Acronym/Abbreviation | Definition |
+| --- | --- |
+| TCF | Traffic Flow Management Convective Forecast |
+| Temp | Temperature |
+| TS | Thunderstorm |
+| TSRA | Thunderstorm with Rain |
+| T-Storm | Thunderstorm |
+| Turb | Turbulence |
+| VA | Volcanic Ash |
+| VAA | Volcanic Ash Advisory |
+| VAR | Volcanic Activity Report |
+| VC | Vicinity |
+| VCFG | Fog in the Vicinity |
+| VCTS | Thunderstorm in the Vicinity |
+| VFR | Visual Flight Rules |
+| WAFS | World Area Forecast System |
+| WDSPR DS | Widespread Dust Storms |
+| WDSPR SS | Widespread Sandstorms |
+| Wx or WX | Weather |
+| Z | Zulu |
+
+<a class="handbook-table-source" href="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-00-weather-element-thunderstorm-type-text-t-graphic.html">Open original</a>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-01-weather-element-thunderstorm-type-text-t-graphic.html">
 <table><caption>Table 3-4. Weather Element: Thunderstorm 
@@ -948,47 +958,47 @@ Observations
   
   
 METAR and SPECI 
-(ASOS, AWOS,</caption><thead><tr><th></th><th>Thunderstorm</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR and SPECI
+(ASOS, AWOS,</caption><thead><tr><th></th><th>Thunderstorm</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR and SPECI
 (ASOS, AWOS,
 ATIS)</td><td></td><td></td><td>T, G,
 V</td><td></td><td></td><td>Thunderstorms are reported in the body section of the METAR/SPECI when
 observed or detected by lightning networks or observers. Lightning information
-is provided in the RMK section of the METAR/SPECI.</td><td></td><td></td></tr><tr><td>PIREP</td><td></td><td></td><td>T, G,
-V</td><td></td><td></td><td>Included when reported.</td><td></td><td></td></tr></tbody></table>
+is provided in the RMK section of the METAR/SPECI.</td></tr><tr><td>PIREP</td><td></td><td></td><td>T, G,
+V</td><td></td><td></td><td>Included when reported.</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-02-untitled.html">
-<table><thead><tr><th></th><th>Thunderstorm</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Radar</td><td></td><td></td><td>I</td><td></td><td></td><td>Radar provides intensity levels of precipitation. Thunderstorms can typically be
+<table><thead><tr><th></th><th>Thunderstorm</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Radar</td><td></td><td></td><td>I</td><td></td><td></td><td>Radar provides intensity levels of precipitation. Thunderstorms can typically be
 distinguished based on intensity, but not always. Certain radar limitations can
-be misleading.</td><td></td><td></td></tr><tr><td>Lightning data</td><td></td><td></td><td>G</td><td></td><td></td><td>Used in the METAR, SPECI, ASOS, AWOS, ATIS, as well as incorporated into
-other product overlays (e.g., satellite pictures, radar display).</td><td></td><td></td></tr><tr><td>Satellite</td><td></td><td></td><td>I</td><td></td><td></td><td>Thunderstorms can be inferred by a meteorologist or trained specialist, unless
-they are embedded in other cloud layers.</td><td></td><td></td></tr><tr><td>Weather Camera</td><td></td><td></td><td>I</td><td></td><td></td><td>CB clouds may be seen on the camera.</td><td></td><td></td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Convective
+be misleading.</td></tr><tr><td>Lightning data</td><td></td><td></td><td>G</td><td></td><td></td><td>Used in the METAR, SPECI, ASOS, AWOS, ATIS, as well as incorporated into
+other product overlays (e.g., satellite pictures, radar display).</td></tr><tr><td>Satellite</td><td></td><td></td><td>I</td><td></td><td></td><td>Thunderstorms can be inferred by a meteorologist or trained specialist, unless
+they are embedded in other cloud layers.</td></tr><tr><td>Weather Camera</td><td></td><td></td><td>I</td><td></td><td></td><td>CB clouds may be seen on the camera.</td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Convective
 SIGMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Active area of thunderstorms. Only issued for the CONUS instead of a SIGMET
-for thunderstorms.</td><td></td><td></td></tr><tr><td>SIGMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Active area of thunderstorms. Issued for areas outside the CONUS.</td><td></td><td></td></tr><tr><td>CWA</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Active area of thunderstorms. Issued as a supplement to a Convective SIGMET
-or when Convective SIGMET criteria have not been met.</td><td></td><td></td></tr><tr><td>AWW</td><td></td><td></td><td>T</td><td></td><td></td><td>Intended for ground operations at select airports. Criteria may vary depending
+for thunderstorms.</td></tr><tr><td>SIGMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Active area of thunderstorms. Issued for areas outside the CONUS.</td></tr><tr><td>CWA</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Active area of thunderstorms. Issued as a supplement to a Convective SIGMET
+or when Convective SIGMET criteria have not been met.</td></tr><tr><td>AWW</td><td></td><td></td><td>T</td><td></td><td></td><td>Intended for ground operations at select airports. Criteria may vary depending
 on user needs. For example, it can be issued for cloud to ground lightning within
-5 miles of the airport.</td><td></td><td></td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TAF</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Thunderstorm included using various descriptors. For example:
+5 miles of the airport.</td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TAF</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Thunderstorm included using various descriptors. For example:
 - TS: thunderstorm without precipitation (means dry thunderstorms).
 - TSRA: thunderstorm with precipitation (in this case, rain).
 - VCTS: thunderstorms in the vicinity (i.e., within 5–10 SM of the center of
-the airport).</td><td></td><td></td></tr><tr><td>Aviation Surface
+the airport).</td></tr><tr><td>Aviation Surface
 Forecast</td><td></td><td></td><td>G</td><td></td><td></td><td>Derived from the GFA and includes forecasts of areas of thunderstorms at
-specified valid times.</td><td></td><td></td></tr><tr><td>Alaska Area
+specified valid times.</td></tr><tr><td>Alaska Area
 Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A description of significant clouds and weather including thunderstorms and
-CB clouds.</td><td></td><td></td></tr><tr><td>Hawaii Area
+CB clouds.</td></tr><tr><td>Hawaii Area
 Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A description of significant clouds and weather including thunderstorms and
-CB clouds.</td><td></td><td></td></tr><tr><td>Gulf of America and
+CB clouds.</td></tr><tr><td>Gulf of America and
 Caribbean Area
 Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A description of significant clouds and weather including thunderstorms and
-CB clouds.</td><td></td><td></td></tr><tr><td>Med-Level SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Forecast of significant weather including areas of CB clouds at specified valid
-times for limited geographic areas around the globe.</td><td></td><td></td></tr><tr><td>High-Level SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Global forecast of significant weather including areas of CB clouds at specified
-valid times.</td><td></td><td></td></tr><tr><td>Alaska SIGWX
+CB clouds.</td></tr><tr><td>Med-Level SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Forecast of significant weather including areas of CB clouds at specified valid
+times for limited geographic areas around the globe.</td></tr><tr><td>High-Level SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Global forecast of significant weather including areas of CB clouds at specified
+valid times.</td></tr><tr><td>Alaska SIGWX
 Chart</td><td></td><td></td><td>G</td><td></td><td></td><td>Forecast of significant weather including areas of thunderstorms at specified
-valid times.</td><td></td><td></td></tr><tr><td>Alaska Surface
+valid times.</td></tr><tr><td>Alaska Surface
 Chart</td><td></td><td></td><td>G</td><td></td><td></td><td>Forecast of surface weather features including areas of thunderstorms at
-specified valid times.</td><td></td><td></td></tr><tr><td>Alaska Convective
+specified valid times.</td></tr><tr><td>Alaska Convective
 Outlook</td><td></td><td></td><td>G</td><td></td><td></td><td>Seasonal product that provides forecasts that indicate where conditions are
-favorable for towering cumulus and thunderstorms at specified valid times.</td><td></td><td></td></tr><tr><td>Surface Prog Charts</td><td></td><td></td><td>G</td><td></td><td></td><td>CONUS forecast that includes areas of thunderstorms at specified valid times.</td><td></td><td></td></tr><tr><td>WAFS</td><td></td><td></td><td>G</td><td></td><td></td><td>Global forecasts that include areas of CB clouds.</td><td></td><td></td></tr></tbody></table>
+favorable for towering cumulus and thunderstorms at specified valid times.</td></tr><tr><td>Surface Prog Charts</td><td></td><td></td><td>G</td><td></td><td></td><td>CONUS forecast that includes areas of thunderstorms at specified valid times.</td></tr><tr><td>WAFS</td><td></td><td></td><td>G</td><td></td><td></td><td>Global forecasts that include areas of CB clouds.</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-03-weather-element-wind-type-text-t-graphic-g-image.html">
@@ -1005,24 +1015,24 @@ METAR and SPECI
 (ASOS, AWOS, 
 ATIS) 
 T, G, 
-V</caption><thead><tr><th></th><th>Thunderstorm</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TCF</td><td></td><td></td><td>G</td><td></td><td></td><td>The TCF depicts areas of convection meeting select criteria.</td><td></td><td></td></tr><tr><td>ECFP</td><td></td><td></td><td>G</td><td></td><td></td><td>The ECFP is a planning forecast mainly intended for air traffic managers.</td><td></td><td></td></tr><tr><td>Convective Outlook</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Convective Outlooks provide the potential for severe (tornado, wind gusts
+V</caption><thead><tr><th></th><th>Thunderstorm</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TCF</td><td></td><td></td><td>G</td><td></td><td></td><td>The TCF depicts areas of convection meeting select criteria.</td></tr><tr><td>ECFP</td><td></td><td></td><td>G</td><td></td><td></td><td>The ECFP is a planning forecast mainly intended for air traffic managers.</td></tr><tr><td>Convective Outlook</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Convective Outlooks provide the potential for severe (tornado, wind gusts
 50 knots or greater, or hail 1-in diameter or greater) and non-severe (general)
-convection and specific severe weather threats during the following 8 days.</td><td></td><td></td></tr><tr><td>SAW</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Formerly known as the AWW, the SAW provides an approximation of the area
-covered by a Severe Thunderstorm Watch or Tornado Watch.</td><td></td><td></td></tr><tr><td>Severe
+convection and specific severe weather threats during the following 8 days.</td></tr><tr><td>SAW</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Formerly known as the AWW, the SAW provides an approximation of the area
+covered by a Severe Thunderstorm Watch or Tornado Watch.</td></tr><tr><td>Severe
 Thunderstorm
 Watch</td><td></td><td></td><td>T, G</td><td></td><td></td><td>A watch is when conditions are favorable for severe thunderstorms, which is hail
 1-in diameter or greater and/or damaging winds of 50 knots or greater. Not to be
 confused with a Severe Thunderstorm Warning, which is issued when severe
-thunderstorms are occurring.</td><td></td><td></td></tr><tr><td>Tornado Watch</td><td></td><td></td><td>T, G</td><td></td><td></td><td>A watch is when conditions are favorable for tornadoes. Not to be confused with
-a Tornado Warning, which is issued when tornadoes are occurring.</td><td></td><td></td></tr><tr><td>AFD</td><td></td><td></td><td>T</td><td></td><td></td><td>Describes the weather conditions as they relate to a specific TAF or group of
+thunderstorms are occurring.</td></tr><tr><td>Tornado Watch</td><td></td><td></td><td>T, G</td><td></td><td></td><td>A watch is when conditions are favorable for tornadoes. Not to be confused with
+a Tornado Warning, which is issued when tornadoes are occurring.</td></tr><tr><td>AFD</td><td></td><td></td><td>T</td><td></td><td></td><td>Describes the weather conditions as they relate to a specific TAF or group of
 TAFs and may provide additional aviation weather-related issues that cannot be
-encoded into the TAF, such as the reasoning behind the forecast.</td><td></td><td></td></tr><tr><td>MIS</td><td></td><td></td><td>T</td><td></td><td></td><td>A discussion of meteorological events (including significant convection) causing
-or expecting to impact the flow of air traffic across an ARTCC.</td><td></td><td></td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes forecast thunderstorm areas with different
+encoded into the TAF, such as the reasoning behind the forecast.</td></tr><tr><td>MIS</td><td></td><td></td><td>T</td><td></td><td></td><td>A discussion of meteorological events (including significant convection) causing
+or expecting to impact the flow of air traffic across an ARTCC.</td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes forecast thunderstorm areas with different
 coverage levels. Also overlays radar Convective SIGMETs, CWAs for
-thunderstorms and Severe Thunderstorm/Tornado Warnings.</td><td></td><td></td></tr><tr><td>Flight Service
+thunderstorms and Severe Thunderstorm/Tornado Warnings.</td></tr><tr><td>Flight Service
 Interactive Map</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes overlays of radar, Convective SIGMETs,
 CWAs for thunderstorms, and Severe Thunderstorms/Tornado Watches and
-Warnings. Also includes an overlay for radar echo tops.</td><td></td><td></td></tr></tbody></table>
+Warnings. Also includes an overlay for radar echo tops.</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-04-weather-element-wind-type-text-t-graphic-g-image.html">
@@ -1039,47 +1049,47 @@ METAR and SPECI
 (ASOS, AWOS, 
 ATIS) 
 T, G, 
-V</caption><thead><tr><th></th><th>Wind Information</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR and SPECI
+V</caption><thead><tr><th></th><th>Wind Information</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR and SPECI
 (ASOS, AWOS,
 ATIS)</td><td></td><td></td><td>T, G,
 V</td><td></td><td></td><td>Surface wind speed and direction are included. Wind direction is reported
 relative to magnetic north in ATIS as well as ASOS and AWOS radio (voice)
 broadcasts. Otherwise reported relative to true north. Wind speed is reported
-in knots.</td><td></td><td></td></tr><tr><td>PIREP/AIREP</td><td></td><td></td><td>T, G,
+in knots.</td></tr><tr><td>PIREP/AIREP</td><td></td><td></td><td>T, G,
 V</td><td></td><td></td><td>Wind direction is reported in tens of degrees magnetic north and wind speed
-in knots.</td><td></td><td></td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Surface Analysis
+in knots.</td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Surface Analysis
 Chart</td><td></td><td></td><td>G</td><td></td><td></td><td>Surface wind speed and direction (true north) are depicted with standard
-symbols on station plot models.</td><td></td><td></td></tr><tr><td>Upper Air Analysis</td><td></td><td></td><td>G</td><td></td><td></td><td>At select pressure levels, the wind direction aloft is displayed in tens of degrees
-true north and wind speed aloft is displayed in knots.</td><td></td><td></td></tr></tbody></table>
+symbols on station plot models.</td></tr><tr><td>Upper Air Analysis</td><td></td><td></td><td>G</td><td></td><td></td><td>At select pressure levels, the wind direction aloft is displayed in tens of degrees
+true north and wind speed aloft is displayed in knots.</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-05-untitled.html">
-<table><thead><tr><th></th><th>Wind Information</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>AIRMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>AIRMET Tango issued when sustained surface winds greater than 30 knots are
-occurring or expected to occur.</td><td></td><td></td></tr><tr><td>CWA</td><td></td><td></td><td>T, G</td><td></td><td></td><td>May be issued if surface wind gusts are at or above 30 knots.</td><td></td><td></td></tr><tr><td>TCA</td><td></td><td></td><td>T</td><td></td><td></td><td>Includes maximum sustained surface winds.</td><td></td><td></td></tr><tr><td>AWW</td><td></td><td></td><td>T</td><td></td><td></td><td>Intended for ground operations at select airports. Criteria may vary depending
-on user needs.</td><td></td><td></td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Winds and
+<table><thead><tr><th></th><th>Wind Information</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>AIRMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>AIRMET Tango issued when sustained surface winds greater than 30 knots are
+occurring or expected to occur.</td></tr><tr><td>CWA</td><td></td><td></td><td>T, G</td><td></td><td></td><td>May be issued if surface wind gusts are at or above 30 knots.</td></tr><tr><td>TCA</td><td></td><td></td><td>T</td><td></td><td></td><td>Includes maximum sustained surface winds.</td></tr><tr><td>AWW</td><td></td><td></td><td>T</td><td></td><td></td><td>Intended for ground operations at select airports. Criteria may vary depending
+on user needs.</td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Winds and
 Temperature Aloft</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Wind direction aloft is indicated in text format as tens of degrees with reference
 to true north, and wind speed aloft in knots. The graphical forecast uses standard
-wind barb display for wind speed/direction (true north).</td><td></td><td></td></tr><tr><td>TAF</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Surface wind forecasts of direction rounded to the nearest 10 degrees (true
-north) and the surface mean wind speed in knots are included in the wind group.</td><td></td><td></td></tr><tr><td>Aviation Surface
+wind barb display for wind speed/direction (true north).</td></tr><tr><td>TAF</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Surface wind forecasts of direction rounded to the nearest 10 degrees (true
+north) and the surface mean wind speed in knots are included in the wind group.</td></tr><tr><td>Aviation Surface
 Forecast</td><td></td><td></td><td>G</td><td></td><td></td><td>Derived from the GFA and includes forecasts of surface winds at specified valid
-times. Also includes AIRMET for surface winds.</td><td></td><td></td></tr><tr><td>Alaska Area
+times. Also includes AIRMET for surface winds.</td></tr><tr><td>Alaska Area
 Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Surface winds greater than 20 knots are included in the description of significant
-clouds and weather.</td><td></td><td></td></tr><tr><td>Hawaii Area
+clouds and weather.</td></tr><tr><td>Hawaii Area
 Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Sustained surface winds of 20 knots or greater are included in the description of
-significant clouds and weather.</td><td></td><td></td></tr><tr><td>Gulf of America and
+significant clouds and weather.</td></tr><tr><td>Gulf of America and
 Caribbean Area
 Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Sustained surface winds greater than or equal to 20 knots are included in the
-description of significant clouds and weather.</td><td></td><td></td></tr><tr><td>Medium-Level
+description of significant clouds and weather.</td></tr><tr><td>Medium-Level
 SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>A jet stream axis with a wind speed aloft of more than 80 knots is depicted with
-double hatched lines identifying 20-knot speed changes.</td><td></td><td></td></tr><tr><td>High-Level SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Global forecast of a jet stream axis with a wind speed aloft of more than
+double hatched lines identifying 20-knot speed changes.</td></tr><tr><td>High-Level SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Global forecast of a jet stream axis with a wind speed aloft of more than
 80 knots is depicted with double hatched lines identifying 20-knot speed
-changes.</td><td></td><td></td></tr><tr><td>WAFS</td><td></td><td></td><td>G</td><td></td><td></td><td>Winds aloft are issued at select FLs and are provided in chart and grid point
-formats. Wind speed and direction (true north) are displayed with wind barbs.</td><td></td><td></td></tr><tr><td>Upper Air Forecasts</td><td></td><td></td><td>G</td><td></td><td></td><td>Model outputs for winds aloft are shown at select pressure levels. Wind speed
-and direction (true north) are displayed with wind barbs.</td><td></td><td></td></tr><tr><td>AFD</td><td></td><td></td><td>T</td><td></td><td></td><td>Describes the weather conditions as they relate to a specific TAF or group of
-TAFs, including surface winds.</td><td></td><td></td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes surface winds (true north) and winds aloft at
-select altitudes/FLs.</td><td></td><td></td></tr><tr><td>Flight Service
+changes.</td></tr><tr><td>WAFS</td><td></td><td></td><td>G</td><td></td><td></td><td>Winds aloft are issued at select FLs and are provided in chart and grid point
+formats. Wind speed and direction (true north) are displayed with wind barbs.</td></tr><tr><td>Upper Air Forecasts</td><td></td><td></td><td>G</td><td></td><td></td><td>Model outputs for winds aloft are shown at select pressure levels. Wind speed
+and direction (true north) are displayed with wind barbs.</td></tr><tr><td>AFD</td><td></td><td></td><td>T</td><td></td><td></td><td>Describes the weather conditions as they relate to a specific TAF or group of
+TAFs, including surface winds.</td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes surface winds (true north) and winds aloft at
+select altitudes/FLs.</td></tr><tr><td>Flight Service
 Interactive Map</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes overlap of AIRMET for surface winds and
-winds aloft (true north) at select altitudes/FLs.</td><td></td><td></td></tr></tbody></table>
+winds aloft (true north) at select altitudes/FLs.</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-06-weather-element-wind-shear-type-text-t-graphic-g.html">
@@ -1095,13 +1105,13 @@ Observations
   
 ATIS 
 V 
-LLWS and/or microburst is</caption><thead><tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Wind Shear</td><td></td><td>Type</td><td></td><td></td><td>Summary</td><td></td><td></td></tr><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>ATIS</td><td></td><td></td><td>V</td><td></td><td></td><td>LLWS and/or microburst is included in ATIS broadcast for 20 minutes
-following last report.</td><td></td><td></td></tr><tr><td>PIREP/AIREP</td><td></td><td></td><td>T, G,
-V</td><td></td><td></td><td>Wind shear is included in the RMK section when reported.</td><td></td><td></td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Convective
-SIGMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Possible LLWS is implied within the convective SIGMET area.</td><td></td><td></td></tr><tr><td>AIRMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>AIRMET Tango issued when non-convective LLWS potential below 2,000 ft
-AGL is occurring or expected to occur.</td><td></td><td></td></tr><tr><td>LLWAS</td><td></td><td></td><td>T</td><td></td><td></td><td>A wind shear alert occurs when wind shear ±15 kt is detected.</td><td></td><td></td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TAF</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Included in the non-convective LLWS group.</td><td></td><td></td></tr><tr><td>AFD</td><td></td><td></td><td>T</td><td></td><td></td><td>Describes the weather conditions as they relate to a specific TAF or group of
-TAFs, including non-convective LLWS.</td><td></td><td></td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes overlay of AIRMET for non-convective LLWS.</td><td></td><td></td></tr><tr><td>Flight Service
-Interactive Map</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes overlay of AIRMET for non-convective LLWS.</td><td></td><td></td></tr></tbody></table>
+LLWS and/or microburst is</caption><thead><tr><th></th><th>Wind Shear</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>ATIS</td><td></td><td></td><td>V</td><td></td><td></td><td>LLWS and/or microburst is included in ATIS broadcast for 20 minutes
+following last report.</td></tr><tr><td>PIREP/AIREP</td><td></td><td></td><td>T, G,
+V</td><td></td><td></td><td>Wind shear is included in the RMK section when reported.</td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Convective
+SIGMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Possible LLWS is implied within the convective SIGMET area.</td></tr><tr><td>AIRMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>AIRMET Tango issued when non-convective LLWS potential below 2,000 ft
+AGL is occurring or expected to occur.</td></tr><tr><td>LLWAS</td><td></td><td></td><td>T</td><td></td><td></td><td>A wind shear alert occurs when wind shear ±15 kt is detected.</td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TAF</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Included in the non-convective LLWS group.</td></tr><tr><td>AFD</td><td></td><td></td><td>T</td><td></td><td></td><td>Describes the weather conditions as they relate to a specific TAF or group of
+TAFs, including non-convective LLWS.</td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes overlay of AIRMET for non-convective LLWS.</td></tr><tr><td>Flight Service
+Interactive Map</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes overlay of AIRMET for non-convective LLWS.</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-07-weather-element-wind-shear-type-text-t-graphic-g.html">
@@ -1117,15 +1127,15 @@ Observations
   
 ATIS 
 V 
-LLWS and/or microburst is</caption><thead><tr><th></th><th>Visibility</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR and SPECI
+LLWS and/or microburst is</caption><thead><tr><th></th><th>Visibility</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR and SPECI
 (ASOS, AWOS,
 ATIS)</td><td></td><td></td><td>T, G,
 V</td><td></td><td></td><td>Visibility is reported in the body section of the METAR/SPECI. The visibility is
-reported in statute miles.</td><td></td><td></td></tr><tr><td>PIREP/AIREP</td><td></td><td></td><td>T, G,
-V</td><td></td><td></td><td>Distance for visibility is reported by the pilot in statute miles.</td><td></td><td></td></tr><tr><td>Weather Camera</td><td></td><td></td><td>I</td><td></td><td></td><td>A rough estimate could be inferred when known distance features are seen on
-the camera.</td><td></td><td></td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Surface Analysis
+reported in statute miles.</td></tr><tr><td>PIREP/AIREP</td><td></td><td></td><td>T, G,
+V</td><td></td><td></td><td>Distance for visibility is reported by the pilot in statute miles.</td></tr><tr><td>Weather Camera</td><td></td><td></td><td>I</td><td></td><td></td><td>A rough estimate could be inferred when known distance features are seen on
+the camera.</td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Surface Analysis
 Chart</td><td></td><td></td><td>G</td><td></td><td></td><td>Certain surface analysis charts may include the reported visibility in the station
-plot model.</td><td></td><td></td></tr></tbody></table>
+plot model.</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-08-weather-element-precipitation-type-text-t-graphi.html">
@@ -1140,18 +1150,18 @@ Observations
   
   
 METAR and SPECI 
-(ASOS, AWOS</caption><thead><tr><th></th><th>Visibility</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>AIRMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>AIRMET Sierra depict areas of surface-based IFR (ceilings less than 1,000 ft
-and/or visibilities less than 3 SM) that is occurring or expected to occur.</td><td></td><td></td></tr><tr><td>CWA</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Issued if conditions are at or approaching low IFR (ceiling less than 500 ft
-and/or visibilities less than 1 SM).</td><td></td><td></td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TAF</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Included under the visibility group when prevailing visibility is forecast to be
-less than or equal to 6 SM.</td><td></td><td></td></tr><tr><td>Aviation Surface
+(ASOS, AWOS</caption><thead><tr><th></th><th>Visibility</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>AIRMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>AIRMET Sierra depict areas of surface-based IFR (ceilings less than 1,000 ft
+and/or visibilities less than 3 SM) that is occurring or expected to occur.</td></tr><tr><td>CWA</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Issued if conditions are at or approaching low IFR (ceiling less than 500 ft
+and/or visibilities less than 1 SM).</td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TAF</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Included under the visibility group when prevailing visibility is forecast to be
+less than or equal to 6 SM.</td></tr><tr><td>Aviation Surface
 Forecast</td><td></td><td></td><td>G</td><td></td><td></td><td>Derived from the GFA and includes forecasts of visibility at specified valid
-times.</td><td></td><td></td></tr><tr><td>Alaska Area
-Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Visibilities of 6 SM or less and obscurations to visibility are included.</td><td></td><td></td></tr><tr><td>Hawaii Area
-Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Visibilities of 6 SM or less and obscurations to visibility are included.</td><td></td><td></td></tr><tr><td>Gulf of America and
+times.</td></tr><tr><td>Alaska Area
+Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Visibilities of 6 SM or less and obscurations to visibility are included.</td></tr><tr><td>Hawaii Area
+Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Visibilities of 6 SM or less and obscurations to visibility are included.</td></tr><tr><td>Gulf of America and
 Caribbean Area
-Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Visibilities of 6 SM and obscurations to visibility are included.</td><td></td><td></td></tr><tr><td>AFD</td><td></td><td></td><td>T</td><td></td><td></td><td>Describes the weather conditions as they relate to a specific TAF or group of
-TAFs, including visibilities.</td><td></td><td></td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes visibility.</td><td></td><td></td></tr><tr><td>Flight Service
-Interactive Map</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes overlay of AIRMET Sierra and CWAs.</td><td></td><td></td></tr></tbody></table>
+Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Visibilities of 6 SM and obscurations to visibility are included.</td></tr><tr><td>AFD</td><td></td><td></td><td>T</td><td></td><td></td><td>Describes the weather conditions as they relate to a specific TAF or group of
+TAFs, including visibilities.</td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes visibility.</td></tr><tr><td>Flight Service
+Interactive Map</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes overlay of AIRMET Sierra and CWAs.</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-09-weather-element-precipitation-type-text-t-graphi.html">
@@ -1166,35 +1176,35 @@ Observations
   
   
 METAR and SPECI 
-(ASOS, AWOS</caption><thead><tr><th></th><th>Precipitation</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR and SPECI
+(ASOS, AWOS</caption><thead><tr><th></th><th>Precipitation</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR and SPECI
 (ASOS, AWOS,
 ATIS)</td><td></td><td></td><td>T, G,
 V</td><td></td><td></td><td>Precipitation is reported in the body section of the METAR/SPECI when
-observed or detected. Some AWOS systems do not report precipitation.</td><td></td><td></td></tr><tr><td>PIREP</td><td></td><td></td><td>T, G,
+observed or detected. Some AWOS systems do not report precipitation.</td></tr><tr><td>PIREP</td><td></td><td></td><td>T, G,
 V</td><td></td><td></td><td>Pilot reports may include precipitation, which in places in the “/WX” section of
-the PIREP.</td><td></td><td></td></tr><tr><td>Radar</td><td></td><td></td><td>I</td><td></td><td></td><td>Radar provides intensity levels of precipitation.</td><td></td><td></td></tr><tr><td>Weather Camera</td><td></td><td></td><td>I</td><td></td><td></td><td>Precipitation may be seen on the camera.</td><td></td><td></td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Surface Analysis
+the PIREP.</td></tr><tr><td>Radar</td><td></td><td></td><td>I</td><td></td><td></td><td>Radar provides intensity levels of precipitation.</td></tr><tr><td>Weather Camera</td><td></td><td></td><td>I</td><td></td><td></td><td>Precipitation may be seen on the camera.</td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Surface Analysis
 Chart</td><td></td><td></td><td>G</td><td></td><td></td><td>Precipitation is included within the station plot models or when charts are
-combined with radar imagery.</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+combined with radar imagery.</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-10-untitled.html">
-<table><thead><tr><th></th><th>Precipitation</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>AIRMET</td><td></td><td></td><td>G</td><td></td><td></td><td>AIRMETs are issued when weather phenomena such as precipitation restricts
-visibility (less than 3 SM).</td><td></td><td></td></tr><tr><td>CWA</td><td></td><td></td><td>T, G</td><td></td><td></td><td>May be issued for heavy, extreme, or frozen precipitation.</td><td></td><td></td></tr><tr><td>AWW</td><td></td><td></td><td>T</td><td></td><td></td><td>Intended for ground operations at select airports. Criteria may vary depending
+<table><thead><tr><th></th><th>Precipitation</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>AIRMET</td><td></td><td></td><td>G</td><td></td><td></td><td>AIRMETs are issued when weather phenomena such as precipitation restricts
+visibility (less than 3 SM).</td></tr><tr><td>CWA</td><td></td><td></td><td>T, G</td><td></td><td></td><td>May be issued for heavy, extreme, or frozen precipitation.</td></tr><tr><td>AWW</td><td></td><td></td><td>T</td><td></td><td></td><td>Intended for ground operations at select airports. Criteria may vary depending
 on user needs. Examples of criteria that could issue this warning are heavy snow
-or freezing rain.</td><td></td><td></td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TAF</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Included when conditions are expected and indicated by various descriptors
+or freezing rain.</td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TAF</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Included when conditions are expected and indicated by various descriptors
 based on the type of precipitation. Intensity is also coded with precipitation
-types.</td><td></td><td></td></tr><tr><td>Aviation Surface
+types.</td></tr><tr><td>Aviation Surface
 Forecast</td><td></td><td></td><td>G</td><td></td><td></td><td>Derived from the GFA and includes forecasts of precipitation at specified valid
-times includes weather phenomena.</td><td></td><td></td></tr><tr><td>Alaska Area
-Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A description of significant clouds and weather, including precipitation.</td><td></td><td></td></tr><tr><td>Hawaii Area
-Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A description of significant clouds and weather, including precipitation.</td><td></td><td></td></tr><tr><td>Gulf of America and
+times includes weather phenomena.</td></tr><tr><td>Alaska Area
+Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A description of significant clouds and weather, including precipitation.</td></tr><tr><td>Hawaii Area
+Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A description of significant clouds and weather, including precipitation.</td></tr><tr><td>Gulf of America and
 Caribbean Area
-Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A description of significant clouds and weather, including precipitation.</td><td></td><td></td></tr><tr><td>Alaska Surface
-Chart</td><td></td><td></td><td>G</td><td></td><td></td><td>Includes forecast of precipitation.</td><td></td><td></td></tr><tr><td>Surface Prog Charts</td><td></td><td></td><td>G</td><td></td><td></td><td>Depicts the type of precipitation and the forecast percent probability of
-measurable precipitation.</td><td></td><td></td></tr><tr><td>AFD</td><td></td><td></td><td>T</td><td></td><td></td><td>Describes the weather conditions as they relate to a specific TAF or group of
-TAFs, including precipitation.</td><td></td><td></td></tr><tr><td>MIS</td><td></td><td></td><td>T</td><td></td><td></td><td>A nontechnical discussion of meteorological events (including precipitation)
-causing or expecting to impact the flow of air traffic across an ARTCC.</td><td></td><td></td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes precipitation information and overlay of radar.</td><td></td><td></td></tr><tr><td>Flight Service
-Interactive Map</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes overlay of radar.</td><td></td><td></td></tr></tbody></table>
+Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A description of significant clouds and weather, including precipitation.</td></tr><tr><td>Alaska Surface
+Chart</td><td></td><td></td><td>G</td><td></td><td></td><td>Includes forecast of precipitation.</td></tr><tr><td>Surface Prog Charts</td><td></td><td></td><td>G</td><td></td><td></td><td>Depicts the type of precipitation and the forecast percent probability of
+measurable precipitation.</td></tr><tr><td>AFD</td><td></td><td></td><td>T</td><td></td><td></td><td>Describes the weather conditions as they relate to a specific TAF or group of
+TAFs, including precipitation.</td></tr><tr><td>MIS</td><td></td><td></td><td>T</td><td></td><td></td><td>A nontechnical discussion of meteorological events (including precipitation)
+causing or expecting to impact the flow of air traffic across an ARTCC.</td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes precipitation information and overlay of radar.</td></tr><tr><td>Flight Service
+Interactive Map</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes overlay of radar.</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-11-weather-element-fog-type-text-t-graphic-g-image-.html">
@@ -1212,7 +1222,7 @@ METAR and SPECI
 ATIS) 
 T, G, 
 V 
-F</caption><thead><tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Fog Information</td><td></td><td>Type</td><td></td><td></td><td>Summary</td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR and SPECI
+F</caption><thead><tr><th></th><th>Fog Information</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR and SPECI
 (ASOS, AWOS,
 ATIS)</td><td></td><td></td><td>T, G,
 V</td><td></td><td></td><td>Fog (including mist and haze) information is reported in METAR/SPECI from
@@ -1223,9 +1233,9 @@ FG is reported when visibility is less than 5/8 SM. FZFG is reported when
 temperature is below 00 °C. BR or HZ is reported for visibilities from 5/8 SM to
 less than 7 SM, depending on the difference between the temperature and
 dewpoint. If the difference is 40 °F (~20 °C) or less, then FG is reported.
-Otherwise, HZ is reported.</td><td></td><td></td></tr><tr><td>PIREP</td><td></td><td></td><td>T, G,
-V</td><td></td><td></td><td>Included if reported.</td><td></td><td></td></tr><tr><td>Weather Camera</td><td></td><td></td><td>I</td><td></td><td></td><td>Fog may be seen on the camera.</td><td></td><td></td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Surface Analysis</td><td></td><td>G</td><td></td><td></td><td>Noted on the chart or in the station plots.</td><td></td><td></td></tr><tr><td></td><td>Chart</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>AIRMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Issued when weather phenomena such as fog/mist occurs or is expected to occur
-that could restrict visibility (less than 3 SM).</td><td></td><td></td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TAF</td><td></td><td></td><td>T, G</td><td></td><td></td><td>A visibility threshold must be met for fog to be included in the TAF (visibility of
+Otherwise, HZ is reported.</td></tr><tr><td>PIREP</td><td></td><td></td><td>T, G,
+V</td><td></td><td></td><td>Included if reported.</td></tr><tr><td>Weather Camera</td><td></td><td></td><td>I</td><td></td><td></td><td>Fog may be seen on the camera.</td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Surface Analysis</td><td></td><td>G</td><td></td><td></td><td>Noted on the chart or in the station plots.</td></tr><tr><td></td><td>Chart</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>AIRMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Issued when weather phenomena such as fog/mist occurs or is expected to occur
+that could restrict visibility (less than 3 SM).</td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TAF</td><td></td><td></td><td>T, G</td><td></td><td></td><td>A visibility threshold must be met for fog to be included in the TAF (visibility of
 less than 5/8 SM). The fog code is “FG,” with the following additional terms:
 - Freezing fog (FZFG).
 - Shallow fog (MIFG).
@@ -1233,16 +1243,16 @@ less than 5/8 SM). The fog code is “FG,” with the following additional terms
 - Partial Fog (PRFG).
 - Fog in the vicinity (VCFG). Vicinity (VC) is defined as the area 5 to 10
 SM from the center of the airport.
-- BR is included for visibilities from 5/8 to 6 SM.</td><td></td><td></td></tr><tr><td>Aviation Surface
+- BR is included for visibilities from 5/8 to 6 SM.</td></tr><tr><td>Aviation Surface
 Forecast</td><td></td><td></td><td>G</td><td></td><td></td><td>Derived from NOAA’s GFA and includes forecasts of areas of thunderstorms at
-specified valid times includes obscurations such as fog/mist.</td><td></td><td></td></tr><tr><td>Alaska Area
-Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Visibilities of 6 SM or less and obstruction(s) to visibility are included.</td><td></td><td></td></tr><tr><td>Hawaii Area
-Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Visibilities of 6 SM or less with obstruction(s) to visibility are included.</td><td></td><td></td></tr><tr><td>Gulf of America and
+specified valid times includes obscurations such as fog/mist.</td></tr><tr><td>Alaska Area
+Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Visibilities of 6 SM or less and obstruction(s) to visibility are included.</td></tr><tr><td>Hawaii Area
+Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Visibilities of 6 SM or less with obstruction(s) to visibility are included.</td></tr><tr><td>Gulf of America and
 Caribbean Area
-Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Visibilities of 6 SM or less and obstruction(s) to visibility are included.</td><td></td><td></td></tr><tr><td>Alaska Surface
+Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Visibilities of 6 SM or less and obstruction(s) to visibility are included.</td></tr><tr><td>Alaska Surface
 Chart</td><td></td><td></td><td>G</td><td></td><td></td><td>Forecast of surface weather features including areas of fog/mist at specified
-valid times.</td><td></td><td></td></tr><tr><td>AFD</td><td></td><td></td><td>T</td><td></td><td></td><td>Describes the weather conditions as they relate to a specific TAF or group of
-TAFs, including fog/mist.</td><td></td><td></td></tr></tbody></table>
+valid times.</td></tr><tr><td>AFD</td><td></td><td></td><td>T</td><td></td><td></td><td>Describes the weather conditions as they relate to a specific TAF or group of
+TAFs, including fog/mist.</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-12-weather-element-in-flight-icing-type-text-t-grap.html">
@@ -1258,9 +1268,9 @@ Observations
   
 PIREP/AIREP 
 T, G, 
-V</caption><thead><tr><th></th><th>Fog Information</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>MIS</td><td></td><td></td><td>T</td><td></td><td></td><td>A discussion of meteorological events (including fog/mist) causing or expecting
-to impact the flow of air traffic across an ARTCC.</td><td></td><td></td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes fog/mist. Also includes AIRMET Sierra.</td><td></td><td></td></tr><tr><td>Flight Service
-Interactive Map</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes overlay of AIRMET Sierra.</td><td></td><td></td></tr></tbody></table>
+V</caption><thead><tr><th></th><th>Fog Information</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>MIS</td><td></td><td></td><td>T</td><td></td><td></td><td>A discussion of meteorological events (including fog/mist) causing or expecting
+to impact the flow of air traffic across an ARTCC.</td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes fog/mist. Also includes AIRMET Sierra.</td></tr><tr><td>Flight Service
+Interactive Map</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes overlay of AIRMET Sierra.</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-13-weather-element-in-flight-icing-type-text-t-grap.html">
@@ -1276,22 +1286,22 @@ Observations
   
 PIREP/AIREP 
 T, G, 
-V</caption><thead><tr><th></th><th>In-Flight Icing</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>PIREP/AIREP</td><td></td><td></td><td>T, G,
+V</caption><thead><tr><th></th><th>In-Flight Icing</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>PIREP/AIREP</td><td></td><td></td><td>T, G,
 V</td><td></td><td></td><td>Icing intensity, type, and altitude reported. Noted as an Urgent PIREP or Special
-AIREP when severe.</td><td></td><td></td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>CIP</td><td></td><td></td><td>G</td><td></td><td></td><td>Computer model’s 0-hour forecast (referred to on the product as an analysis)
+AIREP when severe.</td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>CIP</td><td></td><td></td><td>G</td><td></td><td></td><td>Computer model’s 0-hour forecast (referred to on the product as an analysis)
 depicting five icing analysis products:
 - Icing Probability.
 - Icing Severity.
 - Icing Severity – Probability &gt; 25%.
 - Icing Severity – Probability &gt; 50%.
-- Icing Severity plus SLD.</td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Convective
-SIGMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Possible severe icing is implied within the convective SIGMET area.</td><td></td><td></td></tr><tr><td>SIGMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Non-convective SIGMETs are issued for severe icing.</td><td></td><td></td></tr><tr><td>AIRMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>AIRMET Zulu depicts areas of active or expected moderate icing.</td><td></td><td></td></tr><tr><td>CWA</td><td></td><td></td><td>T, G</td><td></td><td></td><td>May be issued for moderate or greater icing.</td><td></td><td></td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Aviation Clouds
-Forecast</td><td></td><td></td><td>G</td><td></td><td></td><td>Includes a depiction of icing AIRMETs.</td><td></td><td></td></tr><tr><td>Alaska Area
+- Icing Severity plus SLD.</td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Convective
+SIGMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Possible severe icing is implied within the convective SIGMET area.</td></tr><tr><td>SIGMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Non-convective SIGMETs are issued for severe icing.</td></tr><tr><td>AIRMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>AIRMET Zulu depicts areas of active or expected moderate icing.</td></tr><tr><td>CWA</td><td></td><td></td><td>T, G</td><td></td><td></td><td>May be issued for moderate or greater icing.</td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Aviation Clouds
+Forecast</td><td></td><td></td><td>G</td><td></td><td></td><td>Includes a depiction of icing AIRMETs.</td></tr><tr><td>Alaska Area
 Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>May includes a description of icing not meeting AIRMET criteria otherwise
-“NIL SIG” is noted if no significant icing is forecast.</td><td></td><td></td></tr><tr><td>Gulf of America and
+“NIL SIG” is noted if no significant icing is forecast.</td></tr><tr><td>Gulf of America and
 Caribbean Area
-Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A description of moderate or severe icing conditions.</td><td></td><td></td></tr><tr><td>Medium-Level
-SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Areas moderate or severe icing are depicted.</td><td></td><td></td></tr><tr><td>WAFS</td><td></td><td></td><td>G</td><td></td><td></td><td>Global icing forecasts provided in a grid point format.</td><td></td><td></td></tr></tbody></table>
+Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A description of moderate or severe icing conditions.</td></tr><tr><td>Medium-Level
+SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Areas moderate or severe icing are depicted.</td></tr><tr><td>WAFS</td><td></td><td></td><td>G</td><td></td><td></td><td>Global icing forecasts provided in a grid point format.</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-14-weather-element-freezing-level-type-text-t-graph.html">
@@ -1308,16 +1318,16 @@ Observations
 PIREP/AIREP 
 T, G, 
 V 
-In</caption><thead><tr><th></th><th>In-Flight Icing</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>FIP</td><td></td><td></td><td>G</td><td></td><td></td><td>Five icing forecast graphics derived from computer model data for the
+In</caption><thead><tr><th></th><th>In-Flight Icing</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>FIP</td><td></td><td></td><td>G</td><td></td><td></td><td>Five icing forecast graphics derived from computer model data for the
 following:
 - Icing Probability.
 - Icing Severity.
 - Icing Severity – Probability &gt; 25%.
 - Icing Severity – Probability &gt; 50%.
-- Icing Severity plus SLD.</td><td></td><td></td></tr><tr><td>MIS</td><td></td><td></td><td>T</td><td></td><td></td><td>A discussion of meteorological events (including inflight icing information)
-causing or expecting to impact the flow of air traffic across an ARTCC.</td><td></td><td></td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes in-flight icing (PIREPs, FIPs, AIRMETs,
-SIGMETs, and CWAs).</td><td></td><td></td></tr><tr><td>Flight Service
-Interactive Map</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes icing.</td><td></td><td></td></tr></tbody></table>
+- Icing Severity plus SLD.</td></tr><tr><td>MIS</td><td></td><td></td><td>T</td><td></td><td></td><td>A discussion of meteorological events (including inflight icing information)
+causing or expecting to impact the flow of air traffic across an ARTCC.</td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes in-flight icing (PIREPs, FIPs, AIRMETs,
+SIGMETs, and CWAs).</td></tr><tr><td>Flight Service
+Interactive Map</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes icing.</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-15-weather-element-freezing-level-type-text-t-graph.html">
@@ -1334,15 +1344,15 @@ Observations
 PIREP/AIREP 
 T, G, 
 V 
-In</caption><thead><tr><th></th><th>Freezing Level</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>PIREP/AIREP</td><td></td><td></td><td>T, G,
-V</td><td></td><td></td><td>Included when reported.</td><td></td><td></td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Freezing Level
-Analysis</td><td></td><td></td><td>G</td><td></td><td></td><td>Depicts the height (MSL) of the lowest freezing level.</td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>AIRMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Contains one or more of the following:
+In</caption><thead><tr><th></th><th>Freezing Level</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>PIREP/AIREP</td><td></td><td></td><td>T, G,
+V</td><td></td><td></td><td>Included when reported.</td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Freezing Level
+Analysis</td><td></td><td></td><td>G</td><td></td><td></td><td>Depicts the height (MSL) of the lowest freezing level.</td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>AIRMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Contains one or more of the following:
 - Areas of multiple freezing levels.
 - Range of freezing levels over the area.
-- Lowest freezing levels at intervals of 4,000 ft MSL.</td><td></td><td></td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Alaska Area
-Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A description of significant clouds and weather that includes freezing levels.</td><td></td><td></td></tr><tr><td>Gulf and Caribbean
-Area Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A description of significant clouds and weather that includes freezing levels.</td><td></td><td></td></tr><tr><td>Low-Level SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Freezing level at the surface are depicted.</td><td></td><td></td></tr><tr><td>Alaska SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Freezing levels are shown for the surface and at 2,000-ft intervals.</td><td></td><td></td></tr><tr><td>Upper Air Forecasts</td><td></td><td></td><td>G</td><td></td><td></td><td>Computer model outputs for freezing levels at select height levels (available
-levels vary depending on the model).</td><td></td><td></td></tr></tbody></table>
+- Lowest freezing levels at intervals of 4,000 ft MSL.</td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Alaska Area
+Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A description of significant clouds and weather that includes freezing levels.</td></tr><tr><td>Gulf and Caribbean
+Area Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A description of significant clouds and weather that includes freezing levels.</td></tr><tr><td>Low-Level SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Freezing level at the surface are depicted.</td></tr><tr><td>Alaska SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Freezing levels are shown for the surface and at 2,000-ft intervals.</td></tr><tr><td>Upper Air Forecasts</td><td></td><td></td><td>G</td><td></td><td></td><td>Computer model outputs for freezing levels at select height levels (available
+levels vary depending on the model).</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-16-weather-element-turbulence-type-text-t-graphic-g.html">
@@ -1359,8 +1369,8 @@ Observations
 PIREP/AIREP 
 T, G, 
 V 
-Turbulence</caption><thead><tr><th></th><th>Freezing Level</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes freezing levels.</td><td></td><td></td></tr><tr><td>Flight Service
-Interactive Map</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes freezing levels.</td><td></td><td></td></tr></tbody></table>
+Turbulence</caption><thead><tr><th></th><th>Freezing Level</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes freezing levels.</td></tr><tr><td>Flight Service
+Interactive Map</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes freezing levels.</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-17-weather-element-turbulence-type-text-t-graphic-g.html">
@@ -1377,26 +1387,26 @@ Observations
 PIREP/AIREP 
 T, G, 
 V 
-Turbulence</caption><thead><tr><th></th><th>Turbulence</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>PIREP/AIREP</td><td></td><td></td><td>T, G,
+Turbulence</caption><thead><tr><th></th><th>Turbulence</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>PIREP/AIREP</td><td></td><td></td><td>T, G,
 V</td><td></td><td></td><td>Turbulence reports include location, altitude, and aircraft type. The pilot
 determines the degree of turbulence, intensity, and duration. Severe or extreme
 turbulence is reported as an Urgent PIREP or Special AIREP. The vast majority
 of AIREPs are automated and include turbulence reports derived from the
-aircraft’s motion.</td><td></td><td></td></tr><tr><td>Radar</td><td></td><td></td><td>I</td><td></td><td></td><td>Convective weather on radar could indicate potential areas of severe turbulence.</td><td></td><td></td></tr><tr><td>Satellite</td><td></td><td></td><td>I</td><td></td><td></td><td>Potential turbulence areas may be inferred from certain cloud patterns by a
-meteorologist or trained specialist. CB always implies severe turbulence.</td><td></td><td></td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GTG</td><td></td><td></td><td>G</td><td></td><td></td><td>Product provides a computer analysis of turbulence based on multiple computer
-algorithms. Graphic also depicts any turbulence PIREPs.</td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Convective
-SIGMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Possible severe turbulence is implied within the convective SIGMET area.</td><td></td><td></td></tr><tr><td>SIGMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Issued for severe turbulence not associated with thunderstorms.</td><td></td><td></td></tr><tr><td>AIRMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>AIRMET Tango depicts areas of active or expected moderate turbulence. The
-product is divided into high and low altitude at 18,000 ft.</td><td></td><td></td></tr><tr><td>CWA</td><td></td><td></td><td>T, G</td><td></td><td></td><td>May be issued for moderate or greater turbulence not covered by an existing
-AIRMET or SIGMET.</td><td></td><td></td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TAF</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Low-level mechanical turbulence could be inferred when strong and gusty
-surface winds are forecast.</td><td></td><td></td></tr><tr><td>Alaska Area
+aircraft’s motion.</td></tr><tr><td>Radar</td><td></td><td></td><td>I</td><td></td><td></td><td>Convective weather on radar could indicate potential areas of severe turbulence.</td></tr><tr><td>Satellite</td><td></td><td></td><td>I</td><td></td><td></td><td>Potential turbulence areas may be inferred from certain cloud patterns by a
+meteorologist or trained specialist. CB always implies severe turbulence.</td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GTG</td><td></td><td></td><td>G</td><td></td><td></td><td>Product provides a computer analysis of turbulence based on multiple computer
+algorithms. Graphic also depicts any turbulence PIREPs.</td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Convective
+SIGMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Possible severe turbulence is implied within the convective SIGMET area.</td></tr><tr><td>SIGMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Issued for severe turbulence not associated with thunderstorms.</td></tr><tr><td>AIRMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>AIRMET Tango depicts areas of active or expected moderate turbulence. The
+product is divided into high and low altitude at 18,000 ft.</td></tr><tr><td>CWA</td><td></td><td></td><td>T, G</td><td></td><td></td><td>May be issued for moderate or greater turbulence not covered by an existing
+AIRMET or SIGMET.</td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TAF</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Low-level mechanical turbulence could be inferred when strong and gusty
+surface winds are forecast.</td></tr><tr><td>Alaska Area
 Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Expected turbulence conditions are included along with the following
 information:
 - AIRMET information for turbulence or LLWS.
 - Turbulence not meeting SIGMET/AIRMET criteria during the six to 12-
 hour period.
-- “NIL SIG” is noted if no significant turbulence in forecast.</td><td></td><td></td></tr><tr><td>Gulf of America and
+- “NIL SIG” is noted if no significant turbulence in forecast.</td></tr><tr><td>Gulf of America and
 Caribbean Area
-Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Moderate or greater turbulence is noted at the end of forecast bulletin.</td><td></td><td></td></tr></tbody></table>
+Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Moderate or greater turbulence is noted at the end of forecast bulletin.</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-18-weather-element-volcanic-ash-type-text-t-graphic.html">
@@ -1412,15 +1422,15 @@ Observations
   
 METAR, SPECI 
 (ATIS) 
-T, G,</caption><thead><tr><th></th><th>Turbulence</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Low-Level SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Moderate or greater turbulence is depicted.</td><td></td><td></td></tr><tr><td>Medium-Level
-SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Areas of non-convective clouds with moderate or severe turbulence are depicted.</td><td></td><td></td></tr><tr><td>High-Level SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Global forecasts of moderate or severe turbulence associated with wind shear
-zones and mountain waves are depicted.</td><td></td><td></td></tr><tr><td>Alaska SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Areas of forecast moderate or greater non-convective low-level turbulence are
-depicted.</td><td></td><td></td></tr><tr><td>WAFS</td><td></td><td></td><td>G</td><td></td><td></td><td>Global forecasts of turbulence provided in a grid point format primarily intended
-for use in flight-planning systems.</td><td></td><td></td></tr><tr><td>MIS</td><td></td><td></td><td>T</td><td></td><td></td><td>A discussion of meteorological events (including turbulence information)
-causing or expecting to impact the flow of air traffic across an ARTCC.</td><td></td><td></td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes turbulence (PIREP/AIREP, GTG, AIRMET,
-SIGMET, and CWA).</td><td></td><td></td></tr><tr><td>Flight Service
+T, G,</caption><thead><tr><th></th><th>Turbulence</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Low-Level SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Moderate or greater turbulence is depicted.</td></tr><tr><td>Medium-Level
+SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Areas of non-convective clouds with moderate or severe turbulence are depicted.</td></tr><tr><td>High-Level SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Global forecasts of moderate or severe turbulence associated with wind shear
+zones and mountain waves are depicted.</td></tr><tr><td>Alaska SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Areas of forecast moderate or greater non-convective low-level turbulence are
+depicted.</td></tr><tr><td>WAFS</td><td></td><td></td><td>G</td><td></td><td></td><td>Global forecasts of turbulence provided in a grid point format primarily intended
+for use in flight-planning systems.</td></tr><tr><td>MIS</td><td></td><td></td><td>T</td><td></td><td></td><td>A discussion of meteorological events (including turbulence information)
+causing or expecting to impact the flow of air traffic across an ARTCC.</td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes turbulence (PIREP/AIREP, GTG, AIRMET,
+SIGMET, and CWA).</td></tr><tr><td>Flight Service
 Interactive Map</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes turbulence (PIREP/AIREP, GTG, AIRMET,
-SIGMET, and CWA).</td><td></td><td></td></tr></tbody></table>
+SIGMET, and CWA).</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-19-weather-element-volcanic-ash-type-text-t-graphic.html">
@@ -1436,15 +1446,15 @@ Observations
   
 METAR, SPECI 
 (ATIS) 
-T, G,</caption><thead><tr><th></th><th>Volcanic Ash</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR, SPECI
+T, G,</caption><thead><tr><th></th><th>Volcanic Ash</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR, SPECI
 (ATIS)</td><td></td><td></td><td>T, G,
 V</td><td></td><td></td><td>Reported in manual and select augmented METAR/SPECIs as “VA.” Included
-in ATIS as appropriate.</td><td></td><td></td></tr><tr><td>PIREP/AIREP/VAR</td><td></td><td></td><td>T, G,
+in ATIS as appropriate.</td></tr><tr><td>PIREP/AIREP/VAR</td><td></td><td></td><td>T, G,
 V</td><td></td><td></td><td>Reported by pilot and noted as an Urgent PIREP or Special AIREP. First part of
-VAR reported immediately to ATC, second part of VAR submitted postflight.</td><td></td><td></td></tr><tr><td>Radar</td><td></td><td></td><td>I</td><td></td><td></td><td>Potentially visible on radar.</td><td></td><td></td></tr><tr><td>Satellite</td><td></td><td></td><td>I</td><td></td><td></td><td>May be visible on satellite if not obscured by cloud cover.</td><td></td><td></td></tr><tr><td>Weather Camera</td><td></td><td></td><td>I</td><td></td><td></td><td>Volcanic ash cloud may be seen on the camera.</td><td></td><td></td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td>See SIGMET and VAA</td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>SIGMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>One of the conditions that triggers the issuance of a SIGMET. Provides an
-analysis and six-hour forecast location of the ash cloud.</td><td></td><td></td></tr><tr><td>VAA</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Provides an analysis, 6-, 12-, 18-, and 24-hour forecast location of the ash cloud.
+VAR reported immediately to ATC, second part of VAR submitted postflight.</td></tr><tr><td>Radar</td><td></td><td></td><td>I</td><td></td><td></td><td>Potentially visible on radar.</td></tr><tr><td>Satellite</td><td></td><td></td><td>I</td><td></td><td></td><td>May be visible on satellite if not obscured by cloud cover.</td></tr><tr><td>Weather Camera</td><td></td><td></td><td>I</td><td></td><td></td><td>Volcanic ash cloud may be seen on the camera.</td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td>See SIGMET and VAA</td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>SIGMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>One of the conditions that triggers the issuance of a SIGMET. Provides an
+analysis and six-hour forecast location of the ash cloud.</td></tr><tr><td>VAA</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Provides an analysis, 6-, 12-, 18-, and 24-hour forecast location of the ash cloud.
 Issued every six hours until the volcanic ash is no longer discernible from
-satellite and no further reports of volcanic ash are received from the area.</td><td></td><td></td></tr><tr><td>CWA</td><td></td><td></td><td>T, G</td><td></td><td></td><td>One of the conditions that triggers the issuance of a CWA.</td><td></td><td></td></tr></tbody></table>
+satellite and no further reports of volcanic ash are received from the area.</td></tr><tr><td>CWA</td><td></td><td></td><td>T, G</td><td></td><td></td><td>One of the conditions that triggers the issuance of a CWA.</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-20-weather-element-tropical-cyclone-e-g-hurricane-t.html">
@@ -1458,25 +1468,25 @@ Summary
 Observations 
   
   
-Rad</caption><thead><tr><th></th><th>Volcanic Ash</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TAF</td><td></td><td></td><td>T</td><td></td><td></td><td>Included when conditions are expected and indicated in the forecast as “VA”
-under the significant weather group.</td><td></td><td></td></tr><tr><td>Alaska Area
+Rad</caption><thead><tr><th></th><th>Volcanic Ash</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TAF</td><td></td><td></td><td>T</td><td></td><td></td><td>Included when conditions are expected and indicated in the forecast as “VA”
+under the significant weather group.</td></tr><tr><td>Alaska Area
 Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Obstructions to visibility such as volcanic ash are noted in the description of
 significant clouds and weather for the region during the first 12 hours of the
-forecast period.</td><td></td><td></td></tr><tr><td>Hawaii Area
+forecast period.</td></tr><tr><td>Hawaii Area
 Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Obstructions to visibility such as volcanic ash are noted in the description of
 significant clouds and weather for the region during the first 12 hours of the
-forecast period.</td><td></td><td></td></tr><tr><td>Gulf of America and
+forecast period.</td></tr><tr><td>Gulf of America and
 Caribbean Area
 Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Obstructions to visibility such as volcanic ash are noted in the description of
 significant clouds and weather for the region during the first 12 hours of the
-forecast period.</td><td></td><td></td></tr><tr><td>Medium-Level
+forecast period.</td></tr><tr><td>Medium-Level
 SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Erupting volcano is identified with a trapezoidal symbol along with the name,
-latitude, and longitude. Location of ash cloud is not depicted.</td><td></td><td></td></tr><tr><td>High-Level SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Erupting volcano is identified with a trapezoidal symbol along with the name,
-latitude, and longitude. Location of ash cloud is not depicted.</td><td></td><td></td></tr><tr><td>AFD</td><td></td><td></td><td>T</td><td></td><td></td><td>May include a discussion on volcanic ash when applicable.</td><td></td><td></td></tr><tr><td>MIS</td><td></td><td></td><td>T</td><td></td><td></td><td>A discussion of meteorological events (including volcanic ash cloud) causing or
-expecting to impact the flow of air traffic across an ARTCC.</td><td></td><td></td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes SIGMETs and CWAs for volcanic ash cloud
-when they are in effect.</td><td></td><td></td></tr><tr><td>Flight Service
+latitude, and longitude. Location of ash cloud is not depicted.</td></tr><tr><td>High-Level SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Erupting volcano is identified with a trapezoidal symbol along with the name,
+latitude, and longitude. Location of ash cloud is not depicted.</td></tr><tr><td>AFD</td><td></td><td></td><td>T</td><td></td><td></td><td>May include a discussion on volcanic ash when applicable.</td></tr><tr><td>MIS</td><td></td><td></td><td>T</td><td></td><td></td><td>A discussion of meteorological events (including volcanic ash cloud) causing or
+expecting to impact the flow of air traffic across an ARTCC.</td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes SIGMETs and CWAs for volcanic ash cloud
+when they are in effect.</td></tr><tr><td>Flight Service
 Interactive Map</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes SIGMETs and CWAs for volcanic ash cloud
-when they are in effect.</td><td></td><td></td></tr></tbody></table>
+when they are in effect.</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-21-weather-element-tropical-cyclone-e-g-hurricane-t.html">
@@ -1490,9 +1500,9 @@ Summary
 Observations 
   
   
-Rad</caption><thead><tr><th></th><th>Tropical Cyclone</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Radar</td><td></td><td></td><td>I</td><td></td><td></td><td>Tropical cyclones are visible on radar when in range.</td><td></td><td></td></tr><tr><td>Satellite</td><td></td><td></td><td>I</td><td></td><td></td><td>Tropical cyclones are visible on satellite.</td><td></td><td></td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Surface Analysis</td><td></td><td>G</td><td></td><td></td><td>Tropical cyclones are included using standard symbols.</td><td></td><td></td></tr><tr><td></td><td>Chart</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Convective
-SIGMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Issued for thunderstorms associated with tropical cyclones.</td><td></td><td></td></tr><tr><td>SIGMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>SIGMETs are issued for tropical cyclones except over the CONUS and
-associated coastal waters.</td><td></td><td></td></tr></tbody></table>
+Rad</caption><thead><tr><th></th><th>Tropical Cyclone</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Radar</td><td></td><td></td><td>I</td><td></td><td></td><td>Tropical cyclones are visible on radar when in range.</td></tr><tr><td>Satellite</td><td></td><td></td><td>I</td><td></td><td></td><td>Tropical cyclones are visible on satellite.</td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Surface Analysis</td><td></td><td>G</td><td></td><td></td><td>Tropical cyclones are included using standard symbols.</td></tr><tr><td></td><td>Chart</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Convective
+SIGMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Issued for thunderstorms associated with tropical cyclones.</td></tr><tr><td>SIGMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>SIGMETs are issued for tropical cyclones except over the CONUS and
+associated coastal waters.</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-22-weather-element-sandstorm-dust-storm-type-text-t.html">
@@ -1506,12 +1516,12 @@ Summary
 Observations 
   
   
-METAR and SPE</caption><thead><tr><th></th><th>Tropical Cyclone</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TCA</td><td></td><td></td><td>T, G</td><td></td><td></td><td>TCAs are issued four times daily and report the current and forecast tropical
-cyclone position and intensity.</td><td></td><td></td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Medium-Level
-SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Tropical cyclones are included using standard symbols.</td><td></td><td></td></tr><tr><td>High-Level SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Global forecasts that include tropical cyclones using standard symbols.</td><td></td><td></td></tr><tr><td>Surface Prog Charts</td><td></td><td></td><td>G</td><td></td><td></td><td>Tropical depressions, tropical storms, and hurricanes are included using
-symbols.</td><td></td><td></td></tr><tr><td>AFD</td><td></td><td></td><td>T</td><td></td><td></td><td>May include a discussion on tropical cyclones when applicable.</td><td></td><td></td></tr><tr><td>MIS</td><td></td><td></td><td>T</td><td></td><td></td><td>A nontechnical discussion of meteorological events (including tropical cyclones)
-causing or expecting to impact the flow of air traffic across an ARTCC.</td><td></td><td></td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes tropical cyclones, if applicable.</td><td></td><td></td></tr><tr><td>Flight Service
-Interactive Map</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes tropical cyclones, if applicable.</td><td></td><td></td></tr></tbody></table>
+METAR and SPE</caption><thead><tr><th></th><th>Tropical Cyclone</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TCA</td><td></td><td></td><td>T, G</td><td></td><td></td><td>TCAs are issued four times daily and report the current and forecast tropical
+cyclone position and intensity.</td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Medium-Level
+SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Tropical cyclones are included using standard symbols.</td></tr><tr><td>High-Level SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Global forecasts that include tropical cyclones using standard symbols.</td></tr><tr><td>Surface Prog Charts</td><td></td><td></td><td>G</td><td></td><td></td><td>Tropical depressions, tropical storms, and hurricanes are included using
+symbols.</td></tr><tr><td>AFD</td><td></td><td></td><td>T</td><td></td><td></td><td>May include a discussion on tropical cyclones when applicable.</td></tr><tr><td>MIS</td><td></td><td></td><td>T</td><td></td><td></td><td>A nontechnical discussion of meteorological events (including tropical cyclones)
+causing or expecting to impact the flow of air traffic across an ARTCC.</td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes tropical cyclones, if applicable.</td></tr><tr><td>Flight Service
+Interactive Map</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes tropical cyclones, if applicable.</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-23-weather-element-sandstorm-dust-storm-type-text-t.html">
@@ -1525,18 +1535,18 @@ Summary
 Observations 
   
   
-METAR and SPE</caption><thead><tr><th></th><th>Sandstorm/Dust</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Storm Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR and SPECI
+METAR and SPE</caption><thead><tr><th></th><th>Sandstorm/Dust</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Storm Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR and SPECI
 (ASOS, AWOS,
 ATIS)</td><td></td><td></td><td>T, G,
 V</td><td></td><td></td><td>SS, DS, BLDU, and BLSA are reported in manual observations, at some
 augmented observations, but not automated observations. Automated
-observations may report these as HZ.</td><td></td><td></td></tr><tr><td>PIREP</td><td></td><td></td><td>T, G,
-V</td><td></td><td></td><td>Included if reported.</td><td></td><td></td></tr><tr><td>Radar</td><td></td><td></td><td>I</td><td></td><td></td><td>Potentially visible on radar.</td><td></td><td></td></tr><tr><td>Satellite</td><td></td><td></td><td>I</td><td></td><td></td><td>Sandstorms/dust storms may be visible on satellite if not obscured by cloud
-cover.</td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>SIGMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Widespread sandstorms/dust storms (WDSPR DS, WDSPR SS) are conditions
-that trigger the issuance of a SIGMET.</td><td></td><td></td></tr><tr><td>CWA</td><td></td><td></td><td>T, G</td><td></td><td></td><td>One of the conditions that triggers the issuance of a CWA.</td><td></td><td></td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TAF</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Included as BLDU, BLSA, DRDU, and DRSA.</td><td></td><td></td></tr><tr><td>Aviation Surface
+observations may report these as HZ.</td></tr><tr><td>PIREP</td><td></td><td></td><td>T, G,
+V</td><td></td><td></td><td>Included if reported.</td></tr><tr><td>Radar</td><td></td><td></td><td>I</td><td></td><td></td><td>Potentially visible on radar.</td></tr><tr><td>Satellite</td><td></td><td></td><td>I</td><td></td><td></td><td>Sandstorms/dust storms may be visible on satellite if not obscured by cloud
+cover.</td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>SIGMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Widespread sandstorms/dust storms (WDSPR DS, WDSPR SS) are conditions
+that trigger the issuance of a SIGMET.</td></tr><tr><td>CWA</td><td></td><td></td><td>T, G</td><td></td><td></td><td>One of the conditions that triggers the issuance of a CWA.</td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TAF</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Included as BLDU, BLSA, DRDU, and DRSA.</td></tr><tr><td>Aviation Surface
 Forecast</td><td></td><td></td><td>G</td><td></td><td></td><td>Derived from the GFA and includes forecasts of obscurations such as
-sandstorms/dust storms.</td><td></td><td></td></tr><tr><td>Low-Level SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Could be inferred when IFR or MVFR conditions are depicted in desert areas
-and supported by other products (e.g., METAR, TAF, SIGMET).</td><td></td><td></td></tr></tbody></table>
+sandstorms/dust storms.</td></tr><tr><td>Low-Level SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Could be inferred when IFR or MVFR conditions are depicted in desert areas
+and supported by other products (e.g., METAR, TAF, SIGMET).</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-24-weather-element-mountain-obstruction-type-text-t.html">
@@ -1551,11 +1561,11 @@ Summary
 Observations 
   
   
-METAR, SPECI</caption><thead><tr><th></th><th>Sandstorm/Dust</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Storm Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>AFD</td><td></td><td></td><td>T</td><td></td><td></td><td>May include a discussion on current or forecast sandstorms/dust storms when
-applicable.</td><td></td><td></td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Graphical Forecasts
+METAR, SPECI</caption><thead><tr><th></th><th>Sandstorm/Dust</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Storm Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>AFD</td><td></td><td></td><td>T</td><td></td><td></td><td>May include a discussion on current or forecast sandstorms/dust storms when
+applicable.</td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Graphical Forecasts
 for Aviation (GFA)
-Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes sandstorms/dust storms, if applicable.</td><td></td><td></td></tr><tr><td>Flight Service
-Interactive Map</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes sandstorms/dust storms, if applicable.</td><td></td><td></td></tr></tbody></table>
+Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes sandstorms/dust storms, if applicable.</td></tr><tr><td>Flight Service
+Interactive Map</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes sandstorms/dust storms, if applicable.</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-25-weather-element-mountain-obstruction-type-text-t.html">
@@ -1570,17 +1580,17 @@ Summary
 Observations 
   
   
-METAR, SPECI</caption><thead><tr><th></th><th>Mountain</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Obscuration</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR, SPECI
+METAR, SPECI</caption><thead><tr><th></th><th>Mountain</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Obscuration</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR, SPECI
 (ASOS, AWOS,
 ATIS)</td><td></td><td></td><td>T, V</td><td></td><td></td><td>May be included in RMK section at some mountain airports. At times it may be
 inferred or implied by the reporting of clouds at ASOS/AWOS located in
-mountain passes.</td><td></td><td></td></tr><tr><td>PIREP</td><td></td><td></td><td>T, G,
-V</td><td></td><td></td><td>Included when reported.</td><td></td><td></td></tr><tr><td>Weather Camera</td><td></td><td></td><td>I</td><td></td><td></td><td>Mountain obscuration may be visible on the camera.</td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>AIRMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>AIRMET Sierra are issued when widespread mountain obstruction is occurring
-or expected to occur.</td><td></td><td></td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Aviation Clouds
+mountain passes.</td></tr><tr><td>PIREP</td><td></td><td></td><td>T, G,
+V</td><td></td><td></td><td>Included when reported.</td></tr><tr><td>Weather Camera</td><td></td><td></td><td>I</td><td></td><td></td><td>Mountain obscuration may be visible on the camera.</td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>AIRMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>AIRMET Sierra are issued when widespread mountain obstruction is occurring
+or expected to occur.</td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Aviation Clouds
 Forecast</td><td></td><td></td><td>G</td><td></td><td></td><td>Part of the derived forecasts from the GFA and includes overlays of mountain
-obscuration when applicable.</td><td></td><td></td></tr><tr><td>Alaska Area
-Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A description of significant clouds and weather including mountain obscuration.</td><td></td><td></td></tr><tr><td>AFD</td><td></td><td></td><td>T</td><td></td><td></td><td>May include a discussion on current or forecast mountain obscuration.</td><td></td><td></td></tr><tr><td>Tools</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes mountain obscuration, if applicable.</td><td></td><td></td></tr><tr><td>Flight Service
-Interactive Map</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes mountain obscuration, if applicable.</td><td></td><td></td></tr></tbody></table>
+obscuration when applicable.</td></tr><tr><td>Alaska Area
+Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A description of significant clouds and weather including mountain obscuration.</td></tr><tr><td>AFD</td><td></td><td></td><td>T</td><td></td><td></td><td>May include a discussion on current or forecast mountain obscuration.</td></tr><tr><td>Tools</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes mountain obscuration, if applicable.</td></tr><tr><td>Flight Service
+Interactive Map</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes mountain obscuration, if applicable.</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-26-weather-element-surface-ifr-type-text-t-graphic-.html">
@@ -1595,26 +1605,26 @@ Observations
   
   
 METAR and SPECI 
-(ASOS, AWOS,</caption><thead><tr><th></th><th>Surface IFR</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR and SPECI
+(ASOS, AWOS,</caption><thead><tr><th></th><th>Surface IFR</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR and SPECI
 (ASOS, AWOS,
 ATIS)</td><td></td><td></td><td>T, G,
 V</td><td></td><td></td><td>Ceiling less than 1,000 ft and/or visibility less than 3 SM.
 Note: Websites may graphically depict METAR/SPECI as IFR when ceilings are
-from 500 ft to less than 1,000 ft and/or visibility 1 SM to less than 3 SM.</td><td></td><td></td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>AIRMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>AIRMET Sierra is issued when surface-based IFR conditions are occurring or
-expected to occur.</td><td></td><td></td></tr><tr><td>CWA</td><td></td><td></td><td>T, G</td><td></td><td></td><td>May be issued if conditions are at or approaching LIFR conditions (ceilings less
-than 500 ft and/or visibilities less than 1 SM).</td><td></td><td></td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TAF</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Ceiling less than 1,000 ft and/or visibility less than 3 SM.
+from 500 ft to less than 1,000 ft and/or visibility 1 SM to less than 3 SM.</td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>AIRMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>AIRMET Sierra is issued when surface-based IFR conditions are occurring or
+expected to occur.</td></tr><tr><td>CWA</td><td></td><td></td><td>T, G</td><td></td><td></td><td>May be issued if conditions are at or approaching LIFR conditions (ceilings less
+than 500 ft and/or visibilities less than 1 SM).</td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TAF</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Ceiling less than 1,000 ft and/or visibility less than 3 SM.
 Note: Websites may graphically depict TAFs as IFR when ceilings are from
-500 ft to less than 1,000 ft and/or visibility 1 SM to less than 3 SM.</td><td></td><td></td></tr><tr><td>Aviation Surface
+500 ft to less than 1,000 ft and/or visibility 1 SM to less than 3 SM.</td></tr><tr><td>Aviation Surface
 Forecast</td><td></td><td></td><td>G</td><td></td><td></td><td>Derived from NOAA’s GFA and includes forecasts of surface IFR at specified
-valid times.</td><td></td><td></td></tr><tr><td>Alaska Area
+valid times.</td></tr><tr><td>Alaska Area
 Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A 12- to 18-hour categorical outlook for IFR is included in the description of
-significant clouds and weather.</td><td></td><td></td></tr><tr><td>Hawaii Area
+significant clouds and weather.</td></tr><tr><td>Hawaii Area
 Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A 12- to 18-hour categorical outlook for IFR is included in the description of
-significant clouds and weather.</td><td></td><td></td></tr><tr><td>Gulf of America and
+significant clouds and weather.</td></tr><tr><td>Gulf of America and
 Caribbean Area
 Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A 12- to 24-hour categorical outlook for IFR is included in the description of
-significant clouds and weather.</td><td></td><td></td></tr><tr><td>Low-Level SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Areas of forecast IFR conditions are depicted.</td><td></td><td></td></tr><tr><td>Alaska SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Areas of forecast IFR conditions are depicted.</td><td></td><td></td></tr><tr><td>AFD</td><td></td><td></td><td>T</td><td></td><td></td><td>Describes weather conditions such as surface IFR as they relate to the TAF and
-provide additional aviation weather-related issues.</td><td></td><td></td></tr></tbody></table>
+significant clouds and weather.</td></tr><tr><td>Low-Level SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Areas of forecast IFR conditions are depicted.</td></tr><tr><td>Alaska SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Areas of forecast IFR conditions are depicted.</td></tr><tr><td>AFD</td><td></td><td></td><td>T</td><td></td><td></td><td>Describes weather conditions such as surface IFR as they relate to the TAF and
+provide additional aviation weather-related issues.</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-27-surface-mvfr-type-text-t-graphic-g-image-i-voice.html">
@@ -1632,11 +1642,11 @@ METAR and SPECI
 (ASOS, AWOS, 
 ATIS) 
 T, G, 
-V</caption><thead><tr><th></th><th>Surface IFR</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>MIS</td><td></td><td></td><td>T</td><td></td><td></td><td>A nontechnical discussion of meteorological events (including surface IFR)
-causing or expecting to impact the flow of air traffic across an ARTCC.</td><td></td><td></td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes observed and forecast IFR, including AIRMET
-for IFR.</td><td></td><td></td></tr><tr><td>Flight Service
+V</caption><thead><tr><th></th><th>Surface IFR</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>MIS</td><td></td><td></td><td>T</td><td></td><td></td><td>A nontechnical discussion of meteorological events (including surface IFR)
+causing or expecting to impact the flow of air traffic across an ARTCC.</td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes observed and forecast IFR, including AIRMET
+for IFR.</td></tr><tr><td>Flight Service
 Interactive Map</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes METAR and TAF station plots depicting
-surface-based IFR conditions. AIRMETs for IFR are also shown.</td><td></td><td></td></tr></tbody></table>
+surface-based IFR conditions. AIRMETs for IFR are also shown.</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-28-surface-mvfr-type-text-t-graphic-g-image-i-voice.html">
@@ -1654,24 +1664,24 @@ METAR and SPECI
 (ASOS, AWOS, 
 ATIS) 
 T, G, 
-V</caption><thead><tr><th></th><th>Surface MVFR</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR and SPECI
+V</caption><thead><tr><th></th><th>Surface MVFR</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR and SPECI
 (ASOS, AWOS,
 ATIS)</td><td></td><td></td><td>T, G,
 V</td><td></td><td></td><td>Ceiling 1,000 ft to 3,000 ft (inclusive) and/or visibility 3 SM to 5 SM
 (inclusive). Graphical depictions may provide color-coded flight categories,
-including MVFR.</td><td></td><td></td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TAF</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Ceiling 1,000 ft to 3,000 ft (inclusive) and/or visibility 3 SM to 5 SM
+including MVFR.</td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TAF</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Ceiling 1,000 ft to 3,000 ft (inclusive) and/or visibility 3 SM to 5 SM
 (inclusive). Graphical depictions may provide color-coded MVFR flight
-categories for the TAF.</td><td></td><td></td></tr><tr><td>Alaska Area
+categories for the TAF.</td></tr><tr><td>Alaska Area
 Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A 12- to 18-hour categorical outlook for MVFR is included in the description of
-significant clouds and weather.</td><td></td><td></td></tr><tr><td>Hawaii Area
+significant clouds and weather.</td></tr><tr><td>Hawaii Area
 Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A 12- to 18-hour categorical outlook for MVFR is included in the description of
-significant clouds and weather.</td><td></td><td></td></tr><tr><td>Gulf of America and
+significant clouds and weather.</td></tr><tr><td>Gulf of America and
 Caribbean Area
 Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A 12- to 24-hour categorical outlook for MVFR is included in the description of
-significant clouds and weather.</td><td></td><td></td></tr><tr><td>Low-Level SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Areas of forecast MVFR conditions are depicted.</td><td></td><td></td></tr><tr><td>Alaska SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Areas of forecast MVFR conditions are depicted.</td><td></td><td></td></tr><tr><td>AFD</td><td></td><td></td><td>T</td><td></td><td></td><td>Describes weather conditions such as surface MVFR as they relate to the TAF
-and provide additional aviation weather-related issues.</td><td></td><td></td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes observed and forecast MVFR.</td><td></td><td></td></tr><tr><td>Flight Service
+significant clouds and weather.</td></tr><tr><td>Low-Level SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Areas of forecast MVFR conditions are depicted.</td></tr><tr><td>Alaska SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Areas of forecast MVFR conditions are depicted.</td></tr><tr><td>AFD</td><td></td><td></td><td>T</td><td></td><td></td><td>Describes weather conditions such as surface MVFR as they relate to the TAF
+and provide additional aviation weather-related issues.</td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes observed and forecast MVFR.</td></tr><tr><td>Flight Service
 Interactive Map</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes METAR and TAF station plots depicting
-MVFR conditions.</td><td></td><td></td></tr></tbody></table>
+MVFR conditions.</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-29-weather-element-cloud-coverage-type-text-t-graph.html">
@@ -1686,24 +1696,24 @@ Observations
   
   
 METAR, SPECI 
-(ASOS, AWOS</caption><thead><tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Cloud Coverage</td><td></td><td>Type</td><td></td><td></td><td>Summary</td><td></td><td></td></tr><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR, SPECI
+(ASOS, AWOS</caption><thead><tr><th></th><th>Cloud Coverage</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR, SPECI
 (ASOS, AWOS,
 ATIS)</td><td></td><td></td><td>T, G,
-V</td><td></td><td></td><td>Cloud coverage is included.</td><td></td><td></td></tr><tr><td>PIREP</td><td></td><td></td><td>T, G,
-V</td><td></td><td></td><td>Includes sky condition such as cloud coverage when reported.</td><td></td><td></td></tr><tr><td>Satellite</td><td></td><td></td><td>I</td><td></td><td></td><td>A general cloud coverage can be inferred from satellite.</td><td></td><td></td></tr><tr><td>Weather Camera</td><td></td><td></td><td>I</td><td></td><td></td><td>Clouds over the horizon can be seen if in view of the camera and there is
-sufficient daylight. Overhead clouds cannot be seen.</td><td></td><td></td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Surface Analysis
+V</td><td></td><td></td><td>Cloud coverage is included.</td></tr><tr><td>PIREP</td><td></td><td></td><td>T, G,
+V</td><td></td><td></td><td>Includes sky condition such as cloud coverage when reported.</td></tr><tr><td>Satellite</td><td></td><td></td><td>I</td><td></td><td></td><td>A general cloud coverage can be inferred from satellite.</td></tr><tr><td>Weather Camera</td><td></td><td></td><td>I</td><td></td><td></td><td>Clouds over the horizon can be seen if in view of the camera and there is
+sufficient daylight. Overhead clouds cannot be seen.</td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Surface Analysis
 Charts</td><td></td><td></td><td>G</td><td></td><td></td><td>Cloud coverage amounts are included within the station plot models and can be
-inferred when charts are combined with satellite imagery.</td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>AIRMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Issued for areas of IFR ceilings and/or visibilities (i.e., BKN or OVC less than
-1,000 ft and/or 3 SM).</td><td></td><td></td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TAF</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Cloud coverage is included.</td><td></td><td></td></tr><tr><td>Aviation Clouds
-Forecast</td><td></td><td></td><td>G</td><td></td><td></td><td>Part of the derived forecasts from the GFA and includes cloud coverage.</td><td></td><td></td></tr><tr><td>Alaska Area
-Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Cloud coverage is included.</td><td></td><td></td></tr><tr><td>Hawaii Area
-Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Cloud coverage is included.</td><td></td><td></td></tr><tr><td>Gulf of America and
+inferred when charts are combined with satellite imagery.</td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>AIRMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Issued for areas of IFR ceilings and/or visibilities (i.e., BKN or OVC less than
+1,000 ft and/or 3 SM).</td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TAF</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Cloud coverage is included.</td></tr><tr><td>Aviation Clouds
+Forecast</td><td></td><td></td><td>G</td><td></td><td></td><td>Part of the derived forecasts from the GFA and includes cloud coverage.</td></tr><tr><td>Alaska Area
+Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Cloud coverage is included.</td></tr><tr><td>Hawaii Area
+Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Cloud coverage is included.</td></tr><tr><td>Gulf of America and
 Caribbean Area
-Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Cloud coverage is included.</td><td></td><td></td></tr><tr><td>Low-Level SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Depicts forecasts areas of IFR ceilings and/or visibilities (i.e., BKN or OVC less
+Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Cloud coverage is included.</td></tr><tr><td>Low-Level SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Depicts forecasts areas of IFR ceilings and/or visibilities (i.e., BKN or OVC less
 than 1,000 ft and/or less than 3 SM) as well as MVFR (i.e., BKN or OVC from
-1,000 ft to 3,000 ft and/or 3 SM to 5 SM).</td><td></td><td></td></tr><tr><td>Alaska SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Areas of forecast IFR and MVFR conditions are depicted.</td><td></td><td></td></tr><tr><td>Cloud Top Forecast</td><td></td><td></td><td>G</td><td></td><td></td><td>Computer model cloud amount and height of cloud tops.</td><td></td><td></td></tr><tr><td>AFD</td><td></td><td></td><td>T</td><td></td><td></td><td>May include a discussion on current or forecast cloud cover.</td><td></td><td></td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G, I</td><td></td><td></td><td>Interactive website that includes cloud coverage overlay, METAR station plots,
-and satellite imagery.</td><td></td><td></td></tr><tr><td>Flight Service
-Interactive Map</td><td></td><td></td><td>G, I</td><td></td><td></td><td>Interactive website that includes METAR station plots and satellite imagery.</td><td></td><td></td></tr></tbody></table>
+1,000 ft to 3,000 ft and/or 3 SM to 5 SM).</td></tr><tr><td>Alaska SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Areas of forecast IFR and MVFR conditions are depicted.</td></tr><tr><td>Cloud Top Forecast</td><td></td><td></td><td>G</td><td></td><td></td><td>Computer model cloud amount and height of cloud tops.</td></tr><tr><td>AFD</td><td></td><td></td><td>T</td><td></td><td></td><td>May include a discussion on current or forecast cloud cover.</td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G, I</td><td></td><td></td><td>Interactive website that includes cloud coverage overlay, METAR station plots,
+and satellite imagery.</td></tr><tr><td>Flight Service
+Interactive Map</td><td></td><td></td><td>G, I</td><td></td><td></td><td>Interactive website that includes METAR station plots and satellite imagery.</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-30-weather-element-cloud-base-type-text-t-graphic-g.html">
@@ -1719,23 +1729,23 @@ Observations
   
 METAR, SPECI 
 (ASOS, AWOS, 
-ATIS)</caption><thead><tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Cloud Base</td><td></td><td>Type</td><td></td><td></td><td>Summary</td><td></td><td></td></tr><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR, SPECI
+ATIS)</caption><thead><tr><th></th><th>Cloud Base</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR, SPECI
 (ASOS, AWOS,
 ATIS)</td><td></td><td></td><td>T, G,
-V</td><td></td><td></td><td>Cloud bases included when reported.</td><td></td><td></td></tr><tr><td>PIREP</td><td></td><td></td><td>T, G,
-V</td><td></td><td></td><td>Includes cloud bases when reported.</td><td></td><td></td></tr><tr><td>Weather Camera</td><td></td><td></td><td>I</td><td></td><td></td><td>Cloud bases are difficult to estimate or impossible to determine from a camera.</td><td></td><td></td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Surface Analysis
-Charts</td><td></td><td></td><td>G</td><td></td><td></td><td>Some surface analysis charts may plot the height of a BKN or OVC ceiling.</td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>AIRMET</td><td></td><td></td><td>G</td><td></td><td></td><td>Issued for areas of IFR ceilings and/or visibilities (i.e., BKN or OVC less than
-1,000 ft and/or less than 3 SM).</td><td></td><td></td></tr><tr><td>CWA</td><td></td><td></td><td>T, G</td><td></td><td></td><td>May be issued for ceilings less than 500 ft.</td><td></td><td></td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TAF</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Cloud bases included.</td><td></td><td></td></tr><tr><td>Aviation Cloud
-Forecast</td><td></td><td></td><td>G</td><td></td><td></td><td>Part of the derived forecasts from GFA and includes cloud bases.</td><td></td><td></td></tr><tr><td>Alaska Area
-Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Cloud bases included.</td><td></td><td></td></tr><tr><td>Hawaii Area
-Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Cloud bases included.</td><td></td><td></td></tr><tr><td>Gulf of America and
+V</td><td></td><td></td><td>Cloud bases included when reported.</td></tr><tr><td>PIREP</td><td></td><td></td><td>T, G,
+V</td><td></td><td></td><td>Includes cloud bases when reported.</td></tr><tr><td>Weather Camera</td><td></td><td></td><td>I</td><td></td><td></td><td>Cloud bases are difficult to estimate or impossible to determine from a camera.</td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Surface Analysis
+Charts</td><td></td><td></td><td>G</td><td></td><td></td><td>Some surface analysis charts may plot the height of a BKN or OVC ceiling.</td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>AIRMET</td><td></td><td></td><td>G</td><td></td><td></td><td>Issued for areas of IFR ceilings and/or visibilities (i.e., BKN or OVC less than
+1,000 ft and/or less than 3 SM).</td></tr><tr><td>CWA</td><td></td><td></td><td>T, G</td><td></td><td></td><td>May be issued for ceilings less than 500 ft.</td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TAF</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Cloud bases included.</td></tr><tr><td>Aviation Cloud
+Forecast</td><td></td><td></td><td>G</td><td></td><td></td><td>Part of the derived forecasts from GFA and includes cloud bases.</td></tr><tr><td>Alaska Area
+Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Cloud bases included.</td></tr><tr><td>Hawaii Area
+Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Cloud bases included.</td></tr><tr><td>Gulf of America and
 Caribbean Area
-Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Cloud bases included.</td><td></td><td></td></tr><tr><td>Low-Level SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Depicts forecast areas of IFR ceilings and/or visibilities (i.e., BKN or OVC less
+Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>Cloud bases included.</td></tr><tr><td>Low-Level SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Depicts forecast areas of IFR ceilings and/or visibilities (i.e., BKN or OVC less
 than 1,000 ft and/or less than 3 SM) as well as MVFR (i.e., BKN or OVC from
-1,000 ft to 3,000 ft and/or 3 SM to 5 SM).</td><td></td><td></td></tr><tr><td>Alaska SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Areas of forecast IFR and MVFR conditions are depicted.</td><td></td><td></td></tr><tr><td>AFD</td><td></td><td></td><td>T</td><td></td><td></td><td>May include a discussion on current or forecast cloud bases and/or IFR,
-MVFR, etc. conditions.</td><td></td><td></td></tr><tr><td>MIS</td><td></td><td></td><td>T</td><td></td><td></td><td>May include a discussion on current or forecast IFR conditions.</td><td></td><td></td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes overlay of forecast cloud bases as well as
-METAR station plots.</td><td></td><td></td></tr><tr><td>Flight Service
-Interactive Map</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes METAR station plots.</td><td></td><td></td></tr></tbody></table>
+1,000 ft to 3,000 ft and/or 3 SM to 5 SM).</td></tr><tr><td>Alaska SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Areas of forecast IFR and MVFR conditions are depicted.</td></tr><tr><td>AFD</td><td></td><td></td><td>T</td><td></td><td></td><td>May include a discussion on current or forecast cloud bases and/or IFR,
+MVFR, etc. conditions.</td></tr><tr><td>MIS</td><td></td><td></td><td>T</td><td></td><td></td><td>May include a discussion on current or forecast IFR conditions.</td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes overlay of forecast cloud bases as well as
+METAR station plots.</td></tr><tr><td>Flight Service
+Interactive Map</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes METAR station plots.</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-31-weather-element-cloud-tops-type-text-t-graphic-g.html">
@@ -1752,20 +1762,20 @@ Observations
 PIREP 
 T, G, 
 V 
-Cloud tops inclu</caption><thead><tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Cloud Tops</td><td></td><td>Type</td><td></td><td></td><td>Summary</td><td></td><td></td></tr><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>PIREP</td><td></td><td></td><td>T, G,
-V</td><td></td><td></td><td>Cloud tops included when reported.</td><td></td><td></td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Convective
-SIGMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>CB cloud tops are included in Convective SIGMETs.</td><td></td><td></td></tr><tr><td>SIGMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>CB cloud tops are included in SIGMETs for thunderstorms (outside the
-CONUS).</td><td></td><td></td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Aviation Cloud
+Cloud tops inclu</caption><thead><tr><th></th><th>Cloud Tops</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>PIREP</td><td></td><td></td><td>T, G,
+V</td><td></td><td></td><td>Cloud tops included when reported.</td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Convective
+SIGMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>CB cloud tops are included in Convective SIGMETs.</td></tr><tr><td>SIGMET</td><td></td><td></td><td>T, G</td><td></td><td></td><td>CB cloud tops are included in SIGMETs for thunderstorms (outside the
+CONUS).</td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Aviation Cloud
 Forecast</td><td></td><td></td><td>G</td><td></td><td></td><td>Part of the derived forecasts from the GFA and includes cloud tops. This product
-provides a forecast of cloud coverage and height (in hundreds of feet MSL).</td><td></td><td></td></tr><tr><td>Alaska Area
+provides a forecast of cloud coverage and height (in hundreds of feet MSL).</td></tr><tr><td>Alaska Area
 Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A description of significant clouds and weather for the first 12 hours; includes
-cloud tops.</td><td></td><td></td></tr><tr><td>Hawaii Area
+cloud tops.</td></tr><tr><td>Hawaii Area
 Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A description of significant clouds and weather for the first 12 hours; includes
-cloud tops.</td><td></td><td></td></tr><tr><td>Gulf of America and
+cloud tops.</td></tr><tr><td>Gulf of America and
 Caribbean Area
 Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A description of significant clouds and weather for the first 12 hours; includes
-cloud tops.</td><td></td><td></td></tr><tr><td>Medium-Level
-SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Forecast height of CB tops included.</td><td></td><td></td></tr><tr><td>High-Level SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Global forecasts that include forecast CB tops.</td><td></td><td></td></tr><tr><td>Cloud Top Forecast</td><td></td><td></td><td>I</td><td></td><td></td><td>Computer model cloud amount and height of cloud tops.</td><td></td><td></td></tr><tr><td>TCF</td><td></td><td></td><td>G</td><td></td><td></td><td>The TCF includes forecast CB tops.</td><td></td><td></td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes overlay of forecast cloud tops.</td><td></td><td></td></tr></tbody></table>
+cloud tops.</td></tr><tr><td>Medium-Level
+SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Forecast height of CB tops included.</td></tr><tr><td>High-Level SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Global forecasts that include forecast CB tops.</td></tr><tr><td>Cloud Top Forecast</td><td></td><td></td><td>I</td><td></td><td></td><td>Computer model cloud amount and height of cloud tops.</td></tr><tr><td>TCF</td><td></td><td></td><td>G</td><td></td><td></td><td>The TCF includes forecast CB tops.</td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes overlay of forecast cloud tops.</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-32-weather-element-cloud-layers-type-text-t-graphic.html">
@@ -1780,18 +1790,18 @@ Observations
   
   
 METAR, SPECI, 
-(ASOS, AWOS,</caption><thead><tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Cloud Layers</td><td></td><td>Type</td><td></td><td></td><td>Summary</td><td></td><td></td></tr><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR, SPECI,
+(ASOS, AWOS,</caption><thead><tr><th></th><th>Cloud Layers</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR, SPECI,
 (ASOS, AWOS,
 ATIS)</td><td></td><td></td><td>T, G,
-V</td><td></td><td></td><td>Reports the sky condition including cloud layers.</td><td></td><td></td></tr><tr><td>PIREP/AIREP</td><td></td><td></td><td>T, G,
-V</td><td></td><td></td><td>PIREPs may include cloud layers.</td><td></td><td></td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TAF</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Cloud layers are included.</td><td></td><td></td></tr><tr><td>Aviation Cloud
-Forecast</td><td></td><td></td><td>G</td><td></td><td></td><td>Part of the derived forecasts from GFA and includes cloud layers.</td><td></td><td></td></tr><tr><td>Alaska Area
-Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A description of cloud layers is included.</td><td></td><td></td></tr><tr><td>Hawaii Area
-Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A description of cloud layers is included.</td><td></td><td></td></tr><tr><td>Gulf of America and
+V</td><td></td><td></td><td>Reports the sky condition including cloud layers.</td></tr><tr><td>PIREP/AIREP</td><td></td><td></td><td>T, G,
+V</td><td></td><td></td><td>PIREPs may include cloud layers.</td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TAF</td><td></td><td></td><td>T, G</td><td></td><td></td><td>Cloud layers are included.</td></tr><tr><td>Aviation Cloud
+Forecast</td><td></td><td></td><td>G</td><td></td><td></td><td>Part of the derived forecasts from GFA and includes cloud layers.</td></tr><tr><td>Alaska Area
+Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A description of cloud layers is included.</td></tr><tr><td>Hawaii Area
+Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A description of cloud layers is included.</td></tr><tr><td>Gulf of America and
 Caribbean Area
-Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A description of cloud layers is included.</td><td></td><td></td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes overlay of forecast cloud layers as well as
-METAR station plots.</td><td></td><td></td></tr><tr><td>Flight Service
-Interactive Map</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes METAR station plots.</td><td></td><td></td></tr></tbody></table>
+Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>A description of cloud layers is included.</td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>GFA Tool</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes overlay of forecast cloud layers as well as
+METAR station plots.</td></tr><tr><td>Flight Service
+Interactive Map</td><td></td><td></td><td>G</td><td></td><td></td><td>Interactive website that includes METAR station plots.</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-33-weather-element-cloud-layers-type-text-t-graphic.html">
@@ -1806,13 +1816,13 @@ Observations
   
   
 METAR, SPECI, 
-(ASOS, AWOS,</caption><thead><tr><th></th><th>Pressure</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR, SPECI
+(ASOS, AWOS,</caption><thead><tr><th></th><th>Pressure</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR, SPECI
 (ASOS, AWOS,
 RTMA, ATIS)</td><td></td><td></td><td>T, G,
 V</td><td></td><td></td><td>Altimeter setting is included. Sea level pressure included in the RMK section of
-the METAR.</td><td></td><td></td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Surface Analysis
+the METAR.</td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Surface Analysis
 Chart</td><td></td><td></td><td>G</td><td></td><td></td><td>Sea level pressure is depicted as isobars and within the station plots. High- and
-low-pressure centers are also shown.</td><td></td><td></td></tr></tbody></table>
+low-pressure centers are also shown.</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-34-weather-element-fronts-type-text-t-graphic-g-ima.html">
@@ -1828,8 +1838,8 @@ Observations
 METAR, SPECI 
 (ASOS, AWOS, 
 ATIS) 
-T, G,</caption><thead><tr><th></th><th>Pressure</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Surface Prog Charts</td><td></td><td></td><td>G</td><td></td><td></td><td>Sea level pressure is depicted as isobars. High- and low- pressure centers
-depicted.</td><td></td><td></td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+T, G,</caption><thead><tr><th></th><th>Pressure</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Surface Prog Charts</td><td></td><td></td><td>G</td><td></td><td></td><td>Sea level pressure is depicted as isobars. High- and low- pressure centers
+depicted.</td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-35-weather-element-fronts-type-text-t-graphic-g-ima.html">
@@ -1845,23 +1855,23 @@ Observations
 METAR, SPECI 
 (ASOS, AWOS, 
 ATIS) 
-T, G,</caption><thead><tr><th></th><th>Fronts Information</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR, SPECI
+T, G,</caption><thead><tr><th></th><th>Fronts Information</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR, SPECI
 (ASOS, AWOS,
 ATIS)</td><td></td><td></td><td>T, G,
 V</td><td></td><td></td><td>Manually produced METARs and SPECIs may report “FROPA” in the RMK
-portion.</td><td></td><td></td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Surface Chart
-Analysis</td><td></td><td></td><td>G</td><td></td><td></td><td>Depicts the location of fronts as well as the high- and low-pressure systems.</td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TAF</td><td></td><td></td><td>T</td><td></td><td></td><td>Fronts are not explicitly mentioned under weather phenomena, but a significant
+portion.</td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Surface Chart
+Analysis</td><td></td><td></td><td>G</td><td></td><td></td><td>Depicts the location of fronts as well as the high- and low-pressure systems.</td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TAF</td><td></td><td></td><td>T</td><td></td><td></td><td>Fronts are not explicitly mentioned under weather phenomena, but a significant
 change in wind direction coupled with changes in other elements can imply a
-forecast frontal passage.</td><td></td><td></td></tr><tr><td>Alaska Area
+forecast frontal passage.</td></tr><tr><td>Alaska Area
 Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>There is a brief discussion of the synoptic weather affecting the region during
-the first 18-hour valid period, which could include frontal boundaries.</td><td></td><td></td></tr><tr><td>Hawaii Area
+the first 18-hour valid period, which could include frontal boundaries.</td></tr><tr><td>Hawaii Area
 Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>There is a brief discussion of the synoptic weather affecting the region during
-the first 18-hour valid period, which could include frontal boundaries.</td><td></td><td></td></tr><tr><td>Gulf of America and
+the first 18-hour valid period, which could include frontal boundaries.</td></tr><tr><td>Gulf of America and
 Caribbean Area
 Forecast</td><td></td><td></td><td>T</td><td></td><td></td><td>There is a brief discussion of the synoptic weather affecting the region during
-the entire 24-hour valid period, which could include frontal boundaries.</td><td></td><td></td></tr><tr><td>Alaska SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Pressure systems and fronts are included using standard symbols.</td><td></td><td></td></tr><tr><td>Alaska Surface
+the entire 24-hour valid period, which could include frontal boundaries.</td></tr><tr><td>Alaska SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Pressure systems and fronts are included using standard symbols.</td></tr><tr><td>Alaska Surface
 Chart</td><td></td><td></td><td>G</td><td></td><td></td><td>Fronts are depicted using standard symbols for this chart. This product is issued
-every six hours with forecasts valid for 00Z, 06Z, 12Z, and 18Z.</td><td></td><td></td></tr><tr><td>Surface Prog Charts</td><td></td><td></td><td>G</td><td></td><td></td><td>Fronts are included using standard symbols.</td><td></td><td></td></tr><tr><td>AFD</td><td></td><td></td><td>T</td><td></td><td></td><td>May include a discussion on fronts when applicable.</td><td></td><td></td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+every six hours with forecasts valid for 00Z, 06Z, 12Z, and 18Z.</td></tr><tr><td>Surface Prog Charts</td><td></td><td></td><td>G</td><td></td><td></td><td>Fronts are included using standard symbols.</td></tr><tr><td>AFD</td><td></td><td></td><td>T</td><td></td><td></td><td>May include a discussion on fronts when applicable.</td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-36-weather-element-temperature-type-text-t-graphic-.html">
@@ -1872,22 +1882,22 @@ Information
 Contained In: 
 Type 
 Summary 
-Note: Temperatures are in degrees Celsius (°C</caption><thead><tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Temperature Aloft</td><td></td><td>Type</td><td></td><td></td><td>Summary
-Note: Temperatures are in degrees Celsius (°C)</td><td></td><td></td></tr><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR, SPECI
+Note: Temperatures are in degrees Celsius (°C</caption><thead><tr><th></th><th>Temperature Aloft</th><th></th><th>Type</th><th></th><th></th><th>Summary
+Note: Temperatures are in degrees Celsius (°C)</th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>METAR, SPECI
 (ASOS, AWOS,
 ATIS)</td><td></td><td></td><td>T, G,
-V</td><td></td><td></td><td>Surface temperature is included.</td><td></td><td></td></tr><tr><td>PIREP/AIREP</td><td></td><td></td><td>T, G,
-V</td><td></td><td></td><td>Temperature aloft is included if reported.</td><td></td><td></td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Upper Air Analysis</td><td></td><td></td><td>T, G</td><td></td><td></td><td>At select pressure levels, the wind direction and speed are displayed in tens of
-degrees and wind speed is in knots.</td><td></td><td></td></tr><tr><td>Freezing Level
+V</td><td></td><td></td><td>Surface temperature is included.</td></tr><tr><td>PIREP/AIREP</td><td></td><td></td><td>T, G,
+V</td><td></td><td></td><td>Temperature aloft is included if reported.</td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Upper Air Analysis</td><td></td><td></td><td>T, G</td><td></td><td></td><td>At select pressure levels, the wind direction and speed are displayed in tens of
+degrees and wind speed is in knots.</td></tr><tr><td>Freezing Level
 Analysis</td><td></td><td></td><td>G</td><td></td><td></td><td>Temperatures aloft can be indicated with limitations. Depicts the freezing level
 at the lowest altitude in the atmosphere over a given location at which the air
-temperature reaches 0 °C.</td><td></td><td></td></tr><tr><td>RTMA</td><td></td><td></td><td>T</td><td></td><td></td><td>Surface temperature is included.</td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Winds and
+temperature reaches 0 °C.</td></tr><tr><td>RTMA</td><td></td><td></td><td>T</td><td></td><td></td><td>Surface temperature is included.</td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Winds and
 Temperature Aloft</td><td></td><td></td><td>T, G</td><td></td><td></td><td>The text format provides the temperature aloft in a coded format for select
 height levels and locations. Graphical format provides contours of temperatures
-aloft.</td><td></td><td></td></tr><tr><td>Low-Level SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Temperatures aloft can be indicated with limitations. Multiple freezing levels
-can be forecast when temperatures are 0 °C at more than one altitude aloft.</td><td></td><td></td></tr><tr><td>WAFS</td><td></td><td></td><td>G</td><td></td><td></td><td>Global forecasts include temperatures aloft, at selected height levels, from
-model data in a grid point format.</td><td></td><td></td></tr><tr><td>Upper Air Forecasts</td><td></td><td></td><td>G</td><td></td><td></td><td>Computer model outputs for temperatures aloft at select height levels (available
-levels vary depending on the model). Depicted using contours (isotherms).</td><td></td><td></td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+aloft.</td></tr><tr><td>Low-Level SIGWX</td><td></td><td></td><td>G</td><td></td><td></td><td>Temperatures aloft can be indicated with limitations. Multiple freezing levels
+can be forecast when temperatures are 0 °C at more than one altitude aloft.</td></tr><tr><td>WAFS</td><td></td><td></td><td>G</td><td></td><td></td><td>Global forecasts include temperatures aloft, at selected height levels, from
+model data in a grid point format.</td></tr><tr><td>Upper Air Forecasts</td><td></td><td></td><td>G</td><td></td><td></td><td>Computer model outputs for temperatures aloft at select height levels (available
+levels vary depending on the model). Depicted using contours (isotherms).</td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-37-weather-element-temperature-type-text-t-graphic-.html">
@@ -1898,7 +1908,7 @@ Information
 Contained In: 
 Type 
 Summary 
-Note: Temperatures are in degrees Celsius (°C</caption><thead><tr><th></th><th>Space Weather</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td>(See Space Weather Advisory)</td><td></td><td></td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+Note: Temperatures are in degrees Celsius (°C</caption><thead><tr><th>Space Weather</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Observations</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td>(See Space Weather Advisory)</td></tr><tr><td>Analysis</td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-38-weather-element-density-altitude-type-text-t-gra.html">
@@ -1913,10 +1923,10 @@ Observations
   
   
 ASOS, AWOS, and 
-ATIS</caption><thead><tr><th></th><th>Space Weather</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Space Weather
+ATIS</caption><thead><tr><th></th><th>Space Weather</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Space Weather
 Advisory</td><td></td><td></td><td>T</td><td></td><td></td><td>Issued whenever space weather conditions exceed predefined ICAO thresholds
 for both moderate and severe impacts. Provides an observed or expected
-location for the impact and 6-, 12-, 18-, and 24-hour forecasts.</td><td></td><td></td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td>(See Space Weather Advisory)</td><td></td><td></td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+location for the impact and 6-, 12-, 18-, and 24-hour forecasts.</td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td>(See Space Weather Advisory)</td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-4-2-39-weather-element-density-altitude-type-text-t-gra.html">
@@ -1931,8 +1941,8 @@ Observations
   
   
 ASOS, AWOS, and 
-ATIS</caption><thead><tr><th></th><th>Density Altitude</th><th></th><th>Type</th><th></th><th></th><th>Summary</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>ASOS, AWOS, and
+ATIS</caption><thead><tr><th></th><th>Density Altitude</th><th></th><th>Type</th><th></th><th></th><th>Summary</th></tr></thead><tbody><tr><td></td><td>Information</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Contained In:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Observations</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>ASOS, AWOS, and
 ATIS</td><td></td><td></td><td>V</td><td></td><td></td><td>Included in the ASOS and AWOS broadcasts (phone and radio) when density
 altitude exceeds the field elevation by more than 1,000 ft. A density altitude
-advisory (i.e., “check density altitude”) is broadcast on ATIS when appropriate.</td><td></td><td></td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+advisory (i.e., “check density altitude”) is broadcast on ATIS when appropriate.</td></tr><tr><td></td><td>Analysis</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Advisories</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Forecasts</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Tools</td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
 </div>

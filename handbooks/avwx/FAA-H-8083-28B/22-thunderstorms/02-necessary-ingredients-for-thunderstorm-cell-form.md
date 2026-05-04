@@ -28,8 +28,4 @@ The distinguishing feature of the towering cumulus stage is a strong convective 
 bubble of warm, rising air concentrated near the top of the cloud, which leaves a cloudy trail in its wake.
 Updraft speeds can exceed 3,000 fpm.
 
-![Figure 22-1. Necessary Ingredients for Thunderstorm Cell Formation 
-22.3 Thunderstorm Cell Life Cycle 
-A thunderstorm cell is the convective cell of a cumulonimbus cloud having lightning and thunder. It 
-undergoes three distinct stages during its life cycle (see Figure 22-2): towering cumulus, mature, and 
-dissipating.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-2-00-necessary-ingredients-for-thunderstorm-cell-form.png)
+![Figure 22-1. Necessary Ingredients for Thunderstorm Cell Formation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-2-00-necessary-ingredients-for-thunderstorm-cell-form.png)

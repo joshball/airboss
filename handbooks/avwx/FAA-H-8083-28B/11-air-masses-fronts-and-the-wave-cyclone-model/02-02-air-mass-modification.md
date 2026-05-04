@@ -28,10 +28,6 @@ stratiform clouds, fog, and drizzle.
 
 Figure 11-2. Air Mass Modification—Warm, Moist Air Mass Moving Over a Cold Surface
 
-![Figure 11-1. Air Mass Classification 
-11.2.2 Air Mass Modification 
-As these air masses move around the Earth, they can begin to acquire different attributes. For example, in 
-winter, an arctic air mass (very cold and dry air) can move over the ocean, picking up some warmth and 
-moisture from the warmer ocean and becom](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-2-2-00-air-mass-classification-11-2-2-air-mass-modifica.png)
+![Figure 11-1. Air Mass Classification](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-2-2-00-air-mass-classification.png)
 
 ![Figure 11-2. Air Mass Modification—Warm, Moist Air Mass Moving Over a Cold Surface](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-2-2-01-air-mass-modification-warm-moist-air-mass-moving.png)

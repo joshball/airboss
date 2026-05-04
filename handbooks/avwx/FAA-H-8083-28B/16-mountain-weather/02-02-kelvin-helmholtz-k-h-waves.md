@@ -44,26 +44,10 @@ K-H instability induced by the wind shear associated with strong winds aloft is 
 high-level turbulence away from mountain ranges [clear-air turbulence (CAT)]. The mechanism that causes
 this type of disturbance can be compared to that of a flag flapping in a breeze. The flapping is a result of
 
-![Figure 16-1. Gravity Wave Oscillations 
-The described gravity wave will have measurable wavelength, amplitude, phase speed, and period. The 
-period of this type of atmospheric disturbance is related to the temperature of the air and the “spread” 
-between the existing lapse rate and the dry adiabatic lapse rate (or, equ](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-2-00-gravity-wave-oscillations-the-described-gravity-.png)
+![Figure 16-1. Gravity Wave Oscillations](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-2-00-gravity-wave-oscillations.png)
 
-![Figure 16-2. 
- 
-Figure 16-2. Gravity-Shear Waves](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-2-01-figure-16-2-gravity-shear-waves.png)
+![a stable temperature lapse rate. This effect is illustrated in Figure 16-2.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-2-01-this-effect-is-illustrated-in-figure-16-2.png)
 
-![Figure 16-4. 
- 
-Figure 16-3. Schematic of Clouds Associated with Gravity-Shear Waves 
- 
-(Photo Credit: University Corporation for Atmospheric Research (UCAR)) 
-Figure 16-4. Clouds Associated with Gravity-Shear Waves 
-K-H waves are quite common in the atmosphere; they can form in the vicinity of thunderstorms, in shear](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-2-02-figure-16-3-schematic-of-clouds-associated-with-.png)
+![Figure 16-2. Gravity-Shear Waves](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-2-02-gravity-shear-waves.png)
 
-![Figure 16-3. Schematic of Clouds Associated with Gravity-Shear Waves 
- 
-(Photo Credit: University Corporation for Atmospheric Research (UCAR)) 
-Figure 16-4. Clouds Associated with Gravity-Shear Waves 
-K-H waves are quite common in the atmosphere; they can form in the vicinity of thunderstorms, in shear 
-layers near the](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-2-03-schematic-of-clouds-associated-with-gravity-shea.png)
+![gravity waves can frequently be observed in the atmosphere, as shown in Figure 16-3 and Figure 16-4.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-2-03-untitled.png)

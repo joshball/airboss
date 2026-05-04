@@ -37,8 +37,6 @@ Figure 26-1. AWC SIGMET Areas of Responsibility—CONUS
 
 Figure 26-2. AWC SIGMET Areas of Responsibility—Atlantic Basin
 
-![Figure 26-1. AWC SIGMET Areas of Responsibility—CONUS 
- 
-Figure 26-2. AWC SIGMET Areas of Responsibility—Atlantic Basin](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-1-00-awc-sigmet-areas-of-responsibility-conus-figure-.png)
+![Figure 26-1. AWC SIGMET Areas of Responsibility—CONUS](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-1-00-awc-sigmet-areas-of-responsibility-conus.png)
 
 ![Figure 26-2. AWC SIGMET Areas of Responsibility—Atlantic Basin](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-1-01-awc-sigmet-areas-of-responsibility-atlantic-basi.png)

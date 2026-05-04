@@ -1,0 +1,4611 @@
+{
+  "schema_version": 1,
+  "document_slug": "avwx",
+  "edition": "FAA-H-8083-28B",
+  "manifest_sha256": "b0bebe067543fefdc4ea08727487d4b65bc267b22b8b0df1f1f1377a18cc9c32",
+  "generated_at": "2026-05-04T20:34:48.428559+00:00",
+  "warnings": [
+    {
+      "id": "03b13e589d3b40b7",
+      "code": "caption-without-figure",
+      "section_code": "10",
+      "message": "Caption `Figure 10-12. Local Wind Circulation` on page 123 had no paired image."
+    },
+    {
+      "id": "0d248d65ce941cd9",
+      "code": "caption-without-figure",
+      "section_code": "10",
+      "message": "Caption `Figure 10-22. Crosswind Climb Flightpath` on page 132 had no paired image."
+    },
+    {
+      "id": "4ec43e0f42ca3552",
+      "code": "caption-without-figure",
+      "section_code": "10.2",
+      "message": "Caption `Figure 10-1. Direction of Pressure Gradient Force` on page 117 had no paired image."
+    },
+    {
+      "id": "b4f5f5c255e3926d",
+      "code": "caption-without-figure",
+      "section_code": "10.3",
+      "message": "Caption `Figure 10-7. Friction Force Magnitude Variations with Wind Speed` on page 120 had no paired image."
+    },
+    {
+      "id": "2c7429ff162c5258",
+      "code": "caption-without-figure",
+      "section_code": "10.3.1",
+      "message": "Caption `Figure 10-1. Direction of Pressure Gradient Force` on page 117 had no paired image."
+    },
+    {
+      "id": "b64ab4c75ccef33d",
+      "code": "caption-without-figure",
+      "section_code": "10.4",
+      "message": "Caption `Figure 10-8. Geostrophic Wind` on page 121 had no paired image."
+    },
+    {
+      "id": "ddd3b08229896d95",
+      "code": "caption-without-figure",
+      "section_code": "10.5",
+      "message": "Caption `Figure 10-10. Surface Wind Forces` on page 122 had no paired image."
+    },
+    {
+      "id": "147ffa07902f5391",
+      "code": "caption-without-figure",
+      "section_code": "12",
+      "message": "Caption `at the surface than when it began the vertical motion process in Figure 12-2.` on page 148 had no paired image."
+    },
+    {
+      "id": "f0f8aa41b9eb1786",
+      "code": "caption-without-figure",
+      "section_code": "12.3",
+      "message": "Caption `at the surface than when it began the vertical motion process in Figure 12-2.` on page 148 had no paired image."
+    },
+    {
+      "id": "679dbca2d7766609",
+      "code": "caption-without-figure",
+      "section_code": "13.4",
+      "message": "Caption `Figure 13-7. Vertical Motion Effects on Stability` on page 161 had no paired image."
+    },
+    {
+      "id": "b89957b113d4dea2",
+      "code": "caption-without-figure",
+      "section_code": "15",
+      "message": "Caption `Figure 15-22. WSR-88D Weather Radar Stratiform Precipitation on the 0.5° Base Re` on page 189 had no paired image."
+    },
+    {
+      "id": "442306ac9626e2ff",
+      "code": "caption-without-figure",
+      "section_code": "15.2",
+      "message": "Caption `Figure 15-5. Precipitation Attenuation versus Wavelength` on page 175 had no paired image."
+    },
+    {
+      "id": "d9277954716b64f1",
+      "code": "caption-without-figure",
+      "section_code": "15.2",
+      "message": "Caption `Figure 15-22. WSR-88D Weather Radar Stratiform Precipitation on the 0.5° Base Re` on page 189 had no paired image."
+    },
+    {
+      "id": "43d18daee992b41e",
+      "code": "caption-without-figure",
+      "section_code": "15.2.1",
+      "message": "Caption `Figure 15-1. Radar Antenna` on page 172 had no paired image."
+    },
+    {
+      "id": "46fe5712b8ee7749",
+      "code": "caption-without-figure",
+      "section_code": "15.2.2",
+      "message": "Caption `Figure 15-1. Radar Antenna` on page 172 had no paired image."
+    },
+    {
+      "id": "4827154bdfe68503",
+      "code": "caption-without-figure",
+      "section_code": "15.2.6",
+      "message": "Caption `Figure 15-6. Beam Resolution` on page 176 had no paired image."
+    },
+    {
+      "id": "c577d2799a7e5c80",
+      "code": "caption-without-figure",
+      "section_code": "16",
+      "message": "Caption `Figure 16-4. Clouds Associated with Gravity-Shear Waves` on page 193 had no paired image."
+    },
+    {
+      "id": "e8bfeac8a81749f0",
+      "code": "caption-without-figure",
+      "section_code": "16",
+      "message": "Caption `Figure 16-16. Examples of Mountain Wave Clouds` on page 206 had no paired image."
+    },
+    {
+      "id": "efdcb6e2b2e171be",
+      "code": "caption-without-figure",
+      "section_code": "16",
+      "message": "Caption `Figure 16-3. Schematic of Clouds Associated with Gravity-Shear Waves` on page 193 had no paired image."
+    },
+    {
+      "id": "2cc247e14c237ae6",
+      "code": "caption-without-figure",
+      "section_code": "16.2",
+      "message": "Caption `Figure 16-3. Schematic of Clouds Associated with Gravity-Shear Waves` on page 193 had no paired image."
+    },
+    {
+      "id": "98ed2053834133c5",
+      "code": "caption-without-figure",
+      "section_code": "16.2",
+      "message": "Caption `gravity waves can frequently be observed in the atmosphere, as shown in Figure 1` on page 193 had no paired image."
+    },
+    {
+      "id": "deaf623e58cd85a3",
+      "code": "caption-without-figure",
+      "section_code": "16.2",
+      "message": "Caption `Figure 16-4. Clouds Associated with Gravity-Shear Waves` on page 193 had no paired image."
+    },
+    {
+      "id": "ecea8863da9d206c",
+      "code": "caption-without-figure",
+      "section_code": "16.2",
+      "message": "Caption `Figure 16-15. Schematic of Mountain Waves and Associated Clouds` on page 205 had no paired image."
+    },
+    {
+      "id": "a036a9f5adcb0f5e",
+      "code": "caption-without-figure",
+      "section_code": "16.2.1",
+      "message": "Caption `oscillations before the resulting wave motion dampens out. This process is depic` on page 191 had no paired image."
+    },
+    {
+      "id": "2f30e36f276f20b0",
+      "code": "caption-without-figure",
+      "section_code": "16.2.2",
+      "message": "Caption `Figure 16-3. Schematic of Clouds Associated with Gravity-Shear Waves` on page 193 had no paired image."
+    },
+    {
+      "id": "8fea5acd1e70a7bd",
+      "code": "caption-without-figure",
+      "section_code": "16.2.2",
+      "message": "Caption `Figure 16-4. Clouds Associated with Gravity-Shear Waves` on page 193 had no paired image."
+    },
+    {
+      "id": "622eaf8505eb7307",
+      "code": "caption-without-figure",
+      "section_code": "16.2.4",
+      "message": "Caption `Figure 16-8. Computer Simulation of Trapped Lee Waves Behind a 300-m-High Mounta` on page 198 had no paired image."
+    },
+    {
+      "id": "5a81abbb2339a005",
+      "code": "caption-without-figure",
+      "section_code": "17",
+      "message": "Caption `onshore into the continental low pressure, as shown in Figure 17-2. However, mos` on page 212 had no paired image."
+    },
+    {
+      "id": "7d812770b48ac168",
+      "code": "caption-without-figure",
+      "section_code": "17",
+      "message": "Caption `frequent the ITCZ, and tops to 40,000 ft or higher are common, as shown in Figur` on page 211 had no paired image."
+    },
+    {
+      "id": "a9c05104efabcfab",
+      "code": "caption-without-figure",
+      "section_code": "17",
+      "message": "Caption `to the jungle climate. In January, the ITCZ moves south of the valley, as shown ` on page 212 had no paired image."
+    },
+    {
+      "id": "cddf19a0c91f6f86",
+      "code": "caption-without-figure",
+      "section_code": "17",
+      "message": "Caption `winds, as shown in Figure 17-1. Most of the continent is dry during the winter. ` on page 212 had no paired image."
+    },
+    {
+      "id": "ed93f1b9f56837c2",
+      "code": "caption-without-figure",
+      "section_code": "17",
+      "message": "Caption `Figure 17-6. Vertical Cross-Section Along Line A–B in Figure 17-5` on page 215 had no paired image."
+    },
+    {
+      "id": "336fa338d3628ef6",
+      "code": "caption-without-figure",
+      "section_code": "17.2",
+      "message": "Caption `Figure 17-2. Mean Worldwide Surface Pressure Distribution and Prevailing Winds T` on page 209 had no paired image."
+    },
+    {
+      "id": "40c4b32f543b78a9",
+      "code": "caption-without-figure",
+      "section_code": "17.2",
+      "message": "Caption `to the jungle climate. In January, the ITCZ moves south of the valley, as shown ` on page 212 had no paired image."
+    },
+    {
+      "id": "57c9e252c7b1a468",
+      "code": "caption-without-figure",
+      "section_code": "17.2",
+      "message": "Caption `winds, as shown in Figure 17-1. Most of the continent is dry during the winter. ` on page 212 had no paired image."
+    },
+    {
+      "id": "71c07fa25b38c92a",
+      "code": "caption-without-figure",
+      "section_code": "17.2",
+      "message": "Caption `Note in Figure 17-2 how the winter flow has reversed from that shown in Figure 1` on page 212 had no paired image."
+    },
+    {
+      "id": "b7b8b3f4a263c175",
+      "code": "caption-without-figure",
+      "section_code": "17.2",
+      "message": "Caption `frequent the ITCZ, and tops to 40,000 ft or higher are common, as shown in Figur` on page 211 had no paired image."
+    },
+    {
+      "id": "dd5a4dc477134a14",
+      "code": "caption-without-figure",
+      "section_code": "17.2",
+      "message": "Caption `onshore into the continental low pressure, as shown in Figure 17-2. However, mos` on page 212 had no paired image."
+    },
+    {
+      "id": "a00032e764de17df",
+      "code": "caption-without-figure",
+      "section_code": "17.2.1",
+      "message": "Caption `Figure 17-2. Mean Worldwide Surface Pressure Distribution and Prevailing Winds T` on page 209 had no paired image."
+    },
+    {
+      "id": "e489a64945dba46e",
+      "code": "caption-without-figure",
+      "section_code": "17.2.4",
+      "message": "Caption `frequent the ITCZ, and tops to 40,000 ft or higher are common, as shown in Figur` on page 211 had no paired image."
+    },
+    {
+      "id": "01c9826bb863d8c0",
+      "code": "caption-without-figure",
+      "section_code": "17.2.5",
+      "message": "Caption `frequent the ITCZ, and tops to 40,000 ft or higher are common, as shown in Figur` on page 211 had no paired image."
+    },
+    {
+      "id": "0d6c5768b9528ad8",
+      "code": "caption-without-figure",
+      "section_code": "17.2.5",
+      "message": "Caption `Note in Figure 17-2 how the winter flow has reversed from that shown in Figure 1` on page 212 had no paired image."
+    },
+    {
+      "id": "62fa93714c900474",
+      "code": "caption-without-figure",
+      "section_code": "17.2.5",
+      "message": "Caption `to the jungle climate. In January, the ITCZ moves south of the valley, as shown ` on page 212 had no paired image."
+    },
+    {
+      "id": "e23c4f06528013fb",
+      "code": "caption-without-figure",
+      "section_code": "17.2.5",
+      "message": "Caption `winds, as shown in Figure 17-1. Most of the continent is dry during the winter. ` on page 212 had no paired image."
+    },
+    {
+      "id": "f38d214eaeb6509d",
+      "code": "caption-without-figure",
+      "section_code": "17.2.5",
+      "message": "Caption `onshore into the continental low pressure, as shown in Figure 17-2. However, mos` on page 212 had no paired image."
+    },
+    {
+      "id": "f664d6f5ee4709ce",
+      "code": "caption-without-figure",
+      "section_code": "18",
+      "message": "Caption `Figure 18-10. Freezing Fog` on page 228 had no paired image."
+    },
+    {
+      "id": "a2cbfcbd2c971e82",
+      "code": "caption-without-figure",
+      "section_code": "18.1",
+      "message": "Caption `Figure 18-10. Freezing Fog` on page 228 had no paired image."
+    },
+    {
+      "id": "d33f5933340bd9a1",
+      "code": "caption-without-figure",
+      "section_code": "18.1.1",
+      "message": "Caption `Figure 18-10. Freezing Fog` on page 228 had no paired image."
+    },
+    {
+      "id": "1900f4cf3e261338",
+      "code": "caption-without-figure",
+      "section_code": "24",
+      "message": "Caption `Figure 24-14. Weather Radar 0.5° Base Reflectivity (left) versus Composite Refle` on page 326 had no paired image."
+    },
+    {
+      "id": "1c8c4e39afeec7f4",
+      "code": "caption-without-figure",
+      "section_code": "24",
+      "message": "Caption `Figure 24-34. Weather Trends Example at Unalakleet (PAUN), Alaska` on page 342 had no paired image."
+    },
+    {
+      "id": "8247800d2aea4648",
+      "code": "caption-without-figure",
+      "section_code": "24",
+      "message": "Caption `Figure 24-23. Unenhanced Infrared (Black and White) Satellite Image Data Legend` on page 333 had no paired image."
+    },
+    {
+      "id": "966443e0efa1f93d",
+      "code": "caption-without-figure",
+      "section_code": "24",
+      "message": "Caption `Figure 24-24. Water Vapor Satellite Image—U.S. Example` on page 334 had no paired image."
+    },
+    {
+      "id": "c3d3980b3e7d624a",
+      "code": "caption-without-figure",
+      "section_code": "24",
+      "message": "Caption `Figure 24-22. Infrared (Color) Satellite Image Data Legend` on page 333 had no paired image."
+    },
+    {
+      "id": "d9ce312e1e225713",
+      "code": "caption-without-figure",
+      "section_code": "24.6",
+      "message": "Caption `Figure 24-14. Weather Radar 0.5° Base Reflectivity (left) versus Composite Refle` on page 326 had no paired image."
+    },
+    {
+      "id": "8ab9b64dae32c6ac",
+      "code": "caption-without-figure",
+      "section_code": "24.6.1",
+      "message": "Caption `Figure 24-14. Weather Radar 0.5° Base Reflectivity (left) versus Composite Refle` on page 326 had no paired image."
+    },
+    {
+      "id": "44128c2f70d0c71d",
+      "code": "caption-without-figure",
+      "section_code": "24.7",
+      "message": "Caption `Figure 24-23. Unenhanced Infrared (Black and White) Satellite Image Data Legend` on page 333 had no paired image."
+    },
+    {
+      "id": "b5bb15ae1b7ba689",
+      "code": "caption-without-figure",
+      "section_code": "24.7",
+      "message": "Caption `Figure 24-24. Water Vapor Satellite Image—U.S. Example` on page 334 had no paired image."
+    },
+    {
+      "id": "e63a2fa9581f7fa2",
+      "code": "caption-without-figure",
+      "section_code": "24.7",
+      "message": "Caption `Figure 24-22. Infrared (Color) Satellite Image Data Legend` on page 333 had no paired image."
+    },
+    {
+      "id": "364ee5fa98b6e3f8",
+      "code": "caption-without-figure",
+      "section_code": "24.7.2",
+      "message": "Caption `Figure 24-22. Infrared (Color) Satellite Image Data Legend` on page 333 had no paired image."
+    },
+    {
+      "id": "9fc5be8f4ebabd9b",
+      "code": "caption-without-figure",
+      "section_code": "24.7.2",
+      "message": "Caption `Figure 24-24. Water Vapor Satellite Image—U.S. Example` on page 334 had no paired image."
+    },
+    {
+      "id": "d4785a06b8813c88",
+      "code": "caption-without-figure",
+      "section_code": "24.7.2",
+      "message": "Caption `Figure 24-23. Unenhanced Infrared (Black and White) Satellite Image Data Legend` on page 333 had no paired image."
+    },
+    {
+      "id": "db4530706662632d",
+      "code": "caption-without-figure",
+      "section_code": "24.7.3",
+      "message": "Caption `Figure 24-25. Water Vapor Satellite Image Data Legend` on page 335 had no paired image."
+    },
+    {
+      "id": "ad4f43cc0f37fe5d",
+      "code": "caption-without-figure",
+      "section_code": "24.8",
+      "message": "Caption `Figure 24-26. Weather Balloon and Radiosonde` on page 336 had no paired image."
+    },
+    {
+      "id": "3ff41b9baa54361d",
+      "code": "caption-without-figure",
+      "section_code": "24.8.1",
+      "message": "Caption `Figure 24-26. Weather Balloon and Radiosonde` on page 336 had no paired image."
+    },
+    {
+      "id": "0cbc98664a25b068",
+      "code": "caption-without-figure",
+      "section_code": "25",
+      "message": "Caption `Unified Surface Analysis Charts use the symbols shown in Figure 25-6.` on page 359 had no paired image."
+    },
+    {
+      "id": "d62a9f29caf51552",
+      "code": "caption-without-figure",
+      "section_code": "25",
+      "message": "Caption `Figure 25-25. RTMA Surface Temperature and Altimeter Setting Example` on page 367 had no paired image."
+    },
+    {
+      "id": "df21f7aea1a96d20",
+      "code": "caption-without-figure",
+      "section_code": "25",
+      "message": "Caption `Figure 25-24. Skew-T Diagram—Cloud Top Example` on page 364 had no paired image."
+    },
+    {
+      "id": "d8adb3bf984d3c7d",
+      "code": "caption-without-figure",
+      "section_code": "25.4",
+      "message": "Caption `Unified Surface Analysis Charts use the symbols shown in Figure 25-6.` on page 359 had no paired image."
+    },
+    {
+      "id": "929dae4f2ea5312c",
+      "code": "caption-without-figure",
+      "section_code": "25.4.2",
+      "message": "Caption `For surface analysis charts, positions and types of fronts are shown by symbols ` on page 348 had no paired image."
+    },
+    {
+      "id": "d725e4d212671edf",
+      "code": "caption-without-figure",
+      "section_code": "25.4.5",
+      "message": "Caption `Unified Surface Analysis Charts use the symbols shown in Figure 25-6.` on page 359 had no paired image."
+    },
+    {
+      "id": "73a45337e32c5929",
+      "code": "caption-without-figure",
+      "section_code": "25.5",
+      "message": "Caption `Figure 25-24. Skew-T Diagram—Cloud Top Example` on page 364 had no paired image."
+    },
+    {
+      "id": "890f16cf89c1d678",
+      "code": "caption-without-figure",
+      "section_code": "25.9",
+      "message": "Caption `Figure 25-25. RTMA Surface Temperature and Altimeter Setting Example` on page 367 had no paired image."
+    },
+    {
+      "id": "31b363242bb69abd",
+      "code": "caption-without-figure",
+      "section_code": "25.9.1",
+      "message": "Caption `Figure 25-25. RTMA Surface Temperature and Altimeter Setting Example` on page 367 had no paired image."
+    },
+    {
+      "id": "5ba11f9af13455e7",
+      "code": "caption-without-figure",
+      "section_code": "26",
+      "message": "Caption `Figure 26-9. CWA—Example` on page 389 had no paired image."
+    },
+    {
+      "id": "65c3dad1a19cc2c3",
+      "code": "caption-without-figure",
+      "section_code": "26",
+      "message": "Caption `Figure 26-4. Non-Convective SIGMET for the CONUS—Example` on page 373 had no paired image."
+    },
+    {
+      "id": "3fd3f5c48a58d4a4",
+      "code": "caption-without-figure",
+      "section_code": "26.2",
+      "message": "Caption `Figure 26-4. Non-Convective SIGMET for the CONUS—Example` on page 373 had no paired image."
+    },
+    {
+      "id": "244f0131c55b7155",
+      "code": "caption-without-figure",
+      "section_code": "26.2.4",
+      "message": "Caption `Figure 26-4. Non-Convective SIGMET for the CONUS—Example` on page 373 had no paired image."
+    },
+    {
+      "id": "d717f80803d6615b",
+      "code": "caption-without-figure",
+      "section_code": "26.3.5",
+      "message": "Caption `CWAs are issued by the NWS CWSU. CWSU areas of responsibility are depicted in Fi` on page 387 had no paired image."
+    },
+    {
+      "id": "072048ceb69f2155",
+      "code": "caption-without-figure",
+      "section_code": "26.4",
+      "message": "Caption `Figure 26-9. CWA—Example` on page 389 had no paired image."
+    },
+    {
+      "id": "8e64d0376815576a",
+      "code": "caption-without-figure",
+      "section_code": "26.4.1",
+      "message": "Caption `CWAs are issued by the NWS CWSU. CWSU areas of responsibility are depicted in Fi` on page 387 had no paired image."
+    },
+    {
+      "id": "4202f0fea728573b",
+      "code": "caption-without-figure",
+      "section_code": "27",
+      "message": "Caption `Squall lines are denoted using the standard symbol in Figure 27-25.` on page 451 had no paired image."
+    },
+    {
+      "id": "8041798a52693a6d",
+      "code": "caption-without-figure",
+      "section_code": "27",
+      "message": "Caption `Figure 27-24. NDFD Short-Range Surface Prog Forecast—Example` on page 449 had no paired image."
+    },
+    {
+      "id": "e975c0d7221f8a66",
+      "code": "caption-without-figure",
+      "section_code": "27",
+      "message": "Caption `Figure 27-27. 300 mb Constant Pressure Forecast—Example` on page 453 had no paired image."
+    },
+    {
+      "id": "ecc9d4c4f1dcba8e",
+      "code": "caption-without-figure",
+      "section_code": "27",
+      "message": "Caption `Figure 27-31. ECFP Example` on page 460 had no paired image."
+    },
+    {
+      "id": "4f184913051d2f79",
+      "code": "caption-without-figure",
+      "section_code": "27.11",
+      "message": "Caption `Squall lines are denoted using the standard symbol in Figure 27-25.` on page 451 had no paired image."
+    },
+    {
+      "id": "94b78ee06c23fcf3",
+      "code": "caption-without-figure",
+      "section_code": "27.11",
+      "message": "Caption `Figure 27-27. 300 mb Constant Pressure Forecast—Example` on page 453 had no paired image."
+    },
+    {
+      "id": "05c8a1c0b7d3173c",
+      "code": "caption-without-figure",
+      "section_code": "27.17",
+      "message": "Caption `Figure 27-31. ECFP Example` on page 460 had no paired image."
+    },
+    {
+      "id": "a3bcbf7fff3c8881",
+      "code": "caption-without-figure",
+      "section_code": "27.17.2",
+      "message": "Caption `Figure 27-30. TCF Example` on page 459 had no paired image."
+    },
+    {
+      "id": "8ea4b111ab1f7b29",
+      "code": "caption-without-figure",
+      "section_code": "27.9",
+      "message": "Caption `Figure 27-23. Alaska SIGWX Chart—Example` on page 448 had no paired image."
+    },
+    {
+      "id": "c249c02ba74ba91f",
+      "code": "caption-without-figure",
+      "section_code": "27.9.4",
+      "message": "Caption `Figure 27-23. Alaska SIGWX Chart—Example` on page 448 had no paired image."
+    },
+    {
+      "id": "b5e2c1da2cb53adf",
+      "code": "caption-without-figure",
+      "section_code": "7.2",
+      "message": "Caption `Figure 7-1. Earth-Atmosphere Energy Balance` on page 88 had no paired image."
+    },
+    {
+      "id": "8bdc13a339c9c197",
+      "code": "caption-without-figure",
+      "section_code": "8",
+      "message": "Caption `Figure 8-14. Temperature Change’s Effects on Altimeter Readings` on page 107 had no paired image."
+    },
+    {
+      "id": "46a8dd4c6a8bb7ca",
+      "code": "caption-without-figure",
+      "section_code": "8.4",
+      "message": "Caption `Figure 8-14. Temperature Change’s Effects on Altimeter Readings` on page 107 had no paired image."
+    },
+    {
+      "id": "2f88888b2fb6b727",
+      "code": "caption-without-figure",
+      "section_code": "8.4.1",
+      "message": "Caption `Figure 8-14. Temperature Change’s Effects on Altimeter Readings` on page 107 had no paired image."
+    },
+    {
+      "id": "1efb87314fae8e98",
+      "code": "figure-without-caption",
+      "section_code": "1",
+      "message": "Image on page 17 (index 0) had no paired caption."
+    },
+    {
+      "id": "957960acb779631a",
+      "code": "figure-without-caption",
+      "section_code": "1",
+      "message": "Image on page 16 (index 0) had no paired caption."
+    },
+    {
+      "id": "b5b1e55a9fa211bf",
+      "code": "figure-without-caption",
+      "section_code": "1",
+      "message": "Image on page 17 (index 1) had no paired caption."
+    },
+    {
+      "id": "c46b9d85af6a51a4",
+      "code": "figure-without-caption",
+      "section_code": "1",
+      "message": "Image on page 16 (index 1) had no paired caption."
+    },
+    {
+      "id": "ea044fe2755dcca7",
+      "code": "figure-without-caption",
+      "section_code": "10",
+      "message": "Image on page 116 (index 1) had no paired caption."
+    },
+    {
+      "id": "06a63ec191f142c1",
+      "code": "figure-without-caption",
+      "section_code": "10.1",
+      "message": "Image on page 116 (index 0) had no paired caption."
+    },
+    {
+      "id": "1a2907226ff99148",
+      "code": "figure-without-caption",
+      "section_code": "10.1",
+      "message": "Image on page 116 (index 1) had no paired caption."
+    },
+    {
+      "id": "21f284f61b5306b1",
+      "code": "figure-without-caption",
+      "section_code": "11",
+      "message": "Image on page 134 (index 0) had no paired caption."
+    },
+    {
+      "id": "dfab6477ab53d1c2",
+      "code": "figure-without-caption",
+      "section_code": "11",
+      "message": "Image on page 134 (index 1) had no paired caption."
+    },
+    {
+      "id": "583b0e7b28dfe615",
+      "code": "figure-without-caption",
+      "section_code": "11.1",
+      "message": "Image on page 134 (index 0) had no paired caption."
+    },
+    {
+      "id": "926caf5a378357c0",
+      "code": "figure-without-caption",
+      "section_code": "11.1",
+      "message": "Image on page 134 (index 1) had no paired caption."
+    },
+    {
+      "id": "0e2fa88fe77f49e2",
+      "code": "figure-without-caption",
+      "section_code": "12",
+      "message": "Image on page 152 (index 1) had no paired caption."
+    },
+    {
+      "id": "690ef820b9d2e9e7",
+      "code": "figure-without-caption",
+      "section_code": "12",
+      "message": "Image on page 152 (index 0) had no paired caption."
+    },
+    {
+      "id": "803efc827646b562",
+      "code": "figure-without-caption",
+      "section_code": "12",
+      "message": "Image on page 145 (index 1) had no paired caption."
+    },
+    {
+      "id": "a714cdf524b546e4",
+      "code": "figure-without-caption",
+      "section_code": "12",
+      "message": "Image on page 152 (index 2) had no paired caption."
+    },
+    {
+      "id": "e957b594b6866a8d",
+      "code": "figure-without-caption",
+      "section_code": "12",
+      "message": "Image on page 145 (index 0) had no paired caption."
+    },
+    {
+      "id": "2d1a33c75536725d",
+      "code": "figure-without-caption",
+      "section_code": "12.1",
+      "message": "Image on page 145 (index 0) had no paired caption."
+    },
+    {
+      "id": "6e9e3431e807f961",
+      "code": "figure-without-caption",
+      "section_code": "12.1",
+      "message": "Image on page 145 (index 1) had no paired caption."
+    },
+    {
+      "id": "2b4b7413b6d1da27",
+      "code": "figure-without-caption",
+      "section_code": "12.5",
+      "message": "Image on page 152 (index 0) had no paired caption."
+    },
+    {
+      "id": "680e88238eef1b9d",
+      "code": "figure-without-caption",
+      "section_code": "12.5",
+      "message": "Image on page 152 (index 1) had no paired caption."
+    },
+    {
+      "id": "aeb146bff6a914c9",
+      "code": "figure-without-caption",
+      "section_code": "12.5",
+      "message": "Image on page 152 (index 2) had no paired caption."
+    },
+    {
+      "id": "44ba6142330c5bfb",
+      "code": "figure-without-caption",
+      "section_code": "12.6",
+      "message": "Image on page 152 (index 0) had no paired caption."
+    },
+    {
+      "id": "c34d065ed3a220e1",
+      "code": "figure-without-caption",
+      "section_code": "12.6",
+      "message": "Image on page 152 (index 2) had no paired caption."
+    },
+    {
+      "id": "c82d665b5bf61e01",
+      "code": "figure-without-caption",
+      "section_code": "12.6",
+      "message": "Image on page 152 (index 1) had no paired caption."
+    },
+    {
+      "id": "69ad8407137c1660",
+      "code": "figure-without-caption",
+      "section_code": "13",
+      "message": "Image on page 154 (index 0) had no paired caption."
+    },
+    {
+      "id": "9dcff04dc21abaef",
+      "code": "figure-without-caption",
+      "section_code": "13",
+      "message": "Image on page 154 (index 1) had no paired caption."
+    },
+    {
+      "id": "91d620883d6de238",
+      "code": "figure-without-caption",
+      "section_code": "13.1",
+      "message": "Image on page 154 (index 1) had no paired caption."
+    },
+    {
+      "id": "93b78d8cbce4659e",
+      "code": "figure-without-caption",
+      "section_code": "13.1",
+      "message": "Image on page 154 (index 0) had no paired caption."
+    },
+    {
+      "id": "794ec3665c272782",
+      "code": "figure-without-caption",
+      "section_code": "13.3",
+      "message": "Image on page 159 (index 1) had no paired caption."
+    },
+    {
+      "id": "88a6034a3517bdb1",
+      "code": "figure-without-caption",
+      "section_code": "13.3.5",
+      "message": "Image on page 159 (index 1) had no paired caption."
+    },
+    {
+      "id": "3db1e519400bcaaf",
+      "code": "figure-without-caption",
+      "section_code": "14",
+      "message": "Image on page 165 (index 1) had no paired caption."
+    },
+    {
+      "id": "6d79634d6ecfbf6b",
+      "code": "figure-without-caption",
+      "section_code": "14",
+      "message": "Image on page 165 (index 0) had no paired caption."
+    },
+    {
+      "id": "894e43885c4f4d59",
+      "code": "figure-without-caption",
+      "section_code": "14.1",
+      "message": "Image on page 165 (index 1) had no paired caption."
+    },
+    {
+      "id": "945394c720f25523",
+      "code": "figure-without-caption",
+      "section_code": "14.1",
+      "message": "Image on page 165 (index 0) had no paired caption."
+    },
+    {
+      "id": "8dadb872ae0cc936",
+      "code": "figure-without-caption",
+      "section_code": "15",
+      "message": "Image on page 171 (index 1) had no paired caption."
+    },
+    {
+      "id": "1d777cd1d40c76e1",
+      "code": "figure-without-caption",
+      "section_code": "15.1",
+      "message": "Image on page 171 (index 1) had no paired caption."
+    },
+    {
+      "id": "dde446be7b5ed17d",
+      "code": "figure-without-caption",
+      "section_code": "15.1",
+      "message": "Image on page 171 (index 0) had no paired caption."
+    },
+    {
+      "id": "976f96dd05b95896",
+      "code": "figure-without-caption",
+      "section_code": "16",
+      "message": "Image on page 190 (index 1) had no paired caption."
+    },
+    {
+      "id": "5a4ee30a1a4e0756",
+      "code": "figure-without-caption",
+      "section_code": "16.1",
+      "message": "Image on page 190 (index 1) had no paired caption."
+    },
+    {
+      "id": "ee95bda0719d0c50",
+      "code": "figure-without-caption",
+      "section_code": "16.1",
+      "message": "Image on page 190 (index 0) had no paired caption."
+    },
+    {
+      "id": "4c76b243f9a8fd40",
+      "code": "figure-without-caption",
+      "section_code": "17",
+      "message": "Image on page 207 (index 1) had no paired caption."
+    },
+    {
+      "id": "1d991ae63bd38f34",
+      "code": "figure-without-caption",
+      "section_code": "17.1",
+      "message": "Image on page 207 (index 1) had no paired caption."
+    },
+    {
+      "id": "ba69d0429ac07a3a",
+      "code": "figure-without-caption",
+      "section_code": "17.1",
+      "message": "Image on page 207 (index 0) had no paired caption."
+    },
+    {
+      "id": "9532bea8841fd056",
+      "code": "figure-without-caption",
+      "section_code": "18",
+      "message": "Image on page 221 (index 1) had no paired caption."
+    },
+    {
+      "id": "eb9157a82b33b6a5",
+      "code": "figure-without-caption",
+      "section_code": "18",
+      "message": "Image on page 221 (index 0) had no paired caption."
+    },
+    {
+      "id": "44ad1436a8071f00",
+      "code": "figure-without-caption",
+      "section_code": "18.1",
+      "message": "Image on page 221 (index 0) had no paired caption."
+    },
+    {
+      "id": "5f279b084f400146",
+      "code": "figure-without-caption",
+      "section_code": "18.1",
+      "message": "Image on page 221 (index 1) had no paired caption."
+    },
+    {
+      "id": "446a5c71c7e8eaa3",
+      "code": "figure-without-caption",
+      "section_code": "19",
+      "message": "Image on page 233 (index 0) had no paired caption."
+    },
+    {
+      "id": "e5ff8e3cf978e11a",
+      "code": "figure-without-caption",
+      "section_code": "19",
+      "message": "Image on page 233 (index 1) had no paired caption."
+    },
+    {
+      "id": "6ad6cb624068625d",
+      "code": "figure-without-caption",
+      "section_code": "19.1",
+      "message": "Image on page 233 (index 0) had no paired caption."
+    },
+    {
+      "id": "da029ade64d9989c",
+      "code": "figure-without-caption",
+      "section_code": "19.1",
+      "message": "Image on page 233 (index 1) had no paired caption."
+    },
+    {
+      "id": "76ca96023602d125",
+      "code": "figure-without-caption",
+      "section_code": "2",
+      "message": "Image on page 18 (index 0) had no paired caption."
+    },
+    {
+      "id": "c9017674e6f2c15b",
+      "code": "figure-without-caption",
+      "section_code": "2",
+      "message": "Image on page 18 (index 1) had no paired caption."
+    },
+    {
+      "id": "0ded3b9849f94a84",
+      "code": "figure-without-caption",
+      "section_code": "2.1",
+      "message": "Image on page 18 (index 0) had no paired caption."
+    },
+    {
+      "id": "49799e047ab88a7e",
+      "code": "figure-without-caption",
+      "section_code": "2.1",
+      "message": "Image on page 18 (index 1) had no paired caption."
+    },
+    {
+      "id": "0b261ba1d2748d4f",
+      "code": "figure-without-caption",
+      "section_code": "20",
+      "message": "Image on page 243 (index 0) had no paired caption."
+    },
+    {
+      "id": "d61113fca26a6681",
+      "code": "figure-without-caption",
+      "section_code": "20",
+      "message": "Image on page 243 (index 1) had no paired caption."
+    },
+    {
+      "id": "43db852d6bb27d17",
+      "code": "figure-without-caption",
+      "section_code": "20.1",
+      "message": "Image on page 243 (index 0) had no paired caption."
+    },
+    {
+      "id": "d42f2805260ff0a5",
+      "code": "figure-without-caption",
+      "section_code": "20.1",
+      "message": "Image on page 243 (index 1) had no paired caption."
+    },
+    {
+      "id": "5633093d03f0c019",
+      "code": "figure-without-caption",
+      "section_code": "21",
+      "message": "Image on page 251 (index 1) had no paired caption."
+    },
+    {
+      "id": "a24387d8fe0fd79f",
+      "code": "figure-without-caption",
+      "section_code": "21",
+      "message": "Image on page 251 (index 0) had no paired caption."
+    },
+    {
+      "id": "2c8bc1bf185218ed",
+      "code": "figure-without-caption",
+      "section_code": "21.1",
+      "message": "Image on page 251 (index 1) had no paired caption."
+    },
+    {
+      "id": "af5fbad8a7d3747f",
+      "code": "figure-without-caption",
+      "section_code": "21.1",
+      "message": "Image on page 251 (index 0) had no paired caption."
+    },
+    {
+      "id": "8a34907401f3cf9a",
+      "code": "figure-without-caption",
+      "section_code": "22",
+      "message": "Image on page 256 (index 0) had no paired caption."
+    },
+    {
+      "id": "ba66455f4143f602",
+      "code": "figure-without-caption",
+      "section_code": "22",
+      "message": "Image on page 256 (index 1) had no paired caption."
+    },
+    {
+      "id": "8cf0cd8e29867b43",
+      "code": "figure-without-caption",
+      "section_code": "22.1",
+      "message": "Image on page 256 (index 0) had no paired caption."
+    },
+    {
+      "id": "de9b2667a3222f73",
+      "code": "figure-without-caption",
+      "section_code": "22.1",
+      "message": "Image on page 256 (index 1) had no paired caption."
+    },
+    {
+      "id": "2384587bd42e4bfb",
+      "code": "figure-without-caption",
+      "section_code": "23",
+      "message": "Image on page 284 (index 0) had no paired caption."
+    },
+    {
+      "id": "a385775e579ffbd5",
+      "code": "figure-without-caption",
+      "section_code": "23",
+      "message": "Image on page 278 (index 0) had no paired caption."
+    },
+    {
+      "id": "bb692e76a073aebe",
+      "code": "figure-without-caption",
+      "section_code": "23",
+      "message": "Image on page 284 (index 1) had no paired caption."
+    },
+    {
+      "id": "c0281816c4708cbf",
+      "code": "figure-without-caption",
+      "section_code": "23",
+      "message": "Image on page 278 (index 1) had no paired caption."
+    },
+    {
+      "id": "5ac2c142f03f3ee2",
+      "code": "figure-without-caption",
+      "section_code": "23.1",
+      "message": "Image on page 278 (index 1) had no paired caption."
+    },
+    {
+      "id": "f45dcfeb5e669918",
+      "code": "figure-without-caption",
+      "section_code": "23.1",
+      "message": "Image on page 278 (index 0) had no paired caption."
+    },
+    {
+      "id": "3330cb1faa05f89e",
+      "code": "figure-without-caption",
+      "section_code": "23.13",
+      "message": "Image on page 284 (index 0) had no paired caption."
+    },
+    {
+      "id": "5868683658dec079",
+      "code": "figure-without-caption",
+      "section_code": "23.13",
+      "message": "Image on page 284 (index 1) had no paired caption."
+    },
+    {
+      "id": "4418098a9c0eeb89",
+      "code": "figure-without-caption",
+      "section_code": "23.13.4",
+      "message": "Image on page 284 (index 1) had no paired caption."
+    },
+    {
+      "id": "d17e1cc9cc99c808",
+      "code": "figure-without-caption",
+      "section_code": "23.13.4",
+      "message": "Image on page 284 (index 0) had no paired caption."
+    },
+    {
+      "id": "2b52d1a2c0962d55",
+      "code": "figure-without-caption",
+      "section_code": "24",
+      "message": "Image on page 321 (index 0) had no paired caption."
+    },
+    {
+      "id": "3278b7f0db844c33",
+      "code": "figure-without-caption",
+      "section_code": "24",
+      "message": "Image on page 285 (index 1) had no paired caption."
+    },
+    {
+      "id": "cc17148d5065bee7",
+      "code": "figure-without-caption",
+      "section_code": "24",
+      "message": "Image on page 328 (index 2) had no paired caption."
+    },
+    {
+      "id": "f5abda06f817a588",
+      "code": "figure-without-caption",
+      "section_code": "24",
+      "message": "Image on page 285 (index 0) had no paired caption."
+    },
+    {
+      "id": "1cd7f8cca1457739",
+      "code": "figure-without-caption",
+      "section_code": "24.1",
+      "message": "Image on page 285 (index 0) had no paired caption."
+    },
+    {
+      "id": "24b1f19f0a92ea01",
+      "code": "figure-without-caption",
+      "section_code": "24.1",
+      "message": "Image on page 285 (index 1) had no paired caption."
+    },
+    {
+      "id": "0d56957e1cfce95c",
+      "code": "figure-without-caption",
+      "section_code": "24.6",
+      "message": "Image on page 321 (index 0) had no paired caption."
+    },
+    {
+      "id": "1db9ebd086f1cc29",
+      "code": "figure-without-caption",
+      "section_code": "24.6",
+      "message": "Image on page 328 (index 2) had no paired caption."
+    },
+    {
+      "id": "66418e7398894945",
+      "code": "figure-without-caption",
+      "section_code": "24.6.1",
+      "message": "Image on page 321 (index 0) had no paired caption."
+    },
+    {
+      "id": "58f66d8c71fb9897",
+      "code": "figure-without-caption",
+      "section_code": "24.6.2",
+      "message": "Image on page 328 (index 2) had no paired caption."
+    },
+    {
+      "id": "3e2aabe79d76ae82",
+      "code": "figure-without-caption",
+      "section_code": "25",
+      "message": "Image on page 349 (index 1) had no paired caption."
+    },
+    {
+      "id": "618c1ad5079538d0",
+      "code": "figure-without-caption",
+      "section_code": "25",
+      "message": "Image on page 349 (index 3) had no paired caption."
+    },
+    {
+      "id": "749f8086cedbf274",
+      "code": "figure-without-caption",
+      "section_code": "25",
+      "message": "Image on page 343 (index 0) had no paired caption."
+    },
+    {
+      "id": "753e943d270a400c",
+      "code": "figure-without-caption",
+      "section_code": "25",
+      "message": "Image on page 349 (index 2) had no paired caption."
+    },
+    {
+      "id": "b69529cc7de81d73",
+      "code": "figure-without-caption",
+      "section_code": "25",
+      "message": "Image on page 343 (index 1) had no paired caption."
+    },
+    {
+      "id": "b95a16974a92411e",
+      "code": "figure-without-caption",
+      "section_code": "25.1",
+      "message": "Image on page 343 (index 0) had no paired caption."
+    },
+    {
+      "id": "e66253b61c9e248b",
+      "code": "figure-without-caption",
+      "section_code": "25.1",
+      "message": "Image on page 343 (index 1) had no paired caption."
+    },
+    {
+      "id": "12dc525d50d1fd14",
+      "code": "figure-without-caption",
+      "section_code": "25.4",
+      "message": "Image on page 349 (index 2) had no paired caption."
+    },
+    {
+      "id": "131b937606adcf51",
+      "code": "figure-without-caption",
+      "section_code": "25.4",
+      "message": "Image on page 349 (index 3) had no paired caption."
+    },
+    {
+      "id": "9883b034eff14389",
+      "code": "figure-without-caption",
+      "section_code": "25.4",
+      "message": "Image on page 349 (index 1) had no paired caption."
+    },
+    {
+      "id": "2f85152acd04b8a5",
+      "code": "figure-without-caption",
+      "section_code": "25.4.3",
+      "message": "Image on page 349 (index 3) had no paired caption."
+    },
+    {
+      "id": "518aa972528f3b70",
+      "code": "figure-without-caption",
+      "section_code": "25.4.3",
+      "message": "Image on page 349 (index 2) had no paired caption."
+    },
+    {
+      "id": "70c28cda8779c7d4",
+      "code": "figure-without-caption",
+      "section_code": "25.4.3",
+      "message": "Image on page 349 (index 1) had no paired caption."
+    },
+    {
+      "id": "86b37b9a63aee3a9",
+      "code": "figure-without-caption",
+      "section_code": "25.4.3",
+      "message": "Image on page 349 (index 0) had no paired caption."
+    },
+    {
+      "id": "4151052cc50769ff",
+      "code": "figure-without-caption",
+      "section_code": "26",
+      "message": "Image on page 368 (index 0) had no paired caption."
+    },
+    {
+      "id": "8b30a916f29b3a61",
+      "code": "figure-without-caption",
+      "section_code": "26",
+      "message": "Image on page 368 (index 1) had no paired caption."
+    },
+    {
+      "id": "56643b5c715402ab",
+      "code": "figure-without-caption",
+      "section_code": "26.1",
+      "message": "Image on page 368 (index 0) had no paired caption."
+    },
+    {
+      "id": "7dd7a85e6934af3b",
+      "code": "figure-without-caption",
+      "section_code": "26.1",
+      "message": "Image on page 368 (index 1) had no paired caption."
+    },
+    {
+      "id": "3667ebf223ecc174",
+      "code": "figure-without-caption",
+      "section_code": "27",
+      "message": "Image on page 438 (index 0) had no paired caption."
+    },
+    {
+      "id": "74dfc206048745ec",
+      "code": "figure-without-caption",
+      "section_code": "27",
+      "message": "Image on page 402 (index 1) had no paired caption."
+    },
+    {
+      "id": "8813c9825c50ef3d",
+      "code": "figure-without-caption",
+      "section_code": "27",
+      "message": "Image on page 402 (index 0) had no paired caption."
+    },
+    {
+      "id": "0ae807aa8b849c71",
+      "code": "figure-without-caption",
+      "section_code": "27.1",
+      "message": "Image on page 402 (index 0) had no paired caption."
+    },
+    {
+      "id": "fa2aae7218ecabb6",
+      "code": "figure-without-caption",
+      "section_code": "27.1",
+      "message": "Image on page 402 (index 1) had no paired caption."
+    },
+    {
+      "id": "d28b6b1ed14d1eb4",
+      "code": "figure-without-caption",
+      "section_code": "27.9",
+      "message": "Image on page 438 (index 0) had no paired caption."
+    },
+    {
+      "id": "c634e908538e69f9",
+      "code": "figure-without-caption",
+      "section_code": "27.9.1",
+      "message": "Image on page 438 (index 0) had no paired caption."
+    },
+    {
+      "id": "c39bb9663324c11d",
+      "code": "figure-without-caption",
+      "section_code": "28",
+      "message": "Image on page 470 (index 1) had no paired caption."
+    },
+    {
+      "id": "d12a01e1b61f37a6",
+      "code": "figure-without-caption",
+      "section_code": "28",
+      "message": "Image on page 470 (index 0) had no paired caption."
+    },
+    {
+      "id": "9c8db49fe2e149d9",
+      "code": "figure-without-caption",
+      "section_code": "28.1",
+      "message": "Image on page 470 (index 1) had no paired caption."
+    },
+    {
+      "id": "dcdc8501970a7f18",
+      "code": "figure-without-caption",
+      "section_code": "28.1",
+      "message": "Image on page 470 (index 0) had no paired caption."
+    },
+    {
+      "id": "3842608db4b50190",
+      "code": "figure-without-caption",
+      "section_code": "3",
+      "message": "Image on page 24 (index 1) had no paired caption."
+    },
+    {
+      "id": "39c5b7b9303968f6",
+      "code": "figure-without-caption",
+      "section_code": "3",
+      "message": "Image on page 60 (index 0) had no paired caption."
+    },
+    {
+      "id": "5970eab54b080557",
+      "code": "figure-without-caption",
+      "section_code": "3",
+      "message": "Image on page 60 (index 1) had no paired caption."
+    },
+    {
+      "id": "f410d4dfb7855f90",
+      "code": "figure-without-caption",
+      "section_code": "3",
+      "message": "Image on page 24 (index 0) had no paired caption."
+    },
+    {
+      "id": "59fcc53400290a65",
+      "code": "figure-without-caption",
+      "section_code": "3.1",
+      "message": "Image on page 24 (index 0) had no paired caption."
+    },
+    {
+      "id": "65f3633bd18e0340",
+      "code": "figure-without-caption",
+      "section_code": "3.1",
+      "message": "Image on page 24 (index 1) had no paired caption."
+    },
+    {
+      "id": "28a9d7f069497ab4",
+      "code": "figure-without-caption",
+      "section_code": "3.4",
+      "message": "Image on page 60 (index 0) had no paired caption."
+    },
+    {
+      "id": "6e3c2e7195485d0e",
+      "code": "figure-without-caption",
+      "section_code": "3.4",
+      "message": "Image on page 60 (index 1) had no paired caption."
+    },
+    {
+      "id": "83dbfb62d3e53457",
+      "code": "figure-without-caption",
+      "section_code": "3.4.2",
+      "message": "Image on page 60 (index 0) had no paired caption."
+    },
+    {
+      "id": "e60568ec2431ebd8",
+      "code": "figure-without-caption",
+      "section_code": "3.4.2",
+      "message": "Image on page 60 (index 1) had no paired caption."
+    },
+    {
+      "id": "139d827354cf1a6e",
+      "code": "figure-without-caption",
+      "section_code": "4",
+      "message": "Image on page 61 (index 0) had no paired caption."
+    },
+    {
+      "id": "5fffa423de148395",
+      "code": "figure-without-caption",
+      "section_code": "4",
+      "message": "Image on page 61 (index 1) had no paired caption."
+    },
+    {
+      "id": "30e21cefe8d1f895",
+      "code": "figure-without-caption",
+      "section_code": "4.1",
+      "message": "Image on page 61 (index 1) had no paired caption."
+    },
+    {
+      "id": "4a7cdd3720397c83",
+      "code": "figure-without-caption",
+      "section_code": "4.1",
+      "message": "Image on page 61 (index 0) had no paired caption."
+    },
+    {
+      "id": "5c7420e004cb0d5a",
+      "code": "figure-without-caption",
+      "section_code": "5",
+      "message": "Image on page 67 (index 0) had no paired caption."
+    },
+    {
+      "id": "7a4fd4b1477eb477",
+      "code": "figure-without-caption",
+      "section_code": "5",
+      "message": "Image on page 67 (index 1) had no paired caption."
+    },
+    {
+      "id": "a3b9412079d7339f",
+      "code": "figure-without-caption",
+      "section_code": "5.1",
+      "message": "Image on page 67 (index 1) had no paired caption."
+    },
+    {
+      "id": "eca2d53115ca2119",
+      "code": "figure-without-caption",
+      "section_code": "5.1",
+      "message": "Image on page 67 (index 0) had no paired caption."
+    },
+    {
+      "id": "6d5cf8e6366054e4",
+      "code": "figure-without-caption",
+      "section_code": "6",
+      "message": "Image on page 80 (index 0) had no paired caption."
+    },
+    {
+      "id": "769206136456907e",
+      "code": "figure-without-caption",
+      "section_code": "6",
+      "message": "Image on page 80 (index 1) had no paired caption."
+    },
+    {
+      "id": "7d172340ddbbd387",
+      "code": "figure-without-caption",
+      "section_code": "6.1",
+      "message": "Image on page 80 (index 1) had no paired caption."
+    },
+    {
+      "id": "c2bcca5d53449d56",
+      "code": "figure-without-caption",
+      "section_code": "6.1",
+      "message": "Image on page 80 (index 0) had no paired caption."
+    },
+    {
+      "id": "8dca71fa554c7bb2",
+      "code": "figure-without-caption",
+      "section_code": "7",
+      "message": "Image on page 87 (index 1) had no paired caption."
+    },
+    {
+      "id": "364f95d1cf777366",
+      "code": "figure-without-caption",
+      "section_code": "7.1",
+      "message": "Image on page 87 (index 1) had no paired caption."
+    },
+    {
+      "id": "f3e78d8120c254d0",
+      "code": "figure-without-caption",
+      "section_code": "7.1",
+      "message": "Image on page 87 (index 0) had no paired caption."
+    },
+    {
+      "id": "29367647e430ab60",
+      "code": "figure-without-caption",
+      "section_code": "8",
+      "message": "Image on page 95 (index 1) had no paired caption."
+    },
+    {
+      "id": "2f9d2f1233c46c0f",
+      "code": "figure-without-caption",
+      "section_code": "8",
+      "message": "Image on page 95 (index 0) had no paired caption."
+    },
+    {
+      "id": "5145a0539d1e6333",
+      "code": "figure-without-caption",
+      "section_code": "8.1",
+      "message": "Image on page 95 (index 0) had no paired caption."
+    },
+    {
+      "id": "5cdf74825f864002",
+      "code": "figure-without-caption",
+      "section_code": "8.1",
+      "message": "Image on page 95 (index 1) had no paired caption."
+    },
+    {
+      "id": "6a2602c28baecd66",
+      "code": "figure-without-caption",
+      "section_code": "9",
+      "message": "Image on page 110 (index 1) had no paired caption."
+    },
+    {
+      "id": "6f5dc54b787d59fb",
+      "code": "figure-without-caption",
+      "section_code": "9",
+      "message": "Image on page 110 (index 0) had no paired caption."
+    },
+    {
+      "id": "0c2239493e6a67de",
+      "code": "figure-without-caption",
+      "section_code": "9.1",
+      "message": "Image on page 110 (index 1) had no paired caption."
+    },
+    {
+      "id": "4819b25ec57106e2",
+      "code": "figure-without-caption",
+      "section_code": "9.1",
+      "message": "Image on page 110 (index 0) had no paired caption."
+    },
+    {
+      "id": "47faf1e121dee7a5",
+      "code": "ocr-leak-in-section-body",
+      "section_code": "3",
+      "message": "OCR-leak run of 22 short tokens in §3; elided. Likely a figure that escaped the figure-clipper. Elided text (truncated): X X X X AK FA X X X X X X X HI FA X X X X X X X"
+    },
+    {
+      "id": "daf3ff9ffc439f4f",
+      "code": "ocr-leak-in-section-body",
+      "section_code": "3.4",
+      "message": "OCR-leak run of 22 short tokens in §3.4; elided. Likely a figure that escaped the figure-clipper. Elided text (truncated): X X X X AK FA X X X X X X X HI FA X X X X X X X"
+    },
+    {
+      "id": "d0e5e769b553361a",
+      "code": "ocr-leak-in-section-body",
+      "section_code": "3.4.1",
+      "message": "OCR-leak run of 22 short tokens in §3.4.1; elided. Likely a figure that escaped the figure-clipper. Elided text (truncated): X X X X AK FA X X X X X X X HI FA X X X X X X X"
+    },
+    {
+      "id": "205d0c5727206e5c",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 23 end-page (PDF p284) had no parseable FAA header; recovered `23-6` from PDF p283 (walk-back 1)"
+    },
+    {
+      "id": "373bb9b6b9462b6c",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 3 end-page (PDF p60) had no parseable FAA header; recovered `3-36` from PDF p59 (walk-back 1)"
+    },
+    {
+      "id": "8a69ffc56835d42a",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 23.13 end-page (PDF p284) had no parseable FAA header; recovered `23-6` from PDF p283 (walk-back 1)"
+    },
+    {
+      "id": "9aba89131e682583",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 23.13.4 end-page (PDF p284) had no parseable FAA header; recovered `23-6` from PDF p283 (walk-back 1)"
+    },
+    {
+      "id": "bd9ab33449854717",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 3.4.2 end-page (PDF p60) had no parseable FAA header; recovered `3-36` from PDF p59 (walk-back 1)"
+    },
+    {
+      "id": "c6073cfe580f7427",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 1 end-page (PDF p17) had no parseable FAA header; recovered `1-1` from PDF p16 (walk-back 1)"
+    },
+    {
+      "id": "f6ea71bf353004b3",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 3.4 end-page (PDF p60) had no parseable FAA header; recovered `3-36` from PDF p59 (walk-back 1)"
+    },
+    {
+      "id": "77f7d5d03d6bdbee",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "12",
+      "message": "Table on page 153 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "9f0a3ca10132f00a",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "12",
+      "message": "Table on page 149 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "e4ed21d8a7bccf54",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "12",
+      "message": "Table on page 152 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "9efbab51ac97e96b",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "12.4",
+      "message": "Table on page 149 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "61c0cb3a04764b9f",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "12.4.1",
+      "message": "Table on page 149 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "3b9b78b3cafa95fc",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "12.5",
+      "message": "Table on page 152 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "08c2b54b7273a689",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "12.6",
+      "message": "Table on page 153 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "81b5e7229d8f19ba",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "12.6",
+      "message": "Table on page 152 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "c1d8f5b82c7c43b0",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "13",
+      "message": "Table on page 160 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "6507f270fa7320ce",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "13.4",
+      "message": "Table on page 160 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "36c82c3af3823a3e",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "2",
+      "message": "Table on page 22 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "34d5cf47ff372d72",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "2.3.2",
+      "message": "Table on page 22 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "7529ff39b7aff963",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "2.3.3",
+      "message": "Table on page 22 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "e8985bea234bedf4",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "2.3.4",
+      "message": "Table on page 22 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "9fcf30ce17d416ec",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "2.4",
+      "message": "Table on page 22 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "f3264adf19a89a9a",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "2.5",
+      "message": "Table on page 22 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "28952be02921f9f8",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "22",
+      "message": "Table on page 275 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "95c41855c1b63842",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "22.7.10",
+      "message": "Table on page 275 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "6afbb9934e9f6edb",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "22.8",
+      "message": "Table on page 275 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "f71f84f69ae8058b",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "22.8.1",
+      "message": "Table on page 275 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "0b4b06dedf2ccdf2",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "24",
+      "message": "Table on page 324 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "34163a726d3e96f5",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "24",
+      "message": "Table on page 303 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "8f9de184e1218880",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "24",
+      "message": "Table on page 300 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "8f9de184e1218880",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "24",
+      "message": "Table on page 300 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "c8588df1effd0e82",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "24",
+      "message": "Table on page 306 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "f1cfa4b2338644e5",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "24",
+      "message": "Table on page 296 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "4073123cb107511f",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "24.4",
+      "message": "Table on page 300 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "4073123cb107511f",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "24.4",
+      "message": "Table on page 300 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "4c7e53dcca63ba19",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "24.4",
+      "message": "Table on page 306 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "73614770d79a86e0",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "24.4",
+      "message": "Table on page 303 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "cbf85f88f699396a",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "24.4",
+      "message": "Table on page 296 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "265fb8f54706f788",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "24.4.3",
+      "message": "Table on page 306 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "4a9e6b16c29d8915",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "24.4.3",
+      "message": "Table on page 303 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "9711c8d64c42db84",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "24.4.3",
+      "message": "Table on page 300 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "9711c8d64c42db84",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "24.4.3",
+      "message": "Table on page 300 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "f5f59c51b0080d8a",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "24.4.3",
+      "message": "Table on page 296 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "3ebf63fc8c0d8143",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "24.6",
+      "message": "Table on page 324 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "257b5d09cc161278",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "24.6.1",
+      "message": "Table on page 324 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "7d7946e5f8e9a1d5",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "25",
+      "message": "Table on page 349 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "8c32e04162b7a52f",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "25",
+      "message": "Table on page 346 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "9470b99a33577c55",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "25",
+      "message": "Table on page 361 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "4641ce652e514a0d",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "25.4",
+      "message": "Table on page 346 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "e72b162d2e45ae83",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "25.4",
+      "message": "Table on page 349 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "2ab7f9f80d6d39e8",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "25.4.2",
+      "message": "Table on page 346 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "689fdd67c8d58817",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "25.4.3",
+      "message": "Table on page 349 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "d8bea2a4c777543e",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "25.5",
+      "message": "Table on page 361 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "4e8481ffe3f286a5",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "25.5.1",
+      "message": "Table on page 361 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "30762c208a83e69b",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "26",
+      "message": "Table on page 377 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "8dc4d50809b4582f",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "26",
+      "message": "Table on page 389 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "a18265a5b9b10740",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "26",
+      "message": "Table on page 397 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "c3cdac70928a6574",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "26",
+      "message": "Table on page 396 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "d13b0e941dd58cda",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "26",
+      "message": "Table on page 373 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "d543741e8c2963e7",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "26",
+      "message": "Table on page 380 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "439c33443d8dc18a",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "26.2",
+      "message": "Table on page 377 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "49bc6791902f9af7",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "26.2",
+      "message": "Table on page 380 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "9b43f099b754aa5c",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "26.2",
+      "message": "Table on page 373 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "268536b119dcc81d",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "26.2.4",
+      "message": "Table on page 373 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "f17e49b8be57fd31",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "26.2.4",
+      "message": "Table on page 377 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "49f12c60d456a03b",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "26.2.5",
+      "message": "Table on page 380 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "eb6639fdd433a217",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "26.4",
+      "message": "Table on page 389 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "7a49eabba1b23e2a",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "26.4.3",
+      "message": "Table on page 389 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "caceb16f4d88f733",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "26.7",
+      "message": "Table on page 397 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "e182be72d7b516f9",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "26.7",
+      "message": "Table on page 396 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "42c4faff81ea2e26",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "26.7.2",
+      "message": "Table on page 397 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "61b76e80353131d2",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "26.7.2",
+      "message": "Table on page 396 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "0aee4b0a5c28a315",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27",
+      "message": "Table on page 407 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "315f457bd1efe12e",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27",
+      "message": "Table on page 414 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "315f457bd1efe12e",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27",
+      "message": "Table on page 414 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "37c5f9faf8d8e08f",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27",
+      "message": "Table on page 444 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "5e466e6dbcae3de8",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27",
+      "message": "Table on page 463 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "6179e65cd0c0c81a",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27",
+      "message": "Table on page 421 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "6619806c8c77186f",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27",
+      "message": "Table on page 454 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "6622718154d2cb51",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27",
+      "message": "Table on page 427 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "b8301e04d4d6327d",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27",
+      "message": "Table on page 441 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "be69e5b232d49039",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27",
+      "message": "Table on page 437 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "de8149b7085487b9",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27",
+      "message": "Table on page 442 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "f860afbfd58095f4",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27",
+      "message": "Table on page 406 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "fbb218b119ba83ac",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27",
+      "message": "Table on page 413 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "86071bc79e035e81",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27.12",
+      "message": "Table on page 454 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "0c6b32124bf2ba35",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27.13",
+      "message": "Table on page 454 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "a11087e6499f4d10",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27.17",
+      "message": "Table on page 463 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "0eeb681d3da7baaf",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27.17.4",
+      "message": "Table on page 463 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "20f0042b85ed7e68",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27.2",
+      "message": "Table on page 406 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "c9fdd85371c3d3bb",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27.2.1",
+      "message": "Table on page 406 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "a8315b4d79a8b00c",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27.3",
+      "message": "Table on page 407 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "4338f9cfc1a71812",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27.4",
+      "message": "Table on page 421 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "8c99de8b6fd71066",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27.4",
+      "message": "Table on page 414 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "8c99de8b6fd71066",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27.4",
+      "message": "Table on page 414 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "94c31718581d78a7",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27.4",
+      "message": "Table on page 413 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "a04fc2f4dbef5a33",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27.4",
+      "message": "Table on page 407 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "2f63695f367b7d7c",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27.4.1",
+      "message": "Table on page 407 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "58d816afb9dd49a5",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27.4.2",
+      "message": "Table on page 414 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "58d816afb9dd49a5",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27.4.2",
+      "message": "Table on page 414 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "c3d1ff21fd92b51b",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27.4.2",
+      "message": "Table on page 407 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "dc1d422bf1caa9f9",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27.4.2",
+      "message": "Table on page 413 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "c29cb1be333d7ffb",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27.4.4",
+      "message": "Table on page 421 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "e4043164032750e8",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27.6",
+      "message": "Table on page 427 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "fdfee97a808763d3",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27.6.4",
+      "message": "Table on page 427 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "02102a315da0008d",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27.9",
+      "message": "Table on page 441 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "4931ebd242e76ad0",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27.9",
+      "message": "Table on page 437 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "68574e3b15c695f4",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27.9",
+      "message": "Table on page 442 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "fb091bc2b039b6ff",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27.9",
+      "message": "Table on page 444 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "22eecf6a3cc9ec90",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27.9.1",
+      "message": "Table on page 437 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "6c143d256c52e7b6",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27.9.2",
+      "message": "Table on page 441 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "2d76e706289cbb7b",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27.9.3",
+      "message": "Table on page 444 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "7c95e1c177ae512e",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "27.9.3",
+      "message": "Table on page 442 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "0430b5c598b11c72",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 55 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "1dd676881da639f9",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 40 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "1dd676881da639f9",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 40 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "268ad886dd769c25",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 32 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "268ad886dd769c25",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 32 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "2bd72304c00c96a9",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 36 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "3c08cb96e69048d6",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 43 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "3c857dd3a56f73b8",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 51 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "446a6338b930a040",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 44 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "446a6338b930a040",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 44 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "44f698337868558f",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 42 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "47c2bfecb57f18e0",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 54 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "502c8cf457d9da23",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 41 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "502c8cf457d9da23",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 41 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "5bc01ec070b6ac58",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 52 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "5bc01ec070b6ac58",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 52 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "5e3318bd62d22710",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 38 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "5e3318bd62d22710",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 38 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "62ccf2b8c99dff69",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 56 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "62ccf2b8c99dff69",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 56 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "6376dad26c4e91a9",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 48 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "6376dad26c4e91a9",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 48 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "70d638026cc36211",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 49 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "70d638026cc36211",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 49 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "73eabbb2bd97a86b",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 50 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "73eabbb2bd97a86b",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 50 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "7bbd5ba7e893093c",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 37 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "89d58204d91d995e",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 58 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "89d58204d91d995e",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 58 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "9501068644182430",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 45 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "9501068644182430",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 45 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "a202b3dce71c431b",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 57 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "a202b3dce71c431b",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 57 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "aace9d64e95d0070",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 59 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "aace9d64e95d0070",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 59 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "b6261eb40555fc43",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 31 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "d611da80b0d5ef52",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 47 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "d611da80b0d5ef52",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 47 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "e7d5eb1ead798fa5",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 39 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "ed11eb267d5b3b91",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 33 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "ee63c0a1a3bfe7e0",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 53 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "f7843421f3b550ae",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 46 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "f7843421f3b550ae",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 46 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "02a54e207de1fabe",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 59 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "02a54e207de1fabe",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 59 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "0cd345bc1fa3c4f2",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 45 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "0cd345bc1fa3c4f2",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 45 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "1c37dd1184489f28",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 43 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "1ff001efe1e5ad02",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 44 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "1ff001efe1e5ad02",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 44 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "37d6d0cc802df67b",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 32 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "37d6d0cc802df67b",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 32 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "3c4158cb9f44981e",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 52 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "3c4158cb9f44981e",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 52 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "47eacfd868f10d07",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 31 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "4dc89ccba7b0ac60",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 39 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "531089d5b264a50f",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 55 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "5386841dc4800c97",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 58 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "5386841dc4800c97",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 58 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "598b72de8859be60",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 57 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "598b72de8859be60",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 57 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "63a3dfe7545da152",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 48 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "63a3dfe7545da152",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 48 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "880d41210aebfd14",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 33 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "8a6399ccbd39d6e7",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 38 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "8a6399ccbd39d6e7",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 38 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "a2b9deaf579c3552",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 46 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "a2b9deaf579c3552",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 46 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "a5c9d5936d086511",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 53 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "b145382b06ea5fcd",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 42 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "b1d19e111e83cb33",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 56 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "b1d19e111e83cb33",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 56 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "b7c10ad387e12fb3",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 50 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "b7c10ad387e12fb3",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 50 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "b82854f4aa14f2d9",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 40 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "b82854f4aa14f2d9",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 40 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "c075fbbe9de1ee61",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 36 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "c22439761bc29fac",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 41 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "c22439761bc29fac",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 41 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "d57332051cede8d1",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 54 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "d68e4779175299a7",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 49 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "d68e4779175299a7",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 49 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "e1a2af0d1ad7ce34",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 47 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "e1a2af0d1ad7ce34",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 47 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "ed3ef430e04e52b0",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 51 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "febd96c74770e487",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4",
+      "message": "Table on page 37 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "13f74dfd439d60a4",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.1",
+      "message": "Table on page 31 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "bdfcf3a7f8af23ef",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.1",
+      "message": "Table on page 32 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "bdfcf3a7f8af23ef",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.1",
+      "message": "Table on page 32 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "d2f38cf704085392",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.1",
+      "message": "Table on page 33 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "0b2acb51a8107f9b",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 59 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "0b2acb51a8107f9b",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 59 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "1543ca4c8a089c0e",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 55 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "1836b24503eccc10",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 39 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "4ab18b56678f9f29",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 57 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "4ab18b56678f9f29",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 57 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "4c8ef1eeda22934f",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 43 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "5a1074e328265705",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 46 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "5a1074e328265705",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 46 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "6497fc306280f353",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 44 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "6497fc306280f353",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 44 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "6b0c1cef36d228c0",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 38 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "6b0c1cef36d228c0",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 38 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "6cd0a9f9d65a9548",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 56 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "6cd0a9f9d65a9548",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 56 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "728d38dd6f9cf667",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 45 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "728d38dd6f9cf667",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 45 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "7a7a13cf1109730e",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 52 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "7a7a13cf1109730e",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 52 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "7c66c2ac785f504e",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 58 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "7c66c2ac785f504e",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 58 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "8131b87159f7c73b",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 50 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "8131b87159f7c73b",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 50 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "90df317cb374e305",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 54 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "92d51194640c8d80",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 40 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "92d51194640c8d80",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 40 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "9babd27644b404ed",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 42 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "b5a8dcc112e16acd",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 49 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "b5a8dcc112e16acd",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 49 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "c1cf5450816f5e31",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 37 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "c2d2ac14cf1b5ba1",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 47 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "c2d2ac14cf1b5ba1",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 47 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "d335b478ec9e8cd9",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 51 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "d8041fc0abe76a27",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 36 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "e693fd950874b600",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 53 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "e72f85f931827bf8",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 41 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "e72f85f931827bf8",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 41 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "eb609452fbb616b1",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 48 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "eb609452fbb616b1",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3.4.2",
+      "message": "Table on page 48 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "29266ad723281e27",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "4",
+      "message": "Table on page 66 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "4694dfd7b3471cca",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "4",
+      "message": "Table on page 62 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "fd59d820df6e8cae",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "4.2",
+      "message": "Table on page 62 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "80db95c8d210aa02",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "4.4",
+      "message": "Table on page 66 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "266c2d63141d0107",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "5",
+      "message": "Table on page 75 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "319f8a11315e45ca",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "5",
+      "message": "Table on page 69 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "319f8a11315e45ca",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "5",
+      "message": "Table on page 69 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "4ebc02ee1902cdfd",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "5",
+      "message": "Table on page 73 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "1d2e9547821248e0",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "5.5",
+      "message": "Table on page 69 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "1d2e9547821248e0",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "5.5",
+      "message": "Table on page 69 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "b9db70e81dca151f",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "5.5.2",
+      "message": "Table on page 69 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "b9db70e81dca151f",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "5.5.2",
+      "message": "Table on page 69 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "e9c604af5ebbd70f",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "5.6",
+      "message": "Table on page 73 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "ca57aae4c93bb205",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "5.6.3",
+      "message": "Table on page 73 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "b98fe2216dba2abb",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "5.7",
+      "message": "Table on page 75 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "f8a278fef98342e5",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "6",
+      "message": "Table on page 86 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "4f41eb73df2bb8fd",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "6.7",
+      "message": "Table on page 86 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "611c28170752ca7b",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "6.7.1",
+      "message": "Table on page 86 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "44f58a66dc58a9c4",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "8",
+      "message": "Table on page 97 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "04f948943de24492",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "8.2",
+      "message": "Table on page 97 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "c8d785f43ee9a14a",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "8.2.2",
+      "message": "Table on page 97 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "51078b66c4ce0298",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "8.2.3",
+      "message": "Table on page 97 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "7ffa3a361d5d5f96",
+      "code": "tablish-block-not-converted",
+      "section_code": "12",
+      "message": "Table 0 in §12 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "b9a4267477f0695e",
+      "code": "tablish-block-not-converted",
+      "section_code": "12",
+      "message": "Table 2 in §12 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "f1a571ef995a8020",
+      "code": "tablish-block-not-converted",
+      "section_code": "12",
+      "message": "Table 1 in §12 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "25f990f942303b26",
+      "code": "tablish-block-not-converted",
+      "section_code": "12.4",
+      "message": "Table 0 in §12.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "357ccd32d0291aeb",
+      "code": "tablish-block-not-converted",
+      "section_code": "12.4.1",
+      "message": "Table 0 in §12.4.1 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "6789d03f94de1dc1",
+      "code": "tablish-block-not-converted",
+      "section_code": "12.5",
+      "message": "Table 0 in §12.5 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "465c22e89df6563d",
+      "code": "tablish-block-not-converted",
+      "section_code": "12.6",
+      "message": "Table 0 in §12.6 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "967bf5114eaf8039",
+      "code": "tablish-block-not-converted",
+      "section_code": "12.6",
+      "message": "Table 1 in §12.6 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "b2134ddc630b80ed",
+      "code": "tablish-block-not-converted",
+      "section_code": "13",
+      "message": "Table 0 in §13 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "9e4d74a418e64326",
+      "code": "tablish-block-not-converted",
+      "section_code": "13.4",
+      "message": "Table 0 in §13.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "5f49adfe1b8cfcb6",
+      "code": "tablish-block-not-converted",
+      "section_code": "2",
+      "message": "Table 1 in §2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "2eaf23f4dd273667",
+      "code": "tablish-block-not-converted",
+      "section_code": "2.3.2",
+      "message": "Table 0 in §2.3.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "5473ffbcff2311ce",
+      "code": "tablish-block-not-converted",
+      "section_code": "2.3.3",
+      "message": "Table 0 in §2.3.3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "74647b6d56619f2b",
+      "code": "tablish-block-not-converted",
+      "section_code": "2.3.4",
+      "message": "Table 0 in §2.3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "764791e7391772ae",
+      "code": "tablish-block-not-converted",
+      "section_code": "2.4",
+      "message": "Table 0 in §2.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "636d075088d410c1",
+      "code": "tablish-block-not-converted",
+      "section_code": "2.5",
+      "message": "Table 0 in §2.5 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "fb1699fb082bfa3e",
+      "code": "tablish-block-not-converted",
+      "section_code": "22",
+      "message": "Table 0 in §22 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "379a5bea85f13935",
+      "code": "tablish-block-not-converted",
+      "section_code": "22.7.10",
+      "message": "Table 0 in §22.7.10 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "ff583c37c2dc0c0c",
+      "code": "tablish-block-not-converted",
+      "section_code": "22.8",
+      "message": "Table 0 in §22.8 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "d18ef23fbcf40f77",
+      "code": "tablish-block-not-converted",
+      "section_code": "22.8.1",
+      "message": "Table 0 in §22.8.1 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "2d40926ce467fa66",
+      "code": "tablish-block-not-converted",
+      "section_code": "24",
+      "message": "Table 7 in §24 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "5b9400d1eabb2ced",
+      "code": "tablish-block-not-converted",
+      "section_code": "24",
+      "message": "Table 6 in §24 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "5f83f9bdebe17cd0",
+      "code": "tablish-block-not-converted",
+      "section_code": "24",
+      "message": "Table 5 in §24 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "764abb03935a03fa",
+      "code": "tablish-block-not-converted",
+      "section_code": "24",
+      "message": "Table 3 in §24 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "d86f03b12f759958",
+      "code": "tablish-block-not-converted",
+      "section_code": "24",
+      "message": "Table 2 in §24 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "e052a67a31e3fff5",
+      "code": "tablish-block-not-converted",
+      "section_code": "24",
+      "message": "Table 4 in §24 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "340084593c50dae6",
+      "code": "tablish-block-not-converted",
+      "section_code": "24.4",
+      "message": "Table 3 in §24.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "7d29e8fc9800b805",
+      "code": "tablish-block-not-converted",
+      "section_code": "24.4",
+      "message": "Table 2 in §24.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "9989e48a0144dd53",
+      "code": "tablish-block-not-converted",
+      "section_code": "24.4",
+      "message": "Table 4 in §24.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "bf078e5efa01456f",
+      "code": "tablish-block-not-converted",
+      "section_code": "24.4",
+      "message": "Table 5 in §24.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "f4379ae58f7ea528",
+      "code": "tablish-block-not-converted",
+      "section_code": "24.4",
+      "message": "Table 6 in §24.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "441c36fed6b98ed1",
+      "code": "tablish-block-not-converted",
+      "section_code": "24.4.3",
+      "message": "Table 3 in §24.4.3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "5dc1046f3c77548c",
+      "code": "tablish-block-not-converted",
+      "section_code": "24.4.3",
+      "message": "Table 4 in §24.4.3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "827d051185b68b35",
+      "code": "tablish-block-not-converted",
+      "section_code": "24.4.3",
+      "message": "Table 5 in §24.4.3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "d76fc690735e4ffd",
+      "code": "tablish-block-not-converted",
+      "section_code": "24.4.3",
+      "message": "Table 2 in §24.4.3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "e113510b2bc1f783",
+      "code": "tablish-block-not-converted",
+      "section_code": "24.4.3",
+      "message": "Table 1 in §24.4.3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "42b86e7af2cdbe32",
+      "code": "tablish-block-not-converted",
+      "section_code": "24.6",
+      "message": "Table 0 in §24.6 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "3bd5a57631ff9f16",
+      "code": "tablish-block-not-converted",
+      "section_code": "24.6.1",
+      "message": "Table 0 in §24.6.1 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "07b50fb3db01e2d9",
+      "code": "tablish-block-not-converted",
+      "section_code": "25",
+      "message": "Table 0 in §25 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "9d57d0ae2236bca6",
+      "code": "tablish-block-not-converted",
+      "section_code": "25",
+      "message": "Table 1 in §25 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "b0f5148516a83a77",
+      "code": "tablish-block-not-converted",
+      "section_code": "25",
+      "message": "Table 2 in §25 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "3a68a4978461e216",
+      "code": "tablish-block-not-converted",
+      "section_code": "25.4",
+      "message": "Table 1 in §25.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "8e904f55ba686ab0",
+      "code": "tablish-block-not-converted",
+      "section_code": "25.4",
+      "message": "Table 0 in §25.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "9801fdda3cfe19e8",
+      "code": "tablish-block-not-converted",
+      "section_code": "25.4.2",
+      "message": "Table 0 in §25.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "8da15a04b1d9bdbc",
+      "code": "tablish-block-not-converted",
+      "section_code": "25.4.3",
+      "message": "Table 0 in §25.4.3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "39934ed706f44421",
+      "code": "tablish-block-not-converted",
+      "section_code": "25.5",
+      "message": "Table 0 in §25.5 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "2c84b0f40952f504",
+      "code": "tablish-block-not-converted",
+      "section_code": "25.5.1",
+      "message": "Table 0 in §25.5.1 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "3a0dadadd5adf2a4",
+      "code": "tablish-block-not-converted",
+      "section_code": "26",
+      "message": "Table 1 in §26 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "75fd726721c10bfe",
+      "code": "tablish-block-not-converted",
+      "section_code": "26",
+      "message": "Table 0 in §26 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "9819abf0a4f73ad8",
+      "code": "tablish-block-not-converted",
+      "section_code": "26",
+      "message": "Table 5 in §26 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "a72fe80a679a8c42",
+      "code": "tablish-block-not-converted",
+      "section_code": "26",
+      "message": "Table 4 in §26 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "bd721d0010519c0f",
+      "code": "tablish-block-not-converted",
+      "section_code": "26",
+      "message": "Table 2 in §26 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "ca88828d7f4ff6f6",
+      "code": "tablish-block-not-converted",
+      "section_code": "26",
+      "message": "Table 6 in §26 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "8afe9b1e2c35ad8e",
+      "code": "tablish-block-not-converted",
+      "section_code": "26.2",
+      "message": "Table 0 in §26.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "cfe2f26f7aa199d8",
+      "code": "tablish-block-not-converted",
+      "section_code": "26.2",
+      "message": "Table 1 in §26.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "dbb92e0b24a9dda8",
+      "code": "tablish-block-not-converted",
+      "section_code": "26.2",
+      "message": "Table 2 in §26.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "845f9c7d44da4dcc",
+      "code": "tablish-block-not-converted",
+      "section_code": "26.2.4",
+      "message": "Table 0 in §26.2.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "d8310a1230dc6a04",
+      "code": "tablish-block-not-converted",
+      "section_code": "26.2.4",
+      "message": "Table 1 in §26.2.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "4b1c2a31d431fec3",
+      "code": "tablish-block-not-converted",
+      "section_code": "26.2.5",
+      "message": "Table 0 in §26.2.5 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "deb11ac522c5747e",
+      "code": "tablish-block-not-converted",
+      "section_code": "26.4",
+      "message": "Table 0 in §26.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "9cd1986f1f9cf0ca",
+      "code": "tablish-block-not-converted",
+      "section_code": "26.4.3",
+      "message": "Table 0 in §26.4.3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "557f3b595adb2443",
+      "code": "tablish-block-not-converted",
+      "section_code": "26.7",
+      "message": "Table 1 in §26.7 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "719b7ea5ffea02b1",
+      "code": "tablish-block-not-converted",
+      "section_code": "26.7",
+      "message": "Table 0 in §26.7 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "de7c9ecbfc83e917",
+      "code": "tablish-block-not-converted",
+      "section_code": "26.7.2",
+      "message": "Table 0 in §26.7.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "e3c5e2cfb44a6620",
+      "code": "tablish-block-not-converted",
+      "section_code": "26.7.2",
+      "message": "Table 1 in §26.7.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "12e3953cf0a33e12",
+      "code": "tablish-block-not-converted",
+      "section_code": "27",
+      "message": "Table 9 in §27 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "2ba1dc8415805672",
+      "code": "tablish-block-not-converted",
+      "section_code": "27",
+      "message": "Table 2 in §27 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "300e4d8d4c62a0ac",
+      "code": "tablish-block-not-converted",
+      "section_code": "27",
+      "message": "Table 10 in §27 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "38531d70bc871aa2",
+      "code": "tablish-block-not-converted",
+      "section_code": "27",
+      "message": "Table 7 in §27 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "5026dff02735a43e",
+      "code": "tablish-block-not-converted",
+      "section_code": "27",
+      "message": "Table 12 in §27 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "5acb1dcc9c3aa056",
+      "code": "tablish-block-not-converted",
+      "section_code": "27",
+      "message": "Table 14 in §27 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "7089b5ac2643d27a",
+      "code": "tablish-block-not-converted",
+      "section_code": "27",
+      "message": "Table 6 in §27 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "874b5565c98c7fb3",
+      "code": "tablish-block-not-converted",
+      "section_code": "27",
+      "message": "Table 1 in §27 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "8a79be8177497699",
+      "code": "tablish-block-not-converted",
+      "section_code": "27",
+      "message": "Table 5 in §27 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "8c2fe6728d661092",
+      "code": "tablish-block-not-converted",
+      "section_code": "27",
+      "message": "Table 15 in §27 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "b06bf2eb95dcec38",
+      "code": "tablish-block-not-converted",
+      "section_code": "27",
+      "message": "Table 13 in §27 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "ed9963647bb938ce",
+      "code": "tablish-block-not-converted",
+      "section_code": "27",
+      "message": "Table 11 in §27 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "f8127e3cf5d96fd9",
+      "code": "tablish-block-not-converted",
+      "section_code": "27",
+      "message": "Table 4 in §27 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "931482ef98fb6497",
+      "code": "tablish-block-not-converted",
+      "section_code": "27.12",
+      "message": "Table 0 in §27.12 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "87c22fdf075cb539",
+      "code": "tablish-block-not-converted",
+      "section_code": "27.13",
+      "message": "Table 0 in §27.13 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "36b4737fbf0086b0",
+      "code": "tablish-block-not-converted",
+      "section_code": "27.17",
+      "message": "Table 0 in §27.17 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "b17f80020e4e3e6c",
+      "code": "tablish-block-not-converted",
+      "section_code": "27.17.4",
+      "message": "Table 0 in §27.17.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "f1dbb85807fc8538",
+      "code": "tablish-block-not-converted",
+      "section_code": "27.2",
+      "message": "Table 1 in §27.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "fd96c27d97569dfa",
+      "code": "tablish-block-not-converted",
+      "section_code": "27.2.1",
+      "message": "Table 0 in §27.2.1 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "dc25d427a6ce9918",
+      "code": "tablish-block-not-converted",
+      "section_code": "27.3",
+      "message": "Table 0 in §27.3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "27515808470f1ea2",
+      "code": "tablish-block-not-converted",
+      "section_code": "27.4",
+      "message": "Table 3 in §27.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "4882ec7f52184f92",
+      "code": "tablish-block-not-converted",
+      "section_code": "27.4",
+      "message": "Table 4 in §27.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "bd74e1f0d2dc3da5",
+      "code": "tablish-block-not-converted",
+      "section_code": "27.4",
+      "message": "Table 0 in §27.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "c8418b6edc2a019f",
+      "code": "tablish-block-not-converted",
+      "section_code": "27.4",
+      "message": "Table 2 in §27.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "d51063820f4707b7",
+      "code": "tablish-block-not-converted",
+      "section_code": "27.4",
+      "message": "Table 5 in §27.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "497ec1e668fa8b45",
+      "code": "tablish-block-not-converted",
+      "section_code": "27.4.1",
+      "message": "Table 0 in §27.4.1 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "01a883ecfa04b7ae",
+      "code": "tablish-block-not-converted",
+      "section_code": "27.4.2",
+      "message": "Table 2 in §27.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "8412c39908211fe0",
+      "code": "tablish-block-not-converted",
+      "section_code": "27.4.2",
+      "message": "Table 0 in §27.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "9854ee1ad8a13195",
+      "code": "tablish-block-not-converted",
+      "section_code": "27.4.2",
+      "message": "Table 3 in §27.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "bc94bb1c5bef6264",
+      "code": "tablish-block-not-converted",
+      "section_code": "27.4.2",
+      "message": "Table 4 in §27.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "0761b11601eba702",
+      "code": "tablish-block-not-converted",
+      "section_code": "27.4.4",
+      "message": "Table 0 in §27.4.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "8e953b17b2e076e6",
+      "code": "tablish-block-not-converted",
+      "section_code": "27.6",
+      "message": "Table 1 in §27.6 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "b0d989224d180964",
+      "code": "tablish-block-not-converted",
+      "section_code": "27.6.4",
+      "message": "Table 0 in §27.6.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "2b06fc59370fd547",
+      "code": "tablish-block-not-converted",
+      "section_code": "27.9",
+      "message": "Table 3 in §27.9 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "8ae5d8db0e4e1b91",
+      "code": "tablish-block-not-converted",
+      "section_code": "27.9",
+      "message": "Table 2 in §27.9 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "95f6f694be1c6242",
+      "code": "tablish-block-not-converted",
+      "section_code": "27.9",
+      "message": "Table 1 in §27.9 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "c12495b1d5821bdd",
+      "code": "tablish-block-not-converted",
+      "section_code": "27.9",
+      "message": "Table 0 in §27.9 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "71638c985c9ade4f",
+      "code": "tablish-block-not-converted",
+      "section_code": "27.9.1",
+      "message": "Table 0 in §27.9.1 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "b990a5d04a65945f",
+      "code": "tablish-block-not-converted",
+      "section_code": "27.9.2",
+      "message": "Table 0 in §27.9.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "c48401c49a7ed7d2",
+      "code": "tablish-block-not-converted",
+      "section_code": "27.9.3",
+      "message": "Table 1 in §27.9.3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "ca3e6e7a51101e16",
+      "code": "tablish-block-not-converted",
+      "section_code": "27.9.3",
+      "message": "Table 0 in §27.9.3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "07a54a11b1a65b19",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 2 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "0a2cd4f0935cc4cc",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 14 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "0ca92ca1bdf15f79",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 12 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "13702d10b8ea5f31",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 18 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "1cccf4a0f55521c2",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 47 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "28d6ccf1956a5d23",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 11 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "36923de376506d74",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 13 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "3a4bce89d950cde0",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 23 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "408fd6637b6a7746",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 31 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "4408a7b71c6e9b40",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 35 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "61f70a22d949c671",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 34 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "66cbbe624178f31c",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 29 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "6a1839b41fbf78d6",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 26 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "6fac929bae64b573",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 36 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "7675f4bbc8292938",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 41 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "78536daae776d44e",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 39 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "7e12e2d162aef4e7",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 37 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "9b16d89795eddf9e",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 43 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "9bc177b5d331b29f",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 9 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "9d1c3a3d1674b99d",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 44 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "a48d1293c4d1fd65",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 3 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "a81c598eb69bf265",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 5 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "ab2dbdd9449ef2f3",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 27 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "ac41b2282a790129",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 42 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "b558a83c31c7ac32",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 15 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "b7cc50915d52c13e",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 45 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "be854d78195abeab",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 28 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "c62f4c792bc7fdee",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 10 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "c928d7fb4debcc50",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 17 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "c9fb464e25c6d9fe",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 33 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "cf6846e1000ab000",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 16 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "d3ae8470d6c454e9",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 25 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "d87e625bcc0cfca9",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 22 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "d97ba8bb60eb38c0",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 4 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "dc1d5ec3222a0d0b",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 46 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "e0ede9596bf4376e",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 40 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "e1bfa06c9e62c6ce",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 38 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "e281b7c22f82a9c5",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 21 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "e441a4ba131eab6a",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 19 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "ef3519e0512e254b",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 30 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "f45b077b31f306a8",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 32 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "f46c025e0cd6176b",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 20 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "f6df3ee7712fd6bc",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 24 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "01ac342cdc871966",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 32 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "024661a5bc60de73",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 21 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "027576341d195e7e",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 15 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "044dd7dfe53c3f89",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 25 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "0c00687e4caeae3f",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 19 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "127de50a410a3c3d",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 28 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "17448863b08ebfd6",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 45 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "18a3f1d20f2ca0e9",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 33 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "1b33cce16c29a352",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 10 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "1c91b896f2c17c24",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 35 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "3a4db8491392fc87",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 39 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "3eeb8bba6b5c68cd",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 17 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "45d2cce0cd906399",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 8 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "481cdd32212477ee",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 12 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "4e26acacb162203a",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 37 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "53d988edb0ff2123",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 16 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "54e3edac51759241",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 1 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "55a66874084ee92f",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 20 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "5b0128953b5351de",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 34 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "62e62d450f7360f2",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 3 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "744d60245864f7a5",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 40 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "7d4d7d42898d5589",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 24 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "7dd6262edb5aa6a9",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 0 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "7fe6260cdda58e87",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 29 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "88b8bfa5a561f9b0",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 11 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "8abe7e27820d35fd",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 23 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "8bbf91014e2f87bf",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 26 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "8f2e3e4ba24463e5",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 18 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "9775af13a387bf10",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 7 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "aa9d2549f3568f63",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 9 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "acf9464bd81b0a90",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 41 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "ae1f8efa771eb208",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 38 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "b42d11d8a1e88fb7",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 2 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "c1bf1b810d982008",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 22 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "c4a5d172d8264103",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 14 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "c56e8206c46c7172",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 31 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "cb651d0933d11a97",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 13 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "da6ca89fa6098e00",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 44 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "dac3525deb7f1202",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 30 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "f21291dfc923e4a8",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 43 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "f73b951f6b850512",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 36 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "fb88caaf6c75d937",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 42 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "fc6ebc1551e1cf44",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4",
+      "message": "Table 27 in §3.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "14ea03f8cffdf72d",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.1",
+      "message": "Table 0 in §3.4.1 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "58263787a0fe3ccd",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.1",
+      "message": "Table 1 in §3.4.1 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "941a01e5ffa88c9a",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.1",
+      "message": "Table 3 in §3.4.1 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "a8445ece959ae4cb",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.1",
+      "message": "Table 2 in §3.4.1 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "03fd05380a27e4cd",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 13 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "09f7b9295b7db64f",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 28 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "0aaa0e3afb4f2bb1",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 14 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "0b8f6943b349c6e8",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 39 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "0f1a06dff2c9dd3d",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 8 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "12c11a212c8bc218",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 26 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "246e47cb6bbf543c",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 29 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "285cb82e62f45440",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 20 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "2e44c52c4fa2db18",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 6 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "30a7d3eaa38dafcf",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 5 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "3974609214e6cbbf",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 23 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "3d5389146e693acd",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 7 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "3f42f007d4137ae7",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 27 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "42c3a86b56115890",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 2 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "48cc283b3af920dc",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 34 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "51df8881cb43c58a",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 17 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "5bfe5dc3a2f3dfe5",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 15 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "621b542af7abf247",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 32 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "667e1b63139298f0",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 33 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "70bcd63ce810ec67",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 31 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "77d22087d088849e",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 30 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "7a6f9d56262ee69b",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 22 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "80b7f20f95ae4ae3",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 10 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "82843f1f1e68bd50",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 24 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "91f7a9992f2686db",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 35 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "97e854e1d72d1b1e",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 3 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "a19b940c1857ba30",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 25 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "a47d1f27cec95b6c",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 9 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "b22175189c4f32a6",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 37 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "b5766fec23d772f3",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 16 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "b9b02c29034edee4",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 21 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "b9bd1f2b6d132b57",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 19 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "caf92d0cba548bd5",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 11 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "cb536385d811a825",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 38 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "ce9f9191afedbcb1",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 18 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "d000d03578cd826d",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 1 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "f162f95772b50fa0",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 4 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "f5b282a76d8d4d04",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 12 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "ff1ea200b3bbe11b",
+      "code": "tablish-block-not-converted",
+      "section_code": "3.4.2",
+      "message": "Table 36 in §3.4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "6141979a569c4779",
+      "code": "tablish-block-not-converted",
+      "section_code": "4",
+      "message": "Table 1 in §4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "ee95c43ca1835965",
+      "code": "tablish-block-not-converted",
+      "section_code": "4",
+      "message": "Table 0 in §4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "19239a413d04365b",
+      "code": "tablish-block-not-converted",
+      "section_code": "4.2",
+      "message": "Table 0 in §4.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "3a55c9099570f50a",
+      "code": "tablish-block-not-converted",
+      "section_code": "4.4",
+      "message": "Table 0 in §4.4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "366fbc7e8624c566",
+      "code": "tablish-block-not-converted",
+      "section_code": "5",
+      "message": "Table 1 in §5 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "389ea6a23234fbd3",
+      "code": "tablish-block-not-converted",
+      "section_code": "5",
+      "message": "Table 0 in §5 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "7097f25f306d55db",
+      "code": "tablish-block-not-converted",
+      "section_code": "5",
+      "message": "Table 3 in §5 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "a5ccaab33d333719",
+      "code": "tablish-block-not-converted",
+      "section_code": "5",
+      "message": "Table 2 in §5 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "37905632806bfd6e",
+      "code": "tablish-block-not-converted",
+      "section_code": "5.5",
+      "message": "Table 0 in §5.5 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "b8725cbc638142c8",
+      "code": "tablish-block-not-converted",
+      "section_code": "5.5",
+      "message": "Table 1 in §5.5 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "06cbc91c0c532cf6",
+      "code": "tablish-block-not-converted",
+      "section_code": "5.5.2",
+      "message": "Table 1 in §5.5.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "1450109e0c152b0f",
+      "code": "tablish-block-not-converted",
+      "section_code": "5.5.2",
+      "message": "Table 0 in §5.5.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "944cdc913b866348",
+      "code": "tablish-block-not-converted",
+      "section_code": "5.6",
+      "message": "Table 0 in §5.6 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "9ad3715aedad3b35",
+      "code": "tablish-block-not-converted",
+      "section_code": "5.6.3",
+      "message": "Table 0 in §5.6.3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "407ae53975fd2b8e",
+      "code": "tablish-block-not-converted",
+      "section_code": "5.7",
+      "message": "Table 0 in §5.7 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "4fbe771220596aea",
+      "code": "tablish-block-not-converted",
+      "section_code": "6",
+      "message": "Table 0 in §6 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "880f6c2eaa2649a7",
+      "code": "tablish-block-not-converted",
+      "section_code": "6.7",
+      "message": "Table 0 in §6.7 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "8c524c798f1d8848",
+      "code": "tablish-block-not-converted",
+      "section_code": "6.7.1",
+      "message": "Table 0 in §6.7.1 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "2faa1438f28e7a76",
+      "code": "tablish-block-not-converted",
+      "section_code": "8",
+      "message": "Table 0 in §8 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "89ad91ea2c5ff704",
+      "code": "tablish-block-not-converted",
+      "section_code": "8.2",
+      "message": "Table 0 in §8.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "2121953fb1752981",
+      "code": "tablish-block-not-converted",
+      "section_code": "8.2.2",
+      "message": "Table 0 in §8.2.2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "4a5f461f0860df5e",
+      "code": "tablish-block-not-converted",
+      "section_code": "8.2.3",
+      "message": "Table 0 in §8.2.3 kept as raw HTML embed: interior None cell suggests merged span."
+    }
+  ]
+}

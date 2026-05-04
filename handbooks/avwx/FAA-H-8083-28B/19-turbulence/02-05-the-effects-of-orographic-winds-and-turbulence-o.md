@@ -47,9 +47,4 @@ downdrafts over forested areas may be strong enough to force aircraft down into 
 aircraft is flown at the best rate-of-climb speed. This effect on the aircraft can be exacerbated by loss of
 aircraft performance because of the high-density altitude.
 
-![Figure 19-8. LLWS Example 
-19.2.4.2 Convective Wind Shear 
-See Section 22.7.3 for information on convective wind shear. 
-19.2.5 The Effects of Orographic Winds and Turbulence on Aviation Operations 
-19.2.5.1 High-Altitude Operations 
-Turbine-powered aircraft operating at cruise altitudes above FL180 in the vicinity of](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-5-00-llws-example-19-2-4-2-convective-wind-shear-see-.png)
+![Figure 19-8. LLWS Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-5-00-llws-example.png)

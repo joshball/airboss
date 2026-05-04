@@ -35,7 +35,4 @@ moisture is present). This is an area of potentially severe-to-extreme wind shea
 7 Durran, D. R., & Klemp J. B. (1983). A compressible model for the simulation of moist mountain waves. Monthly
 Weather Review, 111, 2341-2361.
 
-![Figure 16-9. Lenticular Clouds Associated with a Trapped Lee Wave 
-16.2.5 Persistent Horizontal Roll Vortices (Rotors) 
-When mountain waves are present, it is quite common for a rotor zone to develop near or below ridge level 
-on the downwind side of the mountain, under a wave crest and associated lenticular cloud (if](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-5-00-lenticular-clouds-associated-with-a-trapped-lee-.png)
+![Figure 16-9. Lenticular Clouds Associated with a Trapped Lee Wave](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-5-00-lenticular-clouds-associated-with-a-trapped-lee-.png)

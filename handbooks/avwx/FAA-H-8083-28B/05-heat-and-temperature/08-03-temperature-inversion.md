@@ -27,10 +27,6 @@ occur within it. Turbulence will be discussed at length in Chapter 19, Turbulenc
 
 Figure 5-9. Sounding with a Temperature Inversion
 
-![Figure 5-8. Sounding with an Isothermal Layer 
-5.8.3 Temperature Inversion 
-A temperature inversion, or simply inversion, is a layer in which the temperature increases with altitude. If 
-the base of the inversion is at the surface, it is termed a surface-based inversion. If the base of the inversion 
-is not at the surf](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-8-3-00-sounding-with-an-isothermal-layer-5-8-3-temperat.png)
+![Figure 5-8. Sounding with an Isothermal Layer](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-8-3-00-sounding-with-an-isothermal-layer.png)
 
 ![Figure 5-9. Sounding with a Temperature Inversion](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-8-3-01-sounding-with-a-temperature-inversion.png)

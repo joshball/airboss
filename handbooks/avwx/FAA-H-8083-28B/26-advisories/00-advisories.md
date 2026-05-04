@@ -1214,20 +1214,11 @@ WINDSHIFTS ACCOMPANYING THE THUNDERSTORMS MAY ALTER THE RUNWAY
 LANDING PATTERN WITH SOME STRONG WESTERLY WIND GUSTS.
 $$
 
-![Figure 26-1. AWC SIGMET Areas of Responsibility—CONUS 
- 
-Figure 26-2. AWC SIGMET Areas of Responsibility—Atlantic Basin](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-1-00-awc-sigmet-areas-of-responsibility-conus-figure-.png)
+![Figure 26-1. AWC SIGMET Areas of Responsibility—CONUS](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-1-00-awc-sigmet-areas-of-responsibility-conus.png)
 
 ![Figure 26-2. AWC SIGMET Areas of Responsibility—Atlantic Basin](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-1-01-awc-sigmet-areas-of-responsibility-atlantic-basi.png)
 
-![Figure 26-3. SIGMET Areas of Responsibility—Pacific Basin 
-26.2.2 SIGMET Identification 
-U.S. SIGMETs (other than Convective SIGMETs) are assigned a series identifier: 
-• 
-AWC for the CONUS: 
-o NOVEMBER, OSCAR, PAPA, QUEBEC, ROMEO, UNIFORM, VICTOR, WHISKEY, 
-XRAY, and YANKEE. Note that SIERRA and TANGO are excluded. 
-•](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-2-00-sigmet-areas-of-responsibility-pacific-basin-26-.png)
+![Figure 26-3. SIGMET Areas of Responsibility—Pacific Basin](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-2-00-sigmet-areas-of-responsibility-pacific-basin.png)
 
 ![Figure 26-5. AWC Convective SIGMET Areas of Responsibility](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-4-00-awc-convective-sigmet-areas-of-responsibility.png)
 
@@ -1235,45 +1226,13 @@ XRAY, and YANKEE. Note that SIERRA and TANGO are excluded.
 
 ![Figure 26-7. SIGMET Outside the CONUS—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-5-00-sigmet-outside-the-conus-example.png)
 
-![Figure 26-8. CWSU Areas of Responsibility 
-CWAs are valid for up to two hours and may include forecasts of conditions expected to begin within two 
-hours of issuance. If conditions are expected to persist after the advisory’s valid period, a statement to that 
-effect is included in the last line of the text. Additional](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-4-2-00-cwsu-areas-of-responsibility-cwas-are-valid-for-.png)
+![CWAs are issued by the NWS CWSU. CWSU areas of responsibility are depicted in Figure 26-8.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-4-2-00-cwsu-areas-of-responsibility.png)
 
-![Figure 26-9. CWA—Example 
-Table 26-5. Decoding a CWA 
-Line 
-Content 
-Description 
-1 
-ZDV 
-ARTCC identification 
-2 
-Phenomenon number (single digit, 1–6) 
-CWA 
-Product type (CWA) 
-032140 
-Beginning and/or issuance UTC date/time 
-2 
-ZDV 
-ARTCC identification 
-CWA 
-Product type 
-2 
-Phenomenon number (single digit, 1–6) 
-0](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-4-3-00-cwa-example-table-26-5-decoding-a-cwa-line-conte.png)
+![Figure 26-8. CWSU Areas of Responsibility](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-4-3-00-cwa-example.png)
 
-![Figure 26-10. Volcanic Ash Advisory Centers 
-The United States has two VAACs with responsibilities defined in ICAO Annex 3, Meteorological Service 
-for International Air Navigation. The Washington VAAC is jointly managed by the NESDIS SAB and the 
-NWS NCO. The Anchorage VAAC is managed by the NWS AAWU. 
-The Washington](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-5-1-00-volcanic-ash-advisory-centers-the-united-states-.png)
+![Figure 26-10. Volcanic Ash Advisory Centers](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-5-1-00-volcanic-ash-advisory-centers.png)
 
-![Figure 26-11. VAA in Graphical Format 
-26.6 Aviation Tropical Cyclone Advisory (TCA) 
-The aviation TCA is intended to provide tropical cyclone forecast guidance, through 24 hours, for 
-international aviation safety and routing purposes. TCAs are issued by the WMO’s TCAC for all ongoing 
-tropical cyclone activity in the](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-6-1-00-vaa-in-graphical-format-26-6-aviation-tropical-c.png)
+![Figure 26-11. VAA in Graphical Format](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-6-1-00-vaa-in-graphical-format.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-26-00-decoding-a-non-convective-sigmet-for-the-conus-l.html">
 <table><caption>Table 26-1. Decoding a Non-Convective SIGMET for the CONUS 
@@ -1290,9 +1249,9 @@ Product identifier
 100130 
 Issuance date/time UTC 
 2 
-SI</caption><thead><tr><th></th><th>Content</th><th></th></tr></thead><tbody><tr><td>Line</td><td></td><td>Description</td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>SFO</td><td>SIGMET area identifier</td></tr><tr><td>1</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>R</td><td>SIGMET series</td></tr><tr><td></td><td>UWS</td><td>Product identifier</td></tr><tr><td></td><td>100130</td><td>Issuance date/time UTC</td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>SIGMET</td><td>Product type</td></tr><tr><td>2</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>ROMEO</td><td>SIGMET series name</td></tr><tr><td></td><td>1</td><td>Series issuance number</td></tr><tr><td></td><td>VALID UNTIL 100530</td><td>Ending valid date/time UTC</td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>OR WA</td><td>Phenomenon location (states)</td></tr><tr><td>3</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>FROM SEA TO PDT TO EUG TO SEA</td><td>Phenomenon location
-(high-altitude VOR coordinates)</td></tr><tr><td>4</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>SEV TURB BTN FL280 AND FL350.
-CONDS CONTG BYD 1000Z</td><td>Phenomenon description</td></tr><tr><td>5</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table>
+SI</caption><thead><tr><th></th><th>Content</th><th></th></tr></thead><tbody><tr><td>Line</td><td></td><td>Description</td></tr><tr><td></td><td>SFO</td><td>SIGMET area identifier</td></tr><tr><td>1</td><td></td><td></td></tr><tr><td></td><td>R</td><td>SIGMET series</td></tr><tr><td></td><td>UWS</td><td>Product identifier</td></tr><tr><td></td><td>100130</td><td>Issuance date/time UTC</td></tr><tr><td></td><td>SIGMET</td><td>Product type</td></tr><tr><td>2</td><td></td><td></td></tr><tr><td></td><td>ROMEO</td><td>SIGMET series name</td></tr><tr><td></td><td>1</td><td>Series issuance number</td></tr><tr><td></td><td>VALID UNTIL 100530</td><td>Ending valid date/time UTC</td></tr><tr><td></td><td>OR WA</td><td>Phenomenon location (states)</td></tr><tr><td>3</td><td></td><td></td></tr><tr><td></td><td>FROM SEA TO PDT TO EUG TO SEA</td><td>Phenomenon location
+(high-altitude VOR coordinates)</td></tr><tr><td>4</td><td></td><td></td></tr><tr><td></td><td>SEV TURB BTN FL280 AND FL350.
+CONDS CONTG BYD 1000Z</td><td>Phenomenon description</td></tr><tr><td>5</td><td></td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-26-01-decoding-a-convective-sigmet-for-the-conus-line-.html">
@@ -1308,13 +1267,13 @@ Region (East, Central, or West)
 WST 
 Product identifier 
 221855 
-Issuance date/tim</caption><thead><tr><th>Line</th><th>Content</th><th>Description</th></tr></thead><tbody><tr><td>1</td><td>MKC</td><td>Issuing office (AWC)</td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>C</td><td>Region (East, Central, or West)</td></tr><tr><td></td><td>WST</td><td>Product identifier</td></tr><tr><td></td><td>221855</td><td>Issuance date/time (DDHHMM)</td></tr><tr><td>2</td><td>CONVECTIVE SIGMET</td><td>Product type</td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>20</td><td>Issuance number</td></tr><tr><td></td><td>C</td><td>Region (East, Central, or West)</td></tr><tr><td>3</td><td>VALID UNTIL 2055Z</td><td>Valid ending time (UTC)</td></tr><tr><td>4</td><td>ND SD</td><td>States/areas affected</td></tr><tr><td>5</td><td>FROM 90W MOT-GFK-ABR-90W MOT</td><td>Phenomenon location (high-altitude
-VOR coordinates)</td></tr><tr><td></td><td></td><td></td></tr><tr><td>6</td><td>INTSFYG AREA SEV TS MOVG FROM
+Issuance date/tim</caption><thead><tr><th>Line</th><th>Content</th><th>Description</th></tr></thead><tbody><tr><td>1</td><td>MKC</td><td>Issuing office (AWC)</td></tr><tr><td></td><td>C</td><td>Region (East, Central, or West)</td></tr><tr><td></td><td>WST</td><td>Product identifier</td></tr><tr><td></td><td>221855</td><td>Issuance date/time (DDHHMM)</td></tr><tr><td>2</td><td>CONVECTIVE SIGMET</td><td>Product type</td></tr><tr><td></td><td>20</td><td>Issuance number</td></tr><tr><td></td><td>C</td><td>Region (East, Central, or West)</td></tr><tr><td>3</td><td>VALID UNTIL 2055Z</td><td>Valid ending time (UTC)</td></tr><tr><td>4</td><td>ND SD</td><td>States/areas affected</td></tr><tr><td>5</td><td>FROM 90W MOT-GFK-ABR-90W MOT</td><td>Phenomenon location (high-altitude
+VOR coordinates)</td></tr><tr><td>6</td><td>INTSFYG AREA SEV TS MOVG FROM
 24045KT. TOPS ABV FL450. WIND
 GUSTS TO 60KTS RPRTD.
 TORNADOES…HAIL TO 2 IN… WIND
 GUSTS TO 65KTS POSS ND PTN</td><td>Phenomenon description,
-movement, cloud top, remarks</td></tr><tr><td></td><td></td><td></td></tr></tbody></table>
+movement, cloud top, remarks</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-26-02-decoding-a-sigmet-outside-of-the-conus-line-cont.html">
@@ -1339,14 +1298,15 @@ N3006 W14012 - N2012 W15016 CB
 TOP FL400 MOV W 10KT WKN.</td><td>Phenomenon description</td></tr></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-26-03-airmets-are-issued-four-times-a-day-except-for-t.html">
-<table><caption>Table 26-4. AIRMETs are issued four times a day 
-except for those in Alaska, which are issued three times a day. Unscheduled AIRMETs are issued when 
-conditions are occurring or expected to occur but</caption><thead><tr><th>Product Type</th><th>Issuance Time</th><th>Issuance Frequency</th></tr></thead><tbody><tr><td>AIRMETs over the CONUS</td><td>0245, 0845, 1445, 2045 UTC</td><td>Every 6 hours</td></tr><tr><td>AIRMETs over Alaska</td><td>0115, 1315, 2115 UTC
-(Standard Time)
-0415, 1215, 2015 UTC
-(Daylight Saving Time)</td><td>Every 8 hours</td></tr><tr><td>AIRMETs over Hawaii</td><td>0400, 1000, 1600, 2200 UTC</td><td>Every 6 hours</td></tr></tbody></table>
-</div>
+**Table 26-4.** AIRMETs are issued four times a day except for those in Alaska, which are issued three times a day. Unscheduled AIRMETs are issued when conditions are occurring or expected to occur but
+
+| Product Type | Issuance Time | Issuance Frequency |
+| --- | --- | --- |
+| AIRMETs over the CONUS | 0245, 0845, 1445, 2045 UTC | Every 6 hours |
+| AIRMETs over Alaska | 0115, 1315, 2115 UTC<br>(Standard Time)<br>0415, 1215, 2015 UTC<br>(Daylight Saving Time) | Every 8 hours |
+| AIRMETs over Hawaii | 0400, 1000, 1600, 2200 UTC | Every 6 hours |
+
+<a class="handbook-table-source" href="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-26-03-airmets-are-issued-four-times-a-day-except-for-t.html">Open original</a>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-26-04-decoding-a-cwa-line-content-description-1-zdv-ar.html">
 <table><caption>Table 26-5. Decoding a CWA 
@@ -1423,70 +1383,32 @@ service</td></tr></tbody></table>
 Latitude Bands Used in Space Weather Advisories 
 High latitudes northern hemisphere (HNH) 
 N90 to N60 
-Middle latitudes northern hemisphere</caption><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>Latitude Bands Used in Space Weather Advisories</td><td></td></tr><tr><td></td><td></td></tr><tr><td>High latitudes northern hemisphere (HNH)</td><td>N90 to N60</td></tr><tr><td>Middle latitudes northern hemisphere (MNH)</td><td>N60 to N30</td></tr><tr><td>Equatorial latitudes northern hemisphere (EQN)</td><td>N30 to equator</td></tr><tr><td>Equatorial latitudes southern hemisphere (EQS)</td><td>Equator to S30</td></tr><tr><td>Middle latitudes southern hemisphere (MSH)</td><td>S30 to S60</td></tr><tr><td>High latitudes southern hemisphere (HSH)</td><td>S60 to S90</td></tr></tbody></table>
+Middle latitudes northern hemisphere</caption><thead><tr><th>Latitude Bands Used in Space Weather Advisories</th><th></th></tr></thead><tbody><tr><td>High latitudes northern hemisphere (HNH)</td><td>N90 to N60</td></tr><tr><td>Middle latitudes northern hemisphere (MNH)</td><td>N60 to N30</td></tr><tr><td>Equatorial latitudes northern hemisphere (EQN)</td><td>N30 to equator</td></tr><tr><td>Equatorial latitudes southern hemisphere (EQS)</td><td>Equator to S30</td></tr><tr><td>Middle latitudes southern hemisphere (MSH)</td><td>S30 to S60</td></tr><tr><td>High latitudes southern hemisphere (HSH)</td><td>S60 to S90</td></tr></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-26-07-format-of-the-space-weather-advisory-format-expl.html">
-<table><caption>Table 26-8. Format of the Space Weather Advisory 
-Format 
-Explanation 
-Examples 
-Communication 
-header 
-Product’s coded identification for 
-the issuing centers. KWNP is the 
-SWPC, LFPW and YMMC are th</caption><thead><tr><th>Format</th><th>Explanation</th><th>Examples</th></tr></thead><tbody><tr><td>Communication
-header</td><td>Product’s coded identification for
-the issuing centers. KWNP is the
-SWPC, LFPW and YMMC are the
-ACFJ, EFKL and EGRR are the
-PECASUS, and ZBBB and UUAG
-are the CRC.
-FNXX01 is for GNSS, FNXX02 is
-for HF COM, FNXX03 is for
-Radiation, and FNXX04 is for
-SATCOM.</td><td>FNXX01 KWNP
-FNXX01 LFPW
-FNXX01 YMMC
-FNXX01 EFKL
-FNXX02 EGRR
-FNXX03 UUAG
-FNXX04 ZBBB</td></tr><tr><td>SWX ADVISORY</td><td>Space Weather (SWX) Advisory.</td><td>SWX ADVISORY</td></tr><tr><td>STATUS:</td><td>Status indicator (optional) for test or
-exercise.</td><td>TEST
-EXER</td></tr><tr><td>DTG:</td><td>Date and time of origin, in
-YYYYMMDD/HHMMZ.</td><td>20190418/0100Z</td></tr><tr><td>SWXC:</td><td>Name of the Space Weather
-Advisory Center (SWXC).</td><td>ACFJ
-PECASUS
-SWPC
-CRC</td></tr><tr><td>ADVISORY NR:</td><td>Advisory number (NR).</td><td>2019/9</td></tr><tr><td>NR RPLC:</td><td>Advisory number being replaced by
-this advisory (optional).</td><td>2019/8</td></tr><tr><td>SWX EFFECT:</td><td>Space weather effect.</td><td>HF COM MOD
-HF COM SEV
-SATCOM MOD
-SATCOM SEV
-GNSS MOD
-GNSS SEV
-RADIATION MOD
-RADIATION SEV</td></tr><tr><td>OBS (or FCST)
-SWX:</td><td>Observed (OBS) or expected
-(FCST) space weather effect
-date/time, location, and altitudes
-(altitudes are only used in the
-radiation advisory).</td><td>18/0100Z EQN W18000-W12000
-18/0100Z HNH HSH E180-W180 ABV
-FL370
-18/0100Z DAYLIGHT SIDE
-18/0100Z NO SWX EXP</td></tr><tr><td>FCST SWX
-+6 HR:</td><td>6-hour forecast. Date/time, location,
-and altitudes.</td><td>Same as above</td></tr><tr><td>FCST SWX
-+12 HR:</td><td>12-hour forecast. Date/time,
-location, and altitudes.</td><td>Same as above</td></tr><tr><td>FCST SWX
-+18 HR:</td><td>18-hour forecast. Date/time,
-location, and altitudes.</td><td>Same as above</td></tr><tr><td>FCST SWX
-+24 HR:</td><td>24-hour forecast. Date/time,
-location, and altitudes.</td><td>Same as above</td></tr></tbody></table>
-</div>
+**Table 26-8.** Format of the Space Weather Advisory Format Explanation Examples Communication header Product’s coded identification for the issuing centers. KWNP is the SWPC, LFPW and YMMC are th
 
-<div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-26-08-untitled.html">
-<table><thead><tr><th>Format</th><th>Explanation</th><th>Examples</th></tr></thead><tbody><tr><td>RMK:</td><td>Remarks (RMK).</td><td>Additional information</td></tr><tr><td>NXT ADVISORY:</td><td>Date/time when the next (NXT)
-scheduled advisory will be issued.</td><td>2010418/0700Z</td></tr></tbody></table>
-</div>
+| Format | Explanation | Examples |
+| --- | --- | --- |
+| Communication<br>header | Product’s coded identification for<br>the issuing centers. KWNP is the<br>SWPC, LFPW and YMMC are the<br>ACFJ, EFKL and EGRR are the<br>PECASUS, and ZBBB and UUAG<br>are the CRC.<br>FNXX01 is for GNSS, FNXX02 is<br>for HF COM, FNXX03 is for<br>Radiation, and FNXX04 is for<br>SATCOM. | FNXX01 KWNP<br>FNXX01 LFPW<br>FNXX01 YMMC<br>FNXX01 EFKL<br>FNXX02 EGRR<br>FNXX03 UUAG<br>FNXX04 ZBBB |
+| SWX ADVISORY | Space Weather (SWX) Advisory. | SWX ADVISORY |
+| STATUS: | Status indicator (optional) for test or<br>exercise. | TEST<br>EXER |
+| DTG: | Date and time of origin, in<br>YYYYMMDD/HHMMZ. | 20190418/0100Z |
+| SWXC: | Name of the Space Weather<br>Advisory Center (SWXC). | ACFJ<br>PECASUS<br>SWPC<br>CRC |
+| ADVISORY NR: | Advisory number (NR). | 2019/9 |
+| NR RPLC: | Advisory number being replaced by<br>this advisory (optional). | 2019/8 |
+| SWX EFFECT: | Space weather effect. | HF COM MOD<br>HF COM SEV<br>SATCOM MOD<br>SATCOM SEV<br>GNSS MOD<br>GNSS SEV<br>RADIATION MOD<br>RADIATION SEV |
+| OBS (or FCST)<br>SWX: | Observed (OBS) or expected<br>(FCST) space weather effect<br>date/time, location, and altitudes<br>(altitudes are only used in the<br>radiation advisory). | 18/0100Z EQN W18000-W12000<br>18/0100Z HNH HSH E180-W180 ABV<br>FL370<br>18/0100Z DAYLIGHT SIDE<br>18/0100Z NO SWX EXP |
+| FCST SWX<br>+6 HR: | 6-hour forecast. Date/time, location,<br>and altitudes. | Same as above |
+| FCST SWX<br>+12 HR: | 12-hour forecast. Date/time,<br>location, and altitudes. | Same as above |
+| FCST SWX<br>+18 HR: | 18-hour forecast. Date/time,<br>location, and altitudes. | Same as above |
+| FCST SWX<br>+24 HR: | 24-hour forecast. Date/time,<br>location, and altitudes. | Same as above |
+
+<a class="handbook-table-source" href="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-26-07-format-of-the-space-weather-advisory-format-expl.html">Open original</a>
+
+| Format | Explanation | Examples |
+| --- | --- | --- |
+| RMK: | Remarks (RMK). | Additional information |
+| NXT ADVISORY: | Date/time when the next (NXT)<br>scheduled advisory will be issued. | 2010418/0700Z |
+
+<a class="handbook-table-source" href="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-26-08-untitled.html">Open original</a>

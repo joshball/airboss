@@ -35,7 +35,4 @@ Figure 27-33. CIWS and CoSPA
 The ROFOR product is no longer issued by the NWS and has been replaced by the GFA in the Pacific. See
 Section 28.2 for information on the GFA.
 
-![Figure 27-33. CIWS and CoSPA 
-27.18 Route Forecast (ROFOR) 
-The ROFOR product is no longer issued by the NWS and has been replaced by the GFA in the Pacific. See 
-Section 28.2 for information on the GFA.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-5-00-ciws-and-cospa-27-18-route-forecast-rofor-the-ro.png)
+![Figure 27-33. CIWS and CoSPA](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-5-00-ciws-and-cospa.png)

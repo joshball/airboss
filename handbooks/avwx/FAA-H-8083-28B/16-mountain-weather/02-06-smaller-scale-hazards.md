@@ -136,28 +136,12 @@ windstorms with very warm lee-side temperatures are known as chinooks; post-cold
 10 American Meteorological Society, cited 2024: Bora. Glossary of Meteorology. [Available online at
 https://glossary.ametsoc.org/wiki/bora.]
 
-![Figure 16-10. Conceptual View of a Mountain Lee Wave Rotor Zone 
-Because of their potential for causing turbulence and loss of aircraft control, rotor zones should be avoided. 
-Rotor zones are of concern not only because of the likelihood of strong turbulence in their vicinity, 
-particularly on the upwind side of the r](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-6-00-conceptual-view-of-a-mountain-lee-wave-rotor-zon.png)
+![Figure 16-10. Conceptual View of a Mountain Lee Wave Rotor Zone](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-6-00-conceptual-view-of-a-mountain-lee-wave-rotor-zon.png)
 
-![Figure 16-11. Development of a Strong Roll Vortex Associated with a Wind Surge Down the Lee Slope of a Mountain 
- 
-9 Bedard, A. J., Jr. (1993). Atmospheric Turbulence Aloft: A review of possible methods for detection, warning, and 
-validation of prediction models. Washington, DC: American Institute of Aeronautics and A](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-6-01-development-of-a-strong-roll-vortex-associated-w.png)
+![Figure 16-11. Development of a Strong Roll Vortex Associated with a Wind Surge Down the Lee Slope of a Mountain](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-6-01-development-of-a-strong-roll-vortex-associated-w.png)
 
-![Figure 16-12. Schematic of Vertically Oriented Vortices Generated in the Lee of an Isolated Mountain Peak 
-16.2.6.3.1 Dust Devils 
-A common wind phenomenon that occurs throughout much of the world, including the desert Southwest, 
-is dust devils, sometimes known as whirlwinds. These dust-filled vortices, created by str](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-6-02-schematic-of-vertically-oriented-vortices-genera.png)
+![Figure 16-12. Schematic of Vertically Oriented Vortices Generated in the Lee of an Isolated Mountain Peak](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-6-02-schematic-of-vertically-oriented-vortices-genera.png)
 
-![Figure 16-13. NWS Dust Devils: A Life Cycle 
-It is important to note that not all dust devils may be easily visible. Some may have no or very little debris. 
-Pilots should try their best to avoid dust devils. They should not fly through them and should scan takeoff 
-and landing areas.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-6-03-nws-dust-devils-a-life-cycle-it-is-important-to-.png)
+![Figure 16-13. NWS Dust Devils: A Life Cycle](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-6-03-nws-dust-devils-a-life-cycle.png)
 
-![Figure 16-14. Accident Damage Caused by a Dust Devil 
-16.2.6.4 Boras 
-The Glossary of Meteorology10 defines a bora as a “fall wind with a source so cold that, when the air reaches 
-the lowlands or coast, the dynamic warming is insufficient to raise the air temperature to the normal level 
-for the region; hence it appea](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-6-04-accident-damage-caused-by-a-dust-devil-16-2-6-4-.png)
+![Figure 16-14. Accident Damage Caused by a Dust Devil](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-6-04-accident-damage-caused-by-a-dust-devil.png)

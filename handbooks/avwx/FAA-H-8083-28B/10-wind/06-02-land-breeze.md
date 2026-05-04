@@ -19,8 +19,4 @@ A land breeze (see Figure 10-16) is a coastal breeze blowing from land to sea ca
 difference when the sea surface is warmer than the adjacent land. Land breezes usually occur at night and
 during early morning.
 
-![Figure 10-15. Effects of Coastline Shape on a Sea Breeze 
-In Figure 10-15, convergence occurs where sea breezes merge from opposite directions. Stronger lift may 
-be sufficient to initiate showers and thunderstorms if the air mass is sufficiently moist and unstable. 
-10.6.2 Land Breeze 
-A land breeze (see Figure 10-16)](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-2-00-effects-of-coastline-shape-on-a-sea-breeze-in-fi.png)
+![Figure 10-15. Effects of Coastline Shape on a Sea Breeze](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-2-00-effects-of-coastline-shape-on-a-sea-breeze.png)

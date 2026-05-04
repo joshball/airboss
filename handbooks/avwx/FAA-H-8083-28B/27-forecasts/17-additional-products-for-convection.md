@@ -254,24 +254,13 @@ responsibility (out to 20 NM for oceans), which includes portions of the Great L
 The SPC issues a watch cancellation message whenever it cancels a watch prior to the expiration time. The
 text of the message will specify the number and area of the cancelled watch.
 
-![Figure 27-28. Day 1 Categorical Convective Outlook Graphic Example 
- 
-Figure 27-29. Categorical Outlook Legend for Days 1-3 Convective Outlook Graphic Example 
-27.17.2 Traffic Flow Management (TFM) Convective Forecast (TCF) 
-The TCF is a high-confidence graphical representation of forecasted convection meeting specific](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-2-00-day-1-categorical-convective-outlook-graphic-exa.png)
+![Figure 27-28. Day 1 Categorical Convective Outlook Graphic Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-2-00-day-1-categorical-convective-outlook-graphic-exa.png)
 
-![Figure 27-30. TCF Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-2-01-tcf-example.png)
+![Figure 27-29. Categorical Outlook Legend for Days 1-3 Convective Outlook Graphic Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-2-01-categorical-outlook-legend-for-days-1-3-convecti.png)
 
-![Figure 27-31. ECFP Example 
-27.17.4 Watch Notification Messages 
-The NWS SPC issues severe weather Watch Notification Messages to provide an area threat alert for the 
-aviation meteorology community to forecast organized severe thunderstorms that may produce tornadoes, 
-large hail, and/or convective damaging winds with](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-3-00-ecfp-example-27-17-4-watch-notification-messages.png)
+![Figure 27-30. TCF Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-3-00-ecfp-example.png)
 
-![Figure 27-32. Aviation Watch (polygon) Compared to Public Watch (shaded) Example 
-The SPC will issue the SAW after the proposed convective watch area has been collaborated with the 
-impacted NWS WFOs defining the approximate areal outline of the watch. 
-SAWs are nonscheduled, event-driven products valid from the time o](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-4-01-aviation-watch-polygon-compared-to-public-watch-.png)
+![Figure 27-32. Aviation Watch (polygon) Compared to Public Watch (shaded) Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-4-01-aviation-watch-polygon-compared-to-public-watch-.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-17-00-decoding-an-aviation-weather-watch-notification-.html">
 <table><caption>Table 27-15. Decoding an Aviation Weather Watch Notification Message 
@@ -286,29 +275,29 @@ date/time
 SAW2 
 NWS product type (SA</caption><thead><tr><th>Line(s)</th><th>Content</th><th>Description</th></tr></thead><tbody><tr><td>Communication header with issuance
 1 WWUS30 KWNS 271559
-date/time</td><td></td><td></td></tr><tr><td>1</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>SAW2</td><td>NWS product type (SAW) and
-issuance number (2)</td></tr><tr><td>2</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>SPC
+date/time</td><td></td><td></td></tr><tr><td>1</td><td></td><td></td></tr><tr><td></td><td>SAW2</td><td>NWS product type (SAW) and
+issuance number (2)</td></tr><tr><td>2</td><td></td><td></td></tr><tr><td></td><td>SPC
 AWW
 271559</td><td>Issuing office
 Product type
-Issuance date/time</td></tr><tr><td>3</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>WW 568
+Issuance date/time</td></tr><tr><td>3</td><td></td><td></td></tr><tr><td></td><td>WW 568
 TORNADO
 AR LA MS
 271605Z - 280000Z</td><td>Watch number
 Watch type
 States affected
-Valid date/time period</td></tr><tr><td>4</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>AXIS..65 STATUTE MILES EAST AND WEST
-OF A LINE...</td><td>Watch axis</td></tr><tr><td>5</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>45ESE HEZ/NATCHEZ MS/ - 50N
-TUP/TUPELO MS/</td><td>Anchor points</td></tr><tr><td>6</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>…AVIATION COORDS..55NM E/W /18WNW MCB
-- 60E MEM/</td><td>Aviation coordinates</td></tr><tr><td>7</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>HAIL SURFACE AND ALOFT…3 INCHES. WIND
+Valid date/time period</td></tr><tr><td>4</td><td></td><td></td></tr><tr><td></td><td>AXIS..65 STATUTE MILES EAST AND WEST
+OF A LINE...</td><td>Watch axis</td></tr><tr><td>5</td><td></td><td></td></tr><tr><td></td><td>45ESE HEZ/NATCHEZ MS/ - 50N
+TUP/TUPELO MS/</td><td>Anchor points</td></tr><tr><td>6</td><td></td><td></td></tr><tr><td></td><td>…AVIATION COORDS..55NM E/W /18WNW MCB
+- 60E MEM/</td><td>Aviation coordinates</td></tr><tr><td>7</td><td></td><td></td></tr><tr><td></td><td>HAIL SURFACE AND ALOFT…3 INCHES. WIND
 GUSTS..70 KNOTS. MAX TOPS TO 550.
 MEAN STORM MOTION VECTOR 26030.</td><td>Type, intensity, max tops and mean
 storm motion using standard
-contractions.</td></tr><tr><td>8–9</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td>10</td><td>(blank line)</td><td></td></tr><tr><td></td><td>LAT...LON 31369169 34998991 4998762
-31368948</td><td>Latitude and longitude coordinates</td></tr><tr><td>11</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td>12</td><td>(blank line)</td><td></td></tr><tr><td></td><td>THIS IS AN APPROXIMATION TO THE WATCH
+contractions.</td></tr><tr><td>8–9</td><td></td><td></td></tr><tr><td>10</td><td>(blank line)</td><td></td></tr><tr><td></td><td>LAT...LON 31369169 34998991 4998762
+31368948</td><td>Latitude and longitude coordinates</td></tr><tr><td>11</td><td></td><td></td></tr><tr><td>12</td><td>(blank line)</td><td></td></tr><tr><td></td><td>THIS IS AN APPROXIMATION TO THE WATCH
 AREA. FOR A COMPLETE DEPICTION OF THE
 WATCH SEE WOUS64 KWNS FOR WOU2.</td><td>Notice that this is an approximation
 of the watch area and for users to
 refer to the referenced product for the
-actual area</td></tr><tr><td>13–15</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table>
+actual area</td></tr><tr><td>13–15</td><td></td><td></td></tr></tbody></table>
 </div>

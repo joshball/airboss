@@ -73,38 +73,18 @@ imagery, and weather trends (see Figure 24-34)], TAFs, PIREPs, and other aeronau
 
 Figure 24-34. Weather Trends Example at Unalakleet (PAUN), Alaska
 
-![Figure 24-27. U.S. Radiosonde Network 
-24.9 Aviation Weather Cameras 
-24.9.1 FAA Aviation Weather Camera Network 
-In July 2007 the FAA, under the leadership of Walter Combs, began a program to assist Alaska pilots with 
-their significant needs for weather information. Combs’ passion for safe flight in Alaska provided t](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-00-u-s-radiosonde-network-24-9-aviation-weather-cam.png)
+![Figure 24-27. U.S. Radiosonde Network](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-00-u-s-radiosonde-network.png)
 
-![Figure 24-28. Map of FAA’s Aviation Weather Camera Network in Alaska, the CONUS, and Canada12 
- 
-Figure 24-29. Map of the FAA’s Aviation Weather Camera Network in Hawaii 
- 
-12 Canadian camera sites are owned and operated by NAV CANADA, Canada’s civilian air navigation service 
-provider.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-01-map-of-faa-s-aviation-weather-camera-network-in-.png)
+![Figure 24-28. Map of FAA’s Aviation Weather Camera Network in Alaska, the CONUS, and Canada12](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-01-map-of-faa-s-aviation-weather-camera-network-in-.png)
 
-![Figure 24-29. Map of the FAA’s Aviation Weather Camera Network in Hawaii 
- 
-12 Canadian camera sites are owned and operated by NAV CANADA, Canada’s civilian air navigation service 
-provider.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-02-map-of-the-faa-s-aviation-weather-camera-network.png)
+![Figure 24-29. Map of the FAA’s Aviation Weather Camera Network in Hawaii](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-02-map-of-the-faa-s-aviation-weather-camera-network.png)
 
-![Figure 24-30. Sectional Chart Depicting Hyder (4Z7), Alaska Camera Orientations 
- 
-Figure 24-31. “Clear Day” Image from the Aviation Weather Camera at Hyder (4Z7), Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-03-sectional-chart-depicting-hyder-4z7-alaska-camer.png)
+![Figure 24-30. Sectional Chart Depicting Hyder (4Z7), Alaska Camera Orientations](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-03-sectional-chart-depicting-hyder-4z7-alaska-camer.png)
 
 ![Figure 24-31. “Clear Day” Image from the Aviation Weather Camera at Hyder (4Z7), Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-04-clear-day-image-from-the-aviation-weather-camera.png)
 
-![Figure 24-32. Aviation Weather Camera Image at Hyder (4Z7), Alaska 
-24.9.2 Visibility Estimation through Image Analytics (VEIA) 
-VEIA, which is available on the FAA’s Aviation Weather Camera Network, is an algorithm that uses the 
-FAA’s Aviation Weather Camera Network to produce visibility estimates (in statute miles)](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-2-00-aviation-weather-camera-image-at-hyder-4z7-alask.png)
+![Figure 24-32. Aviation Weather Camera Image at Hyder (4Z7), Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-2-00-aviation-weather-camera-image-at-hyder-4z7-alask.png)
 
-![Figure 24-33. VEIA Example at Bald Mountain (K7BM) in Colorado 
-24.9.3 Visual Weather Observation System (VWOS) 
-VWOS, which is available on the FAA’s Aviation Weather Camera Network, is an advanced camera system 
-that is comprised of a suite of weather sensors and 360-degree camera images that collectively observe and](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-3-00-veia-example-at-bald-mountain-k7bm-in-colorado-2.png)
+![Figure 24-33. VEIA Example at Bald Mountain (K7BM) in Colorado](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-3-00-veia-example-at-bald-mountain-k7bm-in-colorado.png)
 
 ![Figure 24-34. Weather Trends Example at Unalakleet (PAUN), Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-4-01-weather-trends-example-at-unalakleet-paun-alaska.png)

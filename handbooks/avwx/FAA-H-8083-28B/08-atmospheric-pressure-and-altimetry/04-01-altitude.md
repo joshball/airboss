@@ -116,20 +116,10 @@ though it were at 12,700 ft indicated with a normal temperature of -8 °C.
 To compute density altitude, a pilot can set the altimeter to 29.92 in (1,013.2 mb), read the pressure altitude
 from the altimeter, obtain the OAT, and then use a flight computer to compute density altitude.
 
-![Figure 8-12. In the warm air column, a pilot would fly at an altitude that is higher than the 
-indicated altitude. In the cold air column, the pilot would fly at an altitude lower than the indicated altitude. 
- 
-Figure 8-12. True Versus Indicated Altitude 
-Height indicated on the altimeter also changes with changes in](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-4-1-00-in-the-warm-air-column-a-pilot-would-fly-at-an-a.png)
+![clearly, see Figure 8-12. In the warm air column, a pilot would fly at an altitude that is higher than the  indicated altitude. In the cold air column, the pilot would fly at an altitude lower than the indicated altitude.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-4-1-00-in-the-warm-air-column-a-pilot-would-fly-at-an-a.png)
 
-![Figure 8-13. Pressure Change’s Effects on Altimeter Readings](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-4-1-01-pressure-change-s-effects-on-altimeter-readings.png)
+![Figure 8-12. True Versus Indicated Altitude](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-4-1-01-true-versus-indicated-altitude.png)
 
-![Figure 8-14. Temperature Change’s Effects on Altimeter Readings 
-Figure 8-14 shows that as a pilot flies from warm to cold air, the altimeter reads too high—the pilot is lower 
-than the altimeter indicates. Over flat terrain, this lower-than-true reading is no great problem; other aircraft 
-in the vicinity are also fly](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-4-1-02-temperature-change-s-effects-on-altimeter-readin.png)
+![Figure 8-13. Pressure Change’s Effects on Altimeter Readings](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-4-1-02-pressure-change-s-effects-on-altimeter-readings.png)
 
-![Figure 8-15. High Density Altitude’s Effects on Flight 
-High density altitude also can be a problem at cruising altitude. When air temperature is higher (warmer) 
-than standard atmosphere, the higher density altitude lowers the service ceiling. For example, if temperature 
-at a pressure altitude of 10,000 ft is 20 °C,](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-4-1-03-high-density-altitude-s-effects-on-flight-high-d.png)
+![Figure 8-15. High Density Altitude’s Effects on Flight](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-4-1-03-high-density-altitude-s-effects-on-flight.png)

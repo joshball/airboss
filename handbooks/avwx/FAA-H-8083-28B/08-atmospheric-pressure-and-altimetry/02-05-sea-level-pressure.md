@@ -30,10 +30,6 @@ pressure is approximately 25 + 5, or 30 inHg.
 
 Figure 8-6. Reduction of Station Pressure to Sea Level
 
-![Figure 8-5. Temperature’s Effect on Pressure 
-8.2.5 Sea Level Pressure 
-Since pressure varies greatly with altitude, people cannot readily compare station pressures between stations 
-at different altitudes. To make them comparable, they are adjusted to some common level. Mean sea level 
-(MSL) is the most useful common](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-5-00-temperature-s-effect-on-pressure-8-2-5-sea-level.png)
+![Figure 8-5. Temperature’s Effect on Pressure](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-5-00-temperature-s-effect-on-pressure.png)
 
 ![Figure 8-6. Reduction of Station Pressure to Sea Level](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-5-01-reduction-of-station-pressure-to-sea-level.png)

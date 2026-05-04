@@ -38,8 +38,4 @@ Polar cell—Air rises, diverges, and travels toward the poles. Once over the po
 forming the polar highs. At the surface, air diverges outward from the polar highs. Surface winds
 in the polar cell are easterly (polar easterlies).
 
-![Figure 9-1. Non-Rotating, Non-Tilted, Waterless, Earth Circulation System 
-9.3 Rotating Earth Circulation System 
-However, since the Earth rotates, the axis is tilted, and there is more land mass in the Northern Hemisphere 
-than in the Southern Hemisphere, the actual global pattern is much more complicated. 
-Instead of](/handbooks/avwx/FAA-H-8083-28B/figures/fig-9-2-00-non-rotating-non-tilted-waterless-earth-circulat.png)
+![Figure 9-1. Non-Rotating, Non-Tilted, Waterless, Earth Circulation System](/handbooks/avwx/FAA-H-8083-28B/figures/fig-9-2-00-non-rotating-non-tilted-waterless-earth-circulat.png)

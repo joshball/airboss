@@ -364,43 +364,19 @@ Figure 5-9. Sounding with a Temperature Inversion
 
 ![Figure 5-1. Comparison of Kelvin, Celsius, and Fahrenheit Temperature Scales](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-5-2-00-comparison-of-kelvin-celsius-and-fahrenheit-temp.png)
 
-![Figure 5-2. Radiation Example 
-All objects emit (radiate) energy as the heat energy within the object is converted to radiation energy. This 
-transmitted radiation passes through entities such as air, water, or space. Along the way, the radiation can 
-be reflected, which occurs when the wave energy changes direction wh](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-1-00-radiation-example-all-objects-emit-radiate-energ.png)
+![Figure 5-2. Radiation Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-1-00-radiation-example.png)
 
-![Figure 5-3. Temperature’s Effect on Radiation Wavelength 
-Some of the solar radiation that reaches the Earth’s surface is radiated back into the atmosphere to become 
-heat energy. Dark-colored objects such as asphalt absorb more of the radiant energy and warm faster than 
-light-colored objects. Dark objects also radiat](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-1-01-temperature-s-effect-on-radiation-wavelength-som.png)
+![Figure 5-3. Temperature’s Effect on Radiation Wavelength](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-1-01-temperature-s-effect-on-radiation-wavelength.png)
 
-![Figure 5-4. Solar Zenith Angle 
-5.6.2 Conduction 
-Conduction is the transfer of energy (including heat) by molecular activity from one substance to another 
-in contact with or through a substance. Heat always flows from the warmer substance to the colder 
-substance. The rate of heat transfer is greater with larger temp](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-2-00-solar-zenith-angle-5-6-2-conduction-conduction-i.png)
+![Figure 5-4. Solar Zenith Angle](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-2-00-solar-zenith-angle.png)
 
-![Figure 5-5. Heat Transfer Examples1 
-5.7 Thermal Response 
-Whether by radiation, conduction, convection, or a combination of these, the temperature response to the 
-input (or output) of some specified quantity of heat varies from one substance to another. Specific heat is 
-defined as the measure of heat energy required](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-7-00-heat-transfer-examples1-5-7-thermal-response-whe.png)
+![Figure 5-5. Heat Transfer Examples1](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-7-00-heat-transfer-examples1.png)
 
-![Figure 5-6. Specific Heat Capacity: Water versus Sand 
-The difference in the specific heat of various materials is one of the primary reasons why the temperature 
-of a body of water, such as a lake or the ocean, is less variable with time than the surface temperature of 
-land. Water heats up more slowly than land durin](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-7-01-specific-heat-capacity-water-versus-sand-the-dif.png)
+![Figure 5-6. Specific Heat Capacity: Water versus Sand](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-7-01-specific-heat-capacity-water-versus-sand.png)
 
-![Figure 5-7. Variation of Mean Daily Temperatures for San Francisco (Maritime) and St. Louis (Continental) 
-5.8 Temperature Variations with Altitude 
-A lapse rate of temperature is defined as a decrease in temperature with height. In Figure 4-2, it was stated 
-that the temperature decreases 6.5 °C/km (3.57 °F/1,000 ft)](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-8-1-00-variation-of-mean-daily-temperatures-for-san-fra.png)
+![Figure 5-7. Variation of Mean Daily Temperatures for San Francisco (Maritime) and St. Louis (Continental)](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-8-1-00-variation-of-mean-daily-temperatures-for-san-fra.png)
 
-![Figure 5-8. Sounding with an Isothermal Layer 
-5.8.3 Temperature Inversion 
-A temperature inversion, or simply inversion, is a layer in which the temperature increases with altitude. If 
-the base of the inversion is at the surface, it is termed a surface-based inversion. If the base of the inversion 
-is not at the surf](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-8-3-00-sounding-with-an-isothermal-layer-5-8-3-temperat.png)
+![Figure 5-8. Sounding with an Isothermal Layer](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-8-3-00-sounding-with-an-isothermal-layer.png)
 
 ![Figure 5-9. Sounding with a Temperature Inversion](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-8-3-01-sounding-with-a-temperature-inversion.png)
 
@@ -451,7 +427,7 @@ Solid
 250 
 Iron 
 Solid 
-80</caption><thead><tr><th>Material</th><th></th><th>Phase</th><th></th><th>Heat (Thermal)</th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td>Conductivity (W m-1 K-1)</td><td></td></tr><tr><td>Silver</td><td></td><td>Solid</td><td>429</td><td></td><td></td></tr><tr><td>Copper</td><td></td><td>Solid</td><td>401</td><td></td><td></td></tr><tr><td>Aluminum</td><td></td><td>Solid</td><td>250</td><td></td><td></td></tr><tr><td>Iron</td><td></td><td>Solid</td><td>80</td><td></td><td></td></tr><tr><td>Sand (saturated)</td><td></td><td>Solid</td><td>2.7</td><td></td><td></td></tr><tr><td>Water (ice)</td><td></td><td>Solid (0 °C)</td><td>2.18</td><td></td><td></td></tr><tr><td>Sandstone</td><td></td><td>Solid</td><td>1.7</td><td></td><td></td></tr><tr><td>Limestone</td><td></td><td>Solid</td><td>1.26–1.33</td><td></td><td></td></tr><tr><td>Glass</td><td></td><td>Solid</td><td>1.05</td><td></td><td></td></tr><tr><td>Water (liquid)</td><td></td><td>Liquid</td><td>0.58</td><td></td><td></td></tr><tr><td>Sand (dry)</td><td></td><td>Solid</td><td>0.35</td><td></td><td></td></tr><tr><td>Soil</td><td></td><td>Solid</td><td>0.17–1.13</td><td></td><td></td></tr><tr><td>Wood (oak)</td><td></td><td>Solid</td><td>0.17</td><td></td><td></td></tr><tr><td>Wood (balsa)</td><td></td><td>Solid</td><td>0.055</td><td></td><td></td></tr><tr><td>Snow</td><td></td><td>Solid (&lt;0 °C)</td><td>0.05–0.25</td><td></td><td></td></tr><tr><td>Air</td><td></td><td>Gas</td><td>0.024</td><td></td><td></td></tr><tr><td>Water (steam)</td><td></td><td>Gas (125 °C)</td><td>0.016</td><td></td><td></td></tr><tr><td></td><td>All measurements are at 25 °C unless otherwise noted.</td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Note: 1 K equals -272.15 °C.</td><td></td><td></td><td></td><td></td></tr></tbody></table>
+80</caption><thead><tr><th>Material</th><th></th><th>Phase</th><th></th><th>Heat (Thermal)</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td>Conductivity (W m-1 K-1)</td></tr><tr><td>Silver</td><td></td><td>Solid</td><td>429</td><td></td></tr><tr><td>Copper</td><td></td><td>Solid</td><td>401</td><td></td></tr><tr><td>Aluminum</td><td></td><td>Solid</td><td>250</td><td></td></tr><tr><td>Iron</td><td></td><td>Solid</td><td>80</td><td></td></tr><tr><td>Sand (saturated)</td><td></td><td>Solid</td><td>2.7</td><td></td></tr><tr><td>Water (ice)</td><td></td><td>Solid (0 °C)</td><td>2.18</td><td></td></tr><tr><td>Sandstone</td><td></td><td>Solid</td><td>1.7</td><td></td></tr><tr><td>Limestone</td><td></td><td>Solid</td><td>1.26–1.33</td><td></td></tr><tr><td>Glass</td><td></td><td>Solid</td><td>1.05</td><td></td></tr><tr><td>Water (liquid)</td><td></td><td>Liquid</td><td>0.58</td><td></td></tr><tr><td>Sand (dry)</td><td></td><td>Solid</td><td>0.35</td><td></td></tr><tr><td>Soil</td><td></td><td>Solid</td><td>0.17–1.13</td><td></td></tr><tr><td>Wood (oak)</td><td></td><td>Solid</td><td>0.17</td><td></td></tr><tr><td>Wood (balsa)</td><td></td><td>Solid</td><td>0.055</td><td></td></tr><tr><td>Snow</td><td></td><td>Solid (&lt;0 °C)</td><td>0.05–0.25</td><td></td></tr><tr><td>Air</td><td></td><td>Gas</td><td>0.024</td><td></td></tr><tr><td>Water (steam)</td><td></td><td>Gas (125 °C)</td><td>0.016</td><td></td></tr><tr><td></td><td>All measurements are at 25 °C unless otherwise noted.</td><td></td><td></td><td></td></tr><tr><td></td><td>Note: 1 K equals -272.15 °C.</td><td></td><td></td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-5-03-specific-heat-of-various-substances-substance-ph.html">
@@ -470,5 +446,5 @@ Wood (balsa)
 Solid 
 2.90 
 Water (ice) 
-So</caption><thead><tr><th>Substance</th><th></th><th>Phase</th><th></th><th>Specific Heat</th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td>(J g-1 K-1)</td><td></td></tr><tr><td>Water (steam)</td><td></td><td>Gas (100 °C)</td><td>4.22</td><td></td><td></td></tr><tr><td>Water</td><td></td><td>Liquid (25 °C)</td><td>4.18</td><td></td><td></td></tr><tr><td>Wood (balsa)</td><td></td><td>Solid</td><td>2.90</td><td></td><td></td></tr><tr><td>Water (ice)</td><td></td><td>Solid (0 °C)</td><td>2.05</td><td></td><td></td></tr><tr><td>Wood (oak)</td><td></td><td>Solid</td><td>2.00</td><td></td><td></td></tr><tr><td>Soil (wet)</td><td></td><td>Solid</td><td>1.48</td><td></td><td></td></tr><tr><td>Sandy clay</td><td></td><td>Solid</td><td>1.38</td><td></td><td></td></tr><tr><td>Air (sea level, dry)</td><td></td><td>Gas</td><td>1.01</td><td></td><td></td></tr><tr><td>Asphalt</td><td></td><td>Solid</td><td>0.92</td><td></td><td></td></tr><tr><td>Clay</td><td></td><td>Solid</td><td>0.92</td><td></td><td></td></tr><tr><td>Aluminum</td><td></td><td>Solid</td><td>0.91</td><td></td><td></td></tr><tr><td>Brick (common)</td><td></td><td>Solid</td><td>0.90</td><td></td><td></td></tr><tr><td>Concrete</td><td></td><td>Solid</td><td>0.88</td><td></td><td></td></tr><tr><td>Glass</td><td></td><td>Solid</td><td>0.84</td><td></td><td></td></tr><tr><td>Limestone</td><td></td><td>Solid</td><td>0.84</td><td></td><td></td></tr><tr><td>Sand (quartz)</td><td></td><td>Solid</td><td>0.83</td><td></td><td></td></tr><tr><td>Soil (dry)</td><td></td><td>Solid</td><td>0.80</td><td></td><td></td></tr><tr><td>Granite</td><td></td><td>Solid</td><td>0.79</td><td></td><td></td></tr><tr><td>Iron</td><td></td><td>Solid</td><td>0.46</td><td></td><td></td></tr><tr><td>Copper</td><td></td><td>Solid</td><td>0.39</td><td></td><td></td></tr><tr><td>Mercury</td><td></td><td>Liquid</td><td>0.14</td><td></td><td></td></tr><tr><td>Lead</td><td></td><td>Solid</td><td>0.13</td><td></td><td></td></tr><tr><td></td><td>All measurements are at 25 °C unless otherwise noted.</td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Note: 1 K equals -272.15 °C.</td><td></td><td></td><td></td><td></td></tr></tbody></table>
+So</caption><thead><tr><th>Substance</th><th></th><th>Phase</th><th></th><th>Specific Heat</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td>(J g-1 K-1)</td></tr><tr><td>Water (steam)</td><td></td><td>Gas (100 °C)</td><td>4.22</td><td></td></tr><tr><td>Water</td><td></td><td>Liquid (25 °C)</td><td>4.18</td><td></td></tr><tr><td>Wood (balsa)</td><td></td><td>Solid</td><td>2.90</td><td></td></tr><tr><td>Water (ice)</td><td></td><td>Solid (0 °C)</td><td>2.05</td><td></td></tr><tr><td>Wood (oak)</td><td></td><td>Solid</td><td>2.00</td><td></td></tr><tr><td>Soil (wet)</td><td></td><td>Solid</td><td>1.48</td><td></td></tr><tr><td>Sandy clay</td><td></td><td>Solid</td><td>1.38</td><td></td></tr><tr><td>Air (sea level, dry)</td><td></td><td>Gas</td><td>1.01</td><td></td></tr><tr><td>Asphalt</td><td></td><td>Solid</td><td>0.92</td><td></td></tr><tr><td>Clay</td><td></td><td>Solid</td><td>0.92</td><td></td></tr><tr><td>Aluminum</td><td></td><td>Solid</td><td>0.91</td><td></td></tr><tr><td>Brick (common)</td><td></td><td>Solid</td><td>0.90</td><td></td></tr><tr><td>Concrete</td><td></td><td>Solid</td><td>0.88</td><td></td></tr><tr><td>Glass</td><td></td><td>Solid</td><td>0.84</td><td></td></tr><tr><td>Limestone</td><td></td><td>Solid</td><td>0.84</td><td></td></tr><tr><td>Sand (quartz)</td><td></td><td>Solid</td><td>0.83</td><td></td></tr><tr><td>Soil (dry)</td><td></td><td>Solid</td><td>0.80</td><td></td></tr><tr><td>Granite</td><td></td><td>Solid</td><td>0.79</td><td></td></tr><tr><td>Iron</td><td></td><td>Solid</td><td>0.46</td><td></td></tr><tr><td>Copper</td><td></td><td>Solid</td><td>0.39</td><td></td></tr><tr><td>Mercury</td><td></td><td>Liquid</td><td>0.14</td><td></td></tr><tr><td>Lead</td><td></td><td>Solid</td><td>0.13</td><td></td></tr><tr><td></td><td>All measurements are at 25 °C unless otherwise noted.</td><td></td><td></td><td></td></tr><tr><td></td><td>Note: 1 K equals -272.15 °C.</td><td></td><td></td><td></td></tr></tbody></table>
 </div>

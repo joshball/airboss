@@ -22,8 +22,4 @@ Heat (thermal) conductivity is the property of a substance that indicates its ab
 consequence of molecular motion. Units are watts per meter-kelvin (W m-1 K-1). Table 5-3 provides the
 heat (thermal) conductivity of various substances. Note that air is a poor thermal conductor.
 
-![Figure 5-4. Solar Zenith Angle 
-5.6.2 Conduction 
-Conduction is the transfer of energy (including heat) by molecular activity from one substance to another 
-in contact with or through a substance. Heat always flows from the warmer substance to the colder 
-substance. The rate of heat transfer is greater with larger temp](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-2-00-solar-zenith-angle-5-6-2-conduction-conduction-i.png)
+![Figure 5-4. Solar Zenith Angle](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-2-00-solar-zenith-angle.png)

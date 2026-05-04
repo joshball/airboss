@@ -278,65 +278,25 @@ service</td></tr></tbody></table>
 Latitude Bands Used in Space Weather Advisories 
 High latitudes northern hemisphere (HNH) 
 N90 to N60 
-Middle latitudes northern hemisphere</caption><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>Latitude Bands Used in Space Weather Advisories</td><td></td></tr><tr><td></td><td></td></tr><tr><td>High latitudes northern hemisphere (HNH)</td><td>N90 to N60</td></tr><tr><td>Middle latitudes northern hemisphere (MNH)</td><td>N60 to N30</td></tr><tr><td>Equatorial latitudes northern hemisphere (EQN)</td><td>N30 to equator</td></tr><tr><td>Equatorial latitudes southern hemisphere (EQS)</td><td>Equator to S30</td></tr><tr><td>Middle latitudes southern hemisphere (MSH)</td><td>S30 to S60</td></tr><tr><td>High latitudes southern hemisphere (HSH)</td><td>S60 to S90</td></tr></tbody></table>
+Middle latitudes northern hemisphere</caption><thead><tr><th>Latitude Bands Used in Space Weather Advisories</th><th></th></tr></thead><tbody><tr><td>High latitudes northern hemisphere (HNH)</td><td>N90 to N60</td></tr><tr><td>Middle latitudes northern hemisphere (MNH)</td><td>N60 to N30</td></tr><tr><td>Equatorial latitudes northern hemisphere (EQN)</td><td>N30 to equator</td></tr><tr><td>Equatorial latitudes southern hemisphere (EQS)</td><td>Equator to S30</td></tr><tr><td>Middle latitudes southern hemisphere (MSH)</td><td>S30 to S60</td></tr><tr><td>High latitudes southern hemisphere (HSH)</td><td>S60 to S90</td></tr></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-26-7-2-02-format-of-the-space-weather-advisory-format-expl.html">
-<table><caption>Table 26-8. Format of the Space Weather Advisory 
-Format 
-Explanation 
-Examples 
-Communication 
-header 
-Product’s coded identification for 
-the issuing centers. KWNP is the 
-SWPC, LFPW and YMMC are th</caption><thead><tr><th>Format</th><th>Explanation</th><th>Examples</th></tr></thead><tbody><tr><td>Communication
-header</td><td>Product’s coded identification for
-the issuing centers. KWNP is the
-SWPC, LFPW and YMMC are the
-ACFJ, EFKL and EGRR are the
-PECASUS, and ZBBB and UUAG
-are the CRC.
-FNXX01 is for GNSS, FNXX02 is
-for HF COM, FNXX03 is for
-Radiation, and FNXX04 is for
-SATCOM.</td><td>FNXX01 KWNP
-FNXX01 LFPW
-FNXX01 YMMC
-FNXX01 EFKL
-FNXX02 EGRR
-FNXX03 UUAG
-FNXX04 ZBBB</td></tr><tr><td>SWX ADVISORY</td><td>Space Weather (SWX) Advisory.</td><td>SWX ADVISORY</td></tr><tr><td>STATUS:</td><td>Status indicator (optional) for test or
-exercise.</td><td>TEST
-EXER</td></tr><tr><td>DTG:</td><td>Date and time of origin, in
-YYYYMMDD/HHMMZ.</td><td>20190418/0100Z</td></tr><tr><td>SWXC:</td><td>Name of the Space Weather
-Advisory Center (SWXC).</td><td>ACFJ
-PECASUS
-SWPC
-CRC</td></tr><tr><td>ADVISORY NR:</td><td>Advisory number (NR).</td><td>2019/9</td></tr><tr><td>NR RPLC:</td><td>Advisory number being replaced by
-this advisory (optional).</td><td>2019/8</td></tr><tr><td>SWX EFFECT:</td><td>Space weather effect.</td><td>HF COM MOD
-HF COM SEV
-SATCOM MOD
-SATCOM SEV
-GNSS MOD
-GNSS SEV
-RADIATION MOD
-RADIATION SEV</td></tr><tr><td>OBS (or FCST)
-SWX:</td><td>Observed (OBS) or expected
-(FCST) space weather effect
-date/time, location, and altitudes
-(altitudes are only used in the
-radiation advisory).</td><td>18/0100Z EQN W18000-W12000
-18/0100Z HNH HSH E180-W180 ABV
-FL370
-18/0100Z DAYLIGHT SIDE
-18/0100Z NO SWX EXP</td></tr><tr><td>FCST SWX
-+6 HR:</td><td>6-hour forecast. Date/time, location,
-and altitudes.</td><td>Same as above</td></tr><tr><td>FCST SWX
-+12 HR:</td><td>12-hour forecast. Date/time,
-location, and altitudes.</td><td>Same as above</td></tr><tr><td>FCST SWX
-+18 HR:</td><td>18-hour forecast. Date/time,
-location, and altitudes.</td><td>Same as above</td></tr><tr><td>FCST SWX
-+24 HR:</td><td>24-hour forecast. Date/time,
-location, and altitudes.</td><td>Same as above</td></tr></tbody></table>
-</div>
+**Table 26-8.** Format of the Space Weather Advisory Format Explanation Examples Communication header Product’s coded identification for the issuing centers. KWNP is the SWPC, LFPW and YMMC are th
+
+| Format | Explanation | Examples |
+| --- | --- | --- |
+| Communication<br>header | Product’s coded identification for<br>the issuing centers. KWNP is the<br>SWPC, LFPW and YMMC are the<br>ACFJ, EFKL and EGRR are the<br>PECASUS, and ZBBB and UUAG<br>are the CRC.<br>FNXX01 is for GNSS, FNXX02 is<br>for HF COM, FNXX03 is for<br>Radiation, and FNXX04 is for<br>SATCOM. | FNXX01 KWNP<br>FNXX01 LFPW<br>FNXX01 YMMC<br>FNXX01 EFKL<br>FNXX02 EGRR<br>FNXX03 UUAG<br>FNXX04 ZBBB |
+| SWX ADVISORY | Space Weather (SWX) Advisory. | SWX ADVISORY |
+| STATUS: | Status indicator (optional) for test or<br>exercise. | TEST<br>EXER |
+| DTG: | Date and time of origin, in<br>YYYYMMDD/HHMMZ. | 20190418/0100Z |
+| SWXC: | Name of the Space Weather<br>Advisory Center (SWXC). | ACFJ<br>PECASUS<br>SWPC<br>CRC |
+| ADVISORY NR: | Advisory number (NR). | 2019/9 |
+| NR RPLC: | Advisory number being replaced by<br>this advisory (optional). | 2019/8 |
+| SWX EFFECT: | Space weather effect. | HF COM MOD<br>HF COM SEV<br>SATCOM MOD<br>SATCOM SEV<br>GNSS MOD<br>GNSS SEV<br>RADIATION MOD<br>RADIATION SEV |
+| OBS (or FCST)<br>SWX: | Observed (OBS) or expected<br>(FCST) space weather effect<br>date/time, location, and altitudes<br>(altitudes are only used in the<br>radiation advisory). | 18/0100Z EQN W18000-W12000<br>18/0100Z HNH HSH E180-W180 ABV<br>FL370<br>18/0100Z DAYLIGHT SIDE<br>18/0100Z NO SWX EXP |
+| FCST SWX<br>+6 HR: | 6-hour forecast. Date/time, location,<br>and altitudes. | Same as above |
+| FCST SWX<br>+12 HR: | 12-hour forecast. Date/time,<br>location, and altitudes. | Same as above |
+| FCST SWX<br>+18 HR: | 18-hour forecast. Date/time,<br>location, and altitudes. | Same as above |
+| FCST SWX<br>+24 HR: | 24-hour forecast. Date/time,<br>location, and altitudes. | Same as above |
+
+<a class="handbook-table-source" href="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-26-7-2-02-format-of-the-space-weather-advisory-format-expl.html">Open original</a>

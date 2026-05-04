@@ -52,14 +52,8 @@ squall lines.
 
 Figure 22-4. Multicell Line Thunderstorm
 
-![Figure 22-2. Thunderstorm Cell Life Cycle 
-The cell transitions to the mature stage when precipitation reaches the surface. Precipitation descends 
-through the cloud and drags the adjacent air downward, creating a strong downdraft alongside the updraft. 
-The downdraft spreads out along the surface, well in advance of t](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-4-00-thunderstorm-cell-life-cycle-the-cell-transition.png)
+![Figure 22-2. Thunderstorm Cell Life Cycle](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-4-00-thunderstorm-cell-life-cycle.png)
 
-![Figure 22-3. Multicell Cluster Thunderstorm 
-Sometimes thunderstorms will form in a narrow band or squall line that can extend laterally for hundreds 
-of miles. Often it develops on or ahead of a cold front in moist, unstable air, but it may develop in unstable 
-air far removed from any front. New cells continually re-](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-4-01-multicell-cluster-thunderstorm-sometimes-thunder.png)
+![Figure 22-3. Multicell Cluster Thunderstorm](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-4-01-multicell-cluster-thunderstorm.png)
 
 ![Figure 22-4. Multicell Line Thunderstorm](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-4-02-multicell-line-thunderstorm.png)

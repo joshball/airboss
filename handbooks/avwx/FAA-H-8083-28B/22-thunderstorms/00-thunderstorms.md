@@ -522,108 +522,51 @@ airspeed.
 the aircraft out of the hazards most quickly. In addition, turning maneuvers increase stress on the
 aircraft.
 
-![Figure 22-1. Necessary Ingredients for Thunderstorm Cell Formation 
-22.3 Thunderstorm Cell Life Cycle 
-A thunderstorm cell is the convective cell of a cumulonimbus cloud having lightning and thunder. It 
-undergoes three distinct stages during its life cycle (see Figure 22-2): towering cumulus, mature, and 
-dissipating.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-2-00-necessary-ingredients-for-thunderstorm-cell-form.png)
+![Figure 22-1. Necessary Ingredients for Thunderstorm Cell Formation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-2-00-necessary-ingredients-for-thunderstorm-cell-form.png)
 
-![Figure 22-2. Thunderstorm Cell Life Cycle 
-The cell transitions to the mature stage when precipitation reaches the surface. Precipitation descends 
-through the cloud and drags the adjacent air downward, creating a strong downdraft alongside the updraft. 
-The downdraft spreads out along the surface, well in advance of t](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-4-00-thunderstorm-cell-life-cycle-the-cell-transition.png)
+![Figure 22-2. Thunderstorm Cell Life Cycle](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-4-00-thunderstorm-cell-life-cycle.png)
 
-![Figure 22-3. Multicell Cluster Thunderstorm 
-Sometimes thunderstorms will form in a narrow band or squall line that can extend laterally for hundreds 
-of miles. Often it develops on or ahead of a cold front in moist, unstable air, but it may develop in unstable 
-air far removed from any front. New cells continually re-](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-4-01-multicell-cluster-thunderstorm-sometimes-thunder.png)
+![Figure 22-3. Multicell Cluster Thunderstorm](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-4-01-multicell-cluster-thunderstorm.png)
 
 ![Figure 22-4. Multicell Line Thunderstorm](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-4-02-multicell-line-thunderstorm.png)
 
-![Figure 22-5. Supercell Thunderstorm 
-22.5 Factors that Influence Thunderstorm Motion 
-A thunderstorm is a process, not a solid object or block of wood. Storm motion equals the combined effects 
-of both advection and propagation (see Figure 22-6). Advection is the component of storm motion due to 
-individual cells movin](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-5-00-supercell-thunderstorm-22-5-factors-that-influen.png)
+![Figure 22-5. Supercell Thunderstorm](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-5-00-supercell-thunderstorm.png)
 
-![Figure 22-6. Factors that Influence Thunderstorm Motion 
-Individual cells that comprise the storm move northeast (advection) but dissipate and are replaced by 
-new cells (propagation). Storm motion equals the combined effects of both advection and propagation. 
-22.6 Thunderstorm Terminology 
-Anvil. The flat, spreading](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-6-00-factors-that-influence-thunderstorm-motion-indiv.png)
+![Figure 22-6. Factors that Influence Thunderstorm Motion](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-6-00-factors-that-influence-thunderstorm-motion.png)
 
-![Figure 22-7. Downburst Life Cycle 
-A microburst (see Figure 22-8) is a small-scale, intense downdraft that, when reaching the surface, spreads 
-outward symmetrically (see Figure 22-9) or asymmetrically (see Figure 22-10), in all directions from the 
-downdraft center. It is the most severe type of wind shear. Microburst](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-00-downburst-life-cycle-a-microburst-see-figure-22-.png)
+![Figure 22-7. Downburst Life Cycle](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-00-downburst-life-cycle.png)
 
 ![Figure 22-8. Illustration of the Evolution of a Microburst](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-01-illustration-of-the-evolution-of-a-microburst.png)
 
-![Figure 22-9. Illustration of a Symmetric Microburst 
- 
-Figure 22-10. Illustration of an Asymmetric Microburst](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-02-illustration-of-a-symmetric-microburst-figure-22.png)
+![Figure 22-9. Illustration of a Symmetric Microburst](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-02-illustration-of-a-symmetric-microburst.png)
 
 ![Figure 22-10. Illustration of an Asymmetric Microburst](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-03-illustration-of-an-asymmetric-microburst.png)
 
-![Figure 22-11. Illustration of a Dry Microburst 
-More than one microburst can occur in the same weather system. Pilots are therefore cautioned to be alert 
-for additional microbursts if one has already been encountered or observed. If several microbursts are 
-present, a series of horizontal vortices can form near the gr](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-04-illustration-of-a-dry-microburst-more-than-one-m.png)
+![Figure 22-11. Illustration of a Dry Microburst](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-04-illustration-of-a-dry-microburst.png)
 
-![Figure 22-12. Illustration of a Series of Vortices Due to Microbursts Being Embedded in One Another 
-A downburst or microburst is dangerous to aircraft when climbing from takeoff or approaching to land. 
-During these phases, the aircraft is operating at slow speeds. A major change of wind velocity can lead to 
-loss of](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-05-illustration-of-a-series-of-vortices-due-to-micr.png)
+![Figure 22-12. Illustration of a Series of Vortices Due to Microbursts Being Embedded in One Another](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-05-illustration-of-a-series-of-vortices-due-to-micr.png)
 
-![Figure 22-13. Landing in a Microburst 
-Pilots should be alert for indications of a microburst early in the approach phase, and ready to initiate a 
-missed approach at the first indication. However, it may be impossible to recover from a microburst 
-encounter at low altitude. 
-Pilots should be aware of asymmetrical micr](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-06-landing-in-a-microburst-pilots-should-be-alert-f.png)
+![Figure 22-13. Landing in a Microburst](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-06-landing-in-a-microburst.png)
 
-![Figure 22-14. Wind Shear Encounter During Takeoff After Lift-Off 
-In many events involving after-lift-off wind shear encounters, early trends in airspeed, pitch attitude, 
-vertical speed, and altitude appeared normal. In this example, the airplane encountered wind shear before 
-stabilized climb was established, which c](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-07-wind-shear-encounter-during-takeoff-after-lift-o.png)
+![Figure 22-14. Wind Shear Encounter During Takeoff After Lift-Off](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-07-wind-shear-encounter-during-takeoff-after-lift-o.png)
 
-![Figure 22-15. Wind Shear Effects on Flightpath 
-To counter the loss of airspeed and lift resulting from wind shear, pitch attitude must not be allowed to fall 
-below the normal range. Only by properly controlling pitch attitude and accepting reduced airspeed can 
-flightpath degradation be prevented (see Figure 22-16).](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-08-wind-shear-effects-on-flightpath-to-counter-the-.png)
+![Figure 22-15. Wind Shear Effects on Flightpath](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-08-wind-shear-effects-on-flightpath.png)
 
 ![Figure 22-16. Pitch Control Effects on Flightpath](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-09-pitch-control-effects-on-flightpath.png)
 
-![Figure 22-17. Time Available to Respond to Wind Shear Encounter 
-22.7.3.2 Encounter During Takeoff—On Runway 
-Analysis of a typical accident where an increasing tailwind shear was encountered during takeoff ground 
-roll showed that initial indications appeared normal (see Figure 22-18). Due to the increasing tailwind s](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-10-time-available-to-respond-to-wind-shear-encounte.png)
+![Figure 22-17. Time Available to Respond to Wind Shear Encounter](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-10-time-available-to-respond-to-wind-shear-encounte.png)
 
 ![Figure 22-18. Wind Shear Encounter During Takeoff on Runway](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-11-wind-shear-encounter-during-takeoff-on-runway.png)
 
-![Figure 22-19. Wind Shear Effects on Lift-Off 
-An additional factor is the difficulty of recognizing deteriorating airplane performance. Timely recognition 
-of a wind shear encounter on the runway may be difficult since the only indication may be a 
-slower-than-normal airspeed increase. The presence of gusts may mask ab](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-12-wind-shear-effects-on-lift-off-an-additional-fac.png)
+![Figure 22-19. Wind Shear Effects on Lift-Off](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-12-wind-shear-effects-on-lift-off.png)
 
-![Figure 22-20. Pitch Attitude Effects on Lift-Off 
-22.7.3.3 Encounter on Approach 
-Analysis of a typical wind shear encounter on approach provided evidence of an increasing downdraft and 
-tailwind along the approach flightpath (see Figure 22-21). The airplane lost airspeed, dropped below the 
-target glidepath, and conta](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-13-pitch-attitude-effects-on-lift-off-22-7-3-3-enco.png)
+![Figure 22-20. Pitch Attitude Effects on Lift-Off](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-13-pitch-attitude-effects-on-lift-off.png)
 
 ![Figure 22-21. Wind Shear Encounter During Approach](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-14-wind-shear-encounter-during-approach.png)
 
-![Figure 22-22. Wind Shear Effects on Flightpath on Approach 
-22.7.3.4 Wind Shear Effects on Airplanes and Systems 
-Several terms are used when discussing low-altitude wind variations with respect to aviation. These terms 
-are defined as follows: 
-• 
-Increasing Headwind Shear: Wind shear in which headwind increases, caus](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-15-wind-shear-effects-on-flightpath-on-approach-22-.png)
+![Figure 22-22. Wind Shear Effects on Flightpath on Approach](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-15-wind-shear-effects-on-flightpath-on-approach.png)
 
-![Figure 22-23. Illustration of an Encounter with Microburst Horizontal Vortices 
-An airplane flying through horizontal vortices as shown in Figure 22-23 experiences alternating updrafts 
-and downdrafts causing pitch changes without pilot input. These vertical winds result in airplane 
-angle-of-attack fluctuations that,](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-16-illustration-of-an-encounter-with-microburst-hor.png)
+![Figure 22-23. Illustration of an Encounter with Microburst Horizontal Vortices](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-16-illustration-of-an-encounter-with-microburst-hor.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-22-00-enhanced-fujita-scale-for-tornado-damage-ef-rati.html">
 <table><caption>Table 22-1. Enhanced Fujita Scale for Tornado Damage 
@@ -643,5 +586,5 @@ Gale
 EF-1 
 Weak 
 86–110 
-138</caption><thead><tr><th>EF-Rating</th><th></th><th></th><th>Class</th><th></th><th>3-Second Wind Gust</th><th></th><th></th><th></th><th></th><th>Description</th><th>Relative Frequency</th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td>mph</td><td></td><td></td><td>km/h</td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>EF-0</td><td></td><td>Weak</td><td>65–85</td><td></td><td></td><td>105–137</td><td></td><td></td><td>Gale</td><td>53.5%</td><td></td></tr><tr><td></td><td>EF-1</td><td></td><td>Weak</td><td>86–110</td><td></td><td></td><td>138–177</td><td></td><td></td><td>Weak</td><td>31.6%</td><td></td></tr><tr><td></td><td>EF-2</td><td></td><td>Strong</td><td>111–135</td><td></td><td></td><td>178–217</td><td></td><td></td><td>Strong</td><td>10.7%</td><td></td></tr><tr><td></td><td>EF-3</td><td></td><td>Strong</td><td>136–165</td><td></td><td></td><td>218–266</td><td></td><td></td><td>Severe</td><td>3.4%</td><td></td></tr><tr><td></td><td>EF-4</td><td></td><td>Violent</td><td>166–200</td><td></td><td></td><td>267–322</td><td></td><td></td><td>Devastating</td><td>0.7%</td><td></td></tr><tr><td></td><td>EF-5</td><td></td><td>Violent</td><td>&gt;200</td><td></td><td></td><td>&gt;322</td><td></td><td></td><td>Incredible</td><td>&lt;0.1%</td><td></td></tr><tr><td></td><td>Note: The EF Scale is a set of wind estimates (not measurements) based on damage. The 3-second</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>gust is not the same wind as in METAR/SPECI surface observations, which is a 2-minute average.</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Note: Confirmed tornadoes with no reported damage (i.e., those that remain in open fields) are always</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>rated EF-0.</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+138</caption><thead><tr><th>EF-Rating</th><th></th><th></th><th>Class</th><th></th><th>3-Second Wind Gust</th><th></th><th></th><th></th><th></th><th>Description</th><th>Relative Frequency</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td>mph</td><td></td><td></td><td>km/h</td><td></td><td></td><td></td></tr><tr><td></td><td>EF-0</td><td></td><td>Weak</td><td>65–85</td><td></td><td></td><td>105–137</td><td></td><td></td><td>Gale</td><td>53.5%</td></tr><tr><td></td><td>EF-1</td><td></td><td>Weak</td><td>86–110</td><td></td><td></td><td>138–177</td><td></td><td></td><td>Weak</td><td>31.6%</td></tr><tr><td></td><td>EF-2</td><td></td><td>Strong</td><td>111–135</td><td></td><td></td><td>178–217</td><td></td><td></td><td>Strong</td><td>10.7%</td></tr><tr><td></td><td>EF-3</td><td></td><td>Strong</td><td>136–165</td><td></td><td></td><td>218–266</td><td></td><td></td><td>Severe</td><td>3.4%</td></tr><tr><td></td><td>EF-4</td><td></td><td>Violent</td><td>166–200</td><td></td><td></td><td>267–322</td><td></td><td></td><td>Devastating</td><td>0.7%</td></tr><tr><td></td><td>EF-5</td><td></td><td>Violent</td><td>&gt;200</td><td></td><td></td><td>&gt;322</td><td></td><td></td><td>Incredible</td><td>&lt;0.1%</td></tr><tr><td></td><td>Note: The EF Scale is a set of wind estimates (not measurements) based on damage. The 3-second</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>gust is not the same wind as in METAR/SPECI surface observations, which is a 2-minute average.</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Note: Confirmed tornadoes with no reported damage (i.e., those that remain in open fields) are always</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>rated EF-0.</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
 </div>

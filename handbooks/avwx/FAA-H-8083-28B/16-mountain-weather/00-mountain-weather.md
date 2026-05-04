@@ -378,92 +378,38 @@ See Section 20.3.8 for information on mountain icing.
 16.9 Density Altitude
 See Section 8.4.1.5 for information on density altitude.
 
-![Figure 16-1.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-00-untitled.png)
+![oscillations before the resulting wave motion dampens out. This process is depicted in Figure 16-1.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-00-this-process-is-depicted-in-figure-16-1.png)
 
-![Figure 16-1. Gravity Wave Oscillations 
-The described gravity wave will have measurable wavelength, amplitude, phase speed, and period. The 
-period of this type of atmospheric disturbance is related to the temperature of the air and the “spread” 
-between the existing lapse rate and the dry adiabatic lapse rate (or, equ](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-2-00-gravity-wave-oscillations-the-described-gravity-.png)
+![Figure 16-1. Gravity Wave Oscillations](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-2-00-gravity-wave-oscillations.png)
 
-![Figure 16-2. 
- 
-Figure 16-2. Gravity-Shear Waves](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-2-01-figure-16-2-gravity-shear-waves.png)
+![a stable temperature lapse rate. This effect is illustrated in Figure 16-2.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-2-01-this-effect-is-illustrated-in-figure-16-2.png)
 
-![Figure 16-4. 
- 
-Figure 16-3. Schematic of Clouds Associated with Gravity-Shear Waves 
- 
-(Photo Credit: University Corporation for Atmospheric Research (UCAR)) 
-Figure 16-4. Clouds Associated with Gravity-Shear Waves 
-K-H waves are quite common in the atmosphere; they can form in the vicinity of thunderstorms, in shear](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-2-02-figure-16-3-schematic-of-clouds-associated-with-.png)
+![Figure 16-2. Gravity-Shear Waves](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-2-02-gravity-shear-waves.png)
 
-![Figure 16-3. Schematic of Clouds Associated with Gravity-Shear Waves 
- 
-(Photo Credit: University Corporation for Atmospheric Research (UCAR)) 
-Figure 16-4. Clouds Associated with Gravity-Shear Waves 
-K-H waves are quite common in the atmosphere; they can form in the vicinity of thunderstorms, in shear 
-layers near the](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-2-03-schematic-of-clouds-associated-with-gravity-shea.png)
+![gravity waves can frequently be observed in the atmosphere, as shown in Figure 16-3 and Figure 16-4.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-2-03-untitled.png)
 
-![Figure 16-5. Schematic of a Vertically Propagating Mountain Wave 
-Often accompanying these high-altitude effects is the occurrence of very strong surface winds that result 
-from the wave breaking aloft. In this case, strong downslope winds on the lee slopes can reach 100 kt gusts, 
-creating a low-level turbulence hazar](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-3-00-schematic-of-a-vertically-propagating-mountain-w.png)
+![Figure 16-5. Schematic of a Vertically Propagating Mountain Wave](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-3-00-schematic-of-a-vertically-propagating-mountain-w.png)
 
-![Figure 16-6. Schematic Showing Locations of Jump and Wave Breaking Region of a Vertically Propagating Mountain 
-Wave 
- 
-5 Durran, D. R., & Klemp, J. B. (1983). A compressible model for the simulation of moist mountain waves. Monthly 
-Weather. Review, 111, 2341-2361.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-3-01-schematic-showing-locations-of-jump-and-wave-bre.png)
+![themselves. These features are indicated schematically in Figure 16-6. The jump region is frequently an  area of extreme turbulence extending to 10,000 ft or more above the surface. The area of the jump is sometimes marked by a line of ragged rotor clouds exhibiting very turbulent motion. Downwind of the jump, turbulen](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-3-01-these-features-are-indicated-schematically-in-fi.png)
 
-![Figure 16-7. Schematic of the Strong Shear Zone Associated with a Hydraulic Jump in a Mountain Wave 
-16.2.4 Trapped Lee Waves 
-In the preceding section, an important type of mountain wave that propagates (i.e., transports its energy) 
-vertically was discussed. Next, consider a second type of mountain wave, often manife](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-4-00-schematic-of-the-strong-shear-zone-associated-wi.png)
+![Figure 16-6. Schematic Showing Locations of Jump and Wave Breaking Region of a Vertically Propagating Mountain  Wave](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-3-02-schematic-showing-locations-of-jump-and-wave-bre.png)
 
-![Figure 16-5. 
- 
-(Source: Durran and Klemp, 1983)6 
-Figure 16-8. Computer Simulation of Trapped Lee Waves Behind a 300-m-High Mountain 
-This class of wave presents less turbulence hazard at high altitude than do breaking vertically propagating 
-waves, because the wave amplitude decreases with height within the “trapping](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-4-01-source-durran-and-klemp-1983-6-figure-16-8-compu.png)
+![Figure 16-7. Schematic of the Strong Shear Zone Associated with a Hydraulic Jump in a Mountain Wave](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-4-00-schematic-of-the-strong-shear-zone-associated-wi.png)
 
-![Figure 16-9. Lenticular Clouds Associated with a Trapped Lee Wave 
-16.2.5 Persistent Horizontal Roll Vortices (Rotors) 
-When mountain waves are present, it is quite common for a rotor zone to develop near or below ridge level 
-on the downwind side of the mountain, under a wave crest and associated lenticular cloud (if](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-5-00-lenticular-clouds-associated-with-a-trapped-lee-.png)
+![in Figure 16-5.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-4-01-untitled.png)
 
-![Figure 16-10. Conceptual View of a Mountain Lee Wave Rotor Zone 
-Because of their potential for causing turbulence and loss of aircraft control, rotor zones should be avoided. 
-Rotor zones are of concern not only because of the likelihood of strong turbulence in their vicinity, 
-particularly on the upwind side of the r](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-6-00-conceptual-view-of-a-mountain-lee-wave-rotor-zon.png)
+![Figure 16-8. Computer Simulation of Trapped Lee Waves Behind a 300-m-High Mountain](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-5-00-lenticular-clouds-associated-with-a-trapped-lee-.png)
 
-![Figure 16-11. Development of a Strong Roll Vortex Associated with a Wind Surge Down the Lee Slope of a Mountain 
- 
-9 Bedard, A. J., Jr. (1993). Atmospheric Turbulence Aloft: A review of possible methods for detection, warning, and 
-validation of prediction models. Washington, DC: American Institute of Aeronautics and A](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-6-01-development-of-a-strong-roll-vortex-associated-w.png)
+![Figure 16-9. Lenticular Clouds Associated with a Trapped Lee Wave](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-6-00-conceptual-view-of-a-mountain-lee-wave-rotor-zon.png)
 
-![Figure 16-12. Schematic of Vertically Oriented Vortices Generated in the Lee of an Isolated Mountain Peak 
-16.2.6.3.1 Dust Devils 
-A common wind phenomenon that occurs throughout much of the world, including the desert Southwest, 
-is dust devils, sometimes known as whirlwinds. These dust-filled vortices, created by str](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-6-02-schematic-of-vertically-oriented-vortices-genera.png)
+![Figure 16-10. Conceptual View of a Mountain Lee Wave Rotor Zone](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-6-01-development-of-a-strong-roll-vortex-associated-w.png)
 
-![Figure 16-13. NWS Dust Devils: A Life Cycle 
-It is important to note that not all dust devils may be easily visible. Some may have no or very little debris. 
-Pilots should try their best to avoid dust devils. They should not fly through them and should scan takeoff 
-and landing areas.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-6-03-nws-dust-devils-a-life-cycle-it-is-important-to-.png)
+![Figure 16-11. Development of a Strong Roll Vortex Associated with a Wind Surge Down the Lee Slope of a Mountain](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-6-02-schematic-of-vertically-oriented-vortices-genera.png)
 
-![Figure 16-14. Accident Damage Caused by a Dust Devil 
-16.2.6.4 Boras 
-The Glossary of Meteorology10 defines a bora as a “fall wind with a source so cold that, when the air reaches 
-the lowlands or coast, the dynamic warming is insufficient to raise the air temperature to the normal level 
-for the region; hence it appea](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-6-04-accident-damage-caused-by-a-dust-devil-16-2-6-4-.png)
+![Figure 16-12. Schematic of Vertically Oriented Vortices Generated in the Lee of an Isolated Mountain Peak](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-6-03-nws-dust-devils-a-life-cycle.png)
 
-![Figure 16-15. Schematic of Mountain Waves and Associated Clouds](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-7-00-schematic-of-mountain-waves-and-associated-cloud.png)
+![Figure 16-13. NWS Dust Devils: A Life Cycle](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-6-04-accident-damage-caused-by-a-dust-devil.png)
 
-![Figure 16-16. Examples of Mountain Wave Clouds 
-16.3 Mountain/Valley Breezes and Circulation 
-See Sections 10.6.4, 10.6.5, and 10.6.6 for information on mountain/valley breezes and circulation. 
-16.4 Mountain/Valley Fog 
-See Section 18.1.1.1.1.1 for information on mountain/valley fog. 
-16.5 Upslope Fog 
-See Section 18.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-3-00-examples-of-mountain-wave-clouds-16-3-mountain-v.png)
+![Figure 16-14. Accident Damage Caused by a Dust Devil](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-7-00-schematic-of-mountain-waves-and-associated-cloud.png)
+
+![Figure 16-15. Schematic of Mountain Waves and Associated Clouds](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-3-00-examples-of-mountain-wave-clouds.png)

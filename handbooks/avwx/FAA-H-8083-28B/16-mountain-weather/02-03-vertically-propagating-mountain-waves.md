@@ -72,13 +72,8 @@ Wave
 5 Durran, D. R., & Klemp, J. B. (1983). A compressible model for the simulation of moist mountain waves. Monthly
 Weather. Review, 111, 2341-2361.
 
-![Figure 16-5. Schematic of a Vertically Propagating Mountain Wave 
-Often accompanying these high-altitude effects is the occurrence of very strong surface winds that result 
-from the wave breaking aloft. In this case, strong downslope winds on the lee slopes can reach 100 kt gusts, 
-creating a low-level turbulence hazar](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-3-00-schematic-of-a-vertically-propagating-mountain-w.png)
+![Figure 16-5. Schematic of a Vertically Propagating Mountain Wave](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-3-00-schematic-of-a-vertically-propagating-mountain-w.png)
 
-![Figure 16-6. Schematic Showing Locations of Jump and Wave Breaking Region of a Vertically Propagating Mountain 
-Wave 
- 
-5 Durran, D. R., & Klemp, J. B. (1983). A compressible model for the simulation of moist mountain waves. Monthly 
-Weather. Review, 111, 2341-2361.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-3-01-schematic-showing-locations-of-jump-and-wave-bre.png)
+![themselves. These features are indicated schematically in Figure 16-6. The jump region is frequently an  area of extreme turbulence extending to 10,000 ft or more above the surface. The area of the jump is sometimes marked by a line of ragged rotor clouds exhibiting very turbulent motion. Downwind of the jump, turbulen](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-3-01-these-features-are-indicated-schematically-in-fi.png)
+
+![Figure 16-6. Schematic Showing Locations of Jump and Wave Breaking Region of a Vertically Propagating Mountain  Wave](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-3-02-schematic-showing-locations-of-jump-and-wave-bre.png)

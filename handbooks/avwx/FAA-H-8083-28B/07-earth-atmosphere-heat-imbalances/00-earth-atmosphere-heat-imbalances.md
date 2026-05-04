@@ -139,50 +139,20 @@ The magnitude of diurnal temperature variation is primarily influenced by surfac
 maximized over land, at low latitudes, with a clear sky, dry air, and light wind. Conversely, temperature
 variation is minimized over water, at high latitudes, with a cloudy sky, moist air, and strong wind.
 
-![Figure 7-1. When solar 
-radiation reaches the Earth, some is reflected back to space by air (eight percent), clouds (17 percent), or 
-the surface (six percent). Some is absorbed by water vapor/dust/ozone (19 percent) or by clouds 
-(four percent). The remainder is absorbed by the Earth’s surface (46 percent). 
- 
-Figure](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-2-00-when-solar-radiation-reaches-the-earth-some-is-r.png)
+![radiation) and outgoing energy from the Earth (terrestrial radiation), as seen in Figure 7-1. When solar  radiation reaches the Earth, some is reflected back to space by air (eight percent), clouds (17 percent), or the surface (six percent). Some is absorbed by water vapor/dust/ozone (19 percent) or by clouds (four per](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-2-00-when-solar-radiation-reaches-the-earth-some-is-r.png)
 
-![Figure 7-1. Earth-Atmosphere Energy Balance 
-In Figure 7-1, 100 units of incoming radiation from the Sun is balanced by 100 units of outgoing radiation 
-from the Earth. 
-However, since the Earth is much cooler than the Sun, its radiating energy is much weaker (long 
-wavelength) infrared energy. Indirectly, this energy](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-01-earth-atmosphere-energy-balance-in-figure-7-1-10.png)
+![Figure 7-1. Earth-Atmosphere Energy Balance](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-01-earth-atmosphere-energy-balance.png)
 
-![Figure 7-2. Greenhouse Effect on Nighttime Radiational Cooling 
-7.3 Heat Imbalances Between Earth’s Surface and the Atmosphere 
-The Earth-atmosphere energy balance numbers (see Figure 7-1) indicate that both sensible heat (seven 
-percent) and latent heat (24 percent) processes transfer heat from the Earth’s surface int](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-3-1-00-greenhouse-effect-on-nighttime-radiational-cooli.png)
+![Figure 7-2. Greenhouse Effect on Nighttime Radiational Cooling](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-3-1-00-greenhouse-effect-on-nighttime-radiational-cooli.png)
 
-![Figure 7-3. Development of a Thermal 
-In this manner, convection transports heat from the Earth’s surface into the atmosphere. Because air is a 
-poor conductor of heat (see Table 5-3), convection is much more important than conduction as a heat 
-transport mechanism within the atmosphere. 
- 
-Figure 7-4. Example of Conve](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-3-2-00-development-of-a-thermal-in-this-manner-convecti.png)
+![Figure 7-3. Development of a Thermal](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-3-2-00-development-of-a-thermal.png)
 
-![Figure 7-4. Example of Convection in the Atmosphere 
-7.3.2 Latent Heat 
-The phase transition of water and associated latent heat exchanges are largely responsible for transferring 
-the excess heat from the surface of the Earth into its atmosphere. As the Earth’s surface absorbs radiation, 
-some of the heat produced is](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-3-2-01-example-of-convection-in-the-atmosphere-7-3-2-la.png)
+![Figure 7-4. Example of Convection in the Atmosphere](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-3-2-01-example-of-convection-in-the-atmosphere.png)
 
-![Figure 7-5. Solar Zenith Angle Variations with Latitude 
-The emission of terrestrial radiation also varies by latitude, but less so than the absorption of solar radiation. 
-Terrestrial radiation emission decreases with increasing latitude due to a drop in temperature with latitude. 
-Thus, at higher latitudes, the annua](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-4-00-solar-zenith-angle-variations-with-latitude-the-.png)
+![Figure 7-5. Solar Zenith Angle Variations with Latitude](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-4-00-solar-zenith-angle-variations-with-latitude.png)
 
-![Figure 7-6. Solar Zenith Angle Variations with Northern Hemisphere Seasons 
-Figure 7-7 illustrates the average seasonal temperature variation in the Northern Hemisphere. Note that the 
-warmest (coldest days) of the year occur after the summer (winter) solstice. This is due to the time lag 
-necessary for heat flow proce](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-5-00-solar-zenith-angle-variations-with-northern-hemi.png)
+![Figure 7-6. Solar Zenith Angle Variations with Northern Hemisphere Seasons](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-5-00-solar-zenith-angle-variations-with-northern-hemi.png)
 
-![Figure 7-7. Average Seasonal Temperature Variation in the Northern Hemisphere 
-7.6 Diurnal Temperature Variation 
-Diurnal temperature variation is the daytime maximum and nighttime minimum of air temperature due to 
-variations of insolation caused by the rising and setting of the Sun (i.e., variations of solar zenith a](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-6-00-average-seasonal-temperature-variation-in-the-no.png)
+![Figure 7-7. Average Seasonal Temperature Variation in the Northern Hemisphere](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-6-00-average-seasonal-temperature-variation-in-the-no.png)
 
 ![Figure 7-8. Clear Sky Diurnal Temperature and Radiation Variations Over Land](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-6-01-clear-sky-diurnal-temperature-and-radiation-vari.png)

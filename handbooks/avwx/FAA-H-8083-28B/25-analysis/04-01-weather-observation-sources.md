@@ -39,8 +39,4 @@ drawn between dots representing various elements of the atmosphere. An isopleth 
 line on a weather map connecting points with equal values of a particular atmospheric variable. See Table
 25-1 for common isopleths.
 
-![Figure 25-1. Weather Observation Sources 
-25.2.2 Analysis 
-Analysis is the drawing and interpretation of the patterns of various elements on a weather chart. It is an 
-essential part of the forecast process. If meteorologists do not know what is currently occurring, it is nearly 
-impossible to predict what will happen](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-1-00-weather-observation-sources-25-2-2-analysis-anal.png)
+![Figure 25-1. Weather Observation Sources](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-1-00-weather-observation-sources.png)

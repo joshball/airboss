@@ -49,12 +49,6 @@ dewpoint increases at 0.5°C per 1,000 ft. The temperature-dewpoint spread incre
 humidity decreases until the parcel reaches the surface. Note that the parcel is now much warmer and drier
 at the surface than when it began the vertical motion process in Figure 12-2.
 
-![Figure 12-2. Ascending Air Parcel That Becomes Saturated Example 
-In Figure 12-2, at the surface the air parcel has a temperature of 18°C and a dewpoint of 13°C, indicating 
-that it is unsaturated. As the parcel ascends, its temperature decreases at the dry adiabatic lapse rate of 3°C 
-per 1,000 ft, while the dewpoint](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-3-00-ascending-air-parcel-that-becomes-saturated-exam.png)
+![Figure 12-2. Ascending Air Parcel That Becomes Saturated Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-3-00-ascending-air-parcel-that-becomes-saturated-exam.png)
 
-![Figure 12-3. Descending Air Parcel Example 
-At 5,000 ft, both the temperature and dewpoint of the air parcel are 6°C, indicating that it is saturated. As 
-the parcel descends, it quickly becomes unsaturated. Its temperature increases 3°C per 1,000 ft, while its 
-dewpoint increases at 0.5°C per 1,000 ft. The temperature](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-3-01-descending-air-parcel-example-at-5-000-ft-both-t.png)
+![Figure 12-3. Descending Air Parcel Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-3-01-descending-air-parcel-example.png)

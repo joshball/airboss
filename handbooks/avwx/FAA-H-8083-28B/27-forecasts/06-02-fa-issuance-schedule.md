@@ -52,19 +52,13 @@ None
 Note: DT—During Alaska Daylight Time; ST—During Alaska Standard Time;
 UTC—Coordinated Universal Time.
 
-<div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-6-2-00-fa-issuance-schedule-alaska-utc-1st-issuance-041.html">
-<table><caption>Table 27-8. FA Issuance Schedule 
-  
-Alaska  
-(UTC) 
-1st Issuance 
-0415 (DT)/0515 (ST) 
-2nd Issuance 
-1215 (DT)/1315 (ST) 
-3rd Issuance 
-2015 (DT)/2115 (ST) 
-4th Issuance 
-None 
-Note: DT—During Alaska</caption><thead><tr><th></th><th>Alaska
-(UTC)</th></tr></thead><tbody><tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td>1st Issuance</td><td>0415 (DT)/0515 (ST)</td></tr><tr><td>2nd Issuance</td><td>1215 (DT)/1315 (ST)</td></tr><tr><td>3rd Issuance</td><td>2015 (DT)/2115 (ST)</td></tr><tr><td>4th Issuance</td><td>None</td></tr></tbody></table>
-</div>
+**Table 27-8.** FA Issuance Schedule Alaska (UTC) 1st Issuance 0415 (DT)/0515 (ST) 2nd Issuance 1215 (DT)/1315 (ST) 3rd Issuance 2015 (DT)/2115 (ST) 4th Issuance None Note: DT—During Alaska
+
+|  | Alaska<br>(UTC) |
+| --- | --- |
+| 1st Issuance | 0415 (DT)/0515 (ST) |
+| 2nd Issuance | 1215 (DT)/1315 (ST) |
+| 3rd Issuance | 2015 (DT)/2115 (ST) |
+| 4th Issuance | None |
+
+<a class="handbook-table-source" href="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-6-2-00-fa-issuance-schedule-alaska-utc-1st-issuance-041.html">Open original</a>

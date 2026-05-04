@@ -27,7 +27,4 @@ shift from south or southeasterly to west or southwesterly. Blowing dust and ris
 follow, especially if the dryline passes during the daytime. These changes occur in reverse order when the
 dryline retreats westward.
 
-![Figure 11-14. Dryline Example 
-The dryline typically advances eastward during the afternoon and retreats westward at night. However, a 
-strong wave cyclone can sweep the dryline eastward into the Mississippi Valley, or even farther east, 
-regardless of the time of day. Low-level clouds and early morning fog often preva](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-5-00-dryline-example-the-dryline-typically-advances-e.png)
+![Figure 11-14. Dryline Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-5-00-dryline-example.png)

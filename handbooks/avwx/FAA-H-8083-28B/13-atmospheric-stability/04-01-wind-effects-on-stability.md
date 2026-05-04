@@ -32,6 +32,4 @@ Figure 13-7. Vertical Motion Effects on Stability
 A rising column of air will become less stable when air at the bottom has a higher relative humidity than
 air at the top. As the air moves upward, the bottom becomes saturated first and cools at the lesser moist
 
-![Figure 13-7. Vertical Motion Effects on Stability 
-A rising column of air will become less stable when air at the bottom has a higher relative humidity than 
-air at the top. As the air moves upward, the bottom becomes saturated first and cools at the lesser moist](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-4-1-00-vertical-motion-effects-on-stability-a-rising-co.png)
+![Figure 13-7. Vertical Motion Effects on Stability](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-4-1-00-vertical-motion-effects-on-stability.png)

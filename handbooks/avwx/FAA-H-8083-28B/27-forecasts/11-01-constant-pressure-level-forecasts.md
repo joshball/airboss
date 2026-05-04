@@ -47,14 +47,6 @@ constant pressure levels contained in Table 27-14. It should be noted that the l
 are only a subset of the levels available from the model that are routinely made available to NWS
 meteorologists and others (e.g., 400 mb, 600 mb).
 
-![Figure 27-26. NWS NCO Model Analyses and Guidance Website 
-27.11.1 Constant Pressure Level Forecasts 
-Constant pressure level forecasts (see Figure 27-27) are just one of the many products produced by NWP 
-models. Constant pressure level forecasts are the computer model’s depiction of select weather (e.g., wind) 
-at a](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-11-1-00-nws-nco-model-analyses-and-guidance-website-27-1.png)
+![Figure 27-26. NWS NCO Model Analyses and Guidance Website](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-11-1-00-nws-nco-model-analyses-and-guidance-website.png)
 
-![Figure 27-27. 300 mb Constant Pressure Forecast—Example 
-27.11.1.1 Issuance 
-Constant pressure level forecasts are produced several times a day depending on the model. The NCEP’s 
-GFS model and North American Model (NAM) produce forecasts four times per day, with initial times of 
-00, 06, 12, and 18 UTC. Other higher r](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-11-1-01-300-mb-constant-pressure-forecast-example-27-11-.png)
+![Figure 27-27. 300 mb Constant Pressure Forecast—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-11-1-01-300-mb-constant-pressure-forecast-example.png)

@@ -52,16 +52,6 @@ See Chapter 16, Mountain Weather, for information on adverse mountain winds.
 10.7.7 Atmospheric Disturbances in Mountainous Areas
 See Chapter 19, Turbulence, for information on mountain-related turbulence.
 
-![Figure 10-21. Mountain Breeze 
-Surface wind flows from the mountain down the sloping terrain into the valley. Air rises over the valley 
-and sinks over the sloping terrain. 
-10.7 Adverse Winds 
-10.7.1 Crosswind 
-A crosswind is a wind that has a component directed perpendicularly to the heading of an aircraft 
-(see Figu](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-7-1-00-mountain-breeze-surface-wind-flows-from-the-moun.png)
+![Figure 10-21. Mountain Breeze](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-7-1-00-mountain-breeze.png)
 
-![Figure 10-22. Crosswind Climb Flightpath 
-10.7.2 Gust 
-A gust is a fluctuation of wind speed with variations of 10 knots (kt) or more between peaks and lulls. 
-Even if the airplane is oriented into the wind, gusts during takeoff and landing cause airspeed fluctuations 
-that can cause problems for pilots. A gust increas](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-7-2-00-crosswind-climb-flightpath-10-7-2-gust-a-gust-is.png)
+![Figure 10-22. Crosswind Climb Flightpath](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-7-2-00-crosswind-climb-flightpath.png)

@@ -141,62 +141,29 @@ common cloud cover depictions.
 
 Figure 25-16. NWS Surface Analysis Chart Sky Cover Symbols
 
-![Figure 25-4. Analysis Procedure Step 3: Interpret Significant Weather Features 
-25.2.3 Surface Analysis Chart 
-The WPC in College Park, MD, produces a variety of surface analysis charts for North America that are 
-available on their website. The WPC’s surface analysis is also available on the AWC’s and other providers’](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-00-analysis-procedure-step-3-interpret-significant-.png)
+![Figure 25-4. Analysis Procedure Step 3: Interpret Significant Weather Features](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-00-analysis-procedure-step-3-interpret-significant-.png)
 
-![Figure 25-5. Schematic of Surface Chart Pressure Patterns 
-Figure 25-7 is one example of several surface analysis products available on the WPC’s website. 
-Some of the WPC’s surface analysis charts are combined with radar or satellite imagery (see Figure 25-8 
-and Figure 25-9) as well as having different background fea](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-01-schematic-of-surface-chart-pressure-patterns-fig.png)
+![Figure 25-5. Schematic of Surface Chart Pressure Patterns](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-01-schematic-of-surface-chart-pressure-patterns.png)
 
-![Figure 25-6. NWS Surface Analysis Chart Symbols 
-25.2.3.3 Examples 
- 
-Figure 25-7. Example of a Surface Chart with Surface Observations](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-02-nws-surface-analysis-chart-symbols-25-2-3-3-exam.png)
+![Figure 25-6. NWS Surface Analysis Chart Symbols](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-02-nws-surface-analysis-chart-symbols.png)
 
 ![Figure 25-7. Example of a Surface Chart with Surface Observations](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-03-example-of-a-surface-chart-with-surface-observat.png)
 
-![Figure 25-8. Surface Analysis with Radar Composite Example 
- 
-Figure 25-9. Surface Analysis with Satellite Composite Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-04-surface-analysis-with-radar-composite-example-fi.png)
+![Figure 25-8. Surface Analysis with Radar Composite Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-04-surface-analysis-with-radar-composite-example.png)
 
 ![Figure 25-9. Surface Analysis with Satellite Composite Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-05-surface-analysis-with-satellite-composite-exampl.png)
 
-![Figure 25-10. NWS Surface Analysis Chart Station Plot Model 
- 
-Figure 25-11. NWS Surface Analysis Chart Ship/Buoy Plot Model](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-06-nws-surface-analysis-chart-station-plot-model-fi.png)
+![Figure 25-10. NWS Surface Analysis Chart Station Plot Model](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-06-nws-surface-analysis-chart-station-plot-model.png)
 
 ![Figure 25-11. NWS Surface Analysis Chart Ship/Buoy Plot Model](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-07-nws-surface-analysis-chart-ship-buoy-plot-model.png)
 
-![Figure 25-12. NWS Surface Analysis Chart for Aviation Interests Station Plot Model 
-25.2.3.4.1 Station Identifier 
-The format of the station identifier depends on the observing platform: 
-• 
-Ship: Typically, four or five characters. If five characters, then the fifth will usually be a digit. 
-• 
-Buoy: Whether drifting](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-08-nws-surface-analysis-chart-for-aviation-interest.png)
+![Figure 25-12. NWS Surface Analysis Chart for Aviation Interests Station Plot Model](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-08-nws-surface-analysis-chart-for-aviation-interest.png)
 
-![Figure 25-13. NWS Surface Analysis Chart Common Weather Symbols 
-25.2.3.4.5 Wind 
-Wind is plotted in increments of 5 kt. The wind direction is referenced to true north and is depicted by a 
-stem (line) pointed in the direction from which the wind is blowing. Wind speed is determined by adding 
-the values of the flags (](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-09-nws-surface-analysis-chart-common-weather-symbol.png)
+![Figure 25-13. NWS Surface Analysis Chart Common Weather Symbols](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-09-nws-surface-analysis-chart-common-weather-symbol.png)
 
-![Figure 25-14. NWS Surface Analysis Chart Sample Wind Symbols 
-25.2.3.4.6 Ceiling 
-Ceiling is plotted in hundreds of feet AGL. 
-25.2.3.4.7 Visibility 
-Surface visibility is plotted in whole statute miles. 
-25.2.3.4.8 Pressure 
-Sea level pressure is plotted in tenths of millibars, with the first two digits (generally 10](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-10-nws-surface-analysis-chart-sample-wind-symbols-2.png)
+![Figure 25-14. NWS Surface Analysis Chart Sample Wind Symbols](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-10-nws-surface-analysis-chart-sample-wind-symbols.png)
 
-![Figure 25-15. NWS Surface Analysis Chart Pressure Trends 
-25.2.3.4.10 Sky Cover 
-The approximate amount of sky cover can be determined by the circle at the center of the station plot. The 
-amount that the circle is filled reflects the amount of sky covered by clouds. Figure 25-16 contains the 
-common cloud cover depict](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-11-nws-surface-analysis-chart-pressure-trends-25-2-.png)
+![Figure 25-15. NWS Surface Analysis Chart Pressure Trends](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-11-nws-surface-analysis-chart-pressure-trends.png)
 
 ![Figure 25-16. NWS Surface Analysis Chart Sky Cover Symbols](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-12-nws-surface-analysis-chart-sky-cover-symbols.png)
 
@@ -208,12 +175,12 @@ Definition
 Low 
  
 A minimum of atmospheric pressure in two dimensions (closed 
-isobars) on a surface chart, or a minimum of height (closed</caption><thead><tr><th></th><th>Feature</th><th></th><th></th><th>Symbol</th><th></th><th></th><th>Definition</th><th></th></tr></thead><tbody><tr><td>Low</td><td></td><td></td><td></td><td></td><td></td><td>A minimum of atmospheric pressure in two dimensions (closed
+isobars) on a surface chart, or a minimum of height (closed</caption><thead><tr><th></th><th>Feature</th><th></th><th></th><th>Symbol</th><th></th><th></th><th>Definition</th></tr></thead><tbody><tr><td>Low</td><td></td><td></td><td></td><td></td><td></td><td>A minimum of atmospheric pressure in two dimensions (closed
 isobars) on a surface chart, or a minimum of height (closed
-contours) on a constant-pressure chart. Also known as a cyclone.</td><td></td><td></td></tr><tr><td>High</td><td></td><td></td><td></td><td></td><td></td><td>A maximum of atmospheric pressure in two dimensions (closed
+contours) on a constant-pressure chart. Also known as a cyclone.</td><td></td></tr><tr><td>High</td><td></td><td></td><td></td><td></td><td></td><td>A maximum of atmospheric pressure in two dimensions (closed
 isobars) on a surface chart, or a maximum of height (closed
 contours) on a constant-pressure chart. Also known as an
-anticyclone.</td><td></td><td></td></tr><tr><td>Trough</td><td></td><td></td><td></td><td></td><td></td><td>An elongated area of relatively low atmospheric pressure or height.</td><td></td><td></td></tr><tr><td>Ridge</td><td></td><td></td><td></td><td></td><td></td><td>An elongated area of relatively high atmospheric pressure or
+anticyclone.</td><td></td></tr><tr><td>Trough</td><td></td><td></td><td></td><td></td><td></td><td>An elongated area of relatively low atmospheric pressure or height.</td><td></td></tr><tr><td>Ridge</td><td></td><td></td><td></td><td></td><td></td><td>An elongated area of relatively high atmospheric pressure or
 height. May also be used as reference to other meteorological
-quantities, such as temperature and dewpoint.</td><td></td><td></td></tr></tbody></table>
+quantities, such as temperature and dewpoint.</td><td></td></tr></tbody></table>
 </div>
