@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { CARD_TYPES, DOMAINS, ROUTES } from '../../libs/constants/src';
+import { CARD_KINDS, CARD_TYPES, DOMAINS, ROUTES } from '../../libs/constants/src';
 
 /**
  * Generates a unique card front per test so parallel workers don't collide
@@ -36,6 +36,10 @@ test.describe('memory', () => {
 		await page.locator('select[name="domain"]').selectOption(DOMAINS.REGULATIONS);
 		// cardType has no true default selection in the DOM; select explicitly.
 		await page.locator('select[name="cardType"]').selectOption(CARD_TYPES.BASIC);
+		// `kind` was added after this test was written; it's a required field
+		// (no empty option) so the bound `value=` default is fragile across
+		// browsers. Select explicitly so submission is deterministic.
+		await page.locator('select[name="kind"]').selectOption(CARD_KINDS.RECALL);
 		await page.getByRole('button', { name: /^save$/i }).click();
 
 		await expect(page).toHaveURL(/\/memory\/crd_[a-z0-9]+/i, { timeout: 10_000 });
@@ -60,6 +64,7 @@ test.describe('memory', () => {
 		await page.getByLabel('Back (answer)').fill('for browse test');
 		await page.locator('select[name="domain"]').selectOption(DOMAINS.WEATHER);
 		await page.locator('select[name="cardType"]').selectOption(CARD_TYPES.BASIC);
+		await page.locator('select[name="kind"]').selectOption(CARD_KINDS.RECALL);
 		await page.getByRole('button', { name: /^save$/i }).click();
 
 		await expect(page).toHaveURL(/\/memory\/crd_[a-z0-9]+/i, { timeout: 10_000 });

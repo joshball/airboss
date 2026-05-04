@@ -269,8 +269,14 @@ test.describe('handbook reader: read-state controls', () => {
 		// outbound POST so the wait can't false-trigger on stale state.
 		const checkbox = page.locator('input[type=checkbox][name=comprehended]');
 		await expect(checkbox).toBeEnabled();
+		// The onchange handler calls `form.requestSubmit()`, which is wired
+		// up post-hydration. `check()` alone toggles the DOM state without
+		// firing the requestSubmit if the handler hasn't attached yet --
+		// `dispatchEvent('change')` after the check forces the listener path
+		// and drops the timing dependency on hydrate ordering.
 		await waitForFormAction(page, 'set-comprehended', async () => {
 			await checkbox.check();
+			await checkbox.dispatchEvent('change');
 		});
 		await page.goto(url);
 		await expect(page.locator('input[type=checkbox][name=comprehended]')).toBeChecked();

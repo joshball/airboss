@@ -65,10 +65,14 @@ afterAll(() => {
 
 interface FakeEvent {
 	params: { path: string };
+	locals: { requestId: string; user: null };
 }
 
 function makeEvent(path: string): FakeEvent {
-	return { params: { path } };
+	// `+server.ts` reads `locals.requestId` for log correlation and
+	// `locals.user?.id` for actor attribution; provide both so the path-escape
+	// log line doesn't crash before the `error(404)` throw.
+	return { params: { path }, locals: { requestId: 'test-req', user: null } };
 }
 
 function isHttp404(value: unknown): value is { status: 404 } {

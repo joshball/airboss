@@ -24,11 +24,20 @@ import { AUDIT_TARGETS, JOB_AUDIT_REASONS, JOB_KINDS, JOB_LOG_STREAMS, JOB_STATU
 import { db } from '@ab/db/connection';
 import { generateHangarJobId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
-import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { cancelJob, recoverOrphanedRunning, startWorker } from './index';
 import { hangarJob, hangarJobLog } from './schema';
 
-const TEST_TARGET_PREFIX = `worker-test-${process.pid}-${Date.now()}`;
+// Worker tests poll a real Postgres for status transitions. Under the
+// full-suite parallel run the DB sees enough contention to push individual
+// poll loops past vitest's default 5s test timeout (observed flake on the
+// `serialises two same-targetId jobs`, `handler throw`, and `recoverOrphaned`
+// cases). The underlying `waitFor` helpers also poll the DB, so we bump
+// both the test budget and the helper cap to give each spec enough
+// headroom under contention.
+vi.setConfig({ testTimeout: 30_000 });
+
+const TEST_TARGET_PREFIX = `worker-test-${process.pid}-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
 
 const createdJobIds = new Set<string>();
 
@@ -124,7 +133,7 @@ function createBarrier(): { wait: () => Promise<void>; release: () => void } {
 	return { wait: () => promise, release: () => resolveFn() };
 }
 
-async function waitFor(predicate: () => Promise<boolean> | boolean, timeoutMs = 5000, intervalMs = 25): Promise<void> {
+async function waitFor(predicate: () => Promise<boolean> | boolean, timeoutMs = 25_000, intervalMs = 25): Promise<void> {
 	const start = Date.now();
 	while (Date.now() - start < timeoutMs) {
 		if (await predicate()) return;

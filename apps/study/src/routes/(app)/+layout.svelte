@@ -219,7 +219,7 @@ function handleMemoryItemClick() {
 	onAppearanceChange={setAppearance}
 >
 	{#snippet nav()}
-		<div class="nav-sections" aria-label="Primary">
+		<nav class="nav-sections" aria-label="Primary">
 			<a href={ROUTES.STUDY} aria-current={studyActive ? 'page' : undefined}>{NAV_LABELS.STUDY}</a>
 			<a href={ROUTES.DASHBOARD} aria-current={dashboardActive ? 'page' : undefined}>{NAV_LABELS.DASHBOARD}</a>
 			<a href={ROUTES.PLANS} aria-current={plansActive ? 'page' : undefined}>{NAV_LABELS.PLANS}</a>
@@ -283,7 +283,7 @@ function handleMemoryItemClick() {
 					>
 				</div>
 			</details>
-		</div>
+		</nav>
 	{/snippet}
 	{#snippet helpSearch()}
 		<HelpSearch />

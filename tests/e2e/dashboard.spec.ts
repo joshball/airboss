@@ -20,11 +20,14 @@ test.describe('dashboard', () => {
 		await expect(nav.locator('summary').filter({ hasText: 'Memory' })).toBeVisible();
 		await expect(nav.getByRole('link', { name: 'Reps' })).toBeVisible();
 		await expect(nav.getByRole('link', { name: 'Calibration' })).toBeVisible();
-		// Flightbag link points at the cross-subdomain flightbag app, derived
-		// from the live request URL so dev and prod both work without a
-		// hardcoded origin. Assert it's there with an absolute href that
-		// resolves to the flightbag subdomain.
-		const flightbag = nav.getByRole('link', { name: 'Flightbag' });
+		// Flightbag link moved out of the Primary nav and into the header's
+		// right cluster (Help/Flightbag/theme/account) per the shared
+		// `AppHeader` rollout. It points at the cross-subdomain flightbag app
+		// derived from the live request URL so dev and prod both work without
+		// a hardcoded origin. Assert it's reachable from the page banner with
+		// an absolute href that resolves to the flightbag subdomain.
+		const banner = page.getByRole('banner');
+		const flightbag = banner.getByRole('link', { name: 'Flightbag' });
 		await expect(flightbag).toBeVisible();
 		const flightbagHref = await flightbag.getAttribute('href');
 		expect(flightbagHref).toMatch(/^https?:\/\/flightbag\./);

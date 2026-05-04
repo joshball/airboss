@@ -34,6 +34,10 @@ export function studyLoginUrl(event: RequestEvent): string {
 export function isSafeRedirect(path: string): boolean {
 	if (!path.startsWith('/')) return false;
 	if (path.startsWith('//')) return false;
+	// Block percent-encoded slash / backslash in the leading position. `/%2f...`
+	// or `/%5c...` decode to `//...` after a downstream normalisation pass and
+	// would smuggle a host through. Match case-insensitively.
+	if (/^\/%(2f|5c)/i.test(path)) return false;
 	// Block backslashes (some browsers normalize /\evil.com -> //evil.com)
 	if (path.includes('\\')) return false;
 	// Block CR/LF header injection

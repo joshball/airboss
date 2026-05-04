@@ -7,7 +7,7 @@
  */
 
 import { computeReadingOrder, getHandbookSection, listAllSectionsForReference, listReferences } from '@ab/bc-study';
-import { readingMinutesForWords, REFERENCE_KINDS, type ReferenceKind, ROUTES } from '@ab/constants';
+import { REFERENCE_KINDS, type ReferenceKind, ROUTES, readingMinutesForWords } from '@ab/constants';
 import { error } from '@sveltejs/kit';
 import { computeSiblingNav } from '../../../../../../lib/section-nav';
 import { buildSourceLinks } from '../../../../../../lib/source-links';

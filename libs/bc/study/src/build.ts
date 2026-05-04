@@ -91,7 +91,6 @@ export {
 	handbookSectionFrontmatterSchema,
 	handbookWarningsFileEntrySchema,
 	handbookWarningsFileSchema,
-	WP_FIXABLE_WARNING_CODES,
 	type InfoManifest,
 	infoManifestSchema,
 	legacyCitationSchema,
@@ -103,6 +102,7 @@ export {
 	sectionTreeManifestSchema,
 	structuredCitationSchema,
 	type WholeDocManifest,
+	WP_FIXABLE_WARNING_CODES,
 	wholeDocManifestSchema,
 } from './manifest-validation';
 export type {

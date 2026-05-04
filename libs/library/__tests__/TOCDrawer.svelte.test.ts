@@ -10,8 +10,8 @@
 
 import { cleanup, fireEvent, render, screen } from '@testing-library/svelte';
 import { afterEach, describe, expect, it } from 'vitest';
-import TOCDrawer from '../src/TOCDrawer.svelte';
 import type { TOCDrawerEntry } from '../src/TOCDrawer.svelte';
+import TOCDrawer from '../src/TOCDrawer.svelte';
 
 afterEach(() => {
 	cleanup();
