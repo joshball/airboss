@@ -2,15 +2,19 @@
 title: Special flight ops -- aerobatic, parachute, towing, formation
 week: 6
 section_order: "01"
-covers_regulations:
-  - 91.111
-  - 91.303
-  - 91.305
-  - 91.307
-  - 91.309
-  - 91.311
-ties_to_knowledge_nodes: []
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - airspace/special-use
+  acs_leaves:
+    - PA.I.E.K1
+    - PA.I.E.K2
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/91/137
+    - airboss-ref:regs/cfr-14/91/139
+    - airboss-ref:regs/cfr-14/91/141
+    - airboss-ref:regs/cfr-14/91/143
+    - airboss-ref:regs/cfr-14/91/147
 ---
 
 # Special flight ops -- aerobatic, parachute, towing, formation

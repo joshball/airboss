@@ -2,10 +2,15 @@
 title: NASA ASRS, ASAP, and self-disclosure as protection
 week: 9
 section_order: "03"
-covers_regulations:
-  - 91.25
-ties_to_knowledge_nodes: []
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - procedures/adm-hazardous-attitudes
+  acs_leaves:
+    - PA.I.H.K1
+    - PA.IX.A.K1
+  handbook_sections:
+    - airboss-ref:ac/00-46/f
 ---
 
 # NASA ASRS, ASAP, and self-disclosure as protection

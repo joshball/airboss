@@ -2,15 +2,17 @@
 title: CFI privileges and limitations -- 61.193 and 61.195
 week: 3
 section_order: "03"
-covers_regulations:
-  - 61.193
-  - 61.195
-  - 61.113
-ties_to_knowledge_nodes:
-  - reg-cfi-privileges-61-193
-  - reg-cfi-limitations-61-195
-  - reg-cfi-vs-private-compensation-boundary
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - regulations/pilot-privileges-limitations
+  acs_leaves:
+    - PA.I.A.K1
+    - PA.I.A.K2
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/61/193
+    - airboss-ref:regs/cfr-14/61/195
+    - airboss-ref:regs/cfr-14/61/89
 ---
 
 # CFI privileges and limitations

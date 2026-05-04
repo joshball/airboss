@@ -2,13 +2,15 @@
 title: How to read a citation
 week: 1
 section_order: "02"
-covers_regulations:
-  - 91.103
-  - 91.169
-  - 91.13
-  - 91.3
-  - 61.57
-ties_to_knowledge_nodes: []
+cites:
+  knowledge_nodes:
+    - regulations/pilot-privileges-limitations
+  acs_leaves:
+    - PA.I.A.K1
+    - PA.I.A.K2
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/91/103
+    - airboss-ref:regs/cfr-14/91
 ---
 
 # How to read a citation

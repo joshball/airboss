@@ -2,23 +2,17 @@
 title: IFR rules -- §§91.167-91.185
 week: 4
 section_order: "05"
-covers_regulations:
-  - 91.167
-  - 91.169
-  - 91.171
-  - 91.175
-  - 91.177
-  - 91.179
-  - 91.181
-  - 91.183
-  - 91.185
-ties_to_knowledge_nodes:
-  - reg-ifr-fuel-91-167
-  - reg-ifr-alternate-91-169
-  - reg-ifr-equipment-checks-91-171
-  - reg-ifr-takeoff-and-landing-91-175
-  - reg-lost-comm-91-185
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - flight-planning/ifr-cross-country
+  acs_leaves:
+    - PA.I.E.K1
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/91/167
+    - airboss-ref:regs/cfr-14/91/169
+    - airboss-ref:regs/cfr-14/91/175
+    - airboss-ref:regs/cfr-14/91/185
 ---
 
 # IFR rules: 91.167 through 91.185

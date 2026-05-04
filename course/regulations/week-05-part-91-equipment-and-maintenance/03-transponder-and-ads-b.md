@@ -2,13 +2,17 @@
 title: Transponder and ADS-B Out -- 91.215 + 91.225 + 91.227
 week: 5
 section_order: "03"
-covers_regulations:
-  - 91.215
-  - 91.225
-  - 91.227
-ties_to_knowledge_nodes:
-  - reg-ads-b-out-91-225
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - airspace/classes-and-dimensions
+  acs_leaves:
+    - PA.I.B.K1
+    - PA.I.E.K1
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/91/215
+    - airboss-ref:regs/cfr-14/91/225
+    - airboss-ref:regs/cfr-14/91/227
 ---
 
 # Transponder and ADS-B Out

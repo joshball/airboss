@@ -2,10 +2,17 @@
 title: The Compliance Program vs. legal enforcement
 week: 9
 section_order: "01"
-covers_regulations:
-  - 91.13
-ties_to_knowledge_nodes: []
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - regulations/pilot-privileges-limitations
+    - procedures/adm-hazardous-attitudes
+  acs_leaves:
+    - PA.I.H.K1
+    - PA.IX.A.K1
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/91/13
+    - airboss-ref:regs/cfr-14/61/15
 ---
 
 # The Compliance Program vs. legal enforcement

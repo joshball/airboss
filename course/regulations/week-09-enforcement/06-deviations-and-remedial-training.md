@@ -2,11 +2,17 @@
 title: Deviations and remedial training -- 91.123, 91.3(b), and the off-ramp from certificate action
 week: 9
 section_order: "06"
-covers_regulations:
-  - 91.3
-  - 91.123
-ties_to_knowledge_nodes: []
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - procedures/emergency-authority
+  acs_leaves:
+    - PA.IX.A.K1
+    - PA.IX.A.K2
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/91/3
+    - airboss-ref:regs/cfr-14/91/123
+    - airboss-ref:regs/cfr-14/91/13
 ---
 
 # Deviations and remedial training

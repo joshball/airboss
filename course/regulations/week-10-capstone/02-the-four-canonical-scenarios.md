@@ -2,15 +2,21 @@
 title: The four canonical scenarios
 week: 10
 section_order: "02"
-covers_regulations:
-  - 91.103
-  - 91.3
-  - 91.7
-  - 91.13
-  - 61.56
-  - 61.65
-ties_to_knowledge_nodes: []
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - regulations/pilot-privileges-limitations
+    - regulations/currency-vs-proficiency
+    - procedures/emergency-authority
+  acs_leaves:
+    - PA.I.A.K1
+    - PA.I.A.K3
+    - PA.IX.A.K1
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/61/56
+    - airboss-ref:regs/cfr-14/61/57
+    - airboss-ref:regs/cfr-14/91/3
+    - airboss-ref:regs/cfr-14/91/13
 ---
 
 # The four canonical scenarios

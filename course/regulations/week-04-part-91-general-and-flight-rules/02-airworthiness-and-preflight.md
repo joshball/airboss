@@ -2,15 +2,18 @@
 title: Airworthiness and preflight -- §91.7 and §91.103
 week: 4
 section_order: "02"
-covers_regulations:
-  - 91.7
-  - 91.9
-  - 91.103
-  - 91.213
-ties_to_knowledge_nodes:
-  - reg-airworthiness-91-7
-  - reg-preflight-action-91-103
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - flight-planning/vfr-cross-country
+  acs_leaves:
+    - PA.I.B.K1
+    - PA.I.B.K2
+    - PA.I.D.K1
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/91/103
+    - airboss-ref:regs/cfr-14/91/7
+    - airboss-ref:regs/cfr-14/91/213
 ---
 
 # Airworthiness and preflight

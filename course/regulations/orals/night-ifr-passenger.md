@@ -2,24 +2,18 @@
 title: Night IFR with a passenger -- regulatory walkthrough
 week: 10
 difficulty: capstone
-pulls_from_regulations:
-  - 91.103
-  - 61.57
-  - 91.409
-  - 91.411
-  - 91.413
-  - 91.205
-  - 91.211
-  - 91.167
-  - 91.169
-  - 91.171
-  - 91.215
-  - 91.225
-  - 91.203
-  - 91.7
-  - 91.213
 duration_minutes: 25
 last_verified: 2026-04-26
+cites:
+  knowledge_nodes:
+    - regulations/currency-vs-proficiency
+    - flight-planning/ifr-cross-country
+  acs_leaves:
+    - PA.I.A.K3
+    - PA.I.E.K1
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/61/57
+    - airboss-ref:regs/cfr-14/91/167
 ---
 
 # Night IFR with a passenger -- regulatory walkthrough

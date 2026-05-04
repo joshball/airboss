@@ -2,14 +2,16 @@
 title: Chief Counsel interpretations -- binding within their scope
 week: 8
 section_order: "03"
-covers_regulations:
-  - 61.51
-  - 61.113
-  - 61.193
-  - 91.103
-ties_to_knowledge_nodes:
-  - reg-pilot-privileges-limitations
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - regulations/pilot-privileges-limitations
+  acs_leaves:
+    - PA.I.A.K1
+    - PA.I.A.K2
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/61/51
+    - airboss-ref:regs/cfr-14/61/57
 ---
 
 # Chief Counsel interpretations

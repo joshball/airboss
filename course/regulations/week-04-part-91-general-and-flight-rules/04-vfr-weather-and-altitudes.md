@@ -2,17 +2,19 @@
 title: VFR fuel, weather minimums, special VFR, and cruising altitudes -- §§91.151/155/157/159
 week: 4
 section_order: "04"
-covers_regulations:
-  - 91.151
-  - 91.155
-  - 91.157
-  - 91.159
-ties_to_knowledge_nodes:
-  - reg-vfr-fuel-91-151
-  - reg-vfr-weather-91-155
-  - reg-special-vfr-91-157
-  - reg-vfr-cruising-91-159
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - airspace/vfr-weather-minimums
+    - airspace/classes-and-dimensions
+  acs_leaves:
+    - PA.I.E.K1
+    - PA.I.E.K2
+    - PA.I.C.K1
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/91/155
+    - airboss-ref:regs/cfr-14/91/159
+    - airboss-ref:regs/cfr-14/91/119
 ---
 
 # VFR fuel, weather, special VFR, and cruising altitudes

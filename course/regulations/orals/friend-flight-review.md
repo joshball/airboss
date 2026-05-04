@@ -2,19 +2,18 @@
 title: A friend asks you to give them their flight review
 week: 10
 difficulty: capstone
-pulls_from_regulations:
-  - 61.56
-  - 61.51
-  - 61.57
-  - 61.193
-  - 61.195
-  - 61.197
-  - 61.31
-  - 61.59
-  - 91.7
-  - 91.13
 duration_minutes: 25
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - regulations/currency-vs-proficiency
+    - regulations/pilot-privileges-limitations
+  acs_leaves:
+    - PA.I.A.K3
+    - PA.I.A.K1
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/61/56
+    - airboss-ref:regs/cfr-14/61/59
 ---
 
 # A friend asks you to give them their flight review

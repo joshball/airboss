@@ -2,8 +2,18 @@
 title: The structural map of Title 14
 week: 1
 section_order: "01"
-covers_regulations: []
-ties_to_knowledge_nodes: []
+cites:
+  knowledge_nodes:
+    - regulations/pilot-privileges-limitations
+  acs_leaves:
+    - PA.I.A.K1
+    - PA.I.A.K2
+    - PA.I.A.K3
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/91
+    - airboss-ref:regs/cfr-14/61
+    - airboss-ref:regs/cfr-14/141
+    - airboss-ref:regs/cfr-49/830
 ---
 
 # The structural map of Title 14

@@ -2,13 +2,17 @@
 title: PIC authority and careless or reckless -- §91.3 and §91.13
 week: 4
 section_order: "01"
-covers_regulations:
-  - 91.3
-  - 91.13
-ties_to_knowledge_nodes:
-  - reg-pic-authority-91-3
-  - reg-careless-or-reckless-91-13
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - procedures/emergency-authority
+    - procedures/adm-hazardous-attitudes
+  acs_leaves:
+    - PA.I.H.K1
+    - PA.IX.A.K1
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/91/3
+    - airboss-ref:regs/cfr-14/91/13
 ---
 
 # PIC authority and careless or reckless

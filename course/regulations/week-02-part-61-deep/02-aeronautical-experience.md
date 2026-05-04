@@ -2,14 +2,18 @@
 title: Aeronautical experience -- the parallel hour requirements
 week: 2
 section_order: "02"
-covers_regulations:
-  - 61.1
-  - 61.51
-  - 61.109
-  - 61.129
-  - 61.159
-ties_to_knowledge_nodes: []
 last_verified: 2026-04-28
+cites:
+  knowledge_nodes:
+    - regulations/pilot-privileges-limitations
+  acs_leaves:
+    - PA.I.A.K1
+    - PA.I.A.K2
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/61/109
+    - airboss-ref:regs/cfr-14/61/129
+    - airboss-ref:regs/cfr-14/61/65
+    - airboss-ref:regs/cfr-14/61/51
 ---
 
 # Aeronautical experience -- the parallel hour requirements

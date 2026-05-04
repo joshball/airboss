@@ -2,13 +2,19 @@
 title: Oxygen and transponder rules -- §91.211 and §91.215
 week: 4
 section_order: "06"
-covers_regulations:
-  - 91.211
-  - 91.215
-ties_to_knowledge_nodes:
-  - reg-oxygen-91-211
-  - reg-transponder-91-215
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - flight-planning/vfr-cross-country
+  acs_leaves:
+    - PA.I.B.K1
+    - PA.I.B.K2
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/91/126
+    - airboss-ref:regs/cfr-14/91/127
+    - airboss-ref:regs/cfr-14/91/130
+    - airboss-ref:regs/cfr-14/91/131
+    - airboss-ref:regs/cfr-14/91/135
 ---
 
 # Oxygen and transponder rules

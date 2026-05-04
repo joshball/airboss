@@ -2,15 +2,18 @@
 title: Altimeter, transponder, and records -- 91.411 + 91.413 + 91.417 + 91.419
 week: 5
 section_order: "05"
-covers_regulations:
-  - 91.411
-  - 91.413
-  - 91.417
-  - 91.419
-ties_to_knowledge_nodes:
-  - reg-altimeter-transponder-checks-91-411-91-413
-  - reg-maintenance-records-91-417
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - flight-planning/vfr-cross-country
+  acs_leaves:
+    - PA.I.B.K1
+    - PA.I.B.K2
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/91/411
+    - airboss-ref:regs/cfr-14/91/413
+    - airboss-ref:regs/cfr-14/91/417
+    - airboss-ref:regs/cfr-14/43/appendix-e
 ---
 
 # Altimeter, transponder, and records

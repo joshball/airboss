@@ -2,10 +2,15 @@
 title: The enforcement action pipeline -- warning notice through NTSB appeal
 week: 9
 section_order: "02"
-covers_regulations:
-  - 91.13
-ties_to_knowledge_nodes: []
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - regulations/pilot-privileges-limitations
+  acs_leaves:
+    - PA.IX.A.K1
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/91/13
+    - airboss-ref:regs/cfr-14/61/15
 ---
 
 # The enforcement action pipeline

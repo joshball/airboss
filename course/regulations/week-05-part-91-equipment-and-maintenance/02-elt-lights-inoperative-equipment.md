@@ -2,15 +2,17 @@
 title: ELTs, lights, and inoperative equipment -- 91.207 + 91.209 + 91.213
 week: 5
 section_order: "02"
-covers_regulations:
-  - 91.205
-  - 91.207
-  - 91.209
-  - 91.213
-ties_to_knowledge_nodes:
-  - reg-elt-91-207
-  - reg-no-mel-pathway-91-213
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - flight-planning/vfr-cross-country
+  acs_leaves:
+    - PA.I.B.K1
+    - PA.I.B.K2
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/91/207
+    - airboss-ref:regs/cfr-14/91/209
+    - airboss-ref:regs/cfr-14/91/213
 ---
 
 # ELTs, lights, and inoperative equipment

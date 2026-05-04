@@ -2,13 +2,17 @@
 title: Currency, recency, proficiency -- three concepts pilots conflate
 week: 2
 section_order: "03"
-covers_regulations:
-  - 61.56
-  - 61.57
-  - 61.58
-ties_to_knowledge_nodes:
-  - reg-currency-vs-proficiency
 last_verified: 2026-04-28
+cites:
+  knowledge_nodes:
+    - regulations/currency-vs-proficiency
+  acs_leaves:
+    - PA.I.A.K3
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/61/56
+    - airboss-ref:regs/cfr-14/61/57
+    - airboss-ref:regs/cfr-14/61/58
+    - airboss-ref:ac/61-98/d
 ---
 
 # Currency, recency, proficiency

@@ -2,18 +2,16 @@
 title: Part 141 as a CFI -- the chief structure, stage checks, enrollment
 week: 7
 section_order: "02"
-covers_regulations:
-  - 141.35
-  - 141.36
-  - 141.37
-  - 141.55
-  - 141.61
-  - 141.63
-  - 141.65
-  - 141.93
-  - 141.95
-ties_to_knowledge_nodes: []
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - regulations/pilot-privileges-limitations
+  acs_leaves:
+    - PA.I.A.K1
+    - PA.I.A.K2
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/141
+    - airboss-ref:regs/cfr-14/141/85
 ---
 
 # Part 141 as a CFI -- the chief structure, stage checks, enrollment
