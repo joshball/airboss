@@ -11,10 +11,10 @@ import { test as freshUserTest } from './fixtures/fresh-user';
 baseTest.describe('credentials index (shared seed)', () => {
 	baseTest('renders heading and either an empty-state or credential cards', async ({ page }) => {
 		await page.goto(ROUTES.CREDENTIALS);
-		await expect(page.getByRole('heading', { name: 'Credentials', exact: true, level: 1 })).toBeVisible();
+		await expect(page.getByRole('heading', { name: 'Quals', exact: true, level: 1 })).toBeVisible();
 
 		// Either no active credentials seeded (empty-state) or at least one card with the stat trio.
-		const emptyHeading = page.getByRole('heading', { name: /no active credentials/i });
+		const emptyHeading = page.getByRole('heading', { name: /no active quals/i });
 		const masteryStat = page.getByTestId('cred-mastery').first();
 		await expect(emptyHeading.or(masteryStat).first()).toBeVisible();
 	});
@@ -25,7 +25,7 @@ freshUserTest.describe('credentials index (fresh user)', () => {
 		// `freshUser` has no primary goal -> the banner must appear.
 		expect(freshUser.id).toBeDefined();
 		await page.goto(ROUTES.CREDENTIALS);
-		await expect(page.getByRole('heading', { name: 'Credentials', exact: true, level: 1 })).toBeVisible();
+		await expect(page.getByRole('heading', { name: 'Quals', exact: true, level: 1 })).toBeVisible();
 		const banner = page.getByRole('status').filter({ hasText: /primary goal/i });
 		await expect(banner).toBeVisible();
 		// Banner must render exactly once -- a double render would indicate a

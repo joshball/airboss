@@ -12,13 +12,15 @@ import type { HelpPageIndex } from '@ab/help';
 
 export const credentialsIndex: HelpPageIndex = {
 	id: 'credentials',
-	title: 'Credentials',
+	title: 'Quals',
 	summary:
-		'How the cert dashboard surfaces mastery and coverage across the certs, ratings, and endorsements you target -- including how prereqs compose and what edition pinning means.',
+		'How the quals dashboard surfaces mastery and coverage across the pilot certificates, instructor certificates, class ratings, and endorsements you target -- including how prereqs compose and what edition pinning means.',
 	tags: {
 		appSurface: [APP_SURFACES.CREDENTIALS],
 		helpKind: HELP_KINDS.REFERENCE,
 		keywords: [
+			'quals',
+			'qualifications',
 			'credentials',
 			'cert',
 			'rating',
