@@ -22,6 +22,7 @@ export {
 	type AcManifestChange,
 	type AcManifestFile,
 	type AcManifestSection,
+	type AcWarning,
 	docSlugFromDocNumber,
 	readAcManifest,
 	readCorpusIndex,
