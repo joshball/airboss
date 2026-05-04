@@ -84,7 +84,7 @@ export const actions: Actions = {
 				});
 			}
 			log.error(
-				'renameSavedDeck threw',
+				'rename deck failed',
 				{ requestId: locals.requestId, userId: user.id, metadata: { deckHash } },
 				err instanceof Error ? err : undefined,
 			);
@@ -115,7 +115,7 @@ export const actions: Actions = {
 			await deleteSavedDeck(user.id, deckHash);
 		} catch (err) {
 			log.error(
-				'deleteSavedDeck threw',
+				'delete deck failed',
 				{ requestId: locals.requestId, userId: user.id, metadata: { deckHash } },
 				err instanceof Error ? err : undefined,
 			);
