@@ -18,6 +18,7 @@
 // avoid two import paths for one identity (which previously produced
 // inconsistent grep results during refactors).
 export type { BadgeSize, BadgeTone } from './components/Badge.svelte';
+export type { BadgeStatusState } from './components/BadgeStatus.svelte';
 export type { BannerTone } from './components/Banner.svelte';
 export type { BreadcrumbItem } from './components/Breadcrumbs.svelte';
 export type { BrowseListGroup, BrowseListProps } from './components/BrowseList.svelte';
@@ -35,8 +36,10 @@ export type { PagerProps } from './components/Pager.svelte';
 export type { RadioGroupOrientation, RadioOption } from './components/RadioGroup.svelte';
 export type { ResultSummaryProps } from './components/ResultSummary.svelte';
 export type { ScoreCardSize } from './components/ScoreCard.svelte';
+export type { ScoreMetaItem } from './components/ScoreMeta.svelte';
 export type { SelectOption, SelectSize } from './components/Select.svelte';
 export type { SpinnerSize, SpinnerTone } from './components/Spinner.svelte';
 export type { StatTileTone } from './components/StatTile.svelte';
 export type { TabItem } from './components/Tabs.svelte';
 export type { TextFieldSize, TextFieldType } from './components/TextField.svelte';
+export type { ToastShape, ToastTone } from './components/Toast.svelte';
