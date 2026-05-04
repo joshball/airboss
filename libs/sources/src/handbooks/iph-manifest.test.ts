@@ -70,7 +70,9 @@ describe('IPH manifest (FAA-H-8083-16B)', () => {
 		expect(subsections.length).toBeGreaterThanOrEqual(180);
 		expect(subsections.length).toBeLessThanOrEqual(280);
 		const chaptersWithChildren = new Set(
-			manifest.sections.filter((s) => s.level !== 'chapter' && s.code.includes('.')).map((s) => s.code.split('.')[0]),
+			manifest.sections
+				.filter((s) => (s.level === 'section' || s.level === 'subsection') && s.code.includes('.'))
+				.map((s) => s.code.split('.')[0]),
 		);
 		expect(chaptersWithChildren).toEqual(new Set(['1', '2', '3', '4', '5', '6', '7']));
 	});
@@ -88,7 +90,7 @@ describe('IPH manifest (FAA-H-8083-16B)', () => {
 		const codes = new Set(manifest.sections.map((s) => s.code));
 		for (const s of manifest.sections) {
 			if (s.parent_code === null) {
-				expect(s.level).toBe('chapter');
+				expect(['chapter', 'front-matter']).toContain(s.level);
 				continue;
 			}
 			expect(codes.has(s.parent_code)).toBe(true);
