@@ -86,12 +86,12 @@ export const actions: Actions = {
 			});
 		} catch (err) {
 			log.error(
-				'createPlan threw',
+				'create plan failed',
 				{ requestId: locals.requestId, userId: user.id },
 				err instanceof Error ? err : undefined,
 			);
 			return fail(500, {
-				error: 'Could not create plan. Try again.',
+				error: 'Could not create plan.',
 				values: { title, focusDomains: focusDomainsRaw, skipDomains: skipDomainsRaw },
 			});
 		}

@@ -78,11 +78,11 @@ export const actions: Actions = {
 				return fail(400, { values: input, fieldErrors: { _: err.message } });
 			}
 			log.error(
-				'createCard threw',
+				'create card failed',
 				{ requestId: locals.requestId, userId: user.id },
 				err instanceof Error ? err : undefined,
 			);
-			return fail(500, { values: input, fieldErrors: { _: 'Could not save the card. Please try again.' } });
+			return fail(500, { values: input, fieldErrors: { _: 'Could not create card.' } });
 		}
 
 		if (saveAndAdd) {

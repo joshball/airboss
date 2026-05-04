@@ -141,11 +141,11 @@ export const actions: Actions = {
 			});
 		} catch (err) {
 			log.error(
-				'createScenario threw',
+				'create scenario failed',
 				{ requestId: locals.requestId, userId: user.id },
 				err instanceof Error ? err : undefined,
 			);
-			return fail(500, { values: input, fieldErrors: { _: 'Could not save the scenario. Please try again.' } });
+			return fail(500, { values: input, fieldErrors: { _: 'Could not create scenario.' } });
 		}
 
 		// Land the user on browse with `?created=<id>` so the page can surface

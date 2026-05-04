@@ -115,11 +115,11 @@ export const actions: Actions = {
 				error(404, { message: 'Card not found' });
 			}
 			log.error(
-				'updateCard threw',
+				'save card failed',
 				{ requestId: locals.requestId, userId: user.id, metadata: { cardId: params.id } },
 				err instanceof Error ? err : undefined,
 			);
-			return fail(500, { values: input, fieldErrors: { _: 'Could not save changes.' }, intent: 'update' });
+			return fail(500, { values: input, fieldErrors: { _: 'Could not save card.' }, intent: 'update' });
 		}
 
 		// Edit-then-stay: the client swaps back to read mode and shows a
@@ -144,11 +144,11 @@ export const actions: Actions = {
 				error(404, { message: 'Card not found' });
 			}
 			log.error(
-				'setCardStatus threw',
+				'update card status failed',
 				{ requestId: locals.requestId, userId: user.id, metadata: { cardId: params.id, status: target } },
 				err instanceof Error ? err : undefined,
 			);
-			return fail(500, { intent: 'setStatus', fieldErrors: { _: 'Could not update status.' } });
+			return fail(500, { intent: 'setStatus', fieldErrors: { _: 'Could not update card status.' } });
 		}
 
 		if (target === CARD_STATUSES.ARCHIVED) {
@@ -196,7 +196,7 @@ export const actions: Actions = {
 				return fail(400, { intent: 'addCitation', fieldErrors: { _: 'That reference could not be found.' } });
 			}
 			log.error(
-				'createCitation threw',
+				'add citation failed',
 				{ requestId: locals.requestId, userId: user.id, metadata: { cardId: params.id, targetType, targetId } },
 				err instanceof Error ? err : undefined,
 			);
@@ -227,7 +227,7 @@ export const actions: Actions = {
 				return fail(404, { intent: 'removeCitation', fieldErrors: { _: 'That citation was not found.' } });
 			}
 			log.error(
-				'deleteCitation threw',
+				'remove citation failed',
 				{ requestId: locals.requestId, userId: user.id, metadata: { cardId: params.id, citationId } },
 				err instanceof Error ? err : undefined,
 			);
