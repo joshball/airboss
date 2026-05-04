@@ -1319,6 +1319,17 @@ export const reference = studySchema.table(
 		// "Most-recent edition for this document" probe + the "is this row
 		// superseded?" filter both lean on (document_slug, superseded_by_id).
 		referenceDocSupersededIdx: index('reference_doc_superseded_idx').on(t.documentSlug, t.supersededById),
+		// GIN index on the `subjects` text[] column powers the topic-spine
+		// filter: `library-by-cert.ts` runs `subjects @> ARRAY[$topic]`
+		// (Drizzle `arrayContains`) per topic page render, plus a `LATERAL
+		// unnest(subjects) ... GROUP BY` for the per-topic counts query. Both
+		// shapes are GIN-indexable on `text[]` with the default array opclass;
+		// the containment probe (`@>`) reduces to inverted-index lookups
+		// instead of a sequential scan over the reference catalog. The
+		// counts query trades the in-JS aggregation for a single PG round-trip
+		// that the planner will use the index for whenever the LATERAL filter
+		// or topic predicate is present.
+		referenceSubjectsGinIdx: index('reference_subjects_gin_idx').using('gin', sql`"subjects"`),
 		// Slug shape: kebab-case, 3..32 chars. Document slugs are reader URL
 		// fragments; constraining at the storage layer keeps a typo from
 		// shipping a route that breaks `decodeURIComponent` round-trips.
