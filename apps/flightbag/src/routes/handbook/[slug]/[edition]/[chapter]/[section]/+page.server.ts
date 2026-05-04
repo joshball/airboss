@@ -13,7 +13,7 @@ import {
 	getReferenceByDocument,
 	listAllSectionsForReference,
 } from '@ab/bc-study';
-import { type ReferenceKind, ROUTES } from '@ab/constants';
+import { readingMinutesForWords, type ReferenceKind, ROUTES } from '@ab/constants';
 import { isParseError, parseHandbooksLocator, parseIdentifier } from '@ab/sources';
 import { error } from '@sveltejs/kit';
 import { computeSiblingNav } from '../../../../../../lib/section-nav';
@@ -89,6 +89,9 @@ export const load: PageServerLoad = async ({ params }) => {
 	});
 	const tocTotalMinutes = totalReadingMinutes(readingOrder);
 
+	const sectionEntry = readingOrder.find((e) => e.sectionId === view.section.id);
+	const sectionMinutes = sectionEntry ? readingMinutesForWords(sectionEntry.wordCount) : 0;
+
 	return {
 		uri: rawUri,
 		sourceLinks,
@@ -140,6 +143,9 @@ export const load: PageServerLoad = async ({ params }) => {
 		toc: {
 			entries: tocEntries,
 			totalMinutes: tocTotalMinutes,
+		},
+		readingTime: {
+			sectionMinutes,
 		},
 	};
 };

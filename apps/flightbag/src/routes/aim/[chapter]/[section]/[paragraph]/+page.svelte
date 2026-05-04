@@ -49,6 +49,7 @@ const tocSummary = $derived(
 			body={data.paragraph.contentMd}
 			locator={data.paragraph.sourceLocator}
 			metadata={data.paragraph.metadata}
+			readingTimeMinutes={data.readingTime.sectionMinutes}
 		>
 			{#snippet breadcrumb()}
 				<Breadcrumbs {segments} />

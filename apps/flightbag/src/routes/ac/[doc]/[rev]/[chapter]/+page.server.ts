@@ -15,7 +15,7 @@ import {
 	listFiguresForSection,
 	listReferences,
 } from '@ab/bc-study';
-import { REFERENCE_KINDS, type ReferenceKind, ROUTES } from '@ab/constants';
+import { readingMinutesForWords, REFERENCE_KINDS, type ReferenceKind, ROUTES } from '@ab/constants';
 import { error } from '@sveltejs/kit';
 import { computeSiblingNav } from '../../../../../lib/section-nav';
 import { buildSourceLinks } from '../../../../../lib/source-links';
@@ -70,6 +70,10 @@ export const load: PageServerLoad = async ({ params }) => {
 	const tocEntries = buildTOCEntries(readingOrder, chapter.id, hrefForRow);
 	const tocTotalMinutes = totalReadingMinutes(readingOrder);
 
+	const chapterMinutes = readingOrder
+		.filter((e) => e.sectionId === chapter.id || e.parentChapterCode === chapter.code)
+		.reduce((acc, e) => acc + readingMinutesForWords(e.wordCount), 0);
+
 	return {
 		uri: `airboss-ref:ac/${params.doc}/${params.rev}/section-${params.chapter}`,
 		sourceLinks,
@@ -110,6 +114,9 @@ export const load: PageServerLoad = async ({ params }) => {
 		toc: {
 			entries: tocEntries,
 			totalMinutes: tocTotalMinutes,
+		},
+		readingTime: {
+			chapterMinutes,
 		},
 	};
 };
