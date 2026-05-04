@@ -6,12 +6,15 @@ import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
 
-// `data.prompt` is set when the resolver found an in-progress run for the
-// `?deck=<...>` request and wants the user to choose Resume vs Start fresh
-// (review-sessions-url Layer (b) Redo, decision 4). When it's null the
-// `load` function already redirected, so this template is only reached if
-// SvelteKit kept us on the route (the auth-bounce fallback below).
+// `data.prompt` is set when the resolver found an in-progress run on the
+// `?deck=<...>` hash and wants the user to choose Resume vs Start fresh
+// (review-sessions-url Layer (b) Redo, decision 4). `data.start` is set
+// when no resumable run exists and the page should render a "Start review"
+// button that POSTs to `actions.fresh` -- this replaces the old GET-side
+// session-creation that prefetchers / link previews could trigger (see
+// `+page.server.ts` doc + 2026-05-01 backend review CRITICAL).
 const prompt = $derived(data.prompt);
+const start = $derived(data.start);
 
 function fmtTimestamp(iso: string): string {
 	const d = new Date(iso);
@@ -71,11 +74,32 @@ function formatProgress(currentIndex: number, totalCards: number, status: string
 
 		<p class="back"><a href={ROUTES.MEMORY}>Back to memory</a></p>
 	</section>
+{:else if start}
+	<section class="page">
+		<PageHeader title="Start review?" subtitle={summarizeDeckSpec(start.deckSpec)} />
+
+		<article class="card">
+			<p class="prose">
+				Click Start when you're ready. We'll freeze the due-card queue at that
+				moment so opening the run in another tab doesn't reshape it mid-session.
+			</p>
+
+			<div class="actions">
+				<form method="POST" action="?/fresh">
+					<input type="hidden" name={QUERY_PARAMS.DECK} value={start.deckParam} />
+					<button class="btn primary" type="submit">Start review</button>
+				</form>
+			</div>
+		</article>
+
+		<p class="back"><a href={ROUTES.MEMORY}>Back to memory</a></p>
+	</section>
 {:else}
 	<!--
-		The server `load` redirected to `/memory/review/<sessionId>` for both
-		the no-`?deck` path and the "no resumable run" branch. This fallback
-		only fires when an auth bounce flipped the redirect to /login first.
+		Fallback: `load` returns either `prompt` or `start` for every reachable
+		auth state, so this branch should be unreachable. Renders a graceful
+		shell instead of a blank page if a future refactor breaks that
+		invariant.
 	-->
 	<section class="page">
 		<p class="loading">Preparing your review...</p>
@@ -137,6 +161,11 @@ function formatProgress(currentIndex: number, totalCards: number, status: string
 		margin: 0;
 		color: var(--ink-faint);
 		font-size: var(--font-size-sm);
+	}
+
+	.prose {
+		margin: 0;
+		color: var(--ink-body);
 	}
 
 	.btn {
