@@ -149,7 +149,7 @@ describe('buildAuditWhere', () => {
 		// tests below verify the WHERE actually narrows the result set.
 		expect(buildAuditWhere({ actorId: 'usr_x' })).toBeDefined();
 		expect(buildAuditWhere({ actorId: AUDIT_ACTOR_SYSTEM })).toBeDefined();
-		expect(buildAuditWhere({ targetType: AUDIT_TARGETS.HANGAR_PING })).toBeDefined();
+		expect(buildAuditWhere({ targetType: AUDIT_TARGETS.HANGAR_REFERENCE })).toBeDefined();
 		expect(buildAuditWhere({ targetId: 'src_x' })).toBeDefined();
 		expect(buildAuditWhere({ op: AUDIT_OPS.UPDATE })).toBeDefined();
 		expect(buildAuditWhere({ from: new Date(), to: new Date() })).toBeDefined();
@@ -170,7 +170,7 @@ const ACTOR_B_ID = generateAuthId();
 const ACTOR_A_EMAIL = `audit-explorer-a-${ACTOR_A_ID}@airboss.test`;
 const ACTOR_B_EMAIL = `audit-explorer-b-${ACTOR_B_ID}@airboss.test`;
 
-const TEST_TARGET_TYPE = AUDIT_TARGETS.HANGAR_PING;
+const TEST_TARGET_TYPE = AUDIT_TARGETS.HANGAR_REFERENCE;
 const TEST_TARGET_ID_X = `tgt_x_${ACTOR_A_ID}`;
 const TEST_TARGET_ID_Y = `tgt_y_${ACTOR_A_ID}`;
 
@@ -350,23 +350,24 @@ describe('listAuditEntries -- filter composition', () => {
 	});
 
 	it('honours the time-window filter', async () => {
-		// All seeded rows landed inside a 6-second window. Filter to the
-		// last 3 seconds of that window.
+		// All seeded rows landed inside a 6-second window. Filter to a
+		// 1.5s window from the newest row so only rows 5 + 6 land inside.
 		const last3 = await db
 			.select({ ts: auditLog.timestamp })
 			.from(auditLog)
 			.where(inArray(auditLog.id, insertedAuditIds));
 		const newest = Math.max(...last3.map((r) => r.ts.getTime()));
-		const lowerBound = new Date(newest - 2_500);
+		const lowerBound = new Date(newest - 1_500);
 
 		const page = await listAuditEntries({
 			targetType: TEST_TARGET_TYPE,
 			from: lowerBound,
 		});
 		const ours = page.rows.filter((r) => insertedAuditIds.includes(r.id));
-		// Fixture timestamps are deterministic: rows 5 + 6 land inside the
-		// 2.5s window; row 4 is 1s older. Asserting `>= 2` would silently pass
-		// if a regression let in extra rows; pin to the exact ids/count.
+		// Fixture timestamps are deterministic: row6 (newest) and row5 (1s
+		// older) land inside the 1.5s window; row4 (2s older) falls outside.
+		// Asserting `>= 2` would silently pass if a regression let in extra
+		// rows; pin to the exact ids/count.
 		expect(ours).toHaveLength(2);
 		const expectedIds = new Set([insertedAuditIds[4], insertedAuditIds[5]].filter((v): v is string => Boolean(v)));
 		const seenIds = new Set(ours.map((r) => r.id));

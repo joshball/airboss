@@ -48,7 +48,8 @@ test.describe('study home -- nav', () => {
 	test('SH-1: primary nav exposes Study as a top-level entry', async ({ page }) => {
 		await page.goto(ROUTES.STUDY);
 		const nav = page.getByRole('navigation', { name: 'Primary' });
-		await expect(nav.getByRole('link', { name: 'Study' })).toHaveAttribute('aria-current', 'page');
+		// `exact: true` so the `Study by` lens entry doesn't also match.
+		await expect(nav.getByRole('link', { name: 'Study', exact: true })).toHaveAttribute('aria-current', 'page');
 	});
 });
 

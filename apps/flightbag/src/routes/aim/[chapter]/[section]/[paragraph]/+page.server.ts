@@ -12,7 +12,7 @@ import {
 	listAllSectionsForReference,
 	listChapterSections,
 } from '@ab/bc-study';
-import { readingMinutesForWords, type ReferenceKind, ROUTES } from '@ab/constants';
+import { type ReferenceKind, ROUTES, readingMinutesForWords } from '@ab/constants';
 import { isParseError, parseAimLocator, parseIdentifier } from '@ab/sources';
 import { error } from '@sveltejs/kit';
 import { computeSiblingNav } from '../../../../../lib/section-nav';

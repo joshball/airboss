@@ -179,11 +179,7 @@ const SECTION_TREE_LEVELS = ['front-matter', 'chapter', 'section', 'subsection']
  *                                content (cover, preface, etc.) per the
  *                                `front_matter_page_range:` YAML key.
  */
-const SECTION_EXTRACTION_STATUS_VALUES = [
-	'no-body-content',
-	'merged-from-orphans',
-	'front-matter-extracted',
-] as const;
+const SECTION_EXTRACTION_STATUS_VALUES = ['no-body-content', 'merged-from-orphans', 'front-matter-extracted'] as const;
 export type SectionExtractionStatus = (typeof SECTION_EXTRACTION_STATUS_VALUES)[number];
 
 /**

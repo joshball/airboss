@@ -35,7 +35,7 @@ const flightbagHandbookUrl = $derived(
 	{#if chapters.length === 0}
 		<EmptyState
 			title="No chapters ingested"
-			body="A handbook reference row exists for '{reference.documentSlug}' (edition {reference.edition}) but has no chapter rows. Usually a stale duplicate edition is shadowing the real one. Run `bun run db reset` to wipe and reseed."
+			body="A handbook reference row exists for '{reference.documentSlug}' (edition {reference.edition}) but has no chapter rows. Usually a stale duplicate edition is shadowing the real one. Run 'bun run db reset' to wipe and reseed."
 		/>
 	{:else}
 		<ul class="chapters">

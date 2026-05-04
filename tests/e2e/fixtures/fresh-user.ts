@@ -140,10 +140,19 @@ export async function loginAsFreshUser(page: Page, user: FreshUser): Promise<voi
 	await page.getByLabel('Email').fill(user.email);
 	await page.getByLabel('Password').fill(user.password);
 	await Promise.all([
-		page.waitForURL((url) => url.pathname === ROUTES.DASHBOARD, { timeout: 10_000 }),
+		// Post-login the (app) root redirects to the Study home (`/study`)
+		// since the study-home WP cutover; the legacy `/dashboard` route is
+		// kept as the "Stats" power-user view. Match either pathname so this
+		// fixture survives a future redirect change.
+		page.waitForURL(
+			(url) => url.pathname === ROUTES.STUDY || url.pathname === ROUTES.DASHBOARD,
+			{ timeout: 10_000 },
+		),
 		page.getByRole('button', { name: /sign in/i }).click(),
 	]);
-	await expect(page.getByRole('heading', { name: /^(learning )?dashboard$/i, level: 1 })).toBeVisible();
+	await expect(
+		page.getByRole('heading', { name: /^(study|learning dashboard|dashboard)$/i, level: 1 }),
+	).toBeVisible();
 }
 
 /**

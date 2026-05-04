@@ -9,7 +9,7 @@
  */
 
 import { computeReadingOrder, getReferenceByDocument, listAllSectionsForReference } from '@ab/bc-study';
-import { CITATION_URL_TEMPLATES, readingMinutesForWords, type ReferenceKind, ROUTES } from '@ab/constants';
+import { CITATION_URL_TEMPLATES, type ReferenceKind, ROUTES, readingMinutesForWords } from '@ab/constants';
 import { isParseError, parseIdentifier, parseRegsLocator } from '@ab/sources';
 import { error } from '@sveltejs/kit';
 import { computeSiblingNav, type SiblingNav } from '../../../../../lib/section-nav';

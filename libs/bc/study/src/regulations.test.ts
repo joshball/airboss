@@ -28,6 +28,7 @@ import {
 	REFERENCE_SECTION_LEVELS,
 } from '@ab/constants';
 import { db } from '@ab/db/connection';
+import { airbossRefForCfrSection } from '@ab/sources';
 import type { StructuredCitation } from '@ab/types';
 import { generateAuthId, generateReferenceFigureId, generateReferenceId, generateReferenceSectionId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
@@ -202,6 +203,7 @@ beforeAll(async () => {
 			ordinal: 1,
 			depth: 0,
 			code: '91',
+			airbossRef: 'airboss-ref:regs/cfr-14/91',
 			title: `Subpart 91 (test ${SUITE_SUFFIX})`,
 			faaPageStart: null,
 			faaPageEnd: null,
@@ -222,6 +224,7 @@ beforeAll(async () => {
 			ordinal: 103,
 			depth: 1,
 			code: '91.103',
+			airbossRef: airbossRefForCfrSection(14, '91.103'),
 			title: 'Preflight action',
 			faaPageStart: '91-103',
 			faaPageEnd: '91-103',
@@ -242,6 +245,7 @@ beforeAll(async () => {
 			ordinal: 107,
 			depth: 1,
 			code: '91.107',
+			airbossRef: airbossRefForCfrSection(14, '91.107'),
 			title: 'Use of safety belts',
 			faaPageStart: '91-107',
 			faaPageEnd: '91-107',

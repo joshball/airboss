@@ -70,6 +70,7 @@ describe('downloadFile (atomic write per ADR 021)', () => {
 		const outcome = await downloadFile('https://example.test/doc.pdf', dest, {
 			verbose: false,
 			fetchImpl: buildFakeFetch(body),
+			allowedHosts: TEST_HOSTS,
 		});
 
 		expect(existsSync(dest)).toBe(true);
@@ -104,6 +105,7 @@ describe('downloadFile (atomic write per ADR 021)', () => {
 			downloadFile('https://example.test/broken.pdf', dest, {
 				verbose: false,
 				fetchImpl: fakeFetch,
+				allowedHosts: TEST_HOSTS,
 			}),
 		).rejects.toThrow();
 
@@ -124,6 +126,7 @@ describe('downloadFile (atomic write per ADR 021)', () => {
 		await downloadFile('https://example.test/existing.pdf', dest, {
 			verbose: false,
 			fetchImpl: buildFakeFetch(body),
+			allowedHosts: TEST_HOSTS,
 		});
 
 		// Canonical path now holds the new bytes (verified by sha + content).
@@ -155,6 +158,7 @@ describe('downloadFile (atomic write per ADR 021)', () => {
 			downloadFile('https://example.test/prior.pdf', dest, {
 				verbose: false,
 				fetchImpl: fakeFetch,
+				allowedHosts: TEST_HOSTS,
 			}),
 		).rejects.toThrow();
 

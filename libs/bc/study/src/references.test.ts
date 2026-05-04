@@ -30,6 +30,7 @@ import {
 	ROUTES,
 } from '@ab/constants';
 import { db } from '@ab/db/connection';
+import { airbossRefForHandbookSection } from '@ab/sources';
 import type { LegacyCitation, StructuredCitation } from '@ab/types';
 import { generateAuthId, generateReferenceFigureId, generateReferenceId, generateReferenceSectionId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
@@ -164,6 +165,7 @@ beforeAll(async () => {
 			ordinal: 12,
 			depth: 0,
 			code: '12',
+			airbossRef: airbossRefForHandbookSection(PHAK_SLUG, 'FAA-H-8083-25C', '12'),
 			title: 'Weather Theory',
 			faaPageStart: null,
 			faaPageEnd: null,
@@ -184,6 +186,7 @@ beforeAll(async () => {
 			ordinal: 3,
 			depth: 1,
 			code: '12.3',
+			airbossRef: airbossRefForHandbookSection(PHAK_SLUG, 'FAA-H-8083-25C', '12.3'),
 			title: 'Atmospheric Pressure and Altitude',
 			faaPageStart: '12-3',
 			faaPageEnd: '12-3',
@@ -204,6 +207,7 @@ beforeAll(async () => {
 			ordinal: 4,
 			depth: 1,
 			code: '12.4',
+			airbossRef: airbossRefForHandbookSection(PHAK_SLUG, 'FAA-H-8083-25C', '12.4'),
 			title: 'Density Altitude',
 			faaPageStart: '12-4',
 			faaPageEnd: '12-4',
@@ -229,6 +233,7 @@ beforeAll(async () => {
 			ordinal: 4,
 			depth: 2,
 			code: '12.3.4',
+			airbossRef: airbossRefForHandbookSection(PHAK_SLUG, 'FAA-H-8083-25C', '12.3.4'),
 			title: 'Subsection used for level-guard tests',
 			faaPageStart: '12-3',
 			faaPageEnd: '12-3',
@@ -249,6 +254,7 @@ beforeAll(async () => {
 			ordinal: 5,
 			depth: 0,
 			code: '5',
+			airbossRef: airbossRefForHandbookSection(PHAK_SLUG, 'FAA-H-8083-25C', '5'),
 			title: 'Flight Controls',
 			faaPageStart: null,
 			faaPageEnd: null,
@@ -269,6 +275,7 @@ beforeAll(async () => {
 			ordinal: 1,
 			depth: 1,
 			code: '5.1',
+			airbossRef: airbossRefForHandbookSection(PHAK_SLUG, 'FAA-H-8083-25C', '5.1'),
 			title: 'Primary Flight Controls',
 			faaPageStart: '5-1',
 			faaPageEnd: '5-1',

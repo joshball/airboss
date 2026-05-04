@@ -36,22 +36,17 @@ describe('loadAcsConfig', () => {
 });
 
 describe('loadHandbooksExtrasConfig', () => {
-	it('loads 3 entries (8083-2, -16, mtn-tips with verified URLs)', () => {
+	it('loads 1 entry (faa-mtn-tips -- only residual after Wave 2 promotion)', () => {
 		const ex = loadHandbooksExtrasConfig();
-		// Originally 8 entries from HANDBOOKS_EXTRAS_TARGETS; 4 were dropped on
-		// 2026-04-29 because their canonical URLs returned 404. AMT-G (8083-30)
-		// and AMT-P (8083-32) were briefly re-added then dropped 2026-05-04 as
-		// out of scope (maintenance technician corpus, no pilot-training
-		// relevance). 8083-27 (Sport Pilot) and 8083-34 (Risk Management for GA)
-		// remain dropped -- no longer on the FAA aviation handbooks index. The
-		// mountain-flying pamphlet (faa-mtn-tips) was added 2026-05-02. IFH
-		// (8083-15) was promoted to section-tree by WP-IFH-section-tree. AIH
-		// (8083-9) was promoted out of handbooks-extras to the chapter-aware
-		// path on 2026-05-03 (WP-AIH). The verifier catches stale URLs at HEAD
-		// time, so the YAML stays a deterministic source-of-truth.
-		expect(ex.entries).toHaveLength(3);
+		// Wave 2 (2026-05-03) promoted every FAA-H-* handbook (incl. 8083-2 RMH
+		// and 8083-16 IPH) to the chapter-aware Class A2 pipeline at
+		// `scripts/sources/config/handbooks/<slug>.yaml`. Only the 1999
+		// mountain-flying pamphlet stays here because its OCR is unusable and
+		// the chapter-aware pipeline doesn't yet support `body_override`. See
+		// the YAML header comment for the full promotion / removal log.
+		expect(ex.entries).toHaveLength(1);
 		const ids = ex.entries.map((e) => e.doc_id).sort();
-		expect(ids).toEqual(['faa-h-8083-16', 'faa-h-8083-2', 'faa-mtn-tips']);
+		expect(ids).toEqual(['faa-mtn-tips']);
 	});
 });
 

@@ -85,6 +85,7 @@ describe('downloadHtmlFile', () => {
 		await downloadHtmlFile('https://example.test/happy.html', dest, {
 			verbose: false,
 			fetchImpl: fakeFetch,
+			allowedHosts: TEST_HOSTS,
 		});
 		expect(existsSync(dest)).toBe(true);
 		expect(existsSync(`${dest}.part`)).toBe(false);
@@ -108,6 +109,7 @@ describe('downloadHtmlFile', () => {
 			downloadHtmlFile('https://example.test/broken.html', dest, {
 				verbose: false,
 				fetchImpl: fakeFetch,
+				allowedHosts: TEST_HOSTS,
 			}),
 		).rejects.toThrow();
 

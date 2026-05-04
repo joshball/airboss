@@ -70,8 +70,7 @@ export async function seedSectionTreeManifest(
 	// same depth, then by ordinal, then lexically by code as a final
 	// tiebreaker. This keeps `front-matter/00-cover` ordinal=0 before
 	// chapter "1" ordinal=1 before section "1.3".
-	const levelRank = (level: HandbookManifestSection['level']): number =>
-		level === 'front-matter' ? 0 : 1;
+	const levelRank = (level: HandbookManifestSection['level']): number => (level === 'front-matter' ? 0 : 1);
 	const sortedSections = [...manifest.sections].sort((a, b) => {
 		if (a.code.length !== b.code.length) return a.code.length - b.code.length;
 		if (a.code.length === 1) {
