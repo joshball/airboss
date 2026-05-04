@@ -94,10 +94,12 @@ export {
 	getCredentialBySlug,
 	getCredentialIdsCoveredBy,
 	getCredentialMastery,
+	getCredentialMasteryMap,
 	getCredentialPrereqDag,
 	getCredentialPrereqs,
 	getCredentialPrimarySyllabus,
 	getCredentialSyllabi,
+	getCredentialsByIds,
 	listCredentials,
 	upsertCredential,
 	upsertCredentialPrereq,
@@ -342,6 +344,7 @@ export {
 } from './reference-errata';
 // Reference ingestion + reader (post-WP-SUB substrate; ADR 016 phase 0).
 export type {
+	CitingNodesBatchQuery,
 	CitingNodesQuery,
 	GetReferenceOptions,
 	HandbookProgressSummary,
@@ -351,8 +354,10 @@ export type {
 export {
 	getHandbookChapter,
 	getHandbookProgress,
+	getHandbookProgressMap,
 	getHandbookSection,
 	getNodesCitingSection,
+	getNodesCitingSectionsBatch,
 	getReadableReferenceIds,
 	getReadState,
 	getReferenceByDocument,
@@ -632,7 +637,9 @@ export {
 	AirbossRefValidationError,
 	buildSyllabusTreeFromRows,
 	getCitationsForSyllabusNode,
+	getCitationsForSyllabusNodes,
 	getKnowledgeNodesForSyllabusLeaf,
+	getKnowledgeNodesForSyllabusLeaves,
 	getSyllabusArea,
 	getSyllabusById,
 	getSyllabusBySlug,

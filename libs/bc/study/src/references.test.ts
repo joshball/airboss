@@ -36,8 +36,10 @@ import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
 	getHandbookChapter,
+	getHandbookProgressMap,
 	getHandbookSection,
 	getNodesCitingSection,
+	getNodesCitingSectionsBatch,
 	getReferenceByDocument,
 	HandbookSectionNotFoundError,
 	HandbookValidationError,
@@ -485,6 +487,89 @@ describe('getNodesCitingSection', () => {
 	it('matches AFH section when querying its reference id', async () => {
 		const nodes = await getNodesCitingSection({ referenceId: AFH_3C_ID, chapter: 5, section: 1 });
 		expect(nodes.map((n) => n.id)).toEqual([NODE_CITES_AFH_ID]);
+	});
+});
+
+describe('getNodesCitingSectionsBatch', () => {
+	it('groups citing nodes per requested section in one query', async () => {
+		const map = await getNodesCitingSectionsBatch({
+			referenceId: PHAK_25C_ID,
+			chapter: 12,
+			sections: [3, 4],
+		});
+		// section 3 has the section-locator citation; section 4 has none. The
+		// chapter-only NODE_CITES_CHAPTER_ID node should NOT appear -- this
+		// helper buckets per section, and a chapter-only locator does not
+		// resolve to a section.
+		expect(map.get(3)?.map((n) => n.id)).toEqual([NODE_CITES_SECTION_ID]);
+		expect(map.get(4)).toEqual([]);
+	});
+
+	it('returns empty arrays for unrequested or unmatched sections', async () => {
+		const map = await getNodesCitingSectionsBatch({
+			referenceId: PHAK_25C_ID,
+			chapter: 5,
+			sections: [1],
+		});
+		// AFH cites 5.1 but references a different reference id, so PHAK 5.1
+		// has no citers.
+		expect(map.get(1)).toEqual([]);
+	});
+
+	it('returns an empty Map for an empty sections list', async () => {
+		const map = await getNodesCitingSectionsBatch({
+			referenceId: PHAK_25C_ID,
+			chapter: 12,
+			sections: [],
+		});
+		expect(map.size).toBe(0);
+	});
+
+	it('does not match nodes from other reference ids', async () => {
+		// Same chapter+section as the AFH node but probing the wrong reference id.
+		const map = await getNodesCitingSectionsBatch({
+			referenceId: PHAK_25C_ID,
+			chapter: 5,
+			sections: [1],
+		});
+		expect(map.get(1)).toEqual([]);
+	});
+});
+
+describe('getHandbookProgressMap', () => {
+	it('returns per-reference summary keyed by reference id', async () => {
+		const map = await getHandbookProgressMap(TEST_USER_ID, [PHAK_25C_ID, AFH_3C_ID]);
+		expect(map.size).toBe(2);
+		const phak = map.get(PHAK_25C_ID);
+		// Four non-chapter rows seeded under PHAK-25C: 12.3, 12.4, 12.3.4, 5.1.
+		// (Two chapters do not count toward the section total -- this mirrors
+		// the per-row helper's `<> chapter` filter.)
+		expect(phak?.totalSections).toBe(4);
+		expect(phak?.readSections).toBe(0);
+		expect(phak?.readingSections).toBe(0);
+		expect(phak?.unreadSections).toBe(4);
+		expect(phak?.comprehendedSections).toBe(0);
+
+		const afh = map.get(AFH_3C_ID);
+		expect(afh?.totalSections).toBe(0);
+		expect(afh?.unreadSections).toBe(0);
+	});
+
+	it('returns empty Map for empty input', async () => {
+		const map = await getHandbookProgressMap(TEST_USER_ID, []);
+		expect(map.size).toBe(0);
+	});
+
+	it('returns zero summary for unknown reference ids without throwing', async () => {
+		const fake = generateReferenceId();
+		const map = await getHandbookProgressMap(TEST_USER_ID, [fake]);
+		expect(map.get(fake)).toEqual({
+			totalSections: 0,
+			readSections: 0,
+			readingSections: 0,
+			unreadSections: 0,
+			comprehendedSections: 0,
+		});
 	});
 });
 

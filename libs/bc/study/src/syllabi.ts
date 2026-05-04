@@ -38,7 +38,7 @@ import {
 import { db as defaultDb } from '@ab/db/connection';
 import { getCorpusResolver, isParseError, parseIdentifier } from '@ab/sources';
 import type { StructuredCitation } from '@ab/types';
-import { and, asc, eq } from 'drizzle-orm';
+import { and, asc, eq, inArray } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import {
 	type KnowledgeNodeRow,
@@ -227,6 +227,35 @@ export async function getCitationsForSyllabusNode(
 }
 
 /**
+ * Batched counterpart to {@link getCitationsForSyllabusNode}: pull the inline
+ * citations arrays for a set of syllabus_node ids in one round trip and
+ * return them keyed by node id. Missing ids resolve to `[]` so the caller
+ * doesn't have to guard each lookup.
+ *
+ * Closes the per-row N+1 in
+ * `apps/study/src/routes/(app)/credentials/[slug]/areas/[areaCode]/+page.server.ts`
+ * (one `getCitationsForSyllabusNode` call per element under each task).
+ *
+ * Empty input short-circuits.
+ */
+export async function getCitationsForSyllabusNodes(
+	syllabusNodeIds: readonly string[],
+	db: Db = defaultDb,
+): Promise<Map<string, StructuredCitation[]>> {
+	const out = new Map<string, StructuredCitation[]>();
+	if (syllabusNodeIds.length === 0) return out;
+	for (const id of syllabusNodeIds) out.set(id, []);
+	const rows = await db
+		.select({ id: syllabusNode.id, citations: syllabusNode.citations })
+		.from(syllabusNode)
+		.where(inArray(syllabusNode.id, syllabusNodeIds as string[]));
+	for (const row of rows) {
+		out.set(row.id, row.citations ?? []);
+	}
+	return out;
+}
+
+/**
  * Optional class scoping for the leaf-graph traversals. Class-agnostic leaves
  * (`classes IS NULL`) always pass; class-tagged leaves pass when their tags
  * intersect the filter array. Empty / undefined filter = pass.
@@ -257,6 +286,49 @@ export async function getKnowledgeNodesForSyllabusLeaf(
 	return rows
 		.filter((r) => leafPassesClassFilter(r.leafClasses, classFilter))
 		.map((r) => ({ node: r.node, weight: r.weight }));
+}
+
+/**
+ * Batched counterpart to {@link getKnowledgeNodesForSyllabusLeaf}: pull every
+ * (leaf -> knowledge node) link for a set of leaves in a single round trip
+ * and group the results by leaf id. Missing ids resolve to `[]` so the
+ * caller doesn't have to guard each lookup.
+ *
+ * Closes the per-row N+1 in
+ * `apps/study/src/routes/(app)/credentials/[slug]/areas/[areaCode]/+page.server.ts`
+ * (one `getKnowledgeNodesForSyllabusLeaf` call per element under each task).
+ *
+ * Class-filter semantics match the per-row helper (class-agnostic leaves
+ * always pass; class-tagged leaves pass when their tags intersect the
+ * filter array). Empty input short-circuits.
+ */
+export async function getKnowledgeNodesForSyllabusLeaves(
+	syllabusNodeIds: readonly string[],
+	options: ClassFilterOptions = {},
+	db: Db = defaultDb,
+): Promise<Map<string, Array<{ node: KnowledgeNodeRow; weight: number }>>> {
+	const out = new Map<string, Array<{ node: KnowledgeNodeRow; weight: number }>>();
+	if (syllabusNodeIds.length === 0) return out;
+	for (const id of syllabusNodeIds) out.set(id, []);
+	const rows = await db
+		.select({
+			leafId: syllabusNodeLink.syllabusNodeId,
+			node: knowledgeNode,
+			weight: syllabusNodeLink.weight,
+			leafClasses: syllabusNode.classes,
+		})
+		.from(syllabusNodeLink)
+		.innerJoin(syllabusNode, eq(syllabusNode.id, syllabusNodeLink.syllabusNodeId))
+		.innerJoin(knowledgeNode, eq(knowledgeNode.id, syllabusNodeLink.knowledgeNodeId))
+		.where(inArray(syllabusNodeLink.syllabusNodeId, syllabusNodeIds as string[]));
+	const classFilter = options.classes ?? [];
+	for (const row of rows) {
+		if (!leafPassesClassFilter(row.leafClasses, classFilter)) continue;
+		const list = out.get(row.leafId);
+		if (list === undefined) continue;
+		list.push({ node: row.node, weight: row.weight });
+	}
+	return out;
 }
 
 export interface SyllabusLeafWithSyllabus {
