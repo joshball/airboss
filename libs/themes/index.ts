@@ -65,6 +65,7 @@ export {
 	PRE_HYDRATION_PLACEHOLDER,
 } from './picker/pre-hydration';
 export {
+	createAppearanceEndpoint,
 	createThemeEndpoint,
 	readThemeFromCookies,
 } from './picker/server';

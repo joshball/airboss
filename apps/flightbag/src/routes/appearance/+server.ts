@@ -1,10 +1,9 @@
 /**
- * Persist the user's appearance preference for study.
+ * Persist the user's appearance preference for flightbag.
  *
  * Delegates to `createAppearanceEndpoint` so the cookie name, validation,
- * and attribute set stay in sync with sister apps. Not auth-gated: the
- * toggle is visible on `/login` too, and the setting is cosmetic -- no
- * session data flows through it.
+ * and attribute set stay in sync with sister apps. Not auth-gated:
+ * flightbag is a public reference reader and the setting is cosmetic.
  */
 
 import { createAppearanceEndpoint } from '@ab/themes';

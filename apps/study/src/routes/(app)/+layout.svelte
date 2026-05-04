@@ -2,7 +2,6 @@
 import { NAV_LABELS, ROUTES } from '@ab/constants';
 import HelpSearch from '@ab/help/ui/HelpSearch.svelte';
 import {
-	APPEARANCE_PREFERENCE_VALUES,
 	type AppearanceMode,
 	type AppearancePreference,
 	DEFAULT_APPEARANCE,
@@ -211,7 +210,14 @@ function handleMemoryItemClick() {
 -->
 <a class="skip" href="#main">Skip to main content</a>
 
-<AppHeader app="study" flightbagHref={data.flightbagOrigin} user={data.user}>
+<AppHeader
+	app="study"
+	flightbagHref={data.flightbagOrigin}
+	helpHref={ROUTES.HELP}
+	user={data.user}
+	appearance={appearancePref}
+	onAppearanceChange={setAppearance}
+>
 	{#snippet nav()}
 		<div class="nav-sections" aria-label="Primary">
 			<a href={ROUTES.STUDY} aria-current={studyActive ? 'page' : undefined}>{NAV_LABELS.STUDY}</a>
@@ -279,26 +285,11 @@ function handleMemoryItemClick() {
 			</details>
 		</div>
 	{/snippet}
-	{#snippet tools()}
+	{#snippet helpSearch()}
 		<HelpSearch />
-		<ThemePicker currentThemeId={selection.theme} onSelect={setTheme} locked={themePickerLocked} />
 	{/snippet}
-	{#snippet identityPanel()}
-		<fieldset class="identity-appearance">
-			<legend>Appearance</legend>
-			{#each APPEARANCE_PREFERENCE_VALUES as option (option)}
-				<label class="identity-appearance-option">
-					<input
-						type="radio"
-						name="appearance"
-						value={option}
-						checked={appearancePref === option}
-						onchange={() => setAppearance(option)}
-					/>
-					<span class="identity-appearance-label">{option}</span>
-				</label>
-			{/each}
-		</fieldset>
+	{#snippet themePicker()}
+		<ThemePicker currentThemeId={selection.theme} onSelect={setTheme} locked={themePickerLocked} />
 	{/snippet}
 </AppHeader>
 
@@ -451,52 +442,6 @@ function handleMemoryItemClick() {
 	.nav-menu-panel a[aria-current='page'] {
 		color: var(--action-default-hover);
 		background: var(--action-default-wash);
-	}
-
-	/*
-	 * Appearance picker rendered inside the AppHeader identity panel via the
-	 * `identityPanel` snippet. Snippet content is style-scoped to the caller
-	 * (this layout), so these rules target the fieldset markup we declared
-	 * above without leaking out of the file.
-	 */
-	.identity-appearance {
-		margin: 0;
-		padding: var(--space-sm);
-		border: 0;
-		border-top: 1px solid var(--edge-default);
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-2xs);
-	}
-
-	.identity-appearance legend {
-		padding: 0 0 var(--space-2xs);
-		font-size: var(--type-ui-label-size);
-		color: var(--ink-muted);
-		font-weight: var(--type-ui-control-weight);
-	}
-
-	.identity-appearance-option {
-		display: inline-flex;
-		align-items: center;
-		gap: var(--space-xs);
-		padding: var(--space-2xs) var(--space-2xs);
-		border-radius: var(--radius-sm);
-		cursor: pointer;
-		font-size: var(--type-ui-label-size);
-		color: var(--ink-body);
-	}
-
-	.identity-appearance-option:hover {
-		background: var(--surface-sunken);
-	}
-
-	.identity-appearance-option input {
-		accent-color: var(--action-default);
-	}
-
-	.identity-appearance-label {
-		text-transform: capitalize;
 	}
 
 	@media (max-width: 640px) {

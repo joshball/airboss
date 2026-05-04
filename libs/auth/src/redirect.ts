@@ -1,3 +1,25 @@
+import { HOST_PREFIXES, QUERY_PARAMS, ROUTES, siblingOrigin } from '@ab/constants';
+import type { RequestEvent } from '@sveltejs/kit';
+
+/**
+ * Cross-app sign-in URL pointing at the study login page.
+ *
+ * Sister apps (sim, avionics, flightbag) live on different subdomains, so a
+ * sign-in affordance has to redirect back to study where the form-action
+ * lives. The path is composed once here so callers do not duplicate origin
+ * derivation + redirectTo encoding across every per-app layout-server.
+ *
+ * The `redirectTo` parameter targets the user's current cross-origin URL so
+ * the post-login redirect lands them back where they came from. Study's
+ * login page validates this against `isSafeRedirect` before honoring it.
+ */
+export function studyLoginUrl(event: RequestEvent): string {
+	const studyOrigin = siblingOrigin(event.url, HOST_PREFIXES.STUDY);
+	const currentUrl = event.url.toString();
+	const redirectTo = encodeURIComponent(currentUrl);
+	return `${studyOrigin}${ROUTES.LOGIN}?${QUERY_PARAMS.REDIRECT_TO}=${redirectTo}`;
+}
+
 /**
  * True when the path is a safe local redirect target (no open-redirect
  * bypasses). The character allowlist + URL-parse-against-placeholder pattern
