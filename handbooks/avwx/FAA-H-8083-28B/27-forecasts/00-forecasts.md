@@ -2154,212 +2154,85 @@ This forecast is also available at phone number 636-441-8467 ext. 5.
 $$
 TES
 
-![Figure 27-1. Aviation Surface Forecast Example 
- 
-Figure 27-2. Aviation Clouds Forecast Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-5-00-aviation-surface-forecast-example-figure-27-2-av.png)
+![Figure 27-1. Aviation Surface Forecast Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-5-00-aviation-surface-forecast-example.png)
 
 ![Figure 27-2. Aviation Clouds Forecast Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-5-01-aviation-clouds-forecast-example.png)
 
-![Figure 27-3. AAWU Flight Advisory and FA Zones—Alaska 
-Table 27-9. AAWU Area Forecast (FA) Zones—Alaska 
-1 
-Arctic Coast Coastal 
-14 
-Southern Southeast Alaska 
-2 
-North Slopes of the Brooks Range 
-15 
-Coastal Southeast Alaska 
-3 
-Upper Yukon Valley 
-16 
-Eastern Gulf Coast 
-4 
-Koyukuk and Upper Kobuk Valley 
-17 
-Copper](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-6-4-00-aawu-flight-advisory-and-fa-zones-alaska-table-2.png)
+![Figure 27-3. AAWU Flight Advisory and FA Zones—Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-6-4-00-aawu-flight-advisory-and-fa-zones-alaska.png)
 
-![Figure 27-4. Alaska Flying Weather Example 
-27.7.2 Alaska Surface Forecast 
-The Surface Forecast graphic (see Figure 27-5) illustrates prominent surface features, including sea level 
-pressure, areas of high and low pressure, fronts and troughs, and precipitation. Each forecast shows the 
-surface weather that can be ex](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-1-00-alaska-flying-weather-example-27-7-2-alaska-surf.png)
+![Figure 27-4. Alaska Flying Weather Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-1-00-alaska-flying-weather-example.png)
 
-![Figure 27-5. Alaska Surface Forecast Example 
-27.7.3 Alaska Icing Forecast 
-The Icing Forecast graphic (see Figure 27-6) provides information about freezing levels and the potential 
-for significant icing at specified valid times. 
-Freezing level heights are blue-filled contours (every 2,000 ft). Areas of isolated (ISO](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-3-00-alaska-surface-forecast-example-27-7-3-alaska-ic.png)
+![Figure 27-5. Alaska Surface Forecast Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-3-00-alaska-surface-forecast-example.png)
 
-![Figure 27-6. Alaska Icing Forecast Example 
-27.7.4 Alaska Turbulence Forecast 
-The Turbulence Forecast graphic (see Figure 27-7) depicts areas of significant turbulence at specified valid 
-times. 
-Areas of isolated (ISOL) moderate (MOD) turbulence are shaded yellow, areas of occasional (OCNL) or 
-continuous (CONS) mode](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-4-00-alaska-icing-forecast-example-27-7-4-alaska-turb.png)
+![Figure 27-6. Alaska Icing Forecast Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-4-00-alaska-icing-forecast-example.png)
 
-![Figure 27-7. Alaska Turbulence Forecast Example 
-27.7.5 Alaska Convective Outlook 
-The Convective Outlook graphic (see Figure 27-8) is a seasonal product that provides information about 
-convective activity at specific valid times. Each forecast indicates where conditions are favorable for the 
-development of towering](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-5-00-alaska-turbulence-forecast-example-27-7-5-alaska.png)
+![Figure 27-7. Alaska Turbulence Forecast Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-5-00-alaska-turbulence-forecast-example.png)
 
-![Figure 27-8. Alaska Convective Outlook 
-27.8 World Area Forecast System (WAFS) 
-ICAO’s WAFS supplies aviation users with global aeronautical meteorological en route forecasts suitable 
-for use in flight-planning systems and flight documentation. 
-Two WAFCs, WAFC Washington and WAFC London, have the responsibility to is](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-8-1-00-alaska-convective-outlook-27-8-world-area-foreca.png)
+![Figure 27-8. Alaska Convective Outlook](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-8-1-00-alaska-convective-outlook.png)
 
 ![Figure 27-9. WAFS Wind and Temperature Six-Hour Forecast at FL390—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-8-1-01-wafs-wind-and-temperature-six-hour-forecast-at-f.png)
 
-![Figure 27-10. 12-Hour Low-Level SIGWX Chart—Example 
-27.9.1.1 Issuance 
-Low-Level SIGWX Charts are issued four times per day by the NWS AWC (see Table 27-10). Two charts 
-are issued: a 12-hour and a 24-hour prognostic (prog) chart. 
-Table 27-10. Low-Level SIGWX Chart Issuance Schedule 
-  
-Issuance Time 
-~1720Z 
-~2310Z](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-00-12-hour-low-level-sigwx-chart-example-27-9-1-1-i.png)
+![Figure 27-10. 12-Hour Low-Level SIGWX Chart—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-00-12-hour-low-level-sigwx-chart-example.png)
 
-![Figure 27-11. Low-Level SIGWX Chart Symbols 
-27.9.1.2.1 Flying Categories 
-IFR areas are outlined with a solid red line, MVFR areas are outlined with a scalloped blue line, and 
-VFR areas are not depicted (see Figure 27-12). 
- 
-Figure 27-12. Low-Level SIGWX Chart Flying Categories—Example 
-27.9.1.2.2 Turbulence 
-Areas](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-01-low-level-sigwx-chart-symbols-27-9-1-2-1-flying-.png)
+![Figure 27-11. Low-Level SIGWX Chart Symbols](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-01-low-level-sigwx-chart-symbols.png)
 
-![Figure 27-12. Low-Level SIGWX Chart Flying Categories—Example 
-27.9.1.2.2 Turbulence 
-Areas of moderate or greater turbulence are enclosed by bold, dashed, brown lines (see Figure 27-13). 
-Turbulence intensities are identified by standard symbols (see Figure 27-11). The vertical extent of 
-turbulence layers is specifie](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-02-low-level-sigwx-chart-flying-categories-example-.png)
+![Figure 27-12. Low-Level SIGWX Chart Flying Categories—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-02-low-level-sigwx-chart-flying-categories-example.png)
 
-![Figure 27-13. Low-Level SIGWX Chart Turbulence Forecast—Example 
-27.9.1.2.3 Freezing Levels 
-The freezing level at the surface is depicted by a blue, saw-toothed symbol (see Figure 27-14). The surface 
-freezing level separates above-freezing from below-freezing temperatures at the Earth’s surface. 
-Freezing levels abov](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-03-low-level-sigwx-chart-turbulence-forecast-exampl.png)
+![Figure 27-13. Low-Level SIGWX Chart Turbulence Forecast—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-03-low-level-sigwx-chart-turbulence-forecast-exampl.png)
 
 ![Figure 27-14. Low-Level SIGWX Chart Freezing Level Forecast—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-04-low-level-sigwx-chart-freezing-level-forecast-ex.png)
 
-![Figure 27-15. Low-Level SIGWX Chart Multiple Freezing Levels—Example 
-In Figure 27-15, areas with multiple freezing levels are located on the below-freezing side of the surface 
-freezing level contour and bounded by the 4,000-ft freezing level. Multiple freezing levels are possible 
-beyond the 4,000-ft freezing level (](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-2-00-low-level-sigwx-chart-multiple-freezing-levels-e.png)
+![Figure 27-15. Low-Level SIGWX Chart Multiple Freezing Levels—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-2-00-low-level-sigwx-chart-multiple-freezing-levels-e.png)
 
-![Figure 27-16. Mid-Level SIGWX Chart—Example 
-27.9.2.1 Issuance 
-The AWC in Kansas City, MO, has the responsibility, as part of the WAFC Washington, to provide global 
-weather forecasts of SIGWX phenomena. The AWC issues a 24-hour Mid-Level SIGWX Chart, four times 
-daily, for the North Atlantic Ocean Region (see Table 2](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-2-01-mid-level-sigwx-chart-example-27-9-2-1-issuance-.png)
+![Figure 27-16. Mid-Level SIGWX Chart—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-2-01-mid-level-sigwx-chart-example.png)
 
-![Figure 27-17. High-Level SIGWX Chart—Example 
-27.9.3.1 Issuance 
-In accordance with the WAFS of ICAO, High-Level SIGWX forecasts are provided for the en route portion 
-of international flights.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-00-high-level-sigwx-chart-example-27-9-3-1-issuance.png)
+![Figure 27-17. High-Level SIGWX Chart—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-00-high-level-sigwx-chart-example.png)
 
-![Figure 27-18. High-Level SIGWX Chart Turbulence—Examples 
-27.9.3.2.3 Moderate or Severe Icing 
-Moderate or severe icing (outside of thunderstorms) above FL240 is rare and is generally not forecasted on 
-High-Level SIGWX Charts. 
-27.9.3.2.4 Jet Streams 
-A jet stream axis with a wind speed of more than 80 kt is identifie](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-01-high-level-sigwx-chart-turbulence-examples-27-9-.png)
+![Figure 27-18. High-Level SIGWX Chart Turbulence—Examples](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-01-high-level-sigwx-chart-turbulence-examples.png)
 
-![Figure 27-19. High-Level SIGWX Chart Jet Stream—Example 
-27.9.3.2.5 Tropopause Heights 
-Tropopause heights are plotted at selected locations on the chart. They are enclosed by rectangles and 
-plotted in hundreds of feet MSL (see Figure 27-20). Centers of high (H) and low (L) tropopause heights 
-are enclosed by polygons](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-02-high-level-sigwx-chart-jet-stream-example-27-9-3.png)
+![Figure 27-19. High-Level SIGWX Chart Jet Stream—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-02-high-level-sigwx-chart-jet-stream-example.png)
 
-![Figure 27-20. High-Level SIGWX Chart Tropopause Height—Examples 
-27.9.3.2.6 Tropical Cyclones 
-Tropical cyclones (i.e., with surface wind speed 34 kt or greater) are depicted by the symbol in Figure 27-21 
-with the storm’s name positioned adjacent to the symbol. Cumulonimbus clouds meeting chart criteria are 
-identifie](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-03-high-level-sigwx-chart-tropopause-height-example.png)
+![Figure 27-20. High-Level SIGWX Chart Tropopause Height—Examples](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-03-high-level-sigwx-chart-tropopause-height-example.png)
 
-![Figure 27-21. High-Level SIGWX Chart Tropical Cyclone—Examples 
-27.9.3.2.7 Volcanic Eruption Sites 
-Volcanic eruption sites are identified by a trapezoidal symbol depicted in Figure 27-22. The dot on the base 
-of the trapezoid identifies the location of the volcano. The name of the volcano, its latitude, and its longit](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-4-00-high-level-sigwx-chart-tropical-cyclone-examples.png)
+![Figure 27-21. High-Level SIGWX Chart Tropical Cyclone—Examples](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-4-00-high-level-sigwx-chart-tropical-cyclone-examples.png)
 
-![Figure 27-22. The dot on the base 
-of the trapezoid identifies the location of the volcano. The name of the volcano, its latitude, and its longitude 
-are noted adjacent to the symbol. 
- 
-Figure 27-22. High-Level SIGWX Chart Volcanic Eruption Site—Example 
-27.9.4 Alaska Significant Weather (SIGWX) Charts 
-The Alaska SIG](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-4-01-the-dot-on-the-base-of-the-trapezoid-identifies-.png)
+![Volcanic eruption sites are identified by a trapezoidal symbol depicted in Figure 27-22. The dot on the base  of the trapezoid identifies the location of the volcano. The name of the volcano, its latitude, and its longitude are noted adjacent to the symbol.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-4-01-the-dot-on-the-base-of-the-trapezoid-identifies-.png)
 
-![Figure 27-23. Alaska SIGWX Chart—Example 
-27.9.4.1.1 Content 
-27.9.4.1.1.1 Surface Pressure Systems and Fronts 
-Pressure systems and fronts are depicted using standard symbols. Isobars are denoted by solid, thin black 
-lines and labeled with the appropriate pressure in millibars. The central pressure is plotted near th](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-4-02-alaska-sigwx-chart-example-27-9-4-1-1-content-27.png)
+![Figure 27-22. High-Level SIGWX Chart Volcanic Eruption Site—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-4-02-high-level-sigwx-chart-volcanic-eruption-site-ex.png)
 
-![Figure 27-24. NDFD Short-Range Surface Prog Forecast—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-10-00-ndfd-short-range-surface-prog-forecast-example.png)
+![Figure 27-23. Alaska SIGWX Chart—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-10-00-ndfd-short-range-surface-prog-forecast-example.png)
 
-![Figure 27-25. Surface Prog Forecast Symbols 
-27.10.1.3 Pressure Systems 
-Pressure systems are depicted by pressure centers, troughs, isobars, drylines, tropical waves, tropical 
-storms, and hurricanes using standard symbols (see Figure 27-25). Isobars are denoted by solid, thin black 
-lines and labeled with the appropr](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-02-nws-surface-analysis-chart-symbols-25-2-3-3-exam.png)
+![Figure 27-25. Surface Prog Forecast Symbols](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-02-nws-surface-analysis-chart-symbols.png)
 
-![Figure 27-26. NWS NCO Model Analyses and Guidance Website 
-27.11.1 Constant Pressure Level Forecasts 
-Constant pressure level forecasts (see Figure 27-27) are just one of the many products produced by NWP 
-models. Constant pressure level forecasts are the computer model’s depiction of select weather (e.g., wind) 
-at a](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-11-1-00-nws-nco-model-analyses-and-guidance-website-27-1.png)
+![Fronts are depicted using the standard symbols in Figure 27-25.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-11-1-00-nws-nco-model-analyses-and-guidance-website.png)
 
-![Figure 27-27. 300 mb Constant Pressure Forecast—Example 
-27.11.1.1 Issuance 
-Constant pressure level forecasts are produced several times a day depending on the model. The NCEP’s 
-GFS model and North American Model (NAM) produce forecasts four times per day, with initial times of 
-00, 06, 12, and 18 UTC. Other higher r](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-11-1-01-300-mb-constant-pressure-forecast-example-27-11-.png)
+![Figure 27-26. NWS NCO Model Analyses and Guidance Website](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-11-1-01-300-mb-constant-pressure-forecast-example.png)
 
-![Figure 27-28. Day 1 Categorical Convective Outlook Graphic Example 
- 
-Figure 27-29. Categorical Outlook Legend for Days 1-3 Convective Outlook Graphic Example 
-27.17.2 Traffic Flow Management (TFM) Convective Forecast (TCF) 
-The TCF is a high-confidence graphical representation of forecasted convection meeting specific](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-2-00-day-1-categorical-convective-outlook-graphic-exa.png)
+![Figure 27-28. Day 1 Categorical Convective Outlook Graphic Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-2-00-day-1-categorical-convective-outlook-graphic-exa.png)
 
-![Figure 27-30. TCF Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-2-01-tcf-example.png)
+![Figure 27-29. Categorical Outlook Legend for Days 1-3 Convective Outlook Graphic Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-2-01-categorical-outlook-legend-for-days-1-3-convecti.png)
 
-![Figure 27-31. ECFP Example 
-27.17.4 Watch Notification Messages 
-The NWS SPC issues severe weather Watch Notification Messages to provide an area threat alert for the 
-aviation meteorology community to forecast organized severe thunderstorms that may produce tornadoes, 
-large hail, and/or convective damaging winds with](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-3-00-ecfp-example-27-17-4-watch-notification-messages.png)
+![Figure 27-30. TCF Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-3-00-ecfp-example.png)
 
-![Figure 27-32. Aviation Watch (polygon) Compared to Public Watch (shaded) Example 
-The SPC will issue the SAW after the proposed convective watch area has been collaborated with the 
-impacted NWS WFOs defining the approximate areal outline of the watch. 
-SAWs are nonscheduled, event-driven products valid from the time o](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-4-01-aviation-watch-polygon-compared-to-public-watch-.png)
+![Figure 27-32. Aviation Watch (polygon) Compared to Public Watch (shaded) Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-4-01-aviation-watch-polygon-compared-to-public-watch-.png)
 
-![Figure 27-33. CIWS and CoSPA 
-27.18 Route Forecast (ROFOR) 
-The ROFOR product is no longer issued by the NWS and has been replaced by the GFA in the Pacific. See 
-Section 28.2 for information on the GFA.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-5-00-ciws-and-cospa-27-18-route-forecast-rofor-the-ro.png)
+![Figure 27-33. CIWS and CoSPA](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-5-00-ciws-and-cospa.png)
 
-![Figure 27-34. Map of NWS WFO’s Area of Responsibility 
-27.19.1 Example 
-NWS Boise, ID 
-COLD FRONT CURRENTLY OVER SW IDAHO WEST OF THE MAGIC VALLEY. IFR IN HEAVIER 
-RAIN/SNOW SHOWERS BEHIND THE FRONT MOSTLY IN THE MTNS UNTIL THIS EVENING. 
-OTHERWISE, LOW VFR THROUGH TOMORROW WITH ISOLATED SHOWERS INTO THE EVENING. 
-SURF](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-19-1-00-map-of-nws-wfo-s-area-of-responsibility-27-19-1-.png)
+![Figure 27-34. Map of NWS WFO’s Area of Responsibility](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-19-1-00-map-of-nws-wfo-s-area-of-responsibility.png)
 
-<div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-00-untitled.html">
-<table><thead><tr><th>There are many wind and temperature aloft forecasts and products produced by the NWS. Each NWP model</th><th></th></tr></thead><tbody><tr><td>(i.e., sometimes referred to as computer models) outputs wind and temperature at multiple levels. The</td><td></td></tr><tr><td>primary output of these forecasts is a gridded binary code format intended for use in flight planning</td><td></td></tr><tr><td>software.</td><td></td></tr></tbody></table>
-</div>
+| There are many wind and temperature aloft forecasts and products produced by the NWS. Each NWP model |
+| --- |
+| (i.e., sometimes referred to as computer models) outputs wind and temperature at multiple levels. The |
+| primary output of these forecasts is a gridded binary code format intended for use in flight planning |
+| software. |
+
+<a class="handbook-table-source" href="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-00-untitled.html">Open original</a>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-01-wind-and-temperature-aloft-forecast-decoding-exa.html">
 <table><caption>Table 27-1. Wind and Temperature Aloft Forecast Decoding Examples 
 FT 3000 6000 9000 12000 18000 24000 30000 34000 39000 
 MKC 9900 1709+06 2018+00 2130-06 2242-18 2361-30 247242 258848 550252 
-Altitud</caption><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td>FT 3000 6000 9000 12000 18000 24000 30000 34000 39000</td><td></td><td></td><td></td></tr><tr><td>MKC 9900 1709+06 2018+00 2130-06 2242-18 2361-30 247242 258848 550252</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>Wind</td><td></td></tr><tr><td>Altitude (ft)</td><td>Coded</td><td></td><td>Temperature (˚C)</td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>Light and variable</td><td>Not forecast</td></tr><tr><td>3,000 ft</td><td>9900</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>170° at 9 kt</td><td>+06 °C</td></tr><tr><td>6,000 ft</td><td>1709+06</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>200° at 18 kt</td><td>Zero °C</td></tr><tr><td>9,000 ft</td><td>2018+00</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>210° at 30 kt</td><td>-06 °C</td></tr><tr><td>12,000 ft</td><td>2130-06</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>220° at 42 kt</td><td>-18 °C</td></tr><tr><td>18,000 ft</td><td>2242-18</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>230° at 61 kt</td><td>-30 °C</td></tr><tr><td>24,000 ft</td><td>2361-30</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>240° at 72 kt</td><td>-42 °C</td></tr><tr><td>30,000 ft</td><td>247242</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>250° at 88 kt</td><td>-48 °C</td></tr><tr><td>34,000 ft</td><td>258848</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>250° at 102 kt</td><td>-52 °C</td></tr><tr><td>39,000 ft</td><td>750252</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>
+Altitud</caption><thead><tr><th>FT 3000 6000 9000 12000 18000 24000 30000 34000 39000</th><th></th><th></th><th></th></tr></thead><tbody><tr><td>MKC 9900 1709+06 2018+00 2130-06 2242-18 2361-30 247242 258848 550252</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>Wind</td><td></td></tr><tr><td>Altitude (ft)</td><td>Coded</td><td></td><td>Temperature (˚C)</td></tr><tr><td></td><td></td><td>Light and variable</td><td>Not forecast</td></tr><tr><td>3,000 ft</td><td>9900</td><td></td><td></td></tr><tr><td></td><td></td><td>170° at 9 kt</td><td>+06 °C</td></tr><tr><td>6,000 ft</td><td>1709+06</td><td></td><td></td></tr><tr><td></td><td></td><td>200° at 18 kt</td><td>Zero °C</td></tr><tr><td>9,000 ft</td><td>2018+00</td><td></td><td></td></tr><tr><td></td><td></td><td>210° at 30 kt</td><td>-06 °C</td></tr><tr><td>12,000 ft</td><td>2130-06</td><td></td><td></td></tr><tr><td></td><td></td><td>220° at 42 kt</td><td>-18 °C</td></tr><tr><td>18,000 ft</td><td>2242-18</td><td></td><td></td></tr><tr><td></td><td></td><td>230° at 61 kt</td><td>-30 °C</td></tr><tr><td>24,000 ft</td><td>2361-30</td><td></td><td></td></tr><tr><td></td><td></td><td>240° at 72 kt</td><td>-42 °C</td></tr><tr><td>30,000 ft</td><td>247242</td><td></td><td></td></tr><tr><td></td><td></td><td>250° at 88 kt</td><td>-48 °C</td></tr><tr><td>34,000 ft</td><td>258848</td><td></td><td></td></tr><tr><td></td><td></td><td>250° at 102 kt</td><td>-52 °C</td></tr><tr><td>39,000 ft</td><td>750252</td><td></td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-02-wind-and-temperature-aloft-forecast-periods-mode.html">
@@ -2379,47 +2252,20 @@ Valid
 For Use 
 0000Z 
 ~0200Z</caption><thead><tr><th></th><th></th><th>6-Hour Forecast</th><th></th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td>Model
-Run</td><td></td><td></td><td></td><td>12-Hour Forecast</td><td></td><td>24-Hour Forecast</td><td></td></tr><tr><td></td><td>Product</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Available</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>Valid</td><td>For Use</td><td>Valid</td><td>For Use</td><td>Valid</td><td>For Use</td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>0600Z</td><td>0200-0900Z</td><td>1200Z</td><td>0900-1800Z</td><td>0000Z</td><td>1800-0600Z</td></tr><tr><td>0000Z</td><td>~0200Z</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>1200Z</td><td>0800-1500Z</td><td>1800Z</td><td>1500-0000Z</td><td>0600Z</td><td>0000-1200Z</td></tr><tr><td>0600Z</td><td>~0800Z</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>1800Z</td><td>1400-2100Z</td><td>0000Z</td><td>2100-0600Z</td><td>1200Z</td><td>0600-1800Z</td></tr><tr><td>1200Z</td><td>~1400Z</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>0000Z</td><td>2000-0300Z</td><td>0600Z</td><td>0300-1200Z</td><td>1800Z</td><td>1200-0000Z</td></tr><tr><td>1800Z</td><td>~2000Z</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+Run</td><td></td><td></td><td></td><td>12-Hour Forecast</td><td></td><td>24-Hour Forecast</td><td></td></tr><tr><td></td><td>Product</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Available</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>Valid</td><td>For Use</td><td>Valid</td><td>For Use</td><td>Valid</td><td>For Use</td></tr><tr><td></td><td></td><td>0600Z</td><td>0200-0900Z</td><td>1200Z</td><td>0900-1800Z</td><td>0000Z</td><td>1800-0600Z</td></tr><tr><td>0000Z</td><td>~0200Z</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>1200Z</td><td>0800-1500Z</td><td>1800Z</td><td>1500-0000Z</td><td>0600Z</td><td>0000-1200Z</td></tr><tr><td>0600Z</td><td>~0800Z</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>1800Z</td><td>1400-2100Z</td><td>0000Z</td><td>2100-0600Z</td><td>1200Z</td><td>0600-1800Z</td></tr><tr><td>1200Z</td><td>~1400Z</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>0000Z</td><td>2000-0300Z</td><td>0600Z</td><td>0300-1200Z</td><td>1800Z</td><td>1200-0000Z</td></tr><tr><td>1800Z</td><td>~2000Z</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-03-generic-format-of-the-national-weather-service-s.html">
-<table><caption>Table 27-3. Generic Format of the National Weather Service’s TAFs 
-TAF  
-or  
-TAF AMD  
-or  
-TAF COR 
-  
-  
-  
-Type of report 
-  
-CCCC 
-YYGGggZ 
-Y1Y1G1G1/Y2Y2G2G2 
-dddffGfmfmKT 
-Location identifier 
-D</caption><thead><tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td>TAF
-or
-TAF AMD
-or
-TAF COR</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Type of report</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>CCCC YYGGggZ Y Y G G /Y Y G G dddffGf f KT
-1 1 1 1 2 2 2 2 m m
-Location identifier Date/time of forecast Valid period Wind group
-origin group</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>VVVV w’w’ NNNhhh WSh h h /dddftKT
-s s s s s s ws ws ws
-or or
-NSW VVhhh
-s s s
-or
-SKC
-Visibility group Significant weather Cloud and vertical Non-convective LLWS group
-group obscuration groups</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TTGGgg
-Forecast change
-indicator groups</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>FMY Y GGgg TEMPO Y Y GG/Y Y G G PROB30 Y Y GG/Y Y G G
-1 1 1 1 e e e e 1 1 e e e e
-From group Temporary group Probability group</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
-</div>
+**Table 27-3.** Generic Format of the National Weather Service’s TAFs TAF or TAF AMD or TAF COR Type of report CCCC YYGGggZ Y1Y1G1G1/Y2Y2G2G2 dddffGfmfmKT Location identifier D
+
+| TAF<br>or<br>TAF AMD<br>or<br>TAF COR |
+| --- |
+| Type of report |
+| CCCC YYGGggZ Y Y G G /Y Y G G dddffGf f KT<br>1 1 1 1 2 2 2 2 m m<br>Location identifier Date/time of forecast Valid period Wind group<br>origin group |
+| VVVV w’w’ NNNhhh WSh h h /dddftKT<br>s s s s s s ws ws ws<br>or or<br>NSW VVhhh<br>s s s<br>or<br>SKC<br>Visibility group Significant weather Cloud and vertical Non-convective LLWS group<br>group obscuration groups |
+| TTGGgg<br>Forecast change<br>indicator groups |
+| FMY Y GGgg TEMPO Y Y GG/Y Y G G PROB30 Y Y GG/Y Y G G<br>1 1 1 1 e e e e 1 1 e e e e<br>From group Temporary group Probability group |
+
+<a class="handbook-table-source" href="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-03-generic-format-of-the-national-weather-service-s.html">Open original</a>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-04-table-27-4-taf-fog-terms-term-description-freezi.html">
 <table><caption>Table 27-4. 
@@ -2432,13 +2278,13 @@ Any fog (visibility less than 5/8 SM) consisting predominantly of water
 droplets at temperatures less than or equal to</caption><thead><tr><th>Term</th><th>Description</th></tr></thead><tbody><tr><td></td><td>Any fog (visibility less than 5/8 SM) consisting predominantly of water
 droplets at temperatures less than or equal to 32 °F (0°C), whether or not
 rime ice is expected to be deposited. FZBR is not a valid significant weather
-combination and will not be used in TAFs.</td></tr><tr><td>Freezing Fog</td><td></td></tr><tr><td>(FZFG)</td><td></td></tr><tr><td></td><td></td></tr><tr><td>Shallow Fog</td><td>The visibility at 6 ft AGL is greater than or equal to 5/8 SM and the apparent
+combination and will not be used in TAFs.</td></tr><tr><td>Freezing Fog</td><td></td></tr><tr><td>(FZFG)</td><td></td></tr><tr><td>Shallow Fog</td><td>The visibility at 6 ft AGL is greater than or equal to 5/8 SM and the apparent
 visibility in the fog layer is less than 5/8 SM.</td></tr><tr><td>(MIFG)</td><td></td></tr><tr><td></td><td>Fog patches covering part of the airport. The apparent visibility in the fog
 patch or bank is less than 5/8 SM, with the foggy patches extending to at
-least 6 ft AGL.</td></tr><tr><td>Patchy Fog</td><td></td></tr><tr><td>(BCFG)</td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td>A substantial part of the airport is expected to be covered by fog while the
+least 6 ft AGL.</td></tr><tr><td>Patchy Fog</td><td></td></tr><tr><td>(BCFG)</td><td></td></tr><tr><td></td><td>A substantial part of the airport is expected to be covered by fog while the
 remainder is expected to be clear of fog (e.g., a fog bank).
 Note: MIFG, PRFG, and BCFG may be forecast with prevailing visibility of
-P6SM.</td></tr><tr><td>Partial Fog</td><td></td></tr><tr><td>(PRFG)</td><td></td></tr><tr><td></td><td></td></tr></tbody></table>
+P6SM.</td></tr><tr><td>Partial Fog</td><td></td></tr><tr><td>(PRFG)</td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-05-taf-use-of-vicinity-vc-phenomenon-coded-fog-vcfg.html">
@@ -2477,25 +2323,19 @@ Valid Period
 End Time for 
 30 Hour 
 Issuance Window 
-0000</caption><thead><tr><th></th><th>Valid Period</th><th></th><th></th></tr></thead><tbody><tr><td>Scheduled Issuance</td><td></td><td>End Time for</td><td></td></tr><tr><td></td><td></td><td></td><td>Issuance Window</td></tr><tr><td></td><td></td><td>30 Hour</td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td>0000 UTC</td><td>0000 to 0000</td><td>0600 UTC</td><td>2320 to 2340 UTC</td></tr><tr><td>0300 UTC (AMD)</td><td>0300 to 0000 UTC</td><td>0600 UTC</td><td></td></tr><tr><td>0600 UTC</td><td>0600 to 0600</td><td>1200 UTC</td><td>0520 to 0540 UTC</td></tr><tr><td>0900 UTC (AMD)</td><td>0900 to 0600 UTC</td><td>1200 UTC</td><td></td></tr><tr><td>1200 UTC</td><td>1200 to 1200</td><td>1800 UTC</td><td>1120 to 1140 UTC</td></tr><tr><td>1500 UTC (AMD)</td><td>1500 to 1200 UTC</td><td>1800 UTC</td><td></td></tr><tr><td>1800 UTC</td><td>1800 to 1800</td><td>0000 UTC</td><td>1720 to 1740 UTC</td></tr><tr><td>2100 UTC (AMD)</td><td>2100 to 1800 UTC</td><td>0000 UTC</td><td></td></tr></tbody></table>
+0000</caption><thead><tr><th></th><th>Valid Period</th><th></th><th></th></tr></thead><tbody><tr><td>Scheduled Issuance</td><td></td><td>End Time for</td><td></td></tr><tr><td></td><td></td><td></td><td>Issuance Window</td></tr><tr><td></td><td></td><td>30 Hour</td><td></td></tr><tr><td>0000 UTC</td><td>0000 to 0000</td><td>0600 UTC</td><td>2320 to 2340 UTC</td></tr><tr><td>0300 UTC (AMD)</td><td>0300 to 0000 UTC</td><td>0600 UTC</td><td></td></tr><tr><td>0600 UTC</td><td>0600 to 0600</td><td>1200 UTC</td><td>0520 to 0540 UTC</td></tr><tr><td>0900 UTC (AMD)</td><td>0900 to 0600 UTC</td><td>1200 UTC</td><td></td></tr><tr><td>1200 UTC</td><td>1200 to 1200</td><td>1800 UTC</td><td>1120 to 1140 UTC</td></tr><tr><td>1500 UTC (AMD)</td><td>1500 to 1200 UTC</td><td>1800 UTC</td><td></td></tr><tr><td>1800 UTC</td><td>1800 to 1800</td><td>0000 UTC</td><td>1720 to 1740 UTC</td></tr><tr><td>2100 UTC (AMD)</td><td>2100 to 1800 UTC</td><td>0000 UTC</td><td></td></tr></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-08-fa-issuance-schedule-alaska-utc-1st-issuance-041.html">
-<table><caption>Table 27-8. FA Issuance Schedule 
-  
-Alaska  
-(UTC) 
-1st Issuance 
-0415 (DT)/0515 (ST) 
-2nd Issuance 
-1215 (DT)/1315 (ST) 
-3rd Issuance 
-2015 (DT)/2115 (ST) 
-4th Issuance 
-None 
-Note: DT—During Alaska</caption><thead><tr><th></th><th>Alaska
-(UTC)</th></tr></thead><tbody><tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td>1st Issuance</td><td>0415 (DT)/0515 (ST)</td></tr><tr><td>2nd Issuance</td><td>1215 (DT)/1315 (ST)</td></tr><tr><td>3rd Issuance</td><td>2015 (DT)/2115 (ST)</td></tr><tr><td>4th Issuance</td><td>None</td></tr></tbody></table>
-</div>
+**Table 27-8.** FA Issuance Schedule Alaska (UTC) 1st Issuance 0415 (DT)/0515 (ST) 2nd Issuance 1215 (DT)/1315 (ST) 3rd Issuance 2015 (DT)/2115 (ST) 4th Issuance None Note: DT—During Alaska
+
+|  | Alaska<br>(UTC) |
+| --- | --- |
+| 1st Issuance | 0415 (DT)/0515 (ST) |
+| 2nd Issuance | 1215 (DT)/1315 (ST) |
+| 3rd Issuance | 2015 (DT)/2115 (ST) |
+| 4th Issuance | None |
+
+<a class="handbook-table-source" href="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-08-fa-issuance-schedule-alaska-utc-1st-issuance-041.html">Open original</a>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-09-aawu-area-forecast-fa-zones-alaska-1-arctic-coas.html">
 <table><caption>Table 27-9. AAWU Area Forecast (FA) Zones—Alaska 
@@ -2509,7 +2349,7 @@ North Slopes of the Brooks Range
 Coastal Southeast Alaska 
 3 
 Upper Yukon Valley 
-16</caption><thead><tr><th>1</th><th>Arctic Coast Coastal</th><th>14</th><th>Southern Southeast Alaska</th></tr></thead><tbody><tr><td>2</td><td>North Slopes of the Brooks Range</td><td>15</td><td>Coastal Southeast Alaska</td></tr><tr><td>3</td><td>Upper Yukon Valley</td><td>16</td><td>Eastern Gulf Coast</td></tr><tr><td>4</td><td>Koyukuk and Upper Kobuk Valley</td><td>17</td><td>Copper River Basin</td></tr><tr><td></td><td>Northern Seward Peninsula–Lower Kobuk</td><td>18</td><td></td></tr><tr><td>5</td><td></td><td></td><td>Cook Inlet–Susitna Valley</td></tr><tr><td></td><td>Valley</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Southern Seward Peninsula–Eastern Norton</td><td>19</td><td></td></tr><tr><td>6</td><td></td><td></td><td>Central Gulf Coast</td></tr><tr><td></td><td>Sound</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td>7</td><td>Tanana Valley</td><td>20</td><td>Kodiak Island</td></tr><tr><td></td><td></td><td>21</td><td>Alaska Peninsula–Port Heiden to</td></tr><tr><td>8</td><td>Lower Yukon Valley</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td>Unimak Pass</td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td>9</td><td>Kuskokwim Valley</td><td>22</td><td>Unimak Pass to Adak</td></tr><tr><td>10</td><td>Yukon-Kuskokwim Delta</td><td>23</td><td>St. Lawrence Island-Bering Sea Coast</td></tr><tr><td>11</td><td>Bristol Bay</td><td>24</td><td>Adak to Attu</td></tr><tr><td></td><td></td><td>25</td><td>Pribilof Islands and Southeast Bering</td></tr><tr><td>12</td><td>Lynn Canal and Glacier Bay</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td>Sea</td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td>13</td><td>Central Southeast Alaska</td><td></td><td></td></tr></tbody></table>
+16</caption><thead><tr><th>1</th><th>Arctic Coast Coastal</th><th>14</th><th>Southern Southeast Alaska</th></tr></thead><tbody><tr><td>2</td><td>North Slopes of the Brooks Range</td><td>15</td><td>Coastal Southeast Alaska</td></tr><tr><td>3</td><td>Upper Yukon Valley</td><td>16</td><td>Eastern Gulf Coast</td></tr><tr><td>4</td><td>Koyukuk and Upper Kobuk Valley</td><td>17</td><td>Copper River Basin</td></tr><tr><td></td><td>Northern Seward Peninsula–Lower Kobuk</td><td>18</td><td></td></tr><tr><td>5</td><td></td><td></td><td>Cook Inlet–Susitna Valley</td></tr><tr><td></td><td>Valley</td><td></td><td></td></tr><tr><td></td><td>Southern Seward Peninsula–Eastern Norton</td><td>19</td><td></td></tr><tr><td>6</td><td></td><td></td><td>Central Gulf Coast</td></tr><tr><td></td><td>Sound</td><td></td><td></td></tr><tr><td>7</td><td>Tanana Valley</td><td>20</td><td>Kodiak Island</td></tr><tr><td></td><td></td><td>21</td><td>Alaska Peninsula–Port Heiden to</td></tr><tr><td>8</td><td>Lower Yukon Valley</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td>Unimak Pass</td></tr><tr><td>9</td><td>Kuskokwim Valley</td><td>22</td><td>Unimak Pass to Adak</td></tr><tr><td>10</td><td>Yukon-Kuskokwim Delta</td><td>23</td><td>St. Lawrence Island-Bering Sea Coast</td></tr><tr><td>11</td><td>Bristol Bay</td><td>24</td><td>Adak to Attu</td></tr><tr><td></td><td></td><td>25</td><td>Pribilof Islands and Southeast Bering</td></tr><tr><td>12</td><td>Lynn Canal and Glacier Bay</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td>Sea</td></tr><tr><td>13</td><td>Central Southeast Alaska</td><td></td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-10-low-level-sigwx-chart-issuance-schedule-issuance.html">
@@ -2532,7 +2372,7 @@ Valid Time
 18Z 
 00Z 
 06Z 
-27.9.1.2</caption><thead><tr><th></th><th>Issuance Time</th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td>~1720Z</td><td>~2310Z</td><td>~0530Z</td><td>~0935Z</td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Chart</td><td>Valid Time</td><td></td><td></td><td></td></tr><tr><td>12-Hour Prog</td><td>00Z</td><td>06Z</td><td>12Z</td><td>18Z</td></tr><tr><td>24-Hour Prog</td><td>12Z</td><td>18Z</td><td>00Z</td><td>06Z</td></tr></tbody></table>
+27.9.1.2</caption><thead><tr><th></th><th>Issuance Time</th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td>~1720Z</td><td>~2310Z</td><td>~0530Z</td><td>~0935Z</td></tr><tr><td>Chart</td><td>Valid Time</td><td></td><td></td><td></td></tr><tr><td>12-Hour Prog</td><td>00Z</td><td>06Z</td><td>12Z</td><td>18Z</td></tr><tr><td>24-Hour Prog</td><td>12Z</td><td>18Z</td><td>00Z</td><td>06Z</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-11-mid-level-sigwx-chart-issuance-schedule-issued-u.html">
@@ -2562,7 +2402,7 @@ Moderate
 Severe 
 27.9.3 High-Level Significant Weather (SIGWX) Charts 
 High-Level SIGWX Charts (see</caption><thead><tr><th></th><th>Icing
-Symbol</th><th>Turbulence</th></tr></thead><tbody><tr><td>Intensity</td><td></td><td></td></tr><tr><td></td><td></td><td>Symbol</td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td>Moderate</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td>Severe</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table>
+Symbol</th><th>Turbulence</th></tr></thead><tbody><tr><td>Intensity</td><td></td><td></td></tr><tr><td></td><td></td><td>Symbol</td></tr><tr><td>Moderate</td><td></td><td></td></tr><tr><td>Severe</td><td></td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-13-high-level-sigwx-forecast-issuance-schedule-issu.html">
@@ -2613,29 +2453,29 @@ date/time
 SAW2 
 NWS product type (SA</caption><thead><tr><th>Line(s)</th><th>Content</th><th>Description</th></tr></thead><tbody><tr><td>Communication header with issuance
 1 WWUS30 KWNS 271559
-date/time</td><td></td><td></td></tr><tr><td>1</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>SAW2</td><td>NWS product type (SAW) and
-issuance number (2)</td></tr><tr><td>2</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>SPC
+date/time</td><td></td><td></td></tr><tr><td>1</td><td></td><td></td></tr><tr><td></td><td>SAW2</td><td>NWS product type (SAW) and
+issuance number (2)</td></tr><tr><td>2</td><td></td><td></td></tr><tr><td></td><td>SPC
 AWW
 271559</td><td>Issuing office
 Product type
-Issuance date/time</td></tr><tr><td>3</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>WW 568
+Issuance date/time</td></tr><tr><td>3</td><td></td><td></td></tr><tr><td></td><td>WW 568
 TORNADO
 AR LA MS
 271605Z - 280000Z</td><td>Watch number
 Watch type
 States affected
-Valid date/time period</td></tr><tr><td>4</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>AXIS..65 STATUTE MILES EAST AND WEST
-OF A LINE...</td><td>Watch axis</td></tr><tr><td>5</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>45ESE HEZ/NATCHEZ MS/ - 50N
-TUP/TUPELO MS/</td><td>Anchor points</td></tr><tr><td>6</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>…AVIATION COORDS..55NM E/W /18WNW MCB
-- 60E MEM/</td><td>Aviation coordinates</td></tr><tr><td>7</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>HAIL SURFACE AND ALOFT…3 INCHES. WIND
+Valid date/time period</td></tr><tr><td>4</td><td></td><td></td></tr><tr><td></td><td>AXIS..65 STATUTE MILES EAST AND WEST
+OF A LINE...</td><td>Watch axis</td></tr><tr><td>5</td><td></td><td></td></tr><tr><td></td><td>45ESE HEZ/NATCHEZ MS/ - 50N
+TUP/TUPELO MS/</td><td>Anchor points</td></tr><tr><td>6</td><td></td><td></td></tr><tr><td></td><td>…AVIATION COORDS..55NM E/W /18WNW MCB
+- 60E MEM/</td><td>Aviation coordinates</td></tr><tr><td>7</td><td></td><td></td></tr><tr><td></td><td>HAIL SURFACE AND ALOFT…3 INCHES. WIND
 GUSTS..70 KNOTS. MAX TOPS TO 550.
 MEAN STORM MOTION VECTOR 26030.</td><td>Type, intensity, max tops and mean
 storm motion using standard
-contractions.</td></tr><tr><td>8–9</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td>10</td><td>(blank line)</td><td></td></tr><tr><td></td><td>LAT...LON 31369169 34998991 4998762
-31368948</td><td>Latitude and longitude coordinates</td></tr><tr><td>11</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td>12</td><td>(blank line)</td><td></td></tr><tr><td></td><td>THIS IS AN APPROXIMATION TO THE WATCH
+contractions.</td></tr><tr><td>8–9</td><td></td><td></td></tr><tr><td>10</td><td>(blank line)</td><td></td></tr><tr><td></td><td>LAT...LON 31369169 34998991 4998762
+31368948</td><td>Latitude and longitude coordinates</td></tr><tr><td>11</td><td></td><td></td></tr><tr><td>12</td><td>(blank line)</td><td></td></tr><tr><td></td><td>THIS IS AN APPROXIMATION TO THE WATCH
 AREA. FOR A COMPLETE DEPICTION OF THE
 WATCH SEE WOUS64 KWNS FOR WOU2.</td><td>Notice that this is an approximation
 of the watch area and for users to
 refer to the referenced product for the
-actual area</td></tr><tr><td>13–15</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table>
+actual area</td></tr><tr><td>13–15</td><td></td><td></td></tr></tbody></table>
 </div>

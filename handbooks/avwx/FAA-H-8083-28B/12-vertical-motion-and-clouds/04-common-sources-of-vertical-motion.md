@@ -96,22 +96,11 @@ tend to push (i.e., lift) the less dense warm air aloft. On a grand scale, the t
 heating, and how high it will rise, is referred to as stability and is covered in Chapter 13, Atmospheric
 Stability.
 
-![Figure 12-4. Orographic Effects Example 
-The air parcel begins with a temperature of 15°C, dewpoint of 10°C, and a relative humidity of 80 percent 
-at 2,000 ft. As the parcel is lifted on the windward slope, the temperature cools at the dry adiabatic lapse 
-rate of 3°C per 1,000 ft, and the dewpoint cools at a rate of](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-2-00-orographic-effects-example-the-air-parcel-begins.png)
+![Figure 12-4. Orographic Effects Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-2-00-orographic-effects-example.png)
 
-![Figure 12-5. Frictional Effects 
-12.4.3 Frontal Lift 
-Frontal lift (see Figure 12-6) occurs when the cold, denser air wedges under the warm, less dense air, 
-plowing it upward, and/or the warmer air rides up and over the colder air in a process called overrunning. 
-Clouds and precipitation will form given sufficient li](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-3-00-frictional-effects-12-4-3-frontal-lift-frontal-l.png)
+![Figure 12-5. Frictional Effects](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-3-00-frictional-effects.png)
 
-![Figure 12-6. Frontal Lift 
-12.4.4 Buoyancy 
-Air near the ground can warm at different rates depending on the insular properties of the ground with 
-which it is in contact. A newly plowed field will warm faster than an adjacent lake. These temperature 
-differences result in different densities, allowing the warm air to](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-3-01-frontal-lift-12-4-4-buoyancy-air-near-the-ground.png)
+![Figure 12-6. Frontal Lift](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-3-01-frontal-lift.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-12-4-00-air-parcel-vertical-motion-characteristics-parce.html">
 <table><caption>Table 12-1. Air Parcel Vertical Motion Characteristics 
@@ -129,15 +118,15 @@ Change
 Dewpoint 
 Change 
 Relative 
-Humi</caption><thead><tr><th>Parcel</th><th></th><th></th><th></th><th>Unsaturated</th><th></th><th></th><th></th><th></th><th>Saturated</th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td>Temperature
+Humi</caption><thead><tr><th>Parcel</th><th></th><th></th><th></th><th>Unsaturated</th><th></th><th></th><th></th><th></th><th>Saturated</th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td>Temperature
 Change</td><td></td><td>Dewpoint
 Change</td><td>Relative
 Humidity</td><td></td><td>Temperature
 Change</td><td></td><td>Dewpoint
 Change</td><td>Relative
-Humidity</td><td></td></tr><tr><td>Ascending
+Humidity</td></tr><tr><td>Ascending
 (rising)</td><td></td><td></td><td>-3°C/1,000 ft</td><td></td><td>-0.5°C/1,000 ft</td><td>Increases</td><td></td><td>-1.2°C to
 -3°C/1,000 ft</td><td></td><td>Identical to
 temperature
-change</td><td>100%</td><td></td></tr><tr><td></td><td>Descending</td><td></td><td>+3°C/1,000 ft</td><td></td><td>+0.5°C/1,000 ft</td><td>Decreases</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>(subsiding)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+change</td><td>100%</td></tr><tr><td></td><td>Descending</td><td></td><td>+3°C/1,000 ft</td><td></td><td>+0.5°C/1,000 ft</td><td>Decreases</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>(subsiding)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
 </div>

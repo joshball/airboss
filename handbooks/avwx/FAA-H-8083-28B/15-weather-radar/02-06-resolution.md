@@ -40,7 +40,4 @@ a range of 60 NM, targets separated by at least 5.5 NM will be displayed separat
 targets separated by at least 10 NM will be displayed separately.
 The beam resolution is better for the WSR-88D than aircraft radar (see Figure 15-7).
 
-![Figure 15-5. Precipitation Attenuation versus Wavelength 
-As the wavelength of the radar decreases, the amount of precipitation attenuation increases. 
-The WSR-88D’s 10-cm wavelength is not significantly attenuated by precipitation. However, aircraft 
-radars, which typically have 3-cm wavelengths, have a significant pr](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-6-00-precipitation-attenuation-versus-wavelength-as-t.png)
+![Figure 15-5. Precipitation Attenuation versus Wavelength](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-6-00-precipitation-attenuation-versus-wavelength.png)

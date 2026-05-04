@@ -25,10 +25,4 @@ perpendicular to the runway to become a crosswind, the airplane’s directional 
 does not correctly compensate for the crosswind, the aircraft may drift off the side of the runway or side
 load on landing gear might occur. In extreme cases, the landing gear may collapse.
 
-![Figure 10-21. Mountain Breeze 
-Surface wind flows from the mountain down the sloping terrain into the valley. Air rises over the valley 
-and sinks over the sloping terrain. 
-10.7 Adverse Winds 
-10.7.1 Crosswind 
-A crosswind is a wind that has a component directed perpendicularly to the heading of an aircraft 
-(see Figu](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-7-1-00-mountain-breeze-surface-wind-flows-from-the-moun.png)
+![Figure 10-21. Mountain Breeze](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-7-1-00-mountain-breeze.png)

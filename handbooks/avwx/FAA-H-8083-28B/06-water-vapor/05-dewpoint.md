@@ -41,8 +41,4 @@ capacity to hold water vapor.
 The difference between an air parcel’s temperature and its dewpoint is the dewpoint depression, or
 commonly referred to as the spread. Surface aviation weather reports (e.g., METARs/SPECIs) provide
 
-![Figure 6-2. Temperature Effects on Relative Humidity 
-6.5 Dewpoint 
-Dewpoint is the temperature an air parcel must be cooled at constant pressure and constant water vapor 
-pressure to allow the water vapor in the parcel to condense into water (dew). When this temperature is 
-below 0 °C (32 °F), it is sometimes called t](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-4-00-temperature-effects-on-relative-humidity-6-5-dew.png)
+![Figure 6-2. Temperature Effects on Relative Humidity](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-4-00-temperature-effects-on-relative-humidity.png)

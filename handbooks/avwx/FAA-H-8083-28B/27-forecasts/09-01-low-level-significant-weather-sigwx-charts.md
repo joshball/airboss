@@ -106,36 +106,13 @@ level midway between the 4,000 and 8,000-ft lines is 6,000 ft.
 
 Figure 27-14. Low-Level SIGWX Chart Freezing Level Forecast—Example
 
-![Figure 27-10. 12-Hour Low-Level SIGWX Chart—Example 
-27.9.1.1 Issuance 
-Low-Level SIGWX Charts are issued four times per day by the NWS AWC (see Table 27-10). Two charts 
-are issued: a 12-hour and a 24-hour prognostic (prog) chart. 
-Table 27-10. Low-Level SIGWX Chart Issuance Schedule 
-  
-Issuance Time 
-~1720Z 
-~2310Z](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-00-12-hour-low-level-sigwx-chart-example-27-9-1-1-i.png)
+![Figure 27-10. 12-Hour Low-Level SIGWX Chart—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-00-12-hour-low-level-sigwx-chart-example.png)
 
-![Figure 27-11. Low-Level SIGWX Chart Symbols 
-27.9.1.2.1 Flying Categories 
-IFR areas are outlined with a solid red line, MVFR areas are outlined with a scalloped blue line, and 
-VFR areas are not depicted (see Figure 27-12). 
- 
-Figure 27-12. Low-Level SIGWX Chart Flying Categories—Example 
-27.9.1.2.2 Turbulence 
-Areas](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-01-low-level-sigwx-chart-symbols-27-9-1-2-1-flying-.png)
+![Figure 27-11. Low-Level SIGWX Chart Symbols](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-01-low-level-sigwx-chart-symbols.png)
 
-![Figure 27-12. Low-Level SIGWX Chart Flying Categories—Example 
-27.9.1.2.2 Turbulence 
-Areas of moderate or greater turbulence are enclosed by bold, dashed, brown lines (see Figure 27-13). 
-Turbulence intensities are identified by standard symbols (see Figure 27-11). The vertical extent of 
-turbulence layers is specifie](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-02-low-level-sigwx-chart-flying-categories-example-.png)
+![Figure 27-12. Low-Level SIGWX Chart Flying Categories—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-02-low-level-sigwx-chart-flying-categories-example.png)
 
-![Figure 27-13. Low-Level SIGWX Chart Turbulence Forecast—Example 
-27.9.1.2.3 Freezing Levels 
-The freezing level at the surface is depicted by a blue, saw-toothed symbol (see Figure 27-14). The surface 
-freezing level separates above-freezing from below-freezing temperatures at the Earth’s surface. 
-Freezing levels abov](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-03-low-level-sigwx-chart-turbulence-forecast-exampl.png)
+![Figure 27-13. Low-Level SIGWX Chart Turbulence Forecast—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-03-low-level-sigwx-chart-turbulence-forecast-exampl.png)
 
 ![Figure 27-14. Low-Level SIGWX Chart Freezing Level Forecast—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-04-low-level-sigwx-chart-freezing-level-forecast-ex.png)
 
@@ -159,5 +136,5 @@ Valid Time
 18Z 
 00Z 
 06Z 
-27.9.1.2</caption><thead><tr><th></th><th>Issuance Time</th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td>~1720Z</td><td>~2310Z</td><td>~0530Z</td><td>~0935Z</td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Chart</td><td>Valid Time</td><td></td><td></td><td></td></tr><tr><td>12-Hour Prog</td><td>00Z</td><td>06Z</td><td>12Z</td><td>18Z</td></tr><tr><td>24-Hour Prog</td><td>12Z</td><td>18Z</td><td>00Z</td><td>06Z</td></tr></tbody></table>
+27.9.1.2</caption><thead><tr><th></th><th>Issuance Time</th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td>~1720Z</td><td>~2310Z</td><td>~0530Z</td><td>~0935Z</td></tr><tr><td>Chart</td><td>Valid Time</td><td></td><td></td><td></td></tr><tr><td>12-Hour Prog</td><td>00Z</td><td>06Z</td><td>12Z</td><td>18Z</td></tr><tr><td>24-Hour Prog</td><td>12Z</td><td>18Z</td><td>00Z</td><td>06Z</td></tr></tbody></table>
 </div>

@@ -23,8 +23,4 @@ would first become warmer than the surrounding environmental air (i.e., unstable
 unstable column of air in the atmosphere. The LFC is a defining feature of a conditionally unstable column
 of air.
 
-![Figure 13-3. Absolute Instability Example 
-13.3.4 Conditional Instability 
-Conditional instability (see Figure 13-4) is the state of a column of unsaturated air in the atmosphere when 
-its lapse rate of temperature is less than the dry adiabatic lapse rate but greater than the moist adiabatic 
-lapse rate. An air parcel](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-3-4-00-absolute-instability-example-13-3-4-conditional-.png)
+![Figure 13-3. Absolute Instability Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-3-4-00-absolute-instability-example.png)

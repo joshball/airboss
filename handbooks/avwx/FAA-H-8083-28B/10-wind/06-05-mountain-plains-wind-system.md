@@ -30,7 +30,4 @@ one-half of a valley breeze. Air in contact with the sloping terrain becomes war
 above the plains. This is because the air in contact with the sloping terrain heats up faster than the air above
 the plains.
 
-![Figure 10-19. Valley Breeze 
-Pressure gradients develop (along a horizontal reference) with lower pressure over the warmer sloping 
-terrain and higher pressure over the cooler valley. Winds develop in the direction of the PGF. Thus, the 
-wind blows from the valley up the mountain slopes. Air rises over sloping terrain](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-4-00-valley-breeze-pressure-gradients-develop-along-a.png)
+![Figure 10-19. Valley Breeze](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-4-00-valley-breeze.png)

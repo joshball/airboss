@@ -43,11 +43,7 @@ Pressure is lower at higher altitudes. Therefore, airports with higher field ele
 pressure than airports with lower field elevations. For instance, station pressure at Denver is less than at
 New Orleans (see Figure 8-3).
 
-![Figure 8-2. Aneroid Barometer 
-8.2.2 Atmospheric Pressure Units 
-Atmospheric pressure is expressed in many ways throughout the world (see Table 8-1). Meteorologists 
-worldwide have long measured atmospheric pressure in millibars (mb or mbar), which denote pressure as 
-a force per square centimeter. However, after the i](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-2-00-aneroid-barometer-8-2-2-atmospheric-pressure-uni.png)
+![Figure 8-2. Aneroid Barometer](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-2-00-aneroid-barometer.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-8-2-3-00-units-of-pressure-units-of-pressure-standard-atm.html">
 <table><caption>Table 8-1. Units of Pressure 

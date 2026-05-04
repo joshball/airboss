@@ -57,11 +57,12 @@ AIRMETs are valid for six hours except for those in Alaska, which are valid for 
 period of an AIRMET message cannot exceed the valid time of the AIRMET bulletin. However, note that
 each AIRMET contains remarks concerning the continuance of the phenomenon during the six hours
 
-<div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-26-3-2-00-airmets-are-issued-four-times-a-day-except-for-t.html">
-<table><caption>Table 26-4. AIRMETs are issued four times a day 
-except for those in Alaska, which are issued three times a day. Unscheduled AIRMETs are issued when 
-conditions are occurring or expected to occur but</caption><thead><tr><th>Product Type</th><th>Issuance Time</th><th>Issuance Frequency</th></tr></thead><tbody><tr><td>AIRMETs over the CONUS</td><td>0245, 0845, 1445, 2045 UTC</td><td>Every 6 hours</td></tr><tr><td>AIRMETs over Alaska</td><td>0115, 1315, 2115 UTC
-(Standard Time)
-0415, 1215, 2015 UTC
-(Daylight Saving Time)</td><td>Every 8 hours</td></tr><tr><td>AIRMETs over Hawaii</td><td>0400, 1000, 1600, 2200 UTC</td><td>Every 6 hours</td></tr></tbody></table>
-</div>
+**Table 26-4.** AIRMETs are issued four times a day except for those in Alaska, which are issued three times a day. Unscheduled AIRMETs are issued when conditions are occurring or expected to occur but
+
+| Product Type | Issuance Time | Issuance Frequency |
+| --- | --- | --- |
+| AIRMETs over the CONUS | 0245, 0845, 1445, 2045 UTC | Every 6 hours |
+| AIRMETs over Alaska | 0115, 1315, 2115 UTC<br>(Standard Time)<br>0415, 1215, 2015 UTC<br>(Daylight Saving Time) | Every 8 hours |
+| AIRMETs over Hawaii | 0400, 1000, 1600, 2200 UTC | Every 6 hours |
+
+<a class="handbook-table-source" href="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-26-3-2-00-airmets-are-issued-four-times-a-day-except-for-t.html">Open original</a>

@@ -28,8 +28,4 @@ Tropical waves occur in all seasons but are more frequent and stronger during su
 Pacific waves frequently affect Hawaii; Atlantic waves occasionally move into the Gulf of America,
 reaching the coast of the United States.
 
-![Figure 17-4. A TUTT Moves Eastward Across the Hawaiian Islands 
-17.3.3 Tropical Wave 
-Tropical waves (also called easterly waves) are common tropical weather disturbances, normally occurring 
-in the trade wind belt. In the Northern Hemisphere, they usually develop in the southeastern perimeter of 
-subtropical high-pres](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-3-00-a-tutt-moves-eastward-across-the-hawaiian-island.png)
+![Figure 17-4. A TUTT Moves Eastward Across the Hawaiian Islands](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-3-00-a-tutt-moves-eastward-across-the-hawaiian-island.png)

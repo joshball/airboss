@@ -1785,178 +1785,83 @@ Figure 24-34. Weather Trends Example at Unalakleet (PAUN), Alaska
 
 ![Figure 24-1. METAR/SPECI Coding Format](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-00-metar-speci-coding-format.png)
 
-![Figure 24-2. ICAO Continental Codes 
-24.4.3.3 Date and Time of Report 
-METAR KOKC 011955Z AUTO 22015G25KT 180V250 3/4SM R17L/2600FT +TSRA BR OVC010CB 
-18/16 A2992 RMK AO2 TSB25 TS OHD MOV E SLP132 
-The date and time are coded in all reports as follows: the day of the month is the first two digits (01), 
-followed by the](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-01-icao-continental-codes-24-4-3-3-date-and-time-of.png)
+![Figure 24-2. ICAO Continental Codes](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-01-icao-continental-codes.png)
 
 ![Figure 24-3. Obscuration Effects on Slant Range Visibility](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-02-obscuration-effects-on-slant-range-visibility.png)
 
-![Figure 24-4. METAR/SPECI Sky Condition Coding 
-At manual stations, cumulonimbus (CB) or towering cumulus (TCU) is appended to the associated layer. 
-For example, a scattered layer of towering cumulus at 1,500 ft would be coded SCT015TCU and would be 
-followed by a space if there were additional higher layers to code.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-03-metar-speci-sky-condition-coding-at-manual-stati.png)
+![Figure 24-4. METAR/SPECI Sky Condition Coding](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-03-metar-speci-sky-condition-coding.png)
 
 ![Figure 24-5. PIREP Coding Format](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-5-1-00-pirep-coding-format.png)
 
-![Figure 24-6. VAR Form 
-24.5.4 Turbulence Observations 
-Since the 1990s, several innovations have improved the quality and availability of turbulence reports. 
-Automated turbulence reporting systems are common on many commercial aircraft using the Aircraft 
-Meteorological Data Relay (AMDAR) system. 
-Modern commercial ai](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-5-4-00-var-form-24-5-4-turbulence-observations-since-th.png)
+![Figure 24-6. VAR Form](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-5-4-00-var-form.png)
 
-![Figure 24-7. A Plot of AMDAR Reports Received During a 24-Hour Period in 2019 
-24.6 Radar Observations 
-24.6.1 Weather Surveillance Radar—1988 Doppler (WSR-88D) Description 
-Weather radar observations and their resultant images are graphical displays of precipitation and 
-non-precipitation targets detected by weather r](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-00-a-plot-of-amdar-reports-received-during-a-24-hou.png)
+![Figure 24-7. A Plot of AMDAR Reports Received During a 24-Hour Period in 2019](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-00-a-plot-of-amdar-reports-received-during-a-24-hou.png)
 
-![Figure 24-8. Locations of WSR-88D Weather Radar in the CONUS 
-Gulf of 
-America](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-01-locations-of-wsr-88d-weather-radar-in-the-conus-.png)
+![Figure 24-8. Locations of WSR-88D Weather Radar in the CONUS](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-01-locations-of-wsr-88d-weather-radar-in-the-conus.png)
 
-![Figure 24-9. WSR-88D Weather Radar Coverage at 3,000 ft AGL, 6,000 ft AGL, and 10,000 ft AGL over the CONUS 
-and Puerto Rico](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-02-wsr-88d-weather-radar-coverage-at-3-000-ft-agl-6.png)
+![Figure 24-9. WSR-88D Weather Radar Coverage at 3,000 ft AGL, 6,000 ft AGL, and 10,000 ft AGL over the CONUS  and Puerto Rico](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-02-wsr-88d-weather-radar-coverage-at-3-000-ft-agl-6.png)
 
-![Figure 24-10. Additional Locations of WSR-88D Weather Radar and Coverage Outside of the CONUS 
-24.6.1.2 Coverage 
-Figure 24-9 and Figure 24-10 depict the radar coverage at 3,000 ft AGL, 6,000 ft AGL, and 10,000 ft AGL 
-(i.e., above the height of the radar). *Several WSR-88D radars are located in mountainous areas, such](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-03-additional-locations-of-wsr-88d-weather-radar-an.png)
+![Figure 24-10. Additional Locations of WSR-88D Weather Radar and Coverage Outside of the CONUS](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-03-additional-locations-of-wsr-88d-weather-radar-an.png)
 
-![Figure 24-12. WSR-88D Weather Radar Composite Reflectivity, Single-Site Product Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-04-wsr-88d-weather-radar-composite-reflectivity-sin.png)
+![Figure 24-11. Example WSR-88D (NEXRAD) Weather Radar Echo Intensity Legend](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-04-example-wsr-88d-nexrad-weather-radar-echo-intens.png)
 
-![Figure 24-13. Creation of a Composite Reflectivity, Single-Site Product 
- 
-This Composite Reflectivity shows that in many locations the highest precipitation intensity occurs at an 
-altitude higher than precipitation detected at the elevation of the base elevation angle. 
-Figure 24-14. Weather Radar 0.5° Base Reflectiv](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-05-creation-of-a-composite-reflectivity-single-site.png)
+![Figure 24-12. WSR-88D Weather Radar Composite Reflectivity, Single-Site Product Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-05-wsr-88d-weather-radar-composite-reflectivity-sin.png)
 
-![Figure 24-14. Weather Radar 0.5° Base Reflectivity (left) versus Composite Reflectivity (right) Comparison 
-24.6.1.5.3 Base Reflectivity 
-The Base Reflectivity product is a display of both the location and intensity of reflectivity data from the 
-lowest elevation angle scan, or 0.5° above the horizon. Base Reflectivity](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-06-weather-radar-0-5-base-reflectivity-left-versus-.png)
+![Figure 24-13. Creation of a Composite Reflectivity, Single-Site Product](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-06-creation-of-a-composite-reflectivity-single-site.png)
 
-![Figure 24-15. TDWR Locations in the CONUS and Puerto Rico 
-.
- 
-Figure 24-16. TDWR Coverage](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-2-00-tdwr-locations-in-the-conus-and-puerto-rico-figu.png)
+![Figure 24-15. TDWR Locations in the CONUS and Puerto Rico](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-2-00-tdwr-locations-in-the-conus-and-puerto-rico.png)
 
 ![Figure 24-16. TDWR Coverage](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-2-01-tdwr-coverage.png)
 
-![Figure 24-17. GeoColor Satellite Image—U.S. Example 
-24.7.2.2 Visible Imagery 
-Visible imagery (see Figure 24-18) displays reflected sunlight from the Earth’s surface, clouds, and 
-particulate matter in the atmosphere. Visible satellite images, which look like black and white photographs, 
-are derived from the satellit](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-2-00-geocolor-satellite-image-u-s-example-24-7-2-2-vi.png)
+![Figure 24-17. GeoColor Satellite Image—U.S. Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-2-00-geocolor-satellite-image-u-s-example.png)
 
-![Figure 24-18. Visible Satellite Image—U.S. Example 
-24.7.2.2.1 Visible Image Data Legend 
-The data legend on a visible image displays albedo, or reflectance, expressed as a percentage (see Figure 
-24-19). For example, an albedo of 72 means 72 percent of the sunlight that struck a feature was reflected 
-back to space.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-2-01-visible-satellite-image-u-s-example-24-7-2-2-1-v.png)
+![Figure 24-18. Visible Satellite Image—U.S. Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-2-01-visible-satellite-image-u-s-example.png)
 
-![Figure 24-20. Infrared (Color) Satellite Image—U.S. Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-2-02-infrared-color-satellite-image-u-s-example.png)
+![Figure 24-19. Visible Satellite Image Data Legend](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-2-02-visible-satellite-image-data-legend.png)
 
-![Figure 24-21. Unenhanced Infrared (Black and White) Satellite Image—U.S. Example 
-24.7.2.3.1 Infrared Image Data Legends 
-The data legend on an IR image is calibrated to temperature expressed in degrees Celsius (see Figure 24-22 
-and Figure 24-23). The legend may vary based on the satellite image provider. 
- 
-The color](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-2-03-unenhanced-infrared-black-and-white-satellite-im.png)
+![Figure 24-20. Infrared (Color) Satellite Image—U.S. Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-2-03-infrared-color-satellite-image-u-s-example.png)
 
-![Figure 24-24. Water Vapor Satellite Image—U.S. Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-2-04-water-vapor-satellite-image-u-s-example.png)
+![Figure 24-21. Unenhanced Infrared (Black and White) Satellite Image—U.S. Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-2-04-unenhanced-infrared-black-and-white-satellite-im.png)
 
-![Figure 24-26. Weather Balloon and Radiosonde 
-24.8.1.1 Issuance 
-Weather balloons with radiosondes are launched twice a day worldwide from designated locations at around 
-1100 UTC and 2300 UTC (see Figure 24-27). It takes approximately 90 minutes for the balloon to reach 
-an altitude of 100,000 ft. The weather data col](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-8-1-00-weather-balloon-and-radiosonde-24-8-1-1-issuance.png)
+![Figure 24-25. Water Vapor Satellite Image Data Legend](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-8-1-00-water-vapor-satellite-image-data-legend.png)
 
-![Figure 24-27. U.S. Radiosonde Network 
-24.9 Aviation Weather Cameras 
-24.9.1 FAA Aviation Weather Camera Network 
-In July 2007 the FAA, under the leadership of Walter Combs, began a program to assist Alaska pilots with 
-their significant needs for weather information. Combs’ passion for safe flight in Alaska provided t](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-00-u-s-radiosonde-network-24-9-aviation-weather-cam.png)
+![Figure 24-26. Weather Balloon and Radiosonde](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-00-u-s-radiosonde-network.png)
 
-![Figure 24-28. Map of FAA’s Aviation Weather Camera Network in Alaska, the CONUS, and Canada12 
- 
-Figure 24-29. Map of the FAA’s Aviation Weather Camera Network in Hawaii 
- 
-12 Canadian camera sites are owned and operated by NAV CANADA, Canada’s civilian air navigation service 
-provider.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-01-map-of-faa-s-aviation-weather-camera-network-in-.png)
+![Figure 24-27. U.S. Radiosonde Network](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-01-map-of-faa-s-aviation-weather-camera-network-in-.png)
 
-![Figure 24-29. Map of the FAA’s Aviation Weather Camera Network in Hawaii 
- 
-12 Canadian camera sites are owned and operated by NAV CANADA, Canada’s civilian air navigation service 
-provider.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-02-map-of-the-faa-s-aviation-weather-camera-network.png)
+![Figure 24-28. Map of FAA’s Aviation Weather Camera Network in Alaska, the CONUS, and Canada12](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-02-map-of-the-faa-s-aviation-weather-camera-network.png)
 
-![Figure 24-30. Sectional Chart Depicting Hyder (4Z7), Alaska Camera Orientations 
- 
-Figure 24-31. “Clear Day” Image from the Aviation Weather Camera at Hyder (4Z7), Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-03-sectional-chart-depicting-hyder-4z7-alaska-camer.png)
+![Figure 24-29. Map of the FAA’s Aviation Weather Camera Network in Hawaii](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-03-sectional-chart-depicting-hyder-4z7-alaska-camer.png)
 
-![Figure 24-31. “Clear Day” Image from the Aviation Weather Camera at Hyder (4Z7), Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-04-clear-day-image-from-the-aviation-weather-camera.png)
+![Figure 24-30. Sectional Chart Depicting Hyder (4Z7), Alaska Camera Orientations](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-04-clear-day-image-from-the-aviation-weather-camera.png)
 
-![Figure 24-32. Aviation Weather Camera Image at Hyder (4Z7), Alaska 
-24.9.2 Visibility Estimation through Image Analytics (VEIA) 
-VEIA, which is available on the FAA’s Aviation Weather Camera Network, is an algorithm that uses the 
-FAA’s Aviation Weather Camera Network to produce visibility estimates (in statute miles)](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-2-00-aviation-weather-camera-image-at-hyder-4z7-alask.png)
+![Figure 24-31. “Clear Day” Image from the Aviation Weather Camera at Hyder (4Z7), Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-2-00-aviation-weather-camera-image-at-hyder-4z7-alask.png)
 
-![Figure 24-33. VEIA Example at Bald Mountain (K7BM) in Colorado 
-24.9.3 Visual Weather Observation System (VWOS) 
-VWOS, which is available on the FAA’s Aviation Weather Camera Network, is an advanced camera system 
-that is comprised of a suite of weather sensors and 360-degree camera images that collectively observe and](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-3-00-veia-example-at-bald-mountain-k7bm-in-colorado-2.png)
+![Figure 24-32. Aviation Weather Camera Image at Hyder (4Z7), Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-3-00-veia-example-at-bald-mountain-k7bm-in-colorado.png)
 
-![Figure 24-34. Weather Trends Example at Unalakleet (PAUN), Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-4-01-weather-trends-example-at-unalakleet-paun-alaska.png)
+![Figure 24-33. VEIA Example at Bald Mountain (K7BM) in Colorado](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-4-01-weather-trends-example-at-unalakleet-paun-alaska.png)
 
-<div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-24-00-speci-criteria-1-wind-shift-wind-direction-chang.html">
-<table><caption>Table 24-2. SPECI Criteria 
-1 
-Wind Shift 
-Wind direction changes by 45° or more, in less than 15 minutes, and the wind 
-speed is 10 knots or more throughout the wind shift. 
-2 
-Visibility 
-Visibility</caption><thead><tr><th>1</th><th>Wind Shift</th><th>Wind direction changes by 45° or more, in less than 15 minutes, and the wind
-speed is 10 knots or more throughout the wind shift.</th></tr></thead><tbody><tr><td>2</td><td>Visibility</td><td>Visibility as reported in the body of the report decreases to less than, or if below,
-increases to equal or exceed:
-• 3 miles.
-• 2 miles.
-• 1 mile.
-• ½ mile.
-• ¼ mile.
-• The lowest standard IAP minimum as published in the U.S. Terminal
-Procedures, if not listed above.</td></tr><tr><td>3</td><td>RVR</td><td>The highest value from the designated RVR runway decreases to less than 2,400 ft
-during the preceding 10 minutes; or, if the RVR is below 2,400 ft, increases to
-equal to or exceed 2,400 ft during the preceding 10 minutes. U.S. military stations
-may not report a SPECI based on RVR.</td></tr><tr><td>4</td><td>Tornado, Funnel
-Cloud, Waterspout</td><td>• Is observed.
-• Disappears from sight or ends.</td></tr><tr><td>5</td><td>Thunderstorm</td><td>• Begins (a SPECI is not required to report the beginning of a new thunderstorm
-if one is currently active and reported).
-• Ends.</td></tr><tr><td>6</td><td>Precipitation</td><td>• Hail begins or ends.
-• Freezing precipitation begins, ends, or changes intensity.
-• Ice pellets begin, end, or change intensity.
-• Snow begins, ends, or changes intensity.</td></tr><tr><td>7</td><td>Squalls</td><td>When a squall occurs.</td></tr><tr><td>8</td><td>Ceiling</td><td>The ceiling changes1 through:
-• 3,000 ft.
-• 1,500 ft.
-• 1,000 ft.
-• 500 ft.
-• The lowest standard IAP minimum.2
-1 “Ceiling change” means that it forms, dissipates below, decreases to less than,
-or, if below, increases to equal or exceed the values listed.
-2 As published in the U.S. Terminal Procedures. If none published, use 200 ft.</td></tr></tbody></table>
-</div>
+**Table 24-2.** SPECI Criteria 1 Wind Shift Wind direction changes by 45° or more, in less than 15 minutes, and the wind speed is 10 knots or more throughout the wind shift. 2 Visibility Visibility
 
-<div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-24-01-untitled.html">
-<table><thead><tr><th>9</th><th>Sky Condition</th><th>A layer of clouds or obscurations aloft is present below 1,000 ft and no layer aloft
-was reported below 1,000 ft in the preceding METAR or SPECI.</th></tr></thead><tbody><tr><td>10</td><td>Volcanic Eruption</td><td>When an eruption is first noted.</td></tr><tr><td>11</td><td>Aircraft Mishap</td><td>Upon notification of an aircraft mishap,1 unless there has been an intervening
-observation.
-1 “Aircraft mishap” is an inclusive term to denote the occurrence of an aircraft
-accident or incident.</td></tr><tr><td>12</td><td>Miscellaneous</td><td>Any other meteorological situation designated by the responsible agency of which,
-in the opinion of the observer, is critical.</td></tr></tbody></table>
-</div>
+| 1 | Wind Shift | Wind direction changes by 45° or more, in less than 15 minutes, and the wind<br>speed is 10 knots or more throughout the wind shift. |
+| --- | --- | --- |
+| 2 | Visibility | Visibility as reported in the body of the report decreases to less than, or if below,<br>increases to equal or exceed:<br>• 3 miles.<br>• 2 miles.<br>• 1 mile.<br>• ½ mile.<br>• ¼ mile.<br>• The lowest standard IAP minimum as published in the U.S. Terminal<br>Procedures, if not listed above. |
+| 3 | RVR | The highest value from the designated RVR runway decreases to less than 2,400 ft<br>during the preceding 10 minutes; or, if the RVR is below 2,400 ft, increases to<br>equal to or exceed 2,400 ft during the preceding 10 minutes. U.S. military stations<br>may not report a SPECI based on RVR. |
+| 4 | Tornado, Funnel<br>Cloud, Waterspout | • Is observed.<br>• Disappears from sight or ends. |
+| 5 | Thunderstorm | • Begins (a SPECI is not required to report the beginning of a new thunderstorm<br>if one is currently active and reported).<br>• Ends. |
+| 6 | Precipitation | • Hail begins or ends.<br>• Freezing precipitation begins, ends, or changes intensity.<br>• Ice pellets begin, end, or change intensity.<br>• Snow begins, ends, or changes intensity. |
+| 7 | Squalls | When a squall occurs. |
+| 8 | Ceiling | The ceiling changes1 through:<br>• 3,000 ft.<br>• 1,500 ft.<br>• 1,000 ft.<br>• 500 ft.<br>• The lowest standard IAP minimum.2<br>1 “Ceiling change” means that it forms, dissipates below, decreases to less than,<br>or, if below, increases to equal or exceed the values listed.<br>2 As published in the U.S. Terminal Procedures. If none published, use 200 ft. |
+
+<a class="handbook-table-source" href="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-24-00-speci-criteria-1-wind-shift-wind-direction-chang.html">Open original</a>
+
+| 9 | Sky Condition | A layer of clouds or obscurations aloft is present below 1,000 ft and no layer aloft<br>was reported below 1,000 ft in the preceding METAR or SPECI. |
+| --- | --- | --- |
+| 10 | Volcanic Eruption | When an eruption is first noted. |
+| 11 | Aircraft Mishap | Upon notification of an aircraft mishap,1 unless there has been an intervening<br>observation.<br>1 “Aircraft mishap” is an inclusive term to denote the occurrence of an aircraft<br>accident or incident. |
+| 12 | Miscellaneous | Any other meteorological situation designated by the responsible agency of which,<br>in the opinion of the observer, is critical. |
+
+<a class="handbook-table-source" href="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-24-01-untitled.html">Open original</a>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-24-02-metar-speci-notations-for-reporting-present-weat.html">
 <table><caption>Table 24-3. METAR/SPECI Notations for Reporting Present Weather1 
@@ -1976,7 +1881,7 @@ Other
 - 
 Light 
  
-Moder</caption><thead><tr><th>Qualifier</th><th></th><th>Weather Phenomena</th><th></th><th></th></tr></thead><tbody><tr><td>Intensity or</td><td>Descriptor</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>Precipitation</td><td>Obscuration</td><td>Other</td></tr><tr><td>Proximity</td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr><tr><td>- Light MI Shallow DZ Drizzle BR Mist PO Dust/Sand
+Moder</caption><thead><tr><th>Qualifier</th><th></th><th>Weather Phenomena</th><th></th><th></th></tr></thead><tbody><tr><td>Intensity or</td><td>Descriptor</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>Precipitation</td><td>Obscuration</td><td>Other</td></tr><tr><td>Proximity</td><td></td><td></td><td></td><td></td></tr><tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr><tr><td>- Light MI Shallow DZ Drizzle BR Mist PO Dust/Sand
 Whirls
 Moderate2 PR Partial RA Rain FG Fog
 SQ Squalls
@@ -2024,7 +1929,7 @@ Volcanic Eruptions
 14. 
 Hailstone Size 
 27. 
-Precipitation Amount Within</caption><thead><tr><th></th><th></th><th></th><th></th><th>Additive and Automated</th><th></th></tr></thead><tbody><tr><td>Automated, Manual, and Plain Language</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td>Maintenance Data</td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>1.</td><td>Volcanic Eruptions</td><td>14.</td><td>Hailstone Size</td><td>27.</td><td>Precipitation Amount Within a
+Precipitation Amount Within</caption><thead><tr><th></th><th></th><th></th><th></th><th>Additive and Automated</th><th></th></tr></thead><tbody><tr><td>Automated, Manual, and Plain Language</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td>Maintenance Data</td><td></td></tr><tr><td>1.</td><td>Volcanic Eruptions</td><td>14.</td><td>Hailstone Size</td><td>27.</td><td>Precipitation Amount Within a
 Specified Time Period*</td></tr><tr><td>2.</td><td>Funnel Cloud</td><td>15.</td><td>Virga</td><td>28.</td><td>Cloud Types*</td></tr><tr><td>3.</td><td>Type of Automated
 Station</td><td>16.</td><td>Variable Ceiling Height</td><td>29.</td><td>Duration of Sunshine*</td></tr><tr><td>4.</td><td>Peak Wind</td><td>17.</td><td>Obscurations</td><td>30.</td><td>Hourly Temperature and Dewpoint</td></tr><tr><td>5.</td><td>Wind Shift</td><td>18.</td><td>Variable Sky Condition</td><td>31.</td><td>6-Hourly Maximum Temperature*</td></tr><tr><td>6.</td><td>Tower or Surface
 Visibility</td><td>19.</td><td>Significant Cloud Types</td><td>32.</td><td>6-Hourly Minimum Temperature*</td></tr><tr><td>7.</td><td>Variable Prevailing
@@ -2035,7 +1940,7 @@ Rapidly</td><td>34.</td><td>3-Hourly Pressure Tendency*</td></tr><tr><td>9.</td>
 Location</td><td>22.</td><td>Sea Level Pressure</td><td>35.</td><td>Sensor Status Indicators</td></tr><tr><td>10.</td><td>Lightning</td><td>23.</td><td>Aircraft Mishap</td><td>36.</td><td>Maintenance Indicator</td></tr><tr><td>11.</td><td>Beginning and Ending of
 Precipitation</td><td>24.</td><td>No SPECI Reports Taken</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td>NOTE: Additive data is primarily used by</td><td></td></tr><tr><td></td><td></td><td></td><td></td><td>the NWS for climatological purposes.</td><td></td></tr><tr><td>12.</td><td>Beginning and Ending of
 Thunderstorms</td><td>25.</td><td>Snow Increasing Rapidly</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td>*These groups should have no direct impact</td><td></td></tr><tr><td>13.</td><td>Thunderstorm Location</td><td>26.</td><td>Other Significant
-Information</td><td>on the aviation community and will not be</td><td></td></tr><tr><td></td><td></td><td></td><td></td><td>discussed in this document.</td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+Information</td><td>on the aviation community and will not be</td><td></td></tr><tr><td></td><td></td><td></td><td></td><td>discussed in this document.</td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-24-06-metar-speci-type-and-frequency-of-lightning-type.html">
@@ -2067,5 +1972,5 @@ Moderate
 &gt;40–50 dBZ 
 Heavy 
 50</caption><thead><tr><th>Reflectivity</th><th>Weather Radar Echo
-Intensity Terminology</th></tr></thead><tbody><tr><td>(dBZ) Ranges</td><td></td></tr><tr><td>&lt;26 dBZ Light</td><td></td></tr><tr><td>26–40 dBZ</td><td>Moderate</td></tr><tr><td>&gt;40–50 dBZ</td><td>Heavy</td></tr><tr><td>50+ dBZ</td><td>Extreme</td></tr><tr><td></td><td></td></tr></tbody></table>
+Intensity Terminology</th></tr></thead><tbody><tr><td>(dBZ) Ranges</td><td></td></tr><tr><td>&lt;26 dBZ Light</td><td></td></tr><tr><td>26–40 dBZ</td><td>Moderate</td></tr><tr><td>&gt;40–50 dBZ</td><td>Heavy</td></tr><tr><td>50+ dBZ</td><td>Extreme</td></tr></tbody></table>
 </div>

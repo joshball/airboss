@@ -60,13 +60,6 @@ approaching storm. Often, a “roll cloud” or “shelf cloud” on the leading
 marks the top of the extreme turbulence zone, which forms as warm, moist air is lifted by the gust front.
 Shelf clouds are most common with multicell line thunderstorms.
 
-![Figure 19-1. Convective Turbulence 
-When the air is too dry for cumuliform clouds to form, convective currents can still be active. This is called 
-dry convection, or thermals (see Figure 19-2). A pilot has little or no indication of their presence until 
-encountering the turbulence.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-1-00-convective-turbulence-when-the-air-is-too-dry-fo.png)
+![Figure 19-1. Convective Turbulence](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-1-00-convective-turbulence.png)
 
-![Figure 19-2. Thermals 
-19.2.1.1 Thunderstorms 
-Turbulence is present in all thunderstorms, and severe or extreme turbulence is common. A severe 
-thunderstorm can destroy an aircraft. Gust loads can be severe enough to stall an aircraft at maneuvering 
-speed or to cause structural damage at cruising speed. The strongest](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-1-01-thermals-19-2-1-1-thunderstorms-turbulence-is-pr.png)
+![Figure 19-2. Thermals](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-1-01-thermals.png)

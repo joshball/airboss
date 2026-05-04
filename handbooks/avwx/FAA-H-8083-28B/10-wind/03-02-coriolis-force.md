@@ -45,18 +45,8 @@ Coriolis force deflects moving objects to the right of their path in the Norther
 of their path in the Southern Hemisphere. Coriolis deflection is maximized at the poles and zero at
 the Equator.
 
-![Figure 10-2. Magnitude of Pressure Gradient Force 
-In Figure 10-2, on the left panel, the contours/isobars are widely spaced apart, PGF is weak, and the wind 
-speed is weak. On the right panel, the contours/isobars are more closely spaced, the PGF is stronger, and 
-the wind speed is stronger. 
-The wind would flow from](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-2-00-magnitude-of-pressure-gradient-force-in-figure-1.png)
+![Figure 10-2. Magnitude of Pressure Gradient Force](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-2-00-magnitude-of-pressure-gradient-force.png)
 
-![Figure 10-3. Illustration of Coriolis Force 
-A similar apparent force deflects moving particles on the Earth. Because the Earth is spherical, the 
-deflective force is much more complex than the simple turntable example. The principle was first explained 
-by Gaspard-Gustave de Coriolis, and now carries his name—the Cori](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-2-01-illustration-of-coriolis-force-a-similar-apparen.png)
+![Figure 10-3. Illustration of Coriolis Force](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-2-01-illustration-of-coriolis-force.png)
 
-![Figure 10-4. Coriolis Force Variations Across the Earth 
-Coriolis force deflects moving objects to the right of their path in the Northern Hemisphere and to the left 
-of their path in the Southern Hemisphere. Coriolis deflection is maximized at the poles and zero at 
-the Equator.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-2-02-coriolis-force-variations-across-the-earth-corio.png)
+![Figure 10-4. Coriolis Force Variations Across the Earth](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-2-02-coriolis-force-variations-across-the-earth.png)

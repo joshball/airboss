@@ -20,8 +20,4 @@ Locations of towering cumulus are depicted in yellow. Locations of isolated (ISO
 widespread (WDSPRD) thunderstorms (TS) are depicted in orange, red, and dark red, respectively. Cloud
 bases and tops are also depicted.
 
-![Figure 27-7. Alaska Turbulence Forecast Example 
-27.7.5 Alaska Convective Outlook 
-The Convective Outlook graphic (see Figure 27-8) is a seasonal product that provides information about 
-convective activity at specific valid times. Each forecast indicates where conditions are favorable for the 
-development of towering](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-5-00-alaska-turbulence-forecast-example-27-7-5-alaska.png)
+![Figure 27-7. Alaska Turbulence Forecast Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-5-00-alaska-turbulence-forecast-example.png)

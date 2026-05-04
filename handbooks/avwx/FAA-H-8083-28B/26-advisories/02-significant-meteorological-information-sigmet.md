@@ -399,20 +399,11 @@ volcanic ash cloud located approximately at 17°/30 minutes north, 65°/00 minut
 north, 63°/00 minutes west to 16°/50 minutes north, 63°/00 minutes west to 17°/10 minutes north,
 65°/00 minutes west to 17°/30 minutes north, 65°/00 minutes west.
 
-![Figure 26-1. AWC SIGMET Areas of Responsibility—CONUS 
- 
-Figure 26-2. AWC SIGMET Areas of Responsibility—Atlantic Basin](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-1-00-awc-sigmet-areas-of-responsibility-conus-figure-.png)
+![Figure 26-1. AWC SIGMET Areas of Responsibility—CONUS](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-1-00-awc-sigmet-areas-of-responsibility-conus.png)
 
 ![Figure 26-2. AWC SIGMET Areas of Responsibility—Atlantic Basin](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-1-01-awc-sigmet-areas-of-responsibility-atlantic-basi.png)
 
-![Figure 26-3. SIGMET Areas of Responsibility—Pacific Basin 
-26.2.2 SIGMET Identification 
-U.S. SIGMETs (other than Convective SIGMETs) are assigned a series identifier: 
-• 
-AWC for the CONUS: 
-o NOVEMBER, OSCAR, PAPA, QUEBEC, ROMEO, UNIFORM, VICTOR, WHISKEY, 
-XRAY, and YANKEE. Note that SIERRA and TANGO are excluded. 
-•](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-2-00-sigmet-areas-of-responsibility-pacific-basin-26-.png)
+![Figure 26-3. SIGMET Areas of Responsibility—Pacific Basin](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-2-00-sigmet-areas-of-responsibility-pacific-basin.png)
 
 ![Figure 26-5. AWC Convective SIGMET Areas of Responsibility](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-4-00-awc-convective-sigmet-areas-of-responsibility.png)
 
@@ -435,9 +426,9 @@ Product identifier
 100130 
 Issuance date/time UTC 
 2 
-SI</caption><thead><tr><th></th><th>Content</th><th></th></tr></thead><tbody><tr><td>Line</td><td></td><td>Description</td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>SFO</td><td>SIGMET area identifier</td></tr><tr><td>1</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>R</td><td>SIGMET series</td></tr><tr><td></td><td>UWS</td><td>Product identifier</td></tr><tr><td></td><td>100130</td><td>Issuance date/time UTC</td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>SIGMET</td><td>Product type</td></tr><tr><td>2</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>ROMEO</td><td>SIGMET series name</td></tr><tr><td></td><td>1</td><td>Series issuance number</td></tr><tr><td></td><td>VALID UNTIL 100530</td><td>Ending valid date/time UTC</td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>OR WA</td><td>Phenomenon location (states)</td></tr><tr><td>3</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>FROM SEA TO PDT TO EUG TO SEA</td><td>Phenomenon location
-(high-altitude VOR coordinates)</td></tr><tr><td>4</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>SEV TURB BTN FL280 AND FL350.
-CONDS CONTG BYD 1000Z</td><td>Phenomenon description</td></tr><tr><td>5</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table>
+SI</caption><thead><tr><th></th><th>Content</th><th></th></tr></thead><tbody><tr><td>Line</td><td></td><td>Description</td></tr><tr><td></td><td>SFO</td><td>SIGMET area identifier</td></tr><tr><td>1</td><td></td><td></td></tr><tr><td></td><td>R</td><td>SIGMET series</td></tr><tr><td></td><td>UWS</td><td>Product identifier</td></tr><tr><td></td><td>100130</td><td>Issuance date/time UTC</td></tr><tr><td></td><td>SIGMET</td><td>Product type</td></tr><tr><td>2</td><td></td><td></td></tr><tr><td></td><td>ROMEO</td><td>SIGMET series name</td></tr><tr><td></td><td>1</td><td>Series issuance number</td></tr><tr><td></td><td>VALID UNTIL 100530</td><td>Ending valid date/time UTC</td></tr><tr><td></td><td>OR WA</td><td>Phenomenon location (states)</td></tr><tr><td>3</td><td></td><td></td></tr><tr><td></td><td>FROM SEA TO PDT TO EUG TO SEA</td><td>Phenomenon location
+(high-altitude VOR coordinates)</td></tr><tr><td>4</td><td></td><td></td></tr><tr><td></td><td>SEV TURB BTN FL280 AND FL350.
+CONDS CONTG BYD 1000Z</td><td>Phenomenon description</td></tr><tr><td>5</td><td></td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-26-2-01-decoding-a-convective-sigmet-for-the-conus-line-.html">
@@ -453,13 +444,13 @@ Region (East, Central, or West)
 WST 
 Product identifier 
 221855 
-Issuance date/tim</caption><thead><tr><th>Line</th><th>Content</th><th>Description</th></tr></thead><tbody><tr><td>1</td><td>MKC</td><td>Issuing office (AWC)</td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>C</td><td>Region (East, Central, or West)</td></tr><tr><td></td><td>WST</td><td>Product identifier</td></tr><tr><td></td><td>221855</td><td>Issuance date/time (DDHHMM)</td></tr><tr><td>2</td><td>CONVECTIVE SIGMET</td><td>Product type</td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>20</td><td>Issuance number</td></tr><tr><td></td><td>C</td><td>Region (East, Central, or West)</td></tr><tr><td>3</td><td>VALID UNTIL 2055Z</td><td>Valid ending time (UTC)</td></tr><tr><td>4</td><td>ND SD</td><td>States/areas affected</td></tr><tr><td>5</td><td>FROM 90W MOT-GFK-ABR-90W MOT</td><td>Phenomenon location (high-altitude
-VOR coordinates)</td></tr><tr><td></td><td></td><td></td></tr><tr><td>6</td><td>INTSFYG AREA SEV TS MOVG FROM
+Issuance date/tim</caption><thead><tr><th>Line</th><th>Content</th><th>Description</th></tr></thead><tbody><tr><td>1</td><td>MKC</td><td>Issuing office (AWC)</td></tr><tr><td></td><td>C</td><td>Region (East, Central, or West)</td></tr><tr><td></td><td>WST</td><td>Product identifier</td></tr><tr><td></td><td>221855</td><td>Issuance date/time (DDHHMM)</td></tr><tr><td>2</td><td>CONVECTIVE SIGMET</td><td>Product type</td></tr><tr><td></td><td>20</td><td>Issuance number</td></tr><tr><td></td><td>C</td><td>Region (East, Central, or West)</td></tr><tr><td>3</td><td>VALID UNTIL 2055Z</td><td>Valid ending time (UTC)</td></tr><tr><td>4</td><td>ND SD</td><td>States/areas affected</td></tr><tr><td>5</td><td>FROM 90W MOT-GFK-ABR-90W MOT</td><td>Phenomenon location (high-altitude
+VOR coordinates)</td></tr><tr><td>6</td><td>INTSFYG AREA SEV TS MOVG FROM
 24045KT. TOPS ABV FL450. WIND
 GUSTS TO 60KTS RPRTD.
 TORNADOES…HAIL TO 2 IN… WIND
 GUSTS TO 65KTS POSS ND PTN</td><td>Phenomenon description,
-movement, cloud top, remarks</td></tr><tr><td></td><td></td><td></td></tr></tbody></table>
+movement, cloud top, remarks</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-26-2-02-decoding-a-sigmet-outside-of-the-conus-line-cont.html">

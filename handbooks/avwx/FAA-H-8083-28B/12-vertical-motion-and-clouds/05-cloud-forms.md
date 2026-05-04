@@ -60,18 +60,18 @@ appearance bu</caption><thead><tr><th>Cirri-form</th><th></th><th>High-level clo
 composed of ice crystals. High-level clouds are typically thin and white in
 appearance but can create an array of colors when the Sun is low on the
 horizon. Cirrus generally occur in fair weather and point in the direction of air
-movement at their elevation.</th><th></th></tr></thead><tbody><tr><td>Nimbo-form</td><td></td><td>Nimbus comes from the Latin word meaning “rain.” These clouds typically
+movement at their elevation.</th></tr></thead><tbody><tr><td>Nimbo-form</td><td></td><td>Nimbus comes from the Latin word meaning “rain.” These clouds typically
 form between 7,000 and 15,000 ft (2,100 to 4,600 m) and bring steady
 precipitation. As the clouds thicken and precipitation begins to fall, the bases
-of the clouds tend to lower toward the ground.</td><td></td></tr><tr><td>Cumuli-form</td><td></td><td>Clouds that look like white, fluffy cotton balls or heaps and show the vertical
+of the clouds tend to lower toward the ground.</td></tr><tr><td>Cumuli-form</td><td></td><td>Clouds that look like white, fluffy cotton balls or heaps and show the vertical
 motion or thermal uplift of air taking place in the atmosphere. The level at
 which condensation and cloud formation begins is indicated by a flat cloud
 base, and its height will depend upon the humidity of the rising air. The more
 humid the air, the lower the cloud base. The tops of these clouds can reach
-over 60,000 ft (18,000 m).</td><td></td></tr><tr><td>Strati-form</td><td></td><td>Stratus is Latin for “layer” or “blanket.” The clouds consist of a featureless
+over 60,000 ft (18,000 m).</td></tr><tr><td>Strati-form</td><td></td><td>Stratus is Latin for “layer” or “blanket.” The clouds consist of a featureless
 low layer that can cover the entire sky like a blanket, bringing generally gray
 and dull weather. The cloud bases are usually only a few hundred feet above
 the ground. When stratus clouds move over hills and mountains, they are able
 to reach ground level and are thus called fog. Also, as fog lifts off the ground
-due to daytime heating, the fog forms a layer of low stratus clouds.</td><td></td></tr><tr><td></td><td>Source: NWS JetStream – Online School for Weather</td><td></td><td></td></tr></tbody></table>
+due to daytime heating, the fog forms a layer of low stratus clouds.</td></tr><tr><td></td><td>Source: NWS JetStream – Online School for Weather</td><td></td></tr></tbody></table>
 </div>

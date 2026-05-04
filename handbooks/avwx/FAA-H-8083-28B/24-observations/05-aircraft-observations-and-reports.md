@@ -387,9 +387,4 @@ aircraft and send these observations at selected intervals to ground stations vi
 
 ![Figure 24-5. PIREP Coding Format](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-5-1-00-pirep-coding-format.png)
 
-![Figure 24-6. VAR Form 
-24.5.4 Turbulence Observations 
-Since the 1990s, several innovations have improved the quality and availability of turbulence reports. 
-Automated turbulence reporting systems are common on many commercial aircraft using the Aircraft 
-Meteorological Data Relay (AMDAR) system. 
-Modern commercial ai](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-5-4-00-var-form-24-5-4-turbulence-observations-since-th.png)
+![Figure 24-6. VAR Form](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-5-4-00-var-form.png)

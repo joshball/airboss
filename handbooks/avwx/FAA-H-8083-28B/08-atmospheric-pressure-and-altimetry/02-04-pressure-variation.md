@@ -26,12 +26,6 @@ section.
 
 Figure 8-4. Air Pressure in the Standard Atmosphere
 
-![Figure 8-3. Station Pressure 
-The next few sections will examine some factors that influence pressure. 
-8.2.4 Pressure Variation 
-Atmospheric pressure varies with altitude and the temperature of the air, as well as with other minor 
-influences, such as water vapor. 
-8.2.4.1 Pressure Changes with Altitude 
-As a person m](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-4-00-station-pressure-the-next-few-sections-will-exam.png)
+![Figure 8-3. Station Pressure](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-4-00-station-pressure.png)
 
 ![Figure 8-4. Air Pressure in the Standard Atmosphere](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-4-01-air-pressure-in-the-standard-atmosphere.png)

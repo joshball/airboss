@@ -71,34 +71,10 @@ precipitation. The freezing level in a cloud contains ice particles that are coa
 particles reflect significantly more energy (appearing to the radar as large raindrops) than the portions of
 the cloud above and below the freezing layer.
 
-![Figure 15-19. Radar Image of Chaff 
-15.2.15 Precipitation 
-15.2.15.1 Intensity of Precipitation 
-The intensity of precipitation is determined from the amount of energy backscattered by precipitation, also 
-known as reflectivity. Reflectivity is determined by: 
-• 
-The size of precipitation particles. 
-• 
-The precipitati](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-15-00-radar-image-of-chaff-15-2-15-precipitation-15-2-.png)
+![Figure 15-19. Radar Image of Chaff](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-15-00-radar-image-of-chaff.png)
 
-![Figure 15-20. Reflectivity Associated with Liquid Targets 
-Larger particles have greater reflectivity than smaller particles. For example, a particle with a 
-1/4-in diameter backscatters the same amount of energy as 64 particles that each have a 1/8-in diameter. 
-Radar images/intensity scales are associated with reflec](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-15-01-reflectivity-associated-with-liquid-targets-larg.png)
+![Figure 15-20. Reflectivity Associated with Liquid Targets](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-15-01-reflectivity-associated-with-liquid-targets.png)
 
-![Figure 15-21. WSR-88D Weather Radar Convective Precipitation on the 0.5° Base Reflectivity Product Example 
-15.2.15.1.3 Stratiform Precipitation 
-Stratiform precipitation (see Figure 15-22) has the following radar characteristics: 
-• 
-Widespread in aerial coverage. 
-• 
-Weak reflectivity gradients. 
-• 
-Precipitation int](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-15-02-wsr-88d-weather-radar-convective-precipitation-o.png)
+![Figure 15-21. WSR-88D Weather Radar Convective Precipitation on the 0.5° Base Reflectivity Product Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-15-02-wsr-88d-weather-radar-convective-precipitation-o.png)
 
-![Figure 15-22. WSR-88D Weather Radar Stratiform Precipitation on the 0.5° Base Reflectivity Product Example 
-15.2.15.1.4 Intensity of Snow 
-A radar image cannot reliably be used to determine the intensity of snowfall. However, snowfall rates 
-generally increase with increasing reflectivity. 
-15.2.15.1.5 Bright Band 
-Bri](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-15-03-wsr-88d-weather-radar-stratiform-precipitation-o.png)
+![Figure 15-22. WSR-88D Weather Radar Stratiform Precipitation on the 0.5° Base Reflectivity Product Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-15-03-wsr-88d-weather-radar-stratiform-precipitation-o.png)

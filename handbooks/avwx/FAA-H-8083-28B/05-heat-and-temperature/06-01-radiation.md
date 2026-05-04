@@ -66,12 +66,6 @@ increasing solar zenith angle, the Sun’s rays must pass through more of the Ea
 can be scattered and absorbed before reaching the Earth’s surface. Thus, the Sun can heat the surface to a
 much higher temperature when it is high in the sky, rather than low on the horizon.
 
-![Figure 5-2. Radiation Example 
-All objects emit (radiate) energy as the heat energy within the object is converted to radiation energy. This 
-transmitted radiation passes through entities such as air, water, or space. Along the way, the radiation can 
-be reflected, which occurs when the wave energy changes direction wh](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-1-00-radiation-example-all-objects-emit-radiate-energ.png)
+![Figure 5-2. Radiation Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-1-00-radiation-example.png)
 
-![Figure 5-3. Temperature’s Effect on Radiation Wavelength 
-Some of the solar radiation that reaches the Earth’s surface is radiated back into the atmosphere to become 
-heat energy. Dark-colored objects such as asphalt absorb more of the radiant energy and warm faster than 
-light-colored objects. Dark objects also radiat](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-1-01-temperature-s-effect-on-radiation-wavelength-som.png)
+![Figure 5-3. Temperature’s Effect on Radiation Wavelength](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-1-01-temperature-s-effect-on-radiation-wavelength.png)

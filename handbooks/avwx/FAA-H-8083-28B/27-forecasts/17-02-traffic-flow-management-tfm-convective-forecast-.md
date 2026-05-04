@@ -55,10 +55,6 @@ Figure 27-30 shows an example of a TCF.
 
 Figure 27-30. TCF Example
 
-![Figure 27-28. Day 1 Categorical Convective Outlook Graphic Example 
- 
-Figure 27-29. Categorical Outlook Legend for Days 1-3 Convective Outlook Graphic Example 
-27.17.2 Traffic Flow Management (TFM) Convective Forecast (TCF) 
-The TCF is a high-confidence graphical representation of forecasted convection meeting specific](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-2-00-day-1-categorical-convective-outlook-graphic-exa.png)
+![Figure 27-28. Day 1 Categorical Convective Outlook Graphic Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-2-00-day-1-categorical-convective-outlook-graphic-exa.png)
 
-![Figure 27-30. TCF Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-2-01-tcf-example.png)
+![Figure 27-29. Categorical Outlook Legend for Days 1-3 Convective Outlook Graphic Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-2-01-categorical-outlook-legend-for-days-1-3-convecti.png)

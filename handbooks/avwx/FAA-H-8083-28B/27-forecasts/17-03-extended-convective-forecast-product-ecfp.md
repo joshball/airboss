@@ -31,8 +31,4 @@ The NWS SPC issues severe weather Watch Notification Messages to provide an area
 aviation meteorology community to forecast organized severe thunderstorms that may produce tornadoes,
 large hail, and/or convective damaging winds within the CONUS.
 
-![Figure 27-31. ECFP Example 
-27.17.4 Watch Notification Messages 
-The NWS SPC issues severe weather Watch Notification Messages to provide an area threat alert for the 
-aviation meteorology community to forecast organized severe thunderstorms that may produce tornadoes, 
-large hail, and/or convective damaging winds with](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-3-00-ecfp-example-27-17-4-watch-notification-messages.png)
+![Figure 27-31. ECFP Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-3-00-ecfp-example.png)

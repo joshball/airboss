@@ -538,47 +538,20 @@ Valid
 For Use 
 0000Z 
 ~0200Z</caption><thead><tr><th></th><th></th><th>6-Hour Forecast</th><th></th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td>Model
-Run</td><td></td><td></td><td></td><td>12-Hour Forecast</td><td></td><td>24-Hour Forecast</td><td></td></tr><tr><td></td><td>Product</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Available</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>Valid</td><td>For Use</td><td>Valid</td><td>For Use</td><td>Valid</td><td>For Use</td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>0600Z</td><td>0200-0900Z</td><td>1200Z</td><td>0900-1800Z</td><td>0000Z</td><td>1800-0600Z</td></tr><tr><td>0000Z</td><td>~0200Z</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>1200Z</td><td>0800-1500Z</td><td>1800Z</td><td>1500-0000Z</td><td>0600Z</td><td>0000-1200Z</td></tr><tr><td>0600Z</td><td>~0800Z</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>1800Z</td><td>1400-2100Z</td><td>0000Z</td><td>2100-0600Z</td><td>1200Z</td><td>0600-1800Z</td></tr><tr><td>1200Z</td><td>~1400Z</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>0000Z</td><td>2000-0300Z</td><td>0600Z</td><td>0300-1200Z</td><td>1800Z</td><td>1200-0000Z</td></tr><tr><td>1800Z</td><td>~2000Z</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+Run</td><td></td><td></td><td></td><td>12-Hour Forecast</td><td></td><td>24-Hour Forecast</td><td></td></tr><tr><td></td><td>Product</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Available</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>Valid</td><td>For Use</td><td>Valid</td><td>For Use</td><td>Valid</td><td>For Use</td></tr><tr><td></td><td></td><td>0600Z</td><td>0200-0900Z</td><td>1200Z</td><td>0900-1800Z</td><td>0000Z</td><td>1800-0600Z</td></tr><tr><td>0000Z</td><td>~0200Z</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>1200Z</td><td>0800-1500Z</td><td>1800Z</td><td>1500-0000Z</td><td>0600Z</td><td>0000-1200Z</td></tr><tr><td>0600Z</td><td>~0800Z</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>1800Z</td><td>1400-2100Z</td><td>0000Z</td><td>2100-0600Z</td><td>1200Z</td><td>0600-1800Z</td></tr><tr><td>1200Z</td><td>~1400Z</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>0000Z</td><td>2000-0300Z</td><td>0600Z</td><td>0300-1200Z</td><td>1800Z</td><td>1200-0000Z</td></tr><tr><td>1800Z</td><td>~2000Z</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-4-2-01-generic-format-of-the-national-weather-service-s.html">
-<table><caption>Table 27-3. Generic Format of the National Weather Service’s TAFs 
-TAF  
-or  
-TAF AMD  
-or  
-TAF COR 
-  
-  
-  
-Type of report 
-  
-CCCC 
-YYGGggZ 
-Y1Y1G1G1/Y2Y2G2G2 
-dddffGfmfmKT 
-Location identifier 
-D</caption><thead><tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td>TAF
-or
-TAF AMD
-or
-TAF COR</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Type of report</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>CCCC YYGGggZ Y Y G G /Y Y G G dddffGf f KT
-1 1 1 1 2 2 2 2 m m
-Location identifier Date/time of forecast Valid period Wind group
-origin group</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>VVVV w’w’ NNNhhh WSh h h /dddftKT
-s s s s s s ws ws ws
-or or
-NSW VVhhh
-s s s
-or
-SKC
-Visibility group Significant weather Cloud and vertical Non-convective LLWS group
-group obscuration groups</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>TTGGgg
-Forecast change
-indicator groups</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>FMY Y GGgg TEMPO Y Y GG/Y Y G G PROB30 Y Y GG/Y Y G G
-1 1 1 1 e e e e 1 1 e e e e
-From group Temporary group Probability group</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
-</div>
+**Table 27-3.** Generic Format of the National Weather Service’s TAFs TAF or TAF AMD or TAF COR Type of report CCCC YYGGggZ Y1Y1G1G1/Y2Y2G2G2 dddffGfmfmKT Location identifier D
+
+| TAF<br>or<br>TAF AMD<br>or<br>TAF COR |
+| --- |
+| Type of report |
+| CCCC YYGGggZ Y Y G G /Y Y G G dddffGf f KT<br>1 1 1 1 2 2 2 2 m m<br>Location identifier Date/time of forecast Valid period Wind group<br>origin group |
+| VVVV w’w’ NNNhhh WSh h h /dddftKT<br>s s s s s s ws ws ws<br>or or<br>NSW VVhhh<br>s s s<br>or<br>SKC<br>Visibility group Significant weather Cloud and vertical Non-convective LLWS group<br>group obscuration groups |
+| TTGGgg<br>Forecast change<br>indicator groups |
+| FMY Y GGgg TEMPO Y Y GG/Y Y G G PROB30 Y Y GG/Y Y G G<br>1 1 1 1 e e e e 1 1 e e e e<br>From group Temporary group Probability group |
+
+<a class="handbook-table-source" href="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-4-2-01-generic-format-of-the-national-weather-service-s.html">Open original</a>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-4-2-02-table-27-4-taf-fog-terms-term-description-freezi.html">
 <table><caption>Table 27-4. 
@@ -591,13 +564,13 @@ Any fog (visibility less than 5/8 SM) consisting predominantly of water
 droplets at temperatures less than or equal to</caption><thead><tr><th>Term</th><th>Description</th></tr></thead><tbody><tr><td></td><td>Any fog (visibility less than 5/8 SM) consisting predominantly of water
 droplets at temperatures less than or equal to 32 °F (0°C), whether or not
 rime ice is expected to be deposited. FZBR is not a valid significant weather
-combination and will not be used in TAFs.</td></tr><tr><td>Freezing Fog</td><td></td></tr><tr><td>(FZFG)</td><td></td></tr><tr><td></td><td></td></tr><tr><td>Shallow Fog</td><td>The visibility at 6 ft AGL is greater than or equal to 5/8 SM and the apparent
+combination and will not be used in TAFs.</td></tr><tr><td>Freezing Fog</td><td></td></tr><tr><td>(FZFG)</td><td></td></tr><tr><td>Shallow Fog</td><td>The visibility at 6 ft AGL is greater than or equal to 5/8 SM and the apparent
 visibility in the fog layer is less than 5/8 SM.</td></tr><tr><td>(MIFG)</td><td></td></tr><tr><td></td><td>Fog patches covering part of the airport. The apparent visibility in the fog
 patch or bank is less than 5/8 SM, with the foggy patches extending to at
-least 6 ft AGL.</td></tr><tr><td>Patchy Fog</td><td></td></tr><tr><td>(BCFG)</td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td>A substantial part of the airport is expected to be covered by fog while the
+least 6 ft AGL.</td></tr><tr><td>Patchy Fog</td><td></td></tr><tr><td>(BCFG)</td><td></td></tr><tr><td></td><td>A substantial part of the airport is expected to be covered by fog while the
 remainder is expected to be clear of fog (e.g., a fog bank).
 Note: MIFG, PRFG, and BCFG may be forecast with prevailing visibility of
-P6SM.</td></tr><tr><td>Partial Fog</td><td></td></tr><tr><td>(PRFG)</td><td></td></tr><tr><td></td><td></td></tr></tbody></table>
+P6SM.</td></tr><tr><td>Partial Fog</td><td></td></tr><tr><td>(PRFG)</td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-4-2-03-taf-use-of-vicinity-vc-phenomenon-coded-fog-vcfg.html">

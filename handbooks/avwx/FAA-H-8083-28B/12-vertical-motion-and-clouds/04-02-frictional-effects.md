@@ -33,7 +33,4 @@ of clouds and precipitation. Conversely, winds converge into surface low pressur
 expand, and cool, which favors the formation of clouds and precipitation given sufficient moisture
 (see Figure 12-5).
 
-![Figure 12-4. Orographic Effects Example 
-The air parcel begins with a temperature of 15°C, dewpoint of 10°C, and a relative humidity of 80 percent 
-at 2,000 ft. As the parcel is lifted on the windward slope, the temperature cools at the dry adiabatic lapse 
-rate of 3°C per 1,000 ft, and the dewpoint cools at a rate of](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-2-00-orographic-effects-example-the-air-parcel-begins.png)
+![Figure 12-4. Orographic Effects Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-2-00-orographic-effects-example.png)

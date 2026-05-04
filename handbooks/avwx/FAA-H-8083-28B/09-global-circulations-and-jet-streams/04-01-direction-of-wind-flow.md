@@ -32,8 +32,4 @@ Why do the jet stream winds blow from west to east? As stated in the previous se
 rotating, the warm air would rise at the Equator and move toward both the poles. The Earth’s rotation
 divides this circulation into three cells. Likewise, the Earth’s rotation is responsible for the jet stream.
 
-![Figure 9-2. Earth Circulation System 
-Between each of these circulation cells are bands of high and low pressure at the surface. The high-pressure 
-band is located about 30° N/S latitude and at each pole. Low-pressure bands are found at the Equator 
-and 50° to 60° N/S latitude. 
-Usually, fair and dry/hot weather is ass](/handbooks/avwx/FAA-H-8083-28B/figures/fig-9-4-1-00-earth-circulation-system-between-each-of-these-c.png)
+![Figure 9-2. Earth Circulation System](/handbooks/avwx/FAA-H-8083-28B/figures/fig-9-4-1-00-earth-circulation-system.png)

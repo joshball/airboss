@@ -37,8 +37,4 @@ turbine blades and fuel injectors/igniters. With no air going into the engine, t
 comes to a slow spinning stop by spooling down, and a flameout occurs. As the aircraft exits the ash cloud
 and enters colder temperatures, the cooled, hardened silicas on the turbine blades become dislodged,
 
-![Figure 18-11. Haboob 
-18.1.9 Volcanic Ash 
-Volcanic ash is made up of fine particles of rock powder that originate from a volcano and that may remain 
-suspended in the atmosphere for long periods. Severe volcanic eruptions that send ash into the upper 
-atmosphere occur somewhere around the world several times per year.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-9-00-haboob-18-1-9-volcanic-ash-volcanic-ash-is-made-.png)
+![Figure 18-11. Haboob](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-9-00-haboob.png)

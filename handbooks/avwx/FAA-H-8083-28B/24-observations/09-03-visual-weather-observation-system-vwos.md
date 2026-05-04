@@ -32,7 +32,4 @@ adverse conditions (e.g., AIRMETs and SIGMETs), current conditions [e.g., METARs
 imagery, and weather trends (see Figure 24-34)], TAFs, PIREPs, and other aeronautical information
 (e.g., RCOs, TFRs, and charts).
 
-![Figure 24-33. VEIA Example at Bald Mountain (K7BM) in Colorado 
-24.9.3 Visual Weather Observation System (VWOS) 
-VWOS, which is available on the FAA’s Aviation Weather Camera Network, is an advanced camera system 
-that is comprised of a suite of weather sensors and 360-degree camera images that collectively observe and](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-3-00-veia-example-at-bald-mountain-k7bm-in-colorado-2.png)
+![Figure 24-33. VEIA Example at Bald Mountain (K7BM) in Colorado](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-3-00-veia-example-at-bald-mountain-k7bm-in-colorado.png)

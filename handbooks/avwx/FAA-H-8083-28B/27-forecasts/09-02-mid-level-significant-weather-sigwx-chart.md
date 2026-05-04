@@ -49,16 +49,9 @@ weather elements and their presentation are the same as in the High-Level SIGWX 
 (see Section 27.9.3) except for the addition of non-convective clouds with moderate or severe icing and/or
 moderate or severe turbulence. See Section 27.9.3.2 for details on these other weather elements.
 
-![Figure 27-15. Low-Level SIGWX Chart Multiple Freezing Levels—Example 
-In Figure 27-15, areas with multiple freezing levels are located on the below-freezing side of the surface 
-freezing level contour and bounded by the 4,000-ft freezing level. Multiple freezing levels are possible 
-beyond the 4,000-ft freezing level (](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-2-00-low-level-sigwx-chart-multiple-freezing-levels-e.png)
+![Figure 27-15. Low-Level SIGWX Chart Multiple Freezing Levels—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-2-00-low-level-sigwx-chart-multiple-freezing-levels-e.png)
 
-![Figure 27-16. Mid-Level SIGWX Chart—Example 
-27.9.2.1 Issuance 
-The AWC in Kansas City, MO, has the responsibility, as part of the WAFC Washington, to provide global 
-weather forecasts of SIGWX phenomena. The AWC issues a 24-hour Mid-Level SIGWX Chart, four times 
-daily, for the North Atlantic Ocean Region (see Table 2](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-2-01-mid-level-sigwx-chart-example-27-9-2-1-issuance-.png)
+![Figure 27-16. Mid-Level SIGWX Chart—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-2-01-mid-level-sigwx-chart-example.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-9-2-00-mid-level-sigwx-chart-issuance-schedule-issued-u.html">
 <table><caption>Table 27-11. Mid-Level SIGWX Chart Issuance Schedule 

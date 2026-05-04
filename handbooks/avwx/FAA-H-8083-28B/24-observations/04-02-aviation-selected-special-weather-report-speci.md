@@ -65,40 +65,16 @@ The ceiling changes1 through:
 or, if below, increases to equal or exceed the values listed.
 2 As published in the U.S. Terminal Procedures. If none published, use 200 ft.
 
-<div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-24-4-2-00-speci-criteria-1-wind-shift-wind-direction-chang.html">
-<table><caption>Table 24-2. SPECI Criteria 
-1 
-Wind Shift 
-Wind direction changes by 45° or more, in less than 15 minutes, and the wind 
-speed is 10 knots or more throughout the wind shift. 
-2 
-Visibility 
-Visibility</caption><thead><tr><th>1</th><th>Wind Shift</th><th>Wind direction changes by 45° or more, in less than 15 minutes, and the wind
-speed is 10 knots or more throughout the wind shift.</th></tr></thead><tbody><tr><td>2</td><td>Visibility</td><td>Visibility as reported in the body of the report decreases to less than, or if below,
-increases to equal or exceed:
-• 3 miles.
-• 2 miles.
-• 1 mile.
-• ½ mile.
-• ¼ mile.
-• The lowest standard IAP minimum as published in the U.S. Terminal
-Procedures, if not listed above.</td></tr><tr><td>3</td><td>RVR</td><td>The highest value from the designated RVR runway decreases to less than 2,400 ft
-during the preceding 10 minutes; or, if the RVR is below 2,400 ft, increases to
-equal to or exceed 2,400 ft during the preceding 10 minutes. U.S. military stations
-may not report a SPECI based on RVR.</td></tr><tr><td>4</td><td>Tornado, Funnel
-Cloud, Waterspout</td><td>• Is observed.
-• Disappears from sight or ends.</td></tr><tr><td>5</td><td>Thunderstorm</td><td>• Begins (a SPECI is not required to report the beginning of a new thunderstorm
-if one is currently active and reported).
-• Ends.</td></tr><tr><td>6</td><td>Precipitation</td><td>• Hail begins or ends.
-• Freezing precipitation begins, ends, or changes intensity.
-• Ice pellets begin, end, or change intensity.
-• Snow begins, ends, or changes intensity.</td></tr><tr><td>7</td><td>Squalls</td><td>When a squall occurs.</td></tr><tr><td>8</td><td>Ceiling</td><td>The ceiling changes1 through:
-• 3,000 ft.
-• 1,500 ft.
-• 1,000 ft.
-• 500 ft.
-• The lowest standard IAP minimum.2
-1 “Ceiling change” means that it forms, dissipates below, decreases to less than,
-or, if below, increases to equal or exceed the values listed.
-2 As published in the U.S. Terminal Procedures. If none published, use 200 ft.</td></tr></tbody></table>
-</div>
+**Table 24-2.** SPECI Criteria 1 Wind Shift Wind direction changes by 45° or more, in less than 15 minutes, and the wind speed is 10 knots or more throughout the wind shift. 2 Visibility Visibility
+
+| 1 | Wind Shift | Wind direction changes by 45° or more, in less than 15 minutes, and the wind<br>speed is 10 knots or more throughout the wind shift. |
+| --- | --- | --- |
+| 2 | Visibility | Visibility as reported in the body of the report decreases to less than, or if below,<br>increases to equal or exceed:<br>• 3 miles.<br>• 2 miles.<br>• 1 mile.<br>• ½ mile.<br>• ¼ mile.<br>• The lowest standard IAP minimum as published in the U.S. Terminal<br>Procedures, if not listed above. |
+| 3 | RVR | The highest value from the designated RVR runway decreases to less than 2,400 ft<br>during the preceding 10 minutes; or, if the RVR is below 2,400 ft, increases to<br>equal to or exceed 2,400 ft during the preceding 10 minutes. U.S. military stations<br>may not report a SPECI based on RVR. |
+| 4 | Tornado, Funnel<br>Cloud, Waterspout | • Is observed.<br>• Disappears from sight or ends. |
+| 5 | Thunderstorm | • Begins (a SPECI is not required to report the beginning of a new thunderstorm<br>if one is currently active and reported).<br>• Ends. |
+| 6 | Precipitation | • Hail begins or ends.<br>• Freezing precipitation begins, ends, or changes intensity.<br>• Ice pellets begin, end, or change intensity.<br>• Snow begins, ends, or changes intensity. |
+| 7 | Squalls | When a squall occurs. |
+| 8 | Ceiling | The ceiling changes1 through:<br>• 3,000 ft.<br>• 1,500 ft.<br>• 1,000 ft.<br>• 500 ft.<br>• The lowest standard IAP minimum.2<br>1 “Ceiling change” means that it forms, dissipates below, decreases to less than,<br>or, if below, increases to equal or exceed the values listed.<br>2 As published in the U.S. Terminal Procedures. If none published, use 200 ft. |
+
+<a class="handbook-table-source" href="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-24-4-2-00-speci-criteria-1-wind-shift-wind-direction-chang.html">Open original</a>

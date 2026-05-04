@@ -36,8 +36,4 @@ roll cloud, a shelf cloud is attached to the base of the parent cloud above it, 
 Updraft. A small-scale current of rising air. If the air is sufficiently moist, then the moisture condenses to
 become a cumulus cloud or an individual tower of a towering cumulus or cumulonimbus.
 
-![Figure 22-6. Factors that Influence Thunderstorm Motion 
-Individual cells that comprise the storm move northeast (advection) but dissipate and are replaced by 
-new cells (propagation). Storm motion equals the combined effects of both advection and propagation. 
-22.6 Thunderstorm Terminology 
-Anvil. The flat, spreading](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-6-00-factors-that-influence-thunderstorm-motion-indiv.png)
+![Figure 22-6. Factors that Influence Thunderstorm Motion](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-6-00-factors-that-influence-thunderstorm-motion.png)

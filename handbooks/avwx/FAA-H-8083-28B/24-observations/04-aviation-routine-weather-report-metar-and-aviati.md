@@ -899,66 +899,33 @@ not operating, the remark CHINO LOC is coded.
 
 ![Figure 24-1. METAR/SPECI Coding Format](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-00-metar-speci-coding-format.png)
 
-![Figure 24-2. ICAO Continental Codes 
-24.4.3.3 Date and Time of Report 
-METAR KOKC 011955Z AUTO 22015G25KT 180V250 3/4SM R17L/2600FT +TSRA BR OVC010CB 
-18/16 A2992 RMK AO2 TSB25 TS OHD MOV E SLP132 
-The date and time are coded in all reports as follows: the day of the month is the first two digits (01), 
-followed by the](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-01-icao-continental-codes-24-4-3-3-date-and-time-of.png)
+![Figure 24-2. ICAO Continental Codes](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-01-icao-continental-codes.png)
 
 ![Figure 24-3. Obscuration Effects on Slant Range Visibility](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-02-obscuration-effects-on-slant-range-visibility.png)
 
-![Figure 24-4. METAR/SPECI Sky Condition Coding 
-At manual stations, cumulonimbus (CB) or towering cumulus (TCU) is appended to the associated layer. 
-For example, a scattered layer of towering cumulus at 1,500 ft would be coded SCT015TCU and would be 
-followed by a space if there were additional higher layers to code.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-03-metar-speci-sky-condition-coding-at-manual-stati.png)
+![Figure 24-4. METAR/SPECI Sky Condition Coding](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-03-metar-speci-sky-condition-coding.png)
 
-<div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-24-4-00-speci-criteria-1-wind-shift-wind-direction-chang.html">
-<table><caption>Table 24-2. SPECI Criteria 
-1 
-Wind Shift 
-Wind direction changes by 45° or more, in less than 15 minutes, and the wind 
-speed is 10 knots or more throughout the wind shift. 
-2 
-Visibility 
-Visibility</caption><thead><tr><th>1</th><th>Wind Shift</th><th>Wind direction changes by 45° or more, in less than 15 minutes, and the wind
-speed is 10 knots or more throughout the wind shift.</th></tr></thead><tbody><tr><td>2</td><td>Visibility</td><td>Visibility as reported in the body of the report decreases to less than, or if below,
-increases to equal or exceed:
-• 3 miles.
-• 2 miles.
-• 1 mile.
-• ½ mile.
-• ¼ mile.
-• The lowest standard IAP minimum as published in the U.S. Terminal
-Procedures, if not listed above.</td></tr><tr><td>3</td><td>RVR</td><td>The highest value from the designated RVR runway decreases to less than 2,400 ft
-during the preceding 10 minutes; or, if the RVR is below 2,400 ft, increases to
-equal to or exceed 2,400 ft during the preceding 10 minutes. U.S. military stations
-may not report a SPECI based on RVR.</td></tr><tr><td>4</td><td>Tornado, Funnel
-Cloud, Waterspout</td><td>• Is observed.
-• Disappears from sight or ends.</td></tr><tr><td>5</td><td>Thunderstorm</td><td>• Begins (a SPECI is not required to report the beginning of a new thunderstorm
-if one is currently active and reported).
-• Ends.</td></tr><tr><td>6</td><td>Precipitation</td><td>• Hail begins or ends.
-• Freezing precipitation begins, ends, or changes intensity.
-• Ice pellets begin, end, or change intensity.
-• Snow begins, ends, or changes intensity.</td></tr><tr><td>7</td><td>Squalls</td><td>When a squall occurs.</td></tr><tr><td>8</td><td>Ceiling</td><td>The ceiling changes1 through:
-• 3,000 ft.
-• 1,500 ft.
-• 1,000 ft.
-• 500 ft.
-• The lowest standard IAP minimum.2
-1 “Ceiling change” means that it forms, dissipates below, decreases to less than,
-or, if below, increases to equal or exceed the values listed.
-2 As published in the U.S. Terminal Procedures. If none published, use 200 ft.</td></tr></tbody></table>
-</div>
+**Table 24-2.** SPECI Criteria 1 Wind Shift Wind direction changes by 45° or more, in less than 15 minutes, and the wind speed is 10 knots or more throughout the wind shift. 2 Visibility Visibility
 
-<div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-24-4-01-untitled.html">
-<table><thead><tr><th>9</th><th>Sky Condition</th><th>A layer of clouds or obscurations aloft is present below 1,000 ft and no layer aloft
-was reported below 1,000 ft in the preceding METAR or SPECI.</th></tr></thead><tbody><tr><td>10</td><td>Volcanic Eruption</td><td>When an eruption is first noted.</td></tr><tr><td>11</td><td>Aircraft Mishap</td><td>Upon notification of an aircraft mishap,1 unless there has been an intervening
-observation.
-1 “Aircraft mishap” is an inclusive term to denote the occurrence of an aircraft
-accident or incident.</td></tr><tr><td>12</td><td>Miscellaneous</td><td>Any other meteorological situation designated by the responsible agency of which,
-in the opinion of the observer, is critical.</td></tr></tbody></table>
-</div>
+| 1 | Wind Shift | Wind direction changes by 45° or more, in less than 15 minutes, and the wind<br>speed is 10 knots or more throughout the wind shift. |
+| --- | --- | --- |
+| 2 | Visibility | Visibility as reported in the body of the report decreases to less than, or if below,<br>increases to equal or exceed:<br>• 3 miles.<br>• 2 miles.<br>• 1 mile.<br>• ½ mile.<br>• ¼ mile.<br>• The lowest standard IAP minimum as published in the U.S. Terminal<br>Procedures, if not listed above. |
+| 3 | RVR | The highest value from the designated RVR runway decreases to less than 2,400 ft<br>during the preceding 10 minutes; or, if the RVR is below 2,400 ft, increases to<br>equal to or exceed 2,400 ft during the preceding 10 minutes. U.S. military stations<br>may not report a SPECI based on RVR. |
+| 4 | Tornado, Funnel<br>Cloud, Waterspout | • Is observed.<br>• Disappears from sight or ends. |
+| 5 | Thunderstorm | • Begins (a SPECI is not required to report the beginning of a new thunderstorm<br>if one is currently active and reported).<br>• Ends. |
+| 6 | Precipitation | • Hail begins or ends.<br>• Freezing precipitation begins, ends, or changes intensity.<br>• Ice pellets begin, end, or change intensity.<br>• Snow begins, ends, or changes intensity. |
+| 7 | Squalls | When a squall occurs. |
+| 8 | Ceiling | The ceiling changes1 through:<br>• 3,000 ft.<br>• 1,500 ft.<br>• 1,000 ft.<br>• 500 ft.<br>• The lowest standard IAP minimum.2<br>1 “Ceiling change” means that it forms, dissipates below, decreases to less than,<br>or, if below, increases to equal or exceed the values listed.<br>2 As published in the U.S. Terminal Procedures. If none published, use 200 ft. |
+
+<a class="handbook-table-source" href="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-24-4-00-speci-criteria-1-wind-shift-wind-direction-chang.html">Open original</a>
+
+| 9 | Sky Condition | A layer of clouds or obscurations aloft is present below 1,000 ft and no layer aloft<br>was reported below 1,000 ft in the preceding METAR or SPECI. |
+| --- | --- | --- |
+| 10 | Volcanic Eruption | When an eruption is first noted. |
+| 11 | Aircraft Mishap | Upon notification of an aircraft mishap,1 unless there has been an intervening<br>observation.<br>1 “Aircraft mishap” is an inclusive term to denote the occurrence of an aircraft<br>accident or incident. |
+| 12 | Miscellaneous | Any other meteorological situation designated by the responsible agency of which,<br>in the opinion of the observer, is critical. |
+
+<a class="handbook-table-source" href="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-24-4-01-untitled.html">Open original</a>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-24-4-02-metar-speci-notations-for-reporting-present-weat.html">
 <table><caption>Table 24-3. METAR/SPECI Notations for Reporting Present Weather1 
@@ -978,7 +945,7 @@ Other
 - 
 Light 
  
-Moder</caption><thead><tr><th>Qualifier</th><th></th><th>Weather Phenomena</th><th></th><th></th></tr></thead><tbody><tr><td>Intensity or</td><td>Descriptor</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>Precipitation</td><td>Obscuration</td><td>Other</td></tr><tr><td>Proximity</td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr><tr><td>- Light MI Shallow DZ Drizzle BR Mist PO Dust/Sand
+Moder</caption><thead><tr><th>Qualifier</th><th></th><th>Weather Phenomena</th><th></th><th></th></tr></thead><tbody><tr><td>Intensity or</td><td>Descriptor</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>Precipitation</td><td>Obscuration</td><td>Other</td></tr><tr><td>Proximity</td><td></td><td></td><td></td><td></td></tr><tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr><tr><td>- Light MI Shallow DZ Drizzle BR Mist PO Dust/Sand
 Whirls
 Moderate2 PR Partial RA Rain FG Fog
 SQ Squalls
@@ -1026,7 +993,7 @@ Volcanic Eruptions
 14. 
 Hailstone Size 
 27. 
-Precipitation Amount Within</caption><thead><tr><th></th><th></th><th></th><th></th><th>Additive and Automated</th><th></th></tr></thead><tbody><tr><td>Automated, Manual, and Plain Language</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td>Maintenance Data</td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>1.</td><td>Volcanic Eruptions</td><td>14.</td><td>Hailstone Size</td><td>27.</td><td>Precipitation Amount Within a
+Precipitation Amount Within</caption><thead><tr><th></th><th></th><th></th><th></th><th>Additive and Automated</th><th></th></tr></thead><tbody><tr><td>Automated, Manual, and Plain Language</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td>Maintenance Data</td><td></td></tr><tr><td>1.</td><td>Volcanic Eruptions</td><td>14.</td><td>Hailstone Size</td><td>27.</td><td>Precipitation Amount Within a
 Specified Time Period*</td></tr><tr><td>2.</td><td>Funnel Cloud</td><td>15.</td><td>Virga</td><td>28.</td><td>Cloud Types*</td></tr><tr><td>3.</td><td>Type of Automated
 Station</td><td>16.</td><td>Variable Ceiling Height</td><td>29.</td><td>Duration of Sunshine*</td></tr><tr><td>4.</td><td>Peak Wind</td><td>17.</td><td>Obscurations</td><td>30.</td><td>Hourly Temperature and Dewpoint</td></tr><tr><td>5.</td><td>Wind Shift</td><td>18.</td><td>Variable Sky Condition</td><td>31.</td><td>6-Hourly Maximum Temperature*</td></tr><tr><td>6.</td><td>Tower or Surface
 Visibility</td><td>19.</td><td>Significant Cloud Types</td><td>32.</td><td>6-Hourly Minimum Temperature*</td></tr><tr><td>7.</td><td>Variable Prevailing
@@ -1037,7 +1004,7 @@ Rapidly</td><td>34.</td><td>3-Hourly Pressure Tendency*</td></tr><tr><td>9.</td>
 Location</td><td>22.</td><td>Sea Level Pressure</td><td>35.</td><td>Sensor Status Indicators</td></tr><tr><td>10.</td><td>Lightning</td><td>23.</td><td>Aircraft Mishap</td><td>36.</td><td>Maintenance Indicator</td></tr><tr><td>11.</td><td>Beginning and Ending of
 Precipitation</td><td>24.</td><td>No SPECI Reports Taken</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td>NOTE: Additive data is primarily used by</td><td></td></tr><tr><td></td><td></td><td></td><td></td><td>the NWS for climatological purposes.</td><td></td></tr><tr><td>12.</td><td>Beginning and Ending of
 Thunderstorms</td><td>25.</td><td>Snow Increasing Rapidly</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td>*These groups should have no direct impact</td><td></td></tr><tr><td>13.</td><td>Thunderstorm Location</td><td>26.</td><td>Other Significant
-Information</td><td>on the aviation community and will not be</td><td></td></tr><tr><td></td><td></td><td></td><td></td><td>discussed in this document.</td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+Information</td><td>on the aviation community and will not be</td><td></td></tr><tr><td></td><td></td><td></td><td></td><td>discussed in this document.</td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-24-4-06-metar-speci-type-and-frequency-of-lightning-type.html">

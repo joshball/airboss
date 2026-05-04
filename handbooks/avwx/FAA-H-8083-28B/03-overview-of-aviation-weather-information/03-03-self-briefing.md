@@ -52,6 +52,10 @@ The FAA’s Aviation Weather Cameras website can be found in Appendix G. The web
 progressive web application standards that enables an application-level experience on certain mobile
 devices. See Section 24.9 for additional information.
 
-<div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-3-3-00-untitled.html">
-<table><thead><tr><th>FSS specialists are qualified and certified as Pilot Weather Briefers by the FAA. They are not authorized</th><th></th></tr></thead><tbody><tr><td>to make original forecasts but are certified to translate and interpret available weather information directly</td><td></td></tr><tr><td>into terms describing the weather conditions that can be expected at the departure, along the route of flight,</td><td></td></tr><tr><td>and at the destination.</td><td></td></tr></tbody></table>
-</div>
+| FSS specialists are qualified and certified as Pilot Weather Briefers by the FAA. They are not authorized |
+| --- |
+| to make original forecasts but are certified to translate and interpret available weather information directly |
+| into terms describing the weather conditions that can be expected at the departure, along the route of flight, |
+| and at the destination. |
+
+<a class="handbook-table-source" href="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-3-3-3-00-untitled.html">Open original</a>

@@ -28,8 +28,4 @@ clear obstacles at the end of the runway. During a landing, a longer landing rol
 aircraft will touch down at a higher groundspeed. Wind should always be considered in takeoff performance
 planning.
 
-![Figure 10-22. Crosswind Climb Flightpath 
-10.7.2 Gust 
-A gust is a fluctuation of wind speed with variations of 10 knots (kt) or more between peaks and lulls. 
-Even if the airplane is oriented into the wind, gusts during takeoff and landing cause airspeed fluctuations 
-that can cause problems for pilots. A gust increas](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-7-2-00-crosswind-climb-flightpath-10-7-2-gust-a-gust-is.png)
+![Figure 10-22. Crosswind Climb Flightpath](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-7-2-00-crosswind-climb-flightpath.png)

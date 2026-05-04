@@ -137,21 +137,11 @@ currents within them. Water boiling in a pot is an example of convection. Becaus
 conductor, convection plays a vital role in the Earth’s atmospheric heat transfer process. Figure 5-5
 illustrates examples of various heat transfer processes.
 
-![Figure 5-2. Radiation Example 
-All objects emit (radiate) energy as the heat energy within the object is converted to radiation energy. This 
-transmitted radiation passes through entities such as air, water, or space. Along the way, the radiation can 
-be reflected, which occurs when the wave energy changes direction wh](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-1-00-radiation-example-all-objects-emit-radiate-energ.png)
+![Figure 5-2. Radiation Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-1-00-radiation-example.png)
 
-![Figure 5-3. Temperature’s Effect on Radiation Wavelength 
-Some of the solar radiation that reaches the Earth’s surface is radiated back into the atmosphere to become 
-heat energy. Dark-colored objects such as asphalt absorb more of the radiant energy and warm faster than 
-light-colored objects. Dark objects also radiat](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-1-01-temperature-s-effect-on-radiation-wavelength-som.png)
+![Figure 5-3. Temperature’s Effect on Radiation Wavelength](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-1-01-temperature-s-effect-on-radiation-wavelength.png)
 
-![Figure 5-4. Solar Zenith Angle 
-5.6.2 Conduction 
-Conduction is the transfer of energy (including heat) by molecular activity from one substance to another 
-in contact with or through a substance. Heat always flows from the warmer substance to the colder 
-substance. The rate of heat transfer is greater with larger temp](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-2-00-solar-zenith-angle-5-6-2-conduction-conduction-i.png)
+![Figure 5-4. Solar Zenith Angle](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-2-00-solar-zenith-angle.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-5-6-00-heat-thermal-conductivity-of-various-substances-.html">
 <table><caption>Table 5-3. Heat (Thermal) Conductivity of Various Substances 
@@ -170,5 +160,5 @@ Solid
 250 
 Iron 
 Solid 
-80</caption><thead><tr><th>Material</th><th></th><th>Phase</th><th></th><th>Heat (Thermal)</th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td>Conductivity (W m-1 K-1)</td><td></td></tr><tr><td>Silver</td><td></td><td>Solid</td><td>429</td><td></td><td></td></tr><tr><td>Copper</td><td></td><td>Solid</td><td>401</td><td></td><td></td></tr><tr><td>Aluminum</td><td></td><td>Solid</td><td>250</td><td></td><td></td></tr><tr><td>Iron</td><td></td><td>Solid</td><td>80</td><td></td><td></td></tr><tr><td>Sand (saturated)</td><td></td><td>Solid</td><td>2.7</td><td></td><td></td></tr><tr><td>Water (ice)</td><td></td><td>Solid (0 °C)</td><td>2.18</td><td></td><td></td></tr><tr><td>Sandstone</td><td></td><td>Solid</td><td>1.7</td><td></td><td></td></tr><tr><td>Limestone</td><td></td><td>Solid</td><td>1.26–1.33</td><td></td><td></td></tr><tr><td>Glass</td><td></td><td>Solid</td><td>1.05</td><td></td><td></td></tr><tr><td>Water (liquid)</td><td></td><td>Liquid</td><td>0.58</td><td></td><td></td></tr><tr><td>Sand (dry)</td><td></td><td>Solid</td><td>0.35</td><td></td><td></td></tr><tr><td>Soil</td><td></td><td>Solid</td><td>0.17–1.13</td><td></td><td></td></tr><tr><td>Wood (oak)</td><td></td><td>Solid</td><td>0.17</td><td></td><td></td></tr><tr><td>Wood (balsa)</td><td></td><td>Solid</td><td>0.055</td><td></td><td></td></tr><tr><td>Snow</td><td></td><td>Solid (&lt;0 °C)</td><td>0.05–0.25</td><td></td><td></td></tr><tr><td>Air</td><td></td><td>Gas</td><td>0.024</td><td></td><td></td></tr><tr><td>Water (steam)</td><td></td><td>Gas (125 °C)</td><td>0.016</td><td></td><td></td></tr><tr><td></td><td>All measurements are at 25 °C unless otherwise noted.</td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Note: 1 K equals -272.15 °C.</td><td></td><td></td><td></td><td></td></tr></tbody></table>
+80</caption><thead><tr><th>Material</th><th></th><th>Phase</th><th></th><th>Heat (Thermal)</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td>Conductivity (W m-1 K-1)</td></tr><tr><td>Silver</td><td></td><td>Solid</td><td>429</td><td></td></tr><tr><td>Copper</td><td></td><td>Solid</td><td>401</td><td></td></tr><tr><td>Aluminum</td><td></td><td>Solid</td><td>250</td><td></td></tr><tr><td>Iron</td><td></td><td>Solid</td><td>80</td><td></td></tr><tr><td>Sand (saturated)</td><td></td><td>Solid</td><td>2.7</td><td></td></tr><tr><td>Water (ice)</td><td></td><td>Solid (0 °C)</td><td>2.18</td><td></td></tr><tr><td>Sandstone</td><td></td><td>Solid</td><td>1.7</td><td></td></tr><tr><td>Limestone</td><td></td><td>Solid</td><td>1.26–1.33</td><td></td></tr><tr><td>Glass</td><td></td><td>Solid</td><td>1.05</td><td></td></tr><tr><td>Water (liquid)</td><td></td><td>Liquid</td><td>0.58</td><td></td></tr><tr><td>Sand (dry)</td><td></td><td>Solid</td><td>0.35</td><td></td></tr><tr><td>Soil</td><td></td><td>Solid</td><td>0.17–1.13</td><td></td></tr><tr><td>Wood (oak)</td><td></td><td>Solid</td><td>0.17</td><td></td></tr><tr><td>Wood (balsa)</td><td></td><td>Solid</td><td>0.055</td><td></td></tr><tr><td>Snow</td><td></td><td>Solid (&lt;0 °C)</td><td>0.05–0.25</td><td></td></tr><tr><td>Air</td><td></td><td>Gas</td><td>0.024</td><td></td></tr><tr><td>Water (steam)</td><td></td><td>Gas (125 °C)</td><td>0.016</td><td></td></tr><tr><td></td><td>All measurements are at 25 °C unless otherwise noted.</td><td></td><td></td><td></td></tr><tr><td></td><td>Note: 1 K equals -272.15 °C.</td><td></td><td></td><td></td></tr></tbody></table>
 </div>

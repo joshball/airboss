@@ -50,14 +50,6 @@ CAPE is directly related to the maximum potential vertical speed within an updra
 indicate the potential for stronger updrafts. Observed values in thunderstorm environments often
 exceed 1,000 J/kg and in extreme cases may exceed 5,000 J/kg.
 
-![Figure 13-8. Diurnal Temperature Variation Effects on Stability 
-13.5 Measurements of Stability 
-Several stability indices and other quantities exist that evaluate atmospheric stability and the potential for 
-convective storms. The most common of these are Lifted Index (LI) and Convective Available Potential 
-Energy (C](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-4-3-00-diurnal-temperature-variation-effects-on-stabili.png)
+![Figure 13-8. Diurnal Temperature Variation Effects on Stability](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-4-3-00-diurnal-temperature-variation-effects-on-stabili.png)
 
-![Figure 13-9. Lifted Index Example 
-13.5.2 Convective Available Potential Energy (CAPE) 
-CAPE is the maximum amount of energy available to an ascending air parcel for convection. CAPE is 
-represented on a sounding by the area enclosed between the environmental temperature profile and the path 
-of a rising air parcel ove](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-5-1-00-lifted-index-example-13-5-2-convective-available.png)
+![Figure 13-9. Lifted Index Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-5-1-00-lifted-index-example.png)

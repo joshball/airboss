@@ -27,15 +27,6 @@ The altimeter is essentially an aneroid barometer. The difference is the scale. 
 read increments of altitude rather than units of pressure. The standard for graduating the altimeter is the
 standard atmosphere.
 
-![Figure 8-10. Temperature’s Effects on Density 
-In the atmosphere, temperature has the most effect on density in the horizontal direction; that is, with 
-horizontal changes of location (e.g., New York City versus Miami), temperature has the greatest effect on 
-density. 
-8.3.5 Water Vapor’s Effects on Density 
-Density of](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-3-5-00-temperature-s-effects-on-density-in-the-atmosphe.png)
+![Figure 8-10. Temperature’s Effects on Density](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-3-5-00-temperature-s-effects-on-density.png)
 
-![Figure 8-11. Water Vapor’s Effects on Density 
-8.4 Altimetry 
-The altimeter is essentially an aneroid barometer. The difference is the scale. The altimeter is graduated to 
-read increments of altitude rather than units of pressure. The standard for graduating the altimeter is the 
-standard atmosphere.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-3-5-01-water-vapor-s-effects-on-density-8-4-altimetry-t.png)
+![Figure 8-11. Water Vapor’s Effects on Density](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-3-5-01-water-vapor-s-effects-on-density.png)

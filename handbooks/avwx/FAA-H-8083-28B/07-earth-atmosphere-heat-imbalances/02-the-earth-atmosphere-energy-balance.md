@@ -31,9 +31,4 @@ it would if there was no atmosphere. The average surface temperature of the Moon
 atmosphere, is -18 °C (0 °F). By contrast, the average surface temperature of the Earth is 15 °C (59 °F).
 This heating effect is called the greenhouse effect.
 
-![Figure 7-1. When solar 
-radiation reaches the Earth, some is reflected back to space by air (eight percent), clouds (17 percent), or 
-the surface (six percent). Some is absorbed by water vapor/dust/ozone (19 percent) or by clouds 
-(four percent). The remainder is absorbed by the Earth’s surface (46 percent). 
- 
-Figure](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-2-00-when-solar-radiation-reaches-the-earth-some-is-r.png)
+![radiation) and outgoing energy from the Earth (terrestrial radiation), as seen in Figure 7-1. When solar  radiation reaches the Earth, some is reflected back to space by air (eight percent), clouds (17 percent), or the surface (six percent). Some is absorbed by water vapor/dust/ozone (19 percent) or by clouds (four per](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-2-00-when-solar-radiation-reaches-the-earth-some-is-r.png)

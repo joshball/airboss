@@ -45,13 +45,6 @@ breezes (see Figure 10-15). A narrow peninsula or island is generally an area of
 development during the late morning or early afternoon. This is because the sea breezes that formed along
 opposing shores merge near the center of the peninsula or island.
 
-![Figure 10-13. Sea Breeze 
-Air above the land becomes warmer (less dense) than air above the water. This is because land heats up 
-faster than water. Low-level pressure gradients develop with lower pressure over the warmer land and 
-higher pressure over the cooler water. 
-Low-level winds develop in the direction of the](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-1-00-sea-breeze-air-above-the-land-becomes-warmer-les.png)
+![Figure 10-13. Sea Breeze](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-1-00-sea-breeze.png)
 
-![Figure 10-14. Sea Breeze Front 
-A sea breeze front’s position and movement are influenced by coastline shape, low-level wind direction 
-and speed, and temperature difference between land and sea surface. This temperature difference can be 
-affected by the presence of cloud cover over land and the diurnal cycle. The dep](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-1-01-sea-breeze-front-a-sea-breeze-front-s-position-a.png)
+![Figure 10-14. Sea Breeze Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-1-01-sea-breeze-front.png)

@@ -22,7 +22,4 @@ valleys. Air in contact with the sloping terrain cools faster than air above the
 sloping terrain is higher than over the valleys (along a horizontal reference). Cooler air over the sloping
 terrain is denser than warmer air over the valley.
 
-![Figure 10-20. Mountain-Plains Wind System 
-Pressure gradients develop (along a horizontal reference) with lower pressure over the warmer sloping 
-terrain and higher pressure over the cooler plains. Winds develop in the direction of the PGF. Thus, the 
-wind blows from the plains up the mountain slopes. There is a weak r](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-6-00-mountain-plains-wind-system-pressure-gradients-d.png)
+![Figure 10-20. Mountain-Plains Wind System](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-6-00-mountain-plains-wind-system.png)

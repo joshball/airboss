@@ -67,7 +67,4 @@ mean? It means that within the lowest 2,000 ft, the wind speed and/or direction 
 200-ft layer (see Figure 19-8). Non-convective LLWS is commonly associated with passing frontal systems,
 temperature inversions, and strong upper-level winds (greater than 25 kt).
 
-![Figure 19-7. Wind Shear Example 
-It is important to remember that wind shear can affect any flight at any altitude (e.g., at upper levels near 
-jet steams or near the ground due to convection). Wind shear can subject an aircraft to violent updrafts and 
-downdrafts, as well as abrupt changes to the horizontal movement o](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-4-00-wind-shear-example-it-is-important-to-remember-t.png)
+![Figure 19-7. Wind Shear Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-4-00-wind-shear-example.png)

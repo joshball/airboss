@@ -144,8 +144,4 @@ they strike the snow surface from many angles. The diffused light then reflects 
 times between the snow and the cloud, eliminating all shadows. The result is a loss of depth perception.
 Buildings, people, and dark-colored objects appear to float in the air, and the horizon disappears.
 
-![Figure 21-1. The Arctic Circle 
-21.2 Climate, Air Masses, and Fronts 
-There are a number of factors that influence Arctic climate. Climate of any region, especially in the Arctic, 
-is largely determined by the amount of energy received from the Sun; however, local characteristics of the 
-area, such as mountains and ice](/handbooks/avwx/FAA-H-8083-28B/figures/fig-21-2-1-00-the-arctic-circle-21-2-climate-air-masses-and-fr.png)
+![Figure 21-1. The Arctic Circle](/handbooks/avwx/FAA-H-8083-28B/figures/fig-21-2-1-00-the-arctic-circle.png)

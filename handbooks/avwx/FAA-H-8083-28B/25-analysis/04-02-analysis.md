@@ -125,18 +125,11 @@ Table 25-2 provides the most common weather chart symbols. In the surface pressu
 1  4
 1  4
 
-![Figure 25-1. Weather Observation Sources 
-25.2.2 Analysis 
-Analysis is the drawing and interpretation of the patterns of various elements on a weather chart. It is an 
-essential part of the forecast process. If meteorologists do not know what is currently occurring, it is nearly 
-impossible to predict what will happen](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-1-00-weather-observation-sources-25-2-2-analysis-anal.png)
+![Figure 25-1. Weather Observation Sources](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-1-00-weather-observation-sources.png)
 
 ![Figure 25-2. Analysis Procedure Step 1: Determine the Optimal Contour Interval and Values to be Analyzed](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-2-01-analysis-procedure-step-1-determine-the-optimal-.png)
 
-![Figure 25-3. Analysis Procedure Step 2: Draw the Isopleths and Extrema 
-25.2.2.1.3 Step 3: Identify Significant Weather Features 
-The third (and final) step is to interpret significant weather features. The conventional labels for extrema 
-are H (high) and L (low) for pressure and height, W (warm) and K (cold) for temp](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-2-01-analysis-procedure-step-1-determine-the-optimal-.png)
+![Figure 25-3. Analysis Procedure Step 2: Draw the Isopleths and Extrema](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-2-01-analysis-procedure-step-1-determine-the-optimal-.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-25-4-2-00-common-isopleths-isopleth-variable-definition-is.html">
 <table><caption>Table 25-1. Common Isopleths 
@@ -149,7 +142,7 @@ A line connecting points of equal or constant pressure.
 Contour Line (also 
 called Isoheight) 
 Height 
-A line of consta</caption><thead><tr><th></th><th>Isopleth</th><th></th><th></th><th>Variable</th><th></th><th></th><th>Definition</th><th></th></tr></thead><tbody><tr><td>Isobar</td><td></td><td></td><td>Pressure</td><td></td><td></td><td>A line connecting points of equal or constant pressure.</td><td></td><td></td></tr><tr><td>Contour Line (also
+A line of consta</caption><thead><tr><th></th><th>Isopleth</th><th></th><th></th><th>Variable</th><th></th><th></th><th>Definition</th></tr></thead><tbody><tr><td>Isobar</td><td></td><td></td><td>Pressure</td><td></td><td></td><td>A line connecting points of equal or constant pressure.</td><td></td></tr><tr><td>Contour Line (also
 called Isoheight)</td><td></td><td></td><td>Height</td><td></td><td></td><td>A line of constant elevation above MSL of a defined surface,
-typically a constant-pressure surface.</td><td></td><td></td></tr><tr><td>Isotherm</td><td></td><td></td><td>Temperature</td><td></td><td></td><td>A line connecting points of equal or constant temperature.</td><td></td><td></td></tr><tr><td>Isotach</td><td></td><td></td><td>Wind Speed</td><td></td><td></td><td>A line connecting points of equal wind speed.</td><td></td><td></td></tr><tr><td>Isohume</td><td></td><td></td><td>Humidity</td><td></td><td></td><td>A line drawn through points of equal humidity.</td><td></td><td></td></tr><tr><td>Isodrosotherm</td><td></td><td></td><td>Dewpoint</td><td></td><td></td><td>A line connecting points of equal dewpoint.</td><td></td><td></td></tr></tbody></table>
+typically a constant-pressure surface.</td><td></td></tr><tr><td>Isotherm</td><td></td><td></td><td>Temperature</td><td></td><td></td><td>A line connecting points of equal or constant temperature.</td><td></td></tr><tr><td>Isotach</td><td></td><td></td><td>Wind Speed</td><td></td><td></td><td>A line connecting points of equal wind speed.</td><td></td></tr><tr><td>Isohume</td><td></td><td></td><td>Humidity</td><td></td><td></td><td>A line drawn through points of equal humidity.</td><td></td></tr><tr><td>Isodrosotherm</td><td></td><td></td><td>Dewpoint</td><td></td><td></td><td>A line connecting points of equal dewpoint.</td><td></td></tr></tbody></table>
 </div>

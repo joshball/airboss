@@ -66,25 +66,10 @@ When ducting occurs, the radar beam will hit the surface of the Earth, causing s
 to backscatter. This often leads to false echoes, also known as anomalous propagation (AP), to appear in
 the radar display.
 
-![Figure 15-7. Beam Resolution Comparison Between WSR-88D and Aircraft Weather Radar 
-In the example above, the targets (thunderstorms) are at the same range in azimuths for both the aircraft 
-and WSR-88D radar. At 10 NM, the beam width is small enough for both the WSR-88D and aircraft radar 
-to display the thunderstorms](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-7-00-beam-resolution-comparison-between-wsr-88d-and-a.png)
+![Figure 15-7. Beam Resolution Comparison Between WSR-88D and Aircraft Weather Radar](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-7-00-beam-resolution-comparison-between-wsr-88d-and-a.png)
 
-![Figure 15-8. Normal Refraction 
-15.2.7.2 Subrefraction 
-Atmospheric conditions are never normal or standard. Sometimes, the density of the atmosphere decreases 
-with height at a more-than-normal rate (actual density is less than normal). When this occurs, the radar 
-beam bends less than normal and climbs skyward. This](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-7-01-normal-refraction-15-2-7-2-subrefraction-atmosph.png)
+![Figure 15-8. Normal Refraction](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-7-01-normal-refraction.png)
 
-![Figure 15-9. Subrefraction 
-15.2.7.3 Superrefraction 
-Conversely, sometimes the density of the atmosphere decreases with height at a less-than-normal rate 
-(actual density is greater than normal) or even increases with height. When this occurs, the radar beam will 
-bend more than normal toward the Earth’s surface. This](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-7-02-subrefraction-15-2-7-3-superrefraction-conversel.png)
+![Figure 15-9. Subrefraction](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-7-02-subrefraction.png)
 
-![Figure 15-10. Superrefraction 
-15.2.7.4 Ducting 
-If the atmospheric condition that causes superrefraction bends the beam equal to, or greater than, the Earth’s 
-curvature, then a condition called ducting (or trapping) occurs (see Figure 15-11). 
-When ducting occurs, the radar beam will hit the surface of the Earth, cau](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-7-03-superrefraction-15-2-7-4-ducting-if-the-atmosphe.png)
+![Figure 15-10. Superrefraction](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-7-03-superrefraction.png)

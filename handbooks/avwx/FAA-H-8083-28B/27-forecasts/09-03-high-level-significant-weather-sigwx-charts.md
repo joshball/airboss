@@ -119,29 +119,13 @@ Tropical cyclones (i.e., with surface wind speed 34 kt or greater) are depicted 
 with the storm’s name positioned adjacent to the symbol. Cumulonimbus clouds meeting chart criteria are
 identified and characterized relative to each storm.
 
-![Figure 27-17. High-Level SIGWX Chart—Example 
-27.9.3.1 Issuance 
-In accordance with the WAFS of ICAO, High-Level SIGWX forecasts are provided for the en route portion 
-of international flights.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-00-high-level-sigwx-chart-example-27-9-3-1-issuance.png)
+![Figure 27-17. High-Level SIGWX Chart—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-00-high-level-sigwx-chart-example.png)
 
-![Figure 27-18. High-Level SIGWX Chart Turbulence—Examples 
-27.9.3.2.3 Moderate or Severe Icing 
-Moderate or severe icing (outside of thunderstorms) above FL240 is rare and is generally not forecasted on 
-High-Level SIGWX Charts. 
-27.9.3.2.4 Jet Streams 
-A jet stream axis with a wind speed of more than 80 kt is identifie](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-01-high-level-sigwx-chart-turbulence-examples-27-9-.png)
+![Figure 27-18. High-Level SIGWX Chart Turbulence—Examples](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-01-high-level-sigwx-chart-turbulence-examples.png)
 
-![Figure 27-19. High-Level SIGWX Chart Jet Stream—Example 
-27.9.3.2.5 Tropopause Heights 
-Tropopause heights are plotted at selected locations on the chart. They are enclosed by rectangles and 
-plotted in hundreds of feet MSL (see Figure 27-20). Centers of high (H) and low (L) tropopause heights 
-are enclosed by polygons](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-02-high-level-sigwx-chart-jet-stream-example-27-9-3.png)
+![Figure 27-19. High-Level SIGWX Chart Jet Stream—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-02-high-level-sigwx-chart-jet-stream-example.png)
 
-![Figure 27-20. High-Level SIGWX Chart Tropopause Height—Examples 
-27.9.3.2.6 Tropical Cyclones 
-Tropical cyclones (i.e., with surface wind speed 34 kt or greater) are depicted by the symbol in Figure 27-21 
-with the storm’s name positioned adjacent to the symbol. Cumulonimbus clouds meeting chart criteria are 
-identifie](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-03-high-level-sigwx-chart-tropopause-height-example.png)
+![Figure 27-20. High-Level SIGWX Chart Tropopause Height—Examples](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-03-high-level-sigwx-chart-tropopause-height-example.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-9-3-00-icing-and-turbulence-intensity-symbols-intensity.html">
 <table><caption>Table 27-12. Icing and Turbulence Intensity Symbols 
@@ -154,7 +138,7 @@ Moderate
 Severe 
 27.9.3 High-Level Significant Weather (SIGWX) Charts 
 High-Level SIGWX Charts (see</caption><thead><tr><th></th><th>Icing
-Symbol</th><th>Turbulence</th></tr></thead><tbody><tr><td>Intensity</td><td></td><td></td></tr><tr><td></td><td></td><td>Symbol</td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td>Moderate</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td>Severe</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table>
+Symbol</th><th>Turbulence</th></tr></thead><tbody><tr><td>Intensity</td><td></td><td></td></tr><tr><td></td><td></td><td>Symbol</td></tr><tr><td>Moderate</td><td></td><td></td></tr><tr><td>Severe</td><td></td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-9-3-01-high-level-sigwx-forecast-issuance-schedule-issu.html">

@@ -33,7 +33,4 @@ cooler air, and rises. Through this process, a large bubble of warm air called a
 heat energy upwards (see Figure 7-3). Cooler, denser air sinks toward the ground to replace the rising air.
 This cooler air becomes heated in turn, rises, and repeats the cycle.
 
-![Figure 7-2. Greenhouse Effect on Nighttime Radiational Cooling 
-7.3 Heat Imbalances Between Earth’s Surface and the Atmosphere 
-The Earth-atmosphere energy balance numbers (see Figure 7-1) indicate that both sensible heat (seven 
-percent) and latent heat (24 percent) processes transfer heat from the Earth’s surface int](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-3-1-00-greenhouse-effect-on-nighttime-radiational-cooli.png)
+![Figure 7-2. Greenhouse Effect on Nighttime Radiational Cooling](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-3-1-00-greenhouse-effect-on-nighttime-radiational-cooli.png)

@@ -235,9 +235,9 @@ Product identifier
 100130 
 Issuance date/time UTC 
 2 
-SI</caption><thead><tr><th></th><th>Content</th><th></th></tr></thead><tbody><tr><td>Line</td><td></td><td>Description</td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>SFO</td><td>SIGMET area identifier</td></tr><tr><td>1</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>R</td><td>SIGMET series</td></tr><tr><td></td><td>UWS</td><td>Product identifier</td></tr><tr><td></td><td>100130</td><td>Issuance date/time UTC</td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>SIGMET</td><td>Product type</td></tr><tr><td>2</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>ROMEO</td><td>SIGMET series name</td></tr><tr><td></td><td>1</td><td>Series issuance number</td></tr><tr><td></td><td>VALID UNTIL 100530</td><td>Ending valid date/time UTC</td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>OR WA</td><td>Phenomenon location (states)</td></tr><tr><td>3</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>FROM SEA TO PDT TO EUG TO SEA</td><td>Phenomenon location
-(high-altitude VOR coordinates)</td></tr><tr><td>4</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>SEV TURB BTN FL280 AND FL350.
-CONDS CONTG BYD 1000Z</td><td>Phenomenon description</td></tr><tr><td>5</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table>
+SI</caption><thead><tr><th></th><th>Content</th><th></th></tr></thead><tbody><tr><td>Line</td><td></td><td>Description</td></tr><tr><td></td><td>SFO</td><td>SIGMET area identifier</td></tr><tr><td>1</td><td></td><td></td></tr><tr><td></td><td>R</td><td>SIGMET series</td></tr><tr><td></td><td>UWS</td><td>Product identifier</td></tr><tr><td></td><td>100130</td><td>Issuance date/time UTC</td></tr><tr><td></td><td>SIGMET</td><td>Product type</td></tr><tr><td>2</td><td></td><td></td></tr><tr><td></td><td>ROMEO</td><td>SIGMET series name</td></tr><tr><td></td><td>1</td><td>Series issuance number</td></tr><tr><td></td><td>VALID UNTIL 100530</td><td>Ending valid date/time UTC</td></tr><tr><td></td><td>OR WA</td><td>Phenomenon location (states)</td></tr><tr><td>3</td><td></td><td></td></tr><tr><td></td><td>FROM SEA TO PDT TO EUG TO SEA</td><td>Phenomenon location
+(high-altitude VOR coordinates)</td></tr><tr><td>4</td><td></td><td></td></tr><tr><td></td><td>SEV TURB BTN FL280 AND FL350.
+CONDS CONTG BYD 1000Z</td><td>Phenomenon description</td></tr><tr><td>5</td><td></td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-26-2-4-01-decoding-a-convective-sigmet-for-the-conus-line-.html">
@@ -253,11 +253,11 @@ Region (East, Central, or West)
 WST 
 Product identifier 
 221855 
-Issuance date/tim</caption><thead><tr><th>Line</th><th>Content</th><th>Description</th></tr></thead><tbody><tr><td>1</td><td>MKC</td><td>Issuing office (AWC)</td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>C</td><td>Region (East, Central, or West)</td></tr><tr><td></td><td>WST</td><td>Product identifier</td></tr><tr><td></td><td>221855</td><td>Issuance date/time (DDHHMM)</td></tr><tr><td>2</td><td>CONVECTIVE SIGMET</td><td>Product type</td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>20</td><td>Issuance number</td></tr><tr><td></td><td>C</td><td>Region (East, Central, or West)</td></tr><tr><td>3</td><td>VALID UNTIL 2055Z</td><td>Valid ending time (UTC)</td></tr><tr><td>4</td><td>ND SD</td><td>States/areas affected</td></tr><tr><td>5</td><td>FROM 90W MOT-GFK-ABR-90W MOT</td><td>Phenomenon location (high-altitude
-VOR coordinates)</td></tr><tr><td></td><td></td><td></td></tr><tr><td>6</td><td>INTSFYG AREA SEV TS MOVG FROM
+Issuance date/tim</caption><thead><tr><th>Line</th><th>Content</th><th>Description</th></tr></thead><tbody><tr><td>1</td><td>MKC</td><td>Issuing office (AWC)</td></tr><tr><td></td><td>C</td><td>Region (East, Central, or West)</td></tr><tr><td></td><td>WST</td><td>Product identifier</td></tr><tr><td></td><td>221855</td><td>Issuance date/time (DDHHMM)</td></tr><tr><td>2</td><td>CONVECTIVE SIGMET</td><td>Product type</td></tr><tr><td></td><td>20</td><td>Issuance number</td></tr><tr><td></td><td>C</td><td>Region (East, Central, or West)</td></tr><tr><td>3</td><td>VALID UNTIL 2055Z</td><td>Valid ending time (UTC)</td></tr><tr><td>4</td><td>ND SD</td><td>States/areas affected</td></tr><tr><td>5</td><td>FROM 90W MOT-GFK-ABR-90W MOT</td><td>Phenomenon location (high-altitude
+VOR coordinates)</td></tr><tr><td>6</td><td>INTSFYG AREA SEV TS MOVG FROM
 24045KT. TOPS ABV FL450. WIND
 GUSTS TO 60KTS RPRTD.
 TORNADOES…HAIL TO 2 IN… WIND
 GUSTS TO 65KTS POSS ND PTN</td><td>Phenomenon description,
-movement, cloud top, remarks</td></tr><tr><td></td><td></td><td></td></tr></tbody></table>
+movement, cloud top, remarks</td></tr></tbody></table>
 </div>

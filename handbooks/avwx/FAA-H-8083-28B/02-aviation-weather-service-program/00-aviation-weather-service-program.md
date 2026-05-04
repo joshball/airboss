@@ -203,10 +203,12 @@ Manual (AIM), Chapter 7, Section 1, Paragraph 7-1-3, Use of Aviation Weather Pro
 additional information pertaining to commercial providers, including the Enhanced Weather Information
 System (EWINS).
 
-<div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-2-00-untitled.html">
-<table><thead><tr><th>Per Title 49 of the United States Code (49 U.S.C.) § 44720, Meteorological Services, the FAA establishes</th><th></th></tr></thead><tbody><tr><td>all requirements for aviation weather reports and forecasts.</td><td></td></tr></tbody></table>
-</div>
+| Per Title 49 of the United States Code (49 U.S.C.) § 44720, Meteorological Services, the FAA establishes |
+| --- |
+| all requirements for aviation weather reports and forecasts. |
+
+<a class="handbook-table-source" href="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-2-00-untitled.html">Open original</a>
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-2-01-untitled.html">
-<table><thead><tr><th>The FAA delivers</th><th>flight services to pilots in the CONUS, Alaska, Hawaii, and Puerto Rico. For pilots in</th><th></th></tr></thead><tbody><tr><td>the CONUS, services are available by phone at 1-800-WX-BRIEF (1-800-992-7433). For pilots in Alaska</td><td></td><td></td></tr><tr><td>call 1-833-AK-BRIEF (1-833-252-7433). Services include, but are not limited to, pre-flight weather</td><td></td><td></td></tr><tr><td>briefings, flight planning, and in-flight advisory services.</td><td></td><td></td></tr></tbody></table>
+<table><thead><tr><th>The FAA delivers</th><th>flight services to pilots in the CONUS, Alaska, Hawaii, and Puerto Rico. For pilots in</th></tr></thead><tbody><tr><td>the CONUS, services are available by phone at 1-800-WX-BRIEF (1-800-992-7433). For pilots in Alaska</td><td></td></tr><tr><td>call 1-833-AK-BRIEF (1-833-252-7433). Services include, but are not limited to, pre-flight weather</td><td></td></tr><tr><td>briefings, flight planning, and in-flight advisory services.</td><td></td></tr></tbody></table>
 </div>

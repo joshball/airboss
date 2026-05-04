@@ -36,7 +36,4 @@ To upgrade a thunderstorm advisory to include severe thunderstorms.
 To upgrade an AIRMET to include isolated severe turbulence or icing. If greater than isolated
 severe turbulence or icing is occurring, then a new CWA should be issued.
 
-![Figure 26-8. CWSU Areas of Responsibility 
-CWAs are valid for up to two hours and may include forecasts of conditions expected to begin within two 
-hours of issuance. If conditions are expected to persist after the advisory’s valid period, a statement to that 
-effect is included in the last line of the text. Additional](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-4-2-00-cwsu-areas-of-responsibility-cwas-are-valid-for-.png)
+![Figure 26-8. CWSU Areas of Responsibility](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-4-2-00-cwsu-areas-of-responsibility.png)

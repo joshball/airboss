@@ -37,8 +37,4 @@ changes. One end of the cell is fixed, while the other end moves the registering
 mechanism magnifies the movement of the cell driving an indicator hand along a scale graduated in
 pressure units.
 
-![Figure 8-1. Air Has Weight 
-8.2.1 Barometer 
-The instrument Torricelli designed to measure pressure was called a barometer. The aneroid barometer is 
-the type most commonly used by meteorologists and the aviation community. 
-Essential features of an aneroid barometer (see Figure 8-2) are a flexible metal cell and the r](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-1-00-air-has-weight-8-2-1-barometer-the-instrument-to.png)
+![Figure 8-1. Air Has Weight](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-1-00-air-has-weight.png)

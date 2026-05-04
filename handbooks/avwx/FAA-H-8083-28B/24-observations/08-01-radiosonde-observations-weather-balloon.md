@@ -59,8 +59,4 @@ an altitude of 100,000 ft. The weather data collected is assigned the observatio
 0000 UTC. Special radiosondes may be launched at select times for various reasons, including when severe
 weather is expected in a region.
 
-![Figure 24-26. Weather Balloon and Radiosonde 
-24.8.1.1 Issuance 
-Weather balloons with radiosondes are launched twice a day worldwide from designated locations at around 
-1100 UTC and 2300 UTC (see Figure 24-27). It takes approximately 90 minutes for the balloon to reach 
-an altitude of 100,000 ft. The weather data col](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-8-1-00-weather-balloon-and-radiosonde-24-8-1-1-issuance.png)
+![Figure 24-25. Water Vapor Satellite Image Data Legend](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-8-1-00-water-vapor-satellite-image-data-legend.png)

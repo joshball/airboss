@@ -183,27 +183,13 @@ The amount of energy associated with latent heat exchange should not be understa
 releases 52 million trillion (5.2 x 1019) joules per day as water vapor condenses into clouds and precipitation.
 This is equivalent to about 40 times the total worldwide energy consumption per day in 2005!
 
-![Figure 6-1. The Hydrologic Cycle 
-6.2.1 Evaporation 
-Evaporation is the phase transition by which a liquid is changed to a vapor (gas). In meteorology, the 
-substance meteorologists are concerned about the most is water, and the primary source is the ocean. On 
-average, about 120 cm (47 in) is evaporated into the atmos](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-2-1-00-the-hydrologic-cycle-6-2-1-evaporation-evaporati.png)
+![Figure 6-1. The Hydrologic Cycle](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-2-1-00-the-hydrologic-cycle.png)
 
-![Figure 6-2. Temperature Effects on Relative Humidity 
-6.5 Dewpoint 
-Dewpoint is the temperature an air parcel must be cooled at constant pressure and constant water vapor 
-pressure to allow the water vapor in the parcel to condense into water (dew). When this temperature is 
-below 0 °C (32 °F), it is sometimes called t](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-4-00-temperature-effects-on-relative-humidity-6-5-dew.png)
+![Figure 6-2. Temperature Effects on Relative Humidity](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-4-00-temperature-effects-on-relative-humidity.png)
 
-![Figure 6-3. Temperature-Dewpoint Spread Effect on Relative Humidity 
-Relative humidity depends on the temperature-dewpoint spread. In Figure 6-3, dewpoint is constant, but 
-temperature decreases from left to right. On the left panel relative humidity is 50 percent, indicating that 
-the air parcel could hold twice as mu](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-7-00-temperature-dewpoint-spread-effect-on-relative-h.png)
+![Figure 6-3. Temperature-Dewpoint Spread Effect on Relative Humidity](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-7-00-temperature-dewpoint-spread-effect-on-relative-h.png)
 
-![Figure 6-4. Latent Heat Transactions When Water Undergoes Phase Transition 
-Heat is exchanged between water and its environment during phase transition. Although the temperature of 
-the environment changes in response, the temperature of the water undergoing the phase transition remains 
-constant until the phase change](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-7-1-00-latent-heat-transactions-when-water-undergoes-ph.png)
+![Figure 6-4. Latent Heat Transactions When Water Undergoes Phase Transition](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-7-1-00-latent-heat-transactions-when-water-undergoes-ph.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-6-00-latent-heat-of-water-at-0-c-latent-heat-type-ene.html">
 <table><caption>Table 6-1. Latent Heat of Water at 0 °C 
@@ -216,5 +202,5 @@ Latent heat of vaporization
 2,501 
 Latent heat of fusion 
 334 
-The amount of ener</caption><thead><tr><th>Latent Heat Type</th><th></th><th>Energy Exchange</th><th></th></tr></thead><tbody><tr><td></td><td></td><td>(J/g)</td><td></td></tr><tr><td>Latent heat of sublimation</td><td>2,834</td><td></td><td></td></tr><tr><td>Latent heat of vaporization</td><td>2,501</td><td></td><td></td></tr><tr><td>Latent heat of fusion</td><td>334</td><td></td><td></td></tr></tbody></table>
+The amount of ener</caption><thead><tr><th>Latent Heat Type</th><th></th><th>Energy Exchange</th></tr></thead><tbody><tr><td></td><td></td><td>(J/g)</td></tr><tr><td>Latent heat of sublimation</td><td>2,834</td><td></td></tr><tr><td>Latent heat of vaporization</td><td>2,501</td><td></td></tr><tr><td>Latent heat of fusion</td><td>334</td><td></td></tr></tbody></table>
 </div>

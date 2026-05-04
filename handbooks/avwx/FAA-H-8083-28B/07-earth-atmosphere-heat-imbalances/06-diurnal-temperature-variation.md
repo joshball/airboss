@@ -35,9 +35,6 @@ The magnitude of diurnal temperature variation is primarily influenced by surfac
 maximized over land, at low latitudes, with a clear sky, dry air, and light wind. Conversely, temperature
 variation is minimized over water, at high latitudes, with a cloudy sky, moist air, and strong wind.
 
-![Figure 7-7. Average Seasonal Temperature Variation in the Northern Hemisphere 
-7.6 Diurnal Temperature Variation 
-Diurnal temperature variation is the daytime maximum and nighttime minimum of air temperature due to 
-variations of insolation caused by the rising and setting of the Sun (i.e., variations of solar zenith a](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-6-00-average-seasonal-temperature-variation-in-the-no.png)
+![Figure 7-7. Average Seasonal Temperature Variation in the Northern Hemisphere](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-6-00-average-seasonal-temperature-variation-in-the-no.png)
 
 ![Figure 7-8. Clear Sky Diurnal Temperature and Radiation Variations Over Land](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-6-01-clear-sky-diurnal-temperature-and-radiation-vari.png)
