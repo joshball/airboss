@@ -1,11 +1,26 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
+import type { BreadcrumbSegment } from '@ab/library';
+import Breadcrumbs from '@ab/library/Breadcrumbs.svelte';
 import ReaderNav from '@ab/library/ReaderNav.svelte';
 import RenderedSection from '@ab/library/RenderedSection.svelte';
 import SourceLinks from '@ab/library/SourceLinks.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
+
+const segments = $derived.by((): BreadcrumbSegment[] => {
+	const trail: BreadcrumbSegment[] = [
+		{ label: 'Flightbag', href: ROUTES.FLIGHTBAG_HOME },
+		{ label: data.reference.title, href: data.links.aimHref },
+		{ label: `Chapter ${data.paragraph.code.split('-')[0]}`, href: data.links.chapterHref },
+	];
+	if (data.section) {
+		trail.push({ label: `§${data.section.code}`, href: data.links.sectionHref });
+	}
+	trail.push({ label: `¶${data.paragraph.code}`, href: null });
+	return trail;
+});
 </script>
 
 <svelte:head>
@@ -22,15 +37,7 @@ let { data }: { data: PageData } = $props();
 			metadata={data.paragraph.metadata}
 		>
 			{#snippet breadcrumb()}
-				<nav aria-label="Breadcrumb" class="crumbs">
-					<a href={ROUTES.FLIGHTBAG_HOME}>Flightbag</a> &raquo;
-					<a href={data.links.aimHref}>{data.reference.title}</a> &raquo;
-					<a href={data.links.chapterHref}>Chapter {data.paragraph.code.split('-')[0]}</a> &raquo;
-					{#if data.section}
-						<a href={data.links.sectionHref}>§{data.section.code}</a> &raquo;
-					{/if}
-					<span>¶{data.paragraph.code}</span>
-				</nav>
+				<Breadcrumbs {segments} />
 				<SourceLinks
 					localPdfHref={data.sourceLinks.localPdfHref}
 					onlineUrl={data.sourceLinks.onlineUrl}
@@ -66,14 +73,6 @@ let { data }: { data: PageData } = $props();
 </div>
 
 <style>
-	:global(.crumbs) {
-		color: var(--ink-muted);
-		font-size: var(--font-size-sm);
-	}
-	:global(.crumbs a) {
-		color: inherit;
-	}
-
 	.reader {
 		display: grid;
 		grid-template-columns: 1fr 18rem;

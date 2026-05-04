@@ -1,5 +1,6 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
+import Breadcrumbs from '@ab/library/Breadcrumbs.svelte';
 import ReaderNav from '@ab/library/ReaderNav.svelte';
 import RenderedSection from '@ab/library/RenderedSection.svelte';
 import SourceLinks from '@ab/library/SourceLinks.svelte';
@@ -9,6 +10,12 @@ let { data }: { data: PageData } = $props();
 
 const hasPreamble = $derived(data.chapter.contentMd.trim().length > 0 || data.figures.length > 0);
 const hasSections = $derived(data.sections.length > 0);
+
+const segments = $derived([
+	{ label: 'Flightbag', href: ROUTES.FLIGHTBAG_HOME },
+	{ label: data.reference.title, href: data.reference.acHref },
+	{ label: `Chapter ${data.chapter.code}`, href: null },
+]);
 </script>
 
 <svelte:head>
@@ -16,11 +23,7 @@ const hasSections = $derived(data.sections.length > 0);
 </svelte:head>
 
 {#if hasSections}
-	<nav aria-label="Breadcrumb" class="crumbs">
-		<a href={ROUTES.FLIGHTBAG_HOME}>Flightbag</a> &raquo;
-		<a href={data.reference.acHref}>{data.reference.title}</a> &raquo;
-		<span>Chapter {data.chapter.code}</span>
-	</nav>
+	<Breadcrumbs {segments} />
 
 	<SourceLinks
 		localPdfHref={data.sourceLinks.localPdfHref}
@@ -71,11 +74,7 @@ const hasSections = $derived(data.sections.length > 0);
 		metadata={data.chapter.metadata}
 	>
 		{#snippet breadcrumb()}
-			<nav aria-label="Breadcrumb" class="crumbs">
-				<a href={ROUTES.FLIGHTBAG_HOME}>Flightbag</a> &raquo;
-				<a href={data.reference.acHref}>{data.reference.title}</a> &raquo;
-				<span>Chapter {data.chapter.code}</span>
-			</nav>
+			<Breadcrumbs {segments} />
 			<SourceLinks
 				localPdfHref={data.sourceLinks.localPdfHref}
 				onlineUrl={data.sourceLinks.onlineUrl}
@@ -92,13 +91,6 @@ const hasSections = $derived(data.sections.length > 0);
 {/if}
 
 <style>
-	:global(.crumbs) {
-		color: var(--ink-muted);
-		font-size: var(--font-size-sm);
-	}
-	:global(.crumbs a) {
-		color: inherit;
-	}
 	.page-header h1 {
 		margin: 0 0 var(--space-md);
 	}

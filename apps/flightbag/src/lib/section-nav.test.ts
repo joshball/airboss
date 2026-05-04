@@ -21,6 +21,7 @@ function row(partial: Partial<ReferenceSectionRow>): ReferenceSectionRow {
 		sourceLocator: '',
 		contentMd: '',
 		contentHash: '',
+		airbossRef: 'airboss-ref:test',
 		hasFigures: false,
 		hasTables: false,
 		metadata: {},

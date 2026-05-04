@@ -1,5 +1,6 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
+import Breadcrumbs from '@ab/library/Breadcrumbs.svelte';
 import SourceLinks from '@ab/library/SourceLinks.svelte';
 import type { PageData } from './$types';
 
@@ -10,11 +11,13 @@ let { data }: { data: PageData } = $props();
 	<title>{data.reference.title} -- Area {data.raw.area} / Task {data.raw.task}</title>
 </svelte:head>
 
-<nav aria-label="Breadcrumb" class="crumbs">
-	<a href={ROUTES.FLIGHTBAG_HOME}>Flightbag</a> &raquo;
-	<a href={data.reference.acsHref}>{data.reference.title}</a> &raquo;
-	<span>Area {data.raw.area} / Task {data.raw.task}</span>
-</nav>
+<Breadcrumbs
+	segments={[
+		{ label: 'Flightbag', href: ROUTES.FLIGHTBAG_HOME },
+		{ label: data.reference.title, href: data.reference.acsHref },
+		{ label: `Area ${data.raw.area} / Task ${data.raw.task}`, href: null },
+	]}
+/>
 
 <SourceLinks
 	localPdfHref={data.sourceLinks.localPdfHref}
@@ -46,14 +49,6 @@ let { data }: { data: PageData } = $props();
 </section>
 
 <style>
-	.crumbs {
-		color: var(--ink-muted);
-		margin-bottom: var(--space-sm);
-		font-size: var(--font-size-sm);
-	}
-	.crumbs a {
-		color: inherit;
-	}
 	.page-header h1 {
 		margin: 0 0 var(--space-xs);
 	}

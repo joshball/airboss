@@ -1,5 +1,6 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
+import Breadcrumbs from '@ab/library/Breadcrumbs.svelte';
 import SourceLinks from '@ab/library/SourceLinks.svelte';
 import type { PageData } from './$types';
 
@@ -10,9 +11,12 @@ let { data }: { data: PageData } = $props();
 	<title>{data.reference.title} -- Flightbag</title>
 </svelte:head>
 
-<nav aria-label="Breadcrumb" class="crumbs">
-	<a href={ROUTES.FLIGHTBAG_HOME}>Flightbag</a> &raquo; <span>{data.reference.title}</span>
-</nav>
+<Breadcrumbs
+	segments={[
+		{ label: 'Flightbag', href: ROUTES.FLIGHTBAG_HOME },
+		{ label: data.reference.title, href: null },
+	]}
+/>
 
 <SourceLinks
 	localPdfHref={data.sourceLinks.localPdfHref}
@@ -57,15 +61,6 @@ let { data }: { data: PageData } = $props();
 {/if}
 
 <style>
-	.crumbs {
-		color: var(--ink-muted);
-		margin-bottom: var(--space-sm);
-		font-size: var(--font-size-sm);
-	}
-	.crumbs a {
-		color: inherit;
-	}
-
 	.page-header {
 		margin-bottom: var(--space-lg);
 	}
