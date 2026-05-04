@@ -14,7 +14,9 @@
  */
 
 import {
+	type AssessmentMethod,
 	CARD_TYPES,
+	type CardKind,
 	type CardType,
 	CONTENT_SOURCES,
 	type ContentSource,
@@ -31,6 +33,13 @@ export interface SeedCard {
 	back: string;
 	domain: Domain;
 	cardType: CardType;
+	/**
+	 * Knowledge-axis kind (evidence-kind-data-layer WP). Optional in the seed
+	 * shape; the seeder defaults to `recall` when omitted, matching the column
+	 * default. Explicit `calculation` cards (e.g. weight-and-balance,
+	 * crosswind-component) flip the partition for mastery aggregation.
+	 */
+	kind?: CardKind;
 	tags: string[];
 	sourceType: ContentSource;
 	sourceRef: string | null;
@@ -56,6 +65,15 @@ export interface SeedScenario {
 	phaseOfFlight: PhaseOfFlight | null;
 	regReferences: string[];
 	nodeId: string | null;
+	/**
+	 * Per-scenario assessment-method tags (evidence-kind-data-layer WP).
+	 * Optional in the seed shape; the seeder defaults to `['scenario']` when
+	 * omitted, matching the column default and today's "every rep is judgment"
+	 * behavior. A hybrid maneuver / decision rep declares
+	 * `['scenario','demonstration']` so the same rep contributes to both
+	 * gates in mastery aggregation.
+	 */
+	assessmentMethods?: readonly AssessmentMethod[];
 }
 
 // -----------------------------------------------------------------------------

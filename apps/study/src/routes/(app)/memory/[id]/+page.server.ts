@@ -20,6 +20,7 @@ import {
 	updateCardSchema,
 } from '@ab/bc-study';
 import {
+	type CARD_KIND_VALUES,
 	CARD_STATUS_VALUES,
 	CARD_STATUSES,
 	type CARD_TYPE_VALUES,
@@ -76,11 +77,13 @@ export const actions: Actions = {
 		const { params, request, locals } = event;
 
 		const form = await request.formData();
+		const rawKindField = form.get('kind');
 		const input = {
 			front: String(form.get('front') ?? ''),
 			back: String(form.get('back') ?? ''),
 			domain: String(form.get('domain') ?? ''),
 			cardType: String(form.get('cardType') ?? ''),
+			kind: rawKindField === null ? undefined : String(rawKindField),
 			tags: parseTags(String(form.get('tags') ?? '')),
 		};
 
@@ -100,6 +103,7 @@ export const actions: Actions = {
 				back: parsed.data.back,
 				domain: parsed.data.domain as (typeof DOMAIN_VALUES)[number],
 				cardType: parsed.data.cardType as (typeof CARD_TYPE_VALUES)[number],
+				kind: parsed.data.kind as (typeof CARD_KIND_VALUES)[number] | undefined,
 				tags: parsed.data.tags,
 			});
 		} catch (err) {

@@ -1,5 +1,5 @@
 /**
- * Per-evidence-kind mastery primitive (evidence-kind-gating WP).
+ * Per-evidence-kind mastery primitive (evidence-kind-gating + evidence-kind-data-layer WPs).
  *
  * Composes on top of the dual-gate model in `knowledge.ts` (cards + reps
  * pillars). Where the dual gate is kind-agnostic, this module decomposes the
@@ -8,33 +8,30 @@
  * tells you which kind is missing rather than collapsing every kind into one
  * boolean.
  *
- * Backing data status (matches the live schema, not the spec's aspirational
- * shape):
- *   - `recall`: aggregated from every card attached to the node. The card
- *     schema does not currently carry a recall vs calculation kind, so the
- *     `recall` gate folds in every card. When `card.kind` lands, the gate
- *     filters by `card.kind = 'recall'` instead.
- *   - `scenario`: aggregated from every rep attempt on a scenario attached to
- *     the node. The scenario schema does not currently carry an
- *     `assessment_methods` column either, so every rep contributes to the
- *     `scenario` gate. When `scenario.assessment_methods` lands, the gate
- *     filters by methods that include `'scenario'`.
- *   - `calculation`, `demonstration`: backing partition data does not exist
- *     yet. Both gates report `not_applicable` until a follow-on data WP adds
- *     `card.kind` and `scenario.assessment_methods`.
- *   - `teaching`: depends on a `'teaching-exercise'` `SESSION_ITEM_KINDS`
- *     value that does not exist yet. Reports `not_applicable` until that
- *     item kind ships and is wired through the session pipeline.
+ * Per-kind partition shape (real, since evidence-kind-data-layer landed):
+ *   - `recall`: cards filtered to `card.kind = 'recall'`, joined to
+ *     `card_state` for the mastered-stability check. Zero recall cards on a
+ *     node => `not_applicable` for that node's recall gate.
+ *   - `calculation`: same as recall but `card.kind = 'calculation'`. Zero
+ *     calc cards => `not_applicable`.
+ *   - `scenario`: reps via `session_item_result` joined to `scenario`,
+ *     where `scenario.assessment_methods @> '["scenario"]'::jsonb`. Hybrid
+ *     scenarios tagged `['scenario','demonstration']` contribute to both
+ *     gates. Zero matching reps => `not_applicable`.
+ *   - `demonstration`: same as scenario but the array contains
+ *     `'demonstration'`. Zero matching => `not_applicable`.
+ *   - `teaching`: `session_item_result` rows with `item_kind =
+ *     'teaching-exercise'` joined to `teaching_exercise.node_id`. Treated
+ *     like reps -- count + accuracy via `computeRepGate`. Zero rows =>
+ *     `not_applicable`.
  *
- * The leaf-mastery gating is meaningful even with these limits: an `S` leaf
- * still demands `[demonstration, scenario]` alternatives, and with the
- * current data only the `scenario` alternative ever reaches `pass`. A learner
- * with recall-only evidence on an `S` leaf reads as not-mastered with
- * `missingKinds=['demonstration', 'scenario']`, which is the user-facing fix
- * this WP exists to deliver. Per-kind decomposition tightens further when
- * the data layer catches up.
+ * `aggregateLeafKindStates` is unchanged in shape; the data behind its
+ * inputs is what got tighter. Existing leaf-mastery semantics (any-of x
+ * all-of with the requires-teaching stack) keep working without edits.
  *
- * See `docs/work-packages/evidence-kind-gating/` for spec / design / tasks.
+ * See:
+ *   docs/work-packages/evidence-kind-gating/   -- gate logic + leaf rollup
+ *   docs/work-packages/evidence-kind-data-layer/ -- partition columns + this wire-up
  */
 
 import {
@@ -42,6 +39,7 @@ import {
 	type ACSTriad,
 	ASSESSMENT_METHODS,
 	type AssessmentMethod,
+	CARD_KINDS,
 	CARD_MASTERY_RATIO_THRESHOLD,
 	CARD_MIN,
 	CARD_STATUSES,
@@ -62,7 +60,15 @@ import { db as defaultDb } from '@ab/db/connection';
 import { and, count, eq, inArray, isNotNull, isNull, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { computeCardGate, computeRepGate } from './knowledge';
-import { card, cardState, scenario, sessionItemResult, syllabusNode, syllabusNodeLink } from './schema';
+import {
+	card,
+	cardState,
+	scenario,
+	sessionItemResult,
+	syllabusNode,
+	syllabusNodeLink,
+	teachingExercise,
+} from './schema';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 
@@ -140,10 +146,29 @@ export function credentialSlugToCertApplicability(slug: string | null | undefine
 // Per-node evidence state
 // ---------------------------------------------------------------------------
 
-interface PerKindCounts {
-	cards: { total: number; mastered: number };
-	reps: { total: number; correct: number };
+interface CardKindCounts {
+	total: number;
+	mastered: number;
+}
+
+interface RepMethodCounts {
+	total: number;
+	correct: number;
 	scenariosAttached: number;
+}
+
+interface PerKindCounts {
+	cardsByKind: Map<string, CardKindCounts>;
+	repsByMethod: Map<string, RepMethodCounts>;
+	teaching: { total: number; correct: number; exercisesAttached: number };
+}
+
+function emptyPerKindCounts(): PerKindCounts {
+	return {
+		cardsByKind: new Map(),
+		repsByMethod: new Map(),
+		teaching: { total: 0, correct: 0, exercisesAttached: 0 },
+	};
 }
 
 /**
@@ -188,28 +213,38 @@ export async function getNodeEvidenceStateMap(
 	if (nodeIds.length === 0) return out;
 	const ids = [...nodeIds];
 
-	// Three independent fan-outs:
-	//   1. Cards attached to each node (recall pillar; calculation cannot be
-	//      partitioned until card.kind ships).
-	//   2. Rep attempts via session_item_result joined to scenario by node id
-	//      (scenario pillar; demonstration cannot be partitioned until
-	//      scenario.assessment_methods ships).
-	//   3. Whether any scenarios are attached at all (drives the
-	//      `not_applicable` fallback for nodes with zero scenarios).
-	const [cardRows, repRows, scenarioRows] = await Promise.all([
+	// Five independent fan-outs:
+	//   1. Cards grouped by (node_id, kind) -- drives recall + calculation gates.
+	//   2. Reps grouped by (scenario.node_id, method) via LATERAL on the
+	//      assessment_methods jsonb array -- drives scenario + demonstration gates.
+	//   3. Per-(node, method) scenario count for the rep gate's "scenarios
+	//      attached" fallback (computeRepGate uses it to distinguish "no
+	//      scenarios authored" from "scenarios authored but no attempts").
+	//   4. Teaching-exercise rep counts joined through teaching_exercise.node_id.
+	//   5. Per-node teaching-exercise count for the same fallback (zero
+	//      teaching exercises authored on a node => teaching=not_applicable).
+	const [cardRows, repRows, scenarioCountRows, teachingRepRows, teachingExerciseCountRows] = await Promise.all([
 		db
 			.select({
 				nodeId: card.nodeId,
+				kind: card.kind,
 				cardsTotal: count(),
 				cardsMastered: sql<number>`sum(case when ${cardState.stability} > ${STABILITY_MASTERED_DAYS} then 1 else 0 end)`,
 			})
 			.from(card)
 			.innerJoin(cardState, and(eq(cardState.cardId, card.id), eq(cardState.userId, card.userId)))
 			.where(and(eq(card.userId, userId), eq(card.status, CARD_STATUSES.ACTIVE), inArray(card.nodeId, ids)))
-			.groupBy(card.nodeId),
+			.groupBy(card.nodeId, card.kind),
+		// LATERAL UNNEST over scenario.assessment_methods (jsonb array). Postgres
+		// `jsonb_array_elements_text` cross joins each scenario row with one
+		// element row per method; group by (scenario.node_id, method) folds
+		// the per-method totals. A hybrid scenario tagged
+		// `['scenario','demonstration']` contributes the same rep attempts to
+		// both gates by design.
 		db
 			.select({
 				nodeId: scenario.nodeId,
+				method: sql<string>`m.value`,
 				repsTotal: count(),
 				repsCorrect: sql<number>`sum(case when ${sessionItemResult.isCorrect} then 1 else 0 end)`,
 			})
@@ -218,6 +253,7 @@ export async function getNodeEvidenceStateMap(
 				scenario,
 				and(eq(scenario.id, sessionItemResult.scenarioId), eq(scenario.userId, sessionItemResult.userId)),
 			)
+			.innerJoin(sql`jsonb_array_elements_text(${scenario.assessmentMethods}) AS m(value)`, sql`true`)
 			.where(
 				and(
 					eq(sessionItemResult.userId, userId),
@@ -227,74 +263,144 @@ export async function getNodeEvidenceStateMap(
 					inArray(scenario.nodeId, ids),
 				),
 			)
-			.groupBy(scenario.nodeId),
+			.groupBy(scenario.nodeId, sql`m.value`),
+		// Per-(node, method) count of scenarios authored against the node.
+		// Drives the rep-gate fallback: a node with zero scenarios tagged
+		// `'demonstration'` reports `demonstration=not_applicable` even if
+		// reps were attempted on a different (recall-tagged?) scenario row.
 		db
-			.select({ nodeId: scenario.nodeId, c: count() })
+			.select({
+				nodeId: scenario.nodeId,
+				method: sql<string>`m.value`,
+				c: count(),
+			})
 			.from(scenario)
-			.where(inArray(scenario.nodeId, ids))
-			.groupBy(scenario.nodeId),
+			.innerJoin(sql`jsonb_array_elements_text(${scenario.assessmentMethods}) AS m(value)`, sql`true`)
+			.where(and(eq(scenario.userId, userId), inArray(scenario.nodeId, ids)))
+			.groupBy(scenario.nodeId, sql`m.value`),
+		// Teaching-exercise reps. session_item_result rows with
+		// item_kind='teaching-exercise' joined to teaching_exercise so the
+		// gate can group by node_id. The shape mirrors the rep query --
+		// computeRepGate handles count + accuracy.
+		db
+			.select({
+				nodeId: teachingExercise.nodeId,
+				repsTotal: count(),
+				repsCorrect: sql<number>`sum(case when ${sessionItemResult.isCorrect} then 1 else 0 end)`,
+			})
+			.from(sessionItemResult)
+			.innerJoin(
+				teachingExercise,
+				and(
+					eq(teachingExercise.id, sessionItemResult.teachingExerciseId),
+					eq(teachingExercise.userId, sessionItemResult.userId),
+				),
+			)
+			.where(
+				and(
+					eq(sessionItemResult.userId, userId),
+					eq(sessionItemResult.itemKind, SESSION_ITEM_KINDS.TEACHING_EXERCISE),
+					isNotNull(sessionItemResult.completedAt),
+					isNull(sessionItemResult.skipKind),
+					inArray(teachingExercise.nodeId, ids),
+				),
+			)
+			.groupBy(teachingExercise.nodeId),
+		// Per-node count of teaching-exercise rows authored against the node.
+		// Zero exercises on a node => teaching=not_applicable, regardless of
+		// whether other reps exist (mirrors the scenario-attached fallback).
+		db
+			.select({ nodeId: teachingExercise.nodeId, c: count() })
+			.from(teachingExercise)
+			.where(and(eq(teachingExercise.userId, userId), inArray(teachingExercise.nodeId, ids)))
+			.groupBy(teachingExercise.nodeId),
 	]);
 
 	const perNode = new Map<string, PerKindCounts>();
-	for (const id of ids) {
-		perNode.set(id, {
-			cards: { total: 0, mastered: 0 },
-			reps: { total: 0, correct: 0 },
-			scenariosAttached: 0,
-		});
-	}
+	for (const id of ids) perNode.set(id, emptyPerKindCounts());
+
 	for (const r of cardRows) {
 		if (!r.nodeId) continue;
-		const existing = perNode.get(r.nodeId);
-		if (existing === undefined) continue;
-		existing.cards = { total: Number(r.cardsTotal ?? 0), mastered: Number(r.cardsMastered ?? 0) };
+		const node = perNode.get(r.nodeId);
+		if (!node) continue;
+		node.cardsByKind.set(r.kind, {
+			total: Number(r.cardsTotal ?? 0),
+			mastered: Number(r.cardsMastered ?? 0),
+		});
 	}
 	for (const r of repRows) {
 		if (!r.nodeId) continue;
-		const existing = perNode.get(r.nodeId);
-		if (existing === undefined) continue;
-		existing.reps = { total: Number(r.repsTotal ?? 0), correct: Number(r.repsCorrect ?? 0) };
+		const node = perNode.get(r.nodeId);
+		if (!node) continue;
+		const existing = node.repsByMethod.get(r.method) ?? { total: 0, correct: 0, scenariosAttached: 0 };
+		existing.total = Number(r.repsTotal ?? 0);
+		existing.correct = Number(r.repsCorrect ?? 0);
+		node.repsByMethod.set(r.method, existing);
 	}
-	for (const r of scenarioRows) {
+	for (const r of scenarioCountRows) {
 		if (!r.nodeId) continue;
-		const existing = perNode.get(r.nodeId);
-		if (existing === undefined) continue;
+		const node = perNode.get(r.nodeId);
+		if (!node) continue;
+		const existing = node.repsByMethod.get(r.method) ?? { total: 0, correct: 0, scenariosAttached: 0 };
 		existing.scenariosAttached = Number(r.c ?? 0);
+		node.repsByMethod.set(r.method, existing);
+	}
+	for (const r of teachingRepRows) {
+		if (!r.nodeId) continue;
+		const node = perNode.get(r.nodeId);
+		if (!node) continue;
+		node.teaching.total = Number(r.repsTotal ?? 0);
+		node.teaching.correct = Number(r.repsCorrect ?? 0);
+	}
+	for (const r of teachingExerciseCountRows) {
+		if (!r.nodeId) continue;
+		const node = perNode.get(r.nodeId);
+		if (!node) continue;
+		node.teaching.exercisesAttached = Number(r.c ?? 0);
 	}
 
 	for (const id of ids) {
-		const counts = perNode.get(id);
-		const cardsTotal = counts?.cards.total ?? 0;
-		const cardsMastered = counts?.cards.mastered ?? 0;
-		const cardsRatio = cardsTotal === 0 ? 0 : cardsMastered / cardsTotal;
-		const repsTotal = counts?.reps.total ?? 0;
-		const repsCorrect = counts?.reps.correct ?? 0;
-		const repsAccuracy = repsTotal === 0 ? 0 : repsCorrect / repsTotal;
-		const scenariosAttached = counts?.scenariosAttached ?? 0;
+		const counts = perNode.get(id) ?? emptyPerKindCounts();
 
-		const recall = computeCardGate(cardsTotal, cardsRatio);
-		const scenarioGate = computeRepGate(repsTotal, repsAccuracy, scenariosAttached);
+		const recall = cardGateForKind(counts.cardsByKind, CARD_KINDS.RECALL);
+		const calculation = cardGateForKind(counts.cardsByKind, CARD_KINDS.CALCULATION);
+		const scenarioGate = repGateForMethod(counts.repsByMethod, ASSESSMENT_METHODS.SCENARIO);
+		const demonstration = repGateForMethod(counts.repsByMethod, ASSESSMENT_METHODS.DEMONSTRATION);
+		const teaching = teachingGate(counts.teaching);
 
 		out.set(id, {
 			nodeId: id,
 			recall,
-			// Backing data does not exist yet (see file header). When card.kind
-			// ships, partition the card query by kind and replace this with the
-			// calculation-card-only gate.
-			calculation: NODE_MASTERY_GATES.NOT_APPLICABLE,
+			calculation,
 			scenario: scenarioGate,
-			// Backing data does not exist yet (see file header). When
-			// scenario.assessment_methods ships, partition the rep query by
-			// method and replace this with the demonstration-only gate.
-			demonstration: NODE_MASTERY_GATES.NOT_APPLICABLE,
-			// Backing data does not exist yet (no 'teaching-exercise' value in
-			// SESSION_ITEM_KINDS). When that item kind ships, query
-			// session_item_result for it and replace this with a real gate.
-			teaching: NODE_MASTERY_GATES.NOT_APPLICABLE,
+			demonstration,
+			teaching,
 		});
 	}
 
 	return out;
+}
+
+function cardGateForKind(byKind: Map<string, CardKindCounts>, kind: AssessmentMethod): GateState {
+	const c = byKind.get(kind);
+	const total = c?.total ?? 0;
+	const mastered = c?.mastered ?? 0;
+	const ratio = total === 0 ? 0 : mastered / total;
+	return computeCardGate(total, ratio);
+}
+
+function repGateForMethod(byMethod: Map<string, RepMethodCounts>, method: AssessmentMethod): GateState {
+	const m = byMethod.get(method);
+	const total = m?.total ?? 0;
+	const correct = m?.correct ?? 0;
+	const accuracy = total === 0 ? 0 : correct / total;
+	const scenariosAttached = m?.scenariosAttached ?? 0;
+	return computeRepGate(total, accuracy, scenariosAttached);
+}
+
+function teachingGate(t: { total: number; correct: number; exercisesAttached: number }): GateState {
+	const accuracy = t.total === 0 ? 0 : t.correct / t.total;
+	return computeRepGate(t.total, accuracy, t.exercisesAttached);
 }
 
 // ---------------------------------------------------------------------------

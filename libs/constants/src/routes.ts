@@ -54,6 +54,8 @@ export const QUERY_PARAMS = {
 	STATUS: 'status',
 	/** Memory-card type filter. */
 	CARD_TYPE: 'type',
+	/** Memory-card knowledge-kind filter (recall vs calculation). evidence-kind-data-layer WP. */
+	CARD_KIND: 'kind',
 	/** Comma-separated tag carry-over ("save and add another" flow). */
 	TAGS: 'tags',
 	/** Free-text search query. */

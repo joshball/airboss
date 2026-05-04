@@ -3,8 +3,8 @@ title: 'Design: Evidence Kind Data Layer'
 product: study
 feature: evidence-kind-data-layer
 type: design
-status: unread
-review_status: pending
+status: read
+review_status: done
 ---
 
 # Design: Evidence Kind Data Layer

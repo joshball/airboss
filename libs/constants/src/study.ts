@@ -228,6 +228,32 @@ export const CARD_TYPE_LABELS: Record<CardType, string> = {
 	[CARD_TYPES.MEMORY_ITEM]: 'Memory item',
 };
 
+/**
+ * Card knowledge-kind axis (evidence-kind-data-layer WP).
+ *
+ * Distinct from `CARD_TYPES` (basic/cloze/...) which describes presentation
+ * form. `CARD_KINDS` describes what knowledge the card tests so the
+ * per-evidence-kind mastery gate (libs/bc/study/src/mastery.ts) can partition
+ * recall vs calculation evidence on a node. Subset of `ASSESSMENT_METHODS` --
+ * cards never carry scenario / demonstration / teaching kinds (those live on
+ * scenarios and teaching-exercises). Values match the corresponding
+ * `ASSESSMENT_METHODS` strings exactly so the partition query is a simple
+ * string compare across both.
+ */
+export const CARD_KINDS = {
+	RECALL: 'recall',
+	CALCULATION: 'calculation',
+} as const;
+
+export type CardKind = (typeof CARD_KINDS)[keyof typeof CARD_KINDS];
+
+export const CARD_KIND_VALUES = Object.values(CARD_KINDS);
+
+export const CARD_KIND_LABELS: Record<CardKind, string> = {
+	[CARD_KINDS.RECALL]: 'Recall',
+	[CARD_KINDS.CALCULATION]: 'Calculation',
+};
+
 export const CONTENT_SOURCES = {
 	PERSONAL: 'personal',
 	COURSE: 'course',
@@ -680,6 +706,15 @@ export type AssessmentMethod = (typeof ASSESSMENT_METHODS)[keyof typeof ASSESSME
 
 export const ASSESSMENT_METHOD_VALUES = Object.values(ASSESSMENT_METHODS);
 
+/**
+ * Default `scenario.assessment_methods` array applied when authoring tools
+ * leave the field unset (evidence-kind-data-layer WP). Matches the column
+ * default (`'["scenario"]'::jsonb`) so the BC-applied default and the schema
+ * default stay in lockstep. Authoring tools that want a different shape pass
+ * an explicit value.
+ */
+export const SCENARIO_DEFAULT_ASSESSMENT_METHODS: readonly AssessmentMethod[] = [ASSESSMENT_METHODS.SCENARIO];
+
 /** Node lifecycle: how much of the seven-phase content model is authored. */
 export const NODE_LIFECYCLES = {
 	/** Metadata + edges only -- no content phases authored. */
@@ -809,6 +844,7 @@ export const SESSION_ITEM_KINDS = {
 	CARD: 'card',
 	REP: 'rep',
 	NODE_START: 'node_start',
+	TEACHING_EXERCISE: 'teaching-exercise',
 } as const;
 
 export type SessionItemKind = (typeof SESSION_ITEM_KINDS)[keyof typeof SESSION_ITEM_KINDS];

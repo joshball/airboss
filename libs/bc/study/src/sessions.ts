@@ -726,6 +726,7 @@ export async function commitSession(
 				cardId: item.kind === SESSION_ITEM_KINDS.CARD ? item.cardId : null,
 				scenarioId: item.kind === SESSION_ITEM_KINDS.REP ? item.scenarioId : null,
 				nodeId: item.kind === SESSION_ITEM_KINDS.NODE_START ? item.nodeId : null,
+				teachingExerciseId: item.kind === SESSION_ITEM_KINDS.TEACHING_EXERCISE ? item.teachingExerciseId : null,
 				reviewId: null,
 				skipKind: null,
 				reasonDetail: item.reasonDetail ?? null,

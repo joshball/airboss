@@ -10,7 +10,10 @@
  */
 
 import {
+	CARD_KIND_VALUES,
+	CARD_KINDS,
 	CARD_STATUSES,
+	type CardKind,
 	type CardStatus,
 	type CardType,
 	CONTENT_SOURCES,
@@ -57,6 +60,21 @@ export class SourceRefRequiredError extends Error {
 	}
 }
 
+/**
+ * Raised when a card-kind value is not in `CARD_KIND_VALUES`. Defensive:
+ * `newCardSchema` / `updateCardSchema` are the primary defense, but the BC
+ * also rejects so cross-BC callers and scripts that bypass the zod schema
+ * still hit a typed failure.
+ */
+export class InvalidCardKindError extends Error {
+	constructor(public readonly kind: string) {
+		super(`Invalid card kind: ${kind}. Expected one of ${CARD_KIND_VALUES.join(', ')}.`);
+		this.name = 'InvalidCardKindError';
+	}
+}
+
+const CARD_KIND_VALUE_SET = new Set<string>(CARD_KIND_VALUES);
+
 /** Full card view that pairs static card data with per-user scheduler state. */
 export interface CardWithState {
 	card: CardRow;
@@ -69,6 +87,12 @@ export interface CreateCardInput {
 	back: string;
 	domain: Domain;
 	cardType: CardType;
+	/**
+	 * Knowledge-axis kind (recall vs calculation). Distinct from cardType
+	 * (presentation form). Drives the per-evidence-kind partition in
+	 * mastery.ts. Defaults to `recall` when omitted.
+	 */
+	kind?: CardKind;
 	tags?: string[];
 	sourceType?: ContentSource;
 	sourceRef?: string | null;
@@ -85,12 +109,14 @@ export interface UpdateCardInput {
 	back?: string;
 	domain?: Domain;
 	cardType?: CardType;
+	kind?: CardKind;
 	tags?: string[];
 }
 
 export interface CardFilters {
 	domain?: Domain;
 	cardType?: CardType;
+	kind?: CardKind;
 	sourceType?: ContentSource;
 	status?: CardStatus | CardStatus[];
 	search?: string;
@@ -107,6 +133,7 @@ export async function createCard(input: CreateCardInput, db: Db = defaultDb): Pr
 		back: input.back,
 		domain: input.domain,
 		cardType: input.cardType,
+		kind: input.kind,
 		tags: input.tags,
 		sourceType: input.sourceType,
 		sourceRef: input.sourceRef,
@@ -115,6 +142,13 @@ export async function createCard(input: CreateCardInput, db: Db = defaultDb): Pr
 	const sourceType = (parsed.sourceType ?? CONTENT_SOURCES.PERSONAL) as ContentSource;
 	if (sourceType !== CONTENT_SOURCES.PERSONAL && !parsed.sourceRef) {
 		throw new SourceRefRequiredError();
+	}
+	const kind = (parsed.kind ?? CARD_KINDS.RECALL) as CardKind;
+	if (!CARD_KIND_VALUE_SET.has(kind)) {
+		// Defensive: the zod schema rejects unknown values upstream, but a
+		// caller bypassing zod (e.g. a script that constructs a CreateCardInput
+		// from raw user input) still hits a typed failure here.
+		throw new InvalidCardKindError(kind);
 	}
 
 	return await db.transaction(async (tx) => {
@@ -132,6 +166,7 @@ export async function createCard(input: CreateCardInput, db: Db = defaultDb): Pr
 				domain: parsed.domain as Domain,
 				tags: parsed.tags ?? [],
 				cardType: parsed.cardType as CardType,
+				kind,
 				sourceType,
 				sourceRef: parsed.sourceRef ?? null,
 				nodeId: input.nodeId ?? null,
@@ -194,6 +229,11 @@ export async function updateCard(
 		if (parsed.back !== undefined) update.back = parsed.back;
 		if (parsed.domain !== undefined) update.domain = parsed.domain as Domain;
 		if (parsed.cardType !== undefined) update.cardType = parsed.cardType as CardType;
+		if (parsed.kind !== undefined) {
+			const kind = parsed.kind as CardKind;
+			if (!CARD_KIND_VALUE_SET.has(kind)) throw new InvalidCardKindError(kind);
+			update.kind = kind;
+		}
 		if (parsed.tags !== undefined) update.tags = parsed.tags;
 
 		const [updated] = await tx
@@ -204,13 +244,15 @@ export async function updateCard(
 
 		// Mark any active `bad-question` snoozes so the re-entry banner fires
 		// the next time this card surfaces in a review. Only triggers on real
-		// content changes (front/back/domain/cardType/tags) -- the whitelist
-		// above already screens out status-only flips.
+		// content changes (front/back/domain/cardType/kind/tags) -- the whitelist
+		// above already screens out status-only flips. `kind` flips reframe the
+		// question (recall vs calculation) so they count as content changes.
 		const contentChanged =
 			parsed.front !== undefined ||
 			parsed.back !== undefined ||
 			parsed.domain !== undefined ||
 			parsed.cardType !== undefined ||
+			parsed.kind !== undefined ||
 			parsed.tags !== undefined;
 		if (contentChanged) {
 			const editedAt = new Date();
@@ -337,6 +379,7 @@ export async function getCards(
 
 	if (filters.domain) clauses.push(eq(card.domain, filters.domain));
 	if (filters.cardType) clauses.push(eq(card.cardType, filters.cardType));
+	if (filters.kind) clauses.push(eq(card.kind, filters.kind));
 	if (filters.sourceType) clauses.push(eq(card.sourceType, filters.sourceType));
 	if (filters.nodeId) clauses.push(eq(card.nodeId, filters.nodeId));
 	if (filters.search && filters.search.trim().length > 0) {
@@ -384,6 +427,7 @@ export async function getCardsCount(
 
 	if (filters.domain) clauses.push(eq(card.domain, filters.domain));
 	if (filters.cardType) clauses.push(eq(card.cardType, filters.cardType));
+	if (filters.kind) clauses.push(eq(card.kind, filters.kind));
 	if (filters.sourceType) clauses.push(eq(card.sourceType, filters.sourceType));
 	if (filters.nodeId) clauses.push(eq(card.nodeId, filters.nodeId));
 	if (filters.search && filters.search.trim().length > 0) {
@@ -431,6 +475,7 @@ export interface RemovedCardRow {
 export interface RemovedCardsFilters {
 	domain?: Domain;
 	cardType?: CardType;
+	kind?: CardKind;
 	sourceType?: ContentSource;
 	search?: string;
 	limit?: number;
@@ -456,6 +501,7 @@ export async function getRemovedCards(
 	];
 	if (filters.domain) clauses.push(eq(card.domain, filters.domain));
 	if (filters.cardType) clauses.push(eq(card.cardType, filters.cardType));
+	if (filters.kind) clauses.push(eq(card.kind, filters.kind));
 	if (filters.sourceType) clauses.push(eq(card.sourceType, filters.sourceType));
 	if (filters.search && filters.search.trim().length > 0) {
 		const pattern = `%${escapeLikePattern(filters.search.trim())}%`;
@@ -505,6 +551,7 @@ export async function getRemovedCardsCount(
 	];
 	if (filters.domain) clauses.push(eq(card.domain, filters.domain));
 	if (filters.cardType) clauses.push(eq(card.cardType, filters.cardType));
+	if (filters.kind) clauses.push(eq(card.kind, filters.kind));
 	if (filters.sourceType) clauses.push(eq(card.sourceType, filters.sourceType));
 	if (filters.search && filters.search.trim().length > 0) {
 		const pattern = `%${escapeLikePattern(filters.search.trim())}%`;
@@ -557,11 +604,12 @@ export async function getCardsFacetCounts(
 			: [filters.status]
 		: [CARD_STATUSES.ACTIVE];
 
-	const withExcept = (exclude: 'domain' | 'cardType' | 'sourceType' | 'status'): SQL[] => {
+	const withExcept = (exclude: 'domain' | 'cardType' | 'kind' | 'sourceType' | 'status'): SQL[] => {
 		const c = [...baseClauses];
 		if (exclude !== 'status') c.push(inArray(card.status, statusFilter));
 		if (exclude !== 'domain' && filters.domain) c.push(eq(card.domain, filters.domain));
 		if (exclude !== 'cardType' && filters.cardType) c.push(eq(card.cardType, filters.cardType));
+		if (exclude !== 'kind' && filters.kind) c.push(eq(card.kind, filters.kind));
 		if (exclude !== 'sourceType' && filters.sourceType) c.push(eq(card.sourceType, filters.sourceType));
 		return c;
 	};
@@ -601,4 +649,28 @@ export async function getCardsFacetCounts(
 		sourceType: toRecord(sourceRows),
 		status: toRecord(statusRows),
 	};
+}
+
+/**
+ * Read every active card on a given (user, node) filtered by knowledge kind
+ * (recall vs calculation). Powers the per-evidence-kind partition in
+ * `mastery.ts` and the `bun run db check card-kinds` audit script.
+ *
+ * Backed by the (user_id, kind) index so the lookup stays bounded even on a
+ * large per-user card pool. evidence-kind-data-layer WP.
+ */
+export async function getCardsForNodeByKind(
+	userId: string,
+	nodeId: string,
+	kind: CardKind,
+	db: Db = defaultDb,
+): Promise<CardRow[]> {
+	if (!CARD_KIND_VALUE_SET.has(kind)) throw new InvalidCardKindError(kind);
+	return await db
+		.select()
+		.from(card)
+		.where(
+			and(eq(card.userId, userId), eq(card.nodeId, nodeId), eq(card.kind, kind), eq(card.status, CARD_STATUSES.ACTIVE)),
+		)
+		.orderBy(asc(card.createdAt));
 }

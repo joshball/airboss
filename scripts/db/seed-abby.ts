@@ -31,6 +31,7 @@ import {
 import { fsrsInitialState } from '@ab/bc-study/srs';
 import {
 	BETTER_AUTH_PROVIDERS,
+	CARD_KINDS,
 	CARD_STATES,
 	CARD_STATUSES,
 	CERTS,
@@ -44,6 +45,7 @@ import {
 	type Domain,
 	PLAN_STATUSES,
 	REVIEW_RATINGS,
+	SCENARIO_DEFAULT_ASSESSMENT_METHODS,
 	SCENARIO_STATUSES,
 	SESSION_ITEM_KINDS,
 	SESSION_MODES,
@@ -199,6 +201,7 @@ async function seedAbbyCards(databaseUrl: string, userId: string): Promise<Inser
 					domain: c.domain,
 					tags: c.tags,
 					cardType: c.cardType,
+					kind: c.kind ?? CARD_KINDS.RECALL,
 					sourceType: c.sourceType,
 					sourceRef: c.sourceRef,
 					nodeId: c.nodeId,
@@ -252,6 +255,7 @@ async function seedAbbyScenarios(databaseUrl: string, userId: string): Promise<I
 					nodeId: s.nodeId,
 					isEditable: true,
 					regReferences: s.regReferences,
+					assessmentMethods: [...(s.assessmentMethods ?? SCENARIO_DEFAULT_ASSESSMENT_METHODS)],
 					status: SCENARIO_STATUSES.ACTIVE,
 					seedOrigin: DEV_SEED_ORIGIN_TAG,
 					createdAt: now,

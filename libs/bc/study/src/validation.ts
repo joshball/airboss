@@ -6,6 +6,8 @@
  */
 
 import {
+	ASSESSMENT_METHOD_VALUES,
+	CARD_KIND_VALUES,
 	CARD_TYPE_VALUES,
 	CONFIDENCE_LEVEL_VALUES,
 	CONTENT_SOURCE_VALUES,
@@ -21,6 +23,7 @@ import { z } from 'zod';
 const cardEnum = {
 	domain: z.enum(DOMAIN_VALUES as [string, ...string[]]),
 	cardType: z.enum(CARD_TYPE_VALUES as [string, ...string[]]),
+	kind: z.enum(CARD_KIND_VALUES as [string, ...string[]]),
 	sourceType: z.enum(CONTENT_SOURCE_VALUES as [string, ...string[]]),
 };
 
@@ -33,6 +36,7 @@ export const newCardSchema = z.object({
 	back: cardTextSchema,
 	domain: cardEnum.domain,
 	cardType: cardEnum.cardType,
+	kind: cardEnum.kind.optional(),
 	tags: cardTagsSchema.optional(),
 	sourceType: cardEnum.sourceType.optional(),
 	sourceRef: z.string().trim().min(1).max(500).nullish(),
@@ -52,6 +56,7 @@ export const updateCardSchema = z.object({
 	back: cardTextSchema.optional(),
 	domain: cardEnum.domain.optional(),
 	cardType: cardEnum.cardType.optional(),
+	kind: cardEnum.kind.optional(),
 	tags: cardTagsSchema.optional(),
 });
 
@@ -138,6 +143,33 @@ export const scenarioOptionsSchema = z
 
 export const regReferencesSchema = z.array(z.string().trim().min(1).max(200)).max(10).default([]);
 
+/**
+ * `scenario.assessment_methods` BC validator (evidence-kind-data-layer WP).
+ * Schema-level CHECK on a jsonb array would be awkward; the BC enforces the
+ * three rules below and the column default fills the unset case at insert.
+ *
+ * - Non-empty (default applies when the field is omitted; an explicit empty
+ *   array is rejected here).
+ * - Every entry is in `ASSESSMENT_METHOD_VALUES`.
+ * - No duplicates within the array.
+ */
+export const assessmentMethodsSchema = z
+	.array(z.enum(ASSESSMENT_METHOD_VALUES as [string, ...string[]]))
+	.min(1, 'assessmentMethods must be a non-empty array')
+	.superRefine((values, ctx) => {
+		const seen = new Set<string>();
+		for (let i = 0; i < values.length; i++) {
+			if (seen.has(values[i])) {
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					path: [i],
+					message: `duplicate assessment method: ${values[i]}`,
+				});
+			}
+			seen.add(values[i]);
+		}
+	});
+
 export const newScenarioSchema = z.object({
 	title: z.string().trim().min(1).max(200),
 	situation: z.string().trim().min(1).max(10_000),
@@ -150,6 +182,7 @@ export const newScenarioSchema = z.object({
 	sourceRef: z.string().trim().min(1).max(500).nullish(),
 	regReferences: regReferencesSchema.optional(),
 	isEditable: z.boolean().optional(),
+	assessmentMethods: assessmentMethodsSchema.optional(),
 });
 
 /**
@@ -159,6 +192,27 @@ export const newScenarioSchema = z.object({
  * contract.
  */
 export type NewScenarioInput = z.infer<typeof newScenarioSchema>;
+
+// -------- Teaching exercises (evidence-kind-data-layer WP) --------
+
+export const newTeachingExerciseSchema = z.object({
+	title: z.string().trim().min(1).max(200),
+	prompt: z.string().trim().min(1).max(10_000),
+	domain: z.enum(DOMAIN_VALUES as [string, ...string[]]),
+	nodeId: z.string().trim().min(1).max(150).nullish(),
+	isEditable: z.boolean().optional(),
+});
+
+export type NewTeachingExerciseInput = z.infer<typeof newTeachingExerciseSchema>;
+
+export const updateTeachingExerciseSchema = z.object({
+	title: z.string().trim().min(1).max(200).optional(),
+	prompt: z.string().trim().min(1).max(10_000).optional(),
+	domain: z.enum(DOMAIN_VALUES as [string, ...string[]]).optional(),
+	nodeId: z.string().trim().min(1).max(150).nullish(),
+});
+
+export type UpdateTeachingExerciseInput = z.infer<typeof updateTeachingExerciseSchema>;
 
 export const submitAttemptSchema = z.object({
 	scenarioId: z.string().trim().min(1),

@@ -39,9 +39,11 @@ export {
 	getCards,
 	getCardsCount,
 	getCardsFacetCounts,
+	getCardsForNodeByKind,
 	getDueCards,
 	getRemovedCards,
 	getRemovedCardsCount,
+	InvalidCardKindError,
 	SourceRefRequiredError,
 	setCardStatus,
 	updateCard,
@@ -452,7 +454,9 @@ export {
 	getScenarios,
 	getScenariosCount,
 	getScenariosFacetCounts,
+	getScenariosForNodeByMethod,
 	getScenarioWithOptions,
+	InvalidAssessmentMethodError,
 	InvalidOptionError,
 	ScenarioNotAttemptableError,
 	ScenarioNotFoundError,
@@ -554,6 +558,7 @@ export {
 	syllabus,
 	syllabusNode,
 	syllabusNodeLink,
+	teachingExercise,
 } from './schema';
 export type {
 	ItemResultInput,
@@ -649,6 +654,23 @@ export {
 	validateAirbossRefForLeaf,
 	validateSyllabusTree,
 } from './syllabi';
+export type {
+	CreateTeachingExerciseInput,
+	NewTeachingExerciseInput,
+	TeachingExerciseFilters,
+	TeachingExerciseRow,
+	UpdateTeachingExerciseInput,
+} from './teaching-exercises';
+export {
+	createTeachingExercise,
+	deleteTeachingExercise,
+	getTeachingExercise,
+	getTeachingExercises,
+	getTeachingExercisesForNode,
+	TeachingExerciseNotEditableError,
+	TeachingExerciseNotFoundError,
+	updateTeachingExercise,
+} from './teaching-exercises';
 export {
 	cardTagsSchema,
 	cardTextSchema,
