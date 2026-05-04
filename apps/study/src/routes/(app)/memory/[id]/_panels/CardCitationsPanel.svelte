@@ -28,13 +28,20 @@ const citationItems = $derived<CitationChipItem[]>(
 		typeLabel: targetTypeLabel(c.target.type),
 		label: c.target.label,
 		href: c.target.href ?? null,
+		// Stage-5: external_ref opens in a new tab; in-app deep links
+		// (`reference_section` -> flightbag, `knowledge_node` -> /knowledge/<id>)
+		// stay in the same tab so the back button returns to the source.
+		targetExternal: c.target.type === CITATION_TARGET_TYPES.EXTERNAL_REF,
 		context: c.citation.citationContext,
 	})),
 );
 const citationRemoveAction = $derived(`${ROUTES.MEMORY_CARD(cardId)}?/removeCitation`);
+// Stage-5 (WP `stage5-citation-deeplink`): the polymorphic
+// `reference_section` target type covers every corpus-backed citation
+// (CFR / handbook / AC / ACS / AIM / NTSB / SAFO / InFO) -- one search
+// box, one tab. Knowledge nodes and external refs keep their own tabs.
 const citationTargets = [
-	CITATION_TARGET_TYPES.REGULATION_NODE,
-	CITATION_TARGET_TYPES.AC_REFERENCE,
+	CITATION_TARGET_TYPES.REFERENCE_SECTION,
 	CITATION_TARGET_TYPES.KNOWLEDGE_NODE,
 	CITATION_TARGET_TYPES.EXTERNAL_REF,
 ];
@@ -82,7 +89,7 @@ async function handleCitationSelect(selection: CitationPickerSelection): Promise
 		<div class="error" role="alert">{citationError}</div>
 	{/if}
 	{#if citations.length === 0}
-		<p class="empty-note">No citations yet. Link a regulation, AC, knowledge node, or external reference.</p>
+		<p class="empty-note">No citations yet. Link a reference section, knowledge node, or external link.</p>
 	{:else}
 		<CitationChips items={citationItems} editable removeAction={citationRemoveAction} />
 	{/if}
