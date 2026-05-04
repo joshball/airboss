@@ -26,8 +26,6 @@ import {
 	type ACSTriad,
 	BLOOM_LEVEL_VALUES,
 	type BloomLevel,
-	type Cert,
-	CERT_VALUES,
 	CREDENTIAL_CATEGORY_VALUES,
 	CREDENTIAL_CLASS_VALUES,
 	CREDENTIAL_KIND_VALUES,
@@ -38,8 +36,8 @@ import {
 	type CredentialKind,
 	type CredentialPrereqKind,
 	type CredentialStatus,
-	type Domain,
 	DOMAIN_VALUES,
+	type Domain,
 	GOAL_NODE_NOTES_MAX_LENGTH,
 	GOAL_NOTES_MAX_LENGTH,
 	GOAL_STATUS_VALUES,
@@ -178,18 +176,22 @@ export const syllabusNodeYamlSchema: z.ZodType<SyllabusNodeYamlBase, z.ZodTypeDe
  */
 export const syllabusAreaYamlSchema = syllabusNodeYamlSchema;
 
-/** Goal-CRUD input from a route action. The user_id is set server-side. */
+/**
+ * Goal-CRUD input from a route action. The user_id is set server-side.
+ * Targeting fields (`focusDomains`, `skipDomains`, `skipNodes`) flow through
+ * separate setter helpers (`setGoalFocusDomains`, `setGoalSkipDomains`,
+ * `setGoalSkipNodes`) -- not this schema -- because the route layer
+ * patches them as a separate operation post-create.
+ */
 export const createGoalInputSchema = z.object({
 	title: z.string().min(1).max(GOAL_TITLE_MAX_LENGTH),
-	notesMd: z.string().max(GOAL_NOTES_MAX_LENGTH).default(''),
-	isPrimary: z.boolean().default(false),
+	notesMd: z.string().max(GOAL_NOTES_MAX_LENGTH).optional(),
+	isPrimary: z.boolean().optional(),
 	targetDate: z
 		.string()
 		.regex(/^\d{4}-\d{2}-\d{2}$/, 'targetDate must be a calendar date in YYYY-MM-DD form')
 		.nullable()
 		.optional(),
-	focusDomains: z.array(z.enum(DOMAIN_VALUES as unknown as readonly [Domain, ...Domain[]])).default([]),
-	skipDomains: z.array(z.enum(DOMAIN_VALUES as unknown as readonly [Domain, ...Domain[]])).default([]),
 });
 export type CreateGoalInput = z.infer<typeof createGoalInputSchema>;
 
@@ -231,14 +233,20 @@ export const goalNodeIdListSchema = z.array(z.string().min(1));
 export type GoalNodeIdList = z.infer<typeof goalNodeIdListSchema>;
 
 /**
- * Input for `applyCertGoalsToPrimaryGoal`. Validates the cert slugs against
- * `CERT_VALUES` and the optional targeting overrides against
- * `DOMAIN_VALUES`. The owning userId is supplied server-side; only the
- * shape of the request body crosses the BC boundary here.
+ * Input for `applyCertGoalsToPrimaryGoal`. Validates the shape of every
+ * argument: non-empty `userId`, an array of non-empty cert slug strings,
+ * and the optional targeting overrides against `DOMAIN_VALUES` plus the
+ * goal-title length cap. The cert slugs themselves are NOT enum-checked
+ * here because the BC already resolves each slug against `credential.slug`
+ * and reports unknown slugs through the `skippedCerts` result -- making
+ * "unknown slug" a first-class outcome, not an error. The schema's role
+ * is to block oversized/wrong-shape payloads so a script bypassing the
+ * route layer can't blow up `credentialBySlug` lookups with non-string
+ * input.
  */
 export const applyCertGoalsInputSchema = z.object({
 	userId: z.string().min(1),
-	certs: z.array(z.enum(CERT_VALUES as unknown as readonly [Cert, ...Cert[]])),
+	certs: z.array(z.string().min(1)),
 	options: z
 		.object({
 			goalTitle: z.string().min(1).max(GOAL_TITLE_MAX_LENGTH).optional(),

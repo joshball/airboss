@@ -43,8 +43,8 @@ import { and, eq, inArray, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import {
 	type AddGoalNodeInput,
-	addGoalNodeInputSchema,
 	type AddGoalSyllabusInput,
+	addGoalNodeInputSchema,
 	addGoalSyllabusInputSchema,
 	applyCertGoalsInputSchema,
 	type CreateGoalInput,
@@ -248,8 +248,9 @@ export interface CreateGoalParams extends CreateGoalInput {
  *
  * Inputs are parsed against `createGoalInputSchema` at the BC boundary so
  * cross-BC callers and scripts can't inject oversized titles, oversized
- * notes, malformed dates, or unknown domain slugs even when the route layer
- * is bypassed.
+ * notes, or malformed `targetDate` strings even when the route layer is
+ * bypassed. Targeting fields (`focusDomains`, `skipDomains`, `skipNodes`)
+ * land via separate setter helpers post-create.
  */
 export async function createGoal(params: CreateGoalParams, db: Db = defaultDb): Promise<GoalRow> {
 	const { userId } = params;
@@ -265,9 +266,9 @@ export async function createGoal(params: CreateGoalParams, db: Db = defaultDb): 
 		id,
 		userId,
 		title: parsed.title,
-		notesMd: parsed.notesMd,
+		notesMd: parsed.notesMd ?? '',
 		status: GOAL_STATUSES.ACTIVE,
-		isPrimary: parsed.isPrimary,
+		isPrimary: parsed.isPrimary ?? false,
 		targetDate: parsed.targetDate ?? null,
 		seedOrigin: null,
 		createdAt: now,
@@ -572,18 +573,21 @@ export async function applyCertGoalsToPrimaryGoal(
 	options: { goalTitle?: string; focusDomains?: readonly Domain[]; skipDomains?: readonly Domain[] } = {},
 	db: Db = defaultDb,
 ): Promise<ApplyCertGoalsResult> {
-	// Validate at the BC boundary: cert slugs against `CERT_VALUES`,
-	// goal title length and focus/skip domains against the same caps the
-	// route layer enforces. The schema's `parse` throws `ZodError` for any
-	// shape violation before any DB I/O fires.
-	const parsed = applyCertGoalsInputSchema.parse({ userId, certs, options });
+	// Validate at the BC boundary: shape-check `userId`, the `certs` array
+	// (every entry a non-empty string), and the optional targeting overrides
+	// against `DOMAIN_VALUES` plus the goal-title length cap. The schema's
+	// `parse` throws `ZodError` for any shape violation before any DB I/O
+	// fires. Cert slug enum-checking is intentionally NOT done here -- the
+	// function already resolves each slug against `credential.slug` and
+	// reports unknown slugs through `skippedCerts`.
+	applyCertGoalsInputSchema.parse({ userId, certs, options });
 	// Resolve everything we need to write before opening the transaction
 	// (read-only credential / syllabus lookups don't need the tx scope).
 	// The transaction then takes ownership of every write -- targeting
 	// patch + per-cert goal_syllabus upserts -- so a mid-loop failure
 	// cannot leave a partially-built primary goal that
 	// `getDerivedCertGoals` could read while the user is mid-action.
-	const certSlugs = [...new Set(parsed.certs)];
+	const certSlugs = [...new Set(certs)];
 
 	const credentialRows =
 		certSlugs.length === 0
@@ -618,7 +622,7 @@ export async function applyCertGoalsToPrimaryGoal(
 	const skippedCerts: string[] = [];
 	const resolved: Array<{ slug: Cert; syllabusId: string }> = [];
 	const seen = new Set<Cert>();
-	for (const certSlug of parsed.certs) {
+	for (const certSlug of certs) {
 		if (seen.has(certSlug)) continue;
 		seen.add(certSlug);
 		const credId = credBySlug.get(certSlug);
@@ -635,13 +639,13 @@ export async function applyCertGoalsToPrimaryGoal(
 	}
 
 	return await db.transaction(async (tx) => {
-		let primary = await getPrimaryGoal(parsed.userId, tx);
+		let primary = await getPrimaryGoal(userId, tx);
 		let created = false;
 		if (primary === null) {
 			primary = await createGoal(
 				{
-					userId: parsed.userId,
-					title: parsed.options.goalTitle ?? 'Study goal',
+					userId,
+					title: options.goalTitle ?? 'Study goal',
 					notesMd: '',
 					isPrimary: true,
 				},
@@ -654,8 +658,8 @@ export async function applyCertGoalsToPrimaryGoal(
 		// update so the helper is the only writer for these columns on this
 		// path. Empty arrays are valid -- they unset narrowing.
 		const targetingPatch: Partial<{ focusDomains: Domain[]; skipDomains: Domain[]; updatedAt: Date }> = {};
-		if (parsed.options.focusDomains !== undefined) targetingPatch.focusDomains = [...parsed.options.focusDomains];
-		if (parsed.options.skipDomains !== undefined) targetingPatch.skipDomains = [...parsed.options.skipDomains];
+		if (options.focusDomains !== undefined) targetingPatch.focusDomains = [...options.focusDomains];
+		if (options.skipDomains !== undefined) targetingPatch.skipDomains = [...options.skipDomains];
 		if (Object.keys(targetingPatch).length > 0) {
 			targetingPatch.updatedAt = new Date();
 			await tx.update(goal).set(targetingPatch).where(eq(goal.id, primary.id));
@@ -667,7 +671,7 @@ export async function applyCertGoalsToPrimaryGoal(
 		// (and the just-created primary goal, when applicable) back.
 		if (resolved.length > 0) {
 			await Promise.all(
-				resolved.map((r) => addGoalSyllabus(primary.id, parsed.userId, { syllabusId: r.syllabusId, weight: 1.0 }, tx)),
+				resolved.map((r) => addGoalSyllabus(primary.id, userId, { syllabusId: r.syllabusId, weight: 1.0 }, tx)),
 			);
 		}
 

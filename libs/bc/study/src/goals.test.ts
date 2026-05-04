@@ -6,7 +6,17 @@
  */
 
 import { bauthUser } from '@ab/auth/schema';
-import { CREDENTIAL_STATUSES, GOAL_STATUSES, SYLLABUS_PRIMACY, SYLLABUS_STATUSES } from '@ab/constants';
+import {
+	CREDENTIAL_STATUSES,
+	GOAL_NODE_NOTES_MAX_LENGTH,
+	GOAL_NOTES_MAX_LENGTH,
+	GOAL_STATUSES,
+	GOAL_SYLLABUS_WEIGHT_MAX,
+	GOAL_SYLLABUS_WEIGHT_MIN,
+	GOAL_TITLE_MAX_LENGTH,
+	SYLLABUS_PRIMACY,
+	SYLLABUS_STATUSES,
+} from '@ab/constants';
 import { db } from '@ab/db/connection';
 import {
 	generateAuthId,
@@ -17,6 +27,7 @@ import {
 } from '@ab/utils';
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { z } from 'zod';
 import {
 	addGoalNode,
 	addGoalSyllabus,
@@ -36,7 +47,10 @@ import {
 	listGoals,
 	removeGoalNode,
 	removeGoalSyllabus,
+	setGoalFocusDomains,
 	setGoalNodeWeight,
+	setGoalSkipDomains,
+	setGoalSkipNodes,
 	setPrimaryGoal,
 	updateGoal,
 } from './goals';
@@ -653,6 +667,293 @@ describe('applyCertGoalsToPrimaryGoal', () => {
 			await db.delete(goal).where(eq(goal.userId, ATOMIC_USER_ID));
 			await db.delete(bauthUser).where(eq(bauthUser.id, ATOMIC_USER_ID));
 		}
+	});
+});
+
+// ---------------------------------------------------------------------------
+// Zod validation at the BC boundary
+//
+// Mirrors the cards/scenarios pattern: the BC parses each write input against
+// the matching schema in `credentials.validation.ts` so a cross-BC caller or
+// script that bypasses the route layer cannot inject oversized titles,
+// oversized notes, out-of-range weights, malformed dates, or unknown domain
+// slugs. These tests pin that the BC throws `ZodError` BEFORE any DB I/O so a
+// regression that drops the `.parse(...)` call surfaces here.
+// Closes chunk-2 security MAJOR (`docs/work/reviews/2026-05-01-study-bc-domain-security.md`).
+// ---------------------------------------------------------------------------
+describe('BC-boundary Zod validation -- chunk-2 security MAJOR', () => {
+	describe('createGoal', () => {
+		it('round-trips a valid input', async () => {
+			const g = await createGoal({
+				userId: TEST_USER_ID,
+				title: 'valid create',
+				notesMd: 'short notes',
+				isPrimary: false,
+			});
+			expect(g.title).toBe('valid create');
+			expect(g.notesMd).toBe('short notes');
+		});
+
+		it('rejects an oversized title with ZodError before any DB write', async () => {
+			const oversized = 'x'.repeat(GOAL_TITLE_MAX_LENGTH + 1);
+			await expect(
+				createGoal({ userId: TEST_USER_ID, title: oversized, notesMd: '', isPrimary: false }),
+			).rejects.toThrow(z.ZodError);
+			// Symmetric post-condition: nothing landed.
+			const goals = await db.select().from(goal).where(eq(goal.userId, TEST_USER_ID));
+			expect(goals.some((row) => row.title === oversized)).toBe(false);
+		});
+
+		it('rejects an oversized notesMd with ZodError', async () => {
+			const oversizedNotes = 'n'.repeat(GOAL_NOTES_MAX_LENGTH + 1);
+			await expect(
+				createGoal({ userId: TEST_USER_ID, title: 'oversized notes', notesMd: oversizedNotes, isPrimary: false }),
+			).rejects.toThrow(z.ZodError);
+		});
+
+		it('rejects a malformed targetDate with ZodError', async () => {
+			await expect(
+				createGoal({
+					userId: TEST_USER_ID,
+					title: 'bad date',
+					notesMd: '',
+					isPrimary: false,
+					targetDate: 'not-a-date',
+				}),
+			).rejects.toThrow(z.ZodError);
+		});
+	});
+
+	describe('updateGoal', () => {
+		it('round-trips a valid partial update', async () => {
+			const g = await createGoal({
+				userId: TEST_USER_ID,
+				title: 'pre-update',
+				notesMd: '',
+				isPrimary: false,
+			});
+			const updated = await updateGoal(g.id, TEST_USER_ID, { notesMd: 'updated notes' });
+			expect(updated.notesMd).toBe('updated notes');
+			expect(updated.title).toBe('pre-update');
+		});
+
+		it('rejects an oversized title with ZodError', async () => {
+			const g = await createGoal({
+				userId: TEST_USER_ID,
+				title: 'pre-update oversized',
+				notesMd: '',
+				isPrimary: false,
+			});
+			const oversized = 'x'.repeat(GOAL_TITLE_MAX_LENGTH + 1);
+			await expect(updateGoal(g.id, TEST_USER_ID, { title: oversized })).rejects.toThrow(z.ZodError);
+			// Symmetric post-condition: prior title preserved (no partial write).
+			const refreshed = await getGoalById(g.id);
+			expect(refreshed.title).toBe('pre-update oversized');
+		});
+
+		it('rejects an oversized notesMd with ZodError', async () => {
+			const g = await createGoal({
+				userId: TEST_USER_ID,
+				title: 'pre-update notes',
+				notesMd: 'before',
+				isPrimary: false,
+			});
+			const oversizedNotes = 'n'.repeat(GOAL_NOTES_MAX_LENGTH + 1);
+			await expect(updateGoal(g.id, TEST_USER_ID, { notesMd: oversizedNotes })).rejects.toThrow(z.ZodError);
+			const refreshed = await getGoalById(g.id);
+			expect(refreshed.notesMd).toBe('before');
+		});
+
+		it('rejects an unknown status enum with ZodError', async () => {
+			const g = await createGoal({
+				userId: TEST_USER_ID,
+				title: 'pre-update status',
+				notesMd: '',
+				isPrimary: false,
+			});
+			await expect(
+				updateGoal(g.id, TEST_USER_ID, {
+					status: 'not-a-real-status' as unknown as (typeof GOAL_STATUSES)[keyof typeof GOAL_STATUSES],
+				}),
+			).rejects.toThrow(z.ZodError);
+		});
+	});
+
+	describe('addGoalSyllabus', () => {
+		it('round-trips a valid input', async () => {
+			const g = await createGoal({
+				userId: TEST_USER_ID,
+				title: 'syllabus valid',
+				notesMd: '',
+				isPrimary: false,
+			});
+			const row = await addGoalSyllabus(g.id, TEST_USER_ID, { syllabusId: PPL_SYL_ID, weight: 0.5 });
+			expect(row.weight).toBeCloseTo(0.5);
+		});
+
+		it('rejects a weight above the GOAL_SYLLABUS_WEIGHT bound with ZodError', async () => {
+			const g = await createGoal({
+				userId: TEST_USER_ID,
+				title: 'syllabus over weight',
+				notesMd: '',
+				isPrimary: false,
+			});
+			await expect(
+				addGoalSyllabus(g.id, TEST_USER_ID, { syllabusId: PPL_SYL_ID, weight: GOAL_SYLLABUS_WEIGHT_MAX + 1 }),
+			).rejects.toThrow(z.ZodError);
+			// Symmetric post-condition: no syllabus link landed.
+			const rows = await getGoalSyllabi(g.id);
+			expect(rows.length).toBe(0);
+		});
+
+		it('rejects a weight below the GOAL_SYLLABUS_WEIGHT bound with ZodError', async () => {
+			const g = await createGoal({
+				userId: TEST_USER_ID,
+				title: 'syllabus neg weight',
+				notesMd: '',
+				isPrimary: false,
+			});
+			await expect(
+				addGoalSyllabus(g.id, TEST_USER_ID, { syllabusId: PPL_SYL_ID, weight: GOAL_SYLLABUS_WEIGHT_MIN - 0.1 }),
+			).rejects.toThrow(z.ZodError);
+		});
+
+		it('rejects an empty syllabusId with ZodError', async () => {
+			const g = await createGoal({
+				userId: TEST_USER_ID,
+				title: 'syllabus empty id',
+				notesMd: '',
+				isPrimary: false,
+			});
+			await expect(addGoalSyllabus(g.id, TEST_USER_ID, { syllabusId: '', weight: 1.0 })).rejects.toThrow(z.ZodError);
+		});
+	});
+
+	describe('addGoalNode', () => {
+		it('round-trips a valid input', async () => {
+			const g = await createGoal({
+				userId: TEST_USER_ID,
+				title: 'node valid',
+				notesMd: '',
+				isPrimary: false,
+			});
+			const row = await addGoalNode(g.id, TEST_USER_ID, {
+				knowledgeNodeId: ADHOC_NODE_ID,
+				weight: 0.75,
+				notes: 'short',
+			});
+			expect(row.weight).toBeCloseTo(0.75);
+			expect(row.notes).toBe('short');
+		});
+
+		it('rejects a weight above the GOAL_SYLLABUS_WEIGHT bound with ZodError', async () => {
+			const g = await createGoal({
+				userId: TEST_USER_ID,
+				title: 'node over weight',
+				notesMd: '',
+				isPrimary: false,
+			});
+			await expect(
+				addGoalNode(g.id, TEST_USER_ID, {
+					knowledgeNodeId: ADHOC_NODE_ID,
+					weight: GOAL_SYLLABUS_WEIGHT_MAX + 1,
+					notes: '',
+				}),
+			).rejects.toThrow(z.ZodError);
+			const rows = await getGoalNodes(g.id);
+			expect(rows.length).toBe(0);
+		});
+
+		it('rejects oversized notes with ZodError', async () => {
+			const g = await createGoal({
+				userId: TEST_USER_ID,
+				title: 'node oversized notes',
+				notesMd: '',
+				isPrimary: false,
+			});
+			const oversizedNotes = 'n'.repeat(GOAL_NODE_NOTES_MAX_LENGTH + 1);
+			await expect(
+				addGoalNode(g.id, TEST_USER_ID, { knowledgeNodeId: ADHOC_NODE_ID, weight: 1.0, notes: oversizedNotes }),
+			).rejects.toThrow(z.ZodError);
+		});
+
+		it('rejects an empty knowledgeNodeId with ZodError', async () => {
+			const g = await createGoal({
+				userId: TEST_USER_ID,
+				title: 'node empty id',
+				notesMd: '',
+				isPrimary: false,
+			});
+			await expect(addGoalNode(g.id, TEST_USER_ID, { knowledgeNodeId: '', weight: 1.0, notes: '' })).rejects.toThrow(
+				z.ZodError,
+			);
+		});
+	});
+
+	describe('setGoalFocusDomains / setGoalSkipDomains / setGoalSkipNodes', () => {
+		it('round-trips a valid focus-domain list', async () => {
+			const g = await createGoal({
+				userId: TEST_USER_ID,
+				title: 'focus valid',
+				notesMd: '',
+				isPrimary: false,
+			});
+			await setGoalFocusDomains(g.id, TEST_USER_ID, ['aerodynamics', 'airspace']);
+			const refreshed = await getGoalById(g.id);
+			expect(refreshed.focusDomains.sort()).toEqual(['aerodynamics', 'airspace']);
+		});
+
+		it('rejects an unknown domain slug on focus-domains with ZodError', async () => {
+			const g = await createGoal({
+				userId: TEST_USER_ID,
+				title: 'focus bad slug',
+				notesMd: '',
+				isPrimary: false,
+			});
+			await expect(
+				setGoalFocusDomains(g.id, TEST_USER_ID, ['aerodynamics', 'not-a-real-domain' as unknown as 'aerodynamics']),
+			).rejects.toThrow(z.ZodError);
+			// Symmetric post-condition: focus list unchanged (still empty).
+			const refreshed = await getGoalById(g.id);
+			expect(refreshed.focusDomains).toEqual([]);
+		});
+
+		it('rejects an unknown domain slug on skip-domains with ZodError', async () => {
+			const g = await createGoal({
+				userId: TEST_USER_ID,
+				title: 'skip bad slug',
+				notesMd: '',
+				isPrimary: false,
+			});
+			await expect(
+				setGoalSkipDomains(g.id, TEST_USER_ID, ['not-a-real-domain' as unknown as 'aerodynamics']),
+			).rejects.toThrow(z.ZodError);
+		});
+
+		it('rejects an empty-string node id on skip-nodes with ZodError', async () => {
+			const g = await createGoal({
+				userId: TEST_USER_ID,
+				title: 'skip empty node',
+				notesMd: '',
+				isPrimary: false,
+			});
+			await expect(setGoalSkipNodes(g.id, TEST_USER_ID, [''])).rejects.toThrow(z.ZodError);
+		});
+	});
+
+	describe('applyCertGoalsToPrimaryGoal', () => {
+		it('rejects an oversized goalTitle option with ZodError', async () => {
+			const oversized = 't'.repeat(GOAL_TITLE_MAX_LENGTH + 1);
+			await expect(applyCertGoalsToPrimaryGoal(TEST_USER_ID, [], { goalTitle: oversized })).rejects.toThrow(z.ZodError);
+		});
+
+		it('rejects an unknown focusDomains option with ZodError', async () => {
+			await expect(
+				applyCertGoalsToPrimaryGoal(TEST_USER_ID, [], {
+					focusDomains: ['not-a-real-domain' as unknown as 'aerodynamics'],
+				}),
+			).rejects.toThrow(z.ZodError);
+		});
 	});
 });
 
