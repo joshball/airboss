@@ -2,9 +2,22 @@
 import { ROUTES } from '@ab/constants';
 import Button from '@ab/ui/components/Button.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
+import MapPanel from './_panels/MapPanel.svelte';
+import ProgressPanel from './_panels/ProgressPanel.svelte';
+import TilesPanel from './_panels/TilesPanel.svelte';
+import TodayPanel from './_panels/TodayPanel.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
+
+// Cards-due / cards-new badge derives from the credential's recall
+// gating bucket. The mastery rollup gives a coarse "required vs passing"
+// shape; for the per-tile badge we surface "leaves not yet mastered" as
+// a stand-in for "cards that need work" until the future card-state-
+// per-credential aggregation lands.
+const recallRequired = $derived(data.kind === 'home' ? (data.mastery.byEvidenceKind.recall?.required ?? 0) : 0);
+const recallPassing = $derived(data.kind === 'home' ? (data.mastery.byEvidenceKind.recall?.passing ?? 0) : 0);
+const dueCardsCount = $derived(Math.max(0, recallRequired - recallPassing));
 </script>
 
 <svelte:head>
@@ -12,7 +25,14 @@ let { data }: { data: PageData } = $props();
 </svelte:head>
 
 <section class="page">
-	<PageHeader title="Study" subtitle="Where you are. What's next. How you'd like to study it." />
+	{#if data.kind === 'home'}
+		<PageHeader
+			title="Study"
+			subtitleSnippet={credentialSubtitle}
+		/>
+	{:else}
+		<PageHeader title="Study" subtitle="Where you are. What's next. How you'd like to study it." />
+	{/if}
 
 	{#if data.kind === 'no-goal'}
 		<article class="banner" aria-labelledby="study-no-goal-h">
@@ -27,30 +47,32 @@ let { data }: { data: PageData } = $props();
 			</div>
 		</article>
 	{:else}
-		<article class="banner" aria-labelledby="study-home-h">
-			<h2 id="study-home-h">Study home -- coming online</h2>
-			<p>
-				The study-home work package ships its progress strip, today briefing, tile row, and map of
-				the cert across tasks 5-12 of <code>docs/work-packages/study-home/tasks.md</code>. The route
-				constants, user-pref store, and Today prose helper landed first; the data composition lands
-				next.
-			</p>
-			<p>Until then, jump into one of the existing surfaces:</p>
-			<div class="tiles">
-				<a class="tile" href={ROUTES.LIBRARY}>Read</a>
-				<a class="tile" href={ROUTES.MEMORY_REVIEW}>Cards</a>
-				<a class="tile" href={ROUTES.REPS}>Scenarios</a>
-				<a class="tile" href={ROUTES.FLIGHT}>Flight</a>
-			</div>
-		</article>
+		<ProgressPanel mastery={data.mastery} />
+		<TodayPanel briefing={data.briefing} />
+		<TilesPanel
+			repBacklog={data.repBacklog}
+			focusNodeId={data.focusNodeId}
+			dueCardsCount={dueCardsCount}
+			newCardsCount={0}
+		/>
+		<MapPanel tab={data.tab} tree={data.tree} citationOrder={data.citationOrder} />
 	{/if}
 </section>
+
+{#snippet credentialSubtitle()}
+	{#if data.kind === 'home'}
+		<span class="cred">
+			<strong>{data.credential.title}</strong>
+			<a href={ROUTES.GOALS} class="switch">(switch)</a>
+		</span>
+	{/if}
+{/snippet}
 
 <style>
 .page {
 	display: flex;
 	flex-direction: column;
-	gap: var(--space-lg);
+	gap: var(--space-xl);
 }
 
 .banner {
@@ -74,45 +96,19 @@ let { data }: { data: PageData } = $props();
 	color: var(--ink-muted);
 }
 
-.banner code {
-	font-family: var(--font-family-mono);
-	background: var(--surface-sunken);
-	padding: 0 var(--space-2xs);
-	border-radius: var(--radius-sm);
-	color: var(--ink-body);
-}
-
-.tiles {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
-	gap: var(--space-md);
-}
-
-.tile {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	min-height: 4rem;
-	padding: var(--space-md);
-	border: 1px solid var(--edge-default);
-	border-radius: var(--radius-md);
-	background: var(--surface-panel);
-	color: var(--ink-body);
-	text-decoration: none;
-	font-weight: var(--font-weight-medium);
-}
-
-.tile:hover {
-	background: var(--surface-sunken);
-	border-color: var(--edge-strong);
-}
-
-.tile:focus-visible {
-	outline: 2px solid var(--edge-focus);
-	outline-offset: 2px;
-}
-
 .actions {
 	margin-top: var(--space-sm);
+}
+
+.cred {
+	display: inline-flex;
+	gap: var(--space-2xs);
+	align-items: baseline;
+}
+
+.switch {
+	color: var(--ink-accent);
+	text-decoration: underline;
+	font-size: var(--font-size-sm);
 }
 </style>
