@@ -121,6 +121,14 @@ chapter_cover_strip:
 page_label_walk_back: 5
 chapter_overrides: {}
 
+# Front-matter PDF page range (1-indexed, inclusive). Pages 1..21 cover the
+# title page, copyright/notice, preface, acknowledgments, and the printed
+# Table of Contents; chapter 1 ("Introduction to Flight Training") begins
+# at PDF page 22 (printed FAA page 1-1). Per WP-HANDBOOK-RE-EXTRACTION-V2
+# sub-phase 1D. Empirically verified by walking the cached PDF for the
+# first body page bearing the FAA `<chap>-<page>` header.
+front_matter_page_range: [1, 21]
+
 # Declarative errata list. Each entry is one FAA-published amendment to
 # this edition, applied via `bun run sources extract handbooks afh
 # --apply-errata <id>`. See ADR 020 for the cumulative-vs-incremental

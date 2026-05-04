@@ -64,6 +64,11 @@ from .config_loader import (
 from .fetch import fetch_pdf
 from .figures import extract_figures
 from .figures_dedup import deduplicate_figures
+from .front_matter import (
+    extract_front_matter,
+    front_matter_to_outline_nodes,
+    front_matter_to_section_bodies,
+)
 from .handbooks import HandbookPlugin, UnknownHandbookError, get_handbook
 from .normalize import write_outputs
 from .outline import OutlineError, OutlineNode, detect_outline_from_text, filter_to_chapter, parse_outline
@@ -636,6 +641,11 @@ def _run_toc_file_sidecar_strategy(
             flat_outline, bodies, section_nodes, fetch_result.path, config
         )
 
+    section_metadata: dict[str, dict[str, str]] = {}
+    flat_outline, bodies = _phase_front_matter(
+        config, fetch_result.path, flat_outline, bodies, section_metadata, section_extra_warnings
+    )
+
     if dry_run:
         click.echo("")
         click.echo(
@@ -660,6 +670,7 @@ def _run_toc_file_sidecar_strategy(
         table_warnings=table_warnings,
         extraction_metadata=extraction_metadata,
         extra_warnings=[*section_extra_warnings, *section_label_warnings],
+        section_metadata=section_metadata,
     )
     click.echo(
         f"  -> wrote {summary.sections_written} sections, "
@@ -743,6 +754,11 @@ def _run_toc_strategy(
             flat_outline, bodies, section_nodes, fetch_result.path, config
         )
 
+    section_metadata: dict[str, dict[str, str]] = {}
+    flat_outline, bodies = _phase_front_matter(
+        config, fetch_result.path, flat_outline, bodies, section_metadata, section_extra_warnings
+    )
+
     if dry_run:
         click.echo("")
         click.echo(
@@ -767,6 +783,7 @@ def _run_toc_strategy(
         table_warnings=table_warnings,
         extraction_metadata=extraction_metadata,
         extra_warnings=[*section_extra_warnings, *section_label_warnings],
+        section_metadata=section_metadata,
     )
     click.echo(
         f"  -> wrote {summary.sections_written} sections, "
@@ -775,6 +792,68 @@ def _run_toc_strategy(
     )
     click.echo(f"  -> wrote {summary.warnings} warnings; warnings -> {summary.warnings_path}")
     click.echo(f"done: {config.document_slug} {config.edition}")
+
+
+def _phase_front_matter(
+    config: HandbookConfig,
+    pdf_path: Path,
+    flat_outline: list[OutlineNode],
+    bodies: list,
+    section_metadata: dict[str, dict[str, str]],
+    extra_warnings: list[str],
+) -> tuple[list[OutlineNode], list]:
+    """Read front-matter pages and prepend synthetic depth-0 sections.
+
+    When `front_matter_page_range` is set, reads PDF pages start..end,
+    segments by recognized markers (preface / acknowledgments / introduction /
+    table-of-contents / cover residual), and emits the synthetic
+    `level='front-matter'` rows that sit BEFORE chapter 1's preamble in
+    the chapter-list view.
+
+    When unset, emits one `front-matter-page-range-not-declared` warning into
+    `extra_warnings` and skips capture (no fail). The per-doc YAML is the
+    canonical authoring location for the empirical range; surfacing a warning
+    rather than failing keeps re-extractions of unrelated handbooks unblocked
+    while the range is being committed for each doc.
+
+    Per WP-HANDBOOK-RE-EXTRACTION-V2 sub-phase 1D.
+    """
+    page_range = config.front_matter_page_range
+    if page_range is None:
+        extra_warnings.append(
+            "front-matter-page-range-not-declared: "
+            f"{config.document_slug} {config.edition} has no front_matter_page_range "
+            "in its YAML; front-matter capture skipped."
+        )
+        click.echo("  front-matter: page range not declared (warning emitted; skipping)")
+        return flat_outline, bodies
+    click.echo("")
+    click.echo("PHASE -- capture front matter")
+    click.echo(
+        f"  WHAT: read PDF pages {page_range[0]}..{page_range[1]} as synthetic "
+        f"depth-0 'front-matter' sections."
+    )
+    click.echo("  WHY:  the v1 extractor started at chapter 1; cover, preface,")
+    click.echo("        acknowledgments, and the substantive prose introduction were missing.")
+    click.echo("  HOW:  ingest.front_matter.extract_front_matter segments by recognized markers")
+    click.echo("        (cover residual, preface, acknowledgments, introduction, TOC).")
+    sections = extract_front_matter(pdf_path, page_range)
+    nodes = front_matter_to_outline_nodes(sections)
+    section_bodies = front_matter_to_section_bodies(sections, nodes)
+    click.echo(
+        f"  -> {len(sections)} front-matter sections "
+        f"({', '.join(s.slug for s in sections)})"
+    )
+    # Prepend front-matter rows so they appear at the top of the chapter list.
+    # Both `flat_outline` and `bodies` are mutated in place via list addition.
+    new_outline = list(nodes) + list(flat_outline)
+    new_bodies = list(section_bodies) + list(bodies)
+    # Tag every front-matter section row with the closed extraction_status
+    # value the TS schema accepts (`front-matter-extracted`); the seeder
+    # forwards this through to `study.reference_section.metadata`.
+    for fm_node in nodes:
+        section_metadata[fm_node.code] = {"extraction_status": "front-matter-extracted"}
+    return new_outline, new_bodies
 
 
 def relative_to_repo_or_path(path: Path) -> str:

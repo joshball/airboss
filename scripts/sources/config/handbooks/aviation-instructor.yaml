@@ -158,6 +158,15 @@ chapter_cover_strip:
 page_label_walk_back: 5
 chapter_overrides: {}
 
+# Front-matter PDF page range (1-indexed, inclusive). Pages 1..4 cover the
+# cover/title page, acknowledgments (PDF page 3), and preface (PDF page
+# 4); chapter 1 ("Risk Management and Single-Pilot Resource Management")
+# begins at PDF page 5 (printed FAA page 1-1). Per
+# WP-HANDBOOK-RE-EXTRACTION-V2 sub-phase 1D. Empirically verified by
+# cross-checking the embedded bookmark tree (acknowledgments bookmark
+# resolves to PDF page 3, preface to page 4, chapter 1 to page 5).
+front_matter_page_range: [1, 4]
+
 # Declarative errata list. Each entry is one FAA-published amendment to
 # this edition, applied via `bun run sources extract handbooks
 # aviation-instructor --apply-errata <id>`. AIH (2020 edition) has no
