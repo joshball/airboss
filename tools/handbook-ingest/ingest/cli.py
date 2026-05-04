@@ -61,6 +61,7 @@ from .config_loader import (
     HandbookConfig,
     load_config,
 )
+from .empty_section import apply_empty_section_policy
 from .fetch import fetch_pdf
 from .figures import extract_figures
 from .figures_dedup import deduplicate_figures
@@ -645,6 +646,9 @@ def _run_toc_file_sidecar_strategy(
     flat_outline, bodies = _phase_front_matter(
         config, fetch_result.path, flat_outline, bodies, section_metadata, section_extra_warnings
     )
+    flat_outline, bodies = _phase_empty_section_policy(
+        config, fetch_result.path, flat_outline, bodies, section_metadata, section_extra_warnings
+    )
 
     if dry_run:
         click.echo("")
@@ -758,6 +762,9 @@ def _run_toc_strategy(
     flat_outline, bodies = _phase_front_matter(
         config, fetch_result.path, flat_outline, bodies, section_metadata, section_extra_warnings
     )
+    flat_outline, bodies = _phase_empty_section_policy(
+        config, fetch_result.path, flat_outline, bodies, section_metadata, section_extra_warnings
+    )
 
     if dry_run:
         click.echo("")
@@ -853,6 +860,53 @@ def _phase_front_matter(
     # forwards this through to `study.reference_section.metadata`.
     for fm_node in nodes:
         section_metadata[fm_node.code] = {"extraction_status": "front-matter-extracted"}
+    return new_outline, new_bodies
+
+
+def _phase_empty_section_policy(
+    config: HandbookConfig,
+    pdf_path: Path,
+    flat_outline: list[OutlineNode],
+    bodies: list,
+    section_metadata: dict[str, dict[str, str]],
+    extra_warnings: list[str],
+) -> tuple[list[OutlineNode], list]:
+    """Resolve every empty section against the per-doc policy.
+
+    Three branches: drop (`merge_upward`), best-effort orphan-paragraph
+    fill (`best_effort_fill`), or default keep-with-placeholder. Section
+    metadata for kept rows is merged into the supplied `section_metadata`
+    mapping; warnings are appended to `extra_warnings` so the manifest
+    routes them through the closed `empty-section-kept` /
+    `empty-section-merged` codes.
+
+    Per WP-HANDBOOK-RE-EXTRACTION-V2 sub-phase 1D.
+    """
+    click.echo("")
+    click.echo("PHASE -- empty-section policy")
+    click.echo("  WHAT: detect sections with zero paragraph-level prose and resolve")
+    click.echo("        per the YAML `empty_section_policy:` block (drop / fill / keep).")
+    click.echo("  WHY:  the v1 extractor produced structural ghost rows when a heading")
+    click.echo("        was split off without its paragraph. Triage them at extraction time.")
+    click.echo("  HOW:  ingest.empty_section.apply_empty_section_policy.")
+    new_outline, new_bodies, new_metadata, warnings = apply_empty_section_policy(
+        config.empty_section_policy, pdf_path, flat_outline, bodies
+    )
+    # Surface a per-branch tally so the operator can spot-check the policy
+    # is hitting the right rows.
+    merged = sum(1 for w in warnings if w.code == "empty-section-merged")
+    kept = sum(1 for w in warnings if w.code == "empty-section-kept")
+    filled = sum(
+        1 for v in new_metadata.values() if v.get("extraction_status") == "merged-from-orphans"
+    )
+    click.echo(f"  -> {merged} dropped, {filled} filled-from-orphans, {kept} kept-with-placeholder")
+    # Merge metadata + warnings into the caller-owned containers.
+    for code, meta in new_metadata.items():
+        # If the front-matter pass already tagged this code (it shouldn't,
+        # since front-matter is exempt), prefer the caller's tag.
+        section_metadata.setdefault(code, meta)
+    for w in warnings:
+        extra_warnings.append(w.as_extra_warning_str())
     return new_outline, new_bodies
 
 
