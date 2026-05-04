@@ -8,9 +8,16 @@
  */
 
 import { parseHandbookChapter, parseHandbookSlug } from '@ab/aviation';
-import { getHandbookChapter, getReferenceByDocument, listChapterSections, listFiguresForSection } from '@ab/bc-study';
+import {
+	getHandbookChapter,
+	getReferenceByDocument,
+	listAllSectionsForReference,
+	listChapterSections,
+	listFiguresForSection,
+} from '@ab/bc-study';
 import { type ReferenceKind, ROUTES } from '@ab/constants';
 import { error } from '@sveltejs/kit';
+import { computeSiblingNav } from '../../../../../lib/section-nav';
 import { buildSourceLinks } from '../../../../../lib/source-links';
 import { shortHandbookEdition } from '../../../../reader-url';
 import type { PageServerLoad } from './$types';
@@ -33,13 +40,28 @@ export const load: PageServerLoad = async ({ params }) => {
 	if (!chapter) throw error(404, `Chapter ${chapterCode} not found in ${ref.title}`);
 
 	const sections = await listChapterSections(chapter.id);
-	const figures = sections.length === 0 ? await listFiguresForSection(chapter.id) : [];
+	// Always pull figures attached to the chapter row so the preamble can
+	// inline its referenced figures even when child sections exist (the
+	// preamble paragraph is a real read surface, not just a card).
+	const figures = await listFiguresForSection(chapter.id);
 
 	const sourceLinks = buildSourceLinks({
 		kind: ref.kind as ReferenceKind,
 		documentSlug: ref.documentSlug,
 		edition: ref.edition,
 		url: ref.url,
+	});
+
+	const allSections = await listAllSectionsForReference(ref.id);
+	const nav = computeSiblingNav(allSections, chapter.id, (row) => {
+		if (row.parentId === null) {
+			return ROUTES.FLIGHTBAG_HANDBOOK_CHAPTER(ref.documentSlug, shortEdition, row.code);
+		}
+		const parts = row.code.split('.');
+		if (parts.length !== 2) return null;
+		const [ch, sec] = parts;
+		if (!ch || !sec) return null;
+		return ROUTES.FLIGHTBAG_HANDBOOK_SECTION(ref.documentSlug, shortEdition, ch, sec);
 	});
 
 	return {
@@ -61,6 +83,7 @@ export const load: PageServerLoad = async ({ params }) => {
 			sourceLocator: chapter.sourceLocator,
 			faaPageStart: chapter.faaPageStart,
 			faaPageEnd: chapter.faaPageEnd,
+			metadata: chapter.metadata as Record<string, unknown>,
 		},
 		sections: sections.map((s) => ({
 			id: s.id,
@@ -82,5 +105,6 @@ export const load: PageServerLoad = async ({ params }) => {
 			width: f.width,
 			height: f.height,
 		})),
+		nav,
 	};
 };

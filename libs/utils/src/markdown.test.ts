@@ -1,12 +1,14 @@
 import { describe, expect, test } from 'vitest';
 import {
 	dedupeFirstHeading,
+	extractHandbookTableLinks,
 	extractImageUrls,
 	findFigureReferences,
 	injectFigureRefs,
 	normalizeHandbookAssetPath,
 	parseFrontmatter,
 	renderMarkdown,
+	sanitizeInlineHtml,
 	stripFrontmatter,
 } from './markdown';
 
@@ -367,5 +369,183 @@ describe('injectFigureRefs', () => {
 		expect(out).toContain('![cap](/handbooks/x/figures/fig-1-1.png)');
 		// No double slash.
 		expect(out).not.toContain('//handbooks');
+	});
+});
+
+describe('sanitizeInlineHtml', () => {
+	test('passes a handbook-table wrapper through unchanged-modulo-allowlist', () => {
+		const html = '<div class="handbook-table"><table><thead><tr><th>A</th></tr></thead></table></div>';
+		const out = sanitizeInlineHtml(html);
+		expect(out).toContain('<div class="handbook-table">');
+		expect(out).toContain('<table>');
+		expect(out).toContain('<thead>');
+		expect(out).toContain('<tr>');
+		expect(out).toContain('<th>A</th>');
+	});
+
+	test('strips a <script> tag wholesale', () => {
+		const html = '<table><tr><td><script>alert(1)</script>safe</td></tr></table>';
+		const out = sanitizeInlineHtml(html);
+		expect(out).not.toContain('<script>');
+		expect(out).not.toContain('alert(1)');
+		expect(out).toContain('safe');
+	});
+
+	test('strips <iframe> and inline event handlers', () => {
+		const html = '<table onclick="x()"><tr><td><iframe src="x"></iframe>cell</td></tr></table>';
+		const out = sanitizeInlineHtml(html);
+		expect(out).not.toContain('onclick');
+		expect(out).not.toContain('<iframe');
+		expect(out).toContain('<table>');
+		expect(out).toContain('cell');
+	});
+
+	test('strips a generic <span> while preserving allowed siblings', () => {
+		const html = '<td><span class="bad">x</span>y</td>';
+		const out = sanitizeInlineHtml(html);
+		expect(out).not.toContain('<span');
+		expect(out).toContain('<td>');
+		expect(out).toContain('y');
+	});
+
+	test('rewrites the wrapper data-source from /handbooks/ to /handbook-asset/', () => {
+		const html = '<div class="handbook-table" data-source="/handbooks/avwx/x/tbl.html"><table></table></div>';
+		const out = sanitizeInlineHtml(html);
+		expect(out).toContain('data-source="/handbook-asset/avwx/x/tbl.html"');
+		expect(out).not.toContain('data-source="/handbooks/');
+	});
+
+	test('drops HTML comments', () => {
+		const html = '<table><!-- secret --><tr><td>x</td></tr></table>';
+		const out = sanitizeInlineHtml(html);
+		expect(out).not.toContain('<!--');
+		expect(out).not.toContain('secret');
+		expect(out).toContain('<td>x</td>');
+	});
+
+	test('preserves colspan and rowspan on <th> and <td>', () => {
+		const html = '<tr><th colspan="2">A</th><td rowspan="3">B</td></tr>';
+		const out = sanitizeInlineHtml(html);
+		expect(out).toContain('colspan="2"');
+		expect(out).toContain('rowspan="3"');
+	});
+
+	test('drops disallowed attributes on allowed tags', () => {
+		const html = '<th id="bad" colspan="2">A</th>';
+		const out = sanitizeInlineHtml(html);
+		expect(out).not.toContain('id=');
+		expect(out).toContain('colspan="2"');
+	});
+
+	test('escapes text outside tags', () => {
+		const html = 'before <table></table> & after <';
+		const out = sanitizeInlineHtml(html);
+		expect(out).toContain('before ');
+		expect(out).toContain('<table>');
+		expect(out).toContain('&amp; after &lt;');
+	});
+});
+
+describe('extractHandbookTableLinks', () => {
+	test('returns the data-source path for one wrapper', () => {
+		const md = [
+			'<div class="handbook-table" data-source="/handbooks/avwx/x/tbl-4-1.html">',
+			'<table><caption>Table 4-1. Composition</caption></table>',
+			'</div>',
+		].join('\n');
+		const links = extractHandbookTableLinks(md);
+		expect(links).toHaveLength(1);
+		expect(links[0]?.assetPath).toBe('/handbooks/avwx/x/tbl-4-1.html');
+		expect(links[0]?.caption).toContain('Table 4-1');
+	});
+
+	test('returns multiple wrappers in source order', () => {
+		const md = [
+			'<div class="handbook-table" data-source="/h/a.html"><table></table></div>',
+			'',
+			'<div class="handbook-table" data-source="/h/b.html"><table></table></div>',
+		].join('\n');
+		const links = extractHandbookTableLinks(md);
+		expect(links.map((l) => l.assetPath)).toEqual(['/h/a.html', '/h/b.html']);
+	});
+
+	test('returns empty array when no wrapper is present', () => {
+		expect(extractHandbookTableLinks('plain markdown\n\nno tables.')).toEqual([]);
+	});
+
+	test('handles caption with whitespace and newlines', () => {
+		const md = [
+			'<div class="handbook-table" data-source="/h/a.html">',
+			'<table><caption>Table 4-1.    Approximations of the',
+			"Composition of a Dry Earth's Atmosphere</caption></table>",
+			'</div>',
+		].join('\n');
+		const links = extractHandbookTableLinks(md);
+		expect(links).toHaveLength(1);
+		const cap = links[0]?.caption ?? '';
+		expect(cap).toContain('Table 4-1.');
+		expect(cap).toContain('Approximations');
+		// Whitespace collapsed to single spaces.
+		expect(cap).not.toContain('\n');
+	});
+});
+
+describe('renderMarkdown -- block-level HTML (handbook tables)', () => {
+	test('passes through a single-line wrapped table', () => {
+		const md =
+			'<div class="handbook-table" data-source="/handbooks/avwx/x/t.html"><table><tr><td>A</td></tr></table></div>';
+		const html = renderMarkdown(md);
+		expect(html).toContain('<div class="handbook-table"');
+		expect(html).toContain('<table>');
+		expect(html).toContain('<td>A</td>');
+		// Asset path rewritten so the "open original" link lands on the streamer.
+		expect(html).toContain('data-source="/handbook-asset/avwx/x/t.html"');
+	});
+
+	test('passes through a multi-line wrapped table with multi-line caption', () => {
+		const md = [
+			'Some preceding paragraph.',
+			'',
+			'<div class="handbook-table" data-source="/handbooks/avwx/x/t.html">',
+			'<table><caption>Table 4-1.',
+			'Composition</caption><tbody><tr><td>A</td></tr></tbody></table>',
+			'</div>',
+			'',
+			'Trailing paragraph.',
+		].join('\n');
+		const html = renderMarkdown(md);
+		expect(html).toContain('<div class="handbook-table"');
+		expect(html).toContain('<caption>');
+		expect(html).toContain('<tbody>');
+		expect(html).toContain('<td>A</td>');
+		expect(html).toContain('<p>Some preceding paragraph.</p>');
+		expect(html).toContain('<p>Trailing paragraph.</p>');
+	});
+
+	test('strips a <script> tag inside an inline HTML block', () => {
+		const md = '<table><tr><td><script>bad()</script>good</td></tr></table>';
+		const html = renderMarkdown(md);
+		expect(html).not.toContain('<script>');
+		expect(html).not.toContain('bad()');
+		expect(html).toContain('<td>');
+		expect(html).toContain('good');
+	});
+
+	test('falls back to escaped paragraph when block is unclosed', () => {
+		const md = '<div class="handbook-table">\nno close';
+		const html = renderMarkdown(md);
+		// No closing </div> -> the html-block path bails; the line(s) flow into
+		// the paragraph parser, which html-escapes the leading `<`.
+		expect(html).toContain('&lt;div');
+		expect(html).not.toContain('<div class="handbook-table">');
+	});
+
+	test('injects an "Open original" link inside every wrapper', () => {
+		const md =
+			'<div class="handbook-table" data-source="/handbooks/avwx/x/t.html"><table><tr><td>A</td></tr></table></div>';
+		const html = renderMarkdown(md);
+		expect(html).toContain('class="handbook-table-source"');
+		expect(html).toContain('href="/handbook-asset/avwx/x/t.html"');
+		expect(html).toContain('Open original table');
 	});
 });

@@ -10,6 +10,7 @@ import { getReferenceByDocument, listAllSectionsForReference, listChapterSection
 import { type ReferenceKind, ROUTES } from '@ab/constants';
 import { isParseError, parseAimLocator, parseIdentifier } from '@ab/sources';
 import { error } from '@sveltejs/kit';
+import { computeSiblingNav } from '../../../../../lib/section-nav';
 import { buildSourceLinks } from '../../../../../lib/source-links';
 import type { PageServerLoad } from './$types';
 
@@ -48,6 +49,27 @@ export const load: PageServerLoad = async ({ params }) => {
 		url: ref.url,
 	});
 
+	const nav = computeSiblingNav(allSections, paragraphRow.id, (row) => {
+		const parts = row.code.split('-');
+		// Chapter rows: code is "1"; section rows: "1-1"; paragraph rows: "1-1-7".
+		if (parts.length === 1) {
+			const ch = parts[0];
+			if (!ch) return null;
+			return ROUTES.FLIGHTBAG_AIM_CHAPTER(ch);
+		}
+		if (parts.length === 2) {
+			const [ch, sec] = parts;
+			if (!ch || !sec) return null;
+			return ROUTES.FLIGHTBAG_AIM_SECTION(ch, sec);
+		}
+		if (parts.length === 3) {
+			const [ch, sec, para] = parts;
+			if (!ch || !sec || !para) return null;
+			return ROUTES.FLIGHTBAG_AIM_PARAGRAPH(ch, sec, para);
+		}
+		return null;
+	});
+
 	return {
 		uri: rawUri,
 		sourceLinks,
@@ -61,6 +83,7 @@ export const load: PageServerLoad = async ({ params }) => {
 			title: paragraphRow.title,
 			contentMd: paragraphRow.contentMd,
 			sourceLocator: paragraphRow.sourceLocator,
+			metadata: paragraphRow.metadata as Record<string, unknown>,
 		},
 		section: sectionRow
 			? {
@@ -84,5 +107,6 @@ export const load: PageServerLoad = async ({ params }) => {
 			chapterHref: ROUTES.FLIGHTBAG_AIM_CHAPTER(params.chapter),
 			sectionHref: ROUTES.FLIGHTBAG_AIM_SECTION(params.chapter, params.section),
 		},
+		nav,
 	};
 };

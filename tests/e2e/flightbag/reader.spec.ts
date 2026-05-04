@@ -112,15 +112,87 @@ test.describe('flightbag reader content fixes', () => {
 		expect(h1Count).toBe(1);
 	});
 
-	test('an empty section renders the placeholder copy instead of a blank page', async ({ page }) => {
+	test('an empty section renders prev/next/up nav instead of a dead-end page', async ({ page }) => {
 		await page.goto(ROUTES.FLIGHTBAG_HANDBOOK_SECTION('ifh', '8083-15B', '1', '1'));
 		const rendered = page.locator('[data-testid="rendered-section"]').first();
 		await expect(rendered).toBeVisible();
-		// IFH §1.1 has only the frontmatter block in its body; once stripped
-		// the placeholder appears.
-		const placeholder = rendered.locator('[data-testid="rendered-section-empty"]');
-		await expect(placeholder).toBeVisible();
-		await expect(placeholder).toContainText(/no body content/i);
+		// IFH §1.1 has only the frontmatter block in its body. Instead of a
+		// dead-end placeholder, the page exposes a Reader-Nav block with a
+		// link to the chapter (up) and to §1.2 (next).
+		const nav = rendered.locator('nav.reader-nav.variant-empty').first();
+		await expect(nav).toBeVisible();
+		const upLink = nav.locator('[data-testid="reader-nav-up"]');
+		await expect(upLink).toBeVisible();
+		const nextLink = nav.locator('[data-testid="reader-nav-next"]');
+		await expect(nextLink).toBeVisible();
+	});
+
+	test('every section page exposes a footer reader-nav strip', async ({ page }) => {
+		// Pick a section in the middle of the chapter so prev + next + up are all present.
+		await page.goto(ROUTES.FLIGHTBAG_HANDBOOK_SECTION('ifh', '8083-15B', '2', '5'));
+		const footer = page.locator('nav.reader-nav:not(.variant-empty)').first();
+		await expect(footer).toBeVisible();
+		await expect(footer.locator('[data-testid="reader-nav-prev"]')).toBeVisible();
+		await expect(footer.locator('[data-testid="reader-nav-next"]')).toBeVisible();
+	});
+
+	test('chapter page renders the chapter preamble before the section list', async ({ page }) => {
+		// IFH chapter 1 has a preamble body file; without the fix the page
+		// shows just the section list. With the fix the preamble renders first.
+		await page.goto(ROUTES.FLIGHTBAG_HANDBOOK_CHAPTER('ifh', '8083-15B', '1'));
+		const rendered = page.locator('[data-testid="rendered-section"]').first();
+		await expect(rendered).toBeVisible();
+		// Preamble's H1 is "Chapter 1: The National Airspace System" -- followed
+		// by the body content, then the "Sections" list further down.
+		const sectionsHeader = page.locator('section[aria-label="Sections"] h2');
+		await expect(sectionsHeader).toBeVisible();
+	});
+
+	test('handbook table renders inline with the body, not as escaped text', async ({ page }) => {
+		// AvWX 4.2 carries a `<div class="handbook-table">...<table>...</table></div>` block.
+		await page.goto(ROUTES.FLIGHTBAG_HANDBOOK_SECTION('avwx', '8083-28B', '4', '2'));
+		const rendered = page.locator('[data-testid="rendered-section"]').first();
+		await expect(rendered).toBeVisible();
+		// The table should render as a real <table> element, not as escaped text.
+		const table = rendered.locator('.handbook-table table').first();
+		await expect(table).toBeVisible();
+		// And there's an "Open original table" affordance.
+		const openLink = rendered.locator('a.handbook-table-source').first();
+		await expect(openLink).toBeVisible();
+		await expect(openLink).toHaveAttribute('href', /handbook-asset/);
+	});
+
+	test('section page exposes the metadata panel sourced from frontmatter or DB', async ({ page }) => {
+		await page.goto(ROUTES.FLIGHTBAG_HANDBOOK_SECTION('iph', '8083-16B', '2', '3'));
+		const panel = page.locator('[data-testid="rendered-section-metadata"]').first();
+		await expect(panel).toBeVisible();
+	});
+
+	test('chapter page exposes the metadata panel via the preamble RenderedSection', async ({ page }) => {
+		// Repro of the original bug: chapter pages had no Metadata panel
+		// because the chapter row's preamble wasn't rendered when sections
+		// existed alongside.
+		await page.goto(ROUTES.FLIGHTBAG_HANDBOOK_CHAPTER('iph', '8083-16B', '2'));
+		const panel = page.locator('[data-testid="rendered-section-metadata"]').first();
+		await expect(panel).toBeVisible();
+	});
+
+	test('IPH chapter 2 preamble renders the inline figure (Figure 2-1) end-to-end', async ({ page }) => {
+		// `has_figures: true` on the IPH ch 2 chapter row means the chapter
+		// markdown carries `![...](/handbooks/iph/.../figures/...png)` blocks.
+		// The renderer rewrites the URL to the streamer; the streamer must
+		// 200 with an image content-type.
+		await page.goto(ROUTES.FLIGHTBAG_HANDBOOK_CHAPTER('iph', '8083-16B', '2'));
+		const rendered = page.locator('[data-testid="rendered-section"]').first();
+		await expect(rendered).toBeVisible();
+		const fig = rendered.locator('img').first();
+		await expect(fig).toBeVisible();
+		const src = (await fig.getAttribute('src')) ?? '';
+		expect(src).toMatch(/^\/handbook-asset\//);
+		// Streamer responds with image content-type, not 404.
+		const response = await page.request.get(src);
+		expect(response.status()).toBe(200);
+		expect(response.headers()['content-type'] ?? '').toMatch(/^image\//);
 	});
 
 	test('IFH §2.5 renders the inline figure for "Figure 2-5"', async ({ page }) => {

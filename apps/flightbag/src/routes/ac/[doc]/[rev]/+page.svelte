@@ -29,19 +29,22 @@ let { data }: { data: PageData } = $props();
 </header>
 
 {#if data.chapters.length === 0}
-	<section class="callout">
-		<h2>Read on faa.gov</h2>
+	<section class="callout" data-testid="ac-sourced-only">
+		<p class="badge">Sourced only</p>
+		<h2>This document hasn't been ingested yet.</h2>
 		<p>
-			This advisory circular's per-chapter content isn't ingested into the flightbag reader yet. The FAA's AC
-			index is the authoritative source.
+			Read the official FAA PDF below. The full reader will activate once the document is added to the corpus.
 		</p>
-		{#if data.reference.externalUrl}
-			<p>
+		<div class="callout-actions">
+			{#if data.sourceLinks.localPdfHref}
+				<a class="local-link" href={data.sourceLinks.localPdfHref}>Local PDF</a>
+			{/if}
+			{#if data.reference.externalUrl}
 				<a class="external-link" href={data.reference.externalUrl} target="_blank" rel="noopener noreferrer">
-					Open on faa.gov &rarr;
+					Online PDF &rarr;
 				</a>
-			</p>
-		{/if}
+			{/if}
+		</div>
 	</section>
 {:else}
 	<section aria-label="Chapters">
@@ -123,7 +126,26 @@ let { data }: { data: PageData } = $props();
 	.callout p:last-child {
 		margin-bottom: 0;
 	}
-	.external-link {
+	.badge {
+		display: inline-block;
+		padding: var(--space-3xs) var(--space-2xs);
+		background: var(--surface-raised);
+		color: var(--ink-muted);
+		border-radius: var(--radius-sm);
+		font-family: var(--font-family-mono);
+		font-size: var(--font-size-xs);
+		text-transform: uppercase;
+		letter-spacing: var(--letter-spacing-caps);
+		margin: 0 0 var(--space-xs);
+	}
+	.callout-actions {
+		display: flex;
+		gap: var(--space-sm);
+		flex-wrap: wrap;
+		margin-top: var(--space-sm);
+	}
+	.external-link,
+	.local-link {
 		display: inline-block;
 		padding: var(--space-xs) var(--space-md);
 		border-radius: var(--radius-sm);
@@ -131,5 +153,10 @@ let { data }: { data: PageData } = $props();
 		color: var(--action-default-ink, var(--ink-strong));
 		text-decoration: none;
 		font-weight: var(--font-weight-medium);
+	}
+	.local-link {
+		background: var(--surface-raised);
+		color: var(--ink-body);
+		border: 1px solid var(--edge-default);
 	}
 </style>
