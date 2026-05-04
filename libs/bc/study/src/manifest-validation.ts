@@ -152,8 +152,53 @@ export type HandbookManifestFigure = z.infer<typeof handbookManifestFigureSchema
  * Inline rather than imported from constants so it stays scoped to this
  * shape -- whole-doc manifests don't have a sections array, and other
  * corpora's manifests use different vocabulary.
+ *
+ * `front-matter` (WP-HANDBOOK-RE-EXTRACTION-V2 Sub-phase 1C) is a peer to
+ * `chapter` at depth 0: cover, preface, acknowledgments, the substantive
+ * prose introduction, and the optional verbatim TOC are emitted as
+ * synthetic depth-0 sections that order BEFORE chapter 1's preamble in
+ * the reader's chapter-list view. The seed adapter accepts the new value
+ * because the section-tree adapter forwards `level` straight through to
+ * `study.reference_section.level` (no DB CHECK; per-corpus enums are
+ * declared on `reference.section_schema`).
  */
-const SECTION_TREE_LEVELS = ['chapter', 'section', 'subsection'] as const;
+const SECTION_TREE_LEVELS = ['front-matter', 'chapter', 'section', 'subsection'] as const;
+
+/**
+ * Closed vocabulary for `manifest.sections[].metadata.extraction_status`
+ * (WP-HANDBOOK-RE-EXTRACTION-V2 Sub-phase 1C). Three values, all surfaced
+ * to the reader as soft-fail badges:
+ *
+ * - `no-body-content`        -- section was detected but no paragraph-level
+ *                                prose was extracted (default empty-section
+ *                                policy: keep with placeholder).
+ * - `merged-from-orphans`    -- empty section was filled from same-page
+ *                                orphan paragraphs by the `best_effort_fill`
+ *                                policy.
+ * - `front-matter-extracted` -- synthetic depth-0 row carrying front-matter
+ *                                content (cover, preface, etc.) per the
+ *                                `front_matter_page_range:` YAML key.
+ */
+const SECTION_EXTRACTION_STATUS_VALUES = [
+	'no-body-content',
+	'merged-from-orphans',
+	'front-matter-extracted',
+] as const;
+export type SectionExtractionStatus = (typeof SECTION_EXTRACTION_STATUS_VALUES)[number];
+
+/**
+ * Per-section metadata. Free-form JSON, but the closed `extraction_status`
+ * field is the WP-HANDBOOK-RE-EXTRACTION-V2 contract for soft-fail signals
+ * the reader surfaces (placeholder badges, "filled from orphan paragraphs"
+ * tooltips). Other keys are accepted for forward-compatibility; no
+ * downstream consumer exists yet.
+ */
+const sectionMetadataSchema = z
+	.object({
+		extraction_status: z.enum(SECTION_EXTRACTION_STATUS_VALUES).optional(),
+	})
+	.catchall(z.unknown());
+export type HandbookManifestSectionMetadata = z.infer<typeof sectionMetadataSchema>;
 
 /**
  * One section row inside `manifest.json -> sections[]`. The seed reads the
@@ -177,6 +222,13 @@ export const handbookManifestSectionSchema = z.object({
 	content_hash: z.string().regex(/^[0-9a-f]{64}$/i),
 	has_figures: z.boolean(),
 	has_tables: z.boolean(),
+	/**
+	 * Per-section extras forwarded into `study.reference_section.metadata`.
+	 * Optional; pre-WP manifests omit it. The closed `extraction_status`
+	 * field carries soft-fail signals from the empty-section policy and
+	 * front-matter capture (Sub-phase 1C). See {@link sectionMetadataSchema}.
+	 */
+	metadata: sectionMetadataSchema.optional(),
 });
 export type HandbookManifestSection = z.infer<typeof handbookManifestSectionSchema>;
 

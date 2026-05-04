@@ -149,6 +149,26 @@ class ChapterPdfsConfig:
 
 
 @dataclass(frozen=True)
+class EmptySectionPolicy:
+    """Per-doc empty-section remediation lists keyed by section code.
+
+    Both fields default to empty (every empty section takes the default
+    `keep-with-placeholder` path). Codes here are the dotted-decimal
+    section codes (`"1.1"`, `"5.3.2"`) -- NOT chapter ordinals.
+
+    Per WP-HANDBOOK-RE-EXTRACTION-V2 Sub-phase 1C.
+    """
+
+    merge_upward: frozenset[str] = field(default_factory=frozenset)
+    """Section codes whose empty rows should be dropped from the
+    section tree entirely. Emit `empty-section-merged` warning."""
+
+    best_effort_fill: frozenset[str] = field(default_factory=frozenset)
+    """Section codes whose empty rows should be filled from same-page
+    orphan paragraphs. If no orphans found, fall to the default policy."""
+
+
+@dataclass(frozen=True)
 class HandbookConfig:
     """Static config describing a handbook + edition."""
 
@@ -250,6 +270,39 @@ class HandbookConfig:
     # but the printed TOC flattens both"). Empty / None for handbooks
     # without observed quirks.
     extraction_hints: list[str] = field(default_factory=list)
+    # Front-matter page range (1-indexed PDF page numbers, inclusive)
+    # spanning the cover .. last-page-before-chapter-1. Captured per
+    # WP-HANDBOOK-RE-EXTRACTION-V2 Sub-phase 1C.
+    #
+    # When set, the extractor emits synthetic depth-0 sections under a
+    # `front-matter/` subdirectory carrying cover, preface,
+    # acknowledgments, the substantive prose introduction, and (optional)
+    # the verbatim FAA TOC. The pages are discriminated empirically by
+    # inspecting each PDF's outline + first body page; values are
+    # committed to the per-doc YAML.
+    #
+    # When unset / None, the extractor emits a
+    # `front-matter-page-range-not-declared` warning once and skips
+    # front-matter capture for that doc. The per-doc YAML is the
+    # canonical authoring location.
+    front_matter_page_range: tuple[int, int] | None = None
+    # Empty-section policy. Per-WP Sub-phase 1C, the extractor decides
+    # what to do with sections whose body has no paragraph-level prose:
+    #
+    # - `merge_upward[]`     -- drop the row entirely; emit
+    #                            `empty-section-merged` warning. Keyed by
+    #                            section CODE (e.g. `"1.1"`).
+    # - `best_effort_fill[]` -- attribute orphan paragraphs from the same
+    #                            PDF page; if no orphans found, fall to
+    #                            the default. Keyed by section CODE.
+    # - default              -- keep with placeholder + emit
+    #                            `empty-section-kept` warning + tag the
+    #                            section row's metadata with
+    #                            `extraction_status: 'no-body-content'`.
+    #
+    # Empty / None means "all empty sections take the default path"
+    # (keep with placeholder).
+    empty_section_policy: EmptySectionPolicy = field(default_factory=lambda: EmptySectionPolicy())
     # Raw YAML payload, exposed so strategy modules can read their own blocks
     # (`toc`, `heading_style`, `prompt`) without each one re-parsing the file.
     raw_yaml: dict[str, object] = field(default_factory=dict)
@@ -410,6 +463,13 @@ def load_config(document_slug: str) -> HandbookConfig:
             f"section_strategy is 'toc-file-sidecar'."
         )
 
+    front_matter_page_range = _load_front_matter_page_range(
+        raw.get("front_matter_page_range"), config_path
+    )
+    empty_section_policy = _load_empty_section_policy(
+        raw.get("empty_section_policy"), config_path
+    )
+
     return HandbookConfig(
         document_slug=raw["document_slug"],
         edition=raw["edition"],
@@ -442,6 +502,8 @@ def load_config(document_slug: str) -> HandbookConfig:
         errata=errata,
         dismissed_errata=dismissed_errata,
         extraction_hints=extraction_hints,
+        front_matter_page_range=front_matter_page_range,
+        empty_section_policy=empty_section_policy,
         raw_yaml=raw,
     )
 
@@ -718,6 +780,115 @@ def _load_primary_cert(raw: object, config_path: Path) -> str | None:
             f"{sorted(PRIMARY_CERT_VALUES)!r}."
         )
     return raw
+
+
+_SECTION_CODE_RE = re.compile(r"^[0-9]+(?:\.[0-9]+){0,2}$")
+
+
+def _load_front_matter_page_range(raw: object, config_path: Path) -> tuple[int, int] | None:
+    """Parse the YAML ``front_matter_page_range:`` field.
+
+    Expected shape: ``[start, end]`` where both are positive 1-indexed PDF
+    page numbers and ``end >= start``. None / missing produces None
+    (the extractor emits a `front-matter-page-range-not-declared`
+    warning at run-time and skips front-matter capture).
+
+    Per WP-HANDBOOK-RE-EXTRACTION-V2 Sub-phase 1C.
+    """
+    if raw is None:
+        return None
+    if not isinstance(raw, list) or len(raw) != 2:
+        raise ConfigError(
+            f"front_matter_page_range in {config_path} must be a 2-element list "
+            f"[start, end] (got {raw!r})."
+        )
+    start_raw, end_raw = raw
+    if not isinstance(start_raw, int) or not isinstance(end_raw, int):
+        raise ConfigError(
+            f"front_matter_page_range[start, end] in {config_path} must be ints "
+            f"(got {type(start_raw).__name__}, {type(end_raw).__name__})."
+        )
+    if start_raw < 1:
+        raise ConfigError(
+            f"front_matter_page_range start={start_raw} in {config_path} must be >= 1 "
+            f"(1-indexed PDF page)."
+        )
+    if end_raw < start_raw:
+        raise ConfigError(
+            f"front_matter_page_range end={end_raw} in {config_path} must be "
+            f">= start={start_raw}."
+        )
+    return (start_raw, end_raw)
+
+
+def _load_empty_section_policy(raw: object, config_path: Path) -> EmptySectionPolicy:
+    """Parse the YAML ``empty_section_policy:`` block.
+
+    Shape::
+
+        empty_section_policy:
+          merge_upward: ['1.1', '5.3']
+          best_effort_fill: ['7.2']
+
+    Both lists default to empty. Codes must be dotted-decimal section
+    codes (NOT chapter ordinals). A code listed in both lists is a
+    config error -- the policy must be unambiguous per code.
+
+    Per WP-HANDBOOK-RE-EXTRACTION-V2 Sub-phase 1C.
+    """
+    if raw is None:
+        return EmptySectionPolicy()
+    if not isinstance(raw, dict):
+        raise ConfigError(
+            f"empty_section_policy in {config_path} must be a mapping "
+            f"(got {type(raw).__name__})."
+        )
+    unknown = set(raw.keys()) - {"merge_upward", "best_effort_fill"}
+    if unknown:
+        raise ConfigError(
+            f"empty_section_policy in {config_path} has unknown keys "
+            f"{sorted(unknown)!r}; allowed: ['merge_upward', 'best_effort_fill']."
+        )
+    merge_upward = _load_section_code_list(raw.get("merge_upward"), "merge_upward", config_path)
+    best_effort_fill = _load_section_code_list(
+        raw.get("best_effort_fill"), "best_effort_fill", config_path
+    )
+    overlap = set(merge_upward) & set(best_effort_fill)
+    if overlap:
+        raise ConfigError(
+            f"empty_section_policy in {config_path}: codes {sorted(overlap)!r} appear in "
+            f"both `merge_upward` and `best_effort_fill`. Pick one policy per code."
+        )
+    return EmptySectionPolicy(
+        merge_upward=frozenset(merge_upward),
+        best_effort_fill=frozenset(best_effort_fill),
+    )
+
+
+def _load_section_code_list(raw: object, field_name: str, config_path: Path) -> list[str]:
+    if raw is None:
+        return []
+    if not isinstance(raw, list):
+        raise ConfigError(
+            f"empty_section_policy.{field_name} in {config_path} must be a list "
+            f"(got {type(raw).__name__})."
+        )
+    out: list[str] = []
+    seen: set[str] = set()
+    for idx, item in enumerate(raw):
+        if not isinstance(item, str) or not _SECTION_CODE_RE.match(item):
+            raise ConfigError(
+                f"empty_section_policy.{field_name}[{idx}] in {config_path} must be a "
+                f"dotted-decimal section code (e.g. '1.1', '5.3.2'); got {item!r}."
+            )
+        if item in seen:
+            raise ConfigError(
+                f"empty_section_policy.{field_name} in {config_path}: code {item!r} "
+                f"is listed twice."
+            )
+        seen.add(item)
+        out.append(item)
+    return out
 
 
 def _load_bookmark_chapter_filter(raw: object, config_path: Path) -> str | None:
