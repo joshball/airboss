@@ -7,12 +7,18 @@
  */
 
 import { parseHandbookChapter, parseHandbookSection, parseHandbookSlug } from '@ab/aviation';
-import { getHandbookSection, getReferenceByDocument, listAllSectionsForReference } from '@ab/bc-study';
+import {
+	computeReadingOrder,
+	getHandbookSection,
+	getReferenceByDocument,
+	listAllSectionsForReference,
+} from '@ab/bc-study';
 import { type ReferenceKind, ROUTES } from '@ab/constants';
 import { isParseError, parseHandbooksLocator, parseIdentifier } from '@ab/sources';
 import { error } from '@sveltejs/kit';
 import { computeSiblingNav } from '../../../../../../lib/section-nav';
 import { buildSourceLinks } from '../../../../../../lib/source-links';
+import { buildTOCEntries, totalReadingMinutes } from '../../../../../../lib/toc';
 import { shortHandbookEdition } from '../../../../../reader-url';
 import type { PageServerLoad } from './$types';
 
@@ -68,6 +74,21 @@ export const load: PageServerLoad = async ({ params }) => {
 		return ROUTES.FLIGHTBAG_HANDBOOK_SECTION(ref.documentSlug, shortEdition, ch, sec);
 	});
 
+	// Whole-doc TOC -- powers the persistent left-rail drawer. Each entry maps
+	// to its reader URL via the same dispatch as the prev/next walk.
+	const readingOrder = computeReadingOrder(allSections);
+	const tocEntries = buildTOCEntries(readingOrder, view.section.id, (entry) => {
+		if (entry.parentId === null) {
+			return ROUTES.FLIGHTBAG_HANDBOOK_CHAPTER(ref.documentSlug, shortEdition, entry.code);
+		}
+		const parts = entry.code.split('.');
+		if (parts.length !== 2) return null;
+		const [ch, sec] = parts;
+		if (!ch || !sec) return null;
+		return ROUTES.FLIGHTBAG_HANDBOOK_SECTION(ref.documentSlug, shortEdition, ch, sec);
+	});
+	const tocTotalMinutes = totalReadingMinutes(readingOrder);
+
 	return {
 		uri: rawUri,
 		sourceLinks,
@@ -116,5 +137,9 @@ export const load: PageServerLoad = async ({ params }) => {
 			),
 		})),
 		nav,
+		toc: {
+			entries: tocEntries,
+			totalMinutes: tocTotalMinutes,
+		},
 	};
 };

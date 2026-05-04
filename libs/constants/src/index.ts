@@ -603,6 +603,8 @@ export {
 	WEAK_AREA_MIN_DATA_POINTS,
 	WEAK_AREA_REP_WEIGHT,
 	WEAK_AREA_WINDOW_DAYS,
+	WORDS_PER_MINUTE_READING_RATE,
+	readingMinutesForWords,
 } from './study';
 export {
 	MS_PER_DAY,

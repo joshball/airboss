@@ -6,12 +6,18 @@
  * malformed deep-link is rejected before a DB query fires.
  */
 
-import { getReferenceByDocument, listAllSectionsForReference, listChapterSections } from '@ab/bc-study';
+import {
+	computeReadingOrder,
+	getReferenceByDocument,
+	listAllSectionsForReference,
+	listChapterSections,
+} from '@ab/bc-study';
 import { type ReferenceKind, ROUTES } from '@ab/constants';
 import { isParseError, parseAimLocator, parseIdentifier } from '@ab/sources';
 import { error } from '@sveltejs/kit';
 import { computeSiblingNav } from '../../../../../lib/section-nav';
 import { buildSourceLinks } from '../../../../../lib/source-links';
+import { buildTOCEntries, totalReadingMinutes } from '../../../../../lib/toc';
 import type { PageServerLoad } from './$types';
 
 const AIM_SLUG = 'aim';
@@ -49,7 +55,7 @@ export const load: PageServerLoad = async ({ params }) => {
 		url: ref.url,
 	});
 
-	const nav = computeSiblingNav(allSections, paragraphRow.id, (row) => {
+	const hrefForRow = (row: { code: string }): string | null => {
 		const parts = row.code.split('-');
 		// Chapter rows: code is "1"; section rows: "1-1"; paragraph rows: "1-1-7".
 		if (parts.length === 1) {
@@ -68,7 +74,11 @@ export const load: PageServerLoad = async ({ params }) => {
 			return ROUTES.FLIGHTBAG_AIM_PARAGRAPH(ch, sec, para);
 		}
 		return null;
-	});
+	};
+	const nav = computeSiblingNav(allSections, paragraphRow.id, hrefForRow);
+	const readingOrder = computeReadingOrder(allSections);
+	const tocEntries = buildTOCEntries(readingOrder, paragraphRow.id, hrefForRow);
+	const tocTotalMinutes = totalReadingMinutes(readingOrder);
 
 	return {
 		uri: rawUri,
@@ -108,5 +118,9 @@ export const load: PageServerLoad = async ({ params }) => {
 			sectionHref: ROUTES.FLIGHTBAG_AIM_SECTION(params.chapter, params.section),
 		},
 		nav,
+		toc: {
+			entries: tocEntries,
+			totalMinutes: tocTotalMinutes,
+		},
 	};
 };

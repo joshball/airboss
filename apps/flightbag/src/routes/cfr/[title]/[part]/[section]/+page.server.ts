@@ -8,12 +8,13 @@
  * resolves to something useful.
  */
 
-import { getReferenceByDocument, listAllSectionsForReference } from '@ab/bc-study';
+import { computeReadingOrder, getReferenceByDocument, listAllSectionsForReference } from '@ab/bc-study';
 import { CITATION_URL_TEMPLATES, type ReferenceKind, ROUTES } from '@ab/constants';
 import { isParseError, parseIdentifier, parseRegsLocator } from '@ab/sources';
 import { error } from '@sveltejs/kit';
 import { computeSiblingNav, type SiblingNav } from '../../../../../lib/section-nav';
 import { buildSourceLinks } from '../../../../../lib/source-links';
+import { buildTOCEntries, totalReadingMinutes } from '../../../../../lib/toc';
 import type { PageServerLoad } from './$types';
 
 const NUM_SHAPE = /^\d+$/;
@@ -52,17 +53,22 @@ export const load: PageServerLoad = async ({ params }) => {
 		url: ref.url,
 	});
 
+	const hrefForRow = (row: { parentId: string | null; code: string }): string | null => {
+		// CFR section rows have a code that's the section number alone (e.g.
+		// `103`); subpart rows are at `parentId === null` and don't have a
+		// dedicated reader page in the flightbag (they route to the part
+		// landing).
+		if (row.parentId === null) return null;
+		return ROUTES.FLIGHTBAG_CFR_SECTION(params.title, params.part, row.code);
+	};
+
 	let nav: SiblingNav = { prev: null, next: null, up: null };
 	if (sectionRow) {
-		nav = computeSiblingNav(allSections, sectionRow.id, (row) => {
-			// CFR section rows have a code that's the section number alone (e.g.
-			// `103`); subpart rows are at `parentId === null` and don't have a
-			// dedicated reader page in the flightbag (they route to the part
-			// landing).
-			if (row.parentId === null) return null;
-			return ROUTES.FLIGHTBAG_CFR_SECTION(params.title, params.part, row.code);
-		});
+		nav = computeSiblingNav(allSections, sectionRow.id, hrefForRow);
 	}
+	const readingOrder = computeReadingOrder(allSections);
+	const tocEntries = buildTOCEntries(readingOrder, sectionRow?.id ?? null, hrefForRow);
+	const tocTotalMinutes = totalReadingMinutes(readingOrder);
 
 	return {
 		uri: rawUri,
@@ -93,5 +99,9 @@ export const load: PageServerLoad = async ({ params }) => {
 			section: params.section,
 		},
 		nav,
+		toc: {
+			entries: tocEntries,
+			totalMinutes: tocTotalMinutes,
+		},
 	};
 };

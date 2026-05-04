@@ -4,6 +4,7 @@ import Breadcrumbs from '@ab/library/Breadcrumbs.svelte';
 import ReaderNav from '@ab/library/ReaderNav.svelte';
 import RenderedSection from '@ab/library/RenderedSection.svelte';
 import SourceLinks from '@ab/library/SourceLinks.svelte';
+import TOCDrawer from '@ab/library/TOCDrawer.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -13,62 +14,109 @@ const segments = $derived([
 	{ label: data.reference.title, href: data.reference.partHref },
 	{ label: `§${data.raw.part}.${data.raw.section}`, href: null },
 ]);
+
+// Only show the TOC drawer when the doc has any reading-order entries we can
+// link to -- avoids a blank rail on a not-yet-ingested CFR Part.
+const hasTOC = $derived(data.toc.entries.length > 0);
+const tocSummary = $derived(
+	data.toc.totalMinutes > 0 ? `${data.toc.entries.length} entries · ≈ ${data.toc.totalMinutes} min` : undefined,
+);
 </script>
 
 <svelte:head>
 	<title>{data.raw.title} CFR §{data.raw.part}.{data.raw.section}</title>
 </svelte:head>
 
-{#if data.section}
-	<RenderedSection
-		title={`${data.raw.title} CFR §${data.raw.part}.${data.raw.section} -- ${data.section.title}`}
-		id={data.uri}
-		body={data.section.contentMd}
-		locator={data.section.sourceLocator}
-		metadata={data.section.metadata}
-	>
-		{#snippet breadcrumb()}
+<div class="reader" class:has-toc={hasTOC}>
+	{#if hasTOC}
+		<aside class="toc-rail">
+			<TOCDrawer
+				entries={data.toc.entries}
+				heading={data.reference.title}
+				headingHref={data.reference.partHref}
+				summary={tocSummary}
+			/>
+		</aside>
+	{/if}
+
+	<div class="primary">
+		{#if data.section}
+			<RenderedSection
+				title={`${data.raw.title} CFR §${data.raw.part}.${data.raw.section} -- ${data.section.title}`}
+				id={data.uri}
+				body={data.section.contentMd}
+				locator={data.section.sourceLocator}
+				metadata={data.section.metadata}
+			>
+				{#snippet breadcrumb()}
+					<Breadcrumbs {segments} />
+					<SourceLinks
+						localPdfHref={data.sourceLinks.localPdfHref}
+						onlineUrl={data.sourceLinks.onlineUrl}
+						localPdfMissing={data.sourceLinks.localPdfMissing}
+					/>
+				{/snippet}
+				{#snippet emptyFallback()}
+					<ReaderNav nav={data.nav} variant="empty" />
+				{/snippet}
+				{#snippet footer()}
+					<ReaderNav nav={data.nav} variant="footer" />
+				{/snippet}
+			</RenderedSection>
+		{:else}
 			<Breadcrumbs {segments} />
 			<SourceLinks
 				localPdfHref={data.sourceLinks.localPdfHref}
 				onlineUrl={data.sourceLinks.onlineUrl}
 				localPdfMissing={data.sourceLinks.localPdfMissing}
 			/>
-		{/snippet}
-		{#snippet emptyFallback()}
-			<ReaderNav nav={data.nav} variant="empty" />
-		{/snippet}
-		{#snippet footer()}
-			<ReaderNav nav={data.nav} variant="footer" />
-		{/snippet}
-	</RenderedSection>
-{:else}
-	<Breadcrumbs {segments} />
-	<SourceLinks
-		localPdfHref={data.sourceLinks.localPdfHref}
-		onlineUrl={data.sourceLinks.onlineUrl}
-		localPdfMissing={data.sourceLinks.localPdfMissing}
-	/>
-	<header class="page-header">
-		<h1>{data.raw.title} CFR §{data.raw.part}.{data.raw.section}</h1>
-	</header>
-	<section class="callout">
-		<h2>Read on eCFR</h2>
-		<p>
-			This section isn't ingested into the flightbag reader yet. The federal eCFR site is the authoritative
-			source.
-		</p>
-		{#if data.ecfrUrl}
-			<p>
-				<a class="ecfr-link" href={data.ecfrUrl} target="_blank" rel="noopener noreferrer">
-					Open §{data.raw.part}.{data.raw.section} on eCFR &rarr;
-				</a>
-			</p>
+			<header class="page-header">
+				<h1>{data.raw.title} CFR §{data.raw.part}.{data.raw.section}</h1>
+			</header>
+			<section class="callout">
+				<h2>Read on eCFR</h2>
+				<p>
+					This section isn't ingested into the flightbag reader yet. The federal eCFR site is the authoritative
+					source.
+				</p>
+				{#if data.ecfrUrl}
+					<p>
+						<a class="ecfr-link" href={data.ecfrUrl} target="_blank" rel="noopener noreferrer">
+							Open §{data.raw.part}.{data.raw.section} on eCFR &rarr;
+						</a>
+					</p>
+				{/if}
+			</section>
 		{/if}
-	</section>
-{/if}
+	</div>
+</div>
 
 <style>
+	.reader {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: var(--space-lg);
+		align-items: start;
+	}
+	.reader.has-toc {
+		grid-template-columns: 18rem minmax(0, 1fr);
+	}
+	.toc-rail {
+		position: sticky;
+		top: var(--space-md);
+	}
+	.primary {
+		min-width: 0;
+	}
+	@media (max-width: 60rem) {
+		.reader.has-toc {
+			grid-template-columns: 1fr;
+		}
+		.toc-rail {
+			position: static;
+		}
+	}
+
 	.page-header h1 {
 		margin: 0 0 var(--space-md);
 	}

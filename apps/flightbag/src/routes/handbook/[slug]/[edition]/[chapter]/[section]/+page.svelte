@@ -4,6 +4,7 @@ import Breadcrumbs from '@ab/library/Breadcrumbs.svelte';
 import ReaderNav from '@ab/library/ReaderNav.svelte';
 import RenderedSection from '@ab/library/RenderedSection.svelte';
 import SourceLinks from '@ab/library/SourceLinks.svelte';
+import TOCDrawer from '@ab/library/TOCDrawer.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -14,6 +15,10 @@ const segments = $derived([
 	{ label: `Chapter ${data.chapter.code}`, href: data.reference.chapterHref },
 	{ label: `§${data.section.code}`, href: null },
 ]);
+
+const tocSummary = $derived(
+	data.toc.totalMinutes > 0 ? `${data.toc.entries.length} entries · ≈ ${data.toc.totalMinutes} min` : undefined,
+);
 </script>
 
 <svelte:head>
@@ -21,6 +26,14 @@ const segments = $derived([
 </svelte:head>
 
 <div class="reader">
+	<aside class="toc-rail">
+		<TOCDrawer
+			entries={data.toc.entries}
+			heading={data.reference.title}
+			headingHref={data.reference.handbookHref}
+			summary={tocSummary}
+		/>
+	</aside>
 	<div class="primary">
 		<RenderedSection
 			title={data.section.title}
@@ -46,78 +59,31 @@ const segments = $derived([
 			{/snippet}
 		</RenderedSection>
 	</div>
-
-	{#if data.siblings.length > 1}
-		<aside class="toc" aria-label="Sections in this chapter">
-			<h3>Chapter {data.chapter.code}: {data.chapter.title}</h3>
-			<ol>
-				{#each data.siblings as sib (sib.id)}
-					<li class:active={sib.id === data.section.id}>
-						<a href={sib.href}>
-							<span class="sib-code">§{sib.code}</span>
-							<span class="sib-title">{sib.title}</span>
-						</a>
-					</li>
-				{/each}
-			</ol>
-		</aside>
-	{/if}
 </div>
 
 <style>
 	.reader {
 		display: grid;
-		grid-template-columns: 1fr 16rem;
+		grid-template-columns: 18rem minmax(0, 1fr);
 		gap: var(--space-lg);
 		align-items: start;
 	}
+
+	.toc-rail {
+		position: sticky;
+		top: var(--space-md);
+	}
+
+	.primary {
+		min-width: 0;
+	}
+
 	@media (max-width: 60rem) {
 		.reader {
 			grid-template-columns: 1fr;
 		}
-	}
-
-	.toc {
-		position: sticky;
-		top: var(--space-md);
-		padding: var(--space-sm);
-		background: var(--surface-sunken);
-		border-radius: var(--radius-md);
-		font-size: var(--font-size-sm);
-	}
-	.toc h3 {
-		margin: 0 0 var(--space-xs);
-		font-size: var(--font-size-sm);
-		font-weight: var(--font-weight-semibold);
-		color: var(--ink-muted);
-	}
-	.toc ol {
-		list-style: none;
-		padding: 0;
-		margin: 0;
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-2xs);
-	}
-	.toc a {
-		display: flex;
-		gap: var(--space-2xs);
-		padding: var(--space-2xs) var(--space-xs);
-		color: inherit;
-		text-decoration: none;
-		border-radius: var(--radius-sm);
-	}
-	.toc a:hover,
-	.toc a:focus-visible {
-		background: var(--surface-raised);
-	}
-	.toc li.active a {
-		background: var(--surface-raised);
-		color: var(--ink-strong);
-		font-weight: var(--font-weight-medium);
-	}
-	.sib-code {
-		font-family: var(--font-family-mono);
-		color: var(--ink-muted);
+		.toc-rail {
+			position: static;
+		}
 	}
 </style>
