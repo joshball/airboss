@@ -2,14 +2,16 @@
 title: Restricted, limited, and experimental category operating rules
 week: 6
 section_order: "02"
-covers_regulations:
-  - 91.313
-  - 91.315
-  - 91.317
-  - 91.319
-  - 91.327
-ties_to_knowledge_nodes: []
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - airspace/special-use
+  acs_leaves:
+    - PA.I.E.K1
+    - PA.I.B.K1
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/91/313
+    - airboss-ref:regs/cfr-14/91/319
 ---
 
 # Restricted, limited, and experimental category operating rules

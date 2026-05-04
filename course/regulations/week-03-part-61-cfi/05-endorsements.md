@@ -2,20 +2,17 @@
 title: Endorsements -- AC 61-65 and the daily-CFI signature set
 week: 3
 section_order: "05"
-covers_regulations:
-  - 61.39
-  - 61.87
-  - 61.93
-  - 61.107
-  - 61.129
-  - 61.183
-  - 61.31
-  - 61.56
-  - 61.57
-ties_to_knowledge_nodes:
-  - reg-flight-review-endorsement-ac-61-65
-  - reg-cfi-spin-endorsement-61-183-i
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - regulations/pilot-privileges-limitations
+  acs_leaves:
+    - PA.I.A.K2
+    - PA.I.A.K3
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/61/31
+    - airboss-ref:regs/cfr-14/61/189
+    - airboss-ref:ac/61-65/j
 ---
 
 # Endorsements -- AC 61-65 and the daily-CFI signature set

@@ -73,6 +73,13 @@ export const AUDIT_TARGETS = {
 	 * `docs/work-packages/hangar-invite-flow/spec.md` decision (h).
 	 */
 	HANGAR_INVITATION: 'hangar.invitation',
+	/**
+	 * Per-user preference write on `study.user_pref` (study-home WP). Each
+	 * `setUserPref` call emits one audit row; `target_id` is `<userId>:<key>`
+	 * so the composite-PK pair stays addressable. WP 3 reuses the same
+	 * target type for the render-mode preference key.
+	 */
+	USER_PREF: 'study.user_pref',
 } as const;
 
 export type AuditTarget = (typeof AUDIT_TARGETS)[keyof typeof AUDIT_TARGETS];

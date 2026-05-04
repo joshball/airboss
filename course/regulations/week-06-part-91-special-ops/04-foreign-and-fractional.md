@@ -2,17 +2,15 @@
 title: Subparts H, J, K, L -- foreign aircraft, fractional, and the SFAR overlay model
 week: 6
 section_order: "04"
-covers_regulations:
-  - 91.701
-  - 91.703
-  - 91.715
-  - 91.901
-  - 91.903
-  - 91.1001
-  - 91.1011
-  - 91.1411
-ties_to_knowledge_nodes: []
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - regulations/pilot-privileges-limitations
+  acs_leaves:
+    - PA.I.A.K1
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/91/703
+    - airboss-ref:regs/cfr-14/91/1001
 ---
 
 # Subparts H, J, K, L and the SFAR overlay model

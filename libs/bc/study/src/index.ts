@@ -146,6 +146,7 @@ export type {
 } from './dashboard';
 export {
 	getDashboardPayload,
+	getFirstTouchDate,
 	getRecentActivity,
 	getRepBacklog,
 	getWeakAreas,
@@ -521,6 +522,7 @@ export type {
 	SyllabusNodeLinkRow,
 	SyllabusNodeRow,
 	SyllabusRow,
+	UserPrefRow,
 } from './schema';
 export {
 	card,
@@ -554,6 +556,7 @@ export {
 	syllabusNode,
 	syllabusNodeLink,
 	teachingExercise,
+	userPref,
 } from './schema';
 export type {
 	ItemResultInput,
@@ -669,6 +672,15 @@ export {
 	TeachingExerciseNotFoundError,
 	updateTeachingExercise,
 } from './teaching-exercises';
+export type { UserPrefValue } from './user-prefs';
+export {
+	getUserPrefs,
+	InvalidUserPrefValueError,
+	isUserPrefKey,
+	setUserPref,
+	UnknownUserPrefKeyError,
+	USER_PREF_SCHEMAS,
+} from './user-prefs';
 export {
 	cardTagsSchema,
 	cardTextSchema,

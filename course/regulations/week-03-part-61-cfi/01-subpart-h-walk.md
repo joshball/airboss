@@ -2,22 +2,18 @@
 title: Walking Part 61 subpart H -- the CFI subpart, front to back
 week: 3
 section_order: "01"
-covers_regulations:
-  - 61.181
-  - 61.183
-  - 61.185
-  - 61.187
-  - 61.189
-  - 61.191
-  - 61.193
-  - 61.195
-  - 61.197
-  - 61.199
-  - 61.201
-ties_to_knowledge_nodes:
-  - reg-cfi-privileges-61-193
-  - reg-cfi-limitations-61-195
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - regulations/pilot-privileges-limitations
+  acs_leaves:
+    - PA.I.A.K1
+    - PA.I.A.K2
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/61/181
+    - airboss-ref:regs/cfr-14/61/189
+    - airboss-ref:regs/cfr-14/61/195
+    - airboss-ref:regs/cfr-14/61/197
 ---
 
 # Walking Part 61 subpart H, front to back

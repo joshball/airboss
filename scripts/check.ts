@@ -50,6 +50,9 @@ const testLint = await $`bun tools/test-lint/bin.ts`.nothrow();
 console.log('\nValidating help-ids (InfoTip / PageHelp)...');
 const helpIds = await $`bun scripts/validate-help-ids.ts`.nothrow();
 
+console.log('\nValidating course/regulations frontmatter...');
+const courseFrontmatter = await $`bun tools/course-frontmatter/check.ts`.nothrow();
+
 const failed =
 	svelteCheck.exitCode !== 0 ||
 	svelteCheckSim.exitCode !== 0 ||
@@ -62,7 +65,8 @@ const failed =
 	knowledge.exitCode !== 0 ||
 	themeLint.exitCode !== 0 ||
 	testLint.exitCode !== 0 ||
-	helpIds.exitCode !== 0;
+	helpIds.exitCode !== 0 ||
+	courseFrontmatter.exitCode !== 0;
 if (failed) {
 	console.error('\nChecks failed.');
 	process.exit(1);

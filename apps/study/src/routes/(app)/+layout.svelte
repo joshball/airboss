@@ -37,7 +37,9 @@ let appearanceOverride = $state<AppearancePreference | null>(null);
 let themeOverride = $state<ThemeId | null>(null);
 let systemAppearance = $state<AppearanceMode>(DEFAULT_APPEARANCE);
 
-const appearancePref = $derived<AppearancePreference>(appearanceOverride ?? data.appearance ?? DEFAULT_APPEARANCE_PREFERENCE);
+const appearancePref = $derived<AppearancePreference>(
+	appearanceOverride ?? data.appearance ?? DEFAULT_APPEARANCE_PREFERENCE,
+);
 const themePref = $derived<ThemePreference>(themeOverride ?? data.theme ?? DEFAULT_THEME_PREFERENCE);
 
 $effect(() => {
@@ -104,6 +106,8 @@ function pathMatches(current: string, prefix: string): boolean {
 	return current === prefix || current.startsWith(`${prefix}/`);
 }
 
+const studyActive = $derived(page.url.pathname === ROUTES.STUDY);
+const flightActive = $derived(pathMatches(page.url.pathname, ROUTES.FLIGHT));
 const dashboardActive = $derived(page.url.pathname === ROUTES.DASHBOARD);
 const memoryActive = $derived(pathMatches(page.url.pathname, ROUTES.MEMORY));
 const memoryHomeActive = $derived(page.url.pathname === ROUTES.MEMORY);
@@ -239,6 +243,7 @@ function handleDocumentPointerDown(event: PointerEvent) {
 
 <nav aria-label="Primary">
 	<div class="nav-sections">
+		<a href={ROUTES.STUDY} aria-current={studyActive ? 'page' : undefined}>{NAV_LABELS.STUDY}</a>
 		<a href={ROUTES.DASHBOARD} aria-current={dashboardActive ? 'page' : undefined}>{NAV_LABELS.DASHBOARD}</a>
 		<a href={ROUTES.PLANS} aria-current={plansActive ? 'page' : undefined}>{NAV_LABELS.PLANS}</a>
 		<a href={ROUTES.CREDENTIALS} aria-current={credentialsActive ? 'page' : undefined}>{NAV_LABELS.CREDENTIALS}</a>
@@ -277,6 +282,7 @@ function handleDocumentPointerDown(event: PointerEvent) {
 			</div>
 		</details>
 		<a href={ROUTES.REPS} aria-current={repsActive ? 'page' : undefined}>{NAV_LABELS.REPS}</a>
+		<a href={ROUTES.FLIGHT} aria-current={flightActive ? 'page' : undefined}>{NAV_LABELS.FLIGHT}</a>
 		<a href={ROUTES.KNOWLEDGE} aria-current={knowledgeActive ? 'page' : undefined}>{NAV_LABELS.KNOWLEDGE}</a>
 		<a href={ROUTES.GLOSSARY} aria-current={glossaryActive ? 'page' : undefined}>{NAV_LABELS.GLOSSARY}</a>
 		<a href={data.flightbagOrigin}>{NAV_LABELS.FLIGHTBAG}</a>

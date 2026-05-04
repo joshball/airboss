@@ -2,13 +2,16 @@
 title: The pilot, the flight, the operation
 week: 1
 section_order: "04"
-covers_regulations:
-  - 91.3
-  - 91.13
-  - 91.103
-  - 61.56
-  - 61.57
-ties_to_knowledge_nodes: []
+cites:
+  knowledge_nodes:
+    - regulations/pilot-privileges-limitations
+  acs_leaves:
+    - PA.I.A.K1
+    - PA.I.A.K2
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/61
+    - airboss-ref:regs/cfr-14/91
+    - airboss-ref:regs/cfr-14/141
 ---
 
 # The pilot, the flight, the operation

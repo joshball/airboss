@@ -2,16 +2,17 @@
 title: Documents and required equipment -- 91.203 + 91.205
 week: 5
 section_order: "01"
-covers_regulations:
-  - 91.7
-  - 91.9
-  - 91.203
-  - 91.205
-  - 91.213
-ties_to_knowledge_nodes:
-  - reg-arow-documents-91-203
-  - reg-equipment-cumulative-91-205
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - flight-planning/vfr-cross-country
+  acs_leaves:
+    - PA.I.B.K1
+    - PA.I.B.K2
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/91/9
+    - airboss-ref:regs/cfr-14/91/203
+    - airboss-ref:regs/cfr-14/91/205
 ---
 
 # Documents and required equipment

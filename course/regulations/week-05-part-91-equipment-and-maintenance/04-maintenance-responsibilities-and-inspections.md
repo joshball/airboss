@@ -2,15 +2,22 @@
 title: Maintenance responsibilities and inspections -- 91.405 + 91.407 + 91.409
 week: 5
 section_order: "04"
-covers_regulations:
-  - 91.7
-  - 91.403
-  - 91.405
-  - 91.407
-  - 91.409
-ties_to_knowledge_nodes:
-  - reg-annual-vs-100hour-91-409
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - flight-planning/vfr-cross-country
+  acs_leaves:
+    - PA.I.B.K1
+    - PA.I.B.K2
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/91/403
+    - airboss-ref:regs/cfr-14/91/405
+    - airboss-ref:regs/cfr-14/91/407
+    - airboss-ref:regs/cfr-14/91/409
+    - airboss-ref:regs/cfr-14/91/411
+    - airboss-ref:regs/cfr-14/91/413
+    - airboss-ref:regs/cfr-14/91/417
+    - airboss-ref:regs/cfr-14/43
 ---
 
 # Maintenance responsibilities and inspections

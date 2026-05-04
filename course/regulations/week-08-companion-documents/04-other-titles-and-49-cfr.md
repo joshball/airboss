@@ -2,12 +2,16 @@
 title: Other titles -- 49 CFR 1552 (TSA), 49 CFR 830 (NTSB), and the cross-title rules
 week: 8
 section_order: "04"
-covers_regulations:
-  - 61.193
-  - 61.195
-  - 91.3
-ties_to_knowledge_nodes: []
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - regulations/pilot-privileges-limitations
+  acs_leaves:
+    - PA.IX.A.K1
+    - PA.IX.D.K1
+  handbook_sections:
+    - airboss-ref:regs/cfr-49/830
+    - airboss-ref:regs/cfr-49/1552
 ---
 
 # Other titles -- where pilot rules live outside Title 14

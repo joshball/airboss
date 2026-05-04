@@ -2,19 +2,18 @@
 title: A 250-hour PPL walks in and asks for an instrument rating
 week: 10
 difficulty: capstone
-pulls_from_regulations:
-  - 61.65
-  - 61.51
-  - 61.57
-  - 61.56
-  - 61.3
-  - 61.23
-  - 61.31
-  - 61.49
-  - 91.169
-  - 91.205
 duration_minutes: 25
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - regulations/pilot-privileges-limitations
+    - flight-planning/ifr-cross-country
+  acs_leaves:
+    - PA.I.A.K1
+    - PA.I.A.K2
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/61/65
+    - airboss-ref:regs/cfr-14/61/51
 ---
 
 # A 250-hour PPL walks in and asks for an instrument rating

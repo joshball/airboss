@@ -2,11 +2,18 @@
 title: The AIM as expected knowledge -- non-regulatory but enforceable
 week: 8
 section_order: "01"
-covers_regulations:
-  - 91.13
-  - 91.103
-ties_to_knowledge_nodes: []
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - airspace/classes-and-dimensions
+  acs_leaves:
+    - PA.I.E.K1
+    - PA.I.E.K2
+    - PA.III.A.K1
+  handbook_sections:
+    - airboss-ref:aim/1-1-1
+    - airboss-ref:aim/3-1-1
+    - airboss-ref:aim/4-1-1
 ---
 
 # The AIM as expected knowledge

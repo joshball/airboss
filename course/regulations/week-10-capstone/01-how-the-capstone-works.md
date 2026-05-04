@@ -2,9 +2,18 @@
 title: How the capstone works
 week: 10
 section_order: "01"
-covers_regulations: []
-ties_to_knowledge_nodes: []
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - regulations/pilot-privileges-limitations
+    - regulations/currency-vs-proficiency
+  acs_leaves:
+    - PA.I.A.K1
+    - PA.I.A.K2
+    - PA.I.A.K3
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/61
+    - airboss-ref:regs/cfr-14/91
 ---
 
 # How the capstone works

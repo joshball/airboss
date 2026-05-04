@@ -2,47 +2,15 @@
 title: Walking Part 91 -- the whole part in 90 minutes
 week: 6
 section_order: "05"
-covers_regulations:
-  - 91.1
-  - 91.3
-  - 91.13
-  - 91.103
-  - 91.105
-  - 91.107
-  - 91.111
-  - 91.113
-  - 91.119
-  - 91.155
-  - 91.157
-  - 91.159
-  - 91.167
-  - 91.169
-  - 91.175
-  - 91.185
-  - 91.203
-  - 91.205
-  - 91.207
-  - 91.211
-  - 91.213
-  - 91.215
-  - 91.225
-  - 91.303
-  - 91.307
-  - 91.309
-  - 91.313
-  - 91.319
-  - 91.327
-  - 91.409
-  - 91.411
-  - 91.413
-  - 91.501
-  - 91.601
-  - 91.701
-  - 91.706
-  - 91.903
-  - 91.1001
-ties_to_knowledge_nodes: []
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - regulations/pilot-privileges-limitations
+  acs_leaves:
+    - PA.I.A.K1
+    - PA.I.B.K1
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/91
 ---
 
 # Walking Part 91 -- the whole part in 90 minutes

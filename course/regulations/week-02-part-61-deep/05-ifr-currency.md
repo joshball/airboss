@@ -2,12 +2,16 @@
 title: IFR currency -- §61.57(c), the grace period, and the IPC
 week: 2
 section_order: "05"
-covers_regulations:
-  - 61.51
-  - 61.57
-ties_to_knowledge_nodes:
-  - reg-currency-vs-proficiency
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - regulations/currency-vs-proficiency
+  acs_leaves:
+    - PA.I.A.K3
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/61/57
+    - airboss-ref:regs/cfr-14/61/65
+    - airboss-ref:regs/cfr-14/61/51
 ---
 
 # IFR currency -- six-six-HIT, the grace, the IPC

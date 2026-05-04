@@ -2,16 +2,20 @@
 title: Where the real answer lives -- the source escalation path
 week: 8
 section_order: "05"
-covers_regulations:
-  - 61.51
-  - 61.113
-  - 91.3
-  - 91.13
-  - 91.103
-  - 91.123
-  - 91.185
-ties_to_knowledge_nodes: []
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - regulations/pilot-privileges-limitations
+  acs_leaves:
+    - PA.I.A.K1
+    - PA.I.A.K2
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/61/51
+    - airboss-ref:regs/cfr-14/61/113
+    - airboss-ref:regs/cfr-14/91/13
+    - airboss-ref:regs/cfr-14/91/103
+    - airboss-ref:regs/cfr-14/91/123
+    - airboss-ref:regs/cfr-14/91/185
 ---
 
 # Where the real answer lives

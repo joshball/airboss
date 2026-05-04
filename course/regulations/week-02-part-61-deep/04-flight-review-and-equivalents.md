@@ -2,12 +2,16 @@
 title: Flight review and equivalents -- §61.56 in detail
 week: 2
 section_order: "04"
-covers_regulations:
-  - 61.56
-  - 61.193
-ties_to_knowledge_nodes:
-  - reg-currency-vs-proficiency
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - regulations/currency-vs-proficiency
+  acs_leaves:
+    - PA.I.A.K3
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/61/56
+    - airboss-ref:ac/61-98/d
+    - airboss-ref:ac/61-65/j
 ---
 
 # Flight review and equivalents

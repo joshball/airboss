@@ -2,16 +2,18 @@
 title: Advisory Circulars -- numbering, currency, when an AC is the answer
 week: 8
 section_order: "02"
-covers_regulations:
-  - 61.31
-  - 61.56
-  - 61.57
-  - 61.113
-  - 91.103
-  - 91.126
-  - 91.155
-ties_to_knowledge_nodes: []
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - regulations/pilot-privileges-limitations
+  acs_leaves:
+    - PA.I.A.K1
+    - PA.I.E.K1
+  handbook_sections:
+    - airboss-ref:ac/00-6/b
+    - airboss-ref:ac/00-45/h
+    - airboss-ref:ac/61-65/j
+    - airboss-ref:ac/91-21.1/d
 ---
 
 # Advisory Circulars

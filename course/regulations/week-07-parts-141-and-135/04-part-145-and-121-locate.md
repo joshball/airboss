@@ -2,16 +2,16 @@
 title: Parts 145 and 121 -- name and locate
 week: 7
 section_order: "04"
-covers_regulations:
-  - 121.1
-  - 121.7
-  - 145.1
-  - 145.3
-  - 145.51
-  - 145.53
-  - 145.201
-ties_to_knowledge_nodes: []
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - regulations/pilot-privileges-limitations
+  acs_leaves:
+    - PA.I.A.K1
+    - PA.I.B.K1
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/145
+    - airboss-ref:regs/cfr-14/121
 ---
 
 # Parts 145 and 121 -- name and locate

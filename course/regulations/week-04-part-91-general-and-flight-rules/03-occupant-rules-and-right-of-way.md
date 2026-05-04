@@ -2,19 +2,18 @@
 title: Occupant rules, right-of-way, and minimum altitudes -- §§91.105/107, 91.111/113/115, 91.119
 week: 4
 section_order: "03"
-covers_regulations:
-  - 91.105
-  - 91.107
-  - 91.111
-  - 91.113
-  - 91.115
-  - 91.119
-ties_to_knowledge_nodes:
-  - reg-flight-crewmember-stations-91-105
-  - reg-occupant-restraints-91-107
-  - reg-right-of-way-91-113
-  - reg-minimum-altitudes-91-119
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - airspace/classes-and-dimensions
+  acs_leaves:
+    - PA.III.B.K1
+    - PA.I.E.K1
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/91/105
+    - airboss-ref:regs/cfr-14/91/107
+    - airboss-ref:regs/cfr-14/91/113
+    - airboss-ref:regs/cfr-14/91/123
 ---
 
 # Occupant rules, right-of-way, and minimum altitudes

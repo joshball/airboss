@@ -2,22 +2,15 @@
 title: Subpart F (large/turbine multi-engine) and subpart G (RVSM, foreign) -- name and locate
 week: 6
 section_order: "03"
-covers_regulations:
-  - 91.501
-  - 91.503
-  - 91.505
-  - 91.519
-  - 91.531
-  - 91.533
-  - 91.601
-  - 91.605
-  - 91.609
-  - 91.701
-  - 91.703
-  - 91.705
-  - 91.706
-ties_to_knowledge_nodes: []
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - airspace/classes-and-dimensions
+  acs_leaves:
+    - PA.I.E.K1
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/91/180
+    - airboss-ref:regs/cfr-14/91/189
 ---
 
 # Subpart F and subpart G -- name and locate

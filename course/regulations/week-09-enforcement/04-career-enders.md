@@ -2,14 +2,18 @@
 title: The career-enders -- 61.16, 91.17, 67.403
 week: 9
 section_order: "04"
-covers_regulations:
-  - 61.15
-  - 61.16
-  - 91.17
-  - 91.19
-  - 67.403
-ties_to_knowledge_nodes: []
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - regulations/pilot-privileges-limitations
+  acs_leaves:
+    - PA.IX.A.K1
+    - PA.I.A.K2
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/61/15
+    - airboss-ref:regs/cfr-14/61/16
+    - airboss-ref:regs/cfr-14/91/17
+    - airboss-ref:regs/cfr-14/91/19
 ---
 
 # The career-enders

@@ -10,7 +10,10 @@ test.describe('dashboard', () => {
 	test('primary nav exposes all surfaces', async ({ page }) => {
 		await page.goto(ROUTES.DASHBOARD);
 		const nav = page.getByRole('navigation', { name: 'Primary' });
-		await expect(nav.getByRole('link', { name: 'Dashboard' })).toHaveAttribute('aria-current', 'page');
+		// Post-study-home WP: the legacy "Dashboard" nav label was renamed to
+		// "Stats" while keeping its URL. The Study-home page is the new
+		// post-login home.
+		await expect(nav.getByRole('link', { name: 'Stats' })).toHaveAttribute('aria-current', 'page');
 		// Memory is a `<details><summary>` disclosure group. `<summary>` has no
 		// stable cross-browser ARIA role (Chromium exposes it without role),
 		// so locate it by tag/text instead of role.
@@ -27,9 +30,11 @@ test.describe('dashboard', () => {
 		expect(flightbagHref).toMatch(/^https?:\/\/flightbag\./);
 	});
 
-	test('root path redirects to dashboard', async ({ page }) => {
+	test('root path redirects to study home', async ({ page }) => {
+		// Post-WP study-home: `/` redirects to `/study` (the new post-login
+		// home). `/dashboard` is preserved at its URL as the "Stats" view.
 		await page.goto('/');
-		await expect(page).toHaveURL((url) => url.pathname === ROUTES.DASHBOARD);
+		await expect(page).toHaveURL((url) => url.pathname === ROUTES.STUDY);
 	});
 
 	test('nav links navigate to their surfaces', async ({ page }) => {
@@ -49,7 +54,7 @@ test.describe('dashboard', () => {
 		await nav.getByRole('link', { name: 'Calibration' }).click();
 		await expect(page).toHaveURL((url) => url.pathname === ROUTES.CALIBRATION);
 
-		await nav.getByRole('link', { name: 'Dashboard' }).click();
+		await nav.getByRole('link', { name: 'Stats' }).click();
 		await expect(page).toHaveURL((url) => url.pathname === ROUTES.DASHBOARD);
 	});
 

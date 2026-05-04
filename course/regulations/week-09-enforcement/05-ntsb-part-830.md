@@ -2,8 +2,17 @@
 title: NTSB Part 830 -- accidents, incidents, and reporting
 week: 9
 section_order: "05"
-covers_regulations: []
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - procedures/emergency-authority
+  acs_leaves:
+    - PA.IX.A.K1
+    - PA.IX.D.K1
+  handbook_sections:
+    - airboss-ref:regs/cfr-49/830/5
+    - airboss-ref:regs/cfr-49/830/10
+    - airboss-ref:regs/cfr-49/830/15
 ---
 
 # NTSB Part 830 -- accidents, incidents, and reporting

@@ -2,17 +2,18 @@
 title: Gear-up landing on a night IFR cross-country
 week: 10
 difficulty: capstone
-pulls_from_regulations:
-  - 91.3
-  - 91.7
-  - 91.13
-  - 91.405
-  - 91.407
-  - 91.417
-  - 61.51
-  - 61.193
-  - 91.123
 duration_minutes: 25
+cites:
+  knowledge_nodes:
+    - procedures/emergency-authority
+    - flight-planning/ifr-cross-country
+  acs_leaves:
+    - PA.IX.A.K1
+    - PA.IX.D.K1
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/91/3
+    - airboss-ref:regs/cfr-14/91/13
+    - airboss-ref:regs/cfr-49/830/5
 ---
 
 # Gear-up landing on a night IFR cross-country

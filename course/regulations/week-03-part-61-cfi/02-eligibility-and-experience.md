@@ -2,15 +2,17 @@
 title: CFI eligibility, aeronautical experience, and instructor records
 week: 3
 section_order: "02"
-covers_regulations:
-  - 61.183
-  - 61.185
-  - 61.187
-  - 61.189
-ties_to_knowledge_nodes:
-  - reg-cfi-eligibility-61-183
-  - reg-cfi-instructor-records-61-189
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - regulations/pilot-privileges-limitations
+  acs_leaves:
+    - PA.I.A.K1
+    - PA.I.A.K2
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/61/183
+    - airboss-ref:regs/cfr-14/61/187
+    - airboss-ref:regs/cfr-14/61/65
 ---
 
 # CFI eligibility, aeronautical experience, and instructor records

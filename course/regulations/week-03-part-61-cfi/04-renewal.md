@@ -2,13 +2,15 @@
 title: CFI renewal -- 61.197 pathways and the 24-month clock
 week: 3
 section_order: "04"
-covers_regulations:
-  - 61.197
-  - 61.199
-  - 61.189
-ties_to_knowledge_nodes:
-  - reg-cfi-renewal-61-197
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - regulations/currency-vs-proficiency
+  acs_leaves:
+    - PA.I.A.K3
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/61/197
+    - airboss-ref:regs/cfr-14/61/199
 ---
 
 # CFI renewal

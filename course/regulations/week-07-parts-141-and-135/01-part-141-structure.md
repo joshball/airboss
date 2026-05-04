@@ -2,20 +2,16 @@
 title: Part 141 -- structured curriculum, TCO approval, the syllabi
 week: 7
 section_order: "01"
-covers_regulations:
-  - 61.71
-  - 141.1
-  - 141.5
-  - 141.11
-  - 141.17
-  - 141.21
-  - 141.27
-  - 141.41
-  - 141.55
-  - 141.57
-  - 141.93
-ties_to_knowledge_nodes: []
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - regulations/pilot-privileges-limitations
+  acs_leaves:
+    - PA.I.A.K1
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/141
+    - airboss-ref:regs/cfr-14/141/1
+    - airboss-ref:regs/cfr-14/141/55
 ---
 
 # Part 141 -- structured curriculum, TCO approval, the syllabi

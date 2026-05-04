@@ -664,3 +664,58 @@ export function mapToPanelError(err: unknown, panel: string, userId: string): st
 export function overdueCutoff(now: Date = new Date()): Date {
 	return new Date(now.getTime() - OVERDUE_GRACE_MS);
 }
+
+/**
+ * Earliest evidence-touch timestamp for a (user, knowledge node) pair.
+ *
+ * "Touch" is any of:
+ *
+ *   - The earliest `card_state.last_reviewed_at` across cards whose
+ *     `node_id` matches.
+ *   - The earliest `session_item_result.presented_at` across rep / card
+ *     slots whose `node_id` (or, for card slots, the linked card's
+ *     `node_id`) matches.
+ *
+ * Returns `null` when no evidence is attached to the node.
+ *
+ * The study-home Today panel renders this as "you've been working on
+ * this for N days" (Decision Q6 in the WP spec). When WP 2 lands a
+ * `flight_maneuver` table, the union here gains a third leg without
+ * breaking the existing two; today the table doesn't exist so the
+ * helper returns the cards-and-reps minimum.
+ */
+export async function getFirstTouchDate(userId: string, nodeId: string, db: Db = defaultDb): Promise<Date | null> {
+	const [cardEarliest, scenarioEarliest, cardSlotEarliest] = await Promise.all([
+		// Direct card_state row whose owning card.node_id matches.
+		db
+			.select({ at: cardState.lastReviewedAt })
+			.from(cardState)
+			.innerJoin(card, eq(card.id, cardState.cardId))
+			.where(and(eq(cardState.userId, userId), eq(card.nodeId, nodeId), isNotNull(cardState.lastReviewedAt)))
+			.orderBy(cardState.lastReviewedAt)
+			.limit(1),
+		// Rep slots tagged with node_id directly.
+		db
+			.select({ at: sessionItemResult.presentedAt })
+			.from(sessionItemResult)
+			.where(and(eq(sessionItemResult.userId, userId), eq(sessionItemResult.nodeId, nodeId)))
+			.orderBy(sessionItemResult.presentedAt)
+			.limit(1),
+		// Card slots whose card row points at the node (the slot itself may not
+		// carry node_id when itemKind is `card`).
+		db
+			.select({ at: sessionItemResult.presentedAt })
+			.from(sessionItemResult)
+			.innerJoin(card, eq(card.id, sessionItemResult.cardId))
+			.where(and(eq(sessionItemResult.userId, userId), eq(card.nodeId, nodeId)))
+			.orderBy(sessionItemResult.presentedAt)
+			.limit(1),
+	]);
+
+	const candidates: Date[] = [];
+	if (cardEarliest[0]?.at != null) candidates.push(cardEarliest[0].at);
+	if (scenarioEarliest[0]?.at != null) candidates.push(scenarioEarliest[0].at);
+	if (cardSlotEarliest[0]?.at != null) candidates.push(cardSlotEarliest[0].at);
+	if (candidates.length === 0) return null;
+	return candidates.reduce((a, b) => (a.getTime() <= b.getTime() ? a : b));
+}

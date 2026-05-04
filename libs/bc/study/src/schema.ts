@@ -2336,3 +2336,38 @@ export type GoalSyllabusRow = typeof goalSyllabus.$inferSelect;
 export type NewGoalSyllabusRow = typeof goalSyllabus.$inferInsert;
 export type GoalNodeRow = typeof goalNode.$inferSelect;
 export type NewGoalNodeRow = typeof goalNode.$inferInsert;
+
+/**
+ * Per-user, per-key preference store.
+ *
+ * Owned by the study-home WP. v1 keys are `study.home.citation_order`
+ * and `study.home.map_tab`; WP 3 reuses the table for
+ * `study.knowledge.render_mode`. Composite PK (`user_id`, `key`) means
+ * upsert is one `INSERT ... ON CONFLICT DO UPDATE`. `value` is jsonb
+ * so future preferences can carry richer shapes without a migration.
+ *
+ * Cascade on user delete: a vanished user takes its preferences with
+ * it. Per-key validation (closed value sets) is enforced in the BC
+ * `setUserPref`, not by a CHECK on this table -- the closed sets evolve
+ * faster than schema migrations.
+ */
+export const userPref = studySchema.table(
+	'user_pref',
+	{
+		userId: text('user_id')
+			.notNull()
+			.references(() => bauthUser.id, { onDelete: 'cascade' }),
+		key: text('key').notNull(),
+		value: jsonb('value').notNull(),
+		updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+	},
+	(t) => ({
+		pk: primaryKey({ columns: [t.userId, t.key] }),
+		// Reverse: "every user that has set this preference key" (for ops /
+		// migration scripts). Cheap GIN-free btree on a low-cardinality column.
+		userPrefKeyIdx: index('user_pref_key_idx').on(t.key),
+	}),
+);
+
+export type UserPrefRow = typeof userPref.$inferSelect;
+export type NewUserPrefRow = typeof userPref.$inferInsert;

@@ -2,9 +2,17 @@
 title: Companion documents -- AIM, ACs, Chief Counsel, NTSB
 week: 1
 section_order: "03"
-covers_regulations:
-  - 91.13
-ties_to_knowledge_nodes: []
+cites:
+  knowledge_nodes:
+    - regulations/pilot-privileges-limitations
+  acs_leaves:
+    - PA.I.A.K1
+    - PA.I.E.K1
+  handbook_sections:
+    - airboss-ref:aim/1-1-1
+    - airboss-ref:ac/00-6/b
+    - airboss-ref:ac/61-65/j
+    - airboss-ref:regs/cfr-49/830
 ---
 
 # Companion documents

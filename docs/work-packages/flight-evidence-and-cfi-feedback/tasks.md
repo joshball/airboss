@@ -24,7 +24,7 @@ revised: 2026-05-04
 - [ ] Read `libs/bc/hangar/src/user-writes.ts` -- existing dual-gate write pattern; teacher writes follow the same shape.
 - [ ] Read `libs/db/src/schema/study/syllabus.ts` (or wherever `syllabus` + `syllabus_node` live) -- understand existing columns before adding `display_order` + `author_user_id`.
 - [ ] Read `course/regulations/SYLLABUS.md` -- understand the FAR navigation course shape; the teaching syllabus is the same shape.
-- [ ] Confirm decisions ratified -- spec.md "Decisions" table has 7 entries. Three open questions remain (Q-DEBRIEF-1/2/3); their resolution may shape the magic-link flow specifics.
+- [ ] Confirm decisions ratified -- spec.md "Decisions" table has 10 entries; all open questions are decided.
 - [ ] Run `bun run check` -- baseline 0 errors before starting.
 
 ## Implementation
@@ -138,7 +138,7 @@ revised: 2026-05-04
 - [ ] Create `libs/bc/study/src/debrief-invites.ts`:
   - `createDebriefInvite`: generates token, writes row, sends email via existing transport. Audits. Email-send failure rolls back the row insert (matches hangar invite pattern).
   - `getDebriefInviteByToken`.
-  - `acceptDebriefInvite`: per design.md "Debrief invite + magic link" flow. Validates token, signs in or creates user via better-auth magic link, auto-grants `teacher` role with default kind=`'cfi'` (TBD per Q-DEBRIEF-3 -- update once user answers). Optionally creates `teacher_student_link` per Q-DEBRIEF-2 (until answered, skip the link creation; document the TODO inline in the BC source).
+  - `acceptDebriefInvite`: per design.md "Debrief invite + magic link" flow. Validates token, signs in or creates user via better-auth magic link, auto-grants `teacher` role with metadata `{ kind: 'cfi', certificates_verified: false }` (Decision 10). Marks invite accepted. Does NOT create a `teacher_student_link` (Decision 9 -- debrief is one-flight only; relationship is opt-in via separate "Make this regular" action).
   - `revokeDebriefInvite`: soft-revoke. Audits.
 - [ ] Vitest unit: 10+ cases (create, get, accept-new-user, accept-existing-user, revoke, expired, double-click idempotency, email already revoked, role auto-grant verified).
 - [ ] `bun run check` -- 0 errors. Run tests.
@@ -178,7 +178,7 @@ revised: 2026-05-04
   - Shows the flight summary, maneuver list with assessment forms, GPS track viewer.
   - **No "create your account" text anywhere.** Header says "Welcome -- leave feedback below."
   - Save button: writes assessments, audits, shows "Thanks. Your feedback has been sent to [inviter]."
-  - Optional footer: "Want to keep tracking [student] going forward? [Make this a regular relationship]." Link only renders when relationship-on-first-debrief was NOT auto-created (per Q-DEBRIEF-2).
+  - Footer: "Want to keep tracking [student] going forward? [Make this a regular relationship]." Always renders (per Decision 9, the debrief never auto-creates a link). Click opens a Dialog with a kind dropdown (defaults to `'cfi'` per Decision 10, options `'cfi' | 'mentor' | 'peer'`); submit creates the `teacher_student_link`.
 - [ ] `bun run check` -- 0 errors.
 
 ### 16. WP 1 surface updates (consume new evidence)
@@ -214,7 +214,7 @@ revised: 2026-05-04
 ## Post-implementation
 
 - [ ] Full manual test per `test-plan.md`.
-- [ ] **Resolve Q-DEBRIEF-2 + Q-DEBRIEF-3 with user before final ship.** Update spec.md and tasks accordingly; re-test the affected flow.
+- [ ] All decisions ratified upfront; no open-question resolution needed at ship time.
 - [ ] Request review (`/ball-review-full`).
 - [ ] Apply review fixes.
 - [ ] Re-run `bun run check`, all tests.

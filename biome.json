@@ -57,7 +57,7 @@
 			}
 		},
 		{
-			"includes": ["scripts/**/*.ts"],
+			"includes": ["scripts/**/*.ts", "tools/**/*.ts"],
 			"linter": {
 				"rules": {
 					"suspicious": {
@@ -122,6 +122,14 @@
 		}
 	},
 	"files": {
-		"includes": ["*.ts", "libs/**/*.ts", "libs/**/*.svelte", "apps/**/*.ts", "apps/**/*.svelte", "scripts/**/*.ts"]
+		"includes": [
+			"*.ts",
+			"libs/**/*.ts",
+			"libs/**/*.svelte",
+			"apps/**/*.ts",
+			"apps/**/*.svelte",
+			"scripts/**/*.ts",
+			"tools/course-frontmatter/**/*.ts"
+		]
 	}
 }

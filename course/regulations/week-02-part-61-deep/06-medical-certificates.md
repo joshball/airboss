@@ -2,13 +2,16 @@
 title: Medical certificates -- Part 67 and BasicMed (Part 68 + 49 USC 44703)
 week: 2
 section_order: "06"
-covers_regulations:
-  - 61.3
-  - 61.23
-  - 61.53
-  - 61.113
-ties_to_knowledge_nodes: []
 last_verified: 2026-04-29
+cites:
+  knowledge_nodes:
+    - regulations/pilot-privileges-limitations
+  acs_leaves:
+    - PA.I.A.K2
+  handbook_sections:
+    - airboss-ref:regs/cfr-14/67
+    - airboss-ref:regs/cfr-14/68
+    - airboss-ref:regs/cfr-14/61/23
 ---
 
 # Medical certificates -- Part 67 and BasicMed
