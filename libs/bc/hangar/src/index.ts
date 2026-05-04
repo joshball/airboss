@@ -160,6 +160,7 @@ export {
 export {
 	type CreateBucketInput,
 	type CreateTaskInput,
+	countReviewQueueOpen,
 	createBucket,
 	createColumn,
 	createTask,
@@ -169,6 +170,7 @@ export {
 	filterItemsByCriteria,
 	findItemByRef,
 	finishSession,
+	getBucket,
 	getDerivedColumnName,
 	getItem,
 	getOpenSession,
@@ -208,7 +210,13 @@ export {
 	discoverAllItems,
 } from './review-discovery';
 export { readFrontmatter, writeFrontmatterField, writeFrontmatterFields } from './review-frontmatter';
-export { type LoaderResult, loadReviewItems } from './review-loader';
+export {
+	getLastLoaderRun,
+	type LastLoaderRun,
+	type LoaderResult,
+	loadReviewItems,
+	setLastLoaderRun,
+} from './review-loader';
 export { parseTestPlan, type TestPlanStep } from './review-test-plan';
 export { parseToc, type TocEntry, type TocParseResult } from './review-toc';
 export {

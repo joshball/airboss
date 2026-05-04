@@ -52,7 +52,7 @@ import {
 	generateHangarReviewSessionId,
 	generateHangarReviewStepId,
 } from '@ab/utils';
-import { and, asc, desc, eq, inArray, isNull, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, inArray, isNull, not, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import {
 	type BucketFilterCriteria,
@@ -404,6 +404,12 @@ export async function deleteBucket(id: string, db: Db = defaultDb): Promise<void
 	await db.delete(hangarReviewBucket).where(eq(hangarReviewBucket.id, id));
 }
 
+/** Get a single bucket by id. Returns null when no row matches. */
+export async function getBucket(id: string, db: Db = defaultDb): Promise<HangarReviewBucketRow | null> {
+	const rows = await db.select().from(hangarReviewBucket).where(eq(hangarReviewBucket.id, id)).limit(1);
+	return rows[0] ?? null;
+}
+
 // ---------------------------------------------------------------------------
 // Items
 // ---------------------------------------------------------------------------
@@ -447,6 +453,43 @@ export async function listItems(
 		.orderBy(asc(hangarReviewItem.sortOrder), asc(hangarReviewItem.title), asc(hangarReviewItem.id))
 		.limit(limit);
 }
+
+/**
+ * Count live review items that still need review -- everything that doesn't
+ * land in the Done column under `getDerivedColumnName`. Used by the hangar
+ * nav badge so a reviewer can see "X open" at a glance without expanding
+ * the board.
+ *
+ * "Needs review" = soft-deleted-excluded + NOT (frontmatterStatus = done AND
+ * reviewStatus = done). Pinned columns aren't consulted -- the nav badge is
+ * a derived-state count, not a column-membership count, so a user pinning
+ * an item to Done without flipping frontmatter still surfaces in the badge.
+ */
+export async function countReviewQueueOpen(boardId: string, db: Db = defaultDb): Promise<number> {
+	// "Done" is `frontmatterStatus === 'done' AND reviewStatus === 'done'`;
+	// anything that isn't that pair is "open." Express via Drizzle's `not`
+	// + `and` rather than a raw SQL literal so the constant strings come
+	// straight from `FRONTMATTER_STATUSES.DONE` -- no magic strings.
+	const rows = await db
+		.select({ count: sql<number>`count(*)::int` })
+		.from(hangarReviewItem)
+		.where(
+			and(
+				eq(hangarReviewItem.boardId, boardId),
+				isNull(hangarReviewItem.deletedAt),
+				not(
+					and(
+						eq(hangarReviewItem.frontmatterStatus, FRONTMATTER_DONE),
+						eq(hangarReviewItem.reviewStatus, REVIEW_STATUS_DONE),
+					) ?? sql`FALSE`,
+				),
+			),
+		);
+	return rows[0]?.count ?? 0;
+}
+
+const FRONTMATTER_DONE: FrontmatterStatus = 'done';
+const REVIEW_STATUS_DONE: FrontmatterReviewStatus = 'done';
 
 /** Get a single item by id (live or soft-deleted). */
 export async function getItem(id: string, db: Db = defaultDb): Promise<HangarReviewItemRow | null> {

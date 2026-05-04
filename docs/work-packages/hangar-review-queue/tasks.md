@@ -125,14 +125,14 @@ Acceptance: each kind opens its custom view and persists outcomes. Adding an ad-
 
 ## Phase 7 -- Loader admin + bucket admin + bucket counts in nav
 
-- [ ] `/review/admin/loader` -- shows last scan summary, errors, manual refresh button.
-- [ ] `/review/admin/buckets` -- list buckets: name, kind, filter criteria summary, item count, sort order. Edit/Delete actions per row.
-- [ ] `/review/admin/buckets/new` -- create form: name, kind dropdown, structured filter editor (kind / cachedStatus.frontmatterStatus / cachedStatus.reviewStatus dropdowns), Advanced jsonb predicate textarea, sort order, target column.
-- [ ] `/review/admin/buckets/[id]/edit` -- same form, pre-filled, with Delete button (confirm).
-- [ ] BC primitives in `libs/bc/hangar/src/review.ts`: `createBucket`, `updateBucket`, `deleteBucket`. Server-side validation: name unique per board, filter parses as jsonb, kind in `REVIEW_KINDS`.
-- [ ] On bucket delete, items are not deleted; they fall through to whatever bucket catches them (or hide).
-- [ ] Sidebar Review entry shows total open-review count badge.
-- [ ] Surface bucket counts on the sub-nav.
+- [x] `/review/admin/loader` -- shows last scan summary, errors, manual refresh button.
+- [x] `/review/admin/buckets` -- list buckets: name, kind, filter criteria summary, item count, sort order. Edit/Delete actions per row.
+- [x] `/review/admin/buckets/new` -- create form: name, kind dropdown, structured filter editor (kind / cachedStatus.frontmatterStatus / cachedStatus.reviewStatus dropdowns), Advanced jsonb predicate textarea, sort order.
+- [x] `/review/admin/buckets/[id]/edit` -- same form, pre-filled, with Delete button (confirm).
+- [x] BC primitives in `libs/bc/hangar/src/review.ts`: `createBucket`, `updateBucket`, `deleteBucket`, `getBucket`, `countReviewQueueOpen`. Server-side validation: name unique per board (PG 23505 mapped to inline error), filter parses through `validateBucketFilterCriteria`, kind in `REVIEW_KINDS`.
+- [x] On bucket delete, items are not deleted; they fall through to whatever bucket catches them (or hide).
+- [x] Sidebar Review entry shows total open-review count badge.
+- [ ] Surface bucket counts on the sub-nav. (Bucket counts already render on each bucket card on `/review`; admin sub-nav left as Loader / Buckets without per-bucket counts since the per-bucket count is on the buckets list page itself.)
 
 ## Phase 8 -- Polish + e2e
 

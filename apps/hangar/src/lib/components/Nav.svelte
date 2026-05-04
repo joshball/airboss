@@ -34,13 +34,24 @@ const jobsActive = $derived(
 	page.url.pathname === ROUTES.HANGAR_JOBS || page.url.pathname.startsWith(`${ROUTES.HANGAR_JOBS}/`),
 );
 const isAdmin = $derived(page.data.user?.role === ROLES.ADMIN);
+const reviewQueueCount = $derived<number>(
+	typeof page.data.reviewQueueCount === 'number' ? page.data.reviewQueueCount : 0,
+);
 </script>
 
 <div class="nav-sections">
 	<a href={ROUTES.HANGAR_SOURCES} aria-current={sourcesActive ? 'page' : undefined}>Sources</a>
 	<a href={ROUTES.HANGAR_GLOSSARY} aria-current={glossaryActive ? 'page' : undefined}>Glossary</a>
 	<a href={ROUTES.HANGAR_DOCS} aria-current={docsActive ? 'page' : undefined}>Docs</a>
-	<a href={ROUTES.HANGAR_REVIEW} aria-current={reviewActive ? 'page' : undefined}>Review</a>
+	<a href={ROUTES.HANGAR_REVIEW} aria-current={reviewActive ? 'page' : undefined}>
+		Review
+		{#if reviewQueueCount > 0}
+			<span
+				class="badge"
+				aria-label={`${reviewQueueCount} item${reviewQueueCount === 1 ? '' : 's'} need review`}
+			>{reviewQueueCount}</span>
+		{/if}
+	</a>
 	{#if isAdmin}
 		<a href={ROUTES.HANGAR_USERS} aria-current={usersActive ? 'page' : undefined}>Users</a>
 	{/if}
@@ -75,5 +86,20 @@ const isAdmin = $derived(page.data.user?.role === ROLES.ADMIN);
 	a:focus-visible {
 		outline: 2px solid var(--focus-ring);
 		outline-offset: 2px;
+	}
+
+	.badge {
+		display: inline-block;
+		margin-left: var(--space-3xs);
+		padding: 0 var(--space-2xs);
+		min-width: 1.25rem;
+		font-size: var(--type-ui-caption-size);
+		font-family: var(--font-family-mono);
+		font-weight: var(--font-weight-medium);
+		line-height: 1.25rem;
+		text-align: center;
+		color: var(--ink-inverse);
+		background: var(--action-default-default);
+		border-radius: var(--radius-pill, 999px);
 	}
 </style>
