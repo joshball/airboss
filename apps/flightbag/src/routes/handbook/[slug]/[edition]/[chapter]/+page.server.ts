@@ -16,7 +16,7 @@ import {
 	listChapterSections,
 	listFiguresForSection,
 } from '@ab/bc-study';
-import { type ReferenceKind, ROUTES } from '@ab/constants';
+import { readingMinutesForWords, type ReferenceKind, ROUTES } from '@ab/constants';
 import { error } from '@sveltejs/kit';
 import { computeSiblingNav } from '../../../../../lib/section-nav';
 import { buildSourceLinks } from '../../../../../lib/source-links';
@@ -71,6 +71,12 @@ export const load: PageServerLoad = async ({ params }) => {
 	const tocEntries = buildTOCEntries(readingOrder, chapter.id, hrefForRow);
 	const tocTotalMinutes = totalReadingMinutes(readingOrder);
 
+	// Aggregate reading-time across this chapter and its descendants. Sums the
+	// chapter row's preamble plus every nested section / paragraph.
+	const chapterMinutes = readingOrder
+		.filter((e) => e.sectionId === chapter.id || e.parentChapterCode === chapter.code)
+		.reduce((acc, e) => acc + readingMinutesForWords(e.wordCount), 0);
+
 	return {
 		uri: `airboss-ref:handbooks/${ref.documentSlug}/${shortEdition}/${chapterCode}`,
 		sourceLinks,
@@ -116,6 +122,9 @@ export const load: PageServerLoad = async ({ params }) => {
 		toc: {
 			entries: tocEntries,
 			totalMinutes: tocTotalMinutes,
+		},
+		readingTime: {
+			chapterMinutes,
 		},
 	};
 };

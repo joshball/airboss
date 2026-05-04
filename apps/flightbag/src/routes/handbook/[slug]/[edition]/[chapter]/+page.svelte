@@ -2,6 +2,7 @@
 import { ROUTES } from '@ab/constants';
 import Breadcrumbs from '@ab/library/Breadcrumbs.svelte';
 import ReaderNav from '@ab/library/ReaderNav.svelte';
+import ReadingTime from '@ab/library/ReadingTime.svelte';
 import RenderedSection from '@ab/library/RenderedSection.svelte';
 import SourceLinks from '@ab/library/SourceLinks.svelte';
 import TOCDrawer from '@ab/library/TOCDrawer.svelte';
@@ -56,13 +57,20 @@ const tocSummary = $derived(
 					figures={data.figures}
 					locator={data.chapter.sourceLocator}
 					metadata={data.chapter.metadata}
+					readingTimeMinutes={data.readingTime.chapterMinutes}
 				/>
 			{:else}
 				<header class="page-header">
 					<h1>Chapter {data.chapter.code}: {data.chapter.title}</h1>
-					{#if data.chapter.sourceLocator}
-						<p class="locator">{data.chapter.sourceLocator}</p>
-					{/if}
+					<p class="meta-row">
+						{#if data.chapter.sourceLocator}
+							<span class="locator">{data.chapter.sourceLocator}</span>
+						{/if}
+						<ReadingTime
+							minutes={data.readingTime.chapterMinutes}
+							ariaLabel={`Approximately ${data.readingTime.chapterMinutes} minutes to read this chapter`}
+						/>
+					</p>
 				</header>
 			{/if}
 
@@ -89,6 +97,7 @@ const tocSummary = $derived(
 				figures={data.figures}
 				locator={data.chapter.sourceLocator}
 				metadata={data.chapter.metadata}
+				readingTimeMinutes={data.readingTime.chapterMinutes}
 			>
 				{#snippet breadcrumb()}
 					<Breadcrumbs {segments} />
@@ -143,10 +152,17 @@ const tocSummary = $derived(
 		font-size: var(--font-size-2xl);
 		font-weight: var(--font-weight-bold);
 	}
-	.locator {
+	.meta-row {
 		margin: 0;
+		display: flex;
+		align-items: baseline;
+		flex-wrap: wrap;
+		gap: var(--space-xs) var(--space-sm);
+	}
+	.locator {
 		color: var(--ink-muted);
 		font-family: var(--font-family-mono);
+		font-size: var(--font-size-sm);
 	}
 
 	.sections {

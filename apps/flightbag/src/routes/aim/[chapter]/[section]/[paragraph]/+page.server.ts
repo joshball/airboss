@@ -12,7 +12,7 @@ import {
 	listAllSectionsForReference,
 	listChapterSections,
 } from '@ab/bc-study';
-import { type ReferenceKind, ROUTES } from '@ab/constants';
+import { readingMinutesForWords, type ReferenceKind, ROUTES } from '@ab/constants';
 import { isParseError, parseAimLocator, parseIdentifier } from '@ab/sources';
 import { error } from '@sveltejs/kit';
 import { computeSiblingNav } from '../../../../../lib/section-nav';
@@ -80,6 +80,9 @@ export const load: PageServerLoad = async ({ params }) => {
 	const tocEntries = buildTOCEntries(readingOrder, paragraphRow.id, hrefForRow);
 	const tocTotalMinutes = totalReadingMinutes(readingOrder);
 
+	const paragraphEntry = readingOrder.find((e) => e.sectionId === paragraphRow.id);
+	const sectionMinutes = paragraphEntry ? readingMinutesForWords(paragraphEntry.wordCount) : 0;
+
 	return {
 		uri: rawUri,
 		sourceLinks,
@@ -121,6 +124,9 @@ export const load: PageServerLoad = async ({ params }) => {
 		toc: {
 			entries: tocEntries,
 			totalMinutes: tocTotalMinutes,
+		},
+		readingTime: {
+			sectionMinutes,
 		},
 	};
 };

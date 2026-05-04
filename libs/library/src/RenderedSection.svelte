@@ -64,6 +64,13 @@ export interface RenderedSectionProps {
 	/** Optional locator string (e.g. `PHAK §12.9 -- pp. 12-15..12-18`). Rendered under the title. */
 	readonly locator?: string;
 	/**
+	 * Optional reading-time estimate, in minutes. When > 0, surfaces a small
+	 * "≈ N min read" badge in the section header (next to the title). 0 hides
+	 * the badge. The estimate is computed from the body's word count via
+	 * `readingMinutesForWords` in `@ab/constants`.
+	 */
+	readonly readingTimeMinutes?: number;
+	/**
 	 * Optional footer rendered below the body (and below the orphan-figures
 	 * tail). Used by the section reader to attach the prev/next/up nav strip
 	 * so every section page is "book-like" instead of dead-ending.
@@ -91,6 +98,7 @@ import {
 	parseFrontmatter,
 	renderMarkdown,
 } from '@ab/utils';
+import ReadingTime from './ReadingTime.svelte';
 
 let {
 	title,
@@ -101,6 +109,7 @@ let {
 	breadcrumb,
 	aside,
 	locator,
+	readingTimeMinutes = 0,
 	footer,
 	emptyFallback,
 }: RenderedSectionProps = $props();
@@ -243,8 +252,13 @@ function stringifyMetadataValue(value: unknown): string {
 	<header class="head">
 		<div class="title-block">
 			<h1>{title}</h1>
-			{#if locator}
-				<p class="locator">{locator}</p>
+			{#if locator || readingTimeMinutes > 0}
+				<p class="meta-row">
+					{#if locator}
+						<span class="locator">{locator}</span>
+					{/if}
+					<ReadingTime minutes={readingTimeMinutes} />
+				</p>
 			{/if}
 			{#if figures.length > 0 || tableLinks.length > 0}
 				<p class="indicators" data-testid="rendered-section-indicators">
@@ -341,10 +355,18 @@ h1 {
 	font-weight: var(--font-weight-bold);
 }
 
-.locator {
+.meta-row {
 	margin: 0;
+	display: flex;
+	align-items: baseline;
+	flex-wrap: wrap;
+	gap: var(--space-xs) var(--space-sm);
+}
+
+.locator {
 	color: var(--ink-muted);
 	font-family: var(--font-family-mono);
+	font-size: var(--font-size-sm);
 }
 
 .metadata {
