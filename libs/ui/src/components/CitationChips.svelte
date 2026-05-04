@@ -19,8 +19,21 @@ export interface CitationChipItem {
 	typeLabel?: string | null;
 	/** Primary display text (e.g. "14 CFR 91.155(b)"). */
 	label: string;
-	/** Optional external URL. When set, the chip label renders as a link. */
+	/**
+	 * Optional URL. When set, the chip label renders as a link. The render
+	 * rule pairs with `targetExternal`: external links open in a new tab
+	 * (`_blank` + `noopener`); internal links open in the same tab so the
+	 * back button returns the user to the source surface.
+	 */
 	href?: string | null;
+	/**
+	 * Set to `true` for external (off-app) URLs -- the chip renders with
+	 * `target="_blank"` + `rel="noopener noreferrer"`. Internal flightbag /
+	 * knowledge-node deep links leave it `false` (or omitted) so navigation
+	 * stays in the same tab. Stage-5 (WP `stage5-citation-deeplink`)
+	 * convention: route layer sets this when building items.
+	 */
+	targetExternal?: boolean;
 	/** Optional author note ("basis for the answer"). Italic, quoted. */
 	context?: string | null;
 }
@@ -48,8 +61,10 @@ let { items, editable = false, removeAction, removeLabel = 'Remove citation' }: 
 			{#if item.typeLabel}
 				<span class="citation-type">{item.typeLabel}</span>
 			{/if}
-			{#if item.href}
+			{#if item.href && item.targetExternal}
 				<a class="citation-label" href={item.href} target="_blank" rel="noopener noreferrer">{item.label}</a>
+			{:else if item.href}
+				<a class="citation-label" href={item.href}>{item.label}</a>
 			{:else}
 				<span class="citation-label">{item.label}</span>
 			{/if}

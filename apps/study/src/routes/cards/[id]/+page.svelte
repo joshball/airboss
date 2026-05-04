@@ -14,6 +14,10 @@ const citationItems = $derived<CitationChipItem[]>(
 		typeLabel: c.detail,
 		label: c.label,
 		href: c.href,
+		// Stage-5: external_ref opens in a new tab; in-app deep links
+		// (flightbag / knowledge node) stay in the same tab so the back
+		// button returns the user to the card page.
+		targetExternal: c.targetExternal,
 	})),
 );
 

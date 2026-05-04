@@ -31,6 +31,7 @@ import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { REFERENCE_KINDS, REFERENCE_SECTION_LEVELS } from '@ab/constants';
+import { airbossRefForNtsbAljDocument, airbossRefForNtsbAljSection } from '@ab/sources';
 import type { NtsbAljManifest } from '../manifest-validation';
 import { type SectionSchema, upsertReference, upsertReferenceSection } from '../references';
 import type { SeedContext, SeedSummary } from './types';
@@ -138,6 +139,7 @@ async function seedDocumentRoot(
 		ordinal: 0,
 		depth: 0,
 		code: '1',
+		airbossRef: airbossRefForNtsbAljDocument(manifest.case_number),
 		title: manifest.title,
 		faaPageStart: null,
 		faaPageEnd: null,
@@ -185,6 +187,7 @@ async function seedOpinionSections(
 			ordinal: section.ordinal,
 			depth: 1,
 			code: section.code,
+			airbossRef: airbossRefForNtsbAljSection(manifest.case_number, section.code),
 			title: section.title,
 			faaPageStart: null,
 			faaPageEnd: null,

@@ -45,6 +45,23 @@ export { parseAcLocator } from './ac/locator.ts';
 export { parseAcsLocator } from './acs/locator.ts';
 export { parseAimLocator } from './aim/locator.ts';
 export {
+	airbossRefForAcDocument,
+	airbossRefForAcSection,
+	airbossRefForAcsArea,
+	airbossRefForAcsElement,
+	airbossRefForAcsPublication,
+	airbossRefForAcsTask,
+	airbossRefForAimEntry,
+	airbossRefForCfrSection,
+	airbossRefForGenericDocument,
+	airbossRefForHandbookSection,
+	airbossRefForInfo,
+	airbossRefForNtsbAljDocument,
+	airbossRefForNtsbAljSection,
+	airbossRefForSafo,
+	airbossRefForWholeDocHandbook,
+} from './airboss-ref-builder.ts';
+export {
 	type BootstrapOptions,
 	type BootstrapReport,
 	hydrateRegsFromDerivatives,

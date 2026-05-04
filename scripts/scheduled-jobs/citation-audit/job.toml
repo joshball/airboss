@@ -7,7 +7,7 @@
 
 name = "citation-audit"
 description = "Stage-5 cross-link audit: dead targets, dead sources, resolver coverage gaps"
-enabled = false
+enabled = true
 
 # Weekly, Mondays at 09:30 local time.
 schedule = "30 9 * * 1"

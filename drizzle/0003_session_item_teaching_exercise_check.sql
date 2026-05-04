@@ -1,1 +1,0 @@
-ALTER TABLE "study"."session_item_result" ADD CONSTRAINT "sir_teaching_exercise_shape_check" CHECK (("item_kind" = 'teaching-exercise') = ("teaching_exercise_id" IS NOT NULL));

@@ -34,8 +34,21 @@ export interface PublicCardCitation {
 	label: string;
 	/** Optional secondary text (e.g. "Regulation"). */
 	detail: string | null;
-	/** External link when the citation has one (external_ref). Internal targets stay unlinked on the public page. */
+	/**
+	 * Link target when the citation resolves to one. Stage-5
+	 * (WP `stage5-citation-deeplink`): in-app deep links to flightbag /
+	 * knowledge-node detail pages are now safe to expose publicly because
+	 * both target surfaces are public. External refs continue to carry
+	 * their author-supplied URL through.
+	 */
 	href: string | null;
+	/**
+	 * `true` for external (off-app) URLs; the chip renders with
+	 * `target="_blank"` + `rel="noopener noreferrer"`. In-app deep links
+	 * leave it `false` so navigation stays in the same tab and the back
+	 * button returns the user to the card page.
+	 */
+	targetExternal: boolean;
 }
 
 export interface PublicCard {
@@ -51,10 +64,19 @@ export interface PublicCard {
 
 /**
  * Public-safe projection of a resolved citation. Lives here (not in the
- * citations BC) because the policy of "external links only on the public
- * page" is a card-public concern, and keeping it here avoids a dep cycle
- * (citations already imports from study). Internal targets render as text;
- * external_ref carries its href through.
+ * citations BC) because the link-exposure policy is a card-public concern.
+ *
+ * Stage-5 (WP `stage5-citation-deeplink`) flipped the rule: every kind of
+ * citation can carry an href on the public page now.
+ *
+ * - `reference_section` -> flightbag deep link (public reader).
+ * - `knowledge_node`    -> /knowledge/<id> (public detail page).
+ * - `external_ref`      -> author-supplied URL (off-app).
+ * - legacy regulation_node / ac_reference -> no href (those rows have no
+ *   canonical airboss-ref URI to dispatch through; migration 2 retires them).
+ *
+ * `targetExternal` is true only for `external_ref`; in-app deep links open
+ * in the same tab so the back button returns the user to the card page.
  */
 export function composePublicCardCitations(
 	resolved: ReadonlyArray<{
@@ -62,12 +84,22 @@ export function composePublicCardCitations(
 		target: { type: CitationTargetType; label: string; detail?: string; href?: string };
 	}>,
 ): PublicCardCitation[] {
-	return resolved.map((c) => ({
-		id: c.citation.id,
-		label: c.target.label,
-		detail: c.target.detail ?? null,
-		href: c.target.type === CITATION_TARGET_TYPES.EXTERNAL_REF && c.target.href ? c.target.href : null,
-	}));
+	return resolved.map((c) => {
+		const isExternal = c.target.type === CITATION_TARGET_TYPES.EXTERNAL_REF;
+		const isLegacyHangarRef =
+			c.target.type === CITATION_TARGET_TYPES.REGULATION_NODE || c.target.type === CITATION_TARGET_TYPES.AC_REFERENCE;
+		// Legacy hangar.reference targets have no airboss-ref URI to deep-link
+		// through, so suppress href even if one somehow arrived. Every other
+		// kind passes its href through (or null when missing).
+		const href = isLegacyHangarRef ? null : (c.target.href ?? null);
+		return {
+			id: c.citation.id,
+			label: c.target.label,
+			detail: c.target.detail ?? null,
+			href,
+			targetExternal: isExternal,
+		};
+	});
 }
 
 /**

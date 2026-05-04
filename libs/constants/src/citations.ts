@@ -28,7 +28,24 @@ export const CITATION_SOURCE_LABELS: Record<CitationSourceType, string> = {
 };
 
 export const CITATION_TARGET_TYPES = {
+	/**
+	 * Polymorphic target -- points at `study.reference_section.id`. Covers
+	 * every corpus-backed citation (handbooks / cfr / ac / acs / aim / ntsb /
+	 * safo / info / ...). The corpus is read from the joined
+	 * `study.reference.kind`, not encoded in the target type, so adding a new
+	 * corpus is purely additive at the data layer. See WP
+	 * `stage5-citation-deeplink`.
+	 */
+	REFERENCE_SECTION: 'reference_section',
+	/**
+	 * @deprecated kept in the enum for one release while migration 1 backfills
+	 * any existing rows to `reference_section`. Drops in migration 2.
+	 */
 	REGULATION_NODE: 'regulation_node',
+	/**
+	 * @deprecated kept in the enum for one release while migration 1 backfills
+	 * any existing rows to `reference_section`. Drops in migration 2.
+	 */
 	AC_REFERENCE: 'ac_reference',
 	EXTERNAL_REF: 'external_ref',
 	KNOWLEDGE_NODE: 'knowledge_node',
@@ -39,6 +56,7 @@ export type CitationTargetType = (typeof CITATION_TARGET_TYPES)[keyof typeof CIT
 export const CITATION_TARGET_VALUES: readonly CitationTargetType[] = Object.values(CITATION_TARGET_TYPES);
 
 export const CITATION_TARGET_LABELS: Record<CitationTargetType, string> = {
+	[CITATION_TARGET_TYPES.REFERENCE_SECTION]: 'Reference section',
 	[CITATION_TARGET_TYPES.REGULATION_NODE]: 'Regulation',
 	[CITATION_TARGET_TYPES.AC_REFERENCE]: 'Advisory circular',
 	[CITATION_TARGET_TYPES.EXTERNAL_REF]: 'External reference',

@@ -25,6 +25,7 @@ import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { REFERENCE_KINDS, REFERENCE_SECTION_LEVELS, type ReferenceSectionLevel } from '@ab/constants';
+import { airbossRefForAimEntry } from '@ab/sources';
 import type { AimManifest, AimManifestEntry } from '../manifest-validation';
 import { type SectionSchema, upsertReference, upsertReferenceSection } from '../references';
 import type { SeedContext, SeedSummary } from './types';
@@ -177,6 +178,7 @@ export async function seedAimManifest(
 			ordinal,
 			depth: KIND_TO_DEPTH[entry.kind],
 			code: entry.code,
+			airbossRef: airbossRefForAimEntry(entry.code),
 			title: entry.title,
 			faaPageStart: null,
 			faaPageEnd: null,

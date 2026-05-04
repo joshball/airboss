@@ -57,13 +57,19 @@ const citationItems = $derived<CitationChipItem[]>(
 		typeLabel: targetTypeLabel(c.target.type),
 		label: c.target.label,
 		href: c.target.href ?? null,
+		// Stage-5: external_ref opens in a new tab; in-app deep links stay
+		// in the same tab so the back button returns to the rep view.
+		targetExternal: c.target.type === CITATION_TARGET_TYPES.EXTERNAL_REF,
 		context: c.citation.citationContext,
 	})),
 );
 const citationRemoveAction = $derived(`${ROUTES.REP_DETAIL(scenario.id)}?/removeCitation`);
+// Stage-5 (WP `stage5-citation-deeplink`): one polymorphic
+// `reference_section` tab covers every corpus-backed citation; legacy
+// `regulation_node` + `ac_reference` enum values are dropped from the
+// picker UI in this WP (retired by migration 2 in the constants).
 const citationTargets = [
-	CITATION_TARGET_TYPES.REGULATION_NODE,
-	CITATION_TARGET_TYPES.AC_REFERENCE,
+	CITATION_TARGET_TYPES.REFERENCE_SECTION,
 	CITATION_TARGET_TYPES.KNOWLEDGE_NODE,
 	CITATION_TARGET_TYPES.EXTERNAL_REF,
 ];
