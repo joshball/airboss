@@ -44,7 +44,6 @@ export {
 	getRemovedCards,
 	getRemovedCardsCount,
 	InvalidCardKindError,
-	SourceRefRequiredError,
 	setCardStatus,
 	updateCard,
 } from './cards';
