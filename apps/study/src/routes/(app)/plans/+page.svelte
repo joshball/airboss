@@ -14,6 +14,7 @@ import {
 	SESSION_MODE_LABELS,
 	type SessionMode,
 } from '@ab/constants';
+import BadgeStatus from '@ab/ui/components/BadgeStatus.svelte';
 import Button from '@ab/ui/components/Button.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
@@ -115,7 +116,7 @@ function fmt(date: Date): string {
 				<div class="plan-head">
 					<div>
 						<h2>{active.title}</h2>
-						<span class="badge active-badge">{PLAN_STATUS_LABELS[active.status as PlanStatus]}</span>
+						<BadgeStatus state="active">{PLAN_STATUS_LABELS[active.status as PlanStatus]}</BadgeStatus>
 					</div>
 					<a class="link" href={ROUTES.PLAN(active.id)}>Open</a>
 				</div>
@@ -172,7 +173,7 @@ function fmt(date: Date): string {
 					<li>
 						<a class="plan-name" href={ROUTES.PLAN(p.id)}>{p.title}</a>
 						<span class="meta">
-							<span class="badge">{PLAN_STATUS_LABELS[p.status as PlanStatus]}</span>
+							<BadgeStatus state="archived">{PLAN_STATUS_LABELS[p.status as PlanStatus]}</BadgeStatus>
 							<span class="muted">{fmt(p.updatedAt)}</span>
 						</span>
 					</li>
@@ -268,21 +269,6 @@ function fmt(date: Date): string {
 	.plan-head h2 {
 		margin: 0 0 var(--space-2xs);
 		font-size: var(--type-heading-1-size);
-	}
-
-	.badge {
-		display: inline-block;
-		font-size: var(--type-ui-caption-size);
-		font-weight: 600;
-		padding: var(--space-2xs) var(--space-sm);
-		border-radius: var(--radius-pill);
-		background: var(--edge-default);
-		color: var(--ink-muted);
-	}
-
-	.active-badge {
-		background: var(--action-default-hover);
-		color: var(--ink-inverse);
 	}
 
 	.plan-meta {

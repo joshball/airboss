@@ -44,7 +44,7 @@ Re-audited every per-category file against current main. **All 5 headline critic
 | testing      |     17 |    4 | done     | savedDeck seeding; cleanup-guard removal; per-test fresh user for memory/review; reps-test ordering                  |
 | dx           |      4 |   14 | pending  | handbook .catch -> typed errors; "verb entity failed" log sweep; login 5xx branch; discovery log level promotion     |
 | ux           |      5 |   13 | pending  | library card-state indicator; topic 404 -> soft empty; Skip Permanently confirm copy; form-error consistency         |
-| svelte       |      2 |    6 | pending  | route-level CSS extraction (work-package); effect-mirror -> derived; module-scoped timers -> $effect cleanup         |
+| svelte       |      4 |    4 | pending  | route-level CSS extraction landed (Card/Toast/ScoreMeta/BadgeStatus + calibration h2 nit); remaining: effect-mirror -> derived; module-scoped timers -> $effect cleanup |
 | backend      |     16 |    2 | done     | regulations-section redundant fetch; per-action ref/chapter re-fetch (handbook chapter actions)                       |
 
 ### Closed-by-rewrite
@@ -59,7 +59,7 @@ Re-audited every per-category file against current main. **All 5 headline critic
 - **Log-quality sweep** (~6 dx items): mechanical pass replacing `'<func> threw'` with `'<verb> <entity> failed'` and aligning user-visible noun-phrase across logs + `fail()` messages.
 - **Heartbeat correctness tail** (3 correctness items): rating numeric key, local accumulator on POST failure, handbook-asset symlink defence. Three small follow-ons.
 - **Library completeness UX** (4 ux items + 1 architecture): card-state indicator, topic 404 -> soft empty, regulations empty buckets, isReadable hardcoded. All gated on the library-completeness Wave-2 spec decision.
-- **Route-level CSS extraction** (1 svelte MAJOR): work-package scope -- extract Card / Toast / ScoreMeta / BadgeStatus primitives into `libs/ui`. Token migration is a finishing pass per project rule.
+- **Route-level CSS extraction** (1 svelte MAJOR): CLOSED 2026-05-04 -- `Toast`, `ScoreMeta`, `BadgeStatus` added to `@ab/ui`; existing `Card` applied to calibration. Consumers updated: calibration (Card x3, ScoreMeta), plans/+page (BadgeStatus x2), plans/[id]/+page (BadgeStatus + Toast for edit-success), memory/review/[sessionId]/+page (Toast x2: undo + share), memory/[id]/_panels/CardDetailPanel (Toast x2: edit + share). Token migration is a finishing pass per project rule.
 - **(app)/+layout effect-mirror** (1 svelte MAJOR + 1 svelte MINOR): replace mirror effects with optimistic-override `$derived` + nullable pending state.
 - **Backend CRITICAL** (memory/review GET-mutation): single-route fix -- redirect to a Start prompt with form action; never mint a session in `load`.
 - **a11y CRITICAL × 3** -- ALL CLOSED 2026-05-04: MapPanel `aria-label` + `role="cell"` wrapper; radiogroup roving-tabindex via `radio-group-keyboard.ts`; read-suggestion preamble via `ReadSuggestionPanel.svelte`. See a11y review file for evidence.
@@ -96,8 +96,8 @@ Re-audited every per-category file against current main. **All 5 headline critic
 These show up across multiple reviewers and should be fixed at the root once, not N times.
 
 ### Route-level visual CSS proliferation
-- **svelte (major)**: 65 of ~70 route files ship multi-screen `<style>` blocks with reusable component styling (cards, toasts, badges, score-meta, identity menu, undo-bar). Top 5 offenders carry 2300+ lines combined.
-- **architecture (major)**: `memory/[id]/+page.svelte` (1172 lines, 432 CSS) and `session/start/+page.svelte` (883 lines, 438 CSS) have grown into multi-screen feature surfaces. Should follow the dashboard `_panels/` pattern.
+- **svelte (major)**: CLOSED 2026-05-04 -- `Toast`, `ScoreMeta`, `BadgeStatus` extracted into `@ab/ui` and applied to calibration / plans / memory-review / CardDetailPanel; existing `Card` adopted on calibration's three sub-panels. The most-duplicated visual blocks (toast, score-meta, lifecycle pill, panel-shape card) now live in libs and the routes ship layout-flow CSS only. Identity menu (200+ lines in `(app)/+layout.svelte`) stayed inline -- it's a single-site composite, not a 3+-site shape.
+- **architecture (major)**: CLOSED -- `memory/[id]/+page.svelte` (1172 lines -> 49) and `session/start/+page.svelte` (883 -> 87) shipped via the dashboard `_panels/` pattern.
 - **Root cause**: route files are treated as pages instead of assembly. Visual primitives belong in `libs/ui/`.
 
 ### Business-logic drift into routes

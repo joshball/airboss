@@ -19,10 +19,12 @@ import {
 	TOAST_DISMISS_MS,
 } from '@ab/constants';
 import type { ActionFailure } from '@ab/types';
+import BadgeStatus from '@ab/ui/components/BadgeStatus.svelte';
 import Banner from '@ab/ui/components/Banner.svelte';
 import Button from '@ab/ui/components/Button.svelte';
 import ConfirmAction from '@ab/ui/components/ConfirmAction.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
+import Toast from '@ab/ui/components/Toast.svelte';
 import { enhance } from '$app/forms';
 import { page } from '$app/state';
 import type { ActionData, PageData } from './$types';
@@ -87,7 +89,7 @@ const goalLink = $derived(data.primaryGoalId ? ROUTES.GOAL_EDIT(data.primaryGoal
 <section class="page">
 	<PageHeader title={plan.title}>
 		{#snippet subtitleSnippet()}
-			<span class="badge" class:active={isActive}>{PLAN_STATUS_LABELS[plan.status as PlanStatus]}</span>
+			<BadgeStatus state={isActive ? 'active' : 'archived'}>{PLAN_STATUS_LABELS[plan.status as PlanStatus]}</BadgeStatus>
 			{#if isActive}<a class="link" href={ROUTES.SESSION_START}>Start a session</a>{/if}
 		{/snippet}
 		{#snippet actions()}
@@ -105,7 +107,7 @@ const goalLink = $derived(data.primaryGoalId ? ROUTES.GOAL_EDIT(data.primaryGoal
 		</Banner>
 	{/if}
 	{#if editToastVisible}
-		<Banner tone="success">Plan updated.</Banner>
+		<Toast tone="success" shape="card">Plan updated.</Toast>
 	{/if}
 	{#if formError}
 		<Banner tone="danger">{formError}</Banner>
@@ -254,21 +256,6 @@ const goalLink = $derived(data.primaryGoalId ? ROUTES.GOAL_EDIT(data.primaryGoal
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-xl);
-	}
-
-	.badge {
-		display: inline-block;
-		font-size: var(--type-ui-caption-size);
-		font-weight: 600;
-		padding: var(--space-2xs) var(--space-sm);
-		border-radius: var(--radius-pill);
-		background: var(--edge-default);
-		color: var(--ink-muted);
-	}
-
-	.badge.active {
-		background: var(--action-default-hover);
-		color: var(--ink-inverse);
 	}
 
 	.link {

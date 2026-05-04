@@ -29,6 +29,7 @@ import JumpToCardPopover, { type JumpCardStatus } from '@ab/ui/components/JumpTo
 import KbdHint from '@ab/ui/components/KbdHint.svelte';
 import SharePopover from '@ab/ui/components/SharePopover.svelte';
 import SnoozeReasonPopover from '@ab/ui/components/SnoozeReasonPopover.svelte';
+import Toast from '@ab/ui/components/Toast.svelte';
 import { enhance } from '$app/forms';
 import { invalidateAll } from '$app/navigation';
 import { page } from '$app/state';
@@ -520,7 +521,9 @@ async function submitFeedbackForm(event: SubmitEvent) {
 		</header>
 
 		{#if shareToast}
-			<div class="share-toast" role="status" aria-live="polite">{shareToast}</div>
+			<div class="share-toast-row">
+				<Toast tone="featured" shape="pill">{shareToast}</Toast>
+			</div>
 		{/if}
 
 		{#if reEntryBanner}
@@ -729,17 +732,22 @@ async function submitFeedbackForm(event: SubmitEvent) {
 		{/if}
 
 		{#if pendingUndo}
-			<div class="undo-toast" role="status" aria-live="polite">
-				<span class="undo-msg">
-					Rated <strong>{pendingUndo.ratingLabel}</strong>.
-					<span class="undo-domain">{domainLabel(pendingUndo.card.domain)}</span>
-				</span>
-				<a class="undo-link" href={ROUTES.MEMORY_CARD(pendingUndo.cardId)}>View card</a>
-				<button type="button" class="undo-btn" onclick={triggerUndo} disabled={undoing}>
-					{undoing ? 'Undoing...' : 'Undo'}
-					<KbdHint>U</KbdHint>
-				</button>
-				<button type="button" class="undo-dismiss" onclick={cancelUndo} aria-label="Dismiss undo">&times;</button>
+			{@const undo = pendingUndo}
+			<div class="undo-toast-wrap">
+				<Toast tone="featured" shape="card">
+					<span class="undo-msg">
+						Rated <strong>{undo.ratingLabel}</strong>.
+						<span class="undo-domain">{domainLabel(undo.card.domain)}</span>
+					</span>
+					{#snippet actions()}
+						<a class="undo-link" href={ROUTES.MEMORY_CARD(undo.cardId)}>View card</a>
+						<button type="button" class="undo-btn" onclick={triggerUndo} disabled={undoing}>
+							{undoing ? 'Undoing...' : 'Undo'}
+							<KbdHint>U</KbdHint>
+						</button>
+						<button type="button" class="undo-dismiss" onclick={cancelUndo} aria-label="Dismiss undo">&times;</button>
+					{/snippet}
+				</Toast>
 			</div>
 		{/if}
 	{/if}
@@ -783,17 +791,11 @@ async function submitFeedbackForm(event: SubmitEvent) {
 		position: relative;
 	}
 
-	.undo-toast {
-		display: flex;
-		align-items: center;
-		gap: var(--space-md);
-		padding: var(--space-sm) var(--space-md);
-		background: var(--action-default-wash);
-		border: 1px solid var(--action-default-edge);
-		border-radius: var(--radius-lg);
-		font-size: var(--font-size-sm);
-		color: var(--action-default-active);
-		animation: undo-fade-in var(--motion-normal) ease-out;
+	/* Layout slot for the Toast primitive -- pushes the toast block down
+	 * from the rating row. The visual treatment (background, border,
+	 * radius, fade-in animation, prefers-reduced-motion carve-out) lives
+	 * inside <Toast>; the route owns only the surrounding flow. */
+	.undo-toast-wrap {
 		margin-top: var(--space-md);
 	}
 
@@ -863,15 +865,6 @@ async function submitFeedbackForm(event: SubmitEvent) {
 		border-radius: var(--radius-sm);
 	}
 
-	@keyframes undo-fade-in {
-		from { opacity: 0; transform: translateY(4px); }
-		to { opacity: 1; transform: translateY(0); }
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.undo-toast { animation: none; }
-	}
-
 	.hd {
 		display: flex;
 		justify-content: space-between;
@@ -905,20 +898,11 @@ async function submitFeedbackForm(event: SubmitEvent) {
 		box-shadow: 0 0 0 3px var(--focus-ring);
 	}
 
-	.share-toast {
-		align-self: flex-end;
-		padding: var(--space-2xs) var(--space-md);
-		background: var(--action-default-wash);
-		border: 1px solid var(--action-default-edge);
-		color: var(--action-default-hover);
-		font-size: var(--font-size-sm);
-		font-weight: 600;
-		border-radius: var(--radius-pill);
-		animation: undo-fade-in var(--motion-normal) ease-out;
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.share-toast { animation: none; }
+	/* Layout wrapper to right-align the share Toast. The Toast primitive
+	 * owns its own pill shape, animation, and reduced-motion fallback. */
+	.share-toast-row {
+		display: flex;
+		justify-content: flex-end;
 	}
 
 	.title-row {

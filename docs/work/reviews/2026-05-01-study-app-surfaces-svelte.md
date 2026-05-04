@@ -14,18 +14,18 @@ review_status: pending
 
 ## Status as of 2026-05-04
 
-Re-greped main. 2 of 8 closed. The route-level CSS proliferation MAJOR remains the dominant follow-up; the effect-mirror anti-pattern also still in place.
+Re-greped main. 4 of 8 closed (route-CSS extraction landed for Card / Toast / ScoreMeta / BadgeStatus + the calibration h2 grouping nit went with it). Remaining open items are the effect-mirror cluster.
 
 | Severity | Finding | Verdict | Evidence |
 | -------- | ------- | ------- | -------- |
-| MAJOR    | Pervasive heavy visual CSS in route files (65 files affected) | STILL OPEN | partial relief via the memory/[id] (-1100 lines) and session/start (-800 lines) `_panels/` extractions; calibration / memory/review / knowledge / sessions still ship 270-628 lines of `<style>`. Next: scope a follow-up work package to extract Card / Toast / ScoreMeta / BadgeStatus / IdentityMenu primitives into `libs/ui` (token migration runs LAST per project rule) |
+| MAJOR    | Pervasive heavy visual CSS in route files (65 files affected) | CLOSED (by extraction) | `Toast`, `ScoreMeta`, `BadgeStatus` added to `@ab/ui`; existing `Card` applied to calibration. Calibration drops from 455 lines to ~360 (-21%). `plans/+page` and `plans/[id]/+page` drop their inline `.badge` / `.active-badge` blocks. `memory/review/[sessionId]/+page` drops the inline `.undo-toast` / `.share-toast` blocks (animation + reduced-motion now lives in `<Toast>`). `memory/[id]/_panels/CardDetailPanel.svelte` drops the duplicated `.toast` block. Token migration for residual hex / raw rules in route files runs in a later finishing pass per project rule. |
 | MAJOR    | $effect mirrors props/server data into $state (effect-should-be-derived) | STILL OPEN | `apps/study/src/routes/(app)/+layout.svelte:30-40` still has the two mirror effects on `appearancePref` / `themePref`. Next: replace with optimistic-override `$derived(pendingPref ?? data.pref)` pattern |
 | MAJOR    | $effect side-effects URL based on state seeded from URL | STILL OPEN | the `state_referenced_locally` suppressed pattern recurs in `memory/[id]` panels, `sessions/[id]`, and `knowledge/[slug]/learn`. Next: prefer event-driven URL writes over reactive sync (handler calls `replaceState` directly) |
 | MAJOR    | $effect missing cleanup on setTimeout (memory/[id] shareToastTimer) | CLOSED (by refactor) | `memory/[id]/+page.svelte` shrunk to 49 lines; toast logic absorbed by panels. Pattern persists in `memory/review/[sessionId]/+page.svelte:75,84` (undo + share toasts) -- both are module-scoped `let` outside `$effect`. Tracked under the related MINOR |
 | MINOR    | Forward reference of `selection` inside $effect at top of layout | STILL OPEN | `(app)/+layout.svelte` still has the hoisted-const dependency. Cosmetic |
 | MINOR    | Module-scoped mutable timer outside $effect | STILL OPEN | `memory/review/[sessionId]/+page.svelte:75,84` -- module-scoped `let undoTimer` and `let shareToastTimer`. Next: move into `$effect` cleanup |
 | MINOR    | `state_referenced_locally` suppression recurs 3+ times | STILL OPEN | tied to the second MAJOR (effect-should-be-derived); fix together |
-| NIT      | Mixed h2 selector grouping in calibration CSS | STILL OPEN | tied to the route-level CSS extraction MAJOR |
+| NIT      | Mixed h2 selector grouping in calibration CSS | CLOSED (by Card adoption) | the three `.chart-card / .domains-card / .trend-card h2` selectors collapsed into a single `h2` rule when those panels migrated to `<Card>`; the route's only h2s now live inside Card `header` snippets. |
 
 ## Summary
 
