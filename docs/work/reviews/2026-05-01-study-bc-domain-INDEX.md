@@ -15,23 +15,23 @@ review_status: done
 
 | Category     | Critical | Major C/O | Minor C/O | Nit C/O | Total C/O |
 | ------------ | :------: | :-------: | :-------: | :-----: | :-------: |
-| correctness  |    -     |    3/1    |    1/5    |   0/2   |    4/8    |
+| correctness  |    -     |    4/0    |    2/4    |   0/2   |    6/6    |
 | security     |    -     |    0/2    |    1/4    |   1/2   |    2/8    |
 | perf         |    -     |    3/2    |    3/3    |   0/3   |    6/8    |
-| architecture |   0/1    |    -      |    0/3    |   0/1   |    0/5    |
+| architecture |   1/0    |    -      |    2/1    |   0/1   |    3/2    |
 | patterns     |    -     |    -      |    1/0    |    -    |    1/0    |
 | testing      |    -     |    5/0    |    2/7    |   2/2   |    9/9    |
 | dx           |    -     |    2/2    |    1/4    |   0/3   |    3/9    |
 | schema       |    -     |    4/1    |    1/5    |   0/4   |    5/10   |
-| backend      |   0/1    |    3/1    |    2/4    |   0/4   |    5/10   |
-| **TOTAL**    | **0/2**  | **20/9**  | **12/35** | **3/21**| **35/67** |
+| backend      |   1/0    |    4/0    |    2/4    |   0/4   |    7/8    |
+| **TOTAL**    | **2/0**  | **22/7**  | **15/32** | **3/21**| **42/60** |
 
-(Format: `Closed/Open`. Architecture marks the chunk's sole CRITICAL as still open; backend's CRITICAL is partial-closed -- see per-category detail.)
+(Format: `Closed/Open`. Both chunk-2 CRITICALs (architecture package boundaries + backend transaction-wrap) are now closed -- see per-category detail.)
 
 ### Total tally
 
-- **Closed: 35 / 102 (34%)** -- includes 0 of 2 critical, 20 of 29 major, 12 of 45 minor (plus 1 minor counted as patterns), 3 of 26 nit.
-- **Still open: 67 / 102 (66%)** -- includes both criticals (1 fully open architecture; 1 partial-close backend), 9 majors, 35 minors, 21 nits.
+- **Closed: 42 / 102 (41%)** -- includes 2 of 2 critical, 22 of 29 major, 15 of 45 minor (plus 1 minor counted as patterns), 3 of 26 nit.
+- **Still open: 60 / 102 (59%)** -- 0 criticals, 7 majors, 32 minors, 21 nits.
 - All open items have concrete triggers documented in the per-category audit sections.
 
 ### Convergent fixes that landed (root cause -> closed children)
@@ -40,6 +40,10 @@ review_status: done
 | ------------------ | ---------- | --------------- |
 | `recordItemResult` rewrite (typed errors, no upsert, single tx, audit emit) | PR #437 | correctness MAJOR ×2, backend MAJOR, dx MAJOR (`SessionNotFoundError` mislabel) |
 | `applyCertGoals` batched reads | PR #481 | perf MAJOR, backend (partial CRITICAL) |
+| `applyCertGoalsToPrimaryGoal` transaction wrap | this PR | backend CRITICAL |
+| `updateCard` card+snooze transaction wrap | this PR | correctness MAJOR, backend MAJOR |
+| `renameSavedDeck` / `deleteSavedDeck` -> `onConflictDoUpdate` | this PR | backend MAJOR |
+| Package-boundary hardening (`@ab/bc-hangar` dep + barrel imports, explicit `exports` on `@ab/db`/`@ab/auth`/`@ab/bc-sim`) | this PR | architecture CRITICAL, architecture MINOR ×2 |
 | `getCredentialIdsCoveredBy` recursive CTE | PR #479 | perf MAJOR, backend MAJOR |
 | Per-test isolation across mastery / knowledge.progress / credentials / engine-targeting | PR #546 | testing MAJOR ×4 |
 | `sessions.test.ts` coverage expansion | PR #547 | testing MAJOR |
@@ -67,16 +71,16 @@ review_status: done
 
 ### Open work clusters (root-cause groupings of still-open items)
 
-1. **Package-boundary hardening (architecture)** -- one CRITICAL + 2 minors. Same WP: declare `@ab/bc-hangar` dep on bc-study + curated re-export, add `exports` field to `@ab/db` / `@ab/auth` / replace `@ab/bc-sim/persistence` wildcard with explicit subpath.
-2. **Library-by-cert SQL-side filter (perf)** -- 2 majors. Same fix: GIN on `study.reference(subjects)` + Drizzle `arrayContains` for list, `LATERAL` unnest for counts.
-3. **Batch BC helpers (perf)** -- 2 majors. `getHandbookProgressBatch` + `getNodesCitingSectionsBatch`; closes chunk-1 N+1s.
-4. **BC error-class hygiene sweep (dx + backend + correctness)** -- 1 major + 4 minors. `SourceRefRequiredError` dedupe, shared `UpsertReturnedNoRowError`, `CitationNotOwnedError`, `CredentialPrereqUnresolvedNodesError`, `LensError` style.
-5. **Transaction-wrap pass (backend + correctness)** -- 1 partial CRITICAL + 1 major + 1 minor. `applyCertGoalsToPrimaryGoal`, `updateCard`, `renameSavedDeck`/`deleteSavedDeck` -> `onConflictDoUpdate`.
-6. **Goals validation gap (security)** -- 1 major. Wire `createGoalInputSchema.parse` etc. at the BC boundary.
-7. **Build-only barrel split (security)** -- 1 major. Split `@ab/bc-study` and `@ab/bc-study/build` (or add actor assertions).
-8. **Knowledge-node updater audit column (schema)** -- 1 major tied to deferred `knowledge_node_version` work.
-9. **Schema cleanup migration (schema)** -- 3 minors. `lifecycle` notNull tightening, `references_v2_migrated` drop, `cert_goals` deprecated drop.
-10. **Test-polish sweep (testing)** -- 7 minors + 2 nits. `withFreshUser` propagation, scenarios reject regex pinning, smoke-test pinning.
+1. **Library-by-cert SQL-side filter (perf)** -- 2 majors. Same fix: GIN on `study.reference(subjects)` + Drizzle `arrayContains` for list, `LATERAL` unnest for counts.
+2. **Batch BC helpers (perf)** -- 2 majors. `getHandbookProgressBatch` + `getNodesCitingSectionsBatch`; closes chunk-1 N+1s.
+3. **BC error-class hygiene sweep (dx + backend + correctness)** -- 1 major + 4 minors. `SourceRefRequiredError` dedupe, shared `UpsertReturnedNoRowError`, `CitationNotOwnedError`, `CredentialPrereqUnresolvedNodesError`, `LensError` style.
+4. **Goals validation gap (security)** -- 1 major. Wire `createGoalInputSchema.parse` etc. at the BC boundary.
+5. **Build-only barrel split (security)** -- 1 major. Split `@ab/bc-study` and `@ab/bc-study/build` (or add actor assertions).
+6. **Knowledge-node updater audit column (schema)** -- 1 major tied to deferred `knowledge_node_version` work.
+7. **Schema cleanup migration (schema)** -- 3 minors. `lifecycle` notNull tightening, `references_v2_migrated` drop, `cert_goals` deprecated drop.
+8. **Test-polish sweep (testing)** -- 7 minors + 2 nits. `withFreshUser` propagation, scenarios reject regex pinning, smoke-test pinning.
+
+The package-boundary hardening cluster + the transaction-wrap cluster (formerly open) closed in this PR; both chunk-2 CRITICALs are now closed and the cluster list is no longer required to track them.
 
 ### Per-category status
 

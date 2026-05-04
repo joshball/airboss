@@ -233,6 +233,70 @@ describe('deleteSavedDeck', () => {
 	});
 });
 
+// ---------------------------------------------------------------------
+// Atomicity / race protection: both write paths used to read-then-write
+// outside a transaction, so a concurrent double-click could drive two
+// INSERTs against the (user_id, deck_hash) UNIQUE and surface a raw
+// 23505 instead of the typed BC outcome. The single-statement upsert
+// fix lets the DB pick one winner; the test below fires N parallel
+// calls and verifies only one row exists with the last-write-wins
+// values applied.
+// ---------------------------------------------------------------------
+describe('renameSavedDeck / deleteSavedDeck concurrent writes', () => {
+	it('collapses concurrent renames into one row without surfacing 23505', async () => {
+		const hash = 'rc000001';
+		const labels = ['First', 'Second', 'Third', 'Fourth', 'Fifth'];
+
+		// Promise.all-fire all renames; pre-fix, at least one of these
+		// would lose the read-then-write race and reject with the raw
+		// unique-violation. With the upsert path, every call resolves
+		// with a valid row.
+		const results = await Promise.all(labels.map((l) => renameSavedDeck(TEST_USER_ID, hash, l)));
+		expect(results).toHaveLength(labels.length);
+		for (const r of results) {
+			expect(r.deckHash).toBe(hash);
+			expect(r.userId).toBe(TEST_USER_ID);
+		}
+
+		const stored = await db
+			.select()
+			.from(savedDeck)
+			.where(and(eq(savedDeck.userId, TEST_USER_ID), eq(savedDeck.deckHash, hash)));
+		expect(stored).toHaveLength(1);
+		expect(labels).toContain(stored[0]?.label);
+	});
+
+	it('collapses concurrent dismisses into one row', async () => {
+		const hash = 'rc000002';
+		await Promise.all(Array.from({ length: 8 }, () => deleteSavedDeck(TEST_USER_ID, hash)));
+
+		const stored = await db
+			.select()
+			.from(savedDeck)
+			.where(and(eq(savedDeck.userId, TEST_USER_ID), eq(savedDeck.deckHash, hash)));
+		expect(stored).toHaveLength(1);
+		expect(stored[0]?.dismissedAt).toBeInstanceOf(Date);
+	});
+
+	it('handles concurrent rename + dismiss without 23505 even when neither row exists yet', async () => {
+		const hash = 'rc000003';
+		// Mix of rename and dismiss firing into a hash that has no row
+		// yet -- the first arrival inserts, the rest upsert.
+		const ops: Array<Promise<unknown>> = [];
+		for (let i = 0; i < 4; i += 1) {
+			ops.push(renameSavedDeck(TEST_USER_ID, hash, `concurrent-${i}`));
+			ops.push(deleteSavedDeck(TEST_USER_ID, hash));
+		}
+		await Promise.all(ops);
+
+		const stored = await db
+			.select()
+			.from(savedDeck)
+			.where(and(eq(savedDeck.userId, TEST_USER_ID), eq(savedDeck.deckHash, hash)));
+		expect(stored).toHaveLength(1);
+	});
+});
+
 describe('listSavedDecks integration with overlay', () => {
 	it('hides decks that have been dismissed', async () => {
 		const visible = 'lv000001';

@@ -17,17 +17,17 @@ review_status: done
 | Severity | Count | Closed | Open |
 | -------- | ----: | -----: | ---: |
 | critical |     0 |      0 |    0 |
-| major    |     4 |      3 |    1 |
-| minor    |     6 |      1 |    5 |
+| major    |     4 |      4 |    0 |
+| minor    |     6 |      2 |    4 |
 | nit      |     2 |      0 |    2 |
 
 ### MAJOR: `recordItemResult` upsert vs documented contract -- CLOSED
 
 PR #437. `libs/bc/study/src/sessions.ts:933-963` now uses a pure `db.update(sessionItemResult).set(...).where(...).returning()` with explicit zero-row check that throws `SessionSlotNotFoundError`. Audit emit + tx wrap added. Regression test at `sessions.test.ts:311-336` ("throws SessionSlotNotFoundError when the slot row was never inserted -- no ghost row created") confirms. Closed.
 
-### MAJOR: `updateCard` mutates card + cardSnooze outside transaction -- STILL OPEN
+### MAJOR: `updateCard` mutates card + cardSnooze outside transaction -- CLOSED
 
-`libs/bc/study/src/cards.ts:168-225` still runs both writes on raw `db`. Trigger: roll into next cards-feedback WP; wrap in `db.transaction(async tx => { ... })` and thread `tx` through both updates.
+Closed by this PR. `libs/bc/study/src/cards.ts:168-227` now wraps the existence check, the card UPDATE, and the bad-question snooze sweep in one `db.transaction(async (tx) => { ... })`; both writes share the same `tx`. New atomicity tests at `libs/bc/study/src/cards.test.ts:206-267` use a forced-rollback proxy on `db.transaction` and verify neither write survives the rollback -- the post-conditions read raw `db` and assert the card content + snooze row reverted.
 
 ### MAJOR: `skipSessionSlot` inherits `recordItemResult` upsert bug -- CLOSED
 
@@ -49,9 +49,9 @@ The root-cause `recordItemResult` rewrite (PR #437) propagates to `skipSessionSl
 
 `libs/bc/study/src/goals.ts:262-267` clear is now narrowed via `and(eq(goal.userId, params.userId), eq(goal.isPrimary, true))`. Mirrors `setPrimaryGoal`. Closed.
 
-### MINOR: `applyCertGoalsToPrimaryGoal` non-transactional -- STILL OPEN (mirrors backend CRITICAL)
+### MINOR: `applyCertGoalsToPrimaryGoal` non-transactional -- CLOSED (mirrors backend CRITICAL)
 
-Same finding as backend's CRITICAL. Per-cert reads are batched (#481) but multi-write phase still runs outside `db.transaction`. Trigger documented in backend audit; closing here as a duplicate symptom.
+Closed in lockstep with the backend CRITICAL by this PR. `libs/bc/study/src/goals.ts:542-647` opens a single transaction that owns the create-primary path, the targeting patch, and every per-cert upsert. Atomicity test at `libs/bc/study/src/goals.test.ts:600-654`.
 
 ### MINOR: `getReviewedCardIdsInSession` ownership predicate -- STILL OPEN
 

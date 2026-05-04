@@ -173,55 +173,62 @@ export async function updateCard(
 ): Promise<CardRow> {
 	const parsed = updateCardSchema.parse(patch);
 
-	const [existing] = await db
-		.select()
-		.from(card)
-		.where(and(eq(card.id, cardId), eq(card.userId, userId)))
-		.limit(1);
-	if (!existing) throw new CardNotFoundError(cardId, userId);
-	if (!existing.isEditable) throw new CardNotEditableError(cardId);
+	// Wrap the card UPDATE and the bad-question snooze sweep in one
+	// transaction so a failure on the second write rolls back the first.
+	// Without the wrap a partial failure leaves the card content patched
+	// but stale snooze rows still pointing at the old text -- the
+	// re-entry banner would never fire and the row drifts silently.
+	return await db.transaction(async (tx) => {
+		const [existing] = await tx
+			.select()
+			.from(card)
+			.where(and(eq(card.id, cardId), eq(card.userId, userId)))
+			.limit(1);
+		if (!existing) throw new CardNotFoundError(cardId, userId);
+		if (!existing.isEditable) throw new CardNotEditableError(cardId);
 
-	// Whitelist explicitly so Drizzle can't accept extra keys slipped in by a
-	// caller that bypasses TypeScript.
-	const update: Partial<CardRow> = { updatedAt: new Date() };
-	if (parsed.front !== undefined) update.front = parsed.front;
-	if (parsed.back !== undefined) update.back = parsed.back;
-	if (parsed.domain !== undefined) update.domain = parsed.domain as Domain;
-	if (parsed.cardType !== undefined) update.cardType = parsed.cardType as CardType;
-	if (parsed.tags !== undefined) update.tags = parsed.tags;
+		// Whitelist explicitly so Drizzle can't accept extra keys slipped in by a
+		// caller that bypasses TypeScript.
+		const update: Partial<CardRow> = { updatedAt: new Date() };
+		if (parsed.front !== undefined) update.front = parsed.front;
+		if (parsed.back !== undefined) update.back = parsed.back;
+		if (parsed.domain !== undefined) update.domain = parsed.domain as Domain;
+		if (parsed.cardType !== undefined) update.cardType = parsed.cardType as CardType;
+		if (parsed.tags !== undefined) update.tags = parsed.tags;
 
-	const [updated] = await db
-		.update(card)
-		.set(update)
-		.where(and(eq(card.id, cardId), eq(card.userId, userId)))
-		.returning();
+		const [updated] = await tx
+			.update(card)
+			.set(update)
+			.where(and(eq(card.id, cardId), eq(card.userId, userId)))
+			.returning();
 
-	// Mark any active `bad-question` snoozes so the re-entry banner fires
-	// the next time this card surfaces in a review. Only triggers on real
-	// content changes (front/back/domain/cardType/tags) -- the whitelist
-	// above already screens out status-only flips.
-	const contentChanged =
-		parsed.front !== undefined ||
-		parsed.back !== undefined ||
-		parsed.domain !== undefined ||
-		parsed.cardType !== undefined ||
-		parsed.tags !== undefined;
-	if (contentChanged) {
-		const editedAt = new Date();
-		await db
-			.update(cardSnooze)
-			.set({ cardEditedAt: editedAt, snoozeUntil: editedAt })
-			.where(
-				and(
-					eq(cardSnooze.cardId, cardId),
-					eq(cardSnooze.reason, SNOOZE_REASONS.BAD_QUESTION),
-					isNull(cardSnooze.resolvedAt),
-					isNull(cardSnooze.cardEditedAt),
-				),
-			);
-	}
+		// Mark any active `bad-question` snoozes so the re-entry banner fires
+		// the next time this card surfaces in a review. Only triggers on real
+		// content changes (front/back/domain/cardType/tags) -- the whitelist
+		// above already screens out status-only flips.
+		const contentChanged =
+			parsed.front !== undefined ||
+			parsed.back !== undefined ||
+			parsed.domain !== undefined ||
+			parsed.cardType !== undefined ||
+			parsed.tags !== undefined;
+		if (contentChanged) {
+			const editedAt = new Date();
+			await tx
+				.update(cardSnooze)
+				.set({ cardEditedAt: editedAt, snoozeUntil: editedAt })
+				.where(
+					and(
+						eq(cardSnooze.cardId, cardId),
+						eq(cardSnooze.reason, SNOOZE_REASONS.BAD_QUESTION),
+						isNull(cardSnooze.resolvedAt),
+						isNull(cardSnooze.cardEditedAt),
+					),
+				);
+		}
 
-	return updated;
+		return updated;
+	});
 }
 
 /** Fetch a single card and its scheduler state. Returns null when not found. */
