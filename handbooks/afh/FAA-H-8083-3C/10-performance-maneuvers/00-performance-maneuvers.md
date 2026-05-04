@@ -24,7 +24,4 @@ Performance maneuvers, once grasped by the pilot, are very satisfying and reward
 performance maneuvers, they may likely see an increased smoothness in their flight control application and an increased ability to
 sense the airplane’s attitude and orientation without significant conscious effort.
 
-![Figure 10-4. Lazy eight. 
-The previous description of a lazy eight and figure 10-4 describe how a lazy eight looks from outside the flight deck and describes it 
-as two 180° turns with altitude changes. How does it look from the pilot's perspective? Think of the longitudinal axis of the airplane 
-as a pencil, which dra](/handbooks/afh/FAA-H-8083-3C/figures/fig-10-00-lazy-eight-the-previous-description-of-a-lazy-ei.png)
+![Figure 10-3. Chandelle.](/handbooks/afh/FAA-H-8083-3C/figures/fig-10-00-chandelle.png)

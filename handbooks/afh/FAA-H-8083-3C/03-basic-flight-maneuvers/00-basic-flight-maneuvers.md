@@ -15,7 +15,4 @@ pilots about attitude awareness; which requires understanding the motions of fli
 also moving horizontally, vertically, and laterally. The four fundamentals (straight-and-level flight, turns, climbs, and descents) are
 the principal maneuvers that control the airplane through the six motions of flight.
 
-![Figure 3-2. The pilot is always considered the referenced center of effect as the flight controls are used. 
-With the pilot’s hand: 
-⦁ When pulling the elevator pitch control toward the pilot, which is an aft movement of the control wheel, 
-yoke, control stick, or side stick controller (referred to as adding back press](/handbooks/afh/FAA-H-8083-3C/figures/fig-3-00-the-pilot-is-always-considered-the-referenced-ce.png)
+![Figure 3-1. Basic flight controls and instrument panel.](/handbooks/afh/FAA-H-8083-3C/figures/fig-3-00-basic-flight-controls-and-instrument-panel.png)

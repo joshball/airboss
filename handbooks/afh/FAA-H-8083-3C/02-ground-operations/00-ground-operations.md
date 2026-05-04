@@ -23,6 +23,4 @@ This chapter covers the essential elements for the regulatory basis of flight in
 3. Managing risk and resources, and
 4. Proper and effective airplane surface movements using the AFM/POH and airplane checklists.
 
-![Figure 2-9. An aircraft piston showing damage that occurred in just minutes as a result of detonation and overheating. 
-Jet fuel refueling trucks and dispensing equipment are marked with JET-A placards in white characters on a black background. 
-Because of the dire consequences associated with misfueling, fuel nozzles](/handbooks/afh/FAA-H-8083-3C/figures/fig-2-00-an-aircraft-piston-showing-damage-that-occurred-.png)
+![Figure 2-8. Cracks radiating from screw holes that have been stop-drilled to prevent crack progression.](/handbooks/afh/FAA-H-8083-3C/figures/fig-2-00-cracks-radiating-from-screw-holes-that-have-been.png)
