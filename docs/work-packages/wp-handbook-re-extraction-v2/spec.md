@@ -79,18 +79,31 @@ The extractor logs which path each empty section took. Default policy is (b) (ke
 
 ### 5. Warning taxonomy + per-doc warning manifest
 
-The existing `manifest.json` `warnings[]` field has free-form `{code, section_code, message}` shapes. Standardize the codes:
+The existing `manifest.json` `warnings[]` field has free-form `{code, section_code, message}` shapes. The vocabulary is split into two families:
+
+**Extraction-quality codes** (the v2 extractor improvements target these; counted toward the success criterion):
 
 - `caption-without-figure` (existing)
-- `figure-without-caption`
-- `table-cell-merge-ambiguity`
-- `ocr-leak-in-section-body`
-- `empty-section-kept`
-- `empty-section-merged`
-- `front-matter-page-range-not-declared`
-- `tablish-block-not-converted` (HTML survived as-is because conversion failed)
+- `figure-without-caption` (existing)
+- `table-merge-failed` (existing)
+- `table-empty` (existing)
+- `cross-reference-unresolved` (existing)
+- `table-cell-merge-ambiguity` (Phase 1B)
+- `tablish-block-not-converted` (Phase 1B; HTML survived as-is because conversion failed)
+- `ocr-leak-in-section-body` (Phase 1C)
+- `empty-section-kept` (Phase 1C)
+- `empty-section-merged` (Phase 1C)
+- `front-matter-page-range-not-declared` (Phase 1C)
 
-Each warning stays in `manifest.json`. Emit a sibling `warnings.json` as a normalized array for tooling. Every warning has a stable `id` (hash of code + section_code + first 50 chars of message) so triage state can be persisted against it.
+**Strategy / parser instrumentation** (audit signal; surfaced separately, NOT counted toward this WP's success criterion -- see "Success criteria" below):
+
+- `toc` -- TOC parser issues (orphan entry, indent ambiguity)
+- `toc-verify` -- heading-fingerprint mismatch between TOC and body
+- `llm` -- Claude API errors / malformed responses (legacy; no current handbook uses this)
+- `section-strategy` -- catch-all for parser-instrumentation messages without a more specific class
+- `page-label` -- printed FAA header walk-back failures
+
+Each warning stays in `manifest.json`. The v2 extractor also emits a sibling `warnings.json` (normalized triage-input file matching `handbookWarningsFileSchema` in `libs/bc/study/src/manifest-validation.ts`). Every warning has a stable `id` (16 hex chars; hash of `<code>|<section_code or "">|<message[:50]>`) so triage state can be persisted against it across re-extractions. The `id` is optional on `manifest.json` warnings (back-compat with pre-WP manifests) and required on `warnings.json` entries.
 
 ### 6. Hangar warning-triage surface (WP-HANGAR-REFS dependency)
 
@@ -115,7 +128,11 @@ After v2 ships, re-run the extractor against every ingested doc:
 
 …plus all 9 promoted ACs. The 12 link-only ACs from Wave 6 stay link-only for now (their full ingestion is WP-AC-FULL).
 
-Validate the warning-count change after re-extraction. Goal: cut PHAK warnings from 1050 to <100 (i.e. 90%+ resolved by the v2 extractor's improvements alone). Anything still flagged after v2 is a real triage item that goes through the hangar dashboard.
+**Strategy carve-out.** This WP covers handbooks using `section_strategy: toc`, `toc-file-sidecar`, and `override-md` -- i.e. all 8 currently-ingested handbooks. If a future handbook uses `section_strategy: prompt` (the paste-to-Claude flow per [section-extraction-prompt-strategy.md](../../ingestion-pipeline/section-extraction-prompt-strategy.md)), re-extracting it falls under a separate WP -- `prompt` is human-interactive (memory rule: `run-llm-comparison.md` is human-interactive, not a sub-agent target) and doesn't fit the headless re-run shape this WP assumes.
+
+**Front-matter page-range methodology (per-doc, empirical).** For each handbook in Phase 1C, inspect the source PDF's bookmark tree + the first page that bears the FAA-style `<chapter>-<page>` body header to find the boundary between front matter and chapter 1. Commit the `front_matter_page_range: [start, end]` (1-indexed PDF pages, inclusive) to the per-doc YAML at `scripts/sources/config/handbooks/<slug>.yaml`. Surface the value in the Phase 2 PR body so the user can spot-check against the PDF.
+
+**Warning-count goal.** Cut **fixable** warnings from ~2023 (extraction-quality only, excluding `toc-verify`'s 668 PHAK entries and the other parser-instrumentation codes) to <300. The remaining warnings are real triage items that go through the hangar dashboard.
 
 ### 8. AIM, ACS, CFR — same treatment
 
@@ -136,43 +153,63 @@ The AIM extractor (744 entries) and the CFR section extractor are different code
 
 ## Phases
 
-### Phase 1: extractor improvements (one PR)
+Phase 1 is split into three sub-phases (one PR each) so review stays tractable and the WP can ship incrementally without holding the warning-emission contract hostage to the table-conversion or front-matter work.
 
-1. Front-matter capture (add `front_matter_page_range` to per-doc YAML; add the synthetic section emission).
-2. HTML-to-markdown table conversion (with HTML fallback wired through).
-3. Figure-pairing wider-rectangle retry + OCR-leak detection.
-4. Empty-section policy.
-5. Warning taxonomy normalization + `warnings.json` emission.
+### Phase 1A: warning-taxonomy normalization + `warnings.json` emission (one PR)
+
+1. Extend `handbookManifestWarningSchema` with the new code vocabulary (`table-cell-merge-ambiguity`, `tablish-block-not-converted`, `ocr-leak-in-section-body`, `empty-section-kept`, `empty-section-merged`, `front-matter-page-range-not-declared`).
+2. Add `id` (16 hex chars; optional on manifest, required on `warnings.json`) computed from `<code>|<section_code or "">|<message[:50]>`.
+3. Author the sibling `warnings.json` schema (`handbookWarningsFileSchema`) + Python emitter in `tools/handbook-ingest/ingest/normalize.py`. Sorted entries for byte-stable diffs.
+4. Classify codes as fixable vs. parser-instrumentation (`WP_FIXABLE_WARNING_CODES`). `toc-verify`, `toc`, `llm`, `page-label`, `section-strategy` are NOT fixable.
+5. Hard-fail the writer when it sees an emitter code outside the closed vocabulary so the validator and emitter never drift silently.
+6. Spec edits: per-strategy scope carve-out, `toc-verify` reclassification, sub-phase plan.
+
+Tests: TS validator + Python emitter unit tests. No re-extraction yet.
+
+### Phase 1B: HTML-to-markdown table conversion + figure-pairing retry (one PR)
+
+1. Convert simple HTML tables (1 thead row, no rowspans/colspans) to clean markdown tables in section bodies.
+2. Keep the standalone `.html` file as fidelity fallback (linked via "open original" through `/handbook-asset/[...path]`).
+3. Emit `table-cell-merge-ambiguity` for complex tables that survive as best-effort markdown + HTML fallback; emit `tablish-block-not-converted` for raw-HTML survivors.
+4. Figure-pairing wider-rectangle retry: when a caption is detected but no image is paired, retry with a relaxed rectangle.
+
+### Phase 1C: front-matter capture + empty-section policy + OCR-leak detection (one PR)
+
+1. Add `front_matter_page_range: [start, end]` per-doc YAML key (commit empirical values for each handbook in this PR's body).
+2. Emit synthetic `level: 'front-matter'` sections (depth 0; ordinals before chapter 1's preamble) for cover, preface, acknowledgments, the substantive prose introduction, optional TOC.
+3. Empty-section policy: per-doc YAML `empty_section_policy: { merge_upward: [...], best_effort_fill: [...] }` keyed by section code. Default for unlisted = keep with placeholder + `metadata.extraction_status: 'no-body-content'` on the section row.
+4. OCR-leak detection: long string of single-letter tokens in a section body -> elide + emit `ocr-leak-in-section-body`.
 
 Tests: extractor unit tests against known good/bad fixtures.
 
-### Phase 2: re-run + diff (one PR per doc, or one mass-rebuild PR)
+### Phase 2: re-run + diff (one PR per doc; 9 PRs total)
 
-1. Run the v2 extractor against each of the 8 handbooks + 9 ACs.
+1. Run the v2 extractor against each of the 8 handbooks (one PR per handbook) + one consolidated PR for the 9 promoted ACs.
 2. Diff the new derivative tree against the old; commit the new tree, archive the old where it's been superseded.
 3. Re-seed the DB and verify section counts haven't regressed (apart from intentional empty-section merges).
-4. Per-doc warning-count delta (target: 90%+ reduction for handbooks with high pre-v2 counts).
+4. Per-doc warning-count delta in the PR body (target: <300 fixable warnings across all handbooks combined).
 
 ### Phase 3: hangar triage data contract (separate small PR)
 
-1. `warnings.json` normalized format.
-2. `validation/.../warnings-triage.json` shape + BC reader.
+1. `warnings.json` consumer contract (Phase 1A wrote the producer; Phase 3 wires the BC reader).
+2. `validation/.../warnings-triage.json` shape + BC reader (`getOpenWarningsForReference`).
 3. Hand-off to WP-HANGAR-REFS for the UI.
 
 ## Risks
 
-- **Re-extraction changes content_hash for many sections.** The seeder is content-hash idempotent; a hash change triggers re-seeding figures and re-rendering. This is fine but the diff will be enormous on PR review. Strategy: one-doc-per-PR for Phase 2 to keep diffs tractable.
-- **Front-matter capture might pick up false positives** (legal disclaimers, distribution lists). Per-doc opt-in via `front_matter_page_range`.
+- **Re-extraction changes content_hash for many sections.** The seeder is content-hash idempotent; a hash change triggers re-seeding figures and re-rendering. This is fine but the diff will be enormous on PR review. Strategy: one-doc-per-PR for Phase 2 (8 handbook PRs + 1 ACs PR = 9 PRs) to keep diffs tractable.
+- **Front-matter capture might pick up false positives** (legal disclaimers, distribution lists). Per-doc opt-in via `front_matter_page_range` (committed empirically per handbook in Phase 1C).
 - **Markdown table conversion is lossy for complex tables.** Documented above; fallback HTML mitigates.
-- **AIM and CFR extractors are different code paths.** Don't try to unify them in this WP — fix each in place.
+- **AIM and CFR extractors are different code paths.** Don't try to unify them in this WP -- fix each in place.
+- **`toc-verify` reclassification could surprise PHAK reviewers.** The 668 PHAK `toc-verify` warnings stay surfaced via the hangar dashboard but are explicitly out of this WP's success-criteria scope. They're a separate triage item: the TOC parser disagreed with the body heading-fingerprint matcher, which is real signal but doesn't fit any of this WP's improvements. A future WP can revisit them.
 
 ## Success criteria
 
 - Every ingested handbook + AC has front-matter sections in the DB. The reader renders preface / introduction / etc. as part of the doc's reading order.
 - Zero raw HTML table blocks in section markdown bodies. Tables render as markdown tables with the original HTML linked as "open original."
 - Figure pairing rate ≥ 95% per handbook (measured: figures successfully bound to their sections / total figures detected).
-- Total warning count across all handbooks down from current ~2700 to <300.
-- The remaining warnings are surfaced in the hangar dashboard (via WP-HANGAR-REFS) for triage.
+- **Fixable warning count across all handbooks down from current ~2023 to <300.** "Fixable" = the closed set on `WP_FIXABLE_WARNING_CODES` (see `libs/bc/study/src/manifest-validation.ts`): the figure-pairing, table-conversion, OCR-leak, empty-section, table-cell-merge-ambiguity, tablish-block-not-converted, and front-matter-page-range-not-declared codes. Parser-instrumentation codes (`toc`, `toc-verify`, `llm`, `page-label`, `section-strategy`) are tracked separately and surfaced via the hangar dashboard for review but are NOT on this WP's hook. PHAK's 668 `toc-verify` warnings are an example of the latter.
+- The remaining fixable warnings (<300) are surfaced in the hangar dashboard (via WP-HANGAR-REFS) for triage.
 - IFH chapter 1 page renders the chapter preamble + the "Introduction" sub-section is no longer empty (or is correctly merged upward).
 
 ## Anchors back to user-visible bugs this resolves

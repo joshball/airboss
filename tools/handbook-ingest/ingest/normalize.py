@@ -6,14 +6,19 @@ responsible for:
 1. Writing one markdown file per chapter / section / subsection at
    `handbooks/<doc>/<edition>/<chapter>/...`.
 2. Emitting the per-edition `manifest.json` the seed reads in Phase 9.
+3. Emitting the sibling per-edition `warnings.json` (the normalized
+   triage-input file the hangar warning-triage dashboard reads, per
+   WP-HANDBOOK-RE-EXTRACTION-V2 Sub-phase 1A).
 
 Each markdown file carries YAML frontmatter matching
 `handbookSectionFrontmatterSchema` in `libs/bc/study/src/handbook-validation.ts`.
-The manifest matches `handbookManifestSchema`.
+The manifest matches `handbookManifestSchema`. The warnings sidecar matches
+`handbookWarningsFileSchema` in the same module.
 """
 
 from __future__ import annotations
 
+import datetime as _dt
 import hashlib
 import json
 import re
@@ -30,6 +35,72 @@ from .paths import edition_root, ensure_dir, relative_to_repo
 from .sections import SectionBody
 from .tables import TableRecord, TableWarning
 
+# Closed vocabulary of warning codes the section-tree extractor may emit.
+# Mirrors `HANDBOOK_MANIFEST_WARNING_CODES` in
+# `libs/bc/study/src/manifest-validation.ts`. Two families:
+#
+#   1. Extraction-quality codes (WP-HANDBOOK-RE-EXTRACTION-V2): targets the
+#      v2 extractor improvements eliminate. The "fixable" set the WP's
+#      success criterion measures against.
+#   2. Strategy / parser instrumentation: TOC-vs-body disagreements,
+#      page-label walk-back failures. Audit signal, not extraction quality.
+#
+# Keeping the two families in one set means the validator stays a single
+# source of truth; classification (which codes count toward "<300 fixable
+# warnings") happens at the dashboard / reporting layer via
+# `WP_FIXABLE_WARNING_CODES` (TS) -- not enforced in the Python layer.
+ALLOWED_WARNING_CODES: frozenset[str] = frozenset(
+    {
+        # v1 extraction-quality
+        "figure-without-caption",
+        "caption-without-figure",
+        "table-merge-failed",
+        "table-empty",
+        "cross-reference-unresolved",
+        # v2 extraction-quality (Phase 1B + 1C; the codes are reserved here
+        # so 1B / 1C PRs only have to start emitting them, not re-extend
+        # the validator).
+        "table-cell-merge-ambiguity",
+        "tablish-block-not-converted",
+        "ocr-leak-in-section-body",
+        "empty-section-kept",
+        "empty-section-merged",
+        "front-matter-page-range-not-declared",
+        # Strategy / parser instrumentation
+        "toc",
+        "toc-verify",
+        "llm",
+        "section-strategy",
+        "page-label",
+    }
+)
+
+# Schema version for the sibling `warnings.json` file. Bump when the
+# top-level shape changes; do NOT bump for additions to ALLOWED_WARNING_CODES
+# (the schema stays at 1; new codes are additive).
+WARNINGS_FILE_SCHEMA_VERSION = 1
+
+
+def compute_warning_id(code: str, section_code: str | None, message: str) -> str:
+    """Stable 16-char hex id for one warning.
+
+    Hashes ``<code>|<section_code or "">|<message[:50]>`` so the same
+    warning across re-extractions gets the same id, which the hangar
+    triage dashboard uses as the persistence key for triage state
+    (open / wontfix / fixed / duplicate).
+
+    16 hex chars (64-bit hash prefix) trades collision risk for readability;
+    the dashboard renders the id verbatim in the URL.
+
+    Mirrors the regex `WARNING_ID_REGEX` (`^[0-9a-f]{16}$`) on the
+    TS-side schema in `libs/bc/study/src/manifest-validation.ts`.
+    """
+    section = section_code or ""
+    head = (message or "")[:50]
+    payload = f"{code}|{section}|{head}".encode()
+    digest = hashlib.sha256(payload).hexdigest()
+    return digest[:16]
+
 
 @dataclass
 class WriteSummary:
@@ -38,6 +109,7 @@ class WriteSummary:
     tables_written: int
     warnings: int
     manifest_path: Path
+    warnings_path: Path
 
 
 def write_outputs(
@@ -127,30 +199,42 @@ def write_outputs(
         for f in figures
     ]
 
-    manifest_warnings: list[dict[str, object]] = [
-        {"code": w.code, "section_code": w.section_code, "message": w.message}
-        for w in (*figure_warnings, *table_warnings)
-    ]
+    manifest_warnings: list[dict[str, object]] = []
+    for w in (*figure_warnings, *table_warnings):
+        if w.code not in ALLOWED_WARNING_CODES:
+            # Hard-fail loudly: an unrecognized code means the emitter and
+            # the validator drifted. Add the code to ALLOWED_WARNING_CODES
+            # AND to HANDBOOK_MANIFEST_WARNING_CODES on the TS side together.
+            raise ValueError(
+                f"normalize.write_outputs: unknown warning code {w.code!r} from "
+                f"figures/tables emitter -- add to ALLOWED_WARNING_CODES in "
+                f"normalize.py AND HANDBOOK_MANIFEST_WARNING_CODES in "
+                f"libs/bc/study/src/manifest-validation.ts."
+            )
+        manifest_warnings.append(
+            {
+                "id": compute_warning_id(w.code, w.section_code, w.message),
+                "code": w.code,
+                "section_code": w.section_code,
+                "message": w.message,
+            }
+        )
     if extra_warnings:
         # Map structured warning prefixes from the section-strategy modules to
-        # the manifest schema's enumerated codes. The schema now accepts
-        # `toc`, `toc-verify`, `llm`, and `section-strategy`.
-        allowed_codes = {
-            "figure-without-caption",
-            "caption-without-figure",
-            "table-merge-failed",
-            "table-empty",
-            "cross-reference-unresolved",
-            "toc",
-            "toc-verify",
-            "llm",
-            "section-strategy",
-            "page-label",
-        }
+        # the manifest schema's enumerated codes. Anything not recognized
+        # falls back to `section-strategy` (the catch-all for parser
+        # instrumentation messages without a more specific class).
         for msg in extra_warnings:
             prefix = msg.split(":", 1)[0].strip() if ":" in msg else ""
-            code = prefix if prefix in allowed_codes else "section-strategy"
-            manifest_warnings.append({"code": code, "section_code": None, "message": msg})
+            code = prefix if prefix in ALLOWED_WARNING_CODES else "section-strategy"
+            manifest_warnings.append(
+                {
+                    "id": compute_warning_id(code, None, msg),
+                    "code": code,
+                    "section_code": None,
+                    "message": msg,
+                }
+            )
 
     manifest: dict[str, object] = {
         "document_slug": config.document_slug,
@@ -175,7 +259,38 @@ def write_outputs(
         manifest["extraction"] = extraction_metadata
 
     manifest_path = root / "manifest.json"
-    manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    manifest_text = json.dumps(manifest, indent=2, ensure_ascii=False) + "\n"
+    manifest_path.write_text(manifest_text, encoding="utf-8")
+
+    # Sibling `warnings.json` -- the normalized triage-input file the hangar
+    # warning-triage dashboard reads (WP-HANDBOOK-RE-EXTRACTION-V2 Sub-phase
+    # 1A). Written deterministically: warnings sorted by `(code, section_code,
+    # id)` so re-runs of the same extraction produce a byte-identical file
+    # when nothing changed. The triage state file
+    # (`validation/.../warnings-triage.json`) is keyed on `id`, so the order
+    # in this file is purely for diff readability.
+    manifest_sha256 = hashlib.sha256(manifest_text.encode("utf-8")).hexdigest()
+    sorted_warnings = sorted(
+        manifest_warnings,
+        key=lambda w: (
+            str(w.get("code", "")),
+            str(w.get("section_code") or ""),
+            str(w.get("id", "")),
+        ),
+    )
+    warnings_payload: dict[str, object] = {
+        "schema_version": WARNINGS_FILE_SCHEMA_VERSION,
+        "document_slug": config.document_slug,
+        "edition": config.edition,
+        "manifest_sha256": manifest_sha256,
+        "generated_at": _dt.datetime.now(tz=_dt.UTC).isoformat(),
+        "warnings": sorted_warnings,
+    }
+    warnings_path = root / "warnings.json"
+    warnings_path.write_text(
+        json.dumps(warnings_payload, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
 
     return WriteSummary(
         sections_written=sections_written,
@@ -183,6 +298,7 @@ def write_outputs(
         tables_written=len(tables),
         warnings=len(manifest_warnings),
         manifest_path=manifest_path,
+        warnings_path=warnings_path,
     )
 
 

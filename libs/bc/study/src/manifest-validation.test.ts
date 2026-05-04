@@ -16,13 +16,17 @@ import {
 	aimManifestSchema,
 	cfrManifestSchema,
 	cfrSectionsFileSchema,
+	HANDBOOK_MANIFEST_WARNING_CODES,
 	handbookHeartbeatInputSchema,
 	handbookManifestErrataEntrySchema,
+	handbookManifestWarningSchema,
+	handbookWarningsFileSchema,
 	infoManifestSchema,
 	manifestSchema,
 	ntsbAljManifestSchema,
 	safoManifestSchema,
 	sectionTreeManifestSchema,
+	WP_FIXABLE_WARNING_CODES,
 	wholeDocManifestSchema,
 } from './manifest-validation';
 
@@ -1114,5 +1118,195 @@ describe('handbookHeartbeatInputSchema (POST /heartbeat wire shape)', () => {
 		expect(handbookHeartbeatInputSchema.safeParse({ delta: true }).success).toBe(false);
 		expect(handbookHeartbeatInputSchema.safeParse({ delta: null }).success).toBe(false);
 		expect(handbookHeartbeatInputSchema.safeParse({ delta: undefined }).success).toBe(false);
+	});
+});
+
+// ---------------------------------------------------------------------------
+// Warning taxonomy + warnings.json sibling file
+// (WP-HANDBOOK-RE-EXTRACTION-V2 Sub-phase 1A)
+// ---------------------------------------------------------------------------
+
+describe('handbookManifestWarningSchema (Sub-phase 1A taxonomy extensions)', () => {
+	const VALID_WARNING_ID = 'a'.repeat(16);
+
+	it.each(HANDBOOK_MANIFEST_WARNING_CODES)('accepts code %s', (code) => {
+		const result = handbookManifestWarningSchema.safeParse({
+			code,
+			section_code: '1',
+			message: `synthetic ${code} warning for code-coverage test`,
+		});
+		expect(result.success).toBe(true);
+	});
+
+	it('accepts a manifest warning with an optional id', () => {
+		const result = handbookManifestWarningSchema.safeParse({
+			id: VALID_WARNING_ID,
+			code: 'caption-without-figure',
+			section_code: '12',
+			message: 'Caption `Figure 12-1.` on page 12-7 had no paired image.',
+		});
+		expect(result.success).toBe(true);
+	});
+
+	it('accepts a manifest warning without an id (pre-WP back-compat)', () => {
+		const result = handbookManifestWarningSchema.safeParse({
+			code: 'figure-without-caption',
+			section_code: '12',
+			message: 'Image on page 12-3 (index 0) had no paired caption.',
+		});
+		expect(result.success).toBe(true);
+	});
+
+	it('rejects an unknown warning code', () => {
+		const result = handbookManifestWarningSchema.safeParse({
+			code: 'never-emitted-by-any-pipeline',
+			section_code: '1',
+			message: 'should fail',
+		});
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects an id that is not 16 hex chars', () => {
+		const cases = ['ABCDEFabcdef0123', 'g'.repeat(16), 'a'.repeat(15), 'a'.repeat(17), ''];
+		for (const id of cases) {
+			const result = handbookManifestWarningSchema.safeParse({
+				id,
+				code: 'caption-without-figure',
+				section_code: '1',
+				message: 'msg',
+			});
+			expect(result.success).toBe(false);
+		}
+	});
+
+	it('accepts a warning with null section_code (cross-section / pipeline-level)', () => {
+		const result = handbookManifestWarningSchema.safeParse({
+			code: 'front-matter-page-range-not-declared',
+			section_code: null,
+			message: 'phak.yaml is missing front_matter_page_range; defaulting to first-chapter detection.',
+		});
+		expect(result.success).toBe(true);
+	});
+
+	it('exposes the new v2 codes in the closed vocabulary', () => {
+		const codes = new Set<string>(HANDBOOK_MANIFEST_WARNING_CODES);
+		expect(codes.has('table-cell-merge-ambiguity')).toBe(true);
+		expect(codes.has('tablish-block-not-converted')).toBe(true);
+		expect(codes.has('ocr-leak-in-section-body')).toBe(true);
+		expect(codes.has('empty-section-kept')).toBe(true);
+		expect(codes.has('empty-section-merged')).toBe(true);
+		expect(codes.has('front-matter-page-range-not-declared')).toBe(true);
+	});
+
+	it('keeps toc-verify in the vocabulary (decision 6: surfaced for separate triage)', () => {
+		const codes = new Set<string>(HANDBOOK_MANIFEST_WARNING_CODES);
+		expect(codes.has('toc-verify')).toBe(true);
+		// And it is NOT classed as fixable -- it is parser instrumentation, not
+		// extraction quality, per the WP scoping decision.
+		expect(WP_FIXABLE_WARNING_CODES.has('toc-verify' as never)).toBe(false);
+	});
+
+	it('classifies fixable codes per the WP success criterion', () => {
+		// All fixable codes must be in the closed vocabulary.
+		for (const code of WP_FIXABLE_WARNING_CODES) {
+			expect(HANDBOOK_MANIFEST_WARNING_CODES).toContain(code);
+		}
+		// And the parser-instrumentation codes are NOT in the fixable set.
+		for (const code of ['toc', 'toc-verify', 'llm', 'page-label', 'section-strategy'] as const) {
+			expect(WP_FIXABLE_WARNING_CODES.has(code as never)).toBe(false);
+		}
+	});
+});
+
+describe('handbookWarningsFileSchema (sibling warnings.json)', () => {
+	const VALID_WARNINGS_FILE = {
+		schema_version: 1,
+		document_slug: 'phak',
+		edition: 'FAA-H-8083-25C',
+		manifest_sha256: 'a'.repeat(64),
+		generated_at: '2026-05-04T00:00:00.000+00:00',
+		warnings: [
+			{
+				id: 'b'.repeat(16),
+				code: 'caption-without-figure',
+				section_code: '12',
+				message: 'Caption `Figure 12-1.` on page 12-7 had no paired image.',
+			},
+			{
+				id: 'c'.repeat(16),
+				code: 'front-matter-page-range-not-declared',
+				section_code: null,
+				message: 'phak.yaml is missing front_matter_page_range.',
+			},
+		],
+	} as const;
+
+	it('accepts a valid warnings.json shape', () => {
+		const result = handbookWarningsFileSchema.safeParse(VALID_WARNINGS_FILE);
+		expect(result.success).toBe(true);
+	});
+
+	it('accepts a warnings.json with an empty warnings array', () => {
+		const result = handbookWarningsFileSchema.safeParse({ ...VALID_WARNINGS_FILE, warnings: [] });
+		expect(result.success).toBe(true);
+	});
+
+	it('defaults warnings[] to [] when the field is omitted', () => {
+		const { warnings: _drop, ...withoutWarnings } = VALID_WARNINGS_FILE;
+		const result = handbookWarningsFileSchema.safeParse(withoutWarnings);
+		expect(result.success).toBe(true);
+		if (result.success) {
+			expect(result.data.warnings).toEqual([]);
+		}
+	});
+
+	it('rejects a warnings.json missing the schema_version', () => {
+		const { schema_version: _drop, ...rest } = VALID_WARNINGS_FILE;
+		const result = handbookWarningsFileSchema.safeParse(rest);
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects a warnings.json with an entry missing id', () => {
+		const broken = {
+			...VALID_WARNINGS_FILE,
+			warnings: [
+				{
+					code: 'caption-without-figure' as const,
+					section_code: '1',
+					message: 'no id',
+				},
+			],
+		};
+		const result = handbookWarningsFileSchema.safeParse(broken);
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects a warnings.json with malformed manifest_sha256', () => {
+		const result = handbookWarningsFileSchema.safeParse({
+			...VALID_WARNINGS_FILE,
+			manifest_sha256: 'not-a-sha',
+		});
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects a warnings.json with an unknown warning code', () => {
+		const broken = {
+			...VALID_WARNINGS_FILE,
+			warnings: [
+				{
+					id: 'd'.repeat(16),
+					code: 'made-up-code',
+					section_code: '1',
+					message: 'msg',
+				},
+			],
+		};
+		const result = handbookWarningsFileSchema.safeParse(broken);
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects a non-1 schema_version (forward-compat is by minting new schemas)', () => {
+		const result = handbookWarningsFileSchema.safeParse({ ...VALID_WARNINGS_FILE, schema_version: 2 });
+		expect(result.success).toBe(false);
 	});
 });

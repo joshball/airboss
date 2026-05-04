@@ -666,6 +666,7 @@ def _run_toc_file_sidecar_strategy(
         f"{summary.figures_written} figures, {summary.tables_written} tables; "
         f"manifest -> {summary.manifest_path}"
     )
+    click.echo(f"  -> wrote {summary.warnings} warnings; warnings -> {summary.warnings_path}")
     click.echo(f"done: {config.document_slug} {config.edition}")
 
 
@@ -772,6 +773,7 @@ def _run_toc_strategy(
         f"{summary.figures_written} figures, {summary.tables_written} tables; "
         f"manifest -> {summary.manifest_path}"
     )
+    click.echo(f"  -> wrote {summary.warnings} warnings; warnings -> {summary.warnings_path}")
     click.echo(f"done: {config.document_slug} {config.edition}")
 
 
