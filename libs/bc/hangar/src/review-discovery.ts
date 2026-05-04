@@ -102,14 +102,14 @@ async function discoverWorkPackages(repoRoot: string): Promise<DiscoveryResult> 
 		const tpPath = join(wpDir, 'test-plan.md');
 		const specRef = toRepoRelative(repoRoot, specPath);
 		const tpRef = toRepoRelative(repoRoot, tpPath);
-		const specRow = await readMarkdownItem(specPath, 'wp_spec', specRef, wpName);
+		const specRow = await readMarkdownItem(specPath, 'wp_spec', specRef, wpName, repoRoot);
 		if (specRow.kind === 'item') items.push(specRow.item);
 		// spec.md is conventional but not enforced; some early WPs only carry
 		// design / tasks / test-plan. Treat ENOENT as skip, not error -- by
 		// error code, not message substring (libuv message text is not
 		// part of Node's contract).
 		else if (specRow.error.code !== 'ENOENT') errors.push(specRow.error);
-		const tpRow = await readMarkdownItem(tpPath, 'wp_test_plan', tpRef, `${wpName} (test plan)`);
+		const tpRow = await readMarkdownItem(tpPath, 'wp_test_plan', tpRef, `${wpName} (test plan)`, repoRoot);
 		if (tpRow.kind === 'item') items.push(tpRow.item);
 		// Test plans are optional per spec; ENOENT is the silent-skip path.
 		else if (tpRow.error.code !== 'ENOENT') errors.push(tpRow.error);
@@ -129,7 +129,7 @@ async function discoverKnowledgeNodes(repoRoot: string): Promise<DiscoveryResult
 	const errors: DiscoveryError[] = [];
 	for await (const path of walkForFile(root, 'node.md')) {
 		const ref = toRepoRelative(repoRoot, path);
-		const row = await readMarkdownItem(path, 'knowledge_node', ref, basenameWithoutExt(ref) || ref);
+		const row = await readMarkdownItem(path, 'knowledge_node', ref, basenameWithoutExt(ref) || ref, repoRoot);
 		if (row.kind === 'item') items.push(row.item);
 		else errors.push(row.error);
 	}
@@ -197,6 +197,7 @@ async function readMarkdownItem(
 	kindId: ReviewKind,
 	ref: string,
 	fallbackTitle: string,
+	repoRoot: string,
 ): Promise<ReadMarkdownResult> {
 	let text: string;
 	try {
@@ -205,7 +206,16 @@ async function readMarkdownItem(
 		const code = errorCode(err);
 		return {
 			kind: 'error',
-			error: { kindId, ref, message: describeError(err), ...(code !== undefined ? { code } : {}) },
+			error: {
+				kindId,
+				ref,
+				// Strip absolute path prefixes from the message so admin UI
+				// surfaces and screenshots don't leak the host's filesystem
+				// layout. The `ref` field already carries the repo-relative
+				// path so the operator still knows which file blew up.
+				message: stripRepoRoot(describeError(err), repoRoot),
+				...(code !== undefined ? { code } : {}),
+			},
 		};
 	}
 	const parsed = parseFrontmatter(text);
@@ -304,4 +314,20 @@ function basenameWithoutExt(repoRel: string): string {
 function describeError(err: unknown): string {
 	if (err instanceof Error) return `${err.name}: ${err.message}`;
 	return String(err);
+}
+
+/**
+ * Replace the absolute repo-root prefix in a message string with a
+ * `<repo>` placeholder. The error messages from `node:fs/promises` embed
+ * absolute paths (`ENOENT: no such file or directory, open '/Users/...'`)
+ * which would leak host filesystem layout in the admin UI; the
+ * repo-relative `ref` field is already carried separately so the operator
+ * still knows the file.
+ */
+function stripRepoRoot(message: string, repoRoot: string): string {
+	if (repoRoot === '' || repoRoot === undefined) return message;
+	const root = resolve(repoRoot);
+	if (!message.includes(root)) return message;
+	// Replace every occurrence; some libuv messages embed the path twice.
+	return message.split(root).join('<repo>');
 }

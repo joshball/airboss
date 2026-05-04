@@ -41,6 +41,33 @@ export interface LoaderResult {
 }
 
 /**
+ * Last-run snapshot for the admin loader page. Process-local cache (not
+ * persisted) so a hangar restart resets it -- the spec calls this out as
+ * a v1 simplification (no `review_loader` table). Surfaces (run-at,
+ * counts, error list) for the admin UI; the page also lets the user
+ * trigger a fresh run via the existing form action.
+ */
+export interface LastLoaderRun {
+	readonly ranAt: string;
+	readonly result: LoaderResult;
+}
+
+let lastLoaderRun: LastLoaderRun | null = null;
+
+export function getLastLoaderRun(): LastLoaderRun | null {
+	return lastLoaderRun;
+}
+
+/**
+ * Module-private writer for the last-run cache. Only `runLoader` should call
+ * this -- a public re-export would let any caller pollute the admin "Last
+ * run" panel with a synthesized result. Stays private to enforce that.
+ */
+function setLastLoaderRun(result: LoaderResult): void {
+	lastLoaderRun = { ranAt: new Date().toISOString(), result };
+}
+
+/**
  * In-flight singleton, keyed on `Db` identity so per-test transaction-scoped
  * callers don't share results with concurrent live-DB callers. The `WeakMap`
  * clears entries automatically when callers release their `Db` reference.
@@ -57,6 +84,15 @@ export async function loadReviewItems(repoRoot: string, db: Db = defaultDb): Pro
 	const existing = inflight.get(db);
 	if (existing) return existing;
 	const promise = runLoader(repoRoot, db)
+		.then((result) => {
+			// Snapshot the most-recent run for the admin loader page. Live
+			// runs against the test transaction also hit this snapshot, so
+			// callers in tests should expect prior runs to be visible
+			// across `getLastLoaderRun()`. The admin page calls
+			// `loadReviewItems(REPO_ROOT, defaultDb)` only.
+			setLastLoaderRun(result);
+			return result;
+		})
 		.catch((err) => {
 			// Surface the rejection so a failed boot scan is visible (rather
 			// than silently swallowed by a fire-and-forget caller).

@@ -70,6 +70,7 @@ const initialValues = $derived<InitialValues | null>(
 				required
 				maxlength="200"
 				value={initialValues?.title ?? ''}
+				autofocus
 				aria-invalid={fieldErrors.title ? 'true' : undefined}
 				aria-describedby={fieldErrors.title ? 'err-title' : undefined}
 			/>
@@ -131,11 +132,19 @@ const initialValues = $derived<InitialValues | null>(
 			</select>
 		</label>
 
-		<label class="field">
-			<span class="label">Assignee user id (optional)</span>
-			<input name="assigneeId" type="text" value={initialValues?.assigneeId ?? ''} />
-			<small class="hint">User id (e.g. <code>auth_xxxx</code>). Leave blank to assign later.</small>
-		</label>
+		<details class="advanced">
+			<summary>Advanced fields</summary>
+			<label class="field">
+				<span class="label">Assignee user id</span>
+				<input
+					name="assigneeId"
+					type="text"
+					value={initialValues?.assigneeId ?? ''}
+					placeholder="Leave blank -- single-user app today"
+				/>
+				<small class="hint">Future multi-user feature; today this is best left blank.</small>
+			</label>
+		</details>
 
 		<div class="actions">
 			<Button type="submit" variant="primary" loading={saving} loadingLabel="Saving...">Create task</Button>
@@ -221,5 +230,17 @@ const initialValues = $derived<InitialValues | null>(
 
 	.cancel {
 		color: var(--link-default);
+	}
+
+	.advanced {
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-sm);
+		padding: var(--space-2xs) var(--space-sm);
+	}
+
+	.advanced summary {
+		cursor: pointer;
+		font-size: var(--type-ui-label-size);
+		color: var(--ink-muted);
 	}
 </style>

@@ -355,6 +355,33 @@ export const REVIEW_WP_SPEC_FINISH_PARAMS = {
 } as const;
 
 /**
+ * Query-string parameters the `/review` board reads on mount after a task
+ * create / delete redirect lands the user back on the board. The action
+ * server appends them; the board surfaces a one-shot toast then strips the
+ * params via `goto({ replaceState: true })` so a refresh / share-link
+ * doesn't re-show the toast. Mirrors `REVIEW_WP_SPEC_FINISH_PARAMS` -- the
+ * closing handshake is essential for destructive / create actions where
+ * the only visible feedback is a re-rendered list.
+ */
+export const REVIEW_TASK_FLOW_PARAMS = {
+	/** Set to the new task id after a successful create. */
+	CREATED: 'created',
+	/** Title of the just-created task (for the toast copy). */
+	CREATED_TITLE: 'createdTitle',
+	/** Title of the just-deleted task (for the toast copy). */
+	DELETED_TITLE: 'deletedTitle',
+} as const;
+
+/**
+ * Bucket name used by the loader / TOC view's "left bucket" toast copy. The
+ * loader seeds this bucket; the TOC finish action reports the bucket name
+ * back so the success toast can acknowledge the side-effect ("item left
+ * bucket on passing close"). Centralised so a future bucket rename touches
+ * one constant rather than hand-edited copy in two places.
+ */
+export const REVIEW_REFERENCE_TOC_BUCKET_NAME = 'References -- TOC review';
+
+/**
  * Auto-dismiss delay for transient success toasts on the WP-spec / walker
  * surfaces. Errors stay sticky -- the user has to read them and decide on
  * next action. Reuses the board's dismiss window for consistency.

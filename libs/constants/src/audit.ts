@@ -80,6 +80,24 @@ export const AUDIT_TARGETS = {
 	 * target type for the render-mode preference key.
 	 */
 	USER_PREF: 'study.user_pref',
+	/**
+	 * Bucket configuration edits in the hangar review admin (create / update /
+	 * delete). Bucket predicates control what every reviewer sees on the
+	 * board, so admin-driven changes warrant an audit trail. `targetId` is
+	 * the bucket id; `before` / `after` are the row snapshot. Op is
+	 * `create` / `update` / `delete`.
+	 */
+	HANGAR_REVIEW_BUCKET: 'hangar.review_bucket',
+	/**
+	 * Admin-triggered runs of the review queue loader (the "Run loader now"
+	 * action on `/review/admin/loader`). `targetId` is null (the loader is a
+	 * singleton, not a row); `metadata` carries the result counts (added /
+	 * updated / removed / errorCount / durationMs). Op is `action` because
+	 * the loader is a heavy side-effecting operation, not a row mutation
+	 * by itself. Unattended boot scans intentionally do NOT audit-write -- the
+	 * trail is only for the admin-pressed-button path.
+	 */
+	HANGAR_REVIEW_LOADER: 'hangar.review_loader',
 } as const;
 
 export type AuditTarget = (typeof AUDIT_TARGETS)[keyof typeof AUDIT_TARGETS];
