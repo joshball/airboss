@@ -3,8 +3,8 @@ title: 'Spec: WP-HANDBOOK-RE-EXTRACTION-V2 -- fix what survived the first pass'
 product: hangar
 feature: wp-handbook-re-extraction-v2
 type: spec
-status: draft
-review_status: pending
+status: signed-off
+review_status: done
 ---
 
 # WP-HANDBOOK-RE-EXTRACTION-V2: fix what survived the first pass
