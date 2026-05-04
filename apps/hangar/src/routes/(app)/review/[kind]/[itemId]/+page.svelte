@@ -19,6 +19,9 @@ import { onMount } from 'svelte';
 import { enhance } from '$app/forms';
 import { goto, invalidateAll } from '$app/navigation';
 import { page } from '$app/state';
+import AdHocView from './_views/AdHocView.svelte';
+import KnowledgeNodeView from './_views/KnowledgeNodeView.svelte';
+import ReferenceTocView from './_views/ReferenceTocView.svelte';
 import type { ActionData, PageData } from './$types';
 
 interface WpTabPayload {
@@ -363,12 +366,38 @@ const sessionTotalNote = $derived<string | null>(
 			</Card>
 		</aside>
 	</div>
+{:else if data.view === 'reference_toc'}
+	<ReferenceTocView
+		itemId={data.item.id}
+		itemTitle={data.item.title}
+		reference={data.reference}
+		entries={data.entries}
+		tocErrors={data.tocErrors}
+		session={data.session}
+		recordedByRef={data.recordedByRef}
+		openSessionStartedAt={data.openSessionStartedAt}
+		sessions={data.sessions}
+	/>
+{:else if data.view === 'knowledge_node'}
+	<KnowledgeNodeView
+		itemId={data.item.id}
+		itemTitle={data.item.title}
+		itemRef={data.item.ref}
+		bodyHtml={data.bodyHtml}
+		frontmatter={data.frontmatter}
+		missing={data.missing}
+		sessions={data.sessions}
+		markedDoneFromAction={form && 'markKnowledgeNodeReviewed' in form
+			? form.markKnowledgeNodeReviewed ?? null
+			: null}
+	/>
+{:else if data.view === 'ad_hoc'}
+	<AdHocView itemId={data.item.id} itemTitle={data.item.title} itemRef={data.item.ref} />
 {:else}
 	<section class="placeholder" aria-labelledby="placeholder-heading">
-		<h2 id="placeholder-heading">{data.kindLabel} review -- coming in Phase 6</h2>
+		<h2 id="placeholder-heading">{data.kindLabel} review</h2>
 		<p>
-			Per-kind review for <code>{data.kind}</code> items lands in a later phase. The dispatcher route is wired today
-			so links from the board don't 404.
+			This kind doesn't have a custom view yet -- the walker on the sibling spec is the primary surface for it.
 		</p>
 		<p>
 			Source reference: <code>{data.item.ref}</code>

@@ -369,6 +369,7 @@ function onCardDragEnd() {
 <header class="board-head">
 	<div class="title-row">
 		<h1>Hangar Review</h1>
+		<a class="new-task-link" href={ROUTES.HANGAR_REVIEW_TASK_NEW}>+ New task</a>
 	</div>
 
 	<div class="filter-bar" role="toolbar" aria-label="Board filters">
@@ -542,6 +543,25 @@ function onCardDragEnd() {
 
 	.title-row h1 {
 		margin: 0;
+	}
+
+	.new-task-link {
+		display: inline-block;
+		padding: var(--space-2xs) var(--space-sm);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-sm);
+		color: var(--link-default);
+		text-decoration: none;
+		font: inherit;
+	}
+
+	.new-task-link:hover {
+		background: var(--surface-sunken);
+	}
+
+	.new-task-link:focus-visible {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
 	}
 
 	.filter-bar {

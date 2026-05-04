@@ -18,19 +18,27 @@ import { readFile } from 'node:fs/promises';
 import { dirname, resolve, sep } from 'node:path';
 import { requireRole } from '@ab/auth';
 import {
+	finishSession,
 	getItem,
 	getOpenSession,
+	getReference,
 	listSessions,
 	listSteps,
 	parseTestPlan,
+	parseToc,
 	REPO_ROOT,
+	recordStep,
+	startSession,
+	type TocEntry,
 	writeFrontmatterField,
 } from '@ab/bc-hangar';
 import {
 	REVIEW_KIND_LABELS,
 	REVIEW_KIND_VALUES,
 	REVIEW_KINDS,
+	REVIEW_OUTCOME_VALUES,
 	type ReviewKind,
+	type ReviewOutcome,
 	ROLES,
 	WP_SPEC_TABS,
 	type WpSpecTabId,
@@ -86,8 +94,17 @@ export const load: PageServerLoad = async (event) => {
 	if (kind === REVIEW_KINDS.WP_SPEC) {
 		return loadWpSpec(item, user.id);
 	}
-
-	// Non-`wp_spec` kinds keep the Phase 4 placeholder shape.
+	if (kind === REVIEW_KINDS.REFERENCE_TOC) {
+		return loadReferenceToc(item, user.id);
+	}
+	if (kind === REVIEW_KINDS.KNOWLEDGE_NODE) {
+		return loadKnowledgeNode(item);
+	}
+	if (kind === REVIEW_KINDS.AD_HOC) {
+		return loadAdHoc(item);
+	}
+	// `wp_test_plan` items fall through to a placeholder; the walker on the
+	// sibling spec is the primary surface for that kind today.
 	return {
 		kind: kind as ReviewKind,
 		kindLabel: REVIEW_KIND_LABELS[kind as ReviewKind],
@@ -95,6 +112,153 @@ export const load: PageServerLoad = async (event) => {
 		view: 'placeholder' as const,
 	};
 };
+
+async function loadReferenceToc(
+	item: { id: string; kindId: string; ref: string; title: string; deletedAt: Date | null },
+	userId: string,
+): Promise<{
+	kind: 'reference_toc';
+	kindLabel: string;
+	item: typeof item;
+	view: 'reference_toc';
+	reference: { id: string; displayName: string; paraphrase: string } | null;
+	entries: ReadonlyArray<TocEntry>;
+	tocErrors: ReadonlyArray<{ message: string; path: string }>;
+	session: { id: string; startedAt: string } | null;
+	recordedByRef: ReadonlyArray<{ entryRef: string; outcome: ReviewOutcome; note: string }>;
+	sessions: ReadonlyArray<SessionSummary>;
+	openSessionStartedAt: string | null;
+}> {
+	// `item.ref` for reference_toc IS the reference id (per discovery rule).
+	const reference = await getReference(item.ref);
+	const verbatim = reference?.verbatim ?? null;
+	const parsed = parseToc(item.ref, verbatim);
+	let session: { id: string; startedAt: string } | null = null;
+	let stepRows: readonly { stepRef: string; outcome: string | null; note: string | null }[] = [];
+	let openSessionStartedAt: string | null = null;
+	if (parsed.entries.length > 0) {
+		const open = await startSession(item.id, userId);
+		stepRows = await listSteps(open.id);
+		session = {
+			id: open.id,
+			startedAt: open.startedAt instanceof Date ? open.startedAt.toISOString() : String(open.startedAt),
+		};
+		openSessionStartedAt = session.startedAt;
+	}
+	const recordedByRef: { entryRef: string; outcome: ReviewOutcome; note: string }[] = [];
+	for (const r of stepRows) {
+		if (!isReviewOutcome(r.outcome)) continue;
+		recordedByRef.push({ entryRef: r.stepRef, outcome: r.outcome, note: r.note ?? '' });
+	}
+	const sessionRows = await listSessions(item.id);
+	const sessions = sessionRows.map(toSessionSummary);
+	return {
+		kind: REVIEW_KINDS.REFERENCE_TOC,
+		kindLabel: REVIEW_KIND_LABELS[REVIEW_KINDS.REFERENCE_TOC],
+		item,
+		view: 'reference_toc' as const,
+		reference: reference
+			? {
+					id: reference.id,
+					displayName: reference.displayName,
+					paraphrase: reference.paraphrase,
+				}
+			: null,
+		entries: parsed.entries,
+		tocErrors: parsed.errors,
+		session,
+		recordedByRef,
+		sessions,
+		openSessionStartedAt,
+	};
+}
+
+async function loadKnowledgeNode(item: {
+	id: string;
+	kindId: string;
+	ref: string;
+	title: string;
+	deletedAt: Date | null;
+}): Promise<{
+	kind: 'knowledge_node';
+	kindLabel: string;
+	item: typeof item;
+	view: 'knowledge_node';
+	bodyHtml: string | null;
+	frontmatter: ReadonlyArray<{ key: string; value: string }>;
+	missing: boolean;
+	sessions: ReadonlyArray<SessionSummary>;
+}> {
+	const absPath = resolve(REPO_ROOT, item.ref);
+	const raw = await safeReadFile(absPath);
+	if (raw === null) {
+		const sessionRows = await listSessions(item.id);
+		return {
+			kind: REVIEW_KINDS.KNOWLEDGE_NODE,
+			kindLabel: REVIEW_KIND_LABELS[REVIEW_KINDS.KNOWLEDGE_NODE],
+			item,
+			view: 'knowledge_node' as const,
+			bodyHtml: null,
+			frontmatter: [],
+			missing: true,
+			sessions: sessionRows.map(toSessionSummary),
+		};
+	}
+	const parsed = parseFrontmatter(raw);
+	const bodyHtml = renderMarkdown(parsed.body, { minHeadingLevel: 2, headingIds: true });
+	const sessionRows = await listSessions(item.id);
+	return {
+		kind: REVIEW_KINDS.KNOWLEDGE_NODE,
+		kindLabel: REVIEW_KIND_LABELS[REVIEW_KINDS.KNOWLEDGE_NODE],
+		item,
+		view: 'knowledge_node' as const,
+		bodyHtml,
+		frontmatter: parsed.entries.map((e) => ({ key: e.key, value: e.value })),
+		missing: false,
+		sessions: sessionRows.map(toSessionSummary),
+	};
+}
+
+async function loadAdHoc(item: {
+	id: string;
+	kindId: string;
+	ref: string;
+	title: string;
+	deletedAt: Date | null;
+}): Promise<{
+	kind: 'ad_hoc';
+	kindLabel: string;
+	item: typeof item;
+	view: 'ad_hoc';
+}> {
+	return {
+		kind: REVIEW_KINDS.AD_HOC,
+		kindLabel: REVIEW_KIND_LABELS[REVIEW_KINDS.AD_HOC],
+		item,
+		view: 'ad_hoc' as const,
+	};
+}
+
+function toSessionSummary(s: {
+	id: string;
+	startedAt: Date | string;
+	finishedAt: Date | string | null;
+	outcome: string | null;
+	note: string | null;
+}): SessionSummary {
+	return {
+		id: s.id,
+		startedAt: s.startedAt instanceof Date ? s.startedAt.toISOString() : String(s.startedAt),
+		finishedAt:
+			s.finishedAt === null ? null : s.finishedAt instanceof Date ? s.finishedAt.toISOString() : String(s.finishedAt),
+		outcome: s.outcome,
+		note: s.note ?? '',
+	};
+}
+
+function isReviewOutcome(value: unknown): value is ReviewOutcome {
+	return typeof value === 'string' && (REVIEW_OUTCOME_VALUES as readonly string[]).includes(value);
+}
 
 async function loadWpSpec(
 	item: { id: string; kindId: string; ref: string; title: string },
@@ -168,14 +332,7 @@ async function loadWpSpec(
 	}
 
 	const sessionRows = await listSessions(item.id);
-	const sessions: SessionSummary[] = sessionRows.map((s) => ({
-		id: s.id,
-		startedAt: s.startedAt instanceof Date ? s.startedAt.toISOString() : String(s.startedAt),
-		finishedAt:
-			s.finishedAt === null ? null : s.finishedAt instanceof Date ? s.finishedAt.toISOString() : String(s.finishedAt),
-		outcome: s.outcome,
-		note: s.note ?? '',
-	}));
+	const sessions = sessionRows.map(toSessionSummary);
 
 	return {
 		kind: REVIEW_KINDS.WP_SPEC,
@@ -294,6 +451,113 @@ export const actions: Actions = {
 			const message = err instanceof Error ? err.message : 'Frontmatter write failed.';
 			log.error('flipReviewStatus failed', undefined, err instanceof Error ? err : new Error(message));
 			return fail(409, { flipReviewStatus: `Frontmatter write failed: ${message}` as const });
+		}
+	},
+
+	/**
+	 * `?/recordTocStep` -- record (or overwrite) a TOC entry's pass/fail/blocked
+	 * outcome inside the open `reference_toc` session. Mirrors the walker's
+	 * `?/recordStep` action shape (idempotent on `(sessionId, stepRef)`) so
+	 * the existing review_step table works without extension. The route is
+	 * shared between kinds for symmetry and to keep the dispatcher route
+	 * simple; the BC primitive (`recordStep`) is kind-agnostic.
+	 */
+	recordTocStep: async (event) => {
+		const user = requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
+		const { itemId } = event.params;
+		const fd = await event.request.formData();
+		const sessionId = String(fd.get('sessionId') ?? '');
+		const entryRef = String(fd.get('entryRef') ?? '');
+		const entryIndexRaw = String(fd.get('entryIndex') ?? '0');
+		const outcomeRaw = String(fd.get('outcome') ?? '');
+		const note = String(fd.get('note') ?? '');
+		if (sessionId === '' || entryRef === '') {
+			return fail(400, { recordTocStep: 'Missing sessionId or entryRef.' as const });
+		}
+		const entryIndex = Number.parseInt(entryIndexRaw, 10);
+		if (!Number.isFinite(entryIndex) || entryIndex < 0) {
+			return fail(400, { recordTocStep: 'entryIndex must be a non-negative integer.' as const });
+		}
+		if (!isReviewOutcome(outcomeRaw)) {
+			return fail(400, { recordTocStep: 'Invalid outcome.' as const });
+		}
+		const item = await getItem(itemId);
+		if (!item || item.deletedAt !== null) {
+			return fail(404, { recordTocStep: 'Item not found.' as const });
+		}
+		if (item.kindId !== REVIEW_KINDS.REFERENCE_TOC) {
+			return fail(400, { recordTocStep: 'Only reference_toc items support this action.' as const });
+		}
+		const open = await getOpenSession(itemId, user.id);
+		if (!open || open.id !== sessionId) {
+			return fail(409, { recordTocStep: 'Session no longer open. Reload to start a new session.' as const });
+		}
+		await recordStep({ sessionId, stepIndex: entryIndex, stepRef: entryRef, outcome: outcomeRaw, note });
+		return { recordTocStep: 'ok' as const };
+	},
+
+	/**
+	 * `?/finishTocSession` -- close the open `reference_toc` session with
+	 * an outcome. The TOC review does NOT flip frontmatter (`hangar.reference`
+	 * rows live in the DB, not on disk); the bucket filter
+	 * `noPassingSession: true` removes the item from the TOC bucket once
+	 * it has at least one passing session.
+	 */
+	finishTocSession: async (event) => {
+		const user = requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
+		const { itemId } = event.params;
+		const fd = await event.request.formData();
+		const sessionId = String(fd.get('sessionId') ?? '');
+		const outcomeRaw = String(fd.get('outcome') ?? '');
+		const note = String(fd.get('note') ?? '');
+		if (sessionId === '') {
+			return fail(400, { finishTocSession: 'Missing sessionId.' as const });
+		}
+		if (outcomeRaw !== 'pass' && outcomeRaw !== 'fail' && outcomeRaw !== 'abandoned') {
+			return fail(400, { finishTocSession: 'Invalid outcome.' as const });
+		}
+		const item = await getItem(itemId);
+		if (!item || item.deletedAt !== null) return fail(404, { finishTocSession: 'Item not found.' as const });
+		if (item.kindId !== REVIEW_KINDS.REFERENCE_TOC) {
+			return fail(400, { finishTocSession: 'Only reference_toc items support this action.' as const });
+		}
+		const open = await getOpenSession(itemId, user.id);
+		if (!open || open.id !== sessionId) {
+			return fail(403, { finishTocSession: 'Session does not belong to the current user / item.' as const });
+		}
+		await finishSession(sessionId, outcomeRaw, note);
+		return { finishTocSession: 'ok' as const, closedAs: outcomeRaw };
+	},
+
+	/**
+	 * `?/markKnowledgeNodeReviewed` -- write `discovery_review: done` to a
+	 * knowledge node's frontmatter. The node loader emits all 46 nodes with
+	 * `reviewStatus = null` (spec gap #1) so this action moves the node
+	 * from the "pending" bucket to the "reviewed" state.
+	 *
+	 * Confirm-gated client-side (a single user-driven write per node).
+	 * Reviewer can also walk the node's pedagogy via free-form notes in a
+	 * session if they want a record; the action stays a one-click shortcut.
+	 */
+	markKnowledgeNodeReviewed: async (event) => {
+		requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
+		const { itemId } = event.params;
+		const item = await getItem(itemId);
+		if (!item || item.deletedAt !== null) {
+			return fail(404, { markKnowledgeNodeReviewed: 'Item not found.' as const });
+		}
+		if (item.kindId !== REVIEW_KINDS.KNOWLEDGE_NODE) {
+			return fail(400, { markKnowledgeNodeReviewed: 'Only knowledge_node items support this action.' as const });
+		}
+		const absPath = resolve(REPO_ROOT, item.ref);
+		try {
+			assertWithinRepoRoot(absPath);
+			await writeFrontmatterField(absPath, 'discovery_review', 'done');
+			return { markKnowledgeNodeReviewed: 'ok' as const };
+		} catch (err) {
+			const message = err instanceof Error ? err.message : 'Frontmatter write failed.';
+			log.error('markKnowledgeNodeReviewed failed', undefined, err instanceof Error ? err : new Error(message));
+			return fail(409, { markKnowledgeNodeReviewed: `Frontmatter write failed: ${message}` as const });
 		}
 	},
 };

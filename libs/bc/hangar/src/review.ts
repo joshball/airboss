@@ -525,6 +525,32 @@ export async function softDeleteItem(id: string, db: Db = defaultDb): Promise<vo
 }
 
 /**
+ * Find a live `review_item` by `(boardId, kindId, ref)`. Used by the ad-hoc
+ * task edit / delete path to keep the mirrored review_item row in sync with
+ * the underlying `board_task` row.
+ */
+export async function findItemByRef(
+	boardId: string,
+	kindId: ReviewKind,
+	ref: string,
+	db: Db = defaultDb,
+): Promise<HangarReviewItemRow | null> {
+	const rows = await db
+		.select()
+		.from(hangarReviewItem)
+		.where(
+			and(
+				eq(hangarReviewItem.boardId, boardId),
+				eq(hangarReviewItem.kindId, kindId),
+				eq(hangarReviewItem.ref, ref),
+				isNull(hangarReviewItem.deletedAt),
+			),
+		)
+		.limit(1);
+	return rows[0] ?? null;
+}
+
+/**
  * Derive the default column name for an item from its `(frontmatterStatus,
  * reviewStatus)` snapshot. Callers map the resulting NAME to a column id by
  * consulting the board's column list.
@@ -872,6 +898,12 @@ export async function listTasks(boardId: string, db: Db = defaultDb): Promise<re
 		.from(hangarBoardTask)
 		.where(eq(hangarBoardTask.boardId, boardId))
 		.orderBy(asc(hangarBoardTask.sortOrder));
+}
+
+/** Get a single task by id. Returns null when no row matches. */
+export async function getTask(id: string, db: Db = defaultDb): Promise<HangarBoardTaskRow | null> {
+	const rows = await db.select().from(hangarBoardTask).where(eq(hangarBoardTask.id, id)).limit(1);
+	return rows[0] ?? null;
 }
 
 export interface CreateTaskInput {

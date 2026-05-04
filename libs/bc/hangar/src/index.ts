@@ -167,11 +167,13 @@ export {
 	deleteTask,
 	everyStepPassed,
 	filterItemsByCriteria,
+	findItemByRef,
 	finishSession,
 	getDerivedColumnName,
 	getItem,
 	getOpenSession,
 	getOrCreateBoard,
+	getTask,
 	type ListItemsFilters,
 	listBuckets,
 	listColumns,
@@ -206,6 +208,7 @@ export {
 export { readFrontmatter, writeFrontmatterField, writeFrontmatterFields } from './review-frontmatter';
 export { type LoaderResult, loadReviewItems } from './review-loader';
 export { parseTestPlan, type TestPlanStep } from './review-test-plan';
+export { parseToc, type TocEntry, type TocParseResult } from './review-toc';
 export {
 	type BucketFilterCriteria,
 	type CachedFrontmatterFields,
