@@ -28,6 +28,14 @@ export {
 	countVerbatimReferences,
 	listLiveSources,
 } from './dashboard-queries';
+export { countDocsIndex, type DocsSearchHit, searchDocs } from './docs-search';
+export {
+	type DocsTreeDirNode,
+	type DocsTreeFileNode,
+	type DocsTreeNode,
+	isDocsPathAllowed,
+	listDocsTree,
+} from './docs-tree';
 export type { FetchHtmlFn } from './edition-stub';
 export { makeStubFetchHtml, withEditionStub } from './edition-stub';
 export {
