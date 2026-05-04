@@ -26,6 +26,8 @@ import { bauthUser } from '@ab/auth/schema';
 import {
 	FRONTMATTER_REVIEW_STATUS_VALUES,
 	FRONTMATTER_STATUS_VALUES,
+	type FrontmatterReviewStatus,
+	type FrontmatterStatus,
 	HANGAR_SYNC_MODE_VALUES,
 	PRODUCT_AREA_VALUES,
 	REVIEW_KIND_VALUES,
@@ -567,9 +569,9 @@ export const hangarReviewItem = hangarSchema.table(
 		ref: text('ref').notNull(),
 		title: text('title').notNull(),
 		/** One of `FRONTMATTER_STATUS_VALUES` (or NULL when the file lacks `status:`). */
-		frontmatterStatus: text('frontmatter_status'),
+		frontmatterStatus: text('frontmatter_status').$type<FrontmatterStatus | null>(),
 		/** One of `FRONTMATTER_REVIEW_STATUS_VALUES` (or NULL when the file lacks `review_status:`). */
-		reviewStatus: text('review_status'),
+		reviewStatus: text('review_status').$type<FrontmatterReviewStatus | null>(),
 		/** Open-ended frontmatter bag (everything beyond the two first-class fields). */
 		cachedFields: jsonb('cached_fields').$type<CachedFrontmatterFields>().notNull().default({ otherFields: {} }),
 		sortOrder: integer('sort_order').notNull().default(0),

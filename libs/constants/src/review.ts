@@ -89,6 +89,20 @@ export const REVIEW_BOARD_DEFAULT_COLUMNS = ['Backlog', 'In Progress', 'Review',
 export type ReviewBoardDefaultColumn = (typeof REVIEW_BOARD_DEFAULT_COLUMNS)[number];
 
 /**
+ * Object-literal alias for `REVIEW_BOARD_DEFAULT_COLUMNS` -- DX shortcut so the
+ * server-side frontmatter mapper, the page-level "home column" fallback, and
+ * the BC's `getDerivedColumnName` all reference the same names through one
+ * canonical source. A future rename ("In Progress" -> "Doing") then touches
+ * exactly one constant.
+ */
+export const REVIEW_BOARD_COLUMN_NAMES = {
+	BACKLOG: 'Backlog',
+	IN_PROGRESS: 'In Progress',
+	REVIEW: 'Review',
+	DONE: 'Done',
+} as const satisfies Record<string, ReviewBoardDefaultColumn>;
+
+/**
  * Default board name used by `getOrCreateBoard()` when no board exists for
  * the hangar. Single-board until multi-user lands.
  */
@@ -147,6 +161,51 @@ export const REVIEW_BOARD_FILTER_LABELS: Record<ReviewBoardFilter, string> = {
 	reviews: 'Reviews',
 	tasks: 'Tasks',
 };
+
+/**
+ * Status-selector values shown on the board's filter bar, narrowing items by
+ * frontmatter `status:` (or 'no-status' for kinds without frontmatter, e.g.
+ * `ad_hoc`). Single-select.
+ */
+export const REVIEW_BOARD_STATUS_FILTER_VALUES = ['all', 'unread', 'reading', 'done', 'no-status'] as const;
+export type ReviewBoardStatusFilter = (typeof REVIEW_BOARD_STATUS_FILTER_VALUES)[number];
+export const REVIEW_BOARD_STATUS_FILTER_LABELS: Record<ReviewBoardStatusFilter, string> = {
+	all: 'Any status',
+	unread: 'Unread',
+	reading: 'Reading',
+	done: 'Done',
+	'no-status': 'No status',
+};
+
+/**
+ * Search-param keys the `/review` board reads from / writes to its URL so
+ * filter state survives reload, deep-link, and back-button. Kept out of the
+ * shared `QUERY_PARAMS` table because the board owns the only callers.
+ */
+export const REVIEW_BOARD_QUERY_PARAMS = {
+	/** Top-of-board chip filter (`all` | `reviews` | `tasks`). */
+	TOP: 'top',
+	/** Kind filter -- one of `REVIEW_KIND_VALUES` or `'all'`. */
+	KIND: 'kind',
+	/** Status filter -- one of `REVIEW_BOARD_STATUS_FILTER_VALUES`. */
+	STATUS: 'status',
+	/** Free-text title/ref substring filter. */
+	TEXT: 'q',
+	/** `1` when the Done column is hidden; absent / `0` otherwise. */
+	HIDE_DONE: 'hideDone',
+} as const;
+
+/**
+ * Auto-dismiss delays for transient announcements on the `/review` board.
+ * The success toast (move complete, loader complete) clears itself after the
+ * window so the live region doesn't shout indefinitely.
+ */
+export const REVIEW_BOARD_TOAST_DISMISS_MS = 6000 as const;
+/**
+ * Debounce window for the result-count live-region announcement. Without it,
+ * each keystroke into the text-search retriggers AT, which is unusable.
+ */
+export const REVIEW_BOARD_FILTER_ANNOUNCE_DEBOUNCE_MS = 400 as const;
 
 /**
  * Form-action ids used by the review surfaces. Centralised so action urls

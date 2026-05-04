@@ -29,12 +29,14 @@ import {
 	type FrontmatterReviewStatus,
 	type FrontmatterStatus,
 	type ProductArea,
+	REVIEW_BOARD_COLUMN_NAMES,
 	REVIEW_BOARD_DEFAULT_COLUMNS,
 	REVIEW_BOARD_DEFAULT_NAME,
 	REVIEW_KIND_LABELS,
 	REVIEW_KIND_VALUES,
 	REVIEW_LIST_HARD_CAP,
 	REVIEW_SESSION_HISTORY_LIMIT,
+	type ReviewBoardDefaultColumn,
 	type ReviewKind,
 	type ReviewOutcome,
 	type SessionOutcome,
@@ -539,15 +541,15 @@ export async function softDeleteItem(id: string, db: Db = defaultDb): Promise<vo
  * Items with no frontmatter (e.g. `ad_hoc`) land in Backlog by default.
  */
 export function getDerivedColumnName(
-	frontmatterStatus: string | null,
-	reviewStatus: string | null,
-): 'Backlog' | 'In Progress' | 'Review' | 'Done' {
-	if (frontmatterStatus === 'reading') return 'In Progress';
+	frontmatterStatus: FrontmatterStatus | null,
+	reviewStatus: FrontmatterReviewStatus | null,
+): ReviewBoardDefaultColumn {
+	if (frontmatterStatus === 'reading') return REVIEW_BOARD_COLUMN_NAMES.IN_PROGRESS;
 	if (frontmatterStatus === 'done') {
-		if (reviewStatus === 'done') return 'Done';
-		return 'Review';
+		if (reviewStatus === 'done') return REVIEW_BOARD_COLUMN_NAMES.DONE;
+		return REVIEW_BOARD_COLUMN_NAMES.REVIEW;
 	}
-	return 'Backlog';
+	return REVIEW_BOARD_COLUMN_NAMES.BACKLOG;
 }
 
 /**
@@ -558,7 +560,11 @@ export function getDerivedColumnName(
  * `Backlog` is malformed but shouldn't crash the page).
  */
 export function resolveItemColumnId(
-	item: { pinnedColumnId: string | null; frontmatterStatus: string | null; reviewStatus: string | null },
+	item: {
+		pinnedColumnId: string | null;
+		frontmatterStatus: FrontmatterStatus | null;
+		reviewStatus: FrontmatterReviewStatus | null;
+	},
 	columns: ReadonlyArray<{ id: string; name: string }>,
 ): string {
 	if (item.pinnedColumnId !== null) return item.pinnedColumnId;
@@ -580,7 +586,12 @@ export function resolveItemColumnId(
  * `noPassingSession: true` predicate; otherwise the empty set works.
  */
 export function filterItemsByCriteria<
-	T extends { kindId: string; frontmatterStatus: string | null; reviewStatus: string | null; id: string },
+	T extends {
+		kindId: string;
+		frontmatterStatus: FrontmatterStatus | null;
+		reviewStatus: FrontmatterReviewStatus | null;
+		id: string;
+	},
 >(
 	items: ReadonlyArray<T>,
 	criteria: BucketFilterCriteria,
@@ -591,15 +602,14 @@ export function filterItemsByCriteria<
 		if (
 			criteria.frontmatterStatus !== undefined &&
 			criteria.frontmatterStatus.length > 0 &&
-			(item.frontmatterStatus === null ||
-				!criteria.frontmatterStatus.includes(item.frontmatterStatus as 'unread' | 'reading' | 'done'))
+			(item.frontmatterStatus === null || !criteria.frontmatterStatus.includes(item.frontmatterStatus))
 		) {
 			return false;
 		}
 		if (
 			criteria.reviewStatus !== undefined &&
 			criteria.reviewStatus.length > 0 &&
-			(item.reviewStatus === null || !criteria.reviewStatus.includes(item.reviewStatus as 'pending' | 'done'))
+			(item.reviewStatus === null || !criteria.reviewStatus.includes(item.reviewStatus))
 		) {
 			return false;
 		}

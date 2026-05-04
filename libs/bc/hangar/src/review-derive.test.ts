@@ -42,12 +42,12 @@ describe('resolveItemColumnId', () => {
 	];
 
 	test('returns the pinned column when set', () => {
-		const item = { pinnedColumnId: 'col_done', frontmatterStatus: 'unread', reviewStatus: null };
+		const item = { pinnedColumnId: 'col_done', frontmatterStatus: 'unread' as const, reviewStatus: null };
 		expect(resolveItemColumnId(item, columns)).toBe('col_done');
 	});
 
 	test('falls through to derived column when not pinned', () => {
-		const item = { pinnedColumnId: null, frontmatterStatus: 'reading', reviewStatus: null };
+		const item = { pinnedColumnId: null, frontmatterStatus: 'reading' as const, reviewStatus: null };
 		expect(resolveItemColumnId(item, columns)).toBe('col_inprogress');
 	});
 
@@ -58,7 +58,7 @@ describe('resolveItemColumnId', () => {
 
 	test('falls back to first column when derived name is missing from board', () => {
 		const partial = [{ id: 'col_only', name: 'Only' }];
-		const item = { pinnedColumnId: null, frontmatterStatus: 'done', reviewStatus: 'done' };
+		const item = { pinnedColumnId: null, frontmatterStatus: 'done' as const, reviewStatus: 'done' as const };
 		expect(resolveItemColumnId(item, partial)).toBe('col_only');
 	});
 

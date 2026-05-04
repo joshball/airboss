@@ -32,7 +32,15 @@ import {
 	REPO_ROOT,
 	writeFrontmatterField,
 } from '@ab/bc-hangar';
-import { ROLES } from '@ab/constants';
+import {
+	type FrontmatterReviewStatus,
+	type FrontmatterStatus,
+	REVIEW_BOARD_COLUMN_NAMES,
+	REVIEW_KINDS,
+	type ReviewBoardDefaultColumn,
+	type ReviewKind,
+	ROLES,
+} from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { fail } from '@sveltejs/kit';
 import type { Actions } from './$types';
@@ -42,19 +50,23 @@ const log = createLogger('hangar:review');
 /** Map column NAME -> frontmatter `(status, reviewStatus)` writes. Returns
  * null when the column doesn't trigger a frontmatter write (e.g. an
  * unknown name). The spec rules: Backlog -> unread; In Progress ->
- * reading; Review -> status: done (review_status stays); Done -> both. */
+ * reading; Review -> status: done (review_status stays); Done -> both.
+ *
+ * Routed through `REVIEW_BOARD_COLUMN_NAMES` so a future column-name change
+ * touches one constant instead of three switch arms. */
 function frontmatterTargetFor(columnName: string): {
-	status: string | null;
-	reviewStatus: string | null;
+	status: FrontmatterStatus | null;
+	reviewStatus: FrontmatterReviewStatus | null;
 } | null {
-	switch (columnName) {
-		case 'Backlog':
+	const name = columnName as ReviewBoardDefaultColumn;
+	switch (name) {
+		case REVIEW_BOARD_COLUMN_NAMES.BACKLOG:
 			return { status: 'unread', reviewStatus: null };
-		case 'In Progress':
+		case REVIEW_BOARD_COLUMN_NAMES.IN_PROGRESS:
 			return { status: 'reading', reviewStatus: null };
-		case 'Review':
+		case REVIEW_BOARD_COLUMN_NAMES.REVIEW:
 			return { status: 'done', reviewStatus: null };
-		case 'Done':
+		case REVIEW_BOARD_COLUMN_NAMES.DONE:
 			return { status: 'done', reviewStatus: 'done' };
 		default:
 			return null;
@@ -63,7 +75,11 @@ function frontmatterTargetFor(columnName: string): {
 
 /** Kinds whose `ref` is a repo-relative path to a markdown file the
  * frontmatter writer can edit. */
-const FRONTMATTER_BACKED_KINDS: ReadonlySet<string> = new Set(['wp_spec', 'wp_test_plan', 'knowledge_node']);
+const FRONTMATTER_BACKED_KINDS: ReadonlySet<ReviewKind> = new Set([
+	REVIEW_KINDS.WP_SPEC,
+	REVIEW_KINDS.WP_TEST_PLAN,
+	REVIEW_KINDS.KNOWLEDGE_NODE,
+]);
 
 export const actions: Actions = {
 	move: async (event) => {
@@ -86,7 +102,7 @@ export const actions: Actions = {
 		// next request even before the frontmatter write completes.
 		await pinItemToColumn(itemId, toColumnId);
 		const fmTarget = frontmatterTargetFor(target.name);
-		if (fmTarget && FRONTMATTER_BACKED_KINDS.has(item.kindId)) {
+		if (fmTarget && FRONTMATTER_BACKED_KINDS.has(item.kindId as ReviewKind)) {
 			const absPath = resolve(REPO_ROOT, item.ref);
 			try {
 				if (fmTarget.status !== null && fmTarget.status !== item.frontmatterStatus) {

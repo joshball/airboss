@@ -23,7 +23,6 @@ import {
 	listItemsWithPassingSession,
 	listKinds,
 	seedDefaultBuckets,
-	seedReviewKinds,
 } from '@ab/bc-hangar';
 import { ROLES } from '@ab/constants';
 import type { LayoutServerLoad } from './$types';
@@ -31,10 +30,11 @@ import type { LayoutServerLoad } from './$types';
 export const load: LayoutServerLoad = async (event) => {
 	requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
 	const board = await getOrCreateBoard();
-	// Idempotent seeders -- they no-op when the rows already exist. Running
-	// them on every layout request keeps the board self-healing if rows
-	// were truncated externally (e.g. via a manual SQL edit).
-	await seedReviewKinds();
+	// `getOrCreateBoard()` already seeds default columns + kinds idempotently;
+	// only the bucket seeder is layered on here so a fresh checkout boots into
+	// the default bucket list. Bucket seeding stays self-healing if rows were
+	// truncated externally (e.g. a manual SQL edit) without doubling up the
+	// kind seeder's per-request SELECT.
 	await seedDefaultBuckets(board.id);
 	const [columns, kinds, buckets, items, passingItemIds] = await Promise.all([
 		listColumns(board.id),
