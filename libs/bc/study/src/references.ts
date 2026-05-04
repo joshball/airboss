@@ -50,7 +50,7 @@ import { getCorpusResolver, isParseError, parseIdentifier, type SourceId } from 
 import type { Citation, StructuredCitation } from '@ab/types';
 import { isHandbookCitation, isStructuredCitation } from '@ab/types';
 import { generateReferenceFigureId, generateReferenceId, generateReferenceSectionId } from '@ab/utils';
-import { and, asc, eq, inArray, isNull, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, inArray, isNull, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import {
 	type KnowledgeNodeRow,
@@ -155,10 +155,18 @@ export async function getReferenceByDocument(
 		if (!row) throw new ReferenceNotFoundError({ documentSlug, edition: options.edition });
 		return row;
 	}
+	// ORDER BY edition DESC because edition tags sort lexicographically: the
+	// FAA-H- prefix (`FAA-H-8083-3C`) outranks bare-prefix legacy rows
+	// (`8083-3C`) when both somehow coexist. Without this, Postgres returns
+	// rows in an indeterminate order and an empty legacy row can shadow the
+	// real one. `db reset` rebuilds with one edition per handbook and the
+	// problem disappears, but we lock in deterministic resolution so a
+	// half-seeded DB can't silently render an empty page.
 	const rows = await db
 		.select()
 		.from(reference)
 		.where(and(eq(reference.documentSlug, documentSlug), isNull(reference.supersededById)))
+		.orderBy(desc(reference.edition))
 		.limit(1);
 	const row = rows[0];
 	if (!row) throw new ReferenceNotFoundError({ documentSlug });

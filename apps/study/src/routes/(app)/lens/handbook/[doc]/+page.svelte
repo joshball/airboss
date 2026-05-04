@@ -30,7 +30,7 @@ const chapters = $derived(data.chapters);
 	{#if chapters.length === 0}
 		<EmptyState
 			title="No chapters ingested"
-			body="The reference exists but no chapters were ingested. Run the ingest pipeline for this handbook."
+			body="A handbook reference row exists for '{reference.documentSlug}' (edition {reference.edition}) but has no chapter rows. Usually a stale duplicate edition is shadowing the real one. Run `bun run db reset` to wipe and reseed."
 		/>
 	{:else}
 		<ul class="chapters">
