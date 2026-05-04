@@ -10,21 +10,33 @@ Open work for the NOTAMs course. Course is **queued behind [course/weather/](../
 
 ## Blockers (must resolve before lesson authoring)
 
-### Acronym verification
+### Acronym verification (verified 2026-05-04)
 
-The transition story uses acronyms that are noted from informal session discussion and are **not verified** against authoritative FAA sources. No lesson content can be authored until each is confirmed.
+Verified against FAA newsroom announcements, NBAA, the Federal NOTAM System reference docs at `notams.aim.faa.gov`, FAA Order JO 7930.2S (Notices to Air Missions), and the eNOTAM II user guide. Each entry below is now load-bearing for the transition-story lesson plan.
 
-- **USNS** -- claimed: legacy text-based NOTAM system. Verify: exact name (United States NOTAM System?), dates of operation, what it was officially replaced by.
-- **FNS** -- claimed: Federal NOTAM System. Verify: exact name, whether it is distinct from NMS or the same system under a different label, current status.
-- **NMS** -- claimed: NOTAM Manager System. Verify: exact name, relationship to FNS, current status.
-- **AIDAP** -- claimed: distribution protocol. Verify: full name, what it stands for, what it actually does, current status.
-- **XMLQ** -- claimed: legacy distribution format. Verify: name, role, when it was retired or how it relates to current formats.
-- **BHIV** -- claimed: entry-side system, "behave" in old controller slang. Verify: official name (NOTAM Entry System?), current status, whether the slang is real or apocryphal.
-- **FICON** -- claimed: runway condition reporting. Verify: current format spec, effective dates, FAA Order reference, RwyCC scale.
+- **USNS** -- **United States NOTAM System.** Legacy text-based NOTAM origination + distribution system, originally built circa 1985. Operated in parallel with FNS for years. **Officially retired and replaced by NMS in February 2026**, with full transition complete by late spring 2026 (12,000+ users migrated worldwide).
+- **FNS** -- **Federal NOTAM System.** Second legacy NOTAM system; ran in parallel with USNS. Hosted PilotWeb (the public NOTAM search front-end at `notams.aim.faa.gov/notamSearch/`) and the FNS-NDS NOTAM Distribution Service that pushes NOTAMs via SWIM JMS using the AIXM 5.1 schema (developed by the international Digital NOTAM Focus Group jointly led by EUROCONTROL and the FAA). **FNS user transition started November 2025; all users on NMS by 1 April 2026.** FNS retires after that.
+- **NMS** -- **NOTAM Management Service** (NOT "NOTAM Manager System" -- the original draft was wrong). Cloud-based replacement for both USNS and FNS. Began operations 29 September 2025 with early-adopter testing; rolled to general availability in 2026. Designed for high availability, near-real-time data exchange, and resilience. Single authoritative source for all NOTAMs once the FNS retirement completes.
+- **AIDAP** -- **Aeronautical Information Data Access Portal** (NOT "distribution protocol" -- the original draft was wrong). XML data feed for NOTAM and weather information, accessed via `7-AWA-NAIMES@faa.gov`. Replaces the legacy FAA604 weather data circuit and the USNS for automated downstream consumers. Still active; supports AIXM 5.1, AIDAP-native XML, GeoJSON, and unmodified output formats.
+- **XMLQ** -- **Not a real FAA acronym.** No mention in FAA Order JO 7930.2, FNS docs, NMS docs, AIDAP docs, or AIXM specs. The session-noted "legacy distribution format" was likely a confused recollection of the AIXM 5.1 XML schema or AIDAP's XML feed. **Drop from the lesson plan.**
+- **BHIV** -- **Not a real FAA acronym.** No mention in any FAA NOTAM documentation, training materials, or system reference docs. The session note about "behave" in controller slang appears to be apocryphal -- no public source corroborates either the acronym or the slang. The actual NOTAM entry system pilots/airport ops use is **eNOTAM II (ENII)**, an FAA-hosted web tool at `notams.aim.faa.gov/en2/` for airport-side origination, with NOTAM Manager (a digital direct-entry system) as the primary path and telephone as the fallback. **Replace BHIV with ENII in the lesson plan; document BHIV as folklore that didn't survive verification.**
+- **FICON** -- **Field Condition NOTAM**, governed by **FAA Notice N JO 7930.107** (Field Condition Reporting) and FAA Order JO 7930.2S Chg 2 (December 2021). Reports surface conditions on runways, taxiways, and aprons. Generates a per-third **Runway Condition Code (RwyCC)** for paved surfaces only (asphalt, asphalt-concrete, concrete, porous friction course); no RwyCC for non-paved surfaces or when mud is the contaminant. RwyCC is suppressed when contaminant coverage is ≤25% of the surface. Airport operators can downgrade or upgrade the RwyCC under specific protocols.
 
-Sources to check first: FAA Order JO 7930.2 (NOTAM), AIM 5-1-3, faa.gov NOTAM Search documentation, Aeronautical Information Services (AIS) public-facing pages, the FAA Notices to Airmen Publication.
+Conflict / timeline notes for the lesson:
 
-When verification produces conflicts or "this changed in YYYY," capture the timeline -- the course will use it to teach the transition story honestly.
+- The "USNS retired" story has a hard date pair to teach: USNS retirement Feb 2026, FNS retirement spring 2026, NMS first ops Sep 2025. The transition is the lesson; learners need to understand they may have read CFI material referencing USNS as recently as 2024-2025.
+- Two of the seven session-noted acronyms (XMLQ, BHIV) failed verification. The lesson plan should not teach them; the verification process itself is a small case study in why "I heard this somewhere" doesn't survive contact with FAA Order text.
+
+Primary sources used for verification:
+
+- [FAA newsroom -- USNS replacement deployment (2025-09)](https://www.faa.gov/newsroom/us-transportation-secretary-sean-p-duffy-deploys-brand-new-notice-airmen-system-provide)
+- [NBAA -- April 18 changeover details](https://nbaa.org/aircraft-operations/airspace/faa-plans-april-18-changeover-to-new-notam-system/)
+- [FAA NMS portal](https://nms.aim.faa.gov/)
+- [FAA Federal NOTAM System (FNS) System Interface document v2.0](https://notams.aim.faa.gov/FNS-SI-v2.0.pdf)
+- [FAA Order JO 7930.2S (Notices to Air Missions)](https://www.faa.gov/documentLibrary/media/Order/7930.2S_Chg_2_dtd_12-2-21.pdf)
+- [FAA Notice N JO 7930.107 -- Field Condition (FICON) Reporting](https://www.faa.gov/documentLibrary/media/Notice/N_JO_7930.107_Field_Condition_(FICON)_Reporting.pdf)
+- [eNOTAM II user guide](https://notams.aim.faa.gov/en2subuserguide.pdf)
+- [FAA NOTAM Modernization briefing (ACF 25-02)](https://www.faa.gov/air_traffic/flight_info/aeronav/acf/media/Briefings/NOTAM_Modernization.pdf)
 
 ## Queued behind weather course
 
