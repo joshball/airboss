@@ -79,7 +79,7 @@ Biggest remaining gaps for stage 4 (Seeded):
 2. **ACS**: 6 cards link-only with 5 manifests on disk. Needs `kind: 'acs'` schema + seed adapter. Section-tree pattern (publication → area → task → element).
 3. **NTSB / SAFO / InFO / Chief Counsel**: link-only umbrellas; no extraction pipeline yet.
 
-Cross-linking (stage 5) starts paying off once enough corpora are seeded that knowledge-node citations have real targets to deep-link to. Worth deferring until 4-5 corpora are at stage 4. AC and ACS are the next two; once they land, the cross-linking pass becomes worthwhile.
+Cross-linking (stage 5) shipped end-to-end on 2026-05-04 via WP `stage5-citation-deeplink`. Citation chips on cards / reps / scenarios deep-link to the right flightbag section for every seeded corpus (handbooks, CFR, AC, ACS, AIM, NTSB-ALJ, SAFO, InFO). The picker writes a polymorphic `reference_section` target that points at `study.reference_section.id`; the row carries an `airboss_ref` URI that the existing `urlForReference()` dispatcher turns into the flightbag URL. The audit (`bun run sources audit-citations`) runs weekly via the `citation-audit` scheduled job (`enabled = true`) and catches dead targets, dead sources, and resolver coverage gaps. The previous "deferred until 4-5 corpora are at stage 4" gate was satisfied by WP-AC, WP-ACS, WP-AIM, and WP-CFR earlier in May.
 
 ## Known dupe / orphan rows in `study.reference`
 

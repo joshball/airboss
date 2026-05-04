@@ -40,9 +40,9 @@ import {
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import { ENUMERATED_CORPORA, getCorpusResolver } from '@ab/sources';
-import { inArray, sql } from 'drizzle-orm';
+import { eq, inArray, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
-import { card, knowledgeNode, scenario } from '../schema';
+import { card, knowledgeNode, reference, referenceSection, scenario } from '../schema';
 import { corpusForCitationTarget } from './corpus';
 import { type ContentCitationRow, contentCitation } from './schema';
 
@@ -309,22 +309,39 @@ interface TargetInfoLookup {
 /**
  * Batch-load existence + corpus for every distinct citation target.
  *
- * Regulation / AC targets resolve to `hangar.reference`; we read the row and
- * pull `tags ->> 'sourceType'` to compute the corpus. Knowledge targets read
- * `study.knowledge_node`. External refs resolve in-process (URL parse).
+ * Stage-5 (WP `stage5-citation-deeplink`): `reference_section` targets join
+ * `study.reference_section` -> `study.reference` and read the corpus from
+ * `reference.kind` (already lowercase, already a registered corpus name in
+ * the resolver registry). The legacy `regulation_node` / `ac_reference`
+ * branch keeps reading `hangar.reference.tags ->> 'sourceType'`. Knowledge
+ * targets read `study.knowledge_node`. External refs resolve in-process
+ * (URL parse).
  */
 async function loadTargetEnrichment(citations: readonly ContentCitationRow[], db: Db): Promise<TargetInfoLookup> {
+	const sectionIds = new Set<string>();
 	const refIds = new Set<string>();
 	const nodeIds = new Set<string>();
 	for (const c of citations) {
-		if (c.targetType === CITATION_TARGET_TYPES.REGULATION_NODE || c.targetType === CITATION_TARGET_TYPES.AC_REFERENCE) {
+		if (c.targetType === CITATION_TARGET_TYPES.REFERENCE_SECTION) {
+			sectionIds.add(c.targetId);
+		} else if (
+			c.targetType === CITATION_TARGET_TYPES.REGULATION_NODE ||
+			c.targetType === CITATION_TARGET_TYPES.AC_REFERENCE
+		) {
 			refIds.add(c.targetId);
 		} else if (c.targetType === CITATION_TARGET_TYPES.KNOWLEDGE_NODE) {
 			nodeIds.add(c.targetId);
 		}
 	}
 
-	const [refs, nodes] = await Promise.all([
+	const [sections, refs, nodes] = await Promise.all([
+		sectionIds.size > 0
+			? db
+					.select({ id: referenceSection.id, kind: reference.kind })
+					.from(referenceSection)
+					.innerJoin(reference, eq(reference.id, referenceSection.referenceId))
+					.where(inArray(referenceSection.id, Array.from(sectionIds)))
+			: Promise.resolve([] as { id: string; kind: string }[]),
 		refIds.size > 0
 			? db
 					.select({
@@ -342,12 +359,18 @@ async function loadTargetEnrichment(citations: readonly ContentCitationRow[], db
 			: Promise.resolve([] as { id: string }[]),
 	]);
 
+	const sectionKindById = new Map(sections.map((s) => [s.id, s.kind]));
 	const refSourceTypeById = new Map(refs.map((r) => [r.id, r.sourceType]));
 	const liveNodeIds = new Set(nodes.map((r) => r.id));
 
 	return {
 		lookup(c: ContentCitationRow): { exists: boolean; corpus: string | null } {
 			const targetType = c.targetType as CitationTargetType;
+			if (targetType === CITATION_TARGET_TYPES.REFERENCE_SECTION) {
+				const kind = sectionKindById.get(c.targetId);
+				if (kind === undefined) return { exists: false, corpus: null };
+				return { exists: true, corpus: corpusForReferenceKind(kind) };
+			}
 			if (targetType === CITATION_TARGET_TYPES.REGULATION_NODE || targetType === CITATION_TARGET_TYPES.AC_REFERENCE) {
 				const sourceType = refSourceTypeById.get(c.targetId);
 				const exists = refSourceTypeById.has(c.targetId);
@@ -370,6 +393,45 @@ async function loadTargetEnrichment(citations: readonly ContentCitationRow[], db
 			}
 		},
 	};
+}
+
+/**
+ * Map a `study.reference.kind` value to the corpus name registered with
+ * the resolver registry. Mirrors the seeder's per-kind URI builder choice
+ * so the audit's resolver-coverage check matches what the chip-render
+ * layer actually dispatches through.
+ *
+ * Handbook-family kinds collapse to `handbooks`; CFR collapses to `regs`;
+ * other kinds map by name. Unknown kinds return null (treated as "no
+ * resolver expected" by the audit, matching the corpus.ts policy).
+ */
+function corpusForReferenceKind(kind: string): string | null {
+	switch (kind) {
+		case 'handbook':
+			return 'handbooks';
+		case 'cfr':
+			return 'regs';
+		case 'ac':
+			return 'ac';
+		case 'acs':
+			return 'acs';
+		case 'aim':
+			return 'aim';
+		case 'pcg':
+			return 'aim';
+		case 'pts':
+			return 'pts';
+		case 'ntsb':
+			return 'ntsb-alj';
+		case 'poh':
+			return 'pohs';
+		case 'safo':
+			return 'safo';
+		case 'info':
+			return 'info';
+		default:
+			return null;
+	}
 }
 
 function labelForOrphanTarget(targetType: CitationTargetType): string {
