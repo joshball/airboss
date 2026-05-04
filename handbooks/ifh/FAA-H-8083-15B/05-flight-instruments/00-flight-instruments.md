@@ -61,155 +61,29 @@ Head Up Display (HUD), etc., that are increasingly being
 incorporated into general aviation aircraft.
 
 
-![Figure 5-18. Utilization of a compass rose aids compensation for 
-deviation errors.
-Figure 5-19. A compass correction card shows the deviation 
-correction for any heading.
-is no magnetic interference. Lines, oriented to magnetic north, 
-are painted every 30°, as shown in Figure 5-18.
-The pilot or AMT aligns the aircraf](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-00-utilization-of-a-compass-rose-aids-compensation-.png)
+![Figure 5-17. Isogonic lines are lines of equal variation.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-00-isogonic-lines-are-lines-of-equal-variation.png)
 
-![Figure 5-46. The benefits of realistic visualization imagery, as 
-illustrated by Synthetic Vision manufactured by Chelton Flight 
-Systems.  The system provides the pilot a realistic, real-time, three-
-dimensional depiction of the aircraft and its relation to terrain 
-around it.
-XPDR  5537  IDNT  LCL10:12:34
-INSET
-PFD
-C](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-01-the-benefits-of-realistic-visualization-imagery-.png)
+![Figure 5-44. A Control Display Unit (CDU) used to control the  flight management system (FMS).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-01-a-control-display-unit-cdu-used-to-control-the-f.png)
 
-![Figure 5-45. Two primary flight displays (Avidyne on the left and Garmin on the right).
-rate of turn among other key relevant indications. Examples 
-of PFDs are illustrated in Figure 5-45.
-Synthetic Vision
-Synthetic vision provides a realistic depiction of the aircraft 
-in relation to terrain and flightpath. Systems su](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-02-two-primary-flight-displays-avidyne-on-the-left-.png)
+![Figure 5-46. The benefits of realistic visualization imagery, as  illustrated by Synthetic Vision manufactured by Chelton Flight Systems.  The system provides the pilot a realistic, real-time, three- dimensional depiction of the aircraft and its relation to terrain around it.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-02-the-benefits-of-realistic-visualization-imagery-.png)
 
-![Figure 5-48. Aircraft equipped with Automatic Dependent Surveillance—Broadcast (ADS-B) continuously broadcast their identification, 
-altitude, direction, and vertical trend. The transmitted signal carries significant information for other aircraft and ground stations alike. 
-Other ADS-equipped aircraft receive this inf](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-03-aircraft-equipped-with-automatic-dependent-surve.png)
+![Figure 5-47. Example of a multi-function display (MFD).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-03-example-of-a-multi-function-display-mfd.png)
 
-![Figure 5-49. An aircraft equipped with ADS will receive identification, altitude in hundreds of feet (above or below using + or–), direction 
-of the traffic, and aircraft descent or climb using an up or down arrow.  The yellow target is an illustration of how a non-ADS equipped 
-aircraft would appear on an ADS-equipped](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-04-an-aircraft-equipped-with-ads-will-receive-ident.png)
+![Figure 5-48. Aircraft equipped with Automatic Dependent Surveillance—Broadcast (ADS-B) continuously broadcast their identification,  altitude, direction, and vertical trend. The transmitted signal carries significant information for other aircraft and ground stations alike. Other ADS-equipped aircraft receive this info](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-04-aircraft-equipped-with-automatic-dependent-surve.png)
 
-![Figure 5-50. An aircraft equipped with ADS has the ability to upload and display weather.
-140 
-A 
-D 
-S 
-T 
-I 
-S 
-GS 250  4.0NM 
-UPS350  LRG 
-GS 240 
-120° /15 
-SDF 
-42 NM 
-11:10 
-VEC         1.0    MIN
--27      ALT      +27
-+10 
-FDX514 
-+12 
--08
-ABX123
-UPS350 
-+09 
-+05 
--09 
-UPS189](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-04-an-aircraft-equipped-with-ads-will-receive-ident.png)
+![Figure 5-49. An aircraft equipped with ADS will receive identification, altitude in hundreds of feet (above or below using + or–), direction  of the traffic, and aircraft descent or climb using an up or down arrow.  The yellow target is an illustration of how a non-ADS equipped aircraft would appear on an ADS-equipped ](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-04-aircraft-equipped-with-automatic-dependent-surve.png)
 
-![Figure 5-53. Multi-function display (MFD).
-Receiver-transmitter (RT)
-Radar altimeter indicator
-Figure 5-51. Components of a radar altimeter.
-3,500' 
-3,500' 
-7 NM
-Figure 5-52. Coverage provided by a traffic information system.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-04-an-aircraft-equipped-with-ads-will-receive-ident.png)
+![Figure 5-50. An aircraft equipped with ADS has the ability to upload and display weather.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-04-aircraft-equipped-with-automatic-dependent-surve.png)
 
-![Figure 5-60. A head-up display (HUD).
-7 
-7 
-5 
-5 
-5 
-5 
-10 
-10 
-24 
-25 
-26 
-W 
-100 
-90 
-80 
-70 
-60 
-50 
- 63 
-2 
-CRS 
-360 
-HDG 
-360 
-VOR2 
-- -  .  -  NM 
-GSPD 
-59 KTS 
-VOR1 
-6 
-- - -   
-TRACK 
-00500 
-29.89 IN 
-KDVT 25L 
-ON RWY  36L 
-2000 
- 
- 
- 
- 
- 
- 
- 
- 
-1000
-14
-80
-60
-4 
-3 
-2 
-1 
-1 
-2 
-3 
-4 
-information desired can be d](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-07-a-head-up-display-hud-7-7-5-5-5-5-10-10-24-25-26.png)
+![Figure 5-59. A six-frame sequence illustrating the manner in which TAWS operates. A TAWS installation is aircraft specific and provides  warnings and cautions based upon time to potential impact with terrain rather than distance. The TAWS is illustrated in an upper left window while aircrew view is provided out of the ](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-07-a-six-frame-sequence-illustrating-the-manner-in-.png)
 
-<div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-5-00-untitled.html">
-<table><thead><tr><th></th><th>Flight Instruments
-ntroduction</th><th></th></tr></thead><tbody><tr><td>Introduction
-Aircraft became a practical means of transportation when
-accurate flight instruments freed the pilot from the necessity
-of maintaining visual contact with the ground. Flight
-instruments are crucial to conducting safe flight operations
-and it is important that the pilot have a basic understanding
-of their operation. The basic flight instruments required
-for operation under visual flight rules (VFR) are airspeed
-indicator (ASI), altimeter, and magnetic direction indicator.
-In addition to these, operation under instrument flight rules
-(IFR) requires a gyroscopic rate-of-turn indicator, slip-skid
-indicator, sensitive altimeter adjustable for barometric
-pressure, clock displaying hours, minutes, and seconds with
-a sweep-second pointer or digital presentation, gyroscopic
-pitch-and-bank indicator (artificial horizon), and gyroscopic
-direction indicator (directional gyro or equivalent).</td><td>ntroduction</td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table>
-</div>
+![Figure 5-60. A head-up display (HUD).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-08-a-head-up-display-hud.png)
+
+|  | Flight Instruments<br>ntroduction |
+| --- | --- |
+| Introduction<br>Aircraft became a practical means of transportation when<br>accurate flight instruments freed the pilot from the necessity<br>of maintaining visual contact with the ground. Flight<br>instruments are crucial to conducting safe flight operations<br>and it is important that the pilot have a basic understanding<br>of their operation. The basic flight instruments required<br>for operation under visual flight rules (VFR) are airspeed<br>indicator (ASI), altimeter, and magnetic direction indicator.<br>In addition to these, operation under instrument flight rules<br>(IFR) requires a gyroscopic rate-of-turn indicator, slip-skid<br>indicator, sensitive altimeter adjustable for barometric<br>pressure, clock displaying hours, minutes, and seconds with<br>a sweep-second pointer or digital presentation, gyroscopic<br>pitch-and-bank indicator (artificial horizon), and gyroscopic<br>direction indicator (directional gyro or equivalent). | ntroduction |
+
+<a class="handbook-table-source" href="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-5-00-untitled.html">Open original</a>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-5-01-untitled.html">
 <table><thead><tr><th>Height Above Airport in Feet
@@ -254,60 +128,11 @@ White arc
 Yellow arc</th></tr></thead><tbody></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-5-05-untitled.html">
-<table><thead><tr><th>of degrees of variation in their area. The line that passes near Som
-Chicago is called the agonic line. Anywhere along this line mark
-180˚W 165ŇW 150ŇW 135ŇW 120ŇW 105ŇW 90ŇW 75ŇW 60ŇW 45ŇW 30ŇW 15ŇW 0Ň 15ŇE
-70˚N -10 -40 -10
--30
-0
-60ŇN</th><th>e airports have a compass rose, which is a series of lines
-ed out on a taxiway or ramp at some location where there
-30ŇE 45ŇE 60ŇE 75ŇE 90ŇE 105ŇE 120ŇE 135ŇE 150ŇE 165ŇE 180˚W
-70˚N 10
-20
-10
-60ŇN</th></tr></thead><tbody><tr><td>-20
-20
-45ŇN
-0
-30ŇN
-10
-15ŇN
-0Ň 10 -10 -20 -10
-0
-15ŇS
-20
-30ŇS
-Main field declination (D)
-45ŇS Contour interval: 2 degrees 30
-red contours positive (east) 10
-blue negative (west) 40 20
-pink (agonic) zero line.
-60ŇN Mercator Projection. 50
-Position of dip poles 60
-80 70 -20 -30
-70˚N
-180˚W 165ŇW 150ŇW 135ŇW 120ŇW 105ŇW 90ŇW 75ŇW 60ŇW 45ŇW 30ŇW 15ŇW 0Ň 15ŇE</td><td>-10
-45ŇN
-30ŇN 0
-15ŇN 0
-0Ň
--10
-15ŇS -20
--30 10
-30ŇS
-20
-30
-45ŇS -60
-40
--70
-50
-60ŇN -80 -120-100 -13009- 7090 60
--40 -50 -110 130 100 110 80
-70˚N
-30ŇE 45ŇE 60ŇE 75ŇE 90ŇE 105ŇE 120ŇE 135ŇE 150ŇE 165ŇE 180˚W</td></tr><tr><td></td><td></td></tr></tbody></table>
-</div>
+| of degrees of variation in their area. The line that passes near Som<br>Chicago is called the agonic line. Anywhere along this line mark<br>180˚W 165ŇW 150ŇW 135ŇW 120ŇW 105ŇW 90ŇW 75ŇW 60ŇW 45ŇW 30ŇW 15ŇW 0Ň 15ŇE<br>70˚N -10 -40 -10<br>-30<br>0<br>60ŇN | e airports have a compass rose, which is a series of lines<br>ed out on a taxiway or ramp at some location where there<br>30ŇE 45ŇE 60ŇE 75ŇE 90ŇE 105ŇE 120ŇE 135ŇE 150ŇE 165ŇE 180˚W<br>70˚N 10<br>20<br>10<br>60ŇN |
+| --- | --- |
+| -20<br>20<br>45ŇN<br>0<br>30ŇN<br>10<br>15ŇN<br>0Ň 10 -10 -20 -10<br>0<br>15ŇS<br>20<br>30ŇS<br>Main field declination (D)<br>45ŇS Contour interval: 2 degrees 30<br>red contours positive (east) 10<br>blue negative (west) 40 20<br>pink (agonic) zero line.<br>60ŇN Mercator Projection. 50<br>Position of dip poles 60<br>80 70 -20 -30<br>70˚N<br>180˚W 165ŇW 150ŇW 135ŇW 120ŇW 105ŇW 90ŇW 75ŇW 60ŇW 45ŇW 30ŇW 15ŇW 0Ň 15ŇE | -10<br>45ŇN<br>30ŇN 0<br>15ŇN 0<br>0Ň<br>-10<br>15ŇS -20<br>-30 10<br>30ŇS<br>20<br>30<br>45ŇS -60<br>40<br>-70<br>50<br>60ŇN -80 -120-100 -13009- 7090 60<br>-40 -50 -110 130 100 110 80<br>70˚N<br>30ŇE 45ŇE 60ŇE 75ŇE 90ŇE 105ŇE 120ŇE 135ŇE 150ŇE 165ŇE 180˚W |
+
+<a class="handbook-table-source" href="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-5-05-untitled.html">Open original</a>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-5-06-untitled.html">
 <table><thead><tr><th>B
@@ -375,12 +200,12 @@ R DN TA OFF SCALE MAP WPT AUX NRST</td><td></td><td></td><td>HDG UP</td></tr></t
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-5-10-untitled.html">
-<table><thead><tr><th></th><th>24</th><th>TRACK</th><th>5 5
+<table><thead><tr><th>24</th><th>TRACK</th><th>5 5
 25 26</th><th>KDVT 25L</th><th>4
 3
 2
 1
-W</th><th></th></tr></thead><tbody><tr><td></td><td></td><td>- - -</td><td></td><td>00500</td><td></td><td></td></tr><tr><td></td><td></td><td>100
+W</th></tr></thead><tbody><tr><td></td><td>- - -</td><td></td><td>00500</td><td></td></tr><tr><td></td><td>100
 90
 80
 70
@@ -388,6 +213,6 @@ W</th><th></th></tr></thead><tbody><tr><td></td><td></td><td>- - -</td><td></td>
 80
 14
 60
-1000</td><td></td><td></td></tr><tr><td></td><td></td><td>6602
-50</td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td>29.89 IN</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+1000</td><td></td></tr><tr><td></td><td>6602
+50</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td>29.89 IN</td><td></td></tr></tbody></table>
 </div>

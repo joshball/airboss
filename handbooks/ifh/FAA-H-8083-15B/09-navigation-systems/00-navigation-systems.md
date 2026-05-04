@@ -30,26 +30,13 @@ Sky wave
 Figure 9-1. Ground, space, and sky wave propogation.
 
 
-![Figure 9-28. A GPS stand-alone approach.
-required underlying ground-based navigation facilities and 
-related aircraft equipment appropriate to the route of flight, 
-terminal operations, instrument approaches for the destination, 
-and alternate airports/heliports are operational for the ETA. 
-If the required ground-base](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-00-a-gps-stand-alone-approach-required-underlying-g.png)
+![Figure 9-28. A GPS stand-alone approach.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-00-a-gps-stand-alone-approach.png)
 
-<div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-9-00-untitled.html">
-<table><thead><tr><th></th><th>Navigation
-Systems</th><th></th></tr></thead><tbody><tr><td>Introduction
-This chapter provides the basic radio principles applicable to
-navigation equipment, as well as an operational knowledge
-of how to use these systems in instrument flight. This
-information provides the framework for all instrument
-procedures, including standard instrument departure
-procedures (SIDS), departure procedures (DPs), holding
-patterns, and approaches, because each of these maneuvers
-consists mainly of accurate attitude instrument flying and
-accurate tracking using navigation systems.</td><td></td><td></td></tr></tbody></table>
-</div>
+|  | Navigation<br>Systems |
+| --- | --- |
+| Introduction<br>This chapter provides the basic radio principles applicable to<br>navigation equipment, as well as an operational knowledge<br>of how to use these systems in instrument flight. This<br>information provides the framework for all instrument<br>procedures, including standard instrument departure<br>procedures (SIDS), departure procedures (DPs), holding<br>patterns, and approaches, because each of these maneuvers<br>consists mainly of accurate attitude instrument flying and<br>accurate tracking using navigation systems. |  |
+
+<a class="handbook-table-source" href="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-9-00-untitled.html">Open original</a>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-9-01-untitled.html">
 <table><thead><tr><th>NAV1 108.00 113.00
@@ -87,7 +74,7 @@ VOR 1</td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></t
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-9-02-untitled.html">
-<table><thead><tr><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td>B</td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table>
+<table><thead><tr><th>B</th></tr></thead><tbody></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-9-03-untitled.html">
@@ -97,7 +84,7 @@ NAV2 108.00 110.60</th><th>GS 120KT XTK 8.15NM ETE 08:28 ESA 3100FT</th><th>134.
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-9-04-untitled.html">
-<table><thead><tr><th>INSET</th><th></th><th>PFD</th><th></th></tr></thead><tbody></tbody></table>
+<table><thead><tr><th>INSET</th><th></th><th>PFD</th></tr></thead><tbody></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-9-05-untitled.html">
@@ -106,13 +93,13 @@ NAV2 108.00 110.60</th><th>GS 120KT XTK 8.15NM ETE 08:28 ESA 3100FT</th><th>134.
 123.800 118.000 COM2</th></tr></thead><tbody><tr><td></td><td>MAP - NAVIGATION MAP</td><td></td></tr></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-9-06-untitled.html">
-<table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td></td><td>4100
-2</td></tr><tr><td></td><td></td></tr><tr><td></td><td>4400000 0</td></tr><tr><td></td><td></td></tr><tr><td></td><td>8
-3900
-ns</td></tr></tbody></table>
-</div>
+| 4100<br>2 |
+| --- |
+| 4400000 0 |
+| 8<br>3900<br>ns |
+
+<a class="handbook-table-source" href="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-9-06-untitled.html">Open original</a>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-9-07-untitled.html">
-<table><thead><tr><th></th><th>3 6 0.3 N M 0.3 NM FINAL A PPR O A C H 1 .0 N M 1 .0 N M TER M IN 2 AL .0 N M 2 .0 N M EN R O U TE</th><th></th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td>RNP 0.3 RNP 1.0 RNP 2.0 RNP 1.0</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>36</td><td></td><td></td><td>81</td><td></td></tr></tbody></table>
+<table><thead><tr><th></th><th>3 6 0.3 N M 0.3 NM FINAL A PPR O A C H 1 .0 N M 1 .0 N M TER M IN 2 AL .0 N M 2 .0 N M EN R O U TE</th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td>RNP 0.3 RNP 1.0 RNP 2.0 RNP 1.0</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>36</td><td></td><td></td><td>81</td></tr></tbody></table>
 </div>

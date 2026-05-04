@@ -43,17 +43,6 @@ Figure 5-43 is a diagram layout of a rate-based autopilot by
 S-Tec, which permits the purchaser to add modular capability
 form basic wing leveling to increased capability.
 
-O
-
-P
-T
-H
-F
-O
-M
-T
-O
-
 TURN COORDINATOR
 2  MIN.
 PWR

@@ -152,16 +152,7 @@ DIP
 DIP
 DIP
 Dip
- e
-ff
-e
-c
-t
-Di
-p
-ef
-fe
-ct
+ 
 Left turn
 No error
 Right turn

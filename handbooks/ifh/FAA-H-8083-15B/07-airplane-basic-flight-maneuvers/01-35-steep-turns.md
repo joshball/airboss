@@ -297,16 +297,7 @@ cross-checking the instruments long enough to enter
 an unusual attitude.
 
 TAS
-P
-F
-T
-T
-U
-F
-V
-T
-P
-F
+
 ATTITUDE FAIL
 CRS  071°
 HDG  273°

@@ -25,69 +25,6 @@ by regulation in Class B and Class C airspace and inside a
 30-mile circle surrounding the primary airport in Class B
 airspace. Altitude reporting should also be ON at all times.
 
-r
-R 0
-q
-Q9
-p
-P 8
-o
-O7
-n
-N6
-z
-ZZ
-y
-Y Y
-x
-XX
-w
-W W
-v
-V V
-u
-U U
-t
-T T
-s
-SS
-r
-R R
-q
-QQ
-p
-P P
-o
-OO
-n
-NN
-m
-MM
-LL
-k
-K K
-j
-J J
-i
-II
-h
-hH
-g
-GG
-f
-F F
-e
-E E
-d
-D D
-c
-CC
-b
-B B
-a
-A A
-a
-b
 Character
 Phonic
 (Pronunciation)

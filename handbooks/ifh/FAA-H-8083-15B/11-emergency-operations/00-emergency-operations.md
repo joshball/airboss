@@ -24,20 +24,11 @@ Operations
 Chapter 11
 
 
-<div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-11-00-untitled.html">
-<table><thead><tr><th></th><th>Emergency
-Operations</th><th></th></tr></thead><tbody><tr><td>Introduction
-Changing weather conditions, air traffic control (ATC), the
-aircraft, and the pilot are all variables that make instrument
-fyl ing an unpredictable and challenging operation. The safety
-of the flight depends upon the pilot’s ability to manage these
-variables while maintaining positive aircraft control and
-adequate situational awareness. This chapter discusses the
-recognition and suggested remedies for such abnormal and
-emergency events related to unforecasted, adverse weather;
-aircraft system malfunctions; communication/navigation
-system malfunctions; and loss of situational awareness.</td><td></td><td></td></tr></tbody></table>
-</div>
+|  | Emergency<br>Operations |
+| --- | --- |
+| Introduction<br>Changing weather conditions, air traffic control (ATC), the<br>aircraft, and the pilot are all variables that make instrument<br>fyl ing an unpredictable and challenging operation. The safety<br>of the flight depends upon the pilot’s ability to manage these<br>variables while maintaining positive aircraft control and<br>adequate situational awareness. This chapter discusses the<br>recognition and suggested remedies for such abnormal and<br>emergency events related to unforecasted, adverse weather;<br>aircraft system malfunctions; communication/navigation<br>system malfunctions; and loss of situational awareness. |  |
+
+<a class="handbook-table-source" href="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-11-00-untitled.html">Open original</a>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-11-01-untitled.html">
 <table><thead><tr><th>N NA AV V1 2 1 10 08 8. .0 00 0 1 11 13 0. .0 60 0 W</th><th>PT _ _ _ _ _ _ DIS _ _ ._ NM DTK _ _ _° TRK 360°</th><th>1 13 24 3. .0 80 00 0 11 11 88 .. 00 00 00 C CO OM M1 2</th></tr></thead><tbody></tbody></table>
@@ -49,11 +40,11 @@ MAP - NAVIGATION MAP</th><th>1 13 24 3. .0 80 00 0 11 11 88 .. 00 00 00 C CO OM 
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-11-03-untitled.html">
-<table><thead><tr><th></th><th></th><th></th><th></th><th></th><th></th><th>A</th><th>LERTS</th></tr></thead><tbody></tbody></table>
+<table><thead><tr><th>A</th><th>LERTS</th></tr></thead><tbody></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-11-04-untitled.html">
-<table><thead><tr><th></th><th>MAP</th><th></th><th></th><th>DCLTR</th><th></th><th></th></tr></thead><tbody></tbody></table>
+<table><thead><tr><th>MAP</th><th></th><th></th><th>DCLTR</th></tr></thead><tbody></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-11-05-untitled.html">
@@ -61,24 +52,24 @@ MAP - NAVIGATION MAP</th><th>1 13 24 3. .0 80 00 0 11 11 88 .. 00 00 00 C CO OM 
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-11-06-untitled.html">
-<table><thead><tr><th></th><th></th><th></th><th></th><th></th><th>A</th><th>LERTS</th></tr></thead><tbody></tbody></table>
+<table><thead><tr><th>A</th><th>LERTS</th></tr></thead><tbody></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-11-07-untitled.html">
-<table><thead><tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td>0 30 60
-ALT AMPS</td><td></td><td></td></tr><tr><td></td><td></td><td>0 30 60
+<table><thead><tr><th></th><th></th><th>0 30 60
+ALT AMPS</th></tr></thead><tbody><tr><td>0 30 60
 ALT AMPS</td><td></td><td>0 30 60
-ALT AMPS</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+ALT AMPS</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-11-08-untitled.html">
 <table><thead><tr><th>NAV1 108.00 113.00
 NAV2 108.00 110.60</th><th>WPT _ _ _ _ _ _ DIS _ _ . _ NM DTK _ _ _° TRK 360°</th><th>134.000 118.000 COM1
-123.800 118.000 COM2</th></tr></thead><tbody><tr><td></td><td></td><td></td></tr></tbody></table>
+123.800 118.000 COM2</th></tr></thead><tbody></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-11-09-untitled.html">
-<table><thead><tr><th>AL</th><th></th></tr></thead><tbody></tbody></table>
+<table><thead><tr><th>AL</th></tr></thead><tbody></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-11-10-untitled.html">
@@ -88,16 +79,16 @@ Closest city</th><th></th></tr></thead><tbody><tr><td>Field elevation
 Name of the airport
 Type of airport
 Geographic region
-Fuel available</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td>Lat/long coordinates</td></tr></tbody></table>
+Fuel available</td><td></td><td></td></tr><tr><td></td><td></td><td>Lat/long coordinates</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-11-11-untitled.html">
 <table><thead><tr><th></th><th>Airport identifier
-Airport symbol</th><th></th></tr></thead><tbody><tr><td>Best approach available
+Airport symbol</th></tr></thead><tbody><tr><td>Best approach available
 Distance to the airport
 from present position
 Communication frequency and type
-Longest runway available</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table>
+Longest runway available</td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-11-12-untitled.html">
@@ -107,7 +98,7 @@ NAV2 108.00 110.60</th><th>_ DIS _ _ . _ NM DTK _ _ _° TRK 360°</th><th>134.00
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-11-13-untitled.html">
-<table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>DCLTR</td><td></td></tr></tbody></table>
+<table><thead><tr><th>DCLTR</th></tr></thead><tbody></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-11-14-untitled.html">
