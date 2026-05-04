@@ -25,11 +25,11 @@ let liveAnnounce = $state('');
 
 // Breadcrumbs intentionally skip an `Admin` crumb -- the admin sub-nav
 // (Buckets / Loader) is the IA for this surface.
-const crumbs: readonly BreadcrumbItem[] = [
+const crumbs = $derived<readonly BreadcrumbItem[]>([
 	{ label: 'Review board', href: ROUTES.HANGAR_REVIEW },
 	{ label: 'Buckets', href: ROUTES.HANGAR_REVIEW_ADMIN_BUCKETS },
 	{ label: data.bucket.name },
-];
+]);
 
 const fieldErrors = $derived<Record<string, string>>(
 	form && 'errors' in form && typeof form.errors === 'object' && form.errors !== null

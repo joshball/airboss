@@ -63,7 +63,7 @@ const initial = $derived<BucketFormInitial>({
 			};
 		}}
 	>
-		<BucketForm initial={initial} errors={fieldErrors} submitLabel="Create bucket" saving={saving} autofocus />
+		<BucketForm initial={initial} errors={fieldErrors} submitLabel="Create bucket" saving={saving} />
 		<p class="cancel-row">
 			<a class="cancel" href={ROUTES.HANGAR_REVIEW_ADMIN_BUCKETS}>Cancel</a>
 		</p>

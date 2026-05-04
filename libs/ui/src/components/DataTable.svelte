@@ -85,6 +85,8 @@ function sortIndicator(column: DataTableColumn<T>): string {
 }
 </script>
 
+<!-- WAI-ARIA APG data-grid pattern: scrollable region needs tabindex=0 so keyboard users can scroll horizontally. -->
+<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 <div
 	class="wrap"
 	role="region"
