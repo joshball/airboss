@@ -189,11 +189,11 @@ export const actions: Actions = {
 				error(404, { message: 'Review session not found' });
 			}
 			log.error(
-				'submitReview threw',
+				'save review failed',
 				{ requestId: locals.requestId, userId: user.id, metadata: { cardId, sessionId: params.sessionId } },
 				err instanceof Error ? err : undefined,
 			);
-			return fail(500, { success: false as const, cardId, error: 'Could not save review' });
+			return fail(500, { success: false as const, cardId, error: 'Could not save review.' });
 		}
 	},
 	jumpTo: async (event) => {
@@ -225,11 +225,11 @@ export const actions: Actions = {
 				error(404, { message: 'Review session not found' });
 			}
 			log.error(
-				'jumpToIndex threw',
+				'jump to card failed',
 				{ requestId: locals.requestId, userId: user.id, metadata: { sessionId: params.sessionId, index } },
 				err instanceof Error ? err : undefined,
 			);
-			return fail(500, { error: 'Could not jump to that card' });
+			return fail(500, { error: 'Could not jump to that card.' });
 		}
 	},
 	undoReview: async (event) => {
@@ -256,11 +256,11 @@ export const actions: Actions = {
 				return fail(409, { error: 'Nothing to undo' });
 			}
 			log.error(
-				'undoReview threw',
+				'undo review failed',
 				{ requestId: locals.requestId, userId: user.id, metadata: { cardId, sessionId: params.sessionId } },
 				err instanceof Error ? err : undefined,
 			);
-			return fail(500, { error: 'Could not undo review' });
+			return fail(500, { error: 'Could not undo review.' });
 		}
 	},
 	snooze: async (event) => {
@@ -319,11 +319,11 @@ export const actions: Actions = {
 				error(404, { message: 'Review session not found' });
 			}
 			log.error(
-				'snoozeCard threw',
+				'snooze card failed',
 				{ requestId: locals.requestId, userId: user.id, metadata: { cardId, sessionId: params.sessionId, reason } },
 				err instanceof Error ? err : undefined,
 			);
-			return fail(500, { error: 'Could not snooze card' });
+			return fail(500, { error: 'Could not snooze card.' });
 		}
 	},
 	feedback: async (event) => {
@@ -352,11 +352,11 @@ export const actions: Actions = {
 				return fail(404, { error: 'Card not found' });
 			}
 			log.error(
-				'submitFeedback threw',
+				'save feedback failed',
 				{ requestId: locals.requestId, userId: user.id, metadata: { cardId, sessionId: params.sessionId, signal } },
 				err instanceof Error ? err : undefined,
 			);
-			return fail(500, { error: 'Could not save feedback' });
+			return fail(500, { error: 'Could not save feedback.' });
 		}
 	},
 } satisfies Actions;

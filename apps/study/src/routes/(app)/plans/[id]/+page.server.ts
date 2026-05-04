@@ -82,11 +82,11 @@ export const actions: Actions = {
 				return fail(400, { error: 'A domain can be in focus or skip, not both.' });
 			}
 			log.error(
-				'updatePlan threw',
+				'save plan failed',
 				{ requestId: locals.requestId, userId: user.id, metadata: { planId: params.id } },
 				err instanceof Error ? err : undefined,
 			);
-			return fail(500, { error: 'Could not save plan. Try again.' });
+			return fail(500, { error: 'Could not save plan.' });
 		}
 		return { success: true as const };
 	},

@@ -112,7 +112,7 @@ export const actions: Actions = {
 				return fail(400, { intent: 'addCitation', fieldErrors: { _: 'That reference could not be found.' } });
 			}
 			log.error(
-				'createCitation threw',
+				'add citation failed',
 				{ requestId: locals.requestId, userId: user.id, metadata: { scenarioId: params.id, targetType, targetId } },
 				err instanceof Error ? err : undefined,
 			);
@@ -145,7 +145,7 @@ export const actions: Actions = {
 				return fail(404, { intent: 'removeCitation', fieldErrors: { _: 'That citation was not found.' } });
 			}
 			log.error(
-				'deleteCitation threw',
+				'remove citation failed',
 				{ requestId: locals.requestId, userId: user.id, metadata: { scenarioId: params.id, citationId } },
 				err instanceof Error ? err : undefined,
 			);
