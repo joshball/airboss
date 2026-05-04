@@ -2,9 +2,6 @@
 // and the polymorphic content-citation surface (folded in from the former
 // citations package; see docs/work-packages/bc-citations-coupling/).
 
-// Cross-file error classes (shared by 2+ modules in the BC).
-export { SourceRefRequiredError, UpsertReturnedNoRowError } from './errors';
-
 export type {
 	CalibrationBucket,
 	CalibrationPageData,
@@ -147,6 +144,8 @@ export {
 	getEngineTargeting,
 	getEngineTargetingSnapshot,
 } from './engine-targeting';
+// Cross-file error classes (shared by 2+ modules in the BC).
+export { SourceRefRequiredError, UpsertReturnedNoRowError } from './errors';
 export type { SubmitFeedbackInput } from './feedback';
 export { FeedbackCommentRequiredError, getLatestFeedback, submitFeedback } from './feedback';
 export { formatNextInterval, formatNextIntervalAbsolute } from './formatters';

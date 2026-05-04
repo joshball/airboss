@@ -16,7 +16,12 @@
 
 import { CITATION_SOURCE_TYPES, CITATION_TARGET_TYPES, EXTERNAL_REF_TARGET_DELIMITER } from '@ab/constants';
 import { describe, expect, it } from 'vitest';
-import { CitationNotFoundError, CitationNotOwnedError, resolveCitationSources, resolveCitationTargets } from './citations';
+import {
+	CitationNotFoundError,
+	CitationNotOwnedError,
+	resolveCitationSources,
+	resolveCitationTargets,
+} from './citations';
 import type { ContentCitationRow } from './schema';
 
 interface FakeQueryResult<T> {

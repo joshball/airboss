@@ -10,10 +10,7 @@
 
 import { describe, expect, it } from 'vitest';
 import { SourceRefRequiredError as CardsSourceRefRequiredError } from './cards';
-import {
-	SourceRefRequiredError as BarrelSourceRefRequiredError,
-	UpsertReturnedNoRowError,
-} from './errors';
+import { SourceRefRequiredError as BarrelSourceRefRequiredError, UpsertReturnedNoRowError } from './errors';
 import { SourceRefRequiredError as ScenariosSourceRefRequiredError } from './scenarios';
 
 describe('SourceRefRequiredError class identity', () => {
