@@ -22,7 +22,7 @@
  */
 
 import { readFile } from 'node:fs/promises';
-import { dirname, resolve } from 'node:path';
+import { dirname, resolve, sep } from 'node:path';
 import { requireRole } from '@ab/auth';
 import {
 	everyStepPassed,
@@ -37,14 +37,7 @@ import {
 	type TestPlanStep,
 	writeFrontmatterField,
 } from '@ab/bc-hangar';
-import {
-	REVIEW_KINDS,
-	REVIEW_OUTCOME_VALUES,
-	type ReviewOutcome,
-	ROLES,
-	SESSION_OUTCOME_VALUES,
-	type SessionOutcome,
-} from '@ab/constants';
+import { REVIEW_KINDS, REVIEW_OUTCOME_VALUES, type ReviewOutcome, ROLES, type SessionOutcome } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
@@ -77,11 +70,21 @@ export const load: PageServerLoad = async (event) => {
 	const md = await safeReadFile(testPlanAbs);
 	const steps: ReadonlyArray<TestPlanStep> = md === null ? [] : parseTestPlan(testPlanRel, md);
 
-	// Idempotent for a single user: if an open session already exists for
-	// this item/user, return it; otherwise create a new one. Two tabs hit
-	// the same open session row.
-	const session = await startSession(item.id, user.id);
-	const stepRows = await listSteps(session.id);
+	// Lazy session creation: only start a session when there's a plan to walk.
+	// Visiting the walker for an empty plan must not pollute the session
+	// history. A no-plan visit shows the missing/empty state without a row in
+	// the spec view's right rail.
+	let session: { id: string; startedAt: string } | null = null;
+	let stepRows: readonly { stepRef: string; outcome: string | null; note: string | null }[] = [];
+	if (steps.length > 0) {
+		const open = await startSession(item.id, user.id);
+		stepRows = await listSteps(open.id);
+		session = {
+			id: open.id,
+			startedAt: open.startedAt instanceof Date ? open.startedAt.toISOString() : String(open.startedAt),
+		};
+	}
+
 	const recordedByRef = new Map<string, RecordedStep>();
 	for (const r of stepRows) {
 		if (!isReviewOutcome(r.outcome)) continue;
@@ -98,10 +101,7 @@ export const load: PageServerLoad = async (event) => {
 		wpDir,
 		testPlanRel,
 		testPlanPresent: md !== null,
-		session: {
-			id: session.id,
-			startedAt: session.startedAt instanceof Date ? session.startedAt.toISOString() : String(session.startedAt),
-		},
+		session,
 		steps,
 		recordedByRef: [...recordedByRef.values()],
 		summary: {
@@ -123,7 +123,7 @@ async function safeReadFile(absPath: string): Promise<string | null> {
 	}
 }
 
-function countByOutcome(rows: ReadonlyArray<{ outcome: string }>, target: ReviewOutcome): number {
+function countByOutcome(rows: ReadonlyArray<{ outcome: string | null }>, target: ReviewOutcome): number {
 	let n = 0;
 	for (const r of rows) if (r.outcome === target) n += 1;
 	return n;
@@ -133,8 +133,30 @@ function isReviewOutcome(value: unknown): value is ReviewOutcome {
 	return typeof value === 'string' && (REVIEW_OUTCOME_VALUES as readonly string[]).includes(value);
 }
 
-function isSessionOutcome(value: unknown): value is SessionOutcome {
-	return typeof value === 'string' && (SESSION_OUTCOME_VALUES as readonly string[]).includes(value);
+/**
+ * User-finishable session outcomes. `abandoned` IS surfaced as a button
+ * (an explicit "Abandon" affordance the walker UI exposes alongside Pass /
+ * Fail), so it's whitelisted here. The constants file documents `abandoned`
+ * as ALSO a loader-bookkeeping marker; the walker action accepts the user-
+ * driven path because the alternative (fake `fail` plus a "really abandoned"
+ * sentinel note) muddies session history more than it gains in tamper
+ * resistance.
+ *
+ * The whitelist exists primarily to defend against future enum growth: if a
+ * fourth `SessionOutcome` ever lands (e.g. `superseded`), the action stays
+ * a known-good set rather than silently accepting the new value.
+ */
+const USER_FINISHABLE_OUTCOMES: readonly SessionOutcome[] = ['pass', 'fail', 'abandoned'];
+
+function isUserFinishableOutcome(value: unknown): value is SessionOutcome {
+	return typeof value === 'string' && (USER_FINISHABLE_OUTCOMES as readonly string[]).includes(value);
+}
+
+function assertWithinRepoRoot(absPath: string): void {
+	const root = REPO_ROOT.endsWith(sep) ? REPO_ROOT : `${REPO_ROOT}${sep}`;
+	if (!absPath.startsWith(root) && absPath !== REPO_ROOT) {
+		throw new Error(`Path resolves outside REPO_ROOT: ${absPath}`);
+	}
 }
 
 export const actions: Actions = {
@@ -142,6 +164,11 @@ export const actions: Actions = {
 	 * `?/recordStep` -- idempotent step write keyed on `(sessionId, stepRef)`.
 	 * Saving the same step twice flips the outcome / note. The walker page
 	 * fires this on every outcome click and on note blur.
+	 *
+	 * Re-checks the open session immediately before writing so a concurrent
+	 * `?/finishSession` from another tab can't trick this action into landing
+	 * a step row in a closed session. Returns 409 if the session has been
+	 * finished since the form was rendered so the UI can re-load.
 	 */
 	recordStep: async (event) => {
 		const user = requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
@@ -163,25 +190,18 @@ export const actions: Actions = {
 			return fail(400, { recordStep: 'Invalid outcome.' as const });
 		}
 		// Tamper guard: the session must belong to this item AND the calling
-		// user. Without this, a malicious form post could write into another
-		// user's open session by guessing the session id.
+		// user AND must still be open. Without this, a malicious form post
+		// could write into another user's open session by guessing the
+		// session id, OR a concurrent finishSession from another tab could
+		// race the write into a closed session.
 		const open = await getOpenSession(itemId, user.id);
 		if (!open || open.id !== sessionId) {
-			return fail(403, { recordStep: 'Session does not belong to the current user / item.' as const });
+			return fail(409, {
+				recordStep: 'Session no longer open. Reload to start a new session.' as const,
+			});
 		}
 		await recordStep({ sessionId, stepIndex, stepRef, outcome: outcomeRaw, note });
 		return { recordStep: 'ok' as const };
-	},
-
-	/**
-	 * `?/pauseSession` -- no-op write that lets the user navigate away
-	 * cleanly. The session stays open (`finishedAt = null`); revisiting
-	 * resumes it. Today we don't persist a "paused at" marker -- the
-	 * frontend just pivots the user back to the spec view.
-	 */
-	pauseSession: async (event) => {
-		requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
-		return { pauseSession: 'ok' as const };
 	},
 
 	/**
@@ -192,6 +212,12 @@ export const actions: Actions = {
 	 * to the wp_spec's frontmatter so the next loader pass moves the item
 	 * to the `Done` column on the board. The frontmatter flip is the
 	 * agent-owned write the spec calls out (status flip stays user-owned).
+	 *
+	 * Soft-deleted items are rejected the same way they are in `?/markSpecRead`
+	 * / `?/flipReviewStatus`: a session against a deleted item must not flip
+	 * frontmatter on a stale path. The `isUserFinishableOutcome` helper
+	 * whitelists user-driven outcomes so future enum growth can't reach the
+	 * action via an untouched validator.
 	 */
 	finishSession: async (event) => {
 		const user = requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
@@ -203,7 +229,7 @@ export const actions: Actions = {
 		if (sessionId === '') {
 			return fail(400, { finishSession: 'Missing sessionId.' as const });
 		}
-		if (!isSessionOutcome(outcomeRaw)) {
+		if (!isUserFinishableOutcome(outcomeRaw)) {
 			return fail(400, { finishSession: 'Invalid outcome.' as const });
 		}
 		const open = await getOpenSession(itemId, user.id);
@@ -217,7 +243,10 @@ export const actions: Actions = {
 		// the load-time snapshot) so a concurrent edit can't trick us into a
 		// premature flip.
 		const item = await getItem(itemId);
-		if (!item) return fail(404, { finishSession: 'Item not found.' as const });
+		// Match the soft-delete gate used by sibling load + actions; a stale
+		// `item.ref` after a soft-delete must not be the target of a
+		// frontmatter write.
+		if (!item || item.deletedAt !== null) return fail(404, { finishSession: 'Item not found.' as const });
 		const wpDir = dirname(item.ref);
 		const testPlanRel = `${wpDir}/test-plan.md`;
 		const md = await safeReadFile(resolve(REPO_ROOT, testPlanRel));
@@ -233,6 +262,7 @@ export const actions: Actions = {
 		if (outcomeRaw === 'pass' && cleanPass && item.kindId === REVIEW_KINDS.WP_SPEC) {
 			const absPath = resolve(REPO_ROOT, item.ref);
 			try {
+				assertWithinRepoRoot(absPath);
 				await writeFrontmatterField(absPath, 'review_status', 'done');
 				frontmatterFlipped = true;
 			} catch (err) {

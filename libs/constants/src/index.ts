@@ -280,7 +280,9 @@ export {
 	REVIEW_OUTCOME_LABELS,
 	REVIEW_OUTCOME_VALUES,
 	REVIEW_SESSION_HISTORY_LIMIT,
+	REVIEW_WP_SPEC_FINISH_PARAMS,
 	REVIEW_WP_SPEC_TAB_PARAM,
+	REVIEW_WP_SPEC_TOAST_DISMISS_MS,
 	type ReviewBoardDefaultColumn,
 	type ReviewBoardFilter,
 	type ReviewBoardStatusFilter,
@@ -292,6 +294,7 @@ export {
 	TASK_TYPE_LABELS,
 	TASK_TYPE_VALUES,
 	type TaskType,
+	WALKER_KEYBOARD_SHORTCUTS,
 	WP_SPEC_TABS,
 	type WpSpecTabId,
 } from './review';

@@ -339,3 +339,43 @@ export type WpSpecTabId = (typeof WP_SPEC_TABS)[number]['id'];
  * link can deep-link a specific tab.
  */
 export const REVIEW_WP_SPEC_TAB_PARAM = 'tab' as const;
+
+/**
+ * Query-string parameters the WP-spec view reads on mount after the walker's
+ * Finish redirect, so the spec view can re-display the walker's success
+ * toast (the walker page unmounts before its inline toast can be read). The
+ * walker writes `?finishedAs=<outcome>&flipped=<0|1>[&fmError=<msg>]`; the
+ * spec view reads them once on mount, surfaces the toast, then strips them
+ * via `goto({ replaceState: true })`.
+ */
+export const REVIEW_WP_SPEC_FINISH_PARAMS = {
+	FINISHED_AS: 'finishedAs',
+	FLIPPED: 'flipped',
+	FM_ERROR: 'fmError',
+} as const;
+
+/**
+ * Auto-dismiss delay for transient success toasts on the WP-spec / walker
+ * surfaces. Errors stay sticky -- the user has to read them and decide on
+ * next action. Reuses the board's dismiss window for consistency.
+ */
+export const REVIEW_WP_SPEC_TOAST_DISMISS_MS = 5000 as const;
+
+/**
+ * Walker keyboard shortcut keys. The walker is the highest-volume click
+ * surface in the WP and a 50-step plan needs ~100 mouse clicks without a
+ * keyboard path. `j` / `k` move between rows; `p` / `f` / `b` pick the
+ * outcome on the focused row; `n` jumps focus to the focused row's note
+ * textarea so the reviewer can type without taking a hand off the home row.
+ *
+ * Single source of truth so the in-page cheat sheet, the keydown handler,
+ * and any future docs share one set of bindings.
+ */
+export const WALKER_KEYBOARD_SHORTCUTS = {
+	NEXT_STEP: 'j',
+	PREV_STEP: 'k',
+	OUTCOME_PASS: 'p',
+	OUTCOME_FAIL: 'f',
+	OUTCOME_BLOCKED: 'b',
+	FOCUS_NOTE: 'n',
+} as const;

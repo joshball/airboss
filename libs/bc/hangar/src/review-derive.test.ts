@@ -165,7 +165,7 @@ describe('everyStepPassed', () => {
 		).toBe(true);
 	});
 
-	test('extra recorded steps that do not exist in the plan do not invalidate the pass', () => {
+	test('orphan recorded steps with fail outcome do not invalidate the pass', () => {
 		// `recordStep` is idempotent on (sessionId, stepRef); a stale row
 		// from a prior plan revision survives until the next loader sweep.
 		// We accept the extras because the plan's steps are the authoritative
@@ -176,6 +176,59 @@ describe('everyStepPassed', () => {
 				{ stepRef: 'b', outcome: 'pass' },
 				{ stepRef: 'c', outcome: 'pass' },
 				{ stepRef: 'orphan', outcome: 'fail' },
+			]),
+		).toBe(true);
+	});
+
+	test('orphan recorded steps with pass outcome do not inflate the pass count', () => {
+		// Regression: an orphan-pass row used to inflate `passCount` past
+		// `steps.length` in the prior implementation, which made the loop
+		// short-circuit on a missing plan-step pass. After the fix, orphans
+		// are ignored entirely -- only plan stepRefs count toward the pass.
+		expect(
+			everyStepPassed(steps, [
+				{ stepRef: 'a', outcome: 'pass' },
+				{ stepRef: 'b', outcome: 'pass' },
+				{ stepRef: 'c', outcome: 'pass' },
+				{ stepRef: 'orphan', outcome: 'pass' },
+			]),
+		).toBe(true);
+	});
+
+	test('orphan-pass with a missing plan step still returns false', () => {
+		// Edge case: orphan-pass row exists but plan step c is unrecorded.
+		// The orphan must not "fill in" for the missing plan step.
+		expect(
+			everyStepPassed(steps, [
+				{ stepRef: 'a', outcome: 'pass' },
+				{ stepRef: 'b', outcome: 'pass' },
+				{ stepRef: 'orphan', outcome: 'pass' },
+			]),
+		).toBe(false);
+	});
+
+	test('duplicate stepRef rows: any non-pass keeps the step non-pass', () => {
+		// `recordStep` is idempotent at the DB level (unique index on
+		// `(sessionId, stepRef)`), so duplicates shouldn't reach this fn.
+		// Defensive coverage: if a duplicate slips in, a non-pass entry
+		// must not be silently promoted by a sibling pass row.
+		expect(
+			everyStepPassed(steps, [
+				{ stepRef: 'a', outcome: 'pass' },
+				{ stepRef: 'b', outcome: 'pass' },
+				{ stepRef: 'c', outcome: 'fail' },
+				{ stepRef: 'c', outcome: 'pass' },
+			]),
+		).toBe(false);
+	});
+
+	test('duplicate stepRef rows: all-pass duplicates still pass', () => {
+		expect(
+			everyStepPassed(steps, [
+				{ stepRef: 'a', outcome: 'pass' },
+				{ stepRef: 'a', outcome: 'pass' },
+				{ stepRef: 'b', outcome: 'pass' },
+				{ stepRef: 'c', outcome: 'pass' },
 			]),
 		).toBe(true);
 	});

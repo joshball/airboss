@@ -778,22 +778,13 @@ export interface RecordStepInput {
 /**
  * Record (or overwrite) a step outcome inside a session. Idempotent on
  * `(sessionId, stepRef)`; saving the same step twice flips the prior outcome.
+ *
+ * Implemented as a single `INSERT ... ON CONFLICT DO UPDATE` against the
+ * `(sessionId, stepRef)` unique index so two concurrent writers (fast double-
+ * click, two browser tabs) collapse into one row without surfacing PG `23505`.
+ * The class JSDoc on this file names idempotency a hard guarantee.
  */
 export async function recordStep(input: RecordStepInput, db: Db = defaultDb): Promise<HangarReviewStepRow> {
-	const existing = await db
-		.select()
-		.from(hangarReviewStep)
-		.where(and(eq(hangarReviewStep.sessionId, input.sessionId), eq(hangarReviewStep.stepRef, input.stepRef)))
-		.limit(1);
-	if (existing[0]) {
-		const updated = await db
-			.update(hangarReviewStep)
-			.set({ outcome: input.outcome, note: input.note, stepIndex: input.stepIndex })
-			.where(eq(hangarReviewStep.id, existing[0].id))
-			.returning();
-		if (!updated[0]) throw new Error('recordStep: update returned no row');
-		return updated[0];
-	}
 	const id = generateHangarReviewStepId();
 	const inserted = await db
 		.insert(hangarReviewStep)
@@ -805,8 +796,16 @@ export async function recordStep(input: RecordStepInput, db: Db = defaultDb): Pr
 			outcome: input.outcome,
 			note: input.note,
 		})
+		.onConflictDoUpdate({
+			target: [hangarReviewStep.sessionId, hangarReviewStep.stepRef],
+			set: {
+				outcome: input.outcome,
+				note: input.note,
+				stepIndex: input.stepIndex,
+			},
+		})
 		.returning();
-	if (!inserted[0]) throw new Error('recordStep: insert returned no row');
+	if (!inserted[0]) throw new Error('recordStep: upsert returned no row');
 	return inserted[0];
 }
 
@@ -826,7 +825,13 @@ export async function listSteps(sessionId: string, db: Db = defaultDb): Promise<
  * `review_status: done` on the spec frontmatter. Conditions:
  *   1. The plan has at least one step (no flip on an empty plan).
  *   2. Every step in the plan has been recorded.
- *   3. Every recorded outcome is `pass` (no fails, no blockeds).
+ *   3. Every plan step's recorded outcome is `pass` (no fails, no blockeds).
+ *
+ * Orphan recorded rows (whose `stepRef` is not in the live plan -- e.g.
+ * test-plan.md was edited mid-walk) are ignored entirely: their outcome
+ * neither contributes to nor blocks the pass count. The plan's stepRefs
+ * are the authoritative universe. A stale orphan-`pass` row from a prior
+ * plan revision must NOT inflate `passCount` past `steps.length`.
  *
  * Lives in the BC alongside the other test-plan helpers so it's reachable
  * from unit tests without touching the route layer.
@@ -836,19 +841,24 @@ export function everyStepPassed(
 	recorded: ReadonlyArray<{ stepRef: string; outcome: string }>,
 ): boolean {
 	if (steps.length === 0) return false;
-	const recordedRefs = new Set(recorded.map((r) => r.stepRef));
-	for (const step of steps) {
-		if (!recordedRefs.has(step.stepRef)) return false;
-	}
-	let passCount = 0;
+	const planRefs = new Set(steps.map((s) => s.stepRef));
+	// Filter to plan stepRefs first; dedupe in case `recorded` somehow surfaces
+	// duplicates (defensive -- the unique index on `(sessionId, stepRef)`
+	// prevents duplicate rows, but the comparator stays robust if a future
+	// caller passes pre-merged data).
+	const passByRef = new Map<string, boolean>();
 	for (const r of recorded) {
-		if (r.outcome === 'pass') passCount += 1;
-		// A non-`pass` outcome on any step disqualifies even if later steps
-		// re-recorded the same ref as `pass`. `recordStep` is idempotent on
-		// `(sessionId, stepRef)`, so the input is already deduped to one row
-		// per step -- we only count the final outcome.
+		if (!planRefs.has(r.stepRef)) continue;
+		// Once a non-pass row is seen for a ref, it stays non-pass; subsequent
+		// pass rows for the same ref do NOT promote it back. (Idempotency at
+		// the BC level means there's only one row per ref anyway.)
+		if (passByRef.get(r.stepRef) === false) continue;
+		passByRef.set(r.stepRef, r.outcome === 'pass');
 	}
-	return passCount === steps.length;
+	for (const step of steps) {
+		if (passByRef.get(step.stepRef) !== true) return false;
+	}
+	return true;
 }
 
 // ---------------------------------------------------------------------------

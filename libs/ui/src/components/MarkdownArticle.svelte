@@ -82,6 +82,13 @@ let { bodyHtml, ariaLabel }: Props = $props();
 		border-collapse: collapse;
 		margin: var(--space-md) 0;
 		width: 100%;
+		/* Allow wide test-plan / spec tables to overflow their column instead
+		 * of clipping content off-screen on narrow viewports. `display: block`
+		 * lets the table own its scroll container; max-width keeps it inside
+		 * the prose column. */
+		display: block;
+		overflow-x: auto;
+		max-width: 100%;
 	}
 
 	.prose :global(th),

@@ -15,7 +15,7 @@
  */
 
 import { readFile } from 'node:fs/promises';
-import { dirname, resolve } from 'node:path';
+import { dirname, resolve, sep } from 'node:path';
 import { requireRole } from '@ab/auth';
 import {
 	getItem,
@@ -108,13 +108,27 @@ async function loadWpSpec(
 	tabs: ReadonlyArray<WpTabPayload>;
 	walker: WalkerSummary;
 	sessions: ReadonlyArray<SessionSummary>;
+	openSessionStartedAt: string | null;
 }> {
 	// Derive the work-package directory from the spec's `ref`. The ref is the
 	// repo-relative path to `spec.md`; the directory is the parent.
 	const wpDir = dirname(item.ref);
-	const tabs = await Promise.all(WP_SPEC_TABS.map(async (tab) => buildTabPayload(tab.id, tab.label, tab.file, wpDir)));
-	// Walker summary -- only meaningful when test-plan.md exists.
-	const testPlanTab = tabs.find((t) => t.id === 'test-plan');
+	// Single test-plan read shared across the tab payload + the walker summary
+	// so a concurrent edit between the two reads can't surface a tab body that
+	// disagrees with the parsed step count.
+	const testPlanRel = `${wpDir}/test-plan.md`;
+	const testPlanAbs = resolve(REPO_ROOT, testPlanRel);
+	const testPlanMd = await safeReadFile(testPlanAbs);
+	const tabs = await Promise.all(
+		WP_SPEC_TABS.map(async (tab) => {
+			if (tab.file === 'test-plan.md') {
+				return buildTabPayloadFromMd(tab.id, tab.label, tab.file, testPlanMd);
+			}
+			return buildTabPayload(tab.id, tab.label, tab.file, wpDir);
+		}),
+	);
+	// Walker summary -- only meaningful when test-plan.md exists AND has at
+	// least one parseable step.
 	let walker: WalkerSummary = {
 		stepCount: 0,
 		hasPlan: false,
@@ -124,12 +138,12 @@ async function loadWpSpec(
 		failCount: 0,
 		blockedCount: 0,
 	};
-	if (testPlanTab && testPlanTab.present) {
-		const testPlanPath = `${wpDir}/test-plan.md`;
-		const absPath = resolve(REPO_ROOT, testPlanPath);
-		const md = await safeReadFile(absPath);
-		const steps = md === null ? [] : parseTestPlan(testPlanPath, md);
-		const open = await getOpenSession(item.id, userId);
+	let openSessionStartedAt: string | null = null;
+	if (testPlanMd !== null) {
+		const steps = parseTestPlan(testPlanRel, testPlanMd);
+		// Only inspect open sessions when there's actually a plan to walk; an
+		// empty plan should not surface a "session in progress" badge.
+		const open = steps.length > 0 ? await getOpenSession(item.id, userId) : null;
 		const recorded = open ? await listSteps(open.id) : [];
 		let passCount = 0;
 		let failCount = 0;
@@ -148,6 +162,9 @@ async function loadWpSpec(
 			failCount,
 			blockedCount,
 		};
+		if (open) {
+			openSessionStartedAt = open.startedAt instanceof Date ? open.startedAt.toISOString() : String(open.startedAt);
+		}
 	}
 
 	const sessionRows = await listSessions(item.id);
@@ -169,6 +186,7 @@ async function loadWpSpec(
 		tabs,
 		walker,
 		sessions,
+		openSessionStartedAt,
 	};
 }
 
@@ -176,6 +194,10 @@ async function buildTabPayload(id: WpSpecTabId, label: string, file: string, wpD
 	const repoRelPath = `${wpDir}/${file}`;
 	const absPath = resolve(REPO_ROOT, repoRelPath);
 	const raw = await safeReadFile(absPath);
+	return buildTabPayloadFromMd(id, label, file, raw);
+}
+
+function buildTabPayloadFromMd(id: WpSpecTabId, label: string, file: string, raw: string | null): WpTabPayload {
 	if (raw === null) {
 		return { id, label, file, present: false, bodyHtml: null, frontmatter: [] };
 	}
@@ -199,6 +221,20 @@ async function safeReadFile(absPath: string): Promise<string | null> {
 	}
 }
 
+/**
+ * Defense-in-depth path-traversal check. `item.ref` is loader-controlled (not
+ * user-controlled), but a corrupted DB row could resolve outside REPO_ROOT
+ * via `..` segments. Reject any absolute path that doesn't sit under the
+ * repo root + a path separator (the trailing-separator check guards against
+ * `${REPO_ROOT}-evil/` matches).
+ */
+function assertWithinRepoRoot(absPath: string): void {
+	const root = REPO_ROOT.endsWith(sep) ? REPO_ROOT : `${REPO_ROOT}${sep}`;
+	if (!absPath.startsWith(root) && absPath !== REPO_ROOT) {
+		throw new Error(`Path resolves outside REPO_ROOT: ${absPath}`);
+	}
+}
+
 export const actions: Actions = {
 	/**
 	 * `?/markSpecRead` -- writes `status: done` to the WP's spec.md
@@ -217,8 +253,15 @@ export const actions: Actions = {
 		if (item.kindId !== REVIEW_KINDS.WP_SPEC) {
 			return fail(400, { markSpecRead: 'Only wp_spec items support this action.' as const });
 		}
+		// Idempotent: skip the write when status is already `done` so the user
+		// gets accurate "already done" wording rather than a misleading
+		// "marked as read" toast on a re-click.
+		if (item.frontmatterStatus === 'done') {
+			return { markSpecRead: 'already-done' as const };
+		}
 		const absPath = resolve(REPO_ROOT, item.ref);
 		try {
+			assertWithinRepoRoot(absPath);
 			await writeFrontmatterField(absPath, 'status', 'done');
 			return { markSpecRead: 'ok' as const };
 		} catch (err) {
@@ -244,6 +287,7 @@ export const actions: Actions = {
 		}
 		const absPath = resolve(REPO_ROOT, item.ref);
 		try {
+			assertWithinRepoRoot(absPath);
 			await writeFrontmatterField(absPath, 'review_status', 'done');
 			return { flipReviewStatus: 'ok' as const };
 		} catch (err) {
