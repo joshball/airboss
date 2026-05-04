@@ -18,149 +18,47 @@ Factors
 Chapter 17
 
 
-![Figure 17-11. To avoid the bends, scuba divers must not fly for 
-specific time periods following dives.
-Figure 17-10. Signs and symptoms of altitude decompression sickness.
-DCS Type
-Bubble Location
-Signs and Symptoms (Clinical Manifestations)
-BENDS
-NEUROLOGIC
-Manifestations
-CHOKES
-SKIN BENDS
-Mostly large joints
-of the](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-00-to-avoid-the-bends-scuba-divers-must-not-fly-for.png)
+![Figure 17-11. To avoid the bends, scuba divers must not fly for  specific time periods following dives.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-00-to-avoid-the-bends-scuba-divers-must-not-fly-for.png)
 
-![Figure 17-13. Types of vision.
-Types of Vision
-Types of vision used
-Photopic
-Mesopic
-Scotopic
-Light level
-High
-Medium/Low
-Low
-Technique of viewing
-Central
-Both
-Scanning
-Color perception
-Good
-Some
-None
-Receptors used
-Cones
-Cones/Rods
-Rods
-Acuity best
-20/20
-Varies
-20/200
-Blind spot
-Day
-Day/Night
-Day/Night
-Figure 17-12. T](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-01-types-of-vision-types-of-vision-types-of-vision-.png)
+![Figure 17-10. Signs and symptoms of altitude decompression sickness.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-01-signs-and-symptoms-of-altitude-decompression-sic.png)
 
-![Figure 17-15. The eye’s blind spot.
-Figure 17-14. Central blind spot.
-Pupil
-Blind spot
-Optic nerve
-Retina
-Center of vision
-Right
-LEFT
-The cones concentrated in the fovea centralis of the eye are 
-primarily responsible for vision in bright light. [Figure 17-12] 
-Because of the high light level, rhodopsin, which is a 
-bi](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-02-the-eye-s-blind-spot-figure-17-14-central-blind-.png)
+![Figure 17-13. Types of vision.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-02-types-of-vision.png)
 
-![Figure 17-16. Night vision.
-Figure 17-17. Night blind spot.
-Cones active
-Rods active
-Night blind spot
-Pilots must look 5°–10° off center of the 
-object in order for the object to be seen. 
-5.	
-When the page is about 16–18 inches from you, the 
-black X should disappear completely because it has 
-been imaged onto the bli](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-03-night-vision-figure-17-17-night-blind-spot-cones.png)
+![Figure 17-15. The eye’s blind spot.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-03-the-eye-s-blind-spot.png)
 
-![Figure 17-17. Night blind spot.
-Cones active
-Rods active
-Night blind spot
-Pilots must look 5°–10° off center of the 
-object in order for the object to be seen. 
-5.	
-When the page is about 16–18 inches from you, the 
-black X should disappear completely because it has 
-been imaged onto the blind spot of your right eye.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-04-night-blind-spot-cones-active-rods-active-night-.png)
+![Figure 17-14. Central blind spot.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-04-central-blind-spot.png)
 
-![Figure 17-18. Scanning techniques.
-4
-2
-3
-1
-10°
-sharpness (acuity) and color at night, depth perception and 
-judgment of size may be lost. [Figure 17-17]
-Dark Adaptation
-Dark adaptation is the adjustment of the human eye to a dark 
-environment. That adjustment takes longer depending on the 
-amount of light in the enviro](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-05-scanning-techniques-4-2-3-1-10-sharpness-acuity-.png)
+![Figure 17-16. Night vision.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-05-night-vision.png)
 
-![Figure 17-22. At night, the horizon may be hard to discern due to dark terrain and misleading light patterns on the ground.
-Apparent horizon 
-Actual horizon 
-parallel to another’s course. To determine the direction of 
-flight, pilots should observe aircraft lights and their relative 
-position to the horizon. If the int](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-06-at-night-the-horizon-may-be-hard-to-discern-due-.png)
+![Figure 17-21. Geometric perspective.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-06-geometric-perspective.png)
 
-![Figure 17-25. Night time SVS system.
-Figure 17-24. SVS system.
-Figure 17-23. Synthetic and enhanced vision systems.
-Synthetic vision system
-Enhanced vision system
-Synthetic Vision System
-A Synthetic Vision System (SVS) is an electronic means 
-to display a synthetic vision image of the external scene 
-topography to the](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-07-night-time-svs-system-figure-17-24-svs-system-fi.png)
+![Figure 17-22. At night, the horizon may be hard to discern due to dark terrain and misleading light patterns on the ground.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-07-at-night-the-horizon-may-be-hard-to-discern-due-.png)
 
-![Figure 17-24. SVS system.
-Figure 17-23. Synthetic and enhanced vision systems.
-Synthetic vision system
-Enhanced vision system
-Synthetic Vision System
-A Synthetic Vision System (SVS) is an electronic means 
-to display a synthetic vision image of the external scene 
-topography to the flight crew. [Figure 17-24] It is not](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-08-svs-system-figure-17-23-synthetic-and-enhanced-v.png)
+![Figure 17-25. Night time SVS system. Figure 17-24. SVS system.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-08-night-time-svs-system-figure-17-24-svs-system.png)
 
-![Figure 17-23. Synthetic and enhanced vision systems.
-Synthetic vision system
-Enhanced vision system
-Synthetic Vision System
-A Synthetic Vision System (SVS) is an electronic means 
-to display a synthetic vision image of the external scene 
-topography to the flight crew. [Figure 17-24] It is not a 
-real-time image like t](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-09-synthetic-and-enhanced-vision-systems-synthetic-.png)
+![Figure 17-24. SVS system.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-09-svs-system.png)
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-17-00-untitled.html">
 <table><thead><tr><th></th><th>Aeromedical
-Factors</th><th></th></tr></thead><tbody><tr><td>Introduction
+Factors</th></tr></thead><tbody><tr><td>Introduction
 It is important for a pilot to be aware of the mental and
 physical standards required for the type of flying performed.
 This chapter provides information on medical certification and
-on a variety of aeromedical factors related to flight activities.</td><td></td><td></td></tr></tbody></table>
+on a variety of aeromedical factors related to flight activities.</td><td></td></tr></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-17-01-untitled.html">
-<table><thead><tr><th>Altitude</th><th>Time of useful consciousness</th></tr></thead><tbody><tr><td>45,000 feet MSL</td><td>9 to 15 seconds</td></tr><tr><td>40,000 feet MSL</td><td>15 to 20 seconds</td></tr><tr><td>35,000 feet MSL</td><td>30 to 60 seconds</td></tr><tr><td>30,000 feet MSL</td><td>1 to 2 minutes</td></tr><tr><td>28,000 feet MSL</td><td>2½ to 3 minutes</td></tr><tr><td>25,000 feet MSL</td><td>3 to 5 minutes</td></tr><tr><td>22,000 feet MSL</td><td>5 to 10 minutes</td></tr><tr><td>20,000 feet MSL</td><td>30 minutes or more</td></tr></tbody></table>
-</div>
+| Altitude | Time of useful consciousness |
+| --- | --- |
+| 45,000 feet MSL | 9 to 15 seconds |
+| 40,000 feet MSL | 15 to 20 seconds |
+| 35,000 feet MSL | 30 to 60 seconds |
+| 30,000 feet MSL | 1 to 2 minutes |
+| 28,000 feet MSL | 2½ to 3 minutes |
+| 25,000 feet MSL | 3 to 5 minutes |
+| 22,000 feet MSL | 5 to 10 minutes |
+| 20,000 feet MSL | 30 minutes or more |
+
+<a class="handbook-table-source" href="/handbooks/phak/FAA-H-8083-25C/tables/tbl-17-01-untitled.html">Open original</a>
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-17-02-untitled.html">
 <table><thead><tr><th>Narrower runway
@@ -267,33 +165,16 @@ Decreased clotting ability of the blood (clotting ability could be the differenc
 between life and death in a survival situation)</td></tr></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-17-05-untitled.html">
-<table><thead><tr><th>DCS Type</th><th>Bubble Location</th><th>Signs and Symptoms (Clinical Manifestations)</th></tr></thead><tbody><tr><td>BENDS</td><td>Mostly large joints
-of the body (elbows,
-shoulders, hip, wrists,
-knees, ankles)</td><td>• Localized deep pain, ranging from mild (a “niggle”) to excruciating–sometimes a dull
-ache, but rarely a sharp pain
-• Active and passive motion of the joint aggravating the pain
-• Pain occurring at altitude, during the descent, or many hours later</td></tr><tr><td>NEUROLOGIC
-Manifestations</td><td>Brain</td><td>• Confusion or memory loss
-• Headache
-• Spots in visual field (scotoma), tunnel vision, double vision (diplopia), or blurry vision
-• Unexplained extreme fatigue or behavior changes
-• Seizures, dizziness, vertigo, nausea, vomiting, and unconsciousness</td></tr><tr><td></td><td>Spinal cord</td><td>• Abnormal sensations, such as burning, stinging, and tingling, around the lower chest
-and back
-• Symptoms spreading from the feet up and possibly accompanied by ascending
-weakness or paralysis
-• Girdling abdominal or chest pain</td></tr><tr><td></td><td>Peripheral nerves</td><td>• Urinary and rectal incontinence
-• Abnormal sensations, such as numbness, burning, stinging and tingling (paresthesia)
-• Muscle weakness or twitching</td></tr><tr><td>CHOKES</td><td>Lungs</td><td>• Burning deep chest pain (under the sternum)
-• Pain aggravated by breathing
-• Shortness of breath (dyspnea)
-• Dry constant cough</td></tr><tr><td>SKIN BENDS</td><td>Skin</td><td>• Itching usually around the ears, face, neck, arms, and upper torso
-• Sensation of tiny insects crawling over the skin
-• Mottled or marbled skin usually around the shoulders, upper chest, and abdomen
-accompanied by itching
-• Swelling of the skin, accompanied by tiny scar-like skin depressions (pitting edema)</td></tr></tbody></table>
-</div>
+| DCS Type | Bubble Location | Signs and Symptoms (Clinical Manifestations) |
+| --- | --- | --- |
+| BENDS | Mostly large joints<br>of the body (elbows,<br>shoulders, hip, wrists,<br>knees, ankles) | • Localized deep pain, ranging from mild (a “niggle”) to excruciating–sometimes a dull<br>ache, but rarely a sharp pain<br>• Active and passive motion of the joint aggravating the pain<br>• Pain occurring at altitude, during the descent, or many hours later |
+| NEUROLOGIC<br>Manifestations | Brain | • Confusion or memory loss<br>• Headache<br>• Spots in visual field (scotoma), tunnel vision, double vision (diplopia), or blurry vision<br>• Unexplained extreme fatigue or behavior changes<br>• Seizures, dizziness, vertigo, nausea, vomiting, and unconsciousness |
+|  | Spinal cord | • Abnormal sensations, such as burning, stinging, and tingling, around the lower chest<br>and back<br>• Symptoms spreading from the feet up and possibly accompanied by ascending<br>weakness or paralysis<br>• Girdling abdominal or chest pain |
+|  | Peripheral nerves | • Urinary and rectal incontinence<br>• Abnormal sensations, such as numbness, burning, stinging and tingling (paresthesia)<br>• Muscle weakness or twitching |
+| CHOKES | Lungs | • Burning deep chest pain (under the sternum)<br>• Pain aggravated by breathing<br>• Shortness of breath (dyspnea)<br>• Dry constant cough |
+| SKIN BENDS | Skin | • Itching usually around the ears, face, neck, arms, and upper torso<br>• Sensation of tiny insects crawling over the skin<br>• Mottled or marbled skin usually around the shoulders, upper chest, and abdomen<br>accompanied by itching<br>• Swelling of the skin, accompanied by tiny scar-like skin depressions (pitting edema) |
+
+<a class="handbook-table-source" href="/handbooks/phak/FAA-H-8083-25C/tables/tbl-17-05-untitled.html">Open original</a>
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-17-06-untitled.html">
 <table><thead><tr><th>Ro
@@ -306,7 +187,7 @@ tration</th></tr></thead><tbody></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-17-08-untitled.html">
-<table><thead><tr><th></th><th>10°
+<table><thead><tr><th>10°
 1 2
 4 3</th></tr></thead><tbody></tbody></table>
 </div>

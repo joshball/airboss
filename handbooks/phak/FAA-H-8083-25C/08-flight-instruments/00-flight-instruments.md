@@ -21,208 +21,46 @@ malfunctioning, he or she can safely utilize the instruments
 to their fullest potential.
 
 
-![Figure 8-10. Blocked pitot system with clear static system.
-Climb
-Descent
-Static port
-Drain hole
-Pitot tube
-Blockage
-must include two components: static pressure and 
-dynamic pressure.
-It can be inferred that airspeed indication must be based upon 
-a relationship between these two pressures, and indeed it is. 
-An ASI u](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-00-blocked-pitot-system-with-clear-static-system-cl.png)
+![Figure 8-9. A blocked pitot tube, but clear drain hole.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-00-a-blocked-pitot-tube-but-clear-drain-hole.png)
 
-![Figure 8-13. Multi-function display (MFD).
-normal range, and caution range. [Figure 8-12] The number 
-value changes color to red when the airspeed exceeds VNE to 
-warn the pilot of exceeding the maximum speed limitation.
-Attitude Indicator
-One improvement over analogue instrumentation is the 
-larger attitude indicator](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-01-multi-function-display-mfd-normal-range-and-caut.png)
+![Figure 8-12. Primary flight display (PFD). Note that the actual location of indications vary depending on manufacturers.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-01-primary-flight-display-pfd-note-that-the-actual-.png)
 
-![Figure 8-15. Teledyne’s 90004 TAS/Plus Air Data Computer (ADC) 
-computes air data information from the pitot-static pneumatic 
-system, aircraft temperature probe, and barometric correction 
-device to help create a clear picture of flight characteristics.
-Figure 8-16. Airspeed trend vector.
-150
-140
-130
-110
-100
-90
-1
-120](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-02-teledyne-s-90004-tas-plus-air-data-computer-adc-.png)
+![Figure 8-13. Multi-function display (MFD).](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-02-multi-function-display-mfd.png)
 
-![Figure 8-16. Airspeed trend vector.
-150
-140
-130
-110
-100
-90
-1
-120
-9
-TAS  120KT
-1
-0
-Airspeed trend vector
-Figure 8-14. Chelton’s FlightLogic (top) and Avidyne’s Entegra
-(bottom) are examples of panel displays that are configurable.
-140 
-120 
-100 
-80 
-60 
-40 
-102 
-10 
- 
- 
-10 
-10 
- 
- 
-10 
-58 
-70 
-65 
-70 
-30.30 
-6710 
-0 
-21](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-03-airspeed-trend-vector-150-140-130-110-100-90-1-1.png)
+![Figure 8-15. Teledyne’s 90004 TAS/Plus Air Data Computer (ADC)  computes air data information from the pitot-static pneumatic system, aircraft temperature probe, and barometric correction device to help create a clear picture of flight characteristics.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-03-teledyne-s-90004-tas-plus-air-data-computer-adc-.png)
 
-![Figure 8-25. A heading indicator displays headings based on a 360° 
-azimuth, with the final zero omitted. For example, “6” represents 
-060°, while “21” indicates 210°. The adjustment knob is used to 
-align the heading indicator with the magnetic compass.
-Figure 8-26. Attitude and heading reference system (AHRS).
-making](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-04-a-heading-indicator-displays-headings-based-on-a.png)
+![Figure 8-24. Attitude representation by the attitude indicator corresponds to the relation of the aircraft to the real horizon.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-04-attitude-representation-by-the-attitude-indicato.png)
 
-![Figure 8-27. The soft iron frame of the flux valve accepts the flux from 
-the Earth’s magnetic field each time the current in the center coil 
-reverses. This flux causes current to flow in the three pickup coils.
-Figure 8-28. The current in each of the three pickup coils changes 
-with the heading of the aircraft.
-Figur](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-05-the-soft-iron-frame-of-the-flux-valve-accepts-th.png)
+![Figure 8-25. A heading indicator displays headings based on a 360°  azimuth, with the final zero omitted. For example, “6” represents 060°, while “21” indicates 210°. The adjustment knob is used to align the heading indicator with the magnetic compass.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-05-a-heading-indicator-displays-headings-based-on-a.png)
 
-![Figure 8-30. Driven by signals from a flux valve, the compass card 
-in this RMI indicates the heading of the aircraft opposite the upper 
-center index mark. The green pointer is driven by the ADF.
-a signal relayed to the heading indicator unit, which is also 
-remotely mounted. This signal operates a torque motor in 
-th](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-06-driven-by-signals-from-a-flux-valve-the-compass-.png)
+![Figure 8-27. The soft iron frame of the flux valve accepts the flux from  the Earth’s magnetic field each time the current in the center coil reverses. This flux causes current to flow in the three pickup coils.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-06-the-soft-iron-frame-of-the-flux-valve-accepts-th.png)
 
-![Figure 8-31. Angle of attack indicators.
-N-S 
-E-W 
-Figure 8-32. A magnetic compass. The vertical line is called the 
-lubber line.
-state of an airplane is the balance between airspeed, altitude, 
-drag, and thrust and represents how efficiently the airfoil is 
-operating.
-Compass Systems
-The Earth is a huge magnet, spinni](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-11-a-variety-of-aoa-indicators-of-the-airfoil-this-.png)
+![Figure 8-30. Driven by signals from a flux valve, the compass card  in this RMI indicates the heading of the aircraft opposite the upper center index mark. The green pointer is driven by the ADF.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-11-increase-in-stall-speed-and-load-factor.png)
 
-![Figure 8-32. A magnetic compass. The vertical line is called the 
-lubber line.
-state of an airplane is the balance between airspeed, altitude, 
-drag, and thrust and represents how efficiently the airfoil is 
-operating.
-Compass Systems
-The Earth is a huge magnet, spinning in space, surrounded 
-by a magnetic field made u](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-08-a-magnetic-compass-the-vertical-line-is-called-t.png)
+![RMI in Figure 8-30. The compass card is driven by signals  from the flux valve, and the two pointers are driven by an automatic direction finder (ADF) and a very high frequency (VHF) omni-directional radio range (VOR).](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-08-the-compass-card-is-driven-by-signals-from-the-f.png)
 
-![Figure 8-33. Isogonic lines are lines of equal variation.
-card from its backside. When the pilot is flying north, as the 
-compass indicates, east is to the pilot’s right. On the card, 
-“33,” which represents 330° (west of north), is to the right of 
-north. The reason for this apparent backward graduation is 
-that the c](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-09-isogonic-lines-are-lines-of-equal-variation-card.png)
+![Figure 8-31. Angle of attack indicators.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-09-angle-of-attack-indicators.png)
 
-![Figure 8-35. A compass correction card shows the deviation 
-correction for any heading.
-030
-060
-E
-120
-150
-S
-210
-240
-W
-300
-330
-N
-True north
-Figure 8-34. Utilization of a compass rose aids compensation for
-deviation errors.
-To swing the compass, an AMT positions the aircraft 
-on a series of known headings, usually at a c](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-10-a-compass-correction-card-shows-the-deviation-co.png)
+![Figure 8-32. A magnetic compass. The vertical line is called the  lubber line.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-10-a-magnetic-compass-the-vertical-line-is-called-t.png)
 
-![Figure 8-34. Utilization of a compass rose aids compensation for
-deviation errors.
-To swing the compass, an AMT positions the aircraft 
-on a series of known headings, usually at a compass 
-rose. [Figure 8-34] A compass rose consists of a series 
-of lines marked every 30° on an airport ramp, oriented to 
-magnetic north.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-11-utilization-of-a-compass-rose-aids-compensation-.png)
+![Figure 8-33. Isogonic lines are lines of equal variation.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-11-isogonic-lines-are-lines-of-equal-variation.png)
 
-![Figure 8-36. Northerly and southerly turning errors.
-rotate only in the horizontal plane. This is done by lowering 
-the center of gravity below the pivot point and making the 
-assembly heavy enough that the vertical component of the 
-magnetic force is too weak to tilt it significantly out of the 
-horizontal plane. The](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-12-northerly-and-southerly-turning-errors-rotate-on.png)
+![Figure 8-35. A compass correction card shows the deviation  correction for any heading.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-12-a-compass-correction-card-shows-the-deviation-co.png)
 
-![Figure 8-38. Vertical card magnetic compass.
-NORTH
-S
-o
-u
-t
-h
-OBS 
-N 
-E 
-S 
-W 
-3 
-33 
-24 
-21 
-15 
-12 
-30 
-6 
-NAV
-GS 
-View is from the pilot’s
-perspective, and the 
-movable card is reset 
-after each turn.
-Figure 8-37. The effects of acceleration error.
-indication toward north; deceleration causes an indication 
-toward so](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-13-vertical-card-magnetic-compass-north-s-o-u-t-h-o.png)
+![Figure 8-34. Utilization of a compass rose aids compensation for deviation errors.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-13-utilization-of-a-compass-rose-aids-compensation-.png)
 
-![Figure 8-37. The effects of acceleration error.
-indication toward north; deceleration causes an indication 
-toward south.
-Oscillation Error
-Oscillation is a combination of all of the errors previously 
-mentioned and results in fluctuation of the compass card in 
-relation to the actual heading direction of the aircraft.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-14-the-effects-of-acceleration-error-indication-tow.png)
+![Figure 8-36. Northerly and southerly turning errors.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-13-utilization-of-a-compass-rose-aids-compensation-.png)
+
+![Figure 8-38. Vertical card magnetic compass.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-15-vertical-card-magnetic-compass.png)
+
+![Figure 8-37. The effects of acceleration error.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-16-the-effects-of-acceleration-error.png)
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-8-00-untitled.html">
 <table><thead><tr><th>Height Above Airport in Feet °C
 Reported
 0
 Temp 1,000 1,500 2,000 3,000 4,000 5,000
-200 300 400 500 600 700 800 900</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td>+10</td><td>10</td><td>10</td><td>10</td><td>10</td><td>20</td><td>20</td><td>20</td><td>20</td><td>20</td><td>30</td><td>40</td><td>60</td><td>80</td><td>90</td><td></td></tr><tr><td>0</td><td>20</td><td>20</td><td>30</td><td>30</td><td>40</td><td>40</td><td>50</td><td>50</td><td>60</td><td>90</td><td>120</td><td>170</td><td>230</td><td>280</td><td></td></tr><tr><td>-10</td><td>20</td><td>30</td><td>40</td><td>50</td><td>60</td><td>70</td><td>80</td><td>90</td><td>100</td><td>150</td><td>200</td><td>290</td><td>390</td><td>490</td><td></td></tr><tr><td>-20</td><td>30</td><td>50</td><td>60</td><td>70</td><td>90</td><td>100</td><td>120</td><td>130</td><td>140</td><td>210</td><td>280</td><td>420</td><td>570</td><td>710</td><td></td></tr><tr><td>-30</td><td>40</td><td>60</td><td>80</td><td>100</td><td>120</td><td>140</td><td>150</td><td>170</td><td>190</td><td>280</td><td>380</td><td>570</td><td>760</td><td>950</td><td></td></tr><tr><td>-40</td><td>50</td><td>80</td><td>100</td><td>120</td><td>150</td><td>170</td><td>190</td><td>220</td><td>240</td><td>360</td><td>480</td><td>720</td><td>970</td><td>1,210</td><td></td></tr><tr><td>-50</td><td>60</td><td>90</td><td>120</td><td>150</td><td>180</td><td>210</td><td>240</td><td>270</td><td>300</td><td>450</td><td>590</td><td>890</td><td>1,190</td><td>1,500</td><td></td></tr></tbody></table>
+200 300 400 500 600 700 800 900</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td>+10</td><td>10</td><td>10</td><td>10</td><td>10</td><td>20</td><td>20</td><td>20</td><td>20</td><td>20</td><td>30</td><td>40</td><td>60</td><td>80</td><td>90</td></tr><tr><td>0</td><td>20</td><td>20</td><td>30</td><td>30</td><td>40</td><td>40</td><td>50</td><td>50</td><td>60</td><td>90</td><td>120</td><td>170</td><td>230</td><td>280</td></tr><tr><td>-10</td><td>20</td><td>30</td><td>40</td><td>50</td><td>60</td><td>70</td><td>80</td><td>90</td><td>100</td><td>150</td><td>200</td><td>290</td><td>390</td><td>490</td></tr><tr><td>-20</td><td>30</td><td>50</td><td>60</td><td>70</td><td>90</td><td>100</td><td>120</td><td>130</td><td>140</td><td>210</td><td>280</td><td>420</td><td>570</td><td>710</td></tr><tr><td>-30</td><td>40</td><td>60</td><td>80</td><td>100</td><td>120</td><td>140</td><td>150</td><td>170</td><td>190</td><td>280</td><td>380</td><td>570</td><td>760</td><td>950</td></tr><tr><td>-40</td><td>50</td><td>80</td><td>100</td><td>120</td><td>150</td><td>170</td><td>190</td><td>220</td><td>240</td><td>360</td><td>480</td><td>720</td><td>970</td><td>1,210</td></tr><tr><td>-50</td><td>60</td><td>90</td><td>120</td><td>150</td><td>180</td><td>210</td><td>240</td><td>270</td><td>300</td><td>450</td><td>590</td><td>890</td><td>1,190</td><td>1,500</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-8-01-untitled.html">
@@ -231,7 +69,7 @@ Temp 1,000 1,500 2,000 3,000 4,000 5,000
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-8-02-untitled.html">
 <table><thead><tr><th>V
-N0</th><th></th></tr></thead><tbody><tr><td></td><td></td></tr></tbody></table>
+N0</th></tr></thead><tbody></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-8-03-untitled.html">
@@ -297,77 +135,28 @@ cs</th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td>
 150
 140
 130
-1</td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>1
-0</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td>120
+1</td></tr><tr><td></td><td>1
+0</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td>120
 9
 110
 100
 90
-TAS 120KT</td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>8</td><td>-</td><td></td></tr></tbody></table>
+TAS 120KT</td></tr><tr><td></td><td></td><td>8</td><td>-</td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-8-07-untitled.html">
-<table><thead><tr><th></th><th>Airspeed trend vector</th></tr></thead><tbody></tbody></table>
+<table><thead><tr><th>Airspeed trend vector</th></tr></thead><tbody></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-8-08-untitled.html">
 <table><thead><tr><th>Artificial horizon</th><th>Adjustment knob</th></tr></thead><tbody></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-8-09-untitled.html">
-<table><thead><tr><th>Chicago is called the agonic line. Anywhere along this line the c
-180˚W 165˚W 150˚W 135˚W 120˚W 105˚W 90˚W 75˚W 60˚W 45˚W 30˚W 15˚W 0˚ 15˚E
-70˚N -10 -40 -10
--30
-0
-60˚N</th><th>ompass.”
-30˚E 45˚E 60˚E 75˚E 90˚E 105˚E 120˚E 135˚E 150˚E 165˚E 180˚W
-70˚N 10
-20
-10
-60˚N</th></tr></thead><tbody><tr><td>-20
-20
-45˚N
-0
-30˚N
-10
-15˚N
-0˚ 10 -10 -20 -10
-0
-15˚S
-20
-30˚S
-Main field declination (D)
-Contour interval:
-2 degrees 30
-45˚S
-red contours positive (east) 10
-blue negative (west) 40 20
-pink (agonic) zero line.
-60˚N Mercator Projection. 50
-Position of dip poles 60
-80 70 -20 -30
-70˚N
-180˚W 165˚W 150˚W 135˚W 120˚W 105˚W 90˚W 75˚W 60˚W 45˚W 30˚W 15˚W 0˚ 15˚E</td><td>-10
-45˚N
-30˚N 0
-15˚N 0
-0˚
--10
-15˚S -20
--30 10
-30˚S
-20
-30
-45˚S -60
-40
--70
-50
-60˚N -80 -120-100 -13009- 7090 60
--40 -50 -110 130 100 110 80
-70˚N
-30˚E 45˚E 60˚E 75˚E 90˚E 105˚E 120˚E 135˚E 150˚E 165˚E 180˚W</td></tr><tr><td></td><td></td></tr></tbody></table>
-</div>
+| Chicago is called the agonic line. Anywhere along this line the c<br>180˚W 165˚W 150˚W 135˚W 120˚W 105˚W 90˚W 75˚W 60˚W 45˚W 30˚W 15˚W 0˚ 15˚E<br>70˚N -10 -40 -10<br>-30<br>0<br>60˚N | ompass.”<br>30˚E 45˚E 60˚E 75˚E 90˚E 105˚E 120˚E 135˚E 150˚E 165˚E 180˚W<br>70˚N 10<br>20<br>10<br>60˚N |
+| --- | --- |
+| -20<br>20<br>45˚N<br>0<br>30˚N<br>10<br>15˚N<br>0˚ 10 -10 -20 -10<br>0<br>15˚S<br>20<br>30˚S<br>Main field declination (D)<br>Contour interval:<br>2 degrees 30<br>45˚S<br>red contours positive (east) 10<br>blue negative (west) 40 20<br>pink (agonic) zero line.<br>60˚N Mercator Projection. 50<br>Position of dip poles 60<br>80 70 -20 -30<br>70˚N<br>180˚W 165˚W 150˚W 135˚W 120˚W 105˚W 90˚W 75˚W 60˚W 45˚W 30˚W 15˚W 0˚ 15˚E | -10<br>45˚N<br>30˚N 0<br>15˚N 0<br>0˚<br>-10<br>15˚S -20<br>-30 10<br>30˚S<br>20<br>30<br>45˚S -60<br>40<br>-70<br>50<br>60˚N -80 -120-100 -13009- 7090 60<br>-40 -50 -110 130 100 110 80<br>70˚N<br>30˚E 45˚E 60˚E 75˚E 90˚E 105˚E 120˚E 135˚E 150˚E 165˚E 180˚W |
+
+<a class="handbook-table-source" href="/handbooks/phak/FAA-H-8083-25C/tables/tbl-8-09-untitled.html">Open original</a>
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-8-10-untitled.html">
 <table><thead><tr><th>B
@@ -384,5 +173,5 @@ D 2 1
 </div>
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-8-11-untitled.html">
-<table><thead><tr><th></th><th>C</th></tr></thead><tbody></tbody></table>
+<table><thead><tr><th>C</th></tr></thead><tbody></tbody></table>
 </div>

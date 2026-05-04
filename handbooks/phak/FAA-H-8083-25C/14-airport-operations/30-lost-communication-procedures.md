@@ -42,49 +42,7 @@ Morse Code
 Telephony
 Phonic Pronunciation
 Character
-R0
-q
-Q9
-P8
-O7
-N6
-z
-ZZ
-y
-YY
-x
-XX
-WW
-VV
-u
-UU
-TT
-SS
-RR
-q
-QQ
-PP
-OO
-NN
-MM
-LL
-k
-KK
-j
-JJ
-II
-h
-hH
-g
-GG
-f
-FF
-EE
-DD
-CC
-b
-BB
-AA
+
 Figure 14-41. Phonetic alphabet.
 easily be aware of your presence when they are expecting
 the standard radio calls.

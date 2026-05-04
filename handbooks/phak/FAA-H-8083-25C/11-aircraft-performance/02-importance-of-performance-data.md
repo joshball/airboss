@@ -33,8 +33,7 @@ Hg
 Standard
 Sea Level
 Pressure
-mb
-A t m o s p h e r i c  P r e s s u r e
+
 Figure 11-1. Standard sea level pressure.
 It must be emphasized that the manufacturers’ information
 and data furnished in the AFM/POH is not standardized.

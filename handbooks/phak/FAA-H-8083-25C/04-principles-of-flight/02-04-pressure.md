@@ -16,8 +16,7 @@ Hg
 Standard
 Sea Level
 Pressure
-mb
-A t m o s p h e r i c  P r e s s u r e
+
 Figure 4-2. Standard sea level pressure.
 Altitude (ft)
 Pressure (Hg)

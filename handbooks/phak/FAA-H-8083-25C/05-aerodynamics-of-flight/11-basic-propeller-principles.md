@@ -43,21 +43,7 @@ Chord line
 Thrust
 Forward velocity
 Rotational velocity
-bl
-gl
 
-Pi
-tc
-h
-or
-
-at
-ta
-k
-
-gl
-
-of
 Figure 5-44.  Propeller blade angle.
 often used interchangeably. An increase or decrease in one is
 usually associated with an increase or decrease in the other.
@@ -148,14 +134,6 @@ l
 
 —
 
-k
-er
-at
-tr
-el
-is
-ta
-nc
 —
 er
 at

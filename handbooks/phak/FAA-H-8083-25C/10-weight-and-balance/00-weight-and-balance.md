@@ -17,84 +17,26 @@ with the center of gravity (CG) outside the approved limits
 results in control difficulty.
 
 
-![Figure 10-1. Lateral and longitudinal unbalance.
-Effects of Weight
-Any item aboard an aircraft that increases the total weight is 
-undesirable for performance. Manufacturers attempt to make 
-an aircraft as light as possible without sacrificing strength 
-or safety.
-The pilot should always be aware of the consequences of](/handbooks/phak/FAA-H-8083-25C/figures/fig-10-00-lateral-and-longitudinal-unbalance-effects-of-we.png)
+![Figure 10-1. Lateral and longitudinal unbalance.](/handbooks/phak/FAA-H-8083-25C/figures/fig-10-00-lateral-and-longitudinal-unbalance.png)
 
-![Figure 10-9. Loading schedule placard.
-way.) Once this has been done for each item, total the weight 
-and moments and draw a line for both weight and moment 
-on the CG envelope graph. If the lines intersect within the 
-envelope, the aircraft is loaded within limits. In this sample 
-loading problem, the aircraft is load](/handbooks/phak/FAA-H-8083-25C/figures/fig-10-01-loading-schedule-placard-way-once-this-has-been-.png)
+![Figure 10-8. CG moment envelope.](/handbooks/phak/FAA-H-8083-25C/figures/fig-10-01-cg-moment-envelope.png)
 
-![Figure 10-11. Sample weight and balance using an aircraft with a 
-published zero fuel weight.
-Item 
-Weight 
-Arm 
-Moment
-Licensed empty weight 
-1,011.9 
-68.6 
-69,393.0
-Oil (6 quarts) 
-11.0 
-−31.0 
-−341.0
-Fuel (18 gallons) 
-108.0 
-84.0 
-9,072.0
-Fuel, auxiliary (18 gallons) 
-108.0 
-84.0 
-9,072.0
-Pilot 
-170.0 
-81.0 
-13,770](/handbooks/phak/FAA-H-8083-25C/figures/fig-10-02-sample-weight-and-balance-using-an-aircraft-with.png)
+![Figure 10-7. Loading graph.](/handbooks/phak/FAA-H-8083-25C/figures/fig-10-02-loading-graph.png)
 
-![Figure 10-10. Sample weight and balance using a negative.
-weight and balance calculation based on that table. In this 
-problem, the total weight of 2,799 pounds and moment of 
-2,278/100 are within the limits of the table.
-Computations With a Negative Arm
-Figure 10-10 is a sample of weight and balance computation 
-using](/handbooks/phak/FAA-H-8083-25C/figures/fig-10-03-sample-weight-and-balance-using-a-negative-weigh.png)
+![Figure 10-9. Loading schedule placard.](/handbooks/phak/FAA-H-8083-25C/figures/fig-10-03-loading-schedule-placard.png)
 
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-10-00-untitled.html">
-<table><thead><tr><th></th><th>Weight and Balance</th><th></th></tr></thead><tbody><tr><td>Introduction
-Compliance with the weight and balance limits of any aircraft
-is critical to flight safety. Operating above the maximum
-weight limitation compromises the structural integrity of
-an aircraft and adversely affects its performance. Operation
-with the center of gravity (CG) outside the approved limits
-results in control difficulty.
-Weight Control
-As discussed in Chapter 5, Aerodynamics of Flight, weight
-is the force with which gravity attracts a body toward the
-center of the Earth. It is a product of the mass of a body and
-the acceleration acting on the body. Weight is a major factor
-in aircraft construction and operation and demands respect
-from all pilots.
-The force of gravity continuously attempts to pull an aircraft
-down toward Earth. The force of lift is the only force that
-counteracts weight and sustains an aircraft in flight. The
-amount of lift produced by an airfoil is limited by the airfoil
-design, angle of attack (AOA), airspeed, and air density. To
-assure that the lift generated is sufficient to counteract weight,
-loading an aircraft beyond the manufacturer’s recommended
-weight must be avoided. If the weight is greater than the lift
-generated, the aircraft may be incapable of flight.</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table>
-</div>
+![Figure 10-11. Sample weight and balance using an aircraft with a  published zero fuel weight.](/handbooks/phak/FAA-H-8083-25C/figures/fig-10-04-sample-weight-and-balance-using-an-aircraft-with.png)
+
+![Figure 10-10. Sample weight and balance using a negative.](/handbooks/phak/FAA-H-8083-25C/figures/fig-10-05-sample-weight-and-balance-using-a-negative.png)
+
+|  | Weight and Balance |
+| --- | --- |
+| Introduction<br>Compliance with the weight and balance limits of any aircraft<br>is critical to flight safety. Operating above the maximum<br>weight limitation compromises the structural integrity of<br>an aircraft and adversely affects its performance. Operation<br>with the center of gravity (CG) outside the approved limits<br>results in control difficulty.<br>Weight Control<br>As discussed in Chapter 5, Aerodynamics of Flight, weight<br>is the force with which gravity attracts a body toward the<br>center of the Earth. It is a product of the mass of a body and<br>the acceleration acting on the body. Weight is a major factor<br>in aircraft construction and operation and demands respect<br>from all pilots.<br>The force of gravity continuously attempts to pull an aircraft<br>down toward Earth. The force of lift is the only force that<br>counteracts weight and sustains an aircraft in flight. The<br>amount of lift produced by an airfoil is limited by the airfoil<br>design, angle of attack (AOA), airspeed, and air density. To<br>assure that the lift generated is sufficient to counteract weight,<br>loading an aircraft beyond the manufacturer’s recommended<br>weight must be avoided. If the weight is greater than the lift<br>generated, the aircraft may be incapable of flight. |  |
+
+<a class="handbook-table-source" href="/handbooks/phak/FAA-H-8083-25C/tables/tbl-10-00-untitled.html">Open original</a>
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-10-01-untitled.html">
-<table><thead><tr><th>Item</th><th>Weight</th><th>Arm</th><th>Moment</th></tr></thead><tbody><tr><td>Aircraft Empty Weight</td><td>2,100</td><td>78.3</td><td>164,430</td></tr><tr><td>Front Seat Occupants</td><td>340</td><td>85.0</td><td>28,900</td></tr><tr><td>Rear Seat Occupants</td><td>350</td><td>121.0</td><td>42,350</td></tr><tr><td>Fuel</td><td>450</td><td>75.0</td><td>33,750</td></tr><tr><td>Baggage Area 1</td><td>80</td><td>150.0</td><td>12,000</td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td>Total</td><td>3,320</td><td></td><td>281,430</td></tr><tr><td></td><td>281,430 ÷ 3,320 = 84.8</td><td></td><td></td></tr></tbody></table>
+<table><thead><tr><th>Item</th><th>Weight</th><th>Arm</th><th>Moment</th></tr></thead><tbody><tr><td>Aircraft Empty Weight</td><td>2,100</td><td>78.3</td><td>164,430</td></tr><tr><td>Front Seat Occupants</td><td>340</td><td>85.0</td><td>28,900</td></tr><tr><td>Rear Seat Occupants</td><td>350</td><td>121.0</td><td>42,350</td></tr><tr><td>Fuel</td><td>450</td><td>75.0</td><td>33,750</td></tr><tr><td>Baggage Area 1</td><td>80</td><td>150.0</td><td>12,000</td></tr><tr><td>Total</td><td>3,320</td><td></td><td>281,430</td></tr><tr><td></td><td>281,430 ÷ 3,320 = 84.8</td><td></td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-10-02-untitled.html">
@@ -105,25 +47,51 @@ includes unusable fuel and full oil</td><td>1,467</td><td>57.3</td></tr><tr><td>
 Standard tanks (40 gal maximum)
 Long range tanks (50 gal maximum)
 Integral tanks (62 gal maximum)
-Integral reduced fuel (42 gal)</td><td></td><td></td></tr><tr><td></td><td>240</td><td>11.5</td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td>3. Pilot and front passenger (Station 34
+Integral reduced fuel (42 gal)</td><td></td><td></td></tr><tr><td></td><td>240</td><td>11.5</td></tr><tr><td>3. Pilot and front passenger (Station 34
 to 46)</td><td>340</td><td>12.7</td></tr><tr><td>4. Rear passengers</td><td>300</td><td>21.8</td></tr><tr><td>5. Baggage area 1 or passenger on child’s
 seat (Station 82 to 108, 120 lb maximum)</td><td>20</td><td>1.9</td></tr><tr><td>6. Baggage area 2
 (Station 108 to 142, 50 lb maximum)</td><td></td><td></td></tr><tr><td>7. Weight and moment</td><td>2,367</td><td>105.2</td></tr></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-10-03-untitled.html">
-<table><thead><tr><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td>62 gal***(234.7 lit</td></tr><tr><td></td><td></td><td>e r)</td></tr><tr><td></td><td></td><td>60 gal (227.1 liters) /lit
-kg</td></tr><tr><td></td><td></td><td>7 2</td></tr><tr><td></td><td></td><td>50 gal**(189.3 liters) er 0 .</td></tr><tr><td></td><td></td><td>ng l;</td></tr><tr><td></td><td></td><td>e g a</td></tr><tr><td></td><td></td><td>ss lb /</td></tr><tr><td></td><td></td><td>pa (6
-42 gal reduced***(159 liters) l</td></tr><tr><td></td><td></td><td>ont e
-40 gal*(189.3 liters) u</td></tr><tr><td></td><td></td><td>fr F</td></tr><tr><td></td><td>&amp;</td><td></td></tr><tr><td></td><td>ot</td><td></td></tr><tr><td></td><td>P il</td><td>30 gal (113.6 liters)</td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>20</td><td>gal (75.7 liters)</td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td>B a g g a g e a re a 1 o r</td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td>p a s s e n g e r o n c h ild ’s s e a t</td></tr><tr><td></td><td>10 gal (37.9</td><td>liters)</td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>B a g g</td><td>a g e a re a 2</td></tr><tr><td></td><td></td><td></td></tr></tbody></table>
-</div>
+|  | 62 gal***(234.7 lit |
+| --- | --- |
+|  | e r) |
+|  | 60 gal (227.1 liters) /lit<br>kg |
+|  | 7 2 |
+|  | 50 gal**(189.3 liters) er 0 . |
+|  | ng l; |
+|  | e g a |
+|  | ss lb / |
+|  | pa (6<br>42 gal reduced***(159 liters) l |
+|  | ont e<br>40 gal*(189.3 liters) u |
+|  | fr F |
+| & |  |
+| ot |  |
+| P il | 30 gal (113.6 liters) |
+| 20 | gal (75.7 liters) |
+|  | B a g g a g e a re a 1 o r |
+|  | p a s s e n g e r o n c h ild ’s s e a t |
+| 10 gal (37.9 | liters) |
+| B a g g | a g e a re a 2 |
 
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-10-04-untitled.html">
-<table><thead><tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td>Nor</td><td>mal</td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td>cate</td><td>gory</td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td>ry</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td>o</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td>eg</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td>at</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td>c</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td>ity</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td>til</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td>U</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
-</div>
+<a class="handbook-table-source" href="/handbooks/phak/FAA-H-8083-25C/tables/tbl-10-03-untitled.html">Open original</a>
+
+| Nor | mal |
+| --- | --- |
+| cate | gory |
+| ry |  |
+| o |  |
+| eg |  |
+| at |  |
+| c |  |
+| ity |  |
+| til |  |
+| U |  |
+
+<a class="handbook-table-source" href="/handbooks/phak/FAA-H-8083-25C/tables/tbl-10-04-untitled.html">Open original</a>
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-10-05-untitled.html">
-<table><thead><tr><th></th><th></th><th>Occ</th><th></th><th>upants</th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Fro
+<table><thead><tr><th></th><th></th><th>Occ</th><th></th><th>upants</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Fro
 A</td><td>nt Seat
 rm 85</td><td></td><td></td><td>Rear Seats
 Arm 121</td><td></td></tr><tr><td></td><td></td><td></td><td>85</td><td></td><td></td><td></td></tr><tr><td>W</td><td>eig</td><td>ht</td><td>Momen</td><td>t</td><td>Weight</td><td>Moment
@@ -152,7 +120,7 @@ Arm 121</td><td></td></tr><tr><td></td><td></td><td></td><td>85</td><td></td><td
 218
 230
 242</td></tr><tr><td></td><td></td><td></td><td>102</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td>110</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td>119
-128</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td>136</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td>144</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td>153</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td>162</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td>170</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+128</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td>136</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td>144</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td>153</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td>162</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td>170</td><td></td><td></td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-10-06-untitled.html">
@@ -313,8 +281,8 @@ S</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></
 98
 112
 126</td><td></td><td>2,</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>2,
-2,</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>2,</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>2,</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>2,
-2,</td><td></td><td></td><td></td></tr><tr><td>Moment Limits vs</td><td></td><td>Weight</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Moment limits are based on the f
+2,</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>2,</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>2,</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>2,
+2,</td><td></td><td></td><td></td></tr><tr><td>Moment Limits vs</td><td></td><td>Weight</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Moment limits are based on the f
 center of gravity limit data (landin</td><td></td><td>ollowing weigh
 g gear down).</td><td></td><td></td><td></td><td>t and</td><td></td><td></td><td></td><td></td><td></td><td></td><td>2,</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>2,</td><td></td><td></td><td></td></tr><tr><td>Weight
 Condition</td><td>Forward
@@ -333,7 +301,7 @@ or landing)
 77.5
 77.0</td><td></td><td>84.7
 85.7
-85.7</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Sample Loading Problem</td><td></td><td></td><td></td><td>Weig</td><td></td><td>ht</td><td></td><td>Momen</td><td></td><td>t</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Basic empty weight</td><td></td><td></td><td></td><td>2,01</td><td></td><td>5</td><td></td><td>1,55</td><td></td><td>4</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Fuel main tanks (44 gal)</td><td></td><td></td><td></td><td>26</td><td></td><td>4</td><td></td><td>19</td><td></td><td>8</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>*Front seat passengers</td><td></td><td></td><td></td><td>30</td><td></td><td>0</td><td></td><td>25</td><td></td><td>4</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>*Rear seat passengers</td><td></td><td></td><td></td><td>19</td><td></td><td>0</td><td></td><td>23</td><td></td><td>0</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Baggage</td><td></td><td></td><td></td><td>3</td><td></td><td>0</td><td></td><td>4</td><td></td><td>2</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Total</td><td></td><td></td><td></td><td>2,79</td><td></td><td>9</td><td>2</td><td>,278/10</td><td></td><td>0</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>* Interpolate or, as in this case, add</td><td></td><td></td><td></td><td>appropri</td><td></td><td>ate numbers.</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+85.7</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Sample Loading Problem</td><td></td><td></td><td></td><td>Weig</td><td></td><td>ht</td><td></td><td>Momen</td><td></td><td>t</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Basic empty weight</td><td></td><td></td><td></td><td>2,01</td><td></td><td>5</td><td></td><td>1,55</td><td></td><td>4</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Fuel main tanks (44 gal)</td><td></td><td></td><td></td><td>26</td><td></td><td>4</td><td></td><td>19</td><td></td><td>8</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>*Front seat passengers</td><td></td><td></td><td></td><td>30</td><td></td><td>0</td><td></td><td>25</td><td></td><td>4</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>*Rear seat passengers</td><td></td><td></td><td></td><td>19</td><td></td><td>0</td><td></td><td>23</td><td></td><td>0</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Baggage</td><td></td><td></td><td></td><td>3</td><td></td><td>0</td><td></td><td>4</td><td></td><td>2</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Total</td><td></td><td></td><td></td><td>2,79</td><td></td><td>9</td><td>2</td><td>,278/10</td><td></td><td>0</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>* Interpolate or, as in this case, add</td><td></td><td></td><td></td><td>appropri</td><td></td><td>ate numbers.</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-10-09-untitled.html">
@@ -351,82 +319,40 @@ takeoff weight</td><td>5,038</td><td>CG 97.9</td><td>493,379.0</td></tr><tr><td>
 Actual landing weight</td><td>4,588</td><td>CG 96.5</td><td>442,529.0</td></tr><tr><td>*Fuel for start, taxi, and takeoff is n</td><td>ormally 24 pounds.</td><td></td><td></td></tr></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-10-11-untitled.html">
-<table><thead><tr><th>Item</th><th>Weight</th><th>Arm</th><th>Moment</th></tr></thead><tbody><tr><td>Licensed empty weight</td><td>1,011.9</td><td>68.6</td><td>69,393.0</td></tr><tr><td>Oil (6 quarts)</td><td>11.0</td><td>−31.0</td><td>−341.0</td></tr><tr><td>Fuel (18 gallons)</td><td>108.0</td><td>84.0</td><td>9,072.0</td></tr><tr><td>Fuel, auxiliary (18 gallons)</td><td>108.0</td><td>84.0</td><td>9,072.0</td></tr><tr><td>Pilot</td><td>170.0</td><td>81.0</td><td>13,770.0</td></tr><tr><td>Passenger</td><td>170.0</td><td>81.0</td><td>13,770.0</td></tr><tr><td>Baggage</td><td>70.0</td><td>105.0</td><td>7,350.0</td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td>Total</td><td>1,648.9</td><td></td><td>122,086.0</td></tr><tr><td>CG</td><td></td><td>74.0</td><td></td></tr></tbody></table>
-</div>
+| Item | Weight | Arm | Moment |
+| --- | --- | --- | --- |
+| Licensed empty weight | 1,011.9 | 68.6 | 69,393.0 |
+| Oil (6 quarts) | 11.0 | −31.0 | −341.0 |
+| Fuel (18 gallons) | 108.0 | 84.0 | 9,072.0 |
+| Fuel, auxiliary (18 gallons) | 108.0 | 84.0 | 9,072.0 |
+| Pilot | 170.0 | 81.0 | 13,770.0 |
+| Passenger | 170.0 | 81.0 | 13,770.0 |
+| Baggage | 70.0 | 105.0 | 7,350.0 |
+| Total | 1,648.9 |  | 122,086.0 |
+| CG |  | 74.0 |  |
 
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-10-12-untitled.html">
-<table><thead><tr><th>Example</th><th></th></tr></thead><tbody><tr><td>Weight shifted ∆CG (change of CG)
-=
-Total weight Distance weight is shifted
-100 ∆CG
-=
-8,000 120
-∆CG = 1.5 in
-The change of CG is added to (or subtracted from when appropriate)
-the original CG to determine the new CG:
-77 + 1.5 = 78.5 inches aft of datum
-The shifting weight proportion formula can also be used to determine
-how much weight must be shifted to achieve a particular shift of the CG.
-The following problem illustrates a solution of this type.</td><td></td></tr></tbody></table>
-</div>
+<a class="handbook-table-source" href="/handbooks/phak/FAA-H-8083-25C/tables/tbl-10-11-untitled.html">Open original</a>
 
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-10-13-untitled.html">
-<table><thead><tr><th>Example</th><th></th></tr></thead><tbody><tr><td>Given:
-Aircraft total weight . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 6,860 lb
-CG station. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 80.0 in
-Determine the location of the CG if 140 pounds of baggage is added to
-station 150.
-Solution:
-Added weight ∆CG
-=
-New total weight Distance between weight and old CG
-140 lb ∆CG
-=
-6,860 lb + 140 lb 150 in − 80 in
-140 lb ∆CG
-=
-7,000 lb 70 in
-CG = 1.4 in aft
-Add ∆CG to old CG
-New CG = 80 in + 1.4 in = 81.4 in</td><td></td></tr></tbody></table>
-</div>
+| Example |
+| --- |
+| Weight shifted ∆CG (change of CG)<br>=<br>Total weight Distance weight is shifted<br>100 ∆CG<br>=<br>8,000 120<br>∆CG = 1.5 in<br>The change of CG is added to (or subtracted from when appropriate)<br>the original CG to determine the new CG:<br>77 + 1.5 = 78.5 inches aft of datum<br>The shifting weight proportion formula can also be used to determine<br>how much weight must be shifted to achieve a particular shift of the CG.<br>The following problem illustrates a solution of this type. |
 
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-10-14-untitled.html">
-<table><thead><tr><th>Example</th><th></th></tr></thead><tbody><tr><td>Given:
-Aircraft total weight . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 7,800 lb
-CG station. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 81.5 in
-Aft CG limit . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 80.5 in
-Determine how much cargo must be shifted from the aft cargo compart-
-ment at station 150 to the forward cargo compartment at station 30 to
-move the CG to exactly the aft limit.
-Solution:
-Weight to be shifted CG
-=
-Total weight Distance weight is shifted
-Weight to be shifted 1.0 in
-=
-7,800 lb 120 in
-Weight to be shifted = 65 lb</td><td></td></tr></tbody></table>
-</div>
+<a class="handbook-table-source" href="/handbooks/phak/FAA-H-8083-25C/tables/tbl-10-12-untitled.html">Open original</a>
 
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-10-15-untitled.html">
-<table><thead><tr><th>Example</th><th></th></tr></thead><tbody><tr><td>Given:
-Aircraft total weight . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 6,100 lb
-CG station. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 80.0 in
-Determine the location of the CG if 100 pounds is removed from
-station 150.
-Solution:
-Weight removed ∆CG
-=
-New total weight Distance between weight and old CG
-100 lb ∆CG
-=
-6,100 lb − 100 lb 150 in − 80 in
-100 lb ∆CG
-=
-6,000 lb 70 in
-CG = 1.2 in forward
-Subtract ∆CG from old CG
-New CG = 80 in − 1.2 in = 78.8 in</td><td></td></tr></tbody></table>
-</div>
+| Example |
+| --- |
+| Given:<br>Aircraft total weight . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 6,860 lb<br>CG station. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 80.0 in<br>Determine the location of the CG if 140 pounds of baggage is added to<br>station 150.<br>Solution:<br>Added weight ∆CG<br>=<br>New total weight Distance between weight and old CG<br>140 lb ∆CG<br>=<br>6,860 lb + 140 lb 150 in − 80 in<br>140 lb ∆CG<br>=<br>7,000 lb 70 in<br>CG = 1.4 in aft<br>Add ∆CG to old CG<br>New CG = 80 in + 1.4 in = 81.4 in |
+
+<a class="handbook-table-source" href="/handbooks/phak/FAA-H-8083-25C/tables/tbl-10-13-untitled.html">Open original</a>
+
+| Example |
+| --- |
+| Given:<br>Aircraft total weight . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 7,800 lb<br>CG station. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 81.5 in<br>Aft CG limit . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 80.5 in<br>Determine how much cargo must be shifted from the aft cargo compart-<br>ment at station 150 to the forward cargo compartment at station 30 to<br>move the CG to exactly the aft limit.<br>Solution:<br>Weight to be shifted CG<br>=<br>Total weight Distance weight is shifted<br>Weight to be shifted 1.0 in<br>=<br>7,800 lb 120 in<br>Weight to be shifted = 65 lb |
+
+<a class="handbook-table-source" href="/handbooks/phak/FAA-H-8083-25C/tables/tbl-10-14-untitled.html">Open original</a>
+
+| Example |
+| --- |
+| Given:<br>Aircraft total weight . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 6,100 lb<br>CG station. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 80.0 in<br>Determine the location of the CG if 100 pounds is removed from<br>station 150.<br>Solution:<br>Weight removed ∆CG<br>=<br>New total weight Distance between weight and old CG<br>100 lb ∆CG<br>=<br>6,100 lb − 100 lb 150 in − 80 in<br>100 lb ∆CG<br>=<br>6,000 lb 70 in<br>CG = 1.2 in forward<br>Subtract ∆CG from old CG<br>New CG = 80 in − 1.2 in = 78.8 in |
+
+<a class="handbook-table-source" href="/handbooks/phak/FAA-H-8083-25C/tables/tbl-10-15-untitled.html">Open original</a>

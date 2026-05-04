@@ -28,18 +28,6 @@ FLIGHT
 ONLY
 OFF
 
-K
-
-AN
-DI
-NG
-
-AL
-TT
-IT
-UD
-ES
-
 Figure 7-30. Gravity-feed and fuel-pump systems.
 Gravity-feed system
 Fuel-pump system

@@ -32,187 +32,55 @@ Figure 1-2. Glider from 1852 by Sir George Cayley, British aviator
 Figure 1-1. Leonardo da Vinci’s ornithopter wings.
 
 
-![Figure 1-2. Glider from 1852 by Sir George Cayley, British aviator 
-(1773–1857).
-Figure 1-1. Leonardo da Vinci’s ornithopter wings.
-History of Flight
-From prehistoric times, humans have watched the flight of 
-birds, and longed to imitate them, but lacked the power to do 
-so. Logic dictated that if the small muscles of](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-00-glider-from-1852-by-sir-george-cayley-british-av.png)
+![Figure 1-2. Glider from 1852 by Sir George Cayley, British aviator  (1773–1857).](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-00-glider-from-1852-by-sir-george-cayley-british-av.png)
 
-![Figure 1-1. Leonardo da Vinci’s ornithopter wings.
-History of Flight
-From prehistoric times, humans have watched the flight of 
-birds, and longed to imitate them, but lacked the power to do 
-so. Logic dictated that if the small muscles of birds can lift 
-them into the air and sustain them, then the larger muscles 
-of h](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-01-leonardo-da-vinci-s-ornithopter-wings-history-of.png)
+![Figure 1-1. Leonardo da Vinci’s ornithopter wings.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-01-leonardo-da-vinci-s-ornithopter-wings.png)
 
-![Figure 1-3. First flight by the Wright brothers.
-Figure 1-4. Benoist airboat.
-For the half-century after Cayley’s death, countless scientists, 
-flying enthusiasts, and inventors worked toward building 
-a powered flying machine. Men, such as William Samuel 
-Henson, who designed a huge monoplane that was propelled 
-by a](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-02-first-flight-by-the-wright-brothers-figure-1-4-b.png)
+![Figure 1-3. First flight by the Wright brothers.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-02-first-flight-by-the-wright-brothers.png)
 
-![Figure 1-4. Benoist airboat.
-For the half-century after Cayley’s death, countless scientists, 
-flying enthusiasts, and inventors worked toward building 
-a powered flying machine. Men, such as William Samuel 
-Henson, who designed a huge monoplane that was propelled 
-by a steam engine housed inside the fuselage, and Otto](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-03-benoist-airboat-for-the-half-century-after-cayle.png)
+![Figure 1-4. Benoist airboat.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-03-benoist-airboat.png)
 
-![Figure 1-6. The transcontinental airmail route ran from New York 
-to San Francisco. 
-Figure 1-5. The de Haviland DH-4 on the New York to San 
-Francisco inaugural route in 1921.
-mass produced to serve as fighters, bombers, trainers, as well 
-as reconnaissance platforms. 
-Aviation advocates continued to look for ways to](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-04-the-transcontinental-airmail-route-ran-from-new-.png)
+![Figure 1-6. The transcontinental airmail route ran from New York  to San Francisco.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-04-the-transcontinental-airmail-route-ran-from-new-.png)
 
-![Figure 1-5. The de Haviland DH-4 on the New York to San 
-Francisco inaugural route in 1921.
-mass produced to serve as fighters, bombers, trainers, as well 
-as reconnaissance platforms. 
-Aviation advocates continued to look for ways to use 
-airplanes. Airmail service was a popular idea, but the 
-war prevented the Postal](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-05-the-de-haviland-dh-4-on-the-new-york-to-san-fran.png)
+![Figure 1-5. The de Haviland DH-4 on the New York to San  Francisco inaugural route in 1921.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-05-the-de-haviland-dh-4-on-the-new-york-to-san-fran.png)
 
-![Figure 1-7. A standard airway beacon tower.
-Figure 1-8. The first pilot license was issued to William P. 
-MacCracken, Jr.
-Figure 1-9. The third head of the Aeronautics Branch, Eugene 
-L. Vidal, is flanked by President Franklin D. Roosevelt (left) and 
-Secretary of Agriculture Henry A. Wallace (right). The photograph 
-w](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-06-a-standard-airway-beacon-tower-figure-1-8-the-fi.png)
+![Figure 1-7. A standard airway beacon tower.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-06-a-standard-airway-beacon-tower.png)
 
-![Figure 1-8. The first pilot license was issued to William P. 
-MacCracken, Jr.
-Figure 1-9. The third head of the Aeronautics Branch, Eugene 
-L. Vidal, is flanked by President Franklin D. Roosevelt (left) and 
-Secretary of Agriculture Henry A. Wallace (right). The photograph 
-was taken in 1933. During Vidal’s tenure, the](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-07-the-first-pilot-license-was-issued-to-william-p-.png)
+![Figure 1-8. The first pilot license was issued to William P.  MacCracken, Jr.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-07-the-first-pilot-license-was-issued-to-william-p-.png)
 
-![Figure 1-9. The third head of the Aeronautics Branch, Eugene 
-L. Vidal, is flanked by President Franklin D. Roosevelt (left) and 
-Secretary of Agriculture Henry A. Wallace (right). The photograph 
-was taken in 1933. During Vidal’s tenure, the Aeronautics Branch 
-was renamed the Bureau of Air Commerce on July 1, 1934. T](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-08-the-third-head-of-the-aeronautics-branch-eugene-.png)
+![Figure 1-9. The third head of the Aeronautics Branch, Eugene  L. Vidal, is flanked by President Franklin D. Roosevelt (left) and Secretary of Agriculture Henry A. Wallace (right). The photograph was taken in 1933. During Vidal’s tenure, the Aeronautics Branch was renamed the Bureau of Air Commerce on July 1, 1934. The ](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-08-the-third-head-of-the-aeronautics-branch-eugene-.png)
 
-![Figure 1-10. First Administrator of the FAA was General Elwood 
-Richard “Pete” Quesada, 1959–1961.
-Airport Program. This program was designed to promote 
-the establishment of civil airports throughout the country.
-The Federal Aviation Act of 1958
-By mid-century, air traffic had increased and jet aircraft had 
-been intr](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-09-first-administrator-of-the-faa-was-general-elwoo.png)
+![Figure 1-10. First Administrator of the FAA was General Elwood  Richard “Pete” Quesada, 1959–1961.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-09-first-administrator-of-the-faa-was-general-elwoo.png)
 
-![Figure 1-11. President Jimmy Carter signs the Airline Deregulation 
-Act in late 1978.
-Traffic Controllers Organization (PATCO) culminated in a 
-1970 “sickout” by 3,000 controllers. Although controllers 
-subsequently gained additional wage and retirement 
-benefits, another period of tension led to an illegal strike in](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-10-president-jimmy-carter-signs-the-airline-deregul.png)
+![Figure 1-11. President Jimmy Carter signs the Airline Deregulation  Act in late 1978.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-10-president-jimmy-carter-signs-the-airline-deregul.png)
 
-![Figure 1-13. Atlanta Flight Standards District Office (FSDO).
-Safety Team (FAASTeam) exemplifies this commitment. 
-The FAASTeam has replaced the Aviation Safety Program 
-(ASP), whose education of airmen on all types of safety 
-subjects successfully reduced accidents. Its success led to 
-its demise because the easy-to-f](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-11-atlanta-flight-standards-district-office-fsdo-sa.png)
+![Figure 1-12. Overview of 14 CFR, available online free from the FAA and for purchase through commercial sources.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-11-overview-of-14-cfr-available-online-free-from-th.png)
 
-![Figure 1-15. A sample of handbooks available to the public. Most 
-can be downloaded free of charge from the FAA website.
-Figure 1-14. Aeronautical Information Manual.
-of a text book used in a classroom or a one page document. 
-Some ACs are free while others cost money. They are to 
-be used for information only and are](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-12-a-sample-of-handbooks-available-to-the-public-mo.png)
+![Figure 1-13. Atlanta Flight Standards District Office (FSDO).](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-12-atlanta-flight-standards-district-office-fsdo.png)
 
-![Figure 1-16. Pilot Operating Handbooks from manufacturers.
-Figure 1-17. Example of an Advisory Circular in its fifth revision.
-•	
-Standardize implementation of a regulation or 
-harmonize implementation for the international 
-aviation community
-•	
-Resolve a general misunderstanding of a regulation
-•	
-Respond to a reques](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-13-pilot-operating-handbooks-from-manufacturers-fig.png)
+![Figure 1-15. A sample of handbooks available to the public. Most  can be downloaded free of charge from the FAA website.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-13-a-sample-of-handbooks-available-to-the-public-mo.png)
 
-![Figure 1-17. Example of an Advisory Circular in its fifth revision.
-•	
-Standardize implementation of a regulation or 
-harmonize implementation for the international 
-aviation community
-•	
-Resolve a general misunderstanding of a regulation
-•	
-Respond to a request from some government entity, 
-such as General Accounting](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-14-example-of-an-advisory-circular-in-its-fifth-rev.png)
+![Figure 1-14. Aeronautical Information Manual.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-14-aeronautical-information-manual.png)
 
-![Figure 1-18. From left to right, a sectional VFR chart, IFR chart, and chart supplement U.S. (formerly Airport/Facility Directory) with 
-a sample of a page from the supplement.
-Pilot and Aeronautical Information 
-Notices to Airmen (NOTAMs) 
-Notices to Airmen, or NOTAMs, are time-critical aeronautical 
-information eithe](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-15-from-left-to-right-a-sectional-vfr-chart-ifr-cha.png)
+![Figure 1-16. Pilot Operating Handbooks from manufacturers.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-15-pilot-operating-handbooks-from-manufacturers.png)
 
-![Figure 1-19. NOTAM (D) Information. 
-FDC NOTAMs
-FDC NOTAMs are issued by the National Flight Data 
-Center and contain information that is regulatory in nature 
-pertaining to flight including, but not limited to, changes 
-to charts, procedures, and airspace usage. FDC NOTAMs 
-refer to information that is regulatory in n](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-16-notam-d-information-fdc-notams-fdc-notams-are-is.png)
+![Figure 1-17. Example of an Advisory Circular in its fifth revision.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-16-example-of-an-advisory-circular-in-its-fifth-rev.png)
 
-![Figure 1-20. Front side (top) and back side (bottom) of an airman 
-certificate issued by the FAA.
-a specific make and basic model of aircraft, 
-Including modifications thereto that do not 
-change its handling or flight characteristics. 
-Examples include: 737-700, G-IV, and 1900; and 
-2. 	 As used with respect to the ce](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-17-front-side-top-and-back-side-bottom-of-an-airman.png)
+![Figure 1-18. From left to right, a sectional VFR chart, IFR chart, and chart supplement U.S. (formerly Airport/Facility Directory) with  a sample of a page from the supplement.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-17-from-left-to-right-a-sectional-vfr-chart-ifr-cha.png)
 
-![Figure 1-21. Example endorsement for a recreational pilot to conduct solo flights for the purpose of determining an additional certificate 
-or rating. 
-Limitations:
-•	
-Prohibited from flying in Class A airspace 
-•	
-Prohibited from flying in Class B, C, or D airspace 
-until you receive training and a logbook endorsement](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-18-example-endorsement-for-a-recreational-pilot-to-.png)
+![Figure 1-19. NOTAM (D) Information.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-18-notam-d-information.png)
 
-![Figure 1-23. A complex aircraft.
-Figure 1-24. Type of aircraft flown by an airline transport pilot.
-Figure 1-22. A typical aircraft a private pilot might fly. 
-active pilots. It allows command of any aircraft (subject 
-to appropriate ratings) for any noncommercial purpose 
-and gives almost unlimited authority to fly un](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-19-a-complex-aircraft-figure-1-24-type-of-aircraft-.png)
+![Figure 1-20. Front side (top) and back side (bottom) of an airman  certificate issued by the FAA.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-19-front-side-top-and-back-side-bottom-of-an-airman.png)
 
-![Figure 1-24. Type of aircraft flown by an airline transport pilot.
-Figure 1-22. A typical aircraft a private pilot might fly. 
-active pilots. It allows command of any aircraft (subject 
-to appropriate ratings) for any noncommercial purpose 
-and gives almost unlimited authority to fly under VFR. 
-Passengers may be carri](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-20-type-of-aircraft-flown-by-an-airline-transport-p.png)
+![Figure 1-21. Example endorsement for a recreational pilot to conduct solo flights for the purpose of determining an additional certificate  or rating.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-20-example-endorsement-for-a-recreational-pilot-to-.png)
 
-![Figure 1-22. A typical aircraft a private pilot might fly. 
-active pilots. It allows command of any aircraft (subject 
-to appropriate ratings) for any noncommercial purpose 
-and gives almost unlimited authority to fly under VFR. 
-Passengers may be carried and flight in furtherance of a 
-business is permitted; however,](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-21-a-typical-aircraft-a-private-pilot-might-fly-act.png)
+![Figure 1-23. A complex aircraft.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-21-a-complex-aircraft.png)
 
-![Figure 1-25. Examples of Practical Test Standards.
-FAA-S-8081-12C
-FAA-S-8081-14B
-FAA-S-8081-8B
-When To Take the Knowledge Test
-The knowledge test is more meaningful to the applicant 
-and more likely to result in a satisfactory grade if it is taken 
-after beginning the flight portion of the training. Therefore, 
-the FAA](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-22-examples-of-practical-test-standards-faa-s-8081-.png)
+![Figure 1-24. Type of aircraft flown by an airline transport pilot.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-22-type-of-aircraft-flown-by-an-airline-transport-p.png)
+
+![Figure 1-22. A typical aircraft a private pilot might fly.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-23-a-typical-aircraft-a-private-pilot-might-fly.png)
+
+![Figure 1-25. Examples of Practical Test Standards.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-24-examples-of-practical-test-standards.png)
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-1-00-untitled.html">
 <table><thead><tr><th>Code of Federal Regulations</th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td>Title</td><td>Volume</td><td>Chapter</td><td>Subchapters</td><td></td></tr><tr><td>Title 14
