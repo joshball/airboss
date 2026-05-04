@@ -11,7 +11,9 @@ Related docs:
 
 ## Overview
 
-One table, `study.content_citations`, connects any content row (card / rep / scenario / knowledge node) to any reference (regulation node / advisory circular / external URL / knowledge node). The fabric is symmetric: source-side reads power "citations on this card", target-side reads power "cited by" panels on regulation and knowledge-node detail pages. The data model is polymorphic with soft FKs; the `@ab/bc-study` BC is the only write gate, and it validates source ownership and target existence before insert.
+One table, `study.content_citations`, connects any content row (card / rep / scenario / knowledge node) to any reference (corpus-backed reference section / knowledge node / external URL). The fabric is symmetric: source-side reads power "citations on this card", target-side reads power "cited by" panels on reference and knowledge-node detail pages. The data model is polymorphic with soft FKs; the `@ab/bc-study` BC is the only write gate, and it validates source ownership and target existence before insert.
+
+Stage-5 deep-linking (WP `stage5-citation-deeplink`) collapsed the previous per-corpus target types (`regulation_node`, `ac_reference`) into one polymorphic `reference_section` -- corpus is data on the joined `study.reference.kind` row, not encoded in the enum. Adding a new corpus is purely additive: register the resolver, ingest the manifest, and the picker + chip render layer pick it up via `reference.kind`.
 
 ## Data model
 
@@ -19,25 +21,24 @@ Schema: [libs/bc/study/src/citations/schema.ts](../../libs/bc/study/src/citation
 
 Source x target matrix (from [libs/constants/src/citations.ts](../../libs/constants/src/citations.ts)):
 
-| Source type \ Target type | regulation_node | ac_reference | knowledge_node | external_ref |
-| ------------------------- | --------------- | ------------ | -------------- | ------------ |
-| card                      | yes             | yes          | yes            | yes          |
-| rep                       | yes             | yes          | yes            | yes          |
-| scenario                  | yes             | yes          | yes            | yes          |
-| node                      | yes             | yes          | yes            | yes          |
+| Source type \ Target type | reference_section | knowledge_node | external_ref |
+| ------------------------- | ----------------- | -------------- | ------------ |
+| card                      | yes               | yes            | yes          |
+| rep                       | yes               | yes            | yes          |
+| scenario                  | yes               | yes            | yes          |
+| node                      | yes               | yes            | yes          |
 
 Source and target tables (resolved by the BC, not the DB):
 
-| Type discriminator | Table                           | Notes                                                        |
-| ------------------ | ------------------------------- | ------------------------------------------------------------ |
-| `card`             | `study.card`                    | Owner: `card.userId`                                         |
-| `rep`              | `study.scenario`                | Same table as `scenario`, kept distinct to label reads       |
-| `scenario`         | `study.scenario`                | Owner: `scenario.userId`                                     |
-| `node`             | `study.knowledge_node`          | Author check is open in v1; per-node ACLs land later         |
-| `regulation_node`  | `hangar.reference` (CFR rows)   | Bucketed by `tags.sourceType = 'cfr'`                        |
-| `ac_reference`     | `hangar.reference` (AC rows)    | Bucketed by `tags.sourceType = 'ac'`                         |
-| `knowledge_node`   | `study.knowledge_node`          | Internal graph node id                                       |
-| `external_ref`     | none -- `target_id` is the data | Encodes `<url>\|<title>` via `EXTERNAL_REF_TARGET_DELIMITER` |
+| Type discriminator  | Table                           | Notes                                                                 |
+| ------------------- | ------------------------------- | --------------------------------------------------------------------- |
+| `card`              | `study.card`                    | Owner: `card.userId`                                                  |
+| `rep`               | `study.scenario`                | Same table as `scenario`, kept distinct to label reads                |
+| `scenario`          | `study.scenario`                | Owner: `scenario.userId`                                              |
+| `node`              | `study.knowledge_node`          | Author check is open in v1; per-node ACLs land later                  |
+| `reference_section` | `study.reference_section`       | Polymorphic across every corpus -- CFR / handbook / AC / ACS / AIM / NTSB / SAFO / InFO. Corpus is read from joined `study.reference.kind`. Each row carries the canonical `airboss_ref` URI used for chip deep-linking. |
+| `knowledge_node`    | `study.knowledge_node`          | Internal graph node id                                                |
+| `external_ref`      | none -- `target_id` is the data | Encodes `<url>\|<title>` via `EXTERNAL_REF_TARGET_DELIMITER`          |
 
 Soft FK rationale: a real per-type FK would require either nullable-FK fan-out (option B) or per-type tables (option C). Both lose the symmetric "cited by" query surface across types. The BC is the integrity gate -- it verifies the source row exists and is owned by the caller, and that the target row exists, before inserting. See [content-citations/spec.md](../work-packages/content-citations/spec.md) decision 1.
 
@@ -63,9 +64,9 @@ Citation exports re-emitted from the `@ab/bc-study` barrel: [libs/bc/study/src/c
 | `getCitedBy(tgtType, id)`      | Target-side read. Raw rows ordered by `createdAt`. Pair with `resolveCitationSources`. |
 | `resolveCitationTargets(rows)` | Batch-enrich rows with target display data (`label`, `detail`, `href`).                |
 | `resolveCitationSources(rows)` | Batch-enrich rows with source display data (`label`, `detail`, `exists`).              |
-| `searchRegulationNodes(q)`     | Picker search backing for `regulation_node` tab.                                       |
-| `searchAcReferences(q)`        | Picker search backing for `ac_reference` tab.                                          |
+| `searchReferenceSections(q)`   | Picker search backing for the `reference_section` tab. Joins `study.reference_section` -> `study.reference`; one search box covers every corpus. Returns the `airboss_ref` URI alongside label + corpus badge so the chip-render layer can compute the deep-link without a second fetch. |
 | `searchKnowledgeNodes(q)`      | Picker search backing for `knowledge_node` tab.                                        |
+| `auditCitations(db?)`          | Walks every `content_citations` row; reports dead targets, dead sources, resolver coverage gaps, invalid external URLs. Used by `bun run sources audit-citations` + the `citation-audit` scheduled job. |
 
 Typed errors thrown by `createCitation` / `deleteCitation`:
 
@@ -147,6 +148,10 @@ const citationItems = $derived<CitationChipItem[]>(
     typeLabel: CITATION_TARGET_LABELS[c.target.type],
     label: c.target.label,
     href: c.target.href ?? null,
+    // Stage-5 chip rule: external_ref opens in a new tab; in-app deep
+    // links (reference_section -> flightbag, knowledge_node -> /knowledge/<id>)
+    // stay in the same tab so the back button returns to the source.
+    targetExternal: c.target.type === CITATION_TARGET_TYPES.EXTERNAL_REF,
     context: c.citation.citationContext,
   })),
 );
@@ -169,8 +174,7 @@ async function handleSelect(s: CitationPickerSelection): Promise<void> {
 <CitationPicker
   bind:open={citationPickerOpen}
   targetTypes={[
-    CITATION_TARGET_TYPES.REGULATION_NODE,
-    CITATION_TARGET_TYPES.AC_REFERENCE,
+    CITATION_TARGET_TYPES.REFERENCE_SECTION,
     CITATION_TARGET_TYPES.KNOWLEDGE_NODE,
     CITATION_TARGET_TYPES.EXTERNAL_REF,
   ]}
@@ -179,9 +183,11 @@ async function handleSelect(s: CitationPickerSelection): Promise<void> {
 />
 ```
 
+The `reference_section` tab covers every seeded corpus via one search box. Result rows render with a corpus badge (`reference.kind`-derived label) so the user can tell PHAK §12.3 from CFR §91.103 from ACS PA.I.A.K1 in the result list.
+
 ### 4. Cited-by panel on a target page
 
-For a new target type's detail page, mirror [knowledge/[slug]/+page.server.ts:105](../../apps/study/src/routes/(app)/knowledge/%5Bslug%5D/+page.server.ts) or [references/[id]/+page.server.ts:36](../../apps/study/src/routes/(app)/references/%5Bid%5D/+page.server.ts).
+For a new target type's detail page, mirror [knowledge/[slug]/+page.server.ts:105](../../apps/study/src/routes/(app)/knowledge/%5Bslug%5D/+page.server.ts).
 
 ```typescript
 const citedByRows = await getCitedBy(CITATION_TARGET_TYPES.KNOWLEDGE_NODE, node.id);
