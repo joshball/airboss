@@ -38,17 +38,18 @@ The Practiced pill **aggregates objectively** -- attempts logged, self-assessed 
 
 ## Decisions (formerly open questions, ratified 2026-05-04)
 
-| # | Question                              | Decision                                                                                                                                                                                                |
-| - | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1 | Teacher surface location              | Under study at `/teach/...`. Not a new app; not under hangar. Promote to `apps/teach/` only when teacher features grow.                                                                                |
-| 2 | Practiced credit rule                 | **No credit rule.** Self-assessed and teacher-signed are tracked as independent counts; mastery rolls up objectively (attempts + outcomes). The teacher is the gate; we are the tracker.                |
-| 3 | GPS track production storage          | Dev-local cache for v1. Cloud-storage adapter follows when second user uploads.                                                                                                                          |
-| 4 | Maneuver kinds scope                  | ASEL + IR (~50 kinds). Covers PPL refresh + IR refresh -- the user's near-term cert goals.                                                                                                              |
-| 5 | Reorder transaction shape             | Single transaction `UPDATE ... FROM unnest(...)`. One audit row.                                                                                                                                         |
-| 6 | Roles architecture                    | New `study.account_role` join table. Roles `student` and `teacher`. Auto-grant `student` on first sign-in. Per-role metadata in jsonb. Ready for future billing / certificate-verification without schema change. |
-| 7 | Multi-teacher Course tab on `/study`  | Most-recently-active teacher's syllabus by default. Dropdown auto-appears when student has 2+ active teacher links. Stored in WP 1's `study.user_pref`.                                                  |
-
-Three open questions remain (the magic-link debrief flow specifics) -- see "Open questions" at end of spec.
+| #  | Question                              | Decision                                                                                                                                                                                                |
+| -- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1  | Teacher surface location              | Under study at `/teach/...`. Not a new app; not under hangar. Promote to `apps/teach/` only when teacher features grow.                                                                                |
+| 2  | Practiced credit rule                 | **No credit rule.** Self-assessed and teacher-signed are tracked as independent counts; mastery rolls up objectively (attempts + outcomes). The teacher is the gate; we are the tracker.                |
+| 3  | GPS track production storage          | Dev-local cache for v1. Cloud-storage adapter follows when second user uploads.                                                                                                                          |
+| 4  | Maneuver kinds scope                  | ASEL + IR (~50 kinds). Covers PPL refresh + IR refresh -- the user's near-term cert goals.                                                                                                              |
+| 5  | Reorder transaction shape             | Single transaction `UPDATE ... FROM unnest(...)`. One audit row.                                                                                                                                         |
+| 6  | Roles architecture                    | New `study.account_role` join table. Roles `student` and `teacher`. Auto-grant `student` on first sign-in. Per-role metadata in jsonb. Ready for future billing / certificate-verification without schema change. |
+| 7  | Multi-teacher Course tab on `/study`  | Most-recently-active teacher's syllabus by default. Dropdown auto-appears when student has 2+ active teacher links. Stored in WP 1's `study.user_pref`.                                                  |
+| 8  | Magic-link flow shape                 | **Real account, no formal "create account" prompt.** better-auth magic-link plugin creates `bauth_user` + auto-grants `teacher` role on first click. The teacher never sees signup UI; phrases like "create your account," "set a password," "pick a username" never appear. The page reads "Welcome -- leave feedback below."        |
+| 9  | Single-flight grant vs ongoing relationship | **Opt-in.** Accepting a debrief invite grants access to **one specific flight only**. `acceptDebriefInvite` does NOT auto-create a `teacher_student_link`. Either side promotes to a durable relationship via an explicit "Make this regular" action.                                                          |
+| 10 | Default `teacher_student_link.kind`   | **`'cfi'` is the default.** Most student-initiated invites are to CFIs; this matches the most common case. The teacher can switch to `'mentor'` or `'peer'` via `setRoleMetadata` from settings; the student picks the kind via a dropdown when they click "Make this regular."                                  |
 
 Two follow-on entries captured in `docs/platform/IDEAS.md`:
 
@@ -185,12 +186,11 @@ A student can have multiple active teachers (e.g., one CFI + one peer-study-part
 
 Single-flight magic-link grant. Lets a teacher engage with one flight without setting up a relationship.
 
-> **TODO Q-DEBRIEF-1 (pending user answer): magic-link account creation shape.**
-> User has confirmed: "we will create an account, just don't want them to have to say 'create account' we will have an email from the link." Implementation choice: better-auth magic-link creates a real `bauth_user` row on first link click; the teacher never sees a sign-up form. The phrase "create your account" never appears; the email says "Joshua wants your feedback on his short-field landing today" and the page says "Welcome -- leave feedback below."
->
-> What's still open: does accepting a debrief invite **also** auto-create a `teacher_student_link` (i.e., implicitly start an ongoing relationship), or does the debrief stand alone and the relationship is opt-in?
->
-> Recommended (subject to user confirmation): **stand alone in v1.** A debrief invite gives access to **one specific flight**; subsequent flights need new invites. The teacher upgrades to "ongoing teacher" via an explicit "Make this regular" action (either side initiates). Magic links stay genuinely lightweight.
+**Magic-link flow + relationship semantics (Decisions 8-10):**
+
+- The magic-link plugin from better-auth creates a real `bauth_user` row on first click; teacher's UX never says "create your account," "set a password," or "pick a username." The email reads `"[Inviter] would like your feedback on a flight"`; the page reads `"Welcome -- leave feedback below"`.
+- `acceptDebriefInvite` creates the `bauth_user` (if new) + auto-grants the `teacher` role with metadata `{ kind: 'cfi', certificates_verified: false }`. It does **NOT** create a `teacher_student_link`.
+- The debrief grants access to **one specific flight only**. Subsequent flights need new invites OR an explicit "Make this regular" action (either side) that creates the durable `teacher_student_link`.
 
 ```sql
 CREATE TABLE study.debrief_invite (
@@ -301,13 +301,7 @@ All writes gate on `assertSyllabusAuthor(syllabusId, callerUserId)`:
 - `acceptDebriefInvite(input, db?)` -- the magic-link accept handler. Either signs in an existing teacher account or creates one + auto-grants `teacher` role. Marks `accepted_at` + `accepted_user_id`. Audit.
 - `revokeDebriefInvite(input, db?)` -- student revokes. Audit.
 
-> **TODO Q-DEBRIEF-2 (pending user answer): does accepting an invite create a teacher_student_link?**
->
-> If yes (relationship-on-first-debrief): `acceptDebriefInvite` also creates `teacher_student_link` with `kind = 'cfi'` (TBD see Q-DEBRIEF-3) and `status = 'active'`. Future debriefs from this student to this teacher don't need new invites.
->
-> If no (debrief-only): the invite grants access to one flight only. The teacher_student_link is opt-in via a separate "Make this a regular teacher" action by either side.
->
-> Recommendation: **no** in v1 (debrief-only). Magic links stay lightweight; relationships compound deliberately. The "make this regular" action is a one-line BC call (`grantRole` + `createTeacherLink`) and a button on either side's UI.
+**Decided (Decision 9): debrief-only.** `acceptDebriefInvite` creates the `bauth_user` + auto-grants `teacher` role + marks the invite accepted. It does NOT create a `teacher_student_link`. The relationship is opt-in via a separate "Make this regular" action (either side can initiate; both surfaces ship in this WP). The teacher's per-flight access is enforced by their accepted-invite record, not by an active link. Magic links stay lightweight; relationships compound deliberately.
 
 ### Surfaces
 
@@ -387,16 +381,12 @@ The teacher never sees "create your account" or "set a password." The phrase doe
 
 ### Teacher signs off on subsequent flights
 
-> Per pending Q-DEBRIEF-2: this depends on whether accepting a debrief creates a teacher_student_link.
+Per Decision 9, the debrief grants one-flight access; no `teacher_student_link` is auto-created. Future flights need new debrief invites OR an explicit "Make this regular" action (either side). The promotion calls `createTeacherStudentLink({ teacherUserId, studentUserId, kind: 'cfi' })` (kind defaulted per Decision 10; the "Make this regular" form has a kind dropdown).
 
-If link auto-created on first debrief:
+Surfaces for the promotion:
 
-- Future debriefs from the same student appear in the teacher's `/teach/students` queue automatically. No new magic link required.
-
-If debrief-only (recommended v1):
-
-- Future flights need new debrief invites. Each invite grants access to one flight.
-- Either side can "promote" to a teacher_student_link via an explicit action (`/teach/students/[studentId]/promote` or `/flight/[id]/make-regular-teacher`).
+- Student-side: `/flight/[id]` shows "Make [teacher] a regular teacher" after they've left feedback. One-click; opens a Dialog with the kind dropdown.
+- Teacher-side: `/teach/debrief/[token]` (after submitting feedback) shows "Want to keep tracking [student]? [Make this a regular relationship]." Opens the same kind-dropdown Dialog.
 
 ### Teacher authors a teaching syllabus
 
@@ -458,15 +448,9 @@ If debrief-only (recommended v1):
 | Teacher hasn't filled `studying_for` (their `student` role is bare)                              | Their `/study` page works; progress strip shows "no goal" banner per WP 1.                                                                                  |
 | First-time sign-in with no `account_role` rows                                                   | Hooks layer auto-grants `student` with `studying_for: null`.                                                                                                |
 
-## Open questions (TODO)
+## Open questions
 
-These three remain pending user answer (flagged inline in the spec as `TODO Q-DEBRIEF-1/2/3`):
-
-1. **Q-DEBRIEF-1: Magic-link flow shape (final confirmation).** The user has confirmed: real account, but no formal "create your account" prompt. Implementation uses better-auth magic-link plugin; teacher never sees signup UI. **Confirm there are no remaining concerns before locking.**
-2. **Q-DEBRIEF-2: Single-flight grant vs ongoing relationship.** Does accepting a debrief invite auto-create a `teacher_student_link`, or does the relationship stay opt-in? Recommended: opt-in (debrief grants access to one flight only). User to confirm.
-3. **Q-DEBRIEF-3: Default `teacher_student_link.kind` on auto-creation.** When a magic-link debrief turns into an ongoing relationship, what's the default kind? `'cfi'` (assumes the inviter wanted a CFI), `'mentor'` (lower assumption), or "ask the teacher when they accept"? Recommended: `'cfi'` (matches the most common case; teacher can edit their kind in role metadata anytime).
-
-Until these three answers ratify, the magic-link debrief sections (BC + surface + Behavior) are the spec's least-frozen content. Everything else is final.
+None. The previously-pending Q-DEBRIEF-1/2/3 questions are decided as Decisions 8/9/10 above. Spec is fully ratified.
 
 ## Out of scope
 
@@ -492,4 +476,3 @@ Until these three answers ratify, the magic-link debrief sections (BC + surface 
 - Joshua (as teacher) authors a 5-lesson teaching syllabus at `/teach/syllabus`, drags lesson #5 to position #2, sees the new order persist on reload.
 - Student's `/study` page reflects the in-plane evidence: Practiced pill counts maneuvers (objectively, no credit gate), ACS map leaf rows show evidence on relevant leaves, Course projection seeds from the teacher's syllabus when present.
 - All BC writes audit. `bun run check` clean. Vitest + Playwright green.
-- Three open questions (Q-DEBRIEF-1/2/3) resolved before final ship; the spec's TODO blocks updated to "decided."

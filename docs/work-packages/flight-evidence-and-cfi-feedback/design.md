@@ -76,7 +76,7 @@ Why both:
 
 The "teaching" surfaces (`/teach/...`) check `requireTeacher(callerId)` to gate the route. Per-relationship writes (assess this maneuver, reorder this syllabus) gate on `assertTeacherLink(callerId, studentId)` AND `assertSyllabusAuthor(syllabusId, callerId)` respectively.
 
-Why this matters for the magic-link flow: a teacher accepting a debrief invite gets the `teacher` role auto-granted *and* gets a link to that one student auto-created (per Q-DEBRIEF-2 if confirmed). Both happen in the same transaction. If the user's `account_role` already has `teacher`, that row is left alone; only the link is new.
+Why this matters for the magic-link flow: a teacher accepting a debrief invite gets the `teacher` role auto-granted (per Decision 8). NO `teacher_student_link` is auto-created (per Decision 9 -- the debrief is one-flight only; relationships are opt-in via the explicit "Make this regular" action). If the teacher already has the `teacher` role, that row is left alone.
 
 Future-compat: when a `subscription` table arrives, it FKs into `account_role(user_id, role)` cleanly. A teacher subscription, a student subscription, or both can attach to the same user without surgery.
 
@@ -298,11 +298,10 @@ export async function revokeDebriefInvite(input: RevokeDebriefInviteInput, db?: 
 
 1. Validate the token exists, hasn't been accepted/revoked, hasn't expired.
 2. Use better-auth `auth.api.signInEmail` (magic-link verify variant) to either sign in an existing `bauth_user` matched on email OR create a new one.
-3. If new user: insert into `bauth_user`. (No password required; magic-link is the auth.)
-4. Auto-grant `teacher` role via `grantRole(userId, 'teacher', { kind: 'cfi', certificates_verified: false })` (TBD per Q-DEBRIEF-3).
-5. **Per Q-DEBRIEF-2 (pending):** if relationship-on-first-debrief, also create `teacher_student_link`.
-6. Mark invite `accepted_at` + `accepted_user_id`.
-7. Audit each step.
+3. If new user: insert into `bauth_user`. (No password required; magic-link is the auth. Per Decision 8: the UX never says "create your account.")
+4. Auto-grant `teacher` role via `grantRole(userId, 'teacher', { kind: 'cfi', certificates_verified: false })` (Decision 10 -- default kind = `'cfi'`; teacher can edit later via settings).
+5. Mark invite `accepted_at` + `accepted_user_id`. **Do NOT create a `teacher_student_link`** (Decision 9 -- the debrief is one-flight only; durable relationships are opt-in).
+6. Audit each step.
 
 ### Track parsing
 

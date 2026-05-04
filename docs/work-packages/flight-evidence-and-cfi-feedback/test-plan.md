@@ -111,12 +111,33 @@ revised: 2026-05-04
 ## FE-13: Teacher account auto-created with teacher role
 
 1. After accepting a debrief invite (FE-11), check `bauth_user` and `account_role`.
-2. **Expected:** `bauth_user` row exists for `instructor@airboss.test`. `account_role` has both `student` (auto-granted on first sign-in) and `teacher` (auto-granted on debrief acceptance) rows. Teacher metadata defaults: `{ kind: 'cfi', certificates_verified: false }` (per Q-DEBRIEF-3, subject to user confirmation).
+2. **Expected:** `bauth_user` row exists for `instructor@airboss.test`. `account_role` has both `student` (auto-granted on first sign-in) and `teacher` (auto-granted on debrief acceptance) rows. Teacher metadata: `{ kind: 'cfi', certificates_verified: false }` (Decision 10). NO `teacher_student_link` row created (Decision 9 -- debrief is one-flight only).
 
 ## FE-14: Teacher revisits debrief link after acceptance
 
 1. Same teacher clicks the same `/teach/debrief/[token]` URL again (not via magic link, just direct URL).
 2. **Expected:** If signed in: page renders normally (read-only or editable per their existing assessment). If signed out: redirect to a "request a new link" page (token is single-use post-acceptance).
+
+## FE-14a: "Make this regular" promotion (student-side)
+
+1. Abby logs flight, invites teacher, teacher accepts + leaves feedback (FE-10..12).
+2. Abby visits `/flight/[id]` after the teacher signoff.
+3. **Expected:** "Make [teacher] a regular teacher" CTA visible. Click opens a Dialog with a kind dropdown (default `'cfi'`, options `'cfi' | 'mentor' | 'peer'`).
+4. Confirm with kind `'mentor'`.
+5. **Expected:** `teacher_student_link` row created with `kind: 'mentor'`, `status: 'active'`. Subsequent flights from Abby appear in this teacher's `/teach/students/[abbyId]` queue without needing new debrief invites.
+
+## FE-14b: "Make this regular" promotion (teacher-side)
+
+1. Teacher leaves feedback on a debrief.
+2. Footer on `/teach/debrief/[token]` shows "Want to keep tracking [student] going forward? [Make this a regular relationship]."
+3. Click; confirm with default kind `'cfi'`.
+4. **Expected:** Same `teacher_student_link` row creation. Either side initiating produces the same outcome.
+
+## FE-14c: Without promotion, teacher can't see other flights
+
+1. Teacher accepts a debrief invite for Flight A; leaves feedback.
+2. Abby logs Flight B; teacher tries to navigate to `/teach/students/[abbyId]/attempts/[flightB-id]` directly.
+3. **Expected:** 404 / NOT_AUTHORIZED. The accepted debrief grants access to Flight A only. Flight B requires a new debrief invite OR the "Make this regular" promotion to have happened.
 
 ## FE-15: Practiced pill counts both self and teacher signoffs
 
