@@ -16,6 +16,7 @@ import {
 import Button from '@ab/ui/components/Button.svelte';
 import ConfirmAction from '@ab/ui/components/ConfirmAction.svelte';
 import InfoTip from '@ab/ui/components/InfoTip.svelte';
+import Toast from '@ab/ui/components/Toast.svelte';
 import { humanize } from '@ab/utils';
 import { tick } from 'svelte';
 import { enhance } from '$app/forms';
@@ -164,11 +165,11 @@ function confirmDiscardEdit() {
 </script>
 
 {#if editToastVisible}
-	<div class="toast" role="status">{editToastMessage}</div>
+	<Toast tone="success" shape="card">{editToastMessage}</Toast>
 {/if}
 
 {#if shareToastVisible}
-	<div class="toast" role="status" aria-live="polite">{shareToastMessage}</div>
+	<Toast tone="success" shape="card">{shareToastMessage}</Toast>
 {/if}
 
 {#if fieldErrors._}
@@ -413,14 +414,6 @@ function confirmDiscardEdit() {
 		font-size: var(--type-ui-label-size);
 	}
 
-	.toast {
-		background: var(--signal-success-wash);
-		border: 1px solid var(--signal-success-edge);
-		color: var(--signal-success);
-		padding: var(--space-sm) var(--space-md);
-		border-radius: var(--radius-md);
-		font-size: var(--type-ui-label-size);
-	}
 
 	.cell-label {
 		font-size: var(--type-ui-caption-size);

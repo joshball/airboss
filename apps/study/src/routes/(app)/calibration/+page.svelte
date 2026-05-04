@@ -14,6 +14,7 @@ import Button from '@ab/ui/components/Button.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import ScoreCard from '@ab/ui/components/ScoreCard.svelte';
+import ScoreMeta, { type ScoreMetaItem } from '@ab/ui/components/ScoreMeta.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -22,6 +23,11 @@ const calibration = $derived(data.calibration);
 const trend = $derived(data.trend);
 const pointCount = $derived(data.pointCount);
 const hasData = $derived(pointCount > 0);
+
+const scoreMetaItems = $derived<ScoreMetaItem[]>([
+	{ label: 'Data points', value: pointCount, testId: 'data-points' },
+	{ label: 'Domains with data', value: calibration.domains.length, testId: 'domains-with-data' },
+]);
 
 function confidenceLabel(level: ConfidenceLevel): string {
 	return CONFIDENCE_LEVEL_LABELS[level];
@@ -254,16 +260,7 @@ const interpretation = $derived(
 				{/if}
 			{/snippet}
 			{#snippet meta()}
-				<dl class="score-meta">
-					<div>
-						<dt>Data points</dt>
-						<dd>{pointCount}</dd>
-					</div>
-					<div>
-						<dt>Domains with data</dt>
-						<dd>{calibration.domains.length}</dd>
-					</div>
-				</dl>
+				<ScoreMeta items={scoreMetaItems} />
 			{/snippet}
 		</ScoreCard>
 
@@ -412,31 +409,6 @@ const interpretation = $derived(
 	.fine {
 		font-size: var(--type-ui-label-size);
 		color: var(--ink-subtle);
-	}
-
-	.score-meta {
-		display: flex;
-		gap: var(--space-xl);
-		margin: 0;
-	}
-
-	.score-meta div {
-		display: flex;
-		flex-direction: column;
-	}
-
-	.score-meta dt {
-		font-size: var(--type-ui-caption-size);
-		color: var(--ink-subtle);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-caps);
-	}
-
-	.score-meta dd {
-		margin: 0;
-		font-size: var(--type-heading-2-size);
-		font-weight: 600;
-		color: var(--ink-body);
 	}
 
 	.chart-card,
