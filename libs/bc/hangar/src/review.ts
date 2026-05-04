@@ -53,6 +53,7 @@ import {
 import { and, asc, desc, eq, inArray, isNull } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import {
+	type BucketFilterCriteria,
 	type CachedFrontmatterFields,
 	type HangarBoardRow,
 	type HangarBoardTaskRow,
@@ -85,7 +86,8 @@ type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
  * `seedDefaultBuckets()` after the board exists).
  *
  * Wraps the create-and-seed branch in a transaction so a process kill mid-seed
- * cannot leave a board with no columns.
+ * cannot leave a board with no columns. Two concurrent first-run callers race
+ * the unique-on-name index; the loser catches PG `23505` and re-fetches.
  */
 export async function getOrCreateBoard(db: Db = defaultDb): Promise<HangarBoardRow> {
 	const existing = await db.select().from(hangarBoard).where(eq(hangarBoard.name, REVIEW_BOARD_DEFAULT_NAME)).limit(1);
@@ -96,20 +98,33 @@ export async function getOrCreateBoard(db: Db = defaultDb): Promise<HangarBoardR
 		return existing[0];
 	}
 	// Fresh board: insert + seed inside a single transaction.
-	return db.transaction(async (tx) => {
-		const id = generateHangarBoardId();
-		const inserted = await tx.insert(hangarBoard).values({ id, name: REVIEW_BOARD_DEFAULT_NAME }).returning();
-		const board = inserted[0];
-		if (!board) {
-			throw new Error('getOrCreateBoard: insert returned no row');
-		}
-		await seedDefaultColumns(board.id, tx);
-		await seedReviewKinds(tx);
-		return board;
-	});
+	try {
+		return await db.transaction(async (tx) => {
+			const id = generateHangarBoardId();
+			const inserted = await tx.insert(hangarBoard).values({ id, name: REVIEW_BOARD_DEFAULT_NAME }).returning();
+			const board = inserted[0];
+			if (!board) {
+				throw new Error('getOrCreateBoard: insert returned no row');
+			}
+			await seedDefaultColumns(board.id, tx);
+			await seedReviewKinds(tx);
+			return board;
+		});
+	} catch (err) {
+		// Concurrent caller won the race -- the unique-on-name index rejected
+		// our INSERT. Re-fetch the winner's row.
+		if (!isPgUniqueViolation(err)) throw err;
+		const retry = await db.select().from(hangarBoard).where(eq(hangarBoard.name, REVIEW_BOARD_DEFAULT_NAME)).limit(1);
+		if (retry[0]) return retry[0];
+		throw err;
+	}
 }
 
-/** Insert any missing default columns for the given board. Idempotent. */
+/**
+ * Insert any missing default columns for the given board. Idempotent and
+ * race-safe: `onConflictDoNothing` on the (boardId, name) unique index means
+ * two concurrent boots converge without surfacing PG `23505`.
+ */
 export async function seedDefaultColumns(boardId: string, db: Db = defaultDb): Promise<void> {
 	const existing = await db
 		.select({ name: hangarBoardColumn.name })
@@ -126,7 +141,7 @@ export async function seedDefaultColumns(boardId: string, db: Db = defaultDb): P
 		sortOrder: REVIEW_BOARD_DEFAULT_COLUMNS.indexOf(name),
 	}));
 	if (toInsert.length === 0) return;
-	await db.insert(hangarBoardColumn).values(toInsert);
+	await db.insert(hangarBoardColumn).values(toInsert).onConflictDoNothing();
 }
 
 /** List columns for a board ordered by `sortOrder`. */
@@ -159,8 +174,8 @@ export async function listKinds(db: Db = defaultDb): Promise<readonly HangarRevi
 }
 
 /**
- * Insert any kinds in `REVIEW_KIND_VALUES` that are missing. Idempotent;
- * safe to call on every boot.
+ * Insert any kinds in `REVIEW_KIND_VALUES` that are missing. Idempotent and
+ * race-safe via `onConflictDoNothing` on the PK.
  */
 export async function seedReviewKinds(db: Db = defaultDb): Promise<void> {
 	const existing = await db.select({ id: hangarReviewKind.id }).from(hangarReviewKind);
@@ -168,11 +183,9 @@ export async function seedReviewKinds(db: Db = defaultDb): Promise<void> {
 	const toInsert = REVIEW_KIND_VALUES.filter((k) => !have.has(k)).map((k) => ({
 		id: k,
 		label: REVIEW_KIND_LABELS[k],
-		defaultColumnMapping: null,
-		discoveryRule: null,
 	}));
 	if (toInsert.length === 0) return;
-	await db.insert(hangarReviewKind).values(toInsert);
+	await db.insert(hangarReviewKind).values(toInsert).onConflictDoNothing();
 }
 
 // ---------------------------------------------------------------------------
@@ -192,12 +205,17 @@ export async function listBuckets(boardId: string, db: Db = defaultDb): Promise<
  * Default bucket seed list. The loader populates items; bucket admin (Phase 7)
  * lets a user customise. Each entry maps to a `REVIEW_KIND_VALUES` kind plus
  * a structured `filterCriteria` predicate.
+ *
+ * `reference_toc` carries `noPassingSession: true` so a TOC that has been
+ * walked + passed at least once disappears from the bucket -- spec gap #2's
+ * "needs review" derivation lives in the bucket filter, not the discovery
+ * rule.
  */
 const DEFAULT_BUCKET_SEEDS: ReadonlyArray<{
 	name: string;
 	kindId: ReviewKind;
 	sortOrder: number;
-	filterCriteria: Record<string, unknown>;
+	filterCriteria: BucketFilterCriteria;
 }> = [
 	{
 		name: 'WP Specs -- unread',
@@ -221,7 +239,7 @@ const DEFAULT_BUCKET_SEEDS: ReadonlyArray<{
 		name: 'References -- TOC review',
 		kindId: 'reference_toc',
 		sortOrder: 3,
-		filterCriteria: { kind: 'reference_toc' },
+		filterCriteria: { kind: 'reference_toc', noPassingSession: true },
 	},
 	{
 		name: 'Knowledge nodes -- pending discovery',
@@ -237,7 +255,60 @@ const DEFAULT_BUCKET_SEEDS: ReadonlyArray<{
 	},
 ];
 
-/** Insert any default buckets that are missing for the given board. Idempotent. */
+/**
+ * Validate a bucket filter predicate at the BC boundary. Schema-level CHECK on
+ * a deeply-nested jsonb path is fragile; the BC validator is the only write
+ * path so unknown keys / wrong-typed values are rejected here before the row
+ * lands. Throws a `RangeError` with a useful message; callers (form actions,
+ * loader) surface it back to the user.
+ */
+export function validateBucketFilterCriteria(input: unknown): BucketFilterCriteria {
+	if (input === null || typeof input !== 'object' || Array.isArray(input)) {
+		throw new RangeError('filterCriteria must be a structured object');
+	}
+	const obj = input as Record<string, unknown>;
+	const allowed = new Set(['kind', 'frontmatterStatus', 'reviewStatus', 'noPassingSession']);
+	for (const k of Object.keys(obj)) {
+		if (!allowed.has(k)) throw new RangeError(`filterCriteria: unknown key '${k}'`);
+	}
+	const out: { -readonly [K in keyof BucketFilterCriteria]: BucketFilterCriteria[K] } = {};
+	if (obj.kind !== undefined) {
+		if (typeof obj.kind !== 'string') throw new RangeError('filterCriteria.kind must be a string');
+		out.kind = obj.kind;
+	}
+	if (obj.frontmatterStatus !== undefined) {
+		if (!Array.isArray(obj.frontmatterStatus))
+			throw new RangeError('filterCriteria.frontmatterStatus must be a string array');
+		const fs: Array<'unread' | 'reading' | 'done'> = [];
+		for (const v of obj.frontmatterStatus) {
+			if (v !== 'unread' && v !== 'reading' && v !== 'done')
+				throw new RangeError(`filterCriteria.frontmatterStatus[]: invalid '${String(v)}'`);
+			fs.push(v);
+		}
+		out.frontmatterStatus = fs;
+	}
+	if (obj.reviewStatus !== undefined) {
+		if (!Array.isArray(obj.reviewStatus)) throw new RangeError('filterCriteria.reviewStatus must be a string array');
+		const rs: Array<'pending' | 'done'> = [];
+		for (const v of obj.reviewStatus) {
+			if (v !== 'pending' && v !== 'done')
+				throw new RangeError(`filterCriteria.reviewStatus[]: invalid '${String(v)}'`);
+			rs.push(v);
+		}
+		out.reviewStatus = rs;
+	}
+	if (obj.noPassingSession !== undefined) {
+		if (typeof obj.noPassingSession !== 'boolean')
+			throw new RangeError('filterCriteria.noPassingSession must be a boolean');
+		out.noPassingSession = obj.noPassingSession;
+	}
+	return out;
+}
+
+/**
+ * Insert any default buckets that are missing for the given board. Idempotent
+ * and race-safe via `onConflictDoNothing` on the (boardId, name) unique index.
+ */
 export async function seedDefaultBuckets(boardId: string, db: Db = defaultDb): Promise<void> {
 	const existing = await db
 		.select({ name: hangarReviewBucket.name })
@@ -253,23 +324,32 @@ export async function seedDefaultBuckets(boardId: string, db: Db = defaultDb): P
 		sortOrder: b.sortOrder,
 	}));
 	if (toInsert.length === 0) return;
-	await db.insert(hangarReviewBucket).values(toInsert);
+	await db.insert(hangarReviewBucket).values(toInsert).onConflictDoNothing();
 }
 
 export interface CreateBucketInput {
 	boardId: string;
 	name: string;
 	kindId: ReviewKind;
-	filterCriteria: Record<string, unknown>;
+	/** Validated through `validateBucketFilterCriteria` before insert. */
+	filterCriteria: BucketFilterCriteria | Record<string, unknown>;
 	sortOrder: number;
 }
 
 /** Create a new bucket. Throws if the name is not unique on the board. */
 export async function createBucket(input: CreateBucketInput, db: Db = defaultDb): Promise<HangarReviewBucketRow> {
 	const id = generateHangarReviewBucketId();
+	const filterCriteria = validateBucketFilterCriteria(input.filterCriteria);
 	const inserted = await db
 		.insert(hangarReviewBucket)
-		.values({ id, ...input })
+		.values({
+			id,
+			boardId: input.boardId,
+			name: input.name,
+			kindId: input.kindId,
+			filterCriteria,
+			sortOrder: input.sortOrder,
+		})
 		.returning();
 	if (!inserted[0]) throw new Error('createBucket: insert returned no row');
 	return inserted[0];
@@ -281,7 +361,12 @@ export async function updateBucket(
 	patch: Partial<Omit<CreateBucketInput, 'boardId'>>,
 	db: Db = defaultDb,
 ): Promise<HangarReviewBucketRow> {
-	const updated = await db.update(hangarReviewBucket).set(patch).where(eq(hangarReviewBucket.id, id)).returning();
+	const set: { name?: string; kindId?: ReviewKind; filterCriteria?: BucketFilterCriteria; sortOrder?: number } = {};
+	if (patch.name !== undefined) set.name = patch.name;
+	if (patch.kindId !== undefined) set.kindId = patch.kindId;
+	if (patch.filterCriteria !== undefined) set.filterCriteria = validateBucketFilterCriteria(patch.filterCriteria);
+	if (patch.sortOrder !== undefined) set.sortOrder = patch.sortOrder;
+	const updated = await db.update(hangarReviewBucket).set(set).where(eq(hangarReviewBucket.id, id)).returning();
 	if (!updated[0]) throw new Error(`updateBucket: bucket ${id} not found`);
 	return updated[0];
 }
@@ -348,7 +433,8 @@ export interface UpsertItemInput {
 	title: string;
 	frontmatterStatus: FrontmatterStatus | null;
 	reviewStatus: FrontmatterReviewStatus | null;
-	cachedFields: CachedFrontmatterFields;
+	/** Optional. Falls through to schema default `{ otherFields: {} }` on insert. */
+	cachedFields?: CachedFrontmatterFields;
 }
 
 /**
@@ -357,60 +443,78 @@ export interface UpsertItemInput {
  * rename. Resurrection clears any prior `pinnedColumnId` so a stale pin
  * doesn't mask a frontmatter status change while the file was missing.
  * Returns the upserted row.
+ *
+ * Atomic: a single SELECT-existing pass against the unique partial
+ * `(boardId, kindId, ref) WHERE deletedAt IS NULL` followed by either an
+ * UPDATE-by-id (existing) or an INSERT (new). When a soft-deleted row
+ * matches, we extend the SELECT by also reading the deleted row to enable
+ * resurrection with pin clear.
+ *
+ * Concurrency: two concurrent loader processes both miss the live partial
+ * and both INSERT -> the loser hits PG `23505` on the unique partial. We
+ * catch + retry the SELECT once, mirroring `startSession`'s pattern.
  */
 export async function upsertItem(input: UpsertItemInput, db: Db = defaultDb): Promise<HangarReviewItemRow> {
-	const now = new Date();
-	// Try to find an existing row (live or deleted) for the loader's idempotency key.
-	const existing = await db
-		.select()
-		.from(hangarReviewItem)
-		.where(
-			and(
-				eq(hangarReviewItem.boardId, input.boardId),
-				eq(hangarReviewItem.kindId, input.kindId),
-				eq(hangarReviewItem.ref, input.ref),
-			),
-		)
-		.limit(1);
-	if (existing[0]) {
-		const row = existing[0];
-		const wasDeleted = row.deletedAt !== null;
-		const updated = await db
-			.update(hangarReviewItem)
-			.set({
-				title: input.title,
-				frontmatterStatus: input.frontmatterStatus,
-				reviewStatus: input.reviewStatus,
-				cachedFields: input.cachedFields,
-				cachedAt: now,
-				deletedAt: null,
-				// Resurrection: clear stale pin so a downgraded frontmatter status
-				// is reflected in the derived column. The user can re-pin if they
-				// want, but a stale pin masking new state is the bigger surprise.
-				...(wasDeleted ? { pinnedColumnId: null } : {}),
-			})
-			.where(eq(hangarReviewItem.id, row.id))
-			.returning();
-		if (!updated[0]) throw new Error('upsertItem: update returned no row');
-		return updated[0];
+	const cachedFields: CachedFrontmatterFields = input.cachedFields ?? { otherFields: {} };
+	for (let attempt = 0; attempt < 2; attempt++) {
+		// Try to find an existing row (live or deleted) for the loader's idempotency key.
+		const existing = await db
+			.select()
+			.from(hangarReviewItem)
+			.where(
+				and(
+					eq(hangarReviewItem.boardId, input.boardId),
+					eq(hangarReviewItem.kindId, input.kindId),
+					eq(hangarReviewItem.ref, input.ref),
+				),
+			)
+			.limit(1);
+		if (existing[0]) {
+			const row = existing[0];
+			const wasDeleted = row.deletedAt !== null;
+			const updated = await db
+				.update(hangarReviewItem)
+				.set({
+					title: input.title,
+					frontmatterStatus: input.frontmatterStatus,
+					reviewStatus: input.reviewStatus,
+					cachedFields,
+					deletedAt: null,
+					// Resurrection: clear stale pin so a downgraded frontmatter status
+					// is reflected in the derived column. The user can re-pin if they
+					// want, but a stale pin masking new state is the bigger surprise.
+					...(wasDeleted ? { pinnedColumnId: null } : {}),
+				})
+				.where(eq(hangarReviewItem.id, row.id))
+				.returning();
+			if (!updated[0]) throw new Error('upsertItem: update returned no row');
+			return updated[0];
+		}
+		const id = generateHangarReviewItemId();
+		try {
+			const inserted = await db
+				.insert(hangarReviewItem)
+				.values({
+					id,
+					boardId: input.boardId,
+					kindId: input.kindId,
+					ref: input.ref,
+					title: input.title,
+					frontmatterStatus: input.frontmatterStatus,
+					reviewStatus: input.reviewStatus,
+					cachedFields,
+				})
+				.returning();
+			if (!inserted[0]) throw new Error('upsertItem: insert returned no row');
+			return inserted[0];
+		} catch (err) {
+			// Concurrent loader writer beat us to the unique partial; retry the
+			// SELECT-then-UPDATE branch. Only the unique-violation SQLSTATE is
+			// retryable; FK / connection / CHECK errors propagate.
+			if (!isPgUniqueViolation(err) || attempt > 0) throw err;
+		}
 	}
-	const id = generateHangarReviewItemId();
-	const inserted = await db
-		.insert(hangarReviewItem)
-		.values({
-			id,
-			boardId: input.boardId,
-			kindId: input.kindId,
-			ref: input.ref,
-			title: input.title,
-			frontmatterStatus: input.frontmatterStatus,
-			reviewStatus: input.reviewStatus,
-			cachedFields: input.cachedFields,
-			cachedAt: now,
-		})
-		.returning();
-	if (!inserted[0]) throw new Error('upsertItem: insert returned no row');
-	return inserted[0];
+	throw new Error('upsertItem: insert + select retry both failed');
 }
 
 /** Soft-delete an item (loader uses this when its source artifact disappears). */
@@ -440,7 +544,10 @@ export async function pinItemToColumn(
 /**
  * Look up the open session for `(itemId, userId)`. Returns null when no
  * open session exists; the caller wraps this with `startSession()` to create
- * one when entering the walker.
+ * one when entering the walker. `userId` is required at the BC entry point;
+ * orphaned sessions (whose `userId` was nulled by a user delete) are
+ * unreachable here -- they show up as read-only history rows in the
+ * `listSessions(itemId)` view.
  */
 export async function getOpenSession(
 	itemId: string,

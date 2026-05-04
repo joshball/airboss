@@ -38,7 +38,7 @@ import {
 	TASK_TYPE_VALUES,
 } from '@ab/constants';
 import { timestamps } from '@ab/db';
-import { sql } from 'drizzle-orm';
+import { desc, sql } from 'drizzle-orm';
 import {
 	boolean,
 	check,
@@ -52,7 +52,14 @@ import {
 	uniqueIndex,
 } from 'drizzle-orm/pg-core';
 
-/** Render a string array as a SQL `IN (...)` value list. */
+/**
+ * Render a constant string array as a SQL `IN (...)` value list. Inputs MUST be
+ * `as const` arrays imported from `@ab/constants` -- this helper assumes the
+ * input is compile-time-known (e.g. `REVIEW_KIND_VALUES`). The single-quote
+ * escape is defense in depth on a low-likelihood vector; never pass a runtime
+ * string here. CHECK constraints don't take parameters, so the raw SQL is
+ * required.
+ */
 const inList = (values: readonly string[]) => values.map((v) => `'${v.replace(/'/g, "''")}'`).join(', ');
 
 /**
@@ -363,6 +370,18 @@ export type NewHangarInvitationRow = typeof hangarInvitation.$inferInsert;
 //
 // All literal sets (kinds, outcomes, frontmatter statuses, columns) are
 // enforced via CHECK constraints sourced from `@ab/constants`.
+//
+// Cascade map (one paragraph because the chain is deep):
+// - Deleting a `board` cascades to `board_column` (cascade) -> `review_item`
+//   (cascade via boardId) -> `review_session` (cascade via itemId) ->
+//   `review_step` (cascade via sessionId), AND to `review_bucket` (cascade)
+//   AND to `board_task` (cascade). Five tables hit on one board delete.
+// - Deleting a `bauth_user` is `set null` everywhere (`review_session.userId`,
+//   `board_task.assigneeId`, `board_task.createdBy`) so the audit trail
+//   survives a user purge. NEVER turn this into a cascade -- session +
+//   step history is the only durable record of what was reviewed.
+// - Deleting a `review_kind` is `restrict` (rejected) so the kind registry
+//   stays a stable enum mirror; admins remove buckets / items first.
 
 /**
  * Snapshot of a review item's underlying frontmatter beyond the two
@@ -381,17 +400,24 @@ export interface CachedFrontmatterFields {
 }
 
 /**
- * Bucket filter predicate. v1 supports the structured shape (kind +
- * frontmatter status filters); the `advanced` field carries a free-form
- * jsonb predicate for power users (validated server-side before insert /
- * update).
+ * Bucket filter predicate. Structured-only -- no free-form jsonb passthrough.
+ * Anything the bucket-filter executor can interpret has a typed slot here;
+ * unknown keys are rejected by `bucketFilterCriteriaSchema` in `review.ts`
+ * before the row is written. This keeps the bucket query path closed-shape
+ * (no eval of an arbitrary jsonb path) and the schema CHECK + Zod parse the
+ * single source of truth.
+ *
+ * `noPassingSession: true` is the "needs review" predicate the spec calls
+ * out (gap #2): the bucket renders only items whose latest session for any
+ * user did NOT close `outcome = 'pass'`. Implemented as a JOIN against
+ * `review_session` in the bucket-filter executor.
  */
 export interface BucketFilterCriteria {
 	readonly kind?: string;
 	readonly frontmatterStatus?: ReadonlyArray<'unread' | 'reading' | 'done'>;
 	readonly reviewStatus?: ReadonlyArray<'pending' | 'done'>;
-	/** Optional jsonb predicate, e.g. `{ "cachedFields": { "otherFields.area": "ifr" } }`. */
-	readonly advanced?: Readonly<Record<string, unknown>>;
+	/** When true, exclude items whose most recent session closed with `outcome = 'pass'`. */
+	readonly noPassingSession?: boolean;
 }
 
 /**
@@ -438,14 +464,20 @@ export const hangarBoardColumn = hangarSchema.table(
 
 /**
  * Review kind registry. Pre-seeded with `REVIEW_KIND_VALUES`; future kinds
- * land via a `seedReviewKinds()` migration. The discovery rule is stored as
- * jsonb so a reviewer can adjust per-kind behavior without a code change.
+ * land via a `seedReviewKinds()` migration. `id` is the kind discriminator
+ * (e.g. `wp_spec`); CHECK guards it against `REVIEW_KIND_VALUES`.
  *
- * `id` is the kind discriminator (e.g. `wp_spec`); CHECK guards it against
- * `REVIEW_KIND_VALUES`. `defaultColumnMapping` (per spec) is a jsonb map from
- * derived `frontmatter_status` -> board-column name (e.g. `{ unread: 'Backlog',
- * reading: 'In Progress', done: 'Done' }`); the board uses it to derive a
- * column for unpinned items. Null defers to a hard-coded default.
+ * Discovery rules live in `review-discovery.ts` (TypeScript) for now, not
+ * a per-kind data column -- see retro schema review m2/m3. When a Phase 7
+ * admin UI lands that lets a reviewer customise per-kind discovery from the
+ * hangar, we re-introduce a typed discriminated-union jsonb column with a
+ * server-side validator. Until then, no un-consumed jsonb here.
+ *
+ * Default column mapping is also derived in code (`review.ts`'s
+ * `getDerivedColumnId(item)` helper); each kind's `frontmatter_status` ->
+ * column-name map is identity for v1 (`unread` -> Backlog, `reading` ->
+ * In Progress, `done` -> Done). Custom mappings will join here when an
+ * admin can edit them.
  */
 export const hangarReviewKind = hangarSchema.table(
 	'review_kind',
@@ -453,10 +485,6 @@ export const hangarReviewKind = hangarSchema.table(
 		/** Kind discriminator: one of `REVIEW_KIND_VALUES`. */
 		id: text('id').primaryKey(),
 		label: text('label').notNull(),
-		/** Per-kind status -> column-name map. Null = use built-in default. */
-		defaultColumnMapping: jsonb('default_column_mapping').$type<Readonly<Record<string, string>> | null>(),
-		/** Discovery-rule shape; see `review-discovery.ts`. Optional. */
-		discoveryRule: jsonb('discovery_rule').$type<Record<string, unknown> | null>(),
 		...timestamps(),
 	},
 	(_t) => ({
@@ -490,6 +518,10 @@ export const hangarReviewBucket = hangarSchema.table(
 	(t) => ({
 		bucketBoardIdx: index('hangar_review_bucket_board_idx').on(t.boardId, t.sortOrder),
 		bucketNameUnique: uniqueIndex('hangar_review_bucket_name_unique_idx').on(t.boardId, t.name),
+		// FK-supporting index: Postgres needs this to enforce ON DELETE
+		// RESTRICT on `review_kind` cheaply, AND the bucket-admin "all
+		// buckets pointing at kind X" query (Phase 7) walks this column.
+		bucketKindIdx: index('hangar_review_bucket_kind_idx').on(t.kindId),
 	}),
 );
 
@@ -507,7 +539,8 @@ export const hangarReviewBucket = hangarSchema.table(
  * markdown per render -- the loader writes all three on every scan.
  *
  * `pinnedColumnId` is the user's drag-drop pin; NULL means derive the
- * column from `frontmatterStatus` via `review_kind.defaultColumnMapping`.
+ * column from `frontmatterStatus` via the per-kind mapping in
+ * `review.ts`'s `getDerivedColumnId(item)` helper.
  */
 export const hangarReviewItem = hangarSchema.table(
 	'review_item',
@@ -539,7 +572,6 @@ export const hangarReviewItem = hangarSchema.table(
 		reviewStatus: text('review_status'),
 		/** Open-ended frontmatter bag (everything beyond the two first-class fields). */
 		cachedFields: jsonb('cached_fields').$type<CachedFrontmatterFields>().notNull().default({ otherFields: {} }),
-		cachedAt: timestamp('cached_at', { withTimezone: true }).notNull().defaultNow(),
 		sortOrder: integer('sort_order').notNull().default(0),
 		/** Soft-delete marker; loader prunes missing artifacts to this. */
 		deletedAt: timestamp('deleted_at', { withTimezone: true }),
@@ -562,6 +594,15 @@ export const hangarReviewItem = hangarSchema.table(
 		itemReviewStatusIdx: index('hangar_review_item_review_status_idx')
 			.on(t.boardId, t.reviewStatus)
 			.where(sql`${t.deletedAt} IS NULL`),
+		// Both "live items for board" and "all items including soft-deleted"
+		// plans land on this index (loader's prune walk needs the second
+		// shape; the live partial above satisfies the first).
+		itemBoardIdx: index('hangar_review_item_board_idx').on(t.boardId, t.deletedAt),
+		// FK-supporting partial: cleanup on column delete (set null) and
+		// "items pinned to column X" admin queries.
+		itemPinnedColumnIdx: index('hangar_review_item_pinned_column_idx')
+			.on(t.pinnedColumnId)
+			.where(sql`${t.pinnedColumnId} IS NOT NULL`),
 		itemFrontmatterStatusCheck: check(
 			'hangar_review_item_frontmatter_status_check',
 			sql.raw(`"frontmatter_status" IS NULL OR "frontmatter_status" IN (${inList(FRONTMATTER_STATUS_VALUES)})`),
@@ -587,9 +628,13 @@ export const hangarReviewSession = hangarSchema.table(
 		itemId: text('item_id')
 			.notNull()
 			.references(() => hangarReviewItem.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
-		userId: text('user_id')
-			.notNull()
-			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
+		/**
+		 * Session author. NULLABLE + ON DELETE SET NULL so deleting (or GDPR-
+		 * purging) a `bauth_user` does not vaporize the session + step
+		 * history -- the audit trail of what was reviewed survives the user.
+		 * The board renders an orphaned session as read-only.
+		 */
+		userId: text('user_id').references(() => bauthUser.id, { onDelete: 'set null', onUpdate: 'cascade' }),
 		startedAt: timestamp('started_at', { withTimezone: true }).notNull().defaultNow(),
 		finishedAt: timestamp('finished_at', { withTimezone: true }),
 		/** One of `SESSION_OUTCOME_VALUES`; NULL while open. */
@@ -598,8 +643,12 @@ export const hangarReviewSession = hangarSchema.table(
 		...timestamps(),
 	},
 	(t) => ({
-		// Hot path: open-session lookup for the walker.
+		// Hot path: open-session lookup for the walker `(itemId, userId)`.
 		sessionItemUserIdx: index('hangar_review_session_item_user_idx').on(t.itemId, t.userId, t.startedAt),
+		// Hot path: WP-spec right-rail `listSessions(itemId)` ORDER BY
+		// startedAt DESC. The composite leading on `itemId` alone lets the
+		// planner walk in startedAt-desc order without a sort step.
+		sessionItemStartedIdx: index('hangar_review_session_item_started_idx').on(t.itemId, desc(t.startedAt)),
 		// Only one OPEN session per (item, user); finished sessions are unbounded.
 		sessionOpenUnique: uniqueIndex('hangar_review_session_open_unique_idx')
 			.on(t.itemId, t.userId)
@@ -685,6 +734,10 @@ export const hangarBoardTask = hangarSchema.table(
 	},
 	(t) => ({
 		taskBoardIdx: index('hangar_board_task_board_idx').on(t.boardId, t.sortOrder),
+		// FK-supporting partials: cleanup on column / assignee delete (set null)
+		// and "tasks in column X" / "my tasks" filter queries.
+		taskColumnIdx: index('hangar_board_task_column_idx').on(t.columnId).where(sql`${t.columnId} IS NOT NULL`),
+		taskAssigneeIdx: index('hangar_board_task_assignee_idx').on(t.assigneeId).where(sql`${t.assigneeId} IS NOT NULL`),
 		taskTypeCheck: check('hangar_board_task_type_check', sql.raw(`"type" IN (${inList(TASK_TYPE_VALUES)})`)),
 		taskProductAreaCheck: check(
 			'hangar_board_task_product_area_check',
@@ -753,9 +806,3 @@ export type HangarBoardTaskRow = typeof hangarBoardTask.$inferSelect;
 export type NewHangarBoardTaskRow = typeof hangarBoardTask.$inferInsert;
 export type HangarDocsSearchIndexRow = typeof hangarDocsSearchIndex.$inferSelect;
 export type NewHangarDocsSearchIndexRow = typeof hangarDocsSearchIndex.$inferInsert;
-
-// Frontmatter status / review_status are enforced inside `cachedStatus` by
-// the BC writer; CHECK on a deeply nested jsonb path is fragile. Keeping
-// the imports here so the BC's writers reference the same source of truth.
-void FRONTMATTER_STATUS_VALUES;
-void FRONTMATTER_REVIEW_STATUS_VALUES;

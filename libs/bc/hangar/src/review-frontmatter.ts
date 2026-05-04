@@ -12,7 +12,9 @@
  * walks the filesystem on its own.
  */
 
-import { readFile, writeFile } from 'node:fs/promises';
+import { randomBytes } from 'node:crypto';
+import { readFile, rename, unlink, writeFile } from 'node:fs/promises';
+import { dirname } from 'node:path';
 import { parseFrontmatter, setFrontmatterField, setFrontmatterFields } from '@ab/utils';
 
 /**
@@ -32,11 +34,15 @@ export async function readFrontmatter(path: string): Promise<{
 
 /**
  * Read a markdown file, rewrite (or insert) one frontmatter field, and write
- * the result back. Atomic in the sense that either the new bytes are on disk
- * or the original is intact -- we go through `writeFile` which on POSIX
- * replaces the path in one syscall when the destination directory and file
- * are on the same filesystem. The board's drag-write surface invokes this
- * once per drag.
+ * the result back atomically. The new bytes land on disk via a sibling temp
+ * file plus `rename`: POSIX same-filesystem rename is one atomic syscall, so
+ * a process kill / ENOSPC mid-write either leaves the original file intact
+ * or replaces it with the complete new contents -- no partial-write window.
+ *
+ * Plain `writeFile(path, ...)` is NOT atomic: it opens the destination with
+ * `O_TRUNC` and streams bytes; an interruption truncates the file. We use
+ * the temp + rename pattern so the board's drag-write surface can never
+ * corrupt a tracked WP spec or test plan.
  */
 export async function writeFrontmatterField(path: string, field: string, value: string): Promise<void> {
 	const before = await readFile(path, 'utf8').catch((err: unknown) => {
@@ -44,21 +50,44 @@ export async function writeFrontmatterField(path: string, field: string, value: 
 	});
 	const after = setFrontmatterField(before, field, value);
 	if (after === before) return;
-	await writeFile(path, after, 'utf8').catch((err: unknown) => {
+	await atomicWriteFile(path, after).catch((err: unknown) => {
 		throw new Error(`writeFrontmatterField: failed to write ${path}: ${describeError(err)}`);
 	});
 }
 
-/** Batch variant: rewrite many fields in one read + one write. */
+/** Batch variant: rewrite many fields in one read + one atomic write. */
 export async function writeFrontmatterFields(path: string, updates: Readonly<Record<string, string>>): Promise<void> {
 	const before = await readFile(path, 'utf8').catch((err: unknown) => {
 		throw new Error(`writeFrontmatterFields: failed to read ${path}: ${describeError(err)}`);
 	});
 	const after = setFrontmatterFields(before, updates);
 	if (after === before) return;
-	await writeFile(path, after, 'utf8').catch((err: unknown) => {
+	await atomicWriteFile(path, after).catch((err: unknown) => {
 		throw new Error(`writeFrontmatterFields: failed to write ${path}: ${describeError(err)}`);
 	});
+}
+
+/**
+ * Write `data` to `path` atomically by writing to a sibling temp file then
+ * `rename`-ing into place. The temp filename uses `pid + random + ts` so
+ * concurrent writers from the same process to the same path don't collide.
+ *
+ * If the rename fails (e.g. cross-filesystem on `/tmp`), we delete the temp
+ * file and rethrow so the caller doesn't leave junk behind.
+ */
+async function atomicWriteFile(path: string, data: string): Promise<void> {
+	const dir = dirname(path);
+	const suffix = `${process.pid}-${randomBytes(4).toString('hex')}-${Date.now()}`;
+	const tmp = `${dir}/.${suffix}.tmp`;
+	try {
+		await writeFile(tmp, data, 'utf8');
+		await rename(tmp, path);
+	} catch (err) {
+		// Best-effort cleanup; ignore unlink failure (the rename may have
+		// succeeded after a transient error, or the temp file may not exist).
+		await unlink(tmp).catch(() => {});
+		throw err;
+	}
 }
 
 function describeError(err: unknown): string {

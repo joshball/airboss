@@ -313,36 +313,51 @@ export function setFrontmatterField(md: string, field: string, value: string): s
 		throw new Error(`setFrontmatterField: invalid key '${field}'. Keys must match /^[A-Za-z0-9_-]+$/.`);
 	}
 	const formatted = `${field}: ${formatYamlScalarValue(value)}`;
+	// Detect dominant EOL of the input so a CRLF-authored file stays CRLF
+	// after rewrite. Mixed-EOL files (CRLF in the body, LF in the
+	// frontmatter) are rare; we prefer CRLF when any CRLF appears so the
+	// dominant convention wins.
+	const eol = md.includes('\r\n') ? '\r\n' : '\n';
 	// No leading frontmatter at all -> prepend a fresh block.
 	if (!md.startsWith('---') || (md.charCodeAt(3) !== 0x0a && md.charCodeAt(3) !== 0x0d)) {
-		return `---\n${formatted}\n---\n\n${md}`;
+		return `---${eol}${formatted}${eol}---${eol}${eol}${md}`;
 	}
 	const end = md.indexOf('\n---', 3);
 	if (end < 0) {
 		// Malformed (no closing fence). Treat as no frontmatter; prepend one.
-		return `---\n${formatted}\n---\n\n${md}`;
+		return `---${eol}${formatted}${eol}---${eol}${eol}${md}`;
 	}
 	const head = md.slice(0, end + 1); // up to and including the `\n` before the closing `---`
 	const tail = md.slice(end + 1); // `---\n...rest...`
-	const lines = head.split('\n');
+	// Split on \r?\n so CRLF lines drop the trailing \r in `lines`. We then
+	// rejoin with the detected EOL so the rewritten / inserted line and the
+	// preserved lines all share one convention.
+	const lines = head.split(/\r?\n/);
 	// `lines[0]` is the opening `---`; `lines[lines.length - 1]` is empty (the trailing
-	// \n of `head`). Walk the inner lines, find the existing key, and rewrite.
+	// newline of `head`). Walk the inner lines, find every occurrence of the key,
+	// rewrite the first and drop the rest -- duplicates would otherwise let
+	// `parseFrontmatter`'s "last write wins" rule mask the rewrite.
 	const keyPattern = new RegExp(`^\\s*${escapeRegExp(field)}\\s*:`);
 	let replaced = false;
 	for (let i = 1; i < lines.length - 1; i++) {
 		const line = lines[i];
 		if (line === undefined) continue;
-		if (keyPattern.test(line)) {
+		if (!keyPattern.test(line)) continue;
+		if (!replaced) {
 			lines[i] = formatted;
 			replaced = true;
-			break;
+		} else {
+			// Drop the duplicate so the post-condition `parseFrontmatter(...)
+			// .entries` always contains exactly one (key, value).
+			lines.splice(i, 1);
+			i -= 1;
 		}
 	}
 	if (!replaced) {
 		// Append before the closing fence.
 		lines.splice(lines.length - 1, 0, formatted);
 	}
-	return lines.join('\n') + tail;
+	return lines.join(eol) + tail;
 }
 
 /**
@@ -381,6 +396,16 @@ const YAML_RESERVED_BARE_VALUES: ReadonlySet<string> = new Set([
 	'NO',
 ]);
 
+/**
+ * YAML 1.1 / 1.2 treats these characters as reserved when they appear at the
+ * START of a value: alias (`*`), anchor (`&`), tag (`!`), reserved (`@`),
+ * directive (`%`), folded (`>`), literal (`|`), flow (`[`/`]`/`{`/`}`/`,`),
+ * and the comment (`#`) marker is also unsafe in mid-value (already covered
+ * by the `includes('#')` rule). Quote them to keep external YAML parsers
+ * (gray-matter, js-yaml, IDE frontmatter linters) happy.
+ */
+const YAML_RESERVED_LEADING_CHAR = /^[*&!@`%>|[\]{},]/;
+
 function formatYamlScalarValue(value: string): string {
 	const needsQuote =
 		value === '' ||
@@ -391,6 +416,7 @@ function formatYamlScalarValue(value: string): string {
 		value.includes("'") ||
 		value.includes('"') ||
 		YAML_RESERVED_BARE_VALUES.has(value) ||
+		YAML_RESERVED_LEADING_CHAR.test(value) ||
 		/^-?\d+(\.\d+)?$/.test(value);
 	if (!needsQuote) return value;
 	// Single-quote the value; double internal single quotes (YAML escape).

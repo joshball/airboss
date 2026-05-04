@@ -608,6 +608,47 @@ describe('setFrontmatterField', () => {
 		const out = setFrontmatterField(md, 'status', 'unread');
 		expect(out.startsWith('---\nstatus: unread\n---\n\n')).toBe(true);
 	});
+
+	test('preserves CRLF line endings on rewrite', () => {
+		const md = ['---', 'status: unread', 'title: Foo', '---', '', 'body line.', ''].join('\r\n');
+		const out = setFrontmatterField(md, 'status', 'reading');
+		// All EOL boundaries stay CRLF; no LF-only lines slipped in.
+		expect(out).not.toMatch(/[^\r]\n/);
+		expect(out).toContain('status: reading');
+		expect(parseFrontmatter(out).entries).toContainEqual({ key: 'status', value: 'reading' });
+	});
+
+	test('preserves CRLF line endings when prepending a fresh block', () => {
+		const md = '# heading\r\n\r\nbody\r\n';
+		const out = setFrontmatterField(md, 'status', 'reading');
+		expect(out.startsWith('---\r\nstatus: reading\r\n---\r\n\r\n')).toBe(true);
+	});
+
+	test('rewrites duplicate keys to a single occurrence', () => {
+		const md = '---\nstatus: unread\ntitle: Foo\nstatus: reading\n---\n\nbody\n';
+		const out = setFrontmatterField(md, 'status', 'done');
+		const entries = parseFrontmatter(out).entries;
+		// Both occurrences collapse to one with the new value.
+		const statusEntries = entries.filter((e) => e.key === 'status');
+		expect(statusEntries).toEqual([{ key: 'status', value: 'done' }]);
+		expect(entries).toContainEqual({ key: 'title', value: 'Foo' });
+	});
+
+	test('quotes values that start with YAML reserved indicators', () => {
+		const cases: ReadonlyArray<readonly [string, string]> = [
+			['*foo', "'*foo'"],
+			['&anchor', "'&anchor'"],
+			['!tag', "'!tag'"],
+			['|pipe', "'|pipe'"],
+			['>folded', "'>folded'"],
+			['[item]', "'[item]'"],
+		];
+		for (const [input, expected] of cases) {
+			const out = setFrontmatterField('---\n---\n', 'k', input);
+			expect(out).toContain(`k: ${expected}`);
+			expect(parseFrontmatter(out).entries).toContainEqual({ key: 'k', value: input });
+		}
+	});
 });
 
 describe('setFrontmatterFields', () => {

@@ -61,7 +61,10 @@ export function parseTestPlan(filePath: string, markdown: string): readonly Test
 		if (i === 0) continue;
 		const headerLine = lines[i - 1];
 		if (headerLine === undefined || !isTableHeader(headerLine)) continue;
-		// Walk forward, consuming rows until we hit a non-row line.
+		// Walk forward, consuming rows until we hit a non-row line. `rowIndex`
+		// counts ONLY rows we emit; a malformed (<3-cell) row is skipped and
+		// does NOT advance the index, so removing or fixing one malformed row
+		// doesn't shift every subsequent step's stepRef hash.
 		let rowIndex = 0;
 		let j = i + 1;
 		while (j < lines.length) {
@@ -76,8 +79,8 @@ export function parseTestPlan(filePath: string, markdown: string): readonly Test
 				const expected = cells[2] ?? '';
 				const stepRef = hashStepRef(filePath, sectionTitle, rowIndex);
 				steps.push({ stepIndex, sectionTitle, title, action, expected, stepRef });
+				rowIndex += 1;
 			}
-			rowIndex += 1;
 			j += 1;
 		}
 		// Skip past the consumed rows so the outer loop doesn't re-enter this table.

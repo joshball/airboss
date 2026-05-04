@@ -181,6 +181,7 @@ export {
 	updateBucket,
 	updateTask,
 	upsertItem,
+	validateBucketFilterCriteria,
 } from './review';
 export {
 	type DiscoveredItem,

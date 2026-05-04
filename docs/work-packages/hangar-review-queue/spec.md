@@ -169,7 +169,7 @@ Frontmatter writes use the existing markdown frontmatter parser/serializer (or f
 | `review_item`      | `hangar` | `id`, `kindId`, `ref` (path or id), `title` (denormalized), `cachedStatus` (jsonb -- frontmatter snapshot), `cachedAt`, `boardId`, `columnId` (derived or set), `sortOrder`, `createdAt`, `updatedAt` |
 | `review_session`   | `hangar` | `id`, `itemId`, `userId`, `startedAt`, `finishedAt` (nullable), `outcome` (nullable -- pass/fail/abandoned), `notes` (text)                                                |
 | `review_step`      | `hangar` | `id`, `sessionId`, `stepIndex`, `stepRef` (e.g. test-plan row id), `outcome` (pass/fail/blocked), `note` (text), `updatedAt`                                               |
-| `task`             | `hangar` | `id`, `boardId`, `columnId`, `title`, `description`, `type`, `productArea`, `assigneeId`, `createdBy`, `sortOrder`, `createdAt`, `updatedAt` (ad-hoc tasks; mirrors airboss-firc shape) |
+| `board_task`       | `hangar` | `id`, `boardId`, `columnId`, `title`, `description`, `type`, `productArea`, `assigneeId`, `createdBy`, `sortOrder`, `createdAt`, `updatedAt` (ad-hoc tasks; mirrors airboss-firc shape; named `board_task` to avoid future "task" name collisions) |
 
 `cachedStatus` jsonb shape: `{ frontmatterStatus: 'unread'|'reading'|'done'|null, reviewStatus: 'pending'|'done'|null, otherFields: {...} }`. The loader writes this; the board reads it without re-parsing markdown per render.
 

@@ -11,9 +11,10 @@
  *   ALL nodes regardless of `discovery_review:` frontmatter; the reviewer
  *   flips state via the per-kind view -- see Phase 1 spec gap #1)
  * - `reference_toc` -- one row per `hangar.reference` row whose `verbatim`
- *   jsonb has TOC content; "needs review" is derived in the bucket filter,
- *   not the discovery rule (avoids the chicken-and-egg query against
- *   `review_session` -- spec gap #2)
+ *   jsonb has a TOC-shaped block (a `toc` key, OR a `kind: 'toc'` discriminator,
+ *   OR a `tableOfContents` key). "Needs review" is derived in the bucket
+ *   filter via `noPassingSession: true` -- not the discovery rule (avoids
+ *   the chicken-and-egg query against `review_session`; spec gap #2).
  * - `ad_hoc` -- hand-created via the "+ Ad-hoc" button; no discovery
  *
  * Server-only: the filesystem rules use `node:fs/promises`; the
@@ -31,7 +32,7 @@ import {
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import { parseFrontmatter } from '@ab/utils';
-import { and, eq, isNull, sql } from 'drizzle-orm';
+import { and, isNull, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { hangarReference } from './schema';
 
@@ -51,6 +52,8 @@ export interface DiscoveryError {
 	readonly kindId: ReviewKind;
 	readonly ref: string;
 	readonly message: string;
+	/** ENOENT, EACCES, etc. when the underlying error was a `NodeJS.ErrnoException`. */
+	readonly code?: string;
 }
 
 export interface DiscoveryResult {
@@ -100,15 +103,16 @@ async function discoverWorkPackages(repoRoot: string): Promise<DiscoveryResult> 
 		const specRef = toRepoRelative(repoRoot, specPath);
 		const tpRef = toRepoRelative(repoRoot, tpPath);
 		const specRow = await readMarkdownItem(specPath, 'wp_spec', specRef, wpName);
-		if ('item' in specRow) items.push(specRow.item);
+		if (specRow.kind === 'item') items.push(specRow.item);
 		// spec.md is conventional but not enforced; some early WPs only carry
-		// design / tasks / test-plan. Treat "missing" as skip, not error.
-		else if (specRow.error && !specRow.error.message.includes('ENOENT')) errors.push(specRow.error);
+		// design / tasks / test-plan. Treat ENOENT as skip, not error -- by
+		// error code, not message substring (libuv message text is not
+		// part of Node's contract).
+		else if (specRow.error.code !== 'ENOENT') errors.push(specRow.error);
 		const tpRow = await readMarkdownItem(tpPath, 'wp_test_plan', tpRef, `${wpName} (test plan)`);
-		if ('item' in tpRow) items.push(tpRow.item);
-		// Test plans are optional per spec; only surface a real read error,
-		// not "file not found".
-		else if (tpRow.error && !tpRow.error.message.includes('ENOENT')) errors.push(tpRow.error);
+		if (tpRow.kind === 'item') items.push(tpRow.item);
+		// Test plans are optional per spec; ENOENT is the silent-skip path.
+		else if (tpRow.error.code !== 'ENOENT') errors.push(tpRow.error);
 	}
 	return { items, errors };
 }
@@ -126,8 +130,8 @@ async function discoverKnowledgeNodes(repoRoot: string): Promise<DiscoveryResult
 	for await (const path of walkForFile(root, 'node.md')) {
 		const ref = toRepoRelative(repoRoot, path);
 		const row = await readMarkdownItem(path, 'knowledge_node', ref, basenameWithoutExt(ref) || ref);
-		if ('item' in row) items.push(row.item);
-		else if (row.error) errors.push(row.error);
+		if (row.kind === 'item') items.push(row.item);
+		else errors.push(row.error);
 	}
 	return { items, errors };
 }
@@ -136,11 +140,34 @@ async function discoverKnowledgeNodes(repoRoot: string): Promise<DiscoveryResult
 // Reference TOCs: hangar.reference rows with non-null `verbatim`
 // ---------------------------------------------------------------------------
 
+/**
+ * Predicate: does this `hangar.reference.verbatim` jsonb describe a TOC?
+ * Three accepted shapes (the ingestion pipeline doesn't enforce one):
+ *
+ *   - `{ toc: [...] }` -- direct TOC array
+ *   - `{ kind: 'toc', ... }` -- discriminator
+ *   - `{ tableOfContents: ... }` -- legacy verbose shape
+ *
+ * We filter at the SQL layer (`jsonb -> 'toc' IS NOT NULL OR ...`) so the
+ * loader walks only TOC-shaped rows -- a reference with a generic verbatim
+ * block (e.g. a CFR snippet, a prose excerpt) is NOT discovered as a
+ * reviewable TOC.
+ */
 async function discoverReferenceTocs(db: Db): Promise<DiscoveryResult> {
 	const rows = await db
 		.select({ id: hangarReference.id, displayName: hangarReference.displayName })
 		.from(hangarReference)
-		.where(and(sql`${hangarReference.verbatim} IS NOT NULL`, isNull(hangarReference.deletedAt)))
+		.where(
+			and(
+				sql`${hangarReference.verbatim} IS NOT NULL`,
+				sql`(
+					jsonb_typeof(${hangarReference.verbatim}->'toc') IS NOT NULL
+					OR ${hangarReference.verbatim}->>'kind' = 'toc'
+					OR jsonb_typeof(${hangarReference.verbatim}->'tableOfContents') IS NOT NULL
+				)`,
+				isNull(hangarReference.deletedAt),
+			),
+		)
 		.orderBy(hangarReference.id);
 	const items: DiscoveredItem[] = rows.map((row) => ({
 		kindId: 'reference_toc',
@@ -153,24 +180,33 @@ async function discoverReferenceTocs(db: Db): Promise<DiscoveryResult> {
 	return { items, errors: [] };
 }
 
-// Silence unused-import warning when only `eq` is used in nested helpers.
-void eq;
-
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
+
+/**
+ * Discriminated union return: either an `item` was successfully read or an
+ * `error` describes why not. The `kind` discriminator lets callers narrow
+ * without `'item' in row` checks; `error.code` lets the caller treat
+ * ENOENT as skip-not-error without string-matching the message.
+ */
+type ReadMarkdownResult = { kind: 'item'; item: DiscoveredItem } | { kind: 'error'; error: DiscoveryError };
 
 async function readMarkdownItem(
 	absPath: string,
 	kindId: ReviewKind,
 	ref: string,
 	fallbackTitle: string,
-): Promise<{ item: DiscoveredItem } | { error?: DiscoveryError }> {
+): Promise<ReadMarkdownResult> {
 	let text: string;
 	try {
 		text = await readFile(absPath, 'utf8');
 	} catch (err) {
-		return { error: { kindId, ref, message: describeError(err) } };
+		const code = errorCode(err);
+		return {
+			kind: 'error',
+			error: { kindId, ref, message: describeError(err), ...(code !== undefined ? { code } : {}) },
+		};
 	}
 	const parsed = parseFrontmatter(text);
 	const fmMap = new Map<string, string>();
@@ -185,6 +221,7 @@ async function readMarkdownItem(
 		}
 	}
 	return {
+		kind: 'item',
 		item: {
 			kindId,
 			ref,
@@ -194,6 +231,12 @@ async function readMarkdownItem(
 			otherFields,
 		},
 	};
+}
+
+function errorCode(err: unknown): string | undefined {
+	if (typeof err !== 'object' || err === null) return undefined;
+	const candidate = err as { code?: unknown };
+	return typeof candidate.code === 'string' ? candidate.code : undefined;
 }
 
 function normalizeFrontmatterStatus(raw: string | undefined): FrontmatterStatus | null {

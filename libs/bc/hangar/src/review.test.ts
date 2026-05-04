@@ -34,6 +34,7 @@ import {
 	updateBucket,
 	updateTask,
 	upsertItem,
+	validateBucketFilterCriteria,
 } from './review';
 import {
 	hangarBoard,
@@ -88,8 +89,8 @@ afterAll(async () => {
 		// Cascade walks columns / buckets / items / sessions / steps / tasks.
 		await db.delete(hangarBoard).where(inArray(hangarBoard.id, boardIds));
 	}
-	await db.delete(bauthUser).where(eq(bauthUser.id, TEST_USER_ID));
-	await db.delete(bauthUser).where(eq(bauthUser.id, TEST_USER_2_ID));
+	// Single round-trip for both test users.
+	await db.delete(bauthUser).where(inArray(bauthUser.id, [TEST_USER_ID, TEST_USER_2_ID]));
 });
 
 /**
@@ -402,6 +403,53 @@ describe('tasks', () => {
 		const bRows = await listTasks(b.id);
 		expect(aRows.map((r) => r.title)).toEqual(['A']);
 		expect(bRows.map((r) => r.title)).toEqual(['B']);
+	});
+});
+
+describe('validateBucketFilterCriteria', () => {
+	it('accepts an empty object', () => {
+		expect(validateBucketFilterCriteria({})).toEqual({});
+	});
+
+	it('accepts the structured shape with all known keys', () => {
+		const out = validateBucketFilterCriteria({
+			kind: 'wp_spec',
+			frontmatterStatus: ['unread', 'reading'],
+			reviewStatus: ['pending'],
+			noPassingSession: true,
+		});
+		expect(out).toMatchObject({
+			kind: 'wp_spec',
+			frontmatterStatus: ['unread', 'reading'],
+			reviewStatus: ['pending'],
+			noPassingSession: true,
+		});
+	});
+
+	it('rejects unknown keys', () => {
+		expect(() => validateBucketFilterCriteria({ kind: 'wp_spec', evilExtra: 1 })).toThrow(/unknown key/);
+	});
+
+	it('rejects wrong-typed kind', () => {
+		expect(() => validateBucketFilterCriteria({ kind: 42 })).toThrow(/kind must be a string/);
+	});
+
+	it('rejects invalid frontmatterStatus values', () => {
+		expect(() => validateBucketFilterCriteria({ frontmatterStatus: ['nope'] })).toThrow(/frontmatterStatus.*invalid/);
+	});
+
+	it('rejects non-array frontmatterStatus', () => {
+		expect(() => validateBucketFilterCriteria({ frontmatterStatus: 'unread' })).toThrow(/string array/);
+	});
+
+	it('rejects non-boolean noPassingSession', () => {
+		expect(() => validateBucketFilterCriteria({ noPassingSession: 'yes' })).toThrow(/noPassingSession.*boolean/);
+	});
+
+	it('rejects null / arrays / non-objects at the top level', () => {
+		expect(() => validateBucketFilterCriteria(null)).toThrow(/structured object/);
+		expect(() => validateBucketFilterCriteria([])).toThrow(/structured object/);
+		expect(() => validateBucketFilterCriteria('foo')).toThrow(/structured object/);
 	});
 });
 

@@ -89,4 +89,18 @@ describe('parseTestPlan', () => {
 		expect(steps[0]?.sectionTitle).toBe('');
 		expect(steps[1]?.sectionTitle).toBe('s');
 	});
+
+	it('skipping a malformed row does not shift later steps stepRef', () => {
+		const file = 'docs/work-packages/foo/test-plan.md';
+		const clean = `## s\n\n| a | b | c |\n| - | - | - |\n| 1 | 2 | 3 |\n| 4 | 5 | 6 |\n`;
+		const malformed = `## s\n\n| a | b | c |\n| - | - | - |\n| 1 | 2 | 3 |\n| oops |\n| 4 | 5 | 6 |\n`;
+		const cleanSteps = parseTestPlan(file, clean);
+		const malformedSteps = parseTestPlan(file, malformed);
+		expect(cleanSteps.length).toBe(2);
+		expect(malformedSteps.length).toBe(2);
+		// rowIndex only advances for emitted rows, so the second valid row
+		// keeps the same stepRef whether the malformed row is present or not.
+		expect(malformedSteps[0]?.stepRef).toBe(cleanSteps[0]?.stepRef);
+		expect(malformedSteps[1]?.stepRef).toBe(cleanSteps[1]?.stepRef);
+	});
 });
