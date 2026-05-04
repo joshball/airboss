@@ -6,10 +6,10 @@
  * tree against seeded data lives in the Playwright e2e.
  */
 
-import { NODE_MASTERY_GATES, type AssessmentMethod } from '@ab/constants';
+import type { NodeEvidenceState } from '@ab/bc-study';
+import { type AssessmentMethod, NODE_MASTERY_GATES } from '@ab/constants';
 import { describe, expect, it } from 'vitest';
 import { rollupOverNodes } from './build-handbook-tree';
-import type { NodeEvidenceState } from '@ab/bc-study';
 
 const NA = NODE_MASTERY_GATES.NOT_APPLICABLE;
 const PASS = NODE_MASTERY_GATES.PASS;
