@@ -39,18 +39,15 @@ Rotor Ice Protection System (RIPS) determines the temperature and
 moisture content of the air and removes any ice buildup by heating the
 main and tail rotor blades. The system is shown here during testing.
 
-![Figure 7-10. The COPTER ILS or LOC RWY 13 approach at New York/La Guardia (LGA) airport. 
-7-11](/handbooks/iph/FAA-H-8083-16B/figures/fig-7-00-the-copter-ils-or-loc-rwy-13-approach-at-new-yor.png)
+![Figure 7-10. The COPTER ILS or LOC RWY 13 approach at New York/La Guardia (LGA) airport.](/handbooks/iph/FAA-H-8083-16B/figures/fig-7-00-the-copter-ils-or-loc-rwy-13-approach-at-new-yor.png)
 
-![Figure 7-11. COPTER RNAV (GPS) 291° at Indianapolis Downtown Heliport. 
-7-12](/handbooks/iph/FAA-H-8083-16B/figures/fig-7-01-copter-rnav-gps-291-at-indianapolis-downtown-hel.png)
+![Figure 7-11. COPTER RNAV (GPS) 291° at Indianapolis Downtown Heliport.](/handbooks/iph/FAA-H-8083-16B/figures/fig-7-01-copter-rnav-gps-291-at-indianapolis-downtown-hel.png)
 
-![Figure 7-13. COPTER RNAV (GPS) 250° at New York/La Guardia Airport. 
-7-15](/handbooks/iph/FAA-H-8083-16B/figures/fig-7-02-copter-rnav-gps-250-at-new-york-la-guardia-airpo.png)
+![Figure 7-13. COPTER RNAV (GPS) 250° at New York/La Guardia Airport.](/handbooks/iph/FAA-H-8083-16B/figures/fig-7-02-copter-rnav-gps-250-at-new-york-la-guardia-airpo.png)
 
 <div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-7-00-untitled.html">
 <table><thead><tr><th></th><th>Helicopter Instrument
-Procedures</th><th></th></tr></thead><tbody><tr><td>Introduction
+Procedures</th></tr></thead><tbody><tr><td>Introduction
 This chapter presents information on IFR helicopter
 operations in the National Airspace System. Advances in
 avionics technology installed in helicopters such as Global
@@ -71,7 +68,7 @@ MINI
 better autopilots and flight management systems (FMS).
 As a result, in October 2005, the first civil helicopter in
 the United States was certified for flight into known icing
-conditions. [Figure 7-1]</td><td></td><td></td></tr></tbody></table>
+conditions. [Figure 7-1]</td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-7-01-untitled.html">

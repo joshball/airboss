@@ -68,18 +68,7 @@ TK
 . nm
 LEG
 VOR NDB INT USR ACT NAV FPL SET AUX
-APT 1
-J
-K
-M
-N
-O
-P
-Q
-U
-W
-Y
-Z
+APT 
 SPC
 BKSP
 PFD
@@ -128,96 +117,22 @@ rely heavily on airborne navigation databases to provide
 the information needed to perform their numerous
 functions.
 
-![Figure 6-2. GPS with a flight route on display. 
-RNG 
-PULL SCAN 
-PUSH ON 
-BRT 
-PROC 
-CRSR 
-MSG 
-OBS 
-ALT 
-NRST 
-CLR 
-ENT
-D 
-MENU 
-DTK 
-TK 
-. nm 
-LEG 
-VOR NDB INT USR ACT NAV FPL SET AUX
-APT 1 
-A 
-B 
-C 
-D 
-E 
-F 
-G 
-H 
-J 
-K 
-L 
-M 
-N 
-O 
-P 
-Q 
-R 
-S 
-T 
-U 
-V 
-W 
-X 
-Y 
-Z 
-SPC 
-BKSP 
-PFD 
-MFD 
-NAV 
-COM 
-PFD 
-MENU 
-FPL 
-PROC](/handbooks/iph/FAA-H-8083-16B/figures/fig-6-00-gps-with-a-flight-route-on-display-rng-pull-scan.png)
+![Figure 6-1. Area navigation (RNAV) receivers.](/handbooks/iph/FAA-H-8083-16B/figures/fig-6-00-area-navigation-rnav-receivers.png)
 
-![Figure 6-26. Grand Junction Five Departure. 
-6-10](/handbooks/iph/FAA-H-8083-16B/figures/fig-6-01-grand-junction-five-departure-6-10.png)
+![Figure 6-24. Procedure turn or PI leg.](/handbooks/iph/FAA-H-8083-16B/figures/fig-6-01-procedure-turn-or-pi-leg.png)
 
-![Figure 6-28. ILS or LOC/DME RWY 3 in Durango, Colorado. 
-6-12](/handbooks/iph/FAA-H-8083-16B/figures/fig-6-02-ils-or-loc-dme-rwy-3-in-durango-colorado-6-12.png)
+![Figure 6-27. Channel One Departure.](/handbooks/iph/FAA-H-8083-16B/figures/fig-6-02-channel-one-departure.png)
 
-![Figure 6-29. Naming conventions of three different systems for the VOR 34 Approach. 
-6-13](/handbooks/iph/FAA-H-8083-16B/figures/fig-6-03-naming-conventions-of-three-different-systems-fo.png)
+![Figure 6-28. ILS or LOC/DME RWY 3 in Durango, Colorado.](/handbooks/iph/FAA-H-8083-16B/figures/fig-6-03-ils-or-loc-dme-rwy-3-in-durango-colorado.png)
 
-![Figure 6-30. Database rolls. 
-14 CFR Part 43, § 43.3(h). 
-Pilots using the databases are ultimately responsible for 
-ensuring that the database they are operating with is 
-current. This includes checking Notices to Airmen (NOTAM)­
-type information concerning errors that may be supplied 
-by the avionics manufacturer or](/handbooks/iph/FAA-H-8083-16B/figures/fig-6-04-database-rolls-14-cfr-part-43-43-3-h-pilots-usin.png)
+![Figure 6-29. Naming conventions of three different systems for the VOR 34 Approach.](/handbooks/iph/FAA-H-8083-16B/figures/fig-6-04-naming-conventions-of-three-different-systems-fo.png)
 
-![Figure 6-31. Manufacturer’s naming conventions. 
-6-16](/handbooks/iph/FAA-H-8083-16B/figures/fig-6-05-manufacturer-s-naming-conventions-6-16.png)
+![Figure 6-30. Database rolls.](/handbooks/iph/FAA-H-8083-16B/figures/fig-6-05-database-rolls.png)
 
-<div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-6-00-untitled.html">
-<table><thead><tr><th></th><th>Airborne Navigation Databases</th></tr></thead><tbody><tr><td>Introduction
-Area Navigation (RNAV) systems, aeronautical applications,
-and functions that depend on databases are widespread.
-[Figure 6-1] Since the 1970s, installed flight systems
-have relied on airborne navigation databases to support
-their intended functions, such as navigation data used
-to facilitate the presentation of flight information to the
-flight crew and understanding and better visualization
-of the governing aeronautical flight charts. With the
-overwhelming upgrades to navigation systems and fully
-integrated filght management systems (FMS) that are now
-installed in almost all corporate and commercial aircraft,
-the need for reliable and consistent airborne navigation
-databases is more important than ever.</td><td></td></tr></tbody></table>
-</div>
+![Figure 6-31. Manufacturer’s naming conventions.](/handbooks/iph/FAA-H-8083-16B/figures/fig-6-06-manufacturer-s-naming-conventions.png)
+
+|  | Airborne Navigation Databases |
+| --- | --- |
+| Introduction<br>Area Navigation (RNAV) systems, aeronautical applications,<br>and functions that depend on databases are widespread.<br>[Figure 6-1] Since the 1970s, installed flight systems<br>have relied on airborne navigation databases to support<br>their intended functions, such as navigation data used<br>to facilitate the presentation of flight information to the<br>flight crew and understanding and better visualization<br>of the governing aeronautical flight charts. With the<br>overwhelming upgrades to navigation systems and fully<br>integrated filght management systems (FMS) that are now<br>installed in almost all corporate and commercial aircraft,<br>the need for reliable and consistent airborne navigation<br>databases is more important than ever. |  |
+
+<a class="handbook-table-source" href="/handbooks/iph/FAA-H-8083-16B/tables/tbl-6-00-untitled.html">Open original</a>
