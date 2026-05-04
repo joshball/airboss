@@ -2,10 +2,10 @@ import { requireAuth } from '@ab/auth';
 import {
 	CredentialNotFoundError,
 	type CredentialRow,
-	getCitationsForSyllabusNode,
+	getCitationsForSyllabusNodes,
 	getCredentialBySlug,
 	getCredentialPrimarySyllabus,
-	getKnowledgeNodesForSyllabusLeaf,
+	getKnowledgeNodesForSyllabusLeaves,
 	getSyllabusArea,
 	getSyllabusBySlug,
 	type KnowledgeNodeRow,
@@ -76,21 +76,27 @@ export const load: PageServerLoad = async (event) => {
 		throw err;
 	}
 
-	const tasksWithElements: TaskView[] = await Promise.all(
-		areaView.tasks.map(async (task) => {
-			const elements = areaView.elements.filter((e) => e.parentId === task.id);
-			const elementViews: ElementView[] = await Promise.all(
-				elements.map(async (element) => {
-					const [citations, linkedNodes] = await Promise.all([
-						getCitationsForSyllabusNode(element.id),
-						getKnowledgeNodesForSyllabusLeaf(element.id),
-					]);
-					return { element, citations, linkedNodes };
-				}),
-			);
-			return { task, elements: elementViews };
-		}),
-	);
+	// Batched citation + linked-node lookups: pull all element citations and
+	// linked-node rows for the entire area in two queries instead of two per
+	// element. See `getCitationsForSyllabusNodes` and
+	// `getKnowledgeNodesForSyllabusLeaves` in `@ab/bc-study/syllabi.ts`.
+	// Closes the chunk-1 perf MAJOR / backend MAJOR triple-nested N+1
+	// (review-tail-2026-05).
+	const elementIds = areaView.elements.map((e) => e.id);
+	const [citationsByElement, linkedNodesByElement] = await Promise.all([
+		getCitationsForSyllabusNodes(elementIds),
+		getKnowledgeNodesForSyllabusLeaves(elementIds),
+	]);
+
+	const tasksWithElements: TaskView[] = areaView.tasks.map((task) => {
+		const elements = areaView.elements.filter((e) => e.parentId === task.id);
+		const elementViews: ElementView[] = elements.map((element) => ({
+			element,
+			citations: citationsByElement.get(element.id) ?? [],
+			linkedNodes: linkedNodesByElement.get(element.id) ?? [],
+		}));
+		return { task, elements: elementViews };
+	});
 
 	return {
 		credential,

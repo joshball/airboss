@@ -1,6 +1,6 @@
 import { requireAuth } from '@ab/auth';
 import {
-	getNodesCitingSection,
+	getNodesCitingSectionsBatch,
 	getReferenceByDocument,
 	type KnowledgeNodeRow,
 	listChapterSections,
@@ -59,19 +59,36 @@ export const load: PageServerLoad = async (event) => {
 		throw error(404, `Chapter '${chapterCode}' not found in ${reference.title}.`);
 	}
 	const sections = await listChapterSections(chapter.id);
-	const sectionsWithNodes: SectionWithNodes[] = await Promise.all(
-		sections.map(async (section) => {
-			const parsed = parseSectionCode(section.code);
-			const citingNodes =
-				parsed.section === null
-					? []
-					: await getNodesCitingSection({
-							referenceId: reference.id,
-							chapter: parsed.chapter,
-							section: parsed.section,
-						});
-			return { section, citingNodes };
-		}),
-	);
+
+	// Batched citation reverse-lookup: pull every cited-by node for this
+	// chapter in one indexed JSONB-containment query instead of one per
+	// section. See `getNodesCitingSectionsBatch` in
+	// `@ab/bc-study/references.ts`. Closes the chunk-1 perf MAJOR /
+	// backend MAJOR N+1 (review-tail-2026-05).
+	const parsedByCode = new Map<string, { chapter: number; section: number | null }>();
+	const sectionNumbers: number[] = [];
+	for (const section of sections) {
+		const parsed = parseSectionCode(section.code);
+		parsedByCode.set(section.code, parsed);
+		if (parsed.section !== null) sectionNumbers.push(parsed.section);
+	}
+	// Use the chapter's own parsed `chapter` integer as the probe -- every
+	// section under a chapter shares it. Chapter rows themselves can have
+	// `parsed.section === null` and resolve to an empty list.
+	const chapterParsed = parseSectionCode(chapter.code);
+	const nodesBySection =
+		sectionNumbers.length === 0
+			? new Map<number, KnowledgeNodeRow[]>()
+			: await getNodesCitingSectionsBatch({
+					referenceId: reference.id,
+					chapter: chapterParsed.chapter,
+					sections: sectionNumbers,
+				});
+
+	const sectionsWithNodes: SectionWithNodes[] = sections.map((section) => {
+		const parsed = parsedByCode.get(section.code) ?? { chapter: 0, section: null };
+		const citingNodes = parsed.section === null ? [] : (nodesBySection.get(parsed.section) ?? []);
+		return { section, citingNodes };
+	});
 	return { reference, chapter, sections: sectionsWithNodes } satisfies ChapterLensData;
 };
