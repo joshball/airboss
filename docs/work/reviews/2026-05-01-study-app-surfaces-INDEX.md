@@ -35,7 +35,7 @@ Re-audited every per-category file against current main. **All 5 headline critic
 
 | Category     | Closed | Open | Status   | Headline open items                                                                                                  |
 | ------------ | -----: | ---: | -------- | -------------------------------------------------------------------------------------------------------------------- |
-| correctness  |     11 |    3 | done     | memory-review undo numeric key; heartbeat local accumulator; handbook-asset symlink defence                          |
+| correctness  |     14 |    0 | done     | ALL CLOSED 2026-05-04 (wave-2 heartbeat correctness tail closed memory-review undo numeric key, heartbeat local accumulator, handbook-asset symlink defence) |
 | security     |      4 |    5 | done     | (dev) prod gate landed in this PR; remaining are seed/edition charset caps + content-type allowlist                  |
 | perf         |      6 |    5 | pending  | help-registry code-split, library aggregators, regulations-section redundant fetch, knowledge-node listReferences   |
 | architecture |      6 |   11 | done     | library / knowledge / session aggregator BCs, group-by enums to constants, handbook-asset to libs                    |
@@ -57,7 +57,7 @@ Re-audited every per-category file against current main. **All 5 headline critic
 
 - **Convergent N+1 cluster** (5 perf MAJORs + 6 backend MAJORs): CLOSED 2026-05-04 -- six batched BC helpers (`getCredentialMasteryMap`, `getHandbookProgressMap`, `getNodesCitingSectionsBatch`, `getCredentialsByIds`, `getCitationsForSyllabusNodes`, `getKnowledgeNodesForSyllabusLeaves`) and six route loader updates landed via the wave-2 worktree (review-tail-2026-05).
 - **Log-quality sweep** (~6 dx items): mechanical pass replacing `'<func> threw'` with `'<verb> <entity> failed'` and aligning user-visible noun-phrase across logs + `fail()` messages.
-- **Heartbeat correctness tail** (3 correctness items): rating numeric key, local accumulator on POST failure, handbook-asset symlink defence. Three small follow-ons.
+- **Heartbeat correctness tail** (3 correctness items): CLOSED 2026-05-04 -- memory-review numeric rating key (`rating-tally.ts` + threaded `rating: ReviewRating` through `PendingUndo`), local accumulator on POST failure (`heartbeat-client.ts` queue with `onCredit` only on success + `flushPartial` gates on sendBeacon `true`), handbook-asset symlink defence (`resolve-asset-path.ts` two-layer prefix + realpath canonical check, with real-fs unit tests for the symlink-escape attack).
 - **Library completeness UX** (4 ux items + 1 architecture): card-state indicator, topic 404 -> soft empty, regulations empty buckets, isReadable hardcoded. All gated on the library-completeness Wave-2 spec decision.
 - **Route-level CSS extraction** (1 svelte MAJOR): work-package scope -- extract Card / Toast / ScoreMeta / BadgeStatus primitives into `libs/ui`. Token migration is a finishing pass per project rule.
 - **(app)/+layout effect-mirror** (1 svelte MAJOR + 1 svelte MINOR): replace mirror effects with optimistic-override `$derived` + nullable pending state.

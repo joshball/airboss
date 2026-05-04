@@ -14,16 +14,16 @@ review_status: done
 
 ## Status as of 2026-05-04
 
-Re-greped main against every finding. 11 of 14 closed; 3 still-open items left as next-action.
+Re-greped main against every finding. 14 of 14 closed (3 closed via wave-2 heartbeat correctness tail); only the appearance/theme Origin-binding MINOR remains explicitly open as low-priority cosmetic-only.
 
 | Severity | Finding (one-line) | Verdict | Evidence |
 | -------- | ------------------ | ------- | -------- |
 | MAJOR    | Heartbeat queue races on slow networks | CLOSED | `apps/study/src/routes/(app)/library/handbook/[slug]/[chapter]/[section]/+page.svelte:66-99` introduces single-flight gate + `pendingDeltas` shift loop |
 | MAJOR    | Heartbeat lacks visibilitychange / pagehide flush | CLOSED | same file `:148-172` -- `sendBeacon` + `visibilitychange` + `pagehide` listeners |
-| MAJOR    | Memory review tally undo keyed by case-folded label string | STILL OPEN | `apps/study/src/routes/(app)/memory/review/[sessionId]/+page.svelte:206` still `snap.ratingLabel.toLowerCase()`. Next: thread numeric `rating: ReviewRating` into `PendingUndo` and decrement bucket via numeric compare |
+| MAJOR    | Memory review tally undo keyed by case-folded label string | CLOSED | `apps/study/src/routes/(app)/memory/review/[sessionId]/+page.svelte` now threads numeric `rating: ReviewRating` through `PendingUndo`; both increment + decrement go through `ratingTallyKey` (extracted to sibling `rating-tally.ts` with unit tests). Tampered-DOM submits surface error via `isReviewRating` validation. |
 | MAJOR    | Regulations switches drop exhaustiveness | CLOSED | switch logic moved into `libs/bc/study/src/regulations.ts` (`getRegulationsView`); routes are thin adapters now |
-| MINOR    | Heartbeat increments local accumulators on POST failure | STILL OPEN | section-reader still increments before resolve. Next: move `accumulatedSecondsThisLoad++` into the success path, or echo cumulative count in the heartbeat reply and use server-truth |
-| MINOR    | handbook-asset lacks symlink protection | STILL OPEN | `apps/study/src/routes/handbook-asset/[...path]/+server.ts` still does prefix-startswith only. Next: call `realpathSync` after the prefix check; reject 404 if canonical path leaves `HANDBOOKS_DIR` |
+| MINOR    | Heartbeat increments local accumulators on POST failure | CLOSED | section-reader's heartbeat queue extracted to sibling `heartbeat-client.ts` with `onCredit` callback; `accumulatedSecondsThisLoad` only advances on confirmed delivery (`success` result). `flushPartial` (visibilitychange/pagehide) gates on `sendBeacon`'s `true` return or fetch 2xx. Pre-fix unconditional increment is gone. |
+| MINOR    | handbook-asset lacks symlink protection | CLOSED | `apps/study/src/routes/handbook-asset/[...path]/+server.ts` now applies a two-layer guard via sibling `resolve-asset-path.ts`: cheap string-prefix check + `realpathSync` canonical-prefix check. Real-fs unit tests cover the symlink-escape attack (symlinks to outside file + outside dir + path-through-symlinked-dir). |
 | MINOR    | appearance/+server.ts not auth-gated nor Origin-bound | STILL OPEN | `apps/study/src/routes/appearance/+server.ts:17-37` still accepts any-origin POST with no `Origin` check. Same shape on `theme/+server.ts`. Next: gate via `event.request.headers.get('origin') === event.url.origin` (cosmetic effect only, low priority) |
 | MINOR    | extractActivityIds match[1] could be undefined | CLOSED | `apps/study/src/routes/(app)/knowledge/[slug]/learn/+page.server.ts:30-31` adds `if (id !== undefined) ids.add(id);` guard |
 | MINOR    | `pathname.startsWith(ROUTES.MEMORY)` overly broad | CLOSED | `apps/study/src/routes/(app)/+layout.svelte` now uses `pathMatches(pathname, ROUTES.X)` helper across every nav-active derive |
