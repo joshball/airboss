@@ -54,6 +54,8 @@ export {
 	parseFrontmatter,
 	renderMarkdown,
 	sanitizeInlineHtml,
+	setFrontmatterField,
+	setFrontmatterFields,
 	stripFrontmatter,
 } from './markdown';
 export { narrow } from './narrow';

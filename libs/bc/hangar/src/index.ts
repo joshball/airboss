@@ -183,6 +183,15 @@ export {
 	upsertItem,
 } from './review';
 export {
+	type DiscoveredItem,
+	type DiscoveryError,
+	type DiscoveryResult,
+	discoverAllItems,
+} from './review-discovery';
+export { readFrontmatter, writeFrontmatterField, writeFrontmatterFields } from './review-frontmatter';
+export { type LoaderResult, loadReviewItems } from './review-loader';
+export { parseTestPlan, type TestPlanStep } from './review-test-plan';
+export {
 	type BucketFilterCriteria,
 	type CachedFrontmatterFields,
 	type HangarBoardColumnRow,

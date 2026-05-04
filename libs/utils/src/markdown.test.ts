@@ -9,6 +9,8 @@ import {
 	parseFrontmatter,
 	renderMarkdown,
 	sanitizeInlineHtml,
+	setFrontmatterField,
+	setFrontmatterFields,
 	stripFrontmatter,
 } from './markdown';
 
@@ -547,5 +549,73 @@ describe('renderMarkdown -- block-level HTML (handbook tables)', () => {
 		expect(html).toContain('class="handbook-table-source"');
 		expect(html).toContain('href="/handbook-asset/avwx/x/t.html"');
 		expect(html).toContain('Open original table');
+	});
+});
+
+describe('setFrontmatterField', () => {
+	test('rewrites an existing key in place', () => {
+		const md = '---\nstatus: unread\ntitle: Foo\n---\n\nbody text\n';
+		const out = setFrontmatterField(md, 'status', 'reading');
+		expect(out).toBe('---\nstatus: reading\ntitle: Foo\n---\n\nbody text\n');
+		expect(parseFrontmatter(out).entries).toContainEqual({ key: 'status', value: 'reading' });
+		expect(parseFrontmatter(out).entries).toContainEqual({ key: 'title', value: 'Foo' });
+	});
+
+	test('appends a missing key before the closing fence', () => {
+		const md = '---\ntitle: Foo\n---\n\nbody\n';
+		const out = setFrontmatterField(md, 'status', 'reading');
+		expect(out).toBe('---\ntitle: Foo\nstatus: reading\n---\n\nbody\n');
+	});
+
+	test('prepends a frontmatter block when none exists', () => {
+		const md = '# Heading\n\nbody\n';
+		const out = setFrontmatterField(md, 'status', 'reading');
+		expect(out).toBe('---\nstatus: reading\n---\n\n# Heading\n\nbody\n');
+		expect(parseFrontmatter(out).entries).toEqual([{ key: 'status', value: 'reading' }]);
+	});
+
+	test('quotes values that contain a colon', () => {
+		const md = '---\n---\n\nbody\n';
+		const out = setFrontmatterField(md, 'note', 'see http://example.com:80');
+		expect(out).toContain("note: 'see http://example.com:80'");
+		expect(parseFrontmatter(out).entries).toContainEqual({ key: 'note', value: 'see http://example.com:80' });
+	});
+
+	test('quotes YAML reserved bare values', () => {
+		const out = setFrontmatterField('---\n---\n', 'flag', 'true');
+		expect(out).toContain("flag: 'true'");
+	});
+
+	test('quotes numeric-looking values', () => {
+		const out = setFrontmatterField('---\n---\n', 'rev', '7');
+		expect(out).toContain("rev: '7'");
+		expect(parseFrontmatter(out).entries).toContainEqual({ key: 'rev', value: '7' });
+	});
+
+	test('escapes single quotes inside the value', () => {
+		const out = setFrontmatterField('---\n---\n', 'note', "it's");
+		expect(out).toContain("note: 'it''s'");
+		expect(parseFrontmatter(out).entries).toContainEqual({ key: 'note', value: "it's" });
+	});
+
+	test('rejects keys that do not match the YAML key shape', () => {
+		expect(() => setFrontmatterField('---\n---\n', 'has space', 'x')).toThrow(/invalid key/);
+		expect(() => setFrontmatterField('---\n---\n', '', 'x')).toThrow(/invalid key/);
+	});
+
+	test('handles unclosed frontmatter by prepending a fresh block', () => {
+		const md = '---\nincomplete\nbody after\n';
+		const out = setFrontmatterField(md, 'status', 'unread');
+		expect(out.startsWith('---\nstatus: unread\n---\n\n')).toBe(true);
+	});
+});
+
+describe('setFrontmatterFields', () => {
+	test('applies multiple updates in order', () => {
+		const md = '---\nstatus: unread\n---\n\nbody\n';
+		const out = setFrontmatterFields(md, { status: 'reading', review_status: 'pending' });
+		const parsed = parseFrontmatter(out);
+		expect(parsed.entries).toContainEqual({ key: 'status', value: 'reading' });
+		expect(parsed.entries).toContainEqual({ key: 'review_status', value: 'pending' });
 	});
 });

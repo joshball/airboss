@@ -281,11 +281,124 @@ function stripYamlScalarQuotes(value: string): string {
 	if (value.length >= 2) {
 		const first = value.charAt(0);
 		const last = value.charAt(value.length - 1);
-		if ((first === '"' && last === '"') || (first === "'" && last === "'")) {
+		if (first === '"' && last === '"') {
 			return value.slice(1, -1);
+		}
+		if (first === "'" && last === "'") {
+			// YAML single-quote escape: doubled single quote -> literal apostrophe.
+			return value.slice(1, -1).replace(/''/g, "'");
 		}
 	}
 	return value;
+}
+
+/**
+ * Pure-string transform: rewrite the value of one frontmatter field, or add
+ * the field if missing. Preserves all other frontmatter lines and the body
+ * verbatim. If the source has no frontmatter block, prepends one with the
+ * single key.
+ *
+ * Quoting policy: values that contain a colon, are bare YAML keywords
+ * (`true`, `false`, `null`, `yes`, `no`), look numeric, or start with whitespace
+ * are wrapped in single quotes; everything else is written bare. Single quotes
+ * inside the value are doubled per YAML's single-quote escape rule. Values are
+ * normalised to never carry a leading or trailing newline; pass `\n` literals
+ * via a multi-line scalar (out of scope -- this helper is for short scalars).
+ *
+ * Round-trips: `parseFrontmatter(setFrontmatterField(md, k, v)).entries` always
+ * contains `(k, v)`.
+ */
+export function setFrontmatterField(md: string, field: string, value: string): string {
+	if (!isValidFrontmatterKey(field)) {
+		throw new Error(`setFrontmatterField: invalid key '${field}'. Keys must match /^[A-Za-z0-9_-]+$/.`);
+	}
+	const formatted = `${field}: ${formatYamlScalarValue(value)}`;
+	// No leading frontmatter at all -> prepend a fresh block.
+	if (!md.startsWith('---') || (md.charCodeAt(3) !== 0x0a && md.charCodeAt(3) !== 0x0d)) {
+		return `---\n${formatted}\n---\n\n${md}`;
+	}
+	const end = md.indexOf('\n---', 3);
+	if (end < 0) {
+		// Malformed (no closing fence). Treat as no frontmatter; prepend one.
+		return `---\n${formatted}\n---\n\n${md}`;
+	}
+	const head = md.slice(0, end + 1); // up to and including the `\n` before the closing `---`
+	const tail = md.slice(end + 1); // `---\n...rest...`
+	const lines = head.split('\n');
+	// `lines[0]` is the opening `---`; `lines[lines.length - 1]` is empty (the trailing
+	// \n of `head`). Walk the inner lines, find the existing key, and rewrite.
+	const keyPattern = new RegExp(`^\\s*${escapeRegExp(field)}\\s*:`);
+	let replaced = false;
+	for (let i = 1; i < lines.length - 1; i++) {
+		const line = lines[i];
+		if (line === undefined) continue;
+		if (keyPattern.test(line)) {
+			lines[i] = formatted;
+			replaced = true;
+			break;
+		}
+	}
+	if (!replaced) {
+		// Append before the closing fence.
+		lines.splice(lines.length - 1, 0, formatted);
+	}
+	return lines.join('\n') + tail;
+}
+
+/**
+ * Pure-string batch variant of `setFrontmatterField`. Applies updates in
+ * insertion order; the last write to a key wins.
+ */
+export function setFrontmatterFields(md: string, updates: Readonly<Record<string, string>>): string {
+	let out = md;
+	for (const [key, value] of Object.entries(updates)) {
+		out = setFrontmatterField(out, key, value);
+	}
+	return out;
+}
+
+function isValidFrontmatterKey(key: string): boolean {
+	return /^[A-Za-z0-9_-]+$/.test(key);
+}
+
+const YAML_RESERVED_BARE_VALUES: ReadonlySet<string> = new Set([
+	'true',
+	'false',
+	'null',
+	'yes',
+	'no',
+	'~',
+	'',
+	'True',
+	'False',
+	'Null',
+	'Yes',
+	'No',
+	'TRUE',
+	'FALSE',
+	'NULL',
+	'YES',
+	'NO',
+]);
+
+function formatYamlScalarValue(value: string): string {
+	const needsQuote =
+		value === '' ||
+		value !== value.trim() ||
+		value.includes(':') ||
+		value.includes('#') ||
+		value.includes('\n') ||
+		value.includes("'") ||
+		value.includes('"') ||
+		YAML_RESERVED_BARE_VALUES.has(value) ||
+		/^-?\d+(\.\d+)?$/.test(value);
+	if (!needsQuote) return value;
+	// Single-quote the value; double internal single quotes (YAML escape).
+	return `'${value.replace(/'/g, "''")}'`;
+}
+
+function escapeRegExp(literal: string): string {
+	return literal.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 /**
