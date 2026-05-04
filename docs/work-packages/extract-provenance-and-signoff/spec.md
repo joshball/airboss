@@ -4,7 +4,8 @@ product: platform
 feature: extract-provenance-and-signoff
 type: spec
 status: read
-review_status: pending
+review_status: done
+ratified: 2026-05-04
 ---
 
 # Spec: Extract provenance + per-section signoff
@@ -202,8 +203,18 @@ This WP does NOT block:
 
 - Day-to-day extraction. The pipeline keeps working unchanged; sidecars are additive.
 
-## Open questions
+## Ratifications (2026-05-04)
 
-1. **Where do sidecars live?** Co-located (`02-role-of-the-faa.md` + `02-role-of-the-faa.stats.json` + `02-role-of-the-faa.signoff.json`) is straightforward but doubles file count. Alternative: a per-chapter `_signoff/` directory. Recommend co-located -- humans browsing the tree see the sidecars in context.
-2. **Does the reader read sidecars per request?** Or does the seed-script bake sidecar fields into the DB row? Per-request keeps the source-of-truth on disk; baked is faster. Recommend baking with a regen trigger.
-3. **Is signoff per-user?** Today the airboss platform is user-zero only (private, hosted-only). Signoff is single-user. Multi-user signoff is a future concern when the platform opens up.
+User ratified all 3 open questions to the recommended defaults. Build proceeds against the recommendations below.
+
+| Q   | Decision                          | Ratified value                                                                                                                                                            |
+| --- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| (1) | Sidecar location                  | **Co-located** with the section markdown (`02-role-of-the-faa.md` + `02-role-of-the-faa.stats.json` + `02-role-of-the-faa.signoff.json`). Humans see sidecars in context. |
+| (2) | Reader access pattern             | **Bake sidecar fields into the DB row** at seed time with a regen trigger. Per-request disk reads are slower; the seeder is the regen trigger.                            |
+| (3) | Signoff per-user                  | **Single-user (no per-user signoff).** Matches private-hosted single-admin posture. Multi-user signoff is a future concern when the platform opens up.                    |
+
+## Open questions (history -- now ratified above)
+
+1. **Where do sidecars live?** Co-located (`02-role-of-the-faa.md` + `02-role-of-the-faa.stats.json` + `02-role-of-the-faa.signoff.json`) is straightforward but doubles file count. Alternative: a per-chapter `_signoff/` directory. Recommend co-located -- humans browsing the tree see the sidecars in context. **Resolved 2026-05-04: co-located.**
+2. **Does the reader read sidecars per request?** Or does the seed-script bake sidecar fields into the DB row? Per-request keeps the source-of-truth on disk; baked is faster. Recommend baking with a regen trigger. **Resolved 2026-05-04: bake.**
+3. **Is signoff per-user?** Today the airboss platform is user-zero only (private, hosted-only). Signoff is single-user. Multi-user signoff is a future concern when the platform opens up. **Resolved 2026-05-04: single-user.**
