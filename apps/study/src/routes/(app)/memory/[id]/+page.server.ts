@@ -3,6 +3,7 @@ import {
 	CardNotEditableError,
 	CardNotFoundError,
 	CitationNotFoundError,
+	CitationNotOwnedError,
 	CitationSourceNotFoundError,
 	CitationTargetNotFoundError,
 	CitationValidationError,
@@ -218,10 +219,11 @@ export const actions: Actions = {
 		try {
 			await deleteCitation(citationId, user.id);
 		} catch (err) {
-			if (err instanceof CitationNotFoundError) {
-				// `deleteCitation` raises CitationNotFoundError both when the row is
-				// missing and when the caller does not own it. Surface as 404 so the
-				// learner sees a clean "already gone" rather than a server error.
+			if (err instanceof CitationNotFoundError || err instanceof CitationNotOwnedError) {
+				// BC raises a distinct `CitationNotOwnedError` when the row exists but
+				// belongs to another user; both shapes collapse to 404 here for
+				// security obfuscation (the learner shouldn't be able to probe for
+				// other users' citation ids). The BC log retains the discrimination.
 				return fail(404, { intent: 'removeCitation', fieldErrors: { _: 'That citation was not found.' } });
 			}
 			log.error(

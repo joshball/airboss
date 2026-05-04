@@ -47,6 +47,7 @@ import type {
 	CreateGoalInput,
 	UpdateGoalInput,
 } from './credentials.validation';
+import { UpsertReturnedNoRowError } from './errors';
 import {
 	credential,
 	credentialSyllabus,
@@ -264,12 +265,12 @@ export async function createGoal(params: CreateGoalParams, db: Db = defaultDb): 
 				.set({ isPrimary: false, updatedAt: new Date() })
 				.where(and(eq(goal.userId, params.userId), eq(goal.isPrimary, true)));
 			const [inserted] = await tx.insert(goal).values(row).returning();
-			if (!inserted) throw new Error('createGoal failed');
+			if (!inserted) throw new UpsertReturnedNoRowError('goal', id);
 			return inserted;
 		});
 	}
 	const [inserted] = await db.insert(goal).values(row).returning();
-	if (!inserted) throw new Error('createGoal failed');
+	if (!inserted) throw new UpsertReturnedNoRowError('goal', id);
 	return inserted;
 }
 
@@ -349,7 +350,7 @@ export async function addGoalSyllabus(
 			set: { weight: input.weight },
 		})
 		.returning();
-	if (!result) throw new Error('addGoalSyllabus failed');
+	if (!result) throw new UpsertReturnedNoRowError('goal_syllabus', `${existing.id}:${input.syllabusId}`);
 	return result;
 }
 
@@ -405,7 +406,7 @@ export async function addGoalNode(
 			set: { weight: input.weight, notes: input.notes },
 		})
 		.returning();
-	if (!result) throw new Error('addGoalNode failed');
+	if (!result) throw new UpsertReturnedNoRowError('goal_node', `${existing.id}:${input.knowledgeNodeId}`);
 	return result;
 }
 

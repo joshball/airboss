@@ -20,6 +20,7 @@
 import { requireAuth } from '@ab/auth';
 import {
 	CitationNotFoundError,
+	CitationNotOwnedError,
 	CitationSourceNotFoundError,
 	CitationTargetNotFoundError,
 	CitationValidationError,
@@ -137,10 +138,10 @@ export const actions: Actions = {
 			// else's citation even on a scenario they're viewing.
 			await deleteCitation(citationId, user.id);
 		} catch (err) {
-			if (err instanceof CitationNotFoundError) {
-				// Both "row missing" and "not owned by caller" surface as
-				// CitationNotFoundError; treat as 404 so we don't conflate
-				// ownership/missing with a server error.
+			if (err instanceof CitationNotFoundError || err instanceof CitationNotOwnedError) {
+				// "Row missing" and "not owned by caller" are distinct typed
+				// errors at the BC; collapse both to 404 here so a hostile actor
+				// can't probe ids by message. The BC log keeps the discrimination.
 				return fail(404, { intent: 'removeCitation', fieldErrors: { _: 'That citation was not found.' } });
 			}
 			log.error(

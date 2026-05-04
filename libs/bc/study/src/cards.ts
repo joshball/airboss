@@ -27,9 +27,17 @@ import { db as defaultDb } from '@ab/db/connection';
 import { generateCardId } from '@ab/utils';
 import { and, asc, desc, eq, ilike, inArray, isNull, lte, or, type SQL, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
+import { SourceRefRequiredError } from './errors';
 import { type CardRow, type CardStateRow, card, cardSnooze, cardState } from './schema';
 import { fsrsInitialState } from './srs';
 import { newCardSchema, updateCardSchema } from './validation';
+
+// Re-exported so `import { SourceRefRequiredError } from './cards'` (and the
+// barrel) keeps working. The canonical class lives in `./errors` so the same
+// shape is shared with `scenarios.ts`; previously two identically-named
+// classes collided at the barrel and `instanceof` checks silently missed
+// the scenarios case (chunk-2 dx review).
+export { SourceRefRequiredError };
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 
@@ -49,14 +57,6 @@ export class CardNotEditableError extends Error {
 	constructor(public readonly cardId: string) {
 		super(`Card ${cardId} is not editable`);
 		this.name = 'CardNotEditableError';
-	}
-}
-
-/** Raised when sourceType requires sourceRef but none was supplied. */
-export class SourceRefRequiredError extends Error {
-	constructor() {
-		super('source_ref is required when source_type is not personal');
-		this.name = 'SourceRefRequiredError';
 	}
 }
 

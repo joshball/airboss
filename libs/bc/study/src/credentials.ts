@@ -38,6 +38,7 @@ import {
 import { db as defaultDb } from '@ab/db/connection';
 import { and, eq, inArray, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
+import { UpsertReturnedNoRowError } from './errors';
 import { credentialSlugToCertApplicability, getLeafMasteryStateMap, type LeafMasteryState } from './mastery';
 import {
 	type CredentialPrereqRow,
@@ -74,6 +75,22 @@ export class CredentialPrereqCycleError extends Error {
 	) {
 		super(message ?? `Credential prereq cycle detected: ${cycle.join(' -> ')}`);
 		this.name = 'CredentialPrereqCycleError';
+	}
+}
+
+/**
+ * Raised by `validateCredentialDag` when topological sort cannot drain every
+ * node but no walkable cycle was found from the first remaining node. This
+ * happens when prereqs reference credentials that are part of a downstream
+ * cycle, leaving them with non-zero in-degree even though DFS from one
+ * specific entry didn't traverse the loop. Distinct from
+ * `CredentialPrereqCycleError` so callers can render an accurate message
+ * ("these credentials cannot be ordered" vs "this is the cycle path").
+ */
+export class CredentialPrereqUnresolvedNodesError extends Error {
+	constructor(public readonly unresolved: readonly string[]) {
+		super(`Credential prereq DAG has unresolved nodes: ${unresolved.join(', ')}`);
+		this.name = 'CredentialPrereqUnresolvedNodesError';
 	}
 }
 
@@ -707,7 +724,7 @@ export async function upsertCredential(input: NewCredentialRow, db: Db = default
 			},
 		})
 		.returning();
-	if (!row) throw new Error(`upsertCredential failed for ${input.id}`);
+	if (!row) throw new UpsertReturnedNoRowError('credential', input.id);
 	return row;
 }
 
@@ -788,10 +805,15 @@ export function validateCredentialDag(adjacency: ReadonlyMap<string, readonly st
 	if (sorted.length !== inDegree.size) {
 		// Surface the unsorted nodes -- those that still have a non-zero
 		// in-degree are part of (or downstream of) the cycle. Find one cycle
-		// for the error message via a DFS.
+		// for the error message via a DFS. When DFS can't walk a cycle from
+		// the chosen entry, throw the distinct unresolved-nodes error so
+		// callers don't render an unsorted id list as a cycle path.
 		const unsorted = [...inDegree.entries()].filter(([_, d]) => d > 0).map(([n]) => n);
 		const cycle = findCycle(adjacency, unsorted[0] ?? '');
-		throw new CredentialPrereqCycleError(cycle.length > 0 ? cycle : unsorted);
+		if (cycle.length > 0) {
+			throw new CredentialPrereqCycleError(cycle);
+		}
+		throw new CredentialPrereqUnresolvedNodesError(unsorted);
 	}
 	// `inDegree` size may exceed adjacency.size when prereqs reference
 	// credentials not in the proposed map; that's a missing-reference

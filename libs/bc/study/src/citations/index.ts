@@ -14,6 +14,7 @@ export {
 } from './audit';
 export {
 	CitationNotFoundError,
+	CitationNotOwnedError,
 	CitationSourceNotFoundError,
 	CitationTargetNotFoundError,
 	CitationValidationError,

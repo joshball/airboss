@@ -44,7 +44,6 @@ export {
 	getRemovedCards,
 	getRemovedCardsCount,
 	InvalidCardKindError,
-	SourceRefRequiredError,
 	setCardStatus,
 	updateCard,
 } from './cards';
@@ -57,6 +56,7 @@ export {
 	type AuditReport,
 	auditCitations,
 	CitationNotFoundError,
+	CitationNotOwnedError,
 	CitationSourceNotFoundError,
 	CitationTargetNotFoundError,
 	CitationValidationError,
@@ -91,6 +91,7 @@ export type {
 export {
 	CredentialNotFoundError,
 	CredentialPrereqCycleError,
+	CredentialPrereqUnresolvedNodesError,
 	getCertsCoveredBy,
 	getCredentialById,
 	getCredentialBySlug,
@@ -142,6 +143,8 @@ export {
 	getEngineTargeting,
 	getEngineTargetingSnapshot,
 } from './engine-targeting';
+// Cross-file error classes (shared by 2+ modules in the BC).
+export { SourceRefRequiredError, UpsertReturnedNoRowError } from './errors';
 export type { SubmitFeedbackInput } from './feedback';
 export { FeedbackCommentRequiredError, getLatestFeedback, submitFeedback } from './feedback';
 export { formatNextInterval, formatNextIntervalAbsolute } from './formatters';

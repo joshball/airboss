@@ -18,8 +18,8 @@ counts:
 | -------- | ----: | -----: | ---: |
 | critical |     1 |      1 |    0 |
 | major    |     4 |      4 |    0 |
-| minor    |     6 |      2 |    4 |
-| nit      |     4 |      0 |    4 |
+| minor    |     6 |      3 |    3 |
+| nit      |     4 |      1 |    3 |
 
 ### CRITICAL: `applyCertGoalsToPrimaryGoal` non-transactional -- CLOSED
 
@@ -57,9 +57,9 @@ PR #479 (`libs/bc/study/src/credentials.ts:144-165`). Replaced with a single `WI
 
 `libs/bc/study/src/citations/search.ts:12,29`. Imports `escapeLikePattern` from `@ab/db` and uses it inside `buildTermPattern`. Closed.
 
-### MINOR: `goals.ts` bare `Error('createGoal failed')` etc. -- STILL OPEN
+### MINOR: `goals.ts` bare `Error('createGoal failed')` etc. -- CLOSED
 
-`libs/bc/study/src/goals.ts:267,272,352,408`, `credentials.ts:478`, `syllabi.ts:502,534` still throw `new Error('upsertX failed')`. No shared `UpsertReturnedNoRowError` introduced. Same pattern as DX MINOR. Trigger: bundle into a "BC error class hygiene" sweep; introduce one shared `UpsertReturnedNoRowError(entity, id)` in the BC and replace all 7 sites.
+Closed by the chunk-2 BC error-class hygiene sweep. `libs/bc/study/src/errors.ts` adds `UpsertReturnedNoRowError(entity, id)` (canonical home, barreled from `index.ts`). The 6 sites (`goals.ts:268,273,353,409`, `credentials.ts:495`, `syllabi.ts:503,535`) now throw the typed class with structured `entity` + `id` fields, so route layers can map cleanly to a stable 500 and operator log search by error name no longer misses these. `libs/bc/study/src/errors.test.ts` pins the public field contract.
 
 ### MINOR: `createCitation` defence-in-depth pre-read -- STILL OPEN
 
@@ -81,13 +81,13 @@ PR #479 (`libs/bc/study/src/credentials.ts:144-165`). Replaced with a single `WI
 
 `libs/bc/study/src/references.ts:705-730` behavior unchanged. Trigger: roll into the next references read-state refactor; add JSDoc noting the by-design behavior.
 
-### NIT: `validateCredentialDag` non-cycle payload -- STILL OPEN
+### NIT: `validateCredentialDag` non-cycle payload -- CLOSED
 
-`libs/bc/study/src/credentials.ts:558-565` fallback returns unsorted ids in `CredentialPrereqCycleError`. Trigger: split into `CredentialPrereqUnresolvedNodesError` when a real seed authoring task surfaces the case in the wild.
+Closed by the chunk-2 BC error-class hygiene sweep. `libs/bc/study/src/credentials.ts:80-94` adds `CredentialPrereqUnresolvedNodesError(unresolved)`; `validateCredentialDag` (line 573-585) now throws it when DFS cannot find a walkable cycle from the chosen entry, instead of stuffing unsorted ids into a `CredentialPrereqCycleError`. Callers can render an accurate message (cycle path vs unordered set) and discriminate on `err instanceof`. `credentials.test.ts:128-159` pins the public field shape, distinct-instanceof guarantee, and message contents.
 
 ### Final verdict
 
-All 4 majors and the sole CRITICAL closed (transaction-wrap pass landed: `applyCertGoalsToPrimaryGoal` + `updateCard` + `renameSavedDeck`/`deleteSavedDeck` upsert; PR #437, PR #479, the createPlan SQLSTATE inline, plus this PR for the saved-decks/updateCard/applyCertGoals trio). 2 of 6 minors closed (snooze magic strings, escapeLike). 4 nits remain as low-priority follow-ups with concrete triggers. `review_status` flipped to `done`; `status` user-controlled.
+All 4 majors and the sole CRITICAL closed (transaction-wrap pass landed: `applyCertGoalsToPrimaryGoal` + `updateCard` + `renameSavedDeck`/`deleteSavedDeck` upsert; PR #437, PR #479, the createPlan SQLSTATE inline, plus the saved-decks/updateCard/applyCertGoals trio). 3 of 6 minors closed (snooze magic strings, escapeLike, upsert typed errors). 1 of 4 nits closed (`CredentialPrereqUnresolvedNodesError` lift). 3 minors + 3 nits remain as low-priority follow-ups with concrete triggers. `review_status` flipped to `done`; `status` user-controlled.
 
 ## Summary
 

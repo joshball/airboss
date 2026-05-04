@@ -48,6 +48,7 @@ import {
 	sql,
 } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
+import { SourceRefRequiredError } from './errors';
 import {
 	type ScenarioOption,
 	type ScenarioOptionRow,
@@ -57,6 +58,11 @@ import {
 	sessionItemResult,
 } from './schema';
 import { newScenarioSchema, submitAttemptSchema } from './validation';
+
+// Re-exported so existing consumers of `from './scenarios'` and the BC barrel
+// keep working. Canonical class lives in `./errors` and is shared with
+// `cards.ts` -- see the comment there. (chunk-2 dx review.)
+export { SourceRefRequiredError };
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 
@@ -90,18 +96,6 @@ export class InvalidOptionError extends Error {
 	) {
 		super(`Option ${chosenOptionId} is not valid for scenario ${scenarioId}`);
 		this.name = 'InvalidOptionError';
-	}
-}
-
-/**
- * Raised when `sourceType !== 'personal'` but `sourceRef` is missing. Mirrors
- * the identically-named typed error in `cards.ts` so non-personal scenarios
- * and cards produce the same discriminable failure mode for callers.
- */
-export class SourceRefRequiredError extends Error {
-	constructor() {
-		super('source_ref is required when source_type is not personal');
-		this.name = 'SourceRefRequiredError';
 	}
 }
 
