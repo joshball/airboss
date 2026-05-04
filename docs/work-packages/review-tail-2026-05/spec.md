@@ -103,9 +103,9 @@ Mechanical pass replacing `'<func> threw'` with `'<verb> <entity> failed'` and a
 - Local accumulator on POST failure (today the counter increments even on 5xx).
 - Handbook-asset symlink defence (escape-the-prefix attack on `[...path]`).
 
-### Layout effect-mirror remainder (chunk-1 svelte × 2)
+### Layout effect-mirror remainder (chunk-1 svelte × 2) - CLOSED 2026-05-04
 
-Chunk-5's audit (#568) shipped the convergent fix for 5 layouts. Chunk-1 still flags two remaining sites — verify whether the overlap is real or whether chunk-1's INDEX is just stale; close either way.
+Chunk-5's audit (#568) shipped the convergent fix for 5 layouts. Verified against current main on 2026-05-04: the chunk-1-cited site (`apps/study/src/routes/(app)/+layout.svelte:36-41`) is on the optimistic-override `$derived(override ?? data.* ?? DEFAULT_*)` pattern, no `state_referenced_locally` suppression remains in the layout. Both findings (1 MAJOR + 1 related MINOR) closed via #568 - chunk-1 svelte review file Status table updated; INDEX svelte tally adjusted to 4 closed / 4 open. The other `state_referenced_locally` suppressions across `memory/[id]/_panels/`, `sessions/[id]`, `session/start/SessionLegend`, `plans/[id]`, and `knowledge/[slug]/learn` are tied to MAJOR #3 (URL-from-state side-effects) and remain open under the route-level convergent fix.
 
 ### Route-level CSS extraction (chunk-1 svelte MAJOR)
 

@@ -14,18 +14,32 @@ review_status: pending
 
 ## Status as of 2026-05-04
 
-Re-greped main. 2 of 8 closed. The route-level CSS proliferation MAJOR remains the dominant follow-up; the effect-mirror anti-pattern also still in place.
+Re-greped main. 3 of 8 closed (effect-mirror MAJOR + related state-referenced-locally MINOR closed by [PR #568](https://github.com/joshball/airboss/pull/568) chunk-5 ui-library-themes audit; setTimeout-cleanup MAJOR closed by refactor). The route-level CSS proliferation MAJOR remains the dominant follow-up.
 
 | Severity | Finding | Verdict | Evidence |
 | -------- | ------- | ------- | -------- |
 | MAJOR    | Pervasive heavy visual CSS in route files (65 files affected) | STILL OPEN | partial relief via the memory/[id] (-1100 lines) and session/start (-800 lines) `_panels/` extractions; calibration / memory/review / knowledge / sessions still ship 270-628 lines of `<style>`. Next: scope a follow-up work package to extract Card / Toast / ScoreMeta / BadgeStatus / IdentityMenu primitives into `libs/ui` (token migration runs LAST per project rule) |
-| MAJOR    | $effect mirrors props/server data into $state (effect-should-be-derived) | STILL OPEN | `apps/study/src/routes/(app)/+layout.svelte:30-40` still has the two mirror effects on `appearancePref` / `themePref`. Next: replace with optimistic-override `$derived(pendingPref ?? data.pref)` pattern |
+| MAJOR    | $effect mirrors props/server data into $state (effect-should-be-derived) | CLOSED (by PR #568) | `apps/study/src/routes/(app)/+layout.svelte:36-41` is now `$derived(override ?? data.* ?? DEFAULT_*)` over nullable `$state` overrides. The two mirror effects are gone. The chunk-5 audit shipped the convergent optimistic-override fix across all 5 layouts including study `(app)` |
 | MAJOR    | $effect side-effects URL based on state seeded from URL | STILL OPEN | the `state_referenced_locally` suppressed pattern recurs in `memory/[id]` panels, `sessions/[id]`, and `knowledge/[slug]/learn`. Next: prefer event-driven URL writes over reactive sync (handler calls `replaceState` directly) |
 | MAJOR    | $effect missing cleanup on setTimeout (memory/[id] shareToastTimer) | CLOSED (by refactor) | `memory/[id]/+page.svelte` shrunk to 49 lines; toast logic absorbed by panels. Pattern persists in `memory/review/[sessionId]/+page.svelte:75,84` (undo + share toasts) -- both are module-scoped `let` outside `$effect`. Tracked under the related MINOR |
 | MINOR    | Forward reference of `selection` inside $effect at top of layout | STILL OPEN | `(app)/+layout.svelte` still has the hoisted-const dependency. Cosmetic |
 | MINOR    | Module-scoped mutable timer outside $effect | STILL OPEN | `memory/review/[sessionId]/+page.svelte:75,84` -- module-scoped `let undoTimer` and `let shareToastTimer`. Next: move into `$effect` cleanup |
-| MINOR    | `state_referenced_locally` suppression recurs 3+ times | STILL OPEN | tied to the second MAJOR (effect-should-be-derived); fix together |
+| MINOR    | `state_referenced_locally` suppression recurs 3+ times | CLOSED (by PR #568) | the layout suppression is gone (effect-mirror MAJOR closed). Remaining suppressions in `memory/[id]/_panels/CardDetailPanel.svelte`, `sessions/[id]/+page.svelte`, `session/start/SessionLegend.svelte`, `plans/[id]/+page.svelte`, and `knowledge/[slug]/learn/+page.svelte` are URL-mirror sites tracked under MAJOR #3 (URL-from-state side-effects), not the effect-mirror MAJOR closed here |
 | NIT      | Mixed h2 selector grouping in calibration CSS | STILL OPEN | tied to the route-level CSS extraction MAJOR |
+
+## Update as of 2026-05-04 (effect-mirror remainder closed by chunk-5 audit)
+
+The `(app)/+layout.svelte` effect-mirror pattern that anchored both the second MAJOR and the related MINOR was closed by [PR #568](https://github.com/joshball/airboss/pull/568) (chunk-5 ui-library-themes close-out audit), which shipped the convergent optimistic-override `$derived` fix across 5 layouts including the study `(app)` layout.
+
+Verified against current main on 2026-05-04:
+
+- `apps/study/src/routes/(app)/+layout.svelte:36-41` -- mirror effects gone; `appearancePref` / `themePref` are `$derived(override ?? data.* ?? DEFAULT_*)` over nullable `$state` overrides cleared on the next server invalidation.
+- `apps/study/src/routes/(app)/+layout.svelte:64-95` -- `setAppearance` / `setTheme` write the override before the cookie round-trip; the optimistic flip is visible immediately and collapses back to the prop on the next load.
+- No `state_referenced_locally` suppression remains in the layout file (`grep -n state_referenced_locally apps/study/src/routes/\(app\)/+layout.svelte` returns no matches).
+
+The remaining `state_referenced_locally` suppressions in `memory/[id]/_panels/CardDetailPanel.svelte`, `sessions/[id]/+page.svelte`, `session/start/SessionLegend.svelte`, `plans/[id]/+page.svelte`, and `knowledge/[slug]/learn/+page.svelte` are tied to MAJOR #3 (URL-as-source-of-truth seeded into local state). That MAJOR remains open and is tracked separately in `docs/work-packages/review-tail-2026-05/spec.md` under "Layout effect-mirror remainder" / route-level convergent fixes.
+
+Tally update: 3 of 8 closed (setTimeout-cleanup MAJOR, effect-mirror MAJOR, state-referenced-locally MINOR tied to mirror -- all from prior audits or #568). 5 still open: route-level CSS extraction MAJOR (work-package scope), URL-from-state side-effect MAJOR, forward-reference MINOR, module-scoped timer MINOR, calibration h2 NIT.
 
 ## Summary
 

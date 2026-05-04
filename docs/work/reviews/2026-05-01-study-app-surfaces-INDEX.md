@@ -24,10 +24,10 @@ Re-audited every per-category file against current main. **All 5 headline critic
 | Severity | Closed | Open  | Total |
 | -------- | -----: | ----: | ----: |
 | CRITICAL |      6 |     0 |     6 |
-| MAJOR    |     38 |    20 |    58 |
-| MINOR    |     35 |    40 |    75 |
+| MAJOR    |     39 |    19 |    58 |
+| MINOR    |     36 |    39 |    75 |
 | NIT      |     12 |    15 |    27 |
-| **TOTAL**|  **91**|**75** |**166**|
+| **TOTAL**|  **93**|**73** |**166**|
 
 (Note: original critical tally rolled the (dev)-group security finding in -- that was scoped as MAJOR in the security review file but recorded as critical in the index frontmatter. Actual headline criticals on entry were 5: 3 a11y + 1 testing + 1 backend.)
 
@@ -44,7 +44,7 @@ Re-audited every per-category file against current main. **All 5 headline critic
 | testing      |     17 |    4 | done     | savedDeck seeding; cleanup-guard removal; per-test fresh user for memory/review; reps-test ordering                  |
 | dx           |      4 |   14 | pending  | handbook .catch -> typed errors; "verb entity failed" log sweep; login 5xx branch; discovery log level promotion     |
 | ux           |      5 |   13 | pending  | library card-state indicator; topic 404 -> soft empty; Skip Permanently confirm copy; form-error consistency         |
-| svelte       |      2 |    6 | pending  | route-level CSS extraction (work-package); effect-mirror -> derived; module-scoped timers -> $effect cleanup         |
+| svelte       |      4 |    4 | pending  | route-level CSS extraction (work-package); URL-from-state side-effects; module-scoped timers -> $effect cleanup      |
 | backend      |     16 |    2 | done     | regulations-section redundant fetch; per-action ref/chapter re-fetch (handbook chapter actions)                       |
 
 ### Closed-by-rewrite
@@ -60,7 +60,7 @@ Re-audited every per-category file against current main. **All 5 headline critic
 - **Heartbeat correctness tail** (3 correctness items): rating numeric key, local accumulator on POST failure, handbook-asset symlink defence. Three small follow-ons.
 - **Library completeness UX** (4 ux items + 1 architecture): card-state indicator, topic 404 -> soft empty, regulations empty buckets, isReadable hardcoded. All gated on the library-completeness Wave-2 spec decision.
 - **Route-level CSS extraction** (1 svelte MAJOR): work-package scope -- extract Card / Toast / ScoreMeta / BadgeStatus primitives into `libs/ui`. Token migration is a finishing pass per project rule.
-- **(app)/+layout effect-mirror** (1 svelte MAJOR + 1 svelte MINOR): replace mirror effects with optimistic-override `$derived` + nullable pending state.
+- ~~**(app)/+layout effect-mirror** (1 svelte MAJOR + 1 svelte MINOR): replace mirror effects with optimistic-override `$derived` + nullable pending state.~~ CLOSED 2026-05-04 by [PR #568](https://github.com/joshball/airboss/pull/568) (chunk-5 ui-library-themes close-out audit) which shipped the convergent optimistic-override `$derived` fix across 5 layouts including the study `(app)` layout. Verified: no `state_referenced_locally` suppression remains in the layout file.
 - **Backend CRITICAL** (memory/review GET-mutation): single-route fix -- redirect to a Start prompt with form action; never mint a session in `load`.
 - **a11y CRITICAL × 3** -- ALL CLOSED 2026-05-04: MapPanel `aria-label` + `role="cell"` wrapper; radiogroup roving-tabindex via `radio-group-keyboard.ts`; read-suggestion preamble via `ReadSuggestionPanel.svelte`. See a11y review file for evidence.
 
