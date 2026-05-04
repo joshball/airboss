@@ -149,6 +149,7 @@ The AIM extractor (744 entries) and the CFR section extractor are different code
 - **Bucket C reader UX work.** Prev/next, breadcrumbs, reading-progress UI — separate WP.
 - **Adding new corpora.** Wave 7 already shipped SAFO/InFO/CC/NTSB-ALJ; this WP only fixes what's already ingested.
 - **Errata application.** WP-APPLY-ERRATA is a separate, related WP that overlaps the chapter-aware path; we'll resolve any pipeline conflicts as they arise but neither blocks the other.
+- **Full v2 emitter port for ACs.** The 9 promoted ACs use a separate TS pipeline (`libs/sources/src/ac/ingest.ts`), not the Python handbook extractor. Phase 3 ships an AC conformance shim: `acManifestSchema` carries `warnings: []`, the AC ingest writer writes the sibling `warnings.json` (also empty), and the BC reader's corpus dispatch handles AC references uniformly. AC ingest emits zero v2 codes today; porting figure-pairing, table conversion, OCR-leak detection, empty-section policy, and front-matter capture into the AC pipeline is **WP-AC-V2** (separately scheduled).
 
 ## Phases
 

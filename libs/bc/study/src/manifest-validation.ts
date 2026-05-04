@@ -797,6 +797,23 @@ export const acManifestSchema = z.object({
 	body_sha256: z.string().regex(/^[0-9a-f]{64}$/i),
 	sections: z.array(acManifestSectionSchema).default([]),
 	changes: z.array(z.unknown()).default([]),
+	/**
+	 * Pipeline warnings (WP-HANDBOOK-RE-EXTRACTION-V2 Phase 3 conformance
+	 * shim). AC ingest emits an empty array today; the field is plumbed so
+	 * downstream consumers see a uniform shape across handbook + AC corpora.
+	 * Full v2 emitter port for ACs is WP-AC-V2. Legacy pre-shim manifests
+	 * omit the field; default to `[]` so older derivatives keep validating.
+	 */
+	warnings: z
+		.array(
+			z.object({
+				id: z.string().min(1),
+				code: z.string().min(1),
+				section_code: z.string().min(1).nullable(),
+				message: z.string().min(1),
+			}),
+		)
+		.default([]),
 });
 export type AcManifest = z.infer<typeof acManifestSchema>;
 

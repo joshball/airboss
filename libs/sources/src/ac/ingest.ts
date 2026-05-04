@@ -35,7 +35,13 @@ import { commitIngestBatch, getEntryLifecycle } from '../registry/lifecycle.ts';
 import { classifySkipReasons, INGEST_EXIT_CODES } from '../shared/exit-codes.ts';
 import { ShaMismatchError, verifyCachedSha } from '../shared/sha-verify.ts';
 import type { Edition, SourceEntry, SourceId } from '../types.ts';
-import type { AcCorpusIndex, AcCorpusIndexEntry, AcManifestFile, AcManifestSection } from './derivative-reader.ts';
+import type {
+	AcCorpusIndex,
+	AcCorpusIndexEntry,
+	AcManifestFile,
+	AcManifestSection,
+	AcWarning,
+} from './derivative-reader.ts';
 import { type AcExtractionConfig, extractAcSections } from './section-extract.ts';
 
 export const PHASE_8_REVIEWER_ID = 'phase-8-ac-ingestion';
@@ -472,9 +478,33 @@ export async function runAcIngest(args: IngestArgs): Promise<IngestReport> {
 				body_sha256: bodySha,
 				sections,
 				changes: [],
+				// WP-HANDBOOK-RE-EXTRACTION-V2 Phase 3 conformance shim. AC ingest
+				// emits zero v2 codes today; the array exists so the BC reader
+				// (`getOpenWarningsForReference`) sees a uniform shape across
+				// handbook + AC corpora. Full v2 emitter port lands in WP-AC-V2.
+				warnings: [],
 			};
 			const manifestPath = join(docDir, 'manifest.json');
-			writeIfChanged(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
+			const manifestJson = `${JSON.stringify(manifest, null, 2)}\n`;
+			writeIfChanged(manifestPath, manifestJson);
+
+			// Sibling `warnings.json` -- normalized triage-input file the BC
+			// reader (`getOpenWarningsForReference` in `@ab/bc-study`) reads.
+			// Mirrors `handbookWarningsFileSchema` so handbook + AC corpora
+			// share one consumer dispatch. The recorded `manifest_sha256` is
+			// the digest of the manifest bytes we just wrote so the BC reader
+			// can detect drift across re-extractions.
+			const manifestSha = createHash('sha256').update(manifestJson).digest('hex');
+			const warningsFile = {
+				schema_version: 1,
+				document_slug: ac.docSlug,
+				edition: `${ac.docSlug}-${ac.revision}`,
+				manifest_sha256: manifestSha,
+				generated_at: ac.downloaderManifest.fetched_at,
+				warnings: [] as readonly AcWarning[],
+			};
+			const warningsPath = join(docDir, 'warnings.json');
+			writeIfChanged(warningsPath, `${JSON.stringify(warningsFile, null, 2)}\n`);
 
 			const entry = buildSourceEntry({ ac, title, publicationDate });
 			const overlay = getEntryLifecycle(entry.id);
