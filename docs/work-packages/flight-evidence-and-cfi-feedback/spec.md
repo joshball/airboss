@@ -1,340 +1,495 @@
 ---
-title: 'Spec: Flight evidence and CFI feedback'
+title: 'Spec: Flight evidence and teacher feedback'
 product: study
 feature: flight-evidence-and-cfi-feedback
 type: spec
 status: draft
 review_status: pending
 created: 2026-05-04
+revised: 2026-05-04
 ---
 
-Add real-flight evidence to airboss: a student logs a flight, records numbers + optional GPS track, and a CFI delivers feedback online. The flight tile on `/study` becomes real (not a stub). The Practiced pill counts in-the-plane attempts alongside sim scenarios. A CFI gets a teacher-side surface where they review attempts, leave structured feedback, and -- critically -- author their own teaching syllabus with drag-handle-reorderable lessons.
+Add real-flight evidence to airboss alongside a lightweight teacher-feedback layer. A user logs a flight + maneuvers + optional GPS track. Optionally a teacher (CFI, mentor, peer) reviews and comments. The system tracks data; it does not gate. The Practiced pill on `/study` aggregates objectively across self-assessed and teacher-reviewed maneuvers. Teachers can engage frictionlessly via a magic-link debrief flow (no formal "create account" prompt) and, if they want, author their own teaching syllabus with drag-handle reordering.
 
 This is WP 2 of a three-WP arc. WP 1 is [study-home](../study-home/spec.md). WP 3 is [node-render-modes](../node-render-modes/spec.md).
 
 ## Why this WP exists
 
-Today the system has zero in-plane evidence. The `ASSESSMENT_METHODS.DEMONSTRATION` slot is reserved in the schema for exactly this purpose but no surfaces, no storage, no roll-up exist. A returning CFI -- and any pilot training under one -- needs the in-the-plane data to live alongside the recall and scenario data. Without it:
+Today the system has zero in-plane evidence. The `ASSESSMENT_METHODS.DEMONSTRATION` slot exists in the schema for exactly this purpose but no surfaces, no storage, no rollups exist.
 
-- The Practiced pill on `/study` undercounts (only sim, no plane).
-- The CFI has nowhere to leave structured feedback that ties back to ACS leaves.
-- The student has no record of "I flew this maneuver, here are my numbers, here's what the CFI said." It lives in a paper logbook.
+Three things this WP closes:
 
-This WP closes those gaps:
+1. **Flight maneuver attempts.** A user logs a flight + per-maneuver numbers (rotate speed, obstacle clearance, touchdown distance, wind component) + optional GPS track. Each maneuver maps to one or more knowledge nodes / ACS leaves.
+2. **GPS track ingest, vendor-agnostic.** GPX, CSV with `lat,lon,alt,time`, ForeFlight CSV, CloudAhoy CSV. The bytes live in the dev cache (per ADR 018); the row is metadata.
+3. **Teacher feedback, no formal account required.** A teacher (CFI / mentor / peer) gets a magic-link to debrief a specific flight. They land on the flight, leave per-maneuver assessments + notes, save. The system creates a real account behind the scenes (better-auth magic link), but the teacher never sees a "sign up" prompt. Subsequent invites resolve to the same account; their history persists.
 
-1. **Flight maneuver attempts.** A student logs a flight with maneuvers attempted; per-maneuver they record numbers (altitude held, airspeed, touchdown distance, wind component) and optionally upload a GPS track. The attempt links to one or more knowledge nodes / ACS leaves.
-2. **GPS track ingest, vendor-agnostic.** Accept GPX, CSV with `lat,lon,alt,time` columns, or ForeFlight / CloudAhoy / Sentry exports that boil down to one of those shapes. No vendor lock-in. Tracks are derivative artifacts (per ADR 018) -- stored in a developer-local cache for v1, with a clear path to S3 / R2 for cloud later.
-3. **CFI as a second user role with a teacher / student edge.** A CFI invites a student via the existing hangar invite flow. Once linked, the CFI can: see the student's attempts, leave per-maneuver notes, mark a maneuver "satisfactory" / "needs work", roll signoff up to a leaf or a syllabus.
-4. **CFI's teaching syllabus.** A CFI authors lessons in their own ordering -- drag handles, immediate persistence -- that link to ACS leaves the lessons cover. The Course projection on `/study` (from WP 1) gains a fourth seed source: the CFI's syllabus replaces or augments the FAR navigation course default for students of that CFI.
+The Practiced pill **aggregates objectively** -- attempts logged, self-assessed satisfactory, teacher-signed satisfactory. Each is a number. There is no "credit rule" that gates "mastered" behind a teacher signoff. The user (and any teacher they engage) interprets the data; the system tracks it.
 
 ## Anchors
 
 - [study-home](../study-home/spec.md) -- WP 1, the surface that consumes this WP's data.
-- [hangar-invite-flow](../hangar-invite-flow/spec.md) -- the existing invite mechanism extended to support CFI / student edges.
-- [hangar-users-editing](../hangar-users-editing/spec.md) -- the dual-gate write pattern (admin role + audit + ConfirmDialog) we extend to teacher-facing writes.
-- [decision-016](../../decisions/016-cert-syllabus-goal-model/decision.md) -- syllabus / leaf model; this WP adds a new `syllabus.kind = 'teaching'`.
-- [decision-018](../../decisions/018-source-artifact-storage-policy/decision.md) -- developer-local cache for source bytes; GPS tracks ride this convention as derivative bytes.
-- `libs/constants/src/study.ts` -- `ASSESSMENT_METHODS.DEMONSTRATION` already defined; we just light it up.
-- `libs/bc/study/src/mastery.ts` -- `getNodeEvidenceState` already partitions per `AssessmentMethod`; this WP adds a real query for the `demonstration` partition.
-- `libs/auth/src/schema.ts` -- `bauth_user`; we add a sibling `cfi_student_link` table for the teacher / student edge.
+- [hangar-invite-flow](../hangar-invite-flow/spec.md) -- the existing email-invite mechanism. The magic-link debrief flow extends it.
+- [decision-016](../../decisions/016-cert-syllabus-goal-model/decision.md) -- syllabus / leaf model; this WP adds `syllabus.kind = 'teaching'`.
+- [decision-018](../../decisions/018-source-artifact-storage-policy/decision.md) -- developer-local cache for derivative bytes; GPS tracks ride this convention.
+- `libs/constants/src/study.ts` -- `ASSESSMENT_METHODS.DEMONSTRATION` already defined; this WP lights it up.
+- `libs/bc/study/src/mastery.ts` -- `getNodeEvidenceStateMap` partitions per `AssessmentMethod`; we add a sixth fan-out for `flight_maneuver`.
+- `libs/auth/src/schema.ts` -- `bauth_user`. better-auth provides magic-link email auth; we configure that capability.
+- WP 1's `study.user_pref` table -- reused for any teacher-side preferences.
+
+## Decisions (formerly open questions, ratified 2026-05-04)
+
+| # | Question                              | Decision                                                                                                                                                                                                |
+| - | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1 | Teacher surface location              | Under study at `/teach/...`. Not a new app; not under hangar. Promote to `apps/teach/` only when teacher features grow.                                                                                |
+| 2 | Practiced credit rule                 | **No credit rule.** Self-assessed and teacher-signed are tracked as independent counts; mastery rolls up objectively (attempts + outcomes). The teacher is the gate; we are the tracker.                |
+| 3 | GPS track production storage          | Dev-local cache for v1. Cloud-storage adapter follows when second user uploads.                                                                                                                          |
+| 4 | Maneuver kinds scope                  | ASEL + IR (~50 kinds). Covers PPL refresh + IR refresh -- the user's near-term cert goals.                                                                                                              |
+| 5 | Reorder transaction shape             | Single transaction `UPDATE ... FROM unnest(...)`. One audit row.                                                                                                                                         |
+| 6 | Roles architecture                    | New `study.account_role` join table. Roles `student` and `teacher`. Auto-grant `student` on first sign-in. Per-role metadata in jsonb. Ready for future billing / certificate-verification without schema change. |
+| 7 | Multi-teacher Course tab on `/study`  | Most-recently-active teacher's syllabus by default. Dropdown auto-appears when student has 2+ active teacher links. Stored in WP 1's `study.user_pref`.                                                  |
+
+Three open questions remain (the magic-link debrief flow specifics) -- see "Open questions" at end of spec.
+
+Two follow-on entries captured in `docs/platform/IDEAS.md`:
+
+- **ADS-B / GPS auto-grading** -- automatic maneuver detection + envelope grading from GPS tracks. Future enhancement after WP 2 ships and the user has tracks ingested.
+- **Flightbag render modes** -- Learn / Review / Memorize for handbook sections. Future, separate from WP 3's knowledge-node version.
 
 ## In scope
 
-### Data model
+### Roles infrastructure
+
+#### `study.account_role` table
+
+```sql
+CREATE TABLE study.account_role (
+  user_id     text NOT NULL REFERENCES bauth_user(id) ON DELETE CASCADE,
+  role        text NOT NULL,                       -- 'student' | 'teacher' (v1)
+  metadata    jsonb NOT NULL DEFAULT '{}',         -- per-role data
+  granted_at  timestamp NOT NULL DEFAULT now(),
+  revoked_at  timestamp,                           -- soft-end; preserves history
+  PRIMARY KEY (user_id, role)
+);
+
+CREATE INDEX account_role_role_idx ON study.account_role (role);
+```
+
+`metadata` v1:
+
+- `student`: `{ "studying_for": "ppl" | "ir" | "cfi" | "atp" | null }`. Nullable -- user is a student but isn't actively pursuing a cert (just here to read).
+- `teacher`: `{ "kind": "cfi" | "mentor" | "peer", "certificates_verified": false }`. Default kind on auto-create from a debrief invite is `'cfi'` (TBD -- see open questions).
+
+A user can hold both roles simultaneously. Soft-end via `revoked_at IS NOT NULL` preserves history; "active" = `revoked_at IS NULL`.
+
+#### Auto-grant `student` on first sign-in
+
+In `apps/study/src/hooks.server.ts` (or first-sign-in detection elsewhere): on a sign-in where the user has no `account_role` rows, insert `(user_id, 'student', {studying_for: null})`. One row per first-time user.
+
+#### Helpers in `libs/bc/study/src/account-roles.ts`
+
+- `getUserRoles(userId, db?) -> { student?: StudentMeta; teacher?: TeacherMeta }`
+- `hasRole(userId, role, db?) -> boolean`
+- `requireStudent(userId, db?)` / `requireTeacher(userId, db?)` -- throw `NOT_AUTHORIZED` if missing.
+- `grantRole(userId, role, metadata, db?)` -- audit-emitting upsert.
+- `revokeRole(userId, role, db?)` -- soft-end via `revoked_at = now()`. Audit.
+- `setRoleMetadata(userId, role, metadata, db?)` -- partial-merge into existing metadata. Audit.
+
+### Data model -- flight evidence
 
 #### `study.flight_attempt`
 
-A single flight session with one or more maneuvers logged.
+A single flight session.
 
-- `id` (text PK, prefix `fa_`)
-- `user_id` (text, FK -> `bauth_user`, NOT NULL) -- the student.
-- `flight_date` (date, NOT NULL) -- the day of the flight.
-- `aircraft_ident` (text, NOT NULL) -- e.g. "N5293D".
-- `aircraft_type` (text) -- e.g. "C172S". Optional in v1.
-- `from_icao` (text) -- e.g. "KPAO". Optional.
-- `to_icao` (text) -- optional.
-- `total_time_minutes` (integer) -- optional.
-- `notes` (text) -- free-form student notes.
-- `gps_track_id` (text, FK -> `study.flight_track`, nullable) -- one optional track per attempt.
-- `created_at`, `updated_at` (timestamps).
+- `id` text PK, prefix `fa_`
+- `user_id` text NOT NULL FK -> `bauth_user`
+- `flight_date` date NOT NULL
+- `aircraft_ident` text NOT NULL -- e.g. "N5293D"
+- `aircraft_type` text -- e.g. "C172S"; optional
+- `from_icao` text -- optional
+- `to_icao` text -- optional
+- `total_time_minutes` integer -- optional
+- `notes` text
+- `gps_track_id` text FK -> `study.flight_track`, nullable
+- `deleted_at` timestamp -- soft-delete
+- `created_at`, `updated_at` timestamps
+
+Index: `(user_id, flight_date DESC)`.
 
 #### `study.flight_maneuver`
 
 A single maneuver attempt within a flight.
 
-- `id` (text PK, prefix `fm_`)
-- `flight_attempt_id` (text, FK -> `study.flight_attempt`, NOT NULL, ON DELETE CASCADE).
-- `node_id` (text, FK -> `knowledge_node`, nullable) -- the knowledge node this maneuver maps to (e.g., `procedures/short-field-takeoff-and-landing`). Either `node_id` or `syllabus_node_id` must be set.
-- `syllabus_node_id` (text, FK -> `syllabus_node`, nullable) -- the ACS leaf this maneuver maps to (e.g., `PA.IV.E`). Independent of `node_id`; both can be set.
-- `kind` (text, NOT NULL, CHECK in `MANEUVER_KINDS`) -- `'short_field_to'`, `'short_field_ldg'`, `'soft_field_to'`, etc. Closed enum with ~30 values for v1 ASEL maneuvers; extensible.
-- `attempts_made` (integer, NOT NULL, default 1) -- how many times the student tried it on this flight.
-- `target_metric_json` (jsonb, default `{}`) -- maneuver-specific target shape (e.g., `{ "rotate_speed_kts": 55, "obstacle_clearance_ft": 50 }`).
-- `actual_metric_json` (jsonb, default `{}`) -- what the student logged (e.g., `{ "rotate_speed_kts": 58, "obstacle_clearance_ft": 75, "wind_kts": 8, "wind_dir_deg": 280 }`).
-- `self_assessment` (text, CHECK in `SELF_ASSESSMENTS`) -- `'satisfactory'`, `'needs_work'`, `'unable'`. Required.
-- `student_notes` (text) -- per-maneuver notes from the student.
-- `cfi_assessment` (text, CHECK in `CFI_ASSESSMENTS`, nullable) -- `'satisfactory'`, `'needs_work'`, `'unable'`. Set by the CFI; null until the CFI signs off.
-- `cfi_notes` (text, nullable) -- per-maneuver feedback from the CFI.
-- `cfi_signed_off_by` (text, FK -> `bauth_user`, nullable).
-- `cfi_signed_off_at` (timestamp, nullable).
-- `created_at`, `updated_at` (timestamps).
+- `id` text PK, prefix `fm_`
+- `flight_attempt_id` text NOT NULL FK -> `study.flight_attempt` ON DELETE CASCADE
+- `user_id` text NOT NULL FK -> `bauth_user` (denormalized for fast leaf-rollup queries)
+- `node_id` text FK -> `knowledge_node`, nullable
+- `syllabus_node_id` text FK -> `syllabus_node`, nullable
+- `kind` text NOT NULL CHECK in `MANEUVER_KINDS`
+- `attempts_made` integer NOT NULL default 1
+- `target_metric_json` jsonb default `{}` -- maneuver-specific target shape (Zod schema lookup by `kind`)
+- `actual_metric_json` jsonb default `{}` -- what the user logged
+- `self_assessment` text NOT NULL CHECK in `ASSESSMENT_VALUES` -- `'satisfactory'` / `'needs_work'` / `'unable'`
+- `student_notes` text -- per-maneuver notes from the user
+- `teacher_assessment` text CHECK in `ASSESSMENT_VALUES`, nullable
+- `teacher_notes` text, nullable
+- `teacher_signed_off_by` text FK -> `bauth_user`, nullable
+- `teacher_signed_off_at` timestamp, nullable
+- `created_at`, `updated_at` timestamps
 
-CHECK constraint: at least one of `node_id` or `syllabus_node_id` must be set.
-CHECK constraint: `cfi_signed_off_by IS NULL` iff `cfi_assessment IS NULL` iff `cfi_signed_off_at IS NULL` (all-or-nothing trio).
+CHECK constraints:
 
-Composite index on `(user_id, flight_date DESC)` for the student's attempt list.
-Composite index on `(syllabus_node_id, user_id)` for the leaf rollup.
-Composite index on `(node_id, user_id)` for the node rollup.
+- At least one of `node_id` or `syllabus_node_id` must be set.
+- Teacher trio is all-or-nothing: `teacher_assessment IS NULL <=> teacher_signed_off_by IS NULL <=> teacher_signed_off_at IS NULL`.
+
+Indexes:
+
+- `(flight_attempt_id)`
+- `(syllabus_node_id, user_id)` -- leaf rollup
+- `(node_id, user_id)` -- node rollup
+
+**Field naming note:** "teacher" not "cfi" because the teacher might be a mentor or peer, not a certificated instructor. The `kind` lives on the role row, not on every assessment. A maneuver row records "a teacher reviewed this," not "a CFI signed off"; whether that teacher is a CFI is metadata of their role.
 
 #### `study.flight_track`
 
-A GPS track artifact.
+GPS track artifact. Bytes live in the dev cache; row is metadata.
 
-- `id` (text PK, prefix `ft_`)
-- `user_id` (text, FK -> `bauth_user`, NOT NULL).
-- `format` (text, CHECK in `TRACK_FORMATS`) -- `'gpx'`, `'csv'`, `'foreflight_csv'`, `'cloudahoy_csv'`. Closed enum.
-- `cache_path` (text, NOT NULL) -- relative path within the developer-local cache (per ADR 018), e.g. `~/Documents/airboss-cache/flight-tracks/<userId>/<id>.gpx`. The bytes do not live in the DB.
-- `byte_size` (integer, NOT NULL).
-- `point_count` (integer, NOT NULL) -- decoded once on upload, cached.
-- `start_time`, `end_time` (timestamps) -- decoded.
-- `bbox_json` (jsonb) -- `{ "n": 37.5, "s": 37.4, "e": -122.1, "w": -122.2 }` for fast spatial filtering.
-- `created_at` (timestamp).
+- `id` text PK, prefix `ft_`
+- `user_id` text NOT NULL FK -> `bauth_user`
+- `format` text NOT NULL CHECK in `TRACK_FORMATS`
+- `cache_path` text NOT NULL -- relative to cache root (`AIRBOSS_HANDBOOK_CACHE` env var; default `~/Documents/airboss-handbook-cache/flight-tracks/<userId>/<id>.<ext>`)
+- `byte_size` integer NOT NULL
+- `point_count` integer NOT NULL
+- `start_time`, `end_time` timestamps
+- `bbox_json` jsonb -- `{ "n": ..., "s": ..., "e": ..., "w": ... }`
+- `created_at` timestamp
 
-NOT a regular table for the bytes -- the bytes live in the cache, the row is metadata only. Aligns with ADR 018 storage policy.
+#### `study.teacher_student_link`
 
-#### `study.cfi_student_link`
+Teacher / student edge. Replaces what was originally called `cfi_student_link`.
 
-Teacher / student edge.
+- `id` text PK, prefix `tsl_`
+- `teacher_user_id` text NOT NULL FK -> `bauth_user`
+- `student_user_id` text NOT NULL FK -> `bauth_user`
+- `kind` text NOT NULL CHECK in `TEACHER_LINK_KINDS` -- `'cfi'` / `'mentor'` / `'peer'`
+- `status` text NOT NULL CHECK in `TEACHER_LINK_STATUSES` -- `'active'` / `'paused'` / `'ended'`
+- `started_at` timestamp NOT NULL DEFAULT now()
+- `ended_at` timestamp
+- `teacher_notes` text -- private to the teacher
+- `created_at`, `updated_at` timestamps
 
-- `id` (text PK, prefix `cs_`)
-- `cfi_user_id` (text, FK -> `bauth_user`, NOT NULL).
-- `student_user_id` (text, FK -> `bauth_user`, NOT NULL).
-- `status` (text, CHECK in `CFI_STUDENT_LINK_STATUSES`) -- `'active'`, `'paused'`, `'ended'`.
-- `started_at` (timestamp, NOT NULL).
-- `ended_at` (timestamp, nullable).
-- `cfi_notes` (text) -- private, CFI-only notes about the student.
-- `created_at`, `updated_at` (timestamps).
+UNIQUE partial index on `(teacher_user_id, student_user_id)` WHERE `status = 'active'`.
 
-UNIQUE (`cfi_user_id`, `student_user_id`) WHERE `status = 'active'` -- one active link at a time per pair.
+A student can have multiple active teachers (e.g., one CFI + one peer-study-partner). Each link is independent.
+
+#### `study.debrief_invite`
+
+Single-flight magic-link grant. Lets a teacher engage with one flight without setting up a relationship.
+
+> **TODO Q-DEBRIEF-1 (pending user answer): magic-link account creation shape.**
+> User has confirmed: "we will create an account, just don't want them to have to say 'create account' we will have an email from the link." Implementation choice: better-auth magic-link creates a real `bauth_user` row on first link click; the teacher never sees a sign-up form. The phrase "create your account" never appears; the email says "Joshua wants your feedback on his short-field landing today" and the page says "Welcome -- leave feedback below."
+>
+> What's still open: does accepting a debrief invite **also** auto-create a `teacher_student_link` (i.e., implicitly start an ongoing relationship), or does the debrief stand alone and the relationship is opt-in?
+>
+> Recommended (subject to user confirmation): **stand alone in v1.** A debrief invite gives access to **one specific flight**; subsequent flights need new invites. The teacher upgrades to "ongoing teacher" via an explicit "Make this regular" action (either side initiates). Magic links stay genuinely lightweight.
+
+```sql
+CREATE TABLE study.debrief_invite (
+  id                     text PRIMARY KEY,                       -- prefix 'dbi_'
+  flight_attempt_id      text NOT NULL REFERENCES study.flight_attempt(id) ON DELETE CASCADE,
+  inviter_user_id        text NOT NULL REFERENCES bauth_user(id), -- the student
+  invited_email          text NOT NULL,                           -- lowercased
+  token                  text NOT NULL UNIQUE,                    -- opaque random
+  expires_at             timestamp NOT NULL,                      -- default invited_at + 14 days
+  invited_at             timestamp NOT NULL DEFAULT now(),
+  accepted_at            timestamp,                               -- set on first click
+  accepted_user_id       text REFERENCES bauth_user(id),          -- the teacher's account (created via magic link if new)
+  revoked_at             timestamp
+);
+
+CREATE UNIQUE INDEX debrief_invite_active_idx
+  ON study.debrief_invite (flight_attempt_id, invited_email)
+  WHERE accepted_at IS NULL AND revoked_at IS NULL;
+```
+
+Public-route policy: `/teach/debrief/[token]` is the **only** non-auth-gated mutation surface in study (post-magic-link sign-in). The route layer explicitly allows it past the layout-level auth gate.
 
 #### Extend `study.syllabus.kind`
 
-Today: `'acs'`, `'pts'`, `'endorsement'`. Add `'teaching'` -- a CFI-authored teaching syllabus.
+Today: `'acs'`, `'pts'`, `'endorsement'`. Add `'teaching'` -- a user-authored teaching syllabus.
 
 #### `study.syllabus.author_user_id`
 
-New nullable FK column. NULL for FAA-published syllabi (ACS / PTS), set for `teaching` syllabi -- the CFI who authored it.
+New nullable FK column. NULL for FAA-published syllabi. Set for `'teaching'` syllabi -- the teacher who authored it.
 
-#### `study.syllabus_node` -- new column
+#### `study.syllabus_node.display_order`
 
-Add `display_order` (integer, NOT NULL, default 0) -- the CFI-authored ordering for `teaching` syllabi. ACS syllabi keep `display_order = 0` (their order is defined by `code` / area / task structure). Drag-handle reorder in the CFI authoring UI updates this column.
-
-#### Extend `card.assessment_methods` AND `scenario.assessment_methods` -- already exists
-
-These are already `jsonb` arrays of `AssessmentMethod`. No schema change. We start writing `'demonstration'` into `flight_maneuver` rows; the existing `getNodeEvidenceStateMap` partition queries get a sixth fan-out for `flight_maneuver`-derived evidence.
+New `integer NOT NULL DEFAULT 0`. CFI-authored ordering for `'teaching'` syllabi. ACS rows keep `display_order = 0` (their order is defined by `code` / area / task structure).
 
 ### BC reads
 
-`libs/bc/study/src/flight-attempts.ts`:
+#### `libs/bc/study/src/flight-attempts.ts`
 
-- `listFlightAttempts(userId, filters?, db?) -> FlightAttemptRow[]` -- paginated, sortable.
-- `getFlightAttempt(id, userId, db?) -> FlightAttemptWithManeuvers | null` -- includes joined maneuvers.
-- `listManeuversForLeaf(userId, syllabusNodeId, db?) -> FlightManeuverRow[]` -- for leaf detail rollup on `/study`.
-- `listManeuversForNode(userId, nodeId, db?) -> FlightManeuverRow[]` -- for knowledge node detail rollup.
-- `listAttemptsForCfi(cfiUserId, studentUserId?, filters?, db?) -> FlightAttemptRow[]` -- the CFI's review queue.
+- `listFlightAttempts(userId, filters?, db?) -> FlightAttemptRow[]`
+- `getFlightAttempt(id, userId, db?) -> FlightAttemptWithManeuvers | null`
+- `listManeuversForLeaf(userId, syllabusNodeId, db?) -> FlightManeuverRow[]`
+- `listManeuversForNode(userId, nodeId, db?) -> FlightManeuverRow[]`
+- `listAttemptsForTeacher(teacherUserId, studentUserId?, filters?, db?) -> FlightAttemptRow[]` -- a teacher's review queue across all their student links.
 
-`libs/bc/study/src/flight-tracks.ts`:
+#### `libs/bc/study/src/flight-tracks.ts`
 
-- `getFlightTrack(id, userId, db?) -> FlightTrackRow | null`.
-- `parseFlightTrack(bytes, format) -> { points, bbox, startTime, endTime, pointCount }` -- pure parser, lives in a sibling file. No DB.
+- `getFlightTrack(id, userId, db?) -> FlightTrackRow | null` (with row-level ownership check)
+- `parseFlightTrack(bytes, format) -> ParsedTrack` -- pure parser; no DB
 
-`libs/bc/study/src/cfi-links.ts`:
+#### `libs/bc/study/src/teacher-links.ts`
 
-- `listMyCfis(studentUserId, db?) -> CfiStudentLinkRow[]` -- a student's CFIs.
-- `listMyStudents(cfiUserId, db?) -> CfiStudentLinkRow[]` -- a CFI's students.
-- `getActiveCfiLink(cfiUserId, studentUserId, db?) -> CfiStudentLinkRow | null` -- gating helper for CFI write ops.
+- `listMyTeachers(studentUserId, db?) -> TeacherStudentLinkRow[]`
+- `listMyStudents(teacherUserId, db?) -> TeacherStudentLinkRow[]`
+- `getActiveTeacherLink(teacherUserId, studentUserId, db?) -> TeacherStudentLinkRow | null`
+- `assertTeacherLink(teacherUserId, studentUserId, db?)` -- throws NOT_AUTHORIZED if no active link
 
-Extend `libs/bc/study/src/mastery.ts` -- `getNodeEvidenceStateMap` gains a sixth fan-out:
+#### Extend `libs/bc/study/src/mastery.ts`
+
+`getNodeEvidenceStateMap` gains a sixth fan-out for `flight_maneuver`:
 
 ```typescript
 db.select({
   nodeId: sql<string>`coalesce(${flightManeuver.nodeId}, sn.node_id)`,
   attempts: count(),
-  satisfactory: sql<number>`sum(case when ${flightManeuver.cfiAssessment} = 'satisfactory' then 1 else 0 end)`,
+  selfSatisfactory: sql<number>`sum(case when ${flightManeuver.selfAssessment} = 'satisfactory' then 1 else 0 end)`,
+  teacherSatisfactory: sql<number>`sum(case when ${flightManeuver.teacherAssessment} = 'satisfactory' then 1 else 0 end)`,
 })
 .from(flightManeuver)
-.leftJoin(...)  // syllabus_node -> resolved node_id
+.leftJoin(syllabusNode, eq(syllabusNode.id, flightManeuver.syllabusNodeId))
 .where(and(eq(flightManeuver.userId, userId), inArray(...)))
 .groupBy(...)
 ```
 
-The `demonstration` gate now computes against real data instead of `not_applicable`.
+The `demonstration` partition in `NodeEvidenceState` now exposes both counts (self + teacher) without privileging either. The `passing` count is `attempts >= 1 AND (selfSatisfactory + teacherSatisfactory >= 1)` -- "at least one assessment is satisfactory, no matter who made it." That's the simplest objective rule; surfaces can render a richer breakdown if they want.
 
-### BC writes (with auth gates)
+### BC writes
 
-`libs/bc/study/src/flight-attempts.ts`:
+#### Student-side -- `libs/bc/study/src/flight-attempts.ts`
 
-- `createFlightAttempt(input, db?)` -- student creates their own attempt. Audits.
-- `updateFlightAttempt(input, db?)` -- student updates their own. Audits.
-- `deleteFlightAttempt(id, userId, db?)` -- student soft-deletes their own. Audits.
-- `addManeuver(input, db?)` -- student adds a maneuver to their attempt. Audits.
-- `updateManeuverSelfAssessment(input, db?)` -- student updates their self-assessment / notes. Audits.
-- `attachFlightTrack(attemptId, trackId, userId, db?)` -- links an uploaded track to an attempt.
+- `createFlightAttempt(input, db?)` -- audit
+- `updateFlightAttempt(input, db?)` -- audit
+- `softDeleteFlightAttempt(id, userId, db?)` -- audit
+- `addManeuver(input, db?)` -- audit; validates `actualMetricJson` against `MANEUVER_KINDS[kind].actualSchema`
+- `updateManeuverSelfAssessment(input, db?)` -- audit
+- `deleteManeuver(id, userId, db?)` -- audit
+- `attachFlightTrack(attemptId, trackId, userId, db?)` -- ownership-gated; audit
 
-`libs/bc/study/src/cfi-writes.ts`:
+#### Teacher-side -- `libs/bc/study/src/teacher-writes.ts`
 
-- `setCfiAssessment(input, db?)` -- CFI signs off on a maneuver. Validates the CFI / student link is active; validates the CFI hasn't already signed off (or is updating). Audits.
-- `setStudentLinkStatus(input, db?)` -- CFI pauses / ends a link.
+All writes gate on `assertTeacherLink(callerUserId, studentUserId)`:
 
-`libs/bc/study/src/cfi-syllabus-writes.ts`:
+- `setTeacherAssessment(input, db?)` -- update teacher trio atomically
+- `setTeacherStudentLinkStatus(input, db?)` -- pause / end a link
 
-- `createTeachingSyllabus(input, db?)` -- CFI creates a new teaching syllabus.
-- `addLessonToSyllabus(input, db?)` -- adds a leaf reference (linked node or syllabus_node) at a `display_order`.
-- `reorderLessons(syllabusId, orderedLeafIds, db?)` -- atomic reorder. Critical for the drag-handle UX. Single transaction. Audits once with the full `orderedLeafIds` array as `metadata.newOrder`.
+#### Teaching syllabus -- `libs/bc/study/src/teaching-syllabus-writes.ts`
 
-All CFI writes are gated:
+All writes gate on `assertSyllabusAuthor(syllabusId, callerUserId)`:
 
-- Caller must be authenticated.
-- `getActiveCfiLink(callerId, targetStudentId)` must return non-null.
-- For writes on a `teaching` syllabus, caller must be `syllabus.author_user_id`.
+- `createTeachingSyllabus(input, db?)`
+- `addLessonToSyllabus(input, db?)` -- inserts at end (max `display_order` + 1)
+- `removeLessonFromSyllabus(syllabusNodeId, db?)`
+- `reorderLessons(syllabusId, orderedLeafIds, db?)` -- single-transaction `UPDATE ... FROM unnest(...)` per Decision 5. Audit emits one row with full `metadata.newOrder`.
+
+#### Debrief invite flow -- `libs/bc/study/src/debrief-invites.ts`
+
+- `createDebriefInvite(input, db?)` -- student creates an invite for a specific `flight_attempt_id`. Sends email via existing transport. Audit.
+- `getDebriefInviteByToken(token, db?) -> DebriefInviteRow | null` -- public route's loader.
+- `acceptDebriefInvite(input, db?)` -- the magic-link accept handler. Either signs in an existing teacher account or creates one + auto-grants `teacher` role. Marks `accepted_at` + `accepted_user_id`. Audit.
+- `revokeDebriefInvite(input, db?)` -- student revokes. Audit.
+
+> **TODO Q-DEBRIEF-2 (pending user answer): does accepting an invite create a teacher_student_link?**
+>
+> If yes (relationship-on-first-debrief): `acceptDebriefInvite` also creates `teacher_student_link` with `kind = 'cfi'` (TBD see Q-DEBRIEF-3) and `status = 'active'`. Future debriefs from this student to this teacher don't need new invites.
+>
+> If no (debrief-only): the invite grants access to one flight only. The teacher_student_link is opt-in via a separate "Make this a regular teacher" action by either side.
+>
+> Recommendation: **no** in v1 (debrief-only). Magic links stay lightweight; relationships compound deliberately. The "make this regular" action is a one-line BC call (`grantRole` + `createTeacherLink`) and a button on either side's UI.
 
 ### Surfaces
 
-#### Student-side: `/flight`
+#### Student -- `/flight`
 
-- **List view** at `/flight` -- the user's flight attempts, sorted by `flight_date` descending. Empty-state explains how to log the first one.
-- **Detail / edit** at `/flight/[id]` -- attempt summary, list of maneuvers (each editable inline), GPS track viewer (Leaflet map of the track with maneuver markers).
-- **New attempt** at `/flight/new` -- form: date, aircraft, route, total time, notes, optional track upload, then add maneuvers.
-- **Add maneuver** as a sub-form within the attempt detail -- pick a maneuver kind from a dropdown (which ones map to ACS leaves the user is targeting), enter target / actual metrics (the form fields are dynamic per maneuver kind), self-assess, notes.
-- **Track upload** -- a file picker accepting `.gpx`, `.csv`, `.kml` (via converter). On upload, parse via `parseFlightTrack`, write bytes to the cache, create the `flight_track` row, link to the attempt.
+- `/flight` -- list of attempts, sorted `flight_date DESC`. Empty state explains how to log the first.
+- `/flight/new` -- create form: date, aircraft, route, total time, notes, optional track upload.
+- `/flight/[id]` -- detail view + maneuver list + GPS track viewer (Leaflet). Add / edit / delete maneuvers inline.
+- `/flight/[id]/invite` -- form to send a debrief invite (or this is a button on the detail page that opens a Dialog -- design.md decides).
 
-#### CFI-side: `/teach` (under hangar or as a new study sub-app -- TBD)
+#### Teacher -- `/teach`
 
-- **My students** at `/teach/students` -- list of active links.
-- **Student detail** at `/teach/students/[studentId]` -- the student's attempts, recent flight-evidence summary, link to ACS / leaf rollup for that student.
-- **Attempt review** at `/teach/students/[studentId]/attempts/[attemptId]` -- the same detail page the student sees, plus a CFI-only feedback editor: per-maneuver assessment (`satisfactory` / `needs_work` / `unable`) + notes textarea + "Sign off" button.
-- **My syllabus** at `/teach/syllabus` -- the CFI's teaching syllabus authoring page. Drag handles on lessons, immediate persistence via `reorderLessons`. Add lesson, remove lesson, link to ACS leaf.
+- `/teach` -- entry. If user has no `teacher` role, shows "you don't have any students yet" + an explainer.
+- `/teach/students` -- list of active teacher_student_links.
+- `/teach/students/[studentId]` -- per-student summary (recent attempts + leaf rollup).
+- `/teach/students/[studentId]/attempts/[attemptId]` -- attempt review with sign-off form.
+- `/teach/syllabus` -- create / edit teaching syllabus. Drag-handle reorder. ACS-leaf picker.
+- `/teach/debrief/[token]` -- the magic-link landing. Public route gated only by token. Renders the flight + maneuvers; teacher leaves assessments + notes; on save, the magic-link sign-in completes (if not already) and the teacher's identity is attached to the assessment rows.
 
-#### Updated: `/study` (WP 1)
+#### Updated -- `/study` (WP 1)
 
-- Flight tile changes from "WP 2" placeholder to "Log a flight" / "N attempts pending CFI" badge. Click goes to `/flight`.
-- The Practiced pill on the progress strip now sums sim scenarios + flight maneuvers (where `cfi_assessment = 'satisfactory'` for full credit; `self_assessment = 'satisfactory'` for partial credit -- exact rule TBD; see design.md).
-- Per-leaf P pill in the map updates to reflect demonstration evidence too.
-- Course projection grows a fourth seed source: if the active student has an active CFI link with a `teaching` syllabus, that syllabus is the default Course projection (FAR nav course remains as a fallback).
+- Flight tile changes from "WP 2" placeholder to live: badge shows `"N flights logged"` or `"log a flight"` per state. Click -> `/flight`.
+- Practiced pill on progress strip aggregates `flight_maneuver` evidence per Decision 2 (no credit rule -- just objective counts).
+- Per-leaf P pill in the map reflects demonstration evidence.
+- Course projection grows a fourth seed source: if the active student has an active teacher link with a `kind = 'teaching'` syllabus, that syllabus seeds the Course tab. Multi-teacher behavior per Decision 7 (most-recently-active by default; dropdown when 2+ active).
 
 ### Constants
 
-- `MANEUVER_KINDS` -- closed enum, ~30 values. Each entry has a label, an ACS leaf code (or list), and a `target_metric_schema` (Zod schema for the target / actual JSON shape).
-- `SELF_ASSESSMENTS` / `CFI_ASSESSMENTS` -- both `['satisfactory', 'needs_work', 'unable']`.
-- `TRACK_FORMATS` -- `['gpx', 'csv', 'foreflight_csv', 'cloudahoy_csv']`.
-- `CFI_STUDENT_LINK_STATUSES` -- `['active', 'paused', 'ended']`.
-- `ROUTES.FLIGHT`, `ROUTES.FLIGHT_NEW`, `ROUTES.FLIGHT_DETAIL(id)`, `ROUTES.TEACH_*`.
-- `AUDIT_TARGETS.FLIGHT_ATTEMPT`, `FLIGHT_MANEUVER`, `CFI_STUDENT_LINK`, `TEACHING_SYLLABUS`.
+- `MANEUVER_KINDS` -- closed enum, ~50 values covering ASEL + IR. Each entry: `{ label, leafCodes, targetSchema, actualSchema }`. Authored in `libs/constants/src/maneuvers.ts`.
+- `MANEUVER_KIND_VALUES` -- string array of keys.
+- `ASSESSMENT_VALUES = ['satisfactory', 'needs_work', 'unable']`.
+- `TRACK_FORMATS = ['gpx', 'csv', 'foreflight_csv', 'cloudahoy_csv']`.
+- `TEACHER_LINK_KINDS = ['cfi', 'mentor', 'peer']`.
+- `TEACHER_LINK_STATUSES = ['active', 'paused', 'ended']`.
+- `ACCOUNT_ROLES = ['student', 'teacher']`.
+- `STUDENT_STUDYING_FOR_VALUES = ['ppl', 'ir', 'cfi', 'atp', null]`.
+- `ROUTES.FLIGHT`, `FLIGHT_NEW`, `FLIGHT_DETAIL(id)`, `FLIGHT_INVITE(id)`, `TEACH`, `TEACH_STUDENTS`, `TEACH_STUDENT_DETAIL(id)`, `TEACH_ATTEMPT_REVIEW(studentId, attemptId)`, `TEACH_SYLLABUS`, `TEACH_DEBRIEF(token)`.
+- `AUDIT_TARGETS.{ACCOUNT_ROLE, FLIGHT_ATTEMPT, FLIGHT_MANEUVER, FLIGHT_TRACK, TEACHER_STUDENT_LINK, TEACHING_SYLLABUS, DEBRIEF_INVITE}`.
+
+### Better-auth magic-link configuration
+
+Better-auth (already in the stack) supports magic-link plugins. Configure in `libs/auth/src/auth.ts`:
+
+- Enable magic-link plugin.
+- Magic-link email template named `debrief-invite`: subject "[inviter] would like your feedback on a flight"; body explains the flight + a "Open feedback link" CTA.
+- Magic-link tokens are single-use; subsequent visits to the same `/teach/debrief/[token]` URL after acceptance redirect to a "Request a new link" page (the original token is consumed).
+- The teacher's session, once established via the magic link, is a regular better-auth session. They can navigate to other `/teach/...` routes (their own students list, syllabus, etc.) without re-authenticating.
 
 ### Audit emission
 
-Every mutation audits per the existing pattern:
-
-- `flight_attempt` create / update / delete.
-- `flight_maneuver` add / update / delete.
-- `flight_track` upload / delete.
-- `cfi_assessment` set.
-- `cfi_student_link` create (via invite accept) / status change.
-- `teaching_syllabus` create / lesson add / lesson remove / lesson reorder (single audit row per reorder, with the full new order in `metadata`).
-
-### Hangar invite flow extension
-
-The existing invite flow already invites users with a `proposed_role`. Add a new `relationship: { kind: 'cfi_student_link', cfiUserId: string }` field to the invite -- when the recipient accepts, an active `cfi_student_link` row is created in the same transaction as the user. v1: only CFIs can invite as `cfi_student_link`; the role check happens in `createInvitation`.
+Every mutation audits per the existing pattern. New `AUDIT_TARGETS` entries listed above. One audit row per write (reorder collapses to one row with full `newOrder` array per Decision 5).
 
 ## Behavior
 
 ### Student logs a flight
 
-1. Student navigates to `/flight/new`.
-2. Fills date, aircraft ident, route, optional total time, optional notes.
-3. Optionally uploads a GPS track.
-4. Clicks "Save" -> `flight_attempt` row created, redirects to `/flight/[id]`.
-5. Adds maneuvers one at a time: pick from `MANEUVER_KINDS` dropdown (suggestions filtered by user's active goals), fill target / actual metrics, self-assess, save.
-6. Each maneuver appears on the detail page; the leaf rollup on `/study` updates.
+1. Navigate `/flight/new`. Fill date / aircraft / route. Save.
+2. Land on `/flight/[id]`. Add maneuvers one at a time -- pick from `MANEUVER_KINDS` dropdown (filtered by user's primary goal cert), enter target / actual metrics, self-assess, save.
+3. Optionally upload GPX. Track viewer renders below the maneuver list.
 
-### CFI signs off on a maneuver
+### Student invites a teacher to debrief
 
-1. CFI navigates to `/teach/students/[studentId]/attempts/[attemptId]`.
-2. Per maneuver: picks an assessment, writes notes, clicks "Sign off".
-3. `setCfiAssessment` updates the row + audits. Student sees the CFI's assessment on their next visit.
+1. From `/flight/[id]`, click "Invite a teacher to review."
+2. Modal: enter email + optional message.
+3. Submit -> `createDebriefInvite` runs; magic-link email sent to the teacher.
 
-### CFI authors a teaching syllabus
+### Teacher receives + responds (magic link, no account creation prompt)
 
-1. CFI navigates to `/teach/syllabus`.
-2. Empty state -> "Create teaching syllabus" -> form: title, description -> creates row with `kind: 'teaching'`, `author_user_id = cfi.id`.
-3. Adds lessons: click "Add lesson", search ACS leaves, pick one or more, set lesson title, click save -> `syllabus_node` row(s) created, linked.
-4. Reorders: drags a lesson by its handle, drops in new position, `reorderLessons` fires immediately. Optimistic UI; rollback on error.
+1. Email: "Joshua wants your feedback on his short-field landing today. [Open feedback]".
+2. Click link -> better-auth magic-link verifies the token -> creates `bauth_user` row if new + auto-grants `teacher` role -> session established.
+3. Land on `/teach/debrief/[token]`. See the flight summary, maneuver list, GPS track.
+4. Per maneuver: pick assessment, write notes, click "Save."
+5. `setTeacherAssessment` writes the trio atomically. Audit row.
+6. Done. Page shows "Thanks. Your feedback has been sent to Joshua."
+
+The teacher never sees "create your account" or "set a password." The phrase doesn't appear anywhere in the flow.
+
+### Teacher signs off on subsequent flights
+
+> Per pending Q-DEBRIEF-2: this depends on whether accepting a debrief creates a teacher_student_link.
+
+If link auto-created on first debrief:
+
+- Future debriefs from the same student appear in the teacher's `/teach/students` queue automatically. No new magic link required.
+
+If debrief-only (recommended v1):
+
+- Future flights need new debrief invites. Each invite grants access to one flight.
+- Either side can "promote" to a teacher_student_link via an explicit action (`/teach/students/[studentId]/promote` or `/flight/[id]/make-regular-teacher`).
+
+### Teacher authors a teaching syllabus
+
+1. Navigate `/teach/syllabus`.
+2. Empty state: "Create a teaching syllabus."
+3. Form: title + description -> `createTeachingSyllabus` writes a `syllabus` row with `kind = 'teaching'` + `author_user_id = caller`.
+4. Add lessons via "Add lesson" -> ACS-leaf picker (search syllabus_node rows where `kind = 'acs'`) -> select one or more leaves -> set lesson title -> save. New `syllabus_node` rows linked to the teaching syllabus, `display_order` = current max + 1.
+5. Reorder via drag handle -> drop event triggers `reorderLessons(syllabusId, orderedLeafIds)` -> single transaction updates all `display_order` values atomically. Optimistic UI; rollback on error.
+6. The teaching syllabus seeds the Course tab on `/study` for all students of this teacher (via active `teacher_student_link`).
 
 ### Track upload + parse
 
-1. User picks a `.gpx` / `.csv` / `.kml` file.
-2. Server-side: read bytes, dispatch to `parseFlightTrack(bytes, format)`.
-3. Parser returns `{ points, bbox, startTime, endTime, pointCount }`.
-4. Bytes written to cache at `~/Documents/airboss-cache/flight-tracks/<userId>/<trackId>.<ext>`.
-5. `flight_track` row inserted with metadata.
-6. If linked to an attempt: `attempt.gps_track_id` set.
+1. Pick `.gpx` / `.csv` / `.kml` (kml via converter in v1; gpx + csv native).
+2. Server: read bytes, dispatch to `parseFlightTrack(bytes, format)`.
+3. Parser returns `{ points, bbox, startTime, endTime, pointCount }` -- pure function.
+4. Bytes written to cache: `<AIRBOSS_HANDBOOK_CACHE>/flight-tracks/<userId>/<trackId>.<ext>`.
+5. `flight_track` row inserted.
+6. `flight_attempt.gps_track_id` linked.
 
 ## Validation
 
-| Field                                  | Rule                                                                                            |
-| -------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| `flight_attempt.flight_date`           | Must be <= today; not more than 5 years past.                                                  |
-| `flight_attempt.aircraft_ident`        | Required; trimmed; uppercased; matches `^[A-Z0-9-]{2,10}$`.                                     |
-| `flight_attempt.total_time_minutes`    | If set: positive integer, <= 1440 (24h sanity).                                                 |
-| `flight_maneuver.kind`                 | Must be in `MANEUVER_KINDS`.                                                                    |
-| `flight_maneuver.attempts_made`        | Positive integer, <= 50.                                                                        |
-| `flight_maneuver.actual_metric_json`   | Must validate against the Zod schema for `MANEUVER_KINDS[kind].target_metric_schema`.           |
-| `flight_maneuver.self_assessment`      | Required, in `SELF_ASSESSMENTS`.                                                                |
-| `flight_maneuver.cfi_assessment`       | If set, in `CFI_ASSESSMENTS`. All-or-nothing trio enforced by CHECK.                            |
-| `flight_track` upload                  | <= 25 MB. Format must be in `TRACK_FORMATS`. Parser must succeed; reject unparseable files.     |
-| `cfi_student_link` (CFI write gate)    | Caller must have an active link to the target student.                                          |
-| `teaching_syllabus` write              | Caller must be the `author_user_id`.                                                            |
+| Field                                     | Rule                                                                                                     |
+| ----------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `account_role.role`                       | In `ACCOUNT_ROLES`.                                                                                       |
+| `account_role.metadata` (student)         | Zod: `{ studying_for: STUDENT_STUDYING_FOR_VALUES \| null }`.                                             |
+| `account_role.metadata` (teacher)         | Zod: `{ kind: TEACHER_LINK_KINDS, certificates_verified: boolean }`.                                      |
+| `flight_attempt.flight_date`              | <= today; not more than 5 years past.                                                                     |
+| `flight_attempt.aircraft_ident`           | Required; trimmed; uppercased; matches `^[A-Z0-9-]{2,10}$`.                                               |
+| `flight_attempt.total_time_minutes`       | If set: positive integer, <= 1440.                                                                        |
+| `flight_maneuver.kind`                    | In `MANEUVER_KINDS`.                                                                                      |
+| `flight_maneuver.attempts_made`           | Positive integer, <= 50.                                                                                  |
+| `flight_maneuver.actual_metric_json`      | Validates against `MANEUVER_KINDS[kind].actualSchema`.                                                    |
+| `flight_maneuver.self_assessment`         | Required, in `ASSESSMENT_VALUES`.                                                                          |
+| `flight_maneuver.teacher_assessment`      | If set, in `ASSESSMENT_VALUES`. Trio CHECK enforces all-or-nothing.                                       |
+| `flight_track` upload                     | <= 25 MB. Format in `TRACK_FORMATS`. Parser must succeed.                                                 |
+| Teacher writes (gating)                   | Caller must have an active `teacher_student_link` to the target student. (Or the matching debrief invite.) |
+| Teaching syllabus writes (gating)         | Caller must equal `syllabus.author_user_id`.                                                              |
+| `debrief_invite.invited_email`            | Lowercased; valid email format.                                                                            |
+| `debrief_invite.expires_at`               | Default `invited_at + 14 days`; configurable via constant.                                                |
 
 ## Edge cases
 
-| Trigger                                                                          | What happens                                                                                                                                              |
-| -------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Student uploads a corrupt GPS file                                               | Parser throws; the upload is rejected with a clear error ("Could not parse GPS track. Supported: GPX, CSV with lat,lon,alt,time"). No row created.        |
-| Student logs a flight, CFI signs off, then student edits the maneuver            | Edit allowed. Sign-off is **not** invalidated automatically. CFI sees the edit timestamp + a "post-signoff edit" badge in the review UI; can re-sign-off. |
-| CFI ends the link, then student tries to view CFI feedback on past maneuvers     | Past feedback persists (the row's `cfi_assessment` is durable). New writes blocked. Read access for the student persists.                                  |
-| Two CFIs both link to the same student                                           | Allowed. UNIQUE constraint is per `(cfi, student)` pair, not per student. Each CFI sees their own attempts review queue.                                  |
-| CFI tries to reorder lessons in a syllabus authored by a different CFI           | `reorderLessons` rejects with `NOT_AUTHORIZED`. Audit captures the attempt.                                                                                |
-| Student deletes an attempt                                                       | Soft-delete; cascades to maneuvers via `ON DELETE CASCADE`. Audits the delete.                                                                            |
-| Maneuver kind has no `target_metric_schema`                                      | `actual_metric_json` defaults to `{}`; form renders only `student_notes` and `self_assessment`.                                                            |
-| Two students share a tail number                                                 | Aircraft ident is free-form text per row; no normalization across users.                                                                                  |
-| GPS track file is private to one user                                            | `flight_track.user_id` enforces row-level ownership. CFI can view tracks attached to their student's attempts via the link gate.                          |
+| Trigger                                                                                          | What happens                                                                                                                                                |
+| ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Student uploads corrupt GPS file                                                                 | Parser throws; upload rejected with clear error. No row created.                                                                                            |
+| Student edits a maneuver after teacher sign-off                                                  | Edit allowed. Teacher trio not invalidated automatically. Teacher sees a "post-signoff edit" badge with the diff; can re-sign-off if desired.                |
+| Teacher's link goes `'ended'`; student tries to view past assessments                            | Past assessments persist (durable row state). Read access for the student persists. New writes blocked by gating.                                            |
+| Student has multiple active teachers                                                             | Allowed. Each link is independent. Course projection picks most-recently-active by default; dropdown surfaces when 2+ exist (Decision 7).                    |
+| Teacher reorders lessons in a syllabus authored by a different teacher                           | `assertSyllabusAuthor` rejects. Audit captures the attempt.                                                                                                  |
+| Student deletes a flight                                                                         | Soft-delete; cascades to maneuvers via FK. Audit.                                                                                                            |
+| Maneuver kind has no `actualSchema` defined                                                      | Form renders only `student_notes` + `self_assessment`; `actual_metric_json = {}`.                                                                            |
+| Two students share a tail number                                                                 | Aircraft ident is free-form text per row; no normalization across users.                                                                                    |
+| GPS track file private to one user                                                               | `flight_track.user_id` enforces row-level ownership. Teacher can view tracks attached to their student's attempts via the link gate.                          |
+| Teacher receives a debrief invite for an account that already exists                             | Magic-link signs them into the existing account (matched by email). No duplicate accounts.                                                                  |
+| Teacher's existing account doesn't have `teacher` role                                           | `acceptDebriefInvite` auto-grants the role.                                                                                                                  |
+| Student revokes a pending debrief invite before the teacher clicks                               | `revokeDebriefInvite` sets `revoked_at`. Subsequent click on the link returns "This invite has been revoked." No account creation.                          |
+| Debrief invite expires before click                                                              | `expires_at < now()` -> "This invite has expired. Ask Joshua for a new one."                                                                                |
+| Magic link clicked twice                                                                         | First click marks `accepted_at`. Subsequent clicks: if same email/session -> redirect to `/teach/debrief/[token]` and show the existing feedback page. If different -> magic-link rejects (token consumed). |
+| Teacher hasn't filled `studying_for` (their `student` role is bare)                              | Their `/study` page works; progress strip shows "no goal" banner per WP 1.                                                                                  |
+| First-time sign-in with no `account_role` rows                                                   | Hooks layer auto-grants `student` with `studying_for: null`.                                                                                                |
 
-## Open questions
+## Open questions (TODO)
 
-1. **Where does CFI surface live?** Under hangar (`hangar/teach/...`)? Or a new study sub-app (`apps/teach/`)? Or under study (`apps/study/teach/...`)? Recommendation: under study at `/teach/...` for v1; promote to its own surface app (`apps/teach/`) when CFI features grow.
-2. **Practiced pill credit rule.** Does a `cfi_assessment = 'satisfactory'` count for full credit, while `self_assessment = 'satisfactory'` counts partial? Or only CFI-signed counts? Recommendation: CFI-signed = full credit; self-assessed counts as "covered, not mastered" (the existing `covered` vs `mastered` partition handles this).
-3. **GPS track storage in production.** Local cache is dev-only. Production needs S3 / R2 or similar. Recommendation: dev-only for v1 (Joshua is user zero); cloud-storage adapter is a follow-up WP when a second user joins.
-4. **Maneuver kinds enum scope.** ASEL-only for v1? Or include AMEL / IR / commercial? Recommendation: ASEL-only for v1; extend additively as new certs come into focus.
-5. **Reorder transaction shape.** `reorderLessons` is a single transaction over N rows. For very large syllabi (50+ lessons) this may lock briefly. Acceptable? Recommendation: yes, even 100 rows is sub-millisecond; revisit only if a real CFI authors > 200 lessons.
-6. **CFI invite role mapping.** When a CFI invites a student, what role does the student get? Recommendation: same role as a regular study user; the CFI / student edge is independent of the role enum.
-7. **Multi-CFI displays.** If a student has two CFIs, whose `teaching` syllabus seeds the Course projection? Recommendation: the most-recently-active link's CFI; user can switch via a dropdown.
+These three remain pending user answer (flagged inline in the spec as `TODO Q-DEBRIEF-1/2/3`):
+
+1. **Q-DEBRIEF-1: Magic-link flow shape (final confirmation).** The user has confirmed: real account, but no formal "create your account" prompt. Implementation uses better-auth magic-link plugin; teacher never sees signup UI. **Confirm there are no remaining concerns before locking.**
+2. **Q-DEBRIEF-2: Single-flight grant vs ongoing relationship.** Does accepting a debrief invite auto-create a `teacher_student_link`, or does the relationship stay opt-in? Recommended: opt-in (debrief grants access to one flight only). User to confirm.
+3. **Q-DEBRIEF-3: Default `teacher_student_link.kind` on auto-creation.** When a magic-link debrief turns into an ongoing relationship, what's the default kind? `'cfi'` (assumes the inviter wanted a CFI), `'mentor'` (lower assumption), or "ask the teacher when they accept"? Recommended: `'cfi'` (matches the most common case; teacher can edit their kind in role metadata anytime).
+
+Until these three answers ratify, the magic-link debrief sections (BC + surface + Behavior) are the spec's least-frozen content. Everything else is final.
 
 ## Out of scope
 
 - **No FAA logbook integration.** Logbook ingest is a separate corpus / ingestion pipeline.
-- **No automatic maneuver detection from GPS tracks** (CloudAhoy-style). The student declares which maneuvers they flew. Auto-detection is a future enhancement.
+- **No automatic maneuver detection from GPS tracks** (CloudAhoy-style auto-grading). Captured as IDEA `ADS-B / GPS auto-grading` for post-WP-2.
 - **No video / audio upload.** Tracks only.
-- **No real-time CFI/student chat.** Notes are async.
+- **No real-time chat between teacher and student.** Notes are async.
 - **No grading rubrics beyond the three-state assessment.** A 1-5 star rubric per maneuver is post-MVP.
-- **No payment / billing.** CFI invites their student; no transaction.
-- **No CFI directory.** Students can't browse / search CFIs; CFI must invite by email.
-- **No multi-user editing of one teaching syllabus.** Single-author v1.
+- **No payment / billing.** Schema is built so a future `subscription` table can FK into `account_role` cleanly; no billing surfaces in this WP.
+- **No teacher / mentor directory.** Teachers must be invited; not browsable.
+- **No multi-author editing of one teaching syllabus.** Single-author v1.
 - **No track diff / comparison across attempts.** Each track stands alone.
-- **No checkride scheduling, endorsement signing, or 8710 generation.** Out of scope; would be its own large WP.
+- **No checkride scheduling, endorsement signing, or 8710 generation.**
+- **No automatic role promotion** beyond `student` (auto-granted on first sign-in) and `teacher` (auto-granted on first debrief acceptance). All other role transitions are explicit.
+- **No certificate verification.** `teacher.metadata.certificates_verified` always defaults to `false`. Verification (FAA airman cert lookup, document upload, etc.) is a future WP if/when the platform monetizes around CFI legitimacy.
+- **No cloud GPS-track storage.** Dev-local cache only; cloud adapter is a follow-up WP triggered by second uploader.
 
 ## What "done" looks like
 
-- Joshua (as student) logs a flight from `/flight/new`, adds three short-field landing maneuvers with target / actual metrics, optionally uploads a GPX track, sees the attempt at `/flight/[id]`.
-- Joshua (as CFI) reviews a different student's attempt at `/teach/students/[id]/attempts/[id]`, signs off on each maneuver with notes, sees them propagate.
-- Joshua (as CFI) authors a 5-lesson teaching syllabus at `/teach/syllabus`, drags lesson #5 to position #2, sees the new order persist on reload.
-- The student's `/study` page reflects the in-plane evidence: Practiced pill counts the maneuvers, ACS map leaf rows show `P:●` where the CFI has signed off, the Course projection seeds from the CFI's teaching syllabus.
+- Joshua (as student) logs a flight from `/flight/new`, adds three short-field landing maneuvers with target/actual metrics, optionally uploads a GPX track, sees the attempt at `/flight/[id]`.
+- Joshua sends a debrief invite to a teacher's email. Teacher clicks the magic link, lands on `/teach/debrief/[token]`, leaves per-maneuver feedback. Never sees a sign-up form. Teacher's account exists; they didn't notice.
+- Joshua (with `teacher` role auto-granted somehow -- either through inviting himself for testing, or another path) reviews a different student's attempt at `/teach/students/[id]/attempts/[id]`, signs off on each maneuver with notes, sees them propagate.
+- Joshua (as teacher) authors a 5-lesson teaching syllabus at `/teach/syllabus`, drags lesson #5 to position #2, sees the new order persist on reload.
+- Student's `/study` page reflects the in-plane evidence: Practiced pill counts maneuvers (objectively, no credit gate), ACS map leaf rows show evidence on relevant leaves, Course projection seeds from the teacher's syllabus when present.
 - All BC writes audit. `bun run check` clean. Vitest + Playwright green.
+- Three open questions (Q-DEBRIEF-1/2/3) resolved before final ship; the spec's TODO blocks updated to "decided."
