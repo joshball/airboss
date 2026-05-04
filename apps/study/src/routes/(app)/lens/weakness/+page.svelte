@@ -24,13 +24,13 @@ function reasonText(area: {
 </script>
 
 <svelte:head>
-	<title>Weakness lens -- airboss</title>
+	<title>What to study next -- airboss</title>
 </svelte:head>
 
 <section class="page">
 	<PageHeader
-		eyebrow="Lens"
-		title="Weakness lens"
+		eyebrow="Study by"
+		title="What to study next"
 		subtitle="Domains ranked by combined card accuracy, rep accuracy, and overdue load over the last 30 days. Bucketed by severity."
 	/>
 

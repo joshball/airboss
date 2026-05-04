@@ -14,21 +14,23 @@ export const lensBody: HelpPageBody = {
 		{
 			id: 'overview',
 			title: 'Overview',
-			body: `A lens is a read-only projection of your data. The cert dashboard (\`/credentials\`) is the ACS lens for one credential. This surface ships two more:
+			body: `A "study by" surface is a read-only projection of your data, designed to answer a specific question. The Quals dashboard (\`/credentials\`) answers "where do I stand on this cert?". This menu ships two more:
 
-- **Handbook lens** -- pick a handbook (PHAK, AFH, AvWX, ...), drill into a chapter, see which knowledge nodes cite each section.
-- **Weakness lens** -- domains bucketed by severity (severe / moderate / mild) using the existing dashboard weakness signal (card accuracy + rep accuracy + overdue load).`,
+- **Study by handbook** -- pick a handbook (PHAK, AFH, AvWX, ...), drill into a chapter, see which knowledge nodes cite each section. To just *read* a handbook end-to-end, use Flightbag instead.
+- **What to study next** -- domains bucketed by severity (severe / moderate / mild) using the existing dashboard weakness signal (card accuracy + rep accuracy + overdue load).`,
 		},
 		{
 			id: 'handbook-lens',
-			title: 'Handbook lens',
+			title: 'Study by handbook',
 			body: `Lands at \`/lens/handbook\`. The index lists every active handbook reference plus your read progress. Each card opens to the doc view, then chapter view.
 
-The chapter view is the payoff: each section header has a "X citing nodes" count, with the actual graph nodes listed inline. Click a node to jump to its detail page; click the section title to read it in the handbook reader.`,
+The chapter view is the payoff: each section header has a "X citing nodes" count, with the actual graph nodes listed inline. Click a node to jump to its detail page; click the section title to read it in the handbook reader.
+
+This surface is for *learning through* a handbook (filtered by your goals + mastery). For straight reading or citation-anchored deep links, use Flightbag.`,
 		},
 		{
 			id: 'weakness-lens',
-			title: 'Weakness lens',
+			title: 'What to study next',
 			body: `Lands at \`/lens/weakness\`. Three severity buckets (severe / moderate / mild) computed from the existing \`getWeakAreas\` BC, mapped to severity by score:
 
 - **Severe** = score normalised >= 0.70.

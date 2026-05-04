@@ -7,6 +7,7 @@ import type { PageData } from './$types';
 let { data }: { data: PageData } = $props();
 
 const entries = $derived(data.entries);
+const flightbagOrigin = $derived(data.flightbagOrigin);
 
 function pct(num: number, den: number): number {
 	if (den === 0) return 0;
@@ -15,15 +16,16 @@ function pct(num: number, den: number): number {
 </script>
 
 <svelte:head>
-	<title>Handbook lens -- airboss</title>
+	<title>Study by handbook -- airboss</title>
 </svelte:head>
 
 <section class="page">
-	<PageHeader
-		eyebrow="Lens"
-		title="Handbook lens"
-		subtitle="What each FAA handbook looks like through the knowledge nodes that cite it and your read state on each section."
-	/>
+	<PageHeader eyebrow="Study by" title="What to study from each handbook">
+		{#snippet subtitleSnippet()}
+			Tracking which sections you've read and which knowledge nodes cite each handbook. To just read the handbook,
+			open it in <a class="flightbag-link" href={flightbagOrigin}>Flightbag</a>.
+		{/snippet}
+	</PageHeader>
 
 	{#if entries.length === 0}
 		<EmptyState
@@ -70,6 +72,12 @@ function pct(num: number, den: number): number {
 		max-width: 80rem;
 		margin: 0 auto;
 		width: 100%;
+	}
+
+	.flightbag-link {
+		color: var(--action-default);
+		text-decoration: underline;
+		text-underline-offset: var(--underline-offset-2xs);
 	}
 
 	.grid {

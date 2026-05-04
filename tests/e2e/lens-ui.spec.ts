@@ -4,7 +4,9 @@ import { ROUTES } from '../../libs/constants/src';
 test.describe('handbook lens', () => {
 	test('index renders heading and lists handbooks or empty state', async ({ page }) => {
 		await page.goto(ROUTES.LENS_HANDBOOK);
-		await expect(page.getByRole('heading', { name: 'Handbook lens', exact: true, level: 1 })).toBeVisible();
+		await expect(
+			page.getByRole('heading', { name: 'What to study from each handbook', exact: true, level: 1 }),
+		).toBeVisible();
 
 		const empty = page.getByRole('heading', { name: /no handbooks ingested/i });
 		const card = page.locator('.card-link').first();
@@ -20,7 +22,7 @@ test.describe('handbook lens', () => {
 test.describe('weakness lens', () => {
 	test('index renders heading and either buckets or empty state', async ({ page }) => {
 		await page.goto(ROUTES.LENS_WEAKNESS);
-		await expect(page.getByRole('heading', { name: 'Weakness lens', exact: true, level: 1 })).toBeVisible();
+		await expect(page.getByRole('heading', { name: 'What to study next', exact: true, level: 1 })).toBeVisible();
 
 		const empty = page.getByRole('heading', { name: /no weakness signal yet/i });
 		const severityPill = page.locator('.severity-pill').first();

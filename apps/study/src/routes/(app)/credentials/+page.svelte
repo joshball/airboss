@@ -2,8 +2,11 @@
 import { CREDENTIAL_KIND_LABELS, type CredentialKind, ROUTES } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
+import InfoTip from '@ab/ui/components/InfoTip.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import type { PageData } from './$types';
+
+const QUALS_DEFINITION = 'Pilot certificates, instructor certificates, class ratings, and endorsements.';
 
 let { data }: { data: PageData } = $props();
 
@@ -22,15 +25,13 @@ function pct(num: number, den: number): number {
 </script>
 
 <svelte:head>
-	<title>Credentials -- airboss</title>
+	<title>Quals -- airboss</title>
 </svelte:head>
 
 <section class="page">
-	<PageHeader
-		title="Credentials"
-		subtitle="Mastery and coverage across the certs, ratings, and endorsements you're targeting."
-	>
+	<PageHeader title="Quals" subtitle={QUALS_DEFINITION}>
 		{#snippet titleSuffix()}
+			<InfoTip term="Quals" definition={QUALS_DEFINITION} />
 			<PageHelp pageId="credentials" />
 		{/snippet}
 	</PageHeader>
@@ -38,8 +39,8 @@ function pct(num: number, den: number): number {
 	{#if !hasPrimaryGoal}
 		<aside class="banner" role="status">
 			<p>
-				<strong>No primary goal set.</strong> All active credentials are listed. Set a primary goal to filter this list to
-				the ones you're actively pursuing.
+				<strong>No primary goal set.</strong> Showing every active qual. Set a primary goal to narrow this to the ones you're
+				actively pursuing.
 			</p>
 			<a class="banner-cta" href={ROUTES.GOALS_NEW}>Create a goal</a>
 		</aside>
@@ -47,8 +48,8 @@ function pct(num: number, den: number): number {
 
 	{#if isEmpty}
 		<EmptyState
-			title="No active credentials"
-			body="No credentials are seeded as active in the database. Run `bun run db seed credentials` if you're a developer."
+			title="No active quals"
+			body="No quals are seeded as active in the database. Run `bun run db seed credentials` if you're a developer."
 		/>
 	{:else}
 		<ul class="grid">

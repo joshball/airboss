@@ -8,10 +8,14 @@ let { data }: { data: PageData } = $props();
 
 const reference = $derived(data.reference);
 const chapters = $derived(data.chapters);
+const flightbagOrigin = $derived(data.flightbagOrigin);
+const flightbagHandbookUrl = $derived(
+	`${flightbagOrigin}${ROUTES.FLIGHTBAG_HANDBOOK(reference.documentSlug, reference.edition)}`,
+);
 </script>
 
 <svelte:head>
-	<title>{reference.title} -- Handbook lens -- airboss</title>
+	<title>{reference.title} -- Study by handbook -- airboss</title>
 </svelte:head>
 
 <section class="page">
@@ -21,11 +25,12 @@ const chapters = $derived(data.chapters);
 		<span>{reference.title}</span>
 	</nav>
 
-	<PageHeader
-		eyebrow={reference.publisher}
-		title={reference.title}
-		subtitle="Edition: {reference.edition}. Chapters with knowledge-node citations and your read state."
-	/>
+	<PageHeader eyebrow={reference.publisher} title={reference.title}>
+		{#snippet subtitleSnippet()}
+			Edition: {reference.edition}. Chapters with knowledge-node citations and your read state. To just read this
+			handbook, open it in <a class="flightbag-link" href={flightbagHandbookUrl}>Flightbag</a>.
+		{/snippet}
+	</PageHeader>
 
 	{#if chapters.length === 0}
 		<EmptyState
@@ -66,6 +71,12 @@ const chapters = $derived(data.chapters);
 
 	.crumb a {
 		color: var(--ink-subtle);
+	}
+
+	.flightbag-link {
+		color: var(--action-default);
+		text-decoration: underline;
+		text-underline-offset: var(--underline-offset-2xs);
 	}
 
 	.chapters {
