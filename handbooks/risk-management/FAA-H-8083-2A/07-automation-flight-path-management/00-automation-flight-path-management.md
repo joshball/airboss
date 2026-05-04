@@ -116,16 +116,9 @@ appropriate focus on the progress of the flight at all times. Balancing the use 
 in case a particular situation requires pilot intervention. Using automation proficiently and at the appropriate level reduces risk
 and helps prevent incidents and accidents.
 
-![Figure 7-1. Autopilot interface.
-Chapter 7:  Automation & Flight Path 
-Management
-7-1](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-7-1-00-autopilot-interface-chapter-7-automation-flight-.png)
+![Figure 7-1. Autopilot interface.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-7-1-00-autopilot-interface.png)
 
-![Figure 7-2. Steps for interacting with automation
-12301
-Understanding autopilot function and logic allows the pilot to anticipate, act, and verify the autopilot performs as expected. 
-Figure 7-3 shows a typical flight mode annunciator displayed on the primary flight display (PFD) of a general aviation integrated 
-fligh](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-7-5-00-steps-for-interacting-with-automation-12301-unde.png)
+![Figure 7-2. Steps for interacting with automation](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-7-5-00-steps-for-interacting-with-automation.png)
 
 <div class="handbook-table" data-source="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-7-00-untitled.html">
 <table><thead><tr><th>HDG

@@ -97,16 +97,6 @@ Figure 3-6. Example of a numerical FRAT.
 25487/11871
 The FAA provides a numerical FRAT here. While this type of FRAT is easy to use, it has several drawbacks, including:
 
-![Figure 3-4. Elkins, WV airport.
-11796
-Figure 3-5. Sectional chart excerpt of Elkins, WV airport.
-11797
-The mountains and obstructions on both sides of the Elkins airport are a hazard. However, on a day with good visibility, few 
-clouds, and light winds, the associated risks are low for most aircraft engaged in visual f](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-6-00-elkins-wv-airport-11796-figure-3-5-sectional-cha.png)
+![Figure 3-4. Elkins, WV airport.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-6-00-elkins-wv-airport.png)
 
-![Figure 3-5. Sectional chart excerpt of Elkins, WV airport.
-11797
-The mountains and obstructions on both sides of the Elkins airport are a hazard. However, on a day with good visibility, few 
-clouds, and light winds, the associated risks are low for most aircraft engaged in visual flight rules (VFR) operations.
-11798
-If](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-6-01-sectional-chart-excerpt-of-elkins-wv-airport-117.png)
+![Figure 3-5. Sectional chart excerpt of Elkins, WV airport.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-6-01-sectional-chart-excerpt-of-elkins-wv-airport.png)

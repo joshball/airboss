@@ -118,6 +118,9 @@ DecisionMaking
 Figure B-4. 3P process.
 B-2
 
-<div class="handbook-table" data-source="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-10-1-1-00-untitled.html">
-<table><thead><tr><th>High</th><th>High</th><th>Serious</th><th></th></tr></thead><tbody><tr><td>High</td><td>Serious</td><td></td><td></td></tr><tr><td>Serious</td><td>Med</td><td>ium</td><td>Low</td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>
-</div>
+| High | High | Serious |  |
+| --- | --- | --- | --- |
+| High | Serious |  |  |
+| Serious | Med | ium | Low |
+
+<a class="handbook-table-source" href="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-10-1-1-00-untitled.html">Open original</a>

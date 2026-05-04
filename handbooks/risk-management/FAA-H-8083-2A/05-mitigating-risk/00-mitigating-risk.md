@@ -221,12 +221,7 @@ can enhance any risk mitigation analysis, but may not be required for simpler fl
 management skill. A brief FAA Safety Team (FAASTeam) video on risk-based decision-making summarizes many concepts
 discussed in this chapter.
 
-![Figure 5-1. Modified route.
-12164
-The total distance along this route is 880 NM, versus the straight-line distance of 711 NM. The additional 169 NM adds about 
-1 hour and 15 minutes to the total flight time.
-12165
-She mitigated the aircraft and environmental risks using this plan. She should also deal with the external](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-5-3-1-00-modified-route-12164-the-total-distance-along-th.png)
+![Figure 5-1. Modified route.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-5-3-1-00-modified-route.png)
 
 <div class="handbook-table" data-source="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-5-00-untitled.html">
 <table><thead><tr><th>Pilot “P”</th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td>serious</td><td></td><td>Add 500' to minimums improbable/catastrophic now

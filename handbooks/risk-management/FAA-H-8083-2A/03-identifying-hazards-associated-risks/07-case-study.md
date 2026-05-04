@@ -105,15 +105,6 @@ could lead to loss of control.
 potential hazard could create a risk for an overrun or stall after takeoff. Her personal minimums include a 20 percent
 additional margin over calculated runway takeoff distance.
 
-![Figure 3-8. Aeronautical chart excerpt showing Durango, CO.
-11887
-Tricia and the Smiths are enjoying the warm-weather weekend with rafting, cycling, and hiking as featured activities. The 
-Smiths are well-established in the Durango social scene, and the three friends go to parties on Friday and Saturday night, 
-with an](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-7-1-00-aeronautical-chart-excerpt-showing-durango-co-11.png)
+![Figure 3-7. Example Flight Risk Assessment Tool.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-7-1-00-example-flight-risk-assessment-tool.png)
 
-![Figure 3-9. The direct route from Durango to Santa Rosa.
-11892
-Tricia makes a quick analysis and figures she can fly this trip nonstop in just under five hours, with 6 hours and 45 minutes of 
-endurance with full tanks. She then evaluates the weather and immediately foresees some challenges.
-11893
-A low-pressure system](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-7-2-00-the-direct-route-from-durango-to-santa-rosa-1189.png)
+![Figure 3-8. Aeronautical chart excerpt showing Durango, CO.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-7-2-00-the-direct-route-from-durango-to-santa-rosa.png)

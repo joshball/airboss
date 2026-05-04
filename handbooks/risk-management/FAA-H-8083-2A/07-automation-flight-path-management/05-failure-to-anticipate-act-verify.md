@@ -44,11 +44,7 @@ standards.
 Pilots should train and practice using automation under VFR with an appropriately qualified and knowledgeable flight instructor
 before attempting IFR flight. In addition, using a flight simulation training device provides the opportunity to practice and
 
-![Figure 7-2. Steps for interacting with automation
-12301
-Understanding autopilot function and logic allows the pilot to anticipate, act, and verify the autopilot performs as expected. 
-Figure 7-3 shows a typical flight mode annunciator displayed on the primary flight display (PFD) of a general aviation integrated 
-fligh](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-7-5-00-steps-for-interacting-with-automation-12301-unde.png)
+![Figure 7-2. Steps for interacting with automation](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-7-5-00-steps-for-interacting-with-automation.png)
 
 <div class="handbook-table" data-source="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-7-5-00-untitled.html">
 <table><thead><tr><th>HDG

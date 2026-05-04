@@ -86,8 +86,4 @@ As a result, the attitude indicator and directional gyro became inoperative. Rat
 pilot decided to continue toward the destination and into instrument meteorological conditions (IMC). This elevated the risks
 associated with an “A” hazard because of the inoperative instruments and a “V” hazard because of the IMC. After the vacuum
 
-![Figure 1-2. The PAVE checklist.
-12855
-The pilot reported to air traffic control (ATC) that the vacuum pump failed while in visual meteorological conditions (VMC). 
-As a result, the attitude indicator and directional gyro became inoperative. Rather than divert to an airport while in VMC, the 
-pilot decided to continue t](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-1-4-00-the-pave-checklist-12855-the-pilot-reported-to-a.png)
+![Figure 1-2. The PAVE checklist.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-1-4-00-the-pave-checklist.png)

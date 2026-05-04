@@ -68,5 +68,5 @@ likelihood and risk severity for all identified hazards. The primary tools for t
 matrix. A pilot’s risk assessment accuracy should improve with practice.
 
 <div class="handbook-table" data-source="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-4-4-00-untitled.html">
-<table><thead><tr><th>Pilot “P”</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>serious</td><td></td></tr><tr><td></td><td>serious</td><td></td></tr><tr><td>Aircraft “A”</td><td></td><td></td></tr><tr><td></td><td>serious</td><td></td></tr><tr><td></td><td>high</td><td></td></tr><tr><td></td><td>serious</td><td></td></tr><tr><td>Environment “V”</td><td></td><td></td></tr></tbody></table>
+<table><thead><tr><th>Pilot “P”</th><th></th></tr></thead><tbody><tr><td></td><td>serious</td></tr><tr><td></td><td>serious</td></tr><tr><td>Aircraft “A”</td><td></td></tr><tr><td></td><td>serious</td></tr><tr><td></td><td>high</td></tr><tr><td></td><td>serious</td></tr><tr><td>Environment “V”</td><td></td></tr></tbody></table>
 </div>

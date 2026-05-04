@@ -58,8 +58,4 @@ Tricia goes back to her room and begins her analysis. First, she looks at the ro
 planned a direct VFR flight back to Santa Rosa, a nonstop flight of 711 nautical miles, as depicted in the sectional chart excerpt
 in Figure 3-9.
 
-![Figure 3-8. Aeronautical chart excerpt showing Durango, CO.
-11887
-Tricia and the Smiths are enjoying the warm-weather weekend with rafting, cycling, and hiking as featured activities. The 
-Smiths are well-established in the Durango social scene, and the three friends go to parties on Friday and Saturday night, 
-with an](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-7-1-00-aeronautical-chart-excerpt-showing-durango-co-11.png)
+![Figure 3-7. Example Flight Risk Assessment Tool.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-7-1-00-example-flight-risk-assessment-tool.png)

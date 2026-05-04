@@ -63,12 +63,6 @@ important than safety:
 4.	 Continuing to the original destination
 Perform: After choosing a viable option, the pilot executes the changes. The choice made should lead to a safe outcome.
 
-![Figure 8-1. Advisory Circular (AC) 60-22, Aeronautical Decision-Making, includes a wealth of information for pilots.
-12316
-Accidents still occur despite advances in training methods, aircraft technology, and services available to pilots. Despite 
-improvements in training and technology, human error remains an issue. AD](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-8-1-00-advisory-circular-ac-60-22-aeronautical-decision.png)
+![Figure 8-1. Advisory Circular (AC) 60-22, Aeronautical Decision-Making, includes a wealth of information for pilots.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-8-1-00-advisory-circular-ac-60-22-aeronautical-decision.png)
 
-![Figure 8-2. The illustration shows how the 3P model is used in decision-making.
-12331
-Perceive: While en route, for example, a pilot checks data-link weather on an electronic flight bag and sees thunderstorms 
-developing ahead. The pilot perceives this as a significant hazard since the likelihood of a thunderstorm affe](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-8-3-01-the-illustration-shows-how-the-3p-model-is-used-.png)
+![Figure 8-2. The illustration shows how the 3P model is used in decision-making.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-8-3-01-the-illustration-shows-how-the-3p-model-is-used-.png)

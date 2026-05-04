@@ -549,50 +549,17 @@ The risk assessment and mitigation for this case study will continue in Chapters
 Poor risk management is a common factor in many general aviation accidents. Pilots can use the PAVE checklist before flight
 to identify hazards. Pilots can use a FRAT to organize identified hazards and associated risks for additional analysis.
 
-![Figure 3-3. IMSAFE checklist.
-Aircraft Hazards
-11831
-“A” hazards can be classified in terms of both performance and equipage.
-Performance
-11832
-Aircraft performance hazards may include:
-11833
-•	 Fuel and Range–As previously described, fuel issues continue to be a leading cause of general aviation accidents. 
-Planning a](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-4-2-00-imsafe-checklist-aircraft-hazards-11831-a-hazard.png)
+![Figure 3-3. IMSAFE checklist.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-4-2-00-imsafe-checklist.png)
 
-![Figure 3-4. Elkins, WV airport.
-11796
-Figure 3-5. Sectional chart excerpt of Elkins, WV airport.
-11797
-The mountains and obstructions on both sides of the Elkins airport are a hazard. However, on a day with good visibility, few 
-clouds, and light winds, the associated risks are low for most aircraft engaged in visual f](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-6-00-elkins-wv-airport-11796-figure-3-5-sectional-cha.png)
+![Figure 3-4. Elkins, WV airport.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-6-00-elkins-wv-airport.png)
 
-![Figure 3-5. Sectional chart excerpt of Elkins, WV airport.
-11797
-The mountains and obstructions on both sides of the Elkins airport are a hazard. However, on a day with good visibility, few 
-clouds, and light winds, the associated risks are low for most aircraft engaged in visual flight rules (VFR) operations.
-11798
-If](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-6-01-sectional-chart-excerpt-of-elkins-wv-airport-117.png)
+![Figure 3-5. Sectional chart excerpt of Elkins, WV airport.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-6-01-sectional-chart-excerpt-of-elkins-wv-airport.png)
 
-![Figure 3-8. Aeronautical chart excerpt showing Durango, CO.
-11887
-Tricia and the Smiths are enjoying the warm-weather weekend with rafting, cycling, and hiking as featured activities. The 
-Smiths are well-established in the Durango social scene, and the three friends go to parties on Friday and Saturday night, 
-with an](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-7-1-00-aeronautical-chart-excerpt-showing-durango-co-11.png)
+![Figure 3-7. Example Flight Risk Assessment Tool.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-7-1-00-example-flight-risk-assessment-tool.png)
 
-![Figure 3-9. The direct route from Durango to Santa Rosa.
-11892
-Tricia makes a quick analysis and figures she can fly this trip nonstop in just under five hours, with 6 hours and 45 minutes of 
-endurance with full tanks. She then evaluates the weather and immediately foresees some challenges.
-11893
-A low-pressure system](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-7-2-00-the-direct-route-from-durango-to-santa-rosa-1189.png)
+![Figure 3-8. Aeronautical chart excerpt showing Durango, CO.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-7-2-00-the-direct-route-from-durango-to-santa-rosa.png)
 
-![Figure 3-10. She needs to assess these risks in terms of their likelihood and severity. She strives to complete the risk analysis 
-so she can return and discuss the situation with the Smiths.
-11924
-Figure 3-10. Case study FRAT with risks identified.
-11923
-The risk assessment and mitigation for this case study will cont](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-8-00-she-needs-to-assess-these-risks-in-terms-of-thei.png)
+![in Figure 3-10. She needs to assess these risks in terms of their likelihood and severity. She strives to complete the risk analysis  so she can return and discuss the situation with the Smiths. 11924](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-8-00-she-needs-to-assess-these-risks-in-terms-of-thei.png)
 
 <div class="handbook-table" data-source="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-3-00-untitled.html">
 <table><thead><tr><th>Hazardous Attitude</th><th>Antidotes</th></tr></thead><tbody><tr><td>Macho
