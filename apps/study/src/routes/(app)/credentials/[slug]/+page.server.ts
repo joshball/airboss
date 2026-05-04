@@ -6,12 +6,12 @@ import {
 	type CredentialPrereqRow,
 	type CredentialRow,
 	type CredentialSyllabusRow,
-	getCredentialById,
 	getCredentialBySlug,
 	getCredentialMastery,
 	getCredentialPrereqs,
 	getCredentialPrimarySyllabus,
 	getCredentialSyllabi,
+	getCredentialsByIds,
 	getSyllabusBySlug,
 	type SyllabusRow,
 } from '@ab/bc-study';
@@ -71,12 +71,16 @@ export const load: PageServerLoad = async (event) => {
 		getCredentialSyllabi(credential.id, { primacy: 'supplemental' }),
 	]);
 
-	const prereqs: PrereqDisplay[] = await Promise.all(
-		prereqRows.map(async (row: CredentialPrereqRow) => ({
-			credential: await getCredentialById(row.prereqId),
-			kind: row.kind,
-		})),
-	);
+	// Batched prereq title resolution: one BC call instead of one
+	// `getCredentialById` per prereq row. See `getCredentialsByIds` in
+	// `@ab/bc-study/credentials.ts`. Closes the chunk-1 perf MAJOR /
+	// backend MAJOR N+1 (review-tail-2026-05).
+	const prereqCredentials = await getCredentialsByIds(prereqRows.map((r: CredentialPrereqRow) => r.prereqId));
+	const prereqs: PrereqDisplay[] = prereqRows.flatMap((row: CredentialPrereqRow) => {
+		const cred = prereqCredentials.get(row.prereqId);
+		if (cred === undefined) return [];
+		return [{ credential: cred, kind: row.kind }];
+	});
 	prereqs.sort((a, b) => a.credential.title.localeCompare(b.credential.title));
 
 	return {

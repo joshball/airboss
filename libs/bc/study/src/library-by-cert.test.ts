@@ -32,7 +32,7 @@ import {
 } from '@ab/constants';
 import { db } from '@ab/db/connection';
 import { generateReferenceId } from '@ab/utils';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
 	getReferenceCountsByCert,
@@ -287,5 +287,70 @@ describe('getReferenceCountsByTopic', () => {
 		expect(counts[AVIATION_TOPICS.WEATHER]).toBeGreaterThanOrEqual(1);
 		expect(counts[AVIATION_TOPICS.PROCEDURES]).toBeGreaterThanOrEqual(2);
 		expect(counts[AVIATION_TOPICS.TRAINING_OPS]).toBeGreaterThanOrEqual(1);
+	});
+});
+
+// -- Index plumbing ---------------------------------------------------------
+
+/**
+ * The `subjects @> ARRAY[$topic]` shape is GIN-indexable, but the small dev
+ * catalog (≈80 rows) is well within the planner's seq-scan-is-cheaper
+ * threshold, so an unconditional `EXPLAIN` against `listReferencesByTopic`
+ * would not assert anything useful: the planner picks the btree-on-
+ * `superseded_by_id` path on small data even when the GIN index is present.
+ *
+ * Two assertions instead:
+ *
+ *   1. The GIN index actually exists on `study.reference(subjects)`. This
+ *      catches schema drift -- if a future edit drops or renames the index,
+ *      this test fails immediately rather than silently regressing the
+ *      topic-spine to a seq-scan in production where the catalog is large
+ *      enough for the regression to bite.
+ *   2. With seq scan + plain index scan disabled (forcing the planner to
+ *      use a bitmap path), the GIN index is the path the planner chooses
+ *      for `subjects @> ARRAY[...]`. This proves the index is wired to the
+ *      query shape and is reachable, independent of catalog size.
+ */
+describe('reference_subjects_gin_idx (index plumbing)', () => {
+	it('exists on study.reference(subjects)', async () => {
+		const rows = (await db.execute(sql`
+			SELECT i.indexname, i.indexdef
+			FROM pg_indexes i
+			WHERE i.schemaname = 'study'
+				AND i.tablename = 'reference'
+				AND i.indexname = 'reference_subjects_gin_idx'
+		`)) as unknown as ReadonlyArray<{ indexname: string; indexdef: string }>;
+
+		expect(rows.length, 'expected exactly one row for reference_subjects_gin_idx').toBe(1);
+		const def = rows[0]?.indexdef ?? '';
+		// The definition string is shaped like:
+		//   CREATE INDEX reference_subjects_gin_idx ON study.reference USING gin (subjects)
+		expect(def).toMatch(/USING gin/i);
+		expect(def).toMatch(/\(subjects\)/);
+	});
+
+	it('is the planner-chosen path for `subjects @> ARRAY[...]` when bitmap scan is the only viable path', async () => {
+		// Drop other paths so the GIN index is the only sensible option. We
+		// scope the SETs via `SET LOCAL` inside a `db.transaction(...)` so the
+		// session state never escapes the test (postgres-js refuses raw `BEGIN`
+		// in `db.execute`). `enable_seqscan = off` + `enable_indexscan = off`
+		// together force a bitmap heap scan, which can only be fed by the GIN
+		// index for an `@>` predicate.
+		const planText = await db.transaction(async (tx) => {
+			await tx.execute(sql`SET LOCAL enable_seqscan = off`);
+			await tx.execute(sql`SET LOCAL enable_indexscan = off`);
+			const rows = (await tx.execute(sql`
+				EXPLAIN (FORMAT JSON)
+					SELECT id FROM study.reference
+					WHERE subjects @> ARRAY['weather']::text[]
+			`)) as unknown as ReadonlyArray<{ 'QUERY PLAN': unknown }>;
+			// `EXPLAIN (FORMAT JSON)` returns either the JSON value directly
+			// or a stringified blob, depending on the driver. Normalise to a
+			// string and scan for the index name -- structural assertion is
+			// unnecessary because the index name is unique in the DB.
+			return JSON.stringify(rows[0]?.['QUERY PLAN']);
+		});
+
+		expect(planText).toMatch(/reference_subjects_gin_idx/);
 	});
 });

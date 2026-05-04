@@ -6,9 +6,17 @@
  * section list. Mirrors the handbook chapter route's shape.
  */
 
-import { getHandbookChapter, getReferenceByDocument, listChapterSections, listReferences } from '@ab/bc-study';
+import {
+	getHandbookChapter,
+	getReferenceByDocument,
+	listAllSectionsForReference,
+	listChapterSections,
+	listFiguresForSection,
+	listReferences,
+} from '@ab/bc-study';
 import { REFERENCE_KINDS, type ReferenceKind, ROUTES } from '@ab/constants';
 import { error } from '@sveltejs/kit';
+import { computeSiblingNav } from '../../../../../lib/section-nav';
 import { buildSourceLinks } from '../../../../../lib/source-links';
 import type { PageServerLoad } from './$types';
 
@@ -35,12 +43,25 @@ export const load: PageServerLoad = async ({ params }) => {
 	if (!chapter) throw error(404, `Chapter ${params.chapter} not found in ${ref.title}.`);
 
 	const sections = await listChapterSections(chapter.id);
+	const figures = await listFiguresForSection(chapter.id);
 
 	const sourceLinks = buildSourceLinks({
 		kind: ref.kind as ReferenceKind,
 		documentSlug: ref.documentSlug,
 		edition: ref.edition,
 		url: ref.url,
+	});
+
+	const allSections = await listAllSectionsForReference(ref.id);
+	const nav = computeSiblingNav(allSections, chapter.id, (row) => {
+		if (row.parentId === null) {
+			return ROUTES.FLIGHTBAG_AC_CHAPTER(params.doc, params.rev, row.code);
+		}
+		const parts = row.code.split('.');
+		if (parts.length !== 2) return null;
+		const [ch, sec] = parts;
+		if (!ch || !sec) return null;
+		return ROUTES.FLIGHTBAG_AC_SECTION(params.doc, params.rev, ch, sec);
 	});
 
 	return {
@@ -58,6 +79,7 @@ export const load: PageServerLoad = async ({ params }) => {
 			title: chapter.title,
 			contentMd: chapter.contentMd,
 			sourceLocator: chapter.sourceLocator,
+			metadata: chapter.metadata as Record<string, unknown>,
 		},
 		sections: sections.map((s) => {
 			// AC section codes are `1.1`, `12.3`. URL only carries the trailing
@@ -70,5 +92,14 @@ export const load: PageServerLoad = async ({ params }) => {
 				href: ROUTES.FLIGHTBAG_AC_SECTION(params.doc, params.rev, params.chapter, trail),
 			};
 		}),
+		figures: figures.map((f) => ({
+			id: f.id,
+			ordinal: f.ordinal,
+			caption: f.caption,
+			assetPath: f.assetPath,
+			width: f.width,
+			height: f.height,
+		})),
+		nav,
 	};
 };

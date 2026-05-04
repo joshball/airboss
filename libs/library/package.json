@@ -9,6 +9,7 @@
 			"default": "./src/index.ts"
 		},
 		"./RenderedSection.svelte": "./src/RenderedSection.svelte",
+		"./ReaderNav.svelte": "./src/ReaderNav.svelte",
 		"./CitationChip.svelte": "./src/CitationChip.svelte",
 		"./SourceLinks.svelte": "./src/SourceLinks.svelte"
 	},

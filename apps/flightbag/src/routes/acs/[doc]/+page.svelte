@@ -4,6 +4,8 @@ import SourceLinks from '@ab/library/SourceLinks.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
+
+const hasSections = $derived(data.sections.length > 0);
 </script>
 
 <svelte:head>
@@ -28,20 +30,38 @@ let { data }: { data: PageData } = $props();
 	</p>
 </header>
 
-<section class="callout">
-	<h2>Read on faa.gov</h2>
-	<p>
-		The FAA's Airman Certification Standards portal is the authoritative source for ACS publications. Per-task
-		content is on the airboss roadmap; until then, the FAA's PDF is the canonical reference.
-	</p>
-	{#if data.reference.externalUrl}
+{#if hasSections}
+	<section aria-label="Sections" class="sections">
+		<h2>Areas of operation</h2>
+		<ol>
+			{#each data.sections as section (section.id)}
+				<li class="level-{section.level}">
+					<span class="section-code">{section.code}</span>
+					<span class="section-title">{section.title}</span>
+				</li>
+			{/each}
+		</ol>
+	</section>
+{:else}
+	<section class="callout" data-testid="acs-sourced-only">
+		<p class="badge">Sourced only</p>
+		<h2>This document hasn't been ingested yet.</h2>
 		<p>
-			<a class="external-link" href={data.reference.externalUrl} target="_blank" rel="noopener noreferrer">
-				Open ACS portal &rarr;
-			</a>
+			Read the official FAA PDF below. The full reader will activate once per-task content is added to the
+			corpus.
 		</p>
-	{/if}
-</section>
+		<div class="callout-actions">
+			{#if data.sourceLinks.localPdfHref}
+				<a class="local-link" href={data.sourceLinks.localPdfHref}>Local PDF</a>
+			{/if}
+			{#if data.reference.externalUrl}
+				<a class="external-link" href={data.reference.externalUrl} target="_blank" rel="noopener noreferrer">
+					Online PDF &rarr;
+				</a>
+			{/if}
+		</div>
+	</section>
+{/if}
 
 <style>
 	.crumbs {
@@ -80,7 +100,26 @@ let { data }: { data: PageData } = $props();
 	.callout p:last-child {
 		margin-bottom: 0;
 	}
-	.external-link {
+	.badge {
+		display: inline-block;
+		padding: var(--space-3xs) var(--space-2xs);
+		background: var(--surface-raised);
+		color: var(--ink-muted);
+		border-radius: var(--radius-sm);
+		font-family: var(--font-family-mono);
+		font-size: var(--font-size-xs);
+		text-transform: uppercase;
+		letter-spacing: var(--letter-spacing-caps);
+		margin: 0 0 var(--space-xs);
+	}
+	.callout-actions {
+		display: flex;
+		gap: var(--space-sm);
+		flex-wrap: wrap;
+		margin-top: var(--space-sm);
+	}
+	.external-link,
+	.local-link {
 		display: inline-block;
 		padding: var(--space-xs) var(--space-md);
 		border-radius: var(--radius-sm);
@@ -88,5 +127,29 @@ let { data }: { data: PageData } = $props();
 		color: var(--action-default-ink, var(--ink-strong));
 		text-decoration: none;
 		font-weight: var(--font-weight-medium);
+	}
+	.local-link {
+		background: var(--surface-raised);
+		color: var(--ink-body);
+		border: 1px solid var(--edge-default);
+	}
+	.sections ol {
+		list-style: none;
+		padding: 0;
+		margin: var(--space-sm) 0 0;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2xs);
+	}
+	.sections li {
+		display: flex;
+		gap: var(--space-sm);
+		padding: var(--space-2xs) var(--space-sm);
+		border-radius: var(--radius-sm);
+	}
+	.section-code {
+		font-family: var(--font-family-mono);
+		color: var(--ink-muted);
+		min-width: 4rem;
 	}
 </style>

@@ -1,6 +1,12 @@
 // Study BC -- spaced repetition, cards, reviews, scenarios, calibration,
 // and the polymorphic content-citation surface (folded in from the former
 // citations package; see docs/work-packages/bc-citations-coupling/).
+//
+// Build-only helpers (seeders' upserts, manifest validators, citation audit,
+// citation ingestion schemas) live in `./build.ts`. They are intentionally
+// not re-exported from this barrel so a route loader / form action can never
+// reach them. Closes the chunk-2 security MAJOR finding in
+// `docs/work/reviews/2026-05-01-study-bc-domain-security.md`.
 
 export type {
 	CalibrationBucket,
@@ -39,22 +45,22 @@ export {
 	getCards,
 	getCardsCount,
 	getCardsFacetCounts,
+	getCardsForNodeByKind,
 	getDueCards,
 	getRemovedCards,
 	getRemovedCardsCount,
-	SourceRefRequiredError,
+	InvalidCardKindError,
 	setCardStatus,
 	updateCard,
 } from './cards';
 export type { PublicCard, PublicCardCitation } from './cards-public';
 export { composePublicCardCitations, getPublicCard } from './cards-public';
+// Citation audit (`AUDIT_FINDING_KINDS`, `AuditFinding`, `AuditFindingKind`,
+// `AuditReport`, `auditCitations`) is build-only -- exported from
+// `@ab/bc-study/build`. It reads every citation row across all users.
 export {
-	AUDIT_FINDING_KINDS,
-	type AuditFinding,
-	type AuditFindingKind,
-	type AuditReport,
-	auditCitations,
 	CitationNotFoundError,
+	CitationNotOwnedError,
 	CitationSourceNotFoundError,
 	CitationTargetNotFoundError,
 	CitationValidationError,
@@ -87,23 +93,26 @@ export type {
 	CredentialMasteryRollup,
 	ListCredentialsOptions,
 } from './credentials';
+// Credential writers (`upsertCredential`, `upsertCredentialPrereq`,
+// `upsertCredentialSyllabus`) and `validateCredentialDag` are build-only
+// -- exported from `@ab/bc-study/build`. Credentials are shared course
+// content rewritten by seeders, not per-user data.
 export {
 	CredentialNotFoundError,
 	CredentialPrereqCycleError,
+	CredentialPrereqUnresolvedNodesError,
 	getCertsCoveredBy,
 	getCredentialById,
 	getCredentialBySlug,
 	getCredentialIdsCoveredBy,
 	getCredentialMastery,
+	getCredentialMasteryMap,
 	getCredentialPrereqDag,
 	getCredentialPrereqs,
 	getCredentialPrimarySyllabus,
 	getCredentialSyllabi,
+	getCredentialsByIds,
 	listCredentials,
-	upsertCredential,
-	upsertCredentialPrereq,
-	upsertCredentialSyllabus,
-	validateCredentialDag,
 } from './credentials';
 export type {
 	ActivityDay,
@@ -139,6 +148,8 @@ export {
 	getEngineTargeting,
 	getEngineTargetingSnapshot,
 } from './engine-targeting';
+// Cross-file error classes (shared by 2+ modules in the BC).
+export { SourceRefRequiredError, UpsertReturnedNoRowError } from './errors';
 export type { SubmitFeedbackInput } from './feedback';
 export { FeedbackCommentRequiredError, getLatestFeedback, submitFeedback } from './feedback';
 export { formatNextInterval, formatNextIntervalAbsolute } from './formatters';
@@ -189,6 +200,10 @@ export type {
 	NodeSummary,
 	NodeView,
 } from './knowledge';
+// Knowledge-graph writers (`upsertKnowledgeNode`, `replaceNodeEdges`,
+// `refreshEdgeTargetExists`) are build-only -- exported from
+// `@ab/bc-study/build`. They rewrite shared knowledge_node /
+// knowledge_edge rows, not per-user data.
 export {
 	computeCardGate,
 	computeDisplayScore,
@@ -215,10 +230,7 @@ export {
 	listNodesWithFacets,
 	recordPhaseCompleted,
 	recordPhaseVisited,
-	refreshEdgeTargetExists,
-	replaceNodeEdges,
 	splitContentPhases,
-	upsertKnowledgeNode,
 } from './knowledge';
 export type {
 	AcsLensFilters,
@@ -239,61 +251,16 @@ export {
 	getReferencesForCertWithCarryover,
 	listReferencesByTopic,
 } from './library-by-cert';
+// Runtime handbook input schemas. Route handlers parse `+server.ts` request
+// bodies (heartbeat / notes) and form-action submissions (read status)
+// against these. Manifest schemas + citation ingestion schemas
+// (manifestSchema, acsManifestSchema, citationSchema, legacyCitationSchema,
+// structuredCitationSchema, etc.) are build-only -- exported from
+// `@ab/bc-study/build`.
 export {
-	type AcManifest,
-	type AcsManifest,
-	type AcsManifestArea,
-	type AcsManifestElement,
-	type AcsManifestTask,
-	type AimManifest,
-	type AimManifestEntry,
-	acManifestSchema,
-	acsManifestAreaSchema,
-	acsManifestElementSchema,
-	acsManifestSchema,
-	acsManifestTaskSchema,
-	aimManifestEntrySchema,
-	aimManifestSchema,
-	type BulletinManifestSection,
-	bulletinManifestSectionSchema,
-	type CfrManifest,
-	type CfrManifestSource,
-	type CfrSectionEntry,
-	type CfrSectionsFile,
-	cfrManifestSchema,
-	cfrManifestSourceSchema,
-	cfrSectionEntrySchema,
-	cfrSectionsFileSchema,
-	citationSchema,
-	type HandbookManifestErrataEntry,
-	type HandbookManifestErrataSectionPatched,
-	type HandbookManifestExtraction,
-	type HandbookManifestFigure,
-	type HandbookManifestSection,
-	type HandbookManifestWarning,
-	type HandbookSectionFrontmatter,
 	handbookHeartbeatInputSchema,
-	handbookManifestErrataEntrySchema,
-	handbookManifestErrataSectionPatchedSchema,
-	handbookManifestExtractionSchema,
-	handbookManifestFigureSchema,
-	handbookManifestSectionSchema,
-	handbookManifestWarningSchema,
 	handbookNotesInputSchema,
 	handbookReadStatusSchema,
-	handbookSectionFrontmatterSchema,
-	type InfoManifest,
-	infoManifestSchema,
-	legacyCitationSchema,
-	type Manifest,
-	manifestSchema,
-	type SafoManifest,
-	type SectionTreeManifest,
-	safoManifestSchema,
-	sectionTreeManifestSchema,
-	structuredCitationSchema,
-	type WholeDocManifest,
-	wholeDocManifestSchema,
 } from './manifest-validation';
 export type { GateState, LeafMasteryState, NodeEvidenceState } from './mastery';
 export {
@@ -343,6 +310,7 @@ export {
 } from './reference-errata';
 // Reference ingestion + reader (post-WP-SUB substrate; ADR 016 phase 0).
 export type {
+	CitingNodesBatchQuery,
 	CitingNodesQuery,
 	GetReferenceOptions,
 	HandbookProgressSummary,
@@ -352,8 +320,10 @@ export type {
 export {
 	getHandbookChapter,
 	getHandbookProgress,
+	getHandbookProgressMap,
 	getHandbookSection,
 	getNodesCitingSection,
+	getNodesCitingSectionsBatch,
 	getReadableReferenceIds,
 	getReadState,
 	getReferenceByDocument,
@@ -453,7 +423,9 @@ export {
 	getScenarios,
 	getScenariosCount,
 	getScenariosFacetCounts,
+	getScenariosForNodeByMethod,
 	getScenarioWithOptions,
+	InvalidAssessmentMethodError,
 	InvalidOptionError,
 	ScenarioNotAttemptableError,
 	ScenarioNotFoundError,
@@ -555,6 +527,7 @@ export {
 	syllabus,
 	syllabusNode,
 	syllabusNodeLink,
+	teachingExercise,
 } from './schema';
 export type {
 	ItemResultInput,
@@ -629,11 +602,18 @@ export type {
 	SyllabusTreeNode,
 	SyllabusTreeValidationInput,
 } from './syllabi';
+// Syllabus writers (`upsertSyllabus`, `upsertSyllabusNode`,
+// `replaceSyllabusNodeLinks`) and the seed-time leaf validator
+// (`validateAirbossRefForLeaf`) are build-only -- exported from
+// `@ab/bc-study/build`. The pure tree validator (`validateSyllabusTree`)
+// stays here because it's reusable from feature code.
 export {
 	AirbossRefValidationError,
 	buildSyllabusTreeFromRows,
 	getCitationsForSyllabusNode,
+	getCitationsForSyllabusNodes,
 	getKnowledgeNodesForSyllabusLeaf,
+	getKnowledgeNodesForSyllabusLeaves,
 	getSyllabusArea,
 	getSyllabusById,
 	getSyllabusBySlug,
@@ -642,14 +622,27 @@ export {
 	getSyllabusTree,
 	levelIsLeafEligible,
 	listSyllabi,
-	replaceSyllabusNodeLinks,
 	SyllabusNotFoundError,
 	SyllabusValidationError,
-	upsertSyllabus,
-	upsertSyllabusNode,
-	validateAirbossRefForLeaf,
 	validateSyllabusTree,
 } from './syllabi';
+export type {
+	CreateTeachingExerciseInput,
+	NewTeachingExerciseInput,
+	TeachingExerciseFilters,
+	TeachingExerciseRow,
+	UpdateTeachingExerciseInput,
+} from './teaching-exercises';
+export {
+	createTeachingExercise,
+	deleteTeachingExercise,
+	getTeachingExercise,
+	getTeachingExercises,
+	getTeachingExercisesForNode,
+	TeachingExerciseNotEditableError,
+	TeachingExerciseNotFoundError,
+	updateTeachingExercise,
+} from './teaching-exercises';
 export {
 	cardTagsSchema,
 	cardTextSchema,

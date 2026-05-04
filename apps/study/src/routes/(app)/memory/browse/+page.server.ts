@@ -192,11 +192,11 @@ export const actions: Actions = {
 			return { success: true as const, intent: 'restore' as const, cardId };
 		} catch (err) {
 			log.error(
-				'restoreCard threw',
+				'restore card failed',
 				{ requestId: locals.requestId, userId: user.id, metadata: { cardId } },
 				err instanceof Error ? err : undefined,
 			);
-			return fail(500, { error: 'Could not restore card' });
+			return fail(500, { error: 'Could not restore card.' });
 		}
 	},
 } satisfies Actions;

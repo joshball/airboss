@@ -7,10 +7,11 @@
  */
 
 import { parseHandbookChapter, parseHandbookSection, parseHandbookSlug } from '@ab/aviation';
-import { getHandbookSection, getReferenceByDocument } from '@ab/bc-study';
+import { getHandbookSection, getReferenceByDocument, listAllSectionsForReference } from '@ab/bc-study';
 import { type ReferenceKind, ROUTES } from '@ab/constants';
 import { isParseError, parseHandbooksLocator, parseIdentifier } from '@ab/sources';
 import { error } from '@sveltejs/kit';
+import { computeSiblingNav } from '../../../../../../lib/section-nav';
 import { buildSourceLinks } from '../../../../../../lib/source-links';
 import { shortHandbookEdition } from '../../../../../reader-url';
 import type { PageServerLoad } from './$types';
@@ -49,6 +50,24 @@ export const load: PageServerLoad = async ({ params }) => {
 		url: ref.url,
 	});
 
+	// Reading-order nav: pull every section under the reference so prev/next
+	// can wrap across chapter boundaries (last-of-§1 -> first-of-§2 etc.).
+	const allSections = await listAllSectionsForReference(ref.id);
+	const nav = computeSiblingNav(allSections, view.section.id, (row) => {
+		// Chapter rows route to the chapter overview; section rows to the section
+		// reader. Sub-section rows (deeper than `chapter.section`) don't have a
+		// dedicated reader route in handbooks today, so they're skipped from
+		// the prev/next walk.
+		if (row.parentId === null) {
+			return ROUTES.FLIGHTBAG_HANDBOOK_CHAPTER(ref.documentSlug, shortEdition, row.code);
+		}
+		const parts = row.code.split('.');
+		if (parts.length !== 2) return null;
+		const [ch, sec] = parts;
+		if (!ch || !sec) return null;
+		return ROUTES.FLIGHTBAG_HANDBOOK_SECTION(ref.documentSlug, shortEdition, ch, sec);
+	});
+
 	return {
 		uri: rawUri,
 		sourceLinks,
@@ -74,6 +93,7 @@ export const load: PageServerLoad = async ({ params }) => {
 			sourceLocator: view.section.sourceLocator,
 			faaPageStart: view.section.faaPageStart,
 			faaPageEnd: view.section.faaPageEnd,
+			metadata: view.section.metadata as Record<string, unknown>,
 		},
 		figures: view.figures.map((f) => ({
 			id: f.id,
@@ -95,5 +115,6 @@ export const load: PageServerLoad = async ({ params }) => {
 				s.code.split('.').slice(1).join('.'),
 			),
 		})),
+		nav,
 	};
 };

@@ -1,6 +1,6 @@
 import { requireAuth } from '@ab/auth';
 import { type CardRow, createCard, newCardSchema, SourceRefRequiredError } from '@ab/bc-study';
-import { type CARD_TYPE_VALUES, type DOMAIN_VALUES, QUERY_PARAMS, ROUTES } from '@ab/constants';
+import { type CARD_KIND_VALUES, type CARD_TYPE_VALUES, type DOMAIN_VALUES, QUERY_PARAMS, ROUTES } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
@@ -21,6 +21,7 @@ export const load: PageServerLoad = async ({ url }) => {
 		seed: {
 			domain: url.searchParams.get(QUERY_PARAMS.DOMAIN) ?? '',
 			cardType: url.searchParams.get(QUERY_PARAMS.CARD_TYPE) ?? '',
+			kind: url.searchParams.get(QUERY_PARAMS.CARD_KIND) ?? '',
 			tags: url.searchParams.get(QUERY_PARAMS.TAGS) ?? '',
 		},
 	};
@@ -36,6 +37,8 @@ export const actions: Actions = {
 		const rawBack = String(form.get('back') ?? '');
 		const rawDomain = String(form.get('domain') ?? '');
 		const rawCardType = String(form.get('cardType') ?? '');
+		const rawKindField = form.get('kind');
+		const rawKind = rawKindField === null ? undefined : String(rawKindField);
 		const rawTags = String(form.get('tags') ?? '');
 
 		const input = {
@@ -43,6 +46,7 @@ export const actions: Actions = {
 			back: rawBack,
 			domain: rawDomain,
 			cardType: rawCardType,
+			kind: rawKind,
 			tags: parseTags(rawTags),
 		};
 
@@ -66,6 +70,7 @@ export const actions: Actions = {
 				// zod's enum() widens to string; newCardSchema guarantees membership.
 				domain: parsed.data.domain as (typeof DOMAIN_VALUES)[number],
 				cardType: parsed.data.cardType as (typeof CARD_TYPE_VALUES)[number],
+				kind: parsed.data.kind as (typeof CARD_KIND_VALUES)[number] | undefined,
 				tags: parsed.data.tags,
 			});
 		} catch (err) {
@@ -73,11 +78,11 @@ export const actions: Actions = {
 				return fail(400, { values: input, fieldErrors: { _: err.message } });
 			}
 			log.error(
-				'createCard threw',
+				'create card failed',
 				{ requestId: locals.requestId, userId: user.id },
 				err instanceof Error ? err : undefined,
 			);
-			return fail(500, { values: input, fieldErrors: { _: 'Could not save the card. Please try again.' } });
+			return fail(500, { values: input, fieldErrors: { _: 'Could not create card.' } });
 		}
 
 		if (saveAndAdd) {
@@ -87,6 +92,9 @@ export const actions: Actions = {
 				[QUERY_PARAMS.DOMAIN]: parsed.data.domain,
 				[QUERY_PARAMS.CARD_TYPE]: parsed.data.cardType,
 			});
+			if (parsed.data.kind) {
+				next.set(QUERY_PARAMS.CARD_KIND, parsed.data.kind);
+			}
 			if (parsed.data.tags && parsed.data.tags.length > 0) {
 				next.set(QUERY_PARAMS.TAGS, parsed.data.tags.join(','));
 			}

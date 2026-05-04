@@ -1,6 +1,8 @@
 import { requireAuth } from '@ab/auth';
 import { createScenario, newScenarioSchema, type ScenarioOption, type ScenarioRow } from '@ab/bc-study';
 import {
+	ASSESSMENT_METHOD_VALUES,
+	type AssessmentMethod,
 	type DIFFICULTY_VALUES,
 	type DOMAIN_VALUES,
 	type PHASE_OF_FLIGHT_VALUES,
@@ -58,6 +60,28 @@ function parseRegRefs(raw: string): string[] {
 		.filter((s) => s.length > 0);
 }
 
+/**
+ * Parse the multi-checkbox `assessmentMethods` group. The form posts each
+ * checked method as a separate `assessmentMethods=<value>` entry; we
+ * deduplicate (preserving first-seen order) and strip values outside the
+ * known enum so the BC validator sees a clean array. Returns `undefined`
+ * when nothing checked so the BC default (['scenario']) applies.
+ */
+function parseAssessmentMethods(form: FormData): AssessmentMethod[] | undefined {
+	const raw = form.getAll('assessmentMethods');
+	if (raw.length === 0) return undefined;
+	const seen = new Set<string>();
+	const out: AssessmentMethod[] = [];
+	const valueSet = new Set<string>(ASSESSMENT_METHOD_VALUES);
+	for (const v of raw) {
+		const s = String(v);
+		if (!valueSet.has(s) || seen.has(s)) continue;
+		seen.add(s);
+		out.push(s as AssessmentMethod);
+	}
+	return out.length > 0 ? out : undefined;
+}
+
 export const actions: Actions = {
 	default: async (event) => {
 		const user = requireAuth(event);
@@ -74,6 +98,7 @@ export const actions: Actions = {
 
 		const options = parseOptions(form);
 		const regReferences = parseRegRefs(rawRegRefs);
+		const assessmentMethods = parseAssessmentMethods(form);
 
 		const input = {
 			title: rawTitle,
@@ -84,6 +109,7 @@ export const actions: Actions = {
 			difficulty: rawDifficulty,
 			phaseOfFlight: rawPhase || null,
 			regReferences,
+			assessmentMethods,
 		};
 
 		const parsed = newScenarioSchema.safeParse(input);
@@ -111,14 +137,15 @@ export const actions: Actions = {
 				difficulty: parsed.data.difficulty as (typeof DIFFICULTY_VALUES)[number],
 				phaseOfFlight: (parsed.data.phaseOfFlight ?? null) as (typeof PHASE_OF_FLIGHT_VALUES)[number] | null,
 				regReferences: parsed.data.regReferences,
+				assessmentMethods: parsed.data.assessmentMethods as readonly AssessmentMethod[] | undefined,
 			});
 		} catch (err) {
 			log.error(
-				'createScenario threw',
+				'create scenario failed',
 				{ requestId: locals.requestId, userId: user.id },
 				err instanceof Error ? err : undefined,
 			);
-			return fail(500, { values: input, fieldErrors: { _: 'Could not save the scenario. Please try again.' } });
+			return fail(500, { values: input, fieldErrors: { _: 'Could not create scenario.' } });
 		}
 
 		// Land the user on browse with `?created=<id>` so the page can surface

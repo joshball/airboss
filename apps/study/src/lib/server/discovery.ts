@@ -53,13 +53,17 @@ export async function maybeRunDiscovery(): Promise<void> {
 			env: { ...process.env, [ENV_VARS.AIRBOSS_HANDBOOK_CACHE]: cacheRoot },
 		});
 		child.on('error', (err) => {
-			log.warn('discover-errata startup hook failed to spawn', {
+			// Spawn failure means errata discovery is permanently broken (binary
+			// missing, perms, etc.) -- on-call needs the error tier so they see
+			// it without filtering through warn-noise. Fire-and-forget child;
+			// this log is the only visibility.
+			log.error('spawn discovery child failed', {
 				metadata: { err: err.message },
 			});
 		});
 		child.unref();
 	} catch (error) {
-		log.warn('discover-errata startup hook errored', {
+		log.error('spawn discovery child failed', {
 			metadata: { err: error instanceof Error ? error.message : String(error) },
 		});
 	}

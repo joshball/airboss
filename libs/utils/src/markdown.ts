@@ -335,6 +335,298 @@ export function normalizeHandbookAssetPath(path: string): string {
 	return trimmed;
 }
 
+// ---------------------------------------------------------------------------
+// Allow-listed inline HTML (tables, captions, etc.) inside section bodies.
+// ---------------------------------------------------------------------------
+
+/**
+ * Tag names that survive `sanitizeInlineHtml`. The handbook extractor authors a
+ * `<div class="handbook-table">` wrapper around `<table>` blocks pulled from
+ * the source PDF; we allow the table descendants plus the wrapper itself.
+ *
+ * `script`, `iframe`, `style`, `object`, `embed`, and event-handler attributes
+ * are stripped. Anything else (links, images, generic divs not on the list)
+ * is dropped wholesale rather than partially escaped, so the escape path is
+ * narrow and easy to audit.
+ */
+const ALLOWED_HTML_TAGS = new Set([
+	'div',
+	'table',
+	'thead',
+	'tbody',
+	'tfoot',
+	'tr',
+	'th',
+	'td',
+	'caption',
+	'colgroup',
+	'col',
+]);
+
+/**
+ * Per-tag attribute allow-list. Only attributes safe to interpolate verbatim
+ * (no URL handling, no event handlers) appear here. `class`, `data-*`, simple
+ * geometry attributes for tables. `data-source` carries the path back to the
+ * standalone table HTML file the extractor wrote alongside the section.
+ */
+const ALLOWED_HTML_ATTRS: Record<string, ReadonlyArray<string>> = {
+	div: ['class', 'data-source'],
+	table: ['class'],
+	thead: [],
+	tbody: [],
+	tfoot: [],
+	tr: [],
+	th: ['colspan', 'rowspan', 'scope'],
+	td: ['colspan', 'rowspan'],
+	caption: [],
+	colgroup: ['span'],
+	col: ['span'],
+};
+
+/**
+ * Rewrite the `data-source="/handbooks/<rest>"` attribute on `<div class="handbook-table">`
+ * wrappers to `/handbook-asset/<rest>` so the "open original" link in the
+ * caption resolves through the asset streamer rather than 404'ing on a
+ * static path that doesn't exist on the runtime origin.
+ */
+const HANDBOOK_TABLE_DATA_SOURCE_RE = /\bdata-source\s*=\s*"([^"]+)"/i;
+function rewriteDataSourceAttr(attrs: string): string {
+	return attrs.replace(HANDBOOK_TABLE_DATA_SOURCE_RE, (_m, raw: string) => {
+		const safe = rewriteHandbookAssetUrl(raw);
+		return `data-source="${escapeAttr(safe)}"`;
+	});
+}
+
+/**
+ * Re-emit a single tag (open or close) honouring the allow-list. Returns the
+ * empty string when the tag is not allowed; the surrounding text walker drops
+ * the disallowed tag entirely (and continues consuming text inside, since this
+ * is a small reader-only sanitiser, not a full DOM tree builder).
+ *
+ * Open tags retain only allow-listed attributes. Self-closing forms preserve
+ * the trailing `/`. The matching tag-name pattern matches alphabetic-only
+ * names so XML-namespaced tags (`<svg:foo>`) and exotic constructs cannot
+ * sneak through. Comments and processing instructions are stripped.
+ */
+const TAG_OPEN_RE = /^<([a-z][a-z0-9]*)\b([^>]*?)(\/?)>$/i;
+const TAG_CLOSE_RE = /^<\/([a-z][a-z0-9]*)\s*>$/i;
+const ATTR_RE = /([a-z][a-z0-9-]*)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/gi;
+
+function emitOpenTag(tag: string, attrs: string, selfClose: boolean): string {
+	const lower = tag.toLowerCase();
+	if (!ALLOWED_HTML_TAGS.has(lower)) return '';
+	const allowedAttrs = ALLOWED_HTML_ATTRS[lower] ?? [];
+	const rewritten = lower === 'div' ? rewriteDataSourceAttr(attrs) : attrs;
+	const out: string[] = [];
+	const re = new RegExp(ATTR_RE.source, 'gi');
+	let match: RegExpExecArray | null = re.exec(rewritten);
+	while (match !== null) {
+		const name = (match[1] ?? '').toLowerCase();
+		if (allowedAttrs.includes(name)) {
+			const value = match[2] ?? match[3] ?? match[4] ?? '';
+			out.push(`${name}="${escapeAttr(value)}"`);
+		}
+		match = re.exec(rewritten);
+	}
+	const attrPart = out.length === 0 ? '' : ` ${out.join(' ')}`;
+	const closer = selfClose ? ' /' : '';
+	return `<${lower}${attrPart}${closer}>`;
+}
+
+function emitCloseTag(tag: string): string {
+	const lower = tag.toLowerCase();
+	if (!ALLOWED_HTML_TAGS.has(lower)) return '';
+	return `</${lower}>`;
+}
+
+/**
+ * Tags that carry executable / styling payload. When we encounter one of these
+ * we drop the open tag AND swallow everything up to its matching close tag,
+ * so a `<script>alert(1)</script>` doesn't leave the inner script body on the
+ * page as visible text.
+ *
+ * Deliberately a small set: anything else falls through to "drop the tag,
+ * keep child text" which is the right call for generic disallowed structural
+ * tags (e.g. a stray `<span>` inside a `<td>` should not eat the cell text).
+ */
+const SCRIPTLIKE_TAGS = new Set(['script', 'style', 'iframe', 'object', 'embed', 'noscript', 'template']);
+
+/**
+ * Sanitize a chunk of inline HTML by walking tag-by-tag and emitting only the
+ * subset on the allow-list. Text outside tags is HTML-escaped so a stray `<`
+ * inside a `<caption>` block doesn't break out of the surrounding markup.
+ *
+ * Deliberately tag-walk based, not a full HTML parser: the input is
+ * extractor-authored from FAA tables, not arbitrary user content. Anything
+ * exotic (CDATA, SGML comments with embedded `>`, doctype) gets stripped.
+ *
+ * `<script>` / `<style>` / `<iframe>` (etc.) are treated specially: the
+ * matching close tag is found and the entire run between is discarded so the
+ * inner payload doesn't surface as visible text.
+ *
+ * Used by `renderMarkdown` to pass `<div class="handbook-table">...</div>`
+ * blocks through unchanged-modulo-allowlist while keeping the inline-image
+ * and inline-text passes safe.
+ */
+export function sanitizeInlineHtml(html: string): string {
+	const out: string[] = [];
+	let i = 0;
+	const len = html.length;
+	while (i < len) {
+		const lt = html.indexOf('<', i);
+		if (lt < 0) {
+			out.push(escapeHtml(html.slice(i)));
+			break;
+		}
+		if (lt > i) out.push(escapeHtml(html.slice(i, lt)));
+		// Strip HTML comments wholesale.
+		if (html.startsWith('<!--', lt)) {
+			const end = html.indexOf('-->', lt + 4);
+			i = end < 0 ? len : end + 3;
+			continue;
+		}
+		const gt = html.indexOf('>', lt);
+		if (gt < 0) {
+			// Stray `<` with no closing -- escape and bail.
+			out.push(escapeHtml(html.slice(lt)));
+			break;
+		}
+		const raw = html.slice(lt, gt + 1);
+		const close = raw.match(TAG_CLOSE_RE);
+		if (close?.[1]) {
+			out.push(emitCloseTag(close[1]));
+			i = gt + 1;
+			continue;
+		}
+		const open = raw.match(TAG_OPEN_RE);
+		if (open?.[1] !== undefined) {
+			const tag = open[1].toLowerCase();
+			const attrs = open[2] ?? '';
+			const selfClose = (open[3] ?? '') === '/';
+			// Script-like tags: discard the entire body up to the matching
+			// close tag so the script body doesn't render as visible text.
+			if (SCRIPTLIKE_TAGS.has(tag) && !selfClose) {
+				const closeRe = new RegExp(`<\\/${tag}\\s*>`, 'i');
+				const rest = html.slice(gt + 1);
+				const closeMatch = rest.match(closeRe);
+				if (closeMatch?.index !== undefined) {
+					i = gt + 1 + closeMatch.index + closeMatch[0].length;
+				} else {
+					i = len;
+				}
+				continue;
+			}
+			out.push(emitOpenTag(tag, attrs, selfClose));
+			i = gt + 1;
+			continue;
+		}
+		// Unrecognised: drop the tag and continue past it.
+		i = gt + 1;
+	}
+	return out.join('');
+}
+
+/**
+ * Tags whose opening on a line marks the start of a block-level HTML chunk
+ * inside section markdown. Used by `renderMarkdown` to peel the chunk out of
+ * the markdown stream (so its inner contents aren't run through the inline
+ * paragraph/list parsers) before sanitising it through `sanitizeInlineHtml`.
+ *
+ * Kept narrow on purpose: the handbook extractor only emits `<div class="handbook-table">`
+ * wrappers and bare `<table>` siblings. Other block tags fall through to the
+ * markdown paragraph path where their `<` characters are escaped as text.
+ */
+const HTML_BLOCK_OPENERS = ['div', 'table'] as const;
+
+/**
+ * Append a small "Open original" anchor inside each `<div class="handbook-table">`
+ * wrapper, reading the wrapper's `data-source` attribute. The anchor lands
+ * immediately before the closing `</div>` so the table renders first and the
+ * link sits visually below it. When no caption / no data-source is present
+ * (defensive: shouldn't happen for extractor-authored content), the input is
+ * returned unchanged.
+ *
+ * Run AFTER `sanitizeInlineHtml`, which has already rewritten `data-source`
+ * from `/handbooks/` to `/handbook-asset/`. The anchor uses the rewritten
+ * URL directly so it streams the standalone HTML through the asset endpoint.
+ */
+function injectOpenOriginalLink(html: string): string {
+	return html.replace(
+		/<div\s+class="handbook-table"\s+data-source="([^"]+)"\s*>([\s\S]*?)<\/div>/gi,
+		(_m, dataSource: string, inner: string) => {
+			const safeHref = escapeAttr(dataSource);
+			const link = `<a class="handbook-table-source" href="${safeHref}" target="_blank" rel="noopener noreferrer">Open original table</a>`;
+			return `<div class="handbook-table" data-source="${safeHref}">${inner}${link}</div>`;
+		},
+	);
+}
+
+/**
+ * One handbook-table block found in a section body: the original asset path
+ * the extractor wrote (via `data-source` on the wrapper), plus the wrapper's
+ * caption (when present) so a "table N" hint can render alongside the
+ * "open original" link in the RenderedSection.
+ */
+export interface HandbookTableLink {
+	readonly assetPath: string;
+	readonly caption: string;
+}
+
+/**
+ * Extract every `data-source` attribute from `<div class="handbook-table">`
+ * wrappers in a markdown body. Used by the section reader to surface "open
+ * original" links pointing at the standalone HTML the extractor wrote
+ * alongside the section markdown. Returns an empty array when no wrapper is
+ * present.
+ *
+ * Two-pass: locate each wrapper open + matching close, then probe the inner
+ * span for an optional `<caption>...</caption>`. Splitting the lookups avoids
+ * the regex-with-optional-capture pitfall where a lazy outer match prefers
+ * to skip the optional caption group entirely, leaving the caption empty
+ * even though the source HTML carries one.
+ */
+const HANDBOOK_TABLE_OPEN_RE = /<div\s+class\s*=\s*"handbook-table"[^>]*\bdata-source\s*=\s*"([^"]+)"[^>]*>/gi;
+const HANDBOOK_TABLE_CAPTION_RE = /<caption\b[^>]*>([\s\S]*?)<\/caption>/i;
+export function extractHandbookTableLinks(md: string): readonly HandbookTableLink[] {
+	const out: HandbookTableLink[] = [];
+	const re = new RegExp(HANDBOOK_TABLE_OPEN_RE.source, 'gi');
+	let match: RegExpExecArray | null = re.exec(md);
+	while (match !== null) {
+		const assetPath = match[1] ?? '';
+		// Find the matching close `</div>` from the open tag's end position.
+		// Tracks nested `<div>` opens defensively even though the extractor
+		// authors a flat one-deep wrapper.
+		const startInside = match.index + match[0].length;
+		const closeIdx = findMatchingClose(md, startInside, 'div');
+		const inside = closeIdx === -1 ? md.slice(startInside) : md.slice(startInside, closeIdx);
+		const capMatch = inside.match(HANDBOOK_TABLE_CAPTION_RE);
+		const captionRaw = (capMatch?.[1] ?? '').trim();
+		const caption = captionRaw.replace(/\s+/g, ' ').slice(0, 200);
+		if (assetPath !== '') out.push({ assetPath, caption });
+		match = re.exec(md);
+	}
+	return out;
+}
+
+/**
+ * Walk forward from `start` looking for the matching close tag for `tag`,
+ * tracking nesting depth. Returns the index of the matching `</tag>` start,
+ * or `-1` if no match is found before end of input.
+ */
+function findMatchingClose(s: string, start: number, tag: string): number {
+	const re = new RegExp(`<(\\/?)${tag}\\b[^>]*>`, 'gi');
+	re.lastIndex = start;
+	let depth = 1;
+	let m: RegExpExecArray | null = re.exec(s);
+	while (m !== null) {
+		const isClose = m[1] === '/';
+		depth += isClose ? -1 : 1;
+		if (depth === 0) return m.index;
+		m = re.exec(s);
+	}
+	return -1;
+}
+
 /**
  * Convert markdown to HTML. Supports:
  * - ATX headings `###`, `####` (H2 is reserved for phase splitting upstream)
@@ -365,6 +657,60 @@ export function renderMarkdown(md: string): string {
 		if (openList === null) return;
 		html.push(`</${openList}>`);
 		openList = null;
+	};
+
+	// Block-level HTML chunk -- a line that opens with `<div ...>` or `<table ...>`
+	// and whose closing tag appears on a later line. The whole span is pulled
+	// out of the markdown stream and run through `sanitizeInlineHtml` so a
+	// `<table>` block from the handbook extractor renders as a real table
+	// instead of escaped text or an inert paragraph.
+	//
+	// Returns `null` when the line doesn't open a recognised block, or when
+	// the opening tag's matching close isn't found before the end of input.
+	// In the no-match case the caller falls back to the paragraph path, which
+	// HTML-escapes the `<` so it renders as visible text -- safe by default.
+	const tryHtmlBlock = (start: number): { html: string; consumed: number } | null => {
+		const first = lines[start];
+		if (first === undefined) return null;
+		const openMatch = first.match(/^<([a-z][a-z0-9]*)\b/i);
+		if (!openMatch) return null;
+		const tag = (openMatch[1] ?? '').toLowerCase();
+		if (!HTML_BLOCK_OPENERS.includes(tag as (typeof HTML_BLOCK_OPENERS)[number])) return null;
+		// Walk line-by-line, tracking nesting depth on the same tag name. A
+		// `<table>` inside a `<div class="handbook-table">` increments depth on
+		// the div line and decrements on the matching `</div>` only; nested
+		// occurrences of the same tag are rare in extractor output but safer to
+		// support than not.
+		const openRe = new RegExp(`<${tag}\\b`, 'gi');
+		const closeRe = new RegExp(`</${tag}\\s*>`, 'gi');
+		let depth = 0;
+		let cursor = start;
+		const buffer: string[] = [];
+		while (cursor < lines.length) {
+			const ln = lines[cursor];
+			buffer.push(ln);
+			depth += (ln.match(openRe)?.length ?? 0) - (ln.match(closeRe)?.length ?? 0);
+			if (depth <= 0 && cursor > start) {
+				// Multi-line block closed -- include this line.
+				const sanitized = sanitizeInlineHtml(buffer.join('\n'));
+				return { html: injectOpenOriginalLink(sanitized), consumed: cursor - start + 1 };
+			}
+			if (depth <= 0 && cursor === start) {
+				// Single-line block (`<table>...</table>` on one line). Only
+				// honour it if there's actually a close on this line.
+				if (closeRe.test(ln)) {
+					const sanitized = sanitizeInlineHtml(buffer.join('\n'));
+					return { html: injectOpenOriginalLink(sanitized), consumed: 1 };
+				}
+				// Otherwise depth could be 0 at the start because the open
+				// regex didn't match the (already-confirmed) opener -- bump
+				// depth to keep scanning forward.
+				depth = 1;
+			}
+			cursor++;
+		}
+		// Unclosed block -- bail and let the paragraph path handle it.
+		return null;
 	};
 
 	// Block-level image markdown -- a line that begins with `![` and whose
@@ -399,6 +745,20 @@ export function renderMarkdown(md: string): string {
 	while (i < lines.length) {
 		const raw = lines[i];
 		const line = raw.replace(/\s+$/, '');
+
+		// Block-level HTML chunk: `<div class="handbook-table">...</div>` and
+		// bare `<table>` blocks pass through `sanitizeInlineHtml` rather than
+		// the markdown paragraph parser. Detected before the inline-image
+		// pass because a div-wrapped table line begins with `<` and would
+		// otherwise fall into the default paragraph branch.
+		const htmlBlock = line.startsWith('<') ? tryHtmlBlock(i) : null;
+		if (htmlBlock) {
+			closeParagraph();
+			closeList();
+			html.push(htmlBlock.html);
+			i += htmlBlock.consumed;
+			continue;
+		}
 
 		// Block-level image: `![alt](url)` on its own line. Rendered as <figure>.
 		const imgBlock = line.startsWith('![') ? tryImageBlock(i) : null;

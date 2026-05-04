@@ -15,7 +15,7 @@
  *     by the DB index; duplicate inserts surface as DuplicateCitationError.
  */
 
-import { hangarReference } from '@ab/bc-hangar/schema';
+import { hangarReference } from '@ab/bc-hangar';
 import {
 	CITATION_CONTEXT_MAX_LENGTH,
 	CITATION_SOURCE_LABELS,
@@ -86,6 +86,23 @@ export class CitationNotFoundError extends Error {
 	constructor(public readonly citationId: string) {
 		super(`Citation ${citationId} not found`);
 		this.name = 'CitationNotFoundError';
+	}
+}
+
+/**
+ * Raised by `deleteCitation` when a citation row exists but the deleting user
+ * is not its `created_by`. The route layer maps this to 404 (alongside
+ * `CitationNotFoundError`) for security obfuscation; the BC truth-tells so
+ * the operator log and `instanceof` discriminator disambiguate "row right
+ * there, wrong owner" from "row never existed."
+ */
+export class CitationNotOwnedError extends Error {
+	constructor(
+		public readonly citationId: string,
+		public readonly userId: string,
+	) {
+		super(`Citation ${citationId} is not owned by user ${userId}`);
+		this.name = 'CitationNotOwnedError';
 	}
 }
 
@@ -322,7 +339,10 @@ export async function createCitation(input: CreateCitationInput, db: Db = defaul
 /**
  * Delete a citation by id. Callers must verify the deleting user either owns
  * the citation (createdBy) or owns the source content. For v1 we require
- * `createdBy` match -- authors delete their own citations.
+ * `createdBy` match -- authors delete their own citations. The two failure
+ * modes raise distinct typed errors (`CitationNotFoundError` vs
+ * `CitationNotOwnedError`) so the BC log truth-tells; route handlers may map
+ * both to 404 for security obfuscation.
  */
 export async function deleteCitation(id: string, userId: string, db: Db = defaultDb): Promise<void> {
 	const [existing] = await db
@@ -331,7 +351,7 @@ export async function deleteCitation(id: string, userId: string, db: Db = defaul
 		.where(eq(contentCitation.id, id))
 		.limit(1);
 	if (!existing) throw new CitationNotFoundError(id);
-	if (existing.createdBy !== userId) throw new CitationNotFoundError(id);
+	if (existing.createdBy !== userId) throw new CitationNotOwnedError(id, userId);
 	await db.delete(contentCitation).where(eq(contentCitation.id, id));
 }
 

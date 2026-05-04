@@ -16,18 +16,22 @@ counts:
 
 | Severity | Count | Closed | Open |
 | -------- | ----: | -----: | ---: |
-| critical |     1 |      0 |    1 |
-| major    |     4 |      3 |    1 |
-| minor    |     6 |      2 |    4 |
-| nit      |     4 |      0 |    4 |
+| critical |     1 |      1 |    0 |
+| major    |     4 |      4 |    0 |
+| minor    |     6 |      3 |    3 |
+| nit      |     4 |      1 |    3 |
 
-### CRITICAL: `applyCertGoalsToPrimaryGoal` non-transactional -- STILL OPEN
+### CRITICAL: `applyCertGoalsToPrimaryGoal` non-transactional -- CLOSED
 
-Closed partially: the per-cert serial walk is now batched (`PR #481`, `libs/bc/study/src/goals.ts:542-639`). Reads are batched (`inArray(credential.slug, slugs)` + `inArray(credentialSyllabus.credentialId, ids)`); upserts run via `Promise.all(...addGoalSyllabus)`. **Open:** the targeting patch update + N upserts still run on raw `db`, not inside a `db.transaction`. The function-level docstring claims "idempotent on re-run" so partial failure is recoverable by re-invoking, which softens the original criticality. Trigger: when WP-engine-goal-cutover ships its end-to-end tests, wrap targeting patch + upsert phase in `db.transaction(async tx => { ... })` and thread `tx` through `addGoalSyllabus`.
+Closed by this PR. `libs/bc/study/src/goals.ts:542-647` now resolves the cert -> syllabus map (read-only) before opening a single `db.transaction(async (tx) => { ... })` that owns every write: the create-primary path (when no goal exists), the targeting patch update, and the per-cert `addGoalSyllabus` upserts (all threaded through `tx`). A mid-loop failure rolls every preceding write back, so `getDerivedCertGoals` can never observe a partially-built primary goal mid-action. New atomicity test at `libs/bc/study/src/goals.test.ts:600-654` proves it: a forced-rollback proxy wraps `db.transaction`, the helper runs end-to-end against a fresh user, and the post-conditions assert both the primary goal and its `goal_syllabus` rows are absent. Pre-fix the targeting update on raw `db` would have survived the rollback.
 
-### MAJOR: `renameSavedDeck` / `deleteSavedDeck` read-then-write -- STILL OPEN
+### MAJOR: `renameSavedDeck` / `deleteSavedDeck` read-then-write -- CLOSED
 
-`libs/bc/study/src/saved-decks.ts:73-107, 123-155` still pre-read + branch + INSERT/UPDATE outside a transaction. Concurrent double-clicks can race on the partial UNIQUE `(user_id, deck_hash)`. Trigger: roll into a "saved-decks atomicity" cleanup pass; replace both functions with a single `insert().onConflictDoUpdate({ target: [savedDeck.userId, savedDeck.deckHash], set: {...} }).returning()`.
+Closed by this PR. `libs/bc/study/src/saved-decks.ts:73-103, 119-145` now use a single-statement `insert().onConflictDoUpdate({ target: [savedDeck.userId, savedDeck.deckHash], set: {...} }).returning()`. The read-then-write race against the (user_id, deck_hash) UNIQUE is gone; the DB picks the winner in one round-trip and surfaces the typed BC outcome to every concurrent caller. New concurrency tests at `libs/bc/study/src/saved-decks.test.ts:236-291` fire 5 parallel renames, 8 parallel dismisses, and an interleaved rename/dismiss burst against fresh deck hashes; pre-fix at least one call would have rejected with raw 23505. Each post-condition asserts exactly one row exists per (user, hash).
+
+### MAJOR: `updateCard` non-transactional card+snooze writes -- CLOSED
+
+Closed by this PR. `libs/bc/study/src/cards.ts:168-225` wraps the existence check, the card UPDATE, and the bad-question snooze sweep in one `db.transaction(async (tx) => { ... })`; all three statements share the same `tx`. New atomicity tests at `libs/bc/study/src/cards.test.ts:206-267` use a forced-rollback proxy on `db.transaction`, run `updateCard` to completion, then verify neither `card.front`/`tags` nor the active snooze's `cardEditedAt`/`snoozeUntil` mutated -- proving both writes lived inside the BC's transaction and rolled back together. Pre-fix this finding was filed against the correctness reviewer; the fix closes both the correctness major and this backend MAJOR.
 
 ### MAJOR: `recordItemResult` mislabeled `SessionNotFoundError` -- CLOSED
 
@@ -53,9 +57,9 @@ PR #479 (`libs/bc/study/src/credentials.ts:144-165`). Replaced with a single `WI
 
 `libs/bc/study/src/citations/search.ts:12,29`. Imports `escapeLikePattern` from `@ab/db` and uses it inside `buildTermPattern`. Closed.
 
-### MINOR: `goals.ts` bare `Error('createGoal failed')` etc. -- STILL OPEN
+### MINOR: `goals.ts` bare `Error('createGoal failed')` etc. -- CLOSED
 
-`libs/bc/study/src/goals.ts:267,272,352,408`, `credentials.ts:478`, `syllabi.ts:502,534` still throw `new Error('upsertX failed')`. No shared `UpsertReturnedNoRowError` introduced. Same pattern as DX MINOR. Trigger: bundle into a "BC error class hygiene" sweep; introduce one shared `UpsertReturnedNoRowError(entity, id)` in the BC and replace all 7 sites.
+Closed by the chunk-2 BC error-class hygiene sweep. `libs/bc/study/src/errors.ts` adds `UpsertReturnedNoRowError(entity, id)` (canonical home, barreled from `index.ts`). The 6 sites (`goals.ts:268,273,353,409`, `credentials.ts:495`, `syllabi.ts:503,535`) now throw the typed class with structured `entity` + `id` fields, so route layers can map cleanly to a stable 500 and operator log search by error name no longer misses these. `libs/bc/study/src/errors.test.ts` pins the public field contract.
 
 ### MINOR: `createCitation` defence-in-depth pre-read -- STILL OPEN
 
@@ -77,13 +81,13 @@ PR #479 (`libs/bc/study/src/credentials.ts:144-165`). Replaced with a single `WI
 
 `libs/bc/study/src/references.ts:705-730` behavior unchanged. Trigger: roll into the next references read-state refactor; add JSDoc noting the by-design behavior.
 
-### NIT: `validateCredentialDag` non-cycle payload -- STILL OPEN
+### NIT: `validateCredentialDag` non-cycle payload -- CLOSED
 
-`libs/bc/study/src/credentials.ts:558-565` fallback returns unsorted ids in `CredentialPrereqCycleError`. Trigger: split into `CredentialPrereqUnresolvedNodesError` when a real seed authoring task surfaces the case in the wild.
+Closed by the chunk-2 BC error-class hygiene sweep. `libs/bc/study/src/credentials.ts:80-94` adds `CredentialPrereqUnresolvedNodesError(unresolved)`; `validateCredentialDag` (line 573-585) now throws it when DFS cannot find a walkable cycle from the chosen entry, instead of stuffing unsorted ids into a `CredentialPrereqCycleError`. Callers can render an accurate message (cycle path vs unordered set) and discriminate on `err instanceof`. `credentials.test.ts:128-159` pins the public field shape, distinct-instanceof guarantee, and message contents.
 
 ### Final verdict
 
-3 of 4 majors closed (#437, #479, plus createPlan SQLSTATE inline; the sole open major is `saved-decks` atomicity). Critical is partially closed (batching landed; transaction wrap still pending). 2 of 6 minors closed (snooze magic strings, escapeLike). 4 nits remain as low-priority follow-ups with concrete triggers. `review_status` flipped to `done`; `status` user-controlled.
+All 4 majors and the sole CRITICAL closed (transaction-wrap pass landed: `applyCertGoalsToPrimaryGoal` + `updateCard` + `renameSavedDeck`/`deleteSavedDeck` upsert; PR #437, PR #479, the createPlan SQLSTATE inline, plus the saved-decks/updateCard/applyCertGoals trio). 3 of 6 minors closed (snooze magic strings, escapeLike, upsert typed errors). 1 of 4 nits closed (`CredentialPrereqUnresolvedNodesError` lift). 3 minors + 3 nits remain as low-priority follow-ups with concrete triggers. `review_status` flipped to `done`; `status` user-controlled.
 
 ## Summary
 

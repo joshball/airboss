@@ -285,11 +285,11 @@ export const actions: Actions = {
 				return fail(400, { error: 'Slot not found on session' });
 			}
 			log.error(
-				'submitReview from session threw',
+				'save review failed',
 				{ requestId: event.locals.requestId, userId: user.id, metadata: { sessionId: event.params.id } },
 				err instanceof Error ? err : undefined,
 			);
-			return fail(500, { error: 'Could not save review' });
+			return fail(500, { error: 'Could not save review.' });
 		}
 	},
 
@@ -361,11 +361,11 @@ export const actions: Actions = {
 			}
 			if (err instanceof InvalidOptionError) return fail(400, { error: 'Selected option is not on this scenario' });
 			log.error(
-				'submitAttempt from session threw',
+				'save rep attempt failed',
 				{ requestId: event.locals.requestId, userId: user.id, metadata: { sessionId: event.params.id } },
 				err instanceof Error ? err : undefined,
 			);
-			return fail(500, { error: 'Could not save rep attempt' });
+			return fail(500, { error: 'Could not save rep attempt.' });
 		}
 	},
 
@@ -434,7 +434,7 @@ export const actions: Actions = {
 			});
 		} catch (err) {
 			log.error(
-				'skipSessionSlot transaction threw',
+				'skip slot failed',
 				{
 					requestId: event.locals.requestId,
 					userId: user.id,
@@ -442,7 +442,7 @@ export const actions: Actions = {
 				},
 				err instanceof Error ? err : undefined,
 			);
-			return fail(500, { success: false as const, error: 'Could not save skip' });
+			return fail(500, { success: false as const, error: 'Could not save skip.' });
 		}
 
 		return { success: true as const };

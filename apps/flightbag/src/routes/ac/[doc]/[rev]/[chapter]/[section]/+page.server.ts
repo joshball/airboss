@@ -6,9 +6,10 @@
  * TOC.
  */
 
-import { getHandbookSection, listReferences } from '@ab/bc-study';
+import { getHandbookSection, listAllSectionsForReference, listReferences } from '@ab/bc-study';
 import { REFERENCE_KINDS, type ReferenceKind, ROUTES } from '@ab/constants';
 import { error } from '@sveltejs/kit';
+import { computeSiblingNav } from '../../../../../../lib/section-nav';
 import { buildSourceLinks } from '../../../../../../lib/source-links';
 import type { PageServerLoad } from './$types';
 
@@ -42,6 +43,18 @@ export const load: PageServerLoad = async ({ params }) => {
 		url: ref.url,
 	});
 
+	const allSections = await listAllSectionsForReference(ref.id);
+	const nav = computeSiblingNav(allSections, view.section.id, (row) => {
+		if (row.parentId === null) {
+			return ROUTES.FLIGHTBAG_AC_CHAPTER(params.doc, params.rev, row.code);
+		}
+		const parts = row.code.split('.');
+		if (parts.length !== 2) return null;
+		const [ch, sec] = parts;
+		if (!ch || !sec) return null;
+		return ROUTES.FLIGHTBAG_AC_SECTION(params.doc, params.rev, ch, sec);
+	});
+
 	return {
 		uri: `airboss-ref:ac/${params.doc}/${params.rev}/section-${params.chapter}`,
 		sourceLinks,
@@ -63,6 +76,7 @@ export const load: PageServerLoad = async ({ params }) => {
 			title: view.section.title,
 			contentMd: view.section.contentMd,
 			sourceLocator: view.section.sourceLocator,
+			metadata: view.section.metadata as Record<string, unknown>,
 		},
 		figures: view.figures.map((f) => ({
 			id: f.id,
@@ -81,5 +95,6 @@ export const load: PageServerLoad = async ({ params }) => {
 				href: ROUTES.FLIGHTBAG_AC_SECTION(params.doc, params.rev, params.chapter, trail),
 			};
 		}),
+		nav,
 	};
 };

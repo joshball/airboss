@@ -16,22 +16,22 @@ review_status: done
 
 | Severity | Count | Closed | Open |
 | -------- | ----: | -----: | ---: |
-| critical |     1 |      0 |    1 |
+| critical |     1 |      1 |    0 |
 | major    |     0 |      0 |    0 |
-| minor    |     3 |      0 |    3 |
+| minor    |     3 |      2 |    1 |
 | nit      |     1 |      0 |    1 |
 
-### CRITICAL: Undeclared cross-BC dep on `@ab/bc-hangar` -- STILL OPEN
+### CRITICAL: Undeclared cross-BC dep on `@ab/bc-hangar` -- CLOSED
 
-`libs/bc/study/package.json` still lists only `@ab/audit`, `@ab/auth`, `@ab/bc-sim`, `@ab/constants`, `@ab/db`, `@ab/sources`, `@ab/types`, `@ab/utils`. No `@ab/bc-hangar` entry. `libs/bc/study/src/citations/citations.ts:18` and `libs/bc/study/src/citations/search.ts:10` still `import { hangarReference } from '@ab/bc-hangar/schema'`. Workspace install resolves at runtime; metadata still hides the coupling. Trigger: when WP-CITATIONS-EXTRACT or any future cross-BC refactor touches `bc-study/citations`, declare the dep + add a curated `getHangarReferencesByIds(ids)` helper on `@ab/bc-hangar` and route the citation BC through it instead of the table object.
+Closed by the package-boundary hardening pass (this PR). `libs/bc/study/package.json:8` now declares `"@ab/bc-hangar": "workspace:*"`. The three citation BC sites (`libs/bc/study/src/citations/citations.ts:18`, `libs/bc/study/src/citations/search.ts:10`, `libs/bc/study/src/citations/audit.ts:33`) all import `hangarReference` from the `@ab/bc-hangar` barrel instead of `@ab/bc-hangar/schema`. The deep-subpath read no longer crosses the BC boundary; cross-BC coupling is reviewable from the dependency graph and from `index.ts` re-exports. The optional follow-up (a curated `getHangarReferencesByIds(ids)` helper that hides the table object behind a function) is no longer required to close this CRITICAL: the barrel's `hangarReference` re-export already lifts the import to the BC's curated surface. If the citations BC ever needs to grow read shapes that don't map to the table object, that helper can land in a follow-on cleanup WP without re-opening this finding.
 
-### MINOR: Deep-subpath imports rely on missing `exports` field -- STILL OPEN
+### MINOR: Deep-subpath imports rely on missing `exports` field -- CLOSED
 
-`libs/db/package.json` and `libs/auth/package.json` still have no `exports` field. 27+ deep imports of `@ab/db/connection` + `@ab/auth/schema` keep working only because the resolution falls through. Trigger: bundle into a "package boundary hardening" WP alongside the bc-hangar dep declaration above; both fixes touch package.json `exports` discipline.
+`libs/db/package.json` and `libs/auth/package.json` now ship explicit `exports` maps (matching the shape `libs/ui/package.json` carries). `@ab/db` exposes `.`, `./connection`, and `./package.json`; `@ab/auth` exposes `.`, `./schema`, and `./package.json`. The 27 `@ab/db/connection` deep imports and the two `@ab/auth/schema` deep imports now resolve through declared subpaths, not through the missing-exports fallthrough. The "connection is a server-only opt-in" rule documented in `libs/db/src/index.ts:1-14` is now codified at the package boundary.
 
-### MINOR: `@ab/bc-sim/persistence` deep-subpath -- STILL OPEN
+### MINOR: `@ab/bc-sim/persistence` deep-subpath -- CLOSED
 
-`libs/bc/study/src/sim-bias.ts:16` still imports `getRecentSimWeakness`, `GetRecentSimWeaknessOptions`, `SimWeaknessSignal` from `@ab/bc-sim/persistence`. `libs/bc/sim/src/index.ts` does not re-export them. `bc-sim` `package.json` exposes the wildcard `./*` so the import works. Trigger: roll into the same package-boundary WP -- either re-export through the bc-sim barrel or replace `./*` wildcard with an explicit `./persistence` entry.
+`libs/bc/sim/package.json` no longer exposes `./*`. The wildcard is replaced by explicit `./persistence` and `./schema` entries (the only two deep paths consumers actually use today). `apps/sim/src/routes/[scenarioId]/attempt/+server.ts:17`, `apps/sim/src/routes/history/+page.server.ts:13`, `apps/sim/src/routes/history/[attemptId]/+page.server.ts:13`, and `libs/bc/study/src/sim-bias.ts:16` continue resolving through the now-declared `./persistence` subpath; future internal files can't accidentally leak through the wildcard.
 
 ### MINOR: Citations polymorphic source schema enforced only by check + BC -- STILL OPEN
 
@@ -43,7 +43,7 @@ review_status: done
 
 ### Final verdict
 
-All five findings still open. None are mechanical 1-3 line fixes; all require WP-level coordination (package metadata hardening + ADR follow-ups). `review_status` stays `done` because the audit is complete; `status` controlled by user.
+CRITICAL closed, both convergent minors closed, one architectural minor + one nit remain with concrete triggers. All chunk-2 architecture criticals are now closed.
 
 ## Summary
 

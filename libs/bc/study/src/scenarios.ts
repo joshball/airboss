@@ -12,6 +12,8 @@
  */
 
 import {
+	ASSESSMENT_METHOD_VALUES,
+	type AssessmentMethod,
 	CONTENT_SOURCES,
 	type ContentSource,
 	DEFAULT_USER_TIMEZONE,
@@ -21,6 +23,7 @@ import {
 	type PhaseOfFlight,
 	REP_BATCH_SIZE,
 	REP_DASHBOARD_WINDOW_DAYS,
+	SCENARIO_DEFAULT_ASSESSMENT_METHODS,
 	SCENARIO_STATUSES,
 	type ScenarioStatus,
 	SESSION_ITEM_KINDS,
@@ -45,6 +48,7 @@ import {
 	sql,
 } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
+import { SourceRefRequiredError } from './errors';
 import {
 	type ScenarioOption,
 	type ScenarioOptionRow,
@@ -54,6 +58,11 @@ import {
 	sessionItemResult,
 } from './schema';
 import { newScenarioSchema, submitAttemptSchema } from './validation';
+
+// Re-exported so existing consumers of `from './scenarios'` and the BC barrel
+// keep working. Canonical class lives in `./errors` and is shared with
+// `cards.ts` -- see the comment there. (chunk-2 dx review.)
+export { SourceRefRequiredError };
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 
@@ -91,14 +100,33 @@ export class InvalidOptionError extends Error {
 }
 
 /**
- * Raised when `sourceType !== 'personal'` but `sourceRef` is missing. Mirrors
- * the identically-named typed error in `cards.ts` so non-personal scenarios
- * and cards produce the same discriminable failure mode for callers.
+ * Raised when `scenario.assessment_methods` is empty, contains a duplicate, or
+ * contains a value outside `ASSESSMENT_METHOD_VALUES`. Defensive: zod
+ * (`assessmentMethodsSchema` in validation.ts) is the primary defense; the BC
+ * also rejects so cross-BC callers and seed scripts that construct an input
+ * directly still hit a typed failure. evidence-kind-data-layer WP.
  */
-export class SourceRefRequiredError extends Error {
-	constructor() {
-		super('source_ref is required when source_type is not personal');
-		this.name = 'SourceRefRequiredError';
+export class InvalidAssessmentMethodError extends Error {
+	constructor(
+		public readonly methods: readonly string[],
+		public readonly reason: string,
+	) {
+		super(`Invalid scenario.assessment_methods (${reason}): ${JSON.stringify(methods)}`);
+		this.name = 'InvalidAssessmentMethodError';
+	}
+}
+
+const ASSESSMENT_METHOD_VALUE_SET: ReadonlySet<string> = new Set(ASSESSMENT_METHOD_VALUES);
+
+function validateAssessmentMethods(methods: readonly AssessmentMethod[]): void {
+	if (methods.length === 0) throw new InvalidAssessmentMethodError(methods, 'must be non-empty');
+	const seen = new Set<string>();
+	for (const m of methods) {
+		if (!ASSESSMENT_METHOD_VALUE_SET.has(m)) {
+			throw new InvalidAssessmentMethodError(methods, `unknown method '${m}'`);
+		}
+		if (seen.has(m)) throw new InvalidAssessmentMethodError(methods, `duplicate method '${m}'`);
+		seen.add(m);
 	}
 }
 
@@ -131,6 +159,15 @@ export interface CreateScenarioInput {
 	 * mastery aggregation.
 	 */
 	nodeId?: string | null;
+	/**
+	 * Per-scenario assessment-method tags (evidence-kind-data-layer WP).
+	 * Drives the `scenario` and `demonstration` partition gates in mastery.ts.
+	 * Defaults to `['scenario']` when omitted, matching the column default
+	 * and today's "every rep is judgment" behavior. A scenario can carry
+	 * multiple methods (e.g. `['scenario','demonstration']` for a hybrid
+	 * maneuver / decision rep) so the same rep contributes to both gates.
+	 */
+	assessmentMethods?: readonly AssessmentMethod[];
 }
 
 export interface ScenarioFilters {
@@ -209,6 +246,7 @@ export async function createScenario(input: CreateScenarioInput, db: Db = defaul
 		sourceRef: input.sourceRef,
 		regReferences: input.regReferences,
 		isEditable: input.isEditable,
+		assessmentMethods: input.assessmentMethods,
 	});
 	const sourceType = (parsed.sourceType ?? CONTENT_SOURCES.PERSONAL) as ContentSource;
 	if (sourceType !== CONTENT_SOURCES.PERSONAL && !parsed.sourceRef) {
@@ -216,6 +254,8 @@ export async function createScenario(input: CreateScenarioInput, db: Db = defaul
 		// traceable back to its origin (course, product, import).
 		throw new SourceRefRequiredError();
 	}
+	const assessmentMethods = (parsed.assessmentMethods ?? SCENARIO_DEFAULT_ASSESSMENT_METHODS) as AssessmentMethod[];
+	validateAssessmentMethods(assessmentMethods);
 
 	const now = new Date();
 	const id = generateScenarioId();
@@ -240,6 +280,7 @@ export async function createScenario(input: CreateScenarioInput, db: Db = defaul
 				// or course-authored and should not be edited downstream.
 				isEditable: parsed.isEditable ?? sourceType === CONTENT_SOURCES.PERSONAL,
 				regReferences: parsed.regReferences ?? [],
+				assessmentMethods: [...assessmentMethods],
 				status: SCENARIO_STATUSES.ACTIVE,
 				createdAt: now,
 			})
@@ -862,4 +903,41 @@ export async function getRepDashboard(
 		},
 		domainBreakdown: domainWindow,
 	};
+}
+
+/**
+ * Read every active scenario on a (user, node) whose `assessment_methods`
+ * jsonb array contains the given method. Powers the per-evidence-kind
+ * partition in `mastery.ts` (scenario vs demonstration gates) and the
+ * `bun run db check scenario-assessment-methods` audit.
+ *
+ * The filter uses `jsonb @> '"<method>"'::jsonb` so the read picks up
+ * scenarios tagged with multiple methods (a hybrid `['scenario','demonstration']`
+ * scenario matches both `scenario` and `demonstration` calls). Postgres
+ * supports a GIN index on `assessment_methods` if profiling shows the scan
+ * is hot; v1 leaves the column un-indexed.
+ *
+ * evidence-kind-data-layer WP.
+ */
+export async function getScenariosForNodeByMethod(
+	userId: string,
+	nodeId: string,
+	method: AssessmentMethod,
+	db: Db = defaultDb,
+): Promise<ScenarioRow[]> {
+	if (!ASSESSMENT_METHOD_VALUE_SET.has(method)) {
+		throw new InvalidAssessmentMethodError([method], `unknown method '${method}'`);
+	}
+	return await db
+		.select()
+		.from(scenario)
+		.where(
+			and(
+				eq(scenario.userId, userId),
+				eq(scenario.nodeId, nodeId),
+				eq(scenario.status, SCENARIO_STATUSES.ACTIVE),
+				sql`${scenario.assessmentMethods} @> ${JSON.stringify([method])}::jsonb`,
+			),
+		)
+		.orderBy(asc(scenario.createdAt));
 }

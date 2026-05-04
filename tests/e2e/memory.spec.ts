@@ -76,10 +76,18 @@ test.describe('memory', () => {
 		await expect(page.getByText(front).first()).toBeVisible();
 	});
 
-	test('review route loads (may be empty or show a due card)', async ({ page }) => {
+	test('review route loads -- Start prompt, then runner after submit', async ({ page }) => {
 		await page.goto(ROUTES.MEMORY_REVIEW);
-		// Valid states: "All caught up." (no cards due), "Show answer" button (phase=front), or a rating button (phase=answer).
-		// Scope away the InfoTip trigger ("Learn more about Show answer") which also matches /show answer/i.
+		// Post-2026-05 fix: GET /memory/review never mints a session. The
+		// landing screen renders a "Start review" prompt that POSTs to
+		// `?/fresh`; the runner page is only reached after that submit.
+		const startBtn = page.getByRole('button', { name: /start review/i });
+		await expect(startBtn).toBeVisible();
+		await startBtn.click();
+		// Valid post-submit states: "All caught up." (no cards due), "Show answer"
+		// button (phase=front), or a rating button (phase=answer). Scope away
+		// the InfoTip trigger ("Learn more about Show answer") which also
+		// matches /show answer/i.
 		const caughtUp = page.getByRole('heading', { name: /all caught up/i });
 		const showAnswer = page.locator('button:not([data-testid="infotip-trigger"])').filter({ hasText: /show answer/i }).first();
 		const ratingBtn = page.locator('button[data-rating]').first();

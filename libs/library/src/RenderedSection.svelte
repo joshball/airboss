@@ -47,12 +47,35 @@ export interface RenderedSectionProps {
 	readonly body: string;
 	/** Optional manifest-side figure list to render after the body (deduped). */
 	readonly figures?: ReadonlyArray<RenderedSectionFigure>;
+	/**
+	 * Optional structured metadata loaded from `reference_section.metadata`
+	 * (the JSONB column populated by the seeder). Merged with body-frontmatter
+	 * keys to drive the "Metadata" disclosure panel. Frontmatter wins on key
+	 * collision; keys present only in `metadata` show too.
+	 *
+	 * Pass `null` or `undefined` when the page-server didn't load it (older
+	 * routes); the panel falls through to body-frontmatter only.
+	 */
+	readonly metadata?: Record<string, unknown> | null;
 	/** Optional breadcrumb / header content rendered above the title. */
 	readonly breadcrumb?: Snippet;
 	/** Optional aside (e.g. sibling-section TOC, citing-nodes panel). */
 	readonly aside?: Snippet;
 	/** Optional locator string (e.g. `PHAK §12.9 -- pp. 12-15..12-18`). Rendered under the title. */
 	readonly locator?: string;
+	/**
+	 * Optional footer rendered below the body (and below the orphan-figures
+	 * tail). Used by the section reader to attach the prev/next/up nav strip
+	 * so every section page is "book-like" instead of dead-ending.
+	 */
+	readonly footer?: Snippet;
+	/**
+	 * Optional empty-body fallback. Rendered in place of the default "no body
+	 * content in the PDF" placeholder when the section has no body and no
+	 * figures. Lets the section reader inject prev/next/up navigation links so
+	 * an empty section still has somewhere to go.
+	 */
+	readonly emptyFallback?: Snippet;
 }
 </script>
 
@@ -60,14 +83,27 @@ export interface RenderedSectionProps {
 import { ROUTES } from '@ab/constants';
 import {
 	dedupeFirstHeading,
+	extractHandbookTableLinks,
 	extractImageUrls,
+	type FrontmatterEntry,
 	injectFigureRefs,
 	normalizeHandbookAssetPath,
 	parseFrontmatter,
 	renderMarkdown,
 } from '@ab/utils';
 
-let { title, id, body, figures = [], breadcrumb, aside, locator }: RenderedSectionProps = $props();
+let {
+	title,
+	id,
+	body,
+	figures = [],
+	metadata = null,
+	breadcrumb,
+	aside,
+	locator,
+	footer,
+	emptyFallback,
+}: RenderedSectionProps = $props();
 
 // Pipeline:
 //   1. Parse the YAML frontmatter the section seed leaves at the top of the
@@ -86,13 +122,17 @@ let { title, id, body, figures = [], breadcrumb, aside, locator }: RenderedSecti
 //      reference (rare but seen on pages with bare image references that
 //      don't follow the "Figure X-Y" convention).
 const parsedFrontmatter = $derived(parseFrontmatter(body));
-const metadataEntries = $derived(parsedFrontmatter.entries);
 const stripped = $derived(dedupeFirstHeading(parsedFrontmatter.body, title));
 const figureOrdinalMap = $derived(buildFigureOrdinalMap(figures));
 const injection = $derived(injectFigureRefs(stripped, figureOrdinalMap));
 const renderableBody = $derived(injection.body);
 const bodyHtml = $derived(renderMarkdown(renderableBody));
+const tableLinks = $derived(extractHandbookTableLinks(renderableBody));
 
+// Merge body-frontmatter and DB-loaded metadata. Frontmatter wins on key
+// collision (operator-authored is presumed more current than the seeder).
+// DB-only keys still surface so the panel covers every available field.
+const metadataEntries = $derived(mergeMetadata(metadata, parsedFrontmatter.entries));
 const hasMetadata = $derived(metadataEntries.length > 0);
 
 // Dedup the manifest's figure list against figures already embedded in
@@ -151,6 +191,49 @@ function isHttpUrl(value: string): boolean {
 function humanizeFrontmatterKey(key: string): string {
 	return key.replace(/[_-]+/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 }
+
+/**
+ * Merge DB-loaded `reference_section.metadata` with body-frontmatter entries.
+ * Frontmatter wins on key collision; DB-only keys still surface. Order:
+ * frontmatter keys first (in author order), then DB keys not already covered
+ * (in object-key order).
+ *
+ * DB values may be primitives (string/number/boolean), arrays, or nested
+ * objects. The panel only knows how to render strings, so non-string values
+ * are JSON-encoded into a compact display form. Empty objects/arrays render
+ * as the same dash glyph as empty frontmatter values.
+ */
+function mergeMetadata(
+	dbMetadata: Record<string, unknown> | null | undefined,
+	frontmatter: ReadonlyArray<FrontmatterEntry>,
+): ReadonlyArray<FrontmatterEntry> {
+	const seen = new Set<string>();
+	const out: FrontmatterEntry[] = [];
+	for (const entry of frontmatter) {
+		seen.add(entry.key);
+		out.push(entry);
+	}
+	if (dbMetadata) {
+		for (const [key, value] of Object.entries(dbMetadata)) {
+			if (seen.has(key)) continue;
+			seen.add(key);
+			out.push({ key, value: stringifyMetadataValue(value) });
+		}
+	}
+	return out;
+}
+
+function stringifyMetadataValue(value: unknown): string {
+	if (value === null || value === undefined) return '';
+	if (typeof value === 'string') return value;
+	if (typeof value === 'number' || typeof value === 'boolean') return String(value);
+	if (Array.isArray(value)) return value.map((v) => stringifyMetadataValue(v)).join(', ');
+	try {
+		return JSON.stringify(value);
+	} catch {
+		return '';
+	}
+}
 </script>
 
 <section data-testid="rendered-section" data-ref-id={id}>
@@ -162,6 +245,16 @@ function humanizeFrontmatterKey(key: string): string {
 			<h1>{title}</h1>
 			{#if locator}
 				<p class="locator">{locator}</p>
+			{/if}
+			{#if figures.length > 0 || tableLinks.length > 0}
+				<p class="indicators" data-testid="rendered-section-indicators">
+					{#if figures.length > 0}
+						<span class="indicator">Figures: {figures.length}</span>
+					{/if}
+					{#if tableLinks.length > 0}
+						<span class="indicator">Tables: {tableLinks.length}</span>
+					{/if}
+				</p>
 			{/if}
 		</div>
 		{#if hasMetadata}
@@ -203,6 +296,8 @@ function humanizeFrontmatterKey(key: string): string {
 				</aside>
 			{/if}
 		</article>
+	{:else if emptyFallback}
+		{@render emptyFallback()}
 	{:else}
 		<p class="empty" data-testid="rendered-section-empty">
 			This section has no body content in the PDF. Open the linked PDF or parent page below for the source material.
@@ -210,6 +305,9 @@ function humanizeFrontmatterKey(key: string): string {
 	{/if}
 	{#if aside}
 		{@render aside()}
+	{/if}
+	{#if footer}
+		{@render footer()}
 	{/if}
 </section>
 
@@ -385,5 +483,83 @@ h1 {
 	margin-top: var(--space-lg);
 	padding-top: var(--space-md);
 	border-top: 1px dashed var(--edge-default);
+}
+
+.indicators {
+	margin: 0;
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-xs);
+	font-size: var(--font-size-sm);
+	color: var(--ink-muted);
+}
+
+.indicator {
+	padding: var(--space-3xs) var(--space-2xs);
+	background: var(--surface-sunken);
+	border-radius: var(--radius-sm);
+	font-family: var(--font-family-mono);
+}
+
+/* Handbook tables -- the extractor authors `<div class="handbook-table">`
+   wrappers that survive `sanitizeInlineHtml`. Style them in scoped styles
+   so the table fits the reader's typography (left-aligned text, monospace
+   captions, alternating row backgrounds for legibility). */
+.body :global(.handbook-table) {
+	margin: var(--space-md) 0;
+	overflow-x: auto;
+	border-radius: var(--radius-md);
+	border: 1px solid var(--edge-default);
+	background: var(--surface-panel);
+}
+
+.body :global(.handbook-table > table) {
+	border-collapse: collapse;
+	width: 100%;
+	font-size: var(--font-size-sm);
+}
+
+.body :global(.handbook-table caption) {
+	caption-side: top;
+	padding: var(--space-xs) var(--space-sm);
+	color: var(--ink-muted);
+	font-family: var(--font-family-mono);
+	font-size: var(--font-size-xs);
+	text-align: left;
+	background: var(--surface-sunken);
+	border-bottom: 1px solid var(--edge-default);
+}
+
+.body :global(.handbook-table th),
+.body :global(.handbook-table td) {
+	padding: var(--space-2xs) var(--space-sm);
+	border-bottom: 1px solid var(--edge-subtle, var(--edge-default));
+	text-align: left;
+	vertical-align: top;
+}
+
+.body :global(.handbook-table th) {
+	background: var(--surface-sunken);
+	font-weight: var(--font-weight-semibold);
+	color: var(--ink-strong);
+}
+
+.body :global(.handbook-table tbody tr:nth-child(even) td) {
+	background: var(--surface-sunken);
+}
+
+.body :global(.handbook-table-source) {
+	display: inline-block;
+	margin: var(--space-2xs) var(--space-sm) var(--space-xs);
+	padding: var(--space-3xs) var(--space-2xs);
+	color: var(--ink-muted);
+	font-size: var(--font-size-xs);
+	text-decoration: underline;
+	text-underline-offset: 0.15em;
+}
+
+.body :global(.handbook-table-source:hover),
+.body :global(.handbook-table-source:focus-visible) {
+	color: var(--ink-strong);
 }
 </style>

@@ -188,6 +188,8 @@ const CHECK_TARGETS: Record<string, readonly string[]> = {
 	'plan-goal-drift': ['bun', 'scripts/db/check-plan-goal-drift.ts'],
 	'goal-targeting-backfill': ['bun', 'scripts/db/check-goal-targeting-backfill.ts'],
 	'engine-targeting-source': ['bun', 'scripts/db/check-engine-targeting-source.ts'],
+	'card-kinds': ['bun', 'scripts/db/check-card-kinds.ts'],
+	'scenario-assessment-methods': ['bun', 'scripts/db/check-scenario-assessment-methods.ts'],
 };
 
 async function doCheck(): Promise<void> {
@@ -436,23 +438,29 @@ const COMMAND_HELP: Record<string, CommandHelp> = {
 		links: ['scripts/db/backfill-goal-targeting.ts', 'docs/work-packages/engine-goal-cutover/'],
 	},
 	check: {
-		summary: 'Run a read-only diagnostic (engine-goal-cutover dual-read window)',
+		summary: 'Run a read-only diagnostic',
 		what:
 			'Runs a read-only diagnostic. Sub-targets:\n\n' +
 			'  plan-goal-drift              Users whose primary goal projects to a different cert set than study_plan.cert_goals.\n' +
 			'  goal-targeting-backfill      Active study_plans with non-empty cert_goals that fall back to source=plan (no primary goal).\n' +
-			'  engine-targeting-source      Tally engine-targeting log lines by source; reports READY TO DROP after N clean days.\n\n' +
+			'  engine-targeting-source      Tally engine-targeting log lines by source; reports READY TO DROP after N clean days.\n' +
+			'  card-kinds                   Per-(domain, kind) distribution on study.card. Surfaces calc-heavy domains still defaulted to recall.\n' +
+			'  scenario-assessment-methods  Per-array distribution on study.scenario.assessment_methods. Splits default vs explicit so the content team can audit.\n\n' +
 			'Flags pass through to the underlying script (e.g. `--json`, `--window=14d`).\n\n' +
 			'  bun run db check plan-goal-drift\n' +
-			'  bun run db check goal-targeting-backfill\n' +
+			'  bun run db check card-kinds\n' +
+			'  bun run db check scenario-assessment-methods --json\n' +
 			'  cat prod.log | bun run db check engine-targeting-source --window=14d',
-		why: 'The cutover ships behind a dual-read window; these checks surface the drift, the migration orphans, and the trigger-readiness counter without mutating data.',
+		why: 'Read-only diagnostics for migration cutovers (engine-goal) and content-side audits (evidence-kind-data-layer).',
 		how: 'Each target is a script in `scripts/db/check-*.ts`. Read-only; safe to run in any environment.',
 		links: [
 			'scripts/db/check-plan-goal-drift.ts',
 			'scripts/db/check-goal-targeting-backfill.ts',
 			'scripts/db/check-engine-targeting-source.ts',
+			'scripts/db/check-card-kinds.ts',
+			'scripts/db/check-scenario-assessment-methods.ts',
 			'docs/work-packages/engine-goal-cutover/',
+			'docs/work-packages/evidence-kind-data-layer/',
 		],
 	},
 	help: {

@@ -95,7 +95,16 @@ describe('loadLessonReferences', () => {
 		});
 	});
 
-	it('annotates as `current` by default when no acks or historicalLens are passed', async () => {
+	it('defaults annotation kind to `none` (renders as a current citation) when no acks or historicalLens are passed', async () => {
+		// Regression bait: the annotation cascade has six branches; the
+		// default (branch 6) returns `kind: 'none'`, which the web mode
+		// renders as a plain anchor with no historical/cross-corpus/covered
+		// span -- i.e. a "current" citation in the lesson UI. A regression
+		// that flipped the default to `'historical'` would mark every
+		// citation in production as historical and visibly break "Per
+		// §91.103, the PIC..." rendering. Pinning the default explicitly
+		// here closes the gap that the per-target ack and lens-flag tests
+		// below leave open. See ADR 019 §3.4 + §6.3.
 		const e = makeEntry({ id: 'airboss-ref:regs/cfr-14/91/103' as SourceId });
 		registerCorpusResolver(
 			mockResolver('regs', {
@@ -107,7 +116,8 @@ describe('loadLessonReferences', () => {
 			const body = '[@cite](airboss-ref:regs/cfr-14/91/103?at=2026)';
 			const out = await loadLessonReferences(body, []);
 			const resolved = out.resolved['airboss-ref:regs/cfr-14/91/103?at=2026'];
-			expect(resolved?.annotation.kind).toBe('none');
+			expect(resolved?.annotation).toMatchObject({ kind: 'none', text: '' });
+			expect(resolved?.annotation.note).toBeUndefined();
 		});
 	});
 

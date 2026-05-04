@@ -17,13 +17,13 @@ review_status: done
 | Severity | Count | Closed | Open |
 | -------- | ----: | -----: | ---: |
 | critical |     0 |      0 |    0 |
-| major    |     2 |      0 |    2 |
+| major    |     2 |      1 |    1 |
 | minor    |     5 |      1 |    4 |
 | nit      |     3 |      1 |    2 |
 
-### MAJOR: Knowledge-graph + credential write paths exposed without auth gate -- STILL OPEN
+### MAJOR: Knowledge-graph + credential write paths exposed without auth gate -- CLOSED
 
-`libs/bc/study/src/index.ts` still barrels `upsertKnowledgeNode`, `replaceNodeEdges`, `upsertCredential`, `upsertSyllabus`, etc. without admin/actor gates. Trigger: when the next route is wired that touches any of these (hangar admin authoring or seed-runner web UI), split the BC barrel into `@ab/bc-study` (read/user-write) and `@ab/bc-study/build` (admin/seeder upserts). As a stopgap, `// build-only` comments live on the function JSDocs but no lint rule blocks misuse.
+Closed via the build-barrel split. `libs/bc/study/package.json` now declares `'.'` and `'./build'` exports; `libs/bc/study/src/build.ts` re-exports every actor-bypass writer (`upsertKnowledgeNode`, `replaceNodeEdges`, `refreshEdgeTargetExists`, `upsertCredential*`, `validateCredentialDag`, `upsertSyllabus*`, `replaceSyllabusNodeLinks`, `validateAirbossRefForLeaf`, `attachSupersededByLatest`, `replaceFiguresForSection`, `upsertReference`, `upsertReferenceSection`, `auditCitations`, all manifest schemas, citation ingestion schemas), and `libs/bc/study/src/index.ts` no longer surfaces any of them. Scripts/seeders import from `@ab/bc-study/build`; route loaders cannot reach the build barrel because the only `apps/*/src/routes/**` import surface is `@ab/bc-study`. A `barrel-split.test.ts` regression test asserts the runtime + build barrels stay disjoint and that every named build-only symbol lives only in `./build`.
 
 ### MAJOR: `goals.ts` skips BC-level Zod validation -- STILL OPEN
 
@@ -63,7 +63,7 @@ Capability-URL behavior intentional per JSDoc. Trigger: when share-by-URL spec f
 
 ### Final verdict
 
-0 of 2 majors closed -- both require a meaningful BC-shape change (barrel split or Zod integration sweep) that hasn't landed. 1 of 5 minors closed (search caps); 1 of 3 nits closed (snooze message). Remaining items have concrete triggers tied to upcoming WPs (admin authoring routes, citations-permissions PR, references-hardening WP). `review_status` flipped to `done`.
+1 of 2 majors closed -- the build-only barrel split landed (`@ab/bc-study/build` subpath); the goals Zod integration sweep is the remaining major. 1 of 5 minors closed (search caps); 1 of 3 nits closed (snooze message). Remaining items have concrete triggers tied to upcoming WPs (citations-permissions PR, references-hardening WP). `review_status` flipped to `done`.
 
 ## Summary
 

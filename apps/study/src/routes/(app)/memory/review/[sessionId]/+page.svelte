@@ -33,6 +33,7 @@ import { enhance } from '$app/forms';
 import { invalidateAll } from '$app/navigation';
 import { page } from '$app/state';
 import type { PageData } from './$types';
+import { moveRovingFocus, rovingTabIndex } from './radio-group-keyboard';
 
 let { data }: { data: PageData } = $props();
 
@@ -222,6 +223,23 @@ async function triggerUndo() {
 function ratingShortcut(value: number) {
 	const btn = document.querySelector<HTMLButtonElement>(`button[data-rating="${value}"]`);
 	btn?.click();
+}
+
+function onConfidenceRadioKeydown(event: KeyboardEvent): void {
+	moveRovingFocus(event, (value) => {
+		const level = Number(value) as ConfidenceLevel;
+		if (Number.isInteger(level) && level >= 1 && level <= 5) {
+			confidence = level;
+		}
+	});
+}
+
+function onFeedbackRadioKeydown(event: KeyboardEvent): void {
+	moveRovingFocus(event, (value) => {
+		// Cast is safe: data-radio-value is filled from CARD_FEEDBACK_SIGNAL_VALUES.
+		feedbackSignal = value as CardFeedbackSignal;
+		feedbackError = null;
+	});
 }
 
 function onKeydown(e: KeyboardEvent) {
@@ -538,7 +556,10 @@ async function submitFeedbackForm(event: SubmitEvent) {
 							aria-label={`${level} -- ${CONFIDENCE_LEVEL_LABELS[level]}`}
 							class="chicklet"
 							class:is-selected={confidence === level}
+							data-radio-value={level}
+							tabindex={rovingTabIndex(CONFIDENCE_LEVEL_VALUES, confidence as ConfidenceLevel | null, level)}
 							onclick={() => pickConfidence(level)}
+							onkeydown={onConfidenceRadioKeydown}
 							title={CONFIDENCE_LEVEL_LABELS[level]}
 						>
 							{level}
@@ -580,7 +601,10 @@ async function submitFeedbackForm(event: SubmitEvent) {
 								aria-label={`${level} -- ${CONFIDENCE_LEVEL_LABELS[level]}`}
 								class="chicklet"
 								class:is-selected={confidence === level}
+								data-radio-value={level}
+								tabindex={rovingTabIndex(CONFIDENCE_LEVEL_VALUES, confidence as ConfidenceLevel | null, level)}
 								onclick={() => pickConfidence(level)}
+								onkeydown={onConfidenceRadioKeydown}
 							>
 								{level}
 							</button>
@@ -609,7 +633,10 @@ async function submitFeedbackForm(event: SubmitEvent) {
 							aria-checked={feedbackSignal === signal}
 							class="feedback-pill feedback-{signal}"
 							class:is-selected={feedbackSignal === signal}
+							data-radio-value={signal}
+							tabindex={rovingTabIndex(CARD_FEEDBACK_SIGNAL_VALUES, feedbackSignal, signal)}
 							onclick={() => pickFeedback(signal)}
+							onkeydown={onFeedbackRadioKeydown}
 						>
 							{CARD_FEEDBACK_SIGNAL_LABELS[signal]}
 						</button>

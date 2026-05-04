@@ -26,16 +26,13 @@ import { existsSync, readdirSync, statSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { knowledgeNode, type NewSyllabusNodeLinkRow, syllabus, syllabusNode } from '@ab/bc-study';
 import {
-	knowledgeNode,
-	type NewSyllabusNodeLinkRow,
 	replaceSyllabusNodeLinks,
-	syllabus,
-	syllabusNode,
 	upsertSyllabus,
 	upsertSyllabusNode,
 	validateAirbossRefForLeaf,
-} from '@ab/bc-study';
+} from '@ab/bc-study/build';
 import {
 	ACS_TRIAD_VALUES,
 	type ACSTriad,

@@ -597,4 +597,100 @@ describe('applyCertGoalsToPrimaryGoal', () => {
 		// Same two unique syllabi as the prior test -- duplicates collapse.
 		expect(linked.map((r) => r.syllabusId).sort()).toEqual([PPL_SYL_ID, IFR_SYL_ID].sort());
 	});
+
+	// -------------------------------------------------------------------
+	// Atomicity: the targeting patch + per-cert upserts + the create-
+	// primary-goal path must all share a single transaction. A mid-loop
+	// failure that left the targeting patch landed but only the first M
+	// of N cert links attached used to drive `getDerivedCertGoals` to a
+	// wrong cert filter while the user is mid-action. The forced-rollback
+	// proxy proves every write rides the BC's transaction.
+	// -------------------------------------------------------------------
+	it('rolls back the targeting patch + cert links + create-primary atomically when the surrounding transaction fails', async () => {
+		// Dedicated user so no goal exists -- exercises the "create
+		// primary inside the transaction" branch alongside the multi-cert
+		// upsert phase.
+		const ATOMIC_USER_ID = generateAuthId();
+		const now = new Date();
+		await db.insert(bauthUser).values({
+			id: ATOMIC_USER_ID,
+			email: `atomic-${SUITE_TAG}@airboss.test`,
+			name: 'Atomic Apply Cert',
+			firstName: 'Atomic',
+			lastName: 'User',
+			emailVerified: true,
+			role: 'learner',
+			createdAt: now,
+			updatedAt: now,
+		});
+
+		try {
+			const certs = [PPL_CRED_SLUG, IFR_CRED_SLUG] as unknown as Array<
+				Parameters<typeof applyCertGoalsToPrimaryGoal>[1][number]
+			>;
+			const wrapped = dbWithForcedRollback(db);
+
+			await applyCertGoalsToPrimaryGoal(
+				ATOMIC_USER_ID,
+				certs,
+				{ goalTitle: 'should not persist', focusDomains: ['airspace'] },
+				wrapped,
+			);
+
+			// No primary goal landed -- the create-goal call ran inside the
+			// rolled-back transaction.
+			const goals = await db.select().from(goal).where(eq(goal.userId, ATOMIC_USER_ID));
+			expect(goals).toHaveLength(0);
+
+			// No cert links landed -- they rode the same transaction.
+			const links = await db
+				.select()
+				.from(goalSyllabus)
+				.innerJoin(goal, eq(goal.id, goalSyllabus.goalId))
+				.where(eq(goal.userId, ATOMIC_USER_ID));
+			expect(links).toHaveLength(0);
+		} finally {
+			await db.delete(goal).where(eq(goal.userId, ATOMIC_USER_ID));
+			await db.delete(bauthUser).where(eq(bauthUser.id, ATOMIC_USER_ID));
+		}
+	});
 });
+
+/**
+ * Wrap `db.transaction(cb)` so the SQL transaction rolls back after
+ * `cb` resolves. If the BC under test ran any write outside its own
+ * transaction, that write would survive the rollback and the
+ * post-condition assertion would fail. The wrapper preserves the BC's
+ * return value so the success-path code path still runs.
+ */
+function dbWithForcedRollback(realDb: typeof db): typeof db {
+	return new Proxy(realDb, {
+		get(target, prop, receiver) {
+			if (prop === 'transaction') {
+				return async <T>(cb: (tx: typeof db) => Promise<T>): Promise<T> => {
+					let resolved: { value: T } | null = null;
+					try {
+						await target.transaction(async (tx) => {
+							resolved = { value: await cb(tx as unknown as typeof db) };
+							throw new ForcedRollback();
+						});
+					} catch (err) {
+						if (!(err instanceof ForcedRollback)) throw err;
+					}
+					if (resolved === null) {
+						throw new Error('forced-rollback wrapper never observed BC return');
+					}
+					return resolved.value;
+				};
+			}
+			return Reflect.get(target, prop, receiver);
+		},
+	}) as typeof db;
+}
+
+class ForcedRollback extends Error {
+	constructor() {
+		super('forced-rollback');
+		this.name = 'ForcedRollback';
+	}
+}

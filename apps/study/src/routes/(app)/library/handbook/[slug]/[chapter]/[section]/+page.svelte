@@ -8,12 +8,12 @@ import {
 	HANDBOOK_HEARTBEAT_BUFFER,
 	HANDBOOK_HEARTBEAT_INTERVAL_SEC,
 	HANDBOOK_HEARTBEAT_MIN_DELTA_SEC,
-	HANDBOOK_READ_STATUSES,
 	type HandbookReadStatus,
 	ROUTES,
 } from '@ab/constants';
 import { extractImageUrls, normalizeHandbookAssetPath, renderMarkdown } from '@ab/utils';
 import type { PageData } from './$types';
+import ReadSuggestionPanel from './ReadSuggestionPanel.svelte';
 import { shouldShowReadSuggestion } from './read-suggestion';
 
 let { data }: { data: PageData } = $props();
@@ -249,18 +249,7 @@ function dismissSuggestion(): void {
 <HandbookCitingNodesPanel nodes={data.citingNodes} scope="section" />
 
 {#if showSuggestion}
-	<aside class="read-suggestion" role="status" aria-live="polite">
-		<p class="read-suggestion-prompt">Mark this section as read?</p>
-		<div class="read-suggestion-actions">
-			<form method="POST" action="?/set-status">
-				<input type="hidden" name="status" value={HANDBOOK_READ_STATUSES.READ} />
-				<button type="submit" class="read-suggestion-primary">Mark as read</button>
-			</form>
-			<button type="button" class="read-suggestion-secondary" onclick={dismissSuggestion}>
-				Not yet
-			</button>
-		</div>
-	</aside>
+	<ReadSuggestionPanel onDismiss={dismissSuggestion} />
 {/if}
 
 <HandbookReadProgressControl
@@ -370,54 +359,5 @@ function dismissSuggestion(): void {
 		margin-top: var(--space-xs);
 		color: var(--ink-muted);
 	}
-	.read-suggestion {
-		margin-top: var(--space-md);
-		padding: var(--space-sm) var(--space-md);
-		background: var(--surface-raised);
-		border: 1px solid var(--action-default-edge);
-		border-radius: var(--radius-md);
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		justify-content: space-between;
-		gap: var(--space-sm);
-	}
-	.read-suggestion-prompt {
-		margin: 0;
-		color: var(--ink-body);
-		font-weight: var(--font-weight-medium);
-	}
-	.read-suggestion-actions {
-		display: flex;
-		gap: var(--space-xs);
-	}
-	.read-suggestion-actions form {
-		margin: 0;
-	}
-	.read-suggestion-primary {
-		background: var(--action-default);
-		color: var(--action-default-ink);
-		border: 1px solid var(--action-default);
-		border-radius: var(--radius-sm);
-		padding: var(--space-xs) var(--space-sm);
-		cursor: pointer;
-		font-weight: var(--font-weight-medium);
-	}
-	.read-suggestion-primary:hover,
-	.read-suggestion-primary:focus-visible {
-		background: var(--action-default-hover, var(--action-default));
-	}
-	.read-suggestion-secondary {
-		background: none;
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-sm);
-		padding: var(--space-xs) var(--space-sm);
-		color: var(--ink-muted);
-		cursor: pointer;
-	}
-	.read-suggestion-secondary:hover,
-	.read-suggestion-secondary:focus-visible {
-		border-color: var(--action-default-edge);
-		color: var(--ink-body);
-	}
+
 </style>

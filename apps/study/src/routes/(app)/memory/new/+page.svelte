@@ -1,5 +1,15 @@
 <script lang="ts">
-import { CARD_TYPE_LABELS, CARD_TYPES, DOMAIN_VALUES, domainLabel, QUERY_PARAMS, ROUTES } from '@ab/constants';
+import {
+	CARD_KIND_LABELS,
+	CARD_KIND_VALUES,
+	CARD_KINDS,
+	CARD_TYPE_LABELS,
+	CARD_TYPES,
+	DOMAIN_VALUES,
+	domainLabel,
+	QUERY_PARAMS,
+	ROUTES,
+} from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import Button from '@ab/ui/components/Button.svelte';
 import InfoTip from '@ab/ui/components/InfoTip.svelte';
@@ -15,12 +25,14 @@ let frontInput = $state<HTMLTextAreaElement | null>(null);
 let formEl = $state<HTMLFormElement | null>(null);
 
 const cardTypeOptions = Object.values(CARD_TYPES);
+const cardKindOptions = CARD_KIND_VALUES;
 
 interface FieldValues {
 	front?: string;
 	back?: string;
 	domain?: string;
 	cardType?: string;
+	kind?: string;
 	tags?: string[];
 }
 
@@ -32,6 +44,7 @@ const values = $derived<FieldValues>(form?.values ?? {});
 // pre-fill the next card so the rhythm of capture keeps moving.
 const seededDomain = $derived(values.domain ?? data.seed.domain ?? '');
 const seededCardType = $derived(values.cardType ?? data.seed.cardType ?? CARD_TYPES.BASIC);
+const seededKind = $derived(values.kind ?? data.seed.kind ?? CARD_KINDS.RECALL);
 const seededTags = $derived(values.tags?.join?.(', ') ?? data.seed.tags ?? '');
 
 // After a redirect back from a successful save, put focus on Front so the
@@ -168,6 +181,24 @@ function onKeydown(e: KeyboardEvent) {
 					{/each}
 				</select>
 				{#if fieldErrors.cardType}<span class="err">{fieldErrors.cardType}</span>{/if}
+			</label>
+
+			<label class="field">
+				<span class="label">
+					Kind
+					<InfoTip
+						term="Kind"
+						definition="Knowledge axis the card tests. 'Recall' = facts and definitions. 'Calculation' = numeric or procedural answer that you compute. Drives per-evidence-kind mastery so a calc-heavy node doesn't read as recall-mastered."
+						helpId="memory-new"
+						helpSection="kind"
+					/>
+				</span>
+				<select name="kind" required disabled={loading} value={seededKind}>
+					{#each cardKindOptions as opt (opt)}
+						<option value={opt}>{CARD_KIND_LABELS[opt]}</option>
+					{/each}
+				</select>
+				{#if fieldErrors.kind}<span class="err">{fieldErrors.kind}</span>{/if}
 			</label>
 		</div>
 

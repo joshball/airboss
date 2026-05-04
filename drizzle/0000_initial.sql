@@ -80,6 +80,7 @@ CREATE TABLE "study"."card" (
 	"domain" text NOT NULL,
 	"tags" jsonb DEFAULT '[]'::jsonb NOT NULL,
 	"card_type" text NOT NULL,
+	"kind" text DEFAULT 'recall' NOT NULL,
 	"source_type" text DEFAULT 'personal' NOT NULL,
 	"source_ref" text,
 	"node_id" text,
@@ -90,6 +91,7 @@ CREATE TABLE "study"."card" (
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
 	CONSTRAINT "card_id_user_unique" UNIQUE("id","user_id"),
 	CONSTRAINT "card_type_check" CHECK ("card_type" IN ('basic', 'cloze', 'regulation', 'memory_item')),
+	CONSTRAINT "card_kind_check" CHECK ("kind" IN ('recall', 'calculation')),
 	CONSTRAINT "card_source_type_check" CHECK ("source_type" IN ('personal', 'course', 'product', 'imported')),
 	CONSTRAINT "card_status_check" CHECK ("status" IN ('active', 'suspended', 'archived'))
 );
@@ -431,6 +433,7 @@ CREATE TABLE "study"."scenario" (
 	"node_id" text,
 	"is_editable" boolean DEFAULT true NOT NULL,
 	"reg_references" jsonb DEFAULT '[]'::jsonb NOT NULL,
+	"assessment_methods" jsonb DEFAULT '["scenario"]'::jsonb NOT NULL,
 	"status" text DEFAULT 'active' NOT NULL,
 	"seed_origin" text,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
@@ -482,6 +485,7 @@ CREATE TABLE "study"."session_item_result" (
 	"card_id" text,
 	"scenario_id" text,
 	"node_id" text,
+	"teaching_exercise_id" text,
 	"review_id" text,
 	"skip_kind" text,
 	"reason_detail" text,
@@ -492,12 +496,13 @@ CREATE TABLE "study"."session_item_result" (
 	"presented_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"completed_at" timestamp with time zone,
 	"seed_origin" text,
-	CONSTRAINT "sir_item_kind_check" CHECK ("item_kind" IN ('card', 'rep', 'node_start')),
+	CONSTRAINT "sir_item_kind_check" CHECK ("item_kind" IN ('card', 'rep', 'node_start', 'teaching-exercise')),
 	CONSTRAINT "sir_slice_check" CHECK ("slice" IN ('continue', 'strengthen', 'expand', 'diversify')),
 	CONSTRAINT "sir_reason_code_check" CHECK ("reason_code" IN ('continue_recent_domain', 'continue_due_in_domain', 'continue_unfinished_node', 'strengthen_relearning', 'strengthen_rated_again', 'strengthen_overdue', 'strengthen_low_rep_accuracy', 'strengthen_mastery_drop', 'strengthen_sim_weakness_card', 'strengthen_sim_weakness_rep', 'expand_unstarted_ready', 'expand_unstarted_priority', 'expand_focus_match', 'diversify_unused_domain', 'diversify_cross_domain_apply')),
 	CONSTRAINT "sir_skip_kind_check" CHECK ("skip_kind" IS NULL OR "skip_kind" IN ('today', 'topic', 'permanent')),
 	CONSTRAINT "sir_confidence_check" CHECK ("confidence" IS NULL OR "confidence" BETWEEN 1 AND 5),
-	CONSTRAINT "sir_answer_ms_check" CHECK ("answer_ms" IS NULL OR "answer_ms" >= 0)
+	CONSTRAINT "sir_answer_ms_check" CHECK ("answer_ms" IS NULL OR "answer_ms" >= 0),
+	CONSTRAINT "sir_teaching_exercise_shape_check" CHECK (("item_kind" = 'teaching-exercise') = ("teaching_exercise_id" IS NOT NULL))
 );
 --> statement-breakpoint
 CREATE TABLE "study"."study_plan" (
@@ -581,6 +586,20 @@ CREATE TABLE "study"."syllabus_node_link" (
 	"seed_origin" text,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	CONSTRAINT "syllabus_node_link_weight_check" CHECK ("weight" >= 0 AND "weight" <= 1)
+);
+--> statement-breakpoint
+CREATE TABLE "study"."teaching_exercise" (
+	"id" text PRIMARY KEY NOT NULL,
+	"user_id" text NOT NULL,
+	"title" text NOT NULL,
+	"prompt" text NOT NULL,
+	"domain" text NOT NULL,
+	"node_id" text,
+	"is_editable" boolean DEFAULT true NOT NULL,
+	"status" text DEFAULT 'active' NOT NULL,
+	"seed_origin" text,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "teaching_exercise_status_check" CHECK ("status" IN ('active', 'suspended', 'archived'))
 );
 --> statement-breakpoint
 CREATE TABLE "study"."content_citations" (
@@ -804,6 +823,7 @@ ALTER TABLE "study"."session" ADD CONSTRAINT "session_plan_id_study_plan_id_fk" 
 ALTER TABLE "study"."session_item_result" ADD CONSTRAINT "session_item_result_card_id_card_id_fk" FOREIGN KEY ("card_id") REFERENCES "study"."card"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."session_item_result" ADD CONSTRAINT "session_item_result_scenario_id_scenario_id_fk" FOREIGN KEY ("scenario_id") REFERENCES "study"."scenario"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."session_item_result" ADD CONSTRAINT "session_item_result_node_id_knowledge_node_id_fk" FOREIGN KEY ("node_id") REFERENCES "study"."knowledge_node"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "study"."session_item_result" ADD CONSTRAINT "session_item_result_teaching_exercise_id_teaching_exercise_id_fk" FOREIGN KEY ("teaching_exercise_id") REFERENCES "study"."teaching_exercise"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."session_item_result" ADD CONSTRAINT "session_item_result_review_id_review_id_fk" FOREIGN KEY ("review_id") REFERENCES "study"."review"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."session_item_result" ADD CONSTRAINT "session_item_result_chosen_option_id_scenario_option_id_fk" FOREIGN KEY ("chosen_option_id") REFERENCES "study"."scenario_option"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."session_item_result" ADD CONSTRAINT "session_item_result_session_owner_fk" FOREIGN KEY ("session_id","user_id") REFERENCES "study"."session"("id","user_id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
@@ -814,6 +834,8 @@ ALTER TABLE "study"."syllabus_node" ADD CONSTRAINT "syllabus_node_syllabus_id_sy
 ALTER TABLE "study"."syllabus_node" ADD CONSTRAINT "syllabus_node_parent_id_syllabus_node_id_fk" FOREIGN KEY ("parent_id") REFERENCES "study"."syllabus_node"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."syllabus_node_link" ADD CONSTRAINT "syllabus_node_link_syllabus_node_id_syllabus_node_id_fk" FOREIGN KEY ("syllabus_node_id") REFERENCES "study"."syllabus_node"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."syllabus_node_link" ADD CONSTRAINT "syllabus_node_link_knowledge_node_id_knowledge_node_id_fk" FOREIGN KEY ("knowledge_node_id") REFERENCES "study"."knowledge_node"("id") ON DELETE restrict ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "study"."teaching_exercise" ADD CONSTRAINT "teaching_exercise_user_id_bauth_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."bauth_user"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
+ALTER TABLE "study"."teaching_exercise" ADD CONSTRAINT "teaching_exercise_node_id_knowledge_node_id_fk" FOREIGN KEY ("node_id") REFERENCES "study"."knowledge_node"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."content_citations" ADD CONSTRAINT "content_citations_created_by_bauth_user_id_fk" FOREIGN KEY ("created_by") REFERENCES "public"."bauth_user"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE "hangar"."invitation" ADD CONSTRAINT "invitation_invited_by_user_id_bauth_user_id_fk" FOREIGN KEY ("invited_by_user_id") REFERENCES "public"."bauth_user"("id") ON DELETE set null ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE "hangar"."invitation" ADD CONSTRAINT "invitation_accepted_user_id_bauth_user_id_fk" FOREIGN KEY ("accepted_user_id") REFERENCES "public"."bauth_user"("id") ON DELETE set null ON UPDATE cascade;--> statement-breakpoint
@@ -838,6 +860,7 @@ CREATE INDEX "card_user_updated_idx" ON "study"."card" USING btree ("user_id","u
 CREATE INDEX "card_node_user_idx" ON "study"."card" USING btree ("node_id","user_id");--> statement-breakpoint
 CREATE INDEX "card_front_trgm_idx" ON "study"."card" USING gin ("front" gin_trgm_ops);--> statement-breakpoint
 CREATE INDEX "card_back_trgm_idx" ON "study"."card" USING gin ("back" gin_trgm_ops);--> statement-breakpoint
+CREATE INDEX "card_user_kind_idx" ON "study"."card" USING btree ("user_id","kind");--> statement-breakpoint
 CREATE INDEX "card_feedback_user_card_created_idx" ON "study"."card_feedback" USING btree ("user_id","card_id","created_at" desc);--> statement-breakpoint
 CREATE INDEX "card_snooze_user_card_idx" ON "study"."card_snooze" USING btree ("user_id","card_id");--> statement-breakpoint
 CREATE INDEX "card_snooze_user_reason_idx" ON "study"."card_snooze" USING btree ("user_id","reason","resolved_at");--> statement-breakpoint
@@ -874,6 +897,7 @@ CREATE INDEX "mrs_user_started_idx" ON "study"."memory_review_session" USING btr
 CREATE UNIQUE INDEX "reference_doc_edition_unique" ON "study"."reference" USING btree ("document_slug","edition");--> statement-breakpoint
 CREATE INDEX "reference_kind_idx" ON "study"."reference" USING btree ("kind");--> statement-breakpoint
 CREATE INDEX "reference_doc_superseded_idx" ON "study"."reference" USING btree ("document_slug","superseded_by_id");--> statement-breakpoint
+CREATE INDEX "reference_subjects_gin_idx" ON "study"."reference" USING gin ("subjects");--> statement-breakpoint
 CREATE INDEX "reference_figure_section_idx" ON "study"."reference_figure" USING btree ("section_id","ordinal");--> statement-breakpoint
 CREATE UNIQUE INDEX "reference_section_ref_code_unique" ON "study"."reference_section" USING btree ("reference_id","code");--> statement-breakpoint
 CREATE INDEX "reference_section_tree_idx" ON "study"."reference_section" USING btree ("reference_id","parent_id","ordinal");--> statement-breakpoint
@@ -904,6 +928,7 @@ CREATE INDEX "sir_user_kind_completed_idx" ON "study"."session_item_result" USIN
 CREATE INDEX "sir_scenario_completed_idx" ON "study"."session_item_result" USING btree ("scenario_id","completed_at");--> statement-breakpoint
 CREATE INDEX "sir_node_completed_idx" ON "study"."session_item_result" USING btree ("node_id","completed_at");--> statement-breakpoint
 CREATE INDEX "sir_chosen_option_idx" ON "study"."session_item_result" USING btree ("chosen_option_id") WHERE "study"."session_item_result"."chosen_option_id" is not null;--> statement-breakpoint
+CREATE INDEX "sir_teaching_exercise_idx" ON "study"."session_item_result" USING btree ("teaching_exercise_id") WHERE "study"."session_item_result"."teaching_exercise_id" is not null;--> statement-breakpoint
 CREATE INDEX "plan_user_status_idx" ON "study"."study_plan" USING btree ("user_id","status");--> statement-breakpoint
 CREATE UNIQUE INDEX "plan_user_active_uniq" ON "study"."study_plan" USING btree ("user_id") WHERE status = 'active';--> statement-breakpoint
 CREATE UNIQUE INDEX "syllabus_slug_unique" ON "study"."syllabus" USING btree ("slug");--> statement-breakpoint
@@ -918,6 +943,7 @@ CREATE INDEX "syllabus_node_citations_gin_idx" ON "study"."syllabus_node" USING 
 CREATE UNIQUE INDEX "syllabus_node_link_unique" ON "study"."syllabus_node_link" USING btree ("syllabus_node_id","knowledge_node_id");--> statement-breakpoint
 CREATE INDEX "syllabus_node_link_by_syllabus_node_idx" ON "study"."syllabus_node_link" USING btree ("syllabus_node_id");--> statement-breakpoint
 CREATE INDEX "syllabus_node_link_by_knowledge_node_idx" ON "study"."syllabus_node_link" USING btree ("knowledge_node_id","syllabus_node_id");--> statement-breakpoint
+CREATE INDEX "teaching_exercise_user_node_idx" ON "study"."teaching_exercise" USING btree ("user_id","node_id");--> statement-breakpoint
 CREATE INDEX "content_citation_source_idx" ON "study"."content_citations" USING btree ("source_type","source_id");--> statement-breakpoint
 CREATE INDEX "content_citation_target_idx" ON "study"."content_citations" USING btree ("target_type","target_id");--> statement-breakpoint
 CREATE INDEX "content_citation_card_source_idx" ON "study"."content_citations" USING btree ("source_id") WHERE source_type = 'card';--> statement-breakpoint

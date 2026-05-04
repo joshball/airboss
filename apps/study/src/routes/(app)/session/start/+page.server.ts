@@ -76,7 +76,7 @@ export const load: PageServerLoad = async (event) => {
 	} catch (err) {
 		if (err instanceof NoActivePlanError) return { needsPlan: true as const, presets: PRESET_VALUES };
 		log.error(
-			'previewSession threw',
+			'preview session failed',
 			{
 				requestId: event.locals.requestId,
 				userId: user.id,
@@ -110,11 +110,11 @@ export const actions: Actions = {
 				throw redirect(303, ROUTES.SESSION_START);
 			}
 			log.error(
-				'startSession threw',
+				'start session failed',
 				{ requestId: locals.requestId, userId: user.id },
 				err instanceof Error ? err : undefined,
 			);
-			return fail(500, { error: 'Could not start session. Try again.' });
+			return fail(500, { error: 'Could not start session.' });
 		}
 	},
 
@@ -187,11 +187,11 @@ export const actions: Actions = {
 				return fail(409, { error: 'Your active plan changed. Refresh the page and try again.' });
 			}
 			log.error(
-				'startFromPreset threw',
+				'start session from preset failed',
 				{ requestId: locals.requestId, userId: user.id, presetId: rawPresetId },
 				err instanceof Error ? err : undefined,
 			);
-			return fail(500, { error: 'Could not start the session from that preset. Try again.' });
+			return fail(500, { error: 'Could not start session from preset.' });
 		}
 	},
 } satisfies Actions;

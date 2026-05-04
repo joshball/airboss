@@ -17,9 +17,9 @@ review_status: done
 | Severity | Count | Closed | Open |
 | -------- | ----: | -----: | ---: |
 | critical |     0 |      0 |    0 |
-| major    |     4 |      2 |    2 |
-| minor    |     5 |      1 |    4 |
-| nit      |     3 |      0 |    3 |
+| major    |     4 |      3 |    1 |
+| minor    |     5 |      3 |    2 |
+| nit      |     3 |      1 |    2 |
 
 ### MAJOR: `SessionNotFoundError` thrown on review-ownership failure -- CLOSED
 
@@ -33,17 +33,17 @@ PR #437. `libs/bc/study/src/sessions.ts:862-870, 920-927` introduces `ReviewNotF
 
 `libs/bc/study/src/syllabi.ts:140-170` still pushes orphans at root with no log + no `{ roots, orphans }` return shape. Trigger: roll into next syllabi-tree refactor; either add `createLogger('study:syllabi')` + `log.warn` on orphan, or change return shape to surface the data-integrity event.
 
-### MAJOR: Two `SourceRefRequiredError` classes collide at barrel -- STILL OPEN
+### MAJOR: Two `SourceRefRequiredError` classes collide at barrel -- CLOSED
 
-`libs/bc/study/src/cards.ts:53-58` and `libs/bc/study/src/scenarios.ts:98-103` still define separate classes; only the cards version is in `index.ts:45`. Trigger: roll into the BC error-class hygiene sweep mentioned in DX MINOR + backend MINOR; hoist a single class and barrel it once.
+Closed by the chunk-2 BC error-class hygiene sweep. `libs/bc/study/src/errors.ts` hosts the canonical `SourceRefRequiredError`; `cards.ts` and `scenarios.ts` import it from `./errors` and re-export the same constructor so `from './cards'`, `from './scenarios'`, and the barrel all hand out one class. `libs/bc/study/src/errors.test.ts` pins the contract: `CardsSourceRefRequiredError === BarrelSourceRefRequiredError === ScenariosSourceRefRequiredError`, and both module-level instances pass `instanceof` against the barrel.
 
-### MINOR: Bare `throw new Error(...)` for upsert RETURNING-empty paths -- STILL OPEN
+### MINOR: Bare `throw new Error(...)` for upsert RETURNING-empty paths -- CLOSED
 
-Same finding as backend MINOR ("`goals.ts` returns `Error('createGoal failed')`"). `libs/bc/study/src/goals.ts:267,272,352,408`, `credentials.ts:478`, `syllabi.ts:502,534` still bare-Error. Trigger documented in backend audit.
+Closed by the same sweep. `libs/bc/study/src/errors.ts` adds `UpsertReturnedNoRowError(entity, id)`; the 6 sites (`credentials.ts:495`, `syllabi.ts:503,535`, `goals.ts:268,273,353,409`) now throw the typed class, carrying `entity` + `id` as `public readonly` fields for log search and route-layer discriminators.
 
-### MINOR: `CitationNotFoundError` masks ownership failure in `deleteCitation` -- STILL OPEN
+### MINOR: `CitationNotFoundError` masks ownership failure in `deleteCitation` -- CLOSED
 
-`libs/bc/study/src/citations/citations.ts:312-313` still throws `CitationNotFoundError` for both not-found and not-owned cases. Trigger: introduce `CitationNotOwnedError` in next citation-permissions WP; route layer can map both to 404 for security obfuscation, BC truth-tells.
+Closed by the same sweep. `libs/bc/study/src/citations/citations.ts:93-101` adds `CitationNotOwnedError(citationId, userId)`; `deleteCitation` now throws it (instead of reusing `CitationNotFoundError`) when the row exists but belongs to a different user. `apps/study/src/routes/(app)/memory/[id]/+page.server.ts:217` and `apps/study/src/routes/(app)/reps/[id]/+page.server.ts:140` catch both classes and map both to 404 for security obfuscation; the BC log retains the discrimination.
 
 ### MINOR: `FeedbackCommentRequiredError` / `SnoozeCommentRequiredError` lack valid-options -- STILL OPEN
 
@@ -57,9 +57,9 @@ Same finding as backend MINOR ("`goals.ts` returns `Error('createGoal failed')`"
 
 `libs/bc/study/src/dashboard.ts:652-661` still returns the bare string with no correlation id. Trigger: roll into next observability/log-correlation pass; emit a short ref hash on both the logged event and the returned string.
 
-### NIT: `LensError` `[lensKind]` prefix style -- STILL OPEN
+### NIT: `LensError` `[lensKind]` prefix style -- CLOSED
 
-`libs/bc/study/src/lenses.ts` unchanged. Trigger: bundle into BC error-class hygiene sweep.
+Closed earlier by PR #468. `libs/bc/study/src/lenses.ts:175-187` now passes the message through unprefixed; `lensKind` stays the structured discriminator on the `public readonly` field, matching the rest of the BC.
 
 ### NIT: Cycle-error messages as id-only paths -- STILL OPEN
 
@@ -71,7 +71,7 @@ Trigger: small follow-up sweep in next manifest-validation PR; quote the offendi
 
 ### Final verdict
 
-2 of 4 majors closed (`SessionNotFoundError` -> `ReviewNotFoundError`, stderr -> logger). 1 of 5 minors closed (seeders consistency). 2 majors + 4 minors + 3 nits remain with concrete triggers, mostly clustered around the BC error-class hygiene sweep that backend audit also calls for. `review_status` flipped to `done`.
+3 of 4 majors closed (`SessionNotFoundError` -> `ReviewNotFoundError`, stderr -> logger, `SourceRefRequiredError` dedupe). 3 of 5 minors closed (seeders consistency, upsert typed errors, citation-ownership typed error). 1 of 3 nits closed (LensError prefix). 1 major + 2 minors + 2 nits remain with concrete triggers; the BC error-class hygiene sweep that backend audit also called for is now complete. `review_status` flipped to `done`.
 
 ## Summary
 

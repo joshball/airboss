@@ -3,6 +3,7 @@ import {
 	CardNotEditableError,
 	CardNotFoundError,
 	CitationNotFoundError,
+	CitationNotOwnedError,
 	CitationSourceNotFoundError,
 	CitationTargetNotFoundError,
 	CitationValidationError,
@@ -20,6 +21,7 @@ import {
 	updateCardSchema,
 } from '@ab/bc-study';
 import {
+	type CARD_KIND_VALUES,
 	CARD_STATUS_VALUES,
 	CARD_STATUSES,
 	type CARD_TYPE_VALUES,
@@ -76,11 +78,13 @@ export const actions: Actions = {
 		const { params, request, locals } = event;
 
 		const form = await request.formData();
+		const rawKindField = form.get('kind');
 		const input = {
 			front: String(form.get('front') ?? ''),
 			back: String(form.get('back') ?? ''),
 			domain: String(form.get('domain') ?? ''),
 			cardType: String(form.get('cardType') ?? ''),
+			kind: rawKindField === null ? undefined : String(rawKindField),
 			tags: parseTags(String(form.get('tags') ?? '')),
 		};
 
@@ -100,6 +104,7 @@ export const actions: Actions = {
 				back: parsed.data.back,
 				domain: parsed.data.domain as (typeof DOMAIN_VALUES)[number],
 				cardType: parsed.data.cardType as (typeof CARD_TYPE_VALUES)[number],
+				kind: parsed.data.kind as (typeof CARD_KIND_VALUES)[number] | undefined,
 				tags: parsed.data.tags,
 			});
 		} catch (err) {
@@ -110,11 +115,11 @@ export const actions: Actions = {
 				error(404, { message: 'Card not found' });
 			}
 			log.error(
-				'updateCard threw',
+				'save card failed',
 				{ requestId: locals.requestId, userId: user.id, metadata: { cardId: params.id } },
 				err instanceof Error ? err : undefined,
 			);
-			return fail(500, { values: input, fieldErrors: { _: 'Could not save changes.' }, intent: 'update' });
+			return fail(500, { values: input, fieldErrors: { _: 'Could not save card.' }, intent: 'update' });
 		}
 
 		// Edit-then-stay: the client swaps back to read mode and shows a
@@ -139,11 +144,11 @@ export const actions: Actions = {
 				error(404, { message: 'Card not found' });
 			}
 			log.error(
-				'setCardStatus threw',
+				'update card status failed',
 				{ requestId: locals.requestId, userId: user.id, metadata: { cardId: params.id, status: target } },
 				err instanceof Error ? err : undefined,
 			);
-			return fail(500, { intent: 'setStatus', fieldErrors: { _: 'Could not update status.' } });
+			return fail(500, { intent: 'setStatus', fieldErrors: { _: 'Could not update card status.' } });
 		}
 
 		if (target === CARD_STATUSES.ARCHIVED) {
@@ -191,7 +196,7 @@ export const actions: Actions = {
 				return fail(400, { intent: 'addCitation', fieldErrors: { _: 'That reference could not be found.' } });
 			}
 			log.error(
-				'createCitation threw',
+				'add citation failed',
 				{ requestId: locals.requestId, userId: user.id, metadata: { cardId: params.id, targetType, targetId } },
 				err instanceof Error ? err : undefined,
 			);
@@ -214,14 +219,15 @@ export const actions: Actions = {
 		try {
 			await deleteCitation(citationId, user.id);
 		} catch (err) {
-			if (err instanceof CitationNotFoundError) {
-				// `deleteCitation` raises CitationNotFoundError both when the row is
-				// missing and when the caller does not own it. Surface as 404 so the
-				// learner sees a clean "already gone" rather than a server error.
+			if (err instanceof CitationNotFoundError || err instanceof CitationNotOwnedError) {
+				// BC raises a distinct `CitationNotOwnedError` when the row exists but
+				// belongs to another user; both shapes collapse to 404 here for
+				// security obfuscation (the learner shouldn't be able to probe for
+				// other users' citation ids). The BC log retains the discrimination.
 				return fail(404, { intent: 'removeCitation', fieldErrors: { _: 'That citation was not found.' } });
 			}
 			log.error(
-				'deleteCitation threw',
+				'remove citation failed',
 				{ requestId: locals.requestId, userId: user.id, metadata: { cardId: params.id, citationId } },
 				err instanceof Error ? err : undefined,
 			);

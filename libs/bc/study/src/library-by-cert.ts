@@ -12,7 +12,7 @@
 import { CERT_APPLICABILITIES, CERT_APPLICABILITY_VALUES, type CertApplicability } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import { createLogger } from '@ab/utils';
-import { and, asc, eq, inArray, isNull } from 'drizzle-orm';
+import { and, arrayContains, asc, eq, inArray, isNull, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { CredentialNotFoundError, getCertsCoveredBy, getCredentialBySlug } from './credentials';
 import { type ReferenceRow, reference } from './schema';
@@ -219,17 +219,22 @@ async function listReferencesByPrimaryCerts(
 
 /**
  * Active references whose `subjects` array contains the given aviation
- * topic. Newest editions first; superseded rows excluded. The query uses
- * a simple SQL array-contains because Drizzle's `arrayContains` is
- * available on the postgres-js driver.
+ * topic. Newest editions first; superseded rows excluded.
+ *
+ * Implementation: pushes the membership check into Postgres via Drizzle's
+ * `arrayContains`, which compiles to `subjects @> ARRAY[$topic]`. Combined
+ * with the `reference_subjects_gin_idx` GIN index this is an inverted-index
+ * lookup, not a sequential scan + JS filter. The previous implementation
+ * loaded every active reference and ran `rows.filter(... .includes(topic))`
+ * client-side; that path scaled linearly with the catalog size and was
+ * called on every topic-spine page render.
  */
 export async function listReferencesByTopic(topic: string, db: Db = defaultDb): Promise<ReferenceRow[]> {
-	const rows = await db
+	return db
 		.select()
 		.from(reference)
-		.where(isNull(reference.supersededById))
+		.where(and(arrayContains(reference.subjects, [topic]), isNull(reference.supersededById)))
 		.orderBy(asc(reference.documentSlug), asc(reference.edition));
-	return rows.filter((r) => (r.subjects as readonly string[]).includes(topic));
 }
 
 /**
@@ -255,17 +260,32 @@ export async function getReferenceCountsByCert(db: Db = defaultDb): Promise<Reco
  * Per-topic reference counts for the landing page's topic spine. Counts
  * each `subjects[]` membership independently (one ref tagged with two
  * topics increments both counters).
+ *
+ * Implementation: a single round-trip with `LATERAL unnest(subjects)` +
+ * `GROUP BY` so the aggregation runs inside Postgres rather than pulling
+ * every row's `subjects` array across the wire and summing in JS. Drizzle's
+ * query builder cannot express `LATERAL unnest` of a column today, so this
+ * routes through `db.execute(sql\`...\`)` per the project rule "Drizzle ORM
+ * only, except where the SQL shape genuinely requires raw SQL." The shape
+ * here (column-derived rowset that needs to participate in the FROM clause)
+ * is one of those cases. The `superseded_by_id IS NULL` predicate matches
+ * every other "active references only" probe in this BC.
  */
 export async function getReferenceCountsByTopic(db: Db = defaultDb): Promise<Record<string, number>> {
-	const rows = await db
-		.select({ subjects: reference.subjects })
-		.from(reference)
-		.where(isNull(reference.supersededById));
+	// `count(*)::int` so the row comes back as a JS number rather than the
+	// `bigint`-as-string that Postgres' default count() yields. The same
+	// `result as unknown as ReadonlyArray<...>` shape is used by
+	// `getCredentialIdsCoveredBy` for its recursive CTE -- postgres-js's
+	// `db.execute` returns the rowset directly as an iterable here.
+	const result = await db.execute(sql`
+		SELECT s.subject, count(*)::int AS n
+		FROM ${reference} AS r,
+		LATERAL unnest(r.subjects) AS s(subject)
+		WHERE r.superseded_by_id IS NULL
+		GROUP BY s.subject
+	`);
+	const rows = result as unknown as ReadonlyArray<{ subject: string; n: number }>;
 	const out: Record<string, number> = {};
-	for (const row of rows) {
-		for (const subject of row.subjects as readonly string[]) {
-			out[subject] = (out[subject] ?? 0) + 1;
-		}
-	}
+	for (const row of rows) out[row.subject] = row.n;
 	return out;
 }

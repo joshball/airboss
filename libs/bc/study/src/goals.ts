@@ -47,6 +47,7 @@ import type {
 	CreateGoalInput,
 	UpdateGoalInput,
 } from './credentials.validation';
+import { UpsertReturnedNoRowError } from './errors';
 import {
 	credential,
 	credentialSyllabus,
@@ -264,12 +265,12 @@ export async function createGoal(params: CreateGoalParams, db: Db = defaultDb): 
 				.set({ isPrimary: false, updatedAt: new Date() })
 				.where(and(eq(goal.userId, params.userId), eq(goal.isPrimary, true)));
 			const [inserted] = await tx.insert(goal).values(row).returning();
-			if (!inserted) throw new Error('createGoal failed');
+			if (!inserted) throw new UpsertReturnedNoRowError('goal', id);
 			return inserted;
 		});
 	}
 	const [inserted] = await db.insert(goal).values(row).returning();
-	if (!inserted) throw new Error('createGoal failed');
+	if (!inserted) throw new UpsertReturnedNoRowError('goal', id);
 	return inserted;
 }
 
@@ -349,7 +350,7 @@ export async function addGoalSyllabus(
 			set: { weight: input.weight },
 		})
 		.returning();
-	if (!result) throw new Error('addGoalSyllabus failed');
+	if (!result) throw new UpsertReturnedNoRowError('goal_syllabus', `${existing.id}:${input.syllabusId}`);
 	return result;
 }
 
@@ -405,7 +406,7 @@ export async function addGoalNode(
 			set: { weight: input.weight, notes: input.notes },
 		})
 		.returning();
-	if (!result) throw new Error('addGoalNode failed');
+	if (!result) throw new UpsertReturnedNoRowError('goal_node', `${existing.id}:${input.knowledgeNodeId}`);
 	return result;
 }
 
@@ -545,51 +546,25 @@ export async function applyCertGoalsToPrimaryGoal(
 	options: { goalTitle?: string; focusDomains?: readonly Domain[]; skipDomains?: readonly Domain[] } = {},
 	db: Db = defaultDb,
 ): Promise<ApplyCertGoalsResult> {
-	let primary = await getPrimaryGoal(userId, db);
-	let created = false;
-	if (primary === null) {
-		primary = await createGoal(
-			{
-				userId,
-				title: options.goalTitle ?? 'Study goal',
-				notesMd: '',
-				isPrimary: true,
-			},
-			db,
-		);
-		created = true;
-	}
-
-	// Apply optional targeting fields to the primary goal in a single
-	// update so the helper is the only writer for these columns on this
-	// path. Empty arrays are valid -- they unset narrowing.
-	const targetingPatch: Partial<{ focusDomains: Domain[]; skipDomains: Domain[]; updatedAt: Date }> = {};
-	if (options.focusDomains !== undefined) targetingPatch.focusDomains = [...options.focusDomains];
-	if (options.skipDomains !== undefined) targetingPatch.skipDomains = [...options.skipDomains];
-	if (Object.keys(targetingPatch).length > 0) {
-		targetingPatch.updatedAt = new Date();
-		await db.update(goal).set(targetingPatch).where(eq(goal.id, primary.id));
-	}
-
-	if (certs.length === 0) {
-		return { goalId: primary.id, created, skippedCerts: [] };
-	}
-
-	// Batch read 1: every credential row for the requested slugs in one query.
-	// Replaces the per-cert `getCredentialBySlug` round-trip.
+	// Resolve everything we need to write before opening the transaction
+	// (read-only credential / syllabus lookups don't need the tx scope).
+	// The transaction then takes ownership of every write -- targeting
+	// patch + per-cert goal_syllabus upserts -- so a mid-loop failure
+	// cannot leave a partially-built primary goal that
+	// `getDerivedCertGoals` could read while the user is mid-action.
 	const certSlugs = [...new Set(certs)];
-	const credentialRows = await db
-		.select({ id: credential.id, slug: credential.slug })
-		.from(credential)
-		.where(inArray(credential.slug, certSlugs));
+
+	const credentialRows =
+		certSlugs.length === 0
+			? []
+			: await db
+					.select({ id: credential.id, slug: credential.slug })
+					.from(credential)
+					.where(inArray(credential.slug, certSlugs));
 	const credBySlug = new Map(credentialRows.map((r) => [r.slug, r.id] as const));
 
 	const foundCredIds = credentialRows.map((r) => r.id);
 
-	// Batch read 2: every primary credential_syllabus row in one query.
-	// Replaces the per-cert `getCredentialPrimarySyllabus` round-trip.
-	// Filtered to active syllabi to mirror `getCredentialPrimarySyllabus`'s
-	// "we don't surface archived primaries" semantic.
 	const primarySyllabusRows =
 		foundCredIds.length === 0
 			? []
@@ -607,8 +582,8 @@ export async function applyCertGoalsToPrimaryGoal(
 	const syllabusByCredId = new Map(primarySyllabusRows.map((r) => [r.credentialId, r.syllabusId] as const));
 
 	// Resolve each requested slug; record skips when either lookup missed.
-	// Resolutions for the upsert phase preserve input order so deterministic
-	// re-runs hit goal_syllabus rows in the same order.
+	// Preserves input order so deterministic re-runs hit goal_syllabus
+	// rows in the same order.
 	const skippedCerts: string[] = [];
 	const resolved: Array<{ slug: Cert; syllabusId: string }> = [];
 	const seen = new Set<Cert>();
@@ -628,11 +603,43 @@ export async function applyCertGoalsToPrimaryGoal(
 		resolved.push({ slug: certSlug, syllabusId });
 	}
 
-	// Each upsert targets a distinct (goal_id, syllabus_id) row; running in
-	// parallel via Promise.all collapses N round-trips into one batched wait.
-	await Promise.all(
-		resolved.map((r) => addGoalSyllabus(primary.id, userId, { syllabusId: r.syllabusId, weight: 1.0 }, db)),
-	);
+	return await db.transaction(async (tx) => {
+		let primary = await getPrimaryGoal(userId, tx);
+		let created = false;
+		if (primary === null) {
+			primary = await createGoal(
+				{
+					userId,
+					title: options.goalTitle ?? 'Study goal',
+					notesMd: '',
+					isPrimary: true,
+				},
+				tx,
+			);
+			created = true;
+		}
 
-	return { goalId: primary.id, created, skippedCerts };
+		// Apply optional targeting fields to the primary goal in a single
+		// update so the helper is the only writer for these columns on this
+		// path. Empty arrays are valid -- they unset narrowing.
+		const targetingPatch: Partial<{ focusDomains: Domain[]; skipDomains: Domain[]; updatedAt: Date }> = {};
+		if (options.focusDomains !== undefined) targetingPatch.focusDomains = [...options.focusDomains];
+		if (options.skipDomains !== undefined) targetingPatch.skipDomains = [...options.skipDomains];
+		if (Object.keys(targetingPatch).length > 0) {
+			targetingPatch.updatedAt = new Date();
+			await tx.update(goal).set(targetingPatch).where(eq(goal.id, primary.id));
+		}
+
+		// Each upsert targets a distinct (goal_id, syllabus_id) row; running
+		// in parallel via Promise.all collapses N round-trips into one
+		// batched wait. A failure on any one will roll the targeting patch
+		// (and the just-created primary goal, when applicable) back.
+		if (resolved.length > 0) {
+			await Promise.all(
+				resolved.map((r) => addGoalSyllabus(primary.id, userId, { syllabusId: r.syllabusId, weight: 1.0 }, tx)),
+			);
+		}
+
+		return { goalId: primary.id, created, skippedCerts };
+	});
 }

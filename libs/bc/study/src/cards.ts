@@ -10,7 +10,10 @@
  */
 
 import {
+	CARD_KIND_VALUES,
+	CARD_KINDS,
 	CARD_STATUSES,
+	type CardKind,
 	type CardStatus,
 	type CardType,
 	CONTENT_SOURCES,
@@ -24,9 +27,17 @@ import { db as defaultDb } from '@ab/db/connection';
 import { generateCardId } from '@ab/utils';
 import { and, asc, desc, eq, ilike, inArray, isNull, lte, or, type SQL, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
+import { SourceRefRequiredError } from './errors';
 import { type CardRow, type CardStateRow, card, cardSnooze, cardState } from './schema';
 import { fsrsInitialState } from './srs';
 import { newCardSchema, updateCardSchema } from './validation';
+
+// Re-exported so `import { SourceRefRequiredError } from './cards'` (and the
+// barrel) keeps working. The canonical class lives in `./errors` so the same
+// shape is shared with `scenarios.ts`; previously two identically-named
+// classes collided at the barrel and `instanceof` checks silently missed
+// the scenarios case (chunk-2 dx review).
+export { SourceRefRequiredError };
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 
@@ -49,13 +60,20 @@ export class CardNotEditableError extends Error {
 	}
 }
 
-/** Raised when sourceType requires sourceRef but none was supplied. */
-export class SourceRefRequiredError extends Error {
-	constructor() {
-		super('source_ref is required when source_type is not personal');
-		this.name = 'SourceRefRequiredError';
+/**
+ * Raised when a card-kind value is not in `CARD_KIND_VALUES`. Defensive:
+ * `newCardSchema` / `updateCardSchema` are the primary defense, but the BC
+ * also rejects so cross-BC callers and scripts that bypass the zod schema
+ * still hit a typed failure.
+ */
+export class InvalidCardKindError extends Error {
+	constructor(public readonly kind: string) {
+		super(`Invalid card kind: ${kind}. Expected one of ${CARD_KIND_VALUES.join(', ')}.`);
+		this.name = 'InvalidCardKindError';
 	}
 }
+
+const CARD_KIND_VALUE_SET = new Set<string>(CARD_KIND_VALUES);
 
 /** Full card view that pairs static card data with per-user scheduler state. */
 export interface CardWithState {
@@ -69,6 +87,12 @@ export interface CreateCardInput {
 	back: string;
 	domain: Domain;
 	cardType: CardType;
+	/**
+	 * Knowledge-axis kind (recall vs calculation). Distinct from cardType
+	 * (presentation form). Drives the per-evidence-kind partition in
+	 * mastery.ts. Defaults to `recall` when omitted.
+	 */
+	kind?: CardKind;
 	tags?: string[];
 	sourceType?: ContentSource;
 	sourceRef?: string | null;
@@ -85,12 +109,14 @@ export interface UpdateCardInput {
 	back?: string;
 	domain?: Domain;
 	cardType?: CardType;
+	kind?: CardKind;
 	tags?: string[];
 }
 
 export interface CardFilters {
 	domain?: Domain;
 	cardType?: CardType;
+	kind?: CardKind;
 	sourceType?: ContentSource;
 	status?: CardStatus | CardStatus[];
 	search?: string;
@@ -107,6 +133,7 @@ export async function createCard(input: CreateCardInput, db: Db = defaultDb): Pr
 		back: input.back,
 		domain: input.domain,
 		cardType: input.cardType,
+		kind: input.kind,
 		tags: input.tags,
 		sourceType: input.sourceType,
 		sourceRef: input.sourceRef,
@@ -115,6 +142,13 @@ export async function createCard(input: CreateCardInput, db: Db = defaultDb): Pr
 	const sourceType = (parsed.sourceType ?? CONTENT_SOURCES.PERSONAL) as ContentSource;
 	if (sourceType !== CONTENT_SOURCES.PERSONAL && !parsed.sourceRef) {
 		throw new SourceRefRequiredError();
+	}
+	const kind = (parsed.kind ?? CARD_KINDS.RECALL) as CardKind;
+	if (!CARD_KIND_VALUE_SET.has(kind)) {
+		// Defensive: the zod schema rejects unknown values upstream, but a
+		// caller bypassing zod (e.g. a script that constructs a CreateCardInput
+		// from raw user input) still hits a typed failure here.
+		throw new InvalidCardKindError(kind);
 	}
 
 	return await db.transaction(async (tx) => {
@@ -132,6 +166,7 @@ export async function createCard(input: CreateCardInput, db: Db = defaultDb): Pr
 				domain: parsed.domain as Domain,
 				tags: parsed.tags ?? [],
 				cardType: parsed.cardType as CardType,
+				kind,
 				sourceType,
 				sourceRef: parsed.sourceRef ?? null,
 				nodeId: input.nodeId ?? null,
@@ -173,55 +208,69 @@ export async function updateCard(
 ): Promise<CardRow> {
 	const parsed = updateCardSchema.parse(patch);
 
-	const [existing] = await db
-		.select()
-		.from(card)
-		.where(and(eq(card.id, cardId), eq(card.userId, userId)))
-		.limit(1);
-	if (!existing) throw new CardNotFoundError(cardId, userId);
-	if (!existing.isEditable) throw new CardNotEditableError(cardId);
+	// Wrap the card UPDATE and the bad-question snooze sweep in one
+	// transaction so a failure on the second write rolls back the first.
+	// Without the wrap a partial failure leaves the card content patched
+	// but stale snooze rows still pointing at the old text -- the
+	// re-entry banner would never fire and the row drifts silently.
+	return await db.transaction(async (tx) => {
+		const [existing] = await tx
+			.select()
+			.from(card)
+			.where(and(eq(card.id, cardId), eq(card.userId, userId)))
+			.limit(1);
+		if (!existing) throw new CardNotFoundError(cardId, userId);
+		if (!existing.isEditable) throw new CardNotEditableError(cardId);
 
-	// Whitelist explicitly so Drizzle can't accept extra keys slipped in by a
-	// caller that bypasses TypeScript.
-	const update: Partial<CardRow> = { updatedAt: new Date() };
-	if (parsed.front !== undefined) update.front = parsed.front;
-	if (parsed.back !== undefined) update.back = parsed.back;
-	if (parsed.domain !== undefined) update.domain = parsed.domain as Domain;
-	if (parsed.cardType !== undefined) update.cardType = parsed.cardType as CardType;
-	if (parsed.tags !== undefined) update.tags = parsed.tags;
+		// Whitelist explicitly so Drizzle can't accept extra keys slipped in by a
+		// caller that bypasses TypeScript.
+		const update: Partial<CardRow> = { updatedAt: new Date() };
+		if (parsed.front !== undefined) update.front = parsed.front;
+		if (parsed.back !== undefined) update.back = parsed.back;
+		if (parsed.domain !== undefined) update.domain = parsed.domain as Domain;
+		if (parsed.cardType !== undefined) update.cardType = parsed.cardType as CardType;
+		if (parsed.kind !== undefined) {
+			const kind = parsed.kind as CardKind;
+			if (!CARD_KIND_VALUE_SET.has(kind)) throw new InvalidCardKindError(kind);
+			update.kind = kind;
+		}
+		if (parsed.tags !== undefined) update.tags = parsed.tags;
 
-	const [updated] = await db
-		.update(card)
-		.set(update)
-		.where(and(eq(card.id, cardId), eq(card.userId, userId)))
-		.returning();
+		const [updated] = await tx
+			.update(card)
+			.set(update)
+			.where(and(eq(card.id, cardId), eq(card.userId, userId)))
+			.returning();
 
-	// Mark any active `bad-question` snoozes so the re-entry banner fires
-	// the next time this card surfaces in a review. Only triggers on real
-	// content changes (front/back/domain/cardType/tags) -- the whitelist
-	// above already screens out status-only flips.
-	const contentChanged =
-		parsed.front !== undefined ||
-		parsed.back !== undefined ||
-		parsed.domain !== undefined ||
-		parsed.cardType !== undefined ||
-		parsed.tags !== undefined;
-	if (contentChanged) {
-		const editedAt = new Date();
-		await db
-			.update(cardSnooze)
-			.set({ cardEditedAt: editedAt, snoozeUntil: editedAt })
-			.where(
-				and(
-					eq(cardSnooze.cardId, cardId),
-					eq(cardSnooze.reason, SNOOZE_REASONS.BAD_QUESTION),
-					isNull(cardSnooze.resolvedAt),
-					isNull(cardSnooze.cardEditedAt),
-				),
-			);
-	}
+		// Mark any active `bad-question` snoozes so the re-entry banner fires
+		// the next time this card surfaces in a review. Only triggers on real
+		// content changes (front/back/domain/cardType/kind/tags) -- the whitelist
+		// above already screens out status-only flips. `kind` flips reframe the
+		// question (recall vs calculation) so they count as content changes.
+		const contentChanged =
+			parsed.front !== undefined ||
+			parsed.back !== undefined ||
+			parsed.domain !== undefined ||
+			parsed.cardType !== undefined ||
+			parsed.kind !== undefined ||
+			parsed.tags !== undefined;
+		if (contentChanged) {
+			const editedAt = new Date();
+			await tx
+				.update(cardSnooze)
+				.set({ cardEditedAt: editedAt, snoozeUntil: editedAt })
+				.where(
+					and(
+						eq(cardSnooze.cardId, cardId),
+						eq(cardSnooze.reason, SNOOZE_REASONS.BAD_QUESTION),
+						isNull(cardSnooze.resolvedAt),
+						isNull(cardSnooze.cardEditedAt),
+					),
+				);
+		}
 
-	return updated;
+		return updated;
+	});
 }
 
 /** Fetch a single card and its scheduler state. Returns null when not found. */
@@ -330,6 +379,7 @@ export async function getCards(
 
 	if (filters.domain) clauses.push(eq(card.domain, filters.domain));
 	if (filters.cardType) clauses.push(eq(card.cardType, filters.cardType));
+	if (filters.kind) clauses.push(eq(card.kind, filters.kind));
 	if (filters.sourceType) clauses.push(eq(card.sourceType, filters.sourceType));
 	if (filters.nodeId) clauses.push(eq(card.nodeId, filters.nodeId));
 	if (filters.search && filters.search.trim().length > 0) {
@@ -377,6 +427,7 @@ export async function getCardsCount(
 
 	if (filters.domain) clauses.push(eq(card.domain, filters.domain));
 	if (filters.cardType) clauses.push(eq(card.cardType, filters.cardType));
+	if (filters.kind) clauses.push(eq(card.kind, filters.kind));
 	if (filters.sourceType) clauses.push(eq(card.sourceType, filters.sourceType));
 	if (filters.nodeId) clauses.push(eq(card.nodeId, filters.nodeId));
 	if (filters.search && filters.search.trim().length > 0) {
@@ -424,6 +475,7 @@ export interface RemovedCardRow {
 export interface RemovedCardsFilters {
 	domain?: Domain;
 	cardType?: CardType;
+	kind?: CardKind;
 	sourceType?: ContentSource;
 	search?: string;
 	limit?: number;
@@ -449,6 +501,7 @@ export async function getRemovedCards(
 	];
 	if (filters.domain) clauses.push(eq(card.domain, filters.domain));
 	if (filters.cardType) clauses.push(eq(card.cardType, filters.cardType));
+	if (filters.kind) clauses.push(eq(card.kind, filters.kind));
 	if (filters.sourceType) clauses.push(eq(card.sourceType, filters.sourceType));
 	if (filters.search && filters.search.trim().length > 0) {
 		const pattern = `%${escapeLikePattern(filters.search.trim())}%`;
@@ -498,6 +551,7 @@ export async function getRemovedCardsCount(
 	];
 	if (filters.domain) clauses.push(eq(card.domain, filters.domain));
 	if (filters.cardType) clauses.push(eq(card.cardType, filters.cardType));
+	if (filters.kind) clauses.push(eq(card.kind, filters.kind));
 	if (filters.sourceType) clauses.push(eq(card.sourceType, filters.sourceType));
 	if (filters.search && filters.search.trim().length > 0) {
 		const pattern = `%${escapeLikePattern(filters.search.trim())}%`;
@@ -550,11 +604,12 @@ export async function getCardsFacetCounts(
 			: [filters.status]
 		: [CARD_STATUSES.ACTIVE];
 
-	const withExcept = (exclude: 'domain' | 'cardType' | 'sourceType' | 'status'): SQL[] => {
+	const withExcept = (exclude: 'domain' | 'cardType' | 'kind' | 'sourceType' | 'status'): SQL[] => {
 		const c = [...baseClauses];
 		if (exclude !== 'status') c.push(inArray(card.status, statusFilter));
 		if (exclude !== 'domain' && filters.domain) c.push(eq(card.domain, filters.domain));
 		if (exclude !== 'cardType' && filters.cardType) c.push(eq(card.cardType, filters.cardType));
+		if (exclude !== 'kind' && filters.kind) c.push(eq(card.kind, filters.kind));
 		if (exclude !== 'sourceType' && filters.sourceType) c.push(eq(card.sourceType, filters.sourceType));
 		return c;
 	};
@@ -594,4 +649,28 @@ export async function getCardsFacetCounts(
 		sourceType: toRecord(sourceRows),
 		status: toRecord(statusRows),
 	};
+}
+
+/**
+ * Read every active card on a given (user, node) filtered by knowledge kind
+ * (recall vs calculation). Powers the per-evidence-kind partition in
+ * `mastery.ts` and the `bun run db check card-kinds` audit script.
+ *
+ * Backed by the (user_id, kind) index so the lookup stays bounded even on a
+ * large per-user card pool. evidence-kind-data-layer WP.
+ */
+export async function getCardsForNodeByKind(
+	userId: string,
+	nodeId: string,
+	kind: CardKind,
+	db: Db = defaultDb,
+): Promise<CardRow[]> {
+	if (!CARD_KIND_VALUE_SET.has(kind)) throw new InvalidCardKindError(kind);
+	return await db
+		.select()
+		.from(card)
+		.where(
+			and(eq(card.userId, userId), eq(card.nodeId, nodeId), eq(card.kind, kind), eq(card.status, CARD_STATUSES.ACTIVE)),
+		)
+		.orderBy(asc(card.createdAt));
 }

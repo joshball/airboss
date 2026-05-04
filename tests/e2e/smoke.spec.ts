@@ -27,9 +27,15 @@ test.describe('smoke: authed routes load', () => {
 		});
 	}
 
-	test(`${ROUTES.MEMORY_REVIEW} loads (empty state or review UI)`, async ({ page }) => {
+	test(`${ROUTES.MEMORY_REVIEW} loads (Start prompt, then review UI after submit)`, async ({ page }) => {
 		const res = await page.goto(ROUTES.MEMORY_REVIEW);
 		expect(res?.status()).toBeLessThan(400);
+		// Post-2026-05 fix: GET /memory/review never mints a session row. The
+		// landing screen is a "Start review" prompt; the runner UI is only
+		// reachable after the form submit.
+		const startBtn = page.getByRole('button', { name: /start review/i });
+		await expect(startBtn).toBeVisible();
+		await startBtn.click();
 		const caughtUp = page.getByRole('heading', { name: /all caught up/i });
 		const ratingBtn = page.locator('button[data-rating]').first();
 		// Either review-complete heading or a rating button visible once a card

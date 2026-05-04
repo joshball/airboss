@@ -22,14 +22,17 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
 	CredentialNotFoundError,
 	CredentialPrereqCycleError,
+	CredentialPrereqUnresolvedNodesError,
 	getCertsCoveredBy,
 	getCredentialBySlug,
 	getCredentialIdsCoveredBy,
 	getCredentialMastery,
+	getCredentialMasteryMap,
 	getCredentialPrereqDag,
 	getCredentialPrereqs,
 	getCredentialPrimarySyllabus,
 	getCredentialSyllabi,
+	getCredentialsByIds,
 	listCredentials,
 	upsertCredential,
 	upsertCredentialPrereq,
@@ -123,6 +126,40 @@ describe('validateCredentialDag', () => {
 			// The DFS-found cycle starts and ends on the same node.
 			expect(err.cycle[0]).toBe(err.cycle[err.cycle.length - 1]);
 		}
+	});
+});
+
+describe('CredentialPrereqUnresolvedNodesError', () => {
+	// This class is the typed sibling of CredentialPrereqCycleError used when
+	// Kahn's-algorithm cannot drain every node but DFS does not find a
+	// walkable cycle from the chosen entry point. Today the algorithm always
+	// finds a cycle when one exists, so triggering this branch end-to-end
+	// requires a synthetic graph that's hard to author. The structural
+	// assertions below pin the public contract callers depend on so a future
+	// algorithm change cannot silently weaken the typed-error surface.
+
+	it('exposes the unresolved id list as a public readonly field', () => {
+		const err = new CredentialPrereqUnresolvedNodesError(['a', 'b', 'c']);
+		expect(err.unresolved).toEqual(['a', 'b', 'c']);
+	});
+
+	it('error.name is stable for log search', () => {
+		expect(new CredentialPrereqUnresolvedNodesError([]).name).toBe('CredentialPrereqUnresolvedNodesError');
+	});
+
+	it('is distinct from CredentialPrereqCycleError so callers can discriminate', () => {
+		const unresolved = new CredentialPrereqUnresolvedNodesError(['a']);
+		expect(unresolved).not.toBeInstanceOf(CredentialPrereqCycleError);
+	});
+
+	it('extends Error so legacy `instanceof Error` catches still work', () => {
+		expect(new CredentialPrereqUnresolvedNodesError(['a'])).toBeInstanceOf(Error);
+	});
+
+	it('message contains the unresolved ids for plain-text log scans', () => {
+		const err = new CredentialPrereqUnresolvedNodesError(['cred_a', 'cred_b']);
+		expect(err.message).toContain('cred_a');
+		expect(err.message).toContain('cred_b');
 	});
 });
 
@@ -685,6 +722,57 @@ describe('getCredentialMastery', () => {
 		} finally {
 			await fixture.cleanup();
 		}
+	});
+});
+
+describe('getCredentialsByIds (batch)', () => {
+	it('returns rows keyed by id for the input set', async () => {
+		const map = await getCredentialsByIds([PRIVATE_ID, CFI_ID]);
+		expect(map.size).toBe(2);
+		expect(map.get(PRIVATE_ID)?.slug).toBe(PRIVATE_SLUG);
+		expect(map.get(CFI_ID)?.slug).toBe(CFI_SLUG);
+	});
+
+	it('omits unknown ids without throwing', async () => {
+		const fake = generateCredentialId();
+		const map = await getCredentialsByIds([PRIVATE_ID, fake]);
+		expect(map.size).toBe(1);
+		expect(map.get(fake)).toBeUndefined();
+	});
+
+	it('returns empty Map for empty input', async () => {
+		const map = await getCredentialsByIds([]);
+		expect(map.size).toBe(0);
+	});
+});
+
+describe('getCredentialMasteryMap (batch)', () => {
+	it('mirrors getCredentialMastery for every input id', async () => {
+		const ids = [PRIVATE_ID, CFII_ID];
+		const map = await getCredentialMasteryMap(TEST_USER_ID, ids);
+		expect(map.size).toBe(2);
+
+		const private_ = map.get(PRIVATE_ID);
+		expect(private_?.credentialSlug).toBe(PRIVATE_SLUG);
+		expect(private_?.primarySyllabusId).toBe(PRIVATE_SYLLABUS_ID);
+		expect(private_?.totalLeaves).toBe(0);
+
+		// CFII has no primary syllabus -> primarySyllabusId is null.
+		const cfii = map.get(CFII_ID);
+		expect(cfii?.primarySyllabusId).toBeNull();
+		expect(cfii?.totalLeaves).toBe(0);
+	});
+
+	it('returns empty Map for empty input', async () => {
+		const map = await getCredentialMasteryMap(TEST_USER_ID, []);
+		expect(map.size).toBe(0);
+	});
+
+	it('omits unknown credential ids', async () => {
+		const fake = generateCredentialId();
+		const map = await getCredentialMasteryMap(TEST_USER_ID, [PRIVATE_ID, fake]);
+		expect(map.has(PRIVATE_ID)).toBe(true);
+		expect(map.has(fake)).toBe(false);
 	});
 });
 
