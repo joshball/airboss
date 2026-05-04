@@ -44,7 +44,7 @@ Re-audited every per-category file against current main. **All 5 headline critic
 | testing      |     17 |    4 | done     | savedDeck seeding; cleanup-guard removal; per-test fresh user for memory/review; reps-test ordering                  |
 | dx           |     11 |    7 | pending  | handbook .catch -> typed errors; login 5xx branch; sign-out body snippet; narrow/coerceEnum dedup; RenderedLesson  |
 | ux           |      5 |   13 | pending  | library card-state indicator; topic 404 -> soft empty; Skip Permanently confirm copy; form-error consistency         |
-| svelte       |      4 |    4 | pending  | route-level CSS extraction (work-package); URL side-effect from URL-seeded state; module-scoped timers -> $effect cleanup; calibration h2 nit |
+| svelte       |      5 |    3 | pending  | URL side-effect from URL-seeded state; module-scoped timers -> $effect cleanup; calibration h2 nit; IdentityMenu extraction (separate work-package) |
 | backend      |     16 |    2 | done     | regulations-section redundant fetch; per-action ref/chapter re-fetch (handbook chapter actions)                       |
 
 ### Closed-by-rewrite
@@ -59,7 +59,7 @@ Re-audited every per-category file against current main. **All 5 headline critic
 - **Log-quality sweep** (~6 dx items): mechanical pass replacing `'<func> threw'` with `'<verb> <entity> failed'` and aligning user-visible noun-phrase across logs + `fail()` messages.
 - **Heartbeat correctness tail** (3 correctness items): CLOSED 2026-05-04 -- memory-review numeric undo + handbook-asset realpath defence landed via this PR; accumulator-on-success was already in #468. All three pinned by tests (`server.test.ts` for handbook-asset; `manifest-validation.test.ts` for the heartbeat schema's strict-numeric `delta`).
 - **Library completeness UX** (4 ux items + 1 architecture): card-state indicator, topic 404 -> soft empty, regulations empty buckets, isReadable hardcoded. All gated on the library-completeness Wave-2 spec decision.
-- **Route-level CSS extraction** (1 svelte MAJOR): work-package scope -- extract Card / Toast / ScoreMeta / BadgeStatus primitives into `libs/ui`. Token migration is a finishing pass per project rule.
+- **Route-level CSS extraction** (1 svelte MAJOR) -- CLOSED 2026-05-04 (chunk-1 svelte cluster). Card already on main; Toast / ScoreMeta / BadgeStatus extracted into `libs/ui/src/components/` with harness tests + type re-exports on `@ab/ui`. Six study-app consumer sites rewired (memory/review, memory/[id]/_panels/CardDetailPanel, calibration, plans, plans/[id]). IdentityMenu and the route-level token-migration finishing pass remain as separate work-packages per project rule.
 - **(app)/+layout effect-mirror** (1 svelte MAJOR + 1 svelte MINOR): CLOSED 2026-05-04 -- chunk-5's close-out audit shipped the convergent fix across 5 layouts (study `(app)`, hangar root, hangar `(app)`, sim, avionics) via PR #568. `$effect(() => mirror = data.x)` replaced with optimistic-override `$derived(override ?? data.x)`. Forward-reference MINOR closed by the same rework. See [svelte review](2026-05-01-study-app-surfaces-svelte.md) status table.
 - **Backend CRITICAL** (memory/review GET-mutation): single-route fix -- redirect to a Start prompt with form action; never mint a session in `load`.
 - **a11y CRITICAL × 3** -- ALL CLOSED 2026-05-04: MapPanel `aria-label` + `role="cell"` wrapper; radiogroup roving-tabindex via `radio-group-keyboard.ts`; read-suggestion preamble via `ReadSuggestionPanel.svelte`. See a11y review file for evidence.
