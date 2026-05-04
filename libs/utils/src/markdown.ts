@@ -281,11 +281,150 @@ function stripYamlScalarQuotes(value: string): string {
 	if (value.length >= 2) {
 		const first = value.charAt(0);
 		const last = value.charAt(value.length - 1);
-		if ((first === '"' && last === '"') || (first === "'" && last === "'")) {
+		if (first === '"' && last === '"') {
 			return value.slice(1, -1);
+		}
+		if (first === "'" && last === "'") {
+			// YAML single-quote escape: doubled single quote -> literal apostrophe.
+			return value.slice(1, -1).replace(/''/g, "'");
 		}
 	}
 	return value;
+}
+
+/**
+ * Pure-string transform: rewrite the value of one frontmatter field, or add
+ * the field if missing. Preserves all other frontmatter lines and the body
+ * verbatim. If the source has no frontmatter block, prepends one with the
+ * single key.
+ *
+ * Quoting policy: values that contain a colon, are bare YAML keywords
+ * (`true`, `false`, `null`, `yes`, `no`), look numeric, or start with whitespace
+ * are wrapped in single quotes; everything else is written bare. Single quotes
+ * inside the value are doubled per YAML's single-quote escape rule. Values are
+ * normalised to never carry a leading or trailing newline; pass `\n` literals
+ * via a multi-line scalar (out of scope -- this helper is for short scalars).
+ *
+ * Round-trips: `parseFrontmatter(setFrontmatterField(md, k, v)).entries` always
+ * contains `(k, v)`.
+ */
+export function setFrontmatterField(md: string, field: string, value: string): string {
+	if (!isValidFrontmatterKey(field)) {
+		throw new Error(`setFrontmatterField: invalid key '${field}'. Keys must match /^[A-Za-z0-9_-]+$/.`);
+	}
+	const formatted = `${field}: ${formatYamlScalarValue(value)}`;
+	// Detect dominant EOL of the input so a CRLF-authored file stays CRLF
+	// after rewrite. Mixed-EOL files (CRLF in the body, LF in the
+	// frontmatter) are rare; we prefer CRLF when any CRLF appears so the
+	// dominant convention wins.
+	const eol = md.includes('\r\n') ? '\r\n' : '\n';
+	// No leading frontmatter at all -> prepend a fresh block.
+	if (!md.startsWith('---') || (md.charCodeAt(3) !== 0x0a && md.charCodeAt(3) !== 0x0d)) {
+		return `---${eol}${formatted}${eol}---${eol}${eol}${md}`;
+	}
+	const end = md.indexOf('\n---', 3);
+	if (end < 0) {
+		// Malformed (no closing fence). Treat as no frontmatter; prepend one.
+		return `---${eol}${formatted}${eol}---${eol}${eol}${md}`;
+	}
+	const head = md.slice(0, end + 1); // up to and including the `\n` before the closing `---`
+	const tail = md.slice(end + 1); // `---\n...rest...`
+	// Split on \r?\n so CRLF lines drop the trailing \r in `lines`. We then
+	// rejoin with the detected EOL so the rewritten / inserted line and the
+	// preserved lines all share one convention.
+	const lines = head.split(/\r?\n/);
+	// `lines[0]` is the opening `---`; `lines[lines.length - 1]` is empty (the trailing
+	// newline of `head`). Walk the inner lines, find every occurrence of the key,
+	// rewrite the first and drop the rest -- duplicates would otherwise let
+	// `parseFrontmatter`'s "last write wins" rule mask the rewrite.
+	const keyPattern = new RegExp(`^\\s*${escapeRegExp(field)}\\s*:`);
+	let replaced = false;
+	for (let i = 1; i < lines.length - 1; i++) {
+		const line = lines[i];
+		if (line === undefined) continue;
+		if (!keyPattern.test(line)) continue;
+		if (!replaced) {
+			lines[i] = formatted;
+			replaced = true;
+		} else {
+			// Drop the duplicate so the post-condition `parseFrontmatter(...)
+			// .entries` always contains exactly one (key, value).
+			lines.splice(i, 1);
+			i -= 1;
+		}
+	}
+	if (!replaced) {
+		// Append before the closing fence.
+		lines.splice(lines.length - 1, 0, formatted);
+	}
+	return lines.join(eol) + tail;
+}
+
+/**
+ * Pure-string batch variant of `setFrontmatterField`. Applies updates in
+ * insertion order; the last write to a key wins.
+ */
+export function setFrontmatterFields(md: string, updates: Readonly<Record<string, string>>): string {
+	let out = md;
+	for (const [key, value] of Object.entries(updates)) {
+		out = setFrontmatterField(out, key, value);
+	}
+	return out;
+}
+
+function isValidFrontmatterKey(key: string): boolean {
+	return /^[A-Za-z0-9_-]+$/.test(key);
+}
+
+const YAML_RESERVED_BARE_VALUES: ReadonlySet<string> = new Set([
+	'true',
+	'false',
+	'null',
+	'yes',
+	'no',
+	'~',
+	'',
+	'True',
+	'False',
+	'Null',
+	'Yes',
+	'No',
+	'TRUE',
+	'FALSE',
+	'NULL',
+	'YES',
+	'NO',
+]);
+
+/**
+ * YAML 1.1 / 1.2 treats these characters as reserved when they appear at the
+ * START of a value: alias (`*`), anchor (`&`), tag (`!`), reserved (`@`),
+ * directive (`%`), folded (`>`), literal (`|`), flow (`[`/`]`/`{`/`}`/`,`),
+ * and the comment (`#`) marker is also unsafe in mid-value (already covered
+ * by the `includes('#')` rule). Quote them to keep external YAML parsers
+ * (gray-matter, js-yaml, IDE frontmatter linters) happy.
+ */
+const YAML_RESERVED_LEADING_CHAR = /^[*&!@`%>|[\]{},]/;
+
+function formatYamlScalarValue(value: string): string {
+	const needsQuote =
+		value === '' ||
+		value !== value.trim() ||
+		value.includes(':') ||
+		value.includes('#') ||
+		value.includes('\n') ||
+		value.includes("'") ||
+		value.includes('"') ||
+		YAML_RESERVED_BARE_VALUES.has(value) ||
+		YAML_RESERVED_LEADING_CHAR.test(value) ||
+		/^-?\d+(\.\d+)?$/.test(value);
+	if (!needsQuote) return value;
+	// Single-quote the value; double internal single quotes (YAML escape).
+	return `'${value.replace(/'/g, "''")}'`;
+}
+
+function escapeRegExp(literal: string): string {
+	return literal.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 /**
@@ -628,15 +767,50 @@ function findMatchingClose(s: string, start: number, tag: string): number {
 }
 
 /**
+ * Options for `renderMarkdown`.
+ *
+ * - `minHeadingLevel` -- minimum HTML heading level for ATX headings. Default
+ *   is `3` because the knowledge-graph phase pipeline reserves H1/H2 for
+ *   upstream splitting. Surfaces that render whole files (the `/docs` browser)
+ *   pass `1` so a top-level `# Title` becomes `<h1>` and the visual hierarchy
+ *   is preserved.
+ * - `headingIds` -- when `true`, emit GFM-style slug `id` attributes on every
+ *   heading so intra-doc `[link](#section-anchor)` links resolve. Default is
+ *   `true` (rendering whole-file docs is the dominant use case).
+ */
+export interface RenderMarkdownOptions {
+	readonly minHeadingLevel?: 1 | 2 | 3 | 4 | 5 | 6;
+	readonly headingIds?: boolean;
+}
+
+/**
+ * Slugify heading text using the GFM convention: lowercase, replace
+ * non-alphanumerics with `-`, collapse runs, trim leading/trailing `-`.
+ * Exported so tests / link rewriters can produce the same anchor a heading
+ * gets.
+ */
+export function slugifyHeading(text: string): string {
+	return text
+		.toLowerCase()
+		.replace(/[^a-z0-9\s-]/g, '')
+		.replace(/\s+/g, '-')
+		.replace(/-+/g, '-')
+		.replace(/^-+|-+$/g, '');
+}
+
+/**
  * Convert markdown to HTML. Supports:
- * - ATX headings `###`, `####` (H2 is reserved for phase splitting upstream)
+ * - ATX headings `#`-`######` (level floor controlled by `minHeadingLevel`)
  * - Paragraphs (blank-line separated)
  * - Unordered lists (`- `, `* `)
  * - Ordered lists (`1. `, `2. `, ...)
+ * - GFM pipe tables (`| col | col |` + `| --- | --- |`)
  * - Fenced code blocks with ``` (language hint is attached as a class)
  * - Inline: code, bold, italic, links
  */
-export function renderMarkdown(md: string): string {
+export function renderMarkdown(md: string, options: RenderMarkdownOptions = {}): string {
+	const minHeadingLevel = options.minHeadingLevel ?? 3;
+	const headingIds = options.headingIds ?? true;
 	const lines = md.replace(/\r\n/g, '\n').split('\n');
 	const html: string[] = [];
 	let i = 0;
@@ -713,6 +887,61 @@ export function renderMarkdown(md: string): string {
 		return null;
 	};
 
+	// GFM pipe table -- a header row, a separator row, then zero+ body rows.
+	//
+	//     | col1 | col2 |
+	//     | ---- | ---- |
+	//     | a    | b    |
+	//
+	// The separator row is what marks the block as a table (vs a stack of
+	// pipe-bearing paragraphs). Cells split on `|` after stripping a leading /
+	// trailing pipe; cell content is run through `renderInline` so `**bold**`
+	// and `[links]()` inside cells work. Alignment is detected from the
+	// separator row (`:--`, `--:`, `:-:`).
+	const tryGfmTable = (start: number): { html: string; consumed: number } | null => {
+		const headerLine = lines[start];
+		if (headerLine === undefined || !headerLine.includes('|')) return null;
+		const sepLine = lines[start + 1];
+		if (sepLine === undefined) return null;
+		const headerCells = parsePipeRow(headerLine);
+		if (headerCells === null) return null;
+		const sepSpec = parseSeparatorRow(sepLine, headerCells.length);
+		if (sepSpec === null) return null;
+		const bodyRows: string[][] = [];
+		let cursor = start + 2;
+		while (cursor < lines.length) {
+			const ln = lines[cursor];
+			if (ln === undefined) break;
+			if (ln.trim() === '') break;
+			const row = parsePipeRow(ln);
+			if (row === null) break;
+			bodyRows.push(row);
+			cursor++;
+		}
+		const out: string[] = ['<table>', '<thead><tr>'];
+		for (let c = 0; c < headerCells.length; c++) {
+			const cell = headerCells[c] ?? '';
+			const align = sepSpec[c];
+			const styleAttr = align ? ` style="text-align: ${align};"` : '';
+			out.push(`<th${styleAttr}>${renderInline(cell)}</th>`);
+		}
+		out.push('</tr></thead>');
+		if (bodyRows.length > 0) out.push('<tbody>');
+		for (const row of bodyRows) {
+			out.push('<tr>');
+			for (let c = 0; c < headerCells.length; c++) {
+				const cell = row[c] ?? '';
+				const align = sepSpec[c];
+				const styleAttr = align ? ` style="text-align: ${align};"` : '';
+				out.push(`<td${styleAttr}>${renderInline(cell)}</td>`);
+			}
+			out.push('</tr>');
+		}
+		if (bodyRows.length > 0) out.push('</tbody>');
+		out.push('</table>');
+		return { html: out.join(''), consumed: cursor - start };
+	};
+
 	// Block-level image markdown -- a line that begins with `![` and whose
 	// `![alt](url)` token may continue across multiple soft-wrapped lines until
 	// the closing `)`. Renders as a `<figure>` so it survives intact regardless
@@ -770,6 +999,16 @@ export function renderMarkdown(md: string): string {
 			continue;
 		}
 
+		// GFM pipe table -- detect by looking ahead at the separator row.
+		const tableBlock = line.includes('|') ? tryGfmTable(i) : null;
+		if (tableBlock) {
+			closeParagraph();
+			closeList();
+			html.push(tableBlock.html);
+			i += tableBlock.consumed;
+			continue;
+		}
+
 		// Fenced code block.
 		const fenceOpen = line.match(/^```\s*([\w-]*)\s*$/);
 		if (fenceOpen) {
@@ -798,15 +1037,20 @@ export function renderMarkdown(md: string): string {
 			continue;
 		}
 
-		// ATX headings. H1/H2 belong to phase-splitting upstream; inside a phase
-		// body we render H3/H4/H5/H6. A H1/H2 inside a body is demoted to H3
-		// rather than silently dropped.
+		// ATX headings. The `minHeadingLevel` option floors the emitted level;
+		// the default of 3 matches the knowledge-graph phase pipeline (which
+		// reserves H1/H2 for upstream splitting). The `/docs` browser passes
+		// `1` so a top-level `# Title` becomes a real `<h1>`. Headings get
+		// GFM-style slug `id` attributes when `headingIds` is true so
+		// `[link](#section)` references inside the same doc resolve.
 		const heading = line.match(/^(#{1,6})\s+(.*)$/);
 		if (heading) {
 			closeParagraph();
 			closeList();
-			const level = Math.max(3, heading[1].length);
-			html.push(`<h${level}>${renderInline(heading[2].trim())}</h${level}>`);
+			const text = heading[2].trim();
+			const level = Math.max(minHeadingLevel, heading[1].length);
+			const idAttr = headingIds ? ` id="${escapeAttr(slugifyHeading(text))}"` : '';
+			html.push(`<h${level}${idAttr}>${renderInline(text)}</h${level}>`);
 			i++;
 			continue;
 		}
@@ -848,4 +1092,60 @@ export function renderMarkdown(md: string): string {
 	closeParagraph();
 	closeList();
 	return html.join('\n');
+}
+
+/**
+ * Parse one pipe-table row into its cell-text array. Returns `null` when the
+ * line has no pipes (i.e. is not a row). Leading and trailing pipes are
+ * optional. Cells are trimmed; backslash-escaped pipes (`\|`) inside cell
+ * content are preserved as a literal `|`.
+ */
+function parsePipeRow(line: string): string[] | null {
+	const trimmed = line.trim();
+	if (!trimmed.includes('|')) return null;
+	// Strip a single leading and trailing pipe (with optional surrounding
+	// whitespace) so the split below produces N cells, not N+2 with empties.
+	const inner = trimmed.replace(/^\s*\|/, '').replace(/\|\s*$/, '');
+	if (inner === '') return null;
+	const cells: string[] = [];
+	let buf = '';
+	for (let p = 0; p < inner.length; p++) {
+		const ch = inner.charAt(p);
+		if (ch === '\\' && inner.charAt(p + 1) === '|') {
+			buf += '|';
+			p += 1;
+			continue;
+		}
+		if (ch === '|') {
+			cells.push(buf.trim());
+			buf = '';
+			continue;
+		}
+		buf += ch;
+	}
+	cells.push(buf.trim());
+	return cells;
+}
+
+/**
+ * Parse a GFM table separator row into a per-column alignment array. Returns
+ * `null` when the row is not a valid separator (wrong number of cells, or any
+ * cell that doesn't match `^:?-+:?$`). Alignment is `'left'`, `'center'`, or
+ * `'right'`, or `null` for unaligned columns.
+ */
+function parseSeparatorRow(line: string, expectedCols: number): Array<'left' | 'center' | 'right' | null> | null {
+	const cells = parsePipeRow(line);
+	if (cells === null || cells.length !== expectedCols) return null;
+	const out: Array<'left' | 'center' | 'right' | null> = [];
+	for (const cell of cells) {
+		const trimmed = cell.trim();
+		if (!/^:?-+:?$/.test(trimmed)) return null;
+		const startsColon = trimmed.startsWith(':');
+		const endsColon = trimmed.endsWith(':');
+		if (startsColon && endsColon) out.push('center');
+		else if (endsColon) out.push('right');
+		else if (startsColon) out.push('left');
+		else out.push(null);
+	}
+	return out;
 }

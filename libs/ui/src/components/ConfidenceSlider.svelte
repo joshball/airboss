@@ -24,14 +24,7 @@ const skipHintId = `${instanceId}-skip-hint`;
 
 // WAI-ARIA radiogroup requires arrow-key roving among the radios. The selected
 // (or first) radio takes tabindex=0; the rest take tabindex=-1.
-const focusIndex = $derived(
-	selected === null
-		? 0
-		: Math.max(
-				0,
-				CONFIDENCE_LEVEL_VALUES.findIndex((l) => l === selected),
-			),
-);
+const focusIndex = $derived(selected === null ? 0 : Math.max(0, CONFIDENCE_LEVEL_VALUES.indexOf(selected)));
 
 function handleRadioKeyDown(event: KeyboardEvent, idx: number): void {
 	const last = CONFIDENCE_LEVEL_VALUES.length - 1;

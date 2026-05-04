@@ -20,7 +20,7 @@ let {
 	ariaLabel,
 	panel,
 }: {
-	tabs: TabItem[];
+	tabs: ReadonlyArray<TabItem>;
 	active?: string;
 	ariaLabel?: string;
 	panel: Snippet<[string]>;

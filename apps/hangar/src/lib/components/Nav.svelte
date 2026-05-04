@@ -21,6 +21,12 @@ const sourcesActive = $derived(
 const glossaryActive = $derived(
 	page.url.pathname === ROUTES.HANGAR_GLOSSARY || page.url.pathname.startsWith(`${ROUTES.HANGAR_GLOSSARY}/`),
 );
+const docsActive = $derived(
+	page.url.pathname === ROUTES.HANGAR_DOCS || page.url.pathname.startsWith(`${ROUTES.HANGAR_DOCS}/`),
+);
+const reviewActive = $derived(
+	page.url.pathname === ROUTES.HANGAR_REVIEW || page.url.pathname.startsWith(`${ROUTES.HANGAR_REVIEW}/`),
+);
 const usersActive = $derived(
 	page.url.pathname === ROUTES.HANGAR_USERS || page.url.pathname.startsWith(`${ROUTES.HANGAR_USERS}/`),
 );
@@ -33,6 +39,8 @@ const isAdmin = $derived(page.data.user?.role === ROLES.ADMIN);
 <div class="nav-sections">
 	<a href={ROUTES.HANGAR_SOURCES} aria-current={sourcesActive ? 'page' : undefined}>Sources</a>
 	<a href={ROUTES.HANGAR_GLOSSARY} aria-current={glossaryActive ? 'page' : undefined}>Glossary</a>
+	<a href={ROUTES.HANGAR_DOCS} aria-current={docsActive ? 'page' : undefined}>Docs</a>
+	<a href={ROUTES.HANGAR_REVIEW} aria-current={reviewActive ? 'page' : undefined}>Review</a>
 	{#if isAdmin}
 		<a href={ROUTES.HANGAR_USERS} aria-current={usersActive ? 'page' : undefined}>Users</a>
 	{/if}

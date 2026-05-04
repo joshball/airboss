@@ -1,8 +1,8 @@
 <script lang="ts">
 import { HELP_SEARCH_DEBOUNCE_MS, ROUTES } from '@ab/constants';
 import { createFocusTrap, type FocusTrap } from '@ab/ui/lib/focus-trap';
-import { goto } from '$app/navigation';
 import { tick, untrack } from 'svelte';
+import { goto } from '$app/navigation';
 import type { SearchResult, SearchResultSet } from '../schema/help-registry';
 import { search } from '../search';
 

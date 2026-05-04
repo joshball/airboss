@@ -15,6 +15,7 @@ function row(partial: Partial<ReferenceSectionRow>): ReferenceSectionRow {
 		ordinal: 0,
 		depth: 0,
 		code: 'x',
+		airbossRef: 'airboss-ref://test/x',
 		title: 'X',
 		faaPageStart: null,
 		faaPageEnd: null,

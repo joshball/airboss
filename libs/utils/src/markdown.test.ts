@@ -9,6 +9,9 @@ import {
 	parseFrontmatter,
 	renderMarkdown,
 	sanitizeInlineHtml,
+	setFrontmatterField,
+	setFrontmatterFields,
+	slugifyHeading,
 	stripFrontmatter,
 } from './markdown';
 
@@ -547,5 +550,217 @@ describe('renderMarkdown -- block-level HTML (handbook tables)', () => {
 		expect(html).toContain('class="handbook-table-source"');
 		expect(html).toContain('href="/handbook-asset/avwx/x/t.html"');
 		expect(html).toContain('Open original table');
+	});
+});
+
+describe('setFrontmatterField', () => {
+	test('rewrites an existing key in place', () => {
+		const md = '---\nstatus: unread\ntitle: Foo\n---\n\nbody text\n';
+		const out = setFrontmatterField(md, 'status', 'reading');
+		expect(out).toBe('---\nstatus: reading\ntitle: Foo\n---\n\nbody text\n');
+		expect(parseFrontmatter(out).entries).toContainEqual({ key: 'status', value: 'reading' });
+		expect(parseFrontmatter(out).entries).toContainEqual({ key: 'title', value: 'Foo' });
+	});
+
+	test('appends a missing key before the closing fence', () => {
+		const md = '---\ntitle: Foo\n---\n\nbody\n';
+		const out = setFrontmatterField(md, 'status', 'reading');
+		expect(out).toBe('---\ntitle: Foo\nstatus: reading\n---\n\nbody\n');
+	});
+
+	test('prepends a frontmatter block when none exists', () => {
+		const md = '# Heading\n\nbody\n';
+		const out = setFrontmatterField(md, 'status', 'reading');
+		expect(out).toBe('---\nstatus: reading\n---\n\n# Heading\n\nbody\n');
+		expect(parseFrontmatter(out).entries).toEqual([{ key: 'status', value: 'reading' }]);
+	});
+
+	test('quotes values that contain a colon', () => {
+		const md = '---\n---\n\nbody\n';
+		const out = setFrontmatterField(md, 'note', 'see http://example.com:80');
+		expect(out).toContain("note: 'see http://example.com:80'");
+		expect(parseFrontmatter(out).entries).toContainEqual({ key: 'note', value: 'see http://example.com:80' });
+	});
+
+	test('quotes YAML reserved bare values', () => {
+		const out = setFrontmatterField('---\n---\n', 'flag', 'true');
+		expect(out).toContain("flag: 'true'");
+	});
+
+	test('quotes numeric-looking values', () => {
+		const out = setFrontmatterField('---\n---\n', 'rev', '7');
+		expect(out).toContain("rev: '7'");
+		expect(parseFrontmatter(out).entries).toContainEqual({ key: 'rev', value: '7' });
+	});
+
+	test('escapes single quotes inside the value', () => {
+		const out = setFrontmatterField('---\n---\n', 'note', "it's");
+		expect(out).toContain("note: 'it''s'");
+		expect(parseFrontmatter(out).entries).toContainEqual({ key: 'note', value: "it's" });
+	});
+
+	test('rejects keys that do not match the YAML key shape', () => {
+		expect(() => setFrontmatterField('---\n---\n', 'has space', 'x')).toThrow(/invalid key/);
+		expect(() => setFrontmatterField('---\n---\n', '', 'x')).toThrow(/invalid key/);
+	});
+
+	test('handles unclosed frontmatter by prepending a fresh block', () => {
+		const md = '---\nincomplete\nbody after\n';
+		const out = setFrontmatterField(md, 'status', 'unread');
+		expect(out.startsWith('---\nstatus: unread\n---\n\n')).toBe(true);
+	});
+
+	test('preserves CRLF line endings on rewrite', () => {
+		const md = ['---', 'status: unread', 'title: Foo', '---', '', 'body line.', ''].join('\r\n');
+		const out = setFrontmatterField(md, 'status', 'reading');
+		// All EOL boundaries stay CRLF; no LF-only lines slipped in.
+		expect(out).not.toMatch(/[^\r]\n/);
+		expect(out).toContain('status: reading');
+		expect(parseFrontmatter(out).entries).toContainEqual({ key: 'status', value: 'reading' });
+	});
+
+	test('preserves CRLF line endings when prepending a fresh block', () => {
+		const md = '# heading\r\n\r\nbody\r\n';
+		const out = setFrontmatterField(md, 'status', 'reading');
+		expect(out.startsWith('---\r\nstatus: reading\r\n---\r\n\r\n')).toBe(true);
+	});
+
+	test('rewrites duplicate keys to a single occurrence', () => {
+		const md = '---\nstatus: unread\ntitle: Foo\nstatus: reading\n---\n\nbody\n';
+		const out = setFrontmatterField(md, 'status', 'done');
+		const entries = parseFrontmatter(out).entries;
+		// Both occurrences collapse to one with the new value.
+		const statusEntries = entries.filter((e) => e.key === 'status');
+		expect(statusEntries).toEqual([{ key: 'status', value: 'done' }]);
+		expect(entries).toContainEqual({ key: 'title', value: 'Foo' });
+	});
+
+	test('quotes values that start with YAML reserved indicators', () => {
+		const cases: ReadonlyArray<readonly [string, string]> = [
+			['*foo', "'*foo'"],
+			['&anchor', "'&anchor'"],
+			['!tag', "'!tag'"],
+			['|pipe', "'|pipe'"],
+			['>folded', "'>folded'"],
+			['[item]', "'[item]'"],
+		];
+		for (const [input, expected] of cases) {
+			const out = setFrontmatterField('---\n---\n', 'k', input);
+			expect(out).toContain(`k: ${expected}`);
+			expect(parseFrontmatter(out).entries).toContainEqual({ key: 'k', value: input });
+		}
+	});
+});
+
+describe('setFrontmatterFields', () => {
+	test('applies multiple updates in order', () => {
+		const md = '---\nstatus: unread\n---\n\nbody\n';
+		const out = setFrontmatterFields(md, { status: 'reading', review_status: 'pending' });
+		const parsed = parseFrontmatter(out);
+		expect(parsed.entries).toContainEqual({ key: 'status', value: 'reading' });
+		expect(parsed.entries).toContainEqual({ key: 'review_status', value: 'pending' });
+	});
+});
+
+describe('renderMarkdown -- GFM pipe tables', () => {
+	test('renders a basic three-column table', () => {
+		const md = ['| Level | Location | Scope |', '| --- | --- | --- |', '| Session | docs/work | One session |'].join(
+			'\n',
+		);
+		const html = renderMarkdown(md);
+		expect(html).toContain('<table>');
+		expect(html).toContain('<thead><tr>');
+		expect(html).toContain('<th>Level</th>');
+		expect(html).toContain('<th>Location</th>');
+		expect(html).toContain('<th>Scope</th>');
+		expect(html).toContain('</thead>');
+		expect(html).toContain('<tbody>');
+		expect(html).toContain('<td>Session</td>');
+		expect(html).toContain('<td>One session</td>');
+		expect(html).toContain('</tbody>');
+		expect(html).toContain('</table>');
+	});
+
+	test('renders an alignment-bearing separator row', () => {
+		const md = ['| L | C | R |', '| :-- | :-: | --: |', '| 1 | 2 | 3 |'].join('\n');
+		const html = renderMarkdown(md);
+		expect(html).toMatch(/<th style="text-align: left;">L<\/th>/);
+		expect(html).toMatch(/<th style="text-align: center;">C<\/th>/);
+		expect(html).toMatch(/<th style="text-align: right;">R<\/th>/);
+	});
+
+	test('handles tables without leading or trailing pipes', () => {
+		const md = ['col1 | col2', '--- | ---', 'a | b'].join('\n');
+		const html = renderMarkdown(md);
+		expect(html).toContain('<th>col1</th>');
+		expect(html).toContain('<td>b</td>');
+	});
+
+	test('runs inline markdown inside cells', () => {
+		const md = ['| name | note |', '| --- | --- |', '| **bold** | `code` |'].join('\n');
+		const html = renderMarkdown(md);
+		expect(html).toContain('<td><strong>bold</strong></td>');
+		expect(html).toContain('<td><code>code</code></td>');
+	});
+
+	test('does not consume a stack of pipe-bearing paragraphs without separator', () => {
+		const md = ['some | text', 'no separator here'].join('\n');
+		const html = renderMarkdown(md);
+		expect(html).not.toContain('<table>');
+		expect(html).toContain('<p>');
+	});
+
+	test('escapes HTML inside table cells', () => {
+		const md = ['| a | b |', '| --- | --- |', '| <script>x</script> | y |'].join('\n');
+		const html = renderMarkdown(md);
+		expect(html).not.toContain('<script>');
+		expect(html).toContain('&lt;script&gt;');
+	});
+});
+
+describe('renderMarkdown -- heading levels and ids', () => {
+	test('default minHeadingLevel demotes H1/H2 to H3', () => {
+		const html = renderMarkdown('# Title\n\n## Sub\n');
+		expect(html).toMatch(/<h3[^>]*>Title<\/h3>/);
+		expect(html).toMatch(/<h3[^>]*>Sub<\/h3>/);
+	});
+
+	test('minHeadingLevel: 1 preserves H1 / H2', () => {
+		const html = renderMarkdown('# Title\n\n## Sub\n', { minHeadingLevel: 1 });
+		expect(html).toMatch(/<h1[^>]*>Title<\/h1>/);
+		expect(html).toMatch(/<h2[^>]*>Sub<\/h2>/);
+	});
+
+	test('emits GFM-style id slugs by default', () => {
+		const html = renderMarkdown('# Hello, World!\n', { minHeadingLevel: 1 });
+		expect(html).toContain('<h1 id="hello-world">Hello, World!</h1>');
+	});
+
+	test('headingIds: false disables slug emission', () => {
+		const html = renderMarkdown('# Title\n', { minHeadingLevel: 1, headingIds: false });
+		expect(html).toBe('<h1>Title</h1>');
+	});
+
+	test('slug normalises unicode-adjacent characters', () => {
+		const html = renderMarkdown('## Air & Sea\n', { minHeadingLevel: 1 });
+		expect(html).toContain('<h2 id="air-sea">Air &amp; Sea</h2>');
+	});
+});
+
+describe('slugifyHeading', () => {
+	test('lowercases and dashes the text', () => {
+		expect(slugifyHeading('Frontmatter Rules')).toBe('frontmatter-rules');
+	});
+
+	test('strips non-alphanumerics', () => {
+		expect(slugifyHeading('Surface 1 -- /docs Browser')).toBe('surface-1-docs-browser');
+	});
+
+	test('collapses consecutive dashes', () => {
+		expect(slugifyHeading('a   b   c')).toBe('a-b-c');
+	});
+
+	test('trims leading/trailing dashes', () => {
+		expect(slugifyHeading('--leading and trailing--')).toBe('leading-and-trailing');
 	});
 });

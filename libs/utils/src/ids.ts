@@ -73,6 +73,18 @@ export const generateHangarJobId = (): string => createId('job');
 export const generateHangarJobLogId = (): string => createId('jlg');
 export const generateHangarSyncLogId = (): string => createId('syn');
 
+// Hangar BC -- review queue (hangar-review-queue WP). Boards + columns hold
+// review items / tasks; sessions + steps capture the per-walker progress;
+// kinds + buckets are configuration for what items render where.
+export const generateHangarBoardId = (): string => createId('brd');
+export const generateHangarBoardColumnId = (): string => createId('bcol');
+export const generateHangarReviewKindId = (): string => createId('rkind');
+export const generateHangarReviewBucketId = (): string => createId('rbkt');
+export const generateHangarReviewItemId = (): string => createId('ritem');
+export const generateHangarReviewSessionId = (): string => createId('rses');
+export const generateHangarReviewStepId = (): string => createId('rstp');
+export const generateHangarBoardTaskId = (): string => createId('task');
+
 // Sim BC -- one row per completed flight (Track 5).
 export const generateSimAttemptId = (): string => createId('sat');
 

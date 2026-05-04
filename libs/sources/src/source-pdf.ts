@@ -90,6 +90,13 @@ export function describeSourcePdf(args: {
 		case REFERENCE_KINDS.SAFO:
 		case REFERENCE_KINDS.INFO:
 		case REFERENCE_KINDS.OTHER:
+		case REFERENCE_KINDS.SAFO:
+		case REFERENCE_KINDS.INFO:
+			// SAFO / InFO bulletins are short HTML / text artifacts, not PDFs in
+			// the sense the cache layout encodes. The flightbag reader streams
+			// them from the markdown corpus directly; no source PDF descriptor
+			// to surface here yet. When per-bulletin PDFs land, add the cache
+			// shape alongside AC's pattern.
 			return null;
 		default: {
 			const exhaustive: never = kind;

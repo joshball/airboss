@@ -463,6 +463,33 @@ export const ROUTES = {
 	HANGAR_API_AUDIT_ACTORS: '/api/audit-actors',
 	/** Form-action id for the sync-all-pending button. */
 	HANGAR_SYNC_ACTION: '?/syncAll',
+	// Hangar -- /docs read-only markdown viewer over `docs/**`,
+	// `course/**`, `handbooks/**`, `regulations/**`. The `[...path]` route
+	// resolves any markdown file under those roots; the renderer reuses the
+	// existing markdown primitives. Backed by Postgres FTS via the same loader
+	// that populates `review_item`. See
+	// `docs/work-packages/hangar-review-queue/spec.md` Surface 1.
+	HANGAR_DOCS: '/docs',
+	HANGAR_DOCS_PATH: (path: string) => `/docs/${path}` as const,
+	// Hangar -- /review board, buckets, per-kind review surfaces, and
+	// admin (loader + bucket CRUD). See
+	// `docs/work-packages/hangar-review-queue/spec.md` Surface 2 + 3.
+	HANGAR_REVIEW: '/review',
+	HANGAR_REVIEW_BUCKET: (id: string) => `/review/buckets/${encodeURIComponent(id)}` as const,
+	/** Generic item-detail dispatcher; redirects to the per-kind route. */
+	HANGAR_REVIEW_ITEM: (id: string) => `/review/items/${encodeURIComponent(id)}` as const,
+	/** Per-kind review view (`/review/wp_spec/...`, `/review/reference_toc/...`, ...). */
+	HANGAR_REVIEW_KIND: (kind: string, id: string) =>
+		`/review/${encodeURIComponent(kind)}/${encodeURIComponent(id)}` as const,
+	/** Walker page for kinds that support multi-step reviews (`wp_test_plan` today). */
+	HANGAR_REVIEW_WALKER: (kind: string, id: string) =>
+		`/review/${encodeURIComponent(kind)}/${encodeURIComponent(id)}/walker` as const,
+	HANGAR_REVIEW_TASK_NEW: '/review/tasks/new',
+	HANGAR_REVIEW_TASK_EDIT: (id: string) => `/review/tasks/${encodeURIComponent(id)}/edit` as const,
+	HANGAR_REVIEW_ADMIN_LOADER: '/review/admin/loader',
+	HANGAR_REVIEW_ADMIN_BUCKETS: '/review/admin/buckets',
+	HANGAR_REVIEW_ADMIN_BUCKET_NEW: '/review/admin/buckets/new',
+	HANGAR_REVIEW_ADMIN_BUCKET_EDIT: (id: string) => `/review/admin/buckets/${encodeURIComponent(id)}/edit` as const,
 
 	// Flightbag (apps/flightbag) -- public reference reader. Served from its
 	// own host (flightbag.airboss.test), so these paths are relative to that
@@ -615,4 +642,10 @@ export const NAV_LABELS = {
 	HELP: 'Help',
 	HELP_INDEX: 'Help index',
 	HELP_CONCEPTS: 'Concepts',
+	HANGAR_DOCS: 'Docs',
+	HANGAR_REVIEW: 'Review',
+	HANGAR_REVIEW_BOARD: 'Board',
+	HANGAR_REVIEW_BUCKETS: 'Buckets',
+	HANGAR_REVIEW_TASKS: 'Tasks',
+	HANGAR_REVIEW_LOADER: 'Loader',
 } as const;
