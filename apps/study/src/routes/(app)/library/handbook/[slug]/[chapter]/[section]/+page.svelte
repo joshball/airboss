@@ -5,7 +5,6 @@ import HandbookEditionBadge from '@ab/aviation/ui/handbooks/HandbookEditionBadge
 import HandbookReadProgressControl from '@ab/aviation/ui/handbooks/HandbookReadProgressControl.svelte';
 import HandbookSectionNotes from '@ab/aviation/ui/handbooks/HandbookSectionNotes.svelte';
 import {
-	HANDBOOK_HEARTBEAT_BUFFER,
 	HANDBOOK_HEARTBEAT_INTERVAL_SEC,
 	HANDBOOK_HEARTBEAT_MIN_DELTA_SEC,
 	type HandbookReadStatus,
@@ -13,6 +12,7 @@ import {
 } from '@ab/constants';
 import { extractImageUrls, normalizeHandbookAssetPath, renderMarkdown } from '@ab/utils';
 import type { PageData } from './$types';
+import { createHeartbeatQueue, fetchHeartbeatPost } from './heartbeat-client';
 import ReadSuggestionPanel from './ReadSuggestionPanel.svelte';
 import { shouldShowReadSuggestion } from './read-suggestion';
 
@@ -59,60 +59,24 @@ const heartbeatUrl = $derived(
 	),
 );
 
-// Buffer of heartbeat deltas the network failed to deliver. The next
-// successful POST drains the buffer in FIFO order; the cap matches
-// HANDBOOK_HEARTBEAT_BUFFER so a long offline stretch doesn't grow
-// unbounded -- the oldest entries are dropped past the cap.
-const pendingDeltas: number[] = [];
-// Single-flight gate: prevents concurrent `postHeartbeat` invocations from
-// stomping on `pendingDeltas` when a tick fires while a previous POST is
-// still in flight (slow network, paused dev backend). Without the gate two
-// ticks could each grab the buffer mid-mutation and either lose deltas or
-// double-count them.
-let postingInFlight = false;
-
-async function flushPending(): Promise<void> {
-	if (postingInFlight) return;
-	if (pendingDeltas.length === 0) return;
-	postingInFlight = true;
-	try {
-		while (pendingDeltas.length > 0) {
-			const next = pendingDeltas[0];
-			if (next === undefined) break;
-			try {
-				const response = await fetch(heartbeatUrl, {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({ delta: next }),
-				});
-				if (!response.ok) throw new Error(`heartbeat failed: ${response.status}`);
-				pendingDeltas.shift();
-				// Only credit the local accumulator on confirmed success so
-				// `totalSecondsVisible` cannot drift above the server's
-				// authoritative count when the network is degraded.
-				accumulatedSecondsThisLoad += next;
-			} catch {
-				// Network or server rejected: keep the unsent tail; trim from
-				// the front past the cap so a long offline stretch can't grow
-				// unbounded.
-				const overflow = pendingDeltas.length - HANDBOOK_HEARTBEAT_BUFFER;
-				if (overflow > 0) pendingDeltas.splice(0, overflow);
-				return;
-			}
-		}
-	} finally {
-		postingInFlight = false;
-	}
-}
-
-function enqueueHeartbeat(delta: number): void {
-	pendingDeltas.push(delta);
-	void flushPending();
-}
-
 $effect(() => {
 	// Server-rendered page; client tick only runs in the browser.
 	if (typeof window === 'undefined') return;
+
+	// Single-flight FIFO queue over heartbeat deltas. The queue is
+	// single-flight (concurrent `enqueue` calls collapse onto one in-
+	// flight POST chain) so a tick that fires while a previous POST is
+	// still in flight (slow network, paused dev backend) cannot race
+	// the buffer. The local `accumulatedSecondsThisLoad` only advances
+	// when the queue confirms delivery via `onCredit`, so
+	// `totalSecondsVisible` cannot drift above the server's
+	// authoritative count when the network is degraded.
+	const heartbeatQueue = createHeartbeatQueue(heartbeatUrl, {
+		post: fetchHeartbeatPost,
+		onCredit: (deltaSec) => {
+			accumulatedSecondsThisLoad += deltaSec;
+		},
+	});
 
 	function checkScroll(): void {
 		const tolerance = 24;
@@ -129,7 +93,7 @@ $effect(() => {
 		const delta = HANDBOOK_HEARTBEAT_INTERVAL_SEC;
 		openedSecondsInSession += delta;
 		lastTickTs = Date.now();
-		enqueueHeartbeat(delta);
+		heartbeatQueue.enqueue(delta);
 	}
 	const interval = window.setInterval(tick, HANDBOOK_HEARTBEAT_INTERVAL_SEC * 1000);
 
@@ -138,6 +102,13 @@ $effect(() => {
 	// payload in flight after the document is torn down (whereas fetch can
 	// be aborted by the unload). Falls back to fetch when the API is
 	// unavailable.
+	//
+	// The local accumulator is only credited when delivery is confirmed: a
+	// `sendBeacon` `true` return (the OS queued the request) or a fetch
+	// 2xx. A `false` / 4xx / 5xx leaves `accumulatedSecondsThisLoad`
+	// alone so the local mirror cannot drift above the server's
+	// authoritative count when the network is degraded or the request
+	// is rejected (e.g. the anti-flood floor or the per-route cap).
 	function flushPartial(): void {
 		if (typeof document === 'undefined') return;
 		if (document.visibilityState === 'visible') return;
@@ -147,20 +118,26 @@ $effect(() => {
 		const body = JSON.stringify({ delta: elapsedSec });
 		if (typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function') {
 			const blob = new Blob([body], { type: 'application/json' });
-			navigator.sendBeacon(heartbeatUrl, blob);
+			const queued = navigator.sendBeacon(heartbeatUrl, blob);
+			// `sendBeacon` returns `true` only when the user agent queued the
+			// request for delivery; a `false` (size limits, queue full,
+			// off-network) means the bytes were dropped and the local
+			// mirror must not advance.
+			if (queued) accumulatedSecondsThisLoad += elapsedSec;
 		} else {
 			void fetch(heartbeatUrl, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body,
 				keepalive: true,
-			}).catch(() => {
-				/* best-effort on unload */
-			});
+			})
+				.then((response) => {
+					if (response.ok) accumulatedSecondsThisLoad += elapsedSec;
+				})
+				.catch(() => {
+					/* best-effort on unload */
+				});
 		}
-		// Optimistically credit the local counter so the suggestion banner
-		// reflects the time on the next visit. Server confirms via beacon.
-		accumulatedSecondsThisLoad += elapsedSec;
 	}
 	document.addEventListener('visibilitychange', flushPartial);
 	window.addEventListener('pagehide', flushPartial);
