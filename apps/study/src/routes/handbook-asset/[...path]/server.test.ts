@@ -134,6 +134,13 @@ describe('GET /handbook-asset/[...path]', () => {
 			const response = await GET(makeEvent(`${SCRATCH_SUBDIR}/tiny.png`) as unknown as Parameters<typeof GET>[0]);
 			expect(response.status).toBe(200);
 			expect(response.headers.get('Content-Type')).toBe('image/png');
+			// Drain the body before the finally-block unlinks the file. The
+			// response wraps a `createReadStream` that reads asynchronously;
+			// removing the file mid-read raises ENOENT in vitest's unhandled-
+			// error tracker. `arrayBuffer()` consumes the stream synchronously
+			// from the test's perspective and ties the read to a real assertion.
+			const bytes = new Uint8Array(await response.arrayBuffer());
+			expect(bytes.length).toBe(pngBytes.length);
 		} finally {
 			rmSync(inTreeFile, { force: true });
 		}

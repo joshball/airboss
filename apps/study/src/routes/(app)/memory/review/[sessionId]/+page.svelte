@@ -159,7 +159,10 @@ function startAdjustConfidence() {
 
 /** Type-narrow a raw form value to the `ReviewRating` literal union. */
 function isReviewRating(value: number): value is ReviewRating {
-	return REVIEW_RATING_VALUES.includes(value);
+	// `REVIEW_RATING_VALUES` is typed as `ReviewRating[]`; widening to `number[]`
+	// for the `.includes` call lets the predicate accept any `number` input
+	// without resorting to a non-null assertion or `as unknown` cast on `value`.
+	return (REVIEW_RATING_VALUES as readonly number[]).includes(value);
 }
 
 /**
