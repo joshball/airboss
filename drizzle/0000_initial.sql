@@ -613,7 +613,7 @@ CREATE TABLE "study"."content_citations" (
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
 	CONSTRAINT "content_citation_source_type_check" CHECK ("source_type" IN ('card', 'rep', 'scenario', 'node')),
-	CONSTRAINT "content_citation_target_type_check" CHECK ("target_type" IN ('reference_section', 'regulation_node', 'ac_reference', 'external_ref', 'knowledge_node')),
+	CONSTRAINT "content_citation_target_type_check" CHECK ("target_type" IN ('reference_section', 'external_ref', 'knowledge_node')),
 	CONSTRAINT "content_citation_context_length_check" CHECK ("citation_context" IS NULL OR char_length("citation_context") <= 500)
 );
 --> statement-breakpoint

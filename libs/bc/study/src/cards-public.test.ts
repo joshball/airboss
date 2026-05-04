@@ -2,13 +2,10 @@
  * Unit tests for the pure projection helpers in `cards-public.ts`.
  *
  * `composePublicCardCitations` carries the public-page citation policy.
- * Stage-5 (WP `stage5-citation-deeplink`) flipped the rule: every kind of
- * citation can now carry an href on the public page (flightbag + knowledge
- * detail are public surfaces). Only the legacy `regulation_node` /
- * `ac_reference` types -- backed by `hangar.reference` rows that have no
- * canonical airboss-ref URI -- continue to render as text. `targetExternal`
- * stays true only for `external_ref` so the chip render layer keeps
- * external links opening in a new tab.
+ * Every kind of citation carries an href on the public page (flightbag +
+ * knowledge detail are public surfaces). `targetExternal` stays true only
+ * for `external_ref` so the chip render layer keeps external links opening
+ * in a new tab. See WP `stage5-citation-deeplink`.
  */
 
 import { CITATION_TARGET_TYPES } from '@ab/constants';
@@ -82,37 +79,6 @@ describe('composePublicCardCitations', () => {
 			href: '/knowledge/vfr-weather-minimums',
 			targetExternal: false,
 		});
-	});
-
-	it('drops href on legacy regulation_node / ac_reference targets', () => {
-		// These rows back to `hangar.reference`, which has no canonical
-		// airboss-ref URI to dispatch through. Migration 2 retires the types
-		// entirely; until then the policy is "text only" so we don't ship
-		// a broken link.
-		const result = composePublicCardCitations([
-			{
-				citation: { id: 'cit_4' },
-				target: {
-					type: CITATION_TARGET_TYPES.REGULATION_NODE,
-					label: '14 CFR 91.155',
-					detail: 'Regulation',
-					href: '/internal/should-not-leak',
-				},
-			},
-			{
-				citation: { id: 'cit_5' },
-				target: {
-					type: CITATION_TARGET_TYPES.AC_REFERENCE,
-					label: 'AC 91-78',
-					detail: 'Advisory circular',
-				},
-			},
-		]);
-
-		for (const row of result) {
-			expect(row.href).toBeNull();
-			expect(row.targetExternal).toBe(false);
-		}
 	});
 
 	it('drops external_ref href when it is missing', () => {

@@ -58,7 +58,7 @@ let {
 	onCancel?: () => void;
 } = $props();
 
-const activeTypes = $derived(targetTypes.length > 0 ? targetTypes : [CITATION_TARGET_TYPES.REGULATION_NODE]);
+const activeTypes = $derived(targetTypes.length > 0 ? targetTypes : [CITATION_TARGET_TYPES.REFERENCE_SECTION]);
 
 // svelte-ignore state_referenced_locally -- initial seed from props; onTypesChanged keeps them in lockstep
 let activeType = $state<CitationTargetType>(activeTypes[0]);

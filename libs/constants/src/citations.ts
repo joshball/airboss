@@ -37,16 +37,6 @@ export const CITATION_TARGET_TYPES = {
 	 * `stage5-citation-deeplink`.
 	 */
 	REFERENCE_SECTION: 'reference_section',
-	/**
-	 * @deprecated kept in the enum for one release while migration 1 backfills
-	 * any existing rows to `reference_section`. Drops in migration 2.
-	 */
-	REGULATION_NODE: 'regulation_node',
-	/**
-	 * @deprecated kept in the enum for one release while migration 1 backfills
-	 * any existing rows to `reference_section`. Drops in migration 2.
-	 */
-	AC_REFERENCE: 'ac_reference',
 	EXTERNAL_REF: 'external_ref',
 	KNOWLEDGE_NODE: 'knowledge_node',
 } as const;
@@ -57,8 +47,6 @@ export const CITATION_TARGET_VALUES: readonly CitationTargetType[] = Object.valu
 
 export const CITATION_TARGET_LABELS: Record<CitationTargetType, string> = {
 	[CITATION_TARGET_TYPES.REFERENCE_SECTION]: 'Reference section',
-	[CITATION_TARGET_TYPES.REGULATION_NODE]: 'Regulation',
-	[CITATION_TARGET_TYPES.AC_REFERENCE]: 'Advisory circular',
 	[CITATION_TARGET_TYPES.EXTERNAL_REF]: 'External reference',
 	[CITATION_TARGET_TYPES.KNOWLEDGE_NODE]: 'Knowledge node',
 };

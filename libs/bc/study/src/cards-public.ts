@@ -84,22 +84,13 @@ export function composePublicCardCitations(
 		target: { type: CitationTargetType; label: string; detail?: string; href?: string };
 	}>,
 ): PublicCardCitation[] {
-	return resolved.map((c) => {
-		const isExternal = c.target.type === CITATION_TARGET_TYPES.EXTERNAL_REF;
-		const isLegacyHangarRef =
-			c.target.type === CITATION_TARGET_TYPES.REGULATION_NODE || c.target.type === CITATION_TARGET_TYPES.AC_REFERENCE;
-		// Legacy hangar.reference targets have no airboss-ref URI to deep-link
-		// through, so suppress href even if one somehow arrived. Every other
-		// kind passes its href through (or null when missing).
-		const href = isLegacyHangarRef ? null : (c.target.href ?? null);
-		return {
-			id: c.citation.id,
-			label: c.target.label,
-			detail: c.target.detail ?? null,
-			href,
-			targetExternal: isExternal,
-		};
-	});
+	return resolved.map((c) => ({
+		id: c.citation.id,
+		label: c.target.label,
+		detail: c.target.detail ?? null,
+		href: c.target.href ?? null,
+		targetExternal: c.target.type === CITATION_TARGET_TYPES.EXTERNAL_REF,
+	}));
 }
 
 /**

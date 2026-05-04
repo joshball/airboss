@@ -30,7 +30,6 @@
  * testable without capturing stdout.
  */
 
-import { hangarReference } from '@ab/bc-hangar';
 import {
 	CITATION_SOURCE_TYPES,
 	CITATION_TARGET_TYPES,
@@ -40,10 +39,9 @@ import {
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import { ENUMERATED_CORPORA, getCorpusResolver } from '@ab/sources';
-import { eq, inArray, sql } from 'drizzle-orm';
+import { eq, inArray } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { card, knowledgeNode, reference, referenceSection, scenario } from '../schema';
-import { corpusForCitationTarget } from './corpus';
 import { type ContentCitationRow, contentCitation } from './schema';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
@@ -319,22 +317,16 @@ interface TargetInfoLookup {
  */
 async function loadTargetEnrichment(citations: readonly ContentCitationRow[], db: Db): Promise<TargetInfoLookup> {
 	const sectionIds = new Set<string>();
-	const refIds = new Set<string>();
 	const nodeIds = new Set<string>();
 	for (const c of citations) {
 		if (c.targetType === CITATION_TARGET_TYPES.REFERENCE_SECTION) {
 			sectionIds.add(c.targetId);
-		} else if (
-			c.targetType === CITATION_TARGET_TYPES.REGULATION_NODE ||
-			c.targetType === CITATION_TARGET_TYPES.AC_REFERENCE
-		) {
-			refIds.add(c.targetId);
 		} else if (c.targetType === CITATION_TARGET_TYPES.KNOWLEDGE_NODE) {
 			nodeIds.add(c.targetId);
 		}
 	}
 
-	const [sections, refs, nodes] = await Promise.all([
+	const [sections, nodes] = await Promise.all([
 		sectionIds.size > 0
 			? db
 					.select({ id: referenceSection.id, kind: reference.kind })
@@ -342,15 +334,6 @@ async function loadTargetEnrichment(citations: readonly ContentCitationRow[], db
 					.innerJoin(reference, eq(reference.id, referenceSection.referenceId))
 					.where(inArray(referenceSection.id, Array.from(sectionIds)))
 			: Promise.resolve([] as { id: string; kind: string }[]),
-		refIds.size > 0
-			? db
-					.select({
-						id: hangarReference.id,
-						sourceType: sql<string | null>`${hangarReference.tags} ->> 'sourceType'`,
-					})
-					.from(hangarReference)
-					.where(inArray(hangarReference.id, Array.from(refIds)))
-			: Promise.resolve([] as { id: string; sourceType: string | null }[]),
 		nodeIds.size > 0
 			? db
 					.select({ id: knowledgeNode.id })
@@ -360,7 +343,6 @@ async function loadTargetEnrichment(citations: readonly ContentCitationRow[], db
 	]);
 
 	const sectionKindById = new Map(sections.map((s) => [s.id, s.kind]));
-	const refSourceTypeById = new Map(refs.map((r) => [r.id, r.sourceType]));
 	const liveNodeIds = new Set(nodes.map((r) => r.id));
 
 	return {
@@ -370,11 +352,6 @@ async function loadTargetEnrichment(citations: readonly ContentCitationRow[], db
 				const kind = sectionKindById.get(c.targetId);
 				if (kind === undefined) return { exists: false, corpus: null };
 				return { exists: true, corpus: corpusForReferenceKind(kind) };
-			}
-			if (targetType === CITATION_TARGET_TYPES.REGULATION_NODE || targetType === CITATION_TARGET_TYPES.AC_REFERENCE) {
-				const sourceType = refSourceTypeById.get(c.targetId);
-				const exists = refSourceTypeById.has(c.targetId);
-				return { exists, corpus: corpusForCitationTarget(targetType, sourceType ?? null) };
 			}
 			if (targetType === CITATION_TARGET_TYPES.KNOWLEDGE_NODE) {
 				return { exists: liveNodeIds.has(c.targetId), corpus: null };
