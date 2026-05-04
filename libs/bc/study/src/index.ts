@@ -658,3 +658,24 @@ export {
 	submitReviewSchema,
 	updateCardSchema,
 } from './validation';
+// Goal-CRUD Zod schemas + their inferred input types. The BC `goals.ts`
+// write helpers parse against these inside their function bodies as a
+// defense-in-depth layer on top of the route-level coercion. Re-exported
+// so route actions and cross-BC callers reach for the same shape the BC
+// enforces at function entry.
+export {
+	type AddGoalNodeInput,
+	addGoalNodeInputSchema,
+	type AddGoalSyllabusInput,
+	addGoalSyllabusInputSchema,
+	type ApplyCertGoalsInput,
+	applyCertGoalsInputSchema,
+	type CreateGoalInput,
+	createGoalInputSchema,
+	type GoalDomainList,
+	goalDomainListSchema,
+	type GoalNodeIdList,
+	goalNodeIdListSchema,
+	type UpdateGoalInput,
+	updateGoalInputSchema,
+} from './credentials.validation';

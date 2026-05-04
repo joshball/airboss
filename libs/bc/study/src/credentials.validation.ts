@@ -26,6 +26,8 @@ import {
 	type ACSTriad,
 	BLOOM_LEVEL_VALUES,
 	type BloomLevel,
+	type Cert,
+	CERT_VALUES,
 	CREDENTIAL_CATEGORY_VALUES,
 	CREDENTIAL_CLASS_VALUES,
 	CREDENTIAL_KIND_VALUES,
@@ -36,9 +38,14 @@ import {
 	type CredentialKind,
 	type CredentialPrereqKind,
 	type CredentialStatus,
+	type Domain,
+	DOMAIN_VALUES,
+	GOAL_NODE_NOTES_MAX_LENGTH,
+	GOAL_NOTES_MAX_LENGTH,
 	GOAL_STATUS_VALUES,
 	GOAL_SYLLABUS_WEIGHT_MAX,
 	GOAL_SYLLABUS_WEIGHT_MIN,
+	GOAL_TITLE_MAX_LENGTH,
 	type GoalStatus,
 	SYLLABUS_KIND_VALUES,
 	SYLLABUS_NODE_LEVEL_VALUES,
@@ -173,20 +180,22 @@ export const syllabusAreaYamlSchema = syllabusNodeYamlSchema;
 
 /** Goal-CRUD input from a route action. The user_id is set server-side. */
 export const createGoalInputSchema = z.object({
-	title: z.string().min(1).max(200),
-	notesMd: z.string().max(16384).default(''),
+	title: z.string().min(1).max(GOAL_TITLE_MAX_LENGTH),
+	notesMd: z.string().max(GOAL_NOTES_MAX_LENGTH).default(''),
 	isPrimary: z.boolean().default(false),
 	targetDate: z
 		.string()
 		.regex(/^\d{4}-\d{2}-\d{2}$/, 'targetDate must be a calendar date in YYYY-MM-DD form')
 		.nullable()
 		.optional(),
+	focusDomains: z.array(z.enum(DOMAIN_VALUES as unknown as readonly [Domain, ...Domain[]])).default([]),
+	skipDomains: z.array(z.enum(DOMAIN_VALUES as unknown as readonly [Domain, ...Domain[]])).default([]),
 });
 export type CreateGoalInput = z.infer<typeof createGoalInputSchema>;
 
 export const updateGoalInputSchema = z.object({
-	title: z.string().min(1).max(200).optional(),
-	notesMd: z.string().max(16384).optional(),
+	title: z.string().min(1).max(GOAL_TITLE_MAX_LENGTH).optional(),
+	notesMd: z.string().max(GOAL_NOTES_MAX_LENGTH).optional(),
 	status: z.enum(GOAL_STATUS_VALUES as unknown as readonly [GoalStatus, ...GoalStatus[]]).optional(),
 	targetDate: z
 		.string()
@@ -205,6 +214,37 @@ export type AddGoalSyllabusInput = z.infer<typeof addGoalSyllabusInputSchema>;
 export const addGoalNodeInputSchema = z.object({
 	knowledgeNodeId: z.string().min(1),
 	weight: z.number().min(GOAL_SYLLABUS_WEIGHT_MIN).max(GOAL_SYLLABUS_WEIGHT_MAX).default(1.0),
-	notes: z.string().max(2000).default(''),
+	notes: z.string().max(GOAL_NODE_NOTES_MAX_LENGTH).default(''),
 });
 export type AddGoalNodeInput = z.infer<typeof addGoalNodeInputSchema>;
+
+/**
+ * Targeting-list schemas wired into `setGoalFocusDomains`,
+ * `setGoalSkipDomains`, and `setGoalSkipNodes`. The arrays are validated
+ * against `DOMAIN_VALUES` so a caller that bypasses the route layer
+ * (e.g. a script) can't slip an unknown domain slug into `goal.focus_domains`.
+ */
+export const goalDomainListSchema = z.array(z.enum(DOMAIN_VALUES as unknown as readonly [Domain, ...Domain[]]));
+export type GoalDomainList = z.infer<typeof goalDomainListSchema>;
+
+export const goalNodeIdListSchema = z.array(z.string().min(1));
+export type GoalNodeIdList = z.infer<typeof goalNodeIdListSchema>;
+
+/**
+ * Input for `applyCertGoalsToPrimaryGoal`. Validates the cert slugs against
+ * `CERT_VALUES` and the optional targeting overrides against
+ * `DOMAIN_VALUES`. The owning userId is supplied server-side; only the
+ * shape of the request body crosses the BC boundary here.
+ */
+export const applyCertGoalsInputSchema = z.object({
+	userId: z.string().min(1),
+	certs: z.array(z.enum(CERT_VALUES as unknown as readonly [Cert, ...Cert[]])),
+	options: z
+		.object({
+			goalTitle: z.string().min(1).max(GOAL_TITLE_MAX_LENGTH).optional(),
+			focusDomains: z.array(z.enum(DOMAIN_VALUES as unknown as readonly [Domain, ...Domain[]])).optional(),
+			skipDomains: z.array(z.enum(DOMAIN_VALUES as unknown as readonly [Domain, ...Domain[]])).optional(),
+		})
+		.default({}),
+});
+export type ApplyCertGoalsInput = z.infer<typeof applyCertGoalsInputSchema>;

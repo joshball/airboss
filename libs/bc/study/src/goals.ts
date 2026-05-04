@@ -41,11 +41,18 @@ import { db as defaultDb } from '@ab/db/connection';
 import { generateGoalId } from '@ab/utils';
 import { and, eq, inArray, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
-import type {
-	AddGoalNodeInput,
-	AddGoalSyllabusInput,
-	CreateGoalInput,
-	UpdateGoalInput,
+import {
+	type AddGoalNodeInput,
+	addGoalNodeInputSchema,
+	type AddGoalSyllabusInput,
+	addGoalSyllabusInputSchema,
+	applyCertGoalsInputSchema,
+	type CreateGoalInput,
+	createGoalInputSchema,
+	goalDomainListSchema,
+	goalNodeIdListSchema,
+	type UpdateGoalInput,
+	updateGoalInputSchema,
 } from './credentials.validation';
 import { UpsertReturnedNoRowError } from './errors';
 import {
@@ -238,18 +245,30 @@ export interface CreateGoalParams extends CreateGoalInput {
  * Create a goal. When `isPrimary=true`, the call is transactional: any
  * other primary goal for the user is cleared first so the partial UNIQUE
  * never trips.
+ *
+ * Inputs are parsed against `createGoalInputSchema` at the BC boundary so
+ * cross-BC callers and scripts can't inject oversized titles, oversized
+ * notes, malformed dates, or unknown domain slugs even when the route layer
+ * is bypassed.
  */
 export async function createGoal(params: CreateGoalParams, db: Db = defaultDb): Promise<GoalRow> {
+	const { userId } = params;
+	const parsed = createGoalInputSchema.parse({
+		title: params.title,
+		notesMd: params.notesMd,
+		isPrimary: params.isPrimary,
+		targetDate: params.targetDate,
+	});
 	const id = generateGoalId();
 	const now = new Date();
 	const row: NewGoalRow = {
 		id,
-		userId: params.userId,
-		title: params.title,
-		notesMd: params.notesMd ?? '',
+		userId,
+		title: parsed.title,
+		notesMd: parsed.notesMd,
 		status: GOAL_STATUSES.ACTIVE,
-		isPrimary: params.isPrimary ?? false,
-		targetDate: params.targetDate ?? null,
+		isPrimary: parsed.isPrimary,
+		targetDate: parsed.targetDate ?? null,
 		seedOrigin: null,
 		createdAt: now,
 		updatedAt: now,
@@ -263,7 +282,7 @@ export async function createGoal(params: CreateGoalParams, db: Db = defaultDb): 
 			await tx
 				.update(goal)
 				.set({ isPrimary: false, updatedAt: new Date() })
-				.where(and(eq(goal.userId, params.userId), eq(goal.isPrimary, true)));
+				.where(and(eq(goal.userId, userId), eq(goal.isPrimary, true)));
 			const [inserted] = await tx.insert(goal).values(row).returning();
 			if (!inserted) throw new UpsertReturnedNoRowError('goal', id);
 			return inserted;
@@ -278,6 +297,9 @@ export async function createGoal(params: CreateGoalParams, db: Db = defaultDb): 
  * Patch fields on a goal. Returns the updated row. `setPrimaryGoal` is a
  * separate function -- updating `is_primary` here would risk colliding with
  * the partial UNIQUE without the explicit clear-others step.
+ *
+ * Inputs are parsed against `updateGoalInputSchema` at the BC boundary so
+ * length/format/enum violations throw a `ZodError` regardless of caller.
  */
 export async function updateGoal(
 	goalId: string,
@@ -285,13 +307,14 @@ export async function updateGoal(
 	input: UpdateGoalInput,
 	db: Db = defaultDb,
 ): Promise<GoalRow> {
+	const parsed = updateGoalInputSchema.parse(input);
 	const existing = await getOwnedGoal(goalId, userId, db);
 	const updates: Partial<NewGoalRow> = { updatedAt: new Date() };
-	if (input.title !== undefined) updates.title = input.title;
-	if (input.notesMd !== undefined) updates.notesMd = input.notesMd;
-	if (input.status !== undefined) updates.status = input.status;
-	if (input.targetDate !== undefined) {
-		updates.targetDate = input.targetDate;
+	if (parsed.title !== undefined) updates.title = parsed.title;
+	if (parsed.notesMd !== undefined) updates.notesMd = parsed.notesMd;
+	if (parsed.status !== undefined) updates.status = parsed.status;
+	if (parsed.targetDate !== undefined) {
+		updates.targetDate = parsed.targetDate;
 	}
 	const [row] = await db.update(goal).set(updates).where(eq(goal.id, existing.id)).returning();
 	if (!row) throw new GoalNotFoundError(goalId);
@@ -327,6 +350,9 @@ export async function setPrimaryGoal(goalId: string, userId: string, db: Db = de
 /**
  * Add a syllabus to a goal. Idempotent on the (goal_id, syllabus_id)
  * composite PK -- re-running with a different weight updates the weight.
+ *
+ * Inputs are parsed against `addGoalSyllabusInputSchema` so out-of-range
+ * weights and missing syllabus ids fail at the BC boundary.
  */
 export async function addGoalSyllabus(
 	goalId: string,
@@ -334,11 +360,12 @@ export async function addGoalSyllabus(
 	input: AddGoalSyllabusInput,
 	db: Db = defaultDb,
 ): Promise<GoalSyllabusRow> {
+	const parsed = addGoalSyllabusInputSchema.parse(input);
 	const existing = await getOwnedGoal(goalId, userId, db);
 	const row: NewGoalSyllabusRow = {
 		goalId: existing.id,
-		syllabusId: input.syllabusId,
-		weight: input.weight,
+		syllabusId: parsed.syllabusId,
+		weight: parsed.weight,
 		seedOrigin: null,
 		createdAt: new Date(),
 	};
@@ -347,7 +374,7 @@ export async function addGoalSyllabus(
 		.values(row)
 		.onConflictDoUpdate({
 			target: [goalSyllabus.goalId, goalSyllabus.syllabusId],
-			set: { weight: input.weight },
+			set: { weight: parsed.weight },
 		})
 		.returning();
 	if (!result) throw new UpsertReturnedNoRowError('goal_syllabus', `${existing.id}:${input.syllabusId}`);
@@ -382,19 +409,25 @@ export async function setGoalSyllabusWeight(
 		.where(and(eq(goalSyllabus.goalId, existing.id), eq(goalSyllabus.syllabusId, syllabusId)));
 }
 
-/** Add an ad-hoc knowledge node to a goal. Idempotent on (goal_id, node_id). */
+/**
+ * Add an ad-hoc knowledge node to a goal. Idempotent on (goal_id, node_id).
+ *
+ * Inputs are parsed against `addGoalNodeInputSchema` so out-of-range
+ * weights and oversized notes fail at the BC boundary.
+ */
 export async function addGoalNode(
 	goalId: string,
 	userId: string,
 	input: AddGoalNodeInput,
 	db: Db = defaultDb,
 ): Promise<GoalNodeRow> {
+	const parsed = addGoalNodeInputSchema.parse(input);
 	const existing = await getOwnedGoal(goalId, userId, db);
 	const row: NewGoalNodeRow = {
 		goalId: existing.id,
-		knowledgeNodeId: input.knowledgeNodeId,
-		weight: input.weight,
-		notes: input.notes,
+		knowledgeNodeId: parsed.knowledgeNodeId,
+		weight: parsed.weight,
+		notes: parsed.notes,
 		seedOrigin: null,
 		createdAt: new Date(),
 	};
@@ -403,7 +436,7 @@ export async function addGoalNode(
 		.values(row)
 		.onConflictDoUpdate({
 			target: [goalNode.goalId, goalNode.knowledgeNodeId],
-			set: { weight: input.weight, notes: input.notes },
+			set: { weight: parsed.weight, notes: parsed.notes },
 		})
 		.returning();
 	if (!result) throw new UpsertReturnedNoRowError('goal_node', `${existing.id}:${input.knowledgeNodeId}`);
@@ -468,9 +501,8 @@ export async function getGoalSkipNodes(goalId: string, db: Db = defaultDb): Prom
 
 /**
  * Set the goal's `focus_domains` list. Owned-goal check enforces caller
- * authorization. Domains are not validated against `DOMAIN_VALUES` here --
- * the type system enforces shape, and the BC trusts its caller; the route
- * layer is the right place to coerce raw form input.
+ * authorization; the input is parsed against `goalDomainListSchema` so an
+ * unknown domain slug fails at the BC boundary regardless of caller.
  */
 export async function setGoalFocusDomains(
 	goalId: string,
@@ -478,39 +510,33 @@ export async function setGoalFocusDomains(
 	domains: readonly Domain[],
 	db: Db = defaultDb,
 ): Promise<void> {
+	const parsed = goalDomainListSchema.parse(domains);
 	const existing = await getOwnedGoal(goalId, userId, db);
-	await db
-		.update(goal)
-		.set({ focusDomains: [...domains], updatedAt: new Date() })
-		.where(eq(goal.id, existing.id));
+	await db.update(goal).set({ focusDomains: parsed, updatedAt: new Date() }).where(eq(goal.id, existing.id));
 }
 
-/** Set the goal's `skip_domains` list. */
+/** Set the goal's `skip_domains` list. Domains validated at the BC boundary. */
 export async function setGoalSkipDomains(
 	goalId: string,
 	userId: string,
 	domains: readonly Domain[],
 	db: Db = defaultDb,
 ): Promise<void> {
+	const parsed = goalDomainListSchema.parse(domains);
 	const existing = await getOwnedGoal(goalId, userId, db);
-	await db
-		.update(goal)
-		.set({ skipDomains: [...domains], updatedAt: new Date() })
-		.where(eq(goal.id, existing.id));
+	await db.update(goal).set({ skipDomains: parsed, updatedAt: new Date() }).where(eq(goal.id, existing.id));
 }
 
-/** Set the goal's `skip_nodes` list. */
+/** Set the goal's `skip_nodes` list. Node ids validated at the BC boundary. */
 export async function setGoalSkipNodes(
 	goalId: string,
 	userId: string,
 	nodes: readonly string[],
 	db: Db = defaultDb,
 ): Promise<void> {
+	const parsed = goalNodeIdListSchema.parse(nodes);
 	const existing = await getOwnedGoal(goalId, userId, db);
-	await db
-		.update(goal)
-		.set({ skipNodes: [...nodes], updatedAt: new Date() })
-		.where(eq(goal.id, existing.id));
+	await db.update(goal).set({ skipNodes: parsed, updatedAt: new Date() }).where(eq(goal.id, existing.id));
 }
 
 /**
@@ -546,13 +572,18 @@ export async function applyCertGoalsToPrimaryGoal(
 	options: { goalTitle?: string; focusDomains?: readonly Domain[]; skipDomains?: readonly Domain[] } = {},
 	db: Db = defaultDb,
 ): Promise<ApplyCertGoalsResult> {
+	// Validate at the BC boundary: cert slugs against `CERT_VALUES`,
+	// goal title length and focus/skip domains against the same caps the
+	// route layer enforces. The schema's `parse` throws `ZodError` for any
+	// shape violation before any DB I/O fires.
+	const parsed = applyCertGoalsInputSchema.parse({ userId, certs, options });
 	// Resolve everything we need to write before opening the transaction
 	// (read-only credential / syllabus lookups don't need the tx scope).
 	// The transaction then takes ownership of every write -- targeting
 	// patch + per-cert goal_syllabus upserts -- so a mid-loop failure
 	// cannot leave a partially-built primary goal that
 	// `getDerivedCertGoals` could read while the user is mid-action.
-	const certSlugs = [...new Set(certs)];
+	const certSlugs = [...new Set(parsed.certs)];
 
 	const credentialRows =
 		certSlugs.length === 0
@@ -587,7 +618,7 @@ export async function applyCertGoalsToPrimaryGoal(
 	const skippedCerts: string[] = [];
 	const resolved: Array<{ slug: Cert; syllabusId: string }> = [];
 	const seen = new Set<Cert>();
-	for (const certSlug of certs) {
+	for (const certSlug of parsed.certs) {
 		if (seen.has(certSlug)) continue;
 		seen.add(certSlug);
 		const credId = credBySlug.get(certSlug);
@@ -604,13 +635,13 @@ export async function applyCertGoalsToPrimaryGoal(
 	}
 
 	return await db.transaction(async (tx) => {
-		let primary = await getPrimaryGoal(userId, tx);
+		let primary = await getPrimaryGoal(parsed.userId, tx);
 		let created = false;
 		if (primary === null) {
 			primary = await createGoal(
 				{
-					userId,
-					title: options.goalTitle ?? 'Study goal',
+					userId: parsed.userId,
+					title: parsed.options.goalTitle ?? 'Study goal',
 					notesMd: '',
 					isPrimary: true,
 				},
@@ -623,8 +654,8 @@ export async function applyCertGoalsToPrimaryGoal(
 		// update so the helper is the only writer for these columns on this
 		// path. Empty arrays are valid -- they unset narrowing.
 		const targetingPatch: Partial<{ focusDomains: Domain[]; skipDomains: Domain[]; updatedAt: Date }> = {};
-		if (options.focusDomains !== undefined) targetingPatch.focusDomains = [...options.focusDomains];
-		if (options.skipDomains !== undefined) targetingPatch.skipDomains = [...options.skipDomains];
+		if (parsed.options.focusDomains !== undefined) targetingPatch.focusDomains = [...parsed.options.focusDomains];
+		if (parsed.options.skipDomains !== undefined) targetingPatch.skipDomains = [...parsed.options.skipDomains];
 		if (Object.keys(targetingPatch).length > 0) {
 			targetingPatch.updatedAt = new Date();
 			await tx.update(goal).set(targetingPatch).where(eq(goal.id, primary.id));
@@ -636,7 +667,7 @@ export async function applyCertGoalsToPrimaryGoal(
 		// (and the just-created primary goal, when applicable) back.
 		if (resolved.length > 0) {
 			await Promise.all(
-				resolved.map((r) => addGoalSyllabus(primary.id, userId, { syllabusId: r.syllabusId, weight: 1.0 }, tx)),
+				resolved.map((r) => addGoalSyllabus(primary.id, parsed.userId, { syllabusId: r.syllabusId, weight: 1.0 }, tx)),
 			);
 		}
 
