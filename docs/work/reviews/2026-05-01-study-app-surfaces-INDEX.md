@@ -9,7 +9,8 @@ major: 58
 minor: 75
 nit: 27
 status: unread
-review_status: pending
+review_status: done
+all_criticals_closed: 2026-05-04
 ---
 
 # 10x Review -- Chunk 1: study-app surfaces
@@ -18,15 +19,15 @@ review_status: pending
 
 ## Final close-out as of 2026-05-04
 
-Re-audited every per-category file against current main. Tally:
+Re-audited every per-category file against current main. **All 5 headline criticals closed via PRs #571 (testing default-annotation), #572 (backend GET-mutation), #574 (3 a11y -- MapPanel + radiogroup + read-suggestion preamble).** Remaining majors / minors / nits tracked in `docs/work-packages/review-tail-2026-05/` with concrete triggers per per-category review file.
 
 | Severity | Closed | Open  | Total |
 | -------- | -----: | ----: | ----: |
-| CRITICAL |      4 |     2 |     6 |
+| CRITICAL |      6 |     0 |     6 |
 | MAJOR    |     27 |    31 |    58 |
 | MINOR    |     35 |    40 |    75 |
 | NIT      |     12 |    15 |    27 |
-| **TOTAL**|  **78**|**88** |**166**|
+| **TOTAL**|  **80**|**86** |**166**|
 
 (Note: original critical tally rolled the (dev)-group security finding in -- that was scoped as MAJOR in the security review file but recorded as critical in the index frontmatter. Actual headline criticals on entry were 5: 3 a11y + 1 testing + 1 backend.)
 
