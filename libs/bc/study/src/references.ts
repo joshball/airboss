@@ -904,6 +904,13 @@ export interface UpsertReferenceSectionInput {
 	ordinal: number;
 	depth: number;
 	code: string;
+	/**
+	 * Canonical `airboss-ref:` URI for this section. Required by the schema's
+	 * NOT NULL + shape CHECK + unique index. Each seeder builds the URI per
+	 * its corpus's locator shape (handbooks: dotted-code -> slashed; AIM:
+	 * dashed; CFR: paragraph chains; AC: section-N; ACS: area-{a}/task-{t}).
+	 */
+	airbossRef: string;
 	title: string;
 	faaPageStart: string | null;
 	faaPageEnd: string | null;
@@ -943,6 +950,7 @@ export async function upsertReferenceSection(
 		ordinal: input.ordinal,
 		depth: input.depth,
 		code: input.code,
+		airbossRef: input.airbossRef,
 		title: input.title,
 		faaPageStart: input.faaPageStart,
 		faaPageEnd: input.faaPageEnd,
@@ -965,6 +973,7 @@ export async function upsertReferenceSection(
 				parentId: input.parentId,
 				ordinal: input.ordinal,
 				depth: input.depth,
+				airbossRef: input.airbossRef,
 				title: input.title,
 				faaPageStart: input.faaPageStart,
 				faaPageEnd: input.faaPageEnd,
@@ -990,6 +999,7 @@ export async function upsertReferenceSection(
 				level: input.level,
 				ordinal: input.ordinal,
 				depth: input.depth,
+				airbossRef: input.airbossRef,
 				title: input.title,
 				faaPageStart: input.faaPageStart,
 				faaPageEnd: input.faaPageEnd,

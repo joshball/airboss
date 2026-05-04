@@ -44,6 +44,12 @@ import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { REFERENCE_KINDS, REFERENCE_SECTION_LEVELS } from '@ab/constants';
+import {
+	airbossRefForAcsArea,
+	airbossRefForAcsElement,
+	airbossRefForAcsPublication,
+	airbossRefForAcsTask,
+} from '@ab/sources';
 import { getAcsSeedMapping } from '@ab/sources/acs';
 import type { AcsManifest, AcsManifestArea, AcsManifestElement, AcsManifestTask } from '../manifest-validation';
 import { type SectionSchema, upsertReference, upsertReferenceSection } from '../references';
@@ -112,16 +118,28 @@ interface SeedAcsTaskArgs {
 	readonly referenceId: string;
 	readonly areaRefSectionId: string;
 	readonly areaRoman: string;
+	readonly areaPadded: string;
 	readonly editionDir: string;
 	readonly task: AcsManifestTask;
 	readonly ordinal: number;
+	readonly manifestSlug: string;
 	readonly mappingDocumentSlug: string;
 	readonly mappingEdition: string;
 }
 
 async function seedAcsTask(args: SeedAcsTaskArgs, context: SeedContext, summary: SeedSummary): Promise<string> {
-	const { referenceId, areaRefSectionId, areaRoman, editionDir, task, ordinal, mappingDocumentSlug, mappingEdition } =
-		args;
+	const {
+		referenceId,
+		areaRefSectionId,
+		areaRoman,
+		areaPadded,
+		editionDir,
+		task,
+		ordinal,
+		manifestSlug,
+		mappingDocumentSlug,
+		mappingEdition,
+	} = args;
 	const taskCode = `${areaRoman}.${task.task.toUpperCase()}`;
 	const bodyAbsPath = resolve(editionDir, task.body_path);
 	if (!existsSync(bodyAbsPath)) {
@@ -139,6 +157,7 @@ async function seedAcsTask(args: SeedAcsTaskArgs, context: SeedContext, summary:
 		ordinal,
 		depth: 2,
 		code: taskCode,
+		airbossRef: airbossRefForAcsTask(manifestSlug, areaPadded, task.task),
 		title: task.title,
 		faaPageStart: null,
 		faaPageEnd: null,
@@ -163,11 +182,18 @@ interface SeedAcsElementArgs {
 	readonly taskRefSectionId: string;
 	readonly element: AcsManifestElement;
 	readonly ordinal: number;
+	readonly manifestSlug: string;
+	readonly areaPadded: string;
+	readonly taskLetter: string;
 	readonly mappingEdition: string;
 }
 
 async function seedAcsElement(args: SeedAcsElementArgs, context: SeedContext, summary: SeedSummary): Promise<void> {
-	const { referenceId, taskRefSectionId, element, ordinal, mappingEdition } = args;
+	const { referenceId, taskRefSectionId, element, ordinal, manifestSlug, areaPadded, taskLetter, mappingEdition } =
+		args;
+	// Element URI uses 2-digit zero-padded ordinal per
+	// libs/sources/src/acs/locator.ts:82 (`elem-<triad><NN>`).
+	const elementOrdinalPadded = String(element.ordinal).padStart(2, '0');
 	const { changed } = await upsertReferenceSection({
 		referenceId,
 		parentId: taskRefSectionId,
@@ -175,6 +201,7 @@ async function seedAcsElement(args: SeedAcsElementArgs, context: SeedContext, su
 		ordinal,
 		depth: 3,
 		code: element.code,
+		airbossRef: airbossRefForAcsElement(manifestSlug, areaPadded, taskLetter, element.triad, elementOrdinalPadded),
 		title: element.title,
 		faaPageStart: null,
 		faaPageEnd: null,
@@ -199,12 +226,22 @@ interface SeedAcsAreaArgs {
 	readonly editionDir: string;
 	readonly area: AcsManifestArea;
 	readonly ordinal: number;
+	readonly manifestSlug: string;
 	readonly mappingDocumentSlug: string;
 	readonly mappingEdition: string;
 }
 
 async function seedAcsArea(args: SeedAcsAreaArgs, context: SeedContext, summary: SeedSummary): Promise<void> {
-	const { referenceId, publicationRefSectionId, editionDir, area, ordinal, mappingDocumentSlug, mappingEdition } = args;
+	const {
+		referenceId,
+		publicationRefSectionId,
+		editionDir,
+		area,
+		ordinal,
+		manifestSlug,
+		mappingDocumentSlug,
+		mappingEdition,
+	} = args;
 	const areaRoman = paddedOrdinalToRoman(area.area);
 	const { row: areaRow, changed } = await upsertReferenceSection({
 		referenceId,
@@ -213,6 +250,7 @@ async function seedAcsArea(args: SeedAcsAreaArgs, context: SeedContext, summary:
 		ordinal,
 		depth: 1,
 		code: areaRoman,
+		airbossRef: airbossRefForAcsArea(manifestSlug, area.area),
 		title: area.title,
 		faaPageStart: null,
 		faaPageEnd: null,
@@ -238,9 +276,11 @@ async function seedAcsArea(args: SeedAcsAreaArgs, context: SeedContext, summary:
 				referenceId,
 				areaRefSectionId: areaRow.id,
 				areaRoman,
+				areaPadded: area.area,
 				editionDir,
 				task,
 				ordinal: taskOrdinal,
+				manifestSlug,
 				mappingDocumentSlug,
 				mappingEdition,
 			},
@@ -257,6 +297,9 @@ async function seedAcsArea(args: SeedAcsAreaArgs, context: SeedContext, summary:
 					taskRefSectionId,
 					element,
 					ordinal: elementOrdinal,
+					manifestSlug,
+					areaPadded: area.area,
+					taskLetter: task.task,
 					mappingEdition,
 				},
 				context,
@@ -322,6 +365,7 @@ export async function seedAcsManifest(
 		ordinal: 0,
 		depth: 0,
 		code: 'publication',
+		airbossRef: airbossRefForAcsPublication(manifest.slug),
 		title: manifest.title,
 		faaPageStart: null,
 		faaPageEnd: null,
@@ -348,6 +392,7 @@ export async function seedAcsManifest(
 				editionDir,
 				area,
 				ordinal: areaOrdinal,
+				manifestSlug: manifest.slug,
 				mappingDocumentSlug: mapping.documentSlug,
 				mappingEdition: mapping.edition,
 			},

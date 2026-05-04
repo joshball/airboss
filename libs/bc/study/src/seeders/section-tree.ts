@@ -12,6 +12,7 @@
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
+import { airbossRefForHandbookSection } from '@ab/sources';
 import type { SectionTreeManifest } from '../manifest-validation';
 import { replaceFiguresForSection, type SectionSchema, upsertReference, upsertReferenceSection } from '../references';
 import type { SeedContext, SeedSummary } from './types';
@@ -71,6 +72,7 @@ export async function seedSectionTreeManifest(
 			ordinal: section.ordinal,
 			depth: LEVEL_TO_DEPTH[section.level],
 			code: section.code,
+			airbossRef: airbossRefForHandbookSection(manifest.document_slug, manifest.edition, section.code),
 			title: section.title,
 			faaPageStart: section.faa_page_start,
 			faaPageEnd: section.faa_page_end,

@@ -30,6 +30,7 @@ import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { REFERENCE_KINDS, REFERENCE_SECTION_LEVELS, type ReferenceKind } from '@ab/constants';
+import { airbossRefForInfo, airbossRefForSafo } from '@ab/sources';
 import type { BulletinSeedMappingEntry } from '@ab/sources/safo';
 import type { InfoManifest, SafoManifest } from '../manifest-validation';
 import { type SectionSchema, upsertReference, upsertReferenceSection } from '../references';
@@ -127,6 +128,13 @@ async function seedBulletinWholeDoc(
 	}
 	const contentMd = await readFile(bodyAbsPath, 'utf-8');
 
+	// SAFO + InFO bulletins have no section-level routes in the flightbag
+	// reader (`urlForSafo` / `urlForInfo` only handle the bulletin landing).
+	// Every row in this bulletin's tree therefore shares the same bulletin URI
+	// -- the ancestor chip + child chip both deep-link to the bulletin's
+	// landing page. Authored once here.
+	const airbossRef = bulletinAirbossRef(options.referenceKind, manifest.bulletin_id);
+
 	const { changed } = await upsertReferenceSection({
 		referenceId,
 		parentId: null,
@@ -134,6 +142,7 @@ async function seedBulletinWholeDoc(
 		ordinal: 0,
 		depth: 0,
 		code: '1',
+		airbossRef,
 		title: manifest.title,
 		faaPageStart: null,
 		faaPageEnd: null,
@@ -159,6 +168,7 @@ async function seedBulletinSections(
 ): Promise<void> {
 	// Sort by ordinal so document order is preserved.
 	const sortedSections = [...manifest.sections].sort((a, b) => a.ordinal - b.ordinal);
+	const airbossRef = bulletinAirbossRef(options.referenceKind, manifest.bulletin_id);
 
 	for (const section of sortedSections) {
 		const bodyAbsPath = resolve(context.repoRoot, section.body_path);
@@ -175,6 +185,7 @@ async function seedBulletinSections(
 			ordinal: section.ordinal,
 			depth: 0,
 			code: section.code,
+			airbossRef,
 			title: section.title,
 			faaPageStart: null,
 			faaPageEnd: null,
@@ -189,6 +200,12 @@ async function seedBulletinSections(
 		summary.sectionsTouched += 1;
 		if (changed) summary.sectionsChanged += 1;
 	}
+}
+
+function bulletinAirbossRef(kind: ReferenceKind, bulletinId: string): string {
+	if (kind === REFERENCE_KINDS.SAFO) return airbossRefForSafo(bulletinId);
+	if (kind === REFERENCE_KINDS.INFO) return airbossRefForInfo(bulletinId);
+	throw new Error(`bulletin seeder: unsupported referenceKind "${String(kind)}"`);
 }
 
 /**

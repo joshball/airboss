@@ -193,6 +193,11 @@ export async function seedCfrManifest(
 				ordinal,
 				depth: 0,
 				code: entry.canonical_short,
+				// CFR entries already carry their `airboss-ref:regs/cfr-<title>/...`
+				// URI as `entry.id` from the registry's bootstrap (per ADR 019). Use
+				// it directly so the URI source-of-truth stays the registry, not
+				// this seeder.
+				airbossRef: entry.id,
 				title: entry.canonical_title,
 				faaPageStart: null,
 				faaPageEnd: null,
@@ -203,7 +208,6 @@ export async function seedCfrManifest(
 				hasTables: false,
 				metadata: {
 					last_amended_date: entry.last_amended_date,
-					airboss_ref: entry.id,
 				},
 				seedOrigin: context.seedOrigin,
 			});

@@ -33,6 +33,7 @@ import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { REFERENCE_KINDS, REFERENCE_SECTION_LEVELS } from '@ab/constants';
+import { airbossRefForAcDocument, airbossRefForAcSection } from '@ab/sources';
 import { getAcSeedMapping } from '@ab/sources/ac';
 import type { AcManifest } from '../manifest-validation';
 import { type SectionSchema, upsertReference, upsertReferenceSection } from '../references';
@@ -139,6 +140,7 @@ async function seedWholeDoc(
 		ordinal: 0,
 		depth: 0,
 		code: '1',
+		airbossRef: airbossRefForAcDocument(manifest.doc_number, manifest.revision),
 		title: manifest.title,
 		faaPageStart: null,
 		faaPageEnd: null,
@@ -190,6 +192,17 @@ async function seedSectionTree(
 			throw new Error(`AC manifest references missing section body: ${section.body_path} (resolved: ${bodyAbsPath})`);
 		}
 		const contentMd = await readFile(bodyAbsPath, 'utf-8');
+		// AC URIs only express integer chapter codes (`section-<n>` per
+		// libs/sources/src/ac/locator.ts:24). Deeper rows (sections / subsections
+		// inside a chapter) deep-link to their chapter ancestor's URI -- the
+		// flightbag reader scrolls to the chapter; sub-rows share that route
+		// per ADR 019 §1.2. For non-integer chapters (`appendix-a` etc.),
+		// fall back to the whole-doc URI.
+		const chapterCode = section.code.split('.')[0] ?? '';
+		const isIntegerChapter = /^[1-9][0-9]{0,2}$/.test(chapterCode);
+		const sectionRef = isIntegerChapter
+			? airbossRefForAcSection(manifest.doc_number, manifest.revision, chapterCode)
+			: airbossRefForAcDocument(manifest.doc_number, manifest.revision);
 		const { row, changed } = await upsertReferenceSection({
 			referenceId,
 			parentId,
@@ -197,6 +210,7 @@ async function seedSectionTree(
 			ordinal: section.ordinal,
 			depth: LEVEL_TO_DEPTH[section.level],
 			code: section.code,
+			airbossRef: sectionRef,
 			title: section.title,
 			faaPageStart: section.faa_page_start,
 			faaPageEnd: section.faa_page_end,

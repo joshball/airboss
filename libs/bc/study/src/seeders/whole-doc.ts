@@ -16,6 +16,7 @@
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
+import { airbossRefForWholeDocHandbook } from '@ab/sources';
 import type { WholeDocManifest } from '../manifest-validation';
 import { type SectionSchema, upsertReference, upsertReferenceSection } from '../references';
 import type { SeedContext, SeedSummary } from './types';
@@ -70,6 +71,7 @@ export async function seedWholeDocManifest(
 		ordinal: 0,
 		depth: 0,
 		code: '1',
+		airbossRef: airbossRefForWholeDocHandbook(manifest.document_slug, manifest.edition),
 		title: manifest.title,
 		faaPageStart: null,
 		faaPageEnd: null,

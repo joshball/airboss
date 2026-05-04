@@ -1417,6 +1417,22 @@ export const referenceSection = studySchema.table(
 		 * Per-kind regex validation at ingest; no DB regex.
 		 */
 		code: text('code').notNull(),
+		/**
+		 * Canonical `airboss-ref:` URI for this section -- the cross-corpus
+		 * deep-link identifier per ADR 019. Set by the seeder at insert time so
+		 * the citation render path (`resolveCitationTargets`) and the audit
+		 * (`auditCitations`) can both read it without rebuilding the URI from
+		 * `(kind, documentSlug, edition, code)` tuples on every read. Five
+		 * different URI shapes per corpus (handbooks: dotted-code -> slashed;
+		 * AIM: dashed; CFR: paragraph chains; AC: section-N; ACS:
+		 * area-{a}/task-{t}) make at-write computation strictly simpler than
+		 * at-read.
+		 *
+		 * CHECK enforces the `airboss-ref:` prefix so a rogue insert path
+		 * can't drift; the unique index reflects the invariant that one URI
+		 * names exactly one section row.
+		 */
+		airbossRef: text('airboss_ref').notNull(),
 		title: text('title').notNull(),
 		/**
 		 * First FAA-printed page reference (handbook only; NULL elsewhere).
@@ -1464,6 +1480,21 @@ export const referenceSection = studySchema.table(
 			.where(sql`${t.contentMd} <> ''`),
 		ordinalNonNegativeCheck: check('reference_section_ordinal_check', sql.raw(`"ordinal" >= 0`)),
 		depthNonNegativeCheck: check('reference_section_depth_check', sql.raw(`"depth" >= 0`)),
+		// Stage-5 cross-link: `airboss_ref` is the canonical URI for this
+		// section. Shape check guards against the picker / seeder ever writing a
+		// non-URI string. The URI is NOT unique across rows: hierarchies whose
+		// flightbag route only deep-links to ancestor levels (e.g. AC subsections
+		// fall back to their chapter's route per ADR 019 §1.2 + libs/sources/src/ac/
+		// locator.ts) intentionally share a URI with their ancestor. The
+		// `(reference_id, code)` unique index already pins one row per logical
+		// position; the URI is a derived deep-link target, not a primary key.
+		airbossRefShapeCheck: check(
+			'reference_section_airboss_ref_shape_check',
+			sql.raw(`"airboss_ref" ~ '^airboss-ref:'`),
+		),
+		// Indexed for reverse lookups (audit walks "find sections by URI") and
+		// reference-by-URI on the picker / chip resolution paths.
+		airbossRefIdx: index('reference_section_airboss_ref_idx').on(t.airbossRef),
 		// Printed FAA pagination is `<chapter>-<page>` so lexicographic ordering
 		// (`"12-23"` < `"12-9"`) is unsafe. Just enforce the NULL-pair invariant:
 		// either both ends are NULL (page reference unknown) or `faa_page_start`
