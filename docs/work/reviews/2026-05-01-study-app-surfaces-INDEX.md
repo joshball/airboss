@@ -25,9 +25,9 @@ Re-audited every per-category file against current main. **All 5 headline critic
 | -------- | -----: | ----: | ----: |
 | CRITICAL |      6 |     0 |     6 |
 | MAJOR    |     39 |    19 |    58 |
-| MINOR    |     36 |    39 |    75 |
+| MINOR    |     37 |    38 |    75 |
 | NIT      |     12 |    15 |    27 |
-| **TOTAL**|  **93**|**73** |**166**|
+| **TOTAL**|  **94**|**72** |**166**|
 
 (Note: original critical tally rolled the (dev)-group security finding in -- that was scoped as MAJOR in the security review file but recorded as critical in the index frontmatter. Actual headline criticals on entry were 5: 3 a11y + 1 testing + 1 backend.)
 
@@ -35,7 +35,7 @@ Re-audited every per-category file against current main. **All 5 headline critic
 
 | Category     | Closed | Open | Status   | Headline open items                                                                                                  |
 | ------------ | -----: | ---: | -------- | -------------------------------------------------------------------------------------------------------------------- |
-| correctness  |     11 |    3 | done     | memory-review undo numeric key; heartbeat local accumulator; handbook-asset symlink defence                          |
+| correctness  |     14 |    0 | done     | heartbeat correctness tail closed: memory-review undo numeric key + handbook-asset symlink defence (this PR); accumulator-on-success closed earlier in #468 |
 | security     |      4 |    5 | done     | (dev) prod gate landed in this PR; remaining are seed/edition charset caps + content-type allowlist                  |
 | perf         |      6 |    5 | pending  | help-registry code-split, library aggregators, regulations-section redundant fetch, knowledge-node listReferences   |
 | architecture |      6 |   11 | done     | library / knowledge / session aggregator BCs, group-by enums to constants, handbook-asset to libs                    |
@@ -57,7 +57,7 @@ Re-audited every per-category file against current main. **All 5 headline critic
 
 - **Convergent N+1 cluster** (5 perf MAJORs + 6 backend MAJORs): CLOSED 2026-05-04 -- six batched BC helpers (`getCredentialMasteryMap`, `getHandbookProgressMap`, `getNodesCitingSectionsBatch`, `getCredentialsByIds`, `getCitationsForSyllabusNodes`, `getKnowledgeNodesForSyllabusLeaves`) and six route loader updates landed via the wave-2 worktree (review-tail-2026-05).
 - **Log-quality sweep** (~6 dx items): mechanical pass replacing `'<func> threw'` with `'<verb> <entity> failed'` and aligning user-visible noun-phrase across logs + `fail()` messages.
-- **Heartbeat correctness tail** (3 correctness items): rating numeric key, local accumulator on POST failure, handbook-asset symlink defence. Three small follow-ons.
+- **Heartbeat correctness tail** (3 correctness items): CLOSED 2026-05-04 -- memory-review numeric undo + handbook-asset realpath defence landed via this PR; accumulator-on-success was already in #468. All three pinned by tests (`server.test.ts` for handbook-asset; `manifest-validation.test.ts` for the heartbeat schema's strict-numeric `delta`).
 - **Library completeness UX** (4 ux items + 1 architecture): card-state indicator, topic 404 -> soft empty, regulations empty buckets, isReadable hardcoded. All gated on the library-completeness Wave-2 spec decision.
 - **Route-level CSS extraction** (1 svelte MAJOR): work-package scope -- extract Card / Toast / ScoreMeta / BadgeStatus primitives into `libs/ui`. Token migration is a finishing pass per project rule.
 - **(app)/+layout effect-mirror** (1 svelte MAJOR + 1 svelte MINOR): CLOSED 2026-05-04 -- chunk-5's close-out audit shipped the convergent fix across 5 layouts (study `(app)`, hangar root, hangar `(app)`, sim, avionics) via PR #568. `$effect(() => mirror = data.x)` replaced with optimistic-override `$derived(override ?? data.x)`. Forward-reference MINOR closed by the same rework. See [svelte review](2026-05-01-study-app-surfaces-svelte.md) status table.

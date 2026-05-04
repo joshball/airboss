@@ -16,6 +16,7 @@ import {
 	aimManifestSchema,
 	cfrManifestSchema,
 	cfrSectionsFileSchema,
+	handbookHeartbeatInputSchema,
 	handbookManifestErrataEntrySchema,
 	infoManifestSchema,
 	manifestSchema,
@@ -1062,4 +1063,56 @@ describe('on-disk manifest fixtures (ACS)', () => {
 			}
 		});
 	}
+});
+
+describe('handbookHeartbeatInputSchema (POST /heartbeat wire shape)', () => {
+	// Pins the numeric-only contract for the heartbeat POST body. The route
+	// reads `delta` directly off `parsed.data` and forwards it to
+	// `recordHeartbeat(userId, sectionId, delta)`, which uses it as a
+	// numeric integer second-count. A string-typed value would either coerce
+	// inside the BC (silent) or land in DB columns typed as integer
+	// (loud) -- pinning the schema rejection is the cheaper guard.
+	//
+	// Closes the chunk-1 study-app correctness "rating numeric key on the
+	// heartbeat payload" item from the 2026-05-01 review cluster.
+
+	it('accepts a positive integer delta', () => {
+		const result = handbookHeartbeatInputSchema.safeParse({ delta: 30 });
+		expect(result.success).toBe(true);
+		if (result.success) expect(result.data.delta).toBe(30);
+	});
+
+	it('rejects a string-typed delta (no Zod coerce)', () => {
+		// Zod's `z.number()` does NOT accept '30'. A future regression that
+		// flipped this to `z.coerce.number()` would silently parse strings;
+		// pin the strict-type contract here.
+		const result = handbookHeartbeatInputSchema.safeParse({ delta: '30' });
+		expect(result.success).toBe(false);
+		if (!result.success) {
+			const issue = result.error.issues[0];
+			expect(issue?.path).toEqual(['delta']);
+			expect(issue?.code).toBe('invalid_type');
+		}
+	});
+
+	it('rejects a non-integer delta', () => {
+		const result = handbookHeartbeatInputSchema.safeParse({ delta: 1.5 });
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects a zero or negative delta', () => {
+		expect(handbookHeartbeatInputSchema.safeParse({ delta: 0 }).success).toBe(false);
+		expect(handbookHeartbeatInputSchema.safeParse({ delta: -1 }).success).toBe(false);
+	});
+
+	it('rejects a missing delta field', () => {
+		const result = handbookHeartbeatInputSchema.safeParse({});
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects a boolean / null / undefined delta', () => {
+		expect(handbookHeartbeatInputSchema.safeParse({ delta: true }).success).toBe(false);
+		expect(handbookHeartbeatInputSchema.safeParse({ delta: null }).success).toBe(false);
+		expect(handbookHeartbeatInputSchema.safeParse({ delta: undefined }).success).toBe(false);
+	});
 });
