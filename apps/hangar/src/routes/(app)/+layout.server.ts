@@ -1,5 +1,5 @@
 import { requireRole } from '@ab/auth';
-import { ROLES } from '@ab/constants';
+import { HOST_PREFIXES, ROLES, siblingOrigin } from '@ab/constants';
 import type { LayoutServerLoad } from './$types';
 
 /**
@@ -11,6 +11,10 @@ import type { LayoutServerLoad } from './$types';
  * Per the dual-gate rule in `libs/auth/src/auth.ts`, every form action
  * that writes MUST still call `requireRole(...)` itself -- form POSTs
  * don't walk the layout load.
+ *
+ * Also derives the cross-subdomain flightbag origin so the shared
+ * `AppHeader` flightbag link can target the matching env's flightbag
+ * app without a hardcoded URL.
  */
 export const load: LayoutServerLoad = async (event) => {
 	const user = requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
@@ -21,5 +25,6 @@ export const load: LayoutServerLoad = async (event) => {
 			email: user.email,
 			role: user.role,
 		},
+		flightbagOrigin: siblingOrigin(event.url, HOST_PREFIXES.FLIGHTBAG),
 	};
 };

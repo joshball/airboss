@@ -17,6 +17,7 @@
 // Tone vocabulary lives in `@ab/themes`; consumers import it directly to
 // avoid two import paths for one identity (which previously produced
 // inconsistent grep results during refactors).
+export type { AppHeaderProps, AppHeaderUser } from './components/AppHeader.svelte';
 export type { BadgeSize, BadgeTone } from './components/Badge.svelte';
 export type { BadgeStatusState } from './components/BadgeStatus.svelte';
 export type { BannerTone } from './components/Banner.svelte';

@@ -20,5 +20,7 @@ export const load: LayoutServerLoad = (event) => {
 		theme: event.locals.theme,
 		isAuthenticated: event.locals.user !== null,
 		studyLoginUrl: `${studyOrigin}${ROUTES.LOGIN}`,
+		// Cross-subdomain link target for the shared `AppHeader` flightbag link.
+		flightbagOrigin: siblingOrigin(event.url, HOST_PREFIXES.FLIGHTBAG),
 	};
 };

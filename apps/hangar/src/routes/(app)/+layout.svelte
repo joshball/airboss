@@ -12,7 +12,7 @@ import {
 } from '@ab/themes';
 import ThemePicker from '@ab/themes/picker/ThemePicker.svelte';
 import ThemeProvider from '@ab/themes/ThemeProvider.svelte';
-import RolePill from '@ab/ui/components/RolePill.svelte';
+import AppHeader from '@ab/ui/components/AppHeader.svelte';
 import type { Snippet } from 'svelte';
 import { page } from '$app/state';
 import Nav from '$lib/components/Nav.svelte';
@@ -109,79 +109,45 @@ async function setAppearance(value: AppearancePreference) {
 		// Non-fatal: the cookie just doesn't persist this turn.
 	}
 }
-
-const identityLabel = $derived(data.user.name.trim() || data.user.email);
-const showEmailRow = $derived(identityLabel !== data.user.email);
-const initials = $derived(computeInitials(data.user.name, data.user.email));
-
-function computeInitials(name: string, email: string): string {
-	const trimmed = name.trim();
-	if (trimmed) {
-		const parts = trimmed.split(/\s+/);
-		const first = parts[0]?.[0] ?? '';
-		const last = parts.length > 1 ? (parts[parts.length - 1]?.[0] ?? '') : '';
-		const combined = `${first}${last}`.toUpperCase();
-		if (combined) return combined;
-	}
-	return (email[0] ?? '?').toUpperCase();
-}
-
-let identityMenu = $state<HTMLDetailsElement | null>(null);
-
-function handleMenuKeydown(event: KeyboardEvent) {
-	if (event.key !== 'Escape' || !identityMenu?.open) return;
-	identityMenu.open = false;
-	const summary = identityMenu.querySelector('summary');
-	if (summary instanceof HTMLElement) summary.focus();
-}
 </script>
 
-<svelte:window onkeydown={handleMenuKeydown} />
-
+<!--
+	Skip-to-content stays at the layout root (not in AppHeader) so it
+	is the first focusable element on the page.
+-->
 <a class="skip" href="#main">Skip to main content</a>
 
 <ThemeProvider theme={selection.theme} appearance={selection.appearance} layout={selection.layout}>
-	<nav aria-label="Primary" class="topnav">
-		<a class="brand" href={ROUTES.HANGAR_HOME}>airboss / hangar</a>
-		<Nav />
-		<div class="spacer"></div>
-
-		<ThemePicker currentThemeId={selection.theme} onSelect={setTheme} locked={themePickerLocked} />
-
-		<details class="identity" bind:this={identityMenu}>
-			<summary aria-label="Account menu for {identityLabel}">
-				<span class="identity-label-full">{identityLabel}</span>
-				<span class="identity-label-compact" aria-hidden="true">{initials}</span>
-				{#if data.user.role}
-					<RolePill ariaHidden>{data.user.role}</RolePill>
-				{/if}
-				<span class="chevron" aria-hidden="true">▾</span>
-			</summary>
-			<div class="identity-panel">
-				{#if showEmailRow}
-					<div class="identity-email">{data.user.email}</div>
-				{/if}
-				<fieldset class="identity-appearance">
-					<legend>Appearance</legend>
-					{#each APPEARANCE_PREFERENCE_VALUES as option (option)}
-						<label class="identity-appearance-option">
-							<input
-								type="radio"
-								name="appearance"
-								value={option}
-								checked={appearancePref === option}
-								onchange={() => setAppearance(option)}
-							/>
-							<span class="identity-appearance-label">{option}</span>
-						</label>
-					{/each}
-				</fieldset>
-				<form method="POST" action={ROUTES.LOGOUT} class="identity-signout">
-					<button type="submit">Sign out</button>
-				</form>
-			</div>
-		</details>
-	</nav>
+	<AppHeader
+		app="hangar"
+		brandHref={ROUTES.HANGAR_HOME}
+		flightbagHref={data.flightbagOrigin}
+		user={data.user}
+	>
+		{#snippet nav()}
+			<Nav />
+		{/snippet}
+		{#snippet tools()}
+			<ThemePicker currentThemeId={selection.theme} onSelect={setTheme} locked={themePickerLocked} />
+		{/snippet}
+		{#snippet identityPanel()}
+			<fieldset class="identity-appearance">
+				<legend>Appearance</legend>
+				{#each APPEARANCE_PREFERENCE_VALUES as option (option)}
+					<label class="identity-appearance-option">
+						<input
+							type="radio"
+							name="appearance"
+							value={option}
+							checked={appearancePref === option}
+							onchange={() => setAppearance(option)}
+						/>
+						<span class="identity-appearance-label">{option}</span>
+					</label>
+				{/each}
+			</fieldset>
+		{/snippet}
+	</AppHeader>
 
 	<main id="main" tabindex="-1">
 		{@render children()}
@@ -207,124 +173,19 @@ function handleMenuKeydown(event: KeyboardEvent) {
 		color: var(--ink-inverse);
 		padding: var(--space-sm) var(--space-md);
 		border-radius: var(--radius-sm);
-		z-index: 100;
+		z-index: var(--z-modal);
 	}
 
 	.skip:focus {
 		top: var(--space-sm);
 	}
 
-	.topnav {
-		display: flex;
-		flex: 0 0 auto;
-		align-items: center;
-		gap: var(--space-xl);
-		padding: var(--space-lg) var(--space-xl);
-		border-bottom: 1px solid var(--edge-default);
-		background: var(--surface-panel);
-	}
-
-	.brand {
-		font-weight: var(--font-weight-semibold);
-		color: var(--ink-body);
-		font-family: var(--font-family-mono);
-		font-size: var(--type-ui-label-size);
-		text-decoration: none;
-		padding: var(--space-2xs) var(--space-sm);
-		border-radius: var(--radius-sm);
-	}
-
-	.brand:hover {
-		background: var(--surface-sunken);
-	}
-
-	.brand:focus-visible {
-		outline: 2px solid var(--focus-ring);
-		outline-offset: 2px;
-	}
-
-	.spacer {
-		flex: 1;
-	}
-
-	.identity {
-		position: relative;
-	}
-
-	.identity > summary {
-		display: inline-flex;
-		align-items: center;
-		gap: var(--space-2xs);
-		cursor: pointer;
-		list-style: none;
-		color: var(--ink-muted);
-		font-weight: var(--type-ui-control-weight);
-		padding: var(--space-2xs) var(--space-sm);
-		border-radius: var(--radius-sm);
-		user-select: none;
-	}
-
-	.identity > summary::-webkit-details-marker {
-		display: none;
-	}
-
-	.identity > summary::marker {
-		content: '';
-	}
-
-	.identity > summary:hover {
-		color: var(--ink-body);
-		background: var(--surface-sunken);
-	}
-
-	.identity > summary:focus-visible {
-		outline: 2px solid var(--focus-ring);
-		outline-offset: 2px;
-	}
-
-	.identity[open] > summary {
-		color: var(--ink-body);
-		background: var(--surface-sunken);
-	}
-
-	.identity[open] .chevron {
-		transform: rotate(180deg);
-	}
-
-	.chevron {
-		font-size: var(--type-ui-caption-size);
-		line-height: 1;
-		transition: transform var(--motion-fast);
-	}
-
-	.identity-label-compact {
-		display: none;
-		font-variant: small-caps;
-		letter-spacing: var(--letter-spacing-wide);
-	}
-
-	.identity-panel {
-		position: absolute;
-		right: 0;
-		top: calc(100% + var(--space-2xs));
-		min-width: 12rem;
-		background: var(--surface-panel);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-md);
-		box-shadow: var(--shadow-lg);
-		padding: var(--space-2xs);
-		z-index: 50;
-	}
-
-	.identity-email {
-		padding: var(--space-sm) var(--space-sm);
-		font-size: var(--type-ui-label-size);
-		color: var(--ink-muted);
-		border-bottom: 1px solid var(--edge-default);
-		margin-bottom: var(--space-2xs);
-		overflow-wrap: anywhere;
-	}
-
+	/*
+	 * Appearance picker rendered inside the AppHeader identity panel via the
+	 * `identityPanel` snippet. Snippet content is style-scoped to the caller
+	 * (this layout), so these rules target the fieldset markup we declared
+	 * above without leaking out of the file.
+	 */
 	.identity-appearance {
 		margin: 0;
 		padding: var(--space-sm);
@@ -363,50 +224,6 @@ function handleMenuKeydown(event: KeyboardEvent) {
 
 	.identity-appearance-label {
 		text-transform: capitalize;
-	}
-
-	.identity-signout {
-		margin: 0;
-		border-top: 1px solid var(--edge-default);
-		padding-top: var(--space-2xs);
-	}
-
-	.identity-signout button {
-		display: block;
-		width: 100%;
-		text-align: left;
-		background: transparent;
-		border: 0;
-		color: var(--ink-muted);
-		font: inherit;
-		padding: var(--space-sm) var(--space-sm);
-		border-radius: var(--radius-sm);
-		cursor: pointer;
-	}
-
-	.identity-signout button:hover {
-		color: var(--ink-body);
-		background: var(--surface-sunken);
-	}
-
-	.identity-signout button:focus-visible {
-		outline: 2px solid var(--focus-ring);
-		outline-offset: 2px;
-	}
-
-	@media (max-width: 700px) {
-		.topnav {
-			gap: var(--space-md);
-			padding: var(--space-md) var(--space-lg);
-		}
-
-		.identity-label-full {
-			display: none;
-		}
-
-		.identity-label-compact {
-			display: inline;
-		}
 	}
 
 	main {

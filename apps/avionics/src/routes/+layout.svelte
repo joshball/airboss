@@ -10,6 +10,7 @@ import {
 	type ThemePreference,
 } from '@ab/themes';
 import ThemePicker from '@ab/themes/picker/ThemePicker.svelte';
+import AppHeader from '@ab/ui/components/AppHeader.svelte';
 import Banner from '@ab/ui/components/Banner.svelte';
 import type { Snippet } from 'svelte';
 import { page } from '$app/state';
@@ -103,10 +104,11 @@ async function setTheme(value: ThemeId) {
 }
 </script>
 
-<header class="avionics-chrome">
-	<span class="brand">airboss / avionics</span>
-	<ThemePicker currentThemeId={selection.theme} onSelect={setTheme} locked={themePickerLocked} />
-</header>
+<AppHeader app="avionics" flightbagHref={data.flightbagOrigin}>
+	{#snippet tools()}
+		<ThemePicker currentThemeId={selection.theme} onSelect={setTheme} locked={themePickerLocked} />
+	{/snippet}
+</AppHeader>
 
 {#if showAuthBanner}
 	<div class="auth-banner-strip" data-testid="avionics-auth-banner">
@@ -120,23 +122,6 @@ async function setTheme(value: ThemeId) {
 {@render children()}
 
 <style>
-	.avionics-chrome {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: var(--space-lg);
-		padding: var(--space-sm) var(--space-xl);
-		border-bottom: 1px solid var(--edge-default);
-		background: var(--surface-panel);
-	}
-
-	.brand {
-		font-weight: var(--type-ui-control-weight);
-		color: var(--ink-muted);
-		font-size: var(--type-ui-label-size);
-		letter-spacing: var(--letter-spacing-wide);
-	}
-
 	.auth-banner-strip {
 		padding: var(--space-xs) var(--space-xl);
 		border-bottom: 1px solid var(--edge-default);

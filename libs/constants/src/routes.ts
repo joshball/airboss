@@ -566,6 +566,25 @@ export const ROUTES = {
 } as const;
 
 /**
+ * Display names for each surface app. Used by the shared `AppHeader`
+ * brand link ("airboss / {name}") and any other surface that needs a
+ * canonical app label. Kept here so a rename only touches one file.
+ *
+ * The brand renders the lowercase form ("airboss / sim"); these are
+ * the title-cased canonical names.
+ */
+export const APP_NAMES = {
+	study: 'Study',
+	sim: 'Sim',
+	hangar: 'Hangar',
+	flightbag: 'Flightbag',
+	avionics: 'Avionics',
+} as const;
+
+/** Surface app id -- the keys of `APP_NAMES`. Drives the `AppHeader` `app` prop. */
+export type AppId = keyof typeof APP_NAMES;
+
+/**
  * Labels for primary navigation links. Kept out of markup so every surface
  * renders the same text and a rename only touches one file.
  */
