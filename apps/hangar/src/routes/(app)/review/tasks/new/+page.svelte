@@ -70,7 +70,6 @@ const initialValues = $derived<InitialValues | null>(
 				required
 				maxlength="200"
 				value={initialValues?.title ?? ''}
-				autofocus
 				aria-invalid={fieldErrors.title ? 'true' : undefined}
 				aria-describedby={fieldErrors.title ? 'err-title' : undefined}
 			/>

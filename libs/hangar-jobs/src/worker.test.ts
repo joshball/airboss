@@ -133,7 +133,11 @@ function createBarrier(): { wait: () => Promise<void>; release: () => void } {
 	return { wait: () => promise, release: () => resolveFn() };
 }
 
-async function waitFor(predicate: () => Promise<boolean> | boolean, timeoutMs = 25_000, intervalMs = 25): Promise<void> {
+async function waitFor(
+	predicate: () => Promise<boolean> | boolean,
+	timeoutMs = 25_000,
+	intervalMs = 25,
+): Promise<void> {
 	const start = Date.now();
 	while (Date.now() - start < timeoutMs) {
 		if (await predicate()) return;

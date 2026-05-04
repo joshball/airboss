@@ -23,13 +23,6 @@ export interface BucketFormProps {
 	readonly errors: Record<string, string>;
 	readonly submitLabel: string;
 	readonly saving: boolean;
-	/**
-	 * Place initial keyboard focus on the Name field. Default `false` so an
-	 * Edit page reuse doesn't steal focus from a freshly-entered breadcrumb /
-	 * heading. Pass `autofocus` (the bare prop) on the New page where the
-	 * user just clicked + New from the buckets list.
-	 */
-	readonly autofocus?: boolean;
 }
 
 export const KIND_OPTIONS = REVIEW_KIND_VALUES.map((id) => ({
@@ -43,7 +36,7 @@ export const REVIEW_STATUS_OPTIONS = FRONTMATTER_REVIEW_STATUS_VALUES;
 <script lang="ts">
 import Button from '@ab/ui/components/Button.svelte';
 
-let { initial, errors, submitLabel, saving, autofocus = false }: BucketFormProps = $props();
+let { initial, errors, submitLabel, saving }: BucketFormProps = $props();
 </script>
 
 <div class="form">
@@ -55,7 +48,6 @@ let { initial, errors, submitLabel, saving, autofocus = false }: BucketFormProps
 			required
 			maxlength="200"
 			value={initial.name}
-			{autofocus}
 			aria-invalid={errors.name ? 'true' : undefined}
 		/>
 		{#if errors.name}<small class="err">{errors.name}</small>{/if}

@@ -176,7 +176,6 @@ function attemptBack(event: MouseEvent): void {
 				required
 				maxlength="200"
 				value={readField('title', data.task.title)}
-				autofocus
 				aria-invalid={fieldErrors.title ? 'true' : undefined}
 				aria-describedby={fieldErrors.title ? 'err-title' : undefined}
 			/>
