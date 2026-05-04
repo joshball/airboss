@@ -85,11 +85,11 @@ function tabHref(t: StudyMapTab): string {
 
 .hd {
 	margin: 0;
-	font-size: var(--font-size-md);
+	font-size: var(--font-size-base);
 	color: var(--ink-muted);
 	font-weight: var(--font-weight-regular);
 	text-transform: uppercase;
-	letter-spacing: 0.05em;
+	letter-spacing: var(--letter-spacing-wide);
 }
 
 .tabstrip {
@@ -115,13 +115,13 @@ function tabHref(t: StudyMapTab): string {
 }
 
 .tab[aria-selected='true'] {
-	background: var(--ink-accent);
+	background: var(--link-default);
 	color: var(--surface-panel);
 }
 
 .empty {
 	color: var(--ink-muted);
-	font-size: var(--font-size-md);
+	font-size: var(--font-size-base);
 }
 
 .mobile-hint {

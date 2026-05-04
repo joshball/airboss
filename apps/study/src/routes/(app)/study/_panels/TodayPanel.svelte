@@ -43,11 +43,11 @@ const isNoGoal = $derived(briefing.kind === 'no-goal');
 
 .hd {
 	margin: 0;
-	font-size: var(--font-size-md);
+	font-size: var(--font-size-base);
 	color: var(--ink-muted);
 	font-weight: var(--font-weight-regular);
 	text-transform: uppercase;
-	letter-spacing: 0.05em;
+	letter-spacing: var(--letter-spacing-wide);
 }
 
 .headline {
@@ -59,13 +59,13 @@ const isNoGoal = $derived(briefing.kind === 'no-goal');
 
 .body {
 	margin: 0;
-	font-size: var(--font-size-md);
+	font-size: var(--font-size-base);
 	color: var(--ink-body);
 	max-width: 70ch;
 }
 
 .cta a {
-	color: var(--ink-accent);
+	color: var(--link-default);
 	text-decoration: underline;
 }
 </style>

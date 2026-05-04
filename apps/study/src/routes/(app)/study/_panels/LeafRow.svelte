@@ -100,7 +100,7 @@ const hasCitations = $derived((node.citations?.handbook.length ?? 0) + (node.cit
 .glyph {
 	width: 1ch;
 	font-family: var(--font-family-mono);
-	color: var(--ink-accent);
+	color: var(--link-default);
 }
 
 .code {

@@ -107,7 +107,7 @@ const dueCardsCount = $derived(Math.max(0, recallRequired - recallPassing));
 }
 
 .switch {
-	color: var(--ink-accent);
+	color: var(--link-default);
 	text-decoration: underline;
 	font-size: var(--font-size-sm);
 }

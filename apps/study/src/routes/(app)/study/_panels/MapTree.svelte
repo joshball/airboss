@@ -86,7 +86,7 @@ details > summary {
 	gap: var(--space-sm);
 	cursor: pointer;
 	padding: var(--space-2xs) 0;
-	font-size: var(--font-size-md);
+	font-size: var(--font-size-base);
 	list-style: none;
 }
 
@@ -124,7 +124,7 @@ details[open] > summary::before {
 .dotbar {
 	font-family: var(--font-family-mono);
 	letter-spacing: -1px;
-	color: var(--ink-accent);
+	color: var(--link-default);
 	font-size: var(--font-size-sm);
 }
 

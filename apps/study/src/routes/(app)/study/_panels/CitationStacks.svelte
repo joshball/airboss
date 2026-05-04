@@ -129,7 +129,7 @@ async function setOrder(next: CitationOrder, event: MouseEvent | KeyboardEvent):
 	color: var(--ink-muted);
 	font-weight: var(--font-weight-medium);
 	text-transform: uppercase;
-	letter-spacing: 0.05em;
+	letter-spacing: var(--letter-spacing-wide);
 }
 
 .chips {
@@ -142,7 +142,7 @@ async function setOrder(next: CitationOrder, event: MouseEvent | KeyboardEvent):
 }
 
 .chip {
-	color: var(--ink-accent);
+	color: var(--link-default);
 	text-decoration: underline;
 	font-size: var(--font-size-sm);
 }
@@ -172,9 +172,9 @@ async function setOrder(next: CitationOrder, event: MouseEvent | KeyboardEvent):
 }
 
 .toggle button.active {
-	background: var(--ink-accent);
+	background: var(--link-default);
 	color: var(--surface-panel);
-	border-color: var(--ink-accent);
+	border-color: var(--link-default);
 }
 
 @media (max-width: 700px) {

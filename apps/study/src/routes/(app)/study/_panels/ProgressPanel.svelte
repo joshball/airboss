@@ -86,11 +86,11 @@ function pct(num: number, den: number): number {
 
 .hd {
 	margin: 0;
-	font-size: var(--font-size-md);
+	font-size: var(--font-size-base);
 	color: var(--ink-muted);
 	font-weight: var(--font-weight-regular);
 	text-transform: uppercase;
-	letter-spacing: 0.05em;
+	letter-spacing: var(--letter-spacing-wide);
 }
 
 .pills {
@@ -119,10 +119,10 @@ function pct(num: number, den: number): number {
 	background: var(--surface-sunken);
 }
 .bar::-webkit-progress-value {
-	background: var(--ink-accent);
+	background: var(--link-default);
 }
 .bar::-moz-progress-bar {
-	background: var(--ink-accent);
+	background: var(--link-default);
 }
 
 .row {
@@ -138,7 +138,7 @@ function pct(num: number, den: number): number {
 }
 
 .lab {
-	font-size: var(--font-size-md);
+	font-size: var(--font-size-base);
 	color: var(--ink-body);
 }
 

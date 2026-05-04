@@ -94,7 +94,7 @@ const repsBadge = $derived(`${repBacklog.unattempted} ready`);
 }
 
 .tile-label {
-	font-size: var(--font-size-md);
+	font-size: var(--font-size-base);
 	font-weight: var(--font-weight-medium);
 }
 
