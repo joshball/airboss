@@ -45,7 +45,4 @@ training, and develops these skills by flying training-type airplanes with preci
 more complex and higher performance airplanes. Also note that the goal of flight training is a safe and competent pilot; passing
 required practical tests for pilot certification is only incidental to this goal.
 
-![Figure 1-3. Title 14 CFR, Chapter 1, Aeronautics and Space and subchapters. 
-⦁ 14 CFR part 21 prescribes procedural requirements for issuing airworthiness certificates and 
-airworthiness approvals for aircraft and aircraft parts. A standard airworthiness certificate, FAA Form 
-8100-2 [Figure 1-4], is required to be dis](/handbooks/afh/FAA-H-8083-3C/figures/fig-1-00-title-14-cfr-chapter-1-aeronautics-and-space-and.png)
+![Figure 1-2. Good airmanship skills include sound knowledge of the principles of flight and the ability to operate an airplane with  competence and precision.](/handbooks/afh/FAA-H-8083-3C/figures/fig-1-00-good-airmanship-skills-include-sound-knowledge-o.png)

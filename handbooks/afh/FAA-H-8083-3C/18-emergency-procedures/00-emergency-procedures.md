@@ -1820,6 +1820,4 @@ Forced landing
 Precautionary landing
 18-1, 18-8
 
-![Figure 18-5. Turning back to the runway after engine failure. 
-A turn back to the departure runway may require more than a 180° change in direction. There could also be cases where turning back 
-results in overshooting the runway, and the pilot needs to sense the aiming point within seconds after completing a turn back](/handbooks/afh/FAA-H-8083-3C/figures/fig-18-00-turning-back-to-the-runway-after-engine-failure-.png)
+![Figure 18-5. Turning back to the runway after engine failure.](/handbooks/afh/FAA-H-8083-3C/figures/fig-18-00-turning-back-to-the-runway-after-engine-failure.png)

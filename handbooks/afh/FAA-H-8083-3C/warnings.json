@@ -1,0 +1,1929 @@
+{
+  "schema_version": 1,
+  "document_slug": "afh",
+  "edition": "FAA-H-8083-3C",
+  "manifest_sha256": "44e4085eaacbdde103d42ee585eb92565cd90acf8d588c21e74b7d6156a3dba3",
+  "generated_at": "2026-05-04T20:30:37.853153+00:00",
+  "warnings": [
+    {
+      "id": "26e8861afc4abc6b",
+      "code": "caption-without-figure",
+      "section_code": "1",
+      "message": "Caption `Figure 1-4. FAA Form 8100-2, Standard Airworthiness Certificate.` on page 25 had no paired image."
+    },
+    {
+      "id": "2b2089a704544b57",
+      "code": "caption-without-figure",
+      "section_code": "1",
+      "message": "Caption `Figure 1-3. Title 14 CFR, Chapter 1, Aeronautics and Space and subchapters.` on page 24 had no paired image."
+    },
+    {
+      "id": "3040610616ef6d6e",
+      "code": "caption-without-figure",
+      "section_code": "1",
+      "message": "Caption `Figure 1-9. Airman Certification Standards (ACS) developed by FAA` on page 30 had no paired image."
+    },
+    {
+      "id": "57d42c54a691b1ef",
+      "code": "caption-without-figure",
+      "section_code": "1",
+      "message": "Caption `Figure 1-7. Sample lesson plan for stall training and recovery procedures.` on page 28 had no paired image."
+    },
+    {
+      "id": "69847f9ea87a9ad5",
+      "code": "caption-without-figure",
+      "section_code": "1",
+      "message": "Caption `Figure 1-5. Example of some of the required standard or supplemental and optiona` on page 26 had no paired image."
+    },
+    {
+      "id": "7924c7b700935099",
+      "code": "caption-without-figure",
+      "section_code": "1",
+      "message": "Caption `Figure 1-10. Most midair collision accidents occur in good weather.` on page 31 had no paired image."
+    },
+    {
+      "id": "7aff2319b2872575",
+      "code": "caption-without-figure",
+      "section_code": "1",
+      "message": "Caption `Figure 1-8. FAA Form 8000-4, Air Agency Certificate.` on page 29 had no paired image."
+    },
+    {
+      "id": "7dd93b6a3018e776",
+      "code": "caption-without-figure",
+      "section_code": "1",
+      "message": "Caption `Figure 1-14. All student pilots receive and log flight training in stalls and st` on page 34 had no paired image."
+    },
+    {
+      "id": "ba4ddd749c3e263c",
+      "code": "caption-without-figure",
+      "section_code": "1",
+      "message": "Caption `Figure 1-12. Three major areas contributing to runway incursions are communicati` on page 33 had no paired image."
+    },
+    {
+      "id": "bcd57d81cfd31f51",
+      "code": "caption-without-figure",
+      "section_code": "1",
+      "message": "Caption `Figure 1-1. Primary and intermediate flight training teaches basic airmanship sk` on page 22 had no paired image."
+    },
+    {
+      "id": "bf9893b4e00be699",
+      "code": "caption-without-figure",
+      "section_code": "1",
+      "message": "Caption `Figure 1-13. Sedona Airport is one of the many airports that operate without a c` on page 34 had no paired image."
+    },
+    {
+      "id": "c3fd720fff1db341",
+      "code": "caption-without-figure",
+      "section_code": "1",
+      "message": "Caption `Figure 1-17. A sample checklist used by pilots.` on page 37 had no paired image."
+    },
+    {
+      "id": "d2918c8546693822",
+      "code": "caption-without-figure",
+      "section_code": "1",
+      "message": "Caption `Figure 1-6. The flight instructor is responsible for teaching and training.` on page 27 had no paired image."
+    },
+    {
+      "id": "d454ddf8c09ec9df",
+      "code": "caption-without-figure",
+      "section_code": "1",
+      "message": "Caption `Figure 1-16. Checklists have been the foundation of pilot standardization and fl` on page 36 had no paired image."
+    },
+    {
+      "id": "d5b4b75498bdd475",
+      "code": "caption-without-figure",
+      "section_code": "1",
+      "message": "Caption `Figure 1-11. Proper scanning techniques can mitigate midair collisions. Pilots s` on page 32 had no paired image."
+    },
+    {
+      "id": "fdc18eb9bfacd1c2",
+      "code": "caption-without-figure",
+      "section_code": "1",
+      "message": "Caption `Figure 1-15. Stalls occur when the airfoil's angle of attack reaches the critica` on page 35 had no paired image."
+    },
+    {
+      "id": "afd0a97511942be1",
+      "code": "caption-without-figure",
+      "section_code": "10",
+      "message": "Caption `Figure 10-1. Steep turns.` on page 210 had no paired image."
+    },
+    {
+      "id": "b889a34840ba55d9",
+      "code": "caption-without-figure",
+      "section_code": "10",
+      "message": "Caption `Figure 10-4. Lazy eight.` on page 215 had no paired image."
+    },
+    {
+      "id": "d0a82b125058c592",
+      "code": "caption-without-figure",
+      "section_code": "10",
+      "message": "Caption `Figure 10-2. Steep spiral.` on page 212 had no paired image."
+    },
+    {
+      "id": "95c9478a41accb22",
+      "code": "caption-without-figure",
+      "section_code": "11",
+      "message": "Caption `Figure 11-6. Use light patterns for orientation.` on page 227 had no paired image."
+    },
+    {
+      "id": "adf5107945cf88bb",
+      "code": "caption-without-figure",
+      "section_code": "11",
+      "message": "Caption `Figure 11-7. VASI.` on page 228 had no paired image."
+    },
+    {
+      "id": "bd97f58612fbcc17",
+      "code": "caption-without-figure",
+      "section_code": "11",
+      "message": "Caption `Figure 11-8. Round out when tire marks are visible.` on page 229 had no paired image."
+    },
+    {
+      "id": "d4b9cf66f399cb07",
+      "code": "caption-without-figure",
+      "section_code": "11",
+      "message": "Caption `Figure 11-5. Establish a positive climb.` on page 226 had no paired image."
+    },
+    {
+      "id": "eb8e0041c81e99a3",
+      "code": "caption-without-figure",
+      "section_code": "11",
+      "message": "Caption `Figure 11-4. Position lights.` on page 223 had no paired image."
+    },
+    {
+      "id": "0456a756b7de5004",
+      "code": "caption-without-figure",
+      "section_code": "12",
+      "message": "Caption `Figure 12-11. Landing gear handles and single and multiple light indictor.` on page 244 had no paired image."
+    },
+    {
+      "id": "07562e08339b7257",
+      "code": "caption-without-figure",
+      "section_code": "12",
+      "message": "Caption `Figure 12-10. Typical landing gear switch with combination amber and green. Anot` on page 244 had no paired image."
+    },
+    {
+      "id": "0bc054c07bb8c0a6",
+      "code": "caption-without-figure",
+      "section_code": "12",
+      "message": "Caption `Figure 12-2. Coefficient of lift comparison for flap extended and retracted posi` on page 233 had no paired image."
+    },
+    {
+      "id": "0de444f2dd8c3bf3",
+      "code": "caption-without-figure",
+      "section_code": "12",
+      "message": "Caption `Figure 12-5. Flaps extended pitching moment.` on page 236 had no paired image."
+    },
+    {
+      "id": "100112d169cae556",
+      "code": "caption-without-figure",
+      "section_code": "12",
+      "message": "Caption `Figure 12-12. Landing gear safety switch.` on page 245 had no paired image."
+    },
+    {
+      "id": "193faa84a712e1cb",
+      "code": "caption-without-figure",
+      "section_code": "12",
+      "message": "Caption `Figure 12-7. Propeller blade angle.` on page 238 had no paired image."
+    },
+    {
+      "id": "1ab72ed963805cc5",
+      "code": "caption-without-figure",
+      "section_code": "12",
+      "message": "Caption `Figure 12-14. Retractable landing gear inspection checkpoints.` on page 246 had no paired image."
+    },
+    {
+      "id": "3df2ddb73f4f692b",
+      "code": "caption-without-figure",
+      "section_code": "12",
+      "message": "Caption `Figure 12-8. Blade angle range (values are approximate).` on page 239 had no paired image."
+    },
+    {
+      "id": "3f31a802f82c8034",
+      "code": "caption-without-figure",
+      "section_code": "12",
+      "message": "Caption `Figure 12-16. Sample transition training syllabus.` on page 249 had no paired image."
+    },
+    {
+      "id": "56a3aa520ddd9e3d",
+      "code": "caption-without-figure",
+      "section_code": "12",
+      "message": "Caption `Figure 12-1. Airfoil types.` on page 232 had no paired image."
+    },
+    {
+      "id": "5a21e6515d657187",
+      "code": "caption-without-figure",
+      "section_code": "12",
+      "message": "Caption `Figure 12-4. Four basic types of flaps.` on page 234 had no paired image."
+    },
+    {
+      "id": "80b6f4b565f04a1c",
+      "code": "caption-without-figure",
+      "section_code": "12",
+      "message": "Caption `Figure 12-15. Placarded gear speeds in the flight deck.` on page 247 had no paired image."
+    },
+    {
+      "id": "81a54ca60a7aa654",
+      "code": "caption-without-figure",
+      "section_code": "12",
+      "message": "Caption `Figure 12-3. Lift equation.` on page 233 had no paired image."
+    },
+    {
+      "id": "856ca64a9359bea4",
+      "code": "caption-without-figure",
+      "section_code": "12",
+      "message": "Caption `Figure 12-9. Turbocharging system.` on page 240 had no paired image."
+    },
+    {
+      "id": "9929d9df20031548",
+      "code": "caption-without-figure",
+      "section_code": "12",
+      "message": "Caption `Figure 12-6. Controllable-pitch propeller pitch angles.` on page 237 had no paired image."
+    },
+    {
+      "id": "b91528239e554aca",
+      "code": "caption-without-figure",
+      "section_code": "12",
+      "message": "Caption `Figure 12-13. Typical emergency gear extension systems.  Figure 12-14. Retractab` on page 246 had no paired image."
+    },
+    {
+      "id": "11448da093fe6d09",
+      "code": "caption-without-figure",
+      "section_code": "13",
+      "message": "Caption `Figure 13-7. Takeoff and climb profile.` on page 265 had no paired image."
+    },
+    {
+      "id": "1c51cb8c0b11e644",
+      "code": "caption-without-figure",
+      "section_code": "13",
+      "message": "Caption `Figure 13-10. Normal two-engine approach and landing.` on page 270 had no paired image."
+    },
+    {
+      "id": "207cd45b8193142f",
+      "code": "caption-without-figure",
+      "section_code": "13",
+      "message": "Caption `Figure 13-21. Typical “engine failure after takeoff” emergency checklist.` on page 281 had no paired image."
+    },
+    {
+      "id": "22a74f0d12bb1669",
+      "code": "caption-without-figure",
+      "section_code": "13",
+      "message": "Caption `Figure 13-8. Short-field takeoff and climb` on page 266 had no paired image."
+    },
+    {
+      "id": "360d148460894d33",
+      "code": "caption-without-figure",
+      "section_code": "13",
+      "message": "Caption `Figure 13-22. Typical “securing failed engine” emergency checklist.` on page 282 had no paired image."
+    },
+    {
+      "id": "363142f03a4239fc",
+      "code": "caption-without-figure",
+      "section_code": "13",
+      "message": "Caption `Figure 13-12. Forces created during single-engine operation.` on page 273 had no paired image."
+    },
+    {
+      "id": "50298fceaa5e7fbf",
+      "code": "caption-without-figure",
+      "section_code": "13",
+      "message": "Caption `Figure 13-9. Stall recovery procedure.` on page 268 had no paired image."
+    },
+    {
+      "id": "58e990dd864a81e8",
+      "code": "caption-without-figure",
+      "section_code": "13",
+      "message": "Caption `Figure 13-20. Landing gear up—adequate climb performance.` on page 280 had no paired image."
+    },
+    {
+      "id": "6167fd9fe12bd80c",
+      "code": "caption-without-figure",
+      "section_code": "13",
+      "message": "Caption `angle of attack (AOA). For reference, the stall recovery procedure described in ` on page 268 had no paired image."
+    },
+    {
+      "id": "6b35fab055fb088c",
+      "code": "caption-without-figure",
+      "section_code": "13",
+      "message": "Caption `Figure 13-11. Go-around procedure.` on page 271 had no paired image."
+    },
+    {
+      "id": "c954f84951d2cbb3",
+      "code": "caption-without-figure",
+      "section_code": "13",
+      "message": "Caption `Figure 13-19. Engine failure on takeoff, inadequate climb performance.` on page 279 had no paired image."
+    },
+    {
+      "id": "cb450978970bfc55",
+      "code": "caption-without-figure",
+      "section_code": "13",
+      "message": "Caption `Figure 13-2. Feathered propeller.` on page 253 had no paired image."
+    },
+    {
+      "id": "d63c5571e2cf52da",
+      "code": "caption-without-figure",
+      "section_code": "13",
+      "message": "Caption `Figure 13-3. Propeller drag contribution.` on page 254 had no paired image."
+    },
+    {
+      "id": "e056e180a387dfe8",
+      "code": "caption-without-figure",
+      "section_code": "13",
+      "message": "Caption `Figure 13-4. Pitch change forces.` on page 255 had no paired image."
+    },
+    {
+      "id": "ecf9bd79a090b214",
+      "code": "caption-without-figure",
+      "section_code": "13",
+      "message": "Caption `Figure 13-13. Effect of CG location on yaw.` on page 274 had no paired image."
+    },
+    {
+      "id": "ff8c53f9afe7d54d",
+      "code": "caption-without-figure",
+      "section_code": "13",
+      "message": "Caption `Figure 13-1. Airspeed indicator markings for a multiengine airplane` on page 251 had no paired image."
+    },
+    {
+      "id": "175c6316b5c1514a",
+      "code": "caption-without-figure",
+      "section_code": "14",
+      "message": "Caption `Figure 14-3. Wheel landing.` on page 292 had no paired image."
+    },
+    {
+      "id": "ac7a49530f8fec5f",
+      "code": "caption-without-figure",
+      "section_code": "14",
+      "message": "Caption `Figure 14-5. Weathervaning tendency.` on page 294 had no paired image."
+    },
+    {
+      "id": "d4eec6017f18547b",
+      "code": "caption-without-figure",
+      "section_code": "14",
+      "message": "Caption `Figure 14-4. Effect of CG on directional control.` on page 293 had no paired image."
+    },
+    {
+      "id": "fa9595be8c103407",
+      "code": "caption-without-figure",
+      "section_code": "14",
+      "message": "Caption `Figure 14-1. The Piper Super Cub on the left is a popular tailwheel airplane. Th` on page 287 had no paired image."
+    },
+    {
+      "id": "fb2018b2a5c58aac",
+      "code": "caption-without-figure",
+      "section_code": "14",
+      "message": "Caption `Figure 14-2. Tailwheel touchdown.` on page 291 had no paired image."
+    },
+    {
+      "id": "1c96c546665091ed",
+      "code": "caption-without-figure",
+      "section_code": "15",
+      "message": "Caption `Figure 15-3. Powerplant controls—fixed-shaft turboprop engine.` on page 298 had no paired image."
+    },
+    {
+      "id": "329d2cc2acb42de6",
+      "code": "caption-without-figure",
+      "section_code": "15",
+      "message": "Caption `Figure 15-4. Powerplant instrumentation—fixed-shaft turboprop engine.` on page 298 had no paired image."
+    },
+    {
+      "id": "43edb5dac07acedf",
+      "code": "caption-without-figure",
+      "section_code": "15",
+      "message": "Caption `Figure 15-11. Example of a typical turboprop airplane takeoff and departure prof` on page 306 had no paired image."
+    },
+    {
+      "id": "5faa057819090c4c",
+      "code": "caption-without-figure",
+      "section_code": "15",
+      "message": "Caption `Figure 15-6. Powerplant controls—split-shaft/free turbine engine.` on page 300 had no paired image."
+    },
+    {
+      "id": "768fcf7f307ea50a",
+      "code": "caption-without-figure",
+      "section_code": "15",
+      "message": "Caption `Figure 15-12. Example of a typical turboprop airplane arrival and landing profil` on page 307 had no paired image."
+    },
+    {
+      "id": "7c6db24f2bdf713b",
+      "code": "caption-without-figure",
+      "section_code": "15",
+      "message": "Caption `Figure 15-10. Simplified schematic of turboprop airplane electrical system.` on page 305 had no paired image."
+    },
+    {
+      "id": "9f214616501494e0",
+      "code": "caption-without-figure",
+      "section_code": "15",
+      "message": "Caption `Figure 15-1. Basic components of a gas turbine engine.` on page 295 had no paired image."
+    },
+    {
+      "id": "c6d808e05fd475bc",
+      "code": "caption-without-figure",
+      "section_code": "15",
+      "message": "Caption `Figure 15-5. Split shaft/free turbine engine.` on page 299 had no paired image."
+    },
+    {
+      "id": "08d0288b7337a2ef",
+      "code": "caption-without-figure",
+      "section_code": "16",
+      "message": "Caption `Figure 16-16. FAR landing field length required.` on page 328 had no paired image."
+    },
+    {
+      "id": "0b1892672ea52a5b",
+      "code": "caption-without-figure",
+      "section_code": "16",
+      "message": "Caption `Figure 16-4. Typical jet engine acceleration times.` on page 312 had no paired image."
+    },
+    {
+      "id": "24753478e158dc25",
+      "code": "caption-without-figure",
+      "section_code": "16",
+      "message": "Caption `Figure 16-12. Sample captain’s briefing.` on page 322 had no paired image."
+    },
+    {
+      "id": "2f55869a516220dc",
+      "code": "caption-without-figure",
+      "section_code": "16",
+      "message": "Caption `Figure 16-1. Basic turbojet engine.` on page 310 had no paired image."
+    },
+    {
+      "id": "3eb2eddbb8439071",
+      "code": "caption-without-figure",
+      "section_code": "16",
+      "message": "Caption `Figure 16-17. Typical approach and landing profile.` on page 329 had no paired image."
+    },
+    {
+      "id": "75106cdfbb5fda62",
+      "code": "caption-without-figure",
+      "section_code": "16",
+      "message": "Caption `Figure 16-18. Stabilized approach.` on page 331 had no paired image."
+    },
+    {
+      "id": "7ae607a381e349fb",
+      "code": "caption-without-figure",
+      "section_code": "16",
+      "message": "Caption `Figure 16-10. Spoilers.` on page 318 had no paired image."
+    },
+    {
+      "id": "7cc0ffacfbc132d3",
+      "code": "caption-without-figure",
+      "section_code": "16",
+      "message": "Caption `Figure 16-13. Sample takeoff and departure profile.` on page 323 had no paired image."
+    },
+    {
+      "id": "7cc9eb6b770cf53b",
+      "code": "caption-without-figure",
+      "section_code": "16",
+      "message": "Caption `Figure 16-2. Turbofan engine.` on page 311 had no paired image."
+    },
+    {
+      "id": "9a380c7dd7a9f651",
+      "code": "caption-without-figure",
+      "section_code": "16",
+      "message": "Caption `Figure 16-3. Variation of thrust with rpm.` on page 312 had no paired image."
+    },
+    {
+      "id": "9a88f6d5bfd2558f",
+      "code": "caption-without-figure",
+      "section_code": "16",
+      "message": "Caption `Figure 16-5. Jet airspeed indicator.` on page 314 had no paired image."
+    },
+    {
+      "id": "9f22776622c3c27d",
+      "code": "caption-without-figure",
+      "section_code": "16",
+      "message": "Caption `Figure 16-9. Unmodified swept wing stall characteristics.` on page 317 had no paired image."
+    },
+    {
+      "id": "abe169dc789f70aa",
+      "code": "caption-without-figure",
+      "section_code": "16",
+      "message": "Caption `Figure 16-19. Extended flare.` on page 332 had no paired image."
+    },
+    {
+      "id": "c16b626e3baf143c",
+      "code": "caption-without-figure",
+      "section_code": "16",
+      "message": "Caption `Figure 16-8. Stall versus angle of attack—swept wing versus straight wing.` on page 316 had no paired image."
+    },
+    {
+      "id": "f4c074af86f23421",
+      "code": "caption-without-figure",
+      "section_code": "16",
+      "message": "Caption `Figure 16-11. Thrust reversers.` on page 319 had no paired image."
+    },
+    {
+      "id": "f587acc02f04bf74",
+      "code": "caption-without-figure",
+      "section_code": "16",
+      "message": "Caption `Figure 16-6. Transonic flow patterns.` on page 314 had no paired image."
+    },
+    {
+      "id": "04ce9c0be25dc5b6",
+      "code": "caption-without-figure",
+      "section_code": "17",
+      "message": "Caption `Figure 17-2. Light-sport airplane.` on page 336 had no paired image."
+    },
+    {
+      "id": "1aa09973eb6b3d0e",
+      "code": "caption-without-figure",
+      "section_code": "17",
+      "message": "Caption `Figure 17-7. Moderate mountain winds can create severe turbulence for LSA.` on page 342 had no paired image."
+    },
+    {
+      "id": "1dd74650b678b586",
+      "code": "caption-without-figure",
+      "section_code": "17",
+      "message": "Caption `Figure 17-12. Trim control.` on page 344 had no paired image."
+    },
+    {
+      "id": "1df6789f17517ac1",
+      "code": "caption-without-figure",
+      "section_code": "17",
+      "message": "Caption `Figure 17-11. Stoke flight control with conventional engine controls.` on page 344 had no paired image."
+    },
+    {
+      "id": "3982bef035aa1343",
+      "code": "caption-without-figure",
+      "section_code": "17",
+      "message": "Caption `Figure 17-6. Crosswind landing.` on page 341 had no paired image."
+    },
+    {
+      "id": "403c713ebe754297",
+      "code": "caption-without-figure",
+      "section_code": "17",
+      "message": "Caption `Figure 17-13. A ballistic recovery parachute is a popular safety feature availab` on page 345 had no paired image."
+    },
+    {
+      "id": "40a3b658f1acdbd3",
+      "code": "caption-without-figure",
+      "section_code": "17",
+      "message": "Caption `Figure 17-10. Adjustment lever for the rudder pedal position.` on page 343 had no paired image."
+    },
+    {
+      "id": "4a9d00dc25e2de13",
+      "code": "caption-without-figure",
+      "section_code": "17",
+      "message": "Caption `Figure 17-5. An electronic flight instrumentation system provides attitude, airs` on page 341 had no paired image."
+    },
+    {
+      "id": "759a82587ed49705",
+      "code": "caption-without-figure",
+      "section_code": "17",
+      "message": "Caption `Figure 17-3. LSA can be constructed using both metal and composites.` on page 340 had no paired image."
+    },
+    {
+      "id": "761ddde4942012cf",
+      "code": "caption-without-figure",
+      "section_code": "17",
+      "message": "Caption `Figure 17-4. A water-cooled 4-cycle engine.` on page 340 had no paired image."
+    },
+    {
+      "id": "c0bf104a5679adf6",
+      "code": "caption-without-figure",
+      "section_code": "17",
+      "message": "Caption `Figure 17-16. Example of a POH Emergency Procedures section.` on page 348 had no paired image."
+    },
+    {
+      "id": "c85cd9550e476c47",
+      "code": "caption-without-figure",
+      "section_code": "17",
+      "message": "Caption `Figure 17-14. Split flap.` on page 346 had no paired image."
+    },
+    {
+      "id": "c9e710a320b80598",
+      "code": "caption-without-figure",
+      "section_code": "17",
+      "message": "Caption `Figure 17-9. Pilot’s Operating Handbook for a LSA.` on page 343 had no paired image."
+    },
+    {
+      "id": "d971f9e7e4b71f0d",
+      "code": "caption-without-figure",
+      "section_code": "17",
+      "message": "Caption `Figure 17-8. Example of wind limitations that an LSA may have.` on page 342 had no paired image."
+    },
+    {
+      "id": "e3d702ff89d01f69",
+      "code": "caption-without-figure",
+      "section_code": "17",
+      "message": "Caption `Figure 17-15. EFIS indication of level cruise flight.` on page 347 had no paired image."
+    },
+    {
+      "id": "e5be3e38f587debc",
+      "code": "caption-without-figure",
+      "section_code": "17",
+      "message": "Caption `Figure 17-1. The LSA category covers a wide variety of aircraft including: A) ai` on page 335 had no paired image."
+    },
+    {
+      "id": "0c6c2cc0c44b85c7",
+      "code": "caption-without-figure",
+      "section_code": "18",
+      "message": "Caption `Figure 18-11. Commonly experienced in-flight abnormal engine instrument indicati` on page 365 had no paired image."
+    },
+    {
+      "id": "12afe314a825fedb",
+      "code": "caption-without-figure",
+      "section_code": "18",
+      "message": "Caption `Figure 18-15. Level descent.` on page 370 had no paired image."
+    },
+    {
+      "id": "465fbc0a21f92b8e",
+      "code": "caption-without-figure",
+      "section_code": "18",
+      "message": "Caption `Figure 18-2. Stopping distance vs. groundspeed.` on page 352 had no paired image."
+    },
+    {
+      "id": "5b84372a0ed0791d",
+      "code": "caption-without-figure",
+      "section_code": "18",
+      "message": "Caption `Figure 18-14. Level climb.` on page 369 had no paired image."
+    },
+    {
+      "id": "62bafb119d58ebe3",
+      "code": "caption-without-figure",
+      "section_code": "18",
+      "message": "Caption `Figure 18-4. Tree landing.` on page 355 had no paired image."
+    },
+    {
+      "id": "6d16e0b65cd36145",
+      "code": "caption-without-figure",
+      "section_code": "18",
+      "message": "Caption `Figure 18-9. Electrical load for light single.` on page 363 had no paired image."
+    },
+    {
+      "id": "77d1ba0938ee7288",
+      "code": "caption-without-figure",
+      "section_code": "18",
+      "message": "Caption `Figure 18-13. Level turn.` on page 368 had no paired image."
+    },
+    {
+      "id": "794c75682cbb9343",
+      "code": "caption-without-figure",
+      "section_code": "18",
+      "message": "Caption `Figure 18-12. Attitude indicator.` on page 368 had no paired image."
+    },
+    {
+      "id": "7ad0c6b1960784dc",
+      "code": "caption-without-figure",
+      "section_code": "18",
+      "message": "Caption `Figure 18-10. Effects of blocked pitot-static sources.` on page 364 had no paired image."
+    },
+    {
+      "id": "8f09e3470e4c303d",
+      "code": "caption-without-figure",
+      "section_code": "18",
+      "message": "Caption `Figure 18-1. Using vegetation to absorb energy.` on page 351 had no paired image."
+    },
+    {
+      "id": "974c9f5343af377c",
+      "code": "caption-without-figure",
+      "section_code": "18",
+      "message": "Caption `Figure 18-3. Intentional gear-up landing.` on page 354 had no paired image."
+    },
+    {
+      "id": "da17aa103226c635",
+      "code": "caption-without-figure",
+      "section_code": "18",
+      "message": "Caption `Figure 18-7. Landing with one main gear retracted.` on page 361 had no paired image."
+    },
+    {
+      "id": "f7e2776c9962bb24",
+      "code": "caption-without-figure",
+      "section_code": "18",
+      "message": "Caption `Figure 18-8. Landing with nose-wheel retracted.` on page 362 had no paired image."
+    },
+    {
+      "id": "fc468358139de713",
+      "code": "caption-without-figure",
+      "section_code": "18",
+      "message": "Caption `Figure 18-6. Emergency descent.` on page 358 had no paired image."
+    },
+    {
+      "id": "29c6418cc5210c84",
+      "code": "caption-without-figure",
+      "section_code": "2",
+      "message": "Caption `Figure 2-10. An AVGAS fuel filler nozzle is straight with a constant diameter.` on page 45 had no paired image."
+    },
+    {
+      "id": "2b8f875cdef2fd1d",
+      "code": "caption-without-figure",
+      "section_code": "2",
+      "message": "Caption `Figure 2-4. A sample airworthiness checklist used by pilots to inspect an aircra` on page 40 had no paired image."
+    },
+    {
+      "id": "4415c5be0aea465c",
+      "code": "caption-without-figure",
+      "section_code": "2",
+      "message": "Caption `Figure 2-2. A visual inspection of the aircraft before flight is an important st` on page 39 had no paired image."
+    },
+    {
+      "id": "56bc778b522228d1",
+      "code": "caption-without-figure",
+      "section_code": "2",
+      "message": "Caption `Figure 2-5. Seats should be inspected to ensure that they are properly latched i` on page 41 had no paired image."
+    },
+    {
+      "id": "5fcc50be13e1b92b",
+      "code": "caption-without-figure",
+      "section_code": "2",
+      "message": "Caption `Figure 2-15. Control positions of the nosewheel airplane.` on page 57 had no paired image."
+    },
+    {
+      "id": "6fab9eead8d2525b",
+      "code": "caption-without-figure",
+      "section_code": "2",
+      "message": "Caption `Figure 2-9. An aircraft piston showing damage that occurred in just minutes as a` on page 45 had no paired image."
+    },
+    {
+      "id": "76a3f135d7742553",
+      "code": "caption-without-figure",
+      "section_code": "2",
+      "message": "Caption `Figure 2-14. Airport Diagram of Monterey Peninsula (MRY), Monterey, California.` on page 55 had no paired image."
+    },
+    {
+      "id": "805e88d397acbe9f",
+      "code": "caption-without-figure",
+      "section_code": "2",
+      "message": "Caption `Figure 2-12. Evidence of fuel leakage can be found along rivet lines.` on page 46 had no paired image."
+    },
+    {
+      "id": "9c58a12bcabff113",
+      "code": "caption-without-figure",
+      "section_code": "2",
+      "message": "Caption `Figure 2-6. Ground-based inspections include verification that “Xs” on the instr` on page 43 had no paired image."
+    },
+    {
+      "id": "c468d219d420afcf",
+      "code": "caption-without-figure",
+      "section_code": "2",
+      "message": "Caption `Figure 2-3. Airplane Flight Manuals (AFM) and the Pilot Operating Handbook (POH)` on page 39 had no paired image."
+    },
+    {
+      "id": "ce9580213c3a72de",
+      "code": "caption-without-figure",
+      "section_code": "2",
+      "message": "Caption `Figure 2-1. Pilots should view the aircraft’s maintenance logbook prior to fligh` on page 38 had no paired image."
+    },
+    {
+      "id": "e210766e9d2abe31",
+      "code": "caption-without-figure",
+      "section_code": "2",
+      "message": "Caption `Figure 2-7. Example of rivet heads where black oxide film has formed due to the ` on page 43 had no paired image."
+    },
+    {
+      "id": "eabfff8cb477cd0f",
+      "code": "caption-without-figure",
+      "section_code": "2",
+      "message": "Caption `Figure 2-11. A jet fuel filler nozzle is flared at the end to prevent an inadver` on page 46 had no paired image."
+    },
+    {
+      "id": "f937749e0558963e",
+      "code": "caption-without-figure",
+      "section_code": "2",
+      "message": "Caption `Figure 2-13. Standard hand signals used to assist pilots in managing a safe depa` on page 52 had no paired image."
+    },
+    {
+      "id": "048b66b548d5f361",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 3-16. Visual reference for angle of bank.` on page 76 had no paired image."
+    },
+    {
+      "id": "3af81c2dfdf7efb3",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 3-15. Overbanking tendency.` on page 75 had no paired image."
+    },
+    {
+      "id": "3dab6a2bdff23d77",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 3-7. Wingtip reference for straight-and-level flight.` on page 68 had no paired image."
+    },
+    {
+      "id": "4d3d4c25a4bf0f4b",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 3-20. Absolute ceiling.` on page 79 had no paired image."
+    },
+    {
+      "id": "6dca107ba8ff271b",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 3-21. Climb indications.` on page 80 had no paired image."
+    },
+    {
+      "id": "72dd392c12da578a",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 3-18. Parallax view.` on page 77 had no paired image."
+    },
+    {
+      "id": "75c94474b0f18840",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 3-8. Nose reference for level flight.` on page 70 had no paired image."
+    },
+    {
+      "id": "76ecc8cbbfb4ca71",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 3-19. Best angle of climb verses best rate of climb.` on page 79 had no paired image."
+    },
+    {
+      "id": "7d88020b649f7705",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 3-13. Indications of a slip and skid.` on page 74 had no paired image."
+    },
+    {
+      "id": "83c780b86bb309f8",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 3-12. The rudder opposes adverse yaw to help coordinate the turn.` on page 74 had no paired image."
+    },
+    {
+      "id": "8846867e4b8aec1b",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 3-6. Nose reference for straight-and-level flight.` on page 68 had no paired image."
+    },
+    {
+      "id": "9553eb91adf0d07e",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 3-4. Airplane attitude is based on relative positions of the nose and win` on page 65 had no paired image."
+    },
+    {
+      "id": "96e7c6ef96671c15",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 3-3. (A) Pitch attitude is the angle formed between the airplane’s longit` on page 65 had no paired image."
+    },
+    {
+      "id": "98d881da4aef0736",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 3-5. Integrated flight instruction teaches pilots to use both external an` on page 66 had no paired image."
+    },
+    {
+      "id": "99d2da89672dd760",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 3-10. Level turn to the left.` on page 72 had no paired image."
+    },
+    {
+      "id": "be84485226e35bc7",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 3-17. Correct and incorrect posture while seated in the airplane.` on page 76 had no paired image."
+    },
+    {
+      "id": "bf9b8b450a7b59ab",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 3-23. L/DMAX.` on page 83 had no paired image."
+    },
+    {
+      "id": "c29a197e7b0156d4",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 3-22. Descent indications.` on page 82 had no paired image."
+    },
+    {
+      "id": "c2e706a774c50fad",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 3-2. The pilot is always considered the referenced center of effect as th` on page 63 had no paired image."
+    },
+    {
+      "id": "df2b36f85efdc409",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 3-24. Best glide speed provides the greatest forward distance` on page 83 had no paired image."
+    },
+    {
+      "id": "e7927665c01e761e",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 3-9. Elevator trim is used in airplanes to null the pressure exerted by t` on page 71 had no paired image."
+    },
+    {
+      "id": "e8a5b1a58b8dbd26",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 3-11. When the airplane is banked into a turn, total lift is the resultan` on page 73 had no paired image."
+    },
+    {
+      "id": "f69e786c5f06a8cf",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 3-14. Angle of bank and airspeed regulate rate and radius of turn.` on page 75 had no paired image."
+    },
+    {
+      "id": "ef50d12a232954af",
+      "code": "caption-without-figure",
+      "section_code": "4",
+      "message": "Caption `Figure 4-8. The energy-control map helping to visualize the basic energy control` on page 95 had no paired image."
+    },
+    {
+      "id": "12366fed9b49ef24",
+      "code": "caption-without-figure",
+      "section_code": "5",
+      "message": "Caption `Figure 5-13. Secondary stall.` on page 124 had no paired image."
+    },
+    {
+      "id": "3a28c7a2de4ec2d4",
+      "code": "caption-without-figure",
+      "section_code": "5",
+      "message": "Caption `Figure 5-17. Spin recovery template.` on page 129 had no paired image."
+    },
+    {
+      "id": "6a37dccf7224500b",
+      "code": "caption-without-figure",
+      "section_code": "5",
+      "message": "Caption `Figure 5-5. Coordinated flight in a turn.` on page 113 had no paired image."
+    },
+    {
+      "id": "b71c5d2fd4708786",
+      "code": "caption-without-figure",
+      "section_code": "5",
+      "message": "Caption `procedures and techniques, use the six-step spin recovery procedure in Figure 5-` on page 129 had no paired image."
+    },
+    {
+      "id": "dd267a3670053123",
+      "code": "caption-without-figure",
+      "section_code": "5",
+      "message": "Caption `Figure 5-18. Spiral dive recovery template.` on page 132 had no paired image."
+    },
+    {
+      "id": "3c00e60860bdc170",
+      "code": "caption-without-figure",
+      "section_code": "6",
+      "message": "Caption `Figure 6-9. Effect of premature lift-off.` on page 144 had no paired image."
+    },
+    {
+      "id": "4a4c6c68891b855c",
+      "code": "caption-without-figure",
+      "section_code": "6",
+      "message": "Caption `Figure 6-10. Soft-field takeoff.` on page 145 had no paired image."
+    },
+    {
+      "id": "0dfe8b67015479ed",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 7-5. Turns around a point.` on page 154 had no paired image."
+    },
+    {
+      "id": "1229657ba80ab43c",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 7-13. Effect of different altitudes on line of sight.` on page 162 had no paired image."
+    },
+    {
+      "id": "1d25f54bb508efa6",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 7-9. Eights around pylons.` on page 159 had no paired image."
+    },
+    {
+      "id": "1da84b3dc482b34b",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 7-10. Eights on pylons.` on page 160 had no paired image."
+    },
+    {
+      "id": "431dfe95125f60c0",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 7-12. Speed versus pivotal altitude.` on page 161 had no paired image."
+    },
+    {
+      "id": "6563a27fa3b25e66",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 7-3. Effect of wind during turn.` on page 150 had no paired image."
+    },
+    {
+      "id": "6f083ebe09ef8aa3",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 7-11. Line of sight.` on page 161 had no paired image."
+    },
+    {
+      "id": "7384eac11832b13a",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 7-8. Eights across a road.` on page 158 had no paired image."
+    },
+    {
+      "id": "78deb5f63f98a33f",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `The following description is illustrated in Figure 7-7. The airplane is initiall` on page 157 had no paired image."
+    },
+    {
+      "id": "7af90867779a90e3",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 7-4. Rectangular course.` on page 152 had no paired image."
+    },
+    {
+      "id": "8d5250a7f28f5f38",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 7-6. S-turns.` on page 155 had no paired image."
+    },
+    {
+      "id": "8ef6c00e3ca875cc",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 7-7. Eights along a road.` on page 157 had no paired image."
+    },
+    {
+      "id": "a02dbd6117428b79",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 7-2. Effect of wind during a turn.` on page 150 had no paired image."
+    },
+    {
+      "id": "a2376f6cc22df3b5",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 7-14. Bank angle versus pivotal altitude.` on page 163 had no paired image."
+    },
+    {
+      "id": "a296de37c25851ad",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `fence line, pipeline right-of-way, etc.) as illustrated in Figure 7-7. Like the ` on page 157 had no paired image."
+    },
+    {
+      "id": "c29a8c096d2e9324",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 7-1. Wind drift.` on page 149 had no paired image."
+    },
+    {
+      "id": "003544ea248cd671",
+      "code": "caption-without-figure",
+      "section_code": "8",
+      "message": "Caption `Figure 8-4. Location distribution of mid-air collisions in the airport traffic p` on page 170 had no paired image."
+    },
+    {
+      "id": "8d2fa202a5d52f9f",
+      "code": "caption-without-figure",
+      "section_code": "8",
+      "message": "Caption `Figure 8-2. Traffic pattern indicators.` on page 167 had no paired image."
+    },
+    {
+      "id": "a0d89661acc9c33c",
+      "code": "caption-without-figure",
+      "section_code": "8",
+      "message": "Caption `Figure 8-1. Traffic Patterns` on page 166 had no paired image."
+    },
+    {
+      "id": "cdbd994d71b5cb7a",
+      "code": "caption-without-figure",
+      "section_code": "8",
+      "message": "Caption `Figure 8-3. Preferred entry from upwind leg side of airport (A). Alternate midfi` on page 169 had no paired image."
+    },
+    {
+      "id": "79de9562988fdee8",
+      "code": "caption-without-figure",
+      "section_code": "9",
+      "message": "Caption `Figure 9-38. Start of a ground loop.` on page 207 had no paired image."
+    },
+    {
+      "id": "02671a0ef8fd62ea",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §12.1 'Introduction' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "0a53b36d1a58bfda",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.14 'Chapter Summary' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "0abc60183c3ef9b8",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.9.2 'Pitot-Static System' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "0cac429aee958fb0",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §7.1 'Introduction' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "0ce3fc38b4ce3e58",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §7.7.5 'Eights-on-Pylons' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "10b59365f92214ce",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.12.3 'Attitude Control' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "12aef8a5d8b99528",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §6.3.4 'Common Errors' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "13bcf8a2860622dc",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.8.3 'Loss of Elevator Control' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "14435fc49f5dc1b6",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.5 'Engine Failure After Takeoff (Single-Engine)' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "1884b72d1cd18ca1",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §8.1 'Introduction' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "189df18490ada7d0",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §5.2.21 'FSTD-Based UPRT' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "19b9809eeaf03b3e",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §6.7.3 'Initial Climb' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "1a2ab0b05561e967",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §15.8 'Chapter Summary' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "1b0f17dc3c6b8ba6",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §9.4.5 'Common Errors' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "1ba8172240801e62",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §14.20 'Chapter Summary' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "1c39a94b9a8d9284",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §11.10 'Takeoff and Climb' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "1c4af7c6044ee588",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §6.10 'Chapter Summary' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "1c6cd3bc3ff97358",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §3.6.3 'Common Errors' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "219dc45ef5489c67",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.3.5 'Approach' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "274f8d662667267d",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §13.19.5 'Configuration' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "2764505822e76615",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §6.7.4 'Common Errors' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "277777778198a381",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.3.2 'Attitude and Sink Rate Control' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "27af17d5e41f5795",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §7.7.6 'Common Errors' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "290eee3d66efc810",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.3.4 'Airplane Configuration' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "2b2a6c931582dd30",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.4.2 'Trees (Forest)' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "34299f2faca54cf8",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §10.4.1 'Common Errors' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "34e2f3da02160fc8",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.6 'Emergency Descents' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "377e1f5e3dccc7a4",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.12.5 'Climbs' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "384c837ae61c3fd7",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §17.2 'Light Sport Airplane (LSA) Background' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "38b4b992a706ce80",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §16.16.5 'Initial Climb' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "3ba14229b256ed3e",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §6.3.1 'Takeoff Roll' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "3dce78b0a958b49c",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §3.9.3 'Common Errors' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "3ee1c51352c3e412",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §3.1 'Introduction' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "41840c1859297e41",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §11.1 'Introduction' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "4472c91dd11a56a3",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §6.1 'Introduction' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "4474fb90c8547131",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §6.4.4 'Common Errors' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "4953ff0e5cecaecb",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §7.4.1 'Common Errors' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "4f0edeed53aeb9f4",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.7.2 'Electrical Fires' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "523cf81df44ab52b",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §16.20 'Chapter Summary' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "5417a68704e1b19d",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §7.8 'Chapter Summary' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "5442cf08fc029bb2",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §2.15 'Chapter Summary' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "565a94ce6dc72361",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §9.3.7 'Touchdown' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "5f481660faee2c09",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §4.1 'Introduction' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "62e4d9092b193e3c",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §2.1 'Introduction' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "6370122c5d1a9fa3",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.3.3 'Terrain Selection' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "650edff13435ac84",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §2.8 'Before Takeoff Check' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "65c661388b88b84a",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.8.1 'Total Flap Failure' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "68291da1d0e5e519",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.9.1 'Electrical System' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "6947d9156f6a7d74",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §6.7.1 'Takeoff Roll' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "6eb0e79ba333d90c",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.13.1 'Ballistic Parachute' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "736d8c84967b7413",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §3.8.3 'Common Errors' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "7562206d78c8bdd0",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.12.1 'Recognition' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "769afcec202cb3a2",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.12 'Inadvertent VFR Flight Into IMC' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "782367af5a4073cf",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §5.2.12 'UPRT Core Concepts' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "79731df7675f7019",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §7.3.1 'Correcting Drift During Straight and Level Flight' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "79d1ecef988528b3",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §6.6.1 'Takeoff Roll' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "7ad6c6e9be3b7c62",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.2.1 'Types of Emergency Landings' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "7c4f1aa7dad38752",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §10.1 'Introduction' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "80d6b7e4e2d5eda6",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.2 'Emergency Landings' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "81662dedc84ea797",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §14.14 'Touchdown' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "82e3acbe6bb34142",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §10.2.1 'Common Errors' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "841b80e29760fa25",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §9.14 'Chapter Summary' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "8510581936ddd5da",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.10 'Abnormal Engine Instrument Indication' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "8992b5a29f42abad",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §7.7.4 'Common Errors' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "8b89a76ddf7b26bd",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.4.3 'Water (Ditching) and Snow' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "8ce39fe44bfb5947",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.13 'Emergency Response Systems' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "8dfee53adda266f4",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §10.3.1 'Common Errors' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "8e91f3eac66b6593",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §5.1 'Introduction' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "8f1994732a73812c",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §7.6.1 'Common Errors' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "90113d67cfe413ef",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §17.11 'Chapter Summary' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "92c2c687ce1f920d",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §5.5 'Chapter Summary' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "945d8581a5a84b6f",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §9.10.3 'Common Errors' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "963837ba53593e3c",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §6.3.3 'Initial Climb' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "97d6c04a9c492c45",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.8.2 'Asymmetric (Split) Flap' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "98e06541faea52e4",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §12.6 'Chapter Summary' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "9af74b605a779f7a",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §9.3.9 'Common Errors' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "9bdfb95ead2b69ea",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §8.6 'Chapter Summary' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "9ddbab367ed49995",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §15.1 'Introduction' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "a0e1983f26672acc",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §17.3 'LSA Synopsis' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "a11159f7b4848942",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.3 'Basic Safety Concepts' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "a33e5a0f99d107fc",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §9.6.6 'Common Errors' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "a365afde5ba4c49e",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §5.3.3 'Common Errors' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "a36ede93c649d3bb",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §2.10 'After Landing' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "a3ebcca1a381caba",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §6.6.4 'Common Errors' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "a46805ffb468ea4e",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.8 'Flight Control Malfunction/Failure' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "a59c831df3a6874e",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §14.1 'Introduction' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "a5f3a0ec7ef53552",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §9.1 'Introduction' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "a9c9a021a4428903",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §3.11.2 'Common Errors' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "abb19575ef2ba5a5",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.12.4 'Turns' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "acb7d35b29ff8f0a",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §9.4.3 'Configuration' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "b0db8ad2112b4208",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.4 'Terrain Types' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "b3df0b3329ae2947",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.9 'System Malfunctions' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "b412f1446995a368",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §10.6 'Chapter Summary' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "b741b0bcf9ed3170",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §17.9.6 'Takeoff and Climb' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "b7eaa2201330dc0a",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §5.4.22 'Common Errors' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "b92ac5acacb3a6ab",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §4.6 'Review of Definitions and Terms' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "b9ec2c0db65eea95",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §9.8.1 'Common Errors' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "ba0c37e7eb480ee8",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.12.6 'Descents' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "be72caefa9fc0545",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.2.2 'Psychological Hazards' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "bf39025b75038ba2",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §5.4.24 'Common Errors' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "c3426d7655d0d3ac",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §16.16.2 'Takeoff Roll' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "c4b4d6e9a98fa5c1",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.12.2 'Maintaining Airplane Control' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "c56e8eda2ff729f0",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §11.14 'Chapter Summary' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "c6fd4eda7e1b9332",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.11 'Door Opening In-Flight' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "c8160756f1ac0ef5",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §5.2.20 'All-Altitude/All Envelope Flight Training Methods' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "c9e8597cdb088734",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §10.5.1 'Common Errors' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "ca305f6b2ad551e3",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §1.9 'Chapter Summary' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "ce1e8a44f70e8814",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.4.1 'Confined Areas' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "d05983e8e94fb589",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §4.7 'Chapter Summary' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "d1aef4333b6d2e88",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §13.23 'Chapter Summary' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "d25630b6670caf92",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §6.4.3 'Initial Climb' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "d3ebe4523b15b4d8",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §5.4.13 'Common Errors' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "d591c68d07e63759",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §16.1 'Introduction' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "d7a6ad00d98b1e7d",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §1.1 'Introduction' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "d86ed837e00f783c",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.7.1 'Engine Fire' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "da3f7f612c00fd21",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §9.9.1 'Common Errors' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "dbbc6fecb2c4ae0b",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §11.2.3 'The Night Blind Spot' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "dfbf6987eb959d3f",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.7.3 'Cabin Fire' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "e1df7246f52868c0",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.8.4 'Landing Gear Malfunction' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "e1fbce5126cc6865",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §5.2.17 'Common Errors' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "e5510d2d74985d7f",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §6.4.1 'Takeoff Roll' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "e5f355dd451b0399",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.13.2 'Autoland' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "e6a03a968d4d2e2a",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.12.8 'Transition to Visual Flight' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "e9d589cf385a0c4d",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §17.1 'Introduction' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "eefdf2f8f3998f1a",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.12.7 'Combined Maneuvers' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "f071a76908ff953e",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §12.4.6 'Takeoff and Climb' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "f2e2e97a180ffa95",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §9.5.2 'Common Errors' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "f5542445248a559f",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §5.4.21 'Weight and Balance Requirements Related to Spins' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "f6db7d390c6506ff",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §6.6.3 'Initial Climb' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "f6f33537f29a894f",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §18.3.1 'General' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "f84c88eaf67be7df",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §3.12 'Chapter Summary' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "f893ccf2fcda0fc5",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §16.18 'Jet Airplane Landing' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "fc4978edf07881ad",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §13.1 'Introduction' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "a6d780a3f88d7a9b",
+      "code": "figure-without-caption",
+      "section_code": "13",
+      "message": "Image on page 277 (index 2) had no paired caption."
+    },
+    {
+      "id": "fb71a26ce4642523",
+      "code": "figure-without-caption",
+      "section_code": "13",
+      "message": "Image on page 259 (index 0) had no paired caption."
+    },
+    {
+      "id": "6a8043bb69db5015",
+      "code": "figure-without-caption",
+      "section_code": "15",
+      "message": "Image on page 298 (index 0) had no paired caption."
+    },
+    {
+      "id": "6f26f4e2536757b1",
+      "code": "figure-without-caption",
+      "section_code": "15",
+      "message": "Image on page 302 (index 1) had no paired caption."
+    },
+    {
+      "id": "7147f4f5b8e18ecb",
+      "code": "figure-without-caption",
+      "section_code": "15",
+      "message": "Image on page 303 (index 1) had no paired caption."
+    },
+    {
+      "id": "4ccd0c2c0a0a49e5",
+      "code": "figure-without-caption",
+      "section_code": "4",
+      "message": "Image on page 88 (index 0) had no paired caption."
+    }
+  ]
+}
