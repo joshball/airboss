@@ -9,20 +9,27 @@
  * `[...path]` catch-all keeps the URL grammar identical to the manifest
  * `asset_path` field after stripping the `handbooks/` prefix.
  *
- * Path-traversal guard: the resolved path must remain inside the repo's
- * `handbooks/` directory; any `..` or absolute fragment is rejected.
+ * Path-traversal defence -- see `resolveHandbookAssetPath` for the
+ * two-layered prefix + real-path check.
  */
 
-import { createReadStream, existsSync, statSync } from 'node:fs';
+import { createReadStream, realpathSync, statSync } from 'node:fs';
 import { dirname, extname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
+import { resolveHandbookAssetPath } from './resolve-asset-path';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 // apps/study/src/routes/handbook-asset/[...path] -> repo root is six levels up.
 const REPO_ROOT = resolve(HERE, '..', '..', '..', '..', '..', '..');
 const HANDBOOKS_DIR = resolve(REPO_ROOT, 'handbooks');
+// Canonical (symlink-resolved) form of HANDBOOKS_DIR. The prefix check
+// uses the canonical form so a symlink-rooted handbooks dir (e.g. dev
+// machines that point `handbooks` at a shared cache) still validates
+// correctly. Computed once at module init -- the directory itself does
+// not move per process.
+const HANDBOOKS_DIR_REAL = realpathSync(HANDBOOKS_DIR);
 
 const CONTENT_TYPES: Record<string, string> = {
 	'.png': 'image/png',
@@ -35,18 +42,20 @@ const CONTENT_TYPES: Record<string, string> = {
 };
 
 export const GET: RequestHandler = async ({ params }) => {
-	const requested = resolve(HANDBOOKS_DIR, params.path);
-	if (!requested.startsWith(`${HANDBOOKS_DIR}/`) && requested !== HANDBOOKS_DIR) {
-		throw error(404, 'Not found');
-	}
-	if (!existsSync(requested)) throw error(404, 'Not found');
-	const stat = statSync(requested);
+	const resolved = resolveHandbookAssetPath({
+		root: HANDBOOKS_DIR,
+		rootReal: HANDBOOKS_DIR_REAL,
+		requestedPath: params.path,
+	});
+	if (resolved === null) throw error(404, 'Not found');
+
+	const stat = statSync(resolved);
 	if (!stat.isFile()) throw error(404, 'Not found');
 
-	const ext = extname(requested).toLowerCase();
+	const ext = extname(resolved).toLowerCase();
 	const contentType = CONTENT_TYPES[ext] ?? 'application/octet-stream';
 
-	const stream = createReadStream(requested);
+	const stream = createReadStream(resolved);
 	return new Response(stream as unknown as ReadableStream, {
 		headers: {
 			'Content-Type': contentType,
