@@ -1845,6 +1845,30 @@ export const HANDBOOK_HEARTBEAT_MIN_DELTA_SEC = 5;
 export const HANDBOOK_NOTES_MAX_LENGTH = 16384;
 
 /**
+ * Words-per-minute the reading-time estimate divides by.
+ *
+ * 250 wpm matches the conventional "average adult reading rate" -- the same
+ * number Medium / Substack / GitHub READMEs surface as "≈ N min read." The
+ * estimate intentionally rounds up so the floor for any non-empty section
+ * is 1 minute (a 30-word section reads in 7 seconds, but "1 min" is the
+ * lowest unit that signals "this is short" without surfacing seconds).
+ *
+ * The TOC drawer + section header both render this number, computed from
+ * the markdown-stripped word count {@link computeReadingOrder} returns.
+ */
+export const WORDS_PER_MINUTE_READING_RATE = 250;
+
+/**
+ * Compute the reading-time estimate (in minutes) for a body with the given
+ * word count. Returns 0 for empty bodies; otherwise rounds up to the nearest
+ * minute so a 30-word stub still surfaces as "1 min" rather than "0 min".
+ */
+export function readingMinutesForWords(wordCount: number): number {
+	if (wordCount <= 0) return 0;
+	return Math.max(1, Math.ceil(wordCount / WORDS_PER_MINUTE_READING_RATE));
+}
+
+/**
  * `handbook_section_errata.patch_kind`. Each kind shapes how the apply
  * pipeline edits the section markdown and how the reader UI frames the
  * change. The Python parser layer mirrors these constants in

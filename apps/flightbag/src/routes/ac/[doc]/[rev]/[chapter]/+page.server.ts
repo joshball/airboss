@@ -7,6 +7,7 @@
  */
 
 import {
+	computeReadingOrder,
 	getHandbookChapter,
 	getReferenceByDocument,
 	listAllSectionsForReference,
@@ -18,6 +19,7 @@ import { REFERENCE_KINDS, type ReferenceKind, ROUTES } from '@ab/constants';
 import { error } from '@sveltejs/kit';
 import { computeSiblingNav } from '../../../../../lib/section-nav';
 import { buildSourceLinks } from '../../../../../lib/source-links';
+import { buildTOCEntries, totalReadingMinutes } from '../../../../../lib/toc';
 import type { PageServerLoad } from './$types';
 
 const DOC_SHAPE = /^[a-z0-9.-]+$/i;
@@ -53,7 +55,7 @@ export const load: PageServerLoad = async ({ params }) => {
 	});
 
 	const allSections = await listAllSectionsForReference(ref.id);
-	const nav = computeSiblingNav(allSections, chapter.id, (row) => {
+	const hrefForRow = (row: { parentId: string | null; code: string }): string | null => {
 		if (row.parentId === null) {
 			return ROUTES.FLIGHTBAG_AC_CHAPTER(params.doc, params.rev, row.code);
 		}
@@ -62,7 +64,11 @@ export const load: PageServerLoad = async ({ params }) => {
 		const [ch, sec] = parts;
 		if (!ch || !sec) return null;
 		return ROUTES.FLIGHTBAG_AC_SECTION(params.doc, params.rev, ch, sec);
-	});
+	};
+	const nav = computeSiblingNav(allSections, chapter.id, hrefForRow);
+	const readingOrder = computeReadingOrder(allSections);
+	const tocEntries = buildTOCEntries(readingOrder, chapter.id, hrefForRow);
+	const tocTotalMinutes = totalReadingMinutes(readingOrder);
 
 	return {
 		uri: `airboss-ref:ac/${params.doc}/${params.rev}/section-${params.chapter}`,
@@ -101,5 +107,9 @@ export const load: PageServerLoad = async ({ params }) => {
 			height: f.height,
 		})),
 		nav,
+		toc: {
+			entries: tocEntries,
+			totalMinutes: tocTotalMinutes,
+		},
 	};
 };
