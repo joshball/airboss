@@ -34,21 +34,21 @@ import { invalidateAll } from '$app/navigation';
 import { page } from '$app/state';
 import type { PageData } from './$types';
 import { moveRovingFocus, rovingTabIndex } from './radio-group-keyboard';
+import { isReviewRating, type RatingTally, ratingTallyKey } from './rating-tally';
 
 let { data }: { data: PageData } = $props();
-
-interface RatingTally {
-	again: number;
-	hard: number;
-	good: number;
-	easy: number;
-}
 
 type CurrentCard = NonNullable<PageData['currentCard']>;
 
 interface PendingUndo {
 	cardId: string;
-	ratingLabel: string;
+	/**
+	 * Numeric `ReviewRating` value (1-4). Threading the numeric key through the
+	 * undo flow keeps the tally-decrement keyed off the same value the form
+	 * submitted -- not off `REVIEW_RATING_LABELS[rating]`, which a future i18n
+	 * pass or label rename would silently desync from the bucket key.
+	 */
+	rating: ReviewRating;
 	card: CurrentCard;
 	confidence: number | null;
 	/** epoch ms when the toast expires. */
@@ -150,21 +150,18 @@ function startAdjustConfidence() {
 	adjustingConfidence = true;
 }
 
-function recordTally(rating: number) {
-	if (rating === REVIEW_RATINGS.AGAIN) tally.again++;
-	else if (rating === REVIEW_RATINGS.HARD) tally.hard++;
-	else if (rating === REVIEW_RATINGS.GOOD) tally.good++;
-	else if (rating === REVIEW_RATINGS.EASY) tally.easy++;
+function recordTally(rating: ReviewRating) {
+	tally[ratingTallyKey(rating)]++;
 }
 
-function startUndoWindow(rating: number, submittedCard: CurrentCard, submittedConfidence: number | null) {
+function startUndoWindow(rating: ReviewRating, submittedCard: CurrentCard, submittedConfidence: number | null) {
 	if (undoTimer !== null) {
 		clearTimeout(undoTimer);
 		undoTimer = null;
 	}
 	pendingUndo = {
 		cardId: submittedCard.id,
-		ratingLabel: REVIEW_RATING_LABELS[rating as ReviewRating] ?? '',
+		rating,
 		card: submittedCard,
 		confidence: submittedConfidence,
 		expiresAt: Date.now() + REVIEW_UNDO_WINDOW_MS,
@@ -204,12 +201,11 @@ async function triggerUndo() {
 			pendingUndo = null;
 			return;
 		}
-		const label = snap.ratingLabel.toLowerCase();
-		// Rating labels are `Wrong / Hard / Right / Easy`. Map back to tally keys.
-		if (label === REVIEW_RATING_LABELS[REVIEW_RATINGS.AGAIN].toLowerCase() && tally.again > 0) tally.again--;
-		else if (label === REVIEW_RATING_LABELS[REVIEW_RATINGS.HARD].toLowerCase() && tally.hard > 0) tally.hard--;
-		else if (label === REVIEW_RATING_LABELS[REVIEW_RATINGS.GOOD].toLowerCase() && tally.good > 0) tally.good--;
-		else if (label === REVIEW_RATING_LABELS[REVIEW_RATINGS.EASY].toLowerCase() && tally.easy > 0) tally.easy--;
+		// Decrement by numeric rating (the form-submitted value), not by the
+		// localized label. A future label rename / i18n pass cannot desync the
+		// tally bucket from the rating that was actually recorded.
+		const key = ratingTallyKey(snap.rating);
+		if (tally[key] > 0) tally[key]--;
 		pendingUndo = null;
 		await invalidateAll();
 	} catch {
@@ -681,12 +677,21 @@ async function submitFeedbackForm(event: SubmitEvent) {
 			<form
 				method="POST"
 				action="?/submit"
-				use:enhance={({ formData }) => {
+				use:enhance={({ formData, cancel }) => {
 					const submittedCard = current;
 					const submittedConfidence = confidence;
-					const rating = Number(formData.get('rating') ?? 0);
+					// Validate the form-submitted rating before transitioning state. The
+					// button's `value={r}` source is `REVIEW_RATING_VALUES`, so a non-
+					// matching value can only come from a tampered DOM; surface the
+					// error rather than silently submitting a 0.
+					const ratingRaw = Number(formData.get('rating') ?? 0);
+					const rating = isReviewRating(ratingRaw) ? ratingRaw : null;
+					if (rating === null || !submittedCard) {
+						submitError = 'Pick a rating before submitting.';
+						cancel();
+						return;
+					}
 					phase = REVIEW_PHASES.SUBMITTING;
-					if (!submittedCard) return;
 					formData.set('cardId', submittedCard.id);
 					const answerMs = revealedAt !== null ? Date.now() - revealedAt : '';
 					formData.set('answerMs', String(answerMs));
@@ -731,7 +736,7 @@ async function submitFeedbackForm(event: SubmitEvent) {
 		{#if pendingUndo}
 			<div class="undo-toast" role="status" aria-live="polite">
 				<span class="undo-msg">
-					Rated <strong>{pendingUndo.ratingLabel}</strong>.
+					Rated <strong>{REVIEW_RATING_LABELS[pendingUndo.rating]}</strong>.
 					<span class="undo-domain">{domainLabel(pendingUndo.card.domain)}</span>
 				</span>
 				<a class="undo-link" href={ROUTES.MEMORY_CARD(pendingUndo.cardId)}>View card</a>
