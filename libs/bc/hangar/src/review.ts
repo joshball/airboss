@@ -50,7 +50,7 @@ import {
 	generateHangarReviewSessionId,
 	generateHangarReviewStepId,
 } from '@ab/utils';
-import { and, asc, desc, eq, inArray, isNull } from 'drizzle-orm';
+import { and, asc, desc, eq, inArray, isNull, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import {
 	type BucketFilterCriteria,
@@ -520,6 +520,123 @@ export async function upsertItem(input: UpsertItemInput, db: Db = defaultDb): Pr
 /** Soft-delete an item (loader uses this when its source artifact disappears). */
 export async function softDeleteItem(id: string, db: Db = defaultDb): Promise<void> {
 	await db.update(hangarReviewItem).set({ deletedAt: new Date() }).where(eq(hangarReviewItem.id, id));
+}
+
+/**
+ * Derive the default column name for an item from its `(frontmatterStatus,
+ * reviewStatus)` snapshot. Callers map the resulting NAME to a column id by
+ * consulting the board's column list.
+ *
+ * Mapping (per spec.md "Frontmatter rules"):
+ *
+ *   frontmatterStatus    reviewStatus    -> column
+ *   ------------------   ------------    -------------
+ *   null / unread        any             -> Backlog
+ *   reading              any             -> In Progress
+ *   done                 pending / null  -> Review
+ *   done                 done            -> Done
+ *
+ * Items with no frontmatter (e.g. `ad_hoc`) land in Backlog by default.
+ */
+export function getDerivedColumnName(
+	frontmatterStatus: string | null,
+	reviewStatus: string | null,
+): 'Backlog' | 'In Progress' | 'Review' | 'Done' {
+	if (frontmatterStatus === 'reading') return 'In Progress';
+	if (frontmatterStatus === 'done') {
+		if (reviewStatus === 'done') return 'Done';
+		return 'Review';
+	}
+	return 'Backlog';
+}
+
+/**
+ * Resolve an item's effective column id. If the user explicitly pinned the
+ * item via drag-drop, the pin wins. Otherwise the derived mapping above
+ * applies; the matching column from `columns` is returned, falling back to
+ * the first column when nothing matches (defensive -- a board missing
+ * `Backlog` is malformed but shouldn't crash the page).
+ */
+export function resolveItemColumnId(
+	item: { pinnedColumnId: string | null; frontmatterStatus: string | null; reviewStatus: string | null },
+	columns: ReadonlyArray<{ id: string; name: string }>,
+): string {
+	if (item.pinnedColumnId !== null) return item.pinnedColumnId;
+	const derived = getDerivedColumnName(item.frontmatterStatus, item.reviewStatus);
+	const match = columns.find((c) => c.name === derived);
+	if (match) return match.id;
+	const first = columns[0];
+	if (!first) throw new Error('resolveItemColumnId: board has no columns');
+	return first.id;
+}
+
+/**
+ * Apply a `BucketFilterCriteria` predicate to an in-memory item list. Used
+ * by the `/review` board to compute bucket counts + drawer items without a
+ * round-trip per filter chip change.
+ *
+ * `passingSessionItemIds` is the (precomputed) set of items whose latest
+ * session closed `outcome = 'pass'`. Required when any bucket uses the
+ * `noPassingSession: true` predicate; otherwise the empty set works.
+ */
+export function filterItemsByCriteria<
+	T extends { kindId: string; frontmatterStatus: string | null; reviewStatus: string | null; id: string },
+>(
+	items: ReadonlyArray<T>,
+	criteria: BucketFilterCriteria,
+	passingSessionItemIds: ReadonlySet<string> = new Set(),
+): ReadonlyArray<T> {
+	return items.filter((item) => {
+		if (criteria.kind !== undefined && item.kindId !== criteria.kind) return false;
+		if (
+			criteria.frontmatterStatus !== undefined &&
+			criteria.frontmatterStatus.length > 0 &&
+			(item.frontmatterStatus === null ||
+				!criteria.frontmatterStatus.includes(item.frontmatterStatus as 'unread' | 'reading' | 'done'))
+		) {
+			return false;
+		}
+		if (
+			criteria.reviewStatus !== undefined &&
+			criteria.reviewStatus.length > 0 &&
+			(item.reviewStatus === null || !criteria.reviewStatus.includes(item.reviewStatus as 'pending' | 'done'))
+		) {
+			return false;
+		}
+		if (criteria.noPassingSession === true && passingSessionItemIds.has(item.id)) return false;
+		return true;
+	});
+}
+
+/**
+ * Set of item ids whose most recent finished session closed with
+ * `outcome = 'pass'`. Used by the `noPassingSession: true` bucket predicate
+ * to surface items that still need review (i.e., never passed, OR last
+ * session closed with `fail` / `blocked`).
+ *
+ * Implementation: pulls the latest finished session per item via a window
+ * function, then filters to `outcome = 'pass'`.
+ */
+export async function listItemsWithPassingSession(boardId: string, db: Db = defaultDb): Promise<ReadonlySet<string>> {
+	const rows = await db.execute<{ item_id: string }>(sql`
+		SELECT item_id FROM (
+			SELECT
+				rs.item_id,
+				rs.outcome,
+				ROW_NUMBER() OVER (PARTITION BY rs.item_id ORDER BY rs.finished_at DESC NULLS LAST) AS rn
+			FROM ${hangarReviewSession} rs
+			JOIN ${hangarReviewItem} ri ON ri.id = rs.item_id
+			WHERE ri.board_id = ${boardId}
+			  AND rs.finished_at IS NOT NULL
+		) latest
+		WHERE latest.rn = 1 AND latest.outcome = 'pass'
+	`);
+	const out = new Set<string>();
+	const list = (rows as unknown as { rows?: ReadonlyArray<{ item_id: string }> }).rows ?? rows;
+	for (const r of list as ReadonlyArray<{ item_id: string }>) {
+		if (r.item_id) out.add(r.item_id);
+	}
+	return out;
 }
 
 /** Pin an item to a column (drag-drop). Pass `null` to clear the pin. */
