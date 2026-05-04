@@ -4,25 +4,43 @@
  * Produces one `reference` row plus N `reference_section` rows in a
  * chapter/section/subsection tree. Idempotent on `content_hash`.
  *
- * `section_schema = { levels: ['chapter','section','subsection'],
- * strict_sequence: true }` -- handbooks pin level to depth, so depth 0 is
- * always a chapter, depth 1 a section, depth 2 a subsection.
+ * `section_schema = { levels: ['front-matter','chapter','section','subsection'],
+ * strict_sequence: false }` -- chapters pin to depth 0 with their
+ * children at deeper depths, but `front-matter` is also a depth-0 peer
+ * (cover, preface, acknowledgments, prose introduction; see
+ * WP-HANDBOOK-RE-EXTRACTION-V2 Sub-phase 1C). Strict-sequence is
+ * therefore off: at depth 0 the level may be either `front-matter` or
+ * `chapter`. Sections / subsections still pin to their depth.
  */
 
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { airbossRefForHandbookSection } from '@ab/sources';
-import type { SectionTreeManifest } from '../manifest-validation';
+import type { HandbookManifestSection, SectionTreeManifest } from '../manifest-validation';
 import { replaceFiguresForSection, type SectionSchema, upsertReference, upsertReferenceSection } from '../references';
 import type { SeedContext, SeedSummary } from './types';
 
-/** Depth lookup keyed by handbook level. */
-const LEVEL_TO_DEPTH = { chapter: 0, section: 1, subsection: 2 } as const;
+/**
+ * Depth lookup keyed by handbook level.
+ *
+ * Both `front-matter` and `chapter` sit at depth 0 (peers in the
+ * chapter-list view; `front-matter` rows come first per their ordinals).
+ * `section` is depth 1, `subsection` is depth 2.
+ */
+const LEVEL_TO_DEPTH = {
+	'front-matter': 0,
+	chapter: 0,
+	section: 1,
+	subsection: 2,
+} as const satisfies Record<HandbookManifestSection['level'], number>;
 
 const SECTION_TREE_SCHEMA: SectionSchema = {
-	levels: ['chapter', 'section', 'subsection'],
-	strictSequence: true,
+	levels: ['front-matter', 'chapter', 'section', 'subsection'],
+	// `strict_sequence: false` because depth 0 admits two levels
+	// (`front-matter` and `chapter`); the validator falls back to the
+	// loose `every level IN levels[]` rule.
+	strictSequence: false,
 };
 
 export async function seedSectionTreeManifest(
@@ -45,11 +63,23 @@ export async function seedSectionTreeManifest(
 
 	const codeToSectionId: Map<string, string> = new Map();
 
-	// Sort sections so chapters come before their children. Sort by code length
-	// first (shortest first), then lexically; this keeps chapter "12" before
-	// section "12.3" before subsection "12.3.2".
+	// Sort sections so depth-0 rows seed before their descendants and
+	// front-matter rows seed before chapters at the same depth (their
+	// ordinals already reflect that order). Sort by code length first
+	// (shortest first), then by `front-matter` before `chapter` at the
+	// same depth, then by ordinal, then lexically by code as a final
+	// tiebreaker. This keeps `front-matter/00-cover` ordinal=0 before
+	// chapter "1" ordinal=1 before section "1.3".
+	const levelRank = (level: HandbookManifestSection['level']): number =>
+		level === 'front-matter' ? 0 : 1;
 	const sortedSections = [...manifest.sections].sort((a, b) => {
 		if (a.code.length !== b.code.length) return a.code.length - b.code.length;
+		if (a.code.length === 1) {
+			// Depth-0 tiebreaker: front-matter before chapter, then by ordinal.
+			const lr = levelRank(a.level) - levelRank(b.level);
+			if (lr !== 0) return lr;
+			if (a.ordinal !== b.ordinal) return a.ordinal - b.ordinal;
+		}
 		return a.code.localeCompare(b.code);
 	});
 
@@ -81,6 +111,12 @@ export async function seedSectionTreeManifest(
 			contentHash: section.content_hash,
 			hasFigures: section.has_figures,
 			hasTables: section.has_tables,
+			// Forward `metadata.extraction_status` (Sub-phase 1C) into the
+			// `study.reference_section.metadata` jsonb so the reader can
+			// surface placeholder badges + "merged from orphans" tooltips.
+			// Pre-1C manifests omit `metadata`; pass `undefined` so the
+			// upsert defers to the existing row's metadata (no overwrite).
+			metadata: section.metadata,
 			seedOrigin: context.seedOrigin,
 		});
 		codeToSectionId.set(section.code, row.id);
