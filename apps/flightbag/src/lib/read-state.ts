@@ -13,8 +13,8 @@
  * shape-stable because anonymous returns the same empty set.
  */
 
-import { HANDBOOK_READ_STATUSES, type HandbookReadStatus } from '@ab/constants';
 import { listReadStatesForReference } from '@ab/bc-study';
+import { HANDBOOK_READ_STATUSES, type HandbookReadStatus } from '@ab/constants';
 
 /**
  * Sections counted as "read" (and surfaced with a checkmark) when status is

@@ -43,13 +43,31 @@ let { data }: { data: PageData } = $props();
 	<p class="empty">This handbook has no chapter rows in the catalog yet.</p>
 {:else}
 	<section aria-label="Chapters">
-		<h2>Chapters</h2>
+		<header class="chapters-header">
+			<h2>Chapters</h2>
+			{#if data.isAuthenticated && data.readProgress.total > 0}
+				<p class="progress" aria-label="Handbook reading progress">
+					Read <strong>{data.readProgress.read}</strong> of {data.readProgress.total}
+					{data.readProgress.total === 1 ? 'section' : 'sections'}
+				</p>
+			{/if}
+		</header>
 		<ol class="chapters">
 			{#each data.chapters as chapter (chapter.id)}
+				{@const fullyRead = chapter.readProgress.total > 0 && chapter.readProgress.read === chapter.readProgress.total}
 				<li>
-					<a href={chapter.href}>
+					<a
+						href={chapter.href}
+						class:read={fullyRead}
+						aria-label={`Chapter ${chapter.code} ${chapter.title}${fullyRead ? ' (read)' : ''}`}
+					>
 						<span class="chapter-code">Chapter {chapter.code}</span>
 						<span class="chapter-title">{chapter.title}</span>
+						{#if data.isAuthenticated && chapter.readProgress.total > 0}
+							<span class="chapter-progress" aria-hidden="true">
+								{chapter.readProgress.read}/{chapter.readProgress.total}
+							</span>
+						{/if}
 						{#if chapter.faaPageStart}
 							<span class="chapter-pages">pp. {chapter.faaPageStart}{chapter.faaPageEnd ? `..${chapter.faaPageEnd}` : ''}</span>
 						{/if}
@@ -133,5 +151,38 @@ let { data }: { data: PageData } = $props();
 	.empty {
 		color: var(--ink-muted);
 		font-style: italic;
+	}
+
+	.chapters-header {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: var(--space-md);
+		flex-wrap: wrap;
+	}
+	.chapters-header h2 {
+		margin: 0;
+	}
+	.progress {
+		margin: 0;
+		color: var(--ink-muted);
+		font-size: var(--font-size-sm);
+	}
+	.progress strong {
+		color: var(--ink-body);
+		font-weight: var(--font-weight-bold);
+	}
+	.chapter-progress {
+		font-family: var(--font-family-mono);
+		font-size: var(--font-size-sm);
+		color: var(--ink-muted);
+		min-width: 3rem;
+		text-align: right;
+	}
+	.chapters a.read {
+		border-color: var(--signal-success-edge, var(--edge-default));
+	}
+	.chapters a.read .chapter-progress {
+		color: var(--signal-success-ink, var(--ink-body));
 	}
 </style>

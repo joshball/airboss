@@ -16,15 +16,17 @@ import {
 	listChapterSections,
 	listFiguresForSection,
 } from '@ab/bc-study';
-import { readingMinutesForWords, type ReferenceKind, ROUTES } from '@ab/constants';
+import { type ReferenceKind, ROUTES, readingMinutesForWords } from '@ab/constants';
 import { error } from '@sveltejs/kit';
+import { loadReadSetForReference } from '../../../../../lib/read-state';
 import { computeSiblingNav } from '../../../../../lib/section-nav';
 import { buildSourceLinks } from '../../../../../lib/source-links';
 import { buildTOCEntries, totalReadingMinutes } from '../../../../../lib/toc';
 import { shortHandbookEdition } from '../../../../reader-url';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ params }) => {
+export const load: PageServerLoad = async (event) => {
+	const { params } = event;
 	const documentSlug = parseHandbookSlug(params.slug);
 	if (!documentSlug) throw error(404, 'Handbook not found.');
 	const chapterCode = parseHandbookChapter(params.chapter);
@@ -77,6 +79,16 @@ export const load: PageServerLoad = async ({ params }) => {
 		.filter((e) => e.sectionId === chapter.id || e.parentChapterCode === chapter.code)
 		.reduce((acc, e) => acc + readingMinutesForWords(e.wordCount), 0);
 
+	// Per-user read set scoped to the whole reference; the chapter aggregate
+	// counts only sections that belong to this chapter (chapter row itself
+	// plus its `chapter.section`-coded descendants).
+	const readSet = await loadReadSetForReference(event.locals.user?.id ?? null, ref.id);
+	const chapterSectionIds = readingOrder
+		.filter((e) => e.parentChapterCode === chapter.code || e.sectionId === chapter.id)
+		.map((e) => e.sectionId);
+	const chapterTotalSections = chapterSectionIds.length;
+	const chapterReadSections = chapterSectionIds.filter((id) => readSet.has(id)).length;
+
 	return {
 		uri: `airboss-ref:handbooks/${ref.documentSlug}/${shortEdition}/${chapterCode}`,
 		sourceLinks,
@@ -122,9 +134,15 @@ export const load: PageServerLoad = async ({ params }) => {
 		toc: {
 			entries: tocEntries,
 			totalMinutes: tocTotalMinutes,
+			readSectionIds: [...readSet],
 		},
 		readingTime: {
 			chapterMinutes,
 		},
+		readProgress: {
+			read: chapterReadSections,
+			total: chapterTotalSections,
+		},
+		isAuthenticated: event.locals.user !== null,
 	};
 };

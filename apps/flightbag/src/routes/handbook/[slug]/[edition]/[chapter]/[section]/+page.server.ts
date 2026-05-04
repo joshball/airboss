@@ -10,10 +10,11 @@ import { parseHandbookChapter, parseHandbookSection, parseHandbookSlug } from '@
 import {
 	computeReadingOrder,
 	getHandbookSection,
+	getReadState,
 	getReferenceByDocument,
 	listAllSectionsForReference,
 } from '@ab/bc-study';
-import { readingMinutesForWords, type ReferenceKind, ROUTES } from '@ab/constants';
+import { type ReferenceKind, ROUTES, readingMinutesForWords } from '@ab/constants';
 import { isParseError, parseHandbooksLocator, parseIdentifier } from '@ab/sources';
 import { error } from '@sveltejs/kit';
 import { loadReadSetForReference } from '../../../../../../lib/read-state';
@@ -99,6 +100,11 @@ export const load: PageServerLoad = async (event) => {
 	// shape without rendering any check glyphs.
 	const readSet = await loadReadSetForReference(event.locals.user?.id ?? null, ref.id);
 
+	// Fetch the per-section read-state row for the section header's
+	// "you've read this N times; last on X" line. Anonymous callers get null.
+	const userId = event.locals.user?.id ?? null;
+	const sectionReadState = userId ? await getReadState(userId, view.section.id) : null;
+
 	return {
 		uri: rawUri,
 		sourceLinks,
@@ -155,6 +161,13 @@ export const load: PageServerLoad = async (event) => {
 		readingTime: {
 			sectionMinutes,
 		},
+		readState: sectionReadState
+			? {
+					openedCount: sectionReadState.openedCount,
+					lastReadAt: sectionReadState.lastReadAt?.toISOString() ?? null,
+					totalSecondsVisible: sectionReadState.totalSecondsVisible,
+				}
+			: null,
 		isAuthenticated: event.locals.user !== null,
 	};
 };

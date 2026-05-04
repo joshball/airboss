@@ -20,9 +20,16 @@ const segments = $derived([
 	{ label: `Chapter ${data.chapter.code}`, href: null },
 ]);
 
-const tocSummary = $derived(
-	data.toc.totalMinutes > 0 ? `${data.toc.entries.length} entries · ≈ ${data.toc.totalMinutes} min` : undefined,
-);
+const readSet = $derived(new Set(data.toc.readSectionIds));
+const tocSummary = $derived(buildTocSummary(data.toc.entries.length, data.toc.totalMinutes, readSet.size));
+
+function buildTocSummary(total: number, minutes: number, read: number): string | undefined {
+	const parts: string[] = [];
+	if (total > 0) parts.push(`${total} entries`);
+	if (minutes > 0) parts.push(`≈ ${minutes} min`);
+	if (read > 0) parts.push(`${read} read`);
+	return parts.length > 0 ? parts.join(' · ') : undefined;
+}
 </script>
 
 <svelte:head>
@@ -33,6 +40,7 @@ const tocSummary = $derived(
 	<aside class="toc-rail">
 		<TOCDrawer
 			entries={data.toc.entries}
+			{readSet}
 			heading={data.reference.title}
 			headingHref={data.reference.handbookHref}
 			summary={tocSummary}
@@ -75,13 +83,25 @@ const tocSummary = $derived(
 			{/if}
 
 			<section aria-label="Sections">
-				<h2>Sections</h2>
+				<header class="sections-header">
+					<h2>Sections</h2>
+					{#if data.isAuthenticated && data.readProgress.total > 0}
+						<p class="progress" aria-label="Chapter reading progress">
+							Read <strong>{data.readProgress.read}</strong> of {data.readProgress.total}
+							{data.readProgress.total === 1 ? 'section' : 'sections'}
+						</p>
+					{/if}
+				</header>
 				<ol class="sections">
 					{#each data.sections as section (section.id)}
+						{@const isRead = readSet.has(section.id)}
 						<li>
-							<a href={section.href}>
+							<a href={section.href} class:read={isRead} aria-label={`§${section.code} ${section.title}${isRead ? ' (read)' : ''}`}>
 								<span class="section-code">§{section.code}</span>
 								<span class="section-title">{section.title}</span>
+								{#if isRead}
+									<span class="check" aria-hidden="true">✓</span>
+								{/if}
 							</a>
 						</li>
 					{/each}
@@ -195,5 +215,33 @@ const tocSummary = $derived(
 	}
 	.section-title {
 		flex: 1;
+	}
+	.check {
+		color: var(--signal-success-ink, var(--ink-muted));
+		font-weight: var(--font-weight-bold);
+	}
+	.sections a.read {
+		border-color: var(--signal-success-edge, var(--edge-default));
+	}
+
+	.sections-header {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: var(--space-md);
+		flex-wrap: wrap;
+		margin-top: var(--space-lg);
+	}
+	.sections-header h2 {
+		margin: 0;
+	}
+	.progress {
+		margin: 0;
+		color: var(--ink-muted);
+		font-size: var(--font-size-sm);
+	}
+	.progress strong {
+		color: var(--ink-body);
+		font-weight: var(--font-weight-bold);
 	}
 </style>

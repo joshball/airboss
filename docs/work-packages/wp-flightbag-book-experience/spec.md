@@ -3,7 +3,7 @@ title: 'Spec: WP-FLIGHTBAG-BOOK-EXPERIENCE -- read the handbooks like books'
 product: flightbag
 feature: wp-flightbag-book-experience
 type: spec
-status: signed-off
+status: shipped
 review_status: done
 ---
 

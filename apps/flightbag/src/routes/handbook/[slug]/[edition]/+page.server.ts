@@ -8,14 +8,21 @@
  */
 
 import { parseHandbookSlug } from '@ab/aviation';
-import { getReferenceByDocument, listHandbookChapters } from '@ab/bc-study';
+import {
+	computeReadingOrder,
+	getReferenceByDocument,
+	listAllSectionsForReference,
+	listHandbookChapters,
+} from '@ab/bc-study';
 import { type ReferenceKind, ROUTES } from '@ab/constants';
 import { error } from '@sveltejs/kit';
+import { loadReadSetForReference } from '../../../../lib/read-state';
 import { buildSourceLinks } from '../../../../lib/source-links';
 import { shortHandbookEdition } from '../../../reader-url';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ params }) => {
+export const load: PageServerLoad = async (event) => {
+	const { params } = event;
 	const documentSlug = parseHandbookSlug(params.slug);
 	if (!documentSlug) throw error(404, 'Handbook not found.');
 
@@ -39,6 +46,25 @@ export const load: PageServerLoad = async ({ params }) => {
 		url: ref.url,
 	});
 
+	// Per-user read set for the handbook landing aggregate. Computes both an
+	// overall progress count and a per-chapter progress count by walking the
+	// reading-order's `parentChapterCode` field.
+	const allSections = await listAllSectionsForReference(ref.id);
+	const readingOrder = computeReadingOrder(allSections);
+	const readSet = await loadReadSetForReference(event.locals.user?.id ?? null, ref.id);
+	const overallTotal = readingOrder.length;
+	const overallRead = readingOrder.filter((e) => readSet.has(e.sectionId)).length;
+	const perChapter = new Map<string, { read: number; total: number }>();
+	for (const entry of readingOrder) {
+		// Chapter row itself counts under its own code; its descendants carry
+		// `parentChapterCode`.
+		const chapterCode = entry.parentChapterCode ?? entry.code;
+		const bucket = perChapter.get(chapterCode) ?? { read: 0, total: 0 };
+		bucket.total += 1;
+		if (readSet.has(entry.sectionId)) bucket.read += 1;
+		perChapter.set(chapterCode, bucket);
+	}
+
 	return {
 		uri: `airboss-ref:handbooks/${ref.documentSlug}/${shortEdition}`,
 		sourceLinks,
@@ -51,14 +77,23 @@ export const load: PageServerLoad = async ({ params }) => {
 			publisher: ref.publisher,
 			subjects: [...ref.subjects],
 		},
-		chapters: chapters.map((c) => ({
-			id: c.id,
-			code: c.code,
-			title: c.title,
-			ordinal: c.ordinal,
-			faaPageStart: c.faaPageStart,
-			faaPageEnd: c.faaPageEnd,
-			href: ROUTES.FLIGHTBAG_HANDBOOK_CHAPTER(ref.documentSlug, shortEdition, c.code),
-		})),
+		chapters: chapters.map((c) => {
+			const progress = perChapter.get(c.code) ?? { read: 0, total: 0 };
+			return {
+				id: c.id,
+				code: c.code,
+				title: c.title,
+				ordinal: c.ordinal,
+				faaPageStart: c.faaPageStart,
+				faaPageEnd: c.faaPageEnd,
+				href: ROUTES.FLIGHTBAG_HANDBOOK_CHAPTER(ref.documentSlug, shortEdition, c.code),
+				readProgress: progress,
+			};
+		}),
+		readProgress: {
+			read: overallRead,
+			total: overallTotal,
+		},
+		isAuthenticated: event.locals.user !== null,
 	};
 };
