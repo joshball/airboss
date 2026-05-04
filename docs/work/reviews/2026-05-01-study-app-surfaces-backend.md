@@ -14,16 +14,16 @@ review_status: done
 
 ## Status as of 2026-05-04
 
-Re-greped main against every finding. 10 of 18 closed; 8 still-open with the N+1 cluster the dominant remainder.
+Re-greped main against every finding. 16 of 18 closed; 2 still-open. The N+1 cluster (six MAJORs) closed via the wave-2 convergent fix (six new batched BC helpers + six route loader updates).
 
 | Severity | Finding | Verdict | Evidence |
 | -------- | ------- | ------- | -------- |
 | CRITICAL | GET load creates `memory_review_session` rows -- prefetcher can mint sessions | CLOSED | `apps/study/src/routes/(app)/memory/review/+page.server.ts:86-142` -- `load()` is now strictly read-only with respect to session creation: it returns `{ prompt, start: null }` for resumable runs and `{ prompt: null, start }` otherwise. Session creation lives only in `actions.fresh` (POST) at `+page.server.ts:144-186`. The route-actions test suite asserts zero `memory_review_session` inserts on three GET paths (`route-actions.test.ts:348-433`). |
-| MAJOR    | N+1 mastery fan-out on `/credentials` | STILL OPEN | `apps/study/src/routes/(app)/credentials/+page.server.ts:28-34` -- still per-row `getCredentialMastery`. Next: add `getCredentialMasteryMap(userId, credentialIds)` to `@ab/bc-study` |
-| MAJOR    | N+1 syllabi fan-out on `/goals/[id]` (sequential `for...of await`) | STILL OPEN | `apps/study/src/routes/(app)/goals/[id]/+page.server.ts:76-88` still has `for (const cred of credentials) { ... await getCredentialSyllabi(...) }`. Next: at minimum wrap in `Promise.all`; better, add `listPrimarySyllabiByCredential(credIds)` |
-| MAJOR    | N+1 prereq title resolution on `/goals/[id]` | STILL OPEN | per-row `getCredentialById` still in place. Next: add `getCredentialsByIds(ids)` BC helper |
-| MAJOR    | N+1 progress fan-out on `/lens/handbook` | STILL OPEN | `apps/study/src/routes/(app)/lens/handbook/+page.server.ts:17-22` still has per-handbook `getHandbookProgress`. Next: add `getHandbookProgressMap(userId, refIds)` |
-| MAJOR    | N+1 citation reverse-lookup on `/lens/handbook/[doc]/[chapter]` | STILL OPEN | `apps/study/src/routes/(app)/lens/handbook/[doc]/[chapter]/+page.server.ts:62-75` still per-section `getNodesCitingSection`. Next: add `getNodesCitingSectionsBatch({ referenceId, chapter, sections })` |
+| MAJOR    | N+1 mastery fan-out on `/credentials` | CLOSED | `credentials/+page.server.ts` now uses `getCredentialMasteryMap(userId, credentialIds)` -- one BC call computes mastery for every active credential. |
+| MAJOR    | N+1 syllabi fan-out on `/goals/[id]` (sequential `for...of await`) | CLOSED | `goals/[id]/+page.server.ts` now wraps the per-credential `getCredentialSyllabi` reads in `Promise.all` so the round trips overlap. |
+| MAJOR    | N+1 prereq title resolution on `/goals/[id]` | CLOSED | `credentials/[slug]/+page.server.ts` now uses `getCredentialsByIds(prereqIds)` for prereq title resolution. (The original review pinned this finding to `/goals/[id]` but the actual `getCredentialById` per-prereq pattern lives on the credential-detail route; closed at the source.) |
+| MAJOR    | N+1 progress fan-out on `/lens/handbook` | CLOSED | `lens/handbook/+page.server.ts` now uses `getHandbookProgressMap(userId, refIds)` -- per-reference progress for every handbook in one round trip. |
+| MAJOR    | N+1 citation reverse-lookup on `/lens/handbook/[doc]/[chapter]` | CLOSED | `lens/handbook/[doc]/[chapter]/+page.server.ts` now uses `getNodesCitingSectionsBatch({ referenceId, chapter, sections[] })` -- one indexed JSONB-containment query for every section in the chapter. |
 | MAJOR    | Redundant DB fetch on regulations leaf reader | STILL OPEN | `apps/study/src/routes/(app)/library/regulations/[kind]/[group]/[section]/+page.server.ts` still re-fetches `getReferenceById(ref.id)` after the BC view returns. Next: widen `getRegulationsView(view: 'section')` payload to include `supersededById`; drop the extra fetch |
 | MINOR    | Magic-string `'active'` status filter in `/plans` load | CLOSED | `apps/study/src/routes/(app)/plans/+page.server.ts:9` -- `p.status !== PLAN_STATUSES.ACTIVE` |
 | MINOR    | recentReviews limit `10` hardcoded | CLOSED | `apps/study/src/routes/(app)/memory/[id]/+page.server.ts:56` -- `MEMORY_CARD_RECENT_REVIEWS_LIMIT` constant |

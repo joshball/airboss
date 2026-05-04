@@ -2,7 +2,7 @@ import { requireAuth } from '@ab/auth';
 import {
 	type CredentialMasteryRollup,
 	type CredentialRow,
-	getCredentialMastery,
+	getCredentialMasteryMap,
 	getDerivedCertGoals,
 	getPrimaryGoal,
 	listCredentials,
@@ -25,13 +25,42 @@ export const load: PageServerLoad = async (event) => {
 	]);
 	const goalSlugSet = new Set(goalSlugs);
 
-	const rows: CredentialIndexRow[] = await Promise.all(
-		credentials.map(async (cred) => ({
-			credential: cred,
-			mastery: await getCredentialMastery(user.id, cred.id),
-			primaryGoalCredential: goalSlugSet.has(cred.slug),
-		})),
+	// Batched mastery: one BC call computes the rollup for every active
+	// credential instead of N independent `getCredentialMastery` round trips.
+	// See `getCredentialMasteryMap` in `@ab/bc-study/credentials.ts`. Closes
+	// the chunk-1 perf MAJOR / backend MAJOR N+1 (review-tail-2026-05).
+	const masteryById = await getCredentialMasteryMap(
+		user.id,
+		credentials.map((c) => c.id),
 	);
+	const rows: CredentialIndexRow[] = credentials.map((cred) => {
+		const mastery = masteryById.get(cred.id);
+		if (mastery === undefined) {
+			// Missing rollup means the credential row was not seen by the batched
+			// helper -- can only happen on a TOCTOU delete between the list and
+			// the rollup query. Fall through to a zero rollup so the page still
+			// renders.
+			return {
+				credential: cred,
+				mastery: {
+					credentialId: cred.id,
+					credentialSlug: cred.slug,
+					primarySyllabusId: null,
+					totalLeaves: 0,
+					coveredLeaves: 0,
+					masteredLeaves: 0,
+					byEvidenceKind: {},
+					areas: [],
+				},
+				primaryGoalCredential: goalSlugSet.has(cred.slug),
+			};
+		}
+		return {
+			credential: cred,
+			mastery,
+			primaryGoalCredential: goalSlugSet.has(cred.slug),
+		};
+	});
 
 	const ordered = rows.slice().sort((a, b) => {
 		if (a.primaryGoalCredential !== b.primaryGoalCredential) {

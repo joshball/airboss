@@ -68,14 +68,21 @@ export const load: PageServerLoad = async (event) => {
 	const [syllabi, nodes] = await Promise.all([getGoalSyllabi(goal.id), getGoalNodes(goal.id)]);
 
 	// Build available-syllabi list -- every credential's primary syllabus,
-	// minus those already on the goal.
+	// minus those already on the goal. Parallelize the per-credential reads
+	// instead of awaiting each in sequence -- closes the chunk-1 perf MAJOR /
+	// backend MAJOR sequential `for...of await` N+1 (review-tail-2026-05).
 	const credentials = await listCredentials({ status: CREDENTIAL_STATUSES.ACTIVE });
 	const availableSyllabi: SyllabusOption[] = [];
 	const presentSyllabusIds = new Set(syllabi.map((s) => s.syllabusId));
 	const allSyllabusRows: SyllabusRow[] = [];
-	for (const cred of credentials) {
-		const credSyl = await getCredentialSyllabi(cred.id, { primacy: SYLLABUS_PRIMACY.PRIMARY });
-		for (const item of credSyl) {
+	const perCredSyllabi = await Promise.all(
+		credentials.map(async (cred) => ({
+			cred,
+			items: await getCredentialSyllabi(cred.id, { primacy: SYLLABUS_PRIMACY.PRIMARY }),
+		})),
+	);
+	for (const { cred, items } of perCredSyllabi) {
+		for (const item of items) {
 			allSyllabusRows.push(item.syllabus);
 			if (!presentSyllabusIds.has(item.syllabus.id)) {
 				availableSyllabi.push({

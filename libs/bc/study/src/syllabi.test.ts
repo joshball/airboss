@@ -14,7 +14,9 @@ import {
 	AirbossRefValidationError,
 	buildSyllabusTreeFromRows,
 	getCitationsForSyllabusNode,
+	getCitationsForSyllabusNodes,
 	getKnowledgeNodesForSyllabusLeaf,
+	getKnowledgeNodesForSyllabusLeaves,
 	getSyllabusArea,
 	getSyllabusBySlug,
 	getSyllabusLeaves,
@@ -518,6 +520,55 @@ describe('getKnowledgeNodesForSyllabusLeaf', () => {
 		// pass.
 		const links = await getKnowledgeNodesForSyllabusLeaf(K1_ID, { classes: ['amel', 'ames'] });
 		expect(links.length).toBe(1);
+	});
+});
+
+describe('getCitationsForSyllabusNodes (batch)', () => {
+	it('returns the inline citations array keyed by node id', async () => {
+		const map = await getCitationsForSyllabusNodes([TASK_ID, K1_ID]);
+		expect(map.size).toBe(2);
+		expect(map.get(TASK_ID)?.length).toBe(1);
+		expect(map.get(TASK_ID)?.[0]?.kind).toBe('handbook');
+		expect(map.get(K1_ID)).toEqual([]);
+	});
+
+	it('returns empty Map for empty input', async () => {
+		const map = await getCitationsForSyllabusNodes([]);
+		expect(map.size).toBe(0);
+	});
+
+	it('returns empty array for unknown ids (not throw, not omit)', async () => {
+		const unknownId = generateSyllabusNodeId();
+		const map = await getCitationsForSyllabusNodes([unknownId]);
+		expect(map.get(unknownId)).toEqual([]);
+	});
+});
+
+describe('getKnowledgeNodesForSyllabusLeaves (batch)', () => {
+	it('returns linked nodes with weight, keyed by leaf id', async () => {
+		const map = await getKnowledgeNodesForSyllabusLeaves([K1_ID]);
+		expect(map.size).toBe(1);
+		const links = map.get(K1_ID);
+		expect(links?.length).toBe(1);
+		expect(links?.[0]?.node.id).toBe(KN_NODE_ID);
+		expect(links?.[0]?.weight).toBeCloseTo(0.8);
+	});
+
+	it('returns empty array for leaves with no links (not omit)', async () => {
+		// AREA_ID has no leaf-link rows; the helper should still place it in the
+		// Map with [] so the caller doesn't have to guard.
+		const map = await getKnowledgeNodesForSyllabusLeaves([AREA_ID]);
+		expect(map.get(AREA_ID)).toEqual([]);
+	});
+
+	it('passes class-agnostic leaves through every class filter', async () => {
+		const map = await getKnowledgeNodesForSyllabusLeaves([K1_ID], { classes: ['amel', 'ames'] });
+		expect(map.get(K1_ID)?.length).toBe(1);
+	});
+
+	it('returns empty Map for empty input', async () => {
+		const map = await getKnowledgeNodesForSyllabusLeaves([]);
+		expect(map.size).toBe(0);
 	});
 });
 

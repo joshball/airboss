@@ -26,10 +26,12 @@ import {
 	getCredentialBySlug,
 	getCredentialIdsCoveredBy,
 	getCredentialMastery,
+	getCredentialMasteryMap,
 	getCredentialPrereqDag,
 	getCredentialPrereqs,
 	getCredentialPrimarySyllabus,
 	getCredentialSyllabi,
+	getCredentialsByIds,
 	listCredentials,
 	upsertCredential,
 	upsertCredentialPrereq,
@@ -685,6 +687,57 @@ describe('getCredentialMastery', () => {
 		} finally {
 			await fixture.cleanup();
 		}
+	});
+});
+
+describe('getCredentialsByIds (batch)', () => {
+	it('returns rows keyed by id for the input set', async () => {
+		const map = await getCredentialsByIds([PRIVATE_ID, CFI_ID]);
+		expect(map.size).toBe(2);
+		expect(map.get(PRIVATE_ID)?.slug).toBe(PRIVATE_SLUG);
+		expect(map.get(CFI_ID)?.slug).toBe(CFI_SLUG);
+	});
+
+	it('omits unknown ids without throwing', async () => {
+		const fake = generateCredentialId();
+		const map = await getCredentialsByIds([PRIVATE_ID, fake]);
+		expect(map.size).toBe(1);
+		expect(map.get(fake)).toBeUndefined();
+	});
+
+	it('returns empty Map for empty input', async () => {
+		const map = await getCredentialsByIds([]);
+		expect(map.size).toBe(0);
+	});
+});
+
+describe('getCredentialMasteryMap (batch)', () => {
+	it('mirrors getCredentialMastery for every input id', async () => {
+		const ids = [PRIVATE_ID, CFII_ID];
+		const map = await getCredentialMasteryMap(TEST_USER_ID, ids);
+		expect(map.size).toBe(2);
+
+		const private_ = map.get(PRIVATE_ID);
+		expect(private_?.credentialSlug).toBe(PRIVATE_SLUG);
+		expect(private_?.primarySyllabusId).toBe(PRIVATE_SYLLABUS_ID);
+		expect(private_?.totalLeaves).toBe(0);
+
+		// CFII has no primary syllabus -> primarySyllabusId is null.
+		const cfii = map.get(CFII_ID);
+		expect(cfii?.primarySyllabusId).toBeNull();
+		expect(cfii?.totalLeaves).toBe(0);
+	});
+
+	it('returns empty Map for empty input', async () => {
+		const map = await getCredentialMasteryMap(TEST_USER_ID, []);
+		expect(map.size).toBe(0);
+	});
+
+	it('omits unknown credential ids', async () => {
+		const fake = generateCredentialId();
+		const map = await getCredentialMasteryMap(TEST_USER_ID, [PRIVATE_ID, fake]);
+		expect(map.has(PRIVATE_ID)).toBe(true);
+		expect(map.has(fake)).toBe(false);
 	});
 });
 

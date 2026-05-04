@@ -357,6 +357,68 @@ export async function getNodesCitingSection(query: CitingNodesQuery, db: Db = de
 	});
 }
 
+export interface CitingNodesBatchQuery {
+	referenceId: string;
+	chapter: number;
+	sections: readonly number[];
+}
+
+/**
+ * Batched counterpart to {@link getNodesCitingSection}: pull every node that
+ * cites this `reference + chapter` once via the JSONB containment + GIN
+ * index, then fan the result out per-section in memory.
+ *
+ * The single SQL query bounds the candidate set with the reference-id probe
+ * (the same indexed predicate `getNodesCitingSection` uses); the per-section
+ * filter is a JS pass over the bounded result. Sections with no citing
+ * nodes are present in the output Map with an empty array so the caller can
+ * render the "no citations" state without a missing-key check.
+ *
+ * Closes the per-row N+1 in
+ * `apps/study/src/routes/(app)/lens/handbook/[doc]/[chapter]/+page.server.ts`
+ * (one `getNodesCitingSection` call per section in the chapter).
+ *
+ * Empty `sections` short-circuits.
+ */
+export async function getNodesCitingSectionsBatch(
+	query: CitingNodesBatchQuery,
+	db: Db = defaultDb,
+): Promise<Map<number, KnowledgeNodeRow[]>> {
+	const out = new Map<number, KnowledgeNodeRow[]>();
+	for (const s of query.sections) {
+		out.set(s, []);
+	}
+	if (query.sections.length === 0) return out;
+
+	const probe = JSON.stringify([{ kind: REFERENCE_KINDS.HANDBOOK, reference_id: query.referenceId }]);
+	const candidates = await db
+		.select()
+		.from(knowledgeNode)
+		.where(sql`${knowledgeNode.references} @> ${probe}::jsonb`)
+		.orderBy(asc(knowledgeNode.title));
+
+	const sectionSet = new Set<number>(query.sections);
+	for (const node of candidates) {
+		const refs = node.references as unknown as Citation[];
+		const matchedSections = new Set<number>();
+		for (const entry of refs) {
+			if (!isHandbookCitation(entry)) continue;
+			if (entry.reference_id !== query.referenceId) continue;
+			if (entry.locator.chapter !== query.chapter) continue;
+			const section = entry.locator.section;
+			if (section === undefined) continue;
+			if (!sectionSet.has(section)) continue;
+			matchedSections.add(section);
+		}
+		for (const s of matchedSections) {
+			const list = out.get(s);
+			if (list !== undefined) list.push(node);
+		}
+	}
+
+	return out;
+}
+
 // ---------------------------------------------------------------------------
 // Citation URL resolver
 // ---------------------------------------------------------------------------
@@ -486,6 +548,85 @@ export interface HandbookProgressSummary {
 	readingSections: number;
 	unreadSections: number;
 	comprehendedSections: number;
+}
+
+/**
+ * Batched counterpart to {@link getHandbookProgress}: per-(user, reference)
+ * progress summaries for an arbitrary set of reference ids in two queries
+ * (one COUNT-by-reference for total sections, one read-state aggregate),
+ * keyed back to the input by `referenceId`.
+ *
+ * Closes the per-row N+1 in
+ * `apps/study/src/routes/(app)/lens/handbook/+page.server.ts` (one
+ * `getHandbookProgress` call per handbook).
+ *
+ * Missing reference ids show up in the Map with the zero summary
+ * (`{ totalSections: 0, ... }`), matching the per-row helper's behaviour for
+ * a reference that has no `reference_section` rows yet. Empty input
+ * short-circuits.
+ */
+export async function getHandbookProgressMap(
+	userId: string,
+	referenceIds: readonly string[],
+	db: Db = defaultDb,
+): Promise<Map<string, HandbookProgressSummary>> {
+	const out = new Map<string, HandbookProgressSummary>();
+	if (referenceIds.length === 0) return out;
+	const ids = referenceIds as string[];
+
+	const [totalsRows, readStateRows] = await Promise.all([
+		db
+			.select({
+				referenceId: referenceSection.referenceId,
+				total: sql<number>`count(*)::int`,
+			})
+			.from(referenceSection)
+			.where(
+				and(
+					inArray(referenceSection.referenceId, ids),
+					sql`${referenceSection.level} <> ${REFERENCE_SECTION_LEVELS.CHAPTER}`,
+				),
+			)
+			.groupBy(referenceSection.referenceId),
+		db
+			.select({
+				referenceId: referenceSection.referenceId,
+				status: referenceSectionReadState.status,
+				comprehended: referenceSectionReadState.comprehended,
+			})
+			.from(referenceSectionReadState)
+			.innerJoin(referenceSection, eq(referenceSectionReadState.referenceSectionId, referenceSection.id))
+			.where(and(eq(referenceSectionReadState.userId, userId), inArray(referenceSection.referenceId, ids))),
+	]);
+
+	const totalsByRef = new Map<string, number>();
+	for (const row of totalsRows) {
+		totalsByRef.set(row.referenceId, Number(row.total ?? 0));
+	}
+
+	const summaryByRef = new Map<string, { read: number; reading: number; comprehended: number }>();
+	for (const row of readStateRows) {
+		const acc = summaryByRef.get(row.referenceId) ?? { read: 0, reading: 0, comprehended: 0 };
+		if (row.status === HANDBOOK_READ_STATUSES.READ) acc.read += 1;
+		else if (row.status === HANDBOOK_READ_STATUSES.READING) acc.reading += 1;
+		if (row.comprehended) acc.comprehended += 1;
+		summaryByRef.set(row.referenceId, acc);
+	}
+
+	for (const id of ids) {
+		const totalSections = totalsByRef.get(id) ?? 0;
+		const acc = summaryByRef.get(id) ?? { read: 0, reading: 0, comprehended: 0 };
+		const unreadSections = Math.max(0, totalSections - acc.read - acc.reading);
+		out.set(id, {
+			totalSections,
+			readSections: acc.read,
+			readingSections: acc.reading,
+			unreadSections,
+			comprehendedSections: acc.comprehended,
+		});
+	}
+
+	return out;
 }
 
 /**
