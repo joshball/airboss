@@ -47,6 +47,7 @@ export {
 	__ac_seed_mapping_internal__,
 	type AcSeedMappingEntry,
 	getAcSeedMapping,
+	getAcSeedMappingByReference,
 	listAcSeedMappings,
 } from './seed-mapping.ts';
 export { getAcLiveUrl } from './url.ts';

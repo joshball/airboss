@@ -332,10 +332,12 @@ export {
 export type {
 	CitingNodesBatchQuery,
 	CitingNodesQuery,
+	GetOpenWarningsOptions,
 	GetReferenceOptions,
 	HandbookProgressSummary,
 	HandbookSectionView,
 	ListReferencesOptions,
+	OpenWarning,
 	ReadingOrderEntry,
 } from './references';
 export {
@@ -347,6 +349,7 @@ export {
 	getNextInReadingOrder,
 	getNodesCitingSection,
 	getNodesCitingSectionsBatch,
+	getOpenWarningsForReference,
 	getPreviousInReadingOrder,
 	getReadableReferenceIds,
 	getReadingOrder,
@@ -366,6 +369,7 @@ export {
 	ReferenceNotFoundError,
 	recordHeartbeat,
 	resolveCitationUrl,
+	StaleWarningsTriageError,
 	setComprehended,
 	setNotes,
 	setReadStatus,

@@ -42,6 +42,12 @@ import './asrs/index.ts';
 import './ntsb-alj/index.ts';
 
 export { parseAcLocator } from './ac/locator.ts';
+export {
+	__ac_seed_mapping_internal__,
+	getAcSeedMapping,
+	getAcSeedMappingByReference,
+	listAcSeedMappings,
+} from './ac/seed-mapping.ts';
 export { parseAcsLocator } from './acs/locator.ts';
 export { parseAimLocator } from './aim/locator.ts';
 export {

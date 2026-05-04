@@ -21,6 +21,9 @@
  *   - markAsReread keeps notes, resets status + comprehended.
  */
 
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { bauthUser } from '@ab/auth/schema';
 import {
 	HANDBOOK_HEARTBEAT_INTERVAL_SEC,
@@ -30,17 +33,18 @@ import {
 	ROUTES,
 } from '@ab/constants';
 import { db } from '@ab/db/connection';
-import { airbossRefForHandbookSection } from '@ab/sources';
+import { __ac_seed_mapping_internal__, airbossRefForHandbookSection } from '@ab/sources';
 import type { LegacyCitation, StructuredCitation } from '@ab/types';
 import { generateAuthId, generateReferenceFigureId, generateReferenceId, generateReferenceSectionId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import {
 	getHandbookChapter,
 	getHandbookProgressMap,
 	getHandbookSection,
 	getNodesCitingSection,
 	getNodesCitingSectionsBatch,
+	getOpenWarningsForReference,
 	getReferenceByDocument,
 	HandbookSectionNotFoundError,
 	HandbookValidationError,
@@ -50,6 +54,7 @@ import {
 	ReferenceNotFoundError,
 	recordHeartbeat,
 	resolveCitationUrl,
+	StaleWarningsTriageError,
 	setComprehended,
 	setNotes,
 	setReadStatus,
@@ -821,5 +826,196 @@ describe('setNotes', () => {
 
 		const tooBig = 'a'.repeat(20_000);
 		await expect(setNotes(TEST_USER_ID, SECTION_12_4_ID, tooBig)).rejects.toBeInstanceOf(HandbookValidationError);
+	});
+});
+
+// ---------------------------------------------------------------------------
+// getOpenWarningsForReference (WP-HANDBOOK-RE-EXTRACTION-V2 Phase 3)
+// ---------------------------------------------------------------------------
+
+describe('getOpenWarningsForReference', () => {
+	const ISO = '2026-05-04T00:00:00.000+00:00';
+	// 64-hex sha digests we use across cases. Real values aren't checked
+	// against any actual file -- the reader only compares the digest in
+	// `warnings.json` against the digest in `warnings-triage.json`.
+	const MANIFEST_SHA_A = 'a'.repeat(64);
+	const MANIFEST_SHA_B = 'b'.repeat(64);
+	// Per-warning ids -- 16 hex chars each.
+	const WARN_ID_OPEN = 'aa'.repeat(8);
+	const WARN_ID_FIXED = 'bb'.repeat(8);
+	const WARN_ID_WONTFIX = 'cc'.repeat(8);
+
+	let workRoot: string;
+
+	beforeEach(() => {
+		workRoot = mkdtempSync(join(tmpdir(), 'open-warnings-'));
+	});
+
+	afterEach(() => {
+		rmSync(workRoot, { recursive: true, force: true });
+	});
+
+	function writeWarningsForHandbook(args: {
+		documentSlug: string;
+		edition: string;
+		manifestSha?: string;
+		warnings: ReadonlyArray<{ id: string; code: string; section_code: string | null; message: string }>;
+	}): void {
+		const dir = join(workRoot, 'handbooks', args.documentSlug, args.edition);
+		mkdirSync(dir, { recursive: true });
+		const file = {
+			schema_version: 1,
+			document_slug: args.documentSlug,
+			edition: args.edition,
+			manifest_sha256: args.manifestSha ?? MANIFEST_SHA_A,
+			generated_at: ISO,
+			warnings: args.warnings,
+		};
+		writeFileSync(join(dir, 'warnings.json'), JSON.stringify(file), 'utf-8');
+	}
+
+	function writeTriageForHandbook(args: {
+		documentSlug: string;
+		edition: string;
+		referenceId: string;
+		manifestSha?: string;
+		triage: Record<string, { status: 'open' | 'wontfix' | 'fixed' | 'duplicate'; note?: string }>;
+	}): void {
+		const dir = join(workRoot, 'validation', 'handbooks', args.documentSlug, args.edition);
+		mkdirSync(dir, { recursive: true });
+		const triageEntries: Record<string, { status: string; note?: string; decided_at: string }> = {};
+		for (const [id, entry] of Object.entries(args.triage)) {
+			triageEntries[id] = { status: entry.status, decided_at: ISO };
+			if (entry.note !== undefined) triageEntries[id].note = entry.note;
+		}
+		const file = {
+			schema_version: 1,
+			reference_id: args.referenceId,
+			manifest_sha256: args.manifestSha ?? MANIFEST_SHA_A,
+			triaged_at: ISO,
+			triage: triageEntries,
+		};
+		writeFileSync(join(dir, 'warnings-triage.json'), JSON.stringify(file), 'utf-8');
+	}
+
+	it('returns every warning as open when warnings.json exists and no triage file is present', async () => {
+		writeWarningsForHandbook({
+			documentSlug: PHAK_SLUG,
+			edition: 'FAA-H-8083-25C',
+			warnings: [
+				{ id: WARN_ID_OPEN, code: 'caption-without-figure', section_code: '12', message: 'cap msg' },
+				{ id: WARN_ID_FIXED, code: 'empty-section-kept', section_code: '5', message: 'empty msg' },
+			],
+		});
+
+		const out = await getOpenWarningsForReference(PHAK_25C_ID, { repoRoot: workRoot });
+		expect(out).toHaveLength(2);
+		expect(new Set(out.map((w) => w.id))).toEqual(new Set([WARN_ID_OPEN, WARN_ID_FIXED]));
+		expect(out.every((w) => w.triage_note === undefined)).toBe(true);
+	});
+
+	it('filters fixed and wontfix entries when a matching triage file exists', async () => {
+		writeWarningsForHandbook({
+			documentSlug: PHAK_SLUG,
+			edition: 'FAA-H-8083-25C',
+			warnings: [
+				{ id: WARN_ID_OPEN, code: 'caption-without-figure', section_code: '12', message: 'cap msg' },
+				{ id: WARN_ID_FIXED, code: 'empty-section-kept', section_code: '5', message: 'empty msg' },
+				{ id: WARN_ID_WONTFIX, code: 'tablish-block-not-converted', section_code: '7', message: 'tab msg' },
+			],
+		});
+		writeTriageForHandbook({
+			documentSlug: PHAK_SLUG,
+			edition: 'FAA-H-8083-25C',
+			referenceId: PHAK_25C_ID,
+			triage: {
+				[WARN_ID_FIXED]: { status: 'fixed' },
+				[WARN_ID_WONTFIX]: { status: 'wontfix', note: 'expected; FAA caption art' },
+				[WARN_ID_OPEN]: { status: 'open', note: 'investigating' },
+			},
+		});
+
+		const out = await getOpenWarningsForReference(PHAK_25C_ID, { repoRoot: workRoot });
+		expect(out).toHaveLength(1);
+		expect(out[0]?.id).toBe(WARN_ID_OPEN);
+		expect(out[0]?.triage_note).toBe('investigating');
+	});
+
+	it('throws StaleWarningsTriageError when manifest_sha256 in triage does not match warnings.json', async () => {
+		writeWarningsForHandbook({
+			documentSlug: PHAK_SLUG,
+			edition: 'FAA-H-8083-25C',
+			manifestSha: MANIFEST_SHA_A,
+			warnings: [{ id: WARN_ID_OPEN, code: 'caption-without-figure', section_code: '12', message: 'cap msg' }],
+		});
+		writeTriageForHandbook({
+			documentSlug: PHAK_SLUG,
+			edition: 'FAA-H-8083-25C',
+			referenceId: PHAK_25C_ID,
+			manifestSha: MANIFEST_SHA_B,
+			triage: { [WARN_ID_OPEN]: { status: 'fixed' } },
+		});
+
+		await expect(getOpenWarningsForReference(PHAK_25C_ID, { repoRoot: workRoot })).rejects.toBeInstanceOf(
+			StaleWarningsTriageError,
+		);
+	});
+
+	it('returns [] when warnings.json does not exist on disk', async () => {
+		// No file written -- the corpus has not been re-extracted under v2 yet.
+		const out = await getOpenWarningsForReference(AFH_3C_ID, { repoRoot: workRoot });
+		expect(out).toEqual([]);
+	});
+
+	it('reads AC corpus warnings via the seed-mapping inverse lookup', async () => {
+		// Stage a synthetic AC reference row + its on-disk mapping.
+		const AC_DOC_SLUG_FS = `99-test-${SUITE_TOKEN}`;
+		const AC_REVISION = 'a';
+		const AC_DOCUMENT_SLUG = `ac-99-test-${SUITE_TOKEN}`;
+		const AC_EDITION = `AC 99-TEST-${SUITE_TOKEN.toUpperCase()}A`;
+		const AC_REF_ID = generateReferenceId();
+
+		__ac_seed_mapping_internal__.register({
+			docSlug: AC_DOC_SLUG_FS,
+			revision: AC_REVISION,
+			documentSlug: AC_DOCUMENT_SLUG,
+			edition: AC_EDITION,
+		});
+
+		const now = new Date();
+		await db.insert(reference).values({
+			id: AC_REF_ID,
+			kind: REFERENCE_KINDS.AC,
+			documentSlug: AC_DOCUMENT_SLUG,
+			edition: AC_EDITION,
+			title: `AC 99-TEST ${SUITE_TOKEN}A`,
+			publisher: 'FAA',
+			url: null,
+			supersededById: null,
+			seedOrigin: SUITE_TAG,
+			createdAt: now,
+			updatedAt: now,
+		});
+
+		try {
+			const dir = join(workRoot, 'ac', AC_DOC_SLUG_FS, AC_REVISION);
+			mkdirSync(dir, { recursive: true });
+			const file = {
+				schema_version: 1,
+				document_slug: AC_DOCUMENT_SLUG,
+				edition: AC_EDITION,
+				manifest_sha256: MANIFEST_SHA_A,
+				generated_at: ISO,
+				warnings: [{ id: WARN_ID_OPEN, code: 'caption-without-figure', section_code: '1', message: 'ac cap msg' }],
+			};
+			writeFileSync(join(dir, 'warnings.json'), JSON.stringify(file), 'utf-8');
+
+			const out = await getOpenWarningsForReference(AC_REF_ID, { repoRoot: workRoot });
+			expect(out).toHaveLength(1);
+			expect(out[0]?.code).toBe('caption-without-figure');
+		} finally {
+			await db.delete(reference).where(eq(reference.id, AC_REF_ID));
+			__ac_seed_mapping_internal__.reset();
+		}
 	});
 });
