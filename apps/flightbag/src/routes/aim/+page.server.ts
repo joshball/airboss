@@ -7,8 +7,9 @@
  */
 
 import { getReferenceByDocument, listHandbookChapters } from '@ab/bc-study';
-import { ROUTES } from '@ab/constants';
+import { type ReferenceKind, ROUTES } from '@ab/constants';
 import { error } from '@sveltejs/kit';
+import { buildSourceLinks } from '../../lib/source-links';
 import type { PageServerLoad } from './$types';
 
 const AIM_SLUG = 'aim';
@@ -19,8 +20,16 @@ export const load: PageServerLoad = async () => {
 
 	const chapters = await listHandbookChapters(ref.id);
 
+	const sourceLinks = buildSourceLinks({
+		kind: ref.kind as ReferenceKind,
+		documentSlug: ref.documentSlug,
+		edition: ref.edition,
+		url: ref.url,
+	});
+
 	return {
 		uri: 'airboss-ref:aim',
+		sourceLinks,
 		reference: {
 			id: ref.id,
 			edition: ref.edition,

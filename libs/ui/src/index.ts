@@ -14,9 +14,9 @@
 // Re-exporting components here would pull the full svelte runtime into
 // non-UI consumers -- hence the deliberate split.
 
-// Shared tone vocabulary re-exported so callers don't have to import
-// from two packages for a single prop.
-export { isTone, TONES, type Tone } from '@ab/themes';
+// Tone vocabulary lives in `@ab/themes`; consumers import it directly to
+// avoid two import paths for one identity (which previously produced
+// inconsistent grep results during refactors).
 export type { BadgeSize, BadgeTone } from './components/Badge.svelte';
 export type { BannerTone } from './components/Banner.svelte';
 export type { BreadcrumbItem } from './components/Breadcrumbs.svelte';

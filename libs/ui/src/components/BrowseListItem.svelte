@@ -138,6 +138,13 @@ let { href, id, justCreated = false, title, meta, stats, extra, trailing }: Brow
 		font-size: var(--type-ui-label-size);
 	}
 
+	/*
+	 * 720px is the per-component "row pair collapses" threshold for the
+	 * label/extra split. Slightly above the shared `--ab-breakpoint-md`
+	 * (640px) because a list row needs more horizontal headroom than a
+	 * page layout to keep both columns readable. Justified inline rather
+	 * than snapping to the named scale.
+	 */
 	@media (max-width: 720px) {
 		.card-row {
 			flex-direction: column;

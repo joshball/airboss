@@ -2,10 +2,16 @@
  * Tone contract: the shared `Tone` enum powers Badge / StatTile / Banner.
  * Tones describe the *intent of a status indicator*, distinct from
  * `Button.variant` which describes the *role of an action*.
+ *
+ * Lives next to `tones.ts` in `@ab/themes` (the canonical home). Was
+ * formerly under `libs/ui/__tests__/` because `@ab/ui` re-exported the
+ * vocabulary; that re-export was dropped to keep the public surface
+ * minimal (architecture review minor 2026-05-02).
  */
 
-import { isTone, TONES, type Tone } from '@ab/ui';
 import { describe, expect, it } from 'vitest';
+
+import { isTone, TONES, type Tone } from '../tones';
 
 describe('tones', () => {
 	it('exposes the full canonical set', () => {

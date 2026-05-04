@@ -30,8 +30,21 @@ const percentRead = $derived(
 		<h3>{title}</h3>
 		<span class="edition" title="Edition">{edition}</span>
 	</div>
-	<div class="progress" aria-label="Reading progress">
-		<div class="bar">
+	<div class="progress">
+		<!--
+			role="progressbar" + aria-valuenow gives AT a structured reading
+			of progress without needing to aggregate the visible counts. The
+			aria-valuetext also carries the friendly "N of M sections read"
+			form for screen-reader users.
+		-->
+		<div
+			class="bar"
+			role="progressbar"
+			aria-valuenow={percentRead}
+			aria-valuemin="0"
+			aria-valuemax="100"
+			aria-valuetext={`${progress.readSections} of ${progress.totalSections} sections read`}
+		>
 			<div class="fill" style="width: {percentRead}%" aria-hidden="true"></div>
 		</div>
 		<div class="counts">

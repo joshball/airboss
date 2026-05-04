@@ -7,9 +7,10 @@
  */
 
 import { getReferenceByDocument, listAllSectionsForReference, listChapterSections } from '@ab/bc-study';
-import { ROUTES } from '@ab/constants';
+import { type ReferenceKind, ROUTES } from '@ab/constants';
 import { isParseError, parseAimLocator, parseIdentifier } from '@ab/sources';
 import { error } from '@sveltejs/kit';
+import { buildSourceLinks } from '../../../../../lib/source-links';
 import type { PageServerLoad } from './$types';
 
 const AIM_SLUG = 'aim';
@@ -40,8 +41,16 @@ export const load: PageServerLoad = async ({ params }) => {
 	// Sibling paragraphs power the sticky TOC.
 	const siblings = sectionRow ? await listChapterSections(sectionRow.id) : [];
 
+	const sourceLinks = buildSourceLinks({
+		kind: ref.kind as ReferenceKind,
+		documentSlug: ref.documentSlug,
+		edition: ref.edition,
+		url: ref.url,
+	});
+
 	return {
 		uri: rawUri,
+		sourceLinks,
 		reference: {
 			id: ref.id,
 			title: ref.title,

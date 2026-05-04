@@ -224,6 +224,13 @@ async function loadById(id: string): Promise<HelpPage | undefined> {
 	}
 }
 
+/**
+ * Look up help pages whose **primary** surface (first entry in `tags.appSurface`)
+ * matches the given surface. Secondary surfaces are intentionally NOT matched --
+ * the registry uses primary-surface grouping to avoid the same page surfacing
+ * in multiple navigation buckets. If you need to match any surface in the list,
+ * iterate `helpRegistry.all` and check `tags.appSurface.includes(surface)`.
+ */
 function getByAppSurface(surface: AppSurface): readonly HelpPage[] {
 	const out: HelpPage[] = [];
 	for (const indexed of byId.values()) {

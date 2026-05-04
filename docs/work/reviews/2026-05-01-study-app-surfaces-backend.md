@@ -14,11 +14,11 @@ review_status: done
 
 ## Status as of 2026-05-04
 
-Re-greped main against every finding. 9 of 18 closed; 9 still-open with the N+1 cluster the dominant remainder.
+Re-greped main against every finding. 10 of 18 closed; 8 still-open with the N+1 cluster the dominant remainder.
 
 | Severity | Finding | Verdict | Evidence |
 | -------- | ------- | ------- | -------- |
-| CRITICAL | GET load creates `memory_review_session` rows -- prefetcher can mint sessions | STILL OPEN | `apps/study/src/routes/(app)/memory/review/+page.server.ts:101-129` still calls `startReviewSession` from `load`. Next: route the no-resumable + no-deck branches through a "Start fresh" form action; load returns either prompt or "ready" payload only |
+| CRITICAL | GET load creates `memory_review_session` rows -- prefetcher can mint sessions | CLOSED | `apps/study/src/routes/(app)/memory/review/+page.server.ts:86-142` -- `load()` is now strictly read-only with respect to session creation: it returns `{ prompt, start: null }` for resumable runs and `{ prompt: null, start }` otherwise. Session creation lives only in `actions.fresh` (POST) at `+page.server.ts:144-186`. The route-actions test suite asserts zero `memory_review_session` inserts on three GET paths (`route-actions.test.ts:348-433`). |
 | MAJOR    | N+1 mastery fan-out on `/credentials` | STILL OPEN | `apps/study/src/routes/(app)/credentials/+page.server.ts:28-34` -- still per-row `getCredentialMastery`. Next: add `getCredentialMasteryMap(userId, credentialIds)` to `@ab/bc-study` |
 | MAJOR    | N+1 syllabi fan-out on `/goals/[id]` (sequential `for...of await`) | STILL OPEN | `apps/study/src/routes/(app)/goals/[id]/+page.server.ts:76-88` still has `for (const cred of credentials) { ... await getCredentialSyllabi(...) }`. Next: at minimum wrap in `Promise.all`; better, add `listPrimarySyllabiByCredential(credIds)` |
 | MAJOR    | N+1 prereq title resolution on `/goals/[id]` | STILL OPEN | per-row `getCredentialById` still in place. Next: add `getCredentialsByIds(ids)` BC helper |

@@ -1,6 +1,8 @@
 <script lang="ts">
 import { HELP_SEARCH_DEBOUNCE_MS, ROUTES } from '@ab/constants';
+import { createFocusTrap, type FocusTrap } from '@ab/ui/lib/focus-trap';
 import { goto } from '$app/navigation';
+import { tick, untrack } from 'svelte';
 import type { SearchResult, SearchResultSet } from '../schema/help-registry';
 import { search } from '../search';
 
@@ -64,10 +66,31 @@ $effect(() => {
 	focusedBucket = results.aviation.length > 0 ? 'aviation' : results.help.length > 0 ? 'help' : 'aviation';
 });
 
+// Focus-trap lifecycle: allocated once per dialog-open, released on close.
+// Without this Tab/Shift+Tab can leak out of the role="dialog" + aria-modal
+// container into the underlying page chrome behind the scrim, breaking the
+// modal contract.
+let panelEl = $state<HTMLDivElement | null>(null);
+let trap: FocusTrap | null = null;
+let previousFocus: HTMLElement | null = null;
+
 $effect(() => {
-	if (open && input) {
-		input.focus();
-	}
+	if (!open) return;
+	untrack(() => {
+		previousFocus = (document.activeElement as HTMLElement | null) ?? null;
+	});
+	void tick().then(() => {
+		if (panelEl) {
+			trap = createFocusTrap(panelEl, { onEscape: onClose });
+		}
+		input?.focus();
+	});
+	return () => {
+		trap?.release();
+		trap = null;
+		previousFocus?.focus?.();
+		previousFocus = null;
+	};
 });
 
 function currentList(): readonly SearchResult[] {
@@ -75,6 +98,11 @@ function currentList(): readonly SearchResult[] {
 }
 
 function handleKey(event: KeyboardEvent): void {
+	// Route Tab/Shift+Tab through the focus trap so focus can't leak past
+	// the dialog. The trap's Escape handler is wired via createFocusTrap
+	// below, but keep the explicit check here for the input field as well.
+	trap?.handleKeyDown(event);
+	if (event.defaultPrevented) return;
 	if (event.key === 'Escape') {
 		event.preventDefault();
 		onClose();
@@ -151,6 +179,7 @@ function backdropKeydown(event: KeyboardEvent): void {
 		data-testid="helpsearchpalette-backdrop"
 	>
 		<div
+			bind:this={panelEl}
 			id="helpsearch-palette"
 			class="palette"
 			role="dialog"
@@ -278,8 +307,16 @@ function backdropKeydown(event: KeyboardEvent): void {
 		color: inherit;
 	}
 
+	/*
+	 * Visible keyboard focus indicator on the search field. Previously
+	 * suppressed with `outline: none` which left re-focused users with no
+	 * cue. The box-shadow doesn't reflow surrounding content the way
+	 * outline would inside the inset container.
+	 */
 	input:focus-visible {
 		outline: none;
+		box-shadow: 0 0 0 2px var(--focus-ring);
+		border-radius: var(--radius-sm);
 	}
 
 	.buckets {

@@ -1,5 +1,6 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
+import SourceLinks from '@ab/library/SourceLinks.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -12,6 +13,12 @@ let { data }: { data: PageData } = $props();
 <nav aria-label="Breadcrumb" class="crumbs">
 	<a href={ROUTES.FLIGHTBAG_HOME}>Flightbag</a> &raquo; <span>{data.reference.title}</span>
 </nav>
+
+<SourceLinks
+	localPdfHref={data.sourceLinks.localPdfHref}
+	onlineUrl={data.sourceLinks.onlineUrl}
+	localPdfMissing={data.sourceLinks.localPdfMissing}
+/>
 
 <header class="page-header">
 	<h1>{data.reference.title}</h1>

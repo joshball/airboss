@@ -71,6 +71,13 @@ const PRIVATE_HOST_PATTERNS: readonly RegExp[] = [
 	/^172\.(1[6-9]|2\d|3[01])\./,
 	/\.local$/i,
 	/\.internal$/i,
+	// IPv6 loopback `[::1]` and link-local `[fe80::...]`. URL.hostname strips
+	// brackets on most engines but we accept either form to be safe.
+	/^\[?::1\]?$/i,
+	/^\[?fe80:/i,
+	// IPv6 unique-local addresses (fc00::/7, fd00::/8) -- private network
+	// equivalents to RFC1918.
+	/^\[?f[cd][0-9a-f]{2}:/i,
 ];
 
 function isPrivateHost(host: string): boolean {

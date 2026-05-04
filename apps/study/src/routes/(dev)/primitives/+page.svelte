@@ -6,7 +6,7 @@
  * surface before page-level migration (#5).
  */
 
-import { TONES } from '@ab/ui';
+import { TONES } from '@ab/themes';
 import Badge from '@ab/ui/components/Badge.svelte';
 import Banner from '@ab/ui/components/Banner.svelte';
 import Button from '@ab/ui/components/Button.svelte';
@@ -131,9 +131,9 @@ let activeTab = $state('one');
 
 	<section>
 		<h2>FormField</h2>
-		<FormField label="Email" help="We'll never share it." required for="ff-email">
-			{#snippet control({ describedBy, invalid })}
-				<input id="ff-email" type="email" aria-describedby={describedBy} aria-invalid={invalid} />
+		<FormField label="Email" help="We'll never share it." required>
+			{#snippet control({ id, describedBy, invalid })}
+				<input {id} type="email" aria-describedby={describedBy} aria-invalid={invalid} />
 			{/snippet}
 		</FormField>
 	</section>

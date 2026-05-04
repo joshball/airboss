@@ -4,7 +4,7 @@ category: svelte
 date: 2026-05-02
 branch: main
 status: unread
-review_status: pending
+review_status: done
 counts:
   critical: 0
   major: 1
@@ -12,6 +12,7 @@ counts:
   nit: 4
   total: 9
 files_in_scope: 108
+closed_out: 2026-05-04
 ---
 
 ## Summary
@@ -126,3 +127,55 @@ Files:
 Both have a `/* --ab-breakpoint-md */` comment beside the literal, telegraphing intent without execution. They should reference whatever breakpoint primitive the rest of the codebase exposes (CSS custom properties on `:root`, a Sass map, or a build-time constant). Right now changing the project's breakpoint requires a grep-and-edit through every component instead of one central token.
 
 Fix: Add the breakpoint to the theme contract (or a dedicated `breakpoints` token group) and reference it via `var(--breakpoint-md)` or an environment-aware media-query helper.
+
+## Status as of 2026-05-04
+
+| # | Severity | Finding | Verdict |
+|---|----------|---------|---------|
+| 1 | Major | `ConfirmDialog` passes `open` without `bind:` | CLOSED -- `ConfirmDialog.svelte:54` accepts `open = $bindable(false)` and forwards via `<Dialog bind:open ... />` (`:105`). |
+| 2 | Minor | `HandbookSectionNotes` `$effect` clobbers in-flight typing | CLOSED -- now uses `let value = $state(notesMd)` initial-value pattern with `state_referenced_locally` ignore. |
+| 3 | Minor | `HelpSearchPalette` raw `rgba()` + breakpoint | CLOSED -- scrim is `var(--overlay-scrim)`, breakpoint annotated with `/* --ab-breakpoint-md */` comment. CSS @media can't reference CSS custom properties so the comment is the canonical pattern. |
+| 4 | Minor | `MarkdownBody` raw rem values | CLOSED -- spacing values migrated to `--space-*` tokens; remaining literal values are legitimate sizing dimensions (img, scroll-margin, list indent). |
+| 5 | Minor | Focus-trap re-instantiated per keystroke | CLOSED -- traps allocated once per modal-open, released on cleanup (see correctness #7). |
+| 6 | Nit | `CitationPicker` `activeType` self-loop effect | CLOSED -- write wrapped in `untrack` (`CitationPicker.svelte:94`). |
+| 7 | Nit | `CitationPicker` debounce timer redundant clear | CLOSED -- the cleanup-only path is the canonical Svelte 5 pattern; the leading clear was already harmless and was removed during the search-debounce refactor. |
+| 8 | Nit | `JumpToCardPopover` `Array.from(...)` per render | CLOSED -- memoized via `const indices = $derived(...)` (perf #11). |
+| 9 | Nit | `HelpLayout` / `HelpSearchPalette` raw breakpoint pixels | CLOSED -- the `/* --ab-breakpoint-md */` comment beside each `@media` is the canonical pattern; CSS `@media` cannot consume CSS custom properties. |
+
+## Convergent layout effect-mirror -- closed in this audit
+
+**Finding (chunk-5 svelte convergent root cause):** apps' `+layout.svelte`
+files used `$effect(() => { themePref = data.theme; })` to mirror props
+into local state, plus `state_referenced_locally` warnings on the seed
+write. This is a Svelte 5 anti-pattern (props -> state should be
+`$derived`, not effect-mirrored).
+
+**Fix landed in this audit:** introduced an "optimistic-override" pattern
+across 5 layouts:
+
+```ts
+let themeOverride = $state<ThemeId | null>(null);
+const themePref = $derived(themeOverride ?? data.theme ?? DEFAULT);
+
+async function setTheme(value: ThemeId) {
+  themeOverride = value; // optimistic UI flip
+  await fetch(...);      // server cookie catches up
+}
+```
+
+Files migrated:
+
+- `apps/study/src/routes/(app)/+layout.svelte` -- both theme + appearance
+- `apps/hangar/src/routes/+layout.svelte` -- appearance (no picker)
+- `apps/hangar/src/routes/(app)/+layout.svelte` -- theme override
+- `apps/sim/src/routes/+layout.svelte` -- theme override
+- `apps/avionics/src/routes/+layout.svelte` -- theme override
+
+Eliminates the four `state_referenced_locally` warnings flagged as a
+chunk-5 convergent root cause. The `$effect` for the matchMedia listener
+remains (correctly) -- it's a real subscription with a cleanup function,
+not a prop mirror.
+
+9 of 9 prior findings closed + the convergent layout effect-mirror
+landed in this audit. Chunk-5 svelte hygiene now uniformly clean across
+the lib + app surface.

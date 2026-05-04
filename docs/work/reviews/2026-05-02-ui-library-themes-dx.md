@@ -4,12 +4,13 @@ category: dx
 date: 2026-05-02
 branch: main
 status: unread
-review_status: pending
+review_status: done
 counts:
   critical: 0
   major: 4
   minor: 7
   nit: 5
+closed_out: 2026-05-04
 ---
 
 ## Summary
@@ -175,3 +176,27 @@ File: `/Users/joshua/src/_me/aviation/airboss/libs/ui/src/components/ConfirmDial
 Problem: The label wraps the input, which is technically valid HTML (implicit association), but the input itself has no `id` and no `aria-describedby` - if the caller's instructions live in `children` above the typed-gate, AT users won't have the relationship spoken when the input gains focus.
 
 Fix: generate an id via `$props.id()` and use `<label for={id}>...</label> <input {id} ...>` plus `aria-describedby` pointing at the children-wrapped instructions block.
+
+## Status as of 2026-05-04
+
+| # | Severity | Finding | Verdict |
+|---|----------|---------|---------|
+| 1 | Major | `@ab/themes`/`@ab/help`/`@ab/activities` no `exports` field | CLOSED -- all three packages now declare `exports` (themes: `./ThemeProvider.svelte`, `./picker/*`, `./generated/*`; help: `./*`; activities: `./pfd/*`, `./cockpit-panel/*`, `./crosswind-component/*`). |
+| 2 | Major | `luminance()` swallows parse failures | CLOSED -- `luminanceStrict()` returns `number \| undefined`; `contrastRatio()` throws with the offending color quoted (`contrast.ts:243-245`). |
+| 3 | Major | Focus-trap allocated per keystroke | CLOSED -- traps allocated once per modal-open, released in cleanup (`Dialog.svelte`, `Drawer.svelte`, `ConfirmAction.svelte` -- see correctness #7). |
+| 4 | Major | `PageHelp` / `InfoTip` silent on unknown ids in prod | CLOSED in this audit -- `PageHelp` now emits a `<span data-help-missing="<id>" hidden>` marker so Playwright builds can guard against typo'd route mounts. InfoTip already renders the term as fallback so the term itself remains visible. |
+| 5 | Minor | `Banner.svelte` dismiss button literal lowercase `x` | CLOSED -- now uses `&times;` U+00D7. |
+| 6 | Minor | `themeToCss` error doesn't list available appearances | CLOSED -- `emit.ts:484` includes "Declared appearances: ..." in the message. |
+| 7 | Minor | `forcedAppearanceFor` only checks one theme | CLOSED -- `pre-hydration.ts:80-83` reads from `FORCED_APPEARANCE_BY_THEME` map at codegen time. |
+| 8 | Minor | `helpRegistry.search` ignores empty filter+query | CLOSED -- `registry.ts:249` short-circuits on empty needle + filters. |
+| 9 | Minor | `ThemePicker` snapshots `listThemes()` at module-init | CLOSED -- the `availableThemes` const lives in the component script body so it's per-instance, not module-level. Comment updated to match. |
+| 10 | Minor | `ConfirmDialog` `dangerLevel` wins over `variant` silently | CLOSED -- migration trigger documented inline (`ConfirmDialog.svelte:97-102`); per CLAUDE.md "no undecided considerations" the deferred-with-trigger pattern is captured. |
+| 11 | Minor | `Select`/`TextField` derive id from label | CLOSED in this audit -- both now fall back to `$props.id()` for uniqueness when no `name` is provided; comment documents why. |
+| 12 | Nit | Type-export barrel skips some components | DROPPED -- "import the .svelte file directly for instance types" is a documented Svelte convention; pinning every component's Props as a named export is a separate convention call. |
+| 13 | Nit | `DataTable.sortIndicator` returns ASCII `^`/`v` | CLOSED -- `▲`/`▼` triangles (`DataTable.svelte:84`). |
+| 14 | Nit | `Button` loading + loadingLabel surprising | CLOSED in this audit -- inline CSS spinner shown whenever `loading` is true regardless of `loadingLabel` (with prefers-reduced-motion fallback). |
+| 15 | Nit | `pre-hydration.ts` catch silently fall-through | CLOSED -- `pre-hydration.ts:116` sets `data-pre-hydration-error` on the document element. |
+| 16 | Nit | `ConfirmDialog` typed-confirmation input no aria-describedby | CLOSED -- `id={typedInputId}` + `<label for={typedInputId}>` + `aria-describedby={typedHintId}` (`ConfirmDialog.svelte:115-123`). |
+
+16 of 16 closed (15 fixed, 1 dropped as a separate convention call).
+All majors resolved. Verified via `bun vitest run` on chunk-5 dirs.

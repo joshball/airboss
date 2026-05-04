@@ -26,7 +26,9 @@ let {
 	panel: Snippet<[string]>;
 } = $props();
 
-const resolvedActive = $derived(active || tabs[0]?.id || '');
+// Default to the first enabled tab so a disabled `tabs[0]` doesn't strand the
+// panel/focus on a tab that can never be activated by keyboard.
+const resolvedActive = $derived(active || tabs.find((t) => !t.disabled)?.id || '');
 
 let panelEl = $state<HTMLDivElement | null>(null);
 
@@ -78,7 +80,10 @@ function handleKeyDown(event: KeyboardEvent, id: string): void {
 			const first = tabs.find((t) => !t.disabled);
 			if (first) {
 				activate(first.id);
-				document.getElementById(`tab-${first.id}`)?.focus();
+				// Match focusByOffset: defer focus so Svelte applies the new
+				// `tabindex` ordering before the focus call. Mixing rAF +
+				// sync focus confused some assistive-tech announcers.
+				requestAnimationFrame(() => document.getElementById(`tab-${first.id}`)?.focus());
 			}
 			break;
 		}
@@ -88,7 +93,7 @@ function handleKeyDown(event: KeyboardEvent, id: string): void {
 			const last = enabled[enabled.length - 1];
 			if (last) {
 				activate(last.id);
-				document.getElementById(`tab-${last.id}`)?.focus();
+				requestAnimationFrame(() => document.getElementById(`tab-${last.id}`)?.focus());
 			}
 			break;
 		}

@@ -14,6 +14,7 @@
 import { getReferenceByDocument, listHandbookChapters, listReferences } from '@ab/bc-study';
 import { externalUrlForReference, REFERENCE_KINDS, type ReferenceKind, ROUTES } from '@ab/constants';
 import { error } from '@sveltejs/kit';
+import { buildSourceLinks } from '../../../../lib/source-links';
 import type { PageServerLoad } from './$types';
 
 const DOC_SHAPE = /^[a-z0-9.-]+$/i;
@@ -40,8 +41,15 @@ export const load: PageServerLoad = async ({ params }) => {
 		// if revision mapping disagrees.
 		const fallback = await getReferenceByDocument(documentSlug).catch(() => null);
 		if (!fallback) throw error(404, `AC ${params.doc}${targetRev} not found.`);
+		const sourceLinksFb = buildSourceLinks({
+			kind: fallback.kind as ReferenceKind,
+			documentSlug: fallback.documentSlug,
+			edition: fallback.edition,
+			url: fallback.url,
+		});
 		return {
 			uri: `airboss-ref:ac/${params.doc}/${params.rev}`,
+			sourceLinks: sourceLinksFb,
 			reference: {
 				id: fallback.id,
 				documentSlug: fallback.documentSlug,
@@ -61,8 +69,16 @@ export const load: PageServerLoad = async ({ params }) => {
 
 	const chapters = await listHandbookChapters(ref.id);
 
+	const sourceLinks = buildSourceLinks({
+		kind: ref.kind as ReferenceKind,
+		documentSlug: ref.documentSlug,
+		edition: ref.edition,
+		url: ref.url,
+	});
+
 	return {
 		uri: `airboss-ref:ac/${params.doc}/${params.rev}`,
+		sourceLinks,
 		reference: {
 			id: ref.id,
 			documentSlug: ref.documentSlug,

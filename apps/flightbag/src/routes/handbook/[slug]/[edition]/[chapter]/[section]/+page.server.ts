@@ -8,9 +8,10 @@
 
 import { parseHandbookChapter, parseHandbookSection, parseHandbookSlug } from '@ab/aviation';
 import { getHandbookSection, getReferenceByDocument } from '@ab/bc-study';
-import { ROUTES } from '@ab/constants';
+import { type ReferenceKind, ROUTES } from '@ab/constants';
 import { isParseError, parseHandbooksLocator, parseIdentifier } from '@ab/sources';
 import { error } from '@sveltejs/kit';
+import { buildSourceLinks } from '../../../../../../lib/source-links';
 import { shortHandbookEdition } from '../../../../../reader-url';
 import type { PageServerLoad } from './$types';
 
@@ -41,8 +42,16 @@ export const load: PageServerLoad = async ({ params }) => {
 	const view = await getHandbookSection(ref.id, chapterCode, sectionCode).catch(() => null);
 	if (!view) throw error(404, `Section ${chapterCode}.${sectionCode} not found in ${ref.title}`);
 
+	const sourceLinks = buildSourceLinks({
+		kind: ref.kind as ReferenceKind,
+		documentSlug: ref.documentSlug,
+		edition: ref.edition,
+		url: ref.url,
+	});
+
 	return {
 		uri: rawUri,
+		sourceLinks,
 		reference: {
 			id: ref.id,
 			documentSlug: ref.documentSlug,

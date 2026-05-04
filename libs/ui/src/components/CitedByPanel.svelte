@@ -129,14 +129,24 @@ const emptyHeadingLevel = $derived<3 | 4>(headingLevel === 2 ? 3 : 4);
 		letter-spacing: var(--letter-spacing-caps);
 	}
 
+	/*
+	 * Always-on underline for the link variant of the label so colorblind
+	 * users can recognise it as a link (WCAG 1.4.1). The non-anchor
+	 * variant is plain text.
+	 */
 	.cited-by-label {
 		color: var(--action-default-active);
 		text-decoration: none;
 		font-weight: 500;
 	}
 
-	.cited-by-label:is(a):hover {
+	.cited-by-label:is(a) {
 		text-decoration: underline;
+		text-underline-offset: var(--underline-offset-2xs);
+	}
+
+	.cited-by-label:is(a):hover {
+		text-decoration-thickness: 2px;
 	}
 
 	.cited-by-missing {

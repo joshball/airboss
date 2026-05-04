@@ -11,6 +11,7 @@ import { getReferenceByDocument } from '@ab/bc-study';
 import { externalUrlForReference, type ReferenceKind, ROUTES } from '@ab/constants';
 import { isParseError, parseAcsLocator, parseIdentifier } from '@ab/sources';
 import { error } from '@sveltejs/kit';
+import { buildSourceLinks } from '../../../../../../../lib/source-links';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {
@@ -23,8 +24,16 @@ export const load: PageServerLoad = async ({ params }) => {
 	const ref = await getReferenceByDocument(params.doc).catch(() => null);
 	if (!ref) throw error(404, `ACS ${params.doc} not found.`);
 
+	const sourceLinks = buildSourceLinks({
+		kind: ref.kind as ReferenceKind,
+		documentSlug: ref.documentSlug,
+		edition: ref.edition,
+		url: ref.url,
+	});
+
 	return {
 		uri: rawUri,
+		sourceLinks,
 		reference: {
 			id: ref.id,
 			documentSlug: ref.documentSlug,

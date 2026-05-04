@@ -87,3 +87,77 @@ test.describe('flightbag CFR Part landing', () => {
 		await expect(ecfrLink).toHaveAttribute('href', /ecfr\.gov/);
 	});
 });
+
+test.describe('flightbag reader content fixes', () => {
+	test('IFH §1.1 renders without leaking the YAML frontmatter block', async ({ page }) => {
+		await page.goto(ROUTES.FLIGHTBAG_HANDBOOK_SECTION('ifh', '8083-15B', '1', '1'));
+		const rendered = page.locator('[data-testid="rendered-section"]').first();
+		await expect(rendered).toBeVisible();
+		const text = await rendered.innerText();
+		// Frontmatter keys never make it into the rendered body.
+		expect(text).not.toMatch(/^---\s*$/m);
+		expect(text).not.toContain('handbook: ifh');
+		expect(text).not.toContain('source_url:');
+		expect(text).not.toContain('faa_pages:');
+	});
+
+	test('IFH §2.2 does not render the section title twice', async ({ page }) => {
+		await page.goto(ROUTES.FLIGHTBAG_HANDBOOK_SECTION('ifh', '8083-15B', '2', '2'));
+		const rendered = page.locator('[data-testid="rendered-section"]').first();
+		await expect(rendered).toBeVisible();
+		// At most one H1 inside the rendered section. The body's body-level
+		// heading (`# Communication Equipment`) duplicating the page title
+		// is dropped by the renderer.
+		const h1Count = await rendered.locator('h1').count();
+		expect(h1Count).toBe(1);
+	});
+
+	test('an empty section renders the placeholder copy instead of a blank page', async ({ page }) => {
+		await page.goto(ROUTES.FLIGHTBAG_HANDBOOK_SECTION('ifh', '8083-15B', '1', '1'));
+		const rendered = page.locator('[data-testid="rendered-section"]').first();
+		await expect(rendered).toBeVisible();
+		// IFH §1.1 has only the frontmatter block in its body; once stripped
+		// the placeholder appears.
+		const placeholder = rendered.locator('[data-testid="rendered-section-empty"]');
+		await expect(placeholder).toBeVisible();
+		await expect(placeholder).toContainText(/no body content/i);
+	});
+
+	test('IFH §2.5 renders the inline figure for "Figure 2-5"', async ({ page }) => {
+		await page.goto(ROUTES.FLIGHTBAG_HANDBOOK_SECTION('ifh', '8083-15B', '2', '5'));
+		const rendered = page.locator('[data-testid="rendered-section"]').first();
+		await expect(rendered).toBeVisible();
+		const fig = rendered.locator('img').first();
+		await expect(fig).toBeVisible();
+		await expect(fig).toHaveAttribute('src', /handbook-asset\/.*figure-2-5/);
+	});
+});
+
+test.describe('flightbag source links cluster', () => {
+	test('handbook section page exposes a Source cluster with an external link', async ({ page }) => {
+		await page.goto(ROUTES.FLIGHTBAG_HANDBOOK_SECTION('phak', '8083-25C', '12', '9'));
+		const cluster = page.locator('[data-testid="source-links"]').first();
+		await expect(cluster).toBeVisible();
+		const onlineLink = cluster.getByRole('link', { name: /Online source/i });
+		await expect(onlineLink).toBeVisible();
+		await expect(onlineLink).toHaveAttribute('href', /^https?:\/\//);
+	});
+
+	test('AIM paragraph page exposes a Source cluster with an external link', async ({ page }) => {
+		await page.goto(ROUTES.FLIGHTBAG_AIM_PARAGRAPH('5', '1', '7'));
+		const cluster = page.locator('[data-testid="source-links"]').first();
+		await expect(cluster).toBeVisible();
+		const onlineLink = cluster.getByRole('link', { name: /Online source/i });
+		await expect(onlineLink).toBeVisible();
+		await expect(onlineLink).toHaveAttribute('href', /^https?:\/\//);
+	});
+
+	test('CFR Part landing exposes a Source cluster with an eCFR link', async ({ page }) => {
+		await page.goto(ROUTES.FLIGHTBAG_CFR_PART('14', '91'));
+		const cluster = page.locator('[data-testid="source-links"]').first();
+		await expect(cluster).toBeVisible();
+		const onlineLink = cluster.getByRole('link', { name: /Online source/i });
+		await expect(onlineLink).toBeVisible();
+		await expect(onlineLink).toHaveAttribute('href', /ecfr\.gov/);
+	});
+});

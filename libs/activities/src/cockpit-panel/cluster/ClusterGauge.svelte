@@ -37,6 +37,12 @@ function valueToAngle(v: number): number {
 }
 
 function arcPath(a1: number, a2: number, r: number, cx = 100, cy = 100): string {
+	// A degenerate arc (a1 === a2) renders nothing -- the path is a no-op
+	// which silently hides the green band when a caller misconfigures the
+	// gauge with `greenLow === greenHigh`. Return an empty string so the
+	// caller can detect the misconfiguration in dev (and the `<path>` shows
+	// nothing rather than a confusingly invisible SVG command).
+	if (a1 === a2) return '';
 	const toRad = (deg: number) => ((deg - 90) * Math.PI) / 180;
 	const x1 = cx + r * Math.cos(toRad(a1));
 	const y1 = cy + r * Math.sin(toRad(a1));
@@ -57,8 +63,8 @@ const ticks = $derived(
 const display = $derived(formatter ? formatter(safeValue) : safeValue.toFixed(0));
 </script>
 
-<div class="cluster-gauge" aria-label={`${label} ${display} ${units}`}>
-	<svg viewBox="0 0 200 200" role="img">
+<div class="cluster-gauge">
+	<svg viewBox="0 0 200 200" role="img" aria-label={`${label} ${display} ${units}`}>
 		<circle cx="100" cy="100" r="96" class="instrument-face" stroke-width="2" />
 		<path d={greenArc} class="arc-green" stroke-width="6" fill="none" />
 		{#if redlineAngle !== null}

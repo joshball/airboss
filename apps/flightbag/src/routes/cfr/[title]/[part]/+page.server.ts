@@ -8,8 +8,9 @@
  */
 
 import { getReferenceByDocument, listAllSectionsForReference } from '@ab/bc-study';
-import { CITATION_URL_TEMPLATES, ROUTES } from '@ab/constants';
+import { CITATION_URL_TEMPLATES, type ReferenceKind, ROUTES } from '@ab/constants';
 import { error } from '@sveltejs/kit';
+import { buildSourceLinks } from '../../../../lib/source-links';
 import type { PageServerLoad } from './$types';
 
 const NUM_SHAPE = /^\d+$/;
@@ -27,8 +28,16 @@ export const load: PageServerLoad = async ({ params }) => {
 	const titleNum = Number.parseInt(params.title, 10);
 	const partNum = Number.parseInt(params.part, 10);
 
+	const sourceLinks = buildSourceLinks({
+		kind: ref.kind as ReferenceKind,
+		documentSlug: ref.documentSlug,
+		edition: ref.edition,
+		url: ref.url,
+	});
+
 	return {
 		uri: `airboss-ref:regs/cfr-${params.title}/${params.part}`,
+		sourceLinks,
 		reference: {
 			id: ref.id,
 			documentSlug: ref.documentSlug,

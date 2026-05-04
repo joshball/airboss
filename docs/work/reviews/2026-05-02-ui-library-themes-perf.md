@@ -9,7 +9,8 @@ counts:
   minor: 6
   nit: 2
 status: unread
-review_status: pending
+review_status: done
+closed_out: 2026-05-04
 ---
 
 ## Summary
@@ -158,3 +159,22 @@ Problem: `bodies: [page.summary, ...page.sections.map((s) => s.body)]` rebuilds 
 Impact: Tiny allocation per page per keystroke. Folds into the major search-perf issue above.
 
 Fix: When fixing the major search issue, precompute `searchBodies` per page at registration time and store on the indexed-page record.
+
+## Status as of 2026-05-04
+
+| # | Severity | Finding | Verdict |
+|---|----------|---------|---------|
+| 1 | Major | PFD rAF loop runs forever; no quiescence | CLOSED -- `step()` returns `false` when every channel is inside its `QUIESCENCE_EPSILON`; rAF loop bails when not dirty and re-arms via reactive heartbeat (`pfd-tick.svelte.ts:156-310`). |
+| 2 | Major | Help search sync-on-keystroke + no precomputed haystacks | CLOSED -- `IndexedPage.searchHaystack` precomputed at register; palette uses `HELP_SEARCH_DEBOUNCE_MS` debounce; `rankBucketIndexed` reads pre-lowercased fields (`registry.ts:41-78`, `HelpSearchPalette.svelte:40-56`). |
+| 3 | Major | Markdown highlight + section parse serialized | CLOSED -- both `highlightAll` and `PageHelp.loadContent` use `Promise.all` (`markdown/index.ts:29-58`, `PageHelp.svelte:73-87`). |
+| 4 | Major | HelpLayout offsetTop scan per scroll event | CLOSED -- `IntersectionObserver` watches headings; falls back to scroll listener only when IO is unavailable (`HelpLayout.svelte:42-77`). |
+| 5 | Minor | InfoTip resize/scroll measureFlip unthrottled | CLOSED in this audit -- new `scheduleMeasureFlip` rAF gate; resize/scroll listeners attach the throttled wrapper. |
+| 6 | Minor | BrowseList key-by-reference | CLOSED -- `keyOf` prop with id fallback on `BrowseList.svelte:26-39`. |
+| 7 | Minor | Focus-trap closure rebuilt per keydown | CLOSED -- modal traps allocated once per open and `release()`d in cleanup; popovers delegate to Dialog (see correctness #7). |
+| 8 | Minor | Markdown img missing loading=lazy | CLOSED -- `MarkdownBody.svelte:147` ships `loading="lazy" decoding="async"`. |
+| 9 | Minor | Tape ticks recomputed every frame | CLOSED -- `AltitudeTape.svelte` precomputes the full ladder at module init and slices by band-snapped indices (`AltitudeTape.svelte:34-95`). |
+| 10 | Minor | CitationPicker reset-effect re-fires search | CLOSED -- reset and search effects collapsed; reset clears state once on open transition; search effect uses token tracking (`CitationPicker.svelte:97-133`). |
+| 11 | Nit | JumpToCardPopover indices array per render | CLOSED in this audit -- `indices = $derived(...)` so the array only rebuilds when `totalCards` changes. |
+| 12 | Nit | helpRegistry.search builds body array per call | CLOSED -- folded into #2 (precomputed `searchHaystack` removes the per-call allocation). |
+
+All 12 findings closed.

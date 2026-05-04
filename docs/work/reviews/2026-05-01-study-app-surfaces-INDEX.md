@@ -9,7 +9,8 @@ major: 58
 minor: 75
 nit: 27
 status: unread
-review_status: pending
+review_status: done
+all_criticals_closed: 2026-05-04
 ---
 
 # 10x Review -- Chunk 1: study-app surfaces
@@ -18,15 +19,15 @@ review_status: pending
 
 ## Final close-out as of 2026-05-04
 
-Re-audited every per-category file against current main. Tally:
+Re-audited every per-category file against current main. **All 5 headline criticals closed via PRs #571 (testing default-annotation), #572 (backend GET-mutation), #574 (3 a11y -- MapPanel + radiogroup + read-suggestion preamble).** Remaining majors / minors / nits tracked in `docs/work-packages/review-tail-2026-05/` with concrete triggers per per-category review file.
 
 | Severity | Closed | Open  | Total |
 | -------- | -----: | ----: | ----: |
-| CRITICAL |      1 |     5 |     6 |
+| CRITICAL |      6 |     0 |     6 |
 | MAJOR    |     27 |    31 |    58 |
 | MINOR    |     35 |    40 |    75 |
 | NIT      |     12 |    15 |    27 |
-| **TOTAL**|  **75**|**91** |**166**|
+| **TOTAL**|  **80**|**86** |**166**|
 
 (Note: original critical tally rolled the (dev)-group security finding in -- that was scoped as MAJOR in the security review file but recorded as critical in the index frontmatter. Actual headline criticals on entry were 5: 3 a11y + 1 testing + 1 backend.)
 
@@ -38,7 +39,7 @@ Re-audited every per-category file against current main. Tally:
 | security     |      4 |    5 | done     | (dev) prod gate landed in this PR; remaining are seed/edition charset caps + content-type allowlist                  |
 | perf         |      1 |   10 | pending  | five MAJOR N+1 batch helpers (convergent with backend), help-registry code-split, library aggregators                |
 | architecture |      6 |   11 | done     | library / knowledge / session aggregator BCs, group-by enums to constants, handbook-asset to libs                    |
-| a11y         |     14 |    7 | pending  | MapPanel labels (CRITICAL); radiogroup keyboard nav (CRITICAL); read-suggestion preamble (CRITICAL); aria-controls   |
+| a11y         |     17 |    4 | pending  | aria-controls on counter-trigger; login dev-accounts heading; toast live-region scope; KbdHint announcement          |
 | patterns     |     11 |    0 | done     | all clean                                                                                                            |
 | testing      |     17 |    4 | done     | savedDeck seeding; cleanup-guard removal; per-test fresh user for memory/review; reps-test ordering                  |
 | dx           |      4 |   14 | pending  | handbook .catch -> typed errors; "verb entity failed" log sweep; login 5xx branch; discovery log level promotion     |
@@ -61,7 +62,7 @@ Re-audited every per-category file against current main. Tally:
 - **Route-level CSS extraction** (1 svelte MAJOR): work-package scope -- extract Card / Toast / ScoreMeta / BadgeStatus primitives into `libs/ui`. Token migration is a finishing pass per project rule.
 - **(app)/+layout effect-mirror** (1 svelte MAJOR + 1 svelte MINOR): replace mirror effects with optimistic-override `$derived` + nullable pending state.
 - **Backend CRITICAL** (memory/review GET-mutation): single-route fix -- redirect to a Start prompt with form action; never mint a session in `load`.
-- **3 of 3 a11y CRITICAL**: MapPanel `aria-label` + drop `role="cell"`; radiogroup roving-tabindex (or convert to native fieldset); read-suggestion preamble.
+- **a11y CRITICAL × 3** -- ALL CLOSED 2026-05-04: MapPanel `aria-label` + `role="cell"` wrapper; radiogroup roving-tabindex via `radio-group-keyboard.ts`; read-suggestion preamble via `ReadSuggestionPanel.svelte`. See a11y review file for evidence.
 
 ## Summary table
 
@@ -86,7 +87,7 @@ Re-audited every per-category file against current main. Tally:
 
 ## Critical findings (5)
 
-- **a11y x3** -- see [a11y review](2026-05-01-study-app-surfaces-a11y.md)
+- **a11y x3** -- ALL CLOSED 2026-05-04 (chunk-1 a11y wave-1 worktree). MapPanel `aria-label` + `role="cell"` wrapper; radiogroup roving-tabindex via `radio-group-keyboard.ts`; read-suggestion preamble via `ReadSuggestionPanel.svelte`. See [a11y review](2026-05-01-study-app-surfaces-a11y.md) status table for file:line evidence.
 - **testing** -- `apps/study/src/lib/server/references.test.ts` historical-lens tests assert only `kind === 'historical'`, never the default `kind === 'current'`. A regression flipping every citation to historical would pass green.
 - **backend** -- `apps/study/src/routes/(app)/memory/review/+page.server.ts` creates `memory_review_session` rows in a GET load. Prefetchers / link previews / crawlers can mint phantom sessions. Mirror of the hazard already documented (in reverse) at `sessions/[id]/summary/+page.server.ts`. Fix: route the no-resumable case through the existing `actions.fresh` form action.
 

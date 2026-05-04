@@ -52,7 +52,7 @@ export {
 } from './bootstrap.ts';
 export { parseHandbooksLocator } from './handbooks/locator.ts';
 export { isParseError, parseIdentifier } from './parser.ts';
-export { getCorpusResolver, initRegistry, productionRegistry } from './registry/index.ts';
+export { ENUMERATED_CORPORA, getCorpusResolver, initRegistry, productionRegistry } from './registry/index.ts';
 export { NULL_REGISTRY } from './registry-stub.ts';
 export { parseRegsLocator } from './regs/locator.ts';
 export {
@@ -77,5 +77,11 @@ export {
 	substituteTokens,
 	toSerializable,
 } from './render/index.ts';
+export {
+	cachedSourcePdfExists,
+	describeSourcePdf,
+	resolveCachedSourcePdfPath,
+	type SourcePdfDescriptor,
+} from './source-pdf.ts';
 export * from './types.ts';
 export { urlForReference } from './url-for-reference.ts';

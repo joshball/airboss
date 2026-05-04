@@ -116,10 +116,24 @@ const comprehendedDisabled = $derived(status === HANDBOOK_READ_STATUSES.UNREAD);
 		color: var(--action-default-ink);
 		font-weight: 500;
 	}
+	/*
+	 * Visually hide the radio input while keeping it in the focus order.
+	 * `pointer-events: none` is dropped: the visible label is the click
+	 * target, and removing the rule means a keyboard user can also reach
+	 * the radio directly. Combined with `:focus-visible` rules below the
+	 * focused segment now shows a clear ring.
+	 */
 	.segment input {
 		position: absolute;
 		opacity: 0;
-		pointer-events: none;
+		width: 1px;
+		height: 1px;
+		clip: rect(0 0 0 0);
+		clip-path: inset(50%);
+	}
+	.segment:focus-within {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
 	}
 	.comprehended {
 		display: flex;

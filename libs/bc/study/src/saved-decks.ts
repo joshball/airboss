@@ -15,7 +15,7 @@
 import { SAVED_DECK_LABEL_MAX_LENGTH } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import { generateSavedDeckId } from '@ab/utils';
-import { and, eq } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { type SavedDeckRow, savedDeck } from './schema';
 
@@ -78,22 +78,15 @@ export async function renameSavedDeck(
 ): Promise<SavedDeckRow> {
 	const label = normalizeSavedDeckLabel(rawLabel);
 
-	const [existing] = await db
-		.select()
-		.from(savedDeck)
-		.where(and(eq(savedDeck.userId, userId), eq(savedDeck.deckHash, deckHash)))
-		.limit(1);
-
-	if (existing) {
-		const [updated] = await db
-			.update(savedDeck)
-			.set({ label, dismissedAt: null })
-			.where(and(eq(savedDeck.userId, userId), eq(savedDeck.deckHash, deckHash)))
-			.returning();
-		return updated;
-	}
-
-	const [inserted] = await db
+	// Single-statement upsert against the (user_id, deck_hash) UNIQUE.
+	// The previous read-then-write path raced concurrent double-clicks
+	// (two tabs, an enhance retry, ...) into two simultaneous INSERTs;
+	// one would surface a raw 23505 instead of the typed BC outcome.
+	// `onConflictDoUpdate` lets the DB pick the winner in one round-trip
+	// and re-applies the rename semantics: clear `dismissed_at` (so a
+	// previously-dismissed deck comes back into view) and install the
+	// new label.
+	const [row] = await db
 		.insert(savedDeck)
 		.values({
 			id: generateSavedDeckId(),
@@ -102,8 +95,12 @@ export async function renameSavedDeck(
 			label,
 			dismissedAt: null,
 		})
+		.onConflictDoUpdate({
+			target: [savedDeck.userId, savedDeck.deckHash],
+			set: { label, dismissedAt: null },
+		})
 		.returning();
-	return inserted;
+	return row;
 }
 
 /**
@@ -126,22 +123,12 @@ export async function deleteSavedDeck(
 	db: Db = defaultDb,
 	now: Date = new Date(),
 ): Promise<SavedDeckRow> {
-	const [existing] = await db
-		.select()
-		.from(savedDeck)
-		.where(and(eq(savedDeck.userId, userId), eq(savedDeck.deckHash, deckHash)))
-		.limit(1);
-
-	if (existing) {
-		const [updated] = await db
-			.update(savedDeck)
-			.set({ dismissedAt: now })
-			.where(and(eq(savedDeck.userId, userId), eq(savedDeck.deckHash, deckHash)))
-			.returning();
-		return updated;
-	}
-
-	const [inserted] = await db
+	// Single-statement upsert -- same race fix as `renameSavedDeck`.
+	// Two concurrent dismisses (e.g. an enhance retry firing twice) used
+	// to read "no row" twice and INSERT twice; the DB-level UNIQUE
+	// rejected the second with a 23505. Now both paths land as one
+	// upsert that stamps `dismissed_at` whether the row existed or not.
+	const [row] = await db
 		.insert(savedDeck)
 		.values({
 			id: generateSavedDeckId(),
@@ -150,8 +137,12 @@ export async function deleteSavedDeck(
 			label: null,
 			dismissedAt: now,
 		})
+		.onConflictDoUpdate({
+			target: [savedDeck.userId, savedDeck.deckHash],
+			set: { dismissedAt: now },
+		})
 		.returning();
-	return inserted;
+	return row;
 }
 
 /**

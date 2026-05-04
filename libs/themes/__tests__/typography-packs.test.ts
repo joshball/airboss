@@ -7,8 +7,7 @@
  * refs remain across the apps now that the alias block is retired.
  */
 
-import { spawnSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import type { TypeBundle, TypographyPack } from '../contract';
@@ -154,10 +153,41 @@ describe('no legacy --ab-* references remain in apps', () => {
 		const roots = [STUDY_SRC, resolve(REPO_ROOT, 'apps/sim/src'), resolve(REPO_ROOT, 'apps/hangar/src')].filter((p) =>
 			existsSync(p),
 		);
-		if (roots.length === 0) return;
-		const res = spawnSync('rg', ['-oNI', '--ab-[a-z0-9-]+', ...roots], { encoding: 'utf8' });
-		const hits = Array.from(new Set(res.stdout.split('\n').filter(Boolean))).sort();
-		expect(hits, `Option A acceptance: found legacy --ab-* refs: ${hits.join(', ')}`).toEqual([]);
+		// A thin checkout that is missing every app source directory is a
+		// configuration error, not a green test. The previous `if (...) return`
+		// silently passed in that scenario; assert at least one root exists.
+		expect(roots.length).toBeGreaterThan(0);
+
+		// Walk file trees in pure node:fs so we don't depend on `rg` being
+		// installed in CI. The previous spawnSync('rg', ...) silently passed
+		// when ripgrep was missing because `res.stdout` defaulted to ''.
+		const exts = new Set(['.ts', '.js', '.svelte', '.css', '.html']);
+		const skipDirs = new Set(['node_modules', '.svelte-kit', 'dist', 'build', '.archive']);
+		const pattern = /--ab-[a-z0-9-]+/g;
+		const hits = new Set<string>();
+
+		function walk(path: string): void {
+			let stat: ReturnType<typeof statSync>;
+			try {
+				stat = statSync(path);
+			} catch {
+				return;
+			}
+			if (stat.isDirectory()) {
+				const base = path.split('/').pop() ?? '';
+				if (skipDirs.has(base)) return;
+				for (const child of readdirSync(path)) walk(`${path}/${child}`);
+				return;
+			}
+			const ext = path.slice(path.lastIndexOf('.'));
+			if (!exts.has(ext)) return;
+			const text = readFileSync(path, 'utf8');
+			for (const match of text.matchAll(pattern)) hits.add(match[0]);
+		}
+		for (const root of roots) walk(root);
+		expect([...hits].sort(), `Option A acceptance: found legacy --ab-* refs: ${[...hits].sort().join(', ')}`).toEqual(
+			[],
+		);
 	});
 });
 

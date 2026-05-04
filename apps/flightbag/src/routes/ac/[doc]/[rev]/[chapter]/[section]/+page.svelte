@@ -1,6 +1,7 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
 import RenderedSection from '@ab/library/RenderedSection.svelte';
+import SourceLinks from '@ab/library/SourceLinks.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -26,6 +27,11 @@ let { data }: { data: PageData } = $props();
 					<a href={data.reference.chapterHref}>Chapter {data.chapter.code}</a> &raquo;
 					<span>§{data.section.code}</span>
 				</nav>
+				<SourceLinks
+					localPdfHref={data.sourceLinks.localPdfHref}
+					onlineUrl={data.sourceLinks.onlineUrl}
+					localPdfMissing={data.sourceLinks.localPdfMissing}
+				/>
 			{/snippet}
 		</RenderedSection>
 	</div>

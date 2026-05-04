@@ -69,6 +69,10 @@ function resolveDefaultReason(reason: SnoozeReason | undefined): SnoozeReason {
 // svelte-ignore state_referenced_locally
 let selectedReason = $state<SnoozeReason>(resolveDefaultReason(initialReason));
 let comment = $state('');
+// Per-instance id for aria-describedby <-> error message association so
+// SR users hear the validation message when the textarea is invalid.
+const instanceId = $props.id();
+const errorId = `${instanceId}-error`;
 // svelte-ignore state_referenced_locally
 let durationLevel = $state<SnoozeDurationLevel>(
 	SNOOZE_DEFAULT_DURATION[resolveDefaultReason(initialReason)] ?? 'medium',
@@ -229,12 +233,16 @@ $effect(() => {
 					bind:value={comment}
 					rows="3"
 					placeholder={requiresComment ? 'Why are you snoozing this card?' : 'Optional note'}
+					required={requiresComment}
+					aria-required={requiresComment}
+					aria-invalid={submitError ? 'true' : undefined}
+					aria-describedby={submitError ? errorId : undefined}
 					data-testid="snoozereasonpopover-comment-input"
 				></textarea>
 			</label>
 
 			{#if submitError}
-				<p class="error" role="alert" data-testid="snoozereasonpopover-error">{submitError}</p>
+				<p id={errorId} class="error" role="alert" data-testid="snoozereasonpopover-error">{submitError}</p>
 			{/if}
 		</form>
 	{/snippet}

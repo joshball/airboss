@@ -122,6 +122,16 @@ function handleTriggerClick(event: MouseEvent): void {
 }
 </script>
 
+<!--
+	When the registered id misses, render a zero-size element carrying
+	`data-help-missing="<id>"` so a Playwright assertion can catch typo'd
+	route mounts in production builds. The dev-only `console.warn` above
+	complements this for local development; the marker survives to
+	preview / prod environments where the warn does not.
+-->
+{#if !exists}
+	<span data-help-missing={pageId} aria-hidden="true" hidden></span>
+{/if}
 {#if exists && helpPage}
 	<button
 		type="button"
