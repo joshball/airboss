@@ -1,11 +1,12 @@
 /**
  * Pure-function tests for the in-memory derive helpers used by the
  * `/review` board: `getDerivedColumnName`, `resolveItemColumnId`,
- * `filterItemsByCriteria`. These don't need the live DB.
+ * `filterItemsByCriteria`, plus the walker's `everyStepPassed` decision
+ * helper. These don't need the live DB.
  */
 
 import { describe, expect, test } from 'vitest';
-import { filterItemsByCriteria, getDerivedColumnName, resolveItemColumnId } from './review';
+import { everyStepPassed, filterItemsByCriteria, getDerivedColumnName, resolveItemColumnId } from './review';
 
 describe('getDerivedColumnName', () => {
 	test('null/null defaults to Backlog', () => {
@@ -115,5 +116,67 @@ describe('filterItemsByCriteria', () => {
 	test('empty criteria returns the full input', () => {
 		const out = filterItemsByCriteria(items, {});
 		expect(out).toEqual(items);
+	});
+});
+
+describe('everyStepPassed', () => {
+	const steps = [{ stepRef: 'a' }, { stepRef: 'b' }, { stepRef: 'c' }];
+
+	test('returns false on an empty plan even when nothing was recorded', () => {
+		expect(everyStepPassed([], [])).toBe(false);
+	});
+
+	test('returns false when not every step has a recorded outcome', () => {
+		expect(
+			everyStepPassed(steps, [
+				{ stepRef: 'a', outcome: 'pass' },
+				{ stepRef: 'b', outcome: 'pass' },
+			]),
+		).toBe(false);
+	});
+
+	test('returns false when any recorded outcome is not pass', () => {
+		expect(
+			everyStepPassed(steps, [
+				{ stepRef: 'a', outcome: 'pass' },
+				{ stepRef: 'b', outcome: 'fail' },
+				{ stepRef: 'c', outcome: 'pass' },
+			]),
+		).toBe(false);
+	});
+
+	test('returns false when any recorded outcome is blocked', () => {
+		expect(
+			everyStepPassed(steps, [
+				{ stepRef: 'a', outcome: 'pass' },
+				{ stepRef: 'b', outcome: 'pass' },
+				{ stepRef: 'c', outcome: 'blocked' },
+			]),
+		).toBe(false);
+	});
+
+	test('returns true on a clean pass across every step', () => {
+		expect(
+			everyStepPassed(steps, [
+				{ stepRef: 'a', outcome: 'pass' },
+				{ stepRef: 'b', outcome: 'pass' },
+				{ stepRef: 'c', outcome: 'pass' },
+			]),
+		).toBe(true);
+	});
+
+	test('extra recorded steps that do not exist in the plan do not invalidate the pass', () => {
+		// `recordStep` is idempotent on (sessionId, stepRef); a stale row
+		// from a prior plan revision survives until the next loader sweep.
+		// We accept the extras because the plan's steps are the authoritative
+		// universe (every step in the plan has a pass).
+		expect(
+			everyStepPassed(steps, [
+				{ stepRef: 'a', outcome: 'pass' },
+				{ stepRef: 'b', outcome: 'pass' },
+				{ stepRef: 'c', outcome: 'pass' },
+				{ stepRef: 'orphan', outcome: 'fail' },
+			]),
+		).toBe(true);
 	});
 });

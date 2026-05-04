@@ -819,6 +819,38 @@ export async function listSteps(sessionId: string, db: Db = defaultDb): Promise<
 		.orderBy(asc(hangarReviewStep.stepIndex));
 }
 
+/**
+ * Pure decision: did the walker complete the test plan with a clean pass?
+ *
+ * The walker's `?/finishSession` action consults this before flipping
+ * `review_status: done` on the spec frontmatter. Conditions:
+ *   1. The plan has at least one step (no flip on an empty plan).
+ *   2. Every step in the plan has been recorded.
+ *   3. Every recorded outcome is `pass` (no fails, no blockeds).
+ *
+ * Lives in the BC alongside the other test-plan helpers so it's reachable
+ * from unit tests without touching the route layer.
+ */
+export function everyStepPassed(
+	steps: ReadonlyArray<{ stepRef: string }>,
+	recorded: ReadonlyArray<{ stepRef: string; outcome: string }>,
+): boolean {
+	if (steps.length === 0) return false;
+	const recordedRefs = new Set(recorded.map((r) => r.stepRef));
+	for (const step of steps) {
+		if (!recordedRefs.has(step.stepRef)) return false;
+	}
+	let passCount = 0;
+	for (const r of recorded) {
+		if (r.outcome === 'pass') passCount += 1;
+		// A non-`pass` outcome on any step disqualifies even if later steps
+		// re-recorded the same ref as `pass`. `recordStep` is idempotent on
+		// `(sessionId, stepRef)`, so the input is already deduped to one row
+		// per step -- we only count the final outcome.
+	}
+	return passCount === steps.length;
+}
+
 // ---------------------------------------------------------------------------
 // Tasks (ad-hoc)
 // ---------------------------------------------------------------------------

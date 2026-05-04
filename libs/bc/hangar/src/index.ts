@@ -165,6 +165,7 @@ export {
 	createTask,
 	deleteBucket,
 	deleteTask,
+	everyStepPassed,
 	filterItemsByCriteria,
 	finishSession,
 	getDerivedColumnName,

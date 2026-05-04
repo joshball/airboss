@@ -280,6 +280,7 @@ export {
 	REVIEW_OUTCOME_LABELS,
 	REVIEW_OUTCOME_VALUES,
 	REVIEW_SESSION_HISTORY_LIMIT,
+	REVIEW_WP_SPEC_TAB_PARAM,
 	type ReviewBoardDefaultColumn,
 	type ReviewBoardFilter,
 	type ReviewBoardStatusFilter,
@@ -291,6 +292,8 @@ export {
 	TASK_TYPE_LABELS,
 	TASK_TYPE_VALUES,
 	type TaskType,
+	WP_SPEC_TABS,
+	type WpSpecTabId,
 } from './review';
 export { ROLE_LABELS, ROLE_VALUES, ROLES, type Role } from './roles';
 export { NAV_LABELS, QUERY_PARAMS, ROUTES } from './routes';

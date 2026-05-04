@@ -314,3 +314,28 @@ export const REVIEW_ITEM_RESURRECTION_DAYS = 30 as const;
  * the page render predictable.
  */
 export const REVIEW_SESSION_HISTORY_LIMIT = 20 as const;
+
+/**
+ * Tabs surfaced on the WP-spec review page. Each tab maps 1:1 to a sibling
+ * markdown file in the work-package directory; tabs whose underlying file is
+ * missing render a "not present" placeholder rather than a 404 -- a WP that
+ * hasn't authored a `user-stories.md` yet is a normal state, not an error.
+ *
+ * Order is the on-screen tab order (left -> right).
+ */
+export const WP_SPEC_TABS = [
+	{ id: 'spec', label: 'Spec', file: 'spec.md' },
+	{ id: 'tasks', label: 'Tasks', file: 'tasks.md' },
+	{ id: 'test-plan', label: 'Test Plan', file: 'test-plan.md' },
+	{ id: 'design', label: 'Design', file: 'design.md' },
+	{ id: 'user-stories', label: 'User Stories', file: 'user-stories.md' },
+	{ id: 'review', label: 'Review Notes', file: 'review.md' },
+] as const;
+export type WpSpecTabId = (typeof WP_SPEC_TABS)[number]['id'];
+
+/**
+ * Query-string parameter the WP-spec view reads to decide which tab to
+ * highlight on first paint. Centralised so the walker's "back to spec"
+ * link can deep-link a specific tab.
+ */
+export const REVIEW_WP_SPEC_TAB_PARAM = 'tab' as const;
