@@ -131,7 +131,21 @@ export const ROUTES = {
 	 */
 	API_CITATIONS_SEARCH: '/api/citations/search',
 
-	// Study -- Dashboard (launchpad; `/` redirects here)
+	/**
+	 * Post-login default landing surface for the study app (study-home WP).
+	 * Replaces `/dashboard` as the primary destination; `/dashboard` survives
+	 * at its existing URL as the "Stats" power-user view.
+	 */
+	STUDY: '/study',
+
+	/**
+	 * Placeholder for the flight-logging surface. The real page lands in
+	 * WP 2 (`flight-evidence-and-cfi-feedback`). v1 renders a banner + back
+	 * link from the study-home Flight tile.
+	 */
+	FLIGHT: '/flight',
+
+	// Study -- Dashboard (kept as the "Stats" view; was the launchpad pre-WP)
 	DASHBOARD: '/dashboard',
 
 	// Study -- Memory
@@ -556,7 +570,12 @@ export const ROUTES = {
  * renders the same text and a rename only touches one file.
  */
 export const NAV_LABELS = {
-	DASHBOARD: 'Dashboard',
+	/** Post-login home (study-home WP). First nav item. */
+	STUDY: 'Study',
+	/** The legacy `/dashboard` page; renamed to "Stats" once `/study` became the home (study-home WP). */
+	DASHBOARD: 'Stats',
+	/** Placeholder for the flight-logging surface (WP 2). */
+	FLIGHT: 'Flight',
 	PLANS: 'Plans',
 	CREDENTIALS: 'Credentials',
 	GOALS: 'Goals',

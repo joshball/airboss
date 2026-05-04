@@ -539,6 +539,7 @@ export {
 	type ReviewPhase,
 	type ReviewRating,
 	type ReviewSessionStatus,
+	readingMinutesForWords,
 	SAVED_DECK_COPY,
 	SAVED_DECK_LABEL_MAX_LENGTH,
 	SCENARIO_DEFAULT_ASSESSMENT_METHODS,
@@ -604,8 +605,19 @@ export {
 	WEAK_AREA_REP_WEIGHT,
 	WEAK_AREA_WINDOW_DAYS,
 	WORDS_PER_MINUTE_READING_RATE,
-	readingMinutesForWords,
 } from './study';
+export {
+	CITATION_ORDER_DEFAULT,
+	CITATION_ORDER_VALUES,
+	type CitationOrder,
+	STUDY_MAP_TAB_DEFAULT,
+	STUDY_MAP_TAB_VALUES,
+	STUDY_MAP_TABS,
+	type StudyMapTab,
+	USER_PREF_KEY_VALUES,
+	USER_PREF_KEYS,
+	type UserPrefKey,
+} from './study-home';
 export {
 	MS_PER_DAY,
 	MS_PER_HOUR,
