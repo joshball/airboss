@@ -23,6 +23,24 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 /**
+ * One warning row inside an AC manifest's `warnings[]` and the sibling
+ * `warnings.json`. Mirrors the handbook warning shape so the BC reader
+ * (`getOpenWarningsForReference`) can consume both corpora through a
+ * single dispatch.
+ *
+ * Today (WP-HANDBOOK-RE-EXTRACTION-V2 Phase 3 conformance shim) the AC
+ * extractor emits zero warnings -- the field exists so consumers iterate a
+ * uniform shape. Full v2 emitter port (figure-pairing, table conversion,
+ * empty-section policy) for ACs lands in WP-AC-V2.
+ */
+export interface AcWarning {
+	readonly id: string;
+	readonly code: string;
+	readonly section_code: string | null;
+	readonly message: string;
+}
+
+/**
  * Per-AC manifest. One file per (doc, rev) pair under `ac/<doc-slug>/<rev>/`.
  */
 export interface AcManifestFile {
@@ -59,6 +77,13 @@ export interface AcManifestFile {
 	readonly sections: readonly AcManifestSection[];
 	/** Optional per-Change bodies. Filled when an AC has Changes issued against it. */
 	readonly changes: readonly AcManifestChange[];
+	/**
+	 * Pipeline warnings (WP-HANDBOOK-RE-EXTRACTION-V2 Phase 3 conformance shim).
+	 * AC ingest emits an empty array today -- the field exists so the BC reader
+	 * + sibling `warnings.json` see the same shape across handbook + AC corpora.
+	 * Full v2 emitter port for ACs is WP-AC-V2.
+	 */
+	readonly warnings: readonly AcWarning[];
 }
 
 /**
@@ -169,7 +194,14 @@ export function readAcManifest(root: string, docSlug: string, revision: string):
 	if (!Array.isArray(m.changes)) {
 		throw new Error(`ac manifest at ${path}: changes must be an array`);
 	}
-	return m as AcManifestFile;
+	// `warnings` is optional on legacy pre-conformance manifests; default to
+	// `[]` so older derivatives keep parsing while new writes always populate
+	// the array.
+	if (m.warnings !== undefined && !Array.isArray(m.warnings)) {
+		throw new Error(`ac manifest at ${path}: warnings must be an array`);
+	}
+	const out = { ...m, warnings: m.warnings ?? [] } as AcManifestFile;
+	return out;
 }
 
 /**
