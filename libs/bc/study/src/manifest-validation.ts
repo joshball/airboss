@@ -181,35 +181,164 @@ export const handbookManifestSectionSchema = z.object({
 export type HandbookManifestSection = z.infer<typeof handbookManifestSectionSchema>;
 
 /**
+ * Closed vocabulary of warning codes the section-tree extractor may emit.
+ *
+ * Two families:
+ *
+ * 1. **Extraction-quality** -- soft failures the v2 extractor (per
+ *    WP-HANDBOOK-RE-EXTRACTION-V2) targets for triage and elimination.
+ *    Future warnings of this family land here.
+ * 2. **Strategy / parser instrumentation** -- emitted by `sections_via_toc`
+ *    et al. to surface parser disagreements (TOC vs body heading mismatch,
+ *    page-label walk-back failures). These are not extraction-quality
+ *    bugs; they're audit signal for the seed reviewer.
+ *
+ * Both families share this enum so the validator stays a single source of
+ * truth; the **classification** (which codes count toward the WP's
+ * "<300 fixable warnings" success criterion) lives in `WP_FIXABLE_WARNING_CODES`
+ * below and in the WP's success-criteria block.
+ */
+export const HANDBOOK_MANIFEST_WARNING_CODES = [
+	// -- v1 extraction-quality codes (pre-WP-HANDBOOK-RE-EXTRACTION-V2) --
+	'figure-without-caption',
+	'caption-without-figure',
+	'table-merge-failed',
+	'table-empty',
+	'cross-reference-unresolved',
+	// -- v2 extraction-quality codes (WP-HANDBOOK-RE-EXTRACTION-V2) --
+	// Phase 1B: HTML table -> markdown conversion ambiguity (rowspans, colspans,
+	// merged cells) and HTML survival (conversion failed, raw HTML left in body).
+	'table-cell-merge-ambiguity',
+	'tablish-block-not-converted',
+	// Phase 1C: figure escape detection (long letter-shape strings in a section
+	// body that look like an OCR'd figure that wasn't clipped) and the empty-
+	// section policy decisions.
+	'ocr-leak-in-section-body',
+	'empty-section-kept',
+	'empty-section-merged',
+	// Phase 1C: per-doc front_matter_page_range YAML key not declared. Surfaced
+	// once at extraction-time when the YAML omits the range; the operator
+	// adds the empirically-found range and re-runs.
+	'front-matter-page-range-not-declared',
+	// -- Strategy / parser instrumentation (NOT extraction-quality bugs) --
+	// `toc` family covers TOC parser issues (orphan entry, indent ambiguity);
+	// `toc-verify` covers heading-fingerprint mismatches between TOC and body;
+	// `llm` covers Claude API errors and malformed responses.
+	'toc',
+	'toc-verify',
+	'llm',
+	'section-strategy',
+	// Page-label fallbacks emitted by sections.py when the printed FAA
+	// header isn't readable on a given PDF page (e.g. chapter-summary
+	// pages that omit the header). The walk-back recovery and the
+	// offset-derived fallback both surface here so the failures are
+	// visible to seed reviewers.
+	'page-label',
+] as const;
+
+export type HandbookManifestWarningCode = (typeof HANDBOOK_MANIFEST_WARNING_CODES)[number];
+
+/**
+ * Subset of warning codes that count toward the
+ * WP-HANDBOOK-RE-EXTRACTION-V2 success criterion ("<300 fixable warnings
+ * across all handbooks"). Every code here corresponds to a substrate-quality
+ * problem the v2 extractor improvements (front-matter, table conversion,
+ * figure pairing, OCR-leak detection, empty-section policy) target directly.
+ *
+ * Codes outside this set (`toc`, `toc-verify`, `llm`, `page-label`,
+ * `section-strategy`) are kept distinct: they surface in the hangar
+ * warning-triage dashboard for separate review but are NOT on this WP's
+ * hook. See `docs/work-packages/wp-handbook-re-extraction-v2/spec.md`.
+ */
+export const WP_FIXABLE_WARNING_CODES: ReadonlySet<HandbookManifestWarningCode> = new Set([
+	'figure-without-caption',
+	'caption-without-figure',
+	'table-merge-failed',
+	'table-empty',
+	'table-cell-merge-ambiguity',
+	'tablish-block-not-converted',
+	'ocr-leak-in-section-body',
+	'empty-section-kept',
+	'empty-section-merged',
+	'front-matter-page-range-not-declared',
+]);
+
+/**
+ * Stable identifier for a warning. Computed Python-side as a 16-char hex
+ * digest of `<code>|<section_code or "">|<message[:50]>` so that triage
+ * state (open / wontfix / fixed / duplicate) can be persisted against it
+ * across re-extractions. Optional on `manifest.json` warnings so pre-WP
+ * derivative trees keep validating; required on `warnings.json` (the
+ * normalized triage-input file) where every entry must have one.
+ *
+ * 16 hex chars (64-bit hash prefix) trades collision risk for readability;
+ * the hangar dashboard renders the id verbatim in the URL.
+ */
+const WARNING_ID_REGEX = /^[0-9a-f]{16}$/;
+
+/**
  * Pipeline warnings persisted on `manifest.json`. Errors fail the pipeline
  * up-front; these are the soft-fail cases the seed surfaces in its summary.
+ *
+ * The `id` field is optional here (pre-WP manifests don't carry it). The
+ * normalized sibling `warnings.json` (see {@link handbookWarningsFileSchema})
+ * requires it on every entry.
  */
 export const handbookManifestWarningSchema = z.object({
-	code: z.enum([
-		'figure-without-caption',
-		'caption-without-figure',
-		'table-merge-failed',
-		'table-empty',
-		'cross-reference-unresolved',
-		// Section-strategy warnings emitted by sections_via_toc / sections_via_llm.
-		// `toc` family covers TOC parser issues (orphan entry, indent ambiguity);
-		// `toc-verify` covers heading-fingerprint mismatches between TOC and body;
-		// `llm` covers Claude API errors and malformed responses.
-		'toc',
-		'toc-verify',
-		'llm',
-		'section-strategy',
-		// Page-label fallbacks emitted by sections.py when the printed FAA
-		// header isn't readable on a given PDF page (e.g. chapter-summary
-		// pages that omit the header). The walk-back recovery and the
-		// offset-derived fallback both surface here so the failures are
-		// visible to seed reviewers.
-		'page-label',
-	]),
+	id: z.string().regex(WARNING_ID_REGEX).optional(),
+	code: z.enum(HANDBOOK_MANIFEST_WARNING_CODES),
 	section_code: z.string().regex(SECTION_TREE_CODE_REGEX).nullish(),
 	message: z.string().min(1),
 });
 export type HandbookManifestWarning = z.infer<typeof handbookManifestWarningSchema>;
+
+/**
+ * One entry inside the sibling `warnings.json` file. Identical to the
+ * manifest warning shape but with a **required** `id` -- the file is the
+ * triage-input contract for the hangar warning-triage dashboard
+ * (WP-HANGAR-REFS), and every row needs a stable handle so triage state
+ * persists across re-extractions.
+ */
+export const handbookWarningsFileEntrySchema = z.object({
+	id: z.string().regex(WARNING_ID_REGEX),
+	code: z.enum(HANDBOOK_MANIFEST_WARNING_CODES),
+	section_code: z.string().regex(SECTION_TREE_CODE_REGEX).nullish(),
+	message: z.string().min(1),
+});
+export type HandbookWarningsFileEntry = z.infer<typeof handbookWarningsFileEntrySchema>;
+
+/**
+ * Top-level shape of the sibling `warnings.json` file the v2 extractor
+ * emits next to `manifest.json`. Same warnings as `manifest.warnings[]`
+ * but normalized for triage tooling: every entry has an `id`, the source
+ * manifest's sha256 is recorded for drift detection, and the schema is
+ * versioned independently from the manifest schema so the triage tooling
+ * can evolve without forcing a manifest rewrite.
+ *
+ * Path on disk: `<corpus>/<doc>/<edition>/warnings.json`. Sibling to the
+ * existing `manifest.json` (NOT under `validation/`, which holds reviewer
+ * state per WP-TOC-VALIDATION-SCHEMA).
+ */
+export const handbookWarningsFileSchema = z.object({
+	schema_version: z.literal(1),
+	document_slug: z.string().regex(DOCUMENT_SLUG_REGEX),
+	edition: z.string().min(1).max(64),
+	/**
+	 * SHA-256 hex digest of the sibling `manifest.json` at the time
+	 * `warnings.json` was written. Triage tooling re-reads the manifest;
+	 * a mismatch means the manifest was rewritten without re-running the
+	 * extractor (typically: errata apply), and the dashboard surfaces a
+	 * "manifest drift" badge so the reviewer knows the warning set is
+	 * still authoritative for **extraction quality** but the sibling
+	 * derivative tree may have moved on. Re-extraction overwrites this
+	 * field with the fresh digest.
+	 */
+	manifest_sha256: z.string().regex(/^[0-9a-f]{64}$/i),
+	/** ISO 8601 timestamp of the extraction run that produced this file. */
+	generated_at: z.string().datetime({ offset: true }),
+	warnings: z.array(handbookWarningsFileEntrySchema).default([]),
+});
+export type HandbookWarningsFile = z.infer<typeof handbookWarningsFileSchema>;
 
 /**
  * One section the errata pipeline patched. The Python apply path emits these
