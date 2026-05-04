@@ -27,14 +27,6 @@ export {
 	type AuditReport,
 	auditCitations,
 } from './citations';
-
-// Knowledge-graph writers (rewrite shared knowledge_node / knowledge_edge rows).
-export {
-	refreshEdgeTargetExists,
-	replaceNodeEdges,
-	upsertKnowledgeNode,
-} from './knowledge';
-
 // Credential writers + DAG validator (seed-time only -- credentials are shared
 // course content, not per-user data).
 export {
@@ -43,33 +35,12 @@ export {
 	upsertCredentialSyllabus,
 	validateCredentialDag,
 } from './credentials';
-
-// Syllabus writers + the airboss-ref leaf validator used by the syllabi
-// seeder. Pure tree validators stay in the runtime barrel because they're
-// reusable from feature code.
+// Knowledge-graph writers (rewrite shared knowledge_node / knowledge_edge rows).
 export {
-	replaceSyllabusNodeLinks,
-	upsertSyllabus,
-	upsertSyllabusNode,
-	validateAirbossRefForLeaf,
-} from './syllabi';
-
-// Reference + handbook section writers (seed-references-from-manifest path).
-// These were already not in the runtime barrel; surfacing them here gives
-// seed scripts a single import surface and preserves the no-runtime-access
-// invariant.
-export {
-	attachSupersededByLatest,
-	replaceFiguresForSection,
-	upsertReference,
-	upsertReferenceSection,
-} from './references';
-export type {
-	FigureInput,
-	UpsertReferenceInput,
-	UpsertReferenceSectionInput,
-} from './references';
-
+	refreshEdgeTargetExists,
+	replaceNodeEdges,
+	upsertKnowledgeNode,
+} from './knowledge';
 // Manifest schemas + types -- consumed exclusively by seeders. Read-state
 // runtime input schemas (handbookHeartbeatInputSchema, handbookNotesInputSchema,
 // handbookReadStatusSchema) stay in the runtime barrel because route handlers
@@ -127,3 +98,27 @@ export {
 	type WholeDocManifest,
 	wholeDocManifestSchema,
 } from './manifest-validation';
+export type {
+	FigureInput,
+	UpsertReferenceInput,
+	UpsertReferenceSectionInput,
+} from './references';
+// Reference + handbook section writers (seed-references-from-manifest path).
+// These were already not in the runtime barrel; surfacing them here gives
+// seed scripts a single import surface and preserves the no-runtime-access
+// invariant.
+export {
+	attachSupersededByLatest,
+	replaceFiguresForSection,
+	upsertReference,
+	upsertReferenceSection,
+} from './references';
+// Syllabus writers + the airboss-ref leaf validator used by the syllabi
+// seeder. Pure tree validators stay in the runtime barrel because they're
+// reusable from feature code.
+export {
+	replaceSyllabusNodeLinks,
+	upsertSyllabus,
+	upsertSyllabusNode,
+	validateAirbossRefForLeaf,
+} from './syllabi';

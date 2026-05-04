@@ -151,7 +151,15 @@ const resolvedRel = $derived(rel ?? (target === '_blank' ? 'noopener noreferrer'
 		border: 2px solid currentColor;
 		border-right-color: transparent;
 		border-radius: 50%;
-		animation: btn-spinner-rotate 0.8s linear infinite;
+		/*
+		 * Use the slow motion duration token. Discrete-property form rather than
+		 * animation shorthand because the token bakes in `ease-out`, but a
+		 * spinner needs `linear` for steady rotation.
+		 */
+		animation-name: btn-spinner-rotate;
+		animation-duration: var(--motion-slow);
+		animation-timing-function: linear;
+		animation-iteration-count: infinite;
 	}
 
 	@media (prefers-reduced-motion: reduce) {

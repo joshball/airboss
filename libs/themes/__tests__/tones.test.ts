@@ -10,7 +10,6 @@
  */
 
 import { describe, expect, it } from 'vitest';
-
 import { isTone, TONES, type Tone } from '../tones';
 
 describe('tones', () => {

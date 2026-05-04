@@ -37,7 +37,9 @@ let appearanceOverride = $state<AppearancePreference | null>(null);
 let themeOverride = $state<ThemeId | null>(null);
 let systemAppearance = $state<AppearanceMode>(DEFAULT_APPEARANCE);
 
-const appearancePref = $derived<AppearancePreference>(appearanceOverride ?? data.appearance ?? DEFAULT_APPEARANCE_PREFERENCE);
+const appearancePref = $derived<AppearancePreference>(
+	appearanceOverride ?? data.appearance ?? DEFAULT_APPEARANCE_PREFERENCE,
+);
 const themePref = $derived<ThemePreference>(themeOverride ?? data.theme ?? DEFAULT_THEME_PREFERENCE);
 
 $effect(() => {
