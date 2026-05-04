@@ -30,6 +30,7 @@ import yaml
 from .config_loader import HandbookConfig
 from .fetch import FetchResult
 from .figures import FigureRecord, FigureWarning
+from .ocr_leak import detect_ocr_leaks, elide_ocr_leaks
 from .outline import OutlineNode
 from .paths import edition_root, ensure_dir, relative_to_repo
 from .sections import SectionBody
@@ -135,6 +136,23 @@ def write_outputs(
                     body.body_md, body.node.title, config.chapter_cover_strip_max_lines
                 )
                 body.char_count = len(body.body_md)
+    # OCR-leak elision: scan each body for runs of 8+ consecutive 1-2-character
+    # tokens (the IFH 2/5 phonetic-alphabet figure-leak pattern). Runs the body
+    # through `detect_ocr_leaks` -> `elide_ocr_leaks`; warnings carry the
+    # section_code on the closed `ocr-leak-in-section-body` code so the hangar
+    # triage dashboard can target the figure-pairing gap directly.
+    # Per WP-HANDBOOK-RE-EXTRACTION-V2 sub-phase 1D.
+    ocr_leak_warning_records: list[tuple[str, str]] = []  # (section_code, message)
+    if config.ocr_leak_detection_enabled:
+        for body in bodies:
+            spans = detect_ocr_leaks(body.body_md)
+            if not spans:
+                continue
+            cleaned, warnings = elide_ocr_leaks(body.body_md, spans, section_code=body.node.code)
+            body.body_md = cleaned
+            body.char_count = len(cleaned)
+            for w in warnings:
+                ocr_leak_warning_records.append((w.section_code, w.message))
     figures_by_section: dict[str, list[FigureRecord]] = {}
     for fig in figures:
         figures_by_section.setdefault(fig.section_code, []).append(fig)
@@ -247,6 +265,18 @@ def write_outputs(
                     "message": msg,
                 }
             )
+    # OCR-leak warnings: section_code is meaningful (the row whose body
+    # carried the elided run), so they bypass the extra_warnings lane and
+    # land directly with their section_code intact.
+    for section_code, message in ocr_leak_warning_records:
+        manifest_warnings.append(
+            {
+                "id": compute_warning_id("ocr-leak-in-section-body", section_code, message),
+                "code": "ocr-leak-in-section-body",
+                "section_code": section_code,
+                "message": message,
+            }
+        )
 
     manifest: dict[str, object] = {
         "document_slug": config.document_slug,

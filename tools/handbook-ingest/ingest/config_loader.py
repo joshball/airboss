@@ -303,6 +303,14 @@ class HandbookConfig:
     # Empty / None means "all empty sections take the default path"
     # (keep with placeholder).
     empty_section_policy: EmptySectionPolicy = field(default_factory=lambda: EmptySectionPolicy())
+    # OCR-leak detection toggle. When True (default), the writer scans every
+    # section body for runs of 8+ consecutive 1-2-character tokens (the
+    # IFH 2/5 phonetic-alphabet figure leak pattern), elides them, and
+    # emits one `ocr-leak-in-section-body` warning per span. Set to False
+    # in the YAML to disable for a doc that's known to contain legitimate
+    # short-token sequences (e.g. a glossary of single-letter callsigns).
+    # Per WP-HANDBOOK-RE-EXTRACTION-V2 sub-phase 1D.
+    ocr_leak_detection_enabled: bool = True
     # Raw YAML payload, exposed so strategy modules can read their own blocks
     # (`toc`, `heading_style`, `prompt`) without each one re-parsing the file.
     raw_yaml: dict[str, object] = field(default_factory=dict)
@@ -504,6 +512,7 @@ def load_config(document_slug: str) -> HandbookConfig:
         extraction_hints=extraction_hints,
         front_matter_page_range=front_matter_page_range,
         empty_section_policy=empty_section_policy,
+        ocr_leak_detection_enabled=bool(raw.get("ocr_leak_detection_enabled", True)),
         raw_yaml=raw,
     )
 
