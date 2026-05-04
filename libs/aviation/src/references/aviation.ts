@@ -16,19 +16,60 @@ import type { Reference } from '../schema/reference';
 
 export const AVIATION_REFERENCES: readonly Reference[] = [
 	{
+		id: 'adm-safety',
+		displayName: 'Aeronautical Decision-Making',
+		aliases: ['ADM'],
+		paraphrase:
+			'Skeleton entry. Aeronautical Decision-Making (ADM) is the cognitive framework pilots use to consistently determine the best course of action in response to a given set of circumstances. Authoritative content (AC 60-22, PHAK chapter 2) to be captured here.',
+		tags: {
+			sourceType: 'authored',
+			aviationTopic: ['human-factors'],
+			flightRules: 'both',
+			knowledgeKind: 'safety-concept',
+		},
+		sources: [],
+		related: [],
+	},
+	{
+		id: 'srm-safety',
+		displayName: 'Single-Pilot Resource Management',
+		aliases: ['SRM'],
+		paraphrase:
+			'Skeleton entry. Single-Pilot Resource Management (SRM) is the application of crew resource management concepts to the single-pilot operation -- the art and science of managing all available resources (information, equipment, people) to ensure a safe outcome. Authoritative content (PHAK chapter 2, FAA-S-ACS-7) to be captured here.',
+		tags: {
+			sourceType: 'authored',
+			aviationTopic: ['human-factors'],
+			flightRules: 'both',
+			knowledgeKind: 'safety-concept',
+		},
+		sources: [],
+		related: [],
+	},
+	{
 		id: 'test-2n3qpdxpmbfp-ref-create',
 		displayName: 'test-2n3qpdxpmbfp-ref-create',
-		aliases: [
-			'alt-1',
-		],
+		aliases: ['alt-1'],
 		paraphrase: 'initial body',
-		tags: 		{
+		tags: {
 			sourceType: 'cfr',
-			aviationTopic: [
-				'regulations',
-			],
+			aviationTopic: ['regulations'],
 			flightRules: 'both',
 			knowledgeKind: 'reference',
+		},
+		sources: [],
+		related: [],
+	},
+	{
+		id: 'va-aircraft',
+		displayName: 'Va (design maneuvering speed)',
+		aliases: ['Va', 'maneuvering speed', 'design maneuvering speed'],
+		paraphrase:
+			'Skeleton entry. Va is the design maneuvering speed -- the maximum speed at which a full or abrupt control input (aileron, rudder, elevator) will not overstress the airframe, because the wing will stall before the limit load factor is exceeded. Va decreases with weight. Authoritative content (POH section 2, PHAK chapter 5, 14 CFR 23.335 historical context) to be captured here.',
+		tags: {
+			sourceType: 'authored',
+			aviationTopic: ['aerodynamics', 'performance'],
+			flightRules: 'both',
+			knowledgeKind: 'definition',
 		},
 		sources: [],
 		related: [],
