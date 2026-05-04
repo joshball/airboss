@@ -42,7 +42,4 @@ contact ATC in an emergency. During an emergency, a pilot needs to prioritize ta
 Many older aircraft may have modern equipment installed, which require a flight manual supplement. This equipment can be a
 valuable single-pilot resource if the pilot uses the equipment proficiently and adjusts procedures appropriately. In some cases,
 
-![Figure 8-3. Sheared off titanium fan blade with feather impressions.
-12345
-Years later, a pilot who investigated this bird strike was flying a turbojet. When a large bird appeared in the departure path, the 
-pilot delayed rotation a few seconds, and  the airplane flew under the bird without incident. Visualizing what c](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-8-4-00-sheared-off-titanium-fan-blade-with-feather-impr.png)
+![Figure 8-3. Sheared off titanium fan blade with feather impressions.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-8-4-00-sheared-off-titanium-fan-blade-with-feather-impr.png)

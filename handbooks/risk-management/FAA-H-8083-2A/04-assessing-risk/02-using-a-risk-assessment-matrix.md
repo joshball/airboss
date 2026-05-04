@@ -55,6 +55,9 @@ Obsolescence
 The matrix results lose relevance if the hazards change before a flight departs. Pilots should verify and reevaluate their risk
 assessment based on current information and conditions before flight.
 
-<div class="handbook-table" data-source="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-4-2-00-untitled.html">
-<table><thead><tr><th>High</th><th>High</th><th>Serious</th><th></th></tr></thead><tbody><tr><td>High</td><td>Serious</td><td></td><td></td></tr><tr><td>Serious</td><td>Med</td><td>ium</td><td>Low</td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>
-</div>
+| High | High | Serious |  |
+| --- | --- | --- | --- |
+| High | Serious |  |  |
+| Serious | Med | ium | Low |
+
+<a class="handbook-table-source" href="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-4-2-00-untitled.html">Open original</a>

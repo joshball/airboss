@@ -35,7 +35,4 @@ the simpler 3P model, which stands for Perceive, Process, and Perform. [Figure 8
 Chapter 8:  Aeronautical Decision-Making in
 Flight
 
-![Figure 8-1. Advisory Circular (AC) 60-22, Aeronautical Decision-Making, includes a wealth of information for pilots.
-12316
-Accidents still occur despite advances in training methods, aircraft technology, and services available to pilots. Despite 
-improvements in training and technology, human error remains an issue. AD](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-8-1-00-advisory-circular-ac-60-22-aeronautical-decision.png)
+![Figure 8-1. Advisory Circular (AC) 60-22, Aeronautical Decision-Making, includes a wealth of information for pilots.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-8-1-00-advisory-circular-ac-60-22-aeronautical-decision.png)

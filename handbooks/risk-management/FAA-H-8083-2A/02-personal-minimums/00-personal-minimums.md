@@ -310,26 +310,45 @@ the probability of experiencing an encounter that could lead to an incident or a
 A copy of the charts used in this chapter can be found in Appendix B, Risk Assessment Tools. Pilots are encouraged to copy and
 use the charts in the appendix or use comparable tools on an electronic flight bag (EFB) before each flight.
 
-<div class="handbook-table" data-source="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-2-00-untitled.html">
-<table><thead><tr><th>Certification, Training, and Experience Summary</th><th></th></tr></thead><tbody><tr><td>Certification Level</td><td></td></tr><tr><td>Certificate level
-(e.g., private, commercial, ATP)</td><td></td></tr><tr><td>Ratings
-(e.g., instrument, multiengine)</td><td></td></tr><tr><td>Endorsements
-(e.g., complex, high performance, high altitude)</td><td></td></tr></tbody></table>
-</div>
+| Certification, Training, and Experience Summary |
+| --- |
+| Certification Level |
+| Certificate level<br>(e.g., private, commercial, ATP) |
+| Ratings<br>(e.g., instrument, multiengine) |
+| Endorsements<br>(e.g., complex, high performance, high altitude) |
 
-<div class="handbook-table" data-source="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-2-01-untitled.html">
-<table><thead><tr><th>Flight review
-(e.g., certificate, rating, wings)</th><th></th></tr></thead><tbody><tr><td>Instrument Proficiency Check</td><td></td></tr><tr><td>Time since checkout in aircraft 1</td><td></td></tr><tr><td>Time since checkout in aircraft 2</td><td></td></tr><tr><td>Time since checkout in aircraft 3</td><td></td></tr><tr><td>Variation in equipment
-(e.g., GPS navigators, autopilot)</td><td></td></tr></tbody></table>
-</div>
+<a class="handbook-table-source" href="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-2-00-untitled.html">Open original</a>
 
-<div class="handbook-table" data-source="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-2-02-untitled.html">
-<table><thead><tr><th>Total flying time</th><th></th></tr></thead><tbody><tr><td>Years of flying experience</td><td></td></tr></tbody></table>
-</div>
+| Flight review<br>(e.g., certificate, rating, wings) |
+| --- |
+| Instrument Proficiency Check |
+| Time since checkout in aircraft 1 |
+| Time since checkout in aircraft 2 |
+| Time since checkout in aircraft 3 |
+| Variation in equipment<br>(e.g., GPS navigators, autopilot) |
 
-<div class="handbook-table" data-source="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-2-03-untitled.html">
-<table><thead><tr><th>Hours</th><th></th></tr></thead><tbody><tr><td>Hours in this aircraft (or identical model)</td><td></td></tr><tr><td>Landings</td><td></td></tr><tr><td>Night hours</td><td></td></tr><tr><td>Night landings</td><td></td></tr><tr><td>Hours flown in high density altitude</td><td></td></tr><tr><td>Hours flown in mountainous terrain</td><td></td></tr><tr><td>Crosswind landings</td><td></td></tr><tr><td>IFR hours</td><td></td></tr><tr><td>IMC hours (actual conditions)</td><td></td></tr><tr><td>Approaches (actual or simulated)</td><td></td></tr></tbody></table>
-</div>
+<a class="handbook-table-source" href="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-2-01-untitled.html">Open original</a>
+
+| Total flying time |
+| --- |
+| Years of flying experience |
+
+<a class="handbook-table-source" href="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-2-02-untitled.html">Open original</a>
+
+| Hours |
+| --- |
+| Hours in this aircraft (or identical model) |
+| Landings |
+| Night hours |
+| Night landings |
+| Hours flown in high density altitude |
+| Hours flown in mountainous terrain |
+| Crosswind landings |
+| IFR hours |
+| IMC hours (actual conditions) |
+| Approaches (actual or simulated) |
+
+<a class="handbook-table-source" href="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-2-03-untitled.html">Open original</a>
 
 <div class="handbook-table" data-source="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-2-04-untitled.html">
 <table><thead><tr><th>Experience and “Comfort Level” Assessment
@@ -390,7 +409,7 @@ Turbulence
 Surface wind speed 10 knots 15 knots
 Surface wind gusts 5 knots 8 knots
 Crosswind component 7 7</td><td></td><td>ME</td><td>Make/
-Model</td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td>10 knots</td><td>15 knots</td><td></td></tr><tr><td></td><td>5 knots</td><td>8 knots</td><td></td></tr><tr><td></td><td>7</td><td>7</td><td></td></tr></tbody></table>
+Model</td></tr><tr><td></td><td>10 knots</td><td>15 knots</td><td></td></tr><tr><td></td><td>5 knots</td><td>8 knots</td><td></td></tr><tr><td></td><td>7</td><td>7</td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-2-08-untitled.html">
@@ -427,7 +446,7 @@ Model
 Performance
 Shortest runway 2,500 4,500
 Highest terrain 6,000 3,000
-Highest density altitude 3,000 3,000</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>2,500</td><td></td><td>4,500</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>6,000</td><td></td><td>3,000</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>3,000</td><td></td><td>3,000</td><td></td><td></td><td></td></tr></tbody></table>
+Highest density altitude 3,000 3,000</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>2,500</td><td></td><td>4,500</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>6,000</td><td></td><td>3,000</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>3,000</td><td></td><td>3,000</td><td></td><td></td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-2-10-untitled.html">
@@ -442,6 +461,9 @@ Highest density altitude 3,000 3,000</td><td></td><td></td><td></td><td></td><td
 3 miles</th></tr></thead><tbody></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-2-12-untitled.html">
-<table><thead><tr><th></th><th></th><th></th></tr></thead><tbody><tr><td>10 knots</td><td>15 knots</td><td></td></tr><tr><td>5 knots</td><td>8 knots</td><td></td></tr><tr><td>7</td><td>7</td><td></td></tr></tbody></table>
-</div>
+| 10 knots | 15 knots |
+| --- | --- |
+| 5 knots | 8 knots |
+| 7 | 7 |
+
+<a class="handbook-table-source" href="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-2-12-untitled.html">Open original</a>

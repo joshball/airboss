@@ -120,14 +120,6 @@ might lead to an aircraft accident.
 Poor risk management is a cause of many accidents. Accordingly, pilots should emphasize risk management in all types of
 operations, from recreational flying to using aircraft for business.
 
-![Figure 1-1. Sample NTSB final report.
-11782
-Key findings of the NTSB aviation accident final report, highlighted above in yellow, emphasize the pilot's inadequate in-flight 
-planning/decision to continue flight into known adverse weather conditions after the engine’s dry air vacuum pump failed and 
-Chapter 1:  Introduc](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-1-1-00-sample-ntsb-final-report-11782-key-findings-of-t.png)
+![Figure 1-1. Sample NTSB final report.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-1-1-00-sample-ntsb-final-report.png)
 
-![Figure 1-2. The PAVE checklist.
-12855
-The pilot reported to air traffic control (ATC) that the vacuum pump failed while in visual meteorological conditions (VMC). 
-As a result, the attitude indicator and directional gyro became inoperative. Rather than divert to an airport while in VMC, the 
-pilot decided to continue t](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-1-4-00-the-pave-checklist-12855-the-pilot-reported-to-a.png)
+![Figure 1-2. The PAVE checklist.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-1-4-00-the-pave-checklist.png)

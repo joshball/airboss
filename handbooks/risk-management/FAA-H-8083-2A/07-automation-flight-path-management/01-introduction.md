@@ -34,7 +34,4 @@ Figure 7-1. Autopilot interface.
 Chapter 7:  Automation & Flight Path
 Management
 
-![Figure 7-1. Autopilot interface.
-Chapter 7:  Automation & Flight Path 
-Management
-7-1](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-7-1-00-autopilot-interface-chapter-7-automation-flight-.png)
+![Figure 7-1. Autopilot interface.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-7-1-00-autopilot-interface.png)

@@ -123,7 +123,7 @@ study section in Chapter 5, Mitigating Risk). She will soon need to discuss the 
 PAVE Area Hazard Risk Likelihood Severity Composite Risk Mitigation Results
 Pilot “P”
 Capability Not IFR proficient LOC remote catastrophic serious
-Aeromedical Alcohol and lack of sleep Fatigue related errors occasional critical serious</th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Pilot “P”</td><td></td><td></td></tr><tr><td></td><td></td><td>serious</td><td></td></tr><tr><td></td><td></td><td>serious</td><td></td></tr></tbody></table>
+Aeromedical Alcohol and lack of sleep Fatigue related errors occasional critical serious</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Pilot “P”</td><td></td></tr><tr><td></td><td></td><td>serious</td></tr><tr><td></td><td></td><td>serious</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-4-3-01-untitled.html">
@@ -132,5 +132,5 @@ PAVE Area Hazard Risk Likelihood Severity Composite Risk Mitigation Results
 Aircraft “A”
 Fuel/Range/Payload Cannot carry full fuel Fuel exhaustion remote catastrophic serious
 Equipment Not certified for known ice LOC occasional catastrophic high
-Performance Marginal takeoff performance Overrun, LOC, or CFIT occasional critical serious</th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Aircraft “A”</td><td></td><td></td></tr><tr><td></td><td></td><td>serious</td><td></td></tr><tr><td></td><td></td><td>high</td><td></td></tr><tr><td></td><td></td><td>serious</td><td></td></tr></tbody></table>
+Performance Marginal takeoff performance Overrun, LOC, or CFIT occasional critical serious</th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Aircraft “A”</td><td></td></tr><tr><td></td><td></td><td>serious</td></tr><tr><td></td><td></td><td>high</td></tr><tr><td></td><td></td><td>serious</td></tr></tbody></table>
 </div>

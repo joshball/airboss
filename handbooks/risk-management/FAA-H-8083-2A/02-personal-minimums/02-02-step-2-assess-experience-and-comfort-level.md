@@ -97,23 +97,42 @@ column to record personal minimums of a 2,500-foot ceiling and 4 miles visibilit
 For night flight, a ceiling under 3,000 feet or visibility less than 5 miles may create an unnecessary risk, so the pilot decided to
 record a 5,000-foot ceiling and 8 miles visibility in the VFR column.
 
-<div class="handbook-table" data-source="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-2-2-2-00-untitled.html">
-<table><thead><tr><th>Certification, Training, and Experience Summary</th><th></th></tr></thead><tbody><tr><td>Certification Level</td><td></td></tr><tr><td>Certificate level
-(e.g., private, commercial, ATP)</td><td></td></tr><tr><td>Ratings
-(e.g., instrument, multiengine)</td><td></td></tr><tr><td>Endorsements
-(e.g., complex, high performance, high altitude)</td><td></td></tr></tbody></table>
-</div>
+| Certification, Training, and Experience Summary |
+| --- |
+| Certification Level |
+| Certificate level<br>(e.g., private, commercial, ATP) |
+| Ratings<br>(e.g., instrument, multiengine) |
+| Endorsements<br>(e.g., complex, high performance, high altitude) |
 
-<div class="handbook-table" data-source="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-2-2-2-01-untitled.html">
-<table><thead><tr><th>Flight review
-(e.g., certificate, rating, wings)</th><th></th></tr></thead><tbody><tr><td>Instrument Proficiency Check</td><td></td></tr><tr><td>Time since checkout in aircraft 1</td><td></td></tr><tr><td>Time since checkout in aircraft 2</td><td></td></tr><tr><td>Time since checkout in aircraft 3</td><td></td></tr><tr><td>Variation in equipment
-(e.g., GPS navigators, autopilot)</td><td></td></tr></tbody></table>
-</div>
+<a class="handbook-table-source" href="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-2-2-2-00-untitled.html">Open original</a>
 
-<div class="handbook-table" data-source="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-2-2-2-02-untitled.html">
-<table><thead><tr><th>Total flying time</th><th></th></tr></thead><tbody><tr><td>Years of flying experience</td><td></td></tr></tbody></table>
-</div>
+| Flight review<br>(e.g., certificate, rating, wings) |
+| --- |
+| Instrument Proficiency Check |
+| Time since checkout in aircraft 1 |
+| Time since checkout in aircraft 2 |
+| Time since checkout in aircraft 3 |
+| Variation in equipment<br>(e.g., GPS navigators, autopilot) |
 
-<div class="handbook-table" data-source="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-2-2-2-03-untitled.html">
-<table><thead><tr><th>Hours</th><th></th></tr></thead><tbody><tr><td>Hours in this aircraft (or identical model)</td><td></td></tr><tr><td>Landings</td><td></td></tr><tr><td>Night hours</td><td></td></tr><tr><td>Night landings</td><td></td></tr><tr><td>Hours flown in high density altitude</td><td></td></tr><tr><td>Hours flown in mountainous terrain</td><td></td></tr><tr><td>Crosswind landings</td><td></td></tr><tr><td>IFR hours</td><td></td></tr><tr><td>IMC hours (actual conditions)</td><td></td></tr><tr><td>Approaches (actual or simulated)</td><td></td></tr></tbody></table>
-</div>
+<a class="handbook-table-source" href="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-2-2-2-01-untitled.html">Open original</a>
+
+| Total flying time |
+| --- |
+| Years of flying experience |
+
+<a class="handbook-table-source" href="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-2-2-2-02-untitled.html">Open original</a>
+
+| Hours |
+| --- |
+| Hours in this aircraft (or identical model) |
+| Landings |
+| Night hours |
+| Night landings |
+| Hours flown in high density altitude |
+| Hours flown in mountainous terrain |
+| Crosswind landings |
+| IFR hours |
+| IMC hours (actual conditions) |
+| Approaches (actual or simulated) |
+
+<a class="handbook-table-source" href="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-2-2-2-03-untitled.html">Open original</a>

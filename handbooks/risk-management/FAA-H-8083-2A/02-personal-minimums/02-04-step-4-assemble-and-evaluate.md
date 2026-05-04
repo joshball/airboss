@@ -101,7 +101,7 @@ Turbulence
 Surface wind speed 10 knots 15 knots
 Surface wind gusts 5 knots 8 knots
 Crosswind component 7 7</td><td></td><td>ME</td><td>Make/
-Model</td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td>10 knots</td><td>15 knots</td><td></td></tr><tr><td></td><td>5 knots</td><td>8 knots</td><td></td></tr><tr><td></td><td>7</td><td>7</td><td></td></tr></tbody></table>
+Model</td></tr><tr><td></td><td>10 knots</td><td>15 knots</td><td></td></tr><tr><td></td><td>5 knots</td><td>8 knots</td><td></td></tr><tr><td></td><td>7</td><td>7</td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-2-2-4-01-untitled.html">
@@ -138,7 +138,7 @@ Model
 Performance
 Shortest runway 2,500 4,500
 Highest terrain 6,000 3,000
-Highest density altitude 3,000 3,000</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>2,500</td><td></td><td>4,500</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>6,000</td><td></td><td>3,000</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>3,000</td><td></td><td>3,000</td><td></td><td></td><td></td></tr></tbody></table>
+Highest density altitude 3,000 3,000</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>2,500</td><td></td><td>4,500</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>6,000</td><td></td><td>3,000</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>3,000</td><td></td><td>3,000</td><td></td><td></td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-2-2-4-03-untitled.html">
@@ -153,6 +153,9 @@ Highest density altitude 3,000 3,000</td><td></td><td></td><td></td><td></td><td
 3 miles</th></tr></thead><tbody></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-2-2-4-05-untitled.html">
-<table><thead><tr><th></th><th></th><th></th></tr></thead><tbody><tr><td>10 knots</td><td>15 knots</td><td></td></tr><tr><td>5 knots</td><td>8 knots</td><td></td></tr><tr><td>7</td><td>7</td><td></td></tr></tbody></table>
-</div>
+| 10 knots | 15 knots |
+| --- | --- |
+| 5 knots | 8 knots |
+| 7 | 7 |
+
+<a class="handbook-table-source" href="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-2-2-4-05-untitled.html">Open original</a>
