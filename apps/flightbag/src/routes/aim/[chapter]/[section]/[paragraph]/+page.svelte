@@ -1,5 +1,6 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
+import ReaderNav from '@ab/library/ReaderNav.svelte';
 import RenderedSection from '@ab/library/RenderedSection.svelte';
 import SourceLinks from '@ab/library/SourceLinks.svelte';
 import type { PageData } from './$types';
@@ -18,6 +19,7 @@ let { data }: { data: PageData } = $props();
 			id={data.uri}
 			body={data.paragraph.contentMd}
 			locator={data.paragraph.sourceLocator}
+			metadata={data.paragraph.metadata}
 		>
 			{#snippet breadcrumb()}
 				<nav aria-label="Breadcrumb" class="crumbs">
@@ -34,6 +36,12 @@ let { data }: { data: PageData } = $props();
 					onlineUrl={data.sourceLinks.onlineUrl}
 					localPdfMissing={data.sourceLinks.localPdfMissing}
 				/>
+			{/snippet}
+			{#snippet emptyFallback()}
+				<ReaderNav nav={data.nav} variant="empty" />
+			{/snippet}
+			{#snippet footer()}
+				<ReaderNav nav={data.nav} variant="footer" />
 			{/snippet}
 		</RenderedSection>
 	</div>

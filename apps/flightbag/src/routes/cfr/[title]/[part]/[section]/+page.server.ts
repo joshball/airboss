@@ -12,6 +12,7 @@ import { getReferenceByDocument, listAllSectionsForReference } from '@ab/bc-stud
 import { CITATION_URL_TEMPLATES, type ReferenceKind, ROUTES } from '@ab/constants';
 import { isParseError, parseIdentifier, parseRegsLocator } from '@ab/sources';
 import { error } from '@sveltejs/kit';
+import { computeSiblingNav, type SiblingNav } from '../../../../../lib/section-nav';
 import { buildSourceLinks } from '../../../../../lib/source-links';
 import type { PageServerLoad } from './$types';
 
@@ -51,6 +52,18 @@ export const load: PageServerLoad = async ({ params }) => {
 		url: ref.url,
 	});
 
+	let nav: SiblingNav = { prev: null, next: null, up: null };
+	if (sectionRow) {
+		nav = computeSiblingNav(allSections, sectionRow.id, (row) => {
+			// CFR section rows have a code that's the section number alone (e.g.
+			// `103`); subpart rows are at `parentId === null` and don't have a
+			// dedicated reader page in the flightbag (they route to the part
+			// landing).
+			if (row.parentId === null) return null;
+			return ROUTES.FLIGHTBAG_CFR_SECTION(params.title, params.part, row.code);
+		});
+	}
+
 	return {
 		uri: rawUri,
 		sourceLinks,
@@ -70,6 +83,7 @@ export const load: PageServerLoad = async ({ params }) => {
 					title: sectionRow.title,
 					contentMd: sectionRow.contentMd,
 					sourceLocator: sectionRow.sourceLocator,
+					metadata: sectionRow.metadata as Record<string, unknown>,
 				}
 			: null,
 		ecfrUrl,
@@ -78,5 +92,6 @@ export const load: PageServerLoad = async ({ params }) => {
 			part: params.part,
 			section: params.section,
 		},
+		nav,
 	};
 };

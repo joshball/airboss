@@ -20,5 +20,6 @@
  */
 
 export type { CitationChipProps } from './CitationChip.svelte';
+export type { ReaderNavData, ReaderNavLink, ReaderNavProps } from './ReaderNav.svelte';
 export type { RenderedSectionFigure, RenderedSectionProps } from './RenderedSection.svelte';
 export type { SourceLinksProps } from './SourceLinks.svelte';

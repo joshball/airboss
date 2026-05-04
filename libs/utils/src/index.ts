@@ -35,14 +35,17 @@ export { createLogger, type Logger } from './logger';
 export {
 	dedupeFirstHeading,
 	escapeHtml,
+	extractHandbookTableLinks,
 	extractImageUrls,
 	type FrontmatterEntry,
 	findFigureReferences,
+	type HandbookTableLink,
 	injectFigureRefs,
 	normalizeHandbookAssetPath,
 	type ParsedFrontmatter,
 	parseFrontmatter,
 	renderMarkdown,
+	sanitizeInlineHtml,
 	stripFrontmatter,
 } from './markdown';
 export { narrow } from './narrow';

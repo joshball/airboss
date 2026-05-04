@@ -145,29 +145,47 @@ function urlForAcs(locator: string): string {
 	return ROUTES.FLIGHTBAG_HOME;
 }
 
+/**
+ * NTSB-ALJ ruling URLs route to the per-case landing. The flightbag does not
+ * yet implement an `/ntsb-alj/[caseNumber]` route -- citations to ALJ rulings
+ * pre-`/ntsb-alj/` ingest fall through to the flightbag home so the chip
+ * doesn't 404. Once the route lands the URL helper switches to the real path.
+ */
 function urlForNtsbAlj(locator: string): string {
 	const result = parseNtsbAljLocator(locator);
 	if (result.kind === 'error') return ROUTES.FLIGHTBAG_HOME;
 	const ntsbAlj = result.ntsbAlj;
 	if (ntsbAlj === undefined) return ROUTES.FLIGHTBAG_HOME;
-	if (ntsbAlj.section !== undefined) {
-		return ROUTES.FLIGHTBAG_NTSB_ALJ_SECTION(ntsbAlj.caseNumber, ntsbAlj.section);
-	}
-	return ROUTES.FLIGHTBAG_NTSB_ALJ(ntsbAlj.caseNumber);
+	// Routes don't exist in the flightbag yet -- fall back to home so the
+	// citation chip lands somewhere instead of 404'ing.
+	void ntsbAlj;
+	return ROUTES.FLIGHTBAG_HOME;
 }
 
+/**
+ * SAFO bulletin URLs would route to the per-bulletin landing, but the
+ * flightbag does not yet implement an `/safo/[id]` route. Citations fall
+ * through to home until that surface lands.
+ */
 function urlForSafo(locator: string): string {
 	const result = parseSafoLocator(locator);
 	if (result.kind === 'error') return ROUTES.FLIGHTBAG_HOME;
 	const safo = result.safo;
 	if (safo === undefined) return ROUTES.FLIGHTBAG_HOME;
-	return ROUTES.FLIGHTBAG_SAFO(safo.safoId);
+	void safo;
+	return ROUTES.FLIGHTBAG_HOME;
 }
 
+/**
+ * InFO bulletin URLs would route to the per-bulletin landing, but the
+ * flightbag does not yet implement an `/info/[id]` route. Citations fall
+ * through to home until that surface lands.
+ */
 function urlForInfo(locator: string): string {
 	const result = parseInfoLocator(locator);
 	if (result.kind === 'error') return ROUTES.FLIGHTBAG_HOME;
 	const info = result.info;
 	if (info === undefined) return ROUTES.FLIGHTBAG_HOME;
-	return ROUTES.FLIGHTBAG_INFO(info.infoId);
+	void info;
+	return ROUTES.FLIGHTBAG_HOME;
 }

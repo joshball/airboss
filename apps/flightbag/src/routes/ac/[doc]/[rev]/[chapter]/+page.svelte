@@ -1,17 +1,21 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
+import ReaderNav from '@ab/library/ReaderNav.svelte';
 import RenderedSection from '@ab/library/RenderedSection.svelte';
 import SourceLinks from '@ab/library/SourceLinks.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
+
+const hasPreamble = $derived(data.chapter.contentMd.trim().length > 0 || data.figures.length > 0);
+const hasSections = $derived(data.sections.length > 0);
 </script>
 
 <svelte:head>
 	<title>{data.reference.title} -- Chapter {data.chapter.code}</title>
 </svelte:head>
 
-{#if data.sections.length > 0}
+{#if hasSections}
 	<nav aria-label="Breadcrumb" class="crumbs">
 		<a href={ROUTES.FLIGHTBAG_HOME}>Flightbag</a> &raquo;
 		<a href={data.reference.acHref}>{data.reference.title}</a> &raquo;
@@ -24,17 +28,22 @@ let { data }: { data: PageData } = $props();
 		localPdfMissing={data.sourceLinks.localPdfMissing}
 	/>
 
-	<header class="page-header">
-		<h1>Chapter {data.chapter.code}: {data.chapter.title}</h1>
-	</header>
-
-	{#if data.chapter.contentMd}
+	{#if hasPreamble}
 		<RenderedSection
-			title=""
+			title={`Chapter ${data.chapter.code}: ${data.chapter.title}`}
 			id={data.uri}
 			body={data.chapter.contentMd}
+			figures={data.figures}
 			locator={data.chapter.sourceLocator}
+			metadata={data.chapter.metadata}
 		/>
+	{:else}
+		<header class="page-header">
+			<h1>Chapter {data.chapter.code}: {data.chapter.title}</h1>
+			{#if data.chapter.sourceLocator}
+				<p class="locator">{data.chapter.sourceLocator}</p>
+			{/if}
+		</header>
 	{/if}
 
 	<section aria-label="Sections">
@@ -50,12 +59,16 @@ let { data }: { data: PageData } = $props();
 			{/each}
 		</ol>
 	</section>
+
+	<ReaderNav nav={data.nav} variant="footer" />
 {:else}
 	<RenderedSection
 		title={`Chapter ${data.chapter.code}: ${data.chapter.title}`}
 		id={data.uri}
 		body={data.chapter.contentMd}
+		figures={data.figures}
 		locator={data.chapter.sourceLocator}
+		metadata={data.chapter.metadata}
 	>
 		{#snippet breadcrumb()}
 			<nav aria-label="Breadcrumb" class="crumbs">
@@ -68,6 +81,12 @@ let { data }: { data: PageData } = $props();
 				onlineUrl={data.sourceLinks.onlineUrl}
 				localPdfMissing={data.sourceLinks.localPdfMissing}
 			/>
+		{/snippet}
+		{#snippet emptyFallback()}
+			<ReaderNav nav={data.nav} variant="empty" />
+		{/snippet}
+		{#snippet footer()}
+			<ReaderNav nav={data.nav} variant="footer" />
 		{/snippet}
 	</RenderedSection>
 {/if}
@@ -82,6 +101,11 @@ let { data }: { data: PageData } = $props();
 	}
 	.page-header h1 {
 		margin: 0 0 var(--space-md);
+	}
+	.locator {
+		margin: 0;
+		color: var(--ink-muted);
+		font-family: var(--font-family-mono);
 	}
 	.sections {
 		list-style: none;

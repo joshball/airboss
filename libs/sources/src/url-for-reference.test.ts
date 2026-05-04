@@ -112,14 +112,15 @@ describe('urlForReference -- acs', () => {
 });
 
 describe('urlForReference -- ntsb-alj', () => {
-	it('maps a whole-ruling URI to FLIGHTBAG_NTSB_ALJ', () => {
-		expect(urlForReference(id('airboss-ref:ntsb-alj/ea-5567'))).toBe(ROUTES.FLIGHTBAG_NTSB_ALJ('ea-5567'));
+	it('parsable NTSB-ALJ URIs fall through to home until the route lands', () => {
+		// `/ntsb-alj/[caseNumber]` is not implemented in the flightbag yet;
+		// returning the would-be route would 404. Falling through to home
+		// keeps the chip clickable.
+		expect(urlForReference(id('airboss-ref:ntsb-alj/ea-5567'))).toBe(ROUTES.FLIGHTBAG_HOME);
 	});
 
-	it('maps a section-depth URI to FLIGHTBAG_NTSB_ALJ_SECTION', () => {
-		expect(urlForReference(id('airboss-ref:ntsb-alj/ea-5567/findings-of-fact'))).toBe(
-			ROUTES.FLIGHTBAG_NTSB_ALJ_SECTION('ea-5567', 'findings-of-fact'),
-		);
+	it('section-depth NTSB-ALJ URIs also fall through to home', () => {
+		expect(urlForReference(id('airboss-ref:ntsb-alj/ea-5567/findings-of-fact'))).toBe(ROUTES.FLIGHTBAG_HOME);
 	});
 
 	it('falls back to home for a malformed locator', () => {
@@ -128,12 +129,12 @@ describe('urlForReference -- ntsb-alj', () => {
 });
 
 describe('urlForReference -- safo', () => {
-	it('maps a SAFO URI to FLIGHTBAG_SAFO', () => {
-		expect(urlForReference(id('airboss-ref:safo/23001'))).toBe(ROUTES.FLIGHTBAG_SAFO('23001'));
+	it('parsable SAFO URIs fall through to home until the route lands', () => {
+		expect(urlForReference(id('airboss-ref:safo/23001'))).toBe(ROUTES.FLIGHTBAG_HOME);
 	});
 
 	it('strips the ?at= pin before mapping', () => {
-		expect(urlForReference(id('airboss-ref:safo/23004?at=2023'))).toBe(ROUTES.FLIGHTBAG_SAFO('23004'));
+		expect(urlForReference(id('airboss-ref:safo/23004?at=2023'))).toBe(ROUTES.FLIGHTBAG_HOME);
 	});
 
 	it('falls back to home for malformed SAFO locators', () => {
@@ -142,12 +143,12 @@ describe('urlForReference -- safo', () => {
 });
 
 describe('urlForReference -- info', () => {
-	it('maps an InFO URI to FLIGHTBAG_INFO', () => {
-		expect(urlForReference(id('airboss-ref:info/23006'))).toBe(ROUTES.FLIGHTBAG_INFO('23006'));
+	it('parsable InFO URIs fall through to home until the route lands', () => {
+		expect(urlForReference(id('airboss-ref:info/23006'))).toBe(ROUTES.FLIGHTBAG_HOME);
 	});
 
 	it('strips the ?at= pin before mapping', () => {
-		expect(urlForReference(id('airboss-ref:info/22008?at=2022'))).toBe(ROUTES.FLIGHTBAG_INFO('22008'));
+		expect(urlForReference(id('airboss-ref:info/22008?at=2022'))).toBe(ROUTES.FLIGHTBAG_HOME);
 	});
 
 	it('falls back to home for malformed InFO locators', () => {
