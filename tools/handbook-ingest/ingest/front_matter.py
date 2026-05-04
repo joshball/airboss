@@ -50,7 +50,9 @@ _FRONT_MATTER_MARKERS: tuple[tuple[str, re.Pattern[str]], ...] = (
     ("preface", re.compile(r"^preface$", re.IGNORECASE)),
     (
         "acknowledgments",
-        re.compile(r"^acknowled?gements?$", re.IGNORECASE),
+        # Match all four common spellings: Acknowledgments,
+        # Acknowledgements, Acknowledgment, Acknowledgement.
+        re.compile(r"^acknowled?ge?ments?$", re.IGNORECASE),
     ),
     ("notice", re.compile(r"^notice$", re.IGNORECASE)),
     (
