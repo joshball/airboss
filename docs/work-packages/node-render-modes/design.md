@@ -64,13 +64,14 @@ The DB does not store per-mode versions of the body. The body is one structured 
 
 The renderer is a Svelte component that takes `KnowledgeNodeBody + mode` and returns the right tree. Sections that fall after the "primary content" in a given mode (e.g., `hook` + `explanation` in Memorize mode) render inside a `<details>` element labeled "Full explanation."
 
-### Decision 3: Mode persistence -- localStorage v1, URL param for sharing
+### Decision 3: Mode persistence -- server-side `study.user_pref`, URL param for sharing
 
-- LocalStorage key: `study.knowledge.renderMode`. Holds `'learn' | 'review' | 'memorize'`. Default `'learn'`.
-- URL param `?mode=...` overrides for one navigation. If present and valid, sets localStorage to that value (so the user's preference updates by visiting a shared link in their preferred mode).
+- Server-side row in `study.user_pref` (table from WP 1). Key `study.knowledge.render_mode`, value `'learn' | 'review' | 'memorize'`. Default `'learn'`.
+- WP 3 adds the key to the `USER_PREF_SCHEMAS` registry in `libs/bc/study/src/user-prefs.ts` with `z.enum(['learn', 'review', 'memorize'])`. No new table; no new migration; the WP-1 form action `?/setPref` handles writes.
+- URL param `?mode=...` overrides for one navigation. If present and valid, fires the `?/setPref` form action to update the stored preference (so visiting a shared link updates the user's default).
 - Invalid URL param: redirect to `/knowledge/[slug]` with no param.
 
-This matches WP 1's localStorage pattern. Server-side prefs (a `user_pref` table) are a future enhancement.
+Cross-device sync works correctly without extra work.
 
 ### Decision 4: Migration is two-phase
 

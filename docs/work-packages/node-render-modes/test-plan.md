@@ -38,21 +38,22 @@ created: 2026-05-04
 1. Click "Memorize".
 2. **Expected:** Order: regulation_text -> synthesis -> practice_prompts -> citations -> `<details>` "Full explanation" containing hook + explanation.
 
-## NRM-5: Mode persistence across nodes
+## NRM-5: Mode persistence across nodes (server-side)
 
 1. Set mode to "Memorize" on `/knowledge/density-altitude`.
 2. Navigate to `/knowledge/four-forces`.
-3. **Expected:** "Memorize" still selected. localStorage value persisted.
+3. **Expected:** "Memorize" still selected. `study.user_pref` row exists for key `study.knowledge.render_mode` with value `'memorize'`.
+4. Sign in on a different browser; navigate to a knowledge node; "Memorize" still selected (cross-device sync via server pref).
 
 ## NRM-6: URL param mode
 
 1. Navigate to `/knowledge/density-altitude?mode=review`.
-2. **Expected:** Page renders with Review mode selected. localStorage updated to "review".
+2. **Expected:** Page renders with Review mode selected. `study.user_pref` updated to `'review'` (URL-shared link updates the user's default).
 
 ## NRM-7: Invalid URL param mode
 
 1. Navigate to `/knowledge/density-altitude?mode=bogus`.
-2. **Expected:** Server redirects to `/knowledge/density-altitude` (no `?mode=`); falls back to localStorage / Learn default.
+2. **Expected:** Server redirects to `/knowledge/density-altitude` (no `?mode=`); falls back to stored `user_pref` value or `learn` default.
 
 ## NRM-8: Free-form node (un-migrated)
 
@@ -135,3 +136,21 @@ created: 2026-05-04
 
 1. `bunx playwright test tests/e2e/knowledge-render-modes.spec.ts`.
 2. **Expected:** All scenarios pass.
+
+## NRM-24: Practice prompts -- card link resolves
+
+1. Migrate a node with a `practice_prompts` section that contains `airboss-ref:card:<id>` for a real card id.
+2. Open the node in any mode that renders practice_prompts.
+3. **Expected:** The marker renders as a clickable link to `/memory/<id>` (or the project's card detail route). Click navigates to that card.
+
+## NRM-25: Practice prompts -- broken link
+
+1. Migrate a node with `airboss-ref:card:nonexistent` in practice_prompts.
+2. Open the node.
+3. **Expected:** The text renders as plain text (no link). Dev console shows a warning. Validator (`bun run check:knowledge-bodies`) reports the broken link as an error.
+
+## NRM-26: WP 1 dependency -- user_pref table exists
+
+1. Run vitest on `parser.test.ts` -- passes regardless.
+2. Run vitest on the render-mode integration test -- requires the `study.user_pref` table from WP 1.
+3. **Expected:** WP 3 fails to build cleanly until WP 1 has shipped. Confirm in pre-flight.

@@ -1,11 +1,12 @@
 ---
-title: 'Design: Flight evidence and CFI feedback'
+title: 'Design: Flight evidence and teacher feedback'
 product: study
 feature: flight-evidence-and-cfi-feedback
 type: design
 status: draft
 review_status: pending
 created: 2026-05-04
+revised: 2026-05-04
 ---
 
 ## Key technical decisions
@@ -62,25 +63,40 @@ export const MANEUVER_KINDS = {
 
 The form for "log a maneuver" reads the schema for the picked kind and renders inputs accordingly. Validation happens both client-side (form-time) and server-side (in `addManeuver`).
 
-### Decision 5: CFI / student edge is independent of role
+### Decision 5: Roles live on a join table; relationships are independent of roles
 
-A user is a CFI not because of their `role` value, but because they have a row in `cfi_student_link.cfi_user_id`. This:
+Per spec Decision 6 (roles architecture): a user's roles live in `study.account_role` (one row per role per user). v1 roles: `student`, `teacher`. Multi-role accounts are first-class.
 
-- Lets any user become a CFI without an admin promotion.
-- Avoids tangling the role enum (which is about app-level permissions: study user / hangar admin / etc.) with the teaching relationship (which is per-student).
-- Supports a single user being a student of one CFI and a CFI of another simultaneously.
+The teacher / student relationship is a *separate* axis -- `study.teacher_student_link` rows. A user has the `teacher` role independently of which students they teach; the link table tracks the relationships.
 
-The "teaching" surfaces (`/teach/...`) check `listMyStudents(callerId).length > 0` to gate visibility. Per-route `requireCfi` helper.
+Why both:
 
-### Decision 6: Evidence credit rule
+- Roles describe **what the user can do as a class** ("teachers see /teach surfaces"). Single fact per user-role pair.
+- Links describe **specific relationships** ("teacher A teaches student B"). Many per teacher.
 
-A maneuver counts toward the Practiced pill if and only if `cfi_assessment = 'satisfactory'`. A self-assessed maneuver counts as `covered` but not `mastered`. This means:
+The "teaching" surfaces (`/teach/...`) check `requireTeacher(callerId)` to gate the route. Per-relationship writes (assess this maneuver, reorder this syllabus) gate on `assertTeacherLink(callerId, studentId)` AND `assertSyllabusAuthor(syllabusId, callerId)` respectively.
 
-- The `coveredLeaves` count includes leaves with self-assessed maneuvers.
-- The `masteredLeaves` count includes only leaves with CFI-signed maneuvers.
-- The `getNodeEvidenceState` `demonstration` gate computes `passing` from CFI-signed only; `attempts` includes self-assessed too.
+Why this matters for the magic-link flow: a teacher accepting a debrief invite gets the `teacher` role auto-granted (per Decision 8). NO `teacher_student_link` is auto-created (per Decision 9 -- the debrief is one-flight only; relationships are opt-in via the explicit "Make this regular" action). If the teacher already has the `teacher` role, that row is left alone.
 
-Rationale: a CFI's signoff is the actual ACS standard. Self-assessment matters for "you did the thing" but not for "you can do the thing to standard."
+Future-compat: when a `subscription` table arrives, it FKs into `account_role(user_id, role)` cleanly. A teacher subscription, a student subscription, or both can attach to the same user without surgery.
+
+### Decision 6: No credit rule -- track data, don't gate
+
+Per spec Decision 2: airboss is a tracker, not a gate. The teacher (when present) is the gate; we record what they say. We don't synthesize a "mastered" judgment that privileges one kind of evidence over another.
+
+Concretely, the `demonstration` partition in `NodeEvidenceState`:
+
+- `attempts` = total `flight_maneuver` rows for the user on this node.
+- `passing` = rows where **either** `self_assessment = 'satisfactory'` **or** `teacher_assessment = 'satisfactory'`. The simplest objective rule: "at least one assessment is satisfactory, no matter who made it."
+- Surfaces (the WP 1 home page, the credentials dashboard, the lens UI) can render a richer breakdown if they want -- "9 self-satisfactory, 6 teacher-signed satisfactory" -- by reading the partition's underlying counts.
+
+Rationale:
+
+- Self-practice is legitimate; ignoring it punishes solo learners (the user's near-term mode) and the system is wrong by default for anyone without a teacher.
+- A teacher's assessment is more authoritative *to that teacher's judgment*, not because the schema says so. The schema is neutral.
+- "Satisfactory" is what gets recorded; it doesn't get re-weighted.
+
+This is a meaningful simplification from the prior credit-rule design. The schema for `flight_maneuver.teacher_*` columns stays the same (we still want a teacher's identity + timestamp on their assessment); the partition query is simpler (one OR instead of an IF).
 
 ### Decision 7: Track viewer is Leaflet, not Mapbox
 
@@ -101,6 +117,19 @@ The DB write happens in `uploadTrack(input, db)` which calls the parser, writes 
 ## Schema
 
 ```typescript
+// libs/db/schema/study/account-roles.ts
+export const accountRole = study.table('account_role', {
+  userId: text('user_id').notNull().references(() => bauthUser.id, { onDelete: 'cascade' }),
+  role: text('role').notNull(),                                  // 'student' | 'teacher'
+  metadata: jsonb('metadata').notNull().default({}),
+  grantedAt: timestamp('granted_at').notNull().defaultNow(),
+  revokedAt: timestamp('revoked_at'),                            // soft-end
+}, (t) => ({
+  pk: primaryKey({ columns: [t.userId, t.role] }),
+  roleIdx: index('account_role_role_idx').on(t.role),
+  roleCheck: check('account_role_role_check', sql`${t.role} IN ('student','teacher')`),
+}));
+
 // libs/db/schema/study/flight.ts
 export const flightAttempt = study.table('flight_attempt', {
   id: text('id').primaryKey(),
@@ -132,10 +161,10 @@ export const flightManeuver = study.table('flight_maneuver', {
   actualMetricJson: jsonb('actual_metric_json').notNull().default({}),
   selfAssessment: text('self_assessment').notNull(),
   studentNotes: text('student_notes'),
-  cfiAssessment: text('cfi_assessment'),
-  cfiNotes: text('cfi_notes'),
-  cfiSignedOffBy: text('cfi_signed_off_by').references(() => bauthUser.id),
-  cfiSignedOffAt: timestamp('cfi_signed_off_at'),
+  teacherAssessment: text('teacher_assessment'),
+  teacherNotes: text('teacher_notes'),
+  teacherSignedOffBy: text('teacher_signed_off_by').references(() => bauthUser.id),
+  teacherSignedOffAt: timestamp('teacher_signed_off_at'),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 }, (t) => ({
@@ -144,8 +173,8 @@ export const flightManeuver = study.table('flight_maneuver', {
   nodeUserIdx: index('flight_maneuver_node_user_idx').on(t.nodeId, t.userId),
   kindCheck: check('flight_maneuver_kind_check', sql`${t.kind} IN (${sql.raw(MANEUVER_KIND_VALUES.map(v => `'${v}'`).join(','))})`),
   selfAssessmentCheck: check('flight_maneuver_self_check', sql`${t.selfAssessment} IN ('satisfactory','needs_work','unable')`),
-  cfiAssessmentCheck: check('flight_maneuver_cfi_check', sql`${t.cfiAssessment} IS NULL OR ${t.cfiAssessment} IN ('satisfactory','needs_work','unable')`),
-  cfiTrioCheck: check('flight_maneuver_cfi_trio_check', sql`(${t.cfiAssessment} IS NULL) = (${t.cfiSignedOffBy} IS NULL) AND (${t.cfiAssessment} IS NULL) = (${t.cfiSignedOffAt} IS NULL)`),
+  teacherAssessmentCheck: check('flight_maneuver_teacher_check', sql`${t.teacherAssessment} IS NULL OR ${t.teacherAssessment} IN ('satisfactory','needs_work','unable')`),
+  teacherTrioCheck: check('flight_maneuver_teacher_trio_check', sql`(${t.teacherAssessment} IS NULL) = (${t.teacherSignedOffBy} IS NULL) AND (${t.teacherAssessment} IS NULL) = (${t.teacherSignedOffAt} IS NULL)`),
   evidenceTargetCheck: check('flight_maneuver_evidence_target_check', sql`${t.nodeId} IS NOT NULL OR ${t.syllabusNodeId} IS NOT NULL`),
 }));
 
@@ -162,28 +191,64 @@ export const flightTrack = study.table('flight_track', {
   createdAt: timestamp('created_at').notNull().defaultNow(),
 });
 
-export const cfiStudentLink = study.table('cfi_student_link', {
-  id: text('id').primaryKey(),
-  cfiUserId: text('cfi_user_id').notNull().references(() => bauthUser.id),
+export const teacherStudentLink = study.table('teacher_student_link', {
+  id: text('id').primaryKey(),                                  // prefix 'tsl_'
+  teacherUserId: text('teacher_user_id').notNull().references(() => bauthUser.id),
   studentUserId: text('student_user_id').notNull().references(() => bauthUser.id),
-  status: text('status').notNull(),
+  kind: text('kind').notNull(),                                 // 'cfi' | 'mentor' | 'peer'
+  status: text('status').notNull(),                             // 'active' | 'paused' | 'ended'
   startedAt: timestamp('started_at').notNull().defaultNow(),
   endedAt: timestamp('ended_at'),
-  cfiNotes: text('cfi_notes'),
+  teacherNotes: text('teacher_notes'),                          // private to the teacher
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 }, (t) => ({
-  uniqueActive: uniqueIndex('cfi_student_link_active_idx').on(t.cfiUserId, t.studentUserId).where(sql`${t.status} = 'active'`),
-  cfiIdx: index('cfi_student_link_cfi_idx').on(t.cfiUserId),
-  studentIdx: index('cfi_student_link_student_idx').on(t.studentUserId),
+  uniqueActive: uniqueIndex('teacher_student_link_active_idx')
+    .on(t.teacherUserId, t.studentUserId)
+    .where(sql`${t.status} = 'active'`),
+  teacherIdx: index('teacher_student_link_teacher_idx').on(t.teacherUserId),
+  studentIdx: index('teacher_student_link_student_idx').on(t.studentUserId),
+  kindCheck: check('teacher_student_link_kind_check', sql`${t.kind} IN ('cfi','mentor','peer')`),
+  statusCheck: check('teacher_student_link_status_check', sql`${t.status} IN ('active','paused','ended')`),
+}));
+
+export const debriefInvite = study.table('debrief_invite', {
+  id: text('id').primaryKey(),                                  // prefix 'dbi_'
+  flightAttemptId: text('flight_attempt_id').notNull().references(() => flightAttempt.id, { onDelete: 'cascade' }),
+  inviterUserId: text('inviter_user_id').notNull().references(() => bauthUser.id),
+  invitedEmail: text('invited_email').notNull(),                // lowercased
+  token: text('token').notNull().unique(),
+  expiresAt: timestamp('expires_at').notNull(),
+  invitedAt: timestamp('invited_at').notNull().defaultNow(),
+  acceptedAt: timestamp('accepted_at'),
+  acceptedUserId: text('accepted_user_id').references(() => bauthUser.id),
+  revokedAt: timestamp('revoked_at'),
+}, (t) => ({
+  activeIdx: uniqueIndex('debrief_invite_active_idx')
+    .on(t.flightAttemptId, t.invitedEmail)
+    .where(sql`${t.acceptedAt} IS NULL AND ${t.revokedAt} IS NULL`),
+  tokenIdx: index('debrief_invite_token_idx').on(t.token),
 }));
 ```
 
-Plus a `display_order INTEGER NOT NULL DEFAULT 0` added to existing `syllabusNode`, and an `author_user_id TEXT REFERENCES bauth_user.id` added to existing `syllabus`. Existing rows backfill `display_order = 0` (acceptable; ACS rows are ordered by `code`).
+Plus `display_order INTEGER NOT NULL DEFAULT 0` added to existing `syllabusNode`, and `author_user_id TEXT REFERENCES bauth_user.id` added to existing `syllabus`. Existing rows backfill `display_order = 0` (ACS rows are ordered by `code`).
 
 ## API surface
 
-### Student-side
+### Account roles
+
+```typescript
+// libs/bc/study/src/account-roles.ts
+export async function getUserRoles(userId: string, db?: Db): Promise<UserRoles>;
+export async function hasRole(userId: string, role: AccountRole, db?: Db): Promise<boolean>;
+export async function requireStudent(userId: string, db?: Db): Promise<void>;
+export async function requireTeacher(userId: string, db?: Db): Promise<void>;
+export async function grantRole(input: GrantRoleInput, db?: Db): Promise<void>;
+export async function revokeRole(userId: string, role: AccountRole, db?: Db): Promise<void>;
+export async function setRoleMetadata(input: SetRoleMetadataInput, db?: Db): Promise<void>;
+```
+
+### Student-side flight evidence
 
 ```typescript
 // libs/bc/study/src/flight-attempts.ts
@@ -197,21 +262,46 @@ export async function updateManeuverSelfAssessment(input: UpdateManeuverInput, d
 export async function deleteManeuver(id: string, userId: string, db?: Db): Promise<void>;
 ```
 
-### CFI-side
+### Teacher-side
 
 ```typescript
-// libs/bc/study/src/cfi-writes.ts
-export async function setCfiAssessment(input: SetCfiAssessmentInput, db?: Db): Promise<FlightManeuverRow>;
-export async function setStudentLinkStatus(input: SetStudentLinkStatusInput, db?: Db): Promise<CfiStudentLinkRow>;
+// libs/bc/study/src/teacher-writes.ts
+export async function setTeacherAssessment(input: SetTeacherAssessmentInput, db?: Db): Promise<FlightManeuverRow>;
+export async function setTeacherStudentLinkStatus(input: SetTeacherStudentLinkStatusInput, db?: Db): Promise<TeacherStudentLinkRow>;
 
-// libs/bc/study/src/cfi-syllabus-writes.ts
+// libs/bc/study/src/teaching-syllabus-writes.ts
 export async function createTeachingSyllabus(input: CreateTeachingSyllabusInput, db?: Db): Promise<SyllabusRow>;
 export async function addLessonToSyllabus(input: AddLessonInput, db?: Db): Promise<SyllabusNodeRow>;
-export async function removeLessonFromSyllabus(syllabusNodeId: string, cfiUserId: string, db?: Db): Promise<void>;
-export async function reorderLessons(syllabusId: string, orderedLeafIds: readonly string[], cfiUserId: string, db?: Db): Promise<void>;
+export async function removeLessonFromSyllabus(syllabusNodeId: string, teacherUserId: string, db?: Db): Promise<void>;
+export async function reorderLessons(syllabusId: string, orderedLeafIds: readonly string[], teacherUserId: string, db?: Db): Promise<void>;
+
+// libs/bc/study/src/teacher-links.ts
+export async function listMyTeachers(studentUserId: string, db?: Db): Promise<TeacherStudentLinkRow[]>;
+export async function listMyStudents(teacherUserId: string, db?: Db): Promise<TeacherStudentLinkRow[]>;
+export async function getActiveTeacherLink(teacherUserId: string, studentUserId: string, db?: Db): Promise<TeacherStudentLinkRow | null>;
+export async function assertTeacherLink(teacherUserId: string, studentUserId: string, db?: Db): Promise<void>;
 ```
 
-All CFI writes call `assertCfiLink(cfiUserId, studentUserId, db)` or `assertSyllabusAuthor(syllabusId, cfiUserId, db)` as the first action.
+All teacher writes call `assertTeacherLink(teacherUserId, studentUserId, db)` or `assertSyllabusAuthor(syllabusId, teacherUserId, db)` first.
+
+### Debrief invite + magic link
+
+```typescript
+// libs/bc/study/src/debrief-invites.ts
+export async function createDebriefInvite(input: CreateDebriefInviteInput, db?: Db): Promise<DebriefInviteRow>;
+export async function getDebriefInviteByToken(token: string, db?: Db): Promise<DebriefInviteRow | null>;
+export async function acceptDebriefInvite(input: AcceptDebriefInviteInput, db?: Db): Promise<{ user: BauthUser; invite: DebriefInviteRow }>;
+export async function revokeDebriefInvite(input: RevokeDebriefInviteInput, db?: Db): Promise<void>;
+```
+
+`acceptDebriefInvite` is the integration point with better-auth's magic-link plugin:
+
+1. Validate the token exists, hasn't been accepted/revoked, hasn't expired.
+2. Use better-auth `auth.api.signInEmail` (magic-link verify variant) to either sign in an existing `bauth_user` matched on email OR create a new one.
+3. If new user: insert into `bauth_user`. (No password required; magic-link is the auth. Per Decision 8: the UX never says "create your account.")
+4. Auto-grant `teacher` role via `grantRole(userId, 'teacher', { kind: 'cfi', certificates_verified: false })` (Decision 10 -- default kind = `'cfi'`; teacher can edit later via settings).
+5. Mark invite `accepted_at` + `accepted_user_id`. **Do NOT create a `teacher_student_link`** (Decision 9 -- the debrief is one-flight only; durable relationships are opt-in).
+6. Audit each step.
 
 ### Track parsing
 
@@ -236,79 +326,106 @@ apps/study/src/routes/(app)/flight/
     ManeuverForm.svelte                # dynamic per maneuver kind
     TrackUpload.svelte
     TrackViewer.svelte                 # Leaflet map
+    InviteTeacherDialog.svelte         # creates debrief_invite
 
 apps/study/src/routes/(app)/teach/
-  students/+page.server.ts              # CFI's student list
+  +page.server.ts +page.svelte         # entry / fallback for users without teacher role
+  students/+page.server.ts             # teacher's student list
   students/[studentId]/...
-  syllabus/+page.server.ts             # CFI syllabus authoring
+  syllabus/+page.server.ts             # teaching syllabus authoring
   syllabus/_components/
-    LessonList.svelte                   # drag-handle reorder
+    LessonList.svelte                  # drag-handle reorder
     LessonRow.svelte
+  debrief/[token]/+page.server.ts      # PUBLIC route gated only by token
+  debrief/[token]/+page.svelte         # magic-link debrief surface; no "create account" wording
 ```
 
 ## Drag-handle reorder pattern
 
-`LessonList.svelte` uses native HTML5 drag and drop (`draggable="true"`, `dragstart`, `dragover`, `drop`):
+`LessonList.svelte` uses native HTML5 drag and drop:
 
 - On `dragstart`: capture the dragged lesson id.
 - On `dragover`: visually indicate insertion point.
 - On `drop`: compute new ordering, optimistically update local state, fire `reorderLessons` form action.
 - On error: revert to last-known-good ordering, show a toast.
 
-A `<button class="drag-handle">` is the visible affordance per row; the entire row is draggable but only when the handle is the drag source (HTML5 quirk: set `draggable` on the row, but check `event.target` matches `.drag-handle` in `dragstart` to allow the drag).
+A `<button class="drag-handle">` is the visible affordance per row. Keyboard alternative: `↑`/`↓` on a focused lesson moves it up/down; same `reorderLessons` call. Per WAI-ARIA this is the correct pattern for keyboard reorder accessibility.
 
-Keyboard alternative: `↑` / `↓` on a focused lesson moves it up / down; same `reorderLessons` call.
+## Magic-link UX guarantee
 
-## Hangar invite extension
+The phrase **"create your account"** must not appear anywhere in the debrief flow. Specifically:
 
-The existing `hangar.invitation` table gains:
+- The email body says: "[inviter] would like your feedback on a flight." Never "you've been invited to create an account."
+- The debrief landing page (`/teach/debrief/[token]`) says "Welcome -- leave feedback below." If the user doesn't have an account yet, the magic-link plugin creates one server-side; the page never asks the teacher to set a password or pick a username.
+- After saving feedback, the page says "Thanks. Your feedback has been sent to Joshua." Optional: "If you'd like to track this student going forward, [link to make-this-regular page]." That link is the optional upgrade to `teacher_student_link`.
 
-- `relationship_kind` (text, nullable) -- `'cfi_student_link'` or NULL.
-- `relationship_payload_json` (jsonb, nullable) -- `{ "cfiUserId": "..." }` for the CFI link case.
+This is a UX guarantee, not a backend guarantee. The backend has a real `bauth_user` row + `teacher` role + audit trail.
 
-`acceptInvitation` checks the `relationship_*` fields and, if present, creates the corresponding row in the same transaction. Single-author for now -- the inviter is the future CFI.
+## Hangar invite extension (existing) -- minor change
+
+The `hangar.invitation` table from the existing hangar-invite-flow WP keeps its shape. **No new fields added by this WP** (the previous design proposed `relationship_kind` + `relationship_payload_json`, but the magic-link debrief flow handles teacher invites end-to-end via `study.debrief_invite` and doesn't need to extend `hangar.invitation`).
+
+The two flows now coexist:
+
+- `hangar.invitation` -- admin-controlled invites granting study access (existing).
+- `study.debrief_invite` -- student-controlled invites granting one-flight teacher access (new).
 
 ## Audit shape
 
 Per existing pattern. New `AUDIT_TARGETS`:
 
+- `'study.account_role'`
 - `'study.flight_attempt'`
 - `'study.flight_maneuver'`
 - `'study.flight_track'`
-- `'study.cfi_student_link'`
+- `'study.teacher_student_link'`
 - `'study.teaching_syllabus'`
+- `'study.debrief_invite'`
 
-Reorder audit captures the full `orderedLeafIds` in `metadata.newOrder`. Diffs are computed by readers of the audit log; we don't store deltas.
+Reorder audit captures full `orderedLeafIds` in `metadata.newOrder`. Magic-link account creation emits two audit rows: one for `bauth_user` creation (from better-auth), one for `account_role` grant.
 
 ## Performance
 
-- `getNodeEvidenceStateMap` gains one fan-out query. The query is indexed on `(syllabus_node_id, user_id)` and `(node_id, user_id)`. Adds < 10 ms on a seeded user.
+- `getNodeEvidenceStateMap` gains one fan-out query. Indexed on `(syllabus_node_id, user_id)` and `(node_id, user_id)`. Adds < 10 ms on a seeded user.
+- `account_role` lookups are PK lookups. Sub-millisecond.
 - Track upload parses synchronously on the server. Reasonable file (1 MB GPX) parses in < 100 ms. > 25 MB rejected at the upload layer.
-- Track viewer renders client-side; large tracks (10k+ points) get downsampled to ~500 points for rendering. Full data preserved in the cache file.
+- Track viewer renders client-side; large tracks (10k+ points) downsample to ~500 points for rendering. Full data preserved in cache file.
+- `acceptDebriefInvite` does ~5 INSERTs in one transaction. Sub-100 ms.
 
 ## Security
 
 - All BC writes audit.
-- All CFI writes gate on `assertCfiLink` or `assertSyllabusAuthor`.
-- GPS track files are stored under per-user paths; the `getFlightTrack` BC checks ownership before returning the cache path.
-- Track download is via a signed URL or via a server route that checks ownership and streams the bytes -- no direct client access to the cache directory.
-- The `cfi_notes` field on `cfi_student_link` is private to the CFI; the student does not see it.
+- All teacher writes gate on `assertTeacherLink` or `assertSyllabusAuthor`.
+- All role grants/revokes audit.
+- GPS track files stored under per-user paths; `getFlightTrack` BC checks ownership before returning the cache path.
+- Track download via server route that checks ownership and streams bytes -- no direct client access to cache directory.
+- `teacher_notes` on `teacher_student_link` is private to the teacher; student does not see it.
+- `debrief_invite.token` is opaque random (32 bytes base64url); single-use after acceptance.
+- Magic-link follows better-auth's standard security: tokens expire, are single-use, rate-limited.
+- The debrief route is the **only** non-auth-gated mutation surface in study; the route layer explicitly allows `/teach/debrief/[token]` past the auth gate.
 
 ## Migration plan
 
 Single forward migration that:
 
-1. Adds `flight_attempt`, `flight_maneuver`, `flight_track`, `cfi_student_link` tables + indexes + checks.
-2. Adds `display_order INTEGER NOT NULL DEFAULT 0` to `syllabus_node`.
-3. Adds `author_user_id TEXT REFERENCES bauth_user.id` to `syllabus`.
-4. Widens `audit.audit_log.target_type` enum to include the new targets.
-5. Extends `hangar.invitation` with `relationship_kind` + `relationship_payload_json`.
+1. Adds `study.account_role` table + checks.
+2. Adds `study.flight_attempt`, `study.flight_maneuver`, `study.flight_track` tables + indexes + checks.
+3. Adds `study.teacher_student_link` table + indexes + checks.
+4. Adds `study.debrief_invite` table + indexes.
+5. Adds `display_order INTEGER NOT NULL DEFAULT 0` to `syllabus_node`.
+6. Adds `author_user_id TEXT REFERENCES bauth_user.id` to `syllabus`.
+7. Widens `study.syllabus.kind` CHECK to include `'teaching'`.
+8. Widens `audit.audit_log.target_type` enum to include the new targets.
+9. **Backfill `account_role` for existing users:** insert `(user_id, 'student', '{"studying_for": null}')` for every existing `bauth_user` -- preserves existing behavior (everyone is a student by default).
 
-Per project convention: `db push` is the runtime apply path. The migration is generated for diff-accuracy.
+Per project convention: `db push` is the runtime apply path. Migration is generated for diff-accuracy.
 
 ## Forward compatibility
 
-- Multi-CFI dashboards (open question 7) can ship later without schema change.
-- Auto-maneuver-detection from GPS tracks (out of scope for v1) can ship as an additional service that writes proposed `flight_maneuver` rows for student review.
-- Cloud-storage adapter (open question 3) is a single function swap behind `flight_track.cache_path` resolution.
-- Endorsement / 8710 / FAA logbook integration would extend on top of the `flight_attempt` row but is its own large WP.
+- **Multi-teacher dashboards** (Decision 7) ship with this WP; the dropdown auto-appears when the data demands it. No future schema change needed.
+- **Auto-maneuver-detection from GPS tracks** (out of scope) ships as an additional service that writes proposed `flight_maneuver` rows for student review. No schema change.
+- **Cloud-storage adapter** (out of scope) is a single function swap behind `flight_track.cache_path` resolution.
+- **Endorsement / 8710 / FAA logbook integration** would extend on top of `flight_attempt` + a new `endorsement` table. Future WP.
+- **Billing.** A future `subscription` table FKs into `account_role(user_id, role)`. Per-role subscriptions (student-only, teacher-only, both) work without schema surgery. The `account_role.metadata` jsonb can grow per-role billing-related fields (`stripe_customer_id`, `plan`) as part of that future WP.
+- **Certificate verification.** When CFI legitimacy matters (monetization, marketplace, etc.), verification flips `account_role.metadata.certificates_verified` to `true` after document upload + admin review. No schema change.
+- **Mentor / peer roles.** The `kind` field on `teacher_student_link` already supports `'mentor'` and `'peer'`. UX for non-CFI teachers can ship as content / copy changes, not schema.
