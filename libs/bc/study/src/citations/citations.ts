@@ -27,13 +27,19 @@ import {
 	type CitationSourceType,
 	type CitationTargetType,
 	EXTERNAL_REF_TARGET_DELIMITER,
+	REFERENCE_KIND_LABELS,
+	type ReferenceKind,
+	ROUTES,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
+import type { SourceId } from '@ab/sources';
+import { urlForReference } from '@ab/sources';
 import { generateContentCitationId } from '@ab/utils';
 import { and, eq, inArray } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
-import { card, knowledgeNode, scenario } from '../schema';
+import { card, knowledgeNode, reference, referenceSection, scenario } from '../schema';
 import { type ContentCitationRow, contentCitation } from './schema';
+import { formatSectionLabel } from './search';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 
@@ -183,17 +189,32 @@ async function verifySourceOwnership(
 }
 
 /**
- * Soft-FK target lookup. Regulation nodes, advisory circulars, and external
- * refs have per-type existence rules; knowledge nodes point at study.knowledge_node.
+ * Soft-FK target lookup. Each kind has a different existence rule:
+ *
+ * - `reference_section`: row in `study.reference_section` (the canonical
+ *   target for every corpus-backed citation per WP `stage5-citation-deeplink`).
+ * - `knowledge_node`: row in `study.knowledge_node`.
+ * - `external_ref`: parses as `<url><delim><title>` with an http(s) URL.
+ * - `regulation_node` / `ac_reference` (legacy, retired by migration 2):
+ *   row in `hangar.reference`. Kept for one release while migration 1
+ *   backfills any pre-existing rows to `reference_section`. Dev DB has
+ *   zero such rows; the branch is a safety net for prod replay.
  */
 async function verifyTargetExists(targetType: CitationTargetType, targetId: string, db: Db): Promise<boolean> {
 	switch (targetType) {
+		case CITATION_TARGET_TYPES.REFERENCE_SECTION: {
+			const rows = await db
+				.select({ id: referenceSection.id })
+				.from(referenceSection)
+				.where(eq(referenceSection.id, targetId))
+				.limit(1);
+			return rows.length > 0;
+		}
 		case CITATION_TARGET_TYPES.REGULATION_NODE:
 		case CITATION_TARGET_TYPES.AC_REFERENCE: {
-			// Both regulation nodes and AC references live in hangar.reference.
-			// The source_type tag inside `hangar_reference.tags` distinguishes
-			// the two at read time; for the ownership check here, the row
-			// existing is enough.
+			// Legacy: pre-stage-5 citations point at `hangar.reference`. The
+			// migration 2 SQL converts these rows to `reference_section`; until
+			// it runs, the existence check is the same as it was.
 			const rows = await db
 				.select({ id: hangarReference.id })
 				.from(hangarReference)
@@ -348,9 +369,23 @@ export async function getCitedBy(
 
 /**
  * Enrich raw citation rows with their target display data. Batches the
- * per-target-type reads (two queries: hangar.reference for regulation + AC,
- * study.knowledge_node for knowledge nodes) so rendering a card's citation
- * list is O(distinct-target-types), not O(citations).
+ * per-target-type reads (one query per target table) so rendering a card's
+ * citation list is O(distinct-target-types), not O(citations).
+ *
+ * Stage-5 (WP `stage5-citation-deeplink`): `reference_section` targets join
+ * `study.reference_section` + `study.reference` to produce the corpus-aware
+ * label and to read the persisted `airboss_ref` URI -- which the dispatcher
+ * `urlForReference()` turns into a flightbag URL. The href on the returned
+ * `target` is the in-app deep link; chip render layer prefixes the flightbag
+ * origin via `siblingOrigin('flightbag')` when crossing app boundaries.
+ *
+ * Knowledge-node targets get `href = ROUTES.KNOWLEDGE_SLUG(id)` so chips on
+ * cards / reps / scenarios deep-link to the node detail page.
+ *
+ * Legacy regulation_node / ac_reference branches stay until migration 2
+ * retires them. They produce labels but no href -- those rows do not exist
+ * in dev, but we keep the branch as a safety net for any prod replay path
+ * before migration 2 lands.
  */
 export async function resolveCitationTargets(
 	citations: ContentCitationRow[],
@@ -358,17 +393,46 @@ export async function resolveCitationTargets(
 ): Promise<CitationWithTarget[]> {
 	if (citations.length === 0) return [];
 
+	const sectionIds = new Set<string>();
 	const refIds = new Set<string>();
 	const nodeIds = new Set<string>();
 	for (const c of citations) {
-		if (c.targetType === CITATION_TARGET_TYPES.REGULATION_NODE || c.targetType === CITATION_TARGET_TYPES.AC_REFERENCE) {
+		if (c.targetType === CITATION_TARGET_TYPES.REFERENCE_SECTION) {
+			sectionIds.add(c.targetId);
+		} else if (
+			c.targetType === CITATION_TARGET_TYPES.REGULATION_NODE ||
+			c.targetType === CITATION_TARGET_TYPES.AC_REFERENCE
+		) {
 			refIds.add(c.targetId);
 		} else if (c.targetType === CITATION_TARGET_TYPES.KNOWLEDGE_NODE) {
 			nodeIds.add(c.targetId);
 		}
 	}
 
-	const [refs, nodes] = await Promise.all([
+	const [sections, refs, nodes] = await Promise.all([
+		sectionIds.size > 0
+			? db
+					.select({
+						id: referenceSection.id,
+						code: referenceSection.code,
+						sectionTitle: referenceSection.title,
+						airbossRef: referenceSection.airbossRef,
+						referenceTitle: reference.title,
+						referenceKind: reference.kind,
+					})
+					.from(referenceSection)
+					.innerJoin(reference, eq(reference.id, referenceSection.referenceId))
+					.where(inArray(referenceSection.id, Array.from(sectionIds)))
+			: Promise.resolve(
+					[] as {
+						id: string;
+						code: string;
+						sectionTitle: string;
+						airbossRef: string;
+						referenceTitle: string;
+						referenceKind: string;
+					}[],
+				),
 		refIds.size > 0
 			? db
 					.select({ id: hangarReference.id, displayName: hangarReference.displayName })
@@ -383,12 +447,47 @@ export async function resolveCitationTargets(
 			: Promise.resolve([] as { id: string; title: string }[]),
 	]);
 
+	const sectionById = new Map(sections.map((s) => [s.id, s]));
 	const refById = new Map(refs.map((r) => [r.id, r.displayName]));
 	const nodeById = new Map(nodes.map((n) => [n.id, n.title]));
 
 	return citations.map((c) => {
 		const targetTypeLabel = CITATION_TARGET_LABELS[c.targetType as CitationTargetType];
+		if (c.targetType === CITATION_TARGET_TYPES.REFERENCE_SECTION) {
+			const row = sectionById.get(c.targetId);
+			if (row === undefined) {
+				return {
+					citation: c,
+					target: {
+						type: c.targetType as CitationTargetType,
+						id: c.targetId,
+						label: c.targetId,
+						detail: `${targetTypeLabel} (missing)`,
+					},
+				};
+			}
+			const kind = row.referenceKind as ReferenceKind;
+			return {
+				citation: c,
+				target: {
+					type: c.targetType as CitationTargetType,
+					id: c.targetId,
+					label: formatSectionLabel({
+						referenceTitle: row.referenceTitle,
+						referenceKind: kind,
+						code: row.code,
+						sectionTitle: row.sectionTitle,
+					}),
+					detail: REFERENCE_KIND_LABELS[kind] ?? row.referenceKind,
+					href: urlForReference(row.airbossRef as SourceId),
+				},
+			};
+		}
 		if (c.targetType === CITATION_TARGET_TYPES.REGULATION_NODE || c.targetType === CITATION_TARGET_TYPES.AC_REFERENCE) {
+			// Legacy: pre-stage-5 rows in `hangar.reference`. No href -- those
+			// rows have no canonical airboss-ref URI to deep-link through.
+			// Migration 2 rewrites these rows to `reference_section` and drops
+			// the branch.
 			const display = refById.get(c.targetId);
 			return {
 				citation: c,
@@ -409,6 +508,7 @@ export async function resolveCitationTargets(
 					id: c.targetId,
 					label: title ?? c.targetId,
 					detail: title ? targetTypeLabel : `${targetTypeLabel} (missing)`,
+					href: title === undefined ? undefined : ROUTES.KNOWLEDGE_SLUG(c.targetId),
 				},
 			};
 		}

@@ -30,4 +30,10 @@ export {
 } from './citations';
 export { corpusForCitationTarget, corpusForSourceType } from './corpus';
 export { type ContentCitationRow, contentCitation, type NewContentCitationRow } from './schema';
-export { type RegulationSearchResult, searchAcReferences, searchKnowledgeNodes, searchRegulationNodes } from './search';
+export {
+	formatSectionLabel,
+	type KnowledgeNodeSearchResult,
+	type SectionSearchResult,
+	searchKnowledgeNodes,
+	searchReferenceSections,
+} from './search';
