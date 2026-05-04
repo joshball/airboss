@@ -14,8 +14,8 @@ created: 2026-05-04
 - [ ] Read `apps/study/src/routes/(app)/knowledge/[slug]/+page.svelte` -- the current node detail page.
 - [ ] Read `libs/bc/study/src/knowledge.ts` -- existing knowledge-node BC functions.
 - [ ] Sample 3-5 existing knowledge node markdown files from `course/knowledge/` -- understand the current free-form shape.
-- [ ] Confirm WP 1 + WP 2 are merged (this WP composes on the citation pattern from WP 1).
-- [ ] Confirm open questions answered (especially decision 1, frontmatter vs inline).
+- [ ] Confirm WP 1 is merged. WP 3 reuses WP 1's `study.user_pref` table + `?/setPref` form action; building before WP 1 ships means duplicating that work.
+- [ ] Re-read spec.md "Decisions" table -- all 6 questions are decided. Cross-check that nothing in tasks contradicts a decision.
 - [ ] Run `bun run check` -- 0 errors baseline.
 
 ## Implementation
@@ -25,7 +25,8 @@ created: 2026-05-04
 - [ ] Add `RENDER_MODES = { LEARN: 'learn', REVIEW: 'review', MEMORIZE: 'memorize' } as const` in `libs/constants/src/study.ts`.
 - [ ] Add `BODY_SECTION_TYPES = { HOOK: 'hook', EXPLANATION: 'explanation', SYNTHESIS: 'synthesis', REGULATION_TEXT: 'regulation_text', PRACTICE_PROMPTS: 'practice_prompts' } as const`.
 - [ ] Add `MODE_ORDERS: Record<RenderMode, string[]>` -- the per-mode ordering arrays from design.md decision 6.
-- [ ] Add `STUDY_KNOWLEDGE_LOCALSTORAGE_KEY = 'study.knowledge.renderMode'`.
+- [ ] Extend `USER_PREF_KEYS` (from WP 1) with `KNOWLEDGE_RENDER_MODE: 'study.knowledge.render_mode'`.
+- [ ] Extend `USER_PREF_SCHEMAS` registry in `libs/bc/study/src/user-prefs.ts` to include the new key with `z.enum(['learn', 'review', 'memorize'])`.
 - [ ] Add `KnowledgeNodeBody`, `BodySection`, `RenderMode`, `BodySectionType` types (probably in `libs/types/`).
 - [ ] `bun run check` -- 0 errors.
 
@@ -57,7 +58,8 @@ created: 2026-05-04
 - [ ] Create `apps/study/src/routes/(app)/knowledge/[slug]/_components/CollapsedFull.svelte` -- `<details><summary>Full explanation</summary>...</details>`.
 - [ ] Create `apps/study/src/routes/(app)/knowledge/[slug]/_components/ModeToggle.svelte`:
   - Segmented control: 3 buttons.
-  - Bound `mode` prop; reads / writes `localStorage[STUDY_KNOWLEDGE_LOCALSTORAGE_KEY]`.
+  - Reads `mode` from loader output (`data.userPrefs[USER_PREF_KEYS.KNOWLEDGE_RENDER_MODE] ?? 'learn'`).
+  - Click fires the WP-1 `?/setPref` form action with `key=study.knowledge.render_mode`. Optimistic UI; rollback on error.
   - Disabled state for free-form bodies (with tooltip).
   - `[?]` popover with the explainer text from design.md decision 7.
 - [ ] `bun run check` -- 0 errors.
@@ -67,10 +69,12 @@ created: 2026-05-04
 - [ ] Update `+page.server.ts`:
   - Read the markdown file as today.
   - Run `parseKnowledgeBody(markdown)`; return `body` + existing citation data.
-  - Read `?mode=` from URL; validate against `RENDER_MODES`. If invalid: redirect without param. If valid: include in the loader return.
+  - Call `getUserPrefs(userId, [USER_PREF_KEYS.KNOWLEDGE_RENDER_MODE])` -> resolve mode default.
+  - Read `?mode=` from URL; if present and valid, override (and fire `setUserPref` so the URL-shared mode persists). If invalid: redirect without param.
+  - Return `{ body, citations, mode, userPrefs }`.
+- [ ] Wire the `?/setPref` form action (already exists from WP 1; just reuse).
 - [ ] Update `+page.svelte`:
-  - Replace direct markdown render with `<ModeToggle bind:mode />` + `<BodyRenderer ... {mode} />`.
-  - On mount: if URL has `?mode=`, use that and write to localStorage. Else: read localStorage, fall back to `learn`.
+  - Replace direct markdown render with `<ModeToggle mode={data.mode} />` + `<BodyRenderer body={data.body} citations={data.citations} mode={data.mode} />`.
 - [ ] `bun run check` -- 0 errors.
 
 ### 5. Migration -- automated phase
@@ -91,32 +95,44 @@ created: 2026-05-04
 - [ ] Re-run `parseKnowledgeBody` validation: `bun run check:knowledge-bodies`.
 - [ ] All knowledge nodes should now parse as `kind: 'structured'`. Free-form is migration debt; once empty, the lint rule (step 7) flips to error.
 
-### 7. Validation tooling
+### 7. Practice prompts -- airboss-ref marker resolution
+
+- [ ] In `parseKnowledgeBody`, when assembling the `practice_prompts` section's body, scan for `airboss-ref:card:<id>` and `airboss-ref:scenario:<id>` markers.
+- [ ] Render markers as clickable `<a>` elements that route to `ROUTES.MEMORY_CARD(id)` or the scenario detail route, opening the linked artifact in the same tab.
+- [ ] Unresolvable markers (id doesn't exist in registry) render as plain text + dev-mode console warning.
+- [ ] Add a vitest case asserting marker resolution: `airboss-ref:card:abc123` -> `<a href="/memory/abc123">...</a>`; `airboss-ref:card:nonexistent` -> plain text + warning.
+- [ ] Authoring lint extension: `tools/check-knowledge-bodies.ts` walks each `practice_prompts` body, asserts every marker resolves; broken links are an error.
+- [ ] `bun run check` -- 0 errors.
+
+### 8. Validation tooling
 
 - [ ] Create `tools/check-knowledge-bodies.ts`:
   - Walk `course/knowledge/**/*.md`.
   - Parse each via `parseKnowledgeBody`.
   - If any free-form: warn (v1) / error (post-migration).
   - If structured but missing `synthesis` or `explanation`: error.
+  - Walk `practice_prompts` markers; assert each `airboss-ref:card:<id>` / `airboss-ref:scenario:<id>` resolves.
 - [ ] Add `check:knowledge-bodies` script to root `package.json`.
 - [ ] Wire into `bun run check`.
 - [ ] After step 6 completes, flip the free-form behavior from warn to error.
 
-### 8. Tests
+### 9. Tests
 
 - [ ] Vitest: `BodyRenderer` snapshot tests for each mode against a sample structured body.
 - [ ] Vitest: parser tests already covered in step 2.
+- [ ] Vitest: marker resolution covered in step 7.
 - [ ] Playwright e2e (`tests/e2e/knowledge-render-modes.spec.ts`):
   - Navigate to `/knowledge/density-altitude`.
   - Assert toggle visible, "Learn" selected.
   - Assert section order in DOM (hook -> explanation -> synthesis -> reg -> prompts).
   - Click "Memorize". Assert reorder. Assert `<details>` for "Full explanation" present.
-  - Reload page; assert "Memorize" still selected.
+  - Reload page; assert "Memorize" still selected (server-persisted via WP 1's user_pref).
   - Navigate to a free-form node (or a test fixture); assert toggle disabled with tooltip.
-  - Navigate with `?mode=review`; assert mode is review.
+  - Navigate with `?mode=review`; assert mode is review AND that the user_pref was updated.
+  - Click an `airboss-ref:card:` link in a `practice_prompts` section; assert navigation to the card.
 - [ ] `bun run check` -- 0 errors. `bun test`. `bunx playwright test`.
 
-### 9. Polish
+### 10. Polish
 
 - [ ] `bunx biome format --write` over all touched files.
 - [ ] Manual smoke pass per `test-plan.md`.

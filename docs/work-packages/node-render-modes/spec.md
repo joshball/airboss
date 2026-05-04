@@ -118,9 +118,10 @@ For Memorize mode on a node *without* a `regulation_text` section: fall back to 
 | `body_sections` (frontmatter)          | If present: must contain at least `explanation` and `synthesis`. Each entry must have `type` in the closed enum + a non-empty body. |
 | `body_sections.[].type`                | Closed enum: `hook`, `explanation`, `synthesis`, `regulation_text`, `practice_prompts`. (`citations` is generated, not authored.) |
 | Mode toggle URL param (`?mode=`)       | If present, must be `'learn' \| 'review' \| 'memorize'`. Invalid -> redirect without param.     |
-| LocalStorage mode preference           | Key `study.knowledge.renderMode`, value as above. Invalid -> reset to `learn`.                   |
+| `study.user_pref` mode preference      | Key `study.knowledge.render_mode`, value `'learn' \| 'review' \| 'memorize'`. Validated by Zod via the `USER_PREF_SCHEMAS` registry from WP 1. Invalid -> reject. |
+| `practice_prompts` markers             | `airboss-ref:card:<id>` or `airboss-ref:scenario:<id>` -- target id must resolve in the registry; unresolvable links render as plain text with a dev-mode warning. |
 
-No form actions; this WP is read-only on the node body, with state in URL / localStorage.
+One form action: `?/setPref` (POST). Reuses WP 1's user-pref form action shape; key fixed to `study.knowledge.render_mode`.
 
 ## Edge cases
 
@@ -131,16 +132,21 @@ No form actions; this WP is read-only on the node body, with state in URL / loca
 | User picks Memorize on a node with no `regulation_text`                          | Falls back to Learn order; banner notice "no regulation excerpt for this topic."                                       |
 | User has `?mode=memorize` in URL but the node isn't migrated                     | URL param ignored; renders in free-form. Toggle disabled.                                                             |
 | Author adds `body_sections` frontmatter but forgets `synthesis`                  | `bun run check knowledge-bodies` warns. Renderer falls back to free-form; toggle disabled.                            |
-| Same node opened in two tabs with different modes                                | Each tab honors its localStorage at load; localStorage write from one tab affects subsequent loads (no cross-tab live update). Acceptable. |
+| Same node opened in two tabs                                                     | Both honor the server-side `study.user_pref`. A mode change in tab A persists; tab B sees it on next load (no cross-tab live update). Acceptable. |
+| `airboss-ref:card:<id>` link with unresolvable id                                | Link renders as plain text. Dev-mode console warning. Authoring lint flags broken links.                              |
 
-## Open questions
+## Decisions (formerly open questions, ratified 2026-05-04)
 
-1. **Frontmatter `body_sections:` array vs. inline `<!-- @section: name -->` delimiters.** Frontmatter is structured but means duplicating the body across YAML and markdown. Inline delimiters keep markdown native but require a small parser. Recommendation: inline delimiters via `<!-- @section: name -->` markers; the renderer splits the markdown body on delimiter boundaries. See design.md decision 1.
-2. **Should existing free-form nodes auto-detect `## Hook` / `## Explanation` headings?** Recommendation: yes for the migration step (one-shot script), no for the runtime (deterministic / explicit only).
-3. **Render-mode persistence: localStorage vs. server-side.** localStorage v1 (per WP 1's pattern). Server-side `user_pref` is a long-term home; out of v1.
-4. **Flightbag handbook section toggle.** v1.1 enhancement. Confirm out of v1 scope.
-5. **Practice prompts -- inline vs link to existing cards / scenarios.** A prompt could be inline ("What is density altitude on a 95F day at KFLG?") or a link to an existing card / scenario. Recommendation: support both; the section is freeform markdown that may include `<a href="...">` to linked content.
-6. **What about node bodies authored in the future?** Once migration is done, is `body_sections` mandatory for new nodes? Recommendation: yes; lint enforces it. Free-form is migration debt only.
+| # | Question                              | Decision                                                                                                                                |
+| - | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| 1 | Section delimiter shape               | Inline HTML-comment delimiters (`<!-- @section: name -->`). Markdown stays native; tiny parser splits on delimiters. See design.md §1. |
+| 2 | Migration auto-detection              | Auto-detect `## Hook` / `## Explanation` / `## Synthesis` / `## Regulation` / `## Practice` headings; manual fallback for the rest.    |
+| 3 | Mode persistence                      | Server-side `study.user_pref` table -- the same table WP 1 ships. Key: `study.knowledge.render_mode`.                                  |
+| 4 | Flightbag handbook section toggle     | Out of v1 scope. Captured as `flightbag-render-modes` in `docs/platform/IDEAS.md`. Trigger: real demand for "show only boxed regs."     |
+| 5 | Practice prompts shape                | Markdown body with `airboss-ref:card:<id>` / `airboss-ref:scenario:<id>` markers for clickable links to authored cards / scenarios.    |
+| 6 | Post-migration lint posture           | `bun run check:knowledge-bodies` warns until full migration completes; one-line flip to error after the last node migrates.            |
+
+These are no longer open. The text in design.md and tasks.md reflects each decision.
 
 ## Out of scope
 
