@@ -17,17 +17,17 @@ counts:
 | Severity | Count | Closed | Open |
 | -------- | ----: | -----: | ---: |
 | critical |     0 |      0 |    0 |
-| major    |     5 |      3 |    2 |
+| major    |     5 |      5 |    0 |
 | minor    |     6 |      3 |    3 |
 | nit      |     3 |      0 |    3 |
 
-### MAJOR: `listReferencesByTopic` reads-then-filters in JS -- STILL OPEN
+### MAJOR: `listReferencesByTopic` reads-then-filters in JS -- CLOSED
 
-`libs/bc/study/src/library-by-cert.ts:230-238` still loads every active reference and runs `rows.filter((r) => r.subjects.includes(topic))` in memory. Trigger: when the corpus crosses ~500 references (currently ~7 handbooks + a small AC/CFR set), or when `library-by-cert` shows up in production p95s, switch to Drizzle `arrayContains(reference.subjects, [topic])` + add the GIN index on `study.reference(subjects)`.
+PR (wave-2 perf cluster). `libs/bc/study/src/library-by-cert.ts:232-238` now runs `arrayContains(reference.subjects, [topic])` in the WHERE clause; the JS `rows.filter(...)` post-pass is gone. Backed by a new `reference_subjects_gin_idx` GIN index on `study.reference(subjects)` (declared in schema; planner-reachability asserted by `library-by-cert.test.ts > reference_subjects_gin_idx (index plumbing)`). Closed.
 
-### MAJOR: `getReferenceCountsByTopic` materializes every subjects[] -- STILL OPEN
+### MAJOR: `getReferenceCountsByTopic` materializes every subjects[] -- CLOSED
 
-`libs/bc/study/src/library-by-cert.ts:267-280` still pulls every active reference's `subjects` jsonb and sums in JS. Trigger: same as above; one PG round-trip with `LATERAL` unnest + GROUP BY closes both at once.
+PR (wave-2 perf cluster). `libs/bc/study/src/library-by-cert.ts:274-291` now runs a single `db.execute(sql\`...\`)` with `LATERAL unnest(subjects) ... GROUP BY` so the per-subject count happens inside Postgres. The previous "pull every active reference's subjects[] and sum in JS" path is gone. Same GIN index applies. Closed.
 
 ### MAJOR: No `getHandbookProgressBatch`; lens index does N round-trips -- STILL OPEN
 
@@ -87,7 +87,7 @@ Trigger: dashboards perf polish pass.
 
 ### Final verdict
 
-3 of 5 majors closed (`getCredentialIdsCoveredBy` recursive CTE, `applyCertGoals` batched reads, plus the `previewSession` plan dedupe MINOR). 2 majors remain (the library-by-cert pair) -- they share the same fix (GIN index + Drizzle `arrayContains` / `LATERAL` unnest) and are the most-flagged BC perf debt across the chunk-1 + chunk-2 reviews. 3 minors closed (parallel reads, plan dedupe, sessions Promise.all). `review_status` stays `done`.
+5 of 5 majors closed. The library-by-cert pair (`listReferencesByTopic` + `getReferenceCountsByTopic`) shipped together in the wave-2 perf cluster: GIN index on `study.reference(subjects)`, Drizzle `arrayContains` for the topic-spine probe, `LATERAL unnest(subjects) ... GROUP BY` for the per-topic counts, plus a planner-reachability test. The other 3 (recursive CTE, batched cert-goals, previewSession plan dedupe) closed earlier in PRs #479 / #481 and the prior MINOR pass. 3 minors closed (parallel reads, plan dedupe, sessions Promise.all). 3 minors + 3 nits remain trigger-gated (corpus growth, dashboard refactor, phase-write traffic). `review_status` stays `done`.
 
 ## Summary
 
