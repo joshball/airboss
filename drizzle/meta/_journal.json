@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1777741920000,
+      "when": 1777857278819,
       "tag": "0000_initial",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1777741237333,
-      "tag": "0001_hangar_invitation",
       "breakpoints": true
     }
   ]

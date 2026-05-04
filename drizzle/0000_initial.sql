@@ -221,7 +221,8 @@ CREATE TABLE "study"."knowledge_edge" (
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"seed_origin" text,
 	CONSTRAINT "knowledge_edge_from_node_id_to_node_id_edge_type_pk" PRIMARY KEY("from_node_id","to_node_id","edge_type"),
-	CONSTRAINT "knowledge_edge_type_check" CHECK ("edge_type" IN ('requires', 'deepens', 'applies', 'teaches', 'related'))
+	CONSTRAINT "knowledge_edge_type_check" CHECK ("edge_type" IN ('requires', 'deepens', 'applies', 'teaches', 'related')),
+	CONSTRAINT "knowledge_edge_no_self_loop_check" CHECK ("from_node_id" <> "to_node_id")
 );
 --> statement-breakpoint
 CREATE TABLE "study"."knowledge_node" (
@@ -325,6 +326,7 @@ CREATE TABLE "study"."reference_section" (
 	"ordinal" integer NOT NULL,
 	"depth" integer NOT NULL,
 	"code" text NOT NULL,
+	"airboss_ref" text NOT NULL,
 	"title" text NOT NULL,
 	"faa_page_start" text,
 	"faa_page_end" text,
@@ -339,6 +341,7 @@ CREATE TABLE "study"."reference_section" (
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
 	CONSTRAINT "reference_section_ordinal_check" CHECK ("ordinal" >= 0),
 	CONSTRAINT "reference_section_depth_check" CHECK ("depth" >= 0),
+	CONSTRAINT "reference_section_airboss_ref_shape_check" CHECK ("airboss_ref" ~ '^airboss-ref:'),
 	CONSTRAINT "reference_section_faa_pages_check" CHECK (("faa_page_start" IS NULL AND "faa_page_end" IS NULL) OR "faa_page_start" IS NOT NULL)
 );
 --> statement-breakpoint
@@ -591,8 +594,26 @@ CREATE TABLE "study"."content_citations" (
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
 	CONSTRAINT "content_citation_source_type_check" CHECK ("source_type" IN ('card', 'rep', 'scenario', 'node')),
-	CONSTRAINT "content_citation_target_type_check" CHECK ("target_type" IN ('regulation_node', 'ac_reference', 'external_ref', 'knowledge_node')),
+	CONSTRAINT "content_citation_target_type_check" CHECK ("target_type" IN ('reference_section', 'regulation_node', 'ac_reference', 'external_ref', 'knowledge_node')),
 	CONSTRAINT "content_citation_context_length_check" CHECK ("citation_context" IS NULL OR char_length("citation_context") <= 500)
+);
+--> statement-breakpoint
+CREATE TABLE "hangar"."invitation" (
+	"id" text PRIMARY KEY NOT NULL,
+	"email" text NOT NULL,
+	"proposed_role" text NOT NULL,
+	"token" text NOT NULL,
+	"invited_by_user_id" text,
+	"invited_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"expires_at" timestamp with time zone NOT NULL,
+	"accepted_at" timestamp with time zone,
+	"accepted_user_id" text,
+	"revoked_at" timestamp with time zone,
+	"revoked_by_user_id" text,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "invitation_token_unique" UNIQUE("token"),
+	CONSTRAINT "hangar_invitation_proposed_role_check" CHECK ("proposed_role" IN ('learner', 'author', 'operator', 'admin'))
 );
 --> statement-breakpoint
 CREATE TABLE "hangar"."reference" (
@@ -649,6 +670,8 @@ CREATE TABLE "hangar"."sync_log" (
 	"rev_snapshot" jsonb,
 	"started_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"finished_at" timestamp with time zone,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
 	CONSTRAINT "hangar_sync_log_kind_check" CHECK ("kind" IN ('commit-local', 'pr')),
 	CONSTRAINT "hangar_sync_log_outcome_check" CHECK ("outcome" IN ('success', 'noop', 'conflict', 'failed'))
 );
@@ -709,7 +732,7 @@ CREATE TABLE "audit"."audit_log" (
 	"after" jsonb,
 	"metadata" jsonb DEFAULT '{}'::jsonb NOT NULL,
 	CONSTRAINT "audit_log_op_check" CHECK ("op" IN ('create', 'update', 'delete', 'action')),
-	CONSTRAINT "audit_log_target_type_check" CHECK ("target_type" IN ('hangar.ping', 'hangar.reference', 'hangar.source', 'hangar.sync', 'hangar.job', 'hangar.source.edition-resolved', 'hangar.source.edition-drift', 'hangar.source.thumbnail-generated', 'hangar.user', 'study.session_item_result', 'auth.login', 'auth.login-failed', 'auth.logout'))
+	CONSTRAINT "audit_log_target_type_check" CHECK ("target_type" IN ('hangar.reference', 'hangar.source', 'hangar.sync', 'hangar.job', 'hangar.source.edition-resolved', 'hangar.source.edition-drift', 'hangar.source.thumbnail-generated', 'hangar.user', 'study.session_item_result', 'auth.login', 'auth.login-failed', 'auth.logout', 'hangar.invitation', 'hangar.ping'))
 );
 --> statement-breakpoint
 CREATE TABLE "sources_registry"."editions" (
@@ -792,6 +815,9 @@ ALTER TABLE "study"."syllabus_node" ADD CONSTRAINT "syllabus_node_parent_id_syll
 ALTER TABLE "study"."syllabus_node_link" ADD CONSTRAINT "syllabus_node_link_syllabus_node_id_syllabus_node_id_fk" FOREIGN KEY ("syllabus_node_id") REFERENCES "study"."syllabus_node"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."syllabus_node_link" ADD CONSTRAINT "syllabus_node_link_knowledge_node_id_knowledge_node_id_fk" FOREIGN KEY ("knowledge_node_id") REFERENCES "study"."knowledge_node"("id") ON DELETE restrict ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."content_citations" ADD CONSTRAINT "content_citations_created_by_bauth_user_id_fk" FOREIGN KEY ("created_by") REFERENCES "public"."bauth_user"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
+ALTER TABLE "hangar"."invitation" ADD CONSTRAINT "invitation_invited_by_user_id_bauth_user_id_fk" FOREIGN KEY ("invited_by_user_id") REFERENCES "public"."bauth_user"("id") ON DELETE set null ON UPDATE cascade;--> statement-breakpoint
+ALTER TABLE "hangar"."invitation" ADD CONSTRAINT "invitation_accepted_user_id_bauth_user_id_fk" FOREIGN KEY ("accepted_user_id") REFERENCES "public"."bauth_user"("id") ON DELETE set null ON UPDATE cascade;--> statement-breakpoint
+ALTER TABLE "hangar"."invitation" ADD CONSTRAINT "invitation_revoked_by_user_id_bauth_user_id_fk" FOREIGN KEY ("revoked_by_user_id") REFERENCES "public"."bauth_user"("id") ON DELETE set null ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE "hangar"."reference" ADD CONSTRAINT "reference_updated_by_bauth_user_id_fk" FOREIGN KEY ("updated_by") REFERENCES "public"."bauth_user"("id") ON DELETE set null ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE "hangar"."source" ADD CONSTRAINT "source_updated_by_bauth_user_id_fk" FOREIGN KEY ("updated_by") REFERENCES "public"."bauth_user"("id") ON DELETE set null ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE "hangar"."sync_log" ADD CONSTRAINT "sync_log_actor_id_bauth_user_id_fk" FOREIGN KEY ("actor_id") REFERENCES "public"."bauth_user"("id") ON DELETE set null ON UPDATE cascade;--> statement-breakpoint
@@ -808,10 +834,11 @@ CREATE INDEX "bauth_verification_identifier_idx" ON "bauth_verification" USING b
 CREATE INDEX "card_user_status_idx" ON "study"."card" USING btree ("user_id","status");--> statement-breakpoint
 CREATE INDEX "card_user_domain_idx" ON "study"."card" USING btree ("user_id","domain");--> statement-breakpoint
 CREATE INDEX "card_user_created_idx" ON "study"."card" USING btree ("user_id","created_at");--> statement-breakpoint
+CREATE INDEX "card_user_updated_idx" ON "study"."card" USING btree ("user_id","updated_at");--> statement-breakpoint
 CREATE INDEX "card_node_user_idx" ON "study"."card" USING btree ("node_id","user_id");--> statement-breakpoint
 CREATE INDEX "card_front_trgm_idx" ON "study"."card" USING gin ("front" gin_trgm_ops);--> statement-breakpoint
 CREATE INDEX "card_back_trgm_idx" ON "study"."card" USING gin ("back" gin_trgm_ops);--> statement-breakpoint
-CREATE INDEX "card_feedback_user_card_idx" ON "study"."card_feedback" USING btree ("user_id","card_id");--> statement-breakpoint
+CREATE INDEX "card_feedback_user_card_created_idx" ON "study"."card_feedback" USING btree ("user_id","card_id","created_at" desc);--> statement-breakpoint
 CREATE INDEX "card_snooze_user_card_idx" ON "study"."card_snooze" USING btree ("user_id","card_id");--> statement-breakpoint
 CREATE INDEX "card_snooze_user_reason_idx" ON "study"."card_snooze" USING btree ("user_id","reason","resolved_at");--> statement-breakpoint
 CREATE INDEX "card_snooze_user_removed_idx" ON "study"."card_snooze" USING btree ("user_id","card_id") WHERE reason = 'remove' AND resolved_at IS NULL;--> statement-breakpoint
@@ -829,6 +856,7 @@ CREATE UNIQUE INDEX "credential_syllabus_unique" ON "study"."credential_syllabus
 CREATE UNIQUE INDEX "credential_syllabus_primary_unique" ON "study"."credential_syllabus" USING btree ("credential_id") WHERE primacy = 'primary';--> statement-breakpoint
 CREATE INDEX "credential_syllabus_by_syllabus_idx" ON "study"."credential_syllabus" USING btree ("syllabus_id");--> statement-breakpoint
 CREATE INDEX "goal_user_status_idx" ON "study"."goal" USING btree ("user_id","status");--> statement-breakpoint
+CREATE INDEX "goal_user_updated_idx" ON "study"."goal" USING btree ("user_id","updated_at");--> statement-breakpoint
 CREATE UNIQUE INDEX "goal_user_primary_unique" ON "study"."goal" USING btree ("user_id") WHERE is_primary = true;--> statement-breakpoint
 CREATE INDEX "goal_node_by_knowledge_node_idx" ON "study"."goal_node" USING btree ("knowledge_node_id");--> statement-breakpoint
 CREATE INDEX "goal_syllabus_by_syllabus_idx" ON "study"."goal_syllabus" USING btree ("syllabus_id");--> statement-breakpoint
@@ -851,6 +879,7 @@ CREATE UNIQUE INDEX "reference_section_ref_code_unique" ON "study"."reference_se
 CREATE INDEX "reference_section_tree_idx" ON "study"."reference_section" USING btree ("reference_id","parent_id","ordinal");--> statement-breakpoint
 CREATE INDEX "reference_section_depth_idx" ON "study"."reference_section" USING btree ("reference_id","depth","ordinal");--> statement-breakpoint
 CREATE INDEX "reference_section_readable_idx" ON "study"."reference_section" USING btree ("reference_id") WHERE "study"."reference_section"."content_md" <> '';--> statement-breakpoint
+CREATE INDEX "reference_section_airboss_ref_idx" ON "study"."reference_section" USING btree ("airboss_ref");--> statement-breakpoint
 CREATE UNIQUE INDEX "reference_section_errata_section_errata_idx" ON "study"."reference_section_errata" USING btree ("section_id","errata_id");--> statement-breakpoint
 CREATE INDEX "reference_section_errata_section_applied_idx" ON "study"."reference_section_errata" USING btree ("section_id","applied_at");--> statement-breakpoint
 CREATE INDEX "reference_section_read_state_user_status_idx" ON "study"."reference_section_read_state" USING btree ("user_id","status");--> statement-breakpoint
@@ -874,6 +903,7 @@ CREATE INDEX "sir_user_completed_idx" ON "study"."session_item_result" USING btr
 CREATE INDEX "sir_user_kind_completed_idx" ON "study"."session_item_result" USING btree ("user_id","item_kind","completed_at");--> statement-breakpoint
 CREATE INDEX "sir_scenario_completed_idx" ON "study"."session_item_result" USING btree ("scenario_id","completed_at");--> statement-breakpoint
 CREATE INDEX "sir_node_completed_idx" ON "study"."session_item_result" USING btree ("node_id","completed_at");--> statement-breakpoint
+CREATE INDEX "sir_chosen_option_idx" ON "study"."session_item_result" USING btree ("chosen_option_id") WHERE "study"."session_item_result"."chosen_option_id" is not null;--> statement-breakpoint
 CREATE INDEX "plan_user_status_idx" ON "study"."study_plan" USING btree ("user_id","status");--> statement-breakpoint
 CREATE UNIQUE INDEX "plan_user_active_uniq" ON "study"."study_plan" USING btree ("user_id") WHERE status = 'active';--> statement-breakpoint
 CREATE UNIQUE INDEX "syllabus_slug_unique" ON "study"."syllabus" USING btree ("slug");--> statement-breakpoint
@@ -893,18 +923,23 @@ CREATE INDEX "content_citation_target_idx" ON "study"."content_citations" USING 
 CREATE INDEX "content_citation_card_source_idx" ON "study"."content_citations" USING btree ("source_id") WHERE source_type = 'card';--> statement-breakpoint
 CREATE INDEX "content_citation_regulation_target_idx" ON "study"."content_citations" USING btree ("target_id") WHERE target_type = 'regulation_node';--> statement-breakpoint
 CREATE UNIQUE INDEX "content_citation_source_target_unique" ON "study"."content_citations" USING btree ("source_type","source_id","target_type","target_id");--> statement-breakpoint
+CREATE INDEX "hangar_invitation_status_idx" ON "hangar"."invitation" USING btree ("accepted_at","revoked_at","expires_at");--> statement-breakpoint
+CREATE INDEX "hangar_invitation_email_idx" ON "hangar"."invitation" USING btree ("email");--> statement-breakpoint
+CREATE INDEX "hangar_invitation_invited_at_idx" ON "hangar"."invitation" USING btree ("invited_at");--> statement-breakpoint
+CREATE UNIQUE INDEX "hangar_invitation_pending_email_unique_idx" ON "hangar"."invitation" USING btree ("email") WHERE "hangar"."invitation"."accepted_at" IS NULL AND "hangar"."invitation"."revoked_at" IS NULL;--> statement-breakpoint
 CREATE INDEX "hangar_reference_dirty_idx" ON "hangar"."reference" USING btree ("dirty") WHERE "hangar"."reference"."dirty" = true;--> statement-breakpoint
-CREATE INDEX "hangar_reference_updated_idx" ON "hangar"."reference" USING btree ("updated_at");--> statement-breakpoint
-CREATE INDEX "hangar_reference_live_idx" ON "hangar"."reference" USING btree ("id") WHERE "hangar"."reference"."deleted_at" IS NULL;--> statement-breakpoint
+CREATE INDEX "hangar_reference_updated_idx" ON "hangar"."reference" USING btree ("updated_at") WHERE "hangar"."reference"."deleted_at" IS NULL;--> statement-breakpoint
 CREATE INDEX "hangar_source_type_idx" ON "hangar"."source" USING btree ("type");--> statement-breakpoint
 CREATE INDEX "hangar_source_dirty_idx" ON "hangar"."source" USING btree ("dirty") WHERE "hangar"."source"."dirty" = true;--> statement-breakpoint
-CREATE INDEX "hangar_source_live_idx" ON "hangar"."source" USING btree ("id") WHERE "hangar"."source"."deleted_at" IS NULL;--> statement-breakpoint
+CREATE INDEX "hangar_source_updated_idx" ON "hangar"."source" USING btree ("updated_at") WHERE "hangar"."source"."deleted_at" IS NULL;--> statement-breakpoint
 CREATE INDEX "hangar_sync_log_actor_idx" ON "hangar"."sync_log" USING btree ("actor_id","started_at");--> statement-breakpoint
 CREATE INDEX "hangar_sync_log_outcome_idx" ON "hangar"."sync_log" USING btree ("outcome","started_at");--> statement-breakpoint
+CREATE INDEX "hangar_sync_log_kind_idx" ON "hangar"."sync_log" USING btree ("kind","started_at");--> statement-breakpoint
 CREATE INDEX "hangar_job_status_idx" ON "hangar"."job" USING btree ("status","created_at");--> statement-breakpoint
 CREATE INDEX "hangar_job_kind_idx" ON "hangar"."job" USING btree ("kind","created_at");--> statement-breakpoint
 CREATE INDEX "hangar_job_target_idx" ON "hangar"."job" USING btree ("target_type","target_id","created_at");--> statement-breakpoint
 CREATE INDEX "hangar_job_actor_idx" ON "hangar"."job" USING btree ("actor_id","created_at");--> statement-breakpoint
+CREATE INDEX "hangar_job_log_at_idx" ON "hangar"."job_log" USING btree ("at");--> statement-breakpoint
 CREATE INDEX "sim_attempt_user_scenario_ended_idx" ON "sim"."attempt" USING btree ("user_id","scenario_id","ended_at");--> statement-breakpoint
 CREATE INDEX "sim_attempt_user_ended_idx" ON "sim"."attempt" USING btree ("user_id","ended_at");--> statement-breakpoint
 CREATE INDEX "audit_log_actor_idx" ON "audit"."audit_log" USING btree ("actor_id","timestamp");--> statement-breakpoint
