@@ -16,6 +16,7 @@ import { AUDIT_OPS, auditWrite } from '@ab/audit';
 import {
 	AUDIT_TARGETS,
 	CITATION_ORDER_VALUES,
+	RENDER_MODE_VALUES,
 	STUDY_MAP_TAB_VALUES,
 	USER_PREF_KEY_VALUES,
 	type UserPrefKey,
@@ -44,6 +45,16 @@ export const USER_PREF_SCHEMAS = {
 	'study.home.map_tab': z.enum([STUDY_MAP_TAB_VALUES[0], ...STUDY_MAP_TAB_VALUES.slice(1)] as [
 		(typeof STUDY_MAP_TAB_VALUES)[number],
 		...(typeof STUDY_MAP_TAB_VALUES)[number][],
+	]),
+	// Owned by WP 2 (flight-evidence-and-cfi-feedback). Value is a teacher
+	// `bauth_user.id`; validated as a non-empty string here -- referential
+	// integrity is enforced by the route loader (only an active teacher
+	// link's id is accepted).
+	'study.home.course_teacher_id': z.string().min(1),
+	// Owned by WP 3 (node-render-modes). Value is one of `'learn' / 'review' / 'memorize'`.
+	'study.knowledge.render_mode': z.enum([RENDER_MODE_VALUES[0], ...RENDER_MODE_VALUES.slice(1)] as [
+		(typeof RENDER_MODE_VALUES)[number],
+		...(typeof RENDER_MODE_VALUES)[number][],
 	]),
 } satisfies Record<UserPrefKey, z.ZodType>;
 

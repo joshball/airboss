@@ -139,11 +139,32 @@ export const ROUTES = {
 	STUDY: '/study',
 
 	/**
-	 * Placeholder for the flight-logging surface. The real page lands in
-	 * WP 2 (`flight-evidence-and-cfi-feedback`). v1 renders a banner + back
-	 * link from the study-home Flight tile.
+	 * Flight-logging surface root. WP 1 ships this as a placeholder; WP 2
+	 * (`flight-evidence-and-cfi-feedback`) lands the real list / new / detail
+	 * pages and the debrief invite flow.
 	 */
 	FLIGHT: '/flight',
+	FLIGHT_NEW: '/flight/new',
+	FLIGHT_DETAIL: (id: string) => `/flight/${encodeURIComponent(id)}` as const,
+	/** Student-side modal route to open the InviteTeacherDialog from a flight detail page. WP 2. */
+	FLIGHT_INVITE: (id: string) => `/flight/${encodeURIComponent(id)}/invite` as const,
+
+	// Study -- Teacher surfaces (WP 2: flight-evidence-and-cfi-feedback)
+	/** Entry / fallback for users without the `teacher` role. */
+	TEACH: '/teach',
+	/** A teacher's list of active student links. */
+	TEACH_STUDENTS: '/teach/students',
+	TEACH_STUDENT_DETAIL: (studentId: string) => `/teach/students/${encodeURIComponent(studentId)}` as const,
+	TEACH_ATTEMPT_REVIEW: (studentId: string, attemptId: string) =>
+		`/teach/students/${encodeURIComponent(studentId)}/attempts/${encodeURIComponent(attemptId)}` as const,
+	/** Teacher's own teaching syllabus authoring surface. */
+	TEACH_SYLLABUS: '/teach/syllabus',
+	/**
+	 * Public route gated only by the magic-link token. The only non-auth-gated
+	 * mutation surface in study; the route layer explicitly allows it past
+	 * the layout-level auth gate. Per Decisions 8/9/10 in the WP 2 spec.
+	 */
+	TEACH_DEBRIEF: (token: string) => `/teach/debrief/${encodeURIComponent(token)}` as const,
 
 	// Study -- Dashboard (kept as the "Stats" view; was the launchpad pre-WP)
 	DASHBOARD: '/dashboard',
