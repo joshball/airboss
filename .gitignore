@@ -9,6 +9,7 @@ build/
 coverage/
 .tmp/
 .claude/
+.dev/
 
 # Playwright
 /tests/e2e/.auth/
