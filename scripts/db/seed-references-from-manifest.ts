@@ -62,11 +62,8 @@ import { existsSync, readdirSync, statSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { type Manifest, manifestSchema } from '@ab/bc-study';
+import { attachSupersededByLatest, type Manifest, manifestSchema } from '@ab/bc-study/build';
 import { client } from '@ab/db/connection';
-// Build helpers live in the references BC but aren't re-exported from the
-// barrel (route handlers should never need them; only seed code does).
-import { attachSupersededByLatest } from '../../libs/bc/study/src/references';
 import { seedAcManifest } from '../../libs/bc/study/src/seeders/ac';
 import { seedAcsManifest } from '../../libs/bc/study/src/seeders/acs';
 import { seedAimManifest } from '../../libs/bc/study/src/seeders/aim';

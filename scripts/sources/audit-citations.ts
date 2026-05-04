@@ -15,7 +15,7 @@
  * Read-only. Never mutates the database.
  */
 
-import { AUDIT_FINDING_KINDS, type AuditFinding, type AuditReport, auditCitations } from '@ab/bc-study';
+import { AUDIT_FINDING_KINDS, type AuditFinding, type AuditReport, auditCitations } from '@ab/bc-study/build';
 
 interface CliFlags {
 	json: boolean;
