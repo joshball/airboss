@@ -71,6 +71,47 @@ Persisted as a per-doc validation manifest at `validation/<corpus>/<doc>/<editio
 - Count of cruft (handbooks-noningested.yaml, etc.)
 - Each: linked to the rows in question
 
+## Data contract (provided by WP-HANDBOOK-RE-EXTRACTION-V2)
+
+WP-HANDBOOK-RE-EXTRACTION-V2 ships the substrate this dashboard reads from. Three on-disk files + one BC reader define the contract; the dashboard composes them into the warning-triage UI.
+
+### On-disk files
+
+| File                                                                       | Owner                              | Schema (in `libs/bc/study/src/manifest-validation.ts`) |
+| -------------------------------------------------------------------------- | ---------------------------------- | ------------------------------------------------------ |
+| `<corpus>/<doc>/<edition>/manifest.json`                                   | extractor (re-emitted on each run) | `manifestSchema` (discriminated union on `kind`)       |
+| `<corpus>/<doc>/<edition>/warnings.json`                                   | extractor (re-emitted on each run) | `handbookWarningsFileSchema`                           |
+| `validation/<corpus>/<doc>/<edition>/warnings-triage.json`                 | hangar dashboard (this WP)         | `handbookWarningsTriageFileSchema`                     |
+
+`warnings.json` carries the normalized warning list with stable 16-hex `id` per row (computed from `<code>|<section_code or "">|<message[:50]>`); the id is durable across re-extractions. `warnings-triage.json` is the human-curated companion. Both paths use the same dispatch as the BC reader: `<corpus>` is `handbooks` for handbook references, `ac` for AC references.
+
+### Closed vocabularies
+
+- `HANDBOOK_MANIFEST_WARNING_CODES` (in `libs/bc/study/src/manifest-validation.ts`) -- every warning code the extractor may emit.
+- `WP_FIXABLE_WARNING_CODES` -- subset of fixable codes (the v2 extractor's substrate-quality target). Parser-instrumentation codes (`toc`, `toc-verify`, `llm`, `page-label`, `section-strategy`) are surfaced here for separate review but are NOT counted toward the v2 fixable queue.
+- `HANDBOOK_WARNING_TRIAGE_STATUS_VALUES` -- `open` / `wontfix` / `fixed` / `duplicate`. The reader filters anything other than `open` (or untriaged) out of the dashboard's open queue.
+
+### Single consumption point
+
+The dashboard reads warnings exclusively through:
+
+```ts
+import { getOpenWarningsForReference } from '@ab/bc-study';
+const open = await getOpenWarningsForReference(referenceId);
+```
+
+Behavior:
+
+- Returns only warnings whose triage status is `open` (or untriaged), each with optional `triage_note` ride-along.
+- Returns `[]` when `warnings.json` is absent (corpus has not been re-extracted under v2 yet, or the corpus has no warning surface).
+- Throws `StaleWarningsTriageError` when the triage file's `manifest_sha256` no longer matches the live `warnings.json`. The dashboard surfaces a "manifest drift" banner and prompts re-triage rather than silently applying decisions made against an older extraction.
+
+The reader dispatches by `reference.kind` (`handbook` / `ac` today, more corpora as they gain warning surfaces). The hangar dashboard does NOT read the on-disk JSON directly; all access goes through the BC.
+
+### Writer side (this WP)
+
+This WP owns the writer for `warnings-triage.json`: each triage decision in the dashboard re-writes the file in place with the latest `manifest_sha256` from the live `warnings.json`. Writes are idempotent (same decision -> identical file). Audit logging happens at the BC layer in this WP.
+
 ## BC layer
 
 `libs/bc/hangar/src/references-admin.ts`:
