@@ -1898,6 +1898,14 @@ export const GOAL_TITLE_MAX_LENGTH = 200;
 export const GOAL_NOTES_MAX_LENGTH = 16384;
 
 /**
+ * Hard cap on `goal_node.notes` length. Per-node annotations (why this
+ * knowledge node is pinned to the goal) are short prose; the cap is the
+ * same defensive ceiling the BC zod schema enforces and matches the
+ * existing route-side validation.
+ */
+export const GOAL_NODE_NOTES_MAX_LENGTH = 2000;
+
+/**
  * Hard cap on plan title length. Routes parse against this so requests
  * exceeding the limit fail at the route boundary.
  */

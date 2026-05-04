@@ -114,6 +114,27 @@ export {
 	getCredentialsByIds,
 	listCredentials,
 } from './credentials';
+// Goal-CRUD Zod schemas + their inferred input types. The BC `goals.ts`
+// write helpers parse against these inside their function bodies as a
+// defense-in-depth layer on top of the route-level coercion. Re-exported
+// so route actions and cross-BC callers reach for the same shape the BC
+// enforces at function entry.
+export {
+	type AddGoalNodeInput,
+	type AddGoalSyllabusInput,
+	type ApplyCertGoalsInput,
+	addGoalNodeInputSchema,
+	addGoalSyllabusInputSchema,
+	applyCertGoalsInputSchema,
+	type CreateGoalInput,
+	createGoalInputSchema,
+	type GoalDomainList,
+	type GoalNodeIdList,
+	goalDomainListSchema,
+	goalNodeIdListSchema,
+	type UpdateGoalInput,
+	updateGoalInputSchema,
+} from './credentials.validation';
 export type {
 	ActivityDay,
 	DashboardFetchers,

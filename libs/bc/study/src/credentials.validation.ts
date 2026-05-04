@@ -36,9 +36,14 @@ import {
 	type CredentialKind,
 	type CredentialPrereqKind,
 	type CredentialStatus,
+	DOMAIN_VALUES,
+	type Domain,
+	GOAL_NODE_NOTES_MAX_LENGTH,
+	GOAL_NOTES_MAX_LENGTH,
 	GOAL_STATUS_VALUES,
 	GOAL_SYLLABUS_WEIGHT_MAX,
 	GOAL_SYLLABUS_WEIGHT_MIN,
+	GOAL_TITLE_MAX_LENGTH,
 	type GoalStatus,
 	SYLLABUS_KIND_VALUES,
 	SYLLABUS_NODE_LEVEL_VALUES,
@@ -171,11 +176,17 @@ export const syllabusNodeYamlSchema: z.ZodType<SyllabusNodeYamlBase, z.ZodTypeDe
  */
 export const syllabusAreaYamlSchema = syllabusNodeYamlSchema;
 
-/** Goal-CRUD input from a route action. The user_id is set server-side. */
+/**
+ * Goal-CRUD input from a route action. The user_id is set server-side.
+ * Targeting fields (`focusDomains`, `skipDomains`, `skipNodes`) flow through
+ * separate setter helpers (`setGoalFocusDomains`, `setGoalSkipDomains`,
+ * `setGoalSkipNodes`) -- not this schema -- because the route layer
+ * patches them as a separate operation post-create.
+ */
 export const createGoalInputSchema = z.object({
-	title: z.string().min(1).max(200),
-	notesMd: z.string().max(16384).default(''),
-	isPrimary: z.boolean().default(false),
+	title: z.string().min(1).max(GOAL_TITLE_MAX_LENGTH),
+	notesMd: z.string().max(GOAL_NOTES_MAX_LENGTH).optional(),
+	isPrimary: z.boolean().optional(),
 	targetDate: z
 		.string()
 		.regex(/^\d{4}-\d{2}-\d{2}$/, 'targetDate must be a calendar date in YYYY-MM-DD form')
@@ -185,8 +196,8 @@ export const createGoalInputSchema = z.object({
 export type CreateGoalInput = z.infer<typeof createGoalInputSchema>;
 
 export const updateGoalInputSchema = z.object({
-	title: z.string().min(1).max(200).optional(),
-	notesMd: z.string().max(16384).optional(),
+	title: z.string().min(1).max(GOAL_TITLE_MAX_LENGTH).optional(),
+	notesMd: z.string().max(GOAL_NOTES_MAX_LENGTH).optional(),
 	status: z.enum(GOAL_STATUS_VALUES as unknown as readonly [GoalStatus, ...GoalStatus[]]).optional(),
 	targetDate: z
 		.string()
@@ -205,6 +216,43 @@ export type AddGoalSyllabusInput = z.infer<typeof addGoalSyllabusInputSchema>;
 export const addGoalNodeInputSchema = z.object({
 	knowledgeNodeId: z.string().min(1),
 	weight: z.number().min(GOAL_SYLLABUS_WEIGHT_MIN).max(GOAL_SYLLABUS_WEIGHT_MAX).default(1.0),
-	notes: z.string().max(2000).default(''),
+	notes: z.string().max(GOAL_NODE_NOTES_MAX_LENGTH).default(''),
 });
 export type AddGoalNodeInput = z.infer<typeof addGoalNodeInputSchema>;
+
+/**
+ * Targeting-list schemas wired into `setGoalFocusDomains`,
+ * `setGoalSkipDomains`, and `setGoalSkipNodes`. The arrays are validated
+ * against `DOMAIN_VALUES` so a caller that bypasses the route layer
+ * (e.g. a script) can't slip an unknown domain slug into `goal.focus_domains`.
+ */
+export const goalDomainListSchema = z.array(z.enum(DOMAIN_VALUES as unknown as readonly [Domain, ...Domain[]]));
+export type GoalDomainList = z.infer<typeof goalDomainListSchema>;
+
+export const goalNodeIdListSchema = z.array(z.string().min(1));
+export type GoalNodeIdList = z.infer<typeof goalNodeIdListSchema>;
+
+/**
+ * Input for `applyCertGoalsToPrimaryGoal`. Validates the shape of every
+ * argument: non-empty `userId`, an array of non-empty cert slug strings,
+ * and the optional targeting overrides against `DOMAIN_VALUES` plus the
+ * goal-title length cap. The cert slugs themselves are NOT enum-checked
+ * here because the BC already resolves each slug against `credential.slug`
+ * and reports unknown slugs through the `skippedCerts` result -- making
+ * "unknown slug" a first-class outcome, not an error. The schema's role
+ * is to block oversized/wrong-shape payloads so a script bypassing the
+ * route layer can't blow up `credentialBySlug` lookups with non-string
+ * input.
+ */
+export const applyCertGoalsInputSchema = z.object({
+	userId: z.string().min(1),
+	certs: z.array(z.string().min(1)),
+	options: z
+		.object({
+			goalTitle: z.string().min(1).max(GOAL_TITLE_MAX_LENGTH).optional(),
+			focusDomains: z.array(z.enum(DOMAIN_VALUES as unknown as readonly [Domain, ...Domain[]])).optional(),
+			skipDomains: z.array(z.enum(DOMAIN_VALUES as unknown as readonly [Domain, ...Domain[]])).optional(),
+		})
+		.default({}),
+});
+export type ApplyCertGoalsInput = z.infer<typeof applyCertGoalsInputSchema>;

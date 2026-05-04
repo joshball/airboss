@@ -17,7 +17,7 @@ review_status: done
 | Severity | Count | Closed | Open |
 | -------- | ----: | -----: | ---: |
 | critical |     0 |      0 |    0 |
-| major    |     2 |      1 |    1 |
+| major    |     2 |      2 |    0 |
 | minor    |     5 |      1 |    4 |
 | nit      |     3 |      1 |    2 |
 
@@ -25,9 +25,9 @@ review_status: done
 
 Closed via the build-barrel split. `libs/bc/study/package.json` now declares `'.'` and `'./build'` exports; `libs/bc/study/src/build.ts` re-exports every actor-bypass writer (`upsertKnowledgeNode`, `replaceNodeEdges`, `refreshEdgeTargetExists`, `upsertCredential*`, `validateCredentialDag`, `upsertSyllabus*`, `replaceSyllabusNodeLinks`, `validateAirbossRefForLeaf`, `attachSupersededByLatest`, `replaceFiguresForSection`, `upsertReference`, `upsertReferenceSection`, `auditCitations`, all manifest schemas, citation ingestion schemas), and `libs/bc/study/src/index.ts` no longer surfaces any of them. Scripts/seeders import from `@ab/bc-study/build`; route loaders cannot reach the build barrel because the only `apps/*/src/routes/**` import surface is `@ab/bc-study`. A `barrel-split.test.ts` regression test asserts the runtime + build barrels stay disjoint and that every named build-only symbol lives only in `./build`.
 
-### MAJOR: `goals.ts` skips BC-level Zod validation -- STILL OPEN
+### MAJOR: `goals.ts` skips BC-level Zod validation -- CLOSED
 
-`libs/bc/study/src/goals.ts` still has zero `.parse(` calls. Cards/scenarios still parse at the BC boundary; goals does not. Trigger: small parser-integration PR (`createGoalInputSchema.parse`, `addGoalSyllabusInputSchema.parse`, etc.) at the top of each goals write path. Schemas already exist in `credentials.validation.ts`.
+`libs/bc/study/src/goals.ts` now parses every write input at the BC boundary. `createGoal`, `updateGoal`, `addGoalSyllabus`, `addGoalNode`, `setGoalFocusDomains`, `setGoalSkipDomains`, `setGoalSkipNodes`, and `applyCertGoalsToPrimaryGoal` each call the matching `*InputSchema.parse(...)` at function entry; `ZodError` throws before any DB I/O fires. Schemas live in `credentials.validation.ts` (`createGoalInputSchema`, `updateGoalInputSchema`, `addGoalSyllabusInputSchema`, `addGoalNodeInputSchema`, `goalDomainListSchema`, `goalNodeIdListSchema`, `applyCertGoalsInputSchema`) and are now barreled from the BC. Title length, notesMd length, weight bounds, and target-date format flow from `@ab/constants` (`GOAL_TITLE_MAX_LENGTH`, `GOAL_NOTES_MAX_LENGTH`, `GOAL_NODE_NOTES_MAX_LENGTH`, `GOAL_SYLLABUS_WEIGHT_{MIN,MAX}`, `DOMAIN_VALUES`). BC-level integration tests in `goals.test.ts` cover valid round-trips, oversized title/notes, out-of-range weights, and unknown domain slugs.
 
 ### MINOR: `recordPhaseVisited` / `recordPhaseCompleted` accept arbitrary nodeId / phaseId -- STILL OPEN
 
@@ -63,7 +63,7 @@ Capability-URL behavior intentional per JSDoc. Trigger: when share-by-URL spec f
 
 ### Final verdict
 
-1 of 2 majors closed -- the build-only barrel split landed (`@ab/bc-study/build` subpath); the goals Zod integration sweep is the remaining major. 1 of 5 minors closed (search caps); 1 of 3 nits closed (snooze message). Remaining items have concrete triggers tied to upcoming WPs (citations-permissions PR, references-hardening WP). `review_status` flipped to `done`.
+2 of 2 majors closed -- the build-only barrel split landed (`@ab/bc-study/build` subpath, separate PR) AND the goals BC Zod integration sweep landed (this PR). 1 of 5 minors closed (search caps); 1 of 3 nits closed (snooze message). Remaining items have concrete triggers tied to upcoming WPs (citations-permissions PR, references-hardening WP). `review_status` flipped to `done`.
 
 ## Summary
 
@@ -81,13 +81,13 @@ Problem: `upsertKnowledgeNode`, `replaceNodeEdges`, `refreshEdgeTargetExists`, `
 
 Fix: Either (a) split build-only helpers into a separate non-public barrel (e.g. `@ab/bc-study/admin` exported only to scripts), or (b) require an `actor` argument and assert `actor.role === 'admin'` (or equivalent) inside each upsert before issuing the write. Option (a) matches the patterns elsewhere in the repo. As a stopgap, add `// build-only: not safe for route handlers` comments + a lint rule that bans these symbols outside `scripts/`.
 
-### MAJOR: `goals.ts` write paths skip BC-level zod validation that cards/scenarios run
+### MAJOR: `goals.ts` write paths skip BC-level zod validation that cards/scenarios run -- CLOSED
 
 File: `libs/bc/study/src/goals.ts`
 
-Problem: `cards.ts` runs `newCardSchema.parse(...)` and `updateCardSchema.parse(...)` inside the BC ("Inputs are validated here in addition to the route layer so cross-BC callers and scripts can't inject invalid values" -- per the file's own docstring). `scenarios.ts` runs `newScenarioSchema.parse` and `submitAttemptSchema.parse` for the same reason. `goals.ts` does not -- `createGoal`, `updateGoal`, `addGoalSyllabus`, `addGoalNode`, `setGoalFocusDomains`, `setGoalSkipDomains`, `setGoalSkipNodes`, `setGoalNodeWeight`, `setGoalSyllabusWeight`, and `applyCertGoalsToPrimaryGoal` accept their inputs typed but never call the matching schemas in `credentials.validation.ts` (`createGoalInputSchema`, `addGoalSyllabusInputSchema`, `addGoalNodeInputSchema`). Title length, notesMd length, weight bounds, target-date format, and status enum all rely entirely on the route layer.
+Problem: `cards.ts` runs `newCardSchema.parse(...)` and `updateCardSchema.parse(...)` inside the BC ("Inputs are validated here in addition to the route layer so cross-BC callers and scripts can't inject invalid values" -- per the file's own docstring). `scenarios.ts` runs `newScenarioSchema.parse` and `submitAttemptSchema.parse` for the same reason. `goals.ts` did not -- `createGoal`, `updateGoal`, `addGoalSyllabus`, `addGoalNode`, `setGoalFocusDomains`, `setGoalSkipDomains`, `setGoalSkipNodes`, and `applyCertGoalsToPrimaryGoal` accepted their inputs typed but never called the matching schemas. Title length, notesMd length, weight bounds, target-date format, and status enum all relied entirely on the route layer.
 
-Fix: Mirror the cards/scenarios pattern and add `createGoalInputSchema.parse(input)` (etc.) at the top of each goals write path. The schemas already exist; this is purely an integration gap.
+Fix landed: Each write helper now parses against the matching schema in `credentials.validation.ts`. New schemas added: `goalDomainListSchema`, `goalNodeIdListSchema`, `applyCertGoalsInputSchema`. New constant `GOAL_NODE_NOTES_MAX_LENGTH = 2000` in `@ab/constants`. BC barrel re-exports the goal-CRUD schemas and inferred input types. BC-level integration tests in `goals.test.ts` cover valid round-trips, oversized title/notes (`GOAL_TITLE_MAX_LENGTH + 1`, `GOAL_NOTES_MAX_LENGTH + 1`, `GOAL_NODE_NOTES_MAX_LENGTH + 1`), out-of-range weights (`GOAL_SYLLABUS_WEIGHT_MAX + 1`, `< GOAL_SYLLABUS_WEIGHT_MIN`), unknown domain slugs on `setGoalFocusDomains` / `setGoalSkipDomains`, empty-string ids on `setGoalSkipNodes` / `addGoalSyllabus` / `addGoalNode`, malformed `targetDate`, unknown `status` enum, and oversized `goalTitle` / unknown `focusDomains` on `applyCertGoalsToPrimaryGoal`. Each rejection asserts a symmetric "no row landed" post-condition.
 
 ### MINOR: `recordPhaseVisited` / `recordPhaseCompleted` accept arbitrary `nodeId` and `phaseId` strings
 
