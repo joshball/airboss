@@ -22,378 +22,91 @@ En Route Operations
 
 Figure 2-1. Code of Federal Regulations, Title 14 Aeronautics and Space.
 
-![Figure 2-1. Code of Federal Regulations, Title 14 Aeronautics and Space. 
-En Route Navigation 
-En route instrument flight rules (IFR) navigation is evolving 
-from the ground-based navigational aid (NAVAID) airway 
-system to a sophisticated satellite and computer-based 
-system that can generate courses to suit the opera](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-00-code-of-federal-regulations-title-14-aeronautics.png)
+![Figure 2-1. Code of Federal Regulations, Title 14 Aeronautics and Space.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-00-code-of-federal-regulations-title-14-aeronautics.png)
 
-![Figure 2-3. Victor airways. 
-Figure 2-4. Jet routes. 
-ZID 
-ZMP 
-ZOB 
-ZBW 
-ZNY 
-ZNY 
-ZDC 
-ZAU 
-ZKC 
-ZME 
-ZTL 
-ZJX 
-ZMA 
-ZHU 
-ZFW
-ZAB 
-ZDV 
-ZLA 
-ZOA 
-ZLC 
-ZSE 
-ZHN 
-ZAN 
-Cleveland Center 
-Albuquerque Center 
-Seattle Center 
-Atlanta Center 
-Chicago Center 
-Boston Center 
-Washington
-Center (DC) 
-Denver Center 
-Fort Worth C](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-01-victor-airways-figure-2-4-jet-routes-zid-zmp-zob.png)
+![Figure 2-2. Airways depicted on an aeronautical chart.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-01-airways-depicted-on-an-aeronautical-chart.png)
 
-![Figure 2-13. Air Route Traffic Control Centers and sector frequencies. 
-2-6](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-02-air-route-traffic-control-centers-and-sector-fre.png)
+![Figure 2-8. Fort Worth Air Route Traffic Control Center.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-02-fort-worth-air-route-traffic-control-center.png)
 
-![Figure 2-14. Chart Supplement (includes Airport/Facility Directory 
-section). 
-waypoints, NAVAID radials/ distance measuring equipment 
-(DME), or any combinations thereof. 
-Preferred IFR routes are published in the CS for the low and 
-high altitude stratum. If they begin or end with an airway 
-number, it indicates that](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-03-chart-supplement-includes-airport-facility-direc.png)
+![Figure 2-9. Low altitude sectors.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-03-low-altitude-sectors.png)
 
-![Figure 2-19. Tower En Route Control (TEC) Northeast U.S. (Eastern). 
-the route, and the fourth shows the destination airport, 
-which are also listed alphabetically. When flight planning, 
-it is important to always check current publications for 
-information about the departure and destination airport. 
-Routes are effec](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-04-tower-en-route-control-tec-northeast-u-s-eastern.png)
+![Figure 2-10. Intermediate altitude sectors.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-04-intermediate-altitude-sectors.png)
 
-![Figure 2-25. Information found on en route low altitude charts. 
-Figure 2-26. Victor airways. 
-Figure 2-27. LF/MF airways. 
-E 
-VALENTINE 
-Miller Fld 
-(VTN) 
-2596 
-47
-L 
-VALENTINE
- 314 VTN 
-V60
-29 
-26 
-35 
-10000
-V190 
-53 
-27 
-15
-3 
-TAFOY 
-F 
-x 
-232 
-154 
-152
-9 
-D 
-L 83 
-28.55 
-G 
-A 
-V4 
-30 
-Victor Route (with RNAV/GPS](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-05-information-found-on-en-route-low-altitude-chart.png)
+![Figure 2-14. Chart Supplement (includes Airport/Facility Directory  section).](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-05-chart-supplement-includes-airport-facility-direc.png)
 
-![Figure 2-28. Low altitude RNAV routes. 
-• 
-Mileages 
-• 
-Waypoints 
-• 
-Waypoint names 
-• 
-Magnetic reference bearings 
-• 
-MEAs 
-Magnetic reference bearings are shown originating from a 
-waypoint, fix/reporting point, or NAVAID. A GNSS MEA for 
-each segment is established to ensure obstacle clearance 
-Figure 2-29. Low al](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-06-low-altitude-rnav-routes-mileages-waypoints-wayp.png)
+![Figure 2-19. Tower En Route Control (TEC) Northeast U.S. (Eastern).](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-06-tower-en-route-control-tec-northeast-u-s-eastern.png)
 
-![Figure 2-31. IFR en route high altitude chart. 
-IFR En Route High Altitude Chart 
-En route high altitude charts provide aeronautical 
-information for navigation under IFR conditions at and 
-above FL 180. [Figure 2-31] High altitude charts include 
-the following information: 
-•   
-Jet route structure 
-•   
-RNAV Q-routes](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-07-ifr-en-route-high-altitude-chart-ifr-en-route-hi.png)
+![Figure 2-24. IFR en route low altitude (left) and high altitude (right) charts.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-07-ifr-en-route-low-altitude-left-and-high-altitude.png)
 
-![Figure 2-39. Non-mountainous obstacle clearance in the primary 
-area. 
-If the distance from the NAVAID to the change-over point 
-(COP) is more than 51 NM, the outer boundary of the 
-primary area extends beyond the 4 NM width along the 
-4.5° line when the COP is at midpoint. This means the 
-primary area, along with its](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-08-non-mountainous-obstacle-clearance-in-the-primar.png)
+![Figure 2-25. Information found on en route low altitude charts.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-08-information-found-on-en-route-low-altitude-chart.png)
 
-![Figure 2-42. Changeover points. 
-behind. These COPs divide an airway or route segment and 
-ensure continuous reception of navigation signals at the 
-prescribed minimum en route IFR altitude. They also ensure 
-that other aircraft operating within the same portion of 
-an airway or route segment receive consistent azimuth](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-09-changeover-points-behind-these-cops-divide-an-ai.png)
+![Figure 2-28. Low altitude RNAV routes.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-09-low-altitude-rnav-routes.png)
 
-![Figure 2-43. Changeover point effect on long airway or route segment. 
-4.5° 
-6.7° 
-4.5° 
-6.7°
-70 
-70 
-4 NM 
-4 NM 
-Secondary areas 
-Primary areas 
-V214 
-2 NM 
-2 NM 
-Flare 
-Flare 
-2-21](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-10-changeover-point-effect-on-long-airway-or-route-.png)
+![Figure 2-36. Zanesville VOR/Victor Airway 214.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-10-zanesville-vor-victor-airway-214.png)
 
-![Figure 2-44. Direct route navigation. 
-for use in a particular structure (i.e., in the low or high 
-structures) may be used to define the en route phase of a 
-direct flight within that altitude structure. 
-Figure 2-44 shows a straight line on a magnetic course 
-from SCRAN intersection of 270° direct to the Fort Smith](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-11-direct-route-navigation-for-use-in-a-particular-.png)
+![Figure 2-39. Non-mountainous obstacle clearance in the primary  area.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-11-non-mountainous-obstacle-clearance-in-the-primar.png)
 
-![Figure 2-45. Published RNAV jet routes. 
-NOT FOR NAVIGATION
-N60°53.97´ W 151°2163´ 
-114.3 ANC 221.3°-37.0 
-AMOTT 
-280 
-MEA-28000 
-J888R 
-J996R 
-J804R
-61.2 
-61° 
-246
-237
-226° 
-AMOTT 
-37 
-22
-10
-346 
-a. 
-F—to indicate that on the route or portion thereof 
-advisory service only is provided; 
-b. 
-G—to indicate that on the r](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-12-published-rnav-jet-routes-not-for-navigation-n60.png)
+![Figure 2-41. Primary and secondary obstacle clearance area.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-12-primary-and-secondary-obstacle-clearance-area.png)
 
-![Figure 2-47. Off-route obstacle clearance altitude. 
-2-27](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-13-off-route-obstacle-clearance-altitude-2-27.png)
+![Figure 2-42. Changeover points.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-13-changeover-points.png)
 
-![Figure 2-48. Random RNAV route. 
-For all random RNAV flights, there needs to be at least one 
-waypoint in each ARTCC area through which you intend 
-to fly. One of the biggest problems in creating an RNAV 
-direct route is determining if the route goes through special 
-use airspace. For most direct routes, the chances of](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-14-random-rnav-route-for-all-random-rnav-flights-th.png)
+![Figure 2-43. Changeover point effect on long airway or route segment.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-13-changeover-points.png)
 
-![Figure 2-49. Navigational course guidance gaps. 
-VOR test facilities (VOT) 
-Facility Name ..............................
-  Type VOT 
-(Airport Name) ...........Frequency 
-Facility   
-Remarks 
-Bradlay Intl .................... 111.40    
-G 
-Bridgeport ..................... 109.25    
-G 
-Groton ...........................](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-15-navigational-course-guidance-gaps-vor-test-facil.png)
+![Figure 2-44. Direct route navigation.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-15-direct-route-navigation.png)
 
-![Figure 2-50. VOR test facilities (VOT) frequencies. 
-Figure 2-51. VOR checkpoint signs. 
-VOR 116.4 
-147° 4.1 NM 
-DME and VOR check radial 
-2.  On the VOR, set the course selector to 0° and the 
-track bar (TB) indicator should read center. The TO­
-FROM indicator should read FROM. 
-3.  Set the course selector to 180° and](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-16-vor-test-facilities-vot-frequencies-figure-2-51-.png)
+![Figure 2-45. Published RNAV jet routes.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-16-published-rnav-jet-routes.png)
 
-![Figure 2-51. VOR checkpoint signs. 
-VOR 116.4 
-147° 4.1 NM 
-DME and VOR check radial 
-2.  On the VOR, set the course selector to 0° and the 
-track bar (TB) indicator should read center. The TO­
-FROM indicator should read FROM. 
-3.  Set the course selector to 180° and the TO-FROM 
-indicator should read TO and the TB sho](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-17-vor-checkpoint-signs-vor-116-4-147-4-1-nm-dme-an.png)
+![Figure 2-46. Excerpt of authorized areas of en route operation.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-17-excerpt-of-authorized-areas-of-en-route-operatio.png)
 
-![Figure 2-54. Floating waypoints. 
-depicted on a Severe Weather Avoidance Plan (SWAP) en 
-route chart. These waypoints and SWAP routes assist pilots 
-and controllers when severe weather affects the East Coast. 
-Computer Navigation Performance 
-An integral part of RNAV using en route charts typically 
-involves the use of](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-18-floating-waypoints-depicted-on-a-severe-weather-.png)
+![Figure 2-47. Off-route obstacle clearance altitude.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-18-off-route-obstacle-clearance-altitude.png)
 
-![Figure 2-55. Computer navigation fix. 
-Many of the RNAV systems available today make it all 
-too easy to forget that en route charts are still required 
-and necessary for flight. As important as databases are, 
-they really are onboard the aircraft to provide navigation 
-guidance and situational awareness (SA); they are](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-19-computer-navigation-fix-many-of-the-rnav-systems.png)
+![Figure 2-48. Random RNAV route.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-19-random-rnav-route.png)
 
-![Figure 2-56. U.S. standard RNP levels. 
-2-34](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-20-u-s-standard-rnp-levels-2-34.png)
+![in Figure 2-49. Notice the en route chart excerpt depicting  that the MEA is established with a gap in navigation signal coverage northwest of the Carbon VOR/DME on V134.  At the MEA of 13,000, the allowable navigation course guidance gap is approximately 18.5 NM, as depicted in Figure 2-49. The navigation gap area is ](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-20-notice-the-en-route-chart-excerpt-depicting-that.png)
 
-![Figure 2-57. Maximum authorized altitude (MAA). 
-Figure 2-58. Minimum obstacle clearance altitude (MOCA). 
-Minimum obstacle clearance altitude 
-or route segment. [Figure 2-57] It is the highest altitude 
-on a Federal airway, jet route, RNAV low or high route, 
-or other direct route for which an MEA is designated at 
-wh](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-21-maximum-authorized-altitude-maa-figure-2-58-mini.png)
+![gap is approximately 18.5 NM, as depicted in Figure 2-49.  The navigation gap area is not identified on the chart by distances from the navigation facilities. Proper flight planning will help pilots prepare for MEA gaps by insuring that appropriate maps are available as they may need to dead reckon through the gap. Cal](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-21-5-nm-as-depicted-in-figure-2-49-the-navigation-g.png)
 
-![Figure 2-58. Minimum obstacle clearance altitude (MOCA). 
-Minimum obstacle clearance altitude 
-or route segment. [Figure 2-57] It is the highest altitude 
-on a Federal airway, jet route, RNAV low or high route, 
-or other direct route for which an MEA is designated at 
-which adequate reception of navigation signals is a](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-22-minimum-obstacle-clearance-altitude-moca-minimum.png)
+![Figure 2-49. Navigational course guidance gaps.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-22-navigational-course-guidance-gaps.png)
 
-![Figure 2-59. Minimum turning altitude (MTA). 
-Centerline 
-3.6° 
-4.5° 
-Fix displacement area 
-En route facility
-Facility providing intersection radial 
-Primary area 
-Secondary area 
-Figure 2-60. Turning area at the intersection fix with NAVAID distance less than 51 NM. 
-2-37](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-23-minimum-turning-altitude-mta-centerline-3-6-4-5-.png)
+![Figure 2-53. Fly-by and fly-over waypoints.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-23-fly-by-and-fly-over-waypoints.png)
 
-![Figure 2-60. Turning area at the intersection fix with NAVAID distance less than 51 NM. 
-2-37](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-24-turning-area-at-the-intersection-fix-with-navaid.png)
+![Figure 2-54. Floating waypoints.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-24-floating-waypoints.png)
 
-![Figure 2-62. Minimum crossing altitude (MCA). 
-or above the MTA until joining the centerline of the ATS 
-route following the turn. Once established on the centerline 
-following the turning fix, the MEA/MOCA determines the 
-minimum altitude available for assignment. 
-An MTA may also preclude the use of a specific altitu](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-25-minimum-crossing-altitude-mca-or-above-the-mta-u.png)
+![Figure 2-55. Computer navigation fix.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-25-computer-navigation-fix.png)
 
-![Figure 2-65. MVA chart. 
-in 14 CFR Parts 95 or 97, the following MIA applies: In 
-designated mountainous areas, 2,000 feet above the 
-highest obstacle within a horizontal distance of 4 NM 
-from the course to be flown; or other than mountainous 
-areas, 1,000 feet above the highest obstacle within a 
-horizontal distance](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-26-mva-chart-in-14-cfr-parts-95-or-97-the-following.png)
+![Figure 2-56. U.S. standard RNP levels.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-26-u-s-standard-rnp-levels.png)
 
-![Figure 2-66. Cruising altitude or flight level. 
-always important, especially when being radar vectored 
-during a climb into an area with progressively higher MVA 
-sectors, similar to the concept of MCA. Except where diverse 
-vector areas have been established, when climbing, pilots 
-should not be vectored into a secto](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-27-cruising-altitude-or-flight-level-always-importa.png)
+![airspace are shown in Figure 2-56. Other RNP levels as  identified by ICAO, other states, and the FAA may also be used.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-27-other-rnp-levels-as-identified-by-icao-other-sta.png)
 
-![Figure 2-67. Altimeter setting changes. 
-operating in the low altitude structure as follows: 
-Current Altimeter Setting 
-Lowest Usable Flight Level 
-29.92 or higher 
-180 
-29.91 to 29.42 
-185 
-29.41 to 28.92 
-190 
-28.91 to 28.42 
-195 
-28.41 to 27.91 
-200 
-When the minimum altitude, as prescribed in 14 CFR Part 
-91, § 91](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-28-altimeter-setting-changes-operating-in-the-low-a.png)
+![Figure 2-57. Maximum authorized altitude (MAA).](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-28-maximum-authorized-altitude-maa.png)
 
-![Figure 2-68. ATC reporting procedures. 
-settings in hectopascals (hPa) (millibars). Therefore, it is 
-imperative that pilots or on-board equipment are able 
-to accurately convert inches of mercury to hPa, or hPa to 
-inches of mercury. 
-Altitude Above Ground (QFE) 
-A local altimeter setting equivalent to the barometric](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-29-atc-reporting-procedures-settings-in-hectopascal.png)
+![Figure 2-58. Minimum obstacle clearance altitude (MOCA).](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-29-minimum-obstacle-clearance-altitude-moca.png)
 
-![Figure 2-69. Two-way radio communications failure transponder code. 
-minutes short of their intended destination. However, if 
-IFR conditions prevail, pilots must comply with procedures 
-designated in the CFRs to ensure aircraft separation. 
-If pilots must continue their flight under IFR after 
-experiencing two-way rad](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-30-two-way-radio-communications-failure-transponder.png)
+![Figure 2-59. Minimum turning altitude (MTA).](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-30-minimum-turning-altitude-mta.png)
 
-![Figure 2-71. ATC holding instructions. 
-Aircraft Speed and Altitude 
-During the en route descent phase of flight, an additional 
-benefit a FMS is that it provides fuel saving idle thrust 
-descent to your destination airport. This allows an 
-uninterrupted profile descent from level cruising altitude 
-to an appropriate M](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-31-atc-holding-instructions-aircraft-speed-and-alti.png)
+![Figure 2-61. Minimum turning altitude information located in the remarks section of FAA Form 8260-16 Transmittal of Airways/Route Data.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-31-minimum-turning-altitude-information-located-in-.png)
 
-![Figure 2-72. Clearance limit holding. 
-CHERRELYN 
-D 
-( H )117.2 CHL 
-331° 
-269° 
-221°
-126°
-V214 
-the pilot may level off at 10,000 feet MSL on descent to 
-comply with the 14 CFR Part 91 indicated airspeed limit of 
-250 knots. Leveling off at any other time on descent may 
-seriously affect air traffic handling by ATC. I](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-32-clearance-limit-holding-cherrelyn-d-h-117-2-chl-.png)
+![Figure 2-64. En route chart minimum crossing altitude data (outside of the U.S.).](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-32-en-route-chart-minimum-crossing-altitude-data-ou.png)
 
-<div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-2-00-untitled.html">
-<table><thead><tr><th></th><th>En Route Operations
-ntroduction</th></tr></thead><tbody><tr><td>Introduction
-The en route phase of flight is defined as that segment of
-filght from the termination point of a departure procedure
-to the origination point of an arrival procedure. The
-procedures employed in the en route phase of flight are
-governed by a set of specific flight standards established
-by 14 CFR [Figure 2-1], FAA Order 8260.3, and related
-publications. These standards establish courses to be folwn,
-obstacle clearance criteria, minimum altitudes, navigation
-performance, and communications requirements.</td><td>ntroduction</td></tr></tbody></table>
-</div>
+![Figure 2-65. MVA chart.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-33-mva-chart.png)
+
+![Figure 2-66. Cruising altitude or flight level.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-34-cruising-altitude-or-flight-level.png)
+
+![Figure 2-67. Altimeter setting changes.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-35-altimeter-setting-changes.png)
+
+![Figure 2-68. ATC reporting procedures.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-36-atc-reporting-procedures.png)
+
+![Figure 2-69. Two-way radio communications failure transponder code.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-37-two-way-radio-communications-failure-transponder.png)
+
+![Figure 2-70. Holding pattern design criteria template.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-38-holding-pattern-design-criteria-template.png)
+
+![Figure 2-71. ATC holding instructions.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-39-atc-holding-instructions.png)
+
+|  | En Route Operations<br>ntroduction |
+| --- | --- |
+| Introduction<br>The en route phase of flight is defined as that segment of<br>filght from the termination point of a departure procedure<br>to the origination point of an arrival procedure. The<br>procedures employed in the en route phase of flight are<br>governed by a set of specific flight standards established<br>by 14 CFR [Figure 2-1], FAA Order 8260.3, and related<br>publications. These standards establish courses to be folwn,<br>obstacle clearance criteria, minimum altitudes, navigation<br>performance, and communications requirements. | ntroduction |
+
+<a class="handbook-table-source" href="/handbooks/iph/FAA-H-8083-16B/tables/tbl-2-00-untitled.html">Open original</a>
 
 <div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-2-01-untitled.html">
 <table><thead><tr><th>D
@@ -403,7 +116,7 @@ performance, and communications requirements.</td><td>ntroduction</td></tr></tbo
 </div>
 
 <div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-2-02-untitled.html">
-<table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>59
+<table><thead><tr><th>59
 1 50 0 11 - 25 3000
 5 oC L E V
 B 5)arn esville B ro d field 120.4 B
@@ -419,7 +132,7 @@ I)C am b rid g e u15 n
 L 799 2 6 3
 3E
 H IS O M 4
-7 22</td><td></td></tr></tbody></table>
+7 22</th></tr></thead><tbody></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-2-03-untitled.html">
@@ -465,12 +178,17 @@ areas.</td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-2-05-untitled.html">
-<table><thead><tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td>MEA o</td><td>f airwa</td><td></td><td>y or ro</td><td>ute se</td><td></td><td>gmen</td><td>t (thou</td><td>sands</td><td>of feet</td><td>)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td>Sa</td><td>mple:</td><td></td><td>Enter</td><td>with M</td><td>EA of</td><td>13,00</td><td>0 feet.</td><td>Read</td><td>allowa</td><td>ble ga</td><td>p 18.5</td><td>NM.</td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+<table><thead><tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th>)</th><th></th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td>MEA o</td><td>f airwa</td><td></td><td>y or ro</td><td>ute se</td><td></td><td>gmen</td><td>t (thou</td><td>sands</td><td>of feet</td><td>)</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td>Sa</td><td>mple:</td><td></td><td>Enter</td><td>with M</td><td>EA of</td><td>13,00</td><td>0 feet.</td><td>Read</td><td>allowa</td><td>ble ga</td><td>p 18.5</td><td>NM.</td></tr></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-2-06-untitled.html">
-<table><thead><tr><th>RNP Level</th><th>Typical Application</th><th>Primary Route Width (NM) - Centerline to Boundary</th></tr></thead><tbody><tr><td>0.1 to 1.0</td><td>RNP AR Approach Segments</td><td>0.1 to 1.0</td></tr><tr><td>0.3 to 1.0</td><td>RNP Approach Segments</td><td>0.3 to 1.0</td></tr><tr><td>1</td><td>Terminal and En Route</td><td>1.0</td></tr><tr><td>2</td><td>En Route</td><td>2.0</td></tr></tbody></table>
-</div>
+| RNP Level | Typical Application | Primary Route Width (NM) - Centerline to Boundary |
+| --- | --- | --- |
+| 0.1 to 1.0 | RNP AR Approach Segments | 0.1 to 1.0 |
+| 0.3 to 1.0 | RNP Approach Segments | 0.3 to 1.0 |
+| 1 | Terminal and En Route | 1.0 |
+| 2 | En Route | 2.0 |
+
+<a class="handbook-table-source" href="/handbooks/iph/FAA-H-8083-16B/tables/tbl-2-06-untitled.html">Open original</a>
 
 <div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-2-07-untitled.html">
 <table><thead><tr><th>Transmittal of Airways/Route Data</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td>Airway
@@ -491,7 +209,7 @@ Terrain 6077
 DEL MCA ATIDA
 COME ADD MCA
 AT OSITY DEC MOCA</td><td></td></tr><tr><td></td><td>*Osity, ID</td><td></td><td></td><td></td><td></td><td>--7900-­</td><td>8000</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>DEL directional MEA
-MEA CARONIAL ALT</td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>V330</td><td>Osity, ID</td><td></td><td></td><td>AAO 12138 (SEC) @
+MEA CARONIAL ALT</td><td></td></tr><tr><td>V330</td><td>Osity, ID</td><td></td><td></td><td>AAO 12138 (SEC) @
 434118.30N/1104858.30W
 Terrain 11132
 433900.00N/1105057.00W</td><td></td><td>14000</td><td>17500</td><td></td><td></td><td>JAC 10</td><td># MTA
@@ -500,7 +218,7 @@ TER DEC MOCA
 MEA CARDINAL ALT</td><td></td></tr><tr><td></td><td># Jackson, WY VOR/DME</td><td></td><td></td><td></td><td></td><td>--13600-­</td><td>14000</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>JAC R-251 UNUSABLE
 BYD 10 # CHART:
 MTA V330 E TO
-VS20W 16000</td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Date</td><td></td><td>Office
+VS20W 16000</td><td></td></tr><tr><td>Date</td><td></td><td>Office
 AJW-3773</td><td></td><td></td><td>Title
 Manager</td><td></td><td></td><td></td><td>Signature
 Ray Nussear</td><td></td><td></td><td></td><td></td></tr></tbody></table>
@@ -518,12 +236,12 @@ REPORTS EXAMPLE</td><td></td></tr><tr><td>Leaving FAF or OM inbound on final app
 </div>
 
 <div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-2-09-untitled.html">
-<table><thead><tr><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td>CHERRELYN
+<table><thead><tr><th>CHERRELYN
 ( D H )117.2 CHL
 331°
 2 6 9 °
 V 2 1 4
 1 ° 1 2 6 °
 2
-2</td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table>
+2</th></tr></thead><tbody></tbody></table>
 </div>

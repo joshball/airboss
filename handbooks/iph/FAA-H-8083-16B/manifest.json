@@ -6,13 +6,116 @@
   "publisher": "FAA",
   "source_url": "https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/instrument_procedures_handbook/FAA-H-8083-16B.pdf",
   "source_checksum": "67bee284221e2748c426a99793c332fe9f57018b9858f77b911675c814a03e91",
-  "fetched_at": "2026-05-03T19:24:46.430610+00:00",
+  "fetched_at": "2026-05-04T20:35:59.504612+00:00",
   "subjects": [
     "procedures",
     "navigation",
     "flight-instruments"
   ],
+  "primary_cert": null,
   "sections": [
+    {
+      "level": "front-matter",
+      "code": "0.1",
+      "ordinal": 0,
+      "parent_code": null,
+      "title": "Cover",
+      "faa_page_start": null,
+      "faa_page_end": null,
+      "source_locator": "IPH Front Matter -- Cover",
+      "body_path": "handbooks/iph/FAA-H-8083-16B/front-matter/00-cover.md",
+      "content_hash": "12607a04d04efb2731fb6255a7702a4b6b73c7c4d2263cd84725f49365efc4c8",
+      "has_figures": false,
+      "has_tables": false,
+      "metadata": {
+        "extraction_status": "front-matter-extracted"
+      }
+    },
+    {
+      "level": "front-matter",
+      "code": "0.2",
+      "ordinal": 1,
+      "parent_code": null,
+      "title": "Preface",
+      "faa_page_start": null,
+      "faa_page_end": null,
+      "source_locator": "IPH Front Matter -- Preface",
+      "body_path": "handbooks/iph/FAA-H-8083-16B/front-matter/01-preface.md",
+      "content_hash": "af5a3dc2f2f584e23b306285def27413ad6a343f9a9b50a72c37b91046881e7b",
+      "has_figures": false,
+      "has_tables": false,
+      "metadata": {
+        "extraction_status": "front-matter-extracted"
+      }
+    },
+    {
+      "level": "front-matter",
+      "code": "0.3",
+      "ordinal": 2,
+      "parent_code": null,
+      "title": "Acknowledgments",
+      "faa_page_start": null,
+      "faa_page_end": null,
+      "source_locator": "IPH Front Matter -- Acknowledgments",
+      "body_path": "handbooks/iph/FAA-H-8083-16B/front-matter/02-acknowledgments.md",
+      "content_hash": "2b8cc0d3afca1e310377363036fa181488c0f40aaa6a3d2b1146754ff1bfbb33",
+      "has_figures": false,
+      "has_tables": false,
+      "metadata": {
+        "extraction_status": "front-matter-extracted"
+      }
+    },
+    {
+      "level": "front-matter",
+      "code": "0.4",
+      "ordinal": 3,
+      "parent_code": null,
+      "title": "Notice",
+      "faa_page_start": null,
+      "faa_page_end": null,
+      "source_locator": "IPH Front Matter -- Notice",
+      "body_path": "handbooks/iph/FAA-H-8083-16B/front-matter/03-notice.md",
+      "content_hash": "d89d8ff552ce3d965675eb740970d51b1717c81974f8035d9d1ca76792aec6d4",
+      "has_figures": false,
+      "has_tables": false,
+      "metadata": {
+        "extraction_status": "front-matter-extracted"
+      }
+    },
+    {
+      "level": "front-matter",
+      "code": "0.5",
+      "ordinal": 4,
+      "parent_code": null,
+      "title": "Summary of Changes",
+      "faa_page_start": null,
+      "faa_page_end": null,
+      "source_locator": "IPH Front Matter -- Summary of Changes",
+      "body_path": "handbooks/iph/FAA-H-8083-16B/front-matter/04-summary-of-changes.md",
+      "content_hash": "f9d0d2f45f6a7cf9109614ebd673e14a9bfc0db885e5795fa104fa600a075e00",
+      "has_figures": false,
+      "has_tables": false,
+      "metadata": {
+        "extraction_status": "front-matter-extracted"
+      }
+    },
+    {
+      "level": "front-matter",
+      "code": "0.6",
+      "ordinal": 5,
+      "parent_code": null,
+      "title": "Table of Contents",
+      "faa_page_start": null,
+      "faa_page_end": null,
+      "source_locator": "IPH Front Matter -- Table of Contents",
+      "body_path": "handbooks/iph/FAA-H-8083-16B/front-matter/05-table-of-contents.md",
+      "content_hash": "de17f382f4421098861f4f81ab6e2048257673dcdf40ee925b0c0fe7f08c7020",
+      "has_figures": false,
+      "has_tables": false,
+      "metadata": {
+        "extraction_status": "front-matter-extracted"
+      }
+    },
     {
       "level": "chapter",
       "code": "1",
@@ -23,7 +126,7 @@
       "faa_page_end": "1-44",
       "source_locator": "IPH Ch 1 (1-1..1-44)",
       "body_path": "handbooks/iph/FAA-H-8083-16B/01-departure-procedures/00-departure-procedures.md",
-      "content_hash": "29c2e0107f597111fb9a1a29a1c1a15963d774a484f06a6e1123d0d18abe90f1",
+      "content_hash": "4a2888155930da06b69a5dbaf8014922f8be59b19e7f84f44bf9b84b70bbd619",
       "has_figures": true,
       "has_tables": true
     },
@@ -37,7 +140,7 @@
       "faa_page_end": "2-52",
       "source_locator": "IPH Ch 2 (2-1..2-52)",
       "body_path": "handbooks/iph/FAA-H-8083-16B/02-en-route-operations/00-en-route-operations.md",
-      "content_hash": "cf2c5a899eb794433335a84999b28d33433740ee9dbd05662a599b5bb00b16e7",
+      "content_hash": "08ec9f7ae3f92379913d66205c49f9f5271cf545c9c6985aa143091270033bb9",
       "has_figures": true,
       "has_tables": true
     },
@@ -51,7 +154,7 @@
       "faa_page_end": "3-28",
       "source_locator": "IPH Ch 3 (3-1..3-28)",
       "body_path": "handbooks/iph/FAA-H-8083-16B/03-arrivals/00-arrivals.md",
-      "content_hash": "d67b2bcd6d7040b4c73fc1903db27fcdd03d836fa343a1a2b5aa53874572ee71",
+      "content_hash": "ffc493164d913ff0d913f0e3d487819e2a5a417ddc0b290f0db0de15ebf9d25e",
       "has_figures": true,
       "has_tables": true
     },
@@ -65,7 +168,7 @@
       "faa_page_end": "4-92",
       "source_locator": "IPH Ch 4 (4-1..4-92)",
       "body_path": "handbooks/iph/FAA-H-8083-16B/04-approaches/00-approaches.md",
-      "content_hash": "2aa6e8b070ab89d7a08ed73a56dbe510c89540ea6d5d9c61dd290b77dc8690a7",
+      "content_hash": "c11798aba413da7e8015fc8a965edfb8c0c8c591444c1ecce66b135c2c61d9cb",
       "has_figures": true,
       "has_tables": true
     },
@@ -79,7 +182,7 @@
       "faa_page_end": "5-18",
       "source_locator": "IPH Ch 5 (5-1..5-18)",
       "body_path": "handbooks/iph/FAA-H-8083-16B/05-improvement-plans/00-improvement-plans.md",
-      "content_hash": "f1f85c9781b5fdffb7b264c4137c74cb754e28e68e499b5d4e1631b76a199838",
+      "content_hash": "cfc77ff6bd50b68f661de9f6c4d9b432088aeb1af02f37f09d81b4b924fd7522",
       "has_figures": true,
       "has_tables": true
     },
@@ -93,7 +196,7 @@
       "faa_page_end": "6-18",
       "source_locator": "IPH Ch 6 (6-1..6-18)",
       "body_path": "handbooks/iph/FAA-H-8083-16B/06-airborne-navigation-databases/00-airborne-navigation-databases.md",
-      "content_hash": "3181f05da603f679fba448290a37b750a1f994f18749c75fadbc7f4c43ce720d",
+      "content_hash": "172dbeb67c9da610df9b80eb89a5298f7dc17c240178e2ddf322a74a34575fd4",
       "has_figures": true,
       "has_tables": true
     },
@@ -107,7 +210,7 @@
       "faa_page_end": "7-18",
       "source_locator": "IPH Ch 7 (7-1..7-18)",
       "body_path": "handbooks/iph/FAA-H-8083-16B/07-helicopter-instrument-procedures/00-helicopter-instrument-procedures.md",
-      "content_hash": "62398c90d256d1b7fbc8a8abce38b27c311ddd2fac35319d716ad84165331690",
+      "content_hash": "c34b79167692e34b27b7c9bf0e62f8eb42d9bb96c246ab6ad9498886e0a41345",
       "has_figures": true,
       "has_tables": true
     },
@@ -123,7 +226,10 @@
       "body_path": "handbooks/iph/FAA-H-8083-16B/01-departure-procedures/01-introduction.md",
       "content_hash": "21087f7f3cd6c32dcbf84f384a8bfca662cfc4a21c9fdbc5e85ddd6c6ff0847c",
       "has_figures": false,
-      "has_tables": false
+      "has_tables": false,
+      "metadata": {
+        "extraction_status": "no-body-content"
+      }
     },
     {
       "level": "section",
@@ -165,7 +271,10 @@
       "body_path": "handbooks/iph/FAA-H-8083-16B/01-departure-procedures/02-02-airport-facility-directory-a-fd-section-of-the-c.md",
       "content_hash": "0a255710b72b581a27f8de712d11f1842f2d5e11a811668a627a9a4807b3b0f5",
       "has_figures": false,
-      "has_tables": false
+      "has_tables": false,
+      "metadata": {
+        "extraction_status": "no-body-content"
+      }
     },
     {
       "level": "subsection",
@@ -851,7 +960,10 @@
       "body_path": "handbooks/iph/FAA-H-8083-16B/02-en-route-operations/01-introduction.md",
       "content_hash": "da2ef2ed5e0b6f59c6bf5516cd3ffb17b25cd2eaa2160234f61114a100232144",
       "has_figures": false,
-      "has_tables": false
+      "has_tables": false,
+      "metadata": {
+        "extraction_status": "no-body-content"
+      }
     },
     {
       "level": "section",
@@ -1593,7 +1705,10 @@
       "body_path": "handbooks/iph/FAA-H-8083-16B/02-en-route-operations/45-minimum-obstruction-clearance-altitude-moca-2-36.md",
       "content_hash": "728e3f5e67b3b3c02f70c097be4413894d659a14962d4d0578a85e90ec70d07a",
       "has_figures": false,
-      "has_tables": false
+      "has_tables": false,
+      "metadata": {
+        "extraction_status": "no-body-content"
+      }
     },
     {
       "level": "section",
@@ -1985,7 +2100,10 @@
       "body_path": "handbooks/iph/FAA-H-8083-16B/03-arrivals/01-introduction.md",
       "content_hash": "a9c5d20e6a8c5e764b2eccf257db4825eb57edd641ed4c13fe355c70f1cfdc4c",
       "has_figures": false,
-      "has_tables": false
+      "has_tables": false,
+      "metadata": {
+        "extraction_status": "no-body-content"
+      }
     },
     {
       "level": "section",
@@ -2279,7 +2397,10 @@
       "body_path": "handbooks/iph/FAA-H-8083-16B/04-approaches/01-introduction.md",
       "content_hash": "198415057230e0be5591a88c5b1e54851e850f782f4e698763b721e1a463fade",
       "has_figures": false,
-      "has_tables": false
+      "has_tables": false,
+      "metadata": {
+        "extraction_status": "no-body-content"
+      }
     },
     {
       "level": "section",
@@ -2797,7 +2918,10 @@
       "body_path": "handbooks/iph/FAA-H-8083-16B/04-approaches/11-enhanced-flight-vision-systems-efvs-and-instrume.md",
       "content_hash": "7585236dddccdf20272059a71d09c3e5eb3638e7ffa81aa6a5ced0b68610cf81",
       "has_figures": false,
-      "has_tables": false
+      "has_tables": false,
+      "metadata": {
+        "extraction_status": "no-body-content"
+      }
     },
     {
       "level": "section",
@@ -2937,7 +3061,10 @@
       "body_path": "handbooks/iph/FAA-H-8083-16B/04-approaches/12-09-lnav-lanv-vnav-and-circling-minimums.md",
       "content_hash": "a6c3332396d1f6992a43a1721492afc1a4d841bf6fd362a088418ea59261f56d",
       "has_figures": false,
-      "has_tables": false
+      "has_tables": false,
+      "metadata": {
+        "extraction_status": "no-body-content"
+      }
     },
     {
       "level": "subsection",
@@ -3525,7 +3652,10 @@
       "body_path": "handbooks/iph/FAA-H-8083-16B/04-approaches/12-51-simultaneous-close-parallel-precision-runway-mon.md",
       "content_hash": "881a6922e5dad5a6e95fd691450019367ddef47addd31055b9254c70cc643814",
       "has_figures": false,
-      "has_tables": false
+      "has_tables": false,
+      "metadata": {
+        "extraction_status": "no-body-content"
+      }
     },
     {
       "level": "subsection",
@@ -3539,7 +3669,10 @@
       "body_path": "handbooks/iph/FAA-H-8083-16B/04-approaches/12-52-simultaneous-offset-instrument-approaches-soias.md",
       "content_hash": "c75979c2f2d6d3d68910cbbe5d53a4b79a7ea331dae235728b7706e6fff9a57c",
       "has_figures": false,
-      "has_tables": false
+      "has_tables": false,
+      "metadata": {
+        "extraction_status": "no-body-content"
+      }
     },
     {
       "level": "subsection",
@@ -3553,7 +3686,10 @@
       "body_path": "handbooks/iph/FAA-H-8083-16B/04-approaches/12-53-converging-ils-approaches.md",
       "content_hash": "c93c4bfd7a3bfab8a37620ff1072d3ba99b772a6fbb6e9a9302f5d516f4f9058",
       "has_figures": false,
-      "has_tables": false
+      "has_tables": false,
+      "metadata": {
+        "extraction_status": "no-body-content"
+      }
     },
     {
       "level": "subsection",
@@ -3567,7 +3703,10 @@
       "body_path": "handbooks/iph/FAA-H-8083-16B/04-approaches/12-54-vor-approach.md",
       "content_hash": "89d697004c16be7c797b67bac5a1ecf11ae0733df0634c12623c3fa8dfaddf5f",
       "has_figures": false,
-      "has_tables": false
+      "has_tables": false,
+      "metadata": {
+        "extraction_status": "no-body-content"
+      }
     },
     {
       "level": "subsection",
@@ -3581,7 +3720,10 @@
       "body_path": "handbooks/iph/FAA-H-8083-16B/04-approaches/12-55-ndb-approach.md",
       "content_hash": "19036f6393da187bbe1aeb3d0e48a5a0e5984acfdfd242d1aee0d817690f4e00",
       "has_figures": false,
-      "has_tables": false
+      "has_tables": false,
+      "metadata": {
+        "extraction_status": "no-body-content"
+      }
     },
     {
       "level": "subsection",
@@ -3595,7 +3737,10 @@
       "body_path": "handbooks/iph/FAA-H-8083-16B/04-approaches/12-56-radar-approaches.md",
       "content_hash": "68e1ee8816ac02dc7e71e271a445d54d0fe80882a4f54b43352db7ae33b13aea",
       "has_figures": false,
-      "has_tables": false
+      "has_tables": false,
+      "metadata": {
+        "extraction_status": "no-body-content"
+      }
     },
     {
       "level": "subsection",
@@ -3609,7 +3754,10 @@
       "body_path": "handbooks/iph/FAA-H-8083-16B/04-approaches/12-57-precision-approach-radar-par.md",
       "content_hash": "8509b817c7ae35a87bc4256b72601854cd6c24e587ce18a619b3bd23167d9f43",
       "has_figures": false,
-      "has_tables": false
+      "has_tables": false,
+      "metadata": {
+        "extraction_status": "no-body-content"
+      }
     },
     {
       "level": "subsection",
@@ -3623,7 +3771,10 @@
       "body_path": "handbooks/iph/FAA-H-8083-16B/04-approaches/12-58-airport-surveillance-radar-asr.md",
       "content_hash": "56c6b0bbafc6991c497c1ef2926843df97788bfba1c54f9eba693038bc8c2fe0",
       "has_figures": false,
-      "has_tables": false
+      "has_tables": false,
+      "metadata": {
+        "extraction_status": "no-body-content"
+      }
     },
     {
       "level": "subsection",
@@ -3707,7 +3858,10 @@
       "body_path": "handbooks/iph/FAA-H-8083-16B/05-improvement-plans/01-introduction.md",
       "content_hash": "0b19c55919ad34175772ddebe11a78cfbde918a1a42ea447bf37ac5a4e77148b",
       "has_figures": false,
-      "has_tables": false
+      "has_tables": false,
+      "metadata": {
+        "extraction_status": "no-body-content"
+      }
     },
     {
       "level": "section",
@@ -3721,7 +3875,10 @@
       "body_path": "handbooks/iph/FAA-H-8083-16B/05-improvement-plans/02-next-generation-air-transportation-nextgen-syste.md",
       "content_hash": "a4e11b4a8c85a3eb9ae3c23624bc27ae42c66df043cfa1c72a182b115b96b2ba",
       "has_figures": false,
-      "has_tables": false
+      "has_tables": false,
+      "metadata": {
+        "extraction_status": "no-body-content"
+      }
     },
     {
       "level": "subsection",
@@ -3889,7 +4046,10 @@
       "body_path": "handbooks/iph/FAA-H-8083-16B/06-airborne-navigation-databases/01-introduction.md",
       "content_hash": "baabda20a3efbd93befcb7aba78350c29f4e0af884e65b039052564287408838",
       "has_figures": false,
-      "has_tables": false
+      "has_tables": false,
+      "metadata": {
+        "extraction_status": "no-body-content"
+      }
     },
     {
       "level": "section",
@@ -4169,7 +4329,10 @@
       "body_path": "handbooks/iph/FAA-H-8083-16B/07-helicopter-instrument-procedures/01-introduction.md",
       "content_hash": "c0791be958d534114c896be1e0d3f3074a389d4d410964bdd1fc04ffce112d40",
       "has_figures": false,
-      "has_tables": false
+      "has_tables": false,
+      "metadata": {
+        "extraction_status": "no-body-content"
+      }
     },
     {
       "level": "section",
@@ -4485,8 +4648,8 @@
       "id": "fig-1-00",
       "section_code": "1",
       "ordinal": 0,
-      "caption": "Figure 1-3. Excerpts from the Chart Supplement (Airport Facility Directory section) of Naples Muni, Naples, Florida. \n•  \nClearance bar lights—three yellow in-pavement \nclearance bar lights used to denote holding \npositions for aircraft and vehicles. When used for \nhold points, they are co-located with geographic \nposi",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-00-excerpts-from-the-chart-supplement-airport-facil.png",
+      "caption": "Figure 1-2. Airport diagram of Oshkosh, Wisconsin as depicted in  the A/FD section of the CS.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-00-airport-diagram-of-oshkosh-wisconsin-as-depicted.png",
       "width": 1012,
       "height": 763
     },
@@ -4494,8 +4657,8 @@
       "id": "fig-1-01",
       "section_code": "1",
       "ordinal": 1,
-      "caption": "Figure 1-6. Example of runway hot spots located at Long Beach/Daugherty Field Airport (KLGB). \nSW-3, 29 JUL 2010 to 26 AUG 2010 \nStandardized Taxi Routes for Los Angeles  \nInternational Airport (KLAX)  \nThe following Standardized Taxi routes  \nmay be issued to all taxiing aircraft.  \nNorth Route \nTaxi via Charlie (C) t",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-01-example-of-runway-hot-spots-located-at-long-beac.png",
+      "caption": "Figure 1-5. FAA recommendations for reducing runway incursions.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-01-faa-recommendations-for-reducing-runway-incursio.png",
       "width": 924,
       "height": 714
     },
@@ -4503,8 +4666,8 @@
       "id": "fig-1-02",
       "section_code": "1",
       "ordinal": 2,
-      "caption": "Figure 1-7. Los Angeles International Airport diagram, North Route, and standardized taxi route. \n1-7",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-02-los-angeles-international-airport-diagram-north-.png",
+      "caption": "Figure 1-6. Example of runway hot spots located at Long Beach/Daugherty Field Airport (KLGB).",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-02-example-of-runway-hot-spots-located-at-long-beac.png",
       "width": 274,
       "height": 279
     },
@@ -4512,7 +4675,7 @@
       "id": "fig-1-03",
       "section_code": "1",
       "ordinal": 3,
-      "caption": "Figure 1-8. Examples of non-standard takeoff minimums for Colorado Springs, Colorado. \n1-9",
+      "caption": "Figure 1-8. Examples of non-standard takeoff minimums for Colorado Springs, Colorado.",
       "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-03-examples-of-non-standard-takeoff-minimums-for-co.png",
       "width": 1013,
       "height": 1161
@@ -4521,7 +4684,7 @@
       "id": "fig-1-04",
       "section_code": "1",
       "ordinal": 4,
-      "caption": "Figure 1-9. Examples of weather information of various flight \ninformation publications (FLIP). \nCeiling and Visibility Requirements \nAll takeoffs and departures have visibility minimums (some \nmay have minimum ceiling requirements) incorporated \ninto the procedure. There are a number of methods to \nreport visibility a",
+      "caption": "Figure 1-9. Examples of weather information of various flight  information publications (FLIP).",
       "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-04-examples-of-weather-information-of-various-fligh.png",
       "width": 316,
       "height": 422
@@ -4530,8 +4693,8 @@
       "id": "fig-1-05",
       "section_code": "1",
       "ordinal": 5,
-      "caption": "Figure 1-10. RVR conversion table. \n1-10",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-05-rvr-conversion-table-1-10.png",
+      "caption": "Figure 1-10. RVR conversion table.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-05-rvr-conversion-table.png",
       "width": 290,
       "height": 392
     },
@@ -4539,8 +4702,8 @@
       "id": "fig-1-06",
       "section_code": "1",
       "ordinal": 6,
-      "caption": "Figure 1-12. CS entry for an AWOS station. \nSAMPLE NOT FOR ACTUAL USE\nWEATHER DATA SOURCES: AWOS-3 119.675 (704) 735-6954. \nAWOS/ASOS/AWSS information \nThese systems are installed and maintained at airports \nacross the United States by both government (FAA and \nNational Weather Service (NWS)) and private entities. They",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-06-cs-entry-for-an-awos-station-sample-not-for-actu.png",
+      "caption": "Figure 1-11. AWSS installation at Driggs-Reed, Idaho.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-06-awss-installation-at-driggs-reed-idaho.png",
       "width": 529,
       "height": 865
     },
@@ -4548,8 +4711,8 @@
       "id": "fig-1-07",
       "section_code": "1",
       "ordinal": 7,
-      "caption": "Figure 1-13. Examples of IFR alternate minimums. \nIt is important to remember that ATIS information is \nupdated hourly and anytime a significant change in the \nweather occurs. As a result, the information is not the most \ncurrent report available. Prior to departing the airport, you \nneed to get the latest weather info",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-07-examples-of-ifr-alternate-minimums-it-is-importa.png",
+      "caption": "Figure 1-12. CS entry for an AWOS station.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-07-cs-entry-for-an-awos-station.png",
       "width": 73,
       "height": 64
     },
@@ -4557,44 +4720,44 @@
       "id": "fig-1-08",
       "section_code": "1",
       "ordinal": 8,
-      "caption": "Figure 1-18. Examples of takeoff minimums obstacle clearance. \nFigure 1-19. Part 25 turbine-powered, transport category airplane OEI actual (gross) takeoff flight path and OEI net takeoff flight path. \nTakeoff distance \nTakeoff flight path \nAcceleration \nOne engine inoperative \nVFTO\nV2\nBR \nVEF V1 VR VLOF \nClimb \n1,500",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-08-examples-of-takeoff-minimums-obstacle-clearance-.png",
-      "width": 382,
-      "height": 175
+      "caption": "Figure 1-13. Examples of IFR alternate minimums.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-08-examples-of-ifr-alternate-minimums.png",
+      "width": 362,
+      "height": 208
     },
     {
       "id": "fig-1-09",
       "section_code": "1",
       "ordinal": 9,
-      "caption": "Figure 1-19. Part 25 turbine-powered, transport category airplane OEI actual (gross) takeoff flight path and OEI net takeoff flight path. \nTakeoff distance \nTakeoff flight path \nAcceleration \nOne engine inoperative \nVFTO\nV2\nBR \nVEF V1 VR VLOF \nClimb \n1,500 ft \n35 ft \n35 ft \n35 ft \nRegulatory \nperformance \nreduction \nN",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-09-part-25-turbine-powered-transport-category-airpl.png",
+      "caption": "Figure 1-17. Rate of climb table.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-09-rate-of-climb-table.png",
       "width": 382,
-      "height": 89
+      "height": 175
     },
     {
       "id": "fig-1-10",
       "section_code": "1",
       "ordinal": 10,
-      "caption": "Figure 1-21. Graphic ODP/booklet front matter. \n1-22",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-10-graphic-odp-booklet-front-matter-1-22.png",
-      "width": 1013,
-      "height": 822
+      "caption": "Figure 1-18. Examples of takeoff minimums obstacle clearance.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-10-examples-of-takeoff-minimums-obstacle-clearance.png",
+      "width": 382,
+      "height": 89
     },
     {
       "id": "fig-1-11",
       "section_code": "1",
       "ordinal": 11,
-      "caption": "Figure 1-23. Transition routes as depicted on SID. \n1-25",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-11-transition-routes-as-depicted-on-sid-1-25.png",
+      "caption": "Figure 1-20. Airport/runway analysis example.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-11-airport-runway-analysis-example.png",
       "width": 1013,
-      "height": 1200
+      "height": 822
     },
     {
       "id": "fig-1-12",
       "section_code": "1",
       "ordinal": 12,
-      "caption": "Figure 1-24. Example of a common SID at Denver, Colorado. \n1-27",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-12-example-of-a-common-sid-at-denver-colorado-1-27.png",
+      "caption": "Figure 1-22. SID chart.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-12-sid-chart.png",
       "width": 1013,
       "height": 1200
     },
@@ -4602,97 +4765,106 @@
       "id": "fig-1-13",
       "section_code": "1",
       "ordinal": 13,
-      "caption": "Figure 1-25. Example of a radar SID at Denver, Colorado. \nSID Flight Planning Considerations \nTake into consideration the departure paths included in \nthe SIDs, and determine if you can use a standardized \ndeparture procedure. You have the opportunity to choose \nthe SID that best suits your flight plan. During the flig",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-13-example-of-a-radar-sid-at-denver-colorado-sid-fl.png",
-      "width": 490,
-      "height": 331
+      "caption": "Figure 1-24. Example of a common SID at Denver, Colorado.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-13-example-of-a-common-sid-at-denver-colorado.png",
+      "width": 1013,
+      "height": 1200
     },
     {
       "id": "fig-1-14",
       "section_code": "1",
       "ordinal": 14,
-      "caption": "Figure 1-26. Departure procedure notes and cautionary statements. \nneed to quickly recalculate your all-engines-operating \nperformance numbers. If you cannot comply with the \nclimb gradient in the SID, you should not accept a clearance \nfor that SID and furthermore, you must not accept the \nprocedure if ATC assigns it.",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-14-departure-procedure-notes-and-cautionary-stateme.png",
-      "width": 1013,
-      "height": 1109
+      "caption": "Figure 1-25. Example of a radar SID at Denver, Colorado.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-14-example-of-a-radar-sid-at-denver-colorado.png",
+      "width": 490,
+      "height": 331
     },
     {
       "id": "fig-1-15",
       "section_code": "1",
       "ordinal": 15,
-      "caption": "Figure 1-29. Examples of RNAV SID. \n1-34",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-15-examples-of-rnav-sid-1-34.png",
+      "caption": "Figure 1-26. Departure procedure notes and cautionary statements.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-15-departure-procedure-notes-and-cautionary-stateme.png",
       "width": 1013,
-      "height": 1330
+      "height": 1109
     },
     {
       "id": "fig-1-16",
       "section_code": "1",
       "ordinal": 16,
-      "caption": "Figure 1-30. Examples of RNAV ODP. \n1-35",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-16-examples-of-rnav-odp-1-35.png",
+      "caption": "Figure 1-29. Examples of RNAV SID.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-16-examples-of-rnav-sid.png",
       "width": 1013,
-      "height": 1287
+      "height": 1330
     },
     {
       "id": "fig-1-17",
       "section_code": "1",
       "ordinal": 17,
-      "caption": "Figure 1-31. Fly-over and fly-by waypoints. \noperation. If not equipped with GPS, or for multi-sensor \nsystems with GPS that do not alert upon loss of GPS, aircraft \nmust be capable of navigation system updating using DME/ \nDME or DME/DME/ IRU for type 1 and 2 procedures. AC 90­\n100 may be used as operational guidance",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-17-fly-over-and-fly-by-waypoints-operation-if-not-e.png",
-      "width": 914,
-      "height": 615
+      "caption": "Figure 1-30. Examples of RNAV ODP.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-17-examples-of-rnav-odp.png",
+      "width": 1013,
+      "height": 1287
     },
     {
       "id": "fig-1-18",
       "section_code": "1",
       "ordinal": 18,
-      "caption": "Figure 1-32. Operation requirements for RNAV. \n• \nCombination of minimum and maximum – 7000 \n4600 \nSome SIDs may still have “(ATC)” adjacent to a crossing \naltitude as shown in Figure 1-33 which implies that the \ncrossing altitude is there to support an ATC requirement. \nA new charting standard has begun a process to r",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-18-operation-requirements-for-rnav-combination-of-m.png",
-      "width": 471,
-      "height": 382
+      "caption": "Figure 1-31. Fly-over and fly-by waypoints.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-18-fly-over-and-fly-by-waypoints.png",
+      "width": 201,
+      "height": 123
     },
     {
       "id": "fig-1-19",
       "section_code": "1",
       "ordinal": 19,
-      "caption": "Figure 1-33. Crossing altitude is there to support an ATC requirement. \nRadar Departures \nA radar departure is another option for departing an airport \non an IFR flight. You might receive a radar departure if the \nairport does not have an established departure procedure, \nif you are unable to comply with a departure pr",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-19-crossing-altitude-is-there-to-support-an-atc-req.png",
-      "width": 483,
-      "height": 324
+      "caption": "Figure 1-32. Operation requirements for RNAV.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-19-operation-requirements-for-rnav.png",
+      "width": 471,
+      "height": 382
     },
     {
       "id": "fig-1-20",
       "section_code": "1",
       "ordinal": 20,
-      "caption": "Figure 1-34. New charting standard without ATC annotations. \n1-39",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-20-new-charting-standard-without-atc-annotations-1-.png",
-      "width": 492,
-      "height": 341
+      "caption": "Figure 1-33. Crossing altitude is there to support an ATC requirement.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-20-crossing-altitude-is-there-to-support-an-atc-req.png",
+      "width": 483,
+      "height": 324
     },
     {
       "id": "fig-1-21",
       "section_code": "1",
       "ordinal": 21,
-      "caption": "Figure 1-35. Diverse vector area establishment criteria. \nL2 \nTAKE-OFF MINIMUMS AND (OBSTACLE) DEPARTURE PROCEDURES \n10266 \nAUBURN,CA \nBISHOP, CA \nEASTERN \nRGN \ncenterline, \nBEALE AFB (KBAB) \nAGL/225' \nMultiple poles beginning 949' \nMARYSVILLE, CA. . . . . . . .  . .ORIG, 09155 \nfrom departure end of runway, 28' right",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-21-diverse-vector-area-establishment-criteria-l2-ta.png",
-      "width": 421,
-      "height": 192
+      "caption": "Figure 1-34. New charting standard without ATC annotations.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-21-new-charting-standard-without-atc-annotations.png",
+      "width": 492,
+      "height": 335
     },
     {
       "id": "fig-1-22",
       "section_code": "1",
       "ordinal": 22,
-      "caption": "Figure 1-36. Examples of takeoff minimums obstacle clearance. \n 23 SEP 2010 to 21 OCT 2010\n 23 SEP 2010 to 21 OCT 2010 \n1-40",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-22-examples-of-takeoff-minimums-obstacle-clearance-.png",
+      "caption": "Figure 1-35. Diverse vector area establishment criteria.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-22-diverse-vector-area-establishment-criteria.png",
       "width": 421,
       "height": 96
+    },
+    {
+      "id": "fig-1-23",
+      "section_code": "1",
+      "ordinal": 23,
+      "caption": "Figure 1-36. Examples of takeoff minimums obstacle clearance.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-1-23-examples-of-takeoff-minimums-obstacle-clearance.png",
+      "width": 421,
+      "height": 192
     },
     {
       "id": "fig-2-00",
       "section_code": "2",
       "ordinal": 0,
-      "caption": "Figure 2-1. Code of Federal Regulations, Title 14 Aeronautics and Space. \nEn Route Navigation \nEn route instrument flight rules (IFR) navigation is evolving \nfrom the ground-based navigational aid (NAVAID) airway \nsystem to a sophisticated satellite and computer-based \nsystem that can generate courses to suit the opera",
+      "caption": "Figure 2-1. Code of Federal Regulations, Title 14 Aeronautics and Space.",
       "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-00-code-of-federal-regulations-title-14-aeronautics.png",
       "width": 384,
       "height": 600
@@ -4701,8 +4873,8 @@
       "id": "fig-2-01",
       "section_code": "2",
       "ordinal": 1,
-      "caption": "Figure 2-3. Victor airways. \nFigure 2-4. Jet routes. \nZID \nZMP \nZOB \nZBW \nZNY \nZNY \nZDC \nZAU \nZKC \nZME \nZTL \nZJX \nZMA \nZHU \nZFW\nZAB \nZDV \nZLA \nZOA \nZLC \nZSE \nZHN \nZAN \nCleveland Center \nAlbuquerque Center \nSeattle Center \nAtlanta Center \nChicago Center \nBoston Center \nWashington\nCenter (DC) \nDenver Center \nFort Worth C",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-01-victor-airways-figure-2-4-jet-routes-zid-zmp-zob.png",
+      "caption": "Figure 2-2. Airways depicted on an aeronautical chart.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-01-airways-depicted-on-an-aeronautical-chart.png",
       "width": 476,
       "height": 275
     },
@@ -4710,8 +4882,8 @@
       "id": "fig-2-02",
       "section_code": "2",
       "ordinal": 2,
-      "caption": "Figure 2-13. Air Route Traffic Control Centers and sector frequencies. \n2-6",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-02-air-route-traffic-control-centers-and-sector-fre.png",
+      "caption": "Figure 2-8. Fort Worth Air Route Traffic Control Center.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-02-fort-worth-air-route-traffic-control-center.png",
       "width": 1022,
       "height": 604
     },
@@ -4719,269 +4891,332 @@
       "id": "fig-2-03",
       "section_code": "2",
       "ordinal": 3,
-      "caption": "Figure 2-14. Chart Supplement (includes Airport/Facility Directory \nsection). \nwaypoints, NAVAID radials/ distance measuring equipment \n(DME), or any combinations thereof. \nPreferred IFR routes are published in the CS for the low and \nhigh altitude stratum. If they begin or end with an airway \nnumber, it indicates that",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-03-chart-supplement-includes-airport-facility-direc.png",
-      "width": 498,
-      "height": 504
+      "caption": "Figure 2-9. Low altitude sectors.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-03-low-altitude-sectors.png",
+      "width": 381,
+      "height": 252
     },
     {
       "id": "fig-2-04",
       "section_code": "2",
       "ordinal": 4,
-      "caption": "Figure 2-19. Tower En Route Control (TEC) Northeast U.S. (Eastern). \nthe route, and the fourth shows the destination airport, \nwhich are also listed alphabetically. When flight planning, \nit is important to always check current publications for \ninformation about the departure and destination airport. \nRoutes are effec",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-04-tower-en-route-control-tec-northeast-u-s-eastern.png",
-      "width": 2114,
-      "height": 1125
+      "caption": "Figure 2-10. Intermediate altitude sectors.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-04-intermediate-altitude-sectors.png",
+      "width": 214,
+      "height": 152
     },
     {
       "id": "fig-2-05",
       "section_code": "2",
       "ordinal": 5,
-      "caption": "Figure 2-25. Information found on en route low altitude charts. \nFigure 2-26. Victor airways. \nFigure 2-27. LF/MF airways. \nE \nVALENTINE \nMiller Fld \n(VTN) \n2596 \n47\nL \nVALENTINE\n 314 VTN \nV60\n29 \n26 \n35 \n10000\nV190 \n53 \n27 \n15\n3 \nTAFOY \nF \nx \n232 \n154 \n152\n9 \nD \nL 83 \n28.55 \nG \nA \nV4 \n30 \nVictor Route (with RNAV/GPS",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-05-information-found-on-en-route-low-altitude-chart.png",
-      "width": 599,
-      "height": 386
+      "caption": "Figure 2-14. Chart Supplement (includes Airport/Facility Directory  section).",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-05-chart-supplement-includes-airport-facility-direc.png",
+      "width": 498,
+      "height": 504
     },
     {
       "id": "fig-2-06",
       "section_code": "2",
       "ordinal": 6,
-      "caption": "Figure 2-28. Low altitude RNAV routes. \n• \nMileages \n• \nWaypoints \n• \nWaypoint names \n• \nMagnetic reference bearings \n• \nMEAs \nMagnetic reference bearings are shown originating from a \nwaypoint, fix/reporting point, or NAVAID. A GNSS MEA for \neach segment is established to ensure obstacle clearance \nFigure 2-29. Low al",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-06-low-altitude-rnav-routes-mileages-waypoints-wayp.png",
-      "width": 1028,
-      "height": 492
+      "caption": "Figure 2-19. Tower En Route Control (TEC) Northeast U.S. (Eastern).",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-06-tower-en-route-control-tec-northeast-u-s-eastern.png",
+      "width": 2114,
+      "height": 1125
     },
     {
       "id": "fig-2-07",
       "section_code": "2",
       "ordinal": 7,
-      "caption": "Figure 2-31. IFR en route high altitude chart. \nIFR En Route High Altitude Chart \nEn route high altitude charts provide aeronautical \ninformation for navigation under IFR conditions at and \nabove FL 180. [Figure 2-31] High altitude charts include \nthe following information: \n•   \nJet route structure \n•   \nRNAV Q-routes",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-07-ifr-en-route-high-altitude-chart-ifr-en-route-hi.png",
-      "width": 326,
-      "height": 183
+      "caption": "Figure 2-24. IFR en route low altitude (left) and high altitude (right) charts.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-07-ifr-en-route-low-altitude-left-and-high-altitude.png",
+      "width": 599,
+      "height": 386
     },
     {
       "id": "fig-2-08",
       "section_code": "2",
       "ordinal": 8,
-      "caption": "Figure 2-39. Non-mountainous obstacle clearance in the primary \narea. \nIf the distance from the NAVAID to the change-over point \n(COP) is more than 51 NM, the outer boundary of the \nprimary area extends beyond the 4 NM width along the \n4.5° line when the COP is at midpoint. This means the \nprimary area, along with its",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-08-non-mountainous-obstacle-clearance-in-the-primar.png",
-      "width": 494,
-      "height": 296
+      "caption": "Figure 2-25. Information found on en route low altitude charts.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-08-information-found-on-en-route-low-altitude-chart.png",
+      "width": 1028,
+      "height": 492
     },
     {
       "id": "fig-2-09",
       "section_code": "2",
       "ordinal": 9,
-      "caption": "Figure 2-42. Changeover points. \nbehind. These COPs divide an airway or route segment and \nensure continuous reception of navigation signals at the \nprescribed minimum en route IFR altitude. They also ensure \nthat other aircraft operating within the same portion of \nan airway or route segment receive consistent azimuth",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-09-changeover-points-behind-these-cops-divide-an-ai.png",
-      "width": 75,
-      "height": 74
+      "caption": "Figure 2-28. Low altitude RNAV routes.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-09-low-altitude-rnav-routes.png",
+      "width": 326,
+      "height": 183
     },
     {
       "id": "fig-2-10",
       "section_code": "2",
       "ordinal": 10,
-      "caption": "Figure 2-43. Changeover point effect on long airway or route segment. \n4.5° \n6.7° \n4.5° \n6.7°\n70 \n70 \n4 NM \n4 NM \nSecondary areas \nPrimary areas \nV214 \n2 NM \n2 NM \nFlare \nFlare \n2-21",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-10-changeover-point-effect-on-long-airway-or-route-.png",
-      "width": 74,
-      "height": 75
+      "caption": "Figure 2-36. Zanesville VOR/Victor Airway 214.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-10-zanesville-vor-victor-airway-214.png",
+      "width": 494,
+      "height": 296
     },
     {
       "id": "fig-2-11",
       "section_code": "2",
       "ordinal": 11,
-      "caption": "Figure 2-44. Direct route navigation. \nfor use in a particular structure (i.e., in the low or high \nstructures) may be used to define the en route phase of a \ndirect flight within that altitude structure. \nFigure 2-44 shows a straight line on a magnetic course \nfrom SCRAN intersection of 270° direct to the Fort Smith",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-11-direct-route-navigation-for-use-in-a-particular-.png",
-      "width": 2248,
-      "height": 1669
+      "caption": "Figure 2-39. Non-mountainous obstacle clearance in the primary  area.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-11-non-mountainous-obstacle-clearance-in-the-primar.png",
+      "width": 75,
+      "height": 74
     },
     {
       "id": "fig-2-12",
       "section_code": "2",
       "ordinal": 12,
-      "caption": "Figure 2-45. Published RNAV jet routes. \nNOT FOR NAVIGATION\nN60°53.97´ W 151°2163´ \n114.3 ANC 221.3°-37.0 \nAMOTT \n280 \nMEA-28000 \nJ888R \nJ996R \nJ804R\n61.2 \n61° \n246\n237\n226° \nAMOTT \n37 \n22\n10\n346 \na. \nF—to indicate that on the route or portion thereof \nadvisory service only is provided; \nb. \nG—to indicate that on the r",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-12-published-rnav-jet-routes-not-for-navigation-n60.png",
-      "width": 1046,
-      "height": 1098
+      "caption": "Figure 2-41. Primary and secondary obstacle clearance area.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-12-primary-and-secondary-obstacle-clearance-area.png",
+      "width": 74,
+      "height": 75
     },
     {
       "id": "fig-2-13",
       "section_code": "2",
       "ordinal": 13,
-      "caption": "Figure 2-47. Off-route obstacle clearance altitude. \n2-27",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-13-off-route-obstacle-clearance-altitude-2-27.png",
-      "width": 1046,
-      "height": 1053
+      "caption": "Figure 2-42. Changeover points.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-13-changeover-points.png",
+      "width": 2248,
+      "height": 1669
     },
     {
       "id": "fig-2-14",
       "section_code": "2",
       "ordinal": 14,
-      "caption": "Figure 2-48. Random RNAV route. \nFor all random RNAV flights, there needs to be at least one \nwaypoint in each ARTCC area through which you intend \nto fly. One of the biggest problems in creating an RNAV \ndirect route is determining if the route goes through special \nuse airspace. For most direct routes, the chances of",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-14-random-rnav-route-for-all-random-rnav-flights-th.png",
-      "width": 1013,
-      "height": 1039
+      "caption": "Figure 2-43. Changeover point effect on long airway or route segment.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-13-changeover-points.png",
+      "width": 2248,
+      "height": 1669
     },
     {
       "id": "fig-2-15",
       "section_code": "2",
       "ordinal": 15,
-      "caption": "Figure 2-49. Navigational course guidance gaps. \nVOR test facilities (VOT) \nFacility Name ..............................\n  Type VOT \n(Airport Name) ...........Frequency \nFacility   \nRemarks \nBradlay Intl .................... 111.40    \nG \nBridgeport ..................... 109.25    \nG \nGroton ...........................",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-15-navigational-course-guidance-gaps-vor-test-facil.png",
+      "caption": "Figure 2-44. Direct route navigation.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-15-direct-route-navigation.png",
       "width": 806,
-      "height": 545
+      "height": 606
     },
     {
       "id": "fig-2-16",
       "section_code": "2",
       "ordinal": 16,
-      "caption": "Figure 2-50. VOR test facilities (VOT) frequencies. \nFigure 2-51. VOR checkpoint signs. \nVOR 116.4 \n147° 4.1 NM \nDME and VOR check radial \n2.  On the VOR, set the course selector to 0° and the \ntrack bar (TB) indicator should read center. The TO­\nFROM indicator should read FROM. \n3.  Set the course selector to 180° and",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-16-vor-test-facilities-vot-frequencies-figure-2-51-.png",
-      "width": 78,
-      "height": 77
+      "caption": "Figure 2-45. Published RNAV jet routes.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-16-published-rnav-jet-routes.png",
+      "width": 1046,
+      "height": 1098
     },
     {
       "id": "fig-2-17",
       "section_code": "2",
       "ordinal": 17,
-      "caption": "Figure 2-51. VOR checkpoint signs. \nVOR 116.4 \n147° 4.1 NM \nDME and VOR check radial \n2.  On the VOR, set the course selector to 0° and the \ntrack bar (TB) indicator should read center. The TO­\nFROM indicator should read FROM. \n3.  Set the course selector to 180° and the TO-FROM \nindicator should read TO and the TB sho",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-17-vor-checkpoint-signs-vor-116-4-147-4-1-nm-dme-an.png",
-      "width": 76,
-      "height": 74
+      "caption": "Figure 2-46. Excerpt of authorized areas of en route operation.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-17-excerpt-of-authorized-areas-of-en-route-operatio.png",
+      "width": 1046,
+      "height": 1053
     },
     {
       "id": "fig-2-18",
       "section_code": "2",
       "ordinal": 18,
-      "caption": "Figure 2-54. Floating waypoints. \ndepicted on a Severe Weather Avoidance Plan (SWAP) en \nroute chart. These waypoints and SWAP routes assist pilots \nand controllers when severe weather affects the East Coast. \nComputer Navigation Performance \nAn integral part of RNAV using en route charts typically \ninvolves the use of",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-18-floating-waypoints-depicted-on-a-severe-weather-.png",
-      "width": 1108,
-      "height": 896
+      "caption": "Figure 2-47. Off-route obstacle clearance altitude.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-18-off-route-obstacle-clearance-altitude.png",
+      "width": 466,
+      "height": 277
     },
     {
       "id": "fig-2-19",
       "section_code": "2",
       "ordinal": 19,
-      "caption": "Figure 2-55. Computer navigation fix. \nMany of the RNAV systems available today make it all \ntoo easy to forget that en route charts are still required \nand necessary for flight. As important as databases are, \nthey really are onboard the aircraft to provide navigation \nguidance and situational awareness (SA); they are",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-19-computer-navigation-fix-many-of-the-rnav-systems.png",
-      "width": 1030,
-      "height": 651
+      "caption": "Figure 2-48. Random RNAV route.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-19-random-rnav-route.png",
+      "width": 1013,
+      "height": 1039
     },
     {
       "id": "fig-2-20",
       "section_code": "2",
       "ordinal": 20,
-      "caption": "Figure 2-56. U.S. standard RNP levels. \n2-34",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-20-u-s-standard-rnp-levels-2-34.png",
-      "width": 90,
-      "height": 67
+      "caption": "in Figure 2-49. Notice the en route chart excerpt depicting  that the MEA is established with a gap in navigation signal coverage northwest of the Carbon VOR/DME on V134.  At the MEA of 13,000, the allowable navigation course guidance gap is approximately 18.5 NM, as depicted in Figure 2-49. The navigation gap area is ",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-20-notice-the-en-route-chart-excerpt-depicting-that.png",
+      "width": 806,
+      "height": 545
     },
     {
       "id": "fig-2-21",
       "section_code": "2",
       "ordinal": 21,
-      "caption": "Figure 2-57. Maximum authorized altitude (MAA). \nFigure 2-58. Minimum obstacle clearance altitude (MOCA). \nMinimum obstacle clearance altitude \nor route segment. [Figure 2-57] It is the highest altitude \non a Federal airway, jet route, RNAV low or high route, \nor other direct route for which an MEA is designated at \nwh",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-21-maximum-authorized-altitude-maa-figure-2-58-mini.png",
-      "width": 999,
-      "height": 473
+      "caption": "gap is approximately 18.5 NM, as depicted in Figure 2-49.  The navigation gap area is not identified on the chart by distances from the navigation facilities. Proper flight planning will help pilots prepare for MEA gaps by insuring that appropriate maps are available as they may need to dead reckon through the gap. Cal",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-21-5-nm-as-depicted-in-figure-2-49-the-navigation-g.png",
+      "width": 78,
+      "height": 77
     },
     {
       "id": "fig-2-22",
       "section_code": "2",
       "ordinal": 22,
-      "caption": "Figure 2-58. Minimum obstacle clearance altitude (MOCA). \nMinimum obstacle clearance altitude \nor route segment. [Figure 2-57] It is the highest altitude \non a Federal airway, jet route, RNAV low or high route, \nor other direct route for which an MEA is designated at \nwhich adequate reception of navigation signals is a",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-22-minimum-obstacle-clearance-altitude-moca-minimum.png",
-      "width": 1244,
-      "height": 571
+      "caption": "Figure 2-49. Navigational course guidance gaps.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-22-navigational-course-guidance-gaps.png",
+      "width": 76,
+      "height": 74
     },
     {
       "id": "fig-2-23",
       "section_code": "2",
       "ordinal": 23,
-      "caption": "Figure 2-59. Minimum turning altitude (MTA). \nCenterline \n3.6° \n4.5° \nFix displacement area \nEn route facility\nFacility providing intersection radial \nPrimary area \nSecondary area \nFigure 2-60. Turning area at the intersection fix with NAVAID distance less than 51 NM. \n2-37",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-23-minimum-turning-altitude-mta-centerline-3-6-4-5-.png",
-      "width": 743,
-      "height": 562
+      "caption": "Figure 2-53. Fly-by and fly-over waypoints.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-23-fly-by-and-fly-over-waypoints.png",
+      "width": 1108,
+      "height": 896
     },
     {
       "id": "fig-2-24",
       "section_code": "2",
       "ordinal": 24,
-      "caption": "Figure 2-60. Turning area at the intersection fix with NAVAID distance less than 51 NM. \n2-37",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-24-turning-area-at-the-intersection-fix-with-navaid.png",
-      "width": 141,
-      "height": 64
+      "caption": "Figure 2-54. Floating waypoints.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-24-floating-waypoints.png",
+      "width": 563,
+      "height": 461
     },
     {
       "id": "fig-2-25",
       "section_code": "2",
       "ordinal": 25,
-      "caption": "Figure 2-62. Minimum crossing altitude (MCA). \nor above the MTA until joining the centerline of the ATS \nroute following the turn. Once established on the centerline \nfollowing the turning fix, the MEA/MOCA determines the \nminimum altitude available for assignment. \nAn MTA may also preclude the use of a specific altitu",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-25-minimum-crossing-altitude-mca-or-above-the-mta-u.png",
-      "width": 1013,
-      "height": 422
+      "caption": "Figure 2-55. Computer navigation fix.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-25-computer-navigation-fix.png",
+      "width": 1030,
+      "height": 651
     },
     {
       "id": "fig-2-26",
       "section_code": "2",
       "ordinal": 26,
-      "caption": "Figure 2-65. MVA chart. \nin 14 CFR Parts 95 or 97, the following MIA applies: In \ndesignated mountainous areas, 2,000 feet above the \nhighest obstacle within a horizontal distance of 4 NM \nfrom the course to be flown; or other than mountainous \nareas, 1,000 feet above the highest obstacle within a \nhorizontal distance",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-26-mva-chart-in-14-cfr-parts-95-or-97-the-following.png",
-      "width": 423,
-      "height": 423
+      "caption": "Figure 2-56. U.S. standard RNP levels.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-26-u-s-standard-rnp-levels.png",
+      "width": 90,
+      "height": 67
     },
     {
       "id": "fig-2-27",
       "section_code": "2",
       "ordinal": 27,
-      "caption": "Figure 2-66. Cruising altitude or flight level. \nalways important, especially when being radar vectored \nduring a climb into an area with progressively higher MVA \nsectors, similar to the concept of MCA. Except where diverse \nvector areas have been established, when climbing, pilots \nshould not be vectored into a secto",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-27-cruising-altitude-or-flight-level-always-importa.png",
-      "width": 91,
-      "height": 151
+      "caption": "airspace are shown in Figure 2-56. Other RNP levels as  identified by ICAO, other states, and the FAA may also be used.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-27-other-rnp-levels-as-identified-by-icao-other-sta.png",
+      "width": 999,
+      "height": 473
     },
     {
       "id": "fig-2-28",
       "section_code": "2",
       "ordinal": 28,
-      "caption": "Figure 2-67. Altimeter setting changes. \noperating in the low altitude structure as follows: \nCurrent Altimeter Setting \nLowest Usable Flight Level \n29.92 or higher \n180 \n29.91 to 29.42 \n185 \n29.41 to 28.92 \n190 \n28.91 to 28.42 \n195 \n28.41 to 27.91 \n200 \nWhen the minimum altitude, as prescribed in 14 CFR Part \n91, § 91",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-28-altimeter-setting-changes-operating-in-the-low-a.png",
-      "width": 1051,
-      "height": 523
+      "caption": "Figure 2-57. Maximum authorized altitude (MAA).",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-28-maximum-authorized-altitude-maa.png",
+      "width": 1244,
+      "height": 571
     },
     {
       "id": "fig-2-29",
       "section_code": "2",
       "ordinal": 29,
-      "caption": "Figure 2-68. ATC reporting procedures. \nsettings in hectopascals (hPa) (millibars). Therefore, it is \nimperative that pilots or on-board equipment are able \nto accurately convert inches of mercury to hPa, or hPa to \ninches of mercury. \nAltitude Above Ground (QFE) \nA local altimeter setting equivalent to the barometric",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-29-atc-reporting-procedures-settings-in-hectopascal.png",
-      "width": 1042,
-      "height": 523
+      "caption": "Figure 2-58. Minimum obstacle clearance altitude (MOCA).",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-29-minimum-obstacle-clearance-altitude-moca.png",
+      "width": 743,
+      "height": 562
     },
     {
       "id": "fig-2-30",
       "section_code": "2",
       "ordinal": 30,
-      "caption": "Figure 2-69. Two-way radio communications failure transponder code. \nminutes short of their intended destination. However, if \nIFR conditions prevail, pilots must comply with procedures \ndesignated in the CFRs to ensure aircraft separation. \nIf pilots must continue their flight under IFR after \nexperiencing two-way rad",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-30-two-way-radio-communications-failure-transponder.png",
-      "width": 557,
-      "height": 377
+      "caption": "Figure 2-59. Minimum turning altitude (MTA).",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-30-minimum-turning-altitude-mta.png",
+      "width": 141,
+      "height": 64
     },
     {
       "id": "fig-2-31",
       "section_code": "2",
       "ordinal": 31,
-      "caption": "Figure 2-71. ATC holding instructions. \nAircraft Speed and Altitude \nDuring the en route descent phase of flight, an additional \nbenefit a FMS is that it provides fuel saving idle thrust \ndescent to your destination airport. This allows an \nuninterrupted profile descent from level cruising altitude \nto an appropriate M",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-31-atc-holding-instructions-aircraft-speed-and-alti.png",
-      "width": 331,
-      "height": 244
+      "caption": "Figure 2-61. Minimum turning altitude information located in the remarks section of FAA Form 8260-16 Transmittal of Airways/Route Data.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-31-minimum-turning-altitude-information-located-in-.png",
+      "width": 1013,
+      "height": 422
     },
     {
       "id": "fig-2-32",
       "section_code": "2",
       "ordinal": 32,
-      "caption": "Figure 2-72. Clearance limit holding. \nCHERRELYN \nD \n( H )117.2 CHL \n331° \n269° \n221°\n126°\nV214 \nthe pilot may level off at 10,000 feet MSL on descent to \ncomply with the 14 CFR Part 91 indicated airspeed limit of \n250 knots. Leveling off at any other time on descent may \nseriously affect air traffic handling by ATC. I",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-32-clearance-limit-holding-cherrelyn-d-h-117-2-chl-.png",
+      "caption": "Figure 2-64. En route chart minimum crossing altitude data (outside of the U.S.).",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-32-en-route-chart-minimum-crossing-altitude-data-ou.png",
+      "width": 423,
+      "height": 423
+    },
+    {
+      "id": "fig-2-33",
+      "section_code": "2",
+      "ordinal": 33,
+      "caption": "Figure 2-65. MVA chart.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-33-mva-chart.png",
+      "width": 91,
+      "height": 151
+    },
+    {
+      "id": "fig-2-34",
+      "section_code": "2",
+      "ordinal": 34,
+      "caption": "Figure 2-66. Cruising altitude or flight level.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-34-cruising-altitude-or-flight-level.png",
+      "width": 91,
+      "height": 150
+    },
+    {
+      "id": "fig-2-35",
+      "section_code": "2",
+      "ordinal": 35,
+      "caption": "Figure 2-67. Altimeter setting changes.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-35-altimeter-setting-changes.png",
+      "width": 1051,
+      "height": 523
+    },
+    {
+      "id": "fig-2-36",
+      "section_code": "2",
+      "ordinal": 36,
+      "caption": "Figure 2-68. ATC reporting procedures.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-36-atc-reporting-procedures.png",
+      "width": 1042,
+      "height": 523
+    },
+    {
+      "id": "fig-2-37",
+      "section_code": "2",
+      "ordinal": 37,
+      "caption": "Figure 2-69. Two-way radio communications failure transponder code.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-37-two-way-radio-communications-failure-transponder.png",
+      "width": 557,
+      "height": 377
+    },
+    {
+      "id": "fig-2-38",
+      "section_code": "2",
+      "ordinal": 38,
+      "caption": "Figure 2-70. Holding pattern design criteria template.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-38-holding-pattern-design-criteria-template.png",
+      "width": 331,
+      "height": 244
+    },
+    {
+      "id": "fig-2-39",
+      "section_code": "2",
+      "ordinal": 39,
+      "caption": "Figure 2-71. ATC holding instructions.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-2-39-atc-holding-instructions.png",
       "width": 356,
       "height": 245
     },
@@ -4989,8 +5224,8 @@
       "id": "fig-3-00",
       "section_code": "3",
       "ordinal": 0,
-      "caption": "Figure 3-1. Example of Class I and II navigation. \n3-3",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-3-00-example-of-class-i-and-ii-navigation-3-3.png",
+      "caption": "Figure 3-1. Example of Class I and II navigation.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-3-00-example-of-class-i-and-ii-navigation.png",
       "width": 218,
       "height": 249
     },
@@ -4998,8 +5233,8 @@
       "id": "fig-3-01",
       "section_code": "3",
       "ordinal": 1,
-      "caption": "Figure 3-2. VNAV path construction. \n3-4",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-3-01-vnav-path-construction-3-4.png",
+      "caption": "Figure 3-2. VNAV path construction.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-3-01-vnav-path-construction.png",
       "width": 1013,
       "height": 611
     },
@@ -5007,8 +5242,8 @@
       "id": "fig-3-02",
       "section_code": "3",
       "ordinal": 2,
-      "caption": "Figure 3-3. VNAV performance path. \nFigure 3-4. VNAV geometric path. \n3-5",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-3-02-vnav-performance-path-figure-3-4-vnav-geometric-.png",
+      "caption": "Figure 3-3. VNAV performance path.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-3-02-vnav-performance-path.png",
       "width": 1013,
       "height": 515
     },
@@ -5016,8 +5251,8 @@
       "id": "fig-3-03",
       "section_code": "3",
       "ordinal": 3,
-      "caption": "Figure 3-4. VNAV geometric path. \n3-5",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-3-03-vnav-geometric-path-3-5.png",
+      "caption": "Figure 3-4. VNAV geometric path.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-3-03-vnav-geometric-path.png",
       "width": 1013,
       "height": 515
     },
@@ -5025,8 +5260,8 @@
       "id": "fig-3-04",
       "section_code": "3",
       "ordinal": 4,
-      "caption": "Figure 3-6. RNAV (GPS) approach. \n3-7",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-3-04-rnav-gps-approach-3-7.png",
+      "caption": "Figure 3-5. WAAS data provide lateral and vertical guidance.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-3-04-waas-data-provide-lateral-and-vertical-guidance.png",
       "width": 1013,
       "height": 1356
     },
@@ -5034,8 +5269,8 @@
       "id": "fig-3-05",
       "section_code": "3",
       "ordinal": 5,
-      "caption": "Figure 3-9. Altitude management when cleared direct. \nto descending on arrival: “…delayed the initiation of the \ndescent…”; “Aircraft prematurely descended too early…”; \n“…late getting down…”; “During a descent…incorrectly \ncleared down…”; “…aircraft prematurely let down…”; \n“…lost situational awareness…”; “Premature d",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-3-05-altitude-management-when-cleared-direct-to-desce.png",
+      "caption": "Figure 3-9. Altitude management when cleared direct.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-3-05-altitude-management-when-cleared-direct.png",
       "width": 195,
       "height": 104
     },
@@ -5043,8 +5278,8 @@
       "id": "fig-3-06",
       "section_code": "3",
       "ordinal": 6,
-      "caption": "Figure 3-10. Arrival charts. \n3-11",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-3-06-arrival-charts-3-11.png",
+      "caption": "Figure 3-10. Arrival charts.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-3-06-arrival-charts.png",
       "width": 1013,
       "height": 1251
     },
@@ -5052,8 +5287,8 @@
       "id": "fig-3-07",
       "section_code": "3",
       "ordinal": 7,
-      "caption": "Figure 3-11. STAR interpretation. \nNAVAID, intersection, or fix where all the various (en route) \ntransitions to the arrival come together. A STAR en route \ntransition is a published segment used to connect one or \nmore en route airways, jet routes, or RNAV routes to the \nbasic STAR procedure. It is one of several rout",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-3-07-star-interpretation-navaid-intersection-or-fix-w.png",
+      "caption": "Figure 3-11. STAR interpretation.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-3-07-star-interpretation.png",
       "width": 1013,
       "height": 1112
     },
@@ -5061,8 +5296,8 @@
       "id": "fig-3-08",
       "section_code": "3",
       "ordinal": 8,
-      "caption": "Figure 3-12. Reducing pilot/controlling workload. \n3-14",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-3-08-reducing-pilot-controlling-workload-3-14.png",
+      "caption": "Figure 3-12. Reducing pilot/controlling workload.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-3-08-reducing-pilot-controlling-workload.png",
       "width": 1013,
       "height": 1171
     },
@@ -5070,8 +5305,8 @@
       "id": "fig-3-09",
       "section_code": "3",
       "ordinal": 9,
-      "caption": "Figure 3-13. STAR symbology. \n3-15",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-3-09-star-symbology-3-15.png",
+      "caption": "Figure 3-13. STAR symbology.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-3-09-star-symbology.png",
       "width": 1013,
       "height": 964
     },
@@ -5079,8 +5314,8 @@
       "id": "fig-3-10",
       "section_code": "3",
       "ordinal": 10,
-      "caption": "Figure 3-14. Arrival clearance. \n3-17",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-3-10-arrival-clearance-3-17.png",
+      "caption": "Figure 3-14. Arrival clearance.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-3-10-arrival-clearance.png",
       "width": 1013,
       "height": 1169
     },
@@ -5088,8 +5323,8 @@
       "id": "fig-3-11",
       "section_code": "3",
       "ordinal": 11,
-      "caption": "Figure 3-16. Assigned altitudes. \nfinal descent and glideslope/glidepath intercept can be \nmade without exceeding specific obstacle clearance and \nother related arrival, approach, and landing criteria. \nArrival delays typically are absorbed at a metering fix. \nThis fix is established on a route prior to the terminal \na",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-3-11-assigned-altitudes-final-descent-and-glideslope-.png",
+      "caption": "Figure 3-15. Two RNAV (GPS) approaches to Runway 15R at Baltimore. A controller issuing a clearance for one of these approaches  would speak the identifying letter—for example, “...cleared for the RNAV (GPS) Yankee approach, Runway 15R...”",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-3-11-two-rnav-gps-approaches-to-runway-15r-at-baltimo.png",
       "width": 1013,
       "height": 963
     },
@@ -5097,8 +5332,8 @@
       "id": "fig-3-12",
       "section_code": "3",
       "ordinal": 12,
-      "caption": "Figure 3-17. Altitude restrictions. \nbelow 5,000 feet above the airport elevation. \nThere are numerous exceptions to the high performance \naircraft arrival procedures previously outlined. For example, \nin a non-radar environment, the controller may clear the \nflight to use an approach based on a NAVAID other than \nthe",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-3-12-altitude-restrictions-below-5-000-feet-above-the.png",
+      "caption": "Figure 3-16. Assigned altitudes.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-3-12-assigned-altitudes.png",
       "width": 481,
       "height": 339
     },
@@ -5106,17 +5341,26 @@
       "id": "fig-3-13",
       "section_code": "3",
       "ordinal": 13,
-      "caption": "Figure 3-18. Instead of flying for a specific time after passing the holding fix, these holding patterns use distances to mark where the \nturns are made. The distances come from DME or IFR-certified GPS equipment. \nSE \n“...Viking 5786P, hold east of the 20 DME fix on the \n265° radial of the stedman VORTAC, 5 mile legs.",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-3-13-instead-of-flying-for-a-specific-time-after-pass.png",
-      "width": 79,
-      "height": 79
+      "caption": "Figure 3-17. Altitude restrictions.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-3-13-altitude-restrictions.png",
+      "width": 430,
+      "height": 71
     },
     {
       "id": "fig-3-14",
       "section_code": "3",
       "ordinal": 14,
-      "caption": "Figure 3-19. Cleared present position direct from V295. \n3-22",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-3-14-cleared-present-position-direct-from-v295-3-22.png",
+      "caption": "Figure 3-18. Instead of flying for a specific time after passing the holding fix, these holding patterns use distances to mark where the  turns are made. The distances come from DME or IFR-certified GPS equipment.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-3-14-instead-of-flying-for-a-specific-time-after-pass.png",
+      "width": 79,
+      "height": 79
+    },
+    {
+      "id": "fig-3-15",
+      "section_code": "3",
+      "ordinal": 15,
+      "caption": "Figure 3-19. Cleared present position direct from V295.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-3-15-cleared-present-position-direct-from-v295.png",
       "width": 1980,
       "height": 1805
     },
@@ -5124,7 +5368,7 @@
       "id": "fig-4-00",
       "section_code": "4",
       "ordinal": 0,
-      "caption": "Figure 4-1. Chippewa Regional Airport (KEAU), Eau Claire, Wisconsin. \n4-3",
+      "caption": "Figure 4-1. Chippewa Regional Airport (KEAU), Eau Claire, Wisconsin.",
       "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-00-chippewa-regional-airport-keau-eau-claire-wiscon.png",
       "width": 1013,
       "height": 1302
@@ -5133,8 +5377,8 @@
       "id": "fig-4-01",
       "section_code": "4",
       "ordinal": 1,
-      "caption": "Figure 4-3. Instrument approach chart. \n4-10",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-01-instrument-approach-chart-4-10.png",
+      "caption": "Figure 4-2. Construction of circling approach area.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-01-construction-of-circling-approach-area.png",
       "width": 1013,
       "height": 1332
     },
@@ -5142,8 +5386,8 @@
       "id": "fig-4-02",
       "section_code": "4",
       "ordinal": 2,
-      "caption": "Figure 4-4. Procedure identification. \nsame runway, they are significantly different (e.g., one is \na Required Navigation Performance (RNP) Authorization \nRequired (AR) formally known as SPECIAL AIRCRAFT & \nAIRCREW AUTHORIZATION REQUIRED (SAAAR);” one has \ncircling minimums and the other does not; the minimums \nare dif",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-02-procedure-identification-same-runway-they-are-si.png",
+      "caption": "Figure 4-3. Instrument approach chart.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-02-instrument-approach-chart.png",
       "width": 429,
       "height": 585
     },
@@ -5151,287 +5395,287 @@
       "id": "fig-4-03",
       "section_code": "4",
       "ordinal": 3,
-      "caption": "Figure 4-5. Multiple approaches. \n4-12",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-03-multiple-approaches-4-12.png",
-      "width": 471,
-      "height": 331
+      "caption": "Figure 4-4. Procedure identification.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-03-procedure-identification.png",
+      "width": 447,
+      "height": 617
     },
     {
       "id": "fig-4-04",
       "section_code": "4",
       "ordinal": 4,
-      "caption": "Figure 4-6. Procedures with circling landing minima. \nif any crewmember is off the flight deck, all ATC \ninstructions are written down until his or her return \nand then passed to that crewmember upon return. \nSimilarly, if a crewmember is off ATC frequency when \nmaking a precision approach (PA) announcement \nor when ta",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-04-procedures-with-circling-landing-minima-if-any-c.png",
-      "width": 307,
-      "height": 373
+      "caption": "Figure 4-5. Multiple approaches.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-04-multiple-approaches.png",
+      "width": 471,
+      "height": 331
     },
     {
       "id": "fig-4-05",
       "section_code": "4",
       "ordinal": 5,
-      "caption": "Figure 4-7. Durango approach and low altitude en route excerpt. \nconsider the Durango, Colorado, ILS DME RWY 2 and low \naltitude en route chart excerpt shown in Figure 4-7. \nHigh or Lack of Minimum Vectoring Altitudes \n(MVAs) \nConsidering the fact that most modern commercial and \ncorporate aircraft are capable of direc",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-05-durango-approach-and-low-altitude-en-route-excer.png",
-      "width": 1013,
-      "height": 1048
+      "caption": "Figure 4-6. Procedures with circling landing minima.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-05-procedures-with-circling-landing-minima.png",
+      "width": 307,
+      "height": 373
     },
     {
       "id": "fig-4-06",
       "section_code": "4",
       "ordinal": 6,
-      "caption": "Figure 4-7. \nHigh or Lack of Minimum Vectoring Altitudes \n(MVAs) \nConsidering the fact that most modern commercial and \ncorporate aircraft are capable of direct, point-to-point flight, \nit is increasingly important for pilots to understand the \nlimitations of ARTCC capabilities with regard to minimum \naltitudes. There",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-06-high-or-lack-of-minimum-vectoring-altitudes-mvas.png",
-      "width": 217,
-      "height": 308
+      "caption": "Figure 4-7. Durango approach and low altitude en route excerpt.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-06-durango-approach-and-low-altitude-en-route-excer.png",
+      "width": 1013,
+      "height": 1048
     },
     {
       "id": "fig-4-07",
       "section_code": "4",
       "ordinal": 7,
-      "caption": "Figure 4-8. Cheyenne Regional (KCYS), Cheyenne, Wyoming, ILS or LOC RWY 27. \n4-16",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-07-cheyenne-regional-kcys-cheyenne-wyoming-ils-or-l.png",
-      "width": 504,
-      "height": 633
+      "caption": "altitude en route chart excerpt shown in Figure 4-7.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-07-untitled.png",
+      "width": 217,
+      "height": 308
     },
     {
       "id": "fig-4-08",
       "section_code": "4",
       "ordinal": 8,
-      "caption": "Figure 4-9. Fly-by and fly-over waypoints. \n4-18",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-08-fly-by-and-fly-over-waypoints-4-18.png",
-      "width": 1013,
-      "height": 712
+      "caption": "Figure 4-8. Cheyenne Regional (KCYS), Cheyenne, Wyoming, ILS or LOC RWY 27.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-08-cheyenne-regional-kcys-cheyenne-wyoming-ils-or-l.png",
+      "width": 504,
+      "height": 633
     },
     {
       "id": "fig-4-09",
       "section_code": "4",
       "ordinal": 9,
-      "caption": "Figure 4-12. RNAV GPS approach minima. \n4-24",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-09-rnav-gps-approach-minima-4-24.png",
+      "caption": "Figure 4-9. Fly-by and fly-over waypoints.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-09-fly-by-and-fly-over-waypoints.png",
       "width": 1013,
-      "height": 1363
+      "height": 712
     },
     {
       "id": "fig-4-10",
       "section_code": "4",
       "ordinal": 10,
-      "caption": "Figure 4-14. GLS approach at Newark, New Jersey. \n4-27",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-10-gls-approach-at-newark-new-jersey-4-27.png",
+      "caption": "Figure 4-12. RNAV GPS approach minima.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-10-rnav-gps-approach-minima.png",
       "width": 1013,
-      "height": 1368
+      "height": 1363
     },
     {
       "id": "fig-4-11",
       "section_code": "4",
       "ordinal": 11,
-      "caption": "Figure 4-15. RNAV RNP approach procedure with curved flight tracks. \n4-28",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-11-rnav-rnp-approach-procedure-with-curved-flight-t.png",
+      "caption": "Figure 4-14. GLS approach at Newark, New Jersey.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-11-gls-approach-at-newark-new-jersey.png",
       "width": 1013,
-      "height": 1358
+      "height": 1368
     },
     {
       "id": "fig-4-12",
       "section_code": "4",
       "ordinal": 12,
-      "caption": "Figure 4-16. North Platte Regional (KLBF), North Platte, Nebraska, RNAV (GPS) RWY 30. \n4-29",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-12-north-platte-regional-klbf-north-platte-nebraska.png",
-      "width": 1012,
-      "height": 1318
+      "caption": "Figure 4-15. RNAV RNP approach procedure with curved flight tracks.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-12-rnav-rnp-approach-procedure-with-curved-flight-t.png",
+      "width": 1013,
+      "height": 1358
     },
     {
       "id": "fig-4-13",
       "section_code": "4",
       "ordinal": 13,
-      "caption": "Figure 4-17. Example of LNAV and Circling Minima lower than LNAV/VNAV \nDA. Harrisburg International RNAV (GPS) Runway 13. \nFigure 4-18. Explanation of Minima. \n4-31",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-13-example-of-lnav-and-circling-minima-lower-than-l.png",
-      "width": 611,
-      "height": 184
+      "caption": "Figure 4-16. North Platte Regional (KLBF), North Platte, Nebraska, RNAV (GPS) RWY 30.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-13-north-platte-regional-klbf-north-platte-nebraska.png",
+      "width": 1012,
+      "height": 1318
     },
     {
       "id": "fig-4-14",
       "section_code": "4",
       "ordinal": 14,
-      "caption": "Figure 4-18. Explanation of Minima. \n4-31",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-14-explanation-of-minima-4-31.png",
-      "width": 464,
-      "height": 408
+      "caption": "of the approach chart in Figure 4-15.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-14-untitled.png",
+      "width": 611,
+      "height": 184
     },
     {
       "id": "fig-4-15",
       "section_code": "4",
       "ordinal": 15,
-      "caption": "Figure 4-20. Example approaches using autopilot. \n4-38",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-15-example-approaches-using-autopilot-4-38.png",
-      "width": 1012,
-      "height": 1320
+      "caption": "Figure 4-17. Example of LNAV and Circling Minima lower than LNAV/VNAV  DA. Harrisburg International RNAV (GPS) Runway 13.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-15-example-of-lnav-and-circling-minima-lower-than-l.png",
+      "width": 464,
+      "height": 408
     },
     {
       "id": "fig-4-16",
       "section_code": "4",
       "ordinal": 16,
-      "caption": "Figure 4-23. Orlando Executive Airport, Orlando, Florida, ILS RWY 7. \n4-44",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-16-orlando-executive-airport-orlando-florida-ils-rw.png",
+      "caption": "Figure 4-20. Example approaches using autopilot.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-16-example-approaches-using-autopilot.png",
       "width": 1012,
-      "height": 1341
+      "height": 1320
     },
     {
       "id": "fig-4-17",
       "section_code": "4",
       "ordinal": 17,
-      "caption": "Figure 4-25. Missed approach point depiction and steeper than standard climb gradient requirements. \nrequirements are necessary to stay within the protected \nThe primary and secondary areas determine obstacle \nairspace and maintain adequate obstacle clearance. [Figure \nclearance in both the entry and maneuvering zones.",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-17-missed-approach-point-depiction-and-steeper-than.png",
-      "width": 505,
-      "height": 650
+      "caption": "Figure 4-23. Orlando Executive Airport, Orlando, Florida, ILS RWY 7.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-17-orlando-executive-airport-orlando-florida-ils-rw.png",
+      "width": 1012,
+      "height": 1341
     },
     {
       "id": "fig-4-18",
       "section_code": "4",
       "ordinal": 18,
-      "caption": "Figure 4-26. Two sets of minimums required when a climb gradient greater than 200 ft/NM is required. \n4-47",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-18-two-sets-of-minimums-required-when-a-climb-gradi.png",
-      "width": 1010,
-      "height": 1317
+      "caption": "Figure 4-25. Missed approach point depiction and steeper than standard climb gradient requirements.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-18-missed-approach-point-depiction-and-steeper-than.png",
+      "width": 505,
+      "height": 650
     },
     {
       "id": "fig-4-19",
       "section_code": "4",
       "ordinal": 19,
-      "caption": "Figure 4-27. Example of approach chart briefing sequence. \n4-48",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-19-example-of-approach-chart-briefing-sequence-4-48.png",
-      "width": 1012,
-      "height": 1256
+      "caption": "Figure 4-26. Two sets of minimums required when a climb gradient greater than 200 ft/NM is required.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-19-two-sets-of-minimums-required-when-a-climb-gradi.png",
+      "width": 1010,
+      "height": 1317
     },
     {
       "id": "fig-4-20",
       "section_code": "4",
       "ordinal": 20,
-      "caption": "Figure 4-29. Feeder routes. \n4-51",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-20-feeder-routes-4-51.png",
+      "caption": "Figure 4-27. Example of approach chart briefing sequence.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-20-example-of-approach-chart-briefing-sequence.png",
       "width": 1012,
-      "height": 1357
+      "height": 1256
     },
     {
       "id": "fig-4-21",
       "section_code": "4",
       "ordinal": 21,
-      "caption": "Figure 4-30. Terminal routes. \n4-52",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-21-terminal-routes-4-52.png",
+      "caption": "Figure 4-28. Approach segments and obstacle clearance.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-21-approach-segments-and-obstacle-clearance.png",
       "width": 1012,
-      "height": 1352
+      "height": 1357
     },
     {
       "id": "fig-4-22",
       "section_code": "4",
       "ordinal": 22,
-      "caption": "Figure 4-31. DME arc obstruction clearance. \nparts of the CFRs and notations on instrument approach \ncharts, which impose on the pilot the responsibility to \ncomply with or act on an instruction, such as “procedure \nnot authorized at night.” The name of the approach, as \npublished, is used to identify the approach. App",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-22-dme-arc-obstruction-clearance-parts-of-the-cfrs-.png",
-      "width": 436,
-      "height": 215
+      "caption": "Figure 4-29. Feeder routes.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-22-feeder-routes.png",
+      "width": 1012,
+      "height": 1352
     },
     {
       "id": "fig-4-23",
       "section_code": "4",
       "ordinal": 23,
-      "caption": "Figure 4-34. Approach without a designated IF. \nflight conditions permit. Requesting a contact approach \nmay be advantageous since it requires less time than \nthe published IAP and provides separation from IFR and \nspecial visual flight rules (SVFR) traffic. A contact or visual \napproach may be used in lieu of conducti",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-23-approach-without-a-designated-if-flight-conditio.png",
-      "width": 683,
-      "height": 252
+      "caption": "Figure 4-30. Terminal routes.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-23-terminal-routes.png",
+      "width": 436,
+      "height": 215
     },
     {
       "id": "fig-4-24",
       "section_code": "4",
       "ordinal": 24,
-      "caption": "Figure 4-35. Charted visual flight procedures (CVFP). \n4-59",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-24-charted-visual-flight-procedures-cvfp-4-59.png",
-      "width": 1012,
-      "height": 1351
+      "caption": "Figure 4-33. Procedure turn obstacle clearance.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-24-procedure-turn-obstacle-clearance.png",
+      "width": 683,
+      "height": 252
     },
     {
       "id": "fig-4-25",
       "section_code": "4",
       "ordinal": 25,
-      "caption": "Figure 4-36. Terminal arrival area (TAA) design “basic T.” \nof 250 feet obstacle clearance is also incorporated into the \nfinal approach segment for straight-in approaches, and a \nmaximum 400-ft/NM descent gradient is permitted. \nThe approach design criteria are different for approaches \nthat use vertical guidance prov",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-25-terminal-arrival-area-taa-design-basic-t-of-250-.png",
-      "width": 1012,
-      "height": 1103
+      "caption": "Figure 4-34. Approach without a designated IF.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-25-approach-without-a-designated-if.png",
+      "width": 612,
+      "height": 237
     },
     {
       "id": "fig-4-26",
       "section_code": "4",
       "ordinal": 26,
-      "caption": "Figure 4-37. RNAV approaches with and without TAAs. \n4-62",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-26-rnav-approaches-with-and-without-taas-4-62.png",
+      "caption": "Figure 4-35. Charted visual flight procedures (CVFP).",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-26-charted-visual-flight-procedures-cvfp.png",
       "width": 1012,
-      "height": 1321
+      "height": 1351
     },
     {
       "id": "fig-4-27",
       "section_code": "4",
       "ordinal": 27,
-      "caption": "Figure 4-38. Traditional GPS approach overlay. \n4-67",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-27-traditional-gps-approach-overlay-4-67.png",
+      "caption": "Figure 4-36. Terminal arrival area (TAA) design “basic T.”",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-27-terminal-arrival-area-taa-design-basic-t.png",
       "width": 1012,
-      "height": 1266
+      "height": 1103
     },
     {
       "id": "fig-4-28",
       "section_code": "4",
       "ordinal": 28,
-      "caption": "Figure 4-39. Lincoln Muni KLNK Lincoln, Nebraska, RNAV GPS RWY 14 approach. \n4-68",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-28-lincoln-muni-klnk-lincoln-nebraska-rnav-gps-rwy-.png",
+      "caption": "Figure 4-37. RNAV approaches with and without TAAs.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-28-rnav-approaches-with-and-without-taas.png",
       "width": 1012,
-      "height": 1267
+      "height": 1321
     },
     {
       "id": "fig-4-29",
       "section_code": "4",
       "ordinal": 29,
-      "caption": "Figure 4-40. ILS final approach segment design criteria. \nCAT II \n100 \n0 \n150 \n700 \nRunway visual range (feet) \n1,200 \n1,800 \n2,400 \n200\nDecision height (feet AGL)\nCAT IIIc \nCAT IIIb \nCAT IIIa \nCAT I \nThe lowest authorized ILS minimums, with all required ground and airborne systems components operative, are: \nCAT I - d",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-29-ils-final-approach-segment-design-criteria-cat-i.png",
+      "caption": "Figure 4-38. Traditional GPS approach overlay.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-29-traditional-gps-approach-overlay.png",
       "width": 1012,
-      "height": 599
+      "height": 1266
     },
     {
       "id": "fig-4-30",
       "section_code": "4",
       "ordinal": 30,
-      "caption": "Figure 4-42. Category III approach procedure. \n4-71",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-30-category-iii-approach-procedure-4-71.png",
-      "width": 1002,
-      "height": 1262
+      "caption": "Figure 4-39. Lincoln Muni KLNK Lincoln, Nebraska, RNAV GPS RWY 14 approach.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-30-lincoln-muni-klnk-lincoln-nebraska-rnav-gps-rwy-.png",
+      "width": 1012,
+      "height": 1267
     },
     {
       "id": "fig-4-31",
       "section_code": "4",
       "ordinal": 31,
-      "caption": "Figure 4-44. Sacramento International KSMF, Sacramento, California, ILS or LOC RWY 16L. \n4-73",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-31-sacramento-international-ksmf-sacramento-califor.png",
+      "caption": "Figure 4-40. ILS final approach segment design criteria.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-31-ils-final-approach-segment-design-criteria.png",
       "width": 1012,
-      "height": 1274
+      "height": 599
     },
     {
       "id": "fig-4-32",
       "section_code": "4",
       "ordinal": 32,
-      "caption": "Figure 4-45. Charlotte Douglas International KCLT, Charlotte, North Carolina, ILS or LOC RWY 18L. \n4-74",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-32-charlotte-douglas-international-kclt-charlotte-n.png",
-      "width": 2473,
-      "height": 3281
+      "caption": "Figure 4-41. ILS approach categories.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-32-ils-approach-categories.png",
+      "width": 1002,
+      "height": 1262
     },
     {
       "id": "fig-4-33",
       "section_code": "4",
       "ordinal": 33,
-      "caption": "Figure 4-46. Simultaneous Independent Approach Example Using ILS Approaches. \n4-75",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-33-simultaneous-independent-approach-example-using-.png",
-      "width": 840,
-      "height": 1228
+      "caption": "Figure 4-43. Classification of Simultaneous Parallel Approaches.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-33-classification-of-simultaneous-parallel-approach.png",
+      "width": 1012,
+      "height": 1274
     },
     {
       "id": "fig-4-34",
       "section_code": "4",
       "ordinal": 34,
-      "caption": "Figure 4-48. Example of Simultaneous close parallel instrument approach:  Atlanta, Georgia, ILS PRM RWY 10 and AAUP.",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-32-charlotte-douglas-international-kclt-charlotte-n.png",
+      "caption": "Figure 4-44. Sacramento International KSMF, Sacramento, California, ILS or LOC RWY 16L.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-34-sacramento-international-ksmf-sacramento-califor.png",
       "width": 2473,
       "height": 3281
     },
@@ -5439,107 +5683,152 @@
       "id": "fig-4-35",
       "section_code": "4",
       "ordinal": 35,
-      "caption": "Figure 4-50. Converging approach criteria. \n4-80",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-35-converging-approach-criteria-4-80.png",
-      "width": 463,
-      "height": 322
+      "caption": "Figure 4-45. Charlotte Douglas International KCLT, Charlotte, North Carolina, ILS or LOC RWY 18L.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-35-charlotte-douglas-international-kclt-charlotte-n.png",
+      "width": 840,
+      "height": 1228
     },
     {
       "id": "fig-4-36",
       "section_code": "4",
       "ordinal": 36,
-      "caption": "Figure 4-51. Dallas-Fort Worth KDFW, Dallas-Fort Worth, Texas, CONVERGING ILS RWY 35C. \n4-81",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-36-dallas-fort-worth-kdfw-dallas-fort-worth-texas-c.png",
-      "width": 463,
-      "height": 324
+      "caption": "Figure 4-46. Simultaneous Independent Approach Example Using ILS Approaches.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-36-simultaneous-independent-approach-example-using-.png",
+      "width": 247,
+      "height": 78
     },
     {
       "id": "fig-4-37",
       "section_code": "4",
       "ordinal": 37,
-      "caption": "Figure 4-52. Fort Rucker, Alabama, KOZR VOR RWY 6. \nSE-4, 16 DEC 2010 to 13 JAN 2011 \n4-82",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-37-fort-rucker-alabama-kozr-vor-rwy-6-se-4-16-dec-2.png",
-      "width": 463,
-      "height": 618
+      "caption": "Figure 4-47. Simultaneous independent close parallel approach example using ILS PRM approaches.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-34-sacramento-international-ksmf-sacramento-califor.png",
+      "width": 2473,
+      "height": 3281
     },
     {
       "id": "fig-4-38",
       "section_code": "4",
       "ordinal": 38,
-      "caption": "Figure 4-53. Alexandria International (AEX), Alexandria, Louisiana, KAEX VOR DME RWY 32. \n4-83",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-38-alexandria-international-aex-alexandria-louisian.png",
-      "width": 1012,
-      "height": 1268
+      "caption": "Figure 4-48. Example of Simultaneous close parallel instrument approach:  Atlanta, Georgia, ILS PRM RWY 10 and AAUP.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-38-example-of-simultaneous-close-parallel-instrumen.png",
+      "width": 889,
+      "height": 595
     },
     {
       "id": "fig-4-39",
       "section_code": "4",
       "ordinal": 39,
-      "caption": "Figure 4-54. Carthage/Panola County-Sharpe Field, Carthage, Texas, (K4F2), NDB RWY 35. \n4-84",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-39-carthage-panola-county-sharpe-field-carthage-tex.png",
-      "width": 462,
-      "height": 669
+      "caption": "Figure 4-49. Example of Approach and AAUP used for Simultaneous Offset Instrument Approach Procedure.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-39-example-of-approach-and-aaup-used-for-simultaneo.png",
+      "width": 463,
+      "height": 322
     },
     {
       "id": "fig-4-40",
       "section_code": "4",
       "ordinal": 40,
-      "caption": "Figure 4-56. Asheville Regional KAVL, Asheville, North Carolina, radar instrument approach minimums. \nFigure 4-57. PAR final approach area criteria. \n4-86",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-40-asheville-regional-kavl-asheville-north-carolina.png",
-      "width": 134,
-      "height": 134
+      "caption": "Figure 4-50. Converging approach criteria.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-40-converging-approach-criteria.png",
+      "width": 463,
+      "height": 324
     },
     {
       "id": "fig-4-41",
       "section_code": "4",
       "ordinal": 41,
-      "caption": "Figure 4-57. PAR final approach area criteria. \n4-86",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-41-par-final-approach-area-criteria-4-86.png",
-      "width": 1012,
-      "height": 357
+      "caption": "Figure 4-51. Dallas-Fort Worth KDFW, Dallas-Fort Worth, Texas, CONVERGING ILS RWY 35C.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-41-dallas-fort-worth-kdfw-dallas-fort-worth-texas-c.png",
+      "width": 463,
+      "height": 618
     },
     {
       "id": "fig-4-42",
       "section_code": "4",
       "ordinal": 42,
-      "caption": "Figure 4-58. Vicksburg Tallulah Regional KTVR, Tallulah Vicksburg, Louisiana, LOC RWY 36. \n4-87",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-42-vicksburg-tallulah-regional-ktvr-tallulah-vicksb.png",
+      "caption": "Figure 4-52. Fort Rucker, Alabama, KOZR VOR RWY 6.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-42-fort-rucker-alabama-kozr-vor-rwy-6.png",
       "width": 1012,
-      "height": 1295
+      "height": 1268
     },
     {
       "id": "fig-4-43",
       "section_code": "4",
       "ordinal": 43,
-      "caption": "Figure 4-59. Vicksburg Tallulah Regional KTVR, Tallulah Vicksburg, Louisiana, LOC RWY 36. \n4-88",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-42-vicksburg-tallulah-regional-ktvr-tallulah-vicksb.png",
-      "width": 1012,
-      "height": 1295
+      "caption": "Figure 4-53. Alexandria International (AEX), Alexandria, Louisiana, KAEX VOR DME RWY 32.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-43-alexandria-international-aex-alexandria-louisian.png",
+      "width": 462,
+      "height": 669
     },
     {
       "id": "fig-4-44",
       "section_code": "4",
       "ordinal": 44,
-      "caption": "Figure 4-60. Dayton Beach International DAB, Dayton Beach, Florida, LOC BC RWY 25R. \n4-89",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-44-dayton-beach-international-dab-dayton-beach-flor.png",
-      "width": 1012,
-      "height": 1295
+      "caption": "Figure 4-55. Tucson/Ryan Field, Tuscson, Arizona, (KRYN), NDB/DME or GPS RWY 6R.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-44-tucson-ryan-field-tuscson-arizona-kryn-ndb-dme-o.png",
+      "width": 134,
+      "height": 134
     },
     {
       "id": "fig-4-45",
       "section_code": "4",
       "ordinal": 45,
-      "caption": "Figure 4-61. Hartford Brainard KHFD, Hartford, Connecticut, LDA RWY 2. \n4-90",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-45-hartford-brainard-khfd-hartford-connecticut-lda-.png",
-      "width": 1012,
-      "height": 1295
+      "caption": "Figure 4-56. Asheville Regional KAVL, Asheville, North Carolina, radar instrument approach minimums.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-45-asheville-regional-kavl-asheville-north-carolina.png",
+      "width": 462,
+      "height": 626
     },
     {
       "id": "fig-4-46",
       "section_code": "4",
       "ordinal": 46,
-      "caption": "Figure 4-62. Lebanon Floyd W Jones, Lebanon, Missouri, SDF RWY 36. \n4-91",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-46-lebanon-floyd-w-jones-lebanon-missouri-sdf-rwy-3.png",
+      "caption": "Figure 4-57. PAR final approach area criteria.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-46-par-final-approach-area-criteria.png",
+      "width": 1012,
+      "height": 357
+    },
+    {
+      "id": "fig-4-47",
+      "section_code": "4",
+      "ordinal": 47,
+      "caption": "Figure 4-58. Vicksburg Tallulah Regional KTVR, Tallulah Vicksburg, Louisiana, LOC RWY 36.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-47-vicksburg-tallulah-regional-ktvr-tallulah-vicksb.png",
+      "width": 1012,
+      "height": 1295
+    },
+    {
+      "id": "fig-4-48",
+      "section_code": "4",
+      "ordinal": 48,
+      "caption": "Figure 4-59. Vicksburg Tallulah Regional KTVR, Tallulah Vicksburg, Louisiana, LOC RWY 36.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-47-vicksburg-tallulah-regional-ktvr-tallulah-vicksb.png",
+      "width": 1012,
+      "height": 1295
+    },
+    {
+      "id": "fig-4-49",
+      "section_code": "4",
+      "ordinal": 49,
+      "caption": "Figure 4-60. Dayton Beach International DAB, Dayton Beach, Florida, LOC BC RWY 25R.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-49-dayton-beach-international-dab-dayton-beach-flor.png",
+      "width": 1012,
+      "height": 1295
+    },
+    {
+      "id": "fig-4-50",
+      "section_code": "4",
+      "ordinal": 50,
+      "caption": "Figure 4-61. Hartford Brainard KHFD, Hartford, Connecticut, LDA RWY 2.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-50-hartford-brainard-khfd-hartford-connecticut-lda-.png",
+      "width": 1012,
+      "height": 1295
+    },
+    {
+      "id": "fig-4-51",
+      "section_code": "4",
+      "ordinal": 51,
+      "caption": "Figure 4-62. Lebanon Floyd W Jones, Lebanon, Missouri, SDF RWY 36.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-4-51-lebanon-floyd-w-jones-lebanon-missouri-sdf-rwy-3.png",
       "width": 1012,
       "height": 1295
     },
@@ -5547,8 +5836,8 @@
       "id": "fig-5-00",
       "section_code": "5",
       "ordinal": 0,
-      "caption": "Figure 5-2. Satellite-based navigation and tracking allows more aircraft to fly closely together on more direct routes. \nFigure 5-3. Automatic Dependent Surveillance-Broadcast (ADS-B) \nsystems. \nADS-B ground infrastructure is complete and ATC \nnow uses ADS-B for aircraft tracking both in the air \nand on the ground at m",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-5-00-satellite-based-navigation-and-tracking-allows-m.png",
+      "caption": "Figure 5-1. Next Generation Air Transportation System (NEXGEN) introduces new technological innovations for weather forecasting,  digital communications, and networking.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-5-00-next-generation-air-transportation-system-nexgen.png",
       "width": 265,
       "height": 212
     },
@@ -5556,8 +5845,8 @@
       "id": "fig-5-01",
       "section_code": "5",
       "ordinal": 1,
-      "caption": "Figure 5-3. Automatic Dependent Surveillance-Broadcast (ADS-B) \nsystems. \nADS-B ground infrastructure is complete and ATC \nnow uses ADS-B for aircraft tracking both in the air \nand on the ground at many airports. \n2.  System wide information management (SWIM)— \nwill provide a single infrastructure and information \nmana",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-5-01-automatic-dependent-surveillance-broadcast-ads-b.png",
+      "caption": "Figure 5-2. Satellite-based navigation and tracking allows more aircraft to fly closely together on more direct routes.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-5-01-satellite-based-navigation-and-tracking-allows-m.png",
       "width": 136,
       "height": 76
     },
@@ -5565,8 +5854,8 @@
       "id": "fig-5-02",
       "section_code": "5",
       "ordinal": 2,
-      "caption": "Figure 5-10. Ground-Based Augmentation System (GBAS). \nBenefits of NextGen \nThe implementation of NextGen will allow pilots and \ndispatchers to select their own direct flightpaths, rather \nthan follow the existing Victor, Jet, and LF/MF airways. \nEach aircraft will transmit and receive precise information \nabout the ti",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-5-02-ground-based-augmentation-system-gbas-benefits-o.png",
+      "caption": "Figure 5-9. Wide Area Augmentation System (WAAS).",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-5-02-wide-area-augmentation-system-waas.png",
       "width": 119,
       "height": 90
     },
@@ -5574,8 +5863,8 @@
       "id": "fig-5-03",
       "section_code": "5",
       "ordinal": 3,
-      "caption": "Figure 5-11. NextGen improves airport surface movements, reduces \nspacing and separation requirements, and better manages the \noverall flows into and out of busy airports. \nmitigate the impacts of the weather, and to improve \nweather forecasts and decision-making. Better forecasts, \ncoupled with greater automation, wil",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-5-03-nextgen-improves-airport-surface-movements-reduc.png",
+      "caption": "Figure 5-10. Ground-Based Augmentation System (GBAS).",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-5-03-ground-based-augmentation-system-gbas.png",
       "width": 116,
       "height": 87
     },
@@ -5583,8 +5872,8 @@
       "id": "fig-5-04",
       "section_code": "5",
       "ordinal": 4,
-      "caption": "Figure 5-16. Enhanced and synthetic vision displayed on primary \nflight displays. \nspatially correct, database driven, computer-generated \nsynthetic depiction of the nearby topography, including \nobstacles, and a display of the landing runway. The SVGS \ndisplay may be implemented on a head down Primary Flight \nDisplay,",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-5-04-enhanced-and-synthetic-vision-displayed-on-prima.png",
+      "caption": "Figure 5-12. Head-up guidance system (HGS).",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-5-04-head-up-guidance-system-hgs.png",
       "width": 288,
       "height": 204
     },
@@ -5592,8 +5881,8 @@
       "id": "fig-6-00",
       "section_code": "6",
       "ordinal": 0,
-      "caption": "Figure 6-2. GPS with a flight route on display. \nRNG \nPULL SCAN \nPUSH ON \nBRT \nPROC \nCRSR \nMSG \nOBS \nALT \nNRST \nCLR \nENT\nD \nMENU \nDTK \nTK \n. nm \nLEG \nVOR NDB INT USR ACT NAV FPL SET AUX\nAPT 1 \nA \nB \nC \nD \nE \nF \nG \nH \nJ \nK \nL \nM \nN \nO \nP \nQ \nR \nS \nT \nU \nV \nW \nX \nY \nZ \nSPC \nBKSP \nPFD \nMFD \nNAV \nCOM \nPFD \nMENU \nFPL \nPROC",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-6-00-gps-with-a-flight-route-on-display-rng-pull-scan.png",
+      "caption": "Figure 6-1. Area navigation (RNAV) receivers.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-6-00-area-navigation-rnav-receivers.png",
       "width": 1013,
       "height": 777
     },
@@ -5601,8 +5890,8 @@
       "id": "fig-6-01",
       "section_code": "6",
       "ordinal": 1,
-      "caption": "Figure 6-26. Grand Junction Five Departure. \n6-10",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-6-01-grand-junction-five-departure-6-10.png",
+      "caption": "Figure 6-24. Procedure turn or PI leg.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-6-01-procedure-turn-or-pi-leg.png",
       "width": 1010,
       "height": 1306
     },
@@ -5610,8 +5899,8 @@
       "id": "fig-6-02",
       "section_code": "6",
       "ordinal": 2,
-      "caption": "Figure 6-28. ILS or LOC/DME RWY 3 in Durango, Colorado. \n6-12",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-6-02-ils-or-loc-dme-rwy-3-in-durango-colorado-6-12.png",
+      "caption": "Figure 6-27. Channel One Departure.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-6-02-channel-one-departure.png",
       "width": 1010,
       "height": 1306
     },
@@ -5619,8 +5908,8 @@
       "id": "fig-6-03",
       "section_code": "6",
       "ordinal": 3,
-      "caption": "Figure 6-29. Naming conventions of three different systems for the VOR 34 Approach. \n6-13",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-6-03-naming-conventions-of-three-different-systems-fo.png",
+      "caption": "Figure 6-28. ILS or LOC/DME RWY 3 in Durango, Colorado.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-6-03-ils-or-loc-dme-rwy-3-in-durango-colorado.png",
       "width": 495,
       "height": 273
     },
@@ -5628,17 +5917,26 @@
       "id": "fig-6-04",
       "section_code": "6",
       "ordinal": 4,
-      "caption": "Figure 6-30. Database rolls. \n14 CFR Part 43, § 43.3(h). \nPilots using the databases are ultimately responsible for \nensuring that the database they are operating with is \ncurrent. This includes checking Notices to Airmen (NOTAM)­\ntype information concerning errors that may be supplied \nby the avionics manufacturer or",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-6-04-database-rolls-14-cfr-part-43-43-3-h-pilots-usin.png",
-      "width": 494,
-      "height": 497
+      "caption": "Figure 6-29. Naming conventions of three different systems for the VOR 34 Approach.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-6-04-naming-conventions-of-three-different-systems-fo.png",
+      "width": 704,
+      "height": 712
     },
     {
       "id": "fig-6-05",
       "section_code": "6",
       "ordinal": 5,
-      "caption": "Figure 6-31. Manufacturer’s naming conventions. \n6-16",
-      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-6-05-manufacturer-s-naming-conventions-6-16.png",
+      "caption": "Figure 6-30. Database rolls.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-6-05-database-rolls.png",
+      "width": 494,
+      "height": 497
+    },
+    {
+      "id": "fig-6-06",
+      "section_code": "6",
+      "ordinal": 6,
+      "caption": "Figure 6-31. Manufacturer’s naming conventions.",
+      "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-6-06-manufacturer-s-naming-conventions.png",
       "width": 1155,
       "height": 435
     },
@@ -5646,7 +5944,7 @@
       "id": "fig-7-00",
       "section_code": "7",
       "ordinal": 0,
-      "caption": "Figure 7-10. The COPTER ILS or LOC RWY 13 approach at New York/La Guardia (LGA) airport. \n7-11",
+      "caption": "Figure 7-10. The COPTER ILS or LOC RWY 13 approach at New York/La Guardia (LGA) airport.",
       "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-7-00-the-copter-ils-or-loc-rwy-13-approach-at-new-yor.png",
       "width": 1010,
       "height": 1281
@@ -5655,7 +5953,7 @@
       "id": "fig-7-01",
       "section_code": "7",
       "ordinal": 1,
-      "caption": "Figure 7-11. COPTER RNAV (GPS) 291° at Indianapolis Downtown Heliport. \n7-12",
+      "caption": "Figure 7-11. COPTER RNAV (GPS) 291° at Indianapolis Downtown Heliport.",
       "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-7-01-copter-rnav-gps-291-at-indianapolis-downtown-hel.png",
       "width": 1010,
       "height": 1287
@@ -5664,7 +5962,7 @@
       "id": "fig-7-02",
       "section_code": "7",
       "ordinal": 2,
-      "caption": "Figure 7-13. COPTER RNAV (GPS) 250° at New York/La Guardia Airport. \n7-15",
+      "caption": "Figure 7-13. COPTER RNAV (GPS) 250° at New York/La Guardia Airport.",
       "asset_path": "handbooks/iph/FAA-H-8083-16B/figures/fig-7-02-copter-rnav-gps-250-at-new-york-la-guardia-airpo.png",
       "width": 1008,
       "height": 1289
@@ -5672,969 +5970,1744 @@
   ],
   "warnings": [
     {
+      "id": "c55709a811cfb493",
       "code": "caption-without-figure",
       "section_code": "1",
-      "message": "Caption `Figure 1-1. Airport diagram included on the Oshkosh, Wisconsin \nVOR RWY 9 Approa` on page 18 had no paired image."
+      "message": "Caption `Figure 1-1. Airport diagram included on the Oshkosh, Wisconsin  VOR RWY 9 Approa` on page 18 had no paired image."
     },
     {
+      "id": "e6aee8b1d82375ef",
       "code": "caption-without-figure",
       "section_code": "1",
-      "message": "Caption `Figure 1-2. Airport diagram of Oshkosh, Wisconsin as depicted in \nthe A/FD secti` on page 19 had no paired image."
+      "message": "Caption `Figure 1-3. Excerpts from the Chart Supplement (Airport Facility Directory secti` on page 20 had no paired image."
     },
     {
+      "id": "13a8945fb91b1bd1",
       "code": "caption-without-figure",
       "section_code": "1",
-      "message": "Caption `Figure 1-4. Key airport lighting and markings. \nAeronautical Knowledge, appendix` on page 21 had no paired image."
+      "message": "Caption `Figure 1-4. Key airport lighting and markings.` on page 21 had no paired image."
     },
     {
+      "id": "0d883645211beada",
       "code": "caption-without-figure",
       "section_code": "1",
-      "message": "Caption `Figure 1-5. FAA recommendations for reducing runway incursions. \nThe FAA recomme` on page 22 had no paired image."
+      "message": "Caption `Figure 1-7. Los Angeles International Airport diagram, North Route, and standard` on page 23 had no paired image."
     },
     {
+      "id": "eff44ffc6d5d0671",
       "code": "caption-without-figure",
       "section_code": "1",
-      "message": "Caption `Figure 1-11. AWSS installation at Driggs-Reed, Idaho. \nAdequate Visual Reference` on page 27 had no paired image."
+      "message": "Caption `Figure 1-14. Previous TERPS departure procedures.` on page 31 had no paired image."
     },
     {
+      "id": "b852f1203229b8f4",
       "code": "caption-without-figure",
       "section_code": "1",
-      "message": "Caption `Figure 1-14. Previous TERPS departure procedures. \nBeyond the diverse obstacle a` on page 31 had no paired image."
+      "message": "Caption `Figure 1-15. Diverse Departure Obstacle Assessment to 25/46 NM.` on page 31 had no paired image."
     },
     {
+      "id": "1211b8fcb7e624ba",
       "code": "caption-without-figure",
       "section_code": "1",
-      "message": "Caption `Figure 1-15. Diverse Departure Obstacle Assessment to 25/46 NM. \n1-15` on page 31 had no paired image."
+      "message": "Caption `Figure 1-16. New TERPS departure procedures.` on page 32 had no paired image."
     },
     {
+      "id": "5f4d4c20d048fd5c",
       "code": "caption-without-figure",
       "section_code": "1",
-      "message": "Caption `Figure 1-16. New TERPS departure procedures. \nDeparture Procedures \nInstrument d` on page 32 had no paired image."
+      "message": "Caption `or landing distance as shown in Figure 1-16.` on page 33 had no paired image."
     },
     {
+      "id": "1776bf75387177ec",
       "code": "caption-without-figure",
       "section_code": "1",
-      "message": "Caption `Figure 1-16. \nOptimally, the 40 to 1 slope would work for every departure \ndesig` on page 33 had no paired image."
+      "message": "Caption `Figure 1-19. Part 25 turbine-powered, transport category airplane OEI actual (gr` on page 35 had no paired image."
     },
     {
+      "id": "38e910dc458de6b6",
       "code": "caption-without-figure",
       "section_code": "1",
-      "message": "Caption `Figure 1-17. Rate of climb table. \ntreated as a plane which must not be penetrat` on page 34 had no paired image."
+      "message": "Caption `Figure 1-21. Graphic ODP/booklet front matter.` on page 38 had no paired image."
     },
     {
+      "id": "41cba92a874fd58b",
       "code": "caption-without-figure",
       "section_code": "1",
-      "message": "Caption `Figure 1-20. Airport/runway analysis example. \n1-21` on page 37 had no paired image."
+      "message": "Caption `Figure 1-23. Transition routes as depicted on SID.` on page 41 had no paired image."
     },
     {
+      "id": "8cb8d6228a1af5f5",
       "code": "caption-without-figure",
       "section_code": "1",
-      "message": "Caption `Figure 1-22. SID chart. \nSC-5, 23 SEP 2010 to 21 OCT 2010\nSC-5, 23 SEP 2010 to 2` on page 40 had no paired image."
+      "message": "Caption `Figure 1-27. RNP departure levels.` on page 46 had no paired image."
     },
     {
+      "id": "6e34850f0e1caf7a",
       "code": "caption-without-figure",
       "section_code": "1",
-      "message": "Caption `Figure 1-27. RNP departure levels. \n1-30` on page 46 had no paired image."
+      "message": "Caption `Figure 1-28. Flight plan equipment codes (continued on next page).` on page 47 had no paired image."
     },
     {
+      "id": "6e34850f0e1caf7a",
       "code": "caption-without-figure",
       "section_code": "1",
-      "message": "Caption `Figure 1-28. Flight plan equipment codes (continued on next page). \nA \nB \nC \nD \n` on page 47 had no paired image."
+      "message": "Caption `Figure 1-28. Flight plan equipment codes (continued).` on page 48 had no paired image."
     },
     {
+      "id": "95ef4886c5dc9a79",
       "code": "caption-without-figure",
       "section_code": "1",
-      "message": "Caption `Figure 1-28. Flight plan equipment codes (continued). \n1-32` on page 48 had no paired image."
+      "message": "Caption `Figure 1-37. Noise abatement SID.` on page 57 had no paired image."
     },
     {
-      "code": "caption-without-figure",
+      "id": "b025d7da6c2b1e27",
+      "code": "figure-without-caption",
       "section_code": "1",
-      "message": "Caption `Figure 1-37. Noise abatement SID. \n1-41` on page 57 had no paired image."
+      "message": "Image on page 26 (index 0) had no paired caption."
     },
     {
+      "id": "b4de21ff72d46a2e",
       "code": "figure-without-caption",
       "section_code": "1",
       "message": "Image on page 29 (index 1) had no paired caption."
     },
     {
+      "id": "3e07c09b14b0f946",
       "code": "figure-without-caption",
       "section_code": "1",
-      "message": "Image on page 29 (index 2) had no paired caption."
+      "message": "Image on page 35 (index 0) had no paired caption."
     },
     {
+      "id": "526b8a8ffb9b6948",
+      "code": "figure-without-caption",
+      "section_code": "1",
+      "message": "Image on page 44 (index 0) had no paired caption."
+    },
+    {
+      "id": "66f21f0a3151f846",
+      "code": "figure-without-caption",
+      "section_code": "1",
+      "message": "Image on page 52 (index 0) had no paired caption."
+    },
+    {
+      "id": "c597764d0825e9ea",
       "code": "figure-without-caption",
       "section_code": "1",
       "message": "Image on page 52 (index 1) had no paired caption."
     },
     {
+      "id": "73463025eb90dbf4",
       "code": "figure-without-caption",
       "section_code": "1",
       "message": "Image on page 52 (index 2) had no paired caption."
     },
     {
+      "id": "47f1cccf835bfa80",
       "code": "figure-without-caption",
       "section_code": "1",
       "message": "Image on page 52 (index 3) had no paired caption."
     },
     {
+      "id": "c2c975992003c89a",
       "code": "figure-without-caption",
       "section_code": "1",
       "message": "Image on page 52 (index 4) had no paired caption."
     },
     {
+      "id": "d49936ebddfea432",
       "code": "figure-without-caption",
       "section_code": "1",
-      "message": "Image on page 52 (index 5) had no paired caption."
+      "message": "Image on page 53 (index 0) had no paired caption."
     },
     {
+      "id": "d53c65de97d4d1e6",
       "code": "figure-without-caption",
       "section_code": "1",
-      "message": "Image on page 55 (index 1) had no paired caption."
+      "message": "Image on page 55 (index 0) had no paired caption."
     },
     {
+      "id": "d6de59281fcb7769",
+      "code": "figure-without-caption",
+      "section_code": "1",
+      "message": "Image on page 56 (index 0) had no paired caption."
+    },
+    {
+      "id": "4bae4c3d8fa63dc4",
       "code": "caption-without-figure",
       "section_code": "2",
-      "message": "Caption `Figure 2-2. Airways depicted on an aeronautical chart. \n2-2` on page 62 had no paired image."
+      "message": "Caption `Figure 2-3. Victor airways.` on page 63 had no paired image."
     },
     {
+      "id": "6b15bc4de04513a7",
       "code": "caption-without-figure",
       "section_code": "2",
-      "message": "Caption `Figure 2-4. Jet routes. \nZID \nZMP \nZOB \nZBW \nZNY \nZNY \nZDC \nZAU \nZKC \nZME \nZTL \n` on page 63 had no paired image."
+      "message": "Caption `Figure 2-4. Jet routes.` on page 63 had no paired image."
     },
     {
+      "id": "4e3513bec8d16247",
       "code": "caption-without-figure",
       "section_code": "2",
-      "message": "Caption `Figure 2-5. Air Route Traffic Control Centers. \n2-3` on page 63 had no paired image."
+      "message": "Caption `Figure 2-5. Air Route Traffic Control Centers.` on page 63 had no paired image."
     },
     {
+      "id": "5102bef9e2d1ffb8",
       "code": "caption-without-figure",
       "section_code": "2",
-      "message": "Caption `Figure 2-6. Boston Air Route Traffic Control Center. \nThe strips, one for each e` on page 64 had no paired image."
+      "message": "Caption `Figure 2-6. Boston Air Route Traffic Control Center.` on page 64 had no paired image."
     },
     {
+      "id": "32168e4a1068efa0",
       "code": "caption-without-figure",
       "section_code": "2",
-      "message": "Caption `Figure 2-7. Flight progress strips. \n2-4` on page 64 had no paired image."
+      "message": "Caption `Figure 2-7. Flight progress strips.` on page 64 had no paired image."
     },
     {
+      "id": "cd228bb9f7d2b263",
       "code": "caption-without-figure",
       "section_code": "2",
-      "message": "Caption `Figure 2-8. Fort Worth Air Route Traffic Control Center. \nFigure 2-8 shows the F` on page 65 had no paired image."
+      "message": "Caption `Figure 2-11. High altitude sectors.` on page 65 had no paired image."
     },
     {
+      "id": "4619674ad9eef6fa",
       "code": "caption-without-figure",
       "section_code": "2",
-      "message": "Caption `Figure 2-9. Low altitude sectors. \nFigure 2-10. Intermediate altitude sectors. \n` on page 65 had no paired image."
+      "message": "Caption `Figure 2-12. Ultra high altitude sectors.` on page 65 had no paired image."
     },
     {
+      "id": "d71f2a9771e09a55",
       "code": "caption-without-figure",
       "section_code": "2",
-      "message": "Caption `Figure 2-10. Intermediate altitude sectors. \nFigure 2-11. High altitude sectors.` on page 65 had no paired image."
+      "message": "Caption `Figure 2-13. Air Route Traffic Control Centers and sector frequencies.` on page 66 had no paired image."
     },
     {
-      "code": "caption-without-figure",
-      "section_code": "2",
-      "message": "Caption `Figure 2-11. High altitude sectors. \nFigure 2-12. Ultra high altitude sectors. \n` on page 65 had no paired image."
-    },
-    {
-      "code": "caption-without-figure",
-      "section_code": "2",
-      "message": "Caption `Figure 2-12. Ultra high altitude sectors. \nThe ARTCC at Fort Worth, Texas is sub` on page 65 had no paired image."
-    },
-    {
+      "id": "8eec124842ddd325",
       "code": "caption-without-figure",
       "section_code": "2",
       "message": "Caption `Figure 2-20. Chart Supplement (NE), Tower En Route Control route descriptions (B` on page 72 had no paired image."
     },
     {
+      "id": "701dd4923b885017",
       "code": "caption-without-figure",
       "section_code": "2",
       "message": "Caption `Figure 2-21. Chart Supplement (NE), Tower En Route Control route descriptions (A` on page 72 had no paired image."
     },
     {
+      "id": "a4b62e37ce11548f",
       "code": "caption-without-figure",
       "section_code": "2",
       "message": "Caption `Figure 2-22. Chart Supplement (NE), Tower En Route Control route descriptions (A` on page 73 had no paired image."
     },
     {
+      "id": "3ce3ddf461d31fb4",
       "code": "caption-without-figure",
       "section_code": "2",
-      "message": "Caption `Figure 2-23. Low frequency airway G13. \naltitude chart, IFR en route high altitu` on page 73 had no paired image."
+      "message": "Caption `Figure 2-23. Low frequency airway G13.` on page 73 had no paired image."
     },
     {
+      "id": "ece25b25f6330722",
       "code": "caption-without-figure",
       "section_code": "2",
-      "message": "Caption `Figure 2-24. IFR en route low altitude (left) and high altitude (right) charts. ` on page 74 had no paired image."
+      "message": "Caption `Figure 2-26. Victor airways.` on page 75 had no paired image."
     },
     {
+      "id": "0b7b11de23ae5f3d",
       "code": "caption-without-figure",
       "section_code": "2",
-      "message": "Caption `Figure 2-26. Victor airways. \nFigure 2-27. LF/MF airways. \nE \nVALENTINE \nMiller ` on page 75 had no paired image."
+      "message": "Caption `Figure 2-27. LF/MF airways.` on page 75 had no paired image."
     },
     {
+      "id": "456d5fa83b330eac",
       "code": "caption-without-figure",
       "section_code": "2",
-      "message": "Caption `Figure 2-27. LF/MF airways. \nE \nVALENTINE \nMiller Fld \n(VTN) \n2596 \n47\nL \nVALENT` on page 75 had no paired image."
+      "message": "Caption `Figure 2-29. Low altitude RNAV route data.` on page 76 had no paired image."
     },
     {
+      "id": "22c85ff96f266591",
       "code": "caption-without-figure",
       "section_code": "2",
-      "message": "Caption `Figure 2-29. Low altitude RNAV route data. \nand communications reception. All ME` on page 76 had no paired image."
+      "message": "Caption `Figure 2-30. Joint Victor/RNAV airway.` on page 76 had no paired image."
     },
     {
+      "id": "3338ce2166cb70a4",
       "code": "caption-without-figure",
       "section_code": "2",
-      "message": "Caption `Figure 2-30. Joint Victor/RNAV airway. \n2-16` on page 76 had no paired image."
+      "message": "Caption `Figure 2-31. IFR en route high altitude chart.` on page 77 had no paired image."
     },
     {
+      "id": "497f3afd19b16f6d",
       "code": "caption-without-figure",
       "section_code": "2",
-      "message": "Caption `Figure 2-32. Navigation reference system (NRS) waypoints. \nW122°\nN40° \n264\n247\nJ` on page 77 had no paired image."
+      "message": "Caption `Figure 2-32. Navigation reference system (NRS) waypoints.` on page 77 had no paired image."
     },
     {
+      "id": "e31a7aacd091e2ed",
       "code": "caption-without-figure",
       "section_code": "2",
-      "message": "Caption `Figure 2-33. High altitude jet routes. \n2-17` on page 77 had no paired image."
+      "message": "Caption `Figure 2-33. High altitude jet routes.` on page 77 had no paired image."
     },
     {
+      "id": "3ea29ef62f6b4726",
       "code": "caption-without-figure",
       "section_code": "2",
-      "message": "Caption `Figure 2-34. MEAs on RNAV (Q) routes. \nQ5 \nQ3 \nQ1 \nMEA-24000D\n1300-06002\n1300-06` on page 78 had no paired image."
+      "message": "Caption `Figure 2-34. MEAs on RNAV (Q) routes.` on page 78 had no paired image."
     },
     {
+      "id": "6909931b6b3cd37c",
       "code": "caption-without-figure",
       "section_code": "2",
-      "message": "Caption `Figure 2-35. Joint jet/RNAV routes. \nshown originating from a waypoint, fix/repo` on page 78 had no paired image."
+      "message": "Caption `Figure 2-35. Joint jet/RNAV routes.` on page 78 had no paired image."
     },
     {
+      "id": "bc4c3b120bb9b7c7",
       "code": "caption-without-figure",
       "section_code": "2",
-      "message": "Caption `Figure 2-36. Zanesville VOR/Victor Airway 214. \n5° \nNBD \n4.34 NM \n49.66 NM \nNBD\n` on page 79 had no paired image."
+      "message": "Caption `Figure 2-37. LF/MR airway width.` on page 79 had no paired image."
     },
     {
+      "id": "9f8915f46b870584",
       "code": "caption-without-figure",
       "section_code": "2",
-      "message": "Caption `Figure 2-37. LF/MR airway width. \nfactor. The pilot/aircraft information compone` on page 79 had no paired image."
+      "message": "Caption `Figure 2-38. Primary obstacle clearance area.` on page 79 had no paired image."
     },
     {
+      "id": "37ac29c0799e0184",
       "code": "caption-without-figure",
       "section_code": "2",
-      "message": "Caption `Figure 2-38. Primary obstacle clearance area. \n2-19` on page 79 had no paired image."
+      "message": "Caption `Figure 2-40. Secondary obstacle clearance area.` on page 80 had no paired image."
     },
     {
+      "id": "fd7a8694fdb70e94",
       "code": "caption-without-figure",
       "section_code": "2",
-      "message": "Caption `Figure 2-41. Primary and secondary obstacle clearance area. \n±6.7° angle from th` on page 80 had no paired image."
+      "message": "Caption `Figure 2-50. VOR test facilities (VOT) frequencies.` on page 90 had no paired image."
     },
     {
+      "id": "998ea714ce635d85",
       "code": "caption-without-figure",
       "section_code": "2",
-      "message": "Caption `Figure 2-40. Secondary obstacle clearance area. \n2-20` on page 80 had no paired image."
+      "message": "Caption `Figure 2-51. VOR checkpoint signs.` on page 90 had no paired image."
     },
     {
+      "id": "8df604fa7d494dcd",
       "code": "caption-without-figure",
       "section_code": "2",
-      "message": "Caption `Figure 2-46. Excerpt of authorized areas of en route operation. \nSAMPLE NOT FOR ` on page 86 had no paired image."
+      "message": "Caption `Figure 2-52. Instrument panel with dual VORs.` on page 91 had no paired image."
     },
     {
+      "id": "1159b1748779c391",
       "code": "caption-without-figure",
       "section_code": "2",
-      "message": "Caption `Figure 2-49. Notice the en route chart excerpt depicting \nthat the MEA is establ` on page 89 had no paired image."
+      "message": "Caption `Figure 2-60. Turning area at the intersection fix with NAVAID distance less than` on page 97 had no paired image."
     },
     {
+      "id": "ec8417ff7560068d",
       "code": "caption-without-figure",
       "section_code": "2",
-      "message": "Caption `Figure 2-49. \nThe navigation gap area is not identified on the chart \nby distanc` on page 89 had no paired image."
+      "message": "Caption `Figure 2-62. Minimum crossing altitude (MCA).` on page 99 had no paired image."
     },
     {
+      "id": "70fb10b5bf7dd10d",
       "code": "caption-without-figure",
       "section_code": "2",
-      "message": "Caption `Figure 2-52. Instrument panel with dual VORs. \n2-31` on page 91 had no paired image."
+      "message": "Caption `Figure 2-63. Minimum crossing altitude (MCA) determination point.` on page 99 had no paired image."
     },
     {
+      "id": "d3e139e9fc376c68",
       "code": "caption-without-figure",
       "section_code": "2",
-      "message": "Caption `Figure 2-53. Fly-by and fly-over waypoints. \nFly-by waypoint \nFly-over waypoint ` on page 92 had no paired image."
+      "message": "Caption `Figure 2-72. Clearance limit holding.` on page 110 had no paired image."
     },
     {
+      "id": "d271e484251f403d",
       "code": "caption-without-figure",
       "section_code": "2",
-      "message": "Caption `Figure 2-56. Other RNP levels as \nidentified by ICAO, other states, and the FAA ` on page 95 had no paired image."
+      "message": "Caption `Figure 2-73. Maximum holding speeds for different altitudes.` on page 111 had no paired image."
     },
     {
-      "code": "caption-without-figure",
-      "section_code": "2",
-      "message": "Caption `Figure 2-61. Minimum turning altitude information located in the remarks section` on page 98 had no paired image."
-    },
-    {
-      "code": "caption-without-figure",
-      "section_code": "2",
-      "message": "Caption `Figure 2-63. Minimum crossing altitude (MCA) determination point. \n2-39` on page 99 had no paired image."
-    },
-    {
-      "code": "caption-without-figure",
-      "section_code": "2",
-      "message": "Caption `Figure 2-64. En route chart minimum crossing altitude data (outside of the U.S.)` on page 100 had no paired image."
-    },
-    {
-      "code": "caption-without-figure",
-      "section_code": "2",
-      "message": "Caption `Figure 2-70. Holding pattern design criteria template. \n2-49` on page 109 had no paired image."
-    },
-    {
-      "code": "caption-without-figure",
-      "section_code": "2",
-      "message": "Caption `Figure 2-73. Maximum holding speeds for different altitudes. \n17,000 feet at the` on page 111 had no paired image."
-    },
-    {
+      "id": "af1c179a4b713925",
       "code": "figure-without-caption",
       "section_code": "2",
-      "message": "Image on page 66 (index 1) had no paired caption."
+      "message": "Image on page 63 (index 0) had no paired caption."
     },
     {
-      "code": "figure-without-caption",
-      "section_code": "2",
-      "message": "Image on page 66 (index 2) had no paired caption."
-    },
-    {
+      "id": "ac2d71ba456ee759",
       "code": "figure-without-caption",
       "section_code": "2",
       "message": "Image on page 68 (index 1) had no paired caption."
     },
     {
+      "id": "ff851c5ebc1c1da6",
       "code": "figure-without-caption",
       "section_code": "2",
-      "message": "Image on page 82 (index 1) had no paired caption."
+      "message": "Image on page 76 (index 0) had no paired caption."
     },
     {
-      "code": "figure-without-caption",
-      "section_code": "2",
-      "message": "Image on page 82 (index 2) had no paired caption."
-    },
-    {
+      "id": "d50898171032b777",
       "code": "figure-without-caption",
       "section_code": "2",
       "message": "Image on page 84 (index 1) had no paired caption."
     },
     {
-      "code": "figure-without-caption",
-      "section_code": "2",
-      "message": "Image on page 87 (index 1) had no paired caption."
-    },
-    {
-      "code": "figure-without-caption",
-      "section_code": "2",
-      "message": "Image on page 93 (index 1) had no paired caption."
-    },
-    {
+      "id": "417149187614a6f1",
       "code": "figure-without-caption",
       "section_code": "2",
       "message": "Image on page 93 (index 2) had no paired caption."
     },
     {
+      "id": "6585f9f8759aa59e",
       "code": "figure-without-caption",
       "section_code": "2",
       "message": "Image on page 93 (index 3) had no paired caption."
     },
     {
+      "id": "c9492ffa51a33ce5",
+      "code": "figure-without-caption",
+      "section_code": "2",
+      "message": "Image on page 97 (index 1) had no paired caption."
+    },
+    {
+      "id": "bdce03c909928d10",
       "code": "figure-without-caption",
       "section_code": "2",
       "message": "Image on page 102 (index 1) had no paired caption."
     },
     {
+      "id": "5b3c11c33e3631bd",
       "code": "figure-without-caption",
       "section_code": "2",
       "message": "Image on page 102 (index 2) had no paired caption."
     },
     {
+      "id": "9fc95711ce930bf4",
       "code": "figure-without-caption",
       "section_code": "2",
       "message": "Image on page 102 (index 3) had no paired caption."
     },
     {
+      "id": "02468426951142e9",
       "code": "figure-without-caption",
       "section_code": "2",
       "message": "Image on page 102 (index 4) had no paired caption."
     },
     {
-      "code": "figure-without-caption",
-      "section_code": "2",
-      "message": "Image on page 102 (index 5) had no paired caption."
-    },
-    {
+      "id": "6228f3e6194f68d7",
       "code": "figure-without-caption",
       "section_code": "2",
       "message": "Image on page 104 (index 2) had no paired caption."
     },
     {
+      "id": "61443f8b18b44614",
       "code": "figure-without-caption",
       "section_code": "2",
       "message": "Image on page 104 (index 3) had no paired caption."
     },
     {
+      "id": "e366107a64c3e359",
       "code": "caption-without-figure",
       "section_code": "3",
-      "message": "Caption `Figure 3-5. WAAS data provide lateral and vertical guidance. \nNote:  WAAS makes ` on page 118 had no paired image."
+      "message": "Caption `depicted in Figure 3-7. Item 1 is the pressure altitude from  which the descent ` on page 118 had no paired image."
     },
     {
+      "id": "9c12fa4ff0d5990b",
       "code": "caption-without-figure",
       "section_code": "3",
-      "message": "Caption `Figure 3-7. Item 1 is the pressure altitude from \nwhich the descent begins; item` on page 118 had no paired image."
+      "message": "Caption `Figure 3-6. RNAV (GPS) approach.` on page 119 had no paired image."
     },
     {
+      "id": "80c629bfb4dc07d5",
       "code": "caption-without-figure",
       "section_code": "3",
-      "message": "Caption `Figure 3-7. Jet descent task. \nPressure Altitude \n(1,000 feet) \nNote: Subtract 3` on page 120 had no paired image."
+      "message": "Caption `Figure 3-7. Jet descent task.` on page 120 had no paired image."
     },
     {
+      "id": "02dec8db90bfb189",
       "code": "caption-without-figure",
       "section_code": "3",
-      "message": "Caption `Figure 3-8. The descent planning task. \n3-8` on page 120 had no paired image."
+      "message": "Caption `Figure 3-8. The descent planning task.` on page 120 had no paired image."
     },
     {
+      "id": "8c18d82cf888f3e9",
       "code": "caption-without-figure",
       "section_code": "3",
-      "message": "Caption `Figure 3-15. Two RNAV (GPS) approaches to Runway 15R at Baltimore. A controller ` on page 130 had no paired image."
+      "message": "Caption `Figure 3-20. Cleared for the Palm Beach ILS approach.` on page 135 had no paired image."
     },
     {
+      "id": "97477b03fde28464",
       "code": "caption-without-figure",
       "section_code": "3",
-      "message": "Caption `Figure 3-20. Cleared for the Palm Beach ILS approach. \n3-23` on page 135 had no paired image."
+      "message": "Caption `Figure 3-21. Arrival instructions when established.` on page 136 had no paired image."
     },
     {
+      "id": "c70c4e59832733d7",
       "code": "caption-without-figure",
       "section_code": "3",
-      "message": "Caption `Figure 3-21. Arrival instructions when established. \n25 \nIAF \nIAF \n2 \n1 \n3 \nLIMA` on page 136 had no paired image."
+      "message": "Caption `in the following examples as depicted in Figure 3-21.` on page 137 had no paired image."
     },
     {
+      "id": "b24f648409737054",
       "code": "caption-without-figure",
       "section_code": "3",
-      "message": "Caption `Figure 3-21. \nAircraft 1 was vectored to the final approach course \nbut clearanc` on page 137 had no paired image."
+      "message": "Caption `Figure 3-22. Arrival instructions when not established.` on page 137 had no paired image."
     },
     {
+      "id": "373f4dbb9dcaa1a7",
       "code": "caption-without-figure",
       "section_code": "3",
-      "message": "Caption `Figure 3-22. Arrival instructions when not established. \n4000 \n12 DME \nALPHA \nIA` on page 137 had no paired image."
+      "message": "Caption `Figure 3-27. Special airports and comments.` on page 138 had no paired image."
     },
     {
-      "code": "caption-without-figure",
-      "section_code": "3",
-      "message": "Caption `Figure 3-27. Special airports and comments. \n3-26` on page 138 had no paired image."
-    },
-    {
+      "id": "0319c56e6d24e7bd",
       "code": "figure-without-caption",
       "section_code": "3",
       "message": "Image on page 115 (index 1) had no paired caption."
     },
     {
+      "id": "1be0e6eb2a70b43d",
       "code": "figure-without-caption",
       "section_code": "3",
       "message": "Image on page 122 (index 1) had no paired caption."
     },
     {
+      "id": "9b597c41a826d7f9",
       "code": "figure-without-caption",
       "section_code": "3",
       "message": "Image on page 132 (index 1) had no paired caption."
     },
     {
-      "code": "figure-without-caption",
-      "section_code": "3",
-      "message": "Image on page 132 (index 2) had no paired caption."
-    },
-    {
+      "id": "d1efaec5c88cbb88",
       "code": "figure-without-caption",
       "section_code": "3",
       "message": "Image on page 132 (index 3) had no paired caption."
     },
     {
+      "id": "68dcf79b607ca293",
       "code": "figure-without-caption",
       "section_code": "3",
       "message": "Image on page 133 (index 1) had no paired caption."
     },
     {
+      "id": "94e2bdd2f17a26c2",
       "code": "caption-without-figure",
       "section_code": "4",
-      "message": "Caption `Figure 4-2. \n4-8` on page 148 had no paired image."
+      "message": "Caption `shown in Figure 4-2.` on page 148 had no paired image."
     },
     {
+      "id": "2d738433a1f7c035",
       "code": "caption-without-figure",
       "section_code": "4",
-      "message": "Caption `Figure 4-2. Construction of circling approach area. \nA minimum of 300 feet of ob` on page 149 had no paired image."
+      "message": "Caption `Figure 4-13. GBAS architecture.` on page 165 had no paired image."
     },
     {
+      "id": "a790890e24ae9017",
       "code": "caption-without-figure",
       "section_code": "4",
-      "message": "Caption `Figure 4-13. GBAS architecture. \n4-25` on page 165 had no paired image."
+      "message": "Caption `Figure 4-18. Explanation of Minima.` on page 171 had no paired image."
     },
     {
+      "id": "20d5a68f8ca5027d",
       "code": "caption-without-figure",
       "section_code": "4",
-      "message": "Caption `Figure 4-15. \nIn the United States, operators who seek to take advantage \nof RNP` on page 170 had no paired image."
+      "message": "Caption `Figure 4-19. Airport sketch and diagram for Chicago O'Hare International.` on page 172 had no paired image."
     },
     {
+      "id": "a55f51d93e5e31fd",
       "code": "caption-without-figure",
       "section_code": "4",
-      "message": "Caption `Figure 4-19. Airport sketch and diagram for Chicago O'Hare International. \n4-32` on page 172 had no paired image."
+      "message": "Caption `can be seen in the notes section in Figure 4-16.` on page 173 had no paired image."
     },
     {
+      "id": "b88a6fe08d3d4d21",
       "code": "caption-without-figure",
       "section_code": "4",
-      "message": "Caption `Figure 4-16. \nIn response to aviation industry concerns over cold weather \naltim` on page 173 had no paired image."
+      "message": "Caption `Figure 4-21. Determination of visibility minimums.` on page 179 had no paired image."
     },
     {
+      "id": "3df871c3453b81ee",
       "code": "caption-without-figure",
       "section_code": "4",
-      "message": "Caption `Figure 4-21. Determination of visibility minimums. \nsuch as precision, non-preci` on page 179 had no paired image."
+      "message": "Caption `Figure 4-22. RNAV approach Fort Campbell, Kentucky.` on page 180 had no paired image."
     },
     {
+      "id": "acef3ff5354f3d3d",
       "code": "caption-without-figure",
       "section_code": "4",
-      "message": "Caption `Figure 4-22. RNAV approach Fort Campbell, Kentucky. \nnormal rate of descent usin` on page 180 had no paired image."
+      "message": "Caption `segment of an approach procedure as shown in Figure 4-28.` on page 182 had no paired image."
     },
     {
+      "id": "6363eaafdcc50f07",
       "code": "caption-without-figure",
       "section_code": "4",
-      "message": "Caption `Figure 4-28. \nFeeder Routes \nBy definition, a feeder route is a route depicted o` on page 182 had no paired image."
+      "message": "Caption `Figure 4-31. DME arc obstruction clearance.` on page 193 had no paired image."
     },
     {
+      "id": "b1bf2d382b0b3237",
       "code": "caption-without-figure",
       "section_code": "4",
-      "message": "Caption `Figure 4-28. Approach segments and obstacle clearance. \ninterception at that alt` on page 190 had no paired image."
+      "message": "Caption `Figure 4-32. Course reversal methods.` on page 194 had no paired image."
     },
     {
+      "id": "0a45ce3ba13ebd8c",
       "code": "caption-without-figure",
       "section_code": "4",
-      "message": "Caption `Figure 4-32. Course reversal methods. \n2 NM outside the approach gate. Exception` on page 194 had no paired image."
+      "message": "Caption `Figure 4-42. Category III approach procedure.` on page 211 had no paired image."
     },
     {
+      "id": "9054a4d35250604e",
       "code": "caption-without-figure",
       "section_code": "4",
-      "message": "Caption `Figure 4-33. Procedure turn obstacle clearance. \n10,212 - with additional proced` on page 195 had no paired image."
+      "message": "Caption `Figure 4-54. Carthage/Panola County-Sharpe Field, Carthage, Texas, (K4F2), NDB R` on page 224 had no paired image."
     },
     {
-      "code": "caption-without-figure",
-      "section_code": "4",
-      "message": "Caption `Figure 4-41. ILS approach categories. \n4-70` on page 210 had no paired image."
-    },
-    {
-      "code": "caption-without-figure",
-      "section_code": "4",
-      "message": "Caption `Figure 4-43. Classification of Simultaneous Parallel Approaches. \n4-72` on page 212 had no paired image."
-    },
-    {
-      "code": "caption-without-figure",
-      "section_code": "4",
-      "message": "Caption `Figure 4-47. Simultaneous independent close parallel approach example using ILS ` on page 216 had no paired image."
-    },
-    {
-      "code": "caption-without-figure",
-      "section_code": "4",
-      "message": "Caption `Figure 4-49. Example of Approach and AAUP used for Simultaneous Offset Instrumen` on page 219 had no paired image."
-    },
-    {
-      "code": "caption-without-figure",
-      "section_code": "4",
-      "message": "Caption `Figure 4-55. Tucson/Ryan Field, Tuscson, Arizona, (KRYN), NDB/DME or GPS RWY 6R.` on page 225 had no paired image."
-    },
-    {
+      "id": "830439f286a24437",
       "code": "figure-without-caption",
       "section_code": "4",
-      "message": "Image on page 151 (index 1) had no paired caption."
+      "message": "Image on page 152 (index 0) had no paired caption."
     },
     {
-      "code": "figure-without-caption",
-      "section_code": "4",
-      "message": "Image on page 152 (index 1) had no paired caption."
-    },
-    {
+      "id": "3447cfac577bb53f",
       "code": "figure-without-caption",
       "section_code": "4",
       "message": "Image on page 153 (index 2) had no paired caption."
     },
     {
+      "id": "c7203b0cdaf5fc88",
       "code": "figure-without-caption",
       "section_code": "4",
       "message": "Image on page 153 (index 3) had no paired caption."
     },
     {
+      "id": "c1cd299516d64f50",
       "code": "figure-without-caption",
       "section_code": "4",
       "message": "Image on page 160 (index 0) had no paired caption."
     },
     {
+      "id": "4a4253899dadada6",
       "code": "figure-without-caption",
       "section_code": "4",
       "message": "Image on page 161 (index 0) had no paired caption."
     },
     {
+      "id": "b2d37599ca474e42",
       "code": "figure-without-caption",
       "section_code": "4",
       "message": "Image on page 161 (index 1) had no paired caption."
     },
     {
+      "id": "b7d9656b84263433",
       "code": "figure-without-caption",
       "section_code": "4",
       "message": "Image on page 186 (index 1) had no paired caption."
     },
     {
+      "id": "422e2608fde2c07a",
       "code": "figure-without-caption",
       "section_code": "4",
       "message": "Image on page 186 (index 2) had no paired caption."
     },
     {
+      "id": "a8edd171a176bf64",
       "code": "figure-without-caption",
       "section_code": "4",
-      "message": "Image on page 197 (index 0) had no paired caption."
+      "message": "Image on page 214 (index 1) had no paired caption."
     },
     {
-      "code": "figure-without-caption",
-      "section_code": "4",
-      "message": "Image on page 214 (index 2) had no paired caption."
-    },
-    {
+      "id": "e4ff2eb0534f1235",
       "code": "figure-without-caption",
       "section_code": "4",
       "message": "Image on page 217 (index 1) had no paired caption."
     },
     {
+      "id": "657b6446e5cc790d",
       "code": "figure-without-caption",
       "section_code": "4",
       "message": "Image on page 217 (index 2) had no paired caption."
     },
     {
+      "id": "5068279cf67858df",
       "code": "figure-without-caption",
       "section_code": "4",
-      "message": "Image on page 217 (index 3) had no paired caption."
+      "message": "Image on page 220 (index 0) had no paired caption."
     },
     {
+      "id": "20638db3ce09d581",
+      "code": "figure-without-caption",
+      "section_code": "4",
+      "message": "Image on page 226 (index 0) had no paired caption."
+    },
+    {
+      "id": "db5c5230dacdd0ab",
       "code": "figure-without-caption",
       "section_code": "4",
       "message": "Image on page 226 (index 2) had no paired caption."
     },
     {
+      "id": "461cc28bf9e6e78e",
       "code": "caption-without-figure",
       "section_code": "5",
-      "message": "Caption `Figure 5-1. Next Generation Air Transportation System (NEXGEN) introduces new te` on page 234 had no paired image."
+      "message": "Caption `Figure 5-3. Automatic Dependent Surveillance-Broadcast (ADS-B)  systems.` on page 235 had no paired image."
     },
     {
+      "id": "26390033bc628ce0",
       "code": "caption-without-figure",
       "section_code": "5",
       "message": "Caption `Figure 5-4. System wide information management (SWIM)—an information management ` on page 236 had no paired image."
     },
     {
+      "id": "453992715e5919a8",
       "code": "caption-without-figure",
       "section_code": "5",
       "message": "Caption `Figure 5-5. Next generation data communications provides an additional means of ` on page 236 had no paired image."
     },
     {
+      "id": "35ee6463a8e93334",
       "code": "caption-without-figure",
       "section_code": "5",
       "message": "Caption `Figure 5-6. Next generation network enabled weather (NNEW) provides a common wea` on page 237 had no paired image."
     },
     {
+      "id": "c069156b84c6f4e7",
       "code": "caption-without-figure",
       "section_code": "5",
-      "message": "Caption `Figure 5-7. National airspace voice switch (NVS) will replace \nexisting voice sw` on page 237 had no paired image."
+      "message": "Caption `Figure 5-7. National airspace voice switch (NVS) will replace  existing voice sw` on page 237 had no paired image."
     },
     {
+      "id": "e9290083a6e29380",
       "code": "caption-without-figure",
       "section_code": "5",
       "message": "Caption `Figure 5-8. ADS-B services provide real-time precise positioning capability to A` on page 237 had no paired image."
     },
     {
+      "id": "a0cd03250663a047",
       "code": "caption-without-figure",
       "section_code": "5",
-      "message": "Caption `Figure 5-9. Wide Area Augmentation System (WAAS). \nmore safety benefits such as ` on page 238 had no paired image."
+      "message": "Caption `Figure 5-11. NextGen improves airport surface movements, reduces  spacing and se` on page 239 had no paired image."
     },
     {
+      "id": "7f275f16eab0d05f",
       "code": "caption-without-figure",
       "section_code": "5",
-      "message": "Caption `Figure 5-12. Head-up guidance system (HGS). \nFigure 5-13. HGS using a holographi` on page 240 had no paired image."
+      "message": "Caption `Figure 5-13. HGS using a holographic display.` on page 240 had no paired image."
     },
     {
+      "id": "b00b9b0facec7f9e",
       "code": "caption-without-figure",
       "section_code": "5",
-      "message": "Caption `Figure 5-13. HGS using a holographic display. \ndeveloped. By showing airspeed, a` on page 240 had no paired image."
+      "message": "Caption `Figure 5-14. A synthetic vision system (SVS) is an electronic means to  display ` on page 240 had no paired image."
     },
     {
+      "id": "aab636dba1567798",
       "code": "caption-without-figure",
       "section_code": "5",
-      "message": "Caption `Figure 5-14. A synthetic vision system (SVS) is an electronic means to \ndisplay ` on page 240 had no paired image."
+      "message": "Caption `Figure 5-15. An aircraft on an approach equipped with a SVS.` on page 240 had no paired image."
     },
     {
+      "id": "fe5b2fb34883006e",
       "code": "caption-without-figure",
       "section_code": "5",
-      "message": "Caption `Figure 5-15. An aircraft on an approach equipped with a SVS. \nSynthetic and Enha` on page 240 had no paired image."
+      "message": "Caption `Figure 5-16. Enhanced and synthetic vision displayed on primary  flight displays` on page 241 had no paired image."
     },
     {
+      "id": "f5bf6e91a9ccf689",
       "code": "caption-without-figure",
       "section_code": "5",
-      "message": "Caption `Figure 5-18. Portable flight bag. \nFigure 5-19. Installed flight bag. \nCombined ` on page 241 had no paired image."
+      "message": "Caption `Figure 5-18. Portable flight bag.` on page 241 had no paired image."
     },
     {
+      "id": "a039ae5e44c75ea4",
       "code": "caption-without-figure",
       "section_code": "5",
-      "message": "Caption `Figure 5-19. Installed flight bag. \nCombined Vision System Technology \nThe FAA’s` on page 241 had no paired image."
+      "message": "Caption `Figure 5-19. Installed flight bag.` on page 241 had no paired image."
     },
     {
+      "id": "a2d367056a9b1635",
       "code": "caption-without-figure",
       "section_code": "5",
-      "message": "Caption `Figure 5-27. Restricted airspace. \nFigure 5-28. Prohibited airspace. \nFigure 5-2` on page 242 had no paired image."
+      "message": "Caption `Figure 5-27. Restricted airspace.` on page 242 had no paired image."
     },
     {
+      "id": "40ed7b08c22a0ac5",
       "code": "caption-without-figure",
       "section_code": "5",
-      "message": "Caption `Figure 5-28. Prohibited airspace. \nFigure 5-29. Military operations area (MOA). ` on page 242 had no paired image."
+      "message": "Caption `Figure 5-28. Prohibited airspace.` on page 242 had no paired image."
     },
     {
+      "id": "68a32f0ddfb3b8b8",
       "code": "caption-without-figure",
       "section_code": "5",
-      "message": "Caption `Figure 5-29. Military operations area (MOA). \nFigure 5-30. Warning area. \nhardwa` on page 242 had no paired image."
+      "message": "Caption `Figure 5-29. Military operations area (MOA).` on page 242 had no paired image."
     },
     {
+      "id": "3f472de982de60ff",
       "code": "caption-without-figure",
       "section_code": "5",
-      "message": "Caption `Figure 5-30. Warning area. \nhardware device hosts and actively displays either T` on page 242 had no paired image."
+      "message": "Caption `Figure 5-30. Warning area.` on page 242 had no paired image."
     },
     {
+      "id": "edd4fe7bd5d80196",
       "code": "caption-without-figure",
       "section_code": "5",
-      "message": "Caption `Figure 5-31. Alert area. \nauthorization as appropriate. The most current edition` on page 243 had no paired image."
+      "message": "Caption `Figure 5-31. Alert area.` on page 243 had no paired image."
     },
     {
+      "id": "a5152af2c20bca76",
       "code": "caption-without-figure",
       "section_code": "5",
-      "message": "Caption `Figure 5-32. Temporary flight restriction (TFR). \nprocess. Warning areas, MOAs, ` on page 243 had no paired image."
+      "message": "Caption `Figure 5-32. Temporary flight restriction (TFR).` on page 243 had no paired image."
     },
     {
+      "id": "e70cf7471cdb776f",
       "code": "caption-without-figure",
       "section_code": "5",
-      "message": "Caption `Figure 5-33. Special use airspace charted on an aeronautical chart. \nuse airspac` on page 244 had no paired image."
+      "message": "Caption `Figure 5-33. Special use airspace charted on an aeronautical chart.` on page 244 had no paired image."
     },
     {
+      "id": "a6edb261e4a8e5f4",
       "code": "caption-without-figure",
       "section_code": "5",
       "message": "Caption `Figure 5-34. FAA website providing information for both special use airspace and` on page 245 had no paired image."
     },
     {
+      "id": "fe2f1c2cab868eed",
       "code": "caption-without-figure",
       "section_code": "5",
       "message": "Caption `Figure 5-35. Center locations and information available to pilots through the FA` on page 246 had no paired image."
     },
     {
+      "id": "730bce3c95f9e6f3",
       "code": "caption-without-figure",
       "section_code": "5",
-      "message": "Caption `Figure 5-36. State information available to pilots through the FAA website. \n5-1` on page 247 had no paired image."
+      "message": "Caption `Figure 5-36. State information available to pilots through the FAA website.` on page 247 had no paired image."
     },
     {
+      "id": "7dbddc413a1e9ed0",
       "code": "caption-without-figure",
       "section_code": "5",
       "message": "Caption `Figure 5-37. Map layer options and information available to pilots through the F` on page 248 had no paired image."
     },
     {
+      "id": "d8b9ddcea81192d6",
       "code": "caption-without-figure",
       "section_code": "5",
-      "message": "Caption `Figure 5-38. Airport information available to pilots through the FAA website. \n5` on page 249 had no paired image."
+      "message": "Caption `Figure 5-38. Airport information available to pilots through the FAA website.` on page 249 had no paired image."
     },
     {
+      "id": "29f10e46e870e500",
+      "code": "figure-without-caption",
+      "section_code": "5",
+      "message": "Image on page 235 (index 1) had no paired caption."
+    },
+    {
+      "id": "f8c7be112b8e4e5a",
+      "code": "figure-without-caption",
+      "section_code": "5",
+      "message": "Image on page 241 (index 0) had no paired caption."
+    },
+    {
+      "id": "7b65c72a01c1f48a",
       "code": "caption-without-figure",
       "section_code": "6",
-      "message": "Caption `Figure 6-1. Area navigation (RNAV) receivers. \nThe capabilities of airborne navi` on page 252 had no paired image."
+      "message": "Caption `Figure 6-2. GPS with a flight route on display.` on page 253 had no paired image."
     },
     {
+      "id": "2f2d909af2686a21",
       "code": "caption-without-figure",
       "section_code": "6",
-      "message": "Caption `Figure 6-3. FMS display. \n6-3` on page 253 had no paired image."
+      "message": "Caption `Figure 6-3. FMS display.` on page 253 had no paired image."
     },
     {
+      "id": "d0973b5b586c51c5",
       "code": "caption-without-figure",
       "section_code": "6",
-      "message": "Caption `Figure 6-4. Fly-by-waypoints and fly-over-waypoints. \nstrings of fix records and` on page 255 had no paired image."
+      "message": "Caption `Figure 6-4. Fly-by-waypoints and fly-over-waypoints.` on page 255 had no paired image."
     },
     {
+      "id": "15d1f2fe18051ae8",
       "code": "caption-without-figure",
       "section_code": "6",
-      "message": "Caption `Figure 6-5. Initial fix. \nFigure 6-7. Constant radius arc or RF leg. \nNext\nsegme` on page 256 had no paired image."
+      "message": "Caption `Figure 6-5. Initial fix.` on page 256 had no paired image."
     },
     {
+      "id": "bb9ca78a6624c2e2",
       "code": "caption-without-figure",
       "section_code": "6",
-      "message": "Caption `Figure 6-7. Constant radius arc or RF leg. \nNext\nsegment\nR\nF\nLE\nG \nARC \nCENTER \n` on page 256 had no paired image."
+      "message": "Caption `Figure 6-7. Constant radius arc or RF leg.` on page 256 had no paired image."
     },
     {
+      "id": "bc7c085487950520",
       "code": "caption-without-figure",
       "section_code": "6",
-      "message": "Caption `Figure 6-6. Track to a fix leg type. \nFigure 6-8. Course to a fix or CF leg. \nCF` on page 256 had no paired image."
+      "message": "Caption `Figure 6-6. Track to a fix leg type.` on page 256 had no paired image."
     },
     {
+      "id": "201976cd6a3876e5",
       "code": "caption-without-figure",
       "section_code": "6",
-      "message": "Caption `Figure 6-8. Course to a fix or CF leg. \nCF LEG\n080° \nCourse is flown making adju` on page 256 had no paired image."
+      "message": "Caption `Figure 6-8. Course to a fix or CF leg.` on page 256 had no paired image."
     },
     {
+      "id": "4f08efd49103d400",
       "code": "caption-without-figure",
       "section_code": "6",
-      "message": "Caption `Figure 6-9. Direct to a fix or DF leg. \nFigure 6-10. Fix to an altitude or FA le` on page 256 had no paired image."
+      "message": "Caption `Figure 6-9. Direct to a fix or DF leg.` on page 256 had no paired image."
     },
     {
+      "id": "191d44ca7a70716f",
       "code": "caption-without-figure",
       "section_code": "6",
-      "message": "Caption `Figure 6-10. Fix to an altitude or FA leg. \nFA LEG\n080° \nUnspecified position \n8` on page 256 had no paired image."
+      "message": "Caption `Figure 6-10. Fix to an altitude or FA leg.` on page 256 had no paired image."
     },
     {
+      "id": "06a6eee569e92461",
       "code": "caption-without-figure",
       "section_code": "6",
-      "message": "Caption `Figure 6-11. Track from a fix from a distance or FC leg. \nFC LEG \n9 NM\n080° \nFig` on page 257 had no paired image."
+      "message": "Caption `Figure 6-11. Track from a fix from a distance or FC leg.` on page 257 had no paired image."
     },
     {
+      "id": "28d960ec19917edc",
       "code": "caption-without-figure",
       "section_code": "6",
-      "message": "Caption `Figure 6-12. Track from a fix to a DME distance or FD leg. \nFD LEG \nD 10 \n080° \n` on page 257 had no paired image."
+      "message": "Caption `Figure 6-12. Track from a fix to a DME distance or FD leg.` on page 257 had no paired image."
     },
     {
+      "id": "ac2cac269a178857",
       "code": "caption-without-figure",
       "section_code": "6",
-      "message": "Caption `Figure 6-13. From a fix to a manual termination or FM leg. \nover the ground from` on page 257 had no paired image."
+      "message": "Caption `Figure 6-13. From a fix to a manual termination or FM leg.` on page 257 had no paired image."
     },
     {
+      "id": "87be44f72e3d6afe",
       "code": "caption-without-figure",
       "section_code": "6",
-      "message": "Caption `Figure 6-14. Course to an altitude or CA leg. \nCA LEG \n090° \nUnspecified positio` on page 257 had no paired image."
+      "message": "Caption `Figure 6-14. Course to an altitude or CA leg.` on page 257 had no paired image."
     },
     {
+      "id": "99d7a12b902f0bb3",
       "code": "caption-without-figure",
       "section_code": "6",
-      "message": "Caption `Figure 6-15. Course to a DME distance of CD leg. \nCD LEG \n090° \nD 10 \nFigure 6-1` on page 257 had no paired image."
+      "message": "Caption `Figure 6-15. Course to a DME distance of CD leg.` on page 257 had no paired image."
     },
     {
+      "id": "9375349f80e927a6",
       "code": "caption-without-figure",
       "section_code": "6",
-      "message": "Caption `Figure 6-16. Course to an intercept or CI leg. \nCI LEG \n090° \n070° \nNext leg \nFi` on page 257 had no paired image."
+      "message": "Caption `Figure 6-16. Course to an intercept or CI leg.` on page 257 had no paired image."
     },
     {
+      "id": "004e868b02b56bce",
       "code": "caption-without-figure",
       "section_code": "6",
-      "message": "Caption `Figure 6-17. Course to a radial termination or CR leg. \nCR LEG\n120° \n170° \n6-7` on page 257 had no paired image."
+      "message": "Caption `Figure 6-17. Course to a radial termination or CR leg.` on page 257 had no paired image."
     },
     {
+      "id": "0b4046cb1b47c710",
       "code": "caption-without-figure",
       "section_code": "6",
-      "message": "Caption `Figure 6-18. Arc to a fix or AF leg. \nBoundary radial \n245° \nD10\nA\nF\nLE\nG \nFigur` on page 258 had no paired image."
+      "message": "Caption `Figure 6-18. Arc to a fix or AF leg.` on page 258 had no paired image."
     },
     {
+      "id": "a5e0bc59b8cef370",
       "code": "caption-without-figure",
       "section_code": "6",
-      "message": "Caption `Figure 6-19. Heading to an altitude termination or VA leg. \nVA LEG \nUnspecified ` on page 258 had no paired image."
+      "message": "Caption `Figure 6-19. Heading to an altitude termination or VA leg.` on page 258 had no paired image."
     },
     {
+      "id": "6e740fdedaa758a7",
       "code": "caption-without-figure",
       "section_code": "6",
-      "message": "Caption `Figure 6-20. Heading to a DME distance termination or VD leg. \nFigure 6-21. Head` on page 258 had no paired image."
+      "message": "Caption `Figure 6-20. Heading to a DME distance termination or VD leg.` on page 258 had no paired image."
     },
     {
+      "id": "9c4df0cbbb13b755",
       "code": "caption-without-figure",
       "section_code": "6",
-      "message": "Caption `Figure 6-21. Heading to an intercept or VI leg. \nVI LEG \n090° \n070° \nNext leg \ns` on page 258 had no paired image."
+      "message": "Caption `Figure 6-21. Heading to an intercept or VI leg.` on page 258 had no paired image."
     },
     {
+      "id": "e391392cd2003c64",
       "code": "caption-without-figure",
       "section_code": "6",
-      "message": "Caption `Figure 6-22. Heading to a manual termination or VM leg. \nFigure 6-23. Heading to` on page 258 had no paired image."
+      "message": "Caption `Figure 6-22. Heading to a manual termination or VM leg.` on page 258 had no paired image."
     },
     {
+      "id": "b8ce5770f1b43c6b",
       "code": "caption-without-figure",
       "section_code": "6",
-      "message": "Caption `Figure 6-23. Heading to a radial termination or VR leg. \nVR LEG\n120° \n170° \n6-8` on page 258 had no paired image."
+      "message": "Caption `Figure 6-23. Heading to a radial termination or VR leg.` on page 258 had no paired image."
     },
     {
+      "id": "5c3a8622833d44a3",
       "code": "caption-without-figure",
       "section_code": "6",
-      "message": "Caption `Figure 6-24. Procedure turn or PI leg. \nPI \n063° \n018° \ndatabase VOR NAVAID. [Fi` on page 259 had no paired image."
+      "message": "Caption `Figure 6-25. Racetrack course reversal or HA, HF, and HM leg.` on page 259 had no paired image."
     },
     {
+      "id": "663d54e735fa1ed8",
       "code": "caption-without-figure",
       "section_code": "6",
-      "message": "Caption `Figure 6-25. Racetrack course reversal or HA, HF, and HM leg. \nHA, HF, HM \n076° ` on page 259 had no paired image."
+      "message": "Caption `Figure 6-26. Grand Junction Five Departure.` on page 260 had no paired image."
     },
     {
-      "code": "caption-without-figure",
-      "section_code": "6",
-      "message": "Caption `Figure 6-27. Channel One Departure. \n6-11` on page 261 had no paired image."
-    },
-    {
+      "id": "51229a24d8888edf",
       "code": "figure-without-caption",
       "section_code": "6",
       "message": "Image on page 263 (index 1) had no paired caption."
     },
     {
-      "code": "figure-without-caption",
-      "section_code": "6",
-      "message": "Image on page 263 (index 2) had no paired caption."
-    },
-    {
+      "id": "7e0dd80498cb83be",
       "code": "figure-without-caption",
       "section_code": "6",
       "message": "Image on page 263 (index 3) had no paired caption."
     },
     {
+      "id": "4e1aa196769c5642",
       "code": "figure-without-caption",
       "section_code": "6",
       "message": "Image on page 263 (index 4) had no paired caption."
     },
     {
+      "id": "57d11a74bc6def04",
       "code": "caption-without-figure",
       "section_code": "7",
-      "message": "Caption `Figure 7-1. Icing tests. To safely provide an all-weather capability \nand flight` on page 270 had no paired image."
+      "message": "Caption `Figure 7-1. Icing tests. To safely provide an all-weather capability  and flight` on page 270 had no paired image."
     },
     {
+      "id": "16095e574a9ab26b",
       "code": "caption-without-figure",
       "section_code": "7",
       "message": "Caption `Figure 7-2. VMINI limitations, maximum IFR approach angles and G/A mode speeds f` on page 272 had no paired image."
     },
     {
+      "id": "cccc94970a4ef5f7",
       "code": "caption-without-figure",
       "section_code": "7",
-      "message": "Caption `Figure 7-3. Autopilot bank angle and roll rate limits for the S-76 \nused by the ` on page 273 had no paired image."
+      "message": "Caption `Figure 7-3. Autopilot bank angle and roll rate limits for the S-76  used by the ` on page 273 had no paired image."
     },
     {
+      "id": "60c133271f8cebca",
       "code": "caption-without-figure",
       "section_code": "7",
-      "message": "Caption `Figure 7-4. Flight tests at the William J. Hughes Technical Center \npoint out th` on page 273 had no paired image."
+      "message": "Caption `Figure 7-4. Flight tests at the William J. Hughes Technical Center  point out th` on page 273 had no paired image."
     },
     {
+      "id": "3335310dd8b78fdd",
       "code": "caption-without-figure",
       "section_code": "7",
-      "message": "Caption `Figure 7-5. Operations Specifications. \n7-6` on page 274 had no paired image."
+      "message": "Caption `Figure 7-5. Operations Specifications.` on page 274 had no paired image."
     },
     {
+      "id": "6a5707316f1187a6",
       "code": "caption-without-figure",
       "section_code": "7",
-      "message": "Caption `Figure 7-6. Example of a Minimum Equipment List (MEL). \n7-7` on page 275 had no paired image."
+      "message": "Caption `Figure 7-6. Example of a Minimum Equipment List (MEL).` on page 275 had no paired image."
     },
     {
+      "id": "3ff7e4d525a3d0bd",
       "code": "caption-without-figure",
       "section_code": "7",
-      "message": "Caption `Figure 7-7. Helicopter VFR minimums. \nAirspace \nClass A \nClass B \nClass C \nClass` on page 276 had no paired image."
+      "message": "Caption `Figure 7-7. Helicopter VFR minimums.` on page 276 had no paired image."
     },
     {
+      "id": "32388ce182d15182",
       "code": "caption-without-figure",
       "section_code": "7",
-      "message": "Caption `Figure 7-8. Part 97 excerpt. \nCFR Part 97.3 (d-1) rule to reduce the airplane Ca` on page 277 had no paired image."
+      "message": "Caption `Figure 7-8. Part 97 excerpt.` on page 277 had no paired image."
     },
     {
+      "id": "d9c084f3a382733d",
       "code": "caption-without-figure",
       "section_code": "7",
-      "message": "Caption `Figure 7-9. Helicopter use of standard instrument approach procedures. \nProcedur` on page 277 had no paired image."
+      "message": "Caption `Figure 7-9. Helicopter use of standard instrument approach procedures.` on page 277 had no paired image."
     },
     {
+      "id": "397f2fbb59436f0b",
       "code": "caption-without-figure",
       "section_code": "7",
-      "message": "Caption `Figure 7-12. Obstacle clearance surface (OCS). \n7-13` on page 281 had no paired image."
+      "message": "Caption `Figure 7-12. Obstacle clearance surface (OCS).` on page 281 had no paired image."
     },
     {
+      "id": "0271f1e8f2b369f7",
       "code": "caption-without-figure",
       "section_code": "7",
       "message": "Caption `Figure 7-15. Point-in-space (PinS)  approach examples for Part 91 and Part 135 o` on page 284 had no paired image."
+    },
+    {
+      "id": "8d77e64bf52cb5c3",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "1",
+      "message": "Table on page 18 kept as HTML fallback: no body rows after padding strip."
+    },
+    {
+      "id": "158ebe0f7af9675e",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "1",
+      "message": "Table on page 21 kept as HTML fallback: no body rows after padding strip."
+    },
+    {
+      "id": "158ebe0f7af9675e",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "1",
+      "message": "Table on page 21 kept as HTML fallback: no body rows after padding strip."
+    },
+    {
+      "id": "18a9fe116bada109",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "1",
+      "message": "Table on page 26 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "c24bf20ab9c342de",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "1",
+      "message": "Table on page 29 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "138ae14da1a17ce0",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "1",
+      "message": "Table on page 31 kept as HTML fallback: no body rows after padding strip."
+    },
+    {
+      "id": "764ff62e5ef9b27e",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "1",
+      "message": "Table on page 32 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "764ff62e5ef9b27e",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "1",
+      "message": "Table on page 32 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "e7f492f0d8d4a823",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "1",
+      "message": "Table on page 34 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "d80c15b06d12a904",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "1",
+      "message": "Table on page 35 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "87ec0f0a1a970f91",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "1",
+      "message": "Table on page 37 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "8e7ade2cd08307bc",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "1",
+      "message": "Table on page 44 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "114bd107f093ac4f",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "1",
+      "message": "Table on page 47 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "114bd107f093ac4f",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "1",
+      "message": "Table on page 47 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "57efc5e8ba926203",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "1",
+      "message": "Table on page 48 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "57efc5e8ba926203",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "1",
+      "message": "Table on page 48 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "e24bc7b16de4b753",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "1",
+      "message": "Table on page 52 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "ccbb137a20fc419d",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "2",
+      "message": "Table on page 75 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "9933e7da2d75d585",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "2",
+      "message": "Table on page 79 kept as HTML fallback: no body rows after padding strip."
+    },
+    {
+      "id": "2acb0d5a3f43677e",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "2",
+      "message": "Table on page 84 kept as HTML fallback: no body rows after padding strip."
+    },
+    {
+      "id": "a90a8711aeaba050",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "2",
+      "message": "Table on page 86 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "f210b4f9370901bd",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "2",
+      "message": "Table on page 90 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "c68ff355056b9070",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "2",
+      "message": "Table on page 98 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "0000b2b524585fb5",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "2",
+      "message": "Table on page 105 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "524e94794df2734d",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "2",
+      "message": "Table on page 110 kept as HTML fallback: no body rows after padding strip."
+    },
+    {
+      "id": "8598ab8f61f2aff5",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 118 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "0ae1fdd3cf5e289a",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 120 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "507f67459d081acd",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 120 kept as HTML fallback: no body rows after padding strip."
+    },
+    {
+      "id": "507f67459d081acd",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 120 kept as HTML fallback: no body rows after padding strip."
+    },
+    {
+      "id": "507f67459d081acd",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "3",
+      "message": "Table on page 120 kept as HTML fallback: no body rows after padding strip."
+    },
+    {
+      "id": "571f52f25a1ccf27",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "4",
+      "message": "Table on page 151 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "14587347cc77a2c7",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "4",
+      "message": "Table on page 153 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "03a53a16fd6ffcef",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "4",
+      "message": "Table on page 162 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "23f1d669f4035b00",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "4",
+      "message": "Table on page 179 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "01626ac2886ac359",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "4",
+      "message": "Table on page 186 kept as HTML fallback: no body rows after padding strip."
+    },
+    {
+      "id": "6125eaa20149e784",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "4",
+      "message": "Table on page 193 kept as HTML fallback: no body rows after padding strip."
+    },
+    {
+      "id": "a1c86ab598acada7",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "4",
+      "message": "Table on page 195 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "b5ff89fb21347343",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "5",
+      "message": "Table on page 240 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "8b4b982acc82212d",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "5",
+      "message": "Table on page 244 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "60ba25504c06ffe2",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "7",
+      "message": "Table on page 269 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "7cd50192215e2a58",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "7",
+      "message": "Table on page 272 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "5ece6e386014b066",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "7",
+      "message": "Table on page 273 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "90e2c14664fa7b10",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "7",
+      "message": "Table on page 274 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "9acd3037d035061f",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "7",
+      "message": "Table on page 275 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "d7ff71f0c3d2b7ab",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "7",
+      "message": "Table on page 276 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "78a0e6302a7ea976",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "7",
+      "message": "Table on page 277 kept as HTML fallback: interior None cell suggests merged span."
+    },
+    {
+      "id": "a37545531950e6b4",
+      "code": "tablish-block-not-converted",
+      "section_code": "1",
+      "message": "Table 1 in §1 kept as raw HTML embed: no body rows after padding strip."
+    },
+    {
+      "id": "0b68f625c05829b4",
+      "code": "tablish-block-not-converted",
+      "section_code": "1",
+      "message": "Table 2 in §1 kept as raw HTML embed: no body rows after padding strip."
+    },
+    {
+      "id": "d805193560528d96",
+      "code": "tablish-block-not-converted",
+      "section_code": "1",
+      "message": "Table 3 in §1 kept as raw HTML embed: no body rows after padding strip."
+    },
+    {
+      "id": "ea54b823a91911b6",
+      "code": "tablish-block-not-converted",
+      "section_code": "1",
+      "message": "Table 4 in §1 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "441c306c668a1879",
+      "code": "tablish-block-not-converted",
+      "section_code": "1",
+      "message": "Table 5 in §1 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "0fc5d25c745e74b8",
+      "code": "tablish-block-not-converted",
+      "section_code": "1",
+      "message": "Table 6 in §1 kept as raw HTML embed: no body rows after padding strip."
+    },
+    {
+      "id": "edda3aa92bed378b",
+      "code": "tablish-block-not-converted",
+      "section_code": "1",
+      "message": "Table 7 in §1 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "526e382f5de80b41",
+      "code": "tablish-block-not-converted",
+      "section_code": "1",
+      "message": "Table 8 in §1 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "c6a0559cc674ca3d",
+      "code": "tablish-block-not-converted",
+      "section_code": "1",
+      "message": "Table 9 in §1 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "a1421ab56bfb0e8d",
+      "code": "tablish-block-not-converted",
+      "section_code": "1",
+      "message": "Table 10 in §1 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "7b6bc04ce3d16933",
+      "code": "tablish-block-not-converted",
+      "section_code": "1",
+      "message": "Table 11 in §1 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "2a951de38278ed08",
+      "code": "tablish-block-not-converted",
+      "section_code": "1",
+      "message": "Table 12 in §1 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "13fd123b2ab250f7",
+      "code": "tablish-block-not-converted",
+      "section_code": "1",
+      "message": "Table 13 in §1 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "909a3f2ede8ab15d",
+      "code": "tablish-block-not-converted",
+      "section_code": "1",
+      "message": "Table 14 in §1 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "7c3af997ffeb75ac",
+      "code": "tablish-block-not-converted",
+      "section_code": "1",
+      "message": "Table 15 in §1 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "ea19a4c0032bfe8d",
+      "code": "tablish-block-not-converted",
+      "section_code": "1",
+      "message": "Table 16 in §1 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "c40a600ebbf44bd5",
+      "code": "tablish-block-not-converted",
+      "section_code": "1",
+      "message": "Table 17 in §1 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "5f49adfe1b8cfcb6",
+      "code": "tablish-block-not-converted",
+      "section_code": "2",
+      "message": "Table 1 in §2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "565be82afd872a1d",
+      "code": "tablish-block-not-converted",
+      "section_code": "2",
+      "message": "Table 2 in §2 kept as raw HTML embed: no body rows after padding strip."
+    },
+    {
+      "id": "c657730f959eb4dc",
+      "code": "tablish-block-not-converted",
+      "section_code": "2",
+      "message": "Table 3 in §2 kept as raw HTML embed: no body rows after padding strip."
+    },
+    {
+      "id": "a29bb4ede40992fd",
+      "code": "tablish-block-not-converted",
+      "section_code": "2",
+      "message": "Table 4 in §2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "c336775377565005",
+      "code": "tablish-block-not-converted",
+      "section_code": "2",
+      "message": "Table 5 in §2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "94110316539026ce",
+      "code": "tablish-block-not-converted",
+      "section_code": "2",
+      "message": "Table 7 in §2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "50faae13b1cae15c",
+      "code": "tablish-block-not-converted",
+      "section_code": "2",
+      "message": "Table 8 in §2 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "1a410b8e520132a6",
+      "code": "tablish-block-not-converted",
+      "section_code": "2",
+      "message": "Table 9 in §2 kept as raw HTML embed: no body rows after padding strip."
+    },
+    {
+      "id": "0dfe57f8ff5c574c",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 1 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "07a54a11b1a65b19",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 2 in §3 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "aa65d7004ddc805e",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 3 in §3 kept as raw HTML embed: no body rows after padding strip."
+    },
+    {
+      "id": "9861145798dec980",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 4 in §3 kept as raw HTML embed: no body rows after padding strip."
+    },
+    {
+      "id": "b054e136dc1cd6dc",
+      "code": "tablish-block-not-converted",
+      "section_code": "3",
+      "message": "Table 5 in §3 kept as raw HTML embed: no body rows after padding strip."
+    },
+    {
+      "id": "6a9b59c457553c04",
+      "code": "tablish-block-not-converted",
+      "section_code": "4",
+      "message": "Table 2 in §4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "793a93154522e502",
+      "code": "tablish-block-not-converted",
+      "section_code": "4",
+      "message": "Table 3 in §4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "aed49be68e0777da",
+      "code": "tablish-block-not-converted",
+      "section_code": "4",
+      "message": "Table 4 in §4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "e8e82c2842555ebb",
+      "code": "tablish-block-not-converted",
+      "section_code": "4",
+      "message": "Table 5 in §4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "4430e697f1b3c8bc",
+      "code": "tablish-block-not-converted",
+      "section_code": "4",
+      "message": "Table 6 in §4 kept as raw HTML embed: no body rows after padding strip."
+    },
+    {
+      "id": "4739bbadbca1af75",
+      "code": "tablish-block-not-converted",
+      "section_code": "4",
+      "message": "Table 7 in §4 kept as raw HTML embed: no body rows after padding strip."
+    },
+    {
+      "id": "62db4fa677136c33",
+      "code": "tablish-block-not-converted",
+      "section_code": "4",
+      "message": "Table 8 in §4 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "a5ccaab33d333719",
+      "code": "tablish-block-not-converted",
+      "section_code": "5",
+      "message": "Table 2 in §5 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "7097f25f306d55db",
+      "code": "tablish-block-not-converted",
+      "section_code": "5",
+      "message": "Table 3 in §5 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "62be9238aa026e6b",
+      "code": "tablish-block-not-converted",
+      "section_code": "7",
+      "message": "Table 0 in §7 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "1a8f47b151e8d27a",
+      "code": "tablish-block-not-converted",
+      "section_code": "7",
+      "message": "Table 1 in §7 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "5b8ce76df7d5ee43",
+      "code": "tablish-block-not-converted",
+      "section_code": "7",
+      "message": "Table 2 in §7 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "22f4547ffdb8ec86",
+      "code": "tablish-block-not-converted",
+      "section_code": "7",
+      "message": "Table 3 in §7 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "ad797f2a58b9b312",
+      "code": "tablish-block-not-converted",
+      "section_code": "7",
+      "message": "Table 4 in §7 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "07a0a6bbf4d23c68",
+      "code": "tablish-block-not-converted",
+      "section_code": "7",
+      "message": "Table 5 in §7 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "f7a069fb46755f97",
+      "code": "tablish-block-not-converted",
+      "section_code": "7",
+      "message": "Table 6 in §7 kept as raw HTML embed: interior None cell suggests merged span."
+    },
+    {
+      "id": "d7a6ad00d98b1e7d",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §1.1 'Introduction' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "4fd873f2189985b5",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §1.2.2 'Airport/Facility Directory (A/FD) section of the Chart Supplement (CS)' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "62e4d9092b193e3c",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §2.1 'Introduction' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "d986ccb1f8369b50",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §2.45 'Minimum Obstruction Clearance Altitude (MOCA)2-36 Minimum Turning Altitude (MTA)' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "3ee1c51352c3e412",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §3.1 'Introduction' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "5f481660faee2c09",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §4.1 'Introduction' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "d1ec16526bc2c31f",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §4.11 'Enhanced Flight Vision Systems (EFVS) and Instrument Approaches' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "086c8530e5b172ca",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §4.12.9 'LNAV, LANV/VNAV and Circling Minimums' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "b370d27fd7e60178",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §4.12.51 'Simultaneous Close Parallel Precision Runway Monitor (PRM) Approaches' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "0636399a0de2a4bc",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §4.12.52 'Simultaneous Offset Instrument Approaches (SOIAs)' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "5116b9dedd477d0f",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §4.12.53 'Converging ILS Approaches' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "0d05bd183a1c1b89",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §4.12.54 'VOR Approach' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "80945d23866fe491",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §4.12.55 'NDB Approach' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "d70e94b65a1ba5b2",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §4.12.56 'Radar Approaches' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "87cb199f9874f5a4",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §4.12.57 'Precision Approach Radar (PAR)' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "8682af79291b90f1",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §4.12.58 'Airport Surveillance Radar (ASR)' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "8e91f3eac66b6593",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §5.1 'Introduction' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "7d97eae2450e1e98",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §5.2 'Next Generation Air Transportation (NextGen) System' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "4472c91dd11a56a3",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §6.1 'Introduction' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "0cac429aee958fb0",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §7.1 'Introduction' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "2ed56c044ea485a7",
+      "code": "ocr-leak-in-section-body",
+      "section_code": "6",
+      "message": "OCR-leak run of 12 short tokens in §6; elided. Likely a figure that escaped the figure-clipper. Elided text (truncated): 1 J K M N O P Q U W Y Z"
     }
   ],
   "extraction": {
@@ -6656,8 +7729,8 @@
       }
     },
     "figure_dedup": {
-      "canonicalized": 2,
-      "freed_bytes": 827473
+      "canonicalized": 3,
+      "freed_bytes": 3950412
     }
   }
 }

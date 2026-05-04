@@ -204,65 +204,27 @@ ground voice communication systems.
 and ground/ground voice communications system.
 [Figure 5-7]
 
-![Figure 5-2. Satellite-based navigation and tracking allows more aircraft to fly closely together on more direct routes. 
-Figure 5-3. Automatic Dependent Surveillance-Broadcast (ADS-B) 
-systems. 
-ADS-B ground infrastructure is complete and ATC 
-now uses ADS-B for aircraft tracking both in the air 
-and on the ground at m](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-00-satellite-based-navigation-and-tracking-allows-m.png)
+![Figure 5-1. Next Generation Air Transportation System (NEXGEN) introduces new technological innovations for weather forecasting,  digital communications, and networking.](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-00-next-generation-air-transportation-system-nexgen.png)
 
-![Figure 5-3. Automatic Dependent Surveillance-Broadcast (ADS-B) 
-systems. 
-ADS-B ground infrastructure is complete and ATC 
-now uses ADS-B for aircraft tracking both in the air 
-and on the ground at many airports. 
-2.  System wide information management (SWIM)— 
-will provide a single infrastructure and information 
-mana](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-01-automatic-dependent-surveillance-broadcast-ads-b.png)
+![Figure 5-2. Satellite-based navigation and tracking allows more aircraft to fly closely together on more direct routes.](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-01-satellite-based-navigation-and-tracking-allows-m.png)
 
-![Figure 5-10. Ground-Based Augmentation System (GBAS). 
-Benefits of NextGen 
-The implementation of NextGen will allow pilots and 
-dispatchers to select their own direct flightpaths, rather 
-than follow the existing Victor, Jet, and LF/MF airways. 
-Each aircraft will transmit and receive precise information 
-about the ti](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-02-ground-based-augmentation-system-gbas-benefits-o.png)
+![Figure 5-9. Wide Area Augmentation System (WAAS).](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-02-wide-area-augmentation-system-waas.png)
 
-![Figure 5-11. NextGen improves airport surface movements, reduces 
-spacing and separation requirements, and better manages the 
-overall flows into and out of busy airports. 
-mitigate the impacts of the weather, and to improve 
-weather forecasts and decision-making. Better forecasts, 
-coupled with greater automation, wil](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-03-nextgen-improves-airport-surface-movements-reduc.png)
+![Figure 5-10. Ground-Based Augmentation System (GBAS).](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-03-ground-based-augmentation-system-gbas.png)
 
-![Figure 5-16. Enhanced and synthetic vision displayed on primary 
-flight displays. 
-spatially correct, database driven, computer-generated 
-synthetic depiction of the nearby topography, including 
-obstacles, and a display of the landing runway. The SVGS 
-display may be implemented on a head down Primary Flight 
-Display,](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-04-enhanced-and-synthetic-vision-displayed-on-prima.png)
+![Figure 5-12. Head-up guidance system (HGS).](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-04-head-up-guidance-system-hgs.png)
 
-<div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-5-00-untitled.html">
-<table><thead><tr><th></th><th>Improvement Plans</th></tr></thead><tbody><tr><td>Introduction
-In the upcoming years, exciting new technologies will
-be developed and implemented to help ease air traffic
-congestion, add to system capacity, and enhance safety.
-Some of these seamless changes will be invisible to
-pilots. Others will entail learning new procedures, aircraft
-equipment, and systems that will introduce powerful new
-capabilities and dramatically increase the safety of all filght
-operations.</td><td></td></tr></tbody></table>
-</div>
+|  | Improvement Plans |
+| --- | --- |
+| Introduction<br>In the upcoming years, exciting new technologies will<br>be developed and implemented to help ease air traffic<br>congestion, add to system capacity, and enhance safety.<br>Some of these seamless changes will be invisible to<br>pilots. Others will entail learning new procedures, aircraft<br>equipment, and systems that will introduce powerful new<br>capabilities and dramatically increase the safety of all filght<br>operations. |  |
 
-<div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-5-01-untitled.html">
-<table><thead><tr><th>GPS satellites
-Ranging sources
-GBAS ground facility
-GBAS reference receivers</th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td>S ta tu s in fo r m a tio n
-D iffe r e n tia l c o r r e c tio n s , in te g r ity d a ta a n d p a th d e fin itio n
-Omnidirectional VHF data broadcast (VDB) signal</td><td></td><td></td><td></td></tr></tbody></table>
-</div>
+<a class="handbook-table-source" href="/handbooks/iph/FAA-H-8083-16B/tables/tbl-5-00-untitled.html">Open original</a>
+
+| GPS satellites<br>Ranging sources<br>GBAS ground facility<br>GBAS reference receivers |
+| --- |
+| S ta tu s in fo r m a tio n<br>D iffe r e n tia l c o r r e c tio n s , in te g r ity d a ta a n d p a th d e fin itio n<br>Omnidirectional VHF data broadcast (VDB) signal |
+
+<a class="handbook-table-source" href="/handbooks/iph/FAA-H-8083-16B/tables/tbl-5-01-untitled.html">Open original</a>
 
 <div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-5-02-untitled.html">
 <table><thead><tr><th>7800
@@ -283,7 +245,7 @@ Figure 5-14. A synthetic vision system (SVS) is an electronic means to
 display a synthetic vision image of the external scene topography to the
 flight crew to assist during takeoffs, landings, and en route operations.
 Figure 5-12. Head-up guidance system (HGS).
-Figure 5-15. An aircraft on an approach equipped with a SVS.</th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td>160
+Figure 5-15. An aircraft on an approach equipped with a SVS.</th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td>160
 140
 11 4
 100
@@ -292,7 +254,7 @@ Figure 5-15. An aircraft on an approach equipped with a SVS.</th><th></th><th></
 2
 75
 0
-7400</td><td></td></tr><tr><td></td><td>60</td><td></td><td>7200</td><td></td></tr></tbody></table>
+7400</td></tr><tr><td></td><td>60</td><td></td><td>7200</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-5-03-untitled.html">
@@ -301,8 +263,8 @@ Unless otherwise noted are MSL and in feet. † Other times by NOTAM.
 Time is local. “TO” an altitude means “To and including.” NOTAM – Use of this term in Restricted Areas
 FL – Flight Level indicates FAA and DoD NOTAM systems.
 NO A/G – No air to ground communications. Use of this term in all other Special Use areas indicates
-Contact nearest FSS for information. the DoD NOTAM system.</th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td>U.S. P–PROHIBITED, R–RESTRICTED, W–WARNING, A–ALERT, MOA–MILITARY OPERATIONS AREA
+Contact nearest FSS for information. the DoD NOTAM system.</th><th></th><th></th><th></th></tr></thead><tbody><tr><td>U.S. P–PROHIBITED, R–RESTRICTED, W–WARNING, A–ALERT, MOA–MILITARY OPERATIONS AREA
 CONTROLLING AGENCY/
 NUMBER ALTITUDE TIME OF USE FREQUENCIES
-CONTACT FACILITY</td><td></td><td></td><td></td><td></td></tr><tr><td>P-50</td><td>TO BUT NOT</td><td>CONTINUOUS</td><td>NO A/G</td><td></td></tr><tr><td></td><td>INCL 3,000</td><td></td><td></td><td></td></tr><tr><td>R-2903 A</td><td>TO BUT NOT</td><td>INTERMITTENT</td><td>JACKSONVILLE CNTR</td><td></td></tr><tr><td></td><td>INCL 23,000</td><td>0700-1900 TUE-SUN</td><td></td><td></td></tr><tr><td></td><td></td><td>†24 HRS IN ADVANCE</td><td></td><td></td></tr><tr><td>R-2903 C</td><td>TO 7,000</td><td>INTERMITTENT</td><td>JACKSONVILLE TRACON</td><td></td></tr><tr><td></td><td></td><td>0700-1900 TUE-SUN</td><td></td><td></td></tr><tr><td></td><td></td><td>†24 HRS IN ADVANCE</td><td></td><td></td></tr><tr><td>R-2903 D</td><td>TO 5,000</td><td>INTERMITTENT</td><td>JACKSONVILLE TRACON</td><td></td></tr><tr><td></td><td></td><td>0700-1900 TUE-SUN</td><td></td><td></td></tr><tr><td></td><td></td><td>†24 HRS IN ADVANCE</td><td></td><td></td></tr><tr><td>R-2904 A</td><td>TO BUT NOT</td><td>0800-1700 (APR-AUG)</td><td>JACKSONVILLE TRACON</td><td></td></tr><tr><td></td><td>INCL 1,800</td><td>0800-1700 SAT-SUN (SEP-MAR)</td><td></td><td></td></tr><tr><td></td><td></td><td>†24 HRS IN ADVANCE</td><td></td><td></td></tr><tr><td>R-2906</td><td>TO 14,000</td><td>INTERMITTENT</td><td>JACKSONVILLE TRACON</td><td></td></tr><tr><td></td><td></td><td>0500-0100</td><td></td><td></td></tr><tr><td></td><td></td><td>†6 HRS IN ADVANCE</td><td></td><td></td></tr><tr><td>R-2907 A</td><td>TO FL 230</td><td>INTERMITTENT</td><td>JACKSONVILLE CNTR</td><td></td></tr><tr><td></td><td></td><td>0500-0100</td><td></td><td></td></tr><tr><td></td><td></td><td>†6 HRS IN ADVANCE</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+CONTACT FACILITY</td><td></td><td></td><td></td></tr><tr><td>P-50</td><td>TO BUT NOT</td><td>CONTINUOUS</td><td>NO A/G</td></tr><tr><td></td><td>INCL 3,000</td><td></td><td></td></tr><tr><td>R-2903 A</td><td>TO BUT NOT</td><td>INTERMITTENT</td><td>JACKSONVILLE CNTR</td></tr><tr><td></td><td>INCL 23,000</td><td>0700-1900 TUE-SUN</td><td></td></tr><tr><td></td><td></td><td>†24 HRS IN ADVANCE</td><td></td></tr><tr><td>R-2903 C</td><td>TO 7,000</td><td>INTERMITTENT</td><td>JACKSONVILLE TRACON</td></tr><tr><td></td><td></td><td>0700-1900 TUE-SUN</td><td></td></tr><tr><td></td><td></td><td>†24 HRS IN ADVANCE</td><td></td></tr><tr><td>R-2903 D</td><td>TO 5,000</td><td>INTERMITTENT</td><td>JACKSONVILLE TRACON</td></tr><tr><td></td><td></td><td>0700-1900 TUE-SUN</td><td></td></tr><tr><td></td><td></td><td>†24 HRS IN ADVANCE</td><td></td></tr><tr><td>R-2904 A</td><td>TO BUT NOT</td><td>0800-1700 (APR-AUG)</td><td>JACKSONVILLE TRACON</td></tr><tr><td></td><td>INCL 1,800</td><td>0800-1700 SAT-SUN (SEP-MAR)</td><td></td></tr><tr><td></td><td></td><td>†24 HRS IN ADVANCE</td><td></td></tr><tr><td>R-2906</td><td>TO 14,000</td><td>INTERMITTENT</td><td>JACKSONVILLE TRACON</td></tr><tr><td></td><td></td><td>0500-0100</td><td></td></tr><tr><td></td><td></td><td>†6 HRS IN ADVANCE</td><td></td></tr><tr><td>R-2907 A</td><td>TO FL 230</td><td>INTERMITTENT</td><td>JACKSONVILLE CNTR</td></tr><tr><td></td><td></td><td>0500-0100</td><td></td></tr><tr><td></td><td></td><td>†6 HRS IN ADVANCE</td><td></td></tr></tbody></table>
 </div>

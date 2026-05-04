@@ -43,75 +43,46 @@ route. Typically, when operating on area navigation
 (RNAV) routes, pilots are allowed to remain on their own
 navigation.
 
-![Figure 3-1. Example of Class I and II navigation. 
-3-3](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-00-example-of-class-i-and-ii-navigation-3-3.png)
+![Figure 3-1. Example of Class I and II navigation.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-00-example-of-class-i-and-ii-navigation.png)
 
-![Figure 3-2. VNAV path construction. 
-3-4](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-01-vnav-path-construction-3-4.png)
+![Figure 3-2. VNAV path construction.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-01-vnav-path-construction.png)
 
-![Figure 3-3. VNAV performance path. 
-Figure 3-4. VNAV geometric path. 
-3-5](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-02-vnav-performance-path-figure-3-4-vnav-geometric-.png)
+![Figure 3-3. VNAV performance path.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-02-vnav-performance-path.png)
 
-![Figure 3-4. VNAV geometric path. 
-3-5](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-03-vnav-geometric-path-3-5.png)
+![Figure 3-4. VNAV geometric path.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-03-vnav-geometric-path.png)
 
-![Figure 3-6. RNAV (GPS) approach. 
-3-7](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-04-rnav-gps-approach-3-7.png)
+![Figure 3-5. WAAS data provide lateral and vertical guidance.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-04-waas-data-provide-lateral-and-vertical-guidance.png)
 
-![Figure 3-9. Altitude management when cleared direct. 
-to descending on arrival: “…delayed the initiation of the 
-descent…”; “Aircraft prematurely descended too early…”; 
-“…late getting down…”; “During a descent…incorrectly 
-cleared down…”; “…aircraft prematurely let down…”; 
-“…lost situational awareness…”; “Premature d](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-05-altitude-management-when-cleared-direct-to-desce.png)
+![Figure 3-9. Altitude management when cleared direct.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-05-altitude-management-when-cleared-direct.png)
 
-![Figure 3-10. Arrival charts. 
-3-11](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-06-arrival-charts-3-11.png)
+![Figure 3-10. Arrival charts.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-06-arrival-charts.png)
 
-![Figure 3-11. STAR interpretation. 
-NAVAID, intersection, or fix where all the various (en route) 
-transitions to the arrival come together. A STAR en route 
-transition is a published segment used to connect one or 
-more en route airways, jet routes, or RNAV routes to the 
-basic STAR procedure. It is one of several rout](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-07-star-interpretation-navaid-intersection-or-fix-w.png)
+![Figure 3-11. STAR interpretation.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-07-star-interpretation.png)
 
-![Figure 3-12. Reducing pilot/controlling workload. 
-3-14](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-08-reducing-pilot-controlling-workload-3-14.png)
+![Figure 3-12. Reducing pilot/controlling workload.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-08-reducing-pilot-controlling-workload.png)
 
-![Figure 3-13. STAR symbology. 
-3-15](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-09-star-symbology-3-15.png)
+![Figure 3-13. STAR symbology.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-09-star-symbology.png)
 
-![Figure 3-14. Arrival clearance. 
-3-17](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-10-arrival-clearance-3-17.png)
+![Figure 3-14. Arrival clearance.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-10-arrival-clearance.png)
 
-![Figure 3-16. Assigned altitudes. 
-final descent and glideslope/glidepath intercept can be 
-made without exceeding specific obstacle clearance and 
-other related arrival, approach, and landing criteria. 
-Arrival delays typically are absorbed at a metering fix. 
-This fix is established on a route prior to the terminal 
-a](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-11-assigned-altitudes-final-descent-and-glideslope-.png)
+![Figure 3-15. Two RNAV (GPS) approaches to Runway 15R at Baltimore. A controller issuing a clearance for one of these approaches  would speak the identifying letter—for example, “...cleared for the RNAV (GPS) Yankee approach, Runway 15R...”](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-11-two-rnav-gps-approaches-to-runway-15r-at-baltimo.png)
 
-![Figure 3-17. Altitude restrictions. 
-below 5,000 feet above the airport elevation. 
-There are numerous exceptions to the high performance 
-aircraft arrival procedures previously outlined. For example, 
-in a non-radar environment, the controller may clear the 
-flight to use an approach based on a NAVAID other than 
-the](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-12-altitude-restrictions-below-5-000-feet-above-the.png)
+![Figure 3-16. Assigned altitudes.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-12-assigned-altitudes.png)
 
-![Figure 3-18. Instead of flying for a specific time after passing the holding fix, these holding patterns use distances to mark where the 
-turns are made. The distances come from DME or IFR-certified GPS equipment. 
-SE 
-“...Viking 5786P, hold east of the 20 DME fix on the 
-265° radial of the stedman VORTAC, 5 mile legs.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-13-instead-of-flying-for-a-specific-time-after-pass.png)
+![Figure 3-17. Altitude restrictions.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-13-altitude-restrictions.png)
 
-![Figure 3-19. Cleared present position direct from V295. 
-3-22](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-14-cleared-present-position-direct-from-v295-3-22.png)
+![Figure 3-18. Instead of flying for a specific time after passing the holding fix, these holding patterns use distances to mark where the  turns are made. The distances come from DME or IFR-certified GPS equipment.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-14-instead-of-flying-for-a-specific-time-after-pass.png)
 
-<div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-3-00-untitled.html">
-<table><thead><tr><th></th><th>Y
+![Figure 3-19. Cleared present position direct from V295.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-15-cleared-present-position-direct-from-v295.png)
+
+|  | Arrivals |
+| --- | --- |
+| Introduction<br>Preparation for the arrival and approach begins long<br>before the descent from the en route phase of flight.<br>Planning early, while there are fewer demands on the<br>pilot’s attention, leaves the pilot free to concentrate on<br>precise control of the aircraft and better equipped to deal<br>with problems that might arise during the last segment<br>of the flight. |  |
+
+<a class="handbook-table-source" href="/handbooks/iph/FAA-H-8083-16B/tables/tbl-3-00-untitled.html">Open original</a>
+
+<div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-3-01-untitled.html">
+<table><thead><tr><th>Y
 ACT 11 --4 . v1 or0
 .-
 SBY 116.00
@@ -120,12 +91,12 @@ FLAGGED</th><th>S
 120kt Lnav/Vnav</th><th></th><th>DTK
 346°
 ETE
-04:52</th></tr></thead><tbody><tr><td></td><td></td><td>345
+04:52</th></tr></thead><tbody><tr><td></td><td>345
 MSG P</td><td>SUNOL
 ROC FPL</td><td></td></tr></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-3-01-untitled.html">
+<div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-3-02-untitled.html">
 <table><thead><tr><th>1
 5 2 3 4
 .80/280
@@ -149,26 +120,35 @@ tes) (pounds)</td><td></td></tr><tr><td>39</td><td>20</td><td>850</td><td>S
 5 P</td><td>3</td><td>150</td><td>13</td></tr><tr><td>M
 NOTE: A
 Note: Subtract 30 lb of fuel and 36 seconds for each S
-1,000 feet that the destination airport is above sea level</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>
-</div>
-
-<div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-3-02-untitled.html">
-<table><thead><tr><th>2</th><th>7</th><th>0</th></tr></thead><tbody></tbody></table>
+1,000 feet that the destination airport is above sea level</td><td></td><td></td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-3-03-untitled.html">
-<table><thead><tr><th></th><th>1</th><th>8</th><th>0</th></tr></thead><tbody></tbody></table>
+<table><thead><tr><th>2</th><th>7</th><th>0</th></tr></thead><tbody></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-3-04-untitled.html">
-<table><thead><tr><th></th><th>3</th><th>0</th><th>0</th><th>0</th></tr></thead><tbody></tbody></table>
+<table><thead><tr><th>1</th><th>8</th><th>0</th></tr></thead><tbody></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-3-05-untitled.html">
-<table><thead><tr><th>Special Airports</th><th>Comments</th></tr></thead><tbody><tr><td>Kodiak, AK</td><td>Airport is surrounded by mountainous terrain. Any go-around beyond ILS or GCA
-MAP will not provide obstruction clearance.</td></tr><tr><td>Petersburg, AK</td><td>Mountainous terrain in immediate vicinity of airport, all quadrants.</td></tr><tr><td>Cape Newenham AFS, AK</td><td>Runway located on mountain slope with high gradient factor; nonstandard
-instrument approach.</td></tr><tr><td>Washington, DC (National)</td><td>Special arrival/departure procedures.</td></tr><tr><td>Shenandoah Valley, VA
-(Stanton-Waynesboro-Harrisonburg)</td><td>Mountainous terrain.</td></tr><tr><td>Aspen, CO</td><td>High terrain; special procedures.</td></tr><tr><td>Gunnison, CO</td><td>VOR only; uncontrolled; numerous obstructions in airport area; complete departure
-procedures.</td></tr><tr><td>Missoula, MT</td><td>Mountainous terrain; special procedures.</td></tr><tr><td>Jackson Hole, WY</td><td>Mountainous terrain; all quadrants; complex departure procedures.</td></tr><tr><td>Hailey, ID (Friedman Memorial)</td><td>Mountainous terrain; special arrival/departure procedures.</td></tr><tr><td>Hayden, Yampa Valley, CO</td><td>Mountainous terrain; no control tower; special engine-out procedures for certain
-large aircraft.</td></tr><tr><td>Lihue, Kauai, HI</td><td>High terrain; mountainous to 2,300 feet within 3 miles of the localizer.</td></tr><tr><td>Ontario, CA</td><td>Mountainous terrain and extremely limited visibility in haze conditions.</td></tr></tbody></table>
+<table><thead><tr><th>3</th><th>0</th><th>0</th><th>0</th></tr></thead><tbody></tbody></table>
 </div>
+
+| Special Airports | Comments |
+| --- | --- |
+| Kodiak, AK | Airport is surrounded by mountainous terrain. Any go-around beyond ILS or GCA<br>MAP will not provide obstruction clearance. |
+| Petersburg, AK | Mountainous terrain in immediate vicinity of airport, all quadrants. |
+| Cape Newenham AFS, AK | Runway located on mountain slope with high gradient factor; nonstandard<br>instrument approach. |
+| Washington, DC (National) | Special arrival/departure procedures. |
+| Shenandoah Valley, VA<br>(Stanton-Waynesboro-Harrisonburg) | Mountainous terrain. |
+| Aspen, CO | High terrain; special procedures. |
+| Gunnison, CO | VOR only; uncontrolled; numerous obstructions in airport area; complete departure<br>procedures. |
+| Missoula, MT | Mountainous terrain; special procedures. |
+| Jackson Hole, WY | Mountainous terrain; all quadrants; complex departure procedures. |
+| Hailey, ID (Friedman Memorial) | Mountainous terrain; special arrival/departure procedures. |
+| Hayden, Yampa Valley, CO | Mountainous terrain; no control tower; special engine-out procedures for certain<br>large aircraft. |
+| Lihue, Kauai, HI | High terrain; mountainous to 2,300 feet within 3 miles of the localizer. |
+| Ontario, CA | Mountainous terrain and extremely limited visibility in haze conditions. |
+
+<a class="handbook-table-source" href="/handbooks/iph/FAA-H-8083-16B/tables/tbl-3-06-untitled.html">Open original</a>
