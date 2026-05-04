@@ -5,11 +5,12 @@ import ReaderNav from '@ab/library/ReaderNav.svelte';
 import RenderedSection from '@ab/library/RenderedSection.svelte';
 import SourceLinks from '@ab/library/SourceLinks.svelte';
 import TOCDrawer from '@ab/library/TOCDrawer.svelte';
+import { hasChapterPreamble } from '../../../../../lib/chapter-preamble';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
 
-const hasPreamble = $derived(data.chapter.contentMd.trim().length > 0 || data.figures.length > 0);
+const hasPreamble = $derived(hasChapterPreamble({ contentMd: data.chapter.contentMd, figures: data.figures }));
 const hasSections = $derived(data.sections.length > 0);
 
 const segments = $derived([
