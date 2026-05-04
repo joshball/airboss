@@ -58,7 +58,12 @@ export function getLastLoaderRun(): LastLoaderRun | null {
 	return lastLoaderRun;
 }
 
-export function setLastLoaderRun(result: LoaderResult): void {
+/**
+ * Module-private writer for the last-run cache. Only `runLoader` should call
+ * this -- a public re-export would let any caller pollute the admin "Last
+ * run" panel with a synthesized result. Stays private to enforce that.
+ */
+function setLastLoaderRun(result: LoaderResult): void {
 	lastLoaderRun = { ranAt: new Date().toISOString(), result };
 }
 

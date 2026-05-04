@@ -2,8 +2,8 @@
 import { REVIEW_WP_SPEC_TOAST_DISMISS_MS, ROUTES } from '@ab/constants';
 import Banner from '@ab/ui/components/Banner.svelte';
 import Breadcrumbs, { type BreadcrumbItem } from '@ab/ui/components/Breadcrumbs.svelte';
-import Button from '@ab/ui/components/Button.svelte';
 import Card from '@ab/ui/components/Card.svelte';
+import ConfirmAction from '@ab/ui/components/ConfirmAction.svelte';
 import Toast, { type ToastTone } from '@ab/ui/components/Toast.svelte';
 import { onDestroy } from 'svelte';
 import { enhance } from '$app/forms';
@@ -19,15 +19,14 @@ interface ToastState {
 let { data, form }: { data: PageData; form: ActionData } = $props();
 
 let savingUpdate = $state(false);
-let savingDelete = $state(false);
-let confirmDelete = $state(false);
 let toast = $state<ToastState | null>(null);
 let toastDismissTimer: ReturnType<typeof setTimeout> | null = null;
 let liveAnnounce = $state('');
 
+// Breadcrumbs intentionally skip an `Admin` crumb -- the admin sub-nav
+// (Buckets / Loader) is the IA for this surface.
 const crumbs: readonly BreadcrumbItem[] = [
 	{ label: 'Review board', href: ROUTES.HANGAR_REVIEW },
-	{ label: 'Admin', href: ROUTES.HANGAR_REVIEW_ADMIN_BUCKETS },
 	{ label: 'Buckets', href: ROUTES.HANGAR_REVIEW_ADMIN_BUCKETS },
 	{ label: data.bucket.name },
 ];
@@ -87,21 +86,27 @@ onDestroy(() => {
 	if (toastDismissTimer !== null) clearTimeout(toastDismissTimer);
 });
 
+// Update success redirects to the buckets list so the only `form` we ever
+// see on this page is a failure shape (validation error or 5xx). Two
+// distinct effects keep the update + delete branches independent.
 $effect(() => {
 	if (!form) return;
-	const updateValue = 'update' in form ? form.update : undefined;
-	if (updateValue === 'ok') {
-		showToast('success', 'Bucket updated.');
-		liveAnnounce = 'Bucket updated.';
-	} else if (updateValue === 'error') {
+	if (!('update' in form)) return;
+	const value = form.update;
+	if (value === 'invalid' || value === 'error') {
 		const msg = 'errors' in form && form.errors?._form ? form.errors._form : 'Update failed.';
 		showToast('danger', msg, true);
 		liveAnnounce = `Update failed: ${msg}`;
 	}
-	const deleteValue = 'delete' in form ? form.delete : undefined;
-	if (typeof deleteValue === 'string') {
-		showToast('danger', deleteValue, true);
-		liveAnnounce = `Delete failed: ${deleteValue}`;
+});
+
+$effect(() => {
+	if (!form) return;
+	if (!('delete' in form)) return;
+	const value = form.delete;
+	if (typeof value === 'string') {
+		showToast('danger', value, true);
+		liveAnnounce = `Delete failed: ${value}`;
 	}
 });
 </script>
@@ -148,7 +153,7 @@ $effect(() => {
 			};
 		}}
 	>
-		<BucketForm initial={initial} errors={fieldErrors} submitLabel="Save" action="?/update" saving={savingUpdate} />
+		<BucketForm initial={initial} errors={fieldErrors} submitLabel="Save" saving={savingUpdate} />
 		<p class="cancel-row">
 			<a class="cancel" href={ROUTES.HANGAR_REVIEW_ADMIN_BUCKETS}>Back to buckets</a>
 		</p>
@@ -161,33 +166,28 @@ $effect(() => {
 		Hard-deletes the bucket row. Items are <strong>not</strong> deleted -- they fall through to whatever other bucket's
 		predicate matches, or hide until a new bucket catches them. There is no undo.
 	</p>
-	{#if !confirmDelete}
-		<button type="button" class="action-button danger" onclick={() => (confirmDelete = true)}>Delete bucket</button>
-	{:else}
-		<form
-			method="POST"
-			action="?/delete"
-			class="action-form"
-			use:enhance={() => {
-				savingDelete = true;
-				return async ({ update }) => {
-					try {
-						await update();
-					} finally {
-						savingDelete = false;
-					}
-				};
-			}}
-		>
-			<Banner tone="danger">This will permanently delete the bucket. Items remain on the board. Confirm?</Banner>
-			<div class="confirm-row">
-				<Button type="submit" variant="danger" loading={savingDelete} loadingLabel="Deleting...">
-					Confirm delete
-				</Button>
-				<button type="button" class="action-button" onclick={() => (confirmDelete = false)}>Cancel</button>
-			</div>
-		</form>
-	{/if}
+	<Banner tone="warning">
+		This bucket currently surfaces <strong>{data.impact.itemCount}</strong>
+		{data.impact.itemCount === 1 ? 'item' : 'items'}.
+		{#if data.impact.itemsWithoutOtherBucket > 0}
+			After deletion, <strong>{data.impact.itemsWithoutOtherBucket}</strong>
+			{data.impact.itemsWithoutOtherBucket === 1 ? 'item' : 'items'} will not match any remaining bucket and
+			will disappear from the board until a new bucket catches them.
+		{:else}
+			Every item this bucket matches is also matched by at least one other bucket, so nothing will disappear from
+			the board.
+		{/if}
+	</Banner>
+	<div class="confirm-row">
+		<ConfirmAction
+			label="Delete bucket"
+			confirmLabel="Confirm delete"
+			cancelLabel="Cancel"
+			triggerVariant="secondary"
+			confirmVariant="danger"
+			formAction="?/delete"
+		/>
+	</div>
 </Card>
 
 <style>
@@ -214,37 +214,11 @@ $effect(() => {
 		color: var(--ink-muted);
 	}
 
-	.action-button {
-		appearance: none;
-		background: transparent;
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-sm);
-		padding: var(--space-2xs) var(--space-sm);
-		font: inherit;
-		cursor: pointer;
-		color: var(--ink-body);
-	}
-
-	.action-button.danger {
-		color: var(--signal-danger-ink);
-		border-color: var(--signal-danger-ink);
-	}
-
-	.action-button:focus-visible {
-		outline: 2px solid var(--focus-ring);
-		outline-offset: 2px;
-	}
-
-	.action-form {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-sm);
-	}
-
 	.confirm-row {
 		display: flex;
 		gap: var(--space-2xs);
 		align-items: center;
+		margin-top: var(--space-md);
 	}
 
 	.toast-wrap {

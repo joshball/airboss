@@ -11,9 +11,11 @@ let { form }: { form: ActionData } = $props();
 
 let saving = $state(false);
 
+// Breadcrumbs intentionally skip an `Admin` crumb -- the admin sub-nav
+// (Buckets / Loader) is the IA for this surface, so duplicating it as a
+// breadcrumb is noise.
 const crumbs: readonly BreadcrumbItem[] = [
 	{ label: 'Review board', href: ROUTES.HANGAR_REVIEW },
-	{ label: 'Admin', href: ROUTES.HANGAR_REVIEW_ADMIN_BUCKETS },
 	{ label: 'Buckets', href: ROUTES.HANGAR_REVIEW_ADMIN_BUCKETS },
 	{ label: 'New' },
 ];
@@ -61,7 +63,7 @@ const initial = $derived<BucketFormInitial>({
 			};
 		}}
 	>
-		<BucketForm initial={initial} errors={fieldErrors} submitLabel="Create bucket" action="" saving={saving} />
+		<BucketForm initial={initial} errors={fieldErrors} submitLabel="Create bucket" saving={saving} autofocus />
 		<p class="cancel-row">
 			<a class="cancel" href={ROUTES.HANGAR_REVIEW_ADMIN_BUCKETS}>Cancel</a>
 		</p>

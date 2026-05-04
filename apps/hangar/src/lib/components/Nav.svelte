@@ -15,24 +15,16 @@ import { page } from '$app/state';
  * worse than not showing it.
  */
 
-const sourcesActive = $derived(
-	page.url.pathname === ROUTES.HANGAR_SOURCES || page.url.pathname.startsWith(`${ROUTES.HANGAR_SOURCES}/`),
-);
-const glossaryActive = $derived(
-	page.url.pathname === ROUTES.HANGAR_GLOSSARY || page.url.pathname.startsWith(`${ROUTES.HANGAR_GLOSSARY}/`),
-);
-const docsActive = $derived(
-	page.url.pathname === ROUTES.HANGAR_DOCS || page.url.pathname.startsWith(`${ROUTES.HANGAR_DOCS}/`),
-);
-const reviewActive = $derived(
-	page.url.pathname === ROUTES.HANGAR_REVIEW || page.url.pathname.startsWith(`${ROUTES.HANGAR_REVIEW}/`),
-);
-const usersActive = $derived(
-	page.url.pathname === ROUTES.HANGAR_USERS || page.url.pathname.startsWith(`${ROUTES.HANGAR_USERS}/`),
-);
-const jobsActive = $derived(
-	page.url.pathname === ROUTES.HANGAR_JOBS || page.url.pathname.startsWith(`${ROUTES.HANGAR_JOBS}/`),
-);
+function isActive(prefix: string): boolean {
+	return page.url.pathname === prefix || page.url.pathname.startsWith(`${prefix}/`);
+}
+
+const sourcesActive = $derived(isActive(ROUTES.HANGAR_SOURCES));
+const glossaryActive = $derived(isActive(ROUTES.HANGAR_GLOSSARY));
+const docsActive = $derived(isActive(ROUTES.HANGAR_DOCS));
+const reviewActive = $derived(isActive(ROUTES.HANGAR_REVIEW));
+const usersActive = $derived(isActive(ROUTES.HANGAR_USERS));
+const jobsActive = $derived(isActive(ROUTES.HANGAR_JOBS));
 const isAdmin = $derived(page.data.user?.role === ROLES.ADMIN);
 const reviewQueueCount = $derived<number>(
 	typeof page.data.reviewQueueCount === 'number' ? page.data.reviewQueueCount : 0,
@@ -63,9 +55,13 @@ const reviewQueueCount = $derived<number>(
 		display: flex;
 		gap: var(--space-xl);
 		flex-wrap: wrap;
+		align-items: center;
 	}
 
 	a {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-3xs);
 		color: var(--ink-muted);
 		text-decoration: none;
 		font-weight: var(--type-ui-control-weight);
@@ -89,17 +85,16 @@ const reviewQueueCount = $derived<number>(
 	}
 
 	.badge {
-		display: inline-block;
-		margin-left: var(--space-3xs);
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
 		padding: 0 var(--space-2xs);
-		min-width: 1.25rem;
 		font-size: var(--type-ui-caption-size);
 		font-family: var(--font-family-mono);
 		font-weight: var(--font-weight-medium);
-		line-height: 1.25rem;
 		text-align: center;
-		color: var(--ink-inverse);
-		background: var(--action-default-default);
+		color: var(--action-default-ink);
+		background: var(--action-default);
 		border-radius: var(--radius-pill, 999px);
 	}
 </style>

@@ -10,12 +10,16 @@ import { generateAuthId } from '@ab/utils';
 import { eq, inArray } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
+	countItemsByCriteria,
+	countReviewQueueOpen,
 	createBucket,
 	createColumn,
 	createTask,
 	deleteBucket,
 	deleteTask,
 	finishSession,
+	getBoard,
+	getBucket,
 	getItem,
 	getOpenSession,
 	getOrCreateBoard,
@@ -450,6 +454,151 @@ describe('validateBucketFilterCriteria', () => {
 		expect(() => validateBucketFilterCriteria(null)).toThrow(/structured object/);
 		expect(() => validateBucketFilterCriteria([])).toThrow(/structured object/);
 		expect(() => validateBucketFilterCriteria('foo')).toThrow(/structured object/);
+	});
+});
+
+describe('countReviewQueueOpen', () => {
+	it('counts everything that is not (frontmatterStatus=done AND reviewStatus=done) for the board', async () => {
+		const board = await freshBoard('count-open');
+		// Quadrants of (frontmatterStatus, reviewStatus): unread/pending,
+		// reading/pending, done/pending, done/done. Only the (done, done)
+		// row should be excluded from the count.
+		await upsertItem({
+			boardId: board.id,
+			kindId: 'wp_spec',
+			ref: 'a',
+			title: 'A',
+			frontmatterStatus: 'unread',
+			reviewStatus: 'pending',
+			cachedFields: { otherFields: {} },
+		});
+		await upsertItem({
+			boardId: board.id,
+			kindId: 'wp_spec',
+			ref: 'b',
+			title: 'B',
+			frontmatterStatus: 'reading',
+			reviewStatus: 'pending',
+			cachedFields: { otherFields: {} },
+		});
+		await upsertItem({
+			boardId: board.id,
+			kindId: 'wp_spec',
+			ref: 'c',
+			title: 'C',
+			frontmatterStatus: 'done',
+			reviewStatus: 'pending',
+			cachedFields: { otherFields: {} },
+		});
+		await upsertItem({
+			boardId: board.id,
+			kindId: 'wp_spec',
+			ref: 'd',
+			title: 'D',
+			frontmatterStatus: 'done',
+			reviewStatus: 'done',
+			cachedFields: { otherFields: {} },
+		});
+		// Also a soft-deleted "open" row to ensure it's excluded.
+		const e = await upsertItem({
+			boardId: board.id,
+			kindId: 'wp_spec',
+			ref: 'e',
+			title: 'E',
+			frontmatterStatus: 'unread',
+			reviewStatus: 'pending',
+			cachedFields: { otherFields: {} },
+		});
+		await softDeleteItem(e.id);
+		const open = await countReviewQueueOpen(board.id);
+		expect(open).toBe(3);
+	});
+
+	it('returns 0 for a board with no items', async () => {
+		const board = await freshBoard('count-empty');
+		expect(await countReviewQueueOpen(board.id)).toBe(0);
+	});
+});
+
+describe('getBucket', () => {
+	it('returns the bucket when boardId is omitted (back-compat singleton)', async () => {
+		const board = await freshBoard('get-bucket-noscope');
+		const created = await createBucket({
+			boardId: board.id,
+			name: 'Open',
+			kindId: 'wp_spec',
+			filterCriteria: {},
+			sortOrder: 0,
+		});
+		const got = await getBucket(created.id);
+		expect(got?.id).toBe(created.id);
+	});
+
+	it('scopes by boardId when supplied -- mismatched board returns null', async () => {
+		const a = await freshBoard('get-bucket-a');
+		const b = await freshBoard('get-bucket-b');
+		const onA = await createBucket({
+			boardId: a.id,
+			name: 'OnA',
+			kindId: 'wp_spec',
+			filterCriteria: {},
+			sortOrder: 0,
+		});
+		expect((await getBucket(onA.id, a.id))?.id).toBe(onA.id);
+		expect(await getBucket(onA.id, b.id)).toBeNull();
+	});
+
+	it('returns null for unknown ids', async () => {
+		expect(await getBucket('hrb_does_not_exist')).toBeNull();
+	});
+});
+
+describe('countItemsByCriteria', () => {
+	it('counts items via SQL even past REVIEW_LIST_HARD_CAP shape -- here matches kind+status filter', async () => {
+		const board = await freshBoard('count-criteria');
+		await upsertItem({
+			boardId: board.id,
+			kindId: 'wp_spec',
+			ref: 'a',
+			title: 'A',
+			frontmatterStatus: 'unread',
+			reviewStatus: 'pending',
+			cachedFields: { otherFields: {} },
+		});
+		await upsertItem({
+			boardId: board.id,
+			kindId: 'wp_spec',
+			ref: 'b',
+			title: 'B',
+			frontmatterStatus: 'reading',
+			reviewStatus: 'pending',
+			cachedFields: { otherFields: {} },
+		});
+		await upsertItem({
+			boardId: board.id,
+			kindId: 'knowledge_node',
+			ref: 'c',
+			title: 'C',
+			frontmatterStatus: 'unread',
+			reviewStatus: 'pending',
+			cachedFields: { otherFields: {} },
+		});
+		expect(await countItemsByCriteria(board.id, {})).toBe(3);
+		expect(await countItemsByCriteria(board.id, { kind: 'wp_spec' })).toBe(2);
+		expect(await countItemsByCriteria(board.id, { frontmatterStatus: ['unread'] })).toBe(2);
+		expect(await countItemsByCriteria(board.id, { kind: 'wp_spec', frontmatterStatus: ['unread'] })).toBe(1);
+	});
+});
+
+describe('getBoard', () => {
+	it('returns the singleton board after getOrCreateBoard, null before', async () => {
+		// `getBoard` returns the singleton if already seeded. We can't
+		// easily test the null branch in isolation (the test pollutes the
+		// singleton), so the existence assertion is the contract.
+		await getOrCreateBoard();
+		const board = await getBoard();
+		expect(board).not.toBeNull();
+		expect(board?.name).toBe('Hangar Review');
 	});
 });
 

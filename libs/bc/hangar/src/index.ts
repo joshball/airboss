@@ -160,6 +160,7 @@ export {
 export {
 	type CreateBucketInput,
 	type CreateTaskInput,
+	countItemsByCriteria,
 	countReviewQueueOpen,
 	createBucket,
 	createColumn,
@@ -170,6 +171,7 @@ export {
 	filterItemsByCriteria,
 	findItemByRef,
 	finishSession,
+	getBoard,
 	getBucket,
 	getDerivedColumnName,
 	getItem,
@@ -189,10 +191,10 @@ export {
 	type RecordStepInput,
 	recordStep,
 	resolveItemColumnId,
+	type SessionSummary,
 	seedDefaultBuckets,
 	seedDefaultColumns,
 	seedReviewKinds,
-	type SessionSummary,
 	softDeleteItem,
 	startSession,
 	type UpdateTaskInput,
@@ -210,13 +212,7 @@ export {
 	discoverAllItems,
 } from './review-discovery';
 export { readFrontmatter, writeFrontmatterField, writeFrontmatterFields } from './review-frontmatter';
-export {
-	getLastLoaderRun,
-	type LastLoaderRun,
-	type LoaderResult,
-	loadReviewItems,
-	setLastLoaderRun,
-} from './review-loader';
+export { getLastLoaderRun, type LastLoaderRun, type LoaderResult, loadReviewItems } from './review-loader';
 export { parseTestPlan, type TestPlanStep } from './review-test-plan';
 export { parseToc, type TocEntry, type TocParseResult } from './review-toc';
 export {

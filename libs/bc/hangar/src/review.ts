@@ -108,6 +108,18 @@ export interface SessionSummary {
 // ---------------------------------------------------------------------------
 
 /**
+ * Read-only lookup for the singleton review board. Returns `null` when the
+ * board hasn't been seeded yet (first-ever request after a clean DB) so a
+ * caller that doesn't want admin-grade write side-effects can skip the
+ * default-column / default-kind seeding step. Pair with {@link getOrCreateBoard}
+ * on admin-only or loader-only call sites where seeding is the right behavior.
+ */
+export async function getBoard(db: Db = defaultDb): Promise<HangarBoardRow | null> {
+	const rows = await db.select().from(hangarBoard).where(eq(hangarBoard.name, REVIEW_BOARD_DEFAULT_NAME)).limit(1);
+	return rows[0] ?? null;
+}
+
+/**
  * Idempotent board getter. Creates the default `Hangar Review` board on first
  * call along with `REVIEW_BOARD_DEFAULT_COLUMNS` columns and `REVIEW_KIND_VALUES`
  * kinds. Buckets are NOT seeded here (callers seed buckets explicitly via
@@ -404,9 +416,23 @@ export async function deleteBucket(id: string, db: Db = defaultDb): Promise<void
 	await db.delete(hangarReviewBucket).where(eq(hangarReviewBucket.id, id));
 }
 
-/** Get a single bucket by id. Returns null when no row matches. */
-export async function getBucket(id: string, db: Db = defaultDb): Promise<HangarReviewBucketRow | null> {
-	const rows = await db.select().from(hangarReviewBucket).where(eq(hangarReviewBucket.id, id)).limit(1);
+/**
+ * Get a single bucket by id. Returns null when no row matches. Pass `boardId`
+ * to scope the lookup -- defends against a bucket id from a different board
+ * being edited via URL guess once the singleton-board invariant is relaxed
+ * (today there is one board, but threading the board id keeps the call site
+ * honest about scope).
+ */
+export async function getBucket(
+	id: string,
+	boardId?: string,
+	db: Db = defaultDb,
+): Promise<HangarReviewBucketRow | null> {
+	const where =
+		boardId !== undefined
+			? and(eq(hangarReviewBucket.id, id), eq(hangarReviewBucket.boardId, boardId))
+			: eq(hangarReviewBucket.id, id);
+	const rows = await db.select().from(hangarReviewBucket).where(where).limit(1);
 	return rows[0] ?? null;
 }
 
@@ -464,27 +490,81 @@ export async function listItems(
  * reviewStatus = done). Pinned columns aren't consulted -- the nav badge is
  * a derived-state count, not a column-membership count, so a user pinning
  * an item to Done without flipping frontmatter still surfaces in the badge.
+ *
+ * Plan: indexed scan over `(boardId, deletedAt)` (the
+ * `hangar_review_item_board_idx` partial-on-live index covers the leading
+ * predicates), with a heap-side `frontmatter_status` / `review_status`
+ * check. The cardinality is bounded (one singleton board, hundreds of
+ * items today) so the heap check is cheap; if the count grows hot a
+ * partial index over the open-rows-only set is the next step.
  */
 export async function countReviewQueueOpen(boardId: string, db: Db = defaultDb): Promise<number> {
 	// "Done" is `frontmatterStatus === 'done' AND reviewStatus === 'done'`;
 	// anything that isn't that pair is "open." Express via Drizzle's `not`
 	// + `and` rather than a raw SQL literal so the constant strings come
-	// straight from `FRONTMATTER_STATUSES.DONE` -- no magic strings.
+	// straight from `FRONTMATTER_STATUSES.DONE` -- no magic strings. Both
+	// `eq` calls have known arguments so `and(...)` cannot return undefined
+	// here; the type-narrowing fallback that used to live on this line was
+	// dead code.
+	const doneCondition = and(
+		eq(hangarReviewItem.frontmatterStatus, FRONTMATTER_DONE),
+		eq(hangarReviewItem.reviewStatus, REVIEW_STATUS_DONE),
+	);
+	if (doneCondition === undefined) {
+		// Type-only branch: drizzle's `and()` is typed as possibly undefined.
+		// In practice both eq() args are defined, so this never fires.
+		throw new Error('countReviewQueueOpen: drizzle and(...) returned undefined');
+	}
 	const rows = await db
 		.select({ count: sql<number>`count(*)::int` })
 		.from(hangarReviewItem)
-		.where(
-			and(
-				eq(hangarReviewItem.boardId, boardId),
-				isNull(hangarReviewItem.deletedAt),
-				not(
-					and(
-						eq(hangarReviewItem.frontmatterStatus, FRONTMATTER_DONE),
-						eq(hangarReviewItem.reviewStatus, REVIEW_STATUS_DONE),
-					) ?? sql`FALSE`,
-				),
-			),
-		);
+		.where(and(eq(hangarReviewItem.boardId, boardId), isNull(hangarReviewItem.deletedAt), not(doneCondition)));
+	return rows[0]?.count ?? 0;
+}
+
+/**
+ * Count live review items on `boardId` that match a {@link BucketFilterCriteria}
+ * predicate. Differs from `filterItemsByCriteria(listItems(boardId), ...)` in
+ * two important ways:
+ *
+ *  - SQL `COUNT(*)` rather than an in-memory `.filter`, so the count is
+ *    correct above `REVIEW_LIST_HARD_CAP` (the in-memory path silently
+ *    truncates).
+ *  - `noPassingSession: true` joins against the latest finished session per
+ *    item via the same window-function shape as
+ *    {@link listItemsWithPassingSession}.
+ *
+ * Used by the bucket admin list page so an operator reasoning about a
+ * predicate sees the real count, not a capped-and-truncated one.
+ */
+export async function countItemsByCriteria(
+	boardId: string,
+	criteria: BucketFilterCriteria,
+	db: Db = defaultDb,
+): Promise<number> {
+	const conditions = [eq(hangarReviewItem.boardId, boardId), isNull(hangarReviewItem.deletedAt)];
+	if (criteria.kind !== undefined) {
+		conditions.push(eq(hangarReviewItem.kindId, criteria.kind));
+	}
+	if (criteria.frontmatterStatus !== undefined && criteria.frontmatterStatus.length > 0) {
+		conditions.push(inArray(hangarReviewItem.frontmatterStatus, [...criteria.frontmatterStatus]));
+	}
+	if (criteria.reviewStatus !== undefined && criteria.reviewStatus.length > 0) {
+		conditions.push(inArray(hangarReviewItem.reviewStatus, [...criteria.reviewStatus]));
+	}
+	if (criteria.noPassingSession === true) {
+		// Items without a latest-pass session: subtract the passing-session
+		// item set. Matches the semantics of `filterItemsByCriteria` exactly.
+		const passingIds = await listItemsWithPassingSession(boardId, db);
+		const exclude = [...passingIds];
+		if (exclude.length > 0) {
+			conditions.push(not(inArray(hangarReviewItem.id, exclude)));
+		}
+	}
+	const rows = await db
+		.select({ count: sql<number>`count(*)::int` })
+		.from(hangarReviewItem)
+		.where(and(...conditions));
 	return rows[0]?.count ?? 0;
 }
 

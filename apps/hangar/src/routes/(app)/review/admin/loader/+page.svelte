@@ -1,3 +1,23 @@
+<script lang="ts" module>
+// Pure utility helpers -- module-scope so they're parsed once, not per
+// component instance. Locale-resolved at module evaluation; subsequent
+// component mounts reuse the cached `Intl.DateTimeFormat`.
+const tsFmt = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' });
+
+export function formatTs(iso: string): string {
+	try {
+		return tsFmt.format(new Date(iso));
+	} catch {
+		return iso;
+	}
+}
+
+export function formatDurationMs(ms: number): string {
+	if (ms < 1000) return `${ms} ms`;
+	return `${(ms / 1000).toFixed(2)} s`;
+}
+</script>
+
 <script lang="ts">
 import { REVIEW_WP_SPEC_TOAST_DISMISS_MS, ROUTES } from '@ab/constants';
 import Banner from '@ab/ui/components/Banner.svelte';
@@ -22,26 +42,12 @@ let toast = $state<ToastState | null>(null);
 let toastDismissTimer: ReturnType<typeof setTimeout> | null = null;
 let liveAnnounce = $state('');
 
+// Breadcrumbs intentionally skip an `Admin` crumb -- the admin sub-nav
+// (Buckets / Loader) is the IA for this surface.
 const crumbs: readonly BreadcrumbItem[] = [
 	{ label: 'Review board', href: ROUTES.HANGAR_REVIEW },
-	{ label: 'Admin', href: ROUTES.HANGAR_REVIEW_ADMIN_BUCKETS },
 	{ label: 'Loader' },
 ];
-
-const tsFmt = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' });
-
-function formatTs(iso: string): string {
-	try {
-		return tsFmt.format(new Date(iso));
-	} catch {
-		return iso;
-	}
-}
-
-function formatDurationMs(ms: number): string {
-	if (ms < 1000) return `${ms} ms`;
-	return `${(ms / 1000).toFixed(2)} s`;
-}
 
 function showToast(tone: ToastTone, message: string, sticky = false): void {
 	toast = { tone, message, sticky };

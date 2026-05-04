@@ -2,7 +2,8 @@
  * Shared parser for the bucket admin form. Both `/admin/buckets/new` and
  * `/admin/buckets/[bucketId]/edit` accept the same inputs:
  *
- * - `name`         (required, unique per board enforced server-side)
+ * - `name`         (required, unique per board enforced server-side, charset
+ *                   restricted to printable + whitespace via {@link BUCKET_NAME_DISALLOWED})
  * - `kindId`       (required, one of REVIEW_KIND_VALUES)
  * - `sortOrder`    (required integer)
  * - structured filter inputs:
@@ -14,14 +15,18 @@
  *   inputs when present, validated through `validateBucketFilterCriteria`).
  *
  * Returns either a parsed `{ name, kindId, sortOrder, filterCriteria }`
- * payload or a `FormErrors` record so the route can `fail(400, ...)`
- * without re-deriving the field map.
+ * payload (with criteria already validated through
+ * {@link validateBucketFilterCriteria}, so the type signature is honest) or
+ * a `FormErrors` record so the route can `fail(400, ...)` without
+ * re-deriving the field map.
  */
 
-import type { BucketFilterCriteria } from '@ab/bc-hangar';
+import { type BucketFilterCriteria, validateBucketFilterCriteria } from '@ab/bc-hangar';
 import {
 	FRONTMATTER_REVIEW_STATUS_VALUES,
 	FRONTMATTER_STATUS_VALUES,
+	type FrontmatterReviewStatus,
+	type FrontmatterStatus,
 	REVIEW_KIND_VALUES,
 	type ReviewKind,
 } from '@ab/constants';
@@ -50,6 +55,25 @@ export interface BucketFormErrors {
 	readonly values: BucketFormValues;
 }
 
+/** Maximum bucket-name length (matches the DB `varchar(200)` column). */
+export const BUCKET_NAME_MAX_LENGTH = 200;
+
+/**
+ * Disallowed code-point ranges in a bucket name. Defense-in-depth against
+ * homoglyph / RTL-override mimicry and stray control bytes that would render
+ * weirdly in nav lists, breadcrumbs, and the bucket table:
+ *
+ *  - U+0000..U+001F (C0 controls, including NUL / newline / tab)
+ *  - U+007F         (DEL)
+ *  - U+202A..U+202E (bidi-override)
+ *  - U+2066..U+2069 (isolate-override)
+ *
+ * Whitespace inside a name is allowed; control bytes are not. Trim is
+ * already applied in {@link readBucketForm}.
+ */
+// biome-ignore lint/suspicious/noControlCharactersInRegex: intentional reject of C0 controls / DEL / bidi-overrides in admin-supplied bucket names; see comment above.
+const BUCKET_NAME_DISALLOWED = /[\u0000-\u001F\u007F\u202A-\u202E\u2066-\u2069]/u;
+
 export function readBucketForm(fd: FormData): BucketFormValues {
 	const fmStatuses = fd.getAll('filterFmStatuses').map((v) => String(v));
 	const reviewStatuses = fd.getAll('filterReviewStatuses').map((v) => String(v));
@@ -67,8 +91,13 @@ export function readBucketForm(fd: FormData): BucketFormValues {
 
 export function parseBucketForm(values: BucketFormValues): BucketFormParsed | BucketFormErrors {
 	const errors: Record<string, string> = {};
-	if (values.name === '') errors.name = 'Name is required.';
-	if (values.name.length > 200) errors.name = 'Name must be 200 characters or fewer.';
+	if (values.name === '') {
+		errors.name = 'Name is required.';
+	} else if (values.name.length > BUCKET_NAME_MAX_LENGTH) {
+		errors.name = `Name must be ${BUCKET_NAME_MAX_LENGTH} characters or fewer.`;
+	} else if (BUCKET_NAME_DISALLOWED.test(values.name)) {
+		errors.name = 'Name contains disallowed characters (control bytes or bidi overrides).';
+	}
 	if (!(REVIEW_KIND_VALUES as readonly string[]).includes(values.kindId)) {
 		errors.kindId = 'Pick a kind.';
 	}
@@ -80,11 +109,21 @@ export function parseBucketForm(values: BucketFormValues): BucketFormParsed | Bu
 	let filterCriteria: BucketFilterCriteria = {};
 	if (values.advancedJson !== '') {
 		try {
-			const parsed = JSON.parse(values.advancedJson);
+			const parsed: unknown = JSON.parse(values.advancedJson);
 			if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
 				errors.advancedJson = 'Advanced JSON must be a JSON object.';
 			} else {
-				filterCriteria = parsed as BucketFilterCriteria;
+				// Validate at the parser boundary so the success branch's type
+				// signature is honest -- `filterCriteria` is real
+				// `BucketFilterCriteria`, not an unchecked cast pushed forward
+				// to whichever caller happens to invoke
+				// `validateBucketFilterCriteria` next.
+				try {
+					filterCriteria = validateBucketFilterCriteria(parsed);
+				} catch (validateErr) {
+					errors.advancedJson =
+						validateErr instanceof RangeError ? validateErr.message : 'Advanced JSON is not a valid filter predicate.';
+				}
 			}
 		} catch (err) {
 			errors.advancedJson = err instanceof Error ? `Invalid JSON: ${err.message}` : 'Invalid JSON.';
@@ -99,7 +138,7 @@ export function parseBucketForm(values: BucketFormValues): BucketFormParsed | Bu
 			}
 		}
 		if (values.filterFmStatuses.length > 0) {
-			const fs = values.filterFmStatuses.filter((v): v is 'unread' | 'reading' | 'done' =>
+			const fs = values.filterFmStatuses.filter((v): v is FrontmatterStatus =>
 				(FRONTMATTER_STATUS_VALUES as readonly string[]).includes(v),
 			);
 			if (fs.length !== values.filterFmStatuses.length) {
@@ -108,7 +147,7 @@ export function parseBucketForm(values: BucketFormValues): BucketFormParsed | Bu
 			draft.frontmatterStatus = fs;
 		}
 		if (values.filterReviewStatuses.length > 0) {
-			const rs = values.filterReviewStatuses.filter((v): v is 'pending' | 'done' =>
+			const rs = values.filterReviewStatuses.filter((v): v is FrontmatterReviewStatus =>
 				(FRONTMATTER_REVIEW_STATUS_VALUES as readonly string[]).includes(v),
 			);
 			if (rs.length !== values.filterReviewStatuses.length) {
@@ -126,13 +165,10 @@ export function parseBucketForm(values: BucketFormValues): BucketFormParsed | Bu
 		return { errors, values };
 	}
 
-	if (!(REVIEW_KIND_VALUES as readonly string[]).includes(values.kindId)) {
-		// Type narrowing safety -- already validated above; this is the
-		// "narrow for the return" branch.
-		return { errors: { kindId: 'Pick a kind.' }, values };
-	}
 	return {
 		name: values.name,
+		// Verified above via `REVIEW_KIND_VALUES` membership; cast is the
+		// type-narrowing for return.
 		kindId: values.kindId as ReviewKind,
 		sortOrder,
 		filterCriteria,

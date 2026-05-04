@@ -6,11 +6,10 @@ import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
 
-const crumbs: readonly BreadcrumbItem[] = [
-	{ label: 'Review board', href: ROUTES.HANGAR_REVIEW },
-	{ label: 'Admin', href: ROUTES.HANGAR_REVIEW_ADMIN_BUCKETS },
-	{ label: 'Buckets' },
-];
+// Breadcrumbs intentionally skip an `Admin` crumb -- the admin sub-nav
+// (Buckets / Loader) is the IA for this surface, so duplicating it as a
+// breadcrumb is noise.
+const crumbs: readonly BreadcrumbItem[] = [{ label: 'Review board', href: ROUTES.HANGAR_REVIEW }, { label: 'Buckets' }];
 
 function summarizeFilter(criteria: PageData['buckets'][number]['filterCriteria']): string {
 	const parts: string[] = [];
