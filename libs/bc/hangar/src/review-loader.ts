@@ -22,6 +22,7 @@ import { db as defaultDb } from '@ab/db/connection';
 import { createLogger, parseFrontmatter } from '@ab/utils';
 import { and, eq, inArray, isNull, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
+import { bustDocsTreeCache } from './docs-tree';
 import { getOrCreateBoard, seedDefaultBuckets, softDeleteItem, upsertItem } from './review';
 import { type DiscoveryError, discoverAllItems } from './review-discovery';
 import { hangarDocsSearchIndex, hangarReviewItem } from './schema';
@@ -122,6 +123,10 @@ async function runLoader(repoRoot: string, db: Db): Promise<LoaderResult> {
 		return { added: addedLocal, updated: updatedLocal, removed: removedLocal };
 	});
 	const fts = await rebuildDocsSearchIndex(repoRoot, db);
+	// Loader is the only writer to the docs corpus during a dev session;
+	// bust the file-tree cache so the next page render walks fresh disk
+	// state rather than serving the pre-loader snapshot.
+	bustDocsTreeCache(repoRoot);
 	return {
 		added,
 		updated,

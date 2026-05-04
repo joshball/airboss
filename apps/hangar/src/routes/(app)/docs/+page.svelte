@@ -1,10 +1,46 @@
 <script lang="ts">
-import { renderMarkdown, stripFrontmatter } from '@ab/utils';
+import { ROUTES } from '@ab/constants';
+import Button from '@ab/ui/components/Button.svelte';
+import MarkdownArticle from '@ab/ui/components/MarkdownArticle.svelte';
+import { enhance } from '$app/forms';
+import { invalidateAll } from '$app/navigation';
 import type { ActionData, PageData } from './$types';
 
 let { data, form }: { data: PageData; form: ActionData } = $props();
 
-const bodyHtml = $derived(data.now ? renderMarkdown(stripFrontmatter(data.now)) : null);
+let running = $state(false);
+
+const isEmpty = $derived(data.indexCount === 0 && form?.ranLoader !== true);
+
+const showRunNudge = $derived(data.indexCount === 0);
+
+/**
+ * Curated list of jump-off links rendered when NOW.md is missing. Each
+ * route goes through `ROUTES.HANGAR_DOCS_PATH` so an in-tree clone tells
+ * the same browser surface to render the file.
+ */
+const FALLBACK_LINKS: ReadonlyArray<{ label: string; path: string; note: string }> = [
+	{
+		label: 'Multi-product architecture',
+		path: 'docs/platform/MULTI_PRODUCT_ARCHITECTURE.md',
+		note: 'How the surface-typed monorepo is organised.',
+	},
+	{
+		label: 'Design principles',
+		path: 'docs/platform/DESIGN_PRINCIPLES.md',
+		note: 'Core beliefs that govern product shape.',
+	},
+	{
+		label: 'Vocabulary',
+		path: 'docs/platform/VOCABULARY.md',
+		note: 'Naming standards across surfaces.',
+	},
+	{
+		label: 'Idea funnel',
+		path: 'docs/platform/IDEAS.md',
+		note: 'The intake list reviewed every two weeks.',
+	},
+];
 </script>
 
 <section class="docs-index">
@@ -12,37 +48,70 @@ const bodyHtml = $derived(data.now ? renderMarkdown(stripFrontmatter(data.now)) 
 		<h1>Docs</h1>
 		<p class="muted">
 			{data.indexCount.toLocaleString()} files indexed.
-			{#if data.indexCount === 0}
+			{#if isEmpty}
 				<strong>Index is empty.</strong> Click below to populate the FTS index from
 				<code>docs/</code>, <code>course/</code>, <code>handbooks/</code>, and <code>regulations/</code>.
 			{/if}
 		</p>
 	</header>
 
-	{#if data.indexCount === 0}
-		<form method="POST" action="?/runLoader" class="loader-prompt">
-			<button type="submit">Run loader</button>
+	{#if showRunNudge}
+		<form
+			method="POST"
+			action="?/runLoader"
+			class="loader-prompt"
+			use:enhance={() => {
+				running = true;
+				return async ({ update }) => {
+					try {
+						// Default `update` reloads the load function so `indexCount`
+						// reflects the new state without a hard refresh.
+						await update();
+						await invalidateAll();
+					} finally {
+						running = false;
+					}
+				};
+			}}
+		>
+			<Button type="submit" loading={running} loadingLabel="Indexing...">Run loader</Button>
+			{#if running}
+				<span class="hint" role="status">Walking docs/, course/, handbooks/, regulations/...</span>
+			{/if}
 		</form>
 	{/if}
 
 	{#if form?.ranLoader}
-		<p class="muted">
-			Loader ran in {form.durationMs} ms. FTS:
-			<strong>{form.fts.added.toLocaleString()}</strong> added,
-			<strong>{form.fts.updated.toLocaleString()}</strong> updated,
-			<strong>{form.fts.removed.toLocaleString()}</strong> removed.
-		</p>
+		{#if form.ok}
+			<p class="status-line" role="status">
+				Indexed
+				<strong>{form.fts.added.toLocaleString()}</strong> files
+				({form.fts.updated.toLocaleString()} updated, {form.fts.removed.toLocaleString()} removed) in
+				{(form.durationMs / 1000).toFixed(1)} s.
+			</p>
+		{:else}
+			<p class="status-line error" role="alert">
+				Loader failed: {form.error}
+			</p>
+		{/if}
 	{/if}
 
-	{#if bodyHtml}
-		<article class="prose">
-			{@html bodyHtml}
-		</article>
+	{#if data.nowHtml}
+		<MarkdownArticle bodyHtml={data.nowHtml} ariaLabel="NOW.md" />
 	{:else}
-		<p class="muted">
-			<code>{data.nowPath}</code> not found. The index page renders the contents of <code>docs/work/NOW.md</code> when
-			present.
-		</p>
+		<section class="missing-now">
+			<p class="muted">
+				<code>{data.nowPath}</code> not found. Pick a file from the tree on the left, or jump to one of these:
+			</p>
+			<ul class="fallback-links">
+				{#each FALLBACK_LINKS as link (link.path)}
+					<li>
+						<a href={ROUTES.HANGAR_DOCS_PATH(link.path)}>{link.label}</a>
+						<span class="muted">— {link.note}</span>
+					</li>
+				{/each}
+			</ul>
+		</section>
 	{/if}
 </section>
 
@@ -62,50 +131,33 @@ const bodyHtml = $derived(data.now ? renderMarkdown(stripFrontmatter(data.now)) 
 		font-size: var(--type-ui-label-size);
 	}
 
-	.loader-prompt button {
-		padding: var(--space-sm) var(--space-md);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-sm);
-		background: var(--action-default-wash);
-		color: var(--action-default-hover);
-		font: inherit;
-		font-weight: var(--type-ui-control-weight);
-		cursor: pointer;
+	.loader-prompt {
+		display: flex;
+		gap: var(--space-md);
+		align-items: center;
 	}
 
-	.loader-prompt button:hover {
-		background: var(--surface-sunken);
+	.hint {
+		color: var(--ink-muted);
+		font-size: var(--type-ui-caption-size);
 	}
 
-	.loader-prompt button:focus-visible {
-		outline: 2px solid var(--focus-ring);
-		outline-offset: 2px;
-	}
-
-	.prose :global(h1),
-	.prose :global(h2),
-	.prose :global(h3),
-	.prose :global(h4) {
+	.status-line {
+		margin: 0;
 		color: var(--ink-body);
+		font-size: var(--type-ui-label-size);
 	}
 
-	.prose :global(p) {
-		color: var(--ink-body);
+	.status-line.error {
+		color: var(--signal-danger-ink);
 	}
 
-	.prose :global(code) {
-		font-family: var(--font-family-mono);
-		font-size: var(--type-code-inline-size);
-		background: var(--surface-sunken);
-		padding: 0 var(--space-3xs);
-		border-radius: var(--radius-xs);
-	}
-
-	.prose :global(a) {
-		color: var(--link-default);
-	}
-
-	.prose :global(a:hover) {
-		color: var(--link-hover);
+	.fallback-links {
+		list-style: disc inside;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2xs);
 	}
 </style>

@@ -204,6 +204,43 @@ export const DOCS_SEARCH_LIMIT = 50 as const;
 export const DOCS_SEARCH_DEBOUNCE_MS = 200 as const;
 
 /**
+ * Hard cap on characters accepted in a single `searchDocs` query. Defends
+ * against accidental paste of an entire document; clamped server-side before
+ * the query reaches Postgres.
+ */
+export const DOCS_SEARCH_MAX_QUERY_LEN = 200 as const;
+
+/**
+ * Minimum query length before the docs-search popover triggers a backend hit.
+ * Below the floor, the popover stays closed (no flicker, no "no matches" on a
+ * single character). Two is the conventional command-palette floor.
+ */
+export const DOCS_SEARCH_MIN_QUERY_LEN = 2 as const;
+
+/**
+ * Body slice (in characters) that `ts_headline` runs against. Snippet quality
+ * does not meaningfully degrade past the first 16 KB of any doc, but
+ * `ts_headline` cost grows with body size; the cap keeps typeahead under the
+ * debounce budget on a 658 KB regulation file.
+ */
+export const DOCS_SEARCH_HEADLINE_BYTES = 16384 as const;
+
+/**
+ * In-process TTL (ms) for the docs file-tree cache. Clicking around in the
+ * `/docs/**` layout triggers a re-walk of every directory; the cache prevents
+ * each click from issuing thousands of `stat` calls. Manually busted on
+ * `runLoader` so a fresh sync is reflected immediately.
+ */
+export const DOCS_TREE_CACHE_TTL_MS = 60_000 as const;
+
+/**
+ * Browser cache window for the docs-search JSON endpoint. Repeat searches
+ * within the typeahead burst window reuse the prior response instead of
+ * re-hitting the DB.
+ */
+export const DOCS_SEARCH_CACHE_MAX_AGE_S = 10 as const;
+
+/**
  * Soft-delete / resurrection window for review items. The loader prunes items
  * whose source artifact disappears by setting `deletedAt` instead of hard
  * deleting, so a temporarily-renamed file doesn't lose its session history

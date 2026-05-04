@@ -11,6 +11,7 @@ import {
 	sanitizeInlineHtml,
 	setFrontmatterField,
 	setFrontmatterFields,
+	slugifyHeading,
 	stripFrontmatter,
 } from './markdown';
 
@@ -658,5 +659,108 @@ describe('setFrontmatterFields', () => {
 		const parsed = parseFrontmatter(out);
 		expect(parsed.entries).toContainEqual({ key: 'status', value: 'reading' });
 		expect(parsed.entries).toContainEqual({ key: 'review_status', value: 'pending' });
+	});
+});
+
+describe('renderMarkdown -- GFM pipe tables', () => {
+	test('renders a basic three-column table', () => {
+		const md = ['| Level | Location | Scope |', '| --- | --- | --- |', '| Session | docs/work | One session |'].join(
+			'\n',
+		);
+		const html = renderMarkdown(md);
+		expect(html).toContain('<table>');
+		expect(html).toContain('<thead><tr>');
+		expect(html).toContain('<th>Level</th>');
+		expect(html).toContain('<th>Location</th>');
+		expect(html).toContain('<th>Scope</th>');
+		expect(html).toContain('</thead>');
+		expect(html).toContain('<tbody>');
+		expect(html).toContain('<td>Session</td>');
+		expect(html).toContain('<td>One session</td>');
+		expect(html).toContain('</tbody>');
+		expect(html).toContain('</table>');
+	});
+
+	test('renders an alignment-bearing separator row', () => {
+		const md = ['| L | C | R |', '| :-- | :-: | --: |', '| 1 | 2 | 3 |'].join('\n');
+		const html = renderMarkdown(md);
+		expect(html).toMatch(/<th style="text-align: left;">L<\/th>/);
+		expect(html).toMatch(/<th style="text-align: center;">C<\/th>/);
+		expect(html).toMatch(/<th style="text-align: right;">R<\/th>/);
+	});
+
+	test('handles tables without leading or trailing pipes', () => {
+		const md = ['col1 | col2', '--- | ---', 'a | b'].join('\n');
+		const html = renderMarkdown(md);
+		expect(html).toContain('<th>col1</th>');
+		expect(html).toContain('<td>b</td>');
+	});
+
+	test('runs inline markdown inside cells', () => {
+		const md = ['| name | note |', '| --- | --- |', '| **bold** | `code` |'].join('\n');
+		const html = renderMarkdown(md);
+		expect(html).toContain('<td><strong>bold</strong></td>');
+		expect(html).toContain('<td><code>code</code></td>');
+	});
+
+	test('does not consume a stack of pipe-bearing paragraphs without separator', () => {
+		const md = ['some | text', 'no separator here'].join('\n');
+		const html = renderMarkdown(md);
+		expect(html).not.toContain('<table>');
+		expect(html).toContain('<p>');
+	});
+
+	test('escapes HTML inside table cells', () => {
+		const md = ['| a | b |', '| --- | --- |', '| <script>x</script> | y |'].join('\n');
+		const html = renderMarkdown(md);
+		expect(html).not.toContain('<script>');
+		expect(html).toContain('&lt;script&gt;');
+	});
+});
+
+describe('renderMarkdown -- heading levels and ids', () => {
+	test('default minHeadingLevel demotes H1/H2 to H3', () => {
+		const html = renderMarkdown('# Title\n\n## Sub\n');
+		expect(html).toMatch(/<h3[^>]*>Title<\/h3>/);
+		expect(html).toMatch(/<h3[^>]*>Sub<\/h3>/);
+	});
+
+	test('minHeadingLevel: 1 preserves H1 / H2', () => {
+		const html = renderMarkdown('# Title\n\n## Sub\n', { minHeadingLevel: 1 });
+		expect(html).toMatch(/<h1[^>]*>Title<\/h1>/);
+		expect(html).toMatch(/<h2[^>]*>Sub<\/h2>/);
+	});
+
+	test('emits GFM-style id slugs by default', () => {
+		const html = renderMarkdown('# Hello, World!\n', { minHeadingLevel: 1 });
+		expect(html).toContain('<h1 id="hello-world">Hello, World!</h1>');
+	});
+
+	test('headingIds: false disables slug emission', () => {
+		const html = renderMarkdown('# Title\n', { minHeadingLevel: 1, headingIds: false });
+		expect(html).toBe('<h1>Title</h1>');
+	});
+
+	test('slug normalises unicode-adjacent characters', () => {
+		const html = renderMarkdown('## Air & Sea\n', { minHeadingLevel: 1 });
+		expect(html).toContain('<h2 id="air-sea">Air &amp; Sea</h2>');
+	});
+});
+
+describe('slugifyHeading', () => {
+	test('lowercases and dashes the text', () => {
+		expect(slugifyHeading('Frontmatter Rules')).toBe('frontmatter-rules');
+	});
+
+	test('strips non-alphanumerics', () => {
+		expect(slugifyHeading('Surface 1 -- /docs Browser')).toBe('surface-1-docs-browser');
+	});
+
+	test('collapses consecutive dashes', () => {
+		expect(slugifyHeading('a   b   c')).toBe('a-b-c');
+	});
+
+	test('trims leading/trailing dashes', () => {
+		expect(slugifyHeading('--leading and trailing--')).toBe('leading-and-trailing');
 	});
 });

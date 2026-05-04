@@ -28,8 +28,9 @@ export {
 	countVerbatimReferences,
 	listLiveSources,
 } from './dashboard-queries';
-export { countDocsIndex, type DocsSearchHit, searchDocs } from './docs-search';
+export { countDocsIndex, type DocsSearchHit, readIndexedDoc, searchDocs } from './docs-search';
 export {
+	bustDocsTreeCache,
 	type DocsTreeDirNode,
 	type DocsTreeFileNode,
 	type DocsTreeNode,

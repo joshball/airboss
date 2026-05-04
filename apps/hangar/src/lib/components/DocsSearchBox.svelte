@@ -1,20 +1,29 @@
 <script lang="ts">
-import { DOCS_SEARCH_DEBOUNCE_MS, ROUTES } from '@ab/constants';
+import { DOCS_SEARCH_DEBOUNCE_MS, DOCS_SEARCH_MIN_QUERY_LEN, ROUTES } from '@ab/constants';
 import { goto } from '$app/navigation';
 
 /**
  * Live search box for `/docs` -- debounces user input by
  * `DOCS_SEARCH_DEBOUNCE_MS`, fires a GET to `/docs/search.json?q=`, renders
  * the top-N hits in a popover. ENTER on a hit (or click) navigates via
- * `goto`. ESC clears the popover.
+ * `goto`. ESC clears the query (first press) then closes the popover.
  *
- * Uses a `fetch` to a `+server.ts` JSON endpoint rather than a form action
- * because typeahead UI wants per-keystroke results, not a submit cycle.
+ * Below `DOCS_SEARCH_MIN_QUERY_LEN` characters the popover stays closed
+ * (no flicker, no premature "no matches"). The popover opens after the
+ * user types two characters and a request returns.
  *
- * Snippet bracketing in `ts_headline` returns `<mark>...</mark>` tags. We
- * render those via `{@html}` after sanitising on the server (see
- * `/docs/search.json/+server.ts`'s contract -- only `<mark>`/`</mark>` and
- * the bracketed body fragment are emitted).
+ * Race-safety:
+ *   - In-flight requests are cancelled via `AbortController` whenever a
+ *     new keystroke supersedes the old one. The endpoint sees a closed
+ *     request; that's free server-side cancellation.
+ *   - A monotonic `requestId` counter gates the apply-to-state on the
+ *     response so an out-of-order non-aborted response cannot clobber
+ *     newer hits.
+ *
+ * Snippet safety: the server post-escapes `ts_headline` output and only
+ * re-injects `<mark>`/`</mark>` tags. The contract reaching the client is
+ * "only `<mark>` survives; everything else is text", so `{@html}` on the
+ * snippet is safe.
  */
 
 interface Hit {
@@ -28,27 +37,67 @@ let hits = $state<readonly Hit[]>([]);
 let loading = $state(false);
 let open = $state(false);
 let activeIndex = $state(-1);
-let debounceTimer = $state<ReturnType<typeof setTimeout> | null>(null);
 let inputEl = $state<HTMLInputElement | null>(null);
 
+// Plain `let`s -- not template-read, no need for reactive proxies.
+let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+let inflight: AbortController | null = null;
+let nextRequestId = 0;
+let lastAppliedRequestId = -1;
+
+const optionId = (idx: number): string => `docs-search-opt-${idx}`;
+
+const activeOptionId = $derived(open && activeIndex >= 0 ? optionId(activeIndex) : undefined);
+
 async function runSearch(q: string): Promise<void> {
-	if (q.trim() === '') {
+	const trimmed = q.trim();
+	if (trimmed === '') {
+		hits = [];
+		open = false;
+		return;
+	}
+	if (trimmed.length < DOCS_SEARCH_MIN_QUERY_LEN) {
 		hits = [];
 		return;
 	}
+	// Cancel the prior in-flight request before starting a new one. The
+	// server endpoint sees a closed connection and stops the FTS scan early.
+	if (inflight !== null) inflight.abort();
+	const controller = new AbortController();
+	inflight = controller;
+	const requestId = nextRequestId++;
 	loading = true;
 	try {
-		const res = await fetch(`${ROUTES.HANGAR_DOCS}/search.json?q=${encodeURIComponent(q)}`);
+		const res = await fetch(`${ROUTES.HANGAR_DOCS}/search.json?q=${encodeURIComponent(q)}`, {
+			signal: controller.signal,
+		});
 		if (!res.ok) {
-			hits = [];
+			if (requestId > lastAppliedRequestId) {
+				lastAppliedRequestId = requestId;
+				hits = [];
+			}
 			return;
 		}
 		const data = (await res.json()) as { hits: Hit[] };
+		// Drop late responses -- only the most recent request reaches state.
+		if (requestId <= lastAppliedRequestId) return;
+		lastAppliedRequestId = requestId;
 		hits = data.hits ?? [];
-	} catch {
-		hits = [];
+	} catch (err) {
+		// Aborted requests reach here as a `DOMException` named "AbortError"
+		// or "Abort" -- silently swallow.
+		if (err instanceof DOMException && (err.name === 'AbortError' || err.name === 'Abort')) return;
+		if (requestId > lastAppliedRequestId) {
+			lastAppliedRequestId = requestId;
+			hits = [];
+		}
 	} finally {
-		loading = false;
+		// `loading` belongs to the latest request; only flip it off when
+		// this controller is still the active one.
+		if (inflight === controller) {
+			inflight = null;
+			loading = false;
+		}
 	}
 }
 
@@ -66,7 +115,22 @@ function onInput(event: Event) {
 
 function onKeydown(event: KeyboardEvent) {
 	if (event.key === 'Escape') {
+		event.preventDefault();
+		// First press clears the query if it's non-empty; second press closes.
+		if (query !== '') {
+			query = '';
+			hits = [];
+			activeIndex = -1;
+			if (debounceTimer !== null) clearTimeout(debounceTimer);
+			if (inflight !== null) inflight.abort();
+			open = false;
+			// Keep focus on the input so the user can immediately retype.
+			inputEl?.focus();
+			return;
+		}
 		open = false;
+		// On the second press blur the input so focus releases out of the box.
+		inputEl?.blur();
 		return;
 	}
 	if (!open || hits.length === 0) {
@@ -80,10 +144,12 @@ function onKeydown(event: KeyboardEvent) {
 	}
 	if (event.key === 'ArrowDown') {
 		event.preventDefault();
-		activeIndex = Math.min(activeIndex + 1, hits.length - 1);
+		activeIndex = activeIndex < hits.length - 1 ? activeIndex + 1 : 0;
 	} else if (event.key === 'ArrowUp') {
 		event.preventDefault();
-		activeIndex = Math.max(activeIndex - 1, 0);
+		// Wrap from the first option to the last so the user can reach the
+		// bottom from the top via one keystroke (W3C APG combobox option).
+		activeIndex = activeIndex <= 0 ? hits.length - 1 : activeIndex - 1;
 	} else if (event.key === 'Enter') {
 		event.preventDefault();
 		const target = activeIndex >= 0 ? hits[activeIndex] : hits[0];
@@ -94,19 +160,38 @@ function onKeydown(event: KeyboardEvent) {
 	}
 }
 
-function onBlur() {
-	// Defer close so a click on a result still navigates before blur kills the popover.
-	setTimeout(() => {
-		open = false;
-	}, 150);
-}
-
 function onFocus() {
 	if (hits.length > 0 || query.trim() !== '') open = true;
 }
+
+/**
+ * Suppress blur on popover mousedown so a result click runs to navigation
+ * without the input losing focus first. Replaces the prior 150 ms timeout
+ * (which leaked across unmount and races between handlers).
+ */
+function onPopoverMousedown(event: MouseEvent) {
+	event.preventDefault();
+}
+
+function onResultClick() {
+	open = false;
+}
+
+/**
+ * Component teardown: cancel any in-flight fetch + pending debounce when
+ * Svelte unmounts. Without this, a navigation away inside the debounce
+ * window would dispatch a network request from a torn-down component.
+ */
+$effect(() => {
+	return () => {
+		if (debounceTimer !== null) clearTimeout(debounceTimer);
+		if (inflight !== null) inflight.abort();
+	};
+});
 </script>
 
-<div class="search-box" role="combobox" aria-haspopup="listbox" aria-expanded={open} aria-controls="docs-search-results" aria-owns="docs-search-results">
+<div class="search-box">
+	<span class="icon" aria-hidden="true">⌕</span>
 	<input
 		bind:this={inputEl}
 		type="search"
@@ -114,25 +199,44 @@ function onFocus() {
 		value={query}
 		oninput={onInput}
 		onkeydown={onKeydown}
-		onblur={onBlur}
 		onfocus={onFocus}
+		role="combobox"
 		aria-label="Search docs"
 		aria-autocomplete="list"
+		aria-expanded={open}
 		aria-controls="docs-search-results"
+		aria-activedescendant={activeOptionId}
 	/>
-	{#if open && (loading || hits.length > 0 || query.trim() !== '')}
-		<ul class="results" id="docs-search-results" role="listbox">
+	{#if open && (hits.length > 0 || (loading && query.trim().length >= DOCS_SEARCH_MIN_QUERY_LEN))}
+		<ul
+			class="results"
+			id="docs-search-results"
+			role="listbox"
+			onmousedown={onPopoverMousedown}
+		>
 			{#if loading && hits.length === 0}
-				<li class="state">Searching…</li>
+				<li class="state">Searching...</li>
 			{:else if hits.length === 0}
 				<li class="state">No matches.</li>
 			{:else}
 				{#each hits as hit, idx (hit.path)}
-					<li class="hit" class:active={idx === activeIndex} role="option" aria-selected={idx === activeIndex}>
-						<a href={ROUTES.HANGAR_DOCS_PATH(hit.path)} onclick={() => (open = false)}>
-							<span class="hit-title">{hit.title}</span>
-							<span class="hit-path">{hit.path}</span>
+					{@const sameAsPath = hit.title === hit.path || hit.title === hit.path.split('/').pop()}
+					<li
+						id={optionId(idx)}
+						class="hit"
+						class:active={idx === activeIndex}
+						role="option"
+						aria-selected={idx === activeIndex}
+					>
+						<a href={ROUTES.HANGAR_DOCS_PATH(hit.path)} onclick={onResultClick}>
+							{#if sameAsPath}
+								<span class="hit-title">{hit.path}</span>
+							{:else}
+								<span class="hit-title">{hit.title}</span>
+								<span class="hit-path">{hit.path}</span>
+							{/if}
 							{#if hit.snippet}
+								<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 								<span class="hit-snippet">{@html hit.snippet}</span>
 							{/if}
 						</a>
@@ -147,11 +251,21 @@ function onFocus() {
 	.search-box {
 		position: relative;
 		flex: 0 1 24rem;
+		display: flex;
+		align-items: center;
+	}
+
+	.icon {
+		position: absolute;
+		left: var(--space-sm);
+		color: var(--ink-muted);
+		font-size: var(--type-ui-label-size);
+		pointer-events: none;
 	}
 
 	input {
 		width: 100%;
-		padding: var(--space-2xs) var(--space-sm);
+		padding: var(--space-2xs) var(--space-sm) var(--space-2xs) var(--space-xl);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-sm);
 		background: var(--surface-panel);

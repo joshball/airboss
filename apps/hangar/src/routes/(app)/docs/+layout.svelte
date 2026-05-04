@@ -9,15 +9,34 @@ import type { LayoutData } from './$types';
 let { data, children }: { data: LayoutData; children: Snippet } = $props();
 
 // `page.params.path` exists on `/docs/[...path]` -- strip a trailing slash
-// and reuse it for the FileTree's active highlight.
+// and reuse it for the FileTree's active highlight. On the bare `/docs`
+// route NOW.md is what the page renders, so point the tree at that file
+// when present so the rail-vs-content mental model lines up.
 const activePath = $derived<string | undefined>(
-	typeof page.params.path === 'string' && page.params.path !== '' ? page.params.path : undefined,
+	typeof page.params.path === 'string' && page.params.path !== ''
+		? page.params.path
+		: hasNowFile(data.tree)
+			? 'docs/work/NOW.md'
+			: undefined,
 );
 
+// `data.tree` is structurally identical to `FileTreeNode`. We `$derived`
+// the cast so the rune system tracks the `data` reference for reactivity --
+// reading reactive state outside a closure / `$derived` is a Svelte 5
+// `state_referenced_locally` warning. The derivation is cheap (a type-only
+// cast); the wrapper exists only to register the dependency.
 const tree = $derived(data.tree as ReadonlyArray<FileTreeNode>);
 
 function hrefFor(path: string): string {
 	return ROUTES.HANGAR_DOCS_PATH(path);
+}
+
+function hasNowFile(nodes: ReadonlyArray<FileTreeNode>): boolean {
+	for (const node of nodes) {
+		if (node.type === 'file' && node.path === 'docs/work/NOW.md') return true;
+		if (node.type === 'dir' && hasNowFile(node.children)) return true;
+	}
+	return false;
 }
 </script>
 
