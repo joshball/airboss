@@ -10,19 +10,22 @@ import { parseHandbookChapter, parseHandbookSection, parseHandbookSlug } from '@
 import {
 	computeReadingOrder,
 	getHandbookSection,
+	getReadState,
 	getReferenceByDocument,
 	listAllSectionsForReference,
 } from '@ab/bc-study';
-import { readingMinutesForWords, type ReferenceKind, ROUTES } from '@ab/constants';
+import { type ReferenceKind, ROUTES, readingMinutesForWords } from '@ab/constants';
 import { isParseError, parseHandbooksLocator, parseIdentifier } from '@ab/sources';
 import { error } from '@sveltejs/kit';
+import { loadReadSetForReference } from '../../../../../../lib/read-state';
 import { computeSiblingNav } from '../../../../../../lib/section-nav';
 import { buildSourceLinks } from '../../../../../../lib/source-links';
 import { buildTOCEntries, totalReadingMinutes } from '../../../../../../lib/toc';
 import { shortHandbookEdition } from '../../../../../reader-url';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ params }) => {
+export const load: PageServerLoad = async (event) => {
+	const { params } = event;
 	const documentSlug = parseHandbookSlug(params.slug);
 	if (!documentSlug) throw error(404, 'Handbook not found.');
 	const chapterCode = parseHandbookChapter(params.chapter);
@@ -92,6 +95,16 @@ export const load: PageServerLoad = async ({ params }) => {
 	const sectionEntry = readingOrder.find((e) => e.sectionId === view.section.id);
 	const sectionMinutes = sectionEntry ? readingMinutesForWords(sectionEntry.wordCount) : 0;
 
+	// Per-user read state -- powers the TOC drawer's checkmarks. Anonymous
+	// callers get an empty set; the drawer falls through to the no-progress
+	// shape without rendering any check glyphs.
+	const readSet = await loadReadSetForReference(event.locals.user?.id ?? null, ref.id);
+
+	// Fetch the per-section read-state row for the section header's
+	// "you've read this N times; last on X" line. Anonymous callers get null.
+	const userId = event.locals.user?.id ?? null;
+	const sectionReadState = userId ? await getReadState(userId, view.section.id) : null;
+
 	return {
 		uri: rawUri,
 		sourceLinks,
@@ -143,9 +156,18 @@ export const load: PageServerLoad = async ({ params }) => {
 		toc: {
 			entries: tocEntries,
 			totalMinutes: tocTotalMinutes,
+			readSectionIds: [...readSet],
 		},
 		readingTime: {
 			sectionMinutes,
 		},
+		readState: sectionReadState
+			? {
+					openedCount: sectionReadState.openedCount,
+					lastReadAt: sectionReadState.lastReadAt?.toISOString() ?? null,
+					totalSecondsVisible: sectionReadState.totalSecondsVisible,
+				}
+			: null,
+		isAuthenticated: event.locals.user !== null,
 	};
 };

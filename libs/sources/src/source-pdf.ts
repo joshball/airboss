@@ -87,6 +87,8 @@ export function describeSourcePdf(args: {
 		case REFERENCE_KINDS.PCG:
 		case REFERENCE_KINDS.NTSB:
 		case REFERENCE_KINDS.POH:
+		case REFERENCE_KINDS.SAFO:
+		case REFERENCE_KINDS.INFO:
 		case REFERENCE_KINDS.OTHER:
 			return null;
 		default: {

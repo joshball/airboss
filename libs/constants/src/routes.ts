@@ -540,6 +540,15 @@ export const ROUTES = {
 	/** Named section reader inside an InFO bulletin. */
 	FLIGHTBAG_INFO_SECTION: (id: string, section: string) =>
 		`/info/${encodeURIComponent(id)}/${encodeURIComponent(section)}` as const,
+	/**
+	 * POST endpoint for the flightbag reader heartbeat. The client posts
+	 * `{ delta: <seconds-since-last-tick> }`; the server credits the per-
+	 * `(user, reference_section)` row in `study.reference_section_read_state`
+	 * and refreshes `last_read_at`. Path-keyed on the section id (not the
+	 * doc-locator) so the same endpoint serves every corpus.
+	 */
+	FLIGHTBAG_SECTION_HEARTBEAT: (sectionId: string) =>
+		`/api/section/${encodeURIComponent(sectionId)}/heartbeat` as const,
 } as const;
 
 /**
