@@ -46,12 +46,24 @@ import {
 	ROUTES,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
-import { getCorpusResolver, isParseError, parseIdentifier, type SourceId } from '@ab/sources';
+import {
+	getAcSeedMappingByReference,
+	getCorpusResolver,
+	isParseError,
+	parseIdentifier,
+	type SourceId,
+} from '@ab/sources';
 import type { Citation, StructuredCitation } from '@ab/types';
 import { isHandbookCitation, isStructuredCitation } from '@ab/types';
 import { generateReferenceFigureId, generateReferenceId, generateReferenceSectionId } from '@ab/utils';
 import { and, asc, desc, eq, inArray, isNull, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
+import {
+	type HandbookManifestWarningCode,
+	type HandbookWarningTriageStatus,
+	handbookWarningsFileSchema,
+	handbookWarningsTriageFileSchema,
+} from './manifest-validation';
 import {
 	type KnowledgeNodeRow,
 	knowledgeNode,
@@ -657,6 +669,227 @@ function resolveAirbossRefUrl(ref: string): string | null {
 	const resolver = getCorpusResolver(parsed.corpus);
 	if (resolver === null) return null;
 	return resolver.getLiveUrl(parsed.raw as SourceId, parsed.pin ?? '');
+}
+
+// ---------------------------------------------------------------------------
+// Open-warnings reader (WP-HANDBOOK-RE-EXTRACTION-V2 Phase 3)
+// ---------------------------------------------------------------------------
+
+/**
+ * One open warning surfaced to the hangar warning-triage dashboard.
+ *
+ * "Open" = the warning exists in `warnings.json` AND its `id` is either
+ * absent from `warnings-triage.json` OR carries `status: 'open'`. Closed
+ * triage states (`wontfix`, `fixed`, `duplicate`) are filtered out by the
+ * reader so the dashboard only sees what still needs attention.
+ *
+ * `triage_note` is the optional reviewer note from the triage file; it
+ * survives even on `open` decisions (e.g. "investigating", "blocked on
+ * extractor change") so the dashboard can render context next to the row.
+ */
+export interface OpenWarning {
+	readonly id: string;
+	readonly code: HandbookManifestWarningCode;
+	readonly section_code: string | null;
+	readonly message: string;
+	readonly triage_note?: string;
+}
+
+/**
+ * Thrown by {@link getOpenWarningsForReference} when the triage file's
+ * `manifest_sha256` does not match the digest recorded on the live
+ * `warnings.json`. The triage decisions were made against an older
+ * extraction; the dashboard surfaces a "manifest drift" prompt and asks
+ * the reviewer to re-triage rather than silently applying decisions whose
+ * underlying warning text may have moved.
+ */
+export class StaleWarningsTriageError extends Error {
+	constructor(
+		public readonly referenceId: string,
+		public readonly expectedManifestSha: string,
+		public readonly recordedManifestSha: string,
+	) {
+		super(
+			`Stale warnings triage for reference ${referenceId}: ` +
+				`triage file recorded manifest_sha256=${recordedManifestSha}, warnings.json reports ${expectedManifestSha}. ` +
+				`Re-triage required after re-extraction.`,
+		);
+		this.name = 'StaleWarningsTriageError';
+	}
+}
+
+type NodeFs = {
+	existsSync: (p: string) => boolean;
+	readFileSync: (p: string, encoding: 'utf-8') => string;
+};
+type NodePath = { join: (...parts: string[]) => string };
+
+let cachedFs: NodeFs | null = null;
+let cachedPath: NodePath | null = null;
+
+type GetBuiltinModule = (spec: string) => unknown;
+
+/**
+ * Lazy-load Node built-ins so this module stays browser-bundle safe.
+ * `libs/bc/study` is hoisted into the SvelteKit client bundle by the BC
+ * barrel; a top-level `import 'node:fs'` would crash the dev server with
+ * a Vite externalization error. Mirrors `libs/constants/src/source-cache.ts`.
+ */
+function loadBuiltin<T>(spec: string): T {
+	const proc = (typeof process !== 'undefined' ? process : undefined) as
+		| (NodeJS.Process & { getBuiltinModule?: GetBuiltinModule })
+		| undefined;
+	const getBuiltin = proc?.getBuiltinModule;
+	if (typeof getBuiltin !== 'function') {
+		throw new Error(`references: ${spec} unavailable in this runtime (no process.getBuiltinModule)`);
+	}
+	return getBuiltin(spec) as T;
+}
+
+function nodeFs(): NodeFs {
+	if (!cachedFs) cachedFs = loadBuiltin<NodeFs>('node:fs');
+	return cachedFs;
+}
+
+function nodePath(): NodePath {
+	if (!cachedPath) cachedPath = loadBuiltin<NodePath>('node:path');
+	return cachedPath;
+}
+
+/**
+ * Resolve the on-disk `warnings.json` path for a reference row.
+ *
+ * Dispatches on `reference.kind`:
+ *
+ * - `handbook` -> `handbooks/<documentSlug>/<edition>/warnings.json`. Same
+ *    layout for sectioned (PHAK / AFH / AVWX / IFH / IPH / RMH / AIH) and
+ *    whole-doc handbooks; the manifest discriminator differs but the
+ *    sibling `warnings.json` lives at the same path.
+ * - `ac`       -> `ac/<doc_slug>/<revision>/warnings.json` per WP-AC-V2
+ *    conformance shim. The reverse lookup goes through
+ *    {@link getAcSeedMappingByReference} so AC reference rows resolve to
+ *    the on-disk locator regardless of edition string casing.
+ *
+ * Other kinds return null today; the reader treats null as "no warnings
+ * surface" (zero open warnings, no error). When future corpora gain
+ * triage warnings, extend this dispatch.
+ */
+function warningsJsonRelPath(referenceRow: ReferenceRow): string | null {
+	if (referenceRow.kind === REFERENCE_KINDS.HANDBOOK) {
+		return `handbooks/${referenceRow.documentSlug}/${referenceRow.edition}/warnings.json`;
+	}
+	if (referenceRow.kind === REFERENCE_KINDS.AC) {
+		const mapping = getAcSeedMappingByReference(referenceRow.documentSlug, referenceRow.edition);
+		if (mapping === null) return null;
+		return `ac/${mapping.docSlug}/${mapping.revision}/warnings.json`;
+	}
+	return null;
+}
+
+/**
+ * Resolve the triage file path for a reference row. Mirrors the
+ * `warnings.json` dispatch but rooted under `validation/` and pinned
+ * to the corpus directory keyed off `reference.kind`.
+ */
+function warningsTriageJsonRelPath(referenceRow: ReferenceRow): string | null {
+	if (referenceRow.kind === REFERENCE_KINDS.HANDBOOK) {
+		return `validation/handbooks/${referenceRow.documentSlug}/${referenceRow.edition}/warnings-triage.json`;
+	}
+	if (referenceRow.kind === REFERENCE_KINDS.AC) {
+		const mapping = getAcSeedMappingByReference(referenceRow.documentSlug, referenceRow.edition);
+		if (mapping === null) return null;
+		return `validation/ac/${mapping.docSlug}/${mapping.revision}/warnings-triage.json`;
+	}
+	return null;
+}
+
+export interface GetOpenWarningsOptions {
+	/**
+	 * Filesystem root for the repo. Defaults to `process.cwd()`. Tests pass
+	 * an absolute path under `tmpdir()` so they can stage fixture
+	 * `warnings.json` + `warnings-triage.json` files without touching the
+	 * real derivative trees.
+	 */
+	repoRoot?: string;
+}
+
+/**
+ * Read the open (untriaged or `status: 'open'`) warnings for a reference.
+ *
+ * Reads two files from disk:
+ *
+ *   1. `<corpus>/<doc>/<edition>/warnings.json`         (extractor-emitted)
+ *   2. `validation/<corpus>/<doc>/<edition>/warnings-triage.json`  (reviewer-curated)
+ *
+ * Behavior:
+ *
+ * - When `warnings.json` is absent: returns `[]`. The corpus has not been
+ *   re-extracted under the v2 substrate yet (or the corpus has no warning
+ *   surface, e.g. CFR / SAFO / InFO).
+ * - When the triage file is absent: every warning surfaces as `open`.
+ * - When the triage file is present and `manifest_sha256` matches: returns
+ *   only warnings whose triage status is `open` (or untriaged). Triage
+ *   notes ride along on the result so the dashboard can render context.
+ * - When the triage file is present but `manifest_sha256` differs from the
+ *   live `warnings.json`: throws {@link StaleWarningsTriageError}. The
+ *   dashboard prompts the reviewer to re-triage; the reader refuses to
+ *   apply potentially-irrelevant decisions silently.
+ *
+ * Pure read; no DB writes. Server-only (uses `node:fs` lazily; safe to
+ * import from the browser bundle but never executed there).
+ */
+export async function getOpenWarningsForReference(
+	referenceId: string,
+	options: GetOpenWarningsOptions = {},
+	db: Db = defaultDb,
+): Promise<OpenWarning[]> {
+	const referenceRow = await getReferenceById(referenceId, db);
+	const warningsRel = warningsJsonRelPath(referenceRow);
+	if (warningsRel === null) return [];
+
+	const repoRoot = options.repoRoot ?? process.cwd();
+	const fs = nodeFs();
+	const path = nodePath();
+
+	const warningsAbs = path.join(repoRoot, warningsRel);
+	if (!fs.existsSync(warningsAbs)) return [];
+
+	const warningsRaw = fs.readFileSync(warningsAbs, 'utf-8');
+	const warningsParsed = handbookWarningsFileSchema.parse(JSON.parse(warningsRaw));
+
+	const triageRel = warningsTriageJsonRelPath(referenceRow);
+	let triage: Map<string, { status: HandbookWarningTriageStatus; note?: string }> | null = null;
+	if (triageRel !== null) {
+		const triageAbs = path.join(repoRoot, triageRel);
+		if (fs.existsSync(triageAbs)) {
+			const triageRaw = fs.readFileSync(triageAbs, 'utf-8');
+			const triageParsed = handbookWarningsTriageFileSchema.parse(JSON.parse(triageRaw));
+			if (triageParsed.manifest_sha256.toLowerCase() !== warningsParsed.manifest_sha256.toLowerCase()) {
+				throw new StaleWarningsTriageError(referenceId, warningsParsed.manifest_sha256, triageParsed.manifest_sha256);
+			}
+			triage = new Map();
+			for (const [warningId, entry] of Object.entries(triageParsed.triage)) {
+				triage.set(warningId, { status: entry.status, note: entry.note });
+			}
+		}
+	}
+
+	const out: OpenWarning[] = [];
+	for (const w of warningsParsed.warnings) {
+		const triageEntry = triage?.get(w.id);
+		// Untriaged or explicitly `open` -> surface it. `wontfix` / `fixed` /
+		// `duplicate` -> drop it; the dashboard's open queue ignores closed rows.
+		if (triageEntry !== undefined && triageEntry.status !== 'open') continue;
+		const open: OpenWarning = {
+			id: w.id,
+			code: w.code,
+			section_code: w.section_code ?? null,
+			message: w.message,
+			...(triageEntry?.note !== undefined ? { triage_note: triageEntry.note } : {}),
+		};
+		out.push(open);
+	}
+	return out;
 }
 
 // ---------------------------------------------------------------------------

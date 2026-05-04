@@ -17,10 +17,12 @@ import {
 	cfrManifestSchema,
 	cfrSectionsFileSchema,
 	HANDBOOK_MANIFEST_WARNING_CODES,
+	HANDBOOK_WARNING_TRIAGE_STATUS_VALUES,
 	handbookHeartbeatInputSchema,
 	handbookManifestErrataEntrySchema,
 	handbookManifestWarningSchema,
 	handbookWarningsFileSchema,
+	handbookWarningsTriageFileSchema,
 	infoManifestSchema,
 	manifestSchema,
 	ntsbAljManifestSchema,
@@ -1307,6 +1309,77 @@ describe('handbookWarningsFileSchema (sibling warnings.json)', () => {
 
 	it('rejects a non-1 schema_version (forward-compat is by minting new schemas)', () => {
 		const result = handbookWarningsFileSchema.safeParse({ ...VALID_WARNINGS_FILE, schema_version: 2 });
+		expect(result.success).toBe(false);
+	});
+});
+
+describe('handbookWarningsTriageFileSchema (validation/<corpus>/<doc>/<edition>/warnings-triage.json)', () => {
+	const ISO = '2026-05-04T00:00:00.000+00:00';
+	const REFERENCE_ID = 'ref_01ARZ3NDEKTSV4RRFFQ69G5FAV';
+	const VALID_TRIAGE_FILE = {
+		schema_version: 1 as const,
+		reference_id: REFERENCE_ID,
+		manifest_sha256: 'a'.repeat(64),
+		triaged_at: ISO,
+		triage: {
+			['b'.repeat(16)]: { status: 'wontfix', note: 'expected; FAA caption art', decided_at: ISO, decided_by: 'jb' },
+			['c'.repeat(16)]: { status: 'fixed', decided_at: ISO },
+		},
+	};
+
+	it('accepts a valid triage file', () => {
+		const result = handbookWarningsTriageFileSchema.safeParse(VALID_TRIAGE_FILE);
+		expect(result.success).toBe(true);
+	});
+
+	it('defaults triage to {} when omitted', () => {
+		const { triage: _drop, ...rest } = VALID_TRIAGE_FILE;
+		const result = handbookWarningsTriageFileSchema.safeParse(rest);
+		expect(result.success).toBe(true);
+		if (result.success) expect(result.data.triage).toEqual({});
+	});
+
+	it('accepts every triage status value', () => {
+		for (const status of HANDBOOK_WARNING_TRIAGE_STATUS_VALUES) {
+			const result = handbookWarningsTriageFileSchema.safeParse({
+				...VALID_TRIAGE_FILE,
+				triage: { ['d'.repeat(16)]: { status, decided_at: ISO } },
+			});
+			expect(result.success).toBe(true);
+		}
+	});
+
+	it('rejects an unknown triage status', () => {
+		const result = handbookWarningsTriageFileSchema.safeParse({
+			...VALID_TRIAGE_FILE,
+			triage: { ['e'.repeat(16)]: { status: 'snoozed', decided_at: ISO } },
+		});
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects a triage entry keyed by a non-16-hex id', () => {
+		const result = handbookWarningsTriageFileSchema.safeParse({
+			...VALID_TRIAGE_FILE,
+			triage: { 'not-a-hash': { status: 'open', decided_at: ISO } },
+		});
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects malformed manifest_sha256', () => {
+		const result = handbookWarningsTriageFileSchema.safeParse({
+			...VALID_TRIAGE_FILE,
+			manifest_sha256: 'not-a-sha',
+		});
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects schema_version other than 1', () => {
+		const result = handbookWarningsTriageFileSchema.safeParse({ ...VALID_TRIAGE_FILE, schema_version: 2 });
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects an empty reference_id', () => {
+		const result = handbookWarningsTriageFileSchema.safeParse({ ...VALID_TRIAGE_FILE, reference_id: '' });
 		expect(result.success).toBe(false);
 	});
 });

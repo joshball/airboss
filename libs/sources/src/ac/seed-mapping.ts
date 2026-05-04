@@ -78,6 +78,27 @@ export function listAcSeedMappings(): readonly AcSeedMappingEntry[] {
 }
 
 /**
+ * Inverse of {@link getAcSeedMapping}: resolve the on-disk
+ * `(doc_slug, revision)` pair from the DB-side `(document_slug, edition)`.
+ * Returns null when no mapping matches. Used by warning-triage readers
+ * (WP-HANDBOOK-RE-EXTRACTION-V2 Phase 3) to locate the on-disk
+ * `ac/<doc_slug>/<revision>/warnings.json` for a given AC reference row.
+ */
+export function getAcSeedMappingByReference(
+	documentSlug: string,
+	edition: string,
+): { docSlug: string; revision: string } | null {
+	const testHit = TEST_AC_SEED_MAPPINGS.find(
+		(entry) => entry.documentSlug === documentSlug && entry.edition === edition,
+	);
+	if (testHit) return { docSlug: testHit.docSlug, revision: testHit.revision };
+	const found = BUILT_IN_AC_SEED_MAPPINGS.find(
+		(entry) => entry.documentSlug === documentSlug && entry.edition === edition,
+	);
+	return found ? { docSlug: found.docSlug, revision: found.revision } : null;
+}
+
+/**
  * Test-only mutators. Mirrors the `__ac_resolver_internal__` pattern -- the
  * underscore prefix marks the surface as off-limits to production callers.
  * Lets seed-adapter integration tests inject synthetic (docSlug, revision)

@@ -389,6 +389,67 @@ export const handbookWarningsFileSchema = z.object({
 export type HandbookWarningsFile = z.infer<typeof handbookWarningsFileSchema>;
 
 /**
+ * Closed vocabulary of triage statuses for a single warning. Mirrors the
+ * status set surfaced by WP-HANGAR-REFS in the warning-triage dashboard:
+ *
+ * - `open`       -- needs attention (default for any warning without a row).
+ * - `wontfix`    -- reviewer decided the warning is acceptable as-is.
+ * - `fixed`      -- the underlying substrate problem has been corrected and
+ *                   the next extraction is expected to drop the warning.
+ *                   When the warning persists after re-extraction the
+ *                   triage entry is stale and the dashboard re-opens it.
+ * - `duplicate`  -- this warning is a duplicate of another tracked elsewhere.
+ */
+export const HANDBOOK_WARNING_TRIAGE_STATUS_VALUES = ['open', 'wontfix', 'fixed', 'duplicate'] as const;
+export type HandbookWarningTriageStatus = (typeof HANDBOOK_WARNING_TRIAGE_STATUS_VALUES)[number];
+
+/**
+ * One triage entry inside `warnings-triage.json`. Keyed by `warning_id` in
+ * the parent file's `triage` map. `decided_at` is the ISO timestamp the
+ * decision was recorded; `decided_by` is the reviewer's identifier (free
+ * text -- usually a hangar admin email or system tag).
+ */
+export const handbookWarningTriageEntrySchema = z.object({
+	status: z.enum(HANDBOOK_WARNING_TRIAGE_STATUS_VALUES),
+	note: z.string().optional(),
+	decided_at: z.string().datetime({ offset: true }),
+	decided_by: z.string().min(1).optional(),
+});
+export type HandbookWarningTriageEntry = z.infer<typeof handbookWarningTriageEntrySchema>;
+
+/**
+ * Top-level shape of `validation/<corpus>/<doc_slug>/<edition>/warnings-triage.json`.
+ *
+ * Companion file to the sibling `warnings.json` (see {@link handbookWarningsFileSchema}):
+ *
+ * - `warnings.json` (under `<corpus>/<doc_slug>/<edition>/`) is the
+ *   extractor-emitted normalized warning list. Regenerated on every
+ *   re-extraction.
+ * - `warnings-triage.json` (under `validation/<corpus>/<doc_slug>/<edition>/`)
+ *   is the human-curated triage state, mirroring the per-doc validation file
+ *   shape from WP-TOC-VALIDATION-SCHEMA. Authored by the hangar warning-triage
+ *   dashboard.
+ *
+ * `manifest_sha256` records the sibling `manifest.json` digest at the time
+ * triage state was last persisted. When a re-extraction rewrites the manifest
+ * the digest drifts; the BC reader treats that as stale triage and surfaces
+ * the mismatch so the dashboard can prompt re-triage rather than silently
+ * applying possibly-irrelevant decisions.
+ *
+ * `reference_id` is recorded so a misfiled triage file (wrong directory) is
+ * caught before its decisions land on the wrong reference.
+ */
+export const handbookWarningsTriageFileSchema = z.object({
+	schema_version: z.literal(1),
+	reference_id: z.string().min(1),
+	manifest_sha256: z.string().regex(/^[0-9a-f]{64}$/i),
+	triaged_at: z.string().datetime({ offset: true }),
+	/** Map keyed by `warning_id` (16-hex). Absent ids = `open` (the reader's default). */
+	triage: z.record(z.string().regex(WARNING_ID_REGEX), handbookWarningTriageEntrySchema).default({}),
+});
+export type HandbookWarningsTriageFile = z.infer<typeof handbookWarningsTriageFileSchema>;
+
+/**
  * One section the errata pipeline patched. The Python apply path emits these
  * onto `manifest.json -> errata[].sections_patched[]` so future re-ingest can
  * round-trip the patched state. Mirrors the dataclass written by
