@@ -3,8 +3,8 @@ title: 'Test Plan: Evidence Kind Data Layer'
 product: study
 feature: evidence-kind-data-layer
 type: test-plan
-status: unread
-review_status: pending
+status: read
+review_status: done
 ---
 
 # Test Plan: Evidence Kind Data Layer
@@ -135,6 +135,24 @@ Setup: Abby + node N + linked syllabus leaf L (triad/required_kinds vary per cas
 - Grep for `not_applicable` constant assignments inside `getNodeEvidenceStateMap`'s per-kind output (the lines that hardcoded the shim) returns empty.
 - `mastery.ts` file header no longer documents three shims; documents the real partition shape.
 - Audit scripts run cleanly and produce informational output for the content team.
+
+## Build results -- 2026-05-03
+
+Recorded by `/ball-wp-build` on commit `7052be48` (Phase 5).
+
+- **Automated tests:** `bun test libs/bc/study/` -> 642 pass / 1 fail. The single fail (`library-by-cert.orphan.test.ts`) predates this WP and is unrelated. Mastery suite (27 tests, 10 new partition cases) all green. Validator suite (`evidence-kind-data-layer.test.ts`, 19 tests) all green.
+- **`bun run check`:** clean (0 errors, 0 warnings) across all 5 SvelteKit apps + Biome + reference validator + knowledge-graph dry-run + theme-lint + test-lint + help-id validator.
+- **`bunx drizzle-kit check`:** "Everything's fine" -- 0002 + 0003 snapshots internally consistent with TS schema.
+- **`bun run db reset --force`:** clean -- schema applies via `drizzle-kit push`, full seed orchestrator succeeds (1 user / 18 cards / 16 scenarios / 1 plan / 3 sessions / 10 reviews / 18 SIR rows).
+- **Audit scripts:** both subcommands run cleanly against fresh seed data:
+  - `bun run db check card-kinds` -> 47 airspace recall + 7 emergency-procedures recall (no calc cards in seed, expected).
+  - `bun run db check scenario-assessment-methods` -> 16 default ([scenario]), 0 explicit (expected pre-content-update).
+- **Grep verifications:**
+  - `grep -nE "NOT_APPLICABLE.*(calculation|demonstration|teaching)" libs/bc/study/src/mastery.ts` -> empty (no shims left).
+  - `grep -nE "card\.kind|scenario\.assessment_methods|teaching_exercise" libs/bc/study/src/mastery.ts` -> 18 hits (header docstring + partition queries).
+- **Manual M1 -- Hangar card editor:** Surfaced as `/memory/new` + `/memory/[id]` in the study app (no hangar card editor exists yet). Kind selector renders, defaults to Recall, persists round-trip. To verify by user; ready for manual exercise.
+- **Manual M2 -- Hangar scenario editor:** Surfaced as `/reps/new` (study app). Multi-checkbox renders Scenario / Demonstration / Recall / Calculation; Teaching excluded per spec. To verify by user; ready for manual exercise.
+- **Manual M3 / M4 / M5 / M6:** require a hand-walk against the running app + DB. Acceptance criteria documented; pending user verification.
 
 ## Out of scope for this test plan
 

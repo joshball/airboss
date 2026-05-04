@@ -4,7 +4,7 @@ product: study
 feature: evidence-kind-data-layer
 type: spec
 status: read
-review_status: pending
+review_status: done
 ---
 
 # Spec: Evidence Kind Data Layer
