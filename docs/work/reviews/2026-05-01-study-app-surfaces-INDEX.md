@@ -42,7 +42,7 @@ Re-audited every per-category file against current main. **All 5 headline critic
 | a11y         |     17 |    4 | pending  | aria-controls on counter-trigger; login dev-accounts heading; toast live-region scope; KbdHint announcement          |
 | patterns     |     11 |    0 | done     | all clean                                                                                                            |
 | testing      |     17 |    4 | done     | savedDeck seeding; cleanup-guard removal; per-test fresh user for memory/review; reps-test ordering                  |
-| dx           |      4 |   14 | pending  | handbook .catch -> typed errors; "verb entity failed" log sweep; login 5xx branch; discovery log level promotion     |
+| dx           |     11 |    7 | pending  | handbook .catch -> typed errors; login 5xx branch; sign-out body snippet; narrow/coerceEnum dedup; RenderedLesson  |
 | ux           |      5 |   13 | pending  | library card-state indicator; topic 404 -> soft empty; Skip Permanently confirm copy; form-error consistency         |
 | svelte       |      4 |    4 | pending  | route-level CSS extraction (work-package); URL side-effect from URL-seeded state; module-scoped timers -> $effect cleanup; calibration h2 nit |
 | backend      |     16 |    2 | done     | regulations-section redundant fetch; per-action ref/chapter re-fetch (handbook chapter actions)                       |

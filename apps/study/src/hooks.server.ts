@@ -67,10 +67,22 @@ function applySecurityHeaders(response: Response): void {
 			response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
 		}
 	} catch (err) {
-		// Some response types (streaming/binary) have frozen headers; skip
-		// silently in prod. In dev surface the failure so a real CSP regression
-		// (or a future header-set bug) doesn't hide behind the throw.
-		if (dev) log.warn('security header set failed', { metadata: { err: String(err) } });
+		// Streaming / binary responses throw `TypeError: Headers immutable` --
+		// expected, swallow silently. Anything else is a real bug (a future
+		// `Permissions-Policy` syntax error, a regressed header value) that
+		// would otherwise turn off CSRF / clickjacking defenses with zero
+		// signal; surface it so on-call sees the regression. In dev keep the
+		// noisier `warn` so the failure shows up immediately during iteration.
+		if (err instanceof TypeError) return;
+		if (dev) {
+			log.warn('set security headers failed', { metadata: { err: String(err) } });
+		} else {
+			log.error(
+				'set security headers failed',
+				{ metadata: { err: String(err) } },
+				err instanceof Error ? err : undefined,
+			);
+		}
 	}
 }
 
@@ -134,7 +146,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 		}
 
 		if (event.locals.user?.banned) {
-			log.warn('banned user blocked', {
+			// `info`, not `warn`: a banned account hammering the app would
+			// otherwise produce hundreds of warns/minute and bury legitimate
+			// warnings. The 403 is expected behaviour, not an anomaly. If the
+			// rate matters operationally, wire a counter at a higher layer.
+			log.info('banned user blocked', {
 				requestId,
 				userId: event.locals.user.id,
 				metadata: { path: event.url.pathname },
