@@ -77,22 +77,7 @@ Figure 16-38. ADF terms.
 Radio station
 N-S
 E-W
-g
-et
-ic
- b
-ar
-in
-g
-to
-ta
-ti
-l
-ti
 
-b
-ri
-g
 Magnetic heading
 Magnetic North
 Figure 16-37. ADF with fixed azimuth and magnetic compass.

@@ -102,149 +102,26 @@ flight control systems and characteristics of specific types
 of aircraft.
 
 
-![Figure 6-3. Helicopter flight control system.
-Hydraulic pressure
-Hydraulic return
-Pivot point
-LEGEND
-Elevator (UP)
-Control stick (AFT—nose up)
-Control cables
-Power cylinder
-Neutral
-Neutral
-Control valves
-Neutral
-Power disconnect linkage
-Figure 6-2. Hydromechanical flight control system.
-Elevator
-Control stick
-Cable
-Pul](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-00-helicopter-flight-control-system-hydraulic-press.png)
+![Figure 6-3. Helicopter flight control system.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-00-helicopter-flight-control-system.png)
 
-![Figure 6-2. Hydromechanical flight control system.
-Elevator
-Control stick
-Cable
-Pulleys
-Push rod
-Figure 6-1. Mechanical flight control system.
-As aviation matured and aircraft designers learned more about 
-aerodynamics, the industry produced larger and faster aircraft. 
-Therefore, the aerodynamic forces acting upon the](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-01-hydromechanical-flight-control-system-elevator-c.png)
+![Figure 6-2. Hydromechanical flight control system.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-01-hydromechanical-flight-control-system.png)
 
-![Figure 6-8. Coupled ailerons and rudder.
-Figure 6-9. Flaperons on a Skystar Kitfox MK 7.
-N
-os
-e 
-up
-   
-   
-   
-   
- 
-T
-ai
-l 
-do
-w
-n 
-   
- 
-   
-   
-  
-Control column
-aft
-Up elevator
-Downward
-aerodynamic force
-CG
-Figure 6-10. The elevator is the primary control for changing the 
-pitch attitude of an aircraft.
-example, w](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-02-coupled-ailerons-and-rudder-figure-6-9-flaperons.png)
+![Figure 6-6. Differential ailerons.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-02-differential-ailerons.png)
 
-![Figure 6-9. Flaperons on a Skystar Kitfox MK 7.
-N
-os
-e 
-up
-   
-   
-   
-   
- 
-T
-ai
-l 
-do
-w
-n 
-   
- 
-   
-   
-  
-Control column
-aft
-Up elevator
-Downward
-aerodynamic force
-CG
-Figure 6-10. The elevator is the primary control for changing the 
-pitch attitude of an aircraft.
-example, when the control wheel, or control stick,](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-03-flaperons-on-a-skystar-kitfox-mk-7-n-os-e-up-t-a.png)
+![Figure 6-7. Frise-type ailerons.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-03-frise-type-ailerons.png)
 
-![Figure 6-12. When the aerodynamic efficiency of the horizontal tail 
-surface is inadequate due to an aft CG condition, an elevator down 
-spring may be used to supply a mechanical load to lower the nose.
-Antiservo tab
-Balance weight
-Stabilator
-Pivot point
-Figure 6-13. The stabilator is a one-piece horizontal tail surfac](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-04-when-the-aerodynamic-efficiency-of-the-horizonta.png)
+![Figure 6-11. Aircraft with a T-tail design at a high AOA and an aft CG.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-04-aircraft-with-a-t-tail-design-at-a-high-aoa-and-.png)
 
-![Figure 6-15. The effect of left rudder pressure.
-Figure 6-16. Beechcraft Bonanza V35.
-Rudder
-The rudder controls movement of the aircraft about its vertical 
-axis. This motion is called yaw. Like the other primary control 
-surfaces, the rudder is a movable surface hinged to a fixed 
-surface in this case, to the vertica](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-05-the-effect-of-left-rudder-pressure-figure-6-16-b.png)
+![Figure 6-12. When the aerodynamic efficiency of the horizontal tail  surface is inadequate due to an aft CG condition, an elevator down spring may be used to supply a mechanical load to lower the nose.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-05-when-the-aerodynamic-efficiency-of-the-horizonta.png)
 
-![Figure 6-19. Spoilers reduce lift and increase drag during descent 
-and landing.
-variables. Trim systems are used to relieve the pilot of the 
-need to maintain constant pressure on the flight controls, and 
-usually consist of flight deck controls and small hinged devices 
-attached to the trailing edge of one or more of](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-06-spoilers-reduce-lift-and-increase-drag-during-de.png)
+![Figure 6-17. Five common types of flaps.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-06-five-common-types-of-flaps.png)
 
-![Figure 6-24. Basic autopilot system integrated into the flight 
-control system.
-Figure 6-23. Some aircraft, including most jet transports, use an 
-adjustable stabilizer to provide the required pitch trim forces.
-Adjustable stabilizer
-Nose down
-Nose up
-Trim motor or trim cable
-Jackscrew
-Pivot
-Figure 6-22. A ground adjus](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-07-basic-autopilot-system-integrated-into-the-fligh.png)
+![Figure 6-21. An antiservo tab attempts to streamline the control  surface and is used to make the stabilator less sensitive by opposing the force exerted by the pilot.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-07-an-antiservo-tab-attempts-to-streamline-the-cont.png)
 
-![Figure 6-23. Some aircraft, including most jet transports, use an 
-adjustable stabilizer to provide the required pitch trim forces.
-Adjustable stabilizer
-Nose down
-Nose up
-Trim motor or trim cable
-Jackscrew
-Pivot
-Figure 6-22. A ground adjustable tab is used on the rudder of many 
-small airplanes to correct for a tenden](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-08-some-aircraft-including-most-jet-transports-use-.png)
+![Figure 6-20. The movement of the elevator is opposite to the  direction of movement of the elevator trim tab.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-08-the-movement-of-the-elevator-is-opposite-to-the-.png)
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-6-00-untitled.html">
-<table><thead><tr><th>Flight Controls</th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table>
+<table><thead><tr><th>Flight Controls</th></tr></thead><tbody></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-6-01-untitled.html">
@@ -280,7 +157,7 @@ Power disconnect linkage Neutral Power cylinder</td><td></td></tr></tbody></tabl
 </div>
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-6-03-untitled.html">
-<table><thead><tr><th></th><th>Antiservo tab
+<table><thead><tr><th>Antiservo tab
 Stabilator
 Balance weight Pivot point</th></tr></thead><tbody></tbody></table>
 </div>
@@ -290,9 +167,9 @@ Balance weight Pivot point</th></tr></thead><tbody></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-6-05-untitled.html">
-<table><thead><tr><th>Nose down</th><th></th></tr></thead><tbody></tbody></table>
+<table><thead><tr><th>Nose down</th></tr></thead><tbody></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-6-06-untitled.html">
-<table><thead><tr><th>Nose up</th><th></th></tr></thead><tbody></tbody></table>
+<table><thead><tr><th>Nose up</th></tr></thead><tbody></tbody></table>
 </div>

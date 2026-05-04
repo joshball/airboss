@@ -139,30 +139,14 @@ ec
 DIP
 DIP
 DIP
-Di
-ef
-fe
-ip
-ff
-ec
-ip
-ff
-ec
+
 Left turn
 No error
 Right turn
 DIP
 DIP
 DIP
-ip
-ff
-ec
-Di
-ef
-fe
-Di
-ef
-fe
+
 Figure 8-36. Northerly and southerly turning errors.
 rotate only in the horizontal plane. This is done by lowering
 the center of gravity below the pivot point and making the

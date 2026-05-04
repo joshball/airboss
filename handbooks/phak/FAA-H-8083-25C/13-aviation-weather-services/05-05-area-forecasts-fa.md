@@ -139,15 +139,6 @@ East
 Appalachian Mo
 un
 tains
-SE
-NE
-NW
-l
-on
-g
-
-h
-io
 
 ive
 
@@ -276,38 +267,7 @@ Coa
 l
 ec
 tio
-SE
-SW
-MN
-IA
-MI
-IL
-IN
-MO
-AR
-LA
-MS
-AL
-TN
-GA
-FL
-SC
-NC
-VA
-MD
-DC
-NJ
-OH
-WI
-WV
-PA
-NY
-ME
-VT
-NH
-MA
-RI
-CT
+
 Coastal Waters–from
 coast outward to the
 ﬂight information
@@ -582,23 +542,6 @@ Handle
 tte
    River
 
-SE
-NE
-CA
-NV
-ID
-MT
-ND
-SD
-NE
-KS
-OK
-TX
-WY
-UT
-CO
-AZ
-NM
 Lake Powell
 Red River Valley
 Lower Mississippi Valley

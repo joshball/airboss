@@ -60,7 +60,6 @@ the following table:
 VOR/VORTAC NAVAIDS
 Normal Usable Altitudes and Radius Distances
 
-D i s t a n c e
  Class
   Altitudes
 

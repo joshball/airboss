@@ -46,13 +46,7 @@ Double wedge airfoil
 Clark 'Y' airfoil
 (Subsonic)
 Figure 4-6. Airfoil designs.
-Ca
-mb
-er
-of
-up
-pe
-r s
+
 urface
 Camb
 er of l

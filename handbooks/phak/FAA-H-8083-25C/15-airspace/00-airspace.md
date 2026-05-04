@@ -58,55 +58,19 @@ Class G
 Figure 15-1. Airspace profile.
 
 
-![Figure 15-1. Airspace profile.
-Controlled Airspace
-Controlled airspace is a generic term that covers the 
-different classifications of airspace and defined dimensions 
-within which air traffic control (ATC) service is provided 
-in accordance with the airspace classification. Controlled 
-airspace consists of:
-• 	
-Class](/handbooks/phak/FAA-H-8083-25C/figures/fig-15-00-airspace-profile-controlled-airspace-controlled-.png)
+![Figure 15-1. Airspace profile.](/handbooks/phak/FAA-H-8083-25C/figures/fig-15-00-airspace-profile.png)
 
-![Figure 15-2. An example of a prohibited area, P-40 around Camp 
-David.
-This provides sufficient airspace for the safe control and 
-separation of aircraft during IFR operations. Chapter 3 of 
-the Aeronautical Information Manual (AIM) explains the 
-various types of Class E airspace.
-Sectional and other charts depict all](/handbooks/phak/FAA-H-8083-25C/figures/fig-15-01-an-example-of-a-prohibited-area-p-40-around-camp.png)
+![Figure 15-2. An example of a prohibited area, P-40 around Camp  David.](/handbooks/phak/FAA-H-8083-25C/figures/fig-15-01-an-example-of-a-prohibited-area-p-40-around-camp.png)
 
-![Figure 15-4. Requirements for airspace operations.
-Figure 15-3. Restricted areas on a sectional chart.
-Restricted areas are charted with an “R” followed by a 
-number (e.g., R-4401) and are depicted on the en route 
-chart appropriate for use at the altitude or FL being flown. 
-[Figure 15-3] Restricted area information c](/handbooks/phak/FAA-H-8083-25C/figures/fig-15-02-requirements-for-airspace-operations-figure-15-3.png)
+![Figure 15-4. Requirements for airspace operations.](/handbooks/phak/FAA-H-8083-25C/figures/fig-15-02-requirements-for-airspace-operations.png)
 
-![Figure 15-3. Restricted areas on a sectional chart.
-Restricted areas are charted with an “R” followed by a 
-number (e.g., R-4401) and are depicted on the en route 
-chart appropriate for use at the altitude or FL being flown. 
-[Figure 15-3] Restricted area information can be obtained 
-on the back of the chart.
-Warning A](/handbooks/phak/FAA-H-8083-25C/figures/fig-15-03-restricted-areas-on-a-sectional-chart-restricted.png)
+![Figure 15-3. Restricted areas on a sectional chart.](/handbooks/phak/FAA-H-8083-25C/figures/fig-15-03-restricted-areas-on-a-sectional-chart.png)
 
-![Figure 15-5. Camden Ridge MOA is an example of a military operations area.
-Figure 15-6. Alert area (A-211).](/handbooks/phak/FAA-H-8083-25C/figures/fig-15-04-camden-ridge-moa-is-an-example-of-a-military-ope.png)
+![Figure 15-5. Camden Ridge MOA is an example of a military operations area.](/handbooks/phak/FAA-H-8083-25C/figures/fig-15-04-camden-ridge-moa-is-an-example-of-a-military-ope.png)
 
 ![Figure 15-6. Alert area (A-211).](/handbooks/phak/FAA-H-8083-25C/figures/fig-15-05-alert-area-a-211.png)
 
-![Figure 15-7. Military training route (MTR) chart symbols.
-• 	
-Flight Restricted Zones (FRZ) in vicinity of Capitol 
-and White House
-• 	
-Special Awareness Training required by 
-14 CFR 91.161 for pilots to operate VFR within 60 
-NM of the Washington, DC VOR/DME
-• 	
-Wildlife Areas/Wilderness Areas/National Parks and 
-requ](/handbooks/phak/FAA-H-8083-25C/figures/fig-15-06-military-training-route-mtr-chart-symbols-flight.png)
+![Figure 15-7. Military training route (MTR) chart symbols.](/handbooks/phak/FAA-H-8083-25C/figures/fig-15-06-military-training-route-mtr-chart-symbols.png)
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-15-00-untitled.html">
 <table><thead><tr><th>Class</th><th>B</th></tr></thead><tbody></tbody></table>

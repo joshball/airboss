@@ -49,20 +49,7 @@ Agonic line
 Figure 16-10. Effect of variation on the compass.
 Zero
 variation
-ri
-ti
 
-ri
-ti
-NP
-MP
-SP
-SP
-NP
-MP
-NP
-MP
-SP
 Zero degree variation exists on the agonic line where
 MN and TN coincide. This line runs roughly west of the
 Great Lakes, south through Wisconsin, Illinois, western

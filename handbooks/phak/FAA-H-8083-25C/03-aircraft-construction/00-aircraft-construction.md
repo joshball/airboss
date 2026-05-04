@@ -32,219 +32,37 @@ Construction
 Chapter 3
 
 
-![Figure 3-6. Monoplane (left) and biplane (right).
-Aileron
-Fuel tank
-Wing tip
-Wing flap
-Ribs
-Stringers
-Spar
-Skin
-Figure 3-7. Wing components.
-Attached to the rear, or trailing edges, of the wings are two 
-types of control surfaces referred to as ailerons and flaps. 
-Ailerons extend from about the midpoint of each wing](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-00-monoplane-left-and-biplane-right-aileron-fuel-ta.png)
+![Figure 3-4. Airplane components.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-00-airplane-components.png)
 
-![Figure 3-7. Wing components.
-Attached to the rear, or trailing edges, of the wings are two 
-types of control surfaces referred to as ailerons and flaps. 
-Ailerons extend from about the midpoint of each wing 
-outward toward the tip, and move in opposite directions to 
-create aerodynamic forces that cause the airplane to](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-01-wing-components-attached-to-the-rear-or-trailing.png)
+![Figure 3-5. Truss-type fuselage structure.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-01-truss-type-fuselage-structure.png)
 
-![Figure 3-8. Types of flaps.
-Figure 3-9. Weight-shift control aircraft use the shifting of weight 
-for control.
-Horizontal stabilizer
-Rudder
-Elevator
-Vertical stabilizer
-Trim tabs
-Figure 3-10. Empennage components.
-Empennage
-The empennage includes the entire tail group and consists 
-of fixed surfaces, such as the vertic](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-02-types-of-flaps-figure-3-9-weight-shift-control-a.png)
+![Figure 3-6. Monoplane (left) and biplane (right).](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-02-monoplane-left-and-biplane-right.png)
 
-![Figure 3-12. Types of landing gear: floats (top), skis (middle), and 
-wheels (bottom).
-Antiservo tab
-Stabilator pivot point
-Figure 3-11. Stabilator components.
-Landing Gear
-The landing gear is the principal support of the airplane when 
-parked, taxiing, taking off, or landing. The most common type 
-of landing gear cons](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-03-types-of-landing-gear-floats-top-skis-middle-and.png)
+![Figure 3-8. Types of flaps.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-03-types-of-flaps.png)
 
-![Figure 3-11. Stabilator components.
-Landing Gear
-The landing gear is the principal support of the airplane when 
-parked, taxiing, taking off, or landing. The most common type 
-of landing gear consists of wheels, but airplanes can also be 
-equipped with floats for water operations or skis for landing 
-on snow. [Figure 3](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-04-stabilator-components-landing-gear-the-landing-g.png)
+![Figure 3-9. Weight-shift control aircraft use the shifting of weight  for control.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-04-weight-shift-control-aircraft-use-the-shifting-o.png)
 
-![Figure 3-13. Engine compartment.
-propeller blade, as measured against the hub of the propeller, 
-keeps the angle of attack (AOA) (See definition in Glossary) 
-relatively constant along the span of the propeller blade, 
-reducing or eliminating the possibility of a stall. The amount 
-of lift being produced by the propell](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-05-engine-compartment-propeller-blade-as-measured-a.png)
+![Figure 3-10. Empennage components.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-05-empennage-components.png)
 
-![Figure 3-15. Composite aircraft.
-and Columbia line of production aircraft, leading to their high 
-performance despite their fixed landing gear. Composites also 
-help mask the radar signature of “stealth” aircraft designs, 
-such as the B-2 and the F-22. Today, composites can be 
-found in aircraft as varied as gliders to](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-06-composite-aircraft-and-columbia-line-of-producti.png)
+![Figure 3-12. Types of landing gear: floats (top), skis (middle), and  wheels (bottom).](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-06-types-of-landing-gear-floats-top-skis-middle-and.png)
 
-![Figure 3-17. Composite materials in aircraft, such as Columbia 350 
-(top), Boeing 787 (middle), and a Coast Guard HH-65 (bottom).
-In a composite aircraft, fiberglass is an excellent electrical 
-insulator, while carbon fiber conducts electricity, but not 
-as easily as aluminum. Therefore, additional electrical 
-conducti](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-07-composite-materials-in-aircraft-such-as-columbia.png)
+![Figure 3-14. Semimonocoque and monocoque fuselage design.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-07-semimonocoque-and-monocoque-fuselage-design.png)
 
-![Figure 3-18. Analog display (top) and digital display (bottom) from 
-a Cessna 172. 
-Control Instruments 
-The control instruments display immediate attitude and power 
-changes and are calibrated to permit adjustments in precise 
-increments. [Figure 3-20] The instrument for attitude display 
-is the attitude indicator. Th](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-08-analog-display-top-and-digital-display-bottom-fr.png)
+![Figure 3-16. Impact energy affects the visibility, as well as the  severity, of damage in composite structures. High and medium energy impacts, while severe, are easy to detect. Low energy impacts can easily cause hidden damage.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-08-impact-energy-affects-the-visibility-as-well-as-.png)
 
-![Figure 3-19. Performance instruments.
-XPDR  5537  IDNT  LCL23:00:34
-VOR 1  
-  
-270°
-2
-1
-1
-2
-4300
-4200
-4100
-4000
-3900
-3800
-4300
-60
-20
-4000
-4000
-130
-120
-110
-90
-80
-70
-1
-100
-9
-TAS  100KT
-ALERTS
-NAV1 108.00   113.00
-NAV2 108.00   110.60
-134.000  118.000 COM1
-123.800  118.000 COM2
-WPT _ _ _ _ _ _ DIS _ _ ._ NM DTK _ _ _°T TR](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-09-performance-instruments-xpdr-5537-idnt-lcl23-00-.png)
+![Figure 3-17. Composite materials in aircraft, such as Columbia 350  (top), Boeing 787 (middle), and a Coast Guard HH-65 (bottom).](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-09-composite-materials-in-aircraft-such-as-columbia.png)
 
-![Figure 3-21. A comparison of navigation information as depicted on both analog and digital displays.
-OBS
-N
-E
-S
-W
-3
-33
-24
-21
-15
-12
-30
-6
-TO
-33
-30
-24
-2I
-I5
-I2
-6
-3
-2
-33
-30
-24
-2I
-I5
-I2
-6
-3
-OBS
-N
-E
-S
-W
-3
-33
-24
-21
-15
-12
-30
-6
-TO
-1
-160°
-Present position, inbound on 
-160° radial.
-CRS  340°
-HDG  360°
-340°
-1
-The aircraft illustrat](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-10-a-comparison-of-navigation-information-as-depict.png)
+![Figure 3-18. Analog display (top) and digital display (bottom) from  a Cessna 172.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-10-analog-display-top-and-digital-display-bottom-fr.png)
 
-![Figure 3-22. Analog and digital indications for glideslope interception.
-Fly up
-OBS
-FR
-TO
-N
-E
-S
-W
-3
-33
-24
-21
-15
-12
-30
-6
-NAV 1
-20                             20
-I0                  I0
-2       0
-I        0
-4200
-4100
-4000
-3900
-3800
-20
-80
-4000
-Glideslope needle indicates “fly up” to intercept glideslope
-Fly down
-OBS
-FR
-TO](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-11-analog-and-digital-indications-for-glideslope-in.png)
+![Figure 3-19. Performance instruments.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-11-performance-instruments.png)
+
+![Figure 3-20. Control instruments.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-12-control-instruments.png)
+
+![Figure 3-21. A comparison of navigation information as depicted on both analog and digital displays.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-13-a-comparison-of-navigation-information-as-depict.png)
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-3-00-untitled.html">
 <table><thead><tr><th></th><th>Aircraft
-Construction</th><th></th></tr></thead><tbody><tr><td>Introduction
+Construction</th></tr></thead><tbody><tr><td>Introduction
 An aircraft is a device that is used, or intended to be used, for
 flight according to the current Title 14 of the Code of Federal
 Regulations (14 CFR) part 1, Definitions and Abbreviations.
@@ -263,45 +81,22 @@ of aircraft and uses an airplane for most illustrations. Light
 Sport Aircraft (LSA), such as weight-shift control aircraft,
 balloon, glider, powered parachute, and gyroplane, have their
 own handbooks to include detailed information regarding
-aerodynamics and control.</td><td></td><td></td></tr></tbody></table>
+aerodynamics and control.</td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-3-01-untitled.html">
-<table><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td>Through</td><td></td><td></td><td></td></tr><tr><td>penetratio</td><td></td><td></td><td>n</td></tr><tr><td></td><td>small dama</td><td></td><td>ge</td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>zone</td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>
+<table><thead><tr><th>Through</th><th></th><th></th><th></th></tr></thead><tbody><tr><td>penetratio</td><td></td><td></td><td>n</td></tr><tr><td></td><td>small dama</td><td></td><td>ge</td></tr><tr><td></td><td></td><td>zone</td><td></td></tr></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-3-02-untitled.html">
-<table><thead><tr><th>Airspeed indicator Attitude indicator Altimeter indicator
-Turn coordinator Heading indicator Vertical speed indicator</th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td></tr><tr><td>NAV1 108.00 113.00 WPT _ _ _ _ _ _ DIS _ _ . _ NM DTK _ _S _li°pT/ STkRiKd in d36ic0a°tTor134.000 118.000 COM1
-NAV2 108.00 110.60 123.800 118.000 COM2
-Airspeed tape indicator
-4000
-130 4300
-2
-120 Altimeter and 4200 V tae pr eti c ina dl is cp ae toe rd and
-altitude trend tape
-110 4100 1
-1 60 500
-100 44000000
-9
-20
-90 3900
-1
-80 3800 Turn rate trend vector
-270° 270°
-2
-70 4300
-TAS 100KT
-Heading bug
-VOR 1 Course arrow
-Turn rate indicator
-XPDR 5537 IDNT LCL23:00:34
-ALERTS</td><td></td><td></td></tr></tbody></table>
-</div>
+| Airspeed indicator Attitude indicator Altimeter indicator<br>Turn coordinator Heading indicator Vertical speed indicator |
+| --- |
+| NAV1 108.00 113.00 WPT _ _ _ _ _ _ DIS _ _ . _ NM DTK _ _S _li°pT/ STkRiKd in d36ic0a°tTor134.000 118.000 COM1<br>NAV2 108.00 110.60 123.800 118.000 COM2<br>Airspeed tape indicator<br>4000<br>130 4300<br>2<br>120 Altimeter and 4200 V tae pr eti c ina dl is cp ae toe rd and<br>altitude trend tape<br>110 4100 1<br>1 60 500<br>100 44000000<br>9<br>20<br>90 3900<br>1<br>80 3800 Turn rate trend vector<br>270° 270°<br>2<br>70 4300<br>TAS 100KT<br>Heading bug<br>VOR 1 Course arrow<br>Turn rate indicator<br>XPDR 5537 IDNT LCL23:00:34<br>ALERTS |
+
+<a class="handbook-table-source" href="/handbooks/phak/FAA-H-8083-25C/tables/tbl-3-02-untitled.html">Open original</a>
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-3-03-untitled.html">
 <table><thead><tr><th>Manifold pressure gauge
-Attitude indicator</th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td></tr><tr><td>23.0
+Attitude indicator</th><th></th></tr></thead><tbody><tr><td>23.0
 NAV1 108.00 113.00 WPT _ _ _ _ _ _ DIS _ _ . _ NM DTK _ _ _° TRK 360° 134.000 118.000 COM1
 NAV2 108.00 110.60 123.800 118.000 COM2
 4000
@@ -330,15 +125,12 @@ VOR 1
 338
 5
 XPDR 5537 IDNT LCL23:00:34
-ALERTS</td><td>.</td><td></td></tr><tr><td></td><td>_____ DIS __ _NM DTK ___° TRK 360° 134.000 118.000 COM1
-123.800 118.000 COM2</td><td></td></tr></tbody></table>
+ALERTS</td><td>.</td></tr><tr><td></td><td>_____ DIS __ _NM DTK ___° TRK 360° 134.000 118.000 COM1
+123.800 118.000 COM2</td></tr></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-3-04-untitled.html">
-<table><thead><tr><th>cept glideslope
-4200</th><th></th></tr></thead><tbody><tr><td>4100
-20
-44000000
-80
-3900</td><td></td></tr></tbody></table>
-</div>
+| cept glideslope<br>4200 |
+| --- |
+| 4100<br>20<br>44000000<br>80<br>3900 |
+
+<a class="handbook-table-source" href="/handbooks/phak/FAA-H-8083-25C/tables/tbl-3-04-untitled.html">Open original</a>
