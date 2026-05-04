@@ -205,6 +205,127 @@ export async function listAllSectionsForReference(
 		.orderBy(asc(referenceSection.code));
 }
 
+// ---------------------------------------------------------------------------
+// Reading order (book-experience WP)
+// ---------------------------------------------------------------------------
+
+export interface ReadingOrderEntry {
+	readonly sectionId: string;
+	readonly code: string;
+	readonly title: string;
+	readonly depth: number;
+	readonly level: ReferenceSectionRow['level'];
+	readonly parentId: string | null;
+	/** Code of the row's parent chapter -- top-level entries are their own chapter. */
+	readonly parentChapterCode: string | null;
+	readonly parentChapterTitle: string | null;
+	/** Word count of the section's body markdown. Powers reading-time estimates. */
+	readonly wordCount: number;
+}
+
+/**
+ * Compute the canonical reading order for a reference.
+ *
+ * Walk: depth-first by `ordinal` within each parent. Top-level rows
+ * (chapters / front-matter / appendices) appear in `ordinal` order; each
+ * row's children follow it before the next sibling.
+ *
+ * The `parentChapterCode` / `parentChapterTitle` fields point at the row's
+ * nearest level=`chapter` ancestor (or itself, when the row IS a chapter).
+ * Non-handbook corpora that don't carry a chapter level (CFR sections,
+ * AIM paragraphs nested under sections, ACS tasks under areas) fall back
+ * to the topmost ancestor.
+ *
+ * Pure function: caller hands in the section rows (typically via
+ * {@link listAllSectionsForReference}). No DB access. Determines the canonical
+ * order each surface (the prev/up/next nav strip + the TOC drawer + the
+ * "you've read N of M" coverage counter) reads from.
+ */
+export function computeReadingOrder(allSections: ReadonlyArray<ReferenceSectionRow>): ReadingOrderEntry[] {
+	const byId = new Map<string, ReferenceSectionRow>();
+	const childrenByParent = new Map<string | null, ReferenceSectionRow[]>();
+	for (const row of allSections) {
+		byId.set(row.id, row);
+		const list = childrenByParent.get(row.parentId) ?? [];
+		list.push(row);
+		childrenByParent.set(row.parentId, list);
+	}
+	for (const list of childrenByParent.values()) {
+		list.sort((a, b) => a.ordinal - b.ordinal);
+	}
+
+	const order: ReadingOrderEntry[] = [];
+	const visit = (parentId: string | null, chapterCtx: ReferenceSectionRow | null): void => {
+		const kids = childrenByParent.get(parentId) ?? [];
+		for (const kid of kids) {
+			// A row is its own chapter context when the row itself is a chapter
+			// (handbook + AC) or when no chapter ancestor has been resolved yet
+			// (whole-doc corpora that don't carry a chapter level).
+			const ownChapter = kid.level === REFERENCE_SECTION_LEVELS.CHAPTER ? kid : (chapterCtx ?? kid);
+			order.push({
+				sectionId: kid.id,
+				code: kid.code,
+				title: kid.title,
+				depth: kid.depth,
+				level: kid.level,
+				parentId: kid.parentId,
+				parentChapterCode: ownChapter.id === kid.id ? null : ownChapter.code,
+				parentChapterTitle: ownChapter.id === kid.id ? null : ownChapter.title,
+				wordCount: countWords(kid.contentMd),
+			});
+			visit(kid.id, ownChapter);
+		}
+	};
+	visit(null, null);
+	return order;
+}
+
+/**
+ * Count words in a markdown body. Approximate -- strips fences/HTML tags,
+ * collapses whitespace, then splits on whitespace runs. Drives the
+ * `≈ N min read` estimate at `WORDS_PER_MINUTE_READING_RATE`.
+ */
+function countWords(md: string): number {
+	if (md.length === 0) return 0;
+	const stripped = md
+		.replace(/```[\s\S]*?```/g, ' ')
+		.replace(/`[^`]*`/g, ' ')
+		.replace(/<[^>]+>/g, ' ')
+		.replace(/!\[[^\]]*\]\([^)]+\)/g, ' ')
+		.replace(/\[([^\]]*)\]\([^)]+\)/g, '$1')
+		.replace(/[#*_>~|-]+/g, ' ')
+		.replace(/\s+/g, ' ')
+		.trim();
+	if (stripped.length === 0) return 0;
+	return stripped.split(' ').length;
+}
+
+/** Convenience wrapper: load + compute. */
+export async function getReadingOrder(referenceId: string, db: Db = defaultDb): Promise<ReadingOrderEntry[]> {
+	const rows = await listAllSectionsForReference(referenceId, db);
+	return computeReadingOrder(rows);
+}
+
+/** Return the entry following `sectionId` in reading order, or `null` at the end. */
+export function getNextInReadingOrder(
+	order: ReadonlyArray<ReadingOrderEntry>,
+	sectionId: string,
+): ReadingOrderEntry | null {
+	const idx = order.findIndex((e) => e.sectionId === sectionId);
+	if (idx < 0) return null;
+	return order[idx + 1] ?? null;
+}
+
+/** Return the entry preceding `sectionId` in reading order, or `null` at the start. */
+export function getPreviousInReadingOrder(
+	order: ReadonlyArray<ReadingOrderEntry>,
+	sectionId: string,
+): ReadingOrderEntry | null {
+	const idx = order.findIndex((e) => e.sectionId === sectionId);
+	if (idx <= 0) return null;
+	return order[idx - 1] ?? null;
+}
+
 export interface HandbookSectionView {
 	section: ReferenceSectionRow;
 	chapter: ReferenceSectionRow;
