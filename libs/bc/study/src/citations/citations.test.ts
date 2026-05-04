@@ -24,8 +24,16 @@ import {
 } from './citations';
 import type { ContentCitationRow } from './schema';
 
+interface FakeWhere<T> {
+	where: () => Promise<T[]>;
+}
+
+interface FakeJoin<T> extends FakeWhere<T> {
+	innerJoin: () => FakeWhere<T>;
+}
+
 interface FakeQueryResult<T> {
-	from: () => { where: () => Promise<T[]> };
+	from: () => FakeJoin<T>;
 }
 
 interface FakeDb {
@@ -36,8 +44,10 @@ interface FakeDb {
 
 /** Build a fake `Db` that returns empty rows for every select. */
 function emptyDb(): FakeDb {
+	const empty: FakeWhere<unknown> = { where: () => Promise.resolve([]) };
+	const join: FakeJoin<unknown> = { ...empty, innerJoin: () => empty };
 	return {
-		select: () => ({ from: () => ({ where: () => Promise.resolve([]) }) }),
+		select: () => ({ from: () => join }),
 		insert: () => {
 			throw new Error('not implemented in fake');
 		},
@@ -119,16 +129,16 @@ describe('resolveCitationTargets', () => {
 		expect(first.target.label).toBe(url);
 	});
 
-	it('flags an internal target as missing when the lookup returns nothing', async () => {
+	it('flags a reference_section target as missing when the lookup returns nothing', async () => {
 		const row = makeCitationRow({
-			targetType: CITATION_TARGET_TYPES.REGULATION_NODE,
-			targetId: 'ref_unknown',
+			targetType: CITATION_TARGET_TYPES.REFERENCE_SECTION,
+			targetId: 'refsec_unknown',
 		});
 
 		// biome-ignore lint/suspicious/noExplicitAny: fake db only needs select+from+where
 		const [first] = await resolveCitationTargets([row], emptyDb() as any);
 
-		expect(first.target.label).toBe('ref_unknown');
+		expect(first.target.label).toBe('refsec_unknown');
 		expect(first.target.detail).toMatch(/missing/i);
 		expect(first.target.href).toBeUndefined();
 	});

@@ -70,8 +70,6 @@ export {
 	type CorpusCoverage,
 	type CreateCitationInput,
 	contentCitation,
-	corpusForCitationTarget,
-	corpusForSourceType,
 	createCitation,
 	DuplicateCitationError,
 	deleteCitation,

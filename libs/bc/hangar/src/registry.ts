@@ -180,33 +180,6 @@ async function lockSourceForUpdate(id: string, db: Db): Promise<HangarSourceRow 
 	return row;
 }
 
-/** Subset of the reference row used by the study reference detail page. */
-export interface ReferenceSummaryRow {
-	id: string;
-	displayName: string;
-	paraphrase: string;
-	tags: Record<string, unknown>;
-}
-
-/**
- * Slim projection used by `/references/[id]` in `apps/study`. Fetches the
- * presentational fields only (no audit columns, no soft-delete filter) so
- * the BC owns the SELECT shape and the route stays free of Drizzle.
- */
-export async function getReferenceSummary(id: string, db: Db = defaultDb): Promise<ReferenceSummaryRow | undefined> {
-	const [row] = await db
-		.select({
-			id: hangarReference.id,
-			displayName: hangarReference.displayName,
-			paraphrase: hangarReference.paraphrase,
-			tags: hangarReference.tags,
-		})
-		.from(hangarReference)
-		.where(eq(hangarReference.id, id))
-		.limit(1);
-	return row;
-}
-
 function tagsToRow(tags: ReferenceTagsInput): Record<string, unknown> {
 	const out: Record<string, unknown> = {
 		sourceType: tags.sourceType,

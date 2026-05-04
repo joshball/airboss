@@ -1,5 +1,5 @@
 {
-  "id": "07b10419-2406-4cc9-8919-bef71b7d5d07",
+  "id": "59bc2bc6-90e7-4603-a68b-338fa3b35522",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -6297,7 +6297,7 @@
         },
         "content_citation_target_type_check": {
           "name": "content_citation_target_type_check",
-          "value": "\"target_type\" IN ('reference_section', 'regulation_node', 'ac_reference', 'external_ref', 'knowledge_node')"
+          "value": "\"target_type\" IN ('reference_section', 'external_ref', 'knowledge_node')"
         },
         "content_citation_context_length_check": {
           "name": "content_citation_context_length_check",

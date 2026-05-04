@@ -187,15 +187,6 @@ export const ROUTES = {
 	GLOSSARY: '/glossary',
 	GLOSSARY_ID: (id: string) => `/glossary/${encodeURIComponent(id)}` as const,
 
-	/**
-	 * Regulation / advisory-circular reference detail (hangar.reference rows).
-	 * Distinct from `GLOSSARY_ID`: glossary holds in-memory aviation terms from
-	 * `@ab/aviation`; references are the picker-targeted DB rows that
-	 * `content-citations` regulation_node + ac_reference targets resolve to.
-	 * Surface for the "Cited by" panel from the citations work package.
-	 */
-	REFERENCE_DETAIL: (id: string) => `/references/${encodeURIComponent(id)}` as const,
-
 	// Study -- Library (the user-facing reference browse + reader surface).
 	// Hosts the in-app handbook reader (per-edition markdown + figures committed
 	// to `handbooks/<doc>/<edition>/`) plus the subject-grouped index over every

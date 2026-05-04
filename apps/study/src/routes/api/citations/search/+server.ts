@@ -17,17 +17,11 @@ import type { RequestHandler } from './$types';
 /**
  * Citation picker search endpoint. Reads `target` + `q` from the query
  * string and dispatches to the per-target-type search helper in the
- * bc-study citations module.
- *
- * Stage-5 (WP `stage5-citation-deeplink`): the polymorphic
- * `reference_section` target type covers every corpus-backed citation
- * (CFR / handbook / AC / ACS / AIM / NTSB / SAFO / InFO) via one search box.
- * The legacy `regulation_node` and `ac_reference` types are kept in the
- * dispatch as a 400 path until migration 2 retires them; the picker now
- * sends `reference_section` exclusively.
- *
- * External refs are not searched (the picker collects URL + title inline),
- * so the endpoint returns an empty result set for them.
+ * bc-study citations module. The polymorphic `reference_section` target
+ * type covers every corpus-backed citation (CFR / handbook / AC / ACS /
+ * AIM / NTSB / SAFO / InFO) via one search box. External refs are not
+ * searched (the picker collects URL + title inline) so the endpoint
+ * returns an empty result set for them.
  */
 export const GET: RequestHandler = async (event) => {
 	// Auth gate: only the owning user should be issuing citation searches.
@@ -52,14 +46,6 @@ export const GET: RequestHandler = async (event) => {
 			break;
 		case CITATION_TARGET_TYPES.EXTERNAL_REF:
 			// External refs: caller types URL + title inline; no server search.
-			results = [];
-			break;
-		case CITATION_TARGET_TYPES.REGULATION_NODE:
-		case CITATION_TARGET_TYPES.AC_REFERENCE:
-			// Legacy: pre-stage-5 picker path. The current picker sends
-			// `reference_section` instead; treat the legacy types as
-			// "no results" so any in-flight client cache doesn't error,
-			// but the picker's tab repoint (Phase 3) will stop emitting them.
 			results = [];
 			break;
 		default:

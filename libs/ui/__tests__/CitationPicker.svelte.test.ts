@@ -39,7 +39,7 @@ describe('CitationPicker -- closed', () => {
 	it('renders nothing visible when open=false', () => {
 		const { container } = render(CitationPicker, {
 			open: false,
-			targetTypes: [CITATION_TARGET_TYPES.REGULATION_NODE],
+			targetTypes: [CITATION_TARGET_TYPES.REFERENCE_SECTION],
 			onSelect: vi.fn(),
 		});
 		// Dialog wrapper itself may not render any panel content while closed.
@@ -51,22 +51,22 @@ describe('CitationPicker -- open', () => {
 	it('reflects the active target type via data-active-type', () => {
 		render(CitationPicker, {
 			open: true,
-			targetTypes: [CITATION_TARGET_TYPES.REGULATION_NODE, CITATION_TARGET_TYPES.AC_REF],
+			targetTypes: [CITATION_TARGET_TYPES.REFERENCE_SECTION, CITATION_TARGET_TYPES.KNOWLEDGE_NODE],
 			onSelect: vi.fn(),
 		});
 		expect(screen.getByTestId('citationpicker-body').getAttribute('data-active-type')).toBe(
-			CITATION_TARGET_TYPES.REGULATION_NODE,
+			CITATION_TARGET_TYPES.REFERENCE_SECTION,
 		);
 	});
 
 	it('renders one tab button per allowed target type when more than one is allowed', () => {
 		render(CitationPicker, {
 			open: true,
-			targetTypes: [CITATION_TARGET_TYPES.REGULATION_NODE, CITATION_TARGET_TYPES.AC_REF],
+			targetTypes: [CITATION_TARGET_TYPES.REFERENCE_SECTION, CITATION_TARGET_TYPES.KNOWLEDGE_NODE],
 			onSelect: vi.fn(),
 		});
-		expect(screen.getByTestId(`citationpicker-tab-${CITATION_TARGET_TYPES.REGULATION_NODE}`)).toBeInTheDocument();
-		expect(screen.getByTestId(`citationpicker-tab-${CITATION_TARGET_TYPES.AC_REF}`)).toBeInTheDocument();
+		expect(screen.getByTestId(`citationpicker-tab-${CITATION_TARGET_TYPES.REFERENCE_SECTION}`)).toBeInTheDocument();
+		expect(screen.getByTestId(`citationpicker-tab-${CITATION_TARGET_TYPES.KNOWLEDGE_NODE}`)).toBeInTheDocument();
 	});
 
 	it('omits the tab strip when only one target type is allowed', () => {
@@ -81,7 +81,7 @@ describe('CitationPicker -- open', () => {
 	it('uses Dialog primitive for chrome (role=dialog, dialog-close button present)', () => {
 		render(CitationPicker, {
 			open: true,
-			targetTypes: [CITATION_TARGET_TYPES.REGULATION_NODE],
+			targetTypes: [CITATION_TARGET_TYPES.REFERENCE_SECTION],
 			onSelect: vi.fn(),
 		});
 		const panel = screen.getByTestId('dialog-panel');
@@ -93,7 +93,7 @@ describe('CitationPicker -- open', () => {
 	it('uses Button primitive for footer Cancel + Submit actions', () => {
 		render(CitationPicker, {
 			open: true,
-			targetTypes: [CITATION_TARGET_TYPES.REGULATION_NODE],
+			targetTypes: [CITATION_TARGET_TYPES.REFERENCE_SECTION],
 			onSelect: vi.fn(),
 		});
 		expect(screen.getByTestId('citationpicker-cancel')).toBeInTheDocument();
@@ -113,10 +113,10 @@ describe('CitationPicker -- stuck-loading regression', () => {
 		);
 		render(CitationPicker, {
 			open: true,
-			targetTypes: [CITATION_TARGET_TYPES.REGULATION_NODE, CITATION_TARGET_TYPES.EXTERNAL_REF],
+			targetTypes: [CITATION_TARGET_TYPES.REFERENCE_SECTION, CITATION_TARGET_TYPES.EXTERNAL_REF],
 			onSelect: vi.fn(),
 		});
-		const search = screen.getByLabelText(/Search Regulation/) as HTMLInputElement;
+		const search = screen.getByLabelText(/Search Reference section/i) as HTMLInputElement;
 		// Trigger the debounced search.
 		search.value = 'foo';
 		search.dispatchEvent(new Event('input', { bubbles: true }));

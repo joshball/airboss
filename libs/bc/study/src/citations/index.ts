@@ -29,7 +29,6 @@ export {
 	resolveCitationSources,
 	resolveCitationTargets,
 } from './citations';
-export { corpusForCitationTarget, corpusForSourceType } from './corpus';
 export { type ContentCitationRow, contentCitation, type NewContentCitationRow } from './schema';
 export {
 	formatSectionLabel,
