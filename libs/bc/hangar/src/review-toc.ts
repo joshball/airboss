@@ -16,7 +16,30 @@
  * pattern; see `libs/bc/hangar/src/review-test-plan.ts`.
  */
 
-import { createHash } from 'node:crypto';
+/**
+ * `node:crypto` is loaded lazily so `libs/bc/hangar` stays browser-bundle
+ * safe even when a future caller imports a value (rather than a type) from
+ * this module on the client. Top-level `import 'node:crypto'` would crash
+ * Vite at first hit; the lazy load via `process.getBuiltinModule` keeps
+ * the module side-effect-free at import time. See `libs/constants/src/source-cache.ts`
+ * for the canonical pattern.
+ */
+type CreateHashFn = (algorithm: string) => {
+	update(data: string): void;
+	digest(encoding: 'hex'): string;
+};
+
+let cachedCreateHash: CreateHashFn | null = null;
+
+function getCreateHash(): CreateHashFn {
+	if (cachedCreateHash !== null) return cachedCreateHash;
+	if (typeof process === 'undefined' || typeof process.getBuiltinModule !== 'function') {
+		throw new Error('parseToc: node:crypto unavailable in this runtime');
+	}
+	const cryptoMod = process.getBuiltinModule('node:crypto') as { createHash: CreateHashFn };
+	cachedCreateHash = cryptoMod.createHash;
+	return cachedCreateHash;
+}
 
 export interface TocEntry {
 	/** 1-based position across the flattened TOC. */
@@ -151,7 +174,7 @@ function pickString(obj: Record<string, unknown>, keys: readonly string[]): stri
 }
 
 function hashEntryRef(referenceId: string, index: number, label: string): string {
-	const hash = createHash('sha1');
+	const hash = getCreateHash()('sha1');
 	hash.update(referenceId);
 	hash.update('|');
 	hash.update(String(index));

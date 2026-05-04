@@ -16,6 +16,15 @@ interface ToastState {
 	readonly sticky: boolean;
 }
 
+interface FormValues {
+	readonly title: string;
+	readonly description: string;
+	readonly type: string;
+	readonly productArea: string;
+	readonly columnId: string;
+	readonly assigneeId: string;
+}
+
 let { data, form }: { data: PageData; form: ActionData } = $props();
 
 let savingUpdate = $state(false);
@@ -24,6 +33,10 @@ let confirmDelete = $state(false);
 let toast = $state<ToastState | null>(null);
 let toastDismissTimer: ReturnType<typeof setTimeout> | null = null;
 let liveAnnounce = $state('');
+// Dirty-flag state: switches on the first input event so the leave-page
+// confirm panel knows to fire. Reset after a successful save.
+let dirty = $state(false);
+let confirmDiscard = $state(false);
 
 const crumbs = $derived<readonly BreadcrumbItem[]>([
 	{ label: 'Review board', href: ROUTES.HANGAR_REVIEW },
@@ -35,6 +48,19 @@ const fieldErrors = $derived<Record<string, string>>(
 		? (form.errors as Record<string, string>)
 		: {},
 );
+
+// Echo-back: prefer the values the user just submitted (so a validation
+// failure doesn't blow away their description); fall back to the saved
+// row when no form is present (initial load) or after a successful update.
+const formValues = $derived<FormValues | null>(
+	form && 'values' in form && typeof form.values === 'object' && form.values !== null
+		? (form.values as FormValues)
+		: null,
+);
+
+function readField(field: keyof FormValues, fallback: string): string {
+	return formValues ? formValues[field] : fallback;
+}
 
 function showToast(tone: ToastTone, message: string, sticky = false): void {
 	toast = { tone, message, sticky };
@@ -65,6 +91,7 @@ $effect(() => {
 	if (updateValue === 'ok') {
 		showToast('success', 'Task updated.');
 		liveAnnounce = 'Task updated.';
+		dirty = false;
 	} else if (typeof updateValue === 'string' && updateValue !== 'invalid') {
 		showToast('danger', updateValue, true);
 		liveAnnounce = `Update failed: ${updateValue}`;
@@ -75,6 +102,16 @@ $effect(() => {
 		liveAnnounce = `Delete failed: ${deleteValue}`;
 	}
 });
+
+function markDirty(): void {
+	dirty = true;
+}
+
+function attemptBack(event: MouseEvent): void {
+	if (!dirty) return;
+	event.preventDefault();
+	confirmDiscard = true;
+}
 </script>
 
 <Breadcrumbs items={crumbs} />
@@ -99,12 +136,26 @@ $effect(() => {
 	</div>
 {/if}
 
+{#if confirmDiscard}
+	<div class="discard-banner">
+		<Banner tone="warning">
+			You have unsaved changes. Discard and return to the board?
+		</Banner>
+		<div class="confirm-row">
+			<a class="discard-link" href={ROUTES.HANGAR_REVIEW}>Discard and return</a>
+			<button type="button" class="action-button" onclick={() => (confirmDiscard = false)}>Stay on form</button>
+		</div>
+	</div>
+{/if}
+
 <Card>
 	{#snippet header()}<h2>Details</h2>{/snippet}
 	<form
 		method="POST"
 		action="?/update"
 		class="form"
+		oninput={markDirty}
+		onchange={markDirty}
 		use:enhance={() => {
 			savingUpdate = true;
 			return async ({ update }) => {
@@ -124,7 +175,8 @@ $effect(() => {
 				type="text"
 				required
 				maxlength="200"
-				value={data.task.title}
+				value={readField('title', data.task.title)}
+				autofocus
 				aria-invalid={fieldErrors.title ? 'true' : undefined}
 				aria-describedby={fieldErrors.title ? 'err-title' : undefined}
 			/>
@@ -133,7 +185,7 @@ $effect(() => {
 
 		<label class="field">
 			<span class="label">Description</span>
-			<textarea name="description" rows="4">{data.task.description}</textarea>
+			<textarea name="description" rows="4">{readField('description', data.task.description ?? '')}</textarea>
 		</label>
 
 		<div class="row">
@@ -141,7 +193,7 @@ $effect(() => {
 				<span class="label">Type</span>
 				<select name="type" required>
 					{#each data.taskTypes as t (t.id)}
-						<option value={t.id} selected={data.task.type === t.id}>{t.label}</option>
+						<option value={t.id} selected={readField('type', data.task.type) === t.id}>{t.label}</option>
 					{/each}
 				</select>
 				{#if fieldErrors.type}<small class="err">{fieldErrors.type}</small>{/if}
@@ -151,7 +203,7 @@ $effect(() => {
 				<span class="label">Product area</span>
 				<select name="productArea" required>
 					{#each data.productAreas as a (a.id)}
-						<option value={a.id} selected={data.task.productArea === a.id}>{a.label}</option>
+						<option value={a.id} selected={readField('productArea', data.task.productArea) === a.id}>{a.label}</option>
 					{/each}
 				</select>
 				{#if fieldErrors.productArea}<small class="err">{fieldErrors.productArea}</small>{/if}
@@ -161,21 +213,30 @@ $effect(() => {
 		<label class="field">
 			<span class="label">Column</span>
 			<select name="columnId">
-				<option value="" selected={data.task.columnId === null}>(no column)</option>
+				<option value="" selected={readField('columnId', data.task.columnId ?? '') === ''}>(no column)</option>
 				{#each data.columns as c (c.id)}
-					<option value={c.id} selected={data.task.columnId === c.id}>{c.name}</option>
+					<option value={c.id} selected={readField('columnId', data.task.columnId ?? '') === c.id}>{c.name}</option>
 				{/each}
 			</select>
 		</label>
 
-		<label class="field">
-			<span class="label">Assignee user id</span>
-			<input name="assigneeId" type="text" value={data.task.assigneeId ?? ''} />
-		</label>
+		<details class="advanced">
+			<summary>Advanced fields</summary>
+			<label class="field">
+				<span class="label">Assignee user id</span>
+				<input
+					name="assigneeId"
+					type="text"
+					value={readField('assigneeId', data.task.assigneeId ?? '')}
+					placeholder="Leave blank -- single-user app today"
+				/>
+				<small class="hint">Future multi-user feature; today this is best left blank.</small>
+			</label>
+		</details>
 
 		<div class="actions">
 			<Button type="submit" variant="primary" loading={savingUpdate} loadingLabel="Saving...">Save</Button>
-			<a class="cancel" href={ROUTES.HANGAR_REVIEW}>Back to board</a>
+			<a class="cancel" href={ROUTES.HANGAR_REVIEW} onclick={attemptBack}>Back to board</a>
 		</div>
 	</form>
 </Card>
@@ -286,9 +347,22 @@ $effect(() => {
 		color: var(--link-default);
 	}
 
+	.advanced {
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-sm);
+		padding: var(--space-2xs) var(--space-sm);
+	}
+
+	.advanced summary {
+		cursor: pointer;
+		font-size: var(--type-ui-label-size);
+		color: var(--ink-muted);
+	}
+
 	.hint {
 		margin: 0 0 var(--space-sm);
 		color: var(--ink-muted);
+		font-size: var(--type-ui-caption-size);
 	}
 
 	.action-button {
@@ -321,6 +395,20 @@ $effect(() => {
 	.confirm-row {
 		display: flex;
 		gap: var(--space-2xs);
+		align-items: center;
+	}
+
+	.discard-banner {
+		margin: var(--space-md) 0;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2xs);
+	}
+
+	.discard-link {
+		color: var(--signal-danger-ink);
+		text-decoration: underline;
+		font-size: var(--type-ui-label-size);
 	}
 
 	.toast-wrap {

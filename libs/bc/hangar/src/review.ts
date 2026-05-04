@@ -78,6 +78,32 @@ import {
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 
 // ---------------------------------------------------------------------------
+// Per-item view summaries (shared between the dispatcher loader and the
+// walker route's loader). These shapes are derived from the BC primitives
+// (`listSteps`, `parseTestPlan`, `getOpenSession`) so co-locating the type
+// next to the BC keeps a future reshape one-touch rather than splatted
+// across two route files.
+// ---------------------------------------------------------------------------
+
+export interface WalkerSummary {
+	readonly stepCount: number;
+	readonly hasPlan: boolean;
+	readonly openSessionId: string | null;
+	readonly recordedSteps: number;
+	readonly passCount: number;
+	readonly failCount: number;
+	readonly blockedCount: number;
+}
+
+export interface SessionSummary {
+	readonly id: string;
+	readonly startedAt: string;
+	readonly finishedAt: string | null;
+	readonly outcome: string | null;
+	readonly note: string;
+}
+
+// ---------------------------------------------------------------------------
 // Boards + columns
 // ---------------------------------------------------------------------------
 

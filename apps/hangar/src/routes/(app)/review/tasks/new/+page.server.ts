@@ -9,7 +9,10 @@
  *
  * `createdBy` is set to the current session user; the task lands at the
  * end of the column (max sortOrder + 1) so existing rows don't get
- * reshuffled.
+ * reshuffled. The board read + the create are wrapped in a transaction so
+ * the underlying `board_task` and the mirrored `review_item` row land
+ * atomically -- a half-applied write would leave the kanban board with a
+ * task that's invisible (no mirror) or a phantom mirror with no task.
  */
 
 import { requireRole } from '@ab/auth';
@@ -19,14 +22,17 @@ import {
 	PRODUCT_AREA_VALUES,
 	type ProductArea,
 	REVIEW_BOARD_COLUMN_NAMES,
+	REVIEW_KINDS,
+	REVIEW_TASK_FLOW_PARAMS,
 	ROLES,
 	ROUTES,
 	TASK_TYPE_LABELS,
 	TASK_TYPE_VALUES,
 	type TaskType,
 } from '@ab/constants';
+import { db } from '@ab/db/connection';
 import { createLogger } from '@ab/utils';
-import { fail, redirect } from '@sveltejs/kit';
+import { fail, isRedirect, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
 const log = createLogger('hangar:review:tasks:new');
@@ -84,45 +90,53 @@ export const actions: Actions = {
 		if (!isTaskType(typeRaw) || !isProductArea(productAreaRaw)) {
 			throw new Error('unreachable: validated above');
 		}
-		const board = await getOrCreateBoard();
-		const existing = await listTasks(board.id);
-		const nextSortOrder = existing.length === 0 ? 0 : Math.max(...existing.map((t) => t.sortOrder)) + 1;
+		// Wrap board / column / sortOrder peek + the two mutating writes in a
+		// single transaction so a partial-state failure (FK / network blip)
+		// rolls back. Without the wrapper, a `createTask` success followed by
+		// an `upsertItem` failure leaves the user with an invisible task --
+		// the board can't see it because the mirror is missing, and the
+		// loader skips ad_hoc kinds in its prune walk.
+		let taskId: string;
 		try {
-			const task = await createTask({
-				boardId: board.id,
-				title,
-				description: description === '' ? undefined : description,
-				type: typeRaw,
-				productArea: productAreaRaw,
-				columnId: columnIdRaw === '' ? null : columnIdRaw,
-				assigneeId: assigneeIdRaw === '' ? null : assigneeIdRaw,
-				createdBy: user.id,
-				sortOrder: nextSortOrder,
+			taskId = await db.transaction(async (tx) => {
+				const board = await getOrCreateBoard(tx);
+				const existing = await listTasks(board.id, tx);
+				const nextSortOrder = existing.length === 0 ? 0 : Math.max(...existing.map((t) => t.sortOrder)) + 1;
+				const task = await createTask(
+					{
+						boardId: board.id,
+						title,
+						description: description === '' ? undefined : description,
+						type: typeRaw,
+						productArea: productAreaRaw,
+						columnId: columnIdRaw === '' ? null : columnIdRaw,
+						assigneeId: assigneeIdRaw === '' ? null : assigneeIdRaw,
+						createdBy: user.id,
+						sortOrder: nextSortOrder,
+					},
+					tx,
+				);
+				// Mirror the task on the board as a `review_item` row so it shows
+				// up in the kanban view alongside spec/TOC/knowledge-node items.
+				// Ad-hoc items survive loader passes (the loader skips them in
+				// the soft-prune walk) so this is a one-time write per task.
+				await upsertItem(
+					{
+						boardId: board.id,
+						kindId: REVIEW_KINDS.AD_HOC,
+						ref: task.id,
+						title,
+						frontmatterStatus: null,
+						reviewStatus: null,
+						cachedFields: { otherFields: { type: typeRaw, productArea: productAreaRaw } },
+					},
+					tx,
+				);
+				return task.id;
 			});
-			// Mirror the task on the board as a `review_item` row so it shows up
-			// in the kanban view alongside spec/TOC/knowledge-node items. Ad-hoc
-			// items survive loader passes (`review-loader.ts` skips them in the
-			// soft-prune loop) so this is a one-time write per task.
-			await upsertItem({
-				boardId: board.id,
-				kindId: 'ad_hoc',
-				ref: task.id,
-				title,
-				frontmatterStatus: null,
-				reviewStatus: null,
-				cachedFields: { otherFields: { type: typeRaw, productArea: productAreaRaw } },
-			});
-			throw redirect(303, ROUTES.HANGAR_REVIEW_TASK_EDIT(task.id));
 		} catch (err) {
-			// SvelteKit's `redirect()` throws -- rethrow it so the framework
-			// handles the 303 instead of treating it as a server error.
-			if (
-				err instanceof Response ||
-				(typeof err === 'object' && err !== null && 'status' in err && 'location' in err)
-			) {
-				throw err;
-			}
-			const message = err instanceof Error ? err.message : 'Task create failed.';
+			if (isRedirect(err)) throw err;
+			const message = friendlyDbError(err) ?? (err instanceof Error ? err.message : 'Task create failed.');
 			log.error('createTask failed', undefined, err instanceof Error ? err : new Error(message));
 			const formErrors: Record<string, string> = { _form: message };
 			return fail(500, {
@@ -137,5 +151,27 @@ export const actions: Actions = {
 				},
 			});
 		}
+		// Redirect to the board with a `created` flag the board reads on mount
+		// to surface a "Task created" toast (then strips the param). Pattern
+		// mirrors `REVIEW_WP_SPEC_FINISH_PARAMS` for the walker -- the board's
+		// rerender after redirect needs the closing handshake or the user has
+		// no confirmation that the create landed.
+		const target = `${ROUTES.HANGAR_REVIEW}?${REVIEW_TASK_FLOW_PARAMS.CREATED}=${encodeURIComponent(taskId)}&${REVIEW_TASK_FLOW_PARAMS.CREATED_TITLE}=${encodeURIComponent(title)}`;
+		throw redirect(303, target);
 	},
 };
+
+/**
+ * Map a Postgres FK violation to a user-facing error message. Returns null
+ * when the error isn't a known shape; the caller falls back to the raw
+ * message in that case.
+ */
+function friendlyDbError(err: unknown): string | null {
+	if (typeof err !== 'object' || err === null) return null;
+	const candidate = err as { code?: string; constraint?: string };
+	if (candidate.code !== '23503') return null;
+	const c = candidate.constraint ?? '';
+	if (c.includes('assignee')) return 'Assignee not found. Leave blank or use a valid user id.';
+	if (c.includes('column')) return 'Selected column does not exist on the board.';
+	return 'A referenced row was not found.';
+}

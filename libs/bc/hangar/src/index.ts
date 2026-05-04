@@ -190,6 +190,7 @@ export {
 	seedDefaultBuckets,
 	seedDefaultColumns,
 	seedReviewKinds,
+	type SessionSummary,
 	softDeleteItem,
 	startSession,
 	type UpdateTaskInput,
@@ -198,6 +199,7 @@ export {
 	updateTask,
 	upsertItem,
 	validateBucketFilterCriteria,
+	type WalkerSummary,
 } from './review';
 export {
 	type DiscoveredItem,

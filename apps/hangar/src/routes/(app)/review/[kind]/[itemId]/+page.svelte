@@ -17,9 +17,12 @@ import Tabs, { type TabItem } from '@ab/ui/components/Tabs.svelte';
 import Toast, { type ToastTone } from '@ab/ui/components/Toast.svelte';
 import { onMount } from 'svelte';
 import { enhance } from '$app/forms';
-import { goto, invalidateAll } from '$app/navigation';
+import { goto } from '$app/navigation';
 import { page } from '$app/state';
-import AdHocView from './_views/AdHocView.svelte';
+// `AdHocView` is no longer mounted from the dispatcher: the load function
+// 303s ad_hoc items straight to the task editor (canonical surface) rather
+// than rendering a stub. The component file stays for any future deep-link
+// surface; importing it from here would be dead code.
 import KnowledgeNodeView from './_views/KnowledgeNodeView.svelte';
 import ReferenceTocView from './_views/ReferenceTocView.svelte';
 import type { ActionData, PageData } from './$types';
@@ -309,8 +312,11 @@ const sessionTotalNote = $derived<string | null>(
 							savingMarkRead = true;
 							return async ({ update }) => {
 								try {
+									// `update()` already runs the SvelteKit
+									// invalidation pipeline; calling
+									// `invalidateAll()` here would force a
+									// redundant load fetch.
 									await update();
-									await invalidateAll();
 								} finally {
 									savingMarkRead = false;
 								}
@@ -340,7 +346,6 @@ const sessionTotalNote = $derived<string | null>(
 								return async ({ update, result }) => {
 									try {
 										await update();
-										await invalidateAll();
 									} finally {
 										savingFlip = false;
 									}
@@ -372,11 +377,13 @@ const sessionTotalNote = $derived<string | null>(
 		itemTitle={data.item.title}
 		reference={data.reference}
 		entries={data.entries}
+		entryDetails={data.entryDetails}
 		tocErrors={data.tocErrors}
 		session={data.session}
 		recordedByRef={data.recordedByRef}
 		openSessionStartedAt={data.openSessionStartedAt}
 		sessions={data.sessions}
+		bucketName={data.bucketName}
 	/>
 {:else if data.view === 'knowledge_node'}
 	<KnowledgeNodeView
@@ -391,8 +398,6 @@ const sessionTotalNote = $derived<string | null>(
 			? form.markKnowledgeNodeReviewed ?? null
 			: null}
 	/>
-{:else if data.view === 'ad_hoc'}
-	<AdHocView itemId={data.item.id} itemTitle={data.item.title} itemRef={data.item.ref} />
 {:else}
 	<section class="placeholder" aria-labelledby="placeholder-heading">
 		<h2 id="placeholder-heading">{data.kindLabel} review</h2>

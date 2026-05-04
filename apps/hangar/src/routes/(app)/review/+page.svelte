@@ -19,6 +19,7 @@ import {
 	REVIEW_BUCKET_DRAWER_LIMIT,
 	REVIEW_KIND_LABELS,
 	REVIEW_KIND_VALUES,
+	REVIEW_TASK_FLOW_PARAMS,
 	type ReviewBoardFilter,
 	type ReviewBoardStatusFilter,
 	type ReviewKind,
@@ -29,8 +30,9 @@ import BucketCard, { type BucketCardItem } from '@ab/ui/components/BucketCard.sv
 import Button from '@ab/ui/components/Button.svelte';
 import ItemCard from '@ab/ui/components/ItemCard.svelte';
 import type { ActionResult } from '@sveltejs/kit';
+import { onMount } from 'svelte';
 import { applyAction, deserialize, enhance } from '$app/forms';
-import { invalidateAll } from '$app/navigation';
+import { goto, invalidateAll } from '$app/navigation';
 import { page } from '$app/state';
 import type { ActionData, PageData } from './$types';
 
@@ -364,6 +366,37 @@ function onCardDragStart(columnId: string) {
 function onCardDragEnd() {
 	dragSourceColumnId = null;
 }
+
+// On mount, surface any task-flow toasts carried via URL params (the task
+// create / delete actions redirect here with `?created=...` or
+// `?deletedTitle=...` so the user gets a closing handshake on the
+// destination page). Strip the params after the read so reload / share-link
+// doesn't replay the toast.
+onMount(() => {
+	if (typeof window === 'undefined') return;
+	const url = new URL(window.location.href);
+	const created = url.searchParams.get(REVIEW_TASK_FLOW_PARAMS.CREATED);
+	const createdTitle = url.searchParams.get(REVIEW_TASK_FLOW_PARAMS.CREATED_TITLE);
+	const deletedTitle = url.searchParams.get(REVIEW_TASK_FLOW_PARAMS.DELETED_TITLE);
+	let needsStrip = false;
+	if (created !== null) {
+		const message = createdTitle !== null ? `Task "${createdTitle}" created.` : 'Task created.';
+		loaderStatus = { kind: 'success', message };
+		liveAnnounce = message;
+		needsStrip = true;
+	} else if (deletedTitle !== null) {
+		const message = `Task "${deletedTitle}" deleted.`;
+		loaderStatus = { kind: 'success', message };
+		liveAnnounce = message;
+		needsStrip = true;
+	}
+	if (needsStrip) {
+		url.searchParams.delete(REVIEW_TASK_FLOW_PARAMS.CREATED);
+		url.searchParams.delete(REVIEW_TASK_FLOW_PARAMS.CREATED_TITLE);
+		url.searchParams.delete(REVIEW_TASK_FLOW_PARAMS.DELETED_TITLE);
+		void goto(`${url.pathname}${url.search}`, { replaceState: true, noScroll: true, keepFocus: true });
+	}
+});
 </script>
 
 <header class="board-head">

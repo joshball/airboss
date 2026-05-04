@@ -2,15 +2,26 @@
 import type { TocEntry } from '@ab/bc-hangar';
 import type { ReviewOutcome, SessionOutcome } from '@ab/constants';
 
+export interface TocEntryDetail {
+	readonly entryRef: string;
+	readonly entryIndex: number;
+	readonly label: string;
+	readonly pageNumber: string | null;
+	readonly anchor: string | null;
+	readonly bodyHtml: string | null;
+}
+
 export interface ReferenceTocViewProps {
 	readonly itemId: string;
 	readonly itemTitle: string;
 	readonly reference: { id: string; displayName: string; paraphrase: string } | null;
 	readonly entries: ReadonlyArray<TocEntry>;
+	readonly entryDetails: ReadonlyArray<TocEntryDetail>;
 	readonly tocErrors: ReadonlyArray<{ message: string; path: string }>;
 	readonly session: { id: string; startedAt: string } | null;
 	readonly recordedByRef: ReadonlyArray<{ entryRef: string; outcome: ReviewOutcome; note: string }>;
 	readonly openSessionStartedAt: string | null;
+	readonly bucketName: string;
 	readonly sessions: ReadonlyArray<{
 		id: string;
 		startedAt: string;
@@ -26,6 +37,7 @@ import {
 	REVIEW_OUTCOME_LABELS,
 	REVIEW_OUTCOME_VALUES,
 	REVIEW_WP_SPEC_TOAST_DISMISS_MS,
+	ROUTES,
 	WALKER_KEYBOARD_SHORTCUTS,
 } from '@ab/constants';
 import Badge from '@ab/ui/components/Badge.svelte';
@@ -34,7 +46,6 @@ import Card from '@ab/ui/components/Card.svelte';
 import Toast, { type ToastTone } from '@ab/ui/components/Toast.svelte';
 import type { ActionResult } from '@sveltejs/kit';
 import { applyAction, deserialize } from '$app/forms';
-import { invalidateAll } from '$app/navigation';
 import { onDestroy, onMount } from 'svelte';
 
 interface ToastState {
@@ -53,12 +64,18 @@ let {
 	itemTitle,
 	reference,
 	entries,
+	entryDetails,
 	tocErrors,
 	session,
 	recordedByRef,
 	openSessionStartedAt,
 	sessions,
+	bucketName,
 }: ReferenceTocViewProps = $props();
+
+const detailByRef = $derived<ReadonlyMap<string, TocEntryDetail>>(
+	new Map(entryDetails.map((d) => [d.entryRef, d] as const)),
+);
 
 const recordedMap = $derived<ReadonlyMap<string, RecordedEntry>>(
 	new Map(recordedByRef.map((r) => [r.entryRef, { outcome: r.outcome, note: r.note }] as const)),
@@ -71,11 +88,16 @@ let toast = $state<ToastState | null>(null);
 let toastDismissTimer: ReturnType<typeof setTimeout> | null = null;
 let liveAnnounce = $state('');
 let activeEntryRef = $state<string | null>(null);
-let confirmFinish = $state<SessionOutcome | null>(null);
+// Two roles split apart so the keyboard / state model stays unambiguous.
+// `panelOpen` controls whether the finish panel is visible; the selected
+// outcome lives on its own variable and only reads while the panel is
+// open.
+let panelOpen = $state(false);
+let selectedFinishOutcome = $state<SessionOutcome | null>(null);
 let finishing = $state(false);
 
 // Sync server truth into the optimistic map without overwriting in-flight
-// rows. Same rule the walker uses (see walker/+page.svelte).
+// rows. Same rule the walker uses.
 $effect(() => {
 	const next = new Map(optimistic);
 	for (const [ref, rec] of recordedMap) {
@@ -107,11 +129,15 @@ const everyEntryPassed = $derived(
 	entries.length > 0 && totals.pass === entries.length && totals.fail === 0 && totals.blocked === 0,
 );
 
-function suggestedFinish(): SessionOutcome {
-	if (everyEntryPassed) return 'pass';
-	if (totals.fail > 0 || totals.blocked > 0) return 'fail';
-	return 'abandoned';
-}
+const suggestedOutcome = $derived<SessionOutcome>(
+	everyEntryPassed ? 'pass' : totals.fail > 0 || totals.blocked > 0 ? 'fail' : 'abandoned',
+);
+
+// Resume cue: a session that already has recorded steps when we land on
+// the page is one we're picking back up. The banner gives the reviewer a
+// closing cue rather than dropping them into an indistinguishable view.
+const resumingCount = $derived(recordedByRef.length);
+const isResuming = $derived(session !== null && resumingCount > 0);
 
 const startedAtFmt = new Intl.DateTimeFormat(undefined, {
 	dateStyle: 'medium',
@@ -211,10 +237,21 @@ async function recordEntry(entry: TocEntry, outcome: ReviewOutcome): Promise<voi
 		clearSaving(entry.entryRef);
 		return;
 	}
+	// `applyAction` already pumps the SvelteKit invalidation pipeline; an
+	// extra `invalidateAll()` here would force a redundant load fetch.
 	await applyAction(result);
-	await invalidateAll();
 	liveAnnounce = `Entry ${entry.entryIndex} recorded as ${outcome}.`;
 	clearSaving(entry.entryRef);
+	// Auto-open the finish panel when every entry just landed pass --
+	// reduces the keyboard-driven case from "j/k/p ... scroll up ... click ...
+	// pick ... click" to "j/k/p ... Confirm".
+	if (
+		entries.length > 0 &&
+		outcome === 'pass' &&
+		[...optimistic.values()].filter((v) => v.outcome === 'pass').length === entries.length
+	) {
+		openFinishPanel('pass', /*announceAuto*/ true);
+	}
 }
 
 function revertOptimistic(entryRef: string, prior: RecordedEntry | undefined): void {
@@ -234,6 +271,19 @@ function clearSaving(entryRef: string): void {
 	const map = new Map(savingByRef);
 	map.delete(entryRef);
 	savingByRef = map;
+}
+
+function openFinishPanel(initial: SessionOutcome, announceAuto = false): void {
+	panelOpen = true;
+	selectedFinishOutcome = initial;
+	if (announceAuto) {
+		liveAnnounce = 'Every entry passed. Finish panel opened.';
+	}
+}
+
+function closeFinishPanel(): void {
+	panelOpen = false;
+	selectedFinishOutcome = null;
 }
 
 async function finishWith(outcome: SessionOutcome): Promise<void> {
@@ -261,11 +311,14 @@ async function finishWith(outcome: SessionOutcome): Promise<void> {
 		return;
 	}
 	await applyAction(result);
-	await invalidateAll();
 	finishing = false;
-	confirmFinish = null;
-	showToast('success', `TOC review finished as ${outcome}.`);
-	liveAnnounce = `TOC review finished as ${outcome}.`;
+	closeFinishPanel();
+	const bucketSide =
+		outcome === 'pass'
+			? ` Item removed from "${bucketName}" bucket.`
+			: ` Item stays in "${bucketName}" bucket -- mark pass to remove.`;
+	showToast('success', `TOC review finished as ${outcome}.${bucketSide}`);
+	liveAnnounce = `TOC review finished as ${outcome}.${bucketSide}`;
 }
 
 function focusOffset(delta: number): void {
@@ -314,13 +367,37 @@ function handlePageKeydown(event: KeyboardEvent): void {
 }
 
 onMount(() => {
+	// Cursor at the first un-recorded entry on resume; otherwise at the
+	// first entry. Keyboard pickup point matches what the reviewer would do
+	// with the mouse anyway.
+	if (entries.length > 0 && activeEntryRef === null) {
+		const firstUnrecorded = entries.find((e) => !recordedMap.has(e.entryRef));
+		activeEntryRef = (firstUnrecorded ?? entries[0]).entryRef;
+	}
 	if (typeof window === 'undefined') return;
 	window.addEventListener('keydown', handlePageKeydown);
 	return () => window.removeEventListener('keydown', handlePageKeydown);
 });
+
+const activeDetail = $derived<TocEntryDetail | null>(
+	activeEntryRef === null ? null : (detailByRef.get(activeEntryRef) ?? null),
+);
+const activeRecorded = $derived<RecordedEntry | null>(
+	activeEntryRef === null ? null : (optimistic.get(activeEntryRef) ?? null),
+);
 </script>
 
 <div class="visually-hidden" aria-live="polite" role="status">{liveAnnounce}</div>
+
+<header class="view-hd">
+	<h2 class="view-title">{itemTitle}</h2>
+	<aside class="shortcuts" aria-label="Keyboard shortcuts">
+		<kbd>{WALKER_KEYBOARD_SHORTCUTS.NEXT_STEP}</kbd>/<kbd>{WALKER_KEYBOARD_SHORTCUTS.PREV_STEP}</kbd> navigate ·
+		<kbd>{WALKER_KEYBOARD_SHORTCUTS.OUTCOME_PASS}</kbd>/<kbd>{WALKER_KEYBOARD_SHORTCUTS.OUTCOME_FAIL}</kbd>/<kbd
+			>{WALKER_KEYBOARD_SHORTCUTS.OUTCOME_BLOCKED}</kbd
+		> outcome
+	</aside>
+</header>
 
 {#if toast}
 	<div class="toast-wrap">
@@ -337,26 +414,38 @@ onMount(() => {
 
 {#if reference === null}
 	<section class="missing">
-		<h2>Reference not found</h2>
-		<p>The underlying <code>hangar.reference</code> row may have been deleted. Re-run the loader to refresh the board.</p>
+		<h3>This reference no longer exists</h3>
+		<p>
+			The underlying reference row has been removed. <a href={ROUTES.HANGAR_REVIEW}>Return to the board</a> -- the next
+			refresh will clear this item.
+		</p>
 	</section>
 {:else if entries.length === 0}
 	<section class="missing">
-		<h2>No TOC content for this reference</h2>
+		<h3>No TOC content for this reference yet</h3>
 		<p>
-			<code>{reference.displayName}</code> doesn't carry a recognised TOC shape. Re-extract the TOC into the reference's
-			<code>verbatim</code> jsonb (expects <code>toc[]</code>, <code>kind=toc + items[]</code>, or
-			<code>tableOfContents</code>).
+			This reference doesn't have a TOC extraction. Mark this item blocked, or open an ad-hoc task to re-extract the TOC.
+		</p>
+		<p class="empty-actions">
+			<a class="action-link" href={ROUTES.HANGAR_REVIEW_TASK_NEW}>+ New task to re-extract TOC</a>
+			<a class="action-link" href={ROUTES.HANGAR_REVIEW}>Back to board</a>
 		</p>
 		{#if tocErrors.length > 0}
+			<h4 class="errors-h">Parser warnings</h4>
 			<ul class="errors">
 				{#each tocErrors as err (err.path)}
-					<li>{err.message} <code>({err.path})</code></li>
+					<li><span class="err-path">{err.path}</span> -- {err.message}</li>
 				{/each}
 			</ul>
 		{/if}
 	</section>
 {:else}
+	{#if isResuming}
+		<aside class="resume-banner" role="status">
+			<strong>Resuming session</strong> started {openSessionStartedAt ? formatStartedAt(openSessionStartedAt) : ''} --
+			{resumingCount} of {entries.length} entries already recorded.
+		</aside>
+	{/if}
 	<section class="summary" aria-label="TOC review progress">
 		<dl>
 			<div><dt>Total entries</dt><dd>{entries.length}</dd></div>
@@ -365,75 +454,77 @@ onMount(() => {
 			<div><dt>Blocked</dt><dd class="blocked">{totals.blocked}</dd></div>
 			<div><dt>Recorded</dt><dd>{totals.recorded}</dd></div>
 		</dl>
-		<aside class="shortcuts" aria-label="Keyboard shortcuts">
-			<p class="shortcut-line">
-				<kbd>{WALKER_KEYBOARD_SHORTCUTS.NEXT_STEP}</kbd>/<kbd>{WALKER_KEYBOARD_SHORTCUTS.PREV_STEP}</kbd> navigate --
-				<kbd>{WALKER_KEYBOARD_SHORTCUTS.OUTCOME_PASS}</kbd>/<kbd>{WALKER_KEYBOARD_SHORTCUTS.OUTCOME_FAIL}</kbd>/<kbd
-					>{WALKER_KEYBOARD_SHORTCUTS.OUTCOME_BLOCKED}</kbd
-				> outcome
-			</p>
-		</aside>
 		<div class="actions">
-			{#if confirmFinish === null}
+			{#if !panelOpen}
 				<Button
 					variant="primary"
 					disabled={totals.recorded === 0 || session === null}
-					onclick={() => (confirmFinish = suggestedFinish())}
+					onclick={() => openFinishPanel(suggestedOutcome)}
 				>
-					Finish TOC review
+					Finish TOC review (suggests: {suggestedOutcome})
 				</Button>
 			{/if}
 		</div>
 	</section>
 
-	{#if confirmFinish !== null}
+	{#if panelOpen}
 		<section class="finish-panel" aria-labelledby="finish-h">
-			<h2 id="finish-h">Finish session</h2>
+			<h3 id="finish-h">Finish session</h3>
 			<p class="confirm-text">Pick the outcome that best describes this TOC review.</p>
 			<div class="finish-options" role="radiogroup" aria-label="Session outcome">
 				<button
 					type="button"
 					class="finish-option"
-					class:active={confirmFinish === 'pass'}
+					class:active={selectedFinishOutcome === 'pass'}
 					data-tone="success"
-					aria-pressed={confirmFinish === 'pass'}
-					onclick={() => (confirmFinish = 'pass')}
+					aria-pressed={selectedFinishOutcome === 'pass'}
+					aria-describedby={suggestedOutcome === 'pass' ? 'finish-suggested' : undefined}
+					onclick={() => (selectedFinishOutcome = 'pass')}
 				>
 					Pass
+					{#if suggestedOutcome === 'pass'}<span class="suggested-tag">(suggested)</span>{/if}
 				</button>
 				<button
 					type="button"
 					class="finish-option"
-					class:active={confirmFinish === 'fail'}
+					class:active={selectedFinishOutcome === 'fail'}
 					data-tone="danger"
-					aria-pressed={confirmFinish === 'fail'}
-					onclick={() => (confirmFinish = 'fail')}
+					aria-pressed={selectedFinishOutcome === 'fail'}
+					aria-describedby={suggestedOutcome === 'fail' ? 'finish-suggested' : undefined}
+					onclick={() => (selectedFinishOutcome = 'fail')}
 				>
 					Fail
+					{#if suggestedOutcome === 'fail'}<span class="suggested-tag">(suggested)</span>{/if}
 				</button>
 				<button
 					type="button"
 					class="finish-option"
-					class:active={confirmFinish === 'abandoned'}
+					class:active={selectedFinishOutcome === 'abandoned'}
 					data-tone="muted"
-					aria-pressed={confirmFinish === 'abandoned'}
-					onclick={() => (confirmFinish = 'abandoned')}
+					aria-pressed={selectedFinishOutcome === 'abandoned'}
+					aria-describedby={suggestedOutcome === 'abandoned' ? 'finish-suggested' : undefined}
+					onclick={() => (selectedFinishOutcome = 'abandoned')}
 				>
 					Abandoned
+					{#if suggestedOutcome === 'abandoned'}<span class="suggested-tag">(suggested)</span>{/if}
 				</button>
 			</div>
+			<small id="finish-suggested" class="suggestion-text">
+				Suggested based on recorded outcomes ({totals.pass}/{entries.length} pass, {totals.fail} fail, {totals.blocked}
+				blocked).
+			</small>
 			<div class="confirm-row">
 				<Button
 					variant="primary"
 					loading={finishing}
 					loadingLabel="Finishing..."
 					onclick={() => {
-						if (confirmFinish !== null) void finishWith(confirmFinish);
+						if (selectedFinishOutcome !== null) void finishWith(selectedFinishOutcome);
 					}}
 				>
 					Confirm finish
 				</Button>
-				<button type="button" class="action-button" onclick={() => (confirmFinish = null)}>Cancel</button>
+				<button type="button" class="action-button" onclick={closeFinishPanel}>Cancel</button>
 			</div>
 		</section>
 	{/if}
@@ -448,7 +539,6 @@ onMount(() => {
 						class:active={activeEntryRef === entry.entryRef}
 						data-entry-ref={entry.entryRef}
 					>
-						<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 						<button
 							type="button"
 							class="entry-row"
@@ -491,20 +581,52 @@ onMount(() => {
 			</ol>
 		</section>
 
-		<aside class="content-pane" aria-label="Reference content">
+		<aside class="content-pane" aria-label="Entry detail">
 			<Card>
-				{#snippet header()}<h2>{reference.displayName}</h2>{/snippet}
-				{#if reference.paraphrase !== ''}
+				{#snippet header()}
+					<h3>{activeDetail ? `Entry ${activeDetail.entryIndex}` : reference.displayName}</h3>
+				{/snippet}
+				{#if activeDetail}
+					<dl class="detail">
+						<div><dt>Label</dt><dd>{activeDetail.label}</dd></div>
+						{#if activeDetail.pageNumber}
+							<div><dt>Page</dt><dd>{activeDetail.pageNumber}</dd></div>
+						{/if}
+						{#if activeDetail.anchor}
+							<div><dt>Anchor</dt><dd><code>{activeDetail.anchor}</code></dd></div>
+						{/if}
+						<div>
+							<dt>Status</dt>
+							<dd>
+								{#if activeRecorded?.outcome === 'pass'}<Badge tone="success" size="sm">Pass</Badge>
+								{:else if activeRecorded?.outcome === 'fail'}<Badge tone="danger" size="sm">Fail</Badge>
+								{:else if activeRecorded?.outcome === 'blocked'}<Badge tone="warning" size="sm">Blocked</Badge>
+								{:else}<span class="muted">Not recorded</span>{/if}
+							</dd>
+						</div>
+					</dl>
+					{#if activeDetail.bodyHtml}
+						<!-- bodyHtml is rendered HTML from the BC; safe for {@html}. -->
+						<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+						<div class="entry-body">{@html activeDetail.bodyHtml}</div>
+					{:else}
+						<p class="muted entry-hint">
+							Verify the heading and page number against the source. The body for this entry isn't extracted into the
+							TOC blob; the source PDF / scan remains the authority.
+						</p>
+					{/if}
+				{:else}
 					<p class="paraphrase">{reference.paraphrase}</p>
+					<p class="muted">Click a TOC entry on the left to inspect its detail.</p>
 				{/if}
-				{#if openSessionStartedAt !== null}
+				{#if openSessionStartedAt !== null && !isResuming}
 					<p class="session-meta">Open session started {formatStartedAt(openSessionStartedAt)}.</p>
 				{/if}
 			</Card>
 
 			{#if sessions.length > 0}
 				<Card>
-					{#snippet header()}<h2>Sessions</h2>{/snippet}
+					{#snippet header()}<h3>Sessions</h3>{/snippet}
 					<ul class="session-list">
 						{#each sessions as s (s.id)}
 							<li class="session">
@@ -529,11 +651,47 @@ onMount(() => {
 			{/if}
 		</aside>
 	</div>
-
-	{#if itemTitle === ''}<!-- silence unused-prop lint -->{/if}
 {/if}
 
 <style>
+	.view-hd {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: var(--space-md);
+		flex-wrap: wrap;
+		margin-top: var(--space-md);
+	}
+
+	.view-title {
+		margin: 0;
+		font-size: var(--type-ui-control-size);
+	}
+
+	.shortcuts {
+		font-size: var(--type-ui-caption-size);
+		color: var(--ink-muted);
+	}
+
+	.shortcuts kbd {
+		font-family: var(--font-family-mono);
+		font-size: var(--type-ui-caption-size);
+		padding: 0 var(--space-3xs);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-sm);
+		background: var(--surface-sunken);
+	}
+
+	.resume-banner {
+		margin: var(--space-md) 0;
+		padding: var(--space-sm) var(--space-md);
+		background: var(--surface-sunken);
+		border: 1px dashed var(--edge-default);
+		border-radius: var(--radius-sm);
+		font-size: var(--type-ui-label-size);
+		color: var(--ink-body);
+	}
+
 	.summary {
 		display: flex;
 		justify-content: space-between;
@@ -576,26 +734,13 @@ onMount(() => {
 	.summary dd.pass {
 		color: var(--signal-success-ink);
 	}
+
 	.summary dd.fail {
 		color: var(--signal-danger-ink);
 	}
+
 	.summary dd.blocked {
 		color: var(--signal-warning-ink);
-	}
-
-	.shortcuts {
-		flex: 1 0 100%;
-		font-size: var(--type-ui-caption-size);
-		color: var(--ink-muted);
-	}
-
-	.shortcut-line kbd {
-		font-family: var(--font-family-mono);
-		font-size: var(--type-ui-caption-size);
-		padding: 0 var(--space-3xs);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-sm);
-		background: var(--surface-sunken);
 	}
 
 	.actions {
@@ -714,11 +859,13 @@ onMount(() => {
 		color: var(--signal-success-ink);
 		border-color: var(--signal-success-ink);
 	}
+
 	.outcome[data-outcome='fail'].active {
 		background: var(--signal-danger-wash);
 		color: var(--signal-danger-ink);
 		border-color: var(--signal-danger-ink);
 	}
+
 	.outcome[data-outcome='blocked'].active {
 		background: var(--signal-warning-wash);
 		color: var(--signal-warning-ink);
@@ -737,13 +884,43 @@ onMount(() => {
 		gap: var(--space-md);
 	}
 
+	.detail {
+		margin: 0 0 var(--space-sm);
+		display: grid;
+		grid-template-columns: max-content 1fr;
+		row-gap: var(--space-3xs);
+		column-gap: var(--space-md);
+		font-size: var(--type-ui-label-size);
+	}
+
+	.detail dt {
+		color: var(--ink-muted);
+		font-size: var(--type-ui-caption-size);
+		text-transform: uppercase;
+		letter-spacing: var(--letter-spacing-wide);
+	}
+
+	.detail dd {
+		margin: 0;
+	}
+
+	.entry-body {
+		margin-top: var(--space-sm);
+	}
+
+	.entry-hint {
+		margin: 0;
+		font-size: var(--type-ui-caption-size);
+		color: var(--ink-muted);
+	}
+
 	.paraphrase {
 		margin: 0;
 		color: var(--ink-body);
 	}
 
 	.session-meta {
-		margin: 0;
+		margin: var(--space-sm) 0 0;
 		color: var(--ink-muted);
 		font-size: var(--type-ui-caption-size);
 	}
@@ -779,7 +956,7 @@ onMount(() => {
 		gap: var(--space-sm);
 	}
 
-	.finish-panel h2 {
+	.finish-panel h3 {
 		margin: 0;
 		font-size: var(--type-ui-control-size);
 	}
@@ -814,14 +991,28 @@ onMount(() => {
 		color: var(--signal-success-ink);
 		border-color: var(--signal-success-ink);
 	}
+
 	.finish-option[data-tone='danger'].active {
 		background: var(--signal-danger-wash);
 		color: var(--signal-danger-ink);
 		border-color: var(--signal-danger-ink);
 	}
+
 	.finish-option[data-tone='muted'].active {
 		background: var(--surface-sunken);
 		border-color: var(--edge-strong);
+	}
+
+	.suggested-tag {
+		font-size: var(--type-ui-caption-size);
+		font-style: italic;
+		color: var(--ink-muted);
+		margin-left: var(--space-3xs);
+	}
+
+	.suggestion-text {
+		font-size: var(--type-ui-caption-size);
+		color: var(--ink-muted);
 	}
 
 	.confirm-text {
@@ -852,12 +1043,41 @@ onMount(() => {
 		border-radius: var(--radius-md);
 	}
 
-	.errors {
+	.missing h3,
+	.missing h4 {
+		margin: 0 0 var(--space-2xs);
+	}
+
+	.empty-actions {
+		display: flex;
+		gap: var(--space-md);
 		margin: var(--space-sm) 0 0;
+	}
+
+	.action-link {
+		color: var(--link-default);
+	}
+
+	.errors-h {
+		margin-top: var(--space-md);
+		font-size: var(--type-ui-label-size);
+		color: var(--ink-body);
+	}
+
+	.errors {
+		margin: var(--space-2xs) 0 0;
 		padding-left: var(--space-md);
-		color: var(--signal-danger-ink);
-		font-family: var(--font-family-mono);
+		color: var(--ink-muted);
 		font-size: var(--type-ui-caption-size);
+	}
+
+	.err-path {
+		font-family: var(--font-family-mono);
+		color: var(--ink-muted);
+	}
+
+	.muted {
+		color: var(--ink-muted);
 	}
 
 	.toast-wrap {

@@ -13,7 +13,7 @@ export interface KnowledgeNodeViewProps {
 		outcome: string | null;
 		note: string;
 	}>;
-	readonly markedDoneFromAction: 'ok' | string | null;
+	readonly markedDoneFromAction: 'ok' | 'already-done' | string | null;
 }
 </script>
 
@@ -25,7 +25,6 @@ import Card from '@ab/ui/components/Card.svelte';
 import MarkdownArticle from '@ab/ui/components/MarkdownArticle.svelte';
 import Toast, { type ToastTone } from '@ab/ui/components/Toast.svelte';
 import { enhance } from '$app/forms';
-import { invalidateAll } from '$app/navigation';
 import { onDestroy } from 'svelte';
 
 interface ToastState {
@@ -51,7 +50,10 @@ let toast = $state<ToastState | null>(null);
 let toastDismissTimer: ReturnType<typeof setTimeout> | null = null;
 let liveAnnounce = $state('');
 
-const reviewStatusEntry = $derived(frontmatter.find((e) => e.key === 'discovery_review' || e.key === 'review_status'));
+// `discovery_review` is the canonical knowledge-node review field per ADR
+// 011. We only read this key; legacy `review_status` keys (if any) are a
+// migration concern, not a runtime alias.
+const reviewStatusEntry = $derived(frontmatter.find((e) => e.key === 'discovery_review'));
 
 function showToast(tone: ToastTone, message: string, sticky = false): void {
 	toast = { tone, message, sticky };
@@ -81,6 +83,9 @@ $effect(() => {
 	if (markedDoneFromAction === 'ok') {
 		showToast('success', 'discovery_review flipped to done.');
 		liveAnnounce = 'discovery_review flipped to done.';
+	} else if (markedDoneFromAction === 'already-done') {
+		showToast('info', 'discovery_review is already marked done.');
+		liveAnnounce = 'discovery_review is already marked done.';
 	} else {
 		showToast('danger', markedDoneFromAction, true);
 		liveAnnounce = `Mark reviewed failed: ${markedDoneFromAction}`;
@@ -165,8 +170,9 @@ function formatStartedAt(iso: string): string {
 						savingMark = true;
 						return async ({ update, result }) => {
 							try {
+								// `update()` runs invalidation already; an extra
+								// `invalidateAll()` would double-load.
 								await update();
-								await invalidateAll();
 							} finally {
 								savingMark = false;
 							}

@@ -15,11 +15,8 @@ let { itemId: _itemId, itemTitle: _itemTitle, itemRef }: AdHocViewProps = $props
 
 <div class="layout">
 	<Card>
-		{#snippet header()}<h2>Ad-hoc task</h2>{/snippet}
-		<p class="hint">
-			Ad-hoc tasks live on the board as a `board_task` row. The dispatcher route lands you here so deep-links from
-			elsewhere don't 404, but the canonical detail surface is the edit form.
-		</p>
+		{#snippet header()}<h2>Task details</h2>{/snippet}
+		<p class="hint">This is an ad-hoc task on the review board. Edit it below.</p>
 		<p class="actions">
 			<a class="action-link" href={ROUTES.HANGAR_REVIEW_TASK_EDIT(itemRef)}>Open task editor</a>
 			<a class="action-link" href={ROUTES.HANGAR_REVIEW}>Back to the board</a>
