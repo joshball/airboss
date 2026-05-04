@@ -115,17 +115,20 @@ Don't build the rich-reader features (highlights, comments, Q&A authoring) in th
 - **Rich-reader features.** Highlights, comments, Q&A authoring, self-rated understanding, public Q&A merging -- all in IDEAS.md, separately specced.
 - **Cross-handbook reading paths.** "Finish PHAK chapter 1, then read AFH chapter 1" -- a curriculum thing, not a reading-order thing. Belongs to syllabi/lesson plans (cert-syllabus WP territory).
 - **Annotated PDF view.** We're rendering markdown derivatives, not the PDF itself. Keep the SourceLinks "open PDF" affordance for users who want the original.
-- **Auth on the flightbag.** Currently public-readable. Read-state needs a user. This WP introduces the auth surface (or, more likely, an embedded reader inside study/sim that wraps flightbag and provides the user); see Architecture Question below.
 
-## Architecture Question (resolve before Phase 1)
+## Auth resolution
 
-**How does the flightbag get a user identity?** Three paths:
+The auth-surface question that originally lived here as an open architecture question is resolved by [ADR 024 -- Cross-App Auth: Identity, Roles, Entitlements](../../decisions/024-cross-app-auth-identity-roles-entitlements.md). Summary:
 
-a. **Add auth directly to flightbag.** Reuse `@ab/auth`. Simplest, but doubles the auth surface.
-b. **Cross-app session bridging.** Sign-in in study, hand off to flightbag via a signed cookie / token. Works but introduces session-handoff plumbing.
-c. **Embed flightbag in study.** A `(app)/flightbag/...` route in study that proxies the flightbag's render layer. Read-state then just lives in study.
+- One identity realm. `@ab/auth` session cookie scoped to the parent domain (`.airboss.test` / `.airboss.com`); every app reads the same session.
+- Three orthogonal layers: authentication (signed in?), roles (RBAC per ADR 009), entitlements (the new layer; what you've registered or paid for).
+- Flightbag specifically: any user with the `flightbag:read` entitlement. Default-granted to every registered user. The entitlement check is what flexes when the platform later sells courses, when `flightbag:read` is bundled with paid tiers, and when flightbag eventually goes public-deploy (the route guard's check changes from "require entitlement" to "if signed in, require entitlement; else allow").
 
-Defer the decision until Phase 1 review. For Phases 1-5 below (reading order, nav, breadcrumbs, TOC drawer, reading-time), no auth needed -- they're public + stateless. Phase 6 (read state) is where this question must be answered.
+**For this WP**: phase 6 (read state) calls `requireUser(event)` + `requireEntitlement(event, 'flightbag:read')` in flightbag's `+layout.server.ts`. The `study.reference_section_read_state` row keys on the resolved `user.id`. Anonymous users (when public-deploy lands later) gracefully no-op the read-state UI -- the heartbeat / dwell-tracker / progress checkmarks just don't render.
+
+**The entitlement primitive itself** (`identity.entitlement` table, `requireEntitlement` helper, default-grant bundles) is plumbed by ADR 024's implementation, not by this WP. If that plumbing isn't yet shipped when phase 6 begins, phase 6 ships `requireUser` only and adds the entitlement check in a follow-up commit when ADR 024's primitive lands. This sequencing prevents this WP from blocking on the auth substrate.
+
+Phases 1-5 are stateless and run independently; no auth involvement. They can dispatch immediately when the build agent starts.
 
 ## Phases
 
