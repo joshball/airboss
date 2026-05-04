@@ -1,0 +1,2523 @@
+{
+  "schema_version": 1,
+  "document_slug": "aviation-instructor",
+  "edition": "FAA-H-8083-9",
+  "manifest_sha256": "6d39f1eff4dd94eb2c1ca7fc7eba08a2586f1f3f5cd46f9393f3ef29cfa3baa7",
+  "generated_at": "2026-05-04T20:39:43.071436+00:00",
+  "warnings": [
+    {
+      "id": "19b9973f5fc4918a",
+      "code": "caption-without-figure",
+      "section_code": "10",
+      "message": "Caption `Figure 8-9. Aviation instructors can improve their knowledge by becoming familia` on page 170 had no paired image."
+    },
+    {
+      "id": "19eb410391e03038",
+      "code": "caption-without-figure",
+      "section_code": "10",
+      "message": "Caption `Figure 8-2. Acceptable standards in all subject matter areas, procedures, and ma` on page 160 had no paired image."
+    },
+    {
+      "id": "5025eb432a521294",
+      "code": "caption-without-figure",
+      "section_code": "10",
+      "message": "Caption `Figure 8-8. The aviation instructor should always present a professional appeara` on page 167 had no paired image."
+    },
+    {
+      "id": "558b04c62070f9d2",
+      "code": "caption-without-figure",
+      "section_code": "10",
+      "message": "Caption `Figure 8-1. There are five main responsibilities of aviation instructors.` on page 159 had no paired image."
+    },
+    {
+      "id": "70e49e9511690262",
+      "code": "caption-without-figure",
+      "section_code": "10",
+      "message": "Caption `Figure 8-6. Teaching tips from veteran flight instructors.` on page 165 had no paired image."
+    },
+    {
+      "id": "7cba2909cd9be338",
+      "code": "caption-without-figure",
+      "section_code": "10",
+      "message": "Caption `Figure 8-4. These are practical ways to minimize learner frustration.` on page 162 had no paired image."
+    },
+    {
+      "id": "83ccdf9f68856918",
+      "code": "caption-without-figure",
+      "section_code": "10",
+      "message": "Caption `Figure 8-3. Learners learn more when instruction is presented in a positive and ` on page 161 had no paired image."
+    },
+    {
+      "id": "afa4924113f9a627",
+      "code": "caption-without-figure",
+      "section_code": "10",
+      "message": "Caption `Figure 8-5. The flight instructor has many additional responsibilities.` on page 163 had no paired image."
+    },
+    {
+      "id": "f40c31ffe1ceb734",
+      "code": "caption-without-figure",
+      "section_code": "10",
+      "message": "Caption `Figure 8-7. Guidelines for an aviation instructor.` on page 166 had no paired image."
+    },
+    {
+      "id": "aa03436cfa00a2fd",
+      "code": "caption-without-figure",
+      "section_code": "10.1",
+      "message": "Caption `Figure 8-1. There are five main responsibilities of aviation instructors.` on page 159 had no paired image."
+    },
+    {
+      "id": "a1f015ae8fb86530",
+      "code": "caption-without-figure",
+      "section_code": "10.10",
+      "message": "Caption `Figure 8-9. Aviation instructors can improve their knowledge by becoming familia` on page 170 had no paired image."
+    },
+    {
+      "id": "12018548ed7d7108",
+      "code": "caption-without-figure",
+      "section_code": "10.2",
+      "message": "Caption `Figure 8-3. Learners learn more when instruction is presented in a positive and ` on page 161 had no paired image."
+    },
+    {
+      "id": "5dcdbd534e4183e4",
+      "code": "caption-without-figure",
+      "section_code": "10.2",
+      "message": "Caption `Figure 8-1. There are five main responsibilities of aviation instructors.` on page 159 had no paired image."
+    },
+    {
+      "id": "c39911ff8838742f",
+      "code": "caption-without-figure",
+      "section_code": "10.2",
+      "message": "Caption `Figure 8-4. These are practical ways to minimize learner frustration.` on page 162 had no paired image."
+    },
+    {
+      "id": "e728d0cabaf1f926",
+      "code": "caption-without-figure",
+      "section_code": "10.2",
+      "message": "Caption `Figure 8-2. Acceptable standards in all subject matter areas, procedures, and ma` on page 160 had no paired image."
+    },
+    {
+      "id": "e7284a5e75de114d",
+      "code": "caption-without-figure",
+      "section_code": "10.2.1",
+      "message": "Caption `Figure 8-1. There are five main responsibilities of aviation instructors.` on page 159 had no paired image."
+    },
+    {
+      "id": "e208269c8d01079f",
+      "code": "caption-without-figure",
+      "section_code": "10.2.2",
+      "message": "Caption `Figure 8-1. There are five main responsibilities of aviation instructors.` on page 159 had no paired image."
+    },
+    {
+      "id": "5eb945d35042f936",
+      "code": "caption-without-figure",
+      "section_code": "10.2.3",
+      "message": "Caption `Figure 8-2. Acceptable standards in all subject matter areas, procedures, and ma` on page 160 had no paired image."
+    },
+    {
+      "id": "7563aeaefcfb00dc",
+      "code": "caption-without-figure",
+      "section_code": "10.2.4",
+      "message": "Caption `Figure 8-2. Acceptable standards in all subject matter areas, procedures, and ma` on page 160 had no paired image."
+    },
+    {
+      "id": "77a716cbde40aebd",
+      "code": "caption-without-figure",
+      "section_code": "10.2.4",
+      "message": "Caption `Figure 8-3. Learners learn more when instruction is presented in a positive and ` on page 161 had no paired image."
+    },
+    {
+      "id": "b52e0112efeda169",
+      "code": "caption-without-figure",
+      "section_code": "10.2.5",
+      "message": "Caption `Figure 8-4. These are practical ways to minimize learner frustration.` on page 162 had no paired image."
+    },
+    {
+      "id": "a11cbe02dc920938",
+      "code": "caption-without-figure",
+      "section_code": "10.3",
+      "message": "Caption `Figure 8-5. The flight instructor has many additional responsibilities.` on page 163 had no paired image."
+    },
+    {
+      "id": "94028f3923c3c940",
+      "code": "caption-without-figure",
+      "section_code": "10.3.1",
+      "message": "Caption `Figure 8-5. The flight instructor has many additional responsibilities.` on page 163 had no paired image."
+    },
+    {
+      "id": "b807b07920e8e62a",
+      "code": "caption-without-figure",
+      "section_code": "10.3.2",
+      "message": "Caption `Figure 8-5. The flight instructor has many additional responsibilities.` on page 163 had no paired image."
+    },
+    {
+      "id": "c5224c8364af16d2",
+      "code": "caption-without-figure",
+      "section_code": "10.6",
+      "message": "Caption `Figure 8-6. Teaching tips from veteran flight instructors.` on page 165 had no paired image."
+    },
+    {
+      "id": "3bea64824411a854",
+      "code": "caption-without-figure",
+      "section_code": "10.7",
+      "message": "Caption `Figure 8-7. Guidelines for an aviation instructor.` on page 166 had no paired image."
+    },
+    {
+      "id": "47bc2c561f6eb3e2",
+      "code": "caption-without-figure",
+      "section_code": "10.7",
+      "message": "Caption `Figure 8-6. Teaching tips from veteran flight instructors.` on page 165 had no paired image."
+    },
+    {
+      "id": "e94c366da3315b60",
+      "code": "caption-without-figure",
+      "section_code": "10.7.1",
+      "message": "Caption `Figure 8-7. Guidelines for an aviation instructor.` on page 166 had no paired image."
+    },
+    {
+      "id": "e71753c6d0a19eea",
+      "code": "caption-without-figure",
+      "section_code": "10.7.2",
+      "message": "Caption `Figure 8-7. Guidelines for an aviation instructor.` on page 166 had no paired image."
+    },
+    {
+      "id": "c42139b31414577a",
+      "code": "caption-without-figure",
+      "section_code": "10.7.3",
+      "message": "Caption `Figure 8-8. The aviation instructor should always present a professional appeara` on page 167 had no paired image."
+    },
+    {
+      "id": "2dcaa2ab8ca2e93b",
+      "code": "caption-without-figure",
+      "section_code": "10.7.4",
+      "message": "Caption `Figure 8-8. The aviation instructor should always present a professional appeara` on page 167 had no paired image."
+    },
+    {
+      "id": "090ccd3b07464f32",
+      "code": "caption-without-figure",
+      "section_code": "10.7.5",
+      "message": "Caption `Figure 8-8. The aviation instructor should always present a professional appeara` on page 167 had no paired image."
+    },
+    {
+      "id": "8d20c300da262191",
+      "code": "caption-without-figure",
+      "section_code": "10.8",
+      "message": "Caption `Figure 8-8. The aviation instructor should always present a professional appeara` on page 167 had no paired image."
+    },
+    {
+      "id": "1157d6c49c6b18f9",
+      "code": "caption-without-figure",
+      "section_code": "11",
+      "message": "Caption `Figure 9-4. A level 4 FTD used for procedure training.` on page 174 had no paired image."
+    },
+    {
+      "id": "123a16878b10ef2c",
+      "code": "caption-without-figure",
+      "section_code": "11",
+      "message": "Caption `Figure 9-8. During this procedure, a visual check is recommended to see that the` on page 179 had no paired image."
+    },
+    {
+      "id": "1607802c9d92d0b6",
+      "code": "caption-without-figure",
+      "section_code": "11",
+      "message": "Caption `Figure 9-3. An example of a Level 6 Flight Training Device (FTD).` on page 173 had no paired image."
+    },
+    {
+      "id": "3439035bacc4e597",
+      "code": "caption-without-figure",
+      "section_code": "11",
+      "message": "Caption `Figure 9-6. The demonstration-performance method of teaching has four essential ` on page 176 had no paired image."
+    },
+    {
+      "id": "85651d03a9b204f1",
+      "code": "caption-without-figure",
+      "section_code": "11",
+      "message": "Caption `Figure 9-5. Reinforcing what the learner was taught on the ground is critical to` on page 175 had no paired image."
+    },
+    {
+      "id": "b71ccb8eac7d9738",
+      "code": "caption-without-figure",
+      "section_code": "11",
+      "message": "Caption `Figure 9-7. This comparison of steps in the teaching process, the demonstration-` on page 177 had no paired image."
+    },
+    {
+      "id": "bec9826769d72cc9",
+      "code": "caption-without-figure",
+      "section_code": "11",
+      "message": "Caption `Figure 9-2. A Level C simulator.` on page 173 had no paired image."
+    },
+    {
+      "id": "cdec2ec507521655",
+      "code": "caption-without-figure",
+      "section_code": "11",
+      "message": "Caption `Figure 9-1. The learner prepares to execute a power-off stall maneuver in-flight` on page 172 had no paired image."
+    },
+    {
+      "id": "3115927783f7c659",
+      "code": "caption-without-figure",
+      "section_code": "11.3",
+      "message": "Caption `Figure 9-3. An example of a Level 6 Flight Training Device (FTD).` on page 173 had no paired image."
+    },
+    {
+      "id": "773af30383a9c03a",
+      "code": "caption-without-figure",
+      "section_code": "11.3",
+      "message": "Caption `Figure 9-4. A level 4 FTD used for procedure training.` on page 174 had no paired image."
+    },
+    {
+      "id": "8bf8f0b4816a47ff",
+      "code": "caption-without-figure",
+      "section_code": "11.3",
+      "message": "Caption `Figure 9-2. A Level C simulator.` on page 173 had no paired image."
+    },
+    {
+      "id": "fad08f227bf01fef",
+      "code": "caption-without-figure",
+      "section_code": "11.3",
+      "message": "Caption `Figure 9-1. The learner prepares to execute a power-off stall maneuver in-flight` on page 172 had no paired image."
+    },
+    {
+      "id": "fc8e6ef7b6b4c5d0",
+      "code": "caption-without-figure",
+      "section_code": "11.3.1",
+      "message": "Caption `Figure 9-1. The learner prepares to execute a power-off stall maneuver in-flight` on page 172 had no paired image."
+    },
+    {
+      "id": "27b6721f4b6cec92",
+      "code": "caption-without-figure",
+      "section_code": "11.3.2",
+      "message": "Caption `Figure 9-3. An example of a Level 6 Flight Training Device (FTD).` on page 173 had no paired image."
+    },
+    {
+      "id": "4b338ef75b43d0c0",
+      "code": "caption-without-figure",
+      "section_code": "11.3.2",
+      "message": "Caption `Figure 9-1. The learner prepares to execute a power-off stall maneuver in-flight` on page 172 had no paired image."
+    },
+    {
+      "id": "d195b5b58f924bc8",
+      "code": "caption-without-figure",
+      "section_code": "11.3.2",
+      "message": "Caption `Figure 9-2. A Level C simulator.` on page 173 had no paired image."
+    },
+    {
+      "id": "6a4646b319cf75a6",
+      "code": "caption-without-figure",
+      "section_code": "11.3.3",
+      "message": "Caption `Figure 9-4. A level 4 FTD used for procedure training.` on page 174 had no paired image."
+    },
+    {
+      "id": "64750bf80c8fe161",
+      "code": "caption-without-figure",
+      "section_code": "11.3.4",
+      "message": "Caption `Figure 9-4. A level 4 FTD used for procedure training.` on page 174 had no paired image."
+    },
+    {
+      "id": "5c20b3b678240bf5",
+      "code": "caption-without-figure",
+      "section_code": "11.3.5",
+      "message": "Caption `Figure 9-4. A level 4 FTD used for procedure training.` on page 174 had no paired image."
+    },
+    {
+      "id": "10340bc5f62a4360",
+      "code": "caption-without-figure",
+      "section_code": "11.4",
+      "message": "Caption `Figure 9-5. Reinforcing what the learner was taught on the ground is critical to` on page 175 had no paired image."
+    },
+    {
+      "id": "30b8df3c87679ff6",
+      "code": "caption-without-figure",
+      "section_code": "11.4",
+      "message": "Caption `Figure 9-6. The demonstration-performance method of teaching has four essential ` on page 176 had no paired image."
+    },
+    {
+      "id": "be372b060bd19c9d",
+      "code": "caption-without-figure",
+      "section_code": "11.4",
+      "message": "Caption `Figure 9-7. This comparison of steps in the teaching process, the demonstration-` on page 177 had no paired image."
+    },
+    {
+      "id": "7772dc094aabd866",
+      "code": "caption-without-figure",
+      "section_code": "11.4.1",
+      "message": "Caption `Figure 9-5. Reinforcing what the learner was taught on the ground is critical to` on page 175 had no paired image."
+    },
+    {
+      "id": "46bae1877d021fad",
+      "code": "caption-without-figure",
+      "section_code": "11.4.2",
+      "message": "Caption `Figure 9-5. Reinforcing what the learner was taught on the ground is critical to` on page 175 had no paired image."
+    },
+    {
+      "id": "6b9bd9e285ad29eb",
+      "code": "caption-without-figure",
+      "section_code": "11.4.3",
+      "message": "Caption `Figure 9-6. The demonstration-performance method of teaching has four essential ` on page 176 had no paired image."
+    },
+    {
+      "id": "88688cda29cd7d9a",
+      "code": "caption-without-figure",
+      "section_code": "11.4.4",
+      "message": "Caption `Figure 9-6. The demonstration-performance method of teaching has four essential ` on page 176 had no paired image."
+    },
+    {
+      "id": "0cb07d1f2a582f3c",
+      "code": "caption-without-figure",
+      "section_code": "11.4.5",
+      "message": "Caption `Figure 9-7. This comparison of steps in the teaching process, the demonstration-` on page 177 had no paired image."
+    },
+    {
+      "id": "fdb4eef1d51d0c19",
+      "code": "caption-without-figure",
+      "section_code": "11.4.5",
+      "message": "Caption `Figure 9-6. The demonstration-performance method of teaching has four essential ` on page 176 had no paired image."
+    },
+    {
+      "id": "17e13c77ac86ee2f",
+      "code": "caption-without-figure",
+      "section_code": "11.6",
+      "message": "Caption `Figure 9-8. During this procedure, a visual check is recommended to see that the` on page 179 had no paired image."
+    },
+    {
+      "id": "06ab08f5e0fed848",
+      "code": "caption-without-figure",
+      "section_code": "11.7",
+      "message": "Caption `Figure 9-8. During this procedure, a visual check is recommended to see that the` on page 179 had no paired image."
+    },
+    {
+      "id": "7fa86db47e69484d",
+      "code": "caption-without-figure",
+      "section_code": "12",
+      "message": "Caption `Figure 10-2. This risk matrix can be used for almost any operation by assigning ` on page 186 had no paired image."
+    },
+    {
+      "id": "ed761f5f23539b90",
+      "code": "caption-without-figure",
+      "section_code": "12",
+      "message": "Caption `Figure 10-1. NTSB Accident Report.` on page 185 had no paired image."
+    },
+    {
+      "id": "afa70c90512dd266",
+      "code": "caption-without-figure",
+      "section_code": "12.1",
+      "message": "Caption `Figure 10-1. NTSB Accident Report.` on page 185 had no paired image."
+    },
+    {
+      "id": "26585a1a9e850335",
+      "code": "caption-without-figure",
+      "section_code": "12.2",
+      "message": "Caption `Figure 10-1. NTSB Accident Report.` on page 185 had no paired image."
+    },
+    {
+      "id": "61853c0dd95e22da",
+      "code": "caption-without-figure",
+      "section_code": "12.2",
+      "message": "Caption `Figure 10-2. This risk matrix can be used for almost any operation by assigning ` on page 186 had no paired image."
+    },
+    {
+      "id": "957735b29ba32594",
+      "code": "caption-without-figure",
+      "section_code": "12.2.1",
+      "message": "Caption `Figure 10-1. NTSB Accident Report.` on page 185 had no paired image."
+    },
+    {
+      "id": "71e69aa72708e0cf",
+      "code": "caption-without-figure",
+      "section_code": "12.2.2",
+      "message": "Caption `Figure 10-2. This risk matrix can be used for almost any operation by assigning ` on page 186 had no paired image."
+    },
+    {
+      "id": "dec209e9ba537b45",
+      "code": "caption-without-figure",
+      "section_code": "12.2.3",
+      "message": "Caption `Figure 10-2. This risk matrix can be used for almost any operation by assigning ` on page 186 had no paired image."
+    },
+    {
+      "id": "0dc57d1e4a0cf437",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 1-7. Countermeasures for coping with fatigue.` on page 18 had no paired image."
+    },
+    {
+      "id": "103d2d9c7d705d2b",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 1-12. Learners in training can be asked to identify hazardous attitudes a` on page 27 had no paired image."
+    },
+    {
+      "id": "1cb9509311b5d06e",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 1-4. This risk matrix can be used for almost any operation by assigning l` on page 13 had no paired image."
+    },
+    {
+      "id": "4df8ae9a01414c08",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 1-14. Accidents often occur when flying task requirements exceed pilot ca` on page 30 had no paired image."
+    },
+    {
+      "id": "56677d17ed25feee",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 1-5. 3P Model (Perceive, Process, and Perform).` on page 15 had no paired image."
+    },
+    {
+      "id": "6ad2e26419c03c7d",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 1-3. Prior to flight, pilots may use a checklist to assess their fitness,` on page 12 had no paired image."
+    },
+    {
+      "id": "6bea23d96929240b",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 1-9. The 5P checklist.` on page 20 had no paired image."
+    },
+    {
+      "id": "7777f2f96e68bcab",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 1-8. All experienced pilots have fallen prey to, or have been tempted by,` on page 19 had no paired image."
+    },
+    {
+      "id": "7a5f2a0f95144857",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `number of countermeasures for coping with fatigue, as shown in Figure 1-7.` on page 18 had no paired image."
+    },
+    {
+      "id": "83435390baf241df",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 1-13. Three types of stressors that can affect pilot performance.` on page 28 had no paired image."
+    },
+    {
+      "id": "996b5d2f19bd9c83",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 1-2. One of the most important decisions that the pilot in command makes ` on page 11 had no paired image."
+    },
+    {
+      "id": "9c111a4572b4f383",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 1-11. Pilots should examine their decisions carefully to ensure that thei` on page 26 had no paired image."
+    },
+    {
+      "id": "bff74ac4b048aefa",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 1-1. Types of risk.` on page 6 had no paired image."
+    },
+    {
+      "id": "d0d99dfd7430a156",
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 1-10. Terms used in AC 60-22 to explain concepts used in ADM training.` on page 25 had no paired image."
+    },
+    {
+      "id": "7ec61b0355fee757",
+      "code": "caption-without-figure",
+      "section_code": "3.2",
+      "message": "Caption `Figure 1-4. This risk matrix can be used for almost any operation by assigning l` on page 13 had no paired image."
+    },
+    {
+      "id": "8fca70c091ae6b79",
+      "code": "caption-without-figure",
+      "section_code": "3.2",
+      "message": "Caption `Figure 1-2. One of the most important decisions that the pilot in command makes ` on page 11 had no paired image."
+    },
+    {
+      "id": "9a5ac30d7e584b66",
+      "code": "caption-without-figure",
+      "section_code": "3.2",
+      "message": "Caption `Figure 1-1. Types of risk.` on page 6 had no paired image."
+    },
+    {
+      "id": "bbc26705c368dfc4",
+      "code": "caption-without-figure",
+      "section_code": "3.2",
+      "message": "Caption `Figure 1-3. Prior to flight, pilots may use a checklist to assess their fitness,` on page 12 had no paired image."
+    },
+    {
+      "id": "901b4c4c62d7e9f2",
+      "code": "caption-without-figure",
+      "section_code": "3.2.3",
+      "message": "Caption `Figure 1-4. This risk matrix can be used for almost any operation by assigning l` on page 13 had no paired image."
+    },
+    {
+      "id": "9f451514576d6cfc",
+      "code": "caption-without-figure",
+      "section_code": "3.2.3",
+      "message": "Caption `Figure 1-3. Prior to flight, pilots may use a checklist to assess their fitness,` on page 12 had no paired image."
+    },
+    {
+      "id": "bbb20807afa21b9b",
+      "code": "caption-without-figure",
+      "section_code": "3.2.3",
+      "message": "Caption `Figure 1-2. One of the most important decisions that the pilot in command makes ` on page 11 had no paired image."
+    },
+    {
+      "id": "37a95b938a34597a",
+      "code": "caption-without-figure",
+      "section_code": "3.2.5",
+      "message": "Caption `Figure 1-5. 3P Model (Perceive, Process, and Perform).` on page 15 had no paired image."
+    },
+    {
+      "id": "8b2ac3344802828b",
+      "code": "caption-without-figure",
+      "section_code": "3.3",
+      "message": "Caption `Figure 1-5. 3P Model (Perceive, Process, and Perform).` on page 15 had no paired image."
+    },
+    {
+      "id": "1272f49c2eea15df",
+      "code": "caption-without-figure",
+      "section_code": "3.6",
+      "message": "Caption `number of countermeasures for coping with fatigue, as shown in Figure 1-7.` on page 18 had no paired image."
+    },
+    {
+      "id": "71c5791f72abee87",
+      "code": "caption-without-figure",
+      "section_code": "3.6",
+      "message": "Caption `Figure 1-7. Countermeasures for coping with fatigue.` on page 18 had no paired image."
+    },
+    {
+      "id": "812186fbca6b8400",
+      "code": "caption-without-figure",
+      "section_code": "3.6.2",
+      "message": "Caption `number of countermeasures for coping with fatigue, as shown in Figure 1-7.` on page 18 had no paired image."
+    },
+    {
+      "id": "f4fdc5fa4f96b810",
+      "code": "caption-without-figure",
+      "section_code": "3.6.2",
+      "message": "Caption `Figure 1-7. Countermeasures for coping with fatigue.` on page 18 had no paired image."
+    },
+    {
+      "id": "1bbdaee6f60d8c06",
+      "code": "caption-without-figure",
+      "section_code": "3.7",
+      "message": "Caption `Figure 1-9. The 5P checklist.` on page 20 had no paired image."
+    },
+    {
+      "id": "ac9bb1550e42593f",
+      "code": "caption-without-figure",
+      "section_code": "3.7",
+      "message": "Caption `Figure 1-8. All experienced pilots have fallen prey to, or have been tempted by,` on page 19 had no paired image."
+    },
+    {
+      "id": "9fe53b3c78a62718",
+      "code": "caption-without-figure",
+      "section_code": "3.7.1",
+      "message": "Caption `Figure 1-9. The 5P checklist.` on page 20 had no paired image."
+    },
+    {
+      "id": "1e01b33389b8315f",
+      "code": "caption-without-figure",
+      "section_code": "3.8",
+      "message": "Caption `Figure 1-13. Three types of stressors that can affect pilot performance.` on page 28 had no paired image."
+    },
+    {
+      "id": "54c54ed97deeb976",
+      "code": "caption-without-figure",
+      "section_code": "3.8",
+      "message": "Caption `Figure 1-11. Pilots should examine their decisions carefully to ensure that thei` on page 26 had no paired image."
+    },
+    {
+      "id": "55d12085aa84a45a",
+      "code": "caption-without-figure",
+      "section_code": "3.8",
+      "message": "Caption `Figure 1-12. Learners in training can be asked to identify hazardous attitudes a` on page 27 had no paired image."
+    },
+    {
+      "id": "c19a49149a44ad1f",
+      "code": "caption-without-figure",
+      "section_code": "3.8",
+      "message": "Caption `Figure 1-10. Terms used in AC 60-22 to explain concepts used in ADM training.` on page 25 had no paired image."
+    },
+    {
+      "id": "b5ef0aea9fa9cef7",
+      "code": "caption-without-figure",
+      "section_code": "3.8.1",
+      "message": "Caption `Figure 1-10. Terms used in AC 60-22 to explain concepts used in ADM training.` on page 25 had no paired image."
+    },
+    {
+      "id": "5aa158efd6d7013a",
+      "code": "caption-without-figure",
+      "section_code": "3.8.2",
+      "message": "Caption `Figure 1-11. Pilots should examine their decisions carefully to ensure that thei` on page 26 had no paired image."
+    },
+    {
+      "id": "648383f1cc05a3fd",
+      "code": "caption-without-figure",
+      "section_code": "3.8.2",
+      "message": "Caption `Figure 1-13. Three types of stressors that can affect pilot performance.` on page 28 had no paired image."
+    },
+    {
+      "id": "7a2e9bba69a83031",
+      "code": "caption-without-figure",
+      "section_code": "3.8.2",
+      "message": "Caption `Figure 1-12. Learners in training can be asked to identify hazardous attitudes a` on page 27 had no paired image."
+    },
+    {
+      "id": "4bd67fe9b1667089",
+      "code": "caption-without-figure",
+      "section_code": "3.9",
+      "message": "Caption `Figure 1-14. Accidents often occur when flying task requirements exceed pilot ca` on page 30 had no paired image."
+    },
+    {
+      "id": "1a263d6bfe69ec51",
+      "code": "caption-without-figure",
+      "section_code": "4",
+      "message": "Caption `Figure 2-2. Insecure and unpleasant training situations inhibit learning.` on page 36 had no paired image."
+    },
+    {
+      "id": "3bf9df6c9273f302",
+      "code": "caption-without-figure",
+      "section_code": "4",
+      "message": "Caption `Figure 2-4. Daniel Kahneman developed a two-system view of human behaviors that ` on page 41 had no paired image."
+    },
+    {
+      "id": "770d27b65df5dc4d",
+      "code": "caption-without-figure",
+      "section_code": "4",
+      "message": "Caption `Figure 2-7. Poor preparation leads to spotty coverage, misplaced emphasis, unnec` on page 48 had no paired image."
+    },
+    {
+      "id": "7d682a320572de75",
+      "code": "caption-without-figure",
+      "section_code": "4",
+      "message": "Caption `Figure 2-5. Several common defense mechanisms may apply to aviation learners.` on page 43 had no paired image."
+    },
+    {
+      "id": "8ad11670aab95754",
+      "code": "caption-without-figure",
+      "section_code": "4",
+      "message": "Caption `Figure 2-8. A learner with marked changes in mood during different lessons, such` on page 49 had no paired image."
+    },
+    {
+      "id": "9d706426be7bece3",
+      "code": "caption-without-figure",
+      "section_code": "4",
+      "message": "Caption `Figure 2-3. Maslow’s Hierarchy of Needs.` on page 39 had no paired image."
+    },
+    {
+      "id": "d7140bf35233f42c",
+      "code": "caption-without-figure",
+      "section_code": "4",
+      "message": "Caption `Figure 2-1. The average age of a learner pilot is 34, while the average age of a` on page 35 had no paired image."
+    },
+    {
+      "id": "dee9fb8dd72ff71b",
+      "code": "caption-without-figure",
+      "section_code": "4",
+      "message": "Caption `Figure 2-6. The assignment of impossible or unreasonable goals discourages the l` on page 44 had no paired image."
+    },
+    {
+      "id": "18cfdb90118a625c",
+      "code": "caption-without-figure",
+      "section_code": "4.3",
+      "message": "Caption `Figure 2-1. The average age of a learner pilot is 34, while the average age of a` on page 35 had no paired image."
+    },
+    {
+      "id": "30b48a6c28266ec3",
+      "code": "caption-without-figure",
+      "section_code": "4.3",
+      "message": "Caption `Figure 2-2. Insecure and unpleasant training situations inhibit learning.` on page 36 had no paired image."
+    },
+    {
+      "id": "8b961c17665e8073",
+      "code": "caption-without-figure",
+      "section_code": "4.5",
+      "message": "Caption `Figure 2-3. Maslow’s Hierarchy of Needs.` on page 39 had no paired image."
+    },
+    {
+      "id": "3ebea02580e5445e",
+      "code": "caption-without-figure",
+      "section_code": "4.5.1",
+      "message": "Caption `Figure 2-3. Maslow’s Hierarchy of Needs.` on page 39 had no paired image."
+    },
+    {
+      "id": "9e75e7ca0a53d32e",
+      "code": "caption-without-figure",
+      "section_code": "4.6",
+      "message": "Caption `Figure 2-4. Daniel Kahneman developed a two-system view of human behaviors that ` on page 41 had no paired image."
+    },
+    {
+      "id": "05b5957853e86dfa",
+      "code": "caption-without-figure",
+      "section_code": "4.7",
+      "message": "Caption `Figure 2-5. Several common defense mechanisms may apply to aviation learners.` on page 43 had no paired image."
+    },
+    {
+      "id": "a9e41b24c17db332",
+      "code": "caption-without-figure",
+      "section_code": "4.7",
+      "message": "Caption `Figure 2-6. The assignment of impossible or unreasonable goals discourages the l` on page 44 had no paired image."
+    },
+    {
+      "id": "978845943534c02a",
+      "code": "caption-without-figure",
+      "section_code": "4.7.3",
+      "message": "Caption `Figure 2-5. Several common defense mechanisms may apply to aviation learners.` on page 43 had no paired image."
+    },
+    {
+      "id": "3c6644d27e50c1d0",
+      "code": "caption-without-figure",
+      "section_code": "4.7.4",
+      "message": "Caption `Figure 2-5. Several common defense mechanisms may apply to aviation learners.` on page 43 had no paired image."
+    },
+    {
+      "id": "6af27073ec6c227e",
+      "code": "caption-without-figure",
+      "section_code": "4.7.5",
+      "message": "Caption `Figure 2-5. Several common defense mechanisms may apply to aviation learners.` on page 43 had no paired image."
+    },
+    {
+      "id": "be23be6077b54505",
+      "code": "caption-without-figure",
+      "section_code": "4.7.6",
+      "message": "Caption `Figure 2-6. The assignment of impossible or unreasonable goals discourages the l` on page 44 had no paired image."
+    },
+    {
+      "id": "2f16d6d8d711cba1",
+      "code": "caption-without-figure",
+      "section_code": "4.7.7",
+      "message": "Caption `Figure 2-6. The assignment of impossible or unreasonable goals discourages the l` on page 44 had no paired image."
+    },
+    {
+      "id": "be4b774b14cec11e",
+      "code": "caption-without-figure",
+      "section_code": "4.7.8",
+      "message": "Caption `Figure 2-6. The assignment of impossible or unreasonable goals discourages the l` on page 44 had no paired image."
+    },
+    {
+      "id": "968bf58e01fe12c0",
+      "code": "caption-without-figure",
+      "section_code": "4.8",
+      "message": "Caption `Figure 2-7. Poor preparation leads to spotty coverage, misplaced emphasis, unnec` on page 48 had no paired image."
+    },
+    {
+      "id": "762674b67031b13d",
+      "code": "caption-without-figure",
+      "section_code": "4.8.6",
+      "message": "Caption `Figure 2-7. Poor preparation leads to spotty coverage, misplaced emphasis, unnec` on page 48 had no paired image."
+    },
+    {
+      "id": "835977e23fcabc55",
+      "code": "caption-without-figure",
+      "section_code": "4.8.7",
+      "message": "Caption `Figure 2-7. Poor preparation leads to spotty coverage, misplaced emphasis, unnec` on page 48 had no paired image."
+    },
+    {
+      "id": "be55ba2991b0edc4",
+      "code": "caption-without-figure",
+      "section_code": "4.8.8",
+      "message": "Caption `Figure 2-8. A learner with marked changes in mood during different lessons, such` on page 49 had no paired image."
+    },
+    {
+      "id": "df57c5e88ceea925",
+      "code": "caption-without-figure",
+      "section_code": "4.9",
+      "message": "Caption `Figure 2-8. A learner with marked changes in mood during different lessons, such` on page 49 had no paired image."
+    },
+    {
+      "id": "0bb81aeddd5005ed",
+      "code": "caption-without-figure",
+      "section_code": "5",
+      "message": "Caption `Figure 3-20. A pilot is required to perform several tasks at once during approac` on page 80 had no paired image."
+    },
+    {
+      "id": "18b501ff93fadbc7",
+      "code": "caption-without-figure",
+      "section_code": "5",
+      "message": "Caption `Figure 3-18. A learner exhibits deliberate practice by plotting courses for his ` on page 77 had no paired image."
+    },
+    {
+      "id": "34d7b8a194a84b4f",
+      "code": "caption-without-figure",
+      "section_code": "5",
+      "message": "Caption `Figure 3-14. The importance of recognizing a dominant brain hemisphere gives the` on page 72 had no paired image."
+    },
+    {
+      "id": "3921ab76d5735365",
+      "code": "caption-without-figure",
+      "section_code": "5",
+      "message": "Caption `Figure 3-1. An effective instructor understands the characteristics of learning ` on page 53 had no paired image."
+    },
+    {
+      "id": "40c4f66655d01fee",
+      "code": "caption-without-figure",
+      "section_code": "5",
+      "message": "Caption `Figure 3-16. Visual, auditory, and kinesthetic learning styles (VAK).` on page 73 had no paired image."
+    },
+    {
+      "id": "47b47504ed5cb7fc",
+      "code": "caption-without-figure",
+      "section_code": "5",
+      "message": "Caption `Figure 3-12. The psychomotor domain (physical skills) consists of seven educatio` on page 68 had no paired image."
+    },
+    {
+      "id": "4ecbee2dbf7ad3cf",
+      "code": "caption-without-figure",
+      "section_code": "5",
+      "message": "Caption `Figure 3-19. Pilot practices cross-wind landings repeatedly to improve performan` on page 78 had no paired image."
+    },
+    {
+      "id": "53d9e03b12c82d83",
+      "code": "caption-without-figure",
+      "section_code": "5",
+      "message": "Caption `Figure 3-22. Information processing within the sensory register, working on shor` on page 86 had no paired image."
+    },
+    {
+      "id": "975432eba14d0eea",
+      "code": "caption-without-figure",
+      "section_code": "5",
+      "message": "Caption `Figure 3-6. A learner acquires knowledge through memorization, understanding, an` on page 61 had no paired image."
+    },
+    {
+      "id": "a02cbc80a92b0165",
+      "code": "caption-without-figure",
+      "section_code": "5",
+      "message": "Caption `Figure 3-11. The affective domain (attitudes, beliefs, and values) contains five` on page 67 had no paired image."
+    },
+    {
+      "id": "a236cb6324d9845b",
+      "code": "caption-without-figure",
+      "section_code": "5",
+      "message": "Caption `Figure 3-2. Learning theories of psychology include classical conditioning, oper` on page 54 had no paired image."
+    },
+    {
+      "id": "a4b991a1392816ef",
+      "code": "caption-without-figure",
+      "section_code": "5",
+      "message": "Caption `Figure 3-4. Bloom’s Taxonomy of the Cognitive Domain.` on page 56 had no paired image."
+    },
+    {
+      "id": "a9556bbfc8eeb7df",
+      "code": "caption-without-figure",
+      "section_code": "5",
+      "message": "Caption `Figure 3-3. Psychologists and educators who established the theories of cognitiv` on page 55 had no paired image."
+    },
+    {
+      "id": "ae16f3260fc72e7e",
+      "code": "caption-without-figure",
+      "section_code": "5",
+      "message": "Caption `Figure 3-13. A listing such as the one shown here is useful for development of a` on page 69 had no paired image."
+    },
+    {
+      "id": "b0cdbe98c9363a56",
+      "code": "caption-without-figure",
+      "section_code": "5",
+      "message": "Caption `learner repairs an aircraft engine. Sample questions for each level of the cogni` on page 67 had no paired image."
+    },
+    {
+      "id": "c2b87df5cab96ffa",
+      "code": "caption-without-figure",
+      "section_code": "5",
+      "message": "Caption `Figure 3-10. Learning is progressive and occurs at several basic levels.` on page 66 had no paired image."
+    },
+    {
+      "id": "dc8fb76fd4bd4ddd",
+      "code": "caption-without-figure",
+      "section_code": "5",
+      "message": "Caption `Figure 3-5. Most learning occurs through sight, but the combination of sight and` on page 58 had no paired image."
+    },
+    {
+      "id": "e53c0a8ca52c027b",
+      "code": "caption-without-figure",
+      "section_code": "5",
+      "message": "Caption `Figure 3-15. Some of the different traits utilized by each learning style.` on page 73 had no paired image."
+    },
+    {
+      "id": "e71350a280726d39",
+      "code": "caption-without-figure",
+      "section_code": "5",
+      "message": "Caption `Figure 3-21. Other mistakes arise under pressure. For example, a technician or p` on page 85 had no paired image."
+    },
+    {
+      "id": "eeb0aa186b9e1a87",
+      "code": "caption-without-figure",
+      "section_code": "5",
+      "message": "Caption `Figure 3-8. An overview of the three learning domains.` on page 65 had no paired image."
+    },
+    {
+      "id": "f32213a10d0ec37f",
+      "code": "caption-without-figure",
+      "section_code": "5",
+      "message": "Caption `Figure 3-17. Learners will probably experience a learning plateau at some point ` on page 76 had no paired image."
+    },
+    {
+      "id": "fbd2af689af56806",
+      "code": "caption-without-figure",
+      "section_code": "5",
+      "message": "Caption `Figure 3-9. The six major levels of Bloom’s Taxonomy of the Cognitive Domain wit` on page 65 had no paired image."
+    },
+    {
+      "id": "0b478704a07a113d",
+      "code": "caption-without-figure",
+      "section_code": "5.10",
+      "message": "Caption `Figure 3-17. Learners will probably experience a learning plateau at some point ` on page 76 had no paired image."
+    },
+    {
+      "id": "e02849dedc18925c",
+      "code": "caption-without-figure",
+      "section_code": "5.10.2",
+      "message": "Caption `Figure 3-17. Learners will probably experience a learning plateau at some point ` on page 76 had no paired image."
+    },
+    {
+      "id": "757daeaa87736824",
+      "code": "caption-without-figure",
+      "section_code": "5.10.3",
+      "message": "Caption `Figure 3-17. Learners will probably experience a learning plateau at some point ` on page 76 had no paired image."
+    },
+    {
+      "id": "5d346697e894f527",
+      "code": "caption-without-figure",
+      "section_code": "5.10.4",
+      "message": "Caption `Figure 3-18. A learner exhibits deliberate practice by plotting courses for his ` on page 77 had no paired image."
+    },
+    {
+      "id": "47134572267a44dc",
+      "code": "caption-without-figure",
+      "section_code": "5.11",
+      "message": "Caption `Figure 3-19. Pilot practices cross-wind landings repeatedly to improve performan` on page 78 had no paired image."
+    },
+    {
+      "id": "a8088ac1cb1cf556",
+      "code": "caption-without-figure",
+      "section_code": "5.11",
+      "message": "Caption `Figure 3-18. A learner exhibits deliberate practice by plotting courses for his ` on page 77 had no paired image."
+    },
+    {
+      "id": "9f6135eec3eafb8c",
+      "code": "caption-without-figure",
+      "section_code": "5.11.1",
+      "message": "Caption `Figure 3-18. A learner exhibits deliberate practice by plotting courses for his ` on page 77 had no paired image."
+    },
+    {
+      "id": "4073984c1babe952",
+      "code": "caption-without-figure",
+      "section_code": "5.11.2",
+      "message": "Caption `Figure 3-19. Pilot practices cross-wind landings repeatedly to improve performan` on page 78 had no paired image."
+    },
+    {
+      "id": "3b84278350440a6f",
+      "code": "caption-without-figure",
+      "section_code": "5.11.3",
+      "message": "Caption `Figure 3-19. Pilot practices cross-wind landings repeatedly to improve performan` on page 78 had no paired image."
+    },
+    {
+      "id": "2ff0855a9eafdc67",
+      "code": "caption-without-figure",
+      "section_code": "5.12.3",
+      "message": "Caption `Figure 3-20. A pilot is required to perform several tasks at once during approac` on page 80 had no paired image."
+    },
+    {
+      "id": "44093ce90f8cfa50",
+      "code": "caption-without-figure",
+      "section_code": "5.13",
+      "message": "Caption `Figure 3-20. A pilot is required to perform several tasks at once during approac` on page 80 had no paired image."
+    },
+    {
+      "id": "55ec4df5660c611b",
+      "code": "caption-without-figure",
+      "section_code": "5.13.1",
+      "message": "Caption `Figure 3-20. A pilot is required to perform several tasks at once during approac` on page 80 had no paired image."
+    },
+    {
+      "id": "f28b6eb1269a0ef8",
+      "code": "caption-without-figure",
+      "section_code": "5.15",
+      "message": "Caption `Figure 3-21. Other mistakes arise under pressure. For example, a technician or p` on page 85 had no paired image."
+    },
+    {
+      "id": "c0d350253cc0093e",
+      "code": "caption-without-figure",
+      "section_code": "5.15.3",
+      "message": "Caption `Figure 3-21. Other mistakes arise under pressure. For example, a technician or p` on page 85 had no paired image."
+    },
+    {
+      "id": "ed7db5002290efdf",
+      "code": "caption-without-figure",
+      "section_code": "5.15.4",
+      "message": "Caption `Figure 3-21. Other mistakes arise under pressure. For example, a technician or p` on page 85 had no paired image."
+    },
+    {
+      "id": "1af8ef5b9c2dbcbe",
+      "code": "caption-without-figure",
+      "section_code": "5.15.5",
+      "message": "Caption `Figure 3-22. Information processing within the sensory register, working on shor` on page 86 had no paired image."
+    },
+    {
+      "id": "121f48a52dddf136",
+      "code": "caption-without-figure",
+      "section_code": "5.16",
+      "message": "Caption `Figure 3-22. Information processing within the sensory register, working on shor` on page 86 had no paired image."
+    },
+    {
+      "id": "4478a71cff2dd62c",
+      "code": "caption-without-figure",
+      "section_code": "5.2",
+      "message": "Caption `Figure 3-2. Learning theories of psychology include classical conditioning, oper` on page 54 had no paired image."
+    },
+    {
+      "id": "50d3356c04919e10",
+      "code": "caption-without-figure",
+      "section_code": "5.2",
+      "message": "Caption `Figure 3-4. Bloom’s Taxonomy of the Cognitive Domain.` on page 56 had no paired image."
+    },
+    {
+      "id": "9d67d8d7a17664d6",
+      "code": "caption-without-figure",
+      "section_code": "5.2",
+      "message": "Caption `Figure 3-1. An effective instructor understands the characteristics of learning ` on page 53 had no paired image."
+    },
+    {
+      "id": "a90a33e56f875ef0",
+      "code": "caption-without-figure",
+      "section_code": "5.2",
+      "message": "Caption `Figure 3-3. Psychologists and educators who established the theories of cognitiv` on page 55 had no paired image."
+    },
+    {
+      "id": "a6f807b07e35adc6",
+      "code": "caption-without-figure",
+      "section_code": "5.2.1",
+      "message": "Caption `Figure 3-2. Learning theories of psychology include classical conditioning, oper` on page 54 had no paired image."
+    },
+    {
+      "id": "15f8f1baf53077e2",
+      "code": "caption-without-figure",
+      "section_code": "5.2.2",
+      "message": "Caption `Figure 3-4. Bloom’s Taxonomy of the Cognitive Domain.` on page 56 had no paired image."
+    },
+    {
+      "id": "7b4babda47edeeb3",
+      "code": "caption-without-figure",
+      "section_code": "5.2.2",
+      "message": "Caption `Figure 3-3. Psychologists and educators who established the theories of cognitiv` on page 55 had no paired image."
+    },
+    {
+      "id": "5578044a1e9c6143",
+      "code": "caption-without-figure",
+      "section_code": "5.3",
+      "message": "Caption `Figure 3-5. Most learning occurs through sight, but the combination of sight and` on page 58 had no paired image."
+    },
+    {
+      "id": "5407cb804b754e76",
+      "code": "caption-without-figure",
+      "section_code": "5.3.1",
+      "message": "Caption `Figure 3-5. Most learning occurs through sight, but the combination of sight and` on page 58 had no paired image."
+    },
+    {
+      "id": "8401f52e15712224",
+      "code": "caption-without-figure",
+      "section_code": "5.5",
+      "message": "Caption `Figure 3-6. A learner acquires knowledge through memorization, understanding, an` on page 61 had no paired image."
+    },
+    {
+      "id": "0ca235813f6e5796",
+      "code": "caption-without-figure",
+      "section_code": "5.5.2",
+      "message": "Caption `Figure 3-6. A learner acquires knowledge through memorization, understanding, an` on page 61 had no paired image."
+    },
+    {
+      "id": "02aa3c87d0d8d744",
+      "code": "caption-without-figure",
+      "section_code": "5.7",
+      "message": "Caption `learner repairs an aircraft engine. Sample questions for each level of the cogni` on page 67 had no paired image."
+    },
+    {
+      "id": "18f0e6bf7b263d88",
+      "code": "caption-without-figure",
+      "section_code": "5.7",
+      "message": "Caption `Figure 3-12. The psychomotor domain (physical skills) consists of seven educatio` on page 68 had no paired image."
+    },
+    {
+      "id": "2eb54bd05be8d7c7",
+      "code": "caption-without-figure",
+      "section_code": "5.7",
+      "message": "Caption `Figure 3-13. A listing such as the one shown here is useful for development of a` on page 69 had no paired image."
+    },
+    {
+      "id": "301cdadae5f1554c",
+      "code": "caption-without-figure",
+      "section_code": "5.7",
+      "message": "Caption `Figure 3-11. The affective domain (attitudes, beliefs, and values) contains five` on page 67 had no paired image."
+    },
+    {
+      "id": "52c4b755f1072f00",
+      "code": "caption-without-figure",
+      "section_code": "5.7",
+      "message": "Caption `Figure 3-9. The six major levels of Bloom’s Taxonomy of the Cognitive Domain wit` on page 65 had no paired image."
+    },
+    {
+      "id": "7e5cf1f48a41bef6",
+      "code": "caption-without-figure",
+      "section_code": "5.7",
+      "message": "Caption `Figure 3-8. An overview of the three learning domains.` on page 65 had no paired image."
+    },
+    {
+      "id": "fe1db07a0dc9a6f1",
+      "code": "caption-without-figure",
+      "section_code": "5.7",
+      "message": "Caption `Figure 3-10. Learning is progressive and occurs at several basic levels.` on page 66 had no paired image."
+    },
+    {
+      "id": "4a9f3fd84ddb69d0",
+      "code": "caption-without-figure",
+      "section_code": "5.7.1",
+      "message": "Caption `Figure 3-9. The six major levels of Bloom’s Taxonomy of the Cognitive Domain wit` on page 65 had no paired image."
+    },
+    {
+      "id": "b467a5c22524c23f",
+      "code": "caption-without-figure",
+      "section_code": "5.7.1",
+      "message": "Caption `Figure 3-8. An overview of the three learning domains.` on page 65 had no paired image."
+    },
+    {
+      "id": "d957a5d92e3f8820",
+      "code": "caption-without-figure",
+      "section_code": "5.7.1",
+      "message": "Caption `Figure 3-10. Learning is progressive and occurs at several basic levels.` on page 66 had no paired image."
+    },
+    {
+      "id": "276be0318e4e8527",
+      "code": "caption-without-figure",
+      "section_code": "5.7.2",
+      "message": "Caption `Figure 3-11. The affective domain (attitudes, beliefs, and values) contains five` on page 67 had no paired image."
+    },
+    {
+      "id": "c2d1479fde20d515",
+      "code": "caption-without-figure",
+      "section_code": "5.7.2",
+      "message": "Caption `learner repairs an aircraft engine. Sample questions for each level of the cogni` on page 67 had no paired image."
+    },
+    {
+      "id": "0a46e32292130f72",
+      "code": "caption-without-figure",
+      "section_code": "5.7.3",
+      "message": "Caption `Figure 3-12. The psychomotor domain (physical skills) consists of seven educatio` on page 68 had no paired image."
+    },
+    {
+      "id": "b56f995bba779fb0",
+      "code": "caption-without-figure",
+      "section_code": "5.7.4",
+      "message": "Caption `Figure 3-13. A listing such as the one shown here is useful for development of a` on page 69 had no paired image."
+    },
+    {
+      "id": "d9b53021f3247012",
+      "code": "caption-without-figure",
+      "section_code": "5.7.4",
+      "message": "Caption `Figure 3-12. The psychomotor domain (physical skills) consists of seven educatio` on page 68 had no paired image."
+    },
+    {
+      "id": "577c480b1d9cc145",
+      "code": "caption-without-figure",
+      "section_code": "5.9",
+      "message": "Caption `Figure 3-15. Some of the different traits utilized by each learning style.` on page 73 had no paired image."
+    },
+    {
+      "id": "faabb34706a800d4",
+      "code": "caption-without-figure",
+      "section_code": "5.9",
+      "message": "Caption `Figure 3-14. The importance of recognizing a dominant brain hemisphere gives the` on page 72 had no paired image."
+    },
+    {
+      "id": "ff7f005d17f0606c",
+      "code": "caption-without-figure",
+      "section_code": "5.9",
+      "message": "Caption `Figure 3-16. Visual, auditory, and kinesthetic learning styles (VAK).` on page 73 had no paired image."
+    },
+    {
+      "id": "b40724294c96fbcc",
+      "code": "caption-without-figure",
+      "section_code": "5.9.2",
+      "message": "Caption `Figure 3-14. The importance of recognizing a dominant brain hemisphere gives the` on page 72 had no paired image."
+    },
+    {
+      "id": "0a044ada232f25b2",
+      "code": "caption-without-figure",
+      "section_code": "5.9.3",
+      "message": "Caption `Figure 3-14. The importance of recognizing a dominant brain hemisphere gives the` on page 72 had no paired image."
+    },
+    {
+      "id": "450249eced13f5ae",
+      "code": "caption-without-figure",
+      "section_code": "5.9.4",
+      "message": "Caption `Figure 3-16. Visual, auditory, and kinesthetic learning styles (VAK).` on page 73 had no paired image."
+    },
+    {
+      "id": "5ac2179e43abafed",
+      "code": "caption-without-figure",
+      "section_code": "5.9.4",
+      "message": "Caption `Figure 3-15. Some of the different traits utilized by each learning style.` on page 73 had no paired image."
+    },
+    {
+      "id": "003427f7daf8e93d",
+      "code": "caption-without-figure",
+      "section_code": "6",
+      "message": "Caption `Figure 4-5. Instructors can use a number of tools to become better at listening.` on page 101 had no paired image."
+    },
+    {
+      "id": "27ec2331946b4295",
+      "code": "caption-without-figure",
+      "section_code": "6",
+      "message": "Caption `Figure 4-3. Misunderstandings stem primarily from four barriers to effective com` on page 97 had no paired image."
+    },
+    {
+      "id": "7a6a35238dbb13db",
+      "code": "caption-without-figure",
+      "section_code": "6",
+      "message": "Caption `Figure 4-2. The instructor realizes from the response of the learner that “stall` on page 96 had no paired image."
+    },
+    {
+      "id": "a06f81c48e993e94",
+      "code": "caption-without-figure",
+      "section_code": "6",
+      "message": "Caption `Figure 4-6. Learners can improve their listening skills by applying the steps to` on page 102 had no paired image."
+    },
+    {
+      "id": "a1abf216ce9cbbe6",
+      "code": "caption-without-figure",
+      "section_code": "6",
+      "message": "Caption `Figure 4-1. An aviation instructor communicates with her learner using model air` on page 94 had no paired image."
+    },
+    {
+      "id": "d6b7b5666dd0bb90",
+      "code": "caption-without-figure",
+      "section_code": "6",
+      "message": "Caption `Figure 4-4. Overuse of abstract terms can interfere with effective communication` on page 98 had no paired image."
+    },
+    {
+      "id": "5784ff2d19358b50",
+      "code": "caption-without-figure",
+      "section_code": "6.1",
+      "message": "Caption `Figure 4-1. An aviation instructor communicates with her learner using model air` on page 94 had no paired image."
+    },
+    {
+      "id": "479e2f7852b5f868",
+      "code": "caption-without-figure",
+      "section_code": "6.2",
+      "message": "Caption `Figure 4-2. The instructor realizes from the response of the learner that “stall` on page 96 had no paired image."
+    },
+    {
+      "id": "82df4133e3c9e850",
+      "code": "caption-without-figure",
+      "section_code": "6.2.3",
+      "message": "Caption `Figure 4-2. The instructor realizes from the response of the learner that “stall` on page 96 had no paired image."
+    },
+    {
+      "id": "44b27f8f8cdd8945",
+      "code": "caption-without-figure",
+      "section_code": "6.3",
+      "message": "Caption `Figure 4-4. Overuse of abstract terms can interfere with effective communication` on page 98 had no paired image."
+    },
+    {
+      "id": "980c027dab3969cd",
+      "code": "caption-without-figure",
+      "section_code": "6.3",
+      "message": "Caption `Figure 4-3. Misunderstandings stem primarily from four barriers to effective com` on page 97 had no paired image."
+    },
+    {
+      "id": "d2bddd78febf79e4",
+      "code": "caption-without-figure",
+      "section_code": "6.3.1",
+      "message": "Caption `Figure 4-3. Misunderstandings stem primarily from four barriers to effective com` on page 97 had no paired image."
+    },
+    {
+      "id": "cc30fd2f99a7334b",
+      "code": "caption-without-figure",
+      "section_code": "6.3.2",
+      "message": "Caption `Figure 4-4. Overuse of abstract terms can interfere with effective communication` on page 98 had no paired image."
+    },
+    {
+      "id": "8d14fac9de9fdccb",
+      "code": "caption-without-figure",
+      "section_code": "6.3.3",
+      "message": "Caption `Figure 4-4. Overuse of abstract terms can interfere with effective communication` on page 98 had no paired image."
+    },
+    {
+      "id": "10ccdd454f0871b4",
+      "code": "caption-without-figure",
+      "section_code": "6.4",
+      "message": "Caption `Figure 4-5. Instructors can use a number of tools to become better at listening.` on page 101 had no paired image."
+    },
+    {
+      "id": "8a701df51739d034",
+      "code": "caption-without-figure",
+      "section_code": "6.4",
+      "message": "Caption `Figure 4-6. Learners can improve their listening skills by applying the steps to` on page 102 had no paired image."
+    },
+    {
+      "id": "279d25ae944fb530",
+      "code": "caption-without-figure",
+      "section_code": "6.4.3",
+      "message": "Caption `Figure 4-6. Learners can improve their listening skills by applying the steps to` on page 102 had no paired image."
+    },
+    {
+      "id": "b2695aea7cb35ab4",
+      "code": "caption-without-figure",
+      "section_code": "6.4.3",
+      "message": "Caption `Figure 4-5. Instructors can use a number of tools to become better at listening.` on page 101 had no paired image."
+    },
+    {
+      "id": "00b5e78e12701256",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 5-9. Notes allow the accurate dissemination of complicated information.` on page 115 had no paired image."
+    },
+    {
+      "id": "079bce5c48171aae",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 5-10. If the objectives of a lesson are clearly established in advance, i` on page 117 had no paired image."
+    },
+    {
+      "id": "1946ef87252e4e5f",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 5-18. In a computer-assisted learning environment, the instructor still e` on page 130 had no paired image."
+    },
+    {
+      "id": "20263a0781f6daf9",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 5-8. Instructors should try a dry run with another instructor to get a fe` on page 114 had no paired image."
+    },
+    {
+      "id": "530109cab4404a0a",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 5-12. E-learning encompasses a variety of electronic educational media.` on page 121 had no paired image."
+    },
+    {
+      "id": "7907ca1712465b3a",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 5-2. An effective instructor uses a variety of tools to evaluate how lear` on page 106 had no paired image."
+    },
+    {
+      "id": "7e29ec3b97e83f06",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 5-16. Studies generally agree that measurable improvement in learner rete` on page 127 had no paired image."
+    },
+    {
+      "id": "88325f8dde1a836e",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 5-1. Aviation instructors organize course material and use procedures and` on page 105 had no paired image."
+    },
+    {
+      "id": "9972830100c32560",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 5-6. Guidelines for presenting lessons.` on page 111 had no paired image."
+    },
+    {
+      "id": "9b0366a840d1ba71",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 5-17. Guidelines for effective instructional aids.` on page 128 had no paired image."
+    },
+    {
+      "id": "af22f387deeb1e30",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 5-15. The demonstration-performance method of teaching has five essential` on page 125 had no paired image."
+    },
+    {
+      "id": "cc1a0bec3b03a06e",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 5-11. As the learner grows in flight knowledge, he or she should be able ` on page 119 had no paired image."
+    },
+    {
+      "id": "e1c1d38a06a1a809",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 5-5. Examples of Airman Certification Standards.` on page 110 had no paired image."
+    },
+    {
+      "id": "ee634c7ab01d2700",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 5-14. Flight simulator.` on page 123 had no paired image."
+    },
+    {
+      "id": "f1db5c3d96cc6be2",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 5-7. The attention element causes learners to focus on the upcoming lesso` on page 112 had no paired image."
+    },
+    {
+      "id": "f246970920feeabf",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 5-3. The syllabus defines the unit of training, states by objective what ` on page 107 had no paired image."
+    },
+    {
+      "id": "f25ac644b4d3b22c",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 5-13. The instructor continually monitors learner performance when using ` on page 123 had no paired image."
+    },
+    {
+      "id": "fa0c4713dbcb93af",
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 5-4. Performance-based objectives are made up of a description of the ski` on page 109 had no paired image."
+    },
+    {
+      "id": "9533b8c9c8fbd997",
+      "code": "caption-without-figure",
+      "section_code": "7.10",
+      "message": "Caption `Figure 5-14. Flight simulator.` on page 123 had no paired image."
+    },
+    {
+      "id": "a42444c90fa4ddc4",
+      "code": "caption-without-figure",
+      "section_code": "7.10",
+      "message": "Caption `Figure 5-12. E-learning encompasses a variety of electronic educational media.` on page 121 had no paired image."
+    },
+    {
+      "id": "b6d20b6c86bef8c3",
+      "code": "caption-without-figure",
+      "section_code": "7.10",
+      "message": "Caption `Figure 5-13. The instructor continually monitors learner performance when using ` on page 123 had no paired image."
+    },
+    {
+      "id": "c2102156aa589880",
+      "code": "caption-without-figure",
+      "section_code": "7.10.2",
+      "message": "Caption `Figure 5-14. Flight simulator.` on page 123 had no paired image."
+    },
+    {
+      "id": "e9f6126042cb6ebb",
+      "code": "caption-without-figure",
+      "section_code": "7.10.2",
+      "message": "Caption `Figure 5-13. The instructor continually monitors learner performance when using ` on page 123 had no paired image."
+    },
+    {
+      "id": "31eef87ea804cb11",
+      "code": "caption-without-figure",
+      "section_code": "7.12.2",
+      "message": "Caption `Figure 5-15. The demonstration-performance method of teaching has five essential` on page 125 had no paired image."
+    },
+    {
+      "id": "4e962c15d2a9080e",
+      "code": "caption-without-figure",
+      "section_code": "7.12.3",
+      "message": "Caption `Figure 5-15. The demonstration-performance method of teaching has five essential` on page 125 had no paired image."
+    },
+    {
+      "id": "2fd9a749e187b840",
+      "code": "caption-without-figure",
+      "section_code": "7.12.4",
+      "message": "Caption `Figure 5-15. The demonstration-performance method of teaching has five essential` on page 125 had no paired image."
+    },
+    {
+      "id": "70e785896dafeb57",
+      "code": "caption-without-figure",
+      "section_code": "7.13",
+      "message": "Caption `Figure 5-15. The demonstration-performance method of teaching has five essential` on page 125 had no paired image."
+    },
+    {
+      "id": "0462d7c67cb81b35",
+      "code": "caption-without-figure",
+      "section_code": "7.13.1",
+      "message": "Caption `Figure 5-15. The demonstration-performance method of teaching has five essential` on page 125 had no paired image."
+    },
+    {
+      "id": "2ddbde3a324a3d29",
+      "code": "caption-without-figure",
+      "section_code": "7.16",
+      "message": "Caption `Figure 5-17. Guidelines for effective instructional aids.` on page 128 had no paired image."
+    },
+    {
+      "id": "6f913da5fe21eca9",
+      "code": "caption-without-figure",
+      "section_code": "7.16",
+      "message": "Caption `Figure 5-18. In a computer-assisted learning environment, the instructor still e` on page 130 had no paired image."
+    },
+    {
+      "id": "a5878f3851481313",
+      "code": "caption-without-figure",
+      "section_code": "7.16",
+      "message": "Caption `Figure 5-16. Studies generally agree that measurable improvement in learner rete` on page 127 had no paired image."
+    },
+    {
+      "id": "03fbf663ed3e8939",
+      "code": "caption-without-figure",
+      "section_code": "7.16.3",
+      "message": "Caption `Figure 5-16. Studies generally agree that measurable improvement in learner rete` on page 127 had no paired image."
+    },
+    {
+      "id": "abf57db2548d856c",
+      "code": "caption-without-figure",
+      "section_code": "7.16.4",
+      "message": "Caption `Figure 5-17. Guidelines for effective instructional aids.` on page 128 had no paired image."
+    },
+    {
+      "id": "e4922e4cde101360",
+      "code": "caption-without-figure",
+      "section_code": "7.16.4",
+      "message": "Caption `Figure 5-18. In a computer-assisted learning environment, the instructor still e` on page 130 had no paired image."
+    },
+    {
+      "id": "3b6774244c3a1158",
+      "code": "caption-without-figure",
+      "section_code": "7.2",
+      "message": "Caption `Figure 5-1. Aviation instructors organize course material and use procedures and` on page 105 had no paired image."
+    },
+    {
+      "id": "d5ba4889c9c646cb",
+      "code": "caption-without-figure",
+      "section_code": "7.2.2",
+      "message": "Caption `Figure 5-1. Aviation instructors organize course material and use procedures and` on page 105 had no paired image."
+    },
+    {
+      "id": "f70124821acb3742",
+      "code": "caption-without-figure",
+      "section_code": "7.3",
+      "message": "Caption `Figure 5-2. An effective instructor uses a variety of tools to evaluate how lear` on page 106 had no paired image."
+    },
+    {
+      "id": "0ef5af4b79f95c32",
+      "code": "caption-without-figure",
+      "section_code": "7.4",
+      "message": "Caption `Figure 5-3. The syllabus defines the unit of training, states by objective what ` on page 107 had no paired image."
+    },
+    {
+      "id": "56430ebb250722ef",
+      "code": "caption-without-figure",
+      "section_code": "7.5",
+      "message": "Caption `Figure 5-5. Examples of Airman Certification Standards.` on page 110 had no paired image."
+    },
+    {
+      "id": "568300329798604a",
+      "code": "caption-without-figure",
+      "section_code": "7.5",
+      "message": "Caption `Figure 5-4. Performance-based objectives are made up of a description of the ski` on page 109 had no paired image."
+    },
+    {
+      "id": "cc092f636591b2ef",
+      "code": "caption-without-figure",
+      "section_code": "7.5.3",
+      "message": "Caption `Figure 5-4. Performance-based objectives are made up of a description of the ski` on page 109 had no paired image."
+    },
+    {
+      "id": "ef1d1c742cb56a5d",
+      "code": "caption-without-figure",
+      "section_code": "7.5.4",
+      "message": "Caption `Figure 5-5. Examples of Airman Certification Standards.` on page 110 had no paired image."
+    },
+    {
+      "id": "cb39cb31a0f3db49",
+      "code": "caption-without-figure",
+      "section_code": "7.5.5",
+      "message": "Caption `Figure 5-5. Examples of Airman Certification Standards.` on page 110 had no paired image."
+    },
+    {
+      "id": "c4b9908902653a4b",
+      "code": "caption-without-figure",
+      "section_code": "7.6",
+      "message": "Caption `Figure 5-6. Guidelines for presenting lessons.` on page 111 had no paired image."
+    },
+    {
+      "id": "3278e8fd583fabdb",
+      "code": "caption-without-figure",
+      "section_code": "7.7",
+      "message": "Caption `Figure 5-7. The attention element causes learners to focus on the upcoming lesso` on page 112 had no paired image."
+    },
+    {
+      "id": "6cc715b0e5d8ca39",
+      "code": "caption-without-figure",
+      "section_code": "7.7.1",
+      "message": "Caption `Figure 5-7. The attention element causes learners to focus on the upcoming lesso` on page 112 had no paired image."
+    },
+    {
+      "id": "a824cd806b564c6d",
+      "code": "caption-without-figure",
+      "section_code": "7.8",
+      "message": "Caption `Figure 5-9. Notes allow the accurate dissemination of complicated information.` on page 115 had no paired image."
+    },
+    {
+      "id": "dff1614214b8b9e4",
+      "code": "caption-without-figure",
+      "section_code": "7.8",
+      "message": "Caption `Figure 5-10. If the objectives of a lesson are clearly established in advance, i` on page 117 had no paired image."
+    },
+    {
+      "id": "f99ce1d0168c312f",
+      "code": "caption-without-figure",
+      "section_code": "7.8",
+      "message": "Caption `Figure 5-8. Instructors should try a dry run with another instructor to get a fe` on page 114 had no paired image."
+    },
+    {
+      "id": "2107266de1ba816b",
+      "code": "caption-without-figure",
+      "section_code": "7.8.1",
+      "message": "Caption `Figure 5-8. Instructors should try a dry run with another instructor to get a fe` on page 114 had no paired image."
+    },
+    {
+      "id": "c47f1e89cadfb77c",
+      "code": "caption-without-figure",
+      "section_code": "7.8.1",
+      "message": "Caption `Figure 5-9. Notes allow the accurate dissemination of complicated information.` on page 115 had no paired image."
+    },
+    {
+      "id": "58454c65db8af9f4",
+      "code": "caption-without-figure",
+      "section_code": "7.8.3",
+      "message": "Caption `Figure 5-10. If the objectives of a lesson are clearly established in advance, i` on page 117 had no paired image."
+    },
+    {
+      "id": "e00c9a4f28db9ec4",
+      "code": "caption-without-figure",
+      "section_code": "7.9",
+      "message": "Caption `Figure 5-11. As the learner grows in flight knowledge, he or she should be able ` on page 119 had no paired image."
+    },
+    {
+      "id": "1d02c1d48080c410",
+      "code": "caption-without-figure",
+      "section_code": "7.9.1",
+      "message": "Caption `Figure 5-11. As the learner grows in flight knowledge, he or she should be able ` on page 119 had no paired image."
+    },
+    {
+      "id": "16083d982f43b971",
+      "code": "caption-without-figure",
+      "section_code": "8",
+      "message": "Caption `Figure 6-1. Effective assessments share a number of characteristics.` on page 133 had no paired image."
+    },
+    {
+      "id": "2a10126cb5b05107",
+      "code": "caption-without-figure",
+      "section_code": "8",
+      "message": "Caption `Figure 6-4. Rubric for assessing flight training maneuvers.` on page 138 had no paired image."
+    },
+    {
+      "id": "44ebf987e3092e4a",
+      "code": "caption-without-figure",
+      "section_code": "8",
+      "message": "Caption `Figure 6-5. The development process for criterion-referenced tests follows a gen` on page 139 had no paired image."
+    },
+    {
+      "id": "708a14ebdab03578",
+      "code": "caption-without-figure",
+      "section_code": "8",
+      "message": "Caption `completion standards of the lesson. An effective assessment displays the charact` on page 133 had no paired image."
+    },
+    {
+      "id": "c9b9289e9c20f22d",
+      "code": "caption-without-figure",
+      "section_code": "8",
+      "message": "Caption `Figure 6-2. Traditional grading.` on page 135 had no paired image."
+    },
+    {
+      "id": "e6ac89703b5a57d1",
+      "code": "caption-without-figure",
+      "section_code": "8",
+      "message": "Caption `Figure 6-3. Effective tests have six primary characteristics.` on page 135 had no paired image."
+    },
+    {
+      "id": "2b0e6c522cb1df37",
+      "code": "caption-without-figure",
+      "section_code": "8.4",
+      "message": "Caption `Figure 6-1. Effective assessments share a number of characteristics.` on page 133 had no paired image."
+    },
+    {
+      "id": "40b02fce83cc0ccf",
+      "code": "caption-without-figure",
+      "section_code": "8.4",
+      "message": "Caption `completion standards of the lesson. An effective assessment displays the charact` on page 133 had no paired image."
+    },
+    {
+      "id": "57b399e49ffbf6a3",
+      "code": "caption-without-figure",
+      "section_code": "8.4.1",
+      "message": "Caption `completion standards of the lesson. An effective assessment displays the charact` on page 133 had no paired image."
+    },
+    {
+      "id": "f0679dbda3eaa129",
+      "code": "caption-without-figure",
+      "section_code": "8.4.1",
+      "message": "Caption `Figure 6-1. Effective assessments share a number of characteristics.` on page 133 had no paired image."
+    },
+    {
+      "id": "0cc64ef69c3c79d4",
+      "code": "caption-without-figure",
+      "section_code": "8.4.2",
+      "message": "Caption `Figure 6-1. Effective assessments share a number of characteristics.` on page 133 had no paired image."
+    },
+    {
+      "id": "f5a74dcb00f926e5",
+      "code": "caption-without-figure",
+      "section_code": "8.4.2",
+      "message": "Caption `completion standards of the lesson. An effective assessment displays the charact` on page 133 had no paired image."
+    },
+    {
+      "id": "089d3088b72e981b",
+      "code": "caption-without-figure",
+      "section_code": "8.4.3",
+      "message": "Caption `Figure 6-1. Effective assessments share a number of characteristics.` on page 133 had no paired image."
+    },
+    {
+      "id": "331e62e3bb5fe35c",
+      "code": "caption-without-figure",
+      "section_code": "8.4.3",
+      "message": "Caption `completion standards of the lesson. An effective assessment displays the charact` on page 133 had no paired image."
+    },
+    {
+      "id": "767c70858add4b17",
+      "code": "caption-without-figure",
+      "section_code": "8.5",
+      "message": "Caption `Figure 6-3. Effective tests have six primary characteristics.` on page 135 had no paired image."
+    },
+    {
+      "id": "84738dc704c4b0e2",
+      "code": "caption-without-figure",
+      "section_code": "8.5",
+      "message": "Caption `Figure 6-2. Traditional grading.` on page 135 had no paired image."
+    },
+    {
+      "id": "a45313d966e49563",
+      "code": "caption-without-figure",
+      "section_code": "8.5.1",
+      "message": "Caption `Figure 6-3. Effective tests have six primary characteristics.` on page 135 had no paired image."
+    },
+    {
+      "id": "b7b1bf21f3e20b68",
+      "code": "caption-without-figure",
+      "section_code": "8.5.1",
+      "message": "Caption `Figure 6-2. Traditional grading.` on page 135 had no paired image."
+    },
+    {
+      "id": "056b21e87ee4917b",
+      "code": "caption-without-figure",
+      "section_code": "8.7",
+      "message": "Caption `Figure 6-4. Rubric for assessing flight training maneuvers.` on page 138 had no paired image."
+    },
+    {
+      "id": "7a9e07cdac562011",
+      "code": "caption-without-figure",
+      "section_code": "8.7",
+      "message": "Caption `Figure 6-5. The development process for criterion-referenced tests follows a gen` on page 139 had no paired image."
+    },
+    {
+      "id": "2462da51d8668add",
+      "code": "caption-without-figure",
+      "section_code": "8.7.1",
+      "message": "Caption `Figure 6-5. The development process for criterion-referenced tests follows a gen` on page 139 had no paired image."
+    },
+    {
+      "id": "1bf871c704c5751c",
+      "code": "caption-without-figure",
+      "section_code": "9",
+      "message": "Caption `Figure 7-8. Points to remember about scenario-based training.` on page 157 had no paired image."
+    },
+    {
+      "id": "4470fb30e1401685",
+      "code": "caption-without-figure",
+      "section_code": "9",
+      "message": "Caption `Figure 7-7. SBT lesson plan.` on page 156 had no paired image."
+    },
+    {
+      "id": "51282c5178257ffe",
+      "code": "caption-without-figure",
+      "section_code": "9",
+      "message": "Caption `Figure 7-9. Very light jet aircraft in flight.` on page 158 had no paired image."
+    },
+    {
+      "id": "608369764da63f28",
+      "code": "caption-without-figure",
+      "section_code": "9",
+      "message": "Caption `Figure 7-2. This excerpt of a ground lesson shows a unit of ground instruction. ` on page 148 had no paired image."
+    },
+    {
+      "id": "8b9b06455b8abfff",
+      "code": "caption-without-figure",
+      "section_code": "9",
+      "message": "Caption `Figure 7-1. The presolo stage or phase of private pilot training is comprised of` on page 146 had no paired image."
+    },
+    {
+      "id": "8fa8b7dca0c15586",
+      "code": "caption-without-figure",
+      "section_code": "9",
+      "message": "Caption `Figure 7-4. Information in the form of notes may be added to individual ground o` on page 150 had no paired image."
+    },
+    {
+      "id": "beefc1e0bb522baf",
+      "code": "caption-without-figure",
+      "section_code": "9",
+      "message": "Caption `Figure 7-5. Glider training log.` on page 151 had no paired image."
+    },
+    {
+      "id": "c044a8c1db830ef6",
+      "code": "caption-without-figure",
+      "section_code": "9",
+      "message": "Caption `Figure 7-6. Example of a traditional training lesson plan.` on page 154 had no paired image."
+    },
+    {
+      "id": "c352fcca919721c4",
+      "code": "caption-without-figure",
+      "section_code": "9",
+      "message": "Caption `Figure 7-3. A flight training lesson, like a ground training lesson, should incl` on page 149 had no paired image."
+    },
+    {
+      "id": "4aee9259fca3d89c",
+      "code": "caption-without-figure",
+      "section_code": "9.3",
+      "message": "Caption `Figure 7-1. The presolo stage or phase of private pilot training is comprised of` on page 146 had no paired image."
+    },
+    {
+      "id": "1d591f87e2e972ab",
+      "code": "caption-without-figure",
+      "section_code": "9.4",
+      "message": "Caption `Figure 7-3. A flight training lesson, like a ground training lesson, should incl` on page 149 had no paired image."
+    },
+    {
+      "id": "a3a603ca475e2d37",
+      "code": "caption-without-figure",
+      "section_code": "9.4",
+      "message": "Caption `Figure 7-4. Information in the form of notes may be added to individual ground o` on page 150 had no paired image."
+    },
+    {
+      "id": "f6a66dfb323ac6ad",
+      "code": "caption-without-figure",
+      "section_code": "9.4",
+      "message": "Caption `Figure 7-2. This excerpt of a ground lesson shows a unit of ground instruction. ` on page 148 had no paired image."
+    },
+    {
+      "id": "aba4f73b8fb17a74",
+      "code": "caption-without-figure",
+      "section_code": "9.4.2",
+      "message": "Caption `Figure 7-3. A flight training lesson, like a ground training lesson, should incl` on page 149 had no paired image."
+    },
+    {
+      "id": "b54f7b2ffbebbb03",
+      "code": "caption-without-figure",
+      "section_code": "9.4.2",
+      "message": "Caption `Figure 7-4. Information in the form of notes may be added to individual ground o` on page 150 had no paired image."
+    },
+    {
+      "id": "eed1b590477ee301",
+      "code": "caption-without-figure",
+      "section_code": "9.4.2",
+      "message": "Caption `Figure 7-2. This excerpt of a ground lesson shows a unit of ground instruction. ` on page 148 had no paired image."
+    },
+    {
+      "id": "824338afc331ae06",
+      "code": "caption-without-figure",
+      "section_code": "9.5",
+      "message": "Caption `Figure 7-5. Glider training log.` on page 151 had no paired image."
+    },
+    {
+      "id": "08937dd3aff14055",
+      "code": "caption-without-figure",
+      "section_code": "9.6",
+      "message": "Caption `Figure 7-7. SBT lesson plan.` on page 156 had no paired image."
+    },
+    {
+      "id": "7e52d4257e7195a6",
+      "code": "caption-without-figure",
+      "section_code": "9.6",
+      "message": "Caption `Figure 7-6. Example of a traditional training lesson plan.` on page 154 had no paired image."
+    },
+    {
+      "id": "7f4fd02e4cab3c8a",
+      "code": "caption-without-figure",
+      "section_code": "9.6",
+      "message": "Caption `Figure 7-8. Points to remember about scenario-based training.` on page 157 had no paired image."
+    },
+    {
+      "id": "42a7f359e6a12e6e",
+      "code": "caption-without-figure",
+      "section_code": "9.6.2",
+      "message": "Caption `Figure 7-7. SBT lesson plan.` on page 156 had no paired image."
+    },
+    {
+      "id": "8652c11242025b0f",
+      "code": "caption-without-figure",
+      "section_code": "9.6.2",
+      "message": "Caption `Figure 7-8. Points to remember about scenario-based training.` on page 157 had no paired image."
+    },
+    {
+      "id": "c4f20b03bfe6882a",
+      "code": "caption-without-figure",
+      "section_code": "9.7",
+      "message": "Caption `Figure 7-9. Very light jet aircraft in flight.` on page 158 had no paired image."
+    },
+    {
+      "id": "b397532cd4055437",
+      "code": "caption-without-figure",
+      "section_code": "9.8",
+      "message": "Caption `Figure 7-9. Very light jet aircraft in flight.` on page 158 had no paired image."
+    },
+    {
+      "id": "0734a06c1a755ba6",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 14 start-page (PDF p197) had no parseable FAA header; recovered `10-9` from PDF p193 (walk-back 4)"
+    },
+    {
+      "id": "0eb116e0808e8c04",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 14 end-page (PDF p201) had no parseable FAA header within 5 pages; falling back to offset-derived `201`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "1065f72de28aa91d",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 15.1.10 end-page (PDF p205) had no parseable FAA header within 5 pages; falling back to offset-derived `205`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "11dbc395ca4b8362",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 15.1.6 end-page (PDF p204) had no parseable FAA header within 5 pages; falling back to offset-derived `204`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "156e32e928822c53",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 15.1.5 end-page (PDF p204) had no parseable FAA header within 5 pages; falling back to offset-derived `204`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "17312b6f9a5e35b6",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 15.1.8 end-page (PDF p205) had no parseable FAA header within 5 pages; falling back to offset-derived `205`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "1a363c25b580ce9a",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.14 end-page (PDF p212) had no parseable FAA header within 5 pages; falling back to offset-derived `212`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "1a4442dfbaf890cd",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 15.1 start-page (PDF p202) had no parseable FAA header within 5 pages; falling back to offset-derived `202`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "2173f71124e2712a",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.18 start-page (PDF p214) had no parseable FAA header within 5 pages; falling back to offset-derived `214`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "242f59ae712e642e",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.21 start-page (PDF p215) had no parseable FAA header within 5 pages; falling back to offset-derived `215`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "2556d0ded82459a1",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 15.1.7 start-page (PDF p204) had no parseable FAA header within 5 pages; falling back to offset-derived `204`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "26ff975f66c6ceaa",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 14.1.2 start-page (PDF p197) had no parseable FAA header; recovered `10-9` from PDF p193 (walk-back 4)"
+    },
+    {
+      "id": "2f453071efb5d6d7",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 2 end-page (PDF p4) had no parseable FAA header within 5 pages; falling back to offset-derived `4`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "2f9d8e0c09fee538",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.11 end-page (PDF p212) had no parseable FAA header within 5 pages; falling back to offset-derived `212`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "34e19acf562b92de",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 15.1.7 end-page (PDF p204) had no parseable FAA header within 5 pages; falling back to offset-derived `204`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "35cd3d349d94adb1",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.13 start-page (PDF p212) had no parseable FAA header within 5 pages; falling back to offset-derived `212`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "3c5cfcfbb220f81e",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 13 end-page (PDF p196) had no parseable FAA header; recovered `10-9` from PDF p193 (walk-back 3)"
+    },
+    {
+      "id": "3fe838a36c698d0f",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.15 end-page (PDF p213) had no parseable FAA header within 5 pages; falling back to offset-derived `213`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "406a4788872f9e58",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.13 end-page (PDF p212) had no parseable FAA header within 5 pages; falling back to offset-derived `212`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "4089aafb0dd87088",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 15.1.3 end-page (PDF p203) had no parseable FAA header within 5 pages; falling back to offset-derived `203`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "42cfdedf1b788cf6",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.20 start-page (PDF p215) had no parseable FAA header within 5 pages; falling back to offset-derived `215`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "43e0f5807aeea277",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.16 start-page (PDF p213) had no parseable FAA header within 5 pages; falling back to offset-derived `213`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "4625a9612b9447d5",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.18 end-page (PDF p214) had no parseable FAA header within 5 pages; falling back to offset-derived `214`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "4680826cc3d155a2",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 14.1.2 end-page (PDF p197) had no parseable FAA header; recovered `10-9` from PDF p193 (walk-back 4)"
+    },
+    {
+      "id": "499c4604a47e2004",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 15.1 end-page (PDF p205) had no parseable FAA header within 5 pages; falling back to offset-derived `205`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "49e18dd32c9f5e3b",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 16 start-page (PDF p206) had no parseable FAA header within 5 pages; falling back to offset-derived `206`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "4a024e62ef1e25fd",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.8 start-page (PDF p211) had no parseable FAA header within 5 pages; falling back to offset-derived `211`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "4bb0db73b17ca0fe",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 15.1.1 end-page (PDF p203) had no parseable FAA header within 5 pages; falling back to offset-derived `203`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "5053b49004da8bf5",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 15.1.10 start-page (PDF p205) had no parseable FAA header within 5 pages; falling back to offset-derived `205`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "53ba15d1e4ba08ce",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.14 start-page (PDF p212) had no parseable FAA header within 5 pages; falling back to offset-derived `212`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "5874f8e7d4f8cb5f",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 14.1.3 end-page (PDF p198) had no parseable FAA header; recovered `10-9` from PDF p193 (walk-back 5)"
+    },
+    {
+      "id": "5a990660cb7333fa",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.16 end-page (PDF p213) had no parseable FAA header within 5 pages; falling back to offset-derived `213`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "5ad479f71cd79271",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 14.1 end-page (PDF p201) had no parseable FAA header within 5 pages; falling back to offset-derived `201`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "5bd965f09e9df41f",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 16 end-page (PDF p208) had no parseable FAA header within 5 pages; falling back to offset-derived `208`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "5d22763b5015632a",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 15.1.4 start-page (PDF p203) had no parseable FAA header within 5 pages; falling back to offset-derived `203`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "5e0894029b056c1c",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 15.1.4 end-page (PDF p203) had no parseable FAA header within 5 pages; falling back to offset-derived `203`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "5e6073edf6b6eee9",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.11 start-page (PDF p212) had no parseable FAA header within 5 pages; falling back to offset-derived `212`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "65cff4dadbb8a887",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 15.1.9 start-page (PDF p205) had no parseable FAA header within 5 pages; falling back to offset-derived `205`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "670cc43a6ac631f4",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 1 start-page (PDF p3) had no parseable FAA header within 5 pages; falling back to offset-derived `3`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "6908da6d7979a0bb",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.12 start-page (PDF p212) had no parseable FAA header within 5 pages; falling back to offset-derived `212`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "6f6d1443998aee29",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 14.1 start-page (PDF p197) had no parseable FAA header; recovered `10-9` from PDF p193 (walk-back 4)"
+    },
+    {
+      "id": "77c53e012a13ec76",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.17 start-page (PDF p213) had no parseable FAA header within 5 pages; falling back to offset-derived `213`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "8168f23f561b49cb",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 15.1.8 start-page (PDF p205) had no parseable FAA header within 5 pages; falling back to offset-derived `205`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "842f62edcbc7c62c",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 14.1.1 end-page (PDF p197) had no parseable FAA header; recovered `10-9` from PDF p193 (walk-back 4)"
+    },
+    {
+      "id": "89f426433b0dff3b",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.22 start-page (PDF p215) had no parseable FAA header within 5 pages; falling back to offset-derived `215`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "8f0eaccfdede1d38",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 15.1.3 start-page (PDF p203) had no parseable FAA header within 5 pages; falling back to offset-derived `203`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "921f8d8dbd3fd473",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17 start-page (PDF p209) had no parseable FAA header within 5 pages; falling back to offset-derived `209`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "9335113384cf1a56",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 15.1.2 end-page (PDF p203) had no parseable FAA header within 5 pages; falling back to offset-derived `203`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "963e80bbd77e9bdf",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.9 start-page (PDF p211) had no parseable FAA header within 5 pages; falling back to offset-derived `211`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "a10bb12e7b657e44",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 15.1.2 start-page (PDF p203) had no parseable FAA header within 5 pages; falling back to offset-derived `203`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "a312be8a50fa148f",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.2 start-page (PDF p209) had no parseable FAA header within 5 pages; falling back to offset-derived `209`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "a4dcdf8508c423cf",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 14.1.3 start-page (PDF p198) had no parseable FAA header; recovered `10-9` from PDF p193 (walk-back 5)"
+    },
+    {
+      "id": "a4f992d6d6dc84ea",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.1 end-page (PDF p209) had no parseable FAA header within 5 pages; falling back to offset-derived `209`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "a55d2baf5332a09e",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 15.1.6 start-page (PDF p204) had no parseable FAA header within 5 pages; falling back to offset-derived `204`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "a651d6c47be9d064",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.5 end-page (PDF p210) had no parseable FAA header within 5 pages; falling back to offset-derived `210`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "a7b2711b901457a6",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 14.1.1 start-page (PDF p197) had no parseable FAA header; recovered `10-9` from PDF p193 (walk-back 4)"
+    },
+    {
+      "id": "a88e450134338dd6",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.19 end-page (PDF p214) had no parseable FAA header within 5 pages; falling back to offset-derived `214`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "a934f83b4b7e327b",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 14.1.4 start-page (PDF p198) had no parseable FAA header; recovered `10-9` from PDF p193 (walk-back 5)"
+    },
+    {
+      "id": "adce232d064a7fbb",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 15.1.1 start-page (PDF p203) had no parseable FAA header within 5 pages; falling back to offset-derived `203`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "b126c99d66068ced",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.20 end-page (PDF p215) had no parseable FAA header within 5 pages; falling back to offset-derived `215`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "b35eec8ffa64a761",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 15.1.9 end-page (PDF p205) had no parseable FAA header within 5 pages; falling back to offset-derived `205`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "b4e009fac471edfa",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.10 end-page (PDF p212) had no parseable FAA header within 5 pages; falling back to offset-derived `212`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "b52d9fb6a14d067a",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 14.1.4 end-page (PDF p201) had no parseable FAA header within 5 pages; falling back to offset-derived `201`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "b5ae09017cefc96e",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.7 end-page (PDF p211) had no parseable FAA header within 5 pages; falling back to offset-derived `211`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "b61919d3cdc7cf4e",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17 end-page (PDF p215) had no parseable FAA header within 5 pages; falling back to offset-derived `215`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "c541a3c78866c82c",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.17 end-page (PDF p213) had no parseable FAA header within 5 pages; falling back to offset-derived `213`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "c6987116efc00b29",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.19 start-page (PDF p214) had no parseable FAA header within 5 pages; falling back to offset-derived `214`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "c76465dda1efcae8",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.3 end-page (PDF p209) had no parseable FAA header within 5 pages; falling back to offset-derived `209`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "c860db006af64288",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.8 end-page (PDF p211) had no parseable FAA header within 5 pages; falling back to offset-derived `211`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "c8c22a89b57be24f",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.10 start-page (PDF p212) had no parseable FAA header within 5 pages; falling back to offset-derived `212`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "c9fb17d295bda387",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.6 end-page (PDF p211) had no parseable FAA header within 5 pages; falling back to offset-derived `211`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "cf0de24090770701",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.7 start-page (PDF p211) had no parseable FAA header within 5 pages; falling back to offset-derived `211`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "d329aeb1f54a322c",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.9 end-page (PDF p211) had no parseable FAA header within 5 pages; falling back to offset-derived `211`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "d36cea50bce51349",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 13 start-page (PDF p194) had no parseable FAA header; recovered `10-9` from PDF p193 (walk-back 1)"
+    },
+    {
+      "id": "d3d19db0c3f26ee4",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.21 end-page (PDF p215) had no parseable FAA header within 5 pages; falling back to offset-derived `215`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "dba7ad6049906aaa",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 15.1.5 start-page (PDF p204) had no parseable FAA header within 5 pages; falling back to offset-derived `204`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "de6e1a7b1a58866f",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 1 end-page (PDF p3) had no parseable FAA header within 5 pages; falling back to offset-derived `3`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "e0b10f54de2f474d",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 15 start-page (PDF p202) had no parseable FAA header within 5 pages; falling back to offset-derived `202`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "e14573779e42893f",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 15 end-page (PDF p205) had no parseable FAA header within 5 pages; falling back to offset-derived `205`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "e5ce81097bb3fc93",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.6 start-page (PDF p211) had no parseable FAA header within 5 pages; falling back to offset-derived `211`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "e69a208e46d8d414",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.5 start-page (PDF p210) had no parseable FAA header within 5 pages; falling back to offset-derived `210`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "ea57c81c4902ad9f",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.12 end-page (PDF p212) had no parseable FAA header within 5 pages; falling back to offset-derived `212`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "eb48537a5971f1a2",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.4 end-page (PDF p210) had no parseable FAA header within 5 pages; falling back to offset-derived `210`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "ef625df3af31bc0f",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.2 end-page (PDF p209) had no parseable FAA header within 5 pages; falling back to offset-derived `209`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "effd3d764ac11787",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.15 start-page (PDF p213) had no parseable FAA header within 5 pages; falling back to offset-derived `213`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "f27c71b8f1636c2f",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.3 start-page (PDF p209) had no parseable FAA header within 5 pages; falling back to offset-derived `209`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "f43e4cb5073a44ce",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.1 start-page (PDF p209) had no parseable FAA header within 5 pages; falling back to offset-derived `209`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "f852dfd2894040bf",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 2 start-page (PDF p4) had no parseable FAA header within 5 pages; falling back to offset-derived `4`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "fecc577f1679eb5d",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.22 end-page (PDF p215) had no parseable FAA header within 5 pages; falling back to offset-derived `215`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "ff95fafa432dca71",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 17.4 start-page (PDF p210) had no parseable FAA header within 5 pages; falling back to offset-derived `210`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "fe12aa37644d6927",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "13",
+      "message": "Table on page 194 kept as HTML fallback: no body rows after padding strip."
+    },
+    {
+      "id": "86b452b65eccfd61",
+      "code": "table-cell-merge-ambiguity",
+      "section_code": "16",
+      "message": "Table on page 206 kept as HTML fallback: no body rows after padding strip."
+    },
+    {
+      "id": "323431150c20dbe5",
+      "code": "tablish-block-not-converted",
+      "section_code": "13",
+      "message": "Table 0 in §13 kept as raw HTML embed: no body rows after padding strip."
+    },
+    {
+      "id": "958ec8edd8fc60f4",
+      "code": "tablish-block-not-converted",
+      "section_code": "16",
+      "message": "Table 0 in §16 kept as raw HTML embed: no body rows after padding strip."
+    }
+  ]
+}
