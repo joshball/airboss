@@ -62,14 +62,18 @@ async function handleCitationSelect(selection: CitationPickerSelection): Promise
 		headers: { accept: 'application/json' },
 	});
 	if (!res.ok) {
-		// Surface the actionResult error message when present.
+		// Surface the actionResult error message when present, falling back
+		// to a user-safe default if the body wasn't JSON. We attach the HTTP
+		// status + URL as `cause` so an upstream toast / debugger can inspect
+		// the failure without forcing the user-visible string to leak details.
+		let message = 'Could not add citation.';
 		try {
 			const payload = await res.json();
-			const message = payload?.data?.fieldErrors?._ ?? 'Could not add citation.';
-			throw new Error(message);
-		} catch (err) {
-			throw err instanceof Error ? err : new Error('Could not add citation.');
+			if (payload?.data?.fieldErrors?._) message = payload.data.fieldErrors._;
+		} catch {
+			// body wasn't JSON -- keep the default message
 		}
+		throw new Error(message, { cause: { status: res.status, url: res.url } });
 	}
 	citationPickerOpen = false;
 	await invalidateAll();
