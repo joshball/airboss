@@ -123,6 +123,36 @@ These ideas surfaced during the apply-errata-and-afh-mosaic build on 2026-04-28.
 | Evidence packet integrity hash | Phase 2 design session 2026-03-27 | Include a server-computed hash of the run state in the evidence packet that cannot be forged by the client. Server verifies hash at completion. Raises bar for tampered run state submissions.                                                        | Under consideration -- design into scenario player complete action |
 | AFK detection                  | Phase 2 design session 2026-03-27 | If scenario player receives no input for an extended period, mark the run as potentially AFK in the evidence packet. FAA audit can flag these for manual review.                                                                                      | Under consideration                                                |
 
+### Flightbag as a Rich Reading & Studying Surface (2026-05-03)
+
+A reading-as-studying experience for flightbag, layered on top of the canonical reference reader. Captured during the flightbag-reader review session. **Big surface — multiple subsystems, deserves its own work-package suite when promoted.**
+
+Core thesis: when a student opens a handbook section, they're not just reading -- they're studying. The reader should make that studying durable. Every layer below builds on the same `(user, reference_section)` pair as its key.
+
+Subsystems (each its own feature WP when promoted):
+
+1. **Read tracking.** Per-(user, reference_section) read count + last-read timestamp + total dwell time. Surfaced in the section header ("you've read this 3 times; last on 2026-05-01") and in the TOC ("3/12 sections read"). Quiet feedback that the student is making progress.
+2. **Self-rated understanding.** A 1-5 (or thumbs / dots) confidence rating per section, stored per user. Aggregates into a per-chapter / per-handbook heatmap. Drives spaced-rep prioritization later.
+3. **Author Q&A from the reader.** A "make a card from this" affordance on any section: highlight a passage, write a question + answer, the card lands in the student's study deck pinned to that section. Optional flag: share with the public deck for that section.
+4. **Per-section community Q&A.** Each section shows a list of cards/questions other learners have authored against it. Filterable by tags (oral-prep, checkride, knowledge-test). Long term: editorial merge of community decks into curated decks, similar to Anki shared decks but with provenance.
+5. **Highlights.** Yellow / pink / green highlights on any text span. Stored per-user per-section with the span anchors. Surfaced in a "my highlights" view, optionally tagged.
+6. **Inline comments (Google-Docs style).** Comment on a span. Three modes: (a) **ask CFI** -- routes to the user's instructor or course owner for answer; (b) **public question** -- visible to all learners on this section, anyone can answer; (c) **private note** -- only the author sees. Threading on each comment. Comments survive across editions (anchor by content hash, not by ordinal).
+7. **Implicit understanding inference.** Combine self-rated understanding (#2), Q&A accuracy (cards from #3 over time), and dwell-time / re-read patterns (#1) to compute an inferred mastery signal per section. Feeds the broader study engine and scenario targeting.
+8. **A surfaced "my study" view.** Single page that aggregates: my highlights, my comments + replies, my open questions to CFI, my cards by section, my self-ratings, my coverage map. The student's personal study journal of the references.
+
+Source: 2026-05-03 conversation while reviewing the IFH section reader.
+
+Why it matters: this turns the canonical references app from a static reader into the place students do their reading-based studying. Differentiator from every other FIRC + ground-school product, all of which treat the FAA texts as inert PDFs. Aligns with the "Student journal / year-long learning log" idea in Course Design and "Learner-directed course shaping" -- this is the surface those ideas plug into.
+
+Open questions to resolve before promoting:
+
+- Auth surface: flightbag is currently public-readable, no auth. Adding per-user state requires either (a) auth in flightbag, (b) cross-app session bridging from study/sim, or (c) an embedded reader inside study that wraps flightbag.
+- Anchor stability: comments/highlights need to survive section re-extraction. Anchor by content hash + textual span, not by character offset. This is real work; bookmarklet/Hypothes.is-style.
+- Privacy / sharing model: who sees what, by default? CFI-tier access vs public-domain Q&A.
+- Spam / moderation for public Q&A.
+
+Status: New -- captured 2026-05-03. Not promoted. Re-examine in next 2-week IDEAS review.
+
 ## 2026-04-23 Annotations
 
 Per-idea status notes from the 2026-04-23 review walk. Kept separate from the tables so column widths stay stable.
