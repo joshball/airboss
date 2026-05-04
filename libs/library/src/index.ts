@@ -19,6 +19,7 @@
  *   import type { RenderedSectionProps } from '@ab/library';
  */
 
+export type { BreadcrumbSegment, BreadcrumbsProps } from './Breadcrumbs.svelte';
 export type { CitationChipProps } from './CitationChip.svelte';
 export type { ReaderNavData, ReaderNavLink, ReaderNavProps } from './ReaderNav.svelte';
 export type { RenderedSectionFigure, RenderedSectionProps } from './RenderedSection.svelte';
