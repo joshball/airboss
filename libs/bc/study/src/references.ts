@@ -173,6 +173,17 @@ export async function getReferenceById(id: string, db: Db = defaultDb): Promise<
 	return row;
 }
 
+/**
+ * Resolve a single `reference_section` row by id. Returns null when no row
+ * exists (e.g. a stale page reposting after the section was re-ingested).
+ * Used by the flightbag heartbeat endpoint to validate the target before
+ * crediting reading time.
+ */
+export async function getReferenceSectionById(id: string, db: Db = defaultDb): Promise<ReferenceSectionRow | null> {
+	const rows = await db.select().from(referenceSection).where(eq(referenceSection.id, id)).limit(1);
+	return rows[0] ?? null;
+}
+
 /** Chapter rows for a reference, ordered by ordinal. */
 export async function listHandbookChapters(referenceId: string, db: Db = defaultDb): Promise<ReferenceSectionRow[]> {
 	return db
@@ -661,6 +672,41 @@ export async function getReadState(
 		)
 		.limit(1);
 	return rows[0] ?? null;
+}
+
+/**
+ * Bulk fetch every read-state row for one user across one reference. Powers
+ * the flightbag's TOC drawer checkmark column -- we render the entire
+ * reading order, so loading per-section state via {@link getReadState} would
+ * fan out N round-trips per page render.
+ *
+ * One round-trip: inner-join on `reference_section.reference_id = $1` so the
+ * filter happens in Postgres. Returns the rows the user has any state for;
+ * sections the user has never opened produce no row (the caller treats
+ * absence as "unread").
+ */
+export async function listReadStatesForReference(
+	userId: string,
+	referenceId: string,
+	db: Db = defaultDb,
+): Promise<ReferenceSectionReadStateRow[]> {
+	return db
+		.select({
+			userId: referenceSectionReadState.userId,
+			referenceSectionId: referenceSectionReadState.referenceSectionId,
+			status: referenceSectionReadState.status,
+			comprehended: referenceSectionReadState.comprehended,
+			lastReadAt: referenceSectionReadState.lastReadAt,
+			openedCount: referenceSectionReadState.openedCount,
+			totalSecondsVisible: referenceSectionReadState.totalSecondsVisible,
+			notesMd: referenceSectionReadState.notesMd,
+			seedOrigin: referenceSectionReadState.seedOrigin,
+			createdAt: referenceSectionReadState.createdAt,
+			updatedAt: referenceSectionReadState.updatedAt,
+		})
+		.from(referenceSectionReadState)
+		.innerJoin(referenceSection, eq(referenceSectionReadState.referenceSectionId, referenceSection.id))
+		.where(and(eq(referenceSectionReadState.userId, userId), eq(referenceSection.referenceId, referenceId)));
 }
 
 export interface HandbookProgressSummary {
