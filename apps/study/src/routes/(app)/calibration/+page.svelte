@@ -11,9 +11,11 @@ import {
 	SESSION_MODES,
 } from '@ab/constants';
 import Button from '@ab/ui/components/Button.svelte';
+import Card from '@ab/ui/components/Card.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import ScoreCard from '@ab/ui/components/ScoreCard.svelte';
+import ScoreMeta from '@ab/ui/components/ScoreMeta.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -254,16 +256,12 @@ const interpretation = $derived(
 				{/if}
 			{/snippet}
 			{#snippet meta()}
-				<dl class="score-meta">
-					<div>
-						<dt>Data points</dt>
-						<dd>{pointCount}</dd>
-					</div>
-					<div>
-						<dt>Domains with data</dt>
-						<dd>{calibration.domains.length}</dd>
-					</div>
-				</dl>
+				<ScoreMeta
+					items={[
+						{ label: 'Data points', value: pointCount, testId: 'data-points' },
+						{ label: 'Domains with data', value: calibration.domains.length, testId: 'domains' },
+					]}
+				/>
 			{/snippet}
 		</ScoreCard>
 
@@ -278,8 +276,8 @@ const interpretation = $derived(
 			</article>
 		{/if}
 
-		<article class="chart-card">
-			<h2>By confidence level</h2>
+		<Card ariaLabelledby="calibration-by-bucket">
+			{#snippet header()}<h2 id="calibration-by-bucket">By confidence level</h2>{/snippet}
 			<p class="hint">How often you were correct, compared to what that confidence level predicts.</p>
 			<ul class="buckets">
 				{#each calibration.buckets as bucket (bucket.level)}
@@ -324,10 +322,10 @@ const interpretation = $derived(
 					</li>
 				{/each}
 			</ul>
-		</article>
+		</Card>
 
-		<article class="domains-card">
-			<h2>By domain</h2>
+		<Card ariaLabelledby="calibration-by-domain">
+			{#snippet header()}<h2 id="calibration-by-domain">By domain</h2>{/snippet}
 			{#if calibration.domains.length === 0}
 				<p class="empty-note">No domain has enough data yet. Keep rating confidence across different topics.</p>
 			{:else}
@@ -367,10 +365,10 @@ const interpretation = $derived(
 					</tbody>
 				</table>
 			{/if}
-		</article>
+		</Card>
 
-		<article class="trend-card">
-			<h2>Last {CALIBRATION_TREND_WINDOW_DAYS} days</h2>
+		<Card ariaLabelledby="calibration-trend">
+			{#snippet header()}<h2 id="calibration-trend">Last {CALIBRATION_TREND_WINDOW_DAYS} days</h2>{/snippet}
 			{#if lastScore === null}
 				<p class="empty-note">No complete day yet. Keep going -- the trend appears once any day has enough data.</p>
 			{:else}
@@ -398,7 +396,7 @@ const interpretation = $derived(
 					{/if}
 				</div>
 			{/if}
-		</article>
+		</Card>
 	{/if}
 </section>
 
@@ -414,43 +412,10 @@ const interpretation = $derived(
 		color: var(--ink-subtle);
 	}
 
-	.score-meta {
-		display: flex;
-		gap: var(--space-xl);
-		margin: 0;
-	}
-
-	.score-meta div {
-		display: flex;
-		flex-direction: column;
-	}
-
-	.score-meta dt {
-		font-size: var(--type-ui-caption-size);
-		color: var(--ink-subtle);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-caps);
-	}
-
-	.score-meta dd {
-		margin: 0;
-		font-size: var(--type-heading-2-size);
-		font-weight: 600;
-		color: var(--ink-body);
-	}
-
-	.chart-card,
-	.domains-card,
-	.trend-card {
-		background: var(--ink-inverse);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-lg);
-		padding: var(--space-xl);
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-md);
-	}
-
+	/* The three by-bucket / by-domain / by-day cards moved to <Card>.
+	 * The interpretation-card stays inline -- it is a row-flex banner with
+	 * a different visual treatment (action-default wash + flex-wrap CTA),
+	 * not a panel-shape Card body. */
 	.interpretation-card {
 		background: var(--action-default-wash);
 		border: 1px solid var(--action-default-edge);
@@ -472,9 +437,10 @@ const interpretation = $derived(
 		min-width: 0;
 	}
 
-	.chart-card h2,
-	.domains-card h2,
-	.trend-card h2 {
+	/* Card header h2s. Scoped to <h2> because every h2 on the page now
+	 * lives inside a <Card> header snippet -- the route no longer owns
+	 * any free-standing h2s. */
+	h2 {
 		margin: 0;
 		font-size: var(--type-reading-lead-size);
 		color: var(--ink-body);
