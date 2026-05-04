@@ -123,6 +123,7 @@ def write_outputs(
     table_warnings: list[TableWarning],
     extraction_metadata: dict[str, object] | None = None,
     extra_warnings: list[str] | None = None,
+    section_metadata: dict[str, dict[str, str]] | None = None,
 ) -> WriteSummary:
     root = ensure_dir(edition_root(config.document_slug, config.edition))
 
@@ -174,22 +175,27 @@ def write_outputs(
         out_path.write_text(markdown_text, encoding="utf-8")
 
         content_hash = hashlib.sha256(markdown_text.encode("utf-8")).hexdigest()
-        manifest_sections.append(
-            {
-                "level": node.level,
-                "code": node.code,
-                "ordinal": node.ordinal,
-                "parent_code": node.parent_code,
-                "title": node.title,
-                "faa_page_start": body.faa_page_start,
-                "faa_page_end": body.faa_page_end,
-                "source_locator": _source_locator(config, node, body),
-                "body_path": relative_to_repo(out_path),
-                "content_hash": content_hash,
-                "has_figures": bool(section_figs),
-                "has_tables": bool(section_tables),
-            }
-        )
+        section_entry: dict[str, object] = {
+            "level": node.level,
+            "code": node.code,
+            "ordinal": node.ordinal,
+            "parent_code": node.parent_code,
+            "title": node.title,
+            "faa_page_start": body.faa_page_start,
+            "faa_page_end": body.faa_page_end,
+            "source_locator": _source_locator(config, node, body),
+            "body_path": relative_to_repo(out_path),
+            "content_hash": content_hash,
+            "has_figures": bool(section_figs),
+            "has_tables": bool(section_tables),
+        }
+        # Attach soft-fail metadata when supplied (front-matter capture or
+        # empty-section policy). The sectionMetadataSchema is the closed
+        # contract on the TS side; only `extraction_status` is consumed today.
+        meta = section_metadata.get(node.code) if section_metadata else None
+        if meta:
+            section_entry["metadata"] = dict(meta)
+        manifest_sections.append(section_entry)
         sections_written += 1
 
     manifest_figures = [
@@ -317,12 +323,19 @@ def _resolve_output_path(
 
     Chapter overview: `<root>/<NN>-<chapter-slug>/00-<chapter-slug>.md`.
     Section / subsection: `<root>/<NN>-<chapter-slug>/<MM[-PP]>-<title-slug>.md`.
+    Front-matter: `<root>/front-matter/<NN>-<title-slug>.md` (peer to chapter
+    dirs, not nested under one). The flat layout matches
+    `front_matter_body_relpath_under_edition` in `ingest/front_matter.py`.
 
     The chapter slug is looked up from `chapter_slug_by_code`, keyed on the
     bare chapter code (`'1'`, not `'01'`). Falls back to `'section'` only if
     a non-chapter node has no recorded parent chapter (defensive; outline
     builder guarantees one).
     """
+    if node.level == "front-matter":
+        # Ordinal is 0-indexed per FrontMatterSection contract; pad to 2.
+        title_slug = _title_slug(node.title)
+        return root / "front-matter" / f"{node.ordinal:02d}-{title_slug}.md"
     code_parts = node.code.split(".")
     chapter_code = code_parts[0]
     chapter = chapter_code.zfill(2)
@@ -343,7 +356,13 @@ def _source_locator(config: HandbookConfig, node: OutlineNode, body: SectionBody
     the surrounding context already implies "this is a page number" and
     the prefix interferes with column alignment in the chapter / section
     list views. Format: `PHAK Ch 12 §9 (12-7)` or `PHAK Ch 12 (12-1..12-26)`.
+
+    Front-matter sections sit outside the chapter ordinal namespace; their
+    citation reads `PHAK Front Matter -- Cover` so the chapter-list view
+    doesn't show `Ch 0 §1` for the cover page.
     """
+    if node.level == "front-matter":
+        return f"{config.document_slug.upper()} Front Matter -- {node.title}"
     code_parts = node.code.split(".")
     pieces: list[str] = [config.document_slug.upper()]
     pieces.append(f"Ch {code_parts[0]}")

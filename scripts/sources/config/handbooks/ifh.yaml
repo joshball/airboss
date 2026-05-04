@@ -98,6 +98,17 @@ heading_style:
 page_label_walk_back: 5
 chapter_overrides: {}
 
+# Front-matter PDF page range (1-indexed, inclusive). Pages 1..19 cover the
+# notice page, title pages, preface ("This Instrument Flying Handbook is
+# designed..."), acknowledgments, the substantive prose introduction
+# ("Is an Instrument Rating Necessary?"), and the printed Table of
+# Contents (roman-numeral pagination iii..xvi); chapter 1 ("National
+# Airspace System") begins at PDF page 20 (printed FAA page 1-1). Per
+# WP-HANDBOOK-RE-EXTRACTION-V2 sub-phase 1D. The "real introduction" the
+# IFH user-report flagged ("Is an instrument rating necessary?") lives
+# in this range.
+front_matter_page_range: [1, 19]
+
 # Declarative errata list. IFH has 3 FAA-published amendment PDFs (errata
 # + 2 addenda) but their merge is out of scope for this WP per the spec;
 # tracked under a follow-up ADR-020 errata WP.
