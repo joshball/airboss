@@ -21,14 +21,10 @@ Figure 2-2. Audio panel.
 Figure 2-1. Typical navigation/communication installation.
 
 
-![Figure 2-11. Center radar displays.
-Figure 2-12. A center controller’s scope.
-Figure 2-13. A/FD center frequencies listing.
-A common clearance in these situations is “When able, 
-proceed direct to the Astoria VOR…” The words “when able” 
-mean to proceed to the waypoint, intersection, or NAVAID 
-when the pilot is able t](/handbooks/ifh/FAA-H-8083-15B/figures/fig-2-00-center-radar-displays-figure-2-12-a-center-contr.png)
+![Figure 2-10. A portion of the New York area tower en route list (from the A/FD).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-2-00-a-portion-of-the-new-york-area-tower-en-route-li.png)
 
-<div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-2-00-untitled.html">
-<table><thead><tr><th>Call sign—Northwest 196 Departure point—San Diego</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Altitude—37,000 feet Destination—Minneapolis</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
-</div>
+| Call sign—Northwest 196 Departure point—San Diego |
+| --- |
+| Altitude—37,000 feet Destination—Minneapolis |
+
+<a class="handbook-table-source" href="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-2-00-untitled.html">Open original</a>

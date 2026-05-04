@@ -47,7 +47,7 @@ flight, slow Figure 7-3. Pitch attitude and airspeed in level flight, normal</th
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-7-01-untitled.html">
-<table><thead><tr><th>Constant Airsp</th><th>eed Constant Pitch</th></tr></thead><tbody><tr><td></td><td></td></tr></tbody></table>
+<table><thead><tr><th>Constant Airsp</th><th>eed Constant Pitch</th></tr></thead><tbody></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-7-02-untitled.html">
@@ -72,11 +72,11 @@ porting bank</td><td></td></tr></tbody></table>
 29.8
 9.9230.0
 Primary
-as throt</th><th></th></tr></thead><tbody><tr><td>rting pitch and ban
+as throt</th></tr></thead><tbody><tr><td>rting pitch and ban
 y power as
 ed approaches
 d value
-rting bank</td><td></td><td></td></tr></tbody></table>
+rting bank</td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-7-04-untitled.html">
@@ -86,9 +86,9 @@ wer
 29.8
 9.9230.0
 Supporting power
-g bank</th></tr></thead><tbody><tr><td></td><td></td><td></td></tr><tr><td>rt</td><td>in</td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td>ry po
+g bank</th></tr></thead><tbody><tr><td>rt</td><td>in</td><td></td></tr><tr><td>ry po
 rtin</td><td></td><td>we
-g ba</td></tr><tr><td></td><td></td><td></td></tr></tbody></table>
+g ba</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-7-05-untitled.html">
@@ -96,7 +96,7 @@ g ba</td></tr><tr><td></td><td></td><td></td></tr></tbody></table>
 29.8
 9.9230.0
 Primary power
-g bank</th></tr></thead><tbody><tr><td>ortin</td><td></td></tr><tr><td>ortin</td><td></td></tr><tr><td></td><td></td></tr></tbody></table>
+g bank</th></tr></thead><tbody><tr><td>ortin</td><td></td></tr><tr><td>ortin</td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-7-06-untitled.html">
@@ -110,7 +110,7 @@ Supporting pitch</th><th></th><th>ch and bank
 29.8
 9.9230.0
 nk</th></tr></thead><tbody><tr><td></td><td>porting pit</td><td></td></tr><tr><td></td><td>ary pitch
-porting ba</td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td>ary bank</td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table>
+porting ba</td><td></td></tr><tr><td></td><td>ary bank</td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-7-07-untitled.html">
@@ -118,9 +118,9 @@ porting ba</td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><t
 ower
 29.8
 9.9230.0
-g bank</th></tr></thead><tbody><tr><td>portin</td><td></td></tr><tr><td></td><td></td></tr><tr><td>ary p
+g bank</th></tr></thead><tbody><tr><td>portin</td><td></td></tr><tr><td>ary p
 portin</td><td>ower
-g ban</td></tr><tr><td></td><td></td></tr></tbody></table>
+g ban</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-7-08-untitled.html">
@@ -131,9 +131,9 @@ g pitch and bank
 ower as
 pproaches
 lue
-g bank</th></tr></thead><tbody><tr><td>ary p</td><td></td></tr><tr><td></td><td></td></tr><tr><td>portin</td><td></td></tr><tr><td>ary p
+g bank</th></tr></thead><tbody><tr><td>ary p</td><td></td></tr><tr><td>portin</td><td></td></tr><tr><td>ary p
 peed a
-ired va</td><td></td></tr><tr><td>portin</td><td>g ban</td></tr><tr><td></td><td></td></tr></tbody></table>
+ired va</td><td></td></tr><tr><td>portin</td><td>g ban</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-7-09-untitled.html">
@@ -152,7 +152,7 @@ pporting ba</td><td></td></tr><tr><td>mary bank</td><td></td></tr></tbody></tabl
 Add power at
 100'-150' lead
 k</th></tr></thead><tbody><tr><td>orting pitc
-orting ban</td><td></td></tr><tr><td></td><td></td></tr><tr><td>ry bank</td><td></td></tr></tbody></table>
+orting ban</td><td></td></tr><tr><td>ry bank</td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-7-11-untitled.html">
@@ -170,9 +170,9 @@ ower
 9.9230.0
 Primary power
 at 50' lead
-g bank</th><th></th></tr></thead><tbody><tr><td></td><td>tin</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td>p
+g bank</th></tr></thead><tbody><tr><td></td><td>tin</td><td></td></tr><tr><td></td><td>p
 tin</td><td>ower
-g ban</td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>
+g ban</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-7-12-untitled.html">
@@ -182,7 +182,7 @@ ower
 29.8
 9.9230.0
 ank
-d</th></tr></thead><tbody><tr><td>ary pi</td><td></td></tr><tr><td></td><td></td></tr><tr><td>ary b</td><td></td></tr><tr><td></td><td></td></tr><tr><td>ary p
+d</th></tr></thead><tbody><tr><td>ary pi</td><td></td></tr><tr><td>ary b</td><td></td></tr><tr><td>ary p
 ary b
 urn is
 blishe</td><td>ower
@@ -196,12 +196,12 @@ g pitch and bank
 ower
 29.8
 9.9230.0
-ank</th></tr></thead><tbody><tr><td>ry p</td><td></td></tr><tr><td></td><td></td></tr><tr><td>ortin</td><td></td></tr><tr><td></td><td></td></tr><tr><td>ry p
+ank</th></tr></thead><tbody><tr><td>ry p</td><td></td></tr><tr><td>ortin</td><td></td></tr><tr><td>ry p
 ry b</td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-7-14-untitled.html">
-<table><thead><tr><th>9.9230.0 29.8</th><th></th></tr></thead><tbody></tbody></table>
+<table><thead><tr><th>9.9230.0 29.8</th></tr></thead><tbody></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-7-15-untitled.html">
@@ -213,7 +213,7 @@ Primary power
 wer as as throttle is set
 pproaches
 lue
-nk</th></tr></thead><tbody><tr><td>y pi</td><td></td></tr><tr><td></td><td></td></tr><tr><td>tin</td><td></td></tr><tr><td>y po
+nk</th></tr></thead><tbody><tr><td>y pi</td><td></td></tr><tr><td>tin</td><td></td></tr><tr><td>y po
 d a
 va</td><td></td></tr><tr><td>y ba</td><td></td></tr></tbody></table>
 </div>
@@ -517,14 +517,14 @@ XPDR 5537 IDNT LCL23:00:34</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-7-27-untitled.html">
-<table><thead><tr><th></th><th>23.0
-2300</th></tr></thead><tbody><tr><td></td><td></td></tr></tbody></table>
+<table><thead><tr><th>23.0
+2300</th></tr></thead><tbody></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-7-28-untitled.html">
 <table><thead><tr><th>08.00 113.00 WPT _ _ _ _ _ _ DI
 08.00 110.60</th><th>S _ _ . _ NM DTK _ _ _° TRK 360°</th><th>134.000 118.000 COM1
-123.800 118.000 COM2</th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td>5000
+123.800 118.000 COM2</th><th></th><th></th></tr></thead><tbody><tr><td>5000
 150
 500
 5300
@@ -556,7 +556,7 @@ XPDR 5537 IDNT LCL10:12:34</td><td></td><td></td><td></td><td></td></tr><tr><td>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-7-29-untitled.html">
-<table><thead><tr><th></th><th>23.0
+<table><thead><tr><th>23.0
 2300</th></tr></thead><tbody></tbody></table>
 </div>
 
@@ -564,7 +564,7 @@ XPDR 5537 IDNT LCL10:12:34</td><td></td><td></td><td></td><td></td></tr><tr><td>
 <table><thead><tr><th>08.00 113.00 WPT _ _ _ _ _ _ D
 0it8c.h0 a0n d 1b1a0n.k60</th><th></th><th>IS _ _ . _ NM DTK _ _ _° TRK 360°</th><th></th><th>134.000
 123.800</th><th></th><th>1P1r8im.0a0r0y pCiOtMc1h
-118.000 COM2</th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>4000
+118.000 COM2</th><th></th><th></th></tr></thead><tbody><tr><td>4000
 130 4300
 2
 8.0 120 4200
@@ -588,14 +588,14 @@ VOR 1
 1
 338
 5
-XPDR 5537 IDNT LCL10:12:34</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>LCL10:12:34</td><td></td></tr><tr><td>INSET</td><td>PFD</td><td>CDI XPDR</td><td>IDENT</td><td></td><td>TMR/REF</td><td>NRST</td><td></td><td>ALERTS</td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+XPDR 5537 IDNT LCL10:12:34</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>LCL10:12:34</td><td></td></tr><tr><td>INSET</td><td>PFD</td><td>CDI XPDR</td><td>IDENT</td><td></td><td>TMR/REF</td><td>NRST</td><td></td><td>ALERTS</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-7-31-untitled.html">
 <table><thead><tr><th>08.00 113.00
 0t8c.h0 a0n d 1b1a0n.k60</th><th>WPT _ _ _ _ _ _ DIS _ _ . _ NM DTK _ _ _° TRK 360°</th><th>134.000
 123.800</th><th>1S1u8p.p0o0r0t inCOgM 1p
-1d1e8s.ir0e0d0 vCeOrMt2ic</th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>is achieved, t
+1d1e8s.ir0e0d0 vCeOrMt2ic</th><th></th><th></th></tr></thead><tbody><tr><td>is achieved, t
 becomes the
 5000
 150 instrument fo
@@ -630,14 +630,14 @@ XPDR 5537 IDNT LCL10:12:34</td><td></td><td></td><td></td><td></td><td></td></tr
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-7-32-untitled.html">
-<table><thead><tr><th></th><th>18.0
-1800</th></tr></thead><tbody><tr><td></td><td></td></tr></tbody></table>
+<table><thead><tr><th>18.0
+1800</th></tr></thead><tbody></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-7-33-untitled.html">
 <table><thead><tr><th>08.00 113.00 WPT _ _ _ _ _ _ DI
 08.00 110.60</th><th>S _ _ . _ NM DTK _ _ _° TRK 360°</th><th>134.000 118.000 COM1
-123.800 118.000 COM2</th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td>55 30 00 00
+123.800 118.000 COM2</th><th></th><th></th></tr></thead><tbody><tr><td>55 30 00 00
 150
 2
 3.0 140 5200
@@ -673,7 +673,7 @@ NpApV2o r1t0in8g. 0p0it c h110.60</th><th>WPT _ _ _ _ _ _ DIS _ _ . _ NM DTK _ _
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-7-35-untitled.html">
 <table><thead><tr><th>NAV1 108.00 113.00 W
 NAV2 108.00 110.60</th><th></th><th></th><th></th><th></th><th></th><th></th><th>PT _ _ _ _ _ _ DIS _ _ . _ NM DTK _ _ _° TRK 36</th><th></th><th></th><th>0° 134.000 118.000 COM1
-123.800 118.000 COM2</th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td>4000
+123.800 118.000 COM2</th></tr></thead><tbody><tr><td>4000
 6200
 225 00
 130
@@ -685,19 +685,19 @@ NAV2 108.00 110.60</th><th></th><th></th><th></th><th></th><th></th><th></th><th
 3599000 0
 7
 100 80
-40 40 5800</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>1
+40 40 5800</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>1
 90
 5700
 30 30
 80 2
 5600
-GPS ENR</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>ALERTS</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+GPS ENR</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>ALERTS</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-7-36-untitled.html">
 <table><thead><tr><th>NAV1 108.00 113.00 W
 NAV2 108.00 110.60</th><th></th><th></th><th></th><th></th><th></th><th></th><th>PT _ _ _ _ _ _ DIS _ _ . _ NM DTK _ _ _° TRK 36</th><th></th><th></th><th>0° 134.000 118.000 COM1
-123.800 118.000 COM2</th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>5400
+123.800 118.000 COM2</th></tr></thead><tbody><tr><td>5400
 180
 2
 10 10 5300
@@ -713,7 +713,7 @@ NAV2 108.00 110.60</th><th></th><th></th><th></th><th></th><th></th><th></th><th
 130
 -72 150
 4800
-GPS ENR</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>ALERTS</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+GPS ENR</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>ALERTS</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-7-37-untitled.html">
@@ -729,7 +729,7 @@ NAV2 108.00 110.60</th><th>PT _ _ _ _ _ _ DIS _ _ . _ NM DTK _ _ _° TRK 36</th>
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-7-39-untitled.html">
 <table><thead><tr><th></th><th>NAV1 108.00 113.00
 NAV2 108.00 110.60</th><th></th><th></th><th></th><th></th><th></th><th>WPT _ _ _ _ _ _ DIS _ _ . _ NM DTK _ _ _° TRK 3</th><th></th><th></th><th></th><th>60° 134.000 118.000 COM1
-123.800 118.000 COM2</th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td>TRAFFIC 34 11 00 00
+123.800 118.000 COM2</th></tr></thead><tbody><tr><td>TRAFFIC 34 11 00 00
 160
 423 50
 3000
@@ -746,7 +746,7 @@ HDG 273° CRS 071° 2
 2500
 TAS 134KT
 VOR 1
-OAT 7°C XPDR 5537 IDNT LCL23:00:34</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+OAT 7°C XPDR 5537 IDNT LCL23:00:34</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-7-40-untitled.html">
@@ -756,7 +756,7 @@ OAT 7°C XPDR 5537 IDNT LCL23:00:34</td><td></td><td></td><td></td><td></td><td>
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-7-41-untitled.html">
 <table><thead><tr><th></th><th>NAV1 108.00 113.00
 NAV2 108.00 110.60</th><th></th><th></th><th></th><th></th><th></th><th>WPT _ _ _ _ _ _ DIS _ _ . _ NM DTK _ _ _° TRK 36</th><th></th><th></th><th></th><th>0° 134.000 118.000 COM1
-123.800 118.000 COM2</th><th></th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td>4100
+123.800 118.000 COM2</th></tr></thead><tbody><tr><td>4100
 TRAFFIC
 V
 A A E
@@ -772,7 +772,7 @@ HDG
 HDG 273° CRS 071°
 TAS
 VOR 1
-OAT 7°C XPDR 5537 IDNT LCL23:00:34</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+OAT 7°C XPDR 5537 IDNT LCL23:00:34</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-7-42-untitled.html">

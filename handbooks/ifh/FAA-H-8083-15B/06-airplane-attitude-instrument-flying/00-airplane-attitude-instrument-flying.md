@@ -46,70 +46,44 @@ more key instruments.
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-6-00-untitled.html">
 <table><thead><tr><th>30 W 24
-Turning</th><th></th></tr></thead><tbody></tbody></table>
+Turning</th></tr></thead><tbody></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-6-01-untitled.html">
-<table><thead><tr><th>30 W 24</th><th></th></tr></thead><tbody></tbody></table>
+<table><thead><tr><th>30 W 24</th></tr></thead><tbody></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-6-02-untitled.html">
-<table><thead><tr><th>30 W 24</th><th></th></tr></thead><tbody></tbody></table>
+<table><thead><tr><th>30 W 24</th></tr></thead><tbody></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-6-03-untitled.html">
-<table><thead><tr><th>30 W 24</th><th></th></tr></thead><tbody></tbody></table>
+<table><thead><tr><th>30 W 24</th></tr></thead><tbody></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-6-04-untitled.html">
-<table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td>-</td><td></td></tr><tr><td></td><td></td></tr></tbody></table>
+<table><thead><tr><th>-</th></tr></thead><tbody></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-6-05-untitled.html">
-<table><thead><tr><th></th><th></th><th></th></tr></thead><tbody><tr><td>L R
-DC ELEC</td><td></td><td></td></tr><tr><td></td><td>NNAAVV12 110088..0000 111130..0600 WPT _ _ _ _ _ _ DIS _ _ ._ NM DTK _ _ _° TRK 360°113243..080000 111188..000000 CCOOMM12
+<table><thead><tr><th>L R
+DC ELEC</th><th></th></tr></thead><tbody><tr><td></td><td>NNAAVV12 110088..0000 111130..0600 WPT _ _ _ _ _ _ DIS _ _ ._ NM DTK _ _ _° TRK 360°113243..080000 111188..000000 CCOOMM12
 130 44030000
 120 4200 2
-4100 1</td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table>
+4100 1</td></tr></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-6-06-untitled.html">
-<table><thead><tr><th>NNAAVV12 110088..0000 111130..0600 WPT _ _ _ _ _ _ D MI AS P _- _ N. A_V IN GM A T ID OT NK M_A P_ _° TRK 360° 113243..080000 111188..000000 CCOOMM12
-1 13 20 0 4 44 3 20 0 00 0 00 2 27.3
-11 011 0 90 4 341 900 00 00 2 800 1 2090
-0
-90 3900 1
-TAS 8 7100 06 KT 270° 3 48 30 00 0 2
-VOR 1
-OAT 7°C XPDR 5537 IDNT LCL23:00:34</th><th></th></tr></thead><tbody><tr><td>NNAAVV12 110088..0000 111130..0600 WPT _ _ _ _ _ _ D MI AS P _- _ N. A_V IN GM A T ID OT NK M_A P_ _° TRK 360° 113243..080000 111188..000000 CCOOMM12
-1 13 20 0 4 44 3 20 0 00 0 00 2 27.3
-11 011 0 90 4 341 900 00 00 2 800 1 2090
-0
-90 3900 1
-TAS 8 7100 06 KT 270° 3 48 30 00 0 2
-VOR 1
-OAT 7°C XPDR 5537 IDNT LCL23:00:34</td><td></td></tr><tr><td></td><td></td></tr></tbody></table>
-</div>
+| NNAAVV12 110088..0000 111130..0600 WPT _ _ _ _ _ _ D MI AS P _- _ N. A_V IN GM A T ID OT NK M_A P_ _° TRK 360° 113243..080000 111188..000000 CCOOMM12<br>1 13 20 0 4 44 3 20 0 00 0 00 2 27.3<br>11 011 0 90 4 341 900 00 00 2 800 1 2090<br>0<br>90 3900 1<br>TAS 8 7100 06 KT 270° 3 48 30 00 0 2<br>VOR 1<br>OAT 7°C XPDR 5537 IDNT LCL23:00:34 |
+| --- |
+| NNAAVV12 110088..0000 111130..0600 WPT _ _ _ _ _ _ D MI AS P _- _ N. A_V IN GM A T ID OT NK M_A P_ _° TRK 360° 113243..080000 111188..000000 CCOOMM12<br>1 13 20 0 4 44 3 20 0 00 0 00 2 27.3<br>11 011 0 90 4 341 900 00 00 2 800 1 2090<br>0<br>90 3900 1<br>TAS 8 7100 06 KT 270° 3 48 30 00 0 2<br>VOR 1<br>OAT 7°C XPDR 5537 IDNT LCL23:00:34 |
 
-<div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-6-07-untitled.html">
-<table><thead><tr><th>NNAAVV12 110088..0000 111130..0600 WPT _ _ _ _ _ _ DIS _ _ ._ NM DTK _ _ _° TRK 360°113243..080000 111188..000000 CCOOMM12
-130 TRAFFIC 44030000
-18.0 120 4200 2
-1800 11 01 91 0 90 0 4 4 341 0 90 0 000 0 00 6 200 0 1 1
-13 4. 67 OTAATS 8 7 1 00 0 70° KTC 270° 3 438 00 00 2
-200 ALERTS
-116 355 32 8 VOR 1 BdThXea a rRA Prt s oAC Da rf FK R.ap F cU i1a l oeI tP C Ch nd . f.OP F i gA A N sT I FL eH I rG v - i- c- T e A Xr a rH PeffR qDic ’S Rd d .1u e s v ci i on c ng e f ib ga ckup
-XPDR 1200 STBY LCL23:00:34
-ALERTS</th><th></th></tr></thead><tbody><tr><td>NNAAVV12 110088..0000 111130..0600 WPT _ _ _ _ _ _ DIS _ _ ._ NM DTK _ _ _° TRK 360°113243..080000 111188..000000 CCOOMM12
-130 TRAFFIC 44030000
-18.0 120 4200 2
-1800 11 01 91 0 90 0 4 4 341 0 90 0 000 0 00 6 200 0 1 1
-13 4. 67 OTAATS 8 7 1 00 0 70° KTC 270° 3 438 00 00 2
-200 ALERTS
-116 355 32 8 VOR 1 BdThXea a rRA Prt s oAC Da rf FK R.ap F cU i1a l oeI tP C Ch nd . f.OP F i gA A N sT I FL eH I rG v - i- c- T e A Xr a rH PeffR qDic ’S Rd d .1u e s v ci i on c ng e f ib ga ckup
-XPDR 1200 STBY LCL23:00:34
-ALERTS</td><td></td></tr><tr><td></td><td></td></tr></tbody></table>
-</div>
+<a class="handbook-table-source" href="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-6-06-untitled.html">Open original</a>
+
+| NNAAVV12 110088..0000 111130..0600 WPT _ _ _ _ _ _ DIS _ _ ._ NM DTK _ _ _° TRK 360°113243..080000 111188..000000 CCOOMM12<br>130 TRAFFIC 44030000<br>18.0 120 4200 2<br>1800 11 01 91 0 90 0 4 4 341 0 90 0 000 0 00 6 200 0 1 1<br>13 4. 67 OTAATS 8 7 1 00 0 70° KTC 270° 3 438 00 00 2<br>200 ALERTS<br>116 355 32 8 VOR 1 BdThXea a rRA Prt s oAC Da rf FK R.ap F cU i1a l oeI tP C Ch nd . f.OP F i gA A N sT I FL eH I rG v - i- c- T e A Xr a rH PeffR qDic ’S Rd d .1u e s v ci i on c ng e f ib ga ckup<br>XPDR 1200 STBY LCL23:00:34<br>ALERTS |
+| --- |
+| NNAAVV12 110088..0000 111130..0600 WPT _ _ _ _ _ _ DIS _ _ ._ NM DTK _ _ _° TRK 360°113243..080000 111188..000000 CCOOMM12<br>130 TRAFFIC 44030000<br>18.0 120 4200 2<br>1800 11 01 91 0 90 0 4 4 341 0 90 0 000 0 00 6 200 0 1 1<br>13 4. 67 OTAATS 8 7 1 00 0 70° KTC 270° 3 438 00 00 2<br>200 ALERTS<br>116 355 32 8 VOR 1 BdThXea a rRA Prt s oAC Da rf FK R.ap F cU i1a l oeI tP C Ch nd . f.OP F i gA A N sT I FL eH I rG v - i- c- T e A Xr a rH PeffR qDic ’S Rd d .1u e s v ci i on c ng e f ib ga ckup<br>XPDR 1200 STBY LCL23:00:34<br>ALERTS |
+
+<a class="handbook-table-source" href="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-6-07-untitled.html">Open original</a>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-6-08-untitled.html">
 <table><thead><tr><th>Vertical speed indicator
@@ -171,11 +145,11 @@ VOR 1
 338
 5
 OAT 7°C XPDR 5537 IDNT LCL23:00:34
-ALERTS</td></tr><tr><td></td><td></td><td></td></tr><tr><td>Figure 6</td><td></td><td></td></tr></tbody></table>
+ALERTS</td></tr><tr><td>Figure 6</td><td></td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-6-09-untitled.html">
-<table><thead><tr><th></th><th>COM frequency window</th><th></th><th></th></tr></thead><tbody><tr><td>NAV frequency window COM controls Moving map
+<table><thead><tr><th></th><th>COM frequency window</th><th></th></tr></thead><tbody><tr><td>NAV frequency window COM controls Moving map
 N NA AV V1 2 1 11 17 7. .6 90 0 1 11 17 7. .9 60 0 WPT _ _ _ _ _ _ DIS _ _ ._ NM DTK _ _ _° TRK 360°1 13 12 8. .6 57 25 5 1 12 30 2. .0 90 00 0 C CO OM M1 2 N NA AV V1 2 1 11 17 7. .6 90 0 1 11 17 7. .9 60 0 WPT _ _ _ _ _ _ D MI AS P_ -_ N. A_ VN IM G A TD IT OK N _ M A_ P_ ° TRK 360°1 13 12 8. .6 57 25 5 1 12 30 2. .0 90 00 0 C CO OM M1 2
 130 44 30 00 00
 2
@@ -196,7 +170,7 @@ N NA AV V1 2 1 11 17 7. .6 90 0 1 11 17 7. .9 60 0 WPT _ _ _ _ _ _ DIS _ _ ._ NM
 130 44 30 00 00
 2
 120 4200
-110 1</td><td></td><td></td></tr><tr><td></td><td>1
+110 1</td><td></td></tr><tr><td></td><td>1
 100
 NAV cont9rols
 90
@@ -206,7 +180,7 @@ VOTARS 7 100 0 KT
 ourse deviation indicatVoOR r1</td><td>ction
 anel
 NAV section
-audio panel</td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>
+audio panel</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-6-10-untitled.html">
@@ -294,7 +268,7 @@ p</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-6-12-untitled.html">
-<table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>Figure 6-</td><td></td></tr></tbody></table>
+<table><thead><tr><th>Figure 6-</th></tr></thead><tbody></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-6-13-untitled.html">
@@ -337,7 +311,7 @@ o the center (pitch
 e) before proceeding to
 xt direction. For examp
 enter, right, center, up,
-r, down, center.</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table>
+r, down, center.</td><td></td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-6-14-untitled.html">
@@ -381,19 +355,19 @@ Slip/skid indi1c2a3t.o8r00 1
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-6-15-untitled.html">
-<table><thead><tr><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td>NAV1 108
-NAV2 108</td><td>.00 11R3o.l0l 0poinWtPeT r
-.00 110.60</td><td></td><td>_ _ _ _ _ _ DIS _ _ . _ NM DTK _ _ _°</td><td>TRK 360° 134.000 118.000 COM1
-123.800 118.000 COM2</td></tr><tr><td></td><td></td><td>Slip/skid indicator
+<table><thead><tr><th>NAV1 108
+NAV2 108</th><th>.00 11R3o.l0l 0poinWtPeT r
+.00 110.60</th><th></th><th>_ _ _ _ _ _ DIS _ _ . _ NM DTK _ _ _°</th><th>TRK 360° 134.000 118.000 COM1
+123.800 118.000 COM2</th></tr></thead><tbody><tr><td></td><td>Slip/skid indicator
 4000
 130 4300
 2
 0 120 4200
 110 4100 1
-1 60</td><td></td><td></td><td></td></tr><tr><td></td><td>Rudder
+1 60</td><td></td><td></td><td></td></tr><tr><td>Rudder
 23.</td><td>0</td><td>13
 12
-11</td><td></td><td></td></tr><tr><td></td><td>100 44000000
+11</td><td></td><td></td></tr><tr><td>100 44000000
 2300
 9
 20
@@ -447,7 +421,7 @@ ow
 tr
 pl
 lue</th><th></th></tr></thead><tbody><tr><td>so
-m</td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td>u</td><td>r</td></tr><tr><td>e
+m</td><td></td></tr><tr><td>u</td><td>r</td></tr><tr><td>e
 w</td><td>n
 i</td></tr><tr><td>h</td><td>n</td></tr></tbody></table>
 </div>
@@ -514,5 +488,5 @@ TAS 120KT</td><td></td></tr></tbody></table>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-6-18-untitled.html">
 <table><thead><tr><th>_ _ . _ NM DTK _ _ _° TRK 36</th><th>0° 134.000 118.000 COM1
-123.800 118.000 COM2</th></tr></thead><tbody><tr><td></td><td></td></tr></tbody></table>
+123.800 118.000 COM2</th></tr></thead><tbody></tbody></table>
 </div>

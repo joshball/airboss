@@ -33,86 +33,33 @@ Chapter 1
 
 ![Figure 1-8. Obstacle departure procedures (ODP) and standard instrument departures (SID).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-00-obstacle-departure-procedures-odp-and-standard-i.png)
 
-![Figure 1-9. DP chart legend and STAR.
-SE-3, 16 DEC 2010 to 13 JAN 2011
-SE-3, 16 DEC 2010 to 13 JAN 2011](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-01-dp-chart-legend-and-star-se-3-16-dec-2010-to-13-.png)
+![Figure 1-9. DP chart legend and STAR.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-01-dp-chart-legend-and-star.png)
 
 ![Figure 1-10. Instrument approach chart.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-02-instrument-approach-chart.png)
 
-![Figure 1-11. IAP plan view and symbol legends.
-INSTRUMENT APPROACH PROCEDURES (CHARTS) 
- 16 DEC 2010 to 13 JAN 2011
- 16 DEC 2010 to 13 JAN 2011](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-03-iap-plan-view-and-symbol-legends-instrument-appr.png)
+![procedure track are depicted in Figure 1-11. Terrain is depicted  in the plan view portion of all IAPs if the terrain within the plan view exceeds 4,000 feet above the airport elevation, or if within a 6 NM radius of the airport reference point the terrain rises at least 2,000 feet above the airport elevation.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-03-terrain-is-depicted-in-the-plan-view-portion-of-.png)
 
-![Figure 1-12. Basic “T” design of terminal arrival area (TAA) and legend.
-INSTRUMENT APPROACH PROCEDURES (CHARTS) 
- 16 DEC 2010 to 13 JAN 2011
- 16 DEC 2010 to 13 JAN 2011](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-04-basic-t-design-of-terminal-arrival-area-taa-and-.png)
+![Figure 1-11. IAP plan view and symbol legends.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-04-iap-plan-view-and-symbol-legends.png)
 
-![Figure 1-13. 45° procedure turn.
-AUG 2006 to 28 SEP 2006
-Figure 1-14. Holding in lieu of procedure turn.
-Course Reversal Elements in Plan View and 
-Profile View
-Course reversals included in an IAP are depicted in one of 
-three different ways: a 45°/180° procedure turn, a holding 
-pattern in lieu of procedure turn, or a](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-05-45-procedure-turn-aug-2006-to-28-sep-2006-figure.png)
+![Figure 1-12. Basic “T” design of terminal arrival area (TAA) and legend.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-05-basic-t-design-of-terminal-arrival-area-taa-and-.png)
 
-![Figure 1-14. Holding in lieu of procedure turn.
-Course Reversal Elements in Plan View and 
-Profile View
-Course reversals included in an IAP are depicted in one of 
-three different ways: a 45°/180° procedure turn, a holding 
-pattern in lieu of procedure turn, or a teardrop procedure. 
-The maneuvers are required when it](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-06-holding-in-lieu-of-procedure-turn-course-reversa.png)
+![Figure 1-13. 45° procedure turn.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-06-45-procedure-turn.png)
 
-![Figure 1-15. Teardrop procedure.
-Teardrop Procedure
-When a teardrop procedure turn is depicted and a course 
-reversal is required, unless otherwise authorized by ATC, 
-this type of procedure must be executed. [Figure 1-15] The 
-teardrop procedure consists of departure from an IAF on the 
-published outbound course follo](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-07-teardrop-procedure-teardrop-procedure-when-a-tea.png)
+![Figure 1-14. Holding in lieu of procedure turn.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-07-holding-in-lieu-of-procedure-turn.png)
 
-![Figure 1-16. More IAP profile view features.
-FAF Maltese cross 
-Glideslope intercept for full ILS
-MAP 0.4 NM from  
-runway for obstacle  
-clearance 
-Stepdown fix—cannot descend from 5,300' until 4 DME from LMT is identified. 
-Glideslope outer marker altitude
-Glideslope descent angle
-speed](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-08-more-iap-profile-view-features-faf-maltese-cross.png)
+![Figure 1-15. Teardrop procedure.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-08-teardrop-procedure.png)
 
-![Figure 1-17. Vertical descent angle (VDA).
-a climbing turn to the holding altitude (e.g., “Climb to 900, 
-then climbing right turn to 2,500 direct ABC VOR and hold.”)
-When the MAP specifies holding at a facility or fix, the pilot 
-proceeds according to the missed approach track and pattern 
-depicted on the plan view. A](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-09-vertical-descent-angle-vda-a-climbing-turn-to-th.png)
+![Figure 1-16. More IAP profile view features.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-09-more-iap-profile-view-features.png)
 
-![Figure 1-24. RNAV instrument approach charts.
-SE-4, 16 DEC 2010 to 13 JAN 2011
-SE-4, 16 DEC 2010 to 13 JAN 2011
-PILOT BRIEFING
-AND             
-PROCEDURE NOTES
-AIRPORT
-DIAGRAM
-PLAN VIEW
-PROFILE
-MINI-
-MUMS
-Runway lights
-pilot controlled
-VASI
-Alternate minimums
-not authorized](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-10-rnav-instrument-approach-charts-se-4-16-dec-2010.png)
+![Figure 1-17. Vertical descent angle (VDA).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-10-vertical-descent-angle-vda.png)
+
+![Figure 1-23. IAP inoperative components table.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-11-iap-inoperative-components-table.png)
+
+![Figure 1-24. RNAV instrument approach charts.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-12-rnav-instrument-approach-charts.png)
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-1-00-untitled.html">
 <table><thead><tr><th></th><th>The National
-Airspace System</th><th></th></tr></thead><tbody><tr><td>Introduction
+Airspace System</th></tr></thead><tbody><tr><td>Introduction
 The National Airspace System (NAS) is the network of
 United States airspace: air navigation facilities, equipment,
 services, airports or landing areas, aeronautical charts,
@@ -130,7 +77,7 @@ This chapter is a general discussion of airspace classifci ation;
 en route, terminal, and approach procedures; and operations
 within the NAS. Detailed information on the classification
 of airspace, operating procedures, and restrictions is found
-in the Aeronautical Information Manual (AIM).</td><td></td><td></td></tr></tbody></table>
+in the Aeronautical Information Manual (AIM).</td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-1-01-untitled.html">
@@ -148,10 +95,10 @@ s G N aio rpn oto rtw wer ite hd A70 G0 L' A70 G0 L' A70 G0 L' Class D n apo i r
 p
 instrument
 approach Class G Class G Class G
-Class A Class B Class C Class D Class E Class G</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Class A</td><td></td><td>Class B</td><td></td><td>Class C</td><td></td><td>Class D</td><td></td><td>Class E</td><td></td><td>Class G</td><td></td></tr><tr><td></td><td>ATC clearance</td><td></td><td>ATC clearance</td><td></td><td>Prior two-way
+Class A Class B Class C Class D Class E Class G</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td>Class A</td><td></td><td>Class B</td><td></td><td>Class C</td><td></td><td>Class D</td><td></td><td>Class E</td><td></td><td>Class G</td></tr><tr><td></td><td>ATC clearance</td><td></td><td>ATC clearance</td><td></td><td>Prior two-way
 communications</td><td></td><td>Prior two-way
 communications</td><td></td><td>Prior two-way
-communications*</td><td></td><td>None</td><td></td></tr><tr><td></td><td>Instrument
+communications*</td><td></td><td>None</td></tr><tr><td></td><td>Instrument
 Rating</td><td></td><td>Private or Student
 certification—
 local restrictions
@@ -159,18 +106,18 @@ apply.</td><td></td><td>Student
 certificate</td><td></td><td>Student
 certificate</td><td></td><td>Student
 certificate</td><td></td><td>Student
-certificate</td><td></td></tr><tr><td></td><td>Yes</td><td></td><td>Yes</td><td></td><td>Yes</td><td></td><td>Yes</td><td></td><td>Yes, under IFR
-flight plan*</td><td></td><td>None</td><td></td></tr><tr><td></td><td>No</td><td></td><td>Yes</td><td></td><td>Yes</td><td></td><td>Yes</td><td></td><td>Yes</td><td></td><td>N/A</td><td></td></tr><tr><td></td><td>N/A</td><td></td><td>3 statute miles</td><td></td><td>3 statute miles</td><td></td><td>3 statute miles</td><td></td><td>3 statute miles**</td><td></td><td>1 statute mile†</td><td></td></tr><tr><td></td><td>N/A</td><td></td><td>Clear of clouds</td><td></td><td>500' below,
+certificate</td></tr><tr><td></td><td>Yes</td><td></td><td>Yes</td><td></td><td>Yes</td><td></td><td>Yes</td><td></td><td>Yes, under IFR
+flight plan*</td><td></td><td>None</td></tr><tr><td></td><td>No</td><td></td><td>Yes</td><td></td><td>Yes</td><td></td><td>Yes</td><td></td><td>Yes</td><td></td><td>N/A</td></tr><tr><td></td><td>N/A</td><td></td><td>3 statute miles</td><td></td><td>3 statute miles</td><td></td><td>3 statute miles</td><td></td><td>3 statute miles**</td><td></td><td>1 statute mile†</td></tr><tr><td></td><td>N/A</td><td></td><td>Clear of clouds</td><td></td><td>500' below,
 1,000' above,
 2,000' horizontal</td><td></td><td>500' below,
 1,000' above,
 2,000' horizontal</td><td></td><td>500' below,**
 1,000' above,
-2,000' horizontal</td><td></td><td>Clear of clouds†</td><td></td></tr><tr><td></td><td>N/A</td><td></td><td>All</td><td></td><td>IFR aircraft</td><td></td><td>Runway
-operations</td><td></td><td>None</td><td></td><td>None</td><td></td></tr><tr><td></td><td>Yes</td><td></td><td>Yes</td><td></td><td>Yes</td><td></td><td>Workload
+2,000' horizontal</td><td></td><td>Clear of clouds†</td></tr><tr><td></td><td>N/A</td><td></td><td>All</td><td></td><td>IFR aircraft</td><td></td><td>Runway
+operations</td><td></td><td>None</td><td></td><td>None</td></tr><tr><td></td><td>Yes</td><td></td><td>Yes</td><td></td><td>Yes</td><td></td><td>Workload
 permitting</td><td></td><td>Workload
 permitting</td><td></td><td>Workload
-permitting</td><td></td></tr><tr><td>Radar Radar Instrument Instrument Control tower
+permitting</td></tr><tr><td>Radar Radar Instrument Instrument Control tower
 N/A Instrument Instrument approaches approaches
 approaches approaches Weather Weather
 Weather Weather Control tower
@@ -192,19 +139,19 @@ approaches
 Weather
 Control tower</td><td></td><td>Instrument
 approaches
-Weather</td><td></td><td>Control tower</td><td></td></tr></tbody></table>
+Weather</td><td></td><td>Control tower</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-1-02-untitled.html">
 <table><thead><tr><th>NAV1 1
 NAV2 1
 2</th><th>08.00 113.00 WPT _ _ _ _ _ _ DIS _ _ . _ NM DTK _ _ _° TRK 360° 134.000 118.000 COM1
-08.00 110.60 MAP - NAVIGATION MAP 123.800 118.000 COM2</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td>3000
+08.00 110.60 MAP - NAVIGATION MAP 123.800 118.000 COM2</th></tr></thead><tbody><tr><td></td><td>3000
 130 3300
 2
 3.0 120 3200
 110 3100 1
-1 60</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>100 43000000
+1 60</td></tr><tr><td>100 43000000
 2300
 9
 20
@@ -238,7 +185,7 @@ VOR 1
 1652
 1
 338
-5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+5</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-1-03-untitled.html">
@@ -257,12 +204,14 @@ SE-3,
 AIRPORT</td></tr><tr><td></td><td>2011 SE-3, 2010 JAN DEC 16 to 13</td><td></td></tr><tr><td>PROFILE</td><td></td><td></td></tr><tr><td></td><td>Latitude/longitude coordinates</td><td></td></tr></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-1-04-untitled.html">
-<table><thead><tr><th>ourse.</th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td>g in lieu of procedure turn.</td><td></td><td></td><td></td></tr></tbody></table>
-</div>
+| ourse. |
+| --- |
+| g in lieu of procedure turn. |
+
+<a class="handbook-table-source" href="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-1-04-untitled.html">Open original</a>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-1-05-untitled.html">
-<table><thead><tr><th></th><th></th><th>DIAGRAM</th><th></th></tr></thead><tbody><tr><td>PILOT BRIEFING AND OCEDURE NOTES</td><td>C-4, 16 DEC 2010 to 13 JAN 2011</td><td>AIRPORT S</td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td>1102 NAJ 31 ot 0102 CED 61 ,4-CS PLAN VIEW PR</td><td>MINI- PROFILE MUMS</td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>
+<table><thead><tr><th></th><th></th><th>DIAGRAM</th></tr></thead><tbody><tr><td>PILOT BRIEFING AND OCEDURE NOTES</td><td>C-4, 16 DEC 2010 to 13 JAN 2011</td><td>AIRPORT S</td></tr><tr><td></td><td>1102 NAJ 31 ot 0102 CED 61 ,4-CS PLAN VIEW PR</td><td>MINI- PROFILE MUMS</td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-1-06-untitled.html">
@@ -270,9 +219,9 @@ AIRPORT</td></tr><tr><td></td><td>2011 SE-3, 2010 JAN DEC 16 to 13</td><td></td>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-1-07-untitled.html">
-<table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>PROCEDURES (CHARTS)</td><td></td></tr></tbody></table>
+<table><thead><tr><th>PROCEDURES (CHARTS)</th></tr></thead><tbody></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-1-08-untitled.html">
-<table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>ot 0102 CED 61 ,1-WS PLAN VIEW AND PROCEDURE NOTES 2010 to 13 JAN 2011</td><td>1102 NAJ 31 hcaorppA sthgil IPAP dleiF enoz nwodhcuoT noitavele noitavele TM RA OR PG RA II AD SW-1, 16 DEC</td></tr><tr><td>PILOT BRIEFING MINIMUMS PROFILE</td><td></td></tr></tbody></table>
+<table><thead><tr><th>ot 0102 CED 61 ,1-WS PLAN VIEW AND PROCEDURE NOTES 2010 to 13 JAN 2011</th><th>1102 NAJ 31 hcaorppA sthgil IPAP dleiF enoz nwodhcuoT noitavele noitavele TM RA OR PG RA II AD SW-1, 16 DEC</th></tr></thead><tbody><tr><td>PILOT BRIEFING MINIMUMS PROFILE</td><td></td></tr></tbody></table>
 </div>

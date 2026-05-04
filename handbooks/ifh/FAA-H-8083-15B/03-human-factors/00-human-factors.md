@@ -38,7 +38,7 @@ Figure 3-1. Rubik’s cube graphic depicting the visual processing of informatio
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-3-00-untitled.html">
 <table><thead><tr><th></th><th>Human
-Factors</th><th></th></tr></thead><tbody><tr><td>Introduction
+Factors</th></tr></thead><tbody><tr><td>Introduction
 Human factors is a broad field that examines the interaction
 between people, machines, and the environment for the
 purpose of improving performance and reducing errors. As
@@ -58,11 +58,11 @@ sensory systems used for orientation and illusions in flight.
 For more information about physiological and psychological
 factors, medical factors, aeronautical decision-making
 (ADM), and crew resource management (CRM), refer to the
-Pilot’s Handbook of Aeronautical Knowledge.</td><td></td><td></td></tr></tbody></table>
+Pilot’s Handbook of Aeronautical Knowledge.</td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-3-01-untitled.html">
-<table><thead><tr><th></th><th></th><th>A
+<table><thead><tr><th></th><th>A
 idth illusion
 er-than-usual runway can
 an illusion that the aircraft
@@ -83,7 +83,7 @@ on that the aircraft is higher
 ctually is, leading to a lower
 h.
 al approach
-oach due to illusion</th></tr></thead><tbody><tr><td></td><td>Narrower runway Wider runway Figure 3-9
+oach due to illusion</th></tr></thead><tbody><tr><td>Narrower runway Wider runway Figure 3-9
 Runway w
 • A narrow
 created
