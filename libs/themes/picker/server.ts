@@ -21,7 +21,14 @@ import { SECONDS_PER_YEAR } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import type { Cookies, RequestHandler } from '@sveltejs/kit';
 import { error, json } from '@sveltejs/kit';
-import { isThemePreference, parseThemePreference, THEME_COOKIE, type ThemePreference } from '../resolve';
+import {
+	APPEARANCE_COOKIE,
+	isAppearancePreference,
+	isThemePreference,
+	parseThemePreference,
+	THEME_COOKIE,
+	type ThemePreference,
+} from '../resolve';
 
 const log = createLogger('themes:picker');
 
@@ -110,6 +117,72 @@ export function createThemeEndpoint(options: CreateThemeEndpointOptions = {}): R
 			throw error(400, 'invalid theme value');
 		}
 		cookies.set(THEME_COOKIE, value, {
+			path: '/',
+			maxAge: SECONDS_PER_YEAR,
+			sameSite: 'lax',
+			httpOnly: false,
+			secure,
+		});
+		return json({ ok: true, value });
+	};
+}
+
+/**
+ * Build the POST `/appearance` endpoint.
+ *
+ * Sister of `createThemeEndpoint`. Each app exports the result as `POST`
+ * from its `routes/appearance/+server.ts`. Validates the body against
+ * `APPEARANCE_PREFERENCE_VALUES` (`light` | `dark` | `system`).
+ *
+ * Cookie attributes mirror the theme cookie: `Path=/; Max-Age=1y;
+ * SameSite=Lax; HttpOnly=false`. `httpOnly=false` is intentional so the
+ * pre-hydration script can read the value to set `data-appearance` before
+ * SvelteKit hydrates.
+ */
+export interface CreateAppearanceEndpointOptions {
+	/**
+	 * When true, omit the `Secure` cookie attribute (dev / HTTP-localhost).
+	 * Pass `dev` from `$app/environment` at the call site so prod always
+	 * gets `Secure=true`.
+	 */
+	dev?: boolean;
+	/**
+	 * When true, the endpoint rejects requests without `event.locals.user`
+	 * (401). Auth-gated apps (hangar) opt in. Auth-optional apps (study
+	 * pre-login, sim, avionics, flightbag) leave it false: appearance is a
+	 * cosmetic preference and the picker is visible without sign-in.
+	 */
+	requireAuth?: boolean;
+}
+
+export function createAppearanceEndpoint(options: CreateAppearanceEndpointOptions = {}): RequestHandler {
+	const secure = !options.dev;
+	const requireAuth = options.requireAuth === true;
+	return async ({ request, cookies, locals }) => {
+		const ctx = locals as { user?: { id?: string } | null; requestId?: string } | undefined;
+		if (requireAuth && !ctx?.user) {
+			throw error(401, 'sign-in required');
+		}
+		let payload: unknown;
+		try {
+			payload = await request.json();
+		} catch {
+			log.info('appearance payload not JSON', {
+				requestId: ctx?.requestId,
+				userId: ctx?.user?.id ?? null,
+			});
+			throw error(400, 'invalid JSON');
+		}
+		const value = (payload as { value?: unknown } | null)?.value;
+		if (!isAppearancePreference(value)) {
+			log.info('appearance value invalid', {
+				requestId: ctx?.requestId,
+				userId: ctx?.user?.id ?? null,
+				metadata: { value: typeof value === 'string' ? value : typeof value },
+			});
+			throw error(400, 'invalid appearance value');
+		}
+		cookies.set(APPEARANCE_COOKIE, value, {
 			path: '/',
 			maxAge: SECONDS_PER_YEAR,
 			sameSite: 'lax',

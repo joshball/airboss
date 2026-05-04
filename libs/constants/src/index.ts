@@ -244,7 +244,7 @@ export {
 	SOURCE_TYPE_VALUES,
 } from './reference-tags';
 export { ROLE_LABELS, ROLE_VALUES, ROLES, type Role } from './roles';
-export { NAV_LABELS, QUERY_PARAMS, ROUTES } from './routes';
+export { APP_NAMES, type AppId, NAV_LABELS, QUERY_PARAMS, ROUTES } from './routes';
 export { SCHEMAS, type SchemaName } from './schemas';
 export {
 	SIM_AIRCRAFT_IDS,

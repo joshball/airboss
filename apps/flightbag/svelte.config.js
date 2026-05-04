@@ -55,6 +55,8 @@ const config = {
 			'@ab/audit/*': '../../libs/audit/src/*',
 			'@ab/bc-hangar': '../../libs/bc/hangar/src/index.ts',
 			'@ab/bc-hangar/*': '../../libs/bc/hangar/src/*',
+			'@ab/help': '../../libs/help/src/index.ts',
+			'@ab/help/*': '../../libs/help/src/*',
 		},
 		env: {
 			dir: '../../',

@@ -1,18 +1,23 @@
 <script lang="ts">
 import '@ab/themes/generated/tokens.css';
 import { AVIONICS_STORAGE_KEYS, ROUTES } from '@ab/constants';
+import HelpSearch from '@ab/help/ui/HelpSearch.svelte';
 import {
 	type AppearanceMode,
+	type AppearancePreference,
 	DEFAULT_APPEARANCE,
+	DEFAULT_APPEARANCE_PREFERENCE,
 	DEFAULT_THEME_PREFERENCE,
 	resolveThemeSelection,
 	type ThemeId,
 	type ThemePreference,
 } from '@ab/themes';
 import ThemePicker from '@ab/themes/picker/ThemePicker.svelte';
+import AppHeader from '@ab/ui/components/AppHeader.svelte';
 import Banner from '@ab/ui/components/Banner.svelte';
 import type { Snippet } from 'svelte';
 import { page } from '$app/state';
+import '$lib/help/register';
 import type { LayoutData } from './$types';
 
 let { data, children }: { data: LayoutData; children: Snippet } = $props();
@@ -48,7 +53,11 @@ function dismissAuthBanner() {
 // flip immediately while the cookie catches up. Replaces the previous
 // `$effect` mirror anti-pattern.
 let themeOverride = $state<ThemeId | null>(null);
+let appearanceOverride = $state<AppearancePreference | null>(null);
 const themePref = $derived<ThemePreference>(themeOverride ?? data.theme ?? DEFAULT_THEME_PREFERENCE);
+const appearancePref = $derived<AppearancePreference>(
+	appearanceOverride ?? data.appearance ?? DEFAULT_APPEARANCE_PREFERENCE,
+);
 let systemAppearance = $state<AppearanceMode>(DEFAULT_APPEARANCE);
 
 $effect(() => {
@@ -69,7 +78,7 @@ const selection = $derived(
 	resolveThemeSelection({
 		pathname: page.url.pathname,
 		userTheme: themePref,
-		userAppearance: data.appearance,
+		userAppearance: appearancePref,
 		systemAppearance,
 	}),
 );
@@ -101,17 +110,46 @@ async function setTheme(value: ThemeId) {
 		// has already flipped via the $derived above.
 	}
 }
+
+async function setAppearance(value: AppearancePreference) {
+	if (value === appearancePref) return;
+	// Optimistic override mirrors the study layout pattern -- the derived
+	// `appearancePref` flips before the round-trip lands so the user sees
+	// the change immediately.
+	appearanceOverride = value;
+	try {
+		await fetch(ROUTES.APPEARANCE, {
+			method: 'POST',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify({ value }),
+		});
+	} catch {
+		// Non-fatal: the cookie just won't persist this turn.
+	}
+}
 </script>
 
-<header class="avionics-chrome">
-	<span class="brand">airboss / avionics</span>
-	<ThemePicker currentThemeId={selection.theme} onSelect={setTheme} locked={themePickerLocked} />
-</header>
+<AppHeader
+	app="avionics"
+	flightbagHref={data.flightbagOrigin}
+	helpHref={ROUTES.HELP}
+	user={data.user}
+	signInHref={data.signInUrl}
+	appearance={appearancePref}
+	onAppearanceChange={setAppearance}
+>
+	{#snippet helpSearch()}
+		<HelpSearch />
+	{/snippet}
+	{#snippet themePicker()}
+		<ThemePicker currentThemeId={selection.theme} onSelect={setTheme} locked={themePickerLocked} />
+	{/snippet}
+</AppHeader>
 
 {#if showAuthBanner}
 	<div class="auth-banner-strip" data-testid="avionics-auth-banner">
 		<Banner tone="info" dismissible onDismiss={dismissAuthBanner}>
-			<a class="auth-banner-link" href={data.studyLoginUrl}>Sign in via study</a> to record your avionics
+			<a class="auth-banner-link" href={data.signInUrl}>Sign in via study</a> to record your avionics
 			progress. Without an account, the trainer runs but nothing is saved.
 		</Banner>
 	</div>
@@ -120,23 +158,6 @@ async function setTheme(value: ThemeId) {
 {@render children()}
 
 <style>
-	.avionics-chrome {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: var(--space-lg);
-		padding: var(--space-sm) var(--space-xl);
-		border-bottom: 1px solid var(--edge-default);
-		background: var(--surface-panel);
-	}
-
-	.brand {
-		font-weight: var(--type-ui-control-weight);
-		color: var(--ink-muted);
-		font-size: var(--type-ui-label-size);
-		letter-spacing: var(--letter-spacing-wide);
-	}
-
 	.auth-banner-strip {
 		padding: var(--space-xs) var(--space-xl);
 		border-bottom: 1px solid var(--edge-default);

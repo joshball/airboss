@@ -2,7 +2,6 @@
 import { NAV_LABELS, ROUTES } from '@ab/constants';
 import HelpSearch from '@ab/help/ui/HelpSearch.svelte';
 import {
-	APPEARANCE_PREFERENCE_VALUES,
 	type AppearanceMode,
 	type AppearancePreference,
 	DEFAULT_APPEARANCE,
@@ -14,6 +13,7 @@ import {
 } from '@ab/themes';
 import ThemePicker from '@ab/themes/picker/ThemePicker.svelte';
 import ThemeProvider from '@ab/themes/ThemeProvider.svelte';
+import AppHeader from '@ab/ui/components/AppHeader.svelte';
 import type { Snippet } from 'svelte';
 import { page } from '$app/state';
 import '$lib/help/register';
@@ -151,35 +151,15 @@ const selection = $derived(
 	}),
 );
 
-// Identity anchor. Primary label is the user's name; fall back to email if
-// no name is set. The disclosure reveals the email (when it isn't already
-// the label) and the Sign out form action.
-const identityLabel = $derived(data.user.name.trim() || data.user.email);
-const showEmailRow = $derived(identityLabel !== data.user.email);
-// Narrow-viewport fallback: two-letter initials or first letter of the email.
-// Keeps the nav from wrapping when the name is long or the viewport is tight.
-const initials = $derived(computeInitials(data.user.name, data.user.email));
-
-function computeInitials(name: string, email: string): string {
-	const trimmed = name.trim();
-	if (trimmed) {
-		const parts = trimmed.split(/\s+/);
-		const first = parts[0]?.[0] ?? '';
-		const last = parts.length > 1 ? (parts[parts.length - 1]?.[0] ?? '') : '';
-		const combined = `${first}${last}`.toUpperCase();
-		if (combined) return combined;
-	}
-	return (email[0] ?? '?').toUpperCase();
-}
-
-let menu = $state<HTMLDetailsElement | null>(null);
-let helpMenu = $state<HTMLDetailsElement | null>(null);
-let memoryMenu = $state<HTMLDetailsElement | null>(null);
-
 // Disable the picker on routes that hard-require a specific theme (sim).
 // `resolveThemeSelection` already enforces this server-side; the visual
 // affordance keeps the user from wondering why their click was ignored.
 const themePickerLocked = $derived(themePref != null && selection.theme !== themePref);
+
+// Memory + help dropdown state lives in this layout (study-specific nav).
+// Identity-menu state has moved into AppHeader.
+let helpMenu = $state<HTMLDetailsElement | null>(null);
+let memoryMenu = $state<HTMLDetailsElement | null>(null);
 
 function closeDetails(target: HTMLDetailsElement | null) {
 	if (!target?.open) return;
@@ -188,12 +168,8 @@ function closeDetails(target: HTMLDetailsElement | null) {
 	if (summary instanceof HTMLElement) summary.focus();
 }
 
-function handleMenuKeydown(event: KeyboardEvent) {
+function handleNavMenuKeydown(event: KeyboardEvent) {
 	if (event.key !== 'Escape') return;
-	if (menu?.open) {
-		closeDetails(menu);
-		return;
-	}
 	if (memoryMenu?.open) {
 		closeDetails(memoryMenu);
 		return;
@@ -224,128 +200,98 @@ function handleMemoryMenuBlur(event: FocusEvent) {
 function handleMemoryItemClick() {
 	if (memoryMenu) memoryMenu.open = false;
 }
-
-// The identity menu hosts non-navigating controls (theme radios, sign-out
-// form) so it can't rely on link-click teardown to dismiss. Close it when
-// a pointerdown lands outside the <details>; clicks on the appearance
-// radios stay inside and are unaffected.
-function handleDocumentPointerDown(event: PointerEvent) {
-	if (!menu?.open) return;
-	const target = event.target;
-	if (target instanceof Node && menu.contains(target)) return;
-	menu.open = false;
-}
 </script>
 
-<svelte:window onkeydown={handleMenuKeydown} onpointerdown={handleDocumentPointerDown} />
+<svelte:window onkeydown={handleNavMenuKeydown} />
 
+<!--
+	Skip-to-content stays at the layout root (not in AppHeader) so it
+	is the first focusable element on the page.
+-->
 <a class="skip" href="#main">Skip to main content</a>
 
-<nav aria-label="Primary">
-	<div class="nav-sections">
-		<a href={ROUTES.STUDY} aria-current={studyActive ? 'page' : undefined}>{NAV_LABELS.STUDY}</a>
-		<a href={ROUTES.DASHBOARD} aria-current={dashboardActive ? 'page' : undefined}>{NAV_LABELS.DASHBOARD}</a>
-		<a href={ROUTES.PLANS} aria-current={plansActive ? 'page' : undefined}>{NAV_LABELS.PLANS}</a>
-		<a href={ROUTES.CREDENTIALS} aria-current={credentialsActive ? 'page' : undefined}>{NAV_LABELS.CREDENTIALS}</a>
-		<a href={ROUTES.LENS_HANDBOOK} aria-current={lensActive ? 'page' : undefined}>{NAV_LABELS.LENS}</a>
-		<a href={ROUTES.GOALS} aria-current={goalsActive ? 'page' : undefined}>{NAV_LABELS.GOALS}</a>
-		<details class="nav-menu" bind:this={memoryMenu} onfocusout={handleMemoryMenuBlur}>
-			<summary aria-haspopup="menu" aria-current={memoryActive ? 'page' : undefined}>
-				<span>{NAV_LABELS.MEMORY}</span>
-				<span class="chevron" aria-hidden="true">▾</span>
-			</summary>
-			<div class="nav-menu-panel" role="menu" aria-label="Memory sections">
-				<a
-					href={ROUTES.MEMORY}
-					role="menuitem"
-					aria-current={memoryHomeActive ? 'page' : undefined}
-					onclick={handleMemoryItemClick}>{NAV_LABELS.MEMORY_HOME}</a
-				>
-				<a
-					href={ROUTES.MEMORY_BROWSE}
-					role="menuitem"
-					aria-current={memoryBrowseActive ? 'page' : undefined}
-					onclick={handleMemoryItemClick}>{NAV_LABELS.MEMORY_BROWSE}</a
-				>
-				<a
-					href={ROUTES.MEMORY_REVIEW}
-					role="menuitem"
-					aria-current={memoryReviewActive ? 'page' : undefined}
-					onclick={handleMemoryItemClick}>{NAV_LABELS.MEMORY_REVIEW}</a
-				>
-				<a
-					href={ROUTES.MEMORY_NEW}
-					role="menuitem"
-					aria-current={memoryNewActive ? 'page' : undefined}
-					onclick={handleMemoryItemClick}>{NAV_LABELS.MEMORY_NEW}</a
-				>
-			</div>
-		</details>
-		<a href={ROUTES.REPS} aria-current={repsActive ? 'page' : undefined}>{NAV_LABELS.REPS}</a>
-		<a href={ROUTES.FLIGHT} aria-current={flightActive ? 'page' : undefined}>{NAV_LABELS.FLIGHT}</a>
-		<a href={ROUTES.KNOWLEDGE} aria-current={knowledgeActive ? 'page' : undefined}>{NAV_LABELS.KNOWLEDGE}</a>
-		<a href={ROUTES.GLOSSARY} aria-current={glossaryActive ? 'page' : undefined}>{NAV_LABELS.GLOSSARY}</a>
-		<a href={data.flightbagOrigin}>{NAV_LABELS.FLIGHTBAG}</a>
-		<a href={ROUTES.CALIBRATION} aria-current={calibrationActive ? 'page' : undefined}>{NAV_LABELS.CALIBRATION}</a>
-		<details class="nav-menu" bind:this={helpMenu} onfocusout={handleHelpMenuBlur}>
-			<summary aria-haspopup="menu" aria-current={helpActive ? 'page' : undefined}>
-				<span>{NAV_LABELS.HELP}</span>
-				<span class="chevron" aria-hidden="true">▾</span>
-			</summary>
-			<div class="nav-menu-panel" role="menu" aria-label="Help sections">
-				<a
-					href={ROUTES.HELP}
-					role="menuitem"
-					aria-current={helpIndexActive ? 'page' : undefined}
-					onclick={handleHelpItemClick}>{NAV_LABELS.HELP_INDEX}</a
-				>
-				<a
-					href={ROUTES.HELP_CONCEPTS}
-					role="menuitem"
-					aria-current={helpConceptsActive ? 'page' : undefined}
-					onclick={handleHelpItemClick}>{NAV_LABELS.HELP_CONCEPTS}</a
-				>
-			</div>
-		</details>
-	</div>
-
-	<div class="nav-search">
-		<HelpSearch />
-	</div>
-
-	<ThemePicker currentThemeId={selection.theme} onSelect={setTheme} locked={themePickerLocked} />
-
-	<details class="identity" bind:this={menu}>
-		<summary aria-label="Account menu for {identityLabel}">
-			<span class="identity-label-full">{identityLabel}</span>
-			<span class="identity-label-compact" aria-hidden="true">{initials}</span>
-			<span class="chevron" aria-hidden="true">▾</span>
-		</summary>
-		<div class="identity-panel">
-			{#if showEmailRow}
-				<div class="identity-email">{data.user.email}</div>
-			{/if}
-			<fieldset class="identity-appearance">
-				<legend>Appearance</legend>
-				{#each APPEARANCE_PREFERENCE_VALUES as option (option)}
-					<label class="identity-appearance-option">
-						<input
-							type="radio"
-							name="appearance"
-							value={option}
-							checked={appearancePref === option}
-							onchange={() => setAppearance(option)}
-						/>
-						<span class="identity-appearance-label">{option}</span>
-					</label>
-				{/each}
-			</fieldset>
-			<form method="POST" action={ROUTES.LOGOUT} class="identity-signout">
-				<button type="submit">Sign out</button>
-			</form>
+<AppHeader
+	app="study"
+	flightbagHref={data.flightbagOrigin}
+	helpHref={ROUTES.HELP}
+	user={data.user}
+	appearance={appearancePref}
+	onAppearanceChange={setAppearance}
+>
+	{#snippet nav()}
+		<div class="nav-sections" aria-label="Primary">
+			<a href={ROUTES.STUDY} aria-current={studyActive ? 'page' : undefined}>{NAV_LABELS.STUDY}</a>
+			<a href={ROUTES.DASHBOARD} aria-current={dashboardActive ? 'page' : undefined}>{NAV_LABELS.DASHBOARD}</a>
+			<a href={ROUTES.PLANS} aria-current={plansActive ? 'page' : undefined}>{NAV_LABELS.PLANS}</a>
+			<a href={ROUTES.CREDENTIALS} aria-current={credentialsActive ? 'page' : undefined}>{NAV_LABELS.CREDENTIALS}</a>
+			<a href={ROUTES.LENS_HANDBOOK} aria-current={lensActive ? 'page' : undefined}>{NAV_LABELS.LENS}</a>
+			<a href={ROUTES.GOALS} aria-current={goalsActive ? 'page' : undefined}>{NAV_LABELS.GOALS}</a>
+			<details class="nav-menu" bind:this={memoryMenu} onfocusout={handleMemoryMenuBlur}>
+				<summary aria-haspopup="menu" aria-current={memoryActive ? 'page' : undefined}>
+					<span>{NAV_LABELS.MEMORY}</span>
+					<span class="chevron" aria-hidden="true">▾</span>
+				</summary>
+				<div class="nav-menu-panel" role="menu" aria-label="Memory sections">
+					<a
+						href={ROUTES.MEMORY}
+						role="menuitem"
+						aria-current={memoryHomeActive ? 'page' : undefined}
+						onclick={handleMemoryItemClick}>{NAV_LABELS.MEMORY_HOME}</a
+					>
+					<a
+						href={ROUTES.MEMORY_BROWSE}
+						role="menuitem"
+						aria-current={memoryBrowseActive ? 'page' : undefined}
+						onclick={handleMemoryItemClick}>{NAV_LABELS.MEMORY_BROWSE}</a
+					>
+					<a
+						href={ROUTES.MEMORY_REVIEW}
+						role="menuitem"
+						aria-current={memoryReviewActive ? 'page' : undefined}
+						onclick={handleMemoryItemClick}>{NAV_LABELS.MEMORY_REVIEW}</a
+					>
+					<a
+						href={ROUTES.MEMORY_NEW}
+						role="menuitem"
+						aria-current={memoryNewActive ? 'page' : undefined}
+						onclick={handleMemoryItemClick}>{NAV_LABELS.MEMORY_NEW}</a
+					>
+				</div>
+			</details>
+			<a href={ROUTES.REPS} aria-current={repsActive ? 'page' : undefined}>{NAV_LABELS.REPS}</a>
+			<a href={ROUTES.FLIGHT} aria-current={flightActive ? 'page' : undefined}>{NAV_LABELS.FLIGHT}</a>
+			<a href={ROUTES.KNOWLEDGE} aria-current={knowledgeActive ? 'page' : undefined}>{NAV_LABELS.KNOWLEDGE}</a>
+			<a href={ROUTES.GLOSSARY} aria-current={glossaryActive ? 'page' : undefined}>{NAV_LABELS.GLOSSARY}</a>
+			<a href={ROUTES.CALIBRATION} aria-current={calibrationActive ? 'page' : undefined}>{NAV_LABELS.CALIBRATION}</a>
+			<details class="nav-menu" bind:this={helpMenu} onfocusout={handleHelpMenuBlur}>
+				<summary aria-haspopup="menu" aria-current={helpActive ? 'page' : undefined}>
+					<span>{NAV_LABELS.HELP}</span>
+					<span class="chevron" aria-hidden="true">▾</span>
+				</summary>
+				<div class="nav-menu-panel" role="menu" aria-label="Help sections">
+					<a
+						href={ROUTES.HELP}
+						role="menuitem"
+						aria-current={helpIndexActive ? 'page' : undefined}
+						onclick={handleHelpItemClick}>{NAV_LABELS.HELP_INDEX}</a
+					>
+					<a
+						href={ROUTES.HELP_CONCEPTS}
+						role="menuitem"
+						aria-current={helpConceptsActive ? 'page' : undefined}
+						onclick={handleHelpItemClick}>{NAV_LABELS.HELP_CONCEPTS}</a
+					>
+				</div>
+			</details>
 		</div>
-	</details>
-</nav>
+	{/snippet}
+	{#snippet helpSearch()}
+		<HelpSearch />
+	{/snippet}
+	{#snippet themePicker()}
+		<ThemePicker currentThemeId={selection.theme} onSelect={setTheme} locked={themePickerLocked} />
+	{/snippet}
+</AppHeader>
 
 <ThemeProvider theme={selection.theme} appearance={selection.appearance} layout={selection.layout}>
 	<main id="main" tabindex="-1" class:full-bleed={fullBleed}>
@@ -385,23 +331,14 @@ function handleDocumentPointerDown(event: PointerEvent) {
 		top: var(--space-sm);
 	}
 
-	nav {
-		display: flex;
-		flex: 0 0 auto;
-		align-items: center;
-		gap: var(--space-xl);
-		padding: var(--space-lg) var(--space-xl);
-		border-bottom: 1px solid var(--edge-default);
-		background: var(--surface-panel);
-	}
-
 	.nav-sections {
 		display: flex;
 		gap: var(--space-xl);
 		flex-wrap: wrap;
+		align-items: center;
 	}
 
-	nav a {
+	.nav-sections a {
 		color: var(--ink-muted);
 		text-decoration: none;
 		font-weight: var(--type-ui-control-weight);
@@ -409,12 +346,12 @@ function handleDocumentPointerDown(event: PointerEvent) {
 		border-radius: var(--radius-sm);
 	}
 
-	nav a:hover {
+	.nav-sections a:hover {
 		color: var(--ink-body);
 		background: var(--surface-sunken);
 	}
 
-	nav a[aria-current='page'] {
+	.nav-sections a[aria-current='page'] {
 		color: var(--action-default-hover);
 		background: var(--action-default-wash);
 	}
@@ -493,180 +430,23 @@ function handleDocumentPointerDown(event: PointerEvent) {
 	.nav-menu-panel a {
 		padding: var(--space-sm) var(--space-sm);
 		border-radius: var(--radius-sm);
-	}
-
-	.nav-search {
-		margin-left: auto;
-		display: flex;
-		align-items: center;
-	}
-
-	.identity {
-		position: relative;
-	}
-
-	.identity > summary {
-		display: inline-flex;
-		align-items: center;
-		gap: var(--space-2xs);
-		cursor: pointer;
-		list-style: none;
 		color: var(--ink-muted);
-		font-weight: var(--type-ui-control-weight);
-		padding: var(--space-2xs) var(--space-sm);
-		border-radius: var(--radius-sm);
-		user-select: none;
+		text-decoration: none;
 	}
 
-	/* Remove the default marker across browsers. */
-	.identity > summary::-webkit-details-marker {
-		display: none;
-	}
-	.identity > summary::marker {
-		content: '';
-	}
-
-	.identity > summary:hover {
+	.nav-menu-panel a:hover {
 		color: var(--ink-body);
 		background: var(--surface-sunken);
 	}
 
-	.identity > summary:focus-visible {
-		outline: 2px solid var(--focus-ring);
-		outline-offset: 2px;
+	.nav-menu-panel a[aria-current='page'] {
+		color: var(--action-default-hover);
+		background: var(--action-default-wash);
 	}
 
-	.identity[open] > summary {
-		color: var(--ink-body);
-		background: var(--surface-sunken);
-	}
-
-	.identity[open] .chevron {
-		transform: rotate(180deg);
-	}
-
-	.chevron {
-		font-size: var(--type-ui-caption-size);
-		line-height: 1;
-		transition: transform var(--motion-fast);
-	}
-
-	.identity-label-compact {
-		display: none;
-		font-variant: small-caps;
-		letter-spacing: var(--letter-spacing-wide);
-	}
-
-	.identity-panel {
-		position: absolute;
-		right: 0;
-		top: calc(100% + var(--space-2xs));
-		min-width: 12rem;
-		background: var(--surface-panel);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-md);
-		box-shadow: var(--shadow-lg);
-		padding: var(--space-2xs);
-		z-index: var(--z-dropdown);
-	}
-
-	.identity-email {
-		padding: var(--space-sm) var(--space-sm);
-		font-size: var(--type-ui-label-size);
-		color: var(--ink-muted);
-		border-bottom: 1px solid var(--edge-default);
-		margin-bottom: var(--space-2xs);
-		overflow-wrap: anywhere;
-	}
-
-	.identity-appearance {
-		margin: 0;
-		padding: var(--space-sm);
-		border: 0;
-		border-top: 1px solid var(--edge-default);
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-2xs);
-	}
-
-	.identity-appearance legend {
-		padding: 0 0 var(--space-2xs);
-		font-size: var(--type-ui-label-size);
-		color: var(--ink-muted);
-		font-weight: var(--type-ui-control-weight);
-	}
-
-	.identity-appearance-option {
-		display: inline-flex;
-		align-items: center;
-		gap: var(--space-xs);
-		padding: var(--space-2xs) var(--space-2xs);
-		border-radius: var(--radius-sm);
-		cursor: pointer;
-		font-size: var(--type-ui-label-size);
-		color: var(--ink-body);
-	}
-
-	.identity-appearance-option:hover {
-		background: var(--surface-sunken);
-	}
-
-	.identity-appearance-option input {
-		accent-color: var(--action-default);
-	}
-
-	.identity-appearance-label {
-		text-transform: capitalize;
-	}
-
-	.identity-signout {
-		margin: 0;
-		border-top: 1px solid var(--edge-default);
-		padding-top: var(--space-2xs);
-	}
-
-	.identity-signout button {
-		display: block;
-		width: 100%;
-		text-align: left;
-		background: transparent;
-		border: 0;
-		color: var(--ink-muted);
-		font: inherit;
-		padding: var(--space-sm) var(--space-sm);
-		border-radius: var(--radius-sm);
-		cursor: pointer;
-	}
-
-	.identity-signout button:hover {
-		color: var(--ink-body);
-		background: var(--surface-sunken);
-	}
-
-	.identity-signout button:focus-visible {
-		outline: 2px solid var(--focus-ring);
-		outline-offset: 2px;
-	}
-
-	/* Narrow viewports: swap the full name/email label for initials so the
-	   nav stops wrapping around ~600px. The panel still shows the full
-	   identity when opened. */
 	@media (max-width: 640px) {
-		nav {
-			gap: var(--space-md);
-			padding: var(--space-md) var(--space-lg);
-		}
-
 		.nav-sections {
 			gap: var(--space-md);
-		}
-
-		.identity-label-full {
-			display: none;
-		}
-
-		.identity-label-compact {
-			display: inline;
 		}
 	}
 
