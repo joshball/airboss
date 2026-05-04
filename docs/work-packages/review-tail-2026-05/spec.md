@@ -97,15 +97,15 @@ Split `@ab/bc-study` from `@ab/bc-study/build`. The build path imports actor-byp
 
 Mechanical pass replacing `'<func> threw'` with `'<verb> <entity> failed'` and aligning the user-visible noun-phrase across logs + `fail()` messages. Source list in `docs/work/reviews/2026-05-01-study-app-surfaces-dx.md`.
 
-### Heartbeat correctness tail (chunk-1 correctness × 3)
+### Heartbeat correctness tail (chunk-1 correctness × 3) - CLOSED 2026-05-04
 
-- Rating numeric key on the heartbeat payload.
-- Local accumulator on POST failure (today the counter increments even on 5xx).
-- Handbook-asset symlink defence (escape-the-prefix attack on `[...path]`).
+- Rating numeric key (memory/review undo): threaded numeric `ReviewRating` through `PendingUndo`; `recordTally` + `triggerUndo` decrement via a single `ratingTallyKey()` switch keyed off the form-submitted value. Heartbeat schema `delta` is `z.number()` (no coerce); `manifest-validation.test.ts` pins the strict-numeric contract against future regression.
+- Local accumulator on POST failure: `accumulatedSecondsThisLoad += next` already lives inside the `response.ok` branch of the section-reader's `flushPending()` (landed in #468 alongside the single-flight gate + sendBeacon flush). Re-verified against current main.
+- Handbook-asset symlink defence: `realpathSync` runs after the lexical prefix check on `apps/study/src/routes/handbook-asset/[...path]/+server.ts`; canonical-prefix re-check rejects symlink escapes. Pinned by `server.test.ts` (lexical traversal + symlink-escape + happy-path PNG).
 
-### Layout effect-mirror remainder (chunk-1 svelte × 2)
+### Layout effect-mirror remainder (chunk-1 svelte × 2) — CLOSED 2026-05-04
 
-Chunk-5's audit (#568) shipped the convergent fix for 5 layouts. Chunk-1 still flags two remaining sites — verify whether the overlap is real or whether chunk-1's INDEX is just stale; close either way.
+Verified: chunk-5's audit (#568) closed the only chunk-1 site as well. `apps/study/src/routes/(app)/+layout.svelte` was one of the 5 layouts migrated from `$effect(() => { themePref = data.theme })` to the optimistic-override `$derived(override ?? data.theme ?? DEFAULT)` pattern (lines 36-41). The forward-reference MINOR (`selection` referenced before declaration in the document-mirror effect) closed by the same dependency-order rework. Chunk-1's INDEX was stale; updated 2026-05-04 to reflect closure. No remaining work in this cluster — the page-level `state_referenced_locally` suppressions in memory/[id]/_panels, sessions/[id], knowledge/[slug]/learn, plans/* are a different shape (seed-once-from-URL, not mirror-server-data) and remain tracked under the chunk-1 svelte URL-side-effect MAJOR.
 
 ### Route-level CSS extraction (chunk-1 svelte MAJOR)
 
