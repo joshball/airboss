@@ -30,6 +30,19 @@ export const DEV_DB = {
 export const DEV_DB_URL =
 	`postgresql://${DEV_DB.USER}:${DEV_DB.PASSWORD}@${DEV_DB.HOST}:${PORTS.DB}/${DEV_DB.NAME}` as const;
 
+/**
+ * Dedicated database name for the e2e test suite. Lives on the same local
+ * Postgres instance as the dev DB so we don't have to spin up a second
+ * container, but its rows are isolated from `airboss` -- so tests can
+ * truncate, reseed, or otherwise stomp without trashing the developer's
+ * working dataset.
+ */
+export const E2E_DB_NAME = 'airboss_e2e' as const;
+
+/** Connection string for the e2e test database. */
+export const DEV_DB_URL_E2E =
+	`postgresql://${DEV_DB.USER}:${DEV_DB.PASSWORD}@${DEV_DB.HOST}:${PORTS.DB}/${E2E_DB_NAME}` as const;
+
 /** Regex matching connection strings that point at a local dev database. */
 export const DEV_DB_HOST_PATTERN = /@(localhost|127\.0\.0\.1|airboss-db)(:|\/)/;
 

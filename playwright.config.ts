@@ -1,13 +1,70 @@
 import { defineConfig, devices } from '@playwright/test';
-import { PORTS } from './libs/constants/src/ports';
+import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { DEV_DB_URL_E2E, ENV_VARS, PORTS } from './libs/constants/src';
 
-const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? `http://localhost:${PORTS.STUDY}`;
-const flightbagBaseURL = process.env.PLAYWRIGHT_FLIGHTBAG_BASE_URL ?? `http://localhost:${PORTS.FLIGHTBAG}`;
-const hangarBaseURL = process.env.PLAYWRIGHT_HANGAR_BASE_URL ?? `http://localhost:${PORTS.HANGAR}`;
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+// E2E ports = dev ports + 3. Tests get their own vite processes pointed at
+// the e2e database, so a `bun run dev` session can keep running on the
+// canonical ports without colliding. Override via env if you want to point
+// the suite at a deployed preview instead.
+const studyPort = PORTS.STUDY_E2E;
+const hangarPort = PORTS.HANGAR_E2E;
+const flightbagPort = PORTS.FLIGHTBAG_E2E;
+
+const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? `http://127.0.0.1:${studyPort}`;
+const flightbagBaseURL = process.env.PLAYWRIGHT_FLIGHTBAG_BASE_URL ?? `http://127.0.0.1:${flightbagPort}`;
+const hangarBaseURL = process.env.PLAYWRIGHT_HANGAR_BASE_URL ?? `http://127.0.0.1:${hangarPort}`;
+
+// Bun auto-loads `.env` based on the spawned process's cwd. Playwright
+// launches each webServer with `cwd: 'apps/<app>'`, where no .env exists,
+// so vital secrets (BETTER_AUTH_SECRET etc.) never make it into the dev
+// process. We parse the repo-root .env once here and forward the whole
+// payload through `webServer.env`. Anything in the parent shell still
+// wins because process.env is also spread in.
+function loadRootEnv(): Record<string, string> {
+	const path = resolve(__dirname, '.env');
+	const out: Record<string, string> = {};
+	let raw: string;
+	try {
+		raw = readFileSync(path, 'utf8');
+	} catch {
+		return out; // .env optional in CI / fresh clones
+	}
+	for (const line of raw.split('\n')) {
+		const trimmed = line.trim();
+		if (!trimmed || trimmed.startsWith('#')) continue;
+		const eq = trimmed.indexOf('=');
+		if (eq < 0) continue;
+		const key = trimmed.slice(0, eq).trim();
+		let value = trimmed.slice(eq + 1).trim();
+		if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+			value = value.slice(1, -1);
+		}
+		out[key] = value;
+	}
+	return out;
+}
+
+const rootEnv = loadRootEnv();
+
+// Every webServer command inherits this env so the SvelteKit/Drizzle layer
+// connects to the e2e DB instead of the developer's working dataset.
+const e2eEnv = {
+	...rootEnv,
+	[ENV_VARS.DATABASE_URL]: DEV_DB_URL_E2E,
+};
 
 export default defineConfig({
 	testDir: './tests/e2e',
 	outputDir: './tests/e2e/.out',
+	// Provision the e2e DB once per `bun run test e2e`. Drops + recreates
+	// `airboss_e2e`, runs migrations, runs the full seed pipeline. Skipped
+	// when PLAYWRIGHT_SKIP_DB_SETUP=1 -- handy for fast re-runs against a
+	// known-good DB while iterating on a flaky spec.
+	globalSetup: './tests/e2e/global-db-setup.ts',
 	fullyParallel: true,
 	forbidOnly: !!process.env.CI,
 	retries: process.env.CI ? 1 : 0,
@@ -105,24 +162,35 @@ export default defineConfig({
 			testMatch: /hangar-review-queue\/unauthed\/.*\.spec\.ts/,
 		},
 	],
+	// Each webServer launches a dedicated vite process on the e2e port,
+	// pointed at the e2e DB. `reuseExistingServer: false` so we never
+	// silently bind to a `bun run dev` instance that's holding the
+	// developer's working DB open -- that's exactly the cross-talk this
+	// whole isolation pass is here to prevent.
 	webServer: [
 		{
 			command: 'bun run dev',
+			cwd: 'apps/study',
 			url: baseURL,
-			reuseExistingServer: true,
-			timeout: 60_000,
+			reuseExistingServer: false,
+			timeout: 120_000,
+			env: { ...e2eEnv, PORT: String(studyPort) },
 		},
 		{
-			command: 'cd apps/flightbag && bun run dev',
+			command: 'bun run dev',
+			cwd: 'apps/flightbag',
 			url: flightbagBaseURL,
-			reuseExistingServer: true,
-			timeout: 60_000,
+			reuseExistingServer: false,
+			timeout: 120_000,
+			env: { ...e2eEnv, PORT: String(flightbagPort) },
 		},
 		{
-			command: 'cd apps/hangar && bun run dev',
+			command: 'bun run dev',
+			cwd: 'apps/hangar',
 			url: hangarBaseURL,
-			reuseExistingServer: true,
-			timeout: 60_000,
+			reuseExistingServer: false,
+			timeout: 120_000,
+			env: { ...e2eEnv, PORT: String(hangarPort) },
 		},
 	],
 });
