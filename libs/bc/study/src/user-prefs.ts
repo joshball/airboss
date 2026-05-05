@@ -19,6 +19,7 @@ import {
 	RENDER_MODE_VALUES,
 	STUDY_MAP_TAB_VALUES,
 	USER_PREF_KEY_VALUES,
+	USER_PREF_KEYS,
 	type UserPrefKey,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
@@ -56,6 +57,13 @@ export const USER_PREF_SCHEMAS = {
 		(typeof RENDER_MODE_VALUES)[number],
 		...(typeof RENDER_MODE_VALUES)[number][],
 	]),
+	// Owned by study-app-ia-cleanup WP. Value is a JSON object keyed by
+	// `<PageExplainer>` `pageKey`; presence of a `true` flag means the
+	// user collapsed that explainer. Absent / `false` means open by
+	// default. Stored as one row (not one row per page key) so the
+	// closed key list in `USER_PREF_KEYS` does not have to grow with
+	// every new page that mounts an explainer.
+	'study.page_explainer.dismissed': z.record(z.string().min(1), z.literal(true)),
 } satisfies Record<UserPrefKey, z.ZodType>;
 
 export class UnknownUserPrefKeyError extends Error {
@@ -161,4 +169,93 @@ export async function setUserPref(
 		},
 		db,
 	);
+}
+
+/** Map of `pageKey -> true` for explainers the user has dismissed. */
+export type PageExplainerDismissals = Record<string, true>;
+
+/**
+ * Raised when a caller passes an empty `pageKey` to
+ * `setPageExplainerDismissal`. The endpoint's Zod refine catches this
+ * before the BC sees it; the typed error is for direct callers (other
+ * BCs, future internal routes, tests).
+ */
+export class EmptyPageKeyError extends Error {
+	constructor() {
+		super('pageKey must be non-empty');
+		this.name = 'EmptyPageKeyError';
+	}
+}
+
+/**
+ * Read the per-page explainer dismissal map for a user. Returns an empty
+ * object when nothing has been dismissed. The map is the value of the
+ * `study.page_explainer.dismissed` user_pref row.
+ */
+export async function getPageExplainerDismissals(userId: string, db: Db = defaultDb): Promise<PageExplainerDismissals> {
+	const prefs = await getUserPrefs(userId, [USER_PREF_KEYS.PAGE_EXPLAINER_DISMISSED], db);
+	const raw = prefs[USER_PREF_KEYS.PAGE_EXPLAINER_DISMISSED];
+	if (raw === undefined || raw === null || typeof raw !== 'object' || Array.isArray(raw)) return {};
+	const out: PageExplainerDismissals = {};
+	for (const [k, v] of Object.entries(raw as Record<string, UserPrefValue>)) {
+		if (v === true) out[k] = true;
+	}
+	return out;
+}
+
+/**
+ * Set the dismissal flag for a single `pageKey` without overwriting other
+ * pages' dismissal state.
+ *
+ * Concurrency: the read-modify-write runs inside a transaction with
+ * `SELECT ... FOR UPDATE` on the user_pref row, so two simultaneous
+ * toggles for distinct page keys serialize and both land. Same-key
+ * concurrent toggles are last-write-wins, which matches user intent.
+ *
+ * Audit-row size note: the audit row stores the full before/after map
+ * (one JSONB row holds every page's dismissal). After many dismissals
+ * the audit blob grows linearly. This is the cost of "one row per user"
+ * -- replacing the JSON-map shape with one row per (userId, pageKey)
+ * would shrink audit rows but would also force every new page key into
+ * the closed `USER_PREF_KEYS` set. Keep the JSON map until that audit
+ * cost matters.
+ */
+export async function setPageExplainerDismissal(
+	userId: string,
+	pageKey: string,
+	dismissed: boolean,
+	db: Db = defaultDb,
+): Promise<PageExplainerDismissals> {
+	if (pageKey.length === 0) throw new EmptyPageKeyError();
+
+	return db.transaction(async (tx) => {
+		// SELECT ... FOR UPDATE on the (userId, key) row serializes
+		// concurrent toggles for this user without affecting reads from
+		// other rows. If the row doesn't exist yet there's nothing to
+		// lock; the upsert below handles that case.
+		await tx.execute(sql`
+			SELECT 1 FROM study.user_pref
+			WHERE user_id = ${userId}
+			  AND key = ${USER_PREF_KEYS.PAGE_EXPLAINER_DISMISSED}
+			FOR UPDATE
+		`);
+		const current = await getPageExplainerDismissals(userId, tx as unknown as Db);
+		const isCurrentlyDismissed = current[pageKey] === true;
+		// No-op skip: if requested state matches stored state, return
+		// without writing or auditing. Eliminates flip-flop abuse against
+		// the audit log without a rate limiter, and keeps real toggles
+		// snappy.
+		if (isCurrentlyDismissed === dismissed) return current;
+
+		const next: PageExplainerDismissals = { ...current };
+		if (dismissed) {
+			next[pageKey] = true;
+		} else {
+			delete next[pageKey];
+		}
+		// Use the typed setter so the audit row + per-key Zod validation
+		// stay in sync with every other user_pref write.
+		await setUserPref(userId, USER_PREF_KEYS.PAGE_EXPLAINER_DISMISSED, next, tx as unknown as Db);
+		return next;
+	});
 }

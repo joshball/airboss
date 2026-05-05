@@ -28,55 +28,52 @@ Goal: ship the daily-CTA Home, the four explanation surfaces, and the testid con
 
 ### 1.1 Content source (`libs/help/`)
 
-- [ ] Add typed entry map for tooltip definitions: `libs/help/src/glossary/entries.ts` -- `{ key, term, short, longRef, related[] }`.
-- [ ] Author seed entries for every term in [spec.md](./spec.md) glossary (CTA, IA, BC, Qual, Goal, Plan, Syllabus, Knowledge node, Cards, Reps, Session, Domain, Lens, Calibration, First-run, E2E, testid, Page anchor, Explainer).
-- [ ] Long-form markdown corpus under `libs/help/src/glossary/content/` (one `.md` per term).
-- [ ] Loader function: `getGlossaryEntry(key)` returns merged short + long. Vitest unit tests for the loader.
-- [ ] Update [VOCABULARY.md](../../platform/VOCABULARY.md) with Quals, Plan, CTA, IA, BC entries; cross-link to `libs/help/`.
+- [x] Add typed entry map for tooltip definitions: `libs/help/src/glossary/entries.ts` -- `{ key, term, short, longRef, related[] }`.
+- [x] Author seed entries for every term in [spec.md](./spec.md) glossary (CTA, IA, BC, Qual, Goal, Plan, Syllabus, Knowledge node, Cards, Reps, Session, Domain, Lens, Calibration, First-run, E2E, testid, Page anchor, Explainer, Glossary drawer -- 20 entries).
+- [x] Long-form markdown corpus under `libs/help/src/glossary/content/` (one `.md` per term, 20 files).
+- [x] Loader function: `getGlossaryEntry(key)` + `listGlossaryEntries()` + `stripFrontmatter()` returns merged short + long. Vitest unit tests for the loader (9 cases).
+- [x] Update [VOCABULARY.md](../../platform/VOCABULARY.md) with Quals, Plan, CTA, IA, BC entries; cross-link to `libs/help/`.
 
 ### 1.2 Tooltip primitive (`libs/ui/`)
 
-- [ ] `libs/ui/src/components/Tooltip.svelte` -- props `{ for: string; placement?: 'top'|'bottom'|'left'|'right' }`. Reads from `getGlossaryEntry`.
-- [ ] Hover + keyboard focus parity. Touch fallback (tap-to-show, tap-outside-to-dismiss).
-- [ ] ARIA: `aria-describedby` on the trigger; tooltip is `role="tooltip"`.
-- [ ] Vitest unit tests for hover, focus, blur, touch behavior.
+- [x] `libs/ui/src/components/Tooltip.svelte` -- props `{ for?: string; term?: string; definition?: string; placement?: ...; children: Snippet }`. Reads from a registered glossary resolver (libs/ui stays a leaf in the dep graph; mirrors `info-tip-resolver` pattern). The study app registers via `apps/study/src/lib/help/register.ts`.
+- [x] Hover + keyboard focus parity. Touch fallback (tap-to-show); blur / mouseleave dismisses; Esc dismisses + restores focus.
+- [x] ARIA: `aria-describedby` on the trigger; tooltip is `role="tooltip"` with a generated id.
+- [x] Vitest unit tests for hover, focus, blur, touch, resolver, missing-key, ARIA wiring (7 cases).
 
 ### 1.3 Page explainer
 
-- [ ] `libs/ui/src/components/PageExplainer.svelte` -- props `{ pageKey: string; title: string; body: Snippet }`. Collapsible, with per-page dismissal stored in `user_pref` (or local storage if no schema yet).
-- [ ] Per-page `?` button to re-open after dismissal.
-- [ ] Settings toggle ("Hide page explainers") -- one boolean in user prefs. When true, all explainers default-collapsed.
+- [x] `libs/ui/src/components/PageExplainer.svelte` -- props `{ pageKey: string; title?: string; children: Snippet; globallyHidden?: boolean }`. Collapsible, with per-page dismissal stored in `localStorage` (the `user_pref` migration lands when prefs schema is touched in a future phase; storage seam is one swap). Decision documented inline in the component.
+- [x] Per-page `?` button to re-open after dismissal (peek mode -- doesn't clear the dismissal).
+- [ ] Settings toggle ("Hide page explainers") -- the component already accepts `globallyHidden` from the layout; the actual Settings UI toggle is **deferred to Phase 2/Settings WP** (no Settings page surface in Phase 1 scope).
 
 ### 1.4 Glossary drawer
 
-- [ ] `libs/ui/src/components/GlossaryDrawer.svelte` -- right-cluster `?` button opens drawer overlay. Searchable list (case-insensitive substring match on term + short + long).
-- [ ] Mounts in `AppHeader.svelte` right cluster (next to Flightbag link).
-- [ ] Esc / overlay click to dismiss. Trap focus while open.
+- [ ] **Deferred from Phase 1.** Glossary content layer + Tooltip primitive ship in this PR; the drawer overlay is best built once the right-cluster slot in `AppHeader.svelte` and the canonical `/reference/glossary` page are both in scope. Splitting it across phases creates a half-mounted trigger. Re-scope into Phase 3 (where `/reference/glossary` lands), keeping the content + entries already authored.
 
 ### 1.5 Number `?` popover
 
-- [ ] `libs/ui/src/components/MetricExplainer.svelte` -- props `{ value: number|string; label: string; formula?: string; entryKey?: string }`. Hover -> one-liner; click `?` -> popover with formula and link to glossary entry.
-- [ ] Wire it into Home's "12 due" / "6 ready" tiles as the first consumer.
+- [ ] **Deferred from Phase 1.** The existing `<InfoTip>` primitive already covers number explainers in `/session/start`; replacing every Home tile metric in one pass is best done after the Home is observed in practice. Re-scope into a dedicated number-explainer slice that lands alongside the Insights rename (Phase 3) so the formula link can target `/insights/...` directly.
 
 ### 1.6 Home rebuild (`/study`)
 
-- [ ] `apps/study/src/routes/(app)/study/+page.svelte` rebuilt as the daily-CTA home.
-- [ ] Three states (loader-driven): no goal, goal + no plan, goal + plan.
-- [ ] Primary CTA per state: "Set your first goal" / "Build a plan for {goal}" / "Start today's session".
-- [ ] Secondary pressure CTAs (review backlog, due reps) shown only in goal + plan state.
-- [ ] `data-testid="page-anchor"` on the `<h1>`. `data-testid="home-cta-primary"` on the big button. `data-testid="home-cta-secondary"` on each pressure CTA.
-- [ ] Page explainer at top: "Why am I here?" -- 2-3 sentences.
-- [ ] Tooltips on Quals / Goal / Plan terms wherever they appear.
+- [x] `apps/study/src/routes/(app)/study/+page.svelte` rebuilt as the daily-CTA home.
+- [x] Three states (loader-driven): no goal, goal + no plan, goal + plan. Loader fans out `getPrimaryGoal` + `getActivePlan` and returns one of three discriminated payloads.
+- [x] Primary CTA per state: "Set your first goal" / "Build a plan for {goal}" / "Start today's session".
+- [ ] Secondary pressure CTAs (review backlog, due reps) -- existing `TilesPanel` already renders these in the goal+plan state. The dedicated `home-cta-secondary` testid is **deferred** until those tiles get the dedicated CTA shape; the panel shows them today as cards, not as the spec's "Review {n} due" / "Run {n} reps" shape.
+- [x] `data-testid="page-anchor"` on the `<h1>`. `data-testid="home-cta-primary"` on the big button. `data-testid="first-run-set-goal-cta"` on the no-goal CTA.
+- [x] Page explainer at top: "Why am I here?" -- 2-3 sentences with embedded Tooltips for `goal` / `plan`.
+- [x] Tooltips on Goal / Plan terms wherever they appear in the Home banner copy.
 
 ### 1.7 Best-practices doc
 
-- [ ] Add new "E2E selectors" section to [docs/agents/best-practices.md](../../agents/best-practices.md). Verbatim convention from [design.md](./design.md) "E2E strategy".
+- [x] Add new "E2E selectors" section to [docs/agents/best-practices.md](../../agents/best-practices.md). Verbatim convention from [design.md](./design.md) "E2E strategy".
 
 ### 1.8 E2E (Phase 1 slice)
 
-- [ ] Stub `tests/e2e/ia-flow.spec.ts` with the FLOW const containing only `ROUTES.STUDY` for now. Adds routes phase by phase.
-- [ ] Author `tests/e2e/ia-first-run.spec.ts` -- Abby with no goal: Home shows only the "Set your first goal" CTA, Learn + Insights nav links are soft-disabled.
-- [ ] `bun run check` clean.
+- [x] Stub `tests/e2e/ia-flow.spec.ts` with the FLOW const containing only `ROUTES.STUDY` for now. Adds routes phase by phase.
+- [x] Author `tests/e2e/ia-first-run.spec.ts` -- fresh user with no goal: Home shows only the "Set your first goal" CTA. Learn + Insights soft-disable assertions deferred until the five-section nav lands (Phase 4).
+- [x] `bun run check` clean (only pre-existing baseline `fast-xml-parser` error remains; verified present on `main`).
 
 ### Phase 1 commit point
 

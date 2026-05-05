@@ -18,7 +18,13 @@ import { ROUTES } from '@ab/constants';
 interface Props {
 	repBacklog: RepBacklog;
 	focusNodeId: string | null;
-	dueCardsCount: number;
+	/**
+	 * Recall-gated cards still owed for the active credential. `null`
+	 * when the credential has no recall-gated leaves (so we should NOT
+	 * pretend the user has zero cards remaining -- there are no cards
+	 * to count). The badge reads "--" in that case.
+	 */
+	dueCardsCount: number | null;
 	newCardsCount: number;
 }
 
@@ -32,7 +38,9 @@ const scenariosHref = $derived(ROUTES.REPS);
 const simHref = '/sim';
 const flightHref = $derived(ROUTES.FLIGHT);
 
-const cardsBadge = $derived(`${dueCardsCount} due${newCardsCount > 0 ? ` / ${newCardsCount} new` : ''}`);
+const cardsBadge = $derived(
+	dueCardsCount === null ? '--' : `${dueCardsCount} due${newCardsCount > 0 ? ` / ${newCardsCount} new` : ''}`,
+);
 const repsBadge = $derived(`${repBacklog.unattempted} ready`);
 </script>
 

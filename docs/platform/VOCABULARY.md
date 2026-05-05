@@ -45,6 +45,18 @@ Core concepts from the scenario engines and platform infrastructure.
 | **Reference**           | Authoritative source material (CFR, AC, AIM, handbook, NTSB report). Citations from content link to references.                                                      | hangar, [REFERENCE_SYSTEM_FLOW](REFERENCE_SYSTEM_FLOW.md) |
 | **Glossary term**       | A defined aviation term cited from prose via wiki-link. Backed by a reference, rendered in the glossary surface.                                                     | hangar, study                                             |
 
+## UI and IA terms
+
+Terms that surface in the study app's information architecture and "explain everything" plumbing. Authoritative copy and the long-form bodies live in [`libs/help/src/glossary/`](../../libs/help/src/glossary/) -- the entries here are the cross-reference index.
+
+| Term      | Meaning                                                                                                                                                  | Where used                                              |
+| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| **Quals** | UI label for "credentials" -- the certificates the learner is working toward (PPL, IR, CPL, CFI). The DB table stays `credential`; the user word is Quals. | study (Program -> Quals tab), `libs/help/src/glossary/qual.md` |
+| **Plan**  | The schedule and session shape attached to a user (length, default mode, focus and skip domains). One active per user. Drives `/session/start`.          | study (Program -> Plan tab)                             |
+| **CTA**   | Call-To-Action. The button or link that is the obvious next thing to click. Primary CTA = the one big button; secondary CTAs = smaller follow-ups.       | study (Home, goal detail, session entry)                |
+| **IA**    | Information Architecture. How the product is organized into pages and sections.                                                                          | platform docs, study app                                |
+| **BC**    | Bounded Context (DDD). A backend module that owns one model and its rules. `bc/study` owns goals, plans, sessions as separate sub-aggregates.            | platform internals                                      |
+
 ## Carrier operations terms
 
 The carrier metaphor is **partially adopted**. Use these for FIRC-era surfaces (instructor flow, scoring) where the metaphor fits cleanly. Don't force-cram them onto pilot-performance features that have nothing to do with carrier ops.

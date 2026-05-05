@@ -216,6 +216,19 @@ Don't silence the lint rule with `// biome-ignore`. The rule is enforcement, not
 - [libs/utils/src/outbound-url.ts](../../libs/utils/src/outbound-url.ts) - DNS lookup + IP parsing, lazy-loaded.
 - [libs/bc/study/src/deck-spec.ts](../../libs/bc/study/src/deck-spec.ts) - `node:crypto` for deck hash, lazy-loaded.
 
+## Resolver inversion (libs/ui -> libs/help)
+
+`libs/ui` is a leaf in the dependency graph -- `libs/help` and most other libs depend on it, never the reverse. When a `libs/ui` component needs data from a higher-level lib (e.g. `<InfoTip>` resolving help-page validity, `<Tooltip>` reading glossary entries), invert the edge: `libs/ui` exposes a `setXResolver(resolver)` registry, the consuming app registers a resolver at boot, and the component reads through it. Never `import` from a higher-level lib.
+
+### Canonical examples
+
+- [libs/ui/src/lib/info-tip-resolver.ts](../../libs/ui/src/lib/info-tip-resolver.ts) -- `<InfoTip>` -> `@ab/help` registry validation.
+- [libs/ui/src/lib/tooltip-glossary-resolver.ts](../../libs/ui/src/lib/tooltip-glossary-resolver.ts) -- `<Tooltip>` -> `@ab/help/glossary` term + short.
+
+### When you need a third resolver
+
+If a third `libs/ui` component needs the same inversion (e.g. number `?` popovers reading metric formulas), generalize: introduce a single `setUiResolver(kind, resolver)` registry keyed by a `UI_RESOLVER_KINDS` enum in `libs/constants/`. Don't ship a third bespoke resolver file.
+
 ## Formatting (Biome)
 
 - Tabs (width 2), single quotes, 120 char lines, trailing commas, semicolons.
@@ -237,6 +250,28 @@ Don't silence the lint rule with `// biome-ignore`. The rule is enforcement, not
 - No `any`. No non-null assertions (`!`).
 - Capture guard function return values: `const user = requireAuth(locals)`.
 - `bun run check` runs tsc + svelte-check. Must pass with 0 errors, 0 warnings.
+
+## E2E selectors
+
+Playwright tests in this repo target stable `data-testid` hooks, not CSS classes, ARIA roles for nav anchors, or visible text. Testids survive copy churn and IA reorgs without rewriting tests.
+
+Conventions (kebab-case, lowercase):
+
+| Pattern                                | Example                                     | Meaning                                                                                       |
+| -------------------------------------- | ------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `data-testid="page-anchor"`            | (one per route)                             | Single sentinel on the page's `<h1>` or primary section header. Flow tests assert visibility. |
+| `data-testid="nav-{section}"`          | `nav-home`, `nav-program`, `nav-insights`   | Top-level nav links.                                                                          |
+| `data-testid="{section}-tab-{name}"`   | `program-tab-quals`, `program-tab-goal`     | Sub-tabs / sub-anchors within a section.                                                      |
+| `data-testid="{page}-cta-primary"`     | `home-cta-primary`, `goal-detail-start-cta` | The page's primary call-to-action.                                                            |
+| `data-testid="{page}-cta-secondary"`   | `home-cta-secondary`                        | Secondary CTAs. Multiple per page allowed.                                                    |
+| `data-testid="first-run-set-goal-cta"` | (Home, no-goal state)                       | State-specific testid for the first-run Home CTA.                                             |
+
+Rules:
+
+- **Never repurpose a testid.** If meaning changes, rename the testid -- never quietly point an old name at a new affordance. Tests built against the old meaning will silently green on the wrong thing.
+- **Exactly one `page-anchor` per page.** A CI guard fails the build if any route under `apps/study/src/routes/(app)/**` ships without one.
+- **Authoring order:** name the testid first (in the spec or work-package), wire it up in the component, then write the test against the name. Don't let test code be the place a name is invented.
+- **Where to look up active testids:** the IA flow test `tests/e2e/ia-flow.spec.ts` is the canonical list of top-level routes + anchors.
 
 ## Common Mistakes (ranked by debugging pain)
 

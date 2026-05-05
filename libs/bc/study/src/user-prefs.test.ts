@@ -15,8 +15,10 @@ import { and, eq } from 'drizzle-orm';
 import { describe, expect, it } from 'vitest';
 import { userPref } from './schema';
 import {
+	getPageExplainerDismissals,
 	getUserPrefs,
 	InvalidUserPrefValueError,
+	setPageExplainerDismissal,
 	setUserPref,
 	UnknownUserPrefKeyError,
 	type UserPrefValue,
@@ -199,6 +201,64 @@ describe('setUserPref', () => {
 		} finally {
 			// User is already deleted; sweep any straggler audit rows defensively.
 			await db.delete(auditLog).where(eq(auditLog.actorId, userId));
+		}
+	});
+});
+
+describe('page-explainer dismissals', () => {
+	it('returns an empty map when nothing has been dismissed', async () => {
+		const { userId, cleanup } = await isolatedUser('explain-empty');
+		try {
+			expect(await getPageExplainerDismissals(userId)).toEqual({});
+		} finally {
+			await cleanup();
+		}
+	});
+
+	it('upserts a single page key without disturbing other entries', async () => {
+		const { userId, cleanup } = await isolatedUser('explain-merge');
+		try {
+			await setPageExplainerDismissal(userId, 'home', true);
+			await setPageExplainerDismissal(userId, 'program-goal', true);
+			const map = await getPageExplainerDismissals(userId);
+			expect(map).toEqual({ home: true, 'program-goal': true });
+		} finally {
+			await cleanup();
+		}
+	});
+
+	it('clears a single page key by passing dismissed=false', async () => {
+		const { userId, cleanup } = await isolatedUser('explain-clear');
+		try {
+			await setPageExplainerDismissal(userId, 'home', true);
+			await setPageExplainerDismissal(userId, 'program-goal', true);
+			await setPageExplainerDismissal(userId, 'home', false);
+			expect(await getPageExplainerDismissals(userId)).toEqual({ 'program-goal': true });
+		} finally {
+			await cleanup();
+		}
+	});
+
+	it('rejects an empty pageKey', async () => {
+		const { userId, cleanup } = await isolatedUser('explain-empty-key');
+		try {
+			await expect(setPageExplainerDismissal(userId, '', true)).rejects.toBeInstanceOf(Error);
+		} finally {
+			await cleanup();
+		}
+	});
+
+	it('writes through the audited setUserPref path (one audit row per write)', async () => {
+		const { userId, cleanup } = await isolatedUser('explain-audit');
+		try {
+			await setPageExplainerDismissal(userId, 'home', true);
+			const rows = await db
+				.select()
+				.from(auditLog)
+				.where(and(eq(auditLog.actorId, userId), eq(auditLog.targetType, AUDIT_TARGETS.USER_PREF)));
+			expect(rows.length).toBeGreaterThanOrEqual(1);
+		} finally {
+			await cleanup();
 		}
 	});
 });
