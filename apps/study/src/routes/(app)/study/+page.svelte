@@ -30,7 +30,7 @@ const dueCardsCount = $derived(Math.max(0, recallRequired - recallPassing));
 	<PageHeader title="Study" subtitle="What should I do right now? Today's session and any pressure points." />
 	<h1 class="visually-hidden" data-testid="page-anchor">Study Home</h1>
 
-	<PageExplainer pageKey="home">
+	<PageExplainer pageKey="home" dismissed={data.pageExplainerDismissals.home === true}>
 		The Home page rolls up your study state into one obvious next step. If you don't have a
 		<Tooltip for="goal">a goal</Tooltip>, set one. If you have a goal but no
 		<Tooltip for="plan">plan</Tooltip>, build one. If you have both, start today's session.
@@ -114,7 +114,7 @@ const dueCardsCount = $derived(Math.max(0, recallRequired - recallPassing));
 	}
 
 	.banner-cta {
-		border-color: var(--action-default-default);
+		border-color: var(--action-default);
 	}
 
 	.banner h2 {

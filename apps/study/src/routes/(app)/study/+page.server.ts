@@ -26,10 +26,12 @@ import {
 	getCredentialById,
 	getCredentialMastery,
 	getCredentialPrimarySyllabus,
+	getPageExplainerDismissals,
 	getPrimaryGoal,
 	getRepBacklog,
 	getUserPrefs,
 	isUserPrefKey,
+	type PageExplainerDismissals,
 	type RepBacklog,
 	setUserPref,
 	USER_PREF_SCHEMAS,
@@ -78,12 +80,14 @@ export interface StudyHomePayload {
 	tree: MapNode[];
 	citationOrder: CitationOrder;
 	focusNodeId: string | null;
+	pageExplainerDismissals: PageExplainerDismissals;
 }
 
 export interface StudyHomeNoGoalPayload {
 	kind: 'no-goal';
 	citationOrder: CitationOrder;
 	tab: StudyMapTab;
+	pageExplainerDismissals: PageExplainerDismissals;
 }
 
 export interface StudyHomeNoPlanPayload {
@@ -92,6 +96,7 @@ export interface StudyHomeNoPlanPayload {
 	goalTitle: string;
 	citationOrder: CitationOrder;
 	tab: StudyMapTab;
+	pageExplainerDismissals: PageExplainerDismissals;
 }
 
 export type StudyHomeData = StudyHomePayload | StudyHomeNoGoalPayload | StudyHomeNoPlanPayload;
@@ -105,10 +110,11 @@ export const load: PageServerLoad = async (event) => {
 		throw redirect(302, '/study');
 	}
 
-	const [prefs, primaryGoal, activePlan] = await Promise.all([
+	const [prefs, primaryGoal, activePlan, pageExplainerDismissals] = await Promise.all([
 		getUserPrefs(user.id, [USER_PREF_KEYS.CITATION_ORDER, USER_PREF_KEYS.MAP_TAB]),
 		getPrimaryGoal(user.id),
 		getActivePlan(user.id),
+		getPageExplainerDismissals(user.id),
 	]);
 
 	const citationOrderPref = readPrefString(prefs[USER_PREF_KEYS.CITATION_ORDER]);
@@ -123,6 +129,7 @@ export const load: PageServerLoad = async (event) => {
 			kind: 'no-goal' as const,
 			citationOrder,
 			tab,
+			pageExplainerDismissals,
 		} satisfies StudyHomeNoGoalPayload;
 	}
 
@@ -137,6 +144,7 @@ export const load: PageServerLoad = async (event) => {
 			goalTitle: primaryGoal.title,
 			citationOrder,
 			tab,
+			pageExplainerDismissals,
 		} satisfies StudyHomeNoPlanPayload;
 	}
 
@@ -151,6 +159,7 @@ export const load: PageServerLoad = async (event) => {
 			kind: 'no-goal' as const,
 			citationOrder,
 			tab,
+			pageExplainerDismissals,
 		} satisfies StudyHomeNoGoalPayload;
 	}
 	const [credential, primarySyllabus] = await Promise.all([
@@ -188,6 +197,7 @@ export const load: PageServerLoad = async (event) => {
 		tree,
 		citationOrder,
 		focusNodeId,
+		pageExplainerDismissals,
 	} satisfies StudyHomePayload;
 };
 

@@ -49,6 +49,15 @@ export const USER_PREF_KEYS = {
 	 * by WP 3 (node-render-modes).
 	 */
 	KNOWLEDGE_RENDER_MODE: 'study.knowledge.render_mode',
+	/**
+	 * Per-user, per-page-key dismissal map for the "Why am I here?"
+	 * `<PageExplainer>` component. Value is a JSON object keyed by the
+	 * component's `pageKey`; presence of a `true` value means the user
+	 * collapsed that explainer. The `?` peek button does NOT clear the
+	 * entry -- it temporarily renders the body for the current visit
+	 * only. Owned by the `study-app-ia-cleanup` WP.
+	 */
+	PAGE_EXPLAINER_DISMISSED: 'study.page_explainer.dismissed',
 } as const;
 
 export type UserPrefKey = (typeof USER_PREF_KEYS)[keyof typeof USER_PREF_KEYS];

@@ -47,7 +47,7 @@ describe('Tooltip', () => {
 		if (host === null) throw new Error('host missing');
 
 		await fireEvent.focusIn(host);
-		expect(screen.getByRole('tooltip')).toBeTruthy();
+		expect(screen.getByRole('tooltip')).toBeInTheDocument();
 
 		await fireEvent.focusOut(host);
 		expect(screen.queryByRole('tooltip')).toBeNull();
@@ -59,7 +59,7 @@ describe('Tooltip', () => {
 		if (host === null) throw new Error('host missing');
 
 		await fireEvent.touchStart(host);
-		expect(screen.getByRole('tooltip')).toBeTruthy();
+		expect(screen.getByRole('tooltip')).toBeInTheDocument();
 	});
 
 	it('reads from the glossary resolver when `for=` is set', async () => {

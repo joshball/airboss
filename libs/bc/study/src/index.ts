@@ -676,11 +676,13 @@ export {
 	TeachingExerciseNotFoundError,
 	updateTeachingExercise,
 } from './teaching-exercises';
-export type { UserPrefValue } from './user-prefs';
+export type { PageExplainerDismissals, UserPrefValue } from './user-prefs';
 export {
+	getPageExplainerDismissals,
 	getUserPrefs,
 	InvalidUserPrefValueError,
 	isUserPrefKey,
+	setPageExplainerDismissal,
 	setUserPref,
 	UnknownUserPrefKeyError,
 	USER_PREF_SCHEMAS,

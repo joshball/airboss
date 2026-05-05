@@ -130,6 +130,12 @@ export const ROUTES = {
 	 * returns `{ results: { id, label, detail }[] }`. Auth-gated.
 	 */
 	API_CITATIONS_SEARCH: '/api/citations/search',
+	/**
+	 * Page explainer dismissal endpoint. POST `{ pageKey: string, dismissed: boolean }`
+	 * persists the per-user, per-page-key dismissal flag for `<PageExplainer>`.
+	 * Returns `{ ok: true }` on success. Auth-gated.
+	 */
+	API_PAGE_EXPLAINER: '/api/page-explainer',
 
 	/**
 	 * Post-login default landing surface for the study app (study-home WP).

@@ -19,6 +19,7 @@ import {
 	RENDER_MODE_VALUES,
 	STUDY_MAP_TAB_VALUES,
 	USER_PREF_KEY_VALUES,
+	USER_PREF_KEYS,
 	type UserPrefKey,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
@@ -56,6 +57,13 @@ export const USER_PREF_SCHEMAS = {
 		(typeof RENDER_MODE_VALUES)[number],
 		...(typeof RENDER_MODE_VALUES)[number][],
 	]),
+	// Owned by study-app-ia-cleanup WP. Value is a JSON object keyed by
+	// `<PageExplainer>` `pageKey`; presence of a `true` flag means the
+	// user collapsed that explainer. Absent / `false` means open by
+	// default. Stored as one row (not one row per page key) so the
+	// closed key list in `USER_PREF_KEYS` does not have to grow with
+	// every new page that mounts an explainer.
+	'study.page_explainer.dismissed': z.record(z.string().min(1), z.literal(true)),
 } satisfies Record<UserPrefKey, z.ZodType>;
 
 export class UnknownUserPrefKeyError extends Error {
@@ -161,4 +169,50 @@ export async function setUserPref(
 		},
 		db,
 	);
+}
+
+/** Map of `pageKey -> true` for explainers the user has dismissed. */
+export type PageExplainerDismissals = Record<string, true>;
+
+/**
+ * Read the per-page explainer dismissal map for a user. Returns an empty
+ * object when nothing has been dismissed. The map is the value of the
+ * `study.page_explainer.dismissed` user_pref row.
+ */
+export async function getPageExplainerDismissals(userId: string, db: Db = defaultDb): Promise<PageExplainerDismissals> {
+	const prefs = await getUserPrefs(userId, [USER_PREF_KEYS.PAGE_EXPLAINER_DISMISSED], db);
+	const raw = prefs[USER_PREF_KEYS.PAGE_EXPLAINER_DISMISSED];
+	if (raw === undefined || raw === null || typeof raw !== 'object' || Array.isArray(raw)) return {};
+	const out: PageExplainerDismissals = {};
+	for (const [k, v] of Object.entries(raw as Record<string, UserPrefValue>)) {
+		if (v === true) out[k] = true;
+	}
+	return out;
+}
+
+/**
+ * Set the dismissal flag for a single `pageKey` without overwriting other
+ * pages' dismissal state. Reads, mutates, and upserts the JSON map in
+ * one logical operation. `dismissed = false` removes the key from the
+ * map (rather than storing `false`) so the stored shape stays a closed
+ * "set of dismissed page keys".
+ */
+export async function setPageExplainerDismissal(
+	userId: string,
+	pageKey: string,
+	dismissed: boolean,
+	db: Db = defaultDb,
+): Promise<PageExplainerDismissals> {
+	if (pageKey.length === 0) throw new Error('pageKey must be non-empty');
+	const current = await getPageExplainerDismissals(userId, db);
+	const next: PageExplainerDismissals = { ...current };
+	if (dismissed) {
+		next[pageKey] = true;
+	} else {
+		delete next[pageKey];
+	}
+	// Use the typed setter so the audit row + per-key Zod validation
+	// stay in sync with every other user_pref write.
+	await setUserPref(userId, USER_PREF_KEYS.PAGE_EXPLAINER_DISMISSED, next, db);
+	return next;
 }
