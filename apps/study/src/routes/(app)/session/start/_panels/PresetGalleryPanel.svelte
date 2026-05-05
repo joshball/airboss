@@ -79,7 +79,7 @@ function depthLabel(slug: DepthPreference): string {
 		<li>
 			<a
 				class="tile tile-custom"
-				href={submittingPresetId !== null ? undefined : ROUTES.PLANS_NEW}
+				href={submittingPresetId !== null ? undefined : ROUTES.PROGRAM_PLANS_NEW}
 				class:is-disabled={submittingPresetId !== null}
 				aria-disabled={submittingPresetId !== null ? 'true' : undefined}
 				onclick={(e: MouseEvent) => {

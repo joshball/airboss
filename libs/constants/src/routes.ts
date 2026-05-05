@@ -1,3 +1,4 @@
+import type { ProgramTab } from './program';
 import type { AviationTopic, CertApplicability } from './reference-tags';
 import type { SimScenarioId } from './sim';
 import type { KnowledgePhase, LibraryRegulationsKind } from './study';
@@ -22,6 +23,14 @@ export const QUERY_PARAMS = {
 	ITEM: 'item',
 	/** Named slug identifying the active tab within a page. */
 	TAB: 'tab',
+	/**
+	 * Active Program sub-tab. Closed value set lives in
+	 * `PROGRAM_TAB_VALUES`; the `/program` loader rejects out-of-set values
+	 * by falling back to the default tab. Distinct from `TAB` so the
+	 * `/program` shape is grep-able when a future surface grows its own
+	 * `?tab=` semantics. study-app-ia-cleanup Phase 2.
+	 */
+	PROGRAM_TAB: 'tab',
 	/** Boolean-ish mode flag; `1` means edit mode is active. */
 	EDIT: 'edit',
 	/** One-shot banner carrying the id of a just-created entity. */
@@ -311,29 +320,40 @@ export const ROUTES = {
 	MEMORY_REVIEW_FOR_NODE: (nodeId: string) =>
 		`/memory/review?${QUERY_PARAMS.NODE_ID}=${encodeURIComponent(nodeId)}` as const,
 
-	// Study -- Credentials (cert-syllabus WP, ADR 016 phases 1-6).
-	// Pages land in a follow-on WP; the route constants ship here so links
-	// from existing surfaces (cert dashboard breadcrumbs, plan wizard) can
-	// reference the eventual destination without inlining strings.
-	CREDENTIALS: '/credentials',
-	CREDENTIAL: (slug: string) => `/credentials/${encodeURIComponent(slug)}` as const,
-	CREDENTIAL_AREA: (slug: string, areaCode: string) =>
-		`/credentials/${encodeURIComponent(slug)}/areas/${encodeURIComponent(areaCode)}` as const,
-	CREDENTIAL_TASK: (slug: string, areaCode: string, taskCode: string) =>
-		`/credentials/${encodeURIComponent(slug)}/areas/${encodeURIComponent(areaCode)}/tasks/${encodeURIComponent(taskCode)}` as const,
+	// Study -- Program surface (study-app-ia-cleanup Phase 2). Quals + Goal
+	// + Plan + Coverage roll onto one `/program` page with sub-tabs. The
+	// constants below are the canonical paths; the legacy `/credentials`,
+	// `/goals`, `/plans` paths are deferred to Phase 3 redirects (and will
+	// keep working until 6 months after Phase 3 ships per design.md).
+	PROGRAM: '/program',
+	/** `/program?tab=<tab>` -- direct deep link to a sub-tab. */
+	PROGRAM_TAB: (tab: ProgramTab) => `/program?${QUERY_PARAMS.PROGRAM_TAB}=${encodeURIComponent(tab)}` as const,
+	/** Quals tab index (list of credentials). */
+	PROGRAM_QUALS: '/program/quals',
+	/** Single qualification (credential) detail page. */
+	PROGRAM_QUAL: (slug: string) => `/program/quals/${encodeURIComponent(slug)}` as const,
+	PROGRAM_QUAL_AREA: (slug: string, areaCode: string) =>
+		`/program/quals/${encodeURIComponent(slug)}/areas/${encodeURIComponent(areaCode)}` as const,
+	PROGRAM_QUAL_TASK: (slug: string, areaCode: string, taskCode: string) =>
+		`/program/quals/${encodeURIComponent(slug)}/areas/${encodeURIComponent(areaCode)}/tasks/${encodeURIComponent(taskCode)}` as const,
 	/**
-	 * Edition-pinned credential URL. Default loader resolves the
-	 * credential's primary syllabus's latest active edition; this variant
-	 * keeps a learner mid-prep on the older edition they started on.
+	 * Edition-pinned qualification URL. Default loader resolves the
+	 * qualification's primary syllabus's latest active edition; this
+	 * variant keeps a learner mid-prep on the older edition they started on.
 	 */
-	CREDENTIAL_AT_EDITION: (slug: string, edition: string) =>
-		`/credentials/${encodeURIComponent(slug)}?${QUERY_PARAMS.EDITION}=${encodeURIComponent(edition)}` as const,
-
-	// Study -- Goals (cert-syllabus WP).
-	GOALS: '/goals',
-	GOALS_NEW: '/goals/new',
-	GOAL: (id: string) => `/goals/${encodeURIComponent(id)}` as const,
-	GOAL_EDIT: (id: string) => `/goals/${encodeURIComponent(id)}?${QUERY_PARAMS.EDIT}=1` as const,
+	PROGRAM_QUAL_AT_EDITION: (slug: string, edition: string) =>
+		`/program/quals/${encodeURIComponent(slug)}?${QUERY_PARAMS.EDITION}=${encodeURIComponent(edition)}` as const,
+	/** Goals tab index (list of goals). */
+	PROGRAM_GOALS: '/program/goals',
+	PROGRAM_GOALS_NEW: '/program/goals/new',
+	PROGRAM_GOAL: (id: string) => `/program/goals/${encodeURIComponent(id)}` as const,
+	PROGRAM_GOAL_EDIT: (id: string) => `/program/goals/${encodeURIComponent(id)}?${QUERY_PARAMS.EDIT}=1` as const,
+	/** Plans tab index. */
+	PROGRAM_PLANS: '/program/plans',
+	PROGRAM_PLANS_NEW: '/program/plans/new',
+	PROGRAM_PLAN: (id: string) => `/program/plans/${encodeURIComponent(id)}` as const,
+	/** Coverage tab -- read-only summary of qual / goal / plan coverage. */
+	PROGRAM_COVERAGE: '/program/coverage',
 
 	// Study -- Lens UI (lens-ui WP, ADR 016 phase 8).
 	/** Umbrella prefix for the Lens area; used by nav-active prefix checks. */
@@ -351,10 +371,8 @@ export const ROUTES = {
 	LENS_WEAKNESS: '/lens/weakness',
 	LENS_WEAKNESS_BUCKET: (severity: string) => `/lens/weakness/${encodeURIComponent(severity)}` as const,
 
-	// Study -- Plans + Sessions
-	PLANS: '/plans',
-	PLANS_NEW: '/plans/new',
-	PLAN: (id: string) => `/plans/${id}` as const,
+	// Study -- Sessions (Plans moved under `/program/plans` in Phase 2 of
+	// study-app-ia-cleanup; see PROGRAM_PLAN* above).
 	SESSION_START: '/session/start',
 	SESSIONS: '/sessions',
 	SESSION: (id: string) => `/sessions/${id}` as const,
@@ -649,9 +667,16 @@ export const NAV_LABELS = {
 	DASHBOARD: 'Stats',
 	/** Placeholder for the flight-logging surface (WP 2). */
 	FLIGHT: 'Flight',
-	PLANS: 'Plans',
-	CREDENTIALS: 'Quals',
-	GOALS: 'Goals',
+	/**
+	 * Single nav entry for the consolidated Quals + Goal + Plan + Coverage
+	 * surface (study-app-ia-cleanup Phase 2). Replaces the prior PLANS /
+	 * CREDENTIALS / GOALS labels.
+	 */
+	PROGRAM: 'Program',
+	PROGRAM_QUALS: 'Quals',
+	PROGRAM_GOAL: 'Goal',
+	PROGRAM_PLAN: 'Plan',
+	PROGRAM_COVERAGE: 'Coverage',
 	LENS: 'Study by',
 	LENS_HANDBOOK: 'Study by handbook',
 	LENS_WEAKNESS: 'What to study next',

@@ -214,6 +214,14 @@ export {
 	type PresetId,
 } from './presets';
 export {
+	isProgramTab,
+	PROGRAM_TAB_DEFAULT_NO_GOAL,
+	PROGRAM_TAB_DEFAULT_WITH_GOAL,
+	PROGRAM_TAB_VALUES,
+	PROGRAM_TABS,
+	type ProgramTab,
+} from './program';
+export {
 	AVIATION_TOPIC_LABELS,
 	AVIATION_TOPIC_MAX,
 	AVIATION_TOPIC_MIN,

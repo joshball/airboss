@@ -10,7 +10,7 @@ import { test as freshUserTest } from './fixtures/fresh-user';
 
 baseTest.describe('credentials index (shared seed)', () => {
 	baseTest('renders heading and either an empty-state or credential cards', async ({ page }) => {
-		await page.goto(ROUTES.CREDENTIALS);
+		await page.goto(ROUTES.PROGRAM_QUALS);
 		await expect(page.getByRole('heading', { name: 'Quals', exact: true, level: 1 })).toBeVisible();
 
 		// Either no active credentials seeded (empty-state) or at least one card with the stat trio.
@@ -24,7 +24,7 @@ freshUserTest.describe('credentials index (fresh user)', () => {
 	freshUserTest('shows the no-primary-goal banner for a learner with no primary goal', async ({ page, freshUser }) => {
 		// `freshUser` has no primary goal -> the banner must appear.
 		expect(freshUser.id).toBeDefined();
-		await page.goto(ROUTES.CREDENTIALS);
+		await page.goto(ROUTES.PROGRAM_QUALS);
 		await expect(page.getByRole('heading', { name: 'Quals', exact: true, level: 1 })).toBeVisible();
 		const banner = page.getByRole('status').filter({ hasText: /primary goal/i });
 		await expect(banner).toBeVisible();
@@ -39,7 +39,7 @@ freshUserTest.describe('credentials index (fresh user)', () => {
 
 baseTest.describe('credentials detail (shared seed)', () => {
 	baseTest('404 when slug does not match a credential', async ({ page }) => {
-		const response = await page.goto(ROUTES.CREDENTIAL('zzz-not-a-real-credential'));
+		const response = await page.goto(ROUTES.PROGRAM_QUAL('zzz-not-a-real-credential'));
 		expect(response?.status()).toBe(404);
 	});
 
@@ -47,7 +47,7 @@ baseTest.describe('credentials detail (shared seed)', () => {
 		// `private` is the credential the seeded `ppl-airplane-6c` syllabus
 		// links to, so the detail page deterministically renders the mastery
 		// rollup against the shared dev-seed.
-		await page.goto(ROUTES.CREDENTIAL('private'));
+		await page.goto(ROUTES.PROGRAM_QUAL('private'));
 
 		// Header + breadcrumb crumb back to /credentials.
 		await expect(page.getByRole('navigation', { name: 'Breadcrumb' })).toBeVisible();

@@ -107,6 +107,14 @@ export const RENDER_MODE_DEFAULT: RenderMode = RENDER_MODES.LEARN;
 export const PAGE_EXPLAINER_KEYS = {
 	/** `/study` post-login home. Phase 1 of study-app-ia-cleanup. */
 	STUDY_HOME: 'home',
+	/** `/program` Quals tab. Phase 2 of study-app-ia-cleanup. */
+	PROGRAM_QUALS: 'program-quals',
+	/** `/program` Goal tab. Phase 2 of study-app-ia-cleanup. */
+	PROGRAM_GOAL: 'program-goal',
+	/** `/program` Plan tab. Phase 2 of study-app-ia-cleanup. */
+	PROGRAM_PLAN: 'program-plan',
+	/** `/program` Coverage tab. Phase 2 of study-app-ia-cleanup. */
+	PROGRAM_COVERAGE: 'program-coverage',
 } as const;
 
 export type PageExplainerKey = (typeof PAGE_EXPLAINER_KEYS)[keyof typeof PAGE_EXPLAINER_KEYS];

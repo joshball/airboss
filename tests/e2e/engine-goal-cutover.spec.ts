@@ -45,14 +45,14 @@ test.beforeAll(async ({ browser }) => {
 	const context = await browser.newContext({ storageState: 'tests/e2e/.auth/learner.json' });
 	const page = await context.newPage();
 	try {
-		await page.goto(ROUTES.PLANS);
+		await page.goto(ROUTES.PROGRAM_PLANS);
 		const hasPlan = await page
 			.getByRole('link', { name: 'Open' })
 			.first()
 			.isVisible()
 			.catch(() => false);
 		if (!hasPlan) {
-			await page.goto(ROUTES.PLANS_NEW);
+			await page.goto(ROUTES.PROGRAM_PLANS_NEW);
 			await page.getByRole('button', { name: /create plan/i }).click();
 			// Plan submit always redirects to /goals/* per engine-goal-cutover.
 			await page.waitForURL(/\/goals(?:\/|$)/);
@@ -65,7 +65,7 @@ test.beforeAll(async ({ browser }) => {
 
 test.describe('engine-goal-cutover -- plan UI no longer surfaces cert chooser', () => {
 	test('/plans/new shows the goal-composer guidance, not a cert chooser', async ({ page }) => {
-		await page.goto(ROUTES.PLANS_NEW);
+		await page.goto(ROUTES.PROGRAM_PLANS_NEW);
 
 		await expect(page.getByRole('heading', { name: 'New study plan', level: 1 })).toBeVisible();
 
@@ -89,7 +89,7 @@ test.describe('engine-goal-cutover -- plan UI no longer surfaces cert chooser', 
 
 	test('/plans/[id] shows banner pointing at goal composer, no cert chooser', async ({ page }) => {
 		// beforeAll guarantees an active plan exists for this learner.
-		await page.goto(ROUTES.PLANS);
+		await page.goto(ROUTES.PROGRAM_PLANS);
 		await expect(page.getByRole('heading', { name: 'Study plans', level: 1 })).toBeVisible();
 		const openLink = page.getByRole('link', { name: 'Open' }).first();
 		await expect(openLink).toBeVisible();
@@ -117,7 +117,7 @@ test.describe('engine-goal-cutover -- plan UI no longer surfaces cert chooser', 
 
 test.describe('engine-goal-cutover -- plan-creation submit redirects to goal composer', () => {
 	test('submitting /plans/new redirects into the goal composer', async ({ page }) => {
-		await page.goto(ROUTES.PLANS_NEW);
+		await page.goto(ROUTES.PROGRAM_PLANS_NEW);
 		await expect(page.getByRole('heading', { name: 'New study plan', level: 1 })).toBeVisible();
 
 		// Title is optional; leave it blank. Defaults cover focus / skip / depth /
@@ -132,10 +132,10 @@ test.describe('engine-goal-cutover -- plan-creation submit redirects to goal com
 		expect(url.pathname.startsWith('/goals')).toBe(true);
 
 		const onEdit = url.searchParams.get(QUERY_PARAMS.EDIT) === '1';
-		const onNew = url.pathname === ROUTES.GOALS_NEW;
+		const onNew = url.pathname === ROUTES.PROGRAM_GOALS_NEW;
 		expect(
 			onEdit || onNew,
-			`expected /goals/<id>?edit=1 or ${ROUTES.GOALS_NEW}, got ${url.pathname}${url.search}`,
+			`expected /goals/<id>?edit=1 or ${ROUTES.PROGRAM_GOALS_NEW}, got ${url.pathname}${url.search}`,
 		).toBe(true);
 
 		// Page should render either the goal detail/edit heading (existing
@@ -202,7 +202,7 @@ test.describe('engine-goal-cutover -- session preview reflects goal-derived targ
 
 test.describe('engine-goal-cutover -- cross-flow plan -> goal composer link', () => {
 	test('clicking the goal-composer link from /plans/[id] lands on the composer', async ({ page }) => {
-		await page.goto(ROUTES.PLANS);
+		await page.goto(ROUTES.PROGRAM_PLANS);
 		const openLink = page.getByRole('link', { name: 'Open' }).first();
 		await expect(openLink).toBeVisible();
 		await openLink.click();
@@ -217,7 +217,7 @@ test.describe('engine-goal-cutover -- cross-flow plan -> goal composer link', ()
 		expect(url.pathname.startsWith('/goals')).toBe(true);
 
 		const onEdit = url.searchParams.get(QUERY_PARAMS.EDIT) === '1';
-		const onNew = url.pathname === ROUTES.GOALS_NEW;
+		const onNew = url.pathname === ROUTES.PROGRAM_GOALS_NEW;
 		expect(onEdit || onNew).toBe(true);
 	});
 });

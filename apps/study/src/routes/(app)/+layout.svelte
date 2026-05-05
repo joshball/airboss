@@ -115,23 +115,21 @@ const memoryBrowseActive = $derived(pathMatches(page.url.pathname, ROUTES.MEMORY
 const memoryReviewActive = $derived(pathMatches(page.url.pathname, ROUTES.MEMORY_REVIEW));
 const memoryNewActive = $derived(pathMatches(page.url.pathname, ROUTES.MEMORY_NEW));
 const repsActive = $derived(pathMatches(page.url.pathname, ROUTES.REPS));
-const credentialsActive = $derived(pathMatches(page.url.pathname, ROUTES.CREDENTIALS));
 const lensActive = $derived(pathMatches(page.url.pathname, ROUTES.LENS));
-const goalsActive = $derived(pathMatches(page.url.pathname, ROUTES.GOALS));
+// `/program` rolls Quals + Goal + Plan + Coverage into one tabbed surface.
+// The nav highlight is active anywhere under `/program/*`, plus on the
+// session entry points (which the Plan tab CTA leads into).
+const programActive = $derived(
+	pathMatches(page.url.pathname, ROUTES.PROGRAM) ||
+		pathMatches(page.url.pathname, ROUTES.SESSION_START) ||
+		pathMatches(page.url.pathname, ROUTES.SESSIONS),
+);
 const knowledgeActive = $derived(pathMatches(page.url.pathname, ROUTES.KNOWLEDGE));
 const glossaryActive = $derived(pathMatches(page.url.pathname, ROUTES.GLOSSARY));
 const helpActive = $derived(pathMatches(page.url.pathname, ROUTES.HELP));
 const helpConceptsActive = $derived(pathMatches(page.url.pathname, ROUTES.HELP_CONCEPTS));
 const helpIndexActive = $derived(helpActive && !helpConceptsActive);
 const calibrationActive = $derived(pathMatches(page.url.pathname, ROUTES.CALIBRATION));
-// Plans, /session/start and /sessions/* roll under one nav item -- they're
-// the same flow from the user's perspective.
-const plansActive = $derived(
-	pathMatches(page.url.pathname, ROUTES.PLANS) ||
-		pathMatches(page.url.pathname, ROUTES.SESSION_START) ||
-		pathMatches(page.url.pathname, ROUTES.SESSIONS),
-);
-
 // Dashboard renders as a full-bleed TUI grid; every other surface keeps the
 // centered reading-column layout.
 const fullBleed = $derived(dashboardActive);
@@ -221,12 +219,14 @@ function handleMemoryItemClick() {
 >
 	{#snippet nav()}
 		<nav class="nav-sections" aria-label="Primary">
-			<a href={ROUTES.STUDY} aria-current={studyActive ? 'page' : undefined}>{NAV_LABELS.STUDY}</a>
+			<a href={ROUTES.STUDY} aria-current={studyActive ? 'page' : undefined} data-testid="nav-home"
+				>{NAV_LABELS.STUDY}</a
+			>
 			<a href={ROUTES.DASHBOARD} aria-current={dashboardActive ? 'page' : undefined}>{NAV_LABELS.DASHBOARD}</a>
-			<a href={ROUTES.PLANS} aria-current={plansActive ? 'page' : undefined}>{NAV_LABELS.PLANS}</a>
-			<a href={ROUTES.CREDENTIALS} aria-current={credentialsActive ? 'page' : undefined}>{NAV_LABELS.CREDENTIALS}</a>
+			<a href={ROUTES.PROGRAM} aria-current={programActive ? 'page' : undefined} data-testid="nav-program"
+				>{NAV_LABELS.PROGRAM}</a
+			>
 			<a href={ROUTES.LENS_HANDBOOK} aria-current={lensActive ? 'page' : undefined}>{NAV_LABELS.LENS}</a>
-			<a href={ROUTES.GOALS} aria-current={goalsActive ? 'page' : undefined}>{NAV_LABELS.GOALS}</a>
 			<details class="nav-menu" bind:this={memoryMenu} onfocusout={handleMemoryMenuBlur}>
 				<summary aria-haspopup="menu" aria-current={memoryActive ? 'page' : undefined}>
 					<span>{NAV_LABELS.MEMORY}</span>

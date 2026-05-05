@@ -61,7 +61,7 @@ function changeMode(nextMode: SessionMode) {
 
 	<div class="meta">
 		<span>Length: {sessionLength}</span>
-		<span>Plan: <a class="link" href={ROUTES.PLAN(planId)}>{planTitle}</a></span>
+		<span>Plan: <a class="link" href={ROUTES.PROGRAM_PLAN(planId)}>{planTitle}</a></span>
 		{#if focus}<span>Focus: {domainLabel(focus)}</span>{/if}
 		{#if cert}<span>Cert: {cert}</span>{/if}
 	</div>
