@@ -5,9 +5,16 @@
  * code. Every dispatcher (db, references, sources, smoke, test) used to define
  * its own copy of this -- they all called it `run`. Now they import from here.
  */
-export async function run(cmd: readonly string[]): Promise<void> {
+export async function run(
+	cmd: readonly string[],
+	opts: { readonly cwd?: string; readonly env?: Record<string, string | undefined> } = {},
+): Promise<void> {
 	console.log(`> ${cmd.join(' ')}`);
-	const proc = Bun.spawn([...cmd], { stdio: ['inherit', 'inherit', 'inherit'] });
+	const proc = Bun.spawn([...cmd], {
+		cwd: opts.cwd,
+		env: opts.env,
+		stdio: ['inherit', 'inherit', 'inherit'],
+	});
 	const code = await proc.exited;
 	if (code !== 0) process.exit(code);
 }

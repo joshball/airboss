@@ -1,6 +1,9 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 import { HOSTS } from '../../libs/constants/src/hosts';
+import { PORTS } from '../../libs/constants/src/ports';
+
+const port = Number(process.env.PORT ?? PORTS.HANGAR);
 
 export default defineConfig({
 	plugins: [sveltekit()],
@@ -10,6 +13,8 @@ export default defineConfig({
 		// connect. Without this, vite defaults to ::1 (IPv6 only) and IPv4
 		// clients get ECONNREFUSED.
 		host: '127.0.0.1',
+		port,
+		strictPort: true,
 		allowedHosts: [HOSTS.HANGAR],
 	},
 });
