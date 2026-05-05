@@ -16,6 +16,7 @@ import ConfirmAction from '@ab/ui/components/ConfirmAction.svelte';
 import InfoTip from '@ab/ui/components/InfoTip.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import StatTile from '@ab/ui/components/StatTile.svelte';
+import LearnTabs from '$lib/components/LearnTabs.svelte';
 import type { ActionData, PageData } from './$types';
 
 const STATE_TIPS: Record<'new' | 'learning' | 'review' | 'relearning', { label: string; definition: string }> = {
@@ -143,6 +144,7 @@ function percent(n: number, total: number): number {
 </svelte:head>
 
 <section class="page">
+	<LearnTabs active="cards" />
 	<PageHeader
 		title="Memory"
 		subtitle="Cards you've written; the algorithm schedules reviews."

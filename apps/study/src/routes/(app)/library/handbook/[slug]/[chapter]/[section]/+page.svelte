@@ -180,7 +180,7 @@ function dismissSuggestion(): void {
 		>
 		&raquo; <span>§{data.section.code}</span>
 	</nav>
-	<h1>
+	<h1 data-testid="page-anchor">
 		{data.section.title}
 		<HandbookEditionBadge edition={data.reference.edition} />
 	</h1>

@@ -107,6 +107,8 @@ export const RENDER_MODE_DEFAULT: RenderMode = RENDER_MODES.LEARN;
 export const PAGE_EXPLAINER_KEYS = {
 	/** `/study` post-login home. Phase 1 of study-app-ia-cleanup. */
 	STUDY_HOME: 'home',
+	/** `/study/learn` section index. Phase 4 of study-app-ia-cleanup. */
+	LEARN: 'learn',
 	/** `/program` Quals tab. Phase 2 of study-app-ia-cleanup. */
 	PROGRAM_QUALS: 'program-quals',
 	/** `/program` Goal tab. Phase 2 of study-app-ia-cleanup. */

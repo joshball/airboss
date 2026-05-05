@@ -489,7 +489,7 @@ async function submitFeedbackForm(event: SubmitEvent) {
 	{#if phase === REVIEW_PHASES.COMPLETE || !current}
 		<article class="caught-up">
 			<div class="title-row">
-				<h1>{totalCards > 0 ? 'Session complete.' : "You're caught up."}</h1>
+				<h1 data-testid="page-anchor">{totalCards > 0 ? 'Session complete.' : "You're caught up."}</h1>
 				<PageHelp pageId="memory-review" />
 			</div>
 			{#if totalCards > 0}
@@ -512,6 +512,7 @@ async function submitFeedbackForm(event: SubmitEvent) {
 			</div>
 		</article>
 	{:else}
+		<h1 class="visually-hidden" data-testid="page-anchor">Memory review session</h1>
 		<header class="hd">
 			<div class="counter-row">
 				<button
@@ -1409,6 +1410,24 @@ async function submitFeedbackForm(event: SubmitEvent) {
 		color: var(--action-hazard-hover);
 		font-size: var(--font-size-sm);
 		text-align: center;
+	}
+
+	/*
+	 * Visually-hidden h1 for the active-review phase. The on-screen
+	 * orientation is the per-card counter ("Card 3 of 12") in the header
+	 * row, but SR users + the `page-anchor` CI guard expect a heading.
+	 * Standard sr-only pattern.
+	 */
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
 	}
 
 	@media (max-width: 480px) {

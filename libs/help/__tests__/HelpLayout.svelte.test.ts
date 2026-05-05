@@ -26,7 +26,7 @@ describe('HelpLayout', () => {
 	it('renders root article with title and summary', () => {
 		render(HelpLayout, { page });
 		expect(screen.getByTestId('helplayout-root').tagName).toBe('ARTICLE');
-		expect(screen.getByTestId('helplayout-title').textContent).toBe('Overview');
+		expect(screen.getByTestId('page-anchor').textContent).toBe('Overview');
 		expect(screen.getByTestId('helplayout-summary').textContent).toBe('A help page summary.');
 	});
 

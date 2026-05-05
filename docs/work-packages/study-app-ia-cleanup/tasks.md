@@ -158,30 +158,38 @@ Goal: remove Memory dropdown, remove local Help dropdown, lock the five-section 
 
 ### 4.1 Nav cleanup
 
-- [ ] Remove the `<details>` Memory dropdown in [apps/study/src/routes/(app)/+layout.svelte](../../../apps/study/src/routes/(app)/+layout.svelte). Replace with a single `nav-learn` link to `/study/learn` (or fold into Home with a tab strip per Q6).
-- [ ] Remove the local Help dropdown. Global Help in `AppHeader.svelte` is the only Help.
-- [ ] Memory child routes (`/memory/browse`, `/memory/new`, `/memory/review`) become sub-nav on the Learn -> Cards index page (tab strip), not top-level nav items.
-- [ ] Final five top-level entries with testids: `nav-home`, `nav-learn`, `nav-program`, `nav-insights`, `nav-reference`.
+- [x] Remove the `<details>` Memory dropdown in [apps/study/src/routes/(app)/+layout.svelte](../../../apps/study/src/routes/(app)/+layout.svelte). Replaced with a single `nav-learn` link to `/study/learn` (per Q6: section index pages carry sub-nav).
+- [x] Remove the local Help dropdown. Global Help search in `AppHeader.svelte` (Phase 1) plus per-page `<PageHelp>` triggers cover every prior affordance; the local `<details>` block is gone with no feature gap.
+- [x] Memory child routes (`/memory/browse`, `/memory/new`, `/memory/review`) stay at their existing URLs (per design.md). The nav surface is unified under Learn via the new `LearnTabs.svelte` strip mounted on `/study/learn`, `/memory`, `/reps`, and `/library` index pages.
+- [x] Final five top-level entries with testids: `nav-home`, `nav-learn`, `nav-program`, `nav-insights`, `nav-reference`. Locked by the `ia-flow.spec.ts` "top nav exposes exactly the five locked testids" assertion.
 
 ### 4.2 CI guard
 
-- [ ] Add a check (script or test) that fails the build if any route under `apps/study/src/routes/(app)/**` ships without `data-testid="page-anchor"` on its `<h1>`. Implement as a Playwright test that walks `ia-flow.spec.ts` FLOW and asserts `page-anchor` visibility on each.
+- [x] Static guard (`apps/study/src/lib/server/page-anchor-guard.ts` + `.test.ts`) walks every `+page.svelte` under `apps/study/src/routes/(app)/` at Vitest time and fails the build if any route does not surface `data-testid="page-anchor"` (directly, via `_panels/*`, or via a canonical wrapper component). Static check runs in `bun run check` -> Vitest -> the unit-node project.
+- [x] Playwright `ia-flow.spec.ts` walks the same routes at runtime and asserts the anchor is *visible*; the static guard catches missing anchors at unit-test time before they reach Playwright.
 
 ### 4.3 Final E2E pass
 
-- [ ] `ia-flow.spec.ts` includes every top-level route + every Program tab. Asserts no console errors.
-- [ ] `bun run check` clean.
+- [x] `ia-flow.spec.ts` FLOW expanded: home, learn, learn-cards, learn-cards-browse, learn-cards-new, learn-reps, learn-reps-browse, learn-read, program (+ four sub-tab anchors), insights, insights-calibration, insights-lens-handbook, insights-lens-weakness, reference, reference-knowledge, reference-glossary. New `top nav exposes exactly the five locked testids` test asserts the contract directly.
+- [x] `bun run check` clean (only the accepted baseline errors: `fast-xml-parser`, `@ab/aviation`, `three`, `@ab/bc-sim/persistence`, `libs/help/search.ts implicit-any`).
 
 ### Phase 4 commit point
 
 `feat(study): drop dropdowns, lock five-section nav`
 
+Squash commits on main (final shipping record):
+
+- Phase 1 -- `a10403a3` `Phase 1: study IA cleanup -- home rebuild + explain-everything plumbing (#649)`
+- Phase 2 -- `459ef36c` `feat(study): program surface (quals + goal + plan) (#650)`
+- Phase 3 -- `8cc496b1` `feat(study): insights + reference rename with 301 redirects (#653)`
+- Phase 4 -- (filled in after merge)
+
 ## Post-implementation
 
 - [ ] Manual walkthrough of every step in [test-plan.md](./test-plan.md) by Joshua.
-- [ ] `/ball-review-full` for a parallel review pass; fix everything before flipping `status: done`.
-- [ ] Update [docs/products/study/PRD.md](../../products/study/PRD.md) -- IA section reflects the new five-section structure.
-- [ ] Update [docs/products/study/ROADMAP.md](../../products/study/ROADMAP.md) -- mark this WP complete.
-- [ ] Archive [docs/work/plans/20260504-study-app-ia-cleanup.md](../../work/plans/20260504-study-app-ia-cleanup.md) (move to `.archive/` once shipped).
-- [ ] Sweep walkthrough todo ([20260504-03-goal-detail-walkthrough-TODO.md](../../work/todos/20260504-03-goal-detail-walkthrough-TODO.md)) -- mark items resolved by this WP, leave the rest for follow-up.
-- [ ] Set `status: done`, `review_status: done` on [spec.md](./spec.md).
+- [x] Phase-by-phase consolidated review walks (`/ball-review-10x` substitute -- the harness can't dispatch parallel reviewers). Phase 1 + 2 + 3 + 4 review files all under `docs/work/reviews/2026-05-05-study-ia-cleanup-phase{1,2,3,4}-*.md`. Findings closed inline.
+- [x] Update [docs/products/study/PRD.md](../../products/study/PRD.md) -- IA section reflects the new five-section structure.
+- [x] Update [docs/products/study/ROADMAP.md](../../products/study/ROADMAP.md) -- mark this WP complete.
+- [ ] Archive [docs/work/plans/20260504-study-app-ia-cleanup.md](../../work/plans/20260504-study-app-ia-cleanup.md) (move to `.archive/` once shipped). *Trigger: after Joshua's manual walkthrough closes.*
+- [ ] Sweep walkthrough todo ([20260504-03-goal-detail-walkthrough-TODO.md](../../work/todos/20260504-03-goal-detail-walkthrough-TODO.md)) -- mark items resolved by this WP, leave the rest for follow-up. *Trigger: after Joshua's manual walkthrough closes.*
+- [ ] Set `status: done`, `review_status: done` on [spec.md](./spec.md). *Joshua flips after walkthrough.*

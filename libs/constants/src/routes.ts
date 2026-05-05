@@ -154,6 +154,16 @@ export const ROUTES = {
 	STUDY: '/study',
 
 	/**
+	 * `/study/learn` -- the consolidated Learn section index (study-app-ia-
+	 * cleanup Phase 4). Tab-strip surface that aggregates Cards (`/memory`),
+	 * Reps (`/reps`), and Read (`/library`) into one section without
+	 * relocating their underlying URLs. The Memory and Reps URLs stay where
+	 * they are; their nav surface is unified here. Replaces the dropdown
+	 * pattern that used to expose Memory child routes from the top nav.
+	 */
+	LEARN: '/study/learn',
+
+	/**
 	 * Flight-logging surface root. WP 1 ships this as a placeholder; WP 2
 	 * (`flight-evidence-and-cfi-feedback`) lands the real list / new / detail
 	 * pages and the debrief invite flow.
@@ -720,6 +730,17 @@ export type AppId = keyof typeof APP_NAMES;
 export const NAV_LABELS = {
 	/** Post-login home (study-home WP). First nav item. */
 	STUDY: 'Study',
+	/**
+	 * `/study/learn` -- consolidated Cards / Reps / Read section
+	 * (study-app-ia-cleanup Phase 4). Single nav entry that replaces the
+	 * Memory dropdown + standalone Reps + Library nav links. Underlying URLs
+	 * (`/memory`, `/reps`, `/library`) are unchanged.
+	 */
+	LEARN: 'Learn',
+	/** Sub-tab labels for the `/study/learn` section index + per-route tab strips. */
+	LEARN_CARDS: 'Cards',
+	LEARN_REPS: 'Reps',
+	LEARN_READ: 'Read',
 	/**
 	 * @deprecated The legacy `/dashboard` page; renamed to "Stats" pre-IA-
 	 * cleanup. Phase 3 renames the surface to `/insights` and prefers

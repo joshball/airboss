@@ -5,6 +5,7 @@ import Button from '@ab/ui/components/Button.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import StatTile from '@ab/ui/components/StatTile.svelte';
+import LearnTabs from '$lib/components/LearnTabs.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -26,6 +27,7 @@ function bar(value: number): number {
 </svelte:head>
 
 <section class="page">
+	<LearnTabs active="reps" />
 	<PageHeader
 		title="Decision Reps"
 		subtitle="Read a situation. Pick a call. See what happens. 60 seconds at a time."

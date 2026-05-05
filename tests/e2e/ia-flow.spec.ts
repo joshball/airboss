@@ -6,9 +6,12 @@
  * flow is the proof-of-existence net; deep behavior tests live in their
  * own focused specs.
  *
- * Phase 2 (per study-app-ia-cleanup tasks.md 2.4): adds the consolidated
- * `/program` surface and asserts each of its four sub-tab anchors. Insights
- * + Reference land in Phase 3.
+ * Phase 4 (per study-app-ia-cleanup tasks.md 4.2 + 4.3): final FLOW
+ * locked. Includes the new `/study/learn` index, every Learn sub-section
+ * (Cards / Reps / Read), every Insights child, every Reference child,
+ * and every Program tab. The Phase 4 CI guard relies on this being the
+ * complete top-level route map -- if you add a new top-level route, add
+ * it here and assert its page-anchor.
  */
 
 import { expect, type Page, test } from '@playwright/test';
@@ -22,6 +25,33 @@ interface Stop {
 
 const FLOW: ReadonlyArray<Stop> = [
 	{ label: 'home', path: ROUTES.STUDY },
+	// Learn section -- consolidated Cards / Reps / Read (Phase 4).
+	// The Learn tab strip lives on every section index and exposes
+	// `learn-tab-{name}` anchors; assert them on the index pages.
+	{
+		label: 'learn',
+		path: ROUTES.LEARN,
+		subAnchors: ['learn-tab-overview', 'learn-tab-cards', 'learn-tab-reps', 'learn-tab-read'],
+	},
+	{
+		label: 'learn-cards',
+		path: ROUTES.MEMORY,
+		subAnchors: ['learn-tab-cards'],
+	},
+	{ label: 'learn-cards-browse', path: ROUTES.MEMORY_BROWSE },
+	{ label: 'learn-cards-new', path: ROUTES.MEMORY_NEW },
+	{
+		label: 'learn-reps',
+		path: ROUTES.REPS,
+		subAnchors: ['learn-tab-reps'],
+	},
+	{ label: 'learn-reps-browse', path: ROUTES.REPS_BROWSE },
+	{
+		label: 'learn-read',
+		path: ROUTES.LIBRARY,
+		subAnchors: ['learn-tab-read'],
+	},
+	// Program section -- Quals / Goal / Plan / Coverage (Phase 2).
 	{
 		label: 'program',
 		path: ROUTES.PROGRAM,
@@ -30,11 +60,12 @@ const FLOW: ReadonlyArray<Stop> = [
 		// every child route.
 		subAnchors: ['program-tab-quals', 'program-tab-goal', 'program-tab-plan', 'program-tab-coverage'],
 	},
-	// Phase 3 -- Insights + Reference + their children.
+	// Insights section -- consolidated stats / calibration / lens (Phase 3).
 	{ label: 'insights', path: ROUTES.INSIGHTS },
 	{ label: 'insights-calibration', path: ROUTES.INSIGHTS_CALIBRATION },
 	{ label: 'insights-lens-handbook', path: ROUTES.INSIGHTS_LENS_HANDBOOK },
 	{ label: 'insights-lens-weakness', path: ROUTES.INSIGHTS_LENS_WEAKNESS },
+	// Reference section -- knowledge graph / glossary (Phase 3).
 	{ label: 'reference', path: ROUTES.REFERENCE },
 	{ label: 'reference-knowledge', path: ROUTES.REFERENCE_KNOWLEDGE },
 	{ label: 'reference-glossary', path: ROUTES.REFERENCE_GLOSSARY },
@@ -55,11 +86,29 @@ test.describe('IA flow -- existence sweep', () => {
 		for (const stop of FLOW) {
 			const res = await page.goto(stop.path);
 			expect(res?.status(), `expected 2xx for ${stop.path}`).toBeLessThan(400);
-			await expect(page.getByTestId('page-anchor'), `page-anchor missing on ${stop.label}`).toBeVisible();
+			await expect(page.getByTestId('page-anchor').first(), `page-anchor missing on ${stop.label}`).toBeVisible();
 			for (const sub of stop.subAnchors ?? []) {
 				await expect(page.getByTestId(sub), `sub-anchor ${sub} missing on ${stop.label}`).toBeVisible();
 			}
 		}
 		expect(errors, `runtime errors during flow:\n${errors.join('\n')}`).toEqual([]);
+	});
+
+	// Phase 4 CI guard -- the five-section nav is the locked contract. Any
+	// regression that drops, renames, or adds a top-level nav entry without
+	// updating this list (and the FLOW above) fails here.
+	test('top nav exposes exactly the five locked testids', async ({ page }) => {
+		await page.goto(ROUTES.STUDY);
+		const required = ['nav-home', 'nav-learn', 'nav-program', 'nav-insights', 'nav-reference'];
+		for (const id of required) {
+			await expect(page.getByTestId(id), `${id} missing from top nav`).toBeVisible();
+		}
+		// Old testids that lived on dropdown summaries / standalone links must
+		// be gone after Phase 4. A leftover would mean the cleanup missed a
+		// site.
+		const removed = ['nav-memory', 'nav-reps', 'nav-flight', 'nav-help'];
+		for (const id of removed) {
+			await expect(page.getByTestId(id), `legacy nav id ${id} still present`).toHaveCount(0);
+		}
 	});
 });
