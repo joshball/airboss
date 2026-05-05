@@ -46,14 +46,14 @@ function domainLabel(d: Domain): string {
 >
 	{#snippet action()}
 		{#if plan}
-			<Button variant="secondary" size="sm" href={ROUTES.PLAN(plan.id)}>Edit</Button>
+			<Button variant="secondary" size="sm" href={ROUTES.PROGRAM_PLAN(plan.id)}>Edit</Button>
 		{:else}
-			<Button variant="primary" size="sm" href={ROUTES.PLANS_NEW}>Create one</Button>
+			<Button variant="primary" size="sm" href={ROUTES.PROGRAM_PLANS_NEW}>Create one</Button>
 		{/if}
 	{/snippet}
 
 	{#if !plan}
-		<p class="muted">No active plan. Sessions require one -- <a href={ROUTES.PLANS_NEW}>set yours up</a>.</p>
+		<p class="muted">No active plan. Sessions require one -- <a href={ROUTES.PROGRAM_PLANS_NEW}>set yours up</a>.</p>
 	{:else}
 		<dl class="meta">
 			<div class="row">

@@ -62,8 +62,17 @@ let {
 		{:else if eyebrow}
 			<p class="eyebrow" data-testid="pageheader-eyebrow">{eyebrow}</p>
 		{/if}
-		<div class="title-row">
-			<h1 data-testid="pageheader-title">{title}</h1>
+		<div class="title-row" data-testid="pageheader-title">
+			<!--
+				`page-anchor` is the canonical existence-sentinel for every
+				study route. The flow e2e test asserts visibility; a Phase 4
+				CI guard fails the build if any route under
+				`apps/study/src/routes/(app)/**` ships without one. Pages
+				that do not use `PageHeader` must emit their own
+				`data-testid="page-anchor"` on the page's primary heading.
+				See `docs/agents/best-practices.md` "E2E selectors".
+			-->
+			<h1 data-testid="page-anchor">{title}</h1>
 			{#if titleSuffix}
 				{@render titleSuffix()}
 			{/if}

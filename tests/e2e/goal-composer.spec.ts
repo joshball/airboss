@@ -3,7 +3,7 @@ import { ROUTES } from '../../libs/constants/src';
 
 test.describe('goals index', () => {
 	test('renders heading and either empty state or goals', async ({ page }) => {
-		await page.goto(ROUTES.GOALS);
+		await page.goto(ROUTES.PROGRAM_GOALS);
 		await expect(page.getByRole('heading', { name: 'Goals', exact: true, level: 1 })).toBeVisible();
 
 		const empty = page.getByRole('heading', { name: /no goals yet/i });
@@ -12,17 +12,17 @@ test.describe('goals index', () => {
 	});
 
 	test('New goal button navigates to /goals/new', async ({ page }) => {
-		await page.goto(ROUTES.GOALS);
+		await page.goto(ROUTES.PROGRAM_GOALS);
 		// One of the two buttons (header or empty-state CTA) should be visible.
 		const button = page.getByRole('link', { name: /new goal|create your first goal/i }).first();
 		await button.click();
-		await expect(page).toHaveURL(ROUTES.GOALS_NEW);
+		await expect(page).toHaveURL(ROUTES.PROGRAM_GOALS_NEW);
 	});
 });
 
 test.describe('goal create + detail', () => {
 	test('create flow: create then redirect to detail', async ({ page }) => {
-		await page.goto(ROUTES.GOALS_NEW);
+		await page.goto(ROUTES.PROGRAM_GOALS_NEW);
 		await expect(page.getByRole('heading', { name: 'New goal', exact: true, level: 1 })).toBeVisible();
 		const title = `e2e goal ${Date.now()}`;
 		await page.getByLabel('Title').fill(title);
@@ -35,16 +35,16 @@ test.describe('goal create + detail', () => {
 	});
 
 	test('404 when goal id does not match', async ({ page }) => {
-		const response = await page.goto(ROUTES.GOAL('goal_does_not_exist'));
+		const response = await page.goto(ROUTES.PROGRAM_GOAL('goal_does_not_exist'));
 		expect(response?.status()).toBe(404);
 	});
 });
 
 test.describe('goal validation', () => {
 	test('blank title surfaces inline error', async ({ page }) => {
-		await page.goto(ROUTES.GOALS_NEW);
+		await page.goto(ROUTES.PROGRAM_GOALS_NEW);
 		await page.getByRole('button', { name: 'Create goal' }).click();
 		// Browser native required-validation may stop submit; assert URL stayed the same.
-		await expect(page).toHaveURL(ROUTES.GOALS_NEW);
+		await expect(page).toHaveURL(ROUTES.PROGRAM_GOALS_NEW);
 	});
 });

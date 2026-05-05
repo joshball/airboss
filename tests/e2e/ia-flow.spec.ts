@@ -6,9 +6,9 @@
  * flow is the proof-of-existence net; deep behavior tests live in their
  * own focused specs.
  *
- * Phase 1 stub (per study-app-ia-cleanup tasks.md 1.8): the FLOW only
- * contains the Home (`ROUTES.STUDY`). Subsequent phases append routes
- * (Program tabs, Insights, Reference) as those surfaces ship.
+ * Phase 2 (per study-app-ia-cleanup tasks.md 2.4): adds the consolidated
+ * `/program` surface and asserts each of its four sub-tab anchors. Insights
+ * + Reference land in Phase 3.
  */
 
 import { expect, type Page, test } from '@playwright/test';
@@ -20,7 +20,17 @@ interface Stop {
 	subAnchors?: ReadonlyArray<string>;
 }
 
-const FLOW: ReadonlyArray<Stop> = [{ label: 'home', path: ROUTES.STUDY }];
+const FLOW: ReadonlyArray<Stop> = [
+	{ label: 'home', path: ROUTES.STUDY },
+	{
+		label: 'program',
+		path: ROUTES.PROGRAM,
+		// `/program` redirects to the active sub-tab; the sub-tab anchors
+		// live in the `/program/+layout.svelte` strip and stay visible on
+		// every child route.
+		subAnchors: ['program-tab-quals', 'program-tab-goal', 'program-tab-plan', 'program-tab-coverage'],
+	},
+];
 
 function attachErrorTrap(page: Page): { errors: string[] } {
 	const errors: string[] = [];

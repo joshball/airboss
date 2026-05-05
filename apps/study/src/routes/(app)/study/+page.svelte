@@ -54,7 +54,7 @@ const dueCardsCount = $derived<number | null>(
 				by July"). Once you set one, the rest of the app personalizes around it.
 			</p>
 			<div class="actions" data-testid="first-run-set-goal-cta">
-				<Button href={ROUTES.GOALS_NEW} variant="primary">Set your first goal</Button>
+				<Button href={ROUTES.PROGRAM_GOALS_NEW} variant="primary">Set your first goal</Button>
 			</div>
 		</article>
 	{:else if data.kind === 'no-plan'}
@@ -67,7 +67,7 @@ const dueCardsCount = $derived<number | null>(
 				it any time.
 			</p>
 			<div class="actions" data-testid="home-cta-primary">
-				<Button href={ROUTES.PLANS_NEW} variant="primary">Build a plan for {data.goalTitle}</Button>
+				<Button href={ROUTES.PROGRAM_PLANS_NEW} variant="primary">Build a plan for {data.goalTitle}</Button>
 			</div>
 		</article>
 	{:else}

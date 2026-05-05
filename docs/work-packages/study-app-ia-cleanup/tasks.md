@@ -85,26 +85,27 @@ Goal: roll Quals + Goal + Plan onto one `/program` surface with sub-tabs.
 
 ### 2.1 Routes + constants
 
-- [ ] Add to [libs/constants/src/routes.ts](../../../libs/constants/src/routes.ts): `PROGRAM`, `PROGRAM_TAB(tab)`, `PROGRAM_QUAL(slug)`, `PROGRAM_GOAL(id)`, `PROGRAM_PLAN(id)`, plus the `?tab=` query param key in `QUERY_PARAMS.PROGRAM_TAB`.
-- [ ] Add `NAV_LABELS.PROGRAM`.
+- [x] Add to [libs/constants/src/routes.ts](../../../libs/constants/src/routes.ts): `PROGRAM`, `PROGRAM_TAB(tab)`, `PROGRAM_QUAL(slug)`, `PROGRAM_GOAL(id)`, `PROGRAM_PLAN(id)`, plus the `?tab=` query param key in `QUERY_PARAMS.PROGRAM_TAB`.
+- [x] Add `NAV_LABELS.PROGRAM`.
 
 ### 2.2 Surface
 
-- [ ] `apps/study/src/routes/(app)/program/+layout.svelte` -- tab strip with four tabs: Quals / Goal / Plan / Coverage. Each tab has `data-testid="program-tab-{name}"`.
-- [ ] `apps/study/src/routes/(app)/program/+page.svelte` -- routes to the active tab via `?tab=`. Default tab = Goal when one exists, else Quals.
-- [ ] `apps/study/src/routes/(app)/program/quals/[slug]/+page.svelte` -- existing credential detail content moved here.
-- [ ] `apps/study/src/routes/(app)/program/goals/[id]/+page.svelte` -- existing goal detail. Primary CTA: "Build my plan" (no plan) or "Start studying" (plan exists). `data-testid="goal-detail-start-cta"`.
-- [ ] `apps/study/src/routes/(app)/program/plans/[id]/+page.svelte` -- existing plan detail moved here.
-- [ ] Per-tab page explainer.
+- [x] `apps/study/src/routes/(app)/program/+layout.svelte` -- tab strip with four tabs: Quals / Goal / Plan / Coverage. Each tab has `data-testid="program-tab-{name}"`.
+- [x] `apps/study/src/routes/(app)/program/+page.server.ts` -- routes to the active tab via `?tab=`. Default tab = Goal when one exists, else Quals.
+- [x] `apps/study/src/routes/(app)/program/quals/[slug]/+page.svelte` -- existing credential detail content moved here (via `git mv` to preserve history).
+- [x] `apps/study/src/routes/(app)/program/goals/[id]/+page.svelte` -- existing goal detail. Primary CTA: "Build my plan" (no plan) or "Start studying" (plan exists). `data-testid="goal-detail-start-cta"`.
+- [x] `apps/study/src/routes/(app)/program/plans/[id]/+page.svelte` -- existing plan detail moved here.
+- [x] Per-tab page explainer (4 new keys in `PAGE_EXPLAINER_KEYS`).
+- [x] `/program/coverage` -- new placeholder summary tab.
 
 ### 2.3 Nav update
 
-- [ ] Replace Quals / Goals / Plans nav entries with single Program link in [apps/study/src/routes/(app)/+layout.svelte](../../../apps/study/src/routes/(app)/+layout.svelte). `data-testid="nav-program"`.
+- [x] Replace Quals / Goals / Plans nav entries with single Program link in [apps/study/src/routes/(app)/+layout.svelte](../../../apps/study/src/routes/(app)/+layout.svelte). `data-testid="nav-program"`.
 
 ### 2.4 E2E (Phase 2 slice)
 
-- [ ] Expand `ia-flow.spec.ts` FLOW with Program + sub-tabs.
-- [ ] Author `tests/e2e/ia-goal-to-session.spec.ts` -- populated goal -> "Start studying" -> session entry.
+- [x] Expand `ia-flow.spec.ts` FLOW with Program + sub-tabs.
+- [x] Author `tests/e2e/ia-goal-to-session.spec.ts` -- populated goal -> "Start studying" -> session entry.
 
 ### Phase 2 commit point
 

@@ -7,6 +7,10 @@ build/
 .DS_Store
 *.log
 coverage/
+# But not the Program "Coverage" sub-tab route -- that lives at
+# `apps/study/src/routes/(app)/program/coverage/` and is real code, not a
+# test-coverage artifact.
+!apps/study/src/routes/(app)/program/coverage/
 .tmp/
 .claude/
 .dev/

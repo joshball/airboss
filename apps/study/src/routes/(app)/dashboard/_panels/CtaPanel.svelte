@@ -42,7 +42,7 @@ type Cta = { href: string; label: string };
 const primary = $derived<Cta>(
 	hasPlan
 		? { href: ROUTES.SESSION_START, label: 'Start session' }
-		: { href: ROUTES.PLANS_NEW, label: 'Create a study plan' },
+		: { href: ROUTES.PROGRAM_PLANS_NEW, label: 'Create a study plan' },
 );
 
 // Secondary CTAs: surface real work pressure alongside the primary action so
