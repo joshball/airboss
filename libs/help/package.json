@@ -7,6 +7,10 @@
 			"types": "./src/index.ts",
 			"default": "./src/index.ts"
 		},
+		"./glossary": {
+			"types": "./src/glossary/index.ts",
+			"default": "./src/glossary/index.ts"
+		},
 		"./ui/*": "./src/ui/*"
 	},
 	"dependencies": {
