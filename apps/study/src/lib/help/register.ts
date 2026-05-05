@@ -22,7 +22,9 @@
  */
 
 import { helpRegistry } from '@ab/help';
+import { getGlossaryEntry } from '@ab/help/glossary';
 import { setInfoTipHelpResolver } from '@ab/ui/lib/info-tip-resolver';
+import { setTooltipGlossaryResolver } from '@ab/ui/lib/tooltip-glossary-resolver';
 import { loadStudyHelpBody, studyHelpIndex } from './pages-index';
 
 const STUDY_APP_ID = 'study';
@@ -35,6 +37,14 @@ export function registerStudyHelp(): void {
 	// on broken `helpId` props without importing from `@ab/help`. Inverting
 	// this edge keeps the ui <-> help dependency acyclic.
 	setInfoTipHelpResolver((id) => helpRegistry.getById(id) !== undefined);
+	// Same inversion for the new glossary tooltip primitive: `Tooltip`
+	// reads short definitions through this resolver so `libs/ui` does
+	// not depend on `libs/help`.
+	setTooltipGlossaryResolver((key) => {
+		const entry = getGlossaryEntry(key);
+		if (entry === null) return null;
+		return { term: entry.term, short: entry.short };
+	});
 }
 
 // Module-eval side-effect: register on first import. Idempotent on

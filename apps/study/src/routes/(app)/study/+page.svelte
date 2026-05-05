@@ -1,7 +1,9 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
 import Button from '@ab/ui/components/Button.svelte';
+import PageExplainer from '@ab/ui/components/PageExplainer.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
+import Tooltip from '@ab/ui/components/Tooltip.svelte';
 import MapPanel from './_panels/MapPanel.svelte';
 import ProgressPanel from './_panels/ProgressPanel.svelte';
 import TilesPanel from './_panels/TilesPanel.svelte';
@@ -25,28 +27,50 @@ const dueCardsCount = $derived(Math.max(0, recallRequired - recallPassing));
 </svelte:head>
 
 <section class="page">
-	{#if data.kind === 'home'}
-		<PageHeader
-			title="Study"
-			subtitleSnippet={credentialSubtitle}
-		/>
-	{:else}
-		<PageHeader title="Study" subtitle="Where you are. What's next. How you'd like to study it." />
-	{/if}
+	<PageHeader title="Study" subtitle="What should I do right now? Today's session and any pressure points." />
+	<h1 class="visually-hidden" data-testid="page-anchor">Study Home</h1>
+
+	<PageExplainer pageKey="home">
+		The Home page rolls up your study state into one obvious next step. If you don't have a
+		<Tooltip for="goal">a goal</Tooltip>, set one. If you have a goal but no
+		<Tooltip for="plan">plan</Tooltip>, build one. If you have both, start today's session.
+	</PageExplainer>
 
 	{#if data.kind === 'no-goal'}
 		<article class="banner" aria-labelledby="study-no-goal-h">
-			<h2 id="study-no-goal-h">Set a primary goal to personalize your study home</h2>
+			<h2 id="study-no-goal-h">Set your first goal</h2>
 			<p>
-				The study home rolls up progress against the certification you're targeting (Private Pilot,
-				Instrument, etc.). Pick a primary goal and the page will show your understood / memorized /
-				practiced numbers, today's focus, and a hierarchical map of the cert.
+				A <Tooltip for="goal">goal</Tooltip> is the slice of study you're focused on right now (e.g. "Pass PPL written
+				by July"). Once you set one, the rest of the app personalizes around it.
 			</p>
-			<div class="actions">
-				<Button href={ROUTES.GOALS_NEW} variant="primary">Set a primary goal</Button>
+			<div class="actions" data-testid="first-run-set-goal-cta">
+				<Button href={ROUTES.GOALS_NEW} variant="primary">Set your first goal</Button>
+			</div>
+		</article>
+	{:else if data.kind === 'no-plan'}
+		<article class="banner" aria-labelledby="study-no-plan-h">
+			<h2 id="study-no-plan-h">Build a plan for {data.goalTitle}</h2>
+			<p>
+				Your <Tooltip for="goal">goal</Tooltip> is set. A
+				<Tooltip for="plan">plan</Tooltip> tells the
+				<Tooltip for="session">session</Tooltip> engine how long to study, how often, and what to focus on. You can change
+				it any time.
+			</p>
+			<div class="actions" data-testid="home-cta-primary">
+				<Button href={ROUTES.PLANS_NEW} variant="primary">Build a plan for {data.goalTitle}</Button>
 			</div>
 		</article>
 	{:else}
+		<article class="banner banner-cta" aria-labelledby="study-today-h">
+			<h2 id="study-today-h">Start today's session</h2>
+			<p>
+				Working toward <Tooltip for="goal">{data.goalTitle}</Tooltip>. Today's session is shaped by your active
+				<Tooltip for="plan">plan</Tooltip>.
+			</p>
+			<div class="actions" data-testid="home-cta-primary">
+				<Button href={ROUTES.SESSION_START} variant="primary">Start today's session</Button>
+			</div>
+		</article>
 		<ProgressPanel mastery={data.mastery} />
 		<TodayPanel briefing={data.briefing} />
 		<TilesPanel
@@ -59,56 +83,51 @@ const dueCardsCount = $derived(Math.max(0, recallRequired - recallPassing));
 	{/if}
 </section>
 
-{#snippet credentialSubtitle()}
-	{#if data.kind === 'home'}
-		<span class="cred">
-			<strong>{data.credential.title}</strong>
-			<a href={ROUTES.GOALS} class="switch">(switch)</a>
-		</span>
-	{/if}
-{/snippet}
-
 <style>
-.page {
-	display: flex;
-	flex-direction: column;
-	gap: var(--space-xl);
-}
+	.page {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-xl);
+	}
 
-.banner {
-	border: 1px solid var(--edge-strong);
-	border-radius: var(--radius-md);
-	padding: var(--space-xl);
-	background: var(--surface-raised);
-	display: flex;
-	flex-direction: column;
-	gap: var(--space-md);
-	max-width: 60ch;
-}
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
+	}
 
-.banner h2 {
-	margin: 0;
-	font-size: var(--font-size-lg);
-}
+	.banner {
+		border: 1px solid var(--edge-strong);
+		border-radius: var(--radius-md);
+		padding: var(--space-xl);
+		background: var(--surface-raised);
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-md);
+		max-width: 60ch;
+	}
 
-.banner p {
-	margin: 0;
-	color: var(--ink-muted);
-}
+	.banner-cta {
+		border-color: var(--action-default-default);
+	}
 
-.actions {
-	margin-top: var(--space-sm);
-}
+	.banner h2 {
+		margin: 0;
+		font-size: var(--font-size-lg);
+	}
 
-.cred {
-	display: inline-flex;
-	gap: var(--space-2xs);
-	align-items: baseline;
-}
+	.banner p {
+		margin: 0;
+		color: var(--ink-muted);
+	}
 
-.switch {
-	color: var(--link-default);
-	text-decoration: underline;
-	font-size: var(--font-size-sm);
-}
+	.actions {
+		margin-top: var(--space-sm);
+	}
 </style>

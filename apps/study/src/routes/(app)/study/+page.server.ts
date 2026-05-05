@@ -22,6 +22,7 @@ import { requireAuth } from '@ab/auth';
 import {
 	type CredentialMasteryRollup,
 	type CredentialRow,
+	getActivePlan,
 	getCredentialById,
 	getCredentialMastery,
 	getCredentialPrimarySyllabus,
@@ -69,6 +70,7 @@ function citationOrderFromPref(pref: string | null): CitationOrder {
 export interface StudyHomePayload {
 	kind: 'home';
 	credential: { id: string; slug: string; title: string };
+	goalTitle: string;
 	mastery: CredentialMasteryRollup;
 	briefing: TodayBriefing;
 	repBacklog: RepBacklog;
@@ -84,7 +86,15 @@ export interface StudyHomeNoGoalPayload {
 	tab: StudyMapTab;
 }
 
-export type StudyHomeData = StudyHomePayload | StudyHomeNoGoalPayload;
+export interface StudyHomeNoPlanPayload {
+	kind: 'no-plan';
+	goalId: string;
+	goalTitle: string;
+	citationOrder: CitationOrder;
+	tab: StudyMapTab;
+}
+
+export type StudyHomeData = StudyHomePayload | StudyHomeNoGoalPayload | StudyHomeNoPlanPayload;
 
 export const load: PageServerLoad = async (event) => {
 	const user = requireAuth(event);
@@ -95,9 +105,10 @@ export const load: PageServerLoad = async (event) => {
 		throw redirect(302, '/study');
 	}
 
-	const [prefs, primaryGoal] = await Promise.all([
+	const [prefs, primaryGoal, activePlan] = await Promise.all([
 		getUserPrefs(user.id, [USER_PREF_KEYS.CITATION_ORDER, USER_PREF_KEYS.MAP_TAB]),
 		getPrimaryGoal(user.id),
+		getActivePlan(user.id),
 	]);
 
 	const citationOrderPref = readPrefString(prefs[USER_PREF_KEYS.CITATION_ORDER]);
@@ -113,6 +124,20 @@ export const load: PageServerLoad = async (event) => {
 			citationOrder,
 			tab,
 		} satisfies StudyHomeNoGoalPayload;
+	}
+
+	// Goal exists but no active plan -- the user lands in the "build a plan"
+	// state. Spec ID IAC-1.7 + IAC-2.5: Home shows "Build a plan for {goal title}"
+	// as the primary CTA; no Today panel + no map yet because the engine
+	// reads session shape from the active plan.
+	if (activePlan === null) {
+		return {
+			kind: 'no-plan' as const,
+			goalId: primaryGoal.id,
+			goalTitle: primaryGoal.title,
+			citationOrder,
+			tab,
+		} satisfies StudyHomeNoPlanPayload;
 	}
 
 	// Resolve the goal's primary credential. The goal links to syllabi via
@@ -155,6 +180,7 @@ export const load: PageServerLoad = async (event) => {
 	return {
 		kind: 'home' as const,
 		credential: { id: credential.id, slug: credential.slug, title: credential.title },
+		goalTitle: primaryGoal.title,
 		mastery,
 		briefing,
 		repBacklog,
