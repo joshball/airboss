@@ -23,6 +23,18 @@ let { data }: { data: PageData } = $props();
 		<li>
 			<a class="card" class:empty={bucket.count === 0} href={ROUTES.LIBRARY_REGULATIONS_KIND(bucket.kind)}>
 				<span class="card-title">{bucket.label}</span>
+				{#if bucket.officialTitle}
+					<span class="card-official">{bucket.officialTitle}</span>
+				{/if}
+				{#if bucket.description}
+					<p class="card-description">{bucket.description}</p>
+				{/if}
+				{#if bucket.whyItMatters}
+					<p class="card-why">
+						<span class="card-why-label">Why pilots care</span>
+						<span>{bucket.whyItMatters}</span>
+					</p>
+				{/if}
 				<span class="card-count">
 					{bucket.count} reference{bucket.count === 1 ? '' : 's'}
 				</span>
@@ -37,14 +49,14 @@ let { data }: { data: PageData } = $props();
 		padding: 0;
 		margin: 0;
 		display: grid;
-		gap: var(--space-sm);
-		grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+		gap: var(--space-md);
+		grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
 	}
 	.card {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-2xs);
-		padding: var(--space-sm) var(--space-md);
+		padding: var(--space-md) var(--space-lg);
 		border-radius: var(--radius-md);
 		border: 1px solid var(--edge-default);
 		background: var(--surface-raised);
@@ -64,10 +76,38 @@ let { data }: { data: PageData } = $props();
 		opacity: 0.55;
 	}
 	.card-title {
-		font-size: var(--font-size-base);
+		font-size: var(--font-size-lg);
 		font-weight: var(--font-weight-semibold);
 	}
+	.card-official {
+		color: var(--ink-muted);
+		font-size: var(--font-size-sm);
+		font-style: italic;
+	}
+	.card-description {
+		margin: var(--space-2xs) 0 0;
+		font-size: var(--font-size-sm);
+		line-height: var(--line-height-relaxed, 1.55);
+	}
+	.card-why {
+		margin: var(--space-2xs) 0 0;
+		padding: var(--space-xs) var(--space-sm);
+		border-left: 2px solid var(--action-default-edge);
+		background: var(--surface-sunken, var(--surface-raised));
+		font-size: var(--font-size-sm);
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-3xs);
+	}
+	.card-why-label {
+		font-size: var(--font-size-xs);
+		font-weight: var(--font-weight-semibold);
+		text-transform: uppercase;
+		letter-spacing: var(--letter-spacing-caps);
+		color: var(--ink-muted);
+	}
 	.card-count {
+		margin-top: var(--space-xs);
 		color: var(--ink-muted);
 		font-size: var(--font-size-sm);
 	}

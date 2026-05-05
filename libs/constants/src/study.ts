@@ -1522,6 +1522,61 @@ export const LIBRARY_REGULATIONS_KIND_LABELS: Record<LibraryRegulationsKind, str
 };
 
 /**
+ * Hand-authored descriptive copy for the top-level regulations buckets.
+ * Surfaced on `/library/regulations` (landing) and as the page header on
+ * `/library/regulations/[kind]` (group). Kept in code (not DB) because there
+ * is no `reference` row at the kind level -- the kind is a slug grouping over
+ * many references. Edit here when the official scope of a regulator changes.
+ *
+ * `officialTitle` -- the publisher's full name for the corpus.
+ * `description`   -- 1-2 sentences on what the corpus contains.
+ * `whyItMatters`  -- 1-2 sentences on why a learning pilot should care.
+ */
+export interface LibraryRegulationsKindCopy {
+	readonly officialTitle: string;
+	readonly description: string;
+	readonly whyItMatters: string;
+}
+
+export const LIBRARY_REGULATIONS_KIND_COPY: Record<LibraryRegulationsKind, LibraryRegulationsKindCopy> = {
+	[LIBRARY_REGULATIONS_KINDS.CFR_14]: {
+		officialTitle: 'Title 14 of the Code of Federal Regulations -- Aeronautics and Space',
+		description:
+			'The federal aviation regulations. Codifies airman certification, aircraft airworthiness, flight operations, air traffic, schools, and the FAA itself across roughly 200 Parts.',
+		whyItMatters:
+			'This is the rulebook every pilot operates under. Knowing 14 CFR -- especially Parts 61, 91, 135, and 141 -- is the difference between airmanship and ramp-check anxiety.',
+	},
+	[LIBRARY_REGULATIONS_KINDS.CFR_49]: {
+		officialTitle: 'Title 49 of the Code of Federal Regulations -- Transportation',
+		description:
+			'The transportation safety code. For pilots, the relevant Parts are NTSB accident reporting (830) and TSA security programs for charter and commercial operations (1552).',
+		whyItMatters:
+			'When something goes wrong -- an incident, an accident, a security event -- 49 CFR governs what you must report, who you tell, and when. Most pilots will only ever read Part 830, and they will read it under stress.',
+	},
+	[LIBRARY_REGULATIONS_KINDS.AIM]: {
+		officialTitle: 'Aeronautical Information Manual',
+		description:
+			"The FAA's pilot guide to operating in the National Airspace System. Procedural, advisory, and explanatory -- the AIM tells you HOW to fly the rules that 14 CFR codifies.",
+		whyItMatters:
+			'14 CFR says what is required; the AIM says what is expected. Controllers, examiners, and accident investigators all assume you know it. Read it once cover-to-cover, then keep it within reach.',
+	},
+	[LIBRARY_REGULATIONS_KINDS.AC]: {
+		officialTitle: 'FAA Advisory Circulars',
+		description:
+			'Non-regulatory FAA guidance documents -- one acceptable means of complying with the regulations. Cover everything from weight-and-balance methods to recurrent training programs to night-currency procedures.',
+		whyItMatters:
+			'When the regs are vague ("preflight planning shall include all available information"), the relevant AC tells you what the FAA actually expects to see. They are how the regulator turns intent into practice.',
+	},
+	[LIBRARY_REGULATIONS_KINDS.NTSB]: {
+		officialTitle: 'National Transportation Safety Board',
+		description:
+			'The independent investigative agency for civil aviation accidents and incidents. NTSB findings, recommendations, and case reports drive regulatory and procedural change across the industry.',
+		whyItMatters:
+			'The NTSB record is how aviation learns. Reading the cases that match your operation -- VFR-into-IMC, fuel exhaustion, runway excursion -- is the cheapest training a pilot can do.',
+	},
+};
+
+/**
  * External-citation URL templates. The `resolveCitationUrl` resolver in
  * `@ab/bc-study handbooks.ts` consumes these for non-handbook citation kinds.
  * Centralised here so a URL change (eCFR rebrand, FAA AIM reorganisation)

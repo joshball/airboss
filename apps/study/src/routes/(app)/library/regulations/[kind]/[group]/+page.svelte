@@ -15,7 +15,7 @@ const kindLabel = $derived(data.kindLabel);
 	<title>{data.groupLabel} -- airboss</title>
 </svelte:head>
 
-<PageHeader title={data.groupLabel}>
+<PageHeader title={data.groupLabel} subtitle={data.officialTitle ?? undefined}>
 	{#snippet eyebrowSnippet()}
 		<nav aria-label="Breadcrumb">
 			<a href={ROUTES.LIBRARY}>Library</a> &raquo;
@@ -25,6 +25,20 @@ const kindLabel = $derived(data.kindLabel);
 		</nav>
 	{/snippet}
 </PageHeader>
+
+{#if data.description || data.whyItMatters}
+	<section aria-label="About this part" class="group-overview">
+		{#if data.description}
+			<p class="group-description">{data.description}</p>
+		{/if}
+		{#if data.whyItMatters}
+			<p class="group-why">
+				<span class="group-why-label">Why pilots care</span>
+				<span>{data.whyItMatters}</span>
+			</p>
+		{/if}
+	</section>
+{/if}
 
 {#if data.sections.length > 0}
 	<section aria-label="Sections">
@@ -103,5 +117,32 @@ const kindLabel = $derived(data.kindLabel);
 		display: grid;
 		gap: var(--space-sm);
 		grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
+	}
+	.group-overview {
+		margin-bottom: var(--space-lg);
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-sm);
+	}
+	.group-description {
+		margin: 0;
+		font-size: var(--font-size-base);
+		line-height: var(--line-height-relaxed, 1.55);
+	}
+	.group-why {
+		margin: 0;
+		padding: var(--space-sm) var(--space-md);
+		border-left: 3px solid var(--action-default-edge);
+		background: var(--surface-sunken, var(--surface-raised));
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-3xs);
+	}
+	.group-why-label {
+		font-size: var(--font-size-xs);
+		font-weight: var(--font-weight-semibold);
+		text-transform: uppercase;
+		letter-spacing: var(--letter-spacing-caps);
+		color: var(--ink-muted);
 	}
 </style>
