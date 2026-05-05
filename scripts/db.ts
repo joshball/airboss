@@ -579,6 +579,7 @@ const handlers: Record<string, () => Promise<void> | void> = {
 	reset: doReset,
 	'reset-study': doResetStudy,
 	'reset-login-attempts': doResetLoginAttempts,
+	'e2e:setup': () => run(['bun', 'scripts/db/e2e-setup.ts']),
 	build: doBuild,
 	'build-all': doBuildAll,
 	new: doNew,

@@ -132,10 +132,12 @@ export {
 	DEV_DB_HOST_PATTERN,
 	DEV_DB_HOST_SUFFIX_ALLOWLIST,
 	DEV_DB_URL,
+	DEV_DB_URL_E2E,
 	DEV_PASSWORD,
 	DEV_SEED_BYPASS_FLAG,
 	DEV_SEED_LEARNER_EMAIL,
 	DEV_SEED_ORIGIN_TAG,
+	E2E_DB_NAME,
 } from './dev';
 export { ENGINE_SCORING } from './engine';
 export { ENV_VARS, type EnvVarName, getEnv, getEnvBool, getEnvInt, isProd, requireEnv } from './env';
