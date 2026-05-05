@@ -9,7 +9,7 @@
 import type { NodeEvidenceState } from '@ab/bc-study/server';
 import { type AssessmentMethod, NODE_MASTERY_GATES } from '@ab/constants';
 import { describe, expect, it } from 'vitest';
-import { rollupOverNodes } from './build-handbook-tree';
+import { rollupOverNodes } from './build-handbook-tree.server';
 
 const NA = NODE_MASTERY_GATES.NOT_APPLICABLE;
 const PASS = NODE_MASTERY_GATES.PASS;

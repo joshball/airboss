@@ -49,10 +49,10 @@ import {
 import { db } from '@ab/db/connection';
 import { fail, redirect } from '@sveltejs/kit';
 import { sql } from 'drizzle-orm';
-import { buildAcsTree } from './_lib/build-acs-tree';
-import { buildCourseTree } from './_lib/build-course-tree';
-import { buildHandbookTree, type FocusHandbookCitation } from './_lib/build-handbook-tree';
-import { buildTodayBriefing } from './_lib/build-today-briefing';
+import { buildAcsTree } from './_lib/build-acs-tree.server';
+import { buildCourseTree } from './_lib/build-course-tree.server';
+import { buildHandbookTree, type FocusHandbookCitation } from './_lib/build-handbook-tree.server';
+import { buildTodayBriefing } from './_lib/build-today-briefing.server';
 import type { MapNode } from './_lib/map-types';
 import type { TodayBriefing } from './_lib/today-types';
 import type { Actions, PageServerLoad } from './$types';
