@@ -93,3 +93,27 @@ export const RENDER_MODE_VALUES: readonly RenderMode[] = Object.values(RENDER_MO
 
 /** Default render mode when no preference is stored. */
 export const RENDER_MODE_DEFAULT: RenderMode = RENDER_MODES.LEARN;
+
+/**
+ * Closed allowlist of `<PageExplainer>` `pageKey` values. Every page that
+ * mounts an explainer must register its key here; the
+ * `study.page_explainer.dismissed` JSON map and the API endpoint validate
+ * keys against `PAGE_EXPLAINER_KEY_VALUES` so a compromised session can't
+ * fill the row with arbitrary keys (defense-in-depth) and so
+ * `grep PAGE_EXPLAINER_KEYS` produces a catalog of every explainer
+ * surface in the app -- useful when the Settings-level "hide all" toggle
+ * lands.
+ */
+export const PAGE_EXPLAINER_KEYS = {
+	/** `/study` post-login home. Phase 1 of study-app-ia-cleanup. */
+	STUDY_HOME: 'home',
+} as const;
+
+export type PageExplainerKey = (typeof PAGE_EXPLAINER_KEYS)[keyof typeof PAGE_EXPLAINER_KEYS];
+
+export const PAGE_EXPLAINER_KEY_VALUES: readonly PageExplainerKey[] = Object.values(PAGE_EXPLAINER_KEYS);
+
+/** Type-guard: is the given string one of the registered explainer keys. */
+export function isPageExplainerKey(value: string): value is PageExplainerKey {
+	return (PAGE_EXPLAINER_KEY_VALUES as readonly string[]).includes(value);
+}

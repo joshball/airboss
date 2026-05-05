@@ -15,13 +15,17 @@
 
 import { requireAuth } from '@ab/auth';
 import { setPageExplainerDismissal } from '@ab/bc-study';
+import { isPageExplainerKey } from '@ab/constants';
 import { db } from '@ab/db/connection';
 import { error, json } from '@sveltejs/kit';
 import { z } from 'zod';
 import type { RequestHandler } from './$types';
 
+// Validate `pageKey` against the closed `PAGE_EXPLAINER_KEYS` allowlist
+// so an authenticated caller cannot fill their dismissal-map row with
+// arbitrary keys. The Zod refine surfaces a uniform 400 error path.
 const bodySchema = z.object({
-	pageKey: z.string().min(1).max(128),
+	pageKey: z.string().min(1).max(128).refine(isPageExplainerKey, { message: 'unknown page key' }),
 	dismissed: z.boolean(),
 });
 

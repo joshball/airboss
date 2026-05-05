@@ -56,10 +56,15 @@ const {
 	globallyHidden = false,
 }: Props = $props();
 
-// Optimistic local mirror of the dismissal flag. Seeded from the
-// server-rendered prop and then driven by `persistDismissal` / peek
-// state. `untrack` keeps Svelte 5 from warning about a one-shot read
-// of a reactive prop into a `$state` initializer.
+/**
+ * Optimistic local mirror of the dismissal flag. Seeded from the
+ * server-rendered prop and then driven by `persistDismissal` / peek
+ * state. `untrack` keeps Svelte 5 from warning about a one-shot read
+ * of a reactive prop into a `$state` initializer. Do not inline the
+ * call back to `$state(initialDismissed)` -- the warning will resurface
+ * and the seed will start tracking the prop, which we don't want
+ * (subsequent updates flow through fetch + our own writes).
+ */
 let dismissed = $state(untrack(() => initialDismissed));
 /** Set true when the user clicks the `?` to peek even though dismissal is sticky. Resets on next mount. */
 let peek = $state(false);
@@ -90,6 +95,11 @@ async function handleCollapse() {
 	if (!ok) {
 		// Roll back optimistic UI on failure. Action is non-load-bearing,
 		// so we surface no inline error -- the user can click again.
+		// We log the failure so it's visible in dev / DevTools; a future
+		// toast subsystem can subscribe (see TEMP_FIXES.md
+		// "PageExplainer dismissal failure toast").
+		// biome-ignore lint/suspicious/noConsole: failure-path observability
+		console.warn('PageExplainer: dismissal POST failed; reverting optimistic state.');
 		dismissed = previous;
 	}
 }
@@ -113,10 +123,11 @@ function handleHidePeek() {
 					class="control"
 					aria-expanded="true"
 					aria-controls="page-explainer-{pageKey}-body"
+					aria-label={peek ? 'Hide page explainer' : "Don't show this page explainer again"}
 					onclick={peek ? handleHidePeek : handleCollapse}
 					data-testid="page-explainer-collapse"
 				>
-					Hide
+					{peek ? 'Hide' : "Don't show again"}
 				</button>
 			</div>
 			<div id="page-explainer-{pageKey}-body" class="copy">

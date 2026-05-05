@@ -175,6 +175,19 @@ export async function setUserPref(
 export type PageExplainerDismissals = Record<string, true>;
 
 /**
+ * Raised when a caller passes an empty `pageKey` to
+ * `setPageExplainerDismissal`. The endpoint's Zod refine catches this
+ * before the BC sees it; the typed error is for direct callers (other
+ * BCs, future internal routes, tests).
+ */
+export class EmptyPageKeyError extends Error {
+	constructor() {
+		super('pageKey must be non-empty');
+		this.name = 'EmptyPageKeyError';
+	}
+}
+
+/**
  * Read the per-page explainer dismissal map for a user. Returns an empty
  * object when nothing has been dismissed. The map is the value of the
  * `study.page_explainer.dismissed` user_pref row.
@@ -192,10 +205,20 @@ export async function getPageExplainerDismissals(userId: string, db: Db = defaul
 
 /**
  * Set the dismissal flag for a single `pageKey` without overwriting other
- * pages' dismissal state. Reads, mutates, and upserts the JSON map in
- * one logical operation. `dismissed = false` removes the key from the
- * map (rather than storing `false`) so the stored shape stays a closed
- * "set of dismissed page keys".
+ * pages' dismissal state.
+ *
+ * Concurrency: the read-modify-write runs inside a transaction with
+ * `SELECT ... FOR UPDATE` on the user_pref row, so two simultaneous
+ * toggles for distinct page keys serialize and both land. Same-key
+ * concurrent toggles are last-write-wins, which matches user intent.
+ *
+ * Audit-row size note: the audit row stores the full before/after map
+ * (one JSONB row holds every page's dismissal). After many dismissals
+ * the audit blob grows linearly. This is the cost of "one row per user"
+ * -- replacing the JSON-map shape with one row per (userId, pageKey)
+ * would shrink audit rows but would also force every new page key into
+ * the closed `USER_PREF_KEYS` set. Keep the JSON map until that audit
+ * cost matters.
  */
 export async function setPageExplainerDismissal(
 	userId: string,
@@ -203,16 +226,36 @@ export async function setPageExplainerDismissal(
 	dismissed: boolean,
 	db: Db = defaultDb,
 ): Promise<PageExplainerDismissals> {
-	if (pageKey.length === 0) throw new Error('pageKey must be non-empty');
-	const current = await getPageExplainerDismissals(userId, db);
-	const next: PageExplainerDismissals = { ...current };
-	if (dismissed) {
-		next[pageKey] = true;
-	} else {
-		delete next[pageKey];
-	}
-	// Use the typed setter so the audit row + per-key Zod validation
-	// stay in sync with every other user_pref write.
-	await setUserPref(userId, USER_PREF_KEYS.PAGE_EXPLAINER_DISMISSED, next, db);
-	return next;
+	if (pageKey.length === 0) throw new EmptyPageKeyError();
+
+	return db.transaction(async (tx) => {
+		// SELECT ... FOR UPDATE on the (userId, key) row serializes
+		// concurrent toggles for this user without affecting reads from
+		// other rows. If the row doesn't exist yet there's nothing to
+		// lock; the upsert below handles that case.
+		await tx.execute(sql`
+			SELECT 1 FROM study.user_pref
+			WHERE user_id = ${userId}
+			  AND key = ${USER_PREF_KEYS.PAGE_EXPLAINER_DISMISSED}
+			FOR UPDATE
+		`);
+		const current = await getPageExplainerDismissals(userId, tx as unknown as Db);
+		const isCurrentlyDismissed = current[pageKey] === true;
+		// No-op skip: if requested state matches stored state, return
+		// without writing or auditing. Eliminates flip-flop abuse against
+		// the audit log without a rate limiter, and keeps real toggles
+		// snappy.
+		if (isCurrentlyDismissed === dismissed) return current;
+
+		const next: PageExplainerDismissals = { ...current };
+		if (dismissed) {
+			next[pageKey] = true;
+		} else {
+			delete next[pageKey];
+		}
+		// Use the typed setter so the audit row + per-key Zod validation
+		// stay in sync with every other user_pref write.
+		await setUserPref(userId, USER_PREF_KEYS.PAGE_EXPLAINER_DISMISSED, next, tx as unknown as Db);
+		return next;
+	});
 }

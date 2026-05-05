@@ -1,3 +1,18 @@
+<script lang="ts" module>
+/**
+ * Module-scoped instance counter -- one tooltip id per mount, so the
+ * same glossary `for=` key on multiple call sites produces unique
+ * `id="tooltip-<key>-<n>"` ids. WCAG 4.1.1 (parsing) requires unique
+ * ids; previously every `<Tooltip for="goal">` collapsed to
+ * `id="tooltip-goal"` which the home page mounts three times.
+ */
+let nextInstanceId = 0;
+function nextTooltipInstance(): number {
+	nextInstanceId += 1;
+	return nextInstanceId;
+}
+</script>
+
 <script lang="ts">
 /**
  * Lightweight glossary tooltip.
@@ -22,13 +37,20 @@
  *
  * A11y:
  *
- *   - Hover and keyboard focus both open. Blur and Esc dismiss.
- *   - Tap opens on touch devices; tap outside dismisses.
- *   - `role="tooltip"` on the popover with a generated `id`. The trigger
- *     wraps its child in a `span` with `aria-describedby` pointing at the
- *     tooltip id.
+ *   - Hover and keyboard focus both open. Blur, Esc, and pointer-down
+ *     outside the trigger dismiss.
+ *   - Tap opens on touch devices; tap outside the trigger dismisses
+ *     (document-scoped `pointerdown` listener mounted only while open).
+ *   - `role="tooltip"` on the popover with a per-instance unique `id`.
+ *     The trigger wraps its child in a `span` with `aria-describedby`
+ *     pointing at the id while open.
+ *   - `:focus-visible` paints an explicit focus ring so keyboard users
+ *     see the trigger has focus.
  *   - The popover is purely descriptive -- no interactive content. (For
  *     interactive content with a "learn more" link, use `<InfoTip>`.)
+ *   - `tabindex="0"` is opt-in via the `focusable` prop. Plain-text
+ *     wrappers default to non-focusable so a long sentence with multiple
+ *     `<Tooltip>`s doesn't litter the tab order.
  */
 
 import { type Snippet, untrack } from 'svelte';
@@ -45,6 +67,13 @@ interface Props {
 	children: Snippet;
 	/** Preferred placement. Default `top`. */
 	placement?: 'top' | 'bottom' | 'left' | 'right';
+	/**
+	 * Add a `tabindex="0"` to the host span. Default `false` -- inline
+	 * prose wrappers stay out of the tab order. Set `true` only when the
+	 * tooltip wraps content that has no other focusable element (a
+	 * standalone label / chip).
+	 */
+	focusable?: boolean;
 }
 
 const {
@@ -53,22 +82,24 @@ const {
 	definition: literalDefinition,
 	children,
 	placement = 'top',
+	focusable = false,
 }: Props = $props();
 
+const instance = nextTooltipInstance();
 let open = $state(false);
 let triggerEl = $state<HTMLSpanElement | null>(null);
 
-const resolved = $derived.by<{ term: string; short: string } | null>(() => {
-	if (literalTerm !== undefined && literalDefinition !== undefined) {
-		return { term: literalTerm, short: literalDefinition };
-	}
-	if (glossaryKey === undefined) return null;
-	const resolver = getTooltipGlossaryResolver();
-	if (resolver === null) return null;
-	return resolver(glossaryKey);
-});
+const resolved = $derived<{ term: string; short: string } | null>(
+	literalTerm !== undefined && literalDefinition !== undefined
+		? { term: literalTerm, short: literalDefinition }
+		: glossaryKey === undefined
+			? null
+			: (getTooltipGlossaryResolver()?.(glossaryKey) ?? null),
+);
 
-const tooltipId = $derived(`tooltip-${(glossaryKey ?? literalTerm ?? 'unknown').replace(/\s+/g, '-').toLowerCase()}`);
+const tooltipId = $derived(
+	`tooltip-${(glossaryKey ?? literalTerm ?? 'unknown').replace(/\s+/g, '-').toLowerCase()}-${instance}`,
+);
 
 // Dev-only warning when neither literal nor glossary key resolved. Untrack
 // so the warning doesn't fire reactively during prop transitions.
@@ -81,6 +112,20 @@ $effect(() => {
 			console.warn(`Tooltip: glossary key "${glossaryKey}" did not resolve. Is the resolver registered?`);
 		}
 	});
+});
+
+// Document-scoped pointerdown listener: mount only while the bubble is
+// open, unmount on close. Closes the bubble when the pointer goes down
+// outside the trigger -- the missing "tap-outside dismisses" branch on
+// touch devices, which `onmouseleave` does not cover.
+$effect(() => {
+	if (!open) return;
+	function handleOutside(event: PointerEvent) {
+		if (triggerEl !== null && event.target instanceof Node && triggerEl.contains(event.target)) return;
+		open = false;
+	}
+	document.addEventListener('pointerdown', handleOutside, true);
+	return () => document.removeEventListener('pointerdown', handleOutside, true);
 });
 
 function handleOpen() {
@@ -99,28 +144,27 @@ function handleKey(event: KeyboardEvent) {
 }
 </script>
 
-<svelte:window onkeydown={handleKey} />
-
 <!--
 	Svelte's a11y heuristic doesn't model the tooltip pattern well: the host
 	is a non-interactive descriptor, but it must accept hover/focus/touch to
 	surface the definition. WAI's tooltip pattern uses the trigger's existing
-	focusability (whatever the child is) + aria-describedby. We add tabindex
-	to keep keyboard parity when consumers wrap a non-focusable child like
-	plain text. role="group" advertises "this contains related content" and
-	is honored by screen readers without implying activation.
+	focusability + aria-describedby. We default to NOT adding tabindex so
+	a paragraph with many tooltips stays readable; consumers wrapping a
+	standalone non-focusable label can opt in via `focusable`.
 -->
 <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 <span
 	class="tooltip-host"
 	bind:this={triggerEl}
 	role="group"
-	tabindex="0"
+	tabindex={focusable ? 0 : undefined}
 	onmouseenter={handleOpen}
 	onmouseleave={handleClose}
 	onfocusin={handleOpen}
 	onfocusout={handleClose}
 	ontouchstart={handleOpen}
+	onkeydown={handleKey}
 	aria-describedby={open && resolved !== null ? tooltipId : undefined}
 >
 	{@render children()}
@@ -140,6 +184,12 @@ function handleKey(event: KeyboardEvent) {
 		text-underline-offset: 0.2em;
 		text-decoration-color: var(--ink-muted);
 		cursor: help;
+	}
+
+	.tooltip-host:focus-visible {
+		outline: 2px solid var(--action-default);
+		outline-offset: 2px;
+		border-radius: var(--radius-sm);
 	}
 
 	.tooltip-bubble {

@@ -216,6 +216,19 @@ Don't silence the lint rule with `// biome-ignore`. The rule is enforcement, not
 - [libs/utils/src/outbound-url.ts](../../libs/utils/src/outbound-url.ts) - DNS lookup + IP parsing, lazy-loaded.
 - [libs/bc/study/src/deck-spec.ts](../../libs/bc/study/src/deck-spec.ts) - `node:crypto` for deck hash, lazy-loaded.
 
+## Resolver inversion (libs/ui -> libs/help)
+
+`libs/ui` is a leaf in the dependency graph -- `libs/help` and most other libs depend on it, never the reverse. When a `libs/ui` component needs data from a higher-level lib (e.g. `<InfoTip>` resolving help-page validity, `<Tooltip>` reading glossary entries), invert the edge: `libs/ui` exposes a `setXResolver(resolver)` registry, the consuming app registers a resolver at boot, and the component reads through it. Never `import` from a higher-level lib.
+
+### Canonical examples
+
+- [libs/ui/src/lib/info-tip-resolver.ts](../../libs/ui/src/lib/info-tip-resolver.ts) -- `<InfoTip>` -> `@ab/help` registry validation.
+- [libs/ui/src/lib/tooltip-glossary-resolver.ts](../../libs/ui/src/lib/tooltip-glossary-resolver.ts) -- `<Tooltip>` -> `@ab/help/glossary` term + short.
+
+### When you need a third resolver
+
+If a third `libs/ui` component needs the same inversion (e.g. number `?` popovers reading metric formulas), generalize: introduce a single `setUiResolver(kind, resolver)` registry keyed by a `UI_RESOLVER_KINDS` enum in `libs/constants/`. Don't ship a third bespoke resolver file.
+
 ## Formatting (Biome)
 
 - Tabs (width 2), single quotes, 120 char lines, trailing commas, semicolons.

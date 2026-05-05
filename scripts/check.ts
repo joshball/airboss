@@ -53,6 +53,31 @@ const helpIds = await $`bun scripts/validate-help-ids.ts`.nothrow();
 console.log('\nValidating course/regulations frontmatter...');
 const courseFrontmatter = await $`bun tools/course-frontmatter/check.ts`.nothrow();
 
+// Glossary corpus size trip-wire. Every file under
+// `libs/help/src/glossary/content/*.md` is bundled eagerly into every
+// app that imports `@ab/help/glossary` (Vite `import.meta.glob({ eager: true })`).
+// We accept the eager-glob shape today because the corpus is small;
+// this trip-wire fires when the corpus crosses ~64 KB so the next
+// author has to make an informed decision (lazy `import()` or accept
+// the bundle cost). See `libs/help/src/glossary/index.ts` design note.
+console.log('\nChecking glossary corpus size...');
+const GLOSSARY_BUDGET_BYTES = 64 * 1024;
+const glossaryListing = await $`find libs/help/src/glossary/content -name '*.md'`.text();
+let glossaryBytes = 0;
+for (const file of glossaryListing.split('\n')) {
+	if (file.length === 0) continue;
+	glossaryBytes += Bun.file(file).size;
+}
+const glossaryOk = glossaryBytes <= GLOSSARY_BUDGET_BYTES;
+if (glossaryOk) {
+	console.log(`glossary corpus: ${glossaryBytes} / ${GLOSSARY_BUDGET_BYTES} bytes (OK)`);
+} else {
+	console.error(
+		`glossary corpus: ${glossaryBytes} bytes exceeds budget of ${GLOSSARY_BUDGET_BYTES} bytes.\n` +
+			'Eager-globbed bundle cost is no longer trivial. Either trim entries or move to lazy `import()`.',
+	);
+}
+
 const failed =
 	svelteCheck.exitCode !== 0 ||
 	svelteCheckSim.exitCode !== 0 ||
@@ -66,7 +91,8 @@ const failed =
 	themeLint.exitCode !== 0 ||
 	testLint.exitCode !== 0 ||
 	helpIds.exitCode !== 0 ||
-	courseFrontmatter.exitCode !== 0;
+	courseFrontmatter.exitCode !== 0 ||
+	!glossaryOk;
 if (failed) {
 	console.error('\nChecks failed.');
 	process.exit(1);

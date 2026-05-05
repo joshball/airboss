@@ -1,5 +1,5 @@
 <script lang="ts">
-import { ROUTES } from '@ab/constants';
+import { PAGE_EXPLAINER_KEYS, ROUTES } from '@ab/constants';
 import Button from '@ab/ui/components/Button.svelte';
 import PageExplainer from '@ab/ui/components/PageExplainer.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
@@ -12,14 +12,21 @@ import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
 
-// Cards-due / cards-new badge derives from the credential's recall
-// gating bucket. The mastery rollup gives a coarse "required vs passing"
-// shape; for the per-tile badge we surface "leaves not yet mastered" as
-// a stand-in for "cards that need work" until the future card-state-
+// Cards-due badge derives from the credential's recall gating bucket.
+// The mastery rollup gives a coarse "required vs passing" shape; for
+// the per-tile badge we surface "leaves not yet mastered" as a
+// stand-in for "cards that need work" until the future card-state-
 // per-credential aggregation lands.
+//
+// When the credential has zero recall-gated leaves, we surface `null`
+// (TilesPanel renders "--") rather than `0`, so a fresh learner does
+// not read the badge as "you have completed all your cards" when in
+// fact there are no cards to count.
 const recallRequired = $derived(data.kind === 'home' ? (data.mastery.byEvidenceKind.recall?.required ?? 0) : 0);
 const recallPassing = $derived(data.kind === 'home' ? (data.mastery.byEvidenceKind.recall?.passing ?? 0) : 0);
-const dueCardsCount = $derived(Math.max(0, recallRequired - recallPassing));
+const dueCardsCount = $derived<number | null>(
+	recallRequired === 0 ? null : Math.max(0, recallRequired - recallPassing),
+);
 </script>
 
 <svelte:head>
@@ -30,7 +37,10 @@ const dueCardsCount = $derived(Math.max(0, recallRequired - recallPassing));
 	<PageHeader title="Study" subtitle="What should I do right now? Today's session and any pressure points." />
 	<h1 class="visually-hidden" data-testid="page-anchor">Study Home</h1>
 
-	<PageExplainer pageKey="home" dismissed={data.pageExplainerDismissals.home === true}>
+	<PageExplainer
+		pageKey={PAGE_EXPLAINER_KEYS.STUDY_HOME}
+		dismissed={data.pageExplainerDismissals[PAGE_EXPLAINER_KEYS.STUDY_HOME] ?? false}
+	>
 		The Home page rolls up your study state into one obvious next step. If you don't have a
 		<Tooltip for="goal">a goal</Tooltip>, set one. If you have a goal but no
 		<Tooltip for="plan">plan</Tooltip>, build one. If you have both, start today's session.
