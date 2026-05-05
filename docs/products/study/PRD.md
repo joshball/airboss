@@ -15,7 +15,7 @@ nav contract and the `page-anchor` static guard:
 | Insights  | `/insights`    | Stats, Calibration, Lens (handbook + weakness)          |
 | Reference | `/reference`   | Knowledge graph, Glossary, Library link                 |
 
-Memory and Reps URLs intentionally stay where they are; the Learn section is the unifying nav surface, not a relocation. Legacy paths (`/dashboard`, `/credentials`, `/goals`, `/plans`, `/calibration`, `/lens/*`, `/knowledge/*`, `/glossary/*`) 301-redirect to their canonical homes via `apps/study/src/lib/server/legacy-redirects.ts`. See work package: [study-app-ia-cleanup](../../work-packages/study-app-ia-cleanup/).
+Memory and Reps URLs intentionally stay where they are; the Learn section is the unifying nav surface, not a relocation. Legacy paths (`/dashboard`, `/credentials`, `/goals`, `/plans`, `/calibration`, `/lens/*`, `/knowledge/*`, `/glossary/*`) 301-redirect to their canonical homes via `apps/study/src/lib/server/legacy-redirects.ts`. See work package: [study-app-ia-cleanup](../../.archive/work-packages/study-app-ia-cleanup/).
 
 ## Spaced rep adapts to recent sim performance
 

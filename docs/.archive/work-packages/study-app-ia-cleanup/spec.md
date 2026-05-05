@@ -3,9 +3,10 @@ title: 'Spec: Study App IA Cleanup'
 product: study
 feature: study-app-ia-cleanup
 type: spec
-status: unread
-review_status: pending
+status: done
+review_status: done
 created: 2026-05-04
+shipped: 2026-05-05
 ---
 
 # Spec: Study App IA Cleanup
