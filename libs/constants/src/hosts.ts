@@ -42,3 +42,27 @@ export function siblingOrigin(currentUrl: URL, prefix: (typeof HOST_PREFIXES)[ke
 	const parentHost = firstDot === -1 ? host : host.slice(firstDot + 1);
 	return `${currentUrl.protocol}//${prefix}.${parentHost}`;
 }
+
+/**
+ * Derive the origins for every surface app from the current request URL.
+ * Used by the shared `AppHeader` brand dropdown so any app can render a
+ * one-click switcher across the surface family. Keys match `AppId` (the
+ * lowercase surface ids used by `AppHeader`); values are absolute origins
+ * (e.g. `https://hangar.airboss.test`). Subdomain prefixes come from
+ * `HOST_PREFIXES`, never inline strings.
+ */
+export function appOrigins(currentUrl: URL): {
+	avionics: string;
+	study: string;
+	sim: string;
+	hangar: string;
+	flightbag: string;
+} {
+	return {
+		avionics: siblingOrigin(currentUrl, HOST_PREFIXES.AVIONICS),
+		study: siblingOrigin(currentUrl, HOST_PREFIXES.STUDY),
+		sim: siblingOrigin(currentUrl, HOST_PREFIXES.SIM),
+		hangar: siblingOrigin(currentUrl, HOST_PREFIXES.HANGAR),
+		flightbag: siblingOrigin(currentUrl, HOST_PREFIXES.FLIGHTBAG),
+	};
+}

@@ -126,6 +126,7 @@ async function setAppearance(value: AppearancePreference) {
 		user={data.user}
 		appearance={appearancePref}
 		onAppearanceChange={setAppearance}
+		appOrigins={data.appOrigins}
 	>
 		{#snippet nav()}
 			<Nav />

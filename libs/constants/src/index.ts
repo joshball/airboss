@@ -160,6 +160,7 @@ export {
 } from './help-tags';
 export {
 	AUTH_INTERNAL_ORIGIN,
+	appOrigins,
 	COOKIE_DOMAIN_DEV,
 	COOKIE_DOMAIN_PROD,
 	HOST_PREFIXES,

@@ -217,6 +217,7 @@ function handleMemoryItemClick() {
 	user={data.user}
 	appearance={appearancePref}
 	onAppearanceChange={setAppearance}
+	appOrigins={data.appOrigins}
 >
 	{#snippet nav()}
 		<nav class="nav-sections" aria-label="Primary">

@@ -94,6 +94,17 @@ export interface AppHeaderProps {
 	 * for callers that need a custom signed-out cluster.
 	 */
 	signedOut?: Snippet;
+	/**
+	 * Cross-app origins for the surface family (study/sim/hangar/flightbag/
+	 * avionics). When supplied, the brand block becomes a dropdown that
+	 * shows the current app on top (clicking goes to `brandHref`) followed
+	 * by the remaining apps in alpha order, each linking to that app's
+	 * origin. Build via `appOrigins(event.url)` from `@ab/constants` so
+	 * dev (`*.airboss.test:port`) and prod (`*.air-boss.org`) both resolve
+	 * without hardcoded URLs. Omit to render the legacy non-interactive
+	 * brand link.
+	 */
+	appOrigins?: Partial<Record<AppId, string>>;
 }
 </script>
 
@@ -139,9 +150,38 @@ let {
 	themePicker,
 	preferencesHref,
 	signedOut,
+	appOrigins,
 }: AppHeaderProps = $props();
 
 const appLabel = $derived(APP_NAMES[app].toUpperCase());
+
+// Brand-switcher dropdown: list of OTHER apps in alpha order (by display
+// name), each linked to its origin. `appOrigins` is keyed by `AppId`; we
+// filter out the current app (it sits in the summary as the brand link)
+// and any app whose origin wasn't supplied.
+type BrandSwitcherEntry = { id: AppId; label: string; href: string };
+const otherApps = $derived<BrandSwitcherEntry[]>(
+	appOrigins === undefined
+		? []
+		: (Object.keys(APP_NAMES) as AppId[])
+				.filter((id) => id !== app)
+				.flatMap<BrandSwitcherEntry>((id) => {
+					const href = appOrigins[id];
+					if (typeof href !== 'string') return [];
+					return [{ id, label: APP_NAMES[id], href }];
+				})
+				.sort((a, b) => a.label.localeCompare(b.label)),
+);
+const showBrandSwitcher = $derived(appOrigins !== undefined && otherApps.length > 0);
+
+let brandMenu = $state<HTMLDetailsElement | null>(null);
+
+function handleBrandPointerDown(event: PointerEvent) {
+	if (!brandMenu?.open) return;
+	const target = event.target;
+	if (target instanceof Node && brandMenu.contains(target)) return;
+	brandMenu.open = false;
+}
 
 const identityLabel = $derived(user ? user.name.trim() || user.email : '');
 const showEmailRow = $derived(user ? identityLabel !== user.email : false);
@@ -166,17 +206,28 @@ let identityMenu = $state<HTMLDetailsElement | null>(null);
 // a pointerdown lands outside the <details>; clicks on the panel stay
 // inside and are unaffected.
 function handleDocumentPointerDown(event: PointerEvent) {
-	if (!identityMenu?.open) return;
-	const target = event.target;
-	if (target instanceof Node && identityMenu.contains(target)) return;
-	identityMenu.open = false;
+	if (identityMenu?.open) {
+		const target = event.target;
+		if (!(target instanceof Node) || !identityMenu.contains(target)) {
+			identityMenu.open = false;
+		}
+	}
+	handleBrandPointerDown(event);
 }
 
 function handleMenuKeydown(event: KeyboardEvent) {
-	if (event.key !== 'Escape' || !identityMenu?.open) return;
-	identityMenu.open = false;
-	const summary = identityMenu.querySelector('summary');
-	if (summary instanceof HTMLElement) summary.focus();
+	if (event.key !== 'Escape') return;
+	if (identityMenu?.open) {
+		identityMenu.open = false;
+		const summary = identityMenu.querySelector('summary');
+		if (summary instanceof HTMLElement) summary.focus();
+		return;
+	}
+	if (brandMenu?.open) {
+		brandMenu.open = false;
+		const summary = brandMenu.querySelector('summary');
+		if (summary instanceof HTMLElement) summary.focus();
+	}
 }
 
 // Appearance toggle: cycles light -> dark -> system -> light. Render only
@@ -213,10 +264,29 @@ function handleAppearanceClick() {
 <svelte:window onkeydown={handleMenuKeydown} onpointerdown={handleDocumentPointerDown} />
 
 <header class="app-header" data-app={app}>
-	<a class="brand" href={brandHref}>
-		<span class="brand-pretitle">airboss</span>
-		<span class="brand-app">{appLabel}</span>
-	</a>
+	{#if showBrandSwitcher}
+		<details class="brand-switcher" bind:this={brandMenu}>
+			<summary aria-label="Switch app (current: {APP_NAMES[app]})" aria-haspopup="menu">
+				<span class="brand-pretitle">airboss</span>
+				<span class="brand-app">{appLabel}</span>
+				<span class="chevron" aria-hidden="true">▾</span>
+			</summary>
+			<div class="brand-panel" role="menu" aria-label="Switch app">
+				<a class="brand-current" href={brandHref} role="menuitem" data-current="true">
+					<span class="brand-current-label">{APP_NAMES[app]}</span>
+					<span class="brand-current-tag">current</span>
+				</a>
+				{#each otherApps as entry (entry.id)}
+					<a class="brand-other" href={entry.href} role="menuitem">{entry.label}</a>
+				{/each}
+			</div>
+		</details>
+	{:else}
+		<a class="brand" href={brandHref}>
+			<span class="brand-pretitle">airboss</span>
+			<span class="brand-app">{appLabel}</span>
+		</a>
+	{/if}
 
 	{#if nav}
 		<div class="nav-slot">{@render nav()}</div>
@@ -337,6 +407,139 @@ function handleAppearanceClick() {
 		letter-spacing: var(--letter-spacing-wide);
 		color: var(--ink-body);
 		line-height: 1.1;
+	}
+
+	/*
+	 * Brand-switcher dropdown: the summary mirrors `.brand` so the visual
+	 * weight of the header doesn't change when an app supplies appOrigins.
+	 * The chevron sits inline next to the stacked label, matching the
+	 * identity menu pattern on the right.
+	 */
+	.brand-switcher {
+		position: relative;
+		flex: 0 0 auto;
+	}
+
+	.brand-switcher > summary {
+		display: inline-grid;
+		grid-template-columns: auto auto;
+		grid-template-rows: auto auto;
+		align-items: center;
+		column-gap: var(--space-xs);
+		cursor: pointer;
+		list-style: none;
+		padding: var(--space-2xs) var(--space-sm);
+		border-radius: var(--radius-sm);
+		user-select: none;
+	}
+
+	.brand-switcher > summary::-webkit-details-marker {
+		display: none;
+	}
+
+	.brand-switcher > summary::marker {
+		content: '';
+	}
+
+	.brand-switcher > summary > .brand-pretitle,
+	.brand-switcher > summary > .brand-app {
+		display: block;
+	}
+
+	.brand-switcher > summary > .brand-pretitle {
+		grid-column: 1;
+		grid-row: 1;
+	}
+
+	.brand-switcher > summary > .brand-app {
+		grid-column: 1;
+		grid-row: 2;
+	}
+
+	.brand-switcher > summary > .chevron {
+		grid-column: 2;
+		grid-row: 1 / span 2;
+		align-self: center;
+		font-size: var(--type-ui-caption-size);
+		line-height: 1;
+		color: var(--ink-muted);
+		transition: transform var(--motion-fast);
+	}
+
+	.brand-switcher > summary:hover {
+		background: var(--surface-sunken);
+	}
+
+	.brand-switcher > summary:focus-visible {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
+	}
+
+	.brand-switcher[open] > summary {
+		background: var(--surface-sunken);
+	}
+
+	.brand-switcher[open] > summary > .chevron {
+		transform: rotate(180deg);
+	}
+
+	.brand-panel {
+		position: absolute;
+		left: 0;
+		top: calc(100% + var(--space-2xs));
+		min-width: 12rem;
+		background: var(--surface-panel);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-md);
+		box-shadow: var(--shadow-lg);
+		padding: var(--space-2xs);
+		z-index: var(--z-dropdown);
+		display: flex;
+		flex-direction: column;
+	}
+
+	.brand-current,
+	.brand-other {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: var(--space-md);
+		text-decoration: none;
+		color: var(--ink-body);
+		padding: var(--space-sm);
+		border-radius: var(--radius-sm);
+		font-size: var(--type-ui-label-size);
+	}
+
+	.brand-current {
+		font-weight: var(--type-ui-control-weight);
+		border-bottom: 1px solid var(--edge-default);
+		margin-bottom: var(--space-2xs);
+		padding-bottom: var(--space-sm);
+	}
+
+	.brand-current-tag {
+		font-variant: small-caps;
+		text-transform: lowercase;
+		letter-spacing: var(--letter-spacing-wide);
+		color: var(--ink-muted);
+		font-size: var(--type-ui-caption-size);
+	}
+
+	.brand-other {
+		color: var(--ink-muted);
+	}
+
+	.brand-current:hover,
+	.brand-other:hover {
+		background: var(--surface-sunken);
+		color: var(--ink-body);
+	}
+
+	.brand-current:focus-visible,
+	.brand-other:focus-visible {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
 	}
 
 	.nav-slot {

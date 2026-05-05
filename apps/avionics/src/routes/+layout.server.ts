@@ -1,6 +1,7 @@
 import { studyLoginUrl } from '@ab/auth';
 import {
 	AVIONICS_AIRCRAFT_COOKIE,
+	appOrigins,
 	HOST_PREFIXES,
 	SIM_AIRCRAFT_IDS,
 	type SimAircraftId,
@@ -47,5 +48,6 @@ export const load: LayoutServerLoad = (event) => {
 		selectedAircraftId,
 		// Cross-subdomain link target for the shared `AppHeader` flightbag link.
 		flightbagOrigin: siblingOrigin(event.url, HOST_PREFIXES.FLIGHTBAG),
+		appOrigins: appOrigins(event.url),
 	};
 };
