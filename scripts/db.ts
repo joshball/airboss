@@ -10,6 +10,7 @@
  */
 
 import {
+	AUTH_RATE_LIMIT,
 	DEV_DB,
 	DEV_DB_HOST_PATTERN,
 	DEV_DB_URL,
@@ -129,6 +130,26 @@ async function doResetStudy(): Promise<void> {
 	);
 	await run(['bun', 'scripts/db/reset-study.ts']);
 	await run(['bun', 'scripts/db/seed-all.ts', 'cards']);
+}
+
+async function doResetLoginAttempts(): Promise<void> {
+	assertLocalDb();
+	// `bauth_rate_limit` buckets every `/api/auth/*` call by IP. From localhost
+	// every agent + your browser + Playwright share one bucket, so a flurry of
+	// failed sign-ins (or an e2e run reusing the dev server) wedges humans out
+	// with HTTP 429 until the window expires. Truncating clears the slate.
+	await run([
+		'docker',
+		'exec',
+		CONTAINER,
+		'psql',
+		'-U',
+		DB_USER,
+		'-d',
+		DB_NAME,
+		'-c',
+		`TRUNCATE ${AUTH_RATE_LIMIT.TABLE_NAME};`,
+	]);
 }
 
 async function doSeed(): Promise<void> {
@@ -411,6 +432,13 @@ const COMMAND_HELP: Record<string, CommandHelp> = {
 		how: 'Resolves the accepted domain set from `@ab/constants/study` (`DOMAIN_VALUES` plus graph-specific additions), writes the scaffold, exits. Follow up with `bun run db build --dry-run` to validate as you author.',
 		links: ['scripts/knowledge-new.ts', 'libs/constants/src/study.ts', 'docs/work-packages/knowledge-graph/spec.md'],
 	},
+	'reset-login-attempts': {
+		summary: `TRUNCATE ${AUTH_RATE_LIMIT.TABLE_NAME} (clear the auth rate-limit bucket)`,
+		what: `Runs \`TRUNCATE ${AUTH_RATE_LIMIT.TABLE_NAME}\` against the local dev DB. Clears every per-IP bucket better-auth uses to throttle \`/api/auth/*\`, so the next sign-in attempt starts from a clean window.`,
+		why: 'The dev DB is shared by your browser, every agent, and any Playwright run that reuses the dev server. From localhost they all share one IP, so a few failed sign-ins (or one e2e suite that exercises the login form) wedges humans out with HTTP 429 until the window expires. This command unblocks you immediately without restarting the server or waiting.',
+		how: `Refuses to run if DATABASE_URL does not match the local dev pattern. Issues a single \`docker exec psql -c "TRUNCATE ${AUTH_RATE_LIMIT.TABLE_NAME}"\` against the airboss DB. The table is repopulated lazily by better-auth on the next request, so there is no follow-up step.`,
+		links: ['libs/constants/src/auth.ts (AUTH_RATE_LIMIT)', 'libs/auth/src/server.ts (rateLimit config)'],
+	},
 	'reset-study': {
 		summary: 'TRUNCATE study.card/card_state/review, re-materialize cards',
 		what: 'TRUNCATEs `study.card`, `study.card_state`, `study.review`, then re-runs the cards phase of the seed orchestrator. Auth users and the knowledge graph (knowledge_node/knowledge_edge) are untouched.',
@@ -505,7 +533,7 @@ const COMMAND_GROUPS: readonly CommandGroup[] = [
 	{ label: 'Schema', commands: ['push', 'generate', 'migrate'] },
 	{ label: 'Data + content', commands: ['seed', 'seed:check', 'seed:remove', 'reset', 'reset-study'] },
 	{ label: 'Knowledge authoring', commands: ['new', 'build', 'build-all'] },
-	{ label: 'Maintenance', commands: ['backfill', 'check'] },
+	{ label: 'Maintenance', commands: ['backfill', 'check', 'reset-login-attempts'] },
 	{ label: 'Utility', commands: ['help'] },
 ];
 
@@ -550,6 +578,7 @@ const handlers: Record<string, () => Promise<void> | void> = {
 	psql: () => run(['docker', 'exec', '-it', CONTAINER, 'psql', '-U', DB_USER, '-d', DB_NAME]),
 	reset: doReset,
 	'reset-study': doResetStudy,
+	'reset-login-attempts': doResetLoginAttempts,
 	build: doBuild,
 	'build-all': doBuildAll,
 	new: doNew,
