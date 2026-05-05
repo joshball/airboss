@@ -22,5 +22,3 @@ AP typically appears as speckled or blotchy high-reflectivity echoes. When anima
 “bloom up” and dissipate, and has no continuity of motion. AP can sometimes be misinterpreted as
 thunderstorms; differentiating between the two is determined by animating the images. Thunderstorms
 move with a smooth, continuous motion while AP appears to “bloom up” and dissipate randomly.
-
-![Figure 15-16. WSR-88D Weather Radar Angel Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-13-00-wsr-88d-weather-radar-angel-example.png)

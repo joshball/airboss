@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Chapter Summary
+
+![Figure 18-14. Level climb.](/handbooks/afh/FAA-H-8083-3C/figures/fig-18-13-level-climb.png)

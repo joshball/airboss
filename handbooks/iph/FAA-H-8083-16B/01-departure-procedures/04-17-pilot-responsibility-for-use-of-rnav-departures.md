@@ -42,3 +42,6 @@ TPP with traditional departure procedures.
 SW-4, 23 SEP 2010 to 21 OCT 2010
 SW-4, 23 SEP 2010 to 21 OCT 2010
 Figure 1-33. Crossing altitude is there to support an ATC requirement.
+
+
+![Figure 1-32. Operation requirements for RNAV.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-32-operation-requirements-for-rnav.png)

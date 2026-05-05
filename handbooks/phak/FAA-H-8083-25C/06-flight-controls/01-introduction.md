@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Introduction
+
+![Figure 6-1. Mechanical flight control system.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-01-mechanical-flight-control-system.png)

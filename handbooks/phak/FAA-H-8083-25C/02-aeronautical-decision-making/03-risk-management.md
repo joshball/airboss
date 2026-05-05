@@ -74,3 +74,6 @@ While poor decision-making in everyday life does not always
 lead to tragedy, the margin for error in aviation is thin. Since
 ADM enhances management of an aeronautical environment,
 all pilots should become familiar with and employ ADM.
+
+
+![Figure 2-3. Risk management decision-making process.](/handbooks/phak/FAA-H-8083-25C/figures/fig-2-02-risk-management-decision-making-process.png)

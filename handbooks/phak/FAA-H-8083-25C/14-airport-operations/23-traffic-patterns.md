@@ -71,3 +71,8 @@ can be found in Chapter 4, “Air Traffic Control,” of the AIM.
 Pilots can find traffic pattern information and restrictions, such
 as noise abatement in the Chart Supplement U.S. (formerly
 Airport/Facility Directory).
+
+
+![Figure 14-23. The example shown in Figure 14-23 shows  two signs. The sign in the foreground explains that Runway 20 threshold is to the left, and Runways 32, 2, and 14 are to the right. The sign in the background indicates that you are located on Taxiway Bravo and Taxiway November will take you to those runways.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-19-the-example-shown-in-figure-14-23-shows-two-sign.png)
+
+![Figure 14-23. Runway destination sign with different taxi routes.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-25-runway-destination-sign-with-different-taxi-rout.png)

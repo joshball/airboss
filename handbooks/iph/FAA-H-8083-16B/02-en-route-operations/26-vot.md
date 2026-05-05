@@ -53,3 +53,6 @@ noting the degrees difference between 180° or 0°. The
 maximum bearing error with the VOT system check is plus
 or minus 4° and apparent errors greater than 4° indicate
 that the VOR receiver is beyond acceptable tolerance.
+
+
+![Figure 2-26. Victor airways.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-20-victor-airways.png)

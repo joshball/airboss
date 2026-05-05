@@ -75,3 +75,6 @@ system.
 Erratic instrument readouts.
 Weak transmissions and poor radio reception.
 St. Elmo’s Fire.
+
+
+![Figure 9-6. ADF homing with a crosswind.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-05-adf-homing-with-a-crosswind.png)

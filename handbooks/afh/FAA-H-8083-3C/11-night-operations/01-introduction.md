@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Introduction
+
+![Figure 11-1. Rods and cones.](/handbooks/afh/FAA-H-8083-3C/figures/fig-11-00-rods-and-cones.png)

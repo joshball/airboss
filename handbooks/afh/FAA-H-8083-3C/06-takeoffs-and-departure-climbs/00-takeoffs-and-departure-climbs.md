@@ -22,19 +22,3 @@ pertaining to airplane configuration, airspeeds, and other information relevant 
 model airplane are contained in the Federal Aviation Administration (FAA)-approved Airplane Flight Manual and/or Pilot’s
 Operating Handbook (AFM/POH) for that airplane. If any of the information in this chapter differs from the airplane manufacturer’s
 recommendations as contained in the AFM/POH, the airplane manufacturer’s recommendations take precedence.
-
-![Figure 6-1. Takeoff and climb.](/handbooks/afh/FAA-H-8083-3C/figures/fig-6-00-takeoff-and-climb.png)
-
-![Figure 6-2. Performance chart examples.](/handbooks/afh/FAA-H-8083-3C/figures/fig-6-01-performance-chart-examples.png)
-
-![Figure 6-3. Initial roll and takeoff attitude.](/handbooks/afh/FAA-H-8083-3C/figures/fig-6-02-initial-roll-and-takeoff-attitude.png)
-
-![Figure 6-4. Crosswind roll and takeoff climb.](/handbooks/afh/FAA-H-8083-3C/figures/fig-6-03-crosswind-roll-and-takeoff-climb.png)
-
-![Figure 6-5. Crosswind effect.](/handbooks/afh/FAA-H-8083-3C/figures/fig-6-04-crosswind-effect.png)
-
-![Figure 6-6. Crosswind climb flightpath.](/handbooks/afh/FAA-H-8083-3C/figures/fig-6-05-crosswind-climb-flightpath.png)
-
-![Figure 6-7. Takeoff in ground effect area.](/handbooks/afh/FAA-H-8083-3C/figures/fig-6-06-takeoff-in-ground-effect-area.png)
-
-![Figure 6-8. Short-field takeoff.](/handbooks/afh/FAA-H-8083-3C/figures/fig-6-07-short-field-takeoff.png)

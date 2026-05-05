@@ -17,3 +17,6 @@ runway and approach lighting systems, especially where
 few lights illuminate the surrounding terrain, may create the
 illusion of less distance to the runway. The pilot who does
 not recognize this illusion will often fly a higher approach.
+
+
+![Figure 17-9. Adverse affects of various drugs.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-08-adverse-affects-of-various-drugs.png)

@@ -55,3 +55,6 @@ reaching pattern altitude. [Figure 14-40]
 8.
 Do not continue on a track that penetrates the departure
 path of the parallel runway. [Figure 14-40]
+
+
+![Figure 14-25. Holding position sign and marking for instrument  landing system (ILS) critical area boundary.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-23-holding-position-sign-and-marking-for-instrument.png)

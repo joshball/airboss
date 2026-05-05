@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Introduction
+
+![Figure 13-1. Airspeed indicator markings for a multiengine airplane](/handbooks/afh/FAA-H-8083-3C/figures/fig-13-00-airspeed-indicator-markings-for-a-multiengine-ai.png)

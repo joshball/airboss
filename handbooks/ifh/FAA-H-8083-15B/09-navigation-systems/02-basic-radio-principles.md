@@ -18,3 +18,6 @@ atmosphere) without losing too much strength. An antenna
 is used to convert electric current into a radio wave so it can
 travel through space to the receiving antenna, which converts
 it back into an electric current for use by a receiver.
+
+
+![Figure 9-2. ADF indicator instrument and receiver.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-01-adf-indicator-instrument-and-receiver.png)

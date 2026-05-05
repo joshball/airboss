@@ -79,5 +79,3 @@ adverse effect on safety and can impose an unrealistic assessment of piloting sk
 ultimately may bring about practices that are dangerous and sometimes illegal and may lead to a mishap. Learners develop awareness
 and learn to avoid many of these operational pitfalls through effective ADM training. The scenarios and examples provided by
 instructors during ADM instruction should involve these pitfalls. [Figure 1-8]
-
-![Figure 1-6. Fatigue is a threat to aviation safety because it impairs alertness and performance.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-6-1-00-fatigue-is-a-threat-to-aviation-safety-because-i.png)

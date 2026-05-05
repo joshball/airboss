@@ -35,5 +35,3 @@ PULSE
 RADAR
 RADAR
 RADAR
-
-![Figure 15-2. Backscattered Energy](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-3-00-backscattered-energy.png)

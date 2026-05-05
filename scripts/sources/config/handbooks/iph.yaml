@@ -97,7 +97,7 @@ title_overrides:
   '5': 'Improvement Plans'
   '6': 'Airborne Navigation Databases'
   '7': 'Helicopter Instrument Procedures'
-figure_prefix_pattern: 'Figure (\d+)-(\d+)\.'
+figure_prefix_pattern: '^\s*Figure (\d+)-(\d+)\.'
 table_prefix_pattern: 'Table (\d+)-(\d+)\.'
 
 # -----------------------------------------------------------------------------

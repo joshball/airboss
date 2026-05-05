@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Introduction
+
+![Figure 12-1. Composition of the atmosphere.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-00-composition-of-the-atmosphere.png)

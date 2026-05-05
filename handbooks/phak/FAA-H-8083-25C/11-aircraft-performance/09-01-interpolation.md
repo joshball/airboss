@@ -23,3 +23,6 @@ provides a reasonable estimate of performance information
 and gives a slight margin of safety. The following illustration
 is an example of interpolating information from a takeoff
 distance chart. [Figure 11-21]
+
+
+![Figure 11-21. Interpolating charts.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-20-interpolating-charts.png)

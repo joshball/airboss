@@ -11,3 +11,6 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 # Synthetic and Enhanced Vision Systems
 
 Synthetic and Enhanced Vision Systems
+
+
+![Figure 5-4. System wide information management (SWIM)—an information management system that helps deliver high quality, timely  data to improve the efficiency of the national airspace.](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-03-system-wide-information-management-swim-an-infor.png)

@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Introduction
+
+![Figure 6-1. Takeoff and climb.](/handbooks/afh/FAA-H-8083-3C/figures/fig-6-00-takeoff-and-climb.png)

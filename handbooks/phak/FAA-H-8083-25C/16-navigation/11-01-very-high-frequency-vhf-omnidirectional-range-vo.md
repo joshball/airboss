@@ -128,3 +128,6 @@ strength is inadequate to operate the navigational equipment.
 This happens if the aircraft is too far from the VOR or the
 aircraft is too low and, therefore, is out of the line of sight
 of the transmitting signals.
+
+
+![Figure 16-28. VHF transmissions follow a line-of-sight course.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-28-vhf-transmissions-follow-a-line-of-sight-course.png)

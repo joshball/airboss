@@ -285,34 +285,6 @@ Areas of forecast moderate or greater non-convective low-level turbulence are de
 Turbulence altitudes are not included but can be considered as turbulence that is near the surface as a result
 of wind interactions with the terrain. In most cases, it would be within 6,000 ft above the terrain.
 
-![Figure 27-10. 12-Hour Low-Level SIGWX Chart—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-00-12-hour-low-level-sigwx-chart-example.png)
-
-![Figure 27-11. Low-Level SIGWX Chart Symbols](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-01-low-level-sigwx-chart-symbols.png)
-
-![Figure 27-12. Low-Level SIGWX Chart Flying Categories—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-02-low-level-sigwx-chart-flying-categories-example.png)
-
-![Figure 27-13. Low-Level SIGWX Chart Turbulence Forecast—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-03-low-level-sigwx-chart-turbulence-forecast-exampl.png)
-
-![Figure 27-14. Low-Level SIGWX Chart Freezing Level Forecast—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-04-low-level-sigwx-chart-freezing-level-forecast-ex.png)
-
-![Figure 27-15. Low-Level SIGWX Chart Multiple Freezing Levels—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-2-00-low-level-sigwx-chart-multiple-freezing-levels-e.png)
-
-![Figure 27-16. Mid-Level SIGWX Chart—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-2-01-mid-level-sigwx-chart-example.png)
-
-![Figure 27-17. High-Level SIGWX Chart—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-00-high-level-sigwx-chart-example.png)
-
-![Figure 27-18. High-Level SIGWX Chart Turbulence—Examples](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-01-high-level-sigwx-chart-turbulence-examples.png)
-
-![Figure 27-19. High-Level SIGWX Chart Jet Stream—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-02-high-level-sigwx-chart-jet-stream-example.png)
-
-![Figure 27-20. High-Level SIGWX Chart Tropopause Height—Examples](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-03-high-level-sigwx-chart-tropopause-height-example.png)
-
-![Figure 27-21. High-Level SIGWX Chart Tropical Cyclone—Examples](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-4-00-high-level-sigwx-chart-tropical-cyclone-examples.png)
-
-![Volcanic eruption sites are identified by a trapezoidal symbol depicted in Figure 27-22. The dot on the base  of the trapezoid identifies the location of the volcano. The name of the volcano, its latitude, and its longitude are noted adjacent to the symbol.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-4-01-the-dot-on-the-base-of-the-trapezoid-identifies-.png)
-
-![Figure 27-22. High-Level SIGWX Chart Volcanic Eruption Site—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-4-02-high-level-sigwx-chart-volcanic-eruption-site-ex.png)
-
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-9-00-low-level-sigwx-chart-issuance-schedule-issuance.html">
 <table><caption>Table 27-10. Low-Level SIGWX Chart Issuance Schedule 
   

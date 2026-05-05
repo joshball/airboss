@@ -11,3 +11,6 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 # Airframe and Systems
 
 Airframe and Systems
+
+
+![Figure 17-7. Moderate mountain winds can create severe turbulence for LSA.](/handbooks/afh/FAA-H-8083-3C/figures/fig-17-06-moderate-mountain-winds-can-create-severe-turbul.png)

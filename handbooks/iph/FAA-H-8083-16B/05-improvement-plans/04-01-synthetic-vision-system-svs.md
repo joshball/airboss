@@ -36,3 +36,12 @@ head-up display (HUD).  Development efforts are currently
 underway that would combine SVS with a real-time sensor
 image produced by an EFVS. These systems will be known
 as Combined Vision Systems (CVS).
+
+
+![Figure 5-12. Head-up guidance system (HGS).](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-11-head-up-guidance-system-hgs.png)
+
+![Figure 5-13. HGS using a holographic display.](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-12-hgs-using-a-holographic-display.png)
+
+![Figure 5-14. A synthetic vision system (SVS) is an electronic means to  display a synthetic vision image of the external scene topography to the flight crew to assist during takeoffs, landings, and en route operations.](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-13-a-synthetic-vision-system-svs-is-an-electronic-m.png)
+
+![Figure 5-15. An aircraft on an approach equipped with a SVS.](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-14-an-aircraft-on-an-approach-equipped-with-a-svs.png)

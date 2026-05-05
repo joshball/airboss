@@ -17,3 +17,6 @@ operational information for the respective aircraft. Aircraft
 manufacturers have done considerable testing to gather and
 substantiate the information in the aircraft manual. Pilots should
 refer to it for information relevant to a proposed flight.
+
+
+![Figure 10-6. Holding pattern entry procedures.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-10-05-holding-pattern-entry-procedures.png)

@@ -23,3 +23,6 @@ The maneuver must be completed within the distance and
 at the minimum altitude specified in the profile view. Pilots
 should coordinate with the appropriate ATC facility relating
 to course reversal during the IAP.
+
+
+![Figure 1-23. IAP inoperative components table.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-22-iap-inoperative-components-table.png)

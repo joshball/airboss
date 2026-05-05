@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Weather Information and Communication Features
+
+![Figure 1-13. 45° procedure turn.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-12-45-procedure-turn.png)

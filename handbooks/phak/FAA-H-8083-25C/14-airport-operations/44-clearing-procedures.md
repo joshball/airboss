@@ -170,3 +170,6 @@ instances, any ground deviation (PD or VPD) can result
 in a runway incursion. Best practices in preventing
 ground deviations can be found in the following section
 under runway incursion avoidance.
+
+
+![Figure 14-44. Traffic advisories.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-44-traffic-advisories.png)

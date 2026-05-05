@@ -18,5 +18,3 @@ such as insects, or by refraction returns of the radar beam in truly clear air.
 The latter case commonly develops at sunset due to superrefraction during the warm season. The ghost
 develops as an area of low reflectivity echoes (typically less than 15 decibels of Z (dBZ)) near the radar
 site and quickly expands. When animating the imagery, the ghost echo shows little movement.
-
-![Figure 15-14. WSR-88D Weather Radar Ground Clutter Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-11-00-wsr-88d-weather-radar-ground-clutter-example.png)

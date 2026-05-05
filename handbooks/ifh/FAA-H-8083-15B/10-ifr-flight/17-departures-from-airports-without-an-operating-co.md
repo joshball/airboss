@@ -29,3 +29,6 @@ This would authorize departure within the allotted period and
 permit a pilot to proceed in accordance with the clearance. In
 the absence of any specific departure instructions, a pilot would
 be expected to proceed on course via the most direct route.
+
+
+![Figure 10-17. Glideslope deviations due to wind shear encounter.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-10-15-a-thunderstorm-packs-just-about-every-weather-ha.png)

@@ -144,4 +144,4 @@ they strike the snow surface from many angles. The diffused light then reflects 
 times between the snow and the cloud, eliminating all shadows. The result is a loss of depth perception.
 Buildings, people, and dark-colored objects appear to float in the air, and the horizon disappears.
 
-![Figure 21-1. The Arctic Circle](/handbooks/avwx/FAA-H-8083-28B/figures/fig-21-2-1-00-the-arctic-circle.png)
+![Figure 21-1. The Arctic Circle](/handbooks/avwx/FAA-H-8083-28B/figures/fig-21-00-the-arctic-circle.png)

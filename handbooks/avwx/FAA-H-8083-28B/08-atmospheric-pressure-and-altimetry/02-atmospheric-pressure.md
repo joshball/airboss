@@ -102,18 +102,6 @@ pressure is approximately 25 + 5, or 30 inHg.
 
 Figure 8-6. Reduction of Station Pressure to Sea Level
 
-![Figure 8-1. Air Has Weight](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-1-00-air-has-weight.png)
-
-![Figure 8-2. Aneroid Barometer](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-2-00-aneroid-barometer.png)
-
-![Figure 8-3. Station Pressure](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-4-00-station-pressure.png)
-
-![Figure 8-4. Air Pressure in the Standard Atmosphere](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-4-01-air-pressure-in-the-standard-atmosphere.png)
-
-![Figure 8-5. Temperature’s Effect on Pressure](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-5-00-temperature-s-effect-on-pressure.png)
-
-![Figure 8-6. Reduction of Station Pressure to Sea Level](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-5-01-reduction-of-station-pressure-to-sea-level.png)
-
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-8-2-00-units-of-pressure-units-of-pressure-standard-atm.html">
 <table><caption>Table 8-1. Units of Pressure 
 Units of Pressure 

@@ -68,3 +68,6 @@ This prevents static buildup and St. Elmo’s fire by allowing the
 static electricity to dissipate harmlessly.
 Figure 11-1. St. Elmo’s Fire is harmless but may affect both communication and navigation radios, especially the lower frequencies
 such as those used on the automatic direction finding (ADF).
+
+
+![Figure 11-4. Ammeter (left) and loadmeter (right).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-11-03-ammeter-left-and-loadmeter-right.png)

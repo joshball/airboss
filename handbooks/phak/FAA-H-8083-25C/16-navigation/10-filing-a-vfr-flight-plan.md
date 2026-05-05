@@ -72,3 +72,8 @@ in gallons.
 Remember, there is every advantage in filing a flight plan;
 but do not forget to close the flight plan upon arrival. This
 should be done via telephone to avoid radio congestion.
+
+
+![Figure 16-10. Effect of variation on the compass.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-09-effect-of-variation-on-the-compass.png)
+
+![Figure 16-27. Domestic flight plan form.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-27-domestic-flight-plan-form.png)

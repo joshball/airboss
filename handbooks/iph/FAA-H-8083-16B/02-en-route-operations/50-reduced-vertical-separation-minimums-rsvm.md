@@ -54,3 +54,6 @@ years since RVSM was first implemented, not one
 collision has been attributed to RVSM. In the United
 States, this program was known as the Domestic
 Reduced Vertical Separation Minimum (DRVSM).
+
+
+![Figure 2-50. VOR test facilities (VOT) frequencies.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-44-vor-test-facilities-vot-frequencies.png)

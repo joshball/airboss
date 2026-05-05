@@ -52,3 +52,6 @@ When the vacuum pressure drops below the normal operating
 range, the gyroscopic instruments may become unstable and
 inaccurate. Cross-checking the instruments routinely is a
 good habit to develop.
+
+
+![Figure 8-28. The current in each of the three pickup coils changes  with the heading of the aircraft.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-25-the-current-in-each-of-the-three-pickup-coils-ch.png)

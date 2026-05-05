@@ -21,3 +21,6 @@ Class B
 Class C
 Class D
 Class E
+
+
+![Figure 15-2. An example of a prohibited area, P-40 around Camp  David.](/handbooks/phak/FAA-H-8083-25C/figures/fig-15-01-an-example-of-a-prohibited-area-p-40-around-camp.png)

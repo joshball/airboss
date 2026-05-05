@@ -26,3 +26,6 @@ power may be available for the use of flaps, gear, lights, etc. Do
 not rely on any power to be available after the standby battery
 has exhausted itself. Once the charging system has failed,
 flight with a powered electrical system is not guaranteed.
+
+
+![Figure 11-14. Page groups. As the FMS outer knob is rotated, the  current page group is indicated by highlighting the specific group indicator. Notice that the MAP page group is highlighted.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-11-13-page-groups-as-the-fms-outer-knob-is-rotated-the.png)

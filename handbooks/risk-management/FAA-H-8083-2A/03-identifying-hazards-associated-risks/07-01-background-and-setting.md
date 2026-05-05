@@ -57,5 +57,3 @@ to review the weather and do some other planning first, and we can all meet in a
 Tricia goes back to her room and begins her analysis. First, she looks at the route that she might take home. Originally, she
 planned a direct VFR flight back to Santa Rosa, a nonstop flight of 711 nautical miles, as depicted in the sectional chart excerpt
 in Figure 3-9.
-
-![Figure 3-7. Example Flight Risk Assessment Tool.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-7-1-00-example-flight-risk-assessment-tool.png)

@@ -36,3 +36,6 @@ sea level can raise the CO concentration in the blood and
 result in physiological effects similar to flying at 8,000 feet.
 Besides hypoxia, tobacco causes diseases and physiological
 debilitation that can be medically disqualifying for pilots.
+
+
+![Figure 17-12. The human eye.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-12-the-human-eye.png)

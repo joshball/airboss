@@ -11,3 +11,6 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 # Communication Equipment
 
 Communication Equipment
+
+
+![Figure 2-2. Audio panel.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-2-00-audio-panel.png)

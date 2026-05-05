@@ -22,3 +22,6 @@ performance planning for an instrument flight is normally
 done prior to the aircraft’s departure, a general review of
 performance considerations is usually conducted prior to
 commencing an instrument approach.
+
+
+![Figure 4-4. Procedure identification.](/handbooks/iph/FAA-H-8083-16B/figures/fig-4-03-procedure-identification.png)

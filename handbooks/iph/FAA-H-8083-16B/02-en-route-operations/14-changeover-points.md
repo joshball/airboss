@@ -56,3 +56,6 @@ extend beyond the minimum widths of 8 and 12 NM, and a
 flare or spreading outward results at the COP. [Figure 2-43]
 Offset COP and dogleg segments on airways or routes can
 also result in a flare at the COP.
+
+
+![Figure 2-14. Chart Supplement (includes Airport/Facility Directory  section).](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-12-chart-supplement-includes-airport-facility-direc.png)

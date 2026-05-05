@@ -103,3 +103,6 @@ applicable to large aircraft.
 For current information on how to order paper copies of AD
 books and the AD Biweekly, visit the FAA online regulatory
 and guidance library at: http://rgl.faa.gov.
+
+
+![Figure 9-6. Stall speed chart.](/handbooks/phak/FAA-H-8083-25C/figures/fig-9-04-stall-speed-chart.png)

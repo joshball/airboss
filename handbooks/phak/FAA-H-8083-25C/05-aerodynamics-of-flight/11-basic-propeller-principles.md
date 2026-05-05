@@ -230,3 +230,10 @@ revolution is greater, it is more than offset by a decrease in
 slipstream velocity and an increase in airspeed. The AOA is
 still small because the blade angle has been increased with
 an increase in airspeed.
+
+
+![Figure 5-11. The difference in downwash at altitude versus near  the ground.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-09-the-difference-in-downwash-at-altitude-versus-ne.png)
+
+![Figure 5-42. An AOA indicator has several benefits when installed in general aviation aircraft.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-38-an-aoa-indicator-has-several-benefits-when-insta.png)
+
+![Figure 5-43. This section or blade element is an airfoil  comparable to a cross-section of an aircraft wing. One surface of the blade is cambered or curved, similar to the upper surface of an aircraft wing, while the other surface is flat like the bottom surface of a wing. The chord line is an imaginary line drawn thro](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-39-this-section-or-blade-element-is-an-airfoil-comp.png)

@@ -26,3 +26,6 @@ Some DME receivers provide a groundspeed in knots by
 monitoring the rate of change of the aircraft’s position relative
 to the ground station. Groundspeed values are accurate only
 when tracking directly to or from the station.
+
+
+![Figure 9-22. RNAV computation.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-21-rnav-computation.png)

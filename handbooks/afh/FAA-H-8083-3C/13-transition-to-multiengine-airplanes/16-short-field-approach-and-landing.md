@@ -28,3 +28,6 @@ instead of the wing flaps when flap retraction is attempted on the landing rollo
 Landing conditions that involve a short field, high winds, or strong crosswinds are just about the only situations where flap retraction
 on the landing rollout should be considered. When there is an operational need to retract the flaps just after touchdown, it needs to be
 done deliberately with the flap handle positively identified before it is moved.
+
+
+![Figure 13-16. Excessive bank engine-out flight.](/handbooks/afh/FAA-H-8083-3C/figures/fig-13-14-excessive-bank-engine-out-flight.png)

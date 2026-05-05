@@ -64,3 +64,6 @@ generally been made. This discussion also allows the pilot
 to move past what he or she thinks the passengers want to
 do and find out what they actually want to do. This removes
 self-induced pressure from the pilot.
+
+
+![Figure 2-14. The DECIDE model has been recognized worldwide. Its application is illustrated in column A while automatic/naturalistic  decision-making is shown in column B.](/handbooks/phak/FAA-H-8083-25C/figures/fig-2-13-the-decide-model-has-been-recognized-worldwide-i.png)

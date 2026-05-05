@@ -106,16 +106,6 @@ level midway between the 4,000 and 8,000-ft lines is 6,000 ft.
 
 Figure 27-14. Low-Level SIGWX Chart Freezing Level Forecast—Example
 
-![Figure 27-10. 12-Hour Low-Level SIGWX Chart—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-00-12-hour-low-level-sigwx-chart-example.png)
-
-![Figure 27-11. Low-Level SIGWX Chart Symbols](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-01-low-level-sigwx-chart-symbols.png)
-
-![Figure 27-12. Low-Level SIGWX Chart Flying Categories—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-02-low-level-sigwx-chart-flying-categories-example.png)
-
-![Figure 27-13. Low-Level SIGWX Chart Turbulence Forecast—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-03-low-level-sigwx-chart-turbulence-forecast-exampl.png)
-
-![Figure 27-14. Low-Level SIGWX Chart Freezing Level Forecast—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-04-low-level-sigwx-chart-freezing-level-forecast-ex.png)
-
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-9-1-00-low-level-sigwx-chart-issuance-schedule-issuance.html">
 <table><caption>Table 27-10. Low-Level SIGWX Chart Issuance Schedule 
   

@@ -48,3 +48,6 @@ PFD (Primary Flight Display)
 Navigation Radio #1
 Communication Radio #1
 Standby Indicator Light
+
+
+![Figure 11-12. Information shown on the additional information  page that will aid the pilot in making a more informed decision about which airport to choose when diverting.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-11-10-information-shown-on-the-additional-information-.png)

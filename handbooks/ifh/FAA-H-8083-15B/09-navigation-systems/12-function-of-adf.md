@@ -150,3 +150,6 @@ WCA = 10° LEFT
 RB = 10° RIGHT
 Station
 WIND
+
+
+![Figure 9-12. The VOR indicator instrument.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-10-the-vor-indicator-instrument.png)

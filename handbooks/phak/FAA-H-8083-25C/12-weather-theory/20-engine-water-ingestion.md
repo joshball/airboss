@@ -33,3 +33,6 @@ Operations Personnel; AC 00‑24, Thunderstorms; AC 00-45,
 Aviation Weather Services; AC 91-74, Pilot Guide: Flight in
 Icing Conditions; and chapter 7, section 2 of the Aeronautical
 Information Manual (AIM).
+
+
+![Figure 12-20. Relationship between relative humidity, temperature, and dewpoint.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-18-relationship-between-relative-humidity-temperatu.png)

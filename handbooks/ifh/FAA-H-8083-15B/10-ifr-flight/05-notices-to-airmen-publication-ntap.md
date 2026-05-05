@@ -18,3 +18,6 @@ publications listed. It also includes current Flight Data Center
 (FDC) NOTAMs, which are regulatory in nature, issued to
 establish restrictions to flight or to amend charts or published
 instrument approach procedures (IAPs).
+
+
+![Figure 10-5. Drift correction in holding pattern.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-10-04-drift-correction-in-holding-pattern.png)

@@ -68,12 +68,6 @@ additional sections, such as one on Safety and Operational
 Tips or an alphabetical index at the end of the POH.
 
 
-![Figure 9-1. Single-engine airspeed indicator.](/handbooks/phak/FAA-H-8083-25C/figures/fig-9-00-single-engine-airspeed-indicator.png)
-
-![Figure 9-5. Placards are used to depict aircraft limitations.](/handbooks/phak/FAA-H-8083-25C/figures/fig-9-01-placards-are-used-to-depict-aircraft-limitations.png)
-
-![Figure 9-6. Stall speed chart.](/handbooks/phak/FAA-H-8083-25C/figures/fig-9-02-stall-speed-chart.png)
-
 | E |  |  | G | r | o | ss |  | w | ei | g | ht: | 2 | , | 1 | 70 |  | p | ou | n | d | s |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | C | a | li | br | a | ted | s | t | al | l | sp | e | e | d |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | L |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |

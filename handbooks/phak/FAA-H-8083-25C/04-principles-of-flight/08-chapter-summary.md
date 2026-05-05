@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Chapter Summary
+
+![Figure 4-8. Tip vortex.](/handbooks/phak/FAA-H-8083-25C/figures/fig-4-07-tip-vortex.png)

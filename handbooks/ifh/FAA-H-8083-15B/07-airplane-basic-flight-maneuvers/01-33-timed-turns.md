@@ -60,3 +60,6 @@ roll-out, the time it takes for both will not need to be included
 in the calculations. With practice, the pilot should level the
 wings on the desired heading. If any deviation has occurred,
 make small corrections to establish the correct heading.
+
+
+![Figure 7-34. Turn coordinator calibration.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-34-turn-coordinator-calibration.png)

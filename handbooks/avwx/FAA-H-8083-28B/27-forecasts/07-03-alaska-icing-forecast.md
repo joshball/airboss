@@ -23,5 +23,3 @@ Freezing level heights are blue-filled contours (every 2,000 ft). Areas of isola
 icing are shaded yellow, areas of occasional (OCNL) or continuous (CONS) moderate icing are shaded
 orange, and red is used for moderate with isolated severe (SEV) icing (refer to SIGMETs for occasional or
 greater severe icing). These forecasts are issued every eight hours and amended as needed.
-
-![Figure 27-5. Alaska Surface Forecast Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-3-00-alaska-surface-forecast-example.png)

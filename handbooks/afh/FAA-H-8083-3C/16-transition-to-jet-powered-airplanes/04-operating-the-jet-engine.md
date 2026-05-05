@@ -23,3 +23,6 @@ As in any gas turbine engine, exceeding temperature or rpm limits, even for a fe
 blades and other components. The pilot should monitor the temperature of turbine gases and rotation speeds as needed. Modern
 aircraft are designed to prevent exceedances and alert the pilot of an impending or actual exceedance. Older designs rely more on the
 pilot to prevent any exceedances.
+
+
+![Figure 16-4. Typical jet engine acceleration times.](/handbooks/afh/FAA-H-8083-3C/figures/fig-16-03-typical-jet-engine-acceleration-times.png)

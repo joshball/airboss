@@ -41,3 +41,6 @@ With an AOA just under the AOA which may cause an aerodynamic buffet or stall wa
 propeller-driven airplanes, torque, slipstream effect, and P-factor may produce a strong left yaw, which requires right rudder input to
 maintain coordinated flight. The closer the airplane is to the 1G stall, the greater the amount of right rudder pressure required.
 Figure 5-7. Slow flight—low airspeed, high angle of attack, high power, and constant altitude.
+
+
+![Figure 5-6. Angle-of-attack in degrees.](/handbooks/afh/FAA-H-8083-3C/figures/fig-5-05-angle-of-attack-in-degrees.png)

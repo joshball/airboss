@@ -13,3 +13,6 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 Other Airspace Areas
 “Other airspace areas” is a general term referring to the
 majority of the remaining airspace. It includes:
+
+
+![Figure 15-5. Camden Ridge MOA is an example of a military operations area.](/handbooks/phak/FAA-H-8083-25C/figures/fig-15-04-camden-ridge-moa-is-an-example-of-a-military-ope.png)

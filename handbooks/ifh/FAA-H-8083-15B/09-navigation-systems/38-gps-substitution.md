@@ -28,3 +28,6 @@ Determining the aircraft position over a fix defined
 by an NDB/compass locator bearing crossing a VOR/
 LOC course.
 Holding over an NDB/compass locator.
+
+
+![Figure 9-38. Localizer course indications. To follow indications displayed in the aircraft, start from A and proceed through E.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-36-localizer-course-indications-to-follow-indicatio.png)

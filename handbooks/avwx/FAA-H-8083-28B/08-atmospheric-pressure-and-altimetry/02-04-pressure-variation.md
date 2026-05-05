@@ -25,7 +25,3 @@ temperatures are seldom standard, so temperature’s effects on pressure will be
 section.
 
 Figure 8-4. Air Pressure in the Standard Atmosphere
-
-![Figure 8-3. Station Pressure](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-4-00-station-pressure.png)
-
-![Figure 8-4. Air Pressure in the Standard Atmosphere](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-4-01-air-pressure-in-the-standard-atmosphere.png)

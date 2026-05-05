@@ -119,14 +119,6 @@ Tropical cyclones (i.e., with surface wind speed 34 kt or greater) are depicted 
 with the storm’s name positioned adjacent to the symbol. Cumulonimbus clouds meeting chart criteria are
 identified and characterized relative to each storm.
 
-![Figure 27-17. High-Level SIGWX Chart—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-00-high-level-sigwx-chart-example.png)
-
-![Figure 27-18. High-Level SIGWX Chart Turbulence—Examples](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-01-high-level-sigwx-chart-turbulence-examples.png)
-
-![Figure 27-19. High-Level SIGWX Chart Jet Stream—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-02-high-level-sigwx-chart-jet-stream-example.png)
-
-![Figure 27-20. High-Level SIGWX Chart Tropopause Height—Examples](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-03-high-level-sigwx-chart-tropopause-height-example.png)
-
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-9-3-00-icing-and-turbulence-intensity-symbols-intensity.html">
 <table><caption>Table 27-12. Icing and Turbulence Intensity Symbols 
 Intensity 

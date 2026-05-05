@@ -29,3 +29,6 @@ special visual flight rules (SVFR) traffic. A contact or visual
 approach may be used in lieu of conducting a SIAP, and
 both allow the flight to continue as an IFR flight to landing
 while increasing the efficiency of the arrival.
+
+
+![Figure 4-33. Procedure turn obstacle clearance.](/handbooks/iph/FAA-H-8083-16B/figures/fig-4-29-procedure-turn-obstacle-clearance.png)

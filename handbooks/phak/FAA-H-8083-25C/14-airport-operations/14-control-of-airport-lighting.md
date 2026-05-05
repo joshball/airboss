@@ -34,3 +34,6 @@ Lowest intensity available
 5 times within 5 seconds
 3 times within 5 seconds
 Figure 14-34. Radio controlled runway lighting.
+
+
+![Figure 14-14. Runway holding position markings as seen when  exiting the runway. When exiting the runway, no ATC clearance is required to cross.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-13-runway-holding-position-markings-as-seen-when-ex.png)

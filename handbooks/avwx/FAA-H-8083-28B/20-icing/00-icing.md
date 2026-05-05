@@ -217,8 +217,8 @@ be affected, including flameouts. Research into HIWC conditions continues as of 
 20.5 Additional Information
 Refer to AC 91-74, Pilot Guide: Flight in Icing Conditions, for additional information on icing.
 
-![Figure 20-1. Icing with Fronts](/handbooks/avwx/FAA-H-8083-28B/figures/fig-20-3-8-00-icing-with-fronts.png)
+![Figure 20-1. Icing with Fronts](/handbooks/avwx/FAA-H-8083-28B/figures/fig-20-00-icing-with-fronts.png)
 
-![Figure 20-2. Icing with Mountains](/handbooks/avwx/FAA-H-8083-28B/figures/fig-20-3-10-00-icing-with-mountains.png)
+![Figure 20-2. Icing with Mountains](/handbooks/avwx/FAA-H-8083-28B/figures/fig-20-01-icing-with-mountains.png)
 
-![Figure 20-3. Carburetor Icing](/handbooks/avwx/FAA-H-8083-28B/figures/fig-20-4-2-00-carburetor-icing.png)
+![Figure 20-3. Carburetor Icing](/handbooks/avwx/FAA-H-8083-28B/figures/fig-20-02-carburetor-icing.png)

@@ -20,3 +20,6 @@ zero altitude. If required to use QFE altimetry, altimeters
 are set to QFE while operating at or below the transition
 altitude and below the transition level. On the airport, the
 altimeter will read “0” feet.
+
+
+![Figure 2-68. ATC reporting procedures.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-62-atc-reporting-procedures.png)

@@ -13,3 +13,6 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 Post-Flight
 A flight is not complete until the engine is shut down and the airplane is secured. A pilot should consider this an essential part of any
 flight.
+
+
+![Figure 2-14. Airport Diagram of Monterey Peninsula (MRY), Monterey, California.](/handbooks/afh/FAA-H-8083-3C/figures/fig-2-13-airport-diagram-of-monterey-peninsula-mry-monter.png)

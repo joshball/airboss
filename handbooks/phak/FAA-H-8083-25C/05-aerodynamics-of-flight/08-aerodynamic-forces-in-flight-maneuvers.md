@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Aerodynamic Forces in Flight Maneuvers
+
+![Figure 5-8. A wing root can cause interference drag.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-06-a-wing-root-can-cause-interference-drag.png)

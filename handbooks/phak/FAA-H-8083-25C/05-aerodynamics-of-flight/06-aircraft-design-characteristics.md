@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Aircraft Design Characteristics
+
+![Figure 5-6. Drag versus speed.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-04-drag-versus-speed.png)

@@ -25,5 +25,3 @@ pressure is denser than an air parcel with a lower pressure.
 As previously discussed, air pressure decreases with height in the atmosphere. Therefore, the density also
 decreases with height (see Figure 8-9). In the atmosphere, pressure has the greatest effect on density in the
 vertical direction.
-
-![Figure 8-8. Volume’s Effects on Density](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-3-2-00-volume-s-effects-on-density.png)

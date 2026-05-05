@@ -32,3 +32,8 @@ a complete weather briefing before takeoff.
 make in-flight decisions.
 •   	 Let your fellow pilots know about the limitations of
 in-cockpit NEXRAD.
+
+
+![Figure 13-15. Information page.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-14-information-page.png)
+
+![Figure 13-16. List of weather products and the expiration times of each.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-15-list-of-weather-products-and-the-expiration-time.png)

@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Chapter Summary
+
+![Figure 5-5. Coordinated flight in a turn.](/handbooks/afh/FAA-H-8083-3C/figures/fig-5-04-coordinated-flight-in-a-turn.png)

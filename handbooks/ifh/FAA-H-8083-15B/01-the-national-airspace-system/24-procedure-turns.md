@@ -39,3 +39,6 @@ provided, when conducting a timed approach, or when the
 procedure turn is not authorized. Pilots should contact the
 appropriate ATC facility when in doubt if a procedure turn
 is required.
+
+
+![Figure 1-24. RNAV instrument approach charts.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-23-rnav-instrument-approach-charts.png)

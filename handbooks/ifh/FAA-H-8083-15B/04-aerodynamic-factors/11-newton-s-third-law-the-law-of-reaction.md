@@ -21,3 +21,8 @@ from the downward deflection of the airflow around it. This
 downward force of the relative wind results in an equal but
 opposite (upward) lifting force created by the airflow over
 the wing. [Figure 4-6]
+
+
+![Figure 4-11. Region of speed stability.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-4-09-region-of-speed-stability.png)
+
+![Figure 4-11. Flying in this regime permits the pilot to make  slight pitch changes without changing power settings, and](/handbooks/ifh/FAA-H-8083-15B/figures/fig-4-10-vortex-generators.png)

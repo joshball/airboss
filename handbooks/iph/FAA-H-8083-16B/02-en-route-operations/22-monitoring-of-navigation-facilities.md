@@ -29,3 +29,6 @@ the appropriate FAA facility if they have questions in flight
 regarding NAVAID status, in addition to checking NOTAMs
 prior to flight, since NAVAIDs and associated monitoring
 equipment are continuously changing.
+
+
+![Figure 2-22. Chart Supplement (NE), Tower En Route Control route descriptions (Atlantic City).](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-16-chart-supplement-ne-tower-en-route-control-route.png)

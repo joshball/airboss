@@ -90,3 +90,6 @@ speed is 105 knots. Airspeed reduction to 95 knots, gear and
 flaps down, can be made in the following manner:
 
 Figure 7-61. Insufficient cross-check. The problem is power and not nose-high. In this case, the pilot decreased pitch inappropriately.
+
+
+![Figure 7-24. Straight-and-level flight (reduced airspeed stabilized).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-11-pitch-correction-greater-than-100-feet-one-bar-c.png)

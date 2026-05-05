@@ -18,3 +18,6 @@ the pitch attitude changes and control usage, the airplane may stall or sink rap
 Whenever a slow speed approach is noted, the pilot should apply power to accelerate the airplane and increase the lift to reduce the sink
 rate and to prevent a stall. This is done while still at a high enough altitude to reestablish the correct approach airspeed and attitude. If
 too slow and too low, it is best to execute a go-around.
+
+
+![Figure 9-32. Rounding out too high.](/handbooks/afh/FAA-H-8083-3C/figures/fig-9-31-rounding-out-too-high.png)

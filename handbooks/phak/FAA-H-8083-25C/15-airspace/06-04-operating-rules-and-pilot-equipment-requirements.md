@@ -251,3 +251,6 @@ have a control tower (Lake City, FL, for example). Be sure to
 check the Chart Supplement U.S. (formerly Airport/Facility
 Directory) to be familiar with the airport and associated
 airspace prior to flight.
+
+
+![Figure 15-8. Visual flight rule weather minimums.](/handbooks/phak/FAA-H-8083-25C/figures/fig-15-07-visual-flight-rule-weather-minimums.png)

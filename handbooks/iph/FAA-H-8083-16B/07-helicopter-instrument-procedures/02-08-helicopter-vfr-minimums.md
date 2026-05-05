@@ -31,3 +31,6 @@ Knowledge of all VFR minimums is required in order to
 determine if a PinS approach can be conducted or if a SVFR
 clearance is required to continue past the (MAP). These
 approaches and procedures are discussed in detail later.
+
+
+![Figure 7-7. Helicopter VFR minimums.](/handbooks/iph/FAA-H-8083-16B/figures/fig-7-06-helicopter-vfr-minimums.png)

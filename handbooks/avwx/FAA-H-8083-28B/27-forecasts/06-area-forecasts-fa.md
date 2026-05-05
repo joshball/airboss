@@ -120,8 +120,6 @@ Pribilof Islands and Southeast Bering
 Sea
 Central Southeast Alaska
 
-![Figure 27-3. AAWU Flight Advisory and FA Zones—Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-6-4-00-aawu-flight-advisory-and-fa-zones-alaska.png)
-
 **Table 27-8.** FA Issuance Schedule Alaska (UTC) 1st Issuance 0415 (DT)/0515 (ST) 2nd Issuance 1215 (DT)/1315 (ST) 3rd Issuance 2015 (DT)/2115 (ST) 4th Issuance None Note: DT—During Alaska
 
 |  | Alaska<br>(UTC) |

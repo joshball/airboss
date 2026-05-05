@@ -123,3 +123,6 @@ normal cross-check should be satisfactory. When changing
 power, the speed of the cross-check must be increased to
 cover the pitch and bank instruments adequately. This is
 necessary to counteract any deviations immediately.
+
+
+![Figure 8-18. PFD indications during a nose-low pitch attitude in a right turn.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-8-17-pfd-indications-during-a-nose-low-pitch-attitude.png)

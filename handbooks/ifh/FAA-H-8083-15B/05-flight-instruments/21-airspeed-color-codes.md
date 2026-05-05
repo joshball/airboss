@@ -15,3 +15,6 @@ The dial of an ASI is color coded to alert the pilot, at a
 glance, of the significance of the speed at which the aircraft
 is flying. These colors and their associated airspeeds are
 shown in Figure 5-15.
+
+
+![Figure 5-21. The effects of acceleration error.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-18-a-compass-correction-card-shows-the-deviation-co.png)

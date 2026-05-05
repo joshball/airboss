@@ -14,3 +14,6 @@ Taxiway Lights
 Similar to runway lighting, taxiways also have various lights
 which help pilots identify areas of the taxiway and any
 surrounding runways.
+
+
+![Figure 14-15. Runway distance remaining sign indicating that there  is 2,000 feet of runway remaining.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-14-runway-distance-remaining-sign-indicating-that-t.png)

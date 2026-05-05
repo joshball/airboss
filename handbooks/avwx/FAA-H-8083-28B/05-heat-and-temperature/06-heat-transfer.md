@@ -137,12 +137,6 @@ currents within them. Water boiling in a pot is an example of convection. Becaus
 conductor, convection plays a vital role in the Earth’s atmospheric heat transfer process. Figure 5-5
 illustrates examples of various heat transfer processes.
 
-![Figure 5-2. Radiation Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-1-00-radiation-example.png)
-
-![Figure 5-3. Temperature’s Effect on Radiation Wavelength](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-1-01-temperature-s-effect-on-radiation-wavelength.png)
-
-![Figure 5-4. Solar Zenith Angle](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-2-00-solar-zenith-angle.png)
-
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-5-6-00-heat-thermal-conductivity-of-various-substances-.html">
 <table><caption>Table 5-3. Heat (Thermal) Conductivity of Various Substances 
 Material 

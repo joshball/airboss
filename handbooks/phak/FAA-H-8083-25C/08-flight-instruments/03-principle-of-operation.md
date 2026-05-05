@@ -72,3 +72,6 @@ the lag period and cause erratic and unstable rate indications.
 Some aircraft are equipped with an instantaneous vertical
 speed indicator (IVSI), which incorporates accelerometers
 to compensate for the lag in the typical VSI. [Figure 8-6]
+
+
+![Figure 8-3. Effects of nonstandard temperature on an altimeter.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-02-effects-of-nonstandard-temperature-on-an-altimet.png)

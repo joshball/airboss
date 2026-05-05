@@ -58,11 +58,3 @@ typically much wider. A jet stream is a region where winds increase toward a cor
 than just a distinct location.
 One way of visualizing this is to consider a river. The river’s current is generally the strongest in the center,
 with decreasing strength as one approaches the river’s bank. It can be said that jet streams are rivers of air.
-
-![Figure 9-3. Speed Relative to the Earth’s Axis Versus Latitude](/handbooks/avwx/FAA-H-8083-28B/figures/fig-9-4-2-00-speed-relative-to-the-earth-s-axis-versus-latitu.png)
-
-![Figure 9-4. Three Cell Circulations and Jet Stream Location](/handbooks/avwx/FAA-H-8083-28B/figures/fig-9-4-2-01-three-cell-circulations-and-jet-stream-location.png)
-
-![Figure 9-5. Illustration of Polar and Subtropical Jet Streams and Their Relative Locations Around the Globe](/handbooks/avwx/FAA-H-8083-28B/figures/fig-9-4-2-02-illustration-of-polar-and-subtropical-jet-stream.png)
-
-![Figure 9-6. Jet Stream Wind Speeds](/handbooks/avwx/FAA-H-8083-28B/figures/fig-9-4-2-03-jet-stream-wind-speeds.png)

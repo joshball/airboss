@@ -70,3 +70,6 @@ the name steady state. [Figure 12-29]
 
 Knowledge of thunderstorms and the hazards associated with
 them is critical to the safety of flight.
+
+
+![Figure 12-27. Occluded front cross-section with a weather chart depiction and associated METAR.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-25-occluded-front-cross-section-with-a-weather-char.png)

@@ -43,3 +43,6 @@ An engine failure in a descent or other low power setting can be deceiving. The 
 low power settings, the pilot may not even be aware of a failure. If a failure is suspected, the pilot should advance both
 engine mixtures, propellers, and throttles significantly, to the takeoff settings if necessary, to correctly identify the failed engine. The
 power on the operative engine can always be reduced later.
+
+
+![Figure 13-20. Landing gear up—adequate climb performance.](/handbooks/afh/FAA-H-8083-3C/figures/fig-13-18-landing-gear-up-adequate-climb-performance.png)

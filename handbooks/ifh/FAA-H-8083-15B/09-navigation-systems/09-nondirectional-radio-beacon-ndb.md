@@ -25,3 +25,6 @@ heading (MH) is the direction the aircraft is pointed with
 respect to magnetic north. The magnetic bearing (MB) is the
 direction to or from a radio transmitting station measured
 relative to magnetic north.
+
+
+![Figure 9-9. Interception of bearing.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-09-interception-of-bearing.png)

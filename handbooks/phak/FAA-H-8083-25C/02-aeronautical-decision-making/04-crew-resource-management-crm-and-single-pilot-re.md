@@ -33,3 +33,6 @@ information, analyze it, and make decisions. Although the
 flight is coordinated by a single person and not an onboard
 flight crew, the use of available resources such as auto-pilot
 and air traffic control (ATC) replicates the principles of CRM.
+
+
+![Figure 2-4. The five hazardous attitudes identified through past and contemporary study.](/handbooks/phak/FAA-H-8083-25C/figures/fig-2-03-the-five-hazardous-attitudes-identified-through-.png)

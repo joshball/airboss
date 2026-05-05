@@ -18,12 +18,6 @@ must understand the principles involved and learn to use or
 counteract these natural forces.
 
 
-![Figure 4-1. Microscopic surface of a wing.](/handbooks/phak/FAA-H-8083-25C/figures/fig-4-00-microscopic-surface-of-a-wing.png)
-
-![Figure 4-2. Standard sea level pressure.](/handbooks/phak/FAA-H-8083-25C/figures/fig-4-01-standard-sea-level-pressure.png)
-
-![Figure 4-3. Properties of standard atmosphere.](/handbooks/phak/FAA-H-8083-25C/figures/fig-4-02-properties-of-standard-atmosphere.png)
-
 |  | Principles of<br>Flight |
 | --- | --- |
 | Introduction<br>This chapter examines the fundamental physical laws<br>governing the forces acting on an aircraft in flight, and<br>what effect these natural laws and forces have on the<br>performance characteristics of aircraft. To control an aircraft,<br>be it an airplane, helicopter, glider, or balloon, the pilot<br>must understand the principles involved and learn to use or<br>counteract these natural forces.<br>Structure of the Atmosphere<br>The atmosphere is an envelope of air that surrounds the Earth<br>and rests upon its surface. It is as much a part of the Earth as<br>the seas or the land, but air differs from land and water as it is<br>a mixture of gases. It has mass, weight, and indefinite shape.<br>The atmosphere is composed of 78 percent nitrogen, 21<br>percent oxygen, and 1 percent other gases, such as argon<br>or helium. Some of these elements are heavier than others.<br>The heavier elements, such as oxygen, settle to the surface<br>of the Earth, while the lighter elements are lifted up to the<br>region of higher altitude. Most of the atmosphere’s oxygen<br>is contained below 35,000 feet altitude. |  |

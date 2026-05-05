@@ -42,3 +42,6 @@ a taxiway, or grassy infield. Most light-twins do not have the performance to cl
 extended. Considerable altitude is lost while maintaining VYSE and retracting landing gear and flaps. Losses of 500 feet or
 more are not unusual. If the landing gear has been lowered with an alternate means of extension, retraction may not be possible,
 virtually negating any climb capability.
+
+
+![Figure 13-21. Typical “engine failure after takeoff” emergency checklist.](/handbooks/afh/FAA-H-8083-3C/figures/fig-13-19-typical-engine-failure-after-takeoff-emergency-c.png)

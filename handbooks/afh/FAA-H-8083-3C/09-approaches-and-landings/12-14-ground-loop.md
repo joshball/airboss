@@ -29,3 +29,6 @@ If brakes are used, sufficient brake is applied on the low-wing wheel (outside o
 approximately level, the new direction should be maintained until the airplane has slowed to taxi speed or has stopped.
 In nose-wheel airplanes, a ground loop is almost always a result of wheelbarrowing. A pilot should be aware that even though the nosewheel type airplane is less prone than the tailwheel-type airplane, virtually every type of airplane, including large multiengine airplanes,
 can be made to ground loop when sufficiently mishandled.
+
+
+![Figure 9-38. Start of a ground loop.](/handbooks/afh/FAA-H-8083-3C/figures/fig-9-37-start-of-a-ground-loop.png)

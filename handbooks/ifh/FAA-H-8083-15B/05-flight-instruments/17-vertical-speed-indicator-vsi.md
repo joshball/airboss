@@ -40,3 +40,6 @@ pumps that sense an upward or downward pitch of the aircraft
 and instantaneously create a pressure differential. By the time
 the pressure caused by the pitch acceleration dissipates, the
 altitude pressure change is effective.
+
+
+![Figure 5-17. Isogonic lines are lines of equal variation.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-16-isogonic-lines-are-lines-of-equal-variation.png)

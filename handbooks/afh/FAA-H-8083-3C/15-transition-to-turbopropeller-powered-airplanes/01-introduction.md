@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Introduction
+
+![Figure 15-1. Basic components of a gas turbine engine.](/handbooks/afh/FAA-H-8083-3C/figures/fig-15-00-basic-components-of-a-gas-turbine-engine.png)

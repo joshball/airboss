@@ -215,3 +215,6 @@ AGENT
 190°
 060°
 Figure 2-31. IFR en route high altitude chart.
+
+
+![Figure 2-7. Flight progress strips.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-05-flight-progress-strips.png)

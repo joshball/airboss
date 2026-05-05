@@ -291,5 +291,3 @@ Remarks, occasional lighting in cloud, cloud to ground.
 For an electrical discharge, DISCHARGE is coded followed by the altitude.
 /RM DISCHARGE 120
 Remarks, discharge, 12,000 ft MSL.
-
-![Figure 24-5. PIREP Coding Format](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-5-1-00-pirep-coding-format.png)

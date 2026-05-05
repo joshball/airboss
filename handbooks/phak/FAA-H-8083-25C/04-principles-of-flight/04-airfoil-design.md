@@ -108,3 +108,6 @@ Thus, modern airplanes have airfoils that strike a medium
 between extremes in design. The shape varies according to
 the needs of the airplane for which it is designed. Figure 4-6
 shows some of the more common airfoil designs.
+
+
+![Figure 4-4. Air pressure decreases in a venturi tube.](/handbooks/phak/FAA-H-8083-25C/figures/fig-4-03-air-pressure-decreases-in-a-venturi-tube.png)

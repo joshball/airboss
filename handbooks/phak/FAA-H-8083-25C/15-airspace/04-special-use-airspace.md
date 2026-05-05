@@ -23,3 +23,6 @@ the controlling agency, and the chart panel location. On
 National Aeronautical Charting Group (NACG) en route
 charts, this information is available on one of the end panels.
 Special use airspace usually consists of:
+
+
+![Figure 15-4. Requirements for airspace operations.](/handbooks/phak/FAA-H-8083-25C/figures/fig-15-02-requirements-for-airspace-operations.png)

@@ -34,3 +34,6 @@ and vice versa. For a constant temperature to be maintained
 as pressure increases, density must increase, and vice versa.
 These relationships provide a basis for understanding
 instrument indications and aircraft performance.
+
+
+![Figure 4-12. Plain and split flaps.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-4-10-vortex-generators.png)

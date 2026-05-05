@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Jet Airplane Landing
+
+![Figure 16-18. Stabilized approach.](/handbooks/afh/FAA-H-8083-3C/figures/fig-16-17-stabilized-approach.png)

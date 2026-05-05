@@ -25,3 +25,6 @@ the airplane. Important items may include:
 10. Install chocks (release parking brake in accordance with AFM/POH).
 11. Master Switch—turn OFF.
 12. Secure—install control locks and anti-theft security locks.
+
+
+![Figure 2-13. Standard hand signals used to assist pilots in managing a safe departure from the ramp to the taxiway or runway. Note  that at night, the Emergency Stop signal is used for all stop indications .](/handbooks/afh/FAA-H-8083-3C/figures/fig-2-12-standard-hand-signals-used-to-assist-pilots-in-m.png)

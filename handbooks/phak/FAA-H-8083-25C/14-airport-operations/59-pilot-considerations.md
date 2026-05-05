@@ -99,3 +99,6 @@ Facility Directory).
 NE-1, 28 JUL 2011 to 25 AUG 2011
 Not to be used for navigation
 Figure 14-60. An airport diagram with EMAS information.
+
+
+![Figure 14-59. EMAS information for Boston Logan International Airport located in the Chart Supplement U.S. (formerly Airport/ Facility Directory).](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-59-emas-information-for-boston-logan-international-.png)

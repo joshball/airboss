@@ -53,3 +53,6 @@ airspeed will continue to decay without appropriate pilot action. For example, i
 airspeed decreases, the airspeed may continue to decrease without the appropriate pilot action of reducing the AOA or adding power.
 [Figure 5-6]
 Figure 5-6. Angle-of-attack in degrees.
+
+
+![Figure 5-3. Upset recovery template.](/handbooks/afh/FAA-H-8083-3C/figures/fig-5-02-upset-recovery-template.png)

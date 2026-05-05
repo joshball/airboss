@@ -116,23 +116,3 @@ A mountain breeze (see Figure 10-21) is the nightly downslope winds commonly enc
 valleys. Air in contact with the sloping terrain cools faster than air above the valley. Pressure over the
 sloping terrain is higher than over the valleys (along a horizontal reference). Cooler air over the sloping
 terrain is denser than warmer air over the valley.
-
-![Figure 10-11. Surface Wind Flow](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-00-surface-wind-flow.png)
-
-![Figure 10-12. Local Wind Circulation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-01-local-wind-circulation.png)
-
-![Figure 10-13. Sea Breeze](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-1-00-sea-breeze.png)
-
-![Figure 10-14. Sea Breeze Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-1-01-sea-breeze-front.png)
-
-![Figure 10-15. Effects of Coastline Shape on a Sea Breeze](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-2-00-effects-of-coastline-shape-on-a-sea-breeze.png)
-
-![Figure 10-16. Land Breeze](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-3-00-land-breeze.png)
-
-![Figure 10-17. Lake Breeze](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-3-01-lake-breeze.png)
-
-![Figure 10-18. Sea Breeze/Lake Breeze Example [National Aeronautics and Space Administration (NASA)]](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-3-02-sea-breeze-lake-breeze-example-national-aeronaut.png)
-
-![Figure 10-19. Valley Breeze](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-4-00-valley-breeze.png)
-
-![Figure 10-20. Mountain-Plains Wind System](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-6-00-mountain-plains-wind-system.png)

@@ -37,3 +37,6 @@ airports scheduled to receive the system by 2017.
 
 Figure 14-35. Runway Entrance Lights (REL).
 Figure 14-36. Takeoff Hold Lights (THL).
+
+
+![Figure 14-21. (A) Enhanced taxiway centerline marking. (B) Enhanced taxiway centerline marking and runway holding position marking.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-21-a-enhanced-taxiway-centerline-marking-b-enhanced.png)

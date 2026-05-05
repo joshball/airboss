@@ -120,15 +120,3 @@ front occlusion is unstable, the weather is more severe than the weather found i
 Embedded thunderstorms, rain, and fog are likely to occur.
 
 Figure 11-8. Occluded Front
-
-![Figure 11-3. Lake Effect](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-00-lake-effect.png)
-
-![Figure 11-4. Fronts](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-01-fronts.png)
-
-![Figure 11-5. Warm Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-1-00-warm-front.png)
-
-![Figure 11-6. Cold Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-3-00-cold-front.png)
-
-![Figure 11-7. Stationary Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-3-01-stationary-front.png)
-
-![Figure 11-8. Occluded Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-4-00-occluded-front.png)

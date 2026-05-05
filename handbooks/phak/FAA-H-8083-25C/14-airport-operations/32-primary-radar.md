@@ -39,3 +39,6 @@ Automatic Dependent Surveillance−Broadcast (ADS−B) do
 not degrade over distance, provide better visibility around
 mountainous terrain and allows equipped aircraft to update
 their own position once a second with better accuracy.
+
+
+![Figure 14-32. Pulsating visual approach slope indicator.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-31-tri-color-visual-approach-slope-indicator.png)

@@ -22,5 +22,3 @@ Meteorological Data Relay (AMDAR) system.
 Modern commercial aircraft are equipped with meteorological sensors and associated sophisticated data
 acquisition and processing systems. These systems continuously record meteorological information on the
 aircraft and send these observations at selected intervals to ground stations via satellite or radio links where
-
-![Figure 24-6. VAR Form](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-5-4-00-var-form.png)

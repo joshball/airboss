@@ -16,3 +16,6 @@ information that can be used for day or night approaches. By
 maintaining the proper glidepath as provided by the system,
 a pilot should have adequate obstacle clearance and should
 touch down within a specified portion of the runway.
+
+
+![Figure 14-7. Runway Safety Area.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-06-runway-safety-area.png)

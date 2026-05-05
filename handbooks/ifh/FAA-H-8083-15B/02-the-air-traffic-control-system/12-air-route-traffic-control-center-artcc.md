@@ -38,3 +38,6 @@ Each ARTCC’s area of responsibility covers several states;
 when flying from the vicinity of one remote communication
 site toward another, expect to hear the same controller on
 different frequencies.
+
+
+![Figure 2-12. A center controller’s scope.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-2-11-a-center-controller-s-scope.png)

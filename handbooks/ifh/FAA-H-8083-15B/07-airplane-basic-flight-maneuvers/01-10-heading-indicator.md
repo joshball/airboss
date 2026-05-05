@@ -51,3 +51,8 @@ Any time the heading remains constant and the roll pointer and
 the roll index are not aligned, the aircraft is in uncoordinated
 flight. To make a correction, the pilot should apply rudder
 pressure to bring the aircraft back to coordinated flight.
+
+
+![Figure 7-16. Instruments used for bank control.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-15-instruments-used-for-bank-control.png)
+
+![Figure 7-17. Bank interpretation with the attitude indicator.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-16-bank-interpretation-with-the-attitude-indicator.png)

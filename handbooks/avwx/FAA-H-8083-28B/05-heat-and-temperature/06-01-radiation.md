@@ -65,7 +65,3 @@ increasingly larger surface area (y is greater than x) so that the insolation be
 increasing solar zenith angle, the Sun’s rays must pass through more of the Earth’s atmosphere, where they
 can be scattered and absorbed before reaching the Earth’s surface. Thus, the Sun can heat the surface to a
 much higher temperature when it is high in the sky, rather than low on the horizon.
-
-![Figure 5-2. Radiation Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-1-00-radiation-example.png)
-
-![Figure 5-3. Temperature’s Effect on Radiation Wavelength](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-1-01-temperature-s-effect-on-radiation-wavelength.png)

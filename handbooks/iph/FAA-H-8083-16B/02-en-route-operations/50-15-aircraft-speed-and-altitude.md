@@ -81,3 +81,6 @@ received the transmission, not that they understood the
 transmission. “Expect” altitudes are published for planning
 purposes and are not considered crossing restrictions until
 verbally issued by ATC.
+
+
+![Figure 2-70. Holding pattern design criteria template.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-64-holding-pattern-design-criteria-template.png)

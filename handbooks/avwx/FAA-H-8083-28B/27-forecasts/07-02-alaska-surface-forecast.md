@@ -32,5 +32,3 @@ pressure, areas of high and low pressure, fronts and troughs, and precipitation.
 surface weather that can be expected within one hour of the designated time.
 Areas of high pressure are depicted along with the maximum sea level pressure. Areas of low pressure are
 depicted with the minimum sea level pressure. The mean 12-hour motion of low-pressure systems is also
-
-![Figure 27-4. Alaska Flying Weather Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-1-00-alaska-flying-weather-example.png)

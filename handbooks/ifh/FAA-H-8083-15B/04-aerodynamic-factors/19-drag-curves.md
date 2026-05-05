@@ -73,3 +73,6 @@ percent of that power converted into available horsepower,
 approximately 128 horsepower. The remainder is lost energy.
 This is the reason the thrust and power available curves
 change with speed.
+
+
+![Figure 4-19. Rime ice.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-4-18-rime-ice.png)

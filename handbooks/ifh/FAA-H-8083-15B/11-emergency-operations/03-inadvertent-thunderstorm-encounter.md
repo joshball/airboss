@@ -50,3 +50,6 @@ Lightning is also present in a thunderstorm and can
 temporarily blind a pilot. To reduce this risk, turn up flight
 deck lights to the highest intensity, concentrate on the flight
 instruments, and resist the urge to look outside.
+
+
+![Figure 11-3. G1000 PFD display in normal mode and in the reversionary mode activated upon system failure.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-11-02-g1000-pfd-display-in-normal-mode-and-in-the-reve.png)

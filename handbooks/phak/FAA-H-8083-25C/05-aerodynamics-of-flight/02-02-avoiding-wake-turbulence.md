@@ -10,3 +10,5 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Avoiding Wake Turbulence
+
+![Figure 5-13. Avoid following another aircraft at an altitude within 1,000 feet.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-11-avoid-following-another-aircraft-at-an-altitude-.png)

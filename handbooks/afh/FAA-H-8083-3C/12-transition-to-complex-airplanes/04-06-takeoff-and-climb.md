@@ -10,3 +10,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Takeoff and Climb
+
+![Figure 12-15. Placarded gear speeds in the flight deck.](/handbooks/afh/FAA-H-8083-3C/figures/fig-12-13-placarded-gear-speeds-in-the-flight-deck.png)

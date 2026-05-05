@@ -130,3 +130,6 @@ altitudes. VORs with accuracy problems in parts of their
 service volume are listed in Notices to Airmen (NOTAMs)
 and in the Airport/Facility Directory (A/FD) under the name
 of the NAVAID.
+
+
+![Figure 9-14. An HSI display as seen on the pilot’s primary flight display (PFD) on an electronic flight instrument. Note that only attributes  related to the HSI are labeled.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-12-an-hsi-display-as-seen-on-the-pilot-s-primary-fl.png)

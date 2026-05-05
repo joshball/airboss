@@ -38,3 +38,6 @@ of the most commonly used signals. Whether this set of signals or a modified set
 long as each flight operational center uses a suitable, agreed-upon set of signals.
 Figure 2-13. Standard hand signals used to assist pilots in managing a safe departure from the ramp to the taxiway or runway. Note
 that at night, the Emergency Stop signal is used for all stop indications .
+
+
+![Figure 2-4. A sample airworthiness checklist used by pilots to inspect an aircraft.](/handbooks/afh/FAA-H-8083-3C/figures/fig-2-03-a-sample-airworthiness-checklist-used-by-pilots-.png)

@@ -37,3 +37,6 @@ misunderstandings and ensure that instructions were given to
 the correct aircraft. If, at any time, there is uncertainty about
 any ATC instructions or clearances, ask ATC to “say again”
 or ask for progressive taxi instructions.
+
+
+![Figure 14-50. A sound practice is to write down taxi instructions  from ATC.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-49-a-sound-practice-is-to-write-down-taxi-instructi.png)

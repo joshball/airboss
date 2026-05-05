@@ -37,3 +37,6 @@ opposes the downward force of weight.
 Aerodynamics
 of Flight
 Chapter 5
+
+
+![Figure 5-1. Relationship of forces acting on an aircraft.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-00-relationship-of-forces-acting-on-an-aircraft.png)

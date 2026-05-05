@@ -162,3 +162,8 @@ directions: one straight across to figure the ground roll and
 one in a diagonal manner to the correct obstacle height. This
 should be 975 feet for the total ground roll and 1,500 feet for
 the total distance over a 50 foot obstacle.
+
+
+![Figure 10-31. Crosswind component chart.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-29-crosswind-component-chart.png)
+
+![Figure 11-30. Cruise performance graph.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-30-cruise-performance-graph.png)

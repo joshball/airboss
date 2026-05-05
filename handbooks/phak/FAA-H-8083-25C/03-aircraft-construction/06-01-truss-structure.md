@@ -32,3 +32,6 @@ Monocoque
 Monocoque construction uses stressed skin to support almost
 all loads much like an aluminum beverage can. Although
 very strong, monocoque construction is not highly tolerant
+
+
+![Figure 3-13. Engine compartment.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-12-engine-compartment.png)

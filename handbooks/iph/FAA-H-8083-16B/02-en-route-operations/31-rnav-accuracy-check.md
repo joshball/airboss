@@ -39,3 +39,6 @@ Note: While in flight, continue to verify system accuracy
 by displaying bearing/range to a VOR/DME on the RNAV
 system and compare it to the actual RMI reading of that
 particular NAVAID.
+
+
+![Figure 2-31. IFR en route high altitude chart.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-25-ifr-en-route-high-altitude-chart.png)

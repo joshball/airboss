@@ -104,3 +104,6 @@ plotting board on which the CG envelope is printed. The reverse side of the typi
 for the particular airplane. A pencil line plot can be made directly on the CG envelope imprinted on the working side of the plotting
 board. This plot can easily be erased and recalculated anew for each flight. This plotter is to be used only for the make and model
 airplane for which it was designed.
+
+
+![Figure 13-6. Area of decision for engine failure after lift-off.](/handbooks/afh/FAA-H-8083-3C/figures/fig-13-04-area-of-decision-for-engine-failure-after-lift-o.png)

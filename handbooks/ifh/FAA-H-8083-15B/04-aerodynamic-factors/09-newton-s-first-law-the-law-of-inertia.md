@@ -22,3 +22,6 @@ controls to counter or change these forces to maintain the
 desired flightpath. If a pilot reduces power while in straightand-level flight, the aircraft will slow due to drag. However,
 as the aircraft slows there is a reduction of lift, which causes
 the aircraft to begin a descent due to gravity. [Figure 4-4]
+
+
+![Figure 4-9. Thrust and power required curves.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-4-07-thrust-and-power-required-curves.png)

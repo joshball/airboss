@@ -46,8 +46,6 @@ Meters (m)
 25.3.1 Issuance
 The NWS provides data to produce upper air analysis charts.
 
-![Figure 25-20. Schematic of 500 mb Constant-Pressure Chart](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-1-00-schematic-of-500-mb-constant-pressure-chart.png)
-
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-25-5-1-00-common-constant-pressure-charts-chart-pressure-a.html">
 <table><caption>Table 25-3. Common Constant-Pressure Charts 
 Chart 

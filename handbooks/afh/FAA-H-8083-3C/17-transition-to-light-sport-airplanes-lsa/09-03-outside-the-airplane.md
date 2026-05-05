@@ -29,3 +29,6 @@ flaps requires the pilot to crouch and twist low for inspection. A suitable hand
 twisting and bending. In an attempt to keep complexity to a minimum, flap control is typically a handle that actuates the flaps. A pilot
 should verify that the flaps extend and retract smoothly.
 Figure 17-14. Split flap.
+
+
+![Figure 17-13. A ballistic recovery parachute is a popular safety feature available on some LSA.](/handbooks/afh/FAA-H-8083-3C/figures/fig-17-12-a-ballistic-recovery-parachute-is-a-popular-safe.png)

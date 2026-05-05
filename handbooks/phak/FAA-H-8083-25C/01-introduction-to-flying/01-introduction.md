@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Introduction
+
+![Figure 1-1. Leonardo da Vinci’s ornithopter wings.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-01-leonardo-da-vinci-s-ornithopter-wings.png)

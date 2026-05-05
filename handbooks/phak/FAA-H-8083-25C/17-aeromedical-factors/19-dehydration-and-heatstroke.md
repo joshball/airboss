@@ -127,3 +127,6 @@ conditions. If the aircraft has a canopy or roof window,
 wearing light-colored, porous clothing and a hat will help
 provide protection from the sun. Keeping the flight deck well
 ventilated aids in dissipating excess heat.
+
+
+![Figure 17-19. Off-center viewing.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-18-off-center-viewing.png)

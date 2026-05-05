@@ -26,3 +26,6 @@ on some airport charts as circled areas. [Figure 1-6] The FAA
 Office of Runway Safety has links to the FAA regions that
 maintain a complete list of airports with runway hotspots
 at http://www.faa.gov/airports/runway_safety.
+
+
+![Figure 1-5. FAA recommendations for reducing runway incursions.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-04-faa-recommendations-for-reducing-runway-incursio.png)

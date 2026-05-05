@@ -39,3 +39,6 @@ is usually made of heat-resistant material such as stainless
 steel. However, a new emerging process of construction is
 the integration of composites or aircraft made entirely of
 composites.
+
+
+![Figure 3-14. Semimonocoque and monocoque fuselage design.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-13-semimonocoque-and-monocoque-fuselage-design.png)

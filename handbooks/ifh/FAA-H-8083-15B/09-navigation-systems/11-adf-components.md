@@ -60,3 +60,6 @@ as read on the azimuth card. The tail of the needle points to
 the radial of the VOR the aircraft is currently on or crossing.
 Figure 9-5 indicates a heading of 360°, the MB to the station
 is 005°, and the MB from the station is 185°.
+
+
+![Figure 9-11. VOR transmitter (ground station).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-11-vor-transmitter-ground-station.png)

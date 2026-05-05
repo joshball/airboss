@@ -11,3 +11,6 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 # Speed Stability
 
 Speed Stability
+
+
+![Figure 4-22. Downward force on the tailplane.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-4-21-downward-force-on-the-tailplane.png)

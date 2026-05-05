@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Introduction
+
+![Figure 4-1. Chippewa Regional Airport (KEAU), Eau Claire, Wisconsin.](/handbooks/iph/FAA-H-8083-16B/figures/fig-4-00-chippewa-regional-airport-keau-eau-claire-wiscon.png)

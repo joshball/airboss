@@ -170,3 +170,6 @@ designated with COPTER in the procedure identification
 systems may be required to execute other portions of the
 approach prior to intercepting the final approach segment
 or during the missed approach.
+
+
+![Figure 1-19. Descent rate table.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-18-descent-rate-table.png)

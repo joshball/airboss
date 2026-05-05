@@ -918,3 +918,6 @@ percent best power is 140 knots. However, it is necessary
 to subtract 8 knots from the speed since there are no wheel
 fairings. This note is listed under the title and conditions.
 The TAS is 132 knots.
+
+
+![Figure 11-22. Density altitude chart.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-21-density-altitude-chart.png)

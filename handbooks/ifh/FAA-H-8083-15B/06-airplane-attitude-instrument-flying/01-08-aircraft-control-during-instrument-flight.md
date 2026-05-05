@@ -51,3 +51,6 @@ precise setting. The key is to avoid fixating on the indicators
 while setting the power. Knowledge of approximate power
 settings for various flight configurations helps the pilot avoid
 overcontrolling power.
+
+
+![Figure 6-3. Navigation instruments.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-02-navigation-instruments.png)

@@ -32,3 +32,6 @@ light, single-engine airplanes. The airplane is allowed to roll with its full we
 speed. As the takeoff roll progresses, the pilot should adjust the airplane’s pitch attitude and AOA to attain minimum drag and
 maximum acceleration. In nose-wheel type airplanes, this involves little use of the elevator control since the airplane is already in a
 low-drag attitude.
+
+
+![Figure 6-6. Crosswind climb flightpath.](/handbooks/afh/FAA-H-8083-3C/figures/fig-6-05-crosswind-climb-flightpath.png)

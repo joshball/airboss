@@ -28,5 +28,3 @@ individual cells moving with the average wind throughout the vertical depth of t
 The wind at FL180 (500 mb) usually provides a good approximation. Propagation is the component of
 storm motion due to old cell dissipation and the new cell development. Storm motion may deviate
 substantially from the motion of the individual cells, which comprise the storm.
-
-![Figure 22-5. Supercell Thunderstorm](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-5-00-supercell-thunderstorm.png)

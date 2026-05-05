@@ -22,3 +22,6 @@ extend from the stop bar toward the runway. Following the
 ATC clearance to proceed, the stop bar is turned off and the
 lead-on lights are turned on. The stop bar and lead-on lights
 are automatically reset by a sensor or backup timer.
+
+
+![Figure 14-19. Surface painted taxiway direction signs.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-18-surface-painted-taxiway-direction-signs.png)

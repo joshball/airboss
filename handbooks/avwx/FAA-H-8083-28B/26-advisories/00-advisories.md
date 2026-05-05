@@ -1214,25 +1214,27 @@ WINDSHIFTS ACCOMPANYING THE THUNDERSTORMS MAY ALTER THE RUNWAY
 LANDING PATTERN WITH SOME STRONG WESTERLY WIND GUSTS.
 $$
 
-![Figure 26-1. AWC SIGMET Areas of Responsibility—CONUS](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-1-00-awc-sigmet-areas-of-responsibility-conus.png)
+![Figure 26-1. AWC SIGMET Areas of Responsibility—CONUS](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-00-awc-sigmet-areas-of-responsibility-conus.png)
 
-![Figure 26-2. AWC SIGMET Areas of Responsibility—Atlantic Basin](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-1-01-awc-sigmet-areas-of-responsibility-atlantic-basi.png)
+![Figure 26-2. AWC SIGMET Areas of Responsibility—Atlantic Basin](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-01-awc-sigmet-areas-of-responsibility-atlantic-basi.png)
 
-![Figure 26-3. SIGMET Areas of Responsibility—Pacific Basin](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-2-00-sigmet-areas-of-responsibility-pacific-basin.png)
+![Figure 26-3. SIGMET Areas of Responsibility—Pacific Basin](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-02-sigmet-areas-of-responsibility-pacific-basin.png)
 
-![Figure 26-5. AWC Convective SIGMET Areas of Responsibility](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-4-00-awc-convective-sigmet-areas-of-responsibility.png)
+![Figure 26-4. Non-Convective SIGMET for the CONUS—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-03-non-convective-sigmet-for-the-conus-example.png)
 
-![Figure 26-6. Convective SIGMET—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-4-01-convective-sigmet-example.png)
+![Figure 26-5. AWC Convective SIGMET Areas of Responsibility](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-04-awc-convective-sigmet-areas-of-responsibility.png)
 
-![Figure 26-7. SIGMET Outside the CONUS—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-5-00-sigmet-outside-the-conus-example.png)
+![Figure 26-6. Convective SIGMET—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-05-convective-sigmet-example.png)
 
-![CWAs are issued by the NWS CWSU. CWSU areas of responsibility are depicted in Figure 26-8.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-4-2-00-cwsu-areas-of-responsibility.png)
+![Figure 26-7. SIGMET Outside the CONUS—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-06-sigmet-outside-the-conus-example.png)
 
-![Figure 26-8. CWSU Areas of Responsibility](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-4-3-00-cwa-example.png)
+![Figure 26-8. CWSU Areas of Responsibility](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-07-cwsu-areas-of-responsibility.png)
 
-![Figure 26-10. Volcanic Ash Advisory Centers](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-5-1-00-volcanic-ash-advisory-centers.png)
+![Figure 26-9. CWA—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-08-cwa-example.png)
 
-![Figure 26-11. VAA in Graphical Format](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-6-1-00-vaa-in-graphical-format.png)
+![Figure 26-10. Volcanic Ash Advisory Centers](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-09-volcanic-ash-advisory-centers.png)
+
+![Figure 26-11. VAA in Graphical Format](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-10-vaa-in-graphical-format.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-26-00-decoding-a-non-convective-sigmet-for-the-conus-l.html">
 <table><caption>Table 26-1. Decoding a Non-Convective SIGMET for the CONUS 

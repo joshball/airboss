@@ -10,3 +10,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Combined Maneuvers
+
+![Figure 18-15. Level descent.](/handbooks/afh/FAA-H-8083-3C/figures/fig-18-14-level-descent.png)

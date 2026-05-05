@@ -352,3 +352,7 @@ in all types of instruction, from primary to advanced training. Instructors shou
 more effective and consistent. Instructors should also use a building block approach to teaching risk management. Risks encountered
 while giving instruction are similar to those that learners will encounter on operational flights, giving instructors the
 opportunity to highlight risk management as a tool to be used for safe and enjoyable flying.
+
+![Figure 10-1. NTSB Accident Report.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-12-00-ntsb-accident-report.png)
+
+![Figure 10-2. This risk matrix can be used for almost any operation by assigning likelihood and severity. In the case presented, the  likelihood of occasional and the severity as catastrophic falls in the high-risk area.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-12-01-this-risk-matrix-can-be-used-for-almost-any-oper.png)

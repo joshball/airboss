@@ -43,11 +43,3 @@ strong wind-shear layer (such as the top of a pool of cold air on the lee side o
 K-H instability induced by the wind shear associated with strong winds aloft is likely the chief source of
 high-level turbulence away from mountain ranges [clear-air turbulence (CAT)]. The mechanism that causes
 this type of disturbance can be compared to that of a flag flapping in a breeze. The flapping is a result of
-
-![Figure 16-1. Gravity Wave Oscillations](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-2-00-gravity-wave-oscillations.png)
-
-![a stable temperature lapse rate. This effect is illustrated in Figure 16-2.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-2-01-this-effect-is-illustrated-in-figure-16-2.png)
-
-![Figure 16-2. Gravity-Shear Waves](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-2-02-gravity-shear-waves.png)
-
-![gravity waves can frequently be observed in the atmosphere, as shown in Figure 16-3 and Figure 16-4.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-2-03-untitled.png)

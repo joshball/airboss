@@ -22,5 +22,3 @@ the level at which a parcel of air lifted dry adiabatically until saturated and 
 would first become warmer than the surrounding environmental air (i.e., unstable) in a conditionally
 unstable column of air in the atmosphere. The LFC is a defining feature of a conditionally unstable column
 of air.
-
-![Figure 13-3. Absolute Instability Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-3-4-00-absolute-instability-example.png)

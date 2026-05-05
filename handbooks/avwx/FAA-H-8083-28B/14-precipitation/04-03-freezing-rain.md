@@ -26,7 +26,3 @@ Freezing rain occurs when there is a deep layer aloft with above-freezing temper
 layer of below-freezing air at the surface. Ordinarily, air temperatures decrease with increasing altitude, but
 freezing rain requires a temperature inversion, which can occur when a warmer air mass overlies a colder
 air mass. This situation can occur along a warm front, where a warm air mass overruns a cold air mass. It
-
-![Figure 14-2. Snow Temperature Environment](/handbooks/avwx/FAA-H-8083-28B/figures/fig-14-4-2-00-snow-temperature-environment.png)
-
-![Figure 14-3. Ice Pellets Temperature Environment](/handbooks/avwx/FAA-H-8083-28B/figures/fig-14-4-2-01-ice-pellets-temperature-environment.png)

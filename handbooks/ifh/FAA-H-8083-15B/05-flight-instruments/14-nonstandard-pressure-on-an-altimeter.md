@@ -40,3 +40,6 @@ mean sea level) is only 3,500 feet at Point B. The fact that
 the altitude indication is not always true lends itself to the
 memory aid, “When flying from hot to cold or from a high
 to a low, look out below.” [Figure 5-8]
+
+
+![Figure 5-14. A maximum allowable ASI has a movable pointer that  indicates the never-exceed speed, which changes with altitude to avoid the onset of transonic shock waves.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-13-a-maximum-allowable-asi-has-a-movable-pointer-th.png)

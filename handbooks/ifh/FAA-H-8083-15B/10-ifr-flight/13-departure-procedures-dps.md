@@ -25,3 +25,6 @@ DPs, either textual or graphic, may be designed using either
 conventional or area navigation (RNAV) criteria. RNAV
 procedures have RNAV printed in the title (e.g., SHEAD
 TWO DEPARTURE (RNAV)).
+
+
+![Figure 10-13. Circling approaches.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-10-12-circling-approaches.png)

@@ -44,9 +44,3 @@ Note: Areas of in-flight icing forecasts are not included in the Alaska SIGWX fo
 Areas of forecast moderate or greater non-convective low-level turbulence are depicted with black dots.
 Turbulence altitudes are not included but can be considered as turbulence that is near the surface as a result
 of wind interactions with the terrain. In most cases, it would be within 6,000 ft above the terrain.
-
-![Figure 27-21. High-Level SIGWX Chart Tropical Cyclone—Examples](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-4-00-high-level-sigwx-chart-tropical-cyclone-examples.png)
-
-![Volcanic eruption sites are identified by a trapezoidal symbol depicted in Figure 27-22. The dot on the base  of the trapezoid identifies the location of the volcano. The name of the volcano, its latitude, and its longitude are noted adjacent to the symbol.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-4-01-the-dot-on-the-base-of-the-trapezoid-identifies-.png)
-
-![Figure 27-22. High-Level SIGWX Chart Volcanic Eruption Site—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-4-02-high-level-sigwx-chart-volcanic-eruption-site-ex.png)

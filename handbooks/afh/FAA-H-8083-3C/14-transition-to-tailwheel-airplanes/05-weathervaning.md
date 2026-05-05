@@ -14,3 +14,6 @@ Weathervaning
 Tailwheel airplanes have an exaggerated tendency to weathervane, or turn into the wind, when operated on the ground in crosswinds.
 This tendency is greatest when taxiing with a direct crosswind, a factor that makes maintaining directional control more difficult,
 sometimes requiring use of the brakes when tailwheel steering alone proves inadequate to counteract the weathervane effect.
+
+
+![Figure 14-5. Weathervaning tendency.](/handbooks/afh/FAA-H-8083-3C/figures/fig-14-04-weathervaning-tendency.png)

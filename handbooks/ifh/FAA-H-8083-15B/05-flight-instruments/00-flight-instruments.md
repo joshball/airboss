@@ -61,24 +61,6 @@ Head Up Display (HUD), etc., that are increasingly being
 incorporated into general aviation aircraft.
 
 
-![Figure 5-17. Isogonic lines are lines of equal variation.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-00-isogonic-lines-are-lines-of-equal-variation.png)
-
-![Figure 5-44. A Control Display Unit (CDU) used to control the  flight management system (FMS).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-01-a-control-display-unit-cdu-used-to-control-the-f.png)
-
-![Figure 5-46. The benefits of realistic visualization imagery, as  illustrated by Synthetic Vision manufactured by Chelton Flight Systems.  The system provides the pilot a realistic, real-time, three- dimensional depiction of the aircraft and its relation to terrain around it.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-02-the-benefits-of-realistic-visualization-imagery-.png)
-
-![Figure 5-47. Example of a multi-function display (MFD).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-03-example-of-a-multi-function-display-mfd.png)
-
-![Figure 5-48. Aircraft equipped with Automatic Dependent Surveillance—Broadcast (ADS-B) continuously broadcast their identification,  altitude, direction, and vertical trend. The transmitted signal carries significant information for other aircraft and ground stations alike. Other ADS-equipped aircraft receive this info](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-04-aircraft-equipped-with-automatic-dependent-surve.png)
-
-![Figure 5-49. An aircraft equipped with ADS will receive identification, altitude in hundreds of feet (above or below using + or–), direction  of the traffic, and aircraft descent or climb using an up or down arrow.  The yellow target is an illustration of how a non-ADS equipped aircraft would appear on an ADS-equipped ](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-04-aircraft-equipped-with-automatic-dependent-surve.png)
-
-![Figure 5-50. An aircraft equipped with ADS has the ability to upload and display weather.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-04-aircraft-equipped-with-automatic-dependent-surve.png)
-
-![Figure 5-59. A six-frame sequence illustrating the manner in which TAWS operates. A TAWS installation is aircraft specific and provides  warnings and cautions based upon time to potential impact with terrain rather than distance. The TAWS is illustrated in an upper left window while aircrew view is provided out of the ](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-07-a-six-frame-sequence-illustrating-the-manner-in-.png)
-
-![Figure 5-60. A head-up display (HUD).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-08-a-head-up-display-hud.png)
-
 |  | Flight Instruments<br>ntroduction |
 | --- | --- |
 | Introduction<br>Aircraft became a practical means of transportation when<br>accurate flight instruments freed the pilot from the necessity<br>of maintaining visual contact with the ground. Flight<br>instruments are crucial to conducting safe flight operations<br>and it is important that the pilot have a basic understanding<br>of their operation. The basic flight instruments required<br>for operation under visual flight rules (VFR) are airspeed<br>indicator (ASI), altimeter, and magnetic direction indicator.<br>In addition to these, operation under instrument flight rules<br>(IFR) requires a gyroscopic rate-of-turn indicator, slip-skid<br>indicator, sensitive altimeter adjustable for barometric<br>pressure, clock displaying hours, minutes, and seconds with<br>a sweep-second pointer or digital presentation, gyroscopic<br>pitch-and-bank indicator (artificial horizon), and gyroscopic<br>direction indicator (directional gyro or equivalent). | ntroduction |

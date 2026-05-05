@@ -41,5 +41,3 @@ use a particular resource. For example, ATC assistance may be very useful if a p
 contact ATC in an emergency. During an emergency, a pilot needs to prioritize tasks and manage workload.
 Many older aircraft may have modern equipment installed, which require a flight manual supplement. This equipment can be a
 valuable single-pilot resource if the pilot uses the equipment proficiently and adjusts procedures appropriately. In some cases,
-
-![Figure 8-3. Sheared off titanium fan blade with feather impressions.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-8-4-00-sheared-off-titanium-fan-blade-with-feather-impr.png)

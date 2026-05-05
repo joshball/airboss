@@ -56,3 +56,6 @@ each flight. ATC must correlate the pilots’ reports to provide
 separation; therefore, the accuracy of each pilot’s report can
 affect the progress and safety of every other aircraft operating
 in the area on an IFR flight plan.
+
+
+![Figure 10-12. Circling approach area radii.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-10-11-circling-approach-area-radii.png)

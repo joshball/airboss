@@ -26,3 +26,6 @@ environment, these three systems work well. When the
 human body is subjected to the forces of flight, these senses
 can provide misleading information. It is this misleading
 information that causes pilots to become disoriented.
+
+
+![Figure 3-2. Shepard’s tables illustrating problems with perception as both tables are the same length.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-3-01-shepard-s-tables-illustrating-problems-with-perc.png)

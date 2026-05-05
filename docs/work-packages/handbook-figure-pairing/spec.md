@@ -4,7 +4,7 @@ product: flightbag
 feature: handbook-figure-pairing
 type: spec
 status: unread
-review_status: pending
+review_status: done
 ---
 
 # Spec: Handbook Figure-Caption Pairing

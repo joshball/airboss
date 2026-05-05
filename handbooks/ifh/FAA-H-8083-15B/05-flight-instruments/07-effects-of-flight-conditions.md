@@ -24,3 +24,6 @@ The Pilot’s Operating Handbook (POH)/Aircraft Flight
 Manual (AFM) contains any corrections that must be applied
 to the airspeed for the various configurations of flaps and
 landing gear.
+
+
+![Figure 5-7. International Civil Aviation Organization (ICAO) cold temperature error table.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-06-international-civil-aviation-organization-icao-c.png)

@@ -22,3 +22,8 @@ the power because the airplane decelerates rapidly and may approach the critical
 the flaps since this causes a sudden decrease in lift and causes the airplane to sink more rapidly. If there is any doubt about the approach
 being safely completed, it is advisable to execute an immediate go-around.
 Figure 9-30. Right and wrong methods of correction for low final approach.
+
+
+![Figure 9-30. Right and wrong methods of correction for low final approach.](/handbooks/afh/FAA-H-8083-3C/figures/fig-9-29-right-and-wrong-methods-of-correction-for-low-fi.png)
+
+![Figure 9-31. Change in glidepath and increase in descent rate for high final approach.](/handbooks/afh/FAA-H-8083-3C/figures/fig-9-30-change-in-glidepath-and-increase-in-descent-rate.png)

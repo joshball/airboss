@@ -18,3 +18,6 @@ instrumentation offers better reference through all phases of
 flight and all flight maneuvers. The attitude indicator receives
 its information from the Attitude Heading and Reference
 System (AHRS).
+
+
+![Figure 8-14. Chelton’s FlightLogic (top) and Avidyne’s Entegra (bottom) are examples of panel displays that are configurable.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-14-chelton-s-flightlogic-top-and-avidyne-s-entegra-.png)

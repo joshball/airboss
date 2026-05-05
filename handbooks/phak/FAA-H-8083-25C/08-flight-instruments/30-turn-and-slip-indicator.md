@@ -47,3 +47,6 @@ Overboard vent line
 Suction
 gauge
 Figure 8-21. Turn indicators rely on controlled precession for their operation.
+
+
+![Figure 8-30. Driven by signals from a flux valve, the compass card  in this RMI indicates the heading of the aircraft opposite the upper center index mark. The green pointer is driven by the ADF.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-27-driven-by-signals-from-a-flux-valve-the-compass-.png)

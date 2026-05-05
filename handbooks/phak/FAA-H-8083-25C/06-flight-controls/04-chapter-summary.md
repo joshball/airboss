@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Chapter Summary
+
+![Figure 6-4. Airplane controls, movement, axes of rotation, and  type of stability.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-02-airplane-controls-movement-axes-of-rotation-and-.png)

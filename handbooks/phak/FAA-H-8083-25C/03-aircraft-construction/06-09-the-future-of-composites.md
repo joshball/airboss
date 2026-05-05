@@ -20,3 +20,6 @@ to lead to more innovative aircraft designs in the future.
 From the Cirrus SR-20 to the Boeing 787, it is obvious that
 composites have found a home in aircraft construction and
 are here to stay. [Figure 3-17]
+
+
+![Figure 3-17. Composite materials in aircraft, such as Columbia 350  (top), Boeing 787 (middle), and a Coast Guard HH-65 (bottom).](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-16-composite-materials-in-aircraft-such-as-columbia.png)

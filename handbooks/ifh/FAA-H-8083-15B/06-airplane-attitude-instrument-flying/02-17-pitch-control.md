@@ -10,3 +10,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Pitch Control
+
+![Figure 6-30. Pitch of the aircraft.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-30-pitch-of-the-aircraft.png)

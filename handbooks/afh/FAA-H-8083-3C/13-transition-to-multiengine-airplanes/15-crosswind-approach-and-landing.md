@@ -33,3 +33,6 @@ to prevent the airplane from turning. This alternate technique is completely acc
 wind conditions quicker with rudder and aileron than throttle movement. This is especially true with turbocharged engines where the
 throttle response may lag momentarily. The differential power technique should be practiced with an instructor before being
 attempted alone.
+
+
+![Figure 13-15. Wings level engine-out flight.](/handbooks/afh/FAA-H-8083-3C/figures/fig-13-13-wings-level-engine-out-flight.png)

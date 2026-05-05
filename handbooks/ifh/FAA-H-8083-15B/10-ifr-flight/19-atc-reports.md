@@ -28,3 +28,6 @@ The pilot-in-command shall include within the report
 to which the pilot to operate under IFR within the ATC
 system is impaired, and (4) nature and extent of assistance
 desired from ATC.
+
+
+![Figure 10-19. Navigation log.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-10-18-navigation-log.png)

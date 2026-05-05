@@ -23,7 +23,3 @@ terrain. The end result is, in the Northern Hemisphere, the surface wind spirals
 high pressure and counterclockwise and inward into low pressure (see Figure 10-11). In mountainous
 regions, one often has difficulty relating surface wind to pressure gradient because of immense friction and
 because of local terrain effects on pressure.
-
-![Figure 10-9. Upper Air Wind Flow](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-5-00-upper-air-wind-flow.png)
-
-![balance, as shown in Figure 10-10.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-5-01-untitled.png)

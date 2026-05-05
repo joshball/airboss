@@ -25,3 +25,6 @@ Refer to the Pilot’s Handbook of Aeronautical Knowledge
 (FAA-H-8083-25A) for more in depth information on
 blocked pitot systems along with different scenarios and
 how they effect the ASI.
+
+
+![Figure 5-5. Drum-type altimeter.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-04-drum-type-altimeter.png)

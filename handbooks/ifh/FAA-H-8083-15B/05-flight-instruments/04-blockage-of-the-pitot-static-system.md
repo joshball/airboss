@@ -17,3 +17,6 @@ of the pitot tube, the static port(s), or both. Moisture
 both systems. During preflight, it is very important to make
 sure the pitot tube cover is removed and that static port
 openings are checked for blockage and damage.
+
+
+![Figure 5-4. Three-pointer altimeter.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-03-three-pointer-altimeter.png)

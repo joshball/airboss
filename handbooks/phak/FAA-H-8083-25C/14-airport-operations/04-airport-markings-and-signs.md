@@ -21,3 +21,6 @@ most common signs and markings are described on the following
 pages. Additional information may be found in Chapter 2,
 “Aeronautical Lighting and Other Airport Visual Aids,” of
 the Aeronautical Information Manual (AIM).
+
+
+![Figure 14-4. Chart Supplement U.S. (formerly Airport/Facility  Directory excerpt.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-01-chart-supplement-u-s-formerly-airport-facility-d.png)

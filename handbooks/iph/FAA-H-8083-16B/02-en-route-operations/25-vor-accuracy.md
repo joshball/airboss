@@ -14,3 +14,6 @@ VOR Accuracy
 VOR accuracy can be checked by using any of the following
 methods: VOR test facility signal (VOT), VOR checkpoint
 signs, dual VOR check, or airborne VOR check.
+
+
+![Figure 2-25. Information found on en route low altitude charts.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-19-information-found-on-en-route-low-altitude-chart.png)

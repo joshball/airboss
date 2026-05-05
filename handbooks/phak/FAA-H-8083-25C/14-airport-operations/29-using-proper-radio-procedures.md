@@ -40,3 +40,6 @@ of radio communications.
 ICAO has adopted a phonetic alphabet that should be used in
 radio communications. When communicating with ATC, pilots
 should use this alphabet to identify their aircraft. [Figure 14-41]
+
+
+![Figure 14-29. Two-bar VASI system.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-29-two-bar-vasi-system.png)

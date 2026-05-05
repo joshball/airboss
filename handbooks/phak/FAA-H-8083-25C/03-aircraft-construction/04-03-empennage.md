@@ -15,3 +15,6 @@ Empennage
 Powerplant
 Fuselage
 Wing
+
+
+![Figure 3-10. Empennage components.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-09-empennage-components.png)

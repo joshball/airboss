@@ -196,3 +196,6 @@ elevation
 From field
 elevation
 To get
+
+
+![Figure 11-4. Density altitude chart.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-03-density-altitude-chart.png)

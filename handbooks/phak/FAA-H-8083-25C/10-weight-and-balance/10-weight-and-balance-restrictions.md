@@ -102,3 +102,6 @@ be out of CG limits even though the useful load has not been
 exceeded. Because of the effects of an out-of-balance or
 overweight condition, a pilot should always be sure that an
 aircraft is properly loaded.
+
+
+![Figure 10-10. Sample weight and balance using a negative.](/handbooks/phak/FAA-H-8083-25C/figures/fig-10-09-sample-weight-and-balance-using-a-negative.png)

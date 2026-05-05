@@ -21,3 +21,6 @@ Thus, pilots need to have:
 1. An accurate mental model of the airplane as an energy system.
 2. The competency to effectively coordinate control inputs to achieve and maintain altitude and airspeed targets.
 3. The ability to identify, assess, and mitigate the risks associated with mismanagement of energy.
+
+
+![Figure 4-2. The energy balance equation.](/handbooks/afh/FAA-H-8083-3C/figures/fig-4-00-the-energy-balance-equation.png)

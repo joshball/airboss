@@ -119,3 +119,6 @@ passengers, baggage, usable fuel, and drainable oil.
 It is the basic empty weight subtracted from the
 maximum allowable gross weight. This term applies
 to general aviation (GA) aircraft only.
+
+
+![Figure 10-8. CG moment envelope.](/handbooks/phak/FAA-H-8083-25C/figures/fig-10-05-cg-moment-envelope.png)

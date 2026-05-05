@@ -56,3 +56,6 @@ it is automatically terminated when the controller advises
 pilots to change to the tower or advisory frequency. While
 conducting a visual approach, the pilot is responsible for
 providing safe obstacle clearance.
+
+
+![Figure 4-34. Approach without a designated IF.](/handbooks/iph/FAA-H-8083-16B/figures/fig-4-30-approach-without-a-designated-if.png)

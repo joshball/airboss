@@ -68,5 +68,3 @@ In winter, air masses form over the expanded ice pack and adjoining snow-covered
 masses are characterized by very cold surface air, very low humidity, and strong low-level temperature
 inversions. Occasionally, air from unfrozen ocean areas flows northward over the Arctic. These intrusions
 of moist, cold air account for most of the infrequent wintertime cloudiness and precipitation in the Arctic.
-
-![Figure 21-1. The Arctic Circle](/handbooks/avwx/FAA-H-8083-28B/figures/fig-21-2-1-00-the-arctic-circle.png)

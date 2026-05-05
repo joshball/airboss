@@ -67,3 +67,6 @@ expand their routes as they saw fit. Airlines (from 1982)
 also had full freedom to set their fares. In 1984, the CAB
 was finally abolished since its primary duty of regulating the
 airline industry was no longer necessary.
+
+
+![Figure 1-11. President Jimmy Carter signs the Airline Deregulation  Act in late 1978.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-10-president-jimmy-carter-signs-the-airline-deregul.png)

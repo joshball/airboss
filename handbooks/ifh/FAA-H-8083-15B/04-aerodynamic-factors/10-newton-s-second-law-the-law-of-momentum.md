@@ -23,3 +23,6 @@ speed, which are controlled by attitude (both pitch and bank)
 and thrust inputs. Speeding up, slowing down, entering
 climbs or descents, and turning are examples of accelerations
 that the pilot controls in everyday flight. [Figure 4-5]
+
+
+![Figure 4-10. Regions of command.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-4-08-regions-of-command.png)

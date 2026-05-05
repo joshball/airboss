@@ -22,3 +22,6 @@ indicator. The heading information is derived from a
 magnetometer that senses the earth’s lines of magnetic flux.
 This information is then processed and sent out to the PFD
 to generate the heading display. [Figure 8-26]
+
+
+![Figure 8-37. The effects of acceleration error.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-35-the-effects-of-acceleration-error.png)

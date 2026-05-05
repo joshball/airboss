@@ -38,3 +38,6 @@ New Jersey (NJ).
 November 2011—A Cessna Citation 550 overran the
 runway at Key West International Airport (KEYW)
 in Key West, Florida.
+
+
+![Figure 14-57. There have been several incidents where the EMAS  has successfully arrested the aircraft.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-57-there-have-been-several-incidents-where-the-emas.png)

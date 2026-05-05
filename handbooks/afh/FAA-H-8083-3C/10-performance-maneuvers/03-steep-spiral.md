@@ -53,3 +53,6 @@ Common errors when performing steep spirals are:
 8. Performing by reference to the flight instruments rather than visual references
 9. Not scanning for other traffic during the maneuver
 10. Not completing the turn on the designated heading or reference
+
+
+![Figure 10-3. Chandelle.](/handbooks/afh/FAA-H-8083-3C/figures/fig-10-02-chandelle.png)

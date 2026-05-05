@@ -33,3 +33,6 @@ control airspace. All users are encouraged to use the TEC
 route descriptions located in the CS when filing flight plans.
 [Figure 2-20] All published TEC routes are designed to avoid
 en route airspace, and the majority is within radar coverage.
+
+
+![Figure 2-3. Victor airways.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-02-victor-airways.png)

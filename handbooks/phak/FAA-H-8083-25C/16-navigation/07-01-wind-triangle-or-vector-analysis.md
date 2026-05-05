@@ -69,3 +69,6 @@ knots, if the true airspeed of the aircraft is 120 knots, there is
 no need to convert speeds from knots to mph or vice versa.
 Now, on a plain sheet of paper draw a vertical line representing
 north to south. (The various steps are shown in Figure 16-21.)
+
+
+![Figure 16-18. A plotter (A), the computational and wind side of a mechanical flight computer (E6B) (B), and an electronic flight computer (C).](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-17-a-plotter-a-the-computational-and-wind-side-of-a.png)

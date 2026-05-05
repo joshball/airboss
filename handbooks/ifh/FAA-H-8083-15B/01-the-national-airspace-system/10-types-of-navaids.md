@@ -27,3 +27,6 @@ the TACAN-only sites. On AeroNav Products charts, veryhigh frequencies and ultra
 NAVAIDs (e.g., VORs) are depicted in black, while low
 frequencies and medium frequencies (LF/MF) are depicted
 as brown. [Figure 1-5]
+
+
+![Figure 1-10. Instrument approach chart.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-09-instrument-approach-chart.png)

@@ -35,3 +35,6 @@ exceeding the forward CG limit may result in excessive loads
 on the nosewheel, a tendency to nose over on tailwheel type
 airplanes, decreased performance, higher stalling speeds, and
 higher control forces.
+
+
+![Figure 10-5. Example of weight and balance computations.](/handbooks/phak/FAA-H-8083-25C/figures/fig-10-03-example-of-weight-and-balance-computations.png)

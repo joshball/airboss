@@ -20,3 +20,6 @@ A flight director incorporates the ADI within its system,
 which is further explained below (Flight Director System).
 However, an ADI need not have command cues; however,
 it is normally equipped with this feature.
+
+
+![Figure 5-45. Two primary flight displays (Avidyne on the left and Garmin on the right).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-45-two-primary-flight-displays-avidyne-on-the-left-.png)

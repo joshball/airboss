@@ -34,3 +34,6 @@ the runway is permanently shortened, ATC will include
 the word “shortened” until the Chart Supplement U.S.
 (formerly Airport/Facility Directory) is updated to include
 the permanent changes to the runway length.
+
+
+![Figure 14-54. Communication between ATC and a pilot who is  requesting taxi procedures.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-51-communication-between-atc-and-a-pilot-who-is-req.png)

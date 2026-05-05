@@ -31,5 +31,3 @@ Averaged over all latitudes, incoming solar radiation must equal outgoing terres
 the Earth would be unable to maintain a constant average temperature. About 35° latitude in both
 hemispheres is where incoming and outgoing radiation is equal. This implies there is annual net cooling at
 higher latitudes and net warming at lower latitudes; however, this is untrue. The excess heat in the tropics
-
-![Figure 7-5. Solar Zenith Angle Variations with Latitude](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-4-00-solar-zenith-angle-variations-with-latitude.png)

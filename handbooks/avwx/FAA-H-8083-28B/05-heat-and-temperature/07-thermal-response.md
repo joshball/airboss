@@ -125,10 +125,6 @@ seasonal temperature variations than localities well inland (continental locatio
 effect. Although both cities are at approximately the same latitude, the temperature is far less variable in
 San Francisco (maritime) than St. Louis (continental).
 
-![Figure 5-5. Heat Transfer Examples1](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-7-00-heat-transfer-examples1.png)
-
-![Figure 5-6. Specific Heat Capacity: Water versus Sand](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-7-01-specific-heat-capacity-water-versus-sand.png)
-
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-5-7-00-specific-heat-of-various-substances-substance-ph.html">
 <table><caption>Table 5-4. Specific Heat of Various Substances 
 Substance 

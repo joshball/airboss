@@ -90,3 +90,6 @@ as the control tower, but it is more likely that the departure
 radar position is remotely located. The tower controller will
 not issue a takeoff clearance until the departure controller
 issues a release.
+
+
+![Figure 2-9. The top image is a display as seen by controllers in an air traffic facility. It is an ARTS III (Automated Radar Terminal  System). The display shown provides an explanation of the symbols in the graphic. The lower figure is an example of the Digital Bright Radar Indicator Tower Equipment (DBRITE) screen as](/handbooks/ifh/FAA-H-8083-15B/figures/fig-2-08-the-top-image-is-a-display-as-seen-by-controller.png)

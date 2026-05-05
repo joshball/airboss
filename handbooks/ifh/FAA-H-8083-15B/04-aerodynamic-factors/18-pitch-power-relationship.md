@@ -40,3 +40,6 @@ altitude, thrust must be decreased to less than the value of
 drag. As the aircraft slows down, lift is reduced. To prevent
 losing altitude, the pitch angle must be increased in order to
 increase the AOA and maintain altitude.
+
+
+![Figure 4-18. Clear ice buildup with horns.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-4-19-clear-ice-buildup-with-horns.png)

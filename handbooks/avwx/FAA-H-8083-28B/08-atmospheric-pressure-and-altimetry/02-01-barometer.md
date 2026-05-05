@@ -36,5 +36,3 @@ mechanism. Air is taken out of the cell to create a partial vacuum. The cell con
 changes. One end of the cell is fixed, while the other end moves the registering mechanism. The coupling
 mechanism magnifies the movement of the cell driving an indicator hand along a scale graduated in
 pressure units.
-
-![Figure 8-1. Air Has Weight](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-1-00-air-has-weight.png)

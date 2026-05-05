@@ -47,3 +47,6 @@ personnel.
 Delayed signs and symptoms of altitude-induced DCS
 can occur after return to ground level regardless of
 presence during flight.
+
+
+![Figure 17-22. At night, the horizon may be hard to discern due to dark terrain and misleading light patterns on the ground.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-21-at-night-the-horizon-may-be-hard-to-discern-due-.png)

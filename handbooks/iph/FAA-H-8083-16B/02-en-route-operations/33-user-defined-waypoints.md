@@ -35,3 +35,6 @@ automatically become compulsory reporting points unless
 otherwise advised by ATC. All aircraft with latitude and
 longitude navigation systems flying above FL 390 must use
 latitude and longitude to define turning points.
+
+
+![Figure 2-33. High altitude jet routes.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-27-high-altitude-jet-routes.png)

@@ -43,45 +43,25 @@ route. Typically, when operating on area navigation
 (RNAV) routes, pilots are allowed to remain on their own
 navigation.
 
-![Figure 3-1. Example of Class I and II navigation.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-00-example-of-class-i-and-ii-navigation.png)
+![Figure 3-6. RNAV (GPS) approach.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-05-rnav-gps-approach.png)
 
-![Figure 3-2. VNAV path construction.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-01-vnav-path-construction.png)
+![Figure 3-10. Arrival charts.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-09-arrival-charts.png)
 
-![Figure 3-3. VNAV performance path.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-02-vnav-performance-path.png)
+![Figure 3-11. STAR interpretation.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-10-star-interpretation.png)
 
-![Figure 3-4. VNAV geometric path.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-03-vnav-geometric-path.png)
+![Figure 3-12. Reducing pilot/controlling workload.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-11-reducing-pilot-controlling-workload.png)
 
-![Figure 3-5. WAAS data provide lateral and vertical guidance.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-04-waas-data-provide-lateral-and-vertical-guidance.png)
+![Figure 3-13. STAR symbology.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-12-star-symbology.png)
 
-![Figure 3-9. Altitude management when cleared direct.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-05-altitude-management-when-cleared-direct.png)
+![Figure 3-14. Arrival clearance.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-13-arrival-clearance.png)
 
-![Figure 3-10. Arrival charts.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-06-arrival-charts.png)
+![Figure 3-16. Assigned altitudes.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-15-assigned-altitudes.png)
 
-![Figure 3-11. STAR interpretation.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-07-star-interpretation.png)
+![Figure 3-20. Cleared for the Palm Beach ILS approach.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-19-cleared-for-the-palm-beach-ils-approach.png)
 
-![Figure 3-12. Reducing pilot/controlling workload.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-08-reducing-pilot-controlling-workload.png)
+![Figure 3-22. Arrival instructions when not established.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-21-arrival-instructions-when-not-established.png)
 
-![Figure 3-13. STAR symbology.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-09-star-symbology.png)
-
-![Figure 3-14. Arrival clearance.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-10-arrival-clearance.png)
-
-![Figure 3-15. Two RNAV (GPS) approaches to Runway 15R at Baltimore. A controller issuing a clearance for one of these approaches  would speak the identifying letter—for example, “...cleared for the RNAV (GPS) Yankee approach, Runway 15R...”](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-11-two-rnav-gps-approaches-to-runway-15r-at-baltimo.png)
-
-![Figure 3-16. Assigned altitudes.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-12-assigned-altitudes.png)
-
-![Figure 3-17. Altitude restrictions.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-13-altitude-restrictions.png)
-
-![Figure 3-18. Instead of flying for a specific time after passing the holding fix, these holding patterns use distances to mark where the  turns are made. The distances come from DME or IFR-certified GPS equipment.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-14-instead-of-flying-for-a-specific-time-after-pass.png)
-
-![Figure 3-19. Cleared present position direct from V295.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-15-cleared-present-position-direct-from-v295.png)
-
-|  | Arrivals |
-| --- | --- |
-| Introduction<br>Preparation for the arrival and approach begins long<br>before the descent from the en route phase of flight.<br>Planning early, while there are fewer demands on the<br>pilot’s attention, leaves the pilot free to concentrate on<br>precise control of the aircraft and better equipped to deal<br>with problems that might arise during the last segment<br>of the flight. |  |
-
-<a class="handbook-table-source" href="/handbooks/iph/FAA-H-8083-16B/tables/tbl-3-00-untitled.html">Open original</a>
-
-<div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-3-01-untitled.html">
+<div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-3-00-untitled.html">
 <table><thead><tr><th>Y
 ACT 11 --4 . v1 or0
 .-
@@ -96,7 +76,7 @@ MSG P</td><td>SUNOL
 ROC FPL</td><td></td></tr></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-3-02-untitled.html">
+<div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-3-01-untitled.html">
 <table><thead><tr><th>1
 5 2 3 4
 .80/280
@@ -123,15 +103,15 @@ Note: Subtract 30 lb of fuel and 36 seconds for each S
 1,000 feet that the destination airport is above sea level</td><td></td><td></td><td></td></tr></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-3-03-untitled.html">
+<div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-3-02-untitled.html">
 <table><thead><tr><th>2</th><th>7</th><th>0</th></tr></thead><tbody></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-3-04-untitled.html">
+<div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-3-03-untitled.html">
 <table><thead><tr><th>1</th><th>8</th><th>0</th></tr></thead><tbody></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-3-05-untitled.html">
+<div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-3-04-untitled.html">
 <table><thead><tr><th>3</th><th>0</th><th>0</th><th>0</th></tr></thead><tbody></tbody></table>
 </div>
 
@@ -151,4 +131,4 @@ Note: Subtract 30 lb of fuel and 36 seconds for each S
 | Lihue, Kauai, HI | High terrain; mountainous to 2,300 feet within 3 miles of the localizer. |
 | Ontario, CA | Mountainous terrain and extremely limited visibility in haze conditions. |
 
-<a class="handbook-table-source" href="/handbooks/iph/FAA-H-8083-16B/tables/tbl-3-06-untitled.html">Open original</a>
+<a class="handbook-table-source" href="/handbooks/iph/FAA-H-8083-16B/tables/tbl-3-05-untitled.html">Open original</a>

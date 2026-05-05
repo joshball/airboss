@@ -82,3 +82,6 @@ recommended altitudes are actual flight altitudes above
 mean sea level (MSL) and not pressurized cabin altitudes.
 This takes into consideration the risk of decompression of
 the aircraft during flight.
+
+
+![Figure 17-23. Synthetic and enhanced vision systems.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-24-synthetic-and-enhanced-vision-systems.png)

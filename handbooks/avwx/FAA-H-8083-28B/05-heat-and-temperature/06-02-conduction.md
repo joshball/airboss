@@ -21,5 +21,3 @@ heat energy, while the cooler substance warms and gains heat energy.
 Heat (thermal) conductivity is the property of a substance that indicates its ability to conduct heat as a
 consequence of molecular motion. Units are watts per meter-kelvin (W m-1 K-1). Table 5-3 provides the
 heat (thermal) conductivity of various substances. Note that air is a poor thermal conductor.
-
-![Figure 5-4. Solar Zenith Angle](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-2-00-solar-zenith-angle.png)

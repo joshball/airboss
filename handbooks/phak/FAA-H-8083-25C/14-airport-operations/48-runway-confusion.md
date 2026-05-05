@@ -19,3 +19,6 @@ In August 2006, the flight crew of a commercial regional jet
 was cleared for takeoff on Runway 22 but mistakenly lined
 up and departed on Runway 26, a much shorter runway. As
 a result, the aircraft crashed off the end of the runway.
+
+
+![Figure 14-48. Heads-up, eyes outside.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-48-heads-up-eyes-outside.png)

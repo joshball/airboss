@@ -30,3 +30,6 @@ Thunderstorms are not the only area where pilots could
 encounter icing conditions. Pilots should be alert for icing
 anytime the temperature approaches 0 °C and visible moisture
 is present.
+
+
+![Figure 12-15. Turbulence caused by manmade obstructions.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-13-turbulence-caused-by-manmade-obstructions.png)

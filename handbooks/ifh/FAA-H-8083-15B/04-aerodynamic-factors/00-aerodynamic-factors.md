@@ -62,7 +62,7 @@ aircraft control inputs.</td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-4-01-untitled.html">
-<table><thead><tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th>l</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Stal</td><td>l</td></tr><tr><td>1.5</td><td></td><td></td><td></td><td>C</td><td>L-MA</td><td>X</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+<table><thead><tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th>ll</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Sta</td><td>ll</td></tr><tr><td>1.5</td><td></td><td></td><td></td><td>C</td><td>L-MA</td><td>X</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-4-02-untitled.html">

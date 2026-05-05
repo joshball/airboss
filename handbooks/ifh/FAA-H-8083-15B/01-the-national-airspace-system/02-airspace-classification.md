@@ -82,3 +82,6 @@ MSL, and the airspace above FL 600.
 D, or E. Class G airspace is essentially uncontrolled
 by ATC except when associated with a temporary
 control tower.
+
+
+![Figure 1-2. Victor airways and charted IFR altitudes.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-01-victor-airways-and-charted-ifr-altitudes.png)

@@ -10,3 +10,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Common Errors
+
+![Figure 9-27. 180° power-off approach.](/handbooks/afh/FAA-H-8083-3C/figures/fig-9-26-180-power-off-approach.png)

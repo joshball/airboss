@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Next Generation Air Transportation (NextGen) System
+
+![Figure 5-2. Satellite-based navigation and tracking allows more aircraft to fly closely together on more direct routes.](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-01-satellite-based-navigation-and-tracking-allows-m.png)

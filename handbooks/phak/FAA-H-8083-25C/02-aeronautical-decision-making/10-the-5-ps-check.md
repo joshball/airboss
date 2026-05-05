@@ -92,3 +92,6 @@ from the final approach fix, while more difficult, still allows
 the pilot to plan and coordinate better, rather than executing
 a futile missed approach. Let’s look at a detailed discussion
 of each of the Five Ps.
+
+
+![Figure 2-10. Risk management processing can take place in any of three timeframes.](/handbooks/phak/FAA-H-8083-25C/figures/fig-2-09-risk-management-processing-can-take-place-in-any.png)

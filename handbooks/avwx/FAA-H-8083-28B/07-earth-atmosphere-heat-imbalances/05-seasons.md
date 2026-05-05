@@ -26,5 +26,3 @@ Figure 7-6. Solar Zenith Angle Variations with Northern Hemisphere Seasons
 Figure 7-7 illustrates the average seasonal temperature variation in the Northern Hemisphere. Note that the
 warmest (coldest days) of the year occur after the summer (winter) solstice. This is due to the time lag
 necessary for heat flow processes to fully heat (cool) the surface of the Earth.
-
-![Figure 7-6. Solar Zenith Angle Variations with Northern Hemisphere Seasons](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-5-00-solar-zenith-angle-variations-with-northern-hemi.png)

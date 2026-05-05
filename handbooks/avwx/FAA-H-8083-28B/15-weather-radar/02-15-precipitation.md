@@ -70,11 +70,3 @@ originates from a band of enhanced reflectivity that can result when a radar ant
 precipitation. The freezing level in a cloud contains ice particles that are coated with liquid water. These
 particles reflect significantly more energy (appearing to the radar as large raindrops) than the portions of
 the cloud above and below the freezing layer.
-
-![Figure 15-19. Radar Image of Chaff](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-15-00-radar-image-of-chaff.png)
-
-![Figure 15-20. Reflectivity Associated with Liquid Targets](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-15-01-reflectivity-associated-with-liquid-targets.png)
-
-![Figure 15-21. WSR-88D Weather Radar Convective Precipitation on the 0.5° Base Reflectivity Product Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-15-02-wsr-88d-weather-radar-convective-precipitation-o.png)
-
-![Figure 15-22. WSR-88D Weather Radar Stratiform Precipitation on the 0.5° Base Reflectivity Product Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-15-03-wsr-88d-weather-radar-stratiform-precipitation-o.png)

@@ -108,3 +108,6 @@ short period after passage. The wind blows from the southsouthwest. With warming
 rises and then levels off. There is generally a slight rise in
 barometric pressure, followed by a decrease of barometric
 pressure.
+
+
+![Figure 12-23. North American air mass source regions.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-21-north-american-air-mass-source-regions.png)

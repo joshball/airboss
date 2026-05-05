@@ -29,3 +29,8 @@ operation. All helicopters operated under IFR must carry
 enough fuel to fly to the intended destination, fly from that
 airport to the filed alternate, if required, and continue for
 30 minutes at normal cruising speed.
+
+
+![Figure 7-8. Part 97 excerpt.](/handbooks/iph/FAA-H-8083-16B/figures/fig-7-07-part-97-excerpt.png)
+
+![Figure 7-9. Helicopter use of standard instrument approach procedures.](/handbooks/iph/FAA-H-8083-16B/figures/fig-7-08-helicopter-use-of-standard-instrument-approach-p.png)

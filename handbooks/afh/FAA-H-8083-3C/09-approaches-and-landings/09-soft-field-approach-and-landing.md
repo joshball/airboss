@@ -52,3 +52,6 @@ Common errors in the performance of soft-field approaches and landings are:
 6. Hard touchdown.
 7. Inadequate control of the airplane weight transfer from wings to wheels after touchdown.
 8. Allowing the nose-wheel to “fall” to the runway after touchdown rather than controlling its descent.
+
+
+![Figure 9-9. To obtain necessary visual cues, the pilot should look toward the runway at a shallow angle.](/handbooks/afh/FAA-H-8083-3C/figures/fig-9-08-to-obtain-necessary-visual-cues-the-pilot-should.png)

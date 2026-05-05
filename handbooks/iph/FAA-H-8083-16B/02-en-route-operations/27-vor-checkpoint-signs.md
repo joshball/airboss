@@ -43,3 +43,8 @@ i
 and 0.5 NM of the posted distance.
 s
 ­
+
+
+![Figure 2-27. LF/MF airways.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-21-lf-mf-airways.png)
+
+![Figure 2-51. VOR checkpoint signs.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-45-vor-checkpoint-signs.png)

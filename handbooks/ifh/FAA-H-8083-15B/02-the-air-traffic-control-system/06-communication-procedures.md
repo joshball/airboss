@@ -36,3 +36,6 @@ for clarification of a clearance or instruction. If necessary,
 use plain English to ensure understanding, and expect the
 controller to reply in the same way. A safe instrument flight
 is the result of cooperation between controller and pilot.
+
+
+![Figure 2-6. Flight strip.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-2-05-flight-strip.png)

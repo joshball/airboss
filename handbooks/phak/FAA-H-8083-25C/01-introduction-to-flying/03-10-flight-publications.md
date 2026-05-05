@@ -119,3 +119,8 @@ Rwy H1 perimeter lights. ACTIVATE MIRL Rwy 03–21 and Rwy 12–30, and perimete
 H1—CTAF.
 Figure 1-18. From left to right, a sectional VFR chart, IFR chart, and chart supplement U.S. (formerly Airport/Facility Directory) with
 a sample of a page from the supplement.
+
+
+![Figure 1-16. Pilot Operating Handbooks from manufacturers.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-15-pilot-operating-handbooks-from-manufacturers.png)
+
+![Figure 1-17. Example of an Advisory Circular in its fifth revision.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-16-example-of-an-advisory-circular-in-its-fifth-rev.png)

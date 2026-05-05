@@ -89,17 +89,3 @@ stronger.
 Figure 10-7. Friction Force Magnitude Variations with Wind Speed
 Friction force magnitude is directly proportional to wind speed. In Figure 10-7, wind speed is twice as
 strong in the right panel; thus, the friction force is doubled.
-
-![directly across the contours/isobars. See Figure 10-1.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-1-00-see-figure-10-1.png)
-
-![Figure 10-1. Direction of Pressure Gradient Force](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-2-00-magnitude-of-pressure-gradient-force.png)
-
-![Figure 10-2. Magnitude of Pressure Gradient Force](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-2-01-illustration-of-coriolis-force.png)
-
-![Figure 10-3. Illustration of Coriolis Force](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-2-02-coriolis-force-variations-across-the-earth.png)
-
-![Figure 10-4. Coriolis Force Variations Across the Earth](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-3-00-coriolis-force-magnitude-variations-with-wind-sp.png)
-
-![Figure 10-5. Coriolis Force Magnitude Variations with Wind Speed](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-3-01-friction-force-magnitude-variations-with-terrain.png)
-
-![Figure 10-6. Friction Force Magnitude Variations with Terrain Roughness](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-3-02-friction-force-magnitude-variations-with-wind-sp.png)

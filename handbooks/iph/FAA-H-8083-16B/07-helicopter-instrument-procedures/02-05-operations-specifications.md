@@ -60,3 +60,8 @@ must adhere to is 1,600 RVR. Pilots operating under 14 CFR
 Part 91 are encouraged to develop their own personal
 OpSpecs based on their own equipment, training, and
 experience.
+
+
+![Figure 7-3. Autopilot bank angle and roll rate limits for the S-76  used by the William J. Hughes Technical Center for Flight Tests.](/handbooks/iph/FAA-H-8083-16B/figures/fig-7-02-autopilot-bank-angle-and-roll-rate-limits-for-th.png)
+
+![Figure 7-4. Flight tests at the William J. Hughes Technical Center  point out the importance of airspeed control and using the correct technique to make a turning missed approach.](/handbooks/iph/FAA-H-8083-16B/figures/fig-7-03-flight-tests-at-the-william-j-hughes-technical-c.png)

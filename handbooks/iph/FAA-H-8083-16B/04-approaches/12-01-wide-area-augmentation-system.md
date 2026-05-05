@@ -20,3 +20,6 @@ Today, WAAS is already being used at more than 900
 runways across the United States to achieve minimums
 as low as 200 feet height above HAT/one-half mile
 visibility.
+
+
+![Figure 4-13. GBAS architecture.](/handbooks/iph/FAA-H-8083-16B/figures/fig-4-10-gbas-architecture.png)

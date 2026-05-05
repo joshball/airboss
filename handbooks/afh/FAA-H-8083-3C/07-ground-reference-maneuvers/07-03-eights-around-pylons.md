@@ -157,3 +157,6 @@ pilot should be able to command the airplane to specific pitch, roll, and yaw at
 the airplane’s orientation in relation to ground-based references. While safety is paramount in all aspects of flying, ground reference
 maneuvers focus on mitigation of risk during low altitude flying. With these enhanced skills, the pilot also significantly improves their
 competency in everyday flight maneuvers, such as straight-and-level, turns, climbs, and descents.
+
+
+![Figure 7-9. Eights around pylons.](/handbooks/afh/FAA-H-8083-3C/figures/fig-7-08-eights-around-pylons.png)

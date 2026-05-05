@@ -15,3 +15,6 @@ The skills used to fly LSAs resemble those pilots use when flying any airplane, 
 areas that are unique to light-sport airplanes. Most skills learned in a standard airworthiness type certificated airplane are transferable
 to LSAs; however, since LSAs can vary significantly in performance, equipment, systems, and construction, pilots should seek
 competent flight instruction and refer to the airplane’s POH for detailed and specific information prior to flight.
+
+
+![Figure 17-9. Pilot’s Operating Handbook for a LSA.](/handbooks/afh/FAA-H-8083-3C/figures/fig-17-08-pilot-s-operating-handbook-for-a-lsa.png)

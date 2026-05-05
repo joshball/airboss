@@ -46,3 +46,6 @@ Operating in the beta range and/or with reverse thrust requires specific techniq
 airplane make and model. Specific engine parameters and limitations for operations within this area should be adhered to. It is
 essential that a pilot transitioning to turboprop airplanes becomes knowledgeable and proficient in these areas, which are unique to
 turbine-engine powered airplanes.
+
+
+![Figure 15-4. Powerplant instrumentation—fixed-shaft turboprop engine.](/handbooks/afh/FAA-H-8083-3C/figures/fig-15-03-powerplant-instrumentation-fixed-shaft-turboprop.png)

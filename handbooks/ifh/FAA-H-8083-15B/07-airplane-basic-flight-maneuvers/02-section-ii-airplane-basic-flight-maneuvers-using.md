@@ -10,3 +10,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Section II -- Airplane Basic Flight Maneuvers Using an Electronic Flight Display
+
+![Figure 7-2. Pitch attitude and airspeed in level flight, fast  cruise speed.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-00-pitch-attitude-and-airspeed-in-level-flight-fast.png)

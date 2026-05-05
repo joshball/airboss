@@ -31,3 +31,6 @@ and dead reckoning. Only through the integration of these
 techniques can the VFR pilot ensure accuracy in navigation.
 Some critical concerns in VFR use of GPS include RAIM
 capability, database currency, and antenna location.
+
+
+![Figure 16-40. Satellite constellation.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-40-satellite-constellation.png)

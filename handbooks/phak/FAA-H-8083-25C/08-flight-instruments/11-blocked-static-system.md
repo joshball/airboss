@@ -91,3 +91,6 @@ Static port
 Frozen altimeter
 Constant zero indication on VSI
 Inaccurate airspeed indications
+
+
+![Figure 8-11. Blocked static system.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-10-blocked-static-system.png)

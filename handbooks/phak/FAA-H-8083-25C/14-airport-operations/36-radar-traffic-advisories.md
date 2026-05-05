@@ -40,3 +40,6 @@ and sequencing of VFR aircraft to the primary airport. Class
 B service provides approved separation of aircraft based on
 IFR, VFR, and/or weight and sequencing of VFR arrivals to
 the primary airport(s).
+
+
+![Figure 14-36. Takeoff Hold Lights (THL).](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-36-takeoff-hold-lights-thl.png)

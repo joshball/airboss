@@ -22,3 +22,6 @@ The pilot should be aware, however, that making a sharp turn assisted by brakes 
 about a stationary inboard wheel and landing gear. The airplane was not designed for this action, and the pilot should not allow it to
 occur. Unless otherwise directed by the AFM/POH, all ground operations should be conducted with the cowl flaps fully open. The
 use of strobe lights is normally deferred until taxiing onto the active runway.
+
+
+![Figure 13-7. Takeoff and climb profile.](/handbooks/afh/FAA-H-8083-3C/figures/fig-13-05-takeoff-and-climb-profile.png)

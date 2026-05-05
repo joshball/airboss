@@ -68,3 +68,6 @@ Common errors when performing chandelles are:
 12. Execution of a steep turn instead of a climbing maneuver
 13. Not scanning for other traffic during the maneuver
 14. Performing by reference to the instruments rather than visual references
+
+
+![Figure 10-4. Lazy eight.](/handbooks/afh/FAA-H-8083-3C/figures/fig-10-03-lazy-eight.png)

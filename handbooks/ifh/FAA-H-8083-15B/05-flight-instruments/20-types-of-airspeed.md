@@ -50,3 +50,6 @@ aneroid, or altimeter mechanism, that moves it to a lower
 value as air density decreases. By keeping the airspeed pointer
 at a lower value than the maximum pointer, the pilot avoids
 the onset of transonic shock waves.
+
+
+![Figure 5-20. Northerly turning error.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-20-northerly-turning-error.png)

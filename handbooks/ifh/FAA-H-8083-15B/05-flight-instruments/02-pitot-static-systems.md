@@ -15,3 +15,6 @@ Pitot pressure, or impact air pressure, is sensed through an
 open-end tube pointed directly into the relative wind flowing
 around the aircraft. The pitot tube connects to the ASI or an
 air data computer depending on your aircraft's configuration.
+
+
+![Figure 5-2. A typical pitot-static system.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-01-a-typical-pitot-static-system.png)

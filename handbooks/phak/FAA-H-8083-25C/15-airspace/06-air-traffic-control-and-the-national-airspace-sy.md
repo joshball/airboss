@@ -40,3 +40,6 @@ possessions
 agreement, FAA directive, or a military document
 3. 	 A deviation is necessary to assist an aircraft when an
 emergency has been declared
+
+
+![Figure 15-6. Alert area (A-211).](/handbooks/phak/FAA-H-8083-25C/figures/fig-15-05-alert-area-a-211.png)

@@ -17,3 +17,6 @@ approach end of a particular runway. The system consists
 of a pair of synchronized flashing lights located laterally
 on each side of the runway threshold. REILs may be either
 omnidirectional or unidirectional facing the approach area.
+
+
+![Figure 14-11. (A) Taxiway Bravo location sign collocated with runway/runway intersection holding signs at Sioux Gateway Airport  (SUX) (B) Airport diagram of Sioux Gateway Airport (SUX), Sioux City, Iowa. The area outlined in red is a designated “hot spot” (HS1).](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-10-a-taxiway-bravo-location-sign-collocated-with-ru.png)

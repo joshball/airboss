@@ -80,15 +80,3 @@ they reach the surface.
 When viewed from the air, it is evident that hail falls in paths known as hail swaths. They can range in size
 from a few acres to an area 10 mi wide and 100 mi long. Piles of hail in hail swaths have been deep enough
 to need a snowplow to remove them, and occasionally hail drifts have been reported.
-
-![Figure 14-1. The Collision-Coalescence or Warm Rain Process](/handbooks/avwx/FAA-H-8083-28B/figures/fig-14-4-1-00-the-collision-coalescence-or-warm-rain-process.png)
-
-![Figure 14-2. Snow Temperature Environment](/handbooks/avwx/FAA-H-8083-28B/figures/fig-14-4-2-00-snow-temperature-environment.png)
-
-![Figure 14-3. Ice Pellets Temperature Environment](/handbooks/avwx/FAA-H-8083-28B/figures/fig-14-4-2-01-ice-pellets-temperature-environment.png)
-
-![Figure 14-4. Freezing Rain Temperature Environment](/handbooks/avwx/FAA-H-8083-28B/figures/fig-14-4-4-00-freezing-rain-temperature-environment.png)
-
-![Figure 14-5. Rain Temperature Environment](/handbooks/avwx/FAA-H-8083-28B/figures/fig-14-4-4-01-rain-temperature-environment.png)
-
-![Figure 14-6. Vivian, South Dakota, Record Hailstone](/handbooks/avwx/FAA-H-8083-28B/figures/fig-14-4-5-02-vivian-south-dakota-record-hailstone.png)

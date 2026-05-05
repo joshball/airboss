@@ -20,3 +20,6 @@ been specifically assigned by ATC. Graphic ODPs have
 (OBSTACLE) printed in the procedure title (e.g., GEYSR
 THREE DEPARTURE (OBSTACLE),  CROWN ONE
 DEPARTURE (RNAV)(OBSTACLE)).
+
+
+![Figure 10-14. Maintaining an instrument scan in severe turbulence can be difficult.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-10-13-maintaining-an-instrument-scan-in-severe-turbule.png)

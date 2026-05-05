@@ -22,3 +22,11 @@ The pilot should be introduced by their instructor to ground reference maneuvers
 fundamentals. Ground reference maneuvers call for manipulation of the flight controls using necessary control pressures to affect the
 airplane’s attitude and position by using the outside natural horizon and ground-based references with brief periods of scanning the
 flight instruments.
+
+![Figure 7-11. Line of sight.](/handbooks/afh/FAA-H-8083-3C/figures/fig-7-10-line-of-sight.png)
+
+![Figure 7-12. Speed versus pivotal altitude.](/handbooks/afh/FAA-H-8083-3C/figures/fig-7-11-speed-versus-pivotal-altitude.png)
+
+![Figure 7-13. Effect of different altitudes on line of sight.](/handbooks/afh/FAA-H-8083-3C/figures/fig-7-12-effect-of-different-altitudes-on-line-of-sight.png)
+
+![Figure 7-14. Bank angle versus pivotal altitude.](/handbooks/afh/FAA-H-8083-3C/figures/fig-7-13-bank-angle-versus-pivotal-altitude.png)

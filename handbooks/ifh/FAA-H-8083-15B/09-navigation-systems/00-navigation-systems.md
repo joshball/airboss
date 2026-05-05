@@ -30,8 +30,6 @@ Sky wave
 Figure 9-1. Ground, space, and sky wave propogation.
 
 
-![Figure 9-28. A GPS stand-alone approach.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-00-a-gps-stand-alone-approach.png)
-
 |  | Navigation<br>Systems |
 | --- | --- |
 | Introduction<br>This chapter provides the basic radio principles applicable to<br>navigation equipment, as well as an operational knowledge<br>of how to use these systems in instrument flight. This<br>information provides the framework for all instrument<br>procedures, including standard instrument departure<br>procedures (SIDS), departure procedures (DPs), holding<br>patterns, and approaches, because each of these maneuvers<br>consists mainly of accurate attitude instrument flying and<br>accurate tracking using navigation systems. |  |

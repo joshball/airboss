@@ -46,7 +46,3 @@ Figure 24-15. TDWR Locations in the CONUS and Puerto Rico
 .
 
 Figure 24-16. TDWR Coverage
-
-![Figure 24-15. TDWR Locations in the CONUS and Puerto Rico](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-2-00-tdwr-locations-in-the-conus-and-puerto-rico.png)
-
-![Figure 24-16. TDWR Coverage](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-2-01-tdwr-coverage.png)

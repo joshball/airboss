@@ -204,21 +204,31 @@ ground voice communication systems.
 and ground/ground voice communications system.
 [Figure 5-7]
 
-![Figure 5-1. Next Generation Air Transportation System (NEXGEN) introduces new technological innovations for weather forecasting,  digital communications, and networking.](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-00-next-generation-air-transportation-system-nexgen.png)
+![Figure 5-9. Wide Area Augmentation System (WAAS).](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-08-wide-area-augmentation-system-waas.png)
 
-![Figure 5-2. Satellite-based navigation and tracking allows more aircraft to fly closely together on more direct routes.](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-01-satellite-based-navigation-and-tracking-allows-m.png)
+![Figure 5-33. Special use airspace charted on an aeronautical chart.](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-24-special-use-airspace-charted-on-an-aeronautical-.png)
 
-![Figure 5-9. Wide Area Augmentation System (WAAS).](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-02-wide-area-augmentation-system-waas.png)
+![Figure 5-34. FAA website providing information for both special use airspace and temporary flight restrictions.](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-25-faa-website-providing-information-for-both-speci.png)
 
-![Figure 5-10. Ground-Based Augmentation System (GBAS).](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-03-ground-based-augmentation-system-gbas.png)
+![Figure 5-35. Center locations and information available to pilots through the FAA website.](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-26-center-locations-and-information-available-to-pi.png)
 
-![Figure 5-12. Head-up guidance system (HGS).](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-04-head-up-guidance-system-hgs.png)
+![Figure 5-36. State information available to pilots through the FAA website.](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-27-state-information-available-to-pilots-through-th.png)
 
-|  | Improvement Plans |
-| --- | --- |
-| Introduction<br>In the upcoming years, exciting new technologies will<br>be developed and implemented to help ease air traffic<br>congestion, add to system capacity, and enhance safety.<br>Some of these seamless changes will be invisible to<br>pilots. Others will entail learning new procedures, aircraft<br>equipment, and systems that will introduce powerful new<br>capabilities and dramatically increase the safety of all filght<br>operations. |  |
+![Figure 5-37. Map layer options and information available to pilots through the FAA website.](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-28-map-layer-options-and-information-available-to-p.png)
 
-<a class="handbook-table-source" href="/handbooks/iph/FAA-H-8083-16B/tables/tbl-5-00-untitled.html">Open original</a>
+![Figure 5-38. Airport information available to pilots through the FAA website.](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-29-airport-information-available-to-pilots-through-.png)
+
+<div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-5-00-untitled.html">
+<table><thead><tr><th></th><th>Improvement Plans</th></tr></thead><tbody><tr><td>Introduction
+In the upcoming years, exciting new technologies will
+be developed and implemented to help ease air traffic
+congestion, add to system capacity, and enhance safety.
+Some of these seamless changes will be invisible to
+pilots. Others will entail learning new procedures, aircraft
+equipment, and systems that will introduce powerful new
+capabilities and dramatically increase the safety of all filght
+operations.</td><td></td></tr></tbody></table>
+</div>
 
 | GPS satellites<br>Ranging sources<br>GBAS ground facility<br>GBAS reference receivers |
 | --- |

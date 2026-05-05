@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Chapter Summary
+
+![Figure 1-9. Airman Certification Standards (ACS) developed by FAA](/handbooks/afh/FAA-H-8083-3C/figures/fig-1-08-airman-certification-standards-acs-developed-by-.png)

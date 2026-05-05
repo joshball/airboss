@@ -112,3 +112,8 @@ and also uses a 30° angle of bank in an attempt to reverse course. The aircraft
 top image, requires over 6,000 feet to reverse course to safety. Unfortunately, the canyon is only 5,000 feet across and the aircraft will hit
 the canyon wall. The point is that airspeed is the most influential factor in determining how much distance is required to turn. Many pilots
 have made the error of increasing the steepness of their bank angle when a simple reduction of speed would have been more appropriate.
+
+
+![Figure 5-60. Radius at 240 knots.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-56-radius-at-240-knots.png)
+
+![Figure 5-61. Another formula that can be used for radius.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-57-another-formula-that-can-be-used-for-radius.png)

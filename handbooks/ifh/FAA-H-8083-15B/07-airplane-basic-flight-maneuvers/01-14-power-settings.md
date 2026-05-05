@@ -66,3 +66,10 @@ approaches the desired airspeed of 100 knots, the manifold
 pressure is adjusted to approximately 18 "Hg and becomes
 the supporting power instrument. The ASI again becomes
 primary for power. [Figure 7-59]
+
+
+![Figure 7-20. Airspeed low and altitude high—lower pitch.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-19-airspeed-low-and-altitude-high-lower-pitch.png)
+
+![Figure 7-21. Airspeed and altitude high—lower pitch and reduce power.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-20-airspeed-and-altitude-high-lower-pitch-and-reduc.png)
+
+![Figure 7-23. Note that the supporting power instrument is  the manifold pressure gauge (or tachometer if the propeller is fixed pitch). However, when a smooth power reduction to approximately 15 "Hg (underpower) is made, the manifold pressure gauge becomes the primary power instrument. [Figure 7-23] With practice, powe](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-21-note-that-the-supporting-power-instrument-is-the.png)

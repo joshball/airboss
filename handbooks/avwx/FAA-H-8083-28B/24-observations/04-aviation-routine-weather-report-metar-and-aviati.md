@@ -897,14 +897,6 @@ operating, the remark VISNO LOC is coded.
 When automated stations are equipped with a secondary ceiling height indicator and the sensor is
 not operating, the remark CHINO LOC is coded.
 
-![Figure 24-1. METAR/SPECI Coding Format](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-00-metar-speci-coding-format.png)
-
-![Figure 24-2. ICAO Continental Codes](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-01-icao-continental-codes.png)
-
-![Figure 24-3. Obscuration Effects on Slant Range Visibility](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-02-obscuration-effects-on-slant-range-visibility.png)
-
-![Figure 24-4. METAR/SPECI Sky Condition Coding](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-03-metar-speci-sky-condition-coding.png)
-
 **Table 24-2.** SPECI Criteria 1 Wind Shift Wind direction changes by 45° or more, in less than 15 minutes, and the wind speed is 10 knots or more throughout the wind shift. 2 Visibility Visibility
 
 | 1 | Wind Shift | Wind direction changes by 45° or more, in less than 15 minutes, and the wind<br>speed is 10 knots or more throughout the wind shift. |

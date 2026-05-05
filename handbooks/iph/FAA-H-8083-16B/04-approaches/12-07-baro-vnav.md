@@ -55,3 +55,8 @@ be charted. Where DME facility availability is a factor, the
 note would read, “DME/DME RNP 0.3 Authorized; ABC and
 XYZ required,”meaning that ABC and XYZ DME facilities are
 required to assure RNP 0.3.
+
+
+![Figure 4-17. Example of LNAV and Circling Minima lower than LNAV/VNAV  DA. Harrisburg International RNAV (GPS) Runway 13.](/handbooks/iph/FAA-H-8083-16B/figures/fig-4-14-example-of-lnav-and-circling-minima-lower-than-l.png)
+
+![Figure 4-18. Explanation of Minima.](/handbooks/iph/FAA-H-8083-16B/figures/fig-4-15-explanation-of-minima.png)

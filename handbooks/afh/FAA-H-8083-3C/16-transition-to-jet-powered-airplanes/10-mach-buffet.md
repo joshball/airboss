@@ -34,3 +34,6 @@ An increase in load factor (G factor) will raise the low-end buffet speed. For e
 flight altitude and speed should be selected, which will allow sufficient margin for maneuvering and turbulence. The pilot should
 know the manufacturer’s recommended turbulence penetration speed for the particular make and model airplane. This speed normally
 gives the greatest margin between the high-speed and low-speed buffets.
+
+
+![Figure 16-10. Spoilers.](/handbooks/afh/FAA-H-8083-3C/figures/fig-16-09-spoilers.png)

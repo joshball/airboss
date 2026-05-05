@@ -73,7 +73,7 @@ title_overrides:
   "8": "Flight Instruments"
 # Default patterns are inherited from the loader; override per-handbook only
 # when the FAA changes its captioning convention.
-figure_prefix_pattern: 'Figure (\d+)-(\d+)\.'
+figure_prefix_pattern: '^\s*Figure (\d+)-(\d+)\.'
 table_prefix_pattern: 'Table (\d+)-(\d+)\.'
 
 # -----------------------------------------------------------------------------

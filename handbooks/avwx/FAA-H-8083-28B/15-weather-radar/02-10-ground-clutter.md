@@ -27,5 +27,3 @@ ground. It appears as a roughly circular region of high reflectivity at ranges c
 clutter appears stationary when animating images and can mask precipitation located near the radar. Most
 ground clutter is automatically removed from WSR-88D imagery, so typically it is does not interfere with
 image interpretation.
-
-![Figure 15-13. WSR-88D Weather Radar Beam Blockage on Base Reflectivity Product Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-10-00-wsr-88d-weather-radar-beam-blockage-on-base-refl.png)

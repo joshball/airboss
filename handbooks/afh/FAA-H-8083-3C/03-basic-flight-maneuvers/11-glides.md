@@ -79,3 +79,8 @@ After a solid comprehension of the normal glide is attained, the learner should 
 abnormal glides. Abnormal glides are those glides conducted at speeds other than the best glide speed. Glide airspeeds that are too
 slow or too fast may result in the airplane not being able to make the intended landing spot, flat approaches, hard touchdowns,
 floating, overruns, and possibly stalls and an accident.
+
+
+![Figure 3-11. When the airplane is banked into a turn, total lift is the resultant of two components: vertical and horizontal.](/handbooks/afh/FAA-H-8083-3C/figures/fig-3-10-when-the-airplane-is-banked-into-a-turn-total-li.png)
+
+![Figure 3-22. Descent indications.](/handbooks/afh/FAA-H-8083-3C/figures/fig-3-21-descent-indications.png)

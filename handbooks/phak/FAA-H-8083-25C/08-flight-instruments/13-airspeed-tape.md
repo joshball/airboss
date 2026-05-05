@@ -27,3 +27,6 @@ Figure 8-13. Multi-function display (MFD).
 normal range, and caution range. [Figure 8-12] The number
 value changes color to red when the airspeed exceeds VNE to
 warn the pilot of exceeding the maximum speed limitation.
+
+
+![Figure 8-13. Multi-function display (MFD).](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-11-multi-function-display-mfd.png)

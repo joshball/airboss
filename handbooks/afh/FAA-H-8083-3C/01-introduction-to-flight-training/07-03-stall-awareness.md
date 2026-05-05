@@ -31,3 +31,8 @@ The pilot should understand and appreciate factors such as airspeed, pitch attit
 aircraft configuration in order to develop a reasonably accurate mental picture of the wing’s AOA at any particular time. It is essential
 to safety of flight that pilots take into consideration this visualization of the wing’s AOA prior to entering any flight maneuver.
 Chapter 3, Basic Flight Maneuvers, discusses stalls in detail.
+
+
+![Figure 1-13. Sedona Airport is one of the many airports that operate without a control tower.](/handbooks/afh/FAA-H-8083-3C/figures/fig-1-12-sedona-airport-is-one-of-the-many-airports-that-.png)
+
+![Figure 1-14. All student pilots receive and log flight training in stalls and stall recoveries prior to their first solo flight.](/handbooks/afh/FAA-H-8083-3C/figures/fig-1-13-all-student-pilots-receive-and-log-flight-traini.png)

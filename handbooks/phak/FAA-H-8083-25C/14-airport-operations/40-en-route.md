@@ -22,3 +22,6 @@ the reduced air density may result in wake strength comparable
 to that in the terminal area. In addition, for a given separation
 distance, the higher speeds in cruise result in less time for the
 wake to decay before being encountered by a trailing aircraft.
+
+
+![Figure 14-40. Traffic pattern operation—parallel runways.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-40-traffic-pattern-operation-parallel-runways.png)

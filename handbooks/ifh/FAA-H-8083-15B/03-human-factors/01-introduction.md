@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Introduction
+
+![Figure 3-1. Rubik’s cube graphic depicting the visual processing of information.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-3-00-rubik-s-cube-graphic-depicting-the-visual-proces.png)

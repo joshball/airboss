@@ -44,3 +44,6 @@ Common errors in the performance of power-off accuracy approaches are:
 7. Premature flap extension/landing gear extension.
 8. Use of throttle to increase the glide instead of merely clearing the engine.
 9. Forcing the airplane onto the runway in order to avoid overshooting the designated landing spot.
+
+
+![Figure 9-26. 90° power-off approach.](/handbooks/afh/FAA-H-8083-3C/figures/fig-9-25-90-power-off-approach.png)

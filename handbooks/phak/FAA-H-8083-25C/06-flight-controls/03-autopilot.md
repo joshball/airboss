@@ -45,3 +45,22 @@ flight control systems of the aircraft being flown. The
 primary source of this information is the AFM or the POH.
 Various manufacturer and owner group websites can also be
 a valuable source of additional information.
+
+7-1F
+Aircraft Systems
+Chapter 7
+This chapter covers the primary systems found on most
+aircraft. These include the engine, propeller, induction,
+ignition, as well as the fuel, lubrication, cooling, electrical,
+landing gear, and environmental control systems.
+Powerplant
+An aircraft engine, or powerplant, produces thrust to propel
+an aircraft. Reciprocating engines and turboprop engines
+work in combination with a propeller to produce thrust.
+Turbojet and turbofan engines produce thrust by increasing
+the velocity of air flowing through the engine. All of these
+powerplants also drive the various systems that support the
+operation of an aircraft.
+
+
+![Figure 6-3. Helicopter flight control system.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-00-helicopter-flight-control-system.png)

@@ -137,3 +137,6 @@ aircraft, means those aircraft which are similar
 in design. Examples include: 737-700 and 737700C; G-IV and G-IV-X; and 1900 and 1900C.
 This system of definitions allows the FAA to group and
 regulate aircraft to provide for their safe operation.
+
+
+![Figure 1-4. Benoist airboat.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-03-benoist-airboat.png)

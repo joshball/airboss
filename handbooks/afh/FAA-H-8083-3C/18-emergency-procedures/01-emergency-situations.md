@@ -146,3 +146,6 @@ Climbs
  Recognition
  Transition to visual flight
  Turns
+
+
+![Figure 18-1. Using vegetation to absorb energy.](/handbooks/afh/FAA-H-8083-3C/figures/fig-18-00-using-vegetation-to-absorb-energy.png)

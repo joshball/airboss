@@ -27,3 +27,6 @@ airplane in flight, such as during slow flight and cruise configurations. The ho
 altitude, since the point is always on the horizon, although the distance to the horizon will be further as altitude increases. There are
 multiple horizontal reference lines due to varying pitch attitude requirements; however, these teaching aids are generally needed for
 only a short period until the beginning pilot understands where and when to look while maneuvering the airplane.
+
+
+![Figure 3-6. Nose reference for straight-and-level flight.](/handbooks/afh/FAA-H-8083-3C/figures/fig-3-05-nose-reference-for-straight-and-level-flight.png)

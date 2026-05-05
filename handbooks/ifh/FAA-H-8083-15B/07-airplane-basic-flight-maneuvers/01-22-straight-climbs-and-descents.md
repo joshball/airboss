@@ -111,3 +111,6 @@ Lower the nose of the aircraft very slightly to see if a power
 reduction is necessary. Being familiar with the pitch and
 power settings for the aircraft aids in achieving precise
 attitude instrument flying.
+
+
+![Figure 7-25. Climb entry for constant airspeed climb.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-25-climb-entry-for-constant-airspeed-climb.png)

@@ -34,5 +34,3 @@ information on the DECIDE Model, which pilots may wish to study and consider usi
 the simpler 3P model, which stands for Perceive, Process, and Perform. [Figure 8-2] Using this model in flight continues the
 Chapter 8:  Aeronautical Decision-Making in
 Flight
-
-![Figure 8-1. Advisory Circular (AC) 60-22, Aeronautical Decision-Making, includes a wealth of information for pilots.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-8-1-00-advisory-circular-ac-60-22-aeronautical-decision.png)

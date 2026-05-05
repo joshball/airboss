@@ -28,3 +28,6 @@ Wake ends
 Figure 14-46. Vortex behavior.
 Figure 14-45. Vortex generation.
 Vortex Strength
+
+
+![Figure 14-38. Segmented circle.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-38-segmented-circle.png)

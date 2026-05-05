@@ -18,3 +18,6 @@ feet or below, the pilot solves the problem by identifying
 one or more solutions that lead to a successful outcome. It is
 important for the pilot not to become fixated on the process
 to the exclusion of making a decision.
+
+
+![Figure 2-24. Examples of different platforms. Top to bottom are the  Beechcraft Baron G58, Cirrus SR22, and Cirrus Entega.](/handbooks/phak/FAA-H-8083-25C/figures/fig-2-23-examples-of-different-platforms-top-to-bottom-ar.png)

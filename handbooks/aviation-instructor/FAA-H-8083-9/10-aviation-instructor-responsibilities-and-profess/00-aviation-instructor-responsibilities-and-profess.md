@@ -392,3 +392,21 @@ This chapter discussed the responsibilities of aviation instructors to the learn
 additional responsibilities of flight instructors who teach new learner pilots as well as rated pilots seeking add-on certification, the
 role of aviation instructors as safety advocates, and ways in which aviation instructors can enhance their professional image and
 development were explored.
+
+![Figure 8-1. There are five main responsibilities of aviation instructors.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-10-00-there-are-five-main-responsibilities-of-aviation.png)
+
+![Figure 8-2. Acceptable standards in all subject matter areas, procedures, and maneuvers are included in the appropriate Airman  Certification Standards (ACS)/Practical Test Standards (PTS).](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-10-01-acceptable-standards-in-all-subject-matter-areas.png)
+
+![Figure 8-3. Learners learn more when instruction is presented in a positive and professional manner.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-10-02-learners-learn-more-when-instruction-is-presente.png)
+
+![Figure 8-4. These are practical ways to minimize learner frustration.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-10-03-these-are-practical-ways-to-minimize-learner-fru.png)
+
+![Figure 8-5. The flight instructor has many additional responsibilities.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-10-04-the-flight-instructor-has-many-additional-respon.png)
+
+![Figure 8-6. Teaching tips from veteran flight instructors.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-10-05-teaching-tips-from-veteran-flight-instructors.png)
+
+![Figure 8-7. Guidelines for an aviation instructor.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-10-06-guidelines-for-an-aviation-instructor.png)
+
+![Figure 8-8. The aviation instructor should always present a professional appearance.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-10-07-the-aviation-instructor-should-always-present-a-.png)
+
+![Figure 8-9. Aviation instructors can improve their knowledge by becoming familiar with information on the internet.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-10-08-aviation-instructors-can-improve-their-knowledge.png)

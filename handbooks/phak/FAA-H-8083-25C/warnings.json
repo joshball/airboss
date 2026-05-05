@@ -2,1622 +2,86 @@
   "schema_version": 1,
   "document_slug": "phak",
   "edition": "FAA-H-8083-25C",
-  "manifest_sha256": "bf6606621eff6a0d01eb52a211cb288e7e422e2fd90c850b08efc1a9207c3d41",
-  "generated_at": "2026-05-04T20:27:40.398870+00:00",
+  "manifest_sha256": "802b69ff7c5a2579e94e21709996994667b9b999d1d2e4cafe2c38a8de993122",
+  "generated_at": "2026-05-05T21:17:53.592236+00:00",
   "warnings": [
-    {
-      "id": "e5300fb6f2aeeec8",
-      "code": "caption-without-figure",
-      "section_code": "1",
-      "message": "Caption `in Figure 1-12.` on page 22 had no paired image."
-    },
-    {
-      "id": "05b398700626427d",
-      "code": "caption-without-figure",
-      "section_code": "10",
-      "message": "Caption `Figure 10-5. Example of weight and balance computations.` on page 251 had no paired image."
-    },
-    {
-      "id": "4cdad44af84a3358",
-      "code": "caption-without-figure",
-      "section_code": "10",
-      "message": "Caption `Figure 10-4. Establishing a balance.` on page 250 had no paired image."
-    },
     {
       "id": "53e3f5260bf94bff",
       "code": "caption-without-figure",
       "section_code": "10",
-      "message": "Caption `Figure 10-2. Weight and balance.` on page 250 had no paired image."
-    },
-    {
-      "id": "54603feb7c4efdf2",
-      "code": "caption-without-figure",
-      "section_code": "10",
-      "message": "Caption `Figure 10-6. Weight and balance data.` on page 251 had no paired image."
-    },
-    {
-      "id": "fe6017208bfc72ac",
-      "code": "caption-without-figure",
-      "section_code": "10",
-      "message": "Caption `Figure 10-3. Determining moment.` on page 250 had no paired image."
-    },
-    {
-      "id": "036bc53e91ad81e6",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 10-31. Crosswind component chart.` on page 282 had no paired image."
-    },
-    {
-      "id": "089107a63a7d868e",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 11-10. Absolute and service ceiling.` on page 265 had no paired image."
-    },
-    {
-      "id": "0edffa99ef5b355f",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 11-34. Stall speed table.` on page 284 had no paired image."
-    },
-    {
-      "id": "37608ad179d91881",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 11-7. Maximum angle of climb (AOC) versus maximum rate  of climb (ROC).` on page 263 had no paired image."
-    },
-    {
-      "id": "377030e56f2c4fdb",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 11-2. Properties of standard atmosphere.` on page 259 had no paired image."
-    },
-    {
-      "id": "3f06f409d89623be",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 11-26. Fuel time distance climb.` on page 279 had no paired image."
-    },
-    {
-      "id": "58b07a77b3925e10",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `aircraft is illustrated in Figure 11-13. A flight conducted at  high altitude ha` on page 267 had no paired image."
-    },
-    {
-      "id": "5ecd2a88bdfa87a3",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 11-4. Density altitude chart.` on page 260 had no paired image."
-    },
-    {
-      "id": "6786a5f5259ed122",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Refer to Figure 11-24. This chart is an example of a takeoff  distance table for` on page 277 had no paired image."
-    },
-    {
-      "id": "745d2055d6b7a621",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 11-5. Drag versus speed.` on page 262 had no paired image."
-    },
-    {
-      "id": "79d5009720a565c6",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 11-28. Cruise power setting.` on page 281 had no paired image."
-    },
-    {
-      "id": "7c1dd1f704fd146d",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 11-11. Airspeed for maximum endurance.` on page 265 had no paired image."
-    },
-    {
-      "id": "9229702d62b90939",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 11-23. Takeoff distance graph.` on page 278 had no paired image."
-    },
-    {
-      "id": "935e845687fb1304",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 11-13. Effect of altitude on range.` on page 267 had no paired image."
-    },
-    {
-      "id": "9f22e6a3d1a0dae5",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 11-8. Comparison of maximum AOC between jet and propeller airplanes.` on page 263 had no paired image."
-    },
-    {
-      "id": "afa548c787f1be47",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 11-30. Cruise performance graph.` on page 282 had no paired image."
-    },
-    {
-      "id": "b05275f983ad7462",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 11-3. Field elevation versus pressure. The aircraft is located  on a fiel` on page 259 had no paired image."
-    },
-    {
-      "id": "b5401f0e964680ec",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 11-6. Power versus speed.` on page 262 had no paired image."
-    },
-    {
-      "id": "c26200180a477d00",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 11-27. Cruise and range performance.` on page 280 had no paired image."
-    },
-    {
-      "id": "c6477a2bdc9c7758",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 11-24. Takeoff distance short field charts.` on page 278 had no paired image."
-    },
-    {
-      "id": "c7aefadc4e743e56",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 11-21. Interpolating charts.` on page 276 had no paired image."
-    },
-    {
-      "id": "d33e3c2b1b2b0fce",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 11-9. Comparison of maximum ROC between jet and propeller airplanes.` on page 264 had no paired image."
-    },
-    {
-      "id": "dc8a1ea9f9fbc70d",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 11-25. Fuel, time, and distance climb chart.` on page 279 had no paired image."
-    },
-    {
-      "id": "dda8d72d5d8c8e91",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 11-22. Density altitude chart.` on page 277 had no paired image."
-    },
-    {
-      "id": "ea3826efa27d27a8",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Refer to Figure 10-32. This example makes use of a landing  distance table. Noti` on page 282 had no paired image."
-    },
-    {
-      "id": "ed84f3a8f01528c4",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 11-12. Effect of weight.` on page 266 had no paired image."
-    },
-    {
-      "id": "edd6c1b68587e2b3",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `be determined by using Figure 11-18.` on page 273 had no paired image."
-    },
-    {
-      "id": "ee5b644d8b462f19",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 11-29. Best power mixture range.` on page 281 had no paired image."
-    },
-    {
-      "id": "eec99e05053f874f",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 11-32. Landing distance table.` on page 283 had no paired image."
-    },
-    {
-      "id": "f3448db59d4da050",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 11-33. Landing distance graph.` on page 283 had no paired image."
-    },
-    {
-      "id": "fe89f4029f7285bd",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Refer to Figure 11-23. This chart is an example of a combined  takeoff distance ` on page 276 had no paired image."
-    },
-    {
-      "id": "0539a33fc5fd4ff9",
-      "code": "caption-without-figure",
-      "section_code": "12",
-      "message": "Caption `Figure 12-18. Depiction of winds on a surface weather chart.` on page 296 had no paired image."
-    },
-    {
-      "id": "0b865b5e6510d60f",
-      "code": "caption-without-figure",
-      "section_code": "12",
-      "message": "Caption `Figure 12-25. Warm front cross-section with surface weather chart depiction and ` on page 303 had no paired image."
-    },
-    {
-      "id": "0e0b14372aa79755",
-      "code": "caption-without-figure",
-      "section_code": "12",
-      "message": "Caption `Figure 12-9. Takeoff distances increase with increased altitude.` on page 290 had no paired image."
-    },
-    {
-      "id": "21106b69f36d67cd",
-      "code": "caption-without-figure",
-      "section_code": "12",
-      "message": "Caption `Figure 12-24. Common chart symbology to depict weather front  location.` on page 303 had no paired image."
-    },
-    {
-      "id": "26a622d0b74623ba",
-      "code": "caption-without-figure",
-      "section_code": "12",
-      "message": "Caption `Figure 12-15. Turbulence caused by manmade obstructions.` on page 294 had no paired image."
-    },
-    {
-      "id": "27b852b1ad80c777",
-      "code": "caption-without-figure",
-      "section_code": "12",
-      "message": "Caption `Figure 12-14. Currents generated by varying surface conditions.` on page 293 had no paired image."
-    },
-    {
-      "id": "460a9f28a09ba06e",
-      "code": "caption-without-figure",
-      "section_code": "12",
-      "message": "Caption `Figure 12-19. Isobars reveal the pressure gradient of an area of  high- or low-p` on page 296 had no paired image."
-    },
-    {
-      "id": "87d99fb8d6f96a39",
-      "code": "caption-without-figure",
-      "section_code": "12",
-      "message": "Caption `Figure 12-16. Turbulence in mountainous regions.` on page 294 had no paired image."
-    },
-    {
-      "id": "90a6c42427edd7ba",
-      "code": "caption-without-figure",
-      "section_code": "12",
-      "message": "Caption `Figure 12-8. Station pressure is converted to and reported in sea level pressure` on page 290 had no paired image."
-    },
-    {
-      "id": "bbb5bf8827467277",
-      "code": "caption-without-figure",
-      "section_code": "12",
-      "message": "Caption `Figure 12-10. Circulation pattern about areas of high and low  pressure.` on page 291 had no paired image."
+      "message": "Caption `Figure 10-2. Weight and balance.` on page 250 had no paired image. -> mode: image-extracted-elsewhere"
     },
     {
       "id": "bf76b957921c9b29",
       "code": "caption-without-figure",
       "section_code": "12",
-      "message": "Caption `Figure 12-4. Atmosphere weights.` on page 288 had no paired image."
-    },
-    {
-      "id": "d5c59e551da3f14f",
-      "code": "caption-without-figure",
-      "section_code": "12",
-      "message": "Caption `Figure 12-7. Aneroid barometer.` on page 289 had no paired image."
-    },
-    {
-      "id": "d97f2aeafbe7e121",
-      "code": "caption-without-figure",
-      "section_code": "12",
-      "message": "Caption `Figure 12-6. Although mercurial barometers are no longer used  in the U. S., the` on page 289 had no paired image."
-    },
-    {
-      "id": "da429cce7c6c85ff",
-      "code": "caption-without-figure",
-      "section_code": "12",
-      "message": "Caption `Figure 12-17. Effects of a microburst wind.` on page 295 had no paired image."
-    },
-    {
-      "id": "e2345b0e27a0fd5d",
-      "code": "caption-without-figure",
-      "section_code": "12",
-      "message": "Caption `Figure 12-3. Circulation pattern in a static environment.` on page 287 had no paired image."
-    },
-    {
-      "id": "ebe582f7a892a732",
-      "code": "caption-without-figure",
-      "section_code": "12",
-      "message": "Caption `Figure 12-5. Three-cell circulation pattern due to the rotation of  the Earth.` on page 288 had no paired image."
-    },
-    {
-      "id": "150375c044698198",
-      "code": "caption-without-figure",
-      "section_code": "13",
-      "message": "Caption `Figure 13-14. 36- (top) and 48-hour (bottom) surface prognostic chart.` on page 327 had no paired image."
-    },
-    {
-      "id": "166de0e9bbd0b16f",
-      "code": "caption-without-figure",
-      "section_code": "13",
-      "message": "Caption `Figure 13-5. Descriptors and weather phenomena used in a typical METAR.` on page 317 had no paired image."
-    },
-    {
-      "id": "b45a2fd108fea8be",
-      "code": "caption-without-figure",
-      "section_code": "13",
-      "message": "Caption `Figure 13-6. Reportable contractions for sky condition.` on page 317 had no paired image."
-    },
-    {
-      "id": "c2e03c4029d7d87d",
-      "code": "caption-without-figure",
-      "section_code": "13",
-      "message": "Caption `Figure 13-4. HIWAS availability is shown on sectional chart.` on page 314 had no paired image."
-    },
-    {
-      "id": "c7cee0339e570f05",
-      "code": "caption-without-figure",
-      "section_code": "13",
-      "message": "Caption `Figure 13-11. Sample station model and weather chart symbols.` on page 324 had no paired image."
-    },
-    {
-      "id": "d49fecc0b212acad",
-      "code": "caption-without-figure",
-      "section_code": "13",
-      "message": "Caption `Figure 13-7. PIREP encoding and decoding.` on page 318 had no paired image."
-    },
-    {
-      "id": "fc6892ee6f37bd4e",
-      "code": "caption-without-figure",
-      "section_code": "13",
-      "message": "Caption `Figure 13-18. NEXRAD radar display (500 mile range). The individual color gradie` on page 330 had no paired image."
-    },
-    {
-      "id": "0e34c3189a3b51bd",
-      "code": "caption-without-figure",
-      "section_code": "14",
-      "message": "Caption `Figure 14-9. Runway holding position sign at takeoff end of Runway  14 with coll` on page 341 had no paired image."
-    },
-    {
-      "id": "20e1013b2c20137b",
-      "code": "caption-without-figure",
-      "section_code": "14",
-      "message": "Caption `Figure 14-30. Precision approach path indicator for a typical 3° glide slope.` on page 351 had no paired image."
-    },
-    {
-      "id": "2e448827973f74f1",
-      "code": "caption-without-figure",
-      "section_code": "14",
-      "message": "Caption `Figure 14-2. Preferred Entry-Crossing Midfield.` on page 338 had no paired image."
-    },
-    {
-      "id": "3295ea53d1466be6",
-      "code": "caption-without-figure",
-      "section_code": "14",
-      "message": "Caption `Figure 14-33. Runway lights.` on page 352 had no paired image."
-    },
-    {
-      "id": "556ce6d87aaa8785",
-      "code": "caption-without-figure",
-      "section_code": "14",
-      "message": "Caption `Figure 14-41. Phonetic alphabet.` on page 358 had no paired image."
-    },
-    {
-      "id": "62bf86d9ae01cf45",
-      "code": "caption-without-figure",
-      "section_code": "14",
-      "message": "Caption `Figure 14-42. Light gun signals.` on page 359 had no paired image."
-    },
-    {
-      "id": "77b43435b4239a20",
-      "code": "caption-without-figure",
-      "section_code": "14",
-      "message": "Caption `Figure 14-46. Vortex behavior.` on page 361 had no paired image."
-    },
-    {
-      "id": "9350c8d3c6301c32",
-      "code": "caption-without-figure",
-      "section_code": "14",
-      "message": "Caption `Figure 14-43. Transponder phraseology.` on page 359 had no paired image."
-    },
-    {
-      "id": "a4799488eaa73ac1",
-      "code": "caption-without-figure",
-      "section_code": "14",
-      "message": "Caption `Figure 14-44. Traffic advisories.` on page 360 had no paired image."
-    },
-    {
-      "id": "b9e8f7347e383e83",
-      "code": "caption-without-figure",
-      "section_code": "14",
-      "message": "Caption `Figure 14-32. Pulsating visual approach slope indicator.` on page 352 had no paired image."
-    },
-    {
-      "id": "d0ea06bf8c6e8b32",
-      "code": "caption-without-figure",
-      "section_code": "14",
-      "message": "Caption `Figure 14-47. Vortex avoidance procedures.` on page 363 had no paired image."
-    },
-    {
-      "id": "d178dd536c46d8a3",
-      "code": "caption-without-figure",
-      "section_code": "14",
-      "message": "Caption `Figure 14-8. Runway safety area boundary sign and marking located  on Taxiway Ki` on page 341 had no paired image."
-    },
-    {
-      "id": "f63b1f224ed7f312",
-      "code": "caption-without-figure",
-      "section_code": "14",
-      "message": "Caption `Figure 14-45. Vortex generation.` on page 361 had no paired image."
-    },
-    {
-      "id": "f9ed08dc0a8a7e02",
-      "code": "caption-without-figure",
-      "section_code": "14",
-      "message": "Caption `Figure 14-31. Tri-color visual approach slope indicator.` on page 351 had no paired image."
-    },
-    {
-      "id": "45681b341e495fd9",
-      "code": "caption-without-figure",
-      "section_code": "15",
-      "message": "Caption `Figure 15-8. Visual flight rule weather minimums.` on page 383 had no paired image."
-    },
-    {
-      "id": "9c8e1ebee5c6383e",
-      "code": "caption-without-figure",
-      "section_code": "15",
-      "message": "Caption `Figure 15-9. Requirements for airspace operations.` on page 384 had no paired image."
-    },
-    {
-      "id": "015a839ddc2c662f",
-      "code": "caption-without-figure",
-      "section_code": "16",
-      "message": "Caption `Figure 16-17. Establishing a wind correction angle that counteracts wind drift a` on page 398 had no paired image."
-    },
-    {
-      "id": "057c827aeed04b0f",
-      "code": "caption-without-figure",
-      "section_code": "16",
-      "message": "Caption `determined from the formula shown in Figure 16-34.  Course Intercept Course inte` on page 414 had no paired image."
-    },
-    {
-      "id": "104c4517491694c7",
-      "code": "caption-without-figure",
-      "section_code": "16",
-      "message": "Caption `Figure 16-22. Finding true heading by the wind correction angle.` on page 403 had no paired image."
-    },
-    {
-      "id": "193e57b1b08e55fa",
-      "code": "caption-without-figure",
-      "section_code": "16",
-      "message": "Caption `Figure 16-27. Domestic flight plan form.` on page 408 had no paired image."
-    },
-    {
-      "id": "2b8b8ef16115fca0",
-      "code": "caption-without-figure",
-      "section_code": "16",
-      "message": "Caption `Figure 16-5. Time zones in the conterminous United States.` on page 392 had no paired image."
-    },
-    {
-      "id": "3007b54c984493d5",
-      "code": "caption-without-figure",
-      "section_code": "16",
-      "message": "Caption `Figure 16-13. Motion of the air affects the speed with which aircraft  move over` on page 396 had no paired image."
-    },
-    {
-      "id": "30e3d21aeb1e053b",
-      "code": "caption-without-figure",
-      "section_code": "16",
-      "message": "Caption `Figure 16-28. VHF transmissions follow a line-of-sight course.` on page 409 had no paired image."
-    },
-    {
-      "id": "3429a9d2bb7fccb0",
-      "code": "caption-without-figure",
-      "section_code": "16",
-      "message": "Caption `Figure 16-21. Steps in drawing the wind triangle.` on page 402 had no paired image."
-    },
-    {
-      "id": "377962c0c4b8b330",
-      "code": "caption-without-figure",
-      "section_code": "16",
-      "message": "Caption `Figure 16-15. Effects of wind drift on maintaining desired course.` on page 397 had no paired image."
-    },
-    {
-      "id": "73b9ac91e645c8f3",
-      "code": "caption-without-figure",
-      "section_code": "16",
-      "message": "Caption `Figure 16-24. Chart Supplement U.S. (formerly Airport/Facility  Directory).` on page 404 had no paired image."
-    },
-    {
-      "id": "85de3b7be6926a05",
-      "code": "caption-without-figure",
-      "section_code": "16",
-      "message": "Caption `Figure 16-16. Relationship between true, magnetic, and compass  headings for a p` on page 397 had no paired image."
-    },
-    {
-      "id": "9710895fe7dec70c",
-      "code": "caption-without-figure",
-      "section_code": "16",
-      "message": "Caption `Figure 16-19. Principle of the wind triangle.` on page 401 had no paired image."
-    },
-    {
-      "id": "a2284abde415c7a9",
-      "code": "caption-without-figure",
-      "section_code": "16",
-      "message": "Caption `Figure 16-14. Aircraft flight path resulting from its airspeed and direction and` on page 397 had no paired image."
-    },
-    {
-      "id": "a4356ea8f9996e3b",
-      "code": "caption-without-figure",
-      "section_code": "16",
-      "message": "Caption `Figure 16-34. Time-distance check formula using a CDI.` on page 414 had no paired image."
-    },
-    {
-      "id": "a6aac6e8b65e3848",
-      "code": "caption-without-figure",
-      "section_code": "16",
-      "message": "Caption `the compass rose in Figure 16-6.` on page 392 had no paired image."
-    },
-    {
-      "id": "afdfd0f001fc346d",
-      "code": "caption-without-figure",
-      "section_code": "16",
-      "message": "Caption `north to south. (The various steps are shown in Figure 16-21.)` on page 401 had no paired image."
-    },
-    {
-      "id": "b2e96b801ddd9950",
-      "code": "caption-without-figure",
-      "section_code": "16",
-      "message": "Caption `be represented by a diagram as shown in Figure 16-19. Each  line represents dire` on page 401 had no paired image."
-    },
-    {
-      "id": "e29b291a1868d7df",
-      "code": "caption-without-figure",
-      "section_code": "16",
-      "message": "Caption `Figure 16-35. Flying an RNAV course.` on page 415 had no paired image."
-    },
-    {
-      "id": "f2a4db0ec08896c5",
-      "code": "caption-without-figure",
-      "section_code": "16",
-      "message": "Caption `Figure 16-36. RNAV controls.` on page 415 had no paired image."
-    },
-    {
-      "id": "f99bee25a4cee87c",
-      "code": "caption-without-figure",
-      "section_code": "16",
-      "message": "Caption `Figure 16-33. Time-distance check example.` on page 413 had no paired image."
-    },
-    {
-      "id": "05cd7b0853265de6",
-      "code": "caption-without-figure",
-      "section_code": "17",
-      "message": "Caption `Figure 17-6. Sensations from centrifugal force.` on page 430 had no paired image."
-    },
-    {
-      "id": "063425f41f59f44a",
-      "code": "caption-without-figure",
-      "section_code": "17",
-      "message": "Caption `Figure 17-7. Runway illusions.` on page 433 had no paired image."
-    },
-    {
-      "id": "1700082c6a07f8ec",
-      "code": "caption-without-figure",
-      "section_code": "17",
-      "message": "Caption `Figure 17-8. Impairment scale with alcohol use.` on page 437 had no paired image."
-    },
-    {
-      "id": "3761a52ba7af8256",
-      "code": "caption-without-figure",
-      "section_code": "17",
-      "message": "Caption `Figure 17-18. Scanning techniques.` on page 445 had no paired image."
-    },
-    {
-      "id": "4c0e228b8c7ebc06",
-      "code": "caption-without-figure",
-      "section_code": "17",
-      "message": "Caption `Figure 17-12. The human eye.` on page 442 had no paired image."
-    },
-    {
-      "id": "5357b0e0d9549586",
-      "code": "caption-without-figure",
-      "section_code": "17",
-      "message": "Caption `Figure 17-9. Adverse affects of various drugs.` on page 439 had no paired image."
-    },
-    {
-      "id": "5809ce0899b82aff",
-      "code": "caption-without-figure",
-      "section_code": "17",
-      "message": "Caption `Figure 17-20. Self-imposed stress.` on page 447 had no paired image."
-    },
-    {
-      "id": "64f1f6d81dd37ebf",
-      "code": "caption-without-figure",
-      "section_code": "17",
-      "message": "Caption `Figure 17-1. Time of useful consciousness.` on page 426 had no paired image."
-    },
-    {
-      "id": "9a3be90a88ac9b8a",
-      "code": "caption-without-figure",
-      "section_code": "17",
-      "message": "Caption `Figure 17-19. Off-center viewing.` on page 446 had no paired image."
-    },
-    {
-      "id": "b1fd9c56fc1baecb",
-      "code": "caption-without-figure",
-      "section_code": "17",
-      "message": "Caption `Figure 17-2. The Eustachian tube allows air pressure to equalize  in the middle ` on page 427 had no paired image."
-    },
-    {
-      "id": "bb90f1f0acb504e5",
-      "code": "caption-without-figure",
-      "section_code": "17",
-      "message": "Caption `Figure 17-23. Synthetic and enhanced vision systems.` on page 450 had no paired image."
-    },
-    {
-      "id": "f2a0659e024347d0",
-      "code": "caption-without-figure",
-      "section_code": "17",
-      "message": "Caption `Figure 17-17. Night blind spot.` on page 444 had no paired image."
-    },
-    {
-      "id": "fc384f10f709fcff",
-      "code": "caption-without-figure",
-      "section_code": "17",
-      "message": "Caption `Figure 17-4. Human sensation of angular acceleration.` on page 429 had no paired image."
-    },
-    {
-      "id": "fccfa941970b0328",
-      "code": "caption-without-figure",
-      "section_code": "17",
-      "message": "Caption `Figure 17-3. The semicircular canals lie in three planes and sense motions of ro` on page 428 had no paired image."
-    },
-    {
-      "id": "ff7afb7aac258e13",
-      "code": "caption-without-figure",
-      "section_code": "17",
-      "message": "Caption `Figure 17-5. Graveyard spiral.` on page 429 had no paired image."
-    },
-    {
-      "id": "0660f2291e53fbba",
-      "code": "caption-without-figure",
-      "section_code": "2",
-      "message": "Caption `Figure 2-8. Human factors effects pilots, aviation maintenance technicians (AMTs` on page 50 had no paired image."
-    },
-    {
-      "id": "1a889818453660fe",
-      "code": "caption-without-figure",
-      "section_code": "2",
-      "message": "Caption `Figure 2-18. Controllers work to make flights as safe as possible.` on page 62 had no paired image."
-    },
-    {
-      "id": "63c5d0cb355a1b89",
-      "code": "caption-without-figure",
-      "section_code": "2",
-      "message": "Caption `Figure 2-6. Example of a more comprehensive risk assessment program.` on page 46 had no paired image."
-    },
-    {
-      "id": "65f5075ac0e07ff0",
-      "code": "caption-without-figure",
-      "section_code": "2",
-      "message": "Caption `the operational pitfalls shown in Figure 2-15.` on page 60 had no paired image."
-    },
-    {
-      "id": "72f217ca2327ddf1",
-      "code": "caption-without-figure",
-      "section_code": "2",
-      "message": "Caption `Figure 2-9. The Five Ps checklist.` on page 52 had no paired image."
-    },
-    {
-      "id": "94665d79381ea920",
-      "code": "caption-without-figure",
-      "section_code": "2",
-      "message": "Caption `Figure 2-5. This risk matrix can be used for almost any operation  by assigning ` on page 45 had no paired image."
-    },
-    {
-      "id": "b60b79184dc5812a",
-      "code": "caption-without-figure",
-      "section_code": "2",
-      "message": "Caption `Figure 2-4. The five hazardous attitudes identified through past and contemporar` on page 44 had no paired image."
-    },
-    {
-      "id": "c1b17b3f19fc9cfa",
-      "code": "caption-without-figure",
-      "section_code": "2",
-      "message": "Caption `Figure 2-11. A real-world example of how the 3P model guides decisions on a cros` on page 55 had no paired image."
-    },
-    {
-      "id": "ede15822d0059c77",
-      "code": "caption-without-figure",
-      "section_code": "2",
-      "message": "Caption `Figure 2-21. Electronic flight instrumentation comes in many  systems and provid` on page 65 had no paired image."
-    },
-    {
-      "id": "f02b97bd0e6aefaf",
-      "code": "caption-without-figure",
-      "section_code": "2",
-      "message": "Caption `Figure 2-12. A real-world examples of how the 3P model guides decisions on a cro` on page 56 had no paired image."
-    },
-    {
-      "id": "f8f3f9fe2620a06f",
-      "code": "caption-without-figure",
-      "section_code": "2",
-      "message": "Caption `Figure 2-10. Risk management processing can take place in any of three timeframe` on page 54 had no paired image."
-    },
-    {
-      "id": "147efc7dc398ad6c",
-      "code": "caption-without-figure",
-      "section_code": "3",
-      "message": "Caption `Figure 3-13. Engine compartment.` on page 79 had no paired image."
-    },
-    {
-      "id": "6c37d89611b4a9b8",
-      "code": "caption-without-figure",
-      "section_code": "3",
-      "message": "Caption `Figure 3-7. Wing components.` on page 76 had no paired image."
-    },
-    {
-      "id": "7c1fd97303b977c6",
-      "code": "caption-without-figure",
-      "section_code": "3",
-      "message": "Caption `Figure 3-22. Analog and digital indications for glideslope interception.` on page 87 had no paired image."
-    },
-    {
-      "id": "85af0db1e521854e",
-      "code": "caption-without-figure",
-      "section_code": "3",
-      "message": "Caption `Figure 3-15. Composite aircraft.` on page 81 had no paired image."
-    },
-    {
-      "id": "87ae8796fbc048a0",
-      "code": "caption-without-figure",
-      "section_code": "3",
-      "message": "Caption `Figure 3-2. Illustrates the pitch, roll, and yaw motion of the aircraft along th` on page 74 had no paired image."
-    },
-    {
-      "id": "8b134690542d0d1d",
-      "code": "caption-without-figure",
-      "section_code": "3",
-      "message": "Caption `Figure 3-1. The four forces.` on page 74 had no paired image."
-    },
-    {
-      "id": "b69fa8d48020d7c8",
-      "code": "caption-without-figure",
-      "section_code": "3",
-      "message": "Caption `Figure 3-3. Center of gravity (CG).` on page 75 had no paired image."
-    },
-    {
-      "id": "f750607411776168",
-      "code": "caption-without-figure",
-      "section_code": "3",
-      "message": "Caption `Figure 3-11. Stabilator components.` on page 78 had no paired image."
-    },
-    {
-      "id": "30e1ed813a2809a8",
-      "code": "caption-without-figure",
-      "section_code": "4",
-      "message": "Caption `Figure 4-8. Tip vortex.` on page 96 had no paired image."
-    },
-    {
-      "id": "322615e309678e01",
-      "code": "caption-without-figure",
-      "section_code": "4",
-      "message": "Caption `Figure 4-7. Pressure distribution on an airfoil and CP changes  with AOA.` on page 95 had no paired image."
-    },
-    {
-      "id": "496d7209a8d6a2df",
-      "code": "caption-without-figure",
-      "section_code": "4",
-      "message": "Caption `Figure 4-6. Airfoil designs.` on page 94 had no paired image."
-    },
-    {
-      "id": "b319d08c235a3c7a",
-      "code": "caption-without-figure",
-      "section_code": "4",
-      "message": "Caption `Figure 4-5. Typical airfoil section.` on page 94 had no paired image."
-    },
-    {
-      "id": "cfcb8ebd82fa29c2",
-      "code": "caption-without-figure",
-      "section_code": "4",
-      "message": "Caption `Figure 4-4. Air pressure decreases in a venturi tube.` on page 93 had no paired image."
-    },
-    {
-      "id": "028a78ad16693bf6",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-24. Effect of speed on downwash.` on page 113 had no paired image."
-    },
-    {
-      "id": "06b63699af2669fb",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-55. If the airspeed is increased and the ROT desired  is to be constant` on page 135 had no paired image."
-    },
-    {
-      "id": "0949b15770da33d1",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-48. Corkscrewing slipstream.` on page 128 had no paired image."
-    },
-    {
-      "id": "0a257a52c052d6e4",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-23. Longitudinal stability.` on page 113 had no paired image."
-    },
-    {
-      "id": "0f587b880082da46",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-13. Avoid following another aircraft at an altitude within 1,000 feet.` on page 106 had no paired image."
-    },
-    {
-      "id": "0fc0a09a112af46a",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-34. Forces during normal, coordinated turn at constant altitude.` on page 119 had no paired image."
-    },
-    {
-      "id": "14aae9f1cecc09db",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-50. Raising tail produces gyroscopic precession.` on page 129 had no paired image."
-    },
-    {
-      "id": "15ca53aa553de83d",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-42. An AOA indicator has several benefits when installed in general avi` on page 125 had no paired image."
-    },
-    {
-      "id": "16d85755ee4564e8",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-22. Damped versus undamped stability.` on page 112 had no paired image."
-    },
-    {
-      "id": "1fcb9ef36aab20fe",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-32. Fuselage and fin for directional stability.` on page 116 had no paired image."
-    },
-    {
-      "id": "297afab470815b41",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-68. Sweepback effect.` on page 145 had no paired image."
-    },
-    {
-      "id": "2b84900a45a14324",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `change as shown in Figure 5-36. During the transition from  straight-and-level f` on page 120 had no paired image."
-    },
-    {
-      "id": "3319b7dd42473f45",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-15. When the vortices of larger aircraft sink close to the ground (with` on page 107 had no paired image."
-    },
-    {
-      "id": "34973f6b2f736d92",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-17. Ground effect changes drag and lift.` on page 108 had no paired image."
-    },
-    {
-      "id": "3c191bbb4437b720",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-11. The difference in downwash at altitude versus near  the ground.` on page 105 had no paired image."
-    },
-    {
-      "id": "42466665fc352536",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-40. Inflight ice formation.` on page 123 had no paired image."
-    },
-    {
-      "id": "50015549291e347f",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `achieved in Figure 5-58.` on page 135 had no paired image."
-    },
-    {
-      "id": "51cd852836b7d405",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-43. This section or blade element is an airfoil  comparable to a cross-` on page 125 had no paired image."
-    },
-    {
-      "id": "54943c1e986f8cb9",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-10. The difference in wingtip vortex size at altitude versus  near the ` on page 104 had no paired image."
-    },
-    {
-      "id": "5a7d6d7314e2fc02",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-35. Normal, slipping, and skidding turns at a constant altitude.` on page 121 had no paired image."
-    },
-    {
-      "id": "62feaa53660d07af",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-28. Dihedral is the upward angle of the wings from a horizontal (front/` on page 115 had no paired image."
-    },
-    {
-      "id": "6b8b93072f9f490e",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-31. Keel area for lateral stability.` on page 116 had no paired image."
-    },
-    {
-      "id": "73cfbb362aab9fb1",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-56. Rate of turn for a given airspeed (knots, TAS) and  bank angle.` on page 136 had no paired image."
-    },
-    {
-      "id": "755c4f85891f7932",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-43. Airfoil sections of propeller blade.` on page 126 had no paired image."
-    },
-    {
-      "id": "7970fd6eb0223651",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-65. Critical Mach.` on page 142 had no paired image."
-    },
-    {
-      "id": "8f59812ea84460d1",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-33. Different types of wing planforms.` on page 118 had no paired image."
-    },
-    {
-      "id": "994fedb86d6b0c20",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-52. Two forces cause load factor during turns.` on page 131 had no paired image."
+      "message": "Caption `Figure 12-4. Atmosphere weights.` on page 288 had no paired image. -> mode: image-extracted-elsewhere"
     },
     {
       "id": "9a4ebe44c0721f75",
       "code": "caption-without-figure",
       "section_code": "5",
-      "message": "Caption `Figure 5-47. Torque reaction.` on page 128 had no paired image."
-    },
-    {
-      "id": "9a8142a264401206",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-64. Wing airflow.` on page 142 had no paired image."
-    },
-    {
-      "id": "9c93ff01cd854eba",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-29. Sideslip causing different AOA on each blade.` on page 115 had no paired image."
-    },
-    {
-      "id": "9e4239f81dd4cdb9",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-14. Avoid turbulence from another aircraft.` on page 107 had no paired image."
+      "message": "Caption `Figure 5-47. Torque reaction.` on page 128 had no paired image. -> mode: image-extracted-elsewhere"
     },
     {
       "id": "9ef7cfd4fde78498",
       "code": "caption-without-figure",
       "section_code": "5",
-      "message": "Caption `Figure 5-36. Changes in lift during climb entry.` on page 121 had no paired image."
+      "message": "Caption `Figure 5-36. Changes in lift during climb entry.` on page 121 had no paired image. -> mode: image-extracted-elsewhere"
     },
     {
-      "id": "9f1085bbea3b6c00",
+      "id": "b2479bdaf082d2f4",
       "code": "caption-without-figure",
       "section_code": "5",
-      "message": "Caption `Figure 5-37. Changes in speed during climb entry.` on page 121 had no paired image."
-    },
-    {
-      "id": "a97110728084b3b6",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-44.  Propeller blade angle.` on page 126 had no paired image."
-    },
-    {
-      "id": "a9d382dd9dcaf81a",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-63. Effect of load distribution on balance.` on page 140 had no paired image."
-    },
-    {
-      "id": "aaab0dcb7490bf1d",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-62. Two aircraft have flown into a canyon by error. The canyon is 5,000` on page 138 had no paired image."
-    },
-    {
-      "id": "aaf954e66fe9046c",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-41. A variety of AOA indicators.` on page 124 had no paired image."
-    },
-    {
-      "id": "b1e6a9136212abf5",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-12. Wingtip vortices.` on page 106 had no paired image."
-    },
-    {
-      "id": "b93b61948cef4f4c",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-2. Force vectors during a stabilized climb.` on page 99 had no paired image."
-    },
-    {
-      "id": "c50ba0b1329bacf5",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-45. Propeller slippage.` on page 127 had no paired image."
+      "message": "Caption `Figure 5-39. Increase in stall speed and load factor.` on page 123 had no paired image. -> mode: image-extracted-elsewhere"
     },
     {
       "id": "c5db0aa6189dea99",
       "code": "caption-without-figure",
       "section_code": "5",
-      "message": "Caption `Figure 5-53. Angle of bank changes load factor in level flight.` on page 131 had no paired image."
+      "message": "Caption `Figure 5-53. Angle of bank changes load factor in level flight.` on page 131 had no paired image. -> mode: image-filtered-by-floor"
     },
     {
-      "id": "cee0655a8f74a298",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-71. Control surfaces.` on page 147 had no paired image."
-    },
-    {
-      "id": "cfd92f259317e0ec",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-16. Ground effect changes airflow.` on page 108 had no paired image."
-    },
-    {
-      "id": "d29c6cd793593cef",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-54. Load factor changes stall speed.` on page 132 had no paired image."
-    },
-    {
-      "id": "d33a5e8f215daaaf",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-58. To achieve the same rate of turn of an aircraft traveling  at 120 k` on page 136 had no paired image."
-    },
-    {
-      "id": "d888160364b5b695",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-59. Radius at 120 knots with bank angle of 30°.` on page 136 had no paired image."
-    },
-    {
-      "id": "d8c26705e8963653",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-49. Gyroscopic precession.` on page 129 had no paired image."
-    },
-    {
-      "id": "dd25580aa6f80391",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-46. Propeller tips travel faster than the hub.` on page 127 had no paired image."
-    },
-    {
-      "id": "e12dda2496b4369d",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-21. Types of static stability.` on page 111 had no paired image."
-    },
-    {
-      "id": "e5bea8a2580c8dde",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-27. Power changes affect longitudinal stability.` on page 114 had no paired image."
-    },
-    {
-      "id": "e93984dd099b8601",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-55. Typical Vg diagram.` on page 135 had no paired image."
-    },
-    {
-      "id": "ea05f0e25044a275",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-57. Rate of turn when increasing speed.` on page 136 had no paired image."
-    },
-    {
-      "id": "eb1a177a5a24903b",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-25. Reduced power allows pitch down.` on page 113 had no paired image."
-    },
-    {
-      "id": "f04774ba2f60fa4f",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-66. Boundary layer.` on page 144 had no paired image."
-    },
-    {
-      "id": "f4302fe8ba00c23f",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-19. A weight-shift control aircraft.` on page 110 had no paired image."
-    },
-    {
-      "id": "f869662fc3e42230",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-5. Coefficients of lift and drag at various angles of attack.` on page 101 had no paired image."
-    },
-    {
-      "id": "fed8b872e99099e2",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-51. Asymmetrical loading of propeller (P-factor).` on page 130 had no paired image."
-    },
-    {
-      "id": "ff9e25352e53bfa3",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-30. Sweepback wings.` on page 115 had no paired image."
-    },
-    {
-      "id": "ffce200ca2624196",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 5-67. Shock waves.` on page 144 had no paired image."
-    },
-    {
-      "id": "21ee6d35cce3a97a",
+      "id": "847eb8df27e85469",
       "code": "caption-without-figure",
       "section_code": "6",
-      "message": "Caption `Figure 6-13. The stabilator is a one-piece horizontal tail surface  that pivots ` on page 155 had no paired image."
-    },
-    {
-      "id": "2adc83124a39a5a2",
-      "code": "caption-without-figure",
-      "section_code": "6",
-      "message": "Caption `Figure 6-24. Basic autopilot system integrated into the flight  control system.` on page 160 had no paired image."
-    },
-    {
-      "id": "2cd0e70d40d7fcf6",
-      "code": "caption-without-figure",
-      "section_code": "6",
-      "message": "Caption `Figure 6-18. Leading edge high lift devices.` on page 157 had no paired image."
-    },
-    {
-      "id": "54e1690c3b7d7d1c",
-      "code": "caption-without-figure",
-      "section_code": "6",
-      "message": "Caption `Figure 6-23. Some aircraft, including most jet transports, use an  adjustable st` on page 160 had no paired image."
-    },
-    {
-      "id": "7fd661b64b8184c3",
-      "code": "caption-without-figure",
-      "section_code": "6",
-      "message": "Caption `Figure 6-15. The effect of left rudder pressure.` on page 156 had no paired image."
-    },
-    {
-      "id": "914a87493c2ac5bb",
-      "code": "caption-without-figure",
-      "section_code": "6",
-      "message": "Caption `Figure 6-9. Flaperons on a Skystar Kitfox MK 7.` on page 153 had no paired image."
-    },
-    {
-      "id": "9e77555c47418f7a",
-      "code": "caption-without-figure",
-      "section_code": "6",
-      "message": "Caption `Figure 6-4. Airplane controls, movement, axes of rotation, and  type of stabilit` on page 151 had no paired image."
-    },
-    {
-      "id": "a2273c17accd838a",
-      "code": "caption-without-figure",
-      "section_code": "6",
-      "message": "Caption `Figure 6-14. The Piaggio P180 includes a variable-sweep canard  design that prov` on page 155 had no paired image."
-    },
-    {
-      "id": "a30ec30de303af5f",
-      "code": "caption-without-figure",
-      "section_code": "6",
-      "message": "Caption `Figure 6-5. Adverse yaw is caused by higher drag on the outside  wing that is pr` on page 151 had no paired image."
-    },
-    {
-      "id": "bd6e545199f2df3a",
-      "code": "caption-without-figure",
-      "section_code": "6",
-      "message": "Caption `Figure 6-19. Spoilers reduce lift and increase drag during descent  and landing.` on page 158 had no paired image."
-    },
-    {
-      "id": "bfdd45bba8272a2b",
-      "code": "caption-without-figure",
-      "section_code": "6",
-      "message": "Caption `Figure 6-1. Mechanical flight control system.` on page 150 had no paired image."
-    },
-    {
-      "id": "c13a2892df94cd10",
-      "code": "caption-without-figure",
-      "section_code": "6",
-      "message": "Caption `Figure 6-16. Beechcraft Bonanza V35.` on page 156 had no paired image."
-    },
-    {
-      "id": "c72ed512db47ec2f",
-      "code": "caption-without-figure",
-      "section_code": "6",
-      "message": "Caption `Figure 6-8. Coupled ailerons and rudder.` on page 153 had no paired image."
-    },
-    {
-      "id": "cb4a7e75795e036a",
-      "code": "caption-without-figure",
-      "section_code": "6",
-      "message": "Caption `Figure 6-10. The elevator is the primary control for changing the  pitch attitud` on page 153 had no paired image."
+      "message": "Caption `Figure 6-12. When the aerodynamic efficiency of the horizontal tail  surface is ` on page 155 had no paired image. -> mode: image-extracted-elsewhere"
     },
     {
       "id": "d006cfc06a8116c8",
       "code": "caption-without-figure",
       "section_code": "6",
-      "message": "Caption `Figure 6-22. A ground adjustable tab is used on the rudder of many  small airpla` on page 160 had no paired image."
+      "message": "Caption `Figure 6-22. A ground adjustable tab is used on the rudder of many  small airpla` on page 160 had no paired image. -> mode: image-filtered-by-floor"
     },
     {
-      "id": "05b3898dc69de8ee",
+      "id": "bfedb24370e19540",
       "code": "caption-without-figure",
       "section_code": "7",
-      "message": "Caption `Figure 7-32. Aviation fuel color-coding system.` on page 187 had no paired image."
-    },
-    {
-      "id": "19ec5d0817801f22",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 7-27. Dual-spool axial-flow compressor.` on page 183 had no paired image."
-    },
-    {
-      "id": "1a16074739dfd608",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 7-4. Main components of a spark ignition reciprocating  engine.` on page 163 had no paired image."
-    },
-    {
-      "id": "2339c86a5ab8bb56",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 7-9. Engine power output is indicated on the manifold  pressure gauge.` on page 166 had no paired image."
-    },
-    {
-      "id": "24bd3964c909980d",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 7-38. Tailwheel landing gear.` on page 194 had no paired image."
-    },
-    {
-      "id": "2ada94b0bdc40408",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 7-11. The formation of carburetor ice may reduce or block  fuel-air flow ` on page 169 had no paired image."
-    },
-    {
-      "id": "2db7f54eea8caf0d",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 7-41. Standard atmospheric pressure chart.` on page 195 had no paired image."
-    },
-    {
-      "id": "2e8268a061c22944",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 7-33. On this master switch, the left half is for the alternator  and the` on page 191 had no paired image."
-    },
-    {
-      "id": "38a416838a078627",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 7-18. Always check the engine oil level during the preflight  inspection.` on page 177 had no paired image."
-    },
-    {
-      "id": "3f7468b39b8cf869",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 7-22. Eclipse 500 VLJ.` on page 180 had no paired image."
-    },
-    {
-      "id": "4cd0aea55fcf76a2",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 7-28. Comparison of normal and distorted airflow into the  compressor sec` on page 184 had no paired image."
-    },
-    {
-      "id": "54206ae23cc64721",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 7-31. Fuel selector valve.` on page 186 had no paired image."
-    },
-    {
-      "id": "733f8a6740c2b439",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 7-20. Typical starting circuit.` on page 179 had no paired image."
-    },
-    {
-      "id": "83241f9250072292",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 7-40. High performance airplane pressurization system.` on page 195 had no paired image."
-    },
-    {
-      "id": "964d8b2e134e165b",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 7-39. Fixed (left) and retractable (right) gear airplanes.` on page 194 had no paired image."
-    },
-    {
-      "id": "9b8ec22164066b06",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 7-7. Relationship of travel distance and speed of various  portions of pr` on page 165 had no paired image."
-    },
-    {
-      "id": "9d52569160aad131",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 7-13. Fuel injection system.` on page 171 had no paired image."
-    },
-    {
-      "id": "af05a665b7eb0793",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 7-19. Outside air aids in cooling the engine.` on page 177 had no paired image."
-    },
-    {
-      "id": "bc34cbc03b753f37",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 7-14. Power output of normally aspirated engine compared  to a single-sta` on page 173 had no paired image."
-    },
-    {
-      "id": "bfcfc732672e52dc",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 7-24. Turboprop engine.` on page 181 had no paired image."
-    },
-    {
-      "id": "c01a16bcd0430871",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 7-29. Engine net thrust versus aircraft speed and drag. Points` on page 185 had no paired image."
-    },
-    {
-      "id": "c71289bcaacb6d4b",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 7-26. Turboshaft engine.` on page 182 had no paired image."
-    },
-    {
-      "id": "cbc9a9b3dd6a8224",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 7-6. Changes in propeller blade angle from hub to tip.` on page 165 had no paired image."
-    },
-    {
-      "id": "ce759375d41ba3ba",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 7-25. Turbofan engine.` on page 182 had no paired image."
-    },
-    {
-      "id": "e4726fb3a63a3cb1",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 7-30. Gravity-feed and fuel-pump systems.` on page 186 had no paired image."
-    },
-    {
-      "id": "e5dfe48eea941a6e",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 7-5. The arrows in this illustration indicate the direction of  motion of` on page 164 had no paired image."
-    },
-    {
-      "id": "f10be5a50dd478e9",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `cabin altimeter are illustrated in Figure 7-42.` on page 196 had no paired image."
+      "message": "Caption `Figure 7-37. The landing gear supports the airplane during the  takeoff run, lan` on page 193 had no paired image. -> mode: image-extracted-elsewhere"
     },
     {
       "id": "f49a46d491b64248",
       "code": "caption-without-figure",
       "section_code": "7",
-      "message": "Caption `Figure 7-8. Engine rpm is indicated on the tachometer.` on page 165 had no paired image."
-    },
-    {
-      "id": "f5d85b4a419cf8cb",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 7-10. Float-type carburetor.` on page 168 had no paired image."
-    },
-    {
-      "id": "060e2e0a99bc9721",
-      "code": "caption-without-figure",
-      "section_code": "8",
-      "message": "Caption `Figure 8-5. Vertical speed indicator (VSI).` on page 209 had no paired image."
-    },
-    {
-      "id": "07ca8677b4595f3a",
-      "code": "caption-without-figure",
-      "section_code": "8",
-      "message": "Caption `Figure 8-17. Altimeter trend vector.` on page 217 had no paired image."
-    },
-    {
-      "id": "24d229c60ee42fe1",
-      "code": "caption-without-figure",
-      "section_code": "8",
-      "message": "Caption `Figure 8-7. Airspeed indicator (ASI).` on page 210 had no paired image."
-    },
-    {
-      "id": "26a9877d697f215f",
-      "code": "caption-without-figure",
-      "section_code": "8",
-      "message": "Caption `Figure 8-2. Altimeter.` on page 205 had no paired image."
-    },
-    {
-      "id": "41c96a7197e9118a",
-      "code": "caption-without-figure",
-      "section_code": "8",
-      "message": "Caption `Figure 8-20. Typical vacuum system.` on page 219 had no paired image."
-    },
-    {
-      "id": "4e190b0a44809811",
-      "code": "caption-without-figure",
-      "section_code": "8",
-      "message": "Caption `Figure 8-29. Pictorial navigation indicator (HSI, top), slaving meter  (lower ri` on page 223 had no paired image."
-    },
-    {
-      "id": "56d2fd81b6aa1e9c",
-      "code": "caption-without-figure",
-      "section_code": "8",
-      "message": "Caption `Figure 8-21. Turn indicators rely on controlled precession for their operation.` on page 219 had no paired image."
-    },
-    {
-      "id": "580d7521bf442bfc",
-      "code": "caption-without-figure",
-      "section_code": "8",
-      "message": "Caption `Figure 8-22. If inadequate right rudder is applied in a right turn,  a slip resu` on page 220 had no paired image."
-    },
-    {
-      "id": "644150accaa78049",
-      "code": "caption-without-figure",
-      "section_code": "8",
-      "message": "Caption `Figure 8-39. Outside air temperature (OAT) gauge.` on page 230 had no paired image."
-    },
-    {
-      "id": "72235d24f73437bb",
-      "code": "caption-without-figure",
-      "section_code": "8",
-      "message": "Caption `Figure 8-1. Pitot-static system and instruments.` on page 204 had no paired image."
-    },
-    {
-      "id": "7898cad381815ba5",
-      "code": "caption-without-figure",
-      "section_code": "8",
-      "message": "Caption `Figure 8-23. Attitude indicator.` on page 220 had no paired image."
-    },
-    {
-      "id": "84a79717852e91ff",
-      "code": "caption-without-figure",
-      "section_code": "8",
-      "message": "Caption `Figure 8-19. Precession of a gyroscope resulting from an applied deflective forc` on page 218 had no paired image."
-    },
-    {
-      "id": "8640f5d24bfd2544",
-      "code": "caption-without-figure",
-      "section_code": "8",
-      "message": "Caption `Figure 8-3. Effects of nonstandard temperature on an altimeter.` on page 206 had no paired image."
-    },
-    {
-      "id": "8795f1a2562e0772",
-      "code": "caption-without-figure",
-      "section_code": "8",
-      "message": "Caption `Figure 8-10. Blocked pitot system with clear static system.` on page 213 had no paired image."
-    },
-    {
-      "id": "8ab2f5843f542489",
-      "code": "caption-without-figure",
-      "section_code": "8",
-      "message": "Caption `Figure 8-14. Chelton’s FlightLogic (top) and Avidyne’s Entegra (bottom) are exam` on page 216 had no paired image."
-    },
-    {
-      "id": "9670e5bba81f4778",
-      "code": "caption-without-figure",
-      "section_code": "8",
-      "message": "Caption `Figure 8-16. Airspeed trend vector.` on page 216 had no paired image."
+      "message": "Caption `Figure 7-8. Engine rpm is indicated on the tachometer.` on page 165 had no paired image. -> mode: image-filtered-by-floor"
     },
     {
       "id": "a3ce6289056c438d",
       "code": "caption-without-figure",
       "section_code": "8",
-      "message": "Caption `Figure 8-6. An IVSI incorporates accelerometers to help the  instrument immediat` on page 210 had no paired image."
-    },
-    {
-      "id": "bb03d1d738a09cc9",
-      "code": "caption-without-figure",
-      "section_code": "8",
-      "message": "Caption `Figure 8-28. The current in each of the three pickup coils changes  with the hea` on page 223 had no paired image."
-    },
-    {
-      "id": "ddb96753dfc66c24",
-      "code": "caption-without-figure",
-      "section_code": "8",
-      "message": "Caption `illustrated in Figure 8-24. Most banking scale indicators on the  top of the ins` on page 221 had no paired image."
-    },
-    {
-      "id": "e3287015ed0ec3b5",
-      "code": "caption-without-figure",
-      "section_code": "8",
-      "message": "Caption `Figure 8-4. Look at the chart using a temperature of –10 °C and  an aircraft alt` on page 207 had no paired image."
-    },
-    {
-      "id": "e54f66a62370ffea",
-      "code": "caption-without-figure",
-      "section_code": "8",
-      "message": "Caption `Figure 8-18. Regardless of the position of its base, a gyro tends to remain rigi` on page 217 had no paired image."
-    },
-    {
-      "id": "e84ad39d38b80b29",
-      "code": "caption-without-figure",
-      "section_code": "8",
-      "message": "Caption `Figure 8-11. Blocked static system.` on page 214 had no paired image."
+      "message": "Caption `Figure 8-6. An IVSI incorporates accelerometers to help the  instrument immediat` on page 210 had no paired image. -> mode: image-extracted-elsewhere"
     },
     {
       "id": "ea12876e6f2efefc",
       "code": "caption-without-figure",
       "section_code": "8",
-      "message": "Caption `Figure 8-26. Attitude and heading reference system (AHRS).` on page 222 had no paired image."
-    },
-    {
-      "id": "f7c33ecaf6946221",
-      "code": "caption-without-figure",
-      "section_code": "8",
-      "message": "Caption `Figure 8-8. Single engine airspeed indicator (ASI).` on page 211 had no paired image."
-    },
-    {
-      "id": "208da51a8dd8ba88",
-      "code": "caption-without-figure",
-      "section_code": "9",
-      "message": "Caption `Figure 9-9. FAA Form 8100-2, Standard Airworthiness Certificate.` on page 237 had no paired image."
-    },
-    {
-      "id": "30d9aac2cb933655",
-      "code": "caption-without-figure",
-      "section_code": "9",
-      "message": "Caption `Figure 9-8. AC Form 8050-3, Certificate of Aircraft Registration.` on page 236 had no paired image."
-    },
-    {
-      "id": "4f53adc407ac5809",
-      "code": "caption-without-figure",
-      "section_code": "9",
-      "message": "Caption `Figure 9-3. Minimum, maximum, and normal operating range  markings on oil gauge.` on page 233 had no paired image."
-    },
-    {
-      "id": "92dd83b621c10b59",
-      "code": "caption-without-figure",
-      "section_code": "9",
-      "message": "Caption `Figure 9-4. Manifold pressure gauge (top) and tachometer (bottom).` on page 233 had no paired image."
-    },
-    {
-      "id": "9ca0909b4c85065e",
-      "code": "caption-without-figure",
-      "section_code": "9",
-      "message": "Caption `Figure 9-10. FAA Form 8130-7, Special Airworthiness Certificate.` on page 243 had no paired image."
-    },
-    {
-      "id": "b858ba1f046fa6a1",
-      "code": "caption-without-figure",
-      "section_code": "9",
-      "message": "Caption `Figure 9-7. Supplements provide information on optional equipment.` on page 235 had no paired image."
+      "message": "Caption `Figure 8-26. Attitude and heading reference system (AHRS).` on page 222 had no paired image. -> mode: image-extracted-elsewhere"
     },
     {
       "id": "f95f5fd63385075b",
       "code": "caption-without-figure",
       "section_code": "9",
-      "message": "Caption `Figure 9-2. Multi-engine airspeed indicator. Figure 9-4. Manifold pressure gauge` on page 233 had no paired image."
+      "message": "Caption `Figure 9-2. Multi-engine airspeed indicator. Figure 9-4. Manifold pressure gauge` on page 233 had no paired image. -> mode: image-extracted-elsewhere"
     },
     {
       "id": "02671a0ef8fd62ea",
@@ -1678,6 +142,12 @@
       "code": "empty-section-kept",
       "section_code": null,
       "message": "empty-section-kept: Section §5.6.6 'Directional Stability (Yawing)' had no body prose; kept with `extraction_status: no-body-content` placeholder."
+    },
+    {
+      "id": "1b86bffba5d5dd31",
+      "code": "empty-section-kept",
+      "section_code": null,
+      "message": "empty-section-kept: Section §7.2 'Powerplant' had no body prose; kept with `extraction_status: no-body-content` placeholder."
     },
     {
       "id": "1e98a0d71048d1d9",
@@ -2028,408 +498,6 @@
       "message": "empty-section-kept: Section §7.9 'Carburetor Icing' had no body prose; kept with `extraction_status: no-body-content` placeholder."
     },
     {
-      "id": "1d59b77170e5fdc1",
-      "code": "figure-without-caption",
-      "section_code": "1",
-      "message": "Image on page 26 (index 4) had no paired caption."
-    },
-    {
-      "id": "4ca6ad2fae2e7e34",
-      "code": "figure-without-caption",
-      "section_code": "1",
-      "message": "Image on page 27 (index 4) had no paired caption."
-    },
-    {
-      "id": "5755154d79eeb92c",
-      "code": "figure-without-caption",
-      "section_code": "1",
-      "message": "Image on page 26 (index 5) had no paired caption."
-    },
-    {
-      "id": "5826a97f8daba080",
-      "code": "figure-without-caption",
-      "section_code": "1",
-      "message": "Image on page 27 (index 1) had no paired caption."
-    },
-    {
-      "id": "6ba306ad0d83cd2d",
-      "code": "figure-without-caption",
-      "section_code": "1",
-      "message": "Image on page 37 (index 1) had no paired caption."
-    },
-    {
-      "id": "957960acb779631a",
-      "code": "figure-without-caption",
-      "section_code": "1",
-      "message": "Image on page 16 (index 0) had no paired caption."
-    },
-    {
-      "id": "977f533055ecc07b",
-      "code": "figure-without-caption",
-      "section_code": "1",
-      "message": "Image on page 27 (index 3) had no paired caption."
-    },
-    {
-      "id": "a4aa39028329a2f2",
-      "code": "figure-without-caption",
-      "section_code": "1",
-      "message": "Image on page 27 (index 5) had no paired caption."
-    },
-    {
-      "id": "aeb19d4f1a00d2f1",
-      "code": "figure-without-caption",
-      "section_code": "1",
-      "message": "Image on page 27 (index 2) had no paired caption."
-    },
-    {
-      "id": "c59d0a0585e1a195",
-      "code": "figure-without-caption",
-      "section_code": "1",
-      "message": "Image on page 26 (index 2) had no paired caption."
-    },
-    {
-      "id": "a898a33f9086570b",
-      "code": "figure-without-caption",
-      "section_code": "10",
-      "message": "Image on page 253 (index 7) had no paired caption."
-    },
-    {
-      "id": "dc0fa5b3779c3c98",
-      "code": "figure-without-caption",
-      "section_code": "10",
-      "message": "Image on page 253 (index 5) had no paired caption."
-    },
-    {
-      "id": "e6f12b2f16d93f3c",
-      "code": "figure-without-caption",
-      "section_code": "10",
-      "message": "Image on page 253 (index 6) had no paired caption."
-    },
-    {
-      "id": "0869cc1767489d62",
-      "code": "figure-without-caption",
-      "section_code": "12",
-      "message": "Image on page 306 (index 2) had no paired caption."
-    },
-    {
-      "id": "0b5b24d14627e3d4",
-      "code": "figure-without-caption",
-      "section_code": "12",
-      "message": "Image on page 305 (index 0) had no paired caption."
-    },
-    {
-      "id": "2cc4c56fcc38adc1",
-      "code": "figure-without-caption",
-      "section_code": "12",
-      "message": "Image on page 307 (index 2) had no paired caption."
-    },
-    {
-      "id": "3afd5d0c8d05ff2d",
-      "code": "figure-without-caption",
-      "section_code": "12",
-      "message": "Image on page 305 (index 1) had no paired caption."
-    },
-    {
-      "id": "6d84e9ccb3202f12",
-      "code": "figure-without-caption",
-      "section_code": "12",
-      "message": "Image on page 307 (index 1) had no paired caption."
-    },
-    {
-      "id": "8368dcae0e68ae7f",
-      "code": "figure-without-caption",
-      "section_code": "12",
-      "message": "Image on page 300 (index 2) had no paired caption."
-    },
-    {
-      "id": "955a33e7efd38580",
-      "code": "figure-without-caption",
-      "section_code": "12",
-      "message": "Image on page 306 (index 3) had no paired caption."
-    },
-    {
-      "id": "a1447d01aedfb34f",
-      "code": "figure-without-caption",
-      "section_code": "12",
-      "message": "Image on page 300 (index 1) had no paired caption."
-    },
-    {
-      "id": "b8dcde732a17f59f",
-      "code": "figure-without-caption",
-      "section_code": "12",
-      "message": "Image on page 300 (index 3) had no paired caption."
-    },
-    {
-      "id": "e7859e33823e8585",
-      "code": "figure-without-caption",
-      "section_code": "12",
-      "message": "Image on page 306 (index 0) had no paired caption."
-    },
-    {
-      "id": "fcb8aadff499bf9c",
-      "code": "figure-without-caption",
-      "section_code": "12",
-      "message": "Image on page 303 (index 0) had no paired caption."
-    },
-    {
-      "id": "64afe8f8d528801e",
-      "code": "figure-without-caption",
-      "section_code": "13",
-      "message": "Image on page 311 (index 0) had no paired caption."
-    },
-    {
-      "id": "066bc515e208a1b2",
-      "code": "figure-without-caption",
-      "section_code": "14",
-      "message": "Image on page 335 (index 0) had no paired caption."
-    },
-    {
-      "id": "43e5e7d5732f76c6",
-      "code": "figure-without-caption",
-      "section_code": "14",
-      "message": "Image on page 349 (index 5) had no paired caption."
-    },
-    {
-      "id": "5697530624bcd0bf",
-      "code": "figure-without-caption",
-      "section_code": "14",
-      "message": "Image on page 348 (index 1) had no paired caption."
-    },
-    {
-      "id": "6cf7728781dc41ec",
-      "code": "figure-without-caption",
-      "section_code": "14",
-      "message": "Image on page 368 (index 5) had no paired caption."
-    },
-    {
-      "id": "734080d52d8ca5d2",
-      "code": "figure-without-caption",
-      "section_code": "14",
-      "message": "Image on page 349 (index 3) had no paired caption."
-    },
-    {
-      "id": "80d0f750e2534571",
-      "code": "figure-without-caption",
-      "section_code": "14",
-      "message": "Image on page 368 (index 7) had no paired caption."
-    },
-    {
-      "id": "91c97f8e68e17cbe",
-      "code": "figure-without-caption",
-      "section_code": "14",
-      "message": "Image on page 374 (index 1) had no paired caption."
-    },
-    {
-      "id": "952ef87cb2326e9c",
-      "code": "figure-without-caption",
-      "section_code": "14",
-      "message": "Image on page 349 (index 4) had no paired caption."
-    },
-    {
-      "id": "b438a9eaa9947a06",
-      "code": "figure-without-caption",
-      "section_code": "14",
-      "message": "Image on page 355 (index 1) had no paired caption."
-    },
-    {
-      "id": "b96f7c53e39e0064",
-      "code": "figure-without-caption",
-      "section_code": "14",
-      "message": "Image on page 355 (index 2) had no paired caption."
-    },
-    {
-      "id": "c26939f35e03aa87",
-      "code": "figure-without-caption",
-      "section_code": "14",
-      "message": "Image on page 349 (index 7) had no paired caption."
-    },
-    {
-      "id": "cb382c6fa17de6ab",
-      "code": "figure-without-caption",
-      "section_code": "14",
-      "message": "Image on page 355 (index 0) had no paired caption."
-    },
-    {
-      "id": "f277abebcd8a4d7d",
-      "code": "figure-without-caption",
-      "section_code": "14",
-      "message": "Image on page 349 (index 6) had no paired caption."
-    },
-    {
-      "id": "f3dd9da4e780a0eb",
-      "code": "figure-without-caption",
-      "section_code": "14",
-      "message": "Image on page 368 (index 3) had no paired caption."
-    },
-    {
-      "id": "f693d3b420ee2d4e",
-      "code": "figure-without-caption",
-      "section_code": "14",
-      "message": "Image on page 374 (index 3) had no paired caption."
-    },
-    {
-      "id": "f92f5d4b6456d7e4",
-      "code": "figure-without-caption",
-      "section_code": "14",
-      "message": "Image on page 368 (index 4) had no paired caption."
-    },
-    {
-      "id": "039d92ba65c59fa2",
-      "code": "figure-without-caption",
-      "section_code": "16",
-      "message": "Image on page 394 (index 10) had no paired caption."
-    },
-    {
-      "id": "223ffc8544cf3de8",
-      "code": "figure-without-caption",
-      "section_code": "16",
-      "message": "Image on page 417 (index 2) had no paired caption."
-    },
-    {
-      "id": "26d5cc6a44d6c5d8",
-      "code": "figure-without-caption",
-      "section_code": "16",
-      "message": "Image on page 394 (index 9) had no paired caption."
-    },
-    {
-      "id": "33720febb015092c",
-      "code": "figure-without-caption",
-      "section_code": "16",
-      "message": "Image on page 394 (index 8) had no paired caption."
-    },
-    {
-      "id": "5675c0ad1207810f",
-      "code": "figure-without-caption",
-      "section_code": "16",
-      "message": "Image on page 417 (index 1) had no paired caption."
-    },
-    {
-      "id": "65d41a3cdce363af",
-      "code": "figure-without-caption",
-      "section_code": "16",
-      "message": "Image on page 388 (index 0) had no paired caption."
-    },
-    {
-      "id": "cf4b6e30767a30e0",
-      "code": "figure-without-caption",
-      "section_code": "16",
-      "message": "Image on page 394 (index 11) had no paired caption."
-    },
-    {
-      "id": "d04214e64ba952a0",
-      "code": "figure-without-caption",
-      "section_code": "16",
-      "message": "Image on page 418 (index 1) had no paired caption."
-    },
-    {
-      "id": "ac6a71afcac063f3",
-      "code": "figure-without-caption",
-      "section_code": "17",
-      "message": "Image on page 423 (index 0) had no paired caption."
-    },
-    {
-      "id": "fd54c2e3fdcd42fa",
-      "code": "figure-without-caption",
-      "section_code": "17",
-      "message": "Image on page 442 (index 0) had no paired caption."
-    },
-    {
-      "id": "0809b78c40c5db2a",
-      "code": "figure-without-caption",
-      "section_code": "2",
-      "message": "Image on page 67 (index 2) had no paired caption."
-    },
-    {
-      "id": "20b1b338a90d0f2f",
-      "code": "figure-without-caption",
-      "section_code": "2",
-      "message": "Image on page 67 (index 3) had no paired caption."
-    },
-    {
-      "id": "7e0977283a5112d1",
-      "code": "figure-without-caption",
-      "section_code": "2",
-      "message": "Image on page 67 (index 0) had no paired caption."
-    },
-    {
-      "id": "996dbb84bf7cfae6",
-      "code": "figure-without-caption",
-      "section_code": "2",
-      "message": "Image on page 58 (index 0) had no paired caption."
-    },
-    {
-      "id": "a99678bec920fd1d",
-      "code": "figure-without-caption",
-      "section_code": "2",
-      "message": "Image on page 67 (index 1) had no paired caption."
-    },
-    {
-      "id": "b5462f794664e029",
-      "code": "figure-without-caption",
-      "section_code": "2",
-      "message": "Image on page 58 (index 2) had no paired caption."
-    },
-    {
-      "id": "cde472dbe82ac9e2",
-      "code": "figure-without-caption",
-      "section_code": "2",
-      "message": "Image on page 58 (index 1) had no paired caption."
-    },
-    {
-      "id": "4928c442b1901385",
-      "code": "figure-without-caption",
-      "section_code": "3",
-      "message": "Image on page 72 (index 0) had no paired caption."
-    },
-    {
-      "id": "e371a0d71707b305",
-      "code": "figure-without-caption",
-      "section_code": "3",
-      "message": "Image on page 83 (index 2) had no paired caption."
-    },
-    {
-      "id": "4ccd0c2c0a0a49e5",
-      "code": "figure-without-caption",
-      "section_code": "4",
-      "message": "Image on page 88 (index 0) had no paired caption."
-    },
-    {
-      "id": "4e065f90744dba8b",
-      "code": "figure-without-caption",
-      "section_code": "6",
-      "message": "Image on page 153 (index 1) had no paired caption."
-    },
-    {
-      "id": "3546ac5148c0ba3e",
-      "code": "figure-without-caption",
-      "section_code": "8",
-      "message": "Image on page 228 (index 1) had no paired caption."
-    },
-    {
-      "id": "46de62c83f695e0f",
-      "code": "figure-without-caption",
-      "section_code": "8",
-      "message": "Image on page 228 (index 0) had no paired caption."
-    },
-    {
-      "id": "8645435625177360",
-      "code": "figure-without-caption",
-      "section_code": "8",
-      "message": "Image on page 228 (index 4) had no paired caption."
-    },
-    {
-      "id": "cc1701ec8bdeba88",
-      "code": "figure-without-caption",
-      "section_code": "8",
-      "message": "Image on page 226 (index 1) had no paired caption."
-    },
-    {
-      "id": "c1d02905a5ff65eb",
-      "code": "figure-without-caption",
-      "section_code": "9",
-      "message": "Image on page 231 (index 0) had no paired caption."
-    },
-    {
       "id": "92519243b7fb9d60",
       "code": "ocr-leak-in-section-body",
       "section_code": "11.2",
@@ -2548,6 +616,12 @@
       "code": "ocr-leak-in-section-body",
       "section_code": "8.44",
       "message": "OCR-leak run of 9 short tokens in §8.44; elided. Likely a figure that escaped the figure-clipper. Elided text (truncated): ip ff ec Di ef fe Di ef fe"
+    },
+    {
+      "id": "d2238494f2391a5d",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 6 end-page (PDF p161) had no parseable FAA header; recovered `6-12` from PDF p160 (walk-back 1)"
     },
     {
       "id": "520ba718e0f9f888",
@@ -2790,12 +864,6 @@
       "message": "Table on page 318 kept as HTML fallback: interior None cell suggests merged span."
     },
     {
-      "id": "51c453ff25fb2e3a",
-      "code": "table-cell-merge-ambiguity",
-      "section_code": "13",
-      "message": "Table on page 311 kept as HTML fallback: interior None cell suggests merged span."
-    },
-    {
       "id": "d28721976d9f2712",
       "code": "table-cell-merge-ambiguity",
       "section_code": "13",
@@ -2830,12 +898,6 @@
       "code": "table-cell-merge-ambiguity",
       "section_code": "14",
       "message": "Table on page 347 kept as HTML fallback: no body rows after padding strip."
-    },
-    {
-      "id": "8740a48e0c9cac84",
-      "code": "table-cell-merge-ambiguity",
-      "section_code": "14",
-      "message": "Table on page 361 kept as HTML fallback: no body rows after padding strip."
     },
     {
       "id": "8740a48e0c9cac84",
@@ -3060,22 +1122,10 @@
       "message": "Table on page 433 kept as HTML fallback: no body rows after padding strip."
     },
     {
-      "id": "b72271aa529d95f8",
-      "code": "table-cell-merge-ambiguity",
-      "section_code": "17",
-      "message": "Table on page 423 kept as HTML fallback: interior None cell suggests merged span."
-    },
-    {
       "id": "f367c4f4cb054cf3",
       "code": "table-cell-merge-ambiguity",
       "section_code": "17",
       "message": "Table on page 442 kept as HTML fallback: interior None cell suggests merged span."
-    },
-    {
-      "id": "3605503c3df42c3c",
-      "code": "table-cell-merge-ambiguity",
-      "section_code": "2",
-      "message": "Table on page 40 kept as HTML fallback: interior None cell suggests merged span."
     },
     {
       "id": "4c60befa4a3b63bc",
@@ -3228,12 +1278,6 @@
       "message": "Table on page 155 kept as HTML fallback: no body rows after padding strip."
     },
     {
-      "id": "8a4d99b6dc891f47",
-      "code": "table-cell-merge-ambiguity",
-      "section_code": "6",
-      "message": "Table on page 149 kept as HTML fallback: no body rows after padding strip."
-    },
-    {
       "id": "dd40a66afe4ec3dd",
       "code": "table-cell-merge-ambiguity",
       "section_code": "6",
@@ -3274,12 +1318,6 @@
       "code": "table-cell-merge-ambiguity",
       "section_code": "7",
       "message": "Table on page 193 kept as HTML fallback: no body rows after padding strip."
-    },
-    {
-      "id": "3f8c6c4ae8bd8011",
-      "code": "table-cell-merge-ambiguity",
-      "section_code": "7",
-      "message": "Table on page 161 kept as HTML fallback: interior None cell suggests merged span."
     },
     {
       "id": "53b7f6321f5381c5",
@@ -3666,46 +1704,40 @@
       "message": "Table 30 in §11 kept as raw HTML embed: interior None cell suggests merged span."
     },
     {
-      "id": "3335554400b78c75",
+      "id": "6224b913a9cd732b",
       "code": "tablish-block-not-converted",
       "section_code": "12",
-      "message": "Table 5 in §12 kept as raw HTML embed: interior None cell suggests merged span."
+      "message": "Table 4 in §12 kept as raw HTML embed: interior None cell suggests merged span."
     },
     {
-      "id": "82bb7bc5859d8c55",
+      "id": "f1a571ef995a8020",
       "code": "tablish-block-not-converted",
       "section_code": "12",
-      "message": "Table 1 in §12 kept as raw HTML embed: no body rows after padding strip."
+      "message": "Table 1 in §12 kept as raw HTML embed: interior None cell suggests merged span."
     },
     {
-      "id": "b9a4267477f0695e",
+      "id": "fd237ca91883692f",
       "code": "tablish-block-not-converted",
       "section_code": "12",
-      "message": "Table 2 in §12 kept as raw HTML embed: interior None cell suggests merged span."
+      "message": "Table 0 in §12 kept as raw HTML embed: no body rows after padding strip."
     },
     {
-      "id": "4da84821f45e67bb",
+      "id": "3d28101ae469d73d",
       "code": "tablish-block-not-converted",
       "section_code": "13",
-      "message": "Table 4 in §13 kept as raw HTML embed: interior None cell suggests merged span."
+      "message": "Table 4 in §13 kept as raw HTML embed: no body rows after padding strip."
     },
     {
-      "id": "5344d8be2a792899",
+      "id": "6ec9837d3ea43b10",
       "code": "tablish-block-not-converted",
       "section_code": "13",
-      "message": "Table 5 in §13 kept as raw HTML embed: no body rows after padding strip."
+      "message": "Table 2 in §13 kept as raw HTML embed: interior None cell suggests merged span."
     },
     {
-      "id": "b2134ddc630b80ed",
+      "id": "8c8e7ed3f0f059cc",
       "code": "tablish-block-not-converted",
       "section_code": "13",
-      "message": "Table 0 in §13 kept as raw HTML embed: interior None cell suggests merged span."
-    },
-    {
-      "id": "c22d01c1c83497d4",
-      "code": "tablish-block-not-converted",
-      "section_code": "13",
-      "message": "Table 6 in §13 kept as raw HTML embed: interior None cell suggests merged span."
+      "message": "Table 5 in §13 kept as raw HTML embed: interior None cell suggests merged span."
     },
     {
       "id": "ee0c88ccffeff287",
@@ -3786,12 +1818,6 @@
       "message": "Table 7 in §14 kept as raw HTML embed: interior None cell suggests merged span."
     },
     {
-      "id": "bbdcbaebc56b25e1",
-      "code": "tablish-block-not-converted",
-      "section_code": "14",
-      "message": "Table 22 in §14 kept as raw HTML embed: interior None cell suggests merged span."
-    },
-    {
       "id": "c353e6768b692ec3",
       "code": "tablish-block-not-converted",
       "section_code": "14",
@@ -3804,16 +1830,16 @@
       "message": "Table 9 in §14 kept as raw HTML embed: no body rows after padding strip."
     },
     {
-      "id": "d18b613b0a79d23e",
-      "code": "tablish-block-not-converted",
-      "section_code": "14",
-      "message": "Table 21 in §14 kept as raw HTML embed: no body rows after padding strip."
-    },
-    {
       "id": "ec8875c310b5dc90",
       "code": "tablish-block-not-converted",
       "section_code": "14",
       "message": "Table 8 in §14 kept as raw HTML embed: no body rows after padding strip."
+    },
+    {
+      "id": "f1c67857115dcd59",
+      "code": "tablish-block-not-converted",
+      "section_code": "14",
+      "message": "Table 21 in §14 kept as raw HTML embed: interior None cell suggests merged span."
     },
     {
       "id": "fabe562526c52fe3",
@@ -3936,40 +1962,28 @@
       "message": "Table 1 in §16 kept as raw HTML embed: no body rows after padding strip."
     },
     {
-      "id": "32784861f95437e6",
+      "id": "3b0ced10a23d1e50",
       "code": "tablish-block-not-converted",
       "section_code": "17",
-      "message": "Table 7 in §17 kept as raw HTML embed: interior None cell suggests merged span."
+      "message": "Table 6 in §17 kept as raw HTML embed: interior None cell suggests merged span."
     },
     {
-      "id": "3c31ccc3a83db2f1",
+      "id": "8c8b7283fd93a114",
       "code": "tablish-block-not-converted",
       "section_code": "17",
-      "message": "Table 0 in §17 kept as raw HTML embed: interior None cell suggests merged span."
+      "message": "Table 1 in §17 kept as raw HTML embed: no body rows after padding strip."
     },
     {
-      "id": "527146ab5f852fde",
+      "id": "a7dfe5ee84b2181d",
       "code": "tablish-block-not-converted",
       "section_code": "17",
-      "message": "Table 4 in §17 kept as raw HTML embed: interior None cell suggests merged span."
+      "message": "Table 5 in §17 kept as raw HTML embed: no body rows after padding strip."
     },
     {
-      "id": "626ee82855642c19",
+      "id": "bd57bb635e37b2ee",
       "code": "tablish-block-not-converted",
       "section_code": "17",
-      "message": "Table 2 in §17 kept as raw HTML embed: no body rows after padding strip."
-    },
-    {
-      "id": "785451c7855abee2",
-      "code": "tablish-block-not-converted",
-      "section_code": "17",
-      "message": "Table 8 in §17 kept as raw HTML embed: no body rows after padding strip."
-    },
-    {
-      "id": "900f62f9e89b11df",
-      "code": "tablish-block-not-converted",
-      "section_code": "17",
-      "message": "Table 6 in §17 kept as raw HTML embed: no body rows after padding strip."
+      "message": "Table 7 in §17 kept as raw HTML embed: no body rows after padding strip."
     },
     {
       "id": "e56004ff54cb59c8",
@@ -3978,10 +1992,10 @@
       "message": "Table 3 in §17 kept as raw HTML embed: interior None cell suggests merged span."
     },
     {
-      "id": "485bcd336013636c",
+      "id": "ed07a9607f9f1008",
       "code": "tablish-block-not-converted",
-      "section_code": "2",
-      "message": "Table 2 in §2 kept as raw HTML embed: interior None cell suggests merged span."
+      "section_code": "17",
+      "message": "Table 2 in §17 kept as raw HTML embed: interior None cell suggests merged span."
     },
     {
       "id": "5f49adfe1b8cfcb6",
@@ -4110,10 +2124,16 @@
       "message": "Table 15 in §5 kept as raw HTML embed: interior None cell suggests merged span."
     },
     {
-      "id": "60303eb4c867d31e",
+      "id": "0cd670980ddcaa49",
       "code": "tablish-block-not-converted",
       "section_code": "6",
-      "message": "Table 1 in §6 kept as raw HTML embed: interior None cell suggests merged span."
+      "message": "Table 1 in §6 kept as raw HTML embed: no body rows after padding strip."
+    },
+    {
+      "id": "4fbe771220596aea",
+      "code": "tablish-block-not-converted",
+      "section_code": "6",
+      "message": "Table 0 in §6 kept as raw HTML embed: interior None cell suggests merged span."
     },
     {
       "id": "82c3c6807452bae3",
@@ -4122,22 +2142,10 @@
       "message": "Table 4 in §6 kept as raw HTML embed: no body rows after padding strip."
     },
     {
-      "id": "8506e875b38bcb3d",
-      "code": "tablish-block-not-converted",
-      "section_code": "6",
-      "message": "Table 0 in §6 kept as raw HTML embed: no body rows after padding strip."
-    },
-    {
       "id": "870c256f46c15b40",
       "code": "tablish-block-not-converted",
       "section_code": "6",
       "message": "Table 5 in §6 kept as raw HTML embed: no body rows after padding strip."
-    },
-    {
-      "id": "cba2dab29a1d086c",
-      "code": "tablish-block-not-converted",
-      "section_code": "6",
-      "message": "Table 6 in §6 kept as raw HTML embed: no body rows after padding strip."
     },
     {
       "id": "e87077d70d3e0fca",
@@ -4152,40 +2160,40 @@
       "message": "Table 3 in §6 kept as raw HTML embed: no body rows after padding strip."
     },
     {
-      "id": "0283c71c7a3ae502",
+      "id": "0717474e62c5c6c5",
       "code": "tablish-block-not-converted",
       "section_code": "7",
-      "message": "Table 18 in §7 kept as raw HTML embed: interior None cell suggests merged span."
+      "message": "Table 2 in §7 kept as raw HTML embed: no body rows after padding strip."
     },
     {
-      "id": "343a86e9d5669316",
+      "id": "07a0a6bbf4d23c68",
       "code": "tablish-block-not-converted",
       "section_code": "7",
-      "message": "Table 8 in §7 kept as raw HTML embed: interior None cell suggests merged span."
+      "message": "Table 5 in §7 kept as raw HTML embed: interior None cell suggests merged span."
     },
     {
-      "id": "470ee0916e4dcb09",
+      "id": "1a8f47b151e8d27a",
       "code": "tablish-block-not-converted",
       "section_code": "7",
-      "message": "Table 16 in §7 kept as raw HTML embed: interior None cell suggests merged span."
+      "message": "Table 1 in §7 kept as raw HTML embed: interior None cell suggests merged span."
     },
     {
-      "id": "598360ddb99b767f",
+      "id": "2171430a8215f8b6",
       "code": "tablish-block-not-converted",
       "section_code": "7",
-      "message": "Table 20 in §7 kept as raw HTML embed: no body rows after padding strip."
+      "message": "Table 17 in §7 kept as raw HTML embed: interior None cell suggests merged span."
     },
     {
-      "id": "5b8ce76df7d5ee43",
+      "id": "2f7a3c293c8d1eb8",
       "code": "tablish-block-not-converted",
       "section_code": "7",
-      "message": "Table 2 in §7 kept as raw HTML embed: interior None cell suggests merged span."
+      "message": "Table 0 in §7 kept as raw HTML embed: no body rows after padding strip."
     },
     {
-      "id": "62be9238aa026e6b",
+      "id": "35c998c3ecd477ae",
       "code": "tablish-block-not-converted",
       "section_code": "7",
-      "message": "Table 0 in §7 kept as raw HTML embed: interior None cell suggests merged span."
+      "message": "Table 8 in §7 kept as raw HTML embed: no body rows after padding strip."
     },
     {
       "id": "647a7aa13b06e8fd",
@@ -4212,6 +2220,12 @@
       "message": "Table 19 in §7 kept as raw HTML embed: no body rows after padding strip."
     },
     {
+      "id": "907e7ad7a801fb61",
+      "code": "tablish-block-not-converted",
+      "section_code": "7",
+      "message": "Table 18 in §7 kept as raw HTML embed: no body rows after padding strip."
+    },
+    {
       "id": "93397c4387a6f366",
       "code": "tablish-block-not-converted",
       "section_code": "7",
@@ -4224,28 +2238,16 @@
       "message": "Table 3 in §7 kept as raw HTML embed: no body rows after padding strip."
     },
     {
-      "id": "9aeecc523344b675",
+      "id": "bae57536bc51a177",
       "code": "tablish-block-not-converted",
       "section_code": "7",
-      "message": "Table 4 in §7 kept as raw HTML embed: no body rows after padding strip."
+      "message": "Table 12 in §7 kept as raw HTML embed: no body rows after padding strip."
     },
     {
-      "id": "b1b75b953355c97d",
+      "id": "e2fd7f0da308b92e",
       "code": "tablish-block-not-converted",
       "section_code": "7",
-      "message": "Table 1 in §7 kept as raw HTML embed: no body rows after padding strip."
-    },
-    {
-      "id": "d615aefa701d7c95",
-      "code": "tablish-block-not-converted",
-      "section_code": "7",
-      "message": "Table 11 in §7 kept as raw HTML embed: no body rows after padding strip."
-    },
-    {
-      "id": "e32cf469d94dbba3",
-      "code": "tablish-block-not-converted",
-      "section_code": "7",
-      "message": "Table 14 in §7 kept as raw HTML embed: no body rows after padding strip."
+      "message": "Table 15 in §7 kept as raw HTML embed: interior None cell suggests merged span."
     },
     {
       "id": "f7a069fb46755f97",
@@ -6102,6 +4104,12 @@
       "message": "toc-verify: chapter 12 title='Hail' (anchor 12-25, PDF p309): no body heading >= 0.85 similarity"
     },
     {
+      "id": "6d4acd788f3bf8fb",
+      "code": "toc-verify",
+      "section_code": null,
+      "message": "toc-verify: chapter 7 title='Powerplant' (anchor 7-1, PDF p170): no body heading >= 0.85 similarity"
+    },
+    {
       "id": "6d89a6d3ff991672",
       "code": "toc-verify",
       "section_code": null,
@@ -6610,6 +4618,12 @@
       "code": "toc-verify",
       "section_code": null,
       "message": "toc-verify: chapter 1 title='Primary Locations of the FAA' (anchor 1-8, PDF p23): no body heading >= 0.85 similarity"
+    },
+    {
+      "id": "8a8aa987f4791b6b",
+      "code": "toc-verify",
+      "section_code": null,
+      "message": "toc-verify: chapter 7 title='Introduction' (anchor 7-1, PDF p170): no body heading >= 0.85 similarity"
     },
     {
       "id": "8a99b2cea3b252b1",

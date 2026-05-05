@@ -15,3 +15,6 @@ Operating in and out of a towered airport, as well as in a good
 portion of the airspace system, requires that an aircraft have twoway radio communication capability. For this reason, a pilot
 should be knowledgeable of radio station license requirements
 and radio communications equipment and procedures.
+
+
+![Figure 14-26. Holding position marking on a taxiway.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-27-holding-position-marking-on-a-taxiway.png)

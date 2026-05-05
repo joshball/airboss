@@ -18,3 +18,6 @@ off-course NAVAID facilities that determine a fix. When the
 MRA at the fix is higher than the MEA, an MRA is established
 for the fix and is the lowest altitude at which an intersection
 can be determined.
+
+
+![Figure 2-43. Changeover point effect on long airway or route segment.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-37-changeover-point-effect-on-long-airway-or-route-.png)

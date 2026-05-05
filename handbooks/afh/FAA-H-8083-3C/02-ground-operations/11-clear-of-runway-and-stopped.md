@@ -21,3 +21,6 @@ used. Some of the items may include:
 5. Trim—reset to neutral or takeoff position.
 6. Lights—may be switched off if not needed, such as strobe lights.
 7. Avionics—frequencies and transponder set for arrival airport taxi procedures.
+
+
+![Figure 2-11. A jet fuel filler nozzle is flared at the end to prevent an inadvertent insertion into an AVGAS tank.](/handbooks/afh/FAA-H-8083-3C/figures/fig-2-10-a-jet-fuel-filler-nozzle-is-flared-at-the-end-to.png)

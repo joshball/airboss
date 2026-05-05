@@ -657,53 +657,55 @@ KALO
 30.10
 Figure 25-25. RTMA Surface Temperature and Altimeter Setting Example
 
-![Figure 25-1. Weather Observation Sources](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-1-00-weather-observation-sources.png)
+![Figure 25-1. Weather Observation Sources](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-00-weather-observation-sources.png)
 
-![Figure 25-2. Analysis Procedure Step 1: Determine the Optimal Contour Interval and Values to be Analyzed](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-2-01-analysis-procedure-step-1-determine-the-optimal-.png)
+![Figure 25-2. Analysis Procedure Step 1: Determine the Optimal Contour Interval and Values to be Analyzed](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-01-analysis-procedure-step-1-determine-the-optimal-.png)
 
-![Figure 25-3. Analysis Procedure Step 2: Draw the Isopleths and Extrema](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-2-01-analysis-procedure-step-1-determine-the-optimal-.png)
+![Figure 25-3. Analysis Procedure Step 2: Draw the Isopleths and Extrema](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-01-analysis-procedure-step-1-determine-the-optimal-.png)
 
-![For surface analysis charts, positions and types of fronts are shown by symbols in Figure 25-4. The symbols  on the front indicate the type of front and point in the direction toward which the front is moving. Two short lines across a front indicate a change in front type.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-03-the-symbols-on-the-front-indicate-the-type-of-fr.png)
+![Figure 25-4. Analysis Procedure Step 3: Interpret Significant Weather Features](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-03-analysis-procedure-step-3-interpret-significant-.png)
 
-![Figure 25-4. Analysis Procedure Step 3: Interpret Significant Weather Features](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-00-analysis-procedure-step-3-interpret-significant-.png)
+![Figure 25-5. Schematic of Surface Chart Pressure Patterns](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-04-schematic-of-surface-chart-pressure-patterns.png)
 
-![Figure 25-5. Schematic of Surface Chart Pressure Patterns](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-01-schematic-of-surface-chart-pressure-patterns.png)
+![Figure 25-6. NWS Surface Analysis Chart Symbols](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-05-nws-surface-analysis-chart-symbols.png)
 
-![Figure 25-6. NWS Surface Analysis Chart Symbols](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-02-nws-surface-analysis-chart-symbols.png)
+![Figure 25-7. Example of a Surface Chart with Surface Observations](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-06-example-of-a-surface-chart-with-surface-observat.png)
 
-![Figure 25-7. Example of a Surface Chart with Surface Observations](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-03-example-of-a-surface-chart-with-surface-observat.png)
+![Figure 25-8. Surface Analysis with Radar Composite Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-07-surface-analysis-with-radar-composite-example.png)
 
-![Figure 25-8. Surface Analysis with Radar Composite Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-04-surface-analysis-with-radar-composite-example.png)
+![Figure 25-9. Surface Analysis with Satellite Composite Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-08-surface-analysis-with-satellite-composite-exampl.png)
 
-![Figure 25-9. Surface Analysis with Satellite Composite Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-05-surface-analysis-with-satellite-composite-exampl.png)
+![Figure 25-10. NWS Surface Analysis Chart Station Plot Model](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-09-nws-surface-analysis-chart-station-plot-model.png)
 
-![Figure 25-10. NWS Surface Analysis Chart Station Plot Model](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-06-nws-surface-analysis-chart-station-plot-model.png)
+![Figure 25-11. NWS Surface Analysis Chart Ship/Buoy Plot Model](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-10-nws-surface-analysis-chart-ship-buoy-plot-model.png)
 
-![Figure 25-11. NWS Surface Analysis Chart Ship/Buoy Plot Model](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-07-nws-surface-analysis-chart-ship-buoy-plot-model.png)
+![Figure 25-12. NWS Surface Analysis Chart for Aviation Interests Station Plot Model](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-11-nws-surface-analysis-chart-for-aviation-interest.png)
 
-![Figure 25-12. NWS Surface Analysis Chart for Aviation Interests Station Plot Model](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-08-nws-surface-analysis-chart-for-aviation-interest.png)
+![Figure 25-13. NWS Surface Analysis Chart Common Weather Symbols](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-12-nws-surface-analysis-chart-common-weather-symbol.png)
 
-![Figure 25-13. NWS Surface Analysis Chart Common Weather Symbols](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-09-nws-surface-analysis-chart-common-weather-symbol.png)
+![Figure 25-14. NWS Surface Analysis Chart Sample Wind Symbols](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-13-nws-surface-analysis-chart-sample-wind-symbols.png)
 
-![Figure 25-14. NWS Surface Analysis Chart Sample Wind Symbols](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-10-nws-surface-analysis-chart-sample-wind-symbols.png)
+![Figure 25-15. NWS Surface Analysis Chart Pressure Trends](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-14-nws-surface-analysis-chart-pressure-trends.png)
 
-![Figure 25-15. NWS Surface Analysis Chart Pressure Trends](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-11-nws-surface-analysis-chart-pressure-trends.png)
+![Figure 25-16. NWS Surface Analysis Chart Sky Cover Symbols](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-15-nws-surface-analysis-chart-sky-cover-symbols.png)
 
-![Figure 25-16. NWS Surface Analysis Chart Sky Cover Symbols](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-12-nws-surface-analysis-chart-sky-cover-symbols.png)
+![Figure 25-17. Unified Surface Analysis Chart Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-16-unified-surface-analysis-chart-example.png)
 
-![Figure 25-17. Unified Surface Analysis Chart Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-5-00-unified-surface-analysis-chart-example.png)
+![Figure 25-18. Unified Surface Analysis Chart Example (Enlarged Area)](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-17-unified-surface-analysis-chart-example-enlarged-.png)
 
-![Figure 25-18. Unified Surface Analysis Chart Example (Enlarged Area)](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-5-01-unified-surface-analysis-chart-example-enlarged-.png)
+![Figure 25-19. Unified Surface Analysis Chart Example with Fixed Area Coverage over Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-18-unified-surface-analysis-chart-example-with-fixe.png)
 
-![Figure 25-19. Unified Surface Analysis Chart Example with Fixed Area Coverage over Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-1-00-schematic-of-500-mb-constant-pressure-chart.png)
+![Figure 25-20. Schematic of 500 mb Constant-Pressure Chart](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-19-schematic-of-500-mb-constant-pressure-chart.png)
 
-![Figure 25-20. Schematic of 500 mb Constant-Pressure Chart](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-2-00-example-of-a-500-mb-constant-pressure-chart.png)
+![Figure 25-21. Example of a 500 mb Constant-Pressure Chart](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-20-example-of-a-500-mb-constant-pressure-chart.png)
 
-![Figure 25-21. Example of a 500 mb Constant-Pressure Chart](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-2-01-skew-t-diagram-example.png)
+![Figure 25-22. Skew-T Diagram Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-21-skew-t-diagram-example.png)
 
-![Figure 25-22. Skew-T Diagram Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-2-02-skew-t-diagram-multiple-freezing-level-example.png)
+![Figure 25-23. Skew-T Diagram—Multiple Freezing Level Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-22-skew-t-diagram-multiple-freezing-level-example.png)
 
-![Figure 25-23. Skew-T Diagram—Multiple Freezing Level Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-2-03-skew-t-diagram-cloud-top-example.png)
+![Figure 25-24. Skew-T Diagram—Cloud Top Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-23-skew-t-diagram-cloud-top-example.png)
+
+![Figure 25-25. RTMA Surface Temperature and Altimeter Setting Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-24-rtma-surface-temperature-and-altimeter-setting-e.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-25-00-common-isopleths-isopleth-variable-definition-is.html">
 <table><caption>Table 25-1. Common Isopleths 

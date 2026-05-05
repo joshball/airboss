@@ -18,3 +18,6 @@ This blackout training simulates an electrical or instrument light failure. Pilo
 NAVAIDs during the training. In spite of fewer references or checkpoints, night cross-country flights do not present particular
 problems if pre-planning is adequate. Just as during the day, the pilot continuously monitors position, time estimates, fuel consumed,
 and uses NAVAIDs, if available, to assist in monitoring en route progress.
+
+
+![Figure 11-7. VASI.](/handbooks/afh/FAA-H-8083-3C/figures/fig-11-06-vasi.png)

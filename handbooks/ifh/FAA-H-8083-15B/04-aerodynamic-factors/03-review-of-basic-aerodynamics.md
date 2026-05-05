@@ -26,3 +26,6 @@ the relative wind, or flightpath and the chord of the airfoil.
 [Figure 4-2]
 Flightpath is the course or track along which the aircraft is
 flying or is intended to be flown.
+
+
+![Figure 4-3. The four forces and three axes of rotation.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-4-02-the-four-forces-and-three-axes-of-rotation.png)

@@ -23,3 +23,6 @@ energy from the sun, recycles water and other chemicals, and
 works with the electrical and magnetic forces to provide a
 moderate climate. The atmosphere also protects life on Earth
 from high energy radiation and the frigid vacuum of space.
+
+
+![Figure 12-2. Layers of the atmosphere.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-01-layers-of-the-atmosphere.png)

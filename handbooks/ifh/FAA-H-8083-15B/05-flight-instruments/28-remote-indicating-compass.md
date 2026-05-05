@@ -61,3 +61,6 @@ RMI in Figure 5-26. The compass card is driven by signals
 from the flux valve, and the two pointers are driven by an
 automatic direction finder (ADF) and a very high frequency
 omnidirectional range (VOR).
+
+
+![Figure 5-28. Single-engine instrument vacuum system using a steel-vane, wet-type vacuum pump.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-28-single-engine-instrument-vacuum-system-using-a-s.png)

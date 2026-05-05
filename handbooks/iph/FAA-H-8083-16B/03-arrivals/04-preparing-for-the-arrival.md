@@ -44,3 +44,6 @@ fixes to the IAF. If no route is depicted, you should have
 a predetermined plan of action to fly from the STAR
 terminating fix to the IAF in the event of a communication
 failure.
+
+
+![Figure 3-4. VNAV geometric path.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-03-vnav-geometric-path.png)

@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Chapter Summary
+
+![Figure 7-8. Eights across a road.](/handbooks/afh/FAA-H-8083-3C/figures/fig-7-07-eights-across-a-road.png)

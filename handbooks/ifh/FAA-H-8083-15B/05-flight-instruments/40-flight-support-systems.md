@@ -11,3 +11,6 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 # Flight Support Systems
 
 Flight Support Systems
+
+
+![Figure 5-40. Components of a typical FDS.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-39-components-of-a-typical-fds.png)

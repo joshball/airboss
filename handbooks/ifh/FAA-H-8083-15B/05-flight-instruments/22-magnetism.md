@@ -20,3 +20,6 @@ any magnet that is free to rotate aligns with them, and an
 electrical current is induced into any conductor that cuts
 across them. Most direction indicators installed in aircraft
 make use of one of these two characteristics.
+
+
+![Figure 5-22. Vertical card magnetic compass.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-21-vertical-card-magnetic-compass.png)

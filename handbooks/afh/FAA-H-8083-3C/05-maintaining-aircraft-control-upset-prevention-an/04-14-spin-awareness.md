@@ -35,3 +35,6 @@ spin. Proficiency in avoiding conditions that could lead to an accidental stall/
 to recover to normal flight, is essential. An airplane needs to be stalled and yawed in order to enter a spin; therefore, continued
 practice in stall recognition and recovery helps the pilot develop a more instinctive and prompt reaction in recognizing an
 approaching spin. Upon recognition of a spin or approaching spin, the pilot should immediately execute spin recovery procedures.
+
+
+![Figure 5-15. Spin—an aggravated stall and autorotation.](/handbooks/afh/FAA-H-8083-3C/figures/fig-5-14-spin-an-aggravated-stall-and-autorotation.png)

@@ -10,3 +10,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Common Cross-Check Errors
+
+![Figure 6-17. Radial cross-check.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-17-radial-cross-check.png)

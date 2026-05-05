@@ -21,3 +21,6 @@ There are two usual methods of accomplishing a crosswind approach and landing—
 Although the crab method may be easier for the pilot to maintain during final approach, it requires judgment and precise timing when
 removing the crab immediately prior to touchdown. The wing-low method is recommended in most cases, although a combination of
 both methods may be used. While current testing standards allow for either method, pilots should learn to do both.
+
+
+![Figure 9-6. Runway shape during stabilized approach.](/handbooks/afh/FAA-H-8083-3C/figures/fig-9-05-runway-shape-during-stabilized-approach.png)

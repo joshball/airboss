@@ -274,3 +274,6 @@ analyze the flight as objectively as you can. Mistakes
 and judgment errors are inevitable; the most important
 thing is for you to recognize, analyze, and learn from
 them before your next flight.
+
+
+![Figure 2-19. Balancing workloads can be a difficult task.](/handbooks/phak/FAA-H-8083-25C/figures/fig-2-18-balancing-workloads-can-be-a-difficult-task.png)

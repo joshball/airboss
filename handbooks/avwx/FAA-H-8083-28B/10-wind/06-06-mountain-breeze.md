@@ -21,5 +21,3 @@ A mountain breeze (see Figure 10-21) is the nightly downslope winds commonly enc
 valleys. Air in contact with the sloping terrain cools faster than air above the valley. Pressure over the
 sloping terrain is higher than over the valleys (along a horizontal reference). Cooler air over the sloping
 terrain is denser than warmer air over the valley.
-
-![Figure 10-20. Mountain-Plains Wind System](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-6-00-mountain-plains-wind-system.png)

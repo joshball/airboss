@@ -57,3 +57,6 @@ wings using ailerons, coordinate with rudder, and adjust power as necessary. Sta
 aggressive than unaccelerated +1G stalls. Because they occur at higher-than-normal airspeeds or may occur at lower-than-anticipated
 pitch attitudes, they can surprise an inexperienced pilot. Since an accelerated stall may put the airplane in an unexpected attitude.
 Failure to execute an immediate recovery may result in a spin or other departure from controlled flight.
+
+
+![Figure 5-13. Secondary stall.](/handbooks/afh/FAA-H-8083-3C/figures/fig-5-12-secondary-stall.png)

@@ -159,3 +159,6 @@ will lower pitch to best glide speed, no turns will be made prior to (insert app
 and apply appropriate braking, avoiding hazards on the ground as much as possible. I will only consider turning back to
 runway __ if I have reached at least __ feet AGL, which would be __ feet MSL. If time permits, fuel, ignition, and electrical
 systems will be switched off.”
+
+
+![Figure 2-7. Example of rivet heads where black oxide film has formed due to the rivet becoming loose in its hole.](/handbooks/afh/FAA-H-8083-3C/figures/fig-2-06-example-of-rivet-heads-where-black-oxide-film-ha.png)

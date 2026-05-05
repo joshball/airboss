@@ -32,3 +32,6 @@ unnecessary head movements may help alleviate some of the
 discomfort. Although medications like Dramamine can prevent
 airsickness in passengers, they are not recommended while
 flying since they can cause drowsiness and other problems.
+
+
+![Figure 17-11. To avoid the bends, scuba divers must not fly for  specific time periods following dives.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-09-to-avoid-the-bends-scuba-divers-must-not-fly-for.png)

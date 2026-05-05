@@ -34,5 +34,3 @@ decreasing the ability of the airfoil to create lift. The actual weight of ice o
 when compared to the airflow disruption it causes. As power is added to compensate for the additional drag
 and the nose is lifted to maintain altitude, the angle of attack is increased. This allows the underside of the
 wings and fuselage to accumulate additional ice.
-
-![Figure 20-2. Icing with Mountains](/handbooks/avwx/FAA-H-8083-28B/figures/fig-20-3-10-00-icing-with-mountains.png)

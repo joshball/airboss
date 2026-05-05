@@ -18,3 +18,6 @@ convert minutes to hours, divide by 60 (60 minutes = 1 hour).
 Thus, 30 minutes is 30/60 = 0.5 hour. To convert hours to
 minutes, multiply by 60. Thus, 0.75 hour equals 0.75 × 60
 = 45 minutes.
+
+
+![Figure 16-17. Establishing a wind correction angle that counteracts wind drift and maintains the desired course.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-16-establishing-a-wind-correction-angle-that-counte.png)

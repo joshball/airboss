@@ -95,3 +95,6 @@ Groundspeed (GS)—the actual speed of the airplane
 over the ground. It is TAS adjusted for wind. GS
 decreases with a headwind and increases with a
 tailwind.
+
+
+![Figure 8-5. Vertical speed indicator (VSI).](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-04-vertical-speed-indicator-vsi.png)

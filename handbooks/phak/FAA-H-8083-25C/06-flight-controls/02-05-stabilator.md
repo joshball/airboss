@@ -42,3 +42,8 @@ overcontrolling. In addition, a balance weight is usually
 incorporated in front of the main spar. The balance weight
 may project into the empennage or may be incorporated on
 the forward portion of the stabilator tips. [Figure 6-13]
+
+
+![Figure 6-13. The stabilator is a one-piece horizontal tail surface  that pivots up and down about a central hinge point.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-10-the-stabilator-is-a-one-piece-horizontal-tail-su.png)
+
+![Figure 6-14. The Piaggio P180 includes a variable-sweep canard  design that provides longitudinal stability about the lateral axis.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-11-the-piaggio-p180-includes-a-variable-sweep-canar.png)

@@ -26,3 +26,6 @@ the lowest frequencies in the radio range (perhaps as low as
 there is a ground wave component to frequencies above this,
 up to 30 MHz, the ground wave at these higher frequencies
 loses strength over very short distances.
+
+
+![Figure 9-4. Relative bearing (RB) on a movable-card indicator. By  placing the aircraft’s magnetic heading (MH) of 045° under the top index, the RB of 135° to the right is also the magnetic bearing (no wind conditions), which takes you to the transmitting station.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-03-relative-bearing-rb-on-a-movable-card-indicator-.png)

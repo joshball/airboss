@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Introduction
+
+![Figure 11-1. Standard sea level pressure.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-00-standard-sea-level-pressure.png)

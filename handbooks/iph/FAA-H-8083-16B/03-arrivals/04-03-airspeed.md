@@ -60,3 +60,6 @@ expected to comply with the 200 KIAS limit specified in 14
 CFR Part 91, § 91.117(c). (See 14 CFR Part 91, § 91.117(c)
 and 91.703.) Approach clearances cancel any previously
 assigned speed adjustment.
+
+
+![Figure 3-17. Altitude restrictions.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-16-altitude-restrictions.png)

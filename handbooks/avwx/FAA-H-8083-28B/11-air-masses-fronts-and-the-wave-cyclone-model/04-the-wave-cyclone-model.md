@@ -37,13 +37,3 @@ As the cold front continues advancing on the warm front, the occlusion increases
 the supply of warm moist air (see Figure 11-13). This causes the low to gradually dissipate.
 
 Figure 11-13. Wave Cyclone Model—Stage 5
-
-![Figure 11-9. Wave Cyclone Model—Stage 1](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-4-00-wave-cyclone-model-stage-1.png)
-
-![Figure 11-10. Wave Cyclone Model—Stage 2](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-4-01-wave-cyclone-model-stage-2.png)
-
-![Figure 11-11. Wave Cyclone Model—Stage 3](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-4-02-wave-cyclone-model-stage-3.png)
-
-![Figure 11-12. Wave Cyclone Model—Stage 4](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-4-03-wave-cyclone-model-stage-4.png)
-
-![Figure 11-13. Wave Cyclone Model—Stage 5](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-4-04-wave-cyclone-model-stage-5.png)

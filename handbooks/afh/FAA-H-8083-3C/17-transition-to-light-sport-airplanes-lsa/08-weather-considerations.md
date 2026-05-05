@@ -27,3 +27,6 @@ carefully manage all weather-related risks. For example, some consideration shou
 terrain boundaries, such as grass or water to hard surfaces. Differential heating can cause lighter weight airplanes to experience
 sinking and lifting to a greater degree than heavier airplanes. Careful planning, knowledge, experience, and an understanding of the
 flying environment assists in mitigating weather-related risks.
+
+
+![Figure 17-8. Example of wind limitations that an LSA may have.](/handbooks/afh/FAA-H-8083-3C/figures/fig-17-07-example-of-wind-limitations-that-an-lsa-may-have.png)

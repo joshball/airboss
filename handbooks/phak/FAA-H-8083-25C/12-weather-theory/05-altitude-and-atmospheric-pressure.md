@@ -69,3 +69,6 @@ to clear
 2,960
 0 °C
 Figure 12-9. Takeoff distances increase with increased altitude.
+
+
+![Figure 12-5. Three-cell circulation pattern due to the rotation of  the Earth.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-03-three-cell-circulation-pattern-due-to-the-rotati.png)

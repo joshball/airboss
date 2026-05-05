@@ -38,3 +38,6 @@ The matching of the aerodynamic configuration with the
 powerplant is accomplished by the manufacturer to provide
 maximum performance at the specific design condition (e.g.,
 range, endurance, and climb).
+
+
+![Figure 11-7. Maximum angle of climb (AOC) versus maximum rate  of climb (ROC).](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-07-maximum-angle-of-climb-aoc-versus-maximum-rate-o.png)

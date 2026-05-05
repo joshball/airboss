@@ -280,48 +280,46 @@ See Chapter 16, Mountain Weather, for information on adverse mountain winds.
 10.7.7 Atmospheric Disturbances in Mountainous Areas
 See Chapter 19, Turbulence, for information on mountain-related turbulence.
 
-![directly across the contours/isobars. See Figure 10-1.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-1-00-see-figure-10-1.png)
+![Figure 10-1. Direction of Pressure Gradient Force](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-00-direction-of-pressure-gradient-force.png)
 
-![Figure 10-1. Direction of Pressure Gradient Force](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-01-direction-of-pressure-gradient-force.png)
+![Figure 10-2. Magnitude of Pressure Gradient Force](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-01-magnitude-of-pressure-gradient-force.png)
 
-![Figure 10-2. Magnitude of Pressure Gradient Force](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-2-00-magnitude-of-pressure-gradient-force.png)
+![Figure 10-3. Illustration of Coriolis Force](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-02-illustration-of-coriolis-force.png)
 
-![Figure 10-3. Illustration of Coriolis Force](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-2-01-illustration-of-coriolis-force.png)
+![Figure 10-4. Coriolis Force Variations Across the Earth](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-03-coriolis-force-variations-across-the-earth.png)
 
-![Figure 10-4. Coriolis Force Variations Across the Earth](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-2-02-coriolis-force-variations-across-the-earth.png)
+![Figure 10-5. Coriolis Force Magnitude Variations with Wind Speed](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-04-coriolis-force-magnitude-variations-with-wind-sp.png)
 
-![Figure 10-5. Coriolis Force Magnitude Variations with Wind Speed](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-3-00-coriolis-force-magnitude-variations-with-wind-sp.png)
+![Figure 10-6. Friction Force Magnitude Variations with Terrain Roughness](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-05-friction-force-magnitude-variations-with-terrain.png)
 
-![Figure 10-6. Friction Force Magnitude Variations with Terrain Roughness](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-3-01-friction-force-magnitude-variations-with-terrain.png)
+![Figure 10-7. Friction Force Magnitude Variations with Wind Speed](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-06-friction-force-magnitude-variations-with-wind-sp.png)
 
-![Figure 10-7. Friction Force Magnitude Variations with Wind Speed](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-3-02-friction-force-magnitude-variations-with-wind-sp.png)
+![Figure 10-8. Geostrophic Wind](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-07-geostrophic-wind.png)
 
-![in Figure 10-9. This is called the geostrophic wind.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-4-00-this-is-called-the-geostrophic-wind.png)
+![Figure 10-9. Upper Air Wind Flow](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-08-upper-air-wind-flow.png)
 
-![Figure 10-8. Geostrophic Wind](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-5-00-upper-air-wind-flow.png)
+![Figure 10-10. Surface Wind Forces](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-09-surface-wind-forces.png)
 
-![Figure 10-9. Upper Air Wind Flow](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-5-01-untitled.png)
+![Figure 10-11. Surface Wind Flow](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-10-surface-wind-flow.png)
 
-![balance, as shown in Figure 10-10.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-00-surface-wind-flow.png)
+![Figure 10-12. Local Wind Circulation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-11-local-wind-circulation.png)
 
-![Figure 10-10. Surface Wind Forces](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-01-local-wind-circulation.png)
+![Figure 10-13. Sea Breeze](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-12-sea-breeze.png)
 
-![Figure 10-11. Surface Wind Flow](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-1-00-sea-breeze.png)
+![Figure 10-14. Sea Breeze Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-13-sea-breeze-front.png)
 
-![Figure 10-13. Sea Breeze](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-1-01-sea-breeze-front.png)
+![Figure 10-15. Effects of Coastline Shape on a Sea Breeze](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-14-effects-of-coastline-shape-on-a-sea-breeze.png)
 
-![Figure 10-14. Sea Breeze Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-2-00-effects-of-coastline-shape-on-a-sea-breeze.png)
+![Figure 10-16. Land Breeze](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-15-land-breeze.png)
 
-![Figure 10-15. Effects of Coastline Shape on a Sea Breeze](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-3-00-land-breeze.png)
+![Figure 10-17. Lake Breeze](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-16-lake-breeze.png)
 
-![Figure 10-16. Land Breeze](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-3-01-lake-breeze.png)
+![Figure 10-18. Sea Breeze/Lake Breeze Example [National Aeronautics and Space Administration (NASA)]](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-17-sea-breeze-lake-breeze-example-national-aeronaut.png)
 
-![Figure 10-17. Lake Breeze](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-3-02-sea-breeze-lake-breeze-example-national-aeronaut.png)
+![Figure 10-19. Valley Breeze](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-18-valley-breeze.png)
 
-![Figure 10-18. Sea Breeze/Lake Breeze Example [National Aeronautics and Space Administration (NASA)]](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-4-00-valley-breeze.png)
+![Figure 10-20. Mountain-Plains Wind System](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-19-mountain-plains-wind-system.png)
 
-![Figure 10-19. Valley Breeze](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-6-00-mountain-plains-wind-system.png)
+![Figure 10-21. Mountain Breeze](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-20-mountain-breeze.png)
 
-![Figure 10-20. Mountain-Plains Wind System](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-7-1-00-mountain-breeze.png)
-
-![Figure 10-21. Mountain Breeze](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-7-2-00-crosswind-climb-flightpath.png)
+![Figure 10-22. Crosswind Climb Flightpath](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-21-crosswind-climb-flightpath.png)

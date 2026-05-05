@@ -31,3 +31,6 @@ per ATC clearance. All checklists should be completed while
 the aircraft is stopped. There is no place for non-essential
 chatter or other activities while maintaining vigilance during
 taxi. [Figure 14-48]
+
+
+![Figure 14-47. Vortex avoidance procedures.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-47-vortex-avoidance-procedures.png)

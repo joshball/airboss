@@ -38,3 +38,6 @@ Great Circle route between defined WPs.
 GPS may not be approved for IFR use in other countries.
 Prior to its use, pilots should ensure that GPS is authorized
 by the appropriate countries.
+
+
+![Figure 9-35. Localizer receiver indications and aircraft displacement.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-33-localizer-receiver-indications-and-aircraft-disp.png)

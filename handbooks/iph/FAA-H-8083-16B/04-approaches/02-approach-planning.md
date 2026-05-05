@@ -61,3 +61,6 @@ qualified and current for the approach? Many of these types
 of issues must be considered during preflight planning and
 within the framework of each specific air carrier’s OpSpecs,
 or Part 91.
+
+
+![Figure 4-2. Construction of circling approach area.](/handbooks/iph/FAA-H-8083-16B/figures/fig-4-01-construction-of-circling-approach-area.png)

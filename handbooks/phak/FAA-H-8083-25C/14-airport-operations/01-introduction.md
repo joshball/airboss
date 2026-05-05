@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Introduction
+
+![Figure 14-1. Recommended communication procedures.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-00-recommended-communication-procedures.png)

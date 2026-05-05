@@ -56,3 +56,8 @@ well before landing and be prepared for hydroplaning. Opt for
 a suitable runway most aligned with the wind. Mechanical
 braking may be ineffective, so aerodynamic braking should
 be used to its fullest advantage.
+
+
+![Figure 11-16. An aircraft’s performance during takeoff depends greatly on the runway surface.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-14-an-aircraft-s-performance-during-takeoff-depends.png)
+
+![Figure 11-15. Takeoff distance chart.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-15-takeoff-distance-chart.png)

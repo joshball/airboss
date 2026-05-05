@@ -20,5 +20,3 @@ continuous (CONS) moderate turbulence are shaded orange, and red is used for mod
 severe (SEV) turbulence (refer to SIGMETs for occasional or greater severe turbulence).
 Separate graphics are provided for low-level (defined for this product as FL180 and below) and high-level
 (defined for this product as above FL180) turbulence.
-
-![Figure 27-6. Alaska Icing Forecast Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-4-00-alaska-icing-forecast-example.png)

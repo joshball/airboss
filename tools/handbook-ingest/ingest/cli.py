@@ -63,7 +63,7 @@ from .config_loader import (
 )
 from .empty_section import apply_empty_section_policy
 from .fetch import fetch_pdf
-from .figures import extract_figures
+from .figures import extract_figures, rescope_figures_to_deepest_section
 from .figures_dedup import deduplicate_figures
 from .front_matter import (
     extract_front_matter,
@@ -641,6 +641,12 @@ def _run_toc_file_sidecar_strategy(
         flat_outline, bodies = _merge_section_nodes_into_outline(
             flat_outline, bodies, section_nodes, fetch_result.path, config
         )
+        # Re-attach figures to the deepest section that claims their
+        # caption page. ``extract_figures`` ran against the chapter-only
+        # ``flat_outline`` so every figure was glued to its chapter; the
+        # merged outline carries sub-sections with their own page
+        # ranges, which is what readers key on.
+        figures = rescope_figures_to_deepest_section(figures, flat_outline)
 
     section_metadata: dict[str, dict[str, str]] = {}
     flat_outline, bodies = _phase_front_matter(
@@ -757,6 +763,12 @@ def _run_toc_strategy(
         flat_outline, bodies = _merge_section_nodes_into_outline(
             flat_outline, bodies, section_nodes, fetch_result.path, config
         )
+        # Re-attach figures to the deepest section that claims their
+        # caption page. ``extract_figures`` ran against the chapter-only
+        # ``flat_outline`` so every figure was glued to its chapter; the
+        # merged outline carries sub-sections with their own page
+        # ranges, which is what readers key on.
+        figures = rescope_figures_to_deepest_section(figures, flat_outline)
 
     section_metadata: dict[str, dict[str, str]] = {}
     flat_outline, bodies = _phase_front_matter(

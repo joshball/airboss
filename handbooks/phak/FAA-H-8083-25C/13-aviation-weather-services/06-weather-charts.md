@@ -20,3 +20,6 @@ weather depiction, and significant weather prognostic charts
 are sources of current weather information. Significant
 weather prognostic charts provide an overall forecast weather
 picture.
+
+
+![Figure 13-6. Reportable contractions for sky condition.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-05-reportable-contractions-for-sky-condition.png)

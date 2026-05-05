@@ -43,9 +43,3 @@ The phase transition of water and associated latent heat exchanges are largely r
 the excess heat from the surface of the Earth into its atmosphere. As the Earth’s surface absorbs radiation,
 some of the heat produced is used to evaporate (vaporize) water from oceans, lakes, rivers, soil, and
 vegetation. The water absorbs heat energy due to the latent heat of vaporization. Some of this water vapor
-
-![Figure 7-2. Greenhouse Effect on Nighttime Radiational Cooling](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-3-1-00-greenhouse-effect-on-nighttime-radiational-cooli.png)
-
-![Figure 7-3. Development of a Thermal](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-3-2-00-development-of-a-thermal.png)
-
-![Figure 7-4. Example of Convection in the Atmosphere](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-3-2-01-example-of-convection-in-the-atmosphere.png)

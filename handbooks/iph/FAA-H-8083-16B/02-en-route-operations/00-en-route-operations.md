@@ -22,91 +22,35 @@ En Route Operations
 
 Figure 2-1. Code of Federal Regulations, Title 14 Aeronautics and Space.
 
-![Figure 2-1. Code of Federal Regulations, Title 14 Aeronautics and Space.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-00-code-of-federal-regulations-title-14-aeronautics.png)
+![Figure 2-57. Maximum authorized altitude (MAA).](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-51-maximum-authorized-altitude-maa.png)
 
-![Figure 2-2. Airways depicted on an aeronautical chart.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-01-airways-depicted-on-an-aeronautical-chart.png)
+![Figure 2-58. Minimum obstacle clearance altitude (MOCA).](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-52-minimum-obstacle-clearance-altitude-moca.png)
 
-![Figure 2-8. Fort Worth Air Route Traffic Control Center.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-02-fort-worth-air-route-traffic-control-center.png)
+![Figure 2-59. Minimum turning altitude (MTA).](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-53-minimum-turning-altitude-mta.png)
 
-![Figure 2-9. Low altitude sectors.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-03-low-altitude-sectors.png)
+![Figure 2-60. Turning area at the intersection fix with NAVAID distance less than 51 NM.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-54-turning-area-at-the-intersection-fix-with-navaid.png)
 
-![Figure 2-10. Intermediate altitude sectors.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-04-intermediate-altitude-sectors.png)
+![Figure 2-62. Minimum crossing altitude (MCA).](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-56-minimum-crossing-altitude-mca.png)
 
-![Figure 2-14. Chart Supplement (includes Airport/Facility Directory  section).](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-05-chart-supplement-includes-airport-facility-direc.png)
+![Figure 2-63. Minimum crossing altitude (MCA) determination point.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-57-minimum-crossing-altitude-mca-determination-poin.png)
 
-![Figure 2-19. Tower En Route Control (TEC) Northeast U.S. (Eastern).](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-06-tower-en-route-control-tec-northeast-u-s-eastern.png)
+![Figure 2-71. ATC holding instructions.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-65-atc-holding-instructions.png)
 
-![Figure 2-24. IFR en route low altitude (left) and high altitude (right) charts.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-07-ifr-en-route-low-altitude-left-and-high-altitude.png)
+![Figure 2-72. Clearance limit holding.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-66-clearance-limit-holding.png)
 
-![Figure 2-25. Information found on en route low altitude charts.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-08-information-found-on-en-route-low-altitude-chart.png)
-
-![Figure 2-28. Low altitude RNAV routes.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-09-low-altitude-rnav-routes.png)
-
-![Figure 2-36. Zanesville VOR/Victor Airway 214.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-10-zanesville-vor-victor-airway-214.png)
-
-![Figure 2-39. Non-mountainous obstacle clearance in the primary  area.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-11-non-mountainous-obstacle-clearance-in-the-primar.png)
-
-![Figure 2-41. Primary and secondary obstacle clearance area.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-12-primary-and-secondary-obstacle-clearance-area.png)
-
-![Figure 2-42. Changeover points.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-13-changeover-points.png)
-
-![Figure 2-43. Changeover point effect on long airway or route segment.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-13-changeover-points.png)
-
-![Figure 2-44. Direct route navigation.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-15-direct-route-navigation.png)
-
-![Figure 2-45. Published RNAV jet routes.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-16-published-rnav-jet-routes.png)
-
-![Figure 2-46. Excerpt of authorized areas of en route operation.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-17-excerpt-of-authorized-areas-of-en-route-operatio.png)
-
-![Figure 2-47. Off-route obstacle clearance altitude.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-18-off-route-obstacle-clearance-altitude.png)
-
-![Figure 2-48. Random RNAV route.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-19-random-rnav-route.png)
-
-![in Figure 2-49. Notice the en route chart excerpt depicting  that the MEA is established with a gap in navigation signal coverage northwest of the Carbon VOR/DME on V134.  At the MEA of 13,000, the allowable navigation course guidance gap is approximately 18.5 NM, as depicted in Figure 2-49. The navigation gap area is ](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-20-notice-the-en-route-chart-excerpt-depicting-that.png)
-
-![gap is approximately 18.5 NM, as depicted in Figure 2-49.  The navigation gap area is not identified on the chart by distances from the navigation facilities. Proper flight planning will help pilots prepare for MEA gaps by insuring that appropriate maps are available as they may need to dead reckon through the gap. Cal](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-21-5-nm-as-depicted-in-figure-2-49-the-navigation-g.png)
-
-![Figure 2-49. Navigational course guidance gaps.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-22-navigational-course-guidance-gaps.png)
-
-![Figure 2-53. Fly-by and fly-over waypoints.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-23-fly-by-and-fly-over-waypoints.png)
-
-![Figure 2-54. Floating waypoints.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-24-floating-waypoints.png)
-
-![Figure 2-55. Computer navigation fix.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-25-computer-navigation-fix.png)
-
-![Figure 2-56. U.S. standard RNP levels.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-26-u-s-standard-rnp-levels.png)
-
-![airspace are shown in Figure 2-56. Other RNP levels as  identified by ICAO, other states, and the FAA may also be used.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-27-other-rnp-levels-as-identified-by-icao-other-sta.png)
-
-![Figure 2-57. Maximum authorized altitude (MAA).](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-28-maximum-authorized-altitude-maa.png)
-
-![Figure 2-58. Minimum obstacle clearance altitude (MOCA).](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-29-minimum-obstacle-clearance-altitude-moca.png)
-
-![Figure 2-59. Minimum turning altitude (MTA).](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-30-minimum-turning-altitude-mta.png)
-
-![Figure 2-61. Minimum turning altitude information located in the remarks section of FAA Form 8260-16 Transmittal of Airways/Route Data.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-31-minimum-turning-altitude-information-located-in-.png)
-
-![Figure 2-64. En route chart minimum crossing altitude data (outside of the U.S.).](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-32-en-route-chart-minimum-crossing-altitude-data-ou.png)
-
-![Figure 2-65. MVA chart.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-33-mva-chart.png)
-
-![Figure 2-66. Cruising altitude or flight level.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-34-cruising-altitude-or-flight-level.png)
-
-![Figure 2-67. Altimeter setting changes.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-35-altimeter-setting-changes.png)
-
-![Figure 2-68. ATC reporting procedures.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-36-atc-reporting-procedures.png)
-
-![Figure 2-69. Two-way radio communications failure transponder code.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-37-two-way-radio-communications-failure-transponder.png)
-
-![Figure 2-70. Holding pattern design criteria template.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-38-holding-pattern-design-criteria-template.png)
-
-![Figure 2-71. ATC holding instructions.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-39-atc-holding-instructions.png)
-
-|  | En Route Operations<br>ntroduction |
-| --- | --- |
-| Introduction<br>The en route phase of flight is defined as that segment of<br>filght from the termination point of a departure procedure<br>to the origination point of an arrival procedure. The<br>procedures employed in the en route phase of flight are<br>governed by a set of specific flight standards established<br>by 14 CFR [Figure 2-1], FAA Order 8260.3, and related<br>publications. These standards establish courses to be folwn,<br>obstacle clearance criteria, minimum altitudes, navigation<br>performance, and communications requirements. | ntroduction |
-
-<a class="handbook-table-source" href="/handbooks/iph/FAA-H-8083-16B/tables/tbl-2-00-untitled.html">Open original</a>
+<div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-2-00-untitled.html">
+<table><thead><tr><th></th><th>En Route Operations
+ntroduction</th></tr></thead><tbody><tr><td>Introduction
+The en route phase of flight is defined as that segment of
+filght from the termination point of a departure procedure
+to the origination point of an arrival procedure. The
+procedures employed in the en route phase of flight are
+governed by a set of specific flight standards established
+by 14 CFR [Figure 2-1], FAA Order 8260.3, and related
+publications. These standards establish courses to be folwn,
+obstacle clearance criteria, minimum altitudes, navigation
+performance, and communications requirements.</td><td>ntroduction</td></tr></tbody></table>
+</div>
 
 <div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-2-01-untitled.html">
 <table><thead><tr><th>D

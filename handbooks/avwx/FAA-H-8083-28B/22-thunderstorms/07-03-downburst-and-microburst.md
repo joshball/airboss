@@ -228,37 +228,3 @@ An airplane flying through horizontal vortices as shown in Figure 22-23 experien
 and downdrafts causing pitch changes without pilot input. These vertical winds result in airplane
 angle-of-attack fluctuations that, if severe enough, may result in momentary stick shaker actuation or
 airframe shudder at speeds well above normal.
-
-![Figure 22-7. Downburst Life Cycle](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-00-downburst-life-cycle.png)
-
-![Figure 22-8. Illustration of the Evolution of a Microburst](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-01-illustration-of-the-evolution-of-a-microburst.png)
-
-![Figure 22-9. Illustration of a Symmetric Microburst](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-02-illustration-of-a-symmetric-microburst.png)
-
-![Figure 22-10. Illustration of an Asymmetric Microburst](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-03-illustration-of-an-asymmetric-microburst.png)
-
-![Figure 22-11. Illustration of a Dry Microburst](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-04-illustration-of-a-dry-microburst.png)
-
-![Figure 22-12. Illustration of a Series of Vortices Due to Microbursts Being Embedded in One Another](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-05-illustration-of-a-series-of-vortices-due-to-micr.png)
-
-![Figure 22-13. Landing in a Microburst](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-06-landing-in-a-microburst.png)
-
-![Figure 22-14. Wind Shear Encounter During Takeoff After Lift-Off](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-07-wind-shear-encounter-during-takeoff-after-lift-o.png)
-
-![Figure 22-15. Wind Shear Effects on Flightpath](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-08-wind-shear-effects-on-flightpath.png)
-
-![Figure 22-16. Pitch Control Effects on Flightpath](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-09-pitch-control-effects-on-flightpath.png)
-
-![Figure 22-17. Time Available to Respond to Wind Shear Encounter](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-10-time-available-to-respond-to-wind-shear-encounte.png)
-
-![Figure 22-18. Wind Shear Encounter During Takeoff on Runway](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-11-wind-shear-encounter-during-takeoff-on-runway.png)
-
-![Figure 22-19. Wind Shear Effects on Lift-Off](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-12-wind-shear-effects-on-lift-off.png)
-
-![Figure 22-20. Pitch Attitude Effects on Lift-Off](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-13-pitch-attitude-effects-on-lift-off.png)
-
-![Figure 22-21. Wind Shear Encounter During Approach](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-14-wind-shear-encounter-during-approach.png)
-
-![Figure 22-22. Wind Shear Effects on Flightpath on Approach](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-15-wind-shear-effects-on-flightpath-on-approach.png)
-
-![Figure 22-23. Illustration of an Encounter with Microburst Horizontal Vortices](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-16-illustration-of-an-encounter-with-microburst-hor.png)

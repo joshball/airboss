@@ -30,3 +30,6 @@ vector an aircraft off a previously assigned DP; however,
 the 200 FPNM or the FPNM specified in the DP is required.
 Textual ODPs are listed by city and airport in the IFR TakeOff Minimums and DPs section of the TPP. SIDs are depicted
 in the TPP following the approach procedures for the airport.
+
+
+![Figure 1-16. More IAP profile view features.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-15-more-iap-profile-view-features.png)

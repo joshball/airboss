@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Introduction
+
+![Figure 4-1. Microscopic surface of a wing.](/handbooks/phak/FAA-H-8083-25C/figures/fig-4-00-microscopic-surface-of-a-wing.png)

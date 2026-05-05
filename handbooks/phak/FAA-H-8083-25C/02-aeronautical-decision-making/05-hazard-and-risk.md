@@ -91,3 +91,6 @@ surface. Since the pilot was in a hurry and failed to factor
 in the difference between the forecast altitudes, he assigned
 a low risk to the hazard and took a chance. He and the
 passengers died from a poor risk assessment of the situation.
+
+
+![Figure 2-5. This risk matrix can be used for almost any operation  by assigning likelihood and consequence. In the case presented, the pilot assigned a likelihood of occasional and the severity as catastrophic. As one can see, this falls in the high risk area.](/handbooks/phak/FAA-H-8083-25C/figures/fig-2-04-this-risk-matrix-can-be-used-for-almost-any-oper.png)

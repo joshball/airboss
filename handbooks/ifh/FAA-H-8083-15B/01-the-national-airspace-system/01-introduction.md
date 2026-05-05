@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Introduction
+
+![Figure 1-1. Airspace classifications.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-00-airspace-classifications.png)

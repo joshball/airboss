@@ -49,3 +49,6 @@ calculations are:
 By utilizing this technique, the pilot is better able to judge
 if any modifications need to be made to the amount of lead
 once the amount of over- or undershooting is established.
+
+
+![Figure 7-33. Standard rate turn, constant airspeed.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-33-standard-rate-turn-constant-airspeed.png)

@@ -106,3 +106,6 @@ Turbulence;
 Visibility;
 Cloud tops and bases; and
 The presence of hazards such as ice, hail, and lightning.
+
+
+![Figure 2-15. Aircraft management using PRM. (Note the no transgression zone (NTZ) and how the aircraft are separated.)](/handbooks/ifh/FAA-H-8083-15B/figures/fig-2-14-aircraft-management-using-prm-note-the-no-transg.png)

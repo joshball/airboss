@@ -44,3 +44,6 @@ can attempt to troubleshoot alternator failure by following the
 established alternator failure procedure published in the POH/
 AFM. If the alternator cannot be reset, advise ATC of the
 situation and inform them of the impending electrical failure.
+
+
+![Figure 11-15. The page group of nearest airports has been selected.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-11-14-the-page-group-of-nearest-airports-has-been-sele.png)

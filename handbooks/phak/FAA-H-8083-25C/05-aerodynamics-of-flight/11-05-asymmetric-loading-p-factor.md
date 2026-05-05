@@ -75,3 +75,8 @@ Load on
 upward moving
 propeller blade
 Figure 5-51. Asymmetrical loading of propeller (P-factor).
+
+
+![Figure 5-49. Gyroscopic precession.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-45-gyroscopic-precession.png)
+
+![Figure 5-50. Raising tail produces gyroscopic precession.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-46-raising-tail-produces-gyroscopic-precession.png)

@@ -140,8 +140,8 @@ benefit, pilots should consider taking a risk management course.
 Appendix Introduction
 AI-1
 
-![Figure 8-1. Advisory Circular (AC) 60-22, Aeronautical Decision-Making, includes a wealth of information for pilots.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-8-1-00-advisory-circular-ac-60-22-aeronautical-decision.png)
+![Figure 8-1. Advisory Circular (AC) 60-22, Aeronautical Decision-Making, includes a wealth of information for pilots.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-8-00-advisory-circular-ac-60-22-aeronautical-decision.png)
 
-![Figure 8-2. The illustration shows how the 3P model is used in decision-making.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-8-3-01-the-illustration-shows-how-the-3p-model-is-used-.png)
+![Figure 8-2. The illustration shows how the 3P model is used in decision-making.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-8-01-the-illustration-shows-how-the-3p-model-is-used-.png)
 
-![Figure 8-3. Sheared off titanium fan blade with feather impressions.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-8-4-00-sheared-off-titanium-fan-blade-with-feather-impr.png)
+![Figure 8-3. Sheared off titanium fan blade with feather impressions.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-8-02-sheared-off-titanium-fan-blade-with-feather-impr.png)

@@ -12,3 +12,8 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 # Common Errors
 
 Common Errors
+
+
+![Figure 6-38. Horizontal situation indicator (HSI) trend indicator elongates proportionally with the rate of turn.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-38-horizontal-situation-indicator-hsi-trend-indicat.png)
+
+![Figure 6-39. HSI indicator (enlargement).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-39-hsi-indicator-enlargement.png)

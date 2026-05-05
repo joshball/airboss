@@ -26,3 +26,6 @@ was given the honor of being the first Administrator of the
 FAA was former Air Force General Elwood Richard “Pete”
 Quesada. He served as the administrator from 1959–1961.
 [Figure 1-10]
+
+
+![Figure 1-10. First Administrator of the FAA was General Elwood  Richard “Pete” Quesada, 1959–1961.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-09-first-administrator-of-the-faa-was-general-elwoo.png)

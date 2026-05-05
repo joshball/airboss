@@ -28,3 +28,6 @@ security. Furthermore, the WJHTC is active in long-range
 development of innovative aviation systems and concepts,
 development of new ATC equipment and software, and
 modification of existing systems and procedures.
+
+
+![Figure 1-12. Overview of 14 CFR, available online free from the FAA and for purchase through commercial sources.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-11-overview-of-14-cfr-available-online-free-from-th.png)

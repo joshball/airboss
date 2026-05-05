@@ -23,5 +23,3 @@ destination between sunrise and sunset (not during twilight hours or at night).
 VEIA visibility estimates are supplemental information, for use with other meteorological information,
 displayed in conjunction with the specific site’s camera images. The visibility estimates are accessible on
 the FAA’s Aviation Weather Camera website. See Figure 24-33 for an example VEIA visibility estimate.
-
-![Figure 24-32. Aviation Weather Camera Image at Hyder (4Z7), Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-2-00-aviation-weather-camera-image-at-hyder-4z7-alask.png)

@@ -24,3 +24,6 @@ primary during any change in pitch or bank attitude. After
 the new attitude is established, other instruments become
 primary, and the attitude indicator usually becomes the
 supporting instrument.
+
+
+![Figure 8-5. The banking scale at the top of the attitude indicator indicates varying degrees of bank. In this example, the helicopter is  banked approximately 15° to the right.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-8-03-the-banking-scale-at-the-top-of-the-attitude-ind.png)

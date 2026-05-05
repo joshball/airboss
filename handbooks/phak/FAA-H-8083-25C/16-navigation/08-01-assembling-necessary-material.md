@@ -21,3 +21,6 @@ electronic calculator, plotter, and any other item appropriate
 to the particular flight. For example, if a night flight is to
 be undertaken, carry a flashlight; if a flight is over desert
 country, carry a supply of water and other necessities.
+
+
+![Figure 16-24. Chart Supplement U.S. (formerly Airport/Facility  Directory).](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-23-chart-supplement-u-s-formerly-airport-facility-d.png)

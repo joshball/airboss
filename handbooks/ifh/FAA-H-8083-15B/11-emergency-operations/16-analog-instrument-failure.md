@@ -35,3 +35,6 @@ ability to maintain aircraft control and navigate the aircraft.
 Usually, the next step is to advise ATC of the problem and,
 if necessary, declare an emergency before the situation
 deteriorates beyond the pilot’s ability to recover.
+
+
+![Figure 11-16. The four soft keys at the bottom of the MFD are airport (A), runway (B), frequency (C), and approach (D).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-11-15-the-four-soft-keys-at-the-bottom-of-the-mfd-are-.png)

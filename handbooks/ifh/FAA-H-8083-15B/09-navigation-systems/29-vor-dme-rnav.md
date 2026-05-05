@@ -40,3 +40,6 @@ angles 1 and 2 and determines angle 3 and side C, which is
 the distance in NMs and magnetic course from the aircraft
 to the WP. This is presented as guidance information on the
 flight deck display.
+
+
+![Figure 9-29. WAAS satellite representation.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-27-waas-satellite-representation.png)

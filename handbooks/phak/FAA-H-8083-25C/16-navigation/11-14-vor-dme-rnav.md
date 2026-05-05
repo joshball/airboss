@@ -110,3 +110,8 @@ overlooking switch positions or annunciators. As always, the
 prudent pilot is not only familiar with the equipment used,
 but never places complete reliance in just one method of
 navigation when others are available for cross-check.
+
+
+![Figure 16-36. RNAV controls.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-35-rnav-controls.png)
+
+![Figure 16-35. Flying an RNAV course.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-36-flying-an-rnav-course.png)

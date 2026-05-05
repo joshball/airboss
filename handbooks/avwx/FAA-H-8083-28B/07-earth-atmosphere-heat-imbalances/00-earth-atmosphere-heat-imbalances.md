@@ -139,20 +139,18 @@ The magnitude of diurnal temperature variation is primarily influenced by surfac
 maximized over land, at low latitudes, with a clear sky, dry air, and light wind. Conversely, temperature
 variation is minimized over water, at high latitudes, with a cloudy sky, moist air, and strong wind.
 
-![radiation) and outgoing energy from the Earth (terrestrial radiation), as seen in Figure 7-1. When solar  radiation reaches the Earth, some is reflected back to space by air (eight percent), clouds (17 percent), or the surface (six percent). Some is absorbed by water vapor/dust/ozone (19 percent) or by clouds (four per](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-2-00-when-solar-radiation-reaches-the-earth-some-is-r.png)
+![Figure 7-1. Earth-Atmosphere Energy Balance](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-00-earth-atmosphere-energy-balance.png)
 
-![Figure 7-1. Earth-Atmosphere Energy Balance](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-01-earth-atmosphere-energy-balance.png)
+![Figure 7-2. Greenhouse Effect on Nighttime Radiational Cooling](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-01-greenhouse-effect-on-nighttime-radiational-cooli.png)
 
-![Figure 7-2. Greenhouse Effect on Nighttime Radiational Cooling](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-3-1-00-greenhouse-effect-on-nighttime-radiational-cooli.png)
+![Figure 7-3. Development of a Thermal](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-02-development-of-a-thermal.png)
 
-![Figure 7-3. Development of a Thermal](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-3-2-00-development-of-a-thermal.png)
+![Figure 7-4. Example of Convection in the Atmosphere](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-03-example-of-convection-in-the-atmosphere.png)
 
-![Figure 7-4. Example of Convection in the Atmosphere](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-3-2-01-example-of-convection-in-the-atmosphere.png)
+![Figure 7-5. Solar Zenith Angle Variations with Latitude](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-04-solar-zenith-angle-variations-with-latitude.png)
 
-![Figure 7-5. Solar Zenith Angle Variations with Latitude](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-4-00-solar-zenith-angle-variations-with-latitude.png)
+![Figure 7-6. Solar Zenith Angle Variations with Northern Hemisphere Seasons](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-05-solar-zenith-angle-variations-with-northern-hemi.png)
 
-![Figure 7-6. Solar Zenith Angle Variations with Northern Hemisphere Seasons](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-5-00-solar-zenith-angle-variations-with-northern-hemi.png)
+![Figure 7-7. Average Seasonal Temperature Variation in the Northern Hemisphere](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-06-average-seasonal-temperature-variation-in-the-no.png)
 
-![Figure 7-7. Average Seasonal Temperature Variation in the Northern Hemisphere](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-6-00-average-seasonal-temperature-variation-in-the-no.png)
-
-![Figure 7-8. Clear Sky Diurnal Temperature and Radiation Variations Over Land](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-6-01-clear-sky-diurnal-temperature-and-radiation-vari.png)
+![Figure 7-8. Clear Sky Diurnal Temperature and Radiation Variations Over Land](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-07-clear-sky-diurnal-temperature-and-radiation-vari.png)

@@ -18,3 +18,6 @@ concerning transport category airplanes, consult the Airplane
 Flying Handbook, FAA-H-8083-3 (as revised).
 Transport category helicopters are certificated under 14
 CFR part 29.
+
+
+![Figure 11-34. Stall speed table.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-33-stall-speed-table.png)

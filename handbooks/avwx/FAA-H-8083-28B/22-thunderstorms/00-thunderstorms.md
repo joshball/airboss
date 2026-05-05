@@ -522,51 +522,51 @@ airspeed.
 the aircraft out of the hazards most quickly. In addition, turning maneuvers increase stress on the
 aircraft.
 
-![Figure 22-1. Necessary Ingredients for Thunderstorm Cell Formation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-2-00-necessary-ingredients-for-thunderstorm-cell-form.png)
+![Figure 22-1. Necessary Ingredients for Thunderstorm Cell Formation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-00-necessary-ingredients-for-thunderstorm-cell-form.png)
 
-![Figure 22-2. Thunderstorm Cell Life Cycle](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-4-00-thunderstorm-cell-life-cycle.png)
+![Figure 22-2. Thunderstorm Cell Life Cycle](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-01-thunderstorm-cell-life-cycle.png)
 
-![Figure 22-3. Multicell Cluster Thunderstorm](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-4-01-multicell-cluster-thunderstorm.png)
+![Figure 22-3. Multicell Cluster Thunderstorm](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-02-multicell-cluster-thunderstorm.png)
 
-![Figure 22-4. Multicell Line Thunderstorm](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-4-02-multicell-line-thunderstorm.png)
+![Figure 22-4. Multicell Line Thunderstorm](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-03-multicell-line-thunderstorm.png)
 
-![Figure 22-5. Supercell Thunderstorm](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-5-00-supercell-thunderstorm.png)
+![Figure 22-5. Supercell Thunderstorm](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-04-supercell-thunderstorm.png)
 
-![Figure 22-6. Factors that Influence Thunderstorm Motion](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-6-00-factors-that-influence-thunderstorm-motion.png)
+![Figure 22-6. Factors that Influence Thunderstorm Motion](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-05-factors-that-influence-thunderstorm-motion.png)
 
-![Figure 22-7. Downburst Life Cycle](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-00-downburst-life-cycle.png)
+![Figure 22-7. Downburst Life Cycle](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-06-downburst-life-cycle.png)
 
-![Figure 22-8. Illustration of the Evolution of a Microburst](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-01-illustration-of-the-evolution-of-a-microburst.png)
+![Figure 22-8. Illustration of the Evolution of a Microburst](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-07-illustration-of-the-evolution-of-a-microburst.png)
 
-![Figure 22-9. Illustration of a Symmetric Microburst](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-02-illustration-of-a-symmetric-microburst.png)
+![Figure 22-9. Illustration of a Symmetric Microburst](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-08-illustration-of-a-symmetric-microburst.png)
 
-![Figure 22-10. Illustration of an Asymmetric Microburst](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-03-illustration-of-an-asymmetric-microburst.png)
+![Figure 22-10. Illustration of an Asymmetric Microburst](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-09-illustration-of-an-asymmetric-microburst.png)
 
-![Figure 22-11. Illustration of a Dry Microburst](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-04-illustration-of-a-dry-microburst.png)
+![Figure 22-11. Illustration of a Dry Microburst](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-10-illustration-of-a-dry-microburst.png)
 
-![Figure 22-12. Illustration of a Series of Vortices Due to Microbursts Being Embedded in One Another](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-05-illustration-of-a-series-of-vortices-due-to-micr.png)
+![Figure 22-12. Illustration of a Series of Vortices Due to Microbursts Being Embedded in One Another](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-11-illustration-of-a-series-of-vortices-due-to-micr.png)
 
-![Figure 22-13. Landing in a Microburst](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-06-landing-in-a-microburst.png)
+![Figure 22-13. Landing in a Microburst](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-12-landing-in-a-microburst.png)
 
-![Figure 22-14. Wind Shear Encounter During Takeoff After Lift-Off](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-07-wind-shear-encounter-during-takeoff-after-lift-o.png)
+![Figure 22-14. Wind Shear Encounter During Takeoff After Lift-Off](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-13-wind-shear-encounter-during-takeoff-after-lift-o.png)
 
-![Figure 22-15. Wind Shear Effects on Flightpath](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-08-wind-shear-effects-on-flightpath.png)
+![Figure 22-15. Wind Shear Effects on Flightpath](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-14-wind-shear-effects-on-flightpath.png)
 
-![Figure 22-16. Pitch Control Effects on Flightpath](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-09-pitch-control-effects-on-flightpath.png)
+![Figure 22-16. Pitch Control Effects on Flightpath](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-15-pitch-control-effects-on-flightpath.png)
 
-![Figure 22-17. Time Available to Respond to Wind Shear Encounter](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-10-time-available-to-respond-to-wind-shear-encounte.png)
+![Figure 22-17. Time Available to Respond to Wind Shear Encounter](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-16-time-available-to-respond-to-wind-shear-encounte.png)
 
-![Figure 22-18. Wind Shear Encounter During Takeoff on Runway](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-11-wind-shear-encounter-during-takeoff-on-runway.png)
+![Figure 22-18. Wind Shear Encounter During Takeoff on Runway](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-17-wind-shear-encounter-during-takeoff-on-runway.png)
 
-![Figure 22-19. Wind Shear Effects on Lift-Off](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-12-wind-shear-effects-on-lift-off.png)
+![Figure 22-19. Wind Shear Effects on Lift-Off](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-18-wind-shear-effects-on-lift-off.png)
 
-![Figure 22-20. Pitch Attitude Effects on Lift-Off](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-13-pitch-attitude-effects-on-lift-off.png)
+![Figure 22-20. Pitch Attitude Effects on Lift-Off](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-19-pitch-attitude-effects-on-lift-off.png)
 
-![Figure 22-21. Wind Shear Encounter During Approach](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-14-wind-shear-encounter-during-approach.png)
+![Figure 22-21. Wind Shear Encounter During Approach](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-20-wind-shear-encounter-during-approach.png)
 
-![Figure 22-22. Wind Shear Effects on Flightpath on Approach](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-15-wind-shear-effects-on-flightpath-on-approach.png)
+![Figure 22-22. Wind Shear Effects on Flightpath on Approach](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-21-wind-shear-effects-on-flightpath-on-approach.png)
 
-![Figure 22-23. Illustration of an Encounter with Microburst Horizontal Vortices](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-7-3-16-illustration-of-an-encounter-with-microburst-hor.png)
+![Figure 22-23. Illustration of an Encounter with Microburst Horizontal Vortices](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-22-illustration-of-an-encounter-with-microburst-hor.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-22-00-enhanced-fujita-scale-for-tornado-damage-ef-rati.html">
 <table><caption>Table 22-1. Enhanced Fujita Scale for Tornado Damage 

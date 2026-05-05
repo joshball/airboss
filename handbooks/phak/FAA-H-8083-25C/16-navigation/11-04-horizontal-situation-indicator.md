@@ -42,3 +42,8 @@ away from the chosen facility.
 When the NAV warning flag appears, it indicates no reliable
 signal is being received. The appearance of the HDG flag
 indicates the compass card is not functioning properly.
+
+
+![Figure 16-30. Horizontal situation indicator.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-29-horizontal-situation-indicator.png)
+
+![Figure 16-29. VOR indicator.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-30-vor-indicator.png)

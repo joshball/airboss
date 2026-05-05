@@ -20,3 +20,6 @@ on available current weather reports and forecasts, fuel
 requirements, alternatives available if the planned flight
 cannot be completed, and any known traffic delays of which
 the PIC has been advised by ATC.
+
+
+![Figure 16-8. Magnetic meridians are in red while the lines of  longitude and latitude are in blue. From these lines of variation (magnetic meridians), one can determine the effect of local magnetic variations on a magnetic compass.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-06-magnetic-meridians-are-in-red-while-the-lines-of.png)

@@ -57,3 +57,6 @@ Hold a current and valid driver’s license as evidence
 of medical eligibility
 When operating as a sport pilot, some of the following
 privileges and limitations may apply.
+
+
+![Figure 1-5. The de Haviland DH-4 on the New York to San  Francisco inaugural route in 1921.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-05-the-de-haviland-dh-4-on-the-new-york-to-san-fran.png)

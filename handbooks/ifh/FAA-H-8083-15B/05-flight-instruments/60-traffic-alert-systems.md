@@ -16,3 +16,6 @@ nearby aircraft to help determine their relative position to the
 equipped aircraft. They provide three-dimensional location
 of other aircraft [Figures 5-55, 5-56, and 5-57] and are cost
 effective alternatives to TCAS equipage for smaller aircraft.
+
+
+![Figure 5-60. A head-up display (HUD).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-59-a-head-up-display-hud.png)

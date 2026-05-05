@@ -44,6 +44,34 @@ aircraft in emergency situations involving failure of one or
 more key instruments.
 
 
+![Figure 6-5. Attitude indicator.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-04-attitude-indicator.png)
+
+![Figure 6-6. Pitch correction using the attitude indicator.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-05-pitch-correction-using-the-attitude-indicator.png)
+
+![Figure 6-7. Pitch correction using the altimeter.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-06-pitch-correction-using-the-altimeter.png)
+
+![Figure 6-8. Vertical speed indicator.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-07-vertical-speed-indicator.png)
+
+![Figure 6-9. Pitch attitude has lowered.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-08-pitch-attitude-has-lowered.png)
+
+![Figure 6-14. Pitch control and power adjustment required to bring aircraft to level flight.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-12-an-increase-in-power-increasing-airspeed-accordi.png)
+
+![Figure 6-15. Power instruments.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-15-power-instruments.png)
+
+![Figure 6-16. Trim instruments.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-16-trim-instruments.png)
+
+![Figure 6-18. Inverted-V cross-check.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-18-inverted-v-cross-check.png)
+
+![Figure 6-19. Rectangular cross-check.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-19-rectangular-cross-check.png)
+
+![Figure 6-22. Multifunction display (MFD).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-22-multifunction-display-mfd.png)
+
+![Figure 6-23. Reversionary displays.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-23-reversionary-displays.png)
+
+![Figure 6-33. Selected radial cross-check.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-33-selected-radial-cross-check.png)
+
+![Figure 6-34. Roll pointer and slip/skid indicator.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-34-roll-pointer-and-slip-skid-indicator.png)
+
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-6-00-untitled.html">
 <table><thead><tr><th>30 W 24
 Turning</th></tr></thead><tbody></tbody></table>
@@ -156,7 +184,7 @@ N NA AV V1 2 1 11 17 7. .6 90 0 1 11 17 7. .9 60 0 WPT _ _ _ _ _ _ DIS _ _ ._ NM
 120 4200
 11 10 4100 20 1
 con10 t0 3490000 80
-NAV 9r ols 0 Com section
+NAV 9rols 0 Com section
 Glideslope/vertic9 80 0a l guidanc 2e i °n dicator 3 39 80 00 1 audio panel
 70 0 2
 VOTARS 7 100 0 KT G4P300 S/NDB

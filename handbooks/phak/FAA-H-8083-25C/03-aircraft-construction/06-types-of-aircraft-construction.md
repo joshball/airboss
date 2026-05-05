@@ -14,3 +14,6 @@ Types of Aircraft Construction
 The construction of aircraft fuselages evolved from the early
 wood truss structural arrangements to monocoque shell
 structures to the current semimonocoque shell structures.
+
+
+![Figure 3-6. Monoplane (left) and biplane (right).](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-05-monoplane-left-and-biplane-right.png)

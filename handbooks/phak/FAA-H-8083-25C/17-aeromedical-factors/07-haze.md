@@ -22,3 +22,6 @@ due to water particles on the windshield can adversely affect
 depth perception. The lights and terrain features normally
 used to gauge height during landing become less effective
 for the pilot.
+
+
+![Figure 17-7. Runway illusions.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-06-runway-illusions.png)

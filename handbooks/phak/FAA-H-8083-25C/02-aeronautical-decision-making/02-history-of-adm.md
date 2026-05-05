@@ -64,3 +64,6 @@ Learning how to recognize and cope with stress
 Developing risk assessment skills
 Using all resources
 Evaluating the effectiveness of one’s ADM skills
+
+
+![Figure 2-2. Advisory Circular (AC) 60-22, “Aeronautical Decision Making,” carries a wealth of information for the pilot to learn.](/handbooks/phak/FAA-H-8083-25C/figures/fig-2-01-advisory-circular-ac-60-22-aeronautical-decision.png)

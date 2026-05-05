@@ -116,3 +116,6 @@ Additional Reports
 In addition to required position reports, the following reports
 should be made to ATC without a specific request.
 1. At all times:
+
+
+![Figure 10-15. Temperature ranges for ice formation.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-10-14-temperature-ranges-for-ice-formation.png)

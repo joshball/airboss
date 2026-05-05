@@ -52,3 +52,6 @@ En route, it is advisable to avoid a path below and
 behind a large aircraft, and if a large aircraft is
 observed above on the same track, change the aircraft
 position laterally and preferably upwind.
+
+
+![Figure 14-42. Light gun signals.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-42-light-gun-signals.png)

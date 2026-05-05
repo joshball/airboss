@@ -24,3 +24,6 @@ Pilots holding higher level certificates with the appropriate category and class
 U.S. driver’s license as evidence of medical eligibility. However, if the pilot’s most recent medical certificate was denied, revoked,
 suspended, or withdrawn, a U.S. driver’s license is not sufficient. The pilot would then need to hold a valid FAA medical certificate
 to fly an LSA.
+
+
+![Figure 17-4. A water-cooled 4-cycle engine.](/handbooks/afh/FAA-H-8083-3C/figures/fig-17-03-a-water-cooled-4-cycle-engine.png)

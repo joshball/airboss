@@ -109,3 +109,6 @@ the load factors decrease with weight. These aircraft should
 be regarded as being comparable to the normal category
 aircraft designed under the category system, and they should
 be operated accordingly.
+
+
+![Figure 5-51. Asymmetrical loading of propeller (P-factor).](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-47-asymmetrical-loading-of-propeller-p-factor.png)

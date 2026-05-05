@@ -51,3 +51,6 @@ that great control difficulty and dangerous conditions exist.
 However, it does amplify errors of basic flying technique—
 making proper flying technique and precise control of the
 aircraft very important.
+
+
+![Figure 4-21. Effect of ice and frost on lift.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-4-20-effect-of-ice-and-frost-on-lift.png)

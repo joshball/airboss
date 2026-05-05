@@ -22,3 +22,6 @@ and created educational and awareness programs for
 pilots, ATC, and ground operators. By focusing resources
 to attack this problem head on, the FAA hopes to reduce
 and eventually eliminate surface movement accidents.
+
+
+![Figure 1-2. Airport diagram of Oshkosh, Wisconsin as depicted in  the A/FD section of the CS.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-01-airport-diagram-of-oshkosh-wisconsin-as-depicted.png)

@@ -53,3 +53,6 @@ V
 ALT    AMPS
 Ammeter
 Loadmeter
+
+
+![Figure 11-7. Emergency instrumentation available to the pilot on electronic flight instrumented aircraft.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-11-06-emergency-instrumentation-available-to-the-pilot.png)

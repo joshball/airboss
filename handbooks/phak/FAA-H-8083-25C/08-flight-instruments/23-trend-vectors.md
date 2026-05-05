@@ -37,3 +37,6 @@ Airspeed trend (increasing)
 Figure 8-18. Regardless of the position of its base, a gyro tends to
 remain rigid in space, with its axis of rotation pointed in a constant
 direction.
+
+
+![Figure 8-23. Attitude indicator.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-20-attitude-indicator.png)

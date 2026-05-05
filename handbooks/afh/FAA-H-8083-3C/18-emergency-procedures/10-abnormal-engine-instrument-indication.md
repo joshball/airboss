@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Abnormal Engine Instrument Indication
+
+![Figure 18-10. Effects of blocked pitot-static sources.](/handbooks/afh/FAA-H-8083-3C/figures/fig-18-09-effects-of-blocked-pitot-static-sources.png)

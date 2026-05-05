@@ -71,3 +71,8 @@ aircraft in Mach number could equal the MMO of the aircraft,
 and the pilot could neither slow down (without stalling) nor
 speed up (without exceeding the max operating speed of the
 aircraft). This has been dubbed the “coffin corner.”
+
+
+![Figure 5-64. Wing airflow.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-60-wing-airflow.png)
+
+![Figure 5-65. Critical Mach.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-61-critical-mach.png)

@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Introduction
+
+![Figure 17-1. Time of useful consciousness.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-00-time-of-useful-consciousness.png)

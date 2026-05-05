@@ -42,3 +42,6 @@ have the test signal transmitted. A representative of the repair
 station must make an entry into the aircraft logbook or other
 permanent record certifying to the radial accuracy and the
 date of transmission.
+
+
+![Figure 9-20. The same aircraft illustrated in Figure 9-19 shown on the ORM radial near TIGAE intersection turning inbound for the  localizer.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-19-the-same-aircraft-illustrated-in-figure-9-19-sho.png)

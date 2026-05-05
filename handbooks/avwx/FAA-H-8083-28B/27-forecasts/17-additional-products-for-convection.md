@@ -254,14 +254,6 @@ responsibility (out to 20 NM for oceans), which includes portions of the Great L
 The SPC issues a watch cancellation message whenever it cancels a watch prior to the expiration time. The
 text of the message will specify the number and area of the cancelled watch.
 
-![Figure 27-28. Day 1 Categorical Convective Outlook Graphic Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-2-00-day-1-categorical-convective-outlook-graphic-exa.png)
-
-![Figure 27-29. Categorical Outlook Legend for Days 1-3 Convective Outlook Graphic Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-2-01-categorical-outlook-legend-for-days-1-3-convecti.png)
-
-![Figure 27-30. TCF Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-3-00-ecfp-example.png)
-
-![Figure 27-32. Aviation Watch (polygon) Compared to Public Watch (shaded) Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-4-01-aviation-watch-polygon-compared-to-public-watch-.png)
-
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-17-00-decoding-an-aviation-weather-watch-notification-.html">
 <table><caption>Table 27-15. Decoding an Aviation Weather Watch Notification Message 
 Line(s) 

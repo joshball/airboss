@@ -74,3 +74,6 @@ of navigation is required when the RAIM capability of the
 GPS equipment is lost. In situations where the loss of RAIM
 capability is predicted to occur, the flight must rely on other
 approved equipment, delay departure, or cancel the flight.
+
+
+![Figure 9-37. Standard two-bar VASI.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-35-standard-two-bar-vasi.png)

@@ -53,6 +53,16 @@ const helpIds = await $`bun scripts/validate-help-ids.ts`.nothrow();
 console.log('\nValidating course/regulations frontmatter...');
 const courseFrontmatter = await $`bun tools/course-frontmatter/check.ts`.nothrow();
 
+// Handbook ingest pytest. Pinned to the orphan-threshold suite so a
+// missing pytest install on a developer machine surfaces a clear error
+// instead of silently skipping the figure-pairing regression guardrail
+// (per docs/work-packages/handbook-figure-pairing).
+console.log('\nRunning handbook-ingest pytest...');
+const handbookIngestVenv = 'tools/handbook-ingest/.venv/bin/python';
+const handbookIngestPython = existsSync(handbookIngestVenv) ? handbookIngestVenv : 'python3';
+const handbookIngest =
+	await $`cd tools/handbook-ingest && ${handbookIngestPython} -m pytest tests/test_orphan_thresholds.py`.nothrow();
+
 // Glossary corpus size trip-wire. Every file under
 // `libs/help/src/glossary/content/*.md` is bundled eagerly into every
 // app that imports `@ab/help/glossary` (Vite `import.meta.glob({ eager: true })`).
@@ -92,6 +102,7 @@ const failed =
 	testLint.exitCode !== 0 ||
 	helpIds.exitCode !== 0 ||
 	courseFrontmatter.exitCode !== 0 ||
+	handbookIngest.exitCode !== 0 ||
 	!glossaryOk;
 if (failed) {
 	console.error('\nChecks failed.');

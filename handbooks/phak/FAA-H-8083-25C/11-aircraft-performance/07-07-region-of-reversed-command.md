@@ -92,3 +92,6 @@ in a loss of altitude.
 Airplane pilots must give particular attention to precise
 control of airspeed when operating in the low flight speeds
 of the region of reversed command.
+
+
+![Figure 11-13. Effect of altitude on range.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-12-effect-of-altitude-on-range.png)

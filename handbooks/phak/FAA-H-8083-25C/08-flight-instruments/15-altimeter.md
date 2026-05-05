@@ -16,3 +16,6 @@ The altimeter is located on the right side of the PFD.
 descend from the top of the display tape, with the current
 altitude being displayed in the black box in the center of the
 display tape. The altitude is displayed in increments of 20 feet.
+
+
+![Figure 8-15. Teledyne’s 90004 TAS/Plus Air Data Computer (ADC)  computes air data information from the pitot-static pneumatic system, aircraft temperature probe, and barometric correction device to help create a clear picture of flight characteristics.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-12-teledyne-s-90004-tas-plus-air-data-computer-adc-.png)

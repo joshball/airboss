@@ -74,3 +74,12 @@ which when divided by 2 equals a radius of 2,214 feet
 the formula in Figure 5-59.
 In Figure 5-62, the pilot enters a canyon and decides to turn
 180° to exit. The pilot uses a 30° bank angle in his turn.
+
+
+![Figure 5-56. Rate of turn for a given airspeed (knots, TAS) and  bank angle.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-52-rate-of-turn-for-a-given-airspeed-knots-tas-and-.png)
+
+![Figure 5-57. Rate of turn when increasing speed.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-53-rate-of-turn-when-increasing-speed.png)
+
+![Figure 5-58. To achieve the same rate of turn of an aircraft traveling  at 120 knots, an increase of bank angle is required.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-54-to-achieve-the-same-rate-of-turn-of-an-aircraft-.png)
+
+![Figure 5-59. Radius at 120 knots with bank angle of 30°.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-55-radius-at-120-knots-with-bank-angle-of-30.png)

@@ -14,3 +14,8 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 Two Energy Management Scenarios
 Two flight scenarios illustrate the two major risks associated with failure to manage the airplane's energy state and how a pilot can
 identify, assess, and mitigate those risks.
+
+
+![Figure 4-9. Descending below the desired glideslope.](/handbooks/afh/FAA-H-8083-3C/figures/fig-4-07-descending-below-the-desired-glideslope.png)
+
+![Figure 4-10. Departing from Runway 33, Aspen/Pitkin County Airport (KASE), elevation 7,820 feet.](/handbooks/afh/FAA-H-8083-3C/figures/fig-4-08-departing-from-runway-33-aspen-pitkin-county-air.png)

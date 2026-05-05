@@ -80,3 +80,6 @@ feet MSL must simply be determined. The rate of climb could be a negative number
 requirement for a single-engine positive rate of climb at 5,000 feet or any other altitude. For light-twins
 type certificated February 4, 1991, or thereafter, the single-engine climb gradient (positive or negative) is
 simply determined.
+
+
+![Figure 13-3. Propeller drag contribution.](/handbooks/afh/FAA-H-8083-3C/figures/fig-13-02-propeller-drag-contribution.png)

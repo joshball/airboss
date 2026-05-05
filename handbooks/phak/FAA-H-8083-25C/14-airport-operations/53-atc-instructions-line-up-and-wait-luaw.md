@@ -78,3 +78,6 @@ requesting a full-stop, touch-and-go, stop-and-go,
 option, or unrestricted low approach.
 Example – “N456HK, Runway One-Eight, continue,
 traffic holding in position.”
+
+
+![Figure 14-53. Example of taxi and “hold short” instructions from  ATC to a pilot.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-52-example-of-taxi-and-hold-short-instructions-from.png)

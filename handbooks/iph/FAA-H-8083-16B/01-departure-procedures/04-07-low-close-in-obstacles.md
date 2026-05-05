@@ -124,3 +124,6 @@ immediately after takeoff to avoid the obstruction(s).
 These obstacles are especially critical to aircraft that do not
 lift off until close to the DER or which climb at the minimum
 rate. [Figure 1-18]
+
+
+![Figure 1-17. Rate of climb table.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-16-rate-of-climb-table.png)

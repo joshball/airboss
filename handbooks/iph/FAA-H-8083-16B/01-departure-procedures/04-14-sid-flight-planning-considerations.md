@@ -105,3 +105,6 @@ DME, but all waypoints are fixes. Radar vectors may
 also be used to join conventional or RNAV navigation
 SIDs. SIDs requiring radar vectors must be annotated
 “RADAR REQUIRED.”
+
+
+![Figure 1-25. Example of a radar SID at Denver, Colorado.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-20-graphic-odp-booklet-front-matter.png)

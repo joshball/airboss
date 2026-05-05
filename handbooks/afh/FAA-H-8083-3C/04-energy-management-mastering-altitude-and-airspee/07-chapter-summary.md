@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Chapter Summary
+
+![Figure 4-7. Energy map depicting specific excess power (PS) contours (shown in feet per minute) and energy trajectories for a  hypothetical airplane.](/handbooks/afh/FAA-H-8083-3C/figures/fig-4-05-energy-map-depicting-specific-excess-power-ps-co.png)

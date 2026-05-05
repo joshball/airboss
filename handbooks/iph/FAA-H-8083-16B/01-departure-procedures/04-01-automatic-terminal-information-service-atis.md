@@ -35,3 +35,6 @@ in the tower, or from automated weather stations. This
 information, no matter the origin, must be from NWS
 approved weather sources for it to be used in the ATIS
 report.
+
+
+![Figure 1-12. CS entry for an AWOS station.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-11-cs-entry-for-an-awos-station.png)

@@ -75,3 +75,6 @@ flying without a full night’s rest, after working excessive
 hours, or after an especially exhausting or stressful day. Pilots
 who suspect they are suffering from chronic fatigue should
 consult a physician.
+
+
+![Figure 17-14. Central blind spot.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-14-central-blind-spot.png)

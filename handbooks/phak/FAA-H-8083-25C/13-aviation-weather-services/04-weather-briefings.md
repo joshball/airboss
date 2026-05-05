@@ -26,3 +26,6 @@ note is made regarding the type of weather briefing provided.
 If necessary, it can be referenced later to file or amend a
 flight plan. It is also used when an aircraft is overdue or is
 reported missing.
+
+
+![Figure 13-4. HIWAS availability is shown on sectional chart.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-03-hiwas-availability-is-shown-on-sectional-chart.png)

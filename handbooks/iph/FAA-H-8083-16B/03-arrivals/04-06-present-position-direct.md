@@ -42,3 +42,6 @@ segment of the approach. Prior to issuing a clearance for the
 approach, the controller usually assigns the pilot an altitude
 to maintain until established on the final approach course ,
 compatible with glideslope intercept.
+
+
+![Figure 3-21. Arrival instructions when established.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-20-arrival-instructions-when-established.png)

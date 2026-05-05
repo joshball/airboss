@@ -47,5 +47,3 @@ in IMC, having one radio could be considered an “A” hazard. Instrument failu
 and backup systems could prevent an accident.
 •	 Autopilot–Operating an aircraft in IMC without an autopilot increases pilot workload. A pilot flying an aircraft in
 these conditions might consider aircraft without an autopilot an “A” hazard.
-
-![Figure 3-3. IMSAFE checklist.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-4-2-00-imsafe-checklist.png)

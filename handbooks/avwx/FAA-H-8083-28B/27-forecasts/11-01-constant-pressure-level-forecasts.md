@@ -46,7 +46,3 @@ Many constant pressure levels are available for display, depending on the model.
 constant pressure levels contained in Table 27-14. It should be noted that the levels provided on the website
 are only a subset of the levels available from the model that are routinely made available to NWS
 meteorologists and others (e.g., 400 mb, 600 mb).
-
-![Figure 27-26. NWS NCO Model Analyses and Guidance Website](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-11-1-00-nws-nco-model-analyses-and-guidance-website.png)
-
-![Figure 27-27. 300 mb Constant Pressure Forecast—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-11-1-01-300-mb-constant-pressure-forecast-example.png)

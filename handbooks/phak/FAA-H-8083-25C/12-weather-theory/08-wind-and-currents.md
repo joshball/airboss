@@ -21,3 +21,6 @@ currents (upward and downward motion) and wind
 they affect takeoff, landing, and cruise flight operations. Most
 importantly, currents and winds or atmospheric circulation
 cause weather changes.
+
+
+![Figure 12-8. Station pressure is converted to and reported in sea level pressure.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-06-station-pressure-is-converted-to-and-reported-in.png)

@@ -27,3 +27,6 @@ the maximum camber; inclusive of both the displacement
 of the mean camber line and its linear measurement from
 the end of the chord line, provide properties useful in
 evaluating airfoils.
+
+
+![Figure 4-2. Angle of attack and relative wind.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-4-01-angle-of-attack-and-relative-wind.png)

@@ -23,5 +23,3 @@ skills.
 Performance maneuvers, once grasped by the pilot, are very satisfying and rewarding. As the pilot develops skills in executing
 performance maneuvers, they may likely see an increased smoothness in their flight control application and an increased ability to
 sense the airplane’s attitude and orientation without significant conscious effort.
-
-![Figure 10-3. Chandelle.](/handbooks/afh/FAA-H-8083-3C/figures/fig-10-00-chandelle.png)

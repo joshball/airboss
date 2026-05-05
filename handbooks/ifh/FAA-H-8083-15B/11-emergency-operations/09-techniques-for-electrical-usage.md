@@ -11,3 +11,6 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 # Techniques for Electrical Usage
 
 Techniques for Electrical Usage
+
+
+![Figure 11-9. The default soft key menu that is displayed on the PFD contains a “NRST” (Nearest Airport) soft key. Pressing this soft  key opens a text box that displays the nearest 25 airports.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-11-08-the-default-soft-key-menu-that-is-displayed-on-t.png)

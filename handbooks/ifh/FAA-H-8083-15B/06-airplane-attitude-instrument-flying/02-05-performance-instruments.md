@@ -10,3 +10,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Performance Instruments
+
+![Figure 6-26. Performance instruments.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-26-performance-instruments.png)

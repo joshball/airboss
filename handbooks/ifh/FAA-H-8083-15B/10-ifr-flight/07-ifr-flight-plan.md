@@ -26,3 +26,6 @@ for completing and filing FAA Form 7233-1, Flight Plan.
 These forms are available at flight service stations (FSSs)
 and are generally found in flight planning rooms at airport
 terminal buildings. [Figure 10-1]
+
+
+![Figure 10-7. Holding—outbound timing.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-10-06-holding-outbound-timing.png)

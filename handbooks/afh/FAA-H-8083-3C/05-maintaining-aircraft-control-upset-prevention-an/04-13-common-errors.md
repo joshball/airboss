@@ -10,3 +10,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Common Errors
+
+![Figure 5-14. Elevator trim stall.](/handbooks/afh/FAA-H-8083-3C/figures/fig-5-13-elevator-trim-stall.png)

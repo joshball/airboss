@@ -24,3 +24,6 @@ increases with an increase in AOA up to the stalling angle,
 at which point it decreases with any further increase in AOA.
 In conventional aircraft, lift is therefore controlled by varying
 the AOA and speed.
+
+
+![Figure 4-17. Clear ice.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-4-16-clear-ice.png)

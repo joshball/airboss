@@ -38,3 +38,6 @@ temperature at –5 °C (15 °C – 20 °C). If the temperature
 or the pressure is different than the International Standard
 Atmosphere (ISA) prediction an adjustment must be made to
 performance predictions and various instrument indications.
+
+
+![Figure 4-14. Forces in a turn.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-4-10-vortex-generators.png)

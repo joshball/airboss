@@ -28,3 +28,6 @@ maneuvers. Descriptions of tasks and information on how to perform maneuvers and
 teaching documents, such as this handbook. A list of reference documents is contained in the appendices of each ACS and PTS. It is
 necessary that the latest version of the PTS and ACS, with all recent changes, be referenced for training. All recent versions and
 changes to the FAA ACS and PTS may be viewed or downloaded at www.faa.gov.
+
+
+![Figure 1-6. The flight instructor is responsible for teaching and training.](/handbooks/afh/FAA-H-8083-3C/figures/fig-1-05-the-flight-instructor-is-responsible-for-teachin.png)

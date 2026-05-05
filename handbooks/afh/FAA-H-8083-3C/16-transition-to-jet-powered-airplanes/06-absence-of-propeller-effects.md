@@ -13,3 +13,6 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 Absence of Propeller Effects
 The absence of a propeller affects the operation of jet-powered airplanes. Specific effects include the absence of lift from the
 propeller slipstream and the absence of propeller drag.
+
+
+![Figure 16-6. Transonic flow patterns.](/handbooks/afh/FAA-H-8083-3C/figures/fig-16-05-transonic-flow-patterns.png)

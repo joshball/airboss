@@ -48,7 +48,3 @@ the parcel descends, it quickly becomes unsaturated. Its temperature increases 3
 dewpoint increases at 0.5°C per 1,000 ft. The temperature-dewpoint spread increases while relative
 humidity decreases until the parcel reaches the surface. Note that the parcel is now much warmer and drier
 at the surface than when it began the vertical motion process in Figure 12-2.
-
-![Figure 12-2. Ascending Air Parcel That Becomes Saturated Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-3-00-ascending-air-parcel-that-becomes-saturated-exam.png)
-
-![Figure 12-3. Descending Air Parcel Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-3-01-descending-air-parcel-example.png)

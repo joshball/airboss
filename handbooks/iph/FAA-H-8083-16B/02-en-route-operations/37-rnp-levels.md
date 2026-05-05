@@ -18,3 +18,6 @@ as a distance in nautical miles from the intended centerline
 of a procedure, route, or path. RNP applications also
 account for potential errors at some multiple of RNP level
 (e.g., twice the RNP level).
+
+
+![Figure 2-37. LF/MR airway width.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-31-lf-mr-airway-width.png)

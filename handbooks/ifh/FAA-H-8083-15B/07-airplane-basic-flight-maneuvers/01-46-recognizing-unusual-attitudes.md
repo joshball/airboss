@@ -10,3 +10,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Recognizing Unusual Attitudes
+
+![Figure 7-39. Unusual attitude—nose-high.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-39-unusual-attitude-nose-high.png)

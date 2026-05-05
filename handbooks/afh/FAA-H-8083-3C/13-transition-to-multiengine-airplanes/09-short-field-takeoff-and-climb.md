@@ -28,3 +28,6 @@ short-field takeoffs. VX and VXSE are often perilously close to VMC, leaving sca
 VXSE is assumed. If flaps were used for takeoff, the engine failure situation becomes even more critical due to the additional drag
 incurred. If VX is less than 5 knots higher than VMC, give strong consideration to reducing useful load or using another runway in
 order to increase the takeoff margins so that a short-field technique is not required.
+
+
+![Figure 13-9. Stall recovery procedure.](/handbooks/afh/FAA-H-8083-3C/figures/fig-13-07-stall-recovery-procedure.png)

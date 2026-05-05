@@ -11,3 +11,6 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 # Advanced Technologies
 
 Advanced Technologies
+
+
+![Figure 9-33. Instrument landing systems.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-31-instrument-landing-systems.png)

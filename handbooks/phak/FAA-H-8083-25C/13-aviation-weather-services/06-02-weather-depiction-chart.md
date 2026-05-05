@@ -35,3 +35,6 @@ ceiling height, weather, and obstructions to visibility, but
 does not include winds or pressure readings like the surface
 analysis chart. A bracket ( ] ) symbol to the right of the station
 indicates the observation was made by an automated station.
+
+
+![Figure 13-12. Weather depiction chart.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-11-weather-depiction-chart.png)

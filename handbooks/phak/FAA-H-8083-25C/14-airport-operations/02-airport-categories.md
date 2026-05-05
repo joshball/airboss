@@ -58,3 +58,6 @@ in the U.S. system. The category also includes privately
 owned, public use airports that enplane 2500 or more
 passengers annually and receive scheduled airline
 service.
+
+
+![Figure 14-2. Preferred Entry-Crossing Midfield.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-03-preferred-entry-crossing-midfield.png)

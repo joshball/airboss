@@ -22,3 +22,6 @@ a funnel-shaped cloud extending downward from the
 cumulonimbus base. If the cloud does not reach the surface,
 it is a funnel cloud; if it touches a land surface, it is a tornado;
 and if it touches water, it is a “waterspout.”
+
+
+![Figure 12-13. Sea breeze and land breeze wind circulation patterns.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-11-sea-breeze-and-land-breeze-wind-circulation-patt.png)

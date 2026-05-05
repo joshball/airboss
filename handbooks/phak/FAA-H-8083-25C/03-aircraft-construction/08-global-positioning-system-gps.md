@@ -139,3 +139,6 @@ I        0
 Glideslope needle indicates “fly
 down” to intercept glideslope
 Glideslope
+
+
+![Figure 3-8. Types of flaps.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-07-types-of-flaps.png)

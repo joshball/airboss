@@ -33,3 +33,6 @@ databases. In 1975, the committee published the first
 standard, ARINC Specification 424, which has remained the
 worldwide accepted format for transmission of navigation
 databases.
+
+
+![Figure 6-2. GPS with a flight route on display.](/handbooks/iph/FAA-H-8083-16B/figures/fig-6-01-gps-with-a-flight-route-on-display.png)

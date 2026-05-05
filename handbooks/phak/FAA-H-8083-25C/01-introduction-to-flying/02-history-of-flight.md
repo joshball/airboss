@@ -165,3 +165,6 @@ the pilot became lost and landed at the wrong airfield. In
 August of 1918, the United States Postal Service took control
 of the airmail routes and brought the existing Army airmail
 pilots and their planes into the program as postal employees.
+
+
+![Figure 1-2. Glider from 1852 by Sir George Cayley, British aviator  (1773–1857).](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-00-glider-from-1852-by-sir-george-cayley-british-av.png)

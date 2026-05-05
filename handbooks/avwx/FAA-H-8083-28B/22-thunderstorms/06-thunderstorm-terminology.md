@@ -35,5 +35,3 @@ Shelf Cloud. A low, horizontal wedge-shaped cloud associated with a thunderstorm
 roll cloud, a shelf cloud is attached to the base of the parent cloud above it, which is usually a thunderstorm.
 Updraft. A small-scale current of rising air. If the air is sufficiently moist, then the moisture condenses to
 become a cumulus cloud or an individual tower of a towering cumulus or cumulonimbus.
-
-![Figure 22-6. Factors that Influence Thunderstorm Motion](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-6-00-factors-that-influence-thunderstorm-motion.png)

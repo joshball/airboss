@@ -67,3 +67,6 @@ information is available on request from an flight service
 station (FSS). The FAA does provide NOTAMs to advise
 pilots of the status of the WAAS and level of service
 available.
+
+
+![Figure 9-36. Precision and nonprecision ALS configuration.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-34-precision-and-nonprecision-als-configuration.png)

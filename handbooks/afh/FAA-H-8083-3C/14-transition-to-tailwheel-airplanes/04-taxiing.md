@@ -39,3 +39,6 @@ While stick-forward positioning is essential in strong tailwinds, it is not like
 The propeller wash in even lightly-powered airplanes is usually strong enough to overcome the effects of light tailwinds, producing a
 net headwind over the tail. This in turn suggests that back stick, not forward, does the most to help with directional control. If in
 doubt, it is best to sample the wind as you taxi and position the elevator where it will do the most good.
+
+
+![Figure 14-4. Effect of CG on directional control.](/handbooks/afh/FAA-H-8083-3C/figures/fig-14-03-effect-of-cg-on-directional-control.png)

@@ -17,3 +17,6 @@ operating with minimal power. If a two-position battery
 master/alternator rocker switch is installed, it can be utilized
 to isolate the main battery from the electrical system and
 conserve power. [Figure 11-5]
+
+
+![Figure 11-10. An enlargement of the box shown in the lower right  of Figure 11-9. Note that KGNV would be flashing.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-11-11-an-enlargement-of-the-box-shown-in-the-lower-rig.png)

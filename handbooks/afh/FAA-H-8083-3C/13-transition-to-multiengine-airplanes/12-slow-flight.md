@@ -20,3 +20,6 @@ Pilots should closely monitor cylinder head and oil temperatures during slow fli
 tend to heat up fairly quickly under some conditions of slow flight, particularly in the landing configuration. Simulated engine failures
 should not be conducted during slow flight. The airplane will be well below VSSE and very close to VMC. Stability, stall warning, or
 stall avoidance devices should not be disabled while maneuvering during slow flight.
+
+
+![Figure 13-12. Forces created during single-engine operation.](/handbooks/afh/FAA-H-8083-3C/figures/fig-13-10-forces-created-during-single-engine-operation.png)

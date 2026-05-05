@@ -19,3 +19,6 @@ its indications and limitations (see Chapter 5, Flight
 Instruments). With this knowledge, a pilot can quickly
 interpret an instrument indication and translate that
 information into a control response.
+
+
+![Figure 8-2. The flight instruments for pitch control are the airspeed indicator, attitude indicator, altimeter, and vertical speed indicator.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-8-02-the-flight-instruments-for-pitch-control-are-the.png)

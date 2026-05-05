@@ -46,3 +46,6 @@ NOTE: The following provides guidance that is not specific
 to any particular aircraft GPS system. For specific system
 guidance, refer to the POH/AFM, or supplement, or contact
 the system manufacturer.
+
+
+![Figure 9-39. A GS receiver indication and aircraft displacement. An analog system is on the left and the same indication on the Garmin  PFD on the right.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-37-a-gs-receiver-indication-and-aircraft-displaceme.png)

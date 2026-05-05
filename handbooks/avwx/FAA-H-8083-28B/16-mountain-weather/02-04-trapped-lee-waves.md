@@ -55,7 +55,3 @@ the mountain range. This separates a turbulent wake region below mountaintop lev
 
 6 Durran, D. R., & Klemp, J. B. (1983). A compressible model for the simulation of moist mountain waves. Monthly
 Weather Review, 111, 2341-2361.
-
-![Figure 16-7. Schematic of the Strong Shear Zone Associated with a Hydraulic Jump in a Mountain Wave](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-4-00-schematic-of-the-strong-shear-zone-associated-wi.png)
-
-![in Figure 16-5.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-4-01-untitled.png)

@@ -29,3 +29,6 @@ persist, seek medical attention.
 Ingestion—first aid is not normally required; however,
 if swallowed and symptoms develop, seek medical
 attention.
+
+
+![Figure 17-16. Night vision.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-15-night-vision.png)

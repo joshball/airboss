@@ -56,3 +56,6 @@ the pitch attitude slightly to avoid increasing the vertical rate.
 Adjust the pitch attitude smoothly to avoid overcontrolling.
 Small power corrections are usually sufficient to bring the
 airspeed back to the desired indication.
+
+
+![Figure 8-19. MFD display of a moving map.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-8-18-mfd-display-of-a-moving-map.png)

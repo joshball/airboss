@@ -27,3 +27,8 @@ If the linkage between the balance tab and the fixed
 surface is adjustable from the flight deck, the tab acts as a
 combination trim and balance tab that can be adjusted to a
 desired deflection.
+
+
+![Figure 6-21. An antiservo tab attempts to streamline the control  surface and is used to make the stabilator less sensitive by opposing the force exerted by the pilot.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-17-an-antiservo-tab-attempts-to-streamline-the-cont.png)
+
+![Figure 6-20. The movement of the elevator is opposite to the  direction of movement of the elevator trim tab.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-18-the-movement-of-the-elevator-is-opposite-to-the-.png)

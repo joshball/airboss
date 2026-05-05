@@ -113,3 +113,6 @@ be considered for special issuance. If you can present
 satisfactory medical documentation to the FAA that your
 condition is stable, the chances are good that you will be
 able to qualify for an Authorization.
+
+
+![Figure 17-2. The Eustachian tube allows air pressure to equalize  in the middle ear.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-01-the-eustachian-tube-allows-air-pressure-to-equal.png)

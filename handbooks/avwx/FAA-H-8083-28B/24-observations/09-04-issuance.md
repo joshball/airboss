@@ -33,7 +33,3 @@ imagery, and weather trends (see Figure 24-34)], TAFs, PIREPs, and other aeronau
 (e.g., RCOs, TFRs, and charts).
 
 Figure 24-34. Weather Trends Example at Unalakleet (PAUN), Alaska
-
-![Figure 24-33. VEIA Example at Bald Mountain (K7BM) in Colorado](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-3-00-veia-example-at-bald-mountain-k7bm-in-colorado.png)
-
-![Figure 24-34. Weather Trends Example at Unalakleet (PAUN), Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-4-01-weather-trends-example-at-unalakleet-paun-alaska.png)

@@ -248,6 +248,18 @@ Risk assessment is a critical element in the risk analysis process. To determine
 likelihood and risk severity for all identified hazards. The primary tools for this process are the FRAT and the risk assessment
 matrix. A pilot’s risk assessment accuracy should improve with practice.
 
+![Figure 4-1. Risk Assessment Matrix.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-4-00-risk-assessment-matrix.png)
+
+![Figure 4-2. FRAT excerpt for pilot hazards and associated risks.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-4-01-frat-excerpt-for-pilot-hazards-and-associated-ri.png)
+
+![Figure 4-3. FRAT excerpt for aircraft hazards and associated risks.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-4-02-frat-excerpt-for-aircraft-hazards-and-associated.png)
+
+![Figure 4-4. FRAT excerpt for environment hazards and associated risks.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-4-03-frat-excerpt-for-environment-hazards-and-associa.png)
+
+![Figure 4-5. FRAT Excerpt for external pressure hazards and associated risks.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-4-04-frat-excerpt-for-external-pressure-hazards-and-a.png)
+
+![Figure 4-6. FRAT hazards and associated risks.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-4-05-frat-hazards-and-associated-risks.png)
+
 | High | High | Serious |  |
 | --- | --- | --- | --- |
 | High | Serious |  |  |

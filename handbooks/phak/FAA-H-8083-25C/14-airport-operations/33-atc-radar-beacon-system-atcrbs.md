@@ -99,3 +99,6 @@ broadcasting aircraft position information to a ground station,
 ADS–B can also provide coverage in areas that do not have
 radar coverage. In addition, ADS–B provides trajectory
 information that includes speed and direction of motion.
+
+
+![Figure 14-33. Runway lights.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-33-runway-lights.png)

@@ -63,3 +63,14 @@ FAA Order 8900.1 Volume 4, Chapter 15, § 1,
 Electronic Flight Bag authorization for use; and
 FAA Order 8900.1 Volume 3, Chapter 18, § 3, Part A
 Operations Specifications - General
+
+
+![Figure 5-5. Next generation data communications provides an additional means of two-way communication for ATC clearances,  instructions, advisories, flight crew requests, and reports.](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-04-next-generation-data-communications-provides-an-.png)
+
+![Figure 5-27. Restricted airspace.](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-18-restricted-airspace.png)
+
+![Figure 5-28. Prohibited airspace.](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-19-prohibited-airspace.png)
+
+![Figure 5-29. Military operations area (MOA).](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-20-military-operations-area-moa.png)
+
+![Figure 5-30. Warning area.](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-21-warning-area.png)

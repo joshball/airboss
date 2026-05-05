@@ -35,3 +35,6 @@ information on the principles discussed in this chapter, visit
 the National Aeronautics and Space Administration (NASA)
 Beginner’s Guide to Aerodynamics at www.grc.nasa.gov/
 www/k-12/airplane/bga.html.
+
+
+![Figure 4-7. Pressure distribution on an airfoil and CP changes  with AOA.](/handbooks/phak/FAA-H-8083-25C/figures/fig-4-06-pressure-distribution-on-an-airfoil-and-cp-chang.png)

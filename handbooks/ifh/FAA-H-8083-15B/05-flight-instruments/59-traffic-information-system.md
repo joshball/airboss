@@ -34,3 +34,6 @@ Figure 5-54 displays the pictorial concept of the traffic
 information system. Noteworthy is the requirement to have
 Mode S and that the ground air traffic station processes the
 Mode S signal.
+
+
+![Figure 5-59. A six-frame sequence illustrating the manner in which TAWS operates. A TAWS installation is aircraft specific and provides  warnings and cautions based upon time to potential impact with terrain rather than distance. The TAWS is illustrated in an upper left window while aircrew view is provided out of the ](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-58-a-six-frame-sequence-illustrating-the-manner-in-.png)

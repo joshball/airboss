@@ -24,3 +24,6 @@ to enable detection. Although back and forth eye movements
 seem preferred by most pilots, each pilot should develop a
 scanning pattern that is most comfortable and then adhere to
 it to assure optimum scanning. Even if entitled to the right-ofway, a pilot should yield if another aircraft seems too close.
+
+
+![Figure 14-43. Transponder phraseology.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-43-transponder-phraseology.png)

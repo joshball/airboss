@@ -37,3 +37,6 @@ cost routes that may be off the prescribed route structure. NRP
 aircraft are not subject to route-limiting restrictions (e.g.,
 published preferred IFR routes) beyond a 200 NM radius of
 their point of departure or destination.
+
+
+![Figure 1-5. Legend from en route low attitude chart.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-04-legend-from-en-route-low-attitude-chart.png)

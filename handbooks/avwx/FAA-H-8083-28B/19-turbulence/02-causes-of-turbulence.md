@@ -202,19 +202,3 @@ turbulence. Similar wind enhancements can be anticipated near the slopes of an i
 downdrafts over forested areas may be strong enough to force aircraft down into the trees, even when the
 aircraft is flown at the best rate-of-climb speed. This effect on the aircraft can be exacerbated by loss of
 aircraft performance because of the high-density altitude.
-
-![Figure 19-1. Convective Turbulence](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-1-00-convective-turbulence.png)
-
-![Figure 19-2. Thermals](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-1-01-thermals.png)
-
-![Figure 19-3. Thunderstorm with Shelf Cloud](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-2-00-thunderstorm-with-shelf-cloud.png)
-
-![Figure 19-4. Mechanical Turbulence](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-2-01-mechanical-turbulence.png)
-
-![Figure 19-5. Wind Shear Turbulence](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-3-00-wind-shear-turbulence.png)
-
-![Figure 19-6. Wind Shear Turbulence Associated with a Temperature Inversion](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-3-01-wind-shear-turbulence-associated-with-a-temperat.png)
-
-![Figure 19-7. Wind Shear Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-4-00-wind-shear-example.png)
-
-![Figure 19-8. LLWS Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-5-00-llws-example.png)

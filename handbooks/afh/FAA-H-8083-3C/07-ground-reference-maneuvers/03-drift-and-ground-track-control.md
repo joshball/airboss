@@ -56,3 +56,6 @@ magnitude of the wind’s effect on the groundspeed is less. In general, When th
 the groundspeed will be less than the airspeed. When the wind is blowing from directly behind the airplane, the groundspeed will be
 faster than the airspeed. In other words, when the airplane is headed upwind, the groundspeed is decreased; when headed downwind,
 the groundspeed is increased.
+
+
+![Figure 7-3. Effect of wind during turn.](/handbooks/afh/FAA-H-8083-3C/figures/fig-7-02-effect-of-wind-during-turn.png)

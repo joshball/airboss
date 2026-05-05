@@ -27,3 +27,6 @@ Flying a complex or high-performance airplane requires a pilot to further divide
 flight: takeoff and landing. The knowledge, judgment, and piloting skills required to fly these airplanes needs to be developed. It is
 essential that adequate training is received to ensure a complete understanding of the systems, their operation (both normal and
 emergency), and operating limitations.
+
+
+![Figure 12-5. Flaps extended pitching moment.](/handbooks/afh/FAA-H-8083-3C/figures/fig-12-04-flaps-extended-pitching-moment.png)

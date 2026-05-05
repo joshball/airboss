@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Effect of Wing Planform
+
+![Figure 5-7. Form drag.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-05-form-drag.png)

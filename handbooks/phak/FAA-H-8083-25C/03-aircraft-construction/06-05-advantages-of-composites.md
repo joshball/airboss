@@ -101,3 +101,6 @@ from composites, only mechanical methods are allowed, such
 as gentle grit blasting or sanding. Many expensive composite
 parts have been ruined by the use of paint stripper and such
 damage is generally not repairable.
+
+
+![Figure 3-15. Composite aircraft.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-14-composite-aircraft.png)

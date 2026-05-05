@@ -28,3 +28,6 @@ operation by turning them on momentarily during the preflight inspection. Positi
 by tapping the light fixture. If the lights blink while being tapped, determine the cause prior to flight. Parking ramps should be
 checked with a flashlight prior to entering the airplane. During the day, it is quite easy to see stepladders, chuckholes, wheel chocks,
 and other obstructions, but at night, it is more difficult and a check of the area can prevent taxiing mishaps.
+
+
+![Figure 11-8. Round out when tire marks are visible.](/handbooks/afh/FAA-H-8083-3C/figures/fig-11-07-round-out-when-tire-marks-are-visible.png)

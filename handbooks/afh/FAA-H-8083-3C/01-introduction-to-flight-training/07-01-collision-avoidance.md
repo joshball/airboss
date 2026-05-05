@@ -61,3 +61,6 @@ and land without additional human intervention. Currently, these systems take no
 another aircraft, although they transmit over the radio. Pilots should avoid the path of any aircraft under the control of an EAL or
 suspected as under the control of an EAL system. The Emergency Procedures chapter in this handbook contains additional
 information about these systems.
+
+
+![Figure 1-10. Most midair collision accidents occur in good weather.](/handbooks/afh/FAA-H-8083-3C/figures/fig-1-09-most-midair-collision-accidents-occur-in-good-we.png)

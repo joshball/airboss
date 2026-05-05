@@ -45,3 +45,6 @@ pursuit of a pilot certificate. A trainee may judge the effectiveness of the fli
 program solely in terms of being able to pass the requisite FAA practical test. A good flight instructor is able to communicate that
 evaluation through practical tests is a mere sampling of pilot ability that is compressed into a short period of time. The flight
 instructor’s role is to train the “total” pilot.
+
+
+![Figure 1-4. FAA Form 8100-2, Standard Airworthiness Certificate.](/handbooks/afh/FAA-H-8083-3C/figures/fig-1-03-faa-form-8100-2-standard-airworthiness-certifica.png)

@@ -16,3 +16,6 @@ of them have the same major components. [Figure 3-4] The
 overall characteristics are largely determined by the original
 design objectives. Most airplane structures include a fuselage,
 wings, an empennage, landing gear, and a powerplant.
+
+
+![Figure 3-4. Airplane components.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-02-airplane-components.png)

@@ -102,3 +102,6 @@ an inoperative engine was also described in detail. These two considerations cor
 radial line (VYSE) on the airspeed indicator. The actions a pilot takes when dealing with stalls, VMC, or best performance vary
 greatly. Understanding these concepts, knowing how to mitigate the risks, and possessing the skills to handle an engine failure in a
 variety of situations, allows a pilot to enjoy the increased performance and safety provided when flying a multiengine airplane.
+
+
+![Figure 13-22. Typical “securing failed engine” emergency checklist.](/handbooks/afh/FAA-H-8083-3C/figures/fig-13-20-typical-securing-failed-engine-emergency-checkli.png)

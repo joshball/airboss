@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Introduction
+
+![Figure 3-1. The four forces.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-01-the-four-forces.png)

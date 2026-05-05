@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Introduction
+
+![Figure 3-1. Basic flight controls and instrument panel.](/handbooks/afh/FAA-H-8083-3C/figures/fig-3-00-basic-flight-controls-and-instrument-panel.png)

@@ -11,3 +11,6 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 # Courses
 
 Courses
+
+
+![Figure 4-9. Fly-by and fly-over waypoints.](/handbooks/iph/FAA-H-8083-16B/figures/fig-4-08-fly-by-and-fly-over-waypoints.png)

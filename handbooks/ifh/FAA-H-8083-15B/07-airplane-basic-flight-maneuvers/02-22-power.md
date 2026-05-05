@@ -10,3 +10,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Power
+
+![Figure 7-62. The pilot has fixated on pitch and altitude, leaving bank indications unattended. Note the trend line to the left.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-59-straight-and-level-flight-airspeed-decreasing.png)

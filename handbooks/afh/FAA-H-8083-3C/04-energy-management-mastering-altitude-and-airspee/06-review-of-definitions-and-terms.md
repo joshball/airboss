@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Review of Definitions and Terms
+
+![Figure 4-6. The altitude-speed “map” showing lines of constant energy height.](/handbooks/afh/FAA-H-8083-3C/figures/fig-4-04-the-altitude-speed-map-showing-lines-of-constant.png)

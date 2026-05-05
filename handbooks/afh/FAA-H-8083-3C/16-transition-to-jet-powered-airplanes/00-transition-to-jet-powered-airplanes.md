@@ -14,9 +14,3 @@ preparation for, and a supplement to, structured jet airplane qualification trai
 differences a pilot may encounter when transitioning to jet-powered airplanes. The major differences between jet-powered airplanes
 and piston-powered airplanes have been addressed in several distinct areas: differences in aerodynamics, systems, and pilot operating
 procedures. For airplane-specific information, a pilot should refer to the FAA-approved Airplane Flight Manual for that airplane.
-
-![Figure 16-7. Thrust and power required curves (jet aircraft vs. propeller-driven aircraft).](/handbooks/afh/FAA-H-8083-3C/figures/fig-16-00-thrust-and-power-required-curves-jet-aircraft-vs.png)
-
-![Figure 16-14. Typical descent profile.](/handbooks/afh/FAA-H-8083-3C/figures/fig-16-01-typical-descent-profile.png)
-
-![Figure 16-15. Effect of speed on descent path.](/handbooks/afh/FAA-H-8083-3C/figures/fig-16-02-effect-of-speed-on-descent-path.png)

@@ -10,3 +10,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Eights-on-Pylons
+
+![Figure 7-10. Eights on pylons.](/handbooks/afh/FAA-H-8083-3C/figures/fig-7-09-eights-on-pylons.png)

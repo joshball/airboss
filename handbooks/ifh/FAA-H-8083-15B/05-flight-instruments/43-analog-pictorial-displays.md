@@ -11,3 +11,6 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 # Analog Pictorial Displays
 
 Analog Pictorial Displays
+
+
+![Figure 5-43. A diagram layout of an autopilot by S-Tec.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-42-a-diagram-layout-of-an-autopilot-by-s-tec.png)

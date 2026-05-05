@@ -10,3 +10,7 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Bank Control
+
+![Figure 6-10. Pitch attitude has moved higher.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-09-pitch-attitude-has-moved-higher.png)
+
+![Figure 6-11. Bank instruments.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-10-bank-instruments.png)

@@ -25,3 +25,6 @@ Graveyard spiral
 Graveyard spin
 Correct path
 Figure 3-7. Graveyard spiral.
+
+
+![Figure 3-9. Runway width and slope illusions.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-3-08-runway-width-and-slope-illusions.png)

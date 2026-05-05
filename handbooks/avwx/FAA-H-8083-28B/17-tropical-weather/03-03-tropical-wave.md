@@ -27,5 +27,3 @@ thunderstorms. The weather activity is roughly in a north-south line.
 Tropical waves occur in all seasons but are more frequent and stronger during summer and early autumn.
 Pacific waves frequently affect Hawaii; Atlantic waves occasionally move into the Gulf of America,
 reaching the coast of the United States.
-
-![Figure 17-4. A TUTT Moves Eastward Across the Hawaiian Islands](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-3-00-a-tutt-moves-eastward-across-the-hawaiian-island.png)

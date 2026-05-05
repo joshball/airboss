@@ -358,35 +358,3 @@ clouds provide visual proof that mountain waves exist. However, these clouds may
 too dry.
 
 Figure 16-15. Schematic of Mountain Waves and Associated Clouds
-
-![oscillations before the resulting wave motion dampens out. This process is depicted in Figure 16-1.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-2-00-gravity-wave-oscillations.png)
-
-![Figure 16-1. Gravity Wave Oscillations](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-2-01-this-effect-is-illustrated-in-figure-16-2.png)
-
-![a stable temperature lapse rate. This effect is illustrated in Figure 16-2.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-2-02-gravity-shear-waves.png)
-
-![Figure 16-2. Gravity-Shear Waves](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-2-03-untitled.png)
-
-![Figure 16-5. Schematic of a Vertically Propagating Mountain Wave](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-3-00-schematic-of-a-vertically-propagating-mountain-w.png)
-
-![themselves. These features are indicated schematically in Figure 16-6. The jump region is frequently an  area of extreme turbulence extending to 10,000 ft or more above the surface. The area of the jump is sometimes marked by a line of ragged rotor clouds exhibiting very turbulent motion. Downwind of the jump, turbulen](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-3-01-these-features-are-indicated-schematically-in-fi.png)
-
-![Figure 16-6. Schematic Showing Locations of Jump and Wave Breaking Region of a Vertically Propagating Mountain  Wave](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-3-02-schematic-showing-locations-of-jump-and-wave-bre.png)
-
-![Figure 16-7. Schematic of the Strong Shear Zone Associated with a Hydraulic Jump in a Mountain Wave](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-4-00-schematic-of-the-strong-shear-zone-associated-wi.png)
-
-![in Figure 16-5.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-4-01-untitled.png)
-
-![Figure 16-8. Computer Simulation of Trapped Lee Waves Behind a 300-m-High Mountain](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-5-00-lenticular-clouds-associated-with-a-trapped-lee-.png)
-
-![Figure 16-9. Lenticular Clouds Associated with a Trapped Lee Wave](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-6-00-conceptual-view-of-a-mountain-lee-wave-rotor-zon.png)
-
-![Figure 16-10. Conceptual View of a Mountain Lee Wave Rotor Zone](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-6-01-development-of-a-strong-roll-vortex-associated-w.png)
-
-![Figure 16-11. Development of a Strong Roll Vortex Associated with a Wind Surge Down the Lee Slope of a Mountain](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-6-02-schematic-of-vertically-oriented-vortices-genera.png)
-
-![Figure 16-12. Schematic of Vertically Oriented Vortices Generated in the Lee of an Isolated Mountain Peak](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-6-03-nws-dust-devils-a-life-cycle.png)
-
-![Figure 16-13. NWS Dust Devils: A Life Cycle](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-6-04-accident-damage-caused-by-a-dust-devil.png)
-
-![Figure 16-14. Accident Damage Caused by a Dust Devil](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-7-00-schematic-of-mountain-waves-and-associated-cloud.png)

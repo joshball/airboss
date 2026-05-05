@@ -11,3 +11,6 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 # Safety Systems
 
 Safety Systems
+
+
+![Figure 5-56. A Skywatch System.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-55-a-skywatch-system.png)

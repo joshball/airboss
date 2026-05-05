@@ -19,7 +19,3 @@ the radar site (generally within 10 NM), wind farm turbines can result in beam b
 high reflectivity values (see Figure 15-18).
 
 Figure 15-18. Wind Farms Can Make Benign Echoes Appear as Small Storms
-
-![Figure 15-17. WSR-88D Weather Radar AP Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-14-00-wsr-88d-weather-radar-ap-example.png)
-
-![Figure 15-18. Wind Farms Can Make Benign Echoes Appear as Small Storms](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-14-01-wind-farms-can-make-benign-echoes-appear-as-smal.png)

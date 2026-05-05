@@ -38,5 +38,3 @@ Wind speed is directly proportional to the PGF, which itself is directly proport
 gradient. Closely spaced contours/isobars indicate strong winds, while widely spaced contours/isobars
 mean lighter wind. From a pressure analysis, users can get a general idea of wind speed from contour/isobar
 spacing.
-
-![directly across the contours/isobars. See Figure 10-1.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-1-00-see-figure-10-1.png)

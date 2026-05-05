@@ -283,3 +283,6 @@ dizziness). Observing the recommended dosing interval
 doesn’t eliminate the risk for adverse side effects because
 everyone metabolizes medications differently. However,
 five times the dosing interval is a reasonable rule of thumb.
+
+
+![Figure 17-21. Geometric perspective.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-20-geometric-perspective.png)

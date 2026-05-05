@@ -14,3 +14,6 @@ Fog
 Flying into fog can create an illusion of pitching up. Pilots
 who do not recognize this illusion often steepen the approach
 abruptly.
+
+
+![Figure 17-8. Impairment scale with alcohol use.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-07-impairment-scale-with-alcohol-use.png)

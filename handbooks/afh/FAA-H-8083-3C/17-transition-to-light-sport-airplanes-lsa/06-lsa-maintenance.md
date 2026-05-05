@@ -32,3 +32,6 @@ safety directives are not distributed by the FAA. S-LSA owners should comply wit
 S-LSA compliance with maintenance requirements provides greater latitude for owners and operators of these airplanes. Because of
 the options in complying with the maintenance requirements, pilots who are transitioning to LSAs should understand how
 maintenance is accomplished; who is providing the maintenance services; and verify that all compliance requirements have been met.
+
+
+![Figure 17-6. Crosswind landing.](/handbooks/afh/FAA-H-8083-3C/figures/fig-17-05-crosswind-landing.png)

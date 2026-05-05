@@ -40,59 +40,62 @@ runway visual range (RVR). One of the consequences of
 takeoffs with reduced visibility is that pilots are challenged
 in maintaining situational awareness during taxi operations.
 
-![Figure 1-2. Airport diagram of Oshkosh, Wisconsin as depicted in  the A/FD section of the CS.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-00-airport-diagram-of-oshkosh-wisconsin-as-depicted.png)
+![Figure 1-6. Example of runway hot spots located at Long Beach/Daugherty Field Airport (KLGB).](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-05-example-of-runway-hot-spots-located-at-long-beac.png)
 
-![Figure 1-5. FAA recommendations for reducing runway incursions.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-01-faa-recommendations-for-reducing-runway-incursio.png)
+![Figure 1-7. Los Angeles International Airport diagram, North Route, and standardized taxi route.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-06-los-angeles-international-airport-diagram-north-.png)
 
-![Figure 1-6. Example of runway hot spots located at Long Beach/Daugherty Field Airport (KLGB).](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-02-example-of-runway-hot-spots-located-at-long-beac.png)
+![Figure 1-8. Examples of non-standard takeoff minimums for Colorado Springs, Colorado.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-07-examples-of-non-standard-takeoff-minimums-for-co.png)
 
-![Figure 1-8. Examples of non-standard takeoff minimums for Colorado Springs, Colorado.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-03-examples-of-non-standard-takeoff-minimums-for-co.png)
+![Figure 1-14. Previous TERPS departure procedures.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-13-previous-terps-departure-procedures.png)
 
-![Figure 1-9. Examples of weather information of various flight  information publications (FLIP).](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-04-examples-of-weather-information-of-various-fligh.png)
+![Figure 1-15. Diverse Departure Obstacle Assessment to 25/46 NM.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-14-diverse-departure-obstacle-assessment-to-25-46-n.png)
 
-![Figure 1-10. RVR conversion table.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-05-rvr-conversion-table.png)
+![Figure 1-18. Examples of takeoff minimums obstacle clearance.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-17-examples-of-takeoff-minimums-obstacle-clearance.png)
 
-![Figure 1-11. AWSS installation at Driggs-Reed, Idaho.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-06-awss-installation-at-driggs-reed-idaho.png)
+![Figure 1-19. Part 25 turbine-powered, transport category airplane OEI actual (gross) takeoff flight path and OEI net takeoff flight path.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-18-part-25-turbine-powered-transport-category-airpl.png)
 
-![Figure 1-12. CS entry for an AWOS station.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-07-cs-entry-for-an-awos-station.png)
+![Figure 1-20. Airport/runway analysis example.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-19-airport-runway-analysis-example.png)
 
-![Figure 1-13. Examples of IFR alternate minimums.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-08-examples-of-ifr-alternate-minimums.png)
+![Figure 1-21. Graphic ODP/booklet front matter.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-20-graphic-odp-booklet-front-matter.png)
 
-![Figure 1-17. Rate of climb table.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-09-rate-of-climb-table.png)
+![Figure 1-22. SID chart.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-21-sid-chart.png)
 
-![Figure 1-18. Examples of takeoff minimums obstacle clearance.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-10-examples-of-takeoff-minimums-obstacle-clearance.png)
+![Figure 1-23. Transition routes as depicted on SID.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-22-transition-routes-as-depicted-on-sid.png)
 
-![Figure 1-20. Airport/runway analysis example.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-11-airport-runway-analysis-example.png)
+![Figure 1-24. Example of a common SID at Denver, Colorado.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-23-example-of-a-common-sid-at-denver-colorado.png)
 
-![Figure 1-22. SID chart.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-12-sid-chart.png)
+![Figure 1-26. Departure procedure notes and cautionary statements.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-25-departure-procedure-notes-and-cautionary-stateme.png)
 
-![Figure 1-24. Example of a common SID at Denver, Colorado.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-13-example-of-a-common-sid-at-denver-colorado.png)
+![Figure 1-28. Flight plan equipment codes (continued on next page).](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-27-flight-plan-equipment-codes-continued-on-next-pa.png)
 
-![Figure 1-25. Example of a radar SID at Denver, Colorado.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-14-example-of-a-radar-sid-at-denver-colorado.png)
+![Figure 1-28. Flight plan equipment codes (continued).](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-28-flight-plan-equipment-codes-continued.png)
 
-![Figure 1-26. Departure procedure notes and cautionary statements.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-15-departure-procedure-notes-and-cautionary-stateme.png)
+![Figure 1-29. Examples of RNAV SID.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-29-examples-of-rnav-sid.png)
 
-![Figure 1-29. Examples of RNAV SID.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-16-examples-of-rnav-sid.png)
+![Figure 1-30. Examples of RNAV ODP.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-30-examples-of-rnav-odp.png)
 
-![Figure 1-30. Examples of RNAV ODP.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-17-examples-of-rnav-odp.png)
+![Figure 1-34. New charting standard without ATC annotations.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-34-new-charting-standard-without-atc-annotations.png)
 
-![Figure 1-31. Fly-over and fly-by waypoints.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-18-fly-over-and-fly-by-waypoints.png)
+![Figure 1-35. Diverse vector area establishment criteria.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-35-diverse-vector-area-establishment-criteria.png)
 
-![Figure 1-32. Operation requirements for RNAV.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-19-operation-requirements-for-rnav.png)
+![Figure 1-36. Examples of takeoff minimums obstacle clearance.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-36-examples-of-takeoff-minimums-obstacle-clearance.png)
 
-![Figure 1-33. Crossing altitude is there to support an ATC requirement.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-20-crossing-altitude-is-there-to-support-an-atc-req.png)
+![Figure 1-37. Noise abatement SID.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-37-noise-abatement-sid.png)
 
-![Figure 1-34. New charting standard without ATC annotations.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-21-new-charting-standard-without-atc-annotations.png)
-
-![Figure 1-35. Diverse vector area establishment criteria.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-22-diverse-vector-area-establishment-criteria.png)
-
-![Figure 1-36. Examples of takeoff minimums obstacle clearance.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-23-examples-of-takeoff-minimums-obstacle-clearance.png)
-
-|  | Departure Procedures |
-| --- | --- |
-| Introduction<br>Thousands of instrument flight rules (IFR) takeoffs and<br>departures occur daily in the National Airspace System<br>(NAS). In order to accommodate this volume of IFR trafcfi, air<br>trafcfi control (ATC) must rely on pilots to use charted airport<br>sketches and diagrams, as well as departure procedures<br>(DPs) that include both standard instrument departures<br>(SIDs) and obstacle departure procedures (ODPs). While<br>many charted (and uncharted) departures are based on<br>radar vectors, the bulk of IFR departures in the NAS require<br>pilots to navigate out of the terminal environment to the<br>en route phase. |  |
-
-<a class="handbook-table-source" href="/handbooks/iph/FAA-H-8083-16B/tables/tbl-1-00-untitled.html">Open original</a>
+<div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-1-00-untitled.html">
+<table><thead><tr><th></th><th>Departure Procedures</th></tr></thead><tbody><tr><td>Introduction
+Thousands of instrument flight rules (IFR) takeoffs and
+departures occur daily in the National Airspace System
+(NAS). In order to accommodate this volume of IFR trafcfi, air
+trafcfi control (ATC) must rely on pilots to use charted airport
+sketches and diagrams, as well as departure procedures
+(DPs) that include both standard instrument departures
+(SIDs) and obstacle departure procedures (ODPs). While
+many charted (and uncharted) departures are based on
+radar vectors, the bulk of IFR departures in the NAS require
+pilots to navigate out of the terminal environment to the
+en route phase.</td><td></td></tr></tbody></table>
+</div>
 
 <div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-1-01-untitled.html">
 <table><thead><tr><th>Runw
@@ -160,11 +163,11 @@ COLORADO CITY OF COLORADO SPRINGS
 PLAINS RGNL ................. RNAV (GPS) Rwy 11 MUNI .............................. ILS or LOC Rwy 17L
 NA when local weather not available. ILS or LOC Rwy 35L
 ILS or LOC Rwy 35R
-ALAMOSA, CO RNAV (GPS)YRwy 17L
-SAN LUIS VALLEY RGNL/ RNAV (GPS)YRwy 17R 4 E
+ALAMOSA, CO RNAV (GPS) Y Rwy 17L
+SAN LUIS VALLEY RGNL/ RNAV (GPS) Y Rwy 17R 4 E
 S
 U
-BERGMAN FIELD .............. RNAV (GPS) Rwy 2 RNAV (RNP)ZRwy 17R5 A L
+BERGMAN FIELD .............. RNAV (GPS) Rwy 2 RNAV (RNP) Z Rwy 17R5 A L
 RNAV (GPS) Rwy 20 Categories A, B, 900-2; Category C, 900-2 ; C T U
 NA when local weather not available. Category D, 900-2 . A
 R
@@ -176,8 +179,8 @@ EP
 Categories A,B, 900-2; Category C, 900-2 ; 5Categories A, B, C, D, 800-2 . OCT
 Category D, 900-2 ; Category E, 900-3. 2010
 City and state location CORTEZ, CO 21
-CLAYTON, NM CORTEZ MUNI ............ RNAV (GPS)YRwy 21 to to
-CLAYTAOirpNo Mrt UnaNmI Ae IaRnPdA aRpKp l.i.c.a..b..l.e.. .a. NppDrBoa Rchw y 2 RNAV (GPS)ZRwy 21 21 2010
+CLAYTON, NM CORTEZ MUNI ............ RNAV (GPS) Y Rwy 21 to to
+CLAYTAOirpNo Mrt UnaNmI Ae IaRnPdA aRpKp l.i.c.a..b..l.e.. .a. NppDrBoa Rchw y 2 RNAV (GPS) Z Rwy 21 21 2010
 NDB Rwy 20 VOR Rwy 21 OCT
 RNAV (GPS) Rwy 2 Category D, 900-3. SEP
 Other-than-standard IFR alteRrnNaAteV m(GinPimS)u mRws y 20 Categories A, B, 1300-2; Categories C, D, 2010
@@ -255,8 +258,8 @@ dard IFR alteRrnNaAteV m(GinPimS)u mRws y 20 Categor
 cal weather not available. 1300-3.
 A, B, 900-2; Category C, 900-2 ,
 900-2 . CRAIG, C
-, 800-2 . CRAIG-M</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td>MUNI ............ RNAV (GPS)YRw
-RNAV (GPS)ZRw
+, 800-2 . CRAIG-M</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td>MUNI ............ RNAV (GPS) Y Rw
+RNAV (GPS) Z Rw
 VOR Rw
 y D, 900-3.
 ies A, B, 1300-2; Categories C, D,
@@ -352,31 +355,31 @@ uld need to climb at a rate</td></tr><tr><td></td><td></td><td>uired climb gradi
 <div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-1-10-untitled.html">
 <table><thead><tr><th>L2 E
 S
-TAKE-OFFMINIMUMS AND (OBSTACLE)DEPARTUREPROCEDURES U
+TAKE-OFFMINIMUMSAND(OBSTACLE)DEPARTUREPROCEDURES U
 10266 L
 A
 AUBURN,CA BISHOP, CA
-AUB40U ARGNL /M15U59N MI S(AL.UN) EASRTwEyR30N,m SuIlEtipRleRpAoleRs,GbNuilL ding,andterrainbeginning U
+AUB40U ARGNL /M15U59N MI S(AL.UN) EASRTwEyR30N,mSuIlEtipRleRpAoleRs,GbNuilL ding,andterrainbeginning U
 T
 66'fromdepartureendofrunway,228'leftofcenterline,
-BEALE AFB (KBAB) upto65'AGL/225' MSL.Multiple poles beginning 949' C
-MARYSVILLE, CA. . . . . . . . . .ORIG, 09155 from departure end of runway, 28' right of centerline, up 23 A 2010
-DEPARTURE PROCEDURE: Rwy 15, Climb on a to 42' AGL/103' MSL. SEP R
+BEALEAFB(KBAB) upto65'AGL/225'MSL.Multiplepolesbeginning949' C
+MARYSVILLE, CA. . . . . . . . . .ORIG, 09155 fromdepartureendofrunway,28'rightofcenterline,up 23 A 2010
+DEPARTUREPROCEDURE:Rwy15, Climbona to42'AGL/103'MSL. SEP R
 Rwy33, O OCT
 CHICO, CA
-DER. CHICO MUNI TAKE-OFF OBSTACLES: Rwy 33, DEPARTURE PROCEDURE: Rwys 13L/R, climbing right turn. Rwys 31L/R,climbing left turn. All aircraft, to 2010 O T F to 21
+DER. CHICO MUNI TAKE-OFFOBSTACLES:Rwy33, DEPARTUREPROCEDURE: Rwys13L/R,climbing rightturn.Rwys31L/R,climbingleftturn. Allaircraft, to 2010 O T F to 21
 climb via CIC R-205 to JINGO Int. Aircraft departing 21 N 2010
 OCT
 BECKWOURTH,CA E SEP
-NERVINO inbound)to depart JINGO Int at orabove 2800. 2010 L
+NERVINO inbound)todepartJINGOIntatorabove2800. 2010 L
 P
-TAKE-OFF MINIMUMS: Rwys7,25, 3500-3 for climb in visual conditions. CLOVERDALE, CA M 23
-DEPARTURE PROCEDURE: Rwys7,25, for climb in CLOVERDALE MUNI A
-visual conditions: cross Nervino Airport at or above TAKE-OFF MINIMUMS: Rwy 14, 400-2 or std. with a S
-8300before proceeding oncourse. min. climb of 280' per NM to 1500, then a min. climb of
-NOTE: Rwy 7,road58' from departure end of runway, 260' per NM to 3900. Rwy 32, NA.
-469' right of centerline, 15' AGL/4920' MSL. Pole 310' DEPARTURE PROCEDURE: Rwy 14, climb direct STS
-from departure end ofrunway,522'rightof centerline, VOR/DME. Continue climb in holding pattern (NW</th><th></th></tr></thead><tbody><tr><td>49'AGL/4925'MSL P l 528'f d t d f
+TAKE-OFFMINIMUMS: Rwys7,25, 3500-3forclimbin visualconditions. CLOVERDALE, CA M 23
+DEPARTUREPROCEDURE: Rwys7,25, forclimbin CLOVERDALE MUNI A
+visualconditions: crossNervinoAirportatorabove TAKE-OFFMINIMUMS: Rwy14, 400-2orstd.witha S
+8300beforeproceedingoncourse. min.climbof280'perNMto1500,thenamin.climbof
+NOTE: Rwy7,road58'fromdepartureendofrunway, 260'perNMto3900. Rwy32, NA.
+469'rightofcenterline,15'AGL/4920'MSL. Pole310' DEPARTUREPROCEDURE: Rwy14,climbdirectSTS
+fromdepartureendofrunway,522'rightofcenterline, VOR/DME. Continueclimbinholdingpattern(NW</th><th></th></tr></thead><tbody><tr><td>49'AGL/4925'MSL P l 528'f d t d f
 of takeoff minimums obstacle clearance.
 ce Takeoff flight path
 1,5
@@ -531,7 +534,7 @@ appropriate.</td></tr><tr><td>/J</td><td>/E with RVSM</td></tr><tr><td>/K</td><t
 <div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-1-14-untitled.html">
 <table><thead><tr><th>ICAO Flight Plan Equipment Codes</th><th></th></tr></thead><tbody><tr><td>Radio communication, navigation and approach
 aid equipment and capabilities</td><td></td></tr><tr><td>“N” if no COM/NAV/approach aid equipment for the route to be
-flown is carried, or the equipment is unserviceable, OR “S” if standard
+flown is carried, or the equipment is unserviceable, OR “S”if standard
 COM/NAV/ approach aid equipment for the route to be flown is
 carried and serviceable (see note 1), AND/OR INSERT one or more of
 the following letters to indicate the serviceable COM/NAV/approach

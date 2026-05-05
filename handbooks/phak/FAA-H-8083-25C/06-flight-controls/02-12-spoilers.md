@@ -51,3 +51,6 @@ control pressures that may exist for that flight condition. As
 power, pitch attitude, or configuration changes, retrimming
 is necessary to relieve the control pressures for the new
 flight condition.
+
+
+![Figure 6-19. Spoilers reduce lift and increase drag during descent  and landing.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-16-spoilers-reduce-lift-and-increase-drag-during-de.png)

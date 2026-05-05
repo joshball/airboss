@@ -73,3 +73,6 @@ nearly invisible. Serious injuries and fatalities have occurred when people who 
 propeller arc to remove the chocks, reach the cabin, or when moving toward the tail of the airplane. Before the wheel chocks are
 removed, the throttle should be set to idle and the chocks approached only from the rear of the propeller. One should never approach
 the wheel chocks from the front or the side.
+
+
+![Figure 2-6. Ground-based inspections include verification that “Xs” on the instrument display are displayed until the sensor  activates.](/handbooks/afh/FAA-H-8083-3C/figures/fig-2-05-ground-based-inspections-include-verification-th.png)

@@ -88,3 +88,10 @@ target altitude. As the target approaches, the trend indicator
 gradually shrinks until altitude stabilizes. Trend indicators
 should be used as a supplement, not as a primary means of
 determining pitch change.
+
+
+![Figure 6-35. Airspeed trend indicators.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-35-airspeed-trend-indicators.png)
+
+![Figure 6-36. Airspeed indicators with no trend present.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-36-airspeed-indicators-with-no-trend-present.png)
+
+![Figure 6-37. Altimeter trend indicators.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-37-altimeter-trend-indicators.png)

@@ -28,3 +28,6 @@ with any thunderstorm, especially beneath the anvil of a
 large cumulonimbus. Hailstones larger than one-half inch
 in diameter can significantly damage an aircraft in a few
 seconds.
+
+
+![Figure 12-16. Turbulence in mountainous regions.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-14-turbulence-in-mountainous-regions.png)

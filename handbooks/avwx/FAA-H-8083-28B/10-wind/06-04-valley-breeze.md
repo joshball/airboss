@@ -29,5 +29,3 @@ or mountain range and the adjacent plains. During the daytime, this wind system 
 one-half of a valley breeze. Air in contact with the sloping terrain becomes warmer (less dense) than air
 above the plains. This is because the air in contact with the sloping terrain heats up faster than the air above
 the plains.
-
-![Figure 10-19. Valley Breeze](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-4-00-valley-breeze.png)

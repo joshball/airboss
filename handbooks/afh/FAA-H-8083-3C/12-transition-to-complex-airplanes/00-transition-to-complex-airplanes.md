@@ -28,3 +28,9 @@ characteristics using two different methods. Either the airfoil can be a comprom
 for increasing the camber of the airfoil for low-speed flight. Camber is the asymmetry between the top and the bottom surfaces of an
 airfoil. One method for varying an airfoil’s camber is the addition of trailing-edge flaps. Engineers call these devices a high-lift
 system.
+
+![Figure 12-10. Typical landing gear switch with combination amber and green. Another combination has a three light indicator.](/handbooks/afh/FAA-H-8083-3C/figures/fig-12-09-typical-landing-gear-switch-with-combination-amb.png)
+
+![Figure 12-11. Landing gear handles and single and multiple light indictor.](/handbooks/afh/FAA-H-8083-3C/figures/fig-12-10-landing-gear-handles-and-single-and-multiple-lig.png)
+
+![Figure 12-13. Typical emergency gear extension systems.  Figure 12-14. Retractable landing gear inspection checkpoints.](/handbooks/afh/FAA-H-8083-3C/figures/fig-12-12-typical-emergency-gear-extension-systems-figure-.png)

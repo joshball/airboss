@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Flight Control Malfunction/Failure
+
+![Figure 18-8. Landing with nose-wheel retracted.](/handbooks/afh/FAA-H-8083-3C/figures/fig-18-07-landing-with-nose-wheel-retracted.png)

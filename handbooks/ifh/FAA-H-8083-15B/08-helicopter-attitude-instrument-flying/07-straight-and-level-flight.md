@@ -64,3 +64,6 @@ instruments to determine whether the pitch attitude change
 is sufficient. If additional correction is needed to return to
 altitude, or if the airspeed varies more than 10 knots from
 that desired, adjust the power.
+
+
+![Figure 8-7. Flight instrument indications in straight-and-level flight with power increasing.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-8-06-flight-instrument-indications-in-straight-and-le.png)

@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Introduction
+
+![Figure 16-1. Basic turbojet engine.](/handbooks/afh/FAA-H-8083-3C/figures/fig-16-00-basic-turbojet-engine.png)

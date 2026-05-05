@@ -35,3 +35,6 @@ following categories: flight and navigation equipment,
 miscellaneous requirements, stability, helicopter flight
 manual limitations, operations specifications, and
 minimum equipment list (MEL).
+
+
+![Figure 7-2. VMINI limitations, maximum IFR approach angles and G/A mode speeds for selected IFR certified helicopters.](/handbooks/iph/FAA-H-8083-16B/figures/fig-7-01-vmini-limitations-maximum-ifr-approach-angles-an.png)

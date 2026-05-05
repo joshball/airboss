@@ -1783,63 +1783,71 @@ imagery, and weather trends (see Figure 24-34)], TAFs, PIREPs, and other aeronau
 
 Figure 24-34. Weather Trends Example at Unalakleet (PAUN), Alaska
 
-![Figure 24-1. METAR/SPECI Coding Format](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-00-metar-speci-coding-format.png)
+![Figure 24-1. METAR/SPECI Coding Format](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-00-metar-speci-coding-format.png)
 
-![Figure 24-2. ICAO Continental Codes](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-01-icao-continental-codes.png)
+![Figure 24-2. ICAO Continental Codes](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-01-icao-continental-codes.png)
 
-![Figure 24-3. Obscuration Effects on Slant Range Visibility](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-02-obscuration-effects-on-slant-range-visibility.png)
+![Figure 24-3. Obscuration Effects on Slant Range Visibility](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-02-obscuration-effects-on-slant-range-visibility.png)
 
-![Figure 24-4. METAR/SPECI Sky Condition Coding](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-03-metar-speci-sky-condition-coding.png)
+![Figure 24-4. METAR/SPECI Sky Condition Coding](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-03-metar-speci-sky-condition-coding.png)
 
-![Figure 24-5. PIREP Coding Format](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-5-1-00-pirep-coding-format.png)
+![Figure 24-5. PIREP Coding Format](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-04-pirep-coding-format.png)
 
-![Figure 24-6. VAR Form](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-5-4-00-var-form.png)
+![Figure 24-6. VAR Form](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-05-var-form.png)
 
-![Figure 24-7. A Plot of AMDAR Reports Received During a 24-Hour Period in 2019](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-00-a-plot-of-amdar-reports-received-during-a-24-hou.png)
+![Figure 24-7. A Plot of AMDAR Reports Received During a 24-Hour Period in 2019](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-06-a-plot-of-amdar-reports-received-during-a-24-hou.png)
 
-![Figure 24-8. Locations of WSR-88D Weather Radar in the CONUS](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-01-locations-of-wsr-88d-weather-radar-in-the-conus.png)
+![Figure 24-8. Locations of WSR-88D Weather Radar in the CONUS](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-07-locations-of-wsr-88d-weather-radar-in-the-conus.png)
 
-![Figure 24-9. WSR-88D Weather Radar Coverage at 3,000 ft AGL, 6,000 ft AGL, and 10,000 ft AGL over the CONUS  and Puerto Rico](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-02-wsr-88d-weather-radar-coverage-at-3-000-ft-agl-6.png)
+![Figure 24-9. WSR-88D Weather Radar Coverage at 3,000 ft AGL, 6,000 ft AGL, and 10,000 ft AGL over the CONUS  and Puerto Rico](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-08-wsr-88d-weather-radar-coverage-at-3-000-ft-agl-6.png)
 
-![Figure 24-10. Additional Locations of WSR-88D Weather Radar and Coverage Outside of the CONUS](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-03-additional-locations-of-wsr-88d-weather-radar-an.png)
+![Figure 24-10. Additional Locations of WSR-88D Weather Radar and Coverage Outside of the CONUS](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-09-additional-locations-of-wsr-88d-weather-radar-an.png)
 
-![Figure 24-11. Example WSR-88D (NEXRAD) Weather Radar Echo Intensity Legend](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-04-example-wsr-88d-nexrad-weather-radar-echo-intens.png)
+![Figure 24-11. Example WSR-88D (NEXRAD) Weather Radar Echo Intensity Legend](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-10-example-wsr-88d-nexrad-weather-radar-echo-intens.png)
 
-![Figure 24-12. WSR-88D Weather Radar Composite Reflectivity, Single-Site Product Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-05-wsr-88d-weather-radar-composite-reflectivity-sin.png)
+![Figure 24-12. WSR-88D Weather Radar Composite Reflectivity, Single-Site Product Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-11-wsr-88d-weather-radar-composite-reflectivity-sin.png)
 
-![Figure 24-13. Creation of a Composite Reflectivity, Single-Site Product](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-06-creation-of-a-composite-reflectivity-single-site.png)
+![Figure 24-13. Creation of a Composite Reflectivity, Single-Site Product](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-12-creation-of-a-composite-reflectivity-single-site.png)
 
-![Figure 24-15. TDWR Locations in the CONUS and Puerto Rico](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-2-00-tdwr-locations-in-the-conus-and-puerto-rico.png)
+![Figure 24-14. Weather Radar 0.5° Base Reflectivity (left) versus Composite Reflectivity (right) Comparison](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-13-weather-radar-0-5-base-reflectivity-left-versus-.png)
 
-![Figure 24-16. TDWR Coverage](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-2-01-tdwr-coverage.png)
+![Figure 24-15. TDWR Locations in the CONUS and Puerto Rico](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-14-tdwr-locations-in-the-conus-and-puerto-rico.png)
 
-![Figure 24-17. GeoColor Satellite Image—U.S. Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-2-00-geocolor-satellite-image-u-s-example.png)
+![Figure 24-16. TDWR Coverage](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-15-tdwr-coverage.png)
 
-![Figure 24-18. Visible Satellite Image—U.S. Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-2-01-visible-satellite-image-u-s-example.png)
+![Figure 24-17. GeoColor Satellite Image—U.S. Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-16-geocolor-satellite-image-u-s-example.png)
 
-![Figure 24-19. Visible Satellite Image Data Legend](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-2-02-visible-satellite-image-data-legend.png)
+![Figure 24-18. Visible Satellite Image—U.S. Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-17-visible-satellite-image-u-s-example.png)
 
-![Figure 24-20. Infrared (Color) Satellite Image—U.S. Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-2-03-infrared-color-satellite-image-u-s-example.png)
+![Figure 24-19. Visible Satellite Image Data Legend](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-18-visible-satellite-image-data-legend.png)
 
-![Figure 24-21. Unenhanced Infrared (Black and White) Satellite Image—U.S. Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-2-04-unenhanced-infrared-black-and-white-satellite-im.png)
+![Figure 24-20. Infrared (Color) Satellite Image—U.S. Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-19-infrared-color-satellite-image-u-s-example.png)
 
-![Figure 24-25. Water Vapor Satellite Image Data Legend](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-8-1-00-water-vapor-satellite-image-data-legend.png)
+![Figure 24-21. Unenhanced Infrared (Black and White) Satellite Image—U.S. Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-20-unenhanced-infrared-black-and-white-satellite-im.png)
 
-![Figure 24-26. Weather Balloon and Radiosonde](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-00-u-s-radiosonde-network.png)
+![Figure 24-22. Infrared (Color) Satellite Image Data Legend](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-21-infrared-color-satellite-image-data-legend.png)
 
-![Figure 24-27. U.S. Radiosonde Network](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-01-map-of-faa-s-aviation-weather-camera-network-in-.png)
+![Figure 24-24. Water Vapor Satellite Image—U.S. Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-22-water-vapor-satellite-image-u-s-example.png)
 
-![Figure 24-28. Map of FAA’s Aviation Weather Camera Network in Alaska, the CONUS, and Canada12](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-02-map-of-the-faa-s-aviation-weather-camera-network.png)
+![Figure 24-25. Water Vapor Satellite Image Data Legend](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-23-water-vapor-satellite-image-data-legend.png)
 
-![Figure 24-29. Map of the FAA’s Aviation Weather Camera Network in Hawaii](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-03-sectional-chart-depicting-hyder-4z7-alaska-camer.png)
+![Figure 24-26. Weather Balloon and Radiosonde](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-24-weather-balloon-and-radiosonde.png)
 
-![Figure 24-30. Sectional Chart Depicting Hyder (4Z7), Alaska Camera Orientations](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-04-clear-day-image-from-the-aviation-weather-camera.png)
+![Figure 24-27. U.S. Radiosonde Network](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-25-u-s-radiosonde-network.png)
 
-![Figure 24-31. “Clear Day” Image from the Aviation Weather Camera at Hyder (4Z7), Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-2-00-aviation-weather-camera-image-at-hyder-4z7-alask.png)
+![Figure 24-28. Map of FAA’s Aviation Weather Camera Network in Alaska, the CONUS, and Canada12](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-26-map-of-faa-s-aviation-weather-camera-network-in-.png)
 
-![Figure 24-32. Aviation Weather Camera Image at Hyder (4Z7), Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-3-00-veia-example-at-bald-mountain-k7bm-in-colorado.png)
+![Figure 24-29. Map of the FAA’s Aviation Weather Camera Network in Hawaii](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-27-map-of-the-faa-s-aviation-weather-camera-network.png)
 
-![Figure 24-33. VEIA Example at Bald Mountain (K7BM) in Colorado](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-4-01-weather-trends-example-at-unalakleet-paun-alaska.png)
+![Figure 24-30. Sectional Chart Depicting Hyder (4Z7), Alaska Camera Orientations](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-28-sectional-chart-depicting-hyder-4z7-alaska-camer.png)
+
+![Figure 24-31. “Clear Day” Image from the Aviation Weather Camera at Hyder (4Z7), Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-29-clear-day-image-from-the-aviation-weather-camera.png)
+
+![Figure 24-32. Aviation Weather Camera Image at Hyder (4Z7), Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-30-aviation-weather-camera-image-at-hyder-4z7-alask.png)
+
+![Figure 24-33. VEIA Example at Bald Mountain (K7BM) in Colorado](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-31-veia-example-at-bald-mountain-k7bm-in-colorado.png)
+
+![Figure 24-34. Weather Trends Example at Unalakleet (PAUN), Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-32-weather-trends-example-at-unalakleet-paun-alaska.png)
 
 **Table 24-2.** SPECI Criteria 1 Wind Shift Wind direction changes by 45° or more, in less than 15 minutes, and the wind speed is 10 knots or more throughout the wind shift. 2 Visibility Visibility
 

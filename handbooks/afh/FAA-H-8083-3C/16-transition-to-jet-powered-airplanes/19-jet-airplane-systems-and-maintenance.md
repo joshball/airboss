@@ -19,3 +19,6 @@ the particular airplane. Furthermore, in accordance with 14 CFR part 91, section
 qualify to takeoff with inoperable instruments or equipment installed unless, among other requirements, an approved Minimum
 Equipment List (MEL) exists for that aircraft, and the aircraft is operated under all applicable conditions and limitations contained in
 the MEL (section 91.213(a)(5)).
+
+
+![Figure 16-19. Extended flare.](/handbooks/afh/FAA-H-8083-3C/figures/fig-16-18-extended-flare.png)

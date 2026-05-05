@@ -18,3 +18,6 @@ and they help ATC to organize and regulate the air traffic
 flow. Almost all commercial flights are routed along these
 airways but they are available for use by any pilot provided
 that the proper altitudes are employed.
+
+
+![Figure 2-9. Low altitude sectors.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-07-low-altitude-sectors.png)

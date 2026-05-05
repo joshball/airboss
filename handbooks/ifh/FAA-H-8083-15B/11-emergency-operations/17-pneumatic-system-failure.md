@@ -40,3 +40,6 @@ a dangerous unusual attitude that would require a partial panel
 recovery. It is important that pilots practice instrument flight
 without reference to the attitude and heading indicators in
 preparation for such a failure.
+
+
+![Figure 11-17. The area surrounding the aircraft for coverage  using TIS.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-11-16-the-area-surrounding-the-aircraft-for-coverage-u.png)

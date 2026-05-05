@@ -68,3 +68,6 @@ flight rules (IFR), and as previously discussed aircraft maintenance, and preven
 alterations.
 
 Figure 1-5. Example of some of the required standard or supplemental and optional equipment for an aircraft.
+
+
+![Figure 1-2. Good airmanship skills include sound knowledge of the principles of flight and the ability to operate an airplane with  competence and precision.](/handbooks/afh/FAA-H-8083-3C/figures/fig-1-01-good-airmanship-skills-include-sound-knowledge-o.png)

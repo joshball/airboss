@@ -42,3 +42,6 @@ routes have been established to guide pilots in planning their
 routes of flight, to minimize route changes, and to aid in the
 orderly management of air traffic using the Federal airways.
 The A/FD lists both high and low altitude preferred routes.
+
+
+![Figure 10-4. Standard holding pattern—no wind.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-10-03-standard-holding-pattern-no-wind.png)

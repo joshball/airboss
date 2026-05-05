@@ -51,3 +51,6 @@ Kinetic energy
 Landing
 Index-7
 L
+
+
+![Figure 18-7. Landing with one main gear retracted.](/handbooks/afh/FAA-H-8083-3C/figures/fig-18-06-landing-with-one-main-gear-retracted.png)

@@ -19,3 +19,6 @@ Some systems include sequenced flashing lights that appear
 to the pilot as a ball of light traveling toward the runway at
 high speed. Approach lights can also aid pilots operating
 under VFR at night.
+
+
+![Figure 14-6. (A) Displaced runway threshold drawing. (B) Displaced threshold for Runway 17 at Albuquerque International Airport (ABQ).](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-05-a-displaced-runway-threshold-drawing-b-displaced.png)

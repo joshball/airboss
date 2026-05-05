@@ -468,3 +468,13 @@ This chapter described the methods and techniques aviation instructors use to as
 assessment defines what is worth knowing, enhances motivation, and improves learning. Today’s learners want to know the criteria
 by which they are assessed, and they want practical and specific feedback. Aviation instructors familiar with different
 types of assessments know how and when to use them to promote a productive learning environment.
+
+![Figure 6-1. Effective assessments share a number of characteristics.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-8-00-effective-assessments-share-a-number-of-characte.png)
+
+![Figure 6-2. Traditional grading.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-8-01-traditional-grading.png)
+
+![Figure 6-3. Effective tests have six primary characteristics.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-8-02-effective-tests-have-six-primary-characteristics.png)
+
+![Figure 6-4. Rubric for assessing flight training maneuvers.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-8-03-rubric-for-assessing-flight-training-maneuvers.png)
+
+![Figure 6-5. The development process for criterion-referenced tests follows a general-to-specific pattern.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-8-04-the-development-process-for-criterion-referenced.png)

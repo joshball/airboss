@@ -41,3 +41,6 @@ AHRS for aviation and general aviation in particular are small
 solid-state systems integrating a variety of technology such
 as low cost inertial sensors, rate gyros, and magnetometers,
 and have capability for satellite signal reception.
+
+
+![Figure 5-41. The S-TEC/Meggit Corporation Integrated Autopilot installed in the Cirrus.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-40-the-s-tec-meggit-corporation-integrated-autopilo.png)

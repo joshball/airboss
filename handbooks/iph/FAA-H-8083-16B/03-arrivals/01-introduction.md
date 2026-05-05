@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Introduction
+
+![Figure 3-1. Example of Class I and II navigation.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-00-example-of-class-i-and-ii-navigation.png)

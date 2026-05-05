@@ -20,3 +20,6 @@ needle is not exactly zero, it is only slightly above or below
 the zero line. After takeoff, the VSI should trend upward to
 indicate a positive rate of climb and then, once a stabilized
 climb is established, a rate of climb can be referenced.
+
+
+![Figure 8-4. Look at the chart using a temperature of –10 °C and  an aircraft altitude of 1,000 feet above the airport elevation. The chart shows that the reported current altimeter setting may place the aircraft as much as 100 feet below the altitude indicated by the altimeter.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-03-look-at-the-chart-using-a-temperature-of-10-c-an.png)

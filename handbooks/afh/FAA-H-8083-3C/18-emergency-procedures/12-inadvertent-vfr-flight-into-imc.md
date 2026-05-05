@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Inadvertent VFR Flight Into IMC
+
+![Figure 18-12. Attitude indicator.](/handbooks/afh/FAA-H-8083-3C/figures/fig-18-11-attitude-indicator.png)

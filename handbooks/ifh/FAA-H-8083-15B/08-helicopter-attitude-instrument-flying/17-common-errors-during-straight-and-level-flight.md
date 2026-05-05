@@ -16,3 +16,6 @@ Failure to maintain heading
 Overcontrolling pitch and bank during corrections
 Failure to maintain proper pedal trim
 Failure to cross-check all available instruments
+
+
+![Figure 8-17. PFD indications during straight-and-level flight.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-8-16-pfd-indications-during-straight-and-level-flight.png)

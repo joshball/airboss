@@ -47,3 +47,6 @@ Fuel burn can also affect the CG based on the location of the
 fuel tanks. For example, most small aircraft carry fuel in the
 wings very near the CG and burning off fuel has little effect
 on the loaded CG.
+
+
+![Figure 10-6. Weight and balance data.](/handbooks/phak/FAA-H-8083-25C/figures/fig-10-04-weight-and-balance-data.png)

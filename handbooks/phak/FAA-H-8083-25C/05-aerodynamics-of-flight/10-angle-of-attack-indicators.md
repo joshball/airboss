@@ -124,3 +124,10 @@ Wing contamination
 Pilots of general aviation airplanes equipped with AOA
 indicators should contact the manufacturer for specific
 limitations applicable to that installation.
+
+
+![Figure 5-10. The difference in wingtip vortex size at altitude versus  near the ground.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-08-the-difference-in-wingtip-vortex-size-at-altitud.png)
+
+![Figure 5-38. Forces exerted when pulling out of a dive.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-35-forces-exerted-when-pulling-out-of-a-dive.png)
+
+![Figure 5-40. Inflight ice formation.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-36-inflight-ice-formation.png)

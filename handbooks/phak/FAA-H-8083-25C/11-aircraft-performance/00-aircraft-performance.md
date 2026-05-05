@@ -15,21 +15,19 @@ conditions, runway environment, and the fundamental
 physical laws governing the forces acting on an aircraft.
 
 
-![Figure 11-1. Standard sea level pressure.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-00-standard-sea-level-pressure.png)
+![Figure 11-12. Effect of weight.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-11-effect-of-weight.png)
 
-![Figure 11-14. Power required curve.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-01-power-required-curve.png)
+![Figure 11-19.  Effect of wind on takeoff and landing.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-18-effect-of-wind-on-takeoff-and-landing.png)
 
-![Figure 11-16. An aircraft’s performance during takeoff depends greatly on the runway surface.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-02-an-aircraft-s-performance-during-takeoff-depends.png)
+![Figure 11-24. Takeoff distance short field charts.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-22-takeoff-distance-short-field-charts.png)
 
-![Figure 11-15. Takeoff distance chart.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-03-takeoff-distance-chart.png)
+![Figure 11-23. Takeoff distance graph.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-23-takeoff-distance-graph.png)
 
-![Figure 11-18. Tire pressure.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-04-tire-pressure.png)
+![Figure 11-25. Fuel, time, and distance climb chart.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-24-fuel-time-and-distance-climb-chart.png)
 
-![Figure 11-17. Chart Supplement U.S. (formerly Airport/Facility Directory) information.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-05-chart-supplement-u-s-formerly-airport-facility-d.png)
+![Figure 11-26. Fuel time distance climb.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-25-fuel-time-distance-climb.png)
 
-![Figure 11-19.  Effect of wind on takeoff and landing.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-06-effect-of-wind-on-takeoff-and-landing.png)
-
-![Figure 11-20. Conditions notes chart.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-07-conditions-notes-chart.png)
+![Figure 11-27. Cruise and range performance.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-26-cruise-and-range-performance.png)
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-11-00-untitled.html">
 <table><thead><tr><th>Altitude (ft)</th><th>Pressure

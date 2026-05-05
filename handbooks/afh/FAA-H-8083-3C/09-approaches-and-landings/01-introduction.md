@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Introduction
+
+![Figure 9-1. Effect of flaps on the landing point.](/handbooks/afh/FAA-H-8083-3C/figures/fig-9-00-effect-of-flaps-on-the-landing-point.png)

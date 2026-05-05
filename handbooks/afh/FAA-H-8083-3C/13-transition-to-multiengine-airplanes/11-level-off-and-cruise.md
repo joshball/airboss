@@ -23,3 +23,6 @@ fuel systems, limitations are often found restricting the use of some tanks to l
 tanks for descent and landing. Electric fuel pump operation can also vary widely among different models, particularly during tank
 switching or fuel transfer. Some fuel pumps are to be on for takeoff and landing; others are to be off. There is simply no substitute for
 thorough systems and AFM/POH knowledge when operating complex aircraft.
+
+
+![Figure 13-11. Go-around procedure.](/handbooks/afh/FAA-H-8083-3C/figures/fig-13-09-go-around-procedure.png)

@@ -36,3 +36,6 @@ The three coils are connected to three similar but smaller coils
 in a synchro inside the instrument case. The synchro rotates
 the dial of a radio magnetic indicator (RMI) or a horizontal
 situation indicator (HSI).
+
+
+![Figure 5-27. A venturi tube system that provides necessary vacuum  to operate key instruments.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-26-a-venturi-tube-system-that-provides-necessary-va.png)

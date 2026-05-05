@@ -30,3 +30,6 @@ travel is very important, since it affects the position of the
 air loads imposed on the wing structure in both low and high
 AOA conditions. An airplane’s aerodynamic balance and
 controllability are governed by changes in the CP.
+
+
+![Figure 4-5. Typical airfoil section.](/handbooks/phak/FAA-H-8083-25C/figures/fig-4-05-typical-airfoil-section.png)

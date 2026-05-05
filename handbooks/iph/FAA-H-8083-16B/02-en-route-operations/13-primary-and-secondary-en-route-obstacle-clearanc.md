@@ -66,3 +66,6 @@ This plane begins at a point 500 feet above the obstacles
 clearance area is based, and slants upward at an angle that
 causes it to intersect the outer edge of the secondary area
 at a point 500 feet higher. [Figure 2-41]
+
+
+![Figure 2-13. Air Route Traffic Control Centers and sector frequencies.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-11-air-route-traffic-control-centers-and-sector-fre.png)

@@ -36,3 +36,6 @@ hazards by using the CARE checklist of: Consequences,
 Alternatives, Reality, External factors. Finally, pilots can
 perform risk management by using the TEAM choice list
 of: Transfer, Eliminate, Accept, or Mitigate.
+
+
+![Figure 2-16. System stressors. Environmental, physiological, and psychological stress are factors that affect decision-making skills.  These stressors have a profound impact especially during periods of high workload.](/handbooks/phak/FAA-H-8083-25C/figures/fig-2-14-system-stressors-environmental-physiological-and.png)

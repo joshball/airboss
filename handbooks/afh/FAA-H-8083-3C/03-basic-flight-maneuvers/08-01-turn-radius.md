@@ -27,3 +27,8 @@ an overbanking tendency that needs to be controlled by the use of opposite ailer
 3-15] Because the outboard wing is developing more lift, it also produces more drag. The drag causes a slight slip during steep turns
 that should be corrected by use of the rudder.
 Figure 3-15. Overbanking tendency.
+
+
+![Figure 3-14. Angle of bank and airspeed regulate rate and radius of turn.](/handbooks/afh/FAA-H-8083-3C/figures/fig-3-13-angle-of-bank-and-airspeed-regulate-rate-and-rad.png)
+
+![Figure 3-15. Overbanking tendency.](/handbooks/afh/FAA-H-8083-3C/figures/fig-3-14-overbanking-tendency.png)

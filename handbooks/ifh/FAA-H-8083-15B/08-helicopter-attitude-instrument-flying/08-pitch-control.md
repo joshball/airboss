@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Pitch Control
+
+![Figure 8-8. Flight instrument indications in straight-and-level flight with power decreasing.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-8-07-flight-instrument-indications-in-straight-and-le.png)

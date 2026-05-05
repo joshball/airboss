@@ -52,3 +52,6 @@ and limitations.
 Since the characteristics of the atmosphere have a major
 effect on performance, it is necessary to review two dominant
 factors—pressure and temperature.
+
+
+![Figure 11-2. Properties of standard atmosphere.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-01-properties-of-standard-atmosphere.png)

@@ -46,3 +46,6 @@ Character
 Figure 14-41. Phonetic alphabet.
 easily be aware of your presence when they are expecting
 the standard radio calls.
+
+
+![Figure 14-30. Precision approach path indicator for a typical 3° glide slope.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-30-precision-approach-path-indicator-for-a-typical-.png)

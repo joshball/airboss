@@ -68,3 +68,6 @@ can remove the slip without penalty. On the other hand, retracting flaps on an a
 with full rudder displacement during a forward slip, the pilot can adjust to the left and right of the intended ground track by increasing
 and decreasing aileron deflection. The value of the maneuver explains its inclusion as a task in the Private Pilot Airman Certification
 Standards (ACS).
+
+
+![Figure 9-5. Stabilized approach.](/handbooks/afh/FAA-H-8083-3C/figures/fig-9-04-stabilized-approach.png)

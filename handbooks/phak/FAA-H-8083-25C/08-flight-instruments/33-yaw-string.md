@@ -18,3 +18,6 @@ the string trails straight back over the top of the wind screen.
 When the aircraft is either slipping or skidding, the yaw
 string moves to the right or left depending on the direction
 of slip or skid.
+
+
+![Figure 8-33. Isogonic lines are lines of equal variation.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-30-isogonic-lines-are-lines-of-equal-variation.png)

@@ -44,3 +44,6 @@ Figure 5-14. A synthetic vision system (SVS) is an electronic means to
 display a synthetic vision image of the external scene topography to the
 flight crew to assist during takeoffs, landings, and en route operations.
 Figure 5-15. An aircraft on an approach equipped with a SVS.
+
+
+![Figure 5-3. Automatic Dependent Surveillance-Broadcast (ADS-B)  systems.](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-02-automatic-dependent-surveillance-broadcast-ads-b.png)

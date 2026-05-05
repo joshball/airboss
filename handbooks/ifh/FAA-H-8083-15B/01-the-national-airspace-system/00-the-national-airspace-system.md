@@ -31,32 +31,6 @@ Airspace System
 Chapter 1
 
 
-![Figure 1-8. Obstacle departure procedures (ODP) and standard instrument departures (SID).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-00-obstacle-departure-procedures-odp-and-standard-i.png)
-
-![Figure 1-9. DP chart legend and STAR.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-01-dp-chart-legend-and-star.png)
-
-![Figure 1-10. Instrument approach chart.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-02-instrument-approach-chart.png)
-
-![procedure track are depicted in Figure 1-11. Terrain is depicted  in the plan view portion of all IAPs if the terrain within the plan view exceeds 4,000 feet above the airport elevation, or if within a 6 NM radius of the airport reference point the terrain rises at least 2,000 feet above the airport elevation.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-03-terrain-is-depicted-in-the-plan-view-portion-of-.png)
-
-![Figure 1-11. IAP plan view and symbol legends.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-04-iap-plan-view-and-symbol-legends.png)
-
-![Figure 1-12. Basic “T” design of terminal arrival area (TAA) and legend.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-05-basic-t-design-of-terminal-arrival-area-taa-and-.png)
-
-![Figure 1-13. 45° procedure turn.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-06-45-procedure-turn.png)
-
-![Figure 1-14. Holding in lieu of procedure turn.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-07-holding-in-lieu-of-procedure-turn.png)
-
-![Figure 1-15. Teardrop procedure.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-08-teardrop-procedure.png)
-
-![Figure 1-16. More IAP profile view features.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-09-more-iap-profile-view-features.png)
-
-![Figure 1-17. Vertical descent angle (VDA).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-10-vertical-descent-angle-vda.png)
-
-![Figure 1-23. IAP inoperative components table.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-11-iap-inoperative-components-table.png)
-
-![Figure 1-24. RNAV instrument approach charts.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-12-rnav-instrument-approach-charts.png)
-
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-1-00-untitled.html">
 <table><thead><tr><th></th><th>The National
 Airspace System</th></tr></thead><tbody><tr><td>Introduction
@@ -145,13 +119,14 @@ Weather</td><td></td><td>Control tower</td></tr></tbody></table>
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-1-02-untitled.html">
 <table><thead><tr><th>NAV1 1
 NAV2 1
-2</th><th>08.00 113.00 WPT _ _ _ _ _ _ DIS _ _ . _ NM DTK _ _ _° TRK 360° 134.000 118.000 COM1
-08.00 110.60 MAP - NAVIGATION MAP 123.800 118.000 COM2</th></tr></thead><tbody><tr><td></td><td>3000
+2</th><th>08.00 113.00
+08.00 110.60</th><th></th><th></th><th>WPT _ _ _ _ _ _ DIS _ _ . _ NM DTK _ _ _° TRK 360°</th><th></th><th></th><th></th><th></th><th></th><th></th><th>134.000 118.000 COM1
+123.800 118.000 COM2</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td>MAP - NAVIGATION MAP</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>3000
 130 3300
 2
 3.0 120 3200
 110 3100 1
-1 60</td></tr><tr><td>100 43000000
+1 60</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>100 43000000
 2300
 9
 20
@@ -185,7 +160,7 @@ VOR 1
 1652
 1
 338
-5</td></tr></tbody></table>
+5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
 </div>
 
 <div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-1-03-untitled.html">

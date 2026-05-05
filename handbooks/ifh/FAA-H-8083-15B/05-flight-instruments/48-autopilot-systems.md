@@ -59,3 +59,6 @@ I0                  I0
 2       0
 I        0
 Figure 5-43. A diagram layout of an autopilot by S-Tec.
+
+
+![Figure 5-48. Aircraft equipped with Automatic Dependent Surveillance—Broadcast (ADS-B) continuously broadcast their identification,  altitude, direction, and vertical trend. The transmitted signal carries significant information for other aircraft and ground stations alike. Other ADS-equipped aircraft receive this info](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-47-aircraft-equipped-with-automatic-dependent-surve.png)

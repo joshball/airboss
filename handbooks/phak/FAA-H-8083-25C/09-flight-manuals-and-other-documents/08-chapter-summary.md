@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Chapter Summary
+
+![Figure 9-8. AC Form 8050-3, Certificate of Aircraft Registration.](/handbooks/phak/FAA-H-8083-25C/figures/fig-9-06-ac-form-8050-3-certificate-of-aircraft-registrat.png)

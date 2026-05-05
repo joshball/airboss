@@ -33,3 +33,6 @@ areas, 1,000 feet above the highest obstacle within a
 horizontal distance of 4 NM from the course to be flown; or
 as otherwise authorized by the Administrator or assigned
 by ATC. MIAs are not flight checked for communication.
+
+
+![Figure 2-47. Off-route obstacle clearance altitude.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-41-off-route-obstacle-clearance-altitude.png)

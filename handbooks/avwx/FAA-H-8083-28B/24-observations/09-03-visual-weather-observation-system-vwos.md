@@ -31,5 +31,3 @@ In addition to the camera images, the website also delivers a variety of safety 
 adverse conditions (e.g., AIRMETs and SIGMETs), current conditions [e.g., METARs, radar, satellite
 imagery, and weather trends (see Figure 24-34)], TAFs, PIREPs, and other aeronautical information
 (e.g., RCOs, TFRs, and charts).
-
-![Figure 24-33. VEIA Example at Bald Mountain (K7BM) in Colorado](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-3-00-veia-example-at-bald-mountain-k7bm-in-colorado.png)

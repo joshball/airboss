@@ -60,3 +60,6 @@ variation of an airport to define entire procedures at that
 airport. This may result in course discrepancies between
 the charted value and the value calculated using the actual
 variations from the database.
+
+
+![Figure 6-31. Manufacturer’s naming conventions.](/handbooks/iph/FAA-H-8083-16B/figures/fig-6-24-manufacturer-s-naming-conventions.png)

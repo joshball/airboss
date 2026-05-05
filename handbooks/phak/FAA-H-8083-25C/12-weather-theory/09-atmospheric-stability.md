@@ -52,3 +52,6 @@ occurs when the air is moist and warm, as it is in the tropical
 regions in the summer. Typically, thunderstorms appear on
 a daily basis in these regions due to the instability of the
 surrounding air.
+
+
+![Figure 12-9. Takeoff distances increase with increased altitude.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-07-takeoff-distances-increase-with-increased-altitu.png)

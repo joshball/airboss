@@ -41,3 +41,6 @@ short of the point. The pilot should never try to stretch the glide or retract t
 On short final, full attention is given to making a good, safe landing rather than concentrating on the selected landing spot. The approach
 angle used and final approach airspeed determine the probability of landing on the spot, and late adjustments to these parameters are not
 appropriate. It is always better to execute a good landing away from the spot than to make a poor landing precisely on or just past the spot.
+
+
+![Figure 9-25. Plan the base leg for wind conditions.](/handbooks/afh/FAA-H-8083-3C/figures/fig-9-24-plan-the-base-leg-for-wind-conditions.png)

@@ -36,3 +36,6 @@ Common errors in the performance of slow flight are:
 8. Inability to adequately divide attention between airplane control and orientation
 9. Failure to properly trim the airplane
 10. Failure to respond to a stall warning
+
+
+![Figure 5-7. Slow flight—low airspeed, high angle of attack, high power, and constant altitude.](/handbooks/afh/FAA-H-8083-3C/figures/fig-5-06-slow-flight-low-airspeed-high-angle-of-attack-hi.png)

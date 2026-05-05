@@ -2154,71 +2154,73 @@ This forecast is also available at phone number 636-441-8467 ext. 5.
 $$
 TES
 
-![Figure 27-1. Aviation Surface Forecast Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-5-00-aviation-surface-forecast-example.png)
+![Figure 27-1. Aviation Surface Forecast Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-00-aviation-surface-forecast-example.png)
 
-![Figure 27-2. Aviation Clouds Forecast Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-5-01-aviation-clouds-forecast-example.png)
+![Figure 27-2. Aviation Clouds Forecast Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-01-aviation-clouds-forecast-example.png)
 
-![Figure 27-3. AAWU Flight Advisory and FA Zones—Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-6-4-00-aawu-flight-advisory-and-fa-zones-alaska.png)
+![Figure 27-3. AAWU Flight Advisory and FA Zones—Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-02-aawu-flight-advisory-and-fa-zones-alaska.png)
 
-![Figure 27-4. Alaska Flying Weather Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-1-00-alaska-flying-weather-example.png)
+![Figure 27-4. Alaska Flying Weather Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-03-alaska-flying-weather-example.png)
 
-![Figure 27-5. Alaska Surface Forecast Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-3-00-alaska-surface-forecast-example.png)
+![Figure 27-5. Alaska Surface Forecast Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-04-alaska-surface-forecast-example.png)
 
-![Figure 27-6. Alaska Icing Forecast Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-4-00-alaska-icing-forecast-example.png)
+![Figure 27-6. Alaska Icing Forecast Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-05-alaska-icing-forecast-example.png)
 
-![Figure 27-7. Alaska Turbulence Forecast Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-5-00-alaska-turbulence-forecast-example.png)
+![Figure 27-7. Alaska Turbulence Forecast Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-06-alaska-turbulence-forecast-example.png)
 
-![Figure 27-8. Alaska Convective Outlook](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-8-1-00-alaska-convective-outlook.png)
+![Figure 27-8. Alaska Convective Outlook](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-07-alaska-convective-outlook.png)
 
-![Figure 27-9. WAFS Wind and Temperature Six-Hour Forecast at FL390—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-8-1-01-wafs-wind-and-temperature-six-hour-forecast-at-f.png)
+![Figure 27-9. WAFS Wind and Temperature Six-Hour Forecast at FL390—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-08-wafs-wind-and-temperature-six-hour-forecast-at-f.png)
 
-![Figure 27-10. 12-Hour Low-Level SIGWX Chart—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-00-12-hour-low-level-sigwx-chart-example.png)
+![Figure 27-10. 12-Hour Low-Level SIGWX Chart—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-09-12-hour-low-level-sigwx-chart-example.png)
 
-![Figure 27-11. Low-Level SIGWX Chart Symbols](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-01-low-level-sigwx-chart-symbols.png)
+![Figure 27-11. Low-Level SIGWX Chart Symbols](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-10-low-level-sigwx-chart-symbols.png)
 
-![Figure 27-12. Low-Level SIGWX Chart Flying Categories—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-02-low-level-sigwx-chart-flying-categories-example.png)
+![Figure 27-12. Low-Level SIGWX Chart Flying Categories—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-11-low-level-sigwx-chart-flying-categories-example.png)
 
-![Figure 27-13. Low-Level SIGWX Chart Turbulence Forecast—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-03-low-level-sigwx-chart-turbulence-forecast-exampl.png)
+![Figure 27-13. Low-Level SIGWX Chart Turbulence Forecast—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-12-low-level-sigwx-chart-turbulence-forecast-exampl.png)
 
-![Figure 27-14. Low-Level SIGWX Chart Freezing Level Forecast—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-04-low-level-sigwx-chart-freezing-level-forecast-ex.png)
+![Figure 27-14. Low-Level SIGWX Chart Freezing Level Forecast—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-13-low-level-sigwx-chart-freezing-level-forecast-ex.png)
 
-![Figure 27-15. Low-Level SIGWX Chart Multiple Freezing Levels—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-2-00-low-level-sigwx-chart-multiple-freezing-levels-e.png)
+![Figure 27-15. Low-Level SIGWX Chart Multiple Freezing Levels—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-14-low-level-sigwx-chart-multiple-freezing-levels-e.png)
 
-![Figure 27-16. Mid-Level SIGWX Chart—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-2-01-mid-level-sigwx-chart-example.png)
+![Figure 27-16. Mid-Level SIGWX Chart—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-15-mid-level-sigwx-chart-example.png)
 
-![Figure 27-17. High-Level SIGWX Chart—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-00-high-level-sigwx-chart-example.png)
+![Figure 27-17. High-Level SIGWX Chart—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-16-high-level-sigwx-chart-example.png)
 
-![Figure 27-18. High-Level SIGWX Chart Turbulence—Examples](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-01-high-level-sigwx-chart-turbulence-examples.png)
+![Figure 27-18. High-Level SIGWX Chart Turbulence—Examples](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-high-level-sigwx-chart-turbulence-examples.png)
 
-![Figure 27-19. High-Level SIGWX Chart Jet Stream—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-02-high-level-sigwx-chart-jet-stream-example.png)
+![Figure 27-19. High-Level SIGWX Chart Jet Stream—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-18-high-level-sigwx-chart-jet-stream-example.png)
 
-![Figure 27-20. High-Level SIGWX Chart Tropopause Height—Examples](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-03-high-level-sigwx-chart-tropopause-height-example.png)
+![Figure 27-20. High-Level SIGWX Chart Tropopause Height—Examples](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-19-high-level-sigwx-chart-tropopause-height-example.png)
 
-![Figure 27-21. High-Level SIGWX Chart Tropical Cyclone—Examples](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-4-00-high-level-sigwx-chart-tropical-cyclone-examples.png)
+![Figure 27-21. High-Level SIGWX Chart Tropical Cyclone—Examples](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-20-high-level-sigwx-chart-tropical-cyclone-examples.png)
 
-![Volcanic eruption sites are identified by a trapezoidal symbol depicted in Figure 27-22. The dot on the base  of the trapezoid identifies the location of the volcano. The name of the volcano, its latitude, and its longitude are noted adjacent to the symbol.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-4-01-the-dot-on-the-base-of-the-trapezoid-identifies-.png)
+![Figure 27-22. High-Level SIGWX Chart Volcanic Eruption Site—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-21-high-level-sigwx-chart-volcanic-eruption-site-ex.png)
 
-![Figure 27-22. High-Level SIGWX Chart Volcanic Eruption Site—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-4-02-high-level-sigwx-chart-volcanic-eruption-site-ex.png)
+![Figure 27-23. Alaska SIGWX Chart—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-22-alaska-sigwx-chart-example.png)
 
-![Figure 27-23. Alaska SIGWX Chart—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-10-00-ndfd-short-range-surface-prog-forecast-example.png)
+![Figure 27-24. NDFD Short-Range Surface Prog Forecast—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-23-ndfd-short-range-surface-prog-forecast-example.png)
 
-![Figure 27-25. Surface Prog Forecast Symbols](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-02-nws-surface-analysis-chart-symbols.png)
+![Figure 27-25. Surface Prog Forecast Symbols](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-05-nws-surface-analysis-chart-symbols.png)
 
-![Fronts are depicted using the standard symbols in Figure 27-25.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-11-1-00-nws-nco-model-analyses-and-guidance-website.png)
+![Figure 27-26. NWS NCO Model Analyses and Guidance Website](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-25-nws-nco-model-analyses-and-guidance-website.png)
 
-![Figure 27-26. NWS NCO Model Analyses and Guidance Website](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-11-1-01-300-mb-constant-pressure-forecast-example.png)
+![Figure 27-27. 300 mb Constant Pressure Forecast—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-26-300-mb-constant-pressure-forecast-example.png)
 
-![Figure 27-28. Day 1 Categorical Convective Outlook Graphic Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-2-00-day-1-categorical-convective-outlook-graphic-exa.png)
+![Figure 27-28. Day 1 Categorical Convective Outlook Graphic Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-27-day-1-categorical-convective-outlook-graphic-exa.png)
 
-![Figure 27-29. Categorical Outlook Legend for Days 1-3 Convective Outlook Graphic Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-2-01-categorical-outlook-legend-for-days-1-3-convecti.png)
+![Figure 27-29. Categorical Outlook Legend for Days 1-3 Convective Outlook Graphic Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-28-categorical-outlook-legend-for-days-1-3-convecti.png)
 
-![Figure 27-30. TCF Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-3-00-ecfp-example.png)
+![Figure 27-30. TCF Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-29-tcf-example.png)
 
-![Figure 27-32. Aviation Watch (polygon) Compared to Public Watch (shaded) Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-4-01-aviation-watch-polygon-compared-to-public-watch-.png)
+![Figure 27-31. ECFP Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-30-ecfp-example.png)
 
-![Figure 27-33. CIWS and CoSPA](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-5-00-ciws-and-cospa.png)
+![Figure 27-32. Aviation Watch (polygon) Compared to Public Watch (shaded) Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-31-aviation-watch-polygon-compared-to-public-watch-.png)
 
-![Figure 27-34. Map of NWS WFO’s Area of Responsibility](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-19-1-00-map-of-nws-wfo-s-area-of-responsibility.png)
+![Figure 27-33. CIWS and CoSPA](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-32-ciws-and-cospa.png)
+
+![Figure 27-34. Map of NWS WFO’s Area of Responsibility](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-33-map-of-nws-wfo-s-area-of-responsibility.png)
 
 | There are many wind and temperature aloft forecasts and products produced by the NWS. Each NWP model |
 | --- |

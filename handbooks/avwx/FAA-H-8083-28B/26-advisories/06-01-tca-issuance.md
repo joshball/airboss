@@ -26,5 +26,3 @@ available on their respective websites.
 The NHC and CPHC issue TCAs at 0300, 0900, 1500, and 2100 UTC and are valid from the time of
 issuance until the next scheduled issuance or update. The forecast position information in the TCA is
 interpolated from the official forecast data, which is valid at 0000, 0600, 1200, and 1800 UTC.
-
-![Figure 26-11. VAA in Graphical Format](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-6-1-00-vaa-in-graphical-format.png)

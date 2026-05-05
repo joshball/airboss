@@ -62,3 +62,8 @@ plan for every flight. The Code of Federal Regulations (CFR)
 requires that a pilot be familiar with all information available
 prior to any flight. Pilots should use the information to their
 advantage as it can only contribute to safety in flight.
+
+
+![Figure 11-33. Landing distance graph.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-31-landing-distance-graph.png)
+
+![Figure 11-32. Landing distance table.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-32-landing-distance-table.png)

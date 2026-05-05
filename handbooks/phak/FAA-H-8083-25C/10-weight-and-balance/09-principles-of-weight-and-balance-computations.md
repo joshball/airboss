@@ -108,3 +108,6 @@ in Figure 10-4), if a 100-pound weight is placed at a point
 weight is placed at a point (station) 50 inches from the datum,
 the sum of the product of the two weights and their distances
 total a moment of 5,000 in-lb, which will balance the board.
+
+
+![Figure 10-9. Loading schedule placard.](/handbooks/phak/FAA-H-8083-25C/figures/fig-10-07-loading-schedule-placard.png)

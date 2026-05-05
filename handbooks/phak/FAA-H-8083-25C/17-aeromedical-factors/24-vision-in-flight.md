@@ -113,3 +113,6 @@ visual field but virtually has no rods at all. So in low light,
 the middle of the visual field is not very sensitive, but farther
 from the fovea, the rods are more numerous and provide the
 major portion of night vision.
+
+
+![Figure 17-24. SVS system.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-23-svs-system.png)

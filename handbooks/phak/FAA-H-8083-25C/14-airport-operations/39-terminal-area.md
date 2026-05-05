@@ -23,3 +23,6 @@ an increase in aircraft operating weight or decrease in aircraft
 speed. The greatest vortex strength occurs when the generating
 aircraft is heavy, slow, and clean, since the turbulence from a
 “dirty” aircraft configuration hastens wake decay.
+
+
+![Figure 14-39. Traffic pattern operations—single runway.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-39-traffic-pattern-operations-single-runway.png)

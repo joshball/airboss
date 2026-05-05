@@ -47,3 +47,6 @@ an ILS approach at a facility that has no collocated DME,
 but there is a VOR/DME nearby.
 Altitude
 Some DMEs correct for slant-range error.
+
+
+![Figure 9-23. Onboard RNAV receivers have changed significantly.  Originally, RNAV receivers typically computed combined data from VOR, VORTAC, and/or DME. That is generally not the case now. Today, GPS such as the GNC 300 and the Bendix King KLS 88 LORAN receivers compute waypoints based upon embedded databases and air](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-22-onboard-rnav-receivers-have-changed-significantl.png)

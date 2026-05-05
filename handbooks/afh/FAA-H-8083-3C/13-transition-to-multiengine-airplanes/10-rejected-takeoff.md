@@ -18,3 +18,6 @@ particularly if an engine failure is not immediately recognized and accompanied 
 primary objective is not necessarily to stop the airplane in the shortest distance, but to maintain control of the airplane as it
 decelerates. In some situations, it may be preferable to continue into the overrun area under control, rather than risk directional
 control loss, landing gear collapse, or tire/brake failure in an attempt to stop the airplane in the shortest possible distance.
+
+
+![Figure 13-10. Normal two-engine approach and landing.](/handbooks/afh/FAA-H-8083-3C/figures/fig-13-08-normal-two-engine-approach-and-landing.png)

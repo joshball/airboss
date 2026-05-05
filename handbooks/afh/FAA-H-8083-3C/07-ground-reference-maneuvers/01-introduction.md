@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Introduction
+
+![Figure 7-1. Wind drift.](/handbooks/afh/FAA-H-8083-3C/figures/fig-7-00-wind-drift.png)

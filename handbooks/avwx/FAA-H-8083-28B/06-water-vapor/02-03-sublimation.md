@@ -38,5 +38,3 @@ water passing through a plant, only one percent is used in the growth process of
 Sublimation is the phase transition by which a solid is changed into vapor (a gas) without passing through
 the liquid phase. In the atmosphere, sublimation of water occurs when ice and snow (solids) change into
 water vapor (a gas).
-
-![Figure 6-1. The Hydrologic Cycle](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-2-1-00-the-hydrologic-cycle.png)

@@ -70,3 +70,6 @@ ensure that the holding entry procedures and leg lengths
 match the holding pattern. Some situations may require
 pilot intervention in order to stay within protected airspace.
 [Figure 3-18]
+
+
+![Figure 3-18. Instead of flying for a specific time after passing the holding fix, these holding patterns use distances to mark where the  turns are made. The distances come from DME or IFR-certified GPS equipment.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-17-instead-of-flying-for-a-specific-time-after-pass.png)

@@ -42,3 +42,6 @@ continuous and very high current draw on the ammeter. Some airplanes also have a
 purpose. The engine should be shut down immediately if this occurs.
 The pilot should be attentive for sounds, vibrations, smells, or smoke that are not consistent with normal after-start
 operational experience. Any concerns should lead to a shutdown and further investigation.
+
+
+![Figure 2-5. Seats should be inspected to ensure that they are properly latched into the seat rails and checked for damage.](/handbooks/afh/FAA-H-8083-3C/figures/fig-2-04-seats-should-be-inspected-to-ensure-that-they-ar.png)

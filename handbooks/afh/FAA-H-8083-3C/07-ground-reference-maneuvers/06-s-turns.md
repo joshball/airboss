@@ -64,3 +64,6 @@ The following are the most common errors made while performing S-turns across a 
 6. Failure to manipulate the flight controls in a smooth and continuous manner when transitioning into turns.
 7. Failure to establish the appropriate wind correction angle.
 8. Failure to apply coordinated aileron and rudder pressure, resulting in slips or skids.
+
+
+![Figure 7-6. S-turns.](/handbooks/afh/FAA-H-8083-3C/figures/fig-7-05-s-turns.png)

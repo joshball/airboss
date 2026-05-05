@@ -31,3 +31,6 @@ them to update personal conditions as the flight progresses.
 Once risks are identified, the pilot is in a better place to
 make alternate plans that lessen the effect of these factors
 and provide a safer solution.
+
+
+![Figure 2-13. A real-world example of how the 3P model guides decisions on a cross-country trip using the TEAM checklist.](/handbooks/phak/FAA-H-8083-25C/figures/fig-2-12-a-real-world-example-of-how-the-3p-model-guides-.png)

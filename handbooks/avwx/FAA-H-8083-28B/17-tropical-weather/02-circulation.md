@@ -191,7 +191,3 @@ During the winter monsoon, excellent flying weather prevails over dry interior r
 should pick their way around showers and thunderstorms. In the summer monsoon, low ceilings and heavy
 rain often restrict VFR flight. IFR flight copes with the hazards of thunderstorms. The freezing level in the
 Tropics is quite high (14,000 ft or higher), so icing is restricted to high levels.
-
-![over oceans with troughs or lows over continents, as shown in Figure 17-1 and Figure 17-2. The subtropical  highs shift southward during the Northern Hemisphere winter and northward during summer. The seasonal shift, the height and strength of the inversion, and terrain features determine the weather in the subtropical](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-2-1-00-the-subtropical-highs-shift-southward-during-the.png)
-
-![Figure 17-1. Mean Worldwide Surface Pressure Distribution and Prevailing Winds Throughout the World in July](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-2-1-01-mean-worldwide-surface-pressure-distribution-and.png)

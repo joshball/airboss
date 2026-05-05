@@ -22,3 +22,6 @@ gravity, directed opposite to the direction of gravity, enables
 an aircraft to fly. Generating this force called lift is based on
 some important principles, Newton's basic laws of motion,
 and Bernoulli's principle of differential pressure.
+
+
+![Figure 4-3. Properties of standard atmosphere.](/handbooks/phak/FAA-H-8083-25C/figures/fig-4-02-properties-of-standard-atmosphere.png)

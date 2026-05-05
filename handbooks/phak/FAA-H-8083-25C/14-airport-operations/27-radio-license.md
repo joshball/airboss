@@ -20,3 +20,6 @@ aviation aircraft operating in the United States. A station
 license is required, however, for an aircraft that is operating
 internationally, that uses other than a VHF radio, and that
 meets other criteria.
+
+
+![Figure 14-27. (A) Yellow “X” placed on surface of temporarily closed  runways. (B) Lighted “X” placed on temporarily closed runways. (C) Lighted “X” at night showing a temporarily closed runway.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-26-a-yellow-x-placed-on-surface-of-temporarily-clos.png)

@@ -171,3 +171,8 @@ tailwheel permits the airplane to be controlled throughout all
 operations while on the ground. Most aircraft are steered by
 moving the rudder pedals, whether nosewheel or tailwheel.
 Additionally, some aircraft are steered by differential braking.
+
+
+![Figure 3-12. Types of landing gear: floats (top), skis (middle), and  wheels (bottom).](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-10-types-of-landing-gear-floats-top-skis-middle-and.png)
+
+![Figure 3-11. Stabilator components.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-11-stabilator-components.png)

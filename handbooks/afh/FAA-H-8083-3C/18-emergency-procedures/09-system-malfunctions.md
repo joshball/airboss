@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # System Malfunctions
+
+![Figure 18-9. Electrical load for light single.](/handbooks/afh/FAA-H-8083-3C/figures/fig-18-08-electrical-load-for-light-single.png)

@@ -170,3 +170,6 @@ manner. Forward acceleration gives the illusion of the head
 tilting backward. [Figure 3-6] As a result, during takeoff and
 while accelerating, the pilot may sense a steeper than normal
 climb resulting in a tendency to nose-down.
+
+
+![Figure 3-4. Angular acceleration and the semicircular tubes.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-3-02-angular-acceleration-and-the-semicircular-tubes.png)

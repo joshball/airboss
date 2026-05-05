@@ -154,8 +154,6 @@ volcanic ash cloud located approximately at 17°/30 minutes north, 65°/00 minut
 north, 63°/00 minutes west to 16°/50 minutes north, 63°/00 minutes west to 17°/10 minutes north,
 65°/00 minutes west to 17°/30 minutes north, 65°/00 minutes west.
 
-![Figure 26-7. SIGMET Outside the CONUS—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-5-00-sigmet-outside-the-conus-example.png)
-
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-26-2-5-00-decoding-a-sigmet-outside-of-the-conus-line-cont.html">
 <table><caption>Table 26-3. Decoding a SIGMET Outside of the CONUS 
 Line 

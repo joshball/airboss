@@ -35,3 +35,6 @@ tailwind presents the worst case scenario as the wake
 vortices could be all present along a significant portion of
 the final approach and extended centerline and not just in the
 touchdown zone as typically expected.
+
+
+![Figure 14-41. Phonetic alphabet.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-41-phonetic-alphabet.png)

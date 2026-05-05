@@ -261,24 +261,24 @@ Flight can be especially hazardous over mountain routes when the mountains are o
 elevation variations around mountains can cause surface weather observations to mislead. For example, a
 weather station located in a valley could report a VFR cloud ceiling, while a hiker in the mountains sees fog.
 
-![Figure 18-1. Radiation Fog Formation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-1-00-radiation-fog-formation.png)
+![Figure 18-1. Radiation Fog Formation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-00-radiation-fog-formation.png)
 
-![Figure 18-2. Radiation Fog](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-1-01-radiation-fog.png)
+![Figure 18-2. Radiation Fog](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-01-radiation-fog.png)
 
-![18-3 and Figure 18-4.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-1-02-untitled.png)
+![Figure 18-3. Mountain/Valley Fog Formation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-02-mountain-valley-fog-formation.png)
 
-![Figure 18-3. Mountain/Valley Fog Formation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-1-03-mountain-valley-fog-formation.png)
+![Figure 18-4. Mountain/Valley Fog](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-03-mountain-valley-fog.png)
 
-![Figure 18-4. Mountain/Valley Fog](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-1-04-mountain-valley-fog.png)
+![Figure 18-5. Advection Fog Formation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-04-advection-fog-formation.png)
 
-![Figure 18-5. Advection Fog Formation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-1-05-advection-fog-formation.png)
+![Figure 18-6. Advection Fog](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-05-advection-fog.png)
 
-![Figure 18-6. Advection Fog](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-1-06-advection-fog.png)
+![Figure 18-7. Upslope Fog Formation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-06-upslope-fog-formation.png)
 
-![Figure 18-7. Upslope Fog Formation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-1-07-upslope-fog-formation.png)
+![Figure 18-8. Frontal Fog Formation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-07-frontal-fog-formation.png)
 
-![Figure 18-8. Frontal Fog Formation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-1-08-frontal-fog-formation.png)
+![Figure 18-9. Steam Fog Formation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-08-steam-fog-formation.png)
 
-![Figure 18-9. Steam Fog Formation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-1-09-steam-fog-formation.png)
+![Figure 18-10. Freezing Fog](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-09-freezing-fog.png)
 
-![Figure 18-11. Haboob](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-9-00-haboob.png)
+![Figure 18-11. Haboob](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-10-haboob.png)

@@ -14,3 +14,6 @@ Slip/Skid Indicator
 The slip/skid indicator is the horizontal line below the roll
 pointer. [Figure 8-12] Like a ball in a turn-and-slip indicator,
 a bar width off center is equal to one ball width displacement.
+
+
+![Figure 8-20. Typical vacuum system.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-18-typical-vacuum-system.png)

@@ -17,3 +17,6 @@ recognize and recover from loss of directional control associated with the red r
 demonstration. Since the object of
 a VMC demonstration is not performance, sideslip occurs during the maneuver. Detailed
 discussion on both the loss of directional control and maximum OEI climb performance follows.
+
+
+![Figure 13-18. Engine failure on takeoff, landing gear down.](/handbooks/afh/FAA-H-8083-3C/figures/fig-13-16-engine-failure-on-takeoff-landing-gear-down.png)

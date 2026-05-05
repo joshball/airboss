@@ -21,3 +21,6 @@ Wheelbarrowing does not occur if the pilot achieves and maintains the correct la
 gently lowers the nose-wheel while losing speed on rollout. However, if wheelbarrowing is encountered and runway and other conditions
 permit, it is advisable to promptly initiate a go-around. If the pilot decides it's safer to stay on the ground rather than attempt a go-around
 when directional control is lost, close the throttle and adjust the pitch attitude smoothly but firmly to the proper landing attitude.
+
+
+![Figure 9-37. Drifting during touchdown.](/handbooks/afh/FAA-H-8083-3C/figures/fig-9-36-drifting-during-touchdown.png)

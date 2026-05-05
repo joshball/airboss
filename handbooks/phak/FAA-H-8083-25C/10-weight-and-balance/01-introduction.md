@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Introduction
+
+![Figure 10-1. Lateral and longitudinal unbalance.](/handbooks/phak/FAA-H-8083-25C/figures/fig-10-00-lateral-and-longitudinal-unbalance.png)

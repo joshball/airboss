@@ -49,3 +49,6 @@ following methods:
 altitude according to the reported “altimeter setting,”
 [Figure 11-3]
 3.    By using a flight computer
+
+
+![Figure 11-5. Drag versus speed.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-05-drag-versus-speed.png)

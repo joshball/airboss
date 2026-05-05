@@ -45,3 +45,6 @@ AHRS and ADC are integrated within the electronic displays
 themselves thereby reducing the number of units, reducing
 weight, and providing simplification for installation resulting
 in reduced costs.
+
+
+![Figure 5-42.  An Autopilot by Century.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-41-an-autopilot-by-century.png)

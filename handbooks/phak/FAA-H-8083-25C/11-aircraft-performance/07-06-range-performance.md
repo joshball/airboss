@@ -169,3 +169,8 @@ and the aircraft may achieve the range at high altitude with
 the corresponding increase in TAS. The principal differences
 in the high altitude cruise and low altitude cruise are the TAS
 and climb fuel requirements.
+
+
+![Figure 11-10. Absolute and service ceiling.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-09-absolute-and-service-ceiling.png)
+
+![Figure 11-11. Airspeed for maximum endurance.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-10-airspeed-for-maximum-endurance.png)

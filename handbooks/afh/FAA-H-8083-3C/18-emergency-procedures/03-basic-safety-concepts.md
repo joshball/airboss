@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Basic Safety Concepts
+
+![Figure 18-3. Intentional gear-up landing.](/handbooks/afh/FAA-H-8083-3C/figures/fig-18-02-intentional-gear-up-landing.png)

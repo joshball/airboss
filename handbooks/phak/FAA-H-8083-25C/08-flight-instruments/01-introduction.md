@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Introduction
+
+![Figure 8-1. Pitot-static system and instruments.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-00-pitot-static-system-and-instruments.png)

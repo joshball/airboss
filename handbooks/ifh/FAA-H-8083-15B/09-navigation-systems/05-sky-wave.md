@@ -27,3 +27,6 @@ sky wave is, therefore, unreliable for navigation purposes.
 For aeronautical communication purposes, the sky wave
 (HF) is about 80 to 90 percent reliable. HF is being gradually
 replaced by more reliable satellite communication.
+
+
+![Figure 9-5. Radio magnetic indicator (RMI). Because the aircraft’s  magnetic heading (MH) is automatically changed, the relative bearing (RB), in this case 095°, indicates the magnetic bearing (095°) to the station (no wind conditions) and the MH that takes you there.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-03-relative-bearing-rb-on-a-movable-card-indicator-.png)

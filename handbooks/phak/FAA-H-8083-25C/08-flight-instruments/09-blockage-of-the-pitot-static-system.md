@@ -18,3 +18,6 @@ sure the pitot tube cover is removed. Then, check the pitot and
 static port openings. A blocked pitot tube affects the accuracy
 of the ASI, but a blockage of the static port not only affects
 the ASI, but also causes errors in the altimeter and VSI.
+
+
+![Figure 8-9. A blocked pitot tube, but clear drain hole.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-07-a-blocked-pitot-tube-but-clear-drain-hole.png)

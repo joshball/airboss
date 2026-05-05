@@ -47,3 +47,6 @@ than standard, it is denser and the pressure levels are closer
 together. When the aircraft is flying at an indicated altitude
 of 5,000 feet, its true altitude is lower than it would be if the
 air were warmer. [Figure 5-6]
+
+
+![Figure 5-11. Mechanism of an ASI.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-10-mechanism-of-an-asi.png)

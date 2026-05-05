@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Electrical Systems
+
+![Figure 5-33. Turn-and-slip indicator.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-32-turn-and-slip-indicator.png)

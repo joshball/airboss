@@ -18,35 +18,6 @@ Factors
 Chapter 17
 
 
-![Figure 17-11. To avoid the bends, scuba divers must not fly for  specific time periods following dives.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-00-to-avoid-the-bends-scuba-divers-must-not-fly-for.png)
-
-![Figure 17-10. Signs and symptoms of altitude decompression sickness.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-01-signs-and-symptoms-of-altitude-decompression-sic.png)
-
-![Figure 17-13. Types of vision.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-02-types-of-vision.png)
-
-![Figure 17-15. The eye’s blind spot.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-03-the-eye-s-blind-spot.png)
-
-![Figure 17-14. Central blind spot.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-04-central-blind-spot.png)
-
-![Figure 17-16. Night vision.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-05-night-vision.png)
-
-![Figure 17-21. Geometric perspective.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-06-geometric-perspective.png)
-
-![Figure 17-22. At night, the horizon may be hard to discern due to dark terrain and misleading light patterns on the ground.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-07-at-night-the-horizon-may-be-hard-to-discern-due-.png)
-
-![Figure 17-25. Night time SVS system. Figure 17-24. SVS system.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-08-night-time-svs-system-figure-17-24-svs-system.png)
-
-![Figure 17-24. SVS system.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-09-svs-system.png)
-
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-17-00-untitled.html">
-<table><thead><tr><th></th><th>Aeromedical
-Factors</th></tr></thead><tbody><tr><td>Introduction
-It is important for a pilot to be aware of the mental and
-physical standards required for the type of flying performed.
-This chapter provides information on medical certification and
-on a variety of aeromedical factors related to flight activities.</td><td></td></tr></tbody></table>
-</div>
-
 | Altitude | Time of useful consciousness |
 | --- | --- |
 | 45,000 feet MSL | 9 to 15 seconds |
@@ -58,9 +29,9 @@ on a variety of aeromedical factors related to flight activities.</td><td></td><
 | 22,000 feet MSL | 5 to 10 minutes |
 | 20,000 feet MSL | 30 minutes or more |
 
-<a class="handbook-table-source" href="/handbooks/phak/FAA-H-8083-25C/tables/tbl-17-01-untitled.html">Open original</a>
+<a class="handbook-table-source" href="/handbooks/phak/FAA-H-8083-25C/tables/tbl-17-00-untitled.html">Open original</a>
 
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-17-02-untitled.html">
+<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-17-01-untitled.html">
 <table><thead><tr><th>Narrower runway
 N o rm a l A p p ro a c h
 5 2</th><th>Wider runway
@@ -68,7 +39,7 @@ N o rm a l A p p ro a c h
 5 2</th></tr></thead><tbody></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-17-03-untitled.html">
+<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-17-02-untitled.html">
 <table><thead><tr><th>Type Beverage Typical Serving Pure Alcohol
 (oz) Content (oz)</th><th></th></tr></thead><tbody><tr><td>Table wine 4.0 .48</td><td></td></tr><tr><td>Light beer 12.0 .48</td><td></td></tr><tr><td>Aperitif liquor 1.5 .38</td><td></td></tr><tr><td>Champagne 4.0 .48</td><td></td></tr><tr><td>Vodka 1.0 .50</td><td></td></tr><tr><td>Whiskey 1.25 .50</td><td></td></tr><tr><td>0.01–0.05%
 (10–50 mg)</td><td>average individual appears normal</td></tr><tr><td>0.03–0.12%*
@@ -97,7 +68,7 @@ respiratory paralysis (450 mg or above)</td></tr><tr><td>* Legal limit for motor
 or 0.10% (80–100 mg of alcohol per dL of blood).</td><td></td></tr></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-17-04-untitled.html">
+<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-17-03-untitled.html">
 <table><thead><tr><th>Generic Or Treatment
 Substance Possible Side Effects
 Brand Name for</th><th></th><th></th><th></th></tr></thead><tbody><tr><td>Alcohol</td><td>Beer
@@ -174,19 +145,19 @@ between life and death in a survival situation)</td></tr></tbody></table>
 | CHOKES | Lungs | • Burning deep chest pain (under the sternum)<br>• Pain aggravated by breathing<br>• Shortness of breath (dyspnea)<br>• Dry constant cough |
 | SKIN BENDS | Skin | • Itching usually around the ears, face, neck, arms, and upper torso<br>• Sensation of tiny insects crawling over the skin<br>• Mottled or marbled skin usually around the shoulders, upper chest, and abdomen<br>accompanied by itching<br>• Swelling of the skin, accompanied by tiny scar-like skin depressions (pitting edema) |
 
-<a class="handbook-table-source" href="/handbooks/phak/FAA-H-8083-25C/tables/tbl-17-05-untitled.html">Open original</a>
+<a class="handbook-table-source" href="/handbooks/phak/FAA-H-8083-25C/tables/tbl-17-04-untitled.html">Open original</a>
 
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-17-06-untitled.html">
+<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-17-05-untitled.html">
 <table><thead><tr><th>Ro
 concen</th><th>d
 tration</th></tr></thead><tbody></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-17-07-untitled.html">
+<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-17-06-untitled.html">
 <table><thead><tr><th>Types of Vision</th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td>Types of vision used</td><td>Light level</td><td>Technique of viewing</td><td>Color perception</td><td>Receptors used</td><td>Acuity best</td><td>Blind spot</td></tr><tr><td>Photopic</td><td>High</td><td>Central</td><td>Good</td><td>Cones</td><td>20/20</td><td>Day</td></tr><tr><td>Mesopic</td><td>Medium/Low</td><td>Both</td><td>Some</td><td>Cones/Rods</td><td>Varies</td><td>Day/Night</td></tr><tr><td>Scotopic</td><td>Low</td><td>Scanning</td><td>None</td><td>Rods</td><td>20/200</td><td>Day/Night</td></tr></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-17-08-untitled.html">
+<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-17-07-untitled.html">
 <table><thead><tr><th>10°
 1 2
 4 3</th></tr></thead><tbody></tbody></table>

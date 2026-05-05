@@ -42,3 +42,6 @@ While DME groundspeed readout is accurate only when
 tracking directly to or from the station in VOR/DME mode,
 in RNAV mode the DME groundspeed readout is accurate
 on any track.
+
+
+![Figure 9-30. WAAS provides performance enhancement for GPS  approach procedures through real-time monitoring.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-29-waas-provides-performance-enhancement-for-gps-ap.png)

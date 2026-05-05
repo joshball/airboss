@@ -38,5 +38,3 @@ The learner needs to have success in order to have more success in the future. I
 designed to promote success. Positive training experiences are more apt to lead to success and motivate the learner, while negative
 training experiences might stimulate forgetfulness or avoidance. When presented correctly, SBT provides immediate positive
 experiences in terms of real-world applications.
-
-![Figure 3-7. E. L. Thorndike (1874–1949).](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-6-2-00-e-l-thorndike-1874-1949.png)

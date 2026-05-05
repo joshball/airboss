@@ -17,3 +17,6 @@ featureless by snow, can create an illusion that the aircraft is
 at a higher altitude than it actually is. This illusion, sometimes
 referred to as the “black hole approach,” causes pilots to fly
 a lower approach than is desired.
+
+
+![Figure 17-5. Graveyard spiral.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-04-graveyard-spiral.png)

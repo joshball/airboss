@@ -20,3 +20,6 @@ or an APV approach, the MAP occurs at the DA or DH on
 the glideslope/glidepath. For non-precision approaches,
 the MAP is either a fix, NAVAID, or after a specified period
 of time has elapsed after crossing the FAF.
+
+
+![Figure 4-28. Approach segments and obstacle clearance.](/handbooks/iph/FAA-H-8083-16B/figures/fig-4-24-approach-segments-and-obstacle-clearance.png)

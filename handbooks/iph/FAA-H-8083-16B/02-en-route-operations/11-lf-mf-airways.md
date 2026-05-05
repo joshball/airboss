@@ -15,3 +15,6 @@ The basic LF/MF airway width is 4.34 nautical miles (NM)
 on each side of the centerline; the width expands by five
 degrees when the distance from the facility providing
 course guidance is greater than 49.66 NM. [Figure 2-37]
+
+
+![Figure 2-11. High altitude sectors.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-09-high-altitude-sectors.png)

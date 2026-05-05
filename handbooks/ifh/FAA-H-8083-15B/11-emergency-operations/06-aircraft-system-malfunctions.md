@@ -29,3 +29,6 @@ instruments. In addition, during the run-up, verify that the
 operation of the pneumatic system(s) is within acceptable
 parameters. It is critical that all systems are determined to be
 operational before departing into IFR conditions.
+
+
+![Figure 11-6. Note the double rocker switch and the standby battery  switch in this aircraft. The standby battery must be armed to work correctly; arming should be done prior to departure.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-11-05-note-the-double-rocker-switch-and-the-standby-ba.png)

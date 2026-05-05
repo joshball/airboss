@@ -20,7 +20,3 @@ slope can vary, but clouds and precipitation would still form in the warm rising
 both warm and cold fronts.
 
 Figure 11-7. Stationary Front
-
-![Figure 11-6. Cold Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-3-00-cold-front.png)
-
-![Figure 11-7. Stationary Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-3-01-stationary-front.png)

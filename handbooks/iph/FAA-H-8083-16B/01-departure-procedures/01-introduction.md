@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Introduction
+
+![Figure 1-1. Airport diagram included on the Oshkosh, Wisconsin  VOR RWY 9 Approach Chart as depicted in the IFR TPP.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-00-airport-diagram-included-on-the-oshkosh-wisconsi.png)

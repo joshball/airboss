@@ -32,3 +32,6 @@ supply.
 Note: Because compression produces heat and pressure, some pneumatic aircraft systems tap into the source of hot compressed air
 from the engine compressor (bleed air) and use it for engine anti-ice, airfoil anti-ice, aircraft pressurization, and other ancillary
 systems after further conditioning its internal pressure and temperature.
+
+
+![Figure 15-2. Fixed-shaft turboprop engine.](/handbooks/afh/FAA-H-8083-3C/figures/fig-15-01-fixed-shaft-turboprop-engine.png)

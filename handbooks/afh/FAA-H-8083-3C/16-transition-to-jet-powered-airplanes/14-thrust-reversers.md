@@ -47,3 +47,6 @@ uncommanded or inadvertent deployment of thrust reversers, while airborne, is an
 lock systems: one to keep reversers from operating in the air, another to prevent operation with the thrust levers out of the idle detent,
 and/or an “auto-stow” circuit to command reverser stowage any time thrust reverser deployment would be inappropriate, such as
 during takeoff and while airborne.
+
+
+![Figure 16-14. Typical descent profile.](/handbooks/afh/FAA-H-8083-3C/figures/fig-16-13-typical-descent-profile.png)

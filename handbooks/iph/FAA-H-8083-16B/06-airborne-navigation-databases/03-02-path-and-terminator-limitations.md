@@ -46,3 +46,8 @@ equipment they are operating. Pilots should be aware that
 capability which can cause problems for pilots attempting
 to use this equipment to fly complex flightpaths in the
 departure, arrival, or approach environments.
+
+
+![Figure 6-24. Procedure turn or PI leg.](/handbooks/iph/FAA-H-8083-16B/figures/fig-6-17-procedure-turn-or-pi-leg.png)
+
+![Figure 6-25. Racetrack course reversal or HA, HF, and HM leg.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-19-cleared-for-the-palm-beach-ils-approach.png)

@@ -270,35 +270,35 @@ though it were at 12,700 ft indicated with a normal temperature of -8 °C.
 To compute density altitude, a pilot can set the altimeter to 29.92 in (1,013.2 mb), read the pressure altitude
 from the altimeter, obtain the OAT, and then use a flight computer to compute density altitude.
 
-![Figure 8-1. Air Has Weight](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-1-00-air-has-weight.png)
+![Figure 8-1. Air Has Weight](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-00-air-has-weight.png)
 
-![Figure 8-2. Aneroid Barometer](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-2-00-aneroid-barometer.png)
+![Figure 8-2. Aneroid Barometer](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-01-aneroid-barometer.png)
 
-![Figure 8-3. Station Pressure](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-4-00-station-pressure.png)
+![Figure 8-3. Station Pressure](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-02-station-pressure.png)
 
-![Figure 8-4. Air Pressure in the Standard Atmosphere](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-4-01-air-pressure-in-the-standard-atmosphere.png)
+![Figure 8-4. Air Pressure in the Standard Atmosphere](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-03-air-pressure-in-the-standard-atmosphere.png)
 
-![Figure 8-5. Temperature’s Effect on Pressure](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-5-00-temperature-s-effect-on-pressure.png)
+![Figure 8-5. Temperature’s Effect on Pressure](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-04-temperature-s-effect-on-pressure.png)
 
-![Figure 8-6. Reduction of Station Pressure to Sea Level](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-5-01-reduction-of-station-pressure-to-sea-level.png)
+![Figure 8-6. Reduction of Station Pressure to Sea Level](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-05-reduction-of-station-pressure-to-sea-level.png)
 
-![Figure 8-7. Density is Mass (Weight) per Volume](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-3-1-00-density-is-mass-weight-per-volume.png)
+![Figure 8-7. Density is Mass (Weight) per Volume](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-06-density-is-mass-weight-per-volume.png)
 
-![Figure 8-8. Volume’s Effects on Density](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-3-2-00-volume-s-effects-on-density.png)
+![Figure 8-8. Volume’s Effects on Density](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-07-volume-s-effects-on-density.png)
 
-![Figure 8-9. Pressure’s Effects on Density in the Atmosphere](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-3-4-00-pressure-s-effects-on-density-in-the-atmosphere.png)
+![Figure 8-9. Pressure’s Effects on Density in the Atmosphere](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-08-pressure-s-effects-on-density-in-the-atmosphere.png)
 
-![Figure 8-10. Temperature’s Effects on Density](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-3-5-00-temperature-s-effects-on-density.png)
+![Figure 8-10. Temperature’s Effects on Density](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-09-temperature-s-effects-on-density.png)
 
-![Figure 8-11. Water Vapor’s Effects on Density](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-3-5-01-water-vapor-s-effects-on-density.png)
+![Figure 8-11. Water Vapor’s Effects on Density](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-10-water-vapor-s-effects-on-density.png)
 
-![clearly, see Figure 8-12. In the warm air column, a pilot would fly at an altitude that is higher than the  indicated altitude. In the cold air column, the pilot would fly at an altitude lower than the indicated altitude.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-4-1-00-in-the-warm-air-column-a-pilot-would-fly-at-an-a.png)
+![Figure 8-12. True Versus Indicated Altitude](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-11-true-versus-indicated-altitude.png)
 
-![Figure 8-12. True Versus Indicated Altitude](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-4-1-01-true-versus-indicated-altitude.png)
+![Figure 8-13. Pressure Change’s Effects on Altimeter Readings](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-12-pressure-change-s-effects-on-altimeter-readings.png)
 
-![Figure 8-13. Pressure Change’s Effects on Altimeter Readings](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-4-1-02-pressure-change-s-effects-on-altimeter-readings.png)
+![Figure 8-14. Temperature Change’s Effects on Altimeter Readings](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-13-temperature-change-s-effects-on-altimeter-readin.png)
 
-![Figure 8-15. High Density Altitude’s Effects on Flight](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-4-1-03-high-density-altitude-s-effects-on-flight.png)
+![Figure 8-15. High Density Altitude’s Effects on Flight](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-14-high-density-altitude-s-effects-on-flight.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-8-00-units-of-pressure-units-of-pressure-standard-atm.html">
 <table><caption>Table 8-1. Units of Pressure 

@@ -32,3 +32,6 @@ perception of risk a pilot assigns it changes because of the
 multitude of ongoing tasks and the environment. Experience,
 discipline, awareness, and knowledge influences how a pilot
 ranks a problem.
+
+
+![Figure 2-22. Two similar flight decks equipped with the same information two different ways, analog and digital. What are they indicating?  Chances are that the analog pilot will review the top display before the bottom display. Conversely, the digitally trained pilot will review the instrument panel on the bottom firs](/handbooks/phak/FAA-H-8083-25C/figures/fig-2-21-two-similar-flight-decks-equipped-with-the-same-.png)

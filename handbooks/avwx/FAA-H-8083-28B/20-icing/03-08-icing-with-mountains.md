@@ -25,5 +25,3 @@ Icing is more likely and more severe in mountainous regions. Mountain ranges cau
 on their windward side. These vertical currents support large, supercooled water droplets above the freezing
 level. The movement of a front across a mountain range combines frontal lift with the mountain’s upslope
 flow effect to create extremely hazardous icing zones (see Figure 20-2).
-
-![Figure 20-1. Icing with Fronts](/handbooks/avwx/FAA-H-8083-28B/figures/fig-20-3-8-00-icing-with-fronts.png)

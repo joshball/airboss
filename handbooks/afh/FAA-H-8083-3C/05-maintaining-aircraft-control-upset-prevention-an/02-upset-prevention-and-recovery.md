@@ -15,3 +15,6 @@ An unusual attitude is commonly referenced as an unintended or unexpected attitu
 introduced to a pilot during student pilot training as part of basic attitude instrument flying and continue to be trained and tested as
 part of certification for an instrument rating, aircraft type rating, and an airline transport pilot certificate. A pilot is taught the
 conditions or situations that could cause an unusual attitude, with focus on how to recognize one, and how to recover from one.
+
+
+![Figure 5-2. Some differences between aerobatic training and upset prevention and recovery training.](/handbooks/afh/FAA-H-8083-3C/figures/fig-5-01-some-differences-between-aerobatic-training-and-.png)

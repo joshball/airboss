@@ -60,3 +60,6 @@ correction for 180° to be 0° and for 210° to be +2°, it could
 be assumed that the correction for 195° would be +1°. The
 magnetic heading, when corrected for deviation, is known
 as compass heading.
+
+
+![Figure 16-12. Compass deviation card.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-11-compass-deviation-card.png)

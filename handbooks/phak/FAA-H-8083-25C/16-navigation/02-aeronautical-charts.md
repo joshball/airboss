@@ -22,3 +22,6 @@ A free catalog listing aeronautical charts and related
 publications including prices and instructions for ordering is
 available at the Aeronautical Navigation Products website:
 www.aeronav.faa.gov.
+
+
+![Figure 16-2. VFR Terminal Area Chart and legend.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-01-vfr-terminal-area-chart-and-legend.png)

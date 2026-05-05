@@ -85,3 +85,6 @@ Plotter
 Mechanical flight computer
 Electronic flight computer
 Figure 16-18. A plotter (A), the computational and wind side of a mechanical flight computer (E6B) (B), and an electronic flight computer (C).
+
+
+![Figure 16-6. Compass rose.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-07-compass-rose.png)

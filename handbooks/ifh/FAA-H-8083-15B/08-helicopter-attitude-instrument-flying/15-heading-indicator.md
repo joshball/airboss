@@ -32,3 +32,6 @@ number of degrees to be turned. Bank angles greater than
 these require more skill and precision in attaining the desired
 results. During straight-and-level flight, the heading indicator
 is the primary reference for bank control.
+
+
+![Figure 8-15. Flight instrument indications for a stabilized left climbing turn at a constant airspeed.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-8-14-flight-instrument-indications-for-a-stabilized-l.png)

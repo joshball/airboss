@@ -36,3 +36,6 @@ local pressure differences allowing display of targets at correct
 altitudes. 14 CFR part 91 requires the altitude transmitted by
 the transponder to be within 125 feet of the altitude indicated
 on the instrument used to maintain flight altitude.
+
+
+![Figure 5-15. Color codes for an ASI.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-14-color-codes-for-an-asi.png)

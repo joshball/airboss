@@ -28,3 +28,6 @@ gyroscopes are those mounted so that one of the planes of
 freedom is held fixed in relation to the base.
 There are two fundamental properties of gyroscopic action:
 rigidity in space and precession.
+
+
+![Figure 8-25. A heading indicator displays headings based on a 360°  azimuth, with the final zero omitted. For example, “6” represents 060°, while “21” indicates 210°. The adjustment knob is used to align the heading indicator with the magnetic compass.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-23-a-heading-indicator-displays-headings-based-on-a.png)

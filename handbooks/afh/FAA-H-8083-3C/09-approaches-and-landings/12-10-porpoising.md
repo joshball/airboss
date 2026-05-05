@@ -28,3 +28,6 @@ When pilots attempt to correct a severe porpoise with flight control and power i
 severity of each successive contact with the surface. These unintentional and increasing pilot-induced oscillations may lead to damage
 or collapse of the nose gear. When porpoising is severe or seems to be getting worse, the safest procedure is to execute a go-around
 immediately by applying full power while simultaneously maintaining directional control and lowering the nose to a safe climb attitude.
+
+
+![Figure 9-36. Porpoising.](/handbooks/afh/FAA-H-8083-3C/figures/fig-9-35-porpoising.png)

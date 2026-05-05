@@ -10,3 +10,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Straight Climbs and Descents
+
+![Figure 7-63. Constant airspeed climb from cruise airspeed.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-64-constant-airspeed-climb-from-cruise-airspeed.png)

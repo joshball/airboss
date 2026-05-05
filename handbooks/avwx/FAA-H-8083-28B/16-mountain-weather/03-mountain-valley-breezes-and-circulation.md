@@ -25,5 +25,3 @@ See Chapter 19, Turbulence, for information on mountain turbulence.
 See Section 20.3.8 for information on mountain icing.
 16.9 Density Altitude
 See Section 8.4.1.5 for information on density altitude.
-
-![Figure 16-16. Examples of Mountain Wave Clouds](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-3-00-examples-of-mountain-wave-clouds.png)

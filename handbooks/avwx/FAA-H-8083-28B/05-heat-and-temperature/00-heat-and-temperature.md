@@ -362,23 +362,23 @@ occur within it. Turbulence will be discussed at length in Chapter 19, Turbulenc
 
 Figure 5-9. Sounding with a Temperature Inversion
 
-![Figure 5-1. Comparison of Kelvin, Celsius, and Fahrenheit Temperature Scales](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-5-2-00-comparison-of-kelvin-celsius-and-fahrenheit-temp.png)
+![Figure 5-1. Comparison of Kelvin, Celsius, and Fahrenheit Temperature Scales](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-00-comparison-of-kelvin-celsius-and-fahrenheit-temp.png)
 
-![Figure 5-2. Radiation Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-1-00-radiation-example.png)
+![Figure 5-2. Radiation Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-01-radiation-example.png)
 
-![Figure 5-3. Temperature’s Effect on Radiation Wavelength](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-1-01-temperature-s-effect-on-radiation-wavelength.png)
+![Figure 5-3. Temperature’s Effect on Radiation Wavelength](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-02-temperature-s-effect-on-radiation-wavelength.png)
 
-![Figure 5-4. Solar Zenith Angle](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-2-00-solar-zenith-angle.png)
+![Figure 5-4. Solar Zenith Angle](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-03-solar-zenith-angle.png)
 
-![Figure 5-5. Heat Transfer Examples1](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-7-00-heat-transfer-examples1.png)
+![Figure 5-5. Heat Transfer Examples1](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-04-heat-transfer-examples1.png)
 
-![Figure 5-6. Specific Heat Capacity: Water versus Sand](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-7-01-specific-heat-capacity-water-versus-sand.png)
+![Figure 5-6. Specific Heat Capacity: Water versus Sand](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-05-specific-heat-capacity-water-versus-sand.png)
 
-![Figure 5-7. Variation of Mean Daily Temperatures for San Francisco (Maritime) and St. Louis (Continental)](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-8-1-00-variation-of-mean-daily-temperatures-for-san-fra.png)
+![Figure 5-7. Variation of Mean Daily Temperatures for San Francisco (Maritime) and St. Louis (Continental)](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-06-variation-of-mean-daily-temperatures-for-san-fra.png)
 
-![Figure 5-8. Sounding with an Isothermal Layer](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-8-3-00-sounding-with-an-isothermal-layer.png)
+![Figure 5-8. Sounding with an Isothermal Layer](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-07-sounding-with-an-isothermal-layer.png)
 
-![Figure 5-9. Sounding with a Temperature Inversion](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-8-3-01-sounding-with-a-temperature-inversion.png)
+![Figure 5-9. Sounding with a Temperature Inversion](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-08-sounding-with-a-temperature-inversion.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-5-00-celsius-temperature-conversion-formulae-from-cel.html">
 <table><caption>Table 5-1. Celsius Temperature Conversion Formulae 

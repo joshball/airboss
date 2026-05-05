@@ -12,3 +12,6 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 
 ATC Inflight Weather Avoidance
 Assistance
+
+
+![Figure 2-14. High-resolution ATC displays used in PRM.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-2-13-high-resolution-atc-displays-used-in-prm.png)

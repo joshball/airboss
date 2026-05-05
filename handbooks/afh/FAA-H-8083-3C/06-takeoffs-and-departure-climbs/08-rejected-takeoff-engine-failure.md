@@ -29,3 +29,6 @@ attitude without power, the airplane is at or near a stalling AOA. At the same t
 pilot should immediately lower the nose to prevent a stall while moving the rudder to ensure coordinated flight. The pilot should
 establish a controlled glide toward a plausible landing area, preferably straight ahead. Attempting to turn back to the takeoff runway
 should not be attempted unless the pilot previously trained for an emergency turn-back and sufficient altitude exists.
+
+
+![Figure 6-8. Short-field takeoff.](/handbooks/afh/FAA-H-8083-3C/figures/fig-6-07-short-field-takeoff.png)

@@ -16,3 +16,6 @@ altitude” by modeling how throttle and elevator inputs affect the airplane’s
 problem of controlling vertical flight path and airspeed becomes one of handling the airplane’s energy state—the total amount
 of energy and its distribution over altitude and speed. Thus, rather than asking what controls altitude and what controls airspeed, a
 pilot can now ask what controls total energy and what controls its distribution over altitude and airspeed.
+
+
+![Figure 4-3. The reservoir analogy illustrating the primary role of the throttle and elevator to manage the airplane’s energy state.](/handbooks/afh/FAA-H-8083-3C/figures/fig-4-01-the-reservoir-analogy-illustrating-the-primary-r.png)

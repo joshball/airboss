@@ -26,5 +26,3 @@ by meteorologists to determine the state of the atmosphere.
 5.8.2 Isothermal Layer
 An isothermal layer is a layer within the atmosphere where the temperature remains constant with height
 (see Figure 5-8).
-
-![Figure 5-7. Variation of Mean Daily Temperatures for San Francisco (Maritime) and St. Louis (Continental)](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-8-1-00-variation-of-mean-daily-temperatures-for-san-fra.png)

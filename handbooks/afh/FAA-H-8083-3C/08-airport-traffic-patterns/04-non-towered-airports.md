@@ -31,3 +31,6 @@ entry—all while scanning for traffic.
 Before joining the downwind leg, adjust course or speed to fit the traffic. Once fitting into the flow of traffic, adjust power on the
 downwind leg to avoid flying too fast or too slow. Speeds recommended by the airplane manufacturer should be used. They will
 generally fall between 70 to 90 knots for typical piston single-engine airplanes.
+
+
+![Figure 8-4. Location distribution of mid-air collisions in the airport traffic pattern.](/handbooks/afh/FAA-H-8083-3C/figures/fig-8-03-location-distribution-of-mid-air-collisions-in-t.png)

@@ -171,3 +171,8 @@ charts are developed to the maximum radar range. Sectors
 provide separation from terrain and obstructions. Each MVA
 chart has sectors large enough to accommodate vectoring
 of aircraft within the sector at the MVA. [Figure 2-65]
+
+
+![Figure 2-48. Random RNAV route.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-42-random-rnav-route.png)
+
+![Figure 2-65. MVA chart.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-59-mva-chart.png)

@@ -20,3 +20,6 @@ troposphere and the stratosphere. It varies in both thickness
 and altitude but is generally defined where the standard
 lapse (generally accepted at 2 °C per 1,000 feet) decreases
 significantly (usually down to 1 °C or less).
+
+
+![Figure 4-13. Vortex generators.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-4-10-vortex-generators.png)

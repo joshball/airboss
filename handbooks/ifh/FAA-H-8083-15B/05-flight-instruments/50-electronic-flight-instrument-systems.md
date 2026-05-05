@@ -33,3 +33,6 @@ display. Because the versatility offered by glass displays is
 much greater than that offered by analog displays, the use of
 such systems only increases with time until analog systems
 are eclipsed.
+
+
+![Figure 5-50. An aircraft equipped with ADS has the ability to upload and display weather.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-48-an-aircraft-equipped-with-ads-will-receive-ident.png)

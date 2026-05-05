@@ -23,3 +23,6 @@ necessary to depress the brakes. This permits the simultaneous application of ru
 tailwheel airplanes are equipped with heel brakes rather than toe brakes. As in nose-wheel airplanes, brakes are used to slow and stop
 the aircraft and to increase turning authority when tailwheel steering inputs prove insufficient. Whenever used, brakes should be
 applied smoothly and evenly.
+
+
+![Figure 14-2. Tailwheel touchdown.](/handbooks/afh/FAA-H-8083-3C/figures/fig-14-01-tailwheel-touchdown.png)

@@ -138,3 +138,8 @@ GBAS reference receivers
 GBAS ground facility
 Status information
 Figure 5-10. Ground-Based Augmentation System (GBAS).
+
+
+![Figure 5-7. National airspace voice switch (NVS) will replace  existing voice switching systems with single air/ground and ground/ ground voice communication systems.](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-06-national-airspace-voice-switch-nvs-will-replace-.png)
+
+![Figure 5-8. ADS-B services provide real-time precise positioning capability to ATC and ADS-B In-equipped aircraft throughout the  NAS, in all phases of flight operations.](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-07-ads-b-services-provide-real-time-precise-positio.png)

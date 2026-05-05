@@ -4,7 +4,7 @@ product: flightbag
 feature: handbook-figure-pairing
 type: test-plan
 status: unread
-review_status: pending
+review_status: done
 ---
 
 # Test Plan: Handbook Figure-Caption Pairing

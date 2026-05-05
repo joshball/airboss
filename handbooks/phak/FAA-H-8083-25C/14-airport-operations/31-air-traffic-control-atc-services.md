@@ -16,3 +16,6 @@ Chapter 12, “Aviation Weather Services,” numerous other
 services are provided by ATC. In many instances a pilot
 is required to have contact with ATC, but even when not
 required, a pilot may find their services helpful.
+
+
+![Figure 14-31. Tri-color visual approach slope indicator.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-31-tri-color-visual-approach-slope-indicator.png)

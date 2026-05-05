@@ -36,5 +36,3 @@ large amount of cloudiness and precipitation. If this occurs in the vicinity of 
 extensive, and sometimes dense cirrus and some convective turbulence and CAT, often develop.
 TUTTs and lows aloft produce considerable amounts of rainfall in the Tropics, especially over land areas
 where mountains and surface heating lift air to saturation. Low-pressure systems aloft contribute
-
-![Figure 17-3. A Shear Line and an Induced Trough Caused by a Polar High Pushing into the Subtropics](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-1-00-a-shear-line-and-an-induced-trough-caused-by-a-p.png)

@@ -30,65 +30,26 @@ Aviation Weather Services
 Chapter 13
 
 
-![Figure 13-3. WSR-88D Weather Radar Precipitation Intensity  Terminology.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-00-wsr-88d-weather-radar-precipitation-intensity-te.png)
+![Figure 13-10. Surface analysis chart.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-09-surface-analysis-chart.png)
 
-![Figure 13-1. Example of a weather radar scope.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-01-example-of-a-weather-radar-scope.png)
+![Figure 13-11. Sample station model and weather chart symbols.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-10-sample-station-model-and-weather-chart-symbols.png)
 
-![Figure 13-2. WSR-88D Weather Radar Echo Intensity Legend.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-02-wsr-88d-weather-radar-echo-intensity-legend.png)
+![Figure 13-14. 36- (top) and 48-hour (bottom) surface prognostic chart.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-13-36-top-and-48-hour-bottom-surface-prognostic-cha.png)
 
-![Figure 13-8. Area forecast region map.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-03-area-forecast-region-map.png)
+![Figure 13-17. NEXRAD radar display.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-16-nexrad-radar-display.png)
 
-![Figure 13-9. Winds and temperature aloft forecast.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-04-winds-and-temperature-aloft-forecast.png)
+![Figure 13-18. NEXRAD radar display (500 mile range). The individual color gradients can be easily discerned and interpreted via the  legend in the upper right corner of the screen. Additional information can be gained by pressing the LEGEND soft key, which displays the legend page.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-17-nexrad-radar-display-500-mile-range-the-individu.png)
 
-![Figure 13-10. Surface analysis chart.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-05-surface-analysis-chart.png)
+![Figure 13-19. The AIRMET information box instructs the pilot to press the ENTER button soft key (ENT) to gain additional information  on the selected area of weather. Once the ENTER soft key (ENT) is depressed, the specific textual information is displayed on the right side of the screen.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-18-the-airmet-information-box-instructs-the-pilot-t.png)
 
-![Figure 13-12. Weather depiction chart.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-06-weather-depiction-chart.png)
+![Figure 13-20. SIGMET/AIRMET legend display.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-19-sigmet-airmet-legend-display.png)
 
-![Figure 13-13. Significant weather prognostic chart.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-07-significant-weather-prognostic-chart.png)
-
-![shown in Figure 13-14.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-08-untitled.png)
-
-![Figure 13-15. Information page.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-09-information-page.png)
-
-![Figure 13-16. List of weather products and the expiration times of each.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-10-list-of-weather-products-and-the-expiration-time.png)
-
-![Figure 13-17. NEXRAD radar display.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-11-nexrad-radar-display.png)
-
-![Figure 13-19. The AIRMET information box instructs the pilot to press the ENTER button soft key (ENT) to gain additional information  on the selected area of weather. Once the ENTER soft key (ENT) is depressed, the specific textual information is displayed on the right side of the screen.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-12-the-airmet-information-box-instructs-the-pilot-t.png)
-
-![Figure 13-20. SIGMET/AIRMET legend display.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-13-sigmet-airmet-legend-display.png)
-
-![Figure 13-21. Graphical METAR legend display.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-14-graphical-metar-legend-display.png)
-
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-13-00-untitled.html">
-<table><thead><tr><th></th><th>Aviation Weather Services</th></tr></thead><tbody><tr><td>Introduction
-In aviation, weather service is a combined effort of the
-National Weather Service (NWS), Federal Aviation
-Administration (FAA), Department of Defense (DOD), other
-aviation groups, and individuals. Because of the increasing
-need for worldwide weather services, foreign weather
-organizations also provide vital input.
-While weather forecasts are not 100 percent accurate,
-meteorologists, through careful scientific study and computer
-modeling, have the ability to predict weather patterns, trends,
-and characteristics with increasing accuracy. Through a
-complex system of weather services, government agencies,
-and independent weather observers, pilots and other aviation
-professionals receive the benefit of this vast knowledge base
-in the form of up-to-date weather reports and forecasts.
-These reports and forecasts enable pilots to make informed
-decisions regarding weather and flight safety before and
-during a flight.</td><td></td></tr></tbody></table>
-</div>
-
-| Reflectivity (dBZ) Ranges | Weather Radar Echo Intensity |
-| --- | --- |
 | <30 dBZ | Light |
+| --- | --- |
 | 30–40 dBZ | Moderate |
 | >40–50 | Heavy |
-| 50+ dBZ | Extreme |
 
-<a class="handbook-table-source" href="/handbooks/phak/FAA-H-8083-25C/tables/tbl-13-01-untitled.html">Open original</a>
+<a class="handbook-table-source" href="/handbooks/phak/FAA-H-8083-25C/tables/tbl-13-00-untitled.html">Open original</a>
 
 | Sky Cover | Contraction |
 | --- | --- |
@@ -98,15 +59,15 @@ during a flight.</td><td></td></tr></tbody></table>
 | 5∕8–7∕8 (Broken) | BKN |
 | 8∕8 or (Overcast) | OVC |
 
-<a class="handbook-table-source" href="/handbooks/phak/FAA-H-8083-25C/tables/tbl-13-02-untitled.html">Open original</a>
+<a class="handbook-table-source" href="/handbooks/phak/FAA-H-8083-25C/tables/tbl-13-01-untitled.html">Open original</a>
 
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-13-03-untitled.html">
+<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-13-02-untitled.html">
 <table><thead><tr><th>Qualifier</th><th></th><th>Weather Phenomena</th><th></th><th></th></tr></thead><tbody><tr><td>Intensity or Proximity 1</td><td>Descriptor 2</td><td>Precipitation 3</td><td>Obscuration 4</td><td>Other 5</td></tr><tr><td>– Light</td><td>MI Shallow</td><td>DZ Drizzle</td><td>BR Mist</td><td>PO Dust/sand whirls</td></tr><tr><td>Moderate (no qualifier)</td><td>BC Patches</td><td>RA Rain</td><td>FG Fog</td><td>SQ Squalls</td></tr><tr><td>+ Heavy</td><td>DR Low drifting</td><td>SN Snow</td><td>FU Smoke</td><td>FC Funnel cloud</td></tr><tr><td>VC in the vicinity</td><td>BL Blowing</td><td>SG Snow grains</td><td>DU Dust</td><td>+FC Tornado or waterspout</td></tr><tr><td></td><td>SH Showers</td><td>IC Ice crystals (diamond dust)</td><td>SA Sand</td><td>SS Sandstorm</td></tr><tr><td></td><td>TS Thunderstorms</td><td>PL Ice pellets</td><td>HZ Haze</td><td>DS Dust storm</td></tr><tr><td></td><td>FZ Freezing</td><td>GR Hail</td><td>PY Spray</td><td></td></tr><tr><td></td><td>PR Partial</td><td>GS Small hail or snow pellets</td><td>VA Volcanic ash</td><td></td></tr><tr><td></td><td></td><td>UP *Unknown precipitation</td><td></td><td></td></tr><tr><td>The weather groups are constructed by considering columns 1–5 in this table in sequence:
 intensity, followed by descriptor, followed by weather phenomena (e.g., heavy rain showers(s) is coded as +SHRA).
 * Automated stations only</td><td></td><td></td><td></td><td></td></tr></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-13-04-untitled.html">
+<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-13-03-untitled.html">
 <table><thead><tr><th>Encoding Pilot Weather Reports (PIREPS)</th><th></th><th></th><th></th></tr></thead><tbody><tr><td>1</td><td>XXX</td><td>3-letter station identifier</td><td>Nearest weather reporting location to the reported phenomenon</td></tr><tr><td>2</td><td>UA</td><td>Routine PIREP, UUA-Urgent PIREP.</td><td></td></tr><tr><td>3</td><td>/OV</td><td>Location</td><td>Use 3-letter NAVAID idents only.
 a. Fix: /OV ABC, /OV ABC 090025.
 b. Fix: /OV ABC 045020-DEF, /OV ABC-DEF-GHI</td></tr><tr><td>4</td><td>/TM</td><td>Time</td><td>4 digits in UTC: /TM 0915.</td></tr><tr><td>5</td><td>/FL</td><td>Altitude/flight level</td><td>3 digits for hundreds of feet. If not known, use UNKN: /FL095, /FL310, /FLUNKN.</td></tr><tr><td>6</td><td>/TP</td><td>Type aircraft</td><td>4 digits maximum. If not known, use UNKN: /TP L329, /TP B727, /TP UNKN.</td></tr><tr><td>7</td><td>/SK</td><td>Sky cover/cloud layers</td><td>Describe as follows:
@@ -122,7 +83,7 @@ different than /FL: /IC LGT-MOD RIME, /IC SEV CLR 028-045.</td></tr><tr><td>13</
 /RM LLWS -15KT SFC-030 DURC RY22 JFK.</td></tr></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-13-05-untitled.html">
+<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-13-04-untitled.html">
 <table><thead><tr><th>Strait
 SLC Salt Lake City Fuca De n IoS gOn o H at a B s C ic ho B C Ju of
 Olympic Mtns NM Et n Ws A Coast and I Vnt ae llr eio yr Co Blu am sinbia S Cl ooE npa te s Dst vo df Costal Valley WA ND SWRN MT Mtns M Sis los po euri RD esa em rve o ir North of OR Black Hills ID WY PineSD Rosebud J Ra im vee rs Ridge AreaCountry SW NRN Great WY Central Nebraska S Mie tnrr sa Lake Tahoe G BarN e sa intV ULS aa k Tl et NW CoC lon rt arl do S WE Y NE NE SE Mtns NE S M C tnn strl COPalme or r L Da ivk ie d eRidge MaK ra an iss a ds e sR Civ ye gr nV ea sll e By asin C Ao ra es at sal CA VD ae la leth y MLa ek ae d Eastern Plains High Plains KS F Hl ii ln lst SE CBS haa arbn nat na r ea l DS esR eN rts ML oa jake ve CoL loitt rl ae do Santa Monica Valley OK Bay AZ W Mh tnit se Gulf of Santa Catalina NM TX SFO San Francisco Lower Rio Grande Valley mSout M hi Pl d ai C no saFL Ct entra all U Pp lp ai a ee ey r n Nr o e rt a da h A e nh C r eB oc A B aa ta l g il slartne te C h outa B S aD outheastlp ae S estA l outhw i S Southe r b North LA A ro Exe trmMv cos Fi e L P W 85R Central s s o f o co t e s Pc Ga eE orgiaea P st aIA eMi ham ti f r M No Eo xSt t W rss e m u W So rs u Wate thernn L th a o SECoastal M ic w irNorth e Rtral h Cen r rth oA iNG insNE SWNalP C Eo S E CM xn tr i ate rsaE o ms G c AL a Cr Mr SW s nES G t ti i l r s a lr ea i t v n e s r WV n S e aM a l s l s sme l t Cy i n d te rC lp Ae l En Po a p abl t l si aN tm s aoo V y e a le ls Texa a r Ce i ontr V al fVa N m or w thtsa eehtu rl So nia El n al a n iri e Hl i p MSouth t w l R est es d aw l t m l rth I No se na M SC sl s on e My t td e nR A oNSC na P Py l s i e Wxl lof i r Sal Col N e ae n c Ec n a a E g tN o Co R s d oMtn o inNW s e n itPanhandl g a v M mr onWest e Me ot e g er Cn nTN n n a tOzarks Northeast t D s R SC a El l e a o t DV Northwest s Wi iddle eM s H ttsaE a A a v Ca iNC le o and y l nh ear P d B pl e si C ll e e t oa e l s pae e Ar Lakes V t p D n oe y a so a o ley t r l Ctn o l A West ea r C tri Missou SW edn ano aa M r oy A Cj aG P c v oea re SE l ls IL n li hy Area e lzarks O e sl Sa outhV e r r i ns u a a s a tn s Arka F er L i w V o aNRSL o a the of Lake url n Nn n E a SC E eme L Extr Wsn Not rt S herna M n a M MNS k t t an e s ou r Se aJ E an t n l r a u S snSWSE P NE n O SE t oA VV hJ y ia rlSW a t n wa oe n i ol ls n laC ley e lC lD l c Ra n M aa l i i td l V W l n S ea N O s vr tV s Nb q n h E ee r iy u SC r i SV Wt eeg um rrs t p n oS re Exi o NW EV aW l C W aO ewM A Tl hirn o e dl S R RN L n NE N R Waters eR St iNW Sr SW hyellaV River Blue yoW v E oaP lS rla Coastal as en ai St eos u st r ta hes t r eB n IN ta eVnS i r aa B U l al s iC t nC e nt rIL ra ly nk are Pv ci h Cto r nt Noc rl R N WN E OH SWMD r WESV he at at l NEa Eas P SRN lt Il s C n Nt W SN nM M A y tT r o h l Wim rdt a l ee l Cl l l P wG a Ne l d e l a na tr a E Sa xy n t Nr re ms v MC o e n i V e W S N LaEN e r N kt n s n a e ra k ae r t Et xM t Sr r re n m t e E g r E aB e rt t v e l i l ndN Ni a s e HNJ Lao aa W M l d E R e e a IA h a a n v I e n keN tC Ce r d ets a si e n i pa NW oi rn an Cee tNE l ntss r a m lun e R nsa Hills W ad in Sa P s ha aPA Nks braa Erie y t e s r N RL nvi NNa Valley a NC Ha l dew N i L ake SL E s l ri e k Ni S l H E C s nd ParG A L lc ss l sl e i Vl h e H Le nRI L a N u l it s Ck n i ae W ne ta a i SW SE s C E d kl si V l kn a l xv eM e k B k i c h r a aM ss la i r tl lES R ns y l B t i r r i e ee s Vt Wr y s k a e my o Le aT s oSC tc t u l a aF e ol v f o a W g iM m a eExtr n L i n d yrd RivT ne a e ue v r h a at M i S Yn ne y N wW n sa tE l sN e s e k n L R PC t Re D Sn B a t h nNY WI e eO ako r g V d R onii hs L Ns i ag eB i H n o R Cod pe I Ca niM s Eon oi a o Valley s vn tB s C M w r l enro r nH Ho n t Bgr i rB r e l o li mb e iu Th H r W g aiB NE e kNW g k s aw C Moh gl P e i Gi ) rk ha e nrt aa h The o P eo y l t eL n sw aR ae S nE ( n a t oMA i t e c s wNH lls E Catski of dN N aso lv nl D n W t E t e nn o aY egion C R iM of O sN E dl R s MN Wl t d l ss an t M tr t LakesuM Northeast n nC a e e l h s M VT C o a i S f ock c laa d t n km Ro i sdir n M oA MI at e t ee c M t tp G Aa nt dlley Va CMr W nl e r per Up t e as s ae l ol M s e Mississippi n o R t R a Si M BCntrl V Lt w h e si a n a sv n oa aUpper t r k t s n Bl n st l e eel l S ai ue r grg o F l G Ae Sa ne i eb lI M er pp m U r oluERN uC err We y Valley p SoVr a e et w ra io chy l tni o hChampla il ee rlo ol Saet ne a d Eo fV y a r Ris e dr C v uE CM ari ai rvoo aR MI pper e U esWRN sS V R n sk cPec crt ao gF a l a l Nd e N ES d We eo e s y P u u n Mt g d net s
@@ -133,7 +94,7 @@ Straits KeysFlorida
 Figure 13-8. Area forecast region map.</th></tr></thead><tbody></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-13-06-untitled.html">
+<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-13-05-untitled.html">
 <table><thead><tr><th>FB KWBC 151640
 DATA BASED ON 151200Z
 VALID 151800Z FOR USE 1400-2100Z

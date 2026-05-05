@@ -89,3 +89,6 @@ moving map (upper left), the FMS control display unit
 For SA, the pilot makes note that the altitude is well above
 any of the OROCAs on the direct route as the flight arrives
 in the Las Vegas area using the low altitude chart.
+
+
+![Figure 2-21. Chart Supplement (NE), Tower En Route Control route descriptions (Allentown).](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-15-chart-supplement-ne-tower-en-route-control-route.png)

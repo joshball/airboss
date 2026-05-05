@@ -128,3 +128,10 @@ climb or descent from the target altitude, begin to slow the
 vertical speed rate in order to level off at the target altitude.
 This allows the pilot to level at the desired altitude without
 rapid control inputs or experiencing discomfort due to G-load.
+
+
+![Figure 7-4. Pitch correction for level flight, one-half bar width.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-06-pitch-correction-using-the-altimeter.png)
+
+![Figure 7-5. Pitch correction for level flight, one bar width.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-04-pitch-correction-for-level-flight-one-bar-width.png)
+
+![Figure 7-6. Pitch correction for level flight, one-and-one-half  bar width.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-05-pitch-correction-for-level-flight-one-and-one-ha.png)

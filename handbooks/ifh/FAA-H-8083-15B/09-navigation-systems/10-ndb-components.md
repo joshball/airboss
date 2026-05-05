@@ -25,3 +25,6 @@ NDB. Coverage depends on the strength of the transmitting
 station. Before relying on ADF indications, identify the
 station by listening to the Morse code identifier. NDB stations
 are usually two letters or an alpha-numeric combination.
+
+
+![Figure 9-10. VOR radials.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-08-vor-radials.png)

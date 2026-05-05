@@ -31,9 +31,3 @@ full flight simulator to meet the requirement as described in 14 CFR part 61 (se
 alternative provided in the regulation.
 Night flying operations should not be encouraged or attempted except by certificated pilots with knowledge of and experience in
 the topics discussed in this chapter.
-
-![Figure 11-1. Rods and cones.](/handbooks/afh/FAA-H-8083-3C/figures/fig-11-00-rods-and-cones.png)
-
-![Figure 11-2. Central Vision.](/handbooks/afh/FAA-H-8083-3C/figures/fig-11-01-central-vision.png)
-
-![Figure 11-3. The night blind spot.](/handbooks/afh/FAA-H-8083-3C/figures/fig-11-02-the-night-blind-spot.png)

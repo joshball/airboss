@@ -162,12 +162,6 @@ Well-constructed frame homes could have damage to roof
 shingles, vinyl siding, soffit panels, and gutters. Failure of
 aluminum, screened-in, swimming pool enclosures can occur.
 
-![Figure 17-7. The Tracks of Nearly 150 Years of Tropical Cyclones and Their Strength Weave Across the Globe](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-5-00-the-tracks-of-nearly-150-years-of-tropical-cyclo.png)
-
-![Figure 17-8. Radar Image of Hurricane Katrina Observed at New Orleans, Louisiana, on August 29, 2005](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-5-01-radar-image-of-hurricane-katrina-observed-at-new.png)
-
-![Figure 17-9. Hurricane Andrew Observed by Satellite in 1992](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-5-02-hurricane-andrew-observed-by-satellite-in-1992.png)
-
 **Table 17-1.** Wind Speed and Characteristic House Damage for the Saffir-Simpson Hurricane Wind Scale Saffir-Simpson Hurricane Wind Scale Wind Speed Characteristic House Damage 5 ≥157 mph ≥137 kt
 
 | Saffir-Simpson<br>Hurricane<br>Wind Scale | Wind Speed | Characteristic House Damage |

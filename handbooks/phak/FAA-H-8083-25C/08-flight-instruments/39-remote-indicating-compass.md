@@ -81,3 +81,6 @@ susceptible to deflection from the plane of rotation. Some
 aircraft have warning lights to indicate that a low vacuum
 situation has occurred. Other aircraft may have only a vacuum
 gauge that indicates the suction.
+
+
+![Figure 8-39. Outside air temperature (OAT) gauge.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-36-outside-air-temperature-oat-gauge.png)

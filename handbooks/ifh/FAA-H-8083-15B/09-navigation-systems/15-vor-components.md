@@ -102,3 +102,6 @@ and direction. This decreases pilot workload especially
 with tasks such as course intercepts, flying a back-course
 approach, or holding pattern entry. (See Chapter 5, Flight
 Instruments, for operational characteristics.) [Figure 9-14]
+
+
+![Figure 9-15. CDI interpretation. The CDI as typically found on analog systems (right) and as found on electronic flight instruments (left).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-14-cdi-interpretation-the-cdi-as-typically-found-on.png)

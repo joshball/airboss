@@ -17,3 +17,6 @@ edge lights may have variable intensity settings that may
 be adjusted by an ATC when deemed necessary or when
 requested by the pilot. Some airports also have taxiway
 centerline lights that are green in color.
+
+
+![Figure 14-16. Two of three parallel runways.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-15-two-of-three-parallel-runways.png)

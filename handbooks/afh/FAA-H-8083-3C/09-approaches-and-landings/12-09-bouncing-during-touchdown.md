@@ -38,3 +38,8 @@ When a bounce is severe, the safest procedure is to execute a go-around immediat
 landing. Apply full power while simultaneously maintaining directional control and lowering the nose to a safe climb attitude. The goaround procedure should be continued even though the airplane may descend and another bounce may be encountered. Landing from
 a bad bounce should not be attempted,  since airspeed diminishes very rapidly in the nose-high attitude, and a stall may occur before a
 subsequent touchdown can be made.
+
+
+![Figure 9-34. Ballooning during roundout.](/handbooks/afh/FAA-H-8083-3C/figures/fig-9-33-ballooning-during-roundout.png)
+
+![Figure 9-35. Bouncing during touchdown.](/handbooks/afh/FAA-H-8083-3C/figures/fig-9-34-bouncing-during-touchdown.png)

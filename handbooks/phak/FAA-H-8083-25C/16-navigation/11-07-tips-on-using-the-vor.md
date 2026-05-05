@@ -45,3 +45,6 @@ fly headings that maintain or re-intercept the course.
 Just turning toward the needle will cause overshooting
 the radial and flying an S turn to the left and right of
 course.
+
+
+![Figure 16-33. Time-distance check example.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-33-time-distance-check-example.png)

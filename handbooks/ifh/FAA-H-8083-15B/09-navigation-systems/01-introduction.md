@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Introduction
+
+![Figure 9-1. Ground, space, and sky wave propogation.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-00-ground-space-and-sky-wave-propogation.png)

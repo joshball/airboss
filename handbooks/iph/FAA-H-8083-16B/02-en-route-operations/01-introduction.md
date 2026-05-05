@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Introduction
+
+![Figure 2-1. Code of Federal Regulations, Title 14 Aeronautics and Space.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-00-code-of-federal-regulations-title-14-aeronautics.png)

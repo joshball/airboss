@@ -69,11 +69,3 @@ each other. This is the profile of a cloud top. The temperature and dewpoint qui
 a change from the cool, moist air (and associated stratus cloud) to the dry and warmer air (cloud free)
 above.
 Figure 25-24. Skew-T Diagram—Cloud Top Example
-
-![Figure 25-21. Example of a 500 mb Constant-Pressure Chart](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-2-00-example-of-a-500-mb-constant-pressure-chart.png)
-
-![Figure 25-22. Skew-T Diagram Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-2-01-skew-t-diagram-example.png)
-
-![Figure 25-23. Skew-T Diagram—Multiple Freezing Level Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-2-02-skew-t-diagram-multiple-freezing-level-example.png)
-
-![Figure 25-24. Skew-T Diagram—Cloud Top Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-2-03-skew-t-diagram-cloud-top-example.png)

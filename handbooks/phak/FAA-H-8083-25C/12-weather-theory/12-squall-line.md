@@ -20,3 +20,6 @@ thunderstorms and presents the single most intense weather
 hazard to aircraft. It usually forms rapidly, generally reaching
 maximum intensity during the late afternoon and the first
 few hours of darkness.
+
+
+![Figure 12-12. Convective turbulence avoidance.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-10-convective-turbulence-avoidance.png)

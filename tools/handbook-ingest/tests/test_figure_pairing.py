@@ -11,13 +11,13 @@ from __future__ import annotations
 from ingest.figures import _CaptionLoc, _ImageLoc, _pair_caption_with_image, _vertical_distance
 
 
-def img(page: int, idx: int, top_y: float, bottom_y: float) -> _ImageLoc:
+def img(page: int, idx: int, top_y: float, bottom_y: float, *, width: int = 200, height: int = 200) -> _ImageLoc:
     return _ImageLoc(
         page_num=page,
         idx=idx,
-        png_bytes=b"",
-        width=200,
-        height=200,
+        xref=1000 + page * 100 + idx,
+        width=width,
+        height=height,
         top_y=top_y,
         bottom_y=bottom_y,
     )

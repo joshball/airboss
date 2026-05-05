@@ -36,3 +36,6 @@ to comply with appropriate traffic rules, and to display common courtesy toward 
 airports without a control tower, the pilot may not see all traffic. Therefore, the pilot should develop the habit of continued scanning
 even when air traffic appears light or nil. Adherence to the basic rectangular traffic pattern reduces the possibility of conflicts and
 reduces the probability of a midair collision.
+
+
+![Figure 8-2. Traffic pattern indicators.](/handbooks/afh/FAA-H-8083-3C/figures/fig-8-01-traffic-pattern-indicators.png)

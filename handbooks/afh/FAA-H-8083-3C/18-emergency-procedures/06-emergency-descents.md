@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Emergency Descents
+
+![Figure 18-6. Emergency descent.](/handbooks/afh/FAA-H-8083-3C/figures/fig-18-05-emergency-descent.png)

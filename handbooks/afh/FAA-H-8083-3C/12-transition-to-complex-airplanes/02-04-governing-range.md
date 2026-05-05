@@ -22,3 +22,6 @@ propeller load similar to a fixed-pitch propeller. For example, once a specific 
 propeller blades reduce pitch in an attempt to maintain the selected rpm until they contact their low pitch stops. From that point, any
 further reduction in airspeed causes the engine rpm to decrease. Conversely, if the airspeed increases, the pitch angle of the propeller
 blades increase until the high pitch stop is reached. The engine rpm then begins to increase.
+
+
+![Figure 12-8. Blade angle range (values are approximate).](/handbooks/afh/FAA-H-8083-3C/figures/fig-12-07-blade-angle-range-values-are-approximate.png)

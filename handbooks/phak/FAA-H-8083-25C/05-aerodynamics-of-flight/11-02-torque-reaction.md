@@ -46,3 +46,6 @@ Size of the aircraft
 Condition of the ground surface
 This yawing moment on the takeoff roll is corrected by the
 pilot’s proper use of the rudder or rudder trim.
+
+
+![Figure 5-48. Corkscrewing slipstream.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-44-corkscrewing-slipstream.png)
