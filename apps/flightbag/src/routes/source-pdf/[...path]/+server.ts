@@ -16,6 +16,7 @@
  */
 
 import { createReadStream, existsSync, statSync } from 'node:fs';
+import { Readable } from 'node:stream';
 import { resolveCachedSourcePdfPath } from '@ab/sources';
 import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
@@ -28,8 +29,11 @@ export const GET: RequestHandler = async ({ params }) => {
 	if (!stat.isFile()) throw error(404, 'Not found');
 
 	const filename = params.path.split('/').pop() ?? 'source.pdf';
-	const stream = createReadStream(abs);
-	return new Response(stream as unknown as ReadableStream, {
+	// Wrap the Node Readable as a proper Web ReadableStream so an aborted
+	// browser request doesn't crash undici with `ERR_INVALID_STATE` -- see
+	// the matching note in `handbook-asset/[...path]/+server.ts`.
+	const stream = Readable.toWeb(createReadStream(abs)) as ReadableStream<Uint8Array>;
+	return new Response(stream, {
 		headers: {
 			'Content-Type': 'application/pdf',
 			'Content-Length': String(stat.size),

@@ -36,9 +36,8 @@ import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres, { type Sql } from 'postgres';
 import {
 	BETTER_AUTH_PROVIDERS,
-	DEV_DB_URL,
+	DEV_DB_URL_E2E,
 	DEV_PASSWORD,
-	ENV_VARS,
 	ROUTES,
 } from '../../../libs/constants/src';
 import { bauthAccount, bauthSession, bauthUser } from '../../../libs/auth/src/schema';
@@ -75,8 +74,13 @@ interface InternalConnection {
 }
 
 function openConnection(): InternalConnection {
-	const url = process.env[ENV_VARS.DATABASE_URL] ?? DEV_DB_URL;
-	const client = postgres(url, { max: 1 });
+	// Hard-pin to the e2e database (`airboss_e2e`). The playwright webServer
+	// entries pin every spawned vite/sveltekit process at this DB, so a
+	// fresh user inserted anywhere else would never authenticate against
+	// the webserver. We deliberately do NOT honour a `DATABASE_URL` env
+	// override here -- bun auto-loads `.env` based on cwd, which would
+	// quietly route fixture inserts to the developer's dev DB.
+	const client = postgres(DEV_DB_URL_E2E, { max: 1 });
 	const db = drizzle(client);
 	return { client, db };
 }
@@ -386,6 +390,13 @@ export const test = base.extend<FreshUserFixtures>({
 
 	freshUser: async ({ page, context }, use) => {
 		await reapOnce();
+		// Drop the better-auth per-IP rate-limit row so a long auth.spec
+		// session doesn't lock out fresh-user logins. All e2e clients hit
+		// the dev server from `127.0.0.1`, so the 5/min sign-in cap fills
+		// quickly across specs; fresh-user logins were silently failing
+		// with the form stuck on /login until this reset landed.
+		const { clearAuthRateLimit } = await import('./auth-rate-limit');
+		await clearAuthRateLimit();
 		// Defensive: clear any cookies the project-level storageState may
 		// have leaked into this context before our login attempt. The
 		// `storageState` fixture override above should already do this, but

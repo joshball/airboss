@@ -13,6 +13,7 @@
 
 import { createReadStream, existsSync, statSync } from 'node:fs';
 import { dirname, extname, resolve } from 'node:path';
+import { Readable } from 'node:stream';
 import { fileURLToPath } from 'node:url';
 import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
@@ -44,8 +45,15 @@ export const GET: RequestHandler = async ({ params }) => {
 	const ext = extname(requested).toLowerCase();
 	const contentType = CONTENT_TYPES[ext] ?? 'application/octet-stream';
 
-	const stream = createReadStream(requested);
-	return new Response(stream as unknown as ReadableStream, {
+	// Wrap the Node Readable as a proper Web ReadableStream. Casting the
+	// Node stream straight to `ReadableStream` (the previous shape) tripped
+	// undici's response writer when the browser disconnected mid-stream:
+	// undici's `close()` raced with the Node stream's auto-close and threw
+	// `ERR_INVALID_STATE: ReadableStream is already closed`, crashing the
+	// dev server. `Readable.toWeb` returns a Web stream whose lifecycle is
+	// owned by undici, so an aborted browser request doesn't double-close.
+	const stream = Readable.toWeb(createReadStream(requested)) as ReadableStream<Uint8Array>;
+	return new Response(stream, {
 		headers: {
 			'Content-Type': contentType,
 			'Content-Length': String(stat.size),

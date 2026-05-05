@@ -25,11 +25,17 @@ import { expect, test as setup } from '@playwright/test';
 import { mkdir } from 'node:fs/promises';
 import { dirname } from 'node:path';
 import { DEV_ACCOUNTS, DEV_PASSWORD, ROUTES } from '../../../libs/constants/src';
+import { clearAuthRateLimit } from '../fixtures/auth-rate-limit';
 
 const STORAGE = 'tests/e2e/.auth/hangar-admin.json';
 
 setup('authenticate hangar admin', async ({ page }) => {
 	await mkdir(dirname(STORAGE), { recursive: true });
+	// Drop better-auth's `127.0.0.1` rate-limit bucket so the admin login
+	// here doesn't collide with a previously-saturated bucket from the
+	// auth spec or the learner setup. See `fixtures/auth-rate-limit.ts`
+	// for the `5 attempts / minute / IP` cap that drives the issue.
+	await clearAuthRateLimit();
 
 	const admin = DEV_ACCOUNTS.find((a) => a.role === 'admin');
 	if (!admin) throw new Error('DEV_ACCOUNTS missing an admin entry');
@@ -53,19 +59,33 @@ setup('authenticate hangar admin', async ({ page }) => {
 	await page.context().storageState({ path: STORAGE });
 });
 
-setup('seed hangar review items', async ({ page }) => {
-	// Drive the loader through the admin Refresh form -- this populates
-	// `hangar.review_item` from `docs/work-packages/**`, `course/knowledge/**`,
-	// the FTS index over `DOCS_SEARCH_ROOTS`, and the seed buckets via
-	// `getOrCreateBoard()`. Idempotent: subsequent runs just update timestamps.
-	await page.goto(ROUTES.HANGAR_REVIEW_ADMIN_LOADER);
-	await Promise.all([
-		page.waitForResponse((res) => res.request().method() === 'POST' && res.url().includes('?/runLoader'), {
-			timeout: 60_000,
-		}),
-		page.getByRole('button', { name: /run loader now/i }).click(),
-	]);
-	// The "Last run" card flips from "No loader run since the hangar process started"
-	// to a populated <dl> after the form action returns.
-	await expect(page.getByText(/Items added/i)).toBeVisible({ timeout: 30_000 });
+setup('seed hangar review items', async ({ browser }) => {
+	// Boot a fresh context that mounts the admin session captured by the
+	// previous `authenticate hangar admin` test. Without it the loader page
+	// would redirect to /login (no auth) and the "Run loader now" button
+	// would never resolve -- the previous failure mode this guards against.
+	// Hand-rolling a context is the right shape here because the surrounding
+	// `setup.use({ storageState })` would also apply to the auth test that
+	// CREATES the file, which has a chicken-and-egg problem on a fresh run.
+	const context = await browser.newContext({ storageState: STORAGE });
+	const page = await context.newPage();
+	try {
+		await page.goto(ROUTES.HANGAR_REVIEW_ADMIN_LOADER);
+		await Promise.all([
+			page.waitForResponse((res) => res.request().method() === 'POST' && res.url().includes('?/runLoader'), {
+				timeout: 60_000,
+			}),
+			// The loader scans every work-package + knowledge-node markdown
+			// file under the repo and populates `hangar.review_item`; first
+			// run on a fresh DB easily blows past playwright's default 5s
+			// action timeout. Give the click a 60s budget that matches the
+			// response-wait above.
+			page.getByRole('button', { name: /run loader now/i }).click({ timeout: 60_000 }),
+		]);
+		// The "Last run" card flips from "No loader run since the hangar process started"
+		// to a populated <dl> after the form action returns.
+		await expect(page.getByText(/Items added/i)).toBeVisible({ timeout: 30_000 });
+	} finally {
+		await context.close();
+	}
 });

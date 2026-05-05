@@ -9,6 +9,7 @@
 import { createReadStream } from 'node:fs';
 import { stat } from 'node:fs/promises';
 import { basename, resolve } from 'node:path';
+import { Readable } from 'node:stream';
 import { requireRole } from '@ab/auth';
 import { getSource, resolveHangarBlobRoot } from '@ab/bc-hangar';
 import { type ReferenceSourceType, ROLES, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from '@ab/constants';
@@ -42,12 +43,14 @@ export const GET: RequestHandler = async (event) => {
 		throw error(404, `archive not on disk at ${archivePath}`);
 	}
 
-	const stream = createReadStream(archivePath);
+	// Wrap the Node Readable as a proper Web ReadableStream. Casting the
+	// Node stream straight to `ReadableStream` (the previous shape) raced
+	// undici's response writer when the browser disconnected mid-stream
+	// (`ERR_INVALID_STATE: ReadableStream is already closed`), which crashes
+	// the dev server. `Readable.toWeb` returns a Web stream undici can own.
+	const stream = Readable.toWeb(createReadStream(archivePath)) as ReadableStream<Uint8Array>;
 	const filename = `${row.id}-${row.edition.effectiveDate}-${basename(archivePath)}`;
-	// Node fs Readable -> web ReadableStream coercion. SvelteKit / undici accept
-	// the runtime shape; TS lacks a structural overlap between the two stream
-	// hierarchies, hence the double cast.
-	return new Response(stream as unknown as ReadableStream, {
+	return new Response(stream, {
 		status: 200,
 		headers: {
 			'content-type': 'application/zip',

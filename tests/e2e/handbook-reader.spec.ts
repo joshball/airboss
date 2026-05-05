@@ -17,6 +17,7 @@
 
 import { expect, test } from '@playwright/test';
 import {
+	DEV_DB_URL_E2E,
 	HANDBOOK_HEARTBEAT_INTERVAL_SEC,
 	HANDBOOK_SUGGEST_OPEN_SECONDS,
 	HANDBOOK_SUGGEST_TOTAL_SECONDS,
@@ -62,6 +63,16 @@ const HEARTBEAT_RUN_SECONDS =
  * can resolve before the next chunk advances. A single big `runFor` can race
  * against the async fetches inside the tick handler; iterating keeps the page
  * responsive between increments.
+ *
+ * Each `runFor` only advances the virtual clock -- the heartbeat POSTs the
+ * tick fires off use real network. Without an explicit wait between chunks,
+ * `accumulatedSecondsThisLoad` (which credits only on confirmed POST success)
+ * never catches up to `openedSecondsInSession`, and `totalSecondsVisible`
+ * (= server snapshot + accumulator) stays stuck at zero -- so the suggestion
+ * banner never crosses the `HANDBOOK_SUGGEST_TOTAL_SECONDS` threshold even
+ * though `openedSecondsInSession` does. `waitForResponse` on the heartbeat
+ * URL after each chunk forces the in-flight POST to resolve before the next
+ * tick fires, so the accumulator stays in lock-step with the clock.
  */
 async function tickHeartbeatClock(
 	page: import('@playwright/test').Page,
@@ -71,7 +82,13 @@ async function tickHeartbeatClock(
 	let elapsed = 0;
 	while (elapsed < totalSeconds) {
 		const advance = Math.min(chunkSeconds, totalSeconds - elapsed);
+		const responsePromise = page
+			.waitForResponse((res) => res.request().method() === 'POST' && res.url().includes('/heartbeat'), {
+				timeout: 5_000,
+			})
+			.catch(() => null);
 		await page.clock.runFor(advance * 1000);
+		await responsePromise;
 		elapsed += advance;
 	}
 }
@@ -104,10 +121,16 @@ async function waitForFormAction(
 	actionName: string,
 	trigger: () => Promise<void>,
 ): Promise<void> {
+	// Pin a generous wait timeout -- the playwright config's default
+	// `actionTimeout: 5000` would cap the wait below the cold-start cost
+	// of the SvelteKit form action's first POST (drizzle prepared-statement
+	// warmup + section-resolve query + audit insert). 15s leaves room for
+	// that without papering over a real regression.
 	const responsePromise = page.waitForResponse(
 		(res) => res.request().method() === 'POST' && res.url().includes(`?/${actionName}`),
+		{ timeout: 15_000 },
 	);
-	const urlPromise = page.waitForURL((u) => u.search.includes(`/${actionName}`), { timeout: 10_000 });
+	const urlPromise = page.waitForURL((u) => u.search.includes(`/${actionName}`), { timeout: 15_000 });
 	await trigger();
 	await Promise.all([responsePromise, urlPromise]);
 	await page.waitForLoadState('load');
@@ -145,9 +168,19 @@ async function setStatusViaSegment(
 	// `force: true`. The radio's onchange fires `form.requestSubmit()`,
 	// posting to `?/set-status`. Match the action POST by URL fragment so
 	// in-flight heartbeat POSTs don't false-trigger.
+	//
+	// Wait for hydration before driving the radio: the onchange handler
+	// is wired up by Svelte 5 only after the page hydrates. `check()`
+	// toggles the DOM `checked` flag but no submit fires when the listener
+	// hasn't attached yet, and the form-action wait then times out. The
+	// `domcontentloaded` floor + a `dispatchEvent('change')` after the
+	// `check()` together cover both the hydration race and the case where
+	// the input was already checked at server-render time (no change event).
+	await page.waitForLoadState('domcontentloaded');
 	const radio = page.locator(`input[type=radio][name=status][value=${value}]`);
 	await waitForFormAction(page, 'set-status', async () => {
 		await radio.check({ force: true });
+		await radio.dispatchEvent('change');
 	});
 	await expect(radio).toBeChecked();
 }
@@ -450,8 +483,12 @@ test.describe('handbook reader: citing-nodes panel', () => {
 	test('citing-node link round-trip lands on the knowledge page', async ({ page }) => {
 		// Resolve the seeded PHAK reference id directly via Drizzle so the
 		// fixture node's structured citation matches what the page renders.
-		const url = process.env.DATABASE_URL ?? 'postgresql://airboss:airboss@localhost:5435/airboss';
-		const client = postgres(url, { max: 1 });
+		// Hard-pin to the e2e DB (`airboss_e2e`) -- the playwright webServer
+		// entries spawn every SvelteKit process pinned at this DB. Honouring
+		// `DATABASE_URL` here would route the query to the developer's dev
+		// DB (bun auto-loads `.env` from cwd) and the join with the rendered
+		// page would silently miss.
+		const client = postgres(DEV_DB_URL_E2E, { max: 1 });
 		let referenceId: string;
 		try {
 			const db = drizzle(client);
