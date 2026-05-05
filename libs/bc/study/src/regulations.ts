@@ -37,6 +37,7 @@
 import {
 	externalUrlForReference,
 	HANDBOOK_READ_STATUSES,
+	LIBRARY_REGULATIONS_KIND_COPY,
 	LIBRARY_REGULATIONS_KIND_LABELS,
 	LIBRARY_REGULATIONS_KIND_VALUES,
 	LIBRARY_REGULATIONS_KINDS,
@@ -48,10 +49,12 @@ import {
 import { db as defaultDb } from '@ab/db/connection';
 import { type ErrataDisplay, formatErrataForDisplay, listErrataForSection } from './reference-errata';
 import {
+	getFlatSection,
 	getHandbookSection,
 	getNodesCitingSection,
 	getReadState,
 	getReferenceById,
+	listFlatTopLevelSections,
 	listHandbookChapters,
 	listReferences,
 } from './references';
@@ -63,22 +66,49 @@ type Db = typeof defaultDb;
 // View-shape types
 // ---------------------------------------------------------------------------
 
+/**
+ * Optional descriptive copy attached to bucket / group / umbrella cards.
+ * Populated from `reference.metadata` for per-reference cards (the umbrella
+ * fed by the matching reference row); populated from a hand-authored
+ * registry constant for top-level kinds (14 CFR / 49 CFR / AIM / AC / NTSB)
+ * that have no `reference` row.
+ *
+ * `officialTitle` -- canonical publisher title (e.g. "PART 91 -- GENERAL
+ * OPERATING AND FLIGHT RULES"). Extracted from source XML during ingest
+ * for CFR; hand-authored for kind-level cards.
+ *
+ * `description` -- 1-2 sentence neutral summary of what the document
+ * contains.
+ *
+ * `whyItMatters` -- 1-2 sentence pilot-relevance framing (why a learner
+ * should care). Authoring-driven; not all references have this.
+ *
+ * `scope` -- short tag string ("Operations", "Equipment", "Certification")
+ * for at-a-glance grouping when the card grid gets dense.
+ */
+export interface ReferenceCardCopy {
+	officialTitle?: string;
+	description?: string;
+	whyItMatters?: string;
+	scope?: string;
+}
+
 /** Card on the landing page -- one bucket per `LIBRARY_REGULATIONS_KIND`. */
-export interface RegulationsBucketCard {
+export interface RegulationsBucketCard extends ReferenceCardCopy {
 	kind: LibraryRegulationsKind;
 	label: string;
 	count: number;
 }
 
 /** Card on the kind page -- one CFR Part, AIM chapter, or AC series. */
-export interface RegulationsGroupCard {
+export interface RegulationsGroupCard extends ReferenceCardCopy {
 	groupKey: string;
 	label: string;
 	referenceCount: number;
 }
 
 /** Umbrella card -- a reference rendered as a link to its external publisher. */
-export interface RegulationsUmbrellaCard {
+export interface RegulationsUmbrellaCard extends ReferenceCardCopy {
 	id: string;
 	documentSlug: string;
 	edition: string;
@@ -164,7 +194,7 @@ export interface RegulationsLandingView {
 }
 
 /** Group payload -- `/library/regulations/[kind]`. */
-export interface RegulationsGroupView {
+export interface RegulationsGroupView extends ReferenceCardCopy {
 	view: 'group';
 	kind: LibraryRegulationsKind;
 	kindLabel: string;
@@ -173,7 +203,7 @@ export interface RegulationsGroupView {
 }
 
 /** Section list payload -- `/library/regulations/[kind]/[group]`. */
-export interface RegulationsSectionListView {
+export interface RegulationsSectionListView extends ReferenceCardCopy {
 	view: 'section';
 	kind: LibraryRegulationsKind;
 	kindLabel: string;
@@ -299,6 +329,28 @@ function expectedSlugForGroup(kind: LibraryRegulationsKind, group: string): stri
 	}
 }
 
+/**
+ * Pull descriptive copy from a reference's `metadata` JSONB. The shape is
+ * intentionally narrow -- only the four card-copy fields. Anything else in
+ * `metadata` (CFR effective date, AC cancellation chain, NTSB docket) is
+ * carried by reference-kind-specific renderers, not the card.
+ *
+ * Authoring entrypoints:
+ *   - CFR ingestion populates `officialTitle` from eCFR XML <HEAD> elements.
+ *   - Hand-authored `description` / `whyItMatters` / `scope` land via the
+ *     same `reference.metadata` JSONB during seeding.
+ */
+function extractCardCopy(metadata: ReferenceRow['metadata']): ReferenceCardCopy {
+	if (!metadata || typeof metadata !== 'object') return {};
+	const m = metadata as Record<string, unknown>;
+	const out: ReferenceCardCopy = {};
+	if (typeof m.officialTitle === 'string' && m.officialTitle.trim()) out.officialTitle = m.officialTitle;
+	if (typeof m.description === 'string' && m.description.trim()) out.description = m.description;
+	if (typeof m.whyItMatters === 'string' && m.whyItMatters.trim()) out.whyItMatters = m.whyItMatters;
+	if (typeof m.scope === 'string' && m.scope.trim()) out.scope = m.scope;
+	return out;
+}
+
 /** Project a reference row into the umbrella-card view shape. */
 function toUmbrella(ref: ReferenceRow): RegulationsUmbrellaCard {
 	const refKind = ref.kind as ReferenceKind;
@@ -311,6 +363,7 @@ function toUmbrella(ref: ReferenceRow): RegulationsUmbrellaCard {
 		kind: refKind,
 		kindLabel: REFERENCE_KIND_LABELS[refKind],
 		externalUrl: externalUrlForReference(refKind, ref.documentSlug, ref.edition, ref.url),
+		...extractCardCopy(ref.metadata),
 	};
 }
 
@@ -360,7 +413,15 @@ async function buildLandingView(db: Db): Promise<RegulationsLandingView> {
 			(acc, ref) => (bucketMatches(kind, ref.kind as ReferenceKind, ref.documentSlug) ? acc + 1 : acc),
 			0,
 		);
-		return { kind, label: LIBRARY_REGULATIONS_KIND_LABELS[kind], count };
+		const copy = LIBRARY_REGULATIONS_KIND_COPY[kind];
+		return {
+			kind,
+			label: LIBRARY_REGULATIONS_KIND_LABELS[kind],
+			count,
+			officialTitle: copy.officialTitle,
+			description: copy.description,
+			whyItMatters: copy.whyItMatters,
+		};
 	});
 	return { view: 'landing', buckets };
 }
@@ -373,15 +434,30 @@ async function buildGroupView(kind: LibraryRegulationsKind, db: Db): Promise<Reg
 	if (kind === LIBRARY_REGULATIONS_KINDS.CFR_14 || kind === LIBRARY_REGULATIONS_KINDS.CFR_49) {
 		const prefix = kind === LIBRARY_REGULATIONS_KINDS.CFR_14 ? '14cfr' : '49cfr';
 		const matching = refs.filter((r) => r.kind === REFERENCE_KINDS.CFR && r.documentSlug.startsWith(prefix));
-		const byPart = new Map<string, number>();
+		// Map Part -> { count, representative ref } so group cards can carry the
+		// hand-authored official title / description / why-it-matters from the
+		// reference's metadata. Multiple refs for one Part (different editions)
+		// share copy via the latest non-superseded representative.
+		const byPart = new Map<string, { count: number; rep: ReferenceRow | null }>();
 		for (const ref of matching) {
 			const part = extractCfrPart(ref.documentSlug);
 			if (part === null) continue;
-			byPart.set(part, (byPart.get(part) ?? 0) + 1);
+			const cur = byPart.get(part) ?? { count: 0, rep: null };
+			cur.count += 1;
+			if (cur.rep === null || ref.supersededById === null) cur.rep = ref;
+			byPart.set(part, cur);
 		}
 		groups = [...byPart.entries()]
 			.sort(([a], [b]) => Number(a) - Number(b))
-			.map(([part, count]) => ({ groupKey: part, label: `Part ${part}`, referenceCount: count }));
+			.map(([part, { count, rep }]) => {
+				const copy = rep ? extractCardCopy(rep.metadata) : {};
+				return {
+					groupKey: part,
+					label: `Part ${part}`,
+					referenceCount: count,
+					...copy,
+				};
+			});
 	} else if (kind === LIBRARY_REGULATIONS_KINDS.AIM) {
 		// AIM umbrella + PCG always render as umbrella cards; per-chapter
 		// section navigation is forward-compatible (rendered when
@@ -415,10 +491,14 @@ async function buildGroupView(kind: LibraryRegulationsKind, db: Db): Promise<Reg
 		umbrellas = ntsbRefs.map(toUmbrella);
 	}
 
+	const kindCopy = LIBRARY_REGULATIONS_KIND_COPY[kind];
 	return {
 		view: 'group',
 		kind,
 		kindLabel: LIBRARY_REGULATIONS_KIND_LABELS[kind],
+		officialTitle: kindCopy.officialTitle,
+		description: kindCopy.description,
+		whyItMatters: kindCopy.whyItMatters,
 		groups,
 		umbrellas,
 	};
@@ -438,17 +518,35 @@ async function buildSectionListView(
 
 	const umbrellas = groupRefs.map(toUmbrella);
 
-	// If exactly one reference resolves, probe for inline sections so a
-	// future per-section leaf reader can light up without a route change.
+	// If exactly one reference resolves, probe for inline sections so the
+	// per-section leaf reader lights up. Two probes:
+	//   1. listHandbookChapters -- for hierarchical corpora (handbooks, AIM)
+	//      where the reference has level=chapter children at depth 0.
+	//   2. listFlatTopLevelSections -- for flat corpora (CFR per WP-CFR seeder
+	//      docs: Part = reference, sections sit flat at depth 0 with
+	//      level=section, no chapter parent).
+	// The first probe to return rows wins. Empty stays empty (umbrella card
+	// fallback). When subpart hierarchy lands for CFR (Wave 2), this falls
+	// through to a third tree-shaped probe without changing the public shape.
 	let sections: RegulationsSectionRow[] = [];
 	if (groupRefs.length === 1) {
 		const only = groupRefs[0];
 		if (only) {
 			const chapters = await listHandbookChapters(only.id, db);
-			sections = chapters.map((c) => ({ id: c.id, code: c.code, title: c.title, ordinal: c.ordinal }));
+			if (chapters.length > 0) {
+				sections = chapters.map((c) => ({ id: c.id, code: c.code, title: c.title, ordinal: c.ordinal }));
+			} else {
+				const flat = await listFlatTopLevelSections(only.id, db);
+				sections = flat.map((s) => ({ id: s.id, code: s.code, title: s.title, ordinal: s.ordinal }));
+			}
 		}
 	}
 
+	// Group-page header copy: when a single reference resolves, pull
+	// `officialTitle`, `description`, `whyItMatters`, `scope` off its
+	// metadata. Multiple references (rare -- mostly historical editions)
+	// or zero references (slug-valid but unseeded) leave the copy empty.
+	const groupCopy = groupRefs.length === 1 && groupRefs[0] ? extractCardCopy(groupRefs[0].metadata) : {};
 	return {
 		view: 'section',
 		kind,
@@ -457,6 +555,7 @@ async function buildSectionListView(
 		groupLabel: labelForGroup(kind, group),
 		umbrellas,
 		sections,
+		...groupCopy,
 	};
 }
 
@@ -474,18 +573,32 @@ async function buildDetailView(
 		throw new RegulationsViewNotFoundError({ kind, group }, `No reference for ${kind} / ${group}`);
 	}
 
-	const view = await getHandbookSection(ref.id, section.chapterCode, section.sectionCode, db).catch(() => null);
+	// Two-stage probe: hierarchical first (handbook / AIM with chapter rows),
+	// flat fallback (CFR per WP-CFR seeder -- sections sit at depth 0 with
+	// no chapter parent). When the flat probe wins, synthesize a virtual
+	// chapter row from the reference itself so the detail page's breadcrumb
+	// + chrome render unchanged. Wave 2 (subpart hierarchy) lays down real
+	// subpart rows and removes the synth path for CFR.
+	const fullCode = section.sectionCode === '' ? section.chapterCode : `${section.chapterCode}.${section.sectionCode}`;
+	const hierarchicalView = await getHandbookSection(ref.id, section.chapterCode, section.sectionCode, db).catch(
+		() => null,
+	);
+	const flatView = hierarchicalView ? null : await getFlatSection(ref.id, fullCode, db).catch(() => null);
+	const view = hierarchicalView ?? flatView;
 	if (!view) {
 		throw new RegulationsViewNotFoundError(
 			{
 				kind,
 				group,
-				section: section.sectionCode === '' ? section.chapterCode : `${section.chapterCode}.${section.sectionCode}`,
+				section: fullCode,
 				reason: 'section-not-found',
 			},
 			'Section not found.',
 		);
 	}
+	const virtualChapter = hierarchicalView
+		? hierarchicalView.chapter
+		: { id: ref.id, code: group, title: labelForGroup(kind, group) };
 
 	// Fan out the leaf-page reads in parallel. The pre-aggregator route loader
 	// issued these sequentially; parallelizing matches the per-page latency
@@ -531,9 +644,9 @@ async function buildDetailView(
 			faaPageEnd: view.section.faaPageEnd,
 		},
 		chapter: {
-			id: view.chapter.id,
-			code: view.chapter.code,
-			title: view.chapter.title,
+			id: virtualChapter.id,
+			code: virtualChapter.code,
+			title: virtualChapter.title,
 		},
 		figures: view.figures.map((f) => ({
 			id: f.id,
@@ -644,22 +757,25 @@ export async function resolveRegulationsSectionId(
 			`No reference for ${args.kind} / ${args.group}`,
 		);
 	}
-	const view = await getHandbookSection(ref.id, args.section.chapterCode, args.section.sectionCode, db).catch(
+	const fullCode =
+		args.section.sectionCode === ''
+			? args.section.chapterCode
+			: `${args.section.chapterCode}.${args.section.sectionCode}`;
+	const hierarchical = await getHandbookSection(ref.id, args.section.chapterCode, args.section.sectionCode, db).catch(
 		() => null,
 	);
-	if (!view) {
+	const flat = hierarchical ? null : await getFlatSection(ref.id, fullCode, db).catch(() => null);
+	const sectionId = hierarchical?.section.id ?? flat?.section.id;
+	if (!sectionId) {
 		throw new RegulationsViewNotFoundError(
 			{
 				kind: args.kind,
 				group: args.group,
-				section:
-					args.section.sectionCode === ''
-						? args.section.chapterCode
-						: `${args.section.chapterCode}.${args.section.sectionCode}`,
+				section: fullCode,
 				reason: 'section-not-found',
 			},
 			'Section not found.',
 		);
 	}
-	return view.section.id;
+	return sectionId;
 }

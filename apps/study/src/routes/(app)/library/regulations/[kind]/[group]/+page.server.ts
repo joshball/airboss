@@ -40,6 +40,9 @@ export const load: PageServerLoad = async (event) => {
 			kindLabel: view.kindLabel,
 			group: view.group,
 			groupLabel: view.groupLabel,
+			officialTitle: view.officialTitle,
+			description: view.description,
+			whyItMatters: view.whyItMatters,
 			umbrellas: view.umbrellas,
 			sections: view.sections,
 		};
