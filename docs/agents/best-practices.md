@@ -238,6 +238,28 @@ Don't silence the lint rule with `// biome-ignore`. The rule is enforcement, not
 - Capture guard function return values: `const user = requireAuth(locals)`.
 - `bun run check` runs tsc + svelte-check. Must pass with 0 errors, 0 warnings.
 
+## E2E selectors
+
+Playwright tests in this repo target stable `data-testid` hooks, not CSS classes, ARIA roles for nav anchors, or visible text. Testids survive copy churn and IA reorgs without rewriting tests.
+
+Conventions (kebab-case, lowercase):
+
+| Pattern                                | Example                                     | Meaning                                                                                       |
+| -------------------------------------- | ------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `data-testid="page-anchor"`            | (one per route)                             | Single sentinel on the page's `<h1>` or primary section header. Flow tests assert visibility. |
+| `data-testid="nav-{section}"`          | `nav-home`, `nav-program`, `nav-insights`   | Top-level nav links.                                                                          |
+| `data-testid="{section}-tab-{name}"`   | `program-tab-quals`, `program-tab-goal`     | Sub-tabs / sub-anchors within a section.                                                      |
+| `data-testid="{page}-cta-primary"`     | `home-cta-primary`, `goal-detail-start-cta` | The page's primary call-to-action.                                                            |
+| `data-testid="{page}-cta-secondary"`   | `home-cta-secondary`                        | Secondary CTAs. Multiple per page allowed.                                                    |
+| `data-testid="first-run-set-goal-cta"` | (Home, no-goal state)                       | State-specific testid for the first-run Home CTA.                                             |
+
+Rules:
+
+- **Never repurpose a testid.** If meaning changes, rename the testid -- never quietly point an old name at a new affordance. Tests built against the old meaning will silently green on the wrong thing.
+- **Exactly one `page-anchor` per page.** A CI guard fails the build if any route under `apps/study/src/routes/(app)/**` ships without one.
+- **Authoring order:** name the testid first (in the spec or work-package), wire it up in the component, then write the test against the name. Don't let test code be the place a name is invented.
+- **Where to look up active testids:** the IA flow test `tests/e2e/ia-flow.spec.ts` is the canonical list of top-level routes + anchors.
+
 ## Common Mistakes (ranked by debugging pain)
 
 1. CSP on page responses -- hours wasted, misleading symptoms
