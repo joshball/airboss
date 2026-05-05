@@ -147,6 +147,15 @@ export const ROUTES = {
 	API_PAGE_EXPLAINER: '/api/page-explainer',
 
 	/**
+	 * `POST` endpoint where the root layout's `window.onerror` /
+	 * `window.onunhandledrejection` handlers ship browser-only errors so
+	 * they land in the same server log stream as HTTP failures. Anonymous
+	 * callers permitted (errors on `/login` matter); per-request size
+	 * capped, per-IP rate limited.
+	 */
+	API_CLIENT_ERROR: '/api/client-error',
+
+	/**
 	 * Post-login default landing surface for the study app (study-home WP).
 	 * Replaces `/dashboard` as the primary destination; `/dashboard` survives
 	 * at its existing URL as the "Stats" power-user view.

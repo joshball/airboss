@@ -1,3 +1,4 @@
+// @browser-globals: server-only -- never imported by client .svelte
 /**
  * `--fix` mode: walks lesson Markdown files and stamps `?at=<edition>` on
  * unpinned `airboss-ref:` URLs.

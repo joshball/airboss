@@ -1,3 +1,4 @@
+// @browser-globals: server-only -- never imported by client .svelte
 /**
  * `handbooks-extras` corpus ingestion -- whole-doc-only Class C handbooks.
  *

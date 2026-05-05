@@ -1,3 +1,4 @@
+// @browser-globals: server-only -- never imported by client .svelte
 /**
  * SAFO corpus ingestion entry point (WP-SAFO-INFO).
  *

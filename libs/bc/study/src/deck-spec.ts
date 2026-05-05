@@ -148,10 +148,18 @@ export function canonicalDeckSpecJson(spec: ReviewSessionDeckSpec): string {
  * Encode a deck spec for the `?deck=` query parameter. Output is base64url
  * of the canonical JSON, i.e. URL-safe and free of padding so the value can
  * be dropped into a URL without further escaping.
+ *
+ * Implementation uses web-platform `btoa` over UTF-8 bytes (via `TextEncoder`)
+ * rather than Node's `Buffer.from(...).toString('base64url')`. `Buffer` is a
+ * Node global and the surrounding header documents that this module is pulled
+ * into the client bundle; a bare `Buffer.from` ReferenceError'd on hydration.
  */
 export function encodeDeckSpec(spec: ReviewSessionDeckSpec): string {
 	const json = canonicalDeckSpecJson(spec);
-	return Buffer.from(json, 'utf8').toString('base64url');
+	const bytes = new TextEncoder().encode(json);
+	let binary = '';
+	for (const byte of bytes) binary += String.fromCharCode(byte);
+	return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
 /**
@@ -166,7 +174,14 @@ export function decodeDeckSpec(encoded: string): ReviewSessionDeckSpec {
 	}
 	let json: string;
 	try {
-		json = Buffer.from(encoded, 'base64url').toString('utf8');
+		const padded = encoded
+			.replace(/-/g, '+')
+			.replace(/_/g, '/')
+			.padEnd(Math.ceil(encoded.length / 4) * 4, '=');
+		const binary = atob(padded);
+		const bytes = new Uint8Array(binary.length);
+		for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+		json = new TextDecoder().decode(bytes);
 	} catch (cause) {
 		throw new DeckSpecDecodeError('Deck spec is not valid base64url', cause);
 	}

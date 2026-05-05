@@ -1,3 +1,4 @@
+// @browser-globals: server-only -- never imported by client .svelte
 /**
  * Phase 3 -- source cache for the eCFR Versioner XML.
  *

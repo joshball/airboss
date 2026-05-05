@@ -1,3 +1,4 @@
+// @browser-globals: server-only -- never imported by client .svelte
 /**
  * Phase 9 -- runtime registry hydration from on-disk derivatives.
  *

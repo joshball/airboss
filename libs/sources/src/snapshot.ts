@@ -1,3 +1,4 @@
+// @browser-globals: server-only -- never imported by client .svelte
 /**
  * JSON snapshot generator for non-TypeScript consumers.
  *
