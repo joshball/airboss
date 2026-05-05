@@ -29,6 +29,13 @@ import { clearAuthRateLimit } from '../fixtures/auth-rate-limit';
 
 const STORAGE = 'tests/e2e/.auth/hangar-admin.json';
 
+// The seed task reads the storage state file written by the auth task.
+// Without serial mode, fullyParallel runs them on different workers and
+// seed opens its context against an empty/stale file before auth finishes
+// signing in -- the loader page redirects to /login and the test times
+// out at 30s waiting for a button that never renders.
+setup.describe.configure({ mode: 'serial' });
+
 setup('authenticate hangar admin', async ({ page }) => {
 	await mkdir(dirname(STORAGE), { recursive: true });
 	// Drop better-auth's `127.0.0.1` rate-limit bucket so the admin login
