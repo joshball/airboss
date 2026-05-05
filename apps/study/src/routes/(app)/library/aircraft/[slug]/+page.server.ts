@@ -10,7 +10,7 @@
 
 import { requireAuth } from '@ab/auth';
 import { parseAircraftSlug } from '@ab/aviation';
-import { listReferences } from '@ab/bc-study';
+import { listReferences } from '@ab/bc-study/server';
 import { externalUrlForReference, REFERENCE_KINDS, type ReferenceKind } from '@ab/constants';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';

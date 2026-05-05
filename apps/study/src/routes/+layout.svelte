@@ -1,9 +1,9 @@
 <script lang="ts">
 import '@ab/themes/generated/tokens.css';
-import { ROUTES } from '@ab/constants';
 import NavIndicator from '@ab/ui/components/NavIndicator.svelte';
 import type { Snippet } from 'svelte';
 import { onMount } from 'svelte';
+import { postClientErrorReport, shouldSkipDuplicate } from '$lib/client-error-reporter';
 
 let { children }: { children: Snippet } = $props();
 
@@ -14,45 +14,27 @@ let { children }: { children: Snippet } = $props();
 // Phase 4 produces a 200 in the access log and zero error signal -- the
 // user has to notice in the browser devtools and report it by hand.
 //
-// `keepalive: true` lets the report survive a tab close after `onerror`.
-// We swallow fetch failures: a failed report must not itself trigger
-// another report, or we recurse on every errored page.
+// SvelteKit's `handleError` hook (`hooks.client.ts`) catches errors thrown
+// inside the load lifecycle (load functions, hydration, action returns).
+// `window.onerror` / `unhandledrejection` catch everything outside that
+// lifecycle (stray `setTimeout` callbacks, promise rejections without
+// `await`, third-party widgets). Both pipelines POST to the same endpoint
+// and share `shouldSkipDuplicate` so a hydration crash that fires in both
+// paths produces a single server-side report.
 onMount(() => {
 	if (typeof window === 'undefined') return;
 
-	let inFlight = false;
-	async function report(payload: {
-		kind: 'error' | 'unhandledrejection';
-		message: string;
-		source?: string;
-		stack?: string;
-	}): Promise<void> {
-		if (inFlight) return; // de-dupe bursts; the rate limiter is the second line
-		inFlight = true;
-		try {
-			await fetch(ROUTES.API_CLIENT_ERROR, {
-				method: 'POST',
-				headers: { 'content-type': 'application/json' },
-				body: JSON.stringify({
-					...payload,
-					url: window.location.href,
-					userAgent: navigator.userAgent,
-				}),
-				keepalive: true,
-			});
-		} catch {
-			// Reporting must not itself cascade.
-		} finally {
-			inFlight = false;
-		}
-	}
-
 	function onError(event: ErrorEvent): void {
-		void report({
+		const message = event.message || 'unknown error';
+		const stack = event.error instanceof Error ? event.error.stack : undefined;
+		if (shouldSkipDuplicate(message, stack)) return;
+		void postClientErrorReport({
 			kind: 'error',
-			message: event.message || 'unknown error',
+			message,
 			source: event.filename || undefined,
-			stack: event.error instanceof Error ? event.error.stack : undefined,
+			stack,
+			url: window.location.href,
+			userAgent: navigator.userAgent,
 		});
 	}
 
@@ -60,7 +42,14 @@ onMount(() => {
 		const reason = event.reason;
 		const message = reason instanceof Error ? reason.message : String(reason ?? 'unknown rejection');
 		const stack = reason instanceof Error ? reason.stack : undefined;
-		void report({ kind: 'unhandledrejection', message, stack });
+		if (shouldSkipDuplicate(message, stack)) return;
+		void postClientErrorReport({
+			kind: 'unhandledrejection',
+			message,
+			stack,
+			url: window.location.href,
+			userAgent: navigator.userAgent,
+		});
 	}
 
 	window.addEventListener('error', onError);

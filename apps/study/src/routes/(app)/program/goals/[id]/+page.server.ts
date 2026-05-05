@@ -21,7 +21,7 @@ import {
 	setGoalSyllabusWeight,
 	setPrimaryGoal,
 	updateGoal,
-} from '@ab/bc-study';
+} from '@ab/bc-study/server';
 import {
 	CREDENTIAL_STATUSES,
 	GOAL_NOTES_MAX_LENGTH,

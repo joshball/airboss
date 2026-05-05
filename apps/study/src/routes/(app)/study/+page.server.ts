@@ -36,7 +36,7 @@ import {
 	setUserPref,
 	USER_PREF_SCHEMAS,
 	type UserPrefValue,
-} from '@ab/bc-study';
+} from '@ab/bc-study/server';
 import {
 	CITATION_ORDER_DEFAULT,
 	type CitationOrder,

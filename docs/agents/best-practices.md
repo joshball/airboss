@@ -210,6 +210,30 @@ If a file is truly server-only and shouldn't be importable from the client at al
 
 Don't silence the lint rule with `// biome-ignore`. The rule is enforcement, not advice.
 
+### Split-barrel libs (`@ab/bc-study`)
+
+Some libs ship two public entry points to keep server-only modules out of the client bundle without needing to relocate every file. `@ab/bc-study` is the canonical example:
+
+- `@ab/bc-study` -- runtime / browser-safe barrel. Only re-exports values from modules that do NOT statically import `@ab/db/connection`. Pure helpers (`deck-spec`, `srs`, `formatters`, `engine`, `lenses`), Drizzle table objects + row types, runtime input schemas. Every server-only module is `type`-only re-exported here so existing `import type { ... } from '@ab/bc-study'` lines in `.svelte` files keep working (TypeScript erases type re-exports at compile time).
+- `@ab/bc-study/server` -- server-only barrel. Every value export reaches a module that imports `@ab/db/connection`. Used from `+page.server.ts`, `+layout.server.ts`, `+server.ts`, `apps/*/src/lib/server/**`, route-collocated `_lib/build-*.ts` server helpers, scripts, tools, server-side tests.
+- `@ab/bc-study/build` -- build-only barrel (seed-time upserts, manifest validators, citation audit). Bypasses per-user actor scoping; never reachable from a route loader.
+
+Pick the entry point per call site:
+
+```typescript
+// `.svelte` page - browser-safe runtime barrel:
+import { summarizeDeckSpec } from '@ab/bc-study';
+import type { CalibrationBucket } from '@ab/bc-study';
+
+// `+page.server.ts` - server-only barrel:
+import { getCalibration } from '@ab/bc-study/server';
+
+// scripts/db/seed-credentials.ts - build barrel:
+import { upsertCredential } from '@ab/bc-study/build';
+```
+
+`scripts/check-browser-globals.ts` blocks runtime imports of `@ab/bc-study/server` (and `@ab/db/connection` and friends) from any client-eligible file under `apps/*/src/**`. The original `Buffer is not defined` regression slipped past because the single barrel re-exported every module; the split + lint guard close the regression at lint time.
+
 ### Worked examples
 
 - [libs/constants/src/source-cache.ts](../../libs/constants/src/source-cache.ts) - canonical pattern. PR #471.

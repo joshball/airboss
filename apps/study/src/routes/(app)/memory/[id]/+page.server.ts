@@ -19,7 +19,7 @@ import {
 	setCardStatus,
 	updateCard,
 	updateCardSchema,
-} from '@ab/bc-study';
+} from '@ab/bc-study/server';
 import {
 	type CARD_KIND_VALUES,
 	CARD_STATUS_VALUES,

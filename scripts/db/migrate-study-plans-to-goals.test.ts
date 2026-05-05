@@ -6,7 +6,7 @@
  */
 
 import { bauthUser } from '@ab/auth/schema';
-import { credential, credentialSyllabus, goal, goalSyllabus, studyPlan, syllabus } from '@ab/bc-study';
+import { credential, credentialSyllabus, goal, goalSyllabus, studyPlan, syllabus } from '@ab/bc-study/server';
 import {
 	CREDENTIAL_STATUSES,
 	DEPTH_PREFERENCES,

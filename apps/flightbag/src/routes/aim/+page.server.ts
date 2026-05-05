@@ -6,7 +6,7 @@
  * and paragraphs (`1-1-7`) live underneath.
  */
 
-import { getReferenceByDocument, listHandbookChapters } from '@ab/bc-study';
+import { getReferenceByDocument, listHandbookChapters } from '@ab/bc-study/server';
 import { type ReferenceKind, ROUTES } from '@ab/constants';
 import { error } from '@sveltejs/kit';
 import { buildSourceLinks } from '../../lib/source-links';

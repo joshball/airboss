@@ -18,7 +18,7 @@
 
 import { requireAuth } from '@ab/auth';
 import { parseRegulationGroup, parseRegulationKind } from '@ab/aviation';
-import { getRegulationsView, RegulationsViewNotFoundError } from '@ab/bc-study';
+import { getRegulationsView, RegulationsViewNotFoundError } from '@ab/bc-study/server';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 

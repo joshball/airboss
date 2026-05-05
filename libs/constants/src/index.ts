@@ -47,6 +47,12 @@ export {
 	EXTERNAL_REF_TARGET_DELIMITER,
 } from './citations';
 export {
+	CLIENT_ERROR_DEDUPE_WINDOW_MS,
+	CLIENT_ERROR_KINDS,
+	CLIENT_ERROR_TITLE,
+	type ClientErrorKind,
+} from './client-errors';
+export {
 	ACS_TRIAD,
 	ACS_TRIAD_LABELS,
 	ACS_TRIAD_VALUES,

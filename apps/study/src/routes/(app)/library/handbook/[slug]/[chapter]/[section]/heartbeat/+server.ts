@@ -26,7 +26,7 @@ import {
 	getReferenceByDocument,
 	handbookHeartbeatInputSchema,
 	recordHeartbeat,
-} from '@ab/bc-study';
+} from '@ab/bc-study/server';
 import {
 	HANDBOOK_EDITION_MAX_LENGTH,
 	HANDBOOK_HEARTBEAT_INTERVAL_SEC,

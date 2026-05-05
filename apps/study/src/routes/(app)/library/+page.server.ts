@@ -13,7 +13,7 @@
  */
 
 import { requireAuth } from '@ab/auth';
-import { getReferenceCountsByCert, getReferenceCountsByTopic, listReferences } from '@ab/bc-study';
+import { getReferenceCountsByCert, getReferenceCountsByTopic, listReferences } from '@ab/bc-study/server';
 import {
 	AVIATION_TOPIC_VALUES,
 	CERT_APPLICABILITY_VALUES,

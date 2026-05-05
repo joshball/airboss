@@ -5,7 +5,7 @@ import {
 	recordPhaseCompleted,
 	recordPhaseVisited,
 	splitContentPhases,
-} from '@ab/bc-study';
+} from '@ab/bc-study/server';
 import { KNOWLEDGE_PHASE_ORDER, KNOWLEDGE_PHASE_VALUES, type KnowledgePhase, QUERY_PARAMS } from '@ab/constants';
 import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';

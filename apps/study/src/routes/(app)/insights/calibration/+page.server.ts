@@ -1,5 +1,5 @@
 import { requireAuth } from '@ab/auth';
-import { getCalibrationPageData } from '@ab/bc-study';
+import { getCalibrationPageData } from '@ab/bc-study/server';
 import { CALIBRATION_TREND_WINDOW_DAYS } from '@ab/constants';
 import type { PageServerLoad } from './$types';
 

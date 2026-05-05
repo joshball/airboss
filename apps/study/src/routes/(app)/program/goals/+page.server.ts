@@ -1,5 +1,5 @@
 import { requireAuth } from '@ab/auth';
-import { type GoalRow, listGoals } from '@ab/bc-study';
+import { type GoalRow, listGoals } from '@ab/bc-study/server';
 import { GOAL_STATUSES, type GoalStatus } from '@ab/constants';
 import type { PageServerLoad } from './$types';
 

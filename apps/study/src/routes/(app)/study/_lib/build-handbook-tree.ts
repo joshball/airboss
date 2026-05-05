@@ -23,7 +23,7 @@ import {
 	listReferences,
 	type NodeEvidenceState,
 	type ReferenceSectionRow,
-} from '@ab/bc-study';
+} from '@ab/bc-study/server';
 import { NODE_MASTERY_GATES, REFERENCE_KINDS, ROUTES } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';

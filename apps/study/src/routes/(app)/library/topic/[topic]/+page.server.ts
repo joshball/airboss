@@ -7,7 +7,7 @@
  */
 
 import { requireAuth } from '@ab/auth';
-import { getReadableReferenceIds, listReferencesByTopic } from '@ab/bc-study';
+import { getReadableReferenceIds, listReferencesByTopic } from '@ab/bc-study/server';
 import {
 	AVIATION_TOPIC_LABELS,
 	AVIATION_TOPIC_VALUES,

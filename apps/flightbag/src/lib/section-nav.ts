@@ -16,7 +16,7 @@
  * chapter preamble of N when the prior chapter has no sections).
  */
 
-import type { ReferenceSectionRow } from '@ab/bc-study';
+import type { ReferenceSectionRow } from '@ab/bc-study/server';
 
 export interface NavLink {
 	readonly id: string;

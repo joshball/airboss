@@ -9,7 +9,7 @@
  * plain text.
  */
 
-import type { ReadingOrderEntry } from '@ab/bc-study';
+import type { ReadingOrderEntry } from '@ab/bc-study/server';
 import { readingMinutesForWords } from '@ab/constants';
 import type { TOCDrawerEntry } from '@ab/library';
 

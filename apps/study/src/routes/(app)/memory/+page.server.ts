@@ -8,7 +8,7 @@ import {
 	listSavedDecks,
 	renameSavedDeck,
 	SavedDeckLabelTooLongError,
-} from '@ab/bc-study';
+} from '@ab/bc-study/server';
 import { ROUTES, SAVED_DECK_COPY } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { fail, redirect } from '@sveltejs/kit';

@@ -1,3 +1,4 @@
+// @browser-globals: server-only -- never imported by client .svelte
 /**
  * Lesson-tree parser and module-load cache for the Course map projection.
  *

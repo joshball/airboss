@@ -28,6 +28,7 @@ const aliases = {
 	'@ab/ui': resolve('./libs/ui/src/index.ts'),
 	'@ab/utils': resolve('./libs/utils/src/index.ts'),
 	'@ab/bc-study/build': resolve('./libs/bc/study/src/build.ts'),
+	'@ab/bc-study/server': resolve('./libs/bc/study/src/server.ts'),
 	'@ab/bc-study/schema': resolve('./libs/bc/study/src/schema.ts'),
 	'@ab/bc-study/srs': resolve('./libs/bc/study/src/srs.ts'),
 	'@ab/bc-study': resolve('./libs/bc/study/src/index.ts'),

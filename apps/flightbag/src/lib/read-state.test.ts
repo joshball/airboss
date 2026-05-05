@@ -4,7 +4,7 @@
  * the TOC drawer renders with checkmarks.
  */
 
-import type { ReferenceSectionReadStateRow } from '@ab/bc-study';
+import type { ReferenceSectionReadStateRow } from '@ab/bc-study/server';
 import { HANDBOOK_READ_STATUSES } from '@ab/constants';
 import { describe, expect, test, vi } from 'vitest';
 
@@ -16,7 +16,7 @@ vi.mock('@ab/bc-study', async (importOriginal) => {
 	};
 });
 
-import { listReadStatesForReference } from '@ab/bc-study';
+import { listReadStatesForReference } from '@ab/bc-study/server';
 import { loadReadSetForReference } from './read-state';
 
 function row(referenceSectionId: string, status: ReferenceSectionReadStateRow['status']): ReferenceSectionReadStateRow {

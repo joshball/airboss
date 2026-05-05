@@ -1,5 +1,5 @@
 import { requireAuth } from '@ab/auth';
-import { getSession, getSessionSummary, SessionNotFoundError } from '@ab/bc-study';
+import { getSession, getSessionSummary, SessionNotFoundError } from '@ab/bc-study/server';
 import { ROUTES } from '@ab/constants';
 import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';

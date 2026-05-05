@@ -14,7 +14,7 @@
  */
 
 import { requireAuth } from '@ab/auth';
-import { setPageExplainerDismissal } from '@ab/bc-study';
+import { setPageExplainerDismissal } from '@ab/bc-study/server';
 import { isPageExplainerKey } from '@ab/constants';
 import { db } from '@ab/db/connection';
 import { error, json } from '@sveltejs/kit';

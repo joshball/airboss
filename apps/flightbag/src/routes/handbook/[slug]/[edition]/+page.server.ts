@@ -13,7 +13,7 @@ import {
 	getReferenceByDocument,
 	listAllSectionsForReference,
 	listHandbookChapters,
-} from '@ab/bc-study';
+} from '@ab/bc-study/server';
 import { type ReferenceKind, ROUTES } from '@ab/constants';
 import { error } from '@sveltejs/kit';
 import { loadReadSetForReference } from '../../../../lib/read-state';

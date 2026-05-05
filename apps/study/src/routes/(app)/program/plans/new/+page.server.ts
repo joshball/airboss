@@ -1,5 +1,5 @@
 import { requireAuth } from '@ab/auth';
-import { createPlan, getPrimaryGoal } from '@ab/bc-study';
+import { createPlan, getPrimaryGoal } from '@ab/bc-study/server';
 import {
 	DEFAULT_SESSION_MODE,
 	DEPTH_PREFERENCE_VALUES,

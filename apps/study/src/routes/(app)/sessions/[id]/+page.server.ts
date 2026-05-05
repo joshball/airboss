@@ -21,7 +21,7 @@ import {
 	submitAttemptSchema,
 	submitReview,
 	submitReviewSchema,
-} from '@ab/bc-study';
+} from '@ab/bc-study/server';
 import {
 	CONFIDENCE_LEVEL_VALUES,
 	type ConfidenceLevel,

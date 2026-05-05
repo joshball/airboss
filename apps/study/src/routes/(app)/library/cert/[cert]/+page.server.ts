@@ -8,7 +8,7 @@
 
 import { requireAuth } from '@ab/auth';
 import { parseCertSlug } from '@ab/aviation';
-import { getReadableReferenceIds, getReferencesForCertWithCarryover } from '@ab/bc-study';
+import { getReadableReferenceIds, getReferencesForCertWithCarryover } from '@ab/bc-study/server';
 import {
 	CERT_APPLICABILITY_LABELS,
 	type CertApplicability,

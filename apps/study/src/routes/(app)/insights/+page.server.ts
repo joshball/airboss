@@ -1,5 +1,5 @@
 import { requireAuth } from '@ab/auth';
-import { getDashboardPayload } from '@ab/bc-study';
+import { getDashboardPayload } from '@ab/bc-study/server';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {

@@ -3,7 +3,7 @@
  * drawer payload + computes total minutes.
  */
 
-import type { ReadingOrderEntry } from '@ab/bc-study';
+import type { ReadingOrderEntry } from '@ab/bc-study/server';
 import { describe, expect, test } from 'vitest';
 import { buildTOCEntries, totalReadingMinutes } from './toc';
 

@@ -15,7 +15,7 @@
  */
 
 import { bauthUser } from '@ab/auth/schema';
-import { card, cardState, contentCitation } from '@ab/bc-study';
+import { card, cardState, contentCitation } from '@ab/bc-study/server';
 import {
 	CARD_STATES,
 	CARD_STATUSES,

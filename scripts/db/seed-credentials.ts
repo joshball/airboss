@@ -25,7 +25,7 @@ import { existsSync, readdirSync, statSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { type CredentialRow, credential, type SyllabusRow, syllabus } from '@ab/bc-study';
+import { type CredentialRow, credential, type SyllabusRow, syllabus } from '@ab/bc-study/server';
 import {
 	upsertCredential,
 	upsertCredentialPrereq,

@@ -12,7 +12,7 @@ import {
 	type SyllabusNodeRow,
 	SyllabusNotFoundError,
 	type SyllabusRow,
-} from '@ab/bc-study';
+} from '@ab/bc-study/server';
 import { QUERY_PARAMS } from '@ab/constants';
 import type { StructuredCitation } from '@ab/types';
 import { error } from '@sveltejs/kit';

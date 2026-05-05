@@ -1,5 +1,5 @@
 import { requireAuth } from '@ab/auth';
-import { type CardRow, createCard, newCardSchema, SourceRefRequiredError } from '@ab/bc-study';
+import { type CardRow, createCard, newCardSchema, SourceRefRequiredError } from '@ab/bc-study/server';
 import { type CARD_KIND_VALUES, type CARD_TYPE_VALUES, type DOMAIN_VALUES, QUERY_PARAMS, ROUTES } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { fail, redirect } from '@sveltejs/kit';

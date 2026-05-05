@@ -44,7 +44,7 @@ import {
 	syllabus,
 	syllabusNode,
 	syllabusNodeLink,
-} from '@ab/bc-study';
+} from '@ab/bc-study/server';
 import { BLOOM_LEVELS, type BloomLevel, STUDY_PRIORITIES, type StudyPriority, SYLLABUS_STATUSES } from '@ab/constants';
 import { client, db } from '@ab/db/connection';
 import type { RelevanceEntry } from '@ab/types';

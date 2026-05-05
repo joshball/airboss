@@ -15,7 +15,7 @@ import {
 	listAllSectionsForReference,
 	listChapterSections,
 	listFiguresForSection,
-} from '@ab/bc-study';
+} from '@ab/bc-study/server';
 import { type ReferenceKind, ROUTES, readingMinutesForWords } from '@ab/constants';
 import { error } from '@sveltejs/kit';
 import { loadReadSetForReference } from '../../../../../lib/read-state';

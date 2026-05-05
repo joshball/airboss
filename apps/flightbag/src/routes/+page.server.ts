@@ -10,7 +10,7 @@
  * index when the corpus has no inline section content yet).
  */
 
-import { getReadableReferenceIds, listReferences } from '@ab/bc-study';
+import { getReadableReferenceIds, listReferences } from '@ab/bc-study/server';
 import { externalUrlForReference, REFERENCE_KINDS, type ReferenceKind } from '@ab/constants';
 import type { PageServerLoad } from './$types';
 import { readerUrlFor } from './reader-url';

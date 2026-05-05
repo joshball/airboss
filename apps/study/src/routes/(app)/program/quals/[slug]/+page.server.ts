@@ -14,7 +14,7 @@ import {
 	getCredentialsByIds,
 	getSyllabusBySlug,
 	type SyllabusRow,
-} from '@ab/bc-study';
+} from '@ab/bc-study/server';
 import { QUERY_PARAMS } from '@ab/constants';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';

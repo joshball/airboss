@@ -31,7 +31,7 @@
  */
 
 import { requireAuth } from '@ab/auth';
-import { getReferenceSectionById, handbookHeartbeatInputSchema, recordHeartbeat } from '@ab/bc-study';
+import { getReferenceSectionById, handbookHeartbeatInputSchema, recordHeartbeat } from '@ab/bc-study/server';
 import { HANDBOOK_HEARTBEAT_INTERVAL_SEC, HANDBOOK_HEARTBEAT_MIN_DELTA_SEC } from '@ab/constants';
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';

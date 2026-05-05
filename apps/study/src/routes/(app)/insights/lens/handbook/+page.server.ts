@@ -5,7 +5,7 @@ import {
 	type HandbookProgressSummary,
 	listReferences,
 	type ReferenceRow,
-} from '@ab/bc-study';
+} from '@ab/bc-study/server';
 import { REFERENCE_KINDS } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import type { PageServerLoad } from './$types';
