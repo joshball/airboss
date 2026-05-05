@@ -12,7 +12,7 @@ import {
 	removeSkipDomain,
 	removeSkipNode,
 	updatePlan,
-} from '@ab/bc-study';
+} from '@ab/bc-study/server';
 import {
 	DEFAULT_SESSION_MODE,
 	DEPTH_PREFERENCE_VALUES,

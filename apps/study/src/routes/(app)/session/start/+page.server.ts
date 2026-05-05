@@ -7,7 +7,7 @@ import {
 	NoActivePlanError,
 	previewSession,
 	startSession,
-} from '@ab/bc-study';
+} from '@ab/bc-study/server';
 import {
 	CERT_VALUES,
 	type Cert,

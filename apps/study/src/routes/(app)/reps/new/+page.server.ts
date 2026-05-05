@@ -1,5 +1,5 @@
 import { requireAuth } from '@ab/auth';
-import { createScenario, newScenarioSchema, type ScenarioOption, type ScenarioRow } from '@ab/bc-study';
+import { createScenario, newScenarioSchema, type ScenarioOption, type ScenarioRow } from '@ab/bc-study/server';
 import {
 	ASSESSMENT_METHOD_VALUES,
 	type AssessmentMethod,

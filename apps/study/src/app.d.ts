@@ -15,6 +15,10 @@ declare global {
 		interface Error {
 			message: string;
 			requestId?: string;
+			// Set by `hooks.client.ts` for browser-side errors so the
+			// `+error.svelte` boundary can render distinct copy
+			// ("App error") from HTTP errors ("500: Something went wrong").
+			kind?: 'client' | 'server';
 		}
 	}
 }

@@ -8,7 +8,7 @@
  * resolves to something useful.
  */
 
-import { computeReadingOrder, getReferenceByDocument, listAllSectionsForReference } from '@ab/bc-study';
+import { computeReadingOrder, getReferenceByDocument, listAllSectionsForReference } from '@ab/bc-study/server';
 import { CITATION_URL_TEMPLATES, type ReferenceKind, ROUTES, readingMinutesForWords } from '@ab/constants';
 import { isParseError, parseIdentifier, parseRegsLocator } from '@ab/sources';
 import { error } from '@sveltejs/kit';

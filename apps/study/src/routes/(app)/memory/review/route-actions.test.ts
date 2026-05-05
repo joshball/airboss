@@ -27,7 +27,7 @@ import {
 	encodeDeckSpec,
 	memoryReviewSession,
 	type ReviewSessionDeckSpec,
-} from '@ab/bc-study';
+} from '@ab/bc-study/server';
 import {
 	CARD_STATES,
 	CARD_STATUSES,

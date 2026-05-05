@@ -1,5 +1,5 @@
 import { requireAuth } from '@ab/auth';
-import { getRepDashboard } from '@ab/bc-study';
+import { getRepDashboard } from '@ab/bc-study/server';
 import { DEFAULT_USER_TIMEZONE } from '@ab/constants';
 import type { PageServerLoad } from './$types';
 

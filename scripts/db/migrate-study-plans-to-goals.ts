@@ -41,7 +41,7 @@
  *   bun scripts/db/migrate-study-plans-to-goals.ts --dry-run
  */
 
-import { credential, credentialSyllabus, goal, goalSyllabus, studyPlan, syllabus } from '@ab/bc-study';
+import { credential, credentialSyllabus, goal, goalSyllabus, studyPlan, syllabus } from '@ab/bc-study/server';
 import { GOAL_STATUSES, SYLLABUS_PRIMACY } from '@ab/constants';
 import { client, db as defaultDb } from '@ab/db/connection';
 import { generateGoalId } from '@ab/utils';

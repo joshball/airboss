@@ -11,7 +11,7 @@
  * otherwise renders the umbrella card.
  */
 
-import { getReferenceByDocument, listHandbookChapters, listReferences } from '@ab/bc-study';
+import { getReferenceByDocument, listHandbookChapters, listReferences } from '@ab/bc-study/server';
 import { externalUrlForReference, REFERENCE_KINDS, type ReferenceKind, ROUTES } from '@ab/constants';
 import { error } from '@sveltejs/kit';
 import { buildSourceLinks } from '../../../../lib/source-links';

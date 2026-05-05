@@ -6,7 +6,7 @@
  * row is `1`, sections are `1-1`, paragraphs are `1-1-7`.
  */
 
-import { getHandbookChapter, getReferenceByDocument, listChapterSections } from '@ab/bc-study';
+import { getHandbookChapter, getReferenceByDocument, listChapterSections } from '@ab/bc-study/server';
 import { type ReferenceKind, ROUTES } from '@ab/constants';
 import { error } from '@sveltejs/kit';
 import { buildSourceLinks } from '../../../lib/source-links';

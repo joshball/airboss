@@ -1,5 +1,5 @@
 <script lang="ts">
-import { ROUTES } from '@ab/constants';
+import { CLIENT_ERROR_KINDS, CLIENT_ERROR_TITLE, ROUTES } from '@ab/constants';
 import Button from '@ab/ui/components/Button.svelte';
 import { page } from '$app/state';
 
@@ -8,6 +8,16 @@ import { page } from '$app/state';
  * layout -- typically 404s on unknown routes, `/login` / `/logout` failures,
  * or server-level 500s. `(app)/+error.svelte` handles errors for routes
  * under the authenticated shell.
+ *
+ * Two render modes:
+ *
+ *   - `kind === 'client'` (set by `hooks.client.ts`): a browser-side
+ *     hydration / load-lifecycle crash. The HTTP status is whatever
+ *     SvelteKit defaulted to (usually 500) but isn't meaningful -- the
+ *     server returned 200, the failure happened in the browser. Render
+ *     "App error" and the requestId so the learner can quote it.
+ *   - Otherwise: a real HTTP error (404, 500, ...). Keep the existing
+ *     status row + `STATUS_TITLES` mapping.
  *
  * Error messages from thrown `error(status, ...)` calls are typed and user-
  * safe; everything else (caught exceptions, raw `throw new Error(...)`)
@@ -25,9 +35,12 @@ const STATUS_TITLES: Record<number, string> = {
 };
 
 const status = $derived(page.status);
+const isClientError = $derived(page.error?.kind === CLIENT_ERROR_KINDS.CLIENT);
+const requestId = $derived(page.error?.requestId);
 const rawMessage = $derived(page.error?.message ?? '');
 const safeMessage = $derived(isUserSafeMessage(rawMessage) ? rawMessage : 'An unexpected error occurred.');
-const title = $derived(STATUS_TITLES[status] ?? 'Something went wrong');
+const title = $derived(isClientError ? CLIENT_ERROR_TITLE : (STATUS_TITLES[status] ?? 'Something went wrong'));
+const headTitle = $derived(isClientError ? `${title} -- airboss` : `${status} -- ${title} -- airboss`);
 
 function isUserSafeMessage(msg: string): boolean {
 	if (!msg || msg.trim().length === 0) return false;
@@ -40,14 +53,19 @@ function isUserSafeMessage(msg: string): boolean {
 </script>
 
 <svelte:head>
-	<title>{status} -- {title} -- airboss</title>
+	<title>{headTitle}</title>
 </svelte:head>
 
 <main class="wrap">
 	<div class="card" role="alert">
-		<p class="status">{status}</p>
+		{#if !isClientError}
+			<p class="status">{status}</p>
+		{/if}
 		<h1>{title}</h1>
 		<p class="message">{safeMessage}</p>
+		{#if isClientError && requestId}
+			<p class="request-id">Reference: <code>{requestId}</code></p>
+		{/if}
 		<div class="actions">
 			<Button href={ROUTES.HOME} variant="primary">Back home</Button>
 		</div>
@@ -89,6 +107,16 @@ function isUserSafeMessage(msg: string): boolean {
 	.message {
 		margin: 0;
 		color: var(--ink-muted);
+	}
+
+	.request-id {
+		margin: 0;
+		font-size: var(--type-ui-label-size);
+		color: var(--ink-faint);
+	}
+
+	.request-id code {
+		font-family: var(--font-family-mono);
 	}
 
 	.actions {

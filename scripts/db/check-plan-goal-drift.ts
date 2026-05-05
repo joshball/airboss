@@ -16,7 +16,7 @@
  *   bun scripts/db/check-plan-goal-drift.ts --json
  */
 
-import { getDerivedCertGoals } from '@ab/bc-study';
+import { getDerivedCertGoals } from '@ab/bc-study/server';
 import { studyPlan } from '@ab/bc-study/schema';
 import { PLAN_STATUSES } from '@ab/constants';
 import { client, db } from '@ab/db/connection';

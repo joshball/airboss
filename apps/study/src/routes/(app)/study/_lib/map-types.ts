@@ -6,7 +6,7 @@
  * `buildCourseTree`).
  */
 
-import type { NodeEvidenceState } from '@ab/bc-study';
+import type { NodeEvidenceState } from '@ab/bc-study/server';
 import type { CitationOrder, StudyMapTab } from '@ab/constants';
 
 export type { CitationOrder, StudyMapTab };

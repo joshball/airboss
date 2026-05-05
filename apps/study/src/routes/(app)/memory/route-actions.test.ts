@@ -11,7 +11,7 @@
  */
 
 import { bauthUser } from '@ab/auth/schema';
-import { savedDeck } from '@ab/bc-study';
+import { savedDeck } from '@ab/bc-study/server';
 import { SAVED_DECK_LABEL_MAX_LENGTH } from '@ab/constants';
 import { db } from '@ab/db/connection';
 import { generateAuthId } from '@ab/utils';

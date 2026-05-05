@@ -34,7 +34,7 @@ import {
 	submitReview,
 	submitReviewSchema,
 	undoReview,
-} from '@ab/bc-study';
+} from '@ab/bc-study/server';
 import {
 	CARD_FEEDBACK_SIGNAL_VALUES,
 	type CardFeedbackSignal,

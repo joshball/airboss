@@ -1,5 +1,5 @@
 import { requireAuth } from '@ab/auth';
-import { getNodeMasteryMap, listNodesWithFacets } from '@ab/bc-study';
+import { getNodeMasteryMap, listNodesWithFacets } from '@ab/bc-study/server';
 import {
 	BROWSE_PAGE_SIZE,
 	BROWSE_PAGE_SIZE_VALUES,

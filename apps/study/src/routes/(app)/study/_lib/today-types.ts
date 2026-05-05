@@ -8,7 +8,7 @@
  * vitest assertions.
  */
 
-import type { NodeEvidenceState } from '@ab/bc-study';
+import type { NodeEvidenceState } from '@ab/bc-study/server';
 
 /** Source-of-weakness kind for the prose template's reason gating. */
 export type TodayReasonKind = 'never_attempted' | 'low_accuracy' | 'overdue' | 'partial';

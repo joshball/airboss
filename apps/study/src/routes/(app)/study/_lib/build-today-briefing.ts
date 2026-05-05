@@ -26,7 +26,7 @@ import {
 	getWeakAreas,
 	type NodeEvidenceState,
 	type WeakArea,
-} from '@ab/bc-study';
+} from '@ab/bc-study/server';
 import { card, review } from '@ab/bc-study/schema';
 import { CARD_STATUSES, MS_PER_DAY, NODE_MASTERY_GATES, ROUTES } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';

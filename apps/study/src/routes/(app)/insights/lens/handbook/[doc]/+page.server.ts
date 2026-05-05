@@ -5,7 +5,7 @@ import {
 	ReferenceNotFoundError,
 	type ReferenceRow,
 	type ReferenceSectionRow,
-} from '@ab/bc-study';
+} from '@ab/bc-study/server';
 import { createLogger } from '@ab/utils';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';

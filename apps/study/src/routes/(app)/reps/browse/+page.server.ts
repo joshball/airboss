@@ -5,7 +5,7 @@ import {
 	getScenarios,
 	getScenariosCount,
 	getScenariosFacetCounts,
-} from '@ab/bc-study';
+} from '@ab/bc-study/server';
 import {
 	BROWSE_PAGE_SIZE,
 	BROWSE_PAGE_SIZE_VALUES,

@@ -6,7 +6,7 @@
  * paragraph children.
  */
 
-import { getReferenceByDocument, listAllSectionsForReference, listChapterSections } from '@ab/bc-study';
+import { getReferenceByDocument, listAllSectionsForReference, listChapterSections } from '@ab/bc-study/server';
 import { type ReferenceKind, ROUTES } from '@ab/constants';
 import { error } from '@sveltejs/kit';
 import { buildSourceLinks } from '../../../../lib/source-links';

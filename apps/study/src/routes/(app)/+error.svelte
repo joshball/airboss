@@ -1,5 +1,5 @@
 <script lang="ts">
-import { ROUTES } from '@ab/constants';
+import { CLIENT_ERROR_KINDS, CLIENT_ERROR_TITLE, ROUTES } from '@ab/constants';
 import Button from '@ab/ui/components/Button.svelte';
 import { page } from '$app/state';
 
@@ -8,6 +8,11 @@ import { page } from '$app/state';
  * inside the app layout so the top nav stays visible and the learner can
  * recover without a full reload. For anonymous / auth-adjacent errors the
  * root `+error.svelte` takes over.
+ *
+ * Branches on `page.error?.kind === 'client'` (set by `hooks.client.ts`)
+ * so a hydration / load-lifecycle crash renders "App error" instead of
+ * "Something went wrong, status 500" -- the server returned 200, the
+ * status row is misleading.
  */
 
 const STATUS_TITLES: Record<number, string> = {
@@ -20,9 +25,12 @@ const STATUS_TITLES: Record<number, string> = {
 };
 
 const status = $derived(page.status);
+const isClientError = $derived(page.error?.kind === CLIENT_ERROR_KINDS.CLIENT);
+const requestId = $derived(page.error?.requestId);
 const rawMessage = $derived(page.error?.message ?? '');
 const safeMessage = $derived(isUserSafeMessage(rawMessage) ? rawMessage : 'An unexpected error occurred.');
-const title = $derived(STATUS_TITLES[status] ?? 'Something went wrong');
+const title = $derived(isClientError ? CLIENT_ERROR_TITLE : (STATUS_TITLES[status] ?? 'Something went wrong'));
+const headTitle = $derived(isClientError ? `${title} -- airboss` : `${status} -- ${title} -- airboss`);
 
 function isUserSafeMessage(msg: string): boolean {
 	if (!msg || msg.trim().length === 0) return false;
@@ -35,14 +43,19 @@ function isUserSafeMessage(msg: string): boolean {
 </script>
 
 <svelte:head>
-	<title>{status} -- {title} -- airboss</title>
+	<title>{headTitle}</title>
 </svelte:head>
 
 <section class="wrap">
 	<div class="card" role="alert">
-		<p class="status">{status}</p>
+		{#if !isClientError}
+			<p class="status">{status}</p>
+		{/if}
 		<h1>{title}</h1>
 		<p class="message">{safeMessage}</p>
+		{#if isClientError && requestId}
+			<p class="request-id">Reference: <code>{requestId}</code></p>
+		{/if}
 		<div class="actions">
 			<Button href={ROUTES.DASHBOARD} variant="primary">Back to dashboard</Button>
 		</div>
@@ -84,6 +97,16 @@ function isUserSafeMessage(msg: string): boolean {
 	.message {
 		margin: 0;
 		color: var(--ink-muted);
+	}
+
+	.request-id {
+		margin: 0;
+		font-size: var(--type-ui-label-size);
+		color: var(--ink-faint);
+	}
+
+	.request-id code {
+		font-family: var(--font-family-mono);
 	}
 
 	.actions {

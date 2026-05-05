@@ -1,3 +1,4 @@
+// @browser-globals: server-only -- never imported by client .svelte
 /**
  * Per-(user, reference) read-state loader for the flightbag reader pages.
  *
@@ -13,7 +14,7 @@
  * shape-stable because anonymous returns the same empty set.
  */
 
-import { listReadStatesForReference } from '@ab/bc-study';
+import { listReadStatesForReference } from '@ab/bc-study/server';
 import { HANDBOOK_READ_STATUSES, type HandbookReadStatus } from '@ab/constants';
 
 /**

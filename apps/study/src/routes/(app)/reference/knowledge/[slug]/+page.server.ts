@@ -12,7 +12,7 @@ import {
 	resolveCitationSources,
 	resolveCitationUrl,
 	splitContentPhases,
-} from '@ab/bc-study';
+} from '@ab/bc-study/server';
 import { CITATION_TARGET_TYPES, KNOWLEDGE_EDGE_TYPES, KNOWLEDGE_PHASE_ORDER, type KnowledgePhase } from '@ab/constants';
 import type { Citation } from '@ab/types';
 import { error } from '@sveltejs/kit';

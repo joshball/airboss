@@ -11,6 +11,10 @@
 			"types": "./src/build.ts",
 			"default": "./src/build.ts"
 		},
+		"./server": {
+			"types": "./src/server.ts",
+			"default": "./src/server.ts"
+		},
 		"./schema": {
 			"types": "./src/schema.ts",
 			"default": "./src/schema.ts"

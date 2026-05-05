@@ -9,7 +9,7 @@
  */
 
 import { requireAuth } from '@ab/auth';
-import { getRegulationsView } from '@ab/bc-study';
+import { getRegulationsView } from '@ab/bc-study/server';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {

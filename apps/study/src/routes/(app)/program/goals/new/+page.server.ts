@@ -1,5 +1,5 @@
 import { requireAuth } from '@ab/auth';
-import { createGoal } from '@ab/bc-study';
+import { createGoal } from '@ab/bc-study/server';
 import { GOAL_NOTES_MAX_LENGTH, GOAL_TITLE_MAX_LENGTH, ROUTES } from '@ab/constants';
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';

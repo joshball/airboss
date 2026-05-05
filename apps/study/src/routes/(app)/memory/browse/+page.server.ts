@@ -7,7 +7,7 @@ import {
 	getRemovedCards,
 	getRemovedCardsCount,
 	restoreCardByCard,
-} from '@ab/bc-study';
+} from '@ab/bc-study/server';
 import {
 	BROWSE_GROUP_BY_VALUES,
 	BROWSE_PAGE_SIZE,

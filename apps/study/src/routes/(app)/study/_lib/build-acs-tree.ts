@@ -28,7 +28,7 @@ import {
 	type LeafMasteryState,
 	type NodeEvidenceState,
 	type SyllabusNodeRow,
-} from '@ab/bc-study';
+} from '@ab/bc-study/server';
 import { type AssessmentMethod, NODE_MASTERY_GATES, SYLLABUS_NODE_LEVELS } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import { type SourceId, urlForReference } from '@ab/sources';

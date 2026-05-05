@@ -2,7 +2,7 @@
  * Tests for `computeSiblingNav` -- the reader's prev/next/up calculator.
  */
 
-import type { ReferenceSectionRow } from '@ab/bc-study';
+import type { ReferenceSectionRow } from '@ab/bc-study/server';
 import { describe, expect, test } from 'vitest';
 import { computeSiblingNav } from './section-nav';
 

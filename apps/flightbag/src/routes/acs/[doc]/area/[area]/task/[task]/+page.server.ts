@@ -7,7 +7,7 @@
  * resolves the task row by `(referenceId, code)` and renders the body.
  */
 
-import { getReferenceByDocument } from '@ab/bc-study';
+import { getReferenceByDocument } from '@ab/bc-study/server';
 import { externalUrlForReference, type ReferenceKind, ROUTES } from '@ab/constants';
 import { isParseError, parseAcsLocator, parseIdentifier } from '@ab/sources';
 import { error } from '@sveltejs/kit';

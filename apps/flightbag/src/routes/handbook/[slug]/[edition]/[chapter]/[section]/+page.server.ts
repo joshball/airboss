@@ -13,7 +13,7 @@ import {
 	getReadState,
 	getReferenceByDocument,
 	listAllSectionsForReference,
-} from '@ab/bc-study';
+} from '@ab/bc-study/server';
 import { type ReferenceKind, ROUTES, readingMinutesForWords } from '@ab/constants';
 import { isParseError, parseHandbooksLocator, parseIdentifier } from '@ab/sources';
 import { error } from '@sveltejs/kit';

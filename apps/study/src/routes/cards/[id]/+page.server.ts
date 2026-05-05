@@ -18,7 +18,7 @@
  * tree threads `study:<area>` namespaces).
  */
 
-import { composePublicCardCitations, getCitationsOf, getPublicCard, resolveCitationTargets } from '@ab/bc-study';
+import { composePublicCardCitations, getCitationsOf, getPublicCard, resolveCitationTargets } from '@ab/bc-study/server';
 import { CITATION_SOURCE_TYPES } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { error } from '@sveltejs/kit';

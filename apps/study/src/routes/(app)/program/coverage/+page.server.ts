@@ -10,7 +10,7 @@
  */
 
 import { requireAuth } from '@ab/auth';
-import { getActivePlan, getPrimaryGoal, listGoals } from '@ab/bc-study';
+import { getActivePlan, getPrimaryGoal, listGoals } from '@ab/bc-study/server';
 import type { PageServerLoad } from './$types';
 
 export interface ProgramCoverageData {

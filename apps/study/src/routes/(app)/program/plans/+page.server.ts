@@ -1,5 +1,5 @@
 import { requireAuth } from '@ab/auth';
-import { getActivePlan, getPlans } from '@ab/bc-study';
+import { getActivePlan, getPlans } from '@ab/bc-study/server';
 import { PLAN_STATUSES } from '@ab/constants';
 import type { PageServerLoad } from './$types';
 

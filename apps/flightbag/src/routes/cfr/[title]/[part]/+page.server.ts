@@ -7,7 +7,7 @@
  * pointing at the eCFR Part URL.
  */
 
-import { getReferenceByDocument, listAllSectionsForReference } from '@ab/bc-study';
+import { getReferenceByDocument, listAllSectionsForReference } from '@ab/bc-study/server';
 import { CITATION_URL_TEMPLATES, type ReferenceKind, ROUTES } from '@ab/constants';
 import { error } from '@sveltejs/kit';
 import { buildSourceLinks } from '../../../../lib/source-links';

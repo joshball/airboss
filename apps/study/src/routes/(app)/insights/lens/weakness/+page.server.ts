@@ -1,5 +1,5 @@
 import { requireAuth } from '@ab/auth';
-import { getWeakAreas, type WeakArea } from '@ab/bc-study';
+import { getWeakAreas, type WeakArea } from '@ab/bc-study/server';
 import {
 	WEAKNESS_INDEX_LIMIT,
 	WEAKNESS_SEVERITY,

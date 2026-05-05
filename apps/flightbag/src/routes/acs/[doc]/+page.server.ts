@@ -7,7 +7,7 @@
  * portal as the authoritative source.
  */
 
-import { getReferenceByDocument, listAllSectionsForReference } from '@ab/bc-study';
+import { getReferenceByDocument, listAllSectionsForReference } from '@ab/bc-study/server';
 import { externalUrlForReference, REFERENCE_KINDS, type ReferenceKind } from '@ab/constants';
 import { error } from '@sveltejs/kit';
 import { buildSourceLinks } from '../../../lib/source-links';

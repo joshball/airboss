@@ -6,7 +6,7 @@
  * tree against seeded data lives in the Playwright e2e.
  */
 
-import type { NodeEvidenceState } from '@ab/bc-study';
+import type { NodeEvidenceState } from '@ab/bc-study/server';
 import { type AssessmentMethod, NODE_MASTERY_GATES } from '@ab/constants';
 import { describe, expect, it } from 'vitest';
 import { rollupOverNodes } from './build-handbook-tree';

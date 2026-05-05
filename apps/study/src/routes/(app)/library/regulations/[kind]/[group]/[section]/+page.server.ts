@@ -25,7 +25,7 @@ import {
 	setComprehended,
 	setNotes,
 	setReadStatus,
-} from '@ab/bc-study';
+} from '@ab/bc-study/server';
 import { HANDBOOK_NOTES_MAX_LENGTH } from '@ab/constants';
 import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';

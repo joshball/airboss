@@ -6,7 +6,7 @@ import {
 	getDerivedCertGoals,
 	getPrimaryGoal,
 	listCredentials,
-} from '@ab/bc-study';
+} from '@ab/bc-study/server';
 import { CREDENTIAL_STATUSES } from '@ab/constants';
 import type { PageServerLoad } from './$types';
 

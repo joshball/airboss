@@ -13,7 +13,7 @@
  */
 
 import { requireAuth } from '@ab/auth';
-import { getActivePlan, getPrimaryGoal } from '@ab/bc-study';
+import { getActivePlan, getPrimaryGoal } from '@ab/bc-study/server';
 import { resolveDefaultProgramTab } from '$lib/program/default-tab';
 import type { LayoutServerLoad } from './$types';
 

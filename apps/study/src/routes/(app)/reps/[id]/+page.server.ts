@@ -32,7 +32,7 @@ import {
 	getRecentAttemptsForScenario,
 	getScenario,
 	resolveCitationTargets,
-} from '@ab/bc-study';
+} from '@ab/bc-study/server';
 import {
 	CITATION_SOURCE_TYPES,
 	CITATION_TARGET_VALUES,

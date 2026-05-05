@@ -23,7 +23,7 @@ import { Glob } from 'bun';
 import { readFileSync } from 'node:fs';
 import { relative } from 'node:path';
 import { bauthUser } from '@ab/auth/schema';
-import { card, createCard } from '@ab/bc-study';
+import { card, createCard } from '@ab/bc-study/server';
 import {
 	CARD_KIND_VALUES,
 	CARD_KINDS,

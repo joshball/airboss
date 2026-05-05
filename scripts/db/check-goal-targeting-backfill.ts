@@ -18,7 +18,7 @@
  *   bun scripts/db/check-goal-targeting-backfill.ts --json
  */
 
-import { getEngineTargeting } from '@ab/bc-study';
+import { getEngineTargeting } from '@ab/bc-study/server';
 import { studyPlan } from '@ab/bc-study/schema';
 import { ENGINE_TARGETING_SOURCES, PLAN_STATUSES } from '@ab/constants';
 import { client, db } from '@ab/db/connection';

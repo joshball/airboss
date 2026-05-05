@@ -33,7 +33,7 @@
  */
 
 import { requireAuth } from '@ab/auth';
-import type { ReviewSessionDeckSpec } from '@ab/bc-study';
+import type { ReviewSessionDeckSpec } from '@ab/bc-study/server';
 import {
 	abandonStaleSessions,
 	computeDeckHash,
@@ -43,7 +43,7 @@ import {
 	findResumableSessionByDeckHash,
 	normalizeDeckSpec,
 	startReviewSession,
-} from '@ab/bc-study';
+} from '@ab/bc-study/server';
 import { DOMAIN_VALUES, QUERY_PARAMS, ROUTES } from '@ab/constants';
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
