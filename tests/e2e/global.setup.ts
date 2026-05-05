@@ -1,12 +1,14 @@
 import { expect, test as setup } from '@playwright/test';
 import { mkdir } from 'node:fs/promises';
 import { dirname } from 'node:path';
-import { DEV_ACCOUNTS, DEV_DB_URL, DEV_PASSWORD, DEV_SEED_LEARNER_EMAIL, ENV_VARS, ROUTES } from '../../libs/constants/src';
+import { DEV_ACCOUNTS, DEV_DB_URL_E2E, DEV_PASSWORD, DEV_SEED_LEARNER_EMAIL, ENV_VARS, ROUTES } from '../../libs/constants/src';
+import { clearAuthRateLimit } from './fixtures/auth-rate-limit';
 
 const STORAGE = 'tests/e2e/.auth/learner.json';
 
 setup('authenticate learner', async ({ page }) => {
 	await mkdir(dirname(STORAGE), { recursive: true });
+	await clearAuthRateLimit();
 
 	// Abby is the canonical dev-seed learner -- all seeded plans/sessions/
 	// reviews/personal cards own to her, so e2e specs that read from those
@@ -40,9 +42,12 @@ setup('authenticate learner', async ({ page }) => {
 // pipeline doesn't run the apply-errata Python flow, so the table is empty
 // without this hook. See R6.12a in the apply-errata-and-afh-mosaic WP.
 setup('seed handbook errata fixtures', async () => {
-	if (!process.env[ENV_VARS.DATABASE_URL]) {
-		process.env[ENV_VARS.DATABASE_URL] = DEV_DB_URL;
-	}
+	// Force the e2e DB (`airboss_e2e`) -- the same database the playwright
+	// webServer entries point every spawned vite process at. Bun auto-loads
+	// `.env` from cwd which sets `DATABASE_URL` to the developer's working
+	// DB; without this hard override the seed lands there, the webserver
+	// reads from the e2e DB, and the amendment-panel spec finds no rows.
+	process.env[ENV_VARS.DATABASE_URL] = DEV_DB_URL_E2E;
 	const { seedErrataFixtures } = await import('./seed-errata');
 	const inserted = await seedErrataFixtures();
 	expect(inserted).toBeGreaterThanOrEqual(3);

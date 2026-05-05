@@ -28,8 +28,14 @@ test.describe('flightbag read-state UI (anonymous)', () => {
 	test('chapter page has no Read N of M indicator when anonymous', async ({ page }) => {
 		await page.goto(ROUTES.FLIGHTBAG_HANDBOOK_CHAPTER('phak', '8083-25C', '12'));
 		await expect(page.getByLabel('Chapter reading progress')).toHaveCount(0);
-		// Sections list still renders.
-		await expect(page.getByRole('list', { name: /Sections/i })).toBeVisible();
+		// Sections list still renders. The chapter page wraps the per-section
+		// `<ol>` in a `<section aria-label="Sections">` landmark; assert the
+		// landmark and its sibling H2 ("Sections") are both present so a future
+		// markup change to the inner list shape doesn't silently hide the
+		// failure.
+		const sectionsLandmark = page.locator('section[aria-label="Sections"]');
+		await expect(sectionsLandmark).toBeVisible();
+		await expect(sectionsLandmark.getByRole('heading', { level: 2, name: 'Sections' })).toBeVisible();
 	});
 
 	test('section page renders normally with no read-history line when anonymous', async ({ page }) => {

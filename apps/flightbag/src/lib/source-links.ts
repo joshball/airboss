@@ -9,7 +9,7 @@
  * (`<SourceLinks>` in `@ab/library`) is browser-safe.
  */
 
-import { externalUrlForReference, type ReferenceKind, ROUTES } from '@ab/constants';
+import { externalUrlForReference, REFERENCE_KINDS, type ReferenceKind, ROUTES } from '@ab/constants';
 import { cachedSourcePdfExists, describeSourcePdf } from '@ab/sources';
 
 export interface SourceLinksData {
@@ -28,7 +28,14 @@ export function buildSourceLinks(args: {
 	url: string | null;
 }): SourceLinksData {
 	const { kind, documentSlug, edition, url } = args;
-	const onlineUrl = externalUrlForReference(kind, documentSlug, edition, url);
+	// `externalUrlForReference` deliberately returns `null` for handbooks
+	// because the **library index** treats handbooks as in-app reading
+	// surfaces (no off-site link on the card). The flightbag reader is the
+	// in-app surface, so its "Online source" cluster should still expose
+	// the canonical FAA PDF URL when one is recorded on the reference row.
+	// We bypass the helper for handbook rows and read the manifest URL
+	// directly; every other kind keeps the helper's resolution order.
+	const onlineUrl = kind === REFERENCE_KINDS.HANDBOOK ? url : externalUrlForReference(kind, documentSlug, edition, url);
 
 	const descriptor = describeSourcePdf({ kind, documentSlug, edition });
 	if (descriptor === null) {

@@ -30,7 +30,7 @@ import { expect, test } from '@playwright/test';
 import { asc, eq, isNull } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
-import { DEV_DB_URL, ENV_VARS, REFERENCE_KINDS, ROUTES } from '../../../libs/constants/src';
+import { DEV_DB_URL_E2E, REFERENCE_KINDS, ROUTES } from '../../../libs/constants/src';
 import { reference, referenceSection } from '../../../libs/bc/study/src/schema';
 
 interface SamplePage {
@@ -54,10 +54,14 @@ function buildSectionUrl(kind: string, documentSlug: string, edition: string, co
 			// Whole-chapter rows have a single segment. Subsections (`12.3.4`)
 			// are an existing reader unknown -- the route only handles two
 			// segments -- so fall back to the chapter for the deepest leaf we
-			// actually render.
+			// actually render. Front-matter rows (`0.1`, `0.2`, ...) use a
+			// pseudo-chapter `0` that has no `/handbook/.../0/...` reader route;
+			// they're surfaced via the handbook landing's front-matter list and
+			// don't have a deep-linkable section page yet, so skip them here.
 			const segments = code.split('.');
 			const chapter = segments[0] ?? code;
 			const section = segments[1];
+			if (chapter === '0') return null;
 			if (section !== undefined) {
 				return ROUTES.FLIGHTBAG_HANDBOOK_SECTION(documentSlug, edition, chapter, section);
 			}
@@ -106,8 +110,12 @@ function buildSectionUrl(kind: string, documentSlug: string, edition: string, co
  * stay covered by the catalog landing test.
  */
 async function collectSamplePages(): Promise<readonly SamplePage[]> {
-	const url = process.env[ENV_VARS.DATABASE_URL] ?? DEV_DB_URL;
-	const client = postgres(url, { max: 1 });
+	// Hard-pin to the e2e DB -- the webServer entries spawn every SvelteKit
+	// process pinned at `airboss_e2e`, so the catalog rows the reader
+	// serves live there. We do NOT honour `DATABASE_URL` here because bun
+	// auto-loads `.env` from cwd and would silently route this query to
+	// the developer's dev DB instead.
+	const client = postgres(DEV_DB_URL_E2E, { max: 1 });
 	const db = drizzle(client);
 	try {
 		const refs = await db
@@ -170,11 +178,12 @@ test.describe('flightbag representative pages', () => {
 	test('sample size is non-trivial -- catches a fully-empty registry', () => {
 		// Defensive: if a future refactor blanks the registry, every parameterised
 		// test below would silently pass via `for-of` no-iter. Pin the floor at
-		// 20 (smaller than any plausible real corpus) so a regression here
+		// 15 (smaller than any plausible real corpus) so a regression here
 		// surfaces as a single failing assertion instead of a green test
-		// report. At write time the dev seed produces ~28 samples (handbook +
-		// AIM + CFR triplets); raise this floor when AC/ACS/POH builders land.
-		expect(samples.length).toBeGreaterThan(20);
+		// report. At write time the dev seed produces ~19 samples (handbook +
+		// AIM + CFR triplets, after front-matter rows are skipped); raise this
+		// floor when AC/ACS/POH builders land.
+		expect(samples.length).toBeGreaterThan(15);
 	});
 
 	for (const sample of samples) {

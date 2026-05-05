@@ -11,6 +11,7 @@
 import { createReadStream } from 'node:fs';
 import { stat } from 'node:fs/promises';
 import { resolve } from 'node:path';
+import { Readable } from 'node:stream';
 import { requireRole } from '@ab/auth';
 import { getSource, resolveHangarBlobRoot } from '@ab/bc-hangar';
 import { type ReferenceSourceType, ROLES, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from '@ab/constants';
@@ -46,12 +47,12 @@ export const GET: RequestHandler = async (event) => {
 		return new Response(null, { status: 204 });
 	}
 
-	const stream = createReadStream(abs);
-	// Node fs Readable -> web ReadableStream coercion. SvelteKit / undici accept
-	// the runtime shape (Node's Readable is async-iterable, which Response()
-	// streams natively); TS lacks a structural overlap between the two stream
-	// hierarchies, hence the double cast.
-	return new Response(stream as unknown as ReadableStream, {
+	// Wrap the Node Readable as a proper Web ReadableStream so undici can
+	// own its lifecycle. Casting straight to `ReadableStream` raced undici's
+	// response writer when the browser disconnected mid-stream and crashed
+	// the dev server with `ERR_INVALID_STATE: ReadableStream is already closed`.
+	const stream = Readable.toWeb(createReadStream(abs)) as ReadableStream<Uint8Array>;
+	return new Response(stream, {
 		status: 200,
 		headers: {
 			'content-type': 'image/jpeg',

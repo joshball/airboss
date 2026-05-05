@@ -11,10 +11,25 @@ import type { ActionData } from './$types';
 let { form }: { form: ActionData } = $props();
 let loading = $state(false);
 // Seed email from server-returned form state (populated after a failed
-// submit). The prop is re-rendered on server round-trip; no effect needed.
+// submit). The prop is re-rendered on server round-trip.
 // svelte-ignore state_referenced_locally -- initial-value only
 let email = $state<string>(form?.email ?? '');
 let password = $state('');
+
+// `use:enhance` keeps the component mounted across submits, so the
+// `let email = $state(form?.email)` initializer only runs once -- a 401
+// response that the action deliberately returns with `email: ''` (to keep
+// the login form from doubling as a user-enumeration assistant) would
+// silently leave the user-typed value in the field. Syncing in an effect
+// on every `form` change makes the action's blanking intent visible.
+// `form !== undefined` covers both 401 (email cleared) and 400 (email
+// echoed back); the initial mount sees `form === undefined` and is left
+// alone so the field doesn't get blanked before any submit happens.
+$effect(() => {
+	if (form !== undefined && form !== null) {
+		email = form.email ?? '';
+	}
+});
 
 function fillDevAccount(accountEmail: string) {
 	email = accountEmail;

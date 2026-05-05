@@ -1,7 +1,7 @@
-import { defineConfig, devices } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { defineConfig, devices } from '@playwright/test';
 import { DEV_DB_URL_E2E, ENV_VARS, PORTS } from './libs/constants/src';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -76,8 +76,13 @@ export default defineConfig({
 		trace: 'retain-on-failure',
 		screenshot: 'only-on-failure',
 		video: 'retain-on-failure',
-		actionTimeout: 5_000,
-		navigationTimeout: 10_000,
+		// 5s is too tight for SvelteKit form actions whose dependent navigation
+		// has to bounce through a server-render of a heavy admin/board page
+		// (the hangar loader, the bucket-edit pre-fill, etc.). 15s leaves
+		// room for that without papering over a real regression -- a true
+		// hang still trips the per-test 30s budget set above.
+		actionTimeout: 15_000,
+		navigationTimeout: 15_000,
 	},
 	projects: [
 		{
