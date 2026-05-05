@@ -1,3 +1,4 @@
+// @browser-globals: server-only -- never imported by client .svelte
 /**
  * Reference ingestion + reader BC.
  *
@@ -222,6 +223,76 @@ export async function listChapterSections(chapterId: string, db: Db = defaultDb)
 		.from(referenceSection)
 		.where(eq(referenceSection.parentId, chapterId))
 		.orderBy(asc(referenceSection.ordinal));
+}
+
+/**
+ * Flat top-level sections for a reference. Used by corpora that seed sections
+ * directly under the reference with no chapter parent (notably CFR -- per
+ * `REFERENCE_SECTION_LEVELS.PART` doc, the seeder produces level=section rows
+ * flat under the reference). Returns rows where `parentId IS NULL` and
+ * `level = 'section'`, ordered by ordinal.
+ *
+ * Distinct from {@link listHandbookChapters} (which filters level=chapter)
+ * and from {@link listChapterSections} (which descends a known chapter).
+ */
+export async function listFlatTopLevelSections(
+	referenceId: string,
+	db: Db = defaultDb,
+): Promise<ReferenceSectionRow[]> {
+	return db
+		.select()
+		.from(referenceSection)
+		.where(
+			and(
+				eq(referenceSection.referenceId, referenceId),
+				eq(referenceSection.level, REFERENCE_SECTION_LEVELS.SECTION),
+				isNull(referenceSection.parentId),
+			),
+		)
+		.orderBy(asc(referenceSection.ordinal));
+}
+
+/**
+ * Flat-corpus variant of {@link getHandbookSection}. Resolves a section row
+ * by its full code (e.g. CFR `91.103`) under a reference whose sections sit
+ * flat at depth 0 with no chapter row. Returns the section + figures +
+ * sibling list (all flat top-level sections of the reference). The caller
+ * synthesizes a "virtual chapter" payload from the reference itself.
+ *
+ * Throws `HandbookSectionNotFoundError` if the section doesn't exist.
+ */
+export async function getFlatSection(
+	referenceId: string,
+	fullCode: string,
+	db: Db = defaultDb,
+): Promise<{
+	section: ReferenceSectionRow;
+	figures: ReferenceFigureRow[];
+	siblings: ReferenceSectionRow[];
+}> {
+	const sectionRows = await db
+		.select()
+		.from(referenceSection)
+		.where(
+			and(
+				eq(referenceSection.referenceId, referenceId),
+				eq(referenceSection.code, fullCode),
+				eq(referenceSection.level, REFERENCE_SECTION_LEVELS.SECTION),
+				isNull(referenceSection.parentId),
+			),
+		)
+		.limit(1);
+	const section = sectionRows[0];
+	if (!section) throw new HandbookSectionNotFoundError({ referenceId, code: fullCode });
+
+	const figures = await db
+		.select()
+		.from(referenceFigure)
+		.where(eq(referenceFigure.sectionId, section.id))
+		.orderBy(asc(referenceFigure.ordinal));
+
+	const siblings = await listFlatTopLevelSections(referenceId, db);
+	return { section, figures, siblings };
 }
 
 /** All sections under a reference flattened in tree order (chapter, then sections, then subsections). */

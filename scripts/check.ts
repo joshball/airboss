@@ -50,6 +50,9 @@ const testLint = await $`bun tools/test-lint/bin.ts`.nothrow();
 console.log('\nValidating help-ids (InfoTip / PageHelp)...');
 const helpIds = await $`bun scripts/validate-help-ids.ts`.nothrow();
 
+console.log('\nChecking for Node globals in browser-bundled libs...');
+const browserGlobals = await $`bun scripts/check-browser-globals.ts`.nothrow();
+
 console.log('\nValidating course/regulations frontmatter...');
 const courseFrontmatter = await $`bun tools/course-frontmatter/check.ts`.nothrow();
 
@@ -91,6 +94,7 @@ const failed =
 	themeLint.exitCode !== 0 ||
 	testLint.exitCode !== 0 ||
 	helpIds.exitCode !== 0 ||
+	browserGlobals.exitCode !== 0 ||
 	courseFrontmatter.exitCode !== 0 ||
 	!glossaryOk;
 if (failed) {

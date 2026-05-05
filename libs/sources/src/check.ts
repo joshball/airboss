@@ -1,3 +1,4 @@
+// @browser-globals: server-only -- never imported by client .svelte
 /**
  * `bun run check` entry-point for the airboss-ref: validator.
  *

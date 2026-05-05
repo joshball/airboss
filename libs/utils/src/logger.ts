@@ -1,3 +1,4 @@
+// @browser-globals: server-only -- never imported by client .svelte
 import { ENV_VARS, isProd, LOG_LEVEL_ORDER, type LogLevel } from '@ab/constants';
 
 interface LogContext extends Record<string, unknown> {

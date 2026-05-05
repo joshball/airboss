@@ -1,3 +1,4 @@
+// @browser-globals: server-only -- never imported by client .svelte
 /**
  * Phase 7 -- AIM corpus ingestion orchestration.
  *

@@ -1,3 +1,4 @@
+// @browser-globals: server-only -- never imported by client .svelte
 /**
  * Phase 6 -- the `handbooks` `CorpusResolver` implementation.
  *

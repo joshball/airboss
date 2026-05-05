@@ -1,3 +1,4 @@
+// @browser-globals: server-only -- never imported by client .svelte
 /**
  * Source-document cache root resolution. Single source of truth for the
  * `AIRBOSS_HANDBOOK_CACHE` env var, the default cache directory layout, and
