@@ -10,7 +10,7 @@
 
 import { NODE_MASTERY_GATES } from '@ab/constants';
 import { describe, expect, it } from 'vitest';
-import { buildAcsTree, buildCitationStacks, mergeNodeEvidenceStates } from './build-acs-tree';
+import { buildAcsTree, buildCitationStacks, mergeNodeEvidenceStates } from './build-acs-tree.server';
 
 const NA = NODE_MASTERY_GATES.NOT_APPLICABLE;
 const PASS = NODE_MASTERY_GATES.PASS;
