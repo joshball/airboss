@@ -44,7 +44,7 @@
 import { listThemes } from '../registry';
 import { FORCED_APPEARANCE_BY_THEME, resolveThemeForPath } from '../resolve';
 
-const FLIGHTDECK_THEME = resolveThemeForPath('/dashboard').theme;
+const FLIGHTDECK_THEME = resolveThemeForPath('/insights').theme;
 const SIM_THEME = resolveThemeForPath('/sim').theme;
 const DEFAULT_THEME = resolveThemeForPath('/').theme;
 
@@ -86,7 +86,7 @@ export function buildPreHydrationScript(): string {
 		var doc = document.documentElement;
 		var path = window.location.pathname;
 		var sim = path === '/sim' || path.indexOf('/sim/') === 0;
-		var flightdeck = !sim && (path === '/dashboard' || path.indexOf('/dashboard/') === 0);
+		var flightdeck = !sim && (path === '/insights' || path.indexOf('/insights/') === 0 || path === '/dashboard' || path.indexOf('/dashboard/') === 0);
 		// Path defaults mirror resolveThemeForPath in @ab/themes/resolve.ts.
 		var pathTheme = sim ? '${SIM_THEME}' : flightdeck ? '${FLIGHTDECK_THEME}' : '${DEFAULT_THEME}';
 		var layout = sim ? 'cockpit' : flightdeck ? 'dashboard' : 'reading';

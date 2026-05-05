@@ -117,26 +117,36 @@ Goal: rename `/dashboard` -> `/insights`, fold Calibration + Lens under Insights
 
 ### 3.1 Routes + constants
 
-- [ ] Add to [libs/constants/src/routes.ts](../../../libs/constants/src/routes.ts): `INSIGHTS`, `INSIGHTS_CALIBRATION`, `INSIGHTS_LENS`, `INSIGHTS_LENS_HANDBOOK`, `INSIGHTS_LENS_WEAKNESS`, `REFERENCE`, `REFERENCE_KNOWLEDGE`, `REFERENCE_GLOSSARY`.
-- [ ] Add corresponding `NAV_LABELS` (subject to Q7 -- Training/Progress/Reference vs Program/Insights/Reference).
+- [x] Add to [libs/constants/src/routes.ts](../../../libs/constants/src/routes.ts): `INSIGHTS`, `INSIGHTS_CALIBRATION`, `INSIGHTS_LENS`, `INSIGHTS_LENS_HANDBOOK`, `INSIGHTS_LENS_HANDBOOK_DOC`, `INSIGHTS_LENS_HANDBOOK_CHAPTER`, `INSIGHTS_LENS_WEAKNESS`, `INSIGHTS_LENS_WEAKNESS_BUCKET`, `REFERENCE`, `REFERENCE_KNOWLEDGE`, `REFERENCE_KNOWLEDGE_SLUG`, `REFERENCE_KNOWLEDGE_LEARN`, `REFERENCE_KNOWLEDGE_LEARN_AT`, `REFERENCE_GLOSSARY`, `REFERENCE_GLOSSARY_ID`. Old constants (`DASHBOARD`, `CALIBRATION`, `LENS_*`, `KNOWLEDGE*`, `GLOSSARY*`) kept as `@deprecated` aliases that point at the new paths so external bookmarks in scripts / docs continue to work; in-app callers were migrated to the new constants in this phase.
+- [x] Add corresponding `NAV_LABELS` (`INSIGHTS`, `INSIGHTS_CALIBRATION`, `INSIGHTS_LENS`, `REFERENCE`, `REFERENCE_KNOWLEDGE`, `REFERENCE_GLOSSARY`). Q7 noted "Training / Progress / Reference" as a possible label-only swap; Phase 3 ships with "Insights" / "Reference" because the URL family already uses those names and the spec's section taglines describe Insights' role more accurately than "Progress" alone.
 
 ### 3.2 Surfaces
 
-- [ ] Move `/dashboard/+page.svelte` content to `/insights/+page.svelte`.
-- [ ] Move `/calibration/*` to `/insights/calibration/*`.
-- [ ] Move `/lens/*` to `/insights/lens/*`.
-- [ ] Move `/knowledge/*` to `/reference/knowledge/*`.
-- [ ] Move `/glossary/*` to `/reference/glossary/*` (the canonical glossary page; the drawer mounts content from the same source).
-- [ ] Page explainers on each new index page.
+- [x] Move `/dashboard/*` content to `/insights/*` via `git mv` (preserves history).
+- [x] Move `/calibration/*` to `/insights/calibration/*`.
+- [x] Move `/lens/*` to `/insights/lens/*`.
+- [x] Move `/knowledge/*` to `/reference/knowledge/*`.
+- [x] Move `/glossary/*` to `/reference/glossary/*` (the canonical glossary page; the drawer mounts content from the same source).
+- [x] New `/reference/+page.svelte` section index.
+- [x] Page explainers on each new index page (insights, calibration, lens-handbook, reference, reference-knowledge, reference-glossary -- six new keys registered in `PAGE_EXPLAINER_KEYS`).
+- [x] Insights index also fixes the page-anchor on glossary's shared `ReferencePage` component.
 
 ### 3.3 Redirects
 
-- [ ] `apps/study/src/hooks.server.ts` (or extend if exists) -- 301 redirect map for every renamed path. See `redirectMap` table in [design.md](./design.md).
-- [ ] Author `tests/e2e/ia-redirect.spec.ts` -- every old path returns 301 to its new home.
+- [x] `apps/study/src/hooks.server.ts` extended with a `handleLegacyRedirects` Handle composed via `sequence(handleLegacyRedirects, handleAppRequest)`. Runs FIRST (before auth/session) so unauthenticated users hitting `/dashboard` 301 cleanly to `/insights`. Pure resolver in `apps/study/src/lib/server/legacy-redirects.ts` -- 19 patterns covering `/dashboard`, `/calibration`, `/lens/*`, `/knowledge/*`, `/glossary/*`, plus the Phase 2 `/credentials`, `/goals`, `/plans` rename batch.
+- [x] Author `tests/e2e/ia-redirect.spec.ts` -- every legacy path asserts status 301 + correct `Location` pathname (and a query-string preservation case).
+- [x] Vitest unit tests for the resolver in `apps/study/src/lib/server/legacy-redirects.test.ts` (10 cases).
 
-### 3.4 E2E (Phase 3 slice)
+### 3.4 Glossary drawer + MetricExplainer (deferred from Phase 1)
 
-- [ ] Expand `ia-flow.spec.ts` FLOW with Insights + Reference + their children.
+- [x] `libs/ui/src/components/GlossaryDrawer.svelte` -- searchable list of glossary entries with an inline expanded detail view, mounted via the new `glossarySlot` snippet on `AppHeader`. Entries are passed in as a prop (libs/ui leaf rule); the study layout sources them from `@ab/help/glossary` via `listGlossaryEntries()`.
+- [x] `libs/ui/src/lib/glossary-drawer-state.svelte.ts` -- minimal state machine with Vitest unit tests (6 cases) covering open/close, toggle, selection, and search-clear-on-input transitions.
+- [x] `libs/ui/src/components/MetricExplainer.svelte` -- number `?` popover that renders label + value + click-to-open formula / glossary deep-link. Unit tests (4 cases) cover the closed-state, the popover open behaviour, the glossary link, and Esc-to-close.
+- [x] `libs/ui/src/components/AppHeader.svelte` gains an optional `glossarySlot` snippet so the drawer mounts in the right cluster between Help search and Flightbag.
+
+### 3.5 E2E (Phase 3 slice)
+
+- [x] Expand `ia-flow.spec.ts` FLOW with Insights + Reference + their children (insights, insights-calibration, insights-lens-handbook, insights-lens-weakness, reference, reference-knowledge, reference-glossary).
 
 ### Phase 3 commit point
 

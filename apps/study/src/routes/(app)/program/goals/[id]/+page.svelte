@@ -199,7 +199,7 @@ const editHref = $derived(ROUTES.PROGRAM_GOAL_EDIT(goal.id));
 			<ul class="row-list">
 				{#each nodes as gn (gn.knowledgeNodeId)}
 					<li class="row">
-						<a class="row-title" href={ROUTES.KNOWLEDGE_SLUG(gn.knowledgeNodeId)}>{gn.knowledgeNodeId}</a>
+						<a class="row-title" href={ROUTES.REFERENCE_KNOWLEDGE_SLUG(gn.knowledgeNodeId)}>{gn.knowledgeNodeId}</a>
 						<form method="POST" action="?/setNodeWeight" class="weight-form">
 							<input type="hidden" name="knowledgeNodeId" value={gn.knowledgeNodeId} />
 							<label class="weight-label">

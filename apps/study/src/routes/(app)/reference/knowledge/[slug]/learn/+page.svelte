@@ -115,7 +115,7 @@ function phaseLabel(phase: string): string {
 	<nav aria-label="Breadcrumb">
 		<ol class="crumb">
 			<li><a href={ROUTES.KNOWLEDGE}>Knowledge</a></li>
-			<li><a href={ROUTES.KNOWLEDGE_SLUG(node.id)}>{node.title}</a></li>
+			<li><a href={ROUTES.REFERENCE_KNOWLEDGE_SLUG(node.id)}>{node.title}</a></li>
 			<li aria-current="page">Learn</li>
 		</ol>
 	</nav>
@@ -207,7 +207,7 @@ function phaseLabel(phase: string): string {
 
 	<nav class="controls" aria-label="Phase navigation">
 		{#if stepIndex === 0}
-			<a class="btn secondary" href={ROUTES.KNOWLEDGE_SLUG(node.id)}>Back to node</a>
+			<a class="btn secondary" href={ROUTES.REFERENCE_KNOWLEDGE_SLUG(node.id)}>Back to node</a>
 		{:else}
 			<button type="button" class="btn secondary" onclick={prev}>Previous</button>
 		{/if}

@@ -65,7 +65,7 @@ function truncate(text: string, max: number): string {
 	<span class="term" onkeydown={onKey} role="presentation">
 		<a
 			class="link"
-			href={ROUTES.GLOSSARY_ID(reference.id)}
+			href={ROUTES.REFERENCE_GLOSSARY_ID(reference.id)}
 			aria-describedby={open ? tooltipId : undefined}
 			onmouseenter={() => (hovered = true)}
 			onmouseleave={() => (hovered = false)}

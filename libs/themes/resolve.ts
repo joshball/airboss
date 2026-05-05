@@ -104,7 +104,12 @@ export function forcedAppearanceFor(theme: ThemeId): AppearanceMode | null {
 	return FORCED_APPEARANCE_BY_THEME[theme] ?? null;
 }
 
-const FLIGHTDECK_PATH_PREFIXES: readonly string[] = ['/dashboard'];
+// `/insights` carries the flightdeck theme (study-app-ia-cleanup Phase 3
+// rename of `/dashboard`). `/dashboard` stays in the list so the legacy
+// path picks up the same theme during the redirect window; the hooks-
+// level 301 fires before render, so this is defense-in-depth for the
+// edge case where a same-path test sets it directly.
+const FLIGHTDECK_PATH_PREFIXES: readonly string[] = ['/insights', '/dashboard'];
 const SIM_PATH_PREFIXES: readonly string[] = ['/sim'];
 
 function matchesAnyPrefix(pathname: string, prefixes: readonly string[]): boolean {

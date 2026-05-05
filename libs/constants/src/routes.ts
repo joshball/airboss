@@ -181,8 +181,12 @@ export const ROUTES = {
 	 */
 	TEACH_DEBRIEF: (token: string) => `/teach/debrief/${encodeURIComponent(token)}` as const,
 
-	// Study -- Dashboard (kept as the "Stats" view; was the launchpad pre-WP)
-	DASHBOARD: '/dashboard',
+	/**
+	 * @deprecated Phase 3 of `study-app-ia-cleanup` renamed `/dashboard` to
+	 * `/insights`. Prefer `INSIGHTS`. Hooks-level 301 redirect keeps
+	 * external bookmarks working until 6 months post-Phase 3.
+	 */
+	DASHBOARD: '/insights',
 
 	// Study -- Memory
 	MEMORY: '/memory',
@@ -230,12 +234,53 @@ export const ROUTES = {
 	 */
 	REP_DETAIL: (id: string) => `/reps/${encodeURIComponent(id)}` as const,
 
-	// Study -- Calibration
-	CALIBRATION: '/calibration',
+	// Study -- Insights surface (study-app-ia-cleanup Phase 3). Renames the
+	// legacy `/dashboard` to `/insights` and folds calibration + lens
+	// detail surfaces underneath. The legacy `DASHBOARD`, `CALIBRATION`,
+	// and `LENS_*` constants below are kept as deprecated aliases that
+	// point to the new canonical paths so any caller that still grabs the
+	// old constant lands on the new URL (`hooks.server.ts` 301-redirects
+	// the legacy paths so external bookmarks keep working).
+	INSIGHTS: '/insights',
+	INSIGHTS_CALIBRATION: '/insights/calibration',
+	INSIGHTS_LENS: '/insights/lens',
+	INSIGHTS_LENS_HANDBOOK: '/insights/lens/handbook',
+	INSIGHTS_LENS_HANDBOOK_DOC: (doc: string) => `/insights/lens/handbook/${encodeURIComponent(doc)}` as const,
+	INSIGHTS_LENS_HANDBOOK_CHAPTER: (doc: string, chapter: string | number) =>
+		`/insights/lens/handbook/${encodeURIComponent(doc)}/${encodeURIComponent(String(chapter))}` as const,
+	INSIGHTS_LENS_WEAKNESS: '/insights/lens/weakness',
+	INSIGHTS_LENS_WEAKNESS_BUCKET: (severity: string) =>
+		`/insights/lens/weakness/${encodeURIComponent(severity)}` as const,
 
-	// Study -- Glossary (aviation reference library; shared via @ab/aviation)
-	GLOSSARY: '/glossary',
-	GLOSSARY_ID: (id: string) => `/glossary/${encodeURIComponent(id)}` as const,
+	// Study -- Reference surface (study-app-ia-cleanup Phase 3). Folds the
+	// knowledge graph + glossary under one section index so the user has
+	// one mental destination for "look things up". The legacy `KNOWLEDGE*`
+	// and `GLOSSARY*` constants below are kept as deprecated aliases.
+	REFERENCE: '/reference',
+	REFERENCE_KNOWLEDGE: '/reference/knowledge',
+	REFERENCE_KNOWLEDGE_SLUG: (slug: string) => `/reference/knowledge/${slug}` as const,
+	REFERENCE_KNOWLEDGE_LEARN: (slug: string) => `/reference/knowledge/${slug}/learn` as const,
+	REFERENCE_KNOWLEDGE_LEARN_AT: (slug: string, phase: KnowledgePhase) =>
+		`/reference/knowledge/${slug}/learn?${QUERY_PARAMS.STEP}=${encodeURIComponent(phase)}` as const,
+	REFERENCE_GLOSSARY: '/reference/glossary',
+	REFERENCE_GLOSSARY_ID: (id: string) => `/reference/glossary/${encodeURIComponent(id)}` as const,
+
+	/**
+	 * @deprecated Phase 3 of `study-app-ia-cleanup` renamed `/calibration` to
+	 * `/insights/calibration`. Prefer `INSIGHTS_CALIBRATION`. Hooks-level
+	 * 301 redirect keeps external links working until 6 months post-Phase 3.
+	 */
+	CALIBRATION: '/insights/calibration',
+
+	/**
+	 * @deprecated Phase 3 of `study-app-ia-cleanup` renamed `/glossary` to
+	 * `/reference/glossary`. Prefer `REFERENCE_GLOSSARY`.
+	 */
+	GLOSSARY: '/reference/glossary',
+	/**
+	 * @deprecated Prefer `REFERENCE_GLOSSARY_ID`. Same shape, new path.
+	 */
+	GLOSSARY_ID: (id: string) => `/reference/glossary/${encodeURIComponent(id)}` as const,
 
 	// Study -- Library (the user-facing reference browse + reader surface).
 	// Hosts the in-app handbook reader (per-edition markdown + figures committed
@@ -302,16 +347,17 @@ export const ROUTES = {
 	NODE: (id: string) => `/nodes/${id}` as const,
 
 	/**
-	 * Knowledge-graph browse / detail / guided-learn surface. Separate from
-	 * the legacy `NODES` prefix -- `/knowledge` is the spec-named path in the
-	 * knowledge-graph work package and maps to slug-keyed URLs.
+	 * @deprecated Phase 3 of `study-app-ia-cleanup` moved `/knowledge` under
+	 * `/reference/knowledge`. Prefer `REFERENCE_KNOWLEDGE`.
 	 */
-	KNOWLEDGE: '/knowledge',
-	KNOWLEDGE_SLUG: (slug: string) => `/knowledge/${slug}` as const,
-	KNOWLEDGE_LEARN: (slug: string) => `/knowledge/${slug}/learn` as const,
-	/** Guided-learn page pinned to a specific phase (named slug). */
+	KNOWLEDGE: '/reference/knowledge',
+	/** @deprecated Prefer `REFERENCE_KNOWLEDGE_SLUG`. */
+	KNOWLEDGE_SLUG: (slug: string) => `/reference/knowledge/${slug}` as const,
+	/** @deprecated Prefer `REFERENCE_KNOWLEDGE_LEARN`. */
+	KNOWLEDGE_LEARN: (slug: string) => `/reference/knowledge/${slug}/learn` as const,
+	/** @deprecated Prefer `REFERENCE_KNOWLEDGE_LEARN_AT`. */
 	KNOWLEDGE_LEARN_AT: (slug: string, phase: KnowledgePhase) =>
-		`/knowledge/${slug}/learn?${QUERY_PARAMS.STEP}=${encodeURIComponent(phase)}` as const,
+		`/reference/knowledge/${slug}/learn?${QUERY_PARAMS.STEP}=${encodeURIComponent(phase)}` as const,
 	/**
 	 * Node-filtered review: appends `?node=...` to the existing review flow
 	 * so the server load can narrow the due-cards query without introducing
@@ -355,21 +401,32 @@ export const ROUTES = {
 	/** Coverage tab -- read-only summary of qual / goal / plan coverage. */
 	PROGRAM_COVERAGE: '/program/coverage',
 
-	// Study -- Lens UI (lens-ui WP, ADR 016 phase 8).
-	/** Umbrella prefix for the Lens area; used by nav-active prefix checks. */
-	LENS: '/lens',
+	// Study -- Lens UI (lens-ui WP, ADR 016 phase 8). Phase 3 of
+	// `study-app-ia-cleanup` moved `/lens/*` under `/insights/lens/*`; the
+	// constants below are deprecated aliases that point at the new
+	// canonical paths. The hooks redirect map handles external bookmarks.
+	/**
+	 * @deprecated Prefer `INSIGHTS_LENS`. Used by nav-active prefix checks
+	 * before Phase 3; new prefix checks should compare against `INSIGHTS_LENS`.
+	 */
+	LENS: '/insights/lens',
 	/**
 	 * Handbook / regulation figure asset stream. The `[...path]` server route
 	 * resolves `path` against the handbook cache root and pipes the file body.
 	 * Callers strip any leading slash before passing in.
 	 */
 	HANDBOOK_ASSET: (path: string) => `/handbook-asset/${path}` as const,
-	LENS_HANDBOOK: '/lens/handbook',
-	LENS_HANDBOOK_DOC: (doc: string) => `/lens/handbook/${encodeURIComponent(doc)}` as const,
+	/** @deprecated Prefer `INSIGHTS_LENS_HANDBOOK`. */
+	LENS_HANDBOOK: '/insights/lens/handbook',
+	/** @deprecated Prefer `INSIGHTS_LENS_HANDBOOK_DOC`. */
+	LENS_HANDBOOK_DOC: (doc: string) => `/insights/lens/handbook/${encodeURIComponent(doc)}` as const,
+	/** @deprecated Prefer `INSIGHTS_LENS_HANDBOOK_CHAPTER`. */
 	LENS_HANDBOOK_CHAPTER: (doc: string, chapter: string | number) =>
-		`/lens/handbook/${encodeURIComponent(doc)}/${encodeURIComponent(String(chapter))}` as const,
-	LENS_WEAKNESS: '/lens/weakness',
-	LENS_WEAKNESS_BUCKET: (severity: string) => `/lens/weakness/${encodeURIComponent(severity)}` as const,
+		`/insights/lens/handbook/${encodeURIComponent(doc)}/${encodeURIComponent(String(chapter))}` as const,
+	/** @deprecated Prefer `INSIGHTS_LENS_WEAKNESS`. */
+	LENS_WEAKNESS: '/insights/lens/weakness',
+	/** @deprecated Prefer `INSIGHTS_LENS_WEAKNESS_BUCKET`. */
+	LENS_WEAKNESS_BUCKET: (severity: string) => `/insights/lens/weakness/${encodeURIComponent(severity)}` as const,
 
 	// Study -- Sessions (Plans moved under `/program/plans` in Phase 2 of
 	// study-app-ia-cleanup; see PROGRAM_PLAN* above).
@@ -663,8 +720,32 @@ export type AppId = keyof typeof APP_NAMES;
 export const NAV_LABELS = {
 	/** Post-login home (study-home WP). First nav item. */
 	STUDY: 'Study',
-	/** The legacy `/dashboard` page; renamed to "Stats" once `/study` became the home (study-home WP). */
+	/**
+	 * @deprecated The legacy `/dashboard` page; renamed to "Stats" pre-IA-
+	 * cleanup. Phase 3 renames the surface to `/insights` and prefers
+	 * `INSIGHTS` below. Kept so existing call sites still type-check.
+	 */
 	DASHBOARD: 'Stats',
+	/**
+	 * `/insights` -- consolidated stats + calibration + lens (study-app-
+	 * ia-cleanup Phase 3). Spec Q7 considered "Progress" as an alternative
+	 * label; "Insights" was retained because the URL family is `INSIGHTS`
+	 * and the section index page surfaces calibration + weak areas which
+	 * "Insights" describes more accurately than "Progress" alone.
+	 */
+	INSIGHTS: 'Insights',
+	/** Sub-link inside Insights -- calibration detail surface. */
+	INSIGHTS_CALIBRATION: 'Calibration',
+	/** Sub-link inside Insights -- lens (handbook + weakness) detail surface. */
+	INSIGHTS_LENS: 'Lens',
+	/**
+	 * `/reference` -- consolidated knowledge graph + glossary
+	 * (study-app-ia-cleanup Phase 3). Always-on section; reachable
+	 * pre-goal so first-run users can browse.
+	 */
+	REFERENCE: 'Reference',
+	REFERENCE_KNOWLEDGE: 'Knowledge',
+	REFERENCE_GLOSSARY: 'Glossary',
 	/** Placeholder for the flight-logging surface (WP 2). */
 	FLIGHT: 'Flight',
 	/**

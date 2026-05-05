@@ -47,7 +47,7 @@ const hitsById = $derived.by(() => {
 <section class="page">
 	<header class="hd">
 		<div>
-			<h1>Glossary</h1>
+			<h1 data-testid="page-anchor">Glossary</h1>
 			<p class="sub">
 				Aviation references: CFRs, AIM entries, POH excerpts, and hand-authored explainers. {total} entr{total === 1 ? 'y' : 'ies'}.
 			</p>

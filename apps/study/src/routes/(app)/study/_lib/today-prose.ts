@@ -103,7 +103,7 @@ function renderFocus(b: FocusBriefing): RenderedToday {
 	return {
 		headline,
 		body,
-		cta: { label: 'Open this topic', href: ROUTES.KNOWLEDGE_SLUG(b.focusNodeSlug) },
+		cta: { label: 'Open this topic', href: ROUTES.REFERENCE_KNOWLEDGE_SLUG(b.focusNodeSlug) },
 	};
 }
 

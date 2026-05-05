@@ -18,7 +18,7 @@ let { nodes, scope }: { nodes: CitingNode[]; scope: string } = $props();
 		<ul>
 			{#each nodes as node (node.id)}
 				<li>
-					<a href={ROUTES.KNOWLEDGE_SLUG(node.id)}>
+					<a href={ROUTES.REFERENCE_KNOWLEDGE_SLUG(node.id)}>
 						<span class="title">{node.title}</span>
 						<span class="domain">{node.domain}</span>
 					</a>

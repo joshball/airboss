@@ -141,7 +141,7 @@ const bySlice = $derived.by<Record<SessionSlice, SessionItem[]>>(() => {
 								<span class="detail">-- {item.reasonDetail}</span>
 							{/if}
 							{#if item.kind === SESSION_ITEM_KINDS.NODE_START}
-								<a class="id id-link" href={ROUTES.KNOWLEDGE_SLUG(item.nodeId)}>{item.nodeId}</a>
+								<a class="id id-link" href={ROUTES.REFERENCE_KNOWLEDGE_SLUG(item.nodeId)}>{item.nodeId}</a>
 							{:else if item.kind === SESSION_ITEM_KINDS.CARD}
 								<a class="id id-link" href={ROUTES.MEMORY_CARD(item.cardId)}>{item.cardId}</a>
 							{:else if item.kind === SESSION_ITEM_KINDS.REP}

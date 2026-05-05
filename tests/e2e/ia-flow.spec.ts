@@ -30,6 +30,14 @@ const FLOW: ReadonlyArray<Stop> = [
 		// every child route.
 		subAnchors: ['program-tab-quals', 'program-tab-goal', 'program-tab-plan', 'program-tab-coverage'],
 	},
+	// Phase 3 -- Insights + Reference + their children.
+	{ label: 'insights', path: ROUTES.INSIGHTS },
+	{ label: 'insights-calibration', path: ROUTES.INSIGHTS_CALIBRATION },
+	{ label: 'insights-lens-handbook', path: ROUTES.INSIGHTS_LENS_HANDBOOK },
+	{ label: 'insights-lens-weakness', path: ROUTES.INSIGHTS_LENS_WEAKNESS },
+	{ label: 'reference', path: ROUTES.REFERENCE },
+	{ label: 'reference-knowledge', path: ROUTES.REFERENCE_KNOWLEDGE },
+	{ label: 'reference-glossary', path: ROUTES.REFERENCE_GLOSSARY },
 ];
 
 function attachErrorTrap(page: Page): { errors: string[] } {

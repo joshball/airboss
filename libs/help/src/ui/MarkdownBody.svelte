@@ -23,7 +23,7 @@ function resolveWikilink(pageId: string): { href: string; resolved: boolean } {
 		return { href: ROUTES.HELP_ID(pageId), resolved: true };
 	}
 	if (getReferenceById(pageId)) {
-		return { href: ROUTES.GLOSSARY_ID(pageId), resolved: true };
+		return { href: ROUTES.REFERENCE_GLOSSARY_ID(pageId), resolved: true };
 	}
 	return { href: '', resolved: false };
 }

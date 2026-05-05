@@ -4,8 +4,8 @@ import Button from '@ab/ui/components/Button.svelte';
 import PageExplainer from '@ab/ui/components/PageExplainer.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import Tooltip from '@ab/ui/components/Tooltip.svelte';
-import type { PageData } from './$types';
 import type { LayoutData } from '../$types';
+import type { PageData } from './$types';
 
 let { data }: { data: PageData & LayoutData } = $props();
 </script>

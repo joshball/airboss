@@ -1,7 +1,9 @@
 <script lang="ts">
-import { ROUTES } from '@ab/constants';
+import { PAGE_EXPLAINER_KEYS, ROUTES } from '@ab/constants';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
+import PageExplainer from '@ab/ui/components/PageExplainer.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
+import Tooltip from '@ab/ui/components/Tooltip.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -27,6 +29,12 @@ function pct(num: number, den: number): number {
 		{/snippet}
 	</PageHeader>
 
+	<PageExplainer pageKey={PAGE_EXPLAINER_KEYS.INSIGHTS_LENS}>
+		The handbook
+		<Tooltip for="lens">lens</Tooltip>
+		projects your study data through an FAA handbook. Each chapter shows which sections you've read and which knowledge nodes cite each section.
+	</PageExplainer>
+
 	{#if entries.length === 0}
 		<EmptyState
 			title="No handbooks ingested"
@@ -36,7 +44,7 @@ function pct(num: number, den: number): number {
 		<ul class="grid">
 			{#each entries as entry (entry.reference.id)}
 				<li class="card">
-					<a class="card-link" href={ROUTES.LENS_HANDBOOK_DOC(entry.reference.documentSlug)}>
+					<a class="card-link" href={ROUTES.INSIGHTS_LENS_HANDBOOK_DOC(entry.reference.documentSlug)}>
 						<header>
 							<span class="kind">{entry.reference.publisher}</span>
 							<h2 class="title">{entry.reference.title}</h2>

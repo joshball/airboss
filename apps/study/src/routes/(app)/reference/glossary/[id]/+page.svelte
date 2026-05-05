@@ -91,7 +91,7 @@ const related = $derived(data.related);
 			<ul class="related">
 				{#each related as rel (rel.id)}
 					<li>
-						<a href={ROUTES.GLOSSARY_ID(rel.id)}>{rel.displayName}</a>
+						<a href={ROUTES.REFERENCE_GLOSSARY_ID(rel.id)}>{rel.displayName}</a>
 					</li>
 				{/each}
 			</ul>

@@ -67,7 +67,7 @@ describe('composePublicCardCitations', () => {
 					type: CITATION_TARGET_TYPES.KNOWLEDGE_NODE,
 					label: 'VFR weather minimums',
 					detail: 'Knowledge node',
-					href: '/knowledge/vfr-weather-minimums',
+					href: '/reference/knowledge/vfr-weather-minimums',
 				},
 			},
 		]);
@@ -76,7 +76,7 @@ describe('composePublicCardCitations', () => {
 			id: 'cit_3',
 			label: 'VFR weather minimums',
 			detail: 'Knowledge node',
-			href: '/knowledge/vfr-weather-minimums',
+			href: '/reference/knowledge/vfr-weather-minimums',
 			targetExternal: false,
 		});
 	});

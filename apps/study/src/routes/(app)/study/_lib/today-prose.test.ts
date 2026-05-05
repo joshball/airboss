@@ -57,7 +57,7 @@ describe('renderTodayProse', () => {
 			expect(out.headline).toBe('Weight & balance -- arm and moment');
 			expect(out.body).toBe("You haven't started this yet. PHAK chapter 10 covers it.");
 			expect(out.cta).not.toBeNull();
-			expect(out.cta?.href).toBe('/knowledge/weight-balance-arm-moment');
+			expect(out.cta?.href).toBe('/reference/knowledge/weight-balance-arm-moment');
 		});
 
 		it('low_accuracy on cards, recall 4/10, primary cite PHAK ch. 10', () => {

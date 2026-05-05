@@ -76,6 +76,16 @@ export interface AppHeaderProps {
 	 */
 	helpSearch?: Snippet;
 	/**
+	 * Glossary drawer trigger + drawer mount (study-app-ia-cleanup
+	 * Phase 3). Rendered in the right cluster after `helpSearch`.
+	 * Snippet rather than a direct `<GlossaryDrawer>` import because
+	 * the entries list is sourced from `@ab/help/glossary`, which
+	 * libs/ui must not depend on (leaf rule). Each app supplies its
+	 * own glossary corpus to the `<GlossaryDrawer>` it mounts inside
+	 * this snippet.
+	 */
+	glossarySlot?: Snippet;
+	/**
 	 * Theme picker placement. AppHeader renders this snippet inside the
 	 * account dropdown panel (frequency-of-use argument: themes change
 	 * once a session, appearance toggles daily). Snippet rather than a
@@ -147,6 +157,7 @@ let {
 	onAppearanceChange,
 	nav,
 	helpSearch,
+	glossarySlot,
 	themePicker,
 	preferencesHref,
 	signedOut,
@@ -299,6 +310,10 @@ function handleAppearanceClick() {
 
 		{#if helpSearch}
 			<div class="help-search-slot">{@render helpSearch()}</div>
+		{/if}
+
+		{#if glossarySlot}
+			<div class="glossary-slot">{@render glossarySlot()}</div>
 		{/if}
 
 		{#if flightbagHref}
@@ -576,6 +591,11 @@ function handleAppearanceClick() {
 	}
 
 	.help-search-slot {
+		display: inline-flex;
+		align-items: center;
+	}
+
+	.glossary-slot {
 		display: inline-flex;
 		align-items: center;
 	}
