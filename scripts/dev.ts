@@ -778,7 +778,9 @@ if (command === undefined) {
 } else if (DEV_URLS[command]) {
 	await runOne(command);
 } else {
-	console.error(`Unknown app: '${command}'. Valid apps: ${APPS.join(', ')}, or 'status' / 'kill' / 'clean' / 'nuke' / 'log'.`);
+	console.error(
+		`Unknown app: '${command}'. Valid apps: ${APPS.join(', ')}, or 'status' / 'kill' / 'clean' / 'nuke' / 'log'.`,
+	);
 	console.error('Run `bun run dev --help` for usage.');
 	process.exit(1);
 }

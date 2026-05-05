@@ -42,10 +42,12 @@ const CHAPTER_SHAPE = /^[a-z0-9]+$/i;
 
 /**
  * Section codes carry a single dot (`91.103`, `12.1`). Both halves are
- * digits in practice; allow alphanumeric so a future re-ingestion that
- * carries a letter suffix (`91.103a`) still resolves.
+ * alphanumeric (a future letter suffix like `91.103a` resolves) and a
+ * hyphen-separated range is allowed for combined CFR sections that the
+ * publisher cites as a single unit (e.g. `91.148-91.149`,
+ * `61.170-69.171`).
  */
-const SECTION_SHAPE = /^[a-z0-9]+(?:\.[a-z0-9]+)?$/i;
+const SECTION_SHAPE = /^[a-z0-9]+(?:\.[a-z0-9]+)?(?:-[a-z0-9]+(?:\.[a-z0-9]+)?)?$/i;
 
 /**
  * Parse a `/library/regulations/[kind]` URL fragment into a

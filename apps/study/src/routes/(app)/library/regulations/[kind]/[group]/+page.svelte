@@ -1,6 +1,9 @@
 <script lang="ts">
-import LibraryCard from '@ab/aviation/ui/LibraryCard.svelte';
-import { type LibraryRegulationsKind, ROUTES } from '@ab/constants';
+import AcCard from '@ab/aviation/ui/cards/AcCard.svelte';
+import AimCorpusCard from '@ab/aviation/ui/cards/AimCorpusCard.svelte';
+import NtsbCard from '@ab/aviation/ui/cards/NtsbCard.svelte';
+import UmbrellaCard from '@ab/aviation/ui/cards/UmbrellaCard.svelte';
+import { type LibraryRegulationsKind, REFERENCE_KINDS, ROUTES } from '@ab/constants';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import type { PageData } from './$types';
@@ -58,17 +61,41 @@ const kindLabel = $derived(data.kindLabel);
 		<ul class="grid">
 			{#each data.umbrellas as ref (ref.id)}
 				<li>
-					<LibraryCard
-						documentSlug={ref.documentSlug}
-						edition={ref.edition}
-						title={ref.title}
-						publisher={ref.publisher}
-						kind={ref.kind}
-						subjects={[]}
-						externalUrl={ref.externalUrl}
-						isReadable={false}
-						progress={null}
-					/>
+					{#if ref.kind === REFERENCE_KINDS.AIM || ref.kind === REFERENCE_KINDS.PCG}
+						<AimCorpusCard
+							title={ref.title}
+							officialTitle={ref.officialTitle ?? null}
+							description={ref.description ?? ''}
+							whyItMatters={ref.whyItMatters ?? ''}
+							edition={ref.edition}
+							external={ref.externalUrl ? { url: ref.externalUrl, label: ref.publisher } : null}
+						/>
+					{:else if ref.kind === REFERENCE_KINDS.NTSB}
+						<NtsbCard
+							reportNumber={ref.documentSlug}
+							reportTitle={ref.title}
+							summary={ref.description ?? null}
+							external={ref.externalUrl ? { url: ref.externalUrl, label: ref.publisher } : null}
+						/>
+					{:else if ref.kind === REFERENCE_KINDS.AC}
+						<AcCard
+							acNumber={ref.documentSlug.replace(/^ac-/, '')}
+							acTitle={ref.title}
+							edition={ref.edition}
+							description={ref.description ?? null}
+							external={ref.externalUrl ? { url: ref.externalUrl, label: ref.publisher } : null}
+						/>
+					{:else}
+						<UmbrellaCard
+							title={ref.title}
+							officialTitle={ref.officialTitle ?? null}
+							description={ref.description ?? null}
+							whyItMatters={ref.whyItMatters ?? null}
+							kindBadge={ref.kindLabel}
+							editionBadge={ref.edition}
+							external={ref.externalUrl ? { url: ref.externalUrl, label: ref.publisher } : null}
+						/>
+					{/if}
 				</li>
 			{/each}
 		</ul>

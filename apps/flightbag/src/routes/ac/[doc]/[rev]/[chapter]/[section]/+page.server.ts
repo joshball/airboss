@@ -6,7 +6,12 @@
  * TOC.
  */
 
-import { computeReadingOrder, getHandbookSection, listAllSectionsForReference, listReferences } from '@ab/bc-study/server';
+import {
+	computeReadingOrder,
+	getHandbookSection,
+	listAllSectionsForReference,
+	listReferences,
+} from '@ab/bc-study/server';
 import { REFERENCE_KINDS, type ReferenceKind, ROUTES, readingMinutesForWords } from '@ab/constants';
 import { error } from '@sveltejs/kit';
 import { computeSiblingNav } from '../../../../../../lib/section-nav';

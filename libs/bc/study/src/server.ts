@@ -25,11 +25,6 @@
 // barrel because they bypass per-user actor scoping. See chunk-2 security
 // MAJOR finding in `docs/work/reviews/2026-05-01-study-bc-domain-security.md`.
 
-// Re-export every value the runtime barrel exposes, so server consumers
-// only ever need a single import line. Anything that lives at
-// `@ab/bc-study` is also reachable at `@ab/bc-study/server`.
-export * from './index';
-
 export type {
 	CalibrationBucket,
 	CalibrationPageData,
@@ -186,6 +181,10 @@ export {
 	setPrimaryGoal,
 	updateGoal,
 } from './goals';
+// Re-export every value the runtime barrel exposes, so server consumers
+// only ever need a single import line. Anything that lives at
+// `@ab/bc-study` is also reachable at `@ab/bc-study/server`.
+export * from './index';
 export type {
 	CertAndDomainMatrix,
 	CertProgress,

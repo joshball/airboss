@@ -55,11 +55,18 @@ const TEST_EMAIL = `${SUITE_TAG}@airboss.test`;
 // works for the assertions.
 const CFR14_PART = '99001';
 const CFR49_PART = '99002';
+// Flat-shape Part: sections seeded directly under the reference at
+// `level=section` with `parent_id=null` (the WP-CFR seeder shape per
+// REFERENCE_SECTION_LEVELS.PART doc). Tests the buildSectionListView /
+// buildDetailView fallback path that the hierarchical CFR14_PART fixture
+// does not exercise.
+const CFR14_FLAT_PART = '99003';
 const AC_SERIES = '120';
 // AC orphan: a series outside the canonical bucket list (00/60/61/90/91/120/150).
 const AC_ORPHAN_SERIES = '777';
 
 const CFR14_SLUG = `14cfr${CFR14_PART}`;
+const CFR14_FLAT_SLUG = `14cfr${CFR14_FLAT_PART}`;
 const CFR49_SLUG = `49cfr${CFR49_PART}`;
 const AC_SLUG = `ac-${AC_SERIES}-${SUITE_TAG.slice(-4)}`.toLowerCase();
 const AC_ORPHAN_SLUG = `ac-${AC_ORPHAN_SERIES}-${SUITE_TAG.slice(-4)}`.toLowerCase();
@@ -71,6 +78,7 @@ const AIM_SLUG = `aim-${SUITE_SUFFIX}`;
 const NTSB_SLUG = `ntsb-${SUITE_SUFFIX}`;
 
 const CFR14_REF_ID = generateReferenceId();
+const CFR14_FLAT_REF_ID = generateReferenceId();
 const CFR49_REF_ID = generateReferenceId();
 const AC_REF_ID = generateReferenceId();
 const AC_ORPHAN_REF_ID = generateReferenceId();
@@ -82,6 +90,11 @@ const CFR14_CHAPTER_ID = generateReferenceSectionId();
 const CFR14_SECTION_103_ID = generateReferenceSectionId();
 const CFR14_SECTION_107_ID = generateReferenceSectionId();
 const CFR14_FIGURE_ID = generateReferenceFigureId();
+
+// Flat-shape Part fixture ids -- two sections directly under the reference,
+// no chapter, no parent. Mirrors the WP-CFR seeder output for 14 CFR Parts.
+const CFR14_FLAT_SECTION_103_ID = generateReferenceSectionId();
+const CFR14_FLAT_SECTION_107_ID = generateReferenceSectionId();
 
 const CITING_NODE_ID = `kn-${SUITE_TAG}-cites-cfr14`;
 
@@ -124,6 +137,23 @@ beforeAll(async () => {
 			documentSlug: CFR14_SLUG,
 			edition: 'current',
 			title: `14 CFR Part ${CFR14_PART} (current)`,
+			publisher: 'FAA',
+			url: null,
+			seedOrigin: SUITE_TAG,
+			createdAt: now,
+			updatedAt: now,
+		},
+		{
+			// Flat-shape CFR Part. Same kind/slug-shape as CFR14_REF_ID but
+			// its sections live flat under the reference (no chapter row).
+			// Mirrors the production WP-CFR seeder output. The
+			// buildSectionListView / buildDetailView flat-fallback path is
+			// the only thing that lights this up.
+			id: CFR14_FLAT_REF_ID,
+			kind: REFERENCE_KINDS.CFR,
+			documentSlug: CFR14_FLAT_SLUG,
+			edition: 'current',
+			title: `14 CFR Part ${CFR14_FLAT_PART} (flat fixture)`,
 			publisher: 'FAA',
 			url: null,
 			seedOrigin: SUITE_TAG,
@@ -258,6 +288,54 @@ beforeAll(async () => {
 			createdAt: now,
 			updatedAt: now,
 		},
+		// Flat-shape Part: two sections directly under the reference, no
+		// chapter, no parent, depth 0. Codes are bare `<part>.<section>`
+		// (no `§` prefix) per the URL-slug-shape contract enforced by
+		// SECTION_SHAPE in libs/aviation/src/slugs.ts. The codes here are
+		// what the URL will contain -- if the production seeder writes
+		// `§99003.103` the detail-page link will 404.
+		{
+			id: CFR14_FLAT_SECTION_103_ID,
+			referenceId: CFR14_FLAT_REF_ID,
+			parentId: null,
+			level: REFERENCE_SECTION_LEVELS.SECTION,
+			ordinal: 103,
+			depth: 0,
+			code: `${CFR14_FLAT_PART}.103`,
+			airbossRef: airbossRefForCfrSection(14, `${CFR14_FLAT_PART}.103`),
+			title: 'Flat fixture preflight action',
+			faaPageStart: null,
+			faaPageEnd: null,
+			sourceLocator: `14 CFR §${CFR14_FLAT_PART}.103`,
+			contentMd: 'Flat-shape body. Each pilot in command shall...',
+			contentHash: `hash-cfr14-flat-${CFR14_FLAT_PART}-103`,
+			hasFigures: false,
+			hasTables: false,
+			seedOrigin: SUITE_TAG,
+			createdAt: now,
+			updatedAt: now,
+		},
+		{
+			id: CFR14_FLAT_SECTION_107_ID,
+			referenceId: CFR14_FLAT_REF_ID,
+			parentId: null,
+			level: REFERENCE_SECTION_LEVELS.SECTION,
+			ordinal: 107,
+			depth: 0,
+			code: `${CFR14_FLAT_PART}.107`,
+			airbossRef: airbossRefForCfrSection(14, `${CFR14_FLAT_PART}.107`),
+			title: 'Flat fixture safety belts',
+			faaPageStart: null,
+			faaPageEnd: null,
+			sourceLocator: `14 CFR §${CFR14_FLAT_PART}.107`,
+			contentMd: 'Flat-shape body. No pilot may take off...',
+			contentHash: `hash-cfr14-flat-${CFR14_FLAT_PART}-107`,
+			hasFigures: false,
+			hasTables: false,
+			seedOrigin: SUITE_TAG,
+			createdAt: now,
+			updatedAt: now,
+		},
 	]);
 
 	await db.insert(referenceFigure).values([
@@ -371,7 +449,7 @@ describe('getRegulationsView (group)', () => {
 		expect(view.kindLabel).toBe('14 CFR');
 		const testPart = view.groups.find((g) => g.groupKey === CFR14_PART);
 		expect(testPart).toBeDefined();
-		expect(testPart?.label).toBe(`Part ${CFR14_PART}`);
+		expect(testPart?.label).toBe(`14 CFR Part ${CFR14_PART}`);
 		expect(testPart?.referenceCount).toBe(1);
 		expect(view.umbrellas).toEqual([]);
 	});
@@ -383,7 +461,7 @@ describe('getRegulationsView (group)', () => {
 		});
 		const testPart = view.groups.find((g) => g.groupKey === CFR49_PART);
 		expect(testPart).toBeDefined();
-		expect(testPart?.label).toBe(`Part ${CFR49_PART}`);
+		expect(testPart?.label).toBe(`49 CFR Part ${CFR49_PART}`);
 		// 14 CFR test parts must not bleed into the 49 CFR group.
 		expect(view.groups.find((g) => g.groupKey === CFR14_PART)).toBeUndefined();
 	});
@@ -552,6 +630,121 @@ describe('resolveRegulationsSectionId', () => {
 				kind: LIBRARY_REGULATIONS_KINDS.CFR_14,
 				group: CFR14_PART,
 				section: { chapterCode: '91', sectionCode: '999' },
+			}),
+		).rejects.toBeInstanceOf(RegulationsViewNotFoundError);
+	});
+});
+
+// ---------------------------------------------------------------------------
+// Flat-shape CFR Part: covers the buildSectionListView / buildDetailView
+// fallback path when the matching reference has no chapter row -- sections
+// sit directly under the reference at depth 0 with `parent_id = null`. This
+// is the production WP-CFR seeder shape; the hierarchical fixture above
+// does NOT exercise it. Without these tests, any regression that breaks
+// the flat fallback (e.g. `listFlatTopLevelSections` removed, or the
+// `getHandbookSection` failure no longer cascades to `getFlatSection`)
+// silently falls through to the umbrella card and ships an external link.
+// ---------------------------------------------------------------------------
+
+describe('getRegulationsView (section) -- flat-shape CFR Part', () => {
+	it('returns the flat section TOC when the reference has no chapter row', async () => {
+		const view = await getRegulationsView({
+			view: 'section',
+			kind: LIBRARY_REGULATIONS_KINDS.CFR_14,
+			group: CFR14_FLAT_PART,
+		});
+		expect(view.view).toBe('section');
+		expect(view.group).toBe(CFR14_FLAT_PART);
+		expect(view.umbrellas).toHaveLength(1);
+		expect(view.umbrellas[0]?.id).toBe(CFR14_FLAT_REF_ID);
+		// Two flat sections under the reference; chapter probe returns zero
+		// so the flat fallback wins. Codes are bare `<part>.<section>`.
+		expect(view.sections.map((s) => s.code).sort()).toEqual(
+			[`${CFR14_FLAT_PART}.103`, `${CFR14_FLAT_PART}.107`].sort(),
+		);
+	});
+
+	it('flat section codes match the URL slug shape (no `§` prefix, parser-compatible)', async () => {
+		// Regression guard: the production WP-CFR seeder once wrote codes with
+		// a `§` prefix (`§91.103`). The URL slug parser in
+		// libs/aviation/src/slugs.ts rejects `§` (SECTION_SHAPE matches only
+		// `[a-z0-9]+(?:\.[a-z0-9]+)?`), which silently 404s every detail-page
+		// link. Lock the contract here: every flat-section row's `code` MUST
+		// be slug-parser-compatible.
+		const view = await getRegulationsView({
+			view: 'section',
+			kind: LIBRARY_REGULATIONS_KINDS.CFR_14,
+			group: CFR14_FLAT_PART,
+		});
+		const SECTION_SHAPE = /^[a-z0-9]+(?:\.[a-z0-9]+)?(?:-[a-z0-9]+(?:\.[a-z0-9]+)?)?$/i;
+		for (const section of view.sections) {
+			expect(section.code, `code "${section.code}" must match URL slug shape`).toMatch(SECTION_SHAPE);
+		}
+	});
+});
+
+describe('getRegulationsView (detail) -- flat-shape CFR Part', () => {
+	it('hydrates the section payload via the flat fallback', async () => {
+		// The URL `/library/regulations/14-cfr/<flat-part>/<flat-part>.103`
+		// parses to `chapterCode: '<flat-part>', sectionCode: '103'`. The
+		// hierarchical probe (`getHandbookSection`) cannot find a chapter row
+		// matching `<flat-part>` at level=chapter, so the loader falls
+		// through to `getFlatSection` with the joined `fullCode`.
+		const view = await getRegulationsView({
+			view: 'detail',
+			kind: LIBRARY_REGULATIONS_KINDS.CFR_14,
+			group: CFR14_FLAT_PART,
+			section: { chapterCode: CFR14_FLAT_PART, sectionCode: '103' },
+			userId: TEST_USER_ID,
+		});
+
+		expect(view.view).toBe('detail');
+		expect(view.reference.id).toBe(CFR14_FLAT_REF_ID);
+		expect(view.section.id).toBe(CFR14_FLAT_SECTION_103_ID);
+		expect(view.section.code).toBe(`${CFR14_FLAT_PART}.103`);
+		// Synthesized "virtual chapter" -- carries the reference id + the
+		// part group code + the labelForGroup label so the breadcrumb +
+		// chrome render unchanged. Wave 2 (subpart hierarchy) replaces this.
+		expect(view.chapter.id).toBe(CFR14_FLAT_REF_ID);
+		expect(view.chapter.code).toBe(CFR14_FLAT_PART);
+		expect(view.chapter.title).toBe(`14 CFR Part ${CFR14_FLAT_PART}`);
+		// Siblings come from listFlatTopLevelSections -- both flat sections.
+		expect(view.siblings.map((s) => s.code).sort()).toEqual(
+			[`${CFR14_FLAT_PART}.103`, `${CFR14_FLAT_PART}.107`].sort(),
+		);
+		// No figures on the flat fixture.
+		expect(view.figures).toEqual([]);
+	});
+
+	it('throws RegulationsViewNotFoundError when the flat section code does not exist', async () => {
+		await expect(
+			getRegulationsView({
+				view: 'detail',
+				kind: LIBRARY_REGULATIONS_KINDS.CFR_14,
+				group: CFR14_FLAT_PART,
+				section: { chapterCode: CFR14_FLAT_PART, sectionCode: '999' },
+				userId: TEST_USER_ID,
+			}),
+		).rejects.toBeInstanceOf(RegulationsViewNotFoundError);
+	});
+});
+
+describe('resolveRegulationsSectionId -- flat-shape CFR Part', () => {
+	it('returns the flat section id without hydrating the rest of the payload', async () => {
+		const id = await resolveRegulationsSectionId({
+			kind: LIBRARY_REGULATIONS_KINDS.CFR_14,
+			group: CFR14_FLAT_PART,
+			section: { chapterCode: CFR14_FLAT_PART, sectionCode: '103' },
+		});
+		expect(id).toBe(CFR14_FLAT_SECTION_103_ID);
+	});
+
+	it('throws on missing flat section', async () => {
+		await expect(
+			resolveRegulationsSectionId({
+				kind: LIBRARY_REGULATIONS_KINDS.CFR_14,
+				group: CFR14_FLAT_PART,
+				section: { chapterCode: CFR14_FLAT_PART, sectionCode: '999' },
 			}),
 		).rejects.toBeInstanceOf(RegulationsViewNotFoundError);
 	});

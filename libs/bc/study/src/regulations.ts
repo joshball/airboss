@@ -87,6 +87,8 @@ type Db = typeof defaultDb;
  * for at-a-glance grouping when the card grid gets dense.
  */
 export interface ReferenceCardCopy {
+	/** Short topic line for the card subtitle ("Aeronautics and Space"). */
+	topic?: string;
 	officialTitle?: string;
 	description?: string;
 	whyItMatters?: string;
@@ -418,6 +420,7 @@ async function buildLandingView(db: Db): Promise<RegulationsLandingView> {
 			kind,
 			label: LIBRARY_REGULATIONS_KIND_LABELS[kind],
 			count,
+			topic: copy.topic,
 			officialTitle: copy.officialTitle,
 			description: copy.description,
 			whyItMatters: copy.whyItMatters,
@@ -447,15 +450,23 @@ async function buildGroupView(kind: LibraryRegulationsKind, db: Db): Promise<Reg
 			if (cur.rep === null || ref.supersededById === null) cur.rep = ref;
 			byPart.set(part, cur);
 		}
+		const titleNumber = kind === LIBRARY_REGULATIONS_KINDS.CFR_14 ? 14 : 49;
 		groups = [...byPart.entries()]
 			.sort(([a], [b]) => Number(a) - Number(b))
 			.map(([part, { count, rep }]) => {
 				const copy = rep ? extractCardCopy(rep.metadata) : {};
+				// `officialTitle` precedence: metadata-authored, then reference
+				// row title (e.g. "14 CFR Part 91"), then synthesized -- so the
+				// CfrPartCard wrapper always has a partTitle to render. Wave 1
+				// will populate metadata with the publisher's Part heading
+				// (e.g. "GENERAL OPERATING AND FLIGHT RULES").
+				const officialTitle = copy.officialTitle ?? rep?.title ?? `Part ${part}`;
 				return {
 					groupKey: part,
-					label: `Part ${part}`,
+					label: `${titleNumber} CFR Part ${part}`,
 					referenceCount: count,
 					...copy,
+					officialTitle,
 				};
 			});
 	} else if (kind === LIBRARY_REGULATIONS_KINDS.AIM) {
@@ -492,6 +503,18 @@ async function buildGroupView(kind: LibraryRegulationsKind, db: Db): Promise<Reg
 	}
 
 	const kindCopy = LIBRARY_REGULATIONS_KIND_COPY[kind];
+
+	// Umbrella enrichment: when an umbrella has no copy on its reference
+	// metadata, fall back to the kind's hand-authored copy. Lets the AIM /
+	// PCG / NTSB umbrellas read like first-class corpus cards instead of
+	// bare title-only tiles.
+	umbrellas = umbrellas.map((u) => ({
+		...u,
+		officialTitle: u.officialTitle ?? kindCopy.officialTitle,
+		description: u.description ?? kindCopy.description,
+		whyItMatters: u.whyItMatters ?? kindCopy.whyItMatters,
+	}));
+
 	return {
 		view: 'group',
 		kind,
@@ -516,7 +539,15 @@ async function buildSectionListView(
 		throw new RegulationsViewNotFoundError({ kind, group }, `No reference found for ${kind} / ${group}`);
 	}
 
-	const umbrellas = groupRefs.map(toUmbrella);
+	// Umbrella enrichment mirrors buildGroupView: kind-level fallback for
+	// the corpora where the umbrella IS the corpus card.
+	const kindCopyForGroup = LIBRARY_REGULATIONS_KIND_COPY[kind];
+	const umbrellas = groupRefs.map(toUmbrella).map((u) => ({
+		...u,
+		officialTitle: u.officialTitle ?? kindCopyForGroup.officialTitle,
+		description: u.description ?? kindCopyForGroup.description,
+		whyItMatters: u.whyItMatters ?? kindCopyForGroup.whyItMatters,
+	}));
 
 	// If exactly one reference resolves, probe for inline sections so the
 	// per-section leaf reader lights up. Two probes:
