@@ -144,7 +144,7 @@ $effect(() => {
 
 	<div class="content" data-testid="helplayout-content">
 		<header class="page-head" data-testid="helplayout-head">
-			<h1 data-testid="helplayout-title">{page.title}</h1>
+			<h1 data-testid="page-anchor">{page.title}</h1>
 			<p class="summary" data-testid="helplayout-summary">{page.summary}</p>
 			{#if page.documents}
 				<p class="documents" data-testid="helplayout-documents">Documents: <code>{page.documents}</code></p>

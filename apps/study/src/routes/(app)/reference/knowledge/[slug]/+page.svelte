@@ -194,7 +194,7 @@ const citedByItems = $derived<CitedByItem[]>(
 
 	<header class="hd">
 		<div class="title-row">
-			<h1>{node.title}</h1>
+			<h1 data-testid="page-anchor">{node.title}</h1>
 			<PageHelp pageId="knowledge-graph" />
 		</div>
 		<div class="tags">

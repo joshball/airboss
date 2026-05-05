@@ -45,7 +45,7 @@ function figureUrl(assetPath: string): string {
 		<a href={ROUTES.LIBRARY_REGULATIONS_GROUP(kind, data.group)}>{data.group}</a> &raquo;
 		<span>§{data.section.code}</span>
 	</nav>
-	<h1>
+	<h1 data-testid="page-anchor">
 		{data.section.title}
 		<HandbookEditionBadge edition={data.reference.edition} />
 	</h1>

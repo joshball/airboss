@@ -47,7 +47,7 @@ function sourceLabel(slug: string): string {
 	<div>
 		<a class="back" href={ROUTES.MEMORY_BROWSE}><span aria-hidden="true">←</span> Browse</a>
 		<div class="title-row">
-			<h1>Card detail</h1>
+			<h1 data-testid="page-anchor">Card detail</h1>
 			<PageHelp pageId="memory-card" />
 		</div>
 	</div>

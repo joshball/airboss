@@ -11,6 +11,7 @@ import {
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
+import LearnTabs from '$lib/components/LearnTabs.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -41,6 +42,8 @@ const totalSurfaces = $derived(certCount + topicCount + regCount + aircraftCount
 <svelte:head>
 	<title>Library -- airboss</title>
 </svelte:head>
+
+<LearnTabs active="read" />
 
 <PageHeader
 	title="Library"

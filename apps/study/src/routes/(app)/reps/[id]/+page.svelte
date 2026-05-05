@@ -127,7 +127,7 @@ function formatMs(ms: number | null): string {
 <section class="page">
 	<header class="hd">
 		<div class="title-row">
-			<h1>{scenario.title}</h1>
+			<h1 data-testid="page-anchor">{scenario.title}</h1>
 			<PageHelp pageId="reps-session" />
 		</div>
 		<dl class="meta">

@@ -108,18 +108,31 @@ function pathMatches(current: string, prefix: string): boolean {
 	return current === prefix || current.startsWith(`${prefix}/`);
 }
 
+// Phase 4 of study-app-ia-cleanup locks the top nav to five sections:
+// Home / Learn / Program / Insights / Reference. The Memory dropdown
+// and the local Help dropdown that lived here in earlier phases are
+// removed; section index pages now carry the sub-nav (e.g. `/study/learn`
+// shows Cards / Reps / Read tabs via `LearnTabs.svelte`). The global
+// Help search lives in `AppHeader.svelte` and is the only Help affordance
+// in the chrome. The five testids (`nav-home`, `nav-learn`, `nav-program`,
+// `nav-insights`, `nav-reference`) are the locked contract -- the
+// `ia-flow.spec.ts` and `ia-page-anchor-guard.spec.ts` CI guards depend
+// on them.
 const studyActive = $derived(page.url.pathname === ROUTES.STUDY);
-const flightActive = $derived(pathMatches(page.url.pathname, ROUTES.FLIGHT));
+// `/study/learn` consolidates Cards (`/memory`), Reps (`/reps`), and
+// Read (`/library`). The highlight matches anywhere under `/study/learn`,
+// `/memory`, `/reps`, or `/library` so Learn stays lit no matter which
+// sub-section the user is on.
+const learnActive = $derived(
+	pathMatches(page.url.pathname, ROUTES.LEARN) ||
+		pathMatches(page.url.pathname, ROUTES.MEMORY) ||
+		pathMatches(page.url.pathname, ROUTES.REPS) ||
+		pathMatches(page.url.pathname, ROUTES.LIBRARY),
+);
 // `/insights` rolls Stats / Calibration / Lens onto one section
 // (study-app-ia-cleanup Phase 3). The nav highlight matches anywhere
 // under `/insights/*`.
 const insightsActive = $derived(pathMatches(page.url.pathname, ROUTES.INSIGHTS));
-const memoryActive = $derived(pathMatches(page.url.pathname, ROUTES.MEMORY));
-const memoryHomeActive = $derived(page.url.pathname === ROUTES.MEMORY);
-const memoryBrowseActive = $derived(pathMatches(page.url.pathname, ROUTES.MEMORY_BROWSE));
-const memoryReviewActive = $derived(pathMatches(page.url.pathname, ROUTES.MEMORY_REVIEW));
-const memoryNewActive = $derived(pathMatches(page.url.pathname, ROUTES.MEMORY_NEW));
-const repsActive = $derived(pathMatches(page.url.pathname, ROUTES.REPS));
 // `/program` rolls Quals + Goal + Plan + Coverage into one tabbed surface.
 // The nav highlight is active anywhere under `/program/*`, plus on the
 // session entry points (which the Plan tab CTA leads into).
@@ -132,9 +145,6 @@ const programActive = $derived(
 // link (study-app-ia-cleanup Phase 3). Highlight matches anywhere
 // under `/reference/*`.
 const referenceActive = $derived(pathMatches(page.url.pathname, ROUTES.REFERENCE));
-const helpActive = $derived(pathMatches(page.url.pathname, ROUTES.HELP));
-const helpConceptsActive = $derived(pathMatches(page.url.pathname, ROUTES.HELP_CONCEPTS));
-const helpIndexActive = $derived(helpActive && !helpConceptsActive);
 // The Insights index renders as a full-bleed TUI grid; every other
 // surface keeps the centered reading-column layout. The legacy
 // `/dashboard` path is handled at the hook layer (301) and never
@@ -162,53 +172,12 @@ const selection = $derived(
 // affordance keeps the user from wondering why their click was ignored.
 const themePickerLocked = $derived(themePref != null && selection.theme !== themePref);
 
-// Memory + help dropdown state lives in this layout (study-specific nav).
-// Identity-menu state has moved into AppHeader.
-let helpMenu = $state<HTMLDetailsElement | null>(null);
-let memoryMenu = $state<HTMLDetailsElement | null>(null);
-
-function closeDetails(target: HTMLDetailsElement | null) {
-	if (!target?.open) return;
-	target.open = false;
-	const summary = target.querySelector('summary');
-	if (summary instanceof HTMLElement) summary.focus();
-}
-
-function handleNavMenuKeydown(event: KeyboardEvent) {
-	if (event.key !== 'Escape') return;
-	if (memoryMenu?.open) {
-		closeDetails(memoryMenu);
-		return;
-	}
-	if (helpMenu?.open) {
-		closeDetails(helpMenu);
-	}
-}
-
-function handleHelpMenuBlur(event: FocusEvent) {
-	if (!helpMenu) return;
-	const next = event.relatedTarget;
-	if (next instanceof Node && helpMenu.contains(next)) return;
-	helpMenu.open = false;
-}
-
-function handleHelpItemClick() {
-	if (helpMenu) helpMenu.open = false;
-}
-
-function handleMemoryMenuBlur(event: FocusEvent) {
-	if (!memoryMenu) return;
-	const next = event.relatedTarget;
-	if (next instanceof Node && memoryMenu.contains(next)) return;
-	memoryMenu.open = false;
-}
-
-function handleMemoryItemClick() {
-	if (memoryMenu) memoryMenu.open = false;
-}
+// Phase 4: dropdown state removed. Memory + Help dropdowns are gone;
+// the five top-level sections carry the entire nav surface, with sub-nav
+// living on each section index page (e.g. `LearnTabs.svelte` for the
+// Learn section). Identity-menu state lives in `AppHeader.svelte`; the
+// global Help search lives in the right cluster of the same header.
 </script>
-
-<svelte:window onkeydown={handleNavMenuKeydown} />
 
 <!--
 	Skip-to-content stays at the layout root (not in AppHeader) so it
@@ -230,71 +199,20 @@ function handleMemoryItemClick() {
 			<a href={ROUTES.STUDY} aria-current={studyActive ? 'page' : undefined} data-testid="nav-home"
 				>{NAV_LABELS.STUDY}</a
 			>
-			<a href={ROUTES.INSIGHTS} aria-current={insightsActive ? 'page' : undefined} data-testid="nav-insights"
-				>{NAV_LABELS.INSIGHTS}</a
+			<a href={ROUTES.LEARN} aria-current={learnActive ? 'page' : undefined} data-testid="nav-learn"
+				>{NAV_LABELS.LEARN}</a
 			>
 			<a href={ROUTES.PROGRAM} aria-current={programActive ? 'page' : undefined} data-testid="nav-program"
 				>{NAV_LABELS.PROGRAM}</a
+			>
+			<a href={ROUTES.INSIGHTS} aria-current={insightsActive ? 'page' : undefined} data-testid="nav-insights"
+				>{NAV_LABELS.INSIGHTS}</a
 			>
 			<a
 				href={ROUTES.REFERENCE}
 				aria-current={referenceActive ? 'page' : undefined}
 				data-testid="nav-reference">{NAV_LABELS.REFERENCE}</a
 			>
-			<details class="nav-menu" bind:this={memoryMenu} onfocusout={handleMemoryMenuBlur}>
-				<summary aria-haspopup="menu" aria-current={memoryActive ? 'page' : undefined}>
-					<span>{NAV_LABELS.MEMORY}</span>
-					<span class="chevron" aria-hidden="true">▾</span>
-				</summary>
-				<div class="nav-menu-panel" role="menu" aria-label="Memory sections">
-					<a
-						href={ROUTES.MEMORY}
-						role="menuitem"
-						aria-current={memoryHomeActive ? 'page' : undefined}
-						onclick={handleMemoryItemClick}>{NAV_LABELS.MEMORY_HOME}</a
-					>
-					<a
-						href={ROUTES.MEMORY_BROWSE}
-						role="menuitem"
-						aria-current={memoryBrowseActive ? 'page' : undefined}
-						onclick={handleMemoryItemClick}>{NAV_LABELS.MEMORY_BROWSE}</a
-					>
-					<a
-						href={ROUTES.MEMORY_REVIEW}
-						role="menuitem"
-						aria-current={memoryReviewActive ? 'page' : undefined}
-						onclick={handleMemoryItemClick}>{NAV_LABELS.MEMORY_REVIEW}</a
-					>
-					<a
-						href={ROUTES.MEMORY_NEW}
-						role="menuitem"
-						aria-current={memoryNewActive ? 'page' : undefined}
-						onclick={handleMemoryItemClick}>{NAV_LABELS.MEMORY_NEW}</a
-					>
-				</div>
-			</details>
-			<a href={ROUTES.REPS} aria-current={repsActive ? 'page' : undefined}>{NAV_LABELS.REPS}</a>
-			<a href={ROUTES.FLIGHT} aria-current={flightActive ? 'page' : undefined}>{NAV_LABELS.FLIGHT}</a>
-			<details class="nav-menu" bind:this={helpMenu} onfocusout={handleHelpMenuBlur}>
-				<summary aria-haspopup="menu" aria-current={helpActive ? 'page' : undefined}>
-					<span>{NAV_LABELS.HELP}</span>
-					<span class="chevron" aria-hidden="true">▾</span>
-				</summary>
-				<div class="nav-menu-panel" role="menu" aria-label="Help sections">
-					<a
-						href={ROUTES.HELP}
-						role="menuitem"
-						aria-current={helpIndexActive ? 'page' : undefined}
-						onclick={handleHelpItemClick}>{NAV_LABELS.HELP_INDEX}</a
-					>
-					<a
-						href={ROUTES.HELP_CONCEPTS}
-						role="menuitem"
-						aria-current={helpConceptsActive ? 'page' : undefined}
-						onclick={handleHelpItemClick}>{NAV_LABELS.HELP_CONCEPTS}</a
-					>
-				</div>
-			</details>
 		</nav>
 	{/snippet}
 	{#snippet helpSearch()}
@@ -367,94 +285,6 @@ function handleMemoryItemClick() {
 	}
 
 	.nav-sections a[aria-current='page'] {
-		color: var(--action-default-hover);
-		background: var(--action-default-wash);
-	}
-
-	.nav-menu {
-		position: relative;
-	}
-
-	.nav-menu > summary {
-		display: inline-flex;
-		align-items: center;
-		gap: var(--space-2xs);
-		cursor: pointer;
-		list-style: none;
-		color: var(--ink-muted);
-		font-weight: var(--type-ui-control-weight);
-		padding: var(--space-2xs) var(--space-sm);
-		border-radius: var(--radius-sm);
-		user-select: none;
-	}
-
-	.nav-menu > summary::-webkit-details-marker {
-		display: none;
-	}
-
-	.nav-menu > summary::marker {
-		content: '';
-	}
-
-	.nav-menu > summary:hover {
-		color: var(--ink-body);
-		background: var(--surface-sunken);
-	}
-
-	.nav-menu > summary:focus-visible {
-		outline: 2px solid var(--focus-ring);
-		outline-offset: 2px;
-	}
-
-	.nav-menu[open] > summary {
-		color: var(--ink-body);
-		background: var(--surface-sunken);
-	}
-
-	.nav-menu > summary[aria-current='page'] {
-		color: var(--action-default-hover);
-		background: var(--action-default-wash);
-	}
-
-	.nav-menu[open] .chevron {
-		transform: rotate(180deg);
-	}
-
-	.nav-menu .chevron {
-		font-size: var(--type-ui-caption-size);
-		line-height: 1;
-		transition: transform var(--motion-fast);
-	}
-
-	.nav-menu-panel {
-		position: absolute;
-		left: 0;
-		top: calc(100% + var(--space-2xs));
-		min-width: 12rem;
-		background: var(--surface-panel);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-md);
-		box-shadow: var(--shadow-lg);
-		padding: var(--space-2xs);
-		z-index: var(--z-dropdown);
-		display: flex;
-		flex-direction: column;
-		gap: 0;
-	}
-
-	.nav-menu-panel a {
-		padding: var(--space-sm) var(--space-sm);
-		border-radius: var(--radius-sm);
-		color: var(--ink-muted);
-		text-decoration: none;
-	}
-
-	.nav-menu-panel a:hover {
-		color: var(--ink-body);
-		background: var(--surface-sunken);
-	}
-
-	.nav-menu-panel a[aria-current='page'] {
 		color: var(--action-default-hover);
 		background: var(--action-default-wash);
 	}
