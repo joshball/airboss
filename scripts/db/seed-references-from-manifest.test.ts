@@ -17,10 +17,11 @@ import { createHash } from 'node:crypto';
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { REFERENCE_KINDS, REFERENCE_SECTION_LEVELS } from '@ab/constants';
 import { db } from '@ab/db/connection';
 import { __ac_seed_mapping_internal__ } from '@ab/sources/ac';
 import { __acs_seed_mapping_internal__ } from '@ab/sources/acs';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { afterAll, describe, expect, it } from 'vitest';
 import { reference, referenceFigure, referenceSection } from '../../libs/bc/study/src/schema';
 import { pickEditions, seedReferencesFromManifest } from './seed-references-from-manifest';
@@ -641,8 +642,12 @@ describe('seedReferencesFromManifest', () => {
 		const sections = await db.select().from(referenceSection).where(eq(referenceSection.referenceId, refRow.id));
 		expect(sections).toHaveLength(2);
 		const codes = sections.map((s) => s.code).sort();
-		expect(codes).toEqual([`§${partKey}.1`, `§${partKey}.3`]);
-		const sectionA = sections.find((s) => s.code === `§${partKey}.1`);
+		// Code is the URL-slug-shape form (`<part>.<section>`), NOT the
+		// citation-display form `§<part>.<section>` -- that's what
+		// `canonical_short` is for. The seeder strips the `§` prefix so
+		// `/library/regulations/14-cfr/<part>/<part>.<section>` resolves.
+		expect(codes).toEqual([`${partKey}.1`, `${partKey}.3`]);
+		const sectionA = sections.find((s) => s.code === `${partKey}.1`);
 		expect(sectionA?.level).toBe('section');
 		expect(sectionA?.depth).toBe(0);
 		expect(sectionA?.parentId).toBeNull();
@@ -679,6 +684,7 @@ describe('seedReferencesFromManifest', () => {
 			primaryCert: null,
 			sectionSchema: { levels: [] },
 			metadata: {},
+			seedOrigin: `test-${SUITE_TOKEN}-cfr-missing`,
 		});
 		fixtures.push({ slug: documentSlug, corpusDir: HANDBOOKS_DIR });
 		fixtures.push({ slug: dirSlug, corpusDir: REGS_DIR });
@@ -755,6 +761,7 @@ describe('seedReferencesFromManifest', () => {
 			primaryCert: null,
 			sectionSchema: { levels: [] },
 			metadata: {},
+			seedOrigin: `test-${SUITE_TOKEN}-cfr-partial`,
 		});
 		fixtures.push({ slug: documentSlug, corpusDir: HANDBOOKS_DIR });
 		fixtures.push({ slug: dirSlug, corpusDir: REGS_DIR });
@@ -1197,5 +1204,104 @@ describe('seedReferencesFromManifest', () => {
 		if (!older || !newer) return;
 		expect(older.supersededById).toBe(newer.id);
 		expect(newer.supersededById).toBeNull();
+	});
+});
+
+// ---------------------------------------------------------------------------
+// Cross-corpus seed-shape contract. Walks whatever real CFR rows the dev DB
+// happens to hold (idempotent across re-seeds; nothing test-tagged here)
+// and asserts the shape every renderer + URL parser depends on:
+//
+//   1. Section codes parse against the URL slug shape declared in
+//      libs/aviation/src/slugs.ts (SECTION_SHAPE).
+//   2. Top-level CFR sections sit at depth 0 with `parent_id IS NULL` --
+//      the shape `buildSectionListView` and `getFlatSection` query for.
+//   3. Top-level CFR section level is exactly `'section'` (not `'subsection'`
+//      or some other level the flat probe wouldn't match).
+//
+// If any of these contracts breaks, every CFR detail-page link 404s and
+// the section list silently falls through to the umbrella card. The unit
+// tests above pin synthetic-fixture behaviour; this suite pins the
+// integration with whatever the production seeder actually produced.
+// Skips cleanly when the dev DB hasn't been seeded with CFR rows yet.
+// ---------------------------------------------------------------------------
+
+describe('CFR seed-shape contract (real DB)', () => {
+	// Mirror of SECTION_SHAPE in libs/aviation/src/slugs.ts. Duplicated rather
+	// than imported so a refactor that loosens the production regex doesn't
+	// silently relax this contract.
+	const URL_SECTION_SHAPE = /^[a-z0-9]+(?:\.[a-z0-9]+)?(?:-[a-z0-9]+(?:\.[a-z0-9]+)?)?$/i;
+
+	// Real CFR rows only -- skip rows seed-tagged by other test suites
+	// running in parallel (their suite tokens land in `seed_origin`) AND
+	// rows with test-shape document slugs (`14cfr97-XXXX`) where the test
+	// race is faster than the row's `seed_origin` write.
+	const isProductionRow = (row: { seedOrigin: string | null; documentSlug: string }): boolean => {
+		if (row.seedOrigin && (row.seedOrigin.startsWith('test-') || row.seedOrigin.startsWith('regs-test-'))) {
+			return false;
+		}
+		// CFR test fixtures use slugs like `14cfr97-1234` (Part-token format).
+		// Production CFR slugs are `<title>cfr<part>` with no internal hyphen.
+		if (/^(14|49)cfr\d+-/.test(row.documentSlug)) return false;
+		return true;
+	};
+
+	it('every CFR top-level section has a code that parses as a URL slug', async () => {
+		const allCfrRefs = await db.select().from(reference).where(eq(reference.kind, REFERENCE_KINDS.CFR));
+		const cfrRefs = allCfrRefs.filter(isProductionRow);
+		if (cfrRefs.length === 0) {
+			// Dev DB without CFR seed -- skip rather than fail; the synthetic
+			// suite above still covers the regression on every run.
+			console.warn('cfr-shape contract: no CFR rows in DB -- skipping');
+			return;
+		}
+
+		const violations: { ref: string; code: string }[] = [];
+		for (const ref of cfrRefs) {
+			const sections = await db.select().from(referenceSection).where(eq(referenceSection.referenceId, ref.id));
+			for (const s of sections) {
+				if (!URL_SECTION_SHAPE.test(s.code)) {
+					violations.push({ ref: ref.documentSlug, code: s.code });
+				}
+			}
+		}
+
+		expect(
+			violations,
+			`section codes must parse as URL slugs (no \`§\` prefix etc.). ` +
+				`Failures: ${violations
+					.slice(0, 5)
+					.map((v) => `${v.ref}/${v.code}`)
+					.join(', ')}${violations.length > 5 ? ` +${violations.length - 5} more` : ''}`,
+		).toEqual([]);
+	});
+
+	it('every CFR reference with sections has at least one top-level section row', async () => {
+		// Lock the "data ingested but not seeded into reference_section"
+		// failure mode that produced the original bug: 11 CFR refs in the DB
+		// with zero matching reference_section rows. If this returns nothing,
+		// the regulations browse page falls through to the external link.
+		const allCfrRefs = await db.select().from(reference).where(eq(reference.kind, REFERENCE_KINDS.CFR));
+		const cfrRefs = allCfrRefs.filter(isProductionRow);
+		if (cfrRefs.length === 0) return;
+
+		const refsWithoutSections: string[] = [];
+		for (const ref of cfrRefs) {
+			const top = await db
+				.select()
+				.from(referenceSection)
+				.where(
+					and(eq(referenceSection.referenceId, ref.id), eq(referenceSection.level, REFERENCE_SECTION_LEVELS.SECTION)),
+				)
+				.limit(1);
+			if (top.length === 0) refsWithoutSections.push(ref.documentSlug);
+		}
+
+		expect(
+			refsWithoutSections,
+			`CFR reference rows must have ingested section rows. Missing: ${refsWithoutSections.join(', ')}. ` +
+				`Run \`bun run sources register cfr --title=14 --edition=<date>\` then ` +
+				`\`bun scripts/db/seed-references-from-manifest.ts\`.`,
+		).toEqual([]);
 	});
 });

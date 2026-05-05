@@ -9,6 +9,7 @@
  */
 
 import { bauthUser } from '@ab/auth/schema';
+import { cardState, card as cardTable, review as reviewTable } from '@ab/bc-study/schema';
 import {
 	createCard,
 	getCard,
@@ -18,7 +19,6 @@ import {
 	setCardStatus,
 	submitReview,
 } from '@ab/bc-study/server';
-import { cardState, card as cardTable, review as reviewTable } from '@ab/bc-study/schema';
 import { CARD_TYPES, CONFIDENCE_LEVELS, DEV_ACCOUNTS, DOMAINS, REVIEW_RATINGS } from '@ab/constants';
 import { CARD_STATUSES } from '@ab/constants/study';
 import { eq } from 'drizzle-orm';

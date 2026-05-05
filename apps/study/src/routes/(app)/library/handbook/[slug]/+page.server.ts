@@ -9,7 +9,12 @@
 
 import { requireAuth } from '@ab/auth';
 import { parseHandbookSlug } from '@ab/aviation';
-import { getHandbookProgress, getReferenceByDocument, getReferenceById, listHandbookChapters } from '@ab/bc-study/server';
+import {
+	getHandbookProgress,
+	getReferenceByDocument,
+	getReferenceById,
+	listHandbookChapters,
+} from '@ab/bc-study/server';
 import { QUERY_PARAMS } from '@ab/constants';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';

@@ -1,6 +1,10 @@
 <script lang="ts">
-import LibraryCard from '@ab/aviation/ui/LibraryCard.svelte';
-import { type LibraryRegulationsKind, ROUTES } from '@ab/constants';
+import AcCard from '@ab/aviation/ui/cards/AcCard.svelte';
+import AimCorpusCard from '@ab/aviation/ui/cards/AimCorpusCard.svelte';
+import CfrPartCard from '@ab/aviation/ui/cards/CfrPartCard.svelte';
+import NtsbCard from '@ab/aviation/ui/cards/NtsbCard.svelte';
+import UmbrellaCard from '@ab/aviation/ui/cards/UmbrellaCard.svelte';
+import { LIBRARY_REGULATIONS_KINDS, type LibraryRegulationsKind, REFERENCE_KINDS, ROUTES } from '@ab/constants';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import type { PageData } from './$types';
@@ -11,6 +15,9 @@ let { data }: { data: PageData } = $props();
 // occasionally widens kind back to `string`. Re-narrow at the boundary
 // so the route helpers stay typed.
 const kind = $derived(data.kind as LibraryRegulationsKind);
+const titleNumber = $derived(
+	kind === LIBRARY_REGULATIONS_KINDS.CFR_14 ? 14 : kind === LIBRARY_REGULATIONS_KINDS.CFR_49 ? 49 : null,
+);
 </script>
 
 <svelte:head>
@@ -52,24 +59,25 @@ const kind = $derived(data.kind as LibraryRegulationsKind);
 			<ul class="grid">
 				{#each data.groups as group (group.groupKey)}
 					<li>
-						<a class="card" href={ROUTES.LIBRARY_REGULATIONS_GROUP(kind, group.groupKey)}>
-							<span class="card-title">{group.label}</span>
-							{#if group.officialTitle}
-								<span class="card-official">{group.officialTitle}</span>
-							{/if}
-							{#if group.description}
-								<p class="card-description">{group.description}</p>
-							{/if}
-							{#if group.whyItMatters}
-								<p class="card-why">
-									<span class="card-why-label">Why pilots care</span>
-									<span>{group.whyItMatters}</span>
-								</p>
-							{/if}
-							<span class="card-count">
-								{group.referenceCount} reference{group.referenceCount === 1 ? '' : 's'}
-							</span>
-						</a>
+						{#if titleNumber !== null}
+							<CfrPartCard
+								titleNumber={titleNumber as 14 | 49}
+								partNumber={group.groupKey}
+								partTitle={group.officialTitle ?? `Part ${group.groupKey}`}
+								description={group.description ?? null}
+								whyItMatters={group.whyItMatters ?? null}
+								href={ROUTES.LIBRARY_REGULATIONS_GROUP(kind, group.groupKey)}
+								sectionCount={group.referenceCount}
+							/>
+						{:else}
+							<UmbrellaCard
+								title={group.label}
+								officialTitle={group.officialTitle ?? null}
+								description={group.description ?? null}
+								whyItMatters={group.whyItMatters ?? null}
+								href={ROUTES.LIBRARY_REGULATIONS_GROUP(kind, group.groupKey)}
+							/>
+						{/if}
 					</li>
 				{/each}
 			</ul>
@@ -79,20 +87,44 @@ const kind = $derived(data.kind as LibraryRegulationsKind);
 	{#if data.umbrellas.length > 0}
 		<section aria-label="Umbrella references" class="block">
 			<h2>Umbrella references</h2>
-			<ul class="grid grid-wide">
+			<ul class="grid">
 				{#each data.umbrellas as ref (ref.id)}
 					<li>
-						<LibraryCard
-							documentSlug={ref.documentSlug}
-							edition={ref.edition}
-							title={ref.title}
-							publisher={ref.publisher}
-							kind={ref.kind}
-							subjects={[]}
-							externalUrl={ref.externalUrl}
-							isReadable={false}
-							progress={null}
-						/>
+						{#if ref.kind === REFERENCE_KINDS.AIM || ref.kind === REFERENCE_KINDS.PCG}
+							<AimCorpusCard
+								title={ref.title}
+								officialTitle={ref.officialTitle ?? null}
+								description={ref.description ?? ''}
+								whyItMatters={ref.whyItMatters ?? ''}
+								edition={ref.edition}
+								external={ref.externalUrl ? { url: ref.externalUrl, label: ref.publisher } : null}
+							/>
+						{:else if ref.kind === REFERENCE_KINDS.NTSB}
+							<NtsbCard
+								reportNumber={ref.documentSlug}
+								reportTitle={ref.title}
+								summary={ref.description ?? null}
+								external={ref.externalUrl ? { url: ref.externalUrl, label: ref.publisher } : null}
+							/>
+						{:else if ref.kind === REFERENCE_KINDS.AC}
+							<AcCard
+								acNumber={ref.documentSlug.replace(/^ac-/, '')}
+								acTitle={ref.title}
+								edition={ref.edition}
+								description={ref.description ?? null}
+								external={ref.externalUrl ? { url: ref.externalUrl, label: ref.publisher } : null}
+							/>
+						{:else}
+							<UmbrellaCard
+								title={ref.title}
+								officialTitle={ref.officialTitle ?? null}
+								description={ref.description ?? null}
+								whyItMatters={ref.whyItMatters ?? null}
+								kindBadge={ref.kindLabel}
+								editionBadge={ref.edition}
+								external={ref.externalUrl ? { url: ref.externalUrl, label: ref.publisher } : null}
+							/>
+						{/if}
 					</li>
 				{/each}
 			</ul>
@@ -116,65 +148,6 @@ const kind = $derived(data.kind as LibraryRegulationsKind);
 		display: grid;
 		gap: var(--space-md);
 		grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
-	}
-	.grid-wide {
-		grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
-	}
-	.card {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-2xs);
-		padding: var(--space-md) var(--space-lg);
-		border-radius: var(--radius-md);
-		border: 1px solid var(--edge-default);
-		background: var(--surface-raised);
-		color: inherit;
-		text-decoration: none;
-		transition: border-color var(--motion-fast) ease;
-	}
-	.card:hover {
-		border-color: var(--action-default-edge);
-	}
-	.card:focus-visible {
-		border-color: var(--action-default-edge);
-		outline: 2px solid var(--focus-ring);
-		outline-offset: 2px;
-	}
-	.card-title {
-		font-size: var(--font-size-lg);
-		font-weight: var(--font-weight-semibold);
-	}
-	.card-official {
-		color: var(--ink-muted);
-		font-size: var(--font-size-sm);
-		font-style: italic;
-	}
-	.card-description {
-		margin: var(--space-2xs) 0 0;
-		font-size: var(--font-size-sm);
-		line-height: var(--line-height-relaxed, 1.55);
-	}
-	.card-why {
-		margin: var(--space-2xs) 0 0;
-		padding: var(--space-xs) var(--space-sm);
-		border-left: 2px solid var(--action-default-edge);
-		background: var(--surface-sunken, var(--surface-raised));
-		font-size: var(--font-size-sm);
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-3xs);
-	}
-	.card-why-label {
-		font-size: var(--font-size-xs);
-		font-weight: var(--font-weight-semibold);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-caps);
-		color: var(--ink-muted);
-	}
-	.card-count {
-		margin-top: var(--space-xs);
-		color: var(--ink-muted);
-		font-size: var(--font-size-sm);
 	}
 	.kind-overview {
 		margin-bottom: var(--space-lg);

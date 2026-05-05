@@ -186,13 +186,19 @@ export async function seedCfrManifest(
 			const bodyAbsPath = resolve(editionDir, entry.body_path);
 			const contentMd = await readFile(bodyAbsPath, 'utf-8');
 
+			// `canonical_short` is the citation-display form (`§91.103`).
+			// `code` must be URL-slug-shape (`91.103`) so the
+			// `/library/regulations/14-cfr/91/91.103` route can resolve.
+			// SECTION_SHAPE in libs/aviation/src/slugs.ts rejects the `§`,
+			// which silently 404s every detail-page link.
+			const sectionCode = entry.canonical_short.replace(/^§/, '');
 			const { changed } = await upsertReferenceSection({
 				referenceId: ref.id,
 				parentId: null,
 				level: REFERENCE_SECTION_LEVELS.SECTION,
 				ordinal,
 				depth: 0,
-				code: entry.canonical_short,
+				code: sectionCode,
 				// CFR entries already carry their `airboss-ref:regs/cfr-<title>/...`
 				// URI as `entry.id` from the registry's bootstrap (per ADR 019). Use
 				// it directly so the URI source-of-truth stays the registry, not

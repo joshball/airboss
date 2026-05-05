@@ -22,51 +22,6 @@
 // Browser-safe value exports (no DB connection import in their module)
 // ----------------------------------------------------------------------
 
-// Pure deck-spec encoding/decoding -- used by `.svelte` pages directly.
-export {
-	canonicalDeckSpecJson,
-	computeDeckHash,
-	DeckSpecDecodeError,
-	decodeDeckSpec,
-	encodeDeckSpec,
-	normalizeDeckSpec,
-	summarizeDeckSpec,
-} from './deck-spec';
-
-// Pure session-engine entry point (callbacks abstract every DB read).
-export { runEngine } from './engine';
-
-// Cross-file error classes (shared by 2+ modules in the BC).
-export { SourceRefRequiredError, UpsertReturnedNoRowError } from './errors';
-
-// Display formatters (`.svelte` pages render review intervals via these).
-export { formatNextInterval, formatNextIntervalAbsolute } from './formatters';
-
-// Lens projection -- pure transforms over query callbacks; `db` is a parameter.
-export type {
-	AcsLensFilters,
-	DomainLensFilters,
-	Lens,
-	LensInput,
-	LensLeaf,
-	LensResult,
-	LensTreeNode,
-	MasteryRollup,
-} from './lenses';
-export { acsLens, computeMasteryRollup, domainLens, LensError } from './lenses';
-
-// Runtime handbook input schemas. Route handlers parse `+server.ts` request
-// bodies (heartbeat / notes) and form-action submissions (read status)
-// against these. Manifest schemas + citation ingestion schemas
-// (manifestSchema, acsManifestSchema, citationSchema, legacyCitationSchema,
-// structuredCitationSchema, etc.) are build-only -- exported from
-// `@ab/bc-study/build`.
-export {
-	handbookHeartbeatInputSchema,
-	handbookNotesInputSchema,
-	handbookReadStatusSchema,
-} from './manifest-validation';
-
 // Goal-CRUD Zod schemas + their inferred input types. The BC `goals.ts`
 // write helpers parse against these inside their function bodies as a
 // defense-in-depth layer on top of the route-level coercion.
@@ -86,7 +41,45 @@ export {
 	type UpdateGoalInput,
 	updateGoalInputSchema,
 } from './credentials.validation';
-
+// Pure deck-spec encoding/decoding -- used by `.svelte` pages directly.
+export {
+	canonicalDeckSpecJson,
+	computeDeckHash,
+	DeckSpecDecodeError,
+	decodeDeckSpec,
+	encodeDeckSpec,
+	normalizeDeckSpec,
+	summarizeDeckSpec,
+} from './deck-spec';
+// Pure session-engine entry point (callbacks abstract every DB read).
+export { runEngine } from './engine';
+// Cross-file error classes (shared by 2+ modules in the BC).
+export { SourceRefRequiredError, UpsertReturnedNoRowError } from './errors';
+// Display formatters (`.svelte` pages render review intervals via these).
+export { formatNextInterval, formatNextIntervalAbsolute } from './formatters';
+// Lens projection -- pure transforms over query callbacks; `db` is a parameter.
+export type {
+	AcsLensFilters,
+	DomainLensFilters,
+	Lens,
+	LensInput,
+	LensLeaf,
+	LensResult,
+	LensTreeNode,
+	MasteryRollup,
+} from './lenses';
+export { acsLens, computeMasteryRollup, domainLens, LensError } from './lenses';
+// Runtime handbook input schemas. Route handlers parse `+server.ts` request
+// bodies (heartbeat / notes) and form-action submissions (read status)
+// against these. Manifest schemas + citation ingestion schemas
+// (manifestSchema, acsManifestSchema, citationSchema, legacyCitationSchema,
+// structuredCitationSchema, etc.) are build-only -- exported from
+// `@ab/bc-study/build`.
+export {
+	handbookHeartbeatInputSchema,
+	handbookNotesInputSchema,
+	handbookReadStatusSchema,
+} from './manifest-validation';
 // Drizzle table objects + row types. Drizzle's `pg-core` is browser-safe
 // (it's a SQL builder; the postgres driver lives in `@ab/db/connection`).
 // Table objects are exported here so cross-BC code, scripts, and SSR can
@@ -187,11 +180,9 @@ export {
 	teachingExercise,
 	userPref,
 } from './schema';
-
 // FSRS scheduler -- pure math.
 export type { CardSchedulerState, ScheduleResult } from './srs';
 export { fsrsDefaultParams, fsrsInitialState, fsrsPreviewAll, fsrsSchedule } from './srs';
-
 // Pure Zod schemas for card / scenario / review submission shapes.
 export {
 	cardTagsSchema,

@@ -1,5 +1,7 @@
 <script lang="ts">
-import { ROUTES } from '@ab/constants';
+import CfrTitleCard from '@ab/aviation/ui/cards/CfrTitleCard.svelte';
+import UmbrellaCard from '@ab/aviation/ui/cards/UmbrellaCard.svelte';
+import { LIBRARY_REGULATIONS_KINDS, ROUTES } from '@ab/constants';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import type { PageData } from './$types';
 
@@ -10,7 +12,10 @@ let { data }: { data: PageData } = $props();
 	<title>Regulations & policy -- airboss</title>
 </svelte:head>
 
-<PageHeader title="Regulations & policy" subtitle="Federal regulations, AIM, advisory circulars, and accident-investigation references.">
+<PageHeader
+	title="Regulations & policy"
+	subtitle="Federal regulations, AIM, advisory circulars, and accident-investigation references."
+>
 	{#snippet eyebrowSnippet()}
 		<nav aria-label="Breadcrumb">
 			<a href={ROUTES.LIBRARY}>Library</a> &raquo; <span>Regulations & policy</span>
@@ -20,25 +25,26 @@ let { data }: { data: PageData } = $props();
 
 <ul class="grid">
 	{#each data.buckets as bucket (bucket.kind)}
-		<li>
-			<a class="card" class:empty={bucket.count === 0} href={ROUTES.LIBRARY_REGULATIONS_KIND(bucket.kind)}>
-				<span class="card-title">{bucket.label}</span>
-				{#if bucket.officialTitle}
-					<span class="card-official">{bucket.officialTitle}</span>
-				{/if}
-				{#if bucket.description}
-					<p class="card-description">{bucket.description}</p>
-				{/if}
-				{#if bucket.whyItMatters}
-					<p class="card-why">
-						<span class="card-why-label">Why pilots care</span>
-						<span>{bucket.whyItMatters}</span>
-					</p>
-				{/if}
-				<span class="card-count">
-					{bucket.count} reference{bucket.count === 1 ? '' : 's'}
-				</span>
-			</a>
+		<li class:empty={bucket.count === 0}>
+			{#if bucket.kind === LIBRARY_REGULATIONS_KINDS.CFR_14 || bucket.kind === LIBRARY_REGULATIONS_KINDS.CFR_49}
+				<CfrTitleCard
+					shortLabel={bucket.label}
+					topic={bucket.topic ?? ''}
+					officialTitle={bucket.officialTitle ?? ''}
+					description={bucket.description ?? ''}
+					whyItMatters={bucket.whyItMatters ?? ''}
+					href={ROUTES.LIBRARY_REGULATIONS_KIND(bucket.kind)}
+					countLabel={`${bucket.count} reference${bucket.count === 1 ? '' : 's'}`}
+				/>
+			{:else}
+				<UmbrellaCard
+					title={bucket.label}
+					officialTitle={bucket.officialTitle ?? null}
+					description={bucket.description ?? null}
+					whyItMatters={bucket.whyItMatters ?? null}
+					href={ROUTES.LIBRARY_REGULATIONS_KIND(bucket.kind)}
+				/>
+			{/if}
 		</li>
 	{/each}
 </ul>
@@ -52,63 +58,7 @@ let { data }: { data: PageData } = $props();
 		gap: var(--space-md);
 		grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
 	}
-	.card {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-2xs);
-		padding: var(--space-md) var(--space-lg);
-		border-radius: var(--radius-md);
-		border: 1px solid var(--edge-default);
-		background: var(--surface-raised);
-		color: inherit;
-		text-decoration: none;
-		transition: border-color var(--motion-fast) ease;
-	}
-	.card:hover {
-		border-color: var(--action-default-edge);
-	}
-	.card:focus-visible {
-		border-color: var(--action-default-edge);
-		outline: 2px solid var(--focus-ring);
-		outline-offset: 2px;
-	}
-	.card.empty {
+	li.empty {
 		opacity: 0.55;
-	}
-	.card-title {
-		font-size: var(--font-size-lg);
-		font-weight: var(--font-weight-semibold);
-	}
-	.card-official {
-		color: var(--ink-muted);
-		font-size: var(--font-size-sm);
-		font-style: italic;
-	}
-	.card-description {
-		margin: var(--space-2xs) 0 0;
-		font-size: var(--font-size-sm);
-		line-height: var(--line-height-relaxed, 1.55);
-	}
-	.card-why {
-		margin: var(--space-2xs) 0 0;
-		padding: var(--space-xs) var(--space-sm);
-		border-left: 2px solid var(--action-default-edge);
-		background: var(--surface-sunken, var(--surface-raised));
-		font-size: var(--font-size-sm);
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-3xs);
-	}
-	.card-why-label {
-		font-size: var(--font-size-xs);
-		font-weight: var(--font-weight-semibold);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-caps);
-		color: var(--ink-muted);
-	}
-	.card-count {
-		margin-top: var(--space-xs);
-		color: var(--ink-muted);
-		font-size: var(--font-size-sm);
 	}
 </style>

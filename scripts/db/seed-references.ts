@@ -31,7 +31,7 @@ import {
 import { client } from '@ab/db/connection';
 import { parse } from 'yaml';
 import { z } from 'zod';
-import { upsertReference } from '../../libs/bc/study/src/references';
+import { attachSupersededByLatest, getReferenceByDocument, upsertReference } from '../../libs/bc/study/src/references';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(HERE, '..', '..');
@@ -98,6 +98,7 @@ export async function seedReferences(options: SeedReferencesOptions = {}): Promi
 				.filter((f) => f.endsWith('.yaml') || f.endsWith('.yml'))
 				.sort();
 
+	const slugsTouched = new Set<string>();
 	for (const filename of filenames) {
 		const path = resolve(REFERENCES_DIR, filename);
 		if (!existsSync(path) || !statSync(path).isFile()) {
@@ -120,7 +121,25 @@ export async function seedReferences(options: SeedReferencesOptions = {}): Promi
 				seedOrigin: options.seedOrigin ?? null,
 			});
 			summary.rowsUpserted += 1;
+			slugsTouched.add(entry.slug);
 		}
+	}
+
+	// Wire `supersededById` chains for slugs that may have a manifest-seeded
+	// sibling (e.g. AFH 3B in YAML coexists with AFH 3C from the manifest
+	// seeder). The manifest seeder's own chain step only fires when it sees
+	// >1 edition in the manifest tree, so cross-path pairs (one YAML row,
+	// one manifest row) need this pass. Idempotent: a slug with one row in
+	// the DB resolves to itself and `attachSupersededByLatest` is a no-op
+	// (the WHERE clause excludes the latest id).
+	//
+	// Caveat: relies on `phaseHandbooks` running before `phaseReferences` in
+	// seed-all.ts; standalone `bun scripts/db/seed-references.ts` on a fresh
+	// DB without a prior manifest seed will leave the chain unset until the
+	// manifest seeder runs. The combined seed flow is the authoritative path.
+	for (const slug of slugsTouched) {
+		const latest = await getReferenceByDocument(slug);
+		await attachSupersededByLatest(slug, latest.id);
 	}
 
 	return summary;
