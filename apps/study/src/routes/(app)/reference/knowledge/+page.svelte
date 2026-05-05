@@ -10,6 +10,7 @@ import {
 	NODE_LIFECYCLE_LABELS,
 	NODE_LIFECYCLE_VALUES,
 	type NodeLifecycle,
+	PAGE_EXPLAINER_KEYS,
 	QUERY_PARAMS,
 	ROUTES,
 	STUDY_PRIORITY_LABELS,
@@ -25,9 +26,11 @@ import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import FilterCard from '@ab/ui/components/FilterCard.svelte';
 import type { FilterChipDef } from '@ab/ui/components/FilterChips.svelte';
 import FilterChips from '@ab/ui/components/FilterChips.svelte';
+import PageExplainer from '@ab/ui/components/PageExplainer.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import Pager from '@ab/ui/components/Pager.svelte';
 import ResultSummary from '@ab/ui/components/ResultSummary.svelte';
+import Tooltip from '@ab/ui/components/Tooltip.svelte';
 import { buildQuery, humanize } from '@ab/utils';
 import { goto } from '$app/navigation';
 import type { PageData } from './$types';
@@ -178,7 +181,13 @@ const groups = $derived.by<BrowseListGroup<NodeRow>[]>(() => {
 		{/snippet}
 	</PageHeader>
 
-	<FilterCard resetHref={ROUTES.KNOWLEDGE} ariaLabel="Filter nodes">
+	<PageExplainer pageKey={PAGE_EXPLAINER_KEYS.REFERENCE_KNOWLEDGE}>
+		The
+		<Tooltip for="knowledge-node">knowledge graph</Tooltip>
+		is a set of atomic concepts (one piece of pilot knowledge per node) plus the prerequisite / related / applied-by relationships between them. Cards and reps attach to nodes; mastery is measured per node.
+	</PageExplainer>
+
+	<FilterCard resetHref={ROUTES.REFERENCE_KNOWLEDGE} ariaLabel="Filter nodes">
 		{#snippet hidden()}
 			<input type="hidden" name={QUERY_PARAMS.PAGE} value="1" />
 			<input
@@ -271,7 +280,7 @@ const groups = $derived.by<BrowseListGroup<NodeRow>[]>(() => {
 	{:else}
 		<BrowseList {groups}>
 			{#snippet item(n)}
-				<BrowseListItem href={ROUTES.KNOWLEDGE_SLUG(n.id)} id={`node-${n.id}`}>
+				<BrowseListItem href={ROUTES.REFERENCE_KNOWLEDGE_SLUG(n.id)} id={`node-${n.id}`}>
 					{#snippet title()}
 						<div class="card-head">
 							<span class="card-title">{n.title}</span>

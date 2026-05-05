@@ -42,7 +42,7 @@ function citedByHref(type: CitationSourceType, id: string): string | null {
 		case CITATION_SOURCE_TYPES.SCENARIO:
 			return ROUTES.REP_DETAIL(id);
 		case CITATION_SOURCE_TYPES.NODE:
-			return ROUTES.KNOWLEDGE_SLUG(id);
+			return ROUTES.REFERENCE_KNOWLEDGE_SLUG(id);
 		default:
 			return null;
 	}
@@ -276,7 +276,7 @@ const citedByItems = $derived<CitedByItem[]>(
 				{#each edges.requires as e (e.toNodeId)}
 					<li>
 						{#if e.targetExists}
-							<a href={ROUTES.KNOWLEDGE_SLUG(e.toNodeId)}>{e.title ?? e.toNodeId}</a>
+							<a href={ROUTES.REFERENCE_KNOWLEDGE_SLUG(e.toNodeId)}>{e.title ?? e.toNodeId}</a>
 						{:else}
 							<span class="gap"
 								>{e.title ?? e.toNodeId} <small class="gap-note">(not yet authored)</small></span
@@ -293,7 +293,7 @@ const citedByItems = $derived<CitedByItem[]>(
 			<h2>Applies in</h2>
 			<ul class="edge-list">
 				{#each edges.appliedBy as e (e.toNodeId)}
-					<li><a href={ROUTES.KNOWLEDGE_SLUG(e.toNodeId)}>{e.title ?? e.toNodeId}</a></li>
+					<li><a href={ROUTES.REFERENCE_KNOWLEDGE_SLUG(e.toNodeId)}>{e.title ?? e.toNodeId}</a></li>
 				{/each}
 			</ul>
 		</section>
@@ -304,7 +304,7 @@ const citedByItems = $derived<CitedByItem[]>(
 			<h2>Taught by</h2>
 			<ul class="edge-list">
 				{#each edges.taughtBy as e (e.toNodeId)}
-					<li><a href={ROUTES.KNOWLEDGE_SLUG(e.toNodeId)}>{e.title ?? e.toNodeId}</a></li>
+					<li><a href={ROUTES.REFERENCE_KNOWLEDGE_SLUG(e.toNodeId)}>{e.title ?? e.toNodeId}</a></li>
 				{/each}
 			</ul>
 		</section>
@@ -317,7 +317,7 @@ const citedByItems = $derived<CitedByItem[]>(
 				{#each edges.deepens as e (e.toNodeId)}
 					<li>
 						{#if e.targetExists}
-							<a href={ROUTES.KNOWLEDGE_SLUG(e.toNodeId)}>{e.title ?? e.toNodeId}</a>
+							<a href={ROUTES.REFERENCE_KNOWLEDGE_SLUG(e.toNodeId)}>{e.title ?? e.toNodeId}</a>
 						{:else}
 							<span class="gap"
 								>{e.title ?? e.toNodeId} <small class="gap-note">(not yet authored)</small></span
@@ -336,7 +336,7 @@ const citedByItems = $derived<CitedByItem[]>(
 				{#each edges.related as e (e.toNodeId)}
 					<li>
 						{#if e.targetExists}
-							<a href={ROUTES.KNOWLEDGE_SLUG(e.toNodeId)}>{e.title ?? e.toNodeId}</a>
+							<a href={ROUTES.REFERENCE_KNOWLEDGE_SLUG(e.toNodeId)}>{e.title ?? e.toNodeId}</a>
 						{:else}
 							<span class="gap"
 								>{e.title ?? e.toNodeId} <small class="gap-note">(not yet authored)</small></span

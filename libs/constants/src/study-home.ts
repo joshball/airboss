@@ -115,6 +115,18 @@ export const PAGE_EXPLAINER_KEYS = {
 	PROGRAM_PLAN: 'program-plan',
 	/** `/program` Coverage tab. Phase 2 of study-app-ia-cleanup. */
 	PROGRAM_COVERAGE: 'program-coverage',
+	/** `/insights` index. Phase 3 of study-app-ia-cleanup. */
+	INSIGHTS: 'insights',
+	/** `/insights/calibration` detail. Phase 3 of study-app-ia-cleanup. */
+	INSIGHTS_CALIBRATION: 'insights-calibration',
+	/** `/insights/lens` family index. Phase 3 of study-app-ia-cleanup. */
+	INSIGHTS_LENS: 'insights-lens',
+	/** `/reference` index. Phase 3 of study-app-ia-cleanup. */
+	REFERENCE: 'reference',
+	/** `/reference/knowledge` browse / detail. Phase 3 of study-app-ia-cleanup. */
+	REFERENCE_KNOWLEDGE: 'reference-knowledge',
+	/** `/reference/glossary` canonical glossary page. Phase 3 of study-app-ia-cleanup. */
+	REFERENCE_GLOSSARY: 'reference-glossary',
 } as const;
 
 export type PageExplainerKey = (typeof PAGE_EXPLAINER_KEYS)[keyof typeof PAGE_EXPLAINER_KEYS];

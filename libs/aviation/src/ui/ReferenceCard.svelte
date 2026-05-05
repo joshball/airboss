@@ -48,7 +48,7 @@ const matchedParts = $derived.by<HighlightParts | null>(() => {
 });
 </script>
 
-<a class="card" href={ROUTES.GLOSSARY_ID(reference.id)}>
+<a class="card" href={ROUTES.REFERENCE_GLOSSARY_ID(reference.id)}>
 	<header class="hd">
 		<h3>
 			{#if titleParts}{titleParts.before}<mark>{titleParts.match}</mark>{titleParts.after}{:else}{reference.displayName}{/if}

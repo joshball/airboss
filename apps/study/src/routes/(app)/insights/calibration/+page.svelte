@@ -6,15 +6,18 @@ import {
 	CONFIDENCE_LEVEL_LABELS,
 	type ConfidenceLevel,
 	domainLabel,
+	PAGE_EXPLAINER_KEYS,
 	QUERY_PARAMS,
 	ROUTES,
 	SESSION_MODES,
 } from '@ab/constants';
 import Button from '@ab/ui/components/Button.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
+import PageExplainer from '@ab/ui/components/PageExplainer.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import ScoreCard from '@ab/ui/components/ScoreCard.svelte';
 import ScoreMeta, { type ScoreMetaItem } from '@ab/ui/components/ScoreMeta.svelte';
+import Tooltip from '@ab/ui/components/Tooltip.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -231,6 +234,11 @@ const interpretation = $derived(
 		title="Calibration"
 		subtitle="Where your confidence matches your accuracy -- and where it doesn't."
 	/>
+
+	<PageExplainer pageKey={PAGE_EXPLAINER_KEYS.INSIGHTS_CALIBRATION}>
+		<Tooltip for="calibration">Calibration</Tooltip>
+		measures whether your stated confidence matches how often you're actually right. Both directions matter -- overconfidence is a known accident-chain precondition; underconfidence slows learning.
+	</PageExplainer>
 
 	{#if !hasData}
 		<EmptyState title="Not enough data yet">

@@ -10,10 +10,12 @@ import {
 import { PRE_HYDRATION_SCRIPT } from '@ab/themes/generated/pre-hydration';
 import { createErrorHandler, createLogger } from '@ab/utils';
 import type { Handle, HandleServerError } from '@sveltejs/kit';
+import { sequence } from '@sveltejs/kit/hooks';
 import { building, dev } from '$app/environment';
 import { auth } from '$lib/server/auth';
 import { rewriteSetCookieDomain } from '$lib/server/cookies';
 import { maybeRunDiscovery } from '$lib/server/discovery';
+import { resolveLegacyRedirect } from '$lib/server/legacy-redirects';
 
 const log = createLogger('study');
 const errorHandler = createErrorHandler({ logger: log });
@@ -91,7 +93,26 @@ export const handleError: HandleServerError = ({ error, event, status, message }
 	return errorHandler({ error, status, message, requestId, userId: event.locals.user?.id });
 };
 
-export const handle: Handle = async ({ event, resolve }) => {
+/**
+ * Legacy IA-cleanup redirects. Runs FIRST so an unauthenticated user
+ * landing on `/dashboard` redirects cleanly to `/insights` rather than
+ * bouncing through the auth gate first. The auth handle below sees only
+ * canonical paths after this layer.
+ *
+ * 301 (permanent) is correct here -- the rename is intentional and
+ * search engines / bookmark managers should pin the new URL. Tests
+ * assert the status code, not just the `Location` header.
+ */
+export const handleLegacyRedirects: Handle = ({ event, resolve }) => {
+	if (building) return resolve(event);
+	const target = resolveLegacyRedirect(event.url.pathname, event.url.search);
+	if (target !== null) {
+		return new Response(null, { status: 301, headers: { location: target } });
+	}
+	return resolve(event);
+};
+
+const handleAppRequest: Handle = async ({ event, resolve }) => {
 	// No-op during SvelteKit build/prerender analysis -- auth is not initialized then.
 	if (building) return resolve(event);
 
@@ -183,3 +204,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	return response;
 };
+
+/**
+ * Composed handle: legacy redirects run first (so renamed paths never
+ * hit auth/session lookup) and the main app handle runs second.
+ */
+export const handle: Handle = sequence(handleLegacyRedirects, handleAppRequest);

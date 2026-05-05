@@ -41,7 +41,7 @@ const flightbagHandbookUrl = $derived(
 		<ul class="chapters">
 			{#each chapters as chapter (chapter.id)}
 				<li class="chapter">
-					<a class="chapter-link" href={ROUTES.LENS_HANDBOOK_CHAPTER(reference.documentSlug, chapter.code)}>
+					<a class="chapter-link" href={ROUTES.INSIGHTS_LENS_HANDBOOK_CHAPTER(reference.documentSlug, chapter.code)}>
 						<span class="ch-code">{chapter.code}</span>
 						<span class="ch-title">{chapter.title}</span>
 					</a>

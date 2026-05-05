@@ -382,7 +382,7 @@ export async function getCitedBy(
  * `target` is the in-app deep link; chip render layer prefixes the flightbag
  * origin via `siblingOrigin('flightbag')` when crossing app boundaries.
  *
- * Knowledge-node targets get `href = ROUTES.KNOWLEDGE_SLUG(id)` so chips on
+ * Knowledge-node targets get `href = ROUTES.REFERENCE_KNOWLEDGE_SLUG(id)` so chips on
  * cards / reps / scenarios deep-link to the node detail page.
  */
 export async function resolveCitationTargets(
@@ -477,7 +477,7 @@ export async function resolveCitationTargets(
 					id: c.targetId,
 					label: title ?? c.targetId,
 					detail: title ? targetTypeLabel : `${targetTypeLabel} (missing)`,
-					href: title === undefined ? undefined : ROUTES.KNOWLEDGE_SLUG(c.targetId),
+					href: title === undefined ? undefined : ROUTES.REFERENCE_KNOWLEDGE_SLUG(c.targetId),
 				},
 			};
 		}

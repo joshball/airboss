@@ -148,7 +148,7 @@ function jumpBucket(direction: 1 | -1): void {
 }
 
 function activate(result: SearchResult): void {
-	const path = result.library === 'aviation' ? ROUTES.GLOSSARY_ID(result.id) : ROUTES.HELP_ID(result.id);
+	const path = result.library === 'aviation' ? ROUTES.REFERENCE_GLOSSARY_ID(result.id) : ROUTES.HELP_ID(result.id);
 	onClose();
 	void goto(path);
 }

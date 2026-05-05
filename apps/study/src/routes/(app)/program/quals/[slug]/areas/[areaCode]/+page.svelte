@@ -74,7 +74,7 @@ const tasks = $derived(data.tasks);
 											<ul class="link-list">
 												{#each elv.linkedNodes as link (link.node.id)}
 													<li>
-														<a href={ROUTES.KNOWLEDGE_SLUG(link.node.id)}>{link.node.title}</a>
+														<a href={ROUTES.REFERENCE_KNOWLEDGE_SLUG(link.node.id)}>{link.node.title}</a>
 													</li>
 												{/each}
 											</ul>

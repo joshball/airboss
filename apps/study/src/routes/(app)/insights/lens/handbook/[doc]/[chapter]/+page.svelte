@@ -21,7 +21,7 @@ const totalCitingNodes = $derived(sections.reduce((acc, s) => acc + s.citingNode
 	<nav class="crumb" aria-label="Breadcrumb">
 		<a href={ROUTES.LENS_HANDBOOK}>{NAV_LABELS.LENS_HANDBOOK}</a>
 		<span aria-hidden="true">/</span>
-		<a href={ROUTES.LENS_HANDBOOK_DOC(reference.documentSlug)}>{reference.title}</a>
+		<a href={ROUTES.INSIGHTS_LENS_HANDBOOK_DOC(reference.documentSlug)}>{reference.title}</a>
 		<span aria-hidden="true">/</span>
 		<span>Ch {chapter.code}</span>
 	</nav>
@@ -56,7 +56,7 @@ const totalCitingNodes = $derived(sections.reduce((acc, s) => acc + s.citingNode
 						<ul class="cite-list">
 							{#each entry.citingNodes as node (node.id)}
 								<li>
-									<a href={ROUTES.KNOWLEDGE_SLUG(node.id)} data-testid="lens-citing-node">
+									<a href={ROUTES.REFERENCE_KNOWLEDGE_SLUG(node.id)} data-testid="lens-citing-node">
 										{node.title}
 									</a>
 								</li>

@@ -47,7 +47,7 @@ function reasonText(area: {
 						<span class="severity-pill" data-severity={bucket.severity}>{WEAKNESS_SEVERITY_LABELS[bucket.severity]}</span>
 						<span class="bucket-count">{bucket.areas.length} domain{bucket.areas.length === 1 ? '' : 's'}</span>
 					</h2>
-					<a class="see-all" href={ROUTES.LENS_WEAKNESS_BUCKET(bucket.severity)}>See all</a>
+					<a class="see-all" href={ROUTES.INSIGHTS_LENS_WEAKNESS_BUCKET(bucket.severity)}>See all</a>
 				</header>
 				{#if bucket.areas.length === 0}
 					<p class="muted">No domains in this bucket.</p>

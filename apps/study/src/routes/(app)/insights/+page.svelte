@@ -1,6 +1,9 @@
 <script lang="ts">
+import { PAGE_EXPLAINER_KEYS } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
+import PageExplainer from '@ab/ui/components/PageExplainer.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
+import Tooltip from '@ab/ui/components/Tooltip.svelte';
 import ActivityPanel from './_panels/ActivityPanel.svelte';
 import CalibrationPanel from './_panels/CalibrationPanel.svelte';
 import CertProgressPanel from './_panels/CertProgressPanel.svelte';
@@ -33,19 +36,25 @@ const stamp = $derived(
 </script>
 
 <svelte:head>
-	<title>Dashboard -- airboss</title>
+	<title>Insights -- airboss</title>
 </svelte:head>
 
 <section class="page">
 	<PageHeader
-		eyebrow="Study // dashboard"
-		title="Dashboard"
-		subtitle="Where you are. What slipped. What&apos;s next."
+		eyebrow="Study // insights"
+		title="Insights"
+		subtitle="How you&apos;re doing -- stats, calibration, weak areas, lens views."
 	>
 		{#snippet titleSuffix()}
 			<PageHelp pageId="dashboard" />
 		{/snippet}
 	</PageHeader>
+
+	<PageExplainer pageKey={PAGE_EXPLAINER_KEYS.INSIGHTS}>
+		Insights is the read-only view of your progress. Stats roll up your study activity; the
+		<Tooltip for="calibration">Calibration</Tooltip>
+		page shows how well your confidence matches your accuracy; the Lens views project the same data through a handbook chapter or a weak-area severity bucket.
+	</PageExplainer>
 
 	<div class="grid">
 		<div class="col left">

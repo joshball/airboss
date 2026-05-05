@@ -1,5 +1,6 @@
 <script lang="ts">
 import { NAV_LABELS, ROUTES } from '@ab/constants';
+import { listGlossaryEntries } from '@ab/help/glossary';
 import HelpSearch from '@ab/help/ui/HelpSearch.svelte';
 import {
 	type AppearanceMode,
@@ -14,6 +15,7 @@ import {
 import ThemePicker from '@ab/themes/picker/ThemePicker.svelte';
 import ThemeProvider from '@ab/themes/ThemeProvider.svelte';
 import AppHeader from '@ab/ui/components/AppHeader.svelte';
+import GlossaryDrawer from '@ab/ui/components/GlossaryDrawer.svelte';
 import type { Snippet } from 'svelte';
 import { page } from '$app/state';
 import '$lib/help/register';
@@ -108,14 +110,16 @@ function pathMatches(current: string, prefix: string): boolean {
 
 const studyActive = $derived(page.url.pathname === ROUTES.STUDY);
 const flightActive = $derived(pathMatches(page.url.pathname, ROUTES.FLIGHT));
-const dashboardActive = $derived(page.url.pathname === ROUTES.DASHBOARD);
+// `/insights` rolls Stats / Calibration / Lens onto one section
+// (study-app-ia-cleanup Phase 3). The nav highlight matches anywhere
+// under `/insights/*`.
+const insightsActive = $derived(pathMatches(page.url.pathname, ROUTES.INSIGHTS));
 const memoryActive = $derived(pathMatches(page.url.pathname, ROUTES.MEMORY));
 const memoryHomeActive = $derived(page.url.pathname === ROUTES.MEMORY);
 const memoryBrowseActive = $derived(pathMatches(page.url.pathname, ROUTES.MEMORY_BROWSE));
 const memoryReviewActive = $derived(pathMatches(page.url.pathname, ROUTES.MEMORY_REVIEW));
 const memoryNewActive = $derived(pathMatches(page.url.pathname, ROUTES.MEMORY_NEW));
 const repsActive = $derived(pathMatches(page.url.pathname, ROUTES.REPS));
-const lensActive = $derived(pathMatches(page.url.pathname, ROUTES.LENS));
 // `/program` rolls Quals + Goal + Plan + Coverage into one tabbed surface.
 // The nav highlight is active anywhere under `/program/*`, plus on the
 // session entry points (which the Plan tab CTA leads into).
@@ -124,15 +128,19 @@ const programActive = $derived(
 		pathMatches(page.url.pathname, ROUTES.SESSION_START) ||
 		pathMatches(page.url.pathname, ROUTES.SESSIONS),
 );
-const knowledgeActive = $derived(pathMatches(page.url.pathname, ROUTES.KNOWLEDGE));
-const glossaryActive = $derived(pathMatches(page.url.pathname, ROUTES.GLOSSARY));
+// `/reference` consolidates the knowledge graph + glossary + library
+// link (study-app-ia-cleanup Phase 3). Highlight matches anywhere
+// under `/reference/*`.
+const referenceActive = $derived(pathMatches(page.url.pathname, ROUTES.REFERENCE));
 const helpActive = $derived(pathMatches(page.url.pathname, ROUTES.HELP));
 const helpConceptsActive = $derived(pathMatches(page.url.pathname, ROUTES.HELP_CONCEPTS));
 const helpIndexActive = $derived(helpActive && !helpConceptsActive);
-const calibrationActive = $derived(pathMatches(page.url.pathname, ROUTES.CALIBRATION));
-// Dashboard renders as a full-bleed TUI grid; every other surface keeps the
-// centered reading-column layout.
-const fullBleed = $derived(dashboardActive);
+// The Insights index renders as a full-bleed TUI grid; every other
+// surface keeps the centered reading-column layout. The legacy
+// `/dashboard` path is handled at the hook layer (301) and never
+// reaches client-side rendering, so checking only the new path is
+// sufficient.
+const fullBleed = $derived(page.url.pathname === ROUTES.INSIGHTS);
 
 // Theme resolution. `resolveThemeSelection` honors the precedence rule
 // documented in @ab/themes/resolve.ts: a route safety lock (today only
@@ -222,11 +230,17 @@ function handleMemoryItemClick() {
 			<a href={ROUTES.STUDY} aria-current={studyActive ? 'page' : undefined} data-testid="nav-home"
 				>{NAV_LABELS.STUDY}</a
 			>
-			<a href={ROUTES.DASHBOARD} aria-current={dashboardActive ? 'page' : undefined}>{NAV_LABELS.DASHBOARD}</a>
+			<a href={ROUTES.INSIGHTS} aria-current={insightsActive ? 'page' : undefined} data-testid="nav-insights"
+				>{NAV_LABELS.INSIGHTS}</a
+			>
 			<a href={ROUTES.PROGRAM} aria-current={programActive ? 'page' : undefined} data-testid="nav-program"
 				>{NAV_LABELS.PROGRAM}</a
 			>
-			<a href={ROUTES.LENS_HANDBOOK} aria-current={lensActive ? 'page' : undefined}>{NAV_LABELS.LENS}</a>
+			<a
+				href={ROUTES.REFERENCE}
+				aria-current={referenceActive ? 'page' : undefined}
+				data-testid="nav-reference">{NAV_LABELS.REFERENCE}</a
+			>
 			<details class="nav-menu" bind:this={memoryMenu} onfocusout={handleMemoryMenuBlur}>
 				<summary aria-haspopup="menu" aria-current={memoryActive ? 'page' : undefined}>
 					<span>{NAV_LABELS.MEMORY}</span>
@@ -261,9 +275,6 @@ function handleMemoryItemClick() {
 			</details>
 			<a href={ROUTES.REPS} aria-current={repsActive ? 'page' : undefined}>{NAV_LABELS.REPS}</a>
 			<a href={ROUTES.FLIGHT} aria-current={flightActive ? 'page' : undefined}>{NAV_LABELS.FLIGHT}</a>
-			<a href={ROUTES.KNOWLEDGE} aria-current={knowledgeActive ? 'page' : undefined}>{NAV_LABELS.KNOWLEDGE}</a>
-			<a href={ROUTES.GLOSSARY} aria-current={glossaryActive ? 'page' : undefined}>{NAV_LABELS.GLOSSARY}</a>
-			<a href={ROUTES.CALIBRATION} aria-current={calibrationActive ? 'page' : undefined}>{NAV_LABELS.CALIBRATION}</a>
 			<details class="nav-menu" bind:this={helpMenu} onfocusout={handleHelpMenuBlur}>
 				<summary aria-haspopup="menu" aria-current={helpActive ? 'page' : undefined}>
 					<span>{NAV_LABELS.HELP}</span>
@@ -288,6 +299,9 @@ function handleMemoryItemClick() {
 	{/snippet}
 	{#snippet helpSearch()}
 		<HelpSearch />
+	{/snippet}
+	{#snippet glossarySlot()}
+		<GlossaryDrawer entries={listGlossaryEntries()} />
 	{/snippet}
 	{#snippet themePicker()}
 		<ThemePicker currentThemeId={selection.theme} onSelect={setTheme} locked={themePickerLocked} />
