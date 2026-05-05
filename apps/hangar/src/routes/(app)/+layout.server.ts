@@ -1,6 +1,6 @@
 import { requireRole } from '@ab/auth';
 import { countReviewQueueOpen, getBoard } from '@ab/bc-hangar';
-import { HOST_PREFIXES, ROLES, siblingOrigin } from '@ab/constants';
+import { appOrigins, HOST_PREFIXES, ROLES, siblingOrigin } from '@ab/constants';
 import type { LayoutServerLoad } from './$types';
 
 /**
@@ -40,6 +40,7 @@ export const load: LayoutServerLoad = async (event) => {
 			role: user.role,
 		},
 		flightbagOrigin: siblingOrigin(event.url, HOST_PREFIXES.FLIGHTBAG),
+		appOrigins: appOrigins(event.url),
 		reviewQueueCount,
 	};
 };

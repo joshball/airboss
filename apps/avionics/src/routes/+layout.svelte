@@ -137,6 +137,7 @@ async function setAppearance(value: AppearancePreference) {
 	signInHref={data.signInUrl}
 	appearance={appearancePref}
 	onAppearanceChange={setAppearance}
+	appOrigins={data.appOrigins}
 >
 	{#snippet helpSearch()}
 		<HelpSearch />

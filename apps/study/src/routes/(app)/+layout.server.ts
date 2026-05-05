@@ -1,5 +1,5 @@
 import { requireAuth } from '@ab/auth';
-import { HOST_PREFIXES, siblingOrigin } from '@ab/constants';
+import { appOrigins, HOST_PREFIXES, siblingOrigin } from '@ab/constants';
 import type { LayoutServerLoad } from './$types';
 
 /**
@@ -30,5 +30,6 @@ export const load: LayoutServerLoad = async (event) => {
 		appearance: event.locals.appearance,
 		theme: event.locals.theme,
 		flightbagOrigin: siblingOrigin(event.url, HOST_PREFIXES.FLIGHTBAG),
+		appOrigins: appOrigins(event.url),
 	};
 };
