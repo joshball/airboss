@@ -1,10 +1,22 @@
 ---
-title: 'Spec: Flight Dynamics Sim'
+id: flight-dynamics-sim
+title: "Spec: Flight Dynamics Sim"
 product: sim
-feature: flight-dynamics-sim
-type: spec
-status: unread
-review_status: pending
+category: feature
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-24
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - physics
+  - engine
+legacy_fields:
+  feature: flight-dynamics-sim
+  type: spec
+  review_status: pending
 ---
 
 # Spec: Flight Dynamics Sim

@@ -1,10 +1,22 @@
 ---
-title: 'Spec: WP-HANGAR-REFS -- references admin dashboard in hangar'
+id: wp-hangar-references-dashboard
+title: "Spec: WP-HANGAR-REFS -- references admin dashboard in hangar"
 product: hangar
-feature: hangar-references-dashboard
-type: spec
+category: feature
 status: draft
-review_status: pending
+agent_review_status: pending
+human_review_status: pending
+created: 2026-05-03
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - admin
+  - references
+legacy_fields:
+  feature: hangar-references-dashboard
+  type: spec
+  review_status: pending
 ---
 
 # WP-HANGAR-REFS: references admin dashboard

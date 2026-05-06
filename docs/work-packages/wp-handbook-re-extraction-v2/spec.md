@@ -1,10 +1,22 @@
 ---
-title: 'Spec: WP-HANDBOOK-RE-EXTRACTION-V2 -- fix what survived the first pass'
+id: wp-handbook-re-extraction-v2
+title: "Spec: WP-HANDBOOK-RE-EXTRACTION-V2 -- fix what survived the first pass"
 product: hangar
-feature: wp-handbook-re-extraction-v2
-type: spec
+category: feature
 status: signed-off
-review_status: done
+agent_review_status: pending
+human_review_status: pending
+created: 2026-05-03
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - handbook
+  - extraction
+legacy_fields:
+  feature: wp-handbook-re-extraction-v2
+  type: spec
+  review_status: done
 ---
 
 # WP-HANDBOOK-RE-EXTRACTION-V2: fix what survived the first pass

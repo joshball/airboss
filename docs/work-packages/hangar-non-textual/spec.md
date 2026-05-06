@@ -1,10 +1,22 @@
 ---
-title: 'Spec: Hangar non-textual sources (sectional chart first)'
+id: hangar-non-textual
+title: "Spec: Hangar non-textual sources (sectional chart first)"
 product: hangar
-feature: hangar-non-textual
-type: spec
-status: unread
-review_status: done
+category: feature
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-24
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - sources
+  - non-textual
+legacy_fields:
+  feature: hangar-non-textual
+  type: spec
+  review_status: done
 ---
 
 # Spec: Hangar non-textual sources

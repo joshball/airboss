@@ -1,10 +1,22 @@
 ---
-title: 'Spec: WP-CITE-FLIGHTBAG -- migrate citation chips to flightbag URLs'
-product: study
-feature: wp-citation-chips-to-flightbag
-type: spec
+id: wp-citation-chips-to-flightbag
+title: "Spec: WP-CITE-FLIGHTBAG -- migrate citation chips to flightbag URLs"
+product: flightbag
+category: feature
 status: draft
-review_status: pending
+agent_review_status: pending
+human_review_status: pending
+created: 2026-05-03
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - citations
+  - flightbag
+legacy_fields:
+  feature: wp-citation-chips-to-flightbag
+  type: spec
+  review_status: pending
 ---
 
 # WP-CITE-FLIGHTBAG: migrate citation chips from study `/library/...` to flightbag URLs

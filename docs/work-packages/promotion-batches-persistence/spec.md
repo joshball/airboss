@@ -1,14 +1,33 @@
 ---
+id: promotion-batches-persistence
 title: Promotion batches & editions persistence
-status: shipped
+product: platform
+category: feature
+status: in-flight
+agent_review_status: pending
+human_review_status: pending
 created: 2026-05-01
-shipped: 2026-05-02
-shipped-prs: [434, 454]
-authored-by: Joshua (with agent)
-trigger: chunk-4 review (Cluster H) closure; review #393 line 115
-related-adrs: [019]
-related-wps: [chapter-source-ingestion, sources-content-pipeline-review-fixes]
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - sources
+  - persistence
+legacy_fields:
+  shipped: 2026-05-02
+  shipped-prs:
+    - 434
+    - 454
+  authored-by: Joshua (with agent)
+  trigger: chunk-4 review (Cluster H) closure; review
+  related-adrs:
+    - 19
+  related-wps:
+    - chapter-source-ingestion
+    - sources-content-pipeline-review-fixes
 ---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
 
 ## Why
 

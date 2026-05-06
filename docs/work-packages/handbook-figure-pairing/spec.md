@@ -1,10 +1,22 @@
 ---
-title: 'Spec: Handbook Figure-Caption Pairing'
+id: handbook-figure-pairing
+title: "Spec: Handbook Figure-Caption Pairing"
 product: flightbag
-feature: handbook-figure-pairing
-type: spec
-status: unread
-review_status: done
+category: feature
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-05-05
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - handbook
+  - figures
+legacy_fields:
+  feature: handbook-figure-pairing
+  type: spec
+  review_status: done
 ---
 
 # Spec: Handbook Figure-Caption Pairing

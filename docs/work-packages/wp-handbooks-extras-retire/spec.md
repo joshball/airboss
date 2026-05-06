@@ -1,11 +1,25 @@
 ---
-title: 'Spec: WP-EXTRAS-RETIRE -- slim the handbooks-extras corpus to mtn-tips only'
+id: wp-handbooks-extras-retire
+title: "Spec: WP-EXTRAS-RETIRE -- slim the handbooks-extras corpus to mtn-tips only"
 product: study
-feature: wp-handbooks-extras-retire
-type: spec
-status: shipped-partial
-review_status: done
+category: feature
+status: in-flight
+agent_review_status: pending
+human_review_status: pending
+created: 2026-05-03
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - handbook
+  - corpus
+legacy_fields:
+  feature: wp-handbooks-extras-retire
+  type: spec
+  review_status: done
 ---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
 
 > **Outcome (2026-05-03):** SLIM, not full retire. Retiring the whole corpus would require porting `body_override` + section-tree parser to the chapter-aware pipeline for one document (mtn-tips). That's bad ROI. The corpus is slimmed to its minimum: one entry (mtn-tips), historical-context comments preserved, archived WP dirs.
 
