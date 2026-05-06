@@ -1,11 +1,16 @@
 <script lang="ts">
 import AcCard from '@ab/aviation/ui/cards/AcCard.svelte';
+import AcsCard from '@ab/aviation/ui/cards/AcsCard.svelte';
 import AimCorpusCard from '@ab/aviation/ui/cards/AimCorpusCard.svelte';
 import CfrPartCard from '@ab/aviation/ui/cards/CfrPartCard.svelte';
 import CfrSectionCard from '@ab/aviation/ui/cards/CfrSectionCard.svelte';
 import CfrTitleCard from '@ab/aviation/ui/cards/CfrTitleCard.svelte';
 import HandbookCard from '@ab/aviation/ui/cards/HandbookCard.svelte';
+import InfoCard from '@ab/aviation/ui/cards/InfoCard.svelte';
 import NtsbCard from '@ab/aviation/ui/cards/NtsbCard.svelte';
+import PohCard from '@ab/aviation/ui/cards/PohCard.svelte';
+import PtsCard from '@ab/aviation/ui/cards/PtsCard.svelte';
+import SafoCard from '@ab/aviation/ui/cards/SafoCard.svelte';
 import UmbrellaCard from '@ab/aviation/ui/cards/UmbrellaCard.svelte';
 import type { PageData } from './$types';
 
@@ -131,6 +136,45 @@ const totalRecommendedGaps = $derived(data.summary.reduce((acc, s) => acc + s.mi
 			whyItMatters="Read once cover-to-cover early in primary training, then return to the chapter that matches whatever you are about to fly."
 			href="#"
 		/>
+		<AcsCard
+			slug="faa-s-acs-6b"
+			title="Private Pilot - Airplane Airman Certification Standards"
+			edition="FAA-S-ACS-6B"
+			description="FAA test guide for the private pilot airplane practical test."
+			whyItMatters="Exactly what your DPE expects you to know on checkride day -- knowledge, risk management, and skill criteria."
+			href="#"
+			external={{ url: 'https://www.faa.gov/training_testing/testing/acs', label: 'FAA' }}
+		/>
+		<PtsCard
+			slug="faa-s-8081-6d"
+			title="Flight Instructor Practical Test Standards (Airplane)"
+			edition="FAA-S-8081-6D"
+			description="Predecessor to the ACS, still the active checkride standard for some certificate categories."
+			external={{ url: 'https://www.faa.gov/training_testing/testing/test_standards', label: 'FAA' }}
+		/>
+		<SafoCard
+			safoNumber="SAFO 23001"
+			title="Helicopter Pilot Decision-Making in Whiteout Conditions"
+			date="2023-01-12"
+			summary="Recommended whiteout-recognition procedures and recovery techniques for rotorcraft operators."
+			audience="Air carriers and rotorcraft operators"
+			external={{ url: 'https://www.faa.gov/other_visit/aviation_industry/airline_operators/airline_safety/safo', label: 'FAA' }}
+		/>
+		<InfoCard
+			infoNumber="InFO 22008"
+			title="Operational Use of Flight Path Management Systems"
+			date="2022-08-15"
+			summary="Best practices for autopilot, autothrottle, and FMS mode awareness in commercial operations."
+			audience="Air carriers"
+			external={{ url: 'https://www.faa.gov/other_visit/aviation_industry/airline_operators/airline_safety/info', label: 'FAA' }}
+		/>
+		<PohCard
+			aircraftModel="Cessna 172S"
+			title="Cessna 172S Pilot Operating Handbook"
+			revision="13"
+			description="Manufacturer POH for the Cessna 172S Skyhawk -- limitations, normal/emergency procedures, performance, weight & balance."
+			external={{ url: 'https://www.cessna.com/', label: 'Cessna' }}
+		/>
 		<UmbrellaCard
 			title="Some unfamiliar corpus"
 			description="A description if available."
@@ -161,6 +205,11 @@ const totalRecommendedGaps = $derived(data.summary.reduce((acc, s) => acc + s.mi
 			external={{ url: 'https://www.ecfr.gov/current/title-14/part-999/section-999.1', label: 'eCFR' }}
 		/>
 		<AcCard acNumber="00-0" acTitle="Test AC" edition="-" />
+		<AcsCard slug="test-acs" title="Test ACS" edition="-" />
+		<PtsCard slug="test-pts" title="Test PTS" edition="-" />
+		<SafoCard safoNumber="SAFO 00000" title="Test SAFO" />
+		<InfoCard infoNumber="InFO 00000" title="Test InFO" />
+		<PohCard aircraftModel="Test Model" title="Test POH" revision="1" />
 		<NtsbCard reportNumber="TEST00" reportTitle="Test NTSB" />
 		<HandbookCard shortSlug="test" fullTitle="Test Handbook" edition="-" publisher="FAA" href="#" />
 		<UmbrellaCard title="Bare umbrella" />

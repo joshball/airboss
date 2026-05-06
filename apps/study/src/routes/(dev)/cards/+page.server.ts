@@ -51,6 +51,11 @@ function pickVariant(refKind: string, documentSlug: string): CardVariant {
 	if (refKind === REFERENCE_KINDS.CFR) return 'CfrPartCard';
 	if (refKind === REFERENCE_KINDS.AIM || refKind === REFERENCE_KINDS.PCG) return 'AimCorpusCard';
 	if (refKind === REFERENCE_KINDS.AC) return 'AcCard';
+	if (refKind === REFERENCE_KINDS.ACS) return 'AcsCard';
+	if (refKind === REFERENCE_KINDS.PTS) return 'PtsCard';
+	if (refKind === REFERENCE_KINDS.SAFO) return 'SafoCard';
+	if (refKind === REFERENCE_KINDS.INFO) return 'InfoCard';
+	if (refKind === REFERENCE_KINDS.POH) return 'PohCard';
 	if (refKind === REFERENCE_KINDS.NTSB) return 'NtsbCard';
 	if (refKind === REFERENCE_KINDS.HANDBOOK) return 'HandbookCard';
 	void documentSlug;
@@ -116,6 +121,44 @@ function projectForVariant(
 				description: m.description,
 				whyItMatters: m.whyItMatters,
 			};
+		case 'AcsCard':
+			return {
+				slug: ref.documentSlug,
+				title: ref.title,
+				edition: ref.edition,
+				description: m.description,
+				whyItMatters: m.whyItMatters,
+			};
+		case 'PtsCard':
+			return {
+				slug: ref.documentSlug,
+				title: ref.title,
+				edition: ref.edition,
+				description: m.description,
+			};
+		case 'SafoCard':
+			return {
+				safoNumber: ref.documentSlug,
+				title: ref.title,
+				summary: m.description,
+				date: m.date,
+				audience: m.audience,
+			};
+		case 'InfoCard':
+			return {
+				infoNumber: ref.documentSlug,
+				title: ref.title,
+				summary: m.description,
+				date: m.date,
+				audience: m.audience,
+			};
+		case 'PohCard':
+			return {
+				aircraftModel: m.aircraftModel ?? ref.documentSlug,
+				title: ref.title,
+				revision: ref.edition,
+				description: m.description,
+			};
 		default:
 			// CfrSectionCard + UmbrellaCard fall through here. Both render
 			// from the reference's title alone in this audit projection.
@@ -174,6 +217,11 @@ export const load: PageServerLoad = async () => {
 		'CfrSectionCard',
 		'AimCorpusCard',
 		'AcCard',
+		'AcsCard',
+		'PtsCard',
+		'SafoCard',
+		'InfoCard',
+		'PohCard',
 		'NtsbCard',
 		'HandbookCard',
 		'UmbrellaCard',

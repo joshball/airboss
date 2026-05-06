@@ -26,6 +26,11 @@ const ALL_VARIANTS: readonly CardVariant[] = [
 	'CfrSectionCard',
 	'AimCorpusCard',
 	'AcCard',
+	'AcsCard',
+	'PtsCard',
+	'SafoCard',
+	'InfoCard',
+	'PohCard',
 	'NtsbCard',
 	'HandbookCard',
 	'UmbrellaCard',
@@ -194,6 +199,89 @@ describe('CFR external requirement', () => {
 		expect(REQUIRED_FIELDS_BY_VARIANT.NtsbCard).not.toContain('external');
 		expect(REQUIRED_FIELDS_BY_VARIANT.HandbookCard).not.toContain('external');
 		expect(REQUIRED_FIELDS_BY_VARIANT.UmbrellaCard).not.toContain('external');
+		expect(REQUIRED_FIELDS_BY_VARIANT.AcsCard).not.toContain('external');
+		expect(REQUIRED_FIELDS_BY_VARIANT.PtsCard).not.toContain('external');
+		expect(REQUIRED_FIELDS_BY_VARIANT.SafoCard).not.toContain('external');
+		expect(REQUIRED_FIELDS_BY_VARIANT.InfoCard).not.toContain('external');
+		expect(REQUIRED_FIELDS_BY_VARIANT.PohCard).not.toContain('external');
+	});
+});
+
+// ---------------------------------------------------------------------------
+// Wave-2 corpus wrappers: ACS / PTS / SAFO / InFO / POH
+//
+// Each variant has its own required-field shape. Lock the contract here so
+// adding a sixth variant later won't accidentally drift one of these.
+// ---------------------------------------------------------------------------
+
+describe('Wave-2 corpus wrappers', () => {
+	it('AcsCard requires slug + title + edition; recommends description + whyItMatters', () => {
+		expect(REQUIRED_FIELDS_BY_VARIANT.AcsCard).toEqual(['slug', 'title', 'edition']);
+		expect(RECOMMENDED_FIELDS_BY_VARIANT.AcsCard).toEqual(['description', 'whyItMatters']);
+	});
+
+	it('PtsCard requires slug + title + edition; recommends description', () => {
+		expect(REQUIRED_FIELDS_BY_VARIANT.PtsCard).toEqual(['slug', 'title', 'edition']);
+		expect(RECOMMENDED_FIELDS_BY_VARIANT.PtsCard).toEqual(['description']);
+	});
+
+	it('SafoCard requires safoNumber + title; recommends summary + date + audience', () => {
+		expect(REQUIRED_FIELDS_BY_VARIANT.SafoCard).toEqual(['safoNumber', 'title']);
+		expect(RECOMMENDED_FIELDS_BY_VARIANT.SafoCard).toEqual(['summary', 'date', 'audience']);
+	});
+
+	it('InfoCard requires infoNumber + title; recommends summary + date + audience', () => {
+		expect(REQUIRED_FIELDS_BY_VARIANT.InfoCard).toEqual(['infoNumber', 'title']);
+		expect(RECOMMENDED_FIELDS_BY_VARIANT.InfoCard).toEqual(['summary', 'date', 'audience']);
+	});
+
+	it('PohCard requires aircraftModel + title + revision; recommends description', () => {
+		expect(REQUIRED_FIELDS_BY_VARIANT.PohCard).toEqual(['aircraftModel', 'title', 'revision']);
+		expect(RECOMMENDED_FIELDS_BY_VARIANT.PohCard).toEqual(['description']);
+	});
+
+	it('a complete AcsCard fixture validates clean', () => {
+		const result = validateCardData('AcsCard', 'FAA-S-ACS-6B', {
+			slug: 'faa-s-acs-6b',
+			title: 'Private Pilot - Airplane Airman Certification Standards',
+			edition: 'FAA-S-ACS-6B',
+			description: 'FAA test guide for the private pilot airplane practical test.',
+			whyItMatters: 'This is exactly what your DPE expects you to know on checkride day.',
+		});
+		expect(result.missingRequired).toEqual([]);
+		expect(result.missingRecommended).toEqual([]);
+	});
+
+	it('a complete SafoCard fixture validates clean', () => {
+		const result = validateCardData('SafoCard', 'SAFO 23001', {
+			safoNumber: 'SAFO 23001',
+			title: 'Helicopter Pilot Decision-Making in Whiteout Conditions',
+			date: '2023-01-12',
+			summary: 'Recommended whiteout-recognition procedures for rotorcraft operators.',
+			audience: 'Air carriers',
+		});
+		expect(result.missingRequired).toEqual([]);
+		expect(result.missingRecommended).toEqual([]);
+	});
+
+	it('a complete PohCard fixture validates clean', () => {
+		const result = validateCardData('PohCard', 'Cessna 172S', {
+			aircraftModel: 'Cessna 172S',
+			title: 'Cessna 172S Pilot Operating Handbook',
+			revision: '13',
+			description: 'Manufacturer POH for the Cessna 172S Skyhawk.',
+		});
+		expect(result.missingRequired).toEqual([]);
+		expect(result.missingRecommended).toEqual([]);
+	});
+
+	it('a missing required field on AcsCard surfaces in missingRequired', () => {
+		const result = validateCardData('AcsCard', 'subject', {
+			slug: 'faa-s-acs-6b',
+			title: '',
+			edition: 'B',
+		});
+		expect(result.missingRequired).toEqual(['title']);
 	});
 });
 
