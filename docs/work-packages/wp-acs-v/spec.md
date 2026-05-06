@@ -1,11 +1,21 @@
 ---
-title: 'WP-ACS-V -- 5 ACS publications seeded with task / element drill-down'
-product: study
-feature: wp-acs-v
-type: spec
-status: unread
-review_status: pending
+id: wp-acs-v
+title: WP-ACS-V -- 5 ACS publications seeded with task / element drill-down
+product: course
+category: content
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
 created: 2026-05-02
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - acs
+legacy_fields:
+  feature: wp-acs-v
+  type: spec
+  review_status: pending
 ---
 
 # WP-ACS-V -- Airman Certification Standards visibility

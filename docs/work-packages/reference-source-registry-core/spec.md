@@ -1,10 +1,22 @@
 ---
-title: 'Spec: Reference source registry core'
-product: cross-cutting
-feature: reference-source-registry-core
-type: spec
-status: unread
-review_status: pending
+id: reference-source-registry-core
+title: "Spec: Reference source registry core"
+product: platform
+category: platform
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-27
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - references
+  - registry
+legacy_fields:
+  feature: reference-source-registry-core
+  type: spec
+  review_status: pending
 ---
 
 # Spec: Reference source registry core

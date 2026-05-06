@@ -1,11 +1,25 @@
 ---
-title: 'Spec: WP-ACS-LINK-ONLY -- link-only stubs for the 2 link-only ACS / PTS cards'
-product: study
-feature: wp-acs-link-only-pipeline
-type: spec
-status: shipped
-review_status: done
+id: wp-acs-link-only-pipeline
+title: "Spec: WP-ACS-LINK-ONLY -- link-only stubs for the 2 link-only ACS / PTS cards"
+product: course
+category: content
+status: in-flight
+agent_review_status: pending
+human_review_status: pending
+created: 2026-05-03
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - acs
+  - link-only
+legacy_fields:
+  feature: wp-acs-link-only-pipeline
+  type: spec
+  review_status: done
 ---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
 
 # WP-ACS-LINK-ONLY: link-only stubs for the 2 link-only ACS / PTS cards
 

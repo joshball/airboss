@@ -1,3 +1,21 @@
+---
+id: wp-rmh-section-tree
+title: WP-RMH -- promote Risk Management Handbook to section-tree
+product: course
+category: content
+status: in-flight
+agent_review_status: pending
+human_review_status: pending
+created: 2026-05-03
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - rmh
+  - handbook
+  - section-tree
+---
+
 # WP-RMH -- promote Risk Management Handbook to section-tree
 
 Status: in-flight

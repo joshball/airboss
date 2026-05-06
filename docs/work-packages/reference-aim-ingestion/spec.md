@@ -1,10 +1,22 @@
 ---
-title: 'Spec: Reference AIM ingestion'
-product: cross-cutting
-feature: reference-aim-ingestion
-type: spec
-status: unread
-review_status: pending
+id: reference-aim-ingestion
+title: "Spec: Reference AIM ingestion"
+product: course
+category: content
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-27
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - aim
+  - ingestion
+legacy_fields:
+  feature: reference-aim-ingestion
+  type: spec
+  review_status: pending
 ---
 
 # Spec: Reference AIM ingestion

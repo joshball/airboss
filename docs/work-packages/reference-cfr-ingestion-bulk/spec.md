@@ -1,10 +1,22 @@
 ---
-title: 'Spec: Reference CFR ingestion (bulk)'
-product: cross-cutting
-feature: reference-cfr-ingestion-bulk
-type: spec
-status: unread
-review_status: pending
+id: reference-cfr-ingestion-bulk
+title: "Spec: Reference CFR ingestion (bulk)"
+product: course
+category: content
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-27
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - cfr
+  - ingestion
+legacy_fields:
+  feature: reference-cfr-ingestion-bulk
+  type: spec
+  review_status: pending
 ---
 
 # Spec: Reference CFR ingestion (bulk)

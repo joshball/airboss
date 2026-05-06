@@ -1,11 +1,21 @@
 ---
-title: 'WP-AIM -- AIM seeded as section-tree reference'
-product: study
-feature: wp-aim
-type: spec
-status: unread
-review_status: pending
+id: wp-aim
+title: WP-AIM -- AIM seeded as section-tree reference
+product: course
+category: content
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
 created: 2026-05-02
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - aim
+legacy_fields:
+  feature: wp-aim
+  type: spec
+  review_status: pending
 ---
 
 # WP-AIM -- Aeronautical Information Manual

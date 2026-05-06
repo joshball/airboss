@@ -1,3 +1,23 @@
+---
+id: wp-iph-section-tree
+title: WP-IPH -- Promote Instrument Procedures Handbook to section-tree
+product: course
+category: content
+status: in-flight
+agent_review_status: pending
+human_review_status: pending
+created: 2026-05-03
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - iph
+  - handbook
+  - section-tree
+---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
+
 # WP-IPH -- Promote Instrument Procedures Handbook to section-tree
 
 **Status:** shipped (PR pending)

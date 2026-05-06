@@ -1,9 +1,21 @@
 ---
-title: 'Spec: Reference System Core'
-product: study
-feature: reference-system-core
-type: spec
-status: unread
+id: reference-system-core
+title: "Spec: Reference System Core"
+product: platform
+category: platform
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-22
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - references
+  - core
+legacy_fields:
+  feature: reference-system-core
+  type: spec
 ---
 
 # Spec: Reference System Core

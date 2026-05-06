@@ -1,12 +1,26 @@
 ---
-title: 'WP-AIH -- Aviation Instructor''s Handbook section-tree promotion'
-product: study
-feature: wp-aih-section-tree
-type: spec
-status: shipped
-review_status: pending
+id: wp-aih-section-tree
+title: WP-AIH -- Aviation Instructor's Handbook section-tree promotion
+product: course
+category: content
+status: in-flight
+agent_review_status: pending
+human_review_status: pending
 created: 2026-05-02
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - aih
+  - handbook
+  - section-tree
+legacy_fields:
+  feature: wp-aih-section-tree
+  type: spec
+  review_status: pending
 ---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
 
 # WP-AIH -- Aviation Instructor's Handbook section-tree
 

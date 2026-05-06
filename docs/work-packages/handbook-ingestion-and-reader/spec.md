@@ -1,10 +1,22 @@
 ---
-title: 'Spec: Handbook Ingestion and Reader'
-product: study
-feature: handbook-ingestion-and-reader
-type: spec
-status: unread
-review_status: pending
+id: handbook-ingestion-and-reader
+title: "Spec: Handbook Ingestion and Reader"
+product: course
+category: content
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-26
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - handbook
+  - ingestion
+legacy_fields:
+  feature: handbook-ingestion-and-reader
+  type: spec
+  review_status: pending
 ---
 
 # Spec: Handbook Ingestion and Reader

@@ -1,11 +1,25 @@
 ---
-title: 'Spec: WP-AC-LINK-ONLY -- link-only stubs for the 12 link-only AC cards'
-product: study
-feature: wp-ac-link-only-pipeline
-type: spec
-status: shipped
-review_status: done
+id: wp-ac-link-only-pipeline
+title: "Spec: WP-AC-LINK-ONLY -- link-only stubs for the 12 link-only AC cards"
+product: course
+category: content
+status: in-flight
+agent_review_status: pending
+human_review_status: pending
+created: 2026-05-03
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - ac
+  - link-only
+legacy_fields:
+  feature: wp-ac-link-only-pipeline
+  type: spec
+  review_status: done
 ---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
 
 # WP-AC-LINK-ONLY: link-only stubs for the 12 link-only AC cards
 

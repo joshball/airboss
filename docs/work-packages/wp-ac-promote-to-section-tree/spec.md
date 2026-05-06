@@ -1,12 +1,26 @@
 ---
-title: 'Spec: WP-AC-PROMOTE -- promote the 9 existing ACs from whole-doc to section-tree'
-product: study
-feature: wp-ac-promote-to-section-tree
-type: spec
-status: shipped
-review_status: pending
-shipped_at: 2026-05-03
+id: wp-ac-promote-to-section-tree
+title: "Spec: WP-AC-PROMOTE -- promote the 9 existing ACs from whole-doc to section-tree"
+product: course
+category: content
+status: in-flight
+agent_review_status: pending
+human_review_status: pending
+created: 2026-05-03
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - ac
+  - section-tree
+legacy_fields:
+  feature: wp-ac-promote-to-section-tree
+  type: spec
+  review_status: pending
+  shipped_at: 2026-05-03
 ---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
 
 # WP-AC-PROMOTE: promote 9 existing ACs to section-tree
 

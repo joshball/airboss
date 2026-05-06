@@ -1,15 +1,27 @@
 ---
-title: 'AFH 3B section-tree ingestion'
-product: study
-feature: afh-3b-ingestion
-type: spec
-status: deferred
-review_status: pending
-priority: low
-related:
-  - docs/decisions/018-source-artifact-storage-policy/decision.md
-  - docs/decisions/019-reference-identifier-system/decision.md
-  - docs/ingestion-pipeline/section-extraction-prompt-strategy.md
+id: afh-3b-ingestion
+title: AFH 3B section-tree ingestion
+product: course
+category: content
+status: abandoned
+agent_review_status: pending
+human_review_status: pending
+created: 2026-05-06
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - handbook
+  - afh
+legacy_fields:
+  feature: afh-3b-ingestion
+  type: spec
+  review_status: pending
+  priority: low
+  related:
+    - docs/decisions/018-source-artifact-storage-policy/decision.md
+    - docs/decisions/019-reference-identifier-system/decision.md
+    - docs/ingestion-pipeline/section-extraction-prompt-strategy.md
 ---
 
 # AFH 3B section-tree ingestion
