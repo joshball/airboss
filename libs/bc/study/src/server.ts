@@ -228,6 +228,10 @@ export {
 	recordPhaseVisited,
 	splitContentPhases,
 } from './knowledge';
+// Lens value implementations -- server-only because their module-level
+// `import { ... } from './mastery'` reaches `@ab/db/connection`. Types
+// for these live in the runtime barrel via `./index`.
+export { acsLens, computeMasteryRollup, domainLens, LensError } from './lenses';
 // Library-by-cert spine (ADR 016 / library-by-cert WP wave 3).
 export type { CarryoverGroup, CertReferenceBundle } from './library-by-cert';
 export {

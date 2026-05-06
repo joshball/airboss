@@ -57,7 +57,13 @@ export { runEngine } from './engine';
 export { SourceRefRequiredError, UpsertReturnedNoRowError } from './errors';
 // Display formatters (`.svelte` pages render review intervals via these).
 export { formatNextInterval, formatNextIntervalAbsolute } from './formatters';
-// Lens projection -- pure transforms over query callbacks; `db` is a parameter.
+// Lens projection types only -- the value implementations
+// (`acsLens`, `domainLens`, `computeMasteryRollup`, `LensError`) live in
+// `./lenses`, which transitively imports `./mastery` -> `@ab/db/connection`
+// -> postgres driver -> `Buffer.allocUnsafe` (Node-only). Importing the
+// values from this client-safe barrel pulls postgres into the browser
+// bundle and crashes hydration with `ReferenceError: Buffer is not
+// defined`. Server callers import the values from `@ab/bc-study/server`.
 export type {
 	AcsLensFilters,
 	DomainLensFilters,
@@ -68,7 +74,6 @@ export type {
 	LensTreeNode,
 	MasteryRollup,
 } from './lenses';
-export { acsLens, computeMasteryRollup, domainLens, LensError } from './lenses';
 // Runtime handbook input schemas. Route handlers parse `+server.ts` request
 // bodies (heartbeat / notes) and form-action submissions (read status)
 // against these. Manifest schemas + citation ingestion schemas
