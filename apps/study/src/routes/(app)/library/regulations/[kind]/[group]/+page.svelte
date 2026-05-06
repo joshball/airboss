@@ -19,6 +19,16 @@ const kindLabel = $derived(data.kindLabel);
 // override locally (the row tracks its own state once toggled).
 let expandAll = $state(false);
 
+// Per-Subpart collapse state: when `true`, the Subpart's child section
+// rows are hidden. Defaults to all open. A future preference could persist
+// this per-user; for now it's session-local.
+const subpartCollapsed = $state<Record<string, boolean>>({});
+function toggleSubpart(id: string): void {
+	subpartCollapsed[id] = !subpartCollapsed[id];
+}
+
+const totalSubpartSections = $derived(data.subparts.reduce((acc, sp) => acc + sp.sections.length, 0));
+
 function bodyUrlFor(code: string): string {
 	return `${ROUTES.LIBRARY_REGULATIONS_GROUP(kind, data.group)}/section-body/${encodeURIComponent(code)}`;
 }
@@ -67,7 +77,46 @@ function bodyUrlFor(code: string): string {
 	</section>
 {/if}
 
-{#if data.sections.length > 0}
+{#if data.subparts.length > 0}
+	<section aria-label="Subparts">
+		<div class="section-toolbar">
+			<span class="section-count">{data.subparts.length} subparts &middot; {totalSubpartSections} sections</span>
+			<button type="button" class="section-toolbar-button" onclick={() => (expandAll = !expandAll)}>
+				{expandAll ? 'Collapse all' : 'Expand all'}
+			</button>
+		</div>
+		<div class="subpart-tree">
+			{#each data.subparts as subpart (subpart.id)}
+				<section class="subpart-group" aria-label={subpart.title}>
+					<button
+						type="button"
+						class="subpart-header"
+						aria-expanded={!subpartCollapsed[subpart.id]}
+						onclick={() => toggleSubpart(subpart.id)}
+					>
+						<span class="subpart-twisty" aria-hidden="true">{subpartCollapsed[subpart.id] ? '+' : '–'}</span>
+						<span class="subpart-title">{subpart.title}</span>
+						<span class="subpart-meta">{subpart.sections.length} sections</span>
+					</button>
+					{#if !subpartCollapsed[subpart.id]}
+						<ul class="section-list subpart-children">
+							{#each subpart.sections as section (section.id)}
+								<CfrSectionRow
+									code={section.code}
+									title={section.title}
+									bodyUrl={bodyUrlFor(section.code)}
+									href={ROUTES.LIBRARY_REGULATIONS_SECTION(kind, data.group, section.code)}
+									external={section.external ?? { url: '#', label: 'eCFR' }}
+									expanded={expandAll}
+								/>
+							{/each}
+						</ul>
+					{/if}
+				</section>
+			{/each}
+		</div>
+	</section>
+{:else if data.sections.length > 0}
 	<section aria-label="Sections">
 		<div class="section-toolbar">
 			<span class="section-count">{data.sections.length} sections</span>
@@ -170,6 +219,59 @@ function bodyUrlFor(code: string): string {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-2xs);
+	}
+	.subpart-tree {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-md);
+	}
+	.subpart-group {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-xs);
+	}
+	.subpart-header {
+		display: flex;
+		align-items: center;
+		gap: var(--space-sm);
+		padding: var(--space-xs) var(--space-sm);
+		background: var(--surface-sunken);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-sm);
+		font: inherit;
+		font-weight: var(--font-weight-semibold);
+		text-align: left;
+		cursor: pointer;
+		color: inherit;
+		transition: background var(--motion-fast) ease, border-color var(--motion-fast) ease;
+	}
+	.subpart-header:hover,
+	.subpart-header:focus-visible {
+		background: var(--surface-raised, var(--surface-sunken));
+		border-color: var(--action-default-edge);
+	}
+	.subpart-header:focus-visible {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
+	}
+	.subpart-twisty {
+		display: inline-flex;
+		justify-content: center;
+		align-items: center;
+		width: 1.25rem;
+		color: var(--ink-muted);
+		font-family: var(--font-family-mono);
+	}
+	.subpart-title {
+		flex: 1 1 auto;
+	}
+	.subpart-meta {
+		font-size: var(--font-size-sm);
+		color: var(--ink-muted);
+		font-weight: var(--font-weight-regular);
+	}
+	.subpart-children {
+		padding-left: var(--space-md);
 	}
 	.grid {
 		list-style: none;

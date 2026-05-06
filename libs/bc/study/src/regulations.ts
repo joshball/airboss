@@ -62,9 +62,12 @@ import {
 	getNodesCitingSection,
 	getReadState,
 	getReferenceById,
+	getReferenceSectionById,
 	listFlatTopLevelSections,
 	listHandbookChapters,
 	listReferences,
+	listSectionsForSubpart,
+	listSubpartsForReference,
 } from './references';
 import type { ReferenceRow, ReferenceSectionReadStateRow } from './schema';
 
@@ -178,12 +181,22 @@ export interface RegulationsSectionDetail {
 	faaPageEnd: string | null;
 }
 
-/** Chapter-row summary used to render the section breadcrumb. */
-export interface RegulationsChapterDetail {
+/**
+ * Ancestor-row summary used to render the section breadcrumb. Carries the
+ * direct parent of the section -- a real Subpart row for CFR sections that
+ * live in a Subpart tree, or a synthesized "virtual" parent for flat-shape
+ * references (handbooks, AIM, small CFR Parts with no Subparts) so the
+ * breadcrumb chrome renders the same way regardless of shape.
+ *
+ * Aliased as `RegulationsChapterDetail` for back-compat with pre-Wave-2
+ * route code that destructured `view.chapter`.
+ */
+export interface RegulationsAncestorDetail {
 	id: string;
 	code: string;
 	title: string;
 }
+export type RegulationsChapterDetail = RegulationsAncestorDetail;
 
 /** Figure tile rendered alongside the section body. */
 export interface RegulationsFigureTile {
@@ -246,6 +259,23 @@ export interface RegulationsGroupView extends ReferenceCardCopy {
 	chapters: RegulationsChapterSummary[];
 }
 
+/**
+ * Subpart group on the section-list view. Each Subpart owns a slice of the
+ * Part's sections; the page renders one collapsible section header per
+ * Subpart followed by its child rows. Empty array on flat-shape references
+ * (handbooks, AIM, AC, NTSB, and the small CFR Parts whose sections sit
+ * directly under the Part with no Subpart wrapper) -- in that case the
+ * existing `sections` field carries the flat list and the page falls back
+ * to today's ungrouped layout.
+ */
+export interface RegulationsSubpartGroup {
+	id: string;
+	code: string;
+	title: string;
+	ordinal: number;
+	sections: RegulationsSectionRow[];
+}
+
 /** Section list payload -- `/library/regulations/[kind]/[group]`. */
 export interface RegulationsSectionListView extends ReferenceCardCopy {
 	view: 'section';
@@ -254,7 +284,17 @@ export interface RegulationsSectionListView extends ReferenceCardCopy {
 	group: string;
 	groupLabel: string;
 	umbrellas: RegulationsUmbrellaCard[];
+	/**
+	 * Flat section rows. Populated for handbooks, AIM, and CFR Parts WITHOUT
+	 * Subpart structure. When `subparts.length > 0` (CFR Parts with Subpart
+	 * tree) this stays empty -- the page renders the tree from `subparts`.
+	 */
 	sections: RegulationsSectionRow[];
+	/**
+	 * Subpart-grouped section rows (CFR Wave 2). Empty when the reference has
+	 * no Subpart tree (the page falls back to the flat `sections` field).
+	 */
+	subparts: RegulationsSubpartGroup[];
 	/** Canonical eCFR Part URL (CFR only); null otherwise. */
 	external: RegulationsExternalLink | null;
 	/** Chapter id (CFR only); null otherwise. */
@@ -271,7 +311,13 @@ export interface RegulationsDetailView {
 	group: string;
 	reference: RegulationsReferenceSummary;
 	section: RegulationsSectionDetail;
-	chapter: RegulationsChapterDetail;
+	/**
+	 * Direct parent of the section. For CFR Wave 2 tree-shape sections this
+	 * is the real Subpart row (level=`subpart`); for flat-shape references
+	 * it stays a synthesized "virtual chapter" so the breadcrumb chrome
+	 * renders the same regardless of shape.
+	 */
+	chapter: RegulationsAncestorDetail;
 	figures: RegulationsFigureTile[];
 	siblings: RegulationsSiblingRow[];
 	readState: RegulationsReadState;
@@ -284,6 +330,15 @@ export interface RegulationsDetailView {
 	cfrChapterName: string | null;
 	cfrSubchapterId: string | null;
 	cfrSubchapterName: string | null;
+	/**
+	 * Owning Subpart (CFR Wave 2 only). Populated when the section's parent
+	 * row is a Subpart; null for handbook / AIM / pre-Wave-2 flat CFR
+	 * fixtures. The breadcrumb on the detail page renders this as a
+	 * non-clickable text segment ("Subpart B -- Flight Rules"), consistent
+	 * with how Chapter and Subchapter render.
+	 */
+	cfrSubpartCode: string | null;
+	cfrSubpartTitle: string | null;
 }
 
 export type RegulationsView =
@@ -703,37 +758,61 @@ async function buildSectionListView(
 	}));
 
 	// If exactly one reference resolves, probe for inline sections so the
-	// per-section leaf reader lights up. Two probes:
-	//   1. listHandbookChapters -- for hierarchical corpora (handbooks, AIM)
+	// per-section leaf reader lights up. Three probes, in order:
+	//   1. listSubpartsForReference -- CFR Wave 2 tree shape: Subparts at
+	//      depth 0, sections under them at depth 1.
+	//   2. listHandbookChapters -- hierarchical corpora (handbooks, AIM)
 	//      where the reference has level=chapter children at depth 0.
-	//   2. listFlatTopLevelSections -- for flat corpora (CFR per WP-CFR seeder
-	//      docs: Part = reference, sections sit flat at depth 0 with
-	//      level=section, no chapter parent).
+	//   3. listFlatTopLevelSections -- flat corpora (small CFR Parts with no
+	//      Subpart subdivisions; pre-Wave-2 fixtures).
 	// The first probe to return rows wins. Empty stays empty (umbrella card
-	// fallback). When subpart hierarchy lands for CFR (Wave 2), this falls
-	// through to a third tree-shaped probe without changing the public shape.
+	// fallback). The two outputs are mutually exclusive: when `subparts.length
+	// > 0` the page renders the tree; otherwise it renders `sections` flat.
 	let sections: RegulationsSectionRow[] = [];
+	let subpartGroups: RegulationsSubpartGroup[] = [];
 	if (groupRefs.length === 1) {
 		const only = groupRefs[0];
 		if (only) {
-			const chapters = await listHandbookChapters(only.id, db);
-			if (chapters.length > 0) {
-				sections = chapters.map((c) => ({
-					id: c.id,
-					code: c.code,
-					title: c.title,
-					ordinal: c.ordinal,
-					external: cfrSectionExternal(kind, group, c.code),
-				}));
+			const subparts = await listSubpartsForReference(only.id, db);
+			if (subparts.length > 0) {
+				subpartGroups = await Promise.all(
+					subparts.map(async (sp) => {
+						const sectionRows = await listSectionsForSubpart(sp.id, db);
+						return {
+							id: sp.id,
+							code: sp.code,
+							title: sp.title,
+							ordinal: sp.ordinal,
+							sections: sectionRows.map((s) => ({
+								id: s.id,
+								code: s.code,
+								title: s.title,
+								ordinal: s.ordinal,
+								external: cfrSectionExternal(kind, group, s.code),
+							})),
+						};
+					}),
+				);
 			} else {
-				const flat = await listFlatTopLevelSections(only.id, db);
-				sections = flat.map((s) => ({
-					id: s.id,
-					code: s.code,
-					title: s.title,
-					ordinal: s.ordinal,
-					external: cfrSectionExternal(kind, group, s.code),
-				}));
+				const chapters = await listHandbookChapters(only.id, db);
+				if (chapters.length > 0) {
+					sections = chapters.map((c) => ({
+						id: c.id,
+						code: c.code,
+						title: c.title,
+						ordinal: c.ordinal,
+						external: cfrSectionExternal(kind, group, c.code),
+					}));
+				} else {
+					const flat = await listFlatTopLevelSections(only.id, db);
+					sections = flat.map((s) => ({
+						id: s.id,
+						code: s.code,
+						title: s.title,
+						ordinal: s.ordinal,
+						external: cfrSectionExternal(kind, group, s.code),
+					}));
+				}
 			}
 		}
 	}
@@ -752,6 +831,7 @@ async function buildSectionListView(
 		groupLabel: labelForGroup(kind, group),
 		umbrellas,
 		sections,
+		subparts: subpartGroups,
 		...groupCopy,
 		external: cfrPartExternal(kind, group),
 		chapterId: ctx.chapterId,
@@ -798,9 +878,27 @@ async function buildDetailView(
 			'Section not found.',
 		);
 	}
-	const virtualChapter = hierarchicalView
-		? hierarchicalView.chapter
-		: { id: ref.id, code: group, title: labelForGroup(kind, group) };
+	// Wave 2: CFR sections that live under a Subpart parent expose a real
+	// ancestor row (level=`subpart`). Pre-Wave-2 / non-CFR flat-shape
+	// references keep the synthesized "virtual chapter" so the breadcrumb
+	// chrome stays the same.
+	let subpartCode: string | null = null;
+	let subpartTitle: string | null = null;
+	let virtualChapter: RegulationsAncestorDetail;
+	if (hierarchicalView) {
+		virtualChapter = hierarchicalView.chapter;
+	} else if (flatView && flatView.section.parentId !== null) {
+		const parentRow = await getReferenceSectionById(flatView.section.parentId, db);
+		if (parentRow !== null) {
+			virtualChapter = { id: parentRow.id, code: parentRow.code, title: parentRow.title };
+			subpartCode = parentRow.code;
+			subpartTitle = parentRow.title;
+		} else {
+			virtualChapter = { id: ref.id, code: group, title: labelForGroup(kind, group) };
+		}
+	} else {
+		virtualChapter = { id: ref.id, code: group, title: labelForGroup(kind, group) };
+	}
 
 	// Fan out the leaf-page reads in parallel. The pre-aggregator route loader
 	// issued these sequentially; parallelizing matches the per-page latency
@@ -885,6 +983,8 @@ async function buildDetailView(
 		})),
 		errata,
 		external: cfrSectionExternal(kind, group, view.section.code),
+		cfrSubpartCode: subpartCode,
+		cfrSubpartTitle: subpartTitle,
 		...((): {
 			cfrChapterId: string | null;
 			cfrChapterName: string | null;

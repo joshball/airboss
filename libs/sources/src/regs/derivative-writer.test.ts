@@ -97,6 +97,22 @@ describe('writeDerivativeTree', () => {
 		expect(entry.id).toBe('airboss-ref:regs/cfr-14/91/103');
 		expect(entry.body_path).toBe('91/91-103.md');
 		expect(entry.body_sha256).toMatch(/^[a-f0-9]{64}$/);
+		// Wave 2: each section entry carries its owning Subpart letter so
+		// the seeder can attach the section row under the right Subpart row.
+		expect(entry.subpart_id).toBe('b');
+	});
+
+	it('manifest carries per-Part subparts with section ownership (Wave 2)', () => {
+		writeDerivativeTree(buildInput());
+		const manifest = JSON.parse(readFileSync(join(tmpRoot, 'cfr-14/2026-01-01/manifest.json'), 'utf-8'));
+		expect(manifest.parts).toHaveLength(1);
+		const part91 = manifest.parts[0];
+		expect(part91.number).toBe('91');
+		expect(part91.subparts).toHaveLength(1);
+		expect(part91.subparts[0].id).toBe('b');
+		expect(part91.subparts[0].ordinal).toBe(0);
+		expect(part91.subparts[0].title).toContain('Flight Rules');
+		expect(part91.subparts[0].sections).toEqual(['91.103']);
 	});
 
 	it('second run with identical input is a no-op', () => {

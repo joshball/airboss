@@ -36,6 +36,14 @@ export function airbossRefForWholeDocHandbook(documentSlug: string, edition: str
  * part `"91"`). Section is the section code as authored (`"91.103"` ->
  * `"91/103"` in the URI).
  */
+/**
+ * Build a CFR Subpart URI. `airboss-ref:regs/cfr-14/91/subpart-A`. Subpart
+ * letter is uppercased to match the publisher form (Subpart A, B, ...).
+ */
+export function airbossRefForCfrSubpart(title: number | string, part: string, subpartLetter: string): string {
+	return `${SCHEME_PREFIX}regs/cfr-${title}/${part}/subpart-${subpartLetter.toUpperCase()}`;
+}
+
 export function airbossRefForCfrSection(title: number | string, sectionCode: string): string {
 	// `91.103` -> `91/103`; `91.103(b)(1)(i)` -> `91/103/b/1/i`. Match the
 	// shape that `parseRegsLocator` round-trips: dots become slashes; paren

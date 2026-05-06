@@ -49,6 +49,9 @@ function figureUrl(assetPath: string): string {
 			{/if}
 		{/if}
 		<a href={ROUTES.LIBRARY_REGULATIONS_GROUP(kind, data.group)}>{data.group}</a> &raquo;
+		{#if data.cfrSubpartTitle}
+			<span class="crumb-static">{data.cfrSubpartTitle}</span> &raquo;
+		{/if}
 		<span>§{data.section.code}</span>
 	</nav>
 	{#if data.external}

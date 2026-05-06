@@ -69,6 +69,8 @@ export const load: PageServerLoad = async (event) => {
 			cfrChapterName: view.cfrChapterName,
 			cfrSubchapterId: view.cfrSubchapterId,
 			cfrSubchapterName: view.cfrSubchapterName,
+			cfrSubpartCode: view.cfrSubpartCode,
+			cfrSubpartTitle: view.cfrSubpartTitle,
 		};
 	} catch (err) {
 		if (err instanceof RegulationsViewNotFoundError) throw error(404, err.message);

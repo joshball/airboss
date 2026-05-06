@@ -1046,9 +1046,34 @@ export type CfrManifestSource = z.infer<typeof cfrManifestSourceSchema>;
  * matching reference row. Optional on the schema so older manifests
  * (pre-WP-CFR-Wave-1) still validate; new ingests always populate it.
  */
+/**
+ * One Subpart row inside `manifest.parts[].subparts`. Captures the
+ * publisher's Subpart A, B, C, ... structure under each Part. Used by the
+ * CFR seeder to lay down `reference_section` rows at level=`subpart` so
+ * Part 91's 286 sections render grouped under "Subpart B -- Flight Rules"
+ * instead of as a flat list.
+ *
+ * `id` is the subpart letter, lowercase ("a", "b", ...). `ordinal` is the
+ * 0-indexed position within the Part. `sections` is the list of section
+ * codes (dotted form, e.g. "91.103") this Subpart owns, in source order.
+ */
+export const cfrManifestSubpartEntrySchema = z.object({
+	id: z.string().min(1),
+	ordinal: z.number().int().nonnegative(),
+	title: z.string().min(1),
+	sections: z.array(z.string().min(1)),
+});
+export type CfrManifestSubpartEntry = z.infer<typeof cfrManifestSubpartEntrySchema>;
+
 export const cfrManifestPartEntrySchema = z.object({
 	number: z.string().min(1),
 	officialTitle: z.string().min(1),
+	/**
+	 * Subparts under this Part, in source order. Defaults to `[]` for older
+	 * manifests written before WP-CFR-Wave-2 (when subpart hierarchy was
+	 * added); fresh ingests always populate it.
+	 */
+	subparts: z.array(cfrManifestSubpartEntrySchema).default([]),
 });
 export type CfrManifestPartEntry = z.infer<typeof cfrManifestPartEntrySchema>;
 
@@ -1080,6 +1105,13 @@ export const cfrSectionEntrySchema = z.object({
 	last_amended_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
 	body_path: z.string().min(1),
 	body_sha256: z.string().regex(/^[0-9a-f]{64}$/i),
+	/**
+	 * Owning Subpart letter, lowercase, or null when the section sits
+	 * directly under the Part (small Parts with no Subpart subdivisions).
+	 * Optional for back-compat with pre-Wave-2 sections.json files; fresh
+	 * ingests always populate it.
+	 */
+	subpart_id: z.string().min(1).nullable().default(null),
 });
 export type CfrSectionEntry = z.infer<typeof cfrSectionEntrySchema>;
 

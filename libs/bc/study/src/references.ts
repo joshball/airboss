@@ -253,6 +253,64 @@ export async function listFlatTopLevelSections(
 }
 
 /**
+ * Subpart rows for a reference. Used by the CFR section-list view to render
+ * sections grouped under "Subpart A -- General", "Subpart B -- Flight
+ * Rules", ... per Wave 2 of the CFR ingestion plan. Returns rows where
+ * `level = 'subpart'` and `parentId IS NULL` (subparts sit at depth 0
+ * directly under the reference); ordered by ordinal so the publisher's A,
+ * B, C, ... order is preserved.
+ */
+export async function listSubpartsForReference(
+	referenceId: string,
+	db: Db = defaultDb,
+): Promise<ReferenceSectionRow[]> {
+	return db
+		.select()
+		.from(referenceSection)
+		.where(
+			and(
+				eq(referenceSection.referenceId, referenceId),
+				eq(referenceSection.level, REFERENCE_SECTION_LEVELS.SUBPART),
+				isNull(referenceSection.parentId),
+			),
+		)
+		.orderBy(asc(referenceSection.ordinal));
+}
+
+/**
+ * Section rows that live under a Subpart parent. Pair with
+ * {@link listSubpartsForReference} to render the Subpart -> Section tree
+ * on the CFR Part page. Ordered by ordinal so sections render in
+ * regulatory order.
+ */
+export async function listSectionsForSubpart(subpartId: string, db: Db = defaultDb): Promise<ReferenceSectionRow[]> {
+	return db
+		.select()
+		.from(referenceSection)
+		.where(and(eq(referenceSection.parentId, subpartId), eq(referenceSection.level, REFERENCE_SECTION_LEVELS.SECTION)))
+		.orderBy(asc(referenceSection.ordinal));
+}
+
+/**
+ * All section rows for a reference, regardless of subpart parent. Used by
+ * the CFR detail view to assemble the cross-subpart sibling list and by
+ * `getFlatSection` to resolve a section by full code without caring about
+ * which Subpart owns it.
+ */
+export async function listAllSectionRowsForReference(
+	referenceId: string,
+	db: Db = defaultDb,
+): Promise<ReferenceSectionRow[]> {
+	return db
+		.select()
+		.from(referenceSection)
+		.where(
+			and(eq(referenceSection.referenceId, referenceId), eq(referenceSection.level, REFERENCE_SECTION_LEVELS.SECTION)),
+		)
+		.orderBy(asc(referenceSection.ordinal));
+}
+
+/**
  * Flat-corpus variant of {@link getHandbookSection}. Resolves a section row
  * by its full code (e.g. CFR `91.103`) under a reference whose sections sit
  * flat at depth 0 with no chapter row. Returns the section + figures +
@@ -278,7 +336,6 @@ export async function getFlatSection(
 				eq(referenceSection.referenceId, referenceId),
 				eq(referenceSection.code, fullCode),
 				eq(referenceSection.level, REFERENCE_SECTION_LEVELS.SECTION),
-				isNull(referenceSection.parentId),
 			),
 		)
 		.limit(1);
@@ -291,7 +348,12 @@ export async function getFlatSection(
 		.where(eq(referenceFigure.sectionId, section.id))
 		.orderBy(asc(referenceFigure.ordinal));
 
-	const siblings = await listFlatTopLevelSections(referenceId, db);
+	// Siblings span every section under the reference (across all Subparts
+	// post-Wave-2) so the detail page TOC stays book-experience consistent.
+	// Pre-Wave-2 (handbooks / AIM with flat sections under the reference)
+	// the result is unchanged because every section was already at the same
+	// flat depth.
+	const siblings = await listAllSectionRowsForReference(referenceId, db);
 	return { section, figures, siblings };
 }
 

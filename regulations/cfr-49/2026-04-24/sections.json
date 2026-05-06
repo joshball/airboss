@@ -9,7 +9,8 @@
         "canonical_title": "Reports and statements to be filed",
         "last_amended_date": "1995-08-07",
         "body_path": "830/830-15.md",
-        "body_sha256": "6f6684cee386a1faaf7ae1ec46230d98a23e7d40b760cd81fc5f5aaa9f8a3141"
+        "body_sha256": "6f6684cee386a1faaf7ae1ec46230d98a23e7d40b760cd81fc5f5aaa9f8a3141",
+        "subpart_id": "d"
       },
       {
         "id": "airboss-ref:regs/cfr-49/830/10",
@@ -17,7 +18,8 @@
         "canonical_title": "Preservation of aircraft wreckage, mail, cargo, and records",
         "last_amended_date": "2026-04-24",
         "body_path": "830/830-10.md",
-        "body_sha256": "620720273accacae36a33455abc47386f0fba065daf2c09964a37a1cc7f7360f"
+        "body_sha256": "620720273accacae36a33455abc47386f0fba065daf2c09964a37a1cc7f7360f",
+        "subpart_id": "c"
       },
       {
         "id": "airboss-ref:regs/cfr-49/830/6",
@@ -25,7 +27,8 @@
         "canonical_title": "Information to be given in notification",
         "last_amended_date": "2026-04-24",
         "body_path": "830/830-6.md",
-        "body_sha256": "f2b6bfa6576c158a9619d0b8eaf1bcf1be5766622666e1a345349af82f9370bb"
+        "body_sha256": "f2b6bfa6576c158a9619d0b8eaf1bcf1be5766622666e1a345349af82f9370bb",
+        "subpart_id": "b"
       },
       {
         "id": "airboss-ref:regs/cfr-49/830/5",
@@ -33,7 +36,8 @@
         "canonical_title": "Immediate notification",
         "last_amended_date": "2015-12-15",
         "body_path": "830/830-5.md",
-        "body_sha256": "7b41eea1bb0a6208e36370872881fc8f3346af7b6b33d655c644c64f17d11c65"
+        "body_sha256": "7b41eea1bb0a6208e36370872881fc8f3346af7b6b33d655c644c64f17d11c65",
+        "subpart_id": "b"
       },
       {
         "id": "airboss-ref:regs/cfr-49/830/2",
@@ -41,7 +45,8 @@
         "canonical_title": "Definitions",
         "last_amended_date": "2022-07-14",
         "body_path": "830/830-2.md",
-        "body_sha256": "a44fe448b0e1533a3f814383df235ee4848745e443cfdacc8cf4611b45305d07"
+        "body_sha256": "a44fe448b0e1533a3f814383df235ee4848745e443cfdacc8cf4611b45305d07",
+        "subpart_id": "a"
       },
       {
         "id": "airboss-ref:regs/cfr-49/830/1",
@@ -49,7 +54,8 @@
         "canonical_title": "Applicability",
         "last_amended_date": "1995-08-07",
         "body_path": "830/830-1.md",
-        "body_sha256": "0826a9da10b3d6c2ed44c453e909ea11364ee93f9b68047e74e11a7389b2f887"
+        "body_sha256": "0826a9da10b3d6c2ed44c453e909ea11364ee93f9b68047e74e11a7389b2f887",
+        "subpart_id": "a"
       }
     ],
     "1552": [
@@ -59,7 +65,8 @@
         "canonical_title": "Notification and processing of flight training events",
         "last_amended_date": "2026-04-24",
         "body_path": "1552/1552-51.md",
-        "body_sha256": "487a56cd8c60502fdd31730b10f3697c3929d3e54f137f46b3a3571a1dad7370"
+        "body_sha256": "487a56cd8c60502fdd31730b10f3697c3929d3e54f137f46b3a3571a1dad7370",
+        "subpart_id": "c"
       },
       {
         "id": "airboss-ref:regs/cfr-49/1552/39",
@@ -67,7 +74,8 @@
         "canonical_title": "Fees",
         "last_amended_date": "2026-04-24",
         "body_path": "1552/1552-39.md",
-        "body_sha256": "774be7da2343da3c73da06fc912afafd730249156127ea2fb05f3815cdab8e15"
+        "body_sha256": "774be7da2343da3c73da06fc912afafd730249156127ea2fb05f3815cdab8e15",
+        "subpart_id": "b"
       },
       {
         "id": "airboss-ref:regs/cfr-49/1552/37",
@@ -75,7 +83,8 @@
         "canonical_title": "Comparable security threat assessments",
         "last_amended_date": "2026-04-24",
         "body_path": "1552/1552-37.md",
-        "body_sha256": "0913056cdeec68a3fbc8db997079fddf1c019cc30d5d5f35a0274a31ae2d615e"
+        "body_sha256": "0913056cdeec68a3fbc8db997079fddf1c019cc30d5d5f35a0274a31ae2d615e",
+        "subpart_id": "b"
       },
       {
         "id": "airboss-ref:regs/cfr-49/1552/35",
@@ -83,7 +92,8 @@
         "canonical_title": "Presence in the United States",
         "last_amended_date": "2026-04-24",
         "body_path": "1552/1552-35.md",
-        "body_sha256": "972b4926534a1846d3e02c263f47f465bcc23e3175af77f186d4f39691db3f1e"
+        "body_sha256": "972b4926534a1846d3e02c263f47f465bcc23e3175af77f186d4f39691db3f1e",
+        "subpart_id": "b"
       },
       {
         "id": "airboss-ref:regs/cfr-49/1552/33",
@@ -91,7 +101,8 @@
         "canonical_title": "[Reserved]",
         "last_amended_date": "2026-04-24",
         "body_path": "1552/1552-33.md",
-        "body_sha256": "c230057fda974425f317d7714762169a58309b2f085bba779224a3cb33617db6"
+        "body_sha256": "c230057fda974425f317d7714762169a58309b2f085bba779224a3cb33617db6",
+        "subpart_id": "b"
       },
       {
         "id": "airboss-ref:regs/cfr-49/1552/31",
@@ -99,7 +110,8 @@
         "canonical_title": "Security threat assessment required for flight training candidates",
         "last_amended_date": "2026-04-24",
         "body_path": "1552/1552-31.md",
-        "body_sha256": "5675aeffbfb4e559f9532fd6decc7e28c4108e636361a1d49a7734bfdbfbee68"
+        "body_sha256": "5675aeffbfb4e559f9532fd6decc7e28c4108e636361a1d49a7734bfdbfbee68",
+        "subpart_id": "b"
       },
       {
         "id": "airboss-ref:regs/cfr-49/1552/19",
@@ -107,7 +119,8 @@
         "canonical_title": "Fraud, falsification, misrepresentation, or omission",
         "last_amended_date": "2026-04-24",
         "body_path": "1552/1552-19.md",
-        "body_sha256": "3e95b4dd66312d892f5921ad3c650278b1ea5112b0f1f541de93752ca26795bd"
+        "body_sha256": "3e95b4dd66312d892f5921ad3c650278b1ea5112b0f1f541de93752ca26795bd",
+        "subpart_id": "a"
       },
       {
         "id": "airboss-ref:regs/cfr-49/1552/17",
@@ -115,7 +128,8 @@
         "canonical_title": "FTSP Portal",
         "last_amended_date": "2026-04-24",
         "body_path": "1552/1552-17.md",
-        "body_sha256": "36cef541502779fa0933edd574831a8dfd73c7374466797c9d98e5ab66b56e0d"
+        "body_sha256": "36cef541502779fa0933edd574831a8dfd73c7374466797c9d98e5ab66b56e0d",
+        "subpart_id": "a"
       },
       {
         "id": "airboss-ref:regs/cfr-49/1552/15",
@@ -123,7 +137,8 @@
         "canonical_title": "Recordkeeping",
         "last_amended_date": "2026-04-24",
         "body_path": "1552/1552-15.md",
-        "body_sha256": "39b0271ff2f1a7d3d161246cfed41ec366af95cd3588eabe74435069900fad83"
+        "body_sha256": "39b0271ff2f1a7d3d161246cfed41ec366af95cd3588eabe74435069900fad83",
+        "subpart_id": "a"
       },
       {
         "id": "airboss-ref:regs/cfr-49/1552/13",
@@ -131,7 +146,8 @@
         "canonical_title": "Security awareness training",
         "last_amended_date": "2026-04-24",
         "body_path": "1552/1552-13.md",
-        "body_sha256": "debde64d094777fe0cd4bae81994ba11291b80d660f8e783ba8a5ffe2a4423f7"
+        "body_sha256": "debde64d094777fe0cd4bae81994ba11291b80d660f8e783ba8a5ffe2a4423f7",
+        "subpart_id": "a"
       },
       {
         "id": "airboss-ref:regs/cfr-49/1552/11",
@@ -139,7 +155,8 @@
         "canonical_title": "[Reserved]",
         "last_amended_date": "2026-04-24",
         "body_path": "1552/1552-11.md",
-        "body_sha256": "b849e3e22b8d41dca4435f6acf7af98f5df50d3e6c6748cb2a23aad32a6b466f"
+        "body_sha256": "b849e3e22b8d41dca4435f6acf7af98f5df50d3e6c6748cb2a23aad32a6b466f",
+        "subpart_id": "a"
       },
       {
         "id": "airboss-ref:regs/cfr-49/1552/9",
@@ -147,7 +164,8 @@
         "canonical_title": "Security Coordinator",
         "last_amended_date": "2026-04-24",
         "body_path": "1552/1552-9.md",
-        "body_sha256": "f80bb6a52292a666bbd5538cf61eaebe8acc80951bf62f51cec1d1564d78b784"
+        "body_sha256": "f80bb6a52292a666bbd5538cf61eaebe8acc80951bf62f51cec1d1564d78b784",
+        "subpart_id": "a"
       },
       {
         "id": "airboss-ref:regs/cfr-49/1552/7",
@@ -155,7 +173,8 @@
         "canonical_title": "Verification of eligibility",
         "last_amended_date": "2026-04-24",
         "body_path": "1552/1552-7.md",
-        "body_sha256": "144900d2566c3d1cd88ce42d03036bd99b262c23ea094ed624ca1c0e82ae22e7"
+        "body_sha256": "144900d2566c3d1cd88ce42d03036bd99b262c23ea094ed624ca1c0e82ae22e7",
+        "subpart_id": "a"
       },
       {
         "id": "airboss-ref:regs/cfr-49/1552/5",
@@ -163,7 +182,8 @@
         "canonical_title": "Applicability",
         "last_amended_date": "2026-04-24",
         "body_path": "1552/1552-5.md",
-        "body_sha256": "59df820adcd6eef5d012f09d75199c91e5bc891e33cfd4ad4c5b3b162c8e4261"
+        "body_sha256": "59df820adcd6eef5d012f09d75199c91e5bc891e33cfd4ad4c5b3b162c8e4261",
+        "subpart_id": "a"
       },
       {
         "id": "airboss-ref:regs/cfr-49/1552/3",
@@ -171,7 +191,8 @@
         "canonical_title": "Terms used in this part",
         "last_amended_date": "2026-02-17",
         "body_path": "1552/1552-3.md",
-        "body_sha256": "e884a4ef28227f33dcb280f1885c0986a14c08c998bbf8ae2ccac01d55461287"
+        "body_sha256": "e884a4ef28227f33dcb280f1885c0986a14c08c998bbf8ae2ccac01d55461287",
+        "subpart_id": "a"
       },
       {
         "id": "airboss-ref:regs/cfr-49/1552/1",
@@ -179,7 +200,8 @@
         "canonical_title": "Scope",
         "last_amended_date": "2026-02-17",
         "body_path": "1552/1552-1.md",
-        "body_sha256": "27a3bacf5f1627b8e81b86c93a567a779f068ebdfaee2faff984b40eeca8e4e7"
+        "body_sha256": "27a3bacf5f1627b8e81b86c93a567a779f068ebdfaee2faff984b40eeca8e4e7",
+        "subpart_id": "a"
       }
     ]
   }
