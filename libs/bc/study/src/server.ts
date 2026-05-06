@@ -297,6 +297,7 @@ export type {
 	ListReferencesOptions,
 	OpenWarning,
 	ReadingOrderEntry,
+	ResolvedCitation,
 } from './references';
 export {
 	computeReadingOrder,
@@ -327,6 +328,7 @@ export {
 	markAsReread,
 	ReferenceNotFoundError,
 	recordHeartbeat,
+	resolveCitationsForRender,
 	resolveCitationUrl,
 	StaleWarningsTriageError,
 	setComprehended,

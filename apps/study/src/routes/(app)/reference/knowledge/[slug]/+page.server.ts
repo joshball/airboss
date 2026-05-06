@@ -9,12 +9,12 @@ import {
 	type KnowledgeNodeRow,
 	lifecycleFromContent,
 	listReferences,
+	type ResolvedCitation,
 	resolveCitationSources,
-	resolveCitationUrl,
+	resolveCitationsForRender,
 	splitContentPhases,
 } from '@ab/bc-study/server';
 import { CITATION_TARGET_TYPES, KNOWLEDGE_EDGE_TYPES, KNOWLEDGE_PHASE_ORDER, type KnowledgePhase } from '@ab/constants';
-import type { Citation } from '@ab/types';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
@@ -25,18 +25,7 @@ interface EdgeSummary {
 	title: string | null;
 }
 
-/**
- * Citation entry as the page renders it: the original `Citation` plus the
- * resolved URL. Legacy freeform citations carry `resolvedUrl: null` and render
- * as plain text. Structured handbook citations whose `reference_id` resolves
- * carry the `/handbooks/...` URL. Structured handbook citations whose
- * `reference_id` does not resolve carry `resolvedUrl: null`; the UI flags
- * those as "(citation broken)" by inspecting the citation's `kind`.
- */
-export interface ResolvedCitation {
-	citation: Citation;
-	resolvedUrl: string | null;
-}
+export type { ResolvedCitation };
 
 /** Group edges by KNOWLEDGE_EDGE_TYPES value. Preserves author order. */
 function groupEdgesByType(edges: KnowledgeEdgeRow[]): Map<string, KnowledgeEdgeRow[]> {
@@ -105,19 +94,16 @@ export const load: PageServerLoad = async (event) => {
 	const citedByRows = await getCitedBy(CITATION_TARGET_TYPES.KNOWLEDGE_NODE, node.id);
 	const citedBy: CitationWithSource[] = await resolveCitationSources(citedByRows);
 
-	// Bidirectional citation: resolve every entry in `node.references` to a URL
-	// when possible. v1 only resolves `kind='handbook'` -- legacy freeform and
-	// every other structured kind return null. The reference table is small
-	// (handful of rows v1) so loading it once per request is cheap.
-	// `node.references` is typed as the legacy shape on the column today; the
-	// JSONB column itself accepts both shapes per the spec, so we widen to
-	// `Citation[]` for resolution.
+	// Bidirectional citation resolution. The JSONB column accepts three shapes
+	// today (legacy `{source, detail, note}`, in-type structured with `kind`,
+	// new amendment 2026-05 `ref:`-shape with sentinel fields). We widen to
+	// `unknown[]` and let `resolveCitationsForRender` discriminate. The
+	// reference table is small (handful of rows v1) so loading it once per
+	// request is cheap; we include superseded rows so prior-edition pinned
+	// citations still resolve.
 	const allReferences = await listReferences({ includeSuperseded: true });
-	const rawCitations = node.references as unknown as Citation[];
-	const resolvedReferences: ResolvedCitation[] = rawCitations.map((citation) => ({
-		citation,
-		resolvedUrl: resolveCitationUrl(citation, allReferences),
-	}));
+	const rawCitations = node.references as unknown as ReadonlyArray<unknown>;
+	const resolvedReferences: ResolvedCitation[] = resolveCitationsForRender(rawCitations, allReferences);
 
 	return {
 		node: {

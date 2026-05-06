@@ -19,7 +19,6 @@ import {
 	type StudyPriority,
 } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
-import { type Citation, isStructuredCitation } from '@ab/types';
 import CitedByPanel, { type CitedByItem } from '@ab/ui/components/CitedByPanel.svelte';
 import { humanize, renderMarkdown } from '@ab/utils';
 import type { PageData } from './$types';
@@ -82,9 +81,9 @@ function renderPhase(body: string | null): string {
 interface CitationDisplay {
 	/** Stable key for the {#each} block. */
 	key: string;
-	/** Primary heading -- "PHAK" / "FAR Part 91" / freeform `source`. */
+	/** Primary heading -- registry title ("Airplane Flying Handbook") or legacy `source`. */
 	source: string;
-	/** Secondary detail line -- locator string or freeform `detail`. */
+	/** Secondary detail line -- chapter/section locator or sentinel-derived label. */
 	detail: string;
 	/** Optional commentary -- freeform `note`. */
 	note: string;
@@ -92,78 +91,31 @@ interface CitationDisplay {
 	href: string | null;
 	/** Structured-but-unresolved citations get the "(citation broken)" tag. */
 	broken: boolean;
-	/** Structured kinds get a kind chip; legacy entries don't. */
-	kindLabel: string | null;
-}
-
-/** Format a structured citation's locator into a human-readable suffix. */
-function formatStructuredLocator(citation: Extract<Citation, { kind: ReferenceKind }>): string {
-	switch (citation.kind) {
-		case REFERENCE_KINDS.HANDBOOK: {
-			const parts = [`Ch. ${citation.locator.chapter}`];
-			if (citation.locator.section !== undefined) parts.push(`§${citation.locator.section}`);
-			if (citation.locator.subsection !== undefined) parts.push(`.${citation.locator.subsection}`);
-			if (citation.locator.page_start) {
-				const pages = citation.locator.page_end
-					? `pp. ${citation.locator.page_start}..${citation.locator.page_end}`
-					: `p. ${citation.locator.page_start}`;
-				parts.push(`(${pages})`);
-			}
-			return parts.join(' ');
-		}
-		case REFERENCE_KINDS.CFR:
-			return `${citation.locator.title} CFR ${citation.locator.part}.${citation.locator.section}`;
-		case REFERENCE_KINDS.AC:
-			return citation.locator.paragraph ? `¶${citation.locator.paragraph}` : '';
-		case REFERENCE_KINDS.ACS:
-		case REFERENCE_KINDS.PTS: {
-			const parts: string[] = [];
-			if (citation.locator.area) parts.push(`Area ${citation.locator.area}`);
-			if (citation.locator.task) parts.push(`Task ${citation.locator.task}`);
-			if (citation.locator.element) parts.push(`Element ${citation.locator.element}`);
-			return parts.join(', ');
-		}
-		case REFERENCE_KINDS.AIM:
-			return citation.locator.paragraph ? `¶${citation.locator.paragraph}` : '';
-		case REFERENCE_KINDS.PCG:
-			return citation.locator.term ?? '';
-		case REFERENCE_KINDS.NTSB:
-		case REFERENCE_KINDS.POH:
-		case REFERENCE_KINDS.OTHER:
-			return citation.locator.detail ?? '';
-	}
+	/** Edition annotation when the citation pins to a non-current edition. */
+	priorEditionAnnotation: string | null;
 }
 
 function toCitationDisplay(entry: PageData['node']['references'][number], index: number): CitationDisplay {
-	const { citation, resolvedUrl } = entry;
-	if (isStructuredCitation(citation)) {
-		const kindLabel = REFERENCE_KIND_LABELS[citation.kind];
-		const detail = formatStructuredLocator(citation);
-		// "Broken" = handbook citation whose `reference_id` failed to resolve.
-		// Non-handbook kinds (cfr, ac, acs, ...) deliberately return null from
-		// the v1 resolver because the per-kind resolvers ship in the cert-
-		// syllabus WP. Those are "future kind, no link yet," not broken.
-		const broken = citation.kind === REFERENCE_KINDS.HANDBOOK && resolvedUrl === null;
-		return {
-			key: `${citation.kind}:${citation.reference_id}:${index}`,
-			source: kindLabel,
-			detail,
-			note: citation.note ?? '',
-			href: resolvedUrl,
-			broken,
-			kindLabel,
-		};
-	}
+	// Title comes from the registry-resolved row when available
+	// ("Airplane Flying Handbook"); falls back to the kind family label
+	// ("Handbook", "Advisory Circular") and finally to the raw `source` text.
+	// This is the ADR 019 amendment 2026-05 step 5 fix: the renderer must NOT
+	// display the kind discriminator as the title.
+	const fallbackKindLabel =
+		entry.kind !== null && entry.kind in REFERENCE_KIND_LABELS
+			? REFERENCE_KIND_LABELS[entry.kind as ReferenceKind]
+			: null;
+	const source = entry.title.length > 0 ? entry.title : (fallbackKindLabel ?? entry.fallbackLabel);
+	const priorEditionAnnotation =
+		entry.isPriorEdition && entry.pinnedEditionSlug !== null ? entry.pinnedEditionSlug : null;
 	return {
-		key: `legacy:${citation.source}:${citation.detail}:${index}`,
-		source: citation.source,
-		detail: citation.detail,
-		note: citation.note,
-		// Legacy citations never have a URL in v1 (resolver returns null) and
-		// are NOT broken -- they're freeform by design.
-		href: null,
-		broken: false,
-		kindLabel: null,
+		key: `${entry.kind ?? 'legacy'}:${entry.title}:${entry.edition}:${index}`,
+		source,
+		detail: entry.locatorLabel,
+		note: entry.note,
+		href: entry.resolvedUrl,
+		broken: entry.broken,
+		priorEditionAnnotation,
 	};
 }
 
@@ -393,6 +345,11 @@ const citedByItems = $derived<CitedByItem[]>(
 										(citation broken)
 									</span>
 								{/if}
+							</span>
+						{/if}
+						{#if ref.priorEditionAnnotation}
+							<span class="ref-edition" title="Citation pins a prior edition of this reference.">
+								({ref.priorEditionAnnotation})
 							</span>
 						{/if}
 						{#if ref.note}
@@ -829,6 +786,12 @@ const citedByItems = $derived<CitedByItem[]>(
 		color: var(--ink-faint);
 		font-size: var(--type-ui-caption-size);
 		font-style: italic;
+	}
+
+	.ref-edition {
+		margin-left: var(--space-xs);
+		color: var(--ink-subtle);
+		font-size: var(--type-ui-caption-size);
 	}
 
 </style>
