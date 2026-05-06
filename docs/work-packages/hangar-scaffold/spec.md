@@ -1,10 +1,22 @@
 ---
-title: 'Spec: Hangar scaffold'
+id: hangar-scaffold
+title: "Spec: Hangar scaffold"
 product: hangar
-feature: hangar-scaffold
-type: spec
-status: unread
-review_status: pending
+category: product
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-23
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - scaffold
+  - hangar
+legacy_fields:
+  feature: hangar-scaffold
+  type: spec
+  review_status: pending
 ---
 
 # Spec: Hangar scaffold

@@ -1,10 +1,22 @@
 ---
-title: 'Spec: Hangar sources v1'
+id: hangar-sources-v1
+title: "Spec: Hangar sources v1"
 product: hangar
-feature: hangar-sources-v1
-type: spec
-status: unread
-review_status: done
+category: feature
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-24
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - sources
+  - admin
+legacy_fields:
+  feature: hangar-sources-v1
+  type: spec
+  review_status: done
 ---
 
 # Spec: Hangar sources v1
