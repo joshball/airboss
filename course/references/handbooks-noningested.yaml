@@ -10,22 +10,20 @@
 # `scripts/db/migrate-references-to-structured.ts` now resolves citations
 # directly to the handbooks-extras `(slug, edition)` pairs.
 #
-# The single remaining row -- `afh` at `FAA-H-8083-3B` -- exists so historical
-# citations to the prior AFH edition (3C is current and section-tree
-# ingested) resolve cleanly. Deleting it requires a content audit that
-# re-points every node's `source` string to 3C; tracked as low priority in
-# the references roadmap.
+# The single remaining row -- `afh` at `FAA-H-8083-3B` -- exists so existing
+# knowledge-node citations to the prior AFH edition resolve cleanly while
+# 3C is the current section-tree-ingested edition. The YAML seeder wires
+# `supersededById` after upsert so 3B -> 3C is recorded in the DB; this
+# hides 3B from the cert library page (which filters on the chain) while
+# leaving citation-by-edition lookups working. Proper 3B section-tree
+# ingestion is tracked at:
+#   docs/work-packages/afh-3b-ingestion/spec.md
 
 references:
-  # AFH 3B was the prior edition. Knowledge nodes still reference it
-  # explicitly in `source` strings; rather than rewrite every node to 3C
-  # (which would risk dangling chapter references; AFH reorganizes across
-  # editions), keep both editions authored so citations resolve cleanly
-  # until a content audit promotes them.
   - slug: afh
     kind: handbook
     edition: FAA-H-8083-3B
-    title: Airplane Flying Handbook (prior edition)
+    title: Airplane Flying Handbook
     publisher: FAA
     url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/airplane_handbook
     subjects: [procedures, aerodynamics, training-ops]
