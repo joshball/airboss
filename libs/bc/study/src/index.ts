@@ -307,8 +307,10 @@ export type {
 export type {
 	RegulationsBucketCard,
 	RegulationsChapterDetail,
+	RegulationsChapterSummary,
 	RegulationsCitingNode,
 	RegulationsDetailView,
+	RegulationsExternalLink,
 	RegulationsFigureTile,
 	RegulationsGroupCard,
 	RegulationsGroupView,

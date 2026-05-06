@@ -27,6 +27,7 @@ import {
 import { listReferences } from '@ab/bc-study/server';
 import { LIBRARY_REGULATIONS_KIND_COPY, LIBRARY_REGULATIONS_KINDS, REFERENCE_KINDS } from '@ab/constants';
 import { db } from '@ab/db/connection';
+import { buildEcfrUrl, buildPartUrl } from '@ab/sources';
 import type { PageServerLoad } from './$types';
 
 interface AuditRow {
@@ -65,12 +66,15 @@ function projectForVariant(
 		case 'CfrPartCard': {
 			const titleNumber = ref.documentSlug.startsWith('14cfr') ? 14 : ref.documentSlug.startsWith('49cfr') ? 49 : null;
 			const partNumber = ref.documentSlug.replace(/^(14|49)cfr/, '');
+			const external =
+				titleNumber === 14 || titleNumber === 49 ? { url: buildPartUrl(titleNumber, partNumber), label: 'eCFR' } : null;
 			return {
 				titleNumber,
 				partNumber,
 				partTitle: m.officialTitle ?? ref.title,
 				description: m.description,
 				whyItMatters: m.whyItMatters,
+				external,
 			};
 		}
 		case 'CfrTitleCard': {
@@ -79,6 +83,7 @@ function projectForVariant(
 				topic: m.topic ?? '',
 				description: m.description ?? '',
 				whyItMatters: m.whyItMatters ?? '',
+				external: m.external ?? null,
 			};
 		}
 		case 'AimCorpusCard':
@@ -146,11 +151,13 @@ export const load: PageServerLoad = async () => {
 	const kindLevelAudit: AuditRow[] = [];
 	for (const kind of [LIBRARY_REGULATIONS_KINDS.CFR_14, LIBRARY_REGULATIONS_KINDS.CFR_49]) {
 		const copy = LIBRARY_REGULATIONS_KIND_COPY[kind];
+		const titleNumber = kind === LIBRARY_REGULATIONS_KINDS.CFR_14 ? 14 : 49;
 		const result = validateCardData('CfrTitleCard', `${kind} kind copy`, {
 			shortLabel: copy.shortLabel,
 			topic: copy.topic,
 			description: copy.description,
 			whyItMatters: copy.whyItMatters,
+			external: { url: buildEcfrUrl(titleNumber, {}), label: 'eCFR' },
 		});
 		kindLevelAudit.push({
 			subject: `${kind} (kind copy)`,

@@ -5,6 +5,8 @@
  * topic ("Aeronautics and Space") sits as subtitle. The full official
  * title ("Title 14 of the Code of Federal Regulations") is the tooltip
  * on the short label, surfaced via <abbr>.
+ *
+ * `external` is required: every CFR title links to its eCFR landing.
  */
 
 import LibraryReferenceCard from '../LibraryReferenceCard.svelte';
@@ -17,6 +19,7 @@ let {
 	description,
 	whyItMatters,
 	href,
+	external,
 	countLabel = null,
 }: {
 	shortLabel: string;
@@ -25,11 +28,18 @@ let {
 	description: string;
 	whyItMatters: string;
 	href: string;
+	external: { url: string; label: string };
 	countLabel?: string | null;
 } = $props();
 
 $effect.pre(() => {
-	enforceCardComplete('CfrTitleCard', shortLabel, { shortLabel, topic, description, whyItMatters });
+	enforceCardComplete('CfrTitleCard', shortLabel, {
+		shortLabel,
+		topic,
+		description,
+		whyItMatters,
+		external,
+	});
 });
 </script>
 
@@ -40,5 +50,6 @@ $effect.pre(() => {
 	{description}
 	{whyItMatters}
 	{href}
+	{external}
 	{countLabel}
 />

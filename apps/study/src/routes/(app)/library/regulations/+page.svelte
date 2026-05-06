@@ -26,7 +26,7 @@ let { data }: { data: PageData } = $props();
 <ul class="grid">
 	{#each data.buckets as bucket (bucket.kind)}
 		<li class:empty={bucket.count === 0}>
-			{#if bucket.kind === LIBRARY_REGULATIONS_KINDS.CFR_14 || bucket.kind === LIBRARY_REGULATIONS_KINDS.CFR_49}
+			{#if (bucket.kind === LIBRARY_REGULATIONS_KINDS.CFR_14 || bucket.kind === LIBRARY_REGULATIONS_KINDS.CFR_49) && bucket.external}
 				<CfrTitleCard
 					shortLabel={bucket.label}
 					topic={bucket.topic ?? ''}
@@ -34,6 +34,7 @@ let { data }: { data: PageData } = $props();
 					description={bucket.description ?? ''}
 					whyItMatters={bucket.whyItMatters ?? ''}
 					href={ROUTES.LIBRARY_REGULATIONS_KIND(bucket.kind)}
+					external={bucket.external}
 					countLabel={`${bucket.count} reference${bucket.count === 1 ? '' : 's'}`}
 				/>
 			{:else}
@@ -43,6 +44,7 @@ let { data }: { data: PageData } = $props();
 					description={bucket.description ?? null}
 					whyItMatters={bucket.whyItMatters ?? null}
 					href={ROUTES.LIBRARY_REGULATIONS_KIND(bucket.kind)}
+					external={bucket.external}
 				/>
 			{/if}
 		</li>

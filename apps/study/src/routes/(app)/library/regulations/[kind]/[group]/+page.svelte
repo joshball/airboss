@@ -24,13 +24,27 @@ const kindLabel = $derived(data.kindLabel);
 			<a href={ROUTES.LIBRARY}>Library</a> &raquo;
 			<a href={ROUTES.LIBRARY_REGULATIONS}>Regulations & policy</a> &raquo;
 			<a href={ROUTES.LIBRARY_REGULATIONS_KIND(kind)}>{kindLabel}</a> &raquo;
+			{#if data.chapterId}
+				<span class="crumb-static">Chapter {data.chapterId}{data.chapterName ? ` (${data.chapterName})` : ''}</span> &raquo;
+				{#if data.subchapterId}
+					<span class="crumb-static">Subchapter {data.subchapterId}{data.subchapterName ? ` (${data.subchapterName})` : ''}</span> &raquo;
+				{/if}
+			{/if}
 			<span>{data.groupLabel}</span>
 		</nav>
 	{/snippet}
 </PageHeader>
 
-{#if data.description || data.whyItMatters}
+{#if data.description || data.whyItMatters || data.external}
 	<section aria-label="About this part" class="group-overview">
+		{#if data.external}
+			<p class="group-external">
+				<a href={data.external.url} target="_blank" rel="noopener noreferrer">
+					<span aria-hidden="true">↗</span>
+					View at {data.external.label}
+				</a>
+			</p>
+		{/if}
 		{#if data.description}
 			<p class="group-description">{data.description}</p>
 		{/if}
@@ -170,6 +184,21 @@ const kindLabel = $derived(data.kindLabel);
 		font-weight: var(--font-weight-semibold);
 		text-transform: uppercase;
 		letter-spacing: var(--letter-spacing-caps);
+		color: var(--ink-muted);
+	}
+	.group-external {
+		margin: 0;
+		font-size: var(--font-size-sm);
+	}
+	.group-external a {
+		color: var(--action-default);
+		text-decoration: none;
+	}
+	.group-external a:hover,
+	.group-external a:focus-visible {
+		text-decoration: underline;
+	}
+	:global(.crumb-static) {
 		color: var(--ink-muted);
 	}
 </style>

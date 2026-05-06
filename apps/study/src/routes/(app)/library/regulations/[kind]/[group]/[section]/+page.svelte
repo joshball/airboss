@@ -42,9 +42,23 @@ function figureUrl(assetPath: string): string {
 		<a href={ROUTES.LIBRARY}>Library</a> &raquo;
 		<a href={ROUTES.LIBRARY_REGULATIONS}>Regulations & policy</a> &raquo;
 		<a href={ROUTES.LIBRARY_REGULATIONS_KIND(kind)}>{kind}</a> &raquo;
+		{#if data.cfrChapterId}
+			<span class="crumb-static">Chapter {data.cfrChapterId}{data.cfrChapterName ? ` (${data.cfrChapterName})` : ''}</span> &raquo;
+			{#if data.cfrSubchapterId}
+				<span class="crumb-static">Subchapter {data.cfrSubchapterId}{data.cfrSubchapterName ? ` (${data.cfrSubchapterName})` : ''}</span> &raquo;
+			{/if}
+		{/if}
 		<a href={ROUTES.LIBRARY_REGULATIONS_GROUP(kind, data.group)}>{data.group}</a> &raquo;
 		<span>§{data.section.code}</span>
 	</nav>
+	{#if data.external}
+		<p class="section-external">
+			<a href={data.external.url} target="_blank" rel="noopener noreferrer">
+				<span aria-hidden="true">↗</span>
+				View §{data.section.code} at {data.external.label}
+			</a>
+		</p>
+	{/if}
 	<h1 data-testid="page-anchor">
 		{data.section.title}
 		<HandbookEditionBadge edition={data.reference.edition} />
@@ -110,6 +124,21 @@ function figureUrl(assetPath: string): string {
 	.page-header nav a:focus-visible {
 		outline: 2px solid var(--focus-ring);
 		outline-offset: 2px;
+	}
+	.page-header .crumb-static {
+		color: inherit;
+	}
+	.section-external {
+		margin: 0 0 var(--space-sm) 0;
+		font-size: var(--font-size-sm);
+	}
+	.section-external a {
+		color: var(--action-default);
+		text-decoration: none;
+	}
+	.section-external a:hover,
+	.section-external a:focus-visible {
+		text-decoration: underline;
 	}
 	.page-header h1 {
 		margin: 0 0 var(--space-xs) 0;

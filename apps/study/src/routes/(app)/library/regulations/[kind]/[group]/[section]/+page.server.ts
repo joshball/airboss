@@ -64,6 +64,11 @@ export const load: PageServerLoad = async (event) => {
 			readState: view.readState,
 			citingNodes: view.citingNodes,
 			errata: view.errata,
+			external: view.external,
+			cfrChapterId: view.cfrChapterId,
+			cfrChapterName: view.cfrChapterName,
+			cfrSubchapterId: view.cfrSubchapterId,
+			cfrSubchapterName: view.cfrSubchapterName,
 		};
 	} catch (err) {
 		if (err instanceof RegulationsViewNotFoundError) throw error(404, err.message);

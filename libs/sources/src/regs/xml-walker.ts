@@ -25,6 +25,9 @@ import { XMLParser } from 'fast-xml-parser';
 const TYPE_PART = 'PART';
 const TYPE_SUBPART = 'SUBPART';
 const TYPE_SECTION = 'SECTION';
+const TYPE_CHAPTER = 'CHAPTER';
+// The eCFR XML uses the abbreviated form `SUBCHAP` for subchapter DIV4 nodes.
+const TYPE_SUBCHAP = 'SUBCHAP';
 
 const SECTION_HEAD_PATTERN = /^§\s*\d+(?:\.\d+[a-z]?)?\s+(.*?)\.?$/u;
 const ISO_DATE_PATTERN = /\b(\d{4}-\d{2}-\d{2})\b/u;
@@ -65,11 +68,47 @@ export interface RawPart {
 	readonly headTitle: string;
 }
 
+/**
+ * Title-level navigation skeleton emitted alongside the content tree.
+ *
+ * eCFR XML (`DIV1 TYPE="TITLE"` -> `DIV3 TYPE="CHAPTER"` ->
+ * `DIV4 TYPE="SUBCHAP"` -> `DIV5 TYPE="PART"`) is the only place chapter +
+ * subchapter context is preserved. The content walk drops it (the Part-level
+ * grouping is what the BC keys on); this skeleton captures it as a sidecar
+ * so the nav-tree YAML writer can emit it without re-parsing the XML.
+ *
+ * Empty when the walk root is a `DIV5 TYPE="PART"` (single-part download,
+ * Title 49 path) -- those XMLs have no chapter / subchapter context.
+ */
+export interface RawNavSubchapter {
+	readonly id: string;
+	readonly name: string;
+	readonly parts: readonly string[];
+}
+export interface RawNavChapter {
+	readonly id: string;
+	readonly name: string;
+	readonly subchapters: readonly RawNavSubchapter[];
+	/** Parts that sit directly under the chapter (no subchapter wrapper). */
+	readonly directParts: readonly string[];
+}
+export interface RawNavTree {
+	readonly title: '14' | '49';
+	readonly titleName: string;
+	readonly chapters: readonly RawNavChapter[];
+}
+
 export interface RawCfrTree {
 	readonly title: '14' | '49';
 	readonly parts: readonly RawPart[];
 	readonly subparts: readonly RawSubpart[];
 	readonly sections: readonly RawSection[];
+	/**
+	 * Optional Title-level structure (chapters / subchapters / part membership)
+	 * extracted from the same walk. Absent when the walk root is a
+	 * `DIV5 TYPE="PART"` (no chapter context to capture).
+	 */
+	readonly navTree: RawNavTree | null;
 }
 
 export interface WalkOptions {
@@ -388,12 +427,104 @@ export function walkRegsXml(xmlSource: string, opts: WalkOptions): RawCfrTree {
 		}
 	}
 
+	const navTree = walkRoot.kind === 'title' ? buildNavTree(walkRoot.node, opts) : null;
+
 	return {
 		title: opts.title,
 		parts,
 		subparts,
 		sections,
+		navTree,
 	};
+}
+
+/**
+ * Walk the `DIV1 TYPE="TITLE"` root and capture its chapter / subchapter /
+ * part skeleton. Order is preserved (eCFR XML emits chapters in roman-numeral
+ * order, subchapters alphabetically within a chapter, parts in numeric order
+ * within a subchapter); we don't re-sort.
+ *
+ * `partFilter`, when set, restricts which parts appear in the skeleton --
+ * subchapters whose part lists collapse to empty are dropped.
+ */
+function buildNavTree(titleNode: Node, opts: WalkOptions): RawNavTree {
+	const titleName = cleanTitleHead(extractHeadText(titleNode));
+	const chapters: RawNavChapter[] = [];
+	for (const chapterNode of childrenWithType(titleNode, TYPE_CHAPTER)) {
+		const chapterId = getN(chapterNode);
+		if (chapterId === undefined) continue;
+		const chapterName = cleanChapterHead(extractHeadText(chapterNode));
+		const subchapters: RawNavSubchapter[] = [];
+		const directParts: string[] = [];
+		for (const child of childrenOf(chapterNode)) {
+			const childTag = tagOf(child);
+			if (childTag === undefined) continue;
+			if (!/^DIV\d+$/.test(childTag)) continue;
+			const childType = getType(child);
+			if (childType === TYPE_SUBCHAP) {
+				const subId = getN(child);
+				if (subId === undefined) continue;
+				const subParts = collectImmediatePartNumbers(child, opts);
+				if (subParts.length === 0) continue;
+				subchapters.push({
+					id: subId,
+					name: cleanSubchapterHead(extractHeadText(child)),
+					parts: subParts,
+				});
+			} else if (childType === TYPE_PART) {
+				const partN = getN(child);
+				if (partN === undefined) continue;
+				if (opts.partFilter !== undefined && !opts.partFilter.has(partN)) continue;
+				directParts.push(partN);
+			}
+		}
+		if (subchapters.length === 0 && directParts.length === 0) continue;
+		chapters.push({ id: chapterId, name: chapterName, subchapters, directParts });
+	}
+	return { title: opts.title, titleName, chapters };
+}
+
+function childrenWithType(node: Node, type: string): readonly Node[] {
+	const out: Node[] = [];
+	for (const child of childrenOf(node)) {
+		const tag = tagOf(child);
+		if (tag === undefined) continue;
+		if (!/^DIV\d+$/.test(tag)) continue;
+		if (getType(child) === type) out.push(child);
+	}
+	return out;
+}
+
+function collectImmediatePartNumbers(parent: Node, opts: WalkOptions): readonly string[] {
+	const out: string[] = [];
+	for (const child of childrenOf(parent)) {
+		const tag = tagOf(child);
+		if (tag === undefined) continue;
+		if (!/^DIV\d+$/.test(tag)) continue;
+		if (getType(child) !== TYPE_PART) continue;
+		const partN = getN(child);
+		if (partN === undefined) continue;
+		if (opts.partFilter !== undefined && !opts.partFilter.has(partN)) continue;
+		out.push(partN);
+	}
+	return out;
+}
+
+function cleanTitleHead(raw: string): string {
+	return raw.replace(/^Title\s+\d+\s*[-—–]+\s*/iu, '').trim();
+}
+
+function cleanChapterHead(raw: string): string {
+	const stripped = raw.replace(/^\s*CHAPTER\s+[IVXLCDM]+\s*[-—–]+\s*/iu, '').trim();
+	return titleCase(stripped);
+}
+
+function cleanSubchapterHead(raw: string): string {
+	const stripped = raw
+		.replace(/^\s*SUBCHAPTER\s+[A-Z]+\s*[-—–]+\s*/iu, '')
+		.replace(/\s+/gu, ' ')
+		.trim();
+	return titleCase(stripped);
 }
 
 /**
@@ -463,4 +594,7 @@ export const __xml_walker_internal__ = {
 	extractAmendedDate,
 	extractSectionTitle,
 	titleCase,
+	cleanTitleHead,
+	cleanChapterHead,
+	cleanSubchapterHead,
 };

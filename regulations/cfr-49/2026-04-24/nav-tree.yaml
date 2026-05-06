@@ -1,0 +1,23 @@
+title: 49
+title-name: Transportation
+edition-date: 2026-04-24
+# 49 CFR is fetched part-filtered (eCFR Versioner only honors one ?part=
+# per request) so the walker does not see chapter / subchapter context.
+# This file is hand-authored from the eCFR title-49 outline at
+# https://www.ecfr.gov/current/title-49 and lists ONLY the parts airboss
+# ingests (830 + 1552). Add new parts here when scope expands.
+chapters:
+  - id: VIII
+    name: National Transportation Safety Board
+    subchapters:
+      - id: B
+        name: Investigations
+        parts:
+          - "830"
+  - id: XII
+    name: Transportation Security Administration, Department of Homeland Security
+    subchapters:
+      - id: B
+        name: Security Rules for All Modes of Transportation
+        parts:
+          - "1552"

@@ -45,6 +45,11 @@ export const load: PageServerLoad = async (event) => {
 			whyItMatters: view.whyItMatters,
 			umbrellas: view.umbrellas,
 			sections: view.sections,
+			external: view.external,
+			chapterId: view.chapterId,
+			chapterName: view.chapterName,
+			subchapterId: view.subchapterId,
+			subchapterName: view.subchapterName,
 		};
 	} catch (err) {
 		if (err instanceof RegulationsViewNotFoundError) throw error(404, err.message);

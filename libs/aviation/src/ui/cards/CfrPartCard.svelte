@@ -6,6 +6,9 @@
  * out of context still knows what regulator + Part it belongs to. The
  * official Part title sits as subtitle ("General Operating and Flight
  * Rules").
+ *
+ * `external` is required: every Part links to its eCFR canonical URL
+ * (built via the nav-tree YAML in libs/sources/src/regs/nav-tree.ts).
  */
 
 import LibraryReferenceCard from '../LibraryReferenceCard.svelte';
@@ -18,6 +21,7 @@ let {
 	description = null,
 	whyItMatters = null,
 	href,
+	external,
 	sectionCount = null,
 }: {
 	titleNumber: 14 | 49;
@@ -26,13 +30,14 @@ let {
 	description?: string | null;
 	whyItMatters?: string | null;
 	href: string;
+	external: { url: string; label: string };
 	sectionCount?: number | null;
 } = $props();
 
 const subject = $derived(`${titleNumber} CFR Part ${partNumber}`);
 
 $effect.pre(() => {
-	enforceCardComplete('CfrPartCard', subject, { titleNumber, partNumber, partTitle });
+	enforceCardComplete('CfrPartCard', subject, { titleNumber, partNumber, partTitle, external });
 });
 
 const countLabel = $derived(sectionCount === null ? null : `${sectionCount} section${sectionCount === 1 ? '' : 's'}`);
@@ -44,5 +49,6 @@ const countLabel = $derived(sectionCount === null ? null : `${sectionCount} sect
 	{description}
 	{whyItMatters}
 	{href}
+	{external}
 	{countLabel}
 />

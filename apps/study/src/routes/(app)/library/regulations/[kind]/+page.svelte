@@ -45,6 +45,16 @@ const titleNumber = $derived(
 				<span>{data.whyItMatters}</span>
 			</p>
 		{/if}
+		{#if data.chapters.length > 0}
+			<p class="kind-chapters">
+				<span class="kind-chapters-label">Chapters:</span>
+				<span>
+					{#each data.chapters as ch, i (ch.id)}
+						{i > 0 ? ', ' : ''}{ch.id} ({ch.name})
+					{/each}
+				</span>
+			</p>
+		{/if}
 	</section>
 {/if}
 
@@ -59,7 +69,7 @@ const titleNumber = $derived(
 			<ul class="grid">
 				{#each data.groups as group (group.groupKey)}
 					<li>
-						{#if titleNumber !== null}
+						{#if titleNumber !== null && group.external}
 							<CfrPartCard
 								titleNumber={titleNumber as 14 | 49}
 								partNumber={group.groupKey}
@@ -67,6 +77,7 @@ const titleNumber = $derived(
 								description={group.description ?? null}
 								whyItMatters={group.whyItMatters ?? null}
 								href={ROUTES.LIBRARY_REGULATIONS_GROUP(kind, group.groupKey)}
+								external={group.external}
 								sectionCount={group.referenceCount}
 							/>
 						{:else}
@@ -175,5 +186,14 @@ const titleNumber = $derived(
 		text-transform: uppercase;
 		letter-spacing: var(--letter-spacing-caps);
 		color: var(--ink-muted);
+	}
+	.kind-chapters {
+		margin: 0;
+		font-size: var(--font-size-sm);
+		color: var(--ink-muted);
+	}
+	.kind-chapters-label {
+		font-weight: var(--font-weight-semibold);
+		margin-right: var(--space-xs);
 	}
 </style>

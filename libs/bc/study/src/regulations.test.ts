@@ -503,6 +503,32 @@ describe('getRegulationsView (group)', () => {
 		const card = view.umbrellas.find((u) => u.id === NTSB_REF_ID);
 		expect(card).toBeDefined();
 	});
+
+	it('14 CFR group view exposes a canonical eCFR title URL via `external`', async () => {
+		const view = await getRegulationsView({
+			view: 'group',
+			kind: LIBRARY_REGULATIONS_KINDS.CFR_14,
+		});
+		expect(view.external).toEqual({ url: 'https://www.ecfr.gov/current/title-14', label: 'eCFR' });
+	});
+
+	it('CFR Part group cards each carry a canonical eCFR `external` URL', async () => {
+		const view = await getRegulationsView({
+			view: 'group',
+			kind: LIBRARY_REGULATIONS_KINDS.CFR_14,
+		});
+		const testPart = view.groups.find((g) => g.groupKey === CFR14_PART);
+		expect(testPart?.external?.label).toBe('eCFR');
+		expect(testPart?.external?.url).toContain(`title-14`);
+		expect(testPart?.external?.url).toContain(`part-${CFR14_PART}`);
+	});
+
+	it('AC and AIM kinds do not have an eCFR `external` URL', async () => {
+		const acView = await getRegulationsView({ view: 'group', kind: LIBRARY_REGULATIONS_KINDS.AC });
+		expect(acView.external).toBeNull();
+		const aimView = await getRegulationsView({ view: 'group', kind: LIBRARY_REGULATIONS_KINDS.AIM });
+		expect(aimView.external).toBeNull();
+	});
 });
 
 describe('getRegulationsView (section)', () => {
@@ -544,6 +570,21 @@ describe('getRegulationsView (section)', () => {
 		// empty rather than missing.
 		expect(view.sections).toEqual([]);
 	});
+
+	it('CFR section view exposes a canonical eCFR Part URL via `external` (chapter context falls back to null when the part is not in the nav-tree)', async () => {
+		const view = await getRegulationsView({
+			view: 'section',
+			kind: LIBRARY_REGULATIONS_KINDS.CFR_14,
+			group: CFR14_PART,
+		});
+		// Out-of-band test part has no chapter mapping, so the URL falls back
+		// to the eCFR shortcut form (still resolvable by eCFR server-side).
+		expect(view.external?.label).toBe('eCFR');
+		expect(view.external?.url).toContain(`title-14`);
+		expect(view.external?.url).toContain(`part-${CFR14_PART}`);
+		// chapterId is null because the synthetic part isn't in the nav-tree YAML.
+		expect(view.chapterId).toBeNull();
+	});
 });
 
 describe('getRegulationsView (detail)', () => {
@@ -577,6 +618,11 @@ describe('getRegulationsView (detail)', () => {
 		const citing = view.citingNodes.find((n) => n.id === CITING_NODE_ID);
 		expect(citing).toBeDefined();
 		expect(view.errata).toEqual([]);
+		// CFR section detail carries the canonical eCFR section URL.
+		expect(view.external?.label).toBe('eCFR');
+		expect(view.external?.url).toContain('section-91.103');
+		// Sibling rows each carry their own canonical URL.
+		expect(view.siblings.every((s) => s.external?.label === 'eCFR')).toBe(true);
 	});
 
 	it('throws RegulationsViewNotFoundError when no reference matches the (kind, group)', async () => {
