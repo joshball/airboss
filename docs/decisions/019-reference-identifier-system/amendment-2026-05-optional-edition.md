@@ -202,6 +202,12 @@ ERROR: airboss-ref:handbooks/some-handbook/3 has no current edition.
 
 Two extra lines in each per-corpus resolver, large quality-of-life payoff, zero ongoing cost.
 
+## Lands on top of
+
+This amendment ships on a substrate that the 2026-05-06 schema review flagged as incoherent: three parallel edition stories (`sources_registry.editions`, `study.reference.supersededById`, `study.syllabus.supersededById`) that don't know about each other (review issue A). [ADR 026 -- edition coherence](../026-edition-coherence/decision.md) is the follow-up that closes that out: registry-canonical resolution, the two carryover `superseded_by_id` columns dropped, drift sentinels reading the registry directly.
+
+This amendment's resolver and validator are correct relative to `study.reference` today (the table the readers consult); they will be correct relative to `sources_registry.editions` once ADR 026 lands. No user-visible behavior of the amendment changes when ADR 026 ships -- only the storage path the resolver consults. The amendment can ship before ADR 026 without rework; ADR 026's resolver API will be a one-call-site swap inside the per-corpus resolvers in `@ab/sources`.
+
 ## Lessons -- why we didn't get this right the first time
 
 Full analysis: [docs/decisions/lessons/2026-05-load-bearing-vs-conservative-defaults.md](../lessons/2026-05-load-bearing-vs-conservative-defaults.md).
