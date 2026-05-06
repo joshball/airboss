@@ -805,6 +805,364 @@ function resolveAirbossRefUrl(ref: string): string | null {
 }
 
 // ---------------------------------------------------------------------------
+// Citation rendering resolver (ADR 019 amendment 2026-05 step 5)
+// ---------------------------------------------------------------------------
+
+/**
+ * Citation as the knowledge-node renderer needs it: registry-resolved title
+ * and edition (so the card shows "Airplane Flying Handbook", not "Handbook"),
+ * plus the existing URL routing and the optional sentinel locator captured by
+ * the new `ref:` shape.
+ *
+ * `kind` -- the family discriminator (handbook/cfr/...) when known. Drives
+ * icon choice on the renderer; preserved across all three input shapes.
+ *
+ * `title` -- the registry's `reference.title`. Empty string when the citation
+ * isn't resolvable to a registry row (legacy freeform, an unknown handbook
+ * slug, a corpus we don't yet resolve). The renderer falls back to the
+ * citation's own `source` text in that case.
+ *
+ * `edition` -- the resolved edition tag ("FAA-H-8083-3C", "2024-08-22").
+ * Empty string when the citation didn't pin one and the registry has no
+ * current edition for the slug.
+ *
+ * `locatorLabel` -- the chapter/section/page text the renderer puts under
+ * the title. Filled from sentinel fields on the new ref-shape (e.g.
+ * `chapter_title: Basic Flight Maneuvers`), from `detail` on legacy
+ * citations, or formatted from the typed `StructuredCitation` locator.
+ *
+ * `isPriorEdition` -- true when the citation pinned an explicit edition AND
+ * that edition is older than the current one. The renderer annotates with
+ * the pinned edition slug so the reader sees the difference.
+ *
+ * `pinnedEditionSlug` -- the literal pinned edition tag when
+ * `isPriorEdition` is true; null otherwise. Surfaced as "(FAA-H-8083-3B)"
+ * style annotation.
+ *
+ * `note` -- the citation's optional commentary, preserved verbatim.
+ *
+ * `resolvedUrl` -- the in-app deep link or external URL via
+ * {@link resolveCitationUrl}. Null for citations the URL resolver can't yet
+ * route (legacy freeform, future corpora).
+ *
+ * `broken` -- structured handbook citation whose registry lookup missed.
+ * The renderer flags as "(citation broken)".
+ *
+ * `fallbackLabel` -- the citation's own free-text label (legacy `source`
+ * field) or the raw `ref:` URI for unresolvable structured citations. The
+ * renderer uses this only when `title` is empty, so a broken or future-
+ * corpus citation still renders something readable.
+ */
+export interface ResolvedCitation {
+	readonly kind: string | null;
+	readonly title: string;
+	readonly edition: string;
+	readonly locatorLabel: string;
+	readonly isPriorEdition: boolean;
+	readonly pinnedEditionSlug: string | null;
+	readonly note: string;
+	readonly resolvedUrl: string | null;
+	readonly broken: boolean;
+	readonly fallbackLabel: string;
+}
+
+/**
+ * Build a slug -> latest non-superseded {@link ReferenceRow} index. Used by
+ * the new ref-shape resolver to find the current edition when the citation
+ * doesn't pin one (the amendment §1 default).
+ */
+function indexCurrentByDocumentSlug(references: ReadonlyArray<ReferenceRow>): Map<string, ReferenceRow> {
+	const map = new Map<string, ReferenceRow>();
+	for (const row of references) {
+		if (row.supersededById !== null) continue;
+		const existing = map.get(row.documentSlug);
+		// Deterministic pick when multiple non-superseded rows exist (rare; e.g.
+		// a half-seeded DB): prefer the lexicographically larger edition tag,
+		// matching the ORDER BY edition DESC in `getReferenceByDocument`.
+		if (existing === undefined || row.edition > existing.edition) {
+			map.set(row.documentSlug, row);
+		}
+	}
+	return map;
+}
+
+/** Build a `(slug, edition) -> ReferenceRow` index. Used for pinned citations. */
+function indexBySlugAndEdition(references: ReadonlyArray<ReferenceRow>): Map<string, ReferenceRow> {
+	const map = new Map<string, ReferenceRow>();
+	for (const row of references) {
+		map.set(`${row.documentSlug}::${row.edition}`, row);
+	}
+	return map;
+}
+
+interface RefShape {
+	readonly ref: string;
+	readonly note?: unknown;
+	readonly quote?: unknown;
+	readonly chapter_title?: unknown;
+	readonly section_title?: unknown;
+	readonly paragraph_text?: unknown;
+	readonly page_heading?: unknown;
+}
+
+function isRefShape(value: unknown): value is RefShape {
+	return typeof value === 'object' && value !== null && typeof (value as RefShape).ref === 'string';
+}
+
+function isLegacyShape(value: unknown): value is { source: string; detail?: string; note?: string } {
+	if (typeof value !== 'object' || value === null) return false;
+	const v = value as { source?: unknown };
+	return typeof v.source === 'string';
+}
+
+function pickSentinelLabel(value: RefShape): string {
+	if (typeof value.chapter_title === 'string' && value.chapter_title.length > 0) return value.chapter_title;
+	if (typeof value.section_title === 'string' && value.section_title.length > 0) return value.section_title;
+	if (typeof value.paragraph_text === 'string' && value.paragraph_text.length > 0) return value.paragraph_text;
+	if (typeof value.page_heading === 'string' && value.page_heading.length > 0) return value.page_heading;
+	return '';
+}
+
+/**
+ * Resolve the new `ref:`-shape citation (amendment 2026-05 §1) against the
+ * registry. Returns title/edition/url/locator triples wired through the
+ * existing resolveCitationUrl pipeline.
+ *
+ * v1 only resolves the `handbooks` corpus to a registry row. Other corpora
+ * resolve to a URL via the existing per-corpus `getLiveUrl()` but render
+ * with an empty title; the renderer falls back to the URI's corpus literal.
+ * Per-corpus title resolution lands as those corpus WPs ship.
+ */
+function resolveRefShapeCitation(
+	value: RefShape,
+	allReferences: ReadonlyArray<ReferenceRow>,
+	currentBySlug: Map<string, ReferenceRow>,
+	bySlugEdition: Map<string, ReferenceRow>,
+): ResolvedCitation {
+	const note = typeof value.note === 'string' ? value.note : '';
+	const locatorLabel = pickSentinelLabel(value);
+	const parsed = parseIdentifier(value.ref);
+	if (isParseError(parsed)) {
+		return {
+			kind: null,
+			title: '',
+			edition: '',
+			locatorLabel,
+			isPriorEdition: false,
+			pinnedEditionSlug: null,
+			note,
+			resolvedUrl: null,
+			broken: true,
+			fallbackLabel: value.ref,
+		};
+	}
+
+	// Handbooks corpus: extract slug + optional edition from the locator path
+	// using the registry-aware predicate per amendment §1 path-grammar
+	// disambiguation.
+	if (parsed.corpus === 'handbooks') {
+		const segments = parsed.locator.split('/');
+		const slug = segments[0] ?? '';
+		const candidate = segments[1] ?? '';
+		const candidateRow = bySlugEdition.get(`${slug}::${candidate}`);
+		const pinnedEdition = candidateRow !== undefined ? candidate : '';
+		const currentRow = currentBySlug.get(slug) ?? null;
+		const resolvedRow = pinnedEdition !== '' ? (candidateRow ?? null) : currentRow;
+		const isPriorEdition =
+			pinnedEdition !== '' && currentRow !== null && resolvedRow !== null && resolvedRow.id !== currentRow.id;
+		const url =
+			resolvedRow !== null
+				? (resolveAirbossRefUrl(value.ref) ??
+					buildHandbookUrlFallback(resolvedRow.documentSlug, segments, pinnedEdition !== ''))
+				: null;
+		return {
+			kind: REFERENCE_KINDS.HANDBOOK,
+			title: resolvedRow?.title ?? '',
+			edition: resolvedRow?.edition ?? '',
+			locatorLabel,
+			isPriorEdition,
+			pinnedEditionSlug: isPriorEdition ? pinnedEdition : null,
+			note,
+			resolvedUrl: url,
+			broken: resolvedRow === null,
+			fallbackLabel: value.ref,
+		};
+	}
+
+	// Other corpora: defer to the per-corpus live-URL resolver. Title comes
+	// from the registry once those corpus resolvers ship.
+	const url = resolveAirbossRefUrl(value.ref);
+	void allReferences;
+	return {
+		kind: parsed.corpus,
+		title: '',
+		edition: parsed.pin ?? '',
+		locatorLabel,
+		isPriorEdition: false,
+		pinnedEditionSlug: null,
+		note,
+		resolvedUrl: url,
+		broken: false,
+		fallbackLabel: value.ref,
+	};
+}
+
+/**
+ * Build the in-app handbook URL from a parsed handbooks locator. Used as a
+ * fallback when {@link resolveAirbossRefUrl} returns null (the per-corpus
+ * resolver returned the doc-level live URL, but the in-app reader has a
+ * deeper deep-link).
+ */
+function buildHandbookUrlFallback(
+	documentSlug: string,
+	segments: ReadonlyArray<string>,
+	editionConsumed: boolean,
+): string | null {
+	const tailStart = editionConsumed ? 2 : 1;
+	const chapterSegment = segments[tailStart];
+	if (chapterSegment === undefined || !/^\d+$/.test(chapterSegment)) return null;
+	const chapter = Number(chapterSegment);
+	const sectionSegment = segments[tailStart + 1];
+	if (sectionSegment === undefined) return ROUTES.LIBRARY_HANDBOOK_CHAPTER(documentSlug, chapter);
+	if (!/^\d+$/.test(sectionSegment)) return ROUTES.LIBRARY_HANDBOOK_CHAPTER(documentSlug, chapter);
+	return ROUTES.LIBRARY_HANDBOOK_SECTION(documentSlug, chapter, Number(sectionSegment));
+}
+
+/**
+ * Format the locator portion of a typed structured citation (the in-type
+ * `StructuredCitation` discriminated union, distinct from the new `ref:`
+ * shape). Mirrors the renderer's prior inline logic so legacy structured
+ * rows in the DB keep rendering correctly.
+ */
+function formatStructuredLocator(citation: StructuredCitation): string {
+	switch (citation.kind) {
+		case REFERENCE_KINDS.HANDBOOK: {
+			const parts: string[] = [`Ch. ${citation.locator.chapter}`];
+			if (citation.locator.section !== undefined) parts.push(`§${citation.locator.section}`);
+			if (citation.locator.subsection !== undefined) parts.push(`.${citation.locator.subsection}`);
+			if (citation.locator.page_start !== undefined && citation.locator.page_start.length > 0) {
+				const pages =
+					citation.locator.page_end !== undefined && citation.locator.page_end.length > 0
+						? `pp. ${citation.locator.page_start}..${citation.locator.page_end}`
+						: `p. ${citation.locator.page_start}`;
+				parts.push(`(${pages})`);
+			}
+			return parts.join(' ');
+		}
+		case REFERENCE_KINDS.CFR:
+			return `${citation.locator.title} CFR ${citation.locator.part}.${citation.locator.section}`;
+		case REFERENCE_KINDS.AC:
+			return citation.locator.paragraph !== undefined ? `¶${citation.locator.paragraph}` : '';
+		case REFERENCE_KINDS.ACS:
+		case REFERENCE_KINDS.PTS: {
+			const parts: string[] = [];
+			if (citation.locator.area !== undefined) parts.push(`Area ${citation.locator.area}`);
+			if (citation.locator.task !== undefined) parts.push(`Task ${citation.locator.task}`);
+			if (citation.locator.element !== undefined) parts.push(`Element ${citation.locator.element}`);
+			return parts.join(', ');
+		}
+		case REFERENCE_KINDS.AIM:
+			return citation.locator.paragraph !== undefined ? `¶${citation.locator.paragraph}` : '';
+		case REFERENCE_KINDS.PCG:
+			return citation.locator.term ?? '';
+		case REFERENCE_KINDS.NTSB:
+		case REFERENCE_KINDS.POH:
+		case REFERENCE_KINDS.OTHER:
+			return citation.locator.detail ?? '';
+		default:
+			return '';
+	}
+}
+
+/**
+ * Resolve every citation in `rawCitations` to a {@link ResolvedCitation}.
+ * The JSONB column accepts three shapes today (legacy freeform, in-type
+ * structured-with-`kind`, new `ref:`-shape from amendment 2026-05); this
+ * function normalises all three so the renderer reads one structure.
+ *
+ * Pure: no DB calls. Pass the full reference table (or a subset including
+ * superseded rows when prior-edition citations may resolve back).
+ */
+export function resolveCitationsForRender(
+	rawCitations: ReadonlyArray<unknown>,
+	references: ReadonlyArray<ReferenceRow>,
+): ResolvedCitation[] {
+	const currentBySlug = indexCurrentByDocumentSlug(references);
+	const bySlugEdition = indexBySlugAndEdition(references);
+	const out: ResolvedCitation[] = [];
+
+	for (const value of rawCitations) {
+		// Shape 1: new ref-shape (amendment 2026-05 §2). Discriminated by the
+		// presence of a `ref` string field.
+		if (isRefShape(value)) {
+			out.push(resolveRefShapeCitation(value, references, currentBySlug, bySlugEdition));
+			continue;
+		}
+
+		// Shape 2: in-type structured citation with `kind` discriminator. Pre-
+		// amendment authoring path; still present in the DB until migration
+		// (step 6) runs.
+		if (typeof value === 'object' && value !== null && typeof (value as { kind?: unknown }).kind === 'string') {
+			const citation = value as Citation;
+			if (isStructuredCitation(citation)) {
+				const locatorLabel = formatStructuredLocator(citation);
+				const url = resolveCitationUrl(citation, references);
+				const row = references.find((r) => r.id === citation.reference_id) ?? null;
+				const broken = isHandbookCitation(citation) ? row === null : false;
+				out.push({
+					kind: citation.kind,
+					title: row?.title ?? '',
+					edition: row?.edition ?? '',
+					locatorLabel,
+					isPriorEdition: false,
+					pinnedEditionSlug: null,
+					note: citation.note ?? '',
+					resolvedUrl: url,
+					broken,
+					fallbackLabel: citation.reference_id,
+				});
+				continue;
+			}
+		}
+
+		// Shape 3: legacy freeform.
+		if (isLegacyShape(value)) {
+			const detail = typeof value.detail === 'string' ? value.detail : '';
+			const legacyNote = typeof value.note === 'string' ? value.note : '';
+			out.push({
+				kind: null,
+				title: value.source,
+				edition: '',
+				locatorLabel: detail,
+				isPriorEdition: false,
+				pinnedEditionSlug: null,
+				note: legacyNote,
+				resolvedUrl: null,
+				broken: false,
+				fallbackLabel: value.source,
+			});
+			continue;
+		}
+
+		// Unrecognised shape -- render an inert row so the page doesn't crash.
+		out.push({
+			kind: null,
+			title: '',
+			edition: '',
+			locatorLabel: '',
+			isPriorEdition: false,
+			pinnedEditionSlug: null,
+			note: '',
+			resolvedUrl: null,
+			broken: true,
+			fallbackLabel: '',
+		});
+	}
+
+	return out;
+}
+
+// ---------------------------------------------------------------------------
 // Open-warnings reader (WP-HANDBOOK-RE-EXTRACTION-V2 Phase 3)
 // ---------------------------------------------------------------------------
 
