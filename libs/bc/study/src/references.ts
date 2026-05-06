@@ -779,6 +779,15 @@ function resolveAirbossRefUrl(ref: string): string | null {
  *
  * `note` -- the citation's optional commentary, preserved verbatim.
  *
+ * `redirectedFrom` -- the original `airboss-ref:` URI captured on the
+ * structured citation when a human override moved the citation across
+ * editions, chapters, or books (the well-known non-sentinel field
+ * introduced in ADR 019 amendment 2026-05 §2). Null on legacy and in-type
+ * structured shapes; non-null on `ref:`-shape citations whose YAML carried
+ * a `redirected_from:` line. The renderer surfaces this as a small
+ * annotation under the citation title, mirroring the prior-edition
+ * annotation pattern.
+ *
  * `resolvedUrl` -- the in-app deep link or external URL via
  * {@link resolveCitationUrl}. Null for citations the URL resolver can't yet
  * route (legacy freeform, future corpora).
@@ -799,6 +808,7 @@ export interface ResolvedCitation {
 	readonly isPriorEdition: boolean;
 	readonly pinnedEditionSlug: string | null;
 	readonly note: string;
+	readonly redirectedFrom: string | null;
 	readonly resolvedUrl: string | null;
 	readonly broken: boolean;
 	readonly fallbackLabel: string;
@@ -841,6 +851,7 @@ interface RefShape {
 	readonly section_title?: unknown;
 	readonly paragraph_text?: unknown;
 	readonly page_heading?: unknown;
+	readonly redirected_from?: unknown;
 }
 
 function isRefShape(value: unknown): value is RefShape {
@@ -879,6 +890,13 @@ function resolveRefShapeCitation(
 ): ResolvedCitation {
 	const note = typeof value.note === 'string' ? value.note : '';
 	const locatorLabel = pickSentinelLabel(value);
+	// `redirected_from` is the well-known non-sentinel field per ADR 019
+	// amendment 2026-05 §2: the original airboss-ref URI before a human
+	// override moved this citation. The renderer surfaces it as a small
+	// annotation; we propagate the string verbatim so the formatter at the
+	// edge can decide how to humanise it (e.g. "FAA-H-8083-3B Ch. 4").
+	const redirectedFrom =
+		typeof value.redirected_from === 'string' && value.redirected_from.length > 0 ? value.redirected_from : null;
 	const parsed = parseIdentifier(value.ref);
 	if (isParseError(parsed)) {
 		return {
@@ -889,6 +907,7 @@ function resolveRefShapeCitation(
 			isPriorEdition: false,
 			pinnedEditionSlug: null,
 			note,
+			redirectedFrom,
 			resolvedUrl: null,
 			broken: true,
 			fallbackLabel: value.ref,
@@ -921,6 +940,7 @@ function resolveRefShapeCitation(
 			isPriorEdition,
 			pinnedEditionSlug: isPriorEdition ? pinnedEdition : null,
 			note,
+			redirectedFrom,
 			resolvedUrl: url,
 			broken: resolvedRow === null,
 			fallbackLabel: value.ref,
@@ -939,6 +959,7 @@ function resolveRefShapeCitation(
 		isPriorEdition: false,
 		pinnedEditionSlug: null,
 		note,
+		redirectedFrom,
 		resolvedUrl: url,
 		broken: false,
 		fallbackLabel: value.ref,
@@ -1055,6 +1076,7 @@ export function resolveCitationsForRender(
 					isPriorEdition: false,
 					pinnedEditionSlug: null,
 					note: citation.note ?? '',
+					redirectedFrom: null,
 					resolvedUrl: url,
 					broken,
 					fallbackLabel: citation.reference_id,
@@ -1075,6 +1097,7 @@ export function resolveCitationsForRender(
 				isPriorEdition: false,
 				pinnedEditionSlug: null,
 				note: legacyNote,
+				redirectedFrom: null,
 				resolvedUrl: null,
 				broken: false,
 				fallbackLabel: value.source,
@@ -1091,6 +1114,7 @@ export function resolveCitationsForRender(
 			isPriorEdition: false,
 			pinnedEditionSlug: null,
 			note: '',
+			redirectedFrom: null,
 			resolvedUrl: null,
 			broken: true,
 			fallbackLabel: '',
