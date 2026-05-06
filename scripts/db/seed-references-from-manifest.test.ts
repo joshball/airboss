@@ -665,6 +665,136 @@ describe('seedReferencesFromManifest', () => {
 		expect(second.sectionsChanged).toBe(0);
 	});
 
+	it('CFR manifest with Subpart tree lays down subpart rows + parents sections under them (Wave 2)', async () => {
+		const partKey = `91-${SUITE_TOKEN.replace(/[a-f]/g, '').slice(0, 4) || '3'}`;
+		const titleNumber = '14';
+		const documentSlug = `${titleNumber}cfr${partKey}`;
+		const edition = 'current';
+		const dirSlug = `test-${SUITE_TOKEN}-cfr-tree`;
+		const editionDate = '2026-04-22';
+
+		await db.insert(reference).values({
+			id: `ref_test_${SUITE_TOKEN}_cfr_tree`,
+			kind: 'cfr',
+			documentSlug,
+			edition,
+			title: `${titleNumber} CFR Part ${partKey} -- Tree test`,
+			publisher: 'FAA',
+			url: `https://www.ecfr.gov/current/title-${titleNumber}/part-${partKey}`,
+			subjects: ['regulations'],
+			primaryCert: null,
+			sectionSchema: { levels: [] },
+			metadata: {},
+		});
+		fixtures.push({ slug: documentSlug, corpusDir: HANDBOOKS_DIR });
+
+		const editionDir = join(REGS_DIR, dirSlug, editionDate);
+		mkdirSync(join(editionDir, partKey), { recursive: true });
+		const body1 = `# §${partKey}.1\n\nApplicability body.\n`;
+		const body103 = `# §${partKey}.103\n\nPreflight body.\n`;
+		writeFileSync(join(editionDir, partKey, `${partKey}-1.md`), body1);
+		writeFileSync(join(editionDir, partKey, `${partKey}-103.md`), body103);
+		const hash1 = sha256Hex(body1);
+		const hash103 = sha256Hex(body103);
+
+		writeFileSync(
+			join(editionDir, 'manifest.json'),
+			JSON.stringify({
+				schemaVersion: 1,
+				kind: 'cfr',
+				title: titleNumber,
+				editionSlug: '2026',
+				editionDate,
+				sourceUrl: 'file:///tree.xml',
+				sourceSha256: 'b'.repeat(64),
+				fetchedAt: '2026-04-30T22:31:18.124Z',
+				partCount: 1,
+				subpartCount: 2,
+				sectionCount: 2,
+				parts: [
+					{
+						number: partKey,
+						officialTitle: 'Tree Fixture',
+						subparts: [
+							{ id: 'a', ordinal: 0, title: 'General', sections: [`${partKey}.1`] },
+							{ id: 'b', ordinal: 1, title: 'Flight Rules', sections: [`${partKey}.103`] },
+						],
+					},
+				],
+			}),
+		);
+		writeFileSync(
+			join(editionDir, 'sections.json'),
+			JSON.stringify({
+				schemaVersion: 1,
+				edition: '2026',
+				sectionsByPart: {
+					[partKey]: [
+						{
+							id: `airboss-ref:regs/cfr-${titleNumber}/${partKey}/1`,
+							canonical_short: `§${partKey}.1`,
+							canonical_title: 'Applicability',
+							last_amended_date: '2024-08-01',
+							body_path: `${partKey}/${partKey}-1.md`,
+							body_sha256: hash1,
+							subpart_id: 'a',
+						},
+						{
+							id: `airboss-ref:regs/cfr-${titleNumber}/${partKey}/103`,
+							canonical_short: `§${partKey}.103`,
+							canonical_title: 'Preflight action',
+							last_amended_date: '2024-08-01',
+							body_path: `${partKey}/${partKey}-103.md`,
+							body_sha256: hash103,
+							subpart_id: 'b',
+						},
+					],
+				},
+			}),
+		);
+
+		fixtures.push({ slug: dirSlug, corpusDir: REGS_DIR });
+
+		const summary = await seedReferencesFromManifest({ documentSlug: dirSlug });
+		expect(summary.editionsProcessed).toBe(1);
+		// 2 subparts + 2 sections = 4 rows touched.
+		expect(summary.sectionsTouched).toBe(4);
+		expect(summary.sectionsChanged).toBe(4);
+
+		const refRow = (await db.select().from(reference).where(eq(reference.documentSlug, documentSlug)))[0];
+		expect(refRow).toBeDefined();
+		if (!refRow) return;
+
+		const allRows = await db.select().from(referenceSection).where(eq(referenceSection.referenceId, refRow.id));
+		expect(allRows).toHaveLength(4);
+
+		const subpartRows = allRows.filter((r) => r.level === 'subpart');
+		expect(subpartRows).toHaveLength(2);
+		const subpartA = subpartRows.find((r) => r.code === 'subpart-A');
+		expect(subpartA).toBeDefined();
+		expect(subpartA?.depth).toBe(0);
+		expect(subpartA?.parentId).toBeNull();
+		expect(subpartA?.title).toBe('Subpart A -- General');
+		expect(subpartA?.airbossRef).toBe(`airboss-ref:regs/cfr-${titleNumber}/${partKey}/subpart-A`);
+		const subpartB = subpartRows.find((r) => r.code === 'subpart-B');
+		expect(subpartB?.depth).toBe(0);
+		expect(subpartB?.title).toBe('Subpart B -- Flight Rules');
+
+		const sectionRows = allRows.filter((r) => r.level === 'section');
+		expect(sectionRows).toHaveLength(2);
+		const section1 = sectionRows.find((r) => r.code === `${partKey}.1`);
+		expect(section1?.depth).toBe(1);
+		expect(section1?.parentId).toBe(subpartA?.id);
+		const section103 = sectionRows.find((r) => r.code === `${partKey}.103`);
+		expect(section103?.depth).toBe(1);
+		expect(section103?.parentId).toBe(subpartB?.id);
+
+		// Idempotent re-run: zero changes (no re-write of subparts or sections).
+		const second = await seedReferencesFromManifest({ documentSlug: dirSlug });
+		expect(second.sectionsTouched).toBe(4);
+		expect(second.sectionsChanged).toBe(0);
+	});
+
 	it('CFR manifest skips a Part whose body files are not yet registered (fresh dev box)', async () => {
 		const partKey = `97-${SUITE_TOKEN.replace(/[a-f]/g, '').slice(0, 4) || '1'}`;
 		const documentSlug = `14cfr${partKey}`;
@@ -1260,6 +1390,14 @@ describe('CFR seed-shape contract (real DB)', () => {
 		for (const ref of cfrRefs) {
 			const sections = await db.select().from(referenceSection).where(eq(referenceSection.referenceId, ref.id));
 			for (const s of sections) {
+				// Subpart container rows carry a structural code (`subpart-A`,
+				// `subpart-F-G`) that's never directly URL-targeted -- only the
+				// child section rows (level=`section`) appear in the
+				// `/library/regulations/14-cfr/<part>/<section>` route. Skip
+				// non-section levels so the eCFR's combined-reserved subparts
+				// (e.g. 14 CFR 71 "Subparts F-G [Reserved]") don't trip the
+				// URL-slug contract that's meant for routable sections.
+				if (s.level !== 'section') continue;
 				if (!URL_SECTION_SHAPE.test(s.code)) {
 					violations.push({ ref: ref.documentSlug, code: s.code });
 				}

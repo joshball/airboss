@@ -272,7 +272,12 @@ interface PickEditionsArgs {
  */
 export function pickEditions(args: PickEditionsArgs): string[] {
 	if (args.explicitEdition !== undefined) return [args.explicitEdition];
-	const all = listChildDirs(args.childAbs);
+	// Sibling dirs starting with `_` are reserved for non-edition siblings of
+	// the on-disk edition snapshots (e.g. `regulations/cfr-14/_authoring/`
+	// added in PR #670). They never carry a `manifest.json` and would silently
+	// shadow the real edition under the rolling-publication latest-wins
+	// selector below.
+	const all = listChildDirs(args.childAbs).filter((name) => !name.startsWith('_'));
 	if (!ROLLING_EDITION_CORPORA.has(args.corpusDir) || all.length <= 1) return all;
 	const sorted = [...all].sort();
 	const latest = sorted[sorted.length - 1];

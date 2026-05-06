@@ -37,8 +37,9 @@ import { readFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { REFERENCE_KINDS, REFERENCE_SECTION_LEVELS } from '@ab/constants';
 import { db } from '@ab/db/connection';
+import { airbossRefForCfrSubpart } from '@ab/sources';
 import { eq } from 'drizzle-orm';
-import type { CfrManifest, CfrSectionEntry, CfrSectionsFile } from '../manifest-validation';
+import type { CfrManifest, CfrManifestSubpartEntry, CfrSectionEntry, CfrSectionsFile } from '../manifest-validation';
 import { cfrSectionsFileSchema } from '../manifest-validation';
 import { type SectionSchema, upsertReference, upsertReferenceSection } from '../references';
 import { reference } from '../schema';
@@ -256,7 +257,60 @@ export async function seedCfrManifest(
 			);
 		}
 
-		let ordinal = 0;
+		// Subpart laydown (Wave 2). Manifest carries per-Part Subpart structure
+		// (id + ordinal + title + section codes). For each Subpart we upsert a
+		// `reference_section` row at level=`subpart`, depth=0 (top-level under
+		// the reference); each owned Section then upserts with parent_id set
+		// to the Subpart row's id and depth=1. Parts with no Subparts (small
+		// Parts where sections sit directly under the Part) skip the subpart
+		// loop and fall through to the flat laydown -- preserving the
+		// pre-Wave-2 shape for those.
+		//
+		// Subpart `code` is namespaced as `subpart-A` (uppercase letter) so it
+		// can never collide with a Section code (`91.103`) under the same
+		// reference. The `(reference_id, code)` unique index would otherwise
+		// pin two rows together.
+		const subparts: readonly CfrManifestSubpartEntry[] =
+			manifest.parts?.find((p) => p.number === partKey)?.subparts ?? [];
+		const subpartIdByLetter = new Map<string, string>();
+		for (const sp of subparts) {
+			const subpartLetterUpper = sp.id.toUpperCase();
+			const subpartCode = `subpart-${subpartLetterUpper}`;
+			const subpartTitle = `Subpart ${subpartLetterUpper} -- ${sp.title}`;
+			const { row, changed } = await upsertReferenceSection({
+				referenceId: ref.id,
+				parentId: null,
+				level: REFERENCE_SECTION_LEVELS.SUBPART,
+				ordinal: sp.ordinal,
+				depth: 0,
+				code: subpartCode,
+				airbossRef: airbossRefForCfrSubpart(manifest.title, partKey, sp.id),
+				title: subpartTitle,
+				faaPageStart: null,
+				faaPageEnd: null,
+				sourceLocator: `${manifest.title} CFR Part ${partKey}, Subpart ${subpartLetterUpper}`,
+				// Container row -- the Subpart heading lives in `title`. The
+				// per-section markdown bodies carry the regulatory text.
+				contentMd: '',
+				contentHash: `subpart-${manifest.title}-${partKey}-${sp.id}`,
+				hasFigures: false,
+				hasTables: false,
+				metadata: {
+					subpart_letter: subpartLetterUpper,
+					subpart_title: sp.title,
+				},
+				seedOrigin: context.seedOrigin,
+			});
+			subpartIdByLetter.set(sp.id, row.id);
+			summary.sectionsTouched += 1;
+			if (changed) summary.sectionsChanged += 1;
+		}
+
+		// Per-subpart ordinal counters for sections so each section's ordinal
+		// is its position WITHIN its owning Subpart (not a global counter).
+		// This matches the rendering contract where rows render in subpart-
+		// relative order.
+		const ordinalBySubpart = new Map<string | null, number>();
 		for (const entry of sortedSections) {
 			const bodyAbsPath = resolve(editionDir, entry.body_path);
 			const contentMd = await readFile(bodyAbsPath, 'utf-8');
@@ -267,12 +321,19 @@ export async function seedCfrManifest(
 			// SECTION_SHAPE in libs/aviation/src/slugs.ts rejects the `§`,
 			// which silently 404s every detail-page link.
 			const sectionCode = entry.canonical_short.replace(/^§/, '');
+			const subpartLetter = entry.subpart_id;
+			const parentId = subpartLetter !== null ? (subpartIdByLetter.get(subpartLetter) ?? null) : null;
+			const depth = parentId !== null ? 1 : 0;
+			const ordinalKey = subpartLetter ?? null;
+			const nextOrdinal = ordinalBySubpart.get(ordinalKey) ?? 0;
+			ordinalBySubpart.set(ordinalKey, nextOrdinal + 1);
+
 			const { changed } = await upsertReferenceSection({
 				referenceId: ref.id,
-				parentId: null,
+				parentId,
 				level: REFERENCE_SECTION_LEVELS.SECTION,
-				ordinal,
-				depth: 0,
+				ordinal: nextOrdinal,
+				depth,
 				code: sectionCode,
 				// CFR entries already carry their `airboss-ref:regs/cfr-<title>/...`
 				// URI as `entry.id` from the registry's bootstrap (per ADR 019). Use
@@ -289,17 +350,19 @@ export async function seedCfrManifest(
 				hasTables: false,
 				metadata: {
 					last_amended_date: entry.last_amended_date,
+					...(subpartLetter !== null ? { subpart_id: subpartLetter } : {}),
 				},
 				seedOrigin: context.seedOrigin,
 			});
 			summary.sectionsTouched += 1;
 			if (changed) summary.sectionsChanged += 1;
-			ordinal += 1;
 		}
 
 		summary.editionsProcessed += 1;
 		refIds.push(ref.id);
-		context.onProgress?.(`  ${documentSlug} ${CFR_DB_EDITION}: ${sortedSections.length} sections`);
+		context.onProgress?.(
+			`  ${documentSlug} ${CFR_DB_EDITION}: ${subparts.length} subparts, ${sortedSections.length} sections`,
+		);
 	}
 
 	return refIds;

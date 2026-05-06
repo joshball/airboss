@@ -321,6 +321,7 @@ export type {
 	RegulationsSectionListView,
 	RegulationsSectionRow,
 	RegulationsSiblingRow,
+	RegulationsSubpartGroup,
 	RegulationsUmbrellaCard,
 	RegulationsView,
 	RegulationsViewNotFoundKey,

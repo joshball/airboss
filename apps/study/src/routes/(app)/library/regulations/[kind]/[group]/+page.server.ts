@@ -45,6 +45,7 @@ export const load: PageServerLoad = async (event) => {
 			whyItMatters: view.whyItMatters,
 			umbrellas: view.umbrellas,
 			sections: view.sections,
+			subparts: view.subparts,
 			external: view.external,
 			chapterId: view.chapterId,
 			chapterName: view.chapterName,

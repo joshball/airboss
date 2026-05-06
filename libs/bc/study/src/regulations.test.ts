@@ -28,7 +28,7 @@ import {
 	REFERENCE_SECTION_LEVELS,
 } from '@ab/constants';
 import { db } from '@ab/db/connection';
-import { airbossRefForCfrSection } from '@ab/sources';
+import { airbossRefForCfrSection, airbossRefForCfrSubpart } from '@ab/sources';
 import type { StructuredCitation } from '@ab/types';
 import { generateAuthId, generateReferenceFigureId, generateReferenceId, generateReferenceSectionId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
@@ -96,6 +96,19 @@ const CFR14_FIGURE_ID = generateReferenceFigureId();
 const CFR14_FLAT_SECTION_103_ID = generateReferenceSectionId();
 const CFR14_FLAT_SECTION_107_ID = generateReferenceSectionId();
 
+// Tree-shape Part fixture (CFR Wave 2): two Subpart rows at depth 0,
+// each owning one section at depth 1. Mirrors the production
+// post-Wave-2 seeder output. The CFR14_PART hierarchical fixture above
+// uses a synthesized chapter row; this fixture uses the real
+// `level=subpart` shape that the BC aggregator probes for.
+const CFR14_TREE_PART = '99004';
+const CFR14_TREE_SLUG = `14cfr${CFR14_TREE_PART}`;
+const CFR14_TREE_REF_ID = generateReferenceId();
+const CFR14_TREE_SUBPART_A_ID = generateReferenceSectionId();
+const CFR14_TREE_SUBPART_B_ID = generateReferenceSectionId();
+const CFR14_TREE_SECTION_A1_ID = generateReferenceSectionId();
+const CFR14_TREE_SECTION_B1_ID = generateReferenceSectionId();
+
 const CITING_NODE_ID = `kn-${SUITE_TAG}-cites-cfr14`;
 
 beforeAll(async () => {
@@ -154,6 +167,19 @@ beforeAll(async () => {
 			documentSlug: CFR14_FLAT_SLUG,
 			edition: 'current',
 			title: `14 CFR Part ${CFR14_FLAT_PART} (flat fixture)`,
+			publisher: 'FAA',
+			url: null,
+			seedOrigin: SUITE_TAG,
+			createdAt: now,
+			updatedAt: now,
+		},
+		{
+			// Tree-shape CFR Part. Sections live under Subpart parents.
+			id: CFR14_TREE_REF_ID,
+			kind: REFERENCE_KINDS.CFR,
+			documentSlug: CFR14_TREE_SLUG,
+			edition: 'current',
+			title: `14 CFR Part ${CFR14_TREE_PART} (tree fixture)`,
 			publisher: 'FAA',
 			url: null,
 			seedOrigin: SUITE_TAG,
@@ -330,6 +356,93 @@ beforeAll(async () => {
 			sourceLocator: `14 CFR §${CFR14_FLAT_PART}.107`,
 			contentMd: 'Flat-shape body. No pilot may take off...',
 			contentHash: `hash-cfr14-flat-${CFR14_FLAT_PART}-107`,
+			hasFigures: false,
+			hasTables: false,
+			seedOrigin: SUITE_TAG,
+			createdAt: now,
+			updatedAt: now,
+		},
+		// Tree-shape Part: two Subparts at depth 0, each owning one section
+		// at depth 1. Subpart code uses the `subpart-A` namespace so it
+		// can't collide with section codes under the same reference.
+		{
+			id: CFR14_TREE_SUBPART_A_ID,
+			referenceId: CFR14_TREE_REF_ID,
+			parentId: null,
+			level: REFERENCE_SECTION_LEVELS.SUBPART,
+			ordinal: 0,
+			depth: 0,
+			code: 'subpart-A',
+			airbossRef: airbossRefForCfrSubpart(14, CFR14_TREE_PART, 'a'),
+			title: 'Subpart A -- General',
+			faaPageStart: null,
+			faaPageEnd: null,
+			sourceLocator: `14 CFR Part ${CFR14_TREE_PART}, Subpart A`,
+			contentMd: '',
+			contentHash: `hash-tree-${CFR14_TREE_PART}-subpart-a`,
+			hasFigures: false,
+			hasTables: false,
+			seedOrigin: SUITE_TAG,
+			createdAt: now,
+			updatedAt: now,
+		},
+		{
+			id: CFR14_TREE_SUBPART_B_ID,
+			referenceId: CFR14_TREE_REF_ID,
+			parentId: null,
+			level: REFERENCE_SECTION_LEVELS.SUBPART,
+			ordinal: 1,
+			depth: 0,
+			code: 'subpart-B',
+			airbossRef: airbossRefForCfrSubpart(14, CFR14_TREE_PART, 'b'),
+			title: 'Subpart B -- Flight Rules',
+			faaPageStart: null,
+			faaPageEnd: null,
+			sourceLocator: `14 CFR Part ${CFR14_TREE_PART}, Subpart B`,
+			contentMd: '',
+			contentHash: `hash-tree-${CFR14_TREE_PART}-subpart-b`,
+			hasFigures: false,
+			hasTables: false,
+			seedOrigin: SUITE_TAG,
+			createdAt: now,
+			updatedAt: now,
+		},
+		{
+			id: CFR14_TREE_SECTION_A1_ID,
+			referenceId: CFR14_TREE_REF_ID,
+			parentId: CFR14_TREE_SUBPART_A_ID,
+			level: REFERENCE_SECTION_LEVELS.SECTION,
+			ordinal: 0,
+			depth: 1,
+			code: `${CFR14_TREE_PART}.1`,
+			airbossRef: airbossRefForCfrSection(14, `${CFR14_TREE_PART}.1`),
+			title: 'Tree fixture applicability',
+			faaPageStart: null,
+			faaPageEnd: null,
+			sourceLocator: `14 CFR §${CFR14_TREE_PART}.1`,
+			contentMd: 'Tree-shape body. This part prescribes...',
+			contentHash: `hash-tree-${CFR14_TREE_PART}-1`,
+			hasFigures: false,
+			hasTables: false,
+			seedOrigin: SUITE_TAG,
+			createdAt: now,
+			updatedAt: now,
+		},
+		{
+			id: CFR14_TREE_SECTION_B1_ID,
+			referenceId: CFR14_TREE_REF_ID,
+			parentId: CFR14_TREE_SUBPART_B_ID,
+			level: REFERENCE_SECTION_LEVELS.SECTION,
+			ordinal: 0,
+			depth: 1,
+			code: `${CFR14_TREE_PART}.103`,
+			airbossRef: airbossRefForCfrSection(14, `${CFR14_TREE_PART}.103`),
+			title: 'Tree fixture preflight',
+			faaPageStart: null,
+			faaPageEnd: null,
+			sourceLocator: `14 CFR §${CFR14_TREE_PART}.103`,
+			contentMd: 'Tree-shape body. Each pilot in command shall...',
+			contentHash: `hash-tree-${CFR14_TREE_PART}-103`,
 			hasFigures: false,
 			hasTables: false,
 			seedOrigin: SUITE_TAG,
@@ -772,6 +885,77 @@ describe('getRegulationsView (detail) -- flat-shape CFR Part', () => {
 				userId: TEST_USER_ID,
 			}),
 		).rejects.toBeInstanceOf(RegulationsViewNotFoundError);
+	});
+});
+
+// ---------------------------------------------------------------------------
+// Tree-shape CFR Part (Wave 2): real `level=subpart` rows at depth 0,
+// sections under them at depth 1. The BC aggregator probes this shape
+// FIRST in buildSectionListView; the detail view fetches the real
+// Subpart parent for the breadcrumb instead of synthesizing a virtual
+// chapter.
+// ---------------------------------------------------------------------------
+
+describe('getRegulationsView (section) -- tree-shape CFR Part', () => {
+	it('returns Subpart-grouped sections when subparts exist', async () => {
+		const view = await getRegulationsView({
+			view: 'section',
+			kind: LIBRARY_REGULATIONS_KINDS.CFR_14,
+			group: CFR14_TREE_PART,
+		});
+		expect(view.view).toBe('section');
+		expect(view.subparts).toHaveLength(2);
+		// Subparts come back in ordinal order (A then B).
+		expect(view.subparts[0]?.code).toBe('subpart-A');
+		expect(view.subparts[0]?.title).toBe('Subpart A -- General');
+		expect(view.subparts[0]?.sections).toHaveLength(1);
+		expect(view.subparts[0]?.sections[0]?.code).toBe(`${CFR14_TREE_PART}.1`);
+		expect(view.subparts[1]?.code).toBe('subpart-B');
+		expect(view.subparts[1]?.title).toBe('Subpart B -- Flight Rules');
+		expect(view.subparts[1]?.sections[0]?.code).toBe(`${CFR14_TREE_PART}.103`);
+		// Flat sections list stays empty when subparts win.
+		expect(view.sections).toEqual([]);
+	});
+
+	it('subpart child sections each carry a canonical eCFR external URL', async () => {
+		const view = await getRegulationsView({
+			view: 'section',
+			kind: LIBRARY_REGULATIONS_KINDS.CFR_14,
+			group: CFR14_TREE_PART,
+		});
+		for (const sp of view.subparts) {
+			for (const section of sp.sections) {
+				expect(section.external?.label).toBe('eCFR');
+			}
+		}
+	});
+});
+
+describe('getRegulationsView (detail) -- tree-shape CFR Part', () => {
+	it('hydrates the section payload and exposes the real Subpart parent', async () => {
+		const view = await getRegulationsView({
+			view: 'detail',
+			kind: LIBRARY_REGULATIONS_KINDS.CFR_14,
+			group: CFR14_TREE_PART,
+			section: { chapterCode: CFR14_TREE_PART, sectionCode: '103' },
+			userId: TEST_USER_ID,
+		});
+		expect(view.view).toBe('detail');
+		expect(view.section.id).toBe(CFR14_TREE_SECTION_B1_ID);
+		expect(view.section.code).toBe(`${CFR14_TREE_PART}.103`);
+		// Detail view's `chapter` field carries the real Subpart row, not a
+		// synthesized virtual chapter.
+		expect(view.chapter.id).toBe(CFR14_TREE_SUBPART_B_ID);
+		expect(view.chapter.code).toBe('subpart-B');
+		expect(view.chapter.title).toBe('Subpart B -- Flight Rules');
+		// The Wave 2 breadcrumb fields surface the Subpart context to the
+		// detail page so it can render the breadcrumb segment.
+		expect(view.cfrSubpartCode).toBe('subpart-B');
+		expect(view.cfrSubpartTitle).toBe('Subpart B -- Flight Rules');
+		// Siblings span every section under the reference, not just the
+		// owning Subpart -- the section reader's TOC stays book-experience
+		// consistent across Subpart boundaries.
+		expect(view.siblings.map((s) => s.code).sort()).toEqual([`${CFR14_TREE_PART}.1`, `${CFR14_TREE_PART}.103`].sort());
 	});
 });
 

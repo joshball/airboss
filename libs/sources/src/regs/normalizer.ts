@@ -24,6 +24,12 @@ export interface NormalizedSection {
 	readonly entry: SourceEntry;
 	readonly bodyMarkdown: string;
 	readonly bodyHashInput: string;
+	/** Owning Part number ("91"). */
+	readonly part: string;
+	/** Section code, dotted form ("91.103"). */
+	readonly sectionCode: string;
+	/** Owning Subpart letter (lowercase, "a"); null when section sits directly under Part. */
+	readonly subpart: string | null;
 }
 
 /** Normalize a section into its `SourceEntry` + body markdown. */
@@ -54,12 +60,21 @@ export function normalizeRawSection(raw: RawSection, opts: NormalizerOptions): N
 		},
 		bodyMarkdown,
 		bodyHashInput: bodyMarkdown,
+		part: raw.part,
+		sectionCode: `${raw.part}.${raw.section}`,
+		subpart: raw.subpart,
 	};
 }
 
 export interface NormalizedSubpart {
 	readonly entry: SourceEntry;
 	readonly bodyMarkdown: string;
+	/** Owning Part number ("91"). */
+	readonly part: string;
+	/** Subpart letter, lowercase ("a"). */
+	readonly subpart: string;
+	/** Subpart heading (already cleaned by the walker). */
+	readonly title: string;
 }
 
 export function normalizeRawSubpart(raw: RawSubpart, opts: NormalizerOptions): NormalizedSubpart {
@@ -80,12 +95,16 @@ export function normalizeRawSubpart(raw: RawSubpart, opts: NormalizerOptions): N
 			lifecycle: 'pending',
 		},
 		bodyMarkdown: formatOverviewMarkdown({ canonicalShort, canonicalTitle, kind: 'subpart' }),
+		part: raw.part,
+		subpart: raw.subpart,
+		title: canonicalTitle,
 	};
 }
 
 export interface NormalizedPart {
 	readonly entry: SourceEntry;
 	readonly bodyMarkdown: string;
+	readonly part: string;
 }
 
 export function normalizeRawPart(raw: RawPart, opts: NormalizerOptions): NormalizedPart {
@@ -105,6 +124,7 @@ export function normalizeRawPart(raw: RawPart, opts: NormalizerOptions): Normali
 			lifecycle: 'pending',
 		},
 		bodyMarkdown: formatOverviewMarkdown({ canonicalShort, canonicalTitle, kind: 'part' }),
+		part: raw.part,
 	};
 }
 

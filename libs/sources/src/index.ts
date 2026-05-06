@@ -59,6 +59,7 @@ export {
 	airbossRefForAcsTask,
 	airbossRefForAimEntry,
 	airbossRefForCfrSection,
+	airbossRefForCfrSubpart,
 	airbossRefForGenericDocument,
 	airbossRefForHandbookSection,
 	airbossRefForInfo,

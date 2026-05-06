@@ -83,6 +83,29 @@ export interface ManifestRecord {
 export interface ManifestPartEntry {
 	readonly number: string;
 	readonly officialTitle: string;
+	/**
+	 * Subparts under this Part, in source order (eCFR XML emits them
+	 * alphabetically: A, B, C, ...). Empty array when the Part has no
+	 * Subpart subdivisions (small Parts where sections sit directly under
+	 * the Part). Each Subpart owns the section codes that the seeder
+	 * stitches into a real Subpart -> Section tree.
+	 */
+	readonly subparts: readonly ManifestSubpartEntry[];
+}
+
+export interface ManifestSubpartEntry {
+	/** Subpart letter, lowercase (`"a"`, `"b"`, ...). */
+	readonly id: string;
+	/** Position within the Part (0-indexed). */
+	readonly ordinal: number;
+	/** Subpart heading (`"General"`, `"Flight Rules"`, ...). */
+	readonly title: string;
+	/**
+	 * Section codes (dotted form, e.g. `"91.103"`) owned by this Subpart,
+	 * in source order. Used by the seeder to attach `parent_id` to each
+	 * `reference_section` row.
+	 */
+	readonly sections: readonly string[];
 }
 
 export interface SectionsJsonRecord {
@@ -98,6 +121,14 @@ export interface SectionEntry {
 	readonly last_amended_date: string;
 	readonly body_path: string;
 	readonly body_sha256: string;
+	/**
+	 * Owning Subpart letter (lowercase, e.g. `"a"`, `"b"`). Null when the
+	 * section sits directly under the Part with no Subpart wrapper (small
+	 * Parts in 49 CFR like Part 830 do this; some 14 CFR Parts also do).
+	 * The seeder uses this to look up the parent Subpart row when laying
+	 * down the section tree.
+	 */
+	readonly subpart_id: string | null;
 }
 
 export interface DerivativeWriteReport {
@@ -138,7 +169,19 @@ export function writeDerivativeTree(input: DerivativeWriteInput): DerivativeWrit
 			last_amended_date: section.entry.last_amended_date.toISOString().slice(0, 10),
 			body_path: join(part, `${sectionFileName}.md`),
 			body_sha256: sha256(section.bodyMarkdown),
+			subpart_id: section.subpart,
 		});
+	}
+
+	// Subpart -> ordered section list, keyed by `<part>:<subpart>`. Source order
+	// is preserved (eCFR XML emits sections in regulatory order within a subpart).
+	const subpartSectionsKey = (part: string, sub: string) => `${part}:${sub}`;
+	const subpartSectionLists: Record<string, string[]> = {};
+	for (const section of input.sections) {
+		if (section.subpart === null) continue;
+		const key = subpartSectionsKey(section.part, section.subpart);
+		if (subpartSectionLists[key] === undefined) subpartSectionLists[key] = [];
+		subpartSectionLists[key].push(section.sectionCode);
 	}
 
 	// 2. Subpart overview markdown
@@ -177,10 +220,26 @@ export function writeDerivativeTree(input: DerivativeWriteInput): DerivativeWrit
 	else filesUnchanged += 1;
 
 	// 5. manifest.json
+	// Group subparts by Part, preserving emit order so the per-Part `ordinal`
+	// matches the source (eCFR XML emits Subpart A, B, C, ... in alphabetical
+	// regulatory order; we don't re-sort).
+	const subpartsByPart: Record<string, ManifestSubpartEntry[]> = {};
+	for (const sp of input.subparts) {
+		if (subpartsByPart[sp.part] === undefined) subpartsByPart[sp.part] = [];
+		const list = subpartsByPart[sp.part];
+		if (list === undefined) continue;
+		list.push({
+			id: sp.subpart,
+			ordinal: list.length,
+			title: sp.title,
+			sections: subpartSectionLists[subpartSectionsKey(sp.part, sp.subpart)] ?? [],
+		});
+	}
 	const partEntries: ManifestPartEntry[] = input.parts
 		.map((p) => ({
 			number: partNumberFromEntry(p.entry),
 			officialTitle: p.entry.canonical_title,
+			subparts: subpartsByPart[partNumberFromEntry(p.entry)] ?? [],
 		}))
 		.sort((a, b) => a.number.localeCompare(b.number, 'en', { numeric: true }));
 	const manifest: ManifestRecord = {
