@@ -1,9 +1,23 @@
 ---
-status: done
-shipped: PR #284 (2026-04-28)
-trigger: when scenario authoring tooling lands, OR when a third use of `chosen_option` appears
-source: 2026-04-27 schema review
+id: scenario-options-relational
+title: 'Promote scenario.options JSONB to a relational table'
+product: study
+category: platform
+status: in-flight
+agent_review_status: done
+human_review_status: pending
+created: 2026-04-28
+owner: user
+depends_on: []
+unblocks: []
+tags: [schema, scenarios]
+legacy_fields:
+  shipped: 'PR #284 (2026-04-28)'
+  trigger: 'when scenario authoring tooling lands, OR when a third use of `chosen_option` appears'
+  source: '2026-04-27 schema review'
 ---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
 
 # Promote `scenario.options` JSONB to a relational table
 

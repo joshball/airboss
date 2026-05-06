@@ -1,9 +1,23 @@
 ---
-status: done
-shipped: PR #284 (2026-04-28)
-trigger: as part of the next study schema migration window
-source: 2026-04-27 schema review
+id: card-state-fk-tightening
+title: 'Tighten card_state and session_item_result ownership FKs'
+product: study
+category: platform
+status: in-flight
+agent_review_status: done
+human_review_status: pending
+created: 2026-04-28
+owner: user
+depends_on: []
+unblocks: []
+tags: [schema, cleanup]
+legacy_fields:
+  shipped: 'PR #284 (2026-04-28)'
+  trigger: 'as part of the next study schema migration window'
+  source: '2026-04-27 schema review'
 ---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
 
 # Tighten `card_state` and `session_item_result` ownership FKs
 

@@ -1,8 +1,21 @@
 ---
-status: done
+id: post-284-followup
+title: 'Post-#284 follow-up: e2e cleanup + verification gaps'
+product: platform
+category: docs
+status: in-flight
+agent_review_status: done
+human_review_status: pending
 created: 2026-04-28
-source: leftover from PR #284 (consolidate-wp-batch) + PR #287 (e2e-suite-cleanup)
+owner: user
+depends_on: []
+unblocks: []
+tags: [reviews, e2e]
+legacy_fields:
+  source: 'leftover from PR #284 (consolidate-wp-batch) + PR #287 (e2e-suite-cleanup)'
 ---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
 
 # Post-#284 follow-up: e2e cleanup + verification gaps
 

@@ -1,11 +1,20 @@
 ---
-title: 'Spec: Extract provenance + per-section signoff'
+id: extract-provenance-and-signoff
+title: 'Extract provenance + per-section signoff'
 product: platform
-feature: extract-provenance-and-signoff
-type: spec
-status: read
-review_status: done
-ratified: 2026-05-04
+category: platform
+status: signed-off
+agent_review_status: done
+human_review_status: pending
+created: 2026-04-30
+owner: agent
+depends_on: []
+unblocks: []
+tags: [ingestion, provenance]
+legacy_fields:
+  feature: extract-provenance-and-signoff
+  type: spec
+  ratified: 2026-05-04
 ---
 
 # Spec: Extract provenance + per-section signoff

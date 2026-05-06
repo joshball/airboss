@@ -1,10 +1,19 @@
 ---
-title: 'Spec: Source cache flat naming'
+id: source-cache-flat-naming
+title: 'Source cache flat naming'
 product: platform
-feature: source-cache-flat-naming
-type: spec
-status: unread
-review_status: pending
+category: platform
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-29
+owner: agent
+depends_on: []
+unblocks: []
+tags: [sources, cache]
+legacy_fields:
+  feature: source-cache-flat-naming
+  type: spec
 ---
 
 # Spec: Source cache flat naming
