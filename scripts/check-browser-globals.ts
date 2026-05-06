@@ -90,7 +90,8 @@ interface Finding {
 	file: string;
 	line: number;
 	text: string;
-	symbol: 'Buffer' | 'process' | 'server-only-import';
+	symbol: 'Buffer' | 'process' | 'server-only-import' | 'barrel-leak';
+	chain?: readonly string[];
 }
 
 const findings: Finding[] = [];
@@ -203,8 +204,118 @@ for (const file of appsListing.split('\n')) {
 	scanForServerImports(file, contents);
 }
 
-if (findings.length === 0) {
-	console.log('check-browser-globals: ok (scanned browser-bundled libs + apps client-eligible files)');
+// Third scan: walk every value-re-export from a runtime barrel and confirm
+// no module on that transitive chain imports `@ab/db/connection`, the
+// postgres driver, or another server-only entry point. This is what the
+// `/memory` Buffer crash needed -- the bare-globals scan caught direct
+// `Buffer.` references but not the case where a runtime barrel value-
+// re-exported a module whose own value imports reached `db/connection`.
+//
+// Entries are runtime barrels: client-eligible by design, and any value
+// reachable from them must be browser-safe.
+const RUNTIME_BARRELS = ['libs/bc/study/src/index.ts'] as const;
+
+// Module specifiers whose runtime evaluation pulls a server-only chunk
+// into the client bundle. `import type` is allowed (erases at compile
+// time); a non-type runtime import is a leak.
+const SERVER_ONLY_SPECIFIERS = [
+	'@ab/db/connection',
+	'@ab/bc-study/server',
+	'@ab/bc-study/build',
+	'postgres',
+	'drizzle-orm/postgres-js',
+];
+
+function isNodeBuiltin(spec: string): boolean {
+	return spec.startsWith('node:');
+}
+
+interface ParsedImport {
+	specifier: string;
+	isTypeOnly: boolean;
+}
+
+function parseValueImports(contents: string): ParsedImport[] {
+	const imports: ParsedImport[] = [];
+	const lines = contents.split('\n');
+	// Concatenate continuation lines so multi-line `import { ... } from '...'`
+	// resolves to a single record. Cheap state machine: track open `{` count.
+	let buf = '';
+	let depth = 0;
+	for (const line of lines) {
+		buf += line + '\n';
+		for (const ch of line) {
+			if (ch === '{') depth++;
+			else if (ch === '}') depth--;
+		}
+		if (depth !== 0) continue;
+		const stmt = buf.trim();
+		buf = '';
+		if (!stmt.startsWith('import') && !stmt.startsWith('export')) continue;
+		// `import` and `export ... from` both imply module evaluation if
+		// any part is non-type.
+		const fromMatch = stmt.match(/from\s+['"]([^'"]+)['"]/);
+		if (!fromMatch) continue;
+		const specifier = fromMatch[1];
+		if (specifier === undefined) continue;
+		// `import type { ... } from` and `export type { ... } from` are erased.
+		const isTypeOnly = /^\s*(import|export)\s+type\b/.test(stmt);
+		imports.push({ specifier, isTypeOnly });
+	}
+	return imports;
+}
+
+import { dirname, resolve } from 'node:path';
+
+async function resolveLocal(fromFile: string, specifier: string): Promise<string | null> {
+	if (!specifier.startsWith('.')) return null;
+	const base = resolve(dirname(fromFile), specifier);
+	for (const candidate of [base, `${base}.ts`, `${base}.svelte`, `${base}/index.ts`]) {
+		if (await Bun.file(candidate).exists()) return candidate;
+	}
+	return null;
+}
+
+const barrelFindings: Finding[] = [];
+const visited = new Set<string>();
+
+async function walkForLeaks(file: string, chain: readonly string[]): Promise<void> {
+	const key = file;
+	if (visited.has(key)) return;
+	visited.add(key);
+	if (file.endsWith('.svelte')) return; // svelte components don't run in the barrel-eval chain
+	const contents = await Bun.file(file).text();
+	const imports = parseValueImports(contents);
+	for (const imp of imports) {
+		if (imp.isTypeOnly) continue;
+		// Hit on a server-only specifier => report and stop walking this branch.
+		if (SERVER_ONLY_SPECIFIERS.includes(imp.specifier) || isNodeBuiltin(imp.specifier)) {
+			barrelFindings.push({
+				file,
+				line: 0,
+				text: `imports '${imp.specifier}' as a value`,
+				symbol: 'barrel-leak',
+				chain: [...chain, file, `(import) ${imp.specifier}`],
+			});
+			continue;
+		}
+		// Recurse into local relative imports.
+		const local = await resolveLocal(file, imp.specifier);
+		if (local !== null) {
+			await walkForLeaks(local, [...chain, file]);
+		}
+	}
+}
+
+for (const barrel of RUNTIME_BARRELS) {
+	visited.clear();
+	await walkForLeaks(barrel, []);
+}
+
+if (findings.length === 0 && barrelFindings.length === 0) {
+	console.log(
+		'check-browser-globals: ok (scanned browser-bundled libs + apps client-eligible files + runtime barrels)',
+	);
 	process.exit(0);
 }
 
@@ -230,6 +341,24 @@ if (importFindings.length > 0) {
 	console.error('Switch to a type-only import (`import type { ... }`), move the work into a');
 	console.error('`+page.server.ts` / `+server.ts` / `apps/*/src/lib/server/**` file, or import');
 	console.error('the browser-safe entry point (`@ab/bc-study` instead of `@ab/bc-study/server`).');
+}
+
+if (barrelFindings.length > 0) {
+	console.error('\ncheck-browser-globals: runtime barrel value-re-exports a module that loads server-only code:\n');
+	for (const f of barrelFindings) {
+		console.error(`  ${f.file}: ${f.text}`);
+		if (f.chain) {
+			for (const step of f.chain) {
+				console.error(`    -> ${step}`);
+			}
+		}
+	}
+	console.error('\nThe runtime barrel is bundled into the browser. Any value re-export here MUST resolve');
+	console.error('to a module whose transitive runtime imports stay browser-safe. Fix by:');
+	console.error('  - Removing the value re-export from the runtime barrel and adding it to the');
+	console.error('    matching `/server` barrel (the canonical pattern -- see PR #664), OR');
+	console.error('  - Refactoring the offending file so its server-only imports are dynamic');
+	console.error('    (lazy `await import()` inside async function bodies).');
 }
 
 process.exit(1);

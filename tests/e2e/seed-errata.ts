@@ -21,7 +21,7 @@ import {
 	getHandbookSection,
 	getReferenceByDocument,
 	insertErrataRows,
-} from '../../libs/bc/study/src';
+} from '../../libs/bc/study/src/server';
 import { db } from '../../libs/db/src/connection';
 import { referenceSection } from '../../libs/bc/study/src/schema';
 import { HANDBOOK_ERRATA_PATCH_KINDS } from '../../libs/constants/src';
