@@ -9,6 +9,8 @@ import { defineConfig } from 'vitest/config';
 // they stay listed to document the most common deep imports.
 const aliases = {
 	'@ab/constants/env': resolve('./libs/constants/src/env.ts'),
+	'@ab/constants/sim': resolve('./libs/constants/src/sim.ts'),
+	'@ab/constants/study': resolve('./libs/constants/src/study.ts'),
 	'@ab/constants': resolve('./libs/constants/src/index.ts'),
 	'@ab/types': resolve('./libs/types/src/index.ts'),
 	'@ab/db/connection': resolve('./libs/db/src/connection.ts'),
@@ -57,6 +59,10 @@ const aliases = {
 	'@ab/library/CitationChip.svelte': resolve('./libs/library/src/CitationChip.svelte'),
 	'@ab/library/SourceLinks.svelte': resolve('./libs/library/src/SourceLinks.svelte'),
 	'@ab/library': resolve('./libs/library/src/index.ts'),
+	'@ab/sources/sentinels.ts': resolve('./libs/sources/src/sentinels.ts'),
+	'@ab/sources/parser.ts': resolve('./libs/sources/src/parser.ts'),
+	'@ab/sources/validator.ts': resolve('./libs/sources/src/validator.ts'),
+	'@ab/sources/registry/index.ts': resolve('./libs/sources/src/registry/index.ts'),
 	'@ab/sources/registry/__test_helpers__': resolve('./libs/sources/src/registry/__test_helpers__.ts'),
 	'@ab/sources/registry': resolve('./libs/sources/src/registry/index.ts'),
 	'@ab/sources/regs': resolve('./libs/sources/src/regs/index.ts'),

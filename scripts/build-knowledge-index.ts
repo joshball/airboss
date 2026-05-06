@@ -36,6 +36,8 @@ import {
 	type NodeLifecycle,
 	STUDY_PRIORITY_VALUES,
 } from '@ab/constants/study';
+import type { ParsedIdentifier, ValidationFinding } from '@ab/sources';
+import { type CitationSentinel, type SentinelField, validateSentinelFieldName } from '@ab/sources/sentinels.ts';
 import { parse as parseYaml } from 'yaml';
 
 // ---------------------------------------------------------------------------
@@ -67,11 +69,41 @@ function parseArgs(argv: readonly string[]): Args {
 // Parsing
 // ---------------------------------------------------------------------------
 
-interface ParsedReference {
-	source: string;
-	detail: string;
-	note: string;
+/**
+ * Legacy free-text citation shape per ADR 019 amendment 2026-05 step 4.
+ *
+ * The amendment graduates this to ERROR in step 8 once the migration review
+ * queue (`course/knowledge/.migration-review.md`) closes with zero residual
+ * legacy citations. Today it parses with WARNING so the build flags every
+ * un-migrated row.
+ */
+interface LegacyParsedReference {
+	readonly shape: 'legacy';
+	readonly source: string;
+	readonly detail: string;
+	readonly note: string;
 }
+
+/**
+ * Structured citation shape per ADR 019 amendment 2026-05 §2 and the
+ * migration-script proposed YAML.
+ *
+ * The `ref` field is the canonical `airboss-ref:` URI (with optional
+ * embedded edition pin or `?at=`/`?page=`/`?paragraph=` query). Sentinel
+ * fields are flat per amendment D1; the canonical vocabulary is closed
+ * (validated by `validateSentinelFieldName`). When `quote` is present OR
+ * the locator includes `?page=`/`?paragraph=`, the citation is
+ * edition-sensitive and the validator requires an explicit pin.
+ */
+interface RefParsedReference {
+	readonly shape: 'ref';
+	readonly ref: string;
+	readonly sentinels: ReadonlyArray<{ readonly field: SentinelField; readonly expected: string }>;
+	readonly quote: string | null;
+	readonly note: string;
+}
+
+type ParsedReference = LegacyParsedReference | RefParsedReference;
 
 interface ParsedFrontmatter {
 	id: string;
@@ -253,31 +285,286 @@ function asOptionalInt(value: unknown): number | null {
 	return null;
 }
 
-function asReferenceArray(value: unknown): ParsedReference[] {
-	if (!Array.isArray(value)) return [];
-	return value
-		.filter((v): v is Record<string, unknown> => typeof v === 'object' && v !== null)
-		.map((entry) => ({
-			source: typeof entry.source === 'string' ? entry.source : '',
-			detail: typeof entry.detail === 'string' ? entry.detail : '',
-			note: typeof entry.note === 'string' ? entry.note : '',
-		}));
+/**
+ * Stable code surfaced on every legacy-shape WARNING. ADR 019 amendment
+ * 2026-05 step 8 graduates this to ERROR once the migration review queue
+ * closes; until then the build emits per-citation WARNINGs that show up in
+ * `bun run check` output without blocking.
+ */
+const LEGACY_CITATION_WARNING_CODE = 'legacy-citation-shape';
+
+interface ReferenceParseResult {
+	readonly references: readonly ParsedReference[];
+	readonly errors: readonly string[];
+	readonly warnings: readonly string[];
 }
 
-function parseFrontmatterYaml(yaml: string, relPath: string): { frontmatter: ParsedFrontmatter; errors: string[] } {
+function asReferenceArray(value: unknown): ReferenceParseResult {
+	if (value === null || value === undefined) return { references: [], errors: [], warnings: [] };
+	if (!Array.isArray(value)) {
+		return { references: [], errors: ["'references' must be an array"], warnings: [] };
+	}
+	const references: ParsedReference[] = [];
 	const errors: string[] = [];
+	const warnings: string[] = [];
+	for (let i = 0; i < value.length; i += 1) {
+		const entry = value[i];
+		if (typeof entry !== 'object' || entry === null) {
+			errors.push(`references[${i}]: entry must be an object`);
+			continue;
+		}
+		const obj = entry as Record<string, unknown>;
+		// Shape discrimination: structured citations carry `ref` (canonical
+		// `airboss-ref:` URI per ADR 019). Legacy citations carry `source`.
+		const hasRef = typeof obj.ref === 'string';
+		const hasLegacy = typeof obj.source === 'string';
+		if (hasRef && hasLegacy) {
+			errors.push(`references[${i}]: cannot set both 'ref' (structured) and 'source' (legacy) on the same citation`);
+			continue;
+		}
+		if (hasRef) {
+			const result = parseRefReference(obj, i);
+			if (result.error !== null) {
+				errors.push(result.error);
+				continue;
+			}
+			if (result.reference !== null) references.push(result.reference);
+			continue;
+		}
+		if (hasLegacy) {
+			references.push({
+				shape: 'legacy',
+				source: typeof obj.source === 'string' ? obj.source : '',
+				detail: typeof obj.detail === 'string' ? obj.detail : '',
+				note: typeof obj.note === 'string' ? obj.note : '',
+			});
+			warnings.push(
+				`references[${i}] [${LEGACY_CITATION_WARNING_CODE}]: legacy free-text citation; ` +
+					'migrate to the structured `ref:` shape via `bun scripts/db/migrate-knowledge-citations.ts`. ' +
+					'Per ADR 019 amendment 2026-05 step 8 this graduates to ERROR after the migration review queue closes.',
+			);
+			continue;
+		}
+		errors.push(
+			`references[${i}]: missing required citation discriminator -- set 'ref' (structured) or 'source' (legacy)`,
+		);
+	}
+	return { references, errors, warnings };
+}
+
+interface RefParseSlot {
+	readonly reference: RefParsedReference | null;
+	readonly error: string | null;
+}
+
+/**
+ * Parse a structured citation entry. The shape is `ref:` URI plus zero or
+ * more flat sentinel fields drawn from the canonical vocabulary
+ * (`SENTINEL_FIELDS`), an optional `quote`, and an optional `note`. Unknown
+ * fields are rejected as ERROR (typo defense per amendment D1).
+ */
+function parseRefReference(obj: Record<string, unknown>, index: number): RefParseSlot {
+	const ref = obj.ref;
+	if (typeof ref !== 'string' || ref.length === 0) {
+		return { reference: null, error: `references[${index}]: 'ref' must be a non-empty string` };
+	}
+	const sentinels: Array<{ readonly field: SentinelField; readonly expected: string }> = [];
+	let quote: string | null = null;
+	let note = '';
+	const allowedNonSentinel: ReadonlySet<string> = new Set(['ref', 'quote', 'note']);
+	for (const [key, raw] of Object.entries(obj)) {
+		if (allowedNonSentinel.has(key)) {
+			if (key === 'quote') {
+				if (raw === undefined || raw === null) continue;
+				if (typeof raw !== 'string') {
+					return { reference: null, error: `references[${index}]: 'quote' must be a string` };
+				}
+				quote = raw;
+				continue;
+			}
+			if (key === 'note') {
+				if (raw === undefined || raw === null) continue;
+				if (typeof raw !== 'string') {
+					return { reference: null, error: `references[${index}]: 'note' must be a string` };
+				}
+				note = raw;
+				continue;
+			}
+			continue;
+		}
+		// Anything else must be a canonical sentinel field per amendment D1.
+		const validation = validateSentinelFieldName(key);
+		if (validation.kind !== 'ok') {
+			return { reference: null, error: `references[${index}]: ${validation.message}` };
+		}
+		if (typeof raw !== 'string' || raw.length === 0) {
+			return {
+				reference: null,
+				error: `references[${index}]: sentinel '${key}' must be a non-empty string`,
+			};
+		}
+		sentinels.push({ field: validation.field, expected: raw });
+	}
+	return {
+		reference: {
+			shape: 'ref',
+			ref,
+			sentinels,
+			quote,
+			note,
+		},
+		error: null,
+	};
+}
+
+/**
+ * Determine locator precision per ADR 019 amendment 2026-05 §1. The validator
+ * routes on this to decide whether an unpinned identifier is OK.
+ *
+ * Edition-sensitive when:
+ *   - `?page=` is in the URI (page-pinned),
+ *   - `?paragraph=` is in the URI (paragraph-renumbered regs), or
+ *   - the citation captures a sibling `quote:` field.
+ *
+ * Otherwise doc-or-chapter-level. Editionless corpora are detected inside
+ * the validator from `parsed.corpus`, so we only need to choose between
+ * 'doc-or-chapter-level' and 'edition-sensitive' here.
+ */
+function computeLocatorPrecision(ref: RefParsedReference): 'doc-or-chapter-level' | 'edition-sensitive' {
+	if (ref.quote !== null && ref.quote.length > 0) return 'edition-sensitive';
+	if (/[?&]page=/.test(ref.ref)) return 'edition-sensitive';
+	if (/[?&]paragraph=/.test(ref.ref)) return 'edition-sensitive';
+	return 'doc-or-chapter-level';
+}
+
+/**
+ * Convert build-script captured sentinels to the validator's `CitationSentinel`
+ * shape. The shapes are isomorphic; the indirection lets the build script use
+ * its own readonly type while the validator keeps its own.
+ */
+function toCitationSentinels(ref: RefParsedReference): readonly CitationSentinel[] {
+	return ref.sentinels.map((s) => ({ field: s.field, expected: s.expected }));
+}
+
+interface CitationValidationOutcome {
+	readonly errors: readonly BuildError[];
+	readonly warnings: readonly BuildWarning[];
+}
+
+/**
+ * Lazily-loaded `@ab/sources` toolkit. The static import would pull
+ * `@ab/db/connection` into module-load time (the production registry
+ * transitively imports the editions cache, which imports the db handle),
+ * which breaks `--dry-run` in environments without DATABASE_URL set.
+ * Dynamic import keeps dry-run DB-free, matching the pattern used by
+ * `writeToDb` below.
+ */
+type SourcesToolkit = {
+	readonly parseIdentifier: typeof import('@ab/sources/parser.ts').parseIdentifier;
+	readonly isParseError: typeof import('@ab/sources/parser.ts').isParseError;
+	readonly validateIdentifier: typeof import('@ab/sources/validator.ts').validateIdentifier;
+	readonly registry: import('@ab/sources').RegistryReader;
+	readonly getCorpusResolver: typeof import('@ab/sources').getCorpusResolver;
+};
+let _sourcesToolkit: SourcesToolkit | null = null;
+/**
+ * Load the validator + parser + production registry on first use. The
+ * production registry transitively imports `@ab/db/connection` (the editions
+ * cache reads from Postgres at warm-time), so the static-import path would
+ * break `--dry-run` in environments without DATABASE_URL set. Even the
+ * `@ab/sources` barrel re-exports DB-touching values, so we import each
+ * leaf module directly to keep dry-run hermetic until first use.
+ */
+async function loadSourcesToolkit(): Promise<SourcesToolkit> {
+	if (_sourcesToolkit !== null) return _sourcesToolkit;
+	const [{ parseIdentifier, isParseError }, { validateIdentifier }, { productionRegistry, getCorpusResolver }] =
+		await Promise.all([
+			import('@ab/sources/parser.ts'),
+			import('@ab/sources/validator.ts'),
+			import('@ab/sources/registry/index.ts'),
+		]);
+	_sourcesToolkit = {
+		parseIdentifier,
+		isParseError,
+		validateIdentifier,
+		registry: productionRegistry,
+		getCorpusResolver,
+	};
+	return _sourcesToolkit;
+}
+
+/**
+ * Validate every structured (`ref:`-shaped) citation in `references` via the
+ * `@ab/sources` validator. Per ADR 019 amendment 2026-05 step 4, NOTICE-tier
+ * findings are IDE-only and skipped from the CLI summary; ERROR fails the
+ * build; WARNING is visible-but-non-blocking. Legacy citations are skipped --
+ * `asReferenceArray` already emitted a per-citation WARNING for those.
+ */
+async function validateStructuredCitations(
+	references: readonly ParsedReference[],
+	relPath: string,
+): Promise<CitationValidationOutcome> {
+	const errors: BuildError[] = [];
+	const warnings: BuildWarning[] = [];
+	const toolkit = await loadSourcesToolkit();
+	const lookup = (parsed: ParsedIdentifier, field: SentinelField): string | null => {
+		const resolver = toolkit.getCorpusResolver(parsed.corpus);
+		if (resolver === null) return null;
+		const hook = resolver.getSentinelValue;
+		if (typeof hook !== 'function') return null;
+		return hook(parsed, field);
+	};
+	references.forEach((ref, index) => {
+		if (ref.shape !== 'ref') return;
+		const parsed = toolkit.parseIdentifier(ref.ref);
+		if (toolkit.isParseError(parsed)) {
+			errors.push({
+				relPath,
+				message: `references[${index}] '${ref.ref}': ${parsed.message}`,
+			});
+			return;
+		}
+		const findings: readonly ValidationFinding[] = toolkit.validateIdentifier(parsed, {
+			registry: toolkit.registry,
+			location: { file: relPath, line: 0, column: 0 },
+			locatorPrecision: computeLocatorPrecision(ref),
+			sentinels: toCitationSentinels(ref),
+			sentinelLookup: lookup,
+		});
+		for (const finding of findings) {
+			const detail = `references[${index}] '${ref.ref}' (rule ${finding.ruleId}): ${finding.message}`;
+			if (finding.severity === 'error') {
+				errors.push({ relPath, message: detail });
+			} else if (finding.severity === 'warning') {
+				warnings.push({ relPath, message: detail });
+			}
+			// NOTICE-tier findings are IDE-only per amendment step 4; skip from CLI summary.
+		}
+	});
+	return { errors, warnings };
+}
+
+function parseFrontmatterYaml(
+	yaml: string,
+	relPath: string,
+): { frontmatter: ParsedFrontmatter; errors: string[]; warnings: string[] } {
+	const errors: string[] = [];
+	const warnings: string[] = [];
 	let raw: unknown;
 	try {
 		raw = parseYaml(yaml);
 	} catch (err) {
 		errors.push(`YAML parse error: ${(err as Error).message}`);
-		return { frontmatter: emptyFrontmatter(), errors };
+		return { frontmatter: emptyFrontmatter(), errors, warnings };
 	}
 	if (typeof raw !== 'object' || raw === null) {
 		errors.push('frontmatter is not an object');
-		return { frontmatter: emptyFrontmatter(), errors };
+		return { frontmatter: emptyFrontmatter(), errors, warnings };
 	}
 	const obj = raw as Record<string, unknown>;
+	const referenceParse = asReferenceArray(obj.references);
+	for (const message of referenceParse.errors) errors.push(message);
+	for (const message of referenceParse.warnings) warnings.push(message);
 
 	const frontmatter: ParsedFrontmatter = {
 		id: typeof obj.id === 'string' ? obj.id : '',
@@ -297,7 +584,7 @@ function parseFrontmatterYaml(yaml: string, relPath: string): { frontmatter: Par
 		modalities: asStringArray(obj.modalities),
 		estimatedTimeMinutes: asOptionalInt(obj.estimated_time_minutes),
 		reviewTimeMinutes: asOptionalInt(obj.review_time_minutes),
-		references: asReferenceArray(obj.references),
+		references: referenceParse.references.slice(),
 		assessable: typeof obj.assessable === 'boolean' ? obj.assessable : true,
 		assessmentMethods: asStringArray(obj.assessment_methods),
 		masteryCriteria: asString(obj.mastery_criteria),
@@ -310,7 +597,26 @@ function parseFrontmatterYaml(yaml: string, relPath: string): { frontmatter: Par
 		errors.push(`${relPath}: id '${frontmatter.id}' must match /^[a-z][a-z0-9-]*$/`);
 	}
 
-	return { frontmatter, errors };
+	return { frontmatter, errors, warnings };
+}
+
+/**
+ * Serialise a parsed reference back to the on-disk JSONB shape. The internal
+ * discriminator (`shape`) is stripped so the column stays compatible with
+ * the existing `Citation` union; the renderer then narrows on the presence
+ * of `ref` vs `source` per amendment step 5.
+ */
+function serializeReferenceForDb(ref: ParsedReference): Record<string, unknown> {
+	if (ref.shape === 'legacy') {
+		return { source: ref.source, detail: ref.detail, note: ref.note };
+	}
+	const out: Record<string, unknown> = { ref: ref.ref };
+	for (const sentinel of ref.sentinels) {
+		out[sentinel.field] = sentinel.expected;
+	}
+	if (ref.quote !== null && ref.quote.length > 0) out.quote = ref.quote;
+	if (ref.note.length > 0) out.note = ref.note;
+	return out;
 }
 
 function emptyFrontmatter(): ParsedFrontmatter {
@@ -634,6 +940,7 @@ async function main(): Promise<void> {
 	const files = walkForNodeMd(knowledgeRoot);
 	const nodes: ParsedNode[] = [];
 	const parseErrors: BuildError[] = [];
+	const parseWarnings: BuildWarning[] = [];
 
 	for (const filePath of files) {
 		let raw: string;
@@ -649,8 +956,18 @@ async function main(): Promise<void> {
 			parseErrors.push({ relPath, message: 'missing or malformed frontmatter fence' });
 			continue;
 		}
-		const { frontmatter, errors: fmErrors } = parseFrontmatterYaml(split.yaml, relPath);
+		const { frontmatter, errors: fmErrors, warnings: fmWarnings } = parseFrontmatterYaml(split.yaml, relPath);
 		for (const message of fmErrors) parseErrors.push({ relPath, message });
+		for (const message of fmWarnings) parseWarnings.push({ relPath, message });
+
+		// Validate every structured citation through the @ab/sources validator.
+		// ERROR -> build failure; WARNING -> visible-but-non-blocking; NOTICE
+		// -> IDE-only (skipped from CLI summary). Parse errors on the
+		// `airboss-ref:` URI are surfaced as ERROR carrying the parser's
+		// message per amendment step 4.
+		const validationOutcome = await validateStructuredCitations(frontmatter.references, relPath);
+		for (const err of validationOutcome.errors) parseErrors.push(err);
+		for (const warn of validationOutcome.warnings) parseWarnings.push(warn);
 
 		const { phases, unknownHeadings, duplicates } = splitPhases(split.body);
 		for (const unknown of unknownHeadings) {
@@ -675,6 +992,7 @@ async function main(): Promise<void> {
 
 	const validation = validate(nodes);
 	const allErrors: BuildError[] = [...parseErrors, ...validation.errors];
+	const allWarnings: BuildWarning[] = [...parseWarnings, ...validation.warnings];
 	if (validation.cycleChain) {
 		allErrors.push({
 			relPath: '(graph)',
@@ -685,7 +1003,7 @@ async function main(): Promise<void> {
 	const summary = buildCoverageSummary(nodes);
 
 	if (allErrors.length > 0) {
-		emitReport('failed', args, nodes, summary, allErrors, validation.warnings);
+		emitReport('failed', args, nodes, summary, allErrors, allWarnings);
 		process.exit(1);
 	}
 
@@ -702,7 +1020,7 @@ async function main(): Promise<void> {
 					message: `--fail-on-coverage: ${summary.byLifecycle[NODE_LIFECYCLES.SKELETON]} skeleton node(s) remain`,
 				},
 			],
-			validation.warnings,
+			allWarnings,
 		);
 		process.exit(1);
 	}
@@ -717,7 +1035,7 @@ async function main(): Promise<void> {
 		await writeToDb(nodes);
 	}
 
-	emitReport(args.dryRun ? 'dry-run success' : 'success', args, nodes, summary, [], validation.warnings);
+	emitReport(args.dryRun ? 'dry-run success' : 'success', args, nodes, summary, [], allWarnings);
 }
 
 // ---------------------------------------------------------------------------
@@ -754,7 +1072,7 @@ async function writeToDb(nodes: readonly ParsedNode[]): Promise<void> {
 						modalities: node.frontmatter.modalities,
 						estimatedTimeMinutes: node.frontmatter.estimatedTimeMinutes,
 						reviewTimeMinutes: node.frontmatter.reviewTimeMinutes,
-						references: node.frontmatter.references,
+						references: node.frontmatter.references.map(serializeReferenceForDb),
 						assessable: node.frontmatter.assessable,
 						assessmentMethods: node.frontmatter.assessmentMethods,
 						masteryCriteria: node.frontmatter.masteryCriteria,
@@ -777,7 +1095,7 @@ async function writeToDb(nodes: readonly ParsedNode[]): Promise<void> {
 							modalities: node.frontmatter.modalities,
 							estimatedTimeMinutes: node.frontmatter.estimatedTimeMinutes,
 							reviewTimeMinutes: node.frontmatter.reviewTimeMinutes,
-							references: node.frontmatter.references,
+							references: node.frontmatter.references.map(serializeReferenceForDb),
 							assessable: node.frontmatter.assessable,
 							assessmentMethods: node.frontmatter.assessmentMethods,
 							masteryCriteria: node.frontmatter.masteryCriteria,
@@ -890,7 +1208,24 @@ function emitReport(
 	}
 }
 
-main().catch((err) => {
-	process.stderr.write(`build-knowledge: unexpected failure: ${(err as Error).stack ?? err}\n`);
-	process.exit(1);
-});
+/**
+ * Test-only escape hatch. Re-exports the pure citation-parsing helpers so
+ * `build-knowledge-index.test.ts` can exercise them directly. Not part of
+ * the script's public interface; do not import from production code.
+ */
+export const __test__ = {
+	asReferenceArray,
+	computeLocatorPrecision,
+	serializeReferenceForDb,
+	LEGACY_CITATION_WARNING_CODE,
+};
+
+// Run `main()` only when this script is invoked directly (`bun
+// scripts/build-knowledge-index.ts`), not when imported as a module
+// (e.g. by `build-knowledge-index.test.ts`).
+if (import.meta.main) {
+	main().catch((err) => {
+		process.stderr.write(`build-knowledge: unexpected failure: ${(err as Error).stack ?? err}\n`);
+		process.exit(1);
+	});
+}
