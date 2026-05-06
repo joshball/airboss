@@ -6,8 +6,914 @@
   "editionDate": "2026-04-22",
   "sourceUrl": "file:///Users/joshua/Documents/airboss-handbook-cache/regulations/cfr-14/2026-04-22.xml",
   "sourceSha256": "0eb78e9535d67b2c3b0cf85797ad762f3f9b1ba6a1f02c19e3045df4b4e8ccf5",
-  "fetchedAt": "2026-04-30T22:31:18.124Z",
+  "fetchedAt": "2026-05-06T16:26:46.586Z",
   "partCount": 226,
   "subpartCount": 664,
-  "sectionCount": 6328
+  "sectionCount": 6328,
+  "parts": [
+    {
+      "number": "1",
+      "officialTitle": "Definitions and Abbreviations"
+    },
+    {
+      "number": "3",
+      "officialTitle": "General Requirements"
+    },
+    {
+      "number": "5",
+      "officialTitle": "Safety Management Systems"
+    },
+    {
+      "number": "11",
+      "officialTitle": "General Rulemaking Procedures"
+    },
+    {
+      "number": "13",
+      "officialTitle": "Investigative and Enforcement Procedures"
+    },
+    {
+      "number": "14",
+      "officialTitle": "Rules Implementing the Equal Access to Justice Act of 1980"
+    },
+    {
+      "number": "15",
+      "officialTitle": "Administrative Claims Under Federal Tort Claims Act"
+    },
+    {
+      "number": "16",
+      "officialTitle": "Rules of Practice for Federally-assisted Airport Enforcement Proceedings"
+    },
+    {
+      "number": "17",
+      "officialTitle": "Procedures for Protests and Contract Disputes"
+    },
+    {
+      "number": "21",
+      "officialTitle": "Certification Procedures for Products and Articles"
+    },
+    {
+      "number": "22",
+      "officialTitle": "Xxx"
+    },
+    {
+      "number": "23",
+      "officialTitle": "Airworthiness Standards: Normal Category Airplanes"
+    },
+    {
+      "number": "25",
+      "officialTitle": "Airworthiness Standards: Transport Category Airplanes"
+    },
+    {
+      "number": "26",
+      "officialTitle": "Continued Airworthiness and Safety Improvements for Transport Category Airplanes"
+    },
+    {
+      "number": "27",
+      "officialTitle": "Airworthiness Standards: Normal Category Rotorcraft"
+    },
+    {
+      "number": "29",
+      "officialTitle": "Airworthiness Standards: Transport Category Rotorcraft"
+    },
+    {
+      "number": "31",
+      "officialTitle": "Airworthiness Standards: Manned Free Balloons"
+    },
+    {
+      "number": "33",
+      "officialTitle": "Airworthiness Standards: Aircraft Engines"
+    },
+    {
+      "number": "34",
+      "officialTitle": "Fuel Venting and Exhaust Emission Requirements for Turbine Engine Powered Airplanes"
+    },
+    {
+      "number": "35",
+      "officialTitle": "Airworthiness Standards: Propellers"
+    },
+    {
+      "number": "36",
+      "officialTitle": "Noise Standards: Aircraft Type and Airworthiness Certification"
+    },
+    {
+      "number": "38",
+      "officialTitle": "Airplane Fuel Efficiency Certification"
+    },
+    {
+      "number": "39",
+      "officialTitle": "Airworthiness Directives"
+    },
+    {
+      "number": "43",
+      "officialTitle": "Maintenance, Preventive Maintenance, Rebuilding, and Alteration"
+    },
+    {
+      "number": "45",
+      "officialTitle": "Identification and Registration Marking"
+    },
+    {
+      "number": "47",
+      "officialTitle": "Aircraft Registration"
+    },
+    {
+      "number": "48",
+      "officialTitle": "Registration and Marking Requirements for Small Unmanned Aircraft"
+    },
+    {
+      "number": "49",
+      "officialTitle": "Recording of Aircraft Titles and Security Documents"
+    },
+    {
+      "number": "50-59",
+      "officialTitle": "Parts 50-59 [reserved]"
+    },
+    {
+      "number": "60",
+      "officialTitle": "Flight Simulation Training Device Initial and Continuing Qualification and Use"
+    },
+    {
+      "number": "61",
+      "officialTitle": "Certification: Pilots, Flight Instructors, and Ground Instructors"
+    },
+    {
+      "number": "63",
+      "officialTitle": "Certification: Flight Crewmembers Other Than Pilots"
+    },
+    {
+      "number": "65",
+      "officialTitle": "Certification: Airmen Other Than Flight Crewmembers"
+    },
+    {
+      "number": "67",
+      "officialTitle": "Medical Standards and Certification"
+    },
+    {
+      "number": "68",
+      "officialTitle": "Requirements for Operating Certain Small Aircraft Without a Medical Certificate"
+    },
+    {
+      "number": "71",
+      "officialTitle": "Designation of Class A, B, C, D, and E Airspace Areas; Air Traffic Service Routes; and Reporting Points"
+    },
+    {
+      "number": "73",
+      "officialTitle": "Special Use Airspace"
+    },
+    {
+      "number": "75",
+      "officialTitle": "Part 75 [reserved]"
+    },
+    {
+      "number": "77",
+      "officialTitle": "Safe, Efficient Use, and Preservation of the Navigable Airspace"
+    },
+    {
+      "number": "89",
+      "officialTitle": "Remote Identification of Unmanned Aircraft"
+    },
+    {
+      "number": "91",
+      "officialTitle": "General Operating and Flight Rules"
+    },
+    {
+      "number": "93",
+      "officialTitle": "Special Air Traffic Rules"
+    },
+    {
+      "number": "95",
+      "officialTitle": "Ifr Altitudes"
+    },
+    {
+      "number": "97",
+      "officialTitle": "Standard Instrument Procedures"
+    },
+    {
+      "number": "99",
+      "officialTitle": "Security Control of Air Traffic"
+    },
+    {
+      "number": "101",
+      "officialTitle": "Moored Balloons, Kites, Amateur Rockets, and Unmanned Free Balloons"
+    },
+    {
+      "number": "103",
+      "officialTitle": "Ultralight Vehicles"
+    },
+    {
+      "number": "105",
+      "officialTitle": "Parachute Operations"
+    },
+    {
+      "number": "106",
+      "officialTitle": "Part 106 [reserved]"
+    },
+    {
+      "number": "107",
+      "officialTitle": "Small Unmanned Aircraft Systems"
+    },
+    {
+      "number": "108-109",
+      "officialTitle": "Parts 108-109 [reserved]"
+    },
+    {
+      "number": "110",
+      "officialTitle": "General Requirements"
+    },
+    {
+      "number": "111",
+      "officialTitle": "Pilot Records Database"
+    },
+    {
+      "number": "112-116",
+      "officialTitle": "Parts 112-116 [reserved]"
+    },
+    {
+      "number": "117",
+      "officialTitle": "Flight and Duty Limitations and Rest Requirements: Flightcrew Members"
+    },
+    {
+      "number": "118",
+      "officialTitle": "Part 118 [reserved]"
+    },
+    {
+      "number": "119",
+      "officialTitle": "Certification: Air Carriers and Commercial Operators"
+    },
+    {
+      "number": "120",
+      "officialTitle": "Drug and Alcohol Testing Program"
+    },
+    {
+      "number": "121",
+      "officialTitle": "Operating Requirements: Domestic, Flag, and Supplemental Operations"
+    },
+    {
+      "number": "125",
+      "officialTitle": "Certification and Operations: Aircraft Having a Seating Capacity of 20 or More Passengers or a Maximum Payload Capacity of 6,000 Pounds or More; and Rules Governing Persons On Board Such Aircraft"
+    },
+    {
+      "number": "129",
+      "officialTitle": "Operations: Foreign Air Carriers and Foreign Operators of U.s.-registered Aircraft Engaged in Common Carriage"
+    },
+    {
+      "number": "133",
+      "officialTitle": "Rotorcraft External-load Operations"
+    },
+    {
+      "number": "135",
+      "officialTitle": "Operating Requirements: Commuter and On Demand Operations and Rules Governing Persons On Board Such Aircraft"
+    },
+    {
+      "number": "136",
+      "officialTitle": "Commercial Air Tours and National Parks Air Tour Management"
+    },
+    {
+      "number": "137",
+      "officialTitle": "Agricultural Aircraft Operations"
+    },
+    {
+      "number": "139",
+      "officialTitle": "Certification of Airports"
+    },
+    {
+      "number": "140",
+      "officialTitle": "Part 140 [reserved]"
+    },
+    {
+      "number": "141",
+      "officialTitle": "Pilot Schools"
+    },
+    {
+      "number": "142",
+      "officialTitle": "Training Centers"
+    },
+    {
+      "number": "143",
+      "officialTitle": "Part 143 [reserved]"
+    },
+    {
+      "number": "145",
+      "officialTitle": "Repair Stations"
+    },
+    {
+      "number": "147",
+      "officialTitle": "Aviation Maintenance Technician Schools"
+    },
+    {
+      "number": "150",
+      "officialTitle": "Airport Noise Compatibility Planning"
+    },
+    {
+      "number": "151",
+      "officialTitle": "Federal Aid to Airports"
+    },
+    {
+      "number": "152",
+      "officialTitle": "Airport Aid Program"
+    },
+    {
+      "number": "153",
+      "officialTitle": "Airport Operations"
+    },
+    {
+      "number": "155",
+      "officialTitle": "Release of Airport Property From Surplus Property Disposal Restrictions"
+    },
+    {
+      "number": "156",
+      "officialTitle": "State Block Grant Pilot Program"
+    },
+    {
+      "number": "157",
+      "officialTitle": "Notice of Construction, Alteration, Activation, and Deactivation of Airports"
+    },
+    {
+      "number": "158",
+      "officialTitle": "Passenger Facility Charges (pfc's)"
+    },
+    {
+      "number": "161",
+      "officialTitle": "Notice and Approval of Airport Noise and Access Restrictions"
+    },
+    {
+      "number": "169",
+      "officialTitle": "Expenditure of Federal Funds for Nonmilitary Airports or Air Navigation Facilities Thereon"
+    },
+    {
+      "number": "170",
+      "officialTitle": "Establishment and Discontinuance Criteria for Air Traffic Control Services and Navigational Facilities"
+    },
+    {
+      "number": "171",
+      "officialTitle": "Non-federal Navigation Facilities"
+    },
+    {
+      "number": "183",
+      "officialTitle": "Representatives of the Administrator"
+    },
+    {
+      "number": "185",
+      "officialTitle": "Testimony By Employees and Production of Records in Legal Proceedings, and Service of Legal Process and Pleadings"
+    },
+    {
+      "number": "187",
+      "officialTitle": "Fees"
+    },
+    {
+      "number": "189",
+      "officialTitle": "Use of Federal Aviation Administration Communications System"
+    },
+    {
+      "number": "193",
+      "officialTitle": "Protection of Voluntarily Submitted Information"
+    },
+    {
+      "number": "194",
+      "officialTitle": "Special Federal Aviation Regulation No. 120—powered-lift: Pilot Certification and Training; Operations Requirements"
+    },
+    {
+      "number": "198",
+      "officialTitle": "Aviation Insurance"
+    },
+    {
+      "number": "199",
+      "officialTitle": "Part 199 [reserved]"
+    },
+    {
+      "number": "200",
+      "officialTitle": "Definitions and Instructions"
+    },
+    {
+      "number": "201",
+      "officialTitle": "Air Carrier Authority Under Subtitle Vii of Title 49 of the United States Code"
+    },
+    {
+      "number": "203",
+      "officialTitle": "Waiver of Warsaw Convention Liability Limits and Defenses"
+    },
+    {
+      "number": "204",
+      "officialTitle": "Data to Support Fitness Determinations"
+    },
+    {
+      "number": "205",
+      "officialTitle": "Aircraft Accident Liability Insurance"
+    },
+    {
+      "number": "206",
+      "officialTitle": "Certificates of Public Convenience and Necessity: Special Authorizations and Exemptions"
+    },
+    {
+      "number": "211",
+      "officialTitle": "Applications for Permits to Foreign Air Carriers"
+    },
+    {
+      "number": "212",
+      "officialTitle": "Charter Rules for U.s. and Foreign Direct Air Carriers"
+    },
+    {
+      "number": "213",
+      "officialTitle": "Terms, Conditions and Limitations of Foreign Air Carrier Permits"
+    },
+    {
+      "number": "214",
+      "officialTitle": "Terms, Conditions, and Limitations of Foreign Air Carrier Permits Authorizing Charter Transportation Only"
+    },
+    {
+      "number": "215",
+      "officialTitle": "Use and Change of Names of Air Carriers, Foreign Air Carriers and Commuter Air Carriers"
+    },
+    {
+      "number": "216",
+      "officialTitle": "Commingling of Blind Sector Traffic By Foreign Air Carriers"
+    },
+    {
+      "number": "217",
+      "officialTitle": "Reporting Traffic Statistics By Foreign Air Carriers in Civilian Scheduled, Charter, and Nonscheduled Services"
+    },
+    {
+      "number": "218",
+      "officialTitle": "Lease By Foreign Air Carrier or Other Foreign Person of Aircraft With Crew"
+    },
+    {
+      "number": "221",
+      "officialTitle": "Tariffs"
+    },
+    {
+      "number": "222",
+      "officialTitle": "Intermodal Cargo Services By Foreign Air Carriers"
+    },
+    {
+      "number": "223",
+      "officialTitle": "Free and Reduced-rate Transportation"
+    },
+    {
+      "number": "234",
+      "officialTitle": "Airline Service Quality Performance Reports"
+    },
+    {
+      "number": "235",
+      "officialTitle": "Reports By Air Carriers On Incidents Involving Animals During Air Transport"
+    },
+    {
+      "number": "240",
+      "officialTitle": "Inspection of Accounts and Property"
+    },
+    {
+      "number": "241",
+      "officialTitle": "Uniform System of Accounts and Reports for Large Certificated Air Carriers"
+    },
+    {
+      "number": "243",
+      "officialTitle": "Passenger Manifest Information"
+    },
+    {
+      "number": "244",
+      "officialTitle": "Reporting Tarmac Delay Data"
+    },
+    {
+      "number": "247",
+      "officialTitle": "Direct Airport-to-airport Mileage Records"
+    },
+    {
+      "number": "248",
+      "officialTitle": "Submission of Audit Reports"
+    },
+    {
+      "number": "249",
+      "officialTitle": "Preservation of Air Carrier Records"
+    },
+    {
+      "number": "250",
+      "officialTitle": "Oversales"
+    },
+    {
+      "number": "251",
+      "officialTitle": "Carriage of Musical Instruments"
+    },
+    {
+      "number": "252",
+      "officialTitle": "Smoking Aboard Aircraft"
+    },
+    {
+      "number": "253",
+      "officialTitle": "Notice of Terms of Contract of Carriage"
+    },
+    {
+      "number": "254",
+      "officialTitle": "Domestic Baggage Liability"
+    },
+    {
+      "number": "255",
+      "officialTitle": "Part 255 [reserved]"
+    },
+    {
+      "number": "256",
+      "officialTitle": "Electronic Airline Information Systems"
+    },
+    {
+      "number": "257",
+      "officialTitle": "Disclosure of Code-sharing Arrangements and Long-term Wet Leases"
+    },
+    {
+      "number": "258",
+      "officialTitle": "Disclosure of Change-of-gauge Services"
+    },
+    {
+      "number": "259",
+      "officialTitle": "Enhanced Protections for Airline Passengers"
+    },
+    {
+      "number": "260",
+      "officialTitle": "Refunds for Airline Fare and Ancillary Service Fees"
+    },
+    {
+      "number": "262",
+      "officialTitle": "Travel Credits or Vouchers Due to a Serious Communicable Disease"
+    },
+    {
+      "number": "271",
+      "officialTitle": "Guidelines for Subsidizing Air Carriers Providing Essential Air Transportation"
+    },
+    {
+      "number": "272",
+      "officialTitle": "Part 272 [reserved]"
+    },
+    {
+      "number": "291",
+      "officialTitle": "Cargo Operations in Interstate Air Transportation"
+    },
+    {
+      "number": "292",
+      "officialTitle": "International Cargo Transportation"
+    },
+    {
+      "number": "293",
+      "officialTitle": "International Passenger Transportation"
+    },
+    {
+      "number": "294",
+      "officialTitle": "Canadian Charter Air Taxi Operators"
+    },
+    {
+      "number": "295",
+      "officialTitle": "Air Charter Brokers"
+    },
+    {
+      "number": "296",
+      "officialTitle": "Indirect Air Transportation of Property"
+    },
+    {
+      "number": "297",
+      "officialTitle": "Foreign Air Freight Forwarders and Foreign Cooperative Shippers Associations"
+    },
+    {
+      "number": "298",
+      "officialTitle": "Exemptions for Air Taxi and Commuter Air Carrier Operations"
+    },
+    {
+      "number": "300",
+      "officialTitle": "Rules of Conduct in Dot Proceedings Under This Chapter"
+    },
+    {
+      "number": "302",
+      "officialTitle": "Rules of Practice in Proceedings"
+    },
+    {
+      "number": "303",
+      "officialTitle": "Review of Air Carrier Agreements"
+    },
+    {
+      "number": "305",
+      "officialTitle": "Rules of Practice in Informal Nonpublic Investigations"
+    },
+    {
+      "number": "313",
+      "officialTitle": "Implementation of the Energy Policy and Conservation Act"
+    },
+    {
+      "number": "314",
+      "officialTitle": "Part 314 [reserved]"
+    },
+    {
+      "number": "323",
+      "officialTitle": "Terminations, Suspensions, and Reductions of Service"
+    },
+    {
+      "number": "325",
+      "officialTitle": "Essential Air Service Procedures"
+    },
+    {
+      "number": "330-331",
+      "officialTitle": "Parts 330-331 [reserved]"
+    },
+    {
+      "number": "372",
+      "officialTitle": "Overseas Military Personnel Charters"
+    },
+    {
+      "number": "374",
+      "officialTitle": "Implementation of the Consumer Credit Protection Act With Respect to Air Carriers and Foreign Air Carriers"
+    },
+    {
+      "number": "374a",
+      "officialTitle": "PART 374a—EXTENSION OF CREDIT BY AIRLINES TO FEDERAL POLITICAL CANDIDATES"
+    },
+    {
+      "number": "375",
+      "officialTitle": "Navigation of Foreign Civil Aircraft Within the United States"
+    },
+    {
+      "number": "377",
+      "officialTitle": "Continuance of Expired Authorizations By Operation of Law Pending Final Determination of Applications for Renewal Thereof"
+    },
+    {
+      "number": "380",
+      "officialTitle": "Public Charters"
+    },
+    {
+      "number": "381",
+      "officialTitle": "Special Event Tours"
+    },
+    {
+      "number": "382",
+      "officialTitle": "Nondiscrimination On the Basis of Disability in Air Travel"
+    },
+    {
+      "number": "383",
+      "officialTitle": "Civil Penalties"
+    },
+    {
+      "number": "385",
+      "officialTitle": "Staff Assignments and Review of Action Under Assignments"
+    },
+    {
+      "number": "389",
+      "officialTitle": "Fees and Charges for Special Services"
+    },
+    {
+      "number": "398",
+      "officialTitle": "Guidelines for Individual Determinations of Basic Essential Air Service"
+    },
+    {
+      "number": "399",
+      "officialTitle": "Statements of General Policy"
+    },
+    {
+      "number": "400",
+      "officialTitle": "Basis and Scope"
+    },
+    {
+      "number": "401",
+      "officialTitle": "Organization and Definitions"
+    },
+    {
+      "number": "402",
+      "officialTitle": "General Requirements"
+    },
+    {
+      "number": "404",
+      "officialTitle": "Petition and Rulemaking Procedures"
+    },
+    {
+      "number": "405",
+      "officialTitle": "Compliance and Enforcement"
+    },
+    {
+      "number": "406",
+      "officialTitle": "Investigations, Enforcement, and Administrative Review"
+    },
+    {
+      "number": "411",
+      "officialTitle": "Part 411 [reserved]"
+    },
+    {
+      "number": "413",
+      "officialTitle": "License Application Procedures"
+    },
+    {
+      "number": "414",
+      "officialTitle": "Safety Element Approvals"
+    },
+    {
+      "number": "415-419",
+      "officialTitle": "Parts 415-419 [reserved]"
+    },
+    {
+      "number": "420",
+      "officialTitle": "License to Operate a Launch Site"
+    },
+    {
+      "number": "421-432",
+      "officialTitle": "Parts 421-432 [reserved]"
+    },
+    {
+      "number": "433",
+      "officialTitle": "License to Operate a Reentry Site"
+    },
+    {
+      "number": "434-436",
+      "officialTitle": "Parts 434-436 [reserved]"
+    },
+    {
+      "number": "437",
+      "officialTitle": "Experimental Permits"
+    },
+    {
+      "number": "438-439",
+      "officialTitle": "Parts 438-439 [reserved]"
+    },
+    {
+      "number": "440",
+      "officialTitle": "Financial Responsibility"
+    },
+    {
+      "number": "441-449",
+      "officialTitle": "Parts 441-449 [reserved]"
+    },
+    {
+      "number": "450",
+      "officialTitle": "Launch and Reentry License Requirements"
+    },
+    {
+      "number": "451-459",
+      "officialTitle": "Parts 451-459 [reserved]"
+    },
+    {
+      "number": "460",
+      "officialTitle": "Human Space Flight Requirements"
+    },
+    {
+      "number": "461-1199",
+      "officialTitle": "Parts 461-1199 [reserved]"
+    },
+    {
+      "number": "1200",
+      "officialTitle": "Part 1200 [reserved]"
+    },
+    {
+      "number": "1201",
+      "officialTitle": "Statement of Organization and General Information"
+    },
+    {
+      "number": "1203",
+      "officialTitle": "Information Security Program"
+    },
+    {
+      "number": "1203a",
+      "officialTitle": "PART 1203a—NASA SECURITY AREAS"
+    },
+    {
+      "number": "1203b",
+      "officialTitle": "PART 1203b—SECURITY PROGRAMS; ARREST AUTHORITY AND USE OF FORCE BY NASA SECURITY FORCE PERSONNEL"
+    },
+    {
+      "number": "1204",
+      "officialTitle": "Administrative Authority and Policy"
+    },
+    {
+      "number": "1205",
+      "officialTitle": "Part 1205 [reserved]"
+    },
+    {
+      "number": "1206",
+      "officialTitle": "Procedures for Disclosure of Records Under the Freedom of Information Act (foia)"
+    },
+    {
+      "number": "1207",
+      "officialTitle": "Standards of Conduct"
+    },
+    {
+      "number": "1208",
+      "officialTitle": "Uniform Relocation Assistance and Real Property Acquisition for Federal and Federally Assisted Programs"
+    },
+    {
+      "number": "1209",
+      "officialTitle": "Boards and Committees"
+    },
+    {
+      "number": "1210-1211",
+      "officialTitle": "Parts 1210-1211 [reserved]"
+    },
+    {
+      "number": "1212",
+      "officialTitle": "Privacy Act—nasa Regulations"
+    },
+    {
+      "number": "1213",
+      "officialTitle": "Release of Information to News and Information Media"
+    },
+    {
+      "number": "1214",
+      "officialTitle": "Space Flight"
+    },
+    {
+      "number": "1215",
+      "officialTitle": "Tracking and Data Relay Satellite System (tdrss)"
+    },
+    {
+      "number": "1216",
+      "officialTitle": "Environmental Quality"
+    },
+    {
+      "number": "1217",
+      "officialTitle": "Duty-free Entry of Space Articles"
+    },
+    {
+      "number": "1221",
+      "officialTitle": "The Nasa Seal and Other Devices, and the Congressional Space Medal of Honor"
+    },
+    {
+      "number": "1230",
+      "officialTitle": "Protection of Human Subjects"
+    },
+    {
+      "number": "1232",
+      "officialTitle": "Care and Use of Animals in the Conduct of Nasa Activities"
+    },
+    {
+      "number": "1240",
+      "officialTitle": "Inventions and Contributions"
+    },
+    {
+      "number": "1241",
+      "officialTitle": "To Research, Evaluate, Assess, and Treat (treat) Astronauts"
+    },
+    {
+      "number": "1245",
+      "officialTitle": "Patents and Other Intellectual Property Rights"
+    },
+    {
+      "number": "1250",
+      "officialTitle": "Nondiscrimination in Federally-assisted Programs of Nasa—effectuation of Title Vi of the Civil Rights Act of 1964"
+    },
+    {
+      "number": "1251",
+      "officialTitle": "Nondiscrimination On Basis of Disability"
+    },
+    {
+      "number": "1252",
+      "officialTitle": "Nondiscrimination On the Basis of Age in Programs or Activities Receiving Federal Financial Assistance"
+    },
+    {
+      "number": "1253",
+      "officialTitle": "Nondiscrimination On the Basis of Sex in Education Programs or Activities Receiving Federal Financial Assistance"
+    },
+    {
+      "number": "1259",
+      "officialTitle": "National Space Grant College and Fellowship Program"
+    },
+    {
+      "number": "1260",
+      "officialTitle": "Part 1260 [reserved]"
+    },
+    {
+      "number": "1261",
+      "officialTitle": "Processing of Monetary Claims (general)"
+    },
+    {
+      "number": "1262",
+      "officialTitle": "Equal Access to Justice Act in Agency Proceedings"
+    },
+    {
+      "number": "1263",
+      "officialTitle": "Demand for Information or Testimony Served On Agency Employees; Procedures"
+    },
+    {
+      "number": "1264",
+      "officialTitle": "Implementation of the Program Fraud Civil Penalties Act of 1986"
+    },
+    {
+      "number": "1266",
+      "officialTitle": "Cross-waiver of Liability"
+    },
+    {
+      "number": "1271",
+      "officialTitle": "New Restrictions On Lobbying"
+    },
+    {
+      "number": "1273-1274",
+      "officialTitle": "Parts 1273-1274 [reserved]"
+    },
+    {
+      "number": "1275",
+      "officialTitle": "Research Misconduct"
+    },
+    {
+      "number": "1276-1299",
+      "officialTitle": "Parts 1276-1299 [reserved]"
+    },
+    {
+      "number": "1300",
+      "officialTitle": "Aviation Disaster Relief—air Carrier Guarantee Loan Program"
+    },
+    {
+      "number": "1310",
+      "officialTitle": "Air Carrier Guarantee Loan Program Administrative Regulations and Amendment or Waiver of a Term or Condition of Guaranteed Loan"
+    },
+    {
+      "number": "1311-1399",
+      "officialTitle": "Parts 1311-1399 [reserved]"
+    }
+  ]
 }

@@ -34,7 +34,7 @@
 
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
-import { dirname, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { REFERENCE_KINDS, REFERENCE_SECTION_LEVELS } from '@ab/constants';
 import { db } from '@ab/db/connection';
 import { eq } from 'drizzle-orm';
@@ -42,6 +42,7 @@ import type { CfrManifest, CfrSectionEntry, CfrSectionsFile } from '../manifest-
 import { cfrSectionsFileSchema } from '../manifest-validation';
 import { type SectionSchema, upsertReference, upsertReferenceSection } from '../references';
 import { reference } from '../schema';
+import { type CfrPartOverlay, loadCfrPartAuthoring } from './cfr-authoring';
 import type { SeedContext, SeedSummary } from './types';
 
 const CFR_SCHEMA: SectionSchema = {
@@ -96,6 +97,61 @@ export interface SeedCfrManifestOptions {
 	manifestAbsPath: string;
 }
 
+/**
+ * Per-Part metadata produced by `buildCfrPartMetadata` -- exported so
+ * unit tests can pin the merge order without round-tripping through the
+ * DB. Manifest wins for `officialTitle` (eCFR XML is authoritative);
+ * authoring YAML wins for `description` / `whyItMatters` / `scope`
+ * (manifest never carries these).
+ */
+export interface CfrPartMetadata {
+	readonly title_number: string;
+	readonly part_number: string;
+	readonly edition_date: string;
+	readonly edition_slug: string;
+	readonly section_count: number;
+	readonly officialTitle?: string;
+	readonly description?: string;
+	readonly whyItMatters?: string;
+	readonly scope?: string;
+}
+
+export function buildCfrPartMetadata(input: {
+	manifest: CfrManifest;
+	partKey: string;
+	sectionCount: number;
+	manifestPartOfficialTitle: string | undefined;
+	authoringOverlay: CfrPartOverlay | undefined;
+}): CfrPartMetadata {
+	const out: CfrPartMetadata = {
+		title_number: input.manifest.title,
+		part_number: input.partKey,
+		edition_date: input.manifest.editionDate,
+		edition_slug: input.manifest.editionSlug,
+		section_count: input.sectionCount,
+		...(input.manifestPartOfficialTitle !== undefined ? { officialTitle: input.manifestPartOfficialTitle } : {}),
+		...(input.authoringOverlay?.description !== undefined ? { description: input.authoringOverlay.description } : {}),
+		...(input.authoringOverlay?.whyItMatters !== undefined
+			? { whyItMatters: input.authoringOverlay.whyItMatters }
+			: {}),
+		...(input.authoringOverlay?.scope !== undefined ? { scope: input.authoringOverlay.scope } : {}),
+	};
+	return out;
+}
+
+/**
+ * Resolve the absolute path to the per-Title authoring overlay file.
+ * Layout: `regulations/cfr-{14,49}/_authoring/parts.yaml`. The seeder
+ * walks UP from the manifest directory (`regulations/cfr-14/<edition>/`)
+ * to land on the Title-level `_authoring/parts.yaml`.
+ */
+function authoringFilePathFor(manifestAbsPath: string): string {
+	// manifestAbsPath = .../regulations/cfr-14/2026-04-22/manifest.json
+	// titleDir       = .../regulations/cfr-14
+	const titleDir = dirname(dirname(manifestAbsPath));
+	return join(titleDir, '_authoring', 'parts.yaml');
+}
+
 export async function seedCfrManifest(
 	manifest: CfrManifest,
 	options: SeedCfrManifestOptions,
@@ -105,6 +161,20 @@ export async function seedCfrManifest(
 	const sectionsFile = await loadCfrSectionsFile(options.manifestAbsPath);
 	const editionDir = dirname(options.manifestAbsPath);
 	const refIds: string[] = [];
+
+	// Per-Part overlay map (description / whyItMatters / scope). Empty when
+	// the per-Title authoring file is absent -- a fresh-clone-friendly path.
+	const authoring = await loadCfrPartAuthoring(authoringFilePathFor(options.manifestAbsPath));
+
+	// Index manifest.parts by Part number for O(1) lookup. Older manifests
+	// (pre-Wave-1 ingest) won't carry `parts`; fall back to undefined and
+	// the audit page surfaces the missing officialTitle as a gap.
+	const manifestPartTitles: Record<string, string> = {};
+	if (manifest.parts !== undefined) {
+		for (const p of manifest.parts) {
+			manifestPartTitles[p.number] = p.officialTitle;
+		}
+	}
 
 	// Stable per-Part order so seed logs are deterministic. Numeric-aware
 	// sort so Part 91 lands before Part 135 in the output.
@@ -126,7 +196,18 @@ export async function seedCfrManifest(
 		// YAML-authored metadata (subjects, primary_cert, title, url) via the
 		// undefined-on-conflict path in `upsertReference`. The YAML phase
 		// runs BEFORE this in `seed-all` and is the canonical author for
-		// those fields; we just attach the level vocabulary here.
+		// those fields; we just attach the level vocabulary + per-Part
+		// card-copy here. Manifest's `parts[].officialTitle` is the eCFR
+		// publisher heading; the authoring YAML overlays
+		// description/whyItMatters/scope. See `buildCfrPartMetadata` for
+		// the merge precedence.
+		const partMetadata = buildCfrPartMetadata({
+			manifest,
+			partKey,
+			sectionCount: sections.length,
+			manifestPartOfficialTitle: manifestPartTitles[partKey],
+			authoringOverlay: authoring[partKey],
+		});
 		const ref = await upsertReference({
 			kind: REFERENCE_KINDS.CFR,
 			documentSlug,
@@ -139,13 +220,7 @@ export async function seedCfrManifest(
 			publisher: 'FAA',
 			url: `https://www.ecfr.gov/current/title-${manifest.title}/part-${partKey}`,
 			sectionSchema: CFR_SCHEMA,
-			metadata: {
-				title_number: manifest.title,
-				part_number: partKey,
-				edition_date: manifest.editionDate,
-				edition_slug: manifest.editionSlug,
-				section_count: sections.length,
-			},
+			metadata: partMetadata,
 			seedOrigin: context.seedOrigin,
 		});
 

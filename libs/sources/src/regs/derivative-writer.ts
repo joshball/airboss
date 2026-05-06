@@ -68,6 +68,21 @@ export interface ManifestRecord {
 	readonly subpartCount: number;
 	readonly sectionCount: number;
 	readonly sources?: readonly ManifestSource[];
+	/**
+	 * Per-Part publisher metadata extracted from eCFR XML `<HEAD>` text.
+	 * Authoritative `officialTitle` for each Part (e.g. Part 91 ->
+	 * "General Operating and Flight Rules"), title-cased by the walker.
+	 * The CFR seeder reads this and stamps `reference.metadata.officialTitle`
+	 * so card surfaces can render the canonical Part heading without
+	 * round-tripping through the section markdown. Sorted numeric-aware so
+	 * Part 1 lands before Part 91, Part 91 before Part 135.
+	 */
+	readonly parts: readonly ManifestPartEntry[];
+}
+
+export interface ManifestPartEntry {
+	readonly number: string;
+	readonly officialTitle: string;
 }
 
 export interface SectionsJsonRecord {
@@ -162,6 +177,12 @@ export function writeDerivativeTree(input: DerivativeWriteInput): DerivativeWrit
 	else filesUnchanged += 1;
 
 	// 5. manifest.json
+	const partEntries: ManifestPartEntry[] = input.parts
+		.map((p) => ({
+			number: partNumberFromEntry(p.entry),
+			officialTitle: p.entry.canonical_title,
+		}))
+		.sort((a, b) => a.number.localeCompare(b.number, 'en', { numeric: true }));
 	const manifest: ManifestRecord = {
 		schemaVersion: 1,
 		kind: 'cfr',
@@ -177,6 +198,7 @@ export function writeDerivativeTree(input: DerivativeWriteInput): DerivativeWrit
 		...(input.manifest.sources !== undefined && input.manifest.sources.length > 0
 			? { sources: input.manifest.sources }
 			: {}),
+		parts: partEntries,
 	};
 	const manifestPath = join(editionDir, 'manifest.json');
 	const manifestContent = `${JSON.stringify(manifest, null, 2)}\n`;
