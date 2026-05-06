@@ -16,15 +16,6 @@
 references:
   # ---------- Title 14 (Aeronautics and Space) -----------------------------
 
-  - slug: 14cfr14
-    kind: cfr
-    edition: current
-    title: 14 CFR Part 14 -- Rules implementing the Equal Access to Justice Act
-    publisher: FAA
-    url: https://www.ecfr.gov/current/title-14/part-14
-    subjects: [regulations]
-    primary_cert: null
-
   - slug: 14cfr23
     kind: cfr
     edition: current

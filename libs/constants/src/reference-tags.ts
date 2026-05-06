@@ -76,6 +76,7 @@ export const PHASE_REQUIRING_SOURCE_TYPES: readonly ReferenceSourceType[] = [
 
 export const AVIATION_TOPICS = {
 	REGULATIONS: 'regulations',
+	DEFINITIONS: 'definitions',
 	WEATHER: 'weather',
 	NAVIGATION: 'navigation',
 	COMMUNICATIONS: 'communications',
@@ -86,12 +87,20 @@ export const AVIATION_TOPICS = {
 	AIRCRAFT_SYSTEMS: 'aircraft-systems',
 	FLIGHT_INSTRUMENTS: 'flight-instruments',
 	PROCEDURES: 'procedures',
+	INSTRUMENT_PROCEDURES: 'instrument-procedures',
+	OPERATIONS: 'operations',
+	COMMERCIAL_OPERATIONS: 'commercial-operations',
+	ROTORCRAFT: 'rotorcraft',
+	EQUIPMENT: 'equipment',
 	HUMAN_FACTORS: 'human-factors',
 	MEDICAL: 'medical',
+	AIRWORTHINESS: 'airworthiness',
 	CERTIFICATION: 'certification',
 	MAINTENANCE: 'maintenance',
 	AIRPORTS: 'airports',
 	EMERGENCIES: 'emergencies',
+	ACCIDENT_REPORTING: 'accident-reporting',
+	SECURITY: 'security',
 	TRAINING_OPS: 'training-ops',
 } as const;
 
@@ -101,6 +110,7 @@ export const AVIATION_TOPIC_VALUES: readonly AviationTopic[] = Object.values(AVI
 
 export const AVIATION_TOPIC_LABELS: Record<AviationTopic, string> = {
 	[AVIATION_TOPICS.REGULATIONS]: 'Regulations',
+	[AVIATION_TOPICS.DEFINITIONS]: 'Definitions',
 	[AVIATION_TOPICS.WEATHER]: 'Weather',
 	[AVIATION_TOPICS.NAVIGATION]: 'Navigation',
 	[AVIATION_TOPICS.COMMUNICATIONS]: 'Communications',
@@ -111,18 +121,26 @@ export const AVIATION_TOPIC_LABELS: Record<AviationTopic, string> = {
 	[AVIATION_TOPICS.AIRCRAFT_SYSTEMS]: 'Aircraft Systems',
 	[AVIATION_TOPICS.FLIGHT_INSTRUMENTS]: 'Flight Instruments',
 	[AVIATION_TOPICS.PROCEDURES]: 'Procedures',
+	[AVIATION_TOPICS.INSTRUMENT_PROCEDURES]: 'Instrument procedures',
+	[AVIATION_TOPICS.OPERATIONS]: 'Operations',
+	[AVIATION_TOPICS.COMMERCIAL_OPERATIONS]: 'Commercial operations',
+	[AVIATION_TOPICS.ROTORCRAFT]: 'Rotorcraft',
+	[AVIATION_TOPICS.EQUIPMENT]: 'Equipment',
 	[AVIATION_TOPICS.HUMAN_FACTORS]: 'Human Factors',
 	[AVIATION_TOPICS.MEDICAL]: 'Medical',
+	[AVIATION_TOPICS.AIRWORTHINESS]: 'Airworthiness',
 	[AVIATION_TOPICS.CERTIFICATION]: 'Certification',
 	[AVIATION_TOPICS.MAINTENANCE]: 'Maintenance',
 	[AVIATION_TOPICS.AIRPORTS]: 'Airports',
 	[AVIATION_TOPICS.EMERGENCIES]: 'Emergencies',
+	[AVIATION_TOPICS.ACCIDENT_REPORTING]: 'Accident reporting',
+	[AVIATION_TOPICS.SECURITY]: 'Security',
 	[AVIATION_TOPICS.TRAINING_OPS]: 'Training & Ops',
 };
 
-/** Max topics per reference (tagging research: 1-4). */
+/** Max topics per reference (tagging research: 1-5). Bumped from 4 to 5 in 2026-05 to fit Part 91's full scope. */
 export const AVIATION_TOPIC_MIN = 1;
-export const AVIATION_TOPIC_MAX = 4;
+export const AVIATION_TOPIC_MAX = 5;
 
 // -------- 3. flightRules (required, single-valued) --------
 

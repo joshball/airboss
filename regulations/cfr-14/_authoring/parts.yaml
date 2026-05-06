@@ -22,22 +22,22 @@ parts:
     description: "The dictionary for the rest of Title 14. Defines every term the regulations use -- 'aircraft', 'flight time', 'night', 'PIC' -- so the rules that follow have unambiguous meaning."
     whyItMatters: "Every disagreement about a reg eventually traces back to a Part 1 definition. Knowing what a word means here is the difference between thinking you're legal and being legal."
     scope: "Definitions"
-    topics: ["regulations"]
+    topics: ["definitions"]
   "21":
     description: "How aircraft, engines, propellers, and parts get and keep FAA approval. Type certificates, production certificates, airworthiness certificates, and the supplemental-type-certificate process all live here."
     whyItMatters: "When you ask 'is this airplane legal to fly?', the answer routes through Part 21. It's also where every STC, field approval, and special-airworthiness category traces back to."
     scope: "Certification"
-    topics: ["certification", "aircraft-systems"]
+    topics: ["airworthiness", "certification"]
   "23":
     description: "Airworthiness standards for normal-category airplanes -- the design rules manufacturers met to certificate the airplane you fly. Stall speed limits, structural loads, control-system requirements, equipment standards."
     whyItMatters: "The numbers in your POH (Vs0, Vno, load factors) trace directly to Part 23 minimums. Understanding the certification basis is how you tell a safety margin from a hard limit."
     scope: "Certification"
-    topics: ["certification", "aircraft-systems", "performance"]
+    topics: ["airworthiness", "certification"]
   "39":
     description: "Airworthiness Directives -- the FAA's mechanism for ordering corrections to type-certificated products with unsafe conditions. Issuance authority, compliance obligations, and how ADs become legally binding."
     whyItMatters: "An open AD on your airplane is a no-go item, full stop. Knowing how to find ADs (FAA registry, type-club channels) and verify compliance from the logbooks is a preflight skill, not a maintenance one."
     scope: "Airworthiness"
-    topics: ["maintenance", "aircraft-systems"]
+    topics: ["airworthiness", "maintenance"]
   "43":
     description: "What counts as maintenance, who can perform it, and how it must be recorded. Includes the Appendix A list of preventive maintenance an owner-pilot may legally do without an A&P."
     whyItMatters: "If you own or rent, this Part draws the line between what you can change yourself and what requires a mechanic. The logbook entries you sign live under Part 43."
@@ -67,7 +67,7 @@ parts:
     description: "Designates Class A, B, C, D, and E airspace areas, federal airways, and reporting points. Not the operating rules (those are in Part 91) -- this is where each piece of airspace is legally created."
     whyItMatters: "When you wonder why a Class B shelf cuts off where it does, Part 71 is the legal answer. It's a reference Part you consult, not memorize, but knowing what's here keeps the chart legend honest."
     scope: "Airspace"
-    topics: ["airspace", "navigation"]
+    topics: ["airspace"]
   "73":
     description: "Special-use airspace -- restricted areas, prohibited areas, and how their boundaries, altitudes, and times of designation are set. Companion to the operating rules in §91.133."
     whyItMatters: "A restricted area is only restricted when it's active. Part 73 is where you find the hours, controlling agency, and exact boundaries -- the data the chart legend abbreviates."
@@ -77,62 +77,62 @@ parts:
     description: "The general operating and flight rules. Covers preflight, fuel, alcohol, equipment, instrument requirements, VFR and IFR rules, ATC clearances, special flight operations, maintenance responsibilities, and large/turbine-aircraft operating rules."
     whyItMatters: "If you fly under any other Part (61, 135, 141), you're also flying under Part 91 -- it's the floor every other operating rule sits on. Most ramp-check questions, accident-investigation findings, and FAA enforcement actions come back to a Part 91 line."
     scope: "Operations"
-    topics: ["procedures", "weather", "airspace", "communications"]
+    topics: ["operations", "weather", "airspace", "communications", "equipment"]
   "93":
     description: "Special air-traffic rules for specific locations and airspace -- DC SFRA, Grand Canyon, Hudson River SFRA, the LAX Class B special-flight rules, and other named procedures."
     whyItMatters: "When the chart supplement says 'see 14 CFR Part 93', this is what it means. A pilot heading into the DC SFRA without reading 93B is signing up for an enforcement letter."
     scope: "Operations"
-    topics: ["airspace", "procedures"]
+    topics: ["airspace", "operations"]
   "95":
     description: "IFR altitudes -- minimum en route altitudes, minimum obstruction-clearance altitudes, and changeover points for the federal airway and jet-route system."
     whyItMatters: "The numbers on the IFR low chart trace to Part 95. You don't read it as an operator (the chart does that work for you), but knowing where MEA and MOCA come from changes how you interpret a missed-approach climb requirement."
     scope: "Operations"
-    topics: ["procedures", "navigation"]
+    topics: ["instrument-procedures"]
   "97":
     description: "Standard Instrument Procedures -- the legal home of every instrument approach, departure, and STAR the FAA publishes. Procedures are listed here by reference; the chart depictions are the operational form."
     whyItMatters: "When you fly an ILS, you're flying a Part 97 procedure. The legal authority for every minimum, every step-down, every missed-approach hold is here -- the chart is just the readable face of it."
     scope: "Procedures"
-    topics: ["procedures", "navigation"]
+    topics: ["instrument-procedures"]
   "103":
     description: "Ultralight vehicles -- single-occupant powered aircraft under 254 pounds and unpowered hang gliders, paragliders, etc. Operating rules, where you can fly, and what's prohibited (built-up areas, controlled airspace without authorization)."
     whyItMatters: "Part 103 is the only Part where you operate aircraft without a pilot certificate or registration. Knowing where it ends and Part 91 begins matters at every fuel stop and every airspace boundary."
     scope: "Operations"
-    topics: ["procedures"]
+    topics: ["operations"]
   "105":
     description: "Parachute operations -- jumping from aircraft, the equipment required, ATC notification, and operations near airports and over congested areas."
     whyItMatters: "If you'll ever drop jumpers, fly near a drop zone, or hear 'jumpers away' on CTAF, Part 105 governs what's happening. It also defines what counts as a legal emergency parachute on aerobatic flights."
     scope: "Operations"
-    topics: ["procedures"]
+    topics: ["operations"]
   "119":
     description: "Certification of air carriers and commercial operators. Defines the operating-certificate types (Part 121, 125, 135) and the line between common-carriage commercial operation and private carriage."
     whyItMatters: "Want to know whether an operation legally requires a Part 135 certificate? The answer is in Part 119. Important for any pilot considering charter, fractional, or 'I'll just charge for fuel' arrangements."
     scope: "Certification"
-    topics: ["certification", "regulations"]
+    topics: ["commercial-operations", "certification"]
   "121":
     description: "Operating requirements for domestic, flag, and supplemental air-carrier operations -- the airline rulebook. Covers crew duty/rest, dispatch, MEL, training, maintenance programs, and equipment requirements."
     whyItMatters: "Every regional and major airline operates under Part 121. As a GA pilot you don't fly under it, but understanding the structure (dispatch authority, rest rules, MEL discipline) shapes how you'll think about any future airline interview."
     scope: "Operations"
-    topics: ["procedures", "regulations"]
+    topics: ["commercial-operations"]
   "125":
     description: "Certification and operations for airplanes with 20+ seats or 6,000+ lb payload that aren't operated as common carriage. The corporate-and-private-large-aircraft regime that sits between Part 91 and Part 121."
     whyItMatters: "Large corporate operations and some fractional programs route through Part 125 -- a tighter ruleset than Part 91 but without the airline-grade structure of Part 121. Read it once if you'll ever sit right seat in a corporate jet."
     scope: "Operations"
-    topics: ["procedures", "regulations"]
+    topics: ["commercial-operations"]
   "133":
     description: "Rotorcraft external-load operations -- long-line, sling-load, human external cargo. Class A/B/C/D load classifications, operator certification, and the aircraft and pilot requirements for each class."
     whyItMatters: "Helicopter pilots doing utility, construction, fire suppression, or rescue work live in Part 133. The class-by-class rules are how you tell a legal long-line operation from an unsafe one."
     scope: "Operations"
-    topics: ["procedures", "aircraft-systems"]
+    topics: ["rotorcraft", "operations"]
   "135":
     description: "Operating requirements for commuter and on-demand operations -- charter, air taxi, and small-scheduled. Crew qualification, training, MEL, weather minimums, IFR fuel reserves, and equipment requirements stricter than Part 91."
     whyItMatters: "Most pilot first jobs after CFI are Part 135 (charter, freight, medical). The cultural shift from Part 91 -- ops control, dispatch, IOE, recurrent training -- is how the industry transitions you toward airline discipline."
     scope: "Operations"
-    topics: ["procedures", "regulations"]
+    topics: ["commercial-operations"]
   "137":
     description: "Agricultural aircraft operations -- crop dusting, seeding, and other dispensed-substance operations. Operator certification, dispensing rules, and the congested-area waiver process."
     whyItMatters: "Ag operations are Part 91+137 hybrids; the dispensing-equipment and low-altitude rules are tighter than Part 91 alone. Important context for anyone flying over agricultural country -- those low-pass aircraft are not VFR sightseers."
     scope: "Operations"
-    topics: ["procedures"]
+    topics: ["operations"]
   "141":
     description: "Pilot-school certification -- the structured-syllabus alternative to Part 61 training. Course outlines, stage checks, chief-instructor qualifications, and the audit framework that lets schools self-certify training results."
     whyItMatters: "Part 141 is how an integrated training program (puppy mill, university aviation, military-style) reduces the minimum aeronautical experience for a certificate or rating. Knowing the structure helps you choose between Part 61 and Part 141 schools as a learner."
