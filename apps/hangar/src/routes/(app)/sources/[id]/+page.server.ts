@@ -12,7 +12,7 @@
 import { stat } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { requireRole } from '@ab/auth';
-import { getActiveJobForTarget, getSource, listRecentJobsForTarget, PENDING_DOWNLOAD, REPO_ROOT } from '@ab/bc-hangar';
+import { getActiveJobForTarget, getSource, listRecentJobsForTarget, REPO_ROOT } from '@ab/bc-hangar';
 import { JOB_KINDS, type ReferenceSourceType, ROLES, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { error, fail } from '@sveltejs/kit';
@@ -50,7 +50,11 @@ export const load: PageServerLoad = async (event) => {
 			: Promise.resolve(null as { sizeBytes: number; mtime: string } | null),
 	]);
 
-	const isPendingChecksum = row.checksum === PENDING_DOWNLOAD || row.checksum === '';
+	// Per the 2026-05-06 review §N, NULL = pending download (the earlier
+	// `'pending-download'` sentinel + the NOT NULL constraint were dropped).
+	// Empty-string is preserved as a defensive equivalent for any legacy
+	// row that survived the migration with a placeholder.
+	const isPendingChecksum = row.checksum === null || row.checksum === '';
 	const sourceKind = SOURCE_KIND_BY_TYPE[row.type as ReferenceSourceType] ?? SOURCE_KINDS.TEXT;
 
 	return {
@@ -66,7 +70,7 @@ export const load: PageServerLoad = async (event) => {
 			format: row.format,
 			checksum: row.checksum,
 			sizeBytes: row.sizeBytes,
-			downloadedAt: row.downloadedAt,
+			downloadedAt: row.downloadedAt?.toISOString() ?? null,
 			locatorShape: row.locatorShape,
 			media: row.media,
 			edition: row.edition,

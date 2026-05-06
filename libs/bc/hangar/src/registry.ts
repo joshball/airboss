@@ -65,10 +65,41 @@ export interface SourceInput {
 	url: string;
 	path: string;
 	format: string;
-	checksum: string;
-	downloadedAt: string;
+	/**
+	 * SHA-256 of the binary; null when the source row is registered before
+	 * the binary downloads (per the 2026-05-06 review §N). The CHECK on
+	 * `hangar.source` pairs `(checksum, downloadedAt)` -- both NULL or
+	 * both NOT NULL.
+	 */
+	checksum: string | null;
+	/**
+	 * Server clock when the binary downloaded; null when pending. Accepts a
+	 * Date directly (preferred) or an ISO-8601 string (form-action shape);
+	 * `createSource` coerces strings to Date so older form callers don't
+	 * have to thread a Date through their parser.
+	 */
+	downloadedAt: Date | string | null;
 	sizeBytes?: number | null;
 	locatorShape?: Record<string, unknown> | null;
+}
+
+/**
+ * Coerce the union `Date | string | null` `downloadedAt` shape on
+ * `SourceInput` into the `Date | null` Drizzle expects for a
+ * `timestamptz` column. Empty strings are treated as null (matches the
+ * legacy "pending" sentinel surface). Throws on invalid ISO strings so
+ * the bug surfaces at write time rather than producing silent NULLs.
+ */
+function coerceDownloadedAt(input: Date | string | null | undefined): Date | null {
+	if (input === null || input === undefined) return null;
+	if (input instanceof Date) return input;
+	const trimmed = input.trim();
+	if (trimmed === '' || trimmed === 'pending-download') return null;
+	const parsed = new Date(trimmed);
+	if (Number.isNaN(parsed.getTime())) {
+		throw new Error(`SourceInput.downloadedAt: invalid ISO-8601 string: ${input}`);
+	}
+	return parsed;
 }
 
 export class RevConflictError extends Error {
@@ -389,7 +420,7 @@ export async function createSource(input: SourceInput, actorId: string, db: Db =
 			path: input.path,
 			format: input.format,
 			checksum: input.checksum,
-			downloadedAt: input.downloadedAt,
+			downloadedAt: coerceDownloadedAt(input.downloadedAt),
 			sizeBytes: input.sizeBytes ?? null,
 			locatorShape: input.locatorShape ?? null,
 			dirty: true,
@@ -427,7 +458,7 @@ export async function updateSource(
 				path: input.path,
 				format: input.format,
 				checksum: input.checksum,
-				downloadedAt: input.downloadedAt,
+				downloadedAt: coerceDownloadedAt(input.downloadedAt),
 				sizeBytes: input.sizeBytes ?? null,
 				locatorShape: input.locatorShape ?? null,
 				dirty: true,

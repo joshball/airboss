@@ -58,17 +58,24 @@ export function rowToReference(row: HangarReferenceRow): Reference {
 	return reference;
 }
 
-/** Convert one `hangar.source` row to the domain `Source`. */
+/**
+ * Convert one `hangar.source` row to the domain `Source`. Null DB columns
+ * (per the 2026-05-06 review §N nullable-pending-download work) project
+ * onto the in-memory `'pending-download'` sentinel that the legacy
+ * `Source` type still uses; the type stays string-only so existing
+ * consumers (`isSeedSourceDownloaded`, validators) keep working without
+ * a wider refactor.
+ */
 export function rowToSource(row: HangarSourceRow): Source {
 	return {
 		id: row.id,
 		type: row.type as Source['type'],
 		title: row.title,
 		version: row.version,
-		downloadedAt: row.downloadedAt,
+		downloadedAt: row.downloadedAt?.toISOString() ?? 'pending-download',
 		format: row.format as Source['format'],
 		path: row.path,
 		url: row.url,
-		checksum: row.checksum,
+		checksum: row.checksum ?? 'pending-download',
 	};
 }

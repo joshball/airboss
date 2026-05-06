@@ -21,7 +21,6 @@ import {
 	getLatestCompleteJobByKind,
 	listLiveSources,
 	listRunningJobs,
-	PENDING_DOWNLOAD,
 	REPO_ROOT,
 } from '@ab/bc-hangar';
 import { JOB_KINDS, ROLES } from '@ab/constants';
@@ -83,10 +82,16 @@ export const load: PageServerLoad = async (event) => {
 
 	const sources = rows.map((row) => {
 		const active = activeByTarget.get(row.id) ?? null;
-		const downloadedChecksum = row.checksum && row.checksum !== PENDING_DOWNLOAD;
-		const state: 'pending' | 'downloaded' | 'extracted' = !downloadedChecksum
+		// Per the 2026-05-06 review §N, NULL = pending download. The earlier
+		// `'pending-download'` sentinel string was dropped along with the
+		// NOT NULL constraint; nullable + the pair CHECK on the schema is the
+		// honest representation.
+		const isDownloaded = row.checksum !== null;
+		const state: 'pending' | 'downloaded' | 'extracted' = !isDownloaded
 			? 'pending'
-			: // Heuristic: there's no per-source extracted flag yet; treat "has size + not pending" as downloaded, and leave `extracted` for future when we record it on the row.
+			: // Heuristic: there's no per-source extracted flag yet; treat
+				// "has size + not pending" as downloaded, leaving `extracted`
+				// for future when we record it on the row.
 				'downloaded';
 		return {
 			id: row.id,
@@ -99,7 +104,7 @@ export const load: PageServerLoad = async (event) => {
 			format: row.format,
 			checksum: row.checksum,
 			sizeBytes: row.sizeBytes,
-			downloadedAt: row.downloadedAt,
+			downloadedAt: row.downloadedAt?.toISOString() ?? null,
 			dirty: row.dirty,
 			state,
 			activeJob: active,
@@ -110,7 +115,7 @@ export const load: PageServerLoad = async (event) => {
 	const downloadedCount = sources.filter((s) => s.state !== 'pending').length;
 	const oldestDownloadedAt =
 		sources
-			.filter((s) => s.state !== 'pending' && s.downloadedAt !== PENDING_DOWNLOAD)
+			.filter((s) => s.state !== 'pending' && s.downloadedAt !== null)
 			.map((s) => s.downloadedAt)
 			.sort()[0] ?? null;
 

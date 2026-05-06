@@ -93,8 +93,8 @@ function baseRow(overrides: Partial<Record<string, unknown>> = {}): SectionalFet
 		url: 'https://aeronav.faa.gov/visual/{edition-date}/sectional-files/{region}.zip',
 		path: 'sectional/sectional-denver',
 		format: 'geotiff-zip',
-		checksum: 'pending-download',
-		downloadedAt: 'pending-download',
+		checksum: null,
+		downloadedAt: null,
 		sizeBytes: null,
 		locatorShape: {
 			region: 'Denver',
