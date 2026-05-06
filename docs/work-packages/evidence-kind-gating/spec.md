@@ -1,11 +1,25 @@
 ---
-title: 'Spec: Evidence Kind Gating'
+id: evidence-kind-gating
+title: "Spec: Evidence Kind Gating"
 product: study
-feature: evidence-kind-gating
-type: spec
-status: shipped
-review_status: pending
+category: feature
+status: in-flight
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-29
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - evidence
+  - schema
+legacy_fields:
+  feature: evidence-kind-gating
+  type: spec
+  review_status: pending
 ---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
 
 # Spec: Evidence Kind Gating
 

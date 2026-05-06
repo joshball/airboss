@@ -1,12 +1,25 @@
 ---
-title: 'card-page-and-cross-references'
-status: done
-size: medium
-depends_on: []
+id: card-page-and-cross-references
+title: card-page-and-cross-references
+product: study
+category: feature
+status: in-flight
+agent_review_status: pending
+human_review_status: pending
 created: 2026-04-24
-deferred_at: 2026-04-28
-trigger: A user wants to share a single card publicly (the original ask behind the card-detail vs card-page split), OR the cross-reference panel becomes a blocker for the cited-by surface across content types. At that point, run /ball-wp-spec to settle owner-only vs public surface scope.
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - citations
+  - library
+legacy_fields:
+  size: medium
+  deferred_at: 2026-04-28
+  trigger: A user wants to share a single card publicly (the original ask behind the card-detail vs card-page split), OR the cross-reference panel becomes a blocker for the cited-by surface across content types. At that point, run /ball-wp-spec to settle owner-only vs public surface scope.
 ---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
 
 # Card Page and Cross-References
 

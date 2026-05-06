@@ -1,9 +1,21 @@
 ---
-title: 'Spec: Session Legibility and Help Expansion'
+id: session-legibility-and-help-expansion
+title: "Spec: Session Legibility and Help Expansion"
 product: study
-feature: session-legibility-and-help-expansion
-type: spec
-status: unread
+category: feature
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-23
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - session
+  - help
+legacy_fields:
+  feature: session-legibility-and-help-expansion
+  type: spec
 ---
 
 # Spec: Session Legibility and Help Expansion

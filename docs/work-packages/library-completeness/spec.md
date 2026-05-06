@@ -1,14 +1,26 @@
 ---
-title: 'Library completeness -- visibility gap, corpus catalog, new-corpora proposals'
+id: library-completeness
+title: Library completeness -- visibility gap, corpus catalog, new-corpora proposals
 product: study
-feature: library-completeness
-type: spec
-status: unread
-review_status: done
-revised: 2026-05-01
-revision_history:
-  - v1 (2026-04-30) -- initial spec (recommended a `library_entry` projection table).
-  - v2 (2026-05-01) -- §1 replaced with the substrate rename approach after [review.md](review.md). §§2-5 kept verbatim; §6 simplified -- downstream corpus WPs no longer carry a projection-population step.
+category: feature
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-05-01
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - library
+  - corpus
+legacy_fields:
+  feature: library-completeness
+  type: spec
+  review_status: done
+  revised: 2026-05-01
+  revision_history:
+    - v1 (2026-04-30) -- initial spec (recommended a `library_entry` projection table).
+    - v2 (2026-05-01) -- §1 replaced with the substrate rename approach after [review.md](review.md). §§2-5 kept verbatim; §6 simplified -- downstream corpus WPs no longer carry a projection-population step.
 ---
 
 # Library completeness

@@ -1,11 +1,22 @@
 ---
-title: 'Spec: Node render modes'
+id: node-render-modes
+title: "Spec: Node render modes"
 product: study
-feature: node-render-modes
-type: spec
+category: feature
 status: draft
-review_status: pending
+agent_review_status: pending
+human_review_status: pending
 created: 2026-05-04
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - knowledge-graph
+  - rendering
+legacy_fields:
+  feature: node-render-modes
+  type: spec
+  review_status: pending
 ---
 
 Add a render-mode toggle to knowledge node detail pages and (optionally, in v1.1) to flightbag handbook sections. The toggle has three modes -- **Learn** (discovery-first, default), **Review** (synthesis-first), **Memorize** (regulation-first) -- which re-order the same body content for different reading purposes. Knowledge node bodies are restructured as a small set of named sections so the renderer can re-order them rather than the author writing three versions of the same text.

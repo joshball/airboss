@@ -1,11 +1,21 @@
 ---
-title: 'Spec: Study home'
+id: study-home
+title: "Spec: Study home"
 product: study
-feature: study-home
-type: spec
+category: feature
 status: draft
-review_status: pending
+agent_review_status: pending
+human_review_status: pending
 created: 2026-05-04
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - home
+legacy_fields:
+  feature: study-home
+  type: spec
+  review_status: pending
 ---
 
 A new home surface at `/study` that orients a returning CFI rebuilding PPL knowledge. Friction near zero: progress context up top, a plain-English "Today" briefing in the middle, five equal-weight entry tiles (Read · Cards · Scenarios · Sim · Flight), and a hierarchical map of the cert with three switchable projections (ACS / Handbook / Course).

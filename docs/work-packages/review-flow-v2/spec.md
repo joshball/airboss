@@ -1,12 +1,26 @@
 ---
-title: 'review-flow-v2'
-status: done
-size: small
-depends_on: [help-system Wave 1 merged]
+id: review-flow-v2
+title: review-flow-v2
+product: study
+category: feature
+status: in-flight
+agent_review_status: pending
+human_review_status: pending
 created: 2026-04-24
-deferred_at: 2026-04-28
-trigger: Next manual SMI walkthrough surfaces the same review-screen friction (items 7-9, 12-13, 16) again, OR review-flow chrome blocks snooze-and-flag from shipping cleanly. At that point, lock the four product decisions in this spec and run /ball-wp-spec for a v2 pass.
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - review
+legacy_fields:
+  size: small
+  deferred_at: 2026-04-28
+  trigger: Next manual SMI walkthrough surfaces the same review-screen friction (items 7-9, 12-13, 16) again, OR review-flow chrome blocks snooze-and-flag from shipping cleanly. At that point, lock the four product decisions in this spec and run /ball-wp-spec for a v2 pass.
+  _legacy_depends_on_raw:
+    - help-system Wave 1 merged
 ---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
 
 # Review Flow v2
 

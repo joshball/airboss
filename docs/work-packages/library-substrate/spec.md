@@ -1,13 +1,26 @@
 ---
-title: 'Library substrate -- WP-SUB implementation plan'
+id: library-substrate
+title: Library substrate -- WP-SUB implementation plan
 product: study
-feature: library-substrate
-type: spec
-status: shipped
-review_status: done
-shipped_via: PR #396 (implementation 2026-05-01) + PR #393 (plan)
-parent: docs/work-packages/library-completeness/spec.md
+category: feature
+status: in-flight
+agent_review_status: pending
+human_review_status: pending
+created: 2026-05-01
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - library
+legacy_fields:
+  feature: library-substrate
+  type: spec
+  review_status: done
+  shipped_via: PR
+  parent: docs/work-packages/library-completeness/spec.md
 ---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
 
 # Library substrate (WP-SUB)
 

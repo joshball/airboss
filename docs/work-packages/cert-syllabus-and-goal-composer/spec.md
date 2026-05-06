@@ -1,13 +1,28 @@
 ---
-title: 'Spec: Cert, Syllabus, and Goal Composer'
+id: cert-syllabus-and-goal-composer
+title: "Spec: Cert, Syllabus, and Goal Composer"
 product: study
-feature: cert-syllabus-and-goal-composer
-type: spec
-status: shipped
-review_status: pending
-amended:
-  - 2026-04-27 -- amended to compose with merged WP #1 (PR #242) and accepted ADR 019 v3
+category: feature
+status: in-flight
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-27
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - cert
+  - syllabus
+  - goals
+legacy_fields:
+  feature: cert-syllabus-and-goal-composer
+  type: spec
+  review_status: pending
+  amended:
+    - 2026-04-27 -- amended to compose with merged WP
 ---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
 
 # Spec: Cert, Syllabus, and Goal Composer
 

@@ -1,10 +1,22 @@
 ---
-title: 'Spec: Study Plan + Session Engine'
+id: study-plan-and-session-engine
+title: "Spec: Study Plan + Session Engine"
 product: study
-feature: study-plan-and-session-engine
-type: spec
-status: unread
-review_status: pending
+category: feature
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-20
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - session
+  - engine
+legacy_fields:
+  feature: study-plan-and-session-engine
+  type: spec
+  review_status: pending
 ---
 
 # Spec: Study Plan + Session Engine

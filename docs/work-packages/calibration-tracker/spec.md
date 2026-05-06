@@ -1,9 +1,21 @@
 ---
-title: 'Spec: Calibration Tracker'
+id: calibration-tracker
+title: "Spec: Calibration Tracker"
 product: study
-feature: calibration-tracker
-type: spec
-status: unread
+category: feature
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-17
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - calibration
+  - metacognition
+legacy_fields:
+  feature: calibration-tracker
+  type: spec
 ---
 
 # Spec: Calibration Tracker

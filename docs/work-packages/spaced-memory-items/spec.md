@@ -1,9 +1,20 @@
 ---
-title: 'Spec: Spaced Memory Items'
+id: spaced-memory-items
+title: "Spec: Spaced Memory Items"
 product: study
-feature: spaced-memory-items
-type: spec
-status: unread
+category: feature
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-17
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - spaced-rep
+legacy_fields:
+  feature: spaced-memory-items
+  type: spec
 ---
 
 # Spec: Spaced Memory Items

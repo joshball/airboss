@@ -1,12 +1,24 @@
 ---
-title: 'content-citations'
-status: done
-size: large
-depends_on: []
+id: content-citations
+title: content-citations
+product: study
+category: feature
+status: in-flight
+agent_review_status: pending
+human_review_status: pending
 created: 2026-04-24
-deferred_at: 2026-04-28
-trigger: ADR 019 phase 10 expands beyond ACS (e.g. NTSB or Chief Counsel ingest lands), OR the cert-syllabus surface needs polymorphic citations across cards / reps / scenarios / nodes in one schema. With ADR 019 phases 1-9 shipped, the cross-content citation surface is now feasible; defer until a concrete consumer demands it. At that point, run /ball-wp-spec referencing ADR 019 §3 (inline syntax) and bc-citations.
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - citations
+legacy_fields:
+  size: large
+  deferred_at: 2026-04-28
+  trigger: ADR 019 phase 10 expands beyond ACS (e.g. NTSB or Chief Counsel ingest lands), OR the cert-syllabus surface needs polymorphic citations across cards / reps / scenarios / nodes in one schema. With ADR 019 phases 1-9 shipped, the cross-content citation surface is now feasible; defer until a concrete consumer demands it. At that point, run /ball-wp-spec referencing ADR 019 §3 (inline syntax) and bc-citations.
 ---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
 
 # Content Citations
 

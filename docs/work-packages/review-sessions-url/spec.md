@@ -1,12 +1,27 @@
 ---
-title: 'review-sessions-url'
-status: done
-size: medium
-depends_on: [review-flow-v2 (shares review chrome)]
+id: review-sessions-url
+title: review-sessions-url
+product: study
+category: feature
+status: in-flight
+agent_review_status: pending
+human_review_status: pending
 created: 2026-04-24
-deferred_at: 2026-04-28
-trigger: A user actually loses a session and asks for resume / share / redo, OR review-flow-v2 ships and the URL shape is the next obvious gap. At that point, run /ball-wp-spec to lock the resume vs share vs redo intent split (item 18) and design the URL grammar.
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - review
+  - url
+legacy_fields:
+  size: medium
+  deferred_at: 2026-04-28
+  trigger: A user actually loses a session and asks for resume / share / redo, OR review-flow-v2 ships and the URL shape is the next obvious gap. At that point, run /ball-wp-spec to lock the resume vs share vs redo intent split (item 18) and design the URL grammar.
+  _legacy_depends_on_raw:
+    - review-flow-v2 (shares review chrome)
 ---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
 
 # Review Sessions URL
 
