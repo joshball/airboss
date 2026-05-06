@@ -1050,15 +1050,17 @@ export const knowledgeNodeProgress = studySchema.table(
 			.notNull()
 			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
 		/**
-		 * Knowledge-graph node slug. `set null` on delete so a node rebuild
-		 * that renames a slug doesn't cascade-destroy the learner's progress
-		 * row -- the row is kept as an orphan until the next progress write
-		 * reconciles it. Explicit FK (previously skipped because "seeds may
-		 * rebuild independently") is worth the trade: a dangling `node_id`
-		 * that no longer resolves is a bug, not a feature, and cascade-set-
-		 * null preserves the historical record.
+		 * Knowledge-graph node slug. NOT NULL + cascade on delete: a progress
+		 * row whose `nodeId` is NULL is meaningless (there's nothing to track
+		 * progress *of*), and the previous `set null` policy left orphan rows
+		 * that the unique index `(user_id, node_id)` accumulated forever
+		 * because Postgres treats NULLs as distinct. ADR 011 slugs are stable;
+		 * rebuilding on rename is the seed's job. Cascade is the cleaner
+		 * answer per the 2026-05-06 review §F.
 		 */
-		nodeId: text('node_id').references(() => knowledgeNode.id, { onDelete: 'set null' }),
+		nodeId: text('node_id')
+			.notNull()
+			.references(() => knowledgeNode.id, { onDelete: 'cascade' }),
 		visitedPhases: text('visited_phases').array().notNull().default(sql`'{}'::text[]`),
 		completedPhases: text('completed_phases').array().notNull().default(sql`'{}'::text[]`),
 		lastPhase: text('last_phase'),
