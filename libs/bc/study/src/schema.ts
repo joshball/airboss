@@ -587,7 +587,11 @@ export const scenario = studySchema.table(
 		status: text('status').notNull().default(SCENARIO_STATUSES.ACTIVE),
 		/** Dev-seed marker. NULL on production rows. */
 		seedOrigin: text('seed_origin'),
-		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+		// `...timestamps()` (createdAt + updatedAt) per the 2026-05-06 review §BB.
+		// Every other content-bearing table tracks edit time; scenarios used to
+		// only carry `createdAt`, so editing a scenario silently lost its
+		// "last touched" signal.
+		...timestamps(),
 	},
 	(t) => ({
 		scenarioUserStatusIdx: index('scenario_user_status_idx').on(t.userId, t.status),
