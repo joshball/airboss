@@ -716,3 +716,20 @@ export {
 } from './time';
 export { TOAST_DISMISS_MS, TOAST_DISMISS_SHORT_MS, Z_INDEX, type ZIndexTier } from './ui';
 export { MPS_TO_KNOTS } from './units';
+export {
+	WP_AGENT_REVIEW_STATUSES,
+	WP_CATEGORIES,
+	WP_DIR,
+	WP_HUMAN_REVIEW_STATUSES,
+	WP_HUMAN_REVIEWER_EMAIL,
+	WP_OWNERS,
+	WP_PRODUCTS,
+	WP_SPEC_FILE,
+	WP_STATUSES,
+	type WPAgentReviewStatus,
+	type WPCategory,
+	type WPHumanReviewStatus,
+	type WPOwner,
+	type WPProduct,
+	type WPStatus,
+} from './work-package';

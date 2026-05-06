@@ -56,6 +56,9 @@ const browserGlobals = await $`bun scripts/check-browser-globals.ts`.nothrow();
 console.log('\nValidating course/regulations frontmatter...');
 const courseFrontmatter = await $`bun tools/course-frontmatter/check.ts`.nothrow();
 
+console.log('\nValidating work-package frontmatter (ADR 025)...');
+const wpFrontmatter = await $`bun scripts/lint/wp-frontmatter.ts`.nothrow();
+
 // Handbook ingest pytest. Pinned to the orphan-threshold suite so a
 // missing pytest install on a developer machine surfaces a clear error
 // instead of silently skipping the figure-pairing regression guardrail
@@ -106,6 +109,7 @@ const failed =
 	helpIds.exitCode !== 0 ||
 	browserGlobals.exitCode !== 0 ||
 	courseFrontmatter.exitCode !== 0 ||
+	wpFrontmatter.exitCode !== 0 ||
 	handbookIngest.exitCode !== 0 ||
 	!glossaryOk;
 if (failed) {

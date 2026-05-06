@@ -15,6 +15,7 @@
 		"sources": "bun scripts/sources.ts",
 		"references": "bun scripts/references.ts",
 		"airboss-ref": "bun scripts/airboss-ref.ts",
+		"wp": "bun scripts/wp.ts",
 		"setup": "bun scripts/setup.ts",
 		"smoke": "bun scripts/smoke.ts",
 		"themes:emit": "bun scripts/themes/emit.ts",
