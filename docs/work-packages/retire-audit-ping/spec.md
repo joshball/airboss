@@ -1,12 +1,22 @@
 ---
-title: 'Spec: Retire /admin/audit-ping'
+id: retire-audit-ping
+title: 'Retire /admin/audit-ping'
 product: hangar
-feature: retire-audit-ping
-type: spec
-status: shipped
-review_status: pending
+category: platform
+status: in-flight
+agent_review_status: done
+human_review_status: pending
 created: 2026-04-30
+owner: user
+depends_on: []
+unblocks: []
+tags: [cleanup, audit]
+legacy_fields:
+  feature: retire-audit-ping
+  type: spec
 ---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
 
 Cleanup follow-up to [hangar-audit-explorer](../hangar-audit-explorer/spec.md). The ping route was a scaffold-era heartbeat that proved the auth -> form-action -> audit-write -> audit-read path before any real BC emitted audit rows. Now that `/admin/audit` is the live read surface and the dashboard's System -> Audit tile points at it, the ping route is redundant.
 

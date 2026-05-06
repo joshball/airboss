@@ -1,8 +1,20 @@
 ---
-feature: review-tail-2026-05
+id: review-tail-2026-05
+title: 'Review tail 2026-05 program'
+product: platform
+category: docs
 status: in-flight
-date: 2026-05-04
-driver: 6-chunk 2026-05 review program close-out audit (PRs #560/#561/#563/#564/#565/#568)
+agent_review_status: pending
+human_review_status: pending
+created: 2026-05-03
+owner: agent
+depends_on: []
+unblocks: []
+tags: [reviews, audit]
+legacy_fields:
+  feature: review-tail-2026-05
+  date: 2026-05-04
+  driver: '6-chunk 2026-05 review program close-out audit (PRs #560/#561/#563/#564/#565/#568)'
 ---
 
 # Review tail — 2026-05 program

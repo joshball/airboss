@@ -1,9 +1,19 @@
 ---
-title: 'Spec: Reference Extraction Pipeline'
+id: reference-extraction-pipeline
+title: 'Reference Extraction Pipeline'
 product: platform
-feature: reference-extraction-pipeline
-type: spec
-status: unread
+category: platform
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-22
+owner: agent
+depends_on: []
+unblocks: []
+tags: [references, ingestion, extraction]
+legacy_fields:
+  feature: reference-extraction-pipeline
+  type: spec
 ---
 
 # Spec: Reference Extraction Pipeline

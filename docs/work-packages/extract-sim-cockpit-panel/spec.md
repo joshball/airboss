@@ -1,12 +1,26 @@
 ---
-status: shipped
-shipped_in: https://github.com/joshball/airboss/pull/364
-trigger: fired -- CockpitPanel has three sim consumers (cockpit, dual, window) and is the natural surface to share with future avionics / instructor / replay-theatre pages
-source: ADR 015 follow-up note
-related:
-  - docs/decisions/015-sim-surface-loose-coupling.md
-  - docs/work-packages/extract-sim-instruments/spec.md (PFD precedent, shipped 2026-04-29 in PR #328)
+id: extract-sim-cockpit-panel
+title: 'Promote CockpitPanel to libs/activities/cockpit-panel/'
+product: sim
+category: platform
+status: in-flight
+agent_review_status: done
+human_review_status: pending
+created: 2026-04-30
+owner: user
+depends_on: []
+unblocks: []
+tags: [extraction, sim, activities]
+legacy_fields:
+  shipped_in: 'https://github.com/joshball/airboss/pull/364'
+  trigger: 'fired -- CockpitPanel has three sim consumers (cockpit, dual, window) and is the natural surface to share with future avionics / instructor / replay-theatre pages'
+  source: 'ADR 015 follow-up note'
+  related:
+    - 'docs/decisions/015-sim-surface-loose-coupling.md'
+    - 'docs/work-packages/extract-sim-instruments/spec.md (PFD precedent, shipped 2026-04-29 in PR #328)'
 ---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
 
 # Promote `CockpitPanel` to `libs/activities/cockpit-panel/`
 

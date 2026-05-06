@@ -1,10 +1,21 @@
 ---
-feature: design-token-convergence
-status: planned
-priority: low
-trigger: next theme-pass session, OR when adding a new instrument / overlay primitive
-created: 2026-05-04
-captured_from: 2026-05-02-ui-library-themes-patterns.md (minors #3, #4, nit #2)
+id: wp-design-token-convergence
+title: 'Design token convergence pass'
+product: platform
+category: platform
+status: draft
+agent_review_status: pending
+human_review_status: pending
+created: 2026-05-03
+owner: agent
+depends_on: []
+unblocks: []
+tags: [theme, ui, tokens]
+legacy_fields:
+  feature: design-token-convergence
+  priority: low
+  trigger: 'next theme-pass session, OR when adding a new instrument / overlay primitive'
+  captured_from: '2026-05-02-ui-library-themes-patterns.md (minors #3, #4, nit #2)'
 ---
 
 # Work package: design token convergence pass

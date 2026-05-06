@@ -1,10 +1,20 @@
 ---
-title: 'Spec: Reference identifier scheme validator'
-product: cross-cutting
-feature: reference-identifier-scheme-validator
-type: spec
-status: unread
-review_status: pending
+id: reference-identifier-scheme-validator
+title: 'Reference identifier scheme validator'
+product: platform
+category: platform
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-27
+owner: agent
+depends_on: []
+unblocks: []
+tags: [references, validator]
+legacy_fields:
+  feature: reference-identifier-scheme-validator
+  type: spec
+  legacy_product: cross-cutting
 ---
 
 # Spec: Reference identifier scheme validator

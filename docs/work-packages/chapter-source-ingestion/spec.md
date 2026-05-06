@@ -1,10 +1,19 @@
 ---
-title: 'Spec: Chapter source ingestion'
+id: chapter-source-ingestion
+title: 'Chapter source ingestion'
 product: platform
-feature: chapter-source-ingestion
-type: spec
-status: unread
-review_status: pending
+category: platform
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-29
+owner: agent
+depends_on: []
+unblocks: []
+tags: [ingestion, sources]
+legacy_fields:
+  feature: chapter-source-ingestion
+  type: spec
 ---
 
 # Spec: Chapter source ingestion

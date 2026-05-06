@@ -1,8 +1,20 @@
 ---
-status: deferred
-trigger: dashboard refresh -- the residual sites need either (a) a primitive that hosts structured badges below a title (memory/[id], knowledge/[slug], hangar users/[id], glossary/[id], jobs/[id], sources/[id]), (b) tab-strip support inside a header (dev/references), or (c) a runner-chrome primitive distinct from PageHeader (sim cockpit + horizon + window + dual + debrief, memory review session-runner)
-source: 2026-04-27 architecture + svelte reviews; refined by 2026-04-28 audit + Button-adoption pass; mechanical adoption pass landed 2026-04-29
-note: Mechanical adoption of PageHeader / EmptyState / ScoreCard across 27 routes shipped in the route-style-extraction follow-on PR. Inventory at INVENTORY.md documents every mechanical migration and every Skip residual with reason. Remaining residuals are structural (primitive does not express the page's shape), not cosmetic; they wait on the dashboard refresh which will reshape both the routes and the primitives together.
+id: route-style-extraction
+title: 'Promote oversized route style blocks into libs/ui/'
+product: platform
+category: platform
+status: abandoned
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-28
+owner: agent
+depends_on: []
+unblocks: []
+tags: [theme, ui, deferred]
+legacy_fields:
+  trigger: 'dashboard refresh -- the residual sites need either (a) a primitive that hosts structured badges below a title (memory/[id], knowledge/[slug], hangar users/[id], glossary/[id], jobs/[id], sources/[id]), (b) tab-strip support inside a header (dev/references), or (c) a runner-chrome primitive distinct from PageHeader (sim cockpit + horizon + window + dual + debrief, memory review session-runner)'
+  source: '2026-04-27 architecture + svelte reviews; refined by 2026-04-28 audit + Button-adoption pass; mechanical adoption pass landed 2026-04-29'
+  note: 'Mechanical adoption of PageHeader / EmptyState / ScoreCard across 27 routes shipped in the route-style-extraction follow-on PR. Inventory at INVENTORY.md documents every mechanical migration and every Skip residual with reason. Remaining residuals are structural (primitive does not express the page''s shape), not cosmetic; they wait on the dashboard refresh which will reshape both the routes and the primitives together.'
 ---
 
 # Promote oversized route `<style>` blocks into `libs/ui/`
