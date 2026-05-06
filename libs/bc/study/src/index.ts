@@ -294,6 +294,7 @@ export type {
 	ErrataInsert,
 	ReferenceSectionErrataRow,
 } from './reference-errata';
+export { faaPagesFromMetadata, type ReferenceSectionFaaPages } from './reference-metadata';
 export type {
 	CitingNodesBatchQuery,
 	CitingNodesQuery,

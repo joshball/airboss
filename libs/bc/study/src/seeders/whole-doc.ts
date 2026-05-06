@@ -73,8 +73,6 @@ export async function seedWholeDocManifest(
 		code: '1',
 		airbossRef: airbossRefForWholeDocHandbook(manifest.document_slug, manifest.edition),
 		title: manifest.title,
-		faaPageStart: null,
-		faaPageEnd: null,
 		sourceLocator: `${manifest.title} (${manifest.edition})`,
 		contentMd,
 		contentHash: manifest.body_sha256,

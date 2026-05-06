@@ -280,8 +280,6 @@ export async function seedCfrManifest(
 				// this seeder.
 				airbossRef: entry.id,
 				title: entry.canonical_title,
-				faaPageStart: null,
-				faaPageEnd: null,
 				sourceLocator: `${manifest.title} CFR ${entry.canonical_short}`,
 				contentMd,
 				contentHash: entry.body_sha256,

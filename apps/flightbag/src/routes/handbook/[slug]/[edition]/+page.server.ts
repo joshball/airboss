@@ -8,6 +8,7 @@
  */
 
 import { parseHandbookSlug } from '@ab/aviation';
+import { faaPagesFromMetadata } from '@ab/bc-study';
 import {
 	computeReadingOrder,
 	getReferenceByDocument,
@@ -79,13 +80,14 @@ export const load: PageServerLoad = async (event) => {
 		},
 		chapters: chapters.map((c) => {
 			const progress = perChapter.get(c.code) ?? { read: 0, total: 0 };
+			const pages = faaPagesFromMetadata(c.metadata);
 			return {
 				id: c.id,
 				code: c.code,
 				title: c.title,
 				ordinal: c.ordinal,
-				faaPageStart: c.faaPageStart,
-				faaPageEnd: c.faaPageEnd,
+				faaPageStart: pages?.start ?? null,
+				faaPageEnd: pages?.end ?? null,
 				href: ROUTES.FLIGHTBAG_HANDBOOK_CHAPTER(ref.documentSlug, shortEdition, c.code),
 				readProgress: progress,
 			};

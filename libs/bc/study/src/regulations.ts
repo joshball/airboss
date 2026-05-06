@@ -57,6 +57,7 @@ import {
 } from '@ab/sources';
 import { type ErrataDisplay, formatErrataForDisplay, listErrataForSection } from './reference-errata';
 import {
+	faaPagesFromMetadata,
 	getFlatSection,
 	getHandbookSection,
 	getNodesCitingSection,
@@ -836,15 +837,18 @@ async function buildDetailView(
 			title: ref.title,
 			supersededByEdition,
 		},
-		section: {
-			id: view.section.id,
-			code: view.section.code,
-			title: view.section.title,
-			contentMd: view.section.contentMd,
-			sourceLocator: view.section.sourceLocator,
-			faaPageStart: view.section.faaPageStart,
-			faaPageEnd: view.section.faaPageEnd,
-		},
+		section: (() => {
+			const pages = faaPagesFromMetadata(view.section.metadata);
+			return {
+				id: view.section.id,
+				code: view.section.code,
+				title: view.section.title,
+				contentMd: view.section.contentMd,
+				sourceLocator: view.section.sourceLocator,
+				faaPageStart: pages?.start ?? null,
+				faaPageEnd: pages?.end ?? null,
+			};
+		})(),
 		chapter: {
 			id: virtualChapter.id,
 			code: virtualChapter.code,

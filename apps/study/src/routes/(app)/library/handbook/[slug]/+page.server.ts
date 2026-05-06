@@ -9,6 +9,7 @@
 
 import { requireAuth } from '@ab/auth';
 import { parseHandbookSlug } from '@ab/aviation';
+import { faaPagesFromMetadata } from '@ab/bc-study';
 import {
 	getHandbookProgress,
 	getReferenceByDocument,
@@ -41,16 +42,19 @@ export const load: PageServerLoad = async (event) => {
 			title: ref.title,
 			supersededByEdition: latest?.edition ?? null,
 		},
-		chapters: chapters.map((c) => ({
-			id: c.id,
-			code: c.code,
-			title: c.title,
-			ordinal: c.ordinal,
-			faaPageStart: c.faaPageStart,
-			faaPageEnd: c.faaPageEnd,
-			hasFigures: c.hasFigures,
-			hasTables: c.hasTables,
-		})),
+		chapters: chapters.map((c) => {
+			const pages = faaPagesFromMetadata(c.metadata);
+			return {
+				id: c.id,
+				code: c.code,
+				title: c.title,
+				ordinal: c.ordinal,
+				faaPageStart: pages?.start ?? null,
+				faaPageEnd: pages?.end ?? null,
+				hasFigures: c.hasFigures,
+				hasTables: c.hasTables,
+			};
+		}),
 		progress,
 	};
 };

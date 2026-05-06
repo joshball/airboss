@@ -7,6 +7,7 @@
  */
 
 import { parseHandbookChapter, parseHandbookSection, parseHandbookSlug } from '@ab/aviation';
+import { faaPagesFromMetadata } from '@ab/bc-study';
 import {
 	computeReadingOrder,
 	getHandbookSection,
@@ -122,16 +123,19 @@ export const load: PageServerLoad = async (event) => {
 			code: view.chapter.code,
 			title: view.chapter.title,
 		},
-		section: {
-			id: view.section.id,
-			code: view.section.code,
-			title: view.section.title,
-			contentMd: view.section.contentMd,
-			sourceLocator: view.section.sourceLocator,
-			faaPageStart: view.section.faaPageStart,
-			faaPageEnd: view.section.faaPageEnd,
-			metadata: view.section.metadata as Record<string, unknown>,
-		},
+		section: (() => {
+			const pages = faaPagesFromMetadata(view.section.metadata);
+			return {
+				id: view.section.id,
+				code: view.section.code,
+				title: view.section.title,
+				contentMd: view.section.contentMd,
+				sourceLocator: view.section.sourceLocator,
+				faaPageStart: pages?.start ?? null,
+				faaPageEnd: pages?.end ?? null,
+				metadata: view.section.metadata as Record<string, unknown>,
+			};
+		})(),
 		figures: view.figures.map((f) => ({
 			id: f.id,
 			ordinal: f.ordinal,

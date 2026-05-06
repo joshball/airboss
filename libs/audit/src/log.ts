@@ -1,3 +1,4 @@
+import { AUDIT_TARGET_VALUES } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import { generateAuditLogId } from '@ab/utils';
 import { and, count, desc, eq, gte } from 'drizzle-orm';
@@ -6,6 +7,19 @@ import { type AuditLogRow, type AuditOp, auditLog } from './schema';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 
+/** Raised when `auditWrite` is called with a `targetType` outside AUDIT_TARGET_VALUES. */
+export class InvalidAuditTargetError extends Error {
+	readonly code = 'INVALID_AUDIT_TARGET';
+	constructor(targetType: string) {
+		super(
+			`auditWrite: targetType '${targetType}' is not in AUDIT_TARGET_VALUES (${AUDIT_TARGET_VALUES.join(', ')}). Add it to AUDIT_TARGETS in @ab/constants before emitting.`,
+		);
+		this.name = 'InvalidAuditTargetError';
+	}
+}
+
+const AUDIT_TARGET_SET: ReadonlySet<string> = new Set(AUDIT_TARGET_VALUES);
+
 /**
  * Write one audit row. Intentionally non-transactional -- callers pass their
  * own `db` (usually a transaction scope) so the audit row commits or rolls
@@ -13,6 +27,12 @@ type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
  *
  * Not awaited by hot paths that can't tolerate the latency hit: those callers
  * can `void auditWrite(...)` and live with best-effort capture.
+ *
+ * The DB-level CHECK on `target_type` was dropped per the 2026-05-06 review §J
+ * (AUDIT_TARGET_VALUES grows with every new BC; CHECK was a migration burden
+ * paying for one bad audit row per typo). The write gate moves here: the BC
+ * validates `targetType` against `AUDIT_TARGET_VALUES` and throws
+ * `InvalidAuditTargetError` if it doesn't match.
  */
 export async function auditWrite(
 	input: {
@@ -26,6 +46,7 @@ export async function auditWrite(
 	},
 	db: Db = defaultDb,
 ): Promise<AuditLogRow> {
+	if (!AUDIT_TARGET_SET.has(input.targetType)) throw new InvalidAuditTargetError(input.targetType);
 	const [row] = await db
 		.insert(auditLog)
 		.values({

@@ -180,8 +180,6 @@ export async function seedAimManifest(
 			code: entry.code,
 			airbossRef: airbossRefForAimEntry(entry.code),
 			title: entry.title,
-			faaPageStart: null,
-			faaPageEnd: null,
 			sourceLocator: `AIM ${entry.code}`,
 			contentMd,
 			contentHash: entry.content_hash,

@@ -65,6 +65,7 @@ import {
 	handbookWarningsFileSchema,
 	handbookWarningsTriageFileSchema,
 } from './manifest-validation';
+import type { ReferenceSectionFaaPages } from './reference-metadata';
 import {
 	type KnowledgeNodeRow,
 	knowledgeNode,
@@ -1899,6 +1900,12 @@ export async function upsertReference(input: UpsertReferenceInput, db: Db = defa
 	return row;
 }
 
+// FAA pagination helpers live in `./reference-metadata.ts` so the runtime
+// barrel can re-export them safely (this file is server-only). The
+// upsert input shape consumes the type below.
+export type { ReferenceSectionFaaPages } from './reference-metadata';
+export { faaPagesFromMetadata } from './reference-metadata';
+
 export interface UpsertReferenceSectionInput {
 	referenceId: string;
 	parentId: string | null;
@@ -1914,8 +1921,15 @@ export interface UpsertReferenceSectionInput {
 	 */
 	airbossRef: string;
 	title: string;
-	faaPageStart: string | null;
-	faaPageEnd: string | null;
+	/**
+	 * Optional FAA-printed page references (handbook only; null for every
+	 * other corpus). Stored under `metadata.faaPages` per the 2026-05-06
+	 * review §K. The seeder passes `{ start, end }` (with `end` either a
+	 * single page or NULL when the section ends on its start page); the
+	 * upsert folds it into the metadata jsonb. NULL means "no page reference
+	 * for this row" (CFR / ACS / AC / AIM rows).
+	 */
+	faaPages?: ReferenceSectionFaaPages | null;
 	sourceLocator: string;
 	contentMd: string;
 	contentHash: string;
@@ -1923,6 +1937,21 @@ export interface UpsertReferenceSectionInput {
 	hasTables: boolean;
 	metadata?: Record<string, unknown>;
 	seedOrigin?: string | null;
+}
+
+/**
+ * Build the `metadata` jsonb the row carries. When `faaPages` is provided,
+ * it merges in under the `faaPages` key; otherwise the input metadata
+ * passes through unchanged. Other per-corpus extras (CFR effective dates,
+ * AC paragraph cancellations) live next to `faaPages` in the same blob.
+ */
+function mergeFaaPagesIntoMetadata(
+	metadata: Record<string, unknown> | undefined,
+	faaPages: ReferenceSectionFaaPages | null | undefined,
+): Record<string, unknown> {
+	const base = metadata ?? {};
+	if (!faaPages) return base;
+	return { ...base, faaPages };
 }
 
 /**
@@ -1944,6 +1973,8 @@ export async function upsertReferenceSection(
 		.limit(1);
 	const prev = existing[0];
 
+	const mergedMetadata = mergeFaaPagesIntoMetadata(input.metadata, input.faaPages);
+
 	const values: NewReferenceSectionRow = {
 		id: prev?.id ?? generateReferenceSectionId(),
 		referenceId: input.referenceId,
@@ -1954,14 +1985,12 @@ export async function upsertReferenceSection(
 		code: input.code,
 		airbossRef: input.airbossRef,
 		title: input.title,
-		faaPageStart: input.faaPageStart,
-		faaPageEnd: input.faaPageEnd,
 		sourceLocator: input.sourceLocator,
 		contentMd: input.contentMd,
 		contentHash: input.contentHash,
 		hasFigures: input.hasFigures,
 		hasTables: input.hasTables,
-		metadata: input.metadata ?? {},
+		metadata: mergedMetadata,
 		seedOrigin: input.seedOrigin ?? null,
 	};
 
@@ -1969,6 +1998,9 @@ export async function upsertReferenceSection(
 		// Hash matches -- skip body upsert. Refresh scaffolding fields
 		// (parent / ordinal / locator / hasFigures / hasTables) in case the
 		// extractor moved a section without re-extracting its body.
+		const refreshedMetadata = input.faaPages
+			? mergeFaaPagesIntoMetadata((prev.metadata as Record<string, unknown>) ?? {}, input.faaPages)
+			: ((input.metadata ?? (prev.metadata as Record<string, unknown>)) as Record<string, unknown>);
 		const rows = await db
 			.update(referenceSection)
 			.set({
@@ -1977,12 +2009,10 @@ export async function upsertReferenceSection(
 				depth: input.depth,
 				airbossRef: input.airbossRef,
 				title: input.title,
-				faaPageStart: input.faaPageStart,
-				faaPageEnd: input.faaPageEnd,
 				sourceLocator: input.sourceLocator,
 				hasFigures: input.hasFigures,
 				hasTables: input.hasTables,
-				metadata: input.metadata ?? prev.metadata,
+				metadata: refreshedMetadata,
 				updatedAt: new Date(),
 			})
 			.where(eq(referenceSection.id, prev.id))
@@ -2003,14 +2033,12 @@ export async function upsertReferenceSection(
 				depth: input.depth,
 				airbossRef: input.airbossRef,
 				title: input.title,
-				faaPageStart: input.faaPageStart,
-				faaPageEnd: input.faaPageEnd,
 				sourceLocator: input.sourceLocator,
 				contentMd: input.contentMd,
 				contentHash: input.contentHash,
 				hasFigures: input.hasFigures,
 				hasTables: input.hasTables,
-				metadata: input.metadata ?? {},
+				metadata: mergedMetadata,
 				seedOrigin: input.seedOrigin ?? null,
 				updatedAt: new Date(),
 			},
