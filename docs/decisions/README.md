@@ -4,6 +4,14 @@ This directory holds Architecture Decision Records (ADRs) for airboss. ADRs are 
 
 See [docs/agents/best-practices.md](../agents/best-practices.md) for code-level patterns. ADRs are for decisions; patterns are for how to apply them.
 
+## ADRs
+
+The numbered ADRs each live as a single file (`NNN-topic.md`) or a directory (`NNN-topic/decision.md`). Recent additions:
+
+- [026-edition-coherence/decision.md](026-edition-coherence/decision.md) -- registry-canonical edition resolution; closes the three-parallel-edition-stories incoherence flagged by the 2026-05-06 schema review.
+- [025-wp-frontmatter-contract/decision.md](025-wp-frontmatter-contract/decision.md) -- work-package frontmatter contract.
+- [024-cross-app-auth-identity-roles-entitlements.md](024-cross-app-auth-identity-roles-entitlements.md) -- shared auth identity across apps.
+
 ## Lessons captured from past ADRs
 
 Cross-cutting lessons learned from how prior ADRs aged in practice:
