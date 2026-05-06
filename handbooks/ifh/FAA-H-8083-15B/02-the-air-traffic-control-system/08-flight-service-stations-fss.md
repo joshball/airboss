@@ -57,3 +57,6 @@ an aircraft is airborne at exactly 10 minutes past the hour,
 the clearance is void—a pilot must take off prior to the void
 time. A specific void time may be requested when filing a
 flight plan.
+
+
+![Figure 2-8. Minimum vectoring altitude (MVA) chart.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-2-07-minimum-vectoring-altitude-mva-chart.png)

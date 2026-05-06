@@ -19,3 +19,6 @@ only require the pull of the choke and a twist of the ignition switch. If the LS
 starting procedures are normal and routine. The canopy or doors of an LSA may have quite different latching mechanisms than
 standard airworthiness airplanes. Practice latching and unlatching the doors or canopy to ensure that understanding is complete.
 Having a gull-wing door or sliding canopy “pop” open in flight can become an emergency in seconds.
+
+
+![Figure 17-14. Split flap.](/handbooks/afh/FAA-H-8083-3C/figures/fig-17-13-split-flap.png)

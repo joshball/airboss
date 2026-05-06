@@ -152,3 +152,6 @@ below freezing and super-cooled droplets build up on an
 aircraft and freeze. (Super-cooled droplets are still liquid
 even though the temperature is below 32 °Fahrenheit (F),
 or 0 °Celsius (C).
+
+
+![Figure 5-9. Wingtip vortex from a crop duster.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-07-wingtip-vortex-from-a-crop-duster.png)

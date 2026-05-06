@@ -25,3 +25,6 @@ Governor oil pressure and the blade twisting moment move the blades toward the l
 the counterweights moves them (and the blades) toward the high pitch position. In the first case above, governor oil pressure moves
 the blades towards high pitch and in the second case, governor oil pressure and the blade twisting moment move the blades toward
 low pitch. A loss of governor oil pressure, therefore, affects each differently.
+
+
+![Figure 12-7. Propeller blade angle.](/handbooks/afh/FAA-H-8083-3C/figures/fig-12-06-propeller-blade-angle.png)

@@ -11,3 +11,6 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 # Vestibular Illusions
 
 Vestibular Illusions
+
+
+![Figure 3-8. Sensations from centrifugal force.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-3-07-sensations-from-centrifugal-force.png)

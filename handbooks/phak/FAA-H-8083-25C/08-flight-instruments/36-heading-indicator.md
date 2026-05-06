@@ -75,3 +75,6 @@ indicators (HSI) receive a magnetic north reference from
 a magnetic slaving transmitter and generally need no
 adjustment. The magnetic slaving transmitter is called
 a magnetometer.
+
+
+![Figure 8-36. Northerly and southerly turning errors.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-33-northerly-and-southerly-turning-errors.png)

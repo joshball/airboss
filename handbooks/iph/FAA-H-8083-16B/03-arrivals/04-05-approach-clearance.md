@@ -56,3 +56,6 @@ the glideslope of an ILS) is inoperative or unreliable. The
 controller uses the name of the approach as published but
 advises the aircraft when issuing the approach clearance
 that the component is unusable.
+
+
+![Figure 3-19. Cleared present position direct from V295.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-18-cleared-present-position-direct-from-v295.png)

@@ -28,3 +28,6 @@ two methods: (1) by setting the barometric scale of the
 altimeter to 29.92 "Hg and reading the indicated altitude, or
 (2) by applying a correction factor to the indicated altitude
 according to the reported altimeter setting.
+
+
+![Figure 4-15. Turns.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-4-10-vortex-generators.png)

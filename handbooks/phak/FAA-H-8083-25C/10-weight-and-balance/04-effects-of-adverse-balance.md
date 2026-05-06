@@ -18,3 +18,6 @@ balance limits established for all aircraft. Operating above
 the maximum weight limitation compromises the structural
 integrity of the aircraft and can adversely affect performance.
 Stability and control are also affected by improper balance.
+
+
+![Figure 10-4. Establishing a balance.](/handbooks/phak/FAA-H-8083-25C/figures/fig-10-01-establishing-a-balance.png)

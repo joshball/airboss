@@ -25,5 +25,3 @@ higher density has a smaller volume than an air parcel with a lower density (see
 The shorter parcel (i.e., the parcel with the smaller volume) has a higher density than the taller parcel, which
 contains the larger volume. This is due to the fact that the air molecules within the shorter parcel must be
 compressed within the smaller volume.
-
-![Figure 8-7. Density is Mass (Weight) per Volume](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-3-1-00-density-is-mass-weight-per-volume.png)

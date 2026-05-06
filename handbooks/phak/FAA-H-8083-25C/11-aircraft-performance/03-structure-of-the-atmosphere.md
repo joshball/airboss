@@ -25,3 +25,6 @@ The atmosphere is composed of 78 percent nitrogen, 21
 percent oxygen, and 1 percent other gases, such as argon
 or helium. Most of the oxygen is contained below 35,000
 feet altitude.
+
+
+![Figure 11-3. Field elevation versus pressure. The aircraft is located  on a field that happens to be at sea level. Set the altimeter to the current altimeter setting (29.7). The difference of 205 feet is added to the elevation or a PA of 205 feet.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-02-field-elevation-versus-pressure-the-aircraft-is-.png)

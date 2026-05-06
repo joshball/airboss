@@ -114,3 +114,6 @@ of the direction of bank. The attitude indicator is reliable and the
 most realistic flight instrument on the instrument panel. Its
 indications are very close approximations of the actual attitude of
 the aircraft.
+
+
+![Figure 8-35. A compass correction card shows the deviation  correction for any heading.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-31-a-compass-correction-card-shows-the-deviation-co.png)

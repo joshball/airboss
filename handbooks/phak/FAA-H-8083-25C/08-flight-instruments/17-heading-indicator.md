@@ -17,3 +17,6 @@ Indicator (HSI). [Figure 8-12] As in the case of the attitude
 indicator, the heading indicator receives its information from
 the magnetometer, which feeds information to the AHRS unit
 and then out to the PFD.
+
+
+![Figure 8-17. Altimeter trend vector.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-15-altimeter-trend-vector.png)

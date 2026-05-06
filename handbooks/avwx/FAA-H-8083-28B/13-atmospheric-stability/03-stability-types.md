@@ -63,11 +63,3 @@ of air.
 Figure 13-4. Conditional Instability Example
 13.3.5 Summary of Stability Types
 Figure 13-5 summarizes the possible atmospheric stability types.
-
-![Figure 13-1. Absolute Stability Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-3-2-00-absolute-stability-example.png)
-
-![Figure 13-2. Neutral Stability Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-3-3-00-neutral-stability-example.png)
-
-![Figure 13-3. Absolute Instability Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-3-4-00-absolute-instability-example.png)
-
-![Figure 13-4. Conditional Instability Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-3-5-00-conditional-instability-example.png)

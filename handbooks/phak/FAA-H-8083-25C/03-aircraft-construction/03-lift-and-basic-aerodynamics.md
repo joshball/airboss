@@ -70,3 +70,6 @@ fuel is used, the aircraft becomes unstable. [Figure 3-3] The
 CG is computed during initial design and construction and
 is further affected by the installation of onboard equipment,
 aircraft loading, and other factors.
+
+
+![Figure 3-3. Center of gravity (CG).](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-04-center-of-gravity-cg.png)

@@ -57,3 +57,6 @@ rudder pedal should be relaxed proportionately.
 In summary, during flight, the pressure the pilot exerts on the aileron and elevator controls and rudder pedals causes the airplane to
 move about the roll (longitudinal), pitch (lateral), and yaw (vertical) axes. When a control surface moves out of its streamlined
 position (even slightly), moving air exerts a force against that surface. It is this force that the pilot feels on the controls.
+
+
+![Figure 3-3. (A) Pitch attitude is the angle formed between the airplane’s longitudinal axis, which extends from the nose to tail of the  airplane, and the natural horizon. (B) Bank attitude is the angle formed by the airplane's lateral axis, which extends from wingtip to wingtip, and the natural horizon.](/handbooks/afh/FAA-H-8083-3C/figures/fig-3-02-a-pitch-attitude-is-the-angle-formed-between-the.png)

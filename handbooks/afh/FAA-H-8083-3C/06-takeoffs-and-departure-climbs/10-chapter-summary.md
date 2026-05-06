@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Chapter Summary
+
+![Figure 6-10. Soft-field takeoff.](/handbooks/afh/FAA-H-8083-3C/figures/fig-6-09-soft-field-takeoff.png)

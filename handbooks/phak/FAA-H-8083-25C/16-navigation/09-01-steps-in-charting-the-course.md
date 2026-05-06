@@ -253,3 +253,6 @@ burn of 4.7 gallons. Refer to the flight log in Figure 16-26
 for the time between checkpoints.
 As the trip progresses, the pilot can note headings and time
 and make adjustments in heading, GS, and time.
+
+
+![Figure 16-26. Where calculations are required, the pilot may  use a mathematical formula or a manual or electronic flight computer. If unfamiliar with the use of a manual or electronic computer, it would be advantageous to read the operation manual and work several practice problems at this point.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-24-where-calculations-are-required-the-pilot-may-us.png)

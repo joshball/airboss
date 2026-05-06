@@ -47,3 +47,6 @@ instructor used when giving control to the learner. The learner should stay on t
 controls.” There should never be any doubt as to who is flying the airplane at any time. Numerous accidents have occurred due to a
 lack of communication or misunderstanding as to who actually had control of the aircraft, particularly between learners and flight
 instructors. Establishing the above procedure during initial training ensures the formation of a very beneficial habit pattern.
+
+
+![Figure 1-16. Checklists have been the foundation of pilot standardization and flight safety for many years.](/handbooks/afh/FAA-H-8083-3C/figures/fig-1-15-checklists-have-been-the-foundation-of-pilot-sta.png)

@@ -71,3 +71,6 @@ may select the higher levels only on pilot request. When
 uncertainty exists about the weather ahead, ask the controller
 if the facility can display intensity levels—pilots of small
 aircraft should avoid intensity levels 3 or higher.
+
+
+![Figure 2-10. A portion of the New York area tower en route list (from the A/FD).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-2-09-a-portion-of-the-new-york-area-tower-en-route-li.png)

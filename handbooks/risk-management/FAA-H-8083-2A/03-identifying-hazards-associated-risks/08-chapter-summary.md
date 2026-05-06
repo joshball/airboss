@@ -29,5 +29,3 @@ Figure 3-10. Case study FRAT with risks identified.
 The risk assessment and mitigation for this case study will continue in Chapters 4 and 5.
 Poor risk management is a common factor in many general aviation accidents. Pilots can use the PAVE checklist before flight
 to identify hazards. Pilots can use a FRAT to organize identified hazards and associated risks for additional analysis.
-
-![in Figure 3-10. She needs to assess these risks in terms of their likelihood and severity. She strives to complete the risk analysis  so she can return and discuss the situation with the Smiths. 11924](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-8-00-she-needs-to-assess-these-risks-in-terms-of-thei.png)

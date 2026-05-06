@@ -28,3 +28,6 @@ The proper execution of a go-around maneuver includes three cardinal principles:
 1. Power
 2. Attitude
 3. Configuration
+
+
+![Figure 9-4. Effect of headwind on final approach.](/handbooks/afh/FAA-H-8083-3C/figures/fig-9-03-effect-of-headwind-on-final-approach.png)

@@ -183,13 +183,13 @@ The amount of energy associated with latent heat exchange should not be understa
 releases 52 million trillion (5.2 x 1019) joules per day as water vapor condenses into clouds and precipitation.
 This is equivalent to about 40 times the total worldwide energy consumption per day in 2005!
 
-![Figure 6-1. The Hydrologic Cycle](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-2-1-00-the-hydrologic-cycle.png)
+![Figure 6-1. The Hydrologic Cycle](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-00-the-hydrologic-cycle.png)
 
-![Figure 6-2. Temperature Effects on Relative Humidity](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-4-00-temperature-effects-on-relative-humidity.png)
+![Figure 6-2. Temperature Effects on Relative Humidity](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-01-temperature-effects-on-relative-humidity.png)
 
-![Figure 6-3. Temperature-Dewpoint Spread Effect on Relative Humidity](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-7-00-temperature-dewpoint-spread-effect-on-relative-h.png)
+![Figure 6-3. Temperature-Dewpoint Spread Effect on Relative Humidity](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-02-temperature-dewpoint-spread-effect-on-relative-h.png)
 
-![Figure 6-4. Latent Heat Transactions When Water Undergoes Phase Transition](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-7-1-00-latent-heat-transactions-when-water-undergoes-ph.png)
+![Figure 6-4. Latent Heat Transactions When Water Undergoes Phase Transition](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-03-latent-heat-transactions-when-water-undergoes-ph.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-6-00-latent-heat-of-water-at-0-c-latent-heat-type-ene.html">
 <table><caption>Table 6-1. Latent Heat of Water at 0 °C 

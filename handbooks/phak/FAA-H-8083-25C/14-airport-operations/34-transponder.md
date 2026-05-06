@@ -34,3 +34,6 @@ issued to aircraft “B” would also be given as 12 o’clock, but
 in this case, the pilot of “B” would see trafﬁc at 10 o’clock.
 Wind
 Figure 14-44. Traffic advisories.
+
+
+![Figure 14-34. Radio controlled runway lighting.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-34-radio-controlled-runway-lighting.png)

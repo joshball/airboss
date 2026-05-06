@@ -37,3 +37,8 @@ an electrical fault occurs.
 Power distribution buses are protected from short circuits and other malfunctions by a type of fuse called a current limiter. In the case
 of excessive current supplied by any power source, the current limiter opens the circuit and thereby isolates that power source and
 separates the affected bus from the system. If this occurs, pilots should refer to the appropriate checklist.
+
+
+![Figure 15-5. Split shaft/free turbine engine.](/handbooks/afh/FAA-H-8083-3C/figures/fig-15-04-split-shaft-free-turbine-engine.png)
+
+![Figure 15-9. Typical individual power distribution bus.](/handbooks/afh/FAA-H-8083-3C/figures/fig-15-07-typical-individual-power-distribution-bus.png)

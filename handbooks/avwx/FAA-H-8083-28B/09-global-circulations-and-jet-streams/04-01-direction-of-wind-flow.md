@@ -31,5 +31,3 @@ pronounced in winter, jet streams are the strongest for both the Northern and So
 Why do the jet stream winds blow from west to east? As stated in the previous section, if the Earth was not
 rotating, the warm air would rise at the Equator and move toward both the poles. The Earth’s rotation
 divides this circulation into three cells. Likewise, the Earth’s rotation is responsible for the jet stream.
-
-![Figure 9-2. Earth Circulation System](/handbooks/avwx/FAA-H-8083-28B/figures/fig-9-4-1-00-earth-circulation-system.png)

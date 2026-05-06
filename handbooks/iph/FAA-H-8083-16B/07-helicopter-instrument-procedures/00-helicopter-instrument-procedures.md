@@ -39,11 +39,17 @@ Rotor Ice Protection System (RIPS) determines the temperature and
 moisture content of the air and removes any ice buildup by heating the
 main and tail rotor blades. The system is shown here during testing.
 
-![Figure 7-10. The COPTER ILS or LOC RWY 13 approach at New York/La Guardia (LGA) airport.](/handbooks/iph/FAA-H-8083-16B/figures/fig-7-00-the-copter-ils-or-loc-rwy-13-approach-at-new-yor.png)
+![Figure 7-5. Operations Specifications.](/handbooks/iph/FAA-H-8083-16B/figures/fig-7-04-operations-specifications.png)
 
-![Figure 7-11. COPTER RNAV (GPS) 291° at Indianapolis Downtown Heliport.](/handbooks/iph/FAA-H-8083-16B/figures/fig-7-01-copter-rnav-gps-291-at-indianapolis-downtown-hel.png)
+![Figure 7-6. Example of a Minimum Equipment List (MEL).](/handbooks/iph/FAA-H-8083-16B/figures/fig-7-05-example-of-a-minimum-equipment-list-mel.png)
 
-![Figure 7-13. COPTER RNAV (GPS) 250° at New York/La Guardia Airport.](/handbooks/iph/FAA-H-8083-16B/figures/fig-7-02-copter-rnav-gps-250-at-new-york-la-guardia-airpo.png)
+![Figure 7-10. The COPTER ILS or LOC RWY 13 approach at New York/La Guardia (LGA) airport.](/handbooks/iph/FAA-H-8083-16B/figures/fig-7-09-the-copter-ils-or-loc-rwy-13-approach-at-new-yor.png)
+
+![Figure 7-11. COPTER RNAV (GPS) 291° at Indianapolis Downtown Heliport.](/handbooks/iph/FAA-H-8083-16B/figures/fig-7-10-copter-rnav-gps-291-at-indianapolis-downtown-hel.png)
+
+![Figure 7-12. Obstacle clearance surface (OCS).](/handbooks/iph/FAA-H-8083-16B/figures/fig-7-11-obstacle-clearance-surface-ocs.png)
+
+![Figure 7-13. COPTER RNAV (GPS) 250° at New York/La Guardia Airport.](/handbooks/iph/FAA-H-8083-16B/figures/fig-7-12-copter-rnav-gps-250-at-new-york-la-guardia-airpo.png)
 
 <div class="handbook-table" data-source="/handbooks/iph/FAA-H-8083-16B/tables/tbl-7-00-untitled.html">
 <table><thead><tr><th></th><th>Helicopter Instrument

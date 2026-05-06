@@ -39,3 +39,6 @@ additional ADS−B information. This additional information
 is known as an “extended squitter” message and referred to as
 1090ES. ADS−B equipment operating on 978 MHz is known
 as the Universal Access Transceiver (UAT).
+
+
+![Figure 14-35. Runway Entrance Lights (REL).](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-35-runway-entrance-lights-rel.png)

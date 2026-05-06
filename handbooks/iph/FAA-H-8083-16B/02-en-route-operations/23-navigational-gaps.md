@@ -45,3 +45,6 @@ to dead reckon through the gap. Calculating the ground
 track (with adjustments for winds) before and after the gap
 will also help to stay on course when navigational course
 guidance is not available.
+
+
+![Figure 2-23. Low frequency airway G13.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-17-low-frequency-airway-g13.png)

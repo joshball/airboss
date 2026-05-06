@@ -32,3 +32,6 @@ where flocks of birds may be expected.
 Although turning on aircraft lights supports the “see and be seen” concept, pilots should continue to keep a sharp lookout for other
 aircraft. Aircraft lights may blend in with the stars or the lights of the cities at night and go unnoticed unless a conscious effort is
 made to distinguish them from other lights.
+
+
+![Figure 11-5. Establish a positive climb.](/handbooks/afh/FAA-H-8083-3C/figures/fig-11-04-establish-a-positive-climb.png)

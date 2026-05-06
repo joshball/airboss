@@ -16,3 +16,6 @@ review the current data for that airport. This data provides the
 pilot with information, such as communication frequencies,
 services available, closed runways, or airport construction.
 Three common sources of information are:
+
+
+![Figure 14-3. Alternate Midfield Entry. Figure 14-2. Preferred Entry-Crossing Midfield.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-02-alternate-midfield-entry-figure-14-2-preferred-e.png)

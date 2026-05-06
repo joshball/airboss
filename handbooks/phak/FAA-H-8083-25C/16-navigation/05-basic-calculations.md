@@ -14,3 +14,6 @@ Basic Calculations
 Before a cross-country flight, a pilot should make common
 calculations for time, speed, and distance, and the amount
 of fuel required.
+
+
+![Figure 16-5. Time zones in the conterminous United States.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-04-time-zones-in-the-conterminous-united-states.png)

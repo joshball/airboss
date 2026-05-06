@@ -35,3 +35,8 @@ The control center of the turbocharger system is the pressure controller. This d
 throttle. Once the desired manifold pressure is set, virtually no throttle adjustment is required with changes in altitude. The controller
 senses compressor discharge requirements for various altitudes and controls the oil pressure to the waste gate actuator, which adjusts
 the waste gate accordingly. Thus the turbocharger will maintain the manifold pressure called for by the throttle setting.
+
+
+![Figure 12-3. Lift equation.](/handbooks/afh/FAA-H-8083-3C/figures/fig-12-02-lift-equation.png)
+
+![Figure 12-9. Turbocharging system.](/handbooks/afh/FAA-H-8083-3C/figures/fig-12-08-turbocharging-system.png)

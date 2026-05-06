@@ -18,3 +18,6 @@ was developed by the Department of Transportation
 is commonly referred to as the Pilot Briefing Information
 format. The FAA chart format is presented in a logical order,
 facilitating pilot briefing of the procedures. [Figure 4-3]
+
+
+![Figure 4-5. Multiple approaches.](/handbooks/iph/FAA-H-8083-16B/figures/fig-4-04-multiple-approaches.png)

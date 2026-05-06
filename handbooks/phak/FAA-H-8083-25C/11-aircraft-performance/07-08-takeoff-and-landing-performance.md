@@ -37,3 +37,6 @@ at 37 knots. Thus, an airplane requires four times as
 much distance to stop as required at half the speed.
 The takeoff or landing roll distance is a function of
 both acceleration/deceleration and speed.
+
+
+![Figure 11-14. Power required curve.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-13-power-required-curve.png)

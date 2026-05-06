@@ -67,3 +67,8 @@ Instruction in emergency procedures is not limited to simulated emergency landin
 associated with the operation of the airplane should be explained, demonstrated, and practiced if practicable. Among these emergencies
 are fire in flight, electrical or hydraulic system malfunctions, unexpected severe weather conditions, engine overheating, imminent fuel
 exhaustion, and the emergency operation of airplane systems and equipment.
+
+
+![Figure 9-11. A well-executed round out results in attaining the proper landing attitude.](/handbooks/afh/FAA-H-8083-3C/figures/fig-9-10-a-well-executed-round-out-results-in-attaining-t.png)
+
+![Figure 9-28. Remain over intended landing area.](/handbooks/afh/FAA-H-8083-3C/figures/fig-9-27-remain-over-intended-landing-area.png)

@@ -46,3 +46,6 @@ and yaw axes.
 inside of the turn. A turn coordinator does not sense pitch.
 This is indicated on some instruments by placing the words
 “NO PITCH INFORMATION” on the dial.
+
+
+![Figure 5-39. A typical cue that a pilot would follow.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-38-a-typical-cue-that-a-pilot-would-follow.png)

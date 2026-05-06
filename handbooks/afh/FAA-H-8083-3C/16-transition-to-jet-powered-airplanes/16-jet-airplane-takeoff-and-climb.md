@@ -16,3 +16,6 @@ assumes a two-pilot crew. If any of the following information conflicts with FAA
 the AFM procedures take precedence. Also, if any of the following procedures differ from the FAA-approved procedures developed
 for use by a specific air operator and/or for use in an FAA-approved training center or pilot school curriculum, the FAA-approved
 procedures for that operator and/or training center/pilot school take precedence.
+
+
+![Figure 16-16. FAR landing field length required.](/handbooks/afh/FAA-H-8083-3C/figures/fig-16-15-far-landing-field-length-required.png)

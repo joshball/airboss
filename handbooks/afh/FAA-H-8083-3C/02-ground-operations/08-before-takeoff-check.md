@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Before Takeoff Check
+
+![Figure 2-8. Cracks radiating from screw holes that have been stop-drilled to prevent crack progression.](/handbooks/afh/FAA-H-8083-3C/figures/fig-2-07-cracks-radiating-from-screw-holes-that-have-been.png)

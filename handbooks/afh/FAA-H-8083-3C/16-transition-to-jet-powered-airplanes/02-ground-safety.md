@@ -18,3 +18,6 @@ person down.
 Pilots operating jet-powered airplanes should exercise caution during taxi and when adding power to start moving. Adding too much
 power can pull damaging debris up off the ground or cause damage well behind the aircraft. Jet blast when taxiing into parking areas
 may affect any loose ground equipment.
+
+
+![Figure 16-2. Turbofan engine.](/handbooks/afh/FAA-H-8083-3C/figures/fig-16-01-turbofan-engine.png)

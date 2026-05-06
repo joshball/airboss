@@ -10,3 +10,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Unusual Attitude Recovery Protection
+
+![Figure 7-69. Unusual attitude recovery protection. Note the brown horizon line is visible at the bottom.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-70-unusual-attitude-recovery-protection-note-the-br.png)

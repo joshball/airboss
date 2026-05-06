@@ -102,29 +102,13 @@ flight control systems and characteristics of specific types
 of aircraft.
 
 
-![Figure 6-3. Helicopter flight control system.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-00-helicopter-flight-control-system.png)
+![Figure 6-5. Adverse yaw is caused by higher drag on the outside  wing that is producing more lift.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-03-adverse-yaw-is-caused-by-higher-drag-on-the-outs.png)
 
-![Figure 6-2. Hydromechanical flight control system.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-01-hydromechanical-flight-control-system.png)
+![Figure 6-6. Differential ailerons.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-04-differential-ailerons.png)
 
-![Figure 6-6. Differential ailerons.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-02-differential-ailerons.png)
-
-![Figure 6-7. Frise-type ailerons.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-03-frise-type-ailerons.png)
-
-![Figure 6-11. Aircraft with a T-tail design at a high AOA and an aft CG.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-04-aircraft-with-a-t-tail-design-at-a-high-aoa-and-.png)
-
-![Figure 6-12. When the aerodynamic efficiency of the horizontal tail  surface is inadequate due to an aft CG condition, an elevator down spring may be used to supply a mechanical load to lower the nose.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-05-when-the-aerodynamic-efficiency-of-the-horizonta.png)
-
-![Figure 6-17. Five common types of flaps.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-06-five-common-types-of-flaps.png)
-
-![Figure 6-21. An antiservo tab attempts to streamline the control  surface and is used to make the stabilator less sensitive by opposing the force exerted by the pilot.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-07-an-antiservo-tab-attempts-to-streamline-the-cont.png)
-
-![Figure 6-20. The movement of the elevator is opposite to the  direction of movement of the elevator trim tab.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-08-the-movement-of-the-elevator-is-opposite-to-the-.png)
+![Figure 6-7. Frise-type ailerons.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-05-frise-type-ailerons.png)
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-6-00-untitled.html">
-<table><thead><tr><th>Flight Controls</th></tr></thead><tbody></tbody></table>
-</div>
-
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-6-01-untitled.html">
 <table><thead><tr><th>Neutral
 Control stick (AFT—nose up)
 LEGEND
@@ -152,24 +136,24 @@ Neutral
 Power disconnect linkage Neutral Power cylinder</td><td></td></tr></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-6-02-untitled.html">
+<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-6-01-untitled.html">
 <table><thead><tr><th>Rudder/Ail</th><th>eron interconnecting springs</th></tr></thead><tbody></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-6-03-untitled.html">
+<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-6-02-untitled.html">
 <table><thead><tr><th>Antiservo tab
 Stabilator
 Balance weight Pivot point</th></tr></thead><tbody></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-6-04-untitled.html">
+<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-6-03-untitled.html">
 <table><thead><tr><th>Stabil</th><th>ator</th></tr></thead><tbody></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-6-05-untitled.html">
+<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-6-04-untitled.html">
 <table><thead><tr><th>Nose down</th></tr></thead><tbody></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-6-06-untitled.html">
+<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-6-05-untitled.html">
 <table><thead><tr><th>Nose up</th></tr></thead><tbody></tbody></table>
 </div>

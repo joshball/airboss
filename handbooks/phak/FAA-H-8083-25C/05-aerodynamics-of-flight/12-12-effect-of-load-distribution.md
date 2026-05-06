@@ -145,3 +145,6 @@ aircraft throughout the airspeed range down to the stall.
 A detailed discussion and additional information relating
 to weight and balance can be found in Chapter 10, Weight
 and Balance.
+
+
+![Figure 5-63. Effect of load distribution on balance.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-59-effect-of-load-distribution-on-balance.png)

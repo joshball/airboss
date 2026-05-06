@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Chapter Summary
+
+![Figure 3-12. The rudder opposes adverse yaw to help coordinate the turn.](/handbooks/afh/FAA-H-8083-3C/figures/fig-3-11-the-rudder-opposes-adverse-yaw-to-help-coordinat.png)

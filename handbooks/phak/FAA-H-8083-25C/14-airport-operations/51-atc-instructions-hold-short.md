@@ -72,3 +72,6 @@ Figure 14-52. Runway 13-31 holding position sign and marking
 located on Taxiway Charlie.
 Figure 14-53 shows an example of a controller’s taxi and “hold
 short” instructions and the reply from the pilot.
+
+
+![Figure 14-51. Do NOT cross a runway holding position marking  without ATC clearance. If the tower is closed or you are operating from a non-towered airport, check both directions for conflicting traffic before crossing the hold position marking.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-53-do-not-cross-a-runway-holding-position-marking-w.png)

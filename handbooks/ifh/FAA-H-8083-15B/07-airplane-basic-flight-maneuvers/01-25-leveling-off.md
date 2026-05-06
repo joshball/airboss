@@ -48,3 +48,6 @@ appropriate pitch attitude for level flight with a simultaneous
 reduction in power to a setting that maintains the desired
 speed. With a coordinated reduction in pitch and power, there
 should be no change in the airspeed.
+
+
+![Figure 7-28. Airspeed low and vertical speed high—reduce pitch.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-28-airspeed-low-and-vertical-speed-high-reduce-pitc.png)

@@ -21,3 +21,6 @@ occurs on the back course using standard VOR equipment.
 With a horizontal situation indicator (HSI) system, reverse
 sensing is eliminated if it is set appropriately to the front
 course. [Figure 4-60]
+
+
+![Figure 4-47. Simultaneous independent close parallel approach example using ILS PRM approaches.](/handbooks/iph/FAA-H-8083-16B/figures/fig-4-43-simultaneous-independent-close-parallel-approach.png)

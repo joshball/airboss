@@ -22,3 +22,6 @@ STARs are listed alphabetically at the beginning of the
 AeroNav Products booklet. Figure 1-9 shows an example
 of a STAR, and the legend for STARs and DPs printed in
 AeroNav Products booklets.
+
+
+![Figure 1-17. Vertical descent angle (VDA).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-16-vertical-descent-angle-vda.png)

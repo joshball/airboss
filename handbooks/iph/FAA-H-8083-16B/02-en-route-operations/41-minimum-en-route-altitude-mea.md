@@ -25,3 +25,6 @@ areas and 500 feet within control areas. MEAs are established
 based upon obstacle clearance over terrain and manmade
 objects, adequacy of navigation facility performance, and
 communications requirements.
+
+
+![Figure 2-41. Primary and secondary obstacle clearance area.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-33-non-mountainous-obstacle-clearance-in-the-primar.png)

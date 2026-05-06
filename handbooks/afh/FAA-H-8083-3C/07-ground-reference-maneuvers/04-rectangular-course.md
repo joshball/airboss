@@ -73,3 +73,6 @@ The following are the most common errors made while performing rectangular cours
 7. Failure to manipulate the flight controls in a smooth and continuous manner.
 8. Failure to properly divide attention between airplane control and orientation with ground references.
 9. Failure to execute turns with accurate timing.
+
+
+![Figure 7-4. Rectangular course.](/handbooks/afh/FAA-H-8083-3C/figures/fig-7-03-rectangular-course.png)

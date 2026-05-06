@@ -135,13 +135,3 @@ windstorms with very warm lee-side temperatures are known as chinooks; post-cold
 
 10 American Meteorological Society, cited 2024: Bora. Glossary of Meteorology. [Available online at
 https://glossary.ametsoc.org/wiki/bora.]
-
-![Figure 16-10. Conceptual View of a Mountain Lee Wave Rotor Zone](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-6-00-conceptual-view-of-a-mountain-lee-wave-rotor-zon.png)
-
-![Figure 16-11. Development of a Strong Roll Vortex Associated with a Wind Surge Down the Lee Slope of a Mountain](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-6-01-development-of-a-strong-roll-vortex-associated-w.png)
-
-![Figure 16-12. Schematic of Vertically Oriented Vortices Generated in the Lee of an Isolated Mountain Peak](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-6-02-schematic-of-vertically-oriented-vortices-genera.png)
-
-![Figure 16-13. NWS Dust Devils: A Life Cycle](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-6-03-nws-dust-devils-a-life-cycle.png)
-
-![Figure 16-14. Accident Damage Caused by a Dust Devil](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-6-04-accident-damage-caused-by-a-dust-devil.png)

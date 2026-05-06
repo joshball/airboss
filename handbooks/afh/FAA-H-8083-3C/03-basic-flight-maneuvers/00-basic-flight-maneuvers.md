@@ -15,4 +15,14 @@ pilots about attitude awareness; which requires understanding the motions of fli
 also moving horizontally, vertically, and laterally. The four fundamentals (straight-and-level flight, turns, climbs, and descents) are
 the principal maneuvers that control the airplane through the six motions of flight.
 
-![Figure 3-1. Basic flight controls and instrument panel.](/handbooks/afh/FAA-H-8083-3C/figures/fig-3-00-basic-flight-controls-and-instrument-panel.png)
+![Figure 3-13. Indications of a slip and skid.](/handbooks/afh/FAA-H-8083-3C/figures/fig-3-12-indications-of-a-slip-and-skid.png)
+
+![Figure 3-18. Parallax view.](/handbooks/afh/FAA-H-8083-3C/figures/fig-3-17-parallax-view.png)
+
+![Figure 3-19. Best angle of climb verses best rate of climb.](/handbooks/afh/FAA-H-8083-3C/figures/fig-3-18-best-angle-of-climb-verses-best-rate-of-climb.png)
+
+![Figure 3-20. Absolute ceiling.](/handbooks/afh/FAA-H-8083-3C/figures/fig-3-19-absolute-ceiling.png)
+
+![Figure 3-23. L/DMAX.](/handbooks/afh/FAA-H-8083-3C/figures/fig-3-22-l-dmax.png)
+
+![Figure 3-24. Best glide speed provides the greatest forward distance](/handbooks/afh/FAA-H-8083-3C/figures/fig-3-23-best-glide-speed-provides-the-greatest-forward-d.png)

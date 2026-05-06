@@ -33,9 +33,3 @@ Lake St. Clair) warms up rapidly and is less effective as the source of a lake b
 lake (e.g., the other Great Lakes).
 
 Figure 10-18. Sea Breeze/Lake Breeze Example [National Aeronautics and Space Administration (NASA)]
-
-![Figure 10-16. Land Breeze](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-3-00-land-breeze.png)
-
-![Figure 10-17. Lake Breeze](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-3-01-lake-breeze.png)
-
-![Figure 10-18. Sea Breeze/Lake Breeze Example [National Aeronautics and Space Administration (NASA)]](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-3-02-sea-breeze-lake-breeze-example-national-aeronaut.png)

@@ -28,3 +28,6 @@ a regional poison control center or emergency medical
 professional regarding the induction of vomiting or
 use of activated charcoal. Vomiting should never be
 induced to a person who is groggy or unconscious.
+
+
+![Figure 17-17. Night blind spot.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-16-night-blind-spot.png)

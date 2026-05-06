@@ -21,3 +21,8 @@ pressurization system operation, and high-altitude emergencies.
 Flight training should prepare the pilot to demonstrate a comprehensive knowledge of airplane performance, systems, emergency
 procedures, and operating limitations, along with a high degree of proficiency in performing all flight maneuvers and in-flight
 emergency procedures. The training outline below covers information used by pilots to operate safely at high altitudes.
+
+
+![Figure 15-7. Engine instruments—split shaft/free turbine engine.](/handbooks/afh/FAA-H-8083-3C/figures/fig-15-06-engine-instruments-split-shaft-free-turbine-engi.png)
+
+![Figure 15-12. Example of a typical turboprop airplane arrival and landing profile.](/handbooks/afh/FAA-H-8083-3C/figures/fig-15-10-example-of-a-typical-turboprop-airplane-arrival-.png)

@@ -62,3 +62,6 @@ is a pulsating white light. The pulsating rate increases as the
 aircraft gets further above or below the desired glideslope.
 The useful range of the system is about four miles during the
 day and up to ten miles at night. [Figure 14-32]
+
+
+![Figure 14-9. Runway holding position sign at takeoff end of Runway  14 with collocated Taxiway Alpha location sign.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-07-runway-holding-position-sign-at-takeoff-end-of-r.png)

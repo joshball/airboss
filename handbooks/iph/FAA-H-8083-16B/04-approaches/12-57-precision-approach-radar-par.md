@@ -10,3 +10,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Precision Approach Radar (PAR)
+
+![Figure 4-43. Classification of Simultaneous Parallel Approaches.](/handbooks/iph/FAA-H-8083-16B/figures/fig-4-39-classification-of-simultaneous-parallel-approach.png)

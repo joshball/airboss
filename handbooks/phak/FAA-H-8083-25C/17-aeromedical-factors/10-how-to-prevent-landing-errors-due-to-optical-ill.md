@@ -103,3 +103,6 @@ anticipating them during approaches, inspecting unfamiliar
 airports before landing, using electronic glideslope or VASI
 systems when available, and maintaining proficiency in
 landing procedures.
+
+
+![Figure 17-10. Signs and symptoms of altitude decompression sickness.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-10-signs-and-symptoms-of-altitude-decompression-sic.png)

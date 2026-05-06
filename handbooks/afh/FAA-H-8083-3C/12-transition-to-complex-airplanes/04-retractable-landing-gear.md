@@ -17,3 +17,6 @@ employ a combination of the two systems. Warning indicators are provided in the 
 down and locked and when they are up and locked or if they are in intermediate positions. Systems for emergency operation are also
 provided. Due to the complexity of a retractable landing gear system, the pilot should adhere to specific operating procedures and
 should not exceed any operating limitations.
+
+
+![Figure 12-4. Four basic types of flaps.](/handbooks/afh/FAA-H-8083-3C/figures/fig-12-03-four-basic-types-of-flaps.png)

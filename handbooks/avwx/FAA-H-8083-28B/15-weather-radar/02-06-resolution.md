@@ -39,5 +39,3 @@ Aircraft radars have beam widths that vary between 3° and 10°. Assuming an ave
 a range of 60 NM, targets separated by at least 5.5 NM will be displayed separately. At a range of 120 NM,
 targets separated by at least 10 NM will be displayed separately.
 The beam resolution is better for the WSR-88D than aircraft radar (see Figure 15-7).
-
-![Figure 15-5. Precipitation Attenuation versus Wavelength](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-6-00-precipitation-attenuation-versus-wavelength.png)

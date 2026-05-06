@@ -44,8 +44,6 @@ standards.
 Pilots should train and practice using automation under VFR with an appropriately qualified and knowledgeable flight instructor
 before attempting IFR flight. In addition, using a flight simulation training device provides the opportunity to practice and
 
-![Figure 7-2. Steps for interacting with automation](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-7-5-00-steps-for-interacting-with-automation.png)
-
 <div class="handbook-table" data-source="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-7-6-00-untitled.html">
 <table><thead><tr><th>HDG
 LOC</th><th>AP</th><th>ALT 9000FT GS</th></tr></thead><tbody></tbody></table>

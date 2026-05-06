@@ -43,5 +43,3 @@ Fatigue, discussed as an obstacle to learning, is also an obstacle to maintainin
 because it impairs alertness and performance. [Figure 1-6] The term is used to describe a range of experiences from sleepy, or tired,
 to exhausted. Two major physiological phenomena create fatigue: sleep loss and circadian rhythm disruption.
 Figure 1-6. Fatigue is a threat to aviation safety because it impairs alertness and performance.
-
-![Figure 1-6. Fatigue is a threat to aviation safety because it impairs alertness and performance.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-6-1-00-fatigue-is-a-threat-to-aviation-safety-because-i.png)

@@ -82,3 +82,6 @@ size to include both length and width. Being accustomed to
 a 75-foot-wide runway on flat terrain is most likely going to
 influence a pilot’s perception of a wider runway on uneven
 terrain simply because of the inherent processing experience.
+
+
+![Figure 3-3. Inner ear orientation.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-3-03-inner-ear-orientation.png)

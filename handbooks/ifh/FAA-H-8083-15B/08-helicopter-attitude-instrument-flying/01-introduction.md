@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Introduction
+
+![Figure 8-1. A radial scan pattern of the flight instruments enables the helicopter pilot to fully comprehend the condition and direction  of the helicopter.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-8-00-a-radial-scan-pattern-of-the-flight-instruments-.png)

@@ -36,3 +36,6 @@ necessary, ATC may amend or delete SID crossing altitude
 restrictions; when doing so, ATC assumes responsibility
 for obstacle clearance until the aircraft is re-established
 laterally and vertically on the published SID route.
+
+
+![Figure 1-31. Fly-over and fly-by waypoints.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-31-fly-over-and-fly-by-waypoints.png)

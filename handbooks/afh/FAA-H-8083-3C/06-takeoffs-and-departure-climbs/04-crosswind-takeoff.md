@@ -44,3 +44,6 @@ onto the runway. During these bounces, the crosswind also tends to move the airp
 During a crosswind takeoff roll, it is important that the pilot hold sufficient aileron pressure into the wind not only to keep the upwind
 wing from rising but to hold that wing down so that the airplane sideslips into the wind enough to counteract drift immediately after
 lift-off.
+
+
+![Figure 6-4. Crosswind roll and takeoff climb.](/handbooks/afh/FAA-H-8083-3C/figures/fig-6-03-crosswind-roll-and-takeoff-climb.png)

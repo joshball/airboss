@@ -1,0 +1,13 @@
+---
+handbook: phak
+edition: FAA-H-8083-25C
+chapter_number: 7
+section_title: Introduction
+faa_pages: 7-1
+section_number: 1
+source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/faa-h-8083-25c.pdf
+---
+
+# Introduction
+
+![Figure 7-1. Radial engine.](/handbooks/phak/FAA-H-8083-25C/figures/fig-7-00-radial-engine.png)

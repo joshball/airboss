@@ -29,3 +29,6 @@ setting normally smooths out this roughness. Pilots are urged
 to check for this modulation phenomenon prior to reporting
 a VOR station or aircraft equipment for unsatisfactory
 operation.
+
+
+![Figure 9-18. Using DME and RMI to maintain an arc.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-17-using-dme-and-rmi-to-maintain-an-arc.png)

@@ -22,3 +22,6 @@ serve as a backup source of bank information in the event an
 attitude indicator fails. Coordination is achieved by referring
 to the inclinometer, which consists of a liquid-filled curved
 tube with a ball inside. [Figure 8-21]
+
+
+![Figure 8-29. Pictorial navigation indicator (HSI, top), slaving meter  (lower right), and slaving control compensator unit (lower left).](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-26-pictorial-navigation-indicator-hsi-top-slaving-m.png)

@@ -39,3 +39,6 @@ levels, performance falls off rapidly. Pilots experiencing
 this level of stress are not safe and should not exercise their
 airman privileges. Pilots who suspect they are suffering from
 chronic stress should consult a physician.
+
+
+![Figure 17-13. Types of vision.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-11-types-of-vision.png)

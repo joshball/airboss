@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Introduction
+
+![Figure 10-1. Steep turns.](/handbooks/afh/FAA-H-8083-3C/figures/fig-10-00-steep-turns.png)

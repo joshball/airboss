@@ -16,3 +16,6 @@ aircraft operating under IFR. This is accomplished with ATC
 facilities, to include the FSS, airport traffic control tower
 (ATCT), terminal radar approach control (TRACON), and
 air route traffic control center (ARTCC).
+
+
+![Figure 2-7. Combined radar and beacon antenna.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-2-06-combined-radar-and-beacon-antenna.png)

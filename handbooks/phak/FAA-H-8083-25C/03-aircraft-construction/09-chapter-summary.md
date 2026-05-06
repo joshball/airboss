@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Chapter Summary
+
+![Figure 3-9. Weight-shift control aircraft use the shifting of weight  for control.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-08-weight-shift-control-aircraft-use-the-shifting-o.png)

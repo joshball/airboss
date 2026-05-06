@@ -73,3 +73,6 @@ During uncoordinated flight, the pilot may feel that they are being pushed sidew
 ability to sense a skid or slip is developed over time and as the “feel” of flying develops, a pilot should become highly sensitive to a
 slip or skid without undue reliance on the flight instruments.
 Figure 3-13. Indications of a slip and skid.
+
+
+![Figure 3-8. Nose reference for level flight.](/handbooks/afh/FAA-H-8083-3C/figures/fig-3-07-nose-reference-for-level-flight.png)

@@ -14,3 +14,6 @@ Operation of Systems
 This section deals with systems and equipment that are generally installed in multiengine airplanes. Multiengine airplanes share many
 features with complex single-engine airplanes. However, there are certain features that are found more often in airplanes with two or
 more engines.
+
+
+![Figure 13-4. Pitch change forces.](/handbooks/afh/FAA-H-8083-3C/figures/fig-13-03-pitch-change-forces.png)

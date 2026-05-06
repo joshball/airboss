@@ -49,3 +49,6 @@ manufacturer determines the capabilities and limitations
 of an RNAV system based on the decisions that it makes
 regarding that system’s processing of the airborne
 navigation database.
+
+
+![Figure 6-29. Naming conventions of three different systems for the VOR 34 Approach.](/handbooks/iph/FAA-H-8083-16B/figures/fig-6-22-naming-conventions-of-three-different-systems-fo.png)

@@ -27,3 +27,8 @@ examination is performed in a complex aircraft. A complex
 aircraft must have retractable landing gear, movable flaps,
 and a controllable-pitch propeller. See 14 CFR part 61,
 section 61.31(e) for additional information. [Figure 1-23]
+
+
+![Figure 1-23. A complex aircraft.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-21-a-complex-aircraft.png)
+
+![Figure 1-24. Type of aircraft flown by an airline transport pilot.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-22-type-of-aircraft-flown-by-an-airline-transport-p.png)

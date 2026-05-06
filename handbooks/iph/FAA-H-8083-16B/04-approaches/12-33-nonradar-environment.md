@@ -35,3 +35,6 @@ definition of established on course requires the aircraft
 to be established on the route centerline. Generally, the
 controller assigns an altitude compatible with glideslope/
 glidepath intercept prior to being cleared for the approach.
+
+
+![Figure 4-32. Course reversal methods.](/handbooks/iph/FAA-H-8083-16B/figures/fig-4-28-course-reversal-methods.png)

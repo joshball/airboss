@@ -23,3 +23,6 @@ There is no one right answer in ADM, rather each pilot is
 expected to analyze each situation in light of experience
 level, personal minimums, and current physical and mental
 readiness level, and make his or her own decision.
+
+
+![Figure 2-9. The Five Ps checklist.](/handbooks/phak/FAA-H-8083-25C/figures/fig-2-08-the-five-ps-checklist.png)

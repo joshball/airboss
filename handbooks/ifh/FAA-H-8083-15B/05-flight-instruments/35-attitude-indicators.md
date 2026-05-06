@@ -69,3 +69,6 @@ deceleration. There is also a possibility of a small bank angle
 and pitch error after a 180° turn. These inherent errors are
 small and correct themselves within a minute or so after
 returning to straight-and-level flight.
+
+
+![Figure 5-35. A turn coordinator senses rotation about both roll  and yaw axes.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-35-a-turn-coordinator-senses-rotation-about-both-ro.png)

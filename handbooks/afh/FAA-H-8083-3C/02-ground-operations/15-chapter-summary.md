@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Chapter Summary
+
+![Figure 2-15. Control positions of the nosewheel airplane.](/handbooks/afh/FAA-H-8083-3C/figures/fig-2-14-control-positions-of-the-nosewheel-airplane.png)

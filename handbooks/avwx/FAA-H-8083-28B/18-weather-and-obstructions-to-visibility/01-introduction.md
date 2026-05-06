@@ -238,25 +238,3 @@ ingested into a jet engine, it melts to produce a soft, sticky molten product th
 turbine blades and fuel injectors/igniters. With no air going into the engine, the fuel cannot ignite, the engine
 comes to a slow spinning stop by spooling down, and a flameout occurs. As the aircraft exits the ash cloud
 and enters colder temperatures, the cooled, hardened silicas on the turbine blades become dislodged,
-
-![Figure 18-1. Radiation Fog Formation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-1-00-radiation-fog-formation.png)
-
-![Figure 18-2. Radiation Fog](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-1-01-radiation-fog.png)
-
-![18-3 and Figure 18-4.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-1-02-untitled.png)
-
-![Figure 18-3. Mountain/Valley Fog Formation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-1-03-mountain-valley-fog-formation.png)
-
-![Figure 18-4. Mountain/Valley Fog](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-1-04-mountain-valley-fog.png)
-
-![Figure 18-5. Advection Fog Formation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-1-05-advection-fog-formation.png)
-
-![Figure 18-6. Advection Fog](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-1-06-advection-fog.png)
-
-![Figure 18-7. Upslope Fog Formation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-1-07-upslope-fog-formation.png)
-
-![Figure 18-8. Frontal Fog Formation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-1-08-frontal-fog-formation.png)
-
-![Figure 18-9. Steam Fog Formation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-1-09-steam-fog-formation.png)
-
-![Figure 18-11. Haboob](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-9-00-haboob.png)

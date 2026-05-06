@@ -20,3 +20,6 @@ System providing both 5-dimensional situational awareness
 and a synthetic highway in the sky, representing the desired
 flightpath. Synthetic vision is used as a PFD, but provides
 guidance in a more normal, outside reference format.
+
+
+![Figure 5-52. Coverage provided by a traffic information system.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-52-coverage-provided-by-a-traffic-information-syste.png)

@@ -147,3 +147,6 @@ inflight (LOC-I), controlled flight into terrain (CFIT), and approach and landin
 to: 1) gain an understanding of basic energy management concepts; 2) learn the energy role of the controls for managing the
 airplane’s energy state; and 3) develop the ability to identify, assess, and mitigate risks associated with failure to manage the airplane’s
 energy state.
+
+
+![Figure 4-13. Energy error management.](/handbooks/afh/FAA-H-8083-3C/figures/fig-4-11-energy-error-management.png)

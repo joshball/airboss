@@ -30,5 +30,3 @@ it. Thus, the temperature of a descending air parcel increases approximately 3°
 The parcel’s temperature-dewpoint spread increases, while its relative humidity decreases.
 
 Figure 12-1. Unsaturated Ascending/Descending Air Parcel Example
-
-![Figure 12-1. Unsaturated Ascending/Descending Air Parcel Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-2-00-unsaturated-ascending-descending-air-parcel-exam.png)

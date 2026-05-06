@@ -38,5 +38,3 @@ from one dot to the next, analyzing weather charts is similar in that lines of e
 drawn between dots representing various elements of the atmosphere. An isopleth is a broad term for any
 line on a weather map connecting points with equal values of a particular atmospheric variable. See Table
 25-1 for common isopleths.
-
-![Figure 25-1. Weather Observation Sources](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-1-00-weather-observation-sources.png)

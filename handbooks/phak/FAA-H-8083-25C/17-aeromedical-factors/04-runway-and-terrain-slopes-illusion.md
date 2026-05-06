@@ -16,3 +16,6 @@ illusion that the aircraft is at a higher altitude than it actually
 is. [Figure 17-7] The pilot who does not recognize this
 illusion will fly a lower approach. Downsloping runways and
 downsloping approach terrain can have the opposite effect.
+
+
+![Figure 17-4. Human sensation of angular acceleration.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-03-human-sensation-of-angular-acceleration.png)

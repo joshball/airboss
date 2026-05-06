@@ -52,3 +52,6 @@ with poor surface visibility. The poor surface visibility is due
 to the fact that smoke, dust, and other particles cannot rise
 out of the air mass and are instead trapped near the surface.
 A stable air mass can produce low stratus clouds and fog.
+
+
+![Figure 12-10. Circulation pattern about areas of high and low  pressure.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-08-circulation-pattern-about-areas-of-high-and-low-.png)

@@ -1811,3 +1811,6 @@ Chapter 7, Section II
 Using an Electronic Flight Display
 
 WPT _ _ _ _ _ _ DIS _ _ ._ NM DTK _ _ _° TRK   360°
+
+
+![Figure 7-3. Pitch attitude and airspeed in level flight, normal  cruise speed.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-00-pitch-attitude-and-airspeed-in-level-flight-fast.png)

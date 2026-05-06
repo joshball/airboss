@@ -27,3 +27,6 @@ short” or crossing instructions when approaching an entrance
 to a runway. Scan the full length of the runway and the final
 approaches before entering or crossing any runway, even if
 ATC has issued a clearance.
+
+
+![Figure 14-52. Runway 13-31 holding position sign and marking  located on Taxiway Charlie.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-54-runway-13-31-holding-position-sign-and-marking-l.png)

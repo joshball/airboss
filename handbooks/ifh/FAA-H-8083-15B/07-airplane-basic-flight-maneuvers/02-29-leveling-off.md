@@ -10,3 +10,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Leveling Off
+
+![Figure 7-65. Constant rate climbs.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-66-constant-rate-climbs.png)

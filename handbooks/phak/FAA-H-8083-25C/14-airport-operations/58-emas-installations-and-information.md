@@ -52,3 +52,6 @@ Lead in ramp
 Base surface
 Base surface
 Figure 14-56. Diagram of an EMASMAX system.
+
+
+![Figure 14-58. A Bombardier CRJ-200 regional jet overran the  runway at Yeager Airport (KCRW) in Charleston, West Virginia.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-58-a-bombardier-crj-200-regional-jet-overran-the-ru.png)

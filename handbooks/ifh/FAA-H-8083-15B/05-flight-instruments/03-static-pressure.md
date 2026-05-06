@@ -29,3 +29,6 @@ ASI, sensitive altimeter, and vertical speed indicator (VSI).
 All three instruments receive static air pressure for operation
 with only the ASI receiving both pitot and static pressure.
 [Figure 5-2]
+
+
+![Figure 5-3. Sensitive altimeter components.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-02-sensitive-altimeter-components.png)

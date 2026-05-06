@@ -90,3 +90,6 @@ Common errors when performing steep turns are:
 11. Failure to scan for other traffic during the maneuver
 12. Attempting to start recovery prematurely
 13. Failure to stop the turn on the designated heading
+
+
+![Figure 10-2. Steep spiral.](/handbooks/afh/FAA-H-8083-3C/figures/fig-10-01-steep-spiral.png)

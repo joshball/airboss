@@ -41,3 +41,6 @@ which in turn causes the air to turn about the object within
 the air stream. As a result of this change, the velocity about
 the object changes in both magnitude and direction, in turn
 resulting in a measurable velocity force and direction.
+
+
+![Figure 4-6. Airfoil designs.](/handbooks/phak/FAA-H-8083-25C/figures/fig-4-04-airfoil-designs.png)

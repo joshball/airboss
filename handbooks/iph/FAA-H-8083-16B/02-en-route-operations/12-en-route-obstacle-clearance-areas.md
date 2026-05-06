@@ -81,3 +81,6 @@ The 4.5° value became the basis for primary area obstacle
 clearance criteria, airway and route widths, and the ATC
 separation procedures. The 6.7° value provides secondary
 obstacle clearance area dimensions.
+
+
+![Figure 2-12. Ultra high altitude sectors.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-10-ultra-high-altitude-sectors.png)

@@ -43,3 +43,6 @@ the important design and operational characteristics of the
 aircraft, aircraft engine, or propeller. The TCDS defines the
 product and are available to the public from the FAA website
 at www.faa.gov.
+
+
+![Figure 3-2. Illustrates the pitch, roll, and yaw motion of the aircraft along the lateral, longitudinal, and vertical axes, respectively.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-00-illustrates-the-pitch-roll-and-yaw-motion-of-the.png)

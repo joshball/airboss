@@ -35,3 +35,6 @@ navigation equipment handles the navigation database.
 The manufacturer’s documentation is the pilot’s best source
 of information regarding the capabilities and limitations of
 a specific database. [Figure 6-30]
+
+
+![Figure 6-30. Database rolls.](/handbooks/iph/FAA-H-8083-16B/figures/fig-6-23-database-rolls.png)

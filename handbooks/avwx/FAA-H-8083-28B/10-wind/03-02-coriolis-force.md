@@ -44,9 +44,3 @@ Figure 10-4. Coriolis Force Variations Across the Earth
 Coriolis force deflects moving objects to the right of their path in the Northern Hemisphere and to the left
 of their path in the Southern Hemisphere. Coriolis deflection is maximized at the poles and zero at
 the Equator.
-
-![Figure 10-2. Magnitude of Pressure Gradient Force](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-2-00-magnitude-of-pressure-gradient-force.png)
-
-![Figure 10-3. Illustration of Coriolis Force](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-2-01-illustration-of-coriolis-force.png)
-
-![Figure 10-4. Coriolis Force Variations Across the Earth](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-2-02-coriolis-force-variations-across-the-earth.png)

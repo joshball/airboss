@@ -106,13 +106,3 @@ so this imagery is available 24 hours a day.
 The scale is in degrees Celsius. Blue/green colors indicate moisture and/or clouds in the mid/upper
 troposphere, while dark gray/orange/red colors indicate dry air in the mid/upper troposphere.
 Figure 24-24. Water Vapor Satellite Image—U.S. Example
-
-![Figure 24-17. GeoColor Satellite Image—U.S. Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-2-00-geocolor-satellite-image-u-s-example.png)
-
-![Figure 24-18. Visible Satellite Image—U.S. Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-2-01-visible-satellite-image-u-s-example.png)
-
-![Figure 24-19. Visible Satellite Image Data Legend](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-2-02-visible-satellite-image-data-legend.png)
-
-![Figure 24-20. Infrared (Color) Satellite Image—U.S. Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-2-03-infrared-color-satellite-image-u-s-example.png)
-
-![Figure 24-21. Unenhanced Infrared (Black and White) Satellite Image—U.S. Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-2-04-unenhanced-infrared-black-and-white-satellite-im.png)

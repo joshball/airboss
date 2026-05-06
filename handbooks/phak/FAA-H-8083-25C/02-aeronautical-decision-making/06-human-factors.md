@@ -50,3 +50,6 @@ entire aviation community benefits greatly from human
 factors research and development as it helps better understand
 how humans can most safely and efficiently perform their
 jobs and improve the tools and systems in which they interact.
+
+
+![Figure 2-6. Example of a more comprehensive risk assessment program.](/handbooks/phak/FAA-H-8083-25C/figures/fig-2-05-example-of-a-more-comprehensive-risk-assessment-.png)

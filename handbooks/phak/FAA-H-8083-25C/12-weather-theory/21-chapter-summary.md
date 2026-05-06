@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Chapter Summary
+
+![Figure 12-21. Radiation fog.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-19-radiation-fog.png)

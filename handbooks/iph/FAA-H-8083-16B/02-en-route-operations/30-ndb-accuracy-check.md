@@ -18,3 +18,6 @@ ndicate that the NDB is out of service, even though it may
 till be transmitting (for instance for maintenance or test
 purposes). If an incorrect IDENT is heard, then the NDB
 should not be used.
+
+
+![Figure 2-30. Joint Victor/RNAV airway.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-24-joint-victor-rnav-airway.png)

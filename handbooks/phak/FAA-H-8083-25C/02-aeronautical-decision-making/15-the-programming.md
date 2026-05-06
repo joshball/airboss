@@ -41,3 +41,6 @@ by the current situation. It is often said that failure to make
 a decision is a decision. Under SRM and the 5 Ps, even the
 decision to make no changes to the current plan is made
 through a careful consideration of all the risk factors present.
+
+
+![Figure 2-15. Typical operational pitfalls requiring pilot awareness.](/handbooks/phak/FAA-H-8083-25C/figures/fig-2-15-typical-operational-pitfalls-requiring-pilot-awa.png)

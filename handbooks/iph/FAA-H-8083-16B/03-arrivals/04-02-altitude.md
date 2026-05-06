@@ -135,3 +135,6 @@ a segment of a published route. If no altitude is assigned
 with the approach clearance and the aircraft is already on a
 published segment, the pilot can descend to its minimum
 altitude for that segment of the approach.
+
+
+![Figure 3-15. Two RNAV (GPS) approaches to Runway 15R at Baltimore. A controller issuing a clearance for one of these approaches  would speak the identifying letter—for example, “...cleared for the RNAV (GPS) Yankee approach, Runway 15R...”](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-14-two-rnav-gps-approaches-to-runway-15r-at-baltimo.png)

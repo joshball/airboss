@@ -127,16 +127,6 @@ a change from the cool, moist air (and associated stratus cloud) to the dry and 
 above.
 Figure 25-24. Skew-T Diagram—Cloud Top Example
 
-![Figure 25-19. Unified Surface Analysis Chart Example with Fixed Area Coverage over Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-1-00-schematic-of-500-mb-constant-pressure-chart.png)
-
-![Figure 25-20. Schematic of 500 mb Constant-Pressure Chart](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-2-00-example-of-a-500-mb-constant-pressure-chart.png)
-
-![Figure 25-21. Example of a 500 mb Constant-Pressure Chart](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-2-01-skew-t-diagram-example.png)
-
-![Figure 25-22. Skew-T Diagram Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-2-02-skew-t-diagram-multiple-freezing-level-example.png)
-
-![Figure 25-23. Skew-T Diagram—Multiple Freezing Level Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-2-03-skew-t-diagram-cloud-top-example.png)
-
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-25-5-00-common-constant-pressure-charts-chart-pressure-a.html">
 <table><caption>Table 25-3. Common Constant-Pressure Charts 
 Chart 

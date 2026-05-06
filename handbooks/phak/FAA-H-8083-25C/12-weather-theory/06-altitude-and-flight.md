@@ -24,3 +24,6 @@ of 8,000 feet. [Figure 12-9]. It is also true that at higher
 altitudes, due to the decreased density of the air, aircraft
 engines and propellers are less efficient. This leads to reduced
 rates of climb and a greater ground run for obstacle clearance.
+
+
+![Figure 12-6. Although mercurial barometers are no longer used  in the U. S., they are still a good historical reference for where the altimeter setting came from (inches of mercury).](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-04-although-mercurial-barometers-are-no-longer-used.png)

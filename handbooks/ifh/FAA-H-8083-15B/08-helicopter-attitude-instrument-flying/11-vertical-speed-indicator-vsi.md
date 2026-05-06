@@ -46,3 +46,6 @@ For example, if a descent of 100 feet per minute (fpm) is the
 vertical speed indication when the helicopter is in level flight,
 use that indication as level flight. Any deviation from that
 reading would indicate a change in attitude.
+
+
+![Figure 8-11. Flight instrument indications during climb entry for a constant-airspeed climb.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-8-10-flight-instrument-indications-during-climb-entry.png)

@@ -16,3 +16,6 @@ other airplanes from striking the airplane unnecessarily. Whenever possible, the
 forecast wind. Often airports have airplane tie downs located on ramp areas which may or may not be aligned with the wind or
 provide a significant choice in parking location. After stopping in the desired direction, the airplane should be allowed to roll straight
 ahead enough to straighten the nosewheel or tailwheel.
+
+
+![Figure 2-12. Evidence of fuel leakage can be found along rivet lines.](/handbooks/afh/FAA-H-8083-3C/figures/fig-2-11-evidence-of-fuel-leakage-can-be-found-along-rive.png)

@@ -58,3 +58,6 @@ and autopilot—but if you do not have much weather flying
 experience or practice in using this kind of equipment, you
 cannot rely on the airplane’s capability to compensate for
 your own lack of experience.
+
+
+![Figure 2-17. When possible, have a passenger reconfirm that critical  tasks are completed.](/handbooks/phak/FAA-H-8083-25C/figures/fig-2-16-when-possible-have-a-passenger-reconfirm-that-cr.png)

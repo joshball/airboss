@@ -30,3 +30,6 @@ mild disorientation to total incapacitation, depending on
 body tolerance and altitude. Supplemental oxygen or cabin
 pressurization systems help pilots fly at higher altitudes and
 overcome the effects of oxygen deprivation.
+
+
+![Figure 12-7. Aneroid barometer.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-05-aneroid-barometer.png)

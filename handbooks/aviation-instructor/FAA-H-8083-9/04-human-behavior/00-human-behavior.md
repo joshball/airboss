@@ -631,3 +631,19 @@ This chapter discussed how human behavior affects learning, the effect of human 
 to prevent learning, how adults learn, and the flight instructor’s role in determining a learner’s future in the aviation community. For
 more information on these topics, it is recommended the instructor read a general educational psychology text or visit one of the many
 online sites devoted to education.
+
+![Figure 2-1. The average age of a learner pilot is 34, while the average age of a maintenance learner is 25.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-4-00-the-average-age-of-a-learner-pilot-is-34-while-t.png)
+
+![Figure 2-2. Insecure and unpleasant training situations inhibit learning.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-4-01-insecure-and-unpleasant-training-situations-inhi.png)
+
+![Figure 2-3. Maslow’s Hierarchy of Needs.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-4-02-maslow-s-hierarchy-of-needs.png)
+
+![Figure 2-4. Daniel Kahneman developed a two-system view of human behaviors that affect decision-making: System 1 (fast)  represents the automatic responses, while System 2 (slow) represents the more logical and deliberate considerations used for decision-making.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-4-03-daniel-kahneman-developed-a-two-system-view-of-h.png)
+
+![Figure 2-5. Several common defense mechanisms may apply to aviation learners.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-4-04-several-common-defense-mechanisms-may-apply-to-a.png)
+
+![Figure 2-6. The assignment of impossible or unreasonable goals discourages the learner, diminishes effort, and retards the learning  process.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-4-05-the-assignment-of-impossible-or-unreasonable-goa.png)
+
+![Figure 2-7. Poor preparation leads to spotty coverage, misplaced emphasis, unnecessary repetition, and a lack of confidence on the  part of the learner. The instructor should always have a plan.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-4-06-poor-preparation-leads-to-spotty-coverage-mispla.png)
+
+![Figure 2-8. A learner with marked changes in mood during different lessons, such as excellent morale followed by deep depression, is  indicative of an abnormal reaction to stress.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-4-07-a-learner-with-marked-changes-in-mood-during-dif.png)

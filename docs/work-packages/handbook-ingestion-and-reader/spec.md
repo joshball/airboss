@@ -145,7 +145,7 @@ Unique: `(reference_id, code)`. Indexes: `(reference_id, parent_id, ordinal)` fo
 
 ### study.handbook_figure
 
-Per-figure record. Bound to a section by FK; ordered by `ordinal` within the section.
+Per-figure record. Bound to a section by FK; ordered by `ordinal` within the section. Figure-caption pairing correctness (the line-anchored caption regex, doc-wide image dictionary, vector-figure rasterizer, caption-number rescoping that drives this row's `section_id`) is owned by the [handbook-figure-pairing](../handbook-figure-pairing/spec.md) work package.
 
 | Column      | Type        | Constraints                                                  | Notes                                                                                                |
 | ----------- | ----------- | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- |

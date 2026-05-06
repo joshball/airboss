@@ -10,3 +10,9 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Horizontal Situation Indicator (HSI)
+
+![Figure 7-53. Attitude indicator showing a 15° left bank.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-52-attitude-indicator-showing-a-15-left-bank.png)
+
+![Figure 7-54. Slip/skid and turn rate indicator.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-52-attitude-indicator-showing-a-15-left-bank.png)
+
+![Figure 7-52. Attitude indicator.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-54-attitude-indicator.png)

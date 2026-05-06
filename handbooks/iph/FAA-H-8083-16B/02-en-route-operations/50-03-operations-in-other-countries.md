@@ -61,3 +61,6 @@ settings in hectopascals (hPa) (millibars). Therefore, it is
 imperative that pilots or on-board equipment are able
 to accurately convert inches of mercury to hPa, or hPa to
 inches of mercury.
+
+
+![Figure 2-67. Altimeter setting changes.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-61-altimeter-setting-changes.png)

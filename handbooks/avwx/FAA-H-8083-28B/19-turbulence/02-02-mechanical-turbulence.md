@@ -20,7 +20,3 @@ eddies (see Figure 19-4). An aircraft flying through these eddies experiences me
 Figure 19-4. Mechanical Turbulence
 The intensity of mechanical turbulence depends on wind speed, surface roughness, size of the obstructions,
 and stability of the air. The higher the speed and/or the rougher the surface, the greater the turbulence.
-
-![Figure 19-3. Thunderstorm with Shelf Cloud](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-2-00-thunderstorm-with-shelf-cloud.png)
-
-![Figure 19-4. Mechanical Turbulence](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-2-01-mechanical-turbulence.png)

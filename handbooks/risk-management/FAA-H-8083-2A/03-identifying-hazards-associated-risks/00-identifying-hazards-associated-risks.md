@@ -549,17 +549,25 @@ The risk assessment and mitigation for this case study will continue in Chapters
 Poor risk management is a common factor in many general aviation accidents. Pilots can use the PAVE checklist before flight
 to identify hazards. Pilots can use a FRAT to organize identified hazards and associated risks for additional analysis.
 
-![Figure 3-3. IMSAFE checklist.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-4-2-00-imsafe-checklist.png)
+![Figure 3-1. Pilots should examine their decisions carefully to ensure that their choices have not been influenced by a](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-00-pilots-should-examine-their-decisions-carefully-.png)
 
-![Figure 3-4. Elkins, WV airport.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-6-00-elkins-wv-airport.png)
+![Figure 3-2. Antidotes to hazardous attitudes.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-01-antidotes-to-hazardous-attitudes.png)
 
-![Figure 3-5. Sectional chart excerpt of Elkins, WV airport.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-6-01-sectional-chart-excerpt-of-elkins-wv-airport.png)
+![Figure 3-3. IMSAFE checklist.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-02-imsafe-checklist.png)
 
-![Figure 3-7. Example Flight Risk Assessment Tool.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-7-1-00-example-flight-risk-assessment-tool.png)
+![Figure 3-4. Elkins, WV airport.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-03-elkins-wv-airport.png)
 
-![Figure 3-8. Aeronautical chart excerpt showing Durango, CO.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-7-2-00-the-direct-route-from-durango-to-santa-rosa.png)
+![Figure 3-5. Sectional chart excerpt of Elkins, WV airport.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-04-sectional-chart-excerpt-of-elkins-wv-airport.png)
 
-![in Figure 3-10. She needs to assess these risks in terms of their likelihood and severity. She strives to complete the risk analysis  so she can return and discuss the situation with the Smiths. 11924](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-8-00-she-needs-to-assess-these-risks-in-terms-of-thei.png)
+![Figure 3-6. Example of a numerical FRAT.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-05-example-of-a-numerical-frat.png)
+
+![Figure 3-7. Example Flight Risk Assessment Tool.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-06-example-flight-risk-assessment-tool.png)
+
+![Figure 3-8. Aeronautical chart excerpt showing Durango, CO.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-07-aeronautical-chart-excerpt-showing-durango-co.png)
+
+![Figure 3-9. The direct route from Durango to Santa Rosa.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-08-the-direct-route-from-durango-to-santa-rosa.png)
+
+![Figure 3-10. Case study FRAT with risks identified.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-09-case-study-frat-with-risks-identified.png)
 
 <div class="handbook-table" data-source="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-3-00-untitled.html">
 <table><thead><tr><th>Hazardous Attitude</th><th>Antidotes</th></tr></thead><tbody><tr><td>Macho

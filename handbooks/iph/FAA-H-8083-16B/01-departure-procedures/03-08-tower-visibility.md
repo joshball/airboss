@@ -15,3 +15,6 @@ Tower Visibility
 Tower visibility is the prevailing visibility determined from
 the airport traffic control tower at locations that also report
 the surface visibility.
+
+
+![Figure 1-11. AWSS installation at Driggs-Reed, Idaho.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-10-awss-installation-at-driggs-reed-idaho.png)

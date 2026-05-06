@@ -20,3 +20,6 @@ rudder and ailerons to maintain the proper amount of drift correction.
 Keep the upwind wing down throughout the round out. If the wings are leveled, the airplane begins drifting and the touchdown occurs
 while drifting. Remember, the primary objective is to land the airplane without subjecting it to any side loads that result from touching
 down while drifting.
+
+
+![Figure 9-17. Crosswind approach and landing.](/handbooks/afh/FAA-H-8083-3C/figures/fig-9-16-crosswind-approach-and-landing.png)

@@ -40,5 +40,3 @@ capacity to hold water vapor.
 6.6 Temperature-Dewpoint Spread (Dewpoint Depression)
 The difference between an air parcel’s temperature and its dewpoint is the dewpoint depression, or
 commonly referred to as the spread. Surface aviation weather reports (e.g., METARs/SPECIs) provide
-
-![Figure 6-2. Temperature Effects on Relative Humidity](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-4-00-temperature-effects-on-relative-humidity.png)

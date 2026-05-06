@@ -61,3 +61,6 @@ brought to a halt when clear of the active runway. Exceptions to this would be t
 the weight from the wings and place it on the wheels. In these cases, AFM/POH guidance should be followed. The pilot should not
 indiscriminately reach out for any switch or control on landing rollout. An inadvertent landing gear retraction while meaning to retract
 the wing flaps may result.
+
+
+![Figure 13-14. Graph depicting relationship of VMC to VS.](/handbooks/afh/FAA-H-8083-3C/figures/fig-13-12-graph-depicting-relationship-of-vmc-to-vs.png)

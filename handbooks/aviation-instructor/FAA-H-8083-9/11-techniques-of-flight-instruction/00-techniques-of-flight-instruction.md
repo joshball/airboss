@@ -487,3 +487,19 @@ techniques, practical strategies flight instructors can use to enhance their ins
 flight controls, use of distractions, simulators and flight training devices, obstacles to learning encountered during flight training, and
 how to evaluate learners. Additional information on recommendations and endorsements can be found in Appendix C, Certificates,
 Ratings, and Endorsements.
+
+![Figure 9-1. The learner prepares to execute a power-off stall maneuver in-flight that was taught in ground school.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-11-00-the-learner-prepares-to-execute-a-power-off-stal.png)
+
+![Figure 9-2. A Level C simulator.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-11-01-a-level-c-simulator.png)
+
+![Figure 9-3. An example of a Level 6 Flight Training Device (FTD).](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-11-02-an-example-of-a-level-6-flight-training-device-f.png)
+
+![Figure 9-4. A level 4 FTD used for procedure training.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-11-03-a-level-4-ftd-used-for-procedure-training.png)
+
+![Figure 9-5. Reinforcing what the learner was taught on the ground is critical to learner knowledge.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-11-04-reinforcing-what-the-learner-was-taught-on-the-g.png)
+
+![Figure 9-6. The demonstration-performance method of teaching has four essential phases.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-11-05-the-demonstration-performance-method-of-teaching.png)
+
+![Figure 9-7. This comparison of steps in the teaching process, the demonstration-performance method, and the telling-and-doing  technique highlights similarities as well as differences. The main difference in the telling-and-doing technique is the important transition, learner tells—instructor does, which occurs between](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-11-06-this-comparison-of-steps-in-the-teaching-process.png)
+
+![Figure 9-8. During this procedure, a visual check is recommended to see that the other person actually has the flight controls. When  returning the controls to the instructor, the learner should follow the same procedure the instructor used when giving control to the](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-11-07-during-this-procedure-a-visual-check-is-recommen.png)

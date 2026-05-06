@@ -69,3 +69,6 @@ Operations. Figure 5-9 illustrates the increase in aircraft
 permitted between FL 180 and FL 410. Most noteworthy,
 however, is the economization that aircraft can take advantage
 of by the higher FLs being available to more aircraft.
+
+
+![Figure 5-16. A magnetic compass. The vertical line is called the  lubber line.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-15-a-magnetic-compass-the-vertical-line-is-called-t.png)

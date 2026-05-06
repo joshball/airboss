@@ -15,3 +15,6 @@ Turn-and-slip indicator
 Gyro rotation
 Standard rate turn index
 Horizontal gyro
+
+
+![Figure 8-31. Angle of attack indicators.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-28-angle-of-attack-indicators.png)

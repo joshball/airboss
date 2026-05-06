@@ -67,3 +67,6 @@ markings, or any combination thereof (14 CFR part 91, section 91.9)
 ⦁ Current weight and balance data
 ⦁ Compass correction card, if required under applicable airworthiness standards
 ⦁ External data plate (14 CFR part 45, section 45.11)
+
+
+![Figure 2-2. A visual inspection of the aircraft before flight is an important step in mitigating airplane flight hazards.](/handbooks/afh/FAA-H-8083-3C/figures/fig-2-01-a-visual-inspection-of-the-aircraft-before-fligh.png)

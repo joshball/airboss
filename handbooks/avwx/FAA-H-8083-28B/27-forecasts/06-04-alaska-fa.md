@@ -80,8 +80,6 @@ Pribilof Islands and Southeast Bering
 Sea
 Central Southeast Alaska
 
-![Figure 27-3. AAWU Flight Advisory and FA Zones—Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-6-4-00-aawu-flight-advisory-and-fa-zones-alaska.png)
-
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-6-4-00-aawu-area-forecast-fa-zones-alaska-1-arctic-coas.html">
 <table><caption>Table 27-9. AAWU Area Forecast (FA) Zones—Alaska 
 1 

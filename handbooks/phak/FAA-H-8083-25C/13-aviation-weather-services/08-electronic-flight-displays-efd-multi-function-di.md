@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Electronic Flight Displays (EFD) /Multi-Function Display (MFD) Weather
+
+![Figure 13-8. Area forecast region map.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-07-area-forecast-region-map.png)

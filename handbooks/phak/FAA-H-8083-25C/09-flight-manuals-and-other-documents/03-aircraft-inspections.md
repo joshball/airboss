@@ -32,3 +32,6 @@ maintenance manual, including the Instructions for
 Continued Airworthiness concerning inspection intervals,
 parts replacement, and life-limited items as applicable to
 the aircraft.
+
+
+![Figure 9-3. Minimum, maximum, and normal operating range  markings on oil gauge.](/handbooks/phak/FAA-H-8083-25C/figures/fig-9-01-minimum-maximum-and-normal-operating-range-marki.png)

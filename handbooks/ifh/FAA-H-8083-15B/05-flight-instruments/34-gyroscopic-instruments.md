@@ -11,3 +11,6 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 # Gyroscopic Instruments
 
 Gyroscopic Instruments
+
+
+![Figure 5-34. The rate gyro in both turn-and-slip indicator and turn  coordinator.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-33-the-rate-gyro-in-both-turn-and-slip-indicator-an.png)

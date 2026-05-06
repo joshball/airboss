@@ -179,3 +179,6 @@ the Earth’s magnetic field each time the current in the center coil
 reverses. This flux causes current to flow in the three pickup coils.
 Figure 5-24. The current in each of the three pickup coils changes
 with the heading of the aircraft.
+
+
+![Figure 5-25. The pictorial navigation indicator is commonly  referred to as an HSI.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-25-the-pictorial-navigation-indicator-is-commonly-r.png)

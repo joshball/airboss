@@ -33,3 +33,6 @@ GPS WP, a pilot is over the fix when the GPS distance
 from the active WP equals the charted DME value, and
 the aircraft is established on the appropriate bearing
 or course.
+
+
+![Figure 9-40. MLS coverage volumes, 3-D representation.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-38-mls-coverage-volumes-3-d-representation.png)

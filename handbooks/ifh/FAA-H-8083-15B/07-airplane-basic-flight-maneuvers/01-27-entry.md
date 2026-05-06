@@ -10,3 +10,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Entry
+
+![Figure 7-29. Level off at cruising speed.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-11-pitch-correction-greater-than-100-feet-one-bar-c.png)

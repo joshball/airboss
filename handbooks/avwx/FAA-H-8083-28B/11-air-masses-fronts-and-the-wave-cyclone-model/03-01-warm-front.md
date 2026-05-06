@@ -38,5 +38,3 @@ the south-southwest. With warming temperatures, the dewpoint rises and then leve
 a slight rise in barometric pressure, followed by a decrease of barometric pressure.
 
 Figure 11-5. Warm Front
-
-![Figure 11-5. Warm Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-1-00-warm-front.png)

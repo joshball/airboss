@@ -30,3 +30,8 @@ Figure 5-48. Corkscrewing slipstream.
 Corkscrewing effect of the slipstream
 Gyroscopic action of the propeller
 Asymmetric loading of the propeller (P-factor)
+
+
+![Figure 5-45. Propeller slippage.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-42-propeller-slippage.png)
+
+![Figure 5-46. Propeller tips travel faster than the hub.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-43-propeller-tips-travel-faster-than-the-hub.png)

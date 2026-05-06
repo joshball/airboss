@@ -15,3 +15,6 @@ Prior to takeoff, the ASI should read zero. However, if there
 is a strong wind blowing directly into the pitot tube, the ASI
 may read higher than zero. When beginning the takeoff,
 make sure the airspeed is increasing at an appropriate rate.
+
+
+![Figure 8-8. Single engine airspeed indicator (ASI).](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-06-single-engine-airspeed-indicator-asi.png)

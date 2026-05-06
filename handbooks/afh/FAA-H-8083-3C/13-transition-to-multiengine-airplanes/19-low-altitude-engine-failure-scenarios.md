@@ -24,3 +24,6 @@ commences. An engine failure before a predetermined airspeed or point results in
 airspeed and point, with the gear up, and climb performance assured result in a continued takeoff. With loss of an engine, it is
 paramount to maintain airplane control and comply with the manufacturer’s recommended emergency procedures. Complete failure
 of one engine shortly after takeoff can be broadly categorized into one of three following scenarios.
+
+
+![Figure 13-19. Engine failure on takeoff, inadequate climb performance.](/handbooks/afh/FAA-H-8083-3C/figures/fig-13-17-engine-failure-on-takeoff-inadequate-climb-perfo.png)

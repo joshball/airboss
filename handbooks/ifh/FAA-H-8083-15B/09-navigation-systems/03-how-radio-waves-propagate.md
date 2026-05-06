@@ -23,3 +23,6 @@ energy of radiation is absorbed by molecules of air, water,
 and dust. The characteristics of radio wave propagation vary
 according to the signal frequency and the design, use, and
 limitations of the equipment.
+
+
+![Figure 9-3. Relative bearing (RB) on a fixed-card indicator. Note  that the card always indicates 360° or north. In this case, the RB to the station is 135° to the right. If the aircraft were on a magnetic heading of 360°, then the magnetic bearing (MB) would also be 135°.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-02-relative-bearing-rb-on-a-fixed-card-indicator-no.png)

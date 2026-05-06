@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Minimum Equipment Lists (MEL) and Operations With Inoperative Equipment
+
+![Figure 9-4. Manifold pressure gauge (top) and tachometer (bottom).](/handbooks/phak/FAA-H-8083-25C/figures/fig-9-02-manifold-pressure-gauge-top-and-tachometer-botto.png)

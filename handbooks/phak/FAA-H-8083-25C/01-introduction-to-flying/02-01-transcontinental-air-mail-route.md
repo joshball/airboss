@@ -44,3 +44,6 @@ course lights flashed a code to identify the beacon’s number.
 The tower usually stood in the center of a concrete arrow
 70 feet long. A generator shed, where required, stood at the
 “feather” end of the arrow. [Figure 1-7]
+
+
+![Figure 1-6. The transcontinental airmail route ran from New York  to San Francisco.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-04-the-transcontinental-airmail-route-ran-from-new-.png)

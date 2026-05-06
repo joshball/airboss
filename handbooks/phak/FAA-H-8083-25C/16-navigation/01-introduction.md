@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Introduction
+
+![Figure 16-1. Sectional chart and legend.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-00-sectional-chart-and-legend.png)

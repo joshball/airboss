@@ -20,33 +20,13 @@ IFR Flight
 Chapter 10
 
 
-![Figure 10-1. Flight plan form.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-10-00-flight-plan-form.png)
-
-![Figure 10-3. Standard terminal arrival route (STAR).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-10-01-standard-terminal-arrival-route-star.png)
-
-![Figure 10-8. Monroeville, Alabama (MVC) VOR or GPS Rwy 3 Approach: An approach procedure at an airport without an operating  control tower.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-10-02-monroeville-alabama-mvc-vor-or-gps-rwy-3-approac.png)
-
-![Figure 10-9. Gulfport, Mississippi (GPT) ILS or LOC Rwy 14 Approach: An instrument procedure chart with maximum ATC facilities  available.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-10-03-gulfport-mississippi-gpt-ils-or-loc-rwy-14-appro.png)
-
-![Figure 10-11. ILS RWY 7 Troy, Alabama.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-10-04-ils-rwy-7-troy-alabama.png)
-
-![Figure 10-18. Route planning.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-10-05-route-planning.png)
-
-![Figure 10-19. Navigation log.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-10-00-flight-plan-form.png)
-
-|  | IFR Flight |
-| --- | --- |
-| Introduction<br>This chapter is a discussion of conducting a flight under<br>instrument flight rules (IFR). It also explains the sources for<br>flight planning, the conditions associated with instrument<br>flight, and the procedures used for each phase of IFR flight:<br>departure, en route, and approach. The chapter concludes<br>with an example of an IFR flight that applies many of the<br>procedures discussed in the chapter. |  |
-
-<a class="handbook-table-source" href="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-10-00-untitled.html">Open original</a>
-
 | a |
 | --- |
 | c<br>b |
 
-<a class="handbook-table-source" href="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-10-01-untitled.html">Open original</a>
+<a class="handbook-table-source" href="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-10-00-untitled.html">Open original</a>
 
-<div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-10-02-untitled.html">
+<div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-10-01-untitled.html">
 <table><thead><tr><th>ects the runway
 rline at less than
 angle, and the
@@ -55,7 +35,7 @@ gh to establish a
 leg.</th></tr></thead><tbody></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-10-03-untitled.html">
+<div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-10-02-untitled.html">
 <table><thead><tr><th>0 °C to –10 °C
 –10 °C to –15 °C
 –15 °C to –20°C</th><th>Clear
@@ -63,7 +43,7 @@ Mixed clear and rime
 Rime</th></tr></thead><tbody></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-10-04-untitled.html">
+<div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-10-03-untitled.html">
 <table><thead><tr><th>FLIGHT LOG</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td>TIME</td><td></td><td></td><td>DISTANCE</td><td>FUEL</td><td></td><td></td><td></td></tr><tr><td>TAKE OFF
 1600 E</td><td>LANDING</td><td></td><td>TOTAL
 228</td><td>REQUIRED
@@ -76,6 +56,6 @@ ATE</td><td>ETE</td><td>ALTITUDE</td><td>REMARKS</td></tr><tr><td></td><td>FREQ<
 Regional</td><td>PNS</td><td>085</td><td>91</td><td>+35</td><td></td><td>3000</td><td>18 Gal</td></tr><tr><td></td><td></td><td></td><td>0</td><td></td><td></td><td>158</td><td></td></tr></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-10-05-untitled.html">
+<div class="handbook-table" data-source="/handbooks/ifh/FAA-H-8083-15B/tables/tbl-10-04-untitled.html">
 <table><thead><tr><th>ATIS</th><th></th><th></th></tr></thead><tbody><tr><td>DEPERTURE</td><td></td><td>ARRIVAL</td></tr><tr><td>INFORMATION</td><td></td><td>INFORMATION</td></tr><tr><td>CEILING</td><td></td><td>CEILING</td></tr><tr><td>VISIBILITY</td><td></td><td>VISIBILITY</td></tr><tr><td>TEMP / DEWPOINT</td><td></td><td>TEMP / DEWPOINT</td></tr><tr><td>WINDS</td><td></td><td>WINDS</td></tr><tr><td>ALTIMETER</td><td></td><td>ALTIMETER</td></tr><tr><td>RWY IN USE</td><td></td><td>RWY IN USE</td></tr><tr><td>REMARKS</td><td></td><td>REMARKS</td></tr></tbody></table>
 </div>

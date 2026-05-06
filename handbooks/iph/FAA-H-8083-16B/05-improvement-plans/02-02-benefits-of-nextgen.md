@@ -46,3 +46,8 @@ During busy traffic periods, NextGen will rely on aircraft to
 fly precise routes into and out of many airports to increase
 throughput. For more information on NextGen, visit www.
 faa.gov/nextgen.
+
+
+![Figure 5-10. Ground-Based Augmentation System (GBAS).](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-09-ground-based-augmentation-system-gbas.png)
+
+![Figure 5-11. NextGen improves airport surface movements, reduces  spacing and separation requirements, and better manages the overall flows into and out of busy airports.](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-10-nextgen-improves-airport-surface-movements-reduc.png)

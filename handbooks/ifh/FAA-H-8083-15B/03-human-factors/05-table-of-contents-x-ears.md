@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Table of Contents x Ears
+
+![Figure 3-5. Angular acceleration.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-3-05-angular-acceleration.png)

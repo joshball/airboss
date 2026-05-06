@@ -35,5 +35,3 @@ advisory.
 To upgrade a thunderstorm advisory to include severe thunderstorms.
 To upgrade an AIRMET to include isolated severe turbulence or icing. If greater than isolated
 severe turbulence or icing is occurring, then a new CWA should be issued.
-
-![Figure 26-8. CWSU Areas of Responsibility](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-4-2-00-cwsu-areas-of-responsibility.png)

@@ -15,3 +15,6 @@ Disorientation
 The sensory system responsible for most of the illusions
 leading to spatial disorientation is the vestibular system.
 Visual illusions can also cause spatial disorientation.
+
+
+![Figure 3-7. Graveyard spiral.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-3-06-graveyard-spiral.png)

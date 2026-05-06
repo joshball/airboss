@@ -27,5 +27,3 @@ before lift-off. Also, a smaller initial climb gradient occurs during takeoff, w
 clear obstacles at the end of the runway. During a landing, a longer landing roll is needed because the
 aircraft will touch down at a higher groundspeed. Wind should always be considered in takeoff performance
 planning.
-
-![Figure 10-22. Crosswind Climb Flightpath](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-7-2-00-crosswind-climb-flightpath.png)

@@ -96,3 +96,6 @@ a D-shaped symbol with a mileage number inside
 .
 [Figure 1-4] Approved IFR global positioning system (GPS)
 units can also be used to report intersections.
+
+
+![Figure 1-11. IAP plan view and symbol legends.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-10-iap-plan-view-and-symbol-legends.png)

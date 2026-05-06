@@ -134,3 +134,6 @@ NE-1, 23 SEP 2010 to 21 OCT 2010
 NE-1, 23 SEP 2010 to 21 OCT 2010
 Procedure designed for noise abatement purposes
 Figure 1-37. Noise abatement SID.
+
+
+![Figure 1-33. Crossing altitude is there to support an ATC requirement.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-33-crossing-altitude-is-there-to-support-an-atc-req.png)

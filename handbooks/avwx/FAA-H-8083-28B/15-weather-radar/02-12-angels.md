@@ -21,5 +21,3 @@ Angels typically only appear when the WSR-88D radar is in Clear Air Mode because
 reflectivity (see Section 24.6.1.3 for additional information on modes). Echoes caused by birds are typically
 detected in the morning when they take flight for the day. Echoes caused by bats are typically detected in
 the evening when they are departing from caves.
-
-![Figure 15-15. WSR-88D Weather Radar Ghost Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-12-00-wsr-88d-weather-radar-ghost-example.png)

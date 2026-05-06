@@ -41,3 +41,6 @@ using PAVE, CARE and TEAM, and the DECIDE models.
 They provide assistance in organizing the decision process.
 All these models have been identified as helpful to the single
 pilot in organizing critical decisions.
+
+
+![Figure 2-8. Human factors effects pilots, aviation maintenance technicians (AMTs) and air traffic control (ATC).](/handbooks/phak/FAA-H-8083-25C/figures/fig-2-07-human-factors-effects-pilots-aviation-maintenanc.png)

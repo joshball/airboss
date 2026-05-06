@@ -36,3 +36,6 @@ with ATC by radio. If using this procedure, be certain the
 remainder of the flight can be conducted under VFR. It is
 essential that IFR flight plans be cancelled expeditiously. This
 allows other IFR traffic to utilize the airspace.
+
+
+![Figure 10-9. Gulfport, Mississippi (GPT) ILS or LOC Rwy 14 Approach: An instrument procedure chart with maximum ATC facilities  available.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-10-08-gulfport-mississippi-gpt-ils-or-loc-rwy-14-appro.png)

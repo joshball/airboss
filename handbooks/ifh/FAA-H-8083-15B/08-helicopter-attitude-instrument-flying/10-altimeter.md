@@ -42,3 +42,6 @@ gives an immediate indication of a change or a need for
 change in pitch attitude. Since the altimeter provides the
 most pertinent information regarding pitch in level flight, it
 is considered primary for pitch.
+
+
+![Figure 8-10. Flight instrument indications in straight-and-level flight with airspeed decreasing.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-8-09-flight-instrument-indications-in-straight-and-le.png)

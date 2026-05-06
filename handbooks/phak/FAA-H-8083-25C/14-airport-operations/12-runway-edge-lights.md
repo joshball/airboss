@@ -36,3 +36,6 @@ have variable intensity settings. These lights are white, except
 on instrument runways where amber lights are used on the
 last 2,000 feet or half the length of the runway, whichever
 is less. The lights marking the end of the runway are red.
+
+
+![Figure 14-12. Surface painted runway holding position signs for  Runway 32R-14L along with the enhanced taxiway centerline marking.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-11-surface-painted-runway-holding-position-signs-fo.png)

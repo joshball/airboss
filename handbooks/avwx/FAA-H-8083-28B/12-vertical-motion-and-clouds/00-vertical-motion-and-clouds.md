@@ -222,17 +222,17 @@ Surface–6,500 ft (0–2 km)
 Surface–6,500 ft (0–2 km)
 Surface–6,500 ft (0–2 km)
 
-![Figure 12-1. Unsaturated Ascending/Descending Air Parcel Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-2-00-unsaturated-ascending-descending-air-parcel-exam.png)
+![Figure 12-1. Unsaturated Ascending/Descending Air Parcel Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-00-unsaturated-ascending-descending-air-parcel-exam.png)
 
-![Figure 12-2. Ascending Air Parcel That Becomes Saturated Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-3-00-ascending-air-parcel-that-becomes-saturated-exam.png)
+![Figure 12-2. Ascending Air Parcel That Becomes Saturated Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-01-ascending-air-parcel-that-becomes-saturated-exam.png)
 
-![Figure 12-3. Descending Air Parcel Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-3-01-descending-air-parcel-example.png)
+![Figure 12-3. Descending Air Parcel Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-02-descending-air-parcel-example.png)
 
-![Figure 12-4. Orographic Effects Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-2-00-orographic-effects-example.png)
+![Figure 12-4. Orographic Effects Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-03-orographic-effects-example.png)
 
-![Figure 12-5. Frictional Effects](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-3-00-frictional-effects.png)
+![Figure 12-5. Frictional Effects](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-04-frictional-effects.png)
 
-![Figure 12-6. Frontal Lift](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-3-01-frontal-lift.png)
+![Figure 12-6. Frontal Lift](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-05-frontal-lift.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-12-00-air-parcel-vertical-motion-characteristics-parce.html">
 <table><caption>Table 12-1. Air Parcel Vertical Motion Characteristics 

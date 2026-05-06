@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Section I -- Airplane Attitude Instrument Flying Using Analog Instrumentation
+
+![Figure 6-1. Control instruments.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-00-control-instruments.png)

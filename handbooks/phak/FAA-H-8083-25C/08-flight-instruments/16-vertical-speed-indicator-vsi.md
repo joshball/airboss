@@ -14,3 +14,6 @@ Vertical Speed Indicator (VSI)
 The VSI is displayed to the right of the altimeter tape and can
 take the form of an arced indicator or a vertical speed tape.
 [Figure 8-12] Both are equipped with a vertical speed bug.
+
+
+![Figure 8-16. Airspeed trend vector.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-13-airspeed-trend-vector.png)

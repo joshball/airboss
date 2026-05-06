@@ -10,3 +10,5 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Forces in Turns
+
+![Figure 5-34. Forces during normal, coordinated turn at constant altitude.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-32-forces-during-normal-coordinated-turn-at-constan.png)

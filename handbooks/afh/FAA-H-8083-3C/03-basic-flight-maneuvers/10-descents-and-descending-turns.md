@@ -34,3 +34,6 @@ specifies the procedure. In general, emergency descent procedures are high drag,
 requiring a specific airplane configuration (such as power to idle, propellers forward, landing gear
 extended, and flaps retracted), and a specific emergency descent airspeed. Emergency descent maneuvers
 often include turns.
+
+
+![Figure 3-10. Level turn to the left.](/handbooks/afh/FAA-H-8083-3C/figures/fig-3-09-level-turn-to-the-left.png)

@@ -19,3 +19,6 @@ onset as a fully integrated system comprised of the airframe,
 autopilot, and FDS. This trend of complete integration, once
 seen only in large commercial aircraft, is now becoming
 common in general aviation.
+
+
+![Figure 5-47. Example of a multi-function display (MFD).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-46-example-of-a-multi-function-display-mfd.png)

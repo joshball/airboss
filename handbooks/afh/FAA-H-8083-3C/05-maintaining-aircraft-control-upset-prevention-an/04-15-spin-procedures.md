@@ -35,3 +35,6 @@ pilot should take care with handling of the power (throttle), and apply carburet
 manufacturer’s recommendations
 There are four phases of a spin: entry, incipient, developed, and recovery. [Figure 5-16]
 Figure 5-16. Spin Entry and Recovery.
+
+
+![Figure 5-16. Spin Entry and Recovery.](/handbooks/afh/FAA-H-8083-3C/figures/fig-5-15-spin-entry-and-recovery.png)

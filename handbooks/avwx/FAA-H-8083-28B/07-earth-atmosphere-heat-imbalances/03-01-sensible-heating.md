@@ -32,5 +32,3 @@ shallow layer of air near the ground. The heated air expands, becomes less dense
 cooler air, and rises. Through this process, a large bubble of warm air called a thermal rises and transfers
 heat energy upwards (see Figure 7-3). Cooler, denser air sinks toward the ground to replace the rising air.
 This cooler air becomes heated in turn, rises, and repeats the cycle.
-
-![Figure 7-2. Greenhouse Effect on Nighttime Radiational Cooling](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-3-1-00-greenhouse-effect-on-nighttime-radiational-cooli.png)

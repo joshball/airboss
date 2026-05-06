@@ -198,3 +198,6 @@ overshooting the course.)
 Turn to the MH corresponding to the selected course,
 and follow tracking procedures inbound or outbound.
 Course interception is illustrated in Figure 9-16.
+
+
+![Figure 9-16. Course interception (VOR).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-15-course-interception-vor.png)

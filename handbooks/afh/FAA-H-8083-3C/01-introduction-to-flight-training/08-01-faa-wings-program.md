@@ -25,3 +25,6 @@ policies.
 This chapter discussed some of the concepts and goals of primary and intermediate flight training. It identified and provided
 an explanation of regulatory requirements and the roles of the various entities involved. It also offered recommended techniques to
 be practiced and refined to develop the knowledge, proficiency, and safe habits of a competent pilot.
+
+
+![Figure 1-17. A sample checklist used by pilots.](/handbooks/afh/FAA-H-8083-3C/figures/fig-1-16-a-sample-checklist-used-by-pilots.png)

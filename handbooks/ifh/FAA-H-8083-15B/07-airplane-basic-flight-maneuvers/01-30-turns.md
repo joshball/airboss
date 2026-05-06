@@ -12,3 +12,6 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 # Turns
 
 Turns
+
+
+![Figure 7-32. Level off at descent airspeed.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-32-level-off-at-descent-airspeed.png)

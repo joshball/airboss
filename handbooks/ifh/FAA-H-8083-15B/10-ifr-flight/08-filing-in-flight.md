@@ -33,3 +33,6 @@ Be aware that traffic saturation frequently prevents ARTCC
 personnel from accepting flight plans by radio. In such
 cases, a pilot is advised to contact the nearest FSS to file
 the flight plan.
+
+
+![Figure 10-8. Monroeville, Alabama (MVC) VOR or GPS Rwy 3 Approach: An approach procedure at an airport without an operating  control tower.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-10-07-monroeville-alabama-mvc-vor-or-gps-rwy-3-approac.png)

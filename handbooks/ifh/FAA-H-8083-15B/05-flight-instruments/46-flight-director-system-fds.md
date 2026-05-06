@@ -76,3 +76,6 @@ systems allow more flight director modes.
 
 Figure 5-41. The S-TEC/Meggit Corporation Integrated Autopilot installed in the Cirrus.
 Figure 5-42.  An Autopilot by Century.
+
+
+![Figure 5-46. The benefits of realistic visualization imagery, as  illustrated by Synthetic Vision manufactured by Chelton Flight Systems.  The system provides the pilot a realistic, real-time, three- dimensional depiction of the aircraft and its relation to terrain around it.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-44-the-benefits-of-realistic-visualization-imagery-.png)

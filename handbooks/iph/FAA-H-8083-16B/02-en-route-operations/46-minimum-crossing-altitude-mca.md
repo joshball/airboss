@@ -51,3 +51,8 @@ associated data outside the conterminous United States
 are shown for transitional purposes only and are not part
 of the high altitude jet route and RNAV route systems.
 [Figure 2-64]
+
+
+![Figure 2-46. Excerpt of authorized areas of en route operation.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-40-excerpt-of-authorized-areas-of-en-route-operatio.png)
+
+![Figure 2-64. En route chart minimum crossing altitude data (outside of the U.S.).](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-58-en-route-chart-minimum-crossing-altitude-data-ou.png)

@@ -76,3 +76,6 @@ combining two control rules. One example is when, at maximum cruise airspeed in 
 level airspeed, there is no excess thrust available to increase the airplane’s total energy needed to climb. One solution is to initially
 trade kinetic for potential energy (rule 3.a), slowing down to an airspeed where drag is reduced below thrust, thus allowing the
 airplane to increase its total energy and climb at that slower airspeed (rule 1.a).
+
+
+![Figure 4-8. The energy-control map helping to visualize the basic energy control rules.](/handbooks/afh/FAA-H-8083-3C/figures/fig-4-06-the-energy-control-map-helping-to-visualize-the-.png)

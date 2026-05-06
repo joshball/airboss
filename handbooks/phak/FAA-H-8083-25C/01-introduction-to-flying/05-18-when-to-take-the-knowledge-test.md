@@ -21,3 +21,6 @@ operational knowledge gained by this experience can be used
 to the student’s advantage in the knowledge test. The student
 pilot’s CFI is the best person to determine when the applicant
 is ready to take the knowledge test.
+
+
+![Figure 1-25. Examples of Practical Test Standards.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-23-examples-of-practical-test-standards.png)

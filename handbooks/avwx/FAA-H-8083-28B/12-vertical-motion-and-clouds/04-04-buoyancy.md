@@ -25,7 +25,3 @@ differences result in different densities, allowing the warm air to become buoya
 tend to push (i.e., lift) the less dense warm air aloft. On a grand scale, the tendency of air to rise due to
 heating, and how high it will rise, is referred to as stability and is covered in Chapter 13, Atmospheric
 Stability.
-
-![Figure 12-5. Frictional Effects](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-3-00-frictional-effects.png)
-
-![Figure 12-6. Frontal Lift](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-3-01-frontal-lift.png)

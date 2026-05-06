@@ -55,3 +55,6 @@ the runway. The flight instructor should have the student pilot follow through l
 the outside references that provide the clues for how much control movement is needed and how the pressure and response changes as
 airspeed increases. With practice, the student pilot should become familiar with the airplane’s response to acceleration up to lift-off
 speed, corrective control movements needed, and the outside references necessary to accomplish the takeoff maneuver.
+
+
+![Figure 6-3. Initial roll and takeoff attitude.](/handbooks/afh/FAA-H-8083-3C/figures/fig-6-02-initial-roll-and-takeoff-attitude.png)

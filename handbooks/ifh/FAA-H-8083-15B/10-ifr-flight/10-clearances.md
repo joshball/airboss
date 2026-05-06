@@ -31,3 +31,6 @@ using standard phraseology. Regulatory requirements, the
 AIM, approved flight training programs, and operational
 manuals provide information for pilots on standard ATC
 phraseology and communications requirements.
+
+
+![Figure 10-10. Radar instrument approach minimums for Troy, Alabama.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-10-09-radar-instrument-approach-minimums-for-troy-alab.png)

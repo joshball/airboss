@@ -27,3 +27,6 @@ part-time airspace classifications. A box after an airport name
 with a “C” or “D” inside (e.g.,
  ) indicates Class C and D
 airspace, respectively, per Figure 1-3.
+
+
+![Figure 1-7. Example of an electronic flight bag.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-06-example-of-an-electronic-flight-bag.png)

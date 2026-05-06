@@ -30,3 +30,10 @@ SVGS may not be used in lieu of natural vision. SVGS is
 intended to be used to increase situational awareness
 on the straight-in final approach segment of published
 instrument approaches and requires Special Authorization.
+
+
+![Figure 5-16. Enhanced and synthetic vision displayed on primary  flight displays.](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-15-enhanced-and-synthetic-vision-displayed-on-prima.png)
+
+![Figure 5-18. Portable flight bag.](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-16-portable-flight-bag.png)
+
+![Figure 5-19. Installed flight bag.](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-17-installed-flight-bag.png)

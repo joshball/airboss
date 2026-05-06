@@ -28,3 +28,6 @@ center. To center the ball, level the helicopter laterally by
 reference to the other bank instruments, then center the ball
 with pedal trim. Torque correction pressures vary as power
 changes are made. Always check the ball after such changes.
+
+
+![Figure 8-16. Flight instrument indications during an instrument takeoff.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-04-legend-from-en-route-low-attitude-chart.png)

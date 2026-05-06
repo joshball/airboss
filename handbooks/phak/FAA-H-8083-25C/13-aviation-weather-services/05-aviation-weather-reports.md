@@ -15,3 +15,6 @@ Aviation weather reports are designed to give accurate
 depictions of current weather conditions. Each report
 provides current information that is updated at different times.
 Some typical reports are METARs and PIREPs.
+
+
+![Figure 13-5. Descriptors and weather phenomena used in a typical METAR.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-04-descriptors-and-weather-phenomena-used-in-a-typi.png)

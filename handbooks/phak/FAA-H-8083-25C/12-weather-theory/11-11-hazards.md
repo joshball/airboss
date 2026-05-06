@@ -16,3 +16,6 @@ All thunderstorms have conditions that are a hazard to aviation.
 These hazards occur in numerous combinations. While not
 every thunderstorm contains all hazards, it is not possible to
 visually determine which hazards a thunderstorm contains.
+
+
+![Figure 12-28. Life cycle of a thunderstorm.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-26-life-cycle-of-a-thunderstorm.png)

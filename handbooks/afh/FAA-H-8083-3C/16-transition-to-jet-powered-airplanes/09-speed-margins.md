@@ -44,3 +44,6 @@ excessive airspeed, buffeting, or warning devices before the onset of extreme no
 Due to the critical aspects of high-altitude/high-Mach flight, most jet airplanes capable of operating in the Mach ranges use some
 form of automated Mach tuck compensation. If the system becomes inoperative, the airplane is typically limited to a reduced
 maximum Mach number.
+
+
+![Figure 16-9. Unmodified swept wing stall characteristics.](/handbooks/afh/FAA-H-8083-3C/figures/fig-16-08-unmodified-swept-wing-stall-characteristics.png)

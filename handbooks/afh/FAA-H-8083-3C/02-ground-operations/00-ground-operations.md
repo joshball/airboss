@@ -22,5 +22,3 @@ This chapter covers the essential elements for the regulatory basis of flight in
 2. Important inspection items when conducting a preflight visual inspection,
 3. Managing risk and resources, and
 4. Proper and effective airplane surface movements using the AFM/POH and airplane checklists.
-
-![Figure 2-8. Cracks radiating from screw holes that have been stop-drilled to prevent crack progression.](/handbooks/afh/FAA-H-8083-3C/figures/fig-2-00-cracks-radiating-from-screw-holes-that-have-been.png)

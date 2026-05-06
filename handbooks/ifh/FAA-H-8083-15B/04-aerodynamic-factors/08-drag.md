@@ -93,3 +93,6 @@ total drag in order to provide forward speed with which to
 produce lift. Understanding how the aircraft’s relationship
 between these elements and the environment provide proper
 interpretation of the aircraft’s instruments.
+
+
+![Figure 4-8. Relationship of lift to AOA.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-4-06-relationship-of-lift-to-aoa.png)

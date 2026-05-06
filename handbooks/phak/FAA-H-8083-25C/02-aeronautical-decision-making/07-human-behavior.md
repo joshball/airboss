@@ -107,3 +107,6 @@ Have a disregard for or tend to under  utilize outside
 sources of information, including copilots, flight
 attendants, flight service personnel, flight instructors,
 and ATC
+
+
+![Figure 2-7. The PAVE checklist.](/handbooks/phak/FAA-H-8083-25C/figures/fig-2-06-the-pave-checklist.png)

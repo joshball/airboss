@@ -52,3 +52,6 @@ practice area frequency), and safety clearing turns. As a general note, a ground
 45° or an airspeed greater than the maneuvering speed. As part of preflight planning, the pilot should determine the predicted
 (POH/AFM) stall speed at 50° or at the highest bank angle expected during the maneuver to assure there will be a safety margin
 above the stall speed during the maneuver.
+
+
+![Figure 7-2. Effect of wind during a turn.](/handbooks/afh/FAA-H-8083-3C/figures/fig-7-01-effect-of-wind-during-a-turn.png)

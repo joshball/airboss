@@ -80,3 +80,6 @@ when reaching the fix. If the next succeeding route segment
 has a lower MEA, descend to the applicable altitude either
 the last assigned altitude or the altitude expected in a further
 clearance—when reaching the fix where the MEA decreases.
+
+
+![Figure 2-69. Two-way radio communications failure transponder code.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-63-two-way-radio-communications-failure-transponder.png)

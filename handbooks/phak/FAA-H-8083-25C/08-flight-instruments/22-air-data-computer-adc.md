@@ -32,3 +32,6 @@ barometric pressure and sends a digital signal to the PFD to
 display the proper altitude readout. EFDs also show trend
 vectors, which show the pilot how the altitude and airspeed
 are progressing.
+
+
+![Figure 8-22. If inadequate right rudder is applied in a right turn,  a slip results. Too much right rudder causes the aircraft to skid through the turn. Centering the ball results in a coordinated turn.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-21-if-inadequate-right-rudder-is-applied-in-a-right.png)

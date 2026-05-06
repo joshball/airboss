@@ -19,3 +19,6 @@ on pilot navigation.
 Where ATC has no jurisdiction, it does not issue an IFR
 clearance. It has no control over the flight, nor does the pilot
 have any assurance of separation from other traffic.
+
+
+![Figure 10-18. Route planning.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-10-17-route-planning.png)

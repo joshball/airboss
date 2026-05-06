@@ -65,3 +65,6 @@ one can assume the altitudes have not changed (see the upper
 left area of Figure 1-2). When a change of MEA to a higher
 MEA is required, the climb may commence at the break,
 ensuring obstacle clearance. [Figure 1-4]
+
+
+![Figure 1-8. Obstacle departure procedures (ODP) and standard instrument departures (SID).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-07-obstacle-departure-procedures-odp-and-standard-i.png)

@@ -405,25 +405,23 @@ Well-constructed frame homes could have damage to roof
 shingles, vinyl siding, soffit panels, and gutters. Failure of
 aluminum, screened-in, swimming pool enclosures can occur.
 
-![over oceans with troughs or lows over continents, as shown in Figure 17-1 and Figure 17-2. The subtropical  highs shift southward during the Northern Hemisphere winter and northward during summer. The seasonal shift, the height and strength of the inversion, and terrain features determine the weather in the subtropical](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-2-1-00-the-subtropical-highs-shift-southward-during-the.png)
+![Figure 17-1. Mean Worldwide Surface Pressure Distribution and Prevailing Winds Throughout the World in July](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-00-mean-worldwide-surface-pressure-distribution-and.png)
 
-![Figure 17-1. Mean Worldwide Surface Pressure Distribution and Prevailing Winds Throughout the World in July](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-01-mean-worldwide-surface-pressure-distribution-and.png)
+![Figure 17-2. Mean Worldwide Surface Pressure Distribution and Prevailing Winds Throughout the World in January](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-01-mean-worldwide-surface-pressure-distribution-and.png)
 
-![Figure 17-2. Mean Worldwide Surface Pressure Distribution and Prevailing Winds Throughout the World in January](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-2-1-01-mean-worldwide-surface-pressure-distribution-and.png)
+![Figure 17-3. A Shear Line and an Induced Trough Caused by a Polar High Pushing into the Subtropics](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-02-a-shear-line-and-an-induced-trough-caused-by-a-p.png)
 
-![Note in Figure 17-2 how the winter flow has reversed from that shown in Figure 17-1. Cold, dry air from  the high plateau deep in the interior warms adiabatically as it flows down the southern slopes of the Himalayan Mountains. Virtually no rain falls in the interior in the dry winter monsoon. As the dry air moves offs](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-1-00-a-shear-line-and-an-induced-trough-caused-by-a-p.png)
+![Figure 17-4. A TUTT Moves Eastward Across the Hawaiian Islands](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-03-a-tutt-moves-eastward-across-the-hawaiian-island.png)
 
-![Figure 17-3. A Shear Line and an Induced Trough Caused by a Polar High Pushing into the Subtropics](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-3-00-a-tutt-moves-eastward-across-the-hawaiian-island.png)
+![Figure 17-5. A Northern Hemisphere Easterly Wave Progressing from A–B](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-04-a-northern-hemisphere-easterly-wave-progressing-.png)
 
-![Figure 17-4. A TUTT Moves Eastward Across the Hawaiian Islands](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-4-01-vertical-cross-section-along-line-a-b-in-figure-.png)
+![Figure 17-6. Vertical Cross-Section Along Line A–B in Figure 17-5](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-05-vertical-cross-section-along-line-a-b-in-figure-.png)
 
-![Figure 17-5. A Northern Hemisphere Easterly Wave Progressing from A–B](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-4-00-a-northern-hemisphere-easterly-wave-progressing-.png)
+![Figure 17-7. The Tracks of Nearly 150 Years of Tropical Cyclones and Their Strength Weave Across the Globe](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-06-the-tracks-of-nearly-150-years-of-tropical-cyclo.png)
 
-![Figure 17-7. The Tracks of Nearly 150 Years of Tropical Cyclones and Their Strength Weave Across the Globe](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-5-00-the-tracks-of-nearly-150-years-of-tropical-cyclo.png)
+![Figure 17-8. Radar Image of Hurricane Katrina Observed at New Orleans, Louisiana, on August 29, 2005](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-07-radar-image-of-hurricane-katrina-observed-at-new.png)
 
-![Figure 17-8. Radar Image of Hurricane Katrina Observed at New Orleans, Louisiana, on August 29, 2005](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-5-01-radar-image-of-hurricane-katrina-observed-at-new.png)
-
-![Figure 17-9. Hurricane Andrew Observed by Satellite in 1992](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-5-02-hurricane-andrew-observed-by-satellite-in-1992.png)
+![Figure 17-9. Hurricane Andrew Observed by Satellite in 1992](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-08-hurricane-andrew-observed-by-satellite-in-1992.png)
 
 **Table 17-1.** Wind Speed and Characteristic House Damage for the Saffir-Simpson Hurricane Wind Scale Saffir-Simpson Hurricane Wind Scale Wind Speed Characteristic House Damage 5 ≥157 mph ≥137 kt
 

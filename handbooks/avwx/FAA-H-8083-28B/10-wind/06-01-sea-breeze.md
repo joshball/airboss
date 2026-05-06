@@ -44,7 +44,3 @@ Locally, the shape of the coastline plays an important role in the development o
 breezes (see Figure 10-15). A narrow peninsula or island is generally an area of strong convective
 development during the late morning or early afternoon. This is because the sea breezes that formed along
 opposing shores merge near the center of the peninsula or island.
-
-![Figure 10-13. Sea Breeze](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-1-00-sea-breeze.png)
-
-![Figure 10-14. Sea Breeze Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-1-01-sea-breeze-front.png)

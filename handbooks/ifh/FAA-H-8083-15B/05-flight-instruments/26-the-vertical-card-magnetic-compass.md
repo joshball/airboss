@@ -24,3 +24,6 @@ of the symbolic airplane on the instrument glass represents
 the lubber line for reading the heading of the aircraft from
 the dial. Eddy currents induced into an aluminum-damping
 cup damp oscillation of the magnet. [Figure 5-22]
+
+
+![Figure 5-26. Driven by signals from a flux valve, the compass card  in this RMI indicates the heading of the aircraft opposite the upper center index mark. The green pointer is driven by the ADF. The yellow pointer is driven by the VOR receiver.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-24-driven-by-signals-from-a-flux-valve-the-compass-.png)

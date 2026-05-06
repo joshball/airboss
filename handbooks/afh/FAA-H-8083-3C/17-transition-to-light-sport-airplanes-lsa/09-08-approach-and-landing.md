@@ -22,3 +22,6 @@ Manufacturers place a maximum demonstrated crosswind speed in the POH, and until
 the airplane, a transitioning pilot should have personal minimums that do not approach the manufacturer’s demonstrated crosswind
 speed. Control application does not change for crosswind technique in an LSA. However, the LSA’s weight, slow landing speeds, and
 light control forces can result in a pilot making control deflections that exceed those necessary to compensate for the crosswind.
+
+
+![Figure 17-16. Example of a POH Emergency Procedures section.](/handbooks/afh/FAA-H-8083-3C/figures/fig-17-15-example-of-a-poh-emergency-procedures-section.png)

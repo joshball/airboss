@@ -1457,4 +1457,46 @@ from relying on a single authority to recognizing multiple sources of knowledge,
 While educational theories facilitate learning, no one learning theory is good for all learning situations and all learners. Instruction in
 aviation should utilize a combination of learning theories.
 
-![Figure 3-7. E. L. Thorndike (1874–1949).](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-6-2-00-e-l-thorndike-1874-1949.png)
+![Figure 3-1. An effective instructor understands the characteristics of learning and assists accordingly.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-00-an-effective-instructor-understands-the-characte.png)
+
+![Figure 3-2. Learning theories of psychology include classical conditioning, operant conditioning, and social learning.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-01-learning-theories-of-psychology-include-classica.png)
+
+![Figure 3-3. Psychologists and educators who established the theories of cognitive learning.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-02-psychologists-and-educators-who-established-the-.png)
+
+![Figure 3-4. Bloom’s Taxonomy of the Cognitive Domain.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-03-bloom-s-taxonomy-of-the-cognitive-domain.png)
+
+![Figure 3-5. Most learning occurs through sight, but the combination of sight and hearing accounts for about 88 percent of all  perception.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-04-most-learning-occurs-through-sight-but-the-combi.png)
+
+![Figure 3-6. A learner acquires knowledge through memorization, understanding, and application.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-05-a-learner-acquires-knowledge-through-memorizatio.png)
+
+![Figure 3-7. E. L. Thorndike (1874–1949).](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-06-e-l-thorndike-1874-1949.png)
+
+![Figure 3-8. An overview of the three learning domains.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-07-an-overview-of-the-three-learning-domains.png)
+
+![Figure 3-9. The six major levels of Bloom’s Taxonomy of the Cognitive Domain with types of behavior with objectives.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-08-the-six-major-levels-of-bloom-s-taxonomy-of-the-.png)
+
+![Figure 3-10. Learning is progressive and occurs at several basic levels.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-09-learning-is-progressive-and-occurs-at-several-ba.png)
+
+![Figure 3-11. The affective domain (attitudes, beliefs, and values) contains five educational objective levels.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-10-the-affective-domain-attitudes-beliefs-and-value.png)
+
+![Figure 3-12. The psychomotor domain (physical skills) consists of seven educational objective levels.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-11-the-psychomotor-domain-physical-skills-consists-.png)
+
+![Figure 3-13. A listing such as the one shown here is useful for development of almost any training program.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-12-a-listing-such-as-the-one-shown-here-is-useful-f.png)
+
+![Figure 3-14. The importance of recognizing a dominant brain hemisphere gives the instructor a guide for ways to teach and reinforce  learning.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-13-the-importance-of-recognizing-a-dominant-brain-h.png)
+
+![Figure 3-15. Some of the different traits utilized by each learning style.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-14-some-of-the-different-traits-utilized-by-each-le.png)
+
+![Figure 3-16. Visual, auditory, and kinesthetic learning styles (VAK).](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-15-visual-auditory-and-kinesthetic-learning-styles-.png)
+
+![Figure 3-17. Learners will probably experience a learning plateau at some point in their training.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-16-learners-will-probably-experience-a-learning-pla.png)
+
+![Figure 3-18. A learner exhibits deliberate practice by plotting courses for his next training flight.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-17-a-learner-exhibits-deliberate-practice-by-plotti.png)
+
+![Figure 3-19. Pilot practices cross-wind landings repeatedly to improve performance.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-18-pilot-practices-cross-wind-landings-repeatedly-t.png)
+
+![Figure 3-20. A pilot is required to perform several tasks at once during approaches and landings.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-19-a-pilot-is-required-to-perform-several-tasks-at-.png)
+
+![Figure 3-21. Other mistakes arise under pressure. For example, a technician or pilot might perform a cursory inspection of an  aircraft to save time, only to have a problem manifest itself later.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-20-other-mistakes-arise-under-pressure-for-example-.png)
+
+![Figure 3-22. Information processing within the sensory register, working on short-term memory, and long-term memory includes  complex coding, sorting, storing, and recall functions.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-21-information-processing-within-the-sensory-regist.png)

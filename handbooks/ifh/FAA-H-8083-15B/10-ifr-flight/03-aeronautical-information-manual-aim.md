@@ -11,3 +11,6 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 # Aeronautical Information Manual (AIM)
 
 Aeronautical Information Manual (AIM)
+
+
+![Figure 10-3. Standard terminal arrival route (STAR).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-10-02-standard-terminal-arrival-route-star.png)

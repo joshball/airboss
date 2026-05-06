@@ -52,7 +52,3 @@ within the jet stream that translates along the jet stream core.
 There are several patterns of upper-level winds that are associated with CAT. One of these is a deep, upper
 trough. CAT is found most frequently at, and just upwind of, the base of the trough, especially just
 downwind of an area of strong temperature advection. Another area of the trough in which to suspect CAT
-
-![Figure 19-5. Wind Shear Turbulence](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-3-00-wind-shear-turbulence.png)
-
-![Figure 19-6. Wind Shear Turbulence Associated with a Temperature Inversion](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-3-01-wind-shear-turbulence-associated-with-a-temperat.png)

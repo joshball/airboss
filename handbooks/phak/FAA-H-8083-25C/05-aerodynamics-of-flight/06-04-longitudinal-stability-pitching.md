@@ -10,3 +10,5 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Longitudinal Stability (Pitching)
+
+![Figure 5-22. Damped versus undamped stability.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-20-damped-versus-undamped-stability.png)

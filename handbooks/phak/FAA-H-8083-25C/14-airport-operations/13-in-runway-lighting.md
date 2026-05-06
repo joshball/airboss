@@ -50,3 +50,6 @@ Land and hold short lights consist of a row of pulsing white
 lights installed across the runway at the hold short point.
 Where installed, the lights are on anytime LAHSO is in effect.
 These lights are off when LAHSO is not in effect.
+
+
+![Figure 14-13. Surface painted holding position marking along with  enhanced taxiway centerline.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-12-surface-painted-holding-position-marking-along-w.png)

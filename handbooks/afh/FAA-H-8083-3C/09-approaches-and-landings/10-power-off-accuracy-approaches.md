@@ -57,3 +57,6 @@ the landing occurs at or just beyond the desired point. The selected key positio
 and the wind condition. From the key position, the pilot should constantly evaluate the situation.
 It should be emphasized that, although accurate spot touchdowns are important, safe and properly executed approaches and landings are
 vital. A pilot should never sacrifice a good approach or landing just to land on the desired spot.
+
+
+![Figure 9-10. Changing angle of attack during round out.](/handbooks/afh/FAA-H-8083-3C/figures/fig-9-09-changing-angle-of-attack-during-round-out.png)

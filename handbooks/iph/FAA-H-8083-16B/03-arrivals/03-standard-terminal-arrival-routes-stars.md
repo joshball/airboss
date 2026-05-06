@@ -71,3 +71,8 @@ allow for deceleration segments at any waypoint that has
 a speed restriction. As a general guideline, deceleration
 considerations typically add 1 NM of distance for each 10
 knots of speed reduction required.
+
+
+![Figure 3-3. VNAV performance path.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-02-vnav-performance-path.png)
+
+![Figure 3-9. Altitude management when cleared direct.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-08-altitude-management-when-cleared-direct.png)

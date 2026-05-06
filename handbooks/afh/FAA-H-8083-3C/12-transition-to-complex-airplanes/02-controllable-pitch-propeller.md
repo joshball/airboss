@@ -15,3 +15,6 @@ Fixed-pitch propellers are designed for best efficiency at one particular revolu
 fixed-pitch propeller provides suitable performance in a narrow range of airspeeds. However, fixed-pitch efficiency suffers
 considerably when operating outside of this range. To provide improved propeller efficiency through a wide range of operation, the
 propeller blade angle needs to be controllable.
+
+
+![Figure 12-2. Coefficient of lift comparison for flap extended and retracted positions.](/handbooks/afh/FAA-H-8083-3C/figures/fig-12-01-coefficient-of-lift-comparison-for-flap-extended.png)

@@ -34,3 +34,6 @@ Aeronautical charts are essential for night cross-country flight and, if the int
 chart should also be available. The lights of cities and towns can be seen at surprising distances at night, and if this adjacent chart is
 not available to identify those landmarks, confusion could result. Regardless of the equipment used, organization of the flight deck
 eases the burden and enhances safety. Organize equipment and charts and place them within easy reach prior to taxiing.
+
+
+![Figure 11-4. Position lights.](/handbooks/afh/FAA-H-8083-3C/figures/fig-11-03-position-lights.png)

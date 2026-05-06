@@ -27,5 +27,3 @@ below the horizon for six months and shines continuously during the other six mo
 Twilight in the Arctic is prolonged because of the shallow angle of the Sun below the horizon. In more
 northern latitudes, it persists for days when the Sun remains just below the horizon. This abundance of
 twilight often makes visual reference possible at night.
-
-![Figure 21-1. The Arctic Circle](/handbooks/avwx/FAA-H-8083-28B/figures/fig-21-2-1-00-the-arctic-circle.png)

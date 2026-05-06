@@ -15,3 +15,6 @@ Hydroplaning is a condition that can exist when an airplane has landed on a runw
 or wet snow. Hydroplaning can have serious adverse effects on ground controllability and braking efficiency. The three basic types of
 hydroplaning are dynamic hydroplaning, reverted rubber hydroplaning, and viscous hydroplaning. Any one of the three can render an
 airplane partially or totally uncontrollable anytime during the landing roll.
+
+
+![Figure 9-13. Sideslip.](/handbooks/afh/FAA-H-8083-3C/figures/fig-9-12-sideslip.png)

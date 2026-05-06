@@ -144,3 +144,6 @@ Circling MDA
 1,000 feet charted
   =
       1,200 feet corrected
+
+
+![Figure 5-12. A true ASI allows the pilot to correct IAS for  nonstandard temperature and pressure.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-11-a-true-asi-allows-the-pilot-to-correct-ias-for-n.png)

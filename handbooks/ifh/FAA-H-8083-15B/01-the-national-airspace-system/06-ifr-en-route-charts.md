@@ -44,3 +44,6 @@ When the AeroNav Products en route chart is unfolded, the
 legend is displayed and provides information concerning
 airports, NAVAIDs, communications, air traffic services,
 and airspace.
+
+
+![Figure 1-6. Moving map display.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-05-moving-map-display.png)

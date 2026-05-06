@@ -10,3 +10,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Nose-Low Attitudes
+
+![Figure 7-40. Unusual attitude—nose-low.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-40-unusual-attitude-nose-low.png)

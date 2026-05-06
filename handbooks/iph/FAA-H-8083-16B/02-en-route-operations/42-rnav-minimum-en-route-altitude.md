@@ -14,3 +14,6 @@ RNAV Minimum En Route Altitude
 RNAV MEAs are depicted on some IFR en route low altitude
 charts, allowing both RNAV and non-RNAV pilots to use the
 same chart for instrument navigation.
+
+
+![Figure 2-42. Changeover points.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-36-changeover-points.png)

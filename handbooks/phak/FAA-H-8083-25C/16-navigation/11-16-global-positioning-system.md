@@ -78,3 +78,8 @@ monitoring and another type indicates that the RAIM integrity
 monitor has detected a potential error that exceeds the limit
 for the current phase of flight. Without RAIM capability, the
 pilot has no assurance of the accuracy of the GPS position.
+
+
+![Figure 16-38. ADF terms.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-37-adf-terms.png)
+
+![Figure 16-37. ADF with fixed azimuth and magnetic compass.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-38-adf-with-fixed-azimuth-and-magnetic-compass.png)

@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Engine Failure After Takeoff (Single-Engine)
+
+![Figure 18-5. Turning back to the runway after engine failure.](/handbooks/afh/FAA-H-8083-3C/figures/fig-18-04-turning-back-to-the-runway-after-engine-failure.png)

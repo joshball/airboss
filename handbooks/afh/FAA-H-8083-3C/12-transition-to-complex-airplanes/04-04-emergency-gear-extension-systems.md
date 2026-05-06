@@ -21,3 +21,6 @@ impractical. In these airplanes, provisions are included for forceful gear exten
 so that either hydraulic fluid or compressed gas provides the necessary pressure, while others use a manual system, such as a hand
 crank for emergency gear extension. [Figure 12-14] Hydraulic pressure for emergency operation of the landing gear may be provided
 by an auxiliary hand pump, an accumulator, or an electrically-powered hydraulic pump depending on the design of the airplane.
+
+
+![Figure 12-12. Landing gear safety switch.](/handbooks/afh/FAA-H-8083-3C/figures/fig-12-11-landing-gear-safety-switch.png)

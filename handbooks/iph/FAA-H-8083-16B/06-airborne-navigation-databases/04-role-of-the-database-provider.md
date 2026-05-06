@@ -41,3 +41,6 @@ value for the data block. This value is stored and transmitted
 with the corresponding data block. The integrity of the
 data is checked by reapplying the CRC algorithm prior to
 distribution.
+
+
+![Figure 6-4. Fly-by-waypoints and fly-over-waypoints.](/handbooks/iph/FAA-H-8083-16B/figures/fig-6-03-fly-by-waypoints-and-fly-over-waypoints.png)

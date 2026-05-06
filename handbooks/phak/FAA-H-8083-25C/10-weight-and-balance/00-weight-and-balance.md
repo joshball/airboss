@@ -17,18 +17,6 @@ with the center of gravity (CG) outside the approved limits
 results in control difficulty.
 
 
-![Figure 10-1. Lateral and longitudinal unbalance.](/handbooks/phak/FAA-H-8083-25C/figures/fig-10-00-lateral-and-longitudinal-unbalance.png)
-
-![Figure 10-8. CG moment envelope.](/handbooks/phak/FAA-H-8083-25C/figures/fig-10-01-cg-moment-envelope.png)
-
-![Figure 10-7. Loading graph.](/handbooks/phak/FAA-H-8083-25C/figures/fig-10-02-loading-graph.png)
-
-![Figure 10-9. Loading schedule placard.](/handbooks/phak/FAA-H-8083-25C/figures/fig-10-03-loading-schedule-placard.png)
-
-![Figure 10-11. Sample weight and balance using an aircraft with a  published zero fuel weight.](/handbooks/phak/FAA-H-8083-25C/figures/fig-10-04-sample-weight-and-balance-using-an-aircraft-with.png)
-
-![Figure 10-10. Sample weight and balance using a negative.](/handbooks/phak/FAA-H-8083-25C/figures/fig-10-05-sample-weight-and-balance-using-a-negative.png)
-
 |  | Weight and Balance |
 | --- | --- |
 | Introduction<br>Compliance with the weight and balance limits of any aircraft<br>is critical to flight safety. Operating above the maximum<br>weight limitation compromises the structural integrity of<br>an aircraft and adversely affects its performance. Operation<br>with the center of gravity (CG) outside the approved limits<br>results in control difficulty.<br>Weight Control<br>As discussed in Chapter 5, Aerodynamics of Flight, weight<br>is the force with which gravity attracts a body toward the<br>center of the Earth. It is a product of the mass of a body and<br>the acceleration acting on the body. Weight is a major factor<br>in aircraft construction and operation and demands respect<br>from all pilots.<br>The force of gravity continuously attempts to pull an aircraft<br>down toward Earth. The force of lift is the only force that<br>counteracts weight and sustains an aircraft in flight. The<br>amount of lift produced by an airfoil is limited by the airfoil<br>design, angle of attack (AOA), airspeed, and air density. To<br>assure that the lift generated is sufficient to counteract weight,<br>loading an aircraft beyond the manufacturer’s recommended<br>weight must be avoided. If the weight is greater than the lift<br>generated, the aircraft may be incapable of flight. |  |

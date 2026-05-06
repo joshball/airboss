@@ -16,3 +16,6 @@ decreases as the outside air temperature decreases for constant engine rpm and t
 the airplane operates with improved fuel economy and speed. At high altitudes, engines may be operating close to rpm or temperature
 limits, and excess thrust may not be available. Therefore, pilots should accomplish all maneuvering within the limits of available
 thrust, stability, and controllability.
+
+
+![Figure 16-5. Jet airspeed indicator.](/handbooks/afh/FAA-H-8083-3C/figures/fig-16-04-jet-airspeed-indicator.png)

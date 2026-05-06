@@ -28,3 +28,6 @@ Chapter 4
 
 Leading edge of wing under 1,500x magnification
 Figure 4-1. Microscopic surface of a wing.
+
+
+![Figure 4-2. Standard sea level pressure.](/handbooks/phak/FAA-H-8083-25C/figures/fig-4-01-standard-sea-level-pressure.png)

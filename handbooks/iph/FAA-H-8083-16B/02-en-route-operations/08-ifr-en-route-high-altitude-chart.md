@@ -106,3 +106,6 @@ of “Q” routes in the Gulf of Mexico, GNSS or DME/DME/IRU
 RNAV equipment is required along with radar monitoring
 capabilities. For aircraft that have DME/DME/IRU RNAV
 equipment, refer to the CS for specific DME information.
+
+
+![Figure 2-8. Fort Worth Air Route Traffic Control Center.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-06-fort-worth-air-route-traffic-control-center.png)

@@ -31,3 +31,6 @@ whole, prior to execution.
 ⦁ Developing a pilot’s ability to intuitively manipulate flight controls to adjust the bank angle during turns to
 correct for groundspeed changes in order to maintain constant-radius turns and proper ground track between
 ground references.
+
+
+![Figure 7-7. Eights along a road.](/handbooks/afh/FAA-H-8083-3C/figures/fig-7-06-eights-along-a-road.png)

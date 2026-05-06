@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Section I -- Airplane Basic Flight Maneuvers Using Analog Instrumentation
+
+![Figure 7-1. Pitch attitude and airspeed in level flight, slow  cruise speed.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-01-pitch-attitude-and-airspeed-in-level-flight-slow.png)

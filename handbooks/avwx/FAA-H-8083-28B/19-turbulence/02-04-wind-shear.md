@@ -66,5 +66,3 @@ per 100 ft in a layer more than 200 ft thick that occurs within 2,000 ft of the 
 mean? It means that within the lowest 2,000 ft, the wind speed and/or direction is changing rapidly in a
 200-ft layer (see Figure 19-8). Non-convective LLWS is commonly associated with passing frontal systems,
 temperature inversions, and strong upper-level winds (greater than 25 kt).
-
-![Figure 19-7. Wind Shear Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-4-00-wind-shear-example.png)

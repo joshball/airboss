@@ -57,3 +57,6 @@ The elevation at Denver (DEN) is 5,431 feet, so the lowest
 reportable altitude is 9,000 feet for the winds and temperature
 forecast. In this case, “2321-04” indicates the wind is forecast to
 be from 230° at a speed of 21 knots with a temperature of –4 °C.
+
+
+![Figure 13-9. Winds and temperature aloft forecast.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-08-winds-and-temperature-aloft-forecast.png)

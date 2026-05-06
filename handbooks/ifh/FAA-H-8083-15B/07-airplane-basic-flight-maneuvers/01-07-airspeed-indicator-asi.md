@@ -128,3 +128,10 @@ change. A very small rate of heading change means the bank
 angle is small, and it takes more time to deviate from the
 desired straight flightpath. A larger rate of heading change
 means a greater bank angle happens at a faster rate.
+
+
+![Figure 7-13. Constant power plus constant pitch equals constant  speed.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-06-pitch-correction-using-the-altimeter.png)
+
+![Figure 7-14. Constant power plus decreased pitch equals increased  airspeed.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-11-pitch-correction-greater-than-100-feet-one-bar-c.png)
+
+![Figure 7-15. Constant power plus increased pitch equals decreased  airspeed.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-14-constant-power-plus-increased-pitch-equals-decre.png)

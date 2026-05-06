@@ -17,3 +17,6 @@ setting, the jet engine still produces forward thrust. While this can be an adva
 is necessary to lose speed quickly. The lack of propeller drag, along with the aerodynamically clean airframe of the jet, are new to
 most pilots, and slowing the airplane down is one of the initial problems encountered by pilots transitioning into jets. In level flight at
 idle power, it takes about 1 mile to lose 10 knots of airspeed.
+
+
+![Figure 16-8. Stall versus angle of attack—swept wing versus straight wing.](/handbooks/afh/FAA-H-8083-3C/figures/fig-16-07-stall-versus-angle-of-attack-swept-wing-versus-s.png)

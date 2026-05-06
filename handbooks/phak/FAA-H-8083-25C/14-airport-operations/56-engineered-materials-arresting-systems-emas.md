@@ -41,3 +41,6 @@ to date is a lightweight, crushable concrete. When an aircraft
 rolls into an EMAS arrestor bed, the tires of the aircraft sink
 into the lightweight concrete and the aircraft is decelerated
 by having to roll through the material. [Figure 14-56]
+
+
+![Figure 14-56. Diagram of an EMASMAX system.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-56-diagram-of-an-emasmax-system.png)

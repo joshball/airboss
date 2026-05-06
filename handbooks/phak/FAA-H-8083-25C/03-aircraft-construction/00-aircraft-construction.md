@@ -32,33 +32,13 @@ Construction
 Chapter 3
 
 
-![Figure 3-4. Airplane components.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-00-airplane-components.png)
+![Figure 3-19. Performance instruments.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-18-performance-instruments.png)
 
-![Figure 3-5. Truss-type fuselage structure.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-01-truss-type-fuselage-structure.png)
+![Figure 3-20. Control instruments.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-19-control-instruments.png)
 
-![Figure 3-6. Monoplane (left) and biplane (right).](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-02-monoplane-left-and-biplane-right.png)
+![Figure 3-21. A comparison of navigation information as depicted on both analog and digital displays.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-20-a-comparison-of-navigation-information-as-depict.png)
 
-![Figure 3-8. Types of flaps.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-03-types-of-flaps.png)
-
-![Figure 3-9. Weight-shift control aircraft use the shifting of weight  for control.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-04-weight-shift-control-aircraft-use-the-shifting-o.png)
-
-![Figure 3-10. Empennage components.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-05-empennage-components.png)
-
-![Figure 3-12. Types of landing gear: floats (top), skis (middle), and  wheels (bottom).](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-06-types-of-landing-gear-floats-top-skis-middle-and.png)
-
-![Figure 3-14. Semimonocoque and monocoque fuselage design.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-07-semimonocoque-and-monocoque-fuselage-design.png)
-
-![Figure 3-16. Impact energy affects the visibility, as well as the  severity, of damage in composite structures. High and medium energy impacts, while severe, are easy to detect. Low energy impacts can easily cause hidden damage.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-08-impact-energy-affects-the-visibility-as-well-as-.png)
-
-![Figure 3-17. Composite materials in aircraft, such as Columbia 350  (top), Boeing 787 (middle), and a Coast Guard HH-65 (bottom).](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-09-composite-materials-in-aircraft-such-as-columbia.png)
-
-![Figure 3-18. Analog display (top) and digital display (bottom) from  a Cessna 172.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-10-analog-display-top-and-digital-display-bottom-fr.png)
-
-![Figure 3-19. Performance instruments.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-11-performance-instruments.png)
-
-![Figure 3-20. Control instruments.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-12-control-instruments.png)
-
-![Figure 3-21. A comparison of navigation information as depicted on both analog and digital displays.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-13-a-comparison-of-navigation-information-as-depict.png)
+![Figure 3-22. Analog and digital indications for glideslope interception.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-21-analog-and-digital-indications-for-glideslope-in.png)
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-3-00-untitled.html">
 <table><thead><tr><th></th><th>Aircraft

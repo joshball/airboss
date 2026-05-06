@@ -33,3 +33,8 @@ acting forward along the flight path increases as the angle
 of descent increases and, conversely, when leveling off, the
 component of weight acting along the flight path decreases
 as the angle of descent decreases.
+
+
+![Figure 5-35. Normal, slipping, and skidding turns at a constant altitude.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-33-normal-slipping-and-skidding-turns-at-a-constant.png)
+
+![Figure 5-37. Changes in speed during climb entry.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-34-changes-in-speed-during-climb-entry.png)

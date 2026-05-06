@@ -71,3 +71,6 @@ per dot; the DME readout indicates distance in NM
 from the WP; the groundspeed reads closing speed
 (knots) to the WP; and the time to station (TTS) reads
 time to the WP.
+
+
+![Figure 9-31. LAAS representation.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-28-laas-representation.png)

@@ -29,3 +29,6 @@ be checked against the other. Turn both systems to the same
 VOR ground facility and note the indicated bearing to that
 station. The maximum permissible variation between the two
 indicated bearings is 4°.
+
+
+![Figure 9-21. Aircraft is illustrated inbound on the localizer course.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-20-aircraft-is-illustrated-inbound-on-the-localizer.png)

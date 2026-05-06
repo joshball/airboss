@@ -157,3 +157,6 @@ angle
 Desired course
 090°
 075°
+
+
+![Figure 16-4. Meridians and parallels—the basis of measuring time,  distance, and direction.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-02-meridians-and-parallels-the-basis-of-measuring-t.png)

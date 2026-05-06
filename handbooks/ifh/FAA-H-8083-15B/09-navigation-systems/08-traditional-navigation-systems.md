@@ -11,3 +11,6 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 # Traditional Navigation Systems
 
 Traditional Navigation Systems
+
+
+![Figure 9-8. ADF interception and tracking outbound.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-07-adf-interception-and-tracking-outbound.png)

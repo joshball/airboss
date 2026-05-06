@@ -18,3 +18,6 @@ The restrictions create the same problem as all ceiling and
 visibility restrictions; but the hazards are multiplied when
 associated with the other thunderstorm hazards of turbulence,
 hail, and lightning.
+
+
+![Figure 12-17. Effects of a microburst wind.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-15-effects-of-a-microburst-wind.png)

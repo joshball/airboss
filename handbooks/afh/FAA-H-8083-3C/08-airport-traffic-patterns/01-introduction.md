@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Introduction
+
+![Figure 8-1. Traffic Patterns](/handbooks/afh/FAA-H-8083-3C/figures/fig-8-00-traffic-patterns.png)

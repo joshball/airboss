@@ -70,3 +70,6 @@ When purchasing an aircraft classified as other than Standard,
 it is recommended that the local FSDO be contacted for an
 explanation of the pertinent airworthiness requirements and
 the limitations of such a certificate.
+
+
+![Figure 9-9. FAA Form 8100-2, Standard Airworthiness Certificate.](/handbooks/phak/FAA-H-8083-25C/figures/fig-9-07-faa-form-8100-2-standard-airworthiness-certifica.png)

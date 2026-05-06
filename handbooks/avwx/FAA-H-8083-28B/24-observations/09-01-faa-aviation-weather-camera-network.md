@@ -37,13 +37,3 @@ provider.
 Figure 24-30. Sectional Chart Depicting Hyder (4Z7), Alaska Camera Orientations
 
 Figure 24-31. “Clear Day” Image from the Aviation Weather Camera at Hyder (4Z7), Alaska
-
-![Figure 24-27. U.S. Radiosonde Network](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-00-u-s-radiosonde-network.png)
-
-![Figure 24-28. Map of FAA’s Aviation Weather Camera Network in Alaska, the CONUS, and Canada12](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-01-map-of-faa-s-aviation-weather-camera-network-in-.png)
-
-![Figure 24-29. Map of the FAA’s Aviation Weather Camera Network in Hawaii](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-02-map-of-the-faa-s-aviation-weather-camera-network.png)
-
-![Figure 24-30. Sectional Chart Depicting Hyder (4Z7), Alaska Camera Orientations](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-03-sectional-chart-depicting-hyder-4z7-alaska-camer.png)
-
-![Figure 24-31. “Clear Day” Image from the Aviation Weather Camera at Hyder (4Z7), Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-04-clear-day-image-from-the-aviation-weather-camera.png)

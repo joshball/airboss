@@ -52,3 +52,6 @@ creeping, but not applied to such a degree that control
 movement is limited. In addition, many helicopters equipped
 for instrument flight contain stability augmentation systems
 or an autopilot to help relieve pilot workload.
+
+
+![Figure 8-6. Coordinated flight is indicated by centering of the ball.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-8-05-coordinated-flight-is-indicated-by-centering-of-.png)

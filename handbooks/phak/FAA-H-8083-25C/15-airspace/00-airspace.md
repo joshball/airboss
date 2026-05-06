@@ -58,19 +58,7 @@ Class G
 Figure 15-1. Airspace profile.
 
 
-![Figure 15-1. Airspace profile.](/handbooks/phak/FAA-H-8083-25C/figures/fig-15-00-airspace-profile.png)
-
-![Figure 15-2. An example of a prohibited area, P-40 around Camp  David.](/handbooks/phak/FAA-H-8083-25C/figures/fig-15-01-an-example-of-a-prohibited-area-p-40-around-camp.png)
-
-![Figure 15-4. Requirements for airspace operations.](/handbooks/phak/FAA-H-8083-25C/figures/fig-15-02-requirements-for-airspace-operations.png)
-
-![Figure 15-3. Restricted areas on a sectional chart.](/handbooks/phak/FAA-H-8083-25C/figures/fig-15-03-restricted-areas-on-a-sectional-chart.png)
-
-![Figure 15-5. Camden Ridge MOA is an example of a military operations area.](/handbooks/phak/FAA-H-8083-25C/figures/fig-15-04-camden-ridge-moa-is-an-example-of-a-military-ope.png)
-
-![Figure 15-6. Alert area (A-211).](/handbooks/phak/FAA-H-8083-25C/figures/fig-15-05-alert-area-a-211.png)
-
-![Figure 15-7. Military training route (MTR) chart symbols.](/handbooks/phak/FAA-H-8083-25C/figures/fig-15-06-military-training-route-mtr-chart-symbols.png)
+![Figure 15-9. Requirements for airspace operations.](/handbooks/phak/FAA-H-8083-25C/figures/fig-15-08-requirements-for-airspace-operations.png)
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-15-00-untitled.html">
 <table><thead><tr><th>Class</th><th>B</th></tr></thead><tbody></tbody></table>

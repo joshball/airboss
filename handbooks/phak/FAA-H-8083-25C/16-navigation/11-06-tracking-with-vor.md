@@ -80,3 +80,8 @@ the inbound radial, this new course or radial must be set in
 the course selector and a turn made to intercept this course.
 After this course is reached, tracking procedures are the same
 as previously discussed.
+
+
+![Figure 16-31. Radio magnetic indicator.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-31-radio-magnetic-indicator.png)
+
+![Figure 16-32. Tracking a radial in a crosswind.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-32-tracking-a-radial-in-a-crosswind.png)

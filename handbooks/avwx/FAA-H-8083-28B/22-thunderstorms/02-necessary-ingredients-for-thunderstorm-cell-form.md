@@ -27,5 +27,3 @@ dissipating. The total life cycle is typically about 30 minutes.
 The distinguishing feature of the towering cumulus stage is a strong convective updraft. The updraft is a
 bubble of warm, rising air concentrated near the top of the cloud, which leaves a cloudy trail in its wake.
 Updraft speeds can exceed 3,000 fpm.
-
-![Figure 22-1. Necessary Ingredients for Thunderstorm Cell Formation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-2-00-necessary-ingredients-for-thunderstorm-cell-form.png)

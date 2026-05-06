@@ -68,3 +68,6 @@ to provide radar monitoring and compatibility with traffic
 volume and flow. ATC will radar monitor each flight;
 however, navigation on the random RNAV route is the
 responsibility of the pilot.
+
+
+![Figure 1-4. Legend from en route low attitude chart, air traffic services and airspace information section.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-03-legend-from-en-route-low-attitude-chart-air-traf.png)

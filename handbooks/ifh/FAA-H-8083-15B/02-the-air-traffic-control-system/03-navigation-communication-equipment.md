@@ -65,3 +65,6 @@ transceiver. Using its navigational capability, this unit can
 determine when a flight crosses an airspace boundary or fix
 and can automatically select the appropriate communications
 frequency for that location in the communications radio.
+
+
+![Figure 2-3. Boom microphone, headset, and push-to-talk  switch.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-2-02-boom-microphone-headset-and-push-to-talk-switch.png)

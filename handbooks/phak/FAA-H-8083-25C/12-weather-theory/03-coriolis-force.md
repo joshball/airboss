@@ -75,3 +75,6 @@ the atmosphere slows the moving air. The wind is diverted
 from its path because of the frictional force. Thus, the wind
 direction at the surface varies somewhat from the wind
 direction just a few thousand feet above the Earth.
+
+
+![Figure 12-3. Circulation pattern in a static environment.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-02-circulation-pattern-in-a-static-environment.png)

@@ -120,6 +120,6 @@ might lead to an aircraft accident.
 Poor risk management is a cause of many accidents. Accordingly, pilots should emphasize risk management in all types of
 operations, from recreational flying to using aircraft for business.
 
-![Figure 1-1. Sample NTSB final report.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-1-1-00-sample-ntsb-final-report.png)
+![Figure 1-1. Sample NTSB final report.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-1-00-sample-ntsb-final-report.png)
 
-![Figure 1-2. The PAVE checklist.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-1-4-00-the-pave-checklist.png)
+![Figure 1-2. The PAVE checklist.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-1-01-the-pave-checklist.png)

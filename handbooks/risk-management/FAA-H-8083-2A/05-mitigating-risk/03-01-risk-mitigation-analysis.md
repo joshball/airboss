@@ -84,5 +84,3 @@ She also considers pilot aeromedical risks. She will consume no alcohol, have an
 increases her intake of water. These actions should help avoid dehydration.
 Having addressed all the previously identified risks, she completes the FRAT for the proposed trip, listing all of her mitigations.
 The completed FRAT in Figure 5-2 shows all the risks mitigated to medium or low levels. For illustrative purposes, the
-
-![Figure 5-1. Modified route.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-5-3-1-00-modified-route.png)

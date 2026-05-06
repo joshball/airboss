@@ -138,6 +138,7 @@ conducted. It includes the lesson objectives, organization of material being cov
 learner actions, and evaluation criteria and completions standards.
 Figure 5-3. The syllabus defines the unit of training, states by objective what the learner is expected to accomplish during the unit of
 training, shows an organized plan for instruction, and dictates the assessment process for either the unit or stages of learning.
+5-4Figur
 
 Preparation of a Lesson
 A determination of objectives and standards precedes instruction. Although some schools and independent instructors may develop
@@ -975,3 +976,39 @@ By being well prepared, an effective instructor presents and applies lesson mate
 effective instructor never stops learning. He or she maintains currency in the subject matter being taught, as well as how to teach it by
 reading professional journals and other aviation publications, many of which can be viewed or purchased via the Internet, another
 source of valuable aviation information for professional instructors.
+
+![Figure 5-1. Aviation instructors organize course material and use procedures and methods that promote learning.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-00-aviation-instructors-organize-course-material-an.png)
+
+![Figure 5-2. An effective instructor uses a variety of tools to evaluate how learners learn, as well as what they know.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-01-an-effective-instructor-uses-a-variety-of-tools-.png)
+
+![Figure 5-3. The syllabus defines the unit of training, states by objective what the learner is expected to accomplish during the unit of  training, shows an organized plan for instruction, and dictates the assessment process for either the unit or stages of learning.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-02-the-syllabus-defines-the-unit-of-training-states.png)
+
+![Figure 5-4. Performance-based objectives are made up of a description of the skill or behavior, conditions, and criteria.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-03-performance-based-objectives-are-made-up-of-a-de.png)
+
+![Figure 5-5. Examples of Airman Certification Standards.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-04-examples-of-airman-certification-standards.png)
+
+![Figure 5-6. Guidelines for presenting lessons.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-05-guidelines-for-presenting-lessons.png)
+
+![Figure 5-7. The attention element causes learners to focus on the upcoming lesson.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-06-the-attention-element-causes-learners-to-focus-o.png)
+
+![Figure 5-8. Instructors should try a dry run with another instructor to get a feel for the lecture presentation.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-07-instructors-should-try-a-dry-run-with-another-in.png)
+
+![Figure 5-9. Notes allow the accurate dissemination of complicated information.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-08-notes-allow-the-accurate-dissemination-of-compli.png)
+
+![Figure 5-10. If the objectives of a lesson are clearly established in advance, instructors will find it much easier to ask appropriate  questions that keep the discussion moving in the planned direction.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-09-if-the-objectives-of-a-lesson-are-clearly-establ.png)
+
+![Figure 5-11. As the learner grows in flight knowledge, he or she should be able to lead the postflight review while the instructor  guides the discussion with targeted questions.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-10-as-the-learner-grows-in-flight-knowledge-he-or-s.png)
+
+![Figure 5-12. E-learning encompasses a variety of electronic educational media.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-11-e-learning-encompasses-a-variety-of-electronic-e.png)
+
+![Figure 5-13. The instructor continually monitors learner performance when using CAL, as with all instructional aids.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-12-the-instructor-continually-monitors-learner-perf.png)
+
+![Figure 5-14. Flight simulator.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-13-flight-simulator.png)
+
+![Figure 5-15. The demonstration-performance method of teaching has five essential phases.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-14-the-demonstration-performance-method-of-teaching.png)
+
+![Figure 5-16. Studies generally agree that measurable improvement in learner retention of information occurs when instruction is  supported by appropriate instructional aids.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-15-studies-generally-agree-that-measurable-improvem.png)
+
+![Figure 5-17. Guidelines for effective instructional aids.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-16-guidelines-for-effective-instructional-aids.png)
+
+![Figure 5-18. In a computer-assisted learning environment, the instructor still ensures that learning objectives are being achieved.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-17-in-a-computer-assisted-learning-environment-the-.png)

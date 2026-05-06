@@ -198,18 +198,25 @@ test.describe('flightbag reader content fixes', () => {
 	});
 
 	test('IFH §2.5 renders the inline figure for "Figure 2-5"', async ({ page }) => {
-		// IFH §2.5's body references "Figure 2-5. Phonetic pronunciation
-		// guide." in prose but the manifest carries `has_figures: false` for
-		// this section, so neither the inline `![](...figure-2-5.png)`
-		// markdown nor the orphan-figure tail block is emitted. The figure
-		// asset itself isn't extracted in the IFH ingest yet -- a future
-		// ingest pass needs to detect the prose reference and either embed
-		// the figure or strip the dangling caption. Asserting the section
-		// renders at all (without 500ing) is the floor; the figure assertion
-		// becomes meaningful once the ingest gap is closed.
+		// Closed by the figure-pairing work package: section 2.5's caption
+		// "Figure 2-5. Phonetic pronunciation guide." now scopes to section
+		// 2.5 (caption-number rescoping in `figures.py`), the manifest
+		// carries `has_figures: true`, and the renderer embeds
+		// `![Figure 2-5. ...](.../fig-2-04-phonetic-pronunciation-guide.png)`
+		// inline. The strict assertion against the rendered <img> is the
+		// success criterion for the WP.
 		await page.goto(ROUTES.FLIGHTBAG_HANDBOOK_SECTION('ifh', '8083-15B', '2', '5'));
 		const rendered = page.locator('[data-testid="rendered-section"]').first();
 		await expect(rendered).toBeVisible();
+		const figureImg = rendered
+			.locator('img[alt*="Figure 2-5"], img[alt*="Phonetic pronunciation"]')
+			.first();
+		await expect(figureImg).toBeVisible();
+		const src = (await figureImg.getAttribute('src')) ?? '';
+		expect(src).toMatch(/^\/handbook-asset\//);
+		const response = await page.request.get(src);
+		expect(response.status()).toBe(200);
+		expect(response.headers()['content-type'] ?? '').toMatch(/^image\//);
 	});
 });
 

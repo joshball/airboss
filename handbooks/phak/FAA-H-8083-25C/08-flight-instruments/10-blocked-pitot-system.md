@@ -85,3 +85,6 @@ The pitot tube may become blocked during flight due to
 visible moisture. Some aircraft may be equipped with pitot
 heat for flight in visible moisture. Consult the AFM/POH for
 specific procedures regarding the use of pitot heat.
+
+
+![Figure 8-10. Blocked pitot system with clear static system.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-08-blocked-pitot-system-with-clear-static-system.png)

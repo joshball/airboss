@@ -10,3 +10,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Common Errors
+
+![Figure 9-24. Soft/rough field approach and landing.](/handbooks/afh/FAA-H-8083-3C/figures/fig-9-23-soft-rough-field-approach-and-landing.png)

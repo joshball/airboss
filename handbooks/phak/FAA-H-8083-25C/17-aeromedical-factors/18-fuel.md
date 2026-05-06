@@ -34,3 +34,6 @@ lung damage. Should vomiting occur, keep head below
 the hips to reduce the risks of aspiration. Monitor for
 breathing difficulties. Rinse out any material which
 enters the mouth until the taste is dissipated.
+
+
+![Figure 17-18. Scanning techniques.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-17-scanning-techniques.png)

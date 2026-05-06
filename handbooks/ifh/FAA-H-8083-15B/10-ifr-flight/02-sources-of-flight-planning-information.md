@@ -19,3 +19,6 @@ IFR en route charts
 Area charts
 United States Terminal Procedures Publications (TPP)
 The Federal Aviation Administration (FAA) publications:
+
+
+![Figure 10-2. Departure procedure (DP).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-10-01-departure-procedure-dp.png)

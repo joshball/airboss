@@ -17,3 +17,6 @@ maneuvers, apply these skills to the various combinations
 of individual maneuvers. The practice flight patterns,
 beginning on page 7-30, are directly applicable to operational
 instrument flying.
+
+
+![Figure 7-41. Racetrack pattern (entire pattern in level flight).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-41-racetrack-pattern-entire-pattern-in-level-flight.png)

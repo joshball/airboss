@@ -66,3 +66,6 @@ the center alignment mark, the turn is 3° per second and the
 turn takes 2 minutes to execute a 360° turn. In a 4 minute
 instrument, the same turn takes two widths deflection of the
 needle to achieve 3° per second.
+
+
+![Figure 5-38. Horizontal situation indicator (HSI).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-36-horizontal-situation-indicator-hsi.png)

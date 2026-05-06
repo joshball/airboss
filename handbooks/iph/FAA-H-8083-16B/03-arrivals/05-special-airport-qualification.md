@@ -60,3 +60,8 @@ there are provisions in OpSpecs under which operators can
 comply with this regulation. Figure 3-27 provides some
 examples of special airports in the United States along with
 associated comments.
+
+
+![Figure 3-5. WAAS data provide lateral and vertical guidance.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-04-waas-data-provide-lateral-and-vertical-guidance.png)
+
+![Figure 3-27. Special airports and comments.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-22-special-airports-and-comments.png)

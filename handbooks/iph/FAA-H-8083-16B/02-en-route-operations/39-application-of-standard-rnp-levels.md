@@ -21,3 +21,6 @@ to the level of accuracy of a particular sensor or aircraft
 navigation system, but also to the degree of precision
 with which the aircraft is flown. Specific required flight
 procedures may vary for different RNP levels.
+
+
+![Figure 2-39. Non-mountainous obstacle clearance in the primary  area.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-33-non-mountainous-obstacle-clearance-in-the-primar.png)

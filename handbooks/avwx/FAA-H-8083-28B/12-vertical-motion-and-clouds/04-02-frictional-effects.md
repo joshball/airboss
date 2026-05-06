@@ -32,5 +32,3 @@ away from surface high pressure, causing the air to sink, compress, and warm, wh
 of clouds and precipitation. Conversely, winds converge into surface low pressure, causing the air to rise,
 expand, and cool, which favors the formation of clouds and precipitation given sufficient moisture
 (see Figure 12-5).
-
-![Figure 12-4. Orographic Effects Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-2-00-orographic-effects-example.png)

@@ -25,3 +25,6 @@ installed, the operations that are approved, and the details of
 equipment use. Some aircraft may have equipment that allows
 input from more than one RNAV source, thereby providing
 a very accurate and reliable navigation source.
+
+
+![Figure 9-28. A GPS stand-alone approach.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-26-a-gps-stand-alone-approach.png)

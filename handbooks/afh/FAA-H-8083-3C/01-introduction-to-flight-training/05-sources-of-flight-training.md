@@ -39,3 +39,6 @@ required of FAA-approved pilot schools. Flight instructors employed by non-certi
 instructors, meet the same basic 14 CFR part 61 flight instructor requirements for certification and renewal as those flight instructors
 employed by FAA-certificated pilot schools. In the end, any training program is dependent upon the quality of the ground and flight
 instruction a learner receives.
+
+
+![Figure 1-5. Example of some of the required standard or supplemental and optional equipment for an aircraft.](/handbooks/afh/FAA-H-8083-3C/figures/fig-1-04-example-of-some-of-the-required-standard-or-supp.png)

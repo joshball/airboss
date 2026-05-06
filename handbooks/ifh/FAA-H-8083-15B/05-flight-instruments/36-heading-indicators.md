@@ -67,3 +67,6 @@ to rotate the gyro and dial. The knob is spring loaded so it
 disengages from the gimbals as soon as it is released. This
 instrument should be checked about every 15 minutes to see
 if it agrees with the magnetic compass.
+
+
+![Figure 5-36. The Kearfott Attitude Heading Reference System (AHRS) on the left incorporates a Monolithic Ring Laser Gyro (MRLG)  (center), which is housed in an Inertial Sensor Assembly (ISA) on the right.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-34-the-kearfott-attitude-heading-reference-system-a.png)

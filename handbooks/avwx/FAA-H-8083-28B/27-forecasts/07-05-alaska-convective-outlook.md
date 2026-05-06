@@ -19,5 +19,3 @@ development of towering cumulus and thunderstorms.
 Locations of towering cumulus are depicted in yellow. Locations of isolated (ISOL), scattered (SCT), and
 widespread (WDSPRD) thunderstorms (TS) are depicted in orange, red, and dark red, respectively. Cloud
 bases and tops are also depicted.
-
-![Figure 27-7. Alaska Turbulence Forecast Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-5-00-alaska-turbulence-forecast-example.png)

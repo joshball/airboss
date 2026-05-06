@@ -33,3 +33,6 @@ a slight change in speed does not produce any significant
 excess or deficiency in power. It has the characteristic of
 neutral stability (i.e., the aircraft’s tendency is to remain at
 the new speed).
+
+
+![Figure 4-23. Ice on the tailplane.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-4-22-ice-on-the-tailplane.png)

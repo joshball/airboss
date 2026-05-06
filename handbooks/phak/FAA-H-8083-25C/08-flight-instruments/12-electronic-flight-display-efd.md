@@ -30,3 +30,6 @@ combine all flight instruments onto a single screen that is
 called a primary flight display (PFD). The traditional “six
 pack” of instruments is now displayed on one liquid crystal
 display (LCD) screen.
+
+
+![Figure 8-12. Primary flight display (PFD). Note that the actual location of indications vary depending on manufacturers.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-09-primary-flight-display-pfd-note-that-the-actual-.png)

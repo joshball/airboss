@@ -39,3 +39,6 @@ boundaries described by geographic coordinates or other
 appropriate references that clearly define their perimeter.
 The period of time during which a designation of special
 use airspace is in effect is stated in the designation.
+
+
+![Figure 5-6. Next generation network enabled weather (NNEW) provides a common weather picture across the NAS.](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-05-next-generation-network-enabled-weather-nnew-pro.png)

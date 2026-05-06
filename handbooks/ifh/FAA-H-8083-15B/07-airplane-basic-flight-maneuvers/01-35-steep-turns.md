@@ -323,3 +323,6 @@ maneuvers for long periods of time, skill levels
 diminish. Pilots should avoid flying in IMC if they are
 not proficient. They should seek a qualified instructor to
 receive additional instruction prior to entry into IMC.
+
+
+![Figure 7-35. North and south turn error.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-35-north-and-south-turn-error.png)

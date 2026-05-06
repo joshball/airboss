@@ -18,5 +18,3 @@ Neutral stability (see Figure 13-2) is the state of a column of air in the atmos
 If the column of air is unsaturated, then neutral stability exists when its lapse rate of temperature equals the
 dry adiabatic lapse rate. If the column of air is saturated, then neutral stability exists when its lapse rate of
 temperature equals the moist adiabatic lapse rate.
-
-![Figure 13-1. Absolute Stability Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-3-2-00-absolute-stability-example.png)

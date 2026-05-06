@@ -31,3 +31,6 @@ flight—the controller issues a safety alert if the projected
 path encounters terrain or an obstruction. An unusually
 rapid descent rate on a nonprecision approach can trigger
 such an alert.
+
+
+![Figure 2-11. Center radar displays.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-2-10-center-radar-displays.png)

@@ -216,10 +216,6 @@ Beginning and ending valid times.
 Location of expected Convective SIGMET issuances delineated by high-altitude VOR coordinates
 for the outlook valid time.
 
-![Figure 26-5. AWC Convective SIGMET Areas of Responsibility](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-4-00-awc-convective-sigmet-areas-of-responsibility.png)
-
-![Figure 26-6. Convective SIGMET—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-4-01-convective-sigmet-example.png)
-
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-26-2-4-00-decoding-a-non-convective-sigmet-for-the-conus-l.html">
 <table><caption>Table 26-1. Decoding a Non-Convective SIGMET for the CONUS 
 Line 

@@ -23,3 +23,6 @@ While this is a personal decision, it is just that—a decision.
 Low IFR in a non-autopilot equipped aircraft may depend
 on several of the other Ps to be discussed. Pilot proficiency,
 currency, and fatigue are among them.
+
+
+![Figure 2-12. A real-world examples of how the 3P model guides decisions on a cross-country trip using the CARE checklist.](/handbooks/phak/FAA-H-8083-25C/figures/fig-2-11-a-real-world-examples-of-how-the-3p-model-guides.png)

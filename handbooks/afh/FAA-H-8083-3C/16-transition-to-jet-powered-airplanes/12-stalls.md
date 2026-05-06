@@ -51,3 +51,6 @@ recovery may require significant pitch down to regain airspeed. As such, several
 during the recovery. The above discussion covers most airplanes; however, the stall recovery procedures for a particular make and
 model airplane may differ, as recommended by the manufacturer, and are contained in the FAA-approved Airplane Flight Manual for
 that airplane.
+
+
+![Figure 16-12. Sample captain’s briefing.](/handbooks/afh/FAA-H-8083-3C/figures/fig-16-11-sample-captain-s-briefing.png)

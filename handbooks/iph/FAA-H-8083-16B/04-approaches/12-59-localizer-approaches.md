@@ -23,3 +23,6 @@ Localizer approach
 Localizer/DME approach
 Localizer back course approach
 Localizer-type directional aid (LDA)
+
+
+![Figure 4-46. Simultaneous Independent Approach Example Using ILS Approaches.](/handbooks/iph/FAA-H-8083-16B/figures/fig-4-42-simultaneous-independent-approach-example-using-.png)

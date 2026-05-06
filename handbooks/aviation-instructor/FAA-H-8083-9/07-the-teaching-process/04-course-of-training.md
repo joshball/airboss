@@ -3,7 +3,7 @@ handbook: aviation-instructor
 edition: FAA-H-8083-9
 chapter_number: 7
 section_title: Course of Training
-faa_pages: 5-4
+faa_pages: 5-3
 section_number: 4
 source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/aviation_instructors_handbook/aviation_instructors_handbook.pdf
 ---
@@ -41,3 +41,4 @@ conducted. It includes the lesson objectives, organization of material being cov
 learner actions, and evaluation criteria and completions standards.
 Figure 5-3. The syllabus defines the unit of training, states by objective what the learner is expected to accomplish during the unit of
 training, shows an organized plan for instruction, and dictates the assessment process for either the unit or stages of learning.
+5-4Figur

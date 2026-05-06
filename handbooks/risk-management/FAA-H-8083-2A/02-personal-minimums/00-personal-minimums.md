@@ -310,6 +310,24 @@ the probability of experiencing an encounter that could lead to an incident or a
 A copy of the charts used in this chapter can be found in Appendix B, Risk Assessment Tools. Pilots are encouraged to copy and
 use the charts in the appendix or use comparable tools on an electronic flight bag (EFB) before each flight.
 
+![Figure 2-1. Weather category values for ceiling and visibility.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-2-00-weather-category-values-for-ceiling-and-visibili.png)
+
+![Figure 2-2. Certification, training, and experience summary.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-2-01-certification-training-and-experience-summary.png)
+
+![Figure 2-3. A sample pilot experience and comfort level assessment for VFR and MVFR.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-2-02-a-sample-pilot-experience-and-comfort-level-asse.png)
+
+![Figure 2-4. A sample pilot experience and comfort level assessment for IFR and LIFR.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-2-03-a-sample-pilot-experience-and-comfort-level-asse.png)
+
+![Figure 2-5. Experience and comfort level assessment for combined VFR and IFR.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-2-04-experience-and-comfort-level-assessment-for-comb.png)
+
+![Figure 2-6. A sample pilot experience and comfort level assessment for wind and turbulence.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-2-05-a-sample-pilot-experience-and-comfort-level-asse.png)
+
+![Figure 2-7. Sample experience and comfort level assessment for performance factors.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-2-06-sample-experience-and-comfort-level-assessment-f.png)
+
+![Figure 2-8. Sample baseline personal minimums.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-2-07-sample-baseline-personal-minimums.png)
+
+![Figure 2-9. Examples of additional safety margins from baseline personal minimums.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-2-08-examples-of-additional-safety-margins-from-basel.png)
+
 | Certification, Training, and Experience Summary |
 | --- |
 | Certification Level |

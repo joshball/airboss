@@ -351,3 +351,15 @@ An awareness of the basic elements of the communicative process (source, symbols
 communicator. Recognizing the various barriers to communication further enhances the flow of ideas between an instructor and the
 learner. Instructors develop communications skills in order to convey desired information to the learners. They also recognize that
 communication is a two-way process. In the end, successful communication has taken place if the desired results have been achieved.
+
+![Figure 4-1. An aviation instructor communicates with her learner using model airplanes to ensure the learner’s understanding of the](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-6-00-an-aviation-instructor-communicates-with-her-lea.png)
+
+![Figure 4-2. The instructor realizes from the response of the learner that “stall” has been interpreted by the learner to have something](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-6-01-the-instructor-realizes-from-the-response-of-the.png)
+
+![Figure 4-3. Misunderstandings stem primarily from four barriers to effective communication.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-6-02-misunderstandings-stem-primarily-from-four-barri.png)
+
+![Figure 4-4. Overuse of abstract terms can interfere with effective communication.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-6-03-overuse-of-abstract-terms-can-interfere-with-eff.png)
+
+![Figure 4-5. Instructors can use a number of tools to become better at listening.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-6-04-instructors-can-use-a-number-of-tools-to-become-.png)
+
+![Figure 4-6. Learners can improve their listening skills by applying the steps to effective listening.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-6-05-learners-can-improve-their-listening-skills-by-a.png)

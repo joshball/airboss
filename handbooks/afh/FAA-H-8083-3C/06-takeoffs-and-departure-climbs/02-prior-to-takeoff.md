@@ -33,3 +33,6 @@ during the climb out. These may be runway centerline markings, runway lighting, 
 
 Figure 6-1. Takeoff and climb.
 Figure 6-2. Performance chart examples.
+
+
+![Figure 6-2. Performance chart examples.](/handbooks/afh/FAA-H-8083-3C/figures/fig-6-01-performance-chart-examples.png)

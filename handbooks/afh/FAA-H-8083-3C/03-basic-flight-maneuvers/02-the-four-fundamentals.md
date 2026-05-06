@@ -23,3 +23,6 @@ The flight instructor needs to impart competent knowledge of these basic flight 
 combine them at a performance level that at least meets the Federal Aviation Administration (FAA) Airman Certification Standards
 (ACS) or Practical Test Standards (PTS). As the beginning pilot progresses to more complex flight maneuvers, any deficiencies in the
 mastery of the four fundamentals are likely to become barriers to effective and efficient learning.
+
+
+![Figure 3-2. The pilot is always considered the referenced center of effect as the flight controls are used.](/handbooks/afh/FAA-H-8083-3C/figures/fig-3-01-the-pilot-is-always-considered-the-referenced-ce.png)

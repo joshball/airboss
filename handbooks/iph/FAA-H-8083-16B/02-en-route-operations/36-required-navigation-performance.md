@@ -46,3 +46,10 @@ RNP Level
 Typical Application
 Primary Route Width (NM) - Centerline to Boundary
 Figure 2-56. U.S. standard RNP levels.
+
+
+![Figure 2-36. Zanesville VOR/Victor Airway 214.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-30-zanesville-vor-victor-airway-214.png)
+
+![Figure 2-55. Computer navigation fix.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-49-computer-navigation-fix.png)
+
+![Figure 2-56. U.S. standard RNP levels.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-50-u-s-standard-rnp-levels.png)

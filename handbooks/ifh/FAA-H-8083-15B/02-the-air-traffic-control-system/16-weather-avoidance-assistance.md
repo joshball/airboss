@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Weather Avoidance Assistance
+
+![Figure 2-16. ATC facilities, services, and radio call signs.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-2-15-atc-facilities-services-and-radio-call-signs.png)

@@ -87,3 +87,5 @@ operating limitations. However, sport pilots may not fly at night (14 CFR 61.315
 the aircraft, in accordance with 14 CFR part 61, section 61.101(i)(3) for the purpose of obtaining
 additional certificates or ratings and while under the supervision of an authorized instructor and provided
 the flight or surface visibility is at least 5 statute miles.
+
+![Figure 17-12. Trim control.](/handbooks/afh/FAA-H-8083-3C/figures/fig-17-11-trim-control.png)

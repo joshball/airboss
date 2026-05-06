@@ -51,9 +51,3 @@ difficult to circumnavigate. About 25 percent of all tornadoes in the United Sta
 squall lines.
 
 Figure 22-4. Multicell Line Thunderstorm
-
-![Figure 22-2. Thunderstorm Cell Life Cycle](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-4-00-thunderstorm-cell-life-cycle.png)
-
-![Figure 22-3. Multicell Cluster Thunderstorm](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-4-01-multicell-cluster-thunderstorm.png)
-
-![Figure 22-4. Multicell Line Thunderstorm](/handbooks/avwx/FAA-H-8083-28B/figures/fig-22-4-02-multicell-line-thunderstorm.png)

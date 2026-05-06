@@ -96,7 +96,3 @@ Low risk
 Figure 3-6. Example of a numerical FRAT.
 25487/11871
 The FAA provides a numerical FRAT here. While this type of FRAT is easy to use, it has several drawbacks, including:
-
-![Figure 3-4. Elkins, WV airport.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-6-00-elkins-wv-airport.png)
-
-![Figure 3-5. Sectional chart excerpt of Elkins, WV airport.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-6-01-sectional-chart-excerpt-of-elkins-wv-airport.png)

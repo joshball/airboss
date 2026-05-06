@@ -69,3 +69,8 @@ Landing some turboprop airplanes (as well as some piston twins) can result in a 
 too soon. This is because large propellers spinning rapidly in low pitch create considerable drag. In such airplanes, it may be
 preferable to maintain power throughout the landing flare and touchdown. Once firmly on the ground, propeller beta range operation
 dramatically reduces the need for braking in comparison to piston airplanes of similar weight.
+
+
+![Figure 15-6. Powerplant controls—split-shaft/free turbine engine.](/handbooks/afh/FAA-H-8083-3C/figures/fig-15-05-powerplant-controls-split-shaft-free-turbine-eng.png)
+
+![Figure 15-10. Simplified schematic of turboprop airplane electrical system.](/handbooks/afh/FAA-H-8083-3C/figures/fig-15-08-simplified-schematic-of-turboprop-airplane-elect.png)

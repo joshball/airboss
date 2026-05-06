@@ -21,8 +21,6 @@ Figure 2-2. Audio panel.
 Figure 2-1. Typical navigation/communication installation.
 
 
-![Figure 2-10. A portion of the New York area tower en route list (from the A/FD).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-2-00-a-portion-of-the-new-york-area-tower-en-route-li.png)
-
 | Call sign—Northwest 196 Departure point—San Diego |
 | --- |
 | Altitude—37,000 feet Destination—Minneapolis |

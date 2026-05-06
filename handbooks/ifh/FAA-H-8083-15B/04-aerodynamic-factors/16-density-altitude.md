@@ -67,3 +67,6 @@ actual temperature is 20 °C (11 °C more than that predicted
 by ISA) then the difference of 11 °C is multiplied by 120 feet
 equaling 1,320. Adding this figure to the original 3,000 feet
 provides a density altitude of 4,320 feet (3,000 feet + 1,320 feet).
+
+
+![Figure 4-16. Adverse yaw.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-4-10-vortex-generators.png)

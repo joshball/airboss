@@ -6,7 +6,7 @@
   "publisher": "FAA",
   "source_url": "https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/aviation_instructors_handbook/aviation_instructors_handbook.pdf",
   "source_checksum": "8a3c2cc0133d5d0231ff42589b55b49d995f604c21c16dffe688db1beccbaf73",
-  "fetched_at": "2026-05-04T20:38:18.079062+00:00",
+  "fetched_at": "2026-05-05T21:09:58.198299+00:00",
   "subjects": [
     "training-ops",
     "human-factors"
@@ -102,7 +102,7 @@
       "faa_page_end": "1-29",
       "source_locator": "AVIATION-INSTRUCTOR Ch 3 (1-1..1-29)",
       "body_path": "handbooks/aviation-instructor/FAA-H-8083-9/03-risk-management-and-single-pilot-resource-manage/00-risk-management-and-single-pilot-resource-manage.md",
-      "content_hash": "42540185e5c5dfa71f97a9db31ec77b30b76d8c1314e3d9ba935002a118ffe95",
+      "content_hash": "d6325f8143771b47276f7461908fa4e5a6433ef270f728c906c9370de6b90848",
       "has_figures": true,
       "has_tables": false
     },
@@ -256,8 +256,8 @@
       "faa_page_end": "1-14",
       "source_locator": "AVIATION-INSTRUCTOR Ch 3 §6 (1-13..1-14)",
       "body_path": "handbooks/aviation-instructor/FAA-H-8083-9/03-risk-management-and-single-pilot-resource-manage/06-situational-awareness.md",
-      "content_hash": "446ceea231cbc62f37cfbc72fa2dca84d5a13a97dfc73c3b3c9dc64c0eb09204",
-      "has_figures": true,
+      "content_hash": "f9751fd41b22caed23ed476904df937ff72bc5f1fc41e39806a7e13b244d2fb6",
+      "has_figures": false,
       "has_tables": false
     },
     {
@@ -270,8 +270,8 @@
       "faa_page_end": "1-13",
       "source_locator": "AVIATION-INSTRUCTOR Ch 3 §6 (1) (1-13)",
       "body_path": "handbooks/aviation-instructor/FAA-H-8083-9/03-risk-management-and-single-pilot-resource-manage/06-01-obstacles-to-maintaining-situational-awareness.md",
-      "content_hash": "bbd42b86825beabf6581ed158d2e4da6080dac36dc9d2e30a11afff7133c2b72",
-      "has_figures": true,
+      "content_hash": "a7ff896e28e4c230ac94c56c85e2bc6f13f4f114825803b7747b9640b3807fe5",
+      "has_figures": false,
       "has_tables": false
     },
     {
@@ -452,8 +452,8 @@
       "faa_page_end": "2-18",
       "source_locator": "AVIATION-INSTRUCTOR Ch 4 (2-1..2-18)",
       "body_path": "handbooks/aviation-instructor/FAA-H-8083-9/04-human-behavior/00-human-behavior.md",
-      "content_hash": "5ef3f0cf90d11b75f94fd4652fbd4f35fd144b99e8afdc5d2f6b194f04b92dd7",
-      "has_figures": false,
+      "content_hash": "58a07c84d9b53c51a2da0eedcd43360ef2927df298c802255ae8df2c35e563bf",
+      "has_figures": true,
       "has_tables": false
     },
     {
@@ -956,7 +956,7 @@
       "faa_page_end": "3-42",
       "source_locator": "AVIATION-INSTRUCTOR Ch 5 (3-1..3-42)",
       "body_path": "handbooks/aviation-instructor/FAA-H-8083-9/05-the-learning-process/00-the-learning-process.md",
-      "content_hash": "1c2cb04aedd3d40b2da44436a1e92c060adab60dcd227329336c17d0479128e3",
+      "content_hash": "052432cede63635a7b337766c1b974c603a7032732b38a5d88964939c478d3c1",
       "has_figures": true,
       "has_tables": false
     },
@@ -1138,8 +1138,8 @@
       "faa_page_end": "3-12",
       "source_locator": "AVIATION-INSTRUCTOR Ch 5 §6 (3-11..3-12)",
       "body_path": "handbooks/aviation-instructor/FAA-H-8083-9/05-the-learning-process/06-thorndike-and-the-laws-of-learning.md",
-      "content_hash": "5dd01fc042324fd789ef09b979d9bb404b788f7375bed5b07f84ce8b5d2e8439",
-      "has_figures": true,
+      "content_hash": "e166c6b7c7500c673ef7b4da534e8293d3e83caa577e6e1fc792f415dc0f4268",
+      "has_figures": false,
       "has_tables": false
     },
     {
@@ -1166,8 +1166,8 @@
       "faa_page_end": "3-12",
       "source_locator": "AVIATION-INSTRUCTOR Ch 5 §6 (2) (3-12)",
       "body_path": "handbooks/aviation-instructor/FAA-H-8083-9/05-the-learning-process/06-02-effect.md",
-      "content_hash": "bf101286eae72bcfab851050f1b4d64135fde74344e0d77efced957a74ead4a2",
-      "has_figures": true,
+      "content_hash": "73d0500a2d929954a0dbbb834b9d0846c02374c219279cce915de468181ac6f1",
+      "has_figures": false,
       "has_tables": false
     },
     {
@@ -2188,8 +2188,8 @@
       "faa_page_end": "4-10",
       "source_locator": "AVIATION-INSTRUCTOR Ch 6 (4-1..4-10)",
       "body_path": "handbooks/aviation-instructor/FAA-H-8083-9/06-effective-communication/00-effective-communication.md",
-      "content_hash": "a5676c19efd9e5f1c69ca3196ecb5a92ce2c5ee229901712150a534418dce42a",
-      "has_figures": false,
+      "content_hash": "c24c803148cacca649dcfdd667476c62ea2225e999591210b747cc1ed4223dc4",
+      "has_figures": true,
       "has_tables": false
     },
     {
@@ -2454,8 +2454,8 @@
       "faa_page_end": "5-28",
       "source_locator": "AVIATION-INSTRUCTOR Ch 7 (5-1..5-28)",
       "body_path": "handbooks/aviation-instructor/FAA-H-8083-9/07-the-teaching-process/00-the-teaching-process.md",
-      "content_hash": "00d44c435e6ddb1b6e55e17ad921175fe6c879c4ae96ae723235b6f69805ce57",
-      "has_figures": false,
+      "content_hash": "853ef082663c015f0151aa662591470fca039c8df27e31ab5b2c707ded0be918",
+      "has_figures": true,
       "has_tables": false
     },
     {
@@ -2534,11 +2534,11 @@
       "ordinal": 4,
       "parent_code": "7",
       "title": "Course of Training",
-      "faa_page_start": "5-4",
-      "faa_page_end": "5-4",
-      "source_locator": "AVIATION-INSTRUCTOR Ch 7 §4 (5-4)",
+      "faa_page_start": "5-3",
+      "faa_page_end": "5-3",
+      "source_locator": "AVIATION-INSTRUCTOR Ch 7 §4 (5-3)",
       "body_path": "handbooks/aviation-instructor/FAA-H-8083-9/07-the-teaching-process/04-course-of-training.md",
-      "content_hash": "623ebafde5c35a889486a3dc8b53a0b33163fc9b3732be4a35ba6ef45042d4c1",
+      "content_hash": "8606964d99e7fa0d7ee77b4875e08b938691d6a23c6b389360b16748386a9175",
       "has_figures": false,
       "has_tables": false
     },
@@ -3112,8 +3112,8 @@
       "faa_page_end": "6-13",
       "source_locator": "AVIATION-INSTRUCTOR Ch 8 (6-1..6-13)",
       "body_path": "handbooks/aviation-instructor/FAA-H-8083-9/08-assessment/00-assessment.md",
-      "content_hash": "4fd6cb1c4d92ae6800a24fad89887ab16e6108a04e4eca560732fde7567fc7bb",
-      "has_figures": false,
+      "content_hash": "b60017164ef86b80211a3bc1aed26ca89f103b6a4fd9d87d242def594bd83461",
+      "has_figures": true,
       "has_tables": false
     },
     {
@@ -3630,8 +3630,8 @@
       "faa_page_end": "7-14",
       "source_locator": "AVIATION-INSTRUCTOR Ch 9 (7-1..7-14)",
       "body_path": "handbooks/aviation-instructor/FAA-H-8083-9/09-planning-instructional-activity/00-planning-instructional-activity.md",
-      "content_hash": "aa1687bc3f3c168004c0d99b8345a86065254a68cc1446a9ca85fa293aa5ae4e",
-      "has_figures": false,
+      "content_hash": "f9090e8461450551b369493850ced827252e4abdf6840286c22b64fa99f888f9",
+      "has_figures": true,
       "has_tables": false
     },
     {
@@ -3868,8 +3868,8 @@
       "faa_page_end": "8-12",
       "source_locator": "AVIATION-INSTRUCTOR Ch 10 (8-1..8-12)",
       "body_path": "handbooks/aviation-instructor/FAA-H-8083-9/10-aviation-instructor-responsibilities-and-profess/00-aviation-instructor-responsibilities-and-profess.md",
-      "content_hash": "d3e439b8f42243bd41b3be30f5cd6e6ad8344a22b6d680c57145e693e2c48b39",
-      "has_figures": false,
+      "content_hash": "eb3a46c5cf58c2af19cd6b30623c125e50e5067ab197ff5231fab183f9aa5216",
+      "has_figures": true,
       "has_tables": false
     },
     {
@@ -4246,8 +4246,8 @@
       "faa_page_end": "9-14",
       "source_locator": "AVIATION-INSTRUCTOR Ch 11 (9-1..9-14)",
       "body_path": "handbooks/aviation-instructor/FAA-H-8083-9/11-techniques-of-flight-instruction/00-techniques-of-flight-instruction.md",
-      "content_hash": "05851b8b5c7528e366a71541ba0f86995c3d14417d8adf8893ce929e127f82d5",
-      "has_figures": false,
+      "content_hash": "f7534fba6c899cb28710be704345b4af173734d637d7649302a57bd16bbb111c",
+      "has_figures": true,
       "has_tables": false
     },
     {
@@ -4736,8 +4736,8 @@
       "faa_page_end": "10-9",
       "source_locator": "AVIATION-INSTRUCTOR Ch 12 (10-1..10-9)",
       "body_path": "handbooks/aviation-instructor/FAA-H-8083-9/12-teaching-practical-risk-management-during-flight/00-teaching-practical-risk-management-during-flight.md",
-      "content_hash": "05492004a3034ff36bb0449ed03323790e19f6c6b96ca0cdcb085815ae5e61b6",
-      "has_figures": false,
+      "content_hash": "0c7acb66146a789cf47b9f2f41024b766048e0db1cc905daf50ad84de227115c",
+      "has_figures": true,
       "has_tables": false
     },
     {
@@ -5936,2008 +5936,913 @@
       "id": "fig-3-00",
       "section_code": "3",
       "ordinal": 0,
+      "caption": "Figure 1-1. Types of risk.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-00-types-of-risk.png",
+      "width": 988,
+      "height": 1561
+    },
+    {
+      "id": "fig-3-01",
+      "section_code": "3",
+      "ordinal": 1,
+      "caption": "Figure 1-2. One of the most important decisions that the pilot in command makes is the go/no-go decision. Evaluating each of these  risk elements can help the pilot decide whether a flight should be conducted or continued.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-01-one-of-the-most-important-decisions-that-the-pil.png",
+      "width": 2026,
+      "height": 901
+    },
+    {
+      "id": "fig-3-02",
+      "section_code": "3",
+      "ordinal": 2,
+      "caption": "Figure 1-3. Prior to flight, pilots may use a checklist to assess their fitness, just as they evaluate the aircraft’s airworthiness.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-02-prior-to-flight-pilots-may-use-a-checklist-to-as.png",
+      "width": 988,
+      "height": 826
+    },
+    {
+      "id": "fig-3-03",
+      "section_code": "3",
+      "ordinal": 3,
+      "caption": "Figure 1-4. This risk matrix can be used for almost any operation by assigning likelihood and severity. In the case presented, the pilot  assigned the likelihood of occasional and the severity as catastrophic falls in the high-risk area.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-12-01-this-risk-matrix-can-be-used-for-almost-any-oper.png",
+      "width": 988,
+      "height": 526
+    },
+    {
+      "id": "fig-3-04",
+      "section_code": "3",
+      "ordinal": 4,
+      "caption": "Figure 1-5. 3P Model (Perceive, Process, and Perform).",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-04-3p-model-perceive-process-and-perform.png",
+      "width": 988,
+      "height": 946
+    },
+    {
+      "id": "fig-3-05",
+      "section_code": "3",
+      "ordinal": 5,
       "caption": "Figure 1-6. Fatigue is a threat to aviation safety because it impairs alertness and performance.",
-      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-6-1-00-fatigue-is-a-threat-to-aviation-safety-because-i.png",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-05-fatigue-is-a-threat-to-aviation-safety-because-i.png",
       "width": 988,
       "height": 644
     },
     {
-      "id": "fig-3-6-00",
-      "section_code": "3.6",
-      "ordinal": 0,
-      "caption": "Figure 1-6. Fatigue is a threat to aviation safety because it impairs alertness and performance.",
-      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-6-1-00-fatigue-is-a-threat-to-aviation-safety-because-i.png",
+      "id": "fig-3-06",
+      "section_code": "3",
+      "ordinal": 6,
+      "caption": "Figure 1-7. Countermeasures for coping with fatigue.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-06-countermeasures-for-coping-with-fatigue.png",
       "width": 988,
-      "height": 644
+      "height": 956
     },
     {
-      "id": "fig-3-6-1-00",
-      "section_code": "3.6.1",
-      "ordinal": 0,
-      "caption": "Figure 1-6. Fatigue is a threat to aviation safety because it impairs alertness and performance.",
-      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-6-1-00-fatigue-is-a-threat-to-aviation-safety-because-i.png",
+      "id": "fig-3-07",
+      "section_code": "3",
+      "ordinal": 7,
+      "caption": "Figure 1-8. All experienced pilots have fallen prey to, or have been tempted by, one or more of these tendencies in their flying  careers.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-07-all-experienced-pilots-have-fallen-prey-to-or-ha.png",
+      "width": 2026,
+      "height": 1966
+    },
+    {
+      "id": "fig-3-08",
+      "section_code": "3",
+      "ordinal": 8,
+      "caption": "Figure 1-9. The 5P checklist.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-08-the-5p-checklist.png",
       "width": 988,
-      "height": 644
+      "height": 901
+    },
+    {
+      "id": "fig-3-09",
+      "section_code": "3",
+      "ordinal": 9,
+      "caption": "Figure 1-10. Terms used in AC 60-22 to explain concepts used in ADM training.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-09-terms-used-in-ac-60-22-to-explain-concepts-used-.png",
+      "width": 2026,
+      "height": 2363
+    },
+    {
+      "id": "fig-3-10",
+      "section_code": "3",
+      "ordinal": 10,
+      "caption": "Figure 1-11. Pilots should examine their decisions carefully to ensure that their choices have not been influenced by a hazardous  attitude",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-10-pilots-should-examine-their-decisions-carefully-.png",
+      "width": 2026,
+      "height": 1141
+    },
+    {
+      "id": "fig-3-11",
+      "section_code": "3",
+      "ordinal": 11,
+      "caption": "Figure 1-12. Learners in training can be asked to identify hazardous attitudes and the corresponding antidotes when presented with  flight scenarios.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-11-learners-in-training-can-be-asked-to-identify-ha.png",
+      "width": 988,
+      "height": 1384
+    },
+    {
+      "id": "fig-3-12",
+      "section_code": "3",
+      "ordinal": 12,
+      "caption": "Figure 1-13. Three types of stressors that can affect pilot performance.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-12-three-types-of-stressors-that-can-affect-pilot-p.png",
+      "width": 988,
+      "height": 680
+    },
+    {
+      "id": "fig-3-13",
+      "section_code": "3",
+      "ordinal": 13,
+      "caption": "Figure 1-14. Accidents often occur when flying task requirements exceed pilot capabilities. The difference between these two factors is  called the margin of safety. Note that in this idealized example, the margin of safety is minimal during the approach and landing. At this point, an emergency or distraction could ove",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-13-accidents-often-occur-when-flying-task-requireme.png",
+      "width": 2026,
+      "height": 946
+    },
+    {
+      "id": "fig-4-00",
+      "section_code": "4",
+      "ordinal": 0,
+      "caption": "Figure 2-1. The average age of a learner pilot is 34, while the average age of a maintenance learner is 25.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-4-00-the-average-age-of-a-learner-pilot-is-34-while-t.png",
+      "width": 988,
+      "height": 770
+    },
+    {
+      "id": "fig-4-01",
+      "section_code": "4",
+      "ordinal": 1,
+      "caption": "Figure 2-2. Insecure and unpleasant training situations inhibit learning.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-4-01-insecure-and-unpleasant-training-situations-inhi.png",
+      "width": 987,
+      "height": 1050
+    },
+    {
+      "id": "fig-4-02",
+      "section_code": "4",
+      "ordinal": 2,
+      "caption": "Figure 2-3. Maslow’s Hierarchy of Needs.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-4-02-maslow-s-hierarchy-of-needs.png",
+      "width": 988,
+      "height": 900
+    },
+    {
+      "id": "fig-4-03",
+      "section_code": "4",
+      "ordinal": 3,
+      "caption": "Figure 2-4. Daniel Kahneman developed a two-system view of human behaviors that affect decision-making: System 1 (fast)  represents the automatic responses, while System 2 (slow) represents the more logical and deliberate considerations used for decision-making.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-4-03-daniel-kahneman-developed-a-two-system-view-of-h.png",
+      "width": 1928,
+      "height": 1341
+    },
+    {
+      "id": "fig-4-04",
+      "section_code": "4",
+      "ordinal": 4,
+      "caption": "Figure 2-5. Several common defense mechanisms may apply to aviation learners.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-4-04-several-common-defense-mechanisms-may-apply-to-a.png",
+      "width": 988,
+      "height": 478
+    },
+    {
+      "id": "fig-4-05",
+      "section_code": "4",
+      "ordinal": 5,
+      "caption": "Figure 2-6. The assignment of impossible or unreasonable goals discourages the learner, diminishes effort, and retards the learning  process.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-4-05-the-assignment-of-impossible-or-unreasonable-goa.png",
+      "width": 988,
+      "height": 750
+    },
+    {
+      "id": "fig-4-06",
+      "section_code": "4",
+      "ordinal": 6,
+      "caption": "Figure 2-7. Poor preparation leads to spotty coverage, misplaced emphasis, unnecessary repetition, and a lack of confidence on the  part of the learner. The instructor should always have a plan.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-4-06-poor-preparation-leads-to-spotty-coverage-mispla.png",
+      "width": 987,
+      "height": 660
+    },
+    {
+      "id": "fig-4-07",
+      "section_code": "4",
+      "ordinal": 7,
+      "caption": "Figure 2-8. A learner with marked changes in mood during different lessons, such as excellent morale followed by deep depression, is  indicative of an abnormal reaction to stress.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-4-07-a-learner-with-marked-changes-in-mood-during-dif.png",
+      "width": 987,
+      "height": 1320
     },
     {
       "id": "fig-5-00",
       "section_code": "5",
       "ordinal": 0,
+      "caption": "Figure 3-1. An effective instructor understands the characteristics of learning and assists accordingly.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-00-an-effective-instructor-understands-the-characte.png",
+      "width": 988,
+      "height": 715
+    },
+    {
+      "id": "fig-5-01",
+      "section_code": "5",
+      "ordinal": 1,
+      "caption": "Figure 3-2. Learning theories of psychology include classical conditioning, operant conditioning, and social learning.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-01-learning-theories-of-psychology-include-classica.png",
+      "width": 2025,
+      "height": 486
+    },
+    {
+      "id": "fig-5-02",
+      "section_code": "5",
+      "ordinal": 2,
+      "caption": "Figure 3-3. Psychologists and educators who established the theories of cognitive learning.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-02-psychologists-and-educators-who-established-the-.png",
+      "width": 987,
+      "height": 598
+    },
+    {
+      "id": "fig-5-03",
+      "section_code": "5",
+      "ordinal": 3,
+      "caption": "Figure 3-4. Bloom’s Taxonomy of the Cognitive Domain.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-03-bloom-s-taxonomy-of-the-cognitive-domain.png",
+      "width": 988,
+      "height": 1153
+    },
+    {
+      "id": "fig-5-04",
+      "section_code": "5",
+      "ordinal": 4,
+      "caption": "Figure 3-5. Most learning occurs through sight, but the combination of sight and hearing accounts for about 88 percent of all  perception.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-04-most-learning-occurs-through-sight-but-the-combi.png",
+      "width": 988,
+      "height": 600
+    },
+    {
+      "id": "fig-5-05",
+      "section_code": "5",
+      "ordinal": 5,
+      "caption": "Figure 3-6. A learner acquires knowledge through memorization, understanding, and application.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-05-a-learner-acquires-knowledge-through-memorizatio.png",
+      "width": 988,
+      "height": 1291
+    },
+    {
+      "id": "fig-5-06",
+      "section_code": "5",
+      "ordinal": 6,
       "caption": "Figure 3-7. E. L. Thorndike (1874–1949).",
-      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-6-2-00-e-l-thorndike-1874-1949.png",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-06-e-l-thorndike-1874-1949.png",
       "width": 1224,
       "height": 1454
     },
     {
-      "id": "fig-5-6-00",
-      "section_code": "5.6",
-      "ordinal": 0,
-      "caption": "Figure 3-7. E. L. Thorndike (1874–1949).",
-      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-6-2-00-e-l-thorndike-1874-1949.png",
-      "width": 1224,
-      "height": 1454
+      "id": "fig-5-07",
+      "section_code": "5",
+      "ordinal": 7,
+      "caption": "Figure 3-8. An overview of the three learning domains.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-07-an-overview-of-the-three-learning-domains.png",
+      "width": 2025,
+      "height": 466
     },
     {
-      "id": "fig-5-6-2-00",
-      "section_code": "5.6.2",
+      "id": "fig-5-08",
+      "section_code": "5",
+      "ordinal": 8,
+      "caption": "Figure 3-9. The six major levels of Bloom’s Taxonomy of the Cognitive Domain with types of behavior with objectives.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-08-the-six-major-levels-of-bloom-s-taxonomy-of-the-.png",
+      "width": 2026,
+      "height": 1258
+    },
+    {
+      "id": "fig-5-09",
+      "section_code": "5",
+      "ordinal": 9,
+      "caption": "Figure 3-10. Learning is progressive and occurs at several basic levels.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-09-learning-is-progressive-and-occurs-at-several-ba.png",
+      "width": 2026,
+      "height": 1201
+    },
+    {
+      "id": "fig-5-10",
+      "section_code": "5",
+      "ordinal": 10,
+      "caption": "Figure 3-11. The affective domain (attitudes, beliefs, and values) contains five educational objective levels.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-10-the-affective-domain-attitudes-beliefs-and-value.png",
+      "width": 988,
+      "height": 968
+    },
+    {
+      "id": "fig-5-11",
+      "section_code": "5",
+      "ordinal": 11,
+      "caption": "Figure 3-12. The psychomotor domain (physical skills) consists of seven educational objective levels.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-11-the-psychomotor-domain-physical-skills-consists-.png",
+      "width": 988,
+      "height": 1201
+    },
+    {
+      "id": "fig-5-12",
+      "section_code": "5",
+      "ordinal": 12,
+      "caption": "Figure 3-13. A listing such as the one shown here is useful for development of almost any training program.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-12-a-listing-such-as-the-one-shown-here-is-useful-f.png",
+      "width": 988,
+      "height": 2011
+    },
+    {
+      "id": "fig-5-13",
+      "section_code": "5",
+      "ordinal": 13,
+      "caption": "Figure 3-14. The importance of recognizing a dominant brain hemisphere gives the instructor a guide for ways to teach and reinforce  learning.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-13-the-importance-of-recognizing-a-dominant-brain-h.png",
+      "width": 988,
+      "height": 901
+    },
+    {
+      "id": "fig-5-14",
+      "section_code": "5",
+      "ordinal": 14,
+      "caption": "Figure 3-15. Some of the different traits utilized by each learning style.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-14-some-of-the-different-traits-utilized-by-each-le.png",
+      "width": 988,
+      "height": 930
+    },
+    {
+      "id": "fig-5-15",
+      "section_code": "5",
+      "ordinal": 15,
+      "caption": "Figure 3-16. Visual, auditory, and kinesthetic learning styles (VAK).",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-15-visual-auditory-and-kinesthetic-learning-styles-.png",
+      "width": 988,
+      "height": 480
+    },
+    {
+      "id": "fig-5-16",
+      "section_code": "5",
+      "ordinal": 16,
+      "caption": "Figure 3-17. Learners will probably experience a learning plateau at some point in their training.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-16-learners-will-probably-experience-a-learning-pla.png",
+      "width": 988,
+      "height": 991
+    },
+    {
+      "id": "fig-5-17",
+      "section_code": "5",
+      "ordinal": 17,
+      "caption": "Figure 3-18. A learner exhibits deliberate practice by plotting courses for his next training flight.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-17-a-learner-exhibits-deliberate-practice-by-plotti.png",
+      "width": 987,
+      "height": 658
+    },
+    {
+      "id": "fig-5-18",
+      "section_code": "5",
+      "ordinal": 18,
+      "caption": "Figure 3-19. Pilot practices cross-wind landings repeatedly to improve performance.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-18-pilot-practices-cross-wind-landings-repeatedly-t.png",
+      "width": 2028,
+      "height": 1250
+    },
+    {
+      "id": "fig-5-19",
+      "section_code": "5",
+      "ordinal": 19,
+      "caption": "Figure 3-20. A pilot is required to perform several tasks at once during approaches and landings.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-19-a-pilot-is-required-to-perform-several-tasks-at-.png",
+      "width": 2025,
+      "height": 1200
+    },
+    {
+      "id": "fig-5-20",
+      "section_code": "5",
+      "ordinal": 20,
+      "caption": "Figure 3-21. Other mistakes arise under pressure. For example, a technician or pilot might perform a cursory inspection of an  aircraft to save time, only to have a problem manifest itself later.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-20-other-mistakes-arise-under-pressure-for-example-.png",
+      "width": 849,
+      "height": 565
+    },
+    {
+      "id": "fig-5-21",
+      "section_code": "5",
+      "ordinal": 21,
+      "caption": "Figure 3-22. Information processing within the sensory register, working on short-term memory, and long-term memory includes  complex coding, sorting, storing, and recall functions.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-21-information-processing-within-the-sensory-regist.png",
+      "width": 2026,
+      "height": 1131
+    },
+    {
+      "id": "fig-6-00",
+      "section_code": "6",
       "ordinal": 0,
-      "caption": "Figure 3-7. E. L. Thorndike (1874–1949).",
-      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-5-6-2-00-e-l-thorndike-1874-1949.png",
-      "width": 1224,
-      "height": 1454
+      "caption": "Figure 4-1. An aviation instructor communicates with her learner using model airplanes to ensure the learner’s understanding of the",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-6-00-an-aviation-instructor-communicates-with-her-lea.png",
+      "width": 1001,
+      "height": 753
+    },
+    {
+      "id": "fig-6-01",
+      "section_code": "6",
+      "ordinal": 1,
+      "caption": "Figure 4-2. The instructor realizes from the response of the learner that “stall” has been interpreted by the learner to have something",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-6-01-the-instructor-realizes-from-the-response-of-the.png",
+      "width": 2026,
+      "height": 1050
+    },
+    {
+      "id": "fig-6-02",
+      "section_code": "6",
+      "ordinal": 2,
+      "caption": "Figure 4-3. Misunderstandings stem primarily from four barriers to effective communication.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-6-02-misunderstandings-stem-primarily-from-four-barri.png",
+      "width": 2026,
+      "height": 859
+    },
+    {
+      "id": "fig-6-03",
+      "section_code": "6",
+      "ordinal": 3,
+      "caption": "Figure 4-4. Overuse of abstract terms can interfere with effective communication.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-6-03-overuse-of-abstract-terms-can-interfere-with-eff.png",
+      "width": 2026,
+      "height": 1426
+    },
+    {
+      "id": "fig-6-04",
+      "section_code": "6",
+      "ordinal": 4,
+      "caption": "Figure 4-5. Instructors can use a number of tools to become better at listening.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-6-04-instructors-can-use-a-number-of-tools-to-become-.png",
+      "width": 988,
+      "height": 900
+    },
+    {
+      "id": "fig-6-05",
+      "section_code": "6",
+      "ordinal": 5,
+      "caption": "Figure 4-6. Learners can improve their listening skills by applying the steps to effective listening.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-6-05-learners-can-improve-their-listening-skills-by-a.png",
+      "width": 988,
+      "height": 1800
+    },
+    {
+      "id": "fig-7-00",
+      "section_code": "7",
+      "ordinal": 0,
+      "caption": "Figure 5-1. Aviation instructors organize course material and use procedures and methods that promote learning.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-00-aviation-instructors-organize-course-material-an.png",
+      "width": 987,
+      "height": 639
+    },
+    {
+      "id": "fig-7-01",
+      "section_code": "7",
+      "ordinal": 1,
+      "caption": "Figure 5-2. An effective instructor uses a variety of tools to evaluate how learners learn, as well as what they know.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-01-an-effective-instructor-uses-a-variety-of-tools-.png",
+      "width": 988,
+      "height": 1021
+    },
+    {
+      "id": "fig-7-02",
+      "section_code": "7",
+      "ordinal": 2,
+      "caption": "Figure 5-3. The syllabus defines the unit of training, states by objective what the learner is expected to accomplish during the unit of  training, shows an organized plan for instruction, and dictates the assessment process for either the unit or stages of learning.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-02-the-syllabus-defines-the-unit-of-training-states.png",
+      "width": 2026,
+      "height": 1284
+    },
+    {
+      "id": "fig-7-03",
+      "section_code": "7",
+      "ordinal": 3,
+      "caption": "Figure 5-4. Performance-based objectives are made up of a description of the skill or behavior, conditions, and criteria.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-03-performance-based-objectives-are-made-up-of-a-de.png",
+      "width": 988,
+      "height": 1032
+    },
+    {
+      "id": "fig-7-04",
+      "section_code": "7",
+      "ordinal": 4,
+      "caption": "Figure 5-5. Examples of Airman Certification Standards.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-04-examples-of-airman-certification-standards.png",
+      "width": 1972,
+      "height": 1284
+    },
+    {
+      "id": "fig-7-05",
+      "section_code": "7",
+      "ordinal": 5,
+      "caption": "Figure 5-6. Guidelines for presenting lessons.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-05-guidelines-for-presenting-lessons.png",
+      "width": 988,
+      "height": 2250
+    },
+    {
+      "id": "fig-7-06",
+      "section_code": "7",
+      "ordinal": 6,
+      "caption": "Figure 5-7. The attention element causes learners to focus on the upcoming lesson.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-06-the-attention-element-causes-learners-to-focus-o.png",
+      "width": 1613,
+      "height": 1098
+    },
+    {
+      "id": "fig-7-07",
+      "section_code": "7",
+      "ordinal": 7,
+      "caption": "Figure 5-8. Instructors should try a dry run with another instructor to get a feel for the lecture presentation.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-07-instructors-should-try-a-dry-run-with-another-in.png",
+      "width": 987,
+      "height": 1294
+    },
+    {
+      "id": "fig-7-08",
+      "section_code": "7",
+      "ordinal": 8,
+      "caption": "Figure 5-9. Notes allow the accurate dissemination of complicated information.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-08-notes-allow-the-accurate-dissemination-of-compli.png",
+      "width": 1132,
+      "height": 1696
+    },
+    {
+      "id": "fig-7-09",
+      "section_code": "7",
+      "ordinal": 9,
+      "caption": "Figure 5-10. If the objectives of a lesson are clearly established in advance, instructors will find it much easier to ask appropriate  questions that keep the discussion moving in the planned direction.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-09-if-the-objectives-of-a-lesson-are-clearly-establ.png",
+      "width": 2227,
+      "height": 943
+    },
+    {
+      "id": "fig-7-10",
+      "section_code": "7",
+      "ordinal": 10,
+      "caption": "Figure 5-11. As the learner grows in flight knowledge, he or she should be able to lead the postflight review while the instructor  guides the discussion with targeted questions.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-10-as-the-learner-grows-in-flight-knowledge-he-or-s.png",
+      "width": 988,
+      "height": 600
+    },
+    {
+      "id": "fig-7-11",
+      "section_code": "7",
+      "ordinal": 11,
+      "caption": "Figure 5-12. E-learning encompasses a variety of electronic educational media.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-11-e-learning-encompasses-a-variety-of-electronic-e.png",
+      "width": 987,
+      "height": 625
+    },
+    {
+      "id": "fig-7-12",
+      "section_code": "7",
+      "ordinal": 12,
+      "caption": "Figure 5-13. The instructor continually monitors learner performance when using CAL, as with all instructional aids.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-12-the-instructor-continually-monitors-learner-perf.png",
+      "width": 987,
+      "height": 1479
+    },
+    {
+      "id": "fig-7-13",
+      "section_code": "7",
+      "ordinal": 13,
+      "caption": "Figure 5-14. Flight simulator.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-13-flight-simulator.png",
+      "width": 849,
+      "height": 565
+    },
+    {
+      "id": "fig-7-14",
+      "section_code": "7",
+      "ordinal": 14,
+      "caption": "Figure 5-15. The demonstration-performance method of teaching has five essential phases.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-14-the-demonstration-performance-method-of-teaching.png",
+      "width": 988,
+      "height": 347
+    },
+    {
+      "id": "fig-7-15",
+      "section_code": "7",
+      "ordinal": 15,
+      "caption": "Figure 5-16. Studies generally agree that measurable improvement in learner retention of information occurs when instruction is  supported by appropriate instructional aids.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-15-studies-generally-agree-that-measurable-improvem.png",
+      "width": 2026,
+      "height": 946
+    },
+    {
+      "id": "fig-7-16",
+      "section_code": "7",
+      "ordinal": 16,
+      "caption": "Figure 5-17. Guidelines for effective instructional aids.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-16-guidelines-for-effective-instructional-aids.png",
+      "width": 988,
+      "height": 976
+    },
+    {
+      "id": "fig-7-17",
+      "section_code": "7",
+      "ordinal": 17,
+      "caption": "Figure 5-18. In a computer-assisted learning environment, the instructor still ensures that learning objectives are being achieved.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-7-17-in-a-computer-assisted-learning-environment-the-.png",
+      "width": 1688,
+      "height": 1137
+    },
+    {
+      "id": "fig-8-00",
+      "section_code": "8",
+      "ordinal": 0,
+      "caption": "Figure 6-1. Effective assessments share a number of characteristics.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-8-00-effective-assessments-share-a-number-of-characte.png",
+      "width": 988,
+      "height": 750
+    },
+    {
+      "id": "fig-8-01",
+      "section_code": "8",
+      "ordinal": 1,
+      "caption": "Figure 6-2. Traditional grading.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-8-01-traditional-grading.png",
+      "width": 988,
+      "height": 498
+    },
+    {
+      "id": "fig-8-02",
+      "section_code": "8",
+      "ordinal": 2,
+      "caption": "Figure 6-3. Effective tests have six primary characteristics.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-8-02-effective-tests-have-six-primary-characteristics.png",
+      "width": 988,
+      "height": 750
+    },
+    {
+      "id": "fig-8-03",
+      "section_code": "8",
+      "ordinal": 3,
+      "caption": "Figure 6-4. Rubric for assessing flight training maneuvers.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-8-03-rubric-for-assessing-flight-training-maneuvers.png",
+      "width": 2025,
+      "height": 989
+    },
+    {
+      "id": "fig-8-04",
+      "section_code": "8",
+      "ordinal": 4,
+      "caption": "Figure 6-5. The development process for criterion-referenced tests follows a general-to-specific pattern.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-8-04-the-development-process-for-criterion-referenced.png",
+      "width": 988,
+      "height": 630
+    },
+    {
+      "id": "fig-9-00",
+      "section_code": "9",
+      "ordinal": 0,
+      "caption": "Figure 7-1. The presolo stage or phase of private pilot training is comprised of several basic building blocks. These blocks of  learning, which should include coordinated ground and flight training, lead up to the first solo.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-9-00-the-presolo-stage-or-phase-of-private-pilot-trai.png",
+      "width": 2026,
+      "height": 1321
+    },
+    {
+      "id": "fig-9-01",
+      "section_code": "9",
+      "ordinal": 1,
+      "caption": "Figure 7-2. This excerpt of a ground lesson shows a unit of ground instruction. In this example, neither the time nor the number of  ground training periods to be devoted to the lesson is specified. The lesson should include three parts—objective, content, and completion standards.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-9-01-this-excerpt-of-a-ground-lesson-shows-a-unit-of-.png",
+      "width": 988,
+      "height": 1650
+    },
+    {
+      "id": "fig-9-02",
+      "section_code": "9",
+      "ordinal": 2,
+      "caption": "Figure 7-3. A flight training lesson, like a ground training lesson, should include an objective, content, and completion standards.  More than one objective could, and often does, apply to a single flight lesson.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-9-02-a-flight-training-lesson-like-a-ground-training-.png",
+      "width": 988,
+      "height": 1666
+    },
+    {
+      "id": "fig-9-03",
+      "section_code": "9",
+      "ordinal": 3,
+      "caption": "Figure 7-4. Information in the form of notes may be added to individual ground or flight lessons in a syllabus when they are  necessary.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-9-03-information-in-the-form-of-notes-may-be-added-to.png",
+      "width": 988,
+      "height": 961
+    },
+    {
+      "id": "fig-9-04",
+      "section_code": "9",
+      "ordinal": 4,
+      "caption": "Figure 7-5. Glider training log.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-9-04-glider-training-log.png",
+      "width": 2026,
+      "height": 1966
+    },
+    {
+      "id": "fig-9-05",
+      "section_code": "9",
+      "ordinal": 5,
+      "caption": "Figure 7-6. Example of a traditional training lesson plan.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-9-05-example-of-a-traditional-training-lesson-plan.png",
+      "width": 988,
+      "height": 1049
+    },
+    {
+      "id": "fig-9-06",
+      "section_code": "9",
+      "ordinal": 6,
+      "caption": "Figure 7-7. SBT lesson plan.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-9-06-sbt-lesson-plan.png",
+      "width": 1047,
+      "height": 2533
+    },
+    {
+      "id": "fig-9-07",
+      "section_code": "9",
+      "ordinal": 7,
+      "caption": "Figure 7-8. Points to remember about scenario-based training.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-9-07-points-to-remember-about-scenario-based-training.png",
+      "width": 988,
+      "height": 1284
+    },
+    {
+      "id": "fig-9-08",
+      "section_code": "9",
+      "ordinal": 8,
+      "caption": "Figure 7-9. Very light jet aircraft in flight.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-9-08-very-light-jet-aircraft-in-flight.png",
+      "width": 987,
+      "height": 656
+    },
+    {
+      "id": "fig-10-00",
+      "section_code": "10",
+      "ordinal": 0,
+      "caption": "Figure 8-1. There are five main responsibilities of aviation instructors.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-10-00-there-are-five-main-responsibilities-of-aviation.png",
+      "width": 988,
+      "height": 361
+    },
+    {
+      "id": "fig-10-01",
+      "section_code": "10",
+      "ordinal": 1,
+      "caption": "Figure 8-2. Acceptable standards in all subject matter areas, procedures, and maneuvers are included in the appropriate Airman  Certification Standards (ACS)/Practical Test Standards (PTS).",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-10-01-acceptable-standards-in-all-subject-matter-areas.png",
+      "width": 2026,
+      "height": 1201
+    },
+    {
+      "id": "fig-10-02",
+      "section_code": "10",
+      "ordinal": 2,
+      "caption": "Figure 8-3. Learners learn more when instruction is presented in a positive and professional manner.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-10-02-learners-learn-more-when-instruction-is-presente.png",
+      "width": 987,
+      "height": 660
+    },
+    {
+      "id": "fig-10-03",
+      "section_code": "10",
+      "ordinal": 3,
+      "caption": "Figure 8-4. These are practical ways to minimize learner frustration.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-10-03-these-are-practical-ways-to-minimize-learner-fru.png",
+      "width": 988,
+      "height": 422
+    },
+    {
+      "id": "fig-10-04",
+      "section_code": "10",
+      "ordinal": 4,
+      "caption": "Figure 8-5. The flight instructor has many additional responsibilities.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-10-04-the-flight-instructor-has-many-additional-respon.png",
+      "width": 988,
+      "height": 496
+    },
+    {
+      "id": "fig-10-05",
+      "section_code": "10",
+      "ordinal": 5,
+      "caption": "Figure 8-6. Teaching tips from veteran flight instructors.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-10-05-teaching-tips-from-veteran-flight-instructors.png",
+      "width": 2026,
+      "height": 1261
+    },
+    {
+      "id": "fig-10-06",
+      "section_code": "10",
+      "ordinal": 6,
+      "caption": "Figure 8-7. Guidelines for an aviation instructor.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-10-06-guidelines-for-an-aviation-instructor.png",
+      "width": 988,
+      "height": 600
+    },
+    {
+      "id": "fig-10-07",
+      "section_code": "10",
+      "ordinal": 7,
+      "caption": "Figure 8-8. The aviation instructor should always present a professional appearance.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-10-07-the-aviation-instructor-should-always-present-a-.png",
+      "width": 1937,
+      "height": 1146
+    },
+    {
+      "id": "fig-10-08",
+      "section_code": "10",
+      "ordinal": 8,
+      "caption": "Figure 8-9. Aviation instructors can improve their knowledge by becoming familiar with information on the internet.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-10-08-aviation-instructors-can-improve-their-knowledge.png",
+      "width": 1698,
+      "height": 1131
+    },
+    {
+      "id": "fig-11-00",
+      "section_code": "11",
+      "ordinal": 0,
+      "caption": "Figure 9-1. The learner prepares to execute a power-off stall maneuver in-flight that was taught in ground school.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-11-00-the-learner-prepares-to-execute-a-power-off-stal.png",
+      "width": 987,
+      "height": 555
+    },
+    {
+      "id": "fig-11-01",
+      "section_code": "11",
+      "ordinal": 1,
+      "caption": "Figure 9-2. A Level C simulator.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-11-01-a-level-c-simulator.png",
+      "width": 640,
+      "height": 480
+    },
+    {
+      "id": "fig-11-02",
+      "section_code": "11",
+      "ordinal": 2,
+      "caption": "Figure 9-3. An example of a Level 6 Flight Training Device (FTD).",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-11-02-an-example-of-a-level-6-flight-training-device-f.png",
+      "width": 987,
+      "height": 596
+    },
+    {
+      "id": "fig-11-03",
+      "section_code": "11",
+      "ordinal": 3,
+      "caption": "Figure 9-4. A level 4 FTD used for procedure training.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-11-03-a-level-4-ftd-used-for-procedure-training.png",
+      "width": 2025,
+      "height": 827
+    },
+    {
+      "id": "fig-11-04",
+      "section_code": "11",
+      "ordinal": 4,
+      "caption": "Figure 9-5. Reinforcing what the learner was taught on the ground is critical to learner knowledge.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-11-04-reinforcing-what-the-learner-was-taught-on-the-g.png",
+      "width": 2025,
+      "height": 827
+    },
+    {
+      "id": "fig-11-05",
+      "section_code": "11",
+      "ordinal": 5,
+      "caption": "Figure 9-6. The demonstration-performance method of teaching has four essential phases.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-11-05-the-demonstration-performance-method-of-teaching.png",
+      "width": 988,
+      "height": 450
+    },
+    {
+      "id": "fig-11-06",
+      "section_code": "11",
+      "ordinal": 6,
+      "caption": "Figure 9-7. This comparison of steps in the teaching process, the demonstration-performance method, and the telling-and-doing  technique highlights similarities as well as differences. The main difference in the telling-and-doing technique is the important transition, learner tells—instructor does, which occurs between",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-11-06-this-comparison-of-steps-in-the-teaching-process.png",
+      "width": 2025,
+      "height": 630
+    },
+    {
+      "id": "fig-11-07",
+      "section_code": "11",
+      "ordinal": 7,
+      "caption": "Figure 9-8. During this procedure, a visual check is recommended to see that the other person actually has the flight controls. When  returning the controls to the instructor, the learner should follow the same procedure the instructor used when giving control to the",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-11-07-during-this-procedure-a-visual-check-is-recommen.png",
+      "width": 988,
+      "height": 732
+    },
+    {
+      "id": "fig-12-00",
+      "section_code": "12",
+      "ordinal": 0,
+      "caption": "Figure 10-1. NTSB Accident Report.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-12-00-ntsb-accident-report.png",
+      "width": 2520,
+      "height": 1757
+    },
+    {
+      "id": "fig-12-01",
+      "section_code": "12",
+      "ordinal": 1,
+      "caption": "Figure 10-2. This risk matrix can be used for almost any operation by assigning likelihood and severity. In the case presented, the  likelihood of occasional and the severity as catastrophic falls in the high-risk area.",
+      "asset_path": "handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-12-01-this-risk-matrix-can-be-used-for-almost-any-oper.png",
+      "width": 988,
+      "height": 526
     }
   ],
   "warnings": [
-    {
-      "id": "bff74ac4b048aefa",
-      "code": "caption-without-figure",
-      "section_code": "3",
-      "message": "Caption `Figure 1-1. Types of risk.` on page 6 had no paired image."
-    },
-    {
-      "id": "996b5d2f19bd9c83",
-      "code": "caption-without-figure",
-      "section_code": "3",
-      "message": "Caption `Figure 1-2. One of the most important decisions that the pilot in command makes ` on page 11 had no paired image."
-    },
-    {
-      "id": "6ad2e26419c03c7d",
-      "code": "caption-without-figure",
-      "section_code": "3",
-      "message": "Caption `Figure 1-3. Prior to flight, pilots may use a checklist to assess their fitness,` on page 12 had no paired image."
-    },
-    {
-      "id": "1cb9509311b5d06e",
-      "code": "caption-without-figure",
-      "section_code": "3",
-      "message": "Caption `Figure 1-4. This risk matrix can be used for almost any operation by assigning l` on page 13 had no paired image."
-    },
-    {
-      "id": "56677d17ed25feee",
-      "code": "caption-without-figure",
-      "section_code": "3",
-      "message": "Caption `Figure 1-5. 3P Model (Perceive, Process, and Perform).` on page 15 had no paired image."
-    },
-    {
-      "id": "7a5f2a0f95144857",
-      "code": "caption-without-figure",
-      "section_code": "3",
-      "message": "Caption `number of countermeasures for coping with fatigue, as shown in Figure 1-7.` on page 18 had no paired image."
-    },
-    {
-      "id": "0dc57d1e4a0cf437",
-      "code": "caption-without-figure",
-      "section_code": "3",
-      "message": "Caption `Figure 1-7. Countermeasures for coping with fatigue.` on page 18 had no paired image."
-    },
-    {
-      "id": "7777f2f96e68bcab",
-      "code": "caption-without-figure",
-      "section_code": "3",
-      "message": "Caption `Figure 1-8. All experienced pilots have fallen prey to, or have been tempted by,` on page 19 had no paired image."
-    },
-    {
-      "id": "6bea23d96929240b",
-      "code": "caption-without-figure",
-      "section_code": "3",
-      "message": "Caption `Figure 1-9. The 5P checklist.` on page 20 had no paired image."
-    },
-    {
-      "id": "d0d99dfd7430a156",
-      "code": "caption-without-figure",
-      "section_code": "3",
-      "message": "Caption `Figure 1-10. Terms used in AC 60-22 to explain concepts used in ADM training.` on page 25 had no paired image."
-    },
-    {
-      "id": "9c111a4572b4f383",
-      "code": "caption-without-figure",
-      "section_code": "3",
-      "message": "Caption `Figure 1-11. Pilots should examine their decisions carefully to ensure that thei` on page 26 had no paired image."
-    },
-    {
-      "id": "103d2d9c7d705d2b",
-      "code": "caption-without-figure",
-      "section_code": "3",
-      "message": "Caption `Figure 1-12. Learners in training can be asked to identify hazardous attitudes a` on page 27 had no paired image."
-    },
-    {
-      "id": "83435390baf241df",
-      "code": "caption-without-figure",
-      "section_code": "3",
-      "message": "Caption `Figure 1-13. Three types of stressors that can affect pilot performance.` on page 28 had no paired image."
-    },
-    {
-      "id": "4df8ae9a01414c08",
-      "code": "caption-without-figure",
-      "section_code": "3",
-      "message": "Caption `Figure 1-14. Accidents often occur when flying task requirements exceed pilot ca` on page 30 had no paired image."
-    },
-    {
-      "id": "9a5ac30d7e584b66",
-      "code": "caption-without-figure",
-      "section_code": "3.2",
-      "message": "Caption `Figure 1-1. Types of risk.` on page 6 had no paired image."
-    },
-    {
-      "id": "8fca70c091ae6b79",
-      "code": "caption-without-figure",
-      "section_code": "3.2",
-      "message": "Caption `Figure 1-2. One of the most important decisions that the pilot in command makes ` on page 11 had no paired image."
-    },
-    {
-      "id": "bbc26705c368dfc4",
-      "code": "caption-without-figure",
-      "section_code": "3.2",
-      "message": "Caption `Figure 1-3. Prior to flight, pilots may use a checklist to assess their fitness,` on page 12 had no paired image."
-    },
-    {
-      "id": "7ec61b0355fee757",
-      "code": "caption-without-figure",
-      "section_code": "3.2",
-      "message": "Caption `Figure 1-4. This risk matrix can be used for almost any operation by assigning l` on page 13 had no paired image."
-    },
-    {
-      "id": "bbb20807afa21b9b",
-      "code": "caption-without-figure",
-      "section_code": "3.2.3",
-      "message": "Caption `Figure 1-2. One of the most important decisions that the pilot in command makes ` on page 11 had no paired image."
-    },
-    {
-      "id": "9f451514576d6cfc",
-      "code": "caption-without-figure",
-      "section_code": "3.2.3",
-      "message": "Caption `Figure 1-3. Prior to flight, pilots may use a checklist to assess their fitness,` on page 12 had no paired image."
-    },
-    {
-      "id": "901b4c4c62d7e9f2",
-      "code": "caption-without-figure",
-      "section_code": "3.2.3",
-      "message": "Caption `Figure 1-4. This risk matrix can be used for almost any operation by assigning l` on page 13 had no paired image."
-    },
-    {
-      "id": "37a95b938a34597a",
-      "code": "caption-without-figure",
-      "section_code": "3.2.5",
-      "message": "Caption `Figure 1-5. 3P Model (Perceive, Process, and Perform).` on page 15 had no paired image."
-    },
-    {
-      "id": "8b2ac3344802828b",
-      "code": "caption-without-figure",
-      "section_code": "3.3",
-      "message": "Caption `Figure 1-5. 3P Model (Perceive, Process, and Perform).` on page 15 had no paired image."
-    },
-    {
-      "id": "1272f49c2eea15df",
-      "code": "caption-without-figure",
-      "section_code": "3.6",
-      "message": "Caption `number of countermeasures for coping with fatigue, as shown in Figure 1-7.` on page 18 had no paired image."
-    },
-    {
-      "id": "71c5791f72abee87",
-      "code": "caption-without-figure",
-      "section_code": "3.6",
-      "message": "Caption `Figure 1-7. Countermeasures for coping with fatigue.` on page 18 had no paired image."
-    },
-    {
-      "id": "812186fbca6b8400",
-      "code": "caption-without-figure",
-      "section_code": "3.6.2",
-      "message": "Caption `number of countermeasures for coping with fatigue, as shown in Figure 1-7.` on page 18 had no paired image."
-    },
-    {
-      "id": "f4fdc5fa4f96b810",
-      "code": "caption-without-figure",
-      "section_code": "3.6.2",
-      "message": "Caption `Figure 1-7. Countermeasures for coping with fatigue.` on page 18 had no paired image."
-    },
-    {
-      "id": "ac9bb1550e42593f",
-      "code": "caption-without-figure",
-      "section_code": "3.7",
-      "message": "Caption `Figure 1-8. All experienced pilots have fallen prey to, or have been tempted by,` on page 19 had no paired image."
-    },
-    {
-      "id": "1bbdaee6f60d8c06",
-      "code": "caption-without-figure",
-      "section_code": "3.7",
-      "message": "Caption `Figure 1-9. The 5P checklist.` on page 20 had no paired image."
-    },
-    {
-      "id": "9fe53b3c78a62718",
-      "code": "caption-without-figure",
-      "section_code": "3.7.1",
-      "message": "Caption `Figure 1-9. The 5P checklist.` on page 20 had no paired image."
-    },
-    {
-      "id": "c19a49149a44ad1f",
-      "code": "caption-without-figure",
-      "section_code": "3.8",
-      "message": "Caption `Figure 1-10. Terms used in AC 60-22 to explain concepts used in ADM training.` on page 25 had no paired image."
-    },
-    {
-      "id": "54c54ed97deeb976",
-      "code": "caption-without-figure",
-      "section_code": "3.8",
-      "message": "Caption `Figure 1-11. Pilots should examine their decisions carefully to ensure that thei` on page 26 had no paired image."
-    },
-    {
-      "id": "55d12085aa84a45a",
-      "code": "caption-without-figure",
-      "section_code": "3.8",
-      "message": "Caption `Figure 1-12. Learners in training can be asked to identify hazardous attitudes a` on page 27 had no paired image."
-    },
-    {
-      "id": "1e01b33389b8315f",
-      "code": "caption-without-figure",
-      "section_code": "3.8",
-      "message": "Caption `Figure 1-13. Three types of stressors that can affect pilot performance.` on page 28 had no paired image."
-    },
-    {
-      "id": "b5ef0aea9fa9cef7",
-      "code": "caption-without-figure",
-      "section_code": "3.8.1",
-      "message": "Caption `Figure 1-10. Terms used in AC 60-22 to explain concepts used in ADM training.` on page 25 had no paired image."
-    },
-    {
-      "id": "5aa158efd6d7013a",
-      "code": "caption-without-figure",
-      "section_code": "3.8.2",
-      "message": "Caption `Figure 1-11. Pilots should examine their decisions carefully to ensure that thei` on page 26 had no paired image."
-    },
-    {
-      "id": "7a2e9bba69a83031",
-      "code": "caption-without-figure",
-      "section_code": "3.8.2",
-      "message": "Caption `Figure 1-12. Learners in training can be asked to identify hazardous attitudes a` on page 27 had no paired image."
-    },
-    {
-      "id": "648383f1cc05a3fd",
-      "code": "caption-without-figure",
-      "section_code": "3.8.2",
-      "message": "Caption `Figure 1-13. Three types of stressors that can affect pilot performance.` on page 28 had no paired image."
-    },
-    {
-      "id": "4bd67fe9b1667089",
-      "code": "caption-without-figure",
-      "section_code": "3.9",
-      "message": "Caption `Figure 1-14. Accidents often occur when flying task requirements exceed pilot ca` on page 30 had no paired image."
-    },
-    {
-      "id": "d7140bf35233f42c",
-      "code": "caption-without-figure",
-      "section_code": "4",
-      "message": "Caption `Figure 2-1. The average age of a learner pilot is 34, while the average age of a` on page 35 had no paired image."
-    },
-    {
-      "id": "1a263d6bfe69ec51",
-      "code": "caption-without-figure",
-      "section_code": "4",
-      "message": "Caption `Figure 2-2. Insecure and unpleasant training situations inhibit learning.` on page 36 had no paired image."
-    },
-    {
-      "id": "9d706426be7bece3",
-      "code": "caption-without-figure",
-      "section_code": "4",
-      "message": "Caption `Figure 2-3. Maslow’s Hierarchy of Needs.` on page 39 had no paired image."
-    },
-    {
-      "id": "3bf9df6c9273f302",
-      "code": "caption-without-figure",
-      "section_code": "4",
-      "message": "Caption `Figure 2-4. Daniel Kahneman developed a two-system view of human behaviors that ` on page 41 had no paired image."
-    },
-    {
-      "id": "7d682a320572de75",
-      "code": "caption-without-figure",
-      "section_code": "4",
-      "message": "Caption `Figure 2-5. Several common defense mechanisms may apply to aviation learners.` on page 43 had no paired image."
-    },
-    {
-      "id": "dee9fb8dd72ff71b",
-      "code": "caption-without-figure",
-      "section_code": "4",
-      "message": "Caption `Figure 2-6. The assignment of impossible or unreasonable goals discourages the l` on page 44 had no paired image."
-    },
-    {
-      "id": "770d27b65df5dc4d",
-      "code": "caption-without-figure",
-      "section_code": "4",
-      "message": "Caption `Figure 2-7. Poor preparation leads to spotty coverage, misplaced emphasis, unnec` on page 48 had no paired image."
-    },
-    {
-      "id": "8ad11670aab95754",
-      "code": "caption-without-figure",
-      "section_code": "4",
-      "message": "Caption `Figure 2-8. A learner with marked changes in mood during different lessons, such` on page 49 had no paired image."
-    },
-    {
-      "id": "18cfdb90118a625c",
-      "code": "caption-without-figure",
-      "section_code": "4.3",
-      "message": "Caption `Figure 2-1. The average age of a learner pilot is 34, while the average age of a` on page 35 had no paired image."
-    },
-    {
-      "id": "30b48a6c28266ec3",
-      "code": "caption-without-figure",
-      "section_code": "4.3",
-      "message": "Caption `Figure 2-2. Insecure and unpleasant training situations inhibit learning.` on page 36 had no paired image."
-    },
-    {
-      "id": "8b961c17665e8073",
-      "code": "caption-without-figure",
-      "section_code": "4.5",
-      "message": "Caption `Figure 2-3. Maslow’s Hierarchy of Needs.` on page 39 had no paired image."
-    },
-    {
-      "id": "3ebea02580e5445e",
-      "code": "caption-without-figure",
-      "section_code": "4.5.1",
-      "message": "Caption `Figure 2-3. Maslow’s Hierarchy of Needs.` on page 39 had no paired image."
-    },
-    {
-      "id": "9e75e7ca0a53d32e",
-      "code": "caption-without-figure",
-      "section_code": "4.6",
-      "message": "Caption `Figure 2-4. Daniel Kahneman developed a two-system view of human behaviors that ` on page 41 had no paired image."
-    },
-    {
-      "id": "05b5957853e86dfa",
-      "code": "caption-without-figure",
-      "section_code": "4.7",
-      "message": "Caption `Figure 2-5. Several common defense mechanisms may apply to aviation learners.` on page 43 had no paired image."
-    },
-    {
-      "id": "a9e41b24c17db332",
-      "code": "caption-without-figure",
-      "section_code": "4.7",
-      "message": "Caption `Figure 2-6. The assignment of impossible or unreasonable goals discourages the l` on page 44 had no paired image."
-    },
-    {
-      "id": "978845943534c02a",
-      "code": "caption-without-figure",
-      "section_code": "4.7.3",
-      "message": "Caption `Figure 2-5. Several common defense mechanisms may apply to aviation learners.` on page 43 had no paired image."
-    },
-    {
-      "id": "3c6644d27e50c1d0",
-      "code": "caption-without-figure",
-      "section_code": "4.7.4",
-      "message": "Caption `Figure 2-5. Several common defense mechanisms may apply to aviation learners.` on page 43 had no paired image."
-    },
-    {
-      "id": "6af27073ec6c227e",
-      "code": "caption-without-figure",
-      "section_code": "4.7.5",
-      "message": "Caption `Figure 2-5. Several common defense mechanisms may apply to aviation learners.` on page 43 had no paired image."
-    },
-    {
-      "id": "be23be6077b54505",
-      "code": "caption-without-figure",
-      "section_code": "4.7.6",
-      "message": "Caption `Figure 2-6. The assignment of impossible or unreasonable goals discourages the l` on page 44 had no paired image."
-    },
-    {
-      "id": "2f16d6d8d711cba1",
-      "code": "caption-without-figure",
-      "section_code": "4.7.7",
-      "message": "Caption `Figure 2-6. The assignment of impossible or unreasonable goals discourages the l` on page 44 had no paired image."
-    },
-    {
-      "id": "be4b774b14cec11e",
-      "code": "caption-without-figure",
-      "section_code": "4.7.8",
-      "message": "Caption `Figure 2-6. The assignment of impossible or unreasonable goals discourages the l` on page 44 had no paired image."
-    },
-    {
-      "id": "968bf58e01fe12c0",
-      "code": "caption-without-figure",
-      "section_code": "4.8",
-      "message": "Caption `Figure 2-7. Poor preparation leads to spotty coverage, misplaced emphasis, unnec` on page 48 had no paired image."
-    },
-    {
-      "id": "762674b67031b13d",
-      "code": "caption-without-figure",
-      "section_code": "4.8.6",
-      "message": "Caption `Figure 2-7. Poor preparation leads to spotty coverage, misplaced emphasis, unnec` on page 48 had no paired image."
-    },
-    {
-      "id": "835977e23fcabc55",
-      "code": "caption-without-figure",
-      "section_code": "4.8.7",
-      "message": "Caption `Figure 2-7. Poor preparation leads to spotty coverage, misplaced emphasis, unnec` on page 48 had no paired image."
-    },
-    {
-      "id": "be55ba2991b0edc4",
-      "code": "caption-without-figure",
-      "section_code": "4.8.8",
-      "message": "Caption `Figure 2-8. A learner with marked changes in mood during different lessons, such` on page 49 had no paired image."
-    },
-    {
-      "id": "df57c5e88ceea925",
-      "code": "caption-without-figure",
-      "section_code": "4.9",
-      "message": "Caption `Figure 2-8. A learner with marked changes in mood during different lessons, such` on page 49 had no paired image."
-    },
-    {
-      "id": "3921ab76d5735365",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 3-1. An effective instructor understands the characteristics of learning ` on page 53 had no paired image."
-    },
-    {
-      "id": "a236cb6324d9845b",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 3-2. Learning theories of psychology include classical conditioning, oper` on page 54 had no paired image."
-    },
-    {
-      "id": "a9556bbfc8eeb7df",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 3-3. Psychologists and educators who established the theories of cognitiv` on page 55 had no paired image."
-    },
-    {
-      "id": "a4b991a1392816ef",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 3-4. Bloom’s Taxonomy of the Cognitive Domain.` on page 56 had no paired image."
-    },
-    {
-      "id": "dc8fb76fd4bd4ddd",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 3-5. Most learning occurs through sight, but the combination of sight and` on page 58 had no paired image."
-    },
-    {
-      "id": "975432eba14d0eea",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 3-6. A learner acquires knowledge through memorization, understanding, an` on page 61 had no paired image."
-    },
-    {
-      "id": "eeb0aa186b9e1a87",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 3-8. An overview of the three learning domains.` on page 65 had no paired image."
-    },
-    {
-      "id": "fbd2af689af56806",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 3-9. The six major levels of Bloom’s Taxonomy of the Cognitive Domain wit` on page 65 had no paired image."
-    },
-    {
-      "id": "c2b87df5cab96ffa",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 3-10. Learning is progressive and occurs at several basic levels.` on page 66 had no paired image."
-    },
-    {
-      "id": "b0cdbe98c9363a56",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `learner repairs an aircraft engine. Sample questions for each level of the cogni` on page 67 had no paired image."
-    },
-    {
-      "id": "a02cbc80a92b0165",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 3-11. The affective domain (attitudes, beliefs, and values) contains five` on page 67 had no paired image."
-    },
-    {
-      "id": "47b47504ed5cb7fc",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 3-12. The psychomotor domain (physical skills) consists of seven educatio` on page 68 had no paired image."
-    },
-    {
-      "id": "ae16f3260fc72e7e",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 3-13. A listing such as the one shown here is useful for development of a` on page 69 had no paired image."
-    },
-    {
-      "id": "34d7b8a194a84b4f",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 3-14. The importance of recognizing a dominant brain hemisphere gives the` on page 72 had no paired image."
-    },
-    {
-      "id": "e53c0a8ca52c027b",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 3-15. Some of the different traits utilized by each learning style.` on page 73 had no paired image."
-    },
-    {
-      "id": "40c4f66655d01fee",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 3-16. Visual, auditory, and kinesthetic learning styles (VAK).` on page 73 had no paired image."
-    },
-    {
-      "id": "f32213a10d0ec37f",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 3-17. Learners will probably experience a learning plateau at some point ` on page 76 had no paired image."
-    },
-    {
-      "id": "18b501ff93fadbc7",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 3-18. A learner exhibits deliberate practice by plotting courses for his ` on page 77 had no paired image."
-    },
-    {
-      "id": "4ecbee2dbf7ad3cf",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 3-19. Pilot practices cross-wind landings repeatedly to improve performan` on page 78 had no paired image."
-    },
-    {
-      "id": "0bb81aeddd5005ed",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 3-20. A pilot is required to perform several tasks at once during approac` on page 80 had no paired image."
-    },
-    {
-      "id": "e71350a280726d39",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 3-21. Other mistakes arise under pressure. For example, a technician or p` on page 85 had no paired image."
-    },
-    {
-      "id": "53d9e03b12c82d83",
-      "code": "caption-without-figure",
-      "section_code": "5",
-      "message": "Caption `Figure 3-22. Information processing within the sensory register, working on shor` on page 86 had no paired image."
-    },
-    {
-      "id": "9d67d8d7a17664d6",
-      "code": "caption-without-figure",
-      "section_code": "5.2",
-      "message": "Caption `Figure 3-1. An effective instructor understands the characteristics of learning ` on page 53 had no paired image."
-    },
-    {
-      "id": "4478a71cff2dd62c",
-      "code": "caption-without-figure",
-      "section_code": "5.2",
-      "message": "Caption `Figure 3-2. Learning theories of psychology include classical conditioning, oper` on page 54 had no paired image."
-    },
-    {
-      "id": "a90a33e56f875ef0",
-      "code": "caption-without-figure",
-      "section_code": "5.2",
-      "message": "Caption `Figure 3-3. Psychologists and educators who established the theories of cognitiv` on page 55 had no paired image."
-    },
-    {
-      "id": "50d3356c04919e10",
-      "code": "caption-without-figure",
-      "section_code": "5.2",
-      "message": "Caption `Figure 3-4. Bloom’s Taxonomy of the Cognitive Domain.` on page 56 had no paired image."
-    },
-    {
-      "id": "a6f807b07e35adc6",
-      "code": "caption-without-figure",
-      "section_code": "5.2.1",
-      "message": "Caption `Figure 3-2. Learning theories of psychology include classical conditioning, oper` on page 54 had no paired image."
-    },
-    {
-      "id": "7b4babda47edeeb3",
-      "code": "caption-without-figure",
-      "section_code": "5.2.2",
-      "message": "Caption `Figure 3-3. Psychologists and educators who established the theories of cognitiv` on page 55 had no paired image."
-    },
-    {
-      "id": "15f8f1baf53077e2",
-      "code": "caption-without-figure",
-      "section_code": "5.2.2",
-      "message": "Caption `Figure 3-4. Bloom’s Taxonomy of the Cognitive Domain.` on page 56 had no paired image."
-    },
-    {
-      "id": "5578044a1e9c6143",
-      "code": "caption-without-figure",
-      "section_code": "5.3",
-      "message": "Caption `Figure 3-5. Most learning occurs through sight, but the combination of sight and` on page 58 had no paired image."
-    },
-    {
-      "id": "5407cb804b754e76",
-      "code": "caption-without-figure",
-      "section_code": "5.3.1",
-      "message": "Caption `Figure 3-5. Most learning occurs through sight, but the combination of sight and` on page 58 had no paired image."
-    },
-    {
-      "id": "8401f52e15712224",
-      "code": "caption-without-figure",
-      "section_code": "5.5",
-      "message": "Caption `Figure 3-6. A learner acquires knowledge through memorization, understanding, an` on page 61 had no paired image."
-    },
-    {
-      "id": "0ca235813f6e5796",
-      "code": "caption-without-figure",
-      "section_code": "5.5.2",
-      "message": "Caption `Figure 3-6. A learner acquires knowledge through memorization, understanding, an` on page 61 had no paired image."
-    },
-    {
-      "id": "7e5cf1f48a41bef6",
-      "code": "caption-without-figure",
-      "section_code": "5.7",
-      "message": "Caption `Figure 3-8. An overview of the three learning domains.` on page 65 had no paired image."
-    },
-    {
-      "id": "52c4b755f1072f00",
-      "code": "caption-without-figure",
-      "section_code": "5.7",
-      "message": "Caption `Figure 3-9. The six major levels of Bloom’s Taxonomy of the Cognitive Domain wit` on page 65 had no paired image."
-    },
-    {
-      "id": "fe1db07a0dc9a6f1",
-      "code": "caption-without-figure",
-      "section_code": "5.7",
-      "message": "Caption `Figure 3-10. Learning is progressive and occurs at several basic levels.` on page 66 had no paired image."
-    },
-    {
-      "id": "02aa3c87d0d8d744",
-      "code": "caption-without-figure",
-      "section_code": "5.7",
-      "message": "Caption `learner repairs an aircraft engine. Sample questions for each level of the cogni` on page 67 had no paired image."
-    },
-    {
-      "id": "301cdadae5f1554c",
-      "code": "caption-without-figure",
-      "section_code": "5.7",
-      "message": "Caption `Figure 3-11. The affective domain (attitudes, beliefs, and values) contains five` on page 67 had no paired image."
-    },
-    {
-      "id": "18f0e6bf7b263d88",
-      "code": "caption-without-figure",
-      "section_code": "5.7",
-      "message": "Caption `Figure 3-12. The psychomotor domain (physical skills) consists of seven educatio` on page 68 had no paired image."
-    },
-    {
-      "id": "2eb54bd05be8d7c7",
-      "code": "caption-without-figure",
-      "section_code": "5.7",
-      "message": "Caption `Figure 3-13. A listing such as the one shown here is useful for development of a` on page 69 had no paired image."
-    },
-    {
-      "id": "b467a5c22524c23f",
-      "code": "caption-without-figure",
-      "section_code": "5.7.1",
-      "message": "Caption `Figure 3-8. An overview of the three learning domains.` on page 65 had no paired image."
-    },
-    {
-      "id": "4a9f3fd84ddb69d0",
-      "code": "caption-without-figure",
-      "section_code": "5.7.1",
-      "message": "Caption `Figure 3-9. The six major levels of Bloom’s Taxonomy of the Cognitive Domain wit` on page 65 had no paired image."
-    },
-    {
-      "id": "d957a5d92e3f8820",
-      "code": "caption-without-figure",
-      "section_code": "5.7.1",
-      "message": "Caption `Figure 3-10. Learning is progressive and occurs at several basic levels.` on page 66 had no paired image."
-    },
-    {
-      "id": "c2d1479fde20d515",
-      "code": "caption-without-figure",
-      "section_code": "5.7.2",
-      "message": "Caption `learner repairs an aircraft engine. Sample questions for each level of the cogni` on page 67 had no paired image."
-    },
-    {
-      "id": "276be0318e4e8527",
-      "code": "caption-without-figure",
-      "section_code": "5.7.2",
-      "message": "Caption `Figure 3-11. The affective domain (attitudes, beliefs, and values) contains five` on page 67 had no paired image."
-    },
-    {
-      "id": "0a46e32292130f72",
-      "code": "caption-without-figure",
-      "section_code": "5.7.3",
-      "message": "Caption `Figure 3-12. The psychomotor domain (physical skills) consists of seven educatio` on page 68 had no paired image."
-    },
-    {
-      "id": "d9b53021f3247012",
-      "code": "caption-without-figure",
-      "section_code": "5.7.4",
-      "message": "Caption `Figure 3-12. The psychomotor domain (physical skills) consists of seven educatio` on page 68 had no paired image."
-    },
-    {
-      "id": "b56f995bba779fb0",
-      "code": "caption-without-figure",
-      "section_code": "5.7.4",
-      "message": "Caption `Figure 3-13. A listing such as the one shown here is useful for development of a` on page 69 had no paired image."
-    },
-    {
-      "id": "faabb34706a800d4",
-      "code": "caption-without-figure",
-      "section_code": "5.9",
-      "message": "Caption `Figure 3-14. The importance of recognizing a dominant brain hemisphere gives the` on page 72 had no paired image."
-    },
-    {
-      "id": "577c480b1d9cc145",
-      "code": "caption-without-figure",
-      "section_code": "5.9",
-      "message": "Caption `Figure 3-15. Some of the different traits utilized by each learning style.` on page 73 had no paired image."
-    },
-    {
-      "id": "ff7f005d17f0606c",
-      "code": "caption-without-figure",
-      "section_code": "5.9",
-      "message": "Caption `Figure 3-16. Visual, auditory, and kinesthetic learning styles (VAK).` on page 73 had no paired image."
-    },
-    {
-      "id": "b40724294c96fbcc",
-      "code": "caption-without-figure",
-      "section_code": "5.9.2",
-      "message": "Caption `Figure 3-14. The importance of recognizing a dominant brain hemisphere gives the` on page 72 had no paired image."
-    },
-    {
-      "id": "0a044ada232f25b2",
-      "code": "caption-without-figure",
-      "section_code": "5.9.3",
-      "message": "Caption `Figure 3-14. The importance of recognizing a dominant brain hemisphere gives the` on page 72 had no paired image."
-    },
-    {
-      "id": "5ac2179e43abafed",
-      "code": "caption-without-figure",
-      "section_code": "5.9.4",
-      "message": "Caption `Figure 3-15. Some of the different traits utilized by each learning style.` on page 73 had no paired image."
-    },
-    {
-      "id": "450249eced13f5ae",
-      "code": "caption-without-figure",
-      "section_code": "5.9.4",
-      "message": "Caption `Figure 3-16. Visual, auditory, and kinesthetic learning styles (VAK).` on page 73 had no paired image."
-    },
-    {
-      "id": "0b478704a07a113d",
-      "code": "caption-without-figure",
-      "section_code": "5.10",
-      "message": "Caption `Figure 3-17. Learners will probably experience a learning plateau at some point ` on page 76 had no paired image."
-    },
-    {
-      "id": "e02849dedc18925c",
-      "code": "caption-without-figure",
-      "section_code": "5.10.2",
-      "message": "Caption `Figure 3-17. Learners will probably experience a learning plateau at some point ` on page 76 had no paired image."
-    },
-    {
-      "id": "757daeaa87736824",
-      "code": "caption-without-figure",
-      "section_code": "5.10.3",
-      "message": "Caption `Figure 3-17. Learners will probably experience a learning plateau at some point ` on page 76 had no paired image."
-    },
-    {
-      "id": "5d346697e894f527",
-      "code": "caption-without-figure",
-      "section_code": "5.10.4",
-      "message": "Caption `Figure 3-18. A learner exhibits deliberate practice by plotting courses for his ` on page 77 had no paired image."
-    },
-    {
-      "id": "a8088ac1cb1cf556",
-      "code": "caption-without-figure",
-      "section_code": "5.11",
-      "message": "Caption `Figure 3-18. A learner exhibits deliberate practice by plotting courses for his ` on page 77 had no paired image."
-    },
-    {
-      "id": "47134572267a44dc",
-      "code": "caption-without-figure",
-      "section_code": "5.11",
-      "message": "Caption `Figure 3-19. Pilot practices cross-wind landings repeatedly to improve performan` on page 78 had no paired image."
-    },
-    {
-      "id": "9f6135eec3eafb8c",
-      "code": "caption-without-figure",
-      "section_code": "5.11.1",
-      "message": "Caption `Figure 3-18. A learner exhibits deliberate practice by plotting courses for his ` on page 77 had no paired image."
-    },
-    {
-      "id": "4073984c1babe952",
-      "code": "caption-without-figure",
-      "section_code": "5.11.2",
-      "message": "Caption `Figure 3-19. Pilot practices cross-wind landings repeatedly to improve performan` on page 78 had no paired image."
-    },
-    {
-      "id": "3b84278350440a6f",
-      "code": "caption-without-figure",
-      "section_code": "5.11.3",
-      "message": "Caption `Figure 3-19. Pilot practices cross-wind landings repeatedly to improve performan` on page 78 had no paired image."
-    },
-    {
-      "id": "2ff0855a9eafdc67",
-      "code": "caption-without-figure",
-      "section_code": "5.12.3",
-      "message": "Caption `Figure 3-20. A pilot is required to perform several tasks at once during approac` on page 80 had no paired image."
-    },
-    {
-      "id": "44093ce90f8cfa50",
-      "code": "caption-without-figure",
-      "section_code": "5.13",
-      "message": "Caption `Figure 3-20. A pilot is required to perform several tasks at once during approac` on page 80 had no paired image."
-    },
-    {
-      "id": "55ec4df5660c611b",
-      "code": "caption-without-figure",
-      "section_code": "5.13.1",
-      "message": "Caption `Figure 3-20. A pilot is required to perform several tasks at once during approac` on page 80 had no paired image."
-    },
-    {
-      "id": "f28b6eb1269a0ef8",
-      "code": "caption-without-figure",
-      "section_code": "5.15",
-      "message": "Caption `Figure 3-21. Other mistakes arise under pressure. For example, a technician or p` on page 85 had no paired image."
-    },
-    {
-      "id": "c0d350253cc0093e",
-      "code": "caption-without-figure",
-      "section_code": "5.15.3",
-      "message": "Caption `Figure 3-21. Other mistakes arise under pressure. For example, a technician or p` on page 85 had no paired image."
-    },
-    {
-      "id": "ed7db5002290efdf",
-      "code": "caption-without-figure",
-      "section_code": "5.15.4",
-      "message": "Caption `Figure 3-21. Other mistakes arise under pressure. For example, a technician or p` on page 85 had no paired image."
-    },
-    {
-      "id": "1af8ef5b9c2dbcbe",
-      "code": "caption-without-figure",
-      "section_code": "5.15.5",
-      "message": "Caption `Figure 3-22. Information processing within the sensory register, working on shor` on page 86 had no paired image."
-    },
-    {
-      "id": "121f48a52dddf136",
-      "code": "caption-without-figure",
-      "section_code": "5.16",
-      "message": "Caption `Figure 3-22. Information processing within the sensory register, working on shor` on page 86 had no paired image."
-    },
-    {
-      "id": "a1abf216ce9cbbe6",
-      "code": "caption-without-figure",
-      "section_code": "6",
-      "message": "Caption `Figure 4-1. An aviation instructor communicates with her learner using model air` on page 94 had no paired image."
-    },
-    {
-      "id": "7a6a35238dbb13db",
-      "code": "caption-without-figure",
-      "section_code": "6",
-      "message": "Caption `Figure 4-2. The instructor realizes from the response of the learner that “stall` on page 96 had no paired image."
-    },
-    {
-      "id": "27ec2331946b4295",
-      "code": "caption-without-figure",
-      "section_code": "6",
-      "message": "Caption `Figure 4-3. Misunderstandings stem primarily from four barriers to effective com` on page 97 had no paired image."
-    },
-    {
-      "id": "d6b7b5666dd0bb90",
-      "code": "caption-without-figure",
-      "section_code": "6",
-      "message": "Caption `Figure 4-4. Overuse of abstract terms can interfere with effective communication` on page 98 had no paired image."
-    },
-    {
-      "id": "003427f7daf8e93d",
-      "code": "caption-without-figure",
-      "section_code": "6",
-      "message": "Caption `Figure 4-5. Instructors can use a number of tools to become better at listening.` on page 101 had no paired image."
-    },
-    {
-      "id": "a06f81c48e993e94",
-      "code": "caption-without-figure",
-      "section_code": "6",
-      "message": "Caption `Figure 4-6. Learners can improve their listening skills by applying the steps to` on page 102 had no paired image."
-    },
-    {
-      "id": "5784ff2d19358b50",
-      "code": "caption-without-figure",
-      "section_code": "6.1",
-      "message": "Caption `Figure 4-1. An aviation instructor communicates with her learner using model air` on page 94 had no paired image."
-    },
-    {
-      "id": "479e2f7852b5f868",
-      "code": "caption-without-figure",
-      "section_code": "6.2",
-      "message": "Caption `Figure 4-2. The instructor realizes from the response of the learner that “stall` on page 96 had no paired image."
-    },
-    {
-      "id": "82df4133e3c9e850",
-      "code": "caption-without-figure",
-      "section_code": "6.2.3",
-      "message": "Caption `Figure 4-2. The instructor realizes from the response of the learner that “stall` on page 96 had no paired image."
-    },
-    {
-      "id": "980c027dab3969cd",
-      "code": "caption-without-figure",
-      "section_code": "6.3",
-      "message": "Caption `Figure 4-3. Misunderstandings stem primarily from four barriers to effective com` on page 97 had no paired image."
-    },
-    {
-      "id": "44b27f8f8cdd8945",
-      "code": "caption-without-figure",
-      "section_code": "6.3",
-      "message": "Caption `Figure 4-4. Overuse of abstract terms can interfere with effective communication` on page 98 had no paired image."
-    },
-    {
-      "id": "d2bddd78febf79e4",
-      "code": "caption-without-figure",
-      "section_code": "6.3.1",
-      "message": "Caption `Figure 4-3. Misunderstandings stem primarily from four barriers to effective com` on page 97 had no paired image."
-    },
-    {
-      "id": "cc30fd2f99a7334b",
-      "code": "caption-without-figure",
-      "section_code": "6.3.2",
-      "message": "Caption `Figure 4-4. Overuse of abstract terms can interfere with effective communication` on page 98 had no paired image."
-    },
-    {
-      "id": "8d14fac9de9fdccb",
-      "code": "caption-without-figure",
-      "section_code": "6.3.3",
-      "message": "Caption `Figure 4-4. Overuse of abstract terms can interfere with effective communication` on page 98 had no paired image."
-    },
-    {
-      "id": "10ccdd454f0871b4",
-      "code": "caption-without-figure",
-      "section_code": "6.4",
-      "message": "Caption `Figure 4-5. Instructors can use a number of tools to become better at listening.` on page 101 had no paired image."
-    },
-    {
-      "id": "8a701df51739d034",
-      "code": "caption-without-figure",
-      "section_code": "6.4",
-      "message": "Caption `Figure 4-6. Learners can improve their listening skills by applying the steps to` on page 102 had no paired image."
-    },
-    {
-      "id": "b2695aea7cb35ab4",
-      "code": "caption-without-figure",
-      "section_code": "6.4.3",
-      "message": "Caption `Figure 4-5. Instructors can use a number of tools to become better at listening.` on page 101 had no paired image."
-    },
-    {
-      "id": "279d25ae944fb530",
-      "code": "caption-without-figure",
-      "section_code": "6.4.3",
-      "message": "Caption `Figure 4-6. Learners can improve their listening skills by applying the steps to` on page 102 had no paired image."
-    },
-    {
-      "id": "88325f8dde1a836e",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 5-1. Aviation instructors organize course material and use procedures and` on page 105 had no paired image."
-    },
-    {
-      "id": "7907ca1712465b3a",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 5-2. An effective instructor uses a variety of tools to evaluate how lear` on page 106 had no paired image."
-    },
-    {
-      "id": "f246970920feeabf",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 5-3. The syllabus defines the unit of training, states by objective what ` on page 107 had no paired image."
-    },
-    {
-      "id": "fa0c4713dbcb93af",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 5-4. Performance-based objectives are made up of a description of the ski` on page 109 had no paired image."
-    },
-    {
-      "id": "e1c1d38a06a1a809",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 5-5. Examples of Airman Certification Standards.` on page 110 had no paired image."
-    },
-    {
-      "id": "9972830100c32560",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 5-6. Guidelines for presenting lessons.` on page 111 had no paired image."
-    },
-    {
-      "id": "f1db5c3d96cc6be2",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 5-7. The attention element causes learners to focus on the upcoming lesso` on page 112 had no paired image."
-    },
-    {
-      "id": "20263a0781f6daf9",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 5-8. Instructors should try a dry run with another instructor to get a fe` on page 114 had no paired image."
-    },
-    {
-      "id": "00b5e78e12701256",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 5-9. Notes allow the accurate dissemination of complicated information.` on page 115 had no paired image."
-    },
-    {
-      "id": "079bce5c48171aae",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 5-10. If the objectives of a lesson are clearly established in advance, i` on page 117 had no paired image."
-    },
-    {
-      "id": "cc1a0bec3b03a06e",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 5-11. As the learner grows in flight knowledge, he or she should be able ` on page 119 had no paired image."
-    },
-    {
-      "id": "530109cab4404a0a",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 5-12. E-learning encompasses a variety of electronic educational media.` on page 121 had no paired image."
-    },
-    {
-      "id": "f25ac644b4d3b22c",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 5-13. The instructor continually monitors learner performance when using ` on page 123 had no paired image."
-    },
-    {
-      "id": "ee634c7ab01d2700",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 5-14. Flight simulator.` on page 123 had no paired image."
-    },
-    {
-      "id": "af22f387deeb1e30",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 5-15. The demonstration-performance method of teaching has five essential` on page 125 had no paired image."
-    },
-    {
-      "id": "7e29ec3b97e83f06",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 5-16. Studies generally agree that measurable improvement in learner rete` on page 127 had no paired image."
-    },
-    {
-      "id": "9b0366a840d1ba71",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 5-17. Guidelines for effective instructional aids.` on page 128 had no paired image."
-    },
-    {
-      "id": "1946ef87252e4e5f",
-      "code": "caption-without-figure",
-      "section_code": "7",
-      "message": "Caption `Figure 5-18. In a computer-assisted learning environment, the instructor still e` on page 130 had no paired image."
-    },
-    {
-      "id": "3b6774244c3a1158",
-      "code": "caption-without-figure",
-      "section_code": "7.2",
-      "message": "Caption `Figure 5-1. Aviation instructors organize course material and use procedures and` on page 105 had no paired image."
-    },
-    {
-      "id": "d5ba4889c9c646cb",
-      "code": "caption-without-figure",
-      "section_code": "7.2.2",
-      "message": "Caption `Figure 5-1. Aviation instructors organize course material and use procedures and` on page 105 had no paired image."
-    },
-    {
-      "id": "f70124821acb3742",
-      "code": "caption-without-figure",
-      "section_code": "7.3",
-      "message": "Caption `Figure 5-2. An effective instructor uses a variety of tools to evaluate how lear` on page 106 had no paired image."
-    },
-    {
-      "id": "0ef5af4b79f95c32",
-      "code": "caption-without-figure",
-      "section_code": "7.4",
-      "message": "Caption `Figure 5-3. The syllabus defines the unit of training, states by objective what ` on page 107 had no paired image."
-    },
-    {
-      "id": "568300329798604a",
-      "code": "caption-without-figure",
-      "section_code": "7.5",
-      "message": "Caption `Figure 5-4. Performance-based objectives are made up of a description of the ski` on page 109 had no paired image."
-    },
-    {
-      "id": "56430ebb250722ef",
-      "code": "caption-without-figure",
-      "section_code": "7.5",
-      "message": "Caption `Figure 5-5. Examples of Airman Certification Standards.` on page 110 had no paired image."
-    },
-    {
-      "id": "cc092f636591b2ef",
-      "code": "caption-without-figure",
-      "section_code": "7.5.3",
-      "message": "Caption `Figure 5-4. Performance-based objectives are made up of a description of the ski` on page 109 had no paired image."
-    },
-    {
-      "id": "ef1d1c742cb56a5d",
-      "code": "caption-without-figure",
-      "section_code": "7.5.4",
-      "message": "Caption `Figure 5-5. Examples of Airman Certification Standards.` on page 110 had no paired image."
-    },
-    {
-      "id": "cb39cb31a0f3db49",
-      "code": "caption-without-figure",
-      "section_code": "7.5.5",
-      "message": "Caption `Figure 5-5. Examples of Airman Certification Standards.` on page 110 had no paired image."
-    },
-    {
-      "id": "c4b9908902653a4b",
-      "code": "caption-without-figure",
-      "section_code": "7.6",
-      "message": "Caption `Figure 5-6. Guidelines for presenting lessons.` on page 111 had no paired image."
-    },
-    {
-      "id": "3278e8fd583fabdb",
-      "code": "caption-without-figure",
-      "section_code": "7.7",
-      "message": "Caption `Figure 5-7. The attention element causes learners to focus on the upcoming lesso` on page 112 had no paired image."
-    },
-    {
-      "id": "6cc715b0e5d8ca39",
-      "code": "caption-without-figure",
-      "section_code": "7.7.1",
-      "message": "Caption `Figure 5-7. The attention element causes learners to focus on the upcoming lesso` on page 112 had no paired image."
-    },
-    {
-      "id": "f99ce1d0168c312f",
-      "code": "caption-without-figure",
-      "section_code": "7.8",
-      "message": "Caption `Figure 5-8. Instructors should try a dry run with another instructor to get a fe` on page 114 had no paired image."
-    },
-    {
-      "id": "a824cd806b564c6d",
-      "code": "caption-without-figure",
-      "section_code": "7.8",
-      "message": "Caption `Figure 5-9. Notes allow the accurate dissemination of complicated information.` on page 115 had no paired image."
-    },
-    {
-      "id": "dff1614214b8b9e4",
-      "code": "caption-without-figure",
-      "section_code": "7.8",
-      "message": "Caption `Figure 5-10. If the objectives of a lesson are clearly established in advance, i` on page 117 had no paired image."
-    },
-    {
-      "id": "2107266de1ba816b",
-      "code": "caption-without-figure",
-      "section_code": "7.8.1",
-      "message": "Caption `Figure 5-8. Instructors should try a dry run with another instructor to get a fe` on page 114 had no paired image."
-    },
-    {
-      "id": "c47f1e89cadfb77c",
-      "code": "caption-without-figure",
-      "section_code": "7.8.1",
-      "message": "Caption `Figure 5-9. Notes allow the accurate dissemination of complicated information.` on page 115 had no paired image."
-    },
-    {
-      "id": "58454c65db8af9f4",
-      "code": "caption-without-figure",
-      "section_code": "7.8.3",
-      "message": "Caption `Figure 5-10. If the objectives of a lesson are clearly established in advance, i` on page 117 had no paired image."
-    },
-    {
-      "id": "e00c9a4f28db9ec4",
-      "code": "caption-without-figure",
-      "section_code": "7.9",
-      "message": "Caption `Figure 5-11. As the learner grows in flight knowledge, he or she should be able ` on page 119 had no paired image."
-    },
-    {
-      "id": "1d02c1d48080c410",
-      "code": "caption-without-figure",
-      "section_code": "7.9.1",
-      "message": "Caption `Figure 5-11. As the learner grows in flight knowledge, he or she should be able ` on page 119 had no paired image."
-    },
-    {
-      "id": "a42444c90fa4ddc4",
-      "code": "caption-without-figure",
-      "section_code": "7.10",
-      "message": "Caption `Figure 5-12. E-learning encompasses a variety of electronic educational media.` on page 121 had no paired image."
-    },
-    {
-      "id": "b6d20b6c86bef8c3",
-      "code": "caption-without-figure",
-      "section_code": "7.10",
-      "message": "Caption `Figure 5-13. The instructor continually monitors learner performance when using ` on page 123 had no paired image."
-    },
-    {
-      "id": "9533b8c9c8fbd997",
-      "code": "caption-without-figure",
-      "section_code": "7.10",
-      "message": "Caption `Figure 5-14. Flight simulator.` on page 123 had no paired image."
-    },
-    {
-      "id": "e9f6126042cb6ebb",
-      "code": "caption-without-figure",
-      "section_code": "7.10.2",
-      "message": "Caption `Figure 5-13. The instructor continually monitors learner performance when using ` on page 123 had no paired image."
-    },
-    {
-      "id": "c2102156aa589880",
-      "code": "caption-without-figure",
-      "section_code": "7.10.2",
-      "message": "Caption `Figure 5-14. Flight simulator.` on page 123 had no paired image."
-    },
-    {
-      "id": "31eef87ea804cb11",
-      "code": "caption-without-figure",
-      "section_code": "7.12.2",
-      "message": "Caption `Figure 5-15. The demonstration-performance method of teaching has five essential` on page 125 had no paired image."
-    },
-    {
-      "id": "4e962c15d2a9080e",
-      "code": "caption-without-figure",
-      "section_code": "7.12.3",
-      "message": "Caption `Figure 5-15. The demonstration-performance method of teaching has five essential` on page 125 had no paired image."
-    },
-    {
-      "id": "2fd9a749e187b840",
-      "code": "caption-without-figure",
-      "section_code": "7.12.4",
-      "message": "Caption `Figure 5-15. The demonstration-performance method of teaching has five essential` on page 125 had no paired image."
-    },
-    {
-      "id": "70e785896dafeb57",
-      "code": "caption-without-figure",
-      "section_code": "7.13",
-      "message": "Caption `Figure 5-15. The demonstration-performance method of teaching has five essential` on page 125 had no paired image."
-    },
-    {
-      "id": "0462d7c67cb81b35",
-      "code": "caption-without-figure",
-      "section_code": "7.13.1",
-      "message": "Caption `Figure 5-15. The demonstration-performance method of teaching has five essential` on page 125 had no paired image."
-    },
-    {
-      "id": "a5878f3851481313",
-      "code": "caption-without-figure",
-      "section_code": "7.16",
-      "message": "Caption `Figure 5-16. Studies generally agree that measurable improvement in learner rete` on page 127 had no paired image."
-    },
-    {
-      "id": "2ddbde3a324a3d29",
-      "code": "caption-without-figure",
-      "section_code": "7.16",
-      "message": "Caption `Figure 5-17. Guidelines for effective instructional aids.` on page 128 had no paired image."
-    },
-    {
-      "id": "6f913da5fe21eca9",
-      "code": "caption-without-figure",
-      "section_code": "7.16",
-      "message": "Caption `Figure 5-18. In a computer-assisted learning environment, the instructor still e` on page 130 had no paired image."
-    },
-    {
-      "id": "03fbf663ed3e8939",
-      "code": "caption-without-figure",
-      "section_code": "7.16.3",
-      "message": "Caption `Figure 5-16. Studies generally agree that measurable improvement in learner rete` on page 127 had no paired image."
-    },
-    {
-      "id": "abf57db2548d856c",
-      "code": "caption-without-figure",
-      "section_code": "7.16.4",
-      "message": "Caption `Figure 5-17. Guidelines for effective instructional aids.` on page 128 had no paired image."
-    },
-    {
-      "id": "e4922e4cde101360",
-      "code": "caption-without-figure",
-      "section_code": "7.16.4",
-      "message": "Caption `Figure 5-18. In a computer-assisted learning environment, the instructor still e` on page 130 had no paired image."
-    },
-    {
-      "id": "708a14ebdab03578",
-      "code": "caption-without-figure",
-      "section_code": "8",
-      "message": "Caption `completion standards of the lesson. An effective assessment displays the charact` on page 133 had no paired image."
-    },
-    {
-      "id": "16083d982f43b971",
-      "code": "caption-without-figure",
-      "section_code": "8",
-      "message": "Caption `Figure 6-1. Effective assessments share a number of characteristics.` on page 133 had no paired image."
-    },
-    {
-      "id": "c9b9289e9c20f22d",
-      "code": "caption-without-figure",
-      "section_code": "8",
-      "message": "Caption `Figure 6-2. Traditional grading.` on page 135 had no paired image."
-    },
-    {
-      "id": "e6ac89703b5a57d1",
-      "code": "caption-without-figure",
-      "section_code": "8",
-      "message": "Caption `Figure 6-3. Effective tests have six primary characteristics.` on page 135 had no paired image."
-    },
-    {
-      "id": "2a10126cb5b05107",
-      "code": "caption-without-figure",
-      "section_code": "8",
-      "message": "Caption `Figure 6-4. Rubric for assessing flight training maneuvers.` on page 138 had no paired image."
-    },
-    {
-      "id": "44ebf987e3092e4a",
-      "code": "caption-without-figure",
-      "section_code": "8",
-      "message": "Caption `Figure 6-5. The development process for criterion-referenced tests follows a gen` on page 139 had no paired image."
-    },
-    {
-      "id": "40b02fce83cc0ccf",
-      "code": "caption-without-figure",
-      "section_code": "8.4",
-      "message": "Caption `completion standards of the lesson. An effective assessment displays the charact` on page 133 had no paired image."
-    },
-    {
-      "id": "2b0e6c522cb1df37",
-      "code": "caption-without-figure",
-      "section_code": "8.4",
-      "message": "Caption `Figure 6-1. Effective assessments share a number of characteristics.` on page 133 had no paired image."
-    },
-    {
-      "id": "57b399e49ffbf6a3",
-      "code": "caption-without-figure",
-      "section_code": "8.4.1",
-      "message": "Caption `completion standards of the lesson. An effective assessment displays the charact` on page 133 had no paired image."
-    },
-    {
-      "id": "f0679dbda3eaa129",
-      "code": "caption-without-figure",
-      "section_code": "8.4.1",
-      "message": "Caption `Figure 6-1. Effective assessments share a number of characteristics.` on page 133 had no paired image."
-    },
-    {
-      "id": "f5a74dcb00f926e5",
-      "code": "caption-without-figure",
-      "section_code": "8.4.2",
-      "message": "Caption `completion standards of the lesson. An effective assessment displays the charact` on page 133 had no paired image."
-    },
-    {
-      "id": "0cc64ef69c3c79d4",
-      "code": "caption-without-figure",
-      "section_code": "8.4.2",
-      "message": "Caption `Figure 6-1. Effective assessments share a number of characteristics.` on page 133 had no paired image."
-    },
-    {
-      "id": "331e62e3bb5fe35c",
-      "code": "caption-without-figure",
-      "section_code": "8.4.3",
-      "message": "Caption `completion standards of the lesson. An effective assessment displays the charact` on page 133 had no paired image."
-    },
-    {
-      "id": "089d3088b72e981b",
-      "code": "caption-without-figure",
-      "section_code": "8.4.3",
-      "message": "Caption `Figure 6-1. Effective assessments share a number of characteristics.` on page 133 had no paired image."
-    },
-    {
-      "id": "84738dc704c4b0e2",
-      "code": "caption-without-figure",
-      "section_code": "8.5",
-      "message": "Caption `Figure 6-2. Traditional grading.` on page 135 had no paired image."
-    },
-    {
-      "id": "767c70858add4b17",
-      "code": "caption-without-figure",
-      "section_code": "8.5",
-      "message": "Caption `Figure 6-3. Effective tests have six primary characteristics.` on page 135 had no paired image."
-    },
-    {
-      "id": "b7b1bf21f3e20b68",
-      "code": "caption-without-figure",
-      "section_code": "8.5.1",
-      "message": "Caption `Figure 6-2. Traditional grading.` on page 135 had no paired image."
-    },
-    {
-      "id": "a45313d966e49563",
-      "code": "caption-without-figure",
-      "section_code": "8.5.1",
-      "message": "Caption `Figure 6-3. Effective tests have six primary characteristics.` on page 135 had no paired image."
-    },
-    {
-      "id": "056b21e87ee4917b",
-      "code": "caption-without-figure",
-      "section_code": "8.7",
-      "message": "Caption `Figure 6-4. Rubric for assessing flight training maneuvers.` on page 138 had no paired image."
-    },
-    {
-      "id": "7a9e07cdac562011",
-      "code": "caption-without-figure",
-      "section_code": "8.7",
-      "message": "Caption `Figure 6-5. The development process for criterion-referenced tests follows a gen` on page 139 had no paired image."
-    },
-    {
-      "id": "2462da51d8668add",
-      "code": "caption-without-figure",
-      "section_code": "8.7.1",
-      "message": "Caption `Figure 6-5. The development process for criterion-referenced tests follows a gen` on page 139 had no paired image."
-    },
-    {
-      "id": "8b9b06455b8abfff",
-      "code": "caption-without-figure",
-      "section_code": "9",
-      "message": "Caption `Figure 7-1. The presolo stage or phase of private pilot training is comprised of` on page 146 had no paired image."
-    },
-    {
-      "id": "608369764da63f28",
-      "code": "caption-without-figure",
-      "section_code": "9",
-      "message": "Caption `Figure 7-2. This excerpt of a ground lesson shows a unit of ground instruction. ` on page 148 had no paired image."
-    },
-    {
-      "id": "c352fcca919721c4",
-      "code": "caption-without-figure",
-      "section_code": "9",
-      "message": "Caption `Figure 7-3. A flight training lesson, like a ground training lesson, should incl` on page 149 had no paired image."
-    },
-    {
-      "id": "8fa8b7dca0c15586",
-      "code": "caption-without-figure",
-      "section_code": "9",
-      "message": "Caption `Figure 7-4. Information in the form of notes may be added to individual ground o` on page 150 had no paired image."
-    },
-    {
-      "id": "beefc1e0bb522baf",
-      "code": "caption-without-figure",
-      "section_code": "9",
-      "message": "Caption `Figure 7-5. Glider training log.` on page 151 had no paired image."
-    },
-    {
-      "id": "c044a8c1db830ef6",
-      "code": "caption-without-figure",
-      "section_code": "9",
-      "message": "Caption `Figure 7-6. Example of a traditional training lesson plan.` on page 154 had no paired image."
-    },
-    {
-      "id": "4470fb30e1401685",
-      "code": "caption-without-figure",
-      "section_code": "9",
-      "message": "Caption `Figure 7-7. SBT lesson plan.` on page 156 had no paired image."
-    },
-    {
-      "id": "1bf871c704c5751c",
-      "code": "caption-without-figure",
-      "section_code": "9",
-      "message": "Caption `Figure 7-8. Points to remember about scenario-based training.` on page 157 had no paired image."
-    },
-    {
-      "id": "51282c5178257ffe",
-      "code": "caption-without-figure",
-      "section_code": "9",
-      "message": "Caption `Figure 7-9. Very light jet aircraft in flight.` on page 158 had no paired image."
-    },
-    {
-      "id": "4aee9259fca3d89c",
-      "code": "caption-without-figure",
-      "section_code": "9.3",
-      "message": "Caption `Figure 7-1. The presolo stage or phase of private pilot training is comprised of` on page 146 had no paired image."
-    },
-    {
-      "id": "f6a66dfb323ac6ad",
-      "code": "caption-without-figure",
-      "section_code": "9.4",
-      "message": "Caption `Figure 7-2. This excerpt of a ground lesson shows a unit of ground instruction. ` on page 148 had no paired image."
-    },
-    {
-      "id": "1d591f87e2e972ab",
-      "code": "caption-without-figure",
-      "section_code": "9.4",
-      "message": "Caption `Figure 7-3. A flight training lesson, like a ground training lesson, should incl` on page 149 had no paired image."
-    },
-    {
-      "id": "a3a603ca475e2d37",
-      "code": "caption-without-figure",
-      "section_code": "9.4",
-      "message": "Caption `Figure 7-4. Information in the form of notes may be added to individual ground o` on page 150 had no paired image."
-    },
-    {
-      "id": "eed1b590477ee301",
-      "code": "caption-without-figure",
-      "section_code": "9.4.2",
-      "message": "Caption `Figure 7-2. This excerpt of a ground lesson shows a unit of ground instruction. ` on page 148 had no paired image."
-    },
-    {
-      "id": "aba4f73b8fb17a74",
-      "code": "caption-without-figure",
-      "section_code": "9.4.2",
-      "message": "Caption `Figure 7-3. A flight training lesson, like a ground training lesson, should incl` on page 149 had no paired image."
-    },
-    {
-      "id": "b54f7b2ffbebbb03",
-      "code": "caption-without-figure",
-      "section_code": "9.4.2",
-      "message": "Caption `Figure 7-4. Information in the form of notes may be added to individual ground o` on page 150 had no paired image."
-    },
-    {
-      "id": "824338afc331ae06",
-      "code": "caption-without-figure",
-      "section_code": "9.5",
-      "message": "Caption `Figure 7-5. Glider training log.` on page 151 had no paired image."
-    },
-    {
-      "id": "7e52d4257e7195a6",
-      "code": "caption-without-figure",
-      "section_code": "9.6",
-      "message": "Caption `Figure 7-6. Example of a traditional training lesson plan.` on page 154 had no paired image."
-    },
-    {
-      "id": "08937dd3aff14055",
-      "code": "caption-without-figure",
-      "section_code": "9.6",
-      "message": "Caption `Figure 7-7. SBT lesson plan.` on page 156 had no paired image."
-    },
-    {
-      "id": "7f4fd02e4cab3c8a",
-      "code": "caption-without-figure",
-      "section_code": "9.6",
-      "message": "Caption `Figure 7-8. Points to remember about scenario-based training.` on page 157 had no paired image."
-    },
-    {
-      "id": "42a7f359e6a12e6e",
-      "code": "caption-without-figure",
-      "section_code": "9.6.2",
-      "message": "Caption `Figure 7-7. SBT lesson plan.` on page 156 had no paired image."
-    },
-    {
-      "id": "8652c11242025b0f",
-      "code": "caption-without-figure",
-      "section_code": "9.6.2",
-      "message": "Caption `Figure 7-8. Points to remember about scenario-based training.` on page 157 had no paired image."
-    },
-    {
-      "id": "c4f20b03bfe6882a",
-      "code": "caption-without-figure",
-      "section_code": "9.7",
-      "message": "Caption `Figure 7-9. Very light jet aircraft in flight.` on page 158 had no paired image."
-    },
-    {
-      "id": "b397532cd4055437",
-      "code": "caption-without-figure",
-      "section_code": "9.8",
-      "message": "Caption `Figure 7-9. Very light jet aircraft in flight.` on page 158 had no paired image."
-    },
-    {
-      "id": "558b04c62070f9d2",
-      "code": "caption-without-figure",
-      "section_code": "10",
-      "message": "Caption `Figure 8-1. There are five main responsibilities of aviation instructors.` on page 159 had no paired image."
-    },
-    {
-      "id": "19eb410391e03038",
-      "code": "caption-without-figure",
-      "section_code": "10",
-      "message": "Caption `Figure 8-2. Acceptable standards in all subject matter areas, procedures, and ma` on page 160 had no paired image."
-    },
-    {
-      "id": "83ccdf9f68856918",
-      "code": "caption-without-figure",
-      "section_code": "10",
-      "message": "Caption `Figure 8-3. Learners learn more when instruction is presented in a positive and ` on page 161 had no paired image."
-    },
-    {
-      "id": "7cba2909cd9be338",
-      "code": "caption-without-figure",
-      "section_code": "10",
-      "message": "Caption `Figure 8-4. These are practical ways to minimize learner frustration.` on page 162 had no paired image."
-    },
-    {
-      "id": "afa4924113f9a627",
-      "code": "caption-without-figure",
-      "section_code": "10",
-      "message": "Caption `Figure 8-5. The flight instructor has many additional responsibilities.` on page 163 had no paired image."
-    },
-    {
-      "id": "70e49e9511690262",
-      "code": "caption-without-figure",
-      "section_code": "10",
-      "message": "Caption `Figure 8-6. Teaching tips from veteran flight instructors.` on page 165 had no paired image."
-    },
-    {
-      "id": "f40c31ffe1ceb734",
-      "code": "caption-without-figure",
-      "section_code": "10",
-      "message": "Caption `Figure 8-7. Guidelines for an aviation instructor.` on page 166 had no paired image."
-    },
-    {
-      "id": "5025eb432a521294",
-      "code": "caption-without-figure",
-      "section_code": "10",
-      "message": "Caption `Figure 8-8. The aviation instructor should always present a professional appeara` on page 167 had no paired image."
-    },
-    {
-      "id": "19b9973f5fc4918a",
-      "code": "caption-without-figure",
-      "section_code": "10",
-      "message": "Caption `Figure 8-9. Aviation instructors can improve their knowledge by becoming familia` on page 170 had no paired image."
-    },
-    {
-      "id": "aa03436cfa00a2fd",
-      "code": "caption-without-figure",
-      "section_code": "10.1",
-      "message": "Caption `Figure 8-1. There are five main responsibilities of aviation instructors.` on page 159 had no paired image."
-    },
-    {
-      "id": "5dcdbd534e4183e4",
-      "code": "caption-without-figure",
-      "section_code": "10.2",
-      "message": "Caption `Figure 8-1. There are five main responsibilities of aviation instructors.` on page 159 had no paired image."
-    },
-    {
-      "id": "e728d0cabaf1f926",
-      "code": "caption-without-figure",
-      "section_code": "10.2",
-      "message": "Caption `Figure 8-2. Acceptable standards in all subject matter areas, procedures, and ma` on page 160 had no paired image."
-    },
-    {
-      "id": "12018548ed7d7108",
-      "code": "caption-without-figure",
-      "section_code": "10.2",
-      "message": "Caption `Figure 8-3. Learners learn more when instruction is presented in a positive and ` on page 161 had no paired image."
-    },
-    {
-      "id": "c39911ff8838742f",
-      "code": "caption-without-figure",
-      "section_code": "10.2",
-      "message": "Caption `Figure 8-4. These are practical ways to minimize learner frustration.` on page 162 had no paired image."
-    },
-    {
-      "id": "e7284a5e75de114d",
-      "code": "caption-without-figure",
-      "section_code": "10.2.1",
-      "message": "Caption `Figure 8-1. There are five main responsibilities of aviation instructors.` on page 159 had no paired image."
-    },
-    {
-      "id": "e208269c8d01079f",
-      "code": "caption-without-figure",
-      "section_code": "10.2.2",
-      "message": "Caption `Figure 8-1. There are five main responsibilities of aviation instructors.` on page 159 had no paired image."
-    },
-    {
-      "id": "5eb945d35042f936",
-      "code": "caption-without-figure",
-      "section_code": "10.2.3",
-      "message": "Caption `Figure 8-2. Acceptable standards in all subject matter areas, procedures, and ma` on page 160 had no paired image."
-    },
-    {
-      "id": "7563aeaefcfb00dc",
-      "code": "caption-without-figure",
-      "section_code": "10.2.4",
-      "message": "Caption `Figure 8-2. Acceptable standards in all subject matter areas, procedures, and ma` on page 160 had no paired image."
-    },
-    {
-      "id": "77a716cbde40aebd",
-      "code": "caption-without-figure",
-      "section_code": "10.2.4",
-      "message": "Caption `Figure 8-3. Learners learn more when instruction is presented in a positive and ` on page 161 had no paired image."
-    },
-    {
-      "id": "b52e0112efeda169",
-      "code": "caption-without-figure",
-      "section_code": "10.2.5",
-      "message": "Caption `Figure 8-4. These are practical ways to minimize learner frustration.` on page 162 had no paired image."
-    },
-    {
-      "id": "a11cbe02dc920938",
-      "code": "caption-without-figure",
-      "section_code": "10.3",
-      "message": "Caption `Figure 8-5. The flight instructor has many additional responsibilities.` on page 163 had no paired image."
-    },
-    {
-      "id": "94028f3923c3c940",
-      "code": "caption-without-figure",
-      "section_code": "10.3.1",
-      "message": "Caption `Figure 8-5. The flight instructor has many additional responsibilities.` on page 163 had no paired image."
-    },
-    {
-      "id": "b807b07920e8e62a",
-      "code": "caption-without-figure",
-      "section_code": "10.3.2",
-      "message": "Caption `Figure 8-5. The flight instructor has many additional responsibilities.` on page 163 had no paired image."
-    },
-    {
-      "id": "c5224c8364af16d2",
-      "code": "caption-without-figure",
-      "section_code": "10.6",
-      "message": "Caption `Figure 8-6. Teaching tips from veteran flight instructors.` on page 165 had no paired image."
-    },
-    {
-      "id": "47bc2c561f6eb3e2",
-      "code": "caption-without-figure",
-      "section_code": "10.7",
-      "message": "Caption `Figure 8-6. Teaching tips from veteran flight instructors.` on page 165 had no paired image."
-    },
-    {
-      "id": "3bea64824411a854",
-      "code": "caption-without-figure",
-      "section_code": "10.7",
-      "message": "Caption `Figure 8-7. Guidelines for an aviation instructor.` on page 166 had no paired image."
-    },
-    {
-      "id": "e94c366da3315b60",
-      "code": "caption-without-figure",
-      "section_code": "10.7.1",
-      "message": "Caption `Figure 8-7. Guidelines for an aviation instructor.` on page 166 had no paired image."
-    },
-    {
-      "id": "e71753c6d0a19eea",
-      "code": "caption-without-figure",
-      "section_code": "10.7.2",
-      "message": "Caption `Figure 8-7. Guidelines for an aviation instructor.` on page 166 had no paired image."
-    },
-    {
-      "id": "c42139b31414577a",
-      "code": "caption-without-figure",
-      "section_code": "10.7.3",
-      "message": "Caption `Figure 8-8. The aviation instructor should always present a professional appeara` on page 167 had no paired image."
-    },
-    {
-      "id": "2dcaa2ab8ca2e93b",
-      "code": "caption-without-figure",
-      "section_code": "10.7.4",
-      "message": "Caption `Figure 8-8. The aviation instructor should always present a professional appeara` on page 167 had no paired image."
-    },
-    {
-      "id": "090ccd3b07464f32",
-      "code": "caption-without-figure",
-      "section_code": "10.7.5",
-      "message": "Caption `Figure 8-8. The aviation instructor should always present a professional appeara` on page 167 had no paired image."
-    },
-    {
-      "id": "8d20c300da262191",
-      "code": "caption-without-figure",
-      "section_code": "10.8",
-      "message": "Caption `Figure 8-8. The aviation instructor should always present a professional appeara` on page 167 had no paired image."
-    },
-    {
-      "id": "a1f015ae8fb86530",
-      "code": "caption-without-figure",
-      "section_code": "10.10",
-      "message": "Caption `Figure 8-9. Aviation instructors can improve their knowledge by becoming familia` on page 170 had no paired image."
-    },
-    {
-      "id": "cdec2ec507521655",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 9-1. The learner prepares to execute a power-off stall maneuver in-flight` on page 172 had no paired image."
-    },
-    {
-      "id": "bec9826769d72cc9",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 9-2. A Level C simulator.` on page 173 had no paired image."
-    },
-    {
-      "id": "1607802c9d92d0b6",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 9-3. An example of a Level 6 Flight Training Device (FTD).` on page 173 had no paired image."
-    },
-    {
-      "id": "1157d6c49c6b18f9",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 9-4. A level 4 FTD used for procedure training.` on page 174 had no paired image."
-    },
-    {
-      "id": "85651d03a9b204f1",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 9-5. Reinforcing what the learner was taught on the ground is critical to` on page 175 had no paired image."
-    },
-    {
-      "id": "3439035bacc4e597",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 9-6. The demonstration-performance method of teaching has four essential ` on page 176 had no paired image."
-    },
-    {
-      "id": "b71ccb8eac7d9738",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 9-7. This comparison of steps in the teaching process, the demonstration-` on page 177 had no paired image."
-    },
-    {
-      "id": "123a16878b10ef2c",
-      "code": "caption-without-figure",
-      "section_code": "11",
-      "message": "Caption `Figure 9-8. During this procedure, a visual check is recommended to see that the` on page 179 had no paired image."
-    },
-    {
-      "id": "fad08f227bf01fef",
-      "code": "caption-without-figure",
-      "section_code": "11.3",
-      "message": "Caption `Figure 9-1. The learner prepares to execute a power-off stall maneuver in-flight` on page 172 had no paired image."
-    },
-    {
-      "id": "8bf8f0b4816a47ff",
-      "code": "caption-without-figure",
-      "section_code": "11.3",
-      "message": "Caption `Figure 9-2. A Level C simulator.` on page 173 had no paired image."
-    },
-    {
-      "id": "3115927783f7c659",
-      "code": "caption-without-figure",
-      "section_code": "11.3",
-      "message": "Caption `Figure 9-3. An example of a Level 6 Flight Training Device (FTD).` on page 173 had no paired image."
-    },
-    {
-      "id": "773af30383a9c03a",
-      "code": "caption-without-figure",
-      "section_code": "11.3",
-      "message": "Caption `Figure 9-4. A level 4 FTD used for procedure training.` on page 174 had no paired image."
-    },
-    {
-      "id": "fc8e6ef7b6b4c5d0",
-      "code": "caption-without-figure",
-      "section_code": "11.3.1",
-      "message": "Caption `Figure 9-1. The learner prepares to execute a power-off stall maneuver in-flight` on page 172 had no paired image."
-    },
-    {
-      "id": "4b338ef75b43d0c0",
-      "code": "caption-without-figure",
-      "section_code": "11.3.2",
-      "message": "Caption `Figure 9-1. The learner prepares to execute a power-off stall maneuver in-flight` on page 172 had no paired image."
-    },
-    {
-      "id": "d195b5b58f924bc8",
-      "code": "caption-without-figure",
-      "section_code": "11.3.2",
-      "message": "Caption `Figure 9-2. A Level C simulator.` on page 173 had no paired image."
-    },
-    {
-      "id": "27b6721f4b6cec92",
-      "code": "caption-without-figure",
-      "section_code": "11.3.2",
-      "message": "Caption `Figure 9-3. An example of a Level 6 Flight Training Device (FTD).` on page 173 had no paired image."
-    },
-    {
-      "id": "6a4646b319cf75a6",
-      "code": "caption-without-figure",
-      "section_code": "11.3.3",
-      "message": "Caption `Figure 9-4. A level 4 FTD used for procedure training.` on page 174 had no paired image."
-    },
-    {
-      "id": "64750bf80c8fe161",
-      "code": "caption-without-figure",
-      "section_code": "11.3.4",
-      "message": "Caption `Figure 9-4. A level 4 FTD used for procedure training.` on page 174 had no paired image."
-    },
-    {
-      "id": "5c20b3b678240bf5",
-      "code": "caption-without-figure",
-      "section_code": "11.3.5",
-      "message": "Caption `Figure 9-4. A level 4 FTD used for procedure training.` on page 174 had no paired image."
-    },
-    {
-      "id": "10340bc5f62a4360",
-      "code": "caption-without-figure",
-      "section_code": "11.4",
-      "message": "Caption `Figure 9-5. Reinforcing what the learner was taught on the ground is critical to` on page 175 had no paired image."
-    },
-    {
-      "id": "30b8df3c87679ff6",
-      "code": "caption-without-figure",
-      "section_code": "11.4",
-      "message": "Caption `Figure 9-6. The demonstration-performance method of teaching has four essential ` on page 176 had no paired image."
-    },
-    {
-      "id": "be372b060bd19c9d",
-      "code": "caption-without-figure",
-      "section_code": "11.4",
-      "message": "Caption `Figure 9-7. This comparison of steps in the teaching process, the demonstration-` on page 177 had no paired image."
-    },
-    {
-      "id": "7772dc094aabd866",
-      "code": "caption-without-figure",
-      "section_code": "11.4.1",
-      "message": "Caption `Figure 9-5. Reinforcing what the learner was taught on the ground is critical to` on page 175 had no paired image."
-    },
-    {
-      "id": "46bae1877d021fad",
-      "code": "caption-without-figure",
-      "section_code": "11.4.2",
-      "message": "Caption `Figure 9-5. Reinforcing what the learner was taught on the ground is critical to` on page 175 had no paired image."
-    },
-    {
-      "id": "6b9bd9e285ad29eb",
-      "code": "caption-without-figure",
-      "section_code": "11.4.3",
-      "message": "Caption `Figure 9-6. The demonstration-performance method of teaching has four essential ` on page 176 had no paired image."
-    },
-    {
-      "id": "88688cda29cd7d9a",
-      "code": "caption-without-figure",
-      "section_code": "11.4.4",
-      "message": "Caption `Figure 9-6. The demonstration-performance method of teaching has four essential ` on page 176 had no paired image."
-    },
-    {
-      "id": "fdb4eef1d51d0c19",
-      "code": "caption-without-figure",
-      "section_code": "11.4.5",
-      "message": "Caption `Figure 9-6. The demonstration-performance method of teaching has four essential ` on page 176 had no paired image."
-    },
-    {
-      "id": "0cb07d1f2a582f3c",
-      "code": "caption-without-figure",
-      "section_code": "11.4.5",
-      "message": "Caption `Figure 9-7. This comparison of steps in the teaching process, the demonstration-` on page 177 had no paired image."
-    },
-    {
-      "id": "17e13c77ac86ee2f",
-      "code": "caption-without-figure",
-      "section_code": "11.6",
-      "message": "Caption `Figure 9-8. During this procedure, a visual check is recommended to see that the` on page 179 had no paired image."
-    },
-    {
-      "id": "06ab08f5e0fed848",
-      "code": "caption-without-figure",
-      "section_code": "11.7",
-      "message": "Caption `Figure 9-8. During this procedure, a visual check is recommended to see that the` on page 179 had no paired image."
-    },
-    {
-      "id": "ed761f5f23539b90",
-      "code": "caption-without-figure",
-      "section_code": "12",
-      "message": "Caption `Figure 10-1. NTSB Accident Report.` on page 185 had no paired image."
-    },
-    {
-      "id": "7fa86db47e69484d",
-      "code": "caption-without-figure",
-      "section_code": "12",
-      "message": "Caption `Figure 10-2. This risk matrix can be used for almost any operation by assigning ` on page 186 had no paired image."
-    },
-    {
-      "id": "afa70c90512dd266",
-      "code": "caption-without-figure",
-      "section_code": "12.1",
-      "message": "Caption `Figure 10-1. NTSB Accident Report.` on page 185 had no paired image."
-    },
-    {
-      "id": "26585a1a9e850335",
-      "code": "caption-without-figure",
-      "section_code": "12.2",
-      "message": "Caption `Figure 10-1. NTSB Accident Report.` on page 185 had no paired image."
-    },
-    {
-      "id": "61853c0dd95e22da",
-      "code": "caption-without-figure",
-      "section_code": "12.2",
-      "message": "Caption `Figure 10-2. This risk matrix can be used for almost any operation by assigning ` on page 186 had no paired image."
-    },
-    {
-      "id": "957735b29ba32594",
-      "code": "caption-without-figure",
-      "section_code": "12.2.1",
-      "message": "Caption `Figure 10-1. NTSB Accident Report.` on page 185 had no paired image."
-    },
-    {
-      "id": "71e69aa72708e0cf",
-      "code": "caption-without-figure",
-      "section_code": "12.2.2",
-      "message": "Caption `Figure 10-2. This risk matrix can be used for almost any operation by assigning ` on page 186 had no paired image."
-    },
-    {
-      "id": "dec209e9ba537b45",
-      "code": "caption-without-figure",
-      "section_code": "12.2.3",
-      "message": "Caption `Figure 10-2. This risk matrix can be used for almost any operation by assigning ` on page 186 had no paired image."
-    },
     {
       "id": "fe12aa37644d6927",
       "code": "table-cell-merge-ambiguity",
@@ -7985,6 +6890,18 @@
       "code": "page-label",
       "section_code": null,
       "message": "page-label: node 2 end-page (PDF p4) had no parseable FAA header within 5 pages; falling back to offset-derived `4`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "id": "b1b601307570a1f2",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 7.4 start-page (PDF p107) had no parseable FAA header; recovered `5-3` from PDF p106 (walk-back 1)"
+    },
+    {
+      "id": "e460d1ee8a8ecd54",
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 7.4 end-page (PDF p107) had no parseable FAA header; recovered `5-3` from PDF p106 (walk-back 1)"
     },
     {
       "id": "d36cea50bce51349",
@@ -8522,8 +7439,8 @@
       }
     },
     "figure_dedup": {
-      "canonicalized": 4,
-      "freed_bytes": 1354148
+      "canonicalized": 1,
+      "freed_bytes": 118124
     }
   }
 }

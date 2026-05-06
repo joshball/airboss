@@ -13,3 +13,6 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 Spin Awareness and Stalls
 No multiengine airplane is approved for spins, and their spin recovery characteristics are generally very poor. It is therefore prudent to
 practice spin avoidance and maintain a high awareness of situations that can result in an inadvertent spin.
+
+
+![Figure 13-13. Effect of CG location on yaw.](/handbooks/afh/FAA-H-8083-3C/figures/fig-13-11-effect-of-cg-location-on-yaw.png)

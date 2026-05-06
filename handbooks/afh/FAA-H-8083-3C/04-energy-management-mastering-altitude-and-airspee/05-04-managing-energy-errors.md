@@ -67,3 +67,6 @@ pattern operations, take-offs and climbs, cruise flight, descending flight, and 
 Clearly, skills for promptly correcting path-speed deviations can enhance flight safety but the pilot should also be aware of the risk of
 unrecoverable depletion of the airplane’s mechanical energy, especially as the airplane approaches the edges of its flight envelope
 where available excess power is zero.
+
+
+![Figure 4-11. An energy state matrix that translates the main altitude-speed deviations into energy errors relative to the desired energy  state (5).](/handbooks/afh/FAA-H-8083-3C/figures/fig-4-09-an-energy-state-matrix-that-translates-the-main-.png)

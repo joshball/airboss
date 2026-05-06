@@ -12,3 +12,6 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 
 Weight
 Drag
+
+
+![Figure 4-6. Newton’s Third Law of Motion: the Law of Reaction.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-4-05-newton-s-third-law-of-motion-the-law-of-reaction.png)

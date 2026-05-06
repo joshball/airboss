@@ -24,3 +24,6 @@ give the sensation of banking or tilting. Turbulence can create
 motions that confuse the brain as well. Pilots need to be aware
 that fatigue or illness can exacerbate these sensations and
 ultimately lead to subtle incapacitation.
+
+
+![Figure 3-6. Linear acceleration.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-3-04-linear-acceleration.png)

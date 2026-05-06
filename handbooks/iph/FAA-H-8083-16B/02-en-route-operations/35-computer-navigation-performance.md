@@ -54,3 +54,8 @@ critical to understand the limitations of the system you are
 using, for example, incomplete information, unloadable
 procedures, complex procedures, and database storage
 limitations.
+
+
+![Figure 2-35. Joint jet/RNAV routes.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-29-joint-jet-rnav-routes.png)
+
+![Figure 2-54. Floating waypoints.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-48-floating-waypoints.png)

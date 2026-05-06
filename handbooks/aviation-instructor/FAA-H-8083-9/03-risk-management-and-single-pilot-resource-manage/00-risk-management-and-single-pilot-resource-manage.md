@@ -998,4 +998,30 @@ item, and by flight five, a “manage-decide” item.
 This chapter introduced aviation instructors to the underlying concepts of safety risk management, which the FAA is integrating into
 all levels of the aviation community.
 
-![Figure 1-6. Fatigue is a threat to aviation safety because it impairs alertness and performance.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-6-1-00-fatigue-is-a-threat-to-aviation-safety-because-i.png)
+![Figure 1-1. Types of risk.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-00-types-of-risk.png)
+
+![Figure 1-2. One of the most important decisions that the pilot in command makes is the go/no-go decision. Evaluating each of these  risk elements can help the pilot decide whether a flight should be conducted or continued.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-01-one-of-the-most-important-decisions-that-the-pil.png)
+
+![Figure 1-3. Prior to flight, pilots may use a checklist to assess their fitness, just as they evaluate the aircraft’s airworthiness.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-02-prior-to-flight-pilots-may-use-a-checklist-to-as.png)
+
+![Figure 1-4. This risk matrix can be used for almost any operation by assigning likelihood and severity. In the case presented, the pilot  assigned the likelihood of occasional and the severity as catastrophic falls in the high-risk area.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-12-01-this-risk-matrix-can-be-used-for-almost-any-oper.png)
+
+![Figure 1-5. 3P Model (Perceive, Process, and Perform).](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-04-3p-model-perceive-process-and-perform.png)
+
+![Figure 1-6. Fatigue is a threat to aviation safety because it impairs alertness and performance.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-05-fatigue-is-a-threat-to-aviation-safety-because-i.png)
+
+![Figure 1-7. Countermeasures for coping with fatigue.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-06-countermeasures-for-coping-with-fatigue.png)
+
+![Figure 1-8. All experienced pilots have fallen prey to, or have been tempted by, one or more of these tendencies in their flying  careers.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-07-all-experienced-pilots-have-fallen-prey-to-or-ha.png)
+
+![Figure 1-9. The 5P checklist.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-08-the-5p-checklist.png)
+
+![Figure 1-10. Terms used in AC 60-22 to explain concepts used in ADM training.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-09-terms-used-in-ac-60-22-to-explain-concepts-used-.png)
+
+![Figure 1-11. Pilots should examine their decisions carefully to ensure that their choices have not been influenced by a hazardous  attitude](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-10-pilots-should-examine-their-decisions-carefully-.png)
+
+![Figure 1-12. Learners in training can be asked to identify hazardous attitudes and the corresponding antidotes when presented with  flight scenarios.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-11-learners-in-training-can-be-asked-to-identify-ha.png)
+
+![Figure 1-13. Three types of stressors that can affect pilot performance.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-12-three-types-of-stressors-that-can-affect-pilot-p.png)
+
+![Figure 1-14. Accidents often occur when flying task requirements exceed pilot capabilities. The difference between these two factors is  called the margin of safety. Note that in this idealized example, the margin of safety is minimal during the approach and landing. At this point, an emergency or distraction could ove](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-3-13-accidents-often-occur-when-flying-task-requireme.png)

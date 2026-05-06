@@ -91,5 +91,3 @@ FCST ASH CLOUD +18HR: 30NM EITHER SIDE OF LN FM N51 E175 - N50 E185.
 NEXT ADVISORY: 20030419/1500Z
 REMARKS:
 UPDATES AS SOON AS INFO BECOMES AVAILABLE.
-
-![Figure 26-10. Volcanic Ash Advisory Centers](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-5-1-00-volcanic-ash-advisory-centers.png)

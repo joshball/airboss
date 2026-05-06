@@ -11,3 +11,6 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 # Dynamic Pressure Type Instruments
 
 Dynamic Pressure Type Instruments
+
+
+![Figure 5-18. Utilization of a compass rose aids compensation for  deviation errors.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-17-utilization-of-a-compass-rose-aids-compensation-.png)

@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Introduction
+
+![Figure 6-1. Area navigation (RNAV) receivers.](/handbooks/iph/FAA-H-8083-16B/figures/fig-6-00-area-navigation-rnav-receivers.png)

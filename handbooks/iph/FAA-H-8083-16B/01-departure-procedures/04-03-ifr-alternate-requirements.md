@@ -71,3 +71,6 @@ alternate weather minimums are a ceiling of 200 feet above
 the minimum for the approach to be flown, and visibility
 at least 1 SM but never less than the minimum visibility for
 the approach to be flown.
+
+
+![Figure 1-13. Examples of IFR alternate minimums.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-12-examples-of-ifr-alternate-minimums.png)

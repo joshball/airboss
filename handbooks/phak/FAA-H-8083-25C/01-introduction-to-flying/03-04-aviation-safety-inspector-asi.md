@@ -27,3 +27,6 @@ training on a regular basis. The FAA has approximately
 concerning pilot certification (and/or requests for other
 aviation information or services) should be directed to the
 local FSDO.
+
+
+![Figure 1-13. Atlanta Flight Standards District Office (FSDO).](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-12-atlanta-flight-standards-district-office-fsdo.png)

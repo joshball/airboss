@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # xv Radar-Controlled Departures
+
+![Figure 10-16. A thunderstorm packs just about every weather hazard  known to aviation into one vicious bundle.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-10-15-a-thunderstorm-packs-just-about-every-weather-ha.png)

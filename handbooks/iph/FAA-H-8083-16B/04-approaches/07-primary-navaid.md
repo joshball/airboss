@@ -42,3 +42,6 @@ approach. Planning when the transition to each of these
 NAVAIDs occurs may prevent the use of the incorrect
 NAVAID for course guidance during approaches where
 high pilot workloads already exist.
+
+
+![Figure 4-7. Durango approach and low altitude en route excerpt.](/handbooks/iph/FAA-H-8083-16B/figures/fig-4-06-durango-approach-and-low-altitude-en-route-excer.png)

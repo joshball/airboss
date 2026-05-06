@@ -28,3 +28,6 @@ Any discussion of frontal systems must be tempered with
 the knowledge that no two fronts are the same. However,
 generalized weather conditions are associated with a specific
 type of front that helps identify the front.
+
+
+![Figure 12-11. Favorable winds near a high pressure system.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-09-favorable-winds-near-a-high-pressure-system.png)

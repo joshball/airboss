@@ -54,3 +54,8 @@ that imply severe or greater turbulence. Operation within
 20 miles of thunderstorms should be approached with great
 caution, as the severity of turbulence can be much greater than
 the precipitation intensity might indicate.
+
+
+![Figure 13-7. PIREP encoding and decoding.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-06-pirep-encoding-and-decoding.png)
+
+![Figure 13-13. Significant weather prognostic chart.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-12-significant-weather-prognostic-chart.png)

@@ -20,3 +20,6 @@ are the boundaries between two areas of high pressure, and
 therefore, wind shifts are continually occurring within a front.
 Shifting wind direction is most pronounced in conjunction
 with cold fronts.
+
+
+![Figure 12-26. Cold front cross-section with surface weather chart depiction and associated METAR.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-24-cold-front-cross-section-with-surface-weather-ch.png)

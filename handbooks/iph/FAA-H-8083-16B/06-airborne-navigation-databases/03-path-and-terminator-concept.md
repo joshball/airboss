@@ -32,3 +32,6 @@ navigation. The desire for RNAV equipment to have the
 ability to follow more complicated flightpaths necessitated
 the development of the path and terminator field that is
 included in complex route records.
+
+
+![Figure 6-3. FMS display.](/handbooks/iph/FAA-H-8083-16B/figures/fig-6-02-fms-display.png)

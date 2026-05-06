@@ -32,3 +32,6 @@ Any specific geographical point can be located by reference
 to its longitude and latitude. Washington, D.C., for example,
 is approximately 39° N latitude, 77° W longitude. Chicago
 is approximately 42° N latitude, 88° W longitude.
+
+
+![Figure 16-3. World aeronautical chart.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-07-area-forecast-region-map.png)

@@ -24,3 +24,6 @@ Route of flight: Chickasha Airport direct to Guthrie Airport
  Usable fuel.....................................................38 gallons
  Fuel rate...............................................................8 GPH
  Deviation..................................................................+2°
+
+
+![Figure 16-9. Note the agonic line where magnetic variation is zero.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-08-note-the-agonic-line-where-magnetic-variation-is.png)

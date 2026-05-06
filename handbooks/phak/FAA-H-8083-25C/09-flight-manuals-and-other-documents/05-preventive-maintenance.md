@@ -16,3 +16,6 @@ preservation operations and the replacement of small standard
 parts, not involving complex assembly operations. Allowed
 items of preventative maintenance are listed and limited to
 the items of 14 CFR part 43, appendix A(c).
+
+
+![Figure 9-5. Placards are used to depict aircraft limitations.](/handbooks/phak/FAA-H-8083-25C/figures/fig-9-03-placards-are-used-to-depict-aircraft-limitations.png)

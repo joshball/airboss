@@ -33,3 +33,6 @@ weight as speed increases and lift develops, thereby minimizing the drag caused 
 accurately maintained, the airplane virtually flies itself off the ground, becoming airborne but at an airspeed slower than a safe climb
 speed because of ground effect. [Figure 6-10]
 Figure 6-10. Soft-field takeoff.
+
+
+![Figure 6-7. Takeoff in ground effect area.](/handbooks/afh/FAA-H-8083-3C/figures/fig-6-06-takeoff-in-ground-effect-area.png)

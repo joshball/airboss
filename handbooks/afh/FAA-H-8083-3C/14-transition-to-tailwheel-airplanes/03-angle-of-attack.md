@@ -15,3 +15,6 @@ A second strong contrast to nose-wheel airplanes, tailwheel aircraft make lift w
 headwind. The amount of lift obviously depends on the wind speed, but even at slow taxi speeds, the wings and ailerons are doing
 their best to aid in liftoff. This phenomenon requires care and management, especially during the takeoff and landing rolls, and is
 again unexpected by nose-wheel pilots making the transition.
+
+
+![Figure 14-3. Wheel landing.](/handbooks/afh/FAA-H-8083-3C/figures/fig-14-02-wheel-landing.png)

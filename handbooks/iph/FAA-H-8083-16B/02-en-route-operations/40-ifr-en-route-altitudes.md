@@ -50,3 +50,6 @@ ensure safe vertical separation between the aircraft and the
 terrain. These minimum altitude rules apply to all IFR flights,
 whether in IFR or VFR weather conditions, and whether
 assigned a specific altitude or VFR conditions on top.
+
+
+![Figure 2-40. Secondary obstacle clearance area.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-35-secondary-obstacle-clearance-area.png)

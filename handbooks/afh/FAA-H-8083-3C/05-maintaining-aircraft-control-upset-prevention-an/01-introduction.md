@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Introduction
+
+![Figure 5-1. Maneuvers that better prepare a pilot for understanding unusual attitudes and situations are representative of upset  training.](/handbooks/afh/FAA-H-8083-3C/figures/fig-5-00-maneuvers-that-better-prepare-a-pilot-for-unders.png)

@@ -96,3 +96,8 @@ taking off and landing so that, first of all, the appropriate
 runway can be picked if more than one exists at a particular
 airport, but also so that the aircraft is not pushed beyond its
 tested limits.
+
+
+![Figure 11-29. Best power mixture range.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-27-best-power-mixture-range.png)
+
+![Figure 11-28. Cruise power setting.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-28-cruise-power-setting.png)

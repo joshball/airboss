@@ -31,3 +31,6 @@ Phonic
 Morse Code
 Telephony
 Figure 2-5. Phonetic pronunciation guide.
+
+
+![Figure 2-5. Phonetic pronunciation guide.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-2-04-phonetic-pronunciation-guide.png)

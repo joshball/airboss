@@ -15,3 +15,6 @@ The central principle encapsulating the role of the throttle and elevator for ma
 as follows: coordinated throttle and elevator inputs control the airplane’s energy state. Modifying a popular adage, the principle can
 be restated as “pitch plus power controls energy state.” This central principle serves to guide a set of general energy control rules to
 achieve and maintain any desired vertical flight path and airspeed targets within the airplane’s energy envelope.
+
+
+![Figure 4-4. The front side and backside of the power required curve, the power available curve, and the relative excess power  available (power available - power required) at different speeds.](/handbooks/afh/FAA-H-8083-3C/figures/fig-4-02-the-front-side-and-backside-of-the-power-require.png)

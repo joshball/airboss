@@ -17,3 +17,6 @@ position in low visibility conditions. They may also be
 installed to indicate the location of an intersecting taxiway
 during periods of darkness. Clearance bars consist of three
 in-pavement steady-burning yellow lights.
+
+
+![Figure 14-17. Runway holding position sign and marking for LAHSO.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-16-runway-holding-position-sign-and-marking-for-lah.png)

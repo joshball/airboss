@@ -280,3 +280,6 @@ and safety of ground facilities. Flight in NSAs may be
 temporarily prohibited by regulation under the provisions of
 Title 14 of the Code of Federal Regulations (14 CFR) part 99
 and prohibitions will be disseminated via NOTAM.
+
+
+![Figure 1-3. En route airport legend.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-02-en-route-airport-legend.png)

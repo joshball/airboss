@@ -46,5 +46,3 @@ turbulence. Similar wind enhancements can be anticipated near the slopes of an i
 downdrafts over forested areas may be strong enough to force aircraft down into the trees, even when the
 aircraft is flown at the best rate-of-climb speed. This effect on the aircraft can be exacerbated by loss of
 aircraft performance because of the high-density altitude.
-
-![Figure 19-8. LLWS Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-5-00-llws-example.png)

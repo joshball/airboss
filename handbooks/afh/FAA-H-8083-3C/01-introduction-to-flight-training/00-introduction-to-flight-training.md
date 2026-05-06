@@ -45,4 +45,6 @@ training, and develops these skills by flying training-type airplanes with preci
 more complex and higher performance airplanes. Also note that the goal of flight training is a safe and competent pilot; passing
 required practical tests for pilot certification is only incidental to this goal.
 
-![Figure 1-2. Good airmanship skills include sound knowledge of the principles of flight and the ability to operate an airplane with  competence and precision.](/handbooks/afh/FAA-H-8083-3C/figures/fig-1-00-good-airmanship-skills-include-sound-knowledge-o.png)
+![Figure 1-11. Proper scanning techniques can mitigate midair collisions. Pilots should be aware of potential blind spots and attempt to  clear the entire area in which they are maneuvering.](/handbooks/afh/FAA-H-8083-3C/figures/fig-1-10-proper-scanning-techniques-can-mitigate-midair-c.png)
+
+![Figure 1-15. Stalls occur when the airfoil's angle of attack reaches the critical point which can vary between 16° and 20°.](/handbooks/afh/FAA-H-8083-3C/figures/fig-1-14-stalls-occur-when-the-airfoil-s-angle-of-attack-.png)

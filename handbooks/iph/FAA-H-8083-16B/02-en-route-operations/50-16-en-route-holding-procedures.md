@@ -31,3 +31,6 @@ tolerance, effect of wind, flight procedures, application of
 ATC, outbound leg length, maximum holding airspeeds,
 fix to NAVAID distance, DME slant range effect, holding
 airspace size, and altitude holding levels.
+
+
+![Figure 2-73. Maximum holding speeds for different altitudes.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-67-maximum-holding-speeds-for-different-altitudes.png)

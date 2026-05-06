@@ -67,3 +67,6 @@ the GPS bearing to the active WP is the same as
 the charted NDB/compass locator bearing for the
 fix flying the prescribed track from the non-GPS
 navigation source.
+
+
+![Figure 9-41. Required navigation performance.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-39-required-navigation-performance.png)

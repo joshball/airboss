@@ -11,3 +11,6 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 # Techniques for Electrical Usage
 
 Techniques for Electrical Usage
+
+
+![Figure 11-13. The MFD is another means of viewing the nearest airports.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-11-12-the-mfd-is-another-means-of-viewing-the-nearest-.png)

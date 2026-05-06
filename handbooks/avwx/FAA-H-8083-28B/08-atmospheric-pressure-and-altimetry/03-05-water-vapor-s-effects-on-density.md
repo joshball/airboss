@@ -26,7 +26,3 @@ Figure 8-11. Water Vapor’s Effects on Density
 The altimeter is essentially an aneroid barometer. The difference is the scale. The altimeter is graduated to
 read increments of altitude rather than units of pressure. The standard for graduating the altimeter is the
 standard atmosphere.
-
-![Figure 8-10. Temperature’s Effects on Density](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-3-5-00-temperature-s-effects-on-density.png)
-
-![Figure 8-11. Water Vapor’s Effects on Density](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-3-5-01-water-vapor-s-effects-on-density.png)

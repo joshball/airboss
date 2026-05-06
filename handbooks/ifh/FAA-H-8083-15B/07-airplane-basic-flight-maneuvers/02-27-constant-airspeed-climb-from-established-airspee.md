@@ -10,3 +10,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Constant Airspeed Climb from Established Airspeed
+
+![Figure 7-64. Constant airspeed climb from established airspeed.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-65-constant-airspeed-climb-from-established-airspee.png)

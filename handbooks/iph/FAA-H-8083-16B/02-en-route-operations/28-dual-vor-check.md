@@ -18,3 +18,8 @@ at the same time and noting the indicated bearings to that
 station. [Figure 2-52] A difference greater than 4° between
 the two VORs indicates that one of the receivers may be
 out of tolerance.
+
+
+![Figure 2-28. Low altitude RNAV routes.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-22-low-altitude-rnav-routes.png)
+
+![Figure 2-52. Instrument panel with dual VORs.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-46-instrument-panel-with-dual-vors.png)

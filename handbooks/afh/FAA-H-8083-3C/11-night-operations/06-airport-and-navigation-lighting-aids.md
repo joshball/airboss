@@ -53,3 +53,6 @@ system and a full 15-minute lighting duration is available.
 The length limits of the runway are defined by straight lines of lights across the runway ends. At some airports, the runway threshold
 lights are aviation green, and the runway end lights are aviation red. At many airports, the taxiways are also lighted. A taxiway edge
 lighting system consists of blue lights that outline the usable limits of taxi paths.
+
+
+![Figure 11-6. Use light patterns for orientation.](/handbooks/afh/FAA-H-8083-3C/figures/fig-11-05-use-light-patterns-for-orientation.png)

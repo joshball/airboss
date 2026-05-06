@@ -198,9 +198,9 @@ Note: 1 hectopascal = 1 millibar.
 
 Figure 4-2. U.S. Standard Atmosphere Within the Troposphere
 
-![Figure 4-1. Vertical Structure of the Atmosphere](/handbooks/avwx/FAA-H-8083-28B/figures/fig-4-4-00-vertical-structure-of-the-atmosphere.png)
+![Figure 4-1. Vertical Structure of the Atmosphere](/handbooks/avwx/FAA-H-8083-28B/figures/fig-4-00-vertical-structure-of-the-atmosphere.png)
 
-![Figure 4-2. U.S. Standard Atmosphere Within the Troposphere](/handbooks/avwx/FAA-H-8083-28B/figures/fig-4-4-01-u-s-standard-atmosphere-within-the-troposphere.png)
+![Figure 4-2. U.S. Standard Atmosphere Within the Troposphere](/handbooks/avwx/FAA-H-8083-28B/figures/fig-4-01-u-s-standard-atmosphere-within-the-troposphere.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-4-00-approximations-of-the-composition-of-a-dry-earth.html">
 <table><caption>Table 4-1. Approximations of the Composition of a Dry Earth’s Atmosphere 

@@ -56,3 +56,8 @@ feet MSL may arise when actual altimeter settings along the
 route of flight are lower than 29.92 " Hg. Therefore, 14 CFR
 Part 91, § 91.121 specifies the lowest usable flight levels for
 a given altimeter setting range.
+
+
+![Figure 2-49. Navigational course guidance gaps.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-43-navigational-course-guidance-gaps.png)
+
+![Figure 2-66. Cruising altitude or flight level.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-60-cruising-altitude-or-flight-level.png)

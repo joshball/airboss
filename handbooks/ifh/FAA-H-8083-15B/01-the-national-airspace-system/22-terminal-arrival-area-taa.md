@@ -60,3 +60,6 @@ INSTRUMENT APPROACH PROCEDURES (CHARTS)
 Figure 1-13. 45° procedure turn.
 AUG 2006 to 28 SEP 2006
 Figure 1-14. Holding in lieu of procedure turn.
+
+
+![Figure 1-22. Approach lighting legend.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-21-approach-lighting-legend.png)

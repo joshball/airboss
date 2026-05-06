@@ -26,5 +26,3 @@ A typical dryline passage results in a sharp drop in humidity (hence the name), 
 shift from south or southeasterly to west or southwesterly. Blowing dust and rising temperatures also may
 follow, especially if the dryline passes during the daytime. These changes occur in reverse order when the
 dryline retreats westward.
-
-![Figure 11-14. Dryline Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-5-00-dryline-example.png)

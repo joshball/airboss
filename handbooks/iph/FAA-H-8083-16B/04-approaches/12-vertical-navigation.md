@@ -83,3 +83,6 @@ avionics can serve to reduce CFIT, and minimize the
 effects of visual illusions on approach and landing. Some
 countries even mandate the use of continuous descent
 final approaches (CDFAs) on non-precision approaches.
+
+
+![Figure 4-12. RNAV GPS approach minima.](/handbooks/iph/FAA-H-8083-16B/figures/fig-4-09-rnav-gps-approach-minima.png)

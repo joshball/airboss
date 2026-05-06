@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Introduction
+
+![Figure 2-1. Pilots should view the aircraft’s maintenance logbook prior to flight to ensure the aircraft is safe to fly.](/handbooks/afh/FAA-H-8083-3C/figures/fig-2-00-pilots-should-view-the-aircraft-s-maintenance-lo.png)

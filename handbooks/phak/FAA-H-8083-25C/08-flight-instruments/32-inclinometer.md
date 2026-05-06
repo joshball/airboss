@@ -99,3 +99,6 @@ conditions, and improve the quality of the turn, remember to
 restore coordinated flight from a slip or skid. To correct for a
 slip, decrease bank and/or increase the rate of turn. To correct
 for a skid, increase the bank and/or decrease the rate of turn.
+
+
+![Figure 8-32. A magnetic compass. The vertical line is called the  lubber line.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-29-a-magnetic-compass-the-vertical-line-is-called-t.png)

@@ -84,3 +84,6 @@ Techniques and Practices—Aircraft Inspection and Repair
 also requires that the aircraft mechanic ensure that the weight
 and balance data in the aircraft records is current and accurate
 after a 100-hour or annual inspection.
+
+
+![Figure 10-7. Loading graph.](/handbooks/phak/FAA-H-8083-25C/figures/fig-10-06-loading-graph.png)

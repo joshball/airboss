@@ -162,5 +162,3 @@ given conditions.
 •	 Heliports–The aircraft rotor diameter may exceed the space available.
 •	 Seaplane Bases–Conditions that allow for landing may not be sufficient for takeoff. Obstructions may exist below the
 water and could be affected by tides. Rough water or glassy water conditions may exist.
-
-![Figure 3-3. IMSAFE checklist.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-4-2-00-imsafe-checklist.png)

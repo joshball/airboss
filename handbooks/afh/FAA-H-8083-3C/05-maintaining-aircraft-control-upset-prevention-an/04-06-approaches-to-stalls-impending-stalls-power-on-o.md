@@ -26,3 +26,6 @@ whatever additional power is necessary to return to the desired flightpath. The 
 to the desired flightpath with sufficient airspeed and adequate flight control effectiveness and no stall warning. Performance of the
 impending stall maneuver is unsatisfactory if a full stall occurs, if an excessively low pitch attitude is attained, or if the pilot fails to
 take timely action to avoid excessive airspeed, excessive loss of altitude, or a spin.
+
+
+![Figure 5-11. Power-off stall and recovery.](/handbooks/afh/FAA-H-8083-3C/figures/fig-5-10-power-off-stall-and-recovery.png)

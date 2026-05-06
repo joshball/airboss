@@ -32,3 +32,8 @@ On small aircraft, the jackscrew is cable operated with a trim
 wheel or crank. On larger aircraft, it is motor driven. The
 trimming effect and flight deck indications for an adjustable
 stabilizer are similar to those of a trim tab.
+
+
+![Figure 6-24. Basic autopilot system integrated into the flight  control system.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-19-basic-autopilot-system-integrated-into-the-fligh.png)
+
+![Figure 6-23. Some aircraft, including most jet transports, use an  adjustable stabilizer to provide the required pitch trim forces.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-20-some-aircraft-including-most-jet-transports-use-.png)

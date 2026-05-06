@@ -32,3 +32,6 @@ teaching of safe operating practices during taxi operations. The flight instruct
 instill in the learner an awareness of the potential for runway incursion, and should emphasize the runway incursion avoidance
 procedures. For more information and a list of additional references, refer to Chapter 14 of the Pilot’s Handbook of Aeronautical
 Knowledge.
+
+
+![Figure 1-12. Three major areas contributing to runway incursions are communications with air traffic control (ATC), airport  knowledge, and flight deck procedures.](/handbooks/afh/FAA-H-8083-3C/figures/fig-1-11-three-major-areas-contributing-to-runway-incursi.png)

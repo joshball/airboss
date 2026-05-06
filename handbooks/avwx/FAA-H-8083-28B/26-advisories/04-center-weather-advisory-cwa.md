@@ -104,10 +104,6 @@ ISOLD SEV TS NR FMN MOVG NEWD
 FMN. SEV TS CONTG BYD 2340Z
 Phenomenon description
 
-![CWAs are issued by the NWS CWSU. CWSU areas of responsibility are depicted in Figure 26-8.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-4-2-00-cwsu-areas-of-responsibility.png)
-
-![Figure 26-8. CWSU Areas of Responsibility](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-4-3-00-cwa-example.png)
-
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-26-4-00-decoding-a-cwa-line-content-description-1-zdv-ar.html">
 <table><caption>Table 26-5. Decoding a CWA 
 Line 

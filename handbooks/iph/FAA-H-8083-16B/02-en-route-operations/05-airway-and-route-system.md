@@ -23,3 +23,6 @@ medium frequency (L/MF) airways and routes are still
 being used in Alaska and one other that is located off
 the coast of North Carolina and is called Green 13 (G13).
 [Figure 2-23]
+
+
+![Figure 2-5. Air Route Traffic Control Centers.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-03-air-route-traffic-control-centers.png)

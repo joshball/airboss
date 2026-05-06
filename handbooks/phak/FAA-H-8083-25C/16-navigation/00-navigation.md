@@ -27,65 +27,21 @@ use of radio aids.
 
 Figure 16-1. Sectional chart and legend.
 
-![Figure 16-1. Sectional chart and legend.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-00-sectional-chart-and-legend.png)
+![Figure 16-13. Motion of the air affects the speed with which aircraft  move over the Earth’s surface. Airspeed, the rate at which an aircraft moves through the air, is not affected by air motion.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-12-motion-of-the-air-affects-the-speed-with-which-a.png)
 
-![Figure 16-2. VFR Terminal Area Chart and legend.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-01-vfr-terminal-area-chart-and-legend.png)
+![Figure 16-15. Effects of wind drift on maintaining desired course.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-13-effects-of-wind-drift-on-maintaining-desired-cou.png)
 
-![Figure 16-4. Meridians and parallels—the basis of measuring time,  distance, and direction.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-02-meridians-and-parallels-the-basis-of-measuring-t.png)
+![Figure 16-16. Relationship between true, magnetic, and compass  headings for a particular instance.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-14-relationship-between-true-magnetic-and-compass-h.png)
 
-![Figure 16-3. World aeronautical chart.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-03-area-forecast-region-map.png)
+![Figure 16-14. Aircraft flight path resulting from its airspeed and direction and the wind speed and direction.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-15-aircraft-flight-path-resulting-from-its-airspeed.png)
 
-![Figure 16-7. Courses are determined by reference to meridians on  aeronautical charts.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-04-courses-are-determined-by-reference-to-meridians.png)
+![Figure 16-23. Finding true heading by direct measurement.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-21-finding-true-heading-by-direct-measurement.png)
 
-![Figure 16-8. Magnetic meridians are in red while the lines of  longitude and latitude are in blue. From these lines of variation (magnetic meridians), one can determine the effect of local magnetic variations on a magnetic compass.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-05-magnetic-meridians-are-in-red-while-the-lines-of.png)
+![Figure 16-22. Finding true heading by the wind correction angle.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-22-finding-true-heading-by-the-wind-correction-angl.png)
 
-![Figure 16-6. Compass rose.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-06-compass-rose.png)
+![Figure 16-25. Sectional chart excerpt.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-25-sectional-chart-excerpt.png)
 
-![or true north pole, as indicated in Figure 16-8. If the Earth  were uniformly magnetized, the compass needle would point toward the magnetic pole, in which case the variation between TN (as shown by the geographical meridians) and MN (as shown by the magnetic meridians) could be measured at any intersection of the meri](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-07-if-the-earth-were-uniformly-magnetized-the-compa.png)
-
-![line.) An isogonic chart is shown in Figure 16-9. Minor  bends and turns in the isogonic and agonic lines are caused by unusual geological conditions affecting magnetic forces in these areas.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-08-an-isogonic-chart-is-shown-in-figure-16-9-minor-.png)
-
-![Figure 16-9. Note the agonic line where magnetic variation is zero.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-09-note-the-agonic-line-where-magnetic-variation-is.png)
-
-![Figure 16-10. Effect of variation on the compass.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-10-effect-of-variation-on-the-compass.png)
-
-![Figure 16-11. Magnetized portions of the airplane cause the  compass to deviate from its normal indications.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-11-magnetized-portions-of-the-airplane-cause-the-co.png)
-
-![Figure 16-12. Compass deviation card.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-12-compass-deviation-card.png)
-
-![in Figure 16-11. Magnetic attraction can come from many  other parts of the aircraft; the assumption of attraction in the engine is merely used for the purpose of illustration.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-13-magnetic-attraction-can-come-from-many-other-par.png)
-
-![Figure 16-18. A plotter (A), the computational and wind side of a mechanical flight computer (E6B) (B), and an electronic flight computer (C).](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-14-a-plotter-a-the-computational-and-wind-side-of-a.png)
-
-![Figure 16-20. The wind triangle as is drawn in navigation practice.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-15-the-wind-triangle-as-is-drawn-in-navigation-prac.png)
-
-![Figure 16-23. Finding true heading by direct measurement.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-16-finding-true-heading-by-direct-measurement.png)
-
-![following data and the sectional chart excerpt in Figure 16-25.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-17-untitled.png)
-
-![Figure 16-26. Where calculations are required, the pilot may  use a mathematical formula or a manual or electronic flight computer. If unfamiliar with the use of a manual or electronic computer, it would be advantageous to read the operation manual and work several practice problems at this point.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-18-where-calculations-are-required-the-pilot-may-us.png)
-
-![Figure 16-25. Sectional chart excerpt.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-19-sectional-chart-excerpt.png)
-
-![Figure 16-26. Pilot’s planning sheet and visual flight log.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-20-pilot-s-planning-sheet-and-visual-flight-log.png)
-
-![as noted on the flight log in Figure 16-26.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-21-untitled.png)
-
-![Figure 16-30. Horizontal situation indicator.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-22-horizontal-situation-indicator.png)
-
-![Figure 16-29. VOR indicator.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-23-vor-indicator.png)
-
-![Figure 16-31. Radio magnetic indicator.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-24-radio-magnetic-indicator.png)
-
-![Figure 16-32. Tracking a radial in a crosswind.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-25-tracking-a-radial-in-a-crosswind.png)
-
-![Figure 16-38. ADF terms.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-26-adf-terms.png)
-
-![Figure 16-37. ADF with fixed azimuth and magnetic compass.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-27-adf-with-fixed-azimuth-and-magnetic-compass.png)
-
-![Figure 16-39. ADF tracking.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-28-adf-tracking.png)
-
-![Figure 16-40. Satellite constellation.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-29-satellite-constellation.png)
+![Figure 16-26. Pilot’s planning sheet and visual flight log.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-26-pilot-s-planning-sheet-and-visual-flight-log.png)
 
 |  | Navigation |
 | --- | --- |

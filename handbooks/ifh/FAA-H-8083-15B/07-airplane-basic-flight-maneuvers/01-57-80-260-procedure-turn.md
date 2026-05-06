@@ -10,3 +10,9 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # 80/260 Procedure Turn
+
+![Figure 7-42. Standard procedure turn (entire pattern in level flight).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-42-standard-procedure-turn-entire-pattern-in-level-.png)
+
+![Figure 7-43. 80/260 procedure turn (entire pattern in level flight).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-43-80-260-procedure-turn-entire-pattern-in-level-fl.png)
+
+![Figure 7-44. Teardrop pattern (entire pattern in level flight).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-44-teardrop-pattern-entire-pattern-in-level-flight.png)

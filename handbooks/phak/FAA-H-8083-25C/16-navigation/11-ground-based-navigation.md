@@ -27,3 +27,6 @@ for VFR navigation. These are:
 VHF Omnidirectional Range (VOR)
 Nondirectional Radio Beacon (NDB)
 Global Positioning System (GPS)
+
+
+![Figure 16-11. Magnetized portions of the airplane cause the  compass to deviate from its normal indications.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-10-magnetized-portions-of-the-airplane-cause-the-co.png)

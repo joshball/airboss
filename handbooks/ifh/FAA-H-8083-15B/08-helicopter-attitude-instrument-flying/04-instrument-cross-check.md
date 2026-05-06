@@ -62,3 +62,6 @@ In spite of these common errors, most pilots can adapt well to
 flight by instrument reference after instruction and practice.
 Many find that they can control the helicopter more easily
 and precisely by instruments.
+
+
+![Figure 8-4. The flight instruments used for bank control are the attitude, heading, and turn indicators.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-8-04-the-flight-instruments-used-for-bank-control-are.png)

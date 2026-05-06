@@ -37,5 +37,3 @@ equatorward and westward at higher levels.
 Polar cell—Air rises, diverges, and travels toward the poles. Once over the poles, the air sinks,
 forming the polar highs. At the surface, air diverges outward from the polar highs. Surface winds
 in the polar cell are easterly (polar easterlies).
-
-![Figure 9-1. Non-Rotating, Non-Tilted, Waterless, Earth Circulation System](/handbooks/avwx/FAA-H-8083-28B/figures/fig-9-2-00-non-rotating-non-tilted-waterless-earth-circulat.png)

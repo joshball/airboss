@@ -10,3 +10,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Instrument Interpretation
+
+![Figure 6-20. Power and attitude equal performance.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-15-power-instruments.png)

@@ -36,3 +36,6 @@ Figure 2-54. Floating waypoints.
 depicted on a Severe Weather Avoidance Plan (SWAP) en
 route chart. These waypoints and SWAP routes assist pilots
 and controllers when severe weather affects the East Coast.
+
+
+![Figure 2-34. MEAs on RNAV (Q) routes.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-28-meas-on-rnav-q-routes.png)

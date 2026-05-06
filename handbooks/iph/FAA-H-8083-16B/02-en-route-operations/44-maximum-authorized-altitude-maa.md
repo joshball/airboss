@@ -223,3 +223,6 @@ Obstacle Line
 Figure 2-63. Minimum crossing altitude (MCA) determination point.
 
 MTA: V465 NE TO V330 W OR V520 W 16000
+
+
+![Figure 2-44. Direct route navigation.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-38-direct-route-navigation.png)

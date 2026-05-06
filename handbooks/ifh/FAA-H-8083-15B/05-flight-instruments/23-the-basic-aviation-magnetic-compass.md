@@ -15,3 +15,6 @@ One of the oldest and simplest instruments for indicating
 direction is the magnetic compass. It is also one of the basic
 instruments required by 14 CFR part 91 for both VFR and
 IFR flight.
+
+
+![Figure 5-23. The soft iron frame of the flux valve accepts the flux from  the Earth’s magnetic field each time the current in the center coil reverses. This flux causes current to flow in the three pickup coils.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-22-the-soft-iron-frame-of-the-flux-valve-accepts-th.png)

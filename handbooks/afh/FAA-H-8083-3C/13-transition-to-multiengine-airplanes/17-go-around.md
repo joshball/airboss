@@ -38,3 +38,6 @@ to maintain adequate flying speed throughout the maneuver. Examples of where thi
 landing round out or recovery from a bad bounce, as well as a go-around initiated due to an inadvertent approach to a stall. The first
 priority is always to maintain control and obtain adequate flying speed. A few moments of level or near level flight may be required
 as the airplane accelerates up to climb speed.
+
+
+![Figure 13-17. Zero sideslip engine-out flight.](/handbooks/afh/FAA-H-8083-3C/figures/fig-13-15-zero-sideslip-engine-out-flight.png)

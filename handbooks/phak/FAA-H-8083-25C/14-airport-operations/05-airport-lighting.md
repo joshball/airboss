@@ -16,3 +16,6 @@ operations. The variety and type of lighting systems depends
 on the volume and complexity of operations at a given airport.
 Airport lighting is standardized so that airports use the same
 light colors for runways and taxiways.
+
+
+![Figure 14-5. (A) Relocated runway threshold drawing. (B) Relocated threshold for Runway 36 at Joplin Regional Airport (JLN).](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-04-a-relocated-runway-threshold-drawing-b-relocated.png)

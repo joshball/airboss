@@ -69,3 +69,6 @@ a pilot cannot fly sooner than 8 hours after drinking alcohol.
 
 Although the regulations are quite specific, it is a good idea
 to be more conservative than the regulations.
+
+
+![Figure 17-20. Self-imposed stress.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-19-self-imposed-stress.png)

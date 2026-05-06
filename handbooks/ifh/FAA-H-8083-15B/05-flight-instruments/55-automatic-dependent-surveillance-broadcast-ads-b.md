@@ -46,3 +46,6 @@ equipped aircraft to include notices to airmen (NOTAM),
 weather, etc. [Figures 5-49 and 5-50] At the present time,
 ADS-B is predominantly available along the east coast of
 the United States where it is matured.
+
+
+![Figure 5-55. Theory of a typical alert system.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-54-theory-of-a-typical-alert-system.png)

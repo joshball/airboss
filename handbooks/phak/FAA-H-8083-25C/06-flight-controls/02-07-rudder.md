@@ -27,3 +27,8 @@ speed; therefore, large deflections at low speeds and small
 deflections at high speeds may be required to provide the
 desired reaction. In propeller-driven aircraft, any slipstream
 flowing over the rudder increases its effectiveness.
+
+
+![Figure 6-15. The effect of left rudder pressure.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-12-the-effect-of-left-rudder-pressure.png)
+
+![Figure 6-16. Beechcraft Bonanza V35.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-13-beechcraft-bonanza-v35.png)

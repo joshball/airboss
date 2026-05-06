@@ -23,3 +23,6 @@ Note: Some airports may have a row of three or five
 in-pavement yellow lights installed at taxiway/runway
 intersections. They should not be confused with clearance
 bar lights described previously in this section.
+
+
+![Figure 14-18. Taxiway Bravo direction sign with a collocated  Taxiway Delta location sign. When the arrow on the direction sign indicates a turn, the sign is located prior to the intersection.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-17-taxiway-bravo-direction-sign-with-a-collocated-t.png)

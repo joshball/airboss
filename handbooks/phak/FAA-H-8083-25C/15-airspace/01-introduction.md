@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Introduction
+
+![Figure 15-1. Airspace profile.](/handbooks/phak/FAA-H-8083-25C/figures/fig-15-00-airspace-profile.png)

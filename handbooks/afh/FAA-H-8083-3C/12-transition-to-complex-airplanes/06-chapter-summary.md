@@ -9,3 +9,7 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Chapter Summary
+
+![Figure 12-6. Controllable-pitch propeller pitch angles.](/handbooks/afh/FAA-H-8083-3C/figures/fig-12-05-controllable-pitch-propeller-pitch-angles.png)
+
+![Figure 12-16. Sample transition training syllabus.](/handbooks/afh/FAA-H-8083-3C/figures/fig-12-14-sample-transition-training-syllabus.png)

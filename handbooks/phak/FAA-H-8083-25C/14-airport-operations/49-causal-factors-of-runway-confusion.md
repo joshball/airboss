@@ -46,3 +46,6 @@ runway incursion, it is important to remain extremely cautious
 and maintain situational awareness (SA). When instructed to
 use a runway as a taxiway, do not become confused and take
 off on the runway you are using as a taxiway.
+
+
+![Figure 14-49. Confusing runway/runway intersection.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-50-confusing-runway-runway-intersection.png)

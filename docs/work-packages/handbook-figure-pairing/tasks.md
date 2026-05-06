@@ -4,7 +4,7 @@ product: flightbag
 feature: handbook-figure-pairing
 type: tasks
 status: unread
-review_status: pending
+review_status: done
 ---
 
 # Tasks: Handbook Figure-Caption Pairing

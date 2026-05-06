@@ -33,3 +33,6 @@ up by a Galileo receiver with operational expectancy
 by 2013.
 The GPS came on line in 1992 with 24 satellites and
 today utilizes 30 satellites.
+
+
+![Figure 9-34. Localizer coverage limits.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-32-localizer-coverage-limits.png)

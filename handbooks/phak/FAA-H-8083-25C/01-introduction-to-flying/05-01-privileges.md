@@ -28,3 +28,6 @@ all conditions which require endorsement, e.g., flight which requires communicat
 aircraft for which the pilot does not hold a category/class rating, etc.).
 Figure 1-21. Example endorsement for a recreational pilot to conduct solo flights for the purpose of determining an additional certificate
 or rating.
+
+
+![Figure 1-20. Front side (top) and back side (bottom) of an airman  certificate issued by the FAA.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-19-front-side-top-and-back-side-bottom-of-an-airman.png)

@@ -39,3 +39,6 @@ stabilizer
 Elevator
 Wing
 Lift
+
+
+![Figure 4-5. Newton’s Second Law of Motion: the Law of Momentum.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-4-04-newton-s-second-law-of-motion-the-law-of-momentu.png)

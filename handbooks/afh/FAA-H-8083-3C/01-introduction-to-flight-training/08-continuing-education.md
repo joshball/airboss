@@ -14,3 +14,6 @@ Continuing Education
 In many activities, the ability to receive feedback and continue learning contributes to safety and success. For example, professional
 athletes receive constant coaching. They practice various techniques to achieve their best. Medical professionals read journals, train,
 and master techniques to achieve better outcomes.
+
+
+![Figure 1-8. FAA Form 8000-4, Air Agency Certificate.](/handbooks/afh/FAA-H-8083-3C/figures/fig-1-07-faa-form-8000-4-air-agency-certificate.png)

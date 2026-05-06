@@ -97,3 +97,6 @@ of specialized navigational systems approved for Class II
 operations include inertial navigation system (INS), Doppler,
 and global positioning system (GPS). Figure 3-1 provides
 several examples of Class I and II navigation.
+
+
+![Figure 3-2. VNAV path construction.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-01-vnav-path-construction.png)

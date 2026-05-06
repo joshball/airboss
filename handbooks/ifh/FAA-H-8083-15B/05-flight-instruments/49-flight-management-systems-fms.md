@@ -112,3 +112,6 @@ capability but typically interfaces with other aircraft systems
 providing fuel management, control of cabin briefing and
 display systems, display of uplinked text and graphic weather
 data and air/ground data link communications.
+
+
+![Figure 5-49. An aircraft equipped with ADS will receive identification, altitude in hundreds of feet (above or below using + or–), direction  of the traffic, and aircraft descent or climb using an up or down arrow.  The yellow target is an illustration of how a non-ADS equipped aircraft would appear on an ADS-equipped ](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-48-an-aircraft-equipped-with-ads-will-receive-ident.png)

@@ -43,3 +43,6 @@ varies depending on the number of satellite outages and
 operational spares in orbit. For current status of the GPS
 constellation, please visit http://tycho.usno.navy.mil/gpscurr.
 html. [Figure 16-40]
+
+
+![Figure 16-39. ADF tracking.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-38-adf-with-fixed-azimuth-and-magnetic-compass.png)

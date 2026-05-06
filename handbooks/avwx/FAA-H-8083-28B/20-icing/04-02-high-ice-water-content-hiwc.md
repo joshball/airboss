@@ -19,5 +19,3 @@ cumulonimbus clouds and thunderstorms. Under certain HIWC conditions, turbine en
 be affected, including flameouts. Research into HIWC conditions continues as of the writing of this section.
 20.5 Additional Information
 Refer to AC 91-74, Pilot Guide: Flight in Icing Conditions, for additional information on icing.
-
-![Figure 20-3. Carburetor Icing](/handbooks/avwx/FAA-H-8083-28B/figures/fig-20-4-2-00-carburetor-icing.png)

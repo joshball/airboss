@@ -53,5 +53,3 @@ probability of thunderstorms, and/or the potential exists for some storms to rea
 the valid time.
 27.10.1.2 Symbols
 Figure 27-25 shows the Surface Prog Forecast symbols.
-
-![Figure 27-24. NDFD Short-Range Surface Prog Forecast—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-10-00-ndfd-short-range-surface-prog-forecast-example.png)

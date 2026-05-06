@@ -24,5 +24,3 @@ the pilot has more time to make adjustments necessary for a smooth landing. As t
 perpendicular to the runway to become a crosswind, the airplane’s directional control is affected. If a pilot
 does not correctly compensate for the crosswind, the aircraft may drift off the side of the runway or side
 load on landing gear might occur. In extreme cases, the landing gear may collapse.
-
-![Figure 10-21. Mountain Breeze](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-7-1-00-mountain-breeze.png)

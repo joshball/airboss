@@ -51,7 +51,3 @@ See Chapter 19, Turbulence, for information on wind shear.
 See Chapter 16, Mountain Weather, for information on adverse mountain winds.
 10.7.7 Atmospheric Disturbances in Mountainous Areas
 See Chapter 19, Turbulence, for information on mountain-related turbulence.
-
-![Figure 10-21. Mountain Breeze](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-7-1-00-mountain-breeze.png)
-
-![Figure 10-22. Crosswind Climb Flightpath](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-7-2-00-crosswind-climb-flightpath.png)

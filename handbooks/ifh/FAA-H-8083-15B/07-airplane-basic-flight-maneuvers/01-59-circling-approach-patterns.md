@@ -10,3 +10,7 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Circling Approach Patterns
+
+![Figure 7-45. Circling approach pattern I (imaginary runway).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-45-circling-approach-pattern-i-imaginary-runway.png)
+
+![Figure 7-46. Circling approach pattern II (imaginary runway).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-46-circling-approach-pattern-ii-imaginary-runway.png)

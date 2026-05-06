@@ -69,3 +69,6 @@ Planned in-flight re-dispatch or re-release en route.
 Extended over water operations using a single longrange communication system.
 Operations in reduced vertical separation minimum
 (RVSM) airspace.
+
+
+![Figure 2-20. Chart Supplement (NE), Tower En Route Control route descriptions (Baltimore).](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-14-chart-supplement-ne-tower-en-route-control-route.png)

@@ -43,3 +43,6 @@ It is possible for a pilot to impose a dangerous overload
 on the aircraft structures.
 An increased load factor increases the stalling speed and
 makes stalls possible at seemingly safe flight speeds.
+
+
+![Figure 5-12. Wingtip vortices.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-10-wingtip-vortices.png)

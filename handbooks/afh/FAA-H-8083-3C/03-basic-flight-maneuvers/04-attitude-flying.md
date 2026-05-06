@@ -38,3 +38,6 @@ flight situation requires a specific thrust setting or for a change in thrust to
 ⦁ Trim control—used to relieve the control pressures held by the pilot on the flight controls after a desired
 attitude has been attained.
 Note: Yaw control is used to cancel out the effects of yaw-induced changes, such as adverse yaw and effects of the propeller.
+
+
+![Figure 3-4. Airplane attitude is based on relative positions of the nose and wings on the natural horizon.](/handbooks/afh/FAA-H-8083-3C/figures/fig-3-03-airplane-attitude-is-based-on-relative-positions.png)

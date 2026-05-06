@@ -80,3 +80,6 @@ drop across the instruments.
 Electrical Systems
 Many general aviation aircraft that use pneumatic attitude
 indicators use electric rate indicators and/or the reverse. Some
+
+
+![Figure 5-29. Twin-engine instrument pressure system using a carbon-vane, dry-type air pump.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-27-twin-engine-instrument-pressure-system-using-a-c.png)

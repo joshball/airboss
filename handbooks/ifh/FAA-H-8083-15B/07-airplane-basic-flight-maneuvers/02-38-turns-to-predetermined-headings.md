@@ -10,3 +10,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Turns to Predetermined Headings
+
+![Figure 7-67. Standard rate turn—constant airspeed.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-68-standard-rate-turn-constant-airspeed.png)

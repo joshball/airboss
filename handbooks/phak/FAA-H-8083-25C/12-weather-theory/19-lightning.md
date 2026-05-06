@@ -24,3 +24,6 @@ communications on low and medium frequencies. Though
 lightning intensity and frequency have no simple relationship
 to other storm parameters, severe storms, as a rule, have a
 high frequency of lightning.
+
+
+![Figure 12-19. Isobars reveal the pressure gradient of an area of  high- or low-pressure areas.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-17-isobars-reveal-the-pressure-gradient-of-an-area-.png)

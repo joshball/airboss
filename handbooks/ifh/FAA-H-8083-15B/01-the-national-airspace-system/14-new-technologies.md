@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # New Technologies
+
+![Figure 1-14. Holding in lieu of procedure turn.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-13-holding-in-lieu-of-procedure-turn.png)

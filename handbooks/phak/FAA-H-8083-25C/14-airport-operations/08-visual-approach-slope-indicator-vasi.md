@@ -28,3 +28,6 @@ light, a white segment in the upper part of the beam and a
 red segment in the lower part of the beam. The lights are
 arranged so the pilot sees the combination of lights shown in
 Figure 14-29 to indicate below, on, or above the glidepath.
+
+
+![Figure 14-8. Runway safety area boundary sign and marking located  on Taxiway Kilo.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-08-runway-safety-area-boundary-sign-and-marking-loc.png)

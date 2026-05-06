@@ -66,3 +66,6 @@ deformation of the aircraft structure.
 VNE—the speed that should never be exceeded. If flight is
 attempted above this speed, structural damage or structural
 failure may result.
+
+
+![Figure 11-8. Comparison of maximum AOC between jet and propeller airplanes.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-06-comparison-of-maximum-aoc-between-jet-and-propel.png)

@@ -125,12 +125,6 @@ Table 25-2 provides the most common weather chart symbols. In the surface pressu
 1  4
 1  4
 
-![Figure 25-1. Weather Observation Sources](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-1-00-weather-observation-sources.png)
-
-![Figure 25-2. Analysis Procedure Step 1: Determine the Optimal Contour Interval and Values to be Analyzed](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-2-01-analysis-procedure-step-1-determine-the-optimal-.png)
-
-![Figure 25-3. Analysis Procedure Step 2: Draw the Isopleths and Extrema](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-2-01-analysis-procedure-step-1-determine-the-optimal-.png)
-
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-25-4-2-00-common-isopleths-isopleth-variable-definition-is.html">
 <table><caption>Table 25-1. Common Isopleths 
 Isopleth 

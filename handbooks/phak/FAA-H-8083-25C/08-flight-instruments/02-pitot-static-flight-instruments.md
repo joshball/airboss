@@ -40,3 +40,6 @@ Pitot tube
 Baffle plate
 Static chamber
 Ram air
+
+
+![Figure 8-2. Altimeter.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-01-altimeter.png)

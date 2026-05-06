@@ -32,5 +32,3 @@ Figure 1-1. Sample NTSB final report.
 Key findings of the NTSB aviation accident final report, highlighted above in yellow, emphasize the pilot's inadequate in-flight
 planning/decision to continue flight into known adverse weather conditions after the engine’s dry air vacuum pump failed and
 Chapter 1:  Introduction to Risk Management
-
-![Figure 1-1. Sample NTSB final report.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-1-1-00-sample-ntsb-final-report.png)

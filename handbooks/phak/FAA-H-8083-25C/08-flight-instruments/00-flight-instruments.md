@@ -21,40 +21,6 @@ malfunctioning, he or she can safely utilize the instruments
 to their fullest potential.
 
 
-![Figure 8-9. A blocked pitot tube, but clear drain hole.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-00-a-blocked-pitot-tube-but-clear-drain-hole.png)
-
-![Figure 8-12. Primary flight display (PFD). Note that the actual location of indications vary depending on manufacturers.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-01-primary-flight-display-pfd-note-that-the-actual-.png)
-
-![Figure 8-13. Multi-function display (MFD).](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-02-multi-function-display-mfd.png)
-
-![Figure 8-15. Teledyne’s 90004 TAS/Plus Air Data Computer (ADC)  computes air data information from the pitot-static pneumatic system, aircraft temperature probe, and barometric correction device to help create a clear picture of flight characteristics.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-03-teledyne-s-90004-tas-plus-air-data-computer-adc-.png)
-
-![Figure 8-24. Attitude representation by the attitude indicator corresponds to the relation of the aircraft to the real horizon.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-04-attitude-representation-by-the-attitude-indicato.png)
-
-![Figure 8-25. A heading indicator displays headings based on a 360°  azimuth, with the final zero omitted. For example, “6” represents 060°, while “21” indicates 210°. The adjustment knob is used to align the heading indicator with the magnetic compass.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-05-a-heading-indicator-displays-headings-based-on-a.png)
-
-![Figure 8-27. The soft iron frame of the flux valve accepts the flux from  the Earth’s magnetic field each time the current in the center coil reverses. This flux causes current to flow in the three pickup coils.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-06-the-soft-iron-frame-of-the-flux-valve-accepts-th.png)
-
-![Figure 8-30. Driven by signals from a flux valve, the compass card  in this RMI indicates the heading of the aircraft opposite the upper center index mark. The green pointer is driven by the ADF.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-11-increase-in-stall-speed-and-load-factor.png)
-
-![RMI in Figure 8-30. The compass card is driven by signals  from the flux valve, and the two pointers are driven by an automatic direction finder (ADF) and a very high frequency (VHF) omni-directional radio range (VOR).](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-08-the-compass-card-is-driven-by-signals-from-the-f.png)
-
-![Figure 8-31. Angle of attack indicators.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-09-angle-of-attack-indicators.png)
-
-![Figure 8-32. A magnetic compass. The vertical line is called the  lubber line.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-10-a-magnetic-compass-the-vertical-line-is-called-t.png)
-
-![Figure 8-33. Isogonic lines are lines of equal variation.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-11-isogonic-lines-are-lines-of-equal-variation.png)
-
-![Figure 8-35. A compass correction card shows the deviation  correction for any heading.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-12-a-compass-correction-card-shows-the-deviation-co.png)
-
-![Figure 8-34. Utilization of a compass rose aids compensation for deviation errors.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-13-utilization-of-a-compass-rose-aids-compensation-.png)
-
-![Figure 8-36. Northerly and southerly turning errors.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-13-utilization-of-a-compass-rose-aids-compensation-.png)
-
-![Figure 8-38. Vertical card magnetic compass.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-15-vertical-card-magnetic-compass.png)
-
-![Figure 8-37. The effects of acceleration error.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-16-the-effects-of-acceleration-error.png)
-
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-8-00-untitled.html">
 <table><thead><tr><th>Height Above Airport in Feet °C
 Reported

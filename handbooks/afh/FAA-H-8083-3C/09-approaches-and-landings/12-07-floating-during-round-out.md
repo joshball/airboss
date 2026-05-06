@@ -23,3 +23,6 @@ attained at the moment of touchdown. The slightest error in judgment and timing 
 The recovery from floating is dependent upon the amount of floating and the effect of any crosswind, as well as the amount of runway
 remaining. Since prolonged floating utilizes considerable runway length, it should be avoided especially on short runways or in strong
 crosswinds. If a landing cannot be made on the first third of the runway, or the airplane drifts sideways, execute a go-around.
+
+
+![Figure 9-33. Floating during round out.](/handbooks/afh/FAA-H-8083-3C/figures/fig-9-32-floating-during-round-out.png)

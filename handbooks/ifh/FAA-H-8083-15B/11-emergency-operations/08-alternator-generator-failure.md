@@ -32,3 +32,6 @@ exists in a battery may not be full, altering the time available
 before electrical exhaustion occurs. At no time should a pilot
 consider continuing a flight once the electrical charging
 system has failed. Land at the nearest suitable airport.
+
+
+![Figure 11-8. Vacuum failure.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-11-07-vacuum-failure.png)

@@ -24,15 +24,3 @@ The airplane manufacturer is the final authority on the operation of a particula
 learners should use the Federal Aviation Administration’s Approved Flight Manual (AFM) and/or the Pilot’s Operating Handbook
 (POH). The airplane manufacturer’s guidance and procedures take precedence over any general recommendations made in this
 handbook.
-
-![Figure 13-6. Area of decision for engine failure after lift-off.](/handbooks/afh/FAA-H-8083-3C/figures/fig-13-00-area-of-decision-for-engine-failure-after-lift-o.png)
-
-![Figure 13-14. Graph depicting relationship of VMC to VS.](/handbooks/afh/FAA-H-8083-3C/figures/fig-13-01-graph-depicting-relationship-of-vmc-to-vs.png)
-
-![Figure 13-15. Wings level engine-out flight.](/handbooks/afh/FAA-H-8083-3C/figures/fig-13-02-wings-level-engine-out-flight.png)
-
-![Figure 13-16. Excessive bank engine-out flight.](/handbooks/afh/FAA-H-8083-3C/figures/fig-13-03-excessive-bank-engine-out-flight.png)
-
-![Figure 13-17. Zero sideslip engine-out flight.](/handbooks/afh/FAA-H-8083-3C/figures/fig-13-04-zero-sideslip-engine-out-flight.png)
-
-![Figure 13-18. Engine failure on takeoff, landing gear down.](/handbooks/afh/FAA-H-8083-3C/figures/fig-13-05-engine-failure-on-takeoff-landing-gear-down.png)

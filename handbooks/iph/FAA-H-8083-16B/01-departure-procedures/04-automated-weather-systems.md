@@ -55,3 +55,6 @@ as outlined in individual OpSpecs. Ceiling and visibility
 reports given by the tower with the departure information
 are always considered official weather, and RVR reports are
 typically the controlling visibility reference.
+
+
+![Figure 1-4. Key airport lighting and markings.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-03-key-airport-lighting-and-markings.png)

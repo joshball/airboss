@@ -365,3 +365,21 @@ help the aviation instructor train professional aviators and technicians who are
 good aeronautical decisions and decrease risk factors, leading to a successful flight or maintenance outcome.
 As this training program evolves and new resources are introduced, aviation instructors may access web-based documents such as
 the generic transition syllabus at www.faa.gov/.
+
+![Figure 7-1. The presolo stage or phase of private pilot training is comprised of several basic building blocks. These blocks of  learning, which should include coordinated ground and flight training, lead up to the first solo.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-9-00-the-presolo-stage-or-phase-of-private-pilot-trai.png)
+
+![Figure 7-2. This excerpt of a ground lesson shows a unit of ground instruction. In this example, neither the time nor the number of  ground training periods to be devoted to the lesson is specified. The lesson should include three parts—objective, content, and completion standards.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-9-01-this-excerpt-of-a-ground-lesson-shows-a-unit-of-.png)
+
+![Figure 7-3. A flight training lesson, like a ground training lesson, should include an objective, content, and completion standards.  More than one objective could, and often does, apply to a single flight lesson.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-9-02-a-flight-training-lesson-like-a-ground-training-.png)
+
+![Figure 7-4. Information in the form of notes may be added to individual ground or flight lessons in a syllabus when they are  necessary.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-9-03-information-in-the-form-of-notes-may-be-added-to.png)
+
+![Figure 7-5. Glider training log.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-9-04-glider-training-log.png)
+
+![Figure 7-6. Example of a traditional training lesson plan.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-9-05-example-of-a-traditional-training-lesson-plan.png)
+
+![Figure 7-7. SBT lesson plan.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-9-06-sbt-lesson-plan.png)
+
+![Figure 7-8. Points to remember about scenario-based training.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-9-07-points-to-remember-about-scenario-based-training.png)
+
+![Figure 7-9. Very light jet aircraft in flight.](/handbooks/aviation-instructor/FAA-H-8083-9/figures/fig-9-08-very-light-jet-aircraft-in-flight.png)

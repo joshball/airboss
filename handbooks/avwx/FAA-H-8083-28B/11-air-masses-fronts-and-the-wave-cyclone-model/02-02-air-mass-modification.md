@@ -27,7 +27,3 @@ A warm, moist air mass moving over a cold surface (see Figure 11-2) produces sta
 stratiform clouds, fog, and drizzle.
 
 Figure 11-2. Air Mass Modification—Warm, Moist Air Mass Moving Over a Cold Surface
-
-![Figure 11-1. Air Mass Classification](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-2-2-00-air-mass-classification.png)
-
-![Figure 11-2. Air Mass Modification—Warm, Moist Air Mass Moving Over a Cold Surface](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-2-2-01-air-mass-modification-warm-moist-air-mass-moving.png)

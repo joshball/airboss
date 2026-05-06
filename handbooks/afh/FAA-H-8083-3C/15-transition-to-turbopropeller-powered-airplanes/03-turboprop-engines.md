@@ -52,3 +52,6 @@ exceeding torque limits. In any weather, reaching one of these operating limits 
 the full forward position. The transitioning pilot should understand the importance of knowing and observing limits on turbine
 engines. An over temperature or over torque condition that lasts for more than a few seconds can destroy internal engine components.
 Turboprop Engine Types
+
+
+![Figure 15-3. Powerplant controls—fixed-shaft turboprop engine.](/handbooks/afh/FAA-H-8083-3C/figures/fig-15-02-powerplant-controls-fixed-shaft-turboprop-engine.png)

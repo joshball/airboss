@@ -20,3 +20,6 @@ pilots’ jobs safer and more efficient. Available in booklets by
 region (published by AeroNav Products), the TPP includes
 approach procedures, STARs, Departure Procedures (DPs),
 and airport diagrams.
+
+
+![Figure 1-15. Teardrop procedure.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-14-teardrop-procedure.png)

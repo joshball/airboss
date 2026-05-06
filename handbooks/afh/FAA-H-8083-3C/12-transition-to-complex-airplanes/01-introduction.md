@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Introduction
+
+![Figure 12-1. Airfoil types.](/handbooks/afh/FAA-H-8083-3C/figures/fig-12-00-airfoil-types.png)

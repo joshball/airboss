@@ -36,3 +36,6 @@ which the airplane is incapable of climbing any higher. [Figure 3-20]
 
 Figure 3-19. Best angle of climb verses best rate of climb.
 Figure 3-20. Absolute ceiling.
+
+
+![Figure 3-9. Elevator trim is used in airplanes to null the pressure exerted by the pilot on the pitch flight control.](/handbooks/afh/FAA-H-8083-3C/figures/fig-3-08-elevator-trim-is-used-in-airplanes-to-null-the-p.png)

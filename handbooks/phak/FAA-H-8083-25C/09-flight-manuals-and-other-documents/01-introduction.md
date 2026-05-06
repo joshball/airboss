@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Introduction
+
+![Figure 9-1. Single-engine airspeed indicator.](/handbooks/phak/FAA-H-8083-25C/figures/fig-9-00-single-engine-airspeed-indicator.png)

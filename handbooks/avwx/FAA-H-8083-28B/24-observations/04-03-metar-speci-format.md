@@ -805,14 +805,6 @@ operating, the remark VISNO LOC is coded.
 When automated stations are equipped with a secondary ceiling height indicator and the sensor is
 not operating, the remark CHINO LOC is coded.
 
-![Figure 24-1. METAR/SPECI Coding Format](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-00-metar-speci-coding-format.png)
-
-![Figure 24-2. ICAO Continental Codes](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-01-icao-continental-codes.png)
-
-![Figure 24-3. Obscuration Effects on Slant Range Visibility](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-02-obscuration-effects-on-slant-range-visibility.png)
-
-![Figure 24-4. METAR/SPECI Sky Condition Coding](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-03-metar-speci-sky-condition-coding.png)
-
 | 9 | Sky Condition | A layer of clouds or obscurations aloft is present below 1,000 ft and no layer aloft<br>was reported below 1,000 ft in the preceding METAR or SPECI. |
 | --- | --- | --- |
 | 10 | Volcanic Eruption | When an eruption is first noted. |

@@ -18,3 +18,6 @@ the attitude indicator. To understand how these instruments
 operate requires knowledge of the instrument power systems,
 gyroscopic principles, and the operating principles of each
 instrument.
+
+
+![Figure 8-24. Attitude representation by the attitude indicator corresponds to the relation of the aircraft to the real horizon.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-22-attitude-representation-by-the-attitude-indicato.png)

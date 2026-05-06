@@ -25,3 +25,6 @@ VOR test facility (VOT) or a radiated test signal from
 an appropriately rated radio repair station.
 Certified checkpoints on the airport surface.
 Certified airborne checkpoints.
+
+
+![Figure 9-19. An aircraft is displayed heading southwest to intercept the localizer approach, using the 16 NM DME arc off of ORM.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-18-an-aircraft-is-displayed-heading-southwest-to-in.png)

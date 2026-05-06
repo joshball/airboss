@@ -40,3 +40,8 @@ has the same effect as increasing the weight of the
 aircraft. Whether the increase in G forces is caused
 by turns, rough control usage, or turbulence, the effect
 of increasing the wing’s AOA is the same.
+
+
+![Figure 5-69. Wingtip pre-stall.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-65-wingtip-pre-stall.png)
+
+![Figure 5-70. T-tail stall.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-66-t-tail-stall.png)

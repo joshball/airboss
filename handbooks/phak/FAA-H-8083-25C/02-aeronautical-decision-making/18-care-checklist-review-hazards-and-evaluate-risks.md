@@ -42,3 +42,6 @@ time for a solid reality check. If you are worried about missing
 a meeting, be realistic about how that pressure will affect
 not just your initial go/no-go decision, but also your inflight
 decisions to continue the flight or divert.
+
+
+![Figure 2-18. Controllers work to make flights as safe as possible.](/handbooks/phak/FAA-H-8083-25C/figures/fig-2-17-controllers-work-to-make-flights-as-safe-as-poss.png)

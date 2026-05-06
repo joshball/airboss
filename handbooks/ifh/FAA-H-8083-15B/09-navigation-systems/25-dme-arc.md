@@ -95,3 +95,6 @@ Without an RMI, orientation is more difficult since there is
 no direct azimuth reference. However, the procedure can be
 flown using the OBS and CDI for azimuth information and
 the DME for arc distance.
+
+
+![Figure 9-25. Aircraft/DME/waypoint relationship.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-23-aircraft-dme-waypoint-relationship.png)

@@ -55,3 +55,6 @@ unbalance is a change of trim to remove the excessive control
 pressure. Excessive trim, however, has the effect of reducing
 not only aerodynamic efficiency but also primary control
 travel distance in the direction the trim is applied.
+
+
+![Figure 10-3. Determining moment.](/handbooks/phak/FAA-H-8083-25C/figures/fig-10-02-determining-moment.png)

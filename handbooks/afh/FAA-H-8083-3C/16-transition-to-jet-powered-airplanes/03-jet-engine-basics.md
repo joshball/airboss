@@ -32,3 +32,6 @@ air produces some of the thrust produced by a turbofan engine.
 The turbofan engine design increases the thrust of the jet engine, particularly at lower speeds and altitudes. Although less efficient at
 higher altitudes, the turbofan engine increases acceleration, decreases the takeoff roll, improves initial climb performance, and often
 has the effect of decreasing fuel consumption.
+
+
+![Figure 16-3. Variation of thrust with rpm.](/handbooks/afh/FAA-H-8083-3C/figures/fig-16-02-variation-of-thrust-with-rpm.png)

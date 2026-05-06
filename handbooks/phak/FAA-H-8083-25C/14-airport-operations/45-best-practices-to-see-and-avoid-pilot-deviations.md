@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Best Practices to See and Avoid Pilot Deviations (PDs)
+
+![Figure 14-45. Vortex generation.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-46-vortex-generation.png)

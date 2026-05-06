@@ -28,3 +28,6 @@ brakes can be deployed at any time during flight. There is usually a certain amo
 speed brakes, along with an obvious penalty in fuel consumption. Pilots can minimize the use of speed brakes with proper descent and
 approach planning. Procedures for the use of spoilers and/or speed brakes in various situations are contained in the FAA-approved
 AFM for the particular airplane.
+
+
+![Figure 16-13. Sample takeoff and departure profile.](/handbooks/afh/FAA-H-8083-3C/figures/fig-16-12-sample-takeoff-and-departure-profile.png)

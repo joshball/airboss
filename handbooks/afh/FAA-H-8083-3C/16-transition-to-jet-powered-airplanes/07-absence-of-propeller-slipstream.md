@@ -22,3 +22,6 @@ The lack of ability to produce instant lift in the jet, along with the slow acce
 where landing configuration, constant airspeed, controlled rate of descent, and stable power settings are maintained until over the
 threshold of the runway. This allows for better engine response when making minor changes in the approach speed or rate of descent
 and improves go-around performance.
+
+
+![Figure 16-7. Thrust and power required curves (jet aircraft vs. propeller-driven aircraft).](/handbooks/afh/FAA-H-8083-3C/figures/fig-16-06-thrust-and-power-required-curves-jet-aircraft-vs.png)

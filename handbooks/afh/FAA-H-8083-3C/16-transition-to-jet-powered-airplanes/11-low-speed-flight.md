@@ -24,3 +24,6 @@ developing at a constant power setting, while pitch attitude appears to be norma
 sinking flightpath, is one of the most important aspects of jet-airplane flying.
 
 Figure 16-7. Thrust and power required curves (jet aircraft vs. propeller-driven aircraft).
+
+
+![Figure 16-11. Thrust reversers.](/handbooks/afh/FAA-H-8083-3C/figures/fig-16-10-thrust-reversers.png)

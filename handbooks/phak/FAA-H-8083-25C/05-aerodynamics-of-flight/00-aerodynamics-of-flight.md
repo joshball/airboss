@@ -3966,39 +3966,39 @@ information on stall speeds, load factors, and other important
 aircraft data, always consult the AFM/POH for specific
 information pertaining to the aircraft being flown.
 
-![Figure 5-1. Relationship of forces acting on an aircraft.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-00-relationship-of-forces-acting-on-an-aircraft.png)
+![Figure 5-15. When the vortices of larger aircraft sink close to the ground (within 100 to 200 feet), they tend to move laterally over the  ground at a speed of 2 or 3 knots (top). A crosswind will decrease the lateral movement of the upwind vortex and increase the movement of the downwind vortex. Thus a light wind with](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-12-when-the-vortices-of-larger-aircraft-sink-close-.png)
 
-![Figure 5-3. Angle of attack at various speeds.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-01-angle-of-attack-at-various-speeds.png)
+![Figure 5-14. Avoid turbulence from another aircraft.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-13-avoid-turbulence-from-another-aircraft.png)
 
-![Figure 5-4. Some aircraft have the ability to change the direction of thrust.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-02-some-aircraft-have-the-ability-to-change-the-dir.png)
+![Figure 5-23. Longitudinal stability.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-21-longitudinal-stability.png)
 
-![Figure 5-6. Drag versus speed.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-03-drag-versus-speed.png)
+![Figure 5-24. Effect of speed on downwash.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-22-effect-of-speed-on-downwash.png)
 
-![Figure 5-7. Form drag.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-04-form-drag.png)
+![Figure 5-25. Reduced power allows pitch down.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-23-reduced-power-allows-pitch-down.png)
 
-![Figure 5-8. A wing root can cause interference drag.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-05-a-wing-root-can-cause-interference-drag.png)
+![Figure 5-28. Dihedral is the upward angle of the wings from a horizontal (front/rear view) axis of the plane as shown in the graphic  depiction and the rear view of a Ryanair Boeing 737.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-26-dihedral-is-the-upward-angle-of-the-wings-from-a.png)
 
-![Figure 5-9. Wingtip vortex from a crop duster.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-06-wingtip-vortex-from-a-crop-duster.png)
+![Figure 5-29. Sideslip causing different AOA on each blade.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-27-sideslip-causing-different-aoa-on-each-blade.png)
 
-![Figure 5-18. Axes of an airplane.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-07-axes-of-an-airplane.png)
+![Figure 5-30. Sweepback wings.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-28-sweepback-wings.png)
 
-![Figure 5-20. A powered parachute.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-08-a-powered-parachute.png)
+![Figure 5-33. Different types of wing planforms.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-31-different-types-of-wing-planforms.png)
 
-![Figure 5-26. Thrust line affects longitudinal stability.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-09-thrust-line-affects-longitudinal-stability.png)
+![Figure 5-41. A variety of AOA indicators.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-37-a-variety-of-aoa-indicators.png)
 
-![Figure 5-38. Forces exerted when pulling out of a dive.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-10-forces-exerted-when-pulling-out-of-a-dive.png)
+![Figure 5-43. Airfoil sections of propeller blade.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-40-airfoil-sections-of-propeller-blade.png)
 
-![Figure 5-39. Increase in stall speed and load factor.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-11-increase-in-stall-speed-and-load-factor.png)
+![Figure 5-44.  Propeller blade angle.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-41-propeller-blade-angle.png)
 
-![Figure 5-60. Radius at 240 knots.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-12-radius-at-240-knots.png)
+![Figure 5-54. Load factor changes stall speed.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-49-load-factor-changes-stall-speed.png)
 
-![Figure 5-61. Another formula that can be used for radius.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-13-another-formula-that-can-be-used-for-radius.png)
+![Figure 5-62. Two aircraft have flown into a canyon by error. The canyon is 5,000 feet across and has sheer cliffs on both sides. The pilot  in the top image is flying at 120 knots. After realizing the error, the pilot banks hard and uses a 30° bank angle to reverse course.  This aircraft requires about 4,000 feet to tu](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-58-two-aircraft-have-flown-into-a-canyon-by-error-t.png)
 
-![the formula in Figure 5-59.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-14-untitled.png)
+![Figure 5-66. Boundary layer.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-62-boundary-layer.png)
 
-![Figure 5-69. Wingtip pre-stall.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-15-wingtip-pre-stall.png)
+![Figure 5-67. Shock waves.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-63-shock-waves.png)
 
-![Figure 5-70. T-tail stall.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-16-t-tail-stall.png)
+![Figure 5-71. Control surfaces.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-67-control-surfaces.png)
 
 <div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-5-00-untitled.html">
 <table><thead><tr><th>Sink r</th><th>ate</th></tr></thead><tbody><tr><td></td><td>ndred ft/min</td></tr></tbody></table>

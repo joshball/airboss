@@ -10,3 +10,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Learning Methods
+
+![Figure 6-21. Primary flight display (PFD) and analog counterparts.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-21-primary-flight-display-pfd-and-analog-counterpar.png)

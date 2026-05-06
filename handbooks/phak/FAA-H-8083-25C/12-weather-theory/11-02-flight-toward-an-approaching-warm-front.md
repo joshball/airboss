@@ -34,3 +34,8 @@ Beyond Indianapolis, the ceiling and visibility are too low
 to continue VFR. Therefore, it would be wise to remain in
 Indianapolis until the warm front passes, which may take
 up to two days.
+
+
+![Figure 12-24. Common chart symbology to depict weather front  location.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-22-common-chart-symbology-to-depict-weather-front-l.png)
+
+![Figure 12-25. Warm front cross-section with surface weather chart depiction and associated METAR.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-23-warm-front-cross-section-with-surface-weather-ch.png)

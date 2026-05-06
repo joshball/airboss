@@ -25,3 +25,6 @@ intensity reduced for nighttime.
 Dual lighting—a combination of flashing red beacons
 and steady red lights for nighttime operation and high
 intensity white lights for daytime operations.
+
+
+![Figure 14-20. Orientation of signs is from left to right in a clockwise manner. Left turn signs are on the left and right turn on the right.  In this view, the pilot is on Taxiway Bravo.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-20-orientation-of-signs-is-from-left-to-right-in-a-.png)

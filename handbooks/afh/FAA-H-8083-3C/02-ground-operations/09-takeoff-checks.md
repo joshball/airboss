@@ -31,3 +31,6 @@ while the airplane was moving. However, this procedure may be modified if the ma
 items be accomplished during landing rollout. For example, when performing a short-field landing, the manufacturer may recommend
 retracting the flaps on rollout to improve braking. In this situation, the pilot should make a positive identification of the flap control
 handle before retracting the flaps.
+
+
+![Figure 2-9. An aircraft piston showing damage that occurred in just minutes as a result of detonation and overheating.](/handbooks/afh/FAA-H-8083-3C/figures/fig-2-08-an-aircraft-piston-showing-damage-that-occurred-.png)

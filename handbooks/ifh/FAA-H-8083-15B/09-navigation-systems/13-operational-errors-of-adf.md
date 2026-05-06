@@ -45,3 +45,6 @@ the factors that affect its use.
 10.	 Overcontrolling track corrections close to the station
 (chasing the ADF needle) due to failure to understand
 or recognize station approach.
+
+
+![Figure 9-13. A typical horizontal situation indicator (HSI).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-13-a-typical-horizontal-situation-indicator-hsi.png)

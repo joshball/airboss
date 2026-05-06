@@ -34,5 +34,3 @@ moisture is present). This is an area of potentially severe-to-extreme wind shea
 
 7 Durran, D. R., & Klemp J. B. (1983). A compressible model for the simulation of moist mountain waves. Monthly
 Weather Review, 111, 2341-2361.
-
-![Figure 16-9. Lenticular Clouds Associated with a Trapped Lee Wave](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-5-00-lenticular-clouds-associated-with-a-trapped-lee-.png)

@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Introduction
+
+![Figure 11-1. St. Elmo’s Fire is harmless but may affect both communication and navigation radios, especially the lower frequencies  such as those used on the automatic direction finding (ADF).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-11-01-st-elmo-s-fire-is-harmless-but-may-affect-both-c.png)

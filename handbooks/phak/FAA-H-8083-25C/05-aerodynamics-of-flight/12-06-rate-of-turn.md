@@ -112,3 +112,8 @@ to the time the aircraft takes to travel an arc.
 So why is this important to understand? Once the ROT is
 understood, a pilot can determine the distance required to
 make that particular turn, which is explained in radius of turn.
+
+
+![Figure 5-55. Typical Vg diagram.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-50-typical-vg-diagram.png)
+
+![Figure 5-55. If the airspeed is increased and the ROT desired  is to be constant, the angle of bank must be increased, otherwise, the ROT decreases. Likewise, if the airspeed is held constant, an aircraft’s ROT increases if the bank angle is increased. The formula in Figures 5-56 through 5-58 depicts the relationship b](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-51-if-the-airspeed-is-increased-and-the-rot-desired.png)

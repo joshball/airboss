@@ -79,3 +79,6 @@ Example:  If there is no altitude alerter in the aircraft, then
 both pilots write down the clearance, confirm that they
 have the same altitude, and then cross off the previously
 assigned altitude.
+
+
+![Figure 4-6. Procedures with circling landing minima.](/handbooks/iph/FAA-H-8083-16B/figures/fig-4-05-procedures-with-circling-landing-minima.png)

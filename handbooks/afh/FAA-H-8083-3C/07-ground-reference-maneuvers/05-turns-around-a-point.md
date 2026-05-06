@@ -58,3 +58,6 @@ The following are the most common errors in the performance of turns around a po
 6. Failure to manipulate the flight controls in a smooth and continuous manner.
 7. Failure to establish the appropriate wind correction angle.
 8. Failure to apply coordinated aileron and rudder pressure, resulting in slips or skids.
+
+
+![Figure 7-5. Turns around a point.](/handbooks/afh/FAA-H-8083-3C/figures/fig-7-04-turns-around-a-point.png)

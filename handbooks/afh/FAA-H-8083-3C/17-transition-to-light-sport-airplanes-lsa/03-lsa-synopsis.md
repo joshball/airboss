@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # LSA Synopsis
+
+![Figure 17-3. LSA can be constructed using both metal and composites.](/handbooks/afh/FAA-H-8083-3C/figures/fig-17-02-lsa-can-be-constructed-using-both-metal-and-comp.png)

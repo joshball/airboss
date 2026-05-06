@@ -22,3 +22,6 @@ altitude chart, IFR en route high altitude chart, and Terminal
 Area Chart (TAC). [Figure 2-24A and B]
 
 Figure 2-24. IFR en route low altitude (left) and high altitude (right) charts.
+
+
+![Figure 2-6. Boston Air Route Traffic Control Center.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-04-boston-air-route-traffic-control-center.png)

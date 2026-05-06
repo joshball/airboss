@@ -30,3 +30,6 @@ pilot certificate without any category and class ratings. The
 Instructor will provide you with the appropriate logbook
 endorsement for the category and class of aircraft in which
 you are authorized to act as pilot in command.
+
+
+![Figure 1-21. Example endorsement for a recreational pilot to conduct solo flights for the purpose of determining an additional certificate  or rating.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-20-example-endorsement-for-a-recreational-pilot-to-.png)

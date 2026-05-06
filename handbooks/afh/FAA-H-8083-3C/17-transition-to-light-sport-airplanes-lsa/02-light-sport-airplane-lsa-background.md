@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Light Sport Airplane (LSA) Background
+
+![Figure 17-2. Light-sport airplane.](/handbooks/afh/FAA-H-8083-3C/figures/fig-17-01-light-sport-airplane.png)

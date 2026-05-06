@@ -205,3 +205,7 @@ Defenses against threats and errors are either provided to the pilot or provided
 errors and respond appropriately. The response may require the use of an appropriate checklist or may require more complex
 decision-making. A trained, proficient, and disciplined pilot uses appropriate threat and error management strategies to prevent
 or recover from an undesired aircraft state.
+
+![Figure 6-1. The Swiss cheese model.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-6-00-the-swiss-cheese-model.png)
+
+![Figure 6-2. Operational Pitfalls and Hazardous Attitudes.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-6-01-operational-pitfalls-and-hazardous-attitudes.png)

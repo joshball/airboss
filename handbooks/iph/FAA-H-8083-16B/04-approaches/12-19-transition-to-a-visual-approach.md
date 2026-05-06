@@ -86,3 +86,6 @@ is an indication that the visual segment below the MDA is
 clear of obstructions on the 34:1 slope. Absence of the gray
 shaded area indicates the 34:1 OCS is not free of obstructions.
 [Figure 4-22]
+
+
+![Figure 4-21. Determination of visibility minimums.](/handbooks/iph/FAA-H-8083-16B/figures/fig-4-18-determination-of-visibility-minimums.png)

@@ -25,3 +25,6 @@ is expected to administer practical tests with the same degree of professionalis
 as an FAA ASI. Note that a DPE is not an FAA ASI. A DPE cannot initiate enforcement action, investigate accidents, or perform
 surveillance activities on behalf of the FAA. However, the majority of FAA practical tests at the recreational, private, and commercial
 pilot level are administered by DPEs.
+
+
+![Figure 1-3. Title 14 CFR, Chapter 1, Aeronautics and Space and subchapters.](/handbooks/afh/FAA-H-8083-3C/figures/fig-1-02-title-14-cfr-chapter-1-aeronautics-and-space-and.png)

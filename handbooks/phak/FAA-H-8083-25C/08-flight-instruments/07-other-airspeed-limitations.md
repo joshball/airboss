@@ -50,3 +50,6 @@ speed at which a light, twin-engine aircraft can be
 satisfactorily controlled when an engine suddenly
 becomes inoperative and the remaining engine is at
 takeoff power.
+
+
+![Figure 8-7. Airspeed indicator (ASI).](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-05-airspeed-indicator-asi.png)

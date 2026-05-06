@@ -16,3 +16,6 @@ estimated, the pilot must determine the desirable outcome
 and choose a course of action. In the case of the multiengine
 pilot given the simulated failed engine, the desired objective
 is to safely land the airplane.
+
+
+![Figure 2-23. An example of an autopilot system.](/handbooks/phak/FAA-H-8083-25C/figures/fig-2-22-an-example-of-an-autopilot-system.png)

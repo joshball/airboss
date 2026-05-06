@@ -32,3 +32,6 @@ United Kingdom implemented the 8.33 kHz channel plan on
 January 1, 1999. Accordingly, aircraft operating in the airspace
 of these countries must have the capability of transmitting and
 receiving on the 8.33 kHz spaced channels.
+
+
+![Figure 14-28. Airport rotating beacons.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-28-airport-rotating-beacons.png)

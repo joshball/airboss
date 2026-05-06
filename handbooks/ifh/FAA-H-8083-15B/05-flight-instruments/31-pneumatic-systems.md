@@ -55,3 +55,6 @@ autopilots. Aircraft with only D.C. electrical systems can use
 A.C. instruments via installation of a solid-state D.C. to A.C.
 inverter, which changes 14 or 28 volts D.C. into three-phase
 115-volt, 400-Hz A.C.
+
+
+![Figure 5-31. The heading indicator is not north seeking, but must  be set periodically (about every 15 minutes) to agree with the magnetic compass.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-30-the-heading-indicator-is-not-north-seeking-but-m.png)

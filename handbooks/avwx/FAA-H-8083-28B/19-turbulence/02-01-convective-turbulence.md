@@ -59,7 +59,3 @@ precipitation. The gust front causes a rapid and sometimes drastic change in sur
 approaching storm. Often, a “roll cloud” or “shelf cloud” on the leading edge of the storm (see Figure 19-3)
 marks the top of the extreme turbulence zone, which forms as warm, moist air is lifted by the gust front.
 Shelf clouds are most common with multicell line thunderstorms.
-
-![Figure 19-1. Convective Turbulence](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-1-00-convective-turbulence.png)
-
-![Figure 19-2. Thermals](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-1-01-thermals.png)

@@ -15,3 +15,6 @@ The smoothest and most fuel-efficient descent would be to reduce power to flight
 pilot would descend, level off to decelerate, configure for landing, intercept the final approach, and continue a gradual deceleration
 until setting power for a stabilized descent on final. Traffic and time considerations almost always require deviation from this
 example, and the typical descent profile has three descent segments with two speed reductions in between.
+
+
+![Figure 16-17. Typical approach and landing profile.](/handbooks/afh/FAA-H-8083-3C/figures/fig-16-16-typical-approach-and-landing-profile.png)

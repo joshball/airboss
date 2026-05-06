@@ -116,9 +116,11 @@ appropriate focus on the progress of the flight at all times. Balancing the use 
 in case a particular situation requires pilot intervention. Using automation proficiently and at the appropriate level reduces risk
 and helps prevent incidents and accidents.
 
-![Figure 7-1. Autopilot interface.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-7-1-00-autopilot-interface.png)
+![Figure 7-1. Autopilot interface.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-7-00-autopilot-interface.png)
 
-![Figure 7-2. Steps for interacting with automation](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-7-5-00-steps-for-interacting-with-automation.png)
+![Figure 7-2. Steps for interacting with automation](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-7-01-steps-for-interacting-with-automation.png)
+
+![Figure 7-3. Flight mode annunciators in green indicate the autopilot is engaged in heading “HDG” and altitude “ALT”  mode, maintaining 9,000 feet MSL. The white “LOC” and “GS” annunciators indicate approach mode is armed but not](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-7-02-flight-mode-annunciators-in-green-indicate-the-a.png)
 
 <div class="handbook-table" data-source="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-7-00-untitled.html">
 <table><thead><tr><th>HDG

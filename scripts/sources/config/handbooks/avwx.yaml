@@ -52,7 +52,7 @@ page_offset: 0
 outline_strategy: bookmark
 outline_overrides: []
 title_overrides: {}
-figure_prefix_pattern: 'Figure (\d+)-(\d+)\.'
+figure_prefix_pattern: '^\s*Figure (\d+)-(\d+)\.'
 table_prefix_pattern: 'Table (\d+)-(\d+)\.'
 
 # -----------------------------------------------------------------------------

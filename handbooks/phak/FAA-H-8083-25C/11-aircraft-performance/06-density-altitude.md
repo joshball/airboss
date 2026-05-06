@@ -90,3 +90,6 @@ Using a flight computer, density altitude can be computed by
 inputting the pressure altitude and outside air temperature at
 flight level. Density altitude can also be determined by referring
 to the table and chart in Figures 11-3 and 11-4 respectively.
+
+
+![Figure 11-6. Power versus speed.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-04-power-versus-speed.png)

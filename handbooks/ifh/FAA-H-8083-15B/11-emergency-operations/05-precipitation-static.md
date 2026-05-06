@@ -34,3 +34,6 @@ To reduce the problems associated with P-static, the pilot
 should ensure the aircraft’s static wicks are properly maintained
 and accounted for. Broken or missing static wicks should be
 replaced before an instrument flight. [Figure 11-2]
+
+
+![Figure 11-5. Double rocker switch seen on many aircraft.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-11-04-double-rocker-switch-seen-on-many-aircraft.png)

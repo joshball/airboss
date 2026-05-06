@@ -15,3 +15,6 @@ There are various methods for determining the loaded weight
 and CG of an aircraft. There is the computational method as
 well as methods that utilize graphs and tables provided by
 the aircraft manufacturer.
+
+
+![Figure 10-11. Sample weight and balance using an aircraft with a  published zero fuel weight.](/handbooks/phak/FAA-H-8083-25C/figures/fig-10-08-sample-weight-and-balance-using-an-aircraft-with.png)

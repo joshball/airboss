@@ -45,3 +45,6 @@ spinning gyro to become displaced from its intended plane
 of rotation through bearing friction, etc. Certain instruments
 may require corrective realignment during flight, such as the
 heading indicator.
+
+
+![Figure 8-27. The soft iron frame of the flux valve accepts the flux from  the Earth’s magnetic field each time the current in the center coil reverses. This flux causes current to flow in the three pickup coils.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-35-forces-exerted-when-pulling-out-of-a-dive.png)

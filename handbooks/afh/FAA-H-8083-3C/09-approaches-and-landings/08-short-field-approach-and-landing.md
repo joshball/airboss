@@ -78,3 +78,6 @@ Common errors in the performance of short-field approaches and landings are:
 8. Excessive and/or unnecessary braking after touchdown.
 9. Failure to maintain directional control.
 10. Failure to recognize and abort a poor approach that cannot be completed safely.
+
+
+![Figure 9-8. Focusing too close blurs vision.](/handbooks/afh/FAA-H-8083-3C/figures/fig-9-07-focusing-too-close-blurs-vision.png)

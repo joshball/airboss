@@ -410,3 +410,6 @@ departure procedure in the chart plan view. New aircraft
 equipment suffix codes are used to denote capabilities for
 advanced RNAV navigation for flight plan filing purposes.
 [Figure 1-32]
+
+
+![Figure 1-27. RNP departure levels.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-26-rnp-departure-levels.png)

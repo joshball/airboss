@@ -30,3 +30,6 @@ precise identification of a flight. When requested, briefly push
 the ident button to activate this feature. It is good practice
 for pilots to verbally confirm that they have changed codes
 or pushed the ident button.
+
+
+![Figure 2-4. Combination GPS-com unit.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-2-03-combination-gps-com-unit.png)

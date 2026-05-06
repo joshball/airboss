@@ -101,3 +101,6 @@ when inadvertently going below the minimum altitude.
 Barometric altimeters are subject to inaccuracies that
 become important in helicopter IFR operations, especially
 in cold temperatures.
+
+
+![Figure 7-15. Point-in-space (PinS)  approach examples for Part 91 and Part 135 operations.](/handbooks/iph/FAA-H-8083-16B/figures/fig-7-13-point-in-space-pins-approach-examples-for-part-9.png)

@@ -207,3 +207,6 @@ Both of these instruments provide turn information.
 [Figure 6-12] The turn coordinator provides both bank rate
 and then turn rate once stabilized. The turn-and-slip indicator
 provides only turn rate.
+
+
+![Figure 6-4. Pitch instruments.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-03-pitch-instruments.png)

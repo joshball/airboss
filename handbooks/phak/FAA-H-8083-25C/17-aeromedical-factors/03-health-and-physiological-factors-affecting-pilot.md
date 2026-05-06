@@ -23,3 +23,6 @@ sickness, carbon monoxide (CO) poisoning, stress and
 fatigue, dehydration, and heatstroke. Other subjects include
 the effects of alcohol and drugs, anxiety, and excess nitrogen
 in the blood after scuba diving.
+
+
+![Figure 17-3. The semicircular canals lie in three planes and sense motions of roll, pitch, and yaw.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-02-the-semicircular-canals-lie-in-three-planes-and-.png)

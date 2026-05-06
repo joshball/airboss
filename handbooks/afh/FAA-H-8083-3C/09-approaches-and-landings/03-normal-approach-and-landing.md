@@ -23,3 +23,6 @@ of the approach pattern and the actual landing are divided into five phases:
 3. the round out (flare)
 4. the touchdown
 5. the after-landing roll
+
+
+![Figure 9-3. Base leg and final approach.](/handbooks/afh/FAA-H-8083-3C/figures/fig-9-02-base-leg-and-final-approach.png)

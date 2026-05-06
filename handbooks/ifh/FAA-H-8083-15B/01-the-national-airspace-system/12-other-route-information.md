@@ -71,3 +71,6 @@ waypoints, and terminal procedures. Databases are updated
 every 28 days and are available from various commercial
 vendors. Pilots should be familiar with equipment operation,
 capabilities, and limitations prior to use.
+
+
+![Figure 1-12. Basic “T” design of terminal arrival area (TAA) and legend.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-11-basic-t-design-of-terminal-arrival-area-taa-and-.png)

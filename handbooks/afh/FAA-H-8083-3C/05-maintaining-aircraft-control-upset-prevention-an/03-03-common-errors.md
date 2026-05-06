@@ -10,3 +10,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Common Errors
+
+![Figure 5-8. Critical angle of attack and stall.](/handbooks/afh/FAA-H-8083-3C/figures/fig-5-07-critical-angle-of-attack-and-stall.png)

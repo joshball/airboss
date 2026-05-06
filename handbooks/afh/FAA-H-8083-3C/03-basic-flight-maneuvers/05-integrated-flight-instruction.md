@@ -51,3 +51,6 @@ attitude by reference to the natural horizon, however, presents immediate and ac
 instrument. The beginning pilot should understand that anytime airplane attitude by reference to the natural horizon cannot be
 established or maintained, the situation has become a genuine emergency and that the use of integrated flight instruction does not
 prepare pilots for flight in IMC.
+
+
+![Figure 3-5. Integrated flight instruction teaches pilots to use both external and instrument attitude references.](/handbooks/afh/FAA-H-8083-3C/figures/fig-3-04-integrated-flight-instruction-teaches-pilots-to-.png)

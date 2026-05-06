@@ -215,30 +215,30 @@ shift from south or southeasterly to west or southwesterly. Blowing dust and ris
 follow, especially if the dryline passes during the daytime. These changes occur in reverse order when the
 dryline retreats westward.
 
-![Figure 11-1. Air Mass Classification](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-2-2-00-air-mass-classification.png)
+![Figure 11-1. Air Mass Classification](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-00-air-mass-classification.png)
 
-![Figure 11-2. Air Mass Modification—Warm, Moist Air Mass Moving Over a Cold Surface](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-2-2-01-air-mass-modification-warm-moist-air-mass-moving.png)
+![Figure 11-2. Air Mass Modification—Warm, Moist Air Mass Moving Over a Cold Surface](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-01-air-mass-modification-warm-moist-air-mass-moving.png)
 
-![Figure 11-3. Lake Effect](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-00-lake-effect.png)
+![Figure 11-3. Lake Effect](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-02-lake-effect.png)
 
-![Figure 11-4. Fronts](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-01-fronts.png)
+![Figure 11-4. Fronts](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-03-fronts.png)
 
-![Figure 11-5. Warm Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-1-00-warm-front.png)
+![Figure 11-5. Warm Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-04-warm-front.png)
 
-![Figure 11-6. Cold Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-3-00-cold-front.png)
+![Figure 11-6. Cold Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-05-cold-front.png)
 
-![Figure 11-7. Stationary Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-3-01-stationary-front.png)
+![Figure 11-7. Stationary Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-06-stationary-front.png)
 
-![Figure 11-8. Occluded Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-4-00-occluded-front.png)
+![Figure 11-8. Occluded Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-07-occluded-front.png)
 
-![Figure 11-9. Wave Cyclone Model—Stage 1](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-4-00-wave-cyclone-model-stage-1.png)
+![Figure 11-9. Wave Cyclone Model—Stage 1](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-08-wave-cyclone-model-stage-1.png)
 
-![Figure 11-10. Wave Cyclone Model—Stage 2](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-4-01-wave-cyclone-model-stage-2.png)
+![Figure 11-10. Wave Cyclone Model—Stage 2](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-09-wave-cyclone-model-stage-2.png)
 
-![Figure 11-11. Wave Cyclone Model—Stage 3](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-4-02-wave-cyclone-model-stage-3.png)
+![Figure 11-11. Wave Cyclone Model—Stage 3](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-10-wave-cyclone-model-stage-3.png)
 
-![Figure 11-12. Wave Cyclone Model—Stage 4](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-4-03-wave-cyclone-model-stage-4.png)
+![Figure 11-12. Wave Cyclone Model—Stage 4](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-11-wave-cyclone-model-stage-4.png)
 
-![Figure 11-13. Wave Cyclone Model—Stage 5](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-4-04-wave-cyclone-model-stage-5.png)
+![Figure 11-13. Wave Cyclone Model—Stage 5](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-12-wave-cyclone-model-stage-5.png)
 
-![Figure 11-14. Dryline Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-5-00-dryline-example.png)
+![Figure 11-14. Dryline Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-13-dryline-example.png)

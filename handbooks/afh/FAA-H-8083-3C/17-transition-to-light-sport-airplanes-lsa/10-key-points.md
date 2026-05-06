@@ -35,3 +35,6 @@ construction. While the transition is not difficult, it does require a properly 
 flight instructor-S or flight instructor-A. Safety is of utmost importance when it comes to any flight activity. In order to properly
 assess the hazards of flight and mitigate flight risk, a pilot needs to develop the appropriate knowledge, risk management, and skill, to
 effectively and safely pilot an LSA.
+
+
+![Figure 17-10. Adjustment lever for the rudder pedal position.](/handbooks/afh/FAA-H-8083-3C/figures/fig-17-09-adjustment-lever-for-the-rudder-pedal-position.png)

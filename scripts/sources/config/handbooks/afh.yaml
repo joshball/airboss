@@ -66,7 +66,7 @@ outline_overrides: []
 # Title") so most chapters resolve automatically. Title overrides are only
 # needed when the cover page lays out the title in some other shape.
 title_overrides: {}
-figure_prefix_pattern: 'Figure (\d+)-(\d+)\.'
+figure_prefix_pattern: '^\s*Figure (\d+)-(\d+)\.'
 table_prefix_pattern: 'Table (\d+)-(\d+)\.'
 
 # -----------------------------------------------------------------------------

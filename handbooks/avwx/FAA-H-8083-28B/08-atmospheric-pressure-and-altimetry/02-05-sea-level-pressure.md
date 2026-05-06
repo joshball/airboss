@@ -29,7 +29,3 @@ elevation is 25 inHg; pressure increases about 1 inHg for each 1,000 ft, or a to
 pressure is approximately 25 + 5, or 30 inHg.
 
 Figure 8-6. Reduction of Station Pressure to Sea Level
-
-![Figure 8-5. Temperature’s Effect on Pressure](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-5-00-temperature-s-effect-on-pressure.png)
-
-![Figure 8-6. Reduction of Station Pressure to Sea Level](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-5-01-reduction-of-station-pressure-to-sea-level.png)

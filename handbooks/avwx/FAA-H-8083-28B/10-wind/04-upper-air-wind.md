@@ -24,5 +24,3 @@ constant-pressure charts). With the forces in balance, wind will remain parallel
 in Figure 10-9. This is called the geostrophic wind.
 
 Figure 10-8. Geostrophic Wind
-
-![in Figure 10-9. This is called the geostrophic wind.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-4-00-this-is-called-the-geostrophic-wind.png)

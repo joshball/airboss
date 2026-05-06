@@ -62,3 +62,6 @@ System on Conventional Routes and Procedures, dated
 March 3, 2011 for additional guidance on the proper times
 and procedures for substituting a RNAV system for means
 of navigation.
+
+
+![Figure 4-8. Cheyenne Regional (KCYS), Cheyenne, Wyoming, ILS or LOC RWY 27.](/handbooks/iph/FAA-H-8083-16B/figures/fig-4-07-cheyenne-regional-kcys-cheyenne-wyoming-ils-or-l.png)

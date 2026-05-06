@@ -32,3 +32,6 @@ airplane. A common trim control error is the tendency for the pilot to overcontr
 fly the airplane with the trim is a common fault in basic flying technique even among experienced pilots. The airplane attitude should
 be established first and held with the appropriate flight control pressures, and then the flight control pressures trimmed out so that the
 airplane maintains the desired attitude without the pilot exerting flight control pressure.
+
+
+![Figure 3-7. Wingtip reference for straight-and-level flight.](/handbooks/afh/FAA-H-8083-3C/figures/fig-3-06-wingtip-reference-for-straight-and-level-flight.png)

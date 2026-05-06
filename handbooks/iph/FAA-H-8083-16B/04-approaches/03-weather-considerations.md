@@ -42,3 +42,6 @@ leaves very few options for flight crews if the wind does not
 favor Runway 22; and, in cases where the wind restricts a
 landing on that runway altogether, even a circling approach
 cannot be flown because of the visibility.
+
+
+![Figure 4-3. Instrument approach chart.](/handbooks/iph/FAA-H-8083-16B/figures/fig-4-02-instrument-approach-chart.png)

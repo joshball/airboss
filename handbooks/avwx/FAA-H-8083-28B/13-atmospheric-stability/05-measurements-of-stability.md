@@ -49,7 +49,3 @@ thunderstorms.
 CAPE is directly related to the maximum potential vertical speed within an updraft; thus, higher values
 indicate the potential for stronger updrafts. Observed values in thunderstorm environments often
 exceed 1,000 J/kg and in extreme cases may exceed 5,000 J/kg.
-
-![Figure 13-8. Diurnal Temperature Variation Effects on Stability](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-4-3-00-diurnal-temperature-variation-effects-on-stabili.png)
-
-![Figure 13-9. Lifted Index Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-5-1-00-lifted-index-example.png)

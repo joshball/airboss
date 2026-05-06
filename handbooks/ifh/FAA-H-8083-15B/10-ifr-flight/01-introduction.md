@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Introduction
+
+![Figure 10-1. Flight plan form.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-10-00-flight-plan-form.png)

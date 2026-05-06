@@ -11,3 +11,6 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 # Uncontrolled Airspace
 
 Uncontrolled Airspace
+
+
+![Figure 15-3. Restricted areas on a sectional chart.](/handbooks/phak/FAA-H-8083-25C/figures/fig-15-03-restricted-areas-on-a-sectional-chart.png)

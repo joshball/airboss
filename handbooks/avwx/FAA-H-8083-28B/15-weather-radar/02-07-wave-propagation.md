@@ -65,11 +65,3 @@ curvature, then a condition called ducting (or trapping) occurs (see Figure 15-1
 When ducting occurs, the radar beam will hit the surface of the Earth, causing some of the beam’s energy
 to backscatter. This often leads to false echoes, also known as anomalous propagation (AP), to appear in
 the radar display.
-
-![Figure 15-7. Beam Resolution Comparison Between WSR-88D and Aircraft Weather Radar](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-7-00-beam-resolution-comparison-between-wsr-88d-and-a.png)
-
-![Figure 15-8. Normal Refraction](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-7-01-normal-refraction.png)
-
-![Figure 15-9. Subrefraction](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-7-02-subrefraction.png)
-
-![Figure 15-10. Superrefraction](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-7-03-superrefraction.png)

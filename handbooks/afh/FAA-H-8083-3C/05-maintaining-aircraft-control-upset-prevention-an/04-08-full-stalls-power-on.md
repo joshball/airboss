@@ -35,3 +35,6 @@ the throttle is already at the climb power setting, this step may simply mean co
 Figure 5-12. Power-on stall.
 The final step is to return the airplane to the desired flightpath (e.g., straight and level or departure/climb attitude). With sufficient
 airspeed and control effectiveness, the pilot may return the throttle to the appropriate power setting.
+
+
+![Figure 5-12. Power-on stall.](/handbooks/afh/FAA-H-8083-3C/figures/fig-5-11-power-on-stall.png)

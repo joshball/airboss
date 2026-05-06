@@ -189,3 +189,8 @@ Wind—a large effect due to the wind or wind
 component along the runway
 Runway slope and condition—the effect of an incline
 and retarding effect of factors such as snow or ice
+
+
+![Figure 11-18. Tire pressure.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-16-tire-pressure.png)
+
+![Figure 11-17. Chart Supplement U.S. (formerly Airport/Facility Directory) information.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-17-chart-supplement-u-s-formerly-airport-facility-d.png)

@@ -11,3 +11,6 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 # Navigation Features
 
 Navigation Features
+
+
+![Figure 1-9. DP chart legend and STAR.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-08-dp-chart-legend-and-star.png)

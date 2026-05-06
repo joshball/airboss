@@ -58,5 +58,3 @@ Weather balloons with radiosondes are launched twice a day worldwide from design
 an altitude of 100,000 ft. The weather data collected is assigned the observation times of 1200 UTC and
 0000 UTC. Special radiosondes may be launched at select times for various reasons, including when severe
 weather is expected in a region.
-
-![Figure 24-25. Water Vapor Satellite Image Data Legend](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-8-1-00-water-vapor-satellite-image-data-legend.png)

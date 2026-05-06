@@ -92,3 +92,6 @@ manifold pressure and rpm somewhat for en route climb. The propellers are usuall
 the yaw damper, if installed, engaged. The AFM/POH may also recommend leaning the mixtures during climb. The climb checklist
 should be accomplished as traffic and work load allow. [Figure 13-7]
 Figure 13-7. Takeoff and climb profile.
+
+
+![Figure 13-8. Short-field takeoff and climb](/handbooks/afh/FAA-H-8083-3C/figures/fig-13-06-short-field-takeoff-and-climb.png)

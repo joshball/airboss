@@ -43,3 +43,6 @@ less and can absorb more energy. Because airplane brakes are
 used principally during landings and must absorb enormous
 amounts of energy, their life is measured in landings rather
 than miles.
+
+
+![Figure 3-5. Truss-type fuselage structure.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-03-truss-type-fuselage-structure.png)

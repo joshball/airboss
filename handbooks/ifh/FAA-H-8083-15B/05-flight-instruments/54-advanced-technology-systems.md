@@ -11,3 +11,6 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 # Advanced Technology Systems
 
 Advanced Technology Systems
+
+
+![Figure 5-54. Concept of the traffic information system.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-53-concept-of-the-traffic-information-system.png)

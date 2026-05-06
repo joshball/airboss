@@ -27,3 +27,6 @@ and an indicator. [Figure 5-51] Category II and III precision
 approach procedures require the use of a radar altimeter and
 specify the exact minimum height above the terrain as a
 decision height (DH) or radio altitude (RA).
+
+
+![Figure 5-57. Alert System by Avidyne (Ryan).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-56-alert-system-by-avidyne-ryan.png)

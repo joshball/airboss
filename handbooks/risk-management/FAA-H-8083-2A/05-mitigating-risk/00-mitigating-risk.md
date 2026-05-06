@@ -221,7 +221,9 @@ can enhance any risk mitigation analysis, but may not be required for simpler fl
 management skill. A brief FAA Safety Team (FAASTeam) video on risk-based decision-making summarizes many concepts
 discussed in this chapter.
 
-![Figure 5-1. Modified route.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-5-3-1-00-modified-route.png)
+![Figure 5-1. Modified route.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-5-00-modified-route.png)
+
+![Figure 5-2. Case study FRAT with risks mitigated.](/handbooks/risk-management/FAA-H-8083-2A/figures/fig-5-01-case-study-frat-with-risks-mitigated.png)
 
 <div class="handbook-table" data-source="/handbooks/risk-management/FAA-H-8083-2A/tables/tbl-5-00-untitled.html">
 <table><thead><tr><th>Pilot “P”</th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td>serious</td><td></td><td>Add 500' to minimums improbable/catastrophic now

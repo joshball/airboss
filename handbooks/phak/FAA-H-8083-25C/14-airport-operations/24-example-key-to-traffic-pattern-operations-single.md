@@ -30,3 +30,6 @@ or exit with a 45° turn (to the left when in a left-hand
 traffic pattern; to the right when in a right-hand traffic
 pattern) beyond the departure end of the runway, after
 reaching pattern altitude. [Figure 14-39]
+
+
+![Figure 14-24. Instrument landing system (ILS) holding position sign  and marking on Taxiway Golf.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-22-instrument-landing-system-ils-holding-position-s.png)

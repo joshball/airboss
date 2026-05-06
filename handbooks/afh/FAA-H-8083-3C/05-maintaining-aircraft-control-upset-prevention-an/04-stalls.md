@@ -27,3 +27,6 @@ rolling motion. For airplanes equipped with stick pushers, their activation is a
 Although it depends on the degree to which a stall has progressed, some loss of altitude is expected during recovery. The longer it
 takes for the pilot to recognize an impending stall, the more likely it is that a full stall will result. Intentional stalls should therefore be
 performed at an altitude that provides adequate height above the ground for recovery and return to normal level flight.
+
+
+![Figure 5-4. A Level D full-flight simulator could be used for UPRT.](/handbooks/afh/FAA-H-8083-3C/figures/fig-5-03-a-level-d-full-flight-simulator-could-be-used-fo.png)

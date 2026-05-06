@@ -11,3 +11,6 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 # The Role of the FAA
 
 The Role of the FAA
+
+
+![Figure 1-3. First flight by the Wright brothers.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-02-first-flight-by-the-wright-brothers.png)

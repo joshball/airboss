@@ -50,3 +50,10 @@ rotational speed (revolutions per minute (RPM) as viewed
 on a tachometer) is increased or decreased on fixed-pitch
 propellers, the performance of the aircraft reflects a gain or
 loss of airspeed as well.
+
+
+![Figure 6-12. Turn coordinator and turn-and-slip indicator.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-11-turn-coordinator-and-turn-and-slip-indicator.png)
+
+![Figure 6-13. An increase in power—increasing airspeed accordingly in level flight.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-12-an-increase-in-power-increasing-airspeed-accordi.png)
+
+![Figure 6-16. The aircraft should be properly trimmed while  executing a maneuver. The degree of flying skill, which ultimately develops, depends largely upon how well the aviator learns to keep the aircraft trimmed.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-6-13-the-aircraft-should-be-properly-trimmed-while-ex.png)

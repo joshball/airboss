@@ -75,3 +75,8 @@ prolonged IFR flight in icing conditions. This type of descent
 can also help to minimize the time spent in turbulence by
 allowing pilots to level off at an altitude where the air is
 smoother.
+
+
+![Figure 3-7. Jet descent task.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-06-jet-descent-task.png)
+
+![Figure 3-8. The descent planning task.](/handbooks/iph/FAA-H-8083-16B/figures/fig-3-07-the-descent-planning-task.png)

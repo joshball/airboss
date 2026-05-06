@@ -33,3 +33,6 @@ crossed the runway holding position markings, you must hold
 unless further instructions have been issued by ATC. Do not
 initiate non-essential communications or actions until the
 aircraft has stopped and the brakes set.
+
+
+![Figure 14-55. Engineered material arresting system (EMAS)  located at Yeager Airport, Charleston, West Virginia.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-55-engineered-material-arresting-system-emas-locate.png)

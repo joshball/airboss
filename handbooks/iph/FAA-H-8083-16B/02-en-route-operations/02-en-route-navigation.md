@@ -30,3 +30,6 @@ regulation allows maneuvering to pass well clear of other
 air traffic or, if in visual meteorogical conditions (VMC),
 to clear the flightpath both before and during climb or
 descent.
+
+
+![Figure 2-2. Airways depicted on an aeronautical chart.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-01-airways-depicted-on-an-aeronautical-chart.png)

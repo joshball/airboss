@@ -35,3 +35,6 @@ downwind, base leg, and final approach allow smaller adjustments of pitch and po
 Whenever the flap setting is changed, the pilot should be prepared to re-trim the airplane as needed to compensate for the change in
 aerodynamic forces.  Throughout this chapter, more detail is provided on the use of flaps during specific approach and landing situations,
 as appropriate.
+
+
+![Figure 9-2. Effect of flaps on the approach angle.](/handbooks/afh/FAA-H-8083-3C/figures/fig-9-01-effect-of-flaps-on-the-approach-angle.png)

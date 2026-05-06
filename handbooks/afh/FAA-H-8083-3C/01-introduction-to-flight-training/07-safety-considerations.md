@@ -15,3 +15,6 @@ In the interest of safety and good habit pattern formation, there are certain ba
 emphasized by the flight instructor, and adhered to by both instructor and learner, beginning with the very first dual instruction flight.
 These include, but are not limited to, collision avoidance procedures including proper scanning techniques and clearing procedures,
 runway incursion avoidance, stall awareness, positive transfer of controls, and flight deck workload management.
+
+
+![Figure 1-7. Sample lesson plan for stall training and recovery procedures.](/handbooks/afh/FAA-H-8083-3C/figures/fig-1-06-sample-lesson-plan-for-stall-training-and-recove.png)

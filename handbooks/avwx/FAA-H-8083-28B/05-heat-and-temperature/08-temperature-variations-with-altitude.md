@@ -41,9 +41,3 @@ The principal characteristic of an inversion layer is its marked stability, so t
 occur within it. Turbulence will be discussed at length in Chapter 19, Turbulence.
 
 Figure 5-9. Sounding with a Temperature Inversion
-
-![Figure 5-7. Variation of Mean Daily Temperatures for San Francisco (Maritime) and St. Louis (Continental)](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-8-1-00-variation-of-mean-daily-temperatures-for-san-fra.png)
-
-![Figure 5-8. Sounding with an Isothermal Layer](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-8-3-00-sounding-with-an-isothermal-layer.png)
-
-![Figure 5-9. Sounding with a Temperature Inversion](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-8-3-01-sounding-with-a-temperature-inversion.png)

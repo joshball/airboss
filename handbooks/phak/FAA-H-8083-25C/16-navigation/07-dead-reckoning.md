@@ -21,3 +21,6 @@ destination. Except for flights over water, dead reckoning
 is usually used with pilotage for cross-country flying. The
 heading and GS, as calculated, is constantly monitored and
 corrected by pilotage as observed from checkpoints.
+
+
+![Figure 16-7. Courses are determined by reference to meridians on  aeronautical charts.](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-05-courses-are-determined-by-reference-to-meridians.png)

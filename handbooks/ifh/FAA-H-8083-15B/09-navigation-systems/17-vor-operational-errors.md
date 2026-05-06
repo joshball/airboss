@@ -71,3 +71,6 @@ VOR reading observed while transmitting.
 Chasing the CDI, resulting in homing instead of
 tracking. Careless heading control and failure to
 bracket wind corrections make this error common.
+
+
+![Figure 9-17. DME arc interception.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-16-dme-arc-interception.png)

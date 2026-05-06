@@ -19,3 +19,6 @@ have been caused by “failure of the pilot to...” As such, a reduction of the
 resource management. The risks involved with flying an airplane are very different from those experienced in daily activities, such as
 driving to work. Managing risks and resources requires a conscious effort that goes beyond the stick and rudder skills required to
 pilot the airplane.
+
+
+![Figure 2-3. Airplane Flight Manuals (AFM) and the Pilot Operating Handbook (POH) for each individual aircraft explain the  required items for inspection.](/handbooks/afh/FAA-H-8083-3C/figures/fig-2-02-airplane-flight-manuals-afm-and-the-pilot-operat.png)

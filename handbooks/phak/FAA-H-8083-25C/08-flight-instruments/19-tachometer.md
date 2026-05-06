@@ -17,3 +17,6 @@ not located on the PFD. The tachometer is normally located
 on the multi-function display (MFD). In the event of a display
 screen failure, it is displayed on the remaining screen with
 the PFD flight instrumentation. [Figure 8-13]
+
+
+![Figure 8-19. Precession of a gyroscope resulting from an applied deflective force.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-17-precession-of-a-gyroscope-resulting-from-an-appl.png)

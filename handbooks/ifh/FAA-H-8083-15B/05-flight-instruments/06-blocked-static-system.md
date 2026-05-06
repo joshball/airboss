@@ -42,3 +42,6 @@ if the altitude is held constant.
 For more information on static system blockages and how to
 best react to such situations, refer to the Pilot’s Handbook of
 Aeronautical Knowledge (FAA-H-8083-25A).
+
+
+![Figure 5-6. The loss of altitude experienced when flying into an area where the air is colder (more dense) than standard.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-05-the-loss-of-altitude-experienced-when-flying-int.png)

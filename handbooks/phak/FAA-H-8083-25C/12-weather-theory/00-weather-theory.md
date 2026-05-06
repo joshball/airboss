@@ -63,43 +63,13 @@ her
 feet
 Figure 12-2. Layers of the atmosphere.
 
-![Figure 12-1. Composition of the atmosphere.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-00-composition-of-the-atmosphere.png)
+![Figure 12-22. Basic cloud types.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-20-basic-cloud-types.png)
 
-![Figure 12-2. Layers of the atmosphere.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-01-layers-of-the-atmosphere.png)
-
-![Figure 12-11. Favorable winds near a high pressure system.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-02-favorable-winds-near-a-high-pressure-system.png)
-
-![Figure 12-12. Convective turbulence avoidance.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-03-convective-turbulence-avoidance.png)
-
-![Figure 12-13. Sea breeze and land breeze wind circulation patterns.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-04-sea-breeze-and-land-breeze-wind-circulation-patt.png)
-
-![Figure 12-20. Relationship between relative humidity, temperature, and dewpoint.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-05-relationship-between-relative-humidity-temperatu.png)
-
-![Figure 12-21. Radiation fog.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-06-radiation-fog.png)
-
-![Figure 12-22. Basic cloud types.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-07-basic-cloud-types.png)
-
-![Figure 12-23. North American air mass source regions.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-08-north-american-air-mass-source-regions.png)
-
-![Figure 12-26. Cold front cross-section with surface weather chart depiction and associated METAR.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-09-cold-front-cross-section-with-surface-weather-ch.png)
-
-![Figure 12-27. Occluded front cross-section with a weather chart depiction and associated METAR.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-10-occluded-front-cross-section-with-a-weather-char.png)
-
-![Figure 12-28. Life cycle of a thunderstorm.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-11-life-cycle-of-a-thunderstorm.png)
-
-![Figure 12-29. Movement and turbulence of a maturing thunderstorm.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-12-movement-and-turbulence-of-a-maturing-thundersto.png)
-
-|  | Weather Theory |
-| --- | --- |
-| Introduction<br>Weather is an important factor that influences aircraft<br>performance and flying safety. It is the state of the atmosphere<br>at a given time and place with respect to variables, such as<br>temperature (heat or cold), moisture (wetness or dryness),<br>wind velocity (calm or storm), visibility (clearness or<br>cloudiness), and barometric pressure (high or low). The<br>term “weather” can also apply to adverse or destructive<br>atmospheric conditions, such as high winds.<br>This chapter explains basic weather theory and offers pilots<br>background knowledge of weather principles. It is designed<br>to help them gain a good understanding of how weather<br>affects daily flying activities. Understanding the theories<br>behind weather helps a pilot make sound weather decisions<br>based on the reports and forecasts obtained from a Flight<br>Service Station (FSS) weather specialist and other aviation<br>weather services.<br>Be it a local flight or a long cross-country flight, decisions<br>based on weather can dramatically affect the safety of the flight. |  |
-
-<a class="handbook-table-source" href="/handbooks/phak/FAA-H-8083-25C/tables/tbl-12-00-untitled.html">Open original</a>
-
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-12-01-untitled.html">
+<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-12-00-untitled.html">
 <table><thead><tr><th>Height of mercury</th><th>(760 mm) 29.92&quot;</th></tr></thead><tbody></tbody></table>
 </div>
 
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-12-02-untitled.html">
+<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-12-01-untitled.html">
 <table><thead><tr><th>Pressure Altitude: Sea level TAKEOFF DISTANCE
 MAXIMUM WEIGHT 2,400 LB
 0 °C
@@ -130,14 +100,14 @@ Pressure Altitude: 8,000 feet
 | --- | --- | --- | --- | --- |
 | E/35 kts |  | N/50 kts |  | W/105 kts |
 
-<a class="handbook-table-source" href="/handbooks/phak/FAA-H-8083-25C/tables/tbl-12-03-untitled.html">Open original</a>
+<a class="handbook-table-source" href="/handbooks/phak/FAA-H-8083-25C/tables/tbl-12-02-untitled.html">Open original</a>
 
 | form convective currents but instead creates a<br>with poor surface visibility. The poor surface v<br>to the fact that smoke, dust, and other particl<br>out of the air mass and are instead trapped ne<br>A stable air mass can produce low stratus clo<br>Fronts<br>As an air mass moves across bodies of wate<br>eventually comes in contact with another<br>different characteristics. The boundary layer<br>types of air masses is known as a front. An<br>front of any type always means changes t<br>are imminent. | stable air mass<br>isibility is due<br>Warm Front<br>es cannot rise<br>A warm front occurs when a warm mass of air advances and<br>ar the surface.<br>replaces a body of colder air. Warm fronts move slowly,<br>uds and fog.<br>typically 10 to 25 miles per hour (mph). The slope of the<br>advancing front slides over the top of the cooler air and<br>gradually pushes it out of the area. Warm fronts contain<br>r and land, it warm air that often has very high humidity. As the warm<br>air mass with air is lifted, the temperature drops and condensation occurs.<br>between two<br>approaching Generally, prior to the passage of a warm front, cirriform<br>o the weather or stratiform clouds, along with fog, can be expected to<br>form along the frontal boundary. In the summer months,<br>cumulonimbus clouds (thunderstorms) are likely to develop. |
 | --- | --- |
 | A<br>mP<br>mT<br>cT | Standard air mass abbreviations: arctic (A), continental polar (cP),<br>maritime polar (mP), continental tropical (cT), and maritime tropical<br>(mT).<br>cP<br>mP<br>mT<br>mT |
 
-<a class="handbook-table-source" href="/handbooks/phak/FAA-H-8083-25C/tables/tbl-12-04-untitled.html">Open original</a>
+<a class="handbook-table-source" href="/handbooks/phak/FAA-H-8083-25C/tables/tbl-12-03-untitled.html">Open original</a>
 
-<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-12-05-untitled.html">
+<div class="handbook-table" data-source="/handbooks/phak/FAA-H-8083-25C/tables/tbl-12-04-untitled.html">
 <table><thead><tr><th>Equilibrium level</th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td>30,000 ft.</td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td>0 °C</td></tr></tbody></table>
 </div>

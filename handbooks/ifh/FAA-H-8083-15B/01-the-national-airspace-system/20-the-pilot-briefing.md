@@ -42,3 +42,6 @@ Communication frequencies are listed in the order in which
 they would be used during the approach. Frequencies for
 weather and related facilities are included, where applicable,
 such as ATIS, ASOS, AWOS, and AFSSs.
+
+
+![Figure 1-20. Terms/landing minima data.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-19-terms-landing-minima-data.png)

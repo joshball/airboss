@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Emergency Response Systems
+
+![Figure 18-13. Level turn.](/handbooks/afh/FAA-H-8083-3C/figures/fig-18-12-level-turn.png)

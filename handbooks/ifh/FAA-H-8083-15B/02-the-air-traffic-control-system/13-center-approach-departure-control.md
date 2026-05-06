@@ -189,3 +189,6 @@ scopes can be up to 6 minutes old, and thunderstorms can
 develop at rates exceeding 6,000 feet per minute (fpm). When
 encountering weather conditions that threaten the safety of
 the aircraft, the pilot may exercise emergency authority as
+
+
+![Figure 2-13. A/FD center frequencies listing.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-2-12-a-fd-center-frequencies-listing.png)

@@ -98,3 +98,6 @@ surface is inadequate due to an aft CG condition, an elevator down
 spring may be used to supply a mechanical load to lower the nose.
 Antiservo tab
 Balance weight
+
+
+![Figure 6-11. Aircraft with a T-tail design at a high AOA and an aft CG.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-09-aircraft-with-a-t-tail-design-at-a-high-aoa-and-.png)

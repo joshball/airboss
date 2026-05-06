@@ -12,3 +12,6 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 # Data Link Weather Products
 
 Data Link Weather Products
+
+
+![Figure 13-21. Graphical METAR legend display.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-20-graphical-metar-legend-display.png)

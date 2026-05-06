@@ -96,12 +96,6 @@ tend to push (i.e., lift) the less dense warm air aloft. On a grand scale, the t
 heating, and how high it will rise, is referred to as stability and is covered in Chapter 13, Atmospheric
 Stability.
 
-![Figure 12-4. Orographic Effects Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-2-00-orographic-effects-example.png)
-
-![Figure 12-5. Frictional Effects](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-3-00-frictional-effects.png)
-
-![Figure 12-6. Frontal Lift](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-3-01-frontal-lift.png)
-
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-12-4-00-air-parcel-vertical-motion-characteristics-parce.html">
 <table><caption>Table 12-1. Air Parcel Vertical Motion Characteristics 
 Parcel 

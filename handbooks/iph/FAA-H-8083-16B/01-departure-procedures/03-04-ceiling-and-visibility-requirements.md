@@ -33,3 +33,8 @@ sources, such as Automatic Terminal Information Service
 Automated Surface Observing System (ASOS), and FAA
 Automated Flight Service Station (AFSS) are published on
 approach charts as well. [Figure 1-9]
+
+
+![Figure 1-9. Examples of weather information of various flight  information publications (FLIP).](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-08-examples-of-weather-information-of-various-fligh.png)
+
+![Figure 1-10. RVR conversion table.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-09-rvr-conversion-table.png)

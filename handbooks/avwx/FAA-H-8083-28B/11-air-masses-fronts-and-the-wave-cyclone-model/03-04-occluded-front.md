@@ -30,5 +30,3 @@ front occlusion is unstable, the weather is more severe than the weather found i
 Embedded thunderstorms, rain, and fog are likely to occur.
 
 Figure 11-8. Occluded Front
-
-![Figure 11-8. Occluded Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-4-00-occluded-front.png)

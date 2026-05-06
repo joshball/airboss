@@ -44,3 +44,6 @@ heading of the aircraft changes. [Figure 8-28]
 The three coils are connected to three similar but smaller
 coils in a synchro inside the instrument case. The synchro
 rotates the dial of a radio magnetic indicator (RMI) or a HSI.
+
+
+![Figure 8-38. Vertical card magnetic compass.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-34-vertical-card-magnetic-compass.png)

@@ -10,3 +10,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Trim Technique
+
+![Figure 7-61. Insufficient cross-check. The problem is power and not nose-high. In this case, the pilot decreased pitch inappropriately.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-61-cross-check-supporting-instruments.png)

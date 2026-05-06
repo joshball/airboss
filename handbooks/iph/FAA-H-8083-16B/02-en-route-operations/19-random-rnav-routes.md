@@ -145,3 +145,6 @@ Authorized areas of
 en route operation
 Limitations, provisions,
 and reference paragraphs
+
+
+![Figure 2-19. Tower En Route Control (TEC) Northeast U.S. (Eastern).](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-13-tower-en-route-control-tec-northeast-u-s-eastern.png)

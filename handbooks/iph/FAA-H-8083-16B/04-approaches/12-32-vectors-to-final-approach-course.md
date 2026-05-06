@@ -77,3 +77,6 @@ gate.
 If specifically requested by the pilot, aircraft may
 be vectored to intercept the final approach course
 inside the approach gate but no closer than the FAF.
+
+
+![Figure 4-31. DME arc obstruction clearance.](/handbooks/iph/FAA-H-8083-16B/figures/fig-4-27-dme-arc-obstruction-clearance.png)

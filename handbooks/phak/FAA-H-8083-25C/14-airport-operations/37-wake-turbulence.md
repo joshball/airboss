@@ -20,3 +20,6 @@ turbulence generated within the vortices can damage aircraft
 components and equipment if encountered at close range. For
 this reason, a pilot must envision the location of the vortex
 wake and adjust the flight path accordingly.
+
+
+![Figure 14-37. Wind direction indicators.](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-37-wind-direction-indicators.png)

@@ -10,3 +10,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Climbing and Descending Turns
+
+![Figure 7-38. Change of airspeed during turn.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-7-38-change-of-airspeed-during-turn.png)

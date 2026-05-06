@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Introduction
+
+![Figure 13-1. Example of a weather radar scope.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-01-example-of-a-weather-radar-scope.png)

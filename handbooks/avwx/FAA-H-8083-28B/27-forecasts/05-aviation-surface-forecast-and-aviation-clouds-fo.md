@@ -48,7 +48,3 @@ Complete product information can be found on the AWC’s website.
 Figure 27-1. Aviation Surface Forecast Example
 
 Figure 27-2. Aviation Clouds Forecast Example
-
-![Figure 27-1. Aviation Surface Forecast Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-5-00-aviation-surface-forecast-example.png)
-
-![Figure 27-2. Aviation Clouds Forecast Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-5-01-aviation-clouds-forecast-example.png)

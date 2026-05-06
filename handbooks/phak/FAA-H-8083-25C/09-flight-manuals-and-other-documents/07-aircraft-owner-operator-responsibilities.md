@@ -38,3 +38,8 @@ is allowed on the aircraft, a pilot can maintain his or her
 aircraft in an airworthy condition. The goal of every pilot is
 a safe flight. Flight manuals and aircraft documentation are
 essential tools used to reach that goal.
+
+
+![Figure 9-7. Supplements provide information on optional equipment.](/handbooks/phak/FAA-H-8083-25C/figures/fig-9-05-supplements-provide-information-on-optional-equi.png)
+
+![Figure 9-10. FAA Form 8130-7, Special Airworthiness Certificate.](/handbooks/phak/FAA-H-8083-25C/figures/fig-9-08-faa-form-8130-7-special-airworthiness-certificat.png)

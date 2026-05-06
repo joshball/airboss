@@ -16,3 +16,6 @@ and has no air bubbles. The ball should also be resting at
 its lowest point. When taxiing, the turn coordinator should
 indicate a turn in the correct direction while the ball moves
 opposite the direction of the turn.
+
+
+![Figure 8-34. Utilization of a compass rose aids compensation for deviation errors.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-32-utilization-of-a-compass-rose-aids-compensation-.png)

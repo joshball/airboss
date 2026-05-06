@@ -39,3 +39,6 @@ can swing freely and align themselves with the wind direction.
 Since a wind tee or tetrahedron can also be manually set to
 align with the runway in use, a pilot should also look at the
 wind sock for wind information, if one is available.
+
+
+![Figure 14-22. Destination sign to the fixed-base operator (FBO).](/handbooks/phak/FAA-H-8083-25C/figures/fig-14-24-destination-sign-to-the-fixed-base-operator-fbo.png)

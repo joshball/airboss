@@ -70,5 +70,3 @@ $$
 The NHC, CPHC, and select WFOs issue many public tropical storm and hurricane/typhoon information
 products. Many are in web-based graphical format. For more information on these public forecasts, see the
 websites of the NHC, CPHC, WFO Guam, and WFOs along the Gulf Coast and the East Coast.
-
-![Figure 26-11. VAA in Graphical Format](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-6-1-00-vaa-in-graphical-format.png)

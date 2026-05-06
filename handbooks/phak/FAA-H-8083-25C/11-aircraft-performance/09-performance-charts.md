@@ -201,3 +201,8 @@ roll
 1,940
 - - -
 - - -
+
+
+![Figure 11-9. Comparison of maximum ROC between jet and propeller airplanes.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-08-comparison-of-maximum-roc-between-jet-and-propel.png)
+
+![Figure 11-20. Conditions notes chart.](/handbooks/phak/FAA-H-8083-25C/figures/fig-11-19-conditions-notes-chart.png)

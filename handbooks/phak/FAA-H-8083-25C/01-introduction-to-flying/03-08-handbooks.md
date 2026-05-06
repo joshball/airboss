@@ -26,3 +26,8 @@ approved by the FAA, and are specific to a particular make
 and model aircraft by serial number. This subject is covered
 in greater detail in Chapter 8, “Flight Manuals and Other
 Documents,” of this handbook. [Figure 1-16]
+
+
+![Figure 1-15. A sample of handbooks available to the public. Most  can be downloaded free of charge from the FAA website.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-13-a-sample-of-handbooks-available-to-the-public-mo.png)
+
+![Figure 1-14. Aeronautical Information Manual.](/handbooks/phak/FAA-H-8083-25C/figures/fig-1-14-aeronautical-information-manual.png)

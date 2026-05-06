@@ -84,3 +84,6 @@ on the crosswind leg, to the downwind leg position.
 If the takeoff is made into the wind, the wind will now be approximately perpendicular to the airplane’s flightpath. As a result, the
 pilot should turn or head the airplane slightly into the wind while on the crosswind leg to maintain a ground track that is perpendicular
 to the runway centerline extension.
+
+
+![Figure 8-3. Preferred entry from upwind leg side of airport (A). Alternate midfield entry from upwind leg side of airport (B).](/handbooks/afh/FAA-H-8083-3C/figures/fig-8-02-preferred-entry-from-upwind-leg-side-of-airport-.png)

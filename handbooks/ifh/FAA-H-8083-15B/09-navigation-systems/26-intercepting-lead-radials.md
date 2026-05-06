@@ -46,3 +46,6 @@ one unit may be used to provide azimuth information and the
 other set to the localizer frequency. Since these lead radials
 provide 7° of lead, a half-standard rate turn should be used
 until the LOC needle starts to move toward center.
+
+
+![Figure 9-26. A typical example (GNS 480) of a stand-alone GPS  receiver and display.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-25-a-typical-example-gns-480-of-a-stand-alone-gps-r.png)

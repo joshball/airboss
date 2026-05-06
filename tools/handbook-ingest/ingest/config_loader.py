@@ -200,7 +200,7 @@ class HandbookConfig:
     expected_pages: int | None = None
     page_offset: int = 0
     outline_overrides: list[dict[str, object]] = field(default_factory=list)
-    figure_prefix_pattern: str = r"Figure (\d+)-(\d+)\."
+    figure_prefix_pattern: str = r"^\s*Figure (\d+)-(\d+)\."
     table_prefix_pattern: str = r"Table (\d+)-(\d+)\."
     # `bookmark` (default) reads PyMuPDF's get_toc(); `content` falls back to
     # scanning page text for FAA-style chapter-page headers when the PDF's
@@ -493,7 +493,7 @@ def load_config(document_slug: str) -> HandbookConfig:
         expected_pages=raw.get("expected_pages"),
         page_offset=raw.get("page_offset", 0),
         outline_overrides=list(raw.get("outline_overrides", [])),
-        figure_prefix_pattern=raw.get("figure_prefix_pattern", r"Figure (\d+)-(\d+)\."),
+        figure_prefix_pattern=raw.get("figure_prefix_pattern", r"^\s*Figure (\d+)-(\d+)\."),
         table_prefix_pattern=raw.get("table_prefix_pattern", r"Table (\d+)-(\d+)\."),
         outline_strategy=outline_strategy,
         toc_file=(toc_file_raw.strip() if isinstance(toc_file_raw, str) and toc_file_raw.strip() else None),

@@ -43,3 +43,6 @@ ANG
 239 A
 MA239  5800’
 239 2.3NM
+
+
+![Figure 8-21. Turn indicators rely on controlled precession for their operation.](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-19-turn-indicators-rely-on-controlled-precession-fo.png)

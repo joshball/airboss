@@ -57,7 +57,3 @@ WAFS global wind and temperature forecasts are provided in grid point format (e.
 use in flight-planning systems. Chart format is also provided on the AWC’s website.
 
 Figure 27-9. WAFS Wind and Temperature Six-Hour Forecast at FL390—Example
-
-![Figure 27-8. Alaska Convective Outlook](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-8-1-00-alaska-convective-outlook.png)
-
-![Figure 27-9. WAFS Wind and Temperature Six-Hour Forecast at FL390—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-8-1-01-wafs-wind-and-temperature-six-hour-forecast-at-f.png)

@@ -29,3 +29,6 @@ minimum guideline for first aid for each of the indicated
 scenarios. Ultimately, the pilot should consult the MSDS
 for first aid procedures specific to the type of chemical and
 exposure scenario.
+
+
+![Figure 17-15. The eye’s blind spot.](/handbooks/phak/FAA-H-8083-25C/figures/fig-17-13-the-eye-s-blind-spot.png)

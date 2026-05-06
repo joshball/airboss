@@ -94,3 +94,8 @@ surface of the wing at higher angles of attack, thus lowering
 an aircraft’s stall speed. The fixed nature of leading edge cuffs
 extracts a penalty in maximum cruise airspeed, but recent
 advances in design and technology have reduced this penalty.
+
+
+![Figure 6-17. Five common types of flaps.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-14-five-common-types-of-flaps.png)
+
+![Figure 6-18. Leading edge high lift devices.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-15-leading-edge-high-lift-devices.png)

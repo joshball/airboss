@@ -30,3 +30,6 @@ pitch attitude at touchdown would be only enough to prevent the nose-wheel from 
 touched the surface. After touchdown, the pilot should avoid the tendency to apply forward pressure on the yoke, as this may result in
 wheelbarrowing and possible loss of control. The pilot should allow the airplane to decelerate normally, assisted by careful use of wheel
 brakes and avoid heavy braking until the wings are devoid of lift and the airplane’s full weight is resting on the landing gear.
+
+
+![Figure 9-7. Change in runway shape if approach becomes narrow or steep.](/handbooks/afh/FAA-H-8083-3C/figures/fig-9-06-change-in-runway-shape-if-approach-becomes-narro.png)

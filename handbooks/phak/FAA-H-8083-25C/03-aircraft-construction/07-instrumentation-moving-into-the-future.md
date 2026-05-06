@@ -49,3 +49,6 @@ attack indicator, and the slip-skid indicator. [Figure 3-19]
 
 Figure 3-18. Analog display (top) and digital display (bottom) from
 a Cessna 172.
+
+
+![Figure 3-7. Wing components.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-06-wing-components.png)

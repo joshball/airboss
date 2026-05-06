@@ -19,3 +19,6 @@ is the attitude indicator. The control instruments do not
 indicate aircraft speed or altitude. In order to determine these
 variables and others, a pilot must reference the performance
 instruments.
+
+
+![Figure 3-18. Analog display (top) and digital display (bottom) from  a Cessna 172.](/handbooks/phak/FAA-H-8083-25C/figures/fig-3-17-analog-display-top-and-digital-display-bottom-fr.png)

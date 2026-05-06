@@ -1819,5 +1819,3 @@ Forced landing
 7-2, 9-12, 11-13, 12-6
 Precautionary landing
 18-1, 18-8
-
-![Figure 18-5. Turning back to the runway after engine failure.](/handbooks/afh/FAA-H-8083-3C/figures/fig-18-00-turning-back-to-the-runway-after-engine-failure.png)

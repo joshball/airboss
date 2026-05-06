@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Introduction
+
+![Figure 2-1. Typical navigation/communication installation.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-2-01-typical-navigation-communication-installation.png)

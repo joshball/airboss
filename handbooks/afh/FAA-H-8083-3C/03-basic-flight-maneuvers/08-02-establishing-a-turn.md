@@ -89,3 +89,8 @@ Common errors in level turns are:
 9. Holding excessive rudder in the direction of turn.
 10. Gaining proficiency in turns in only one direction.
 11. Failure to coordinate the controls.
+
+
+![Figure 3-16. Visual reference for angle of bank.](/handbooks/afh/FAA-H-8083-3C/figures/fig-3-15-visual-reference-for-angle-of-bank.png)
+
+![Figure 3-17. Correct and incorrect posture while seated in the airplane.](/handbooks/afh/FAA-H-8083-3C/figures/fig-3-16-correct-and-incorrect-posture-while-seated-in-th.png)

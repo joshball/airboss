@@ -39,3 +39,10 @@ Figure 6-11. Aircraft with a T-tail design at a high AOA and an aft CG.
 example, the horizontal tail surfaces may be attached near
 the lower part of the vertical stabilizer, at the midpoint, or
 at the high point, as in the T-tail design.
+
+
+![Figure 6-8. Coupled ailerons and rudder.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-06-coupled-ailerons-and-rudder.png)
+
+![Figure 6-9. Flaperons on a Skystar Kitfox MK 7.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-07-flaperons-on-a-skystar-kitfox-mk-7.png)
+
+![Figure 6-10. The elevator is the primary control for changing the  pitch attitude of an aircraft.](/handbooks/phak/FAA-H-8083-25C/figures/fig-6-08-the-elevator-is-the-primary-control-for-changing.png)

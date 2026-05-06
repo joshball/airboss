@@ -64,3 +64,6 @@ subdial and align an indication of the outside air temperature
 with the pressure altitude being flown. This alignment causes
 the instrument pointer to indicate the TAS on the subdial.
 [Figure 5-12]
+
+
+![Figure 5-19. A compass correction card shows the deviation  correction for any heading.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-18-a-compass-correction-card-shows-the-deviation-co.png)

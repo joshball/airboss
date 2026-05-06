@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Attitude Indicator
+
+![Figure 8-9. Flight instrument indications in straight-and-level flight at normal cruise speed.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-8-08-flight-instrument-indications-in-straight-and-le.png)

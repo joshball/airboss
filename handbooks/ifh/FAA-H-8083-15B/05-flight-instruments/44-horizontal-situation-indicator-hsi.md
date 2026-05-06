@@ -47,3 +47,6 @@ a fluxgate; however, in few installations where a fluxgate is
 not installed, or in emergency operation, the heading must
 be checked against the magnetic compass occasionally and
 reset with the course select knob.
+
+
+![Figure 5-44. A Control Display Unit (CDU) used to control the  flight management system (FMS).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-43-a-control-display-unit-cdu-used-to-control-the-f.png)

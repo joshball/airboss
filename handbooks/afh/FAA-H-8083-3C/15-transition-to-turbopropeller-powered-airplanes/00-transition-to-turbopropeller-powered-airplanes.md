@@ -15,8 +15,4 @@ the handling of the airplane’s powerplant and its associated systems, which ar
 powered airplane also has the advantage of being equipped with a constant speed, full feathering and reversing propeller—something
 normally not found on piston-powered airplanes.
 
-![Figure 15-2. Fixed-shaft turboprop engine.](/handbooks/afh/FAA-H-8083-3C/figures/fig-15-00-fixed-shaft-turboprop-engine.png)
-
-![Figure 15-7. Engine instruments—split shaft/free turbine engine.](/handbooks/afh/FAA-H-8083-3C/figures/fig-15-01-engine-instruments-split-shaft-free-turbine-engi.png)
-
-![Figure 15-9. Typical individual power distribution bus.](/handbooks/afh/FAA-H-8083-3C/figures/fig-15-02-typical-individual-power-distribution-bus.png)
+![Figure 15-11. Example of a typical turboprop airplane takeoff and departure profile.](/handbooks/afh/FAA-H-8083-3C/figures/fig-15-09-example-of-a-typical-turboprop-airplane-takeoff-.png)

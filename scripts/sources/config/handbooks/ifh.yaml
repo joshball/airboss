@@ -85,7 +85,7 @@ outline_overrides: []
 title_overrides:
   '6': 'Airplane Attitude Instrument Flying'
   '7': 'Airplane Basic Flight Maneuvers'
-figure_prefix_pattern: 'Figure (\d+)-(\d+)\.'
+figure_prefix_pattern: '^\s*Figure (\d+)-(\d+)\.'
 table_prefix_pattern: 'Table (\d+)-(\d+)\.'
 
 heading_style:

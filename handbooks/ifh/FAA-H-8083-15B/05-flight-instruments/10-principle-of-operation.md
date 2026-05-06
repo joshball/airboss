@@ -65,3 +65,6 @@ millibars, the pointers indicate the pressure altitude. The pilot
 displays indicate altitude by adjusting the barometric scale
 to the local altimeter setting. The altimeter then indicates the
 height above the existing sea level pressure.
+
+
+![Figure 5-10. Rate of climb or descent in thousands of feet per minute.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-09-rate-of-climb-or-descent-in-thousands-of-feet-pe.png)

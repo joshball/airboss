@@ -9,3 +9,5 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Terrain Types
+
+![Figure 18-4. Tree landing.](/handbooks/afh/FAA-H-8083-3C/figures/fig-18-03-tree-landing.png)

@@ -78,3 +78,6 @@ or considered unacceptable for safety of flight. The pilot
 is responsible for requesting an amended clearance if ATC
 issues a clearance that would cause a pilot to deviate from
 a rule or regulation or would place the aircraft in jeopardy.
+
+
+![Figure 10-11. ILS RWY 7 Troy, Alabama.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-10-10-ils-rwy-7-troy-alabama.png)

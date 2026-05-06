@@ -36,5 +36,3 @@ clouds provide visual proof that mountain waves exist. However, these clouds may
 too dry.
 
 Figure 16-15. Schematic of Mountain Waves and Associated Clouds
-
-![Figure 16-15. Schematic of Mountain Waves and Associated Clouds](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-2-7-00-schematic-of-mountain-waves-and-associated-cloud.png)

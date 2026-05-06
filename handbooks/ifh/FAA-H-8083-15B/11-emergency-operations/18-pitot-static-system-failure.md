@@ -22,3 +22,6 @@ aircraft, the pilot could break the glass on the VSI. The VSI
 is not required for instrument flight, and breaking the glass
 provides the altimeter and the ASI a source of static pressure.
 This procedure could cause additional instrument errors.
+
+
+![Figure 11-18. A typical display on aircraft MFD when using TIS.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-11-17-a-typical-display-on-aircraft-mfd-when-using-tis.png)

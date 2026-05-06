@@ -116,3 +116,6 @@ emergency. The second and more subtle issue is that decisions
 made under pressure are sometimes executed based upon
 limited experience and the actions taken may be incorrect,
 incomplete, or insufficient to handle the situation.
+
+
+![Figure 2-20. The pilot has a certain capacity of doing work and handling tasks. However, there is a point where the tasking exceeds the  pilot’s capability. When this happens, tasks are either not performed properly or some are not performed at all.](/handbooks/phak/FAA-H-8083-25C/figures/fig-2-19-the-pilot-has-a-certain-capacity-of-doing-work-a.png)

@@ -41,3 +41,6 @@ until the minimum IFR altitude is reached. Following ODP
 assessment, a SID may still be established for the purposes
 of ATC flow management, system enhancement, or noise
 abatement.
+
+
+![Figure 1-16. New TERPS departure procedures.](/handbooks/iph/FAA-H-8083-16B/figures/fig-1-15-new-terps-departure-procedures.png)

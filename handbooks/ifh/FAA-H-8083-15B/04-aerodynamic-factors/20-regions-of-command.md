@@ -30,3 +30,6 @@ power setting can yield two speeds, points 1 and 2. This is
 because at point 1 there is high induced drag and low parasite
 drag, while at point 2 there is high parasite drag and low
 induced drag.
+
+
+![Figure 4-20. Aerodynamic effects of icing.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-4-17-aerodynamic-effects-of-icing.png)

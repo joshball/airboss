@@ -17,3 +17,6 @@ a problem. Descents/approaches to airports distant from the
 VOR/DME facility may not be possible because, during
 the approach, the aircraft may descend below the reception
 altitude of the facility at that distance.
+
+
+![Figure 9-32. The LAAS system working with GPS satellites,  reference receivers and radio transmitters which are located on or in the vicinity of the airport.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-30-the-laas-system-working-with-gps-satellites-refe.png)

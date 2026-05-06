@@ -185,24 +185,6 @@ Figure 24-15. TDWR Locations in the CONUS and Puerto Rico
 
 Figure 24-16. TDWR Coverage
 
-![Figure 24-7. A Plot of AMDAR Reports Received During a 24-Hour Period in 2019](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-00-a-plot-of-amdar-reports-received-during-a-24-hou.png)
-
-![Figure 24-8. Locations of WSR-88D Weather Radar in the CONUS](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-01-locations-of-wsr-88d-weather-radar-in-the-conus.png)
-
-![Figure 24-9. WSR-88D Weather Radar Coverage at 3,000 ft AGL, 6,000 ft AGL, and 10,000 ft AGL over the CONUS  and Puerto Rico](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-02-wsr-88d-weather-radar-coverage-at-3-000-ft-agl-6.png)
-
-![Figure 24-10. Additional Locations of WSR-88D Weather Radar and Coverage Outside of the CONUS](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-03-additional-locations-of-wsr-88d-weather-radar-an.png)
-
-![Figure 24-11. Example WSR-88D (NEXRAD) Weather Radar Echo Intensity Legend](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-04-example-wsr-88d-nexrad-weather-radar-echo-intens.png)
-
-![Figure 24-12. WSR-88D Weather Radar Composite Reflectivity, Single-Site Product Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-05-wsr-88d-weather-radar-composite-reflectivity-sin.png)
-
-![Figure 24-13. Creation of a Composite Reflectivity, Single-Site Product](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-06-creation-of-a-composite-reflectivity-single-site.png)
-
-![Figure 24-15. TDWR Locations in the CONUS and Puerto Rico](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-2-00-tdwr-locations-in-the-conus-and-puerto-rico.png)
-
-![Figure 24-16. TDWR Coverage](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-2-01-tdwr-coverage.png)
-
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-24-6-00-wsr-88d-weather-radar-precipitation-intensity-te.html">
 <table><caption>Table 24-8. WSR-88D Weather Radar Precipitation Intensity Terminology 
 Reflectivity 

@@ -21,3 +21,6 @@ the PFD and MFD can display all critical information that
 the other normally presents thereby providing redundancy
 (using a reversionary mode) not normally found in general
 aviation flight decks.
+
+
+![Figure 5-53. Multi-function display (MFD).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-50-multi-function-display-mfd.png)

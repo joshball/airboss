@@ -78,3 +78,6 @@ out of a turn. If, upon completion of a turn, the miniature
 aircraft is level and the helicopter is still turning, make a
 small change of bank attitude to center the turn needle and
 stop the movement of the heading indicator.
+
+
+![Figure 8-12. Flight instrument indications in a stabilized constant-airspeed climb.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-8-11-flight-instrument-indications-in-a-stabilized-co.png)

@@ -124,3 +124,6 @@ a thin, dashed line. When collocated, the missed approach
 holding pattern and procedure turn holding pattern are
 indicated as a solid, black line. Arrival holding patterns are
 depicted as thin, solid lines.
+
+
+![Figure 1-21. Airport legend and diagram.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-20-airport-legend-and-diagram.png)

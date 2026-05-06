@@ -28,3 +28,6 @@ to continuously maintain track on the centerline of the
 airway. [Figure 2-36] The pilot should continue on this
 course until it is time to change over to the inbound course
 to the Bellaire VOR.
+
+
+![Figure 2-10. Intermediate altitude sectors.](/handbooks/iph/FAA-H-8083-16B/figures/fig-2-08-intermediate-altitude-sectors.png)

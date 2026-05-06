@@ -21,3 +21,6 @@ the nature and severity of the problem. One critical error
 made during the decision-making process is incorrectly
 detecting the problem. In the previous example, the change
 that occurred was a yaw.
+
+
+![Figure 2-21. Electronic flight instrumentation comes in many  systems and provides a myriad of information to the pilot.](/handbooks/phak/FAA-H-8083-25C/figures/fig-2-20-electronic-flight-instrumentation-comes-in-many-.png)

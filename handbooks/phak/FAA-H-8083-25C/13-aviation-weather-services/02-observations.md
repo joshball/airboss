@@ -15,3 +15,6 @@ The data gathered from surface and upper altitude
 observations form the basis of all weather forecasts,
 advisories, and briefings. There are four types of weather
 observations: surface, upper air, radar, and satellite.
+
+
+![Figure 13-2. WSR-88D Weather Radar Echo Intensity Legend.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-02-wsr-88d-weather-radar-echo-intensity-legend.png)

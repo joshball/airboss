@@ -18,3 +18,6 @@ and then falls back to normal as the storm moves on. This
 cycle of pressure change may occur in 15 minutes. If the pilot
 does not receive a corrected altimeter setting, the altimeter
 may be more than 100 feet in error.
+
+
+![Figure 12-18. Depiction of winds on a surface weather chart.](/handbooks/phak/FAA-H-8083-25C/figures/fig-12-16-depiction-of-winds-on-a-surface-weather-chart.png)

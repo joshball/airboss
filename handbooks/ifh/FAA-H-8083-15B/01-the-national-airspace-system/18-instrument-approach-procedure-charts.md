@@ -36,3 +36,6 @@ sections, which include the margin identification, pilot
 briefing (and notes), plan view, profile view, landing
 minimums, and airport diagram. [Figure 1-10] An
 examination of each section follows.
+
+
+![Figure 1-18. IAP profile legend.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-1-17-iap-profile-legend.png)

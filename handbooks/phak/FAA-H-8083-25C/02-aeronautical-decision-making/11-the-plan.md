@@ -33,3 +33,6 @@ weather information should drive a decision, even if that
 decision is to continue on the current plan. Pilots of aircraft
 without datalink weather should get updated weather in flight
 through an FSS and/or Flight Watch.
+
+
+![Figure 2-11. A real-world example of how the 3P model guides decisions on a cross-country trip using the PAVE checklist.](/handbooks/phak/FAA-H-8083-25C/figures/fig-2-10-a-real-world-example-of-how-the-3p-model-guides-.png)

@@ -130,3 +130,8 @@ Figure 5-36. State information available to pilots through the FAA website.
 Figure 5-37. Map layer options and information available to pilots through the FAA website.
 
 Figure 5-38. Airport information available to pilots through the FAA website.
+
+
+![Figure 5-31. Alert area.](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-22-alert-area.png)
+
+![Figure 5-32. Temporary flight restriction (TFR).](/handbooks/iph/FAA-H-8083-16B/figures/fig-5-23-temporary-flight-restriction-tfr.png)

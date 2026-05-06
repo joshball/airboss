@@ -54,7 +54,3 @@ the FAA’s ATCSCC, the FAA’s ARTCC TMUs, and airline and corporate flight ope
 Figure 27-30 shows an example of a TCF.
 
 Figure 27-30. TCF Example
-
-![Figure 27-28. Day 1 Categorical Convective Outlook Graphic Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-2-00-day-1-categorical-convective-outlook-graphic-exa.png)
-
-![Figure 27-29. Categorical Outlook Legend for Days 1-3 Convective Outlook Graphic Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-2-01-categorical-outlook-legend-for-days-1-3-convecti.png)

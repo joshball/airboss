@@ -24,7 +24,3 @@ Precipitation close to the radar absorbs and scatters energy within the radar be
 any, energy will reach targets beyond the initial area of precipitation. Because of precipitation attenuation,
 distant targets (i.e., precipitation) may not be displayed on a radar image.
 The amount of precipitation attenuation is related to the wavelength of the radar (see Figure 15-5).
-
-![Figure 15-3. Wavelengths](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-5-00-wavelengths.png)
-
-![Figure 15-4. Precipitation Attenuation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-5-01-precipitation-attenuation.png)

@@ -18,5 +18,3 @@ be sufficient to initiate showers and thunderstorms if the air mass is sufficien
 A land breeze (see Figure 10-16) is a coastal breeze blowing from land to sea caused by the temperature
 difference when the sea surface is warmer than the adjacent land. Land breezes usually occur at night and
 during early morning.
-
-![Figure 10-15. Effects of Coastline Shape on a Sea Breeze](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-2-00-effects-of-coastline-shape-on-a-sea-breeze.png)

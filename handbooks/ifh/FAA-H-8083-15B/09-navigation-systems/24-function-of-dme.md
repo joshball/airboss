@@ -17,3 +17,6 @@ a DME is very accurate. The distance information can be
 used to determine the aircraft position or flying a track that
 is a constant distance from the station. This is referred to as
 a DME arc.
+
+
+![Figure 9-24. VOR/DME RNAV RWY 25 approach (excerpt).](/handbooks/ifh/FAA-H-8083-15B/figures/fig-9-24-vor-dme-rnav-rwy-25-approach-excerpt.png)

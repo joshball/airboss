@@ -39,3 +39,6 @@ This bank and its resultant necessary power setting reach the
 limit of this type of aircraft. An additional 10° bank increases
 the load factor by approximately 1 G, bringing it close to the
 yield point established for these aircraft. [Figure 5-54]
+
+
+![Figure 5-52. Two forces cause load factor during turns.](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-48-two-forces-cause-load-factor-during-turns.png)

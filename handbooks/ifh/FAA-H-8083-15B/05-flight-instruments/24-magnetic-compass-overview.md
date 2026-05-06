@@ -227,3 +227,6 @@ The end of one shaft is marked E-W, and its magnets affect
 the compass when the aircraft is pointed east or west. The
 other shaft is marked N-S and its magnets affect the compass
 when the aircraft is pointed north or south.
+
+
+![Figure 5-24. The current in each of the three pickup coils changes  with the heading of the aircraft.](/handbooks/ifh/FAA-H-8083-15B/figures/fig-5-23-the-current-in-each-of-the-three-pickup-coils-ch.png)

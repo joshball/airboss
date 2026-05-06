@@ -18,3 +18,6 @@ desired energy state; and 2) unintentional, irreversible deceleration and/or sin
 first risk involves unintended altitude-airspeed deviations (refer to Managing Energy Errors section). The second risk entails
 unforeseen, continuous airspeed and/or altitude loss coupled with little or no available excess power in a given flight condition (refer
 to Preventing Irreversible Deceleration and/or Sink Rate section).
+
+
+![Figure 4-5. The effect of increased load factor on total drag and power required at different airspeeds.](/handbooks/afh/FAA-H-8083-3C/figures/fig-4-03-the-effect-of-increased-load-factor-on-total-dra.png)

@@ -17,3 +17,6 @@ different government agencies, including the FAA, National
 Oceanic and Atmospheric Administration (NOAA), and the
 NWS work in conjunction with private aviation companies
 to provide different means of accessing weather information.
+
+
+![Figure 13-3. WSR-88D Weather Radar Precipitation Intensity  Terminology.](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-00-wsr-88d-weather-radar-precipitation-intensity-te.png)
