@@ -1,14 +1,16 @@
 ---
+id: tracking-system-overhaul
 title: Tracking system overhaul
 product: platform
-category: [tracking, agent-workflow]
-feature: tracking-system-overhaul
-type: spec
+category: docs
 status: signed-off
 agent_review_status: pending
 human_review_status: pending
+created: 2026-05-04
+owner: agent
 depends_on: []
 unblocks: [hangar-roadmap-view, hangar-review-queue]
+tags: [tracking, agent-workflow]
 ---
 
 # Tracking system overhaul

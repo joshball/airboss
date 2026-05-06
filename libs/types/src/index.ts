@@ -11,3 +11,9 @@ export {
 	type StructuredCitationCommon,
 } from './citation';
 export type { RelevanceEntry } from './relevance';
+export {
+	type WorkPackage,
+	type WorkPackageFrontmatter,
+	type WorkPackageValidationError,
+	workPackageFrontmatterSchema,
+} from './work-package';
