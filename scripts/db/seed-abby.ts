@@ -290,7 +290,7 @@ async function seedAbbyScenarios(databaseUrl: string, userId: string): Promise<I
  * case (the standard `seed-all` order does this).
  */
 async function seedAbbyGoal(databaseUrl: string, userId: string): Promise<void> {
-	const { applyCertGoalsToPrimaryGoal } = await import('@ab/bc-study');
+	const { applyCertGoalsToPrimaryGoal } = await import('@ab/bc-study/server');
 	const client = postgres(databaseUrl);
 	const db = drizzle(client);
 	try {
