@@ -145,6 +145,57 @@ describe('asReferenceArray', () => {
 			{ field: 'section_title', expected: 'Climbs' },
 		]);
 	});
+
+	it('parses a structured citation with valid redirected_from', () => {
+		const result = asReferenceArray([
+			{
+				ref: 'airboss-ref:handbooks/afh/4',
+				chapter_title: 'Energy Management: Mastering Altitude and Airspeed Control',
+				redirected_from: 'airboss-ref:handbooks/afh/FAA-H-8083-3B/4',
+			},
+		]);
+		expect(result.errors).toHaveLength(0);
+		expect(result.warnings).toHaveLength(0);
+		const parsed = result.references[0];
+		expect(parsed).toBeDefined();
+		if (parsed === undefined) return;
+		if (parsed.shape !== 'ref') return;
+		expect(parsed.redirectedFrom).toBe('airboss-ref:handbooks/afh/FAA-H-8083-3B/4');
+		expect(parsed.sentinels).toEqual([
+			{ field: 'chapter_title', expected: 'Energy Management: Mastering Altitude and Airspeed Control' },
+		]);
+	});
+
+	it('rejects a structured citation with malformed redirected_from', () => {
+		const result = asReferenceArray([
+			{
+				ref: 'airboss-ref:handbooks/afh/3',
+				redirected_from: 'not-a-uri',
+			},
+		]);
+		expect(result.warnings).toHaveLength(0);
+		expect(result.errors).toHaveLength(1);
+		const message = result.errors[0];
+		expect(message).toBeDefined();
+		if (message === undefined) return;
+		expect(message).toContain('redirected_from');
+		expect(message).toContain('not a parseable airboss-ref URI');
+	});
+
+	it('parses a structured citation without redirected_from (field is optional)', () => {
+		const result = asReferenceArray([
+			{
+				ref: 'airboss-ref:handbooks/afh/3',
+				chapter_title: 'Basic Flight Maneuvers',
+			},
+		]);
+		expect(result.errors).toHaveLength(0);
+		const parsed = result.references[0];
+		expect(parsed).toBeDefined();
+		if (parsed === undefined) return;
+		if (parsed.shape !== 'ref') return;
+		expect(parsed.redirectedFrom).toBeNull();
+	});
 });
 
 describe('computeLocatorPrecision', () => {
@@ -156,6 +207,7 @@ describe('computeLocatorPrecision', () => {
 				sentinels: [],
 				quote: null,
 				note: '',
+				redirectedFrom: null,
 			}),
 		).toBe('doc-or-chapter-level');
 	});
@@ -168,6 +220,7 @@ describe('computeLocatorPrecision', () => {
 				sentinels: [],
 				quote: null,
 				note: '',
+				redirectedFrom: null,
 			}),
 		).toBe('edition-sensitive');
 	});
@@ -180,6 +233,7 @@ describe('computeLocatorPrecision', () => {
 				sentinels: [],
 				quote: null,
 				note: '',
+				redirectedFrom: null,
 			}),
 		).toBe('edition-sensitive');
 	});
@@ -192,6 +246,7 @@ describe('computeLocatorPrecision', () => {
 				sentinels: [],
 				quote: 'verbatim text',
 				note: '',
+				redirectedFrom: null,
 			}),
 		).toBe('edition-sensitive');
 	});
@@ -221,6 +276,7 @@ describe('serializeReferenceForDb', () => {
 				sentinels: [{ field: 'chapter_title', expected: 'Basic Flight Maneuvers' }],
 				quote: null,
 				note: 'contextual note',
+				redirectedFrom: null,
 			}),
 		).toEqual({
 			ref: 'airboss-ref:handbooks/afh/3',
@@ -237,6 +293,7 @@ describe('serializeReferenceForDb', () => {
 				sentinels: [],
 				quote: null,
 				note: '',
+				redirectedFrom: null,
 			}),
 		).toEqual({ ref: 'airboss-ref:handbooks/afh/3' });
 	});
@@ -249,10 +306,28 @@ describe('serializeReferenceForDb', () => {
 				sentinels: [],
 				quote: 'lift equals weight in steady flight',
 				note: '',
+				redirectedFrom: null,
 			}),
 		).toEqual({
 			ref: 'airboss-ref:handbooks/afh/3?at=8083-3C',
 			quote: 'lift equals weight in steady flight',
+		});
+	});
+
+	it('serialises redirected_from when populated', () => {
+		expect(
+			serializeReferenceForDb({
+				shape: 'ref',
+				ref: 'airboss-ref:handbooks/afh/3',
+				sentinels: [{ field: 'chapter_title', expected: 'Basic Flight Maneuvers' }],
+				quote: null,
+				note: '',
+				redirectedFrom: 'airboss-ref:handbooks/afh/FAA-H-8083-3B/3',
+			}),
+		).toEqual({
+			ref: 'airboss-ref:handbooks/afh/3',
+			chapter_title: 'Basic Flight Maneuvers',
+			redirected_from: 'airboss-ref:handbooks/afh/FAA-H-8083-3B/3',
 		});
 	});
 });

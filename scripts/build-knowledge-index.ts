@@ -37,7 +37,12 @@ import {
 	STUDY_PRIORITY_VALUES,
 } from '@ab/constants/study';
 import type { ParsedIdentifier, ValidationFinding } from '@ab/sources';
-import { type CitationSentinel, type SentinelField, validateSentinelFieldName } from '@ab/sources/sentinels.ts';
+import {
+	type CitationSentinel,
+	type SentinelField,
+	validateRedirectedFrom,
+	validateSentinelFieldName,
+} from '@ab/sources/sentinels.ts';
 import { parse as parseYaml } from 'yaml';
 
 // ---------------------------------------------------------------------------
@@ -94,6 +99,15 @@ interface LegacyParsedReference {
  * (validated by `validateSentinelFieldName`). When `quote` is present OR
  * the locator includes `?page=`/`?paragraph=`, the citation is
  * edition-sensitive and the validator requires an explicit pin.
+ *
+ * `redirectedFrom` is the well-known non-sentinel field introduced
+ * alongside the sentinel vocabulary -- it records the original
+ * `airboss-ref:` URI a citation pointed at before a human override moved
+ * it (typically the legacy citation parsed by the migration script).
+ * Validator parses the value via `parseIdentifier` but does not look it up
+ * in the registry; the original target may be a retired edition, which is
+ * exactly the case the field exists to record. Future-proofed for a list
+ * of redirects but ships single-value-only.
  */
 interface RefParsedReference {
 	readonly shape: 'ref';
@@ -101,6 +115,7 @@ interface RefParsedReference {
 	readonly sentinels: ReadonlyArray<{ readonly field: SentinelField; readonly expected: string }>;
 	readonly quote: string | null;
 	readonly note: string;
+	readonly redirectedFrom: string | null;
 }
 
 type ParsedReference = LegacyParsedReference | RefParsedReference;
@@ -360,8 +375,10 @@ interface RefParseSlot {
 /**
  * Parse a structured citation entry. The shape is `ref:` URI plus zero or
  * more flat sentinel fields drawn from the canonical vocabulary
- * (`SENTINEL_FIELDS`), an optional `quote`, and an optional `note`. Unknown
- * fields are rejected as ERROR (typo defense per amendment D1).
+ * (`SENTINEL_FIELDS`), zero or more well-known non-sentinel fields drawn
+ * from `WELL_KNOWN_CITATION_FIELDS` (today: `redirected_from`), an
+ * optional `quote`, and an optional `note`. Unknown fields are rejected
+ * as ERROR (typo defense per amendment D1).
  */
 function parseRefReference(obj: Record<string, unknown>, index: number): RefParseSlot {
 	const ref = obj.ref;
@@ -371,6 +388,7 @@ function parseRefReference(obj: Record<string, unknown>, index: number): RefPars
 	const sentinels: Array<{ readonly field: SentinelField; readonly expected: string }> = [];
 	let quote: string | null = null;
 	let note = '';
+	let redirectedFrom: string | null = null;
 	const allowedNonSentinel: ReadonlySet<string> = new Set(['ref', 'quote', 'note']);
 	for (const [key, raw] of Object.entries(obj)) {
 		if (allowedNonSentinel.has(key)) {
@@ -392,10 +410,34 @@ function parseRefReference(obj: Record<string, unknown>, index: number): RefPars
 			}
 			continue;
 		}
-		// Anything else must be a canonical sentinel field per amendment D1.
+		// Anything else must be a canonical sentinel or well-known field per
+		// amendment D1 + the well-known-fields subsection of §2.
 		const validation = validateSentinelFieldName(key);
-		if (validation.kind !== 'ok') {
+		if (validation.kind === 'unknown-field') {
 			return { reference: null, error: `references[${index}]: ${validation.message}` };
+		}
+		if (validation.kind === 'ok-well-known') {
+			// Today the only well-known field is `redirected_from`. The switch
+			// fans out as the vocabulary grows so each field can carry its own
+			// validator without a generic catch-all that would silently accept
+			// future fields with weaker validation.
+			if (validation.field === 'redirected_from') {
+				const result = validateRedirectedFrom(raw);
+				if (!result.ok) {
+					return { reference: null, error: `references[${index}]: ${result.message}` };
+				}
+				redirectedFrom = result.value;
+				continue;
+			}
+			// Defensive exhaustive check -- if a new well-known field is added to
+			// the vocabulary without a parser branch here, surface it as ERROR
+			// instead of silently dropping the value.
+			const exhaustive: never = validation.field;
+			void exhaustive;
+			return {
+				reference: null,
+				error: `references[${index}]: well-known field '${key}' has no schema parser branch`,
+			};
 		}
 		if (typeof raw !== 'string' || raw.length === 0) {
 			return {
@@ -412,6 +454,7 @@ function parseRefReference(obj: Record<string, unknown>, index: number): RefPars
 			sentinels,
 			quote,
 			note,
+			redirectedFrom,
 		},
 		error: null,
 	};
@@ -614,6 +657,7 @@ function serializeReferenceForDb(ref: ParsedReference): Record<string, unknown> 
 	for (const sentinel of ref.sentinels) {
 		out[sentinel.field] = sentinel.expected;
 	}
+	if (ref.redirectedFrom !== null && ref.redirectedFrom.length > 0) out.redirected_from = ref.redirectedFrom;
 	if (ref.quote !== null && ref.quote.length > 0) out.quote = ref.quote;
 	if (ref.note.length > 0) out.note = ref.note;
 	return out;
