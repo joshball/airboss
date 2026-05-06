@@ -1,8 +1,22 @@
 ---
-status: done
-shipped: PR #278 (2026-04-28) -- option 2 (fold into bc-study)
-source: 2026-04-27 architecture review
+id: bc-citations-coupling
+title: 'Decide: own libs/bc/citations or fold into bc-study'
+product: study
+category: platform
+status: in-flight
+agent_review_status: done
+human_review_status: pending
+created: 2026-04-28
+owner: user
+depends_on: []
+unblocks: []
+tags: [architecture, citations]
+legacy_fields:
+  shipped: 'PR #278 (2026-04-28) -- option 2 (fold into bc-study)'
+  source: '2026-04-27 architecture review'
 ---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
 
 # Decide: own `libs/bc/citations` or fold into `bc-study`
 

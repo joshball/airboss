@@ -1,12 +1,25 @@
 ---
-status: done
-started: 2026-04-29
-shipped: 2026-04-29
-trigger: when PFD components have a second consumer (sim glass-cockpit overlay, avionics MFD, or another tape-style instrument page)
-note: original trigger ("when apps/avionics/ exists") fired via PRs #291, #294, #297; WP rewritten in PR #292 to track the second-consumer trigger. Trigger fired 2026-04-29 -- sim mounted a Glass PFD demo at /glass-pfd as the second consumer, and the PFD set was promoted to `libs/activities/src/pfd/` in the same PR. Sibling specs (content-citations, card-page-and-cross-references, memory-review-load-as-action) use the same `deferred -> active -> done` lifecycle for trigger-gated work.
-source: 2026-04-27 architecture review
-resolved_by: docs/products/avionics/work-packages/avionics-app-scaffold/
+id: extract-sim-instruments
+title: 'Promote PFD components to libs/activities/pfd/'
+product: sim
+category: platform
+status: in-flight
+agent_review_status: done
+human_review_status: pending
+created: 2026-04-28
+owner: user
+depends_on: []
+unblocks: []
+tags: [extraction, sim, activities]
+legacy_fields:
+  started: 2026-04-29
+  shipped: 2026-04-29
+  trigger: 'when PFD components have a second consumer (sim glass-cockpit overlay, avionics MFD, or another tape-style instrument page)'
+  source: '2026-04-27 architecture review'
+  resolved_by: 'docs/products/avionics/work-packages/avionics-app-scaffold/'
 ---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
 
 # Promote PFD components to `libs/activities/pfd/`
 

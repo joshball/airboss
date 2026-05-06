@@ -1,13 +1,24 @@
 ---
-title: 'Spec: Section extraction contract v2'
+id: section-extraction-contract-v2
+title: 'Section extraction contract v2'
 product: platform
-feature: section-extraction-contract-v2
-type: spec
-status: done
-review_status: done
-closed_at: '2026-04-30'
-closed_by: 'PR #366 (Phase 4 v4 production run) + housekeeping'
+category: platform
+status: in-flight
+agent_review_status: done
+human_review_status: pending
+created: 2026-04-29
+owner: user
+depends_on: []
+unblocks: []
+tags: [ingestion, extraction, prompt]
+legacy_fields:
+  feature: section-extraction-contract-v2
+  type: spec
+  closed_at: '2026-04-30'
+  closed_by: 'PR #366 (Phase 4 v4 production run) + housekeeping'
 ---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
 
 # Spec: Section extraction contract v2
 

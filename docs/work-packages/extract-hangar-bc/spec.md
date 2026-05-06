@@ -1,9 +1,23 @@
 ---
-status: done
-shipped: PR #284 (2026-04-28)
-trigger: after the 2026-04-27 fix PR merges; tracked as the next architecture cleanup before any net-new hangar feature
-source: 2026-04-27 architecture + backend reviews
+id: extract-hangar-bc
+title: 'Extract libs/bc/hangar/'
+product: hangar
+category: platform
+status: in-flight
+agent_review_status: done
+human_review_status: pending
+created: 2026-04-28
+owner: user
+depends_on: []
+unblocks: []
+tags: [architecture, extraction]
+legacy_fields:
+  shipped: 'PR #284 (2026-04-28)'
+  trigger: 'after the 2026-04-27 fix PR merges; tracked as the next architecture cleanup before any net-new hangar feature'
+  source: '2026-04-27 architecture + backend reviews'
 ---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
 
 # Extract `libs/bc/hangar/`
 

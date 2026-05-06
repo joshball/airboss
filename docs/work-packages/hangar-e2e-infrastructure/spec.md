@@ -1,11 +1,19 @@
 ---
-title: 'Spec: Hangar Playwright e2e infrastructure'
+id: hangar-e2e-infrastructure
+title: 'Hangar Playwright e2e infrastructure'
 product: hangar
-feature: hangar-e2e-infrastructure
-type: spec
-status: pending
-review_status: pending
+category: platform
+status: in-flight
+agent_review_status: pending
+human_review_status: pending
 created: 2026-04-30
+owner: agent
+depends_on: []
+unblocks: []
+tags: [e2e, testing, hangar]
+legacy_fields:
+  feature: hangar-e2e-infrastructure
+  type: spec
 ---
 
 # Spec: Hangar Playwright e2e infrastructure

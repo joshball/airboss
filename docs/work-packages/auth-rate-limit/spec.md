@@ -1,9 +1,23 @@
 ---
-status: done
-shipped: PR #284 (2026-04-28)
-trigger: before public/non-allowlisted signups are enabled, OR if observed brute-force traffic
-source: 2026-04-27 security review
+id: auth-rate-limit
+title: 'Application-level rate limit on auth surfaces'
+product: platform
+category: platform
+status: in-flight
+agent_review_status: done
+human_review_status: pending
+created: 2026-04-28
+owner: user
+depends_on: []
+unblocks: []
+tags: [security, auth]
+legacy_fields:
+  shipped: 'PR #284 (2026-04-28)'
+  trigger: 'before public/non-allowlisted signups are enabled, OR if observed brute-force traffic'
+  source: '2026-04-27 security review'
 ---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
 
 # Application-level rate limit on auth surfaces
 
