@@ -1,11 +1,22 @@
 ---
+id: hangar-platform-dashboard
 title: Hangar Platform Dashboard -- Spec
 product: hangar
-feature: hangar-platform-dashboard
-type: spec
-status: ready-for-review
-review_status: pending
-depends_on: hangar-review-queue
+category: feature
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-05-04
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - admin
+  - dashboard
+legacy_fields:
+  feature: hangar-platform-dashboard
+  type: spec
+  review_status: pending
 ---
 
 # Hangar Platform Dashboard -- Spec

@@ -1,11 +1,25 @@
 ---
-title: 'Spec: Hangar Users Editing'
+id: hangar-users-editing
+title: "Spec: Hangar Users Editing"
 product: hangar
-feature: hangar-users-editing
-type: spec
-status: shipped
-review_status: done
+category: feature
+status: in-flight
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-30
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - admin
+  - users
+legacy_fields:
+  feature: hangar-users-editing
+  type: spec
+  review_status: done
 ---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
 
 # Spec: Hangar Users Editing
 

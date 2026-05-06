@@ -1,7 +1,21 @@
 ---
-status: deferred
-trigger: when sim scenario seeding/editing moves into hangar
-source: 2026-04-27 schema review
+id: sim-scenario-table
+title: Promote sim manifests to a `sim.scenario` table
+product: sim
+category: feature
+status: abandoned
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-28
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - scenarios
+  - schema
+legacy_fields:
+  trigger: when sim scenario seeding/editing moves into hangar
+  source: 2026-04-27 schema review
 ---
 
 # Promote sim manifests to a `sim.scenario` table

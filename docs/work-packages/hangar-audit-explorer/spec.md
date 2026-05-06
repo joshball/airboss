@@ -1,13 +1,26 @@
 ---
-title: 'Spec: Hangar Audit Explorer'
+id: hangar-audit-explorer
+title: "Spec: Hangar Audit Explorer"
 product: hangar
-feature: hangar-audit-explorer
-type: spec
-status: shipped
-review_status: pending
+category: feature
+status: in-flight
+agent_review_status: pending
+human_review_status: pending
 created: 2026-04-30
-shipped: 2026-04-30
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - audit
+  - admin
+legacy_fields:
+  feature: hangar-audit-explorer
+  type: spec
+  review_status: pending
+  shipped: 2026-04-30
 ---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
 
 # Spec: Hangar Audit Explorer
 

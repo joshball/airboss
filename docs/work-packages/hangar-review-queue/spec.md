@@ -1,10 +1,22 @@
 ---
+id: hangar-review-queue
 title: Hangar Review Queue -- Spec
 product: hangar
-feature: hangar-review-queue
-type: spec
-status: ready-for-review
-review_status: pending
+category: feature
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-05-03
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - review
+  - admin
+legacy_fields:
+  feature: hangar-review-queue
+  type: spec
+  review_status: pending
 ---
 
 # Hangar Review Queue -- Spec

@@ -1,9 +1,21 @@
 ---
-title: 'Spec: Sim-Scenario / Study-Card Mapping'
+id: sim-card-mapping
+title: "Spec: Sim-Scenario / Study-Card Mapping"
 product: study
-feature: sim-card-mapping
-type: spec
-status: unread
+category: feature
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-26
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - sim
+  - cards
+legacy_fields:
+  feature: sim-card-mapping
+  type: spec
 ---
 
 # Spec: Sim-Scenario / Study-Card Mapping

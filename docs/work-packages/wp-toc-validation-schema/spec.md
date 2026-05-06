@@ -1,10 +1,22 @@
 ---
-title: 'Spec: WP-TOC-VALIDATION-SCHEMA -- TOC validation persistence shape'
+id: wp-toc-validation-schema
+title: "Spec: WP-TOC-VALIDATION-SCHEMA -- TOC validation persistence shape"
 product: hangar
-feature: wp-toc-validation-schema
-type: spec
+category: feature
 status: draft
-review_status: pending
+agent_review_status: pending
+human_review_status: pending
+created: 2026-05-03
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - validation
+  - schema
+legacy_fields:
+  feature: wp-toc-validation-schema
+  type: spec
+  review_status: pending
 ---
 
 # WP-TOC-VALIDATION-SCHEMA: TOC validation persistence shape
