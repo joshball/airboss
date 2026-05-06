@@ -25,6 +25,7 @@ import { commitIngestBatch, getEntryLifecycle } from '../registry/lifecycle.ts';
 import type { Edition, SourceEntry, SourceId } from '../types.ts';
 import { type CacheLoadResult, loadEcfrXml } from './cache.ts';
 import { writeDerivativeTree } from './derivative-writer.ts';
+import { writeCfrNavTree } from './nav-tree.ts';
 import {
 	type NormalizedPart,
 	type NormalizedSection,
@@ -121,6 +122,9 @@ export async function runIngest(args: IngestOneTitleArgs): Promise<IngestReport>
 			parts: partsAcc,
 			subparts: subpartsAcc,
 			sections: sectionsAcc,
+			// Part-filter walks have no chapter/subchapter context (the XML
+			// root is `DIV5 TYPE="PART"`, no chapter ancestor in the tree).
+			navTree: null,
 		};
 		const first = cacheResults[0];
 		if (first === undefined) {
@@ -174,6 +178,21 @@ export async function runIngest(args: IngestOneTitleArgs): Promise<IngestReport>
 			};
 			editionsAcc.set(entry.id, [...existingEditions, newEdition]);
 		}
+	}
+
+	// 5a. Write nav-tree sidecar (chapter/subchapter -> part skeleton). Only
+	// the full-title walk yields a non-null nav tree; part-filtered titles
+	// (Title 49) skip this -- they have no chapter ancestor in the XML.
+	if (aggregateTree.navTree !== null) {
+		writeCfrNavTree({
+			// `args.title` is the string literal `'14' | '49'`; the nav-tree API
+			// keys URLs by numeric title id, so coerce up-front rather than
+			// repeating the cast at every call site.
+			title: args.title === '14' ? 14 : 49,
+			editionDate: args.editionDate,
+			outRoot: args.outRoot,
+			raw: aggregateTree.navTree,
+		});
 	}
 
 	// 5. Write derivatives

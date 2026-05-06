@@ -47,6 +47,14 @@ import {
 	type ReferenceKind,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
+import {
+	buildEcfrUrl,
+	buildPartUrl,
+	buildSectionUrl,
+	type CfrTitleNumber,
+	findChapterForPart,
+	getCfrNavTree,
+} from '@ab/sources';
 import { type ErrataDisplay, formatErrataForDisplay, listErrataForSection } from './reference-errata';
 import {
 	getFlatSection,
@@ -95,11 +103,23 @@ export interface ReferenceCardCopy {
 	scope?: string;
 }
 
+/**
+ * Generic external-link shape carried by every card variant. `label` is the
+ * publisher tag the card renders next to the link icon ("eCFR", "FAA",
+ * "NTSB"). `url` is the canonical publisher URL.
+ */
+export interface RegulationsExternalLink {
+	url: string;
+	label: string;
+}
+
 /** Card on the landing page -- one bucket per `LIBRARY_REGULATIONS_KIND`. */
 export interface RegulationsBucketCard extends ReferenceCardCopy {
 	kind: LibraryRegulationsKind;
 	label: string;
 	count: number;
+	/** Canonical publisher URL for this kind (eCFR title for CFR; FAA index for others). */
+	external: RegulationsExternalLink | null;
 }
 
 /** Card on the kind page -- one CFR Part, AIM chapter, or AC series. */
@@ -107,6 +127,13 @@ export interface RegulationsGroupCard extends ReferenceCardCopy {
 	groupKey: string;
 	label: string;
 	referenceCount: number;
+	/** eCFR Part URL for CFR groups; null for AC-series buckets / AIM chapters. */
+	external: RegulationsExternalLink | null;
+	/** Chapter id from nav-tree YAML (CFR only); null when unknown. */
+	chapterId: string | null;
+	chapterName: string | null;
+	subchapterId: string | null;
+	subchapterName: string | null;
 }
 
 /** Umbrella card -- a reference rendered as a link to its external publisher. */
@@ -127,6 +154,8 @@ export interface RegulationsSectionRow {
 	code: string;
 	title: string;
 	ordinal: number;
+	/** Canonical eCFR section URL (CFR only); null for non-CFR groups. */
+	external: RegulationsExternalLink | null;
 }
 
 /** Reference summary embedded in the detail view payload. */
@@ -172,6 +201,8 @@ export interface RegulationsSiblingRow {
 	code: string;
 	title: string;
 	ordinal: number;
+	/** Canonical eCFR URL for the sibling (CFR only); null otherwise. */
+	external: RegulationsExternalLink | null;
 }
 
 /** Knowledge node summary surfaced by the citing-nodes panel. */
@@ -195,6 +226,13 @@ export interface RegulationsLandingView {
 	buckets: RegulationsBucketCard[];
 }
 
+/** Compact summary of a chapter bucket for the kind-page header strip. */
+export interface RegulationsChapterSummary {
+	id: string;
+	name: string;
+	partCount: number;
+}
+
 /** Group payload -- `/library/regulations/[kind]`. */
 export interface RegulationsGroupView extends ReferenceCardCopy {
 	view: 'group';
@@ -202,6 +240,10 @@ export interface RegulationsGroupView extends ReferenceCardCopy {
 	kindLabel: string;
 	groups: RegulationsGroupCard[];
 	umbrellas: RegulationsUmbrellaCard[];
+	/** Canonical eCFR title URL (CFR only); null otherwise. */
+	external: RegulationsExternalLink | null;
+	/** Title-level chapter summary from nav-tree YAML (CFR only); empty otherwise. */
+	chapters: RegulationsChapterSummary[];
 }
 
 /** Section list payload -- `/library/regulations/[kind]/[group]`. */
@@ -213,6 +255,13 @@ export interface RegulationsSectionListView extends ReferenceCardCopy {
 	groupLabel: string;
 	umbrellas: RegulationsUmbrellaCard[];
 	sections: RegulationsSectionRow[];
+	/** Canonical eCFR Part URL (CFR only); null otherwise. */
+	external: RegulationsExternalLink | null;
+	/** Chapter id (CFR only); null otherwise. */
+	chapterId: string | null;
+	chapterName: string | null;
+	subchapterId: string | null;
+	subchapterName: string | null;
 }
 
 /** Section detail payload -- `/library/regulations/[kind]/[group]/[section]`. */
@@ -228,6 +277,13 @@ export interface RegulationsDetailView {
 	readState: RegulationsReadState;
 	citingNodes: RegulationsCitingNode[];
 	errata: ErrataDisplay[];
+	/** Canonical eCFR section URL (CFR only); null otherwise. */
+	external: RegulationsExternalLink | null;
+	/** Chapter id from nav-tree YAML (CFR only); null otherwise. */
+	cfrChapterId: string | null;
+	cfrChapterName: string | null;
+	cfrSubchapterId: string | null;
+	cfrSubchapterName: string | null;
 }
 
 export type RegulationsView =
@@ -405,6 +461,68 @@ function labelForGroup(kind: LibraryRegulationsKind, group: string): string {
 }
 
 // ---------------------------------------------------------------------------
+// CFR external-link helpers (eCFR canonical URLs)
+//
+// Single label "eCFR" for everything in the CFR family per VOCABULARY.md.
+// Section codes flow in the same dotted form the seeder writes (e.g. "91.103").
+// ---------------------------------------------------------------------------
+
+const ECFR_LABEL = 'eCFR';
+
+function cfrTitleNumberFromKind(kind: LibraryRegulationsKind): CfrTitleNumber | null {
+	if (kind === LIBRARY_REGULATIONS_KINDS.CFR_14) return 14;
+	if (kind === LIBRARY_REGULATIONS_KINDS.CFR_49) return 49;
+	return null;
+}
+
+function cfrTitleExternal(kind: LibraryRegulationsKind): RegulationsExternalLink | null {
+	const title = cfrTitleNumberFromKind(kind);
+	if (title === null) return null;
+	return { url: buildEcfrUrl(title, {}), label: ECFR_LABEL };
+}
+
+function cfrPartExternal(kind: LibraryRegulationsKind, part: string): RegulationsExternalLink | null {
+	const title = cfrTitleNumberFromKind(kind);
+	if (title === null) return null;
+	return { url: buildPartUrl(title, part), label: ECFR_LABEL };
+}
+
+function cfrSectionExternal(
+	kind: LibraryRegulationsKind,
+	part: string,
+	sectionCode: string,
+): RegulationsExternalLink | null {
+	const title = cfrTitleNumberFromKind(kind);
+	if (title === null) return null;
+	return { url: buildSectionUrl(title, part, sectionCode), label: ECFR_LABEL };
+}
+
+function cfrChapterContext(
+	kind: LibraryRegulationsKind,
+	part: string,
+): {
+	chapterId: string | null;
+	chapterName: string | null;
+	subchapterId: string | null;
+	subchapterName: string | null;
+} {
+	const title = cfrTitleNumberFromKind(kind);
+	if (title === null) {
+		return { chapterId: null, chapterName: null, subchapterId: null, subchapterName: null };
+	}
+	const loc = findChapterForPart(title, part);
+	if (loc === null) {
+		return { chapterId: null, chapterName: null, subchapterId: null, subchapterName: null };
+	}
+	return {
+		chapterId: loc.chapter.id,
+		chapterName: loc.chapter.name,
+		subchapterId: loc.subchapter?.id ?? null,
+		subchapterName: loc.subchapter?.name ?? null,
+	};
+}
+
+// ---------------------------------------------------------------------------
 // Per-view builders
 // ---------------------------------------------------------------------------
 
@@ -424,6 +542,7 @@ async function buildLandingView(db: Db): Promise<RegulationsLandingView> {
 			officialTitle: copy.officialTitle,
 			description: copy.description,
 			whyItMatters: copy.whyItMatters,
+			external: cfrTitleExternal(kind),
 		};
 	});
 	return { view: 'landing', buckets };
@@ -461,12 +580,18 @@ async function buildGroupView(kind: LibraryRegulationsKind, db: Db): Promise<Reg
 				// will populate metadata with the publisher's Part heading
 				// (e.g. "GENERAL OPERATING AND FLIGHT RULES").
 				const officialTitle = copy.officialTitle ?? rep?.title ?? `Part ${part}`;
+				const ctx = cfrChapterContext(kind, part);
 				return {
 					groupKey: part,
 					label: `${titleNumber} CFR Part ${part}`,
 					referenceCount: count,
 					...copy,
 					officialTitle,
+					external: cfrPartExternal(kind, part),
+					chapterId: ctx.chapterId,
+					chapterName: ctx.chapterName,
+					subchapterId: ctx.subchapterId,
+					subchapterName: ctx.subchapterName,
 				};
 			});
 	} else if (kind === LIBRARY_REGULATIONS_KINDS.AIM) {
@@ -495,6 +620,14 @@ async function buildGroupView(kind: LibraryRegulationsKind, db: Db): Promise<Reg
 			groupKey: series,
 			label: `Series ${series}`,
 			referenceCount: bySeries.get(series) ?? 0,
+			// AC series buckets do not have a per-series canonical URL on faa.gov;
+			// the umbrella references inside the bucket each carry their own URL
+			// via `externalUrlForReference`.
+			external: null,
+			chapterId: null,
+			chapterName: null,
+			subchapterId: null,
+			subchapterName: null,
 		}));
 		umbrellas = orphans.map(toUmbrella);
 	} else if (kind === LIBRARY_REGULATIONS_KINDS.NTSB) {
@@ -515,6 +648,24 @@ async function buildGroupView(kind: LibraryRegulationsKind, db: Db): Promise<Reg
 		whyItMatters: u.whyItMatters ?? kindCopy.whyItMatters,
 	}));
 
+	// Title-level chapter summary (CFR only) -- short strip rendered under
+	// the kind page header so the learner sees the structural chapter list
+	// (e.g. "Chapter I (FAA), II (TSA), III (NASA)") at a glance. Empty for
+	// non-CFR kinds and when the nav-tree YAML is missing.
+	const cfrTitleNumber = cfrTitleNumberFromKind(kind);
+	const chapterSummaries: RegulationsChapterSummary[] =
+		cfrTitleNumber === null
+			? []
+			: (() => {
+					const tree = getCfrNavTree(cfrTitleNumber);
+					if (tree === null) return [];
+					return tree.chapters.map((c) => ({
+						id: c.id,
+						name: c.name,
+						partCount: c.directParts.length + c.subchapters.reduce((acc, s) => acc + s.parts.length, 0),
+					}));
+				})();
+
 	return {
 		view: 'group',
 		kind,
@@ -524,6 +675,8 @@ async function buildGroupView(kind: LibraryRegulationsKind, db: Db): Promise<Reg
 		whyItMatters: kindCopy.whyItMatters,
 		groups,
 		umbrellas,
+		external: cfrTitleExternal(kind),
+		chapters: chapterSummaries,
 	};
 }
 
@@ -565,10 +718,22 @@ async function buildSectionListView(
 		if (only) {
 			const chapters = await listHandbookChapters(only.id, db);
 			if (chapters.length > 0) {
-				sections = chapters.map((c) => ({ id: c.id, code: c.code, title: c.title, ordinal: c.ordinal }));
+				sections = chapters.map((c) => ({
+					id: c.id,
+					code: c.code,
+					title: c.title,
+					ordinal: c.ordinal,
+					external: cfrSectionExternal(kind, group, c.code),
+				}));
 			} else {
 				const flat = await listFlatTopLevelSections(only.id, db);
-				sections = flat.map((s) => ({ id: s.id, code: s.code, title: s.title, ordinal: s.ordinal }));
+				sections = flat.map((s) => ({
+					id: s.id,
+					code: s.code,
+					title: s.title,
+					ordinal: s.ordinal,
+					external: cfrSectionExternal(kind, group, s.code),
+				}));
 			}
 		}
 	}
@@ -578,6 +743,7 @@ async function buildSectionListView(
 	// metadata. Multiple references (rare -- mostly historical editions)
 	// or zero references (slug-valid but unseeded) leave the copy empty.
 	const groupCopy = groupRefs.length === 1 && groupRefs[0] ? extractCardCopy(groupRefs[0].metadata) : {};
+	const ctx = cfrChapterContext(kind, group);
 	return {
 		view: 'section',
 		kind,
@@ -587,6 +753,11 @@ async function buildSectionListView(
 		umbrellas,
 		sections,
 		...groupCopy,
+		external: cfrPartExternal(kind, group),
+		chapterId: ctx.chapterId,
+		chapterName: ctx.chapterName,
+		subchapterId: ctx.subchapterId,
+		subchapterName: ctx.subchapterName,
 	};
 }
 
@@ -692,6 +863,7 @@ async function buildDetailView(
 			code: s.code,
 			title: s.title,
 			ordinal: s.ordinal,
+			external: cfrSectionExternal(kind, group, s.code),
 		})),
 		readState: readState
 			? {
@@ -712,6 +884,21 @@ async function buildDetailView(
 			domain: n.domain,
 		})),
 		errata,
+		external: cfrSectionExternal(kind, group, view.section.code),
+		...((): {
+			cfrChapterId: string | null;
+			cfrChapterName: string | null;
+			cfrSubchapterId: string | null;
+			cfrSubchapterName: string | null;
+		} => {
+			const ctx = cfrChapterContext(kind, group);
+			return {
+				cfrChapterId: ctx.chapterId,
+				cfrChapterName: ctx.chapterName,
+				cfrSubchapterId: ctx.subchapterId,
+				cfrSubchapterName: ctx.subchapterName,
+			};
+		})(),
 	};
 }
 

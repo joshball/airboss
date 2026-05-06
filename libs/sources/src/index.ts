@@ -79,6 +79,20 @@ export { ENUMERATED_CORPORA, getCorpusResolver, initRegistry, productionRegistry
 export { NULL_REGISTRY } from './registry-stub.ts';
 export { parseRegsLocator } from './regs/locator.ts';
 export {
+	buildEcfrUrl,
+	buildPartUrl,
+	buildSectionUrl,
+	type CfrNavChapter,
+	type CfrNavSubchapter,
+	type CfrNavTree,
+	type CfrTitleNumber,
+	findChapterForPart,
+	getCfrNavTree,
+	logUnmappedParts,
+	type PartLocation,
+	writeCfrNavTree,
+} from './regs/nav-tree.ts';
+export {
 	__batch_internal__,
 	batchResolve,
 	computeAdjacencyGroups,

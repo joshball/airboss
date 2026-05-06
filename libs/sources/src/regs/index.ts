@@ -27,6 +27,20 @@ export {
 } from './ingest.ts';
 export { parseRegsLocator } from './locator.ts';
 export {
+	buildEcfrUrl,
+	buildPartUrl,
+	buildSectionUrl,
+	type CfrNavChapter,
+	type CfrNavSubchapter,
+	type CfrNavTree,
+	type CfrTitleNumber,
+	findChapterForPart,
+	getCfrNavTree,
+	logUnmappedParts,
+	type PartLocation,
+	writeCfrNavTree,
+} from './nav-tree.ts';
+export {
 	normalizeRawPart,
 	normalizeRawSection,
 	normalizeRawSubpart,

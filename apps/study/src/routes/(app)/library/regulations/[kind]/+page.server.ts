@@ -37,5 +37,7 @@ export const load: PageServerLoad = async (event) => {
 		whyItMatters: view.whyItMatters,
 		groups: view.groups,
 		umbrellas: view.umbrellas,
+		external: view.external,
+		chapters: view.chapters,
 	};
 };

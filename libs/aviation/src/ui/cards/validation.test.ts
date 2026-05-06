@@ -37,8 +37,9 @@ describe('validateCardData', () => {
 			titleNumber: null,
 			partNumber: undefined,
 			partTitle: '   ',
+			external: null,
 		});
-		expect(result.missingRequired.sort()).toEqual(['partNumber', 'partTitle', 'titleNumber'].sort());
+		expect(result.missingRequired.sort()).toEqual(['external', 'partNumber', 'partTitle', 'titleNumber'].sort());
 	});
 
 	it('non-empty values pass even when type is unexpected (we only check missing-ness here)', () => {
@@ -46,6 +47,7 @@ describe('validateCardData', () => {
 			titleNumber: 14,
 			partNumber: '91',
 			partTitle: 'General Operating Rules',
+			external: { url: 'https://www.ecfr.gov/current/title-14/part-91', label: 'eCFR' },
 		});
 		expect(result.missingRequired).toEqual([]);
 	});
@@ -55,6 +57,7 @@ describe('validateCardData', () => {
 			titleNumber: 14,
 			partNumber: '91',
 			partTitle: 'General Operating Rules',
+			external: { url: 'https://www.ecfr.gov/current/title-14/part-91', label: 'eCFR' },
 			description: '',
 			whyItMatters: null,
 		});
@@ -123,8 +126,74 @@ describe('assertCardComplete', () => {
 				titleNumber: 14,
 				partNumber: '91',
 				partTitle: 'General Operating Rules',
+				external: { url: 'https://www.ecfr.gov/current/title-14/part-91', label: 'eCFR' },
 			}),
 		).not.toThrow();
+	});
+});
+
+// ---------------------------------------------------------------------------
+// CFR `external` (eCFR canonical URL) requirement
+//
+// Every CFR variant carries `external` as a required field. The URL is built
+// by `buildEcfrUrl` / `buildPartUrl` / `buildSectionUrl` in
+// libs/sources/src/regs/nav-tree.ts -- those helpers always return a
+// non-null URL (they fall back to the eCFR shortcut form when the nav-tree
+// YAML is missing), so a missing `external` is a wiring bug.
+// ---------------------------------------------------------------------------
+
+describe('CFR external requirement', () => {
+	it('CfrTitleCard requires external', () => {
+		expect(REQUIRED_FIELDS_BY_VARIANT.CfrTitleCard).toContain('external');
+	});
+
+	it('CfrPartCard requires external', () => {
+		expect(REQUIRED_FIELDS_BY_VARIANT.CfrPartCard).toContain('external');
+	});
+
+	it('CfrSectionCard requires external', () => {
+		expect(REQUIRED_FIELDS_BY_VARIANT.CfrSectionCard).toContain('external');
+	});
+
+	it('an external object missing url counts as missing', () => {
+		const result = validateCardData('CfrPartCard', 'subject', {
+			titleNumber: 14,
+			partNumber: '91',
+			partTitle: 'General',
+			external: { url: '', label: 'eCFR' },
+		});
+		expect(result.missingRequired).toContain('external');
+	});
+
+	it('an external object missing label counts as missing', () => {
+		const result = validateCardData('CfrPartCard', 'subject', {
+			titleNumber: 14,
+			partNumber: '91',
+			partTitle: 'General',
+			external: { url: 'https://example.com', label: '' },
+		});
+		expect(result.missingRequired).toContain('external');
+	});
+
+	it('a complete external object passes', () => {
+		const result = validateCardData('CfrSectionCard', '§91.103', {
+			partNumber: '91',
+			sectionCode: '91.103',
+			sectionTitle: 'Preflight action',
+			external: {
+				url: 'https://www.ecfr.gov/current/title-14/chapter-I/subchapter-F/part-91/section-91.103',
+				label: 'eCFR',
+			},
+		});
+		expect(result.missingRequired).toEqual([]);
+	});
+
+	it('non-CFR variants do not require external (recommended at most)', () => {
+		expect(REQUIRED_FIELDS_BY_VARIANT.AcCard).not.toContain('external');
+		expect(REQUIRED_FIELDS_BY_VARIANT.AimCorpusCard).not.toContain('external');
+		expect(REQUIRED_FIELDS_BY_VARIANT.NtsbCard).not.toContain('external');
+		expect(REQUIRED_FIELDS_BY_VARIANT.HandbookCard).not.toContain('external');
+		expect(REQUIRED_FIELDS_BY_VARIANT.UmbrellaCard).not.toContain('external');
 	});
 });
 

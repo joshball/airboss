@@ -80,6 +80,7 @@ const totalRecommendedGaps = $derived(data.summary.reduce((acc, s) => acc + s.mi
 			description="The federal aviation regulations. Codifies airman certification, aircraft airworthiness, flight operations, air traffic, schools, and the FAA itself."
 			whyItMatters="This is the rulebook every pilot operates under. Knowing 14 CFR is the difference between airmanship and ramp-check anxiety."
 			href="#"
+			external={{ url: 'https://www.ecfr.gov/current/title-14', label: 'eCFR' }}
 			countLabel="11 references"
 		/>
 		<CfrPartCard
@@ -89,9 +90,19 @@ const totalRecommendedGaps = $derived(data.summary.reduce((acc, s) => acc + s.mi
 			description="The core operating rules for civil aviation -- preflight, takeoff, en route, weather minima, equipment requirements, communication, emergencies."
 			whyItMatters="If you fly under Part 91, you live in this Part. It defines almost every decision a non-commercial pilot makes."
 			href="#"
+			external={{ url: 'https://www.ecfr.gov/current/title-14/chapter-I/subchapter-F/part-91', label: 'eCFR' }}
 			sectionCount={286}
 		/>
-		<CfrSectionCard partNumber="91" sectionCode="91.103" sectionTitle="Preflight action" href="#" />
+		<CfrSectionCard
+			partNumber="91"
+			sectionCode="91.103"
+			sectionTitle="Preflight action"
+			href="#"
+			external={{
+				url: 'https://www.ecfr.gov/current/title-14/chapter-I/subchapter-F/part-91/section-91.103',
+				label: 'eCFR',
+			}}
+		/>
 		<AimCorpusCard
 			title="Aeronautical Information Manual"
 			description="The FAA's pilot guide to operating in the National Airspace System."
@@ -138,8 +149,20 @@ const totalRecommendedGaps = $derived(data.summary.reduce((acc, s) => acc + s.mi
 	<h2>Variant gallery (minimum-required fixtures)</h2>
 	<p class="muted">Each wrapper with only its required fields populated -- recommended fields blank.</p>
 	<div class="gallery">
-		<CfrPartCard titleNumber={14} partNumber="999" partTitle="Test Part Title" href="#" />
-		<CfrSectionCard partNumber="999" sectionCode="999.1" sectionTitle="Test Section" href="#" />
+		<CfrPartCard
+			titleNumber={14}
+			partNumber="999"
+			partTitle="Test Part Title"
+			href="#"
+			external={{ url: 'https://www.ecfr.gov/current/title-14/part-999', label: 'eCFR' }}
+		/>
+		<CfrSectionCard
+			partNumber="999"
+			sectionCode="999.1"
+			sectionTitle="Test Section"
+			href="#"
+			external={{ url: 'https://www.ecfr.gov/current/title-14/part-999/section-999.1', label: 'eCFR' }}
+		/>
 		<AcCard acNumber="00-0" acTitle="Test AC" edition="-" />
 		<NtsbCard reportNumber="TEST00" reportTitle="Test NTSB" />
 		<HandbookCard shortSlug="test" fullTitle="Test Handbook" edition="-" publisher="FAA" href="#" />

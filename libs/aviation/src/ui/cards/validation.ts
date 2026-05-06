@@ -39,9 +39,14 @@ export type CardVariant =
  * must exist for the card to ship.
  */
 export const REQUIRED_FIELDS_BY_VARIANT: Record<CardVariant, readonly string[]> = {
-	CfrTitleCard: ['shortLabel', 'topic', 'description', 'whyItMatters'],
-	CfrPartCard: ['titleNumber', 'partNumber', 'partTitle'],
-	CfrSectionCard: ['partNumber', 'sectionCode', 'sectionTitle'],
+	// CFR variants demand a canonical eCFR `external` URL -- learners must be
+	// able to jump from any CFR card to its publisher source. The URL builder
+	// (libs/sources/src/regs/nav-tree.ts) guarantees a non-null URL for every
+	// title/part/section, so a missing `external` is always an authoring or
+	// plumbing bug, not an irreducible data gap.
+	CfrTitleCard: ['shortLabel', 'topic', 'description', 'whyItMatters', 'external'],
+	CfrPartCard: ['titleNumber', 'partNumber', 'partTitle', 'external'],
+	CfrSectionCard: ['partNumber', 'sectionCode', 'sectionTitle', 'external'],
 	AimCorpusCard: ['title', 'description', 'whyItMatters'],
 	AcCard: ['acNumber', 'acTitle', 'edition'],
 	NtsbCard: ['reportNumber', 'reportTitle'],
@@ -68,6 +73,19 @@ export const RECOMMENDED_FIELDS_BY_VARIANT: Record<CardVariant, readonly string[
 function isMissing(value: unknown): boolean {
 	if (value === null || value === undefined) return true;
 	if (typeof value === 'string' && value.trim() === '') return true;
+	// `external` is an `{ url, label }` object on the CFR variants. Treat
+	// the object as missing when either side is empty -- a half-populated
+	// link doesn't render on the card.
+	if (typeof value === 'object' && !Array.isArray(value)) {
+		const obj = value as Record<string, unknown>;
+		if ('url' in obj || 'label' in obj) {
+			const u = obj.url;
+			const l = obj.label;
+			if (typeof u !== 'string' || u.trim() === '') return true;
+			if (typeof l !== 'string' || l.trim() === '') return true;
+			return false;
+		}
+	}
 	return false;
 }
 

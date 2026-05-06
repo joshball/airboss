@@ -1304,4 +1304,31 @@ describe('CFR seed-shape contract (real DB)', () => {
 				`\`bun scripts/db/seed-references-from-manifest.ts\`.`,
 		).toEqual([]);
 	});
+
+	// ----------------------------------------------------------------------
+	// External-URL contract: every production CFR row must have either
+	// an authored `url` column OR a derivable canonical eCFR URL via the
+	// nav-tree YAML. Locks the "card has no eCFR link" failure mode.
+	// ----------------------------------------------------------------------
+	it('every production CFR reference has a derivable canonical eCFR URL', async () => {
+		const { buildPartUrl } = await import('@ab/sources');
+		const allCfrRefs = await db.select().from(reference).where(eq(reference.kind, REFERENCE_KINDS.CFR));
+		const cfrRefs = allCfrRefs.filter(isProductionRow);
+		if (cfrRefs.length === 0) return;
+
+		const missing: string[] = [];
+		for (const ref of cfrRefs) {
+			const slug = ref.documentSlug;
+			const match = slug.match(/^(14|49)cfr(.+)$/);
+			if (match === null) continue;
+			const titleNumber = match[1] === '14' ? 14 : 49;
+			const partNumber = match[2] ?? '';
+			const built = buildPartUrl(titleNumber, partNumber);
+			if (!built.startsWith('https://www.ecfr.gov/')) {
+				if (!ref.url || ref.url.length === 0) missing.push(slug);
+			}
+		}
+
+		expect(missing, `CFR refs missing an eCFR URL: ${missing.join(', ')}`).toEqual([]);
+	});
 });
