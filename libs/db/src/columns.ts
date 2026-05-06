@@ -45,3 +45,22 @@ export function timestamps() {
 			.notNull(),
 	};
 }
+
+/**
+ * Serialize a string array as a SQL `IN (...)` value list for embedding in
+ * a CHECK constraint. Single quotes are escaped; the result is interpolated
+ * between `IN (` and `)` in `sql.raw(...)` calls.
+ *
+ * Consolidated here per the 2026-05-06 schema review §I -- the same
+ * one-line helper was duplicated across six schema files (audit, sources,
+ * hangar-jobs, bc/study, bc/study/citations, bc/hangar). Drift risk on the
+ * function itself was nil, but the cross-file repetition was a smell.
+ *
+ * Usage:
+ *
+ *   import { inList } from '@ab/db';
+ *   check('foo_check', sql.raw(`"col" IN (${inList(FOO_VALUES)})`)),
+ */
+export function inList(values: readonly string[]): string {
+	return values.map((v) => `'${v.replace(/'/g, "''")}'`).join(', ');
+}
