@@ -12,20 +12,18 @@ import { enforceCardComplete } from './validation';
 
 let {
 	title,
-	officialTitle = null,
 	description = null,
 	whyItMatters = null,
 	kindBadge = null,
-	editionBadge = null,
+	identifier = null,
 	href = null,
 	external = null,
 }: {
 	title: string;
-	officialTitle?: string | null;
 	description?: string | null;
 	whyItMatters?: string | null;
 	kindBadge?: string | null;
-	editionBadge?: string | null;
+	identifier?: string | null;
 	href?: string | null;
 	external?: { url: string; label: string } | null;
 } = $props();
@@ -37,11 +35,10 @@ $effect.pre(() => {
 
 <LibraryReferenceCard
 	{title}
-	{officialTitle}
+	{kindBadge}
+	{identifier}
 	{description}
 	{whyItMatters}
-	{kindBadge}
-	{editionBadge}
-	{href}
+	local={href ? { url: href, label: 'Open in airboss' } : null}
 	{external}
 />

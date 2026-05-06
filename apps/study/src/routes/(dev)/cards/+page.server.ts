@@ -116,9 +116,9 @@ function projectForVariant(
 				description: m.description,
 				whyItMatters: m.whyItMatters,
 			};
-		case 'CfrSectionCard':
-		case 'UmbrellaCard':
 		default:
+			// CfrSectionCard + UmbrellaCard fall through here. Both render
+			// from the reference's title alone in this audit projection.
 			return { title: ref.title };
 	}
 }

@@ -1,7 +1,9 @@
 <script lang="ts">
 /**
- * NTSB report / corpus card. Title is the report number or corpus name;
- * subtitle is the report title + (optional) date.
+ * NTSB report / corpus card.
+ *
+ * Layout v2: title is the full report title; identifier shows the
+ * report number + date. Summary becomes the description.
  */
 
 import LibraryReferenceCard from '../LibraryReferenceCard.svelte';
@@ -26,14 +28,15 @@ let {
 $effect.pre(() => {
 	enforceCardComplete('NtsbCard', reportNumber, { reportNumber, reportTitle });
 });
+
+const identifier = $derived(date ? `${reportNumber} · ${date}` : reportNumber);
 </script>
 
 <LibraryReferenceCard
-	title={reportNumber}
-	officialTitle={reportTitle}
-	description={summary}
-	editionBadge={date}
+	title={reportTitle}
 	kindBadge="NTSB"
-	{href}
+	{identifier}
+	description={summary}
+	local={href ? { url: href, label: 'Open in airboss' } : null}
 	{external}
 />

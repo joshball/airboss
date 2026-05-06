@@ -1,12 +1,14 @@
 <script lang="ts">
 /**
  * Top-level CFR title card. Used on /library/regulations to render the
- * "14 CFR" / "49 CFR" buckets. Title is the short form ("14 CFR"); the
- * topic ("Aeronautics and Space") sits as subtitle. The full official
- * title ("Title 14 of the Code of Federal Regulations") is the tooltip
- * on the short label, surfaced via <abbr>.
+ * "14 CFR" / "49 CFR" buckets.
  *
- * `external` is required: every CFR title links to its eCFR landing.
+ * Layout v2: title is the FULL readable name -- "Title 14 CFR -- Aeronautics
+ * and Space" -- not split into short-label + subtitle. The card body is
+ * non-clickable; the two-link footer carries `Open in airboss ->` (kind page)
+ * and `View on eCFR ↗`.
+ *
+ * `external` is required: every CFR title must link to its eCFR landing.
  */
 
 import LibraryReferenceCard from '../LibraryReferenceCard.svelte';
@@ -15,21 +17,17 @@ import { enforceCardComplete } from './validation';
 let {
 	shortLabel,
 	topic,
-	officialTitle,
 	description,
 	whyItMatters,
 	href,
 	external,
-	countLabel = null,
 }: {
 	shortLabel: string;
 	topic: string;
-	officialTitle: string;
 	description: string;
 	whyItMatters: string;
 	href: string;
 	external: { url: string; label: string };
-	countLabel?: string | null;
 } = $props();
 
 $effect.pre(() => {
@@ -41,15 +39,20 @@ $effect.pre(() => {
 		external,
 	});
 });
+
+// Title v2: "Title 14 CFR -- Aeronautics and Space" (one heading, no split).
+// Falls back to `shortLabel` if topic is missing for any reason -- the
+// validator throws on missing topic in dev, so this is a defensive default.
+const title = $derived(topic ? `${shortLabel} -- ${topic}` : shortLabel);
+const identifier = $derived(`Title ${shortLabel.replace(/^[^0-9]*(\d+).*$/, '$1')}`);
 </script>
 
 <LibraryReferenceCard
-	title={shortLabel}
-	titleAbbreviation={officialTitle}
-	officialTitle={topic}
+	{title}
+	kindBadge="CFR"
+	{identifier}
 	{description}
 	{whyItMatters}
-	{href}
+	local={{ url: href, label: 'Browse parts' }}
 	{external}
-	{countLabel}
 />

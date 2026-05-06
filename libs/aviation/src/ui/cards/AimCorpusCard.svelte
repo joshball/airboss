@@ -1,9 +1,11 @@
 <script lang="ts">
 /**
  * AIM corpus card. Single AIM doc + the Pilot/Controller Glossary under
- * one bucket. Title is the short form ("AIM" / "Pilot/Controller
- * Glossary"); description + whyItMatters required so the card always
- * communicates purpose.
+ * one bucket.
+ *
+ * Layout v2: title is the publisher's full name ("Aeronautical
+ * Information Manual"). The kind chip carries "AIM" / "PCG"; identifier
+ * is the edition ("2026-04").
  */
 
 import LibraryReferenceCard from '../LibraryReferenceCard.svelte';
@@ -11,18 +13,18 @@ import { enforceCardComplete } from './validation';
 
 let {
 	title,
-	officialTitle = null,
 	description,
 	whyItMatters,
 	edition = null,
+	kindBadge = 'AIM',
 	href = null,
 	external = null,
 }: {
 	title: string;
-	officialTitle?: string | null;
 	description: string;
 	whyItMatters: string;
 	edition?: string | null;
+	kindBadge?: string;
 	href?: string | null;
 	external?: { url: string; label: string } | null;
 } = $props();
@@ -34,11 +36,10 @@ $effect.pre(() => {
 
 <LibraryReferenceCard
 	{title}
-	{officialTitle}
+	{kindBadge}
+	identifier={edition}
 	{description}
 	{whyItMatters}
-	{href}
+	local={href ? { url: href, label: 'Open in airboss' } : null}
 	{external}
-	editionBadge={edition}
-	kindBadge="AIM"
 />

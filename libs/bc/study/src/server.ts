@@ -300,6 +300,7 @@ export type {
 } from './references';
 export {
 	computeReadingOrder,
+	getFlatSection,
 	getHandbookChapter,
 	getHandbookProgress,
 	getHandbookProgressMap,
