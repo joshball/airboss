@@ -44,7 +44,7 @@ describe('validateReferences - required-axis gates', () => {
 		expect(errors.some((e) => /aviationTopic/i.test(e.message))).toBe(true);
 	});
 
-	it('errors when aviationTopic exceeds 4', () => {
+	it('errors when aviationTopic exceeds AVIATION_TOPIC_MAX', () => {
 		const bad = makeRef({
 			tags: {
 				...makeRef().tags,
@@ -54,6 +54,7 @@ describe('validateReferences - required-axis gates', () => {
 					AVIATION_TOPICS.NAVIGATION,
 					AVIATION_TOPICS.PROCEDURES,
 					AVIATION_TOPICS.AIRSPACE,
+					AVIATION_TOPICS.OPERATIONS,
 				],
 			},
 		});

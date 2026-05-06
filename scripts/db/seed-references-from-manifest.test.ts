@@ -1486,6 +1486,7 @@ describe('CFR seed-shape contract (real DB)', () => {
 			// seeder only stamps metadata where a DB row exists.
 			'14cfr23',
 			'14cfr61',
+			'14cfr68',
 			'14cfr71',
 			'14cfr73',
 			'14cfr91',

@@ -77,12 +77,12 @@ describe('loadCfrPartAuthoring', () => {
 		});
 	});
 
-	it('rejects a topics array longer than AVIATION_TOPIC_MAX (4)', async () => {
+	it('rejects a topics array longer than AVIATION_TOPIC_MAX (5)', async () => {
 		const yaml = [
 			'parts:',
 			'  "91":',
 			'    description: "test desc"',
-			'    topics: ["weather", "airspace", "communications", "navigation", "procedures"]',
+			'    topics: ["weather", "airspace", "communications", "navigation", "procedures", "operations"]',
 		].join('\n');
 		await withTempYaml(yaml, async (path) => {
 			await expect(loadCfrPartAuthoring(path)).rejects.toThrow();
