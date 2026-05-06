@@ -17,6 +17,7 @@ import {
 	buildOriginalAirbossRef,
 	buildProposedYaml,
 	extractLegacyCitations,
+	parseExistingProposedRewrites,
 	parseExistingTicks,
 	parseLegacyDetail,
 	parseLegacySource,
@@ -234,6 +235,75 @@ describe('parseExistingTicks', () => {
 	});
 });
 
+describe('parseExistingProposedRewrites', () => {
+	it('extracts the second yaml fence body for each row, stripped of markdown indent', () => {
+		const text = [
+			'<!-- migration-row -->',
+			'- [x] **course/knowledge/foo/node.md** (line 5)',
+			'',
+			'  Legacy citation:',
+			'',
+			'  ```yaml',
+			'    - source: AFH (FAA-H-8083-3B)',
+			'      detail: Chapter 3 -- Basic Flight Maneuvers',
+			'      note: Practical interpretation.',
+			'  ```',
+			'',
+			'  Proposed rewrite:',
+			'',
+			'  ```yaml',
+			'  - ref: airboss-ref:handbooks/afh/3',
+			"    chapter_title: Basic Flight Maneuvers",
+			'    redirected_from: airboss-ref:handbooks/afh/FAA-H-8083-3B/3',
+			'    note: Practical interpretation.',
+			'  ```',
+			'',
+			'  Slug: `afh`',
+		].join('\n');
+		const rewrites = parseExistingProposedRewrites(text);
+		expect(rewrites.size).toBe(1);
+		expect(rewrites.get('course/knowledge/foo/node.md:5')).toBe(
+			[
+				'- ref: airboss-ref:handbooks/afh/3',
+				'  chapter_title: Basic Flight Maneuvers',
+				'  redirected_from: airboss-ref:handbooks/afh/FAA-H-8083-3B/3',
+				'  note: Practical interpretation.',
+			].join('\n'),
+		);
+	});
+
+	it('extracts a multi-citation hand-edited block', () => {
+		const text = [
+			'<!-- migration-row -->',
+			'- [x] **course/knowledge/foo/node.md** (line 5)',
+			'',
+			'  Legacy citation:',
+			'',
+			'  ```yaml',
+			'    - source: AFH (FAA-H-8083-3B)',
+			'      detail: Chapter 4 -- Slow Flight, Stalls, and Spins',
+			'      note: Stall recovery.',
+			'  ```',
+			'',
+			'  Proposed rewrite:',
+			'',
+			'  ```yaml',
+			'  - ref: airboss-ref:handbooks/afh/5',
+			"    chapter_title: 'Maintaining Aircraft Control: Upset Prevention and Recovery'",
+			'    redirected_from: airboss-ref:handbooks/afh/FAA-H-8083-3B/4',
+			'    note: Stall recovery -- pinned to current Ch. 5.',
+			'  - ref: airboss-ref:handbooks/afh/8083-3B/4',
+			"    chapter_title: 'Slow Flight, Stalls, and Spins'",
+			'    note: Original 3B Ch. 4 retained for traceability.',
+			'  ```',
+		].join('\n');
+		const rewrites = parseExistingProposedRewrites(text);
+		const body = rewrites.get('course/knowledge/foo/node.md:5');
+		expect(body).toContain('- ref: airboss-ref:handbooks/afh/5');
+		expect(body).toContain('- ref: airboss-ref:handbooks/afh/8083-3B/4');
+	});
+});
+
 // ---------------------------------------------------------------------------
 // Filesystem driver tests
 // ---------------------------------------------------------------------------
@@ -342,6 +412,64 @@ describe('runMigration', () => {
 		expect(after).toContain('chapter_title: Basic Flight Maneuvers');
 		expect(after).toContain('redirected_from: airboss-ref:handbooks/afh/FAA-H-8083-3B/3');
 		expect(after).toContain('note: Practical flight interpretation of the four forces.');
+	});
+
+	it('--apply uses hand-edited proposed-rewrite YAML when present', () => {
+		runMigration({ repoRoot: repo.root, mode: 'dry-run' });
+		const reviewPath = join(repo.root, REVIEW_FILE_RELPATH);
+		let review = readFileSync(reviewPath, 'utf8');
+		// Tick the box.
+		review = review.replace('- [ ]', '- [x]');
+		// Replace the script-built proposed YAML with a multi-citation hand-edited block.
+		// Rebuild the second yaml fence body verbatim.
+		const handEdited = [
+			'  ```yaml',
+			'  - ref: airboss-ref:handbooks/afh/3',
+			'    chapter_title: Basic Flight Maneuvers',
+			'    redirected_from: airboss-ref:handbooks/afh/FAA-H-8083-3B/3',
+			'    note: Hand-edited note about basic flight maneuvers.',
+			'  - ref: airboss-ref:handbooks/afh/8083-3B/3',
+			'    chapter_title: Basic Flight Maneuvers',
+			"    note: 'Original 3B pin retained for traceability.'",
+			'  ```',
+		].join('\n');
+		review = review.replace(
+			/  ```yaml\n  - ref: airboss-ref:handbooks\/afh\/3\n[\s\S]*?\n  ```/,
+			(match, _) => {
+				// Only replace the SECOND occurrence (proposed rewrite, not legacy).
+				return match;
+			},
+		);
+		// Simpler approach: split and patch the second yaml fence in-place.
+		const parts = review.split('\n');
+		let yamlFenceCount = 0;
+		const newParts: string[] = [];
+		let i = 0;
+		while (i < parts.length) {
+			const l = parts[i];
+			if (/^  ```yaml\s*$/.test(l)) {
+				yamlFenceCount += 1;
+				if (yamlFenceCount === 2) {
+					// Skip up to the closing fence and replace with handEdited.
+					newParts.push(...handEdited.split('\n'));
+					i += 1;
+					while (i < parts.length && !/^  ```\s*$/.test(parts[i])) i += 1;
+					i += 1; // skip closing fence; handEdited has its own
+					continue;
+				}
+			}
+			newParts.push(l);
+			i += 1;
+		}
+		writeFileSync(reviewPath, newParts.join('\n'), 'utf8');
+		const report = runMigration({ repoRoot: repo.root, mode: 'apply' });
+		expect(report.rowsApplied).toBe(1);
+		const after = readFileSync(repo.nodeMdPath, 'utf8');
+		expect(after).not.toContain('AFH (FAA-H-8083-3B)');
+		expect(after).toContain('- ref: airboss-ref:handbooks/afh/3');
+		expect(after).toContain('- ref: airboss-ref:handbooks/afh/8083-3B/3');
+		expect(after).toContain('Hand-edited note about basic flight maneuvers.');
+		expect(after).toContain('Original 3B pin retained for traceability.');
 	});
 
 	it('idempotent re-run preserves ticks across regeneration', () => {

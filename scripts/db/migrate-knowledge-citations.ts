@@ -660,6 +660,108 @@ export function parseExistingTicks(text: string): Map<string, boolean> {
 	return out;
 }
 
+/**
+ * Parse an existing review file's hand-edited "Proposed rewrite" YAML blocks.
+ * For each row, returns the YAML body inside the SECOND ```yaml fence (the
+ * "Proposed rewrite" block, not the "Legacy citation" block). Lines have
+ * their two-space markdown indent stripped so the returned text is at the
+ * canonical indent level (e.g. `- ref: ...` at column 0). When a row's
+ * proposed-rewrite YAML cannot be located, the row is omitted -- the caller
+ * falls back to the script-built proposedYaml for that row.
+ */
+export function parseExistingProposedRewrites(text: string): Map<string, string> {
+	const out = new Map<string, string>();
+	const lines = text.split(/\r?\n/);
+	let i = 0;
+	while (i < lines.length) {
+		const head = lines[i].match(/^- \[[ xX]\]\s+\*\*(.+?)\*\*\s+\(line\s+(\d+)\)/);
+		if (head === null) {
+			i += 1;
+			continue;
+		}
+		const relPath = head[1];
+		const startLine = Number.parseInt(head[2], 10);
+		// Walk forward to find the SECOND ```yaml fence (the proposed rewrite block).
+		// The first fence is the legacy citation. Stop at the next migration-row marker
+		// or top-level header so we don't run into the next row.
+		let yamlFenceCount = 0;
+		let j = i + 1;
+		let proposedBody: string | null = null;
+		while (j < lines.length) {
+			const l = lines[j];
+			if (l.startsWith('<!-- migration-row -->') || /^- \[[ xX]\]/.test(l) || /^# /.test(l)) break;
+			const fenceMatch = l.match(/^(\s*)```yaml\s*$/);
+			if (fenceMatch !== null) {
+				yamlFenceCount += 1;
+				if (yamlFenceCount === 2) {
+					const fenceIndent = fenceMatch[1].length;
+					const bodyLines: string[] = [];
+					j += 1;
+					while (j < lines.length) {
+						const bl = lines[j];
+						if (/^\s*```\s*$/.test(bl)) break;
+						// Strip up to fenceIndent chars of leading indentation
+						// (the markdown wrapping that matched the fence) so the
+						// YAML body sits at column 0. Do NOT strip more -- the
+						// YAML's own body indent is content.
+						const stripCount = Math.min(fenceIndent, bl.length - bl.trimStart().length);
+						bodyLines.push(bl.slice(stripCount));
+						j += 1;
+					}
+					// Trim trailing blank lines.
+					while (bodyLines.length > 0 && bodyLines[bodyLines.length - 1].trim() === '') {
+						bodyLines.pop();
+					}
+					proposedBody = bodyLines.join('\n');
+					break;
+				}
+			}
+			j += 1;
+		}
+		if (proposedBody !== null) {
+			out.set(tickKey(relPath, startLine), proposedBody);
+		}
+		i = j;
+	}
+	return out;
+}
+
+/**
+ * Splice a hand-edited "Proposed rewrite" YAML block into a source file,
+ * replacing the legacy citation entry at lines [startLine..endLine]. The
+ * proposed block contains one or more `- ref:` items at column 0 (already
+ * stripped of markdown indent by the parser); we re-indent them to match
+ * the source file's list-item indent.
+ */
+export function applyProposedBlockToText(
+	text: string,
+	row: ReviewRow,
+	proposedBlock: string,
+): string {
+	const lines = text.split(/\r?\n/);
+	// itemIndent is the indent of the legacy `- source:` line; bodyIndent is
+	// itemIndent + '  '. Hand-edited block starts each citation with `- ref:`.
+	const itemIndent = row.bodyIndent.slice(0, Math.max(0, row.bodyIndent.length - 2));
+	const blockLines = proposedBlock.split(/\r?\n/);
+	const replacement: string[] = [];
+	for (const l of blockLines) {
+		if (l === '') {
+			replacement.push('');
+			continue;
+		}
+		// A line starting with `- ` is a list-item head: prefix with itemIndent.
+		// Anything else is body of the current item: prefix with itemIndent + '  '.
+		if (l.startsWith('- ')) {
+			replacement.push(`${itemIndent}${l}`);
+		} else {
+			replacement.push(`${itemIndent}  ${l}`);
+		}
+	}
+	const before = lines.slice(0, row.startLine - 1);
+	const after = lines.slice(row.endLine);
+	return [...before, ...replacement, ...after].join('\n');
+}
+
 // ---------------------------------------------------------------------------
 // Building review rows
 // ---------------------------------------------------------------------------
@@ -824,9 +926,11 @@ export function runMigration(options: RunOptions): RunReport {
 		}
 	}
 	let existingTicks = new Map<string, boolean>();
+	let existingProposed = new Map<string, string>();
 	try {
 		const existing = readFileSync(reviewPath, 'utf8');
 		existingTicks = parseExistingTicks(existing);
+		existingProposed = parseExistingProposedRewrites(existing);
 	} catch {
 		// No prior review file -- fine.
 	}
@@ -864,7 +968,12 @@ export function runMigration(options: RunOptions): RunReport {
 		const fullPath = join(repoRoot, relPath);
 		let text = readFileSync(fullPath, 'utf8');
 		for (const row of rows) {
-			text = applyRewriteToText(text, row);
+			const handEdited = existingProposed.get(tickKey(row.relPath, row.startLine));
+			if (handEdited !== undefined && handEdited.trim().length > 0) {
+				text = applyProposedBlockToText(text, row, handEdited);
+			} else {
+				text = applyRewriteToText(text, row);
+			}
 			appliedCount += 1;
 		}
 		writeFileSync(fullPath, text, 'utf8');
