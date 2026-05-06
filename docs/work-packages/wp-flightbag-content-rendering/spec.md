@@ -1,10 +1,22 @@
 ---
-title: 'Spec: WP-FLIGHTBAG-CONTENT -- wire flightbag load functions to real @ab/sources resolvers'
+id: wp-flightbag-content-rendering
+title: "Spec: WP-FLIGHTBAG-CONTENT -- wire flightbag load functions to real @ab/sources resolvers"
 product: flightbag
-feature: wp-flightbag-content-rendering
-type: spec
+category: feature
 status: draft
-review_status: pending
+agent_review_status: pending
+human_review_status: pending
+created: 2026-05-03
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - rendering
+  - content
+legacy_fields:
+  feature: wp-flightbag-content-rendering
+  type: spec
+  review_status: pending
 ---
 
 # WP-FLIGHTBAG-CONTENT: wire flightbag load functions to real content

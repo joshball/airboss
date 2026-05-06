@@ -1,11 +1,25 @@
 ---
-title: 'Spec: WP-FLIGHTBAG-BOOK-EXPERIENCE -- read the handbooks like books'
+id: wp-flightbag-book-experience
+title: "Spec: WP-FLIGHTBAG-BOOK-EXPERIENCE -- read the handbooks like books"
 product: flightbag
-feature: wp-flightbag-book-experience
-type: spec
-status: shipped
-review_status: done
+category: feature
+status: in-flight
+agent_review_status: pending
+human_review_status: pending
+created: 2026-05-03
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - reader
+  - book
+legacy_fields:
+  feature: wp-flightbag-book-experience
+  type: spec
+  review_status: done
 ---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
 
 # WP-FLIGHTBAG-BOOK-EXPERIENCE: read the handbooks like books
 

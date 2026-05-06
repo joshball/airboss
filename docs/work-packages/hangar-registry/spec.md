@@ -1,10 +1,22 @@
 ---
-title: 'Spec: Hangar registry (TOML-hybrid)'
+id: hangar-registry
+title: "Spec: Hangar registry (TOML-hybrid)"
 product: hangar
-feature: hangar-registry
-type: spec
-status: unread
-review_status: pending
+category: product
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-24
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - registry
+  - toml
+legacy_fields:
+  feature: hangar-registry
+  type: spec
+  review_status: pending
 ---
 
 # Spec: Hangar registry (TOML-hybrid)
