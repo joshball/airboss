@@ -117,6 +117,38 @@ function faaDirFor(doc: string, edition: string): string | null {
 }
 
 /**
+ * Registry-aware "is this a known edition for this doc?" predicate per ADR
+ * 019 amendment 2026-05 §1. Wired into `parseHandbooksLocator` so the
+ * locator parser can disambiguate "edition pin vs chapter" without
+ * round-tripping through the resolver registry.
+ */
+export function isKnownHandbookEdition(doc: string, candidate: string): boolean {
+	const docMap = HANDBOOK_DOC_EDITIONS[doc];
+	if (docMap === undefined) return false;
+	return docMap[candidate] !== undefined;
+}
+
+/**
+ * Pick the current edition for a handbook doc when the locator omits the
+ * edition. Per ADR 019 amendment 2026-05 §1: "Edition omitted: resolver
+ * returns the current (latest non-superseded) entry for the slug." Today
+ * each doc has exactly one edition entry in `HANDBOOK_DOC_EDITIONS`; when
+ * a doc gets a successor we pick the lex-max edition slug (matching the
+ * existing `getCurrentEdition` contract).
+ */
+export function currentEditionForDoc(doc: string): string | null {
+	const docMap = HANDBOOK_DOC_EDITIONS[doc];
+	if (docMap === undefined) return null;
+	const editions = Object.keys(docMap);
+	if (editions.length === 0) return null;
+	let max: string | null = null;
+	for (const ed of editions) {
+		if (max === null || ed > max) max = ed;
+	}
+	return max;
+}
+
+/**
  * Build the production `handbooks` resolver. Stateless aside from the
  * derivative root + manifest cache, both overridable for tests.
  */
@@ -124,7 +156,11 @@ export const HANDBOOKS_RESOLVER: CorpusResolver = {
 	corpus: HANDBOOKS_CORPUS,
 
 	parseLocator(locator: string): ParsedLocator | LocatorError {
-		return parseHandbooksLocator(locator);
+		// Per ADR 019 amendment 2026-05 §1, the path-grammar disambiguation
+		// is registry-aware: the segment after `<doc>` is treated as an
+		// edition pin iff it appears in `HANDBOOK_DOC_EDITIONS[doc]`. The
+		// resolver is the registry; the locator parser delegates here.
+		return parseHandbooksLocator(locator, isKnownHandbookEdition);
 	},
 
 	formatCitation(entry, style) {
@@ -160,7 +196,10 @@ export const HANDBOOKS_RESOLVER: CorpusResolver = {
 		const parsed = parseHandbooksLocator(locator);
 		if (parsed.kind !== 'ok' || parsed.handbooks === undefined) return null;
 		const { doc, edition: editionSlug } = parsed.handbooks;
-		const faaDir = faaDirFor(doc, editionSlug);
+		// Per ADR 019 amendment 2026-05 §1: when the locator omits the
+		// edition, resolve to the current (latest) edition for the doc.
+		const effectiveEdition = editionSlug.length > 0 ? editionSlug : (currentEditionForDoc(doc) ?? '');
+		const faaDir = faaDirFor(doc, effectiveEdition);
 		if (faaDir === null) return null;
 		const manifest = loadManifestCached(doc, faaDir, _derivativeRoot);
 		if (manifest === null) return null;
@@ -201,6 +240,47 @@ export const HANDBOOKS_RESOLVER: CorpusResolver = {
 			edition,
 			normalizedText: text,
 		};
+	},
+
+	/**
+	 * Look up the captured sentinel field's value in the resolved manifest.
+	 * Per ADR 019 amendment 2026-05 §2 (D4: handbooks ship first).
+	 *
+	 * - `chapter_title` -- read the chapter section's `title` from the
+	 *   manifest, addressed by the locator's chapter code.
+	 * - `section_title` -- read the section's title at the chapter+section
+	 *   manifest code.
+	 * - `paragraph_text` / `page_heading` -- not implemented for handbooks
+	 *   in this slice; return null. Per amendment D4 the vocabulary is
+	 *   committed inline; per-corpus impls land in their corpus WP. Wire
+	 *   here when the AFH-3B / page-pin work surfaces.
+	 */
+	getSentinelValue(parsed, field): string | null {
+		if (parsed.corpus !== HANDBOOKS_CORPUS) return null;
+		const locatorParsed = parseHandbooksLocator(parsed.locator, isKnownHandbookEdition);
+		if (locatorParsed.kind !== 'ok' || locatorParsed.handbooks === undefined) return null;
+		const { doc, edition: editionSlug, chapter, section } = locatorParsed.handbooks;
+		const effectiveEdition = editionSlug.length > 0 ? editionSlug : (currentEditionForDoc(doc) ?? '');
+		const faaDir = faaDirFor(doc, effectiveEdition);
+		if (faaDir === null) return null;
+		const manifest = loadManifestCached(doc, faaDir, _derivativeRoot);
+		if (manifest === null) return null;
+		if (field === 'chapter_title') {
+			if (chapter === undefined) return null;
+			const chapterSection = manifest.sections.find((s) => s.level === 'chapter' && s.code === chapter);
+			return chapterSection?.title ?? null;
+		}
+		if (field === 'section_title') {
+			if (chapter === undefined || section === undefined || section === 'intro') return null;
+			const code = `${chapter}.${section}`;
+			const sectionEntry = manifest.sections.find((s) => s.level === 'section' && s.code === code);
+			return sectionEntry?.title ?? null;
+		}
+		// `paragraph_text` and `page_heading` not implemented for handbooks
+		// in this slice; the validator surfaces null as match=false which is
+		// the correct conservative default (NOTICE prompts the author to
+		// either pin or capture a more applicable sentinel).
+		return null;
 	},
 };
 

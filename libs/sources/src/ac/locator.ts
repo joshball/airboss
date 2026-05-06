@@ -15,6 +15,17 @@
  *
  * Pin format: `?at=YYYY-MM-DD`. The pin is stripped before `parseAcLocator`
  * is called; this module only sees the locator portion.
+ *
+ * TODO(adr-019-amendment-2026-05): the amendment relaxes mandatory edition
+ * pinning for chapter-and-doc-level citations. For ACs, the "edition" is
+ * the revision letter, which ADR 019 §1.2 baked into the locator path as
+ * mandatory ("a new revision letter is a new doc slug entirely"). Adopting
+ * the amendment cleanly here requires a separate decision: either treat
+ * `ac/<doc-number>` (no revision) as "current revision" and split the
+ * registry on doc-number-without-revision, or leave AC out of the
+ * amendment because the per-revision-as-new-slug semantics already give
+ * authors a stable identifier. Defer until the AC ingestion WP revisits.
+ * See `docs/decisions/019-reference-identifier-system/amendment-2026-05-optional-edition.md`.
  */
 
 import type { LocatorError, ParsedAcLocator, ParsedLocator } from '../types.ts';
