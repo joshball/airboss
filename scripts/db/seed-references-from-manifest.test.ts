@@ -1331,4 +1331,64 @@ describe('CFR seed-shape contract (real DB)', () => {
 
 		expect(missing, `CFR refs missing an eCFR URL: ${missing.join(', ')}`).toEqual([]);
 	});
+
+	// ----------------------------------------------------------------------
+	// Wave 1 authoring contract: every priority Part (the ones authored in
+	// `regulations/cfr-{14,49}/_authoring/parts.yaml` AND backed by a row in
+	// `course/references/cfr-titles.yaml`) must carry `description` +
+	// `whyItMatters` + `officialTitle` in `reference.metadata` after seed.
+	//
+	// Skipped cleanly when the DB has not been seeded yet (cfrRefs empty)
+	// so a fresh dev clone doesn't trip the assertion.
+	// ----------------------------------------------------------------------
+	it('every priority Part has description, whyItMatters, and officialTitle in metadata', async () => {
+		const PRIORITY_14_CFR_PARTS_AUTHORED_AND_SEEDED: readonly string[] = [
+			// Intersection of the priority list and `cfr-titles.yaml` slugs --
+			// the authoring YAML covers more Parts than the YAML refs, but the
+			// seeder only stamps metadata where a DB row exists.
+			'14cfr23',
+			'14cfr61',
+			'14cfr71',
+			'14cfr73',
+			'14cfr91',
+			'14cfr135',
+			'14cfr141',
+		];
+		const PRIORITY_49_CFR_PARTS_AUTHORED_AND_SEEDED: readonly string[] = ['49cfr830', '49cfr1552'];
+		const expectedSlugs = [...PRIORITY_14_CFR_PARTS_AUTHORED_AND_SEEDED, ...PRIORITY_49_CFR_PARTS_AUTHORED_AND_SEEDED];
+
+		const allCfrRefs = await db.select().from(reference).where(eq(reference.kind, REFERENCE_KINDS.CFR));
+		const cfrRefs = allCfrRefs.filter(isProductionRow);
+		if (cfrRefs.length === 0) {
+			console.warn('cfr Wave 1 metadata contract: no CFR rows in DB -- skipping');
+			return;
+		}
+
+		const slugToMetadata = new Map<string, Record<string, unknown>>();
+		for (const ref of cfrRefs) {
+			slugToMetadata.set(ref.documentSlug, (ref.metadata ?? {}) as Record<string, unknown>);
+		}
+
+		const missing: string[] = [];
+		for (const slug of expectedSlugs) {
+			const md = slugToMetadata.get(slug);
+			if (md === undefined) {
+				// Reference row absent means the YAML phase didn't seed it; the
+				// metadata contract can't apply. Surface in the failure list so
+				// the gap is visible.
+				missing.push(`${slug} (no DB row)`);
+				continue;
+			}
+			const gaps: string[] = [];
+			if (typeof md.officialTitle !== 'string' || md.officialTitle.length === 0) gaps.push('officialTitle');
+			if (typeof md.description !== 'string' || md.description.length === 0) gaps.push('description');
+			if (typeof md.whyItMatters !== 'string' || md.whyItMatters.length === 0) gaps.push('whyItMatters');
+			if (gaps.length > 0) missing.push(`${slug} (${gaps.join(', ')})`);
+		}
+
+		expect(
+			missing,
+			`Wave 1 priority CFR Parts must have description+whyItMatters+officialTitle. Missing: ${missing.join('; ')}`,
+		).toEqual([]);
+	});
 });

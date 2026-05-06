@@ -6,7 +6,7 @@
   "editionDate": "2026-04-24",
   "sourceUrl": "file:///Users/joshua/Documents/airboss-handbook-cache/regulations/cfr-49/2026-04-24-parts-1552.xml",
   "sourceSha256": "04e5ff029f3e5962d3dd70a70e465d0f4da13c005ab0f91937882ab2014a46df",
-  "fetchedAt": "2026-05-01T00:14:16.314Z",
+  "fetchedAt": "2026-05-06T16:27:06.807Z",
   "partCount": 2,
   "subpartCount": 7,
   "sectionCount": 22,
@@ -18,6 +18,16 @@
     {
       "url": "file:///Users/joshua/Documents/airboss-handbook-cache/regulations/cfr-49/2026-04-24-parts-830.xml",
       "sha256": "4e2a508220d1f118ece76d98a4fa00651a08bf557b9a11d19c186b1d64b0dcee"
+    }
+  ],
+  "parts": [
+    {
+      "number": "830",
+      "officialTitle": "Notification and Reporting of Aircraft Accidents or Incidents and Overdue Aircraft, and Preservation of Aircraft Wreckage, Mail, Cargo, and Records"
+    },
+    {
+      "number": "1552",
+      "officialTitle": "Flight Training Security Program"
     }
   ]
 }
