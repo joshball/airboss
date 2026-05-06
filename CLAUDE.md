@@ -290,6 +290,14 @@ See [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](docs/platform/MULTI_PRODUCT_AR
 - Format before commit: `bunx biome format --write` on staged files.
 - Fix all bugs directly. Never dismiss, deflect, or suggest restarts.
 
+### Markdown formatting
+
+Tables use aligned style. Run `bun run format:md` (or `bun tools/md-format/bin.ts`) on dirty files before commit. `bun run check` runs `--check` mode and fails the pipeline on unformatted files. Rules: pipe-table alignment (MD060), blank-line-around-headings (MD022), blank-line-around-fences (MD031), blank-line-around-lists (MD032), fence language tags (MD040). See [tools/md-format/README.md](tools/md-format/README.md).
+
+### Check pipeline
+
+`bun run check` runs every step in parallel and writes per-step output to `.cache/check/<step>.{stdout,stderr,exit}`. Use `--scope dirty` for fast pre-commit feedback (filters scopable steps to files changed vs HEAD); CI uses default `--scope all`. Pure type checks (svelte-check) and graph validators (references, browser-globals, help-ids, knowledge dry-run, airboss-ref) always run full regardless of scope. `--verbose` streams output live as steps finish.
+
 ## Biome
 
 - Indent: tabs (width 2)
