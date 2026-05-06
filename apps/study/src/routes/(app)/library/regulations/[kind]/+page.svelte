@@ -1,8 +1,12 @@
 <script lang="ts">
 import AcCard from '@ab/aviation/ui/cards/AcCard.svelte';
+import AcsCard from '@ab/aviation/ui/cards/AcsCard.svelte';
 import AimCorpusCard from '@ab/aviation/ui/cards/AimCorpusCard.svelte';
 import CfrPartCard from '@ab/aviation/ui/cards/CfrPartCard.svelte';
+import InfoCard from '@ab/aviation/ui/cards/InfoCard.svelte';
 import NtsbCard from '@ab/aviation/ui/cards/NtsbCard.svelte';
+import PtsCard from '@ab/aviation/ui/cards/PtsCard.svelte';
+import SafoCard from '@ab/aviation/ui/cards/SafoCard.svelte';
 import UmbrellaCard from '@ab/aviation/ui/cards/UmbrellaCard.svelte';
 import { LIBRARY_REGULATIONS_KINDS, type LibraryRegulationsKind, REFERENCE_KINDS, ROUTES } from '@ab/constants';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
@@ -123,6 +127,37 @@ const titleNumber = $derived(
 								acTitle={ref.title}
 								edition={ref.edition}
 								description={ref.description ?? null}
+								external={ref.externalUrl ? { url: ref.externalUrl, label: ref.publisher } : null}
+							/>
+						{:else if ref.kind === REFERENCE_KINDS.ACS}
+							<AcsCard
+								slug={ref.documentSlug}
+								title={ref.officialTitle ?? ref.title}
+								edition={ref.edition}
+								description={ref.description ?? null}
+								whyItMatters={ref.whyItMatters ?? null}
+								external={ref.externalUrl ? { url: ref.externalUrl, label: ref.publisher } : null}
+							/>
+						{:else if ref.kind === REFERENCE_KINDS.PTS}
+							<PtsCard
+								slug={ref.documentSlug}
+								title={ref.officialTitle ?? ref.title}
+								edition={ref.edition}
+								description={ref.description ?? null}
+								external={ref.externalUrl ? { url: ref.externalUrl, label: ref.publisher } : null}
+							/>
+						{:else if ref.kind === REFERENCE_KINDS.SAFO}
+							<SafoCard
+								safoNumber={ref.documentSlug}
+								title={ref.officialTitle ?? ref.title}
+								summary={ref.description ?? null}
+								external={ref.externalUrl ? { url: ref.externalUrl, label: ref.publisher } : null}
+							/>
+						{:else if ref.kind === REFERENCE_KINDS.INFO}
+							<InfoCard
+								infoNumber={ref.documentSlug}
+								title={ref.officialTitle ?? ref.title}
+								summary={ref.description ?? null}
 								external={ref.externalUrl ? { url: ref.externalUrl, label: ref.publisher } : null}
 							/>
 						{:else}

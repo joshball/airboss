@@ -28,6 +28,11 @@ export type CardVariant =
 	| 'CfrSectionCard'
 	| 'AimCorpusCard'
 	| 'AcCard'
+	| 'AcsCard'
+	| 'PtsCard'
+	| 'SafoCard'
+	| 'InfoCard'
+	| 'PohCard'
 	| 'NtsbCard'
 	| 'HandbookCard'
 	| 'UmbrellaCard';
@@ -49,6 +54,11 @@ export const REQUIRED_FIELDS_BY_VARIANT: Record<CardVariant, readonly string[]> 
 	CfrSectionCard: ['partNumber', 'sectionCode', 'sectionTitle', 'external'],
 	AimCorpusCard: ['title', 'description', 'whyItMatters'],
 	AcCard: ['acNumber', 'acTitle', 'edition'],
+	AcsCard: ['slug', 'title', 'edition'],
+	PtsCard: ['slug', 'title', 'edition'],
+	SafoCard: ['safoNumber', 'title'],
+	InfoCard: ['infoNumber', 'title'],
+	PohCard: ['aircraftModel', 'title', 'revision'],
 	NtsbCard: ['reportNumber', 'reportTitle'],
 	HandbookCard: ['shortSlug', 'fullTitle', 'edition', 'publisher'],
 	UmbrellaCard: ['title'],
@@ -64,6 +74,11 @@ export const RECOMMENDED_FIELDS_BY_VARIANT: Record<CardVariant, readonly string[
 	CfrSectionCard: [],
 	AimCorpusCard: [],
 	AcCard: ['description'],
+	AcsCard: ['description', 'whyItMatters'],
+	PtsCard: ['description'],
+	SafoCard: ['summary', 'date', 'audience'],
+	InfoCard: ['summary', 'date', 'audience'],
+	PohCard: ['description'],
 	NtsbCard: ['summary', 'date'],
 	HandbookCard: ['description', 'whyItMatters'],
 	UmbrellaCard: ['description', 'whyItMatters'],
