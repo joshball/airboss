@@ -1,6 +1,7 @@
 <script lang="ts">
 import AcCard from '@ab/aviation/ui/cards/AcCard.svelte';
 import AimCorpusCard from '@ab/aviation/ui/cards/AimCorpusCard.svelte';
+import CfrSectionRow from '@ab/aviation/ui/cards/CfrSectionRow.svelte';
 import NtsbCard from '@ab/aviation/ui/cards/NtsbCard.svelte';
 import UmbrellaCard from '@ab/aviation/ui/cards/UmbrellaCard.svelte';
 import { type LibraryRegulationsKind, REFERENCE_KINDS, ROUTES } from '@ab/constants';
@@ -12,6 +13,15 @@ let { data }: { data: PageData } = $props();
 
 const kind = $derived(data.kind as LibraryRegulationsKind);
 const kindLabel = $derived(data.kindLabel);
+
+// Drives the CfrSectionRow `expanded` prop. The Expand all / Collapse all
+// toolbar at the top of the section list flips this; per-row toggles
+// override locally (the row tracks its own state once toggled).
+let expandAll = $state(false);
+
+function bodyUrlFor(code: string): string {
+	return `${ROUTES.LIBRARY_REGULATIONS_GROUP(kind, data.group)}/section-body/${encodeURIComponent(code)}`;
+}
 </script>
 
 <svelte:head>
@@ -59,14 +69,22 @@ const kindLabel = $derived(data.kindLabel);
 
 {#if data.sections.length > 0}
 	<section aria-label="Sections">
+		<div class="section-toolbar">
+			<span class="section-count">{data.sections.length} sections</span>
+			<button type="button" class="section-toolbar-button" onclick={() => (expandAll = !expandAll)}>
+				{expandAll ? 'Collapse all' : 'Expand all'}
+			</button>
+		</div>
 		<ul class="section-list">
 			{#each data.sections as section (section.id)}
-				<li>
-					<a href={ROUTES.LIBRARY_REGULATIONS_SECTION(kind, data.group, section.code)} class="section-link">
-						<span class="section-code">{section.code}</span>
-						<span class="section-title">{section.title}</span>
-					</a>
-				</li>
+				<CfrSectionRow
+					code={section.code}
+					title={section.title}
+					bodyUrl={bodyUrlFor(section.code)}
+					href={ROUTES.LIBRARY_REGULATIONS_SECTION(kind, data.group, section.code)}
+					external={section.external ?? { url: '#', label: 'eCFR' }}
+					expanded={expandAll}
+				/>
 			{/each}
 		</ul>
 	</section>
@@ -77,11 +95,11 @@ const kindLabel = $derived(data.kindLabel);
 				<li>
 					{#if ref.kind === REFERENCE_KINDS.AIM || ref.kind === REFERENCE_KINDS.PCG}
 						<AimCorpusCard
-							title={ref.title}
-							officialTitle={ref.officialTitle ?? null}
+							title={ref.officialTitle ?? ref.title}
 							description={ref.description ?? ''}
 							whyItMatters={ref.whyItMatters ?? ''}
 							edition={ref.edition}
+							kindBadge={ref.kind === REFERENCE_KINDS.PCG ? 'PCG' : 'AIM'}
 							external={ref.externalUrl ? { url: ref.externalUrl, label: ref.publisher } : null}
 						/>
 					{:else if ref.kind === REFERENCE_KINDS.NTSB}
@@ -101,12 +119,11 @@ const kindLabel = $derived(data.kindLabel);
 						/>
 					{:else}
 						<UmbrellaCard
-							title={ref.title}
-							officialTitle={ref.officialTitle ?? null}
+							title={ref.officialTitle ?? ref.title}
 							description={ref.description ?? null}
 							whyItMatters={ref.whyItMatters ?? null}
 							kindBadge={ref.kindLabel}
-							editionBadge={ref.edition}
+							identifier={ref.edition && ref.edition !== '-' ? ref.edition : null}
 							external={ref.externalUrl ? { url: ref.externalUrl, label: ref.publisher } : null}
 						/>
 					{/if}
@@ -119,6 +136,33 @@ const kindLabel = $derived(data.kindLabel);
 {/if}
 
 <style>
+	.section-toolbar {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: var(--space-md);
+	}
+	.section-count {
+		font-size: var(--font-size-sm);
+		color: var(--ink-muted);
+	}
+	.section-toolbar-button {
+		appearance: none;
+		background: transparent;
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-sm);
+		padding: var(--space-2xs) var(--space-sm);
+		font: inherit;
+		font-size: var(--font-size-sm);
+		color: var(--action-default);
+		cursor: pointer;
+		transition: all var(--motion-fast) ease;
+	}
+	.section-toolbar-button:hover,
+	.section-toolbar-button:focus-visible {
+		background: var(--surface-sunken);
+		border-color: var(--action-default-edge);
+	}
 	.section-list {
 		list-style: none;
 		padding: 0;
@@ -126,30 +170,6 @@ const kindLabel = $derived(data.kindLabel);
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-2xs);
-	}
-	.section-link {
-		display: grid;
-		grid-template-columns: minmax(4rem, max-content) 1fr;
-		gap: var(--space-sm);
-		padding: var(--space-xs) var(--space-sm);
-		border-radius: var(--radius-md);
-		border: 1px solid var(--edge-default);
-		background: var(--surface-raised);
-		color: inherit;
-		text-decoration: none;
-		transition: border-color var(--motion-fast) ease;
-	}
-	.section-link:hover {
-		border-color: var(--action-default-edge);
-	}
-	.section-link:focus-visible {
-		border-color: var(--action-default-edge);
-		outline: 2px solid var(--focus-ring);
-		outline-offset: 2px;
-	}
-	.section-code {
-		font-family: var(--font-family-mono);
-		color: var(--ink-muted);
 	}
 	.grid {
 		list-style: none;
@@ -160,10 +180,12 @@ const kindLabel = $derived(data.kindLabel);
 		grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
 	}
 	.group-overview {
-		margin-bottom: var(--space-lg);
+		margin-top: var(--space-md);
+		margin-bottom: var(--space-xl);
 		display: flex;
 		flex-direction: column;
-		gap: var(--space-sm);
+		gap: var(--space-md);
+		max-width: 70ch;
 	}
 	.group-description {
 		margin: 0;
@@ -172,12 +194,13 @@ const kindLabel = $derived(data.kindLabel);
 	}
 	.group-why {
 		margin: 0;
-		padding: var(--space-sm) var(--space-md);
+		padding: var(--space-md) var(--space-lg);
 		border-left: 3px solid var(--action-default-edge);
 		background: var(--surface-sunken, var(--surface-raised));
 		display: flex;
 		flex-direction: column;
-		gap: var(--space-3xs);
+		gap: var(--space-2xs);
+		border-radius: var(--radius-sm);
 	}
 	.group-why-label {
 		font-size: var(--font-size-xs);

@@ -1,11 +1,10 @@
 <script lang="ts">
 /**
- * CFR Section card. Compact -- one row per section in the Part TOC.
- * The full Part context lives on the page header, so the card itself
- * is just code + title.
+ * CFR Section card. Used in card-grid contexts (cross-references, search
+ * results). For the in-Part section list, prefer `CfrSectionRow` (which
+ * supports inline body expansion).
  *
- * `external` is required: every section card links to its eCFR
- * canonical URL (built via the nav-tree YAML).
+ * Layout v2: title is "§91.103 -- Preflight action". `external` required.
  */
 
 import LibraryReferenceCard from '../LibraryReferenceCard.svelte';
@@ -30,6 +29,14 @@ const subject = $derived(`§${sectionCode}`);
 $effect.pre(() => {
 	enforceCardComplete('CfrSectionCard', subject, { partNumber, sectionCode, sectionTitle, external });
 });
+
+const title = $derived(sectionTitle ? `${subject} -- ${sectionTitle}` : subject);
 </script>
 
-<LibraryReferenceCard title={subject} officialTitle={sectionTitle} {href} {external} />
+<LibraryReferenceCard
+	{title}
+	kindBadge="CFR"
+	identifier={`Part ${partNumber}`}
+	local={{ url: href, label: 'Read section' }}
+	{external}
+/>

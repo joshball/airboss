@@ -30,19 +30,17 @@ let { data }: { data: PageData } = $props();
 				<CfrTitleCard
 					shortLabel={bucket.label}
 					topic={bucket.topic ?? ''}
-					officialTitle={bucket.officialTitle ?? ''}
 					description={bucket.description ?? ''}
 					whyItMatters={bucket.whyItMatters ?? ''}
 					href={ROUTES.LIBRARY_REGULATIONS_KIND(bucket.kind)}
 					external={bucket.external}
-					countLabel={`${bucket.count} reference${bucket.count === 1 ? '' : 's'}`}
 				/>
 			{:else}
 				<UmbrellaCard
-					title={bucket.label}
-					officialTitle={bucket.officialTitle ?? null}
+					title={bucket.officialTitle ?? bucket.label}
 					description={bucket.description ?? null}
 					whyItMatters={bucket.whyItMatters ?? null}
+					kindBadge={bucket.label}
 					href={ROUTES.LIBRARY_REGULATIONS_KIND(bucket.kind)}
 					external={bucket.external}
 				/>

@@ -76,12 +76,10 @@ const totalRecommendedGaps = $derived(data.summary.reduce((acc, s) => acc + s.mi
 		<CfrTitleCard
 			shortLabel="14 CFR"
 			topic="Aeronautics and Space"
-			officialTitle="Title 14 of the Code of Federal Regulations -- Aeronautics and Space"
 			description="The federal aviation regulations. Codifies airman certification, aircraft airworthiness, flight operations, air traffic, schools, and the FAA itself."
 			whyItMatters="This is the rulebook every pilot operates under. Knowing 14 CFR is the difference between airmanship and ramp-check anxiety."
 			href="#"
 			external={{ url: 'https://www.ecfr.gov/current/title-14', label: 'eCFR' }}
-			countLabel="11 references"
 		/>
 		<CfrPartCard
 			titleNumber={14}
@@ -135,11 +133,10 @@ const totalRecommendedGaps = $derived(data.summary.reduce((acc, s) => acc + s.mi
 		/>
 		<UmbrellaCard
 			title="Some unfamiliar corpus"
-			officialTitle="Optional subtitle"
 			description="A description if available."
 			whyItMatters="Pilot relevance if available."
 			kindBadge="OTHER"
-			editionBadge="2026"
+			identifier="2026"
 			external={{ url: 'https://example.com', label: 'Publisher' }}
 		/>
 	</div>

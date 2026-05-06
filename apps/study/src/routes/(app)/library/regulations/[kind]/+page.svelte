@@ -82,10 +82,10 @@ const titleNumber = $derived(
 							/>
 						{:else}
 							<UmbrellaCard
-								title={group.label}
-								officialTitle={group.officialTitle ?? null}
+								title={group.officialTitle ?? group.label}
 								description={group.description ?? null}
 								whyItMatters={group.whyItMatters ?? null}
+								kindBadge={group.label}
 								href={ROUTES.LIBRARY_REGULATIONS_GROUP(kind, group.groupKey)}
 							/>
 						{/if}
@@ -103,11 +103,11 @@ const titleNumber = $derived(
 					<li>
 						{#if ref.kind === REFERENCE_KINDS.AIM || ref.kind === REFERENCE_KINDS.PCG}
 							<AimCorpusCard
-								title={ref.title}
-								officialTitle={ref.officialTitle ?? null}
+								title={ref.officialTitle ?? ref.title}
 								description={ref.description ?? ''}
 								whyItMatters={ref.whyItMatters ?? ''}
 								edition={ref.edition}
+								kindBadge={ref.kind === REFERENCE_KINDS.PCG ? 'PCG' : 'AIM'}
 								external={ref.externalUrl ? { url: ref.externalUrl, label: ref.publisher } : null}
 							/>
 						{:else if ref.kind === REFERENCE_KINDS.NTSB}
@@ -127,12 +127,11 @@ const titleNumber = $derived(
 							/>
 						{:else}
 							<UmbrellaCard
-								title={ref.title}
-								officialTitle={ref.officialTitle ?? null}
+								title={ref.officialTitle ?? ref.title}
 								description={ref.description ?? null}
 								whyItMatters={ref.whyItMatters ?? null}
 								kindBadge={ref.kindLabel}
-								editionBadge={ref.edition}
+								identifier={ref.edition && ref.edition !== '-' ? ref.edition : null}
 								external={ref.externalUrl ? { url: ref.externalUrl, label: ref.publisher } : null}
 							/>
 						{/if}
@@ -145,10 +144,10 @@ const titleNumber = $derived(
 
 <style>
 	.block {
-		margin-bottom: var(--space-lg);
+		margin-bottom: var(--space-xl);
 	}
 	.block h2 {
-		margin: 0 0 var(--space-sm);
+		margin: 0 0 var(--space-md);
 		font-size: var(--font-size-lg);
 		font-weight: var(--font-weight-semibold);
 	}
@@ -157,14 +156,16 @@ const titleNumber = $derived(
 		padding: 0;
 		margin: 0;
 		display: grid;
-		gap: var(--space-md);
+		gap: var(--space-lg);
 		grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
 	}
 	.kind-overview {
-		margin-bottom: var(--space-lg);
+		margin-top: var(--space-md);
+		margin-bottom: var(--space-xl);
 		display: flex;
 		flex-direction: column;
-		gap: var(--space-sm);
+		gap: var(--space-md);
+		max-width: 70ch;
 	}
 	.kind-description {
 		margin: 0;
@@ -173,12 +174,13 @@ const titleNumber = $derived(
 	}
 	.kind-why {
 		margin: 0;
-		padding: var(--space-sm) var(--space-md);
+		padding: var(--space-md) var(--space-lg);
 		border-left: 3px solid var(--action-default-edge);
 		background: var(--surface-sunken, var(--surface-raised));
 		display: flex;
 		flex-direction: column;
-		gap: var(--space-3xs);
+		gap: var(--space-2xs);
+		border-radius: var(--radius-sm);
 	}
 	.kind-why-label {
 		font-size: var(--font-size-xs);
