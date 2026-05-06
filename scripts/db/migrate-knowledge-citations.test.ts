@@ -14,6 +14,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import {
+	buildOriginalAirbossRef,
 	buildProposedYaml,
 	extractLegacyCitations,
 	parseExistingTicks,
@@ -86,6 +87,7 @@ describe('buildProposedYaml', () => {
 			chapter: 3,
 			chapterTitle: 'Basic Flight Maneuvers',
 			note: 'Practical flight interpretation of the four forces.',
+			redirectedFrom: null,
 		});
 		expect(yaml).toBe(
 			'ref: airboss-ref:handbooks/afh/3\nchapter_title: Basic Flight Maneuvers\nnote: Practical flight interpretation of the four forces.',
@@ -93,13 +95,73 @@ describe('buildProposedYaml', () => {
 	});
 
 	it('omits chapter_title when null', () => {
-		const yaml = buildProposedYaml({ slug: 'afh', chapter: null, chapterTitle: null, note: 'a note' });
+		const yaml = buildProposedYaml({
+			slug: 'afh',
+			chapter: null,
+			chapterTitle: null,
+			note: 'a note',
+			redirectedFrom: null,
+		});
 		expect(yaml).toBe('ref: airboss-ref:handbooks/afh\nnote: a note');
 	});
 
 	it('omits note when blank', () => {
-		const yaml = buildProposedYaml({ slug: 'afh', chapter: 3, chapterTitle: 'X', note: '' });
+		const yaml = buildProposedYaml({
+			slug: 'afh',
+			chapter: 3,
+			chapterTitle: 'X',
+			note: '',
+			redirectedFrom: null,
+		});
 		expect(yaml).toBe('ref: airboss-ref:handbooks/afh/3\nchapter_title: X');
+	});
+
+	it('includes redirected_from when populated, between chapter_title and note', () => {
+		const yaml = buildProposedYaml({
+			slug: 'afh',
+			chapter: 3,
+			chapterTitle: 'Basic Flight Maneuvers',
+			note: 'Practical interpretation.',
+			redirectedFrom: 'airboss-ref:handbooks/afh/FAA-H-8083-3B/3',
+		});
+		expect(yaml).toBe(
+			'ref: airboss-ref:handbooks/afh/3\n' +
+				'chapter_title: Basic Flight Maneuvers\n' +
+				'redirected_from: airboss-ref:handbooks/afh/FAA-H-8083-3B/3\n' +
+				'note: Practical interpretation.',
+		);
+	});
+
+	it('includes redirected_from on a doc-only rewrite (no chapter parseable)', () => {
+		const yaml = buildProposedYaml({
+			slug: 'afh',
+			chapter: null,
+			chapterTitle: null,
+			note: 'a note',
+			redirectedFrom: 'airboss-ref:handbooks/afh/FAA-H-8083-3B',
+		});
+		expect(yaml).toBe(
+			'ref: airboss-ref:handbooks/afh\nredirected_from: airboss-ref:handbooks/afh/FAA-H-8083-3B\nnote: a note',
+		);
+	});
+});
+
+describe('buildOriginalAirbossRef', () => {
+	it('builds a chapter-pinned URI when slug + edition + chapter are known', () => {
+		expect(buildOriginalAirbossRef({ slug: 'afh', edition: 'FAA-H-8083-3B' }, 4)).toBe(
+			'airboss-ref:handbooks/afh/FAA-H-8083-3B/4',
+		);
+	});
+
+	it('builds a doc-only URI when chapter is null', () => {
+		expect(buildOriginalAirbossRef({ slug: 'afh', edition: 'FAA-H-8083-3B' }, null)).toBe(
+			'airboss-ref:handbooks/afh/FAA-H-8083-3B',
+		);
+	});
+
+	it('returns null when the legacy source did not parse to a recognised handbook', () => {
+		expect(buildOriginalAirbossRef(null, 4)).toBeNull();
+		expect(buildOriginalAirbossRef(null, null)).toBeNull();
 	});
 });
 
@@ -242,6 +304,7 @@ describe('runMigration', () => {
 		expect(review).toContain('Knowledge citation migration');
 		expect(review).toContain('AFH (FAA-H-8083-3B)');
 		expect(review).toContain('airboss-ref:handbooks/afh/3');
+		expect(review).toContain('redirected_from: airboss-ref:handbooks/afh/FAA-H-8083-3B/3');
 		expect(review).toContain('Title match: **yes**');
 		// Source file untouched.
 		const after = readFileSync(repo.nodeMdPath, 'utf8');
@@ -277,6 +340,7 @@ describe('runMigration', () => {
 		expect(after).not.toContain('AFH (FAA-H-8083-3B)');
 		expect(after).toContain('ref: airboss-ref:handbooks/afh/3');
 		expect(after).toContain('chapter_title: Basic Flight Maneuvers');
+		expect(after).toContain('redirected_from: airboss-ref:handbooks/afh/FAA-H-8083-3B/3');
 		expect(after).toContain('note: Practical flight interpretation of the four forces.');
 	});
 
