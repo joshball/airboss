@@ -575,8 +575,15 @@ function formatYamlScalar(value: string): string {
 /**
  * Render one row of the review file. Format is intentionally line-stable so
  * the parser on the `--apply` path can read it back without ambiguity.
+ *
+ * When `handEditedProposed` is provided (from the previous review file's
+ * second yaml fence), it is preserved verbatim instead of regenerating from
+ * `row.proposedYaml`. This lets the reviewer hand-edit a row, save, re-run
+ * `--dry-run`, and have their edits survive the regeneration -- the row's
+ * tick state and the row's proposed-rewrite body are both stable across
+ * dry-run regenerations.
  */
-export function renderReviewRow(row: ReviewRow): string {
+export function renderReviewRow(row: ReviewRow, handEditedProposed?: string): string {
 	const lines: string[] = [];
 	lines.push(REVIEW_ROW_FENCE);
 	lines.push(`- [ ] **${row.relPath}** (line ${row.startLine})`);
@@ -592,12 +599,20 @@ export function renderReviewRow(row: ReviewRow): string {
 	lines.push('  Proposed rewrite:');
 	lines.push('');
 	lines.push('  ```yaml');
-	const proposedBody = row.proposedYaml.split(/\r?\n/);
-	const firstBody = proposedBody[0] ?? '';
-	const restBody = proposedBody.slice(1);
-	lines.push(`  - ${firstBody}`);
-	for (const l of restBody) {
-		lines.push(`    ${l}`);
+	if (handEditedProposed !== undefined && handEditedProposed.trim().length > 0) {
+		// Preserve hand edits verbatim. The stored body is at column 0 (markdown
+		// indent stripped); re-add the two-space markdown wrap.
+		for (const l of handEditedProposed.split(/\r?\n/)) {
+			lines.push(l === '' ? '' : `  ${l}`);
+		}
+	} else {
+		const proposedBody = row.proposedYaml.split(/\r?\n/);
+		const firstBody = proposedBody[0] ?? '';
+		const restBody = proposedBody.slice(1);
+		lines.push(`  - ${firstBody}`);
+		for (const l of restBody) {
+			lines.push(`    ${l}`);
+		}
 	}
 	lines.push('  ```');
 	lines.push('');
@@ -621,7 +636,11 @@ export function renderReviewRow(row: ReviewRow): string {
 	return lines.join('\n');
 }
 
-export function renderReviewFile(rows: readonly ReviewRow[], existingTicks: ReadonlyMap<string, boolean>): string {
+export function renderReviewFile(
+	rows: readonly ReviewRow[],
+	existingTicks: ReadonlyMap<string, boolean>,
+	existingProposed?: ReadonlyMap<string, string>,
+): string {
 	const head: string[] = [];
 	head.push(REVIEW_FILE_HEADING);
 	head.push('');
@@ -635,7 +654,8 @@ export function renderReviewFile(rows: readonly ReviewRow[], existingTicks: Read
 	for (const row of rows) {
 		const key = tickKey(row.relPath, row.startLine);
 		const checked = existingTicks.get(key) === true;
-		const rendered = renderReviewRow(row);
+		const handEdited = existingProposed?.get(key);
+		const rendered = renderReviewRow(row, handEdited);
 		body.push(checked ? rendered.replace('- [ ]', '- [x]') : rendered);
 	}
 	return `${head.join('\n')}\n${body.join('\n')}`;
@@ -936,7 +956,7 @@ export function runMigration(options: RunOptions): RunReport {
 	}
 	const titleMismatches = allRows.filter((r) => r.parsedDetail.chapterTitle !== null && !r.titleMatch).length;
 	if (options.mode === 'dry-run') {
-		const rendered = renderReviewFile(allRows, existingTicks);
+		const rendered = renderReviewFile(allRows, existingTicks, existingProposed);
 		writeFileSync(reviewPath, rendered, 'utf8');
 		return {
 			mode: 'dry-run',
