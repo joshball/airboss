@@ -1,13 +1,23 @@
 ---
-title: 'Spec: Goal Composer'
+id: goal-composer
+title: "Spec: Goal Composer"
 product: study
-feature: goal-composer
-type: spec
+category: feature
 status: draft
-review_status: pending
+agent_review_status: pending
+human_review_status: pending
 created: 2026-04-28
-adr: 016
-phase: 9
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - goals
+legacy_fields:
+  feature: goal-composer
+  type: spec
+  review_status: pending
+  adr: 16
+  phase: 9
 ---
 
 # Spec: Goal Composer

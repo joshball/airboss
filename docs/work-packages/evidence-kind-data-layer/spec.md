@@ -1,10 +1,22 @@
 ---
-title: 'Spec: Evidence Kind Data Layer'
+id: evidence-kind-data-layer
+title: "Spec: Evidence Kind Data Layer"
 product: study
-feature: evidence-kind-data-layer
-type: spec
-status: read
-review_status: done
+category: feature
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-30
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - evidence
+  - schema
+legacy_fields:
+  feature: evidence-kind-data-layer
+  type: spec
+  review_status: done
 ---
 
 # Spec: Evidence Kind Data Layer

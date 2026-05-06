@@ -1,11 +1,25 @@
 ---
-title: 'Spec: Engine Goal Cutover'
+id: engine-goal-cutover
+title: "Spec: Engine Goal Cutover"
 product: study
-feature: engine-goal-cutover
-type: spec
-status: shipped
-review_status: pending
+category: feature
+status: in-flight
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-29
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - engine
+  - goals
+legacy_fields:
+  feature: engine-goal-cutover
+  type: spec
+  review_status: pending
 ---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
 
 # Spec: Engine Goal Cutover
 

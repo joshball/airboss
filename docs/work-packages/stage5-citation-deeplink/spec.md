@@ -1,10 +1,22 @@
 ---
-title: 'Spec: Stage-5 citation deep-linking'
+id: stage5-citation-deeplink
+title: "Spec: Stage-5 citation deep-linking"
 product: study
-feature: stage5-citation-deeplink
-type: spec
-status: unread
-review_status: pending
+category: feature
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-05-03
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - citations
+  - deeplink
+legacy_fields:
+  feature: stage5-citation-deeplink
+  type: spec
+  review_status: pending
 ---
 
 # Spec: Stage-5 citation deep-linking

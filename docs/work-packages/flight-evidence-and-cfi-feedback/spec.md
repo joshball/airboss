@@ -1,12 +1,23 @@
 ---
-title: 'Spec: Flight evidence and teacher feedback'
+id: flight-evidence-and-cfi-feedback
+title: "Spec: Flight evidence and teacher feedback"
 product: study
-feature: flight-evidence-and-cfi-feedback
-type: spec
+category: feature
 status: draft
-review_status: pending
+agent_review_status: pending
+human_review_status: pending
 created: 2026-05-04
-revised: 2026-05-04
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - evidence
+  - cfi
+legacy_fields:
+  feature: flight-evidence-and-cfi-feedback
+  type: spec
+  review_status: pending
+  revised: 2026-05-04
 ---
 
 Add real-flight evidence to airboss alongside a lightweight teacher-feedback layer. A user logs a flight + maneuvers + optional GPS track. Optionally a teacher (CFI, mentor, peer) reviews and comments. The system tracks data; it does not gate. The Practiced pill on `/study` aggregates objectively across self-assessed and teacher-reviewed maneuvers. Teachers can engage frictionlessly via a magic-link debrief flow (no formal "create account" prompt) and, if they want, author their own teaching syllabus with drag-handle reordering.

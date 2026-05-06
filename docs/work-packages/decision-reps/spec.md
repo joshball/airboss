@@ -1,9 +1,21 @@
 ---
-title: 'Spec: Decision Reps'
+id: decision-reps
+title: "Spec: Decision Reps"
 product: study
-feature: decision-reps
-type: spec
-status: unread
+category: feature
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-17
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - scenarios
+  - reps
+legacy_fields:
+  feature: decision-reps
+  type: spec
 ---
 
 # Spec: Decision Reps

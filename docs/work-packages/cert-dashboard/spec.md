@@ -1,13 +1,24 @@
 ---
-title: 'Spec: Cert Dashboard'
+id: cert-dashboard
+title: "Spec: Cert Dashboard"
 product: study
-feature: cert-dashboard
-type: spec
+category: feature
 status: draft
-review_status: pending
+agent_review_status: pending
+human_review_status: pending
 created: 2026-04-28
-adr: 016
-phase: 7
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - cert
+  - dashboard
+legacy_fields:
+  feature: cert-dashboard
+  type: spec
+  review_status: pending
+  adr: 16
+  phase: 7
 ---
 
 # Spec: Cert Dashboard

@@ -1,10 +1,22 @@
 ---
-title: 'Library taxonomy: by-cert primary, topic cross-cut, regulations top-level'
+id: library-by-cert
+title: "Library taxonomy: by-cert primary, topic cross-cut, regulations top-level"
 product: study
-feature: library-by-cert
-type: spec
-status: testing
-review_status: pending
+category: feature
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-30
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - library
+  - cert
+legacy_fields:
+  feature: library-by-cert
+  type: spec
+  review_status: pending
 ---
 
 # Library taxonomy proposal

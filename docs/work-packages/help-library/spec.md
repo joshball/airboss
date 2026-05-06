@@ -1,9 +1,20 @@
 ---
-title: 'Spec: Help Library'
+id: help-library
+title: "Spec: Help Library"
 product: study
-feature: help-library
-type: spec
-status: unread
+category: feature
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-22
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - help
+legacy_fields:
+  feature: help-library
+  type: spec
 ---
 
 # Spec: Help Library

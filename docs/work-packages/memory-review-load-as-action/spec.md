@@ -1,8 +1,22 @@
 ---
-status: deferred
-trigger: when the next memory-review UX overhaul lands, OR if production traces show ABANDONED session rows growing from prefetch traffic
-folded_into: docs/work-packages/review-flow-v2/spec.md
-source: 2026-04-27 correctness review
+id: memory-review-load-as-action
+title: "Memory review: load -> action conversion"
+product: study
+category: feature
+status: abandoned
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-28
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - review
+  - memory
+legacy_fields:
+  trigger: when the next memory-review UX overhaul lands, OR if production traces show ABANDONED session rows growing from prefetch traffic
+  folded_into: docs/work-packages/review-flow-v2/spec.md
+  source: 2026-04-27 correctness review
 ---
 
 # Memory review: load -> action conversion

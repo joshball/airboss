@@ -1,9 +1,21 @@
 ---
-title: 'Spec: Apply Errata and AFH MOSAIC'
+id: apply-errata-and-afh-mosaic
+title: "Spec: Apply Errata and AFH MOSAIC"
 product: study
-feature: apply-errata-and-afh-mosaic
-type: spec
-status: unread
+category: feature
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-28
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - handbook
+  - errata
+legacy_fields:
+  feature: apply-errata-and-afh-mosaic
+  type: spec
 ---
 
 # Spec: Apply Errata and AFH MOSAIC

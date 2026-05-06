@@ -1,10 +1,21 @@
 ---
-title: 'Spec: Learning Dashboard'
+id: learning-dashboard
+title: "Spec: Learning Dashboard"
 product: study
-feature: learning-dashboard
-type: spec
-status: unread
-review_status: pending
+category: feature
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-20
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - dashboard
+legacy_fields:
+  feature: learning-dashboard
+  type: spec
+  review_status: pending
 ---
 
 # Spec: Learning Dashboard

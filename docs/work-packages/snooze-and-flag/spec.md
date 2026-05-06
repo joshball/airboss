@@ -1,12 +1,26 @@
 ---
-title: 'snooze-and-flag'
-status: done
-size: large
-depends_on: [review-flow-v2 (shares review chrome)]
+id: snooze-and-flag
+title: snooze-and-flag
+product: study
+category: feature
+status: in-flight
+agent_review_status: pending
+human_review_status: pending
 created: 2026-04-24
-deferred_at: 2026-04-28
-trigger: review-flow-v2 unblocks (locked or shipped), AND the next SMI walkthrough re-raises items 10 / 11 (snooze duration UI, mid-session replacement). At that point, run /ball-wp-spec to lock product decisions and ship the substrate.
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - review
+legacy_fields:
+  size: large
+  deferred_at: 2026-04-28
+  trigger: review-flow-v2 unblocks (locked or shipped), AND the next SMI walkthrough re-raises items 10 / 11 (snooze duration UI, mid-session replacement). At that point, run /ball-wp-spec to lock product decisions and ship the substrate.
+  _legacy_depends_on_raw:
+    - review-flow-v2 (shares review chrome)
 ---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
 
 # Snooze and Flag
 

@@ -1,10 +1,21 @@
 ---
-title: 'Spec: Knowledge Graph'
+id: knowledge-graph
+title: "Spec: Knowledge Graph"
 product: study
-feature: knowledge-graph
-type: spec
-status: unread
-review_status: pending
+category: feature
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-20
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - knowledge-graph
+legacy_fields:
+  feature: knowledge-graph
+  type: spec
+  review_status: pending
 ---
 
 # Spec: Knowledge Graph

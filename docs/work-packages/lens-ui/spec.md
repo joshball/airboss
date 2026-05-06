@@ -1,13 +1,23 @@
 ---
-title: 'Spec: Lens UI'
+id: lens-ui
+title: "Spec: Lens UI"
 product: study
-feature: lens-ui
-type: spec
+category: feature
 status: draft
-review_status: pending
+agent_review_status: pending
+human_review_status: pending
 created: 2026-04-28
-adr: 016
-phase: 8
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - lens
+legacy_fields:
+  feature: lens-ui
+  type: spec
+  review_status: pending
+  adr: 16
+  phase: 8
 ---
 
 # Spec: Lens UI
