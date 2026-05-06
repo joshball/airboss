@@ -88,7 +88,7 @@ import {
 	SYLLABUS_STATUS_VALUES,
 	SYLLABUS_STATUSES,
 } from '@ab/constants';
-import { timestamps } from '@ab/db';
+import { inList, timestamps } from '@ab/db';
 import type { RelevanceEntry, StructuredCitation } from '@ab/types';
 import { desc, sql } from 'drizzle-orm';
 import {
@@ -111,11 +111,6 @@ import {
 } from 'drizzle-orm/pg-core';
 
 export const studySchema = pgSchema(SCHEMAS.STUDY);
-
-/** Serialize a list of text values into a SQL `IN (...)` fragment for CHECK. */
-function inList(values: readonly string[]): string {
-	return values.map((v) => `'${v.replace(/'/g, "''")}'`).join(', ');
-}
 
 /**
  * Serialize a list of text values into a JSON array literal for embedding in

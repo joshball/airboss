@@ -39,7 +39,7 @@ import {
 	SYNC_OUTCOME_VALUES,
 	TASK_TYPE_VALUES,
 } from '@ab/constants';
-import { timestamps } from '@ab/db';
+import { inList, timestamps } from '@ab/db';
 import { desc, sql } from 'drizzle-orm';
 import {
 	boolean,
@@ -53,16 +53,6 @@ import {
 	timestamp,
 	uniqueIndex,
 } from 'drizzle-orm/pg-core';
-
-/**
- * Render a constant string array as a SQL `IN (...)` value list. Inputs MUST be
- * `as const` arrays imported from `@ab/constants` -- this helper assumes the
- * input is compile-time-known (e.g. `REVIEW_KIND_VALUES`). The single-quote
- * escape is defense in depth on a low-likelihood vector; never pass a runtime
- * string here. CHECK constraints don't take parameters, so the raw SQL is
- * required.
- */
-const inList = (values: readonly string[]) => values.map((v) => `'${v.replace(/'/g, "''")}'`).join(', ');
 
 /**
  * Shape of the `media` jsonb column on `hangar.source` (wp-hangar-non-textual).

@@ -18,14 +18,10 @@
 
 import { bauthUser } from '@ab/auth/schema';
 import { CITATION_SOURCE_VALUES, CITATION_TARGET_VALUES } from '@ab/constants';
-import { timestamps } from '@ab/db';
+import { inList, timestamps } from '@ab/db';
 import { sql } from 'drizzle-orm';
 import { check, index, text, uniqueIndex } from 'drizzle-orm/pg-core';
 import { studySchema } from '../schema';
-
-function inList(values: readonly string[]): string {
-	return values.map((v) => `'${v.replace(/'/g, "''")}'`).join(', ');
-}
 
 export const contentCitation = studySchema.table(
 	'content_citations',

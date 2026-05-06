@@ -17,11 +17,9 @@
 
 import { bauthUser } from '@ab/auth/schema';
 import { AUDIT_TARGET_VALUES, SCHEMAS } from '@ab/constants';
+import { inList } from '@ab/db';
 import { sql } from 'drizzle-orm';
 import { check, index, jsonb, pgSchema, text, timestamp } from 'drizzle-orm/pg-core';
-
-/** Render a string array as a SQL `IN (...)` value list. */
-const inList = (values: readonly string[]) => values.map((v) => `'${v.replace(/'/g, "''")}'`).join(', ');
 
 export const auditSchema = pgSchema(SCHEMAS.AUDIT);
 
