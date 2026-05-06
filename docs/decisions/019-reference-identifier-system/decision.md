@@ -59,6 +59,8 @@ The WHATWG URL parser accepts three syntactic variants for non-special schemes (
 
 ### 1.2 Per-corpus rules
 
+> **Amendment**: edition is optional in the locator path for handbooks (and is registry-aware-disambiguated by the parser). See [amendment-2026-05-optional-edition.md](amendment-2026-05-optional-edition.md).
+
 Each corpus's WP defines:
 
 - The locator shape it uses
@@ -137,6 +139,8 @@ airboss-ref:handbooks/afh/8083-3C/5/intro               AFH 8083-3C, chapter 5, 
 
 Edition is part of the doc slug (uppercase revision letter, matching FAA convention). 8083-25D is a new doc slug entirely.
 
+> **Amendment**: edition is now optional in the locator path for chapter-and-doc-level handbook citations. See [amendment-2026-05-optional-edition.md](amendment-2026-05-optional-edition.md).
+
 #### POHs (`pohs`)
 
 ```text
@@ -187,6 +191,8 @@ airboss-ref:asrs/1234567?at=2024                        ASRS report by ACN
 Each gets its own corpus and resolver. Per-corpus rules (locator shape, edition convention) finalized when the corpus's WP lands; the examples above show the expected shape.
 
 ### 1.3 Edition pinning
+
+> **Amendment**: edition pinning is no longer mandatory for chapter-and-doc-level citations. Page-pinned, paragraph-pinned, and quote-bearing citations still require a pin. See [amendment-2026-05-optional-edition.md](amendment-2026-05-optional-edition.md).
 
 **Mandatory.** Every identifier is pinned. There are two forms:
 
@@ -259,6 +265,8 @@ The renderer collects adjacent identifiers and substitutes the grouped list. A s
 
 ### 1.5 Validation rules
 
+> **Amendment**: row 3 distinguishes locator precision (doc-or-chapter-level vs. edition-sensitive); row 5 (`?at=unpinned`) is removed; rows 15 (drift sentinel mismatch) and 16 (sentinel-laundering safeguard) are added. See [amendment-2026-05-optional-edition.md](amendment-2026-05-optional-edition.md).
+
 Build-time validation is tiered.
 
 Rules are evaluated **in order**; the validator emits exactly one error per identifier (the first matching rule).
@@ -268,9 +276,8 @@ Rules are evaluated **in order**; the validator emits exactly one error per iden
 | 0 | Identifier uses `unknown` magic prefix (e.g. `airboss-ref:unknown/<descriptive-string>`) | ERROR with message: "Transitional reference; cannot publish. Replace with a real identifier or wait for ingestion of the relevant corpus." |
 | 1 | Identifier must parse (URL form is path-rootless per §1.1.1, corpus is enumerated in §1.2 — `unknown` is excluded from this check, handled by row 0 — and locator is syntactically valid for that corpus's resolver) | ERROR |
 | 2 | Identifier resolves to an `accepted` or `superseded` registry entry | ERROR |
-| 3 | Pinned edition exists in registry | ERROR |
+| 3 | Pinned edition exists in registry; **OR** for unpinned identifiers, the locator precision permits unpinned (doc-or-chapter-level OK; page / paragraph / quote precision is ERROR). Per the amendment, an unpinned doc-or-chapter-level citation whose slug has no current edition emits a registry-aware ERROR with the suggested pin. | ERROR |
 | 4 | Identifier resolves to `pending`, `draft`, or `retired` | ERROR (message distinguishes the state: "entry is pending review", "entry is in draft", "entry is retired") |
-| 5 | Identifier uses `?at=unpinned` | WARNING |
 | 6 | Pinned edition is older than current `accepted` by > 1 edition | WARNING |
 | 7 | Link text is empty (after stripping Markdown markup) | ERROR |
 | 8 | Bare identifier in prose (not in link) | NOTICE |
@@ -280,6 +287,8 @@ Rules are evaluated **in order**; the validator emits exactly one error per iden
 | 12 | Cross-section move (a `cross-section` `AliasEntry`) | ERROR. The resolver does NOT walk past a `cross-section` alias; chain resolution stops at the first cross-section hop. Author must manually re-pin to the new identifier. See §6.1. |
 | 13 | Reference to superseded entry without `acknowledgments` entry | WARNING |
 | 14 | Reason slug in acknowledgments exceeds 48 characters | NOTICE |
+| 15 | Drift sentinel mismatch (captured `chapter_title`/`section_title`/`paragraph_text`/`page_heading` differs from resolver's value for the resolved edition) | NOTICE (does not block publish per §1.6) |
+| 16 | Sentinel updated in same commit as a registry edition advance for the cited slug (sentinel-laundering safeguard) | NOTICE (does not block publish per §1.6) |
 
 Severity tiers:
 
@@ -798,6 +807,7 @@ The migration tool itself is a Phase 9 WP deliverable; this ADR specifies the ru
 | Academic citation formatters | DROPPED. No concrete trigger. If a real need arises, the need itself becomes the trigger; we don't pre-author a deferral. |
 | Resolver service infrastructure (`refs.airboss.dev`) | DROPPED from v3 scope. External-viewer fallback is the per-corpus live URL (eCFR for regs, faa.gov for AIM/ACs). Resolver service can be added later as enhancement; not load-bearing. |
 | `@unspecified` pin form | DROPPED. Mandatory pinning is the discipline; "deliberately ambiguous" cases use `+historical` ack on a representative pin instead. |
+| `?at=unpinned` query value | DROPPED per [amendment 2026-05](amendment-2026-05-optional-edition.md) D3. The amendment makes edition optional for chapter-and-doc-level locators; authors omit `?at=` instead of writing `?at=unpinned`. The literal is now silently treated as a missing pin by the validator. |
 
 ## 11. Acceptance criteria
 

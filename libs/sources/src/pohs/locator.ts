@@ -17,6 +17,12 @@
  *
  * Pin format: POHs do not have a stable public publication cadence; the
  * `?at=YYYY-MM` pin captures the manufacturer's revision date when known.
+ *
+ * Note(adr-019-amendment-2026-05): POH edition pins ride on `?at=`, never
+ * the locator path. The amendment makes `?at=` optional via the parser
+ * (parser already accepts missing `?at=`); validator-side optional-pin
+ * acceptance for POHs lands when the POH WP exercises sentinels for this
+ * corpus. No locator-grammar change is required here.
  */
 
 import type { LocatorError, ParsedLocator, ParsedPohsLocator } from '../types.ts';

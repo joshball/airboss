@@ -14,11 +14,13 @@
  * a row-1 ERROR.
  */
 
+import type { SentinelField } from '../sentinels.ts';
 import type {
 	Edition,
 	EditionId,
 	IndexedContent,
 	LocatorError,
+	ParsedIdentifier,
 	ParsedLocator,
 	SourceEntry,
 	SourceId,
@@ -44,6 +46,15 @@ export interface CorpusResolver {
 	getLiveUrl(id: SourceId, edition: EditionId): string | null;
 	getDerivativeContent(id: SourceId, edition: EditionId): string | null;
 	getIndexedContent(id: SourceId, edition: EditionId): Promise<IndexedContent | null>;
+	/**
+	 * Per ADR 019 amendment 2026-05 §2 (drift sentinels). Look up the
+	 * actual value of `field` for the given parsed identifier in the
+	 * resolved (or `edition`-pinned) edition. Returns `null` when the
+	 * resolver can't supply a value (unknown locator, sentinel doesn't
+	 * apply to this corpus, etc.). Optional -- corpora that haven't yet
+	 * shipped sentinel support omit it.
+	 */
+	getSentinelValue?(parsed: ParsedIdentifier, field: SentinelField, edition?: EditionId): string | null;
 }
 
 /**

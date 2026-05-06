@@ -11,11 +11,20 @@
  * annual diff job, and any other consumer that needs richer surface.
  */
 
-import type { AliasEntry, RegistryReader, SourceEntry, SourceId, SourceLifecycle } from '../types.ts';
+import type {
+	AliasEntry,
+	RegistryReader,
+	RegistrySlugEdition,
+	SourceEntry,
+	SourceId,
+	SourceLifecycle,
+} from '../types.ts';
 import { isEnumeratedCorpus } from './corpus-resolver.ts';
 import { getEditionsMap } from './editions.ts';
+import { getCorpusEntryIds } from './index-cache.ts';
 import { getEntryLifecycle } from './lifecycle.ts';
 import { getCurrentEdition, hasEntry, resolveIdentifier, stripPin, walkSupersessionChain } from './query.ts';
+import { getSources } from './sources.ts';
 
 /**
  * The production `RegistryReader` consumed by the validator and any other
@@ -92,6 +101,39 @@ export const productionRegistry: RegistryReader = {
 	},
 	isCorpusKnown(corpus: string): boolean {
 		return isEnumeratedCorpus(corpus);
+	},
+	listEditionsForSlug(corpus: string, slug: string): readonly RegistrySlugEdition[] {
+		// Walk every entry in `corpus` whose canonical id begins with the
+		// `<corpus>/<slug>/` segment, collect its edition map, and dedupe by
+		// edition slug. Lifecycle is per-entry (the entry's `lifecycle` field);
+		// supersession date comes from the entry's superseded edition's
+		// `last_amended_date` when available, else null. Result is oldest-first
+		// by supersession date with nulls last (so current/accepted bubbles to
+		// the end of the list).
+		const prefix = `airboss-ref:${corpus}/${slug}/`;
+		const sources = getSources();
+		const seenEditions = new Map<string, RegistrySlugEdition>();
+		for (const id of getCorpusEntryIds(corpus)) {
+			if (!id.startsWith(prefix)) continue;
+			const entry = sources[id];
+			if (entry === undefined) continue;
+			const editions = getEditionsMap().get(id) ?? [];
+			for (const edition of editions) {
+				if (seenEditions.has(edition.id)) continue;
+				seenEditions.set(edition.id, {
+					edition: edition.id,
+					lifecycle: entry.lifecycle,
+					supersededAt: entry.lifecycle === 'superseded' ? entry.last_amended_date : null,
+				});
+			}
+		}
+		const out = Array.from(seenEditions.values());
+		out.sort((a, b) => {
+			const aMs = a.supersededAt?.getTime() ?? Number.POSITIVE_INFINITY;
+			const bMs = b.supersededAt?.getTime() ?? Number.POSITIVE_INFINITY;
+			return aMs - bMs;
+		});
+		return out;
 	},
 };
 

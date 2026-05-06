@@ -109,6 +109,31 @@ export interface RegistryReader {
 	walkAliases(id: SourceId, fromEdition: string, toEdition: string): readonly AliasEntry[];
 	walkSupersessionChain(id: SourceId): readonly SourceEntry[];
 	isCorpusKnown(corpus: string): boolean;
+	/**
+	 * Per ADR 019 amendment 2026-05 §1 + D5. List every edition known for a
+	 * `(corpus, slug)` pair, regardless of lifecycle, oldest-first by
+	 * supersession date. Used by the validator's "no current edition" rule
+	 * to render the registry-aware hint message that names the slug, lists
+	 * up to 3 most-recent superseded entries, and quotes a recommended pin.
+	 *
+	 * Returns an empty array when the slug is unknown to the registry.
+	 *
+	 * Optional for backward-compat with phase-1 stubs: `NULL_REGISTRY` and
+	 * older test fixtures may omit this method, in which case the validator
+	 * skips the registry-aware hint and emits a generic ERROR.
+	 */
+	listEditionsForSlug?(corpus: string, slug: string): readonly RegistrySlugEdition[];
+}
+
+/**
+ * One edition row for the `listEditionsForSlug` lookup. Fields are minimal:
+ * the validator's hint formatter needs the edition slug, the lifecycle, and
+ * the supersession date when known.
+ */
+export interface RegistrySlugEdition {
+	readonly edition: string;
+	readonly lifecycle: SourceLifecycle;
+	readonly supersededAt: Date | null;
 }
 
 // ---------------------------------------------------------------------------
