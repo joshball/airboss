@@ -1,11 +1,22 @@
 ---
-title: 'WP-CFR -- 14 CFR + 49 CFR seeded with section drill-down'
-product: study
-feature: wp-cfr
-type: spec
-status: unread
-review_status: pending
+id: wp-cfr
+title: WP-CFR -- 14 CFR + 49 CFR seeded with section drill-down
+product: course
+category: content
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
 created: 2026-05-02
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - cfr
+  - regulations
+legacy_fields:
+  feature: wp-cfr
+  type: spec
+  review_status: pending
 ---
 
 # WP-CFR -- Code of Federal Regulations

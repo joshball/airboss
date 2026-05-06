@@ -1,12 +1,24 @@
 ---
-title: 'WP-MTN -- promote Tips on Mountain Flying to section-tree'
-product: study
-feature: wp-mtn-section-tree
-type: spec
-status: unread
-review_status: done
+id: wp-mtn-section-tree
+title: WP-MTN -- promote Tips on Mountain Flying to section-tree
+product: course
+category: content
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
 created: 2026-05-03
-shipped: 2026-05-03
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - mtn
+  - handbook
+  - section-tree
+legacy_fields:
+  feature: wp-mtn-section-tree
+  type: spec
+  review_status: done
+  shipped: 2026-05-03
 ---
 
 # WP-MTN-section-tree -- Tips on Mountain Flying

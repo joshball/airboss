@@ -1,11 +1,26 @@
 ---
-title: 'Spec: WP-SAFO-INFO -- pipelines for FAA Safety Alerts For Operators + Information For Operators'
-product: study
-feature: wp-safo-info
-type: spec
-status: shipped
-review_status: pending
+id: wp-safo-info
+title: "Spec: WP-SAFO-INFO -- pipelines for FAA Safety Alerts For Operators + Information For Operators"
+product: course
+category: content
+status: in-flight
+agent_review_status: pending
+human_review_status: pending
+created: 2026-05-03
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - safo
+  - info
+  - advisory
+legacy_fields:
+  feature: wp-safo-info
+  type: spec
+  review_status: pending
 ---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
 
 # WP-SAFO-INFO: combined pipeline for SAFOs and InFOs
 

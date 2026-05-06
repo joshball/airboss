@@ -1,11 +1,24 @@
 ---
-title: 'Spec: IFH section-tree promotion'
-product: platform
-feature: wp-ifh-section-tree
-type: spec
-status: unread
-review_status: pending
-shipped_at: '2026-05-03'
+id: wp-ifh-section-tree
+title: "Spec: IFH section-tree promotion"
+product: course
+category: content
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-05-03
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - ifh
+  - handbook
+  - section-tree
+legacy_fields:
+  feature: wp-ifh-section-tree
+  type: spec
+  review_status: pending
+  shipped_at: 2026-05-03
 ---
 
 # Spec: IFH section-tree promotion

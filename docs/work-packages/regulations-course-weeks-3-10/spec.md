@@ -1,7 +1,23 @@
 ---
-status: done
-review_status: done
+id: regulations-course-weeks-3-10
+title: Regulations course Weeks 3-10
+product: course
+category: content
+status: in-flight
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-29
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - course
+  - regulations
+legacy_fields:
+  review_status: done
 ---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
 
 # Regulations course Weeks 3-10
 

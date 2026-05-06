@@ -1,3 +1,20 @@
+---
+id: wp-ac
+title: "WP-AC: Advisory Circulars as readable library cards"
+product: course
+category: content
+status: draft
+agent_review_status: pending
+human_review_status: pending
+created: 2026-05-02
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - ac
+  - advisory-circular
+---
+
 # WP-AC: Advisory Circulars as readable library cards
 
 Wire the FAA Advisory Circulars (already extracted to `ac/<doc-slug>/<rev>/`) through the post-WP-SUB seeder so they land in `/library` as readable cards (open-and-read in-app), not link-only catalogue entries.

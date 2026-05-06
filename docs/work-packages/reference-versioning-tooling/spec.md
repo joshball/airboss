@@ -1,10 +1,22 @@
 ---
-title: 'Spec: Reference versioning tooling'
-product: cross-cutting
-feature: reference-versioning-tooling
-type: spec
-status: unread
-review_status: pending
+id: reference-versioning-tooling
+title: "Spec: Reference versioning tooling"
+product: platform
+category: platform
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-27
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - references
+  - versioning
+legacy_fields:
+  feature: reference-versioning-tooling
+  type: spec
+  review_status: pending
 ---
 
 # Spec: Reference versioning tooling

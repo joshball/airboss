@@ -1,11 +1,25 @@
 ---
-title: 'Spec: WP-NTSB-ALJ -- NTSB administrative law judge rulings'
-product: study
-feature: wp-ntsb-alj
-type: spec
-status: shipped
-review_status: pending
+id: wp-ntsb-alj
+title: "Spec: WP-NTSB-ALJ -- NTSB administrative law judge rulings"
+product: course
+category: content
+status: in-flight
+agent_review_status: pending
+human_review_status: pending
+created: 2026-05-03
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - ntsb
+  - legal
+legacy_fields:
+  feature: wp-ntsb-alj
+  type: spec
+  review_status: pending
 ---
+
+<!-- Shipped in code but pending user walkthrough; transition to `status: shipped` requires user to set `human_review_status: signed-off`. -->
 
 # WP-NTSB-ALJ: NTSB administrative law judge rulings
 

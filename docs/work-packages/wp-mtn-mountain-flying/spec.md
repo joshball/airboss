@@ -1,11 +1,22 @@
 ---
-title: 'WP-MTN -- Tips on Mountain Flying pamphlet ingestion'
-product: study
-feature: wp-mtn-mountain-flying
-type: spec
-status: unread
-review_status: pending
+id: wp-mtn-mountain-flying
+title: WP-MTN -- Tips on Mountain Flying pamphlet ingestion
+product: course
+category: content
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
 created: 2026-05-02
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - mtn
+  - handbook
+legacy_fields:
+  feature: wp-mtn-mountain-flying
+  type: spec
+  review_status: pending
 ---
 
 # WP-MTN -- Tips on Mountain Flying

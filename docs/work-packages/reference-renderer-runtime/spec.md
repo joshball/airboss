@@ -1,10 +1,22 @@
 ---
-title: 'Spec: Reference renderer runtime'
-product: cross-cutting
-feature: reference-renderer-runtime
-type: spec
-status: unread
-review_status: pending
+id: reference-renderer-runtime
+title: "Spec: Reference renderer runtime"
+product: platform
+category: platform
+status: signed-off
+agent_review_status: pending
+human_review_status: pending
+created: 2026-04-27
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - references
+  - renderer
+legacy_fields:
+  feature: reference-renderer-runtime
+  type: spec
+  review_status: pending
 ---
 
 # Spec: Reference renderer runtime
