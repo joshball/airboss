@@ -82,7 +82,6 @@ import {
 	SNOOZE_REASON_VALUES,
 	STUDY_PRIORITY_VALUES,
 	SYLLABUS_KIND_VALUES,
-	SYLLABUS_NODE_LEVEL_VALUES,
 	SYLLABUS_PRIMACY,
 	SYLLABUS_PRIMACY_VALUES,
 	SYLLABUS_STATUS_VALUES,
@@ -1547,13 +1546,13 @@ export const referenceSection = studySchema.table(
 		 */
 		airbossRef: text('airboss_ref').notNull(),
 		title: text('title').notNull(),
-		/**
-		 * First FAA-printed page reference (handbook only; NULL elsewhere).
-		 * Stored as text because FAA pagination is hyphenated (`"12-7"` =
-		 * chapter 12, page 7 within the chapter).
-		 */
-		faaPageStart: text('faa_page_start'),
-		faaPageEnd: text('faa_page_end'),
+		// FAA-printed page references (e.g. `"12-7"` = chapter 12, page 7
+		// within the chapter) live in `metadata.faaPages = { start, end }`
+		// per the 2026-05-06 review §K. The shared `reference_section` table
+		// is the substrate for every corpus; per-corpus extras (handbook
+		// pagination, CFR effective dates, AC paragraph cancellations) live
+		// in `metadata` jsonb so the column inventory doesn't grow with each
+		// new kind. Validation moves to ingest-time Zod (manifest-validation).
 		/** Canonical citation string ("PHAK Ch 12 §3 (pp. 12-7..12-9)"). Cached for display. */
 		sourceLocator: text('source_locator').notNull(),
 		/**
@@ -1608,15 +1607,9 @@ export const referenceSection = studySchema.table(
 		// Indexed for reverse lookups (audit walks "find sections by URI") and
 		// reference-by-URI on the picker / chip resolution paths.
 		airbossRefIdx: index('reference_section_airboss_ref_idx').on(t.airbossRef),
-		// Printed FAA pagination is `<chapter>-<page>` so lexicographic ordering
-		// (`"12-23"` < `"12-9"`) is unsafe. Just enforce the NULL-pair invariant:
-		// either both ends are NULL (page reference unknown) or `faa_page_start`
-		// is set. `faa_page_end` may be NULL when the section ends on its start
-		// page. The within-chapter ordering uses `ordinal`, not page strings.
-		faaPagesConsistentCheck: check(
-			'reference_section_faa_pages_check',
-			sql.raw(`("faa_page_start" IS NULL AND "faa_page_end" IS NULL) OR "faa_page_start" IS NOT NULL`),
-		),
+		// `faa_pages_check` was dropped per the 2026-05-06 review §K; FAA
+		// pagination is handbook-specific and now lives in `metadata.faaPages`,
+		// validated at ingest by the per-corpus Zod schemas.
 	}),
 );
 
@@ -2104,7 +2097,16 @@ export const syllabusNode = studySchema.table(
 		syllabusNodeLeafIdx: index('syllabus_node_leaf_idx').on(t.syllabusId, t.isLeaf),
 		// GIN index on citations so the reverse-citation query is index-backed.
 		syllabusNodeCitationsGinIdx: index('syllabus_node_citations_gin_idx').using('gin', sql`"citations" jsonb_path_ops`),
-		levelCheck: check('syllabus_node_level_check', sql.raw(`"level" IN (${inList(SYLLABUS_NODE_LEVEL_VALUES)})`)),
+		// `level` vocabulary is per-corpus (ACS uses area/task/element; CFR uses
+		// subpart/section/paragraph; school syllabi mint their own). Per the
+		// 2026-05-06 review §H, per-corpus vocabularies belong in `metadata`
+		// + ingest-time Zod, not in a CHECK that grows with every new corpus.
+		// `parentLevelConsistencyCheck` was dropped for the same reason: it
+		// hard-coded ('area', 'chapter') as the only top-of-tree levels. Both
+		// invariants are validated by `manifest-validation.ts` at seed time.
+		// `triad_check` and `required_bloom_check` stay -- ACS K/R/S triad is
+		// closed at three values; Bloom's taxonomy is closed at six. Neither
+		// grows with new corpora.
 		triadCheck: check(
 			'syllabus_node_triad_check',
 			sql.raw(`"triad" IS NULL OR "triad" IN (${inList(ACS_TRIAD_VALUES)})`),
@@ -2112,13 +2114,6 @@ export const syllabusNode = studySchema.table(
 		requiredBloomCheck: check(
 			'syllabus_node_required_bloom_check',
 			sql.raw(`"required_bloom" IS NULL OR "required_bloom" IN (${inList(BLOOM_LEVEL_VALUES)})`),
-		),
-		// `parent_id IS NULL` iff `level` is a top-of-tree level (area / chapter).
-		parentLevelConsistencyCheck: check(
-			'syllabus_node_parent_level_check',
-			sql.raw(
-				`("level" IN ('area', 'chapter') AND "parent_id" IS NULL) OR ("level" NOT IN ('area', 'chapter') AND "parent_id" IS NOT NULL)`,
-			),
 		),
 		// Triad is meaningful only on element-level rows.
 		triadLevelConsistencyCheck: check(
