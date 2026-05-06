@@ -65,9 +65,10 @@ describe('validateCardData', () => {
 			external: { url: 'https://www.ecfr.gov/current/title-14/part-91', label: 'eCFR' },
 			description: '',
 			whyItMatters: null,
+			topics: [],
 		});
 		expect(result.missingRequired).toEqual([]);
-		expect(result.missingRecommended.sort()).toEqual(['description', 'whyItMatters'].sort());
+		expect(result.missingRecommended.sort()).toEqual(['description', 'topics', 'whyItMatters'].sort());
 	});
 
 	it('returns the variant + subject untouched for diagnostics', () => {
@@ -282,6 +283,49 @@ describe('Wave-2 corpus wrappers', () => {
 			edition: 'B',
 		});
 		expect(result.missingRequired).toEqual(['title']);
+	});
+});
+
+describe('CfrPartCard topics (recommended)', () => {
+	it('topics is in the recommended-fields set for CfrPartCard', () => {
+		expect(RECOMMENDED_FIELDS_BY_VARIANT.CfrPartCard).toContain('topics');
+	});
+
+	it('topics is NOT required -- a Part without topics still validates clean against required', () => {
+		expect(REQUIRED_FIELDS_BY_VARIANT.CfrPartCard).not.toContain('topics');
+		const result = validateCardData('CfrPartCard', '14 CFR Part 91', {
+			titleNumber: 14,
+			partNumber: '91',
+			partTitle: 'General Operating Rules',
+			external: { url: 'https://www.ecfr.gov/current/title-14/part-91', label: 'eCFR' },
+		});
+		expect(result.missingRequired).toEqual([]);
+	});
+
+	it('an empty topics array surfaces in missingRecommended', () => {
+		const result = validateCardData('CfrPartCard', '14 CFR Part 91', {
+			titleNumber: 14,
+			partNumber: '91',
+			partTitle: 'General Operating Rules',
+			external: { url: 'https://www.ecfr.gov/current/title-14/part-91', label: 'eCFR' },
+			description: 'desc',
+			whyItMatters: 'why',
+			topics: [],
+		});
+		expect(result.missingRecommended).toContain('topics');
+	});
+
+	it('a non-empty topics array clears the recommended-missing flag', () => {
+		const result = validateCardData('CfrPartCard', '14 CFR Part 91', {
+			titleNumber: 14,
+			partNumber: '91',
+			partTitle: 'General Operating Rules',
+			external: { url: 'https://www.ecfr.gov/current/title-14/part-91', label: 'eCFR' },
+			description: 'desc',
+			whyItMatters: 'why',
+			topics: [{ value: 'weather', label: 'Weather' }],
+		});
+		expect(result.missingRecommended).toEqual([]);
 	});
 });
 

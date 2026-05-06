@@ -152,6 +152,11 @@ beforeAll(async () => {
 			title: `14 CFR Part ${CFR14_PART} (current)`,
 			publisher: 'FAA',
 			url: null,
+			// Authored topic chips (metadata.topics). The aggregator's
+			// `extractTopicChips` projects these into the group card so the
+			// /library/regulations/14-cfr page can render the pills below
+			// each Part's description. Tests assert the projection round-trips.
+			metadata: { topics: ['weather', 'airspace', 'communications'] },
 			seedOrigin: SUITE_TAG,
 			createdAt: now,
 			updatedAt: now,
@@ -641,6 +646,41 @@ describe('getRegulationsView (group)', () => {
 		expect(acView.external).toBeNull();
 		const aimView = await getRegulationsView({ view: 'group', kind: LIBRARY_REGULATIONS_KINDS.AIM });
 		expect(aimView.external).toBeNull();
+	});
+
+	it('CFR Part group cards project authored topic chips from metadata.topics', async () => {
+		const view = await getRegulationsView({
+			view: 'group',
+			kind: LIBRARY_REGULATIONS_KINDS.CFR_14,
+		});
+		const testPart = view.groups.find((g) => g.groupKey === CFR14_PART);
+		expect(testPart).toBeDefined();
+		expect(testPart?.topics).toBeDefined();
+		const values = testPart?.topics.map((t) => t.value).sort();
+		expect(values).toEqual(['airspace', 'communications', 'weather']);
+		// Each chip carries the human label from AVIATION_TOPIC_LABELS, not
+		// the raw enum value.
+		const weather = testPart?.topics.find((t) => t.value === 'weather');
+		expect(weather?.label).toBe('Weather');
+	});
+
+	it('CFR Part group cards return an empty topics array when metadata.topics is absent', async () => {
+		const view = await getRegulationsView({
+			view: 'group',
+			kind: LIBRARY_REGULATIONS_KINDS.CFR_14,
+		});
+		// The flat-shape Part fixture (CFR14_FLAT_PART) has no metadata.topics.
+		const flatPart = view.groups.find((g) => g.groupKey === CFR14_FLAT_PART);
+		expect(flatPart?.topics).toEqual([]);
+	});
+
+	it('AC series cards return empty topics (no representative reference to project from)', async () => {
+		const view = await getRegulationsView({
+			view: 'group',
+			kind: LIBRARY_REGULATIONS_KINDS.AC,
+		});
+		const series = view.groups.find((g) => g.groupKey === AC_SERIES);
+		expect(series?.topics).toEqual([]);
 	});
 });
 

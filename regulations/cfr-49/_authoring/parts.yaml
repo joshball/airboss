@@ -6,7 +6,9 @@ parts:
     description: "NTSB rules for notification and reporting of aircraft accidents, incidents, and overdue aircraft. Defines what counts as an accident vs. incident, what must be reported immediately by phone, and what gets a written report on Form 6120.1."
     whyItMatters: "When something goes wrong, Part 830 is the clock you're racing. Get the immediate-notification list wrong and the FAA finds out about your incident from someone other than you -- that ends careers. Read it once cold, while you're not stressed."
     scope: "Reporting"
+    topics: ["emergencies", "regulations"]
   "1552":
     description: "TSA's Flight School Security Awareness Program -- the rules flight schools and instructors must follow before training non-U.S. citizens, including the AFSP application and recurrent security training requirements."
     whyItMatters: "If you instruct, this is the Part that says you must complete the annual security training and verify a candidate's citizenship before the first lesson. The penalties for skipping it are operational and personal, not just to the school."
     scope: "Security"
+    topics: ["training-ops", "regulations"]

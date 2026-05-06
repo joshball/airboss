@@ -81,16 +81,23 @@ export async function loadCfrSectionsFile(manifestAbsPath: string): Promise<CfrS
 
 /**
  * Look up an existing reference by `document_slug` for the rolling CFR
- * edition. Returns null when no row exists -- the seed adapter logs a
- * skip and moves on rather than auto-creating long-tail references.
+ * edition. Returns `{ id, subjects }` so the caller can merge authored
+ * `topics` into the YAML-seeded `subjects` list (the topic-page reverse-
+ * lookup at `/library/topic/<topic>` keys off `subjects`, not `metadata`).
+ * Returns null when no row exists -- the seed adapter logs a skip and
+ * moves on rather than auto-creating long-tail references.
  */
-async function findCfrReferenceBySlug(documentSlug: string): Promise<string | null> {
+async function findCfrReferenceBySlug(
+	documentSlug: string,
+): Promise<{ id: string; subjects: readonly string[] } | null> {
 	const rows = await db
-		.select({ id: reference.id })
+		.select({ id: reference.id, subjects: reference.subjects })
 		.from(reference)
 		.where(eq(reference.documentSlug, documentSlug))
 		.limit(1);
-	return rows[0]?.id ?? null;
+	const row = rows[0];
+	if (!row) return null;
+	return { id: row.id, subjects: row.subjects };
 }
 
 export interface SeedCfrManifestOptions {
@@ -115,6 +122,14 @@ export interface CfrPartMetadata {
 	readonly description?: string;
 	readonly whyItMatters?: string;
 	readonly scope?: string;
+	/**
+	 * Authored aviation-topic chips for the Part. Each value is in
+	 * `AVIATION_TOPIC_VALUES` (validated by the YAML schema). The CfrPartCard
+	 * renders these as topic pills below the description; the seeder also
+	 * backfills the values into `reference.subjects` so `/library/topic/<x>`
+	 * surfaces the Part next to the handbooks tagged with the same topic.
+	 */
+	readonly topics?: readonly string[];
 }
 
 export function buildCfrPartMetadata(input: {
@@ -136,6 +151,7 @@ export function buildCfrPartMetadata(input: {
 			? { whyItMatters: input.authoringOverlay.whyItMatters }
 			: {}),
 		...(input.authoringOverlay?.scope !== undefined ? { scope: input.authoringOverlay.scope } : {}),
+		...(input.authoringOverlay?.topics !== undefined ? { topics: input.authoringOverlay.topics } : {}),
 	};
 	return out;
 }
@@ -185,8 +201,8 @@ export async function seedCfrManifest(
 		const sections = sectionsFile.sectionsByPart[partKey] ?? [];
 		const documentSlug = `${manifest.title}cfr${partKey}`;
 
-		const existingRefId = await findCfrReferenceBySlug(documentSlug);
-		if (existingRefId === null) {
+		const existingRef = await findCfrReferenceBySlug(documentSlug);
+		if (existingRef === null) {
 			context.onProgress?.(
 				`  skip ${documentSlug}: no DB row in study.reference (long-tail Part out of scope per WP-CFR spec)`,
 			);
@@ -194,21 +210,40 @@ export async function seedCfrManifest(
 		}
 
 		// Upsert the reference to populate `section_schema` while preserving
-		// YAML-authored metadata (subjects, primary_cert, title, url) via the
+		// YAML-authored metadata (primary_cert, title, url) via the
 		// undefined-on-conflict path in `upsertReference`. The YAML phase
 		// runs BEFORE this in `seed-all` and is the canonical author for
 		// those fields; we just attach the level vocabulary + per-Part
 		// card-copy here. Manifest's `parts[].officialTitle` is the eCFR
 		// publisher heading; the authoring YAML overlays
-		// description/whyItMatters/scope. See `buildCfrPartMetadata` for
-		// the merge precedence.
+		// description/whyItMatters/scope/topics. See `buildCfrPartMetadata`
+		// for the merge precedence.
+		const overlay = authoring[partKey];
 		const partMetadata = buildCfrPartMetadata({
 			manifest,
 			partKey,
 			sectionCount: sections.length,
 			manifestPartOfficialTitle: manifestPartTitles[partKey],
-			authoringOverlay: authoring[partKey],
+			authoringOverlay: overlay,
 		});
+
+		// Topic backfill: union the authored `topics` into the existing
+		// `subjects` array so the topic-spine reverse-lookup at
+		// `/library/topic/<topic>` surfaces this Part alongside handbooks
+		// tagged with the same topic. The CHECK constraint on
+		// `study.reference.subjects` enforces enum membership; the YAML
+		// schema has already validated each `topics` value against
+		// `AVIATION_TOPIC_VALUES`, so the union stays inside the enum.
+		// When no topics are authored we leave `subjects` undefined so the
+		// upsert preserves the YAML-phase value (`undefined` on the input
+		// hits the on-conflict-preserve branch in `upsertReference`).
+		let mergedSubjects: readonly string[] | undefined;
+		if (overlay?.topics !== undefined && overlay.topics.length > 0) {
+			const union = new Set<string>(existingRef.subjects);
+			for (const t of overlay.topics) union.add(t);
+			mergedSubjects = [...union];
+		}
+
 		const ref = await upsertReference({
 			kind: REFERENCE_KINDS.CFR,
 			documentSlug,
@@ -221,6 +256,7 @@ export async function seedCfrManifest(
 			publisher: 'FAA',
 			url: `https://www.ecfr.gov/current/title-${manifest.title}/part-${partKey}`,
 			sectionSchema: CFR_SCHEMA,
+			...(mergedSubjects !== undefined ? { subjects: mergedSubjects } : {}),
 			metadata: partMetadata,
 			seedOrigin: context.seedOrigin,
 		});
