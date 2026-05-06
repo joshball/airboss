@@ -21,6 +21,8 @@
 		"themes:emit": "bun scripts/themes/emit.ts",
 		"lint:theme": "bun tools/theme-lint/bin.ts",
 		"codemod:theme": "bun tools/theme-codemod/bin.ts",
+		"format:md": "bun tools/md-format/bin.ts",
+		"format:md:check": "bun tools/md-format/bin.ts --check",
 		"schedule": "./scripts/scheduler/list.sh",
 		"schedule:install": "./scripts/scheduler/install.sh",
 		"schedule:uninstall": "./scripts/scheduler/uninstall.sh",

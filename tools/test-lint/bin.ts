@@ -142,9 +142,17 @@ async function main(): Promise<void> {
 	const allViolations: Violation[] = [];
 	for (const root of targetRoots) {
 		const absRoot = resolve(REPO_ROOT, root);
+		let st;
 		try {
-			await stat(absRoot);
+			st = await stat(absRoot);
 		} catch {
+			continue;
+		}
+		if (st.isFile()) {
+			if (TEST_FILE_RE.test(absRoot)) {
+				const fileViolations = await scanFile(absRoot);
+				allViolations.push(...fileViolations);
+			}
 			continue;
 		}
 		for await (const file of walk(absRoot)) {

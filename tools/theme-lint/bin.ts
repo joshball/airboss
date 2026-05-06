@@ -119,12 +119,19 @@ export async function lintRoots(roots: string[], repoRoot: string): Promise<Lint
 	const all: LintViolation[] = [];
 	for (const root of roots) {
 		const abs = resolve(repoRoot, root);
+		let st;
 		try {
-			const st = await stat(abs);
-			if (!st.isDirectory()) continue;
+			st = await stat(abs);
 		} catch {
 			continue;
 		}
+		if (st.isFile()) {
+			if (abs.endsWith('.svelte') || abs.endsWith('.css')) {
+				all.push(...(await lintFile(abs, repoRoot, knownTokens)));
+			}
+			continue;
+		}
+		if (!st.isDirectory()) continue;
 		for await (const file of walk(abs)) {
 			all.push(...(await lintFile(file, repoRoot, knownTokens)));
 		}
