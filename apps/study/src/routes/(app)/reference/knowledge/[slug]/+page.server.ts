@@ -6,6 +6,7 @@ import {
 	getNodesByIds,
 	getNodeView,
 	type KnowledgeEdgeRow,
+	type KnowledgeEdgeRowWithTarget,
 	type KnowledgeNodeRow,
 	lifecycleFromContent,
 	listReferences,
@@ -27,8 +28,19 @@ interface EdgeSummary {
 
 export type { ResolvedCitation };
 
-/** Group edges by KNOWLEDGE_EDGE_TYPES value. Preserves author order. */
-function groupEdgesByType(edges: KnowledgeEdgeRow[]): Map<string, KnowledgeEdgeRow[]> {
+/** Group edges (outbound, with `targetExists`) by KNOWLEDGE_EDGE_TYPES value. */
+function groupOutboundByType(edges: KnowledgeEdgeRowWithTarget[]): Map<string, KnowledgeEdgeRowWithTarget[]> {
+	const map = new Map<string, KnowledgeEdgeRowWithTarget[]>();
+	for (const edge of edges) {
+		const bucket = map.get(edge.edgeType);
+		if (bucket) bucket.push(edge);
+		else map.set(edge.edgeType, [edge]);
+	}
+	return map;
+}
+
+/** Group inbound edges (no `targetExists` -- the source row always exists). */
+function groupInboundByType(edges: KnowledgeEdgeRow[]): Map<string, KnowledgeEdgeRow[]> {
 	const map = new Map<string, KnowledgeEdgeRow[]>();
 	for (const edge of edges) {
 		const bucket = map.get(edge.edgeType);
@@ -58,8 +70,8 @@ export const load: PageServerLoad = async (event) => {
 	const linked = await getNodesByIds(Array.from(linkedIds));
 	const titlesById = new Map<string, string>(linked.map((r: KnowledgeNodeRow) => [r.id, r.title]));
 
-	const outbound = groupEdgesByType(edges);
-	const inbound = groupEdgesByType(inboundEdges);
+	const outbound = groupOutboundByType(edges);
+	const inbound = groupInboundByType(inboundEdges);
 
 	function outboundOfType(type: string): EdgeSummary[] {
 		return (outbound.get(type) ?? []).map((e) => ({

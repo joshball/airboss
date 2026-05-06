@@ -382,10 +382,14 @@ async function fetchNodeCandidates(
 				),
 			)
 			.then((rows) => new Set(rows.map((r) => r.nodeId).filter((id): id is string => id !== null))),
+		// `requires` edges whose target exists (gap-free). Existence is resolved
+		// at read time via INNER JOIN against knowledge_node, replacing the
+		// previously-stored `target_exists` boolean (per 2026-05-06 review §E).
 		db
 			.select({ fromNodeId: knowledgeEdge.fromNodeId, toNodeId: knowledgeEdge.toNodeId })
 			.from(knowledgeEdge)
-			.where(and(eq(knowledgeEdge.edgeType, 'requires'), eq(knowledgeEdge.targetExists, true))),
+			.innerJoin(knowledgeNode, eq(knowledgeNode.id, knowledgeEdge.toNodeId))
+			.where(eq(knowledgeEdge.edgeType, 'requires')),
 	]);
 
 	const requiresByFrom = new Map<string, string[]>();
