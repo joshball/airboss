@@ -93,6 +93,32 @@ interface CitationDisplay {
 	broken: boolean;
 	/** Edition annotation when the citation pins to a non-current edition. */
 	priorEditionAnnotation: string | null;
+	/** Provenance annotation when the citation was overridden from another URI (ADR 019 amendment 2026-05). */
+	redirectedFromAnnotation: string | null;
+}
+
+/**
+ * Humanise an `airboss-ref:` URI into a short annotation suitable for inline
+ * display under a citation title. Intentionally narrow: handbooks turn into
+ * `<edition> Ch. <n>` (or just `<edition>` for doc-level), and any other
+ * corpus / shape falls back to the raw URI so the reader still sees the
+ * provenance even when we don't have a humanised form yet.
+ */
+function humaniseAirbossRef(uri: string): string {
+	const SCHEME = 'airboss-ref:';
+	if (!uri.startsWith(SCHEME)) return uri;
+	const path = uri.slice(SCHEME.length).split('?')[0] ?? '';
+	const segments = path.split('/');
+	const corpus = segments[0];
+	if (corpus !== 'handbooks') return uri;
+	const slug = segments[1] ?? '';
+	const edition = segments[2] ?? '';
+	const chapter = segments[3];
+	if (slug === '' || edition === '') return uri;
+	if (chapter !== undefined && chapter.length > 0) {
+		return `${edition} Ch. ${chapter}`;
+	}
+	return edition;
 }
 
 function toCitationDisplay(entry: PageData['node']['references'][number], index: number): CitationDisplay {
@@ -108,6 +134,10 @@ function toCitationDisplay(entry: PageData['node']['references'][number], index:
 	const source = entry.title.length > 0 ? entry.title : (fallbackKindLabel ?? entry.fallbackLabel);
 	const priorEditionAnnotation =
 		entry.isPriorEdition && entry.pinnedEditionSlug !== null ? entry.pinnedEditionSlug : null;
+	// Provenance annotation per ADR 019 amendment 2026-05 §2: when the citation
+	// was overridden in human review, surface where it used to point. Mirrors
+	// the prior-edition annotation pattern from commit 687923a2.
+	const redirectedFromAnnotation = entry.redirectedFrom !== null ? humaniseAirbossRef(entry.redirectedFrom) : null;
 	return {
 		key: `${entry.kind ?? 'legacy'}:${entry.title}:${entry.edition}:${index}`,
 		source,
@@ -116,6 +146,7 @@ function toCitationDisplay(entry: PageData['node']['references'][number], index:
 		href: entry.resolvedUrl,
 		broken: entry.broken,
 		priorEditionAnnotation,
+		redirectedFromAnnotation,
 	};
 }
 
@@ -351,6 +382,14 @@ const citedByItems = $derived<CitedByItem[]>(
 							<span class="ref-edition" title="Citation pins a prior edition of this reference.">
 								({ref.priorEditionAnnotation})
 							</span>
+						{/if}
+						{#if ref.redirectedFromAnnotation}
+							<p
+								class="ref-redirected"
+								title="This citation was redirected during human review; the original reference is shown."
+							>
+								(redirected from {ref.redirectedFromAnnotation})
+							</p>
 						{/if}
 						{#if ref.note}
 							<p class="ref-note">{ref.note}</p>
@@ -792,6 +831,13 @@ const citedByItems = $derived<CitedByItem[]>(
 		margin-left: var(--space-xs);
 		color: var(--ink-subtle);
 		font-size: var(--type-ui-caption-size);
+	}
+
+	.ref-redirected {
+		margin: var(--space-2xs) 0 0;
+		color: var(--ink-subtle);
+		font-size: var(--type-ui-caption-size);
+		font-style: italic;
 	}
 
 </style>

@@ -139,6 +139,55 @@ describe('resolveCitationsForRender (ADR 019 amendment 2026-05 step 5)', () => {
 		expect(resolved?.note).toBe('note text');
 	});
 
+	it('preserves redirected_from from the structured citation through to the resolved shape', () => {
+		const refs: ReferenceRow[] = [
+			buildReferenceRow({
+				id: 'ref_afh_3c',
+				documentSlug: 'afh',
+				edition: 'FAA-H-8083-3C',
+				title: 'Airplane Flying Handbook',
+			}),
+		];
+		const [resolved] = resolveCitationsForRender(
+			[
+				{
+					ref: 'airboss-ref:handbooks/afh/4',
+					chapter_title: 'Energy Management: Mastering Altitude and Airspeed Control',
+					redirected_from: 'airboss-ref:handbooks/afh/FAA-H-8083-3B/4',
+					note: 'Practical stall recognition and recovery, accelerated stall.',
+				},
+			],
+			refs,
+		);
+		expect(resolved?.redirectedFrom).toBe('airboss-ref:handbooks/afh/FAA-H-8083-3B/4');
+		expect(resolved?.title).toBe('Airplane Flying Handbook');
+		expect(resolved?.locatorLabel).toBe('Energy Management: Mastering Altitude and Airspeed Control');
+	});
+
+	it('returns redirectedFrom=null when the structured citation omits the field', () => {
+		const refs: ReferenceRow[] = [
+			buildReferenceRow({
+				id: 'ref_afh_3c',
+				documentSlug: 'afh',
+				edition: 'FAA-H-8083-3C',
+				title: 'Airplane Flying Handbook',
+			}),
+		];
+		const [resolved] = resolveCitationsForRender(
+			[{ ref: 'airboss-ref:handbooks/afh/3', chapter_title: 'Basic Flight Maneuvers' }],
+			refs,
+		);
+		expect(resolved?.redirectedFrom).toBeNull();
+	});
+
+	it('returns redirectedFrom=null on legacy freeform citations', () => {
+		const [resolved] = resolveCitationsForRender(
+			[{ source: 'AFH (FAA-H-8083-3B)', detail: 'Chapter 3 -- Basic Flight Maneuvers' }],
+			[],
+		);
+		expect(resolved?.redirectedFrom).toBeNull();
+	});
+
 	it('resolves the in-type structured handbook shape via reference_id', () => {
 		const refs: ReferenceRow[] = [
 			buildReferenceRow({
