@@ -92,4 +92,26 @@ describe('buildCfrPartMetadata', () => {
 		expect(md.whyItMatters).toBe('y');
 		expect(md.scope).toBe('Operations');
 	});
+
+	it('authoring overlay with topics flows through to metadata.topics', () => {
+		const md = buildCfrPartMetadata({
+			manifest: baseManifest,
+			partKey: '91',
+			sectionCount: 286,
+			manifestPartOfficialTitle: 'General Operating and Flight Rules',
+			authoringOverlay: { topics: ['weather', 'airspace', 'communications'] },
+		});
+		expect(md.topics).toEqual(['weather', 'airspace', 'communications']);
+	});
+
+	it('authoring overlay without topics omits the key (not stamped as undefined)', () => {
+		const md = buildCfrPartMetadata({
+			manifest: baseManifest,
+			partKey: '91',
+			sectionCount: 286,
+			manifestPartOfficialTitle: 'General Operating and Flight Rules',
+			authoringOverlay: { description: 'desc' },
+		});
+		expect('topics' in md).toBe(false);
+	});
 });

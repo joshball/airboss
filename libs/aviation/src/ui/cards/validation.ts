@@ -70,7 +70,7 @@ export const REQUIRED_FIELDS_BY_VARIANT: Record<CardVariant, readonly string[]> 
  */
 export const RECOMMENDED_FIELDS_BY_VARIANT: Record<CardVariant, readonly string[]> = {
 	CfrTitleCard: [],
-	CfrPartCard: ['description', 'whyItMatters'],
+	CfrPartCard: ['description', 'whyItMatters', 'topics'],
 	CfrSectionCard: [],
 	AimCorpusCard: [],
 	AcCard: ['description'],
@@ -88,10 +88,13 @@ export const RECOMMENDED_FIELDS_BY_VARIANT: Record<CardVariant, readonly string[
 function isMissing(value: unknown): boolean {
 	if (value === null || value === undefined) return true;
 	if (typeof value === 'string' && value.trim() === '') return true;
+	// Empty arrays count as missing (e.g. `topics: []` on a CfrPartCard --
+	// no chips to render means the recommended field is unauthored).
+	if (Array.isArray(value)) return value.length === 0;
 	// `external` is an `{ url, label }` object on the CFR variants. Treat
 	// the object as missing when either side is empty -- a half-populated
 	// link doesn't render on the card.
-	if (typeof value === 'object' && !Array.isArray(value)) {
+	if (typeof value === 'object') {
 		const obj = value as Record<string, unknown>;
 		if ('url' in obj || 'label' in obj) {
 			const u = obj.url;

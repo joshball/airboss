@@ -80,6 +80,7 @@ const titleNumber = $derived(
 								partTitle={group.officialTitle ?? `Part ${group.groupKey}`}
 								description={group.description ?? null}
 								whyItMatters={group.whyItMatters ?? null}
+								topics={group.topics}
 								href={ROUTES.LIBRARY_REGULATIONS_GROUP(kind, group.groupKey)}
 								external={group.external}
 								sectionCount={group.referenceCount}

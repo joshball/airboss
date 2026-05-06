@@ -21,13 +21,20 @@
 
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
+import { AVIATION_TOPIC_MAX, AVIATION_TOPIC_VALUES, type AviationTopic } from '@ab/constants';
 import { parse as parseYaml } from 'yaml';
 import { z } from 'zod';
+
+// Closed-enum validator for the per-Part `topics` list. Each value must be a
+// member of `AVIATION_TOPIC_VALUES`; an unknown topic fails the seed loudly so
+// authoring typos surface immediately rather than silently dropping the chip.
+const aviationTopicEnum = z.enum(AVIATION_TOPIC_VALUES as readonly [AviationTopic, ...AviationTopic[]]);
 
 const partOverlaySchema = z.object({
 	description: z.string().min(1).optional(),
 	whyItMatters: z.string().min(1).optional(),
 	scope: z.string().min(1).optional(),
+	topics: z.array(aviationTopicEnum).min(1).max(AVIATION_TOPIC_MAX).optional(),
 });
 export type CfrPartOverlay = z.infer<typeof partOverlaySchema>;
 

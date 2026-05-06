@@ -73,12 +73,18 @@ function projectForVariant(
 			const partNumber = ref.documentSlug.replace(/^(14|49)cfr/, '');
 			const external =
 				titleNumber === 14 || titleNumber === 49 ? { url: buildPartUrl(titleNumber, partNumber), label: 'eCFR' } : null;
+			// `topics` is recommended (not required); surface authored chips so
+			// the audit page can list Parts that still need topic tags. Pass
+			// the raw array off `metadata.topics` -- the validator only checks
+			// missing-ness, not enum membership.
+			const topics = Array.isArray(m.topics) ? m.topics : [];
 			return {
 				titleNumber,
 				partNumber,
 				partTitle: m.officialTitle ?? ref.title,
 				description: m.description,
 				whyItMatters: m.whyItMatters,
+				topics,
 				external,
 			};
 		}

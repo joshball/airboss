@@ -35,6 +35,9 @@
  */
 
 import {
+	AVIATION_TOPIC_LABELS,
+	AVIATION_TOPIC_VALUES,
+	type AviationTopic,
 	externalUrlForReference,
 	HANDBOOK_READ_STATUSES,
 	LIBRARY_REGULATIONS_KIND_COPY,
@@ -125,6 +128,12 @@ export interface RegulationsBucketCard extends ReferenceCardCopy {
 	external: RegulationsExternalLink | null;
 }
 
+/** A topic chip rendered on a card -- closed-enum value + display label. */
+export interface RegulationsTopicChip {
+	value: AviationTopic;
+	label: string;
+}
+
 /** Card on the kind page -- one CFR Part, AIM chapter, or AC series. */
 export interface RegulationsGroupCard extends ReferenceCardCopy {
 	groupKey: string;
@@ -137,6 +146,13 @@ export interface RegulationsGroupCard extends ReferenceCardCopy {
 	chapterName: string | null;
 	subchapterId: string | null;
 	subchapterName: string | null;
+	/**
+	 * Authored topic chips projected from the representative reference's
+	 * `metadata.topics`. Empty array when no topics are authored. Each chip
+	 * carries the closed-enum value + the human label from
+	 * `AVIATION_TOPIC_LABELS`.
+	 */
+	topics: readonly RegulationsTopicChip[];
 }
 
 /** Umbrella card -- a reference rendered as a link to its external publisher. */
@@ -464,6 +480,28 @@ function extractCardCopy(metadata: ReferenceRow['metadata']): ReferenceCardCopy 
 	return out;
 }
 
+/**
+ * Project authored topic values off `reference.metadata.topics` into the
+ * card-shaped `{ value, label }[]` payload. Drops any value that isn't in
+ * `AVIATION_TOPIC_VALUES` (defensive -- the YAML schema gates writes, but
+ * the metadata column is a free-form JSONB so a hand-written backfill could
+ * still land an unknown value). Returns an empty array when no topics are
+ * authored.
+ */
+function extractTopicChips(metadata: ReferenceRow['metadata']): RegulationsTopicChip[] {
+	if (!metadata || typeof metadata !== 'object') return [];
+	const raw = (metadata as Record<string, unknown>).topics;
+	if (!Array.isArray(raw)) return [];
+	const out: RegulationsTopicChip[] = [];
+	for (const v of raw) {
+		if (typeof v !== 'string') continue;
+		if (!(AVIATION_TOPIC_VALUES as readonly string[]).includes(v)) continue;
+		const value = v as AviationTopic;
+		out.push({ value, label: AVIATION_TOPIC_LABELS[value] });
+	}
+	return out;
+}
+
 /** Project a reference row into the umbrella-card view shape. */
 function toUmbrella(ref: ReferenceRow): RegulationsUmbrellaCard {
 	const refKind = ref.kind as ReferenceKind;
@@ -647,6 +685,7 @@ async function buildGroupView(kind: LibraryRegulationsKind, db: Db): Promise<Reg
 					chapterName: ctx.chapterName,
 					subchapterId: ctx.subchapterId,
 					subchapterName: ctx.subchapterName,
+					topics: rep ? extractTopicChips(rep.metadata) : [],
 				};
 			});
 	} else if (kind === LIBRARY_REGULATIONS_KINDS.AIM) {
@@ -683,6 +722,10 @@ async function buildGroupView(kind: LibraryRegulationsKind, db: Db): Promise<Reg
 			chapterName: null,
 			subchapterId: null,
 			subchapterName: null,
+			// AC series cards do not surface authored topic chips today (the
+			// per-series bucket has no representative reference to project
+			// from). Empty array preserves the typed contract.
+			topics: [],
 		}));
 		umbrellas = orphans.map(toUmbrella);
 	} else if (kind === LIBRARY_REGULATIONS_KINDS.NTSB) {
