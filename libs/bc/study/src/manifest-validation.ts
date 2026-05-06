@@ -1038,6 +1038,20 @@ export type CfrManifestSource = z.infer<typeof cfrManifestSourceSchema>;
  * in `course/references/cfr-titles.yaml` and survive seed via
  * `upsertReference`'s null-default-on-conflict path.
  */
+/**
+ * Per-Part publisher metadata captured during ingest from eCFR XML
+ * `<HEAD>` text (e.g. Part 91 -> "General Operating and Flight Rules").
+ * Authoritative source for `reference.metadata.officialTitle` -- the CFR
+ * seeder reads this list and merges each Part's `officialTitle` onto its
+ * matching reference row. Optional on the schema so older manifests
+ * (pre-WP-CFR-Wave-1) still validate; new ingests always populate it.
+ */
+export const cfrManifestPartEntrySchema = z.object({
+	number: z.string().min(1),
+	officialTitle: z.string().min(1),
+});
+export type CfrManifestPartEntry = z.infer<typeof cfrManifestPartEntrySchema>;
+
 export const cfrManifestSchema = z.object({
 	kind: z.literal('cfr'),
 	schemaVersion: z.literal(1),
@@ -1051,6 +1065,7 @@ export const cfrManifestSchema = z.object({
 	subpartCount: z.number().int().nonnegative(),
 	sectionCount: z.number().int().nonnegative(),
 	sources: z.array(cfrManifestSourceSchema).optional(),
+	parts: z.array(cfrManifestPartEntrySchema).optional(),
 });
 export type CfrManifest = z.infer<typeof cfrManifestSchema>;
 
