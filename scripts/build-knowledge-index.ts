@@ -732,9 +732,9 @@ function validate(nodes: readonly ParsedNode[]): ValidationResult {
 				if (!idToNode.has(target)) {
 					// A missing target is a warning in v1 so the 30-node skeleton
 					// can land with dangling `teach-*` / `plan-*` references that
-					// haven't been authored yet. Build script records
-					// `target_exists=false` on these edges so the UI can surface
-					// them as gaps.
+					// haven't been authored yet. The UI surfaces these as gaps
+					// via a read-time LEFT JOIN on `knowledge_node` (see ADR 011
+					// + 2026-05-06 review §E); no per-edge cached flag needed.
 					warnings.push({
 						relPath: node.relPath,
 						message: `${key} -> '${target}' does not resolve to an authored node`,
@@ -1187,22 +1187,14 @@ async function writeToDb(nodes: readonly ParsedNode[]): Promise<void> {
 					return true;
 				});
 				if (unique.length > 0) {
-					await tx
-						.insert(knowledgeEdge)
-						.values(unique.map((e) => ({ ...e, targetExists: false })))
-						.onConflictDoNothing();
+					await tx.insert(knowledgeEdge).values(unique).onConflictDoNothing();
 				}
 			}
 
-			// Refresh target_exists on every edge in one pass. The SQL uses the
-			// study schema qualifier explicitly so the statement remains valid
-			// regardless of search_path.
-			await tx.execute(sql`
-			UPDATE study.knowledge_edge e
-			SET target_exists = EXISTS (
-				SELECT 1 FROM study.knowledge_node n WHERE n.id = e.to_node_id
-			)
-		`);
+			// Edge target existence is now resolved at read time via LEFT JOIN
+			// (per 2026-05-06 review §E). The previously-stored `target_exists`
+			// boolean was a maintained denormalized cache; the column was
+			// dropped, and refresh-after-build is no longer needed.
 		});
 	} finally {
 		// Close the postgres pool so the process can exit immediately on

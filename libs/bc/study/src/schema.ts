@@ -285,10 +285,14 @@ export const knowledgeNode = studySchema.table(
  * Edge in the knowledge graph.
  *
  * `toNodeId` is a plain text column, NOT a foreign key: ADR 011 permits edges
- * whose target does not (yet) exist -- a visible gap is information. The
- * `targetExists` flag is maintained by the build script after every upsert so
- * read-side queries can filter out dangling edges without re-scanning every
- * node. `edgeType` is constrained to the KNOWLEDGE_EDGE_TYPES enum.
+ * whose target does not (yet) exist -- a visible gap is information.
+ * Existence is resolved at read time via `LEFT JOIN knowledge_node ON
+ * to_node_id = id` (see `getNodeView` in `knowledge.ts`). The previous
+ * `target_exists` denormalized boolean was dropped per the 2026-05-06 schema
+ * review (issue E): the build script was the only writer keeping it accurate,
+ * any direct insert path silently corrupted the value, and the join answers
+ * the question without drift. `edgeType` is constrained to the
+ * KNOWLEDGE_EDGE_TYPES enum.
  *
  * Composite PK = (from, to, type). Authoring a `requires` and a `related`
  * edge between the same two nodes is legal; duplicates within a single type
@@ -302,12 +306,6 @@ export const knowledgeEdge = studySchema.table(
 			.references(() => knowledgeNode.id, { onDelete: 'cascade' }),
 		toNodeId: text('to_node_id').notNull(),
 		edgeType: text('edge_type').notNull(),
-		/**
-		 * True when `toNodeId` resolves to an existing knowledge_node at the
-		 * time of the last build. The build script refreshes this after every
-		 * run; render-time filters can use it to hide or mark gaps.
-		 */
-		targetExists: boolean('target_exists').notNull().default(false),
 		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 		seedOrigin: text('seed_origin'),
 	},

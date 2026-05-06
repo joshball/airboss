@@ -24,8 +24,8 @@ const buildKeys = new Set(Object.keys(buildBarrel));
  * path that scripts/seeders need.
  */
 const BUILD_ONLY_SYMBOLS = [
-	// Knowledge-graph writers
-	'refreshEdgeTargetExists',
+	// Knowledge-graph writers (`refreshEdgeTargetExists` was dropped per the
+	// 2026-05-06 review §E -- edge target existence resolved at read time)
 	'replaceNodeEdges',
 	'upsertKnowledgeNode',
 	// Credential writers + DAG validator

@@ -275,6 +275,7 @@ export type {
 	CertProgress,
 	DomainCertCell,
 	DomainCertRow,
+	KnowledgeEdgeRowWithTarget,
 	KnowledgeFacetCounts,
 	KnowledgeNodeListRow,
 	ListNodesFilters,
