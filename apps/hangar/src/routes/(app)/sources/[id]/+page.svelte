@@ -135,7 +135,7 @@ const checksumMatchesOnDisk = $derived(
 					<Badge tone="warning" size="sm">size differs</Badge>
 				{/if}
 			</div>
-			<div class="card-detail mono">{data.source.checksum.slice(0, 12) || '--'}</div>
+			<div class="card-detail mono">{data.source.checksum?.slice(0, 12) || '--'}</div>
 		</div>
 		<div class="card">
 			<div class="card-label">Registry rev</div>

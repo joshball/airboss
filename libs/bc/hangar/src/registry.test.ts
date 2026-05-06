@@ -101,8 +101,8 @@ function sourceInput(id: string) {
 		url: 'https://example.test',
 		path: `cfr/${id}.xml`,
 		format: 'xml',
-		checksum: 'pending-download',
-		downloadedAt: 'pending-download',
+		checksum: null,
+		downloadedAt: null,
 	};
 }
 

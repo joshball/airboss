@@ -26,8 +26,11 @@ let {
 	thumbnailAvailable: boolean;
 	edition: { effectiveDate: string; editionNumber: number | null } | null;
 	archiveSizeBytes: number | null;
-	archiveSha: string;
-	downloadedAt: string;
+	// Per the 2026-05-06 review §N, source rows can be in a pending state
+	// (checksum + downloadedAt both NULL until the binary lands). The tile
+	// renders `--` when either is missing rather than crashing on null.
+	archiveSha: string | null;
+	downloadedAt: string | null;
 	generator: string;
 } = $props();
 
@@ -43,7 +46,10 @@ function formatBytes(bytes: number | null | undefined): string {
 	return `${value.toFixed(unit === 0 ? 0 : 1)} ${units[unit]}`;
 }
 
-function formatRelative(iso: string): string {
+function formatRelative(iso: string | null): string {
+	// Pending sources have null `downloadedAt` per the 2026-05-06 review §N;
+	// fall back to '--' rather than rendering null. Legacy `'pending-download'`
+	// sentinel is kept as a defensive equivalent.
 	if (!iso || iso === 'pending-download') return '--';
 	try {
 		return new Date(iso).toLocaleString();
@@ -84,7 +90,10 @@ const editionLabel = $derived(
 		</div>
 		<div>
 			<dt>Archive</dt>
-			<dd><span class="mono">{formatBytes(archiveSizeBytes)}</span> - <span class="mono">{archiveSha.slice(0, 12)}</span></dd>
+			<dd>
+				<span class="mono">{formatBytes(archiveSizeBytes)}</span> -
+				<span class="mono">{archiveSha ? archiveSha.slice(0, 12) : '--'}</span>
+			</dd>
 		</div>
 		<div>
 			<dt>Downloaded</dt>

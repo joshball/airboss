@@ -161,10 +161,21 @@ export const hangarSource = hangarSchema.table(
 		 */
 		path: text('path').notNull(),
 		format: text('format').notNull(),
-		/** SHA-256 of the downloaded binary; `pending-download` sentinel. */
-		checksum: text('checksum').notNull(),
-		/** ISO-8601 download timestamp; `pending-download` sentinel. */
-		downloadedAt: text('downloaded_at').notNull(),
+		/**
+		 * SHA-256 of the downloaded binary. Null until the binary lands per
+		 * the 2026-05-06 review §N (the earlier `'pending-download'` sentinel
+		 * lied about NOT NULL and forced BC reads into string compares).
+		 * The CHECK pairs `(checksum, downloadedAt)` so the row is always
+		 * either fully downloaded or fully pending.
+		 */
+		checksum: text('checksum'),
+		/**
+		 * Server clock when the binary was downloaded. Null until the binary
+		 * lands. Stored as `timestamptz` (was `text` ISO-8601) so range
+		 * comparisons sort correctly without the sentinel string sneaking
+		 * into a `< some_iso_string` filter.
+		 */
+		downloadedAt: timestamp('downloaded_at', { withTimezone: true }),
 		/** Byte size when on disk. Null until downloaded. */
 		sizeBytes: integer('size_bytes'),
 		/** Locator shape hint for UI forms (see `SourceCitation.locator`). */
@@ -196,6 +207,13 @@ export const hangarSource = hangarSchema.table(
 		// pays back. Chunk-6 schema MIN.
 		sourceUpdatedIdx: index('hangar_source_updated_idx').on(t.updatedAt).where(sql`${t.deletedAt} IS NULL`),
 		sourceTypeCheck: check('hangar_source_type_check', sql.raw(`"type" IN (${inList(SOURCE_TYPE_VALUES)})`)),
+		// Pair invariant per the 2026-05-06 review §N: a row is either fully
+		// pending (both NULL) or fully downloaded (both NOT NULL). Splits in
+		// either direction are bugs the BC must never emit.
+		sourceDownloadedPairCheck: check(
+			'hangar_source_downloaded_pair_check',
+			sql.raw(`("checksum" IS NULL) = ("downloaded_at" IS NULL)`),
+		),
 	}),
 );
 
