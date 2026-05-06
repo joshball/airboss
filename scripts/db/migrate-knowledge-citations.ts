@@ -488,12 +488,21 @@ function findChapterByCode(snapshot: ManifestSnapshot, chapter: number): Manifes
  * body lines (joined by `\n`) WITHOUT the leading `- ` and WITHOUT the body
  * indent prefix; callers prefix each line with the legacy entry's
  * `bodyIndent` (and the leading `- ` for the first line) when emitting.
+ *
+ * When `redirectedFrom` is non-null, the proposed YAML carries the
+ * well-known `redirected_from:` field (per ADR 019 amendment 2026-05 §2)
+ * pointing at the legacy citation's original target. The migration script
+ * constructs this from the legacy `(slug, edition, chapter?)` tuple so the
+ * rewrite preserves provenance: a later reader can see the citation used
+ * to point at FAA-H-8083-3B chapter 4 before the human override moved it
+ * to current 3C chapter 4 (or, on a renumbering, somewhere else).
  */
 export function buildProposedYaml(args: {
 	slug: string;
 	chapter: number | null;
 	chapterTitle: string | null;
 	note: string;
+	redirectedFrom: string | null;
 }): string {
 	const lines: string[] = [];
 	const chapterPath = args.chapter === null ? '' : `/${args.chapter}`;
@@ -501,10 +510,38 @@ export function buildProposedYaml(args: {
 	if (args.chapterTitle !== null && args.chapterTitle.length > 0) {
 		lines.push(`chapter_title: ${quoteYamlIfNeeded(args.chapterTitle)}`);
 	}
+	if (args.redirectedFrom !== null && args.redirectedFrom.length > 0) {
+		// `airboss-ref:` URIs contain `:` but the colon is never followed by a
+		// space, so YAML treats the whole value as a plain scalar (the same way
+		// the `ref:` line above does). Emit unquoted to match the `ref:` style.
+		lines.push(`redirected_from: ${args.redirectedFrom}`);
+	}
 	if (args.note.length > 0) {
 		lines.push(`note: ${formatYamlScalar(args.note)}`);
 	}
 	return lines.join('\n');
+}
+
+/**
+ * Build the original `airboss-ref:` URI for the legacy citation, used as
+ * the `redirected_from` value on the proposed rewrite. Composition is
+ * intentionally loose -- if we can pin a chapter we do, otherwise we fall
+ * back to doc-level (slug + edition). Both are valid airboss-ref URIs per
+ * amendment §1's optional-edition grammar; the validator parses without a
+ * registry lookup so a retired-edition target stays accepted.
+ *
+ * Returns null when the legacy citation didn't parse to a recognised
+ * (slug, edition) -- the migration leaves those for manual rewrite and
+ * has no provenance URI to record.
+ */
+export function buildOriginalAirbossRef(
+	parsedSource: ParsedLegacySource | null,
+	chapter: number | null,
+): string | null {
+	if (parsedSource === null) return null;
+	const editionPath = `/${parsedSource.edition}`;
+	const chapterPath = chapter === null ? '' : `/${chapter}`;
+	return `airboss-ref:handbooks/${parsedSource.slug}${editionPath}${chapterPath}`;
 }
 
 function quoteYamlIfNeeded(value: string): string {
@@ -662,11 +699,13 @@ export function buildReviewRow(
 		parsedDetail.chapterTitle !== null &&
 		currentChapterTitle !== null &&
 		parsedDetail.chapterTitle.trim().toLowerCase() === currentChapterTitle.trim().toLowerCase();
+	const redirectedFrom = buildOriginalAirbossRef(parsedSource, parsedDetail.chapter);
 	const proposedYaml = buildProposedYaml({
 		slug: parsedSource?.slug ?? '<UNKNOWN-SLUG>',
 		chapter: parsedDetail.chapter,
 		chapterTitle: currentChapterTitle ?? parsedDetail.chapterTitle,
 		note: legacy.note,
+		redirectedFrom,
 	});
 	return {
 		relPath: legacy.relPath,
