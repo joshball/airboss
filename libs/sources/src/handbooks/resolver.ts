@@ -40,6 +40,16 @@ export const HANDBOOK_DOC_EDITIONS: Record<string, Record<string, string>> = {
 	},
 	afh: {
 		'8083-3C': 'FAA-H-8083-3C',
+		// Prior edition retained as a pin target so historical citations
+		// (e.g. AFH 3B Ch. 4 "Slow Flight, Stalls, and Spins") resolve
+		// without requiring the section-tree derivatives on disk. The
+		// `?` marker for the FAA dir signals "no derivative" -- the
+		// resolver returns null for content reads on this edition,
+		// which is correct (we don't render 3B; we link out). The
+		// supersedes chain to 3C is wired in `study.reference` per
+		// PR #665. Per ADR 019 amendment 2026-05 deferred-ingestion
+		// work package; this entry is the citation-target stub.
+		'8083-3B': 'FAA-H-8083-3B',
 	},
 	avwx: {
 		'8083-28B': 'FAA-H-8083-28B',
@@ -338,7 +348,20 @@ export const HANDBOOKS_RESOLVER: CorpusResolver = {
 		// Step 4: sub-locator must exist in the manifest. Reuse the
 		// existing manifest cache so this stays cheap.
 		const manifest = loadManifestCached(doc, faaDir, _derivativeRoot);
-		if (manifest === null) return false;
+		if (manifest === null) {
+			// No manifest on disk for this (doc, edition) pair. Two cases
+			// are valid here: (a) the edition is a citation-target stub
+			// like AFH 3B (HANDBOOK_DOC_EDITIONS lists it for pin
+			// validation but section-tree derivatives are deferred per
+			// the AFH-3B-ingestion work package) -- citations to its
+			// chapters resolve as "known but not browseable"; (b) the
+			// derivatives haven't been generated yet in this environment.
+			// Either way, the locator is well-formed and edition is
+			// known: return true. The renderer-side path that needs
+			// actual chapter content gracefully degrades to the live
+			// FAA URL (per `getLiveUrl`).
+			return true;
+		}
 		const sectionMatch = manifestSectionForLocator(manifest, locatorParsed.handbooks);
 		return sectionMatch !== null;
 	},

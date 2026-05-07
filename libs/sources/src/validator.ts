@@ -14,6 +14,7 @@
  * gets a row-2 ERROR until phase 2 lands the constants table.
  */
 
+import { getCorpusResolver } from './registry/corpus-resolver.ts';
 import { type CitationSentinel, compareSentinel, type SentinelLookup } from './sentinels.ts';
 import type {
 	IdentifierOccurrence,
@@ -28,7 +29,6 @@ import type {
 	ValidationFinding,
 } from './types.ts';
 import { UNKNOWN_CORPUS, UNPINNED_EDITION } from './types.ts';
-import { getCorpusResolver } from './registry/corpus-resolver.ts';
 
 /**
  * Context the rule engine needs from the lesson-parser to evaluate the

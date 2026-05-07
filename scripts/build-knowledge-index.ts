@@ -520,12 +520,24 @@ let _sourcesToolkit: SourcesToolkit | null = null;
  */
 async function loadSourcesToolkit(): Promise<SourcesToolkit> {
 	if (_sourcesToolkit !== null) return _sourcesToolkit;
-	const [{ parseIdentifier, isParseError }, { validateIdentifier }, { productionRegistry, getCorpusResolver }] =
-		await Promise.all([
-			import('@ab/sources/parser.ts'),
-			import('@ab/sources/validator.ts'),
-			import('@ab/sources/registry/index.ts'),
-		]);
+	const [
+		{ parseIdentifier, isParseError },
+		{ validateIdentifier },
+		{ productionRegistry, getCorpusResolver },
+		// Side-effect imports that register per-corpus resolvers. Required
+		// for the validator's rule 2 fallback (resolver.isKnownLocator) to
+		// reach the right resolver. The leaf-imports above do not transitively
+		// pull these in -- the @ab/sources barrel does, but we avoid the
+		// barrel because it also re-exports DB-touching values per the
+		// comment above. Adding each corpus's index here is the minimal way
+		// to populate the resolver registry without dragging in the DB layer.
+		_handbooks,
+	] = await Promise.all([
+		import('@ab/sources/parser.ts'),
+		import('@ab/sources/validator.ts'),
+		import('@ab/sources/registry/index.ts'),
+		import('@ab/sources/handbooks/index.ts'),
+	]);
 	_sourcesToolkit = {
 		parseIdentifier,
 		isParseError,
