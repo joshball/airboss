@@ -21,7 +21,7 @@
  */
 
 import { createHash } from 'node:crypto';
-import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { basename, join, relative, resolve } from 'node:path';
 import { SIM_SCENARIO_NODE_MAPPINGS } from '@ab/constants/sim';
 import {
@@ -1248,12 +1248,99 @@ function emitReport(
 	);
 	if (warnings.length > 0) {
 		process.stdout.write(`  warnings: ${warnings.length}\n`);
-		for (const w of warnings) process.stdout.write(`    [warn] ${w.relPath}: ${w.message}\n`);
+		const reportPath = writeWarningsReport(warnings);
+		const aggregated = aggregateWarningsByCode(warnings);
+		for (const group of aggregated) {
+			const head = `    ${group.code}: ${group.count}`;
+			if (group.actionable !== null) {
+				process.stdout.write(`${head}  -- ${group.actionable}\n`);
+			} else {
+				process.stdout.write(`${head}\n`);
+			}
+			// Show one example per group so the operator can spot-check what
+			// the aggregate refers to without opening the JSON.
+			const example = group.first;
+			process.stdout.write(`      eg ${example.relPath}: ${truncateForLine(example.message)}\n`);
+		}
+		process.stdout.write(`    full list: ${reportPath}\n`);
 	}
 	if (errors.length > 0) {
 		process.stderr.write(`  errors: ${errors.length}\n`);
 		for (const e of errors) process.stderr.write(`    [error] ${e.relPath}: ${e.message}\n`);
 	}
+}
+
+interface AggregatedWarningGroup {
+	readonly code: string;
+	readonly count: number;
+	readonly first: BuildWarning;
+	readonly actionable: string | null;
+}
+
+/**
+ * Collapse the flat warnings list into one row per code. The code is
+ * extracted from the `[bracket]` tag in the message; messages without a
+ * tag fall under `uncategorized`. Edge-resolution warnings get their own
+ * synthetic codes (`unresolved-edge`) so they don't all collide as
+ * `uncategorized`.
+ *
+ * `actionable` is the one-liner that tells the operator what to do about
+ * the group ("run script X", "author the missing nodes", etc). Maintained
+ * here so the aggregate output stays useful instead of "warnings: 116" with
+ * no next-step.
+ */
+function aggregateWarningsByCode(warnings: ReadonlyArray<BuildWarning>): AggregatedWarningGroup[] {
+	const buckets = new Map<string, { count: number; first: BuildWarning }>();
+	for (const w of warnings) {
+		const codeMatch = w.message.match(/\[([a-z][a-z0-9-]*)\]/i);
+		let code: string;
+		if (codeMatch) {
+			code = codeMatch[1];
+		} else if (/does not resolve to an authored node/.test(w.message)) {
+			code = 'unresolved-edge';
+		} else {
+			code = 'uncategorized';
+		}
+		const entry = buckets.get(code);
+		if (entry === undefined) {
+			buckets.set(code, { count: 1, first: w });
+		} else {
+			entry.count += 1;
+		}
+	}
+	const ACTIONABLES: Readonly<Record<string, string>> = {
+		'legacy-citation-shape': "run 'bun scripts/db/migrate-knowledge-citations.ts' to migrate to the structured ref: shape",
+		'unresolved-edge': 'author the missing target nodes, or remove the edge from the source node frontmatter',
+	};
+	const out: AggregatedWarningGroup[] = [];
+	for (const [code, entry] of buckets) {
+		out.push({ code, count: entry.count, first: entry.first, actionable: ACTIONABLES[code] ?? null });
+	}
+	out.sort((a, b) => b.count - a.count);
+	return out;
+}
+
+function truncateForLine(message: string): string {
+	const oneLine = message.replace(/\s+/g, ' ').trim();
+	return oneLine.length > 140 ? `${oneLine.slice(0, 137)}...` : oneLine;
+}
+
+/**
+ * Persist the full warning list to `.reports/build-knowledge/warnings.json`
+ * so the operator can drill into specifics without the seed scrollback. Best
+ * effort: failure to write the report is a debug aid, not a build failure.
+ */
+function writeWarningsReport(warnings: ReadonlyArray<BuildWarning>): string {
+	const reportDir = resolve(process.cwd(), '.reports', 'build-knowledge');
+	const reportPath = resolve(reportDir, 'warnings.json');
+	try {
+		mkdirSync(reportDir, { recursive: true });
+		writeFileSync(reportPath, `${JSON.stringify(warnings, null, 2)}\n`);
+	} catch (err) {
+		// Don't crash the build if .reports isn't writable; just note it.
+		process.stderr.write(`build-knowledge: failed to write warnings report: ${(err as Error).message}\n`);
+	}
+	return reportPath;
 }
 
 /**

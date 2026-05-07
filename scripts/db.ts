@@ -117,7 +117,9 @@ async function doReset(): Promise<void> {
 		'CREATE EXTENSION IF NOT EXISTS pg_trgm;',
 	]);
 	await run(['bunx', 'drizzle-kit', 'push']);
-	await run(['bun', 'scripts/db/seed-all.ts']);
+	const seedCmd = ['bun', 'scripts/db/seed-all.ts'];
+	for (const f of passthroughFlags) seedCmd.push(f);
+	await run(seedCmd);
 	// Final summary so the operator sees what landed.
 	await run(['bun', 'scripts/db/seed-check.ts']);
 }
