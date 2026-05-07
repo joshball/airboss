@@ -760,7 +760,10 @@ export function applyProposedBlockToText(
 ): string {
 	const lines = text.split(/\r?\n/);
 	// itemIndent is the indent of the legacy `- source:` line; bodyIndent is
-	// itemIndent + '  '. Hand-edited block starts each citation with `- ref:`.
+	// itemIndent + '  '. Hand-edited block already carries its own internal
+	// indent (item heads at column 0 with `- `, body lines at column 2). All
+	// we do here is prefix every non-empty line with `itemIndent` so the
+	// block re-indents to where the legacy entry lived.
 	const itemIndent = row.bodyIndent.slice(0, Math.max(0, row.bodyIndent.length - 2));
 	const blockLines = proposedBlock.split(/\r?\n/);
 	const replacement: string[] = [];
@@ -769,13 +772,7 @@ export function applyProposedBlockToText(
 			replacement.push('');
 			continue;
 		}
-		// A line starting with `- ` is a list-item head: prefix with itemIndent.
-		// Anything else is body of the current item: prefix with itemIndent + '  '.
-		if (l.startsWith('- ')) {
-			replacement.push(`${itemIndent}${l}`);
-		} else {
-			replacement.push(`${itemIndent}  ${l}`);
-		}
+		replacement.push(`${itemIndent}${l}`);
 	}
 	const before = lines.slice(0, row.startLine - 1);
 	const after = lines.slice(row.endLine);
