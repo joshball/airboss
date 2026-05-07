@@ -25,6 +25,19 @@
 // barrel because they bypass per-user actor scoping. See chunk-2 security
 // MAJOR finding in `docs/work/reviews/2026-05-01-study-bc-domain-security.md`.
 
+// Advisories BC aggregator (one entry point for /library/advisories/* loaders).
+export type {
+	AdvisoriesBucketCard,
+	AdvisoriesBulletinCard,
+	AdvisoriesDetailView,
+	AdvisoriesExternalLink,
+	AdvisoriesLandingView,
+	AdvisoriesReferenceCopy,
+	AdvisoriesView,
+	AdvisoriesViewNotFoundKey,
+	AdvisoriesViewParams,
+} from './advisories';
+export { AdvisoriesViewNotFoundError, getAdvisoriesView } from './advisories';
 export type {
 	CalibrationBucket,
 	CalibrationPageData,

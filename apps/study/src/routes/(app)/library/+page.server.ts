@@ -18,10 +18,13 @@ import {
 	AVIATION_TOPIC_VALUES,
 	CERT_APPLICABILITY_VALUES,
 	type CertApplicability,
+	LIBRARY_ADVISORIES_KIND_VALUES,
+	LIBRARY_ADVISORIES_KINDS,
 	LIBRARY_REGULATIONS_KIND_VALUES,
 	LIBRARY_REGULATIONS_KINDS,
 	LIBRARY_TESTING_KIND_VALUES,
 	LIBRARY_TESTING_KINDS,
+	type LibraryAdvisoriesKind,
 	type LibraryRegulationsKind,
 	type LibraryTestingKind,
 	REFERENCE_KINDS,
@@ -46,6 +49,11 @@ interface RegulationsBucket {
 
 interface TestingBucket {
 	kind: LibraryTestingKind;
+	count: number;
+}
+
+interface AdvisoriesBucket {
+	kind: LibraryAdvisoriesKind;
 	count: number;
 }
 
@@ -121,6 +129,15 @@ export const load: PageServerLoad = async (event) => {
 	});
 	const testingCount = testingBuckets.reduce((acc, b) => acc + b.count, 0);
 
+	// Advisories buckets (SAFO + InFO). Each kind maps 1:1 to a `study.reference.kind`
+	// value so the counts come straight off `listReferences()` without the slug-shape
+	// matchers that the regulations buckets need.
+	const advisoriesBuckets: AdvisoriesBucket[] = LIBRARY_ADVISORIES_KIND_VALUES.map((kind) => {
+		const refKind = kind === LIBRARY_ADVISORIES_KINDS.SAFO ? REFERENCE_KINDS.SAFO : REFERENCE_KINDS.INFO;
+		const count = allRefs.reduce((acc, ref) => (ref.kind === refKind ? acc + 1 : acc), 0);
+		return { kind, count };
+	});
+
 	// Exclude the legacy `poh-afm` umbrella row -- it's the generic citation
 	// landing for "the POH" without a specific aircraft, not an aircraft in
 	// its own right. Counting it would mislead the landing-tile total.
@@ -135,6 +152,7 @@ export const load: PageServerLoad = async (event) => {
 		regulationBuckets,
 		testingBuckets,
 		testingCount,
+		advisoriesBuckets,
 		aircraft,
 	};
 };

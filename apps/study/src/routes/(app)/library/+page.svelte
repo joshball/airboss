@@ -4,6 +4,7 @@ import {
 	type AviationTopic,
 	CERT_APPLICABILITIES,
 	CERT_APPLICABILITY_LABELS,
+	LIBRARY_ADVISORIES_KIND_LABELS,
 	LIBRARY_REGULATIONS_KIND_LABELS,
 	LIBRARY_TESTING_KIND_LABELS,
 	LIBRARY_TOPIC_VISIBLE_THRESHOLD,
@@ -32,14 +33,16 @@ let showAllTopics = $state(false);
 
 const visibleRegulationBuckets = $derived(data.regulationBuckets.filter((b) => b.count > 0));
 const visibleTestingBuckets = $derived(data.testingBuckets.filter((b) => b.count > 0));
+const visibleAdvisoryBuckets = $derived(data.advisoriesBuckets.filter((b) => b.count > 0));
 
 const certCount = $derived(visibleCertSpine.length);
 const topicCount = $derived(primaryTopics.length + collapsedTopics.length);
 const regCount = $derived(visibleRegulationBuckets.length);
 const testingCount = $derived(visibleTestingBuckets.length);
+const advisoriesCount = $derived(visibleAdvisoryBuckets.length);
 const aircraftCount = $derived(data.aircraft.length);
 
-const totalSurfaces = $derived(certCount + topicCount + regCount + testingCount + aircraftCount);
+const totalSurfaces = $derived(certCount + topicCount + regCount + testingCount + advisoriesCount + aircraftCount);
 </script>
 
 <svelte:head>
@@ -166,6 +169,26 @@ const totalSurfaces = $derived(certCount + topicCount + regCount + testingCount 
 						</a>
 					</li>
 				{/each}
+			</ul>
+		</section>
+	{/if}
+
+	{#if visibleAdvisoryBuckets.length > 0}
+		<section class="spine" aria-labelledby="advisories-spine-h">
+			<h2 id="advisories-spine-h">Advisories</h2>
+			<p class="spine-lead">FAA Safety Alerts and Information for Operators -- short urgent bulletins.</p>
+			<ul class="grid">
+				<li>
+					<a class="card advisories-card" href={ROUTES.LIBRARY_ADVISORIES}>
+						<span class="card-title">SAFO &amp; InFO bulletins</span>
+						<span class="card-count">
+							{#each visibleAdvisoryBuckets as bucket, i (bucket.kind)}
+								{i > 0 ? ' · ' : ''}{bucket.count}
+								{LIBRARY_ADVISORIES_KIND_LABELS[bucket.kind]}{bucket.count === 1 ? '' : 's'}
+							{/each}
+						</span>
+					</a>
+				</li>
 			</ul>
 		</section>
 	{/if}

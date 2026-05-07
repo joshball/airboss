@@ -1653,6 +1653,73 @@ export const LIBRARY_TESTING_KIND_COPY: Record<LibraryTestingKind, LibraryTestin
 };
 
 /**
+ * Top-level "Advisories" buckets surfaced on `/library/advisories`. SAFO and
+ * InFO are sibling FAA Flight Standards bulletin programs -- 1-3 page PDFs,
+ * stable 5-digit `<YY><sequence>` ids, immutable once published. They share a
+ * surface here because they share the publishing model: short, urgent, and
+ * pointed at operators in the field.
+ *
+ * Closed enum -- adding a new advisory program requires a code edit so the
+ * route loader always knows how to group the references inside.
+ */
+export const LIBRARY_ADVISORIES_KINDS = {
+	SAFO: 'safo',
+	INFO: 'info',
+} as const;
+
+export type LibraryAdvisoriesKind = (typeof LIBRARY_ADVISORIES_KINDS)[keyof typeof LIBRARY_ADVISORIES_KINDS];
+
+export const LIBRARY_ADVISORIES_KIND_VALUES: readonly LibraryAdvisoriesKind[] = Object.values(LIBRARY_ADVISORIES_KINDS);
+
+export const LIBRARY_ADVISORIES_KIND_LABELS: Record<LibraryAdvisoriesKind, string> = {
+	[LIBRARY_ADVISORIES_KINDS.SAFO]: 'SAFO',
+	[LIBRARY_ADVISORIES_KINDS.INFO]: 'InFO',
+};
+
+/**
+ * Hand-authored descriptive copy for the top-level advisories buckets.
+ * Surfaced on `/library/advisories` (landing) and as the page header on
+ * `/library/advisories/[slug]` (detail). Kept in code (not DB) because there
+ * is no `reference` row at the kind level -- the kind is a slug grouping over
+ * many bulletins. Mirrors the shape of `LibraryRegulationsKindCopy`.
+ *
+ * `officialTitle` -- the publisher's full program name.
+ * `description`   -- 1-2 sentences on what the bulletin program contains.
+ * `whyItMatters`  -- 1-2 sentences on why a learning pilot should care.
+ */
+export interface LibraryAdvisoriesKindCopy {
+	/** Card title -- the wayfinder ("SAFO", "InFO"). Identical to label. */
+	readonly shortLabel: string;
+	/** Card subtitle -- the topic at-a-glance ("Safety Alerts for Operators"). */
+	readonly topic: string;
+	/** Tooltip + detail-page subtitle -- the full publisher program title. */
+	readonly officialTitle: string;
+	readonly description: string;
+	readonly whyItMatters: string;
+}
+
+export const LIBRARY_ADVISORIES_KIND_COPY: Record<LibraryAdvisoriesKind, LibraryAdvisoriesKindCopy> = {
+	[LIBRARY_ADVISORIES_KINDS.SAFO]: {
+		shortLabel: 'SAFO',
+		topic: 'Safety Alerts for Operators',
+		officialTitle: 'FAA Safety Alert for Operators',
+		description:
+			'Short FAA bulletins (1-3 pages) flagging an immediate safety concern -- a maintenance issue, a procedure pitfall, a recurring accident pattern. Sibling program to InFO; same shape, urgent voice.',
+		whyItMatters:
+			"When the FAA decides operators need to know something now, this is the channel. The few minutes a SAFO takes to read are bought with someone else's incident report.",
+	},
+	[LIBRARY_ADVISORIES_KINDS.INFO]: {
+		shortLabel: 'InFO',
+		topic: 'Information for Operators',
+		officialTitle: 'FAA Information for Operators',
+		description:
+			'Short advisory bulletins from FAA Flight Standards Service. Same 1-3 page format as SAFOs; advisory rather than alert -- procedural updates, clarifications, and operational guidance.',
+		whyItMatters:
+			"InFOs surface the day-to-day operational guidance that doesn't rise to a SAFO but still shapes how examiners and inspectors expect operators to behave. Read the ones tagged for your operation.",
+	},
+};
+
+/**
  * External-citation URL templates. The `resolveCitationUrl` resolver in
  * `@ab/bc-study handbooks.ts` consumes these for non-handbook citation kinds.
  * Centralised here so a URL change (eCFR rebrand, FAA AIM reorganisation)
