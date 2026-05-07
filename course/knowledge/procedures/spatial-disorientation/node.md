@@ -50,12 +50,11 @@ review_time_minutes: 10
 
 # === References ===
 references:
-  - source: PHAK (FAA-H-8083-25C)
-    detail: Chapter 17 -- Aeromedical Factors
+  - ref: airboss-ref:handbooks/phak/17
+    chapter_title: Aeromedical Factors
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25C/17
     note: >-
-      Authoritative on the vestibular system, illusions in flight, and the
-      common forms of spatial disorientation (the leans, graveyard spiral,
-      coriolis illusion, somatogravic, somatogyral).
+      Authoritative on the vestibular system, illusions in flight, and the common forms of spatial disorientation (the leans, graveyard spiral, coriolis illusion, somatogravic, somatogyral).
   - source: AC 60-22
     detail: Aeronautical Decision Making
     note: >-

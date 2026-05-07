@@ -40,6 +40,16 @@ export const HANDBOOK_DOC_EDITIONS: Record<string, Record<string, string>> = {
 	},
 	afh: {
 		'8083-3C': 'FAA-H-8083-3C',
+		// Prior edition retained as a pin target so historical citations
+		// (e.g. AFH 3B Ch. 4 "Slow Flight, Stalls, and Spins") resolve
+		// without requiring the section-tree derivatives on disk. The
+		// `?` marker for the FAA dir signals "no derivative" -- the
+		// resolver returns null for content reads on this edition,
+		// which is correct (we don't render 3B; we link out). The
+		// supersedes chain to 3C is wired in `study.reference` per
+		// PR #665. Per ADR 019 amendment 2026-05 deferred-ingestion
+		// work package; this entry is the citation-target stub.
+		'8083-3B': 'FAA-H-8083-3B',
 	},
 	avwx: {
 		'8083-28B': 'FAA-H-8083-28B',
@@ -117,6 +127,38 @@ function faaDirFor(doc: string, edition: string): string | null {
 }
 
 /**
+ * Registry-aware "is this a known edition for this doc?" predicate per ADR
+ * 019 amendment 2026-05 §1. Wired into `parseHandbooksLocator` so the
+ * locator parser can disambiguate "edition pin vs chapter" without
+ * round-tripping through the resolver registry.
+ */
+export function isKnownHandbookEdition(doc: string, candidate: string): boolean {
+	const docMap = HANDBOOK_DOC_EDITIONS[doc];
+	if (docMap === undefined) return false;
+	return docMap[candidate] !== undefined;
+}
+
+/**
+ * Pick the current edition for a handbook doc when the locator omits the
+ * edition. Per ADR 019 amendment 2026-05 §1: "Edition omitted: resolver
+ * returns the current (latest non-superseded) entry for the slug." Today
+ * each doc has exactly one edition entry in `HANDBOOK_DOC_EDITIONS`; when
+ * a doc gets a successor we pick the lex-max edition slug (matching the
+ * existing `getCurrentEdition` contract).
+ */
+export function currentEditionForDoc(doc: string): string | null {
+	const docMap = HANDBOOK_DOC_EDITIONS[doc];
+	if (docMap === undefined) return null;
+	const editions = Object.keys(docMap);
+	if (editions.length === 0) return null;
+	let max: string | null = null;
+	for (const ed of editions) {
+		if (max === null || ed > max) max = ed;
+	}
+	return max;
+}
+
+/**
  * Build the production `handbooks` resolver. Stateless aside from the
  * derivative root + manifest cache, both overridable for tests.
  */
@@ -124,7 +166,11 @@ export const HANDBOOKS_RESOLVER: CorpusResolver = {
 	corpus: HANDBOOKS_CORPUS,
 
 	parseLocator(locator: string): ParsedLocator | LocatorError {
-		return parseHandbooksLocator(locator);
+		// Per ADR 019 amendment 2026-05 §1, the path-grammar disambiguation
+		// is registry-aware: the segment after `<doc>` is treated as an
+		// edition pin iff it appears in `HANDBOOK_DOC_EDITIONS[doc]`. The
+		// resolver is the registry; the locator parser delegates here.
+		return parseHandbooksLocator(locator, isKnownHandbookEdition);
 	},
 
 	formatCitation(entry, style) {
@@ -160,7 +206,10 @@ export const HANDBOOKS_RESOLVER: CorpusResolver = {
 		const parsed = parseHandbooksLocator(locator);
 		if (parsed.kind !== 'ok' || parsed.handbooks === undefined) return null;
 		const { doc, edition: editionSlug } = parsed.handbooks;
-		const faaDir = faaDirFor(doc, editionSlug);
+		// Per ADR 019 amendment 2026-05 §1: when the locator omits the
+		// edition, resolve to the current (latest) edition for the doc.
+		const effectiveEdition = editionSlug.length > 0 ? editionSlug : (currentEditionForDoc(doc) ?? '');
+		const faaDir = faaDirFor(doc, effectiveEdition);
 		if (faaDir === null) return null;
 		const manifest = loadManifestCached(doc, faaDir, _derivativeRoot);
 		if (manifest === null) return null;
@@ -201,6 +250,120 @@ export const HANDBOOKS_RESOLVER: CorpusResolver = {
 			edition,
 			normalizedText: text,
 		};
+	},
+
+	/**
+	 * Look up the captured sentinel field's value in the resolved manifest.
+	 * Per ADR 019 amendment 2026-05 §2 (D4: handbooks ship first).
+	 *
+	 * - `chapter_title` -- read the chapter section's `title` from the
+	 *   manifest, addressed by the locator's chapter code.
+	 * - `section_title` -- read the section's title at the chapter+section
+	 *   manifest code.
+	 * - `paragraph_text` / `page_heading` -- not implemented for handbooks
+	 *   in this slice; return null. Per amendment D4 the vocabulary is
+	 *   committed inline; per-corpus impls land in their corpus WP. Wire
+	 *   here when the AFH-3B / page-pin work surfaces.
+	 */
+	getSentinelValue(parsed, field): string | null {
+		if (parsed.corpus !== HANDBOOKS_CORPUS) return null;
+		const locatorParsed = parseHandbooksLocator(parsed.locator, isKnownHandbookEdition);
+		if (locatorParsed.kind !== 'ok' || locatorParsed.handbooks === undefined) return null;
+		const { doc, edition: editionSlug, chapter, section } = locatorParsed.handbooks;
+		const effectiveEdition = editionSlug.length > 0 ? editionSlug : (currentEditionForDoc(doc) ?? '');
+		const faaDir = faaDirFor(doc, effectiveEdition);
+		if (faaDir === null) return null;
+		const manifest = loadManifestCached(doc, faaDir, _derivativeRoot);
+		if (manifest === null) return null;
+		if (field === 'chapter_title') {
+			if (chapter === undefined) return null;
+			const chapterSection = manifest.sections.find((s) => s.level === 'chapter' && s.code === chapter);
+			return chapterSection?.title ?? null;
+		}
+		if (field === 'section_title') {
+			if (chapter === undefined || section === undefined || section === 'intro') return null;
+			const code = `${chapter}.${section}`;
+			const sectionEntry = manifest.sections.find((s) => s.level === 'section' && s.code === code);
+			return sectionEntry?.title ?? null;
+		}
+		// `paragraph_text` and `page_heading` not implemented for handbooks
+		// in this slice; the validator surfaces null as match=false which is
+		// the correct conservative default (NOTICE prompts the author to
+		// either pin or capture a more applicable sentinel).
+		return null;
+	},
+
+	/**
+	 * Per ADR 019 amendment 2026-05 §2 + the validator's rule 2 fallback.
+	 *
+	 * Handbook content lives on disk as derivatives keyed by `(doc,
+	 * edition)`, not as registry rows in `SOURCES`. The static `SOURCES`
+	 * registry is empty for the handbooks corpus (Phase 2 ships it
+	 * empty), so `registry.getEntry()` always returns null for handbook
+	 * URIs. This predicate teaches rule 2 to recognise a handbook
+	 * locator as resolvable when:
+	 *
+	 *   1. The doc slug exists in `HANDBOOK_DOC_EDITIONS`.
+	 *   2. The edition pin (if present) is a known edition for that doc.
+	 *   3. The chapter / section / subsection / figure / table (if
+	 *      present) exists in the resolved edition's manifest.
+	 *
+	 * For doc-only locators (`airboss-ref:handbooks/phak`), the predicate
+	 * returns true once step 1 passes -- the doc exists; the citation
+	 * is "see this whole handbook," which is a valid shape per ADR 019.
+	 *
+	 * The check uses the cached manifest (no fresh disk read on every
+	 * call). Returns false on any unknown segment so rule 2 surfaces the
+	 * ERROR with the correct "does not resolve" framing.
+	 */
+	isKnownLocator(parsed): boolean {
+		if (parsed.corpus !== HANDBOOKS_CORPUS) return false;
+		const locatorParsed = parseHandbooksLocator(parsed.locator, isKnownHandbookEdition);
+		if (locatorParsed.kind !== 'ok' || locatorParsed.handbooks === undefined) return false;
+		const { doc, edition: editionSlug, chapter, section, subsection, figure, table } = locatorParsed.handbooks;
+
+		// Step 1: doc slug must be known.
+		if (HANDBOOK_DOC_EDITIONS[doc] === undefined) return false;
+
+		// Step 2: if an edition is pinned in the locator, it must be a
+		// known edition for this doc. (parseHandbooksLocator already
+		// does the registry-aware disambiguation, so when editionSlug is
+		// non-empty we know it parsed AS an edition.)
+		const effectiveEdition = editionSlug.length > 0 ? editionSlug : (currentEditionForDoc(doc) ?? '');
+		if (effectiveEdition.length === 0) return false;
+		const faaDir = faaDirFor(doc, effectiveEdition);
+		if (faaDir === null) return false;
+
+		// Step 3: doc-only locator (no chapter/section/...) is resolvable
+		// at the handbook level. ADR 019 §1.2's handbooks shape allows
+		// citations to the whole document.
+		const hasSubLocator =
+			chapter !== undefined ||
+			section !== undefined ||
+			subsection !== undefined ||
+			figure !== undefined ||
+			table !== undefined;
+		if (!hasSubLocator) return true;
+
+		// Step 4: sub-locator must exist in the manifest. Reuse the
+		// existing manifest cache so this stays cheap.
+		const manifest = loadManifestCached(doc, faaDir, _derivativeRoot);
+		if (manifest === null) {
+			// No manifest on disk for this (doc, edition) pair. Two cases
+			// are valid here: (a) the edition is a citation-target stub
+			// like AFH 3B (HANDBOOK_DOC_EDITIONS lists it for pin
+			// validation but section-tree derivatives are deferred per
+			// the AFH-3B-ingestion work package) -- citations to its
+			// chapters resolve as "known but not browseable"; (b) the
+			// derivatives haven't been generated yet in this environment.
+			// Either way, the locator is well-formed and edition is
+			// known: return true. The renderer-side path that needs
+			// actual chapter content gracefully degrades to the live
+			// FAA URL (per `getLiveUrl`).
+			return true;
+		}
+		const sectionMatch = manifestSectionForLocator(manifest, locatorParsed.handbooks);
+		return sectionMatch !== null;
 	},
 };
 

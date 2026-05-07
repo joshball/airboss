@@ -44,13 +44,27 @@ review_time_minutes: 10
 
 # === References ===
 references:
-  - source: Instrument Flying Handbook (FAA-H-8083-15B)
-    detail: Chapter 6 -- Airplane Basic Flight Maneuvers Using an Electronic Flight Display; Chapter 5 -- Airplane Attitude Instrument Flying Using an Analog Instrument Panel
+  - ref: airboss-ref:handbooks/ifh/6
+    chapter_title: Airplane Attitude Instrument Flying
+    redirected_from: airboss-ref:handbooks/ifh/FAA-H-8083-15B/6
     note: >-
       Authoritative on selective-radial-scan and primary/supporting framing.
       The IFH is more direct about the trade-offs between the older "control
       and performance" model and the "primary/supporting" model than most
-      training texts.
+      training texts. Legacy citation referenced split EFD/Analog chapters
+      ("Ch. 6 -- Airplane Basic Flight Maneuvers Using an Electronic Flight
+      Display; Ch. 5 -- Airplane Attitude Instrument Flying Using an Analog
+      Instrument Panel"); IFH 15B consolidated these into Ch. 6 "Airplane
+      Attitude Instrument Flying" (where the scan and primary/supporting
+      framing live). Pinned here.
+  - ref: airboss-ref:handbooks/ifh/7
+    chapter_title: Airplane Basic Flight Maneuvers
+    note: >-
+      IFH 15B Ch. 7 "Airplane Basic Flight Maneuvers" carries the basic-
+      maneuvers material that the legacy citation's "Ch. 6 -- Airplane
+      Basic Flight Maneuvers Using an Electronic Flight Display" pointed
+      at. Pinned alongside Ch. 6 because the legacy citation explicitly
+      named both chapter purposes.
   - source: AC 61-27C
     detail: Instrument Flying Handbook (predecessor / archived guidance)
     note: >-

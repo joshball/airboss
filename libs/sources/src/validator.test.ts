@@ -251,19 +251,46 @@ describe('validator row 4 -- lifecycle', () => {
 });
 
 // ---------------------------------------------------------------------------
-// Row 5 -- ?at=unpinned WARNING
+// Row 5 -- REMOVED per ADR 019 amendment 2026-05 D3
 // ---------------------------------------------------------------------------
 
-describe('validator row 5 -- ?at=unpinned', () => {
-	test('V-05: ?at=unpinned emits WARNING row 5 alongside an ERROR', () => {
+describe('validator row 5 -- REMOVED (amendment 2026-05 D3)', () => {
+	test('V-05: ?at=unpinned no longer emits WARNING row 5; treated as missing pin', () => {
 		const parsed = parseOrThrow('airboss-ref:regs/cfr-14/91/103?at=unpinned');
-		// Use a registry that knows the corpus so we exercise row 5 alongside
-		// row 2 (entry-not-found), matching the "WARNING coexists with ERROR"
-		// pattern. With NULL_REGISTRY post-Phase-2 we'd hit row 1 instead.
 		const reg = fixtureRegistry({ knownCorpora: new Set(['regs']) });
 		const findings = validateIdentifier(parsed, ctx(reg));
-		const warnings = findings.filter((f) => f.severity === 'warning');
-		expect(warnings.find((f) => f.ruleId === 5)).toBeDefined();
+		// Row 5 must not fire under any precision.
+		expect(findings.find((f) => f.ruleId === 5)).toBeUndefined();
+	});
+
+	test('V-05b: ?at=unpinned with edition-sensitive precision and a registered entry => ERROR row 3', () => {
+		// Provide an entry under the raw (pinned) key so row 2 doesn't
+		// preempt row 3 (validator emits exactly one ERROR; row 2 runs
+		// before row 3, and the test fixture's `getEntry` does not strip
+		// pins -- production's `productionRegistry` does).
+		const raw = 'airboss-ref:regs/cfr-14/91/103?at=unpinned';
+		const parsed = parseOrThrow(raw);
+		const reg = fixtureRegistry({
+			entries: { [raw]: makeEntry(raw, 'accepted') },
+		});
+		const findings = validateIdentifier(parsed, {
+			...ctx(reg),
+			locatorPrecision: 'edition-sensitive',
+		});
+		const errors = findings.filter((f) => f.severity === 'error');
+		expect(errors.map((f) => f.ruleId)).toContain(3);
+	});
+
+	test('V-05c: ?at=unpinned with doc-or-chapter-level precision => no row 3 ERROR', () => {
+		const parsed = parseOrThrow('airboss-ref:regs/cfr-14/91/103?at=unpinned');
+		const reg = fixtureRegistry({ knownCorpora: new Set(['regs']) });
+		const findings = validateIdentifier(parsed, {
+			...ctx(reg),
+			locatorPrecision: 'doc-or-chapter-level',
+		});
+		// Row 3 must NOT fire (the precision permits unpinned). Row 2 still
+		// fires because the registry has no entry; that's separate.
+		expect(findings.find((f) => f.ruleId === 3)).toBeUndefined();
 	});
 });
 
@@ -494,14 +521,16 @@ describe('validator row 14 -- ack reason slug length', () => {
 // ---------------------------------------------------------------------------
 
 describe('validator exactly-one-error + multi-finding ordering', () => {
-	test('V-EX: row 2 ERROR + row 5 WARNING coexist on the same identifier', () => {
+	test('V-EX: ?at=unpinned no longer emits row 5; row 2 (unresolved entry) wins as the single ERROR', () => {
+		// Per ADR 019 amendment 2026-05 D3: row 5 is removed. Without an
+		// entry in the registry row 2 fires first and is the only ERROR
+		// (validator emits exactly one ERROR per identifier).
 		const parsed = parseOrThrow('airboss-ref:regs/cfr-14/91/103?at=unpinned');
 		const reg = fixtureRegistry({ knownCorpora: new Set(['regs']) });
 		const findings = validateIdentifier(parsed, ctx(reg));
 		const errors = findings.filter((f) => f.severity === 'error');
-		const warnings = findings.filter((f) => f.severity === 'warning');
 		expect(errors.map((f) => f.ruleId)).toEqual([2]);
-		expect(warnings.map((f) => f.ruleId)).toContain(5);
+		expect(findings.find((f) => f.ruleId === 5)).toBeUndefined();
 	});
 
 	test('V-EX2: identifier matching multiple ERROR rules emits only the first one', () => {
@@ -515,6 +544,154 @@ describe('validator exactly-one-error + multi-finding ordering', () => {
 		const errors = findings.filter((f) => f.severity === 'error');
 		expect(errors.length).toBe(1);
 		expect(errors[0].ruleId).toBe(2);
+	});
+});
+
+// ---------------------------------------------------------------------------
+// Amendment 2026-05: optional edition + drift sentinels
+// ---------------------------------------------------------------------------
+
+describe('amendment 2026-05 -- optional edition (§1)', () => {
+	test('A-01: doc-or-chapter-level + null pin => no row 3 ERROR', () => {
+		const parsed = parseOrThrow('airboss-ref:handbooks/afh/3');
+		const reg = fixtureRegistry({ knownCorpora: new Set(['handbooks']) });
+		const findings = validateIdentifier(parsed, {
+			...ctx(reg),
+			locatorPrecision: 'doc-or-chapter-level',
+		});
+		expect(findings.find((f) => f.ruleId === 3)).toBeUndefined();
+	});
+
+	test('A-02: edition-sensitive + null pin => row 3 ERROR with precision-aware message', () => {
+		const raw = 'airboss-ref:handbooks/afh/3/page-12';
+		const parsed = parseOrThrow(raw);
+		const reg = fixtureRegistry({
+			entries: { [raw]: makeEntry(raw, 'accepted') },
+		});
+		const findings = validateIdentifier(parsed, {
+			...ctx(reg),
+			locatorPrecision: 'edition-sensitive',
+		});
+		const errors = findings.filter((f) => f.severity === 'error');
+		expect(errors[0].ruleId).toBe(3);
+		expect(errors[0].message).toMatch(/edition pin is required/);
+	});
+
+	test('A-03: editionless corpus (interp) + null pin => no row 3 ERROR', () => {
+		const id = 'airboss-ref:interp/chief-counsel/mangiamele-2009';
+		const parsed = parseOrThrow(id);
+		const reg = fixtureRegistry({
+			entries: { [id]: makeEntry(id, 'accepted') },
+		});
+		const findings = validateIdentifier(parsed, ctx(reg));
+		expect(findings.find((f) => f.ruleId === 3)).toBeUndefined();
+		expect(findings.filter((f) => f.severity === 'error')).toHaveLength(0);
+	});
+});
+
+describe('amendment 2026-05 -- no current edition for slug (D5)', () => {
+	test('A-04: unpinned + slug has only superseded editions => ERROR with registry-aware hint', () => {
+		const raw = 'airboss-ref:handbooks/some-handbook/3';
+		const parsed = parseOrThrow(raw);
+		const reg = fixtureRegistry({ knownCorpora: new Set(['handbooks']) });
+		const augmented: RegistryReader = {
+			...reg,
+			listEditionsForSlug(_corpus, _slug) {
+				return [
+					{ edition: '8083-3B', lifecycle: 'superseded', supersededAt: new Date('2024-08-01') },
+					{ edition: '8083-3A', lifecycle: 'superseded', supersededAt: new Date('2018-04-15') },
+				];
+			},
+			// Expose an entry for `raw` so row 2 doesn't fire first.
+			getEntry(_id) {
+				return makeEntry(raw, 'accepted');
+			},
+		};
+		const findings = validateIdentifier(parsed, {
+			...ctx(augmented),
+			locatorPrecision: 'doc-or-chapter-level',
+		});
+		const errors = findings.filter((f) => f.severity === 'error');
+		expect(errors[0].ruleId).toBe(3);
+		expect(errors[0].message).toMatch(/no current edition/);
+		expect(errors[0].message).toMatch(/8083-3B/);
+		expect(errors[0].message).toMatch(/superseded 2024-08-01/);
+		expect(errors[0].message).toMatch(/airboss-ref:handbooks\/some-handbook\/3\?at=8083-3B/);
+	});
+
+	test('A-05: unpinned + slug has a current accepted edition => no error', () => {
+		const raw = 'airboss-ref:handbooks/phak/3';
+		const parsed = parseOrThrow(raw);
+		const reg = fixtureRegistry({ knownCorpora: new Set(['handbooks']) });
+		const augmented: RegistryReader = {
+			...reg,
+			listEditionsForSlug(_corpus, _slug) {
+				return [{ edition: '8083-25C', lifecycle: 'accepted', supersededAt: null }];
+			},
+			getEntry(_id) {
+				return makeEntry(raw, 'accepted');
+			},
+		};
+		const findings = validateIdentifier(parsed, {
+			...ctx(augmented),
+			locatorPrecision: 'doc-or-chapter-level',
+		});
+		expect(findings.filter((f) => f.severity === 'error')).toHaveLength(0);
+	});
+});
+
+describe('amendment 2026-05 -- drift sentinels (§2)', () => {
+	test('A-06: sentinel match emits no finding', () => {
+		const id = 'airboss-ref:handbooks/afh/3';
+		const parsed = parseOrThrow(id);
+		const reg = fixtureRegistry({
+			entries: { [id]: makeEntry(id, 'accepted') },
+		});
+		const findings = validateIdentifier(parsed, {
+			...ctx(reg),
+			locatorPrecision: 'doc-or-chapter-level',
+			sentinels: [{ field: 'chapter_title', expected: 'Basic Flight Maneuvers' }],
+			sentinelLookup: () => 'Basic Flight Maneuvers',
+		});
+		expect(findings.find((f) => f.ruleId === 15)).toBeUndefined();
+	});
+
+	test('A-07: sentinel mismatch emits NOTICE row 15 (does not block publish)', () => {
+		const id = 'airboss-ref:handbooks/afh/3';
+		const parsed = parseOrThrow(id);
+		const reg = fixtureRegistry({
+			entries: { [id]: makeEntry(id, 'accepted') },
+		});
+		const findings = validateIdentifier(parsed, {
+			...ctx(reg),
+			locatorPrecision: 'doc-or-chapter-level',
+			sentinels: [{ field: 'chapter_title', expected: 'Basic Flight Maneuvers' }],
+			sentinelLookup: () => 'Fundamentals of Flight',
+		});
+		const drift = findings.find((f) => f.ruleId === 15);
+		expect(drift).toBeDefined();
+		expect(drift?.severity).toBe('notice');
+		expect(drift?.message).toMatch(/Basic Flight Maneuvers/);
+		expect(drift?.message).toMatch(/Fundamentals of Flight/);
+		expect(findings.filter((f) => f.severity === 'error')).toHaveLength(0);
+	});
+
+	test('A-08: sentinel laundering emits NOTICE row 16 (does not block publish)', () => {
+		const id = 'airboss-ref:handbooks/afh/3';
+		const parsed = parseOrThrow(id);
+		const reg = fixtureRegistry({
+			entries: { [id]: makeEntry(id, 'accepted') },
+		});
+		const findings = validateIdentifier(parsed, {
+			...ctx(reg),
+			locatorPrecision: 'doc-or-chapter-level',
+			sentinelLaundering: true,
+		});
+		const laundering = findings.find((f) => f.ruleId === 16);
+		expect(laundering).toBeDefined();
+		expect(laundering?.severity).toBe('notice');
+		expect(laundering?.message).toMatch(/reviewer should confirm content equivalence/);
+		expect(findings.filter((f) => f.severity === 'error')).toHaveLength(0);
 	});
 });
 

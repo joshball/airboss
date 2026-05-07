@@ -27,9 +27,23 @@ estimated_time_minutes: 45
 review_time_minutes: 8
 
 references:
-  - source: AIH (FAA-H-8083-9B)
-    detail: Chapter 4 -- Effective Teaching; Chapter 5 -- Assessment
-    note: Scenario-based training, single-pilot resource management, judgment evaluation.
+  - ref: airboss-ref:handbooks/aviation-instructor/7
+    chapter_title: The Teaching Process
+    redirected_from: airboss-ref:handbooks/aviation-instructor/FAA-H-8083-9B/4
+    note: >-
+      Scenario-based training (the teaching process side of evaluating
+      student judgment). Original legacy citation said "Ch. 4 -- Effective
+      Teaching" against AIH 9B; AIH 9 renamed this to "The Teaching
+      Process" and shifted code numbering (front-matter chapters consume
+      codes 1-2 in the on-disk manifest, so Ch. 4 of the FAA numbering
+      lives at code 7). The script's auto-mapping picked code 4 = "Human
+      Behavior", which is the wrong topic.
+  - ref: airboss-ref:handbooks/aviation-instructor/8
+    chapter_title: Assessment
+    note: >-
+      Assessment side of evaluating judgment. Original legacy citation
+      paired Ch. 5 -- Assessment alongside Ch. 4. In the AIH 9 manifest
+      Assessment lives at code 8 (offset for the same reason as above).
   - source: AC 60-22
     detail: Aeronautical Decision-Making
     note: Framework for evaluating ADM in training environments.

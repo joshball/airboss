@@ -32,9 +32,18 @@ references:
   - source: AIM
     detail: 6-1-2 -- Pilot Responsibility and Authority
     note: Operational guidance on declaring emergencies and ATC expectations.
-  - source: PHAK (FAA-H-8083-25C)
-    detail: Chapter 17 -- Aeromedical Factors and ADM
-    note: Judgment framing for invoking PIC authority.
+  - ref: airboss-ref:handbooks/phak/17
+    chapter_title: Aeromedical Factors
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25C/17
+    note: >-
+      Aeromedical side of judgment framing for invoking PIC authority.
+      Original detail said "Aeromedical Factors and ADM"; PHAK 25C Ch. 17
+      is "Aeromedical Factors" only -- the ADM material lives at Ch. 2.
+  - ref: airboss-ref:handbooks/phak/2
+    chapter_title: Aeronautical Decision-Making
+    note: >-
+      ADM side of judgment framing -- the original citation merged Ch. 17
+      and ADM. Ch. 2 carries the ADM material.
 
 assessable: true
 assessment_methods: [recall, scenario]

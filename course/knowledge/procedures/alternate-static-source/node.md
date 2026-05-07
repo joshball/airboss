@@ -42,12 +42,11 @@ review_time_minutes: 6
 
 # === References ===
 references:
-  - source: PHAK (FAA-H-8083-25C)
-    detail: Chapter 8 -- Flight Instruments; pitot-static system
+  - ref: airboss-ref:handbooks/phak/8
+    chapter_title: Flight Instruments
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25C/8
     note: >-
-      Authoritative on why the alternate static source is offset (cabin
-      pressure differs from outside static pressure due to airframe leak
-      paths, vent geometry, and Bernoulli effects around vent openings).
+      Authoritative on why the alternate static source is offset (cabin pressure differs from outside static pressure due to airframe leak paths, vent geometry, and Bernoulli effects around vent openings).
   - source: POH / AFM Section 5
     detail: Performance / Airspeed Calibration -- alternate static source correction tables
     note: >-

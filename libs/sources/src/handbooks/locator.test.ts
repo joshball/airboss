@@ -108,6 +108,51 @@ describe('parseHandbooksLocator', () => {
 			});
 		});
 
+		it('amendment 2026-05: doc-only locator (edition omitted)', () => {
+			const result = parseHandbooksLocator('phak');
+			expect(result.kind).toBe('ok');
+			if (result.kind !== 'ok') return;
+			expect(result.handbooks).toEqual({ doc: 'phak', edition: '' });
+		});
+
+		it('amendment 2026-05: doc + chapter (edition omitted)', () => {
+			const knownEditions = new Set(['8083-25C']);
+			const result = parseHandbooksLocator('phak/12', (_doc, c) => knownEditions.has(c));
+			expect(result.kind).toBe('ok');
+			if (result.kind !== 'ok') return;
+			expect(result.handbooks).toEqual({ doc: 'phak', edition: '', chapter: '12' });
+		});
+
+		it('amendment 2026-05: doc + chapter + section (edition omitted)', () => {
+			const knownEditions = new Set(['8083-25C']);
+			const result = parseHandbooksLocator('phak/12/3', (_doc, c) => knownEditions.has(c));
+			expect(result.kind).toBe('ok');
+			if (result.kind !== 'ok') return;
+			expect(result.handbooks).toEqual({ doc: 'phak', edition: '', chapter: '12', section: '3' });
+		});
+
+		it('amendment 2026-05: doc + edition + chapter + section + para (edition pinned, parser uses registry)', () => {
+			const knownEditions = new Set(['8083-25C']);
+			const result = parseHandbooksLocator('phak/8083-25C/12/3/para-2', (_doc, c) => knownEditions.has(c));
+			expect(result.kind).toBe('ok');
+			if (result.kind !== 'ok') return;
+			expect(result.handbooks).toEqual({
+				doc: 'phak',
+				edition: '8083-25C',
+				chapter: '12',
+				section: '3',
+				paragraph: 'para-2',
+			});
+		});
+
+		it('amendment 2026-05: doc + chapter intro (edition omitted)', () => {
+			const knownEditions = new Set(['8083-3C']);
+			const result = parseHandbooksLocator('afh/5/intro', (_doc, c) => knownEditions.has(c));
+			expect(result.kind).toBe('ok');
+			if (result.kind !== 'ok') return;
+			expect(result.handbooks).toEqual({ doc: 'afh', edition: '', chapter: '5', section: 'intro' });
+		});
+
 		it('non-FAA-H-numbered handbook (Tips on Mountain Flying)', () => {
 			// Pamphlets/handbooks without an FAA H-designator use a `<slug>-<year>`
 			// edition shape (see EDITION_PATTERN in locator.ts).
@@ -131,18 +176,29 @@ describe('parseHandbooksLocator', () => {
 			expect(result.message).toMatch(/doc/);
 		});
 
-		it('a missing edition', () => {
-			const result = parseHandbooksLocator('phak');
-			expect(result.kind).toBe('error');
-			if (result.kind !== 'error') return;
-			expect(result.message).toMatch(/edition/);
-		});
-
-		it('a malformed edition', () => {
+		it('a malformed chapter (where edition was previously parsed)', () => {
+			// Per ADR 019 amendment 2026-05 §1, edition is now optional in the
+			// locator path. `phak/abc/12/3` parses `abc` as the chapter slot
+			// (no registry-aware predicate is supplied here, so the syntactic
+			// EDITION_PATTERN classifies "abc" as a non-edition chapter
+			// candidate). The chapter-pattern check then fails.
 			const result = parseHandbooksLocator('phak/abc/12/3');
 			expect(result.kind).toBe('error');
 			if (result.kind !== 'error') return;
-			expect(result.message).toMatch(/edition/);
+			expect(result.message).toMatch(/chapter/);
+		});
+
+		it('a syntactically-valid edition not known to the registry', () => {
+			// EDITION_PATTERN matches "8083-99Z" but a registry-aware predicate
+			// rejects it (no such edition for `phak`). Without a predicate
+			// supplied here, the default uses EDITION_PATTERN and accepts it
+			// as an edition; with a Set-backed predicate restricted to the
+			// real editions, the parser surfaces a "not a known edition" error.
+			const knownEditions = new Set(['8083-25C']);
+			const result = parseHandbooksLocator('phak/8083-99Z/12', (_doc, c) => knownEditions.has(c));
+			expect(result.kind).toBe('error');
+			if (result.kind !== 'error') return;
+			expect(result.message).toMatch(/not a known edition/);
 		});
 
 		it('a non-digit chapter', () => {

@@ -35,8 +35,9 @@ references:
   - source: AIM
     detail: Chapter 3 -- Airspace
     note: Operational descriptions, entry requirements, equipment requirements.
-  - source: PHAK (FAA-H-8083-25C)
-    detail: Chapter 15 -- Airspace
+  - ref: airboss-ref:handbooks/phak/15
+    chapter_title: Airspace
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25C/15
     note: Diagrams of each class with typical dimensions.
 
 assessable: true

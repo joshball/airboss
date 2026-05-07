@@ -59,12 +59,15 @@ references:
       Recommended pattern entries (45 to downwind), CTAF self-announce phrasing,
       and the long-running guidance against straight-in approaches at busy
       non-towered fields.
-  - source: FAA Airplane Flying Handbook (FAA-H-8083-3B)
-    detail: Chapter on airport traffic patterns and operations
+  - ref: airboss-ref:handbooks/afh/8
+    chapter_title: Airport Traffic Patterns
+    redirected_from: airboss-ref:handbooks/afh/FAA-H-8083-3B
     note: >-
-      Practical pattern flying -- crosswind, downwind, base, final shaping;
-      typical airspeeds and configurations; corrections for wind drift on
-      each leg.
+      Practical pattern flying -- crosswind, downwind, base, final
+      shaping; typical airspeeds and configurations; corrections for wind
+      drift on each leg. Original legacy citation was doc-level ("Chapter
+      on airport traffic patterns and operations"); AFH 3C carries this
+      at Ch. 8 "Airport Traffic Patterns" -- pinned here.
   - source: 14 CFR 91.126 / 91.127
     detail: Operations at airports without operating control towers / with operating control towers
     note: >-

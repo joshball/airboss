@@ -27,8 +27,9 @@ estimated_time_minutes: 60
 review_time_minutes: 10
 
 references:
-  - source: PHAK (FAA-H-8083-25C)
-    detail: Chapter 10 -- Weight and Balance
+  - ref: airboss-ref:handbooks/phak/10
+    chapter_title: Weight and Balance
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25C/10
     note: Basic empty weight, useful load, moment arms, CG computation.
   - source: AC 91-23A
     detail: Pilot's Weight and Balance Handbook

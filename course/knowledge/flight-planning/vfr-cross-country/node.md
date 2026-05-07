@@ -32,12 +32,25 @@ estimated_time_minutes: 90
 review_time_minutes: 15
 
 references:
-  - source: PHAK (FAA-H-8083-25C)
-    detail: Chapter 16 -- Navigation
+  - ref: airboss-ref:handbooks/phak/16
+    chapter_title: Navigation
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25C/16
     note: Pilotage, dead reckoning, wind triangle, fuel planning.
-  - source: AFH (FAA-H-8083-3B)
-    detail: Chapter 16 -- Navigation
-    note: Practical VFR cross-country planning workflow.
+  - ref: airboss-ref:handbooks/phak/16
+    chapter_title: Navigation
+    redirected_from: airboss-ref:handbooks/afh/FAA-H-8083-3B/16
+    note: >-
+      Practical VFR cross-country planning workflow. Originally cited
+      against AFH 3B Ch. 16 "Navigation"; AFH 3C dropped its navigation
+      chapter (3C Ch. 16 is "Transition to Jet-Powered Airplanes"), and the
+      VFR-navigation content now lives canonically in PHAK Ch. 16. Pinned
+      to PHAK Ch. 16 as best-effort for the current-edition content.
+  - ref: airboss-ref:handbooks/afh/8083-3B/16
+    chapter_title: Navigation
+    note: >-
+      Pinned to AFH 3B Ch. 16 "Navigation" for the original AFH treatment.
+      AFH 3C dropped this chapter -- kept here for traceability and for
+      anyone wanting the older AFH-specific framing.
   - source: AIM
     detail: 5-1 -- Preflight
     note: Required preflight actions (91.103), flight plan filing, TFRs.

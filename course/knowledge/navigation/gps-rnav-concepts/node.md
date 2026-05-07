@@ -30,9 +30,18 @@ references:
   - source: AIM
     detail: 1-1-17 -- Global Positioning System (GPS)
     note: WAAS, RAIM, service levels, LNAV / LNAV+V / LPV / LP distinctions.
-  - source: IPH (FAA-H-8083-16B)
-    detail: Chapter 2 -- Departures; Chapter 4 -- Approaches
-    note: Operational use of RNAV SIDs, STARs, and approaches.
+  - ref: airboss-ref:handbooks/iph/1
+    chapter_title: Departure Procedures
+    redirected_from: airboss-ref:handbooks/iph/FAA-H-8083-16B/2
+    note: >-
+      RNAV SIDs and departure procedures. Original legacy citation said
+      "Chapter 2 -- Departures" but in current IPH 16B Ch. 1 is "Departure
+      Procedures" (Ch. 2 is "En Route Operations"); the citation's chapter
+      number was off-by-one. Pinned here to Ch. 1 for the actual
+      departure-procedure content.
+  - ref: airboss-ref:handbooks/iph/4
+    chapter_title: Approaches
+    note: Operational use of RNAV approaches.
   - source: AC 90-100A
     detail: U.S. Terminal and En Route Area Navigation (RNAV) Operations
     note: Regulatory context for RNAV equipment certification and operations.

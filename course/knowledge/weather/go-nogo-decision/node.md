@@ -31,8 +31,9 @@ estimated_time_minutes: 60
 review_time_minutes: 10
 
 references:
-  - source: PHAK (FAA-H-8083-25C)
-    detail: Chapter 2 -- Aeronautical Decision-Making
+  - ref: airboss-ref:handbooks/phak/2
+    chapter_title: Aeronautical Decision-Making
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25C/2
     note: DECIDE, PAVE, IMSAFE frameworks applied to weather calls.
   - source: AOPA Air Safety Institute
     detail: Weather-related safety resources

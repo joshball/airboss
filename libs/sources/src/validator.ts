@@ -14,12 +14,15 @@
  * gets a row-2 ERROR until phase 2 lands the constants table.
  */
 
+import { getCorpusResolver } from './registry/corpus-resolver.ts';
+import { type CitationSentinel, compareSentinel, type SentinelLookup } from './sentinels.ts';
 import type {
 	IdentifierOccurrence,
 	LessonAcknowledgment,
 	ParsedIdentifier,
 	ParseError,
 	RegistryReader,
+	RegistrySlugEdition,
 	Severity,
 	SourceId,
 	SourceLocation,
@@ -37,10 +40,55 @@ export interface RuleContext {
 	readonly occurrence?: IdentifierOccurrence;
 	/** All acks in the current lesson; used by rule 13 and rule 14. */
 	readonly acknowledgments?: readonly LessonAcknowledgment[];
+	/**
+	 * Per ADR 019 amendment 2026-05 §1: locator precision determines whether
+	 * unpinned editions are tolerated.
+	 *
+	 * - `'doc-or-chapter-level'` -- doc-only, doc+chapter, doc+chapter+section.
+	 *   Unpinned is OK; resolves to current edition; drift sentinel optionally
+	 *   verifies content equivalence.
+	 * - `'edition-sensitive'` -- includes a page number, paragraph (where
+	 *   regs renumbered), or a sibling `quote:` field. Unpinned is ERROR.
+	 *
+	 * The lesson-parser computes this from the parsed locator + sibling
+	 * frontmatter fields; the validator routes on it. When undefined the
+	 * validator defaults to `'edition-sensitive'` (conservative -- matches
+	 * pre-amendment behavior so callers that don't yet supply precision keep
+	 * getting today's row-3 ERROR for missing pins).
+	 */
+	readonly locatorPrecision?: 'doc-or-chapter-level' | 'edition-sensitive' | 'editionless-corpus';
+	/**
+	 * Per ADR 019 amendment 2026-05 §2: drift sentinels captured alongside
+	 * this citation (e.g. `chapter_title: Basic Flight Maneuvers`). The
+	 * validator looks up the actual value via `sentinelLookup` and emits
+	 * NOTICE on mismatch.
+	 */
+	readonly sentinels?: readonly CitationSentinel[];
+	/**
+	 * Per ADR 019 amendment 2026-05 §2: per-corpus resolver hook for sentinel
+	 * comparison. The validator calls this once per (citation, sentinel)
+	 * pair when sentinels are present.
+	 */
+	readonly sentinelLookup?: SentinelLookup;
+	/**
+	 * Per ADR 019 amendment 2026-05 §2 "Sentinel-laundering safeguard": when
+	 * true, the citation's sentinel was modified in the same commit as a
+	 * registry edition advance for the cited slug. The validator emits
+	 * NOTICE so reviewers can confirm content equivalence; this NOTICE does
+	 * NOT block the publish gate per ADR 019 §1.6.
+	 */
+	readonly sentinelLaundering?: boolean;
 }
 
 /** Maximum reason-slug length before NOTICE row 14 fires. */
 const REASON_SLUG_NOTICE_THRESHOLD = 48;
+
+/**
+ * Corpora whose identifiers are immutable post-publication and never carry
+ * an edition pin (per ADR 019 §1.2). The amendment §1 unpinned-precision
+ * rule does not apply to these -- absent `?at=` is always OK.
+ */
+const EDITIONLESS_CORPORA: ReadonlySet<string> = new Set(['ntsb', 'ntsb-alj', 'asrs', 'interp', 'tcds']);
 
 /**
  * Validate one identifier occurrence and return all findings (zero or more).
@@ -120,25 +168,86 @@ export function validateIdentifier(
 	const sourceId = parsed.raw as SourceId;
 
 	// -----------------------------------------------------------------
-	// Row 2 -- identifier resolves to an `accepted` or `superseded` registry entry.
+	// Row 2 -- identifier resolves to an `accepted` or `superseded` registry
+	// entry, OR the corpus resolver recognises the locator.
+	//
+	// Per ADR 019 §2.1, the static `SOURCES` table is the registry's source
+	// of truth, but corpora that ship content as on-disk derivatives keyed
+	// by `(doc, edition)` (handbooks today; CFR sections eventually) do not
+	// need a `SOURCES` row per locator -- the resolver IS the registry for
+	// those corpora. When the static lookup misses, we ask the resolver via
+	// its optional `isKnownLocator` predicate. Corpora that haven't opted
+	// into resolver-as-registry leave `isKnownLocator` unset and the
+	// fallback is a no-op (rule 2 ERROR fires as before).
 	// -----------------------------------------------------------------
 	const entry = ctx.registry.getEntry(sourceId);
 	if (entry === null) {
-		if (!errorEmitted) {
+		const resolver = getCorpusResolver(parsed.corpus);
+		const resolverKnowsIt = resolver?.isKnownLocator?.(parsed) === true;
+		if (!resolverKnowsIt && !errorEmitted) {
 			pushFinding('error', 2, 'identifier does not resolve to a registered entry');
 		}
 	}
 
 	// -----------------------------------------------------------------
-	// Row 3 -- pinned edition exists in registry.
-	// (Only meaningful if the entry exists; if entry is null, row 2 already
-	// covered it. We still check this for completeness when the registry
-	// happens to know the edition but not the entry -- defensive, harmless.)
+	// Row 3 -- edition pin existence + amendment §1 unpinned-precision rule.
+	//
+	// Pre-amendment behavior: any unpinned identifier was an ERROR. Per ADR
+	// 019 amendment 2026-05 §1, unpinned is now allowed for doc-or-chapter-
+	// level locators (resolves to current edition) and remains an ERROR for
+	// edition-sensitive locators (page, paragraph, quote). When the pin IS
+	// supplied, the registry must contain it (the original row 3 check).
 	// -----------------------------------------------------------------
 	if (parsed.pin !== null && parsed.pin !== UNPINNED_EDITION) {
 		if (!ctx.registry.hasEdition(sourceId, parsed.pin)) {
 			if (!errorEmitted) {
 				pushFinding('error', 3, `pinned edition "${parsed.pin}" does not exist in registry`);
+			}
+		}
+	} else if (parsed.pin === UNPINNED_EDITION || parsed.pin === null) {
+		// Per ADR 019 amendment 2026-05 D3, `?at=unpinned` is a legacy literal
+		// with no remaining semantics. Treat it identically to omitting the
+		// pin. Per amendment §1, missing pin is OK for doc-or-chapter-level
+		// locators and for editionless corpora (NTSB, interp, ASRS, etc.); it
+		// is ERROR for edition-sensitive locators (page, paragraph, quote).
+		const isEditionless = EDITIONLESS_CORPORA.has(parsed.corpus);
+		const precision = ctx.locatorPrecision ?? (isEditionless ? 'editionless-corpus' : 'edition-sensitive');
+		if (precision === 'edition-sensitive' && !errorEmitted) {
+			pushFinding(
+				'error',
+				3,
+				'edition pin is required for edition-sensitive precision (page, paragraph, or quote). ' +
+					'Add `?at=<edition>` or include the slug-encoded edition in the locator.',
+			);
+		}
+		// 'doc-or-chapter-level' / 'editionless-corpus' + null pin: OK (no
+		// row-3 finding). The new "no current edition for slug" rule below
+		// covers the case where the registry has no current edition for the
+		// slug; that rule does not apply to editionless corpora.
+	}
+
+	// -----------------------------------------------------------------
+	// Row 3a (amendment §1 + D5) -- no current edition for slug.
+	//
+	// When an unpinned doc-or-chapter-level citation's slug has no current
+	// (non-superseded, non-retired) edition in the registry, emit ERROR
+	// with a registry-aware hint per amendment D5.
+	// -----------------------------------------------------------------
+	const effectivePrecision =
+		ctx.locatorPrecision ?? (EDITIONLESS_CORPORA.has(parsed.corpus) ? 'editionless-corpus' : 'edition-sensitive');
+	if (
+		parsed.pin === null &&
+		effectivePrecision === 'doc-or-chapter-level' &&
+		ctx.registry.listEditionsForSlug !== undefined
+	) {
+		const slug = extractSlug(parsed.corpus, parsed.locator);
+		if (slug !== null) {
+			const editions = ctx.registry.listEditionsForSlug(parsed.corpus, slug);
+			const hasCurrent = editions.some((e) => e.lifecycle === 'accepted');
+			if (editions.length > 0 && !hasCurrent) {
+				if (!errorEmitted) {
+					pushFinding('error', 3, formatNoCurrentEditionHint(parsed.raw, slug, editions));
+				}
 			}
 		}
 	}
@@ -162,11 +271,16 @@ export function validateIdentifier(
 	}
 
 	// -----------------------------------------------------------------
-	// Row 5 -- ?at=unpinned (WARNING).
+	// Row 5 -- REMOVED per ADR 019 amendment 2026-05 D3.
+	//
+	// The `?at=unpinned` WARNING was retired in the same change that
+	// introduced optional editions: authors learn one mechanism (omit the
+	// edition entirely) instead of two. There were zero usages of
+	// `?at=unpinned` in the wild at amendment time; no deprecation window
+	// is required. The literal `?at=unpinned` is now treated as any other
+	// pinned edition by the validator -- if the registry doesn't know it,
+	// row 3 fires; if it does know it, no finding fires here.
 	// -----------------------------------------------------------------
-	if (parsed.pin === UNPINNED_EDITION) {
-		pushFinding('warning', 5, 'identifier uses ?at=unpinned (authorial opt-out)');
-	}
 
 	// -----------------------------------------------------------------
 	// Row 6 -- pinned edition is older than current `accepted` by > 1 (WARNING).
@@ -284,7 +398,115 @@ export function validateIdentifier(
 		}
 	}
 
+	// -----------------------------------------------------------------
+	// Row 15 -- drift sentinel mismatch (NOTICE).
+	// Per ADR 019 amendment 2026-05 §2: when an author captures a sentinel
+	// (e.g. `chapter_title: Basic Flight Maneuvers`), the validator looks up
+	// the actual value in the resolved (current) edition and emits NOTICE
+	// when they differ. NOTICE does not block the publish gate.
+	// -----------------------------------------------------------------
+	if (ctx.sentinels !== undefined && ctx.sentinels.length > 0 && ctx.sentinelLookup !== undefined) {
+		for (const sentinel of ctx.sentinels) {
+			const actual = ctx.sentinelLookup(parsed, sentinel.field);
+			const cmp = compareSentinel(sentinel.expected, actual);
+			if (!cmp.match) {
+				const actualText = cmp.actual ?? '(not found in registry)';
+				pushFinding(
+					'notice',
+					15,
+					`drift sentinel mismatch on ${sentinel.field}: expected "${sentinel.expected}", actual "${actualText}". ` +
+						'Update the sentinel (content equivalent, retitled) or pin to the previous edition (content changed).',
+				);
+			}
+		}
+	}
+
+	// -----------------------------------------------------------------
+	// Row 16 -- sentinel-laundering safeguard (NOTICE).
+	// Per ADR 019 amendment 2026-05 §2 "Sentinel-laundering safeguard":
+	// when the citation's sentinel was modified in the same commit as a
+	// registry edition advance for the cited slug, surface a NOTICE so the
+	// reviewer can confirm content equivalence. NOTICE does NOT block the
+	// publish gate per ADR 019 §1.6.
+	// -----------------------------------------------------------------
+	if (ctx.sentinelLaundering === true) {
+		pushFinding(
+			'notice',
+			16,
+			'sentinel updated against new edition -- reviewer should confirm content equivalence ' +
+				'(this NOTICE does not block the publish gate).',
+		);
+	}
+
 	return findings;
+}
+
+// ---------------------------------------------------------------------------
+// No-current-edition hint formatting
+// ---------------------------------------------------------------------------
+
+/**
+ * Pull the corpus-specific slug out of a locator. Per ADR 019 §1.2, the
+ * slug is the first path segment for handbooks (`phak`, `afh`), the
+ * authority+order-number pair for orders, etc. The validator's "no current
+ * edition" rule only needs a stable key the registry can look up, so we
+ * extract the first segment by default and let per-corpus refinement land
+ * via the resolver registry when corpora need different slug shapes.
+ */
+function extractSlug(corpus: string, locator: string): string | null {
+	const segments = locator.split('/');
+	const first = segments[0];
+	if (first === undefined || first.length === 0) return null;
+	// Corpora whose slug spans multiple path segments override here. None
+	// today need this; orders is `<authority>/<orderNumber>` but the
+	// "no current edition" rule is moot for orders (no current-edition
+	// concept yet). Add per-corpus extractors when needed.
+	if (corpus === 'orders' && segments.length > 1) {
+		return `${first}/${segments[1] ?? ''}`;
+	}
+	return first;
+}
+
+/**
+ * Format the registry-aware ERROR hint per ADR 019 amendment 2026-05 D5.
+ * Names the slug, lists up to 3 most-recent superseded editions with
+ * supersession dates, and quotes the suggested pin string.
+ */
+function formatNoCurrentEditionHint(raw: string, slug: string, editions: readonly RegistrySlugEdition[]): string {
+	const lines: string[] = [];
+	lines.push(`${raw} has no current edition.`);
+	lines.push(`  All editions of \`${slug}\` are superseded or retired.`);
+	const superseded = editions
+		.filter((e) => e.lifecycle === 'superseded' && e.supersededAt !== null)
+		.sort((a, b) => {
+			const aMs = a.supersededAt?.getTime() ?? 0;
+			const bMs = b.supersededAt?.getTime() ?? 0;
+			return bMs - aMs;
+		})
+		.slice(0, 3);
+	if (superseded.length > 0) {
+		lines.push('  Most recent prior editions:');
+		for (const ed of superseded) {
+			const date = ed.supersededAt?.toISOString().slice(0, 10) ?? 'unknown';
+			lines.push(`    - ${ed.edition} (superseded ${date})`);
+		}
+		const newest = superseded[0];
+		if (newest !== undefined) {
+			lines.push(`  To cite the most recent: ${suggestedPinUri(raw, newest.edition)}`);
+		}
+	}
+	return lines.join('\n');
+}
+
+/**
+ * Build the suggested pin URI for the no-current-edition hint. Strips any
+ * existing pin from `raw` and appends `?at=<edition>`. Round-trips through
+ * the parser cleanly because the original raw string already passed it.
+ */
+function suggestedPinUri(raw: string, edition: string): string {
+	const queryStart = raw.indexOf('?');
+	const base = queryStart === -1 ? raw : raw.slice(0, queryStart);
+	return `${base}?at=${edition}`;
 }
 
 // ---------------------------------------------------------------------------

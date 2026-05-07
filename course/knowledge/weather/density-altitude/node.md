@@ -27,8 +27,9 @@ estimated_time_minutes: 40
 review_time_minutes: 8
 
 references:
-  - source: PHAK (FAA-H-8083-25C)
-    detail: Chapter 11 -- Aircraft Performance
+  - ref: airboss-ref:handbooks/phak/11
+    chapter_title: Aircraft Performance
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25C/11
     note: Density altitude derivation, rules of thumb, chart lookups.
   - source: AC 61-84B
     detail: Role of Preflight Preparation

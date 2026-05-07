@@ -67,13 +67,17 @@ references:
       setting, emergency checklist order) vary by aircraft and must be used
       instead of generic values. This node frames the decision; the POH
       supplies the numbers.
-  - source: FAA Airplane Flying Handbook (FAA-H-8083-3B)
-    detail: Chapter covering emergency procedures -- engine failure after takeoff discussion
+  - ref: airboss-ref:handbooks/afh/18
+    chapter_title: Emergency Procedures
+    redirected_from: airboss-ref:handbooks/afh/FAA-H-8083-3B
     note: >-
-      FAA's canonical guidance. Land essentially straight ahead within
-      roughly 30 degrees of runway heading is the default. Turning back is
-      discouraged unless altitude and conditions clearly support it.
-      TODO(verify) exact chapter and edition -- AFH reorganizes across editions.
+      FAA's canonical guidance: land essentially straight ahead within
+      roughly 30 degrees of runway heading; turning back is discouraged
+      unless altitude and conditions clearly support it. Original legacy
+      citation was doc-level ("Chapter covering emergency procedures") --
+      AFH 3C consolidated emergency content into Ch. 18 "Emergency
+      Procedures"; pinned here as best-effort. The original TODO(verify)
+      note is now resolved by this pin.
   - source: AOPA Air Safety Institute
     detail: Safety Advisor / Accident Case Study -- "The Impossible Turn" / engine failure on takeoff
     note: >-

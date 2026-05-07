@@ -34,9 +34,21 @@ estimated_time_minutes: 120
 review_time_minutes: 20
 
 references:
-  - source: IPH (FAA-H-8083-16B)
-    detail: Chapter 1 -- IFR Preflight; Chapter 3 -- En Route
-    note: IFR flight plan filing, route selection, DPs/STARs, fuel reserves.
+  - ref: airboss-ref:handbooks/iph/1
+    chapter_title: Departure Procedures
+    redirected_from: airboss-ref:handbooks/iph/FAA-H-8083-16B/1
+    note: >-
+      IFR flight plan filing and DPs/STARs. Original legacy citation said
+      "Chapter 1 -- IFR Preflight" but the current IPH (16B) Ch. 1 is
+      "Departure Procedures"; the IFR-preflight framing of the legacy
+      citation maps onto departure-procedure planning here.
+  - ref: airboss-ref:handbooks/iph/2
+    chapter_title: En Route Operations
+    note: >-
+      Route selection, fuel reserves. Original legacy citation said
+      "Chapter 3 -- En Route" but in current IPH 16B Ch. 2 is "En Route
+      Operations" (Ch. 3 is "Arrivals"); pinned here as best-effort to the
+      en-route content.
   - source: AIM
     detail: 5-1, 5-2 -- Preflight and Departure Procedures
     note: Required preflight (91.103), alternate requirements (91.169).

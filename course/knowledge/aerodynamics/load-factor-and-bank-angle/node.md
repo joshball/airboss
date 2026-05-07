@@ -46,16 +46,24 @@ review_time_minutes: 8
 
 # === References ===
 references:
-  - source: PHAK (FAA-H-8083-25C)
-    detail: Chapter 5 -- Aerodynamics; load factor, V-G diagram, maneuvering
+  - ref: airboss-ref:handbooks/phak/5
+    chapter_title: Aerodynamics of Flight
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25C/5
     note: >-
-      Authoritative on load-factor math, bank-stall-speed relationship,
-      and the V-G diagram (load factor as a function of airspeed).
-  - source: AFH (FAA-H-8083-3B)
-    detail: Chapter on maneuvers; steep turns; accelerated stalls
+      Authoritative on load-factor math, bank-stall-speed relationship, and the V-G diagram (load factor as a function of airspeed).
+  - ref: airboss-ref:handbooks/afh/10
+    chapter_title: Performance Maneuvers
+    redirected_from: airboss-ref:handbooks/afh/FAA-H-8083-3B
     note: >-
-      Practical implications: how steep turns feel, why accelerated
-      stalls happen, why pulling at high airspeed is dangerous.
+      Practical implications: how steep turns feel, why pulling at high
+      airspeed is dangerous. Steep turns are the canonical performance
+      maneuver in AFH 3C Ch. 10.
+  - ref: airboss-ref:handbooks/afh/5
+    chapter_title: 'Maintaining Aircraft Control: Upset Prevention and Recovery'
+    note: >-
+      Accelerated-stall content lives in 3C Ch. 5 (upset prevention and
+      recovery). Original legacy citation was doc-level (no chapter pinned);
+      split here so each topic resolves to the chapter that actually carries it.
   - source: 14 CFR 23
     detail: 'Airworthiness Standards: Normal, Utility, Acrobatic, and Commuter Category Aircraft'
     note: >-

@@ -26,9 +26,14 @@ estimated_time_minutes: 60
 review_time_minutes: 12
 
 references:
-  - source: IPH (FAA-H-8083-16B)
-    detail: Instrument Procedures Handbook -- Holding Procedures
-    note: Direct, teardrop, and parallel entries; timing in the outbound leg.
+  - ref: airboss-ref:handbooks/iph/2
+    chapter_title: En Route Operations
+    redirected_from: airboss-ref:handbooks/iph/FAA-H-8083-16B
+    note: >-
+      Direct, teardrop, and parallel entries; timing in the outbound leg.
+      Original legacy citation was doc-level (no chapter parsed); holding
+      procedures live in IPH 16B Ch. 2 "En Route Operations" -- pinned here
+      as best-effort.
   - source: AIM
     detail: 5-3-8 -- Holding
     note: Standard pattern, entry procedures, wind correction, timing.

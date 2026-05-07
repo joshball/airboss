@@ -51,16 +51,24 @@ review_time_minutes: 10
 
 # === References ===
 references:
-  - source: Instrument Flying Handbook (FAA-H-8083-15B)
-    detail: Chapter on Recovery from Unusual Flight Attitudes
+  - ref: airboss-ref:handbooks/ifh/7
+    chapter_title: Airplane Basic Flight Maneuvers
+    redirected_from: airboss-ref:handbooks/ifh/FAA-H-8083-15B
     note: >-
       Authoritative for the FAA's standard recovery sequence -- nose-high
       and nose-low -- and the rationale for the order of control inputs.
-  - source: AFH (FAA-H-8083-3B)
-    detail: Recovery from unusual attitudes (visual)
+      Original legacy citation was doc-level ("Chapter on Recovery from
+      Unusual Flight Attitudes"); IFH 15B Ch. 7 "Airplane Basic Flight
+      Maneuvers" carries the unusual-attitudes-and-recoveries section.
+  - ref: airboss-ref:handbooks/afh/5
+    chapter_title: 'Maintaining Aircraft Control: Upset Prevention and Recovery'
+    redirected_from: airboss-ref:handbooks/afh/FAA-H-8083-3B
     note: >-
       The visual analog of the IMC recovery procedure. Often used as the
-      teaching baseline before adding the hood.
+      teaching baseline before adding the hood. Original legacy citation
+      was doc-level ("Recovery from unusual attitudes (visual)"); AFH 3C
+      Ch. 5 "Maintaining Aircraft Control: Upset Prevention and Recovery"
+      consolidates upset/unusual-attitude visual recovery.
   - source: AC 61-67C
     detail: Stall and Spin Awareness Training
     note: >-

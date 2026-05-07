@@ -34,8 +34,9 @@ references:
   - source: AIM
     detail: 7-1-27 -- Thunderstorms
     note: Operational procedures for avoiding convective activity.
-  - source: PHAK (FAA-H-8083-25C)
-    detail: Chapter 12 -- Weather Theory
+  - ref: airboss-ref:handbooks/phak/12
+    chapter_title: Weather Theory
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25C/12
     note: Life cycle of a thunderstorm, embedded vs. airmass vs. squall line.
 
 assessable: true

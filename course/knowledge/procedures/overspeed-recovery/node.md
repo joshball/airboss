@@ -47,18 +47,21 @@ review_time_minutes: 8
 
 # === References ===
 references:
-  - source: PHAK (FAA-H-8083-25C)
-    detail: Chapter 5 -- Aerodynamics; V-speeds and the airspeed indicator color coding
+  - ref: airboss-ref:handbooks/phak/5
+    chapter_title: Aerodynamics of Flight
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25C/5
     note: >-
-      Authoritative for the relationship of V-speeds (Vne, Vno, Va, Vfe,
-      Vle) to the structural and aerodynamic envelope, and the airspeed-
-      indicator color bands that visualise them.
-  - source: AFH (FAA-H-8083-3B)
-    detail: Recovery from high-speed dives, spiral instability, dive recovery
+      Authoritative for the relationship of V-speeds (Vne, Vno, Va, Vfe, Vle) to the structural and aerodynamic envelope, and the airspeed- indicator color bands that visualise them.
+  - ref: airboss-ref:handbooks/afh/5
+    chapter_title: 'Maintaining Aircraft Control: Upset Prevention and Recovery'
+    redirected_from: airboss-ref:handbooks/afh/FAA-H-8083-3B
     note: >-
       Practical recovery technique from high-speed descending flight. The
       AFH treats overspeed as a subset of unusual-attitude recovery and is
-      consistent with the IFH framing.
+      consistent with the IFH framing. Legacy citation was doc-level; AFH
+      3C Ch. 5 "Maintaining Aircraft Control: Upset Prevention and
+      Recovery" carries unusual-attitude / dive recovery -- pinned here as
+      best-effort.
   - source: POH / AFM
     detail: Section 2 -- Limitations; Section 3 -- Emergency Procedures
     note: >-
