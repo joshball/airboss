@@ -106,8 +106,11 @@ export const load: PageServerLoad = async (event) => {
 		return { kind, count };
 	});
 
+	// Exclude the legacy `poh-afm` umbrella row -- it's the generic citation
+	// landing for "the POH" without a specific aircraft, not an aircraft in
+	// its own right. Counting it would mislead the landing-tile total.
 	const aircraft: AircraftEntry[] = allRefs
-		.filter((ref) => ref.kind === REFERENCE_KINDS.POH)
+		.filter((ref) => ref.kind === REFERENCE_KINDS.POH && ref.documentSlug !== 'poh-afm')
 		.map((ref) => ({ id: ref.id, documentSlug: ref.documentSlug, title: ref.title }))
 		.sort((a, b) => a.title.localeCompare(b.title));
 

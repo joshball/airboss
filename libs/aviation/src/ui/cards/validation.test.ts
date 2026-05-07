@@ -236,9 +236,9 @@ describe('Wave-2 corpus wrappers', () => {
 		expect(RECOMMENDED_FIELDS_BY_VARIANT.InfoCard).toEqual(['summary', 'date', 'audience']);
 	});
 
-	it('PohCard requires aircraftModel + title + revision; recommends description', () => {
-		expect(REQUIRED_FIELDS_BY_VARIANT.PohCard).toEqual(['aircraftModel', 'title', 'revision']);
-		expect(RECOMMENDED_FIELDS_BY_VARIANT.PohCard).toEqual(['description']);
+	it('PohCard requires aircraftModel + title + revision + manufacturer; recommends description + whyItMatters + revisionDate + topics', () => {
+		expect(REQUIRED_FIELDS_BY_VARIANT.PohCard).toEqual(['aircraftModel', 'title', 'revision', 'manufacturer']);
+		expect(RECOMMENDED_FIELDS_BY_VARIANT.PohCard).toEqual(['description', 'whyItMatters', 'revisionDate', 'topics']);
 	});
 
 	it('a complete AcsCard fixture validates clean', () => {
@@ -270,10 +270,36 @@ describe('Wave-2 corpus wrappers', () => {
 			aircraftModel: 'Cessna 172S',
 			title: 'Cessna 172S Pilot Operating Handbook',
 			revision: '13',
+			manufacturer: 'Cessna',
+			revisionDate: '2024-08-01',
 			description: 'Manufacturer POH for the Cessna 172S Skyhawk.',
+			whyItMatters: 'The POH is the legal performance document for your aircraft.',
+			topics: [{ value: 'aircraft-systems', label: 'Aircraft Systems' }],
 		});
 		expect(result.missingRequired).toEqual([]);
 		expect(result.missingRecommended).toEqual([]);
+	});
+
+	it('PohCard surfaces missing manufacturer in missingRequired', () => {
+		const result = validateCardData('PohCard', 'Cessna 172S', {
+			aircraftModel: 'Cessna 172S',
+			title: 'Cessna 172S Pilot Operating Handbook',
+			revision: '13',
+			manufacturer: '',
+		});
+		expect(result.missingRequired).toEqual(['manufacturer']);
+	});
+
+	it('PohCard surfaces missing recommended (whyItMatters / revisionDate / topics) when only description is authored', () => {
+		const result = validateCardData('PohCard', 'Cessna 172S', {
+			aircraftModel: 'Cessna 172S',
+			title: 'Cessna 172S Pilot Operating Handbook',
+			revision: '13',
+			manufacturer: 'Cessna',
+			description: 'Manufacturer POH for the Cessna 172S Skyhawk.',
+		});
+		expect(result.missingRequired).toEqual([]);
+		expect(result.missingRecommended.sort()).toEqual(['revisionDate', 'topics', 'whyItMatters'].sort());
 	});
 
 	it('a missing required field on AcsCard surfaces in missingRequired', () => {

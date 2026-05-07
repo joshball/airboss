@@ -158,13 +158,23 @@ function projectForVariant(
 				date: m.date,
 				audience: m.audience,
 			};
-		case 'PohCard':
+		case 'PohCard': {
+			// `topics` is recommended; surface authored chips so the audit page
+			// lists aircraft still missing topic tags. Pass the raw array off
+			// `metadata.topics` -- the validator only checks missing-ness.
+			const topics = Array.isArray(m.topics) ? m.topics : [];
 			return {
 				aircraftModel: m.aircraftModel ?? ref.documentSlug,
 				title: ref.title,
 				revision: ref.edition,
+				manufacturer: m.manufacturer ?? ref.publisher,
+				revisionDate: m.revisionDate,
+				applicableSerialNumbers: m.applicableSerialNumbers,
 				description: m.description,
+				whyItMatters: m.whyItMatters,
+				topics,
 			};
+		}
 		default:
 			// CfrSectionCard + UmbrellaCard fall through here. Both render
 			// from the reference's title alone in this audit projection.

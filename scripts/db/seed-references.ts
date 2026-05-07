@@ -26,16 +26,48 @@ import {
 	CERT_APPLICABILITY_VALUES,
 	type CertApplicability,
 	REFERENCE_KIND_VALUES,
+	REFERENCE_KINDS,
 	type ReferenceKind,
 } from '@ab/constants';
 import { client } from '@ab/db/connection';
 import { parse } from 'yaml';
 import { z } from 'zod';
 import { attachSupersededByLatest, getReferenceByDocument, upsertReference } from '../../libs/bc/study/src/references';
+import { loadPohAuthoring, type PohOverlay } from '../../libs/bc/study/src/seeders/poh-authoring';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(HERE, '..', '..');
 const REFERENCES_DIR = resolve(REPO_ROOT, 'course/references');
+
+/**
+ * Per-aircraft POH authoring overlay. Loaded once per seed run from
+ * `aircraft/_authoring/poh.yaml` and merged into `reference.metadata` for
+ * any entry whose `kind: poh`. See
+ * `libs/bc/study/src/seeders/poh-authoring.ts` for the schema; missing
+ * file = empty map (no-op merge).
+ */
+const POH_AUTHORING_PATH = resolve(REPO_ROOT, 'aircraft/_authoring/poh.yaml');
+
+/**
+ * Build the metadata jsonb for a POH reference. Only applies when an
+ * overlay row exists for the slug -- entries without an overlay (e.g. the
+ * legacy `poh-afm` umbrella) keep an empty metadata object so the audit
+ * page surfaces the missing fields as recommended-field gaps.
+ */
+function buildPohMetadata(overlay: PohOverlay): Record<string, unknown> {
+	return {
+		aircraftModel: overlay.aircraftModel,
+		manufacturer: overlay.manufacturer,
+		revision: overlay.revision,
+		...(overlay.revisionDate !== undefined ? { revisionDate: overlay.revisionDate } : {}),
+		...(overlay.applicableSerialNumbers !== undefined
+			? { applicableSerialNumbers: overlay.applicableSerialNumbers }
+			: {}),
+		description: overlay.description,
+		whyItMatters: overlay.whyItMatters,
+		topics: overlay.topics,
+	};
+}
 
 export const referenceEntrySchema = z.object({
 	slug: z
@@ -98,6 +130,11 @@ export async function seedReferences(options: SeedReferencesOptions = {}): Promi
 				.filter((f) => f.endsWith('.yaml') || f.endsWith('.yml'))
 				.sort();
 
+	// Per-aircraft POH overlay (description / whyItMatters / topics / revision
+	// metadata). Empty when `aircraft/_authoring/poh.yaml` is absent -- the
+	// audit page surfaces missing fields rather than failing the seed.
+	const pohAuthoring = await loadPohAuthoring(POH_AUTHORING_PATH);
+
 	const slugsTouched = new Set<string>();
 	for (const filename of filenames) {
 		const path = resolve(REFERENCES_DIR, filename);
@@ -109,6 +146,14 @@ export async function seedReferences(options: SeedReferencesOptions = {}): Promi
 		const validated = referencesFileSchema.parse(parsed);
 		summary.filesRead += 1;
 		for (const entry of validated.references) {
+			// POH entries with an authoring overlay get the manufacturer voice
+			// + topic chips merged into `metadata` so the PohCard renders the
+			// extended layout. Entries without an overlay (e.g. the legacy
+			// `poh-afm` umbrella row) keep an empty metadata object; the
+			// audit page surfaces the gap.
+			const pohOverlay = entry.kind === REFERENCE_KINDS.POH ? pohAuthoring[entry.slug] : undefined;
+			const metadata = pohOverlay !== undefined ? buildPohMetadata(pohOverlay) : undefined;
+
 			await upsertReference({
 				kind: entry.kind,
 				documentSlug: entry.slug,
@@ -118,6 +163,7 @@ export async function seedReferences(options: SeedReferencesOptions = {}): Promi
 				url: entry.url ?? null,
 				subjects: entry.subjects,
 				primaryCert: entry.primary_cert ?? null,
+				...(metadata !== undefined ? { metadata } : {}),
 				seedOrigin: options.seedOrigin ?? null,
 			});
 			summary.rowsUpserted += 1;

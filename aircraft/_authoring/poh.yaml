@@ -1,0 +1,84 @@
+# Per-aircraft POH/AFM authoring overlay.
+#
+# Layered on top of `course/references/poh.yaml` (bibliographic) and
+# `course/references/aircraft.yaml` (per-aircraft references). Each entry
+# here is keyed by the reference document slug and supplies the manufacturer
+# voice + pedagogy framing the PohCard renders.
+#
+# Voice rules (mirror LIBRARY_REGULATIONS_KIND_COPY in libs/constants/src/study.ts):
+#   - description: 1-2 sentences, neutral, what the document is.
+#   - whyItMatters: 1-2 sentences, lead with WHY, pilot-relevance.
+#
+# Topics MUST be members of AVIATION_TOPIC_VALUES (libs/constants/src/reference-tags.ts).
+# 1-5 topics per entry; the seeder fails loud on an unknown value.
+
+aircraft:
+  cessna-172s:
+    aircraftModel: Cessna 172S Skyhawk
+    manufacturer: Cessna
+    revision: "13"
+    revisionDate: "2024-08-01"
+    applicableSerialNumbers: 172S serial 172S8001 and on
+    description: >-
+      Manufacturer pilot operating handbook for the Cessna 172S Skyhawk -- the
+      single most-flown training airplane in the United States. Covers normal,
+      abnormal, and emergency procedures, performance, weight & balance,
+      aircraft systems, and the airframe / engine limitations the FAA holds
+      pilots to.
+    whyItMatters: >-
+      Every speed, every limit, every procedure you will be tested on in a
+      172S is in this book. The CFI may teach the technique, but the POH is
+      what the FAA, your insurer, and an accident investigator will measure
+      you against -- learn to find answers in it before you fly the airplane.
+    topics:
+      - aircraft-systems
+      - performance
+      - emergencies
+      - procedures
+
+  piper-pa28-161-warrior-iii:
+    aircraftModel: Piper PA-28-161 Warrior III
+    manufacturer: Piper
+    revision: "5"
+    revisionDate: "2009-03-12"
+    applicableSerialNumbers: PA-28-161 serial 2842001 and on (Warrior III)
+    description: >-
+      Manufacturer pilot operating handbook for the Piper PA-28-161 Warrior
+      III, the low-wing four-seat trainer that competes with the 172 across
+      Part 141 and Part 61 fleets. Covers normal and emergency procedures,
+      performance charts, fuel system, electrical layout, and the placarded
+      operating limitations.
+    whyItMatters: >-
+      Low-wing handling, single-tank fuel selector, and a different stall
+      signature than a 172 mean Warrior pilots cannot transfer Skyhawk muscle
+      memory unchecked. The POH is where the airframe-specific gotchas live --
+      especially fuel management and aft-CG behavior.
+    topics:
+      - aircraft-systems
+      - performance
+      - weight-balance
+      - emergencies
+
+  cirrus-sr22-g6:
+    aircraftModel: Cirrus SR22 G6
+    manufacturer: Cirrus
+    revision: "A"
+    revisionDate: "2017-05-22"
+    applicableSerialNumbers: SR22 serial 4471 and on (G6 turbo and normally aspirated)
+    description: >-
+      Manufacturer pilot operating handbook for the Cirrus SR22 G6 -- a
+      composite, side-stick, parachute-equipped high-performance single. Covers
+      Perspective+ avionics integration, CAPS deployment envelope, FIKI and
+      turbo-system operation, and the performance charts that govern the
+      airplane's high-altitude / high-DA behavior.
+    whyItMatters: >-
+      The SR22 is fast, slick, and unforgiving of energy mismanagement, and
+      the CAPS decision is in the POH long before it is in the cockpit. Pilots
+      who skip the manual and rely on a mentor's habits are the ones the NTSB
+      writes about; the manufacturer's procedures are the floor, not a
+      starting point.
+    topics:
+      - aircraft-systems
+      - performance
+      - emergencies
+      - flight-instruments

@@ -169,10 +169,19 @@ const totalRecommendedGaps = $derived(data.summary.reduce((acc, s) => acc + s.mi
 			external={{ url: 'https://www.faa.gov/other_visit/aviation_industry/airline_operators/airline_safety/info', label: 'FAA' }}
 		/>
 		<PohCard
-			aircraftModel="Cessna 172S"
+			aircraftModel="Cessna 172S Skyhawk"
 			title="Cessna 172S Pilot Operating Handbook"
 			revision="13"
+			manufacturer="Cessna"
+			revisionDate="2024-08-01"
+			applicableSerialNumbers="172S serial 172S8001 and on"
 			description="Manufacturer POH for the Cessna 172S Skyhawk -- limitations, normal/emergency procedures, performance, weight & balance."
+			whyItMatters="Every speed, every limit, every procedure you will be tested on in a 172S is in this book. Find answers in it before you fly the airplane."
+			topics={[
+				{ value: 'aircraft-systems', label: 'Aircraft Systems' },
+				{ value: 'performance', label: 'Performance' },
+				{ value: 'emergencies', label: 'Emergencies' },
+			]}
 			external={{ url: 'https://www.cessna.com/', label: 'Cessna' }}
 		/>
 		<UmbrellaCard
@@ -209,7 +218,7 @@ const totalRecommendedGaps = $derived(data.summary.reduce((acc, s) => acc + s.mi
 		<PtsCard slug="test-pts" title="Test PTS" edition="-" />
 		<SafoCard safoNumber="SAFO 00000" title="Test SAFO" />
 		<InfoCard infoNumber="InFO 00000" title="Test InFO" />
-		<PohCard aircraftModel="Test Model" title="Test POH" revision="1" />
+		<PohCard aircraftModel="Test Model" title="Test POH" revision="1" manufacturer="Test Manufacturer" />
 		<NtsbCard reportNumber="TEST00" reportTitle="Test NTSB" />
 		<HandbookCard shortSlug="test" fullTitle="Test Handbook" edition="-" publisher="FAA" href="#" />
 		<UmbrellaCard title="Bare umbrella" />
