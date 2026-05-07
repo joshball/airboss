@@ -22,11 +22,9 @@
  */
 
 import { PROMOTION_STATE_VALUES, SCHEMAS, SOURCE_LIFECYCLE_VALUES } from '@ab/constants';
+import { inList } from '@ab/db';
 import { sql } from 'drizzle-orm';
 import { check, foreignKey, index, jsonb, pgSchema, text, timestamp } from 'drizzle-orm/pg-core';
-
-/** Render a string array as a SQL `IN (...)` value list for CHECK constraints. */
-const inList = (values: readonly string[]): string => values.map((v) => `'${v.replace(/'/g, "''")}'`).join(', ');
 
 export const sourcesRegistrySchema = pgSchema(SCHEMAS.SOURCES_REGISTRY);
 

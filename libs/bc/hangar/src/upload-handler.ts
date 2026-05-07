@@ -255,7 +255,10 @@ export function makeUploadHandler(options: UploadHandlerOptions = {}): JobHandle
 					.set({
 						rev: existing.rev + 1,
 						checksum: sha256,
-						downloadedAt: updatedAt.toISOString(),
+						// `downloaded_at` is `timestamptz` per the 2026-05-06
+						// review §N (was `text` ISO-8601 + `'pending-download'`
+						// sentinel). Drizzle accepts a Date directly.
+						downloadedAt: updatedAt,
 						sizeBytes,
 						version: newVersion,
 						path: join(existing.type, `${sourceId}.${ext}`),

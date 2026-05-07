@@ -82,13 +82,12 @@ import {
 	SNOOZE_REASON_VALUES,
 	STUDY_PRIORITY_VALUES,
 	SYLLABUS_KIND_VALUES,
-	SYLLABUS_NODE_LEVEL_VALUES,
 	SYLLABUS_PRIMACY,
 	SYLLABUS_PRIMACY_VALUES,
 	SYLLABUS_STATUS_VALUES,
 	SYLLABUS_STATUSES,
 } from '@ab/constants';
-import { timestamps } from '@ab/db';
+import { inList, timestamps } from '@ab/db';
 import type { RelevanceEntry, StructuredCitation } from '@ab/types';
 import { desc, sql } from 'drizzle-orm';
 import {
@@ -111,11 +110,6 @@ import {
 } from 'drizzle-orm/pg-core';
 
 export const studySchema = pgSchema(SCHEMAS.STUDY);
-
-/** Serialize a list of text values into a SQL `IN (...)` fragment for CHECK. */
-function inList(values: readonly string[]): string {
-	return values.map((v) => `'${v.replace(/'/g, "''")}'`).join(', ');
-}
 
 /**
  * Serialize a list of text values into a JSON array literal for embedding in
@@ -285,10 +279,14 @@ export const knowledgeNode = studySchema.table(
  * Edge in the knowledge graph.
  *
  * `toNodeId` is a plain text column, NOT a foreign key: ADR 011 permits edges
- * whose target does not (yet) exist -- a visible gap is information. The
- * `targetExists` flag is maintained by the build script after every upsert so
- * read-side queries can filter out dangling edges without re-scanning every
- * node. `edgeType` is constrained to the KNOWLEDGE_EDGE_TYPES enum.
+ * whose target does not (yet) exist -- a visible gap is information.
+ * Existence is resolved at read time via `LEFT JOIN knowledge_node ON
+ * to_node_id = id` (see `getNodeView` in `knowledge.ts`). The previous
+ * `target_exists` denormalized boolean was dropped per the 2026-05-06 schema
+ * review (issue E): the build script was the only writer keeping it accurate,
+ * any direct insert path silently corrupted the value, and the join answers
+ * the question without drift. `edgeType` is constrained to the
+ * KNOWLEDGE_EDGE_TYPES enum.
  *
  * Composite PK = (from, to, type). Authoring a `requires` and a `related`
  * edge between the same two nodes is legal; duplicates within a single type
@@ -302,12 +300,6 @@ export const knowledgeEdge = studySchema.table(
 			.references(() => knowledgeNode.id, { onDelete: 'cascade' }),
 		toNodeId: text('to_node_id').notNull(),
 		edgeType: text('edge_type').notNull(),
-		/**
-		 * True when `toNodeId` resolves to an existing knowledge_node at the
-		 * time of the last build. The build script refreshes this after every
-		 * run; render-time filters can use it to hide or mark gaps.
-		 */
-		targetExists: boolean('target_exists').notNull().default(false),
 		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 		seedOrigin: text('seed_origin'),
 	},
@@ -595,7 +587,11 @@ export const scenario = studySchema.table(
 		status: text('status').notNull().default(SCENARIO_STATUSES.ACTIVE),
 		/** Dev-seed marker. NULL on production rows. */
 		seedOrigin: text('seed_origin'),
-		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+		// `...timestamps()` (createdAt + updatedAt) per the 2026-05-06 review §BB.
+		// Every other content-bearing table tracks edit time; scenarios used to
+		// only carry `createdAt`, so editing a scenario silently lost its
+		// "last touched" signal.
+		...timestamps(),
 	},
 	(t) => ({
 		scenarioUserStatusIdx: index('scenario_user_status_idx').on(t.userId, t.status),
@@ -1052,15 +1048,17 @@ export const knowledgeNodeProgress = studySchema.table(
 			.notNull()
 			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
 		/**
-		 * Knowledge-graph node slug. `set null` on delete so a node rebuild
-		 * that renames a slug doesn't cascade-destroy the learner's progress
-		 * row -- the row is kept as an orphan until the next progress write
-		 * reconciles it. Explicit FK (previously skipped because "seeds may
-		 * rebuild independently") is worth the trade: a dangling `node_id`
-		 * that no longer resolves is a bug, not a feature, and cascade-set-
-		 * null preserves the historical record.
+		 * Knowledge-graph node slug. NOT NULL + cascade on delete: a progress
+		 * row whose `nodeId` is NULL is meaningless (there's nothing to track
+		 * progress *of*), and the previous `set null` policy left orphan rows
+		 * that the unique index `(user_id, node_id)` accumulated forever
+		 * because Postgres treats NULLs as distinct. ADR 011 slugs are stable;
+		 * rebuilding on rename is the seed's job. Cascade is the cleaner
+		 * answer per the 2026-05-06 review §F.
 		 */
-		nodeId: text('node_id').references(() => knowledgeNode.id, { onDelete: 'set null' }),
+		nodeId: text('node_id')
+			.notNull()
+			.references(() => knowledgeNode.id, { onDelete: 'cascade' }),
 		visitedPhases: text('visited_phases').array().notNull().default(sql`'{}'::text[]`),
 		completedPhases: text('completed_phases').array().notNull().default(sql`'{}'::text[]`),
 		lastPhase: text('last_phase'),
@@ -1552,13 +1550,13 @@ export const referenceSection = studySchema.table(
 		 */
 		airbossRef: text('airboss_ref').notNull(),
 		title: text('title').notNull(),
-		/**
-		 * First FAA-printed page reference (handbook only; NULL elsewhere).
-		 * Stored as text because FAA pagination is hyphenated (`"12-7"` =
-		 * chapter 12, page 7 within the chapter).
-		 */
-		faaPageStart: text('faa_page_start'),
-		faaPageEnd: text('faa_page_end'),
+		// FAA-printed page references (e.g. `"12-7"` = chapter 12, page 7
+		// within the chapter) live in `metadata.faaPages = { start, end }`
+		// per the 2026-05-06 review §K. The shared `reference_section` table
+		// is the substrate for every corpus; per-corpus extras (handbook
+		// pagination, CFR effective dates, AC paragraph cancellations) live
+		// in `metadata` jsonb so the column inventory doesn't grow with each
+		// new kind. Validation moves to ingest-time Zod (manifest-validation).
 		/** Canonical citation string ("PHAK Ch 12 §3 (pp. 12-7..12-9)"). Cached for display. */
 		sourceLocator: text('source_locator').notNull(),
 		/**
@@ -1613,15 +1611,9 @@ export const referenceSection = studySchema.table(
 		// Indexed for reverse lookups (audit walks "find sections by URI") and
 		// reference-by-URI on the picker / chip resolution paths.
 		airbossRefIdx: index('reference_section_airboss_ref_idx').on(t.airbossRef),
-		// Printed FAA pagination is `<chapter>-<page>` so lexicographic ordering
-		// (`"12-23"` < `"12-9"`) is unsafe. Just enforce the NULL-pair invariant:
-		// either both ends are NULL (page reference unknown) or `faa_page_start`
-		// is set. `faa_page_end` may be NULL when the section ends on its start
-		// page. The within-chapter ordering uses `ordinal`, not page strings.
-		faaPagesConsistentCheck: check(
-			'reference_section_faa_pages_check',
-			sql.raw(`("faa_page_start" IS NULL AND "faa_page_end" IS NULL) OR "faa_page_start" IS NOT NULL`),
-		),
+		// `faa_pages_check` was dropped per the 2026-05-06 review §K; FAA
+		// pagination is handbook-specific and now lives in `metadata.faaPages`,
+		// validated at ingest by the per-corpus Zod schemas.
 	}),
 );
 
@@ -2109,7 +2101,16 @@ export const syllabusNode = studySchema.table(
 		syllabusNodeLeafIdx: index('syllabus_node_leaf_idx').on(t.syllabusId, t.isLeaf),
 		// GIN index on citations so the reverse-citation query is index-backed.
 		syllabusNodeCitationsGinIdx: index('syllabus_node_citations_gin_idx').using('gin', sql`"citations" jsonb_path_ops`),
-		levelCheck: check('syllabus_node_level_check', sql.raw(`"level" IN (${inList(SYLLABUS_NODE_LEVEL_VALUES)})`)),
+		// `level` vocabulary is per-corpus (ACS uses area/task/element; CFR uses
+		// subpart/section/paragraph; school syllabi mint their own). Per the
+		// 2026-05-06 review §H, per-corpus vocabularies belong in `metadata`
+		// + ingest-time Zod, not in a CHECK that grows with every new corpus.
+		// `parentLevelConsistencyCheck` was dropped for the same reason: it
+		// hard-coded ('area', 'chapter') as the only top-of-tree levels. Both
+		// invariants are validated by `manifest-validation.ts` at seed time.
+		// `triad_check` and `required_bloom_check` stay -- ACS K/R/S triad is
+		// closed at three values; Bloom's taxonomy is closed at six. Neither
+		// grows with new corpora.
 		triadCheck: check(
 			'syllabus_node_triad_check',
 			sql.raw(`"triad" IS NULL OR "triad" IN (${inList(ACS_TRIAD_VALUES)})`),
@@ -2117,13 +2118,6 @@ export const syllabusNode = studySchema.table(
 		requiredBloomCheck: check(
 			'syllabus_node_required_bloom_check',
 			sql.raw(`"required_bloom" IS NULL OR "required_bloom" IN (${inList(BLOOM_LEVEL_VALUES)})`),
-		),
-		// `parent_id IS NULL` iff `level` is a top-of-tree level (area / chapter).
-		parentLevelConsistencyCheck: check(
-			'syllabus_node_parent_level_check',
-			sql.raw(
-				`("level" IN ('area', 'chapter') AND "parent_id" IS NULL) OR ("level" NOT IN ('area', 'chapter') AND "parent_id" IS NOT NULL)`,
-			),
 		),
 		// Triad is meaningful only on element-level rows.
 		triadLevelConsistencyCheck: check(

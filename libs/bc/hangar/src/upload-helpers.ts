@@ -31,9 +31,13 @@ export function extensionOf(filename: string): string {
 /**
  * Given `sizeBytes` vs the current checksum, decide whether the upload is a
  * no-op. Centralised so the logic is testable and the handler stays slim.
+ *
+ * `existingChecksum` is `string | null` because `hangar.source.checksum` is
+ * nullable for never-downloaded rows (per the 2026-05-06 review §N). A null
+ * checksum is never a no-op -- the upload is always meaningful.
  */
-export function isNoChange(existingChecksum: string, uploadedChecksum: string): boolean {
-	return existingChecksum.length > 0 && existingChecksum === uploadedChecksum;
+export function isNoChange(existingChecksum: string | null, uploadedChecksum: string): boolean {
+	return existingChecksum !== null && existingChecksum.length > 0 && existingChecksum === uploadedChecksum;
 }
 
 /**
@@ -69,10 +73,14 @@ export function archiveFilename(sourceId: string, version: string, ext: string):
 export function archiveFilenameWithChecksum(
 	sourceId: string,
 	version: string,
-	priorChecksum: string,
+	priorChecksum: string | null,
 	ext: string,
 ): string {
-	const shaPrefix = priorChecksum.slice(0, 12);
+	// `priorChecksum` is null when the row was registered before its first
+	// download (per the 2026-05-06 review §N). Falling back to an explicit
+	// `pending` segment keeps the archive name self-descriptive without
+	// the legacy `'pending-download'` sentinel.
+	const shaPrefix = priorChecksum && priorChecksum.length >= 12 ? priorChecksum.slice(0, 12) : 'pending';
 	return `${sourceId}@${version}-${shaPrefix}.${ext}`;
 }
 

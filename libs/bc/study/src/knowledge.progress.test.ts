@@ -163,3 +163,31 @@ describe('recordPhaseCompleted', () => {
 		expect(progress.completedPhases).toContain(KNOWLEDGE_PHASES.DISCOVER);
 	});
 });
+
+// ---------------------------------------------------------------------------
+// FK cascade -- 2026-05-06 review §F
+//
+// `nodeId` is NOT NULL + cascade on delete. Removing a knowledge_node row
+// drops every progress row that points at it (rebuild-on-rename is the
+// seed's job; ADR 011 slugs are stable so this rarely fires in practice).
+// ---------------------------------------------------------------------------
+
+describe('knowledge_node_progress FK cascade', () => {
+	it('cascades progress rows when their node is deleted', async () => {
+		const nodeId = await freshNodeId('cascade-delete');
+		await recordPhaseVisited(TEST_USER_ID, nodeId, KNOWLEDGE_PHASES.CONTEXT);
+
+		// Sanity-check the row exists before we delete the node.
+		const before = await db.select().from(knowledgeNodeProgress).where(eq(knowledgeNodeProgress.nodeId, nodeId));
+		expect(before).toHaveLength(1);
+
+		// Removing the seededNodeIds entry up-front keeps afterAll from
+		// trying to delete a row that no longer exists.
+		const idx = seededNodeIds.indexOf(nodeId);
+		if (idx >= 0) seededNodeIds.splice(idx, 1);
+		await db.delete(knowledgeNode).where(eq(knowledgeNode.id, nodeId));
+
+		const after = await db.select().from(knowledgeNodeProgress).where(eq(knowledgeNodeProgress.nodeId, nodeId));
+		expect(after).toHaveLength(0);
+	});
+});

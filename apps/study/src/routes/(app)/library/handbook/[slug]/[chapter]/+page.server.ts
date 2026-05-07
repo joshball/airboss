@@ -10,6 +10,7 @@
 
 import { requireAuth } from '@ab/auth';
 import { parseHandbookChapter, parseHandbookSlug } from '@ab/aviation';
+import { faaPagesFromMetadata } from '@ab/bc-study';
 import {
 	getHandbookChapter,
 	getNodesCitingSection,
@@ -61,23 +62,29 @@ export const load: PageServerLoad = async (event) => {
 			title: ref.title,
 			supersededByEdition: latest?.edition ?? null,
 		},
-		chapter: {
-			id: chapter.id,
-			code: chapter.code,
-			title: chapter.title,
-			contentMd: chapter.contentMd,
-			faaPageStart: chapter.faaPageStart,
-			faaPageEnd: chapter.faaPageEnd,
-			sourceLocator: chapter.sourceLocator,
-		},
-		sections: sections.map((s) => ({
-			id: s.id,
-			code: s.code,
-			title: s.title,
-			ordinal: s.ordinal,
-			faaPageStart: s.faaPageStart,
-			faaPageEnd: s.faaPageEnd,
-		})),
+		chapter: (() => {
+			const pages = faaPagesFromMetadata(chapter.metadata);
+			return {
+				id: chapter.id,
+				code: chapter.code,
+				title: chapter.title,
+				contentMd: chapter.contentMd,
+				faaPageStart: pages?.start ?? null,
+				faaPageEnd: pages?.end ?? null,
+				sourceLocator: chapter.sourceLocator,
+			};
+		})(),
+		sections: sections.map((s) => {
+			const pages = faaPagesFromMetadata(s.metadata);
+			return {
+				id: s.id,
+				code: s.code,
+				title: s.title,
+				ordinal: s.ordinal,
+				faaPageStart: pages?.start ?? null,
+				faaPageEnd: pages?.end ?? null,
+			};
+		}),
 		figures: figures.map((f) => ({
 			id: f.id,
 			ordinal: f.ordinal,

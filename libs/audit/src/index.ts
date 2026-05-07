@@ -8,7 +8,7 @@ export {
 	type AuthLoginFailedOutcome,
 	createAuditAuthEventEmitter,
 } from './auth-events';
-export { auditRecent, auditWrite, countAuditEntriesSince } from './log';
+export { auditRecent, auditWrite, countAuditEntriesSince, InvalidAuditTargetError } from './log';
 export {
 	AUDIT_OP_VALUES,
 	AUDIT_OPS,

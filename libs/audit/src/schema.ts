@@ -16,12 +16,10 @@
  */
 
 import { bauthUser } from '@ab/auth/schema';
-import { AUDIT_TARGET_VALUES, SCHEMAS } from '@ab/constants';
+import { SCHEMAS } from '@ab/constants';
+import { inList } from '@ab/db';
 import { sql } from 'drizzle-orm';
 import { check, index, jsonb, pgSchema, text, timestamp } from 'drizzle-orm/pg-core';
-
-/** Render a string array as a SQL `IN (...)` value list. */
-const inList = (values: readonly string[]) => values.map((v) => `'${v.replace(/'/g, "''")}'`).join(', ');
 
 export const auditSchema = pgSchema(SCHEMAS.AUDIT);
 
@@ -84,7 +82,12 @@ export const auditLog = auditSchema.table(
 		// targetId separates the equality column from the sort column.
 		auditTargetTypeTimeIdx: index('audit_log_target_type_time_idx').on(t.targetType, t.timestamp),
 		opCheck: check('audit_log_op_check', sql.raw(`"op" IN (${inList(AUDIT_OP_VALUES)})`)),
-		targetTypeCheck: check('audit_log_target_type_check', sql.raw(`"target_type" IN (${inList(AUDIT_TARGET_VALUES)})`)),
+		// `target_type_check` was dropped per the 2026-05-06 review §J:
+		// AUDIT_TARGET_VALUES grows with every new BC, so the CHECK was a
+		// migration burden that paid for one bad audit row per typo (an
+		// append-only table; cost of a typo is one bad row, not a crash).
+		// The audit BC writer (`@ab/audit::auditWrite`) is the gate now;
+		// targetType is a free-form route key.
 	}),
 );
 

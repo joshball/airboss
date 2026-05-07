@@ -88,7 +88,7 @@ async function seedSource(id: string, version: string, sha: string, ext: string)
 		path: blobPath,
 		format: ext,
 		checksum: sha,
-		downloadedAt: 'seed',
+		downloadedAt: now,
 		dirty: false,
 		updatedBy: TEST_USER_ID,
 		createdAt: now,

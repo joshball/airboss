@@ -13,5 +13,5 @@
 // directly (deep import; explicit opt-in to the side-effectful module).
 // This index keeps only pure helpers that are safe to evaluate anywhere.
 
-export { timestamps } from './columns';
+export { inList, timestamps } from './columns';
 export { escapeLikePattern } from './escape';

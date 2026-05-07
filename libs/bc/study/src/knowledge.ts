@@ -1,9 +1,12 @@
 /**
  * Knowledge-graph BC functions.
  *
- * Reads/upserts knowledge_node, knowledge_edge, and bulk-manages the
- * `targetExists` flag on edges. The build script is the only writer in
- * practice today; route handlers read through `getNodeView` / `listNodes`.
+ * Reads/upserts knowledge_node and knowledge_edge. Edge target existence is
+ * resolved at read time via LEFT JOIN against knowledge_node, not stored as
+ * a denormalized boolean -- per ADR 026 follow-up (review issue E), the
+ * boolean cache was a class of subtle bugs (rebuild order, partial seed runs)
+ * that the join eliminates. Route handlers read through `getNodeView` /
+ * `listNodes`.
  *
  * Graph validation (cycle detection in `requires` edges) lives here so tests
  * and the build script share a single implementation.
@@ -63,12 +66,19 @@ export class KnowledgeGraphCycleError extends Error {
 	}
 }
 
+/**
+ * Edge row enriched with a read-time-resolved `targetExists` flag. The flag
+ * comes from a LEFT JOIN against `knowledge_node` on `to_node_id`, not from
+ * a stored boolean (per ADR 011 + the 2026-05-06 schema review issue E).
+ */
+export type KnowledgeEdgeRowWithTarget = KnowledgeEdgeRow & { targetExists: boolean };
+
 /** A full node view for the render route: node + edges + linked cards. */
 export interface NodeView {
 	node: KnowledgeNodeRow;
-	/** Outbound edges from this node. Target may or may not exist. */
-	edges: KnowledgeEdgeRow[];
-	/** Incoming edges pointing at this node. Useful for "applied_by" / "taught_by" display. */
+	/** Outbound edges from this node. Target may or may not exist (`targetExists`). */
+	edges: KnowledgeEdgeRowWithTarget[];
+	/** Incoming edges pointing at this node. Inbound edges always have an existing source. */
 	inboundEdges: KnowledgeEdgeRow[];
 	/** Cards seeded against this node for the current user. */
 	cards: Array<{ card: CardRow; state: CardStateRow }>;
@@ -225,7 +235,9 @@ export async function upsertKnowledgeNode(row: NewKnowledgeNodeRow, db: Db = def
  *
  * Rebuilds the set in a transaction so a partially-authored node never
  * appears with half of its edges present. The build script calls this for
- * every node it processes.
+ * every node it processes. Edge target existence is resolved at read time
+ * via LEFT JOIN, not stored on the edge row -- see the schema docstring on
+ * `knowledgeEdge` for the reasoning.
  */
 export async function replaceNodeEdges(
 	fromNodeId: string,
@@ -235,40 +247,13 @@ export async function replaceNodeEdges(
 	await db.transaction(async (tx) => {
 		await tx.delete(knowledgeEdge).where(eq(knowledgeEdge.fromNodeId, fromNodeId));
 		if (edges.length === 0) return;
-		// Resolve `target_exists` at insert time using an EXISTS subselect so
-		// new edges don't have to wait for `refreshEdgeTargetExists` to flip
-		// -- a node authored between replaceNodeEdges and refresh otherwise
-		// shows a false "gap" banner until the next full build.
-		const targetIds = Array.from(new Set(edges.map((e) => e.toNodeId)));
-		const existingRows = await tx
-			.select({ id: knowledgeNode.id })
-			.from(knowledgeNode)
-			.where(inArray(knowledgeNode.id, targetIds));
-		const existing = new Set(existingRows.map((r) => r.id));
 		const values: NewKnowledgeEdgeRow[] = edges.map((e) => ({
 			fromNodeId,
 			toNodeId: e.toNodeId,
 			edgeType: e.edgeType,
-			targetExists: existing.has(e.toNodeId),
 		}));
 		await tx.insert(knowledgeEdge).values(values).onConflictDoNothing();
 	});
-}
-
-/**
- * Refresh the `target_exists` flag on every edge in one update pass.
- *
- * Run after all nodes are upserted so edges to freshly-authored nodes flip
- * to true in the same build cycle.
- */
-export async function refreshEdgeTargetExists(db: Db = defaultDb): Promise<number> {
-	const result = await db
-		.update(knowledgeEdge)
-		.set({
-			targetExists: sql<boolean>`EXISTS (SELECT 1 FROM ${knowledgeNode} kn WHERE kn.id = ${knowledgeEdge.toNodeId})`,
-		})
-		.returning({ fromNodeId: knowledgeEdge.fromNodeId });
-	return result.length;
 }
 
 /** List all node ids currently in the DB. Used by the build script to detect orphan edges. */
@@ -311,10 +296,14 @@ export async function getNodeView(nodeId: string, userId: string, db: Db = defau
 	const [node] = await db.select().from(knowledgeNode).where(eq(knowledgeNode.id, nodeId)).limit(1);
 	if (!node) return null;
 
-	const [edges, inboundEdges, cardRows] = await Promise.all([
+	const [outboundRows, inboundEdges, cardRows] = await Promise.all([
+		// LEFT JOIN against knowledge_node so each outbound edge carries a
+		// computed `targetExists` flag (the join row is NULL when the target
+		// has not been authored yet -- see ADR 011 + 2026-05-06 review §E).
 		db
-			.select()
+			.select({ edge: knowledgeEdge, targetId: knowledgeNode.id })
 			.from(knowledgeEdge)
+			.leftJoin(knowledgeNode, eq(knowledgeNode.id, knowledgeEdge.toNodeId))
 			.where(eq(knowledgeEdge.fromNodeId, nodeId))
 			.orderBy(asc(knowledgeEdge.edgeType), asc(knowledgeEdge.toNodeId)),
 		db
@@ -329,6 +318,11 @@ export async function getNodeView(nodeId: string, userId: string, db: Db = defau
 			.where(and(eq(card.nodeId, nodeId), eq(card.userId, userId)))
 			.orderBy(asc(card.createdAt)),
 	]);
+
+	const edges: KnowledgeEdgeRowWithTarget[] = outboundRows.map((row) => ({
+		...row.edge,
+		targetExists: row.targetId !== null,
+	}));
 
 	return {
 		node,

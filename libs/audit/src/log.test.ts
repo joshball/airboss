@@ -16,7 +16,7 @@ import { AUDIT_TARGETS } from '@ab/constants';
 import { db } from '@ab/db/connection';
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { auditRecent, auditWrite, countAuditEntriesSince } from './log';
+import { auditRecent, auditWrite, countAuditEntriesSince, InvalidAuditTargetError } from './log';
 import { AUDIT_OPS, auditLog } from './schema';
 
 // Use a current (non-retired) target so the test exercises the AUDIT_TARGETS
@@ -173,5 +173,34 @@ describe('auditWrite + auditRecent round-trip', () => {
 		// Cleanup the cross-type collider row -- the global afterAll only
 		// targets TEST_RUN_ID and the collider row uses sharedTargetId.
 		await db.delete(auditLog).where(eq(auditLog.id, collider.id));
+	});
+});
+
+describe('auditWrite -- targetType validation (replaces dropped DB CHECK)', () => {
+	it('throws InvalidAuditTargetError when targetType is not in AUDIT_TARGET_VALUES', async () => {
+		// Per the 2026-05-06 review §J the DB-level CHECK was dropped; the BC
+		// is the gate now. A typo or a freshly-added BC that hasn't extended
+		// AUDIT_TARGETS surfaces as an InvalidAuditTargetError, not a silent
+		// bad audit row.
+		await expect(
+			auditWrite({
+				actorId: null,
+				op: AUDIT_OPS.ACTION,
+				targetType: 'definitely.not.a.real.target',
+				targetId: TEST_RUN_ID,
+				metadata: { testRunId: TEST_RUN_ID, marker: 'invalid-target' },
+			}),
+		).rejects.toBeInstanceOf(InvalidAuditTargetError);
+	});
+
+	it('accepts known AUDIT_TARGET_VALUES', async () => {
+		const written = await auditWrite({
+			actorId: null,
+			op: AUDIT_OPS.ACTION,
+			targetType: AUDIT_TARGETS.HANGAR_REFERENCE,
+			targetId: TEST_RUN_ID,
+			metadata: { testRunId: TEST_RUN_ID, marker: 'valid-target' },
+		});
+		expect(written.targetType).toBe(AUDIT_TARGETS.HANGAR_REFERENCE);
 	});
 });

@@ -36,11 +36,9 @@ export {
 	validateCredentialDag,
 } from './credentials';
 // Knowledge-graph writers (rewrite shared knowledge_node / knowledge_edge rows).
-export {
-	refreshEdgeTargetExists,
-	replaceNodeEdges,
-	upsertKnowledgeNode,
-} from './knowledge';
+// Edge target existence is resolved at read time via LEFT JOIN; no cache to
+// refresh per the 2026-05-06 schema review §E.
+export { replaceNodeEdges, upsertKnowledgeNode } from './knowledge';
 // Manifest schemas + types -- consumed exclusively by seeders. Read-state
 // runtime input schemas (handbookHeartbeatInputSchema, handbookNotesInputSchema,
 // handbookReadStatusSchema) stay in the runtime barrel because route handlers

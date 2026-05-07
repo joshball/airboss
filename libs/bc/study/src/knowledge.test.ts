@@ -31,11 +31,22 @@ import {
 	computeDisplayScore,
 	computeRepGate,
 	getNodeMastery,
+	getNodeView,
 	isMastered,
 	isNodeMastered,
+	replaceNodeEdges,
 } from './knowledge';
 import { createScenario } from './scenarios';
-import { card, cardState, knowledgeNode, scenario, session, sessionItemResult, studyPlan } from './schema';
+import {
+	card,
+	cardState,
+	knowledgeEdge,
+	knowledgeNode,
+	scenario,
+	session,
+	sessionItemResult,
+	studyPlan,
+} from './schema';
 import { seedRepAttempt } from './test-support';
 
 describe('computeCardGate', () => {
@@ -187,7 +198,9 @@ beforeAll(async () => {
 afterAll(async () => {
 	// Order: session_item_result rows first (they reference scenario SET NULL
 	// and session CASCADE), then sessions, plans, scenarios (restrict), cards,
-	// nodes, user. bauthUser cascades to card/scenario on userId.
+	// edges (FK on from_node_id cascades; clean explicitly so the
+	// node-deletion ordering below is predictable), nodes, user. bauthUser
+	// cascades to card/scenario on userId.
 	await db.delete(sessionItemResult).where(eq(sessionItemResult.userId, TEST_USER_ID));
 	await db.delete(session).where(eq(session.userId, TEST_USER_ID));
 	await db.delete(studyPlan).where(eq(studyPlan.userId, TEST_USER_ID));
@@ -195,6 +208,7 @@ afterAll(async () => {
 	await db.delete(cardState).where(eq(cardState.userId, TEST_USER_ID));
 	await db.delete(card).where(eq(card.userId, TEST_USER_ID));
 	for (const id of [NODE_BOTH, NODE_CARDS_ONLY, NODE_REPS_ONLY, NODE_EMPTY]) {
+		await db.delete(knowledgeEdge).where(eq(knowledgeEdge.fromNodeId, id));
 		await db.delete(knowledgeNode).where(eq(knowledgeNode.id, id));
 	}
 	await db.delete(bauthUser).where(eq(bauthUser.id, TEST_USER_ID));
@@ -312,5 +326,37 @@ describe('getNodeMastery -- integration', () => {
 		expect(stats.repGate).toBe('not_applicable');
 		expect(stats.mastered).toBe(false);
 		expect(stats.displayScore).toBe(0);
+	});
+});
+
+// ---------------------------------------------------------------------------
+// getNodeView edge-existence resolution -- 2026-05-06 review §E
+//
+// Existence of an edge target is resolved at read time via LEFT JOIN; the
+// previously-stored `target_exists` boolean was dropped to remove a class of
+// drift bugs (rebuild order, partial seed runs). These tests exercise both
+// halves: an edge to an authored node returns `targetExists: true`, an edge
+// to a not-yet-authored node returns `targetExists: false`.
+// ---------------------------------------------------------------------------
+
+describe('getNodeView -- edge target existence (LEFT JOIN)', () => {
+	it('marks targetExists=true when the edge target is authored', async () => {
+		// NODE_BOTH and NODE_CARDS_ONLY both exist (seeded in beforeAll).
+		await replaceNodeEdges(NODE_BOTH, [{ toNodeId: NODE_CARDS_ONLY, edgeType: 'related' }]);
+		const view = await getNodeView(NODE_BOTH, TEST_USER_ID);
+		expect(view).not.toBeNull();
+		const related = view?.edges.find((e) => e.toNodeId === NODE_CARDS_ONLY);
+		expect(related).toMatchObject({ toNodeId: NODE_CARDS_ONLY, targetExists: true });
+	});
+
+	it('marks targetExists=false when the edge target is not authored', async () => {
+		const ghostId = `nonexistent-target-${createId('x').slice(0, 6)}`;
+		await replaceNodeEdges(NODE_BOTH, [
+			{ toNodeId: NODE_CARDS_ONLY, edgeType: 'related' },
+			{ toNodeId: ghostId, edgeType: 'requires' },
+		]);
+		const view = await getNodeView(NODE_BOTH, TEST_USER_ID);
+		const ghost = view?.edges.find((e) => e.toNodeId === ghostId);
+		expect(ghost).toMatchObject({ toNodeId: ghostId, targetExists: false });
 	});
 });

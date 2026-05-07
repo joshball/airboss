@@ -9,6 +9,7 @@
 
 import { requireAuth } from '@ab/auth';
 import { parseHandbookChapter, parseHandbookSection, parseHandbookSlug } from '@ab/aviation';
+import { faaPagesFromMetadata } from '@ab/bc-study';
 import {
 	formatErrataForDisplay,
 	getHandbookSection,
@@ -68,15 +69,18 @@ export const load: PageServerLoad = async (event) => {
 			title: ref.title,
 			supersededByEdition: latest?.edition ?? null,
 		},
-		section: {
-			id: view.section.id,
-			code: view.section.code,
-			title: view.section.title,
-			contentMd: view.section.contentMd,
-			sourceLocator: view.section.sourceLocator,
-			faaPageStart: view.section.faaPageStart,
-			faaPageEnd: view.section.faaPageEnd,
-		},
+		section: (() => {
+			const pages = faaPagesFromMetadata(view.section.metadata);
+			return {
+				id: view.section.id,
+				code: view.section.code,
+				title: view.section.title,
+				contentMd: view.section.contentMd,
+				sourceLocator: view.section.sourceLocator,
+				faaPageStart: pages?.start ?? null,
+				faaPageEnd: pages?.end ?? null,
+			};
+		})(),
 		chapter: {
 			id: view.chapter.id,
 			code: view.chapter.code,

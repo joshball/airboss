@@ -25,8 +25,11 @@ function rowToInitial(row: {
 	url: string;
 	path: string;
 	format: string;
-	checksum: string;
-	downloadedAt: string;
+	// `checksum` and `downloadedAt` became nullable per the 2026-05-06
+	// review §N. The form initializer projects null onto an empty string
+	// so the existing form fields render correctly.
+	checksum: string | null;
+	downloadedAt: Date | null;
 	sizeBytes: number | null;
 	locatorShape: Record<string, unknown> | null;
 }): SourceFormInitial {
@@ -39,8 +42,8 @@ function rowToInitial(row: {
 		url: row.url,
 		path: row.path,
 		format: row.format,
-		checksum: row.checksum,
-		downloadedAt: row.downloadedAt,
+		checksum: row.checksum ?? '',
+		downloadedAt: row.downloadedAt?.toISOString() ?? '',
 		sizeBytes: row.sizeBytes == null ? '' : String(row.sizeBytes),
 		locatorShapeJson: JSON.stringify(row.locatorShape ?? {}, null, 2),
 	};

@@ -521,7 +521,10 @@ async function runSectionalFetchUnsafe(
 	await dbUpdate(row.id, {
 		checksum: dl.sha256,
 		sizeBytes: dl.fileSize,
-		downloadedAt: now().toISOString(),
+		// `downloaded_at` is `timestamptz` per the 2026-05-06 review §N
+		// (was `text` ISO-8601). Drizzle's `timestamp({ withTimezone: true })`
+		// accepts a Date object directly.
+		downloadedAt: now(),
 		path: relative(input.blobRoot, archivePath),
 		version: edition.effectiveDate,
 		media,

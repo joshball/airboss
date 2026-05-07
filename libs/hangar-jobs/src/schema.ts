@@ -15,11 +15,9 @@
 
 import { bauthUser } from '@ab/auth/schema';
 import { JOB_KIND_VALUES, JOB_LOG_STREAM_VALUES, JOB_STATUS_VALUES, SCHEMAS } from '@ab/constants';
+import { inList } from '@ab/db';
 import { sql } from 'drizzle-orm';
 import { check, index, integer, jsonb, pgSchema, text, timestamp, unique } from 'drizzle-orm/pg-core';
-
-/** Render a string array as a SQL `IN (...)` value list. */
-const inList = (values: readonly string[]) => values.map((v) => `'${v.replace(/'/g, "''")}'`).join(', ');
 
 /**
  * Shared `hangar` Postgres schema namespace. Job tables sit alongside the
