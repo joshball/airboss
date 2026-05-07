@@ -2017,23 +2017,104 @@ function mergeFaaPagesIntoMetadata(
 }
 
 /**
+ * Process-local cache of `(referenceId -> code -> { id, contentHash })`
+ * built lazily by {@link upsertReferenceSection}. The seed pipeline upserts
+ * thousands of `reference_section` rows per run (CFR alone has ~6300); doing
+ * one SELECT per row to discover whether it exists costs 30+ seconds of
+ * round-trip latency on a warm dev DB. The cache turns that into one
+ * SELECT per reference (the first call for that reference) plus pure
+ * in-memory lookup for every subsequent call. Mutated in place by the
+ * upsert path so a re-checked row sees the freshly-inserted hash.
+ *
+ * Lifetime: process. The seed orchestrator runs once and exits, so the
+ * cache lives only for that run. Tests that build their own DB instance
+ * pass a non-default `db`, which still hits the cache safely because the
+ * key includes the reference id (UUID); collisions across DBs would
+ * require a UUID collision.
+ */
+const sectionIndexByReference: Map<string, Map<string, { id: string; contentHash: string }>> = new Map();
+
+async function loadSectionIndex(referenceId: string, db: Db): Promise<Map<string, { id: string; contentHash: string }>> {
+	const cached = sectionIndexByReference.get(referenceId);
+	if (cached !== undefined) return cached;
+	const rows = await db
+		.select({ id: referenceSection.id, code: referenceSection.code, contentHash: referenceSection.contentHash })
+		.from(referenceSection)
+		.where(eq(referenceSection.referenceId, referenceId));
+	const map = new Map<string, { id: string; contentHash: string }>();
+	for (const row of rows) map.set(row.code, { id: row.id, contentHash: row.contentHash });
+	sectionIndexByReference.set(referenceId, map);
+	return map;
+}
+
+/**
  * Upsert a `reference_section` row by `(reference_id, code)`. Returns
  * `{row, changed}` so the caller can mass-replace figures only when the
  * section's body actually changed (idempotent re-seed). Corpus-agnostic:
  * accepts handbook chapters/sections/subsections, whole-doc rows
  * (`level: 'document'`), CFR paragraphs, AIM sections, etc. -- per-kind
  * shape validation belongs at ingest, not here.
+ *
+ * Reads use a process-local index (one SELECT per reference, not per row);
+ * the unchanged-hash path issues a single UPDATE; the changed path uses
+ * INSERT ... ON CONFLICT. Net cost on a re-seed of 6k unchanged rows is
+ * ~6k UPDATEs (one round trip each) instead of ~12k.
  */
 export async function upsertReferenceSection(
 	input: UpsertReferenceSectionInput,
 	db: Db = defaultDb,
 ): Promise<{ row: ReferenceSectionRow; changed: boolean }> {
-	const existing = await db
-		.select()
-		.from(referenceSection)
-		.where(and(eq(referenceSection.referenceId, input.referenceId), eq(referenceSection.code, input.code)))
-		.limit(1);
-	const prev = existing[0];
+	const index = await loadSectionIndex(input.referenceId, db);
+	const cachedHit = index.get(input.code);
+
+	// Fast path: cache says the row exists AND its content_hash matches the
+	// inbound section AND no faaPages merge is requested. Issue exactly one
+	// UPDATE-by-id to refresh scaffolding (parent/ordinal/locator); skip the
+	// SELECT entirely. This is the dominant cost on a re-seed.
+	// Skip the fast path when input.faaPages is non-null: that path needs to
+	// merge with prev.metadata, which we don't have without a SELECT.
+	const cachedHashMatches = cachedHit !== undefined && cachedHit.contentHash === input.contentHash;
+	if (cachedHashMatches && (input.faaPages === undefined || input.faaPages === null)) {
+		const cachedHitRow = cachedHit as { id: string; contentHash: string };
+		const refreshedMetadata = (input.metadata ?? {}) as Record<string, unknown>;
+		const rows = await db
+			.update(referenceSection)
+			.set({
+				parentId: input.parentId,
+				ordinal: input.ordinal,
+				depth: input.depth,
+				airbossRef: input.airbossRef,
+				title: input.title,
+				sourceLocator: input.sourceLocator,
+				hasFigures: input.hasFigures,
+				hasTables: input.hasTables,
+				metadata: refreshedMetadata,
+				updatedAt: new Date(),
+			})
+			.where(eq(referenceSection.id, cachedHitRow.id))
+			.returning();
+		const row = rows[0];
+		if (!row) {
+			// Cache is stale (row was deleted out from under us). Drop the
+			// entry and fall through to the full path below.
+			index.delete(input.code);
+		} else {
+			return { row, changed: false };
+		}
+	}
+
+	// Slow path: either no cached entry, or hash differs, or we need prev's
+	// metadata to merge faaPages. Fetch the existing row only when the cache
+	// suggests it exists; otherwise straight to insert.
+	let prev: ReferenceSectionRow | undefined;
+	if (cachedHit !== undefined) {
+		const existing = await db
+			.select()
+			.from(referenceSection)
+			.where(eq(referenceSection.id, cachedHit.id))
+			.limit(1);
+		prev = existing[0];
+	}
 
 	const mergedMetadata = mergeFaaPagesIntoMetadata(input.metadata, input.faaPages);
 
@@ -2080,6 +2161,7 @@ export async function upsertReferenceSection(
 			.where(eq(referenceSection.id, prev.id))
 			.returning();
 		const row = rows[0] ?? prev;
+		index.set(input.code, { id: row.id, contentHash: row.contentHash });
 		return { row, changed: false };
 	}
 
@@ -2112,6 +2194,7 @@ export async function upsertReferenceSection(
 			`upsertReferenceSection: insert returned no row for ${input.referenceId} / ${input.code}`,
 		);
 	}
+	index.set(input.code, { id: row.id, contentHash: row.contentHash });
 	return { row, changed: true };
 }
 

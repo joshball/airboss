@@ -178,6 +178,11 @@ export async function seedCfrManifest(
 	const sectionsFile = await loadCfrSectionsFile(options.manifestAbsPath);
 	const editionDir = dirname(options.manifestAbsPath);
 	const refIds: string[] = [];
+	// Long-tail Parts that have no `study.reference` row (per WP-CFR scope).
+	// We skip the per-Part seed for each one, but printing one line per skip
+	// scrolls 130+ lines past the operator on every reset. Collect the slugs
+	// here and emit one summary line at the end of the adapter run.
+	const skippedSlugs: string[] = [];
 
 	// Per-Part overlay map (description / whyItMatters / scope). Empty when
 	// the per-Title authoring file is absent -- a fresh-clone-friendly path.
@@ -203,9 +208,7 @@ export async function seedCfrManifest(
 
 		const existingRef = await findCfrReferenceBySlug(documentSlug);
 		if (existingRef === null) {
-			context.onProgress?.(
-				`  skip ${documentSlug}: no DB row in study.reference (long-tail Part out of scope per WP-CFR spec)`,
-			);
+			skippedSlugs.push(documentSlug);
 			continue;
 		}
 
@@ -396,6 +399,19 @@ export async function seedCfrManifest(
 		refIds.push(ref.id);
 		context.onProgress?.(
 			`  ${documentSlug} ${CFR_DB_EDITION}: ${subparts.length} subparts, ${sortedSections.length} sections`,
+		);
+	}
+
+	if (skippedSlugs.length > 0) {
+		// Show the skipped Part numbers (without the "<title>cfr" prefix) so
+		// the operator can spot when a Part they expected to see was filtered
+		// out. Full slug list is reconstructable from the manifest.
+		const partNumbers = skippedSlugs
+			.map((slug) => slug.replace(/^\d+cfr/, ''))
+			.sort((a, b) => a.localeCompare(b, 'en', { numeric: true }));
+		const titlePrefix = `${manifest.title}cfr`;
+		context.onProgress?.(
+			`  ${titlePrefix}*: skipped ${skippedSlugs.length} long-tail Parts (out of WP-CFR scope): ${partNumbers.join(', ')}`,
 		);
 	}
 

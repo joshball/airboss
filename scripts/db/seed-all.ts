@@ -52,6 +52,7 @@
  *   bun scripts/db/seed-all.ts abby       # only Abby's content
  */
 
+import { mkdirSync, openSync, writeSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { DEV_ACCOUNTS, DEV_DB_URL, DEV_SEED_ORIGIN_TAG, ENV_VARS } from '@ab/constants';
 import { client } from '@ab/db/connection';
@@ -69,7 +70,7 @@ import { seedSectionalsFromManifest } from '@ab/sources/sectionals/seed';
 import { seedStatutesFromManifest } from '@ab/sources/statutes/seed';
 import { seedTcdsFromManifest } from '@ab/sources/tcds/seed';
 import { prompt } from '../lib/prompt';
-import { runOrThrow } from '../lib/spawn';
+import { runOrThrowPiped } from '../lib/spawn';
 import { migrateReferencesToStructured } from './migrate-references-to-structured';
 import { type AbbySeedCounts, seedAbby } from './seed-abby';
 import { seedCardsForUser } from './seed-cards';
@@ -115,14 +116,97 @@ function isPhase(value: string): value is Phase {
 	return (PHASES as readonly string[]).includes(value);
 }
 
+const REPORT_DIR = resolve(REPO_ROOT, '.reports', 'seed');
+
+/**
+ * Per-phase wrapper. Ensures `.reports/seed/<phase>.log` captures every line
+ * the phase wrote to stdout/stderr (live tee, so a crash mid-phase still
+ * leaves the partial log on disk), and starts a heartbeat ticker that prints
+ * `... still running: <phase> ([Xs])` every {@link HEARTBEAT_INTERVAL_MS} ms
+ * the phase has been blocked. The ticker only fires when no other output has
+ * landed in the interval, so chatty phases stay readable.
+ *
+ * Assumes phases are well-behaved: they do not take ownership of
+ * `process.stdout.write` themselves (verified for every current phase) and
+ * they propagate exceptions instead of swallowing them. The console-tee
+ * indirection lives only for the phase's lifetime; restored in `finally`.
+ */
+const HEARTBEAT_INTERVAL_MS = 5_000;
+
+interface PhaseRunResult {
+	readonly bytesLogged: number;
+	readonly logPath: string;
+}
+
+async function runPhaseWithReport(phase: Phase, fn: () => Promise<void>): Promise<PhaseRunResult> {
+	mkdirSync(REPORT_DIR, { recursive: true });
+	const logPath = resolve(REPORT_DIR, `${phase}.log`);
+	const fd = openSync(logPath, 'w');
+	let bytesLogged = 0;
+
+	const originalStdoutWrite = process.stdout.write.bind(process.stdout);
+	const originalStderrWrite = process.stderr.write.bind(process.stderr);
+	let lastOutputAt = Date.now();
+
+	const tee = (
+		original: typeof process.stdout.write,
+	): typeof process.stdout.write => {
+		return ((chunk: unknown, ...rest: unknown[]) => {
+			lastOutputAt = Date.now();
+			try {
+				const buf =
+					typeof chunk === 'string'
+						? Buffer.from(chunk, 'utf8')
+						: chunk instanceof Buffer
+							? chunk
+							: Buffer.from(String(chunk), 'utf8');
+				writeSync(fd, buf);
+				bytesLogged += buf.length;
+			} catch {
+				// best-effort: a failing tee should never break the seed
+			}
+			return (original as unknown as (...args: unknown[]) => boolean)(chunk, ...rest);
+		}) as typeof process.stdout.write;
+	};
+
+	const startedAt = Date.now();
+	const heartbeat = setInterval(() => {
+		const idleMs = Date.now() - lastOutputAt;
+		if (idleMs < HEARTBEAT_INTERVAL_MS) return;
+		const elapsedSec = Math.round((Date.now() - startedAt) / 1000);
+		// Use the original writer so the heartbeat itself doesn't get teed
+		// (it's runtime instrumentation, not part of the phase's record).
+		originalStdoutWrite(`  ... still running: ${phase} (${elapsedSec}s)\n`);
+	}, HEARTBEAT_INTERVAL_MS);
+	heartbeat.unref();
+
+	process.stdout.write = tee(originalStdoutWrite);
+	process.stderr.write = tee(originalStderrWrite);
+
+	try {
+		await fn();
+	} finally {
+		clearInterval(heartbeat);
+		process.stdout.write = originalStdoutWrite;
+		process.stderr.write = originalStderrWrite;
+		try {
+			// Best-effort fsync so a process kill leaves the file durable.
+			writeSync(fd, '');
+		} catch {
+			// ignore
+		}
+	}
+	return { bytesLogged, logPath };
+}
+
 async function phaseUsers(): Promise<void> {
 	process.stdout.write('\n=== seed: users ===\n');
-	await runOrThrow(['bun', 'scripts/db/seed-dev-users.ts'], { cwd: REPO_ROOT });
+	await runOrThrowPiped(['bun', 'scripts/db/seed-dev-users.ts'], { cwd: REPO_ROOT });
 }
 
 async function phaseKnowledge(): Promise<void> {
 	process.stdout.write('\n=== seed: knowledge ===\n');
-	await runOrThrow(['bun', 'scripts/build-knowledge-index.ts'], { cwd: REPO_ROOT });
+	await runOrThrowPiped(['bun', 'scripts/build-knowledge-index.ts'], { cwd: REPO_ROOT });
 }
 
 async function phaseHandbooks(): Promise<void> {
@@ -188,8 +272,21 @@ async function phaseReferenceCorpusSeed(): Promise<void> {
 		['tcds', seedTcdsFromManifest],
 		['asrs', seedAsrsFromManifest],
 	] as const;
-	for (const [name, run] of seeders) {
-		const report = await run();
+	// Each seeder is a pure registry mutation -- they patch
+	// `__sources_internal__` / `__editions_internal__` with disjoint
+	// corpus-scoped keys. Safe to dispatch in parallel; we collect reports
+	// then render them in declaration order so the operator sees a stable
+	// summary regardless of resolution order.
+	const reports = await Promise.all(
+		seeders.map(([name, run]) =>
+			run()
+				.then((report) => ({ name, report } as const))
+				.catch((err) => {
+					throw new Error(`reference-corpus-seed: corpus '${name}' failed: ${(err as Error).message}`);
+				}),
+		),
+	);
+	for (const { name, report } of reports) {
 		const padded = name.padEnd(11);
 		process.stdout.write(
 			`  ${padded}: ${report.entriesRegistered} registered (${report.entriesAlreadyAccepted} already accepted), ${report.editionsRegistered} editions, ${report.skipReasons.length} skipped\n`,
@@ -218,7 +315,7 @@ async function phaseMigrateReferences(): Promise<void> {
 		`  scanned ${report.rowsScanned}, already-migrated ${report.rowsAlreadyMigrated}, migrated ${report.rowsMigrated}\n`,
 	);
 	process.stdout.write(
-		`  citations reshaped ${report.citationsReshaped}, already-structured ${report.citationsAlreadyStructured}, synthetic refs created ${report.syntheticReferencesCreated}\n`,
+		`  citations reshaped ${report.citationsReshaped}, already-structured ${report.citationsAlreadyStructured}, ref-shape ${report.citationsAlreadyRefShape}, synthetic refs created ${report.syntheticReferencesCreated}\n`,
 	);
 }
 
@@ -297,22 +394,151 @@ async function enforceGuard(target: string | undefined): Promise<void> {
 	void target;
 }
 
-async function main(): Promise<void> {
-	const target = process.argv[2];
-	const phases: readonly Phase[] = target && !target.startsWith('-') ? [target].filter(isPhase) : PHASES;
+function formatDuration(ms: number): string {
+	if (ms < 1000) return `${ms}ms`;
+	const seconds = ms / 1000;
+	if (seconds < 60) return `${seconds.toFixed(1)}s`;
+	const minutes = Math.floor(seconds / 60);
+	const remainder = seconds - minutes * 60;
+	return `${minutes}m${remainder.toFixed(1)}s`;
+}
 
-	if (target && !target.startsWith('-') && phases.length === 0) {
-		process.stderr.write(`seed-all: unknown phase '${target}'. Expected one of: ${PHASES.join(', ')}\n`);
+/**
+ * `--quick` skips the heavy reference-ingestion phases. Use it when you want
+ * a fresh DB to reproduce a logic bug fast: dev users + knowledge graph +
+ * Abby + cards land, but `handbooks` + `references` + `reference-corpus-seed`
+ * (the multi-thousand-row registry seeders) are skipped. The migrate-references
+ * phase is also skipped because it depends on `handbooks` having seeded
+ * `study.reference` rows; running it without those rows would crash on
+ * unresolved citations. Pair with `--only` to drill further.
+ */
+const QUICK_SKIP_PHASES: readonly Phase[] = [
+	'handbooks',
+	'references',
+	'credentials',
+	'syllabi',
+	'credential-syllabi',
+	'reference-corpus-seed',
+	'migrate-references',
+];
+
+interface ParsedArgs {
+	readonly target: string | undefined;
+	readonly skip: ReadonlyArray<Phase>;
+	readonly only: ReadonlyArray<Phase> | null;
+	readonly quick: boolean;
+}
+
+function parseArgs(argv: ReadonlyArray<string>): ParsedArgs {
+	let target: string | undefined;
+	const skip: Phase[] = [];
+	let only: Phase[] | null = null;
+	let quick = false;
+	for (let i = 0; i < argv.length; i += 1) {
+		const arg = argv[i];
+		if (arg === undefined) continue;
+		if (arg === '--quick' || arg === '-q') {
+			quick = true;
+			continue;
+		}
+		if (arg === '--skip') {
+			const value = argv[i + 1];
+			if (value === undefined) throw new Error("seed-all: '--skip' requires a comma-separated phase list");
+			skip.push(...parsePhaseList(value, '--skip'));
+			i += 1;
+			continue;
+		}
+		if (arg.startsWith('--skip=')) {
+			skip.push(...parsePhaseList(arg.slice('--skip='.length), '--skip'));
+			continue;
+		}
+		if (arg === '--only') {
+			const value = argv[i + 1];
+			if (value === undefined) throw new Error("seed-all: '--only' requires a comma-separated phase list");
+			only = (only ?? []).concat(parsePhaseList(value, '--only'));
+			i += 1;
+			continue;
+		}
+		if (arg.startsWith('--only=')) {
+			only = (only ?? []).concat(parsePhaseList(arg.slice('--only='.length), '--only'));
+			continue;
+		}
+		if (arg.startsWith('-')) continue;
+		// First positional = single-phase target (preserve existing behaviour).
+		if (target === undefined) target = arg;
+	}
+	return { target, skip, only, quick };
+}
+
+function parsePhaseList(value: string, flag: string): Phase[] {
+	const out: Phase[] = [];
+	for (const raw of value.split(',')) {
+		const name = raw.trim();
+		if (name.length === 0) continue;
+		if (!isPhase(name)) {
+			throw new Error(`seed-all: '${flag}' got unknown phase '${name}'. Expected one of: ${PHASES.join(', ')}`);
+		}
+		out.push(name);
+	}
+	return out;
+}
+
+async function main(): Promise<void> {
+	const argv = process.argv.slice(2);
+	let parsed: ParsedArgs;
+	try {
+		parsed = parseArgs(argv);
+	} catch (err) {
+		process.stderr.write(`${(err as Error).message}\n`);
 		process.exit(1);
+	}
+	const { target, skip, only, quick } = parsed;
+
+	let phases: readonly Phase[];
+	if (target !== undefined) {
+		if (!isPhase(target)) {
+			process.stderr.write(`seed-all: unknown phase '${target}'. Expected one of: ${PHASES.join(', ')}\n`);
+			process.exit(1);
+		}
+		phases = [target];
+	} else if (only !== null) {
+		phases = only;
+	} else {
+		const skipSet = new Set<Phase>(skip);
+		if (quick) for (const p of QUICK_SKIP_PHASES) skipSet.add(p);
+		phases = PHASES.filter((p) => !skipSet.has(p));
 	}
 
 	await enforceGuard(target);
 
-	for (const phase of phases) {
-		await PHASE_FNS[phase]();
+	if (quick || skip.length > 0 || only !== null) {
+		const omitted = PHASES.filter((p) => !phases.includes(p));
+		if (omitted.length > 0) {
+			process.stdout.write(`seed-all: skipping ${omitted.join(', ')} (--quick / --skip / --only)\n`);
+		}
 	}
 
+	const phaseTimings: Array<{ phase: Phase; ms: number; bytesLogged: number; logPath: string }> = [];
+	const totalStart = performance.now();
+	for (const phase of phases) {
+		const phaseStart = performance.now();
+		const result = await runPhaseWithReport(phase, PHASE_FNS[phase]);
+		const ms = Math.round(performance.now() - phaseStart);
+		phaseTimings.push({ phase, ms, bytesLogged: result.bytesLogged, logPath: result.logPath });
+		process.stdout.write(`  -> ${phase} took ${formatDuration(ms)}\n`);
+	}
+	const totalMs = Math.round(performance.now() - totalStart);
+
 	process.stdout.write('\nseed: done.\n');
+	process.stdout.write('\n=== timings ===\n');
+	const longest = phaseTimings.reduce((acc, p) => Math.max(acc, p.phase.length), 0);
+	const sorted = [...phaseTimings].sort((a, b) => b.ms - a.ms);
+	for (const { phase, ms } of sorted) {
+		const pct = totalMs > 0 ? Math.round((ms / totalMs) * 100) : 0;
+		process.stdout.write(`  ${phase.padEnd(longest)}  ${formatDuration(ms).padStart(8)}  ${String(pct).padStart(3)}%\n`);
+	}
+	process.stdout.write(`  ${'TOTAL'.padEnd(longest)}  ${formatDuration(totalMs).padStart(8)}\n`);
+	process.stdout.write(`\nfull per-phase logs: .reports/seed/<phase>.log\n`);
 }
 
 main()

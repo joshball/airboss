@@ -294,6 +294,23 @@ export function slugifySource(source: string): string {
 }
 
 /**
+ * Detect entries written in the `ref:`-shape (ADR 019 amendment 2026-05 §1).
+ * Build-knowledge-index emits `{ ref: "airboss-ref:...", ...sentinels }` for
+ * any reference that pre-resolves to the registry; the reader walks them via
+ * `@ab/sources` directly. The legacy migration has nothing to do with these
+ * entries -- pass them through untouched. Without this guard, the loop
+ * mistakes them for legacy citations and crashes on `legacy.source.trim()`.
+ */
+function isAuthoredRefShape(value: unknown): boolean {
+	return (
+		typeof value === 'object' &&
+		value !== null &&
+		typeof (value as { ref?: unknown }).ref === 'string' &&
+		(value as { ref: string }).ref.length > 0
+	);
+}
+
+/**
  * Reshape one legacy citation into a `ReshapedCitation` carrying a
  * resolved reference identity + the StructuredCitation shape minus
  * `reference_id`. Pure -- no DB access. The script side wraps this with
@@ -626,6 +643,11 @@ export interface MigrationReport {
 	rowsMigrated: number;
 	citationsReshaped: number;
 	citationsAlreadyStructured: number;
+	/**
+	 * Entries already authored in the `ref:`-shape (ADR 019 amendment 2026-05).
+	 * Pass-through: we don't reshape them and don't touch the registry row.
+	 */
+	citationsAlreadyRefShape: number;
 	syntheticReferencesCreated: number;
 	/** Failures that would otherwise have aborted the script; populated only on success runs. */
 	errors: Array<{ nodeId: string; error: string }>;
@@ -650,6 +672,7 @@ export async function migrateReferencesToStructured(
 		rowsMigrated: 0,
 		citationsReshaped: 0,
 		citationsAlreadyStructured: 0,
+		citationsAlreadyRefShape: 0,
 		syntheticReferencesCreated: 0,
 		errors: [],
 	};
@@ -727,7 +750,21 @@ export async function migrateReferencesToStructured(
 					report.citationsAlreadyStructured += 1;
 					continue;
 				}
+				if (isAuthoredRefShape(entry)) {
+					// New `ref:`-shape entry written by build-knowledge-index
+					// (ADR 019 amendment 2026-05 §1). The reader resolves these
+					// directly via `@ab/sources`; the migration has nothing to
+					// reshape and the registry row already exists.
+					newCitations.push(entry as unknown as StructuredCitation);
+					report.citationsAlreadyRefShape += 1;
+					continue;
+				}
 				const legacy = entry as LegacyCitation;
+				if (typeof legacy?.source !== 'string') {
+					throw new Error(
+						`unrecognised citation entry shape (expected legacy {source,detail,note}, structured {kind,...}, or ref-shape {ref,...}); keys=[${Object.keys((legacy as object) ?? {}).join(',')}]`,
+					);
+				}
 				const reshaped = reshapeLegacyCitation(legacy);
 				if (dryRun) {
 					// In dry-run we do not touch the reference table. Use a
@@ -785,7 +822,7 @@ async function main(): Promise<void> {
 		`${tag}migrate-references-to-structured: scanned ${report.rowsScanned}, already-migrated ${report.rowsAlreadyMigrated}, migrated ${report.rowsMigrated}\n`,
 	);
 	process.stdout.write(
-		`  citations reshaped: ${report.citationsReshaped}; already structured: ${report.citationsAlreadyStructured}; synthetic references created: ${report.syntheticReferencesCreated}\n`,
+		`  citations reshaped: ${report.citationsReshaped}; already structured: ${report.citationsAlreadyStructured}; ref-shape pass-through: ${report.citationsAlreadyRefShape}; synthetic references created: ${report.syntheticReferencesCreated}\n`,
 	);
 	if (report.errors.length > 0) {
 		process.stdout.write(`  errors: ${report.errors.length}\n`);
