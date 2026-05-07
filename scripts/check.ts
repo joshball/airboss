@@ -30,16 +30,7 @@
  */
 
 import { $ } from 'bun';
-import {
-	closeSync,
-	existsSync,
-	mkdirSync,
-	openSync,
-	readFileSync,
-	statSync,
-	unlinkSync,
-	writeFileSync,
-} from 'node:fs';
+import { closeSync, existsSync, mkdirSync, openSync, readFileSync, statSync, unlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
@@ -359,7 +350,7 @@ const STEP_HELP: Record<string, StepHelp> = {
 		scopable: false,
 		summary: 'Block Buffer/process/node:* leaks into client bundles',
 		what: 'Walks every browser-bundled lib (libs/{constants,utils,types,themes,ui,help,aviation,...}) and every apps/*/src/** file, blocking static imports of `node:*`, references to `Buffer`/`process` globals, and runtime imports that transitively pull in @ab/db/connection or postgres.',
-		why: "happy-dom polyfills these so vitest passes green; real Firefox/Safari crashes at hydration. This is THE gate that catches the `/memory` Buffer crash class. See PR #664 and docs/agents/debug-playbooks/browser-hydration.md.",
+		why: 'happy-dom polyfills these so vitest passes green; real Firefox/Safari crashes at hydration. This is THE gate that catches the `/memory` Buffer crash class. See PR #664 and docs/agents/debug-playbooks/browser-hydration.md.',
 		how: '`bun scripts/check-browser-globals.ts`. Walks every value re-export from each runtime barrel transitively.',
 		links: ['scripts/check-browser-globals.ts', 'docs/agents/debug-playbooks/browser-hydration.md'],
 	},
@@ -582,6 +573,26 @@ function saveTimings(t: TimingsFile): void {
 	}
 }
 
+function formatSec(ms: number): string {
+	const s = ms / 1000;
+	if (s < 10) return `${s.toFixed(1)}s`;
+	return `${Math.round(s)}s`;
+}
+
+// Match ANSI SGR escapes (CSI ... m). Use unicode escape for the ESC byte
+// to avoid biome's noControlCharactersInRegex.
+// Build from a string so the ESC byte does not appear as a literal -- biome flags it.
+const ANSI_RE = new RegExp(`${String.fromCharCode(27)}\\[[0-9;]*m`, 'g');
+function stripAnsi(s: string): string {
+	return s.replace(ANSI_RE, '');
+}
+
+function padStartAnsi(s: string, width: number): string {
+	const visible = stripAnsi(s).length;
+	if (visible >= width) return s;
+	return ' '.repeat(width - visible) + s;
+}
+
 function medianMs(samples: readonly number[]): number | undefined {
 	if (samples.length === 0) return undefined;
 	const sorted = [...samples].sort((a, b) => a - b);
@@ -647,6 +658,9 @@ class TTYReporter implements Reporter {
 
 	constructor() {
 		this.timer = setInterval(() => this.render(), 250);
+		// Detach from the event loop. We always explicitly clearInterval in close(),
+		// but unref() ensures a stray timer can't keep the process alive on exit.
+		this.timer?.unref?.();
 	}
 
 	register(name: string, expectedMs: number | undefined): void {
@@ -695,46 +709,90 @@ class TTYReporter implements Reporter {
 		let failed = 0;
 		const now = Date.now();
 
+		// Pre-compute the longest "elapsed/expected" cell so columns line up.
+		const timeStrs: string[] = [];
+		const trailing: { bar: string; pct: string }[] = [];
+
 		for (const name of this.order) {
+			const r = this.records.get(name);
+			if (!r) {
+				timeStrs.push('');
+				trailing.push({ bar: '', pct: '' });
+				continue;
+			}
+
+			if (r.status === 'pending') {
+				timeStrs.push(r.expectedMs ? `~${formatSec(r.expectedMs)}` : '');
+				trailing.push({ bar: '', pct: '' });
+			} else if (r.status === 'running') {
+				running += 1;
+				const elapsed = now - (r.startedAt ?? now);
+				timeStrs.push(r.expectedMs ? `${formatSec(elapsed)} / ~${formatSec(r.expectedMs)}` : `${formatSec(elapsed)}`);
+				const bar = this.bar(elapsed, r.expectedMs);
+				const pct = r.expectedMs ? `${Math.min(999, Math.round((elapsed / r.expectedMs) * 100))}%` : '';
+				trailing.push({ bar, pct });
+			} else if (r.status === 'done') {
+				done += 1;
+				const elapsed = (r.finishedAt ?? now) - (r.startedAt ?? now);
+				timeStrs.push(formatSec(elapsed));
+				trailing.push({ bar: '', pct: '' });
+			} else {
+				failed += 1;
+				done += 1;
+				const elapsed = (r.finishedAt ?? now) - (r.startedAt ?? now);
+				timeStrs.push(formatSec(elapsed));
+				trailing.push({ bar: '', pct: '' });
+			}
+		}
+
+		const longestTime = timeStrs.reduce((acc, s) => Math.max(acc, stripAnsi(s).length), 0);
+
+		for (let i = 0; i < this.order.length; i += 1) {
+			const name = this.order[i] ?? '';
 			const r = this.records.get(name);
 			if (!r) continue;
 
 			let symbol: string;
-			let bar = '';
-			let durStr = '';
-
-			if (r.status === 'pending') {
-				symbol = ' ·  ';
-				durStr = '';
-			} else if (r.status === 'running') {
-				running += 1;
-				symbol = '\x1b[36m>>> \x1b[0m';
-				const elapsed = now - (r.startedAt ?? now);
-				durStr = `${(elapsed / 1000).toFixed(1)}s`;
-				bar = this.bar(elapsed, r.expectedMs);
-			} else if (r.status === 'done') {
-				done += 1;
-				symbol = '\x1b[32m OK \x1b[0m';
-				const elapsed = (r.finishedAt ?? now) - (r.startedAt ?? now);
-				durStr = `${(elapsed / 1000).toFixed(1)}s`;
-			} else {
-				failed += 1;
-				done += 1;
-				symbol = '\x1b[31mFAIL\x1b[0m';
-				const elapsed = (r.finishedAt ?? now) - (r.startedAt ?? now);
-				durStr = `${(elapsed / 1000).toFixed(1)}s`;
-			}
+			if (r.status === 'pending') symbol = ' ·  ';
+			else if (r.status === 'running') symbol = '\x1b[36m>>> \x1b[0m';
+			else if (r.status === 'done') symbol = '\x1b[32m OK \x1b[0m';
+			else symbol = '\x1b[31mFAIL\x1b[0m';
 
 			const namePad = name.padEnd(longestName, ' ');
-			const durPad = durStr.padStart(7, ' ');
-			lines.push(`  ${symbol}  ${namePad}  ${durPad}  ${bar}`);
+			const timePad = padStartAnsi(timeStrs[i] ?? '', longestTime);
+			const t = trailing[i] ?? { bar: '', pct: '' };
+			const tail = t.bar ? `  ${t.bar}  ${t.pct}` : '';
+			lines.push(`  ${symbol}  ${namePad}  ${timePad}${tail}`);
 		}
 
-		const totalElapsed = ((now - this.startedAt) / 1000).toFixed(1);
+		const totalElapsed = (now - this.startedAt) / 1000;
+
+		// ETA: how long until the last running/pending step ends.
+		// For each non-done step with a known expectedMs, compute (expectedMs - elapsedSoFar).
+		// ETA = max of those (the long pole). Indeterminate steps contribute nothing.
+		let etaMs = 0;
+		let etaKnown = false;
+		for (const name of this.order) {
+			const r = this.records.get(name);
+			if (!r || r.status === 'done' || r.status === 'failed') continue;
+			if (!r.expectedMs) continue;
+			const elapsedSoFar = r.status === 'running' ? now - (r.startedAt ?? now) : 0;
+			const remaining = Math.max(0, r.expectedMs - elapsedSoFar);
+			if (remaining > etaMs) etaMs = remaining;
+			etaKnown = true;
+		}
+
+		const footerParts: string[] = [];
+		footerParts.push(`${done}/${this.order.length} done`);
+		if (failed > 0) footerParts.push(`${failed} failed`);
+		footerParts.push(`${running} running`);
+		footerParts.push(`elapsed ${formatSec(totalElapsed * 1000)}`);
+		if (etaKnown && running + (this.order.length - done) > 0) {
+			footerParts.push(`ETA ~${formatSec(etaMs)}`);
+		}
+
 		lines.push('');
-		lines.push(
-			`${done}/${this.order.length} done${failed > 0 ? ` · ${failed} failed` : ''} · ${running} running · elapsed ${totalElapsed}s`,
-		);
+		lines.push(footerParts.join(' · '));
 
 		this.clearPrevious();
 		out.write(`${lines.join('\n')}\n`);
@@ -1045,8 +1103,7 @@ function buildStepDefs(profile: Profile, dirty: readonly string[]): StepDef[] {
 		name: 'help-ids',
 		tier: 'fast',
 		// helpId props live in .svelte files; the registry lives in libs/help/.
-		relevantWhen: (d) =>
-			anyMatch(d, (f) => f.endsWith('.svelte') || f.startsWith('libs/help/')),
+		relevantWhen: (d) => anyMatch(d, (f) => f.endsWith('.svelte') || f.startsWith('libs/help/')),
 		fn: () => shellRun('bun', ['scripts/validate-help-ids.ts']),
 	});
 
@@ -1054,11 +1111,7 @@ function buildStepDefs(profile: Profile, dirty: readonly string[]): StepDef[] {
 		name: 'browser-globals',
 		tier: 'fast',
 		// Walks browser-bundled libs + apps client code. Skip if nothing in those trees changed.
-		relevantWhen: (d) =>
-			anyMatch(
-				d,
-				(f) => /apps\/[^/]+\/src\//.test(f) || startsWithAny(f, BROWSER_BUNDLED_LIBS),
-			),
+		relevantWhen: (d) => anyMatch(d, (f) => /apps\/[^/]+\/src\//.test(f) || startsWithAny(f, BROWSER_BUNDLED_LIBS)),
 		fn: () => shellRun('bun', ['scripts/check-browser-globals.ts']),
 	});
 
@@ -1118,12 +1171,7 @@ function buildStepDefs(profile: Profile, dirty: readonly string[]): StepDef[] {
 						f.startsWith('libs/hangar-sync/'),
 				);
 			},
-			fn: () =>
-				shellRun(
-					'bunx',
-					['svelte-check', '--tsconfig', './tsconfig.json', '--incremental'],
-					resolve(REPO_ROOT, app),
-				),
+			fn: () => shellRun('bunx', ['svelte-check', '--tsconfig', './tsconfig.json'], resolve(REPO_ROOT, app)),
 		});
 	}
 
