@@ -74,6 +74,9 @@ const aliases = {
 	'@ab/sources/safo': resolve('./libs/sources/src/safo/index.ts'),
 	'@ab/sources/info': resolve('./libs/sources/src/info/index.ts'),
 	'@ab/sources': resolve('./libs/sources/src/index.ts'),
+	// Hangar `/roadmap` Phase 8 imports the read-only WP loader through
+	// this alias. Mirrors the SvelteKit alias in `apps/hangar/svelte.config.js`.
+	'@ab/wp-loader': resolve('./scripts/lib/wp-loader.ts'),
 };
 
 // `$app/state` is a SvelteKit runtime module. The standalone DOM project

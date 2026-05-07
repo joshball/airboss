@@ -43,9 +43,12 @@ let cachedRepoRoot: string | null = null;
 
 function resolveRepoRoot(): string {
 	if (cachedRepoRoot !== null) return cachedRepoRoot;
-	// import.meta.dir resolves to the directory of this module under Bun.
+	// `import.meta.dirname` is the Node 20+ / Bun standard. Used over the
+	// Bun-only `import.meta.dir` so the hangar `/roadmap` view (which
+	// imports this loader through a SvelteKit alias) type-checks cleanly
+	// under svelte-check, which doesn't see `bun-types`.
 	// Walk up until we find the workspace package.json with name=airboss.
-	let dir = import.meta.dir;
+	let dir = import.meta.dirname;
 	for (let i = 0; i < 16; i += 1) {
 		const candidate = join(dir, 'package.json');
 		try {

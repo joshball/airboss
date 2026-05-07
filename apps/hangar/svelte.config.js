@@ -62,6 +62,13 @@ const config = {
 			'@ab/help/*': '../../libs/help/src/*',
 			'@ab/sources': '../../libs/sources/src/index.ts',
 			'@ab/sources/*': '../../libs/sources/src/*',
+			// Hangar `/roadmap` Phase 8 imports the read-only WP loader from
+			// `scripts/lib/wp-loader.ts` (server-only; uses node:fs). The
+			// loader's top-of-file comment anticipates this exact callsite
+			// (see ADR 025 + tracking-system-overhaul WP). Aliased so the
+			// `+page.server.ts` import path stays grep-able and survives a
+			// future loader move into a `libs/tracking/` server entry point.
+			'@ab/wp-loader': '../../scripts/lib/wp-loader.ts',
 		},
 		env: {
 			dir: '../../',
