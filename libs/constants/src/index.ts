@@ -31,6 +31,14 @@ export {
 } from './auth';
 export { AVIONICS_AIRCRAFT_COOKIE, AVIONICS_SELECTABLE_AIRCRAFT, AVIONICS_STORAGE_KEYS } from './avionics';
 export {
+	BUG_DIR,
+	BUG_FILE_GLOB,
+	BUG_SEVERITIES,
+	BUG_STATUSES,
+	type BugSeverity,
+	type BugStatus,
+} from './bug';
+export {
 	CITATION_CONTEXT_MAX_LENGTH,
 	CITATION_FRAMING_LABELS,
 	CITATION_FRAMING_VALUES,

@@ -3,6 +3,12 @@
 export type { CardKind, CitationFraming } from '@ab/constants';
 export type { ActionFailure, FieldErrors } from './actions';
 export {
+	type Bug,
+	type BugFrontmatter,
+	type BugValidationError,
+	bugFrontmatterSchema,
+} from './bug';
+export {
 	type Citation,
 	isHandbookCitation,
 	isStructuredCitation,
