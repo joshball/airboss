@@ -1,5 +1,5 @@
 /**
- * `/cards` -- card-completeness audit page (dev-only).
+ * `/dev/cards` -- card-completeness audit page (dev-only).
  *
  * Three sections render below:
  *
@@ -13,7 +13,7 @@
  *   3. **Wrapper inventory** -- summary of what variant exists and which
  *      reference kinds map to it.
  *
- * The (dev) group is guarded by `+layout.server.ts` so this never reaches
+ * The dev/ segment is guarded by `+layout.server.ts` so this never reaches
  * production. Even so, each load is an authenticated request -- audit
  * surface stays behind the same gate as the regulations browse routes.
  */

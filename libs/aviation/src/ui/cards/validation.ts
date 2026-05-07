@@ -9,7 +9,7 @@
  *   2. Route loaders call `validateCardData` to surface gaps in their
  *      server-side console (and bail in dev).
  *
- *   3. The /dev/cards audit page calls `validateCardData` per fixture and
+ *   3. The /dev/cards audit page (apps/study) calls `validateCardData` per fixture and
  *      per real DB row, collects results into a punch-list table.
  *
  * Treat empty string as missing. The DB column for `metadata` defaults to

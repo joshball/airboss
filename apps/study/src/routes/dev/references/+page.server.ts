@@ -8,7 +8,7 @@
  * Fixture priming: the route primes a small synthetic `SOURCES` table so the
  * demo works without requiring `bun run cfr-ingest` to have populated the
  * registry. Production lesson rendering uses the real registry; this is a
- * dev surface only (lives under `(dev)/`, not in the app shell).
+ * dev surface only (lives under `dev/`, not in the app shell).
  */
 
 import { readFileSync } from 'node:fs';
