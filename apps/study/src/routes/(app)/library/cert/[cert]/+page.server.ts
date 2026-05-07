@@ -8,32 +8,26 @@
 
 import { requireAuth } from '@ab/auth';
 import { parseCertSlug } from '@ab/aviation';
-import { getReadableReferenceIds, getReferencesForCertWithCarryover } from '@ab/bc-study/server';
 import {
-	CERT_APPLICABILITY_LABELS,
-	type CertApplicability,
-	externalUrlForReference,
-	type ReferenceKind,
-} from '@ab/constants';
+	getReadableReferenceIds,
+	getReferencesForCertWithCarryover,
+	type LibraryCardPayload,
+	projectReferenceToLibraryCard,
+} from '@ab/bc-study/server';
+import { CERT_APPLICABILITY_LABELS, type CertApplicability } from '@ab/constants';
+import { buildPartUrl } from '@ab/sources';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-interface CardView {
+interface CardEntry {
 	id: string;
-	documentSlug: string;
-	edition: string;
-	title: string;
-	publisher: string;
-	kind: ReferenceKind;
-	subjects: readonly string[];
-	externalUrl: string | null;
-	isReadable: boolean;
+	payload: LibraryCardPayload;
 }
 
 interface CarryoverView {
 	fromCert: CertApplicability;
 	label: string;
-	cards: CardView[];
+	cards: CardEntry[];
 }
 
 export const load: PageServerLoad = async (event) => {
@@ -48,26 +42,16 @@ export const load: PageServerLoad = async (event) => {
 	const allRefs = [...bundle.primary, ...bundle.carryover.flatMap((c) => c.refs)];
 	const readableIds = await getReadableReferenceIds(allRefs.map((r) => r.id));
 
-	const toCard = (ref: (typeof allRefs)[number]): CardView => {
-		const kind = ref.kind as ReferenceKind;
-		return {
-			id: ref.id,
-			documentSlug: ref.documentSlug,
-			edition: ref.edition,
-			title: ref.title,
-			publisher: ref.publisher,
-			kind,
-			subjects: ref.subjects as readonly string[],
-			externalUrl: externalUrlForReference(kind, ref.documentSlug, ref.edition, ref.url),
-			isReadable: readableIds.has(ref.id),
-		};
-	};
+	const toEntry = (ref: (typeof allRefs)[number]): CardEntry => ({
+		id: ref.id,
+		payload: projectReferenceToLibraryCard(ref, readableIds.has(ref.id), buildPartUrl),
+	});
 
-	const primary: CardView[] = bundle.primary.map(toCard);
+	const primary: CardEntry[] = bundle.primary.map(toEntry);
 	const carryover: CarryoverView[] = bundle.carryover.map((group) => ({
 		fromCert: group.fromCert,
 		label: group.label,
-		cards: group.refs.map(toCard),
+		cards: group.refs.map(toEntry),
 	}));
 
 	return {

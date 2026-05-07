@@ -7,7 +7,12 @@
  */
 
 import { requireAuth } from '@ab/auth';
-import { getReadableReferenceIds, listReferencesByTopic } from '@ab/bc-study/server';
+import {
+	getReadableReferenceIds,
+	type LibraryCardPayload,
+	listReferencesByTopic,
+	projectReferenceToLibraryCard,
+} from '@ab/bc-study/server';
 import {
 	AVIATION_TOPIC_LABELS,
 	AVIATION_TOPIC_VALUES,
@@ -15,28 +20,20 @@ import {
 	CERT_APPLICABILITIES,
 	CERT_APPLICABILITY_LABELS,
 	type CertApplicability,
-	externalUrlForReference,
-	type ReferenceKind,
 } from '@ab/constants';
+import { buildPartUrl } from '@ab/sources';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-interface CardView {
+interface CardEntry {
 	id: string;
-	documentSlug: string;
-	edition: string;
-	title: string;
-	publisher: string;
-	kind: ReferenceKind;
-	subjects: readonly string[];
-	externalUrl: string | null;
-	isReadable: boolean;
+	payload: LibraryCardPayload;
 }
 
 interface CertGroup {
 	cert: CertApplicability | null;
 	label: string;
-	cards: CardView[];
+	cards: CardEntry[];
 }
 
 /**
@@ -73,23 +70,15 @@ export const load: PageServerLoad = async (event) => {
 	const refs = await listReferencesByTopic(topic);
 	const readableIds = await getReadableReferenceIds(refs.map((r) => r.id));
 
-	const cardsByCert = new Map<CertApplicability | null, CardView[]>();
+	const cardsByCert = new Map<CertApplicability | null, CardEntry[]>();
 	for (const ref of refs) {
 		const cert = (ref.primaryCert as CertApplicability | null) ?? null;
-		const kind = ref.kind as ReferenceKind;
-		const card: CardView = {
+		const entry: CardEntry = {
 			id: ref.id,
-			documentSlug: ref.documentSlug,
-			edition: ref.edition,
-			title: ref.title,
-			publisher: ref.publisher,
-			kind,
-			subjects: ref.subjects as readonly string[],
-			externalUrl: externalUrlForReference(kind, ref.documentSlug, ref.edition, ref.url),
-			isReadable: readableIds.has(ref.id),
+			payload: projectReferenceToLibraryCard(ref, readableIds.has(ref.id), buildPartUrl),
 		};
 		const list = cardsByCert.get(cert) ?? [];
-		list.push(card);
+		list.push(entry);
 		cardsByCert.set(cert, list);
 	}
 

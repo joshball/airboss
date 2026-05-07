@@ -191,13 +191,12 @@ test.describe('handbook reader: navigation + section rendering', () => {
 	test('PHAK index -> chapter list -> chapter -> section', async ({ page }) => {
 		// Wave 3b retired `/library/[doc]` in favour of three spines (cert /
 		// topic / regulations) on `/library`. Handbook cards now live under
-		// `/library/cert/[cert]` and `/library/topic/[topic]`, but the
-		// LibraryCard's readable-link branch is gated on `progress !== null`
-		// and both spine loaders pass `progress={null}`, so the cards render
-		// as un-linked text in those views today. Until the spine loaders
-		// thread through reading progress, navigation to the handbook reader
-		// happens by URL; the chapter-list -> chapter -> section flow below
-		// is what this test cares about.
+		// `/library/cert/[cert]` and `/library/topic/[topic]` and render via
+		// the typed `HandbookCard` wrapper, which links to
+		// `ROUTES.LIBRARY_HANDBOOK(slug)` whenever the row is readable.
+		// This test exercises the handbook-reader chapter -> section flow
+		// directly by URL and doesn't depend on a particular spine to
+		// surface the entry link.
 		await page.goto(ROUTES.LIBRARY_HANDBOOK(PHAK_DOC));
 		await expect(page).toHaveURL(ROUTES.LIBRARY_HANDBOOK(PHAK_DOC));
 

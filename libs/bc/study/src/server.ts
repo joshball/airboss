@@ -254,6 +254,19 @@ export {
 	getReferencesForCertWithCarryover,
 	listReferencesByTopic,
 } from './library-by-cert';
+// Library-card projection -- pure ReferenceRow -> typed-wrapper payload.
+// Re-exported from the server barrel for `+page.server.ts` ergonomics
+// (one import line for the loader). Implementation has no DB / `node:*`
+// dependency so the runtime barrel also re-exports it -- both barrels
+// resolve to the same module.
+export type {
+	CfrPartUrlResolver,
+	ExternalLink as LibraryExternalLink,
+	LibraryCardPayload,
+	LibraryCardVariant,
+	LibraryTopicChip,
+} from './library-card-projection';
+export { projectReferenceToLibraryCard } from './library-card-projection';
 export type { GateState, LeafMasteryState, NodeEvidenceState } from './mastery';
 export {
 	aggregateLeafKindStates,
