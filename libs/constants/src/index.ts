@@ -326,7 +326,18 @@ export {
 	type WpSpecTabId,
 } from './review';
 export { ROLE_LABELS, ROLE_VALUES, ROLES, type Role } from './roles';
-export { APP_NAMES, type AppId, NAV_LABELS, QUERY_PARAMS, ROUTES } from './routes';
+export {
+	AIRBOSS_REPO_SLUG,
+	APP_NAMES,
+	type AppId,
+	NAV_LABELS,
+	QUERY_PARAMS,
+	ROADMAP_QUERY_PARAMS,
+	ROUTES,
+	type RoadmapQueryParam,
+	WP_SUB_DOCS,
+	type WpSubDocKey,
+} from './routes';
 export { SCHEMAS, type SchemaName } from './schemas';
 export {
 	SIM_AIRCRAFT_IDS,

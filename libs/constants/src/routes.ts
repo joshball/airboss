@@ -632,6 +632,15 @@ export const ROUTES = {
 	HANGAR_REVIEW_ADMIN_BUCKET_NEW: '/review/admin/buckets/new',
 	HANGAR_REVIEW_ADMIN_BUCKET_EDIT: (id: string) => `/review/admin/buckets/${encodeURIComponent(id)}/edit` as const,
 
+	// Hangar -- /roadmap read-only WP browser (Phase 8 of the
+	// tracking-system-overhaul WP). Backed by `scripts/lib/wp-loader.ts`
+	// (server-only); writebacks go through `bun run wp set`. See
+	// `docs/decisions/025-wp-frontmatter-contract/decision.md`.
+	HANGAR_ROADMAP: '/roadmap',
+	HANGAR_ROADMAP_DETAIL: (wpId: string) => `/roadmap/${encodeURIComponent(wpId)}` as const,
+	/** JSON dump of one WP -- raw frontmatter + validation errors, for debugging. */
+	HANGAR_ROADMAP_RAW: (wpId: string) => `/roadmap/${encodeURIComponent(wpId)}/raw` as const,
+
 	// Flightbag (apps/flightbag) -- public reference reader. Served from its
 	// own host (flightbag.airboss.test), so these paths are relative to that
 	// origin. Public (no auth gate). Owns the canonical URL space for FAA
@@ -831,4 +840,44 @@ export const NAV_LABELS = {
 	HANGAR_REVIEW_BUCKETS: 'Buckets',
 	HANGAR_REVIEW_TASKS: 'Tasks',
 	HANGAR_REVIEW_LOADER: 'Loader',
+	HANGAR_ROADMAP: 'Roadmap',
 } as const;
+
+/**
+ * Query-string parameter names used by the hangar `/roadmap` view to expose
+ * filter state in the URL so views are bookmarkable + shareable. Mirrors the
+ * `bun run wp list` filter flags. Phase 8 of tracking-system-overhaul.
+ */
+export const ROADMAP_QUERY_PARAMS = {
+	/** `WPProduct` filter (`study`, `hangar`, ...). */
+	PRODUCT: 'product',
+	/** `WPCategory` filter (`product`, `feature`, `content`, `docs`, `platform`). */
+	CATEGORY: 'category',
+	/** `WPStatus` filter (`draft`, `signed-off`, `in-flight`, `shipped`, `abandoned`, `superseded`). */
+	STATUS: 'status',
+	/** `WPHumanReviewStatus` filter (`pending`, `walked`, `signed-off`). */
+	HUMAN_REVIEW: 'human_review',
+	/** Single-tag filter (matches if `tags` array contains it). */
+	TAG: 'tag',
+	/** Free-text search across id + title. Client-side filter. */
+	SEARCH: 'q',
+	/** Active sub-doc tab on the detail page (`spec` | `tasks` | `test-plan` | `design` | `user-stories`). */
+	TAB: 'tab',
+} as const;
+export type RoadmapQueryParam = (typeof ROADMAP_QUERY_PARAMS)[keyof typeof ROADMAP_QUERY_PARAMS];
+
+/** Sub-doc filenames that the `/roadmap/[wp_id]` detail view will surface
+ * as tabs. Order is intentional: spec is required, the rest render only when
+ * the file exists. */
+export const WP_SUB_DOCS = [
+	{ key: 'spec', filename: 'spec.md', label: 'Spec' },
+	{ key: 'tasks', filename: 'tasks.md', label: 'Tasks' },
+	{ key: 'test-plan', filename: 'test-plan.md', label: 'Test plan' },
+	{ key: 'design', filename: 'design.md', label: 'Design' },
+	{ key: 'user-stories', filename: 'user-stories.md', label: 'User stories' },
+] as const;
+export type WpSubDocKey = (typeof WP_SUB_DOCS)[number]['key'];
+
+/** GitHub repo owner+name pair for resolving `shipped_prs` numbers to URLs.
+ * One source of truth so a future repo move touches one constant. */
+export const AIRBOSS_REPO_SLUG = 'joshball/airboss';

@@ -10,9 +10,10 @@
 import type { HelpBodyLoader, HelpPageBody, HelpPageIndex } from '@ab/help';
 import { auditIndex } from './content/audit';
 import { invitationsIndex } from './content/invitations';
+import { roadmapIndex } from './content/roadmap';
 import { usersIndex } from './content/users';
 
-export const hangarHelpIndex: readonly HelpPageIndex[] = [auditIndex, invitationsIndex, usersIndex];
+export const hangarHelpIndex: readonly HelpPageIndex[] = [auditIndex, invitationsIndex, roadmapIndex, usersIndex];
 
 export const loadHangarHelpBody: HelpBodyLoader = async (id: string): Promise<HelpPageBody | undefined> => {
 	switch (id) {
@@ -22,6 +23,8 @@ export const loadHangarHelpBody: HelpBodyLoader = async (id: string): Promise<He
 			return (await import('./content/bodies/invitations')).invitationsBody;
 		case 'users-detail':
 			return (await import('./content/bodies/users')).usersBody;
+		case 'roadmap':
+			return (await import('./content/bodies/roadmap')).roadmapBody;
 		default:
 			return undefined;
 	}
