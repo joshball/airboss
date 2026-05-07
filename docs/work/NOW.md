@@ -1,318 +1,57 @@
 # Now
 
-Single entry point for "what should I work on?" in airboss. Refresh date: 2026-05-03 (evidence-kind-data-layer build + ingestion-pipeline doc reorg + AMT defer + body_override mechanism + rename generic content files + WP-CFR + IDEAS follow-ups, all merged).
+Single entry point for "what should I work on?" in airboss.
 
-## Just shipped (2026-05-03 -- evidence-kind-data-layer)
+## What I'm focused on right now
 
-- **[evidence-kind-data-layer shipped end-to-end](../work-packages/evidence-kind-data-layer/spec.md).** Closes the three `not_applicable` shims that `evidence-kind-gating` (#361) deliberately deferred. New `card.kind` (recall vs calculation, default `recall`), `scenario.assessment_methods` (jsonb `AssessmentMethod[]`, default `["scenario"]`), `SESSION_ITEM_KINDS.TEACHING_EXERCISE` + new `study.teaching_exercise` table + `session_item_result.teaching_exercise_id` FK with a CHECK that ties `(item_kind = 'teaching-exercise') = (teaching_exercise_id IS NOT NULL)`. `getNodeEvidenceStateMap` rewires the three shims into real partition queries: cards GROUP BY `(node_id, kind)`; reps via `LATERAL UNNEST(scenario.assessment_methods)`; teaching via `session_item_result` join through `teaching_exercise.node_id`. After this WP every per-evidence-kind gate computes against authored data; CFI ACS-25 transcription is the next content WP that lands ON this substrate. Authoring surfaces: `/memory/new` + `/memory/[id]` Kind selector; `/reps/new` Assessment-methods multi-checkbox (Teaching excluded -- it's a separate session-item-kind). Audit dispatcher: `bun run db check card-kinds` + `bun run db check scenario-assessment-methods`. 27 mastery tests + 19 validator tests pass; 642/643 across full bc-study (the one remaining failure is the unrelated `library-by-cert.orphan` precondition). Two migration snapshots (`0002_evidence_kind_data_layer.sql`, `0003_session_item_teaching_exercise_check.sql`) ship for diff-accuracy; `db push` is the runtime apply path per `drizzle/README.md`.
+(Human-curated; the only hand-edited part of this file.)
 
-## Just shipped (2026-05-03 -- ingestion-pipeline reorg, body_override, generic-name rename, WP-CFR)
+- Closing out `tracking-system-overhaul` -- Phase 5 (NOW.md trim + log backfill) and Phase 7 (doc home consolidation) are the active fronts.
+- After Phase 5 + 7 land, the `wp-hangar-roadmap-view` WP can pick up the in-app surface evolution.
+- Manual test passes on the cert-syllabus surfaces (#321 / #323 / #324) still owed.
 
-- **[Ingestion-pipeline doc home consolidated (PR #487)](../ingestion-pipeline/README.md).** Eight existing docs moved out of `docs/agents/`, `docs/platform/`, and `docs/sources/` (the latter two cross-pollinated; agents-only kept for agent rules) into a single `docs/ingestion-pipeline/` home, kebab-cased on the way. Two new docs land alongside: [pipeline.md](../ingestion-pipeline/pipeline.md) (five-step ETL walkthrough -- discover → download → extract → register → resolve & cite) and [tooling.md](../ingestion-pipeline/tooling.md) (per-tool reference: `pdftotext`, Poppler, PyMuPDF/`fitz`, dispatcher CLIs, lifecycle/promotion, locator vocabulary). Plus a `README.md` index and a follow-up `stage-status.md` (this session) for per-corpus pipeline state. 30 inbound references updated across CLAUDE.md, ADRs, work packages, scripts, and tooling READMEs.
-- **AMT corpus deferred from ingestion (PR #488).** AMT-General + AMT-Powerplant commented out in `scripts/sources/config/handbooks-extras.yaml` with dated reason. Maintenance technician corpus, no pilot-training relevance for airboss. PDF cache + `DOC_ID_TO_FRIENDLY` mapping retained so un-deferring is a one-line YAML uncomment. Active corpus dropped from 7 to 5; the live smoke test count adjusted in lockstep.
-- **`body_override` mechanism for whole-doc handbooks (PR #489).** New optional `body_override:` field on YAML entries: when set, the produced `document.md` (or post-rename `<slug>-<edition>.md`) is the override file's contents verbatim instead of `pdftotext` extraction. The PDF still provides `page_count`; the cache manifest still tracks source bytes. Designed for older scanned pamphlets where OCR output is unusable. First user: Tips on Mountain Flying (`faa-mtn-tips`), a 1999 scanned pamphlet whose hand-cleaned markdown (`scripts/sources/config/handbooks-extras-overrides/faa-mtn-tips.md`) replaces the OCR garbage. Live smoke test asserts the produced body matches the override byte-for-byte. Override directory now exists for future per-doc overrides.
-- **[Rename generic content files end-to-end (PR #490)](../ingestion-pipeline/inventory.md).** ~2,640 markdown files renamed to self-describing names. Chapter directories embed slugs (`01/` → `01-introduction-to-flying/`); chapter overviews go from `index.md` to `00-<chapter-slug>.md`; AIM `chapter-N`/`section-N` directories slug both layers; AIM `paragraph-N.md` files get title slugs (`<NN>-<paragraph-slug>.md`); whole-doc handbook bodies become `<slug>-<edition>.md` (Option B per analysis §3.4); AC bodies become `ac-<doc>-<rev>.md` (corpus prefix to disambiguate hyphenated AC numbers). Errata pairings preserved as units. All four emitter pipelines updated in lockstep (Python `normalize.py` + `apply_errata.py`, TS `aim/source-ingest.ts`, `handbooks-extras/ingest.ts`, `ac/ingest.ts`). 25+ test fixtures updated. CI assertion in `manifest-validation.ts` rejects future `body_path` values ending in `index.md` or `document.md` (with `regulations/` carve-out for the live regs writer flagged for separate cleanup WP). Three review rounds done in-spec; analysis at [docs/work-packages/rename-generic-content-files/analysis.md](../work-packages/rename-generic-content-files/). Three follow-up cleanup PRs (#492 deletes a migration script that got resurrected by rebase ordering; #493 captures regs cleanup + Hangar TOC validation in IDEAS.md; #494 fixes one missed test).
-- **[WP-CFR shipped end-to-end (PR #491)](../work-packages/wp-cfr/spec.md).** 825 CFR sections seeded across 11 references via the new `kind: 'cfr'` discriminator + `seedCfrManifest` adapter. Per-part counts: 14 CFR Part 1 (3), 14 (19), 23 (68), 61 (149), 68 (6), 71 (15), 73 (11), 91 (286), 135 (200), 141 (49); 49 CFR Part 830 (6), 1552 (16). Section bodies render in-app (`§91.103` "Preflight action" verified). The 217 long-tail CFR-14 parts (engine cert, helicopter cert, etc.) without DB rows stay out of scope per spec; pilot-facing parts are covered. CFR-49 treated per-part (matching DB shape) rather than title-level (per `library-completeness §3.A` spec) -- documented decision in the spec. CFR moves from "extracted but not seeded" to "fully readable." 4-5 corpora now at stage 4; cross-linking starts paying off after AC + ACS land.
-- **IDEAS.md captures rename follow-ups (PR #493).** Two new entries under Technical Approaches: `regs-derivative-cleanup` (close the `regulations/` carve-out in the new CI assertion before regs ingestion runs again; touches `derivative-writer.ts:137`, `resolver.ts:180`, `body-hasher.ts:101`, `bootstrap.ts:85,222`) and `Hangar TOC validation UI` (per-doc spot-check tool with TOC-on-left / rendered-content-on-right / fast keyboard check-x marking).
-- **Inventory tool path corrected.** `scripts/sources/inventory.ts:329` had `docs/sources/INVENTORY.md` hardcoded as the default output path -- a leftover from before #487 retired that directory. Repointed to `docs/ingestion-pipeline/inventory.md`. The retired `docs/sources/` directory was getting silently re-created on every `bun run sources inventory` run; that loop is now closed.
+## Live views
 
-## Just shipped (2026-05-02 -- hangar-invite-flow, drizzle baseline reset, WP-SUB, WP-AC, Cluster H, sources-review fixer wave)
+- [Work package board](./BOARD.md) -- every WP grouped by status (generated)
+- [Shipped log](./SHIPPED.md) -- per-PR + per-WP reverse-chrono (generated, last 90 days)
+- [Bugs](../bugs/INDEX.md) -- open bugs grouped by product and severity (generated)
+- Per-product roadmaps (generated):
+  - [study](../products/study/ROADMAP.md)
+  - [hangar](../products/hangar/ROADMAP.md)
+  - [sim](../products/sim/ROADMAP.md)
+  - [flightbag](../products/flightbag/ROADMAP.md)
+  - [avionics](../products/avionics/ROADMAP.md)
+- Hangar in-app `/roadmap` -- WP browser with filters, tabs, and detail (Phase 8 shipped)
 
-- **[WP-AC shipped end-to-end (PR #480)](../work-packages/wp-ac/spec.md).** All 9 cached Advisory Circulars seed as readable references via the new `kind: 'ac'` discriminator + `seedAcManifest` adapter + dispatcher case + `seed-mapping.ts` registry that bridges on-disk `(doc_slug, revision)` to DB `(document_slug, edition)`. New section level `circular` for AC reference_section rows (depth 0, single legal level per the section_schema). All 9 manifests backfilled with `kind: 'ac'`; `ac/ingest.ts` writes the field on future re-runs. Tests cover positive AC fixture, negative revision/body_path cases, all 9 on-disk fixtures, and synthetic-manifest seed integration (idempotent re-run, missing-mapping clear error). 5 of the 9 ACs match an existing YAML row (`ac-00-6`, `ac-61-83`, `ac-61-98`, `ac-90-66`, `ac-91-79`); the other 4 (`ac-25-7`, `ac-61-65`, `ac-91-21-1`, `ac-120-71`) seed as readable cards but with empty subjects until the YAML reconciliation pass. The 12 link-only AC cards still need WP-AC-FULL (download + extract).
-- **[hangar-invite-flow shipped end-to-end (PR #444)](../work-packages/hangar-invite-flow/spec.md).** All 10 phases landed in one PR: constants + types, `hangar.invitation` schema + migration, Zod inputs, BC (`libs/bc/hangar/src/invitations.ts` -- list, get-by-id, get-by-token, transactional create with email rollback, soft-delete revoke, token-regenerating resend, direct `bauth_user`+`bauth_account` insert on accept because `disableSignUp:true` blocks better-auth's signUpEmail), invite email template, hangar admin UI (`/users/invitations` list with status tabs + ConfirmDialog modal, `/users/invitations/[id]` detail with revoke + resend), public study accept route at `/invite/[token]` with ThemeProvider wrapping + sign-in forwarding to `auth.handler`, help pages on both surfaces, doc updates. 23/23 BC vitest cases passing. Three rebases through 16 PRs that landed mid-build. **Smoke test (HIF-1..91 in [test-plan.md](../work-packages/hangar-invite-flow/test-plan.md)) and `review_status: done` flip remain user actions.**
-- **Drizzle migration baseline reset (PRs #445 + #450).** Four prior PRs (#426, #434, #436, #437, #439) had each added a `.sql` file without journaling it -- the migrate path was silently broken because nobody runs `drizzle-kit migrate` (we always `db push`). #445 collapsed the 11 drifted migrations into one fresh `0000_initial.sql`. #448 merged ~60 seconds later with the same anti-pattern; #450 absorbed it and added `drizzle/README.md` documenting the `push`-only convention so the next agent sees it at the point of edit. Going forward: schema changes go in TS, `db reset` rebuilds; if `drizzle-kit migrate` ever becomes the deploy path, regenerate from this clean baseline.
-- **[library-substrate (WP-SUB) shipped end-to-end (PR #393 plan + PR #396 implementation)](../work-packages/library-substrate/spec.md).** Foundation WP for [library-completeness](../work-packages/library-completeness/spec.md) sequence step #1. Plan ratified via PR #393 (2026-05-01 23:28 UTC); implementation landed via PR #396 (2026-05-01 23:05 UTC -- in fact merged 23 minutes ahead of its own plan). 33 files changed: schema rename (`handbook_section` -> `reference_section` + figure + errata), schema relax (handbook-shaped CHECK constraints dropped; `section_schema` + `metadata` jsonb + `depth` added), seeder generalization (`scripts/db/seed-references-from-manifest.ts` dispatches between [section-tree](../../libs/bc/study/src/seeders/section-tree.ts) + [whole-doc](../../libs/bc/study/src/seeders/whole-doc.ts) seeders), `getReadableReferenceIds()` rewritten against `content_md`. Acceptance criterion met: all 9 handbooks seed (3 sectioned at full chapter trees + 6 whole-doc at depth 0). **Unblocks** sequence items 2-12: WP-MTN, WP-AIM, WP-CFR-V, WP-AC-V, WP-ACS-V, WP-CC, WP-NTSB-ALJ, WP-SAFO, WP-INFO, WP-AC-FULL, WP-O8900-V5, WP-SAFETY-BRIEF.
-- **[promotion-batches-persistence shipped end-to-end](../work-packages/promotion-batches-persistence/spec.md) -- Cluster H closure.** Four PRs across the day. **#404** authored spec + tasks + test-plan + design with W5/W6 reconciliation notes. **#434** (phase 1) shipped Drizzle schema for `promotion_batches` + `editions`, hand-written migration `0007`, and 18 schema-shape unit tests. **#454** (phases 2 + 3) Postgres-backed `recordPromotion` / `recordDePromotion` (now async + transactional; sync->async ripple landed across 14 corpus seed/ingest callers); `getEditionsMap` cache layer with generation counter; `rebuildLifecycleOverlay()` + `initRegistry()` wired into `apps/{study,hangar}/src/hooks.server.ts`; lifecycle + editions + overlay-rebuild tests. **#458** (phase 4) doc-comment + ADR 019 §2.1 update; WP frontmatter flipped to `shipped`; the original "remove `_activeEditions`" task explicitly dropped (post phase 2+3 it is the runtime cache the design describes, not stale scaffolding -- decision recorded inline). Audit trail now survives restart. Plus a small post-#454 lint fix (#457) for a pre-existing biome warning surfaced by the merge.
-- **Sources fixer wave merged -- 2026-05-01 chunk-4 review closure.** Ten fixer PRs + four post-merge cleanup PRs landed. Code: cache-root unification (#402), atomic tmp+rename across writers (#403), AIM ingest manifest read + AC dot-style URL (#401), HTTP fetch hardening (#405), test isolation + manifest schema + partial-dl log + readme (#407), backend criticals + open-corpus enumeration (#408), registry O(1) lookups (#409), `data/sources/` retirement (#413), prompt fence + idempotent derivative writes (#414), legacy aviation SOURCES registry retirement (#429). Cleanup: post-W4 biome (#416), post-W7 test dedup (#417), post-W6 import organize (#420), `dirExists` rename (#457). Plus the persistence WP spec (#404) merged the same day. Five duplicate-dispatch PRs from the parallel fixer batch were closed cleanly: #406, #410, #411, #412, #415. Closes Clusters A through J of `docs/work/reviews/2026-05-01-sources-content-pipeline-INDEX.md`.
-- **Legacy aviation SOURCES registry retired (PR #429).** Successor to #413 (W9). Five (then eight) consumers migrated to `@ab/sources/registry`: hangar app routes via `@ab/bc-hangar/source-seed-registry` (new sub-path), CFR extractor's `SourceExtractor.extract()` gains `sourceVersion` parameter, `validateReferences()` signature inverted to make registry-coherence opt-in, broke the `@ab/aviation` -> `@ab/bc-hangar` cycle. `libs/aviation/src/sources/registry.ts` + tests deleted; the seed catalog moved to `libs/bc/hangar/src/source-seed-registry.ts`.
-- **Worktree cleanup wave (this session).** 16 worktrees + 28 local branches + 10 remote branches removed. Each verified safe by `git cherry -v origin/main` (squash-equivalence) or by file-scope match against the merged counterpart for closed dups. Eight worktrees from concurrent sessions left untouched per the "mind your own business" policy.
+## Open ideas
 
-## Just shipped (2026-05-01 -- library-by-cert taxonomy + completeness ratification)
+- [IDEAS.md](../platform/IDEAS.md) -- intake funnel; review every two weeks
 
-- **library-by-cert taxonomy shipped end-to-end (PRs #386, #389, #390, #391, #392).** Four waves landed in one day. Wave 1 (#386): `reference.primary_cert` column + ratified value set (NULL = cert-agnostic; CHECK against `CERT_APPLICABILITY_VALUES`). Wave 2 (#389): backfilled `primary_cert` for every existing reference YAML (no more nullable orphans on shipped corpora). Wave 3a (#390): manifest schema accepts `carryover_cert` per-section + new BC primitives; retires `handbooks-overrides.yaml`. Wave 3b (#391): new route family at `/library/cert/[cert]`, `/library/topic/[topic]`, `/library/regulations`, `/library/handbook/[id]`; the prior `[doc]` shape is retired (redirected). Wave 4 (#392): vitest unit + Playwright e2e + orphan-check script. **Spec at [library-by-cert/spec.md](../work-packages/library-by-cert/spec.md), `status: shipped` (closes #383).**
-- **library-completeness ratified through v3 (PRs #385, #387, #388).** v1 (#385) recommended `library_entry` projection table; review.md argued the projection ships a workaround over a root-cause fix. v2 (#387) replaced §1 with the substrate rename. v3 (#388) cleaned up post-merge inconsistencies + answered ratification 2.B (the seed check found `kind: whole-doc` manifests fail handbook schema, so WP-EX-Verify folded into WP-SUB). Final spec at [library-completeness/spec.md](../work-packages/library-completeness/spec.md) with full ratification table; sequence #1-#12 captured.
-- **handbooks-extras ingestion pipeline shipped (PR #384).** 6 additional handbooks now register: risk-management (252K), aviation-instructor (784K), IFH (2.0M), IPH (1.2M), AMT-general (3.5M), AMT-powerplant (2.5M). New `handbooks-extras register` subcommand; URI prefix kept consistent with the existing `handbooks` corpus. Closes gap 5 from the broad-extraction survey.
-- **CFR walker fix (PR #382).** Walker accepts `<DIV5 TYPE="PART">` root in addition to `<DIV1 TYPE="TITLE">` for filtered titles; numeric entity decoding (`&#xA7;` -> `§`) enabled. Closes a CFR-49 ingestion blocker.
-- **Library + content cleanups (PR #379).** ACS slug mapping (5/5 ingested), AFH duplicate-errata cleanup (605 dup lines removed), IDEAS.md sweep timestamp.
-- **WP status reconciliation (PR #394).** `hangar-users-editing` flipped to `shipped` (PR #371 closed it). `evidence-kind-data-layer`, `hangar-invite-flow`, `extract-provenance-and-signoff` flipped to `read` (specs accepted, queued for build sequencing).
+## Active session
 
-## Just shipped (2026-04-30 -- scheduled-jobs + library rename + cleanups)
+- [Today's todo](./todos/) -- per-session work files (`YYYYMMDD-NN-TODO.md`)
 
-- **[scheduled-jobs skill bootstrapped (PR #378)](../../scripts/scheduler/README.md).** Local launchd-driven scheduler for repo-scoped scheduled work, installed from the [scheduled-jobs skill](~/src/_me/ai/agent-skills/skills/scheduled-jobs/SKILL.md). Each job runs in an isolated git worktree branched from main; the user's main checkout is never touched. Wired in: `scripts/scheduler/` (manager), `scripts/scheduled-jobs/` (jobs root), CLAUDE.md pointer, 5 `schedule:*` package.json aliases. Two airboss jobs registered with launchd: `now-md-drift` (daily 09:00, log-only -- writes a drift report when WPs marked `status: shipped` are still in NOW.md's "In flight"), and `cert-goals-drop-trigger-watch` (nightly 02:00, open-pr -- polls `bun run db check engine-targeting-source --window=14d`, ships the staged migration when 14 consecutive days hit). Both smoke-tested end-to-end.
-- **`/handbooks` -> `/library` rename (PR #376).** Reader subject grouping + every reference kind exposed. `/handbooks` becomes a `[...rest]` redirect for inbound link compatibility; `/library` is the canonical home.
-- **`/admin/audit-ping` retired (PR #375).** Route gone; the `audit-ping` enum value stays per ADR 004 (audit-log enum is append-only). Closed by [`retire-audit-ping`](../work-packages/retire-audit-ping/) WP (`status: shipped`).
-- **Hangar user editing (PR #371).** First admin-write surface in hangar -- role / ban / session revoke. Composes on the audit explorer (#365).
-- **Identity menu close-on-outside-pointerdown fix (PR #373).** Small UX fix to the study layout's identity menu.
-- **Library + content cleanups -- gaps 2 + 6 + IDEAS.md sweep (PR #379).** Three file-disjoint cleanups: ACS slug mapping for the four cached PDFs that were detecting fine but skipping at register time (now `scanned=5 ingested=5 skipped=0`, 5 publications / 53 areas / 276 tasks / 1576 elements); AFH duplicate-errata cleanup (605 lines of duplicated content removed across 6 files where MOSAIC errata had been applied multiple times); IDEAS.md sweep timestamp (2026-04-30 marker, no triage performed -- ~50 active ideas across 7 sections, funnel healthy).
-- **Postgres pool drain on script exit (PR #380).** `bun run db reset --force` and 10 other `scripts/db/*` entrypoints were hanging ~20s after their work because `libs/db/src/connection.ts` opens a pool on import and Bun keeps the event loop alive until the pool's idle timeout. Added `await client.end()` in `.finally()` for 11 scripts. Force-exit scripts skipped (drain irrelevant); non-DB scripts skipped.
-- **Provenance + signoff WP authored (PR #374).** Extract-provenance-and-signoff spec on disk; `status: unread`. Plus a fresh CFR Title 14 ingest. Closes the second half of the library-broad-extraction-survey work.
-- **Hangar invite flow WP authored (PR #377).** Spec + tasks + test-plan + design on disk; `status: draft`. The next admin-write surface after user-editing.
+## Per-PR log
 
-## Just shipped (2026-04-30 -- hangar admin audit explorer)
-
-- **[hangar-audit-explorer](../work-packages/hangar-audit-explorer/spec.md) shipped (PR #365).** Cross-cutting audit explorer at `/admin/audit` + `/admin/audit/[id]`. Pure read consumer of `audit.audit_log`. New BC reads (`listAuditEntries`, `getAuditEntry`, `searchActorIds`) cursor-paginate / join the actor / typeahead. Filter bar UI (actor, target type/id, op, time-window chips), side-by-side jsonb panes on the detail page. Hangar dashboard's System -> Audit tile retargeted; audit-ping retirement is a separate follow-up cleanup WP. Spec frontmatter `status: shipped`.
-- **CockpitPanel promoted to `libs/activities/cockpit-panel/` (PR #364).** Sim is the second consumer; matches the PFD promotion pattern from #328. 10 components moved (Altimeter, AnnunciatorStrip, Asi, AttitudeIndicator, CockpitPanel, HeadingIndicator, Tachometer, TurnCoordinator, Vsi, plus a `cluster/` subdir).
-- **Encoded-text family kicked off (PR #369).** New `course/weather/` and `course/notams/` skeletons + the wx scenario engine vision. Both anchor the broader encoded-text pedagogy ladder (decode -> understand -> triage) called out in memory: `project_encoded_text_family.md`. PRDs at `docs/vision/products/pre-flight/notam-triage/` + `weather-scenario-engine/`.
-- **WP `status:` frontmatter flips.** Three WPs whose code shipped without a spec-status flip: `evidence-kind-gating` (#361), `engine-goal-cutover` (#353), `cert-syllabus-and-goal-composer` (#248/254/264/270/274). All flipped to `status: shipped`.
-
-## Just shipped (2026-04-30 -- doc + audit reconciliation)
-
-- **Citations pattern doc refreshed** ([`docs/ingestion-pipeline/reference-citations-pattern.md`](../ingestion-pipeline/reference-citations-pattern.md)). Six stale refs corrected against current main: migration repointed from the retired `drizzle/0004_content_citations.sql` to the consolidated `drizzle/0000_initial.sql`; five `:line` references updated where files moved during intervening refactors. PR #358.
-- **Magic-strings audit reconciled** ([`docs/work/reviews/20260424-magic-strings-audit.md`](reviews/20260424-magic-strings-audit.md)). Triaged ~20 items against current main; only the lifecycle literals in `libs/bc/study/src/knowledge.ts` (`lifecycleFromContent` return type + `?? 'skeleton'` fallback) were genuinely open. Replaced with `NODE_LIFECYCLES.{SKELETON,STARTED,COMPLETE}`. Audit doc gets a `Reconciliation 2026-04-30` table at the bottom showing each item's disposition (closed by PR #312, closed by post-pivot taxonomy migration, closed by ADR 014, closed by z-index tokens, closed by this PR, deliberately left). One item left: `SLICE_HELP_SECTION` value literals are help-fragment IDs that shadow `SESSION_SLICES.*` values by convention; coupling them would conflate two parallel vocabularies. PR #360.
-- **`canonicalize` opt-in unordered-array keys** ([`libs/bc/study/src/deck-spec.ts`](../../libs/bc/study/src/deck-spec.ts)). Lifted hardcoded `if (last === 'tags')` to a module-scope `UNORDERED_ARRAY_KEYS` set so future deck-spec fields opt in without growing new branches. Behaviour for `tags` unchanged. PR #358.
-
-## Just shipped (2026-04-30 -- section-extraction-contract-v2 WP closed)
-
-- **[section-extraction-contract-v2](../work-packages/section-extraction-contract-v2/spec.md) shipped end-to-end.** Five phases, ten PRs. v1 baseline (559 entries with 11/17 truncated chapters) -> v4 production (911 entries with structured disagreement signal feeding back to the TOC parser). PR #366 is the production phak run under contract v4: 911 LLM section-tree entries + 357 disagreements across 14 chapters (chs 4, 11, 12 fully agree). Disagreements file format documented in the contract; loader at [`load_chapter_disagreements`](../../tools/handbook-ingest/ingest/sections_via_sidecar.py); aggregated in the compare report. **Resumption path captured at [RESUMING.md](../work-packages/section-extraction-contract-v2/RESUMING.md)** -- TOC parser improvements deferred indefinitely; the 357 disagreements are persistent training data when someone returns. PRs #332 #335 #342 #355 #356 #359 #363 #366 plus closure PR.
-
-## Just shipped (2026-04-30 -- evidence-kind-gating WP)
-
-- **[evidence-kind-gating](../work-packages/evidence-kind-gating/spec.md) shipped.** Per-cert triad mapping (`TRIAD_EVIDENCE_REQUIREMENTS` keyed by `CertApplicability`) + `requires_teaching` flag on `syllabus_node` + new `mastery.ts` BC primitive (`getNodeEvidenceState`, `isLeafMastered`, `aggregateLeafKindStates`). Rollups in `getCredentialMastery`, `acsLens`, and `domainLens` now decompose mastery per `AssessmentMethod` and surface `missingKinds` so the cert dashboard can render "you have recall down but need a scenario" without re-walking. Hard cutover: existing `mastered: boolean` keeps name + meaning; new fields are additive. Achievable scope shipped: `recall` and `scenario` gates compute against the live schema; `calculation`, `demonstration`, and `teaching` return `not_applicable` until backing data ships (no `card.kind`, no `scenario.assessment_methods`, no `teaching-exercise` SESSION_ITEM_KIND today -- richer partition is a follow-on data WP). YAML element schema now accepts `requires_teaching: true`; CFI ACS-25 transcription stays incremental.
-
-## Just shipped (2026-04-30 -- FAR navigation course Weeks 3-10 + 2 sibling capstones)
-
-- **FAR navigation course is content-complete.** All 10 weeks authored. All 4 sibling capstone orals authored. Authored across one work package PR (#349, merged) and one content PR (#350, the omnibus). Authoring approach: parallel sub-agents per week, exclusive directory ownership, phased dispatch.
-  - Week 3 -- Part 61 CFI (subpart H, endorsements, FOI): 6 files (5 lessons + overview) + drills + oral (~1,931 lines)
-  - Week 4 -- Part 91 general + flight rules: 7 files (6 lessons + overview) + drills + oral (Week 4 lessons 03-06 + drills + oral authored inline by the dispatcher after content-filter blocks on the sub-agent return path)
-  - Week 5 -- Part 91 equipment + maintenance: 6 files (5 lessons + overview) + drills + oral (~2,863 lines, "very deep" treatment)
-  - Week 6 -- Part 91 special ops + integration: 6 files (5 lessons + overview) + drills + oral (~1,911 lines)
-  - Week 7 -- Parts 141/135: 5 files (4 lessons + overview) + drills + oral (~1,244 lines, "cursory" literacy treatment)
-  - Week 8 -- Companion documents (AIM, AC, Chief Counsel, 49 CFR): 6 files (5 lessons + overview) + drills + oral (~1,839 lines)
-  - Week 9 -- Enforcement + NTSB Part 830: 7 files (6 lessons + overview) + drills + oral (~2,738 lines)
-  - Week 10 -- Capstone + 2 new sibling capstone orals (`friend-flight-review.md`, `ppl-applies-for-ir.md`): 4 files (3 lessons + overview) + drills + oral + 2 capstones (~691 lines + 59KB capstones). Two existing capstone orals (`gear-up-night-ifr.md` from Week 1 era, `night-ifr-passenger.md` from #235) bring the total to 4/4 sibling capstones.
-  - All citations use `airboss-ref:` URI syntax per ADR 019. Validator (`bun scripts/references.ts validate`) clean, 0 errors.
-  - CHANGELOG status table flipped to "Authored" for all 10 weeks; capstones flipped to 4/4.
-
-## Just shipped (2026-04-29 -- chapter-source-ingestion WP closed, ADR 022)
-
-- **[chapter-source-ingestion](../work-packages/chapter-source-ingestion/spec.md) shipped.** YAML-driven source config, chapter-PDF download path, AIM HTML extraction, and `bun run sources verify-urls` / `inventory` commands. PHAK regenerated under chapter-PDF mode + contract v3 in PR #355: **913 LLM section-extraction entries across 17 chapters** (up from the v1 baseline of 559). PRs #337 (main feature), #338 (cleanup), #339 (HTML idempotency), #340 (handbooks-extras URL audit), #341 (chapter-filter fix), #342 (contract v2 + truncation fix), #343 (PHAK regen), #355 (contract v3 + production phak run). [ADR 022](../decisions/022-chapter-source-ingestion/decision.md) records the design.
-- **Source cache flat naming** ([ADR 021](../decisions/021-source-cache-flat-naming/decision.md)) shipped via PR #327. Cache layout standardized to `~/Documents/airboss-handbook-cache/handbooks/<slug>/<edition>/...` per ADR 018's storage policy.
-
-## Just shipped (2026-04-29 -- PFD promoted to libs/activities, sim is second consumer)
-
-- **[extract-sim-instruments](../work-packages/extract-sim-instruments/spec.md) closed.** PFD component set (`AttitudeIndicator`, `AirspeedTape`, `AltitudeTape`, `HeadingIndicator`, `VsiIndicator`, `Pfd`, `PfdInputs`, `PfdKeyboardLegend`, `pfd-tick.svelte.ts`, `airspeed-arcs.ts`, `pfd-types.ts`) `git mv`'d from `apps/avionics/src/lib/pfd/` to `libs/activities/src/pfd/`. Avionics rewired to import from `@ab/activities/pfd/Pfd.svelte`; sim mounted the Glass PFD demo at `/glass-pfd` (`ROUTES.SIM_GLASS_PFD`) as the second consumer that triggered the move. No barrel; subpath imports follow the existing `crosswind-component/` convention. PR #328.
-- **FAR navigation course Week 2 (Part 61 deep) authored.** Three new lessons (~1,065 lines added): §61.56 flight-review deep-dive + four equivalents, §61.57(c-e) IFR currency state machine + safety-pilot rules, §61.23 + Part 67 + BasicMed two-cycle structure. CHANGELOG and NOW.md drift fixed. PR #329.
-- **`PageHeader` / `EmptyState` / `ScoreCard` adopted across 27 routes.** Mechanical adoption pass on top of the primitives PR #315 shipped. Net -507 lines (785 deletions of duplicated header/empty/stat blocks, 278 insertions of primitive imports + snippet wiring). Inventory at `docs/work-packages/route-style-extraction/INVENTORY.md` documents every mechanical migration and ~30 documented Skip residuals (each with a structural reason -- structured badges below title, tab-strips inside header, runner-chrome distinct from PageHeader). [route-style-extraction](../work-packages/route-style-extraction/spec.md) WP trigger sharpened to name the residual classes; stays deferred for the dashboard refresh.
-
-## Just shipped (2026-04-28 -- ADR 016 phases 7-9: cert-syllabus surface complete)
-
-- **Cert dashboard (phase 7).** New `/credentials` index, `/credentials/[slug]` detail with mastery rollup + prereq snippet + supplemental syllabi, and `/credentials/[slug]/areas/[areaCode]` drill with K/R/S element badges, citations, and linked knowledge nodes. Edition pinning honoured via `?edition=`. Pure read-only consumer of `@ab/bc-study`. PR #321.
-- **Lens UI (phase 8).** New `/lens/handbook` (index + doc view + chapter view with citing knowledge nodes from `getNodesCitingSection`) and `/lens/weakness` (severity buckets via `getWeakAreas`, normalised score / 3, thresholds severe 0.70 / moderate 0.40 / mild 0.15). Domain-level v1; node-level ranking with miscalibration / overdue / low_accuracy / never_attempted reasons documented as a follow-on if the domain rollup is insufficient in real use. PR #323.
-- **Goal composer (phase 9).** New `/goals` index, `/goals/new` create, and `/goals/[id]` detail with `?edit=1` toggle. Ten form actions (update / setStatus / makePrimary / archive / addSyllabus / removeSyllabus / setSyllabusWeight / addNode / removeNode / setNodeWeight). Inline syllabus + node pickers (from `listNodesWithFacets`); modal-with-filter-chips picker captured as a follow-on if the inline scales poorly. PR #324.
-- **Magic-strings sweep PR shipped earlier in the same session.** Help routes + 17 domainLabel sites + 5 MS_PER_DAY stragglers. PR #312.
-
-## Just shipped (2026-04-28 -- avionics surface)
-
-- **Avionics surface born end-to-end -- 9 PRs in one session.** New `apps/avionics/` SvelteKit app on port 9630 (`avionics.airboss.test`), `libs/bc/avionics/` BC, full route set (`/`, `/pfd`, `/mfd`, `/scan`, `/aircraft`), five SVG PFD instruments (Attitude, Airspeed tape, Altitude tape, Heading, VSI) driven by sliders + keyboard with rAF-eased rendering, V-speeds sourced from the selected aircraft's FDM (C172 today, PA28 plumbed via the aircraft selector), avionics theme tokens for both light and dark, polished MFD/Scan placeholders. PRs #288 (WP docs), #291 (Wave 1 contract), #292 (extract-sim-instruments rewrite), #293 (theme tokens), #294 (app shell), #295 (themes pre-hydration fix surfaced mid-build), #297 (Wave 3 surface), #301 (Wave 4 instruments), #303 (Wave 5 polish + review_status flip). Also wired into `bun run dev` (no-arg parallel mode + single-app), `bun run check`, `bun run setup` /etc/hosts probe, and the shared theme-picker server.
-- **Avionics WP closed.** All five docs at `docs/products/avionics/work-packages/avionics-app-scaffold/` flipped `status: done` after manual smoke (PFD verified visually).
-
-## Just shipped (2026-04-28 sweep)
-
-- **Five Wave-1 work packages from the 2026-04-27 12-axis review now closed.** Consolidated and shipped:
-  - [extract-hangar-bc](../work-packages/extract-hangar-bc/spec.md) -- shipped via PR #284. ~2,400 lines moved into `libs/bc/hangar/`; routes are now thin shells; `@ab/db` is infra-only.
-  - [bc-citations-coupling](../work-packages/bc-citations-coupling/spec.md) -- shipped via PR #278 (option 2: folded into `bc-study`). Speculative-extracted citations BC retired; functions now under `libs/bc/study/src/citations/`.
-  - [card-state-fk-tightening](../work-packages/card-state-fk-tightening/spec.md) -- shipped via PR #284. Composite ownership FKs on `card_state` and `session_item_result`.
-  - [scenario-options-relational](../work-packages/scenario-options-relational/spec.md) -- shipped via PR #284. `scenario.options` JSONB promoted to `study.scenario_option` table; `chosen_option` re-keyed to FK.
-  - [auth-rate-limit](../work-packages/auth-rate-limit/spec.md) -- shipped via PR #284. `createAuth` now configures DB-backed rate limit; login passes real client headers; account lockout policy in place.
-- **Sim scenario routes unblocked (cockpit / horizon / dual / window).** PR #295 (themes pre-hydration `.js` shadowed the `.ts` module on bare imports) and PR #298 (postgres driver no longer leaking into client bundles) together fixed the 500/blank renders on the four sim scenario pages.
-
-## Just shipped (2026-04-25 -> 2026-04-27 sweep)
-
-The week was dominated by the reference identifier system (ADR 019, **phases 1-9 all on main**), the cert-syllabus data layer (ADR 016, **all 24 WP phases shipped across PRs #248, #254, #264, #270, #274**), and the post-pivot documentation reset.
-
-- **ADR 019 phases 1-9 fully shipped.** `@ab/sources` lib + validator (#241), registry + `--fix` (#246), CFR ingestion (#247, #260), renderer runtime (#249), versioning + diff job (#250), handbook corpus (#251), AIM corpus + live PDF pipeline (#252, #268), AC corpus (#261), ACS PPL-ASEL slice (#266), lesson migration (#276). Phase 10 (irregular corpora) is demand-driven; per-corpus triggers documented in [adr-019-rollout.md](plans/adr-019-rollout.md#phase-10----reference-irregular-corpora-).
-- **Cert-syllabus + goal composer WP done end-to-end.** PRs #248 (contract + schema, phases 0-7), #254 (BC + ACS resolver, phases 8-13), #264 (seed + transcription + WP P17 reference migration, phases 14-21), #270 (Gate A relevance live + Gate B YAML strip + study_plan -> goal migration, phase 22), #274 (final review pass via /ball-review-full + fixer, phases 23-24). ADR 016 phase table refreshed. Surface work (cert dashboard, lens UI, goal composer pages) is the remaining post-data-layer build.
-
-- **ADR 019 reference-identifier system, phases 1-7 + Lane A (CFR structural index) on main.** New `@ab/sources` lib at `libs/sources/`. Validator, registry core + `--fix` mode, CFR bulk ingestion, renderer runtime, versioning + diff job, handbook corpus, AIM corpus. Lane A landed the CFR Title 14 (226 parts / 6,328 sections) + Title 49 aviation slice (parts 1552 + 830, 22 sections) structural index, plus the ADR 018 amendment formalizing the scale-tier exception (>1k derivatives -> commit `manifest.json` + `sections.json` only; bodies regenerate from cached XML). PRs #241, #246, #247, #249, #250, #251, #252, #260.
-- **Shared PDF extractor + AC date-detection POC + unified ingest dispatcher.** `libs/sources/src/pdf/`, AC corpus date logic, single `bun run ingest <corpus>` entry point. PRs #257, #258, #259.
-- **One-shot source-corpus downloader.** `bun run db sources:download` pulls every needed source PDF/XML into the ADR 018 cache with correct UA + auto-date + named files + HEAD-cache. PRs #253, #255.
-- **ADR 016 phase 0 -- handbook ingestion + reader.** PHAK + AFH + AvWX ingested at section granularity (1,861 `handbook_section` rows). Reader UI under `/handbooks/...` with chapter/section views, read-state, heartbeat, suggestion banner. Bidirectional citation surface on knowledge node detail. ADR 020 (edition + amendment policy) shipped alongside. Figure dedup + Playwright e2e + Phase 16 docs as a same-day follow-up. PRs #242, #243.
-- **ADR 016 phases 1-13 of the cert-syllabus + goal composer WP.** PR 1 of N shipped the contract + schema (phases 0-7 of the WP -- credential DAG, syllabus tables, syllabus_node_link, ACS triad scaffolding). PR 2 of N shipped the BC + ACS resolver (phases 8-13 -- relevance cache rebuild, goal table, GoalSyllabus + GoalNode rows). PRs #248, #254. Note: ADR 016's own phase table still needs refresh (see "Pending infra cleanup" below).
-- **Knowledge graph refactor.** `relevance` array on every node retired in favour of `minimum_cert` + `study_priority`. PR #217. 16 new knowledge nodes authored to back the sim-card mapping, sim weakness wired into the spaced-rep scheduler. PRs #232, #233.
-- **Sim push.** Four new VFR scenarios (ground reference, short-field, slow flight, crosswind), history dashboard, unauthenticated sign-in banner, `ControlInput.svelte` extracted for cross-surface reuse. PRs #212, #214, #215, #216.
-- **Hangar surface bootstrapped.** Scaffold (#173), brand link + dashboard home (#225), read-only `/users` directory + per-user detail (#226). Hangar vision/PRD rewritten post-pivot, ADR 017 marks compliance surface dormant. PR #231.
-- **Post-pivot doc sweep.** Archived FIRC-era platform/app docs under `.archive/`, rewrote live docs, marked superseded ADRs. PR #234. FIRC-era content restructured under `course/firc/`, FAR navigation course bootstrapped at `course/regulations/`. PR #235.
-- **FAR navigation course Week 1 (architecture).** 4 lessons + 30 drills + Week 1 oral + gear-up-night-IFR capstone. PR #237. Weeks 2-10 outlined in `course/regulations/SYLLABUS.md`; per-week authoring is the slow burn.
-- **Handbook ingestion strategies + community Q&A vision + ADR 020.** PR #236.
-- **DB migration collapse.** 11 incremental drizzle migrations folded into a single `0000_initial.sql`; one-shot DDL files retired. PRs #222, #228.
-- **Saved-decks rename + delete affordance, route group-by enums extracted (SvelteKit forbids non-load exports), citations agent reference doc, review-session resolver test coverage, InfoTip popover persistence fix.** PRs #218, #219, #220, #221, #211.
-- **Sim-card mapping work package + 16 sim-mapped knowledge nodes.** Doc PR #213, content PR #232.
-
-## Just shipped (2026-05-04 -- stage-5 citation deep-linking + migration 2 cleanup)
-
-- **stage-5 migration 2 shipped: legacy enum values + dead route retired.** Follow-up to stage5-citation-deeplink. Dropped `regulation_node` + `ac_reference` from `CITATION_TARGET_TYPES` (the polymorphic `reference_section` carries every corpus-backed citation now). DB CHECK constraint contracted to `('reference_section', 'knowledge_node', 'external_ref')` and verified rejecting legacy inserts. Stripped legacy branches from `verifyTargetExists`, `resolveCitationTargets`, the audit's `loadTargetEnrichment`, `composePublicCardCitations`, and the citation-search API endpoint. Deleted the dead `corpus.ts` + `corpus.test.ts` helpers (the audit now reads corpus directly from `reference.kind`). Retired `apps/study/src/routes/(app)/references/[id]/` (the legacy "Cited by" panel that read empty `hangar.reference`), `getReferenceSummary` from `bc-hangar`, and `ROUTES.REFERENCE_DETAIL`. `drizzle/0000_initial.sql` regenerated as a single migration. 24/24 unit tests pass. Audit clean against a fresh CFR + knowledge + external synthetic-citation set.
-
-- **[stage5-citation-deeplink shipped end-to-end](../work-packages/stage5-citation-deeplink/spec.md).** Citation chips on cards / reps / scenarios now deep-link to the right flightbag section for every seeded corpus. The user-visible payoff for stage 5 of the source-ingestion pipeline. Repointed citation picker + verifyTargetExists from `hangar.reference` (empty in dev) to `study.reference_section` (where WP-SUB seeded all corpora). Collapsed `regulation_node` + `ac_reference` polymorphic target types into one `reference_section` (corpus is data via `reference.kind`, not enum value). Added `airboss_ref` NOT NULL column on `study.reference_section` populated by every seeder via the new `airboss-ref-builder.ts` per-corpus URI helpers. `resolveCitationTargets` now populates `target.href` for `reference_section` (via `urlForReference()`) and `knowledge_node` (via `ROUTES.KNOWLEDGE_SLUG`); `CitationChips.svelte` renders external links with `target="_blank"` and internal links with `target="_self"`. `composePublicCardCitations` flipped policy to expose in-app deep links (flightbag + knowledge are both public surfaces). Audit (`bun run sources audit-citations`) reads corpus from `reference.kind` for section targets. `citation-audit` scheduled job flipped to `enabled = true`. 7068 reference_section rows, 7068/7068 URIs parse cleanly.
-
-## In flight
-- **[hangar-review-queue](../work-packages/hangar-review-queue/spec.md) (2026-05-03).** Review-centric backlog + kanban + docs browser for the hangar. Solves "I have 89 work packages and have reviewed none" by aggregating reviewable artifacts into buckets (one card per bucket, not one per item), rendering all `docs/**` markdown beautifully in-app at `/docs`, and shipping a per-kind review view family -- WP-spec tabs, manual test-plan walker with persisted step state, reference-TOC spot-check, knowledge-node discovery review, ad-hoc tasks. Frontmatter (`status` / `review_status`) stays authoritative; DB caches it for fast board queries; ephemeral session/step state is DB-only. Includes Postgres FTS over docs and full bucket admin UI. Spec / design / tasks / test-plan / user-stories all on disk; `status: ready-for-review`.
-- **[extract-provenance-and-signoff](../work-packages/extract-provenance-and-signoff/spec.md) (2026-04-30).** Spec authored via PR #374. `status: read`. Closes the back half of the library-broad-extraction-survey -- captures who/when/how content was extracted + a signoff workflow. Queued for build sequencing.
-- **[library-broad-extraction-survey](../work-packages/library-broad-extraction-survey/spec.md) (2026-04-30).** Survey-shaped WP authored via PR #374; no `status:` frontmatter. Read-only inventory of what's in the library + what extraction quality looks like across corpora.
-
-## ADR 016 status (post-2026-04-28 ship)
-
-Phases 0-9 all on main. The ADR phase table in [decision.md](../decisions/016-cert-syllabus-goal-model/decision.md#migration-plan) reflects this. Only phase 10 -- ongoing iterative transcription of remaining ACS/PTS/endorsement syllabi -- remains as documented work, and it is by design not a single deliverable.
-
-The three transparent scope decisions called out at ship time (PRs #321 / #323 / #324) live as named follow-ons below. Each has a build plan; each has a trigger; none survive as an undecided "future consideration" per CLAUDE.md.
-
-## Follow-ons captured from the cert-syllabus surface ship (2026-04-28)
-
-### Follow-on 1 -- Node-level weakness lens
-
-**What shipped (PR #323):** `/lens/weakness` ranks at the domain level via the existing `getWeakAreas` BC. Three reason kinds (`card-accuracy`, `rep-accuracy`, `overdue`). Severity buckets via score-normalised thresholds.
-
-**What's missing:** per-node ranking with four reason kinds (`miscalibration`, `overdue`, `low_accuracy`, `never_attempted`). The spec called this out as the ideal v2 shape.
-
-**Trigger:** a real walkthrough where the domain row points at "weather" but the actionable gap is one specific node, and the user can't drill from domain -> node without leaving the lens.
-
-**Plan when triggered:**
-
-| Step | Work                                                                                                                                                                                                                                                                                                 | Where                                           |
-| ---- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| 1    | New BC fn `getWeakNodes(userId, severity?, limit?, db?, now?) -> Promise<WeakNode[]>` (node-level analog)                                                                                                                                                                                            | `libs/bc/study/src/dashboard.ts`                |
-| 2    | New types `WeakNode { nodeId, score, severity, reasons }` and `WeakNodeReason` discriminated union                                                                                                                                                                                                   | same file                                       |
-| 3    | Reasons: `miscalibration` (per-node cal point delta vs target retention; from `confidence_calibration_point`); `overdue` (from `card_state.dueAt` join `card.nodeId`); `low_accuracy` (per-node card-rating roll-up); `never_attempted` (`knowledge_node` rows with no card or rep activity by user) | new SQL in `dashboard.ts`                       |
-| 4    | Constants `WEAKNESS_NODE_SIGNAL_KINDS` + `WEAKNESS_NODE_SIGNAL_WEIGHTS` (defaults captured in lens-ui spec)                                                                                                                                                                                          | `libs/constants/src/credentials.ts`             |
-| 5    | Refactor `/lens/weakness` to use `getWeakNodes` (domain rollup becomes a derived view from node-level)                                                                                                                                                                                               | `apps/study/src/routes/(app)/lens/weakness/...` |
-| 6    | Severity-bucket page renders per-node rows with reason chips + drill-to-node CTA                                                                                                                                                                                                                     | same                                            |
-| 7    | Vitest unit tests for `getWeakNodes` against seeded data (Abby's dev seed)                                                                                                                                                                                                                           | `libs/bc/study/src/dashboard.test.ts`           |
-| 8    | Existing Playwright e2e in `tests/e2e/lens-ui.spec.ts` expanded with node-row assertions                                                                                                                                                                                                             | `tests/e2e/lens-ui.spec.ts`                     |
-
-**Estimated scope:** medium. One BC function with four signal queries, one constants block, one page rewrite, tests. Roughly a day if the seed data exposes all four signal kinds; iterative if signals need shaping.
-
-**Out of scope:** changing the existing `getWeakAreas` BC (kept as the dashboard fast-path); per-node calibration math beyond what `confidence_calibration_point` already exposes; goal-aware filters (deferred to follow-on 3).
-
-### Follow-on 2 -- Modal node-picker for the goal composer
-
-**What shipped (PR #324):** `/goals/[id]?edit=1` exposes an inline `<select>` listing up to 25 not-yet-added knowledge nodes from `listNodesWithFacets`. No filter chips, no search, no preview.
-
-**What's missing:** the spec's preferred modal-with-filter-chips picker (a) for scaling beyond 25 candidates and (b) for matching the citation-picker idiom already used elsewhere.
-
-**Trigger:** walkthrough friction. Specifically: the user can't find a node from the 25-candidate inline list, OR the user routinely scrolls past the dropdown to a different surface to copy a node id.
-
-**Plan when triggered:**
-
-| Step | Work                                                                                                                   | Where                                                    |
-| ---- | ---------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| 1    | Reuse `Dialog.svelte` (already used by ConfirmAction) for the modal shell                                              | -------------------------------------------------------- |
-| 2    | New `NodePicker.svelte` -- left rail filter chips (Domain, Cert, Lifecycle), right rail results, top-bar text search   | `libs/ui/src/components/NodePicker.svelte` (new)         |
-| 3    | Loader call uses `listNodesWithFacets({ domain?, cert?, lifecycle? })` already shipped; pagination via existing facets | same                                                     |
-| 4    | Search debounced 200ms; client-side substring match on title (small graph, server filtering not needed yet)            | same                                                     |
-| 5    | Wire `NodePicker` into the goal-detail edit mode in place of the current `<select>`                                    | `apps/study/src/routes/(app)/goals/[id]/+page.svelte`    |
-| 6    | Form-action submit unchanged (`?/addNode` with `knowledgeNodeId`); the picker just produces the id                     | `apps/study/src/routes/(app)/goals/[id]/+page.server.ts` |
-| 7    | Promote pattern for reuse if the lens-ui follow-on or the cert-dashboard ever needs the same picker                    | re-export `NodePicker` from `libs/ui`                    |
-| 8    | E2E: open picker, type 3 chars, click first result, confirm row appears on goal                                        | `tests/e2e/goal-composer.spec.ts`                        |
-
-**Estimated scope:** small to medium. The shape (filter chips + search + result list inside a Dialog) is well-trodden in the codebase via `CitationPicker`. Most of the work is wiring + styling. Roughly half a day.
-
-**Out of scope:** server-side full-text search (the graph fits in memory for the foreseeable future); bulk multi-select (single-add per click matches v1; bulk earns its keep when batch-curating goals from a weak-areas walkthrough lands).
-
-### Follow-on 3 -- Engine cutover to goal-derived filters (shipped)
-
-**Status (2026-04-30):** shipped via PR #353. The dual-read helper [`getEngineTargeting`](../../libs/bc/study/src/engine-targeting.ts) reads cert / focus / skip from the user's primary goal when present and falls back to legacy `study_plan` columns when not, with structured-log telemetry per `previewSession` call. Plan UI redirects to the goal composer; `createPlan` / `updatePlan` reject non-empty cert input via `PlanCertGoalsDeprecatedError`. The staged drop migration sits in the WP directory and lands after `bun run db check engine-targeting-source --window=14d` reports `READY TO DROP` (14 consecutive days with zero legacy reads).
-
-**Spec:** [`engine-goal-cutover`](../work-packages/engine-goal-cutover/spec.md) (PR #345 spec, PR #353 implementation).
-
-**Out of scope of this cutover (now or never):**
-
-- Per-leaf evidence-kind gating -- shipped separately as [`evidence-kind-gating`](../work-packages/evidence-kind-gating/spec.md).
-- Multi-goal targeting (the engine reads the primary goal only; multi-goal weighting is its own design problem when it earns its keep).
-
-## Suggested next-up sequencing
-
-| Order | Item                                                                  | Reason                                                                         |
-| ----- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| 1     | Manual test passes on the cert-syllabus surfaces (#321 / #323 / #324) | The build pushed merges ahead of testing; close the loop before adding more.   |
-| 2     | Confirm engine-cutover telemetry trigger fires (`READY TO DROP`)      | Triggers the `study_plan.cert_goals` column drop migration follow-up to #353.  |
-| 3     | Follow-ons 1 + 2 deferred until a real walkthrough surfaces friction  | Doing them speculatively risks wrong shape; let usage drive.                   |
-
-## Recently closed (no longer active)
-
-- **Cluster G small-fixes** (items 2, 6, 17, 23) shipped via PR #106 ("small SMI walkthrough fixes -- badges, nav, question clarity, browse stats"). Source todo file [archived](.archive/todos/20260424-02-smi-walkthrough-feedback.md) lists all 17 closing PRs.
-- **ADR 019 phases 1-9** all on main (see "Just shipped" above).
-- **Cert-syllabus + goal composer WP** all 24 phases shipped across 5 PRs.
-
-## Five draft work packages -- all shipped
-
-Authored 2026-04-25 from the SMI walkthrough triage and originally listed as deferred. Verdict pass on 2026-04-28 (PR #311) found that every one of them had already shipped during the redesign sprint. Each spec now carries a `status: done` frontmatter and a verdict block citing the shipping PRs.
-
-| Work package                                                                              | Cluster | Shipping evidence                                                                                           |
-| ----------------------------------------------------------------------------------------- | ------- | ----------------------------------------------------------------------------------------------------------- |
-| [review-flow-v2](../work-packages/review-flow-v2/spec.md)                                 | B       | Chicklets, two-line ratings, undo, confidence-adjust, help chicklet (PRs #138, #49, #169)                   |
-| [snooze-and-flag](../work-packages/snooze-and-flag/spec.md)                               | C       | `card_snooze` + `card_feedback` tables, full BC, `SnoozeReasonPopover`, Browse `Removed` (PRs #135, #138)   |
-| [review-sessions-url](../work-packages/review-sessions-url/spec.md)                       | D       | Resume + Redo + Share (`SharePopover`, deck-hash encoder, `memory_review_session`) (PRs #154, #159)         |
-| [card-page-and-cross-references](../work-packages/card-page-and-cross-references/spec.md) | E       | Public `cards/[id]` route, `getPublicCard`, `getCardCrossReferences` panel (PR #128)                        |
-| [content-citations](../work-packages/content-citations/spec.md)                           | F       | Polymorphic `study.content_citations` table + BC + picker; trigger fired via PRs #299, #309 (PR #127, #278) |
-
-## Deferred work packages from the 2026-04-27 12-axis review
-
-Captured as part of the review-fix PR. Each has an explicit trigger condition; none survives as an undecided "future consideration" per CLAUDE.md.
-
-Wave 1 (5 packages) shipped 2026-04-28 via PRs #278 + #284 -- see "Just shipped" above. Remaining gated work:
-
-| Work package                                                                          | Trigger                                                                                          |
-| ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| [route-style-extraction](../work-packages/route-style-extraction/spec.md)             | Dashboard refresh (residuals: structured-badges-below-title, tab-strip-in-header, runner-chrome) |
-| [sim-scenario-table](../work-packages/sim-scenario-table/spec.md)                     | When sim manifests move into hangar                                                              |
-| [memory-review-load-as-action](../work-packages/memory-review-load-as-action/spec.md) | Folded into [review-flow-v2](../work-packages/review-flow-v2/spec.md)                            |
-
-## Build Order
-
-Original MVP build order (Steps 1-6) shipped between PRs #1-#16. The active build order today is:
-
-| Step | Work                                                     | Status                                                                               |
-| ---- | -------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| 7    | Scale knowledge graph to ~500 nodes                      | Ongoing (16 sim-mapped nodes via #232; cumulative count not centrally tracked)       |
-| 8    | Manual test passes (user zero) for the six MVP features  | Pending                                                                              |
-| ---- | ADR 019 phases 1-9 (validator -> ingest -> migration)    | Shipped (PRs #241, #246, #247, #249, #250, #251, #252, #260, #261, #266, #268, #276) |
-| ---- | ADR 019 phase 10 -- irregular corpora (NTSB, CC, etc.)   | Shipped (PRs #309, #316, #318, #322 -- 12 corpora resolved + seeded; asrs empty)     |
-| ---- | ADR 019 §11 acceptance criteria audit                    | Shipped (PR #319 -- 13/13 boxes addressed)                                           |
-| ---- | Cert-syllabus + goal composer WP (data layer)            | Shipped (PRs #248, #254, #264, #270, #274)                                           |
-| ---- | Cert-syllabus surface work (dashboard + lens + composer) | Shipped (PRs #321, #323, #324 -- ADR 016 phases 7-9 complete)                        |
-| ---- | FAR navigation course Weeks 3-10                         | Shipped (PRs #349 work-package, #350 content -- all 10 weeks + 4 capstones authored) |
-| ---- | FIRC migration as `apps/firc/`                           | Deferred (post-MVP-proven)                                                           |
-
-## Next
-
-The original MVP roadmap is done in code; the human-side work and the post-MVP build-out are the active fronts.
-
-1. **Manual test passes on every shipped feature.** CLAUDE.md's "nothing merges without a manual test plan" rule got overridden in the parallel-build velocity push. Six features sit on main without a user-zero walkthrough. Test plans live in each work package:
-
-   - [spaced-memory-items/test-plan.md](../work-packages/spaced-memory-items/test-plan.md)
-   - [decision-reps/test-plan.md](../work-packages/decision-reps/test-plan.md)
-   - [calibration-tracker/test-plan.md](../work-packages/calibration-tracker/test-plan.md)
-   - [knowledge-graph/test-plan.md](../work-packages/knowledge-graph/test-plan.md)
-   - [study-plan-and-session-engine/test-plan.md](../work-packages/study-plan-and-session-engine/test-plan.md)
-   - [learning-dashboard/test-plan.md](../work-packages/learning-dashboard/test-plan.md)
-
-   The 2026-04-25 walkthrough plan at [`docs/work/walkthroughs/20260425/PLAN.md`](walkthroughs/20260425/PLAN.md) audited each test plan against current main and pruned dead steps; that's the doc to walk from, not the raw test plans.
-
-2. **Drop `study_plan.cert_goals` after the engine-cutover telemetry trigger fires.** PR #353 shipped the dual-read; the staged drop migration sits in [`engine-goal-cutover/`](../work-packages/engine-goal-cutover/spec.md) and lands when `bun run db check engine-targeting-source --window=14d` reports `READY TO DROP`.
-
-3. **Decide CFR XML storage.** Open question in [`reference-extraction-pipeline/tasks.md`](../work-packages/reference-extraction-pipeline/tasks.md): commit, LFS, or external? ADR-shaped product call.
-
-## Pending infra cleanup
-
-- **`review_status` flips** on each work package's `review.md` -- agent-controlled field that hasn't been flipped to `done` on the newer packages.
-- **`wip/2026-04-25-safety-net` branch** -- check what's in it; keep or delete.
-- **`.claude/worktrees/agent-*` paths** -- locked to live PIDs from other agents. Will release naturally as agents finish; run `/audit-worktrees` for the current inventory.
+Every merged PR lands as one entry under [docs/log/](../log/) via `bun run log:pr <number>`. The shipped log aggregates these reverse-chronologically.
 
 ## Links
 
 - [MULTI_PRODUCT_ARCHITECTURE.md](../platform/MULTI_PRODUCT_ARCHITECTURE.md) -- surface-typed app architecture
 - [PIVOT.md](../platform/PIVOT.md) -- why airboss exists
 - [DESIGN_PRINCIPLES.md](../platform/DESIGN_PRINCIPLES.md) -- how we evaluate features
+- [VOCABULARY.md](../platform/VOCABULARY.md) -- naming standards
 - [ADR 011](../decisions/011-knowledge-graph-learning-system/decision.md) -- knowledge graph learning system
 - [ADR 016](../decisions/016-cert-syllabus-goal-model/decision.md) -- cert / syllabus / goal / lens model
-- [ADR 018](../decisions/018-source-artifact-storage-policy/decision.md) -- source artifact storage policy (amended for the scale-tier exception in #260)
-- [ADR 019](../decisions/019-reference-identifier-system/decision.md) + [revisit.md](../decisions/019-reference-identifier-system/revisit.md) -- reference identifier system
+- [ADR 018](../decisions/018-source-artifact-storage-policy/decision.md) -- source artifact storage policy
+- [ADR 019](../decisions/019-reference-identifier-system/decision.md) -- reference identifier system
 - [ADR 020](../decisions/020-handbook-edition-and-amendment-policy.md) -- handbook editions + errata
-- [IDEAS.md](../platform/IDEAS.md) -- idea intake (last review: 2026-04-07; due for a fresh pass)
-- [VOCABULARY.md](../platform/VOCABULARY.md) -- naming standards
+- [ADR 025](../decisions/025-wp-frontmatter-contract/decision.md) -- work package frontmatter contract
 - [Product INDEX](../vision/INDEX.md) -- all 53 product ideas
 - [Learning INDEX](../vision/learning/INDEX.md) -- the 14 aviation domains
-- [Loose ends 2026-04-27](../loose-ends/2026-04-27.md) -- project-wide scan for forgotten / deferred work
 
 ## Relationship to airboss-firc
 
 FIRC-specific code, content, and work stays in [airboss-firc](/Users/joshua/src/_me/aviation/airboss-firc) until the FIRC migration step. That repo has the 4 SvelteKit apps (sim, hangar, ops, runway), the FAA compliance pipeline, the 503 questions, and ongoing FIRC-specific work. Nothing new should be built in airboss-firc going forward.
+
+Per [MULTI_PRODUCT_ARCHITECTURE.md](../platform/MULTI_PRODUCT_ARCHITECTURE.md), FIRC will migrate into airboss as `apps/firc/` after the study app MVP is proven.
