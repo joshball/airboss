@@ -538,6 +538,17 @@ export {
 	TeachingExerciseNotFoundError,
 	updateTeachingExercise,
 } from './teaching-exercises';
+// Testing-standards BC aggregator (one entry point for /library/testing/* loaders).
+export type {
+	TestingBucketCard,
+	TestingDetailView,
+	TestingLandingView,
+	TestingPublicationCard,
+	TestingReferenceSummary,
+	TestingView,
+	TestingViewParams,
+} from './testing';
+export { getTestingView, TestingViewNotFoundError } from './testing';
 export type { PageExplainerDismissals, UserPrefValue } from './user-prefs';
 export {
 	getPageExplainerDismissals,

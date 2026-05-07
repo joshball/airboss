@@ -5,6 +5,7 @@ import {
 	CERT_APPLICABILITIES,
 	CERT_APPLICABILITY_LABELS,
 	LIBRARY_REGULATIONS_KIND_LABELS,
+	LIBRARY_TESTING_KIND_LABELS,
 	LIBRARY_TOPIC_VISIBLE_THRESHOLD,
 	ROUTES,
 } from '@ab/constants';
@@ -30,13 +31,15 @@ const collapsedTopics = $derived(allTopics.filter((entry) => entry.count > 0 && 
 let showAllTopics = $state(false);
 
 const visibleRegulationBuckets = $derived(data.regulationBuckets.filter((b) => b.count > 0));
+const visibleTestingBuckets = $derived(data.testingBuckets.filter((b) => b.count > 0));
 
 const certCount = $derived(visibleCertSpine.length);
 const topicCount = $derived(primaryTopics.length + collapsedTopics.length);
 const regCount = $derived(visibleRegulationBuckets.length);
+const testingCount = $derived(visibleTestingBuckets.length);
 const aircraftCount = $derived(data.aircraft.length);
 
-const totalSurfaces = $derived(certCount + topicCount + regCount + aircraftCount);
+const totalSurfaces = $derived(certCount + topicCount + regCount + testingCount + aircraftCount);
 </script>
 
 <svelte:head>
@@ -141,6 +144,31 @@ const totalSurfaces = $derived(certCount + topicCount + regCount + aircraftCount
 			</ul>
 		{/if}
 	</section>
+
+	{#if visibleTestingBuckets.length > 0 || data.testingCount > 0}
+		<section class="spine" aria-labelledby="testing-spine-h">
+			<h2 id="testing-spine-h">Testing standards</h2>
+			<p class="spine-lead">FAA Airman Certification Standards (ACS) and Practical Test Standards (PTS) -- the documents your check ride is graded against.</p>
+			<ul class="grid">
+				<li>
+					<a class="card testing-card" href={ROUTES.LIBRARY_TESTING}>
+						<span class="card-title">All testing standards</span>
+						<span class="card-count"
+							>{data.testingCount} publication{data.testingCount === 1 ? '' : 's'}</span
+						>
+					</a>
+				</li>
+				{#each visibleTestingBuckets as bucket (bucket.kind)}
+					<li>
+						<a class="card testing-card" href={ROUTES.LIBRARY_TESTING}>
+							<span class="card-title">{LIBRARY_TESTING_KIND_LABELS[bucket.kind]}</span>
+							<span class="card-count">{bucket.count} publication{bucket.count === 1 ? '' : 's'}</span>
+						</a>
+					</li>
+				{/each}
+			</ul>
+		</section>
+	{/if}
 
 	{#if aircraftCount > 0}
 		<section class="spine" aria-labelledby="aircraft-spine-h">
