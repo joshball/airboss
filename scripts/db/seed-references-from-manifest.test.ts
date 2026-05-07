@@ -1483,14 +1483,23 @@ describe('CFR seed-shape contract (real DB)', () => {
 		const PRIORITY_14_CFR_PARTS_AUTHORED_AND_SEEDED: readonly string[] = [
 			// Intersection of the priority list and `cfr-titles.yaml` slugs --
 			// the authoring YAML covers more Parts than the YAML refs, but the
-			// seeder only stamps metadata where a DB row exists.
+			// seeder only stamps metadata where a DB row exists. Wave 1 added
+			// the operational/commercial-carriage Parts (103/105/119/121/125/
+			// 133/137) to both YAMLs so the seeder materializes their copy.
 			'14cfr23',
 			'14cfr61',
 			'14cfr68',
 			'14cfr71',
 			'14cfr73',
 			'14cfr91',
+			'14cfr103',
+			'14cfr105',
+			'14cfr119',
+			'14cfr121',
+			'14cfr125',
+			'14cfr133',
 			'14cfr135',
+			'14cfr137',
 			'14cfr141',
 		];
 		const PRIORITY_49_CFR_PARTS_AUTHORED_AND_SEEDED: readonly string[] = ['49cfr830', '49cfr1552'];

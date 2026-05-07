@@ -43,6 +43,69 @@ references:
     subjects: [regulations, medical]
     primary_cert: null
 
+  - slug: 14cfr103
+    kind: cfr
+    edition: current
+    title: 14 CFR Part 103 -- Ultralight Vehicles
+    publisher: FAA
+    url: https://www.ecfr.gov/current/title-14/part-103
+    subjects: [regulations, operations]
+    primary_cert: null
+
+  - slug: 14cfr105
+    kind: cfr
+    edition: current
+    title: 14 CFR Part 105 -- Parachute Operations
+    publisher: FAA
+    url: https://www.ecfr.gov/current/title-14/part-105
+    subjects: [regulations, operations]
+    primary_cert: null
+
+  - slug: 14cfr119
+    kind: cfr
+    edition: current
+    title: 14 CFR Part 119 -- Certification (Air Carriers and Commercial Operators)
+    publisher: FAA
+    url: https://www.ecfr.gov/current/title-14/part-119
+    subjects: [regulations, commercial-operations, certification]
+    primary_cert: null
+
+  - slug: 14cfr121
+    kind: cfr
+    edition: current
+    title: 14 CFR Part 121 -- Operating Requirements (Domestic, Flag, and Supplemental Operations)
+    publisher: FAA
+    url: https://www.ecfr.gov/current/title-14/part-121
+    subjects: [regulations, commercial-operations]
+    primary_cert: null
+
+  - slug: 14cfr125
+    kind: cfr
+    edition: current
+    title: 14 CFR Part 125 -- Operations of Large Airplanes (20+ Seats or 6,000+ lb Payload)
+    publisher: FAA
+    url: https://www.ecfr.gov/current/title-14/part-125
+    subjects: [regulations, commercial-operations]
+    primary_cert: null
+
+  - slug: 14cfr133
+    kind: cfr
+    edition: current
+    title: 14 CFR Part 133 -- Rotorcraft External-Load Operations
+    publisher: FAA
+    url: https://www.ecfr.gov/current/title-14/part-133
+    subjects: [regulations, rotorcraft, operations]
+    primary_cert: null
+
+  - slug: 14cfr137
+    kind: cfr
+    edition: current
+    title: 14 CFR Part 137 -- Agricultural Aircraft Operations
+    publisher: FAA
+    url: https://www.ecfr.gov/current/title-14/part-137
+    subjects: [regulations, operations]
+    primary_cert: null
+
   - slug: 14cfr71
     kind: cfr
     edition: current
