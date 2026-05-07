@@ -28,8 +28,9 @@ estimated_time_minutes: 45
 review_time_minutes: 8
 
 references:
-  - source: PHAK (FAA-H-8083-25C)
-    detail: Chapter 2 -- Aeronautical Decision-Making
+  - ref: airboss-ref:handbooks/phak/2
+    chapter_title: Aeronautical Decision-Making
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25C/2
     note: The five hazardous attitudes and their antidotes.
   - source: FAA-H-8083-2A
     detail: Risk Management Handbook

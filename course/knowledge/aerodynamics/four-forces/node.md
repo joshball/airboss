@@ -26,11 +26,13 @@ estimated_time_minutes: 45
 review_time_minutes: 8
 
 references:
-  - source: PHAK (FAA-H-8083-25C)
-    detail: Chapter 5 -- Aerodynamics of Flight
+  - ref: airboss-ref:handbooks/phak/5
+    chapter_title: Aerodynamics of Flight
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25C/5
     note: Lift, weight, thrust, drag -- equilibrium in steady flight.
-  - source: AFH (FAA-H-8083-3B)
-    detail: Chapter 3 -- Basic Flight Maneuvers
+  - ref: airboss-ref:handbooks/afh/3
+    chapter_title: Basic Flight Maneuvers
+    redirected_from: airboss-ref:handbooks/afh/FAA-H-8083-3B/3
     note: Practical flight interpretation of the four forces.
 
 assessable: true

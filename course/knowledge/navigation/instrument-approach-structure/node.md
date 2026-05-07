@@ -29,8 +29,9 @@ estimated_time_minutes: 60
 review_time_minutes: 10
 
 references:
-  - source: IPH (FAA-H-8083-16B)
-    detail: Chapter 4 -- Approaches
+  - ref: airboss-ref:handbooks/iph/4
+    chapter_title: Approaches
+    redirected_from: airboss-ref:handbooks/iph/FAA-H-8083-16B/4
     note: IAF, IF, FAF, MAP, DA/DH, MDA, feeder routes, transition.
   - source: AIM
     detail: 5-4 -- Arrival Procedures

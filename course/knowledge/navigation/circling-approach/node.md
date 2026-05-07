@@ -26,9 +26,11 @@ estimated_time_minutes: 45
 review_time_minutes: 8
 
 references:
-  - source: IPH (FAA-H-8083-16B)
-    detail: Chapter 4 -- Circling Approaches
-    note: Circling radii by aircraft category, protected airspace, cloud-clearance.
+  - ref: airboss-ref:handbooks/iph/4
+    chapter_title: Approaches
+    redirected_from: airboss-ref:handbooks/iph/FAA-H-8083-16B/4
+    note: >-
+      Circling radii by aircraft category, protected airspace, cloud-clearance.
   - source: AIM
     detail: 5-4-20 -- Approach and Landing Minimums
     note: Circling minimums definition, category-specific values.

@@ -48,17 +48,25 @@ review_time_minutes: 10
 
 # === References ===
 references:
-  - source: PHAK (FAA-H-8083-25C)
-    detail: Chapter 8 -- Flight Instruments
+  - ref: airboss-ref:handbooks/phak/8
+    chapter_title: Flight Instruments
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25C/8
     note: >-
-      Authoritative for the physics: pitot pressure, static pressure, and
-      how each pressure source feeds the airspeed indicator, altimeter,
-      and VSI. Includes the specific failure modes and indications.
-  - source: Instrument Flying Handbook (FAA-H-8083-15B)
-    detail: Chapter on instrument systems and emergencies
+      Authoritative for the physics: pitot pressure, static pressure, and how each pressure source feeds the airspeed indicator, altimeter, and VSI. Includes the specific failure modes and indications.
+  - ref: airboss-ref:handbooks/ifh/5
+    chapter_title: Flight Instruments
+    redirected_from: airboss-ref:handbooks/ifh/FAA-H-8083-15B
     note: >-
-      How the failures present in flight, the indications, and the
-      recommended diagnostic flow.
+      How the failures present in flight and the indications they produce.
+      Original legacy citation was doc-level ("Chapter on instrument
+      systems and emergencies"); the instruments side lives in IFH 15B
+      Ch. 5 "Flight Instruments".
+  - ref: airboss-ref:handbooks/ifh/11
+    chapter_title: Emergency Operations
+    note: >-
+      The emergencies side -- diagnostic flow when a pitot/static failure
+      is suspected in IMC. IFH 15B Ch. 11 "Emergency Operations" carries
+      the in-flight handling of instrument failures.
   - source: POH / AFM
     detail: Section 3 emergency procedures -- pitot heat, alternate static source, instrument failure
     note: >-

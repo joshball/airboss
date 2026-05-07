@@ -35,8 +35,9 @@ references:
   - source: AIM
     detail: 7-1 -- National Weather Service Aviation Products
     note: Format guide with examples.
-  - source: PHAK (FAA-H-8083-25C)
-    detail: Chapter 13 -- Aviation Weather Services
+  - ref: airboss-ref:handbooks/phak/13
+    chapter_title: Aviation Weather Services
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25C/13
     note: Introductory treatment with sample METARs and TAFs.
 
 assessable: true

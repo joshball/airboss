@@ -47,17 +47,31 @@ review_time_minutes: 8
 
 # === References ===
 references:
-  - source: AFH (FAA-H-8083-3B)
-    detail: Chapter 4 -- Slow Flight, Stalls, and Spins
+  - ref: airboss-ref:handbooks/afh/4
+    chapter_title: 'Energy Management: Mastering Altitude and Airspeed Control'
+    redirected_from: airboss-ref:handbooks/afh/FAA-H-8083-3B/4
     note: >-
       Authoritative on the maneuver, recovery, and the FAA's specific
       training profile (slow flight at "minimum controllable airspeed"
       where the airplane is just above stall, approach configuration).
-  - source: PHAK (FAA-H-8083-25C)
-    detail: Chapter 5 -- Aerodynamics; Chapter 11 -- Aircraft Performance
+      Originally cited against AFH 3B Ch. 4 "Slow Flight, Stalls, and
+      Spins"; in 3C the slow-flight content moved to Ch. 4 "Energy
+      Management" (the chapter was renamed and reframed; stalls split out
+      to Ch. 5).
+  - ref: airboss-ref:handbooks/phak/5
+    chapter_title: Aerodynamics of Flight
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25C/5
     note: >-
-      The power curve: induced drag rising, parasite drag decreasing as
-      airspeed drops; back-side-of-power-curve discussion.
+      Induced drag vs. parasite drag fundamentals -- the aerodynamic side
+      of the power curve and the back-side-of-power-curve discussion.
+  - ref: airboss-ref:handbooks/phak/11
+    chapter_title: Aircraft Performance
+    note: >-
+      Performance side of the power curve: power-required vs. power-
+      available, slow-flight regime as the back side of the curve.
+      Original citation packed Ch. 5 (Aerodynamics) and Ch. 11 (Aircraft
+      Performance) into one entry; split here so each chapter carries the
+      slice of the topic it actually treats.
   - source: ACS / PTS standards
     detail: Slow flight maneuver task elements
     note: >-

@@ -51,12 +51,23 @@ review_time_minutes: 12
 
 # === References ===
 references:
-  - source: Instrument Flying Handbook (FAA-H-8083-15B)
-    detail: Chapter on the instrument flight rules (IFR) flight scan; partial-panel sections
+  - ref: airboss-ref:handbooks/ifh/6
+    chapter_title: Airplane Attitude Instrument Flying
+    redirected_from: airboss-ref:handbooks/ifh/FAA-H-8083-15B
     note: >-
       Authoritative for the FAA's framing of the six-pack scan and the
       degraded-scan rebuilds that follow loss of attitude indicator,
-      directional gyro, or vacuum source.
+      directional gyro, or vacuum source. Original legacy citation was
+      doc-level ("Chapter on the instrument flight rules (IFR) flight scan;
+      partial-panel sections"); IFH 15B Ch. 6 "Airplane Attitude Instrument
+      Flying" carries the scan and partial-panel material.
+  - ref: airboss-ref:handbooks/ifh/11
+    chapter_title: Emergency Operations
+    note: >-
+      IFH 15B Ch. 11 "Emergency Operations" carries the partial-panel
+      emergency procedure side. Pinned alongside Ch. 6 because the legacy
+      citation explicitly mentioned partial-panel sections (which split
+      between scan instruction in Ch. 6 and emergency handling in Ch. 11).
   - source: AIM
     detail: 5-3-3 -- IFR Position Reporting; 6-2 -- Emergency Procedures
     note: >-

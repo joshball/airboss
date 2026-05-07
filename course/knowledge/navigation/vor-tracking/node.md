@@ -28,15 +28,34 @@ estimated_time_minutes: 60
 review_time_minutes: 10
 
 references:
-  - source: IPH (FAA-H-8083-16B)
-    detail: Instrument Procedures Handbook -- VOR Navigation
-    note: Operational use of VORs on airways and approaches.
+  - ref: airboss-ref:handbooks/iph/2
+    chapter_title: En Route Operations
+    redirected_from: airboss-ref:handbooks/iph/FAA-H-8083-16B
+    note: >-
+      Operational use of VORs on airways. Original legacy citation was
+      doc-level; en-route VOR airway use lives in IPH 16B Ch. 2 "En Route
+      Operations".
+  - ref: airboss-ref:handbooks/iph/4
+    chapter_title: Approaches
+    note: VOR-based approaches.
   - source: AIM
     detail: 1-1-3 -- VHF Omnidirectional Range (VOR)
     note: Service volumes, frequency protection, accuracy limits.
-  - source: AFH (FAA-H-8083-3B)
-    detail: Chapter 16 -- Navigation Systems
-    note: PPL-level VOR orientation, tracking, and interception.
+  - ref: airboss-ref:handbooks/ifh/9
+    chapter_title: Navigation Systems
+    redirected_from: airboss-ref:handbooks/afh/FAA-H-8083-3B/16
+    note: >-
+      PPL-level VOR orientation, tracking, and interception. Originally
+      cited against AFH 3B Ch. 16 "Navigation Systems"; AFH 3C dropped its
+      navigation chapter (3C Ch. 16 is "Transition to Jet-Powered
+      Airplanes"), and the navigation-systems content now lives in IFH 15B
+      Ch. 9 "Navigation Systems". Pinned here as best-effort to the
+      current-edition home of the topic.
+  - ref: airboss-ref:handbooks/afh/8083-3B/16
+    chapter_title: Navigation Systems
+    note: >-
+      Pinned to AFH 3B Ch. 16 "Navigation Systems" for the original AFH
+      treatment. AFH 3C dropped this chapter -- kept here for traceability.
 
 assessable: true
 assessment_methods: [demonstration, scenario]

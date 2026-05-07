@@ -66,12 +66,16 @@ references:
   - source: AIM
     detail: 3-1-4 -- Basic VFR weather minimums
     note: Plain-language restatement of 91.155 plus operational commentary. Often easier to quote to a student than the CFR.
-  - source: PHAK (FAA-H-8083-25C)
-    detail: Chapter 15 -- Airspace. Basic VFR weather minimums table and discussion.
-    note: The standard PPL-ground treatment. Useful for first exposure; thin on reasoning, which is why this node exists.
-  - source: PHAK (FAA-H-8083-25C)
-    detail: Chapter 13 -- Aviation Weather. Ceiling and visibility context.
-    note: Bridges the weather domain (what ceiling and visibility actually are) to the airspace domain (what the numbers have to be).
+  - ref: airboss-ref:handbooks/phak/15
+    chapter_title: Airspace
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25C/15
+    note: >-
+      The standard PPL-ground treatment. Useful for first exposure; thin on reasoning, which is why this node exists.
+  - ref: airboss-ref:handbooks/phak/13
+    chapter_title: Aviation Weather Services
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25C/13
+    note: >-
+      Bridges the weather domain (what ceiling and visibility actually are) to the airspace domain (what the numbers have to be).
   - source: AC 00-6B
     detail: Aviation Weather -- visibility and cloud reporting definitions.
     note: Foundation for understanding what "3 SM visibility" means operationally vs. as reported in a METAR.

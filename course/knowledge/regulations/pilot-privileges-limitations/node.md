@@ -29,8 +29,9 @@ references:
   - source: 14 CFR
     detail: Part 61 -- Certification of Pilots, Flight Instructors, and Ground Instructors
     note: Subparts B (flight instructors), C-H (certificate grades).
-  - source: PHAK (FAA-H-8083-25C)
-    detail: Chapter 1 -- Introduction to Flying
+  - ref: airboss-ref:handbooks/phak/1
+    chapter_title: Introduction To Flying
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25C/1
     note: Overview of certificate grades and progression.
 
 assessable: true

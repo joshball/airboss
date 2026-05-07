@@ -34,8 +34,9 @@ references:
   - source: AIM
     detail: 3-4 -- Special Use Airspace
     note: Operating rules and status-check procedures (e.g., calling FSS for MOA status).
-  - source: PHAK (FAA-H-8083-25C)
-    detail: Chapter 15 -- Airspace
+  - ref: airboss-ref:handbooks/phak/15
+    chapter_title: Airspace
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25C/15
     note: Covers SUA identification on sectional charts.
 
 assessable: true

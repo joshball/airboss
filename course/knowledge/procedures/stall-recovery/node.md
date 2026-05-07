@@ -54,13 +54,24 @@ references:
       The FAA's canonical guidance on stall awareness, recovery technique,
       and the change from the older "minimum altitude loss" wording to a
       "reduce angle of attack first" framing.
-  - source: FAA Airplane Flying Handbook (FAA-H-8083-3B)
-    detail: Chapter on Slow Flight, Stalls, and Spins
+  - ref: airboss-ref:handbooks/afh/5
+    chapter_title: 'Maintaining Aircraft Control: Upset Prevention and Recovery'
+    redirected_from: airboss-ref:handbooks/afh/FAA-H-8083-3B
     note: >-
-      Practical recovery procedure in light singles. Reduce AOA by relaxing
-      back pressure or pushing forward; level the wings with coordinated
-      aileron and rudder; add power as appropriate; return to level flight
-      while not exceeding limits.
+      Practical recovery procedure in light singles. Reduce AOA by
+      relaxing back pressure or pushing forward; level the wings with
+      coordinated aileron and rudder; add power as appropriate; return to
+      level flight while not exceeding limits. Originally cited against
+      AFH 3B "Chapter on Slow Flight, Stalls, and Spins"; in 3C the stall
+      recognition and recovery content moved to Ch. 5 "Maintaining
+      Aircraft Control: Upset Prevention and Recovery".
+  - ref: airboss-ref:handbooks/afh/8083-3B/4
+    chapter_title: 'Slow Flight, Stalls, and Spins'
+    note: >-
+      Pinned to AFH 3B Ch. 4 "Slow Flight, Stalls, and Spins" for the
+      original AFH treatment. AFH 3C split this content across Ch. 4
+      (slow flight as energy management) and Ch. 5 (stalls); kept here
+      for traceability.
   - source: POH / AFM Section 4
     detail: Normal procedures -- stall recovery / approach to stall recovery
     note: >-

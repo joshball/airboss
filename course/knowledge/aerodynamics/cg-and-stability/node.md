@@ -45,16 +45,23 @@ review_time_minutes: 10
 
 # === References ===
 references:
-  - source: PHAK (FAA-H-8083-25C)
-    detail: Chapter 5 -- Aerodynamics; Chapter 9 -- Weight and Balance
+  - ref: airboss-ref:handbooks/phak/5
+    chapter_title: Aerodynamics of Flight
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25C/5
     note: >-
       Authoritative on the longitudinal stability discussion (forward vs.
-      aft CG, neutral point, stability margin) and the W&B math.
-  - source: AFH (FAA-H-8083-3B)
-    detail: Chapter on slow flight and stalls -- stability discussion
+      aft CG, neutral point, stability margin).
+  - ref: airboss-ref:handbooks/phak/10
+    chapter_title: Weight and Balance
     note: >-
-      Practical implications of CG position for slow-flight and stall
-      handling.
+      Authoritative on the W&B math (basic empty weight, useful load, moment
+      arms, CG computation). Original citation said "Chapter 9 -- Weight and
+      Balance" but in PHAK 25C Ch. 9 is "Flight Manuals and Other Documents";
+      W&B lives at Ch. 10. Pinned here as best-effort to the right content.
+  - ref: airboss-ref:handbooks/afh
+    redirected_from: airboss-ref:handbooks/afh/FAA-H-8083-3B
+    note: >-
+      Practical implications of CG position for slow-flight and stall handling.
   - source: POH / AFM
     detail: Section 6 -- Weight and Balance / Equipment List
     note: >-

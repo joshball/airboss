@@ -26,9 +26,18 @@ estimated_time_minutes: 60
 review_time_minutes: 10
 
 references:
-  - source: AIH (FAA-H-8083-9B)
-    detail: Chapter 10 -- Planning Instructional Activity
-    note: Elements of a lesson plan, objective, completion standards.
+  - ref: airboss-ref:handbooks/aviation-instructor/9
+    chapter_title: Planning Instructional Activity
+    redirected_from: airboss-ref:handbooks/aviation-instructor/FAA-H-8083-9B/10
+    note: >-
+      Elements of a lesson plan, objective, completion standards. Original
+      legacy citation said "Chapter 10 -- Planning Instructional Activity"
+      against AIH 9B; in the on-disk AIH 9 manifest this chapter lives at
+      code 9 (the manifest's chapter codes are offset by two front-matter
+      chapters, so FAA Ch. N maps to code N+2 except where the FAA
+      reorganized the book). The script's auto-mapping picked code 10 =
+      "Aviation Instructor Responsibilities and Professionalism", which is
+      the wrong topic.
   - source: ACS
     detail: Airman Certification Standards (relevant cert)
     note: Tasks, elements, and completion standards a lesson must address.

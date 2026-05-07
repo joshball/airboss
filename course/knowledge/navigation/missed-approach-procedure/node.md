@@ -27,8 +27,9 @@ estimated_time_minutes: 45
 review_time_minutes: 8
 
 references:
-  - source: IPH (FAA-H-8083-16B)
-    detail: Chapter 4 -- Missed Approach
+  - ref: airboss-ref:handbooks/iph/4
+    chapter_title: Approaches
+    redirected_from: airboss-ref:handbooks/iph/FAA-H-8083-16B/4
     note: Missed approach execution, climb gradient, hold at MAP.
   - source: AIM
     detail: 5-4-21 -- Missed Approach

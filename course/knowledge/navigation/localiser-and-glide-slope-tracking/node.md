@@ -52,12 +52,11 @@ review_time_minutes: 10
 
 # === References ===
 references:
-  - source: Instrument Procedures Handbook (FAA-H-8083-16B)
-    detail: Chapter 4 -- Approaches; ILS specifically
+  - ref: airboss-ref:handbooks/iph/4
+    chapter_title: Approaches
+    redirected_from: airboss-ref:handbooks/iph/FAA-H-8083-16B/4
     note: >-
-      Authoritative on the ILS approach structure: localiser, glide
-      slope, marker beacons (where present), categorisation (CAT I,
-      II, III).
+      Authoritative on the ILS approach structure: localiser, glide slope, marker beacons (where present), categorisation (CAT I, II, III).
   - source: AIM
     detail: 1-1-9 -- Instrument Landing System (ILS)
     note: >-

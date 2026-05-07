@@ -68,11 +68,17 @@ references:
     note: >-
       Statistical baseline. ~9 in 10 VFR-into-IMC accidents are fatal.
       The 180 turn, executed early, is the documented survival path.
-  - source: PHAK (FAA-H-8083-25C)
-    detail: Chapter 12 -- Weather Theory; Chapter 17 -- Aeromedical Factors
+  - ref: airboss-ref:handbooks/phak/12
+    chapter_title: Weather Theory
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25C/12
+    note: Preflight weather decisions -- the weather side of the IMC-entry decision.
+  - ref: airboss-ref:handbooks/phak/17
+    chapter_title: Aeromedical Factors
     note: >-
-      Preflight weather decisions and the spatial disorientation that
-      makes IMC entry lethal.
+      Spatial disorientation in IMC -- the aeromedical side of why
+      inadvertent IMC is lethal. Original legacy citation packed Ch. 12
+      (Weather Theory) and Ch. 17 (Aeromedical Factors) into one entry;
+      split here so each chapter carries the slice of the topic it treats.
 
 # === Assessment ===
 assessable: true

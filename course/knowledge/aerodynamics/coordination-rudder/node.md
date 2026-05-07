@@ -48,16 +48,15 @@ review_time_minutes: 8
 
 # === References ===
 references:
-  - source: AFH (FAA-H-8083-3B)
-    detail: Chapters on basic flight maneuvers, slow flight, stalls, and crosswind landings
+  - ref: airboss-ref:handbooks/afh
+    redirected_from: airboss-ref:handbooks/afh/FAA-H-8083-3B
     note: >-
-      Authoritative on coordinated flight, intentional slips and skids,
-      and the rudder demands of various flight regimes.
-  - source: PHAK (FAA-H-8083-25C)
-    detail: Chapter 5 -- Aerodynamics; adverse yaw, P-factor, slipstream
+      Authoritative on coordinated flight, intentional slips and skids, and the rudder demands of various flight regimes.
+  - ref: airboss-ref:handbooks/phak/5
+    chapter_title: Aerodynamics of Flight
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25C/5
     note: >-
-      The four sources of asymmetric yaw (adverse yaw, P-factor, slipstream,
-      gyroscopic precession) and the rudder corrections they demand.
+      The four sources of asymmetric yaw (adverse yaw, P-factor, slipstream, gyroscopic precession) and the rudder corrections they demand.
   - source: AC 61-67C
     detail: Stall and Spin Awareness Training
     note: >-

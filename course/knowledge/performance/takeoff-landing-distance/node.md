@@ -29,8 +29,9 @@ estimated_time_minutes: 50
 review_time_minutes: 10
 
 references:
-  - source: PHAK (FAA-H-8083-25C)
-    detail: Chapter 11 -- Aircraft Performance
+  - ref: airboss-ref:handbooks/phak/11
+    chapter_title: Aircraft Performance
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25C/11
     note: Density altitude corrections, wind adjustments, contamination factors.
   - source: POH
     detail: Section 5 -- Performance

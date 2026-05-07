@@ -54,11 +54,14 @@ references:
       Authoritative on marker beacon types, frequencies, light colors,
       and operational use. Notes that markers are progressively being
       decommissioned and replaced by DME / RNAV equivalents.
-  - source: Instrument Procedures Handbook (FAA-H-8083-16B)
-    detail: Chapter on instrument approaches; ILS components
+  - ref: airboss-ref:handbooks/iph/4
+    chapter_title: Approaches
+    redirected_from: airboss-ref:handbooks/iph/FAA-H-8083-16B
     note: >-
-      The standard reference for marker beacons in the context of an
-      ILS approach.
+      The standard reference for marker beacons in the context of an ILS
+      approach. Original legacy citation was doc-level ("Chapter on
+      instrument approaches; ILS components") -- pinned here to Ch. 4
+      "Approaches" as best-effort.
   - source: Approach plates (specific airport)
     detail: Plan view; profile view; identifier symbols (OM, MM, IM)
     note: >-

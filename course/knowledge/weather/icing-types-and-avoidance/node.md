@@ -33,8 +33,9 @@ references:
   - source: AIM
     detail: 7-1-21 -- Icing
     note: Operational procedures, AIRMET ZULU, pilot-report guidance.
-  - source: PHAK (FAA-H-8083-25C)
-    detail: Chapter 12 -- Weather Theory
+  - ref: airboss-ref:handbooks/phak/12
+    chapter_title: Weather Theory
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25C/12
     note: Clear, rime, and mixed icing formation mechanisms.
 
 assessable: true
