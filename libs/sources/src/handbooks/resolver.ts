@@ -282,6 +282,66 @@ export const HANDBOOKS_RESOLVER: CorpusResolver = {
 		// either pin or capture a more applicable sentinel).
 		return null;
 	},
+
+	/**
+	 * Per ADR 019 amendment 2026-05 §2 + the validator's rule 2 fallback.
+	 *
+	 * Handbook content lives on disk as derivatives keyed by `(doc,
+	 * edition)`, not as registry rows in `SOURCES`. The static `SOURCES`
+	 * registry is empty for the handbooks corpus (Phase 2 ships it
+	 * empty), so `registry.getEntry()` always returns null for handbook
+	 * URIs. This predicate teaches rule 2 to recognise a handbook
+	 * locator as resolvable when:
+	 *
+	 *   1. The doc slug exists in `HANDBOOK_DOC_EDITIONS`.
+	 *   2. The edition pin (if present) is a known edition for that doc.
+	 *   3. The chapter / section / subsection / figure / table (if
+	 *      present) exists in the resolved edition's manifest.
+	 *
+	 * For doc-only locators (`airboss-ref:handbooks/phak`), the predicate
+	 * returns true once step 1 passes -- the doc exists; the citation
+	 * is "see this whole handbook," which is a valid shape per ADR 019.
+	 *
+	 * The check uses the cached manifest (no fresh disk read on every
+	 * call). Returns false on any unknown segment so rule 2 surfaces the
+	 * ERROR with the correct "does not resolve" framing.
+	 */
+	isKnownLocator(parsed): boolean {
+		if (parsed.corpus !== HANDBOOKS_CORPUS) return false;
+		const locatorParsed = parseHandbooksLocator(parsed.locator, isKnownHandbookEdition);
+		if (locatorParsed.kind !== 'ok' || locatorParsed.handbooks === undefined) return false;
+		const { doc, edition: editionSlug, chapter, section, subsection, figure, table } = locatorParsed.handbooks;
+
+		// Step 1: doc slug must be known.
+		if (HANDBOOK_DOC_EDITIONS[doc] === undefined) return false;
+
+		// Step 2: if an edition is pinned in the locator, it must be a
+		// known edition for this doc. (parseHandbooksLocator already
+		// does the registry-aware disambiguation, so when editionSlug is
+		// non-empty we know it parsed AS an edition.)
+		const effectiveEdition = editionSlug.length > 0 ? editionSlug : (currentEditionForDoc(doc) ?? '');
+		if (effectiveEdition.length === 0) return false;
+		const faaDir = faaDirFor(doc, effectiveEdition);
+		if (faaDir === null) return false;
+
+		// Step 3: doc-only locator (no chapter/section/...) is resolvable
+		// at the handbook level. ADR 019 §1.2's handbooks shape allows
+		// citations to the whole document.
+		const hasSubLocator =
+			chapter !== undefined ||
+			section !== undefined ||
+			subsection !== undefined ||
+			figure !== undefined ||
+			table !== undefined;
+		if (!hasSubLocator) return true;
+
+		// Step 4: sub-locator must exist in the manifest. Reuse the
+		// existing manifest cache so this stays cheap.
+		const manifest = loadManifestCached(doc, faaDir, _derivativeRoot);
+		if (manifest === null) return false;
+		const sectionMatch = manifestSectionForLocator(manifest, locatorParsed.handbooks);
+		return sectionMatch !== null;
+	},
 };
 
 /**

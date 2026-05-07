@@ -55,6 +55,31 @@ export interface CorpusResolver {
 	 * shipped sentinel support omit it.
 	 */
 	getSentinelValue?(parsed: ParsedIdentifier, field: SentinelField, edition?: EditionId): string | null;
+
+	/**
+	 * Per ADR 019 amendment 2026-05 §2 + the validator's rule 2 fallback.
+	 * Decide whether a parsed identifier names a real thing in this
+	 * corpus, even when the static `SOURCES` registry is empty for it.
+	 *
+	 * Use case: handbooks ship their content as on-disk derivatives keyed
+	 * by `(doc, edition)` rather than as registry rows. The static
+	 * registry has no entry for `airboss-ref:handbooks/phak/5`, but the
+	 * handbook resolver knows the slug `phak` is a real document and
+	 * the on-disk manifest knows whether chapter 5 exists. Rule 2 calls
+	 * this method as a fallback when `registry.getEntry()` returns null,
+	 * so corpora with on-disk content (handbooks, regs sections) don't
+	 * each need to populate `SOURCES` to satisfy the validator.
+	 *
+	 * Optional -- corpora whose `SOURCES` table IS the source of truth
+	 * (statutes, NTSB IDs, Chief Counsel letters) leave this unset and
+	 * rule 2 falls through to its default ERROR.
+	 *
+	 * Implementations should be cheap (predicate against in-memory maps,
+	 * not disk reads). When the answer requires a disk read the resolver
+	 * may either cache aggressively or return `false` and let rule 2
+	 * remain conservative.
+	 */
+	isKnownLocator?(parsed: ParsedIdentifier): boolean;
 }
 
 /**

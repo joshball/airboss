@@ -28,6 +28,7 @@ import type {
 	ValidationFinding,
 } from './types.ts';
 import { UNKNOWN_CORPUS, UNPINNED_EDITION } from './types.ts';
+import { getCorpusResolver } from './registry/corpus-resolver.ts';
 
 /**
  * Context the rule engine needs from the lesson-parser to evaluate the
@@ -167,11 +168,23 @@ export function validateIdentifier(
 	const sourceId = parsed.raw as SourceId;
 
 	// -----------------------------------------------------------------
-	// Row 2 -- identifier resolves to an `accepted` or `superseded` registry entry.
+	// Row 2 -- identifier resolves to an `accepted` or `superseded` registry
+	// entry, OR the corpus resolver recognises the locator.
+	//
+	// Per ADR 019 §2.1, the static `SOURCES` table is the registry's source
+	// of truth, but corpora that ship content as on-disk derivatives keyed
+	// by `(doc, edition)` (handbooks today; CFR sections eventually) do not
+	// need a `SOURCES` row per locator -- the resolver IS the registry for
+	// those corpora. When the static lookup misses, we ask the resolver via
+	// its optional `isKnownLocator` predicate. Corpora that haven't opted
+	// into resolver-as-registry leave `isKnownLocator` unset and the
+	// fallback is a no-op (rule 2 ERROR fires as before).
 	// -----------------------------------------------------------------
 	const entry = ctx.registry.getEntry(sourceId);
 	if (entry === null) {
-		if (!errorEmitted) {
+		const resolver = getCorpusResolver(parsed.corpus);
+		const resolverKnowsIt = resolver?.isKnownLocator?.(parsed) === true;
+		if (!resolverKnowsIt && !errorEmitted) {
 			pushFinding('error', 2, 'identifier does not resolve to a registered entry');
 		}
 	}
