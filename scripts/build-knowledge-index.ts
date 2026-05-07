@@ -1107,61 +1107,62 @@ async function writeToDb(nodes: readonly ParsedNode[]): Promise<void> {
 
 	try {
 		await db.transaction(async (tx) => {
-			// Upsert every node. `contentHash` is stored so future reads can
-			// detect content changes; the ON CONFLICT set below bumps
-			// `version` only when the hash differs from whatever's on disk
-			// (SQL-side CASE), keeping re-seeds idempotent.
-			for (const node of nodes) {
-				const nextHash = node.contentHash;
+			// Bulk-upsert every node in a single statement instead of one
+			// INSERT per node. `excluded.*` references the candidate row in the
+			// ON CONFLICT clause; the version CASE compares the stored content
+			// hash against the candidate hash so re-seeds bump version only
+			// when the body actually changed. Cuts ~N round-trips to 1.
+			if (nodes.length > 0) {
+				const values = nodes.map((node) => ({
+					id: node.frontmatter.id,
+					title: node.frontmatter.title,
+					domain: node.frontmatter.domain,
+					crossDomains: node.frontmatter.crossDomains,
+					knowledgeTypes: node.frontmatter.knowledgeTypes,
+					technicalDepth: node.frontmatter.technicalDepth,
+					stability: node.frontmatter.stability,
+					minimumCert: node.frontmatter.minimumCert,
+					studyPriority: node.frontmatter.studyPriority,
+					modalities: node.frontmatter.modalities,
+					estimatedTimeMinutes: node.frontmatter.estimatedTimeMinutes,
+					reviewTimeMinutes: node.frontmatter.reviewTimeMinutes,
+					references: node.frontmatter.references.map(serializeReferenceForDb),
+					assessable: node.frontmatter.assessable,
+					assessmentMethods: node.frontmatter.assessmentMethods,
+					masteryCriteria: node.frontmatter.masteryCriteria,
+					contentMd: node.body,
+					contentHash: node.contentHash,
+					version: 1,
+					lifecycle: node.lifecycle,
+				}));
 				await tx
 					.insert(knowledgeNode)
-					.values({
-						id: node.frontmatter.id,
-						title: node.frontmatter.title,
-						domain: node.frontmatter.domain,
-						crossDomains: node.frontmatter.crossDomains,
-						knowledgeTypes: node.frontmatter.knowledgeTypes,
-						technicalDepth: node.frontmatter.technicalDepth,
-						stability: node.frontmatter.stability,
-						minimumCert: node.frontmatter.minimumCert,
-						studyPriority: node.frontmatter.studyPriority,
-						modalities: node.frontmatter.modalities,
-						estimatedTimeMinutes: node.frontmatter.estimatedTimeMinutes,
-						reviewTimeMinutes: node.frontmatter.reviewTimeMinutes,
-						references: node.frontmatter.references.map(serializeReferenceForDb),
-						assessable: node.frontmatter.assessable,
-						assessmentMethods: node.frontmatter.assessmentMethods,
-						masteryCriteria: node.frontmatter.masteryCriteria,
-						contentMd: node.body,
-						contentHash: nextHash,
-						version: 1,
-						lifecycle: node.lifecycle,
-					})
+					.values(values)
 					.onConflictDoUpdate({
 						target: knowledgeNode.id,
 						set: {
-							title: node.frontmatter.title,
-							domain: node.frontmatter.domain,
-							crossDomains: node.frontmatter.crossDomains,
-							knowledgeTypes: node.frontmatter.knowledgeTypes,
-							technicalDepth: node.frontmatter.technicalDepth,
-							stability: node.frontmatter.stability,
-							minimumCert: node.frontmatter.minimumCert,
-							studyPriority: node.frontmatter.studyPriority,
-							modalities: node.frontmatter.modalities,
-							estimatedTimeMinutes: node.frontmatter.estimatedTimeMinutes,
-							reviewTimeMinutes: node.frontmatter.reviewTimeMinutes,
-							references: node.frontmatter.references.map(serializeReferenceForDb),
-							assessable: node.frontmatter.assessable,
-							assessmentMethods: node.frontmatter.assessmentMethods,
-							masteryCriteria: node.frontmatter.masteryCriteria,
-							contentMd: node.body,
-							contentHash: nextHash,
+							title: sql.raw(`excluded.title`),
+							domain: sql.raw(`excluded.domain`),
+							crossDomains: sql.raw(`excluded.cross_domains`),
+							knowledgeTypes: sql.raw(`excluded.knowledge_types`),
+							technicalDepth: sql.raw(`excluded.technical_depth`),
+							stability: sql.raw(`excluded.stability`),
+							minimumCert: sql.raw(`excluded.minimum_cert`),
+							studyPriority: sql.raw(`excluded.study_priority`),
+							modalities: sql.raw(`excluded.modalities`),
+							estimatedTimeMinutes: sql.raw(`excluded.estimated_time_minutes`),
+							reviewTimeMinutes: sql.raw(`excluded.review_time_minutes`),
+							references: sql.raw(`excluded."references"`),
+							assessable: sql.raw(`excluded.assessable`),
+							assessmentMethods: sql.raw(`excluded.assessment_methods`),
+							masteryCriteria: sql.raw(`excluded.mastery_criteria`),
+							contentMd: sql.raw(`excluded.content_md`),
+							contentHash: sql.raw(`excluded.content_hash`),
 							version: sql<number>`CASE
-								WHEN coalesce(${knowledgeNode.contentHash}, '') = ${nextHash} THEN ${knowledgeNode.version}
+								WHEN coalesce(${knowledgeNode.contentHash}, '') = excluded.content_hash THEN ${knowledgeNode.version}
 								ELSE ${knowledgeNode.version} + 1
 							END`,
-							lifecycle: node.lifecycle,
+							lifecycle: sql.raw(`excluded.lifecycle`),
 							updatedAt: new Date(),
 						},
 					});

@@ -294,6 +294,57 @@ export function slugifySource(source: string): string {
 }
 
 /**
+ * Authored ref-shape contract (ADR 019 amendment 2026-05 §1). The pass-through
+ * path validates against this set so a future change to `serializeReferenceForDb`
+ * surfaces here as a typed rejection instead of silent coercion through
+ * `as unknown as StructuredCitation`.
+ *
+ * `ref` is required; the rest are optional sentinel fields the reader uses
+ * for human-readable locator text. Unknown keys are flagged: if the writer
+ * starts emitting a new sentinel, the migration will reject so we update
+ * the contract (and the renderer) deliberately instead of dropping data.
+ */
+const REF_SHAPE_REQUIRED_KEYS = new Set(['ref']);
+const REF_SHAPE_OPTIONAL_KEYS = new Set([
+	'ref',
+	'note',
+	'quote',
+	'chapter_title',
+	'section_title',
+	'paragraph_text',
+	'page_heading',
+	'redirected_from',
+]);
+
+interface RefShapeValidation {
+	readonly ok: boolean;
+	readonly reason: string | null;
+}
+
+function validateRefShape(value: unknown): RefShapeValidation {
+	if (typeof value !== 'object' || value === null) {
+		return { ok: false, reason: 'expected object' };
+	}
+	const obj = value as Record<string, unknown>;
+	for (const key of REF_SHAPE_REQUIRED_KEYS) {
+		if (typeof obj[key] !== 'string' || (obj[key] as string).length === 0) {
+			return { ok: false, reason: `missing required string field '${key}'` };
+		}
+	}
+	for (const key of Object.keys(obj)) {
+		if (!REF_SHAPE_OPTIONAL_KEYS.has(key)) {
+			return { ok: false, reason: `unknown sentinel field '${key}'; update REF_SHAPE_OPTIONAL_KEYS in scripts/db/migrate-references-to-structured.ts`,
+			};
+		}
+		const v = obj[key];
+		if (v !== undefined && typeof v !== 'string') {
+			return { ok: false, reason: `field '${key}' must be string when present, got ${typeof v}` };
+		}
+	}
+	return { ok: true, reason: null };
+}
+
+/**
  * Detect entries written in the `ref:`-shape (ADR 019 amendment 2026-05 §1).
  * Build-knowledge-index emits `{ ref: "airboss-ref:...", ...sentinels }` for
  * any reference that pre-resolves to the registry; the reader walks them via
@@ -754,7 +805,14 @@ export async function migrateReferencesToStructured(
 					// New `ref:`-shape entry written by build-knowledge-index
 					// (ADR 019 amendment 2026-05 §1). The reader resolves these
 					// directly via `@ab/sources`; the migration has nothing to
-					// reshape and the registry row already exists.
+					// reshape and the registry row already exists. We still
+					// validate the shape so a future change to the writer
+					// surfaces here as a typed rejection instead of silently
+					// flowing through `as unknown as StructuredCitation`.
+					const validated = validateRefShape(entry);
+					if (!validated.ok) {
+						throw new Error(`ref-shape validation failed: ${validated.reason}`);
+					}
 					newCitations.push(entry as unknown as StructuredCitation);
 					report.citationsAlreadyRefShape += 1;
 					continue;
@@ -794,19 +852,19 @@ export async function migrateReferencesToStructured(
 			continue;
 		}
 
-		await db.transaction(async (tx) => {
-			await tx
-				.update(knowledgeNode)
-				.set({
-					// Cast through unknown: the column's `$type<LegacyCitation[]>`
-					// hint is the pre-migration shape; post-migration this column
-					// holds StructuredCitation entries.
-					references: newCitations as unknown as { source: string; detail: string; note: string }[],
-					referencesV2Migrated: true,
-					updatedAt: new Date(),
-				})
-				.where(eq(knowledgeNode.id, row.id));
-		});
+		// One UPDATE per row, not one transaction per row: the operation is a
+		// single statement, so begin/commit per row was pure overhead. The
+		// column's `$type<LegacyCitation[]>` hint is the pre-migration shape;
+		// post-migration this column holds StructuredCitation entries (cast
+		// through unknown to silence the type bridge).
+		await db
+			.update(knowledgeNode)
+			.set({
+				references: newCitations as unknown as { source: string; detail: string; note: string }[],
+				referencesV2Migrated: true,
+				updatedAt: new Date(),
+			})
+			.where(eq(knowledgeNode.id, row.id));
 		report.rowsMigrated += 1;
 	}
 

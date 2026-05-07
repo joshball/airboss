@@ -350,9 +350,21 @@ export async function seedCfrManifest(
 		// This matches the rendering contract where rows render in subpart-
 		// relative order.
 		const ordinalBySubpart = new Map<string | null, number>();
+
+		// Pre-read every section body in parallel (chunked to avoid file-handle
+		// exhaustion) so the per-section upsert loop stays purely DB-bound.
+		// Sequential `await readFile` was the second-largest cost on a CFR
+		// re-seed after the per-row SELECT (now cache-bypassed). One Part can
+		// have 200+ sections; reading them serially burns wall time the DB
+		// could be doing useful work in.
+		const bodyByPath = await readBodiesParallel(
+			sortedSections.map((e) => resolve(editionDir, e.body_path)),
+			32,
+		);
+
 		for (const entry of sortedSections) {
 			const bodyAbsPath = resolve(editionDir, entry.body_path);
-			const contentMd = await readFile(bodyAbsPath, 'utf-8');
+			const contentMd = bodyByPath.get(bodyAbsPath) ?? '';
 
 			// `canonical_short` is the citation-display form (`§91.103`).
 			// `code` must be URL-slug-shape (`91.103`) so the
@@ -416,6 +428,32 @@ export async function seedCfrManifest(
 	}
 
 	return refIds;
+}
+
+/**
+ * Read every body file in parallel with a fixed concurrency cap so we don't
+ * exhaust the OS file-handle table on the larger Parts (Part 121 has ~390
+ * sections). Returns a map keyed by absolute path so the caller can look up
+ * each section's body directly without re-resolving paths.
+ */
+async function readBodiesParallel(
+	absPaths: ReadonlyArray<string>,
+	concurrency: number,
+): Promise<Map<string, string>> {
+	const out = new Map<string, string>();
+	let cursor = 0;
+	const workers = Array.from({ length: Math.min(concurrency, absPaths.length) }, async () => {
+		while (true) {
+			const idx = cursor++;
+			if (idx >= absPaths.length) return;
+			const path = absPaths[idx];
+			if (path === undefined) continue;
+			const body = await readFile(path, 'utf-8');
+			out.set(path, body);
+		}
+	});
+	await Promise.all(workers);
+	return out;
 }
 
 /**

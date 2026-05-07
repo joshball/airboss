@@ -306,8 +306,12 @@ export function pickEditions(args: PickEditionsArgs): string[] {
 	// shadow the real edition under the rolling-publication latest-wins
 	// selector below.
 	const all = listChildDirs(args.childAbs).filter((name) => !name.startsWith('_'));
-	if (!ROLLING_EDITION_CORPORA.has(args.corpusDir) || all.length <= 1) return all;
-	const sorted = [...all].sort();
+	// Sort deterministically so the supersede-chain caller always wires
+	// older -> newer in the same order regardless of `readdirSync`'s
+	// filesystem-dependent ordering. Numeric-aware so `FAA-H-8083-3B` sorts
+	// before `FAA-H-8083-3C` and `FAA-H-8083-25C` lands after `FAA-H-8083-3C`.
+	const sorted = [...all].sort((a, b) => a.localeCompare(b, 'en', { numeric: true }));
+	if (!ROLLING_EDITION_CORPORA.has(args.corpusDir) || sorted.length <= 1) return sorted;
 	const latest = sorted[sorted.length - 1];
 	return latest === undefined ? [] : [latest];
 }
