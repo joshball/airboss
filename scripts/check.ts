@@ -156,7 +156,7 @@ const COMMAND_HELP: Record<string, CommandHelp> = {
 
   bun run check branch`,
 		why: 'Pre-PR pass. Covers the full diff a reviewer will see, not just what is uncommitted right now.',
-		how: 'Computes `git merge-base HEAD origin/main` and uses three-dot diff against it. Falls back to a two-dot diff against `origin/main` if no merge-base exists. Requires `origin/main` to be reasonably fresh; run `git fetch` first if your reviewer is on a newer base.',
+		how: 'Computes `git merge-base HEAD origin/main` and uses three-dot diff against it. If origin/main is missing or no merge-base exists, errors with a `git fetch` instruction rather than silently falling back to a different diff shape.',
 		links: ['scripts/check.ts'],
 	},
 	quick: {
@@ -511,7 +511,17 @@ interface StepResult {
 	stderrPath: string;
 }
 
-type StepFn = () => Promise<{ exitCode: number; stdout: string; stderr: string }>;
+type StepFn = () => Promise<{
+	exitCode: number;
+	stdout: string;
+	stderr: string;
+	/**
+	 * If true, do NOT overwrite the on-disk `.cache/check/<step>.{stdout,stderr,exit}`
+	 * files for this step. Used by trivial early-return paths ("no files in scope")
+	 * so the last real run's output stays available for post-mortem inspection.
+	 */
+	skipCache?: boolean;
+}>;
 
 function ensureCacheDir(): void {
 	mkdirSync(CACHE_DIR, { recursive: true });
@@ -839,9 +849,11 @@ async function runStep(
 	const exitPath = resolve(CACHE_DIR, `${name}.exit`);
 	try {
 		const r = await fn();
-		writeFileSync(stdoutPath, r.stdout);
-		writeFileSync(stderrPath, r.stderr);
-		writeFileSync(exitPath, String(r.exitCode));
+		if (!r.skipCache) {
+			writeFileSync(stdoutPath, r.stdout);
+			writeFileSync(stderrPath, r.stderr);
+			writeFileSync(exitPath, String(r.exitCode));
+		}
 		reporter.finish(name, r.exitCode);
 		return {
 			name,
@@ -943,21 +955,29 @@ async function shellRun(
 
 async function dirtyFiles(profile: Profile): Promise<string[]> {
 	if (profile !== 'dirty' && profile !== 'branch') return [];
+
+	// Untracked is always part of the dirty set, on both profiles.
+	const untracked = await $`git ls-files --others --exclude-standard`.cwd(REPO_ROOT).text();
 	let raw = '';
+
 	if (profile === 'dirty') {
 		const tracked = await $`git diff --name-only HEAD`.cwd(REPO_ROOT).text();
-		const untracked = await $`git ls-files --others --exclude-standard`.cwd(REPO_ROOT).text();
 		raw = `${tracked}\n${untracked}`;
 	} else {
-		const base = (await $`git merge-base HEAD origin/main`.cwd(REPO_ROOT).nothrow().text()).trim();
-		if (base === '') {
-			raw = await $`git diff --name-only origin/main`.cwd(REPO_ROOT).nothrow().text();
-		} else {
-			raw = await $`git diff --name-only ${base}...HEAD`.cwd(REPO_ROOT).text();
-			const untracked = await $`git ls-files --others --exclude-standard`.cwd(REPO_ROOT).text();
-			raw = `${raw}\n${untracked}`;
+		// `branch` profile -- diff vs origin/main using the merge-base (3-dot semantics).
+		const baseResult = await $`git merge-base HEAD origin/main`.cwd(REPO_ROOT).nothrow().quiet();
+		const base = baseResult.text().trim();
+		if (baseResult.exitCode !== 0 || base === '') {
+			throw new Error(
+				'check branch: could not find merge-base with origin/main. ' +
+					'Run `git fetch origin main` and retry, or check that origin/main exists locally ' +
+					'(`git rev-parse origin/main`).',
+			);
 		}
+		const tracked = await $`git diff --name-only ${base}...HEAD`.cwd(REPO_ROOT).text();
+		raw = `${tracked}\n${untracked}`;
 	}
+
 	const set = new Set<string>();
 	for (const line of raw.split('\n')) {
 		const t = line.trim();
@@ -1036,7 +1056,7 @@ function buildStepDefs(profile: Profile, dirty: readonly string[]): StepDef[] {
 		fn: async () => {
 			if (!isScoped) return shellRun('bunx', ['biome', 'check', '.']);
 			const files = filterByExt(dirty, ['.ts', '.tsx', '.js', '.svelte', '.json', '.css']).filter(fileExists);
-			if (files.length === 0) return { exitCode: 0, stdout: 'no files in scope', stderr: '' };
+			if (files.length === 0) return { exitCode: 0, stdout: 'no files in scope', stderr: '', skipCache: true };
 			return shellRun('bunx', ['biome', 'check', ...files]);
 		},
 	});
@@ -1082,7 +1102,7 @@ function buildStepDefs(profile: Profile, dirty: readonly string[]): StepDef[] {
 		fn: async () => {
 			if (!isScoped) return shellRun('bun', ['tools/theme-lint/bin.ts']);
 			const files = filterByExt(dirty, ['.svelte', '.css']).filter(fileExists);
-			if (files.length === 0) return { exitCode: 0, stdout: 'no files in scope', stderr: '' };
+			if (files.length === 0) return { exitCode: 0, stdout: 'no files in scope', stderr: '', skipCache: true };
 			return shellRun('bun', ['tools/theme-lint/bin.ts', ...files]);
 		},
 	});
@@ -1094,7 +1114,7 @@ function buildStepDefs(profile: Profile, dirty: readonly string[]): StepDef[] {
 		fn: async () => {
 			if (!isScoped) return shellRun('bun', ['tools/test-lint/bin.ts']);
 			const files = dirty.filter((f) => /\.test\.ts$/.test(f)).filter(fileExists);
-			if (files.length === 0) return { exitCode: 0, stdout: 'no files in scope', stderr: '' };
+			if (files.length === 0) return { exitCode: 0, stdout: 'no files in scope', stderr: '', skipCache: true };
 			return shellRun('bun', ['tools/test-lint/bin.ts', ...files]);
 		},
 	});
@@ -1136,7 +1156,7 @@ function buildStepDefs(profile: Profile, dirty: readonly string[]): StepDef[] {
 		fn: async () => {
 			if (!isScoped) return shellRun('bun', ['tools/md-format/bin.ts', '--check']);
 			const files = filterByExt(dirty, ['.md']).filter(fileExists);
-			if (files.length === 0) return { exitCode: 0, stdout: 'no files in scope', stderr: '' };
+			if (files.length === 0) return { exitCode: 0, stdout: 'no files in scope', stderr: '', skipCache: true };
 			return shellRun('bun', ['tools/md-format/bin.ts', '--check', ...files]);
 		},
 	});
