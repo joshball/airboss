@@ -357,6 +357,14 @@ export const ROUTES = {
 	LIBRARY_AIRCRAFT_LANDING: '/library/aircraft',
 	/** Aircraft-specific (POH/AFM) umbrella surface. */
 	LIBRARY_AIRCRAFT: (slug: string) => `/library/aircraft/${encodeURIComponent(slug)}` as const,
+	/**
+	 * Advisories landing -- SAFO + InFO bulletin index. Sibling to
+	 * `/library/regulations` but partitioned by FAA Flight Standards bulletin
+	 * program rather than by regulator/publisher family.
+	 */
+	LIBRARY_ADVISORIES: '/library/advisories',
+	/** Per-bulletin detail (SAFO or InFO). Slug example: `safo-23001` / `info-23001`. */
+	LIBRARY_ADVISORIES_DETAIL: (slug: string) => `/library/advisories/${encodeURIComponent(slug)}` as const,
 
 	// Study -- Invite acceptance (hangar-invite-flow WP).
 	// Public route -- the token IS the credential. Lives outside the

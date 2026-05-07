@@ -217,6 +217,17 @@ export {
 // ----------------------------------------------------------------------
 
 export type {
+	AdvisoriesBucketCard,
+	AdvisoriesBulletinCard,
+	AdvisoriesDetailView,
+	AdvisoriesExternalLink,
+	AdvisoriesLandingView,
+	AdvisoriesReferenceCopy,
+	AdvisoriesView,
+	AdvisoriesViewNotFoundKey,
+	AdvisoriesViewParams,
+} from './advisories';
+export type {
 	CalibrationBucket,
 	CalibrationPageData,
 	CalibrationResult,
