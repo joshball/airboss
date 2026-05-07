@@ -383,6 +383,15 @@ const STEP_HELP: Record<string, StepHelp> = {
 		how: '`bun scripts/lint/wp-frontmatter.ts`.',
 		links: ['scripts/lint/wp-frontmatter.ts', 'docs/work-packages/'],
 	},
+	'bug-frontmatter': {
+		tier: 'fast',
+		scopable: false,
+		summary: 'Validate front matter on docs/bugs/bug-*.md',
+		what: 'Walks every bug file and validates front matter (id, severity, status, product, dates, optional PR/WP refs) against the bug-tracker contract.',
+		why: 'Bugs are part of the tracking surface. Schema drift here breaks the `bun run bug` CLI and the generated INDEX.md.',
+		how: '`bun scripts/lint/bugs.ts`.',
+		links: ['scripts/lint/bugs.ts', 'docs/bugs/'],
+	},
 	'md-format': {
 		tier: 'fast',
 		scopable: false,
@@ -1124,6 +1133,13 @@ function buildStepDefs(profile: Profile, dirty: readonly string[]): StepDef[] {
 		tier: 'fast',
 		relevantWhen: (d) => anyMatch(d, (f) => f.startsWith('docs/work-packages/') && f.endsWith('.md')),
 		fn: () => shellRun('bun', ['scripts/lint/wp-frontmatter.ts']),
+	});
+
+	defs.push({
+		name: 'bug-frontmatter',
+		tier: 'fast',
+		relevantWhen: (d) => anyMatch(d, (f) => f.startsWith('docs/bugs/') && f.endsWith('.md')),
+		fn: () => shellRun('bun', ['scripts/lint/bugs.ts']),
 	});
 
 	defs.push({
