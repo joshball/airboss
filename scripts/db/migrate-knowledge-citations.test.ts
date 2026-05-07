@@ -253,7 +253,7 @@ describe('parseExistingProposedRewrites', () => {
 			'',
 			'  ```yaml',
 			'  - ref: airboss-ref:handbooks/afh/3',
-			"    chapter_title: Basic Flight Maneuvers",
+			'    chapter_title: Basic Flight Maneuvers',
 			'    redirected_from: airboss-ref:handbooks/afh/FAA-H-8083-3B/3',
 			'    note: Practical interpretation.',
 			'  ```',
@@ -434,7 +434,7 @@ describe('runMigration', () => {
 			'  ```',
 		].join('\n');
 		review = review.replace(
-			/  ```yaml\n  - ref: airboss-ref:handbooks\/afh\/3\n[\s\S]*?\n  ```/,
+			/[ ]{2}```yaml\n[ ]{2}- ref: airboss-ref:handbooks\/afh\/3\n[\s\S]*?\n[ ]{2}```/,
 			(match, _) => {
 				// Only replace the SECOND occurrence (proposed rewrite, not legacy).
 				return match;
@@ -447,13 +447,13 @@ describe('runMigration', () => {
 		let i = 0;
 		while (i < parts.length) {
 			const l = parts[i];
-			if (/^  ```yaml\s*$/.test(l)) {
+			if (/^[ ]{2}```yaml\s*$/.test(l)) {
 				yamlFenceCount += 1;
 				if (yamlFenceCount === 2) {
 					// Skip up to the closing fence and replace with handEdited.
 					newParts.push(...handEdited.split('\n'));
 					i += 1;
-					while (i < parts.length && !/^  ```\s*$/.test(parts[i])) i += 1;
+					while (i < parts.length && !/^[ ]{2}```\s*$/.test(parts[i])) i += 1;
 					i += 1; // skip closing fence; handEdited has its own
 					continue;
 				}

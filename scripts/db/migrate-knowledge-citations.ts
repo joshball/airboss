@@ -753,11 +753,7 @@ export function parseExistingProposedRewrites(text: string): Map<string, string>
  * stripped of markdown indent by the parser); we re-indent them to match
  * the source file's list-item indent.
  */
-export function applyProposedBlockToText(
-	text: string,
-	row: ReviewRow,
-	proposedBlock: string,
-): string {
+export function applyProposedBlockToText(text: string, row: ReviewRow, proposedBlock: string): string {
 	const lines = text.split(/\r?\n/);
 	// itemIndent is the indent of the legacy `- source:` line; bodyIndent is
 	// itemIndent + '  '. Hand-edited block already carries its own internal
