@@ -1,5 +1,5 @@
 <script lang="ts">
-import LibraryCard from '@ab/aviation/ui/LibraryCard.svelte';
+import LibraryCardSwitch from '@ab/aviation/ui/cards/LibraryCardSwitch.svelte';
 import { ROUTES } from '@ab/constants';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
@@ -42,17 +42,7 @@ const totalCount = $derived(data.primary.length + data.carryover.reduce((acc, g)
 			<ul class="grid">
 				{#each data.primary as card (card.id)}
 					<li>
-						<LibraryCard
-							documentSlug={card.documentSlug}
-							edition={card.edition}
-							title={card.title}
-							publisher={card.publisher}
-							kind={card.kind}
-							subjects={card.subjects}
-							externalUrl={card.externalUrl}
-							isReadable={card.isReadable}
-							progress={null}
-						/>
+						<LibraryCardSwitch payload={card.payload} />
 					</li>
 				{/each}
 			</ul>
@@ -71,17 +61,7 @@ const totalCount = $derived(data.primary.length + data.carryover.reduce((acc, g)
 					<ul class="grid">
 						{#each group.cards as card (`${group.fromCert}:${card.id}`)}
 							<li>
-								<LibraryCard
-									documentSlug={card.documentSlug}
-									edition={card.edition}
-									title={card.title}
-									publisher={card.publisher}
-									kind={card.kind}
-									subjects={card.subjects}
-									externalUrl={card.externalUrl}
-									isReadable={card.isReadable}
-									progress={null}
-								/>
+								<LibraryCardSwitch payload={card.payload} />
 							</li>
 						{/each}
 					</ul>

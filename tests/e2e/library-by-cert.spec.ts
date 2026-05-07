@@ -56,9 +56,10 @@ test.describe('library-by-cert: cert spine', () => {
 		await page.goto(ROUTES.LIBRARY_CERT('private'));
 		await expect(page.getByRole('heading', { level: 1 })).toContainText(/Library -- Private/i);
 		// PHAK is the canonical PPL reference and is seeded with
-		// primary_cert=private. Cards on the cert page render via
-		// LibraryCard with `progress={null}` so they're unlinked tiles
-		// keyed by their title heading -- not anchor tags.
+		// primary_cert=private. Cards on the cert page render via the
+		// per-kind typed wrappers (HandbookCard / CfrPartCard / ...);
+		// match by the card's title heading rather than anchor href so
+		// the assertion stays stable across wrapper variants.
 		await expect(
 			page.getByRole('heading', { name: "Pilot's Handbook of Aeronautical Knowledge", exact: true }),
 		).toBeVisible();
@@ -85,8 +86,9 @@ test.describe('library-by-cert: topic spine', () => {
 		await page.goto(ROUTES.LIBRARY_TOPIC('weather'));
 		await expect(page.getByRole('heading', { level: 1 })).toContainText(/Weather/i);
 		// AvWx is the canonical weather handbook in the seed. Cards on the
-		// topic page render via LibraryCard with `progress={null}` so we
-		// match by the card's title heading rather than an anchor href.
+		// topic page render via per-kind typed wrappers; match by the
+		// card's title heading rather than an anchor href so the assertion
+		// stays stable across wrapper variants.
 		await expect(page.getByRole('heading', { name: 'Aviation Weather Handbook', exact: true })).toBeVisible();
 	});
 

@@ -298,6 +298,15 @@ export type {
 	NodeView,
 } from './knowledge';
 export type { CarryoverGroup, CertReferenceBundle } from './library-by-cert';
+export type {
+	CfrPartUrlResolver,
+	ExternalLink as LibraryExternalLink,
+	LibraryCardPayload,
+	LibraryCardVariant,
+	LibraryTopicChip,
+} from './library-card-projection';
+// Pure projection -- no DB / no `node:*` imports. Safe in the runtime barrel.
+export { projectReferenceToLibraryCard } from './library-card-projection';
 export type { GateState, LeafMasteryState, NodeEvidenceState } from './mastery';
 export type { CreatePlanInput, UpdatePlanInput } from './plans';
 export type {
