@@ -1,0 +1,39 @@
+# Per-aircraft Pilot Operating Handbooks.
+#
+# Each row is the bibliographic record (slug, kind, title, publisher, URL,
+# subjects, primary cert) -- the manufacturer voice + pedagogy copy lives
+# in `aircraft/_authoring/poh.yaml` and is layered onto `metadata` at seed
+# time by `libs/bc/study/src/seeders/poh-authoring.ts`.
+#
+# `edition` carries the revision string so the audit page surfaces the
+# revision the user is reading. Cert applicability stays null because a
+# POH is not cert-owned -- a Private student, an instrument candidate, and
+# a CFI all read the same document for the same airplane.
+
+references:
+  - slug: cessna-172s
+    kind: poh
+    edition: "13"
+    title: Cessna 172S Pilot Operating Handbook
+    publisher: Cessna
+    url: https://cessna.txtav.com/en/piston/cessna-skyhawk
+    subjects: [aircraft-systems, performance]
+    primary_cert: null
+
+  - slug: piper-pa28-161-warrior-iii
+    kind: poh
+    edition: "5"
+    title: Piper PA-28-161 Warrior III Pilot Operating Handbook
+    publisher: Piper Aircraft
+    url: https://www.piper.com/aircraft/pilot-100i/
+    subjects: [aircraft-systems, performance]
+    primary_cert: null
+
+  - slug: cirrus-sr22-g6
+    kind: poh
+    edition: "A"
+    title: Cirrus SR22 G6 Pilot Operating Handbook
+    publisher: Cirrus Aircraft
+    url: https://cirrusaircraft.com/aircraft/sr22/
+    subjects: [aircraft-systems, performance]
+    primary_cert: null

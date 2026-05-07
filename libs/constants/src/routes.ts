@@ -343,6 +343,8 @@ export const ROUTES = {
 	/** POST endpoint for client heartbeat ticks while reading a handbook section. */
 	LIBRARY_HANDBOOK_SECTION_HEARTBEAT: (slug: string, chapter: number | string, section: number | string) =>
 		`/library/handbook/${encodeURIComponent(slug)}/${encodeURIComponent(String(chapter))}/${encodeURIComponent(String(section))}/heartbeat` as const,
+	/** Aircraft-specific (POH/AFM) landing -- grid of every authored aircraft. */
+	LIBRARY_AIRCRAFT_LANDING: '/library/aircraft',
 	/** Aircraft-specific (POH/AFM) umbrella surface. */
 	LIBRARY_AIRCRAFT: (slug: string) => `/library/aircraft/${encodeURIComponent(slug)}` as const,
 

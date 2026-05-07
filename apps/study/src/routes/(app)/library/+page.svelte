@@ -145,16 +145,14 @@ const totalSurfaces = $derived(certCount + topicCount + regCount + aircraftCount
 	{#if aircraftCount > 0}
 		<section class="spine" aria-labelledby="aircraft-spine-h">
 			<h2 id="aircraft-spine-h">Aircraft-specific</h2>
-			<p class="spine-lead">Pilot's Operating Handbooks and Aircraft Flight Manuals.</p>
+			<p class="spine-lead">Pilot Operating Handbooks and Aircraft Flight Manuals.</p>
 			<ul class="grid">
-				{#each data.aircraft as ac (ac.id)}
-					<li>
-						<a class="card aircraft-card" href={ROUTES.LIBRARY_AIRCRAFT(ac.documentSlug)}>
-							<span class="card-title">{ac.title}</span>
-							<span class="card-count">POH / AFM</span>
-						</a>
-					</li>
-				{/each}
+				<li>
+					<a class="card aircraft-card" href={ROUTES.LIBRARY_AIRCRAFT_LANDING}>
+						<span class="card-title">Aircraft</span>
+						<span class="card-count">{aircraftCount} POH{aircraftCount === 1 ? '' : 's'}</span>
+					</a>
+				</li>
 			</ul>
 		</section>
 	{/if}
