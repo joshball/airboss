@@ -382,4 +382,13 @@ export type {
 	TeachingExerciseRow,
 	UpdateTeachingExerciseInput,
 } from './teaching-exercises';
+export type {
+	TestingBucketCard,
+	TestingDetailView,
+	TestingLandingView,
+	TestingPublicationCard,
+	TestingReferenceSummary,
+	TestingView,
+	TestingViewParams,
+} from './testing';
 export type { PageExplainerDismissals, UserPrefValue } from './user-prefs';

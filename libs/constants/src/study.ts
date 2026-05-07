@@ -1592,6 +1592,67 @@ export const LIBRARY_REGULATIONS_KIND_COPY: Record<LibraryRegulationsKind, Libra
 };
 
 /**
+ * Top-level "Testing standards" buckets surfaced on `/library/testing`.
+ * One bucket per FAA test-standard format: ACS (current) and PTS (legacy,
+ * still in force for the certificates ACS has not reached yet).
+ *
+ * Closed enum -- adding a new kind requires a code edit so the route loader
+ * always knows how to group the references inside.
+ */
+export const LIBRARY_TESTING_KINDS = {
+	ACS: 'acs',
+	PTS: 'pts',
+} as const;
+
+export type LibraryTestingKind = (typeof LIBRARY_TESTING_KINDS)[keyof typeof LIBRARY_TESTING_KINDS];
+
+export const LIBRARY_TESTING_KIND_VALUES: readonly LibraryTestingKind[] = Object.values(LIBRARY_TESTING_KINDS);
+
+export const LIBRARY_TESTING_KIND_LABELS: Record<LibraryTestingKind, string> = {
+	[LIBRARY_TESTING_KINDS.ACS]: 'Airman Certification Standards',
+	[LIBRARY_TESTING_KINDS.PTS]: 'Practical Test Standards',
+};
+
+/**
+ * Hand-authored descriptive copy for the top-level testing-standards buckets.
+ * Surfaced on `/library/testing` (landing) and as the page header on
+ * `/library/testing/[slug]` (detail). Kept in code (not DB) because there is
+ * no single `reference` row at the kind level -- each kind groups multiple
+ * publications (one per certificate).
+ */
+export interface LibraryTestingKindCopy {
+	/** Card title -- the wayfinder ("ACS", "PTS"). */
+	readonly shortLabel: string;
+	/** Card subtitle -- the topic at-a-glance ("Airman Certification Standards"). */
+	readonly topic: string;
+	/** Tooltip + detail-page subtitle -- the full publisher title. */
+	readonly officialTitle: string;
+	readonly description: string;
+	readonly whyItMatters: string;
+}
+
+export const LIBRARY_TESTING_KIND_COPY: Record<LibraryTestingKind, LibraryTestingKindCopy> = {
+	[LIBRARY_TESTING_KINDS.ACS]: {
+		shortLabel: 'ACS',
+		topic: 'Airman Certification Standards',
+		officialTitle: 'FAA Airman Certification Standards',
+		description:
+			"The FAA's current test standard for pilot certificates and ratings. One ACS per airman level (Private, Instrument, Commercial, Flight Instructor, ATP) -- each lists the knowledge, risk-management, and skill elements an examiner can probe on the practical test.",
+		whyItMatters:
+			'The ACS for your cert is the source of truth for what your check ride examiner can ask. Read it before you train each task; review it the week of the test. Anything outside the ACS is fair to study but not fair to be tested on.',
+	},
+	[LIBRARY_TESTING_KINDS.PTS]: {
+		shortLabel: 'PTS',
+		topic: 'Practical Test Standards',
+		officialTitle: 'FAA Practical Test Standards',
+		description:
+			'The legacy FAA test standard, structured around tasks and tolerances rather than the ACS knowledge-risk-skill triad. Being phased out as the ACS replaces each one, but still in force for some certificates -- notably the CFII -- where the ACS has not landed yet.',
+		whyItMatters:
+			'If your check ride is governed by a PTS, this is the document the examiner is testing you against. The format is older and terser than the ACS, and older training material still cites it -- read it directly so you know what is actually required.',
+	},
+};
+
+/**
  * External-citation URL templates. The `resolveCitationUrl` resolver in
  * `@ab/bc-study handbooks.ts` consumes these for non-handbook citation kinds.
  * Centralised here so a URL change (eCFR rebrand, FAA AIM reorganisation)

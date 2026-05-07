@@ -20,7 +20,10 @@ import {
 	type CertApplicability,
 	LIBRARY_REGULATIONS_KIND_VALUES,
 	LIBRARY_REGULATIONS_KINDS,
+	LIBRARY_TESTING_KIND_VALUES,
+	LIBRARY_TESTING_KINDS,
 	type LibraryRegulationsKind,
+	type LibraryTestingKind,
 	REFERENCE_KINDS,
 	type ReferenceKind,
 } from '@ab/constants';
@@ -38,6 +41,11 @@ interface TopicSpineEntry {
 
 interface RegulationsBucket {
 	kind: LibraryRegulationsKind;
+	count: number;
+}
+
+interface TestingBucket {
+	kind: LibraryTestingKind;
 	count: number;
 }
 
@@ -106,6 +114,13 @@ export const load: PageServerLoad = async (event) => {
 		return { kind, count };
 	});
 
+	const testingBuckets: TestingBucket[] = LIBRARY_TESTING_KIND_VALUES.map((kind) => {
+		const matchKind = kind === LIBRARY_TESTING_KINDS.ACS ? REFERENCE_KINDS.ACS : REFERENCE_KINDS.PTS;
+		const count = allRefs.reduce((acc, ref) => (ref.kind === matchKind ? acc + 1 : acc), 0);
+		return { kind, count };
+	});
+	const testingCount = testingBuckets.reduce((acc, b) => acc + b.count, 0);
+
 	// Exclude the legacy `poh-afm` umbrella row -- it's the generic citation
 	// landing for "the POH" without a specific aircraft, not an aircraft in
 	// its own right. Counting it would mislead the landing-tile total.
@@ -118,6 +133,8 @@ export const load: PageServerLoad = async (event) => {
 		certSpine,
 		topicSpine,
 		regulationBuckets,
+		testingBuckets,
+		testingCount,
 		aircraft,
 	};
 };

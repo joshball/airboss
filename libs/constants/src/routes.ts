@@ -1,7 +1,7 @@
 import type { ProgramTab } from './program';
 import type { AviationTopic, CertApplicability } from './reference-tags';
 import type { SimScenarioId } from './sim';
-import type { KnowledgePhase, LibraryRegulationsKind } from './study';
+import type { KnowledgePhase, LibraryRegulationsKind, LibraryTestingKind } from './study';
 
 /** Query-string parameter names used across study routes. */
 export const QUERY_PARAMS = {
@@ -332,6 +332,16 @@ export const ROUTES = {
 	/** Per-section leaf reader inside a regulations group. */
 	LIBRARY_REGULATIONS_SECTION: (kind: LibraryRegulationsKind, group: string, section: string) =>
 		`/library/regulations/${encodeURIComponent(kind)}/${encodeURIComponent(group)}/${encodeURIComponent(section)}` as const,
+	/** Top-level testing standards index (ACS + PTS). */
+	LIBRARY_TESTING: '/library/testing',
+	/** Detail page for one ACS / PTS publication, keyed by reference document slug. */
+	LIBRARY_TESTING_DETAIL: (slug: string) => `/library/testing/${encodeURIComponent(slug)}` as const,
+	/**
+	 * Optional kind-only filter inside the testing index. Today the landing
+	 * page renders both kinds together, but this constant exists so future
+	 * deep-links / filters route through ROUTES instead of inline strings.
+	 */
+	LIBRARY_TESTING_KIND: (kind: LibraryTestingKind) => `/library/testing?kind=${encodeURIComponent(kind)}` as const,
 	/** Handbook TOC by document slug (PHAK, AFH, IFH, ...). */
 	LIBRARY_HANDBOOK: (slug: string) => `/library/handbook/${encodeURIComponent(slug)}` as const,
 	/** Single chapter inside a handbook. */
