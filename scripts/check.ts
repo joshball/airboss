@@ -33,11 +33,21 @@ import { $ } from 'bun';
 import { closeSync, existsSync, mkdirSync, openSync, readFileSync, statSync, unlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
+import { resolvePositiveIntEnv, runWithConcurrency } from './lib/concurrency';
 
 const REPO_ROOT = resolve(import.meta.dir, '..');
 const CACHE_DIR = resolve(REPO_ROOT, '.cache', 'check');
 const TIMINGS_PATH = resolve(CACHE_DIR, 'timings.json');
 const TIMINGS_KEEP = 5;
+
+/**
+ * Default svelte-check concurrency. Each svelte-check is a full TS+Svelte
+ * compile; 5 in parallel exceeds the default V8 old-space heap and OOMs.
+ * 3 stays comfortably under the default heap and gives ~2x wall-clock
+ * vs. serial. Override with `CHECK_SVELTE_CONCURRENCY`.
+ */
+const DEFAULT_SVELTE_CHECK_CONCURRENCY = 3;
+const SVELTE_CHECK_CONCURRENCY_ENV = 'CHECK_SVELTE_CONCURRENCY';
 
 // ---------------------------------------------------------------------------
 // CLI types and parsing
@@ -171,12 +181,13 @@ const COMMAND_HELP: Record<string, CommandHelp> = {
 	},
 	types: {
 		summary: 'svelte-check across all 5 apps (~120-200s).',
-		what: `Runs only svelte-check on apps/study, sim, hangar, avionics, flightbag. Concurrency-capped at 2 to avoid CPU/heap thrashing.
+		what: `Runs only svelte-check on apps/study, sim, hangar, avionics, flightbag. Concurrency-capped at 3 (override via CHECK_SVELTE_CONCURRENCY) to avoid CPU/heap thrashing.
 
   bun run check types
-  bun run check types --verbose`,
+  bun run check types --verbose
+  CHECK_SVELTE_CONCURRENCY=2 bun run check types`,
 		why: 'svelte-check is the slowest part of the pipeline by a wide margin (apps/study alone is ~3 minutes on a cold cache). Splitting it out lets the default profile stay fast and lets you run type checks deliberately when you have changed types, signatures, or component props.',
-		how: 'Each svelte-check is `bunx svelte-check --tsconfig ./tsconfig.json` in the app directory. They run 2-at-a-time -- 5-at-a-time thrashes RAM and is slower wall-clock.',
+		how: 'Each svelte-check is `bunx svelte-check --tsconfig ./tsconfig.json` in the app directory. They run 3-at-a-time by default -- 5-at-a-time exceeds the default V8 old-space heap and OOMs.',
 		links: ['apps/*/tsconfig.json'],
 	},
 	all: {
@@ -186,7 +197,7 @@ const COMMAND_HELP: Record<string, CommandHelp> = {
   bun run check all
   bun run check all --verbose`,
 		why: 'The "before pushing" mode and the CI mode. Catches everything regardless of which files you touched.',
-		how: 'Spawns all steps in parallel; svelte-check is concurrency-capped to 2.',
+		how: 'Spawns all steps in parallel; svelte-check is concurrency-capped to 3 (override via CHECK_SVELTE_CONCURRENCY).',
 		links: ['scripts/check.ts'],
 	},
 	checks: {
@@ -527,34 +538,8 @@ function ensureCacheDir(): void {
 	mkdirSync(CACHE_DIR, { recursive: true });
 }
 
-/**
- * Tiny semaphore for capping concurrency on a lane.
- * svelte-check is heavy (full TS program + Svelte compile per app).
- * Running 5 in parallel thrashes CPU/heap and is slower wall-clock than 2-at-a-time.
- */
-function createSemaphore(max: number): { acquire(): Promise<() => void> } {
-	let active = 0;
-	const queue: Array<() => void> = [];
-	const next = (): void => {
-		if (active >= max) return;
-		const fn = queue.shift();
-		if (!fn) return;
-		active += 1;
-		fn();
-	};
-	return {
-		acquire: () =>
-			new Promise<() => void>((resolve) => {
-				const release = (): void => {
-					active -= 1;
-					next();
-				};
-				const grant = (): void => resolve(release);
-				queue.push(grant);
-				next();
-			}),
-	};
-}
+// Bounded async pool + env parsing live in `scripts/lib/concurrency.ts`
+// so they can be unit-tested without dragging in the bun-only CLI surface.
 
 // ---------------------------------------------------------------------------
 // Timings cache (drives progress bars based on prior-run medians)
@@ -835,13 +820,7 @@ function pickReporter(args: CliArgs): Reporter {
 // Step runner
 // ---------------------------------------------------------------------------
 
-async function runStep(
-	name: string,
-	fn: StepFn,
-	reporter: Reporter,
-	semaphore?: { acquire(): Promise<() => void> },
-): Promise<StepResult> {
-	const release = semaphore ? await semaphore.acquire() : undefined;
+async function runStep(name: string, fn: StepFn, reporter: Reporter): Promise<StepResult> {
 	reporter.start(name);
 	const start = Date.now();
 	const stdoutPath = resolve(CACHE_DIR, `${name}.stdout`);
@@ -878,8 +857,6 @@ async function runStep(
 			stdoutPath,
 			stderrPath,
 		};
-	} finally {
-		release?.();
 	}
 }
 
@@ -1320,26 +1297,31 @@ async function main(): Promise<number> {
 	const reporter = pickReporter(args);
 	for (const d of defs) reporter.register(d.name, expectedFor(d.name));
 
-	const svelteCheckSem = createSemaphore(2);
-	const tasks = defs.map((d) =>
-		runStep(d.name, d.fn, reporter, d.lane === 'svelte-check' ? svelteCheckSem : undefined),
+	const svelteCap = resolvePositiveIntEnv(process.env[SVELTE_CHECK_CONCURRENCY_ENV], DEFAULT_SVELTE_CHECK_CONCURRENCY);
+	const svelteDefs = defs.filter((d) => d.lane === 'svelte-check');
+	const otherDefs = defs.filter((d) => d.lane !== 'svelte-check');
+
+	const verboseStream = (r: StepResult): StepResult => {
+		if (args.verbose && r.exitCode !== 0) {
+			if (r.stdout) process.stdout.write(r.stdout);
+			if (r.stderr) process.stderr.write(r.stderr);
+		}
+		return r;
+	};
+
+	// Other steps run unbounded in parallel (they're cheap individually).
+	const otherTasks = otherDefs.map((d) => runStep(d.name, d.fn, reporter).then(verboseStream));
+
+	// svelte-check steps run through a bounded pool so we never have more than
+	// `svelteCap` heavy TS+Svelte compiles in flight. The pool returns one
+	// promise that resolves to all StepResults in input order; we spread those
+	// into the final results array so summarize() sees every named step.
+	const svelteTask: Promise<StepResult[]> = runWithConcurrency(svelteDefs, svelteCap, async (d) =>
+		verboseStream(await runStep(d.name, d.fn, reporter)),
 	);
 
-	let results: StepResult[];
-	if (args.verbose) {
-		const wrapped = tasks.map((p) =>
-			p.then((r) => {
-				if (r.exitCode !== 0) {
-					if (r.stdout) process.stdout.write(r.stdout);
-					if (r.stderr) process.stderr.write(r.stderr);
-				}
-				return r;
-			}),
-		);
-		results = await Promise.all(wrapped);
-	} else {
-		results = await Promise.all(tasks);
-	}
+	const [otherResults, svelteResults] = await Promise.all([Promise.all(otherTasks), svelteTask]);
+	const results: StepResult[] = [...otherResults, ...svelteResults];
 	reporter.close();
 
 	for (const r of results) {
