@@ -132,9 +132,37 @@ export async function seedReferencesFromManifest(options: SeedReferencesOptions 
 		onProgress: (line) => console.log(line),
 	};
 
-	for (const corpusDir of CORPUS_DIRS) {
-		const corpusAbs = resolve(REPO_ROOT, corpusDir);
-		if (!existsSync(corpusAbs)) continue;
+	// Run each corpus in parallel: distinct corpora write to disjoint
+	// `(document_slug, edition)` row sets in `study.reference`, and the
+	// supersede-chain step at the end of each corpus only reads its own
+	// per-corpus map. Sections inside a corpus stay serialized (the
+	// reference-section index cache fills the win there). Each corpus
+	// receives its own per-corpus summary which we reduce into the shared
+	// total at the end so accumulation stays race-free.
+	const perCorpus = await Promise.all(
+		CORPUS_DIRS.map((corpusDir) => seedOneCorpus(corpusDir, context, options).catch((err) => {
+			throw new Error(`seedReferencesFromManifest: corpus '${corpusDir}' failed: ${(err as Error).message}`);
+		})),
+	);
+	for (const partial of perCorpus) {
+		summary.editionsProcessed += partial.editionsProcessed;
+		summary.sectionsTouched += partial.sectionsTouched;
+		summary.sectionsChanged += partial.sectionsChanged;
+		summary.figuresWritten += partial.figuresWritten;
+		summary.supersededLinks += partial.supersededLinks;
+	}
+	return summary;
+}
+
+async function seedOneCorpus(
+	corpusDir: string,
+	context: SeedContext,
+	options: SeedReferencesOptions,
+): Promise<SeedSummary> {
+	const summary = emptySummary();
+	const corpusAbs = resolve(REPO_ROOT, corpusDir);
+	if (!existsSync(corpusAbs)) return summary;
+	{
 
 		// Two supported layouts coexist within a corpus:
 		//   (a) Multi-doc:  <corpus>/<slug>/<edition>/manifest.json  (handbooks)
@@ -278,8 +306,12 @@ export function pickEditions(args: PickEditionsArgs): string[] {
 	// shadow the real edition under the rolling-publication latest-wins
 	// selector below.
 	const all = listChildDirs(args.childAbs).filter((name) => !name.startsWith('_'));
-	if (!ROLLING_EDITION_CORPORA.has(args.corpusDir) || all.length <= 1) return all;
-	const sorted = [...all].sort();
+	// Sort deterministically so the supersede-chain caller always wires
+	// older -> newer in the same order regardless of `readdirSync`'s
+	// filesystem-dependent ordering. Numeric-aware so `FAA-H-8083-3B` sorts
+	// before `FAA-H-8083-3C` and `FAA-H-8083-25C` lands after `FAA-H-8083-3C`.
+	const sorted = [...all].sort((a, b) => a.localeCompare(b, 'en', { numeric: true }));
+	if (!ROLLING_EDITION_CORPORA.has(args.corpusDir) || sorted.length <= 1) return sorted;
 	const latest = sorted[sorted.length - 1];
 	return latest === undefined ? [] : [latest];
 }

@@ -392,6 +392,15 @@ const STEP_HELP: Record<string, StepHelp> = {
 		how: '`bun scripts/lint/bugs.ts`.',
 		links: ['scripts/lint/bugs.ts', 'docs/bugs/'],
 	},
+	'tracking-generate': {
+		tier: 'fast',
+		scopable: false,
+		summary: 'Verify BOARD.md / SHIPPED.md / per-product ROADMAP.md are in sync with WP frontmatter',
+		what: 'Re-runs `bun scripts/tracking/generate.ts --check`: re-generates the aggregator views in memory and diffs against the on-disk committed copies. Fails if any generated file is missing or has drifted.',
+		why: 'The generated views are the canonical board / roadmap / shipped log per ADR 025. A drift means either (a) an agent hand-edited a generated file or (b) WP frontmatter changed but the generator was not re-run. Either way the docs lie about the project state.',
+		how: '`bun run tracking:generate:check`. Run `bun run tracking:generate` to refresh.',
+		links: ['scripts/tracking/generate.ts', 'docs/decisions/025-wp-frontmatter-contract/decision.md'],
+	},
 	'md-format': {
 		tier: 'fast',
 		scopable: false,
@@ -1140,6 +1149,25 @@ function buildStepDefs(profile: Profile, dirty: readonly string[]): StepDef[] {
 		tier: 'fast',
 		relevantWhen: (d) => anyMatch(d, (f) => f.startsWith('docs/bugs/') && f.endsWith('.md')),
 		fn: () => shellRun('bun', ['scripts/lint/bugs.ts']),
+	});
+
+	defs.push({
+		name: 'tracking-generate',
+		tier: 'fast',
+		// Drift can be introduced two ways: WP frontmatter changes (regenerate
+		// needed) or hand edits to a generated file. Trigger on either.
+		relevantWhen: (d) =>
+			anyMatch(
+				d,
+				(f) =>
+					(f.startsWith('docs/work-packages/') && f.endsWith('.md')) ||
+					f === 'docs/work/BOARD.md' ||
+					f === 'docs/work/SHIPPED.md' ||
+					(f.startsWith('docs/products/') && f.endsWith('/ROADMAP.md')) ||
+					f === 'scripts/tracking/generate.ts' ||
+					f === 'scripts/lib/wp-loader.ts',
+			),
+		fn: () => shellRun('bun', ['scripts/tracking/generate.ts', '--check']),
 	});
 
 	defs.push({

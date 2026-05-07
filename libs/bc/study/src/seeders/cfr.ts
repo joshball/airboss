@@ -178,6 +178,11 @@ export async function seedCfrManifest(
 	const sectionsFile = await loadCfrSectionsFile(options.manifestAbsPath);
 	const editionDir = dirname(options.manifestAbsPath);
 	const refIds: string[] = [];
+	// Long-tail Parts that have no `study.reference` row (per WP-CFR scope).
+	// We skip the per-Part seed for each one, but printing one line per skip
+	// scrolls 130+ lines past the operator on every reset. Collect the slugs
+	// here and emit one summary line at the end of the adapter run.
+	const skippedSlugs: string[] = [];
 
 	// Per-Part overlay map (description / whyItMatters / scope). Empty when
 	// the per-Title authoring file is absent -- a fresh-clone-friendly path.
@@ -203,9 +208,7 @@ export async function seedCfrManifest(
 
 		const existingRef = await findCfrReferenceBySlug(documentSlug);
 		if (existingRef === null) {
-			context.onProgress?.(
-				`  skip ${documentSlug}: no DB row in study.reference (long-tail Part out of scope per WP-CFR spec)`,
-			);
+			skippedSlugs.push(documentSlug);
 			continue;
 		}
 
@@ -347,9 +350,21 @@ export async function seedCfrManifest(
 		// This matches the rendering contract where rows render in subpart-
 		// relative order.
 		const ordinalBySubpart = new Map<string | null, number>();
+
+		// Pre-read every section body in parallel (chunked to avoid file-handle
+		// exhaustion) so the per-section upsert loop stays purely DB-bound.
+		// Sequential `await readFile` was the second-largest cost on a CFR
+		// re-seed after the per-row SELECT (now cache-bypassed). One Part can
+		// have 200+ sections; reading them serially burns wall time the DB
+		// could be doing useful work in.
+		const bodyByPath = await readBodiesParallel(
+			sortedSections.map((e) => resolve(editionDir, e.body_path)),
+			32,
+		);
+
 		for (const entry of sortedSections) {
 			const bodyAbsPath = resolve(editionDir, entry.body_path);
-			const contentMd = await readFile(bodyAbsPath, 'utf-8');
+			const contentMd = bodyByPath.get(bodyAbsPath) ?? '';
 
 			// `canonical_short` is the citation-display form (`§91.103`).
 			// `code` must be URL-slug-shape (`91.103`) so the
@@ -399,7 +414,46 @@ export async function seedCfrManifest(
 		);
 	}
 
+	if (skippedSlugs.length > 0) {
+		// Show the skipped Part numbers (without the "<title>cfr" prefix) so
+		// the operator can spot when a Part they expected to see was filtered
+		// out. Full slug list is reconstructable from the manifest.
+		const partNumbers = skippedSlugs
+			.map((slug) => slug.replace(/^\d+cfr/, ''))
+			.sort((a, b) => a.localeCompare(b, 'en', { numeric: true }));
+		const titlePrefix = `${manifest.title}cfr`;
+		context.onProgress?.(
+			`  ${titlePrefix}*: skipped ${skippedSlugs.length} long-tail Parts (out of WP-CFR scope): ${partNumbers.join(', ')}`,
+		);
+	}
+
 	return refIds;
+}
+
+/**
+ * Read every body file in parallel with a fixed concurrency cap so we don't
+ * exhaust the OS file-handle table on the larger Parts (Part 121 has ~390
+ * sections). Returns a map keyed by absolute path so the caller can look up
+ * each section's body directly without re-resolving paths.
+ */
+async function readBodiesParallel(
+	absPaths: ReadonlyArray<string>,
+	concurrency: number,
+): Promise<Map<string, string>> {
+	const out = new Map<string, string>();
+	let cursor = 0;
+	const workers = Array.from({ length: Math.min(concurrency, absPaths.length) }, async () => {
+		while (true) {
+			const idx = cursor++;
+			if (idx >= absPaths.length) return;
+			const path = absPaths[idx];
+			if (path === undefined) continue;
+			const body = await readFile(path, 'utf-8');
+			out.set(path, body);
+		}
+	});
+	await Promise.all(workers);
+	return out;
 }
 
 /**
