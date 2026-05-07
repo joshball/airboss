@@ -1,7 +1,7 @@
 <script lang="ts">
 /**
  * Dev demo page -- exercises every UI primitive across every variant.
- * Not wired into navigation; reach it manually via /primitives. Used
+ * Not wired into navigation; reach it manually via /dev/primitives. Used
  * during the package #4 primitive build to visually verify the themed
  * surface before page-level migration (#5).
  */

@@ -3,8 +3,8 @@
  * Dev demo for the ADR 019 Phase 4 renderer.
  *
  * Shows three fixture lessons rendered through the renderer in the requested
- * mode, plus a mode toggle UI. Reach manually via /references; not wired into
- * navigation. The `(dev)/` route group convention matches the primitives demo.
+ * mode, plus a mode toggle UI. Reach manually via /dev/references; not wired
+ * into navigation. The `dev/` segment matches the primitives demo.
  */
 
 import { QUERY_PARAMS } from '@ab/constants';
