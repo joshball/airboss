@@ -407,6 +407,122 @@ describe('SHIPPED.md', () => {
 });
 
 // ---------------------------------------------------------------------------
+// SHIPPED.md PR log integration (Phase 5)
+// ---------------------------------------------------------------------------
+
+describe('SHIPPED.md PR log', () => {
+	it('renders the PR log section header even with no log entries', () => {
+		const files = generateAll([], BASE_OPTS);
+		const shipped = findFile(files, SHIPPED_REL).content;
+		expect(shipped).toContain('## PR log');
+		expect(shipped).toContain('No PR log entries in scope yet');
+	});
+
+	it('renders rows for each log entry, reverse-chrono', () => {
+		const files = generateAll([], {
+			...BASE_OPTS,
+			logEntries: [
+				{
+					pr: 100,
+					date: '2026-04-15',
+					title: 'older PR',
+					wp_id: null,
+					bugs_fixed: [],
+					summary: 'older summary',
+					logPath: '/repo/docs/log/2026-04-15-PR-100-older.md',
+				},
+				{
+					pr: 200,
+					date: '2026-05-01',
+					title: 'newer PR',
+					wp_id: null,
+					bugs_fixed: [],
+					summary: 'newer summary',
+					logPath: '/repo/docs/log/2026-05-01-PR-200-newer.md',
+				},
+			],
+		});
+		const shipped = findFile(files, SHIPPED_REL).content;
+		expect(shipped).toContain('[#100]');
+		expect(shipped).toContain('[#200]');
+		expect(shipped).toContain('older PR');
+		expect(shipped).toContain('newer PR');
+		const idxNewer = shipped.indexOf('newer PR');
+		const idxOlder = shipped.indexOf('older PR');
+		expect(idxNewer).toBeGreaterThan(0);
+		expect(idxOlder).toBeGreaterThan(idxNewer);
+	});
+
+	it('links log entries with wp_id back to the WP spec', () => {
+		const wps: WorkPackage[] = [makeWp({ id: 'foo', status: 'in-flight' })];
+		const files = generateAll(wps, {
+			...BASE_OPTS,
+			logEntries: [
+				{
+					pr: 300,
+					date: '2026-05-01',
+					title: 'foo PR',
+					wp_id: 'foo',
+					bugs_fixed: [],
+					summary: 'foo summary',
+					logPath: '/repo/docs/log/2026-05-01-PR-300-foo.md',
+				},
+			],
+		});
+		const shipped = findFile(files, SHIPPED_REL).content;
+		expect(shipped).toContain('[foo](../work-packages/foo/spec.md)');
+	});
+
+	it('caps PR log to last 90 days by default; --all overrides', () => {
+		const logEntries = [
+			{
+				pr: 50,
+				date: '2025-01-01',
+				title: 'ancient PR',
+				wp_id: null,
+				bugs_fixed: [],
+				summary: '',
+				logPath: '/repo/docs/log/2025-01-01-PR-50-ancient.md',
+			},
+			{
+				pr: 60,
+				date: '2026-05-01',
+				title: 'recent PR',
+				wp_id: null,
+				bugs_fixed: [],
+				summary: '',
+				logPath: '/repo/docs/log/2026-05-01-PR-60-recent.md',
+			},
+		];
+		const filesDefault = generateAll([], { ...BASE_OPTS, logEntries });
+		const shippedDefault = findFile(filesDefault, SHIPPED_REL).content;
+		expect(shippedDefault).toContain('recent PR');
+		expect(shippedDefault).not.toContain('ancient PR');
+		const filesAll = generateAll([], { ...BASE_OPTS, all: true, logEntries });
+		const shippedAll = findFile(filesAll, SHIPPED_REL).content;
+		expect(shippedAll).toContain('recent PR');
+		expect(shippedAll).toContain('ancient PR');
+	});
+
+	it('groups PR log by year-month above the threshold', () => {
+		const count = SHIPPED_GROUP_THRESHOLD + 5;
+		const logEntries = Array.from({ length: count }, (_, i) => ({
+			pr: 1000 + i,
+			date: i < 10 ? '2026-05-01' : '2026-04-15',
+			title: `pr-${i}`,
+			wp_id: null,
+			bugs_fixed: [],
+			summary: '',
+			logPath: `/repo/docs/log/pr-${i}.md`,
+		}));
+		const files = generateAll([], { ...BASE_OPTS, logEntries });
+		const shipped = findFile(files, SHIPPED_REL).content;
+		expect(shipped).toContain('### 2026-05');
+		expect(shipped).toContain('### 2026-04');
+	});
+});
+
+// ---------------------------------------------------------------------------
 // Spec links resolve correctly
 // ---------------------------------------------------------------------------
 
