@@ -4,7 +4,17 @@
  * Echoes the command, inherits stdio, and exits the parent on a non-zero exit
  * code. Every dispatcher (db, references, sources, smoke, test) used to define
  * its own copy of this -- they all called it `run`. Now they import from here.
+ *
+ * Env handling: when the caller passes `opts.env`, it's used as-is. Otherwise
+ * we default to a snapshot of `process.env`, which lets the parent's
+ * mutations to `process.env` (e.g. `db.ts` overriding `DATABASE_URL` for a
+ * worktree DB) propagate to the child. Without that explicit handoff Bun's
+ * implicit `.env` re-reading clobbers the override on every child spawn.
  */
+function spawnEnv(envOverride?: Record<string, string | undefined>): Record<string, string | undefined> {
+	return envOverride ?? { ...process.env };
+}
+
 export async function run(
 	cmd: readonly string[],
 	opts: { readonly cwd?: string; readonly env?: Record<string, string | undefined> } = {},
@@ -12,7 +22,7 @@ export async function run(
 	console.log(`> ${cmd.join(' ')}`);
 	const proc = Bun.spawn([...cmd], {
 		cwd: opts.cwd,
-		env: opts.env,
+		env: spawnEnv(opts.env),
 		stdio: ['inherit', 'inherit', 'inherit'],
 	});
 	const code = await proc.exited;
@@ -25,8 +35,11 @@ export async function run(
  * inside a guarded orchestrator and wants the orchestrator to choose how to
  * handle a phase failure.
  */
-export async function runOrThrow(cmd: readonly string[], opts: { readonly cwd?: string } = {}): Promise<void> {
-	const proc = Bun.spawn([...cmd], { cwd: opts.cwd, stdio: ['inherit', 'inherit', 'inherit'] });
+export async function runOrThrow(
+	cmd: readonly string[],
+	opts: { readonly cwd?: string; readonly env?: Record<string, string | undefined> } = {},
+): Promise<void> {
+	const proc = Bun.spawn([...cmd], { cwd: opts.cwd, env: spawnEnv(opts.env), stdio: ['inherit', 'inherit', 'inherit'] });
 	const code = await proc.exited;
 	if (code !== 0) {
 		throw new Error(`subprocess failed (exit ${code}): ${cmd.join(' ')}`);
@@ -61,7 +74,7 @@ export async function runQuiet(
 ): Promise<string> {
 	const proc = Bun.spawn([...cmd], {
 		cwd: opts.cwd,
-		env: opts.env,
+		env: spawnEnv(opts.env),
 		stdio: ['inherit', 'pipe', 'pipe'],
 	});
 	const [stdout, stderr] = await Promise.all([
@@ -76,9 +89,13 @@ export async function runQuiet(
 	return combined;
 }
 
-export async function runOrThrowPiped(cmd: readonly string[], opts: { readonly cwd?: string } = {}): Promise<void> {
+export async function runOrThrowPiped(
+	cmd: readonly string[],
+	opts: { readonly cwd?: string; readonly env?: Record<string, string | undefined> } = {},
+): Promise<void> {
 	const proc = Bun.spawn([...cmd], {
 		cwd: opts.cwd,
+		env: spawnEnv(opts.env),
 		stdio: ['inherit', 'pipe', 'pipe'],
 	});
 	const forward = async (stream: ReadableStream<Uint8Array> | null, sink: NodeJS.WriteStream): Promise<void> => {

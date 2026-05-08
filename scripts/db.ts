@@ -13,7 +13,6 @@ import {
 	AUTH_RATE_LIMIT,
 	DEV_DB,
 	DEV_DB_HOST_PATTERN,
-	DEV_DB_URL,
 	DEV_SEED_ORIGIN_TAG,
 	ENV_VARS,
 	isProd,
@@ -32,14 +31,24 @@ import {
 	type SnapshotMeta,
 	writeSnapshotMeta,
 } from './db/snapshot';
+import { devDbName } from './lib/db-name';
 import { confirmOrAbort } from './lib/prompt';
 import { run, runOrThrow, runQuiet } from './lib/spawn';
 import { startStatusLine } from './lib/status-line';
 
 const CONTAINER = 'airboss-db';
-const DB_URL = process.env[ENV_VARS.DATABASE_URL] ?? DEV_DB_URL;
 const DB_USER = DEV_DB.USER;
-const DB_NAME = DEV_DB.NAME;
+// Per-worktree: each worktree gets its own DB on the shared OrbStack
+// container so two worktrees doing `db reset` can't trample each other's
+// state. Main repo continues to use the canonical `airboss` DB.
+const DB_NAME = devDbName();
+const DB_URL = `postgresql://${DEV_DB.USER}:${DEV_DB.PASSWORD}@${DEV_DB.HOST}:${PORTS.DB}/${DB_NAME}`;
+// Force every child process (seed-all, drizzle-kit, seed-check, ...) onto
+// our resolved DB by overriding DATABASE_URL in their environment. The
+// repo's `.env` ships with the main-DB URL; without this override, child
+// processes read .env and connect to `airboss` even when we're targeting a
+// worktree DB.
+process.env[ENV_VARS.DATABASE_URL] = DB_URL;
 const REPO_ROOT = resolve(import.meta.dir, '..');
 
 const args = process.argv.slice(2);
@@ -261,7 +270,7 @@ async function runSlowPath(
 	// would print.
 	const seedArgs = ['bun', 'scripts/db/seed-all.ts'];
 	for (const f of passthroughFlags) seedArgs.push(f);
-	const seedProc = Bun.spawn(seedArgs, { stdio: ['inherit', 'inherit', 'inherit'] });
+	const seedProc = Bun.spawn(seedArgs, { env: { ...process.env }, stdio: ['inherit', 'inherit', 'inherit'] });
 	const seedExit = await seedProc.exited;
 	if (seedExit !== 0) process.exit(seedExit);
 
@@ -275,7 +284,10 @@ async function runSlowPath(
 	}
 
 	// Final summary so the operator sees what landed.
-	const checkProc = Bun.spawn(['bun', 'scripts/db/seed-check.ts'], { stdio: ['inherit', 'inherit', 'inherit'] });
+	const checkProc = Bun.spawn(['bun', 'scripts/db/seed-check.ts'], {
+		env: { ...process.env },
+		stdio: ['inherit', 'inherit', 'inherit'],
+	});
 	const checkExit = await checkProc.exited;
 	if (checkExit !== 0) process.exit(checkExit);
 
