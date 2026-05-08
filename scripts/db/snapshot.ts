@@ -1,20 +1,25 @@
 /**
  * Snapshot cache for `bun run db reset`.
  *
- * The slow path (drop + create + drizzle push + full seed) takes ~6min on a
- * typical-day developer reset. Most of that time is spent re-deriving the
+ * The slow path (drop + create + drizzle push + full seed) takes ~6 minutes on
+ * a typical-day developer reset. Most of that time is spent re-deriving the
  * exact same DB state from the exact same source files. This module captures
  * a `pg_dump --format=custom` of the freshly-seeded DB plus a SHA-256 of
  * every input that influences the seed. On the next reset, if the inputs
  * still match (and the running postgres major version is unchanged), the
- * dispatcher can drop + create + restore in ~15s instead of re-seeding.
+ * dispatcher can drop + create + restore in ~20 seconds instead of re-seeding.
  *
- * The hash deliberately ignores file paths in favor of file CONTENTS plus a
- * deterministic walk: a rename of `course/foo/node.md` to `course/bar/node.md`
- * with no body changes still hashes the same. The seed itself reads the
- * frontmatter inside, so renames that reshape the graph would produce a
- * different snapshot post-seed -- but the input hash captures that via the
- * subdirectory walk: the new path is in the sorted list, the old one is gone.
+ * The hash walk is deterministic: we collect every file under the configured
+ * roots that matches an extension allowlist, sort by absolute path, and feed
+ * each file's byte length + bytes into the running SHA. Path strings are not
+ * mixed in directly, which keeps the hash stable across one-for-one
+ * relocations within a single sort position; in practice almost any rename
+ * shifts a file's sort position relative to its neighbours and the hash
+ * changes anyway. That's the safer behaviour: edits and renames both bust
+ * the cache, never silently reuse a stale snapshot. A repo that genuinely
+ * has a hashed root removed (e.g. someone deletes `acs/` entirely) hashes
+ * differently from a repo that never had it -- correct, by design, and
+ * worth preserving against any "warn on missing root" temptation.
  *
  * Cache layout under `.cache/db-build/`:
  *   - snapshot.dump        custom-format pg_dump bytes
@@ -55,7 +60,12 @@ const HASH_ROOTS: readonly HashRoot[] = [
 	{ path: 'handbooks', extensions: ['.json', '.md'] },
 	{ path: 'acs', extensions: ['.json', '.md'] },
 	{ path: 'regulations', extensions: ['.json', '.md'] },
-	{ path: 'libs/sources/src', extensions: ['.yaml'] },
+	{ path: 'aircraft/_authoring', extensions: ['.yaml', '.yml'] },
+	// Sources tree: both manifest.yaml (registry data) and seed.ts (the per-
+	// corpus seeder logic that registers entries on each run). The .ts files
+	// are imported directly from `seed-all.ts`; editing one of them changes
+	// the seed output and must invalidate the cache.
+	{ path: 'libs/sources/src', extensions: ['.yaml', '.ts'] },
 	{ path: 'libs/bc/study/src/seeders', extensions: ['.ts'] },
 	{ path: 'drizzle', extensions: ['.sql'] },
 ];
@@ -74,11 +84,14 @@ const HASH_FILES: readonly string[] = [
 ];
 
 /**
- * Glob for the `scripts/db/seed-*.ts` family. We list the directory and
- * filter by prefix so adding a new `seed-foo.ts` is automatically picked up.
+ * Glob for the `scripts/db/*.ts` family that orchestrates the seed. We pick
+ * up everything under that directory (excluding tests via HASH_SKIP_REGEX).
+ * Adding new orchestration files there -- e.g. `migrate-references-to-
+ * structured.ts`, which `seed-all.ts` imports -- is more common than
+ * refactoring file naming, so a `seed-` prefix glob would silently miss
+ * dependencies. Walk the whole dir instead.
  */
 const SEED_SCRIPT_DIR = 'scripts/db';
-const SEED_SCRIPT_PREFIX = 'seed-';
 const SEED_SCRIPT_SUFFIX = '.ts';
 
 /**
@@ -146,13 +159,14 @@ export async function computeSeedInputHash(
 		}
 	}
 
-	// scripts/db/seed-*.ts (excluding *.test.ts, handled by skip regex above)
+	// scripts/db/*.ts (excluding *.test.ts via HASH_SKIP_REGEX). Picks up
+	// migrate-references-to-structured.ts and any future orchestration files
+	// without requiring a rename.
 	try {
 		const dir = resolve(repoRoot, SEED_SCRIPT_DIR);
 		const entries = (await readdir(dir, { withFileTypes: true })) as Dirent[];
 		for (const entry of entries) {
 			if (!entry.isFile()) continue;
-			if (!entry.name.startsWith(SEED_SCRIPT_PREFIX)) continue;
 			if (!entry.name.endsWith(SEED_SCRIPT_SUFFIX)) continue;
 			if (HASH_SKIP_REGEX.test(entry.name)) continue;
 			collected.push(resolve(dir, entry.name));

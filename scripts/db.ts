@@ -92,7 +92,7 @@ async function doReset(): Promise<void> {
 	const cacheDecision = await decideCachePath();
 
 	if (cacheDecision.kind === 'hit') {
-		await runDropCreate(psqlPostgres, psqlAirboss);
+		await runPreSeed({ psqlPostgres, psqlAirboss, installSchema: false });
 		const restoreStart = Date.now();
 		const status = startStatusLine('restoring snapshot');
 		status.detail(`${formatBytes(cacheDecision.meta.bytes)}`);
@@ -194,13 +194,30 @@ async function safeComputeHash(pgMajorOverride?: string): Promise<string | null>
 	}
 }
 
-async function runDropCreate(
-	psqlPostgres: readonly string[],
-	_psqlAirboss: readonly string[],
-): Promise<void> {
+/**
+ * Drop + create + (optionally) install pg_trgm + drizzle push.
+ *
+ * Cache-hit path passes `installSchema: false`: the dump carries its own
+ * `CREATE EXTENSION` and the schema, so pg_restore handles both. Slow path
+ * passes `installSchema: true` so an empty DB ends up with the GIN trigram
+ * indexes the schema declares on study.card (front, back) using gin_trgm_ops
+ * (drizzle-kit push fails CREATE INDEX without pg_trgm pre-installed).
+ *
+ * `DROP DATABASE ... WITH (FORCE)` (PG13+) replaces the older terminate-then-
+ * drop sequence: the prior pg_terminate_backend hop couldn't close the race
+ * where a new connection appeared between terminate and drop.
+ */
+interface PreSeedOptions {
+	readonly psqlPostgres: readonly string[];
+	readonly psqlAirboss: readonly string[];
+	readonly installSchema: boolean;
+}
+
+async function runPreSeed(opts: PreSeedOptions): Promise<void> {
+	const { psqlPostgres, psqlAirboss, installSchema } = opts;
 	const preStart = Date.now();
 	const preStatus = startStatusLine('reset (pre-seed)');
-	const steps: ReadonlyArray<readonly [string, readonly string[]]> = [
+	const dropAndCreate: ReadonlyArray<readonly [string, readonly string[]]> = [
 		[
 			'terminating lingering connections',
 			[
@@ -211,8 +228,14 @@ async function runDropCreate(
 		['dropping database', [...psqlPostgres, `DROP DATABASE IF EXISTS ${DB_NAME} WITH (FORCE);`]],
 		['creating database', [...psqlPostgres, `CREATE DATABASE ${DB_NAME};`]],
 	];
+	const schemaSteps: ReadonlyArray<readonly [string, readonly string[]]> = installSchema
+		? [
+				['installing pg_trgm extension', [...psqlAirboss, 'CREATE EXTENSION IF NOT EXISTS pg_trgm;']],
+				['drizzle-kit push (schema)', ['bunx', 'drizzle-kit', 'push']],
+			]
+		: [];
 	try {
-		for (const [label, cmd] of steps) {
+		for (const [label, cmd] of [...dropAndCreate, ...schemaSteps]) {
 			preStatus.detail(label);
 			await runQuiet(cmd);
 		}
@@ -220,7 +243,8 @@ async function runDropCreate(
 		preStatus.finish();
 	}
 	const preMs = Date.now() - preStart;
-	process.stdout.write(`  ✓ reset (pre-seed)         ${formatPreMs(preMs)}  drop + create\n`);
+	const summary = installSchema ? 'drop + create + extension + push' : 'drop + create';
+	process.stdout.write(`  ✓ reset (pre-seed)         ${formatPreMs(preMs)}  ${summary}\n`);
 }
 
 async function runSlowPath(
@@ -229,34 +253,7 @@ async function runSlowPath(
 	totalStart: number,
 	cachedCurrentHash: string | null,
 ): Promise<void> {
-	// pg_trgm is a contrib extension required by the GIN trigram indexes the
-	// schema declares on study.card (front, back) using gin_trgm_ops;
-	// drizzle-kit push fails the CREATE INDEX without it.
-	const preStart = Date.now();
-	const preStatus = startStatusLine('reset (pre-seed)');
-	const preSteps: ReadonlyArray<readonly [string, readonly string[]]> = [
-		[
-			'terminating lingering connections',
-			[
-				...psqlPostgres,
-				`SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='${DB_NAME}' AND pid <> pg_backend_pid();`,
-			],
-		],
-		['dropping database', [...psqlPostgres, `DROP DATABASE IF EXISTS ${DB_NAME} WITH (FORCE);`]],
-		['creating database', [...psqlPostgres, `CREATE DATABASE ${DB_NAME};`]],
-		['installing pg_trgm extension', [...psqlAirboss, 'CREATE EXTENSION IF NOT EXISTS pg_trgm;']],
-		['drizzle-kit push (schema)', ['bunx', 'drizzle-kit', 'push']],
-	];
-	try {
-		for (const [label, cmd] of preSteps) {
-			preStatus.detail(label);
-			await runQuiet(cmd);
-		}
-	} finally {
-		preStatus.finish();
-	}
-	const preMs = Date.now() - preStart;
-	process.stdout.write(`  ✓ reset (pre-seed)         ${formatPreMs(preMs)}  drop + create + extension + push\n`);
+	await runPreSeed({ psqlPostgres, psqlAirboss, installSchema: true });
 
 	// Seed runs with its own per-phase status lines + log files. We spawn it
 	// directly with inherited stdio (no echo) so the spinner output isn't
@@ -615,7 +612,7 @@ const COMMAND_HELP: Record<string, CommandHelp> = {
 	},
 	reset: {
 		summary: 'DROP + recreate DB, push schema, run full seed (with snapshot cache)',
-		what: 'Destroys the `airboss` database, recreates it empty, then either restores from a cached pg_dump (fast path, ~15s) or runs `drizzle-kit push` + the full seed orchestrator (slow path, ~6min) and refreshes the cache afterwards.\n\n  bun run db reset                # use cache when source inputs match\n  bun run db reset --force        # skip confirmation prompt\n  bun run db reset --rebuild      # bypass cache, rerun the full seed, refresh snapshot\n  bun run db reset --no-cache     # alias for --rebuild\n\nRefuses to run if DATABASE_URL does not match the local dev pattern. Prompts for confirmation unless `--force` / `-f` is passed.',
+		what: 'Destroys the `airboss` database, recreates it empty, then either restores from a cached pg_dump (fast path) or runs `drizzle-kit push` + the full seed orchestrator (slow path) and refreshes the cache afterwards. The cache hits when the SHA-256 of every hashed input matches the stored value AND the postgres major version is unchanged; otherwise the slow path runs and re-saves the snapshot for next time.\n\n  bun run db reset                # use cache when source inputs match\n  bun run db reset --force        # skip confirmation prompt\n  bun run db reset --rebuild      # bypass cache, rerun the full seed, refresh snapshot\n  bun run db reset --no-cache     # alias for --rebuild\n\nRefuses to run if DATABASE_URL does not match the local dev pattern. Prompts for confirmation unless `--force` / `-f` is passed.',
 		why: 'The nuclear option for "get me back to a known good state fast." Useful after schema churn, botched seeds, or when switching branches with divergent migrations. The snapshot cache turns a typical-day reset (no source changes since last seed) into a sub-30s drop + create + pg_restore cycle, instead of re-running every seeder from scratch.',
 		how: 'Cache layout: `.cache/db-build/snapshot.dump` (custom-format pg_dump) + `.cache/db-build/snapshot.meta.json` (hash + pg version + timestamp). Cache hits when the SHA-256 of every input under `course/`, `handbooks/`, `acs/`, `regulations/`, `libs/sources/src/**/manifest.yaml`, the seed scripts, and the schema files matches the cached hash AND the postgres major version is unchanged.\n\nOn miss or `--rebuild`: drop + create + push + seed-all + dump. On hit: drop + create + pg_restore. Partial seeds (`--quick`/`--skip`/`--only`) are not snapshotted.',
 		links: [
