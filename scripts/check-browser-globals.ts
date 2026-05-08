@@ -214,7 +214,11 @@ for (const file of appsListing.split('\n')) {
 //
 // Entries are runtime barrels: client-eligible by design, and any value
 // reachable from them must be browser-safe.
-const RUNTIME_BARRELS = ['libs/bc/study/src/index.ts', 'libs/bc/hangar/src/index.ts'] as const;
+const RUNTIME_BARRELS = [
+	'libs/bc/study/src/index.ts',
+	'libs/bc/hangar/src/index.ts',
+	'libs/bc/ingest-review/src/index.ts',
+] as const;
 
 // Module specifiers whose runtime evaluation pulls a server-only chunk
 // into the client bundle. `import type` is allowed (erases at compile
@@ -223,6 +227,7 @@ const SERVER_ONLY_SPECIFIERS = [
 	'@ab/db/connection',
 	'@ab/bc-study/server',
 	'@ab/bc-study/build',
+	'@ab/bc-ingest-review/server',
 	'postgres',
 	'drizzle-orm/postgres-js',
 ];

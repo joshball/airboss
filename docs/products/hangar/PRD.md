@@ -29,6 +29,8 @@ For the why, see [VISION.md](VISION.md). For what's queued next, see [ROADMAP.md
 | `/jobs`             | Background-job log with 1Hz live polling                                                           | [hangar-registry](../../work-packages/hangar-registry/spec.md)             |
 | `/admin/audit`      | Cross-cutting audit explorer (ADMIN-only): filter by actor / target / op / time window, paginate   | [hangar-audit-explorer](../../work-packages/hangar-audit-explorer/spec.md) |
 | `/admin/audit/[id]` | Detail view: actor card, side-by-side before/after jsonb panes, metadata, cross-links              | [hangar-audit-explorer](../../work-packages/hangar-audit-explorer/spec.md) |
+| `/ingest-review`    | Plugin-shaped queue for residual ingest-pipeline issues (figure-pairing orphans today)             | [hangar-ingest-review-queue](../../work-packages/hangar-ingest-review-queue/spec.md) |
+| `/ingest-review/[issueId]` | Orphan-card with caption text, candidate-strip, action bar, PDF link                        | [hangar-ingest-review-queue](../../work-packages/hangar-ingest-review-queue/spec.md) |
 | Auth gate           | Layout-level `requireRole(AUTHOR                                                                   | OPERATOR                                                                   |
 
 ## In flight or imminent
