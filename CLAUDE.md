@@ -120,6 +120,7 @@ Read the relevant pattern doc before writing code in that area:
 - **Source ingestion / handbook section extraction (prompt strategy, paste-to-Claude flow):** [docs/ingestion-pipeline/section-extraction-prompt-strategy.md](docs/ingestion-pipeline/section-extraction-prompt-strategy.md)
 - **Before writing any page / BC / component / schema:** [docs/agents/common-pitfalls.md](docs/agents/common-pitfalls.md)
 - **Debugging a browser-only error (`Buffer is not defined`, hydration crash, postgres in client bundle):** [docs/agents/debug-playbooks/browser-hydration.md](docs/agents/debug-playbooks/browser-hydration.md)
+- **Debugging a CFR Part missing on /dev/cards (DB row / sections.json / body files / authoring overlay layer chain):** [docs/agents/debug-playbooks/cfr-card-missing.md](docs/agents/debug-playbooks/cfr-card-missing.md)
 - **New feature? Author work package:** `/ball-wp-spec`
 - **Ready to build? Phased implementation:** `/ball-wp-build`
 - **Code review (10 parallel spec-aware reviewers):** `/ball-review-full`
@@ -279,6 +280,10 @@ See [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](docs/platform/MULTI_PRODUCT_AR
 - **Questions are not instructions.** When asked "why does X work this way?" -- answer. Don't start changing things.
 - **Capture ideas immediately.** New ideas, approaches, insights -- add to [docs/platform/IDEAS.md](docs/platform/IDEAS.md) the moment they come up. Don't evaluate yet. Ideas are reviewed every 2 weeks.
 - **Mind your own business on other agents' work.** Do not narrate, audit, or comment on worktrees, branches, or in-flight PRs that aren't yours. Do not proactively inform the user about them. Only speak up if you see a concrete problem (conflict, broken state, data loss risk) that blocks your work. Otherwise: leave them alone, don't mention them.
+
+## Sub-agent dispatch
+
+Every sub-agent dispatched via the Agent tool must end with one of exactly two outcomes: **(A) a PR URL** (opened, merged, reported) or **(B) a BLOCKER** with the exact decision the dispatcher needs. Silent exit with staged-but-uncommitted work is a contract violation. Drop the terminal-report boilerplate into every dispatch prompt that's expected to ship a PR. Full contract + recovery pattern: [docs/agents/sub-agent-contract.md](docs/agents/sub-agent-contract.md).
 
 ## Code Quality
 
