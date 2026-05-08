@@ -191,17 +191,17 @@ A lens is a function `(Goal, optional filters) -> ordered tree-or-list of nodes 
 
 Initial lenses:
 
-| Lens | Tree shape | Source |
-| ----------------- | ----------------------------- | ------------------------------ |
-| ACS | Area -> Task -> Element -> nodes | Syllabus tree |
-| PTS | Area -> Task -> Element -> nodes | Syllabus tree |
-| Endorsement | Element -> nodes | Endorsement syllabus |
-| Domain | Domain -> nodes | Graph metadata |
-| Phase of flight | Phase -> nodes | Graph metadata |
-| Handbook | Handbook -> Chapter -> nodes | Reference + Citation |
-| Weakness | Severity bucket -> nodes | Mastery snapshot |
-| Bloom | Level -> nodes | Required-bloom across syllabi |
-| Custom | User-defined | Goal + ad-hoc collections |
+| Lens            | Tree shape                       | Source                        |
+| --------------- | -------------------------------- | ----------------------------- |
+| ACS             | Area -> Task -> Element -> nodes | Syllabus tree                 |
+| PTS             | Area -> Task -> Element -> nodes | Syllabus tree                 |
+| Endorsement     | Element -> nodes                 | Endorsement syllabus          |
+| Domain          | Domain -> nodes                  | Graph metadata                |
+| Phase of flight | Phase -> nodes                   | Graph metadata                |
+| Handbook        | Handbook -> Chapter -> nodes     | Reference + Citation          |
+| Weakness        | Severity bucket -> nodes         | Mastery snapshot              |
+| Bloom           | Level -> nodes                   | Required-bloom across syllabi |
+| Custom          | User-defined                     | Goal + ad-hoc collections     |
 
 All share the same UI primitives: tree, rollup, drill-in, jump-to-learn. Mastery rolls up at every internal node of every lens.
 
@@ -282,19 +282,19 @@ A separate work package -- `handbook-ingestion-and-reader` -- carries the engine
 
 Phased; each phase is independently shippable. Status refreshed 2026-04-27 against shipped PRs. The fine-grained 24-phase split for the actual cert-syllabus implementation work lives in [`docs/work-packages/cert-syllabus-and-goal-composer/tasks.md`](../../work-packages/cert-syllabus-and-goal-composer/tasks.md); this table is the ADR-level rollup.
 
-| Phase | Scope                                                                                                                  | Status                                                                                                                                                                                           |
-| ----- | ---------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| 0     | Handbook ingestion pipeline + reader UI + read-progress (PHAK first); Reference table seeded from ingested handbooks   | Shipped (PRs #242, #243) -- PHAK + AFH + AvWX at section-granularity; storage + edition policies in ADR 018 + ADR 020                                                                            |
-| 1     | Citation table; existing node references migrated to structured citations                                              | Shipped -- `StructuredCitation` inline on `knowledge_node.references` + `syllabus_node.citations` (PRs #248, #254); node migration shipped (PR #264 / WP P17)                                    |
-| 2     | Credential DAG; current `CERTS` + `CERT_PREREQUISITES` retired into derived views                                      | Shipped -- schema + Credential BC (PRs #248, #254); credential YAML authoring + seed (PR #264 / WP P14)                                                                                          |
-| 3     | Syllabus + SyllabusNode + SyllabusNodeLink tables; YAML authoring pipeline                                             | Shipped -- schema + Syllabus BC (PRs #248, #254); YAML schema + seed pipeline (PR #264 / WP P15)                                                                                                 |
-| 4     | PPL ACS transcribed (K/R/S as separate leaves); existing 30 nodes wired in via SyllabusNodeLink; AFH + AvWX ingested   | Shipped (Area V slice) -- ACS reference seed + `acs` resolver (PR #254 / WP P8); AFH + AvWX via Phase 0; PPL ACS Area V (PR #264 / WP P16). Remaining ACS areas land per syllabus surface demand |
-| 5     | Relevance cache rebuild; authored relevance arrays dropped from YAML                                                   | Shipped -- dry-run manifest (PR #264 / WP P18); Gate A live write + Gate B YAML strip (PR #270 / WP P19)                                                                                         |
-| 6     | Goal table; existing study plans converted (cert_goals -> GoalSyllabus rows)                                           | Shipped -- schema + Goal BC (PRs #248, #254); migration (PR #270 / WP P20); engine cutover (WP engine-goal-cutover dual-read; column drop gated on 14-day trigger)                               |
-| 7     | Cert dashboard surface (ACS lens)                                                                                      | Shipped (PR #321) -- /credentials index + detail + area drill                                                                                                                                    |
-| 8     | Lens framework + handbook lens + weakness lens                                                                         | Shipped (PRs #254 framework, #323 surface) -- handbook lens (3 routes) + weakness lens (domain-level v1; node-level deferred as a follow-on)                                                     |
-| 9     | Personal goal composer                                                                                                 | Shipped (PR #324) -- /goals index + create + detail with composition (10 form actions)                                                                                                           |
-| 10    | Remaining syllabi: IR ACS, CPL ACS, CFI PTS, CFII PTS, MEI, endorsements; IFH + IPH ingested                           | Ongoing                                                                                                                                                                                          |
+| Phase | Scope                                                                                                                | Status                                                                                                                                                                                           |
+| ----- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 0     | Handbook ingestion pipeline + reader UI + read-progress (PHAK first); Reference table seeded from ingested handbooks | Shipped (PRs #242, #243) -- PHAK + AFH + AvWX at section-granularity; storage + edition policies in ADR 018 + ADR 020                                                                            |
+| 1     | Citation table; existing node references migrated to structured citations                                            | Shipped -- `StructuredCitation` inline on `knowledge_node.references` + `syllabus_node.citations` (PRs #248, #254); node migration shipped (PR #264 / WP P17)                                    |
+| 2     | Credential DAG; current `CERTS` + `CERT_PREREQUISITES` retired into derived views                                    | Shipped -- schema + Credential BC (PRs #248, #254); credential YAML authoring + seed (PR #264 / WP P14)                                                                                          |
+| 3     | Syllabus + SyllabusNode + SyllabusNodeLink tables; YAML authoring pipeline                                           | Shipped -- schema + Syllabus BC (PRs #248, #254); YAML schema + seed pipeline (PR #264 / WP P15)                                                                                                 |
+| 4     | PPL ACS transcribed (K/R/S as separate leaves); existing 30 nodes wired in via SyllabusNodeLink; AFH + AvWX ingested | Shipped (Area V slice) -- ACS reference seed + `acs` resolver (PR #254 / WP P8); AFH + AvWX via Phase 0; PPL ACS Area V (PR #264 / WP P16). Remaining ACS areas land per syllabus surface demand |
+| 5     | Relevance cache rebuild; authored relevance arrays dropped from YAML                                                 | Shipped -- dry-run manifest (PR #264 / WP P18); Gate A live write + Gate B YAML strip (PR #270 / WP P19)                                                                                         |
+| 6     | Goal table; existing study plans converted (cert_goals -> GoalSyllabus rows)                                         | Shipped -- schema + Goal BC (PRs #248, #254); migration (PR #270 / WP P20); engine cutover (WP engine-goal-cutover dual-read; column drop gated on 14-day trigger)                               |
+| 7     | Cert dashboard surface (ACS lens)                                                                                    | Shipped (PR #321) -- /credentials index + detail + area drill                                                                                                                                    |
+| 8     | Lens framework + handbook lens + weakness lens                                                                       | Shipped (PRs #254 framework, #323 surface) -- handbook lens (3 routes) + weakness lens (domain-level v1; node-level deferred as a follow-on)                                                     |
+| 9     | Personal goal composer                                                                                               | Shipped (PR #324) -- /goals index + create + detail with composition (10 form actions)                                                                                                           |
+| 10    | Remaining syllabi: IR ACS, CPL ACS, CFI PTS, CFII PTS, MEI, endorsements; IFH + IPH ingested                         | Ongoing                                                                                                                                                                                          |
 
 Phase 0 lands first because Phase 1 needs the handbook structure to point at and the reader has standalone learner value (the user can read PHAK in-app immediately, even before any cert dashboard exists). Phase 10 is bounded transcription + ingestion work, not a research project. PPL ACS is ~200 task leaves which expand to ~600 K/R/S element leaves; the full set across the certs and ratings user zero is pursuing is on the order of 4000 element leaves.
 
@@ -365,6 +365,25 @@ The four questions originally listed as open are decided. Recorded here so the r
 - Mastery rollup math gets more complex (multiple lenses, weighted aggregation, evidence-kind gating). Worth it.
 
 **Reversible if wrong:** Every layer is additive. If syllabi turn out to be the wrong shape, we keep the graph + references and rebuild the layer above. Nothing in this ADR damages prior work.
+
+## Refinement: Course as a peer primitive (2026-05-08)
+
+ADR 016 originally folded instructor-authored curriculum into the goal, calling out "course is what someone teaches; goal is what the learner needs" and treating that as a reason to omit a Course primitive. The intent was to dodge LMS-conflation (where the course owns the learner's path).
+
+In practice, omitting Course pushed instructor pedagogy into either `syllabus.kind='school'` (a poor fit -- syllabi are ACS-shaped and edition-locked) or into the goal itself (a category error -- the goal is the diner's order, not the chef's menu). Authoring the airboss weather course surfaced this: a course needs tracks, transitions, mutability, and citability that neither syllabus nor goal provides cleanly.
+
+Refinement: introduce Course as a peer primitive to Syllabus, both consumed by Goal.
+
+- **Course** is instructor-authored, mutable, and citable. It carries a curated walking order through graph nodes, with framing prose and optional structural conventions (tracks, transition steps).
+- **Syllabus** stays as shipped: regulatory, edition-locked, FAA-shaped.
+- **Goal** stays as shipped, plus a new `goal_course` join that mirrors `goal_syllabus`. Goals reference any number of courses + any number of syllabi + ad-hoc nodes.
+- **Overlay** (e.g., "this course satisfies these PPL requirements; these requirements remain") is a render-time lens computation, not authored data. Author intent (cert-alignment) is *not* recorded on the course; alignment is the learner's goal, and the lens does the math.
+
+This preserves the original ADR's anti-LMS posture: the course is a citable artifact the learner can choose to consume, not a container that owns the learner's progress. The Goal remains sovereign.
+
+Implementation lands as a small, deliberately scoped WP. The MVP shape: three new tables (`course`, `course_step`, `goal_course`), one extension (`knowledge_node.kind`), and one overlay lens. Course-to-course prerequisites, parallel-ladder schema, aux attachment points, per-node opt-out, and mutability/versioning semantics are explicitly deferred until real authoring use surfaces the need.
+
+See companion principle 11 in [LEARNING_PHILOSOPHY.md](../../platform/LEARNING_PHILOSOPHY.md) ("The chef and the diner are different people").
 
 ## Companion
 

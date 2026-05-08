@@ -46,17 +46,40 @@ You cannot multiple-choice your way to "demonstrate steep turns." Each node decl
 
 The product centers the learner's state -- what I know, what I'm forgetting, what I haven't seen, what's coming due, what's blocking what -- not the course's content. A course-shaped UI puts content first; a learner-shaped UI puts the next-best action first. Both views can exist; the learner-shaped one is primary.
 
+### 11. The chef and the diner are different people
+
+Three authors, one diner. Get the authorship boundaries wrong and the product collapses into LMS mush.
+
+- **The FAA authors syllabi.** The ACS, the PTS, and 14 CFR 61.31 endorsement requirements are regulatory artifacts. Edition-locked, examiner-enforced, no editorial freedom. "Get in line and do it as we say."
+- **The instructor authors courses.** A course is a curated walking order through the graph: tracks, transitions, framings, opinions about what to teach first and why. A course is *citable* (the way a textbook is citable), but it is not regulatory. "Here's a smart way to learn weather: start with airmass character, then layer pressure systems, then bring in PIREP triage."
+- **The learner authors goals.** A goal references zero or more syllabi, zero or more courses, plus ad-hoc graph nodes. A PPL student studying weather might say: "I'm pursuing PPL (FAA syllabus), via the weather-comprehensive course (instructor pedagogy), and I want extra reps on density altitude (ad-hoc)." The learner is sovereign. The chef doesn't decide what the diner orders.
+
+These are three peer primitives, not a hierarchy. A syllabus has no opinion about which course teaches it. A course has no opinion about which cert it serves. The goal composes them.
+
+#### Overlay is a render-time computation
+
+When a learner pursues PPL while taking the weather-comprehensive course, the system compares the course's nodes against the PPL syllabus's required nodes and surfaces the gap: "this course covers X and Y, which PPL requires; PPL also requires Z, which this course does not teach -- here's how to fill it." The overlay is computed by the lens layer at render time. It is not stored on the course or on the goal as authored data. The course author does not declare "this course is for PPL students"; the learner's *goal* declares "I'm pursuing PPL while taking this course," and the system does the gap math.
+
+A learner with no cert goal sees only the course. A learner deep into CFII who's just curious about noreasters sees only the course. A PPL student sees the course plus the gap surface. Same course, three experiences - all driven by the goal, not by the course.
+
+#### Why this is not the LMS mistake
+
+LMS conflation is "the course IS the goal" -- take the course, you're done; the course author owns the learner's path. We reject that. Here, the course is a *citable artifact* the learner can choose to consume, fully or partially, alongside whatever else they want. The goal is sovereign. The course author writes pedagogy; they do not own the learner's progress.
+
+This is symmetric with how syllabi work. The FAA writes the ACS; the ACS does not own the learner's path. The learner can pursue the cert, ignore some elements, supplement with extra topics, or pursue no cert at all. Course is the same, in the instructor's voice instead of the FAA's.
+
 ## What this implies for the model
 
 Five objects, layered:
 
-| Layer | Object | Owner | Purpose |
-| ---------- | ----------------------- | ------ | ------------------------------------------------------------------ |
-| Truth | Knowledge graph (nodes) | System | The aviation concepts themselves; one node per concept |
-| Truth | References | System | Cited sources; CFR/AC/handbook/AIM, versioned |
-| Structure | Syllabus | System | Authored projection (ACS/PTS/endorsement) onto the graph |
-| Structure | Cert / Rating | System | Regulatory artifact; composes via prerequisite DAG |
-| Learner | Goal | User | What this learner is pursuing; multi-syllabus, possibly cert-agnostic |
+| Layer     | Object                  | Owner      | Purpose                                                             |
+| --------- | ----------------------- | ---------- | ------------------------------------------------------------------- |
+| Truth     | Knowledge graph (nodes) | System     | The aviation concepts themselves; one node per concept              |
+| Truth     | References              | System     | Cited sources; CFR/AC/handbook/AIM, versioned                       |
+| Structure | Syllabus                | FAA        | Regulatory projection (ACS/PTS/endorsement) onto the graph          |
+| Structure | Course                  | Instructor | Pedagogical walking-order through the graph; citable, mutable       |
+| Structure | Cert / Rating           | System     | Regulatory artifact; composes via prerequisite DAG                  |
+| Learner   | Goal                    | User       | What this learner is pursuing; multi-syllabus, multi-course, ad-hoc |
 
 Sessions, cards, reps, mastery, dashboards -- all derive from these.
 
@@ -111,17 +134,19 @@ Until syllabi exist, the relevance array is the source. The migration is a cutov
 
 ## Glossary
 
-| Term | Meaning |
-| ----------- | ------- |
-| Node | One concept in the knowledge graph |
-| Edge | Typed relationship between nodes (`requires`, `deepens`, `applies`, `teaches`, `related`) |
-| Domain | High-level grouping for browse (Weather, Airspace, IFR Procedures, ...) |
-| Syllabus | Authored projection (ACS, PTS, endorsement, custom) onto the graph |
-| Area / Task / Element | The FAA's ACS structure; the shape of most syllabi |
-| Cert | Pilot certificate (PPL, CPL, ATP, ...) |
-| Rating | Add-on capability (Instrument, Multi-engine, type rating, ...) |
-| Endorsement | 61.31 endorsement (complex, high-perf, tailwheel, ...) |
-| Goal | Learner-owned object; what this learner is pursuing |
-| Reference | Cited source (CFR, AC, handbook, AIM, ACS, NTSB, ...) versioned by edition |
-| Lens | Named view over the graph (ACS, domain, phase-of-flight, handbook, weakness, custom) |
-| Mastery | Per-node state; rolls up to every structure that projects onto the graph |
+| Term                  | Meaning                                                                                                                                                             |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Node                  | One concept in the knowledge graph                                                                                                                                  |
+| Edge                  | Typed relationship between nodes (`requires`, `deepens`, `applies`, `teaches`, `related`)                                                                           |
+| Domain                | High-level grouping for browse (Weather, Airspace, IFR Procedures, ...)                                                                                             |
+| Syllabus              | Authored projection (ACS, PTS, endorsement, custom) onto the graph                                                                                                  |
+| Course                | Instructor-authored pedagogical sequence through the graph. Citable, mutable, peer to syllabus. A course is what someone teaches; a goal is what the learner needs. |
+| Overlay               | Render-time composition of two structures (e.g., a course as primary spine + a cert syllabus as gap layer). Computed by the lens; not stored.                       |
+| Area / Task / Element | The FAA's ACS structure; the shape of most syllabi                                                                                                                  |
+| Cert                  | Pilot certificate (PPL, CPL, ATP, ...)                                                                                                                              |
+| Rating                | Add-on capability (Instrument, Multi-engine, type rating, ...)                                                                                                      |
+| Endorsement           | 61.31 endorsement (complex, high-perf, tailwheel, ...)                                                                                                              |
+| Goal                  | Learner-owned object; what this learner is pursuing                                                                                                                 |
+| Reference             | Cited source (CFR, AC, handbook, AIM, ACS, NTSB, ...) versioned by edition                                                                                          |
+| Lens                  | Named view over the graph (ACS, domain, phase-of-flight, handbook, weakness, custom)                                                                                |
+| Mastery               | Per-node state; rolls up to every structure that projects onto the graph                                                                                            |
