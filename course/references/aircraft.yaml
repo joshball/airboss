@@ -14,9 +14,9 @@ references:
   - slug: cessna-172s
     kind: poh
     edition: "13"
-    title: Cessna 172S Pilot Operating Handbook
+    title: Cessna 172S Skyhawk Pilot Operating Handbook
     publisher: Cessna
-    url: https://cessna.txtav.com/en/piston/cessna-skyhawk
+    url: https://wayman.edu/files/C172S-G1000-POH.pdf
     subjects: [aircraft-systems, performance]
     primary_cert: null
 
@@ -25,7 +25,7 @@ references:
     edition: "5"
     title: Piper PA-28-161 Warrior III Pilot Operating Handbook
     publisher: Piper Aircraft
-    url: https://www.piper.com/aircraft/pilot-100i/
+    url: https://www.tampabayaviation.com/wp-content/uploads/2024/02/PA28-161-Warrior-POH.pdf
     subjects: [aircraft-systems, performance]
     primary_cert: null
 
@@ -34,6 +34,6 @@ references:
     edition: "A"
     title: Cirrus SR22 G6 Pilot Operating Handbook
     publisher: Cirrus Aircraft
-    url: https://cirrusaircraft.com/aircraft/sr22/
+    url: https://mikegoulianaviation.com/wp-content/uploads/2023/07/G6-SR22-POH-Equipped-with-Perspective-Avionics-Reissue-A-2020.pdf
     subjects: [aircraft-systems, performance]
     primary_cert: null
