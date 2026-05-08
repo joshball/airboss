@@ -436,10 +436,7 @@ export async function seedCfrManifest(
  * sections). Returns a map keyed by absolute path so the caller can look up
  * each section's body directly without re-resolving paths.
  */
-async function readBodiesParallel(
-	absPaths: ReadonlyArray<string>,
-	concurrency: number,
-): Promise<Map<string, string>> {
+async function readBodiesParallel(absPaths: ReadonlyArray<string>, concurrency: number): Promise<Map<string, string>> {
 	const out = new Map<string, string>();
 	let cursor = 0;
 	const workers = Array.from({ length: Math.min(concurrency, absPaths.length) }, async () => {

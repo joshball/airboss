@@ -243,7 +243,7 @@ function parseValueImports(contents: string): ParsedImport[] {
 	let buf = '';
 	let depth = 0;
 	for (const line of lines) {
-		buf += line + '\n';
+		buf += `${line}\n`;
 		for (const ch of line) {
 			if (ch === '{') depth++;
 			else if (ch === '}') depth--;

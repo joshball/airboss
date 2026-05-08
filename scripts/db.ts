@@ -9,6 +9,7 @@
  *   bun run db <command> --help     # detailed help for one command
  */
 
+import { resolve } from 'node:path';
 import {
 	AUTH_RATE_LIMIT,
 	DEV_DB,
@@ -19,7 +20,6 @@ import {
 	PORTS,
 	SCHEMAS,
 } from '@ab/constants';
-import { resolve } from 'node:path';
 import {
 	computeSeedInputHash,
 	dumpSnapshot,
@@ -268,7 +268,9 @@ async function runSlowPath(
 
 	// Don't snapshot a partial seed (--quick / --skip / --only would dump a
 	// subset of tables and fool the next reset). Detect by passthrough flag.
-	const partialSeed = passthroughFlags.some((f) => f === '--quick' || f === '-q' || f.startsWith('--skip') || f.startsWith('--only'));
+	const partialSeed = passthroughFlags.some(
+		(f) => f === '--quick' || f === '-q' || f.startsWith('--skip') || f.startsWith('--only'),
+	);
 	if (!partialSeed) {
 		await refreshSnapshotCache(cachedCurrentHash);
 	} else {

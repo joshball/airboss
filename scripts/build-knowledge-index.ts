@@ -1310,7 +1310,8 @@ function aggregateWarningsByCode(warnings: ReadonlyArray<BuildWarning>): Aggrega
 		}
 	}
 	const ACTIONABLES: Readonly<Record<string, string>> = {
-		'legacy-citation-shape': "run 'bun scripts/db/migrate-knowledge-citations.ts' to migrate to the structured ref: shape",
+		'legacy-citation-shape':
+			"run 'bun scripts/db/migrate-knowledge-citations.ts' to migrate to the structured ref: shape",
 		'unresolved-edge': 'author the missing target nodes, or remove the edge from the source node frontmatter',
 	};
 	const out: AggregatedWarningGroup[] = [];

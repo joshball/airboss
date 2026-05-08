@@ -39,7 +39,11 @@ export async function runOrThrow(
 	cmd: readonly string[],
 	opts: { readonly cwd?: string; readonly env?: Record<string, string | undefined> } = {},
 ): Promise<void> {
-	const proc = Bun.spawn([...cmd], { cwd: opts.cwd, env: spawnEnv(opts.env), stdio: ['inherit', 'inherit', 'inherit'] });
+	const proc = Bun.spawn([...cmd], {
+		cwd: opts.cwd,
+		env: spawnEnv(opts.env),
+		stdio: ['inherit', 'inherit', 'inherit'],
+	});
 	const code = await proc.exited;
 	if (code !== 0) {
 		throw new Error(`subprocess failed (exit ${code}): ${cmd.join(' ')}`);

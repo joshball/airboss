@@ -55,7 +55,6 @@
 import { mkdirSync, openSync, writeSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { DEV_ACCOUNTS, DEV_DB_URL, DEV_SEED_ORIGIN_TAG, ENV_VARS } from '@ab/constants';
-import { startStatusLine, type StatusLine } from '../lib/status-line';
 import { client } from '@ab/db/connection';
 import { seedAsrsFromManifest } from '@ab/sources/asrs/seed';
 import { seedFormsFromManifest } from '@ab/sources/forms/seed';
@@ -72,6 +71,7 @@ import { seedStatutesFromManifest } from '@ab/sources/statutes/seed';
 import { seedTcdsFromManifest } from '@ab/sources/tcds/seed';
 import { prompt } from '../lib/prompt';
 import { runOrThrowPiped } from '../lib/spawn';
+import { type StatusLine, startStatusLine } from '../lib/status-line';
 import { migrateReferencesToStructured } from './migrate-references-to-structured';
 import { type AbbySeedCounts, seedAbby } from './seed-abby';
 import { seedCardsForUser } from './seed-cards';
@@ -193,9 +193,7 @@ async function runPhaseWithReport(phase: Phase, fn: PhaseFn): Promise<PhaseRunRe
 	const originalConsoleWarn = console.warn;
 	const originalConsoleError = console.error;
 	const consoleViaLog = (...args: unknown[]) => {
-		const text = args
-			.map((a) => (typeof a === 'string' ? a : JSON.stringify(a)))
-			.join(' ');
+		const text = args.map((a) => (typeof a === 'string' ? a : JSON.stringify(a))).join(' ');
 		logOnly(`${text}\n`);
 	};
 	console.log = consoleViaLog;
@@ -288,7 +286,7 @@ async function phaseReferenceCorpusSeed(progress: ProgressFn): Promise<PhaseSumm
 	const reports = await Promise.all(
 		seeders.map(([name, run]) =>
 			run()
-				.then((report) => ({ name, report } as const))
+				.then((report) => ({ name, report }) as const)
 				.catch((err) => {
 					throw new Error(`reference-corpus-seed: corpus '${name}' failed: ${(err as Error).message}`);
 				}),
