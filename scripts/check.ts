@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+
 /**
  * Project-wide check pipeline.
  *
@@ -33,6 +34,7 @@ import { $ } from 'bun';
 import { closeSync, existsSync, mkdirSync, openSync, readFileSync, statSync, unlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
+import { DEV_DB_URL, ENV_VARS } from '@ab/constants';
 import { resolvePositiveIntEnv, runWithConcurrency } from './lib/concurrency';
 
 const REPO_ROOT = resolve(import.meta.dir, '..');
@@ -923,6 +925,11 @@ async function shellRun(
 			cwd: cwd ?? REPO_ROOT,
 			stdout: stdoutFd,
 			stderr: stderrFd,
+			// Pass the live `process.env` so children inherit any env vars the
+			// parent injected after startup (e.g. the dev `DATABASE_URL`
+			// fallback). Without this, `Bun.spawn` snapshots the env from
+			// process startup and our injection is invisible to the child.
+			env: process.env,
 		});
 		const exitCode = await proc.exited;
 		closeFds();
@@ -938,6 +945,78 @@ async function shellRun(
 		}
 		try {
 			unlinkSync(stderrTmp);
+		} catch {
+			/* ignore */
+		}
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Dev-env injection
+//
+// Several check steps load modules that statically require `DATABASE_URL`
+// (e.g. `@ab/db/connection` is imported transitively by `airboss-ref` and
+// `build-knowledge-index --dry-run`). Without an env value the script
+// crashes at module load before doing any real work. We mirror the dev
+// fallback used by `scripts/dev.ts`: if no `DATABASE_URL` is set, inject
+// `DEV_DB_URL` so the module load succeeds. Steps that genuinely need a
+// reachable DB (airboss-ref) probe TCP and skip cleanly with a clear
+// message when nothing answers; steps whose work is hermetic
+// (knowledge --dry-run) just run.
+// ---------------------------------------------------------------------------
+
+function ensureDevDatabaseUrl(): { injected: boolean; url: string } {
+	const existing = process.env[ENV_VARS.DATABASE_URL];
+	if (existing && existing.length > 0) return { injected: false, url: existing };
+	process.env[ENV_VARS.DATABASE_URL] = DEV_DB_URL;
+	return { injected: true, url: DEV_DB_URL };
+}
+
+async function isDbReachable(rawUrl: string): Promise<boolean> {
+	let parsed: URL;
+	try {
+		parsed = new URL(rawUrl);
+	} catch {
+		return false;
+	}
+	const host = parsed.hostname;
+	const port = Number(parsed.port) || 5432;
+	// TCP-level ping first: if nothing answers on the port at all we exit
+	// fast without paying the postgres connection cost. This is the case on
+	// most fresh agent containers (no docker, no orbstack, no listener).
+	try {
+		const socket = await Bun.connect({
+			hostname: host,
+			port,
+			socket: { data() {}, open() {}, close() {}, error() {} },
+		});
+		socket.end();
+	} catch {
+		return false;
+	}
+	// TCP-level success is necessary but not sufficient: a dev port can be
+	// claimed by something that completes the SYN/ACK handshake but is not a
+	// running Postgres (this happened locally on 5435 during testing). Run an
+	// actual `select 1` with a tight connect timeout to confirm a real
+	// Postgres is answering.
+	const { default: postgres } = await import('postgres');
+	const sql = postgres(rawUrl, {
+		connect_timeout: 2,
+		idle_timeout: 1,
+		max: 1,
+		// Suppress postgres-js's `notice` console writes during the probe.
+		// Otherwise an unauthenticated probe leaks server warnings into the
+		// check pipeline output.
+		onnotice: () => {},
+	});
+	try {
+		await sql`select 1`;
+		return true;
+	} catch {
+		return false;
+	} finally {
+		try {
+			await sql.end({ timeout: 1 });
 		} catch {
 			/* ignore */
 		}
@@ -1080,7 +1159,24 @@ function buildStepDefs(profile: Profile, dirty: readonly string[]): StepDef[] {
 		// Identifier validation runs over the source registry + ACS lessons.
 		relevantWhen: (d) =>
 			anyMatch(d, (f) => f.startsWith('libs/aviation/') || f.startsWith('acs/') || f.startsWith('course/')),
-		fn: () => shellRun('bun', ['scripts/airboss-ref.ts']),
+		fn: async () => {
+			// `scripts/airboss-ref.ts` hydrates the production registry from on-disk
+			// derivatives and writes promotion batches via `commitIngestBatch` --
+			// that path needs a real reachable Postgres. If nothing answers on the
+			// configured `DATABASE_URL`, skip with a clear message rather than
+			// firing off a connect attempt that times out and surfaces as a generic
+			// child-exit failure.
+			const url = process.env[ENV_VARS.DATABASE_URL] ?? DEV_DB_URL;
+			if (!(await isDbReachable(url))) {
+				return {
+					exitCode: 0,
+					stdout: `airboss-ref: skipped (DB at ${url} is unreachable; start OrbStack / \`bun run db up\` to enable this check)\n`,
+					stderr: '',
+					skipCache: true,
+				};
+			}
+			return shellRun('bun', ['scripts/airboss-ref.ts']);
+		},
 	});
 
 	defs.push({
@@ -1300,6 +1396,15 @@ async function main(): Promise<number> {
 	}
 
 	console.log(`check: profile=${args.profile}${args.verbose ? ' (verbose)' : ''}`);
+
+	// Inject `DEV_DB_URL` as a fallback `DATABASE_URL` so step children that
+	// transitively load `@ab/db/connection` at module top-level do not crash
+	// on `requireEnv(DATABASE_URL)`. Steps that need a reachable DB (e.g.
+	// `airboss-ref`) probe TCP and skip cleanly when nothing answers.
+	const devEnv = ensureDevDatabaseUrl();
+	if (devEnv.injected) {
+		console.log(`check: DATABASE_URL not set; using dev fallback ${devEnv.url}`);
+	}
 
 	// SvelteKit sync prereq is needed for any profile that runs svelte-check.
 	const needsSync = args.profile === 'types' || args.profile === 'all';
