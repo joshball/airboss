@@ -20,6 +20,18 @@ import {
 	PORTS,
 	SCHEMAS,
 } from '@ab/constants';
+import { resolve } from 'node:path';
+import {
+	computeSeedInputHash,
+	dumpSnapshot,
+	getPgMajorVersion,
+	invalidateSnapshot,
+	readSnapshotMeta,
+	restoreSnapshot,
+	snapshotDumpExists,
+	type SnapshotMeta,
+	writeSnapshotMeta,
+} from './db/snapshot';
 import { confirmOrAbort } from './lib/prompt';
 import { run, runOrThrow, runQuiet } from './lib/spawn';
 import { startStatusLine } from './lib/status-line';
@@ -28,6 +40,7 @@ const CONTAINER = 'airboss-db';
 const DB_URL = process.env[ENV_VARS.DATABASE_URL] ?? DEV_DB_URL;
 const DB_USER = DEV_DB.USER;
 const DB_NAME = DEV_DB.NAME;
+const REPO_ROOT = resolve(import.meta.dir, '..');
 
 const args = process.argv.slice(2);
 const positional = args.filter((a) => !a.startsWith('-'));
@@ -37,9 +50,11 @@ const extraPositional = positional.slice(1);
 const flags = new Set(args.filter((a) => a.startsWith('-')));
 const force = flags.has('--force') || flags.has('-f');
 const wantsHelp = flags.has('--help') || flags.has('-h');
-const passthroughFlags = args.filter(
-	(a) => a.startsWith('-') && a !== '--help' && a !== '-h' && a !== '--force' && a !== '-f',
-);
+const wantsRebuild = flags.has('--rebuild') || flags.has('--no-cache');
+// Flags forwarded to seed-all.ts. Strip out reset-only flags (--force, --rebuild,
+// etc.) so the seed orchestrator doesn't complain about unknown args.
+const RESET_ONLY_FLAGS = new Set(['--help', '-h', '--force', '-f', '--rebuild', '--no-cache']);
+const passthroughFlags = args.filter((a) => a.startsWith('-') && !RESET_ONLY_FLAGS.has(a));
 
 async function query(sql: string): Promise<string> {
 	const proc = Bun.spawn(['docker', 'exec', CONTAINER, 'psql', '-U', DB_USER, '-d', DB_NAME, '-t', '-A', '-c', sql], {
@@ -62,14 +77,163 @@ async function doReset(): Promise<void> {
 	assertLocalDb();
 	await confirmOrAbort(`This will DROP and recreate "${DB_NAME}", then run the full seed. Continue?`, { force });
 
-	// Pre-seed steps: drop / recreate / extension / drizzle push. Each one runs
-	// quietly and updates a single status line. Output is captured into
-	// memory; we surface only on failure (where the captured stderr explains
-	// what broke). pg_trgm is a contrib extension required by the GIN trigram
-	// indexes the schema declares on study.card (front, back) using
-	// gin_trgm_ops; drizzle-kit push fails the CREATE INDEX without it.
+	const totalStart = Date.now();
+
+	// Pre-seed steps: drop / recreate / extension / drizzle push. Pre-seed
+	// (minus drizzle-kit push -- the snapshot already carries the schema)
+	// runs whether we're using the cache or the slow path, so we share the
+	// terminate/drop/create chunk. Drizzle push only runs on the slow path.
 	const psqlPostgres = ['docker', 'exec', CONTAINER, 'psql', '-U', DB_USER, '-d', 'postgres', '-c'] as const;
 	const psqlAirboss = ['docker', 'exec', CONTAINER, 'psql', '-U', DB_USER, '-d', DB_NAME, '-c'] as const;
+
+	// Cache decision happens before any DB drop so a "snapshot file missing,
+	// hash matched" miss falls cleanly into the slow path without already
+	// having nuked the DB and printed half a "restoring" line.
+	const cacheDecision = await decideCachePath();
+
+	if (cacheDecision.kind === 'hit') {
+		await runDropCreate(psqlPostgres, psqlAirboss);
+		const restoreStart = Date.now();
+		const status = startStatusLine('restoring snapshot');
+		status.detail(`${formatBytes(cacheDecision.meta.bytes)}`);
+		try {
+			await restoreSnapshot({ container: CONTAINER, dbName: DB_NAME, dbUser: DB_USER });
+		} catch (err) {
+			status.finish();
+			process.stdout.write(`  ! snapshot restore failed; invalidating cache and falling back to slow path\n`);
+			process.stdout.write(`    ${(err as Error).message.split('\n')[0] ?? ''}\n`);
+			await invalidateSnapshot();
+			await runSlowPath(psqlPostgres, psqlAirboss, totalStart, cacheDecision.currentHash);
+			return;
+		}
+		status.finish();
+		const restoreMs = Date.now() - restoreStart;
+		const shortHash = cacheDecision.meta.hash.slice(0, 8);
+		process.stdout.write(
+			`  ✓ snapshot restored        ${formatPreMs(restoreMs)}  ${formatBytes(cacheDecision.meta.bytes)}  hash ${shortHash}\n`,
+		);
+
+		const checkProc = Bun.spawn(['bun', 'scripts/db/seed-check.ts'], { stdio: ['inherit', 'inherit', 'inherit'] });
+		const checkExit = await checkProc.exited;
+		if (checkExit !== 0) process.exit(checkExit);
+
+		const totalMs = Date.now() - totalStart;
+		process.stdout.write(`\nseed: done in ${formatDurationMs(totalMs)}  (cached snapshot, hash ${shortHash})\n`);
+		return;
+	}
+
+	if (cacheDecision.kind === 'miss') {
+		process.stdout.write(`  i cache miss: ${cacheDecision.reason}\n`);
+	} else if (cacheDecision.kind === 'rebuild') {
+		process.stdout.write(`  i --rebuild: bypassing cache, refreshing snapshot after seed\n`);
+	}
+
+	await runSlowPath(psqlPostgres, psqlAirboss, totalStart, cacheDecision.currentHash);
+}
+
+interface CacheHit {
+	readonly kind: 'hit';
+	readonly meta: SnapshotMeta;
+	readonly currentHash: string;
+}
+interface CacheMiss {
+	readonly kind: 'miss';
+	readonly reason: string;
+	readonly currentHash: string | null;
+}
+interface CacheRebuild {
+	readonly kind: 'rebuild';
+	readonly currentHash: string | null;
+}
+type CacheDecision = CacheHit | CacheMiss | CacheRebuild;
+
+async function decideCachePath(): Promise<CacheDecision> {
+	if (wantsRebuild) {
+		// Still compute the hash so we can refresh the snapshot post-seed with
+		// up-to-date inputs. A failed hash compute degrades to "no refresh"
+		// later but never blocks the slow path.
+		const currentHash = await safeComputeHash();
+		return { kind: 'rebuild', currentHash };
+	}
+	const meta = await readSnapshotMeta();
+	if (!meta) return { kind: 'miss', reason: 'no snapshot meta found', currentHash: await safeComputeHash() };
+	if (!(await snapshotDumpExists())) {
+		return { kind: 'miss', reason: 'snapshot dump file missing', currentHash: await safeComputeHash() };
+	}
+	let pgMajor: string;
+	try {
+		pgMajor = await getPgMajorVersion(CONTAINER, DB_USER);
+	} catch (err) {
+		return {
+			kind: 'miss',
+			reason: `could not read postgres version (${(err as Error).message.split('\n')[0]})`,
+			currentHash: null,
+		};
+	}
+	if (meta.pgVersion !== pgMajor) {
+		return {
+			kind: 'miss',
+			reason: `postgres major changed (${meta.pgVersion} -> ${pgMajor})`,
+			currentHash: await safeComputeHash(pgMajor),
+		};
+	}
+	const currentHashResult = await computeSeedInputHash(REPO_ROOT, pgMajor);
+	if (currentHashResult.hash !== meta.hash) {
+		return { kind: 'miss', reason: 'source inputs changed', currentHash: currentHashResult.hash };
+	}
+	return { kind: 'hit', meta, currentHash: currentHashResult.hash };
+}
+
+async function safeComputeHash(pgMajorOverride?: string): Promise<string | null> {
+	try {
+		const pgMajor = pgMajorOverride ?? (await getPgMajorVersion(CONTAINER, DB_USER));
+		const { hash } = await computeSeedInputHash(REPO_ROOT, pgMajor);
+		return hash;
+	} catch {
+		return null;
+	}
+}
+
+async function runDropCreate(
+	psqlPostgres: readonly string[],
+	_psqlAirboss: readonly string[],
+): Promise<void> {
+	const preStart = Date.now();
+	const preStatus = startStatusLine('reset (pre-seed)');
+	const steps: ReadonlyArray<readonly [string, readonly string[]]> = [
+		[
+			'terminating lingering connections',
+			[
+				...psqlPostgres,
+				`SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='${DB_NAME}' AND pid <> pg_backend_pid();`,
+			],
+		],
+		['dropping database', [...psqlPostgres, `DROP DATABASE IF EXISTS ${DB_NAME} WITH (FORCE);`]],
+		['creating database', [...psqlPostgres, `CREATE DATABASE ${DB_NAME};`]],
+	];
+	try {
+		for (const [label, cmd] of steps) {
+			preStatus.detail(label);
+			await runQuiet(cmd);
+		}
+	} finally {
+		preStatus.finish();
+	}
+	const preMs = Date.now() - preStart;
+	process.stdout.write(`  ✓ reset (pre-seed)         ${formatPreMs(preMs)}  drop + create\n`);
+}
+
+async function runSlowPath(
+	psqlPostgres: readonly string[],
+	psqlAirboss: readonly string[],
+	totalStart: number,
+	cachedCurrentHash: string | null,
+): Promise<void> {
+	// pg_trgm is a contrib extension required by the GIN trigram indexes the
+	// schema declares on study.card (front, back) using gin_trgm_ops;
+	// drizzle-kit push fails the CREATE INDEX without it.
+	const preStart = Date.now();
+	const preStatus = startStatusLine('reset (pre-seed)');
 	const preSteps: ReadonlyArray<readonly [string, readonly string[]]> = [
 		[
 			'terminating lingering connections',
@@ -78,14 +242,11 @@ async function doReset(): Promise<void> {
 				`SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='${DB_NAME}' AND pid <> pg_backend_pid();`,
 			],
 		],
-		['dropping database', [...psqlPostgres, `DROP DATABASE IF EXISTS ${DB_NAME};`]],
+		['dropping database', [...psqlPostgres, `DROP DATABASE IF EXISTS ${DB_NAME} WITH (FORCE);`]],
 		['creating database', [...psqlPostgres, `CREATE DATABASE ${DB_NAME};`]],
 		['installing pg_trgm extension', [...psqlAirboss, 'CREATE EXTENSION IF NOT EXISTS pg_trgm;']],
 		['drizzle-kit push (schema)', ['bunx', 'drizzle-kit', 'push']],
 	];
-
-	const preStart = Date.now();
-	const preStatus = startStatusLine('reset (pre-seed)');
 	try {
 		for (const [label, cmd] of preSteps) {
 			preStatus.detail(label);
@@ -107,10 +268,70 @@ async function doReset(): Promise<void> {
 	const seedExit = await seedProc.exited;
 	if (seedExit !== 0) process.exit(seedExit);
 
+	// Don't snapshot a partial seed (--quick / --skip / --only would dump a
+	// subset of tables and fool the next reset). Detect by passthrough flag.
+	const partialSeed = passthroughFlags.some((f) => f === '--quick' || f === '-q' || f.startsWith('--skip') || f.startsWith('--only'));
+	if (!partialSeed) {
+		await refreshSnapshotCache(cachedCurrentHash);
+	} else {
+		process.stdout.write(`  i partial seed (--quick/--skip/--only); skipping snapshot capture\n`);
+	}
+
 	// Final summary so the operator sees what landed.
 	const checkProc = Bun.spawn(['bun', 'scripts/db/seed-check.ts'], { stdio: ['inherit', 'inherit', 'inherit'] });
 	const checkExit = await checkProc.exited;
 	if (checkExit !== 0) process.exit(checkExit);
+
+	const totalMs = Date.now() - totalStart;
+	process.stdout.write(`\nseed: done in ${formatDurationMs(totalMs)}  (full seed)\n`);
+}
+
+async function refreshSnapshotCache(_precomputedHash: string | null): Promise<void> {
+	const dumpStart = Date.now();
+	const status = startStatusLine('saving snapshot');
+	status.detail('pg_dump --format=custom');
+	try {
+		const pgMajor = await getPgMajorVersion(CONTAINER, DB_USER);
+		// Recompute even if a hash was precomputed earlier: the pre-seed run
+		// may have edited drizzle/* (push generates no files but a future
+		// caller might) or the source tree could have been touched while we
+		// were seeding. Cheap relative to the dump itself.
+		const { hash, inputCount } = await computeSeedInputHash(REPO_ROOT, pgMajor);
+		const { bytes } = await dumpSnapshot({ container: CONTAINER, dbName: DB_NAME, dbUser: DB_USER });
+		await writeSnapshotMeta({
+			hash,
+			pgVersion: pgMajor,
+			createdAt: new Date().toISOString(),
+			inputCount,
+			bytes,
+		});
+		status.finish();
+		const dumpMs = Date.now() - dumpStart;
+		const shortHash = hash.slice(0, 8);
+		process.stdout.write(
+			`  ✓ snapshot saved           ${formatPreMs(dumpMs)}  ${formatBytes(bytes)}  hash ${shortHash}  (next reset will be much faster)\n`,
+		);
+	} catch (err) {
+		status.finish();
+		process.stdout.write(`  ! snapshot save failed (continuing anyway): ${(err as Error).message.split('\n')[0]}\n`);
+		// Don't leave a half-written cache around to fool the next reset.
+		await invalidateSnapshot();
+	}
+}
+
+function formatBytes(bytes: number): string {
+	if (bytes < 1024) return `${bytes}B`;
+	if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)}KB`;
+	return `${(bytes / (1024 * 1024)).toFixed(1)}MB`;
+}
+
+function formatDurationMs(ms: number): string {
+	if (ms < 1000) return `${ms}ms`;
+	const seconds = ms / 1000;
+	if (seconds < 60) return `${seconds.toFixed(1)}s`;
+	const minutes = Math.floor(seconds / 60);
+	const remainder = seconds - minutes * 60;
+	return `${minutes}m${remainder.toFixed(1)}s`;
 }
 
 function formatPreMs(ms: number): string {
@@ -393,11 +614,15 @@ const COMMAND_HELP: Record<string, CommandHelp> = {
 		links: ['scripts/db/seed-check.ts', 'scripts/db/seed-tables.ts'],
 	},
 	reset: {
-		summary: 'DROP + recreate DB, push schema, run full seed',
-		what: 'Destroys the `airboss` database, recreates it empty, runs `drizzle-kit push` to materialize the schema, then runs the full seed orchestrator (users + knowledge + cards).\n\nRefuses to run if DATABASE_URL does not match the local dev pattern. Prompts for confirmation unless `--force` / `-f` is passed.',
-		why: 'The nuclear option for "get me back to a known good state fast." Useful after schema churn, botched seeds, or when switching branches with divergent migrations. Leaves the DB ready to serve requests with dev users, the full knowledge graph, and their materialized cards.',
-		how: 'Drops + creates the DB via `docker exec psql`, pushes the Drizzle schema, then delegates to `scripts/db/seed-all.ts` with no sub-target (all phases).',
-		links: ['scripts/db/seed-all.ts', 'libs/constants/src/dev.ts (DEV_DB_HOST_PATTERN guards against prod)'],
+		summary: 'DROP + recreate DB, push schema, run full seed (with snapshot cache)',
+		what: 'Destroys the `airboss` database, recreates it empty, then either restores from a cached pg_dump (fast path, ~15s) or runs `drizzle-kit push` + the full seed orchestrator (slow path, ~6min) and refreshes the cache afterwards.\n\n  bun run db reset                # use cache when source inputs match\n  bun run db reset --force        # skip confirmation prompt\n  bun run db reset --rebuild      # bypass cache, rerun the full seed, refresh snapshot\n  bun run db reset --no-cache     # alias for --rebuild\n\nRefuses to run if DATABASE_URL does not match the local dev pattern. Prompts for confirmation unless `--force` / `-f` is passed.',
+		why: 'The nuclear option for "get me back to a known good state fast." Useful after schema churn, botched seeds, or when switching branches with divergent migrations. The snapshot cache turns a typical-day reset (no source changes since last seed) into a sub-30s drop + create + pg_restore cycle, instead of re-running every seeder from scratch.',
+		how: 'Cache layout: `.cache/db-build/snapshot.dump` (custom-format pg_dump) + `.cache/db-build/snapshot.meta.json` (hash + pg version + timestamp). Cache hits when the SHA-256 of every input under `course/`, `handbooks/`, `acs/`, `regulations/`, `libs/sources/src/**/manifest.yaml`, the seed scripts, and the schema files matches the cached hash AND the postgres major version is unchanged.\n\nOn miss or `--rebuild`: drop + create + push + seed-all + dump. On hit: drop + create + pg_restore. Partial seeds (`--quick`/`--skip`/`--only`) are not snapshotted.',
+		links: [
+			'scripts/db/seed-all.ts',
+			'scripts/db/snapshot.ts',
+			'libs/constants/src/dev.ts (DEV_DB_HOST_PATTERN guards against prod)',
+		],
 	},
 	'build-all': {
 		summary: 'Run every authored-content build step in dependency order',
@@ -552,8 +777,10 @@ function printIndex(): void {
 	}
 	console.log('');
 	console.log('Flags:');
-	console.log('  --force, -f   Skip confirmation prompts (reset, reset-study)');
-	console.log('  --help, -h    Show detailed help for a command');
+	console.log('  --force, -f         Skip confirmation prompts (reset, reset-study)');
+	console.log('  --rebuild           Bypass the snapshot cache on reset; refresh after seed');
+	console.log('  --no-cache          Alias for --rebuild');
+	console.log('  --help, -h          Show detailed help for a command');
 }
 
 // ---------------------------------------------------------------------------
