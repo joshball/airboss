@@ -1,7 +1,7 @@
 # citation-audit
 
 Weekly stage-5 cross-link audit. Runs `bun run sources audit-citations --json`
-against the dev database and writes a report to `docs/loose-ends/` when there
+against the dev database and writes a report to `docs/work/reviews/` when there
 are findings.
 
 ## What it checks
@@ -21,9 +21,9 @@ For every row in `study.content_citations`:
 ## What it produces
 
 Nothing on a clean run. When findings exist, writes
-`docs/loose-ends/citation-audit-<date>.md` with the full JSON report. The
+`docs/work/reviews/citation-audit-<date>.md` with the full JSON report. The
 scheduler is configured `on_diff = "log-only"` so no PR is opened; the
-report sits in `loose-ends/` for human review.
+report sits in `docs/work/reviews/` for human review.
 
 ## Schedule
 
