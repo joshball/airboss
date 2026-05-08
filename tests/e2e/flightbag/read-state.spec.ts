@@ -26,7 +26,16 @@ test.describe('flightbag read-state UI (anonymous)', () => {
 	});
 
 	test('chapter page has no Read N of M indicator when anonymous', async ({ page }) => {
-		await page.goto(ROUTES.FLIGHTBAG_HANDBOOK_CHAPTER('phak', '8083-25C', '12'));
+		// PHAK chapter pages are heavy (855-entry TOC + chapter preamble + section
+		// list). The default `waitUntil: 'load'` waits for every subresource
+		// (fonts, lazy-loaded figure dimension reservations, dev-server HMR
+		// websocket handshake) which routinely trips the 15s navigation budget on
+		// a cold-cache e2e run. Switch to `domcontentloaded` to match
+		// `representative-pages.spec.ts` -- the assertions below only need the
+		// SSR'd DOM, not a fully-warm page.
+		await page.goto(ROUTES.FLIGHTBAG_HANDBOOK_CHAPTER('phak', '8083-25C', '12'), {
+			waitUntil: 'domcontentloaded',
+		});
 		await expect(page.getByLabel('Chapter reading progress')).toHaveCount(0);
 		// Sections list still renders. The chapter page wraps the per-section
 		// `<ol>` in a `<section aria-label="Sections">` landmark; assert the

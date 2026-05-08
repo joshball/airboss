@@ -86,12 +86,20 @@ function buildSectionUrl(kind: string, documentSlug: string, edition: string, co
 		}
 		case REFERENCE_KINDS.CFR: {
 			// CFR slug is `<title>cfr<part>` (e.g. `14cfr91`). `code` is either
-			// the part number (chapter row) or `<part>.<section>`.
+			// the part number (chapter row), a true `<part>.<section>` numeric
+			// section, or a Subpart/Appendix range row whose code carries a `-`
+			// (e.g. `121.1200-121.1399`). The reader's `[section]` route
+			// validates against `/^[a-z0-9-]+$/` and rejects period-bearing
+			// section IDs, so range rows have no leaf reader page today --
+			// route them to the Part landing instead.
 			const slugMatch = /^([0-9]+)cfr(.+)$/.exec(documentSlug);
 			if (!slugMatch) return null;
 			const [, title = '', part = ''] = slugMatch;
 			if (code === part) return ROUTES.FLIGHTBAG_CFR_PART(title, part);
-			const sectionMatch = /^[0-9]+\.(.+)$/.exec(code);
+			// Strict numeric section: `<part>.<digits>` only. Anything else
+			// (range codes, subpart wrappers seeded with `subpart-X` codes,
+			// dotted appendices) drops back to the Part landing.
+			const sectionMatch = /^[0-9]+\.([0-9]+)$/.exec(code);
 			if (sectionMatch?.[1]) return ROUTES.FLIGHTBAG_CFR_SECTION(title, part, sectionMatch[1]);
 			return ROUTES.FLIGHTBAG_CFR_PART(title, part);
 		}
