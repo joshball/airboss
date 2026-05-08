@@ -9,9 +9,11 @@
 	},
 	"dependencies": {
 		"@ab/auth": "workspace:*",
+		"@ab/aviation": "workspace:*",
 		"@ab/bc-sim": "workspace:*",
 		"@ab/constants": "workspace:*",
 		"@ab/db": "workspace:*",
+		"@ab/help": "workspace:*",
 		"@ab/utils": "workspace:*",
 		"three": "^0.169.0"
 	},
