@@ -29,7 +29,7 @@ In:
 - One existing-table extension: `knowledge_node.kind` text column with constants enum
 - Two new lenses: `courseLens` (single-course tree) and `courseWithCertOverlayLens` (course tree with cert gap overlay)
 - Lens type extension: optional `sources` field on `LensTreeNode` and `LensLeaf` for overlay tagging (additive; existing acsLens / domainLens consumers unaffected)
-- YAML authoring pipeline: `course/courses/<slug>/manifest.yaml` + `course/courses/<slug>/steps/*.yaml`
+- YAML authoring pipeline: `course/courses/<slug>/manifest.yaml` + `course/courses/<slug>/sections/*.yaml` (one file per section; steps inline)
 - Seed handler: `bun run db seed courses` (idempotent, content-hashed)
 - Validator: dangling knowledge_node refs, parent-child cycles, duplicate ordinals, dangling syllabus FKs in overlay test scenarios
 - Constants: `COURSE_KINDS`, `COURSE_STATUSES`, `COURSE_STEP_LEVELS`, `KNOWLEDGE_NODE_KINDS`, plus value arrays and labels
