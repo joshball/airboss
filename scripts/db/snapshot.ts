@@ -1,5 +1,5 @@
 /**
- * Snapshot cache for `bun run db reset`.
+ * Fleet-shared snapshot cache for `bun run db reset`.
  *
  * The slow path (drop + create + drizzle push + full seed) takes ~6 minutes on
  * a typical-day developer reset. Most of that time is spent re-deriving the
@@ -9,6 +9,13 @@
  * still match (and the running postgres major version is unchanged), the
  * dispatcher can drop + create + restore in ~20 seconds instead of re-seeding.
  *
+ * The cache is **machine-shared, not per-worktree**: all snapshots live under
+ * `~/.cache/airboss/db-build/pg<N>/<hash>.dump`. A worktree's first reset
+ * looks up by `(hash, pgVersion)`, so any other worktree (or main) on the
+ * same machine that has already seeded the same content fulfils the hit.
+ * That makes per-worktree DBs (PR #711) cheap: each worktree gets its own
+ * postgres database, but they all reuse the same dump bytes.
+ *
  * The hash walk is deterministic: we collect every file under the configured
  * roots that matches an extension allowlist, sort by absolute path, and feed
  * each file's byte length + bytes into the running SHA. Path strings are not
@@ -16,19 +23,26 @@
  * relocations within a single sort position; in practice almost any rename
  * shifts a file's sort position relative to its neighbours and the hash
  * changes anyway. That's the safer behaviour: edits and renames both bust
- * the cache, never silently reuse a stale snapshot. A repo that genuinely
- * has a hashed root removed (e.g. someone deletes `acs/` entirely) hashes
- * differently from a repo that never had it -- correct, by design, and
- * worth preserving against any "warn on missing root" temptation.
+ * the cache, never silently reuse a stale snapshot.
  *
- * Cache layout under `.cache/db-build/`:
- *   - snapshot.dump        custom-format pg_dump bytes
- *   - snapshot.meta.json   { hash, pgVersion, createdAt, inputCount, bytes }
+ * Cache layout:
+ *
+ *   ~/.cache/airboss/db-build/
+ *     pg16/
+ *       7f5e80fa1234abcd....dump
+ *       9bc5c0e35678ef01....dump
+ *       index.json   { entries: [{ hash, createdAt, bytes, inputCount }, ...] }
+ *     pg15/
+ *       ...
+ *
+ * Eviction: keep the {@link MAX_KEPT_PER_PG_VERSION} most recent dumps per
+ * pg version. Older entries are GC'd lazily on each successful save.
  */
 
 import { createHash } from 'node:crypto';
 import type { Dirent } from 'node:fs';
 import { readdir, rm, stat } from 'node:fs/promises';
+import { homedir } from 'node:os';
 import { resolve } from 'node:path';
 import { runQuiet } from '../lib/spawn';
 
@@ -40,9 +54,68 @@ export interface SnapshotMeta {
 	bytes: number;
 }
 
-export const SNAPSHOT_DIR = resolve(process.cwd(), '.cache', 'db-build');
-export const SNAPSHOT_DUMP_PATH = resolve(SNAPSHOT_DIR, 'snapshot.dump');
-export const SNAPSHOT_META_PATH = resolve(SNAPSHOT_DIR, 'snapshot.meta.json');
+const MAX_KEPT_PER_PG_VERSION = 3;
+
+/**
+ * Machine-shared cache root. `~/.cache/airboss/db-build/` is the canonical
+ * place; every worktree on this machine reads and writes the same tree so
+ * they share dump bytes when their input hash matches.
+ *
+ * Override via `AIRBOSS_DB_BUILD_CACHE_DIR` (e.g. for CI runners that want
+ * a workspace-scoped cache).
+ */
+export function snapshotCacheRoot(): string {
+	const override = process.env.AIRBOSS_DB_BUILD_CACHE_DIR;
+	if (override && override.length > 0) return override;
+	return resolve(homedir(), '.cache', 'airboss', 'db-build');
+}
+
+function pgVersionDir(pgVersion: string): string {
+	return resolve(snapshotCacheRoot(), `pg${pgVersion}`);
+}
+
+function dumpPathFor(pgVersion: string, hash: string): string {
+	return resolve(pgVersionDir(pgVersion), `${hash}.dump`);
+}
+
+function indexPathFor(pgVersion: string): string {
+	return resolve(pgVersionDir(pgVersion), 'index.json');
+}
+
+interface IndexFile {
+	entries: SnapshotMeta[];
+}
+
+async function readIndex(pgVersion: string): Promise<IndexFile> {
+	const file = Bun.file(indexPathFor(pgVersion));
+	if (!(await file.exists())) return { entries: [] };
+	try {
+		const parsed = JSON.parse(await file.text()) as unknown;
+		if (typeof parsed !== 'object' || parsed === null) return { entries: [] };
+		const candidate = (parsed as { entries?: unknown }).entries;
+		if (!Array.isArray(candidate)) return { entries: [] };
+		const entries = candidate.filter(isSnapshotMeta);
+		return { entries };
+	} catch {
+		return { entries: [] };
+	}
+}
+
+async function writeIndex(pgVersion: string, idx: IndexFile): Promise<void> {
+	await Bun.write(indexPathFor(pgVersion), `${JSON.stringify(idx, null, 2)}\n`);
+}
+
+function isSnapshotMeta(value: unknown): value is SnapshotMeta {
+	if (typeof value !== 'object' || value === null) return false;
+	const v = value as Record<string, unknown>;
+	return (
+		typeof v.hash === 'string' &&
+		typeof v.pgVersion === 'string' &&
+		typeof v.createdAt === 'string' &&
+		typeof v.inputCount === 'number' &&
+		typeof v.bytes === 'number'
+	);
+}
 
 /**
  * Glob roots to walk for hashing. Each entry is a relative path from
@@ -192,33 +265,29 @@ export async function computeSeedInputHash(
 	return { hash: hash.digest('hex'), inputCount: collected.length };
 }
 
-export async function readSnapshotMeta(): Promise<SnapshotMeta | null> {
-	try {
-		const file = Bun.file(SNAPSHOT_META_PATH);
-		if (!(await file.exists())) return null;
-		const text = await file.text();
-		const parsed = JSON.parse(text) as unknown;
-		if (!isSnapshotMeta(parsed)) return null;
-		return parsed;
-	} catch {
+/**
+ * Look up a snapshot by (hash, pgVersion). Returns the meta + dump path when
+ * an entry exists in the index AND the dump file is on disk; null otherwise.
+ *
+ * Does NOT verify pg_dump payload contents. A corrupted dump is detected by
+ * the restore caller (pg_restore exits non-zero), which then invalidates the
+ * entry via {@link invalidateSnapshotEntry}.
+ */
+export async function findSnapshotForHash(
+	hash: string,
+	pgVersion: string,
+): Promise<{ meta: SnapshotMeta; dumpPath: string } | null> {
+	const idx = await readIndex(pgVersion);
+	const meta = idx.entries.find((entry) => entry.hash === hash && entry.pgVersion === pgVersion);
+	if (!meta) return null;
+	const dumpPath = dumpPathFor(pgVersion, hash);
+	const exists = await Bun.file(dumpPath).exists();
+	if (!exists) {
+		// Index entry without dump file: stale. Drop the entry; treat as miss.
+		await removeIndexEntry(pgVersion, hash);
 		return null;
 	}
-}
-
-function isSnapshotMeta(value: unknown): value is SnapshotMeta {
-	if (typeof value !== 'object' || value === null) return false;
-	const v = value as Record<string, unknown>;
-	return (
-		typeof v.hash === 'string' &&
-		typeof v.pgVersion === 'string' &&
-		typeof v.createdAt === 'string' &&
-		typeof v.inputCount === 'number' &&
-		typeof v.bytes === 'number'
-	);
-}
-
-export async function writeSnapshotMeta(meta: SnapshotMeta): Promise<void> {
-	await Bun.write(SNAPSHOT_META_PATH, JSON.stringify(meta, null, 2));
+	return { meta, dumpPath };
 }
 
 interface SnapshotIO {
@@ -229,9 +298,20 @@ interface SnapshotIO {
 
 const CONTAINER_TMP_PATH = '/tmp/airboss-snap.dump';
 
-/** Captures a custom-format pg_dump of the seeded DB into SNAPSHOT_DUMP_PATH. */
-export async function dumpSnapshot(opts: SnapshotIO): Promise<{ bytes: number }> {
-	await ensureSnapshotDir();
+/**
+ * Capture a custom-format pg_dump of the seeded DB into the cache as
+ * `<hash>.dump`. Updates the per-pg-version index and evicts old entries
+ * down to {@link MAX_KEPT_PER_PG_VERSION}.
+ */
+export async function dumpSnapshot(
+	opts: SnapshotIO,
+	hash: string,
+	pgVersion: string,
+	inputCount: number,
+): Promise<{ meta: SnapshotMeta; dumpPath: string }> {
+	await ensureCacheDir(pgVersion);
+	const dumpPath = dumpPathFor(pgVersion, hash);
+
 	// Run inside the container so we don't need pg_dump on the host. Custom
 	// format lets pg_restore parallelize and ignore object-creation order;
 	// `--no-owner --no-privileges` keeps the dump portable across postgres
@@ -252,18 +332,31 @@ export async function dumpSnapshot(opts: SnapshotIO): Promise<{ bytes: number }>
 		`--file=${CONTAINER_TMP_PATH}`,
 	]);
 	try {
-		await runQuiet(['docker', 'cp', `${opts.container}:${CONTAINER_TMP_PATH}`, SNAPSHOT_DUMP_PATH]);
+		await runQuiet(['docker', 'cp', `${opts.container}:${CONTAINER_TMP_PATH}`, dumpPath]);
 	} finally {
 		// Best-effort cleanup; never fails the dump if the container is gone.
 		await runQuiet(['docker', 'exec', opts.container, 'rm', '-f', CONTAINER_TMP_PATH]).catch(() => undefined);
 	}
-	const info = await stat(SNAPSHOT_DUMP_PATH);
-	return { bytes: info.size };
+	const info = await stat(dumpPath);
+	const meta: SnapshotMeta = {
+		hash,
+		pgVersion,
+		createdAt: new Date().toISOString(),
+		inputCount,
+		bytes: info.size,
+	};
+	await upsertIndexEntry(pgVersion, meta);
+	await evictOldSnapshots(pgVersion);
+	return { meta, dumpPath };
 }
 
-/** Restores from SNAPSHOT_DUMP_PATH into a freshly-created empty DB. */
-export async function restoreSnapshot(opts: SnapshotIO): Promise<void> {
-	await runQuiet(['docker', 'cp', SNAPSHOT_DUMP_PATH, `${opts.container}:${CONTAINER_TMP_PATH}`]);
+/**
+ * Restore from the cached dump for `(hash, pgVersion)` into the freshly-
+ * created empty DB. Caller is expected to have called {@link findSnapshotForHash}
+ * first; this just executes pg_restore against the resolved dumpPath.
+ */
+export async function restoreSnapshot(opts: SnapshotIO, dumpPath: string): Promise<void> {
+	await runQuiet(['docker', 'cp', dumpPath, `${opts.container}:${CONTAINER_TMP_PATH}`]);
 	try {
 		await runQuiet([
 			'docker',
@@ -311,20 +404,52 @@ export async function getPgMajorVersion(container: string, dbUser: string): Prom
 	return String(Math.floor(num / 10000));
 }
 
-/** Best-effort: clear cache files. Used when a restore fails partway. */
-export async function invalidateSnapshot(): Promise<void> {
-	await rm(SNAPSHOT_DUMP_PATH, { force: true }).catch(() => undefined);
-	await rm(SNAPSHOT_META_PATH, { force: true }).catch(() => undefined);
+/**
+ * Drop a single (hash, pgVersion) entry: removes the dump file and the index
+ * entry. Used when a restore fails partway and the cached bytes are
+ * suspect.
+ */
+export async function invalidateSnapshotEntry(hash: string, pgVersion: string): Promise<void> {
+	await rm(dumpPathFor(pgVersion, hash), { force: true }).catch(() => undefined);
+	await removeIndexEntry(pgVersion, hash);
 }
 
-async function ensureSnapshotDir(): Promise<void> {
+async function ensureCacheDir(pgVersion: string): Promise<void> {
 	// Bun.write creates parent dirs but only on the path it's writing to;
-	// `docker cp` writing into SNAPSHOT_DUMP_PATH needs the dir to exist
-	// already. Use a sentinel write that we immediately overwrite so the
-	// directory is guaranteed.
-	await Bun.write(resolve(SNAPSHOT_DIR, '.keep'), '');
+	// `docker cp` writing into the dump path needs the dir to exist already.
+	// Use a sentinel write that we immediately overwrite so the directory
+	// is guaranteed.
+	await Bun.write(resolve(pgVersionDir(pgVersion), '.keep'), '');
 }
 
-export async function snapshotDumpExists(): Promise<boolean> {
-	return Bun.file(SNAPSHOT_DUMP_PATH).exists();
+async function upsertIndexEntry(pgVersion: string, meta: SnapshotMeta): Promise<void> {
+	const idx = await readIndex(pgVersion);
+	const filtered = idx.entries.filter((e) => e.hash !== meta.hash);
+	filtered.push(meta);
+	await writeIndex(pgVersion, { entries: filtered });
+}
+
+async function removeIndexEntry(pgVersion: string, hash: string): Promise<void> {
+	const idx = await readIndex(pgVersion);
+	const filtered = idx.entries.filter((e) => e.hash !== hash);
+	if (filtered.length === idx.entries.length) return;
+	await writeIndex(pgVersion, { entries: filtered });
+}
+
+/**
+ * Keep the {@link MAX_KEPT_PER_PG_VERSION} most recent entries (by
+ * createdAt). Older dump files and their index entries are removed.
+ */
+async function evictOldSnapshots(pgVersion: string): Promise<void> {
+	const idx = await readIndex(pgVersion);
+	if (idx.entries.length <= MAX_KEPT_PER_PG_VERSION) return;
+	const sorted = [...idx.entries].sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+	const keep = sorted.slice(0, MAX_KEPT_PER_PG_VERSION);
+	const evict = sorted.slice(MAX_KEPT_PER_PG_VERSION);
+	await Promise.all(
+		evict.map(async (entry) => {
+			await rm(dumpPathFor(pgVersion, entry.hash), { force: true }).catch(() => undefined);
+		}),
+	);
+	await writeIndex(pgVersion, { entries: keep });
 }

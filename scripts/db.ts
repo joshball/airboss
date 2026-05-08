@@ -23,13 +23,11 @@ import { resolve } from 'node:path';
 import {
 	computeSeedInputHash,
 	dumpSnapshot,
+	findSnapshotForHash,
 	getPgMajorVersion,
-	invalidateSnapshot,
-	readSnapshotMeta,
+	invalidateSnapshotEntry,
 	restoreSnapshot,
-	snapshotDumpExists,
 	type SnapshotMeta,
-	writeSnapshotMeta,
 } from './db/snapshot';
 import { devDbName } from './lib/db-name';
 import { confirmOrAbort } from './lib/prompt';
@@ -106,12 +104,12 @@ async function doReset(): Promise<void> {
 		const status = startStatusLine('restoring snapshot');
 		status.detail(`${formatBytes(cacheDecision.meta.bytes)}`);
 		try {
-			await restoreSnapshot({ container: CONTAINER, dbName: DB_NAME, dbUser: DB_USER });
+			await restoreSnapshot({ container: CONTAINER, dbName: DB_NAME, dbUser: DB_USER }, cacheDecision.dumpPath);
 		} catch (err) {
 			status.finish();
 			process.stdout.write(`  ! snapshot restore failed; invalidating cache and falling back to slow path\n`);
 			process.stdout.write(`    ${(err as Error).message.split('\n')[0] ?? ''}\n`);
-			await invalidateSnapshot();
+			await invalidateSnapshotEntry(cacheDecision.meta.hash, cacheDecision.meta.pgVersion);
 			await runSlowPath(psqlPostgres, psqlAirboss, totalStart, cacheDecision.currentHash);
 			return;
 		}
@@ -143,6 +141,7 @@ async function doReset(): Promise<void> {
 interface CacheHit {
 	readonly kind: 'hit';
 	readonly meta: SnapshotMeta;
+	readonly dumpPath: string;
 	readonly currentHash: string;
 }
 interface CacheMiss {
@@ -164,11 +163,6 @@ async function decideCachePath(): Promise<CacheDecision> {
 		const currentHash = await safeComputeHash();
 		return { kind: 'rebuild', currentHash };
 	}
-	const meta = await readSnapshotMeta();
-	if (!meta) return { kind: 'miss', reason: 'no snapshot meta found', currentHash: await safeComputeHash() };
-	if (!(await snapshotDumpExists())) {
-		return { kind: 'miss', reason: 'snapshot dump file missing', currentHash: await safeComputeHash() };
-	}
 	let pgMajor: string;
 	try {
 		pgMajor = await getPgMajorVersion(CONTAINER, DB_USER);
@@ -179,18 +173,16 @@ async function decideCachePath(): Promise<CacheDecision> {
 			currentHash: null,
 		};
 	}
-	if (meta.pgVersion !== pgMajor) {
+	const { hash: currentHash } = await computeSeedInputHash(REPO_ROOT, pgMajor);
+	const found = await findSnapshotForHash(currentHash, pgMajor);
+	if (!found) {
 		return {
 			kind: 'miss',
-			reason: `postgres major changed (${meta.pgVersion} -> ${pgMajor})`,
-			currentHash: await safeComputeHash(pgMajor),
+			reason: 'no snapshot for current input hash',
+			currentHash,
 		};
 	}
-	const currentHashResult = await computeSeedInputHash(REPO_ROOT, pgMajor);
-	if (currentHashResult.hash !== meta.hash) {
-		return { kind: 'miss', reason: 'source inputs changed', currentHash: currentHashResult.hash };
-	}
-	return { kind: 'hit', meta, currentHash: currentHashResult.hash };
+	return { kind: 'hit', meta: found.meta, dumpPath: found.dumpPath, currentHash };
 }
 
 async function safeComputeHash(pgMajorOverride?: string): Promise<string | null> {
@@ -299,6 +291,8 @@ async function refreshSnapshotCache(_precomputedHash: string | null): Promise<vo
 	const dumpStart = Date.now();
 	const status = startStatusLine('saving snapshot');
 	status.detail('pg_dump --format=custom');
+	let savedHash: string | null = null;
+	let savedPgVersion: string | null = null;
 	try {
 		const pgMajor = await getPgMajorVersion(CONTAINER, DB_USER);
 		// Recompute even if a hash was precomputed earlier: the pre-seed run
@@ -306,25 +300,29 @@ async function refreshSnapshotCache(_precomputedHash: string | null): Promise<vo
 		// caller might) or the source tree could have been touched while we
 		// were seeding. Cheap relative to the dump itself.
 		const { hash, inputCount } = await computeSeedInputHash(REPO_ROOT, pgMajor);
-		const { bytes } = await dumpSnapshot({ container: CONTAINER, dbName: DB_NAME, dbUser: DB_USER });
-		await writeSnapshotMeta({
+		savedHash = hash;
+		savedPgVersion = pgMajor;
+		const { meta } = await dumpSnapshot(
+			{ container: CONTAINER, dbName: DB_NAME, dbUser: DB_USER },
 			hash,
-			pgVersion: pgMajor,
-			createdAt: new Date().toISOString(),
+			pgMajor,
 			inputCount,
-			bytes,
-		});
+		);
 		status.finish();
 		const dumpMs = Date.now() - dumpStart;
-		const shortHash = hash.slice(0, 8);
+		const shortHash = meta.hash.slice(0, 8);
 		process.stdout.write(
-			`  ✓ snapshot saved           ${formatPreMs(dumpMs)}  ${formatBytes(bytes)}  hash ${shortHash}  (next reset will be much faster)\n`,
+			`  ✓ snapshot saved           ${formatPreMs(dumpMs)}  ${formatBytes(meta.bytes)}  hash ${shortHash}  (shared across worktrees)\n`,
 		);
 	} catch (err) {
 		status.finish();
 		process.stdout.write(`  ! snapshot save failed (continuing anyway): ${(err as Error).message.split('\n')[0]}\n`);
-		// Don't leave a half-written cache around to fool the next reset.
-		await invalidateSnapshot();
+		// If the dump partially landed, drop the entry so the next reset
+		// doesn't pick up a corrupt file. We only know the hash if we made
+		// it past the hash-compute step.
+		if (savedHash !== null && savedPgVersion !== null) {
+			await invalidateSnapshotEntry(savedHash, savedPgVersion);
+		}
 	}
 }
 
@@ -626,7 +624,7 @@ const COMMAND_HELP: Record<string, CommandHelp> = {
 		summary: 'DROP + recreate DB, push schema, run full seed (with snapshot cache)',
 		what: 'Destroys the `airboss` database, recreates it empty, then either restores from a cached pg_dump (fast path) or runs `drizzle-kit push` + the full seed orchestrator (slow path) and refreshes the cache afterwards. The cache hits when the SHA-256 of every hashed input matches the stored value AND the postgres major version is unchanged; otherwise the slow path runs and re-saves the snapshot for next time.\n\n  bun run db reset                # use cache when source inputs match\n  bun run db reset --force        # skip confirmation prompt\n  bun run db reset --rebuild      # bypass cache, rerun the full seed, refresh snapshot\n  bun run db reset --no-cache     # alias for --rebuild\n\nRefuses to run if DATABASE_URL does not match the local dev pattern. Prompts for confirmation unless `--force` / `-f` is passed.',
 		why: 'The nuclear option for "get me back to a known good state fast." Useful after schema churn, botched seeds, or when switching branches with divergent migrations. The snapshot cache turns a typical-day reset (no source changes since last seed) into a sub-30s drop + create + pg_restore cycle, instead of re-running every seeder from scratch.',
-		how: 'Cache layout: `.cache/db-build/snapshot.dump` (custom-format pg_dump) + `.cache/db-build/snapshot.meta.json` (hash + pg version + timestamp). Cache hits when the SHA-256 of every input under `course/`, `handbooks/`, `acs/`, `regulations/`, `libs/sources/src/**/manifest.yaml`, the seed scripts, and the schema files matches the cached hash AND the postgres major version is unchanged.\n\nOn miss or `--rebuild`: drop + create + push + seed-all + dump. On hit: drop + create + pg_restore. Partial seeds (`--quick`/`--skip`/`--only`) are not snapshotted.',
+		how: 'Cache layout: `~/.cache/airboss/db-build/pg<N>/<hash>.dump` (custom-format pg_dump) plus a per-pg-version `index.json`. Machine-shared, not per-worktree, so any worktree (or main) on the same machine that has already seeded a given input hash fulfils the cache hit for every other worktree on first reset. Cache hits when the SHA-256 of every input under `course/`, `handbooks/`, `acs/`, `regulations/`, `aircraft/_authoring/`, `libs/sources/src/**`, the seed scripts, and the schema files matches a stored entry AND the postgres major version is unchanged.\n\nOn miss or `--rebuild`: drop + create + push + seed-all + dump. On hit: drop + create + pg_restore. Partial seeds (`--quick`/`--skip`/`--only`) are not snapshotted. Eviction keeps the 3 most recent dumps per pg version.\n\nOverride cache location with `AIRBOSS_DB_BUILD_CACHE_DIR=/path/to/dir`.',
 		links: [
 			'scripts/db/seed-all.ts',
 			'scripts/db/snapshot.ts',
