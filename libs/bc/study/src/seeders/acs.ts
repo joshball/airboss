@@ -52,7 +52,12 @@ import {
 } from '@ab/sources';
 import { getAcsSeedMapping } from '@ab/sources/acs';
 import type { AcsManifest, AcsManifestArea, AcsManifestElement, AcsManifestTask } from '../manifest-validation';
-import { type SectionSchema, upsertReference, upsertReferenceSection } from '../references';
+import {
+	bulkUpsertReferenceSections,
+	type SectionSchema,
+	type UpsertReferenceSectionInput,
+	upsertReference,
+} from '../references';
 import type { SeedContext, SeedSummary } from './types';
 
 const ACS_SCHEMA: SectionSchema = {
@@ -114,196 +119,6 @@ function areaContentHash(slug: string, roman: string, title: string): string {
 	return createHash('sha256').update(`acs:area:${slug}:${roman}:${title}`).digest('hex');
 }
 
-interface SeedAcsTaskArgs {
-	readonly referenceId: string;
-	readonly areaRefSectionId: string;
-	readonly areaRoman: string;
-	readonly areaPadded: string;
-	readonly editionDir: string;
-	readonly task: AcsManifestTask;
-	readonly ordinal: number;
-	readonly manifestSlug: string;
-	readonly mappingDocumentSlug: string;
-	readonly mappingEdition: string;
-}
-
-async function seedAcsTask(args: SeedAcsTaskArgs, context: SeedContext, summary: SeedSummary): Promise<string> {
-	const {
-		referenceId,
-		areaRefSectionId,
-		areaRoman,
-		areaPadded,
-		editionDir,
-		task,
-		ordinal,
-		manifestSlug,
-		mappingDocumentSlug,
-		mappingEdition,
-	} = args;
-	const taskCode = `${areaRoman}.${task.task.toUpperCase()}`;
-	const bodyAbsPath = resolve(editionDir, task.body_path);
-	if (!existsSync(bodyAbsPath)) {
-		throw new Error(
-			`ACS seed: missing task body file for ${mappingDocumentSlug} ${taskCode}: ${task.body_path} ` +
-				`(resolved: ${bodyAbsPath}). Run \`bun run sources register acs\` to produce the inline derivative tree.`,
-		);
-	}
-	const contentMd = await readFile(bodyAbsPath, 'utf-8');
-
-	const { row, changed } = await upsertReferenceSection({
-		referenceId,
-		parentId: areaRefSectionId,
-		level: REFERENCE_SECTION_LEVELS.TASK,
-		ordinal,
-		depth: 2,
-		code: taskCode,
-		airbossRef: airbossRefForAcsTask(manifestSlug, areaPadded, task.task),
-		title: task.title,
-		sourceLocator: `${mappingEdition} ${taskCode}`,
-		contentMd,
-		contentHash: task.body_sha256,
-		hasFigures: false,
-		hasTables: false,
-		metadata: {
-			task_letter: task.task,
-			element_count: task.elements.length,
-		},
-		seedOrigin: context.seedOrigin,
-	});
-	summary.sectionsTouched += 1;
-	if (changed) summary.sectionsChanged += 1;
-	return row.id;
-}
-
-interface SeedAcsElementArgs {
-	readonly referenceId: string;
-	readonly taskRefSectionId: string;
-	readonly element: AcsManifestElement;
-	readonly ordinal: number;
-	readonly manifestSlug: string;
-	readonly areaPadded: string;
-	readonly taskLetter: string;
-	readonly mappingEdition: string;
-}
-
-async function seedAcsElement(args: SeedAcsElementArgs, context: SeedContext, summary: SeedSummary): Promise<void> {
-	const { referenceId, taskRefSectionId, element, ordinal, manifestSlug, areaPadded, taskLetter, mappingEdition } =
-		args;
-	// Element URI uses 2-digit zero-padded ordinal per
-	// libs/sources/src/acs/locator.ts:82 (`elem-<triad><NN>`).
-	const elementOrdinalPadded = String(element.ordinal).padStart(2, '0');
-	const { changed } = await upsertReferenceSection({
-		referenceId,
-		parentId: taskRefSectionId,
-		level: REFERENCE_SECTION_LEVELS.ELEMENT,
-		ordinal,
-		depth: 3,
-		code: element.code,
-		airbossRef: airbossRefForAcsElement(manifestSlug, areaPadded, taskLetter, element.triad, elementOrdinalPadded),
-		title: element.title,
-		sourceLocator: `${mappingEdition} ${element.code}`,
-		contentMd: '',
-		contentHash: elementContentHash(element),
-		hasFigures: false,
-		hasTables: false,
-		metadata: {
-			triad: element.triad,
-			ordinal: element.ordinal,
-		},
-		seedOrigin: context.seedOrigin,
-	});
-	summary.sectionsTouched += 1;
-	if (changed) summary.sectionsChanged += 1;
-}
-
-interface SeedAcsAreaArgs {
-	readonly referenceId: string;
-	readonly publicationRefSectionId: string;
-	readonly editionDir: string;
-	readonly area: AcsManifestArea;
-	readonly ordinal: number;
-	readonly manifestSlug: string;
-	readonly mappingDocumentSlug: string;
-	readonly mappingEdition: string;
-}
-
-async function seedAcsArea(args: SeedAcsAreaArgs, context: SeedContext, summary: SeedSummary): Promise<void> {
-	const {
-		referenceId,
-		publicationRefSectionId,
-		editionDir,
-		area,
-		ordinal,
-		manifestSlug,
-		mappingDocumentSlug,
-		mappingEdition,
-	} = args;
-	const areaRoman = paddedOrdinalToRoman(area.area);
-	const { row: areaRow, changed } = await upsertReferenceSection({
-		referenceId,
-		parentId: publicationRefSectionId,
-		level: REFERENCE_SECTION_LEVELS.AREA,
-		ordinal,
-		depth: 1,
-		code: areaRoman,
-		airbossRef: airbossRefForAcsArea(manifestSlug, area.area),
-		title: area.title,
-		sourceLocator: `${mappingEdition} Area ${areaRoman}`,
-		contentMd: '',
-		contentHash: areaContentHash(mappingDocumentSlug, areaRoman, area.title),
-		hasFigures: false,
-		hasTables: false,
-		metadata: {
-			area_padded: area.area,
-			area_roman: areaRoman,
-			task_count: area.tasks.length,
-		},
-		seedOrigin: context.seedOrigin,
-	});
-	summary.sectionsTouched += 1;
-	if (changed) summary.sectionsChanged += 1;
-
-	let taskOrdinal = 0;
-	for (const task of area.tasks) {
-		const taskRefSectionId = await seedAcsTask(
-			{
-				referenceId,
-				areaRefSectionId: areaRow.id,
-				areaRoman,
-				areaPadded: area.area,
-				editionDir,
-				task,
-				ordinal: taskOrdinal,
-				manifestSlug,
-				mappingDocumentSlug,
-				mappingEdition,
-			},
-			context,
-			summary,
-		);
-		taskOrdinal += 1;
-
-		let elementOrdinal = 0;
-		for (const element of task.elements) {
-			await seedAcsElement(
-				{
-					referenceId,
-					taskRefSectionId,
-					element,
-					ordinal: elementOrdinal,
-					manifestSlug,
-					areaPadded: area.area,
-					taskLetter: task.task,
-					mappingEdition,
-				},
-				context,
-				summary,
-			);
-			elementOrdinal += 1;
-		}
-	}
-}
-
 export async function seedAcsManifest(
 	manifest: AcsManifest,
 	context: SeedContext,
@@ -351,47 +166,192 @@ export async function seedAcsManifest(
 		seedOrigin: context.seedOrigin,
 	});
 
-	// Publication container row at depth 0.
-	const { row: publicationRow, changed: publicationChanged } = await upsertReferenceSection({
-		referenceId: ref.id,
-		parentId: null,
-		level: REFERENCE_SECTION_LEVELS.PUBLICATION,
-		ordinal: 0,
-		depth: 0,
-		code: 'publication',
-		airbossRef: airbossRefForAcsPublication(manifest.slug),
-		title: manifest.title,
-		sourceLocator: mapping.edition,
-		contentMd: '',
-		contentHash: publicationContentHash(mapping.documentSlug, manifest.title),
-		hasFigures: false,
-		hasTables: false,
-		metadata: {
-			manifest_slug: manifest.slug,
-			page_count: manifest.page_count,
-		},
-		seedOrigin: context.seedOrigin,
-	});
-	summary.sectionsTouched += 1;
-	if (publicationChanged) summary.sectionsChanged += 1;
-
-	let areaOrdinal = 0;
+	// Pre-read every task body file in parallel; tasks are the only ACS
+	// rows with markdown bodies (publication/area/element rows are
+	// container-or-leaf-only).
+	const taskBodyByCode = new Map<string, string>();
+	const taskReads: Array<Promise<void>> = [];
 	for (const area of manifest.areas) {
-		await seedAcsArea(
-			{
-				referenceId: ref.id,
-				publicationRefSectionId: publicationRow.id,
-				editionDir,
-				area,
-				ordinal: areaOrdinal,
-				manifestSlug: manifest.slug,
-				mappingDocumentSlug: mapping.documentSlug,
-				mappingEdition: mapping.edition,
+		const areaRoman = paddedOrdinalToRoman(area.area);
+		for (const task of area.tasks) {
+			const taskCode = `${areaRoman}.${task.task.toUpperCase()}`;
+			const bodyAbsPath = resolve(editionDir, task.body_path);
+			if (!existsSync(bodyAbsPath)) {
+				throw new Error(
+					`ACS seed: missing task body file for ${mapping.documentSlug} ${taskCode}: ${task.body_path} ` +
+						`(resolved: ${bodyAbsPath}). Run \`bun run sources register acs\` to produce the inline derivative tree.`,
+				);
+			}
+			taskReads.push(
+				readFile(bodyAbsPath, 'utf-8').then((body) => {
+					taskBodyByCode.set(taskCode, body);
+				}),
+			);
+		}
+	}
+	await Promise.all(taskReads);
+
+	// Depth 0: publication container row.
+	const publicationInputs: UpsertReferenceSectionInput[] = [
+		{
+			referenceId: ref.id,
+			parentId: null,
+			level: REFERENCE_SECTION_LEVELS.PUBLICATION,
+			ordinal: 0,
+			depth: 0,
+			code: 'publication',
+			airbossRef: airbossRefForAcsPublication(manifest.slug),
+			title: manifest.title,
+			sourceLocator: mapping.edition,
+			contentMd: '',
+			contentHash: publicationContentHash(mapping.documentSlug, manifest.title),
+			hasFigures: false,
+			hasTables: false,
+			metadata: {
+				manifest_slug: manifest.slug,
+				page_count: manifest.page_count,
 			},
-			context,
-			summary,
-		);
-		areaOrdinal += 1;
+			seedOrigin: context.seedOrigin,
+		},
+	];
+	const [publicationResult] = await bulkUpsertReferenceSections(publicationInputs);
+	if (!publicationResult) {
+		throw new Error(`ACS seed: bulk upsert returned no row for publication of ${mapping.documentSlug}`);
+	}
+	summary.sectionsTouched += 1;
+	if (publicationResult.changed) summary.sectionsChanged += 1;
+	const publicationRow = publicationResult.row;
+
+	// Depth 1: areas under the publication.
+	const areaInputs: UpsertReferenceSectionInput[] = manifest.areas.map((area, areaOrdinal) => {
+		const areaRoman = paddedOrdinalToRoman(area.area);
+		return {
+			referenceId: ref.id,
+			parentId: publicationRow.id,
+			level: REFERENCE_SECTION_LEVELS.AREA,
+			ordinal: areaOrdinal,
+			depth: 1,
+			code: areaRoman,
+			airbossRef: airbossRefForAcsArea(manifest.slug, area.area),
+			title: area.title,
+			sourceLocator: `${mapping.edition} Area ${areaRoman}`,
+			contentMd: '',
+			contentHash: areaContentHash(mapping.documentSlug, areaRoman, area.title),
+			hasFigures: false,
+			hasTables: false,
+			metadata: {
+				area_padded: area.area,
+				area_roman: areaRoman,
+				task_count: area.tasks.length,
+			},
+			seedOrigin: context.seedOrigin,
+		};
+	});
+	const areaResults = await bulkUpsertReferenceSections(areaInputs);
+	const areaIdByPadded = new Map<string, string>();
+	for (let i = 0; i < manifest.areas.length; i += 1) {
+		const area = manifest.areas[i];
+		const result = areaResults[i];
+		if (!area || !result) continue;
+		areaIdByPadded.set(area.area, result.row.id);
+		summary.sectionsTouched += 1;
+		if (result.changed) summary.sectionsChanged += 1;
+	}
+
+	// Depth 2: tasks under each area.
+	const taskInputs: UpsertReferenceSectionInput[] = [];
+	const taskKeyToAreaPadded: Array<{
+		readonly area: AcsManifestArea;
+		readonly task: AcsManifestTask;
+		readonly taskCode: string;
+	}> = [];
+	for (const area of manifest.areas) {
+		const areaRoman = paddedOrdinalToRoman(area.area);
+		const areaSectionId = areaIdByPadded.get(area.area);
+		if (!areaSectionId) continue;
+		let taskOrdinal = 0;
+		for (const task of area.tasks) {
+			const taskCode = `${areaRoman}.${task.task.toUpperCase()}`;
+			taskInputs.push({
+				referenceId: ref.id,
+				parentId: areaSectionId,
+				level: REFERENCE_SECTION_LEVELS.TASK,
+				ordinal: taskOrdinal,
+				depth: 2,
+				code: taskCode,
+				airbossRef: airbossRefForAcsTask(manifest.slug, area.area, task.task),
+				title: task.title,
+				sourceLocator: `${mapping.edition} ${taskCode}`,
+				contentMd: taskBodyByCode.get(taskCode) ?? '',
+				contentHash: task.body_sha256,
+				hasFigures: false,
+				hasTables: false,
+				metadata: {
+					task_letter: task.task,
+					element_count: task.elements.length,
+				},
+				seedOrigin: context.seedOrigin,
+			});
+			taskKeyToAreaPadded.push({ area, task, taskCode });
+			taskOrdinal += 1;
+		}
+	}
+	const taskResults = await bulkUpsertReferenceSections(taskInputs);
+	const taskIdByCode = new Map<string, string>();
+	for (let i = 0; i < taskInputs.length; i += 1) {
+		const result = taskResults[i];
+		const meta = taskKeyToAreaPadded[i];
+		if (!result || !meta) continue;
+		taskIdByCode.set(meta.taskCode, result.row.id);
+		summary.sectionsTouched += 1;
+		if (result.changed) summary.sectionsChanged += 1;
+	}
+
+	// Depth 3: elements under each task.
+	const elementInputs: UpsertReferenceSectionInput[] = [];
+	for (const meta of taskKeyToAreaPadded) {
+		const taskSectionId = taskIdByCode.get(meta.taskCode);
+		if (!taskSectionId) continue;
+		let elementOrdinal = 0;
+		for (const element of meta.task.elements) {
+			// Element URI uses 2-digit zero-padded ordinal per
+			// libs/sources/src/acs/locator.ts:82 (`elem-<triad><NN>`).
+			const elementOrdinalPadded = String(element.ordinal).padStart(2, '0');
+			elementInputs.push({
+				referenceId: ref.id,
+				parentId: taskSectionId,
+				level: REFERENCE_SECTION_LEVELS.ELEMENT,
+				ordinal: elementOrdinal,
+				depth: 3,
+				code: element.code,
+				airbossRef: airbossRefForAcsElement(
+					manifest.slug,
+					meta.area.area,
+					meta.task.task,
+					element.triad,
+					elementOrdinalPadded,
+				),
+				title: element.title,
+				sourceLocator: `${mapping.edition} ${element.code}`,
+				contentMd: '',
+				contentHash: elementContentHash(element),
+				hasFigures: false,
+				hasTables: false,
+				metadata: {
+					triad: element.triad,
+					ordinal: element.ordinal,
+				},
+				seedOrigin: context.seedOrigin,
+			});
+			elementOrdinal += 1;
+		}
+	}
+	if (elementInputs.length > 0) {
+		const elementResults = await bulkUpsertReferenceSections(elementInputs);
+		for (const result of elementResults) {
+			summary.sectionsTouched += 1;
+			if (result.changed) summary.sectionsChanged += 1;
+		}
 	}
 
 	const taskCount = manifest.areas.reduce((acc, area) => acc + area.tasks.length, 0);

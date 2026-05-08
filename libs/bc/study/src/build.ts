@@ -110,6 +110,7 @@ export {
 	wholeDocManifestSchema,
 } from './manifest-validation';
 export type {
+	BulkUpsertReferenceSectionResult,
 	FigureInput,
 	UpsertReferenceInput,
 	UpsertReferenceSectionInput,
@@ -120,6 +121,8 @@ export type {
 // invariant.
 export {
 	attachSupersededByLatest,
+	bulkReplaceFiguresForSections,
+	bulkUpsertReferenceSections,
 	replaceFiguresForSection,
 	upsertReference,
 	upsertReferenceSection,

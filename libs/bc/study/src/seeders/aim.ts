@@ -27,7 +27,12 @@ import { resolve } from 'node:path';
 import { REFERENCE_KINDS, REFERENCE_SECTION_LEVELS, type ReferenceSectionLevel } from '@ab/constants';
 import { airbossRefForAimEntry } from '@ab/sources';
 import type { AimManifest, AimManifestEntry } from '../manifest-validation';
-import { type SectionSchema, upsertReference, upsertReferenceSection } from '../references';
+import {
+	bulkUpsertReferenceSections,
+	type SectionSchema,
+	type UpsertReferenceSectionInput,
+	upsertReference,
+} from '../references';
 import type { SeedContext, SeedSummary } from './types';
 
 const AIM_SCHEMA: SectionSchema = {
@@ -151,46 +156,77 @@ export async function seedAimManifest(
 	const codeToSectionId = new Map<string, string>();
 	const nextOrdinal = makeOrdinalCounter();
 
+	// Pre-read every body file in parallel so the bulk upsert path is purely
+	// DB-bound. Some AIM paragraphs have no body file on disk (legacy stubs);
+	// `existsSync` keeps that branch silent rather than throwing.
+	const bodyByCode = new Map<string, string>();
+	await Promise.all(
+		sortedEntries.map(async (entry) => {
+			const bodyAbsPath = resolve(context.repoRoot, entry.body_path);
+			bodyByCode.set(entry.code, existsSync(bodyAbsPath) ? await readFile(bodyAbsPath, 'utf-8') : '');
+		}),
+	);
+
+	// Bucket by depth: chapters (0) before sections (1) before paragraphs
+	// (2) so the parent_id FK resolves at INSERT time. Appendix + glossary
+	// are also depth 0 with no children.
+	const byDepth = new Map<number, AimManifestEntry[]>();
+	const ordinalByEntry = new Map<AimManifestEntry, number>();
+	const parentCodeByEntry = new Map<AimManifestEntry, string | null>();
 	for (const entry of sortedEntries) {
 		const parentCode = parentCodeFor(entry);
-		let parentId: string | null = null;
-		if (parentCode !== null) {
-			const found = codeToSectionId.get(parentCode);
-			if (!found) {
-				throw new Error(
-					`AIM seed: entry "${entry.code}" (${entry.kind}) references missing parent "${parentCode}". ` +
-						'Manifest is malformed -- parent must exist before child in entries[].',
-				);
-			}
-			parentId = found;
-		}
-
+		parentCodeByEntry.set(entry, parentCode);
 		const ordinalKey = parentCode ?? `__top__:${entry.kind}`;
-		const ordinal = nextOrdinal(ordinalKey);
+		ordinalByEntry.set(entry, nextOrdinal(ordinalKey));
+		const depth = KIND_TO_DEPTH[entry.kind];
+		const list = byDepth.get(depth);
+		if (list) list.push(entry);
+		else byDepth.set(depth, [entry]);
+	}
 
-		const bodyAbsPath = resolve(context.repoRoot, entry.body_path);
-		const contentMd = existsSync(bodyAbsPath) ? await readFile(bodyAbsPath, 'utf-8') : '';
-
-		const { row, changed } = await upsertReferenceSection({
-			referenceId: ref.id,
-			parentId,
-			level: KIND_TO_LEVEL[entry.kind],
-			ordinal,
-			depth: KIND_TO_DEPTH[entry.kind],
-			code: entry.code,
-			airbossRef: airbossRefForAimEntry(entry.code),
-			title: entry.title,
-			sourceLocator: `AIM ${entry.code}`,
-			contentMd,
-			contentHash: entry.content_hash,
-			hasFigures: false,
-			hasTables: false,
-			seedOrigin: context.seedOrigin,
+	const depths = [...byDepth.keys()].sort((a, b) => a - b);
+	for (const depth of depths) {
+		const entriesAtDepth = byDepth.get(depth) ?? [];
+		const inputs: UpsertReferenceSectionInput[] = entriesAtDepth.map((entry) => {
+			const parentCode = parentCodeByEntry.get(entry) ?? null;
+			let parentId: string | null = null;
+			if (parentCode !== null) {
+				const found = codeToSectionId.get(parentCode);
+				if (!found) {
+					throw new Error(
+						`AIM seed: entry "${entry.code}" (${entry.kind}) references missing parent "${parentCode}". ` +
+							'Manifest is malformed -- parent must exist before child in entries[].',
+					);
+				}
+				parentId = found;
+			}
+			return {
+				referenceId: ref.id,
+				parentId,
+				level: KIND_TO_LEVEL[entry.kind],
+				ordinal: ordinalByEntry.get(entry) ?? 0,
+				depth,
+				code: entry.code,
+				airbossRef: airbossRefForAimEntry(entry.code),
+				title: entry.title,
+				sourceLocator: `AIM ${entry.code}`,
+				contentMd: bodyByCode.get(entry.code) ?? '',
+				contentHash: entry.content_hash,
+				hasFigures: false,
+				hasTables: false,
+				seedOrigin: context.seedOrigin,
+			};
 		});
 
-		codeToSectionId.set(entry.code, row.id);
-		summary.sectionsTouched += 1;
-		if (changed) summary.sectionsChanged += 1;
+		const results = await bulkUpsertReferenceSections(inputs);
+		for (let i = 0; i < entriesAtDepth.length; i += 1) {
+			const entry = entriesAtDepth[i];
+			const result = results[i];
+			if (!entry || !result) continue;
+			codeToSectionId.set(entry.code, result.row.id);
+			summary.sectionsTouched += 1;
+			if (result.changed) summary.sectionsChanged += 1;
+		}
 	}
 
 	summary.editionsProcessed += 1;

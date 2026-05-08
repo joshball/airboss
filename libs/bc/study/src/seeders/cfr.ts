@@ -41,7 +41,12 @@ import { airbossRefForCfrSubpart } from '@ab/sources';
 import { eq } from 'drizzle-orm';
 import type { CfrManifest, CfrManifestSubpartEntry, CfrSectionEntry, CfrSectionsFile } from '../manifest-validation';
 import { cfrSectionsFileSchema } from '../manifest-validation';
-import { type SectionSchema, upsertReference, upsertReferenceSection } from '../references';
+import {
+	bulkUpsertReferenceSections,
+	type SectionSchema,
+	type UpsertReferenceSectionInput,
+	upsertReference,
+} from '../references';
 import { reference } from '../schema';
 import { type CfrPartOverlay, loadCfrPartAuthoring } from './cfr-authoring';
 import type { SeedContext, SeedSummary } from './types';
@@ -312,37 +317,43 @@ export async function seedCfrManifest(
 		const subparts: readonly CfrManifestSubpartEntry[] =
 			manifest.parts?.find((p) => p.number === partKey)?.subparts ?? [];
 		const subpartIdByLetter = new Map<string, string>();
-		for (const sp of subparts) {
-			const subpartLetterUpper = sp.id.toUpperCase();
-			const subpartCode = `subpart-${subpartLetterUpper}`;
-			const subpartTitle = `Subpart ${subpartLetterUpper} -- ${sp.title}`;
-			const { row, changed } = await upsertReferenceSection({
-				referenceId: ref.id,
-				parentId: null,
-				level: REFERENCE_SECTION_LEVELS.SUBPART,
-				ordinal: sp.ordinal,
-				depth: 0,
-				code: subpartCode,
-				airbossRef: airbossRefForCfrSubpart(manifest.title, partKey, sp.id),
-				title: subpartTitle,
-				faaPageStart: null,
-				faaPageEnd: null,
-				sourceLocator: `${manifest.title} CFR Part ${partKey}, Subpart ${subpartLetterUpper}`,
-				// Container row -- the Subpart heading lives in `title`. The
-				// per-section markdown bodies carry the regulatory text.
-				contentMd: '',
-				contentHash: `subpart-${manifest.title}-${partKey}-${sp.id}`,
-				hasFigures: false,
-				hasTables: false,
-				metadata: {
-					subpart_letter: subpartLetterUpper,
-					subpart_title: sp.title,
-				},
-				seedOrigin: context.seedOrigin,
+		if (subparts.length > 0) {
+			const subpartInputs: UpsertReferenceSectionInput[] = subparts.map((sp) => {
+				const subpartLetterUpper = sp.id.toUpperCase();
+				const subpartCode = `subpart-${subpartLetterUpper}`;
+				const subpartTitle = `Subpart ${subpartLetterUpper} -- ${sp.title}`;
+				return {
+					referenceId: ref.id,
+					parentId: null,
+					level: REFERENCE_SECTION_LEVELS.SUBPART,
+					ordinal: sp.ordinal,
+					depth: 0,
+					code: subpartCode,
+					airbossRef: airbossRefForCfrSubpart(manifest.title, partKey, sp.id),
+					title: subpartTitle,
+					sourceLocator: `${manifest.title} CFR Part ${partKey}, Subpart ${subpartLetterUpper}`,
+					// Container row -- the Subpart heading lives in `title`. The
+					// per-section markdown bodies carry the regulatory text.
+					contentMd: '',
+					contentHash: `subpart-${manifest.title}-${partKey}-${sp.id}`,
+					hasFigures: false,
+					hasTables: false,
+					metadata: {
+						subpart_letter: subpartLetterUpper,
+						subpart_title: sp.title,
+					},
+					seedOrigin: context.seedOrigin,
+				};
 			});
-			subpartIdByLetter.set(sp.id, row.id);
-			summary.sectionsTouched += 1;
-			if (changed) summary.sectionsChanged += 1;
+			const subpartResults = await bulkUpsertReferenceSections(subpartInputs);
+			for (let i = 0; i < subparts.length; i += 1) {
+				const sp = subparts[i];
+				const result = subpartResults[i];
+				if (!sp || !result) continue;
+				subpartIdByLetter.set(sp.id, result.row.id);
+				summary.sectionsTouched += 1;
+				if (result.changed) summary.sectionsChanged += 1;
+			}
 		}
 
 		// Per-subpart ordinal counters for sections so each section's ordinal
@@ -362,7 +373,7 @@ export async function seedCfrManifest(
 			32,
 		);
 
-		for (const entry of sortedSections) {
+		const sectionInputs: UpsertReferenceSectionInput[] = sortedSections.map((entry) => {
 			const bodyAbsPath = resolve(editionDir, entry.body_path);
 			const contentMd = bodyByPath.get(bodyAbsPath) ?? '';
 
@@ -379,7 +390,7 @@ export async function seedCfrManifest(
 			const nextOrdinal = ordinalBySubpart.get(ordinalKey) ?? 0;
 			ordinalBySubpart.set(ordinalKey, nextOrdinal + 1);
 
-			const { changed } = await upsertReferenceSection({
+			return {
 				referenceId: ref.id,
 				parentId,
 				level: REFERENCE_SECTION_LEVELS.SECTION,
@@ -402,9 +413,13 @@ export async function seedCfrManifest(
 					...(subpartLetter !== null ? { subpart_id: subpartLetter } : {}),
 				},
 				seedOrigin: context.seedOrigin,
-			});
+			};
+		});
+
+		const sectionResults = await bulkUpsertReferenceSections(sectionInputs);
+		for (const result of sectionResults) {
 			summary.sectionsTouched += 1;
-			if (changed) summary.sectionsChanged += 1;
+			if (result.changed) summary.sectionsChanged += 1;
 		}
 
 		summary.editionsProcessed += 1;
@@ -436,10 +451,7 @@ export async function seedCfrManifest(
  * sections). Returns a map keyed by absolute path so the caller can look up
  * each section's body directly without re-resolving paths.
  */
-async function readBodiesParallel(
-	absPaths: ReadonlyArray<string>,
-	concurrency: number,
-): Promise<Map<string, string>> {
+async function readBodiesParallel(absPaths: ReadonlyArray<string>, concurrency: number): Promise<Map<string, string>> {
 	const out = new Map<string, string>();
 	let cursor = 0;
 	const workers = Array.from({ length: Math.min(concurrency, absPaths.length) }, async () => {
