@@ -48,3 +48,36 @@ export const WP_DIR = 'docs/work-packages';
 
 /** Spec filename. The loader keys WP id from the parent directory name. */
 export const WP_SPEC_FILE = 'spec.md';
+
+/** Whitelist of fields the `bun run wp set` mutation surface accepts. ADR 025
+ * Phase 3. Anything outside this list is rejected with a clear error.
+ *
+ * `human_review_status` IS in the whitelist because the user runs the command
+ * themselves; the lint script (`scripts/lint/wp-frontmatter.ts`) blocks agent
+ * commits that mutate this field at the diff layer. The CLI does not gate on
+ * `git config user.email`. */
+export const WP_SETTABLE_FIELDS = [
+	'status',
+	'agent_review_status',
+	'human_review_status',
+	'category',
+	'product',
+	'owner',
+	'shipped_date',
+	'shipped_prs',
+	'depends_on',
+	'unblocks',
+	'tags',
+] as const;
+export type WPSettableField = (typeof WP_SETTABLE_FIELDS)[number];
+
+/** Friendly aliases the CLI accepts on the command line; mapped to canonical
+ * field names before validation. Keeps `bun run wp set <id> human-review walked`
+ * idiomatic without spelling out `human_review_status`. */
+export const WP_FIELD_ALIASES: Readonly<Record<string, WPSettableField>> = {
+	'human-review': 'human_review_status',
+	'agent-review': 'agent_review_status',
+	'shipped-date': 'shipped_date',
+	'shipped-prs': 'shipped_prs',
+	'depends-on': 'depends_on',
+};
