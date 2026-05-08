@@ -26,7 +26,7 @@ if [ "$finding_count" -eq 0 ] 2>/dev/null; then
 fi
 
 date_stamp="$(date -u +%Y-%m-%d)"
-report="docs/loose-ends/citation-audit-$date_stamp.md"
+report="docs/work/reviews/citation-audit-$date_stamp.md"
 mkdir -p "$(dirname "$report")"
 
 {

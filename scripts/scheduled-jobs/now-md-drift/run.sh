@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # now-md-drift -- detect "status: shipped" WPs that NOW.md's "In flight" section
-# still references. Writes a markdown drift report to docs/loose-ends/now-md-drift-<date>.md
+# still references. Writes a markdown drift report to docs/work/reviews/now-md-drift-<date>.md
 # if any drift is found; produces no diff otherwise.
 
 set -euo pipefail
@@ -55,7 +55,7 @@ fi
 
 # Drift found. Write a report.
 date_stamp="$(date -u +%Y-%m-%d)"
-report="docs/loose-ends/now-md-drift-$date_stamp.md"
+report="docs/work/reviews/now-md-drift-$date_stamp.md"
 mkdir -p "$(dirname "$report")"
 
 {
