@@ -86,10 +86,14 @@ docs/                   PLATFORM
   agents/               Agent instructions, pattern references
   business/             Market research, business context
   devops/               Deployment, infrastructure
-  work/                 Session-scoped (todos, plans, reviews)
+  work/                 Session-scoped (todos, plans, reviews, walkthroughs)
     NOW.md              What's active, what's next
     todos/              Per-session todos: YYYYMMDD-NN-TODO.md
     plans/              Multi-session plans
+    handoffs/           Session-end handoff notes (rolling-archive after 60 days)
+    reviews/            Code/design review reports (rolling-archive after 60 days)
+    walkthroughs/       Manual test walkthroughs (rolling-archive after 60 days)
+    build-reports/      Build artifacts (rolling-archive after 60 days)
   work-packages/        Feature work packages (from /ball-wp-spec)
     {feature}/
       spec.md
@@ -97,7 +101,9 @@ docs/                   PLATFORM
       test-plan.md
       design.md         (medium+ features)
       user-stories.md   (large features)
-  .archive/             Superseded files (never delete, always archive)
+  bugs/                 Bug tracker (frontmatter-driven, see /bun run bug)
+  log/                  Per-PR log entries (auto-emitted by scripts/log-pr.ts)
+  .archive/             Superseded + auto-archived files (never delete, always archive)
 ```
 
 **Rules:**
@@ -108,6 +114,7 @@ docs/                   PLATFORM
 - PRDs link to feature specs. Feature details live in feature dirs, not inline.
 - Session todos committed with work. One per session: `docs/work/todos/YYYYMMDD-NN-TODO.md`.
 - Update docs as part of the work, not as a separate task.
+- Old session-scoped docs in `docs/work/{handoffs,walkthroughs,reviews,build-reports}/` archive after 60 days. Run `bun run archive:dry` to preview, `bun run archive:apply` to execute. Skips `_template.md`, `INDEX.md`, `README.md`.
 
 ## Before You Build
 

@@ -19,6 +19,8 @@
 		"bug": "bun scripts/bug.ts",
 		"tracking:generate": "bun scripts/tracking/generate.ts",
 		"tracking:generate:check": "bun scripts/tracking/generate.ts --check",
+		"archive:dry": "bun scripts/tracking/archive.ts --dry-run",
+		"archive:apply": "bun scripts/tracking/archive.ts --apply",
 		"log:pr": "bun scripts/log-pr.ts",
 		"setup": "bun scripts/setup.ts",
 		"smoke": "bun scripts/smoke.ts",
