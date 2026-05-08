@@ -1486,8 +1486,13 @@ describe('CFR seed-shape contract (real DB)', () => {
 			// seeder only stamps metadata where a DB row exists. Wave 1 added
 			// the operational/commercial-carriage Parts (103/105/119/121/125/
 			// 133/137) to both YAMLs so the seeder materializes their copy.
+			// Wave 2 added the owner-pilot core Parts (39 ADs, 43 maintenance,
+			// 67 medical standards) -- every owner-pilot encounters all three.
 			'14cfr23',
+			'14cfr39',
+			'14cfr43',
 			'14cfr61',
+			'14cfr67',
 			'14cfr68',
 			'14cfr71',
 			'14cfr73',
@@ -1531,12 +1536,13 @@ describe('CFR seed-shape contract (real DB)', () => {
 			if (typeof md.officialTitle !== 'string' || md.officialTitle.length === 0) gaps.push('officialTitle');
 			if (typeof md.description !== 'string' || md.description.length === 0) gaps.push('description');
 			if (typeof md.whyItMatters !== 'string' || md.whyItMatters.length === 0) gaps.push('whyItMatters');
+			if (!Array.isArray(md.topics) || md.topics.length === 0) gaps.push('topics');
 			if (gaps.length > 0) missing.push(`${slug} (${gaps.join(', ')})`);
 		}
 
 		expect(
 			missing,
-			`Wave 1 priority CFR Parts must have description+whyItMatters+officialTitle. Missing: ${missing.join('; ')}`,
+			`Priority CFR Parts must have description+whyItMatters+officialTitle+topics. Missing: ${missing.join('; ')}`,
 		).toEqual([]);
 	});
 });
