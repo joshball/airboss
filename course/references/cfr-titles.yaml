@@ -25,6 +25,24 @@ references:
     subjects: [regulations, aircraft-systems]
     primary_cert: null
 
+  - slug: 14cfr39
+    kind: cfr
+    edition: current
+    title: 14 CFR Part 39 -- Airworthiness Directives
+    publisher: FAA
+    url: https://www.ecfr.gov/current/title-14/part-39
+    subjects: [regulations, airworthiness, maintenance]
+    primary_cert: null
+
+  - slug: 14cfr43
+    kind: cfr
+    edition: current
+    title: 14 CFR Part 43 -- Maintenance, Preventive Maintenance, Rebuilding, and Alteration
+    publisher: FAA
+    url: https://www.ecfr.gov/current/title-14/part-43
+    subjects: [regulations, maintenance]
+    primary_cert: null
+
   - slug: 14cfr61
     kind: cfr
     edition: current
@@ -32,6 +50,15 @@ references:
     publisher: FAA
     url: https://www.ecfr.gov/current/title-14/part-61
     subjects: [regulations, certification]
+    primary_cert: null
+
+  - slug: 14cfr67
+    kind: cfr
+    edition: current
+    title: 14 CFR Part 67 -- Medical Standards and Certification
+    publisher: FAA
+    url: https://www.ecfr.gov/current/title-14/part-67
+    subjects: [regulations, medical, certification]
     primary_cert: null
 
   - slug: 14cfr68
