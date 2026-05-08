@@ -1488,15 +1488,23 @@ describe('CFR seed-shape contract (real DB)', () => {
 			// 133/137) to both YAMLs so the seeder materializes their copy.
 			// Wave 2 added the owner-pilot core Parts (39 ADs, 43 maintenance,
 			// 67 medical standards) -- every owner-pilot encounters all three.
+			// Wave 3 closed the priority list with 65 (non-flight-crew certs:
+			// mechanics, dispatchers, controllers), 93 (special air-traffic
+			// rules: DC SFRA, Hudson, Grand Canyon), 97 (Standard Instrument
+			// Procedures: every IAP a pilot flies), 142 (training centers:
+			// type-rating mills, sim providers).
 			'14cfr23',
 			'14cfr39',
 			'14cfr43',
 			'14cfr61',
+			'14cfr65',
 			'14cfr67',
 			'14cfr68',
 			'14cfr71',
 			'14cfr73',
 			'14cfr91',
+			'14cfr93',
+			'14cfr97',
 			'14cfr103',
 			'14cfr105',
 			'14cfr119',
@@ -1506,6 +1514,7 @@ describe('CFR seed-shape contract (real DB)', () => {
 			'14cfr135',
 			'14cfr137',
 			'14cfr141',
+			'14cfr142',
 		];
 		const PRIORITY_49_CFR_PARTS_AUTHORED_AND_SEEDED: readonly string[] = ['49cfr830', '49cfr1552'];
 		const expectedSlugs = [...PRIORITY_14_CFR_PARTS_AUTHORED_AND_SEEDED, ...PRIORITY_49_CFR_PARTS_AUTHORED_AND_SEEDED];

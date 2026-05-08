@@ -52,6 +52,15 @@ references:
     subjects: [regulations, certification]
     primary_cert: null
 
+  - slug: 14cfr65
+    kind: cfr
+    edition: current
+    title: 14 CFR Part 65 -- Certification (Airmen Other Than Flight Crewmembers)
+    publisher: FAA
+    url: https://www.ecfr.gov/current/title-14/part-65
+    subjects: [regulations, certification, maintenance]
+    primary_cert: null
+
   - slug: 14cfr67
     kind: cfr
     edition: current
@@ -160,6 +169,24 @@ references:
     subjects: [regulations, procedures]
     primary_cert: null
 
+  - slug: 14cfr93
+    kind: cfr
+    edition: current
+    title: 14 CFR Part 93 -- Special Air Traffic Rules
+    publisher: FAA
+    url: https://www.ecfr.gov/current/title-14/part-93
+    subjects: [regulations, airspace, operations]
+    primary_cert: null
+
+  - slug: 14cfr97
+    kind: cfr
+    edition: current
+    title: 14 CFR Part 97 -- Standard Instrument Procedures
+    publisher: FAA
+    url: https://www.ecfr.gov/current/title-14/part-97
+    subjects: [regulations, instrument-procedures]
+    primary_cert: null
+
   - slug: 14cfr135
     kind: cfr
     edition: current
@@ -176,6 +203,15 @@ references:
     publisher: FAA
     url: https://www.ecfr.gov/current/title-14/part-141
     subjects: [regulations, certification, training-ops]
+    primary_cert: null
+
+  - slug: 14cfr142
+    kind: cfr
+    edition: current
+    title: 14 CFR Part 142 -- Training Centers
+    publisher: FAA
+    url: https://www.ecfr.gov/current/title-14/part-142
+    subjects: [regulations, training-ops, certification]
     primary_cert: null
 
   # ---------- Title 49 (Transportation) ------------------------------------
