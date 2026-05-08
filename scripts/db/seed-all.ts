@@ -55,6 +55,7 @@
 import { mkdirSync, openSync, writeSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { DEV_ACCOUNTS, DEV_DB_URL, DEV_SEED_ORIGIN_TAG, ENV_VARS } from '@ab/constants';
+import { startStatusLine, type StatusLine } from '../lib/status-line';
 import { client } from '@ab/db/connection';
 import { seedAsrsFromManifest } from '@ab/sources/asrs/seed';
 import { seedFormsFromManifest } from '@ab/sources/forms/seed';
@@ -119,26 +120,40 @@ function isPhase(value: string): value is Phase {
 const REPORT_DIR = resolve(REPO_ROOT, '.reports', 'seed');
 
 /**
- * Per-phase wrapper. Ensures `.reports/seed/<phase>.log` captures every line
- * the phase wrote to stdout/stderr (live tee, so a crash mid-phase still
- * leaves the partial log on disk), and starts a heartbeat ticker that prints
- * `... still running: <phase> ([Xs])` every {@link HEARTBEAT_INTERVAL_MS} ms
- * the phase has been blocked. The ticker only fires when no other output has
- * landed in the interval, so chatty phases stay readable.
+ * Per-phase wrapper.
  *
- * Assumes phases are well-behaved: they do not take ownership of
- * `process.stdout.write` themselves (verified for every current phase) and
- * they propagate exceptions instead of swallowing them. The console-tee
- * indirection lives only for the phase's lifetime; restored in `finally`.
+ * Output policy:
+ *  - The terminal sees one in-place spinner line ("⠋ <phase> (12s) -- <detail>")
+ *    while the phase runs, then one summary line when it finishes.
+ *  - Everything else the phase wrote -- per-edition lines, skip lists, third-
+ *    party noise from drizzle-kit, individual record-counts -- is captured
+ *    into `.reports/seed/<phase>.log`. The log is the source of truth when
+ *    something goes wrong; the terminal is for at-a-glance progress.
+ *  - Status-line updates flow via `progress(detail)` passed to the phase fn.
+ *    Phases call it whenever they make a unit of progress (one edition seeded,
+ *    one seeder finished, etc).
+ *
+ * Implementation: redirect `process.stdout.write` and `process.stderr.write`
+ * to write into the log fd only (i.e. _not_ the terminal). When the phase
+ * resolves, restore the originals. The status line bypasses this redirect by
+ * holding its own write reference, so the spinner stays visible without
+ * cluttering the log.
  */
-const HEARTBEAT_INTERVAL_MS = 5_000;
+interface PhaseSummary {
+	/** One-liner shown after the phase resolves. */
+	readonly headline: string;
+}
 
 interface PhaseRunResult {
 	readonly bytesLogged: number;
 	readonly logPath: string;
+	readonly summary: PhaseSummary;
 }
 
-async function runPhaseWithReport(phase: Phase, fn: () => Promise<void>): Promise<PhaseRunResult> {
+type ProgressFn = (detail: string) => void;
+type PhaseFn = (progress: ProgressFn) => Promise<PhaseSummary>;
+
+async function runPhaseWithReport(phase: Phase, fn: PhaseFn): Promise<PhaseRunResult> {
 	mkdirSync(REPORT_DIR, { recursive: true });
 	const logPath = resolve(REPORT_DIR, `${phase}.log`);
 	const fd = openSync(logPath, 'w');
@@ -146,117 +161,114 @@ async function runPhaseWithReport(phase: Phase, fn: () => Promise<void>): Promis
 
 	const originalStdoutWrite = process.stdout.write.bind(process.stdout);
 	const originalStderrWrite = process.stderr.write.bind(process.stderr);
-	let lastOutputAt = Date.now();
 
-	const tee = (
-		original: typeof process.stdout.write,
-	): typeof process.stdout.write => {
-		return ((chunk: unknown, ...rest: unknown[]) => {
-			lastOutputAt = Date.now();
-			try {
-				const buf =
-					typeof chunk === 'string'
-						? Buffer.from(chunk, 'utf8')
-						: chunk instanceof Buffer
-							? chunk
-							: Buffer.from(String(chunk), 'utf8');
-				writeSync(fd, buf);
-				bytesLogged += buf.length;
-			} catch {
-				// best-effort: a failing tee should never break the seed
-			}
-			return (original as unknown as (...args: unknown[]) => boolean)(chunk, ...rest);
-		}) as typeof process.stdout.write;
+	// While the phase runs, redirect stdout/stderr to the log file only. The
+	// status line owns the terminal during this window; everything the phase
+	// would have spewed lands in the per-phase log instead.
+	const logOnly = ((chunk: unknown, ..._rest: unknown[]) => {
+		try {
+			const buf =
+				typeof chunk === 'string'
+					? Buffer.from(chunk, 'utf8')
+					: chunk instanceof Buffer
+						? chunk
+						: Buffer.from(String(chunk), 'utf8');
+			writeSync(fd, buf);
+			bytesLogged += buf.length;
+		} catch {
+			// best-effort: a failing log write must not break the seed
+		}
+		return true;
+	}) as unknown as typeof process.stdout.write;
+
+	const status: StatusLine = startStatusLine(phase);
+	process.stdout.write = logOnly;
+	process.stderr.write = logOnly;
+	// Bun's `console.log` doesn't always route through `process.stdout.write`;
+	// it has a fast path that writes to fd 1 directly. Override the console
+	// methods so per-edition `console.log` calls inside the seeders land in
+	// the log file via our redirected write, not on the terminal under the
+	// status line.
+	const originalConsoleLog = console.log;
+	const originalConsoleWarn = console.warn;
+	const originalConsoleError = console.error;
+	const consoleViaLog = (...args: unknown[]) => {
+		const text = args
+			.map((a) => (typeof a === 'string' ? a : JSON.stringify(a)))
+			.join(' ');
+		logOnly(`${text}\n`);
 	};
+	console.log = consoleViaLog;
+	console.warn = consoleViaLog;
+	console.error = consoleViaLog;
 
-	const startedAt = Date.now();
-	const heartbeat = setInterval(() => {
-		const idleMs = Date.now() - lastOutputAt;
-		if (idleMs < HEARTBEAT_INTERVAL_MS) return;
-		const elapsedSec = Math.round((Date.now() - startedAt) / 1000);
-		// Use the original writer so the heartbeat itself doesn't get teed
-		// (it's runtime instrumentation, not part of the phase's record).
-		originalStdoutWrite(`  ... still running: ${phase} (${elapsedSec}s)\n`);
-	}, HEARTBEAT_INTERVAL_MS);
-	heartbeat.unref();
-
-	process.stdout.write = tee(originalStdoutWrite);
-	process.stderr.write = tee(originalStderrWrite);
-
+	let summary: PhaseSummary = { headline: phase };
 	try {
-		await fn();
+		summary = await fn((detail) => status.detail(detail));
 	} finally {
-		clearInterval(heartbeat);
 		process.stdout.write = originalStdoutWrite;
 		process.stderr.write = originalStderrWrite;
+		console.log = originalConsoleLog;
+		console.warn = originalConsoleWarn;
+		console.error = originalConsoleError;
+		status.finish();
 		try {
-			// Best-effort fsync so a process kill leaves the file durable.
 			writeSync(fd, '');
 		} catch {
 			// ignore
 		}
 	}
-	return { bytesLogged, logPath };
+	return { bytesLogged, logPath, summary };
 }
 
-async function phaseUsers(): Promise<void> {
-	process.stdout.write('\n=== seed: users ===\n');
+async function phaseUsers(_progress: ProgressFn): Promise<PhaseSummary> {
 	await runOrThrowPiped(['bun', 'scripts/db/seed-dev-users.ts'], { cwd: REPO_ROOT });
+	return { headline: `${DEV_ACCOUNTS.length} dev users` };
 }
 
-async function phaseKnowledge(): Promise<void> {
-	process.stdout.write('\n=== seed: knowledge ===\n');
+async function phaseKnowledge(_progress: ProgressFn): Promise<PhaseSummary> {
 	await runOrThrowPiped(['bun', 'scripts/build-knowledge-index.ts'], { cwd: REPO_ROOT });
+	return { headline: 'knowledge graph rebuilt' };
 }
 
-async function phaseHandbooks(): Promise<void> {
-	process.stdout.write('\n=== seed: handbooks (section-tree + whole-doc manifests) ===\n');
-	const summary = await seedReferencesFromManifest();
-	process.stdout.write(
-		`  ${summary.editionsProcessed} editions, ${summary.sectionsTouched} sections (${summary.sectionsChanged} changed), ${summary.figuresWritten} figures, ${summary.supersededLinks} superseded links\n`,
-	);
+async function phaseHandbooks(progress: ProgressFn): Promise<PhaseSummary> {
+	const summary = await seedReferencesFromManifest({ progress });
+	return {
+		headline: `${summary.editionsProcessed} editions, ${summary.sectionsTouched} sections (${summary.sectionsChanged} changed), ${summary.figuresWritten} figures, ${summary.supersededLinks} superseded`,
+	};
 }
 
-async function phaseReferences(): Promise<void> {
-	process.stdout.write('\n=== seed: references ===\n');
+async function phaseReferences(progress: ProgressFn): Promise<PhaseSummary> {
+	progress('upserting non-handbook references');
 	const summary = await seedReferences();
-	process.stdout.write(`  ${summary.rowsUpserted} non-handbook reference rows from ${summary.filesRead} file(s)\n`);
+	return { headline: `${summary.rowsUpserted} reference rows from ${summary.filesRead} file(s)` };
 }
 
-async function phaseCredentials(): Promise<void> {
-	process.stdout.write('\n=== seed: credentials ===\n');
+async function phaseCredentials(progress: ProgressFn): Promise<PhaseSummary> {
+	progress('upserting credentials + prereqs');
 	const summary = await seedCredentials();
-	process.stdout.write(
-		`  ${summary.credentialsUpserted} credentials, ${summary.prereqsUpserted} prereqs, ${summary.syllabusLinksUpserted} syllabus links (${summary.syllabusLinksSkipped} skipped pending syllabi)\n`,
-	);
+	return {
+		headline: `${summary.credentialsUpserted} credentials, ${summary.prereqsUpserted} prereqs, ${summary.syllabusLinksUpserted} links (${summary.syllabusLinksSkipped} pending)`,
+	};
 }
 
-async function phaseSyllabi(): Promise<void> {
-	process.stdout.write('\n=== seed: syllabi ===\n');
+async function phaseSyllabi(progress: ProgressFn): Promise<PhaseSummary> {
+	progress('upserting syllabi');
 	const summary = await seedSyllabi();
-	process.stdout.write(
-		`  ${summary.syllabiUpserted} syllabi, ${summary.nodesUpserted} nodes, ${summary.linksUpserted} knowledge-graph links (${summary.linksSkipped} skipped)\n`,
-	);
+	return {
+		headline: `${summary.syllabiUpserted} syllabi, ${summary.nodesUpserted} nodes, ${summary.linksUpserted} graph links`,
+	};
 }
 
-async function phaseCredentialSyllabi(): Promise<void> {
-	// Re-run the credential seed AFTER syllabi land so credential_syllabus
-	// rows the first credential pass deferred can resolve.
-	process.stdout.write('\n=== seed: credential <-> syllabus links ===\n');
+async function phaseCredentialSyllabi(progress: ProgressFn): Promise<PhaseSummary> {
+	progress('resolving credential <-> syllabus links');
 	const summary = await seedCredentials();
-	process.stdout.write(
-		`  ${summary.syllabusLinksUpserted} resolved (${summary.syllabusLinksSkipped} still pending syllabi authoring)\n`,
-	);
+	return {
+		headline: `${summary.syllabusLinksUpserted} resolved (${summary.syllabusLinksSkipped} still pending)`,
+	};
 }
 
-async function phaseReferenceCorpusSeed(): Promise<void> {
-	// Manifest-driven registry seeding for the small / irregular corpora that
-	// don't have a derivative-tree ingestion pipeline yet. Each corpus's
-	// `seedXFromManifest` reads `libs/sources/src/<corpus>/manifest.yaml` and
-	// patches `__sources_internal__` + `__editions_internal__` so authored
-	// `airboss-ref:<corpus>/...` URLs resolve clean during the migrate-references
-	// pass that follows. Idempotent: re-runs leave the registry unchanged.
-	process.stdout.write('\n=== seed: reference corpus (irregular corpora) ===\n');
+async function phaseReferenceCorpusSeed(progress: ProgressFn): Promise<PhaseSummary> {
 	const seeders: ReadonlyArray<readonly [string, () => Promise<CorpusSeedReport>]> = [
 		['orders', seedOrdersFromManifest],
 		['ntsb', seedNtsbFromManifest],
@@ -272,11 +284,7 @@ async function phaseReferenceCorpusSeed(): Promise<void> {
 		['tcds', seedTcdsFromManifest],
 		['asrs', seedAsrsFromManifest],
 	] as const;
-	// Each seeder is a pure registry mutation -- they patch
-	// `__sources_internal__` / `__editions_internal__` with disjoint
-	// corpus-scoped keys. Safe to dispatch in parallel; we collect reports
-	// then render them in declaration order so the operator sees a stable
-	// summary regardless of resolution order.
+	progress(`registering ${seeders.length} corpora`);
 	const reports = await Promise.all(
 		seeders.map(([name, run]) =>
 			run()
@@ -286,15 +294,21 @@ async function phaseReferenceCorpusSeed(): Promise<void> {
 				}),
 		),
 	);
+	let totalEntries = 0;
+	let totalEditions = 0;
 	for (const { name, report } of reports) {
-		const padded = name.padEnd(11);
+		totalEntries += report.entriesRegistered;
+		totalEditions += report.editionsRegistered;
+		// Verbose breakdown only goes to the per-phase log via the redirected
+		// stdout.write -- not the terminal.
 		process.stdout.write(
-			`  ${padded}: ${report.entriesRegistered} registered (${report.entriesAlreadyAccepted} already accepted), ${report.editionsRegistered} editions, ${report.skipReasons.length} skipped\n`,
+			`  ${name.padEnd(11)}: ${report.entriesRegistered} registered, ${report.editionsRegistered} editions, ${report.skipReasons.length} skipped\n`,
 		);
 		for (const reason of report.skipReasons) {
 			process.stdout.write(`    skip: ${reason}\n`);
 		}
 	}
+	return { headline: `${reports.length} corpora, ${totalEntries} entries, ${totalEditions} editions` };
 }
 
 interface CorpusSeedReport {
@@ -304,26 +318,22 @@ interface CorpusSeedReport {
 	readonly skipReasons: readonly string[];
 }
 
-async function phaseMigrateReferences(): Promise<void> {
-	// Reshape every legacy LegacyCitation entry on `knowledge_node.references`
-	// into a uniform StructuredCitation, resolving each entry against the now-
-	// seeded `study.reference` registry. Idempotent on `references_v2_migrated`;
-	// re-runs are no-ops once every row is flipped to true.
-	process.stdout.write('\n=== seed: migrate references -> StructuredCitation ===\n');
+async function phaseMigrateReferences(progress: ProgressFn): Promise<PhaseSummary> {
+	progress('reshaping legacy citations');
 	const report = await migrateReferencesToStructured();
-	process.stdout.write(
-		`  scanned ${report.rowsScanned}, already-migrated ${report.rowsAlreadyMigrated}, migrated ${report.rowsMigrated}\n`,
-	);
-	process.stdout.write(
-		`  citations reshaped ${report.citationsReshaped}, already-structured ${report.citationsAlreadyStructured}, ref-shape ${report.citationsAlreadyRefShape}, synthetic refs created ${report.syntheticReferencesCreated}\n`,
-	);
+	return {
+		headline: `${report.rowsMigrated}/${report.rowsScanned} migrated, ${report.citationsReshaped} reshaped, ${report.citationsAlreadyRefShape} ref-shape, ${report.syntheticReferencesCreated} synth refs`,
+	};
 }
 
-async function phaseCards(): Promise<void> {
-	process.stdout.write('\n=== seed: cards ===\n');
+async function phaseCards(progress: ProgressFn): Promise<PhaseSummary> {
+	let total = 0;
 	for (const account of DEV_ACCOUNTS) {
+		progress(`seeding cards for ${account.email}`);
 		await seedCardsForUser(account.email);
+		total += 1;
 	}
+	return { headline: `cards for ${total} dev accounts` };
 }
 
 function printYellowDevSeedBanner(counts: AbbySeedCounts): void {
@@ -347,13 +357,17 @@ function printYellowDevSeedBanner(counts: AbbySeedCounts): void {
 	process.stdout.write(`\n${lines.join('\n')}\n`);
 }
 
-async function phaseAbby(): Promise<void> {
-	process.stdout.write('\n=== seed: abby ===\n');
+async function phaseAbby(progress: ProgressFn): Promise<PhaseSummary> {
+	progress('seeding Abby + chained content');
 	const counts = await seedAbby();
+	// The yellow banner is verbose; route it to the per-phase log only.
 	printYellowDevSeedBanner(counts);
+	return {
+		headline: `Abby + ${counts.cards} cards, ${counts.scenarios} scenarios, ${counts.sessions} sessions, ${counts.reviews} reviews`,
+	};
 }
 
-const PHASE_FNS: Record<Phase, () => Promise<void>> = {
+const PHASE_FNS: Record<Phase, PhaseFn> = {
 	users: phaseUsers,
 	knowledge: phaseKnowledge,
 	handbooks: phaseHandbooks,
@@ -518,27 +532,21 @@ async function main(): Promise<void> {
 		}
 	}
 
-	const phaseTimings: Array<{ phase: Phase; ms: number; bytesLogged: number; logPath: string }> = [];
+	const phaseTimings: Array<{ phase: Phase; ms: number; headline: string }> = [];
 	const totalStart = performance.now();
 	for (const phase of phases) {
 		const phaseStart = performance.now();
 		const result = await runPhaseWithReport(phase, PHASE_FNS[phase]);
 		const ms = Math.round(performance.now() - phaseStart);
-		phaseTimings.push({ phase, ms, bytesLogged: result.bytesLogged, logPath: result.logPath });
-		process.stdout.write(`  -> ${phase} took ${formatDuration(ms)}\n`);
+		phaseTimings.push({ phase, ms, headline: result.summary.headline });
+		// One green check + phase + duration + summary, that's it.
+		process.stdout.write(`  ✓ ${phase.padEnd(22)} ${formatDuration(ms).padStart(7)}  ${result.summary.headline}\n`);
 	}
 	const totalMs = Math.round(performance.now() - totalStart);
 
-	process.stdout.write('\nseed: done.\n');
-	process.stdout.write('\n=== timings ===\n');
-	const longest = phaseTimings.reduce((acc, p) => Math.max(acc, p.phase.length), 0);
-	const sorted = [...phaseTimings].sort((a, b) => b.ms - a.ms);
-	for (const { phase, ms } of sorted) {
-		const pct = totalMs > 0 ? Math.round((ms / totalMs) * 100) : 0;
-		process.stdout.write(`  ${phase.padEnd(longest)}  ${formatDuration(ms).padStart(8)}  ${String(pct).padStart(3)}%\n`);
-	}
-	process.stdout.write(`  ${'TOTAL'.padEnd(longest)}  ${formatDuration(totalMs).padStart(8)}\n`);
-	process.stdout.write(`\nfull per-phase logs: .reports/seed/<phase>.log\n`);
+	// The last line is the wall-clock total so it always survives terminal
+	// scroll truncation.
+	process.stdout.write(`\nseed: done in ${formatDuration(totalMs)}  (logs: .reports/seed/)\n`);
 }
 
 main()

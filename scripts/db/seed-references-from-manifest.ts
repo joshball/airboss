@@ -119,6 +119,13 @@ export interface SeedReferencesOptions {
 	edition?: string;
 	/** Optional dev-seed marker; production runs leave this null. */
 	seedOrigin?: string | null;
+	/**
+	 * Status-line callback, called once per edition with a short detail string
+	 * the orchestrator displays as the in-place spinner detail. The verbose
+	 * per-edition line still goes to the per-phase log via `console.log`; this
+	 * gives the user something live to look at without scroll spam.
+	 */
+	progress?: (detail: string) => void;
 }
 
 export type SeedReferencesSummary = SeedSummary;
@@ -126,10 +133,19 @@ export type SeedReferencesSummary = SeedSummary;
 /** Walk every CORPUS_DIRS tree and upsert references + sections. */
 export async function seedReferencesFromManifest(options: SeedReferencesOptions = {}): Promise<SeedReferencesSummary> {
 	const summary = emptySummary();
+	let editionsSeen = 0;
 	const context: SeedContext = {
 		repoRoot: REPO_ROOT,
 		seedOrigin: options.seedOrigin ?? null,
-		onProgress: (line) => console.log(line),
+		onProgress: (line) => {
+			// Verbose per-edition line goes to the log.
+			console.log(line);
+			// Status line gets a tighter rendering: "(N) phak FAA-H-8083-25C: 855 sections...".
+			editionsSeen += 1;
+			if (options.progress) {
+				options.progress(`(${editionsSeen}) ${line.trim()}`);
+			}
+		},
 	};
 
 	// Run each corpus in parallel: distinct corpora write to disjoint

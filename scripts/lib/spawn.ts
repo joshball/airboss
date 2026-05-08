@@ -46,6 +46,36 @@ export async function runOrThrow(cmd: readonly string[], opts: { readonly cwd?: 
  * Use this for any subprocess whose output the parent wants to capture for
  * archival; keep `runOrThrow` for one-shots that don't need archival.
  */
+/**
+ * Run a subprocess silently, capturing stdout+stderr into a string so the
+ * caller can render a tight summary. Used by the `db reset` orchestrator so
+ * each pre-seed step (drop / create / push / etc) shows up as a single
+ * status-line update instead of pages of `docker exec` echo + psql output.
+ *
+ * Returns combined stdout+stderr regardless of exit status; throws with the
+ * captured output included in the message on non-zero exit.
+ */
+export async function runQuiet(
+	cmd: readonly string[],
+	opts: { readonly cwd?: string; readonly env?: Record<string, string | undefined> } = {},
+): Promise<string> {
+	const proc = Bun.spawn([...cmd], {
+		cwd: opts.cwd,
+		env: opts.env,
+		stdio: ['inherit', 'pipe', 'pipe'],
+	});
+	const [stdout, stderr] = await Promise.all([
+		proc.stdout ? new Response(proc.stdout).text() : Promise.resolve(''),
+		proc.stderr ? new Response(proc.stderr).text() : Promise.resolve(''),
+	]);
+	const code = await proc.exited;
+	const combined = `${stdout}${stderr}`;
+	if (code !== 0) {
+		throw new Error(`subprocess failed (exit ${code}): ${cmd.join(' ')}\n${combined}`);
+	}
+	return combined;
+}
+
 export async function runOrThrowPiped(cmd: readonly string[], opts: { readonly cwd?: string } = {}): Promise<void> {
 	const proc = Bun.spawn([...cmd], {
 		cwd: opts.cwd,

@@ -21,7 +21,8 @@ import {
 	SCHEMAS,
 } from '@ab/constants';
 import { confirmOrAbort } from './lib/prompt';
-import { run, runOrThrow } from './lib/spawn';
+import { run, runOrThrow, runQuiet } from './lib/spawn';
+import { startStatusLine } from './lib/status-line';
 
 const CONTAINER = 'airboss-db';
 const DB_URL = process.env[ENV_VARS.DATABASE_URL] ?? DEV_DB_URL;
@@ -60,68 +61,62 @@ function assertLocalDb(): void {
 async function doReset(): Promise<void> {
 	assertLocalDb();
 	await confirmOrAbort(`This will DROP and recreate "${DB_NAME}", then run the full seed. Continue?`, { force });
-	// Terminate any lingering connections so DROP DATABASE doesn't fail with
-	// "database is being accessed by other users" (leftover drizzle-studio,
-	// crashed dev processes, abandoned postgres.js pools, etc.).
-	await run([
-		'docker',
-		'exec',
-		CONTAINER,
-		'psql',
-		'-U',
-		DB_USER,
-		'-d',
-		'postgres',
-		'-c',
-		`SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='${DB_NAME}' AND pid <> pg_backend_pid();`,
-	]);
-	await run([
-		'docker',
-		'exec',
-		CONTAINER,
-		'psql',
-		'-U',
-		DB_USER,
-		'-d',
-		'postgres',
-		'-c',
-		`DROP DATABASE IF EXISTS ${DB_NAME};`,
-	]);
-	await run([
-		'docker',
-		'exec',
-		CONTAINER,
-		'psql',
-		'-U',
-		DB_USER,
-		'-d',
-		'postgres',
-		'-c',
-		`CREATE DATABASE ${DB_NAME};`,
-	]);
-	// pg_trgm is a contrib extension; the schema declares GIN trigram indexes on
-	// study.card (front, back) using gin_trgm_ops. Drizzle-kit push fails the
-	// CREATE INDEX if the extension is not present, so install it before push.
-	// The extension is also re-declared at the top of drizzle/0000_initial.sql
-	// so `bun run db migrate` against an empty DB works the same way.
-	await run([
-		'docker',
-		'exec',
-		CONTAINER,
-		'psql',
-		'-U',
-		DB_USER,
-		'-d',
-		DB_NAME,
-		'-c',
-		'CREATE EXTENSION IF NOT EXISTS pg_trgm;',
-	]);
-	await run(['bunx', 'drizzle-kit', 'push']);
-	const seedCmd = ['bun', 'scripts/db/seed-all.ts'];
-	for (const f of passthroughFlags) seedCmd.push(f);
-	await run(seedCmd);
+
+	// Pre-seed steps: drop / recreate / extension / drizzle push. Each one runs
+	// quietly and updates a single status line. Output is captured into
+	// memory; we surface only on failure (where the captured stderr explains
+	// what broke). pg_trgm is a contrib extension required by the GIN trigram
+	// indexes the schema declares on study.card (front, back) using
+	// gin_trgm_ops; drizzle-kit push fails the CREATE INDEX without it.
+	const psqlPostgres = ['docker', 'exec', CONTAINER, 'psql', '-U', DB_USER, '-d', 'postgres', '-c'] as const;
+	const psqlAirboss = ['docker', 'exec', CONTAINER, 'psql', '-U', DB_USER, '-d', DB_NAME, '-c'] as const;
+	const preSteps: ReadonlyArray<readonly [string, readonly string[]]> = [
+		[
+			'terminating lingering connections',
+			[
+				...psqlPostgres,
+				`SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='${DB_NAME}' AND pid <> pg_backend_pid();`,
+			],
+		],
+		['dropping database', [...psqlPostgres, `DROP DATABASE IF EXISTS ${DB_NAME};`]],
+		['creating database', [...psqlPostgres, `CREATE DATABASE ${DB_NAME};`]],
+		['installing pg_trgm extension', [...psqlAirboss, 'CREATE EXTENSION IF NOT EXISTS pg_trgm;']],
+		['drizzle-kit push (schema)', ['bunx', 'drizzle-kit', 'push']],
+	];
+
+	const preStart = Date.now();
+	const preStatus = startStatusLine('reset (pre-seed)');
+	try {
+		for (const [label, cmd] of preSteps) {
+			preStatus.detail(label);
+			await runQuiet(cmd);
+		}
+	} finally {
+		preStatus.finish();
+	}
+	const preMs = Date.now() - preStart;
+	process.stdout.write(`  ✓ reset (pre-seed)         ${formatPreMs(preMs)}  drop + create + extension + push\n`);
+
+	// Seed runs with its own per-phase status lines + log files. We spawn it
+	// directly with inherited stdio (no echo) so the spinner output isn't
+	// preceded by the verbose `> bun scripts/db/seed-all.ts` line that `run`
+	// would print.
+	const seedArgs = ['bun', 'scripts/db/seed-all.ts'];
+	for (const f of passthroughFlags) seedArgs.push(f);
+	const seedProc = Bun.spawn(seedArgs, { stdio: ['inherit', 'inherit', 'inherit'] });
+	const seedExit = await seedProc.exited;
+	if (seedExit !== 0) process.exit(seedExit);
+
 	// Final summary so the operator sees what landed.
-	await run(['bun', 'scripts/db/seed-check.ts']);
+	const checkProc = Bun.spawn(['bun', 'scripts/db/seed-check.ts'], { stdio: ['inherit', 'inherit', 'inherit'] });
+	const checkExit = await checkProc.exited;
+	if (checkExit !== 0) process.exit(checkExit);
+}
+
+function formatPreMs(ms: number): string {
+	const s = ms / 1000;
+	const text = s < 60 ? `${s.toFixed(1)}s` : `${Math.floor(s / 60)}m${(s % 60).toFixed(0)}s`;
+	return text.padStart(7);
 }
 
 async function doResetStudy(): Promise<void> {
