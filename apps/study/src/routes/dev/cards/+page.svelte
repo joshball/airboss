@@ -24,12 +24,49 @@ const totalRecommendedGaps = $derived(data.summary.reduce((acc, s) => acc + s.mi
 	<title>Card audit -- airboss dev</title>
 </svelte:head>
 
+<main class="page">
 <header class="page-header">
 	<h1>Library card audit</h1>
 	<p class="lede">
 		Variant gallery + live data audit. Required fields throw at render in dev; recommended fields surface here so
 		Wave 1 authoring has a punch list.
 	</p>
+
+	<aside class="explainer" aria-label="About this page">
+		<h2>What is this page?</h2>
+		<p>
+			Every reference in <code>study.reference</code> renders through one of the typed card wrappers in
+			<code>libs/aviation/src/ui/cards/</code>. This page is the <strong>completeness oracle</strong> for that
+			rendering: each wrapper has a registry of required and recommended fields; this page validates every live row
+			against that registry.
+		</p>
+		<p>
+			<strong>What to look for:</strong> rows in the live audit table at the bottom with a non-empty
+			<em>Missing required</em> or <em>Missing recommended</em> column. The summary band at the top counts those gaps
+			at the variant level so you can see at a glance whether anything is broken (red) or just under-authored
+			(yellow).
+		</p>
+		<p>
+			<strong>What to do about it:</strong>
+		</p>
+		<ul>
+			<li>
+				<strong>Missing required (red):</strong> a real bug -- the card will throw at render in dev. Fix the seeder
+				or authoring source so the field is populated, then re-seed
+				(<code>bun scripts/db/seed-references-from-manifest.ts</code>) and reload.
+			</li>
+			<li>
+				<strong>Missing recommended (yellow):</strong> the card renders, but is missing copy a learner would expect
+				(description, why-it-matters, topics). Author the missing fields in the per-corpus YAML overlay (e.g.
+				<code>regulations/cfr-14/_authoring/parts.yaml</code> for CFR Parts), then re-seed.
+			</li>
+			<li>
+				<strong>The variant inventory and gallery</strong> are reference, not a punch list. Skim them when
+				introducing a new wrapper to confirm the design stays consistent across kinds.
+			</li>
+		</ul>
+	</aside>
+
 	<dl class="totals">
 		<div>
 			<dt>Variants</dt>
@@ -251,10 +288,49 @@ const totalRecommendedGaps = $derived(data.summary.reduce((acc, s) => acc + s.mi
 		</tbody>
 	</table>
 </section>
+</main>
 
 <style>
+	.page {
+		max-width: 80rem;
+		margin: 0 auto;
+		padding: var(--space-xl) var(--space-lg);
+	}
 	.page-header {
-		margin-bottom: var(--space-lg);
+		margin-bottom: var(--space-xl);
+	}
+	.page-header h1 {
+		margin: 0 0 var(--space-sm);
+	}
+	.explainer {
+		margin: var(--space-lg) 0;
+		padding: var(--space-md) var(--space-lg);
+		border: 1px solid var(--edge-subtle);
+		border-left: 3px solid var(--signal-info, var(--edge-default));
+		border-radius: var(--radius-md);
+		background: var(--surface-raised);
+		max-width: 70ch;
+	}
+	.explainer h2 {
+		margin: 0 0 var(--space-sm);
+		font-size: var(--font-size-base);
+		font-weight: var(--font-weight-semibold);
+	}
+	.explainer p,
+	.explainer ul {
+		margin: 0 0 var(--space-sm);
+		color: var(--ink-body);
+		line-height: var(--line-height-relaxed, 1.55);
+	}
+	.explainer ul {
+		padding-left: var(--space-lg);
+	}
+	.explainer li + li {
+		margin-top: var(--space-2xs);
+	}
+	.explainer p:last-child,
+	.explainer ul:last-child {
+		margin-bottom: 0;
 	}
 	.lede {
 		max-width: 60ch;
