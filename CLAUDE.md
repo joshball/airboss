@@ -301,7 +301,19 @@ Tables use aligned style. Run `bun run format:md` (or `bun tools/md-format/bin.t
 
 ### Check pipeline
 
-`bun run check` runs every step in parallel and writes per-step output to `.cache/check/<step>.{stdout,stderr,exit}`. Use `--scope dirty` for fast pre-commit feedback (filters scopable steps to files changed vs HEAD); CI uses default `--scope all`. Pure type checks (svelte-check) and graph validators (references, browser-globals, help-ids, knowledge dry-run, airboss-ref) always run full regardless of scope. `--verbose` streams output live as steps finish.
+`bun run check` runs every step in parallel and writes per-step output to `.cache/check/<step>.{stdout,stderr,exit}`. Profiles (positional, not flags):
+
+- `bun run check` (default) = `dirty` -- files changed vs HEAD. Fast (<10s typical). Catches everything in the working tree, including pre-existing dirty files in areas you didn't touch.
+- `bun run check branch` -- files changed vs origin/main. Same speed as `dirty`, but scopes only to what your feature branch actually changed. Skips pre-existing untouched-by-this-branch dirty files.
+- `bun run check quick` -- full repo, skips svelte-check. ~15-25s.
+- `bun run check types` -- svelte-check across all 5 apps. ~120-200s.
+- `bun run check all` -- `quick` + `types`. Pre-PR / CI mode.
+
+**On a feature branch, prefer `branch` over the default `dirty`.** `dirty` flags pre-existing dirty files (other agents' shared scratchpads, leftover working-tree edits) as failures even when those files are untouched by your branch -- which means the gate is reporting noise, not your changes. `branch` scopes to your branch's actual diff and matches the question you actually asked: "is what I changed clean?"
+
+Pure type checks (svelte-check) and graph validators (references, browser-globals, help-ids, knowledge dry-run, airboss-ref) always run full regardless of scope. `--verbose` streams output live as steps finish.
+
+Before pushing or in CI: always `bun run check all`.
 
 ## Biome
 
