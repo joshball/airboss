@@ -7,14 +7,14 @@ scope: 6 failures from /tmp/e2e-audit-2026-05-08/full-run.log -- the [setup] pro
 
 ## Summary
 
-| Failure                                                          | Category                          | Action                |
-| ---------------------------------------------------------------- | --------------------------------- | --------------------- |
-| [setup] global.setup.ts:9 -- authenticate learner                | infra-flake (cold-compile)        | fixed (timeout bumps) |
-| [setup] global.setup.ts:44 -- seed handbook errata fixtures      | infra-flake (cold DB pool)        | fixed (timeout bump)  |
-| [chromium-unauthed] auth.spec.ts:16 -- protected route redirects | infra-flake (cold-compile)        | fixed (timeout bump)  |
-| [chromium-unauthed] auth.spec.ts:52 -- happy login lands         | infra-flake + test-cosmetic       | fixed (both)          |
-| [chromium-unauthed] auth.spec.ts:68 -- safe redirectTo           | infra-flake (cold-compile)        | fixed (timeout bumps) |
-| [chromium-unauthed] auth.spec.ts:81 -- unsafe redirectTo         | infra-flake (cold-compile)        | fixed (timeout bumps) |
+| Failure                                                          | Category                    | Action                |
+| ---------------------------------------------------------------- | --------------------------- | --------------------- |
+| [setup] global.setup.ts:9 -- authenticate learner                | infra-flake (cold-compile)  | fixed (timeout bumps) |
+| [setup] global.setup.ts:44 -- seed handbook errata fixtures      | infra-flake (cold DB pool)  | fixed (timeout bump)  |
+| [chromium-unauthed] auth.spec.ts:16 -- protected route redirects | infra-flake (cold-compile)  | fixed (timeout bump)  |
+| [chromium-unauthed] auth.spec.ts:52 -- happy login lands         | infra-flake + test-cosmetic | fixed (both)          |
+| [chromium-unauthed] auth.spec.ts:68 -- safe redirectTo           | infra-flake (cold-compile)  | fixed (timeout bumps) |
+| [chromium-unauthed] auth.spec.ts:81 -- unsafe redirectTo         | infra-flake (cold-compile)  | fixed (timeout bumps) |
 
 All 6 fixed in this worktree. The setup `authenticate learner` failure was the load-bearing one -- 19 dependent specs in the `chromium` project were skipped ("did not run") because the setup test failed. Fixing it should unblock that whole tree.
 

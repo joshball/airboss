@@ -7,17 +7,17 @@ scope: 9 failures from /tmp/e2e-audit-2026-05-08/full-run.log -- the [flightbag]
 
 ## Summary
 
-| Failure                                                                                  | Category                  | Action                  |
-| ---------------------------------------------------------------------------------------- | ------------------------- | ----------------------- |
-| read-state.spec.ts:28 -- chapter page has no Read N of M indicator when anonymous        | infra-flake (cold-compile)| fixed (domcontentloaded)|
-| reader.spec.ts:80 -- 14 CFR 91 Part landing surfaces the eCFR fallback                   | test-cosmetic             | fixed (assertion rewrite)|
-| reader.spec.ts:117 -- an empty section renders prev/next/up nav                          | content-gap               | skipped + re-enable trigger|
-| reader.spec.ts:153 -- handbook table renders inline with the body                        | infra-flake (cold-compile)| fixed (domcontentloaded)|
-| reader.spec.ts:173 -- chapter page exposes the metadata panel                            | infra-flake (cold-compile)| fixed (domcontentloaded)|
-| reader.spec.ts:182 -- IPH chapter 2 preamble renders the inline figure (Figure 2-1)      | infra-flake (cold-compile)| fixed (domcontentloaded)|
-| reader.spec.ts:200 -- IFH §2.5 renders the inline figure for "Figure 2-5"                | infra-flake (cold-compile)| fixed (domcontentloaded)|
-| reader.spec.ts:224 -- handbook section page exposes a Source cluster with external link  | infra-flake (cold-compile)| fixed (domcontentloaded)|
-| representative-pages.spec.ts:190 -- cfr/14cfr121 first (121.1200-121.1399)               | real-regression           | fixed (regex tightening) |
+| Failure                                                                                 | Category                   | Action                      |
+| --------------------------------------------------------------------------------------- | -------------------------- | --------------------------- |
+| read-state.spec.ts:28 -- chapter page has no Read N of M indicator when anonymous       | infra-flake (cold-compile) | fixed (domcontentloaded)    |
+| reader.spec.ts:80 -- 14 CFR 91 Part landing surfaces the eCFR fallback                  | test-cosmetic              | fixed (assertion rewrite)   |
+| reader.spec.ts:117 -- an empty section renders prev/next/up nav                         | content-gap                | skipped + re-enable trigger |
+| reader.spec.ts:153 -- handbook table renders inline with the body                       | infra-flake (cold-compile) | fixed (domcontentloaded)    |
+| reader.spec.ts:173 -- chapter page exposes the metadata panel                           | infra-flake (cold-compile) | fixed (domcontentloaded)    |
+| reader.spec.ts:182 -- IPH chapter 2 preamble renders the inline figure (Figure 2-1)     | infra-flake (cold-compile) | fixed (domcontentloaded)    |
+| reader.spec.ts:200 -- IFH §2.5 renders the inline figure for "Figure 2-5"               | infra-flake (cold-compile) | fixed (domcontentloaded)    |
+| reader.spec.ts:224 -- handbook section page exposes a Source cluster with external link | infra-flake (cold-compile) | fixed (domcontentloaded)    |
+| representative-pages.spec.ts:190 -- cfr/14cfr121 first (121.1200-121.1399)              | real-regression            | fixed (regex tightening)    |
 
 8 of 9 fixed in commit `20ff686c`. 1 skipped (IFH §1.1 empty section -- no representative content after #660). All on branch `ball/e2e-flightbag-triage` for dispatcher consolidation.
 
