@@ -9,6 +9,7 @@ Single entry point for "what should I work on?" in airboss.
 - Closing out `tracking-system-overhaul` -- Phase 5 (NOW.md trim + log backfill) and Phase 7 (doc home consolidation) are the active fronts.
 - After Phase 5 + 7 land, the `wp-hangar-roadmap-view` WP can pick up the in-app surface evolution.
 - Manual test passes on the cert-syllabus surfaces (#321 / #323 / #324) still owed.
+- `course-primitive` WP shipped (PRs #713, #721, #728, #730, #732, #734, #736, #737; doc fixes #731, #739). Course is a peer primitive to Syllabus; weather-course content authoring unblocked.
 
 ## Live views
 
