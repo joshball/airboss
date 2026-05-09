@@ -1,0 +1,55 @@
+{
+	"product": "n0r",
+	"product_long_name": "NEXRAD Composite Reflectivity (Base Scan, Conventional Resolution)",
+	"timestamp_iso": "2024-05-21T22:00:00Z",
+	"source_url": "https://mesonet.agron.iastate.edu/archive/data/2024/05/21/GIS/uscomp/n0r_202405212200.png",
+	"world_file_url": "https://mesonet.agron.iastate.edu/archive/data/2024/05/21/GIS/uscomp/n0r_202405212200.wld",
+	"format": {
+		"png_width_px": 6000,
+		"png_height_px": 2600,
+		"bit_depth": 8,
+		"color_type": "indexed (PLTE, 256 entries)",
+		"transparency_chunk": "tRNS not present -- index 0..6 are opaque black (no-data); indices 7..21 are the NWS reflectivity ramp; 22..255 are unused (also black)"
+	},
+	"georeference": {
+		"projection": "Plate Carree (EPSG:4326, geographic / equirectangular)",
+		"world_file_raw": "0.01 0 0 -0.01 -126.0 50.0",
+		"pixel_width_deg": 0.01,
+		"pixel_height_deg": 0.01,
+		"top_left_lon": -126.0,
+		"top_left_lat": 50.0,
+		"bottom_right_lon": -66.0,
+		"bottom_right_lat": 24.0,
+		"extent_lon_deg": 60.0,
+		"extent_lat_deg": 26.0
+	},
+	"palette_n0r": {
+		"index_to_dbz_step": "0..6 = no-data; 7 = -30 dBZ approx; ... ; 21 = +75 dBZ approx (5 dBZ steps)",
+		"reference": "https://www.weather.gov/jetstream/refl",
+		"observed_palette_first_22": [
+			[0, 0, 0],
+			[0, 0, 0],
+			[0, 0, 0],
+			[0, 0, 0],
+			[0, 0, 0],
+			[0, 0, 0],
+			[0, 0, 0],
+			[0, 236, 236],
+			[1, 160, 246],
+			[0, 0, 246],
+			[0, 255, 0],
+			[0, 200, 0],
+			[0, 144, 0],
+			[255, 255, 0],
+			[231, 192, 0],
+			[255, 144, 0],
+			[255, 0, 0],
+			[214, 0, 0],
+			[192, 0, 0],
+			[255, 0, 255],
+			[153, 85, 201],
+			[255, 255, 255]
+		]
+	},
+	"chosen_for_spike": "n0r (461 KB, 6000x2600). n0q super-res variant (3.3 MB, 12000x5200) is also available; n0r is plenty for CONUS-scale rendering and faster to iterate on."
+}
