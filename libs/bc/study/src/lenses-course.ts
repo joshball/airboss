@@ -29,20 +29,27 @@
  *   - libs/bc/study/src/courses.ts                  -- getCourseStepsByCourse
  */
 
-import { ASSESSMENT_METHOD_VALUES, type AssessmentMethod, NODE_MASTERY_GATES } from '@ab/constants';
-import { and, eq } from 'drizzle-orm';
-import { getCourseStepsByCourse } from './courses';
 import {
+	ASSESSMENT_METHOD_VALUES,
+	type AssessmentMethod,
+	NODE_MASTERY_GATES,
+	SYLLABUS_NODE_LEVELS,
+} from '@ab/constants';
+import { and, eq, inArray } from 'drizzle-orm';
+import { getCourseGaps, getCourseStepsByCourse } from './courses';
+import {
+	type CertGap,
 	computeMasteryRollup,
 	type Lens,
 	type LensLeaf,
 	type LensLeafMastery,
+	type LensLeafSources,
 	type LensTreeNode,
 	type MasteryRollup,
 } from './lenses';
 import { type GateState, getNodeEvidenceStateMap, type NodeEvidenceState } from './mastery';
 import type { CourseStepRow } from './schema';
-import { course, goalCourse } from './schema';
+import { course, goalCourse, syllabusNode, syllabusNodeLink } from './schema';
 
 // ---------------------------------------------------------------------------
 // Course lens
@@ -208,6 +215,233 @@ export const courseLens: Lens<CourseLensFilters> = async (db, userId, input) => 
 		tree: [root],
 		rollup: computeMasteryRollup(courseRollupBuckets),
 		leaves: allLensLeaves,
+	};
+};
+
+// ---------------------------------------------------------------------------
+// Course + cert overlay lens
+// ---------------------------------------------------------------------------
+
+export interface CourseOverlayLensFilters {
+	/** The course to project (one root per call). */
+	courseId: string;
+	/**
+	 * The cert syllabus to overlay on the course. Need NOT be referenced by
+	 * the goal -- the overlay is a "what would this course look like under
+	 * cert X?" projection. The lens does not gate on `goal_syllabus`
+	 * presence; the cert is supplied directly by the caller.
+	 */
+	syllabusId: string;
+}
+
+/**
+ * Course + cert overlay lens. Emits the same two-level tree as `courseLens`
+ * (course root -> sections -> step leaves), with two additional pieces of
+ * data:
+ *
+ *   1. Each `LensLeaf.sources` is set to:
+ *        `{ inCourse: true, inCert: <bool>, certCode: <syllabus_node.code | undefined> }`
+ *      `inCert` is true when the step's `knowledge_node_id` is reachable
+ *      from any `syllabus_node_link` whose `syllabus_node` is rooted under
+ *      `filters.syllabusId`. `certCode` carries the matching syllabus_node
+ *      code so the UI can render the cert anchor without a second query.
+ *      When a step's knowledge node is reachable from multiple cert leaves,
+ *      `certCode` picks the lowest-ordinal-then-lexical-code leaf for
+ *      stable output.
+ *   2. `LensResult.certGaps` is populated with every cert leaf (level
+ *      `'element'`, `is_leaf=true`) under `syllabusId` whose linked
+ *      knowledge nodes are NOT covered by any course step. The gap list is
+ *      always populated, even when the course covers every cert leaf -- in
+ *      that case `certGaps` is the empty array `[]` (not `undefined`), so
+ *      consumers can distinguish "checked, found zero gaps" from "no
+ *      overlay was computed."
+ *
+ * The gap calculation is delegated to {@link getCourseGaps} so the overlay
+ * lens and any non-tree consumer (a banner that says "this course leaves N
+ * cert leaves uncovered") share one canonical algorithm.
+ *
+ * The lens accepts a `syllabusId` that the goal does NOT reference via
+ * `goal_syllabus`. Useful for "what would this course look like if I were
+ * pursuing PPL?" exploration.
+ *
+ * Returns the empty result (with `certGaps: []`) when the course id is
+ * missing or when the goal is set but does not consume the course --
+ * matches `courseLens`'s "goal has no goal_course row" path.
+ */
+export const courseWithCertOverlayLens: Lens<CourseOverlayLensFilters> = async (db, userId, input) => {
+	const courseId = input.filters?.courseId;
+	const syllabusId = input.filters?.syllabusId;
+	if (courseId === undefined || courseId === '' || syllabusId === undefined || syllabusId === '') {
+		return { tree: [], rollup: emptyRollup(), leaves: [], certGaps: [] };
+	}
+
+	// Goal weight resolution mirrors `courseLens`: anonymous browse falls
+	// back to weight=1.0; a goal that does not consume the course returns
+	// the empty result (with `certGaps: []`). Composite PK on
+	// (goal_id, course_id) -> at most one row.
+	let goalWeight = 1.0;
+	if (input.goal !== null) {
+		const linkRows = await db
+			.select({ weight: goalCourse.weight })
+			.from(goalCourse)
+			.where(and(eq(goalCourse.goalId, input.goal.id), eq(goalCourse.courseId, courseId)))
+			.limit(1);
+		const link = linkRows[0];
+		if (link === undefined) {
+			return { tree: [], rollup: emptyRollup(), leaves: [], certGaps: [] };
+		}
+		goalWeight = link.weight;
+	}
+
+	// Resolve the course row + every step in it. `getCourseStepsByCourse`
+	// returns rows in tree-walk order (sections before their child steps,
+	// each parent's children sorted by ordinal).
+	const courseRows = await db.select().from(course).where(eq(course.id, courseId)).limit(1);
+	const courseRow = courseRows[0];
+	if (courseRow === undefined) {
+		return { tree: [], rollup: emptyRollup(), leaves: [], certGaps: [] };
+	}
+	const steps = await getCourseStepsByCourse(courseId, db);
+	if (steps.length === 0) {
+		// Empty course -- still compute the gap list so consumers can render
+		// the cert side ("course is empty; PPL ACS still requires N leaves").
+		const gaps = await getCourseGaps(input.goal?.id ?? '', courseId, syllabusId, db);
+		const root: LensTreeNode = {
+			id: courseRow.id,
+			level: 'course',
+			title: courseRow.title,
+			rollup: emptyRollup(),
+			children: [],
+		};
+		return { tree: [root], rollup: emptyRollup(), leaves: [], certGaps: gaps };
+	}
+
+	// Group rows: sections (parent_id NULL) and steps under each section.
+	const sectionRows: CourseStepRow[] = [];
+	const stepsBySection = new Map<string, CourseStepRow[]>();
+	for (const row of steps) {
+		if (row.parentId === null) {
+			sectionRows.push(row);
+		} else {
+			const list = stepsBySection.get(row.parentId) ?? [];
+			list.push(row);
+			stepsBySection.set(row.parentId, list);
+		}
+	}
+	sectionRows.sort((a, b) => a.ordinal - b.ordinal);
+
+	// Per-step mastery. Same code path as `courseLens`.
+	const allNodeIds = steps
+		.filter((s) => s.knowledgeNodeId !== null)
+		.map((s) => s.knowledgeNodeId)
+		.filter((id): id is string => id !== null);
+	const evidenceByNode =
+		input.goal !== null && allNodeIds.length > 0
+			? await getNodeEvidenceStateMap(userId, allNodeIds, db)
+			: new Map<string, NodeEvidenceState>();
+
+	// Cert overlay: for each step's knowledge_node_id, determine whether the
+	// node is reachable from a cert leaf rooted under `syllabusId`. Build
+	// the lookup once via a join: every (knowledge_node_id ->
+	// syllabus_node.code) pair where the cert leaf is under our syllabus.
+	// When a node is reachable from multiple cert leaves we pick the lowest
+	// (ordinal, code) leaf for stable output (sorted server-side, picked
+	// client-side).
+	const certCodeByNode = new Map<string, string>();
+	if (allNodeIds.length > 0) {
+		const overlayRows = await db
+			.select({
+				knowledgeNodeId: syllabusNodeLink.knowledgeNodeId,
+				code: syllabusNode.code,
+				ordinal: syllabusNode.ordinal,
+			})
+			.from(syllabusNodeLink)
+			.innerJoin(syllabusNode, eq(syllabusNode.id, syllabusNodeLink.syllabusNodeId))
+			.where(
+				and(
+					eq(syllabusNode.syllabusId, syllabusId),
+					eq(syllabusNode.level, SYLLABUS_NODE_LEVELS.ELEMENT),
+					eq(syllabusNode.isLeaf, true),
+					inArray(syllabusNodeLink.knowledgeNodeId, allNodeIds),
+				),
+			);
+		// Group by knowledge_node_id; keep the smallest (ordinal, code) leaf.
+		// One pass: track the current best per node and replace on a smaller
+		// (ordinal, code) tuple.
+		const bestByNode = new Map<string, { ordinal: number; code: string }>();
+		for (const row of overlayRows) {
+			const current = bestByNode.get(row.knowledgeNodeId);
+			if (
+				current === undefined ||
+				row.ordinal < current.ordinal ||
+				(row.ordinal === current.ordinal && row.code.localeCompare(current.code) < 0)
+			) {
+				bestByNode.set(row.knowledgeNodeId, { ordinal: row.ordinal, code: row.code });
+			}
+		}
+		for (const [nodeId, best] of bestByNode) {
+			certCodeByNode.set(nodeId, best.code);
+		}
+	}
+
+	const allLensLeaves: LensLeaf[] = [];
+	const sectionTreeNodes: LensTreeNode[] = [];
+	const courseRollupBuckets: Array<{ mastery: LensLeafMastery; weight: number }> = [];
+
+	for (const section of sectionRows) {
+		const childSteps = (stepsBySection.get(section.id) ?? []).slice().sort((a, b) => a.ordinal - b.ordinal);
+		const sectionLeaves: LensLeaf[] = [];
+		const sectionRollupBuckets: Array<{ mastery: LensLeafMastery; weight: number }> = [];
+
+		for (const step of childSteps) {
+			if (step.knowledgeNodeId === null) continue;
+			const evidence = evidenceByNode.get(step.knowledgeNodeId);
+			const mastery = computeStepLeafMastery(evidence);
+			const certCode = certCodeByNode.get(step.knowledgeNodeId);
+			const sources: LensLeafSources = {
+				inCourse: true,
+				inCert: certCode !== undefined,
+				...(certCode !== undefined ? { certCode } : {}),
+			};
+			const leaf: LensLeaf = {
+				id: step.id,
+				knowledgeNodeId: step.knowledgeNodeId,
+				title: step.title,
+				requiredBloom: null,
+				mastery,
+				sources,
+			};
+			sectionLeaves.push(leaf);
+			sectionRollupBuckets.push({ mastery, weight: goalWeight });
+			allLensLeaves.push(leaf);
+			courseRollupBuckets.push({ mastery, weight: goalWeight });
+		}
+
+		sectionTreeNodes.push({
+			id: section.id,
+			level: 'section',
+			title: section.title,
+			rollup: computeMasteryRollup(sectionRollupBuckets),
+			children: [],
+			leaves: sectionLeaves,
+		});
+	}
+
+	const root: LensTreeNode = {
+		id: courseRow.id,
+		level: 'course',
+		title: courseRow.title,
+		rollup: computeMasteryRollup(courseRollupBuckets),
+		children: sectionTreeNodes,
+	};
+
+	const certGaps: CertGap[] = await getCourseGaps(input.goal?.id ?? '', courseId, syllabusId, db);
+
+	return {
+		tree: [root],
+		rollup: computeMasteryRollup(courseRollupBuckets),
+		leaves: allLensLeaves,
+		certGaps,
 	};
 };
 

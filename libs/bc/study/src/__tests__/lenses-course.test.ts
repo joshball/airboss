@@ -23,14 +23,29 @@
  */
 
 import { bauthUser } from '@ab/auth/schema';
-import { COURSE_KINDS, COURSE_STEP_LEVELS, GOAL_STATUSES } from '@ab/constants';
+import { COURSE_KINDS, COURSE_STEP_LEVELS, GOAL_STATUSES, SYLLABUS_STATUSES } from '@ab/constants';
 import { db } from '@ab/db/connection';
-import { generateAuthId, generateGoalId } from '@ab/utils';
+import {
+	generateAuthId,
+	generateGoalId,
+	generateSyllabusId,
+	generateSyllabusNodeId,
+	generateSyllabusNodeLinkId,
+} from '@ab/utils';
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { upsertCourse, upsertCourseStep } from '../courses';
-import { courseLens } from '../lenses-course';
-import { course, courseStep, goal, goalCourse, knowledgeNode } from '../schema';
+import { getCourseGaps, upsertCourse, upsertCourseStep } from '../courses';
+import { courseLens, courseWithCertOverlayLens } from '../lenses-course';
+import {
+	course,
+	courseStep,
+	goal,
+	goalCourse,
+	knowledgeNode,
+	syllabus,
+	syllabusNode,
+	syllabusNodeLink,
+} from '../schema';
 
 const SUITE_TAG = `lens-course-test-${Date.now()}-${Math.floor(Math.random() * 1_000_000)}`;
 const SUITE_TOKEN = Math.floor(Math.random() * 0x100_000_000)
@@ -44,9 +59,25 @@ const TEST_USER_ID = generateAuthId();
 // syllabus -- the lens computes per-node evidence directly via
 // `getNodeEvidenceStateMap`, which is the same path the Domain lens uses for
 // non-syllabus leaves.
+//
+// `NODE_OUTSIDE_ID` is used by the overlay scenarios: a course step that
+// links to a knowledge node which lives outside any cert syllabus.
 const NODE_A_ID = `kn-${SUITE_TAG}-a`;
 const NODE_B_ID = `kn-${SUITE_TAG}-b`;
 const NODE_C_ID = `kn-${SUITE_TAG}-c`;
+const NODE_OUTSIDE_ID = `kn-${SUITE_TAG}-outside`;
+
+// Test syllabus -- a 3-leaf cert used by the overlay scenarios. Each leaf
+// links to one of NODE_A_ID / NODE_B_ID / NODE_C_ID via syllabus_node_link.
+// `NODE_OUTSIDE_ID` is intentionally NOT linked from any syllabus leaf, so
+// a course covering it produces `inCert: false` per-step output.
+const SYL_ID = generateSyllabusId();
+const SYL_SLUG = `lens-overlay-test-syl-${SUITE_TOKEN}`;
+const SYL_AREA_ID = generateSyllabusNodeId();
+const SYL_TASK_ID = generateSyllabusNodeId();
+const SYL_LEAF_A_ID = generateSyllabusNodeId();
+const SYL_LEAF_B_ID = generateSyllabusNodeId();
+const SYL_LEAF_C_ID = generateSyllabusNodeId();
 
 beforeAll(async () => {
 	const now = new Date();
@@ -63,7 +94,7 @@ beforeAll(async () => {
 	});
 
 	await db.insert(knowledgeNode).values(
-		[NODE_A_ID, NODE_B_ID, NODE_C_ID].map((id) => ({
+		[NODE_A_ID, NODE_B_ID, NODE_C_ID, NODE_OUTSIDE_ID].map((id) => ({
 			id,
 			title: id,
 			domain: 'aerodynamics',
@@ -90,15 +121,162 @@ beforeAll(async () => {
 			updatedAt: now,
 		})),
 	);
+
+	// Test syllabus tree -- one area, one task, three leaf elements. Each
+	// leaf links to one of the test knowledge nodes (A/B/C); the fourth
+	// node (`NODE_OUTSIDE_ID`) is unlinked so course steps that reference
+	// it produce `inCert: false` per-step output.
+	await db.insert(syllabus).values({
+		id: SYL_ID,
+		slug: SYL_SLUG,
+		kind: 'acs',
+		title: 'Test syllabus for overlay lens',
+		edition: `faa-s-acs-overlay-${SUITE_TOKEN}`,
+		status: SYLLABUS_STATUSES.ACTIVE,
+		seedOrigin: SUITE_TAG,
+		createdAt: now,
+		updatedAt: now,
+	});
+	await db.insert(syllabusNode).values([
+		{
+			id: SYL_AREA_ID,
+			syllabusId: SYL_ID,
+			parentId: null,
+			level: 'area',
+			ordinal: 1,
+			code: `${SUITE_TOKEN}-V`,
+			title: 'Test Area',
+			description: '',
+			triad: null,
+			requiredBloom: null,
+			isLeaf: false,
+			airbossRef: null,
+			citations: [],
+			contentHash: null,
+			seedOrigin: SUITE_TAG,
+			createdAt: now,
+			updatedAt: now,
+		},
+		{
+			id: SYL_TASK_ID,
+			syllabusId: SYL_ID,
+			parentId: SYL_AREA_ID,
+			level: 'task',
+			ordinal: 1,
+			code: `${SUITE_TOKEN}-V.A`,
+			title: 'Test Task',
+			description: '',
+			triad: null,
+			requiredBloom: null,
+			isLeaf: false,
+			airbossRef: null,
+			citations: [],
+			contentHash: null,
+			seedOrigin: SUITE_TAG,
+			createdAt: now,
+			updatedAt: now,
+		},
+		{
+			id: SYL_LEAF_A_ID,
+			syllabusId: SYL_ID,
+			parentId: SYL_TASK_ID,
+			level: 'element',
+			ordinal: 1,
+			code: `${SUITE_TOKEN}-V.A.K1`,
+			title: 'Leaf A (-> NODE_A)',
+			description: '',
+			triad: 'knowledge',
+			requiredBloom: 'understand',
+			isLeaf: true,
+			airbossRef: `airboss-ref:acs/ppl-airplane-6c/area-05/task-a/elem-k01`,
+			citations: [],
+			contentHash: null,
+			seedOrigin: SUITE_TAG,
+			createdAt: now,
+			updatedAt: now,
+		},
+		{
+			id: SYL_LEAF_B_ID,
+			syllabusId: SYL_ID,
+			parentId: SYL_TASK_ID,
+			level: 'element',
+			ordinal: 2,
+			code: `${SUITE_TOKEN}-V.A.K2`,
+			title: 'Leaf B (-> NODE_B)',
+			description: '',
+			triad: 'knowledge',
+			requiredBloom: 'understand',
+			isLeaf: true,
+			airbossRef: `airboss-ref:acs/ppl-airplane-6c/area-05/task-a/elem-k02`,
+			citations: [],
+			contentHash: null,
+			seedOrigin: SUITE_TAG,
+			createdAt: now,
+			updatedAt: now,
+		},
+		{
+			id: SYL_LEAF_C_ID,
+			syllabusId: SYL_ID,
+			parentId: SYL_TASK_ID,
+			level: 'element',
+			ordinal: 3,
+			code: `${SUITE_TOKEN}-V.A.K3`,
+			title: 'Leaf C (-> NODE_C)',
+			description: '',
+			triad: 'knowledge',
+			requiredBloom: 'understand',
+			isLeaf: true,
+			airbossRef: `airboss-ref:acs/ppl-airplane-6c/area-05/task-a/elem-k03`,
+			citations: [],
+			contentHash: null,
+			seedOrigin: SUITE_TAG,
+			createdAt: now,
+			updatedAt: now,
+		},
+	]);
+	await db.insert(syllabusNodeLink).values([
+		{
+			id: generateSyllabusNodeLinkId(),
+			syllabusNodeId: SYL_LEAF_A_ID,
+			knowledgeNodeId: NODE_A_ID,
+			weight: 1.0,
+			notes: '',
+			seedOrigin: SUITE_TAG,
+			createdAt: now,
+		},
+		{
+			id: generateSyllabusNodeLinkId(),
+			syllabusNodeId: SYL_LEAF_B_ID,
+			knowledgeNodeId: NODE_B_ID,
+			weight: 1.0,
+			notes: '',
+			seedOrigin: SUITE_TAG,
+			createdAt: now,
+		},
+		{
+			id: generateSyllabusNodeLinkId(),
+			syllabusNodeId: SYL_LEAF_C_ID,
+			knowledgeNodeId: NODE_C_ID,
+			weight: 1.0,
+			notes: '',
+			seedOrigin: SUITE_TAG,
+			createdAt: now,
+		},
+	]);
 });
 
 afterAll(async () => {
 	// Order matters: goal cascades to goal_course on goal delete, but
-	// course_step / course / knowledge_node are independent FKs. Clean in
-	// the same order courses.test.ts does.
+	// course_step / course / knowledge_node are independent FKs.
+	// syllabus_node_link FK -> knowledge_node is RESTRICT, so the link rows
+	// must drop before the knowledge_node rows. Clean in the same order
+	// courses.test.ts does.
 	await db.delete(goal).where(eq(goal.userId, TEST_USER_ID));
 	await db.delete(courseStep).where(eq(courseStep.seedOrigin, SUITE_TAG));
 	await db.delete(course).where(eq(course.seedOrigin, SUITE_TAG));
+	await db.delete(syllabusNodeLink).where(eq(syllabusNodeLink.seedOrigin, SUITE_TAG));
+	await db.delete(syllabusNode).where(eq(syllabusNode.seedOrigin, SUITE_TAG));
+	await db.delete(syllabus).where(eq(syllabus.seedOrigin, SUITE_TAG));
 	await db.delete(knowledgeNode).where(eq(knowledgeNode.seedOrigin, SUITE_TAG));
 	await db.delete(bauthUser).where(eq(bauthUser.id, TEST_USER_ID));
 });
@@ -536,5 +714,236 @@ describe('courseLens -- anonymous browse', () => {
 			filters: { courseId: '' },
 		});
 		expect(empty1.tree).toEqual([]);
+	});
+});
+
+// ---------------------------------------------------------------------------
+// Phase 5: courseWithCertOverlayLens + getCourseGaps
+// ---------------------------------------------------------------------------
+
+/**
+ * Helper: build a course with one section + the given (code, title, nodeId)
+ * tuples as steps. Returns the course id + matching goal id (linked at
+ * weight 1.0) so tests get an isolated context per scenario.
+ */
+async function seedOverlayCourse(
+	courseSlug: string,
+	steps: ReadonlyArray<{ code: string; title: string; nodeId: string }>,
+): Promise<{ courseId: string; goalId: string }> {
+	const ctx = await seedCourseWithGoal(courseSlug, 1.0);
+	const section = await upsertCourseStep({
+		courseId: ctx.courseId,
+		parentId: null,
+		level: COURSE_STEP_LEVELS.SECTION,
+		ordinal: 1,
+		code: 's1',
+		title: 'Section',
+		bodyMd: '',
+		knowledgeNodeId: null,
+		contentHash: `ovl-${ctx.courseId}-s1`,
+		seedOrigin: SUITE_TAG,
+	});
+	for (let i = 0; i < steps.length; i++) {
+		const step = steps[i];
+		if (step === undefined) continue;
+		await upsertCourseStep({
+			courseId: ctx.courseId,
+			parentId: section.id,
+			level: COURSE_STEP_LEVELS.STEP,
+			ordinal: i + 1,
+			code: step.code,
+			title: step.title,
+			bodyMd: '',
+			knowledgeNodeId: step.nodeId,
+			contentHash: `ovl-${ctx.courseId}-${step.code}`,
+			seedOrigin: SUITE_TAG,
+		});
+	}
+	return ctx;
+}
+
+describe('courseWithCertOverlayLens -- course covers all cert leaves', () => {
+	it('returns an empty certGaps array (not undefined) when every cert leaf is covered', async () => {
+		// Course step set: A, B, C -- exactly mirrors the syllabus leaves.
+		// The gap calculation should find zero uncovered cert leaves; the
+		// result must populate `certGaps` with `[]` so consumers can
+		// distinguish "checked, found zero" from "no overlay computed."
+		const { courseId, goalId } = await seedOverlayCourse(slug('overlay-full-cover'), [
+			{ code: 's1.a', title: 'Cover A', nodeId: NODE_A_ID },
+			{ code: 's1.b', title: 'Cover B', nodeId: NODE_B_ID },
+			{ code: 's1.c', title: 'Cover C', nodeId: NODE_C_ID },
+		]);
+		const goalRow = await loadGoal(goalId);
+
+		const result = await courseWithCertOverlayLens(db, TEST_USER_ID, {
+			goal: goalRow,
+			filters: { courseId, syllabusId: SYL_ID },
+		});
+
+		// `certGaps` is populated as an empty array, NOT undefined.
+		expect(result.certGaps).toBeDefined();
+		expect(result.certGaps).toEqual([]);
+
+		// Every step's `sources` reflects in-cert coverage with the matching
+		// cert code populated.
+		expect(result.leaves).toHaveLength(3);
+		for (const leaf of result.leaves) {
+			expect(leaf.sources?.inCourse).toBe(true);
+			expect(leaf.sources?.inCert).toBe(true);
+			expect(leaf.sources?.certCode).toBeDefined();
+		}
+		// And the standalone `getCourseGaps` agrees.
+		const standaloneGaps = await getCourseGaps(goalId, courseId, SYL_ID);
+		expect(standaloneGaps).toEqual([]);
+	});
+});
+
+describe('courseWithCertOverlayLens -- course covers some cert leaves', () => {
+	it('returns the uncovered leaves in certGaps and tags per-step inCert correctly', async () => {
+		// Course covers only A and B; cert leaf C remains uncovered.
+		const { courseId, goalId } = await seedOverlayCourse(slug('overlay-partial-cover'), [
+			{ code: 's1.a', title: 'Cover A', nodeId: NODE_A_ID },
+			{ code: 's1.b', title: 'Cover B', nodeId: NODE_B_ID },
+		]);
+		const goalRow = await loadGoal(goalId);
+
+		const result = await courseWithCertOverlayLens(db, TEST_USER_ID, {
+			goal: goalRow,
+			filters: { courseId, syllabusId: SYL_ID },
+		});
+
+		// Exactly one gap entry: leaf C.
+		expect(result.certGaps).toHaveLength(1);
+		const gap = result.certGaps?.[0];
+		expect(gap?.syllabusNodeId).toBe(SYL_LEAF_C_ID);
+		expect(gap?.code).toBe(`${SUITE_TOKEN}-V.A.K3`);
+		expect(gap?.knowledgeNodeIds).toEqual([NODE_C_ID]);
+		expect(gap?.requiredBloom).toBe('understand');
+
+		// Both covered steps tagged inCert; certCode populated with the
+		// matching cert leaf code.
+		expect(result.leaves).toHaveLength(2);
+		const aLeaf = result.leaves.find((l) => l.knowledgeNodeId === NODE_A_ID);
+		const bLeaf = result.leaves.find((l) => l.knowledgeNodeId === NODE_B_ID);
+		expect(aLeaf?.sources?.inCert).toBe(true);
+		expect(aLeaf?.sources?.certCode).toBe(`${SUITE_TOKEN}-V.A.K1`);
+		expect(bLeaf?.sources?.inCert).toBe(true);
+		expect(bLeaf?.sources?.certCode).toBe(`${SUITE_TOKEN}-V.A.K2`);
+
+		// Standalone helper agrees on the gap shape.
+		const standaloneGaps = await getCourseGaps(goalId, courseId, SYL_ID);
+		expect(standaloneGaps).toHaveLength(1);
+		expect(standaloneGaps[0]?.syllabusNodeId).toBe(SYL_LEAF_C_ID);
+	});
+});
+
+describe('courseWithCertOverlayLens -- step covers a node outside the syllabus', () => {
+	it('marks the step inCert: false and contributes no certGap entry', async () => {
+		// `NODE_OUTSIDE_ID` is not linked from any syllabus leaf in the
+		// fixture; a course step that covers it should produce
+		// `inCert: false`. The other two steps still cover cert leaves A
+		// and B, leaving only leaf C uncovered.
+		const { courseId, goalId } = await seedOverlayCourse(slug('overlay-outside-cert'), [
+			{ code: 's1.a', title: 'Cover A', nodeId: NODE_A_ID },
+			{ code: 's1.b', title: 'Cover B', nodeId: NODE_B_ID },
+			{ code: 's1.outside', title: 'Cover OUTSIDE', nodeId: NODE_OUTSIDE_ID },
+		]);
+		const goalRow = await loadGoal(goalId);
+
+		const result = await courseWithCertOverlayLens(db, TEST_USER_ID, {
+			goal: goalRow,
+			filters: { courseId, syllabusId: SYL_ID },
+		});
+
+		// Per-step provenance: A and B inCert; OUTSIDE not.
+		const aLeaf = result.leaves.find((l) => l.knowledgeNodeId === NODE_A_ID);
+		const bLeaf = result.leaves.find((l) => l.knowledgeNodeId === NODE_B_ID);
+		const outsideLeaf = result.leaves.find((l) => l.knowledgeNodeId === NODE_OUTSIDE_ID);
+		expect(aLeaf?.sources?.inCert).toBe(true);
+		expect(bLeaf?.sources?.inCert).toBe(true);
+		expect(outsideLeaf?.sources?.inCert).toBe(false);
+		expect(outsideLeaf?.sources?.certCode).toBeUndefined();
+
+		// Gap list contains only leaf C; the outside-cert step contributes
+		// nothing to the gap list (only cert leaves can be "gapped").
+		expect(result.certGaps).toHaveLength(1);
+		expect(result.certGaps?.[0]?.syllabusNodeId).toBe(SYL_LEAF_C_ID);
+	});
+});
+
+describe('courseWithCertOverlayLens -- syllabusId not referenced by goal', () => {
+	it('still computes the overlay against the supplied syllabus without erroring', async () => {
+		// Goal has a goal_course row for the test course but ZERO
+		// goal_syllabus rows -- the spec says the overlay lens accepts a
+		// syllabus the goal does not reference. Useful for "what would this
+		// course look like if I were pursuing PPL?" exploration.
+		const { courseId, goalId } = await seedOverlayCourse(slug('overlay-unrelated-syl'), [
+			{ code: 's1.a', title: 'Cover A', nodeId: NODE_A_ID },
+		]);
+		const goalRow = await loadGoal(goalId);
+
+		const result = await courseWithCertOverlayLens(db, TEST_USER_ID, {
+			goal: goalRow,
+			filters: { courseId, syllabusId: SYL_ID },
+		});
+
+		// No throw -> overlay computed. The course covers only leaf A; B
+		// and C remain uncovered.
+		expect(result.certGaps).toHaveLength(2);
+		const gapNodeIds = result.certGaps?.map((g) => g.syllabusNodeId).sort();
+		expect(gapNodeIds).toEqual([SYL_LEAF_B_ID, SYL_LEAF_C_ID].sort());
+
+		// And the per-step `sources` carries the cert code for leaf A.
+		const aLeaf = result.leaves.find((l) => l.knowledgeNodeId === NODE_A_ID);
+		expect(aLeaf?.sources?.inCert).toBe(true);
+		expect(aLeaf?.sources?.certCode).toBe(`${SUITE_TOKEN}-V.A.K1`);
+	});
+});
+
+describe('courseWithCertOverlayLens -- empty input handling', () => {
+	it('returns the empty result with certGaps=[] when filters are missing', async () => {
+		const result = await courseWithCertOverlayLens(db, TEST_USER_ID, {
+			goal: null,
+			filters: { courseId: '', syllabusId: SYL_ID },
+		});
+		expect(result.tree).toEqual([]);
+		expect(result.leaves).toEqual([]);
+		expect(result.certGaps).toEqual([]);
+	});
+
+	it('returns the empty result when the goal exists but holds no goal_course row for the course', async () => {
+		// Mirrors `courseLens`'s empty-link path: a goal that does not
+		// consume the course returns the empty result regardless of which
+		// syllabus is supplied.
+		const courseSlug = slug('overlay-unlinked-course');
+		const c = await upsertCourse({
+			slug: courseSlug,
+			kind: COURSE_KINDS.INSTRUCTOR,
+			title: 'Unlinked overlay course',
+			seedOrigin: SUITE_TAG,
+		});
+		const goalId = generateGoalId();
+		const now = new Date();
+		await db.insert(goal).values({
+			id: goalId,
+			userId: TEST_USER_ID,
+			title: 'Unlinked overlay goal',
+			notesMd: '',
+			status: GOAL_STATUSES.ACTIVE,
+			isPrimary: false,
+			targetDate: null,
+			seedOrigin: SUITE_TAG,
+			createdAt: now,
+			updatedAt: now,
+		});
+		const goalRow = await loadGoal(goalId);
+
+		const result = await courseWithCertOverlayLens(db, TEST_USER_ID, {
+			goal: goalRow,
+			filters: { courseId: c.id, syllabusId: SYL_ID },
+		});
+		expect(result.tree).toEqual([]);
+		expect(result.leaves).toEqual([]);
+		expect(result.certGaps).toEqual([]);
 	});
 });

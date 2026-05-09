@@ -16,20 +16,40 @@
  * deduped node set. Per-node weight is the max across reachable paths --
  * see the JSDoc on `getGoalNodeUnion` for the cross-source aggregation note.
  *
- * Course gap detection (`getCourseGaps`) and the lens layer (`courseLens`,
- * `courseWithCertOverlayLens`) ship in later phases of the course-primitive WP.
+ * Course gap detection (`getCourseGaps`, this file) cross-references a course
+ * against a cert syllabus and returns the cert leaves the course leaves
+ * uncovered. The lens layer (`courseLens`, `courseWithCertOverlayLens` in
+ * `./lenses-course.ts`) shares the same gap calculation: the overlay lens
+ * delegates to `getCourseGaps` so both surfaces produce the same gap list.
  *
  * See `docs/work-packages/course-primitive/` and ADR 016 refinement
  * (2026-05-08) for the model rationale.
  */
 
-import { COURSE_STATUSES, type CourseKind, type CourseStatus, type CourseStepLevel } from '@ab/constants';
+import {
+	type BloomLevel,
+	COURSE_STATUSES,
+	COURSE_STEP_LEVELS,
+	type CourseKind,
+	type CourseStatus,
+	type CourseStepLevel,
+	SYLLABUS_NODE_LEVELS,
+} from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import { createId } from '@ab/utils';
-import { asc, eq, sql } from 'drizzle-orm';
+import { and, asc, eq, inArray, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { UpsertReturnedNoRowError } from './errors';
-import { type CourseRow, type CourseStepRow, course, courseStep, goalCourse } from './schema';
+import type { CertGap } from './lenses';
+import {
+	type CourseRow,
+	type CourseStepRow,
+	course,
+	courseStep,
+	goalCourse,
+	syllabusNode,
+	syllabusNodeLink,
+} from './schema';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 
@@ -207,4 +227,128 @@ export async function upsertCourseStep(input: UpsertCourseStepInput, db: Db = de
 		.returning();
 	if (!row) throw new UpsertReturnedNoRowError('course_step', `${input.courseId}:${input.code}`);
 	return row;
+}
+
+// ---------------------------------------------------------------------------
+// Cert overlay -- gap detection
+// ---------------------------------------------------------------------------
+
+/**
+ * Cert leaves required by a syllabus that no step in the course covers.
+ *
+ * Algorithm:
+ *
+ *   1. Collect every leaf `syllabus_node` rooted under `syllabusId` (level
+ *      `'element'` AND `is_leaf = true` -- the ACS / PTS leaf shape).
+ *   2. For every leaf, collect its linked `knowledge_node_id` set via
+ *      `syllabus_node_link`. Multi-link leaves carry every linked node.
+ *   3. Collect the set of `knowledge_node_id` reached by the course (every
+ *      `course_step` row at `level='step'` under `courseId`).
+ *   4. Emit a {@link CertGap} for every cert leaf where NONE of its linked
+ *      knowledge nodes appear in the course's covered set. Leaves with zero
+ *      authored links count as gaps too -- the course can't possibly cover
+ *      a leaf that lists no knowledge nodes.
+ *
+ * The `goalId` parameter is reserved for future per-goal weighting; the
+ * current calculation is goal-agnostic (a gap is a gap regardless of which
+ * goal the learner holds, and the overlay lens accepts a syllabus id that the
+ * goal does not reference). Kept on the signature so the lens / non-tree
+ * consumers that call `getCourseGaps` stay shape-stable when goal-aware
+ * weighting lands.
+ *
+ * Output is stable-sorted by syllabus_node `(level, ordinal, code)` so the
+ * UI renders gaps in cert-traversal order regardless of insert order. When
+ * the syllabus does not exist or has no leaves, returns `[]`.
+ *
+ * Pure read; no writes. Safe to call from a route loader on every render.
+ */
+export async function getCourseGaps(
+	_goalId: string,
+	courseId: string,
+	syllabusId: string,
+	db: Db = defaultDb,
+): Promise<CertGap[]> {
+	// Step 1: every cert leaf rooted under the syllabus.
+	const leafRows = await db
+		.select({
+			id: syllabusNode.id,
+			code: syllabusNode.code,
+			title: syllabusNode.title,
+			ordinal: syllabusNode.ordinal,
+			requiredBloom: syllabusNode.requiredBloom,
+		})
+		.from(syllabusNode)
+		.where(
+			and(
+				eq(syllabusNode.syllabusId, syllabusId),
+				eq(syllabusNode.level, SYLLABUS_NODE_LEVELS.ELEMENT),
+				eq(syllabusNode.isLeaf, true),
+			),
+		);
+	if (leafRows.length === 0) return [];
+
+	// Step 2: every leaf -> knowledge_node link in one round trip.
+	const leafIds = leafRows.map((l) => l.id);
+	const linkRows =
+		leafIds.length === 0
+			? []
+			: await db
+					.select({
+						leafId: syllabusNodeLink.syllabusNodeId,
+						knowledgeNodeId: syllabusNodeLink.knowledgeNodeId,
+					})
+					.from(syllabusNodeLink)
+					.where(inArray(syllabusNodeLink.syllabusNodeId, leafIds));
+	const knowledgeIdsByLeaf = new Map<string, string[]>();
+	for (const id of leafIds) knowledgeIdsByLeaf.set(id, []);
+	for (const r of linkRows) {
+		const list = knowledgeIdsByLeaf.get(r.leafId);
+		if (list === undefined) continue;
+		list.push(r.knowledgeNodeId);
+	}
+
+	// Step 3: every knowledge_node covered by the course (level='step').
+	// Pulls only `knowledge_node_id` because we only need the set, not the
+	// row shape.
+	const stepRows = await db
+		.select({ knowledgeNodeId: courseStep.knowledgeNodeId })
+		.from(courseStep)
+		.where(and(eq(courseStep.courseId, courseId), eq(courseStep.level, COURSE_STEP_LEVELS.STEP)));
+	const coveredNodes = new Set<string>();
+	for (const r of stepRows) {
+		if (r.knowledgeNodeId !== null) coveredNodes.add(r.knowledgeNodeId);
+	}
+
+	// Step 4: emit a gap for every leaf where NO linked knowledge node is
+	// covered. Stable sort by (ordinal, code) so the output reads like a
+	// cert traversal even when the lower-level scan returned rows in a
+	// different order. The pre-sort ordinal lookup uses the source rows so
+	// the `requiredBloom` cast and the sort compare share the same row
+	// without an O(n) scan per compare.
+	const ordinalByLeaf = new Map<string, number>();
+	for (const leaf of leafRows) ordinalByLeaf.set(leaf.id, leaf.ordinal);
+
+	const gaps: CertGap[] = [];
+	for (const leaf of leafRows) {
+		const linked = knowledgeIdsByLeaf.get(leaf.id) ?? [];
+		const isCovered = linked.some((nodeId) => coveredNodes.has(nodeId));
+		if (isCovered) continue;
+		gaps.push({
+			syllabusNodeId: leaf.id,
+			code: leaf.code,
+			title: leaf.title,
+			requiredBloom: (leaf.requiredBloom as BloomLevel | null) ?? null,
+			knowledgeNodeIds: linked,
+		});
+	}
+	gaps.sort((a, b) => {
+		const ordinalA = ordinalByLeaf.get(a.syllabusNodeId) ?? 0;
+		const ordinalB = ordinalByLeaf.get(b.syllabusNodeId) ?? 0;
+		if (ordinalA !== ordinalB) return ordinalA - ordinalB;
+		// Two leaves with identical ordinals but distinct codes fall through
+		// to the lexical code compare so the output stays deterministic
+		// across re-runs.
+		return a.code.localeCompare(b.code);
+	});
+	return gaps;
 }
