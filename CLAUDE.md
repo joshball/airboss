@@ -208,6 +208,9 @@ Long-form explainer + every workflow: [docs/platform/TRACKING.md](docs/platform/
 
 ## Critical Rules
 
+- **There is no CI.** No GitHub Actions, no remote build pipeline, no automated checks on push or PR. The only gate is `bun run check` running locally before commit. When a doc, ADR, or skill says "CI check," it means a step in `bun run check`. Never write "CI" in agent output, ADRs, work packages, or commit messages -- write "`bun run check` step" or "lint script" or "guard."
+- **There are no Drizzle migrations.** The schema is greenfield: a single `drizzle/0000_initial.sql` is regenerated from `libs/**/schema.ts` whenever schema changes. Do NOT plan phased migration steps, deprecation windows, "drop column in commit N" sequences, or any reasoning that assumes a production DB needs to evolve in place. Schema cleanup = edit `schema.ts`, regenerate `0000_initial.sql`, reseed. One step, no phases.
+- **Do NOT use `AskUserQuestion` (the popup picker) for implementation choices.** When there's an established pattern in the codebase, follow it -- don't ask. When there's genuinely a decision Joshua needs to make, ask in plain text in the chat. Reserve `AskUserQuestion` only for true product-shape decisions where the agent has no defensible recommendation. Multi-option popups for "should I follow the pattern or break it" are always wrong; the pattern wins. If every non-recommended option is worse across the board, those aren't options -- the recommendation is the answer.
 - **Ensure features are finished completly** - always notify of status and list all remaining work, including punted.
 - **Do work in worktrees and in parallel if possible** - always work on worktrees. Be carefule cleaning up (ensure all is committed). and try and orchestrate work in parallel if possible.
 - **No `any`.** No magic strings. No implicit types.
