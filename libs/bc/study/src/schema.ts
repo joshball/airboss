@@ -35,6 +35,10 @@ import {
 	type Cert,
 	CONTENT_SOURCE_VALUES,
 	CONTENT_SOURCES,
+	COURSE_KIND_VALUES,
+	COURSE_STATUS_VALUES,
+	COURSE_STATUSES,
+	COURSE_STEP_LEVEL_VALUES,
 	CREDENTIAL_CATEGORY_VALUES,
 	CREDENTIAL_CLASS_VALUES,
 	CREDENTIAL_KIND_VALUES,
@@ -56,6 +60,8 @@ import {
 	HANDBOOK_READ_STATUS_VALUES,
 	HANDBOOK_READ_STATUSES,
 	KNOWLEDGE_EDGE_TYPE_VALUES,
+	KNOWLEDGE_NODE_KIND_VALUES,
+	KNOWLEDGE_NODE_KINDS,
 	MASTERY_STABILITY_DAYS,
 	MAX_SESSION_LENGTH,
 	MIN_SESSION_LENGTH,
@@ -222,6 +228,22 @@ export const knowledgeNode = studySchema.table(
 		 */
 		lifecycle: text('lifecycle').default(NODE_LIFECYCLES.SKELETON),
 		/**
+		 * Pedagogical kind of this knowledge node. Drives how the lens layer
+		 * frames the node when it is reached through a course step (e.g. a
+		 * `transition` node renders as a bridge between sections, not as a
+		 * full content step). The kind lives on the node, not on the course
+		 * step, so a node's semantic kind is global -- two courses cannot
+		 * disagree about whether `wx-airmass-frontal-transition` is a
+		 * concept or a transition. See course-primitive WP and ADR 016
+		 * "Refinement: Course as a peer primitive (2026-05-08)".
+		 *
+		 * Default `'concept'` is backfilled to every existing row at the
+		 * column-add migration. The seed validator does NOT require nodes
+		 * referenced by a course step to be a particular kind; the kind is
+		 * informational, not gating.
+		 */
+		kind: text('kind').notNull().default(KNOWLEDGE_NODE_KINDS.CONCEPT),
+		/**
 		 * Cert-syllabus WP migration flag. False on every existing row at
 		 * migration time; flips true after `migrate-references-to-structured.ts`
 		 * has reshaped the row's `references` JSONB array from `LegacyCitation`
@@ -272,6 +294,10 @@ export const knowledgeNode = studySchema.table(
 			'knowledge_node_study_priority_check',
 			sql.raw(`"study_priority" IS NULL OR "study_priority" IN (${inList(STUDY_PRIORITY_VALUES)})`),
 		),
+		// Pedagogical kind. NOT NULL with DEFAULT 'concept' so the column
+		// backfills on every existing row at migration time. Course-primitive
+		// WP / ADR 016 refinement.
+		kindCheck: check('knowledge_node_kind_check', sql.raw(`"kind" IN (${inList(KNOWLEDGE_NODE_KIND_VALUES)})`)),
 	}),
 );
 
@@ -2312,6 +2338,171 @@ export const goalNode = studySchema.table(
 	}),
 );
 
+// ---------------------------------------------------------------------------
+// Course-primitive WP -- ADR 016 refinement (2026-05-08), principle 11.
+//
+// Three new tables join the cert-syllabus block as peers to syllabus / goal:
+//   - course / course_step
+//   - goal_course
+//
+// Course is instructor-authored pedagogy (mutable, two-level section -> step
+// tree, step nodes link to knowledge_node). Syllabus stays FAA-shaped; the
+// cert-vs-course overlay is a render-time lens computation, not authored
+// data. See `docs/work-packages/course-primitive/spec.md` and
+// `docs/decisions/016-cert-syllabus-goal-model/decision.md`.
+// ---------------------------------------------------------------------------
+
+/**
+ * Instructor-authored pedagogy artifact. Mutable; not edition-versioned.
+ *
+ * Peer to {@link syllabus}: a goal can compose any combination of syllabi
+ * (cert-shaped) + courses (instructor-shaped) + ad-hoc nodes. The lens
+ * layer renders both shapes; the cert-vs-course overlay is computed at
+ * render time, not authored on the course.
+ */
+export const course = studySchema.table(
+	'course',
+	{
+		id: text('id').primaryKey(),
+		/** Stable kebab-case slug: `weather-comprehensive`, `advanced-wx-noreasters`. */
+		slug: text('slug').notNull(),
+		/** See {@link COURSE_KINDS}. Only `instructor` is authorable in this WP. */
+		kind: text('kind').notNull(),
+		title: text('title').notNull(),
+		description: text('description').notNull().default(''),
+		/** See {@link COURSE_STATUSES}. Default `active`. */
+		status: text('status').notNull().default(COURSE_STATUSES.ACTIVE),
+		seedOrigin: text('seed_origin'),
+		...timestamps(),
+	},
+	(t) => ({
+		courseSlugUnique: uniqueIndex('course_slug_unique').on(t.slug),
+		courseKindStatusIdx: index('course_kind_status_idx').on(t.kind, t.status),
+		kindCheck: check('course_kind_check', sql.raw(`"kind" IN (${inList(COURSE_KIND_VALUES)})`)),
+		statusCheck: check('course_status_check', sql.raw(`"status" IN (${inList(COURSE_STATUS_VALUES)})`)),
+		slugShapeCheck: check('course_slug_shape_check', sql.raw(`"slug" ~ '^[a-z0-9][a-z0-9-]{1,62}[a-z0-9]$'`)),
+	}),
+);
+
+/**
+ * One node in a course tree. Two structural levels: top-level `section`
+ * rows (no parent, no linked knowledge node, not a leaf) and child `step`
+ * rows (parent points at a section, linked to a knowledge node, leaves).
+ *
+ * No sub-sections, no sub-steps. The two-level constraint is enforced via
+ * the `course_step_consistency_check` CHECK below. If a future course
+ * genuinely needs three levels, that lands as a follow-on WP -- easier to
+ * widen than to narrow.
+ *
+ * `knowledge_node_id` FK is RESTRICT (not CASCADE): a knowledge node is
+ * referenced from many places (cards, syllabi). Removing it requires
+ * unlinking the course step first.
+ */
+export const courseStep = studySchema.table(
+	'course_step',
+	{
+		id: text('id').primaryKey(),
+		courseId: text('course_id')
+			.notNull()
+			.references(() => course.id, { onDelete: 'cascade' }),
+		parentId: text('parent_id').references((): AnyPgColumn => courseStep.id, {
+			onDelete: 'cascade',
+		}),
+		/** See {@link COURSE_STEP_LEVELS}. */
+		level: text('level').notNull(),
+		/** Within-parent sort order. Stable. */
+		ordinal: integer('ordinal').notNull(),
+		/** Free-form authoring code (`s1`, `s1.3`). Unique within a course. */
+		code: text('code').notNull(),
+		title: text('title').notNull(),
+		/**
+		 * Step-level framing prose (markdown). Renders before the linked
+		 * knowledge node body. Empty default for sections that carry only
+		 * structural metadata.
+		 */
+		bodyMd: text('body_md').notNull().default(''),
+		/**
+		 * Required on `level='step'` rows; NULL on `level='section'` rows.
+		 * Enforced by the consistency CHECK below.
+		 */
+		knowledgeNodeId: text('knowledge_node_id').references(() => knowledgeNode.id, { onDelete: 'restrict' }),
+		/**
+		 * Stored leaf flag for the hot lens-rollup query. Maintained by the
+		 * seed pipeline (steps are leaves; sections are not). Consistency
+		 * with `level` is enforced by the consistency CHECK below.
+		 */
+		isLeaf: boolean('is_leaf').notNull().default(false),
+		/**
+		 * SHA-256 of the canonicalized YAML entry. Drives idempotent seed:
+		 * an unchanged step entry is a no-op.
+		 */
+		contentHash: text('content_hash'),
+		seedOrigin: text('seed_origin'),
+		...timestamps(),
+	},
+	(t) => ({
+		courseStepCourseCodeUnique: uniqueIndex('course_step_course_code_unique').on(t.courseId, t.code),
+		// Tree walk: course -> parent -> ordered children.
+		courseStepTreeIdx: index('course_step_tree_idx').on(t.courseId, t.parentId, t.ordinal),
+		// Reverse: "what course steps reference this knowledge node?"
+		courseStepNodeIdx: index('course_step_node_idx').on(t.knowledgeNodeId),
+		levelCheck: check('course_step_level_check', sql.raw(`"level" IN (${inList(COURSE_STEP_LEVEL_VALUES)})`)),
+		// Two-level structural invariant. Sections live at the top of the
+		// tree (no parent, no node link, not a leaf); steps live one level
+		// down (parent is a section, must link a node, are leaves). The
+		// rule is encoded as a single OR'd CHECK so any divergence rejects
+		// at the storage layer; the seed validator surfaces the same shape
+		// with a friendlier message.
+		consistencyCheck: check(
+			'course_step_consistency_check',
+			sql.raw(`
+				(("level" = 'section'
+					AND "parent_id" IS NULL
+					AND "knowledge_node_id" IS NULL
+					AND "is_leaf" = false)
+				 OR
+				 ("level" = 'step'
+					AND "parent_id" IS NOT NULL
+					AND "knowledge_node_id" IS NOT NULL
+					AND "is_leaf" = true))
+			`),
+		),
+		ordinalCheck: check('course_step_ordinal_check', sql.raw(`"ordinal" >= 0`)),
+	}),
+);
+
+/**
+ * Many-to-many between goals and courses. Mirrors {@link goalSyllabus} in
+ * shape: composite PK on `(goal_id, course_id)`, weight per link, reverse
+ * index for "what goals reference this course?".
+ *
+ * `course_id` FK is RESTRICT so a course in active goals cannot be deleted
+ * without first removing the link; matches `goal_syllabus`.
+ */
+export const goalCourse = studySchema.table(
+	'goal_course',
+	{
+		goalId: text('goal_id')
+			.notNull()
+			.references(() => goal.id, { onDelete: 'cascade' }),
+		courseId: text('course_id')
+			.notNull()
+			.references(() => course.id, { onDelete: 'restrict' }),
+		weight: real('weight').notNull().default(1.0),
+		seedOrigin: text('seed_origin'),
+		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+	},
+	(t) => ({
+		pk: primaryKey({ columns: [t.goalId, t.courseId] }),
+		// Reverse: "what goals reference this course?"
+		goalCourseByCourseIdx: index('goal_course_by_course_idx').on(t.courseId),
+		weightRangeCheck: check(
+			'goal_course_weight_check',
+			sql.raw(`"weight" >= ${GOAL_SYLLABUS_WEIGHT_MIN} AND "weight" <= ${GOAL_SYLLABUS_WEIGHT_MAX}`),
+		),
+	}),
+);
+
 export type CredentialRow = typeof credential.$inferSelect;
 export type NewCredentialRow = typeof credential.$inferInsert;
 export type CredentialPrereqRow = typeof credentialPrereq.$inferSelect;
@@ -2330,6 +2521,12 @@ export type GoalSyllabusRow = typeof goalSyllabus.$inferSelect;
 export type NewGoalSyllabusRow = typeof goalSyllabus.$inferInsert;
 export type GoalNodeRow = typeof goalNode.$inferSelect;
 export type NewGoalNodeRow = typeof goalNode.$inferInsert;
+export type CourseRow = typeof course.$inferSelect;
+export type NewCourseRow = typeof course.$inferInsert;
+export type CourseStepRow = typeof courseStep.$inferSelect;
+export type NewCourseStepRow = typeof courseStep.$inferInsert;
+export type GoalCourseRow = typeof goalCourse.$inferSelect;
+export type NewGoalCourseRow = typeof goalCourse.$inferInsert;
 
 /**
  * Per-user, per-key preference store.
