@@ -66,14 +66,21 @@ export { formatNextInterval, formatNextIntervalAbsolute } from './formatters';
 // defined`. Server callers import the values from `@ab/bc-study/server`.
 export type {
 	AcsLensFilters,
+	CertGap,
 	DomainLensFilters,
 	Lens,
 	LensInput,
 	LensLeaf,
+	LensLeafSources,
 	LensResult,
 	LensTreeNode,
 	MasteryRollup,
 } from './lenses';
+// Course-aware lens types live in `./lenses-course`. Type-only re-export so
+// `.svelte` consumers can read CourseLensFilters without dragging the lens's
+// DB-touching implementation into the browser bundle. The `courseLens` value
+// is exported from `@ab/bc-study/server`.
+export type { CourseLensFilters } from './lenses-course';
 // Runtime handbook input schemas. Route handlers parse `+server.ts` request
 // bodies (heartbeat / notes) and form-action submissions (read status)
 // against these. Manifest schemas + citation ingestion schemas

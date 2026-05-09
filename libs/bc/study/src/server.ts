@@ -254,6 +254,10 @@ export {
 // `import { ... } from './mastery'` reaches `@ab/db/connection`. Types
 // for these live in the runtime barrel via `./index`.
 export { acsLens, computeMasteryRollup, domainLens, LensError } from './lenses';
+// Course-aware lens (course-primitive WP, Phase 4). Server-only because
+// the implementation imports `./mastery` (postgres driver). The
+// `CourseLensFilters` type is re-exported from `./index` (browser-safe).
+export { courseLens } from './lenses-course';
 // Library-by-cert spine (ADR 016 / library-by-cert WP wave 3).
 export type { CarryoverGroup, CertReferenceBundle } from './library-by-cert';
 export {
