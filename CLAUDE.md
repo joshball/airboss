@@ -163,6 +163,21 @@ Feature lifecycle is driven by shared skills:
 | Product tasks | `docs/products/{app}/TASKS.md`        | What needs building next for this app | Ongoing backlog     |
 | Feature tasks | `docs/work-packages/{name}/tasks.md`  | What's left to finish this feature    | Until feature ships |
 
+### Tracking CLI
+
+Three top-level commands cover everything:
+
+- **`bun run track`** -- workflow umbrella (`status`, `next`, `ship`, `generate`, `format`, `archive`, `log`). Run with no args for the full help index. Use `track ship` (interactive) to walk + close a WP.
+- **`bun run wp`** -- work-package CLI (`list`, `show`, `set`, `next`, `blocked`). Use directly for fine-grained mutations and queries.
+- **`bun run bug`** -- bug CLI (`list`, `show`, `new`, `set`, `index`). Same shape as `wp`, lighter schema.
+
+Long-form explainer + every workflow: [docs/platform/TRACKING.md](docs/platform/TRACKING.md). The frontmatter contract: [ADR 025](docs/decisions/025-wp-frontmatter-contract/decision.md).
+
+**Two rules agents must respect:**
+
+- Never write `human_review_status` on any WP. The lint script blocks agent commits that touch it.
+- Never set `status: shipped`. The shipped transition requires `human_review_status: signed-off`, which only the user can flip.
+
 ## Doc Style
 
 - **No walls of text.** Max 2-3 screens per file. Break into index + linked sub-docs.

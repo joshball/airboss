@@ -17,6 +17,7 @@
 		"airboss-ref": "bun scripts/airboss-ref.ts",
 		"wp": "bun scripts/wp.ts",
 		"bug": "bun scripts/bug.ts",
+		"track": "bun scripts/track.ts",
 		"tracking:generate": "bun scripts/tracking/generate.ts",
 		"tracking:generate:check": "bun scripts/tracking/generate.ts --check",
 		"archive:dry": "bun scripts/tracking/archive.ts --dry-run",
