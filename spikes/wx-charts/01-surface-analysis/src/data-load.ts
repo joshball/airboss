@@ -26,9 +26,21 @@ export interface PressureCenter {
 
 export interface Front {
 	kind: FrontKind;
-	// Polyline traced lon/lat points in direction of motion (for cold/warm).
-	// For stationary/occluded, motion is conventional.
+	// Polyline traced lon/lat points. Direction of trace is from
+	// "anchor end" to "free end" -- typically root at the low-pressure
+	// center outward.
 	points: [number, number][];
+	// Side of the polyline pips face, expressed as cardinal direction
+	// in lon/lat space:
+	//   'N' -- pips point north (smaller y in screen)
+	//   'S' -- pips point south
+	//   'E' -- pips point east
+	//   'W' -- pips point west
+	// If omitted, defaults vary by kind: cold = side of motion (S for
+	// E/W-tracing, etc.) -- generally pick whatever puts pips on the
+	// "advancing" side. For stationary, this is the cold-air (triangles)
+	// side; warm semicircles go on the opposite side automatically.
+	pipSide?: 'N' | 'S' | 'E' | 'W';
 }
 
 export interface StationOb {

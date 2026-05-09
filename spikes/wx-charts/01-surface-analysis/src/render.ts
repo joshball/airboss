@@ -8,7 +8,7 @@
 import { writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { geoPath } from 'd3-geo';
-import { buildConusProjection, SVG_HEIGHT, SVG_WIDTH } from './projection';
+import { buildConusProjection, SVG_HEIGHT, SVG_WIDTH, TITLE_BAND_HEIGHT } from './projection';
 import { loadBasemap } from './basemap';
 import { renderSymbology } from './symbology';
 import { loadSurfaceAnalysis } from './data-load';
@@ -125,8 +125,12 @@ function renderGraticule(projection: ReturnType<typeof buildConusProjection>): s
 
 function renderTitle(title: string): string {
 	return `<g class="title">
-  <text x="20" y="30" font-size="14" font-weight="600" fill="#3d3a32">SURFACE ANALYSIS</text>
-  <text x="20" y="48" font-size="12" fill="#7a7568">${title}</text>
+  <rect x="0" y="0" width="${SVG_WIDTH}" height="${TITLE_BAND_HEIGHT}" fill="#fafaf7" />
+  <line x1="0" y1="${TITLE_BAND_HEIGHT}" x2="${SVG_WIDTH}" y2="${TITLE_BAND_HEIGHT}" stroke="#d8d4c8" stroke-width="0.6" />
+  <text x="24" y="26" font-size="16" font-weight="700" fill="#3d3a32" letter-spacing="1.2">SURFACE ANALYSIS</text>
+  <text x="24" y="46" font-size="12" fill="#7a7568">${title}</text>
+  <text x="${SVG_WIDTH - 24}" y="26" text-anchor="end" font-size="11" font-weight="600" fill="#7a7568">CONUS  --  Lambert Conformal 33/45</text>
+  <text x="${SVG_WIDTH - 24}" y="46" text-anchor="end" font-size="11" fill="#a09b8d">spike prototype  --  not for ops use</text>
 </g>`;
 }
 

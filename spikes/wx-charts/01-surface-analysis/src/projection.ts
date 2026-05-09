@@ -20,12 +20,16 @@ export const CONUS_STD_PARALLELS: [number, number] = [33, 45];
 export const CONUS_CENTRAL_MERIDIAN = -96;
 export const CONUS_REFERENCE_LAT = 38;
 
-export const SVG_WIDTH = 1100;
-export const SVG_HEIGHT = 700;
+export const SVG_WIDTH = 1200;
+export const SVG_HEIGHT = 780;
+export const TITLE_BAND_HEIGHT = 60;
+export const CHART_MARGIN = 24;
 
 /**
  * Construct a Lambert Conformal Conic projection fitted to a GeoJSON.
- * Pass the CONUS-only nation outline as `fitTarget` for best framing.
+ * Pass the CONUS-only states FeatureCollection as `fitTarget` for best
+ * framing. Reserves a band at the top for chart title (so the projected
+ * map does not collide with the title text).
  */
 export function buildConusProjection(fitTarget: GeoJSON.GeoJsonObject): GeoProjection {
 	const projection = geoConicConformal()
@@ -33,11 +37,11 @@ export function buildConusProjection(fitTarget: GeoJSON.GeoJsonObject): GeoProje
 		.rotate([-CONUS_CENTRAL_MERIDIAN, 0])
 		.center([0, CONUS_REFERENCE_LAT]);
 
-	// Fit with a small inset so chart frame doesn't hug the coastline.
+	// Fit into the area below the title band, with margins.
 	projection.fitExtent(
 		[
-			[20, 20],
-			[SVG_WIDTH - 20, SVG_HEIGHT - 20],
+			[CHART_MARGIN, TITLE_BAND_HEIGHT + CHART_MARGIN],
+			[SVG_WIDTH - CHART_MARGIN, SVG_HEIGHT - CHART_MARGIN],
 		],
 		fitTarget,
 	);

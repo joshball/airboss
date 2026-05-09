@@ -52,40 +52,59 @@ function renderFront(projection: GeoProjection, front: Front): string {
 	if (pts.length < 2) return '';
 	const linePath = polylineToPath(pts);
 
+	// Cardinal direction -> screen-space target vector for pip side.
+	// Y axis points down in screen coords.
+	const cardinalToScreen: Record<NonNullable<Front['pipSide']>, [number, number]> = {
+		N: [0, -1],
+		S: [0, 1],
+		E: [1, 0],
+		W: [-1, 0],
+	};
+
+	const defaultPipSide: Record<Front['kind'], NonNullable<Front['pipSide']>> = {
+		cold: 'S', // cold front bulges south/southeast typically
+		warm: 'N', // warm front bulges north (toward cold air being displaced)
+		occluded: 'N',
+		stationary: 'N',
+	};
+	const target = cardinalToScreen[front.pipSide ?? defaultPipSide[front.kind]];
+
 	switch (front.kind) {
 		case 'cold':
-			return renderColdFront(linePath, pts);
+			return renderColdFront(linePath, pts, target);
 		case 'warm':
-			return renderWarmFront(linePath, pts);
+			return renderWarmFront(linePath, pts, target);
 		case 'occluded':
-			return renderOccludedFront(linePath, pts);
+			return renderOccludedFront(linePath, pts, target);
 		case 'stationary':
-			return renderStationaryFront(linePath, pts);
+			return renderStationaryFront(linePath, pts, target);
 		default:
 			return '';
 	}
 }
 
-function renderColdFront(linePath: string, pts: [number, number][]): string {
-	const pips = renderPips(pts, 'triangle', '#1f4ea8', 'forward');
+type ScreenVec = [number, number];
+
+function renderColdFront(linePath: string, pts: [number, number][], target: ScreenVec): string {
+	const pips = renderPips(pts, 'triangle', '#1f4ea8', 0, target);
 	return `<g class="front-cold">
   <path d="${linePath}" fill="none" stroke="#1f4ea8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
   ${pips}
 </g>`;
 }
 
-function renderWarmFront(linePath: string, pts: [number, number][]): string {
-	const pips = renderPips(pts, 'semicircle', '#b8232f', 'forward');
+function renderWarmFront(linePath: string, pts: [number, number][], target: ScreenVec): string {
+	const pips = renderPips(pts, 'semicircle', '#b8232f', 0, target);
 	return `<g class="front-warm">
   <path d="${linePath}" fill="none" stroke="#b8232f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
   ${pips}
 </g>`;
 }
 
-function renderOccludedFront(linePath: string, pts: [number, number][]): string {
+function renderOccludedFront(linePath: string, pts: [number, number][], target: ScreenVec): string {
 	// Alternating triangles + semicircles, all on the same side, purple.
-	const triangles = renderPips(pts, 'triangle', '#6a1f8f', 'forward', 0);
-	const semis = renderPips(pts, 'semicircle', '#6a1f8f', 'forward', FRONT_PIP_SPACING_PX);
+	const triangles = renderPips(pts, 'triangle', '#6a1f8f', 0, target);
+	const semis = renderPips(pts, 'semicircle', '#6a1f8f', FRONT_PIP_SPACING_PX, target);
 	return `<g class="front-occluded">
   <path d="${linePath}" fill="none" stroke="#6a1f8f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
   ${triangles}
@@ -93,14 +112,15 @@ function renderOccludedFront(linePath: string, pts: [number, number][]): string 
 </g>`;
 }
 
-function renderStationaryFront(linePath: string, pts: [number, number][]): string {
-	// Triangles on one side (blue, "cold" side), semicircles on the
-	// opposite side (red, "warm" side).
-	const triangles = renderPips(pts, 'triangle', '#1f4ea8', 'forward', 0, +1);
-	const semis = renderPips(pts, 'semicircle', '#b8232f', 'forward', FRONT_PIP_SPACING_PX, -1);
+function renderStationaryFront(linePath: string, pts: [number, number][], target: ScreenVec): string {
+	// Triangles (blue, cold-side) on the chosen target side; semicircles
+	// (red, warm-side) on the opposite side, offset by pipSpacing.
+	const oppTarget: ScreenVec = [-target[0], -target[1]];
+	const triangles = renderPips(pts, 'triangle', '#1f4ea8', 0, target);
+	const semis = renderPips(pts, 'semicircle', '#b8232f', FRONT_PIP_SPACING_PX, oppTarget);
 	return `<g class="front-stationary">
-  <path d="${linePath}" fill="none" stroke="#1f4ea8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
-  <path d="${linePath}" fill="none" stroke="#b8232f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="0" opacity="0" />
+  <path d="${linePath}" fill="none" stroke="#1f4ea8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="${FRONT_PIP_SPACING_PX} ${FRONT_PIP_SPACING_PX}" />
+  <path d="${linePath}" fill="none" stroke="#b8232f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="${FRONT_PIP_SPACING_PX} ${FRONT_PIP_SPACING_PX}" stroke-dashoffset="${FRONT_PIP_SPACING_PX}" />
   ${triangles}
   ${semis}
 </g>`;
@@ -114,17 +134,17 @@ function polylineToPath(pts: [number, number][]): string {
  * Walk along the polyline at fixed pixel spacing, placing pip glyphs
  * (triangles or semicircles) perpendicular to the segment direction.
  *
- * `side`: +1 for left of motion, -1 for right of motion.
- *   FAA convention: cold/warm pips go in the direction of motion
- *   (both "forward"); we put the glyph on the +1 side by default.
+ * `targetScreen`: a screen-space vector indicating which side to place
+ * the pip on. For each segment, we compute the two perpendicular unit
+ * vectors and pick the one with positive dot product against the target.
+ * This makes "north pips face north" hold globally, even on curved fronts.
  */
 function renderPips(
 	pts: [number, number][],
 	shape: 'triangle' | 'semicircle',
 	color: string,
-	_facing: 'forward',
 	startOffset = 0,
-	side: 1 | -1 = 1,
+	targetScreen: ScreenVec = [0, -1],
 ): string {
 	const segments: { len: number; ax: number; ay: number; bx: number; by: number }[] = [];
 	let total = 0;
@@ -142,16 +162,19 @@ function renderPips(
 		const place = walkAlong(segments, dist);
 		if (!place) continue;
 		const { x, y, dx, dy } = place;
-		// perpendicular unit vector on chosen side
 		const len = Math.hypot(dx, dy) || 1;
-		const px = (-dy / len) * side;
-		const py = (dx / len) * side;
-		// position glyph centered on (x,y) sitting on top of line, on the chosen side
+		// Two candidate perpendicular unit vectors.
+		const perp1: ScreenVec = [-dy / len, dx / len];
+		const perp2: ScreenVec = [dy / len, -dx / len];
+		// Pick the one with larger dot product against target.
+		const dot1 = perp1[0] * targetScreen[0] + perp1[1] * targetScreen[1];
+		const dot2 = perp2[0] * targetScreen[0] + perp2[1] * targetScreen[1];
+		const [px, py] = dot1 >= dot2 ? perp1 : perp2;
+		const tx = dx / len;
+		const ty = dy / len;
+
 		if (shape === 'triangle') {
-			// Equilateral-ish triangle. Apex on the perpendicular side.
 			const apex: [number, number] = [x + px * FRONT_PIP_RADIUS * 1.4, y + py * FRONT_PIP_RADIUS * 1.4];
-			const tx = dx / len;
-			const ty = dy / len;
 			const baseHalf = FRONT_PIP_RADIUS * 0.9;
 			const base1: [number, number] = [x - tx * baseHalf, y - ty * baseHalf];
 			const base2: [number, number] = [x + tx * baseHalf, y + ty * baseHalf];
@@ -159,17 +182,19 @@ function renderPips(
 				`<path d="M ${base1[0].toFixed(1)} ${base1[1].toFixed(1)} L ${apex[0].toFixed(1)} ${apex[1].toFixed(1)} L ${base2[0].toFixed(1)} ${base2[1].toFixed(1)} Z" fill="${color}" stroke="${color}" stroke-width="0.5" stroke-linejoin="round" />`,
 			);
 		} else {
-			// Semicircle: use SVG arc. Diameter sits along the line, bulge points perpendicular.
-			const tx = dx / len;
-			const ty = dy / len;
+			// Semicircle. Pick the SVG arc sweep flag that bulges toward (px, py).
+			// Cross product of segment-tangent x perpendicular tells us
+			// whether the perpendicular is "left" or "right" of the segment
+			// in screen coords (Y-down). cross = tx*py - ty*px.
+			// For SVG arc with sweep-flag 1 (clockwise), the arc bulges to
+			// the LEFT of the segment direction in standard math (Y-up); in
+			// screen coords (Y-down) sweep-flag 1 bulges to the RIGHT of
+			// motion, i.e. into the perpendicular where cross < 0.
+			const cross = tx * py - ty * px;
+			const sweepFlag = cross < 0 ? 1 : 0;
 			const r = FRONT_PIP_RADIUS;
 			const a: [number, number] = [x - tx * r, y - ty * r];
 			const b: [number, number] = [x + tx * r, y + ty * r];
-			// Sweep flag: 1 for the side where +perpendicular points.
-			// We bulge toward (px,py); for SVG arc, sweep-flag 1 = clockwise,
-			// which depends on direction. Easier: emit two arcs and pick. Here
-			// we compute via cross product.
-			const sweepFlag = side === 1 ? 0 : 1;
 			glyphs.push(
 				`<path d="M ${a[0].toFixed(1)} ${a[1].toFixed(1)} A ${r} ${r} 0 0 ${sweepFlag} ${b[0].toFixed(1)} ${b[1].toFixed(1)} Z" fill="${color}" stroke="${color}" stroke-width="0.5" stroke-linejoin="round" />`,
 			);
