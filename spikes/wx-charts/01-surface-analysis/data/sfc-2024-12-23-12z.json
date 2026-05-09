@@ -1,0 +1,68 @@
+{
+  "title": "2024-12-23 12Z (Mon)  --  approximate, hand-traced from WPC archive",
+  "validTimeIso": "2024-12-23T12:00:00Z",
+  "_source": "Hand-traced from WPC Surface Analysis archive PNG, https://www.wpc.ncep.noaa.gov/archives/web_pages/sfc/sfc_archive.php. Positions are eyeballed at roughly 1 deg precision. See spike-notes.md for the limitation.",
+  "_pattern_summary": "Late December 2024: deep low over eastern Canada/Great Lakes leading a long cold front through the Mid-Atlantic and Southeast; trailing warm front off the Carolinas; Pacific cold front pushing through PNW into the northern Plains; broad high in the Intermountain West and a second high off the Southeast coast (subtropical ridge).",
+  "centers": [
+    { "kind": "L", "lon": -82, "lat": 47, "pressureMb": 992 },
+    { "kind": "L", "lon": -125, "lat": 46, "pressureMb": 1002 },
+    { "kind": "H", "lon": -110, "lat": 38, "pressureMb": 1028 },
+    { "kind": "H", "lon": -75, "lat": 30, "pressureMb": 1024 },
+    { "kind": "H", "lon": -100, "lat": 51, "pressureMb": 1032 }
+  ],
+  "fronts": [
+    {
+      "kind": "cold",
+      "_label": "Long cold front trailing eastern low through Mid-Atlantic into Gulf",
+      "points": [
+        [-82, 47],
+        [-83, 43],
+        [-84, 39],
+        [-86, 35],
+        [-90, 32],
+        [-94, 30]
+      ]
+    },
+    {
+      "kind": "warm",
+      "_label": "Warm front extending east off the Carolinas",
+      "points": [
+        [-82, 47],
+        [-78, 45],
+        [-74, 42],
+        [-70, 39]
+      ]
+    },
+    {
+      "kind": "cold",
+      "_label": "Pacific cold front entering PNW, into northern Plains",
+      "points": [
+        [-125, 46],
+        [-120, 44],
+        [-115, 43],
+        [-108, 44],
+        [-102, 46]
+      ]
+    },
+    {
+      "kind": "stationary",
+      "_label": "Stationary front across central Texas / southern Plains",
+      "points": [
+        [-104, 32],
+        [-100, 31],
+        [-96, 31],
+        [-92, 31]
+      ]
+    },
+    {
+      "kind": "occluded",
+      "_label": "Occluded segment north of the Great Lakes low",
+      "points": [
+        [-82, 47],
+        [-80, 49],
+        [-78, 51]
+      ]
+    }
+  ],
+  "stations": []
+}
