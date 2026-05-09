@@ -3,8 +3,8 @@ id: wx-chart-symbology-library
 title: 'Spec: Weather Chart Symbology Library'
 product: cross-product
 category: feature
-status: signed-off
-agent_review_status: done
+status: draft
+agent_review_status: pending
 human_review_status: pending
 created: 2026-05-09
 owner: agent
@@ -152,18 +152,18 @@ The library accepts data shapes as inputs; it does not import from `data/` relat
 
 ## Chart inventory (v1: ten types)
 
-| Slug suffix         | Chart type                       | ACS hook  | Substrate                              | Phase |
-| ------------------- | -------------------------------- | --------- | -------------------------------------- | ----- |
-| surface-analysis    | NWS surface analysis             | C K2b     | vector polylines + isobars + stations  | A     |
-| radar-mosaic        | NEXRAD reflectivity mosaic       | implicit  | raster warp + state border re-stroke   | B     |
-| advisory-overlay    | AIRMET / SIGMET / Conv SIGMET    | C K2g     | polygon styling + advisory text panel  | B     |
-| metar-plot-grid     | METAR station-model plot         | C K2a     | dense point glyphs + collision         | C     |
-| pirep-plot-grid     | PIREP station plot               | C K2a-2nd | dense point glyphs + collision         | C     |
-| winds-aloft-fb      | Winds / Temps Aloft FB grid      | C K2e     | text grid table over basemap           | C     |
-| prog-chart          | Forecast surface analysis        | derived   | same substrate as surface-analysis     | D     |
-| gfa                 | Graphical Forecasts for Aviation | C K2d     | layered polygon overlay (FA, AIRMET)   | D     |
-| convective-outlook  | SPC convective outlook           | C K2f     | risk-tier polygons (MRGL/SLGT/ENH/MDT) | D     |
-| cva                 | Ceiling and Visibility Analysis  | C K2b-2nd | gridded ceiling/vis polygon shading    | E     |
+| Slug suffix        | Chart type                       | ACS hook  | Substrate                              | Phase |
+| ------------------ | -------------------------------- | --------- | -------------------------------------- | ----- |
+| surface-analysis   | NWS surface analysis             | C K2b     | vector polylines + isobars + stations  | A     |
+| radar-mosaic       | NEXRAD reflectivity mosaic       | implicit  | raster warp + state border re-stroke   | B     |
+| advisory-overlay   | AIRMET / SIGMET / Conv SIGMET    | C K2g     | polygon styling + advisory text panel  | B     |
+| metar-plot-grid    | METAR station-model plot         | C K2a     | dense point glyphs + collision         | C     |
+| pirep-plot-grid    | PIREP station plot               | C K2a-2nd | dense point glyphs + collision         | C     |
+| winds-aloft-fb     | Winds / Temps Aloft FB grid      | C K2e     | text grid table over basemap           | C     |
+| prog-chart         | Forecast surface analysis        | derived   | same substrate as surface-analysis     | D     |
+| gfa                | Graphical Forecasts for Aviation | C K2d     | layered polygon overlay (FA, AIRMET)   | D     |
+| convective-outlook | SPC convective outlook           | C K2f     | risk-tier polygons (MRGL/SLGT/ENH/MDT) | D     |
+| cva                | Ceiling and Visibility Analysis  | C K2b-2nd | gridded ceiling/vis polygon shading    | E     |
 
 Slug shape: `wx-<chart-type>-<isodate>[-<frame>]`. Examples: `wx-surface-analysis-2024-12-23-12z`, `wx-radar-mosaic-2024-05-21-22z`, `wx-metar-plot-grid-2024-01-13-12z`. The slug is unique across all `data/charts/wx/<slug>/` directories.
 
@@ -357,23 +357,23 @@ export type FaaFlightCategory = (typeof FAA_FLIGHT_CATEGORY_VALUES)[number];
 
 ## Validation
 
-| Field                             | Rule                                                                                                                                   |
-| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `spec.slug`                       | `^wx-[a-z0-9][a-z0-9-]{1,80}[a-z0-9]$`, must equal the directory name under `data/charts/wx/`                                          |
-| `spec.type`                       | One of `CHART_TYPE_VALUES`                                                                                                             |
-| `spec.title`                      | Non-empty                                                                                                                              |
-| `spec.subtitle`                   | Optional string                                                                                                                        |
-| `spec.sources`                    | Object; every value parseable as `cache://<relative path>` or a relative repo path; resolved file must exist at validate time          |
-| `spec.options`                    | Per-chart Zod schema; unknown keys rejected                                                                                            |
-| `spec.projection`                 | One of the supported projection variants (Lambert with parallels/rotate; Plate Carree; Web Mercator -- only Lambert needed for v1)     |
-| `spec.extent`                     | One of `conus` / `alaska` / `hawaii` / a custom `{lon_min, lat_min, lon_max, lat_max}` object                                          |
-| METAR string                      | Parser rejects unparseable wind tokens (sets `wind: null` and emits a parser warning to meta.json)                                     |
-| Visibility format                 | `M1/4SM` -> 0.125, `1 1/2SM` -> 1.5, `1/8SM` -> 0.125; unparseable tokens -> `visibility: null` + warning                              |
-| Sharp warp source                 | Source PNG must decode; world file numeric fields must parse; output canvas dims must be positive integers                             |
-| Layer band ordering               | `composeChart` rejects bands outside `LAYER_BAND_VALUES`; missing bands render as empty `<g>`                                          |
-| Color palette                     | Reflectivity ramp values must be in [-32, 95] dBZ; flight-category palette accepts only `FAA_FLIGHT_CATEGORY_VALUES` keys              |
-| `meta.json.library_version`       | Semver string read from `libs/wx-charts/package.json`                                                                                  |
-| `meta.json.content_hash`          | SHA-256 of `(canonical(spec.yaml) + sorted source bytes + library_version)`                                                            |
+| Field                       | Rule                                                                                                                               |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `spec.slug`                 | `^wx-[a-z0-9][a-z0-9-]{1,80}[a-z0-9]$`, must equal the directory name under `data/charts/wx/`                                      |
+| `spec.type`                 | One of `CHART_TYPE_VALUES`                                                                                                         |
+| `spec.title`                | Non-empty                                                                                                                          |
+| `spec.subtitle`             | Optional string                                                                                                                    |
+| `spec.sources`              | Object; every value parseable as `cache://<relative path>` or a relative repo path; resolved file must exist at validate time      |
+| `spec.options`              | Per-chart Zod schema; unknown keys rejected                                                                                        |
+| `spec.projection`           | One of the supported projection variants (Lambert with parallels/rotate; Plate Carree; Web Mercator -- only Lambert needed for v1) |
+| `spec.extent`               | One of `conus` / `alaska` / `hawaii` / a custom `{lon_min, lat_min, lon_max, lat_max}` object                                      |
+| METAR string                | Parser rejects unparseable wind tokens (sets `wind: null` and emits a parser warning to meta.json)                                 |
+| Visibility format           | `M1/4SM` -> 0.125, `1 1/2SM` -> 1.5, `1/8SM` -> 0.125; unparseable tokens -> `visibility: null` + warning                          |
+| Sharp warp source           | Source PNG must decode; world file numeric fields must parse; output canvas dims must be positive integers                         |
+| Layer band ordering         | `composeChart` rejects bands outside `LAYER_BAND_VALUES`; missing bands render as empty `<g>`                                      |
+| Color palette               | Reflectivity ramp values must be in [-32, 95] dBZ; flight-category palette accepts only `FAA_FLIGHT_CATEGORY_VALUES` keys          |
+| `meta.json.library_version` | Semver string read from `libs/wx-charts/package.json`                                                                              |
+| `meta.json.content_hash`    | SHA-256 of `(canonical(spec.yaml) + sorted source bytes + library_version)`                                                        |
 
 ## Edge cases
 

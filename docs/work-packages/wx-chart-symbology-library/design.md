@@ -3,8 +3,8 @@ id: wx-chart-symbology-library
 title: 'Design: Weather Chart Symbology Library'
 product: cross-product
 category: feature
-status: signed-off
-agent_review_status: done
+status: draft
+agent_review_status: pending
 human_review_status: pending
 created: 2026-05-09
 owner: agent
@@ -43,13 +43,13 @@ Phasing is the interesting design decision. The user wants:
 
 Five phases shape that intent into shippable PRs:
 
-| Phase | Charts                                                                  | Why this grouping                                                                                                               |
-| ----- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| A     | substrate + surface-analysis                                            | The substrate cannot be partially shipped. Surface analysis is the simplest pure-vector chart and proves the renderer contract. |
-| B     | radar-mosaic, advisory-overlay                                          | Both add raster + polygon styling on top of the substrate. Different contracts (raster warp vs polygon styling) so parallel.    |
-| C     | metar-plot-grid, pirep-plot-grid, winds-aloft-fb                        | Point-glyph cluster. METAR + PIREP share the collision primitive; winds-aloft is a text grid that uses no collision.            |
-| D     | prog-chart, gfa, convective-outlook                                     | Forecast cluster. Prog re-uses surface-analysis. GFA + convective outlook are polygon-overlay variants of advisory-overlay.     |
-| E     | cva                                                                     | Smallest chart; depends on convective-outlook's polygon-shading pattern.                                                        |
+| Phase | Charts                                           | Why this grouping                                                                                                               |
+| ----- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
+| A     | substrate + surface-analysis                     | The substrate cannot be partially shipped. Surface analysis is the simplest pure-vector chart and proves the renderer contract. |
+| B     | radar-mosaic, advisory-overlay                   | Both add raster + polygon styling on top of the substrate. Different contracts (raster warp vs polygon styling) so parallel.    |
+| C     | metar-plot-grid, pirep-plot-grid, winds-aloft-fb | Point-glyph cluster. METAR + PIREP share the collision primitive; winds-aloft is a text grid that uses no collision.            |
+| D     | prog-chart, gfa, convective-outlook              | Forecast cluster. Prog re-uses surface-analysis. GFA + convective outlook are polygon-overlay variants of advisory-overlay.     |
+| E     | cva                                              | Smallest chart; depends on convective-outlook's polygon-shading pattern.                                                        |
 
 Each phase opens its own PR titled `feat(wx-charts): <phase> -- <chart list>`. Each PR includes:
 
@@ -122,12 +122,12 @@ Every chart is one directory under `data/charts/wx/`. The reasons:
 
 The committed-vs-cached split:
 
-| File              | Committed?                            | Why                                                                                            |
-| ----------------- | ------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| `spec.yaml`       | Yes                                   | Chart definition; small, human-readable, the source of truth.                                  |
-| `chart.svg`       | Yes                                   | Output; small (typically <500 KB), deterministic, deduplicates on content_hash, mounts as a static asset. |
-| `meta.json`       | Yes                                   | Provenance and idempotency check; tiny.                                                        |
-| Source bytes      | No (dev cache per [ADR 018](../../decisions/018-source-artifact-storage-policy/decision.md)) | Per-chart raw weather data; large, not load-bearing for non-authors.                             |
+| File         | Committed?                                                                                   | Why                                                                                                       |
+| ------------ | -------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `spec.yaml`  | Yes                                                                                          | Chart definition; small, human-readable, the source of truth.                                             |
+| `chart.svg`  | Yes                                                                                          | Output; small (typically <500 KB), deterministic, deduplicates on content_hash, mounts as a static asset. |
+| `meta.json`  | Yes                                                                                          | Provenance and idempotency check; tiny.                                                                   |
+| Source bytes | No (dev cache per [ADR 018](../../decisions/018-source-artifact-storage-policy/decision.md)) | Per-chart raw weather data; large, not load-bearing for non-authors.                                      |
 
 Committing `chart.svg` is non-trivial. The alternatives considered:
 
@@ -294,24 +294,24 @@ The library has no runtime data flow at consumer time. Charts are pre-built; the
 
 ## Key Decisions
 
-| Question                                                  | Options considered                                                                                       | Chosen                                                | Why                                                                                                       |
-| --------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| Library shape baseline                                    | Clean-sheet design / refine Spike 1 / refine Spike 2 / **refine Spike 3**                                | Refine Spike 3                                        | Spike 3's shape already absorbed Spikes 1+2 lessons; spikes' working code maps directly into the modules. |
-| Raster warp impl                                          | Headless chromium (spike) / **sharp** / native canvas binding / WASM                                     | sharp                                                 | No browser dep, native speed, importable from any Node/Bun script.                                        |
-| Output path convention                                    | Flat (`data/charts/<slug>.svg`) / **per-chart dir** (`data/charts/wx/<slug>/{spec.yaml,chart.svg,meta.json}`) | Per-chart directory                                   | Co-locates spec + output + meta; matches consumer URL path 1:1; new charts = new dirs.                    |
-| Output build trigger                                      | Build at deploy / build on first request / **commit pre-built SVG**                                      | Commit pre-built SVG                                  | No CI; chart authoring is deliberate; static-asset serving is the simplest mount path.                    |
-| CLI invocation pattern                                    | Per-chart script (`scripts/charts/build-<slug>.ts`) / **dispatcher** (`scripts/charts.ts <subcmd>`)      | Dispatcher                                            | Mirrors `scripts/db.ts` and other dispatchers; one canonical entry point per noun.                        |
-| Layer band openness                                       | Open-ended (renderers can name new bands) / **closed enum**                                              | Closed enum                                           | Predictable composition; substrate changes are deliberate; matches Spike 2's contract.                    |
-| Slug prefix                                               | Bare slug / **`wx-` prefix**                                                                             | `wx-` prefix                                          | Future non-WX chart families (perf, route, etc.) get sibling subdirs and own prefixes; no accidents.      |
-| Source-data location                                      | Repo (`data/wx/...`) / **dev cache** (`~/Documents/airboss-handbook-cache/wx/...`)                       | Dev cache                                             | Per ADR 018 -- raw bytes are large + per-instance + not load-bearing for non-authors.                     |
-| Substrate-data location                                   | Cache / **repo** (`data/references/basemaps/`, `data/references/palettes/`)                              | Repo                                                  | Small, stable, shared across every chart, load-bearing for every consumer.                                |
-| Renderer entry-point split                                | Single barrel / **runtime + server barrels** (per `libs/bc/study` pattern)                               | Runtime + server                                      | Sharp lives in server; runtime barrel exposes types so apps can import without dragging sharp in.         |
-| METAR parser                                              | Roll our own (Spike 3) / **roll our own (production)** / `metar-taf-parser` from npm                    | Roll our own                                          | Spike 3's parser is ~250 lines and fits the field set; npm dep buys little for a small API surface.       |
-| Phase A scope                                             | Substrate alone / **substrate + 1 chart e2e** / substrate + 2 charts                                     | Substrate + 1 chart                                   | E2E proof of the renderer contract + CLI + commit story; one chart is enough to unblock B/C/D in parallel. |
-| Authoring CLI auto-fetch                                  | Pull live IEM/NCEI/NOAA at build time / **manual cache capture, build reads from cache**                 | Manual capture                                        | Determinism; no network at build time; cache fetch is its own concern (deferred -- see OUT-OF-SCOPE.md).  |
-| Chart spec format                                         | TOML / JSON / **YAML**                                                                                   | YAML                                                  | Author-friendly; matches existing course YAML authoring; multi-line strings (`subtitle`, `notes`) read well. |
-| Chart count in v1                                         | Charts only as needed / **all 10 PPL ACS Task C K2 charts**                                              | All 10                                                | Fixed scope, fixed phasing, complete coverage of the cert task; subsequent charts ship as micro-WPs.       |
-| Pedagogical overlay shipping                              | Bundled with each chart / **substrate ready, overlays as micro-WPs after**                               | Substrate ready, overlays later                       | Per spike notes: overlays are course-content-driven; substrate must support them but doesn't ship them.   |
+| Question                     | Options considered                                                                                            | Chosen                          | Why                                                                                                          |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Library shape baseline       | Clean-sheet design / refine Spike 1 / refine Spike 2 / **refine Spike 3**                                     | Refine Spike 3                  | Spike 3's shape already absorbed Spikes 1+2 lessons; spikes' working code maps directly into the modules.    |
+| Raster warp impl             | Headless chromium (spike) / **sharp** / native canvas binding / WASM                                          | sharp                           | No browser dep, native speed, importable from any Node/Bun script.                                           |
+| Output path convention       | Flat (`data/charts/<slug>.svg`) / **per-chart dir** (`data/charts/wx/<slug>/{spec.yaml,chart.svg,meta.json}`) | Per-chart directory             | Co-locates spec + output + meta; matches consumer URL path 1:1; new charts = new dirs.                       |
+| Output build trigger         | Build at deploy / build on first request / **commit pre-built SVG**                                           | Commit pre-built SVG            | No CI; chart authoring is deliberate; static-asset serving is the simplest mount path.                       |
+| CLI invocation pattern       | Per-chart script (`scripts/charts/build-<slug>.ts`) / **dispatcher** (`scripts/charts.ts <subcmd>`)           | Dispatcher                      | Mirrors `scripts/db.ts` and other dispatchers; one canonical entry point per noun.                           |
+| Layer band openness          | Open-ended (renderers can name new bands) / **closed enum**                                                   | Closed enum                     | Predictable composition; substrate changes are deliberate; matches Spike 2's contract.                       |
+| Slug prefix                  | Bare slug / **`wx-` prefix**                                                                                  | `wx-` prefix                    | Future non-WX chart families (perf, route, etc.) get sibling subdirs and own prefixes; no accidents.         |
+| Source-data location         | Repo (`data/wx/...`) / **dev cache** (`~/Documents/airboss-handbook-cache/wx/...`)                            | Dev cache                       | Per ADR 018 -- raw bytes are large + per-instance + not load-bearing for non-authors.                        |
+| Substrate-data location      | Cache / **repo** (`data/references/basemaps/`, `data/references/palettes/`)                                   | Repo                            | Small, stable, shared across every chart, load-bearing for every consumer.                                   |
+| Renderer entry-point split   | Single barrel / **runtime + server barrels** (per `libs/bc/study` pattern)                                    | Runtime + server                | Sharp lives in server; runtime barrel exposes types so apps can import without dragging sharp in.            |
+| METAR parser                 | Roll our own (Spike 3) / **roll our own (production)** / `metar-taf-parser` from npm                          | Roll our own                    | Spike 3's parser is ~250 lines and fits the field set; npm dep buys little for a small API surface.          |
+| Phase A scope                | Substrate alone / **substrate + 1 chart e2e** / substrate + 2 charts                                          | Substrate + 1 chart             | E2E proof of the renderer contract + CLI + commit story; one chart is enough to unblock B/C/D in parallel.   |
+| Authoring CLI auto-fetch     | Pull live IEM/NCEI/NOAA at build time / **manual cache capture, build reads from cache**                      | Manual capture                  | Determinism; no network at build time; cache fetch is its own concern (deferred -- see OUT-OF-SCOPE.md).     |
+| Chart spec format            | TOML / JSON / **YAML**                                                                                        | YAML                            | Author-friendly; matches existing course YAML authoring; multi-line strings (`subtitle`, `notes`) read well. |
+| Chart count in v1            | Charts only as needed / **all 10 PPL ACS Task C K2 charts**                                                   | All 10                          | Fixed scope, fixed phasing, complete coverage of the cert task; subsequent charts ship as micro-WPs.         |
+| Pedagogical overlay shipping | Bundled with each chart / **substrate ready, overlays as micro-WPs after**                                    | Substrate ready, overlays later | Per spike notes: overlays are course-content-driven; substrate must support them but doesn't ship them.      |
 
 ## Renderer-by-renderer notes
 
@@ -418,14 +418,14 @@ The library does not need Playwright tests of its own (it produces SVG files, no
 
 ## Risk register
 
-| Risk                                                           | Mitigation                                                                                                        |
-| -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| Sharp warp output diverges from chromium (color / antialiasing) | Phase B starts with a sharp-vs-chromium pixel diff against Spike 2's output; tolerance budget defined before merge. |
-| Layer-band contract proves insufficient when GFA composes 4 layers | GFA is in Phase D; if a real composition need surfaces a missing band, propose substrate change in a substrate PR before D. |
-| Chart-spec YAML drift across chart types                       | One canonical Zod schema per chart type; CLI rejects unknown keys; shared keys (slug, type, title, projection) live in a base schema. |
-| Slug-collision risk (course author picks an existing slug)     | CLI `validate` enumerates existing slugs; future authoring tool can prevent collisions at write time.             |
-| Live data availability (NCEI archives sometimes return 404)    | Manual capture model means availability problems surface at capture time, not at chart-build time.                |
-| Sharp install fails on author's machine                        | `bun install` runs sharp's prebuilt binary install; the CLI surfaces a specific error if the lazy-load throws.     |
-| Per-chart-type spec drift across the team                      | Each Zod schema is the contract; changes go through a schema-PR + regenerate-affected-charts pass.                 |
-| Bundle bloat from including sharp in client                    | Server-only barrel + browser-globals check guard prevents accidental client imports.                              |
-| Visual regression after a substrate change                     | Snapshot tests catch SVG diffs; a substrate PR includes the regen + snapshot updates as part of the same diff.    |
+| Risk                                                               | Mitigation                                                                                                                            |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Sharp warp output diverges from chromium (color / antialiasing)    | Phase B starts with a sharp-vs-chromium pixel diff against Spike 2's output; tolerance budget defined before merge.                   |
+| Layer-band contract proves insufficient when GFA composes 4 layers | GFA is in Phase D; if a real composition need surfaces a missing band, propose substrate change in a substrate PR before D.           |
+| Chart-spec YAML drift across chart types                           | One canonical Zod schema per chart type; CLI rejects unknown keys; shared keys (slug, type, title, projection) live in a base schema. |
+| Slug-collision risk (course author picks an existing slug)         | CLI `validate` enumerates existing slugs; future authoring tool can prevent collisions at write time.                                 |
+| Live data availability (NCEI archives sometimes return 404)        | Manual capture model means availability problems surface at capture time, not at chart-build time.                                    |
+| Sharp install fails on author's machine                            | `bun install` runs sharp's prebuilt binary install; the CLI surfaces a specific error if the lazy-load throws.                        |
+| Per-chart-type spec drift across the team                          | Each Zod schema is the contract; changes go through a schema-PR + regenerate-affected-charts pass.                                    |
+| Bundle bloat from including sharp in client                        | Server-only barrel + browser-globals check guard prevents accidental client imports.                                                  |
+| Visual regression after a substrate change                         | Snapshot tests catch SVG diffs; a substrate PR includes the regen + snapshot updates as part of the same diff.                        |
