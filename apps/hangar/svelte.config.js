@@ -56,6 +56,13 @@ const config = {
 			'@ab/hangar-sync/*': '../../libs/hangar-sync/src/*',
 			'@ab/bc-hangar': '../../libs/bc/hangar/src/index.ts',
 			'@ab/bc-hangar/*': '../../libs/bc/hangar/src/*',
+			// course-reader-and-editor WP, Phase 6 -- the hangar courses editor
+			// reads + writes course YAML files and triggers seedCourses() on
+			// save. Both barrels are needed: the runtime entry for type re-exports
+			// + Zod schemas (browser-safe), the server entry for the listAllCourses
+			// / getCourseBySlug / deleteCourseRow helpers used in form actions.
+			'@ab/bc-study': '../../libs/bc/study/src/index.ts',
+			'@ab/bc-study/*': '../../libs/bc/study/src/*',
 			'@ab/bc-ingest-review': '../../libs/bc/ingest-review/src/index.ts',
 			'@ab/bc-ingest-review/*': '../../libs/bc/ingest-review/src/*',
 			'@ab/bc-avionics': '../../libs/bc/avionics/src/index.ts',
@@ -71,6 +78,11 @@ const config = {
 			// `+page.server.ts` import path stays grep-able and survives a
 			// future loader move into a `libs/tracking/` server entry point.
 			'@ab/wp-loader': '../../scripts/lib/wp-loader.ts',
+			// course-reader-and-editor WP, Phase 6 -- the hangar courses editor
+			// invokes the seed pipeline directly via `seedCourses()` on every
+			// save. Aliased so the import path is grep-stable and survives a
+			// future move of the seed script (per design.md fallback path).
+			'@ab/seed-courses': '../../scripts/db/seed-courses.ts',
 		},
 		env: {
 			dir: '../../',

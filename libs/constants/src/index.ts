@@ -535,6 +535,8 @@ export {
 	CONTENT_SOURCE_LABELS,
 	CONTENT_SOURCE_VALUES,
 	CONTENT_SOURCES,
+	COURSE_SLUG_REGEX,
+	COURSES_DIR_RELATIVE,
 	type ConfidenceLevel,
 	type ContentSource,
 	certsCoveredBy,

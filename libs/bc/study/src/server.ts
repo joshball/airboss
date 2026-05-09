@@ -124,6 +124,7 @@ export {
 	getCourseStepsByCourse,
 	getCoursesByGoal,
 	getGoalCourses,
+	getSectionCountsByCourseIds,
 	goalHasCourse,
 	listAllCourses,
 	listCoursesForReader,

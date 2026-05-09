@@ -560,3 +560,25 @@ export async function goalHasCourse(goalId: string, courseId: string, db: Db = d
 export async function getGoalCourses(goalId: string, db: Db = defaultDb): Promise<GoalCourseRow[]> {
 	return db.select().from(goalCourse).where(eq(goalCourse.goalId, goalId)).orderBy(asc(goalCourse.courseId));
 }
+
+/**
+ * Section counts for a list of courses, returned as `{ courseId -> count }`.
+ * The hangar courses index uses this to render `section_count` per row
+ * without N round-trips. Sections are `course_step` rows with
+ * `level='section'`; steps are excluded.
+ */
+export async function getSectionCountsByCourseIds(
+	courseIds: readonly string[],
+	db: Db = defaultDb,
+): Promise<Record<string, number>> {
+	if (courseIds.length === 0) return {};
+	const rows = await db
+		.select({ courseId: courseStep.courseId, count: sql<number>`COUNT(*)::int` })
+		.from(courseStep)
+		.where(and(inArray(courseStep.courseId, courseIds), eq(courseStep.level, COURSE_STEP_LEVELS.SECTION)))
+		.groupBy(courseStep.courseId);
+	const out: Record<string, number> = {};
+	for (const id of courseIds) out[id] = 0;
+	for (const r of rows) out[r.courseId] = r.count;
+	return out;
+}

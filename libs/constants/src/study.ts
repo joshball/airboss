@@ -799,6 +799,17 @@ export const WX_DECODE_PRODUCT_SLUGS = [
 export type WxDecodeProductSlug = (typeof WX_DECODE_PRODUCT_SLUGS)[number];
 
 /**
+ * Course slug shape -- mirrors the DB CHECK (`course_slug_shape_check`) +
+ * the regex used in `libs/bc/study/src/course-yaml-schemas.ts`. The hangar
+ * editor's new-course form re-uses this for live client-side validation
+ * before posting to the action handler.
+ */
+export const COURSE_SLUG_REGEX = /^[a-z0-9][a-z0-9-]{1,62}[a-z0-9]$/;
+
+/** Repo-relative path to the on-disk courses corpus. */
+export const COURSES_DIR_RELATIVE = 'course/courses';
+
+/**
  * Dual-gate mastery thresholds (ADR 011, spec "Mastery computation").
  *
  * Mastery is a dual gate: card stability AND rep accuracy must each clear

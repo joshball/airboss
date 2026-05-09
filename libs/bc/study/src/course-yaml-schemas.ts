@@ -39,18 +39,13 @@
 
 import {
 	COURSE_KIND_VALUES,
+	COURSE_SLUG_REGEX,
 	COURSE_STATUS_VALUES,
 	COURSE_STATUSES,
 	type CourseKind,
 	type CourseStatus,
 } from '@ab/constants';
 import { z } from 'zod';
-
-// `course.slug` shape -- mirrors the DB CHECK
-// (`course_slug_shape_check` in `libs/bc/study/src/schema.ts`). Keeping the
-// regex literal here avoids leaking schema constants into the runtime
-// barrel; the DB still has the final word at insert time.
-const COURSE_SLUG_REGEX = /^[a-z0-9][a-z0-9-]{1,62}[a-z0-9]$/;
 
 /**
  * Top-level `manifest.yaml` for a course directory.
