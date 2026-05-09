@@ -1,0 +1,86 @@
+{
+  "title": "2024-12-23 12Z (Mon)  --  approximate, hand-traced from WPC archive",
+  "validTimeIso": "2024-12-23T12:00:00Z",
+  "_source": "Hand-traced from WPC Surface Analysis archive PNG, https://www.wpc.ncep.noaa.gov/archives/web_pages/sfc/sfc_archive.php. Positions are eyeballed at roughly 1 deg precision. See spike-notes.md for the limitation.",
+  "_pattern_summary": "Late December 2024: deep low over eastern Canada/Great Lakes leading a long cold front through the Mid-Atlantic and Southeast; trailing warm front off the Carolinas; Pacific cold front pushing through PNW into the northern Plains; broad high in the Intermountain West and a second high off the Southeast coast (subtropical ridge).",
+  "centers": [
+    { "kind": "L", "lon": -82, "lat": 47, "pressureMb": 992 },
+    { "kind": "L", "lon": -125, "lat": 46, "pressureMb": 1002 },
+    { "kind": "H", "lon": -110, "lat": 38, "pressureMb": 1028 },
+    { "kind": "H", "lon": -75, "lat": 30, "pressureMb": 1024 },
+    { "kind": "H", "lon": -100, "lat": 51, "pressureMb": 1032 }
+  ],
+  "fronts": [
+    {
+      "kind": "cold",
+      "_label": "Long cold front trailing eastern low through Mid-Atlantic into Gulf",
+      "pipSide": "E",
+      "points": [
+        [-82, 47],
+        [-83, 43],
+        [-84, 39],
+        [-86, 35],
+        [-90, 32],
+        [-94, 30]
+      ]
+    },
+    {
+      "kind": "warm",
+      "_label": "Warm front extending east off the Carolinas",
+      "pipSide": "N",
+      "points": [
+        [-82, 47],
+        [-78, 45],
+        [-74, 42],
+        [-70, 39]
+      ]
+    },
+    {
+      "kind": "cold",
+      "_label": "Pacific cold front entering PNW, into northern Plains",
+      "pipSide": "S",
+      "points": [
+        [-125, 46],
+        [-120, 44],
+        [-115, 43],
+        [-108, 44],
+        [-102, 46]
+      ]
+    },
+    {
+      "kind": "stationary",
+      "_label": "Stationary front across central Texas / southern Plains",
+      "pipSide": "N",
+      "points": [
+        [-104, 32],
+        [-100, 31],
+        [-96, 31],
+        [-92, 31]
+      ]
+    },
+    {
+      "kind": "occluded",
+      "_label": "Occluded segment north of the Great Lakes low",
+      "pipSide": "E",
+      "points": [
+        [-82, 47],
+        [-80, 49],
+        [-78, 51]
+      ]
+    }
+  ],
+  "stations": [
+    { "id": "KSEA", "lon": -122.31, "lat": 47.45, "tempF": 41, "dewF": 38, "pressureMb": 1003, "windDir": 200, "windKt": 25, "skyCover": "OVC" },
+    { "id": "KSFO", "lon": -122.37, "lat": 37.62, "tempF": 50, "dewF": 44, "pressureMb": 1018, "windDir": 290, "windKt": 10, "skyCover": "BKN" },
+    { "id": "KLAX", "lon": -118.41, "lat": 33.94, "tempF": 56, "dewF": 41, "pressureMb": 1019, "windDir": 240, "windKt": 8, "skyCover": "FEW" },
+    { "id": "KDEN", "lon": -104.67, "lat": 39.86, "tempF": 28, "dewF": 14, "pressureMb": 1027, "windDir": 320, "windKt": 15, "skyCover": "CLR" },
+    { "id": "KDFW", "lon": -97.04, "lat": 32.90, "tempF": 60, "dewF": 55, "pressureMb": 1015, "windDir": 180, "windKt": 12, "skyCover": "OVC" },
+    { "id": "KMSP", "lon": -93.22, "lat": 44.88, "tempF": 18, "dewF": 12, "pressureMb": 1019, "windDir": 290, "windKt": 18, "skyCover": "BKN" },
+    { "id": "KORD", "lon": -87.91, "lat": 41.98, "tempF": 35, "dewF": 32, "pressureMb": 1006, "windDir": 240, "windKt": 25, "skyCover": "OVC" },
+    { "id": "KATL", "lon": -84.43, "lat": 33.64, "tempF": 58, "dewF": 54, "pressureMb": 1011, "windDir": 200, "windKt": 15, "skyCover": "OVC" },
+    { "id": "KMIA", "lon": -80.29, "lat": 25.79, "tempF": 76, "dewF": 70, "pressureMb": 1017, "windDir": 110, "windKt": 12, "skyCover": "SCT" },
+    { "id": "KJFK", "lon": -73.78, "lat": 40.64, "tempF": 42, "dewF": 38, "pressureMb": 1004, "windDir": 130, "windKt": 20, "skyCover": "OVC" },
+    { "id": "KBOS", "lon": -71.00, "lat": 42.36, "tempF": 39, "dewF": 35, "pressureMb": 1002, "windDir": 100, "windKt": 22, "skyCover": "OVC" },
+    { "id": "KBIS", "lon": -100.75, "lat": 46.77, "tempF": 8, "dewF": 4, "pressureMb": 1023, "windDir": 310, "windKt": 12, "skyCover": "FEW" }
+  ]
+}
