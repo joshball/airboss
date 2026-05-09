@@ -35,8 +35,8 @@ import { upsertEdition } from '@ab/sources/server';
 import { eq } from 'drizzle-orm';
 import { parse } from 'yaml';
 import { z } from 'zod';
-import { reference } from '../../libs/bc/study/src/schema';
 import { upsertReference } from '../../libs/bc/study/src/references';
+import { reference } from '../../libs/bc/study/src/schema';
 import { loadPohAuthoring, type PohOverlay } from '../../libs/bc/study/src/seeders/poh-authoring';
 
 const HERE = dirname(fileURLToPath(import.meta.url));

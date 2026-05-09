@@ -11,6 +11,11 @@
 // `SERVER_ONLY_PACKAGE_PATTERNS` so a `.svelte` file that tries to import
 // from it fails the check.
 
+// Drizzle table handles for callers that need to author their own subqueries
+// (e.g. ADR 026 BC-consumers building a `notSupersededInRegistry` predicate
+// against `study.reference`). Surfaced from the server barrel because their
+// only legitimate consumers are query authors -- not types.
+export { type EditionRow, editions, type NewEditionRow } from './db/schema.ts';
 // ADR 026 §6 resolver API.
 export {
 	getCurrentEdition,
@@ -18,17 +23,9 @@ export {
 	isEditionSuperseded,
 	listEditionsForSource,
 } from './registry/edition-resolver.ts';
-
-// Drizzle table handles for callers that need to author their own subqueries
-// (e.g. ADR 026 BC-consumers building a `notSupersededInRegistry` predicate
-// against `study.reference`). Surfaced from the server barrel because their
-// only legitimate consumers are query authors -- not types.
-export { editions, type EditionRow, type NewEditionRow } from './db/schema.ts';
-
 // ADR 026 §3 seed-time writer (the seed is the only caller; the
 // `edition-cache-write-guard` lint blocks non-seed call sites).
 export { markPriorEditionsRetired, type UpsertEditionInput, upsertEdition } from './registry/edition-writer.ts';
-
 // Existing server-only helpers callers reach via deep file import today.
 // Surface them here so future callers don't reach into `registry/editions.ts`
 // directly. `getEditionsMap` (the sync, in-memory variant called from

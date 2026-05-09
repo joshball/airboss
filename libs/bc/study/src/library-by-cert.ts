@@ -283,10 +283,7 @@ export async function listReferencesByTopic(topic: string, db: Db = defaultDb): 
  * one count per `CERT_APPLICABILITIES` value (zero when none assigned).
  */
 export async function getReferenceCountsByCert(db: Db = defaultDb): Promise<Record<CertApplicability, number>> {
-	const rows = await db
-		.select({ primaryCert: reference.primaryCert })
-		.from(reference)
-		.where(notSupersededInRegistry());
+	const rows = await db.select({ primaryCert: reference.primaryCert }).from(reference).where(notSupersededInRegistry());
 	const out = {} as Record<CertApplicability, number>;
 	for (const value of CERT_APPLICABILITY_VALUES) out[value] = 0;
 	for (const row of rows) {

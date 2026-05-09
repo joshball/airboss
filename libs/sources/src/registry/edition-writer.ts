@@ -13,7 +13,7 @@
 import { createId } from '@ab/utils';
 import { and, eq } from 'drizzle-orm';
 import { db } from '../db/client.ts';
-import { type EditionRow, type NewEditionRow, editions as editionsTable } from '../db/schema.ts';
+import { type EditionRow, editions as editionsTable, type NewEditionRow } from '../db/schema.ts';
 import type { SourceId } from '../types.ts';
 import { __editions_internal__ } from './editions.ts';
 

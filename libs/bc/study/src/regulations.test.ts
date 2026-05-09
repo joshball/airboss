@@ -28,12 +28,7 @@ import {
 	REFERENCE_SECTION_LEVELS,
 } from '@ab/constants';
 import { db } from '@ab/db/connection';
-import {
-	airbossRefForCfrSection,
-	airbossRefForCfrSubpart,
-	type SourceId,
-	sourceIdForReference,
-} from '@ab/sources';
+import { airbossRefForCfrSection, airbossRefForCfrSubpart, type SourceId, sourceIdForReference } from '@ab/sources';
 import { editions as editionsTable, upsertEdition } from '@ab/sources/server';
 import type { StructuredCitation } from '@ab/types';
 import { generateAuthId, generateReferenceFigureId, generateReferenceId, generateReferenceSectionId } from '@ab/utils';
