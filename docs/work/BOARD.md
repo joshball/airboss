@@ -50,14 +50,17 @@ Sections sort by status; within each section WPs sort alphabetically by id.
 | [wp-rmh-section-tree](../work-packages/wp-rmh-section-tree/spec.md)                         | WP-RMH -- promote Risk Management Handbook to section-tree                                      | course    | content  | pending      | pending      |
 | [wp-safo-info](../work-packages/wp-safo-info/spec.md)                                       | Spec: WP-SAFO-INFO -- pipelines for FAA Safety Alerts For Operators + Information For Operators | course    | content  | pending      | pending      |
 
-## Signed off (44)
+## Signed off (47)
 
 | ID                                                                                                      | Title                                                                         | Product   | Category | Agent review | Human review |
 | ------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | --------- | -------- | ------------ | ------------ |
 | [apply-errata-and-afh-mosaic](../work-packages/apply-errata-and-afh-mosaic/spec.md)                     | Spec: Apply Errata and AFH MOSAIC                                             | study     | feature  | pending      | pending      |
+| [auth-names](../work-packages/auth-names/spec.md)                                                       | auth-names                                                                    | platform  | feature  | done         | pending      |
 | [calibration-tracker](../work-packages/calibration-tracker/spec.md)                                     | Spec: Calibration Tracker                                                     | study     | feature  | pending      | pending      |
 | [chapter-source-ingestion](../work-packages/chapter-source-ingestion/spec.md)                           | Chapter source ingestion                                                      | platform  | platform | pending      | pending      |
+| [course-primitive](../work-packages/course-primitive/spec.md)                                           | Spec: Course Primitive                                                        | study     | feature  | done         | pending      |
 | [decision-reps](../work-packages/decision-reps/spec.md)                                                 | Spec: Decision Reps                                                           | study     | feature  | pending      | pending      |
+| [drift-fixes-20260330](../work-packages/drift-fixes-20260330/spec.md)                                   | Drift Fixes 2026-03-30                                                        | platform  | platform | done         | pending      |
 | [evidence-kind-data-layer](../work-packages/evidence-kind-data-layer/spec.md)                           | Spec: Evidence Kind Data Layer                                                | study     | feature  | pending      | pending      |
 | [extract-provenance-and-signoff](../work-packages/extract-provenance-and-signoff/spec.md)               | Extract provenance + per-section signoff                                      | platform  | platform | done         | pending      |
 | [flight-dynamics-sim](../work-packages/flight-dynamics-sim/spec.md)                                     | Spec: Flight Dynamics Sim                                                     | sim       | feature  | pending      | pending      |
@@ -128,11 +131,3 @@ Sections sort by status; within each section WPs sort alphabetically by id.
 | [memory-review-load-as-action](../work-packages/memory-review-load-as-action/spec.md) | Memory review: load -> action conversion           | study    | feature  | pending      | pending      |
 | [route-style-extraction](../work-packages/route-style-extraction/spec.md)             | Promote oversized route style blocks into libs/ui/ | platform | platform | pending      | pending      |
 | [sim-scenario-table](../work-packages/sim-scenario-table/spec.md)                     | Promote sim manifests to a `sim.scenario` table    | sim      | feature  | pending      | pending      |
-
-## Invalid (frontmatter errors) (3)
-
-| ID                                                                    | Title                 | Product | Category | Agent review | Human review |
-| --------------------------------------------------------------------- | --------------------- | ------- | -------- | ------------ | ------------ |
-| [auth-names](../work-packages/auth-names/spec.md)                     | (6 validation errors) | ?       | ?        | ?            | ?            |
-| [course-primitive](../work-packages/course-primitive/spec.md)         | (5 validation errors) | ?       | ?        | ?            | ?            |
-| [drift-fixes-20260330](../work-packages/drift-fixes-20260330/spec.md) | (6 validation errors) | ?       | ?        | ?            | ?            |

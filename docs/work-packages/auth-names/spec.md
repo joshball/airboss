@@ -1,8 +1,23 @@
 ---
-title: "auth-names"
-status: "done"
-type: "cross-app"
-scope: "libs/auth, libs/types, all 4 apps"
+id: auth-names
+title: 'auth-names'
+product: platform
+category: feature
+status: signed-off
+agent_review_status: done
+human_review_status: pending
+created: 2026-03-15
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - auth
+  - cross-app
+  - pre-pivot
+legacy_fields:
+  type: cross-app
+  scope: 'libs/auth, libs/types, all 4 apps'
+  status_legacy: done
 ---
 
 # auth-names

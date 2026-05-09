@@ -1,9 +1,24 @@
 ---
+id: course-primitive
 title: 'Spec: Course Primitive'
 product: study
-feature: course-primitive
-type: spec
-status: unread
+category: feature
+status: signed-off
+agent_review_status: done
+human_review_status: pending
+created: 2026-05-08
+owner: agent
+depends_on:
+  - cert-syllabus-and-goal-composer
+unblocks: []
+tags:
+  - lens
+  - syllabus
+  - course
+  - adr-016
+legacy_fields:
+  feature: course-primitive
+  type: spec
 ---
 
 # Spec: Course Primitive

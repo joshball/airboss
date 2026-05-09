@@ -1,11 +1,29 @@
 ---
-title: "Drift Fixes 2026-03-30"
-type: "cross-app-bugfix"
-status: "done"
-date: "2026-03-30"
-source: "docs/work/reviews/20260330-drift-report.md"
-apps: ["sim", "ops"]
-libs: ["utils"]
+id: drift-fixes-20260330
+title: 'Drift Fixes 2026-03-30'
+product: platform
+category: platform
+status: signed-off
+agent_review_status: done
+human_review_status: pending
+created: 2026-03-30
+owner: agent
+depends_on: []
+unblocks: []
+tags:
+  - drift
+  - bug-batch
+  - pre-pivot
+legacy_fields:
+  type: cross-app-bugfix
+  date: '2026-03-30'
+  source: 'docs/work/reviews/20260330-drift-report.md'
+  apps:
+    - sim
+    - ops
+  libs:
+    - utils
+  status_legacy: done
 ---
 
 # Drift Fixes 2026-03-30
