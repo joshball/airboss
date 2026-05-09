@@ -148,17 +148,6 @@ Closeout PR (this phase).
 - [ ] Commit doc updates.
 - [ ] Mark WP `human_review_status: signed-off` after Joshua's walkthrough.
 
-## Out of scope (do NOT do in this WP)
+## Out of scope
 
-These are explicitly deferred per [spec.md](./spec.md). Do not add them to satisfy a reviewer or to "tidy up":
-
-- `course_prereq` table or any course-to-course prerequisite logic
-- `course_step.track` column (parallel ladders are an authoring convention only)
-- `course_aux_link` table or aux course attachment
-- `goal_node_exclusion` or any per-node opt-out primitive
-- Course versioning fields (`version`, `superseded_by_id`, `mutable`)
-- Personal course authoring UI (`COURSE_KINDS.PERSONAL` is reserved as a value but unauthored in this WP)
-- `course.cert_alignment` field (overlay is goal-driven, not course-declared)
-- Course step UI pages (the lens output is consumed by the next WP; this WP ships data + lens, not UI)
-
-If a reviewer flags one of these, point at this section and the spec's Out-of-scope list. Land the deferred work in a follow-on WP only when the weather-course authoring (next WP) shows it's needed.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
