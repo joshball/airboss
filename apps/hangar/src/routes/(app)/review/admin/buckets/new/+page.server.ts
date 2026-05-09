@@ -14,7 +14,7 @@
 
 import { AUDIT_OPS, auditWrite } from '@ab/audit';
 import { requireRole } from '@ab/auth';
-import { createBucket, getOrCreateBoard } from '@ab/bc-hangar';
+import { createBucket, getOrCreateBoard } from '@ab/bc-hangar/server';
 import { AUDIT_TARGETS, ROLES, ROUTES } from '@ab/constants';
 import { db } from '@ab/db/connection';
 import { createLogger } from '@ab/utils';

@@ -34,8 +34,10 @@ test.describe('docs browser: baseline rendering', () => {
 		await expect(article).toBeVisible();
 		const articleText = (await article.innerText()).trim();
 		expect(articleText.length).toBeGreaterThan(500);
-		// Breadcrumb nav surfaces the Docs root link.
-		await expect(page.getByRole('link', { name: /^Docs$/ })).toBeVisible();
+		// Breadcrumb nav surfaces the Docs root link. Scope to the breadcrumbs
+		// landmark -- the banner also exposes a `Docs` link, and we only care
+		// here that the breadcrumb is rendered for this deep-linked file.
+		await expect(page.getByTestId('breadcrumbs-root').getByRole('link', { name: /^Docs$/ })).toBeVisible();
 		// Frontmatter rail renders with at least one of the curated keys.
 		const rail = page.getByRole('complementary', { name: /frontmatter/i });
 		// ADR 011 has a `status` line in its frontmatter; the rail surfaces it.

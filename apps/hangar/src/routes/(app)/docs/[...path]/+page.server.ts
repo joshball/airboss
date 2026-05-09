@@ -24,7 +24,7 @@
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { requireRole } from '@ab/auth';
-import { isDocsPathAllowed, REPO_ROOT, readIndexedDoc } from '@ab/bc-hangar';
+import { isDocsPathAllowed, REPO_ROOT, readIndexedDoc } from '@ab/bc-hangar/server';
 import { ROLES, ROUTES } from '@ab/constants';
 import { parseFrontmatter, renderMarkdown } from '@ab/utils';
 import { error } from '@sveltejs/kit';

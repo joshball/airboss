@@ -12,7 +12,7 @@
 import { stat } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { requireRole } from '@ab/auth';
-import { getActiveJobForTarget, getSource, listRecentJobsForTarget, REPO_ROOT } from '@ab/bc-hangar';
+import { getActiveJobForTarget, getSource, listRecentJobsForTarget, REPO_ROOT } from '@ab/bc-hangar/server';
 import { JOB_KINDS, type ReferenceSourceType, ROLES, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { error, fail } from '@sveltejs/kit';

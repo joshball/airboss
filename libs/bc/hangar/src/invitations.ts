@@ -40,36 +40,26 @@ import { db as defaultDb } from '@ab/db/connection';
 import { createId, generateAuthId } from '@ab/utils';
 import { and, desc, eq, gt, isNotNull, isNull, lte } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
+import {
+	INVITATION_STATUS,
+	INVITATIONS_LIST_LIMIT,
+	type InvitationStatus,
+	type InvitationStatusFilter,
+} from './invitation-status';
 import { type HangarInvitationRow, hangarInvitation } from './schema';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 
-/**
- * Derived state of an invitation. Computed at read time from the row's
- * timestamps + the current clock; the column set stays simple (no
- * separate enum, no soft-delete + status-cache to keep in sync).
- */
-export const INVITATION_STATUS = {
-	PENDING: 'pending',
-	ACCEPTED: 'accepted',
-	REVOKED: 'revoked',
-	EXPIRED: 'expired',
-} as const;
-
-export type InvitationStatus = (typeof INVITATION_STATUS)[keyof typeof INVITATION_STATUS];
-
-export const INVITATION_STATUS_VALUES: readonly InvitationStatus[] = Object.values(INVITATION_STATUS);
-
-/** Status filter accepted by `listInvitations`. `'all'` means no filter. */
-export type InvitationStatusFilter = InvitationStatus | 'all';
-
-/** Hard cap on `listInvitations`. The hangar set is small today; if the
- * platform grows past this the page surfaces a "showing first N" hint. */
-export const INVITATIONS_LIST_LIMIT = 200;
-
-/** Recent audit rows shown on the invitation-detail page. Mirrors the
- * `USER_DETAIL_AUDIT_LIMIT` constant for `/users/[id]`. */
-export const INVITATION_DETAIL_AUDIT_LIMIT = 20;
+// Pure status constants moved to ./invitation-status.ts so the runtime barrel
+// can re-export them without dragging in @ab/db/connection.
+export {
+	INVITATION_DETAIL_AUDIT_LIMIT,
+	INVITATION_STATUS,
+	INVITATION_STATUS_VALUES,
+	INVITATIONS_LIST_LIMIT,
+	type InvitationStatus,
+	type InvitationStatusFilter,
+} from './invitation-status';
 
 /** Compute the derived status of an invitation row at `now`. */
 export function deriveInvitationStatus(row: HangarInvitationRow, now: Date = new Date()): InvitationStatus {

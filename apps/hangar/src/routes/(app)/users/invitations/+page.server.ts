@@ -10,7 +10,7 @@ import {
 	type InvitationStatusFilter,
 	listInvitations,
 	PendingInvitationExistsError,
-} from '@ab/bc-hangar';
+} from '@ab/bc-hangar/server';
 import {
 	HOST_PREFIXES,
 	INVITATION_DEFAULT_EXPIRY_DAYS,

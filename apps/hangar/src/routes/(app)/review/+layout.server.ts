@@ -23,7 +23,7 @@ import {
 	listItemsWithPassingSession,
 	listKinds,
 	seedDefaultBuckets,
-} from '@ab/bc-hangar';
+} from '@ab/bc-hangar/server';
 import { ROLES } from '@ab/constants';
 import type { LayoutServerLoad } from './$types';
 

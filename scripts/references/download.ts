@@ -20,7 +20,7 @@
  *      checksum mismatch, etc.)
  */
 
-import { handleBinaryVisualFetch, resolveHangarBlobRoot, type SectionalFetchOutcome } from '@ab/bc-hangar';
+import { handleBinaryVisualFetch, resolveHangarBlobRoot, type SectionalFetchOutcome } from '@ab/bc-hangar/server';
 import { JOB_KINDS, JOB_STATUSES } from '@ab/constants';
 import type { JobContext, JobProgress } from '@ab/hangar-jobs';
 

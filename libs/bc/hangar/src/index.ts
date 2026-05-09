@@ -1,44 +1,28 @@
-// Hangar BC -- registry CRUD, job pipelines, source ingest, users directory.
-// Owns the `hangar.*` schema and every Drizzle query that touches it.
+// Hangar BC -- runtime barrel (browser-safe).
+//
+// Every value re-export in this file MUST resolve to a module that does NOT
+// statically import `@ab/db/connection` or `node:*`. Server-only helpers
+// live in `./server.ts`; pure / browser-eligible code lives here.
+//
+// Type re-exports of server-only modules are safe -- TypeScript erases them
+// at compile time so they never reach the browser bundle. Existing callers
+// that did `import type { Foo } from '@ab/bc-hangar'` keep working.
+//
+// Validator: `scripts/check-browser-globals.ts` walks this barrel and fails
+// if any value re-export reaches `@ab/db/connection` or `postgres`.
 
-export {
-	type ActorSearchHit,
-	AUDIT_ACTOR_SYSTEM,
-	type AuditEntriesPage,
-	type AuditEntryDetail,
-	type AuditEntryRow,
-	type AuditFilters,
-	buildAuditWhere,
-	clampAuditLimit,
-	type DecodedAuditCursor,
-	decodeAuditCursor,
-	encodeAuditCursor,
-	getActorById,
-	getAuditEntry,
-	isLikelyAuthId,
-	listAuditEntries,
-	resolveActorForChip,
-	searchActorIds,
+// Audit query types (functions + AUDIT_ACTOR_SYSTEM live in ./server).
+export type {
+	ActorSearchHit,
+	AuditEntriesPage,
+	AuditEntryDetail,
+	AuditEntryRow,
+	AuditFilters,
+	DecodedAuditCursor,
 } from './audit-queries';
-export { HANGAR_BLOB_DIR, resolveHangarBlobRoot } from './blob-root';
-export {
-	countAllJobs,
-	countLiveReferences,
-	countLiveSources,
-	countVerbatimReferences,
-	listLiveSources,
-} from './dashboard-queries';
-export { countDocsIndex, type DocsSearchHit, readIndexedDoc, searchDocs } from './docs-search';
-export {
-	bustDocsTreeCache,
-	type DocsTreeDirNode,
-	type DocsTreeFileNode,
-	type DocsTreeNode,
-	isDocsPathAllowed,
-	listDocsTree,
-} from './docs-tree';
-export type { FetchHtmlFn } from './edition-stub';
-export { makeStubFetchHtml, withEditionStub } from './edition-stub';
+export type { DocsSearchHit } from './docs-search';
+export type { DocsTreeDirNode, DocsTreeFileNode, DocsTreeNode } from './docs-tree';
+// Pure form helpers + schemas (zod-only).
 export {
 	type FieldErrors,
 	getAll,
@@ -80,51 +64,13 @@ export {
 	RevokeInvitationInputSchema,
 } from './invitation-schemas';
 export {
-	type AcceptInvitationInput,
-	type AcceptInvitationResult,
-	acceptInvitation,
-	type CreateInvitationInput,
-	type CreateInvitationResult,
-	createInvitation,
-	deriveInvitationStatus,
-	EmailAlreadyExistsError,
-	generateInvitationToken,
-	getInvitation,
-	getInvitationByToken,
 	INVITATION_DETAIL_AUDIT_LIMIT,
 	INVITATION_STATUS,
 	INVITATION_STATUS_VALUES,
 	INVITATIONS_LIST_LIMIT,
-	type InvitationEmailContent,
-	type InvitationEmailContext,
-	type InvitationEmailRenderer,
-	type InvitationEmailSender,
-	InvitationEmailSendFailedError,
-	type InvitationListRow,
-	InvitationRoleForbiddenError,
-	InvitationStateError,
 	type InvitationStatus,
 	type InvitationStatusFilter,
-	type ListInvitationsOptions,
-	type ListInvitationsResult,
-	listInvitations,
-	listInvitationsBySender,
-	type PasswordHasher,
-	PendingInvitationExistsError,
-	type ResendInvitationInput,
-	type ResendInvitationResult,
-	type RevokeInvitationInput,
-	type RevokeInvitationResult,
-	resendInvitation,
-	revokeInvitation,
-} from './invitations';
-export {
-	getActiveJobForTarget,
-	getLatestCompleteJobByKind,
-	getLatestCompleteJobForTarget,
-	listRecentJobsForTarget,
-	listRunningJobs,
-} from './jobs-queries';
+} from './invitation-status';
 export {
 	formDataToInitial,
 	parseCitations,
@@ -133,88 +79,41 @@ export {
 	validateReferenceForm,
 } from './reference-form';
 export { EMPTY_REFERENCE_INITIAL, type ReferenceFormInitial } from './reference-form-types';
-export {
-	createReference,
-	createSource,
-	getReference,
-	getSource,
-	type ListReferencesOptions,
-	type ListReferencesResult,
-	type ListSourcesOptions,
-	type ListSourcesResult,
-	listReferences,
-	listSources,
-	NotFoundError,
-	type ReferenceInput,
-	type ReferenceTagsInput,
-	RevConflictError,
-	referenceDescSortByUpdated,
-	type SourceCitationInput,
-	type SourceInput,
-	softDeleteReference,
-	softDeleteSource,
-	sourceDescSortByUpdated,
-	updateReference,
-	updateSource,
+export type {
+	ListReferencesOptions,
+	ListReferencesResult,
+	ListSourcesOptions,
+	ListSourcesResult,
+	ReferenceInput,
+	ReferenceTagsInput,
+	SourceCitationInput,
+	SourceInput,
 } from './registry';
+// Type-only re-exports of server-only modules (erased at compile time).
+export type {
+	CreateBucketInput,
+	CreateTaskInput,
+	ListItemsFilters,
+	RecordStepInput,
+	SessionSummary,
+	UpdateTaskInput,
+	UpsertItemInput,
+	WalkerSummary,
+} from './review';
+export type { DiscoveredItem, DiscoveryError, DiscoveryResult } from './review-discovery';
+export type { LastLoaderRun, LoaderResult } from './review-loader';
+// Pure helpers (extracted from `./review.ts` to live without DB imports).
 export {
-	type CreateBucketInput,
-	type CreateTaskInput,
-	countItemsByCriteria,
-	countReviewQueueOpen,
-	createBucket,
-	createColumn,
-	createTask,
-	deleteBucket,
-	deleteTask,
 	everyStepPassed,
 	filterItemsByCriteria,
-	findItemByRef,
-	finishSession,
-	getBoard,
-	getBucket,
 	getDerivedColumnName,
-	getItem,
-	getOpenSession,
-	getOrCreateBoard,
-	getTask,
-	type ListItemsFilters,
-	listBuckets,
-	listColumns,
-	listItems,
-	listItemsWithPassingSession,
-	listKinds,
-	listSessions,
-	listSteps,
-	listTasks,
-	pinItemToColumn,
-	type RecordStepInput,
-	recordStep,
 	resolveItemColumnId,
-	type SessionSummary,
-	seedDefaultBuckets,
-	seedDefaultColumns,
-	seedReviewKinds,
-	softDeleteItem,
-	startSession,
-	type UpdateTaskInput,
-	type UpsertItemInput,
-	updateBucket,
-	updateTask,
-	upsertItem,
 	validateBucketFilterCriteria,
-	type WalkerSummary,
-} from './review';
-export {
-	type DiscoveredItem,
-	type DiscoveryError,
-	type DiscoveryResult,
-	discoverAllItems,
-} from './review-discovery';
-export { readFrontmatter, writeFrontmatterField, writeFrontmatterFields } from './review-frontmatter';
-export { getLastLoaderRun, type LastLoaderRun, type LoaderResult, loadReviewItems } from './review-loader';
-export { parseTestPlan, type TestPlanStep } from './review-test-plan';
+} from './review-pure';
+export type { TestPlanStep } from './review-test-plan';
 export { parseToc, type TocEntry, type TocParseResult } from './review-toc';
+// Schema row types + Drizzle table objects (browser-safe -- @ab/db has no
+// runtime side-effects; the postgres driver lives in @ab/db/connection).
 export {
 	type BucketFilterCriteria,
 	type CachedFrontmatterFields,
@@ -262,22 +161,18 @@ export {
 	type NewHangarSyncLogRow,
 } from './schema';
 export { assertRevSnapshot, parseRevSnapshot, type RevSnapshot, RevSnapshotSchema } from './schema-types';
-export {
-	type ArchiveEntry,
-	type ArchiveReaderFn,
-	type BinaryVisualFetchOptions,
-	type DbUpdaterFn,
-	type DownloaderFn,
-	formatEditionDiff,
-	handleBinaryVisualFetch,
-	type LocatorShape,
-	type ResolverFn,
-	runSectionalFetch,
-	SECTIONAL_CADENCE_DAYS,
-	type SectionalFetchHooks,
-	type SectionalFetchInput,
-	type SectionalFetchOutcome,
-	type ThumbnailFn,
+export type {
+	ArchiveEntry,
+	ArchiveReaderFn,
+	BinaryVisualFetchOptions,
+	DbUpdaterFn,
+	DownloaderFn,
+	LocatorShape,
+	ResolverFn,
+	SectionalFetchHooks,
+	SectionalFetchInput,
+	SectionalFetchOutcome,
+	ThumbnailFn,
 } from './source-fetch';
 export {
 	type OutboundUrlValidationFailure,
@@ -290,29 +185,13 @@ export {
 	validateSourceFormUrls,
 } from './source-form';
 export { EMPTY_SOURCE_INITIAL, type SourceFormInitial } from './source-form-types';
-export {
-	type FetchHandlerOptions,
-	makeBuildHandler,
-	makeDiffHandler,
-	makeExtractHandler,
-	makeFetchHandler,
-	makeUploadHandler,
-	makeValidateHandler,
-	nodeSpawnRunner,
-	REGISTRY_TARGET_ID,
-	REPO_ROOT,
-	type SourceJobOptions,
-	type SpawnResult,
-	type SpawnRunner,
-	type TargetedSourcePayload,
+export type {
+	FetchHandlerOptions,
+	SourceJobOptions,
+	SpawnResult,
+	SpawnRunner,
+	TargetedSourcePayload,
 } from './source-jobs';
-export {
-	getSeedSource,
-	getSeedSourcesByType,
-	isSeedSourceDownloaded,
-	PENDING_DOWNLOAD,
-	SOURCES as SEED_SOURCES,
-} from './source-seed-registry';
 export type { UploadHandlerOptions, UploadJobPayload } from './upload-handler';
 export {
 	archiveFilename,
@@ -333,42 +212,19 @@ export {
 	type UnbanUserFormInput,
 	UnbanUserInputSchema,
 } from './user-write-schemas';
-export {
-	type AdminAuthApi,
-	type AdminAuthBundle,
-	assertNotLastAdmin,
-	assertSelfTargetAllowed,
-	type BanUserActionInput,
-	BetterAuthApiError,
-	banUserAction,
-	expiresAtToBanExpiresIn,
-	LastAdminError,
-	type RevokeAllUserSessionsInput,
-	type RevokeUserSessionInput,
-	revokeAllUserSessions,
-	revokeUserSession,
-	SelfTargetForbiddenError,
-	type SelfTargetGuardOp,
-	type SetUserRoleInput,
-	setUserRole,
-	type UnbanUserActionInput,
-	unbanUserAction,
+export type {
+	AdminAuthApi,
+	AdminAuthBundle,
+	BanUserActionInput,
+	RevokeAllUserSessionsInput,
+	RevokeUserSessionInput,
+	SelfTargetGuardOp,
+	SetUserRoleInput,
+	UnbanUserActionInput,
 } from './user-writes';
-export {
-	buildUserSearchWhere,
-	countUserSessions,
-	countUsersByRole,
-	getUser,
-	hasUserSessionWithId,
-	type ListUsersOptions,
-	listRecentUserAudits,
-	listRecentUserSessions,
-	listUsers,
-	narrowRole,
-	USER_DETAIL_AUDIT_LIMIT,
-	USER_DETAIL_SESSION_LIMIT,
-	USERS_LIST_LIMIT,
-	type UserAuditRow,
-	type UserDirectoryRow,
-	type UserSessionRow,
+export type {
+	ListUsersOptions,
+	UserAuditRow,
+	UserDirectoryRow,
+	UserSessionRow,
 } from './users';

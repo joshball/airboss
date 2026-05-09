@@ -9,7 +9,7 @@
  */
 
 import { resolve } from 'node:path';
-import { loadReviewItems } from '@ab/bc-hangar';
+import { loadReviewItems } from '@ab/bc-hangar/server';
 
 const QUIET = process.argv.includes('--quiet');
 

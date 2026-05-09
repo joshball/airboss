@@ -22,6 +22,18 @@
 // Browser-safe value exports (no DB connection import in their module)
 // ----------------------------------------------------------------------
 
+// Course YAML authoring schemas (course-primitive WP Phase 6). Pure Zod;
+// browser-safe. Loaders / form actions on a future authoring surface
+// validate uploaded course YAML against these without dragging the
+// postgres driver into the client bundle.
+export {
+	type CourseManifest,
+	type CourseSection,
+	type CourseStep,
+	courseManifestSchema,
+	courseSectionSchema,
+	courseStepSchema,
+} from './course-yaml-schemas';
 // Goal-CRUD Zod schemas + their inferred input types. The BC `goals.ts`
 // write helpers parse against these inside their function bodies as a
 // defense-in-depth layer on top of the route-level coercion.
@@ -221,18 +233,6 @@ export {
 	submitReviewSchema,
 	updateCardSchema,
 } from './validation';
-// Course YAML authoring schemas (course-primitive WP Phase 6). Pure Zod;
-// browser-safe. Loaders / form actions on a future authoring surface
-// validate uploaded course YAML against these without dragging the
-// postgres driver into the client bundle.
-export {
-	type CourseManifest,
-	type CourseSection,
-	type CourseStep,
-	courseManifestSchema,
-	courseSectionSchema,
-	courseStepSchema,
-} from './course-yaml-schemas';
 
 // ----------------------------------------------------------------------
 // Type-only re-exports of server-only modules

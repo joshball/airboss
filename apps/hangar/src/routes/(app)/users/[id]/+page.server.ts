@@ -17,7 +17,7 @@ import {
 	setUserRole,
 	UnbanUserInputSchema,
 	unbanUserAction,
-} from '@ab/bc-hangar';
+} from '@ab/bc-hangar/server';
 import { ROLES, ROUTES, type Role } from '@ab/constants';
 import { error, fail, type RequestEvent, redirect } from '@sveltejs/kit';
 import { auth } from '$lib/server/auth';

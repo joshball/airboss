@@ -23,7 +23,7 @@ import {
 	softDeleteItem,
 	updateTask,
 	upsertItem,
-} from '@ab/bc-hangar';
+} from '@ab/bc-hangar/server';
 import {
 	PRODUCT_AREA_LABELS,
 	PRODUCT_AREA_VALUES,

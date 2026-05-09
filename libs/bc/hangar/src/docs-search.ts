@@ -109,7 +109,7 @@ export async function searchDocs(
 		})
 		.from(hangarDocsSearchIndex)
 		.where(sql`${tsv} @@ plainto_tsquery('english', ${query})`)
-		.orderBy(sql`rank DESC`)
+		.orderBy(sql`ts_rank_cd(${tsv}, plainto_tsquery('english', ${query})) DESC`)
 		.limit(limit);
 	// Sanitise snippets server-side so the client `{@html}` contract is
 	// "only `<mark>` survives; everything else is HTML-escaped text".

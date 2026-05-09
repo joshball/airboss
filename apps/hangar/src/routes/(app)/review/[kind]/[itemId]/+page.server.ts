@@ -34,7 +34,7 @@ import {
 	type TocEntry,
 	type WalkerSummary,
 	writeFrontmatterField,
-} from '@ab/bc-hangar';
+} from '@ab/bc-hangar/server';
 import {
 	REVIEW_KIND_LABELS,
 	REVIEW_KIND_VALUES,

@@ -17,7 +17,7 @@
  */
 
 import { requireRole } from '@ab/auth';
-import { searchActorIds } from '@ab/bc-hangar';
+import { searchActorIds } from '@ab/bc-hangar/server';
 import { QUERY_PARAMS, ROLES } from '@ab/constants';
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';

@@ -14,7 +14,7 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { requireRole } from '@ab/auth';
-import { getActiveJobForTarget, getSource } from '@ab/bc-hangar';
+import { getActiveJobForTarget, getSource } from '@ab/bc-hangar/server';
 import { JOB_KINDS, ROLES, ROUTES, SOURCE_ACTION_LIMITS } from '@ab/constants';
 import { enqueueJob } from '@ab/hangar-jobs';
 import { createLogger } from '@ab/utils';

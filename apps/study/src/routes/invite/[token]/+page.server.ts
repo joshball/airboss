@@ -6,7 +6,7 @@ import {
 	getInvitationByToken,
 	INVITATION_STATUS,
 	InvitationStateError,
-} from '@ab/bc-hangar';
+} from '@ab/bc-hangar/server';
 import { AUTH_INTERNAL_ORIGIN, BETTER_AUTH_ENDPOINTS, ROUTES } from '@ab/constants';
 import { db } from '@ab/db/connection';
 import { createLogger } from '@ab/utils';

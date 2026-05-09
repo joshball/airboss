@@ -22,7 +22,7 @@ import {
 	listLiveSources,
 	listRunningJobs,
 	REPO_ROOT,
-} from '@ab/bc-hangar';
+} from '@ab/bc-hangar/server';
 import { JOB_KINDS, ROLES } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { enqueueAndRedirect } from '$lib/server/enqueue-and-redirect';

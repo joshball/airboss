@@ -9,7 +9,7 @@
  */
 
 import { requireRole } from '@ab/auth';
-import { getItem } from '@ab/bc-hangar';
+import { getItem } from '@ab/bc-hangar/server';
 import { ROLES, ROUTES } from '@ab/constants';
 import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';

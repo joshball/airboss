@@ -10,7 +10,7 @@
 
 import { countAuditEntriesSince } from '@ab/audit';
 import { countAllUsersIncludingBanned, requireRole } from '@ab/auth';
-import { countAllJobs, countLiveReferences, countLiveSources } from '@ab/bc-hangar';
+import { countAllJobs, countLiveReferences, countLiveSources } from '@ab/bc-hangar/server';
 import { ROLES } from '@ab/constants';
 import type { PageServerLoad } from './$types';
 

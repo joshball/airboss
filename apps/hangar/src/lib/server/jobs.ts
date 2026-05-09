@@ -21,7 +21,7 @@ import {
 	makeUploadHandler,
 	makeValidateHandler,
 	withEditionStub,
-} from '@ab/bc-hangar';
+} from '@ab/bc-hangar/server';
 import { JOB_KINDS } from '@ab/constants';
 import type { JobHandlers } from '@ab/hangar-jobs';
 import { runSyncJob } from '@ab/hangar-sync';

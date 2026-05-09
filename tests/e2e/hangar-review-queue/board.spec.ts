@@ -64,9 +64,10 @@ test.describe('review board: filters + URL persistence', () => {
 
 	test('Clear filters returns the board to the default view', async ({ page }) => {
 		await page.goto(`${ROUTES.HANGAR_REVIEW}?${REVIEW_BOARD_QUERY_PARAMS.TOP}=tasks`);
-		await expect(page.getByRole('button', { name: /^Tasks$/ })).toHaveAttribute('aria-pressed', 'true');
-		await page.getByRole('button', { name: /clear filters/i }).click();
-		await expect(page.getByRole('button', { name: /^All$/ })).toHaveAttribute('aria-pressed', 'true');
+		const toolbar = page.getByLabel('Board filters');
+		await expect(toolbar.getByRole('button', { name: /^Tasks$/ })).toHaveAttribute('aria-pressed', 'true');
+		await toolbar.getByRole('button', { name: /clear filters/i }).click();
+		await expect(toolbar.getByRole('button', { name: /^All$/ })).toHaveAttribute('aria-pressed', 'true');
 		await expect.poll(() => new URL(page.url()).searchParams.get(REVIEW_BOARD_QUERY_PARAMS.TOP)).toBeNull();
 	});
 });

@@ -10,7 +10,7 @@ import {
 	RevokeInvitationInputSchema,
 	resendInvitation,
 	revokeInvitation,
-} from '@ab/bc-hangar';
+} from '@ab/bc-hangar/server';
 import {
 	AUDIT_TARGETS,
 	HOST_PREFIXES,

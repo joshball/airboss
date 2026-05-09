@@ -12,7 +12,7 @@
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { requireRole } from '@ab/auth';
-import { countDocsIndex, loadReviewItems, REPO_ROOT } from '@ab/bc-hangar';
+import { countDocsIndex, loadReviewItems, REPO_ROOT } from '@ab/bc-hangar/server';
 import { ROLES } from '@ab/constants';
 import { createLogger, renderMarkdown, stripFrontmatter } from '@ab/utils';
 import type { Actions, PageServerLoad } from './$types';

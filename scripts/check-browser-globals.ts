@@ -64,6 +64,7 @@ const SERVER_ONLY_PACKAGE_PATTERNS = [
 	/^\s*import\s+(?!type\s)[^;]*\bfrom\s+['"]@ab\/db\/connection['"]/,
 	/^\s*import\s+(?!type\s)[^;]*\bfrom\s+['"]@ab\/bc-study\/server['"]/,
 	/^\s*import\s+(?!type\s)[^;]*\bfrom\s+['"]@ab\/bc-study\/build['"]/,
+	/^\s*import\s+(?!type\s)[^;]*\bfrom\s+['"]@ab\/bc-hangar\/server['"]/,
 	/^\s*import\s+(?!type\s)[^;]*\bfrom\s+['"]postgres['"]/,
 	/^\s*import\s+(?!type\s)[^;]*\bfrom\s+['"]node:[^'"]+['"]/,
 ];
@@ -213,7 +214,7 @@ for (const file of appsListing.split('\n')) {
 //
 // Entries are runtime barrels: client-eligible by design, and any value
 // reachable from them must be browser-safe.
-const RUNTIME_BARRELS = ['libs/bc/study/src/index.ts'] as const;
+const RUNTIME_BARRELS = ['libs/bc/study/src/index.ts', 'libs/bc/hangar/src/index.ts'] as const;
 
 // Module specifiers whose runtime evaluation pulls a server-only chunk
 // into the client bundle. `import type` is allowed (erases at compile

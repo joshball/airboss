@@ -21,7 +21,7 @@ import {
 	listItems,
 	listItemsWithPassingSession,
 	updateBucket,
-} from '@ab/bc-hangar';
+} from '@ab/bc-hangar/server';
 import { AUDIT_TARGETS, ROLES, ROUTES } from '@ab/constants';
 import { db } from '@ab/db/connection';
 import { createLogger } from '@ab/utils';
