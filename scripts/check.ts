@@ -1131,7 +1131,13 @@ function buildStepDefs(profile: Profile, dirty: readonly string[]): StepDef[] {
 			if (!isScoped) return shellRun('bunx', ['biome', 'check', '.']);
 			const files = filterByExt(dirty, ['.ts', '.tsx', '.js', '.svelte', '.json', '.css']).filter(fileExists);
 			if (files.length === 0) return { exitCode: 0, stdout: 'no files in scope', stderr: '', skipCache: true };
-			return shellRun('bunx', ['biome', 'check', ...files]);
+			// `--no-errors-on-unmatched` silences biome's "no files were processed"
+			// error when every file in the dirty list is excluded by `biome.json`'s
+			// `files.includes` (e.g. anything under `tests/e2e/**`). Without it, a
+			// dirty list containing only excluded paths would exit 1 and fail the
+			// scoped check spuriously. Lint/format diagnostics on matched files
+			// still surface as exit 1 normally.
+			return shellRun('bunx', ['biome', 'check', '--no-errors-on-unmatched', ...files]);
 		},
 	});
 
