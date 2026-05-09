@@ -172,6 +172,7 @@ For everything that doesn't earn a WP: a session todo at `docs/work/todos/YYYYMM
 - **Convergent findings get fixed at the root, once.** When multiple reviewers flag the same cause (e.g., token migration stopped at primitives so every page still ships hex), fix the root cause in one pass, not N times.
 - **No undecided "considerations for future work."** Anything the agent or reviewer flags as "worth considering later" must be resolved in the same turn: do it now, write a work package and schedule it, defer with a specific trigger, or explicitly drop. "Maybe someday" is not allowed to survive a session.
 - **After fixes land, re-verify.** `bun run check` clean, relevant tests pass, and grep for the symptom returns empty. A finding is closed when the evidence says so, not when the diff looks plausible.
+- **WP "Out of Scope" extraction is a touch-trigger.** When an agent reads any file under `docs/work-packages/<slug>/`, it must check whether `OUT-OF-SCOPE.md` exists in that directory. If not, extract per [docs/agents/wp-out-of-scope-extraction.md](docs/agents/wp-out-of-scope-extraction.md). The spec / tasks "Out of scope" sections become one-line pointers to `OUT-OF-SCOPE.md`. Captures rationale + revisit-triggers; prevents accidental rebuilds of rejected features and prevents indefinite drift on items that should be built when triggered. Audit the backlog with `bun run track oos-audit`; grind it down in batches with `bun run track oos-pick`.
 
 ### Tracking: three levels
 
