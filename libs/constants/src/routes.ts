@@ -435,6 +435,12 @@ export const ROUTES = {
 	PROGRAM_GOALS_NEW: '/program/goals/new',
 	PROGRAM_GOAL: (id: string) => `/program/goals/${encodeURIComponent(id)}` as const,
 	PROGRAM_GOAL_EDIT: (id: string) => `/program/goals/${encodeURIComponent(id)}?${QUERY_PARAMS.EDIT}=1` as const,
+	/** Form-action id on /program/goals/[id]: add a course to the goal (course-reader-and-editor WP). */
+	STUDY_GOAL_ADD_COURSE_ACTION: '?/addCourse',
+	/** Form-action id on /program/goals/[id]: remove a course from the goal. */
+	STUDY_GOAL_REMOVE_COURSE_ACTION: '?/removeCourse',
+	/** Form-action id on /program/goals/[id]: change a goal_course row's weight. */
+	STUDY_GOAL_SET_COURSE_WEIGHT_ACTION: '?/setCourseWeight',
 	/** Plans tab index. */
 	PROGRAM_PLANS: '/program/plans',
 	PROGRAM_PLANS_NEW: '/program/plans/new',
@@ -657,6 +663,41 @@ export const ROUTES = {
 	HANGAR_ROADMAP_DETAIL: (wpId: string) => `/roadmap/${encodeURIComponent(wpId)}` as const,
 	/** JSON dump of one WP -- raw frontmatter + validation errors, for debugging. */
 	HANGAR_ROADMAP_RAW: (wpId: string) => `/roadmap/${encodeURIComponent(wpId)}/raw` as const,
+
+	// Hangar -- /courses authoring surface (course-reader-and-editor WP).
+	// Reads + writes YAML files under `course/courses/<slug>/` and re-runs
+	// the seed pipeline on every save. Role-gated to AUTHOR | OPERATOR |
+	// ADMIN. The DB is downstream of YAML (per ADR 018 + the WP design
+	// doc); the editor never writes to `study.course` / `study.course_step`
+	// directly. See `docs/work-packages/course-reader-and-editor/`.
+	HANGAR_COURSES: '/courses',
+	HANGAR_COURSE: (slug: string) => `/courses/${encodeURIComponent(slug)}` as const,
+	HANGAR_COURSE_SECTION: (slug: string, code: string) =>
+		`/courses/${encodeURIComponent(slug)}/sections/${encodeURIComponent(code)}` as const,
+	/** Form-action id: write the manifest YAML + re-run seed for one course. */
+	HANGAR_COURSE_UPDATE_MANIFEST_ACTION: '?/updateManifest',
+	/** Form-action id: delete the entire `course/courses/<slug>/` directory + re-run seed. */
+	HANGAR_COURSE_DELETE_ACTION: '?/deleteCourse',
+	/** Form-action id: create a new section YAML file under one course + re-run seed. */
+	HANGAR_COURSE_ADD_SECTION_ACTION: '?/addSection',
+	/** Form-action id: re-emit a section YAML file with new metadata + re-run seed. */
+	HANGAR_COURSE_UPDATE_SECTION_ACTION: '?/updateSection',
+	/** Form-action id: delete one section YAML file + re-run seed. */
+	HANGAR_COURSE_DELETE_SECTION_ACTION: '?/deleteSection',
+	/** Form-action id: re-emit every section YAML with new ordinals + re-run seed. */
+	HANGAR_COURSE_REORDER_SECTIONS_ACTION: '?/reorderSections',
+	/** Form-action id: append a step inside a section file + re-run seed. */
+	HANGAR_COURSE_ADD_STEP_ACTION: '?/addStep',
+	/** Form-action id: re-emit a section YAML with one step's fields changed + re-run seed. */
+	HANGAR_COURSE_UPDATE_STEP_ACTION: '?/updateStep',
+	/** Form-action id: re-emit a section YAML with one step removed + re-run seed. */
+	HANGAR_COURSE_DELETE_STEP_ACTION: '?/deleteStep',
+	/** Form-action id: re-emit a section YAML with steps in new order + re-run seed. */
+	HANGAR_COURSE_REORDER_STEPS_ACTION: '?/reorderSteps',
+	/** Form-action id: delete the orphan course/course_step rows the seed reported. */
+	HANGAR_COURSE_CLEANUP_ORPHANS_ACTION: '?/cleanupOrphans',
+	/** Form-action id: create a fresh course directory (manifest.yaml only) + re-run seed. */
+	HANGAR_COURSE_CREATE_ACTION: '?/createCourse',
 
 	// Flightbag (apps/flightbag) -- public reference reader. Served from its
 	// own host (flightbag.airboss.test), so these paths are relative to that
