@@ -19,6 +19,18 @@ import { resolve } from 'node:path';
 import { geoPath, type GeoProjection } from 'd3-geo';
 import { loadBasemap } from './basemap';
 import { buildConusProjection, SVG_HEIGHT, SVG_WIDTH, TITLE_BAND_HEIGHT } from './projection';
+
+/**
+ * Spike 3 extends the canvas height for a footer legend strip. The
+ * projection fits into the original SVG_HEIGHT (Spike-2 contract); the
+ * footer adds dedicated space below for legends so they don't overlap
+ * Florida, the Gulf coast, or the Pacific NW.
+ *
+ * If we composed Spike 3 with another chart (radar), we'd drop the
+ * footer and use the spike-2 dimensions.
+ */
+const FOOTER_HEIGHT = 110;
+const TOTAL_HEIGHT = SVG_HEIGHT + FOOTER_HEIGHT;
 import { resolveCollisions, type PlacedGlyph } from './collision';
 import { renderStationModel } from './station-model';
 import { ceilingFtAgl, flightCategory, summarizeCover, type ParsedMetar, type FlightCategory } from './metar';
@@ -78,12 +90,13 @@ function renderTitle(envelope: IngestEnvelope): string {
  * Glyph legend showing the station-model layout. Bottom-left area.
  */
 function renderLegend(): string {
+	const W = 460;
+	const H = FOOTER_HEIGHT - 10;
+	// Footer strip, left half
 	const x0 = 24;
-	const y0 = SVG_HEIGHT - 138;
-	const W = 320;
-	const H = 116;
-	const legendCx = x0 + 200;
-	const legendCy = y0 + 60;
+	const y0 = SVG_HEIGHT + 5;
+	const legendCx = x0 + W - 60;
+	const legendCy = y0 + H / 2;
 	// Build a fake parsed METAR for the demo glyph
 	const demo: ParsedMetar = {
 		station: 'KDEM',
@@ -101,6 +114,7 @@ function renderLegend(): string {
 		raw: '',
 	};
 	const demoSvg = renderStationModel({ parsed: demo, cx: legendCx, cy: legendCy });
+	// Two-column field labels so the legend stays compact in the footer
 	return `<g class="legend">
 		<rect x="${x0}" y="${y0}" width="${W}" height="${H}" fill="white" fill-opacity="0.94" stroke="#bdb9ac" stroke-width="0.6" rx="3" />
 		<text x="${x0 + 10}" y="${y0 + 18}" font-size="10" font-weight="700" fill="#3d3a32" letter-spacing="0.6">STATION MODEL</text>
@@ -108,15 +122,19 @@ function renderLegend(): string {
 		<text x="${x0 + 10}" y="${y0 + 50}" font-size="9" fill="#3d3a32">dewpt degF (bot-L)</text>
 		<text x="${x0 + 10}" y="${y0 + 64}" font-size="9" fill="#3d3a32">vis SM (left)</text>
 		<text x="${x0 + 10}" y="${y0 + 78}" font-size="9" fill="#3d3a32">wx (left of circle)</text>
-		<text x="${x0 + 10}" y="${y0 + 92}" font-size="9" fill="#3d3a32">altimeter (top-R)</text>
-		<text x="${x0 + 10}" y="${y0 + 106}" font-size="9" fill="#3d3a32">wind: from -> shaft, KT in barbs (NH)</text>
+		<text x="${x0 + 140}" y="${y0 + 36}" font-size="9" fill="#3d3a32">altimeter (top-R)</text>
+		<text x="${x0 + 140}" y="${y0 + 50}" font-size="9" fill="#3d3a32">cover -> circle fill</text>
+		<text x="${x0 + 140}" y="${y0 + 64}" font-size="9" fill="#3d3a32">wind from -> shaft</text>
+		<text x="${x0 + 140}" y="${y0 + 78}" font-size="9" fill="#3d3a32">barb: half=5 full=10 KT</text>
 		${demoSvg}
-		<text x="${legendCx - 30}" y="${y0 + 100}" font-size="8" fill="#7a7568">demo: 25KT/W, OVC1500, -RA, 5C/3C, A3005</text>
+		<text x="${legendCx - 60}" y="${y0 + H - 6}" font-size="8" fill="#7a7568">demo: 25KT/W, OVC1500, -RA, 5C/3C, A3005</text>
 	</g>`;
 }
 
 /**
- * Flight-category swatches. Bottom-right.
+ * Flight-category swatches. Upper-left, in the empty Pacific area below
+ * the title band. Florida and the SE coast were colliding with this
+ * legend when it was bottom-right.
  */
 function renderCategoryLegend(): string {
 	const items: ReadonlyArray<{ cat: FlightCategory; color: string; def: string }> = [
@@ -125,10 +143,11 @@ function renderCategoryLegend(): string {
 		{ cat: 'IFR', color: '#c62828', def: 'ceil 500-1000 or vis 1-3' },
 		{ cat: 'LIFR', color: '#6a1b9a', def: 'ceil <500 or vis <1' },
 	];
-	const W = 260;
-	const H = items.length * 18 + 24;
+	const W = 380;
+	const H = FOOTER_HEIGHT - 10;
+	// Footer strip, right half (paired with STATION MODEL legend on left)
 	const x0 = SVG_WIDTH - 24 - W;
-	const y0 = SVG_HEIGHT - 24 - H;
+	const y0 = SVG_HEIGHT + 5;
 	const rows: string[] = [];
 	for (let i = 0; i < items.length; i += 1) {
 		const it = items[i];
@@ -201,8 +220,10 @@ function main(): void {
 	}
 
 	const svgBody = [
-		// 1. Background
-		`<rect x="0" y="0" width="${SVG_WIDTH}" height="${SVG_HEIGHT}" fill="#fafaf7" />`,
+		// 1. Background -- spans the full chart + footer canvas
+		`<rect x="0" y="0" width="${SVG_WIDTH}" height="${TOTAL_HEIGHT}" fill="#fafaf7" />`,
+		// Footer separator line
+		`<line x1="0" y1="${SVG_HEIGHT}" x2="${SVG_WIDTH}" y2="${SVG_HEIGHT}" stroke="#d8d4c8" stroke-width="0.6" />`,
 
 		// 2. Graticule
 		renderGraticule(projection),
@@ -231,7 +252,7 @@ function main(): void {
 	].join('\n');
 
 	const svg = `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="${SVG_WIDTH}" height="${SVG_HEIGHT}" viewBox="0 0 ${SVG_WIDTH} ${SVG_HEIGHT}" font-family="-apple-system, system-ui, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="${SVG_WIDTH}" height="${TOTAL_HEIGHT}" viewBox="0 0 ${SVG_WIDTH} ${TOTAL_HEIGHT}" font-family="-apple-system, system-ui, sans-serif">
 ${svgBody}
 </svg>
 `;
