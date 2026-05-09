@@ -1,0 +1,18 @@
+{
+  "slug": "wx-surface-analysis-2024-12-23-12z",
+  "type": "surface-analysis",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-09T23:33:58.508Z",
+  "content_hash": "sha256:aa374c3446d5e80d1511529475ed54c4ea8233b4ffcc7b1bb476b902bcffb05c",
+  "source_hashes": {
+    "fronts": "a103c490a33a6f0f49d6aeaf889a2494472185487c97691f00a0b7b5779fb81d"
+  },
+  "layer_counts": {
+    "vector-symbology": 14,
+    "point-symbology": 17,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 351820
+}
