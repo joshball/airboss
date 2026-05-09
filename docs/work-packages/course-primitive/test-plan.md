@@ -142,17 +142,17 @@ Manual acceptance tests for [spec.md](./spec.md). Prefix `CRS-`.
 2. Call `getGoalNodeUnion(goalId)` via test or REPL.
 3. **Expected:** the returned `knowledgeNodeIds` array contains every node id referenced by the smoke course's step rows. Weights = `goal_course.weight` per node.
 
-### CRS-31: mixed goal dedupes shared nodes and sums weights
+### CRS-31: mixed goal dedupes shared nodes (weight = MAX across paths)
 
 1. Create a goal with: one `goal_course` (weight 1.0) referencing the smoke course AND one `goal_node` (weight 0.5) pointing at the same node id as one of the smoke course's steps.
 2. Call `getGoalNodeUnion(goalId)`.
-3. **Expected:** the shared node appears exactly once in `knowledgeNodeIds`. Its weight in `weights` is 1.5 (sum of course + ad-hoc).
+3. **Expected:** the shared node appears exactly once in `knowledgeNodeIds`. Its weight in `weights` is 1.0 (the MAX of the two reachable paths -- "most-prominent context wins"; matches the existing relevance-cache rebuild semantic).
 
 ### CRS-32: course + syllabus goal merges all sources
 
 1. Create a goal with: one `goal_course` referencing the smoke course AND one `goal_syllabus` referencing PPL ACS Area V.
 2. Call `getGoalNodeUnion(goalId)`.
-3. **Expected:** the union contains every node reached via either source. Shared nodes are deduped with weights summed.
+3. **Expected:** the union contains every node reached via either source. Shared nodes are deduped; per-node weight is the MAX across reachable paths.
 
 ---
 
