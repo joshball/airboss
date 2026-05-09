@@ -77,15 +77,25 @@ test.describe('flightbag AIM reader', () => {
 });
 
 test.describe('flightbag CFR Part landing', () => {
-	test('14 CFR 91 Part landing surfaces the eCFR fallback', async ({ page }) => {
+	test('14 CFR 91 Part landing surfaces a sections list and an eCFR link', async ({ page }) => {
 		await page.goto(ROUTES.FLIGHTBAG_CFR_PART('14', '91'));
 		await expect(page.getByRole('heading', { level: 1 })).toContainText(/14 CFR Part 91/i);
 
-		// Until per-section ingest lands, the page renders the eCFR callout.
-		const callout = page.locator('section.callout').first();
-		await expect(callout).toBeVisible();
-		const ecfrLink = callout.getByRole('link', { name: /Open Part .* on eCFR/i });
-		await expect(ecfrLink).toBeVisible();
+		// Per-section ingest has landed (PRs #668, #678): the Part page now
+		// renders a Sections list for the seeded `referenceSection` rows
+		// instead of the original `section.callout` placeholder. Assert the
+		// Sections landmark + at least one section link.
+		const sectionsLandmark = page.locator('section[aria-label="Sections"], region[aria-label="Sections"]').first();
+		await expect(sectionsLandmark).toBeVisible();
+		await expect(sectionsLandmark.getByRole('link').first()).toBeVisible();
+
+		// The eCFR fallback link still ships on every Part page, served via
+		// the shared Source cluster (covered in detail by the
+		// `CFR Part landing exposes a Source cluster with an eCFR link`
+		// test below). Pin the link's presence here too so a regression in
+		// the cluster doesn't silently strip the fallback.
+		const sourceCluster = page.locator('[data-testid="source-links"]').first();
+		const ecfrLink = sourceCluster.getByRole('link', { name: /Online source/i });
 		await expect(ecfrLink).toHaveAttribute('href', /ecfr\.gov/);
 	});
 });
@@ -114,13 +124,25 @@ test.describe('flightbag reader content fixes', () => {
 		expect(h1Count).toBe(1);
 	});
 
-	test('an empty section renders prev/next/up nav instead of a dead-end page', async ({ page }) => {
-		await page.goto(ROUTES.FLIGHTBAG_HANDBOOK_SECTION('ifh', '8083-15B', '1', '1'));
+	test.skip('an empty section renders prev/next/up nav instead of a dead-end page', async ({ page }) => {
+		// SKIPPED 2026-05-08 (no representative content): the figure-pairing
+		// pass (PR #660) plus the AFH-3B / IFH ingest re-runs paired Figure
+		// 1-1 to IFH §1.1 (and similar figures to every other previously-empty
+		// depth-1 section), so `RenderedSection`'s `hasContent = stripped ||
+		// figures.length > 0` derived rune is now `true` for every seeded
+		// handbook section -- the `emptyFallback` branch (which renders
+		// `nav.reader-nav.variant-empty`) is unreachable through real seed
+		// data. The code path itself is still exercised by the `<RenderedSection>`
+		// component unit tests; an e2e re-revival can pin a fixture-seeded
+		// section row with empty body + zero figures specifically for this
+		// test, or a Storybook-style visual smoke can take over. Re-enable
+		// trigger: a depth-1 handbook section row with `length(trim(content_md))
+		// = 0 AND has_figures = false` exists in the seeded e2e DB.
+		await page.goto(ROUTES.FLIGHTBAG_HANDBOOK_SECTION('ifh', '8083-15B', '1', '1'), {
+			waitUntil: 'domcontentloaded',
+		});
 		const rendered = page.locator('[data-testid="rendered-section"]').first();
 		await expect(rendered).toBeVisible();
-		// IFH §1.1 has only the frontmatter block in its body. Instead of a
-		// dead-end placeholder, the page exposes a Reader-Nav block with a
-		// link to the chapter (up) and to §1.2 (next).
 		const nav = rendered.locator('nav.reader-nav.variant-empty').first();
 		await expect(nav).toBeVisible();
 		const upLink = nav.locator('[data-testid="reader-nav-up"]');
@@ -152,7 +174,12 @@ test.describe('flightbag reader content fixes', () => {
 
 	test('handbook table renders inline with the body, not as escaped text', async ({ page }) => {
 		// AvWX 4.2 carries a `<div class="handbook-table">...<table>...</table></div>` block.
-		await page.goto(ROUTES.FLIGHTBAG_HANDBOOK_SECTION('avwx', '8083-28B', '4', '2'));
+		// Heavy section pages (chapter TOC + body + figures + table HTML) hit the
+		// 15s `load` budget under e2e load; `domcontentloaded` is enough since
+		// the assertion targets the SSR'd table markup, not a hydrated UI piece.
+		await page.goto(ROUTES.FLIGHTBAG_HANDBOOK_SECTION('avwx', '8083-28B', '4', '2'), {
+			waitUntil: 'domcontentloaded',
+		});
 		const rendered = page.locator('[data-testid="rendered-section"]').first();
 		await expect(rendered).toBeVisible();
 		// The table should render as a real <table> element, not as escaped text.
@@ -174,7 +201,12 @@ test.describe('flightbag reader content fixes', () => {
 		// Repro of the original bug: chapter pages had no Metadata panel
 		// because the chapter row's preamble wasn't rendered when sections
 		// existed alongside.
-		await page.goto(ROUTES.FLIGHTBAG_HANDBOOK_CHAPTER('iph', '8083-16B', '2'));
+		// IPH chapter 2 carries 8+ figures in its preamble; `load` waits for
+		// every img response to settle, blowing the 15s nav budget. The metadata
+		// panel is SSR-rendered, so `domcontentloaded` is sufficient.
+		await page.goto(ROUTES.FLIGHTBAG_HANDBOOK_CHAPTER('iph', '8083-16B', '2'), {
+			waitUntil: 'domcontentloaded',
+		});
 		const panel = page.locator('[data-testid="rendered-section-metadata"]').first();
 		await expect(panel).toBeVisible();
 	});
@@ -184,7 +216,12 @@ test.describe('flightbag reader content fixes', () => {
 		// markdown carries `![...](/handbooks/iph/.../figures/...png)` blocks.
 		// The renderer rewrites the URL to the streamer; the streamer must
 		// 200 with an image content-type.
-		await page.goto(ROUTES.FLIGHTBAG_HANDBOOK_CHAPTER('iph', '8083-16B', '2'));
+		// `domcontentloaded` because we drive the streamer ourselves via
+		// `page.request.get(src)` below; waiting for `load` is wasted time
+		// (and trips the 15s nav budget on this 8-figure preamble).
+		await page.goto(ROUTES.FLIGHTBAG_HANDBOOK_CHAPTER('iph', '8083-16B', '2'), {
+			waitUntil: 'domcontentloaded',
+		});
 		const rendered = page.locator('[data-testid="rendered-section"]').first();
 		await expect(rendered).toBeVisible();
 		const fig = rendered.locator('img').first();
@@ -205,7 +242,12 @@ test.describe('flightbag reader content fixes', () => {
 		// `![Figure 2-5. ...](.../fig-2-04-phonetic-pronunciation-guide.png)`
 		// inline. The strict assertion against the rendered <img> is the
 		// success criterion for the WP.
-		await page.goto(ROUTES.FLIGHTBAG_HANDBOOK_SECTION('ifh', '8083-15B', '2', '5'));
+		// `domcontentloaded` because we drive the figure streamer manually via
+		// `page.request.get(src)` below; the `load`-event wait was tripping
+		// the 15s navigation budget on this figure-bearing section.
+		await page.goto(ROUTES.FLIGHTBAG_HANDBOOK_SECTION('ifh', '8083-15B', '2', '5'), {
+			waitUntil: 'domcontentloaded',
+		});
 		const rendered = page.locator('[data-testid="rendered-section"]').first();
 		await expect(rendered).toBeVisible();
 		const figureImg = rendered
@@ -222,7 +264,12 @@ test.describe('flightbag reader content fixes', () => {
 
 test.describe('flightbag source links cluster', () => {
 	test('handbook section page exposes a Source cluster with an external link', async ({ page }) => {
-		await page.goto(ROUTES.FLIGHTBAG_HANDBOOK_SECTION('phak', '8083-25C', '12', '9'));
+		// PHAK §12.9 ships a chapter TOC + body + figure-tail; `load` waits for
+		// every subresource to settle, blowing the 15s nav budget. The Source
+		// cluster is SSR-rendered, so `domcontentloaded` is enough.
+		await page.goto(ROUTES.FLIGHTBAG_HANDBOOK_SECTION('phak', '8083-25C', '12', '9'), {
+			waitUntil: 'domcontentloaded',
+		});
 		const cluster = page.locator('[data-testid="source-links"]').first();
 		await expect(cluster).toBeVisible();
 		const onlineLink = cluster.getByRole('link', { name: /Online source/i });

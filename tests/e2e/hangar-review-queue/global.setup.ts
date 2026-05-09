@@ -67,6 +67,14 @@ setup('authenticate hangar admin', async ({ page }) => {
 });
 
 setup('seed hangar review items', async ({ browser }) => {
+	// The loader scans every work-package + knowledge-node markdown file
+	// under the repo. On a fresh `airboss_e2e` DB that scan + insert pass
+	// easily exceeds the global 30s test budget (playwright.config.ts).
+	// The internal click + waitForResponse already carry 60s budgets; the
+	// outer wrapper has to match, otherwise Playwright tears down the page
+	// mid-action and the `finally { context.close() }` errors out with
+	// "Target page, context or browser has been closed".
+	setup.setTimeout(180_000);
 	// Boot a fresh context that mounts the admin session captured by the
 	// previous `authenticate hangar admin` test. Without it the loader page
 	// would redirect to /login (no auth) and the "Run loader now" button
