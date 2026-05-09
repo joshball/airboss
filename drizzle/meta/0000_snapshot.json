@@ -1,5 +1,5 @@
 {
-  "id": "61f8a7ca-f9cc-4c04-b451-1619f1b66b7d",
+  "id": "c941f5d4-7d85-4f03-9413-2b0d337b86b3",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -3350,12 +3350,6 @@
           "notNull": true,
           "default": "'{}'::jsonb"
         },
-        "superseded_by_id": {
-          "name": "superseded_by_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
         "seed_origin": {
           "name": "seed_origin",
           "type": "text",
@@ -3414,27 +3408,6 @@
           "method": "btree",
           "with": {}
         },
-        "reference_doc_superseded_idx": {
-          "name": "reference_doc_superseded_idx",
-          "columns": [
-            {
-              "expression": "document_slug",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "superseded_by_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
         "reference_subjects_gin_idx": {
           "name": "reference_subjects_gin_idx",
           "columns": [
@@ -3451,22 +3424,7 @@
           "with": {}
         }
       },
-      "foreignKeys": {
-        "reference_superseded_by_id_reference_id_fk": {
-          "name": "reference_superseded_by_id_reference_id_fk",
-          "tableFrom": "reference",
-          "tableTo": "reference",
-          "schemaTo": "study",
-          "columnsFrom": [
-            "superseded_by_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
@@ -5789,12 +5747,6 @@
           "notNull": true,
           "default": "'active'"
         },
-        "superseded_by_id": {
-          "name": "superseded_by_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
         "reference_id": {
           "name": "reference_id",
           "type": "text",
@@ -5898,20 +5850,6 @@
         }
       },
       "foreignKeys": {
-        "syllabus_superseded_by_id_syllabus_id_fk": {
-          "name": "syllabus_superseded_by_id_syllabus_id_fk",
-          "tableFrom": "syllabus",
-          "tableTo": "syllabus",
-          "schemaTo": "study",
-          "columnsFrom": [
-            "superseded_by_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        },
         "syllabus_reference_id_reference_id_fk": {
           "name": "syllabus_reference_id_reference_id_fk",
           "tableFrom": "syllabus",
@@ -9809,6 +9747,49 @@
           ],
           "isUnique": false,
           "where": "retired_at IS NULL",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "editions_source_label_uq": {
+          "name": "editions_source_label_uq",
+          "columns": [
+            {
+              "expression": "source_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "edition_label",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "editions_source_label_superseded_idx": {
+          "name": "editions_source_label_superseded_idx",
+          "columns": [
+            {
+              "expression": "source_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "edition_label",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "where": "retired_at IS NOT NULL",
           "concurrently": false,
           "method": "btree",
           "with": {}

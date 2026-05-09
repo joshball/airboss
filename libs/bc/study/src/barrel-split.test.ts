@@ -39,7 +39,6 @@ const BUILD_ONLY_SYMBOLS = [
 	'upsertSyllabusNode',
 	'validateAirbossRefForLeaf',
 	// Reference writers
-	'attachSupersededByLatest',
 	'replaceFiguresForSection',
 	'upsertReference',
 	'upsertReferenceSection',

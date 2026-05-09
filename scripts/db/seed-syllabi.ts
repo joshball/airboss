@@ -213,7 +213,6 @@ async function seedOneSyllabus(slug: string, options: SeedSyllabiOptions, summar
 		edition: manifest.edition,
 		sourceUrl: manifest.source_url ?? null,
 		status: manifest.status,
-		supersededById: null,
 		referenceId,
 		seedOrigin: options.seedOrigin ?? null,
 		createdAt: existingRow?.createdAt ?? new Date(),

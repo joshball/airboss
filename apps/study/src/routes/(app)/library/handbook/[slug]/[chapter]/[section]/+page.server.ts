@@ -16,7 +16,6 @@ import {
 	getNodesCitingSection,
 	getReadState,
 	getReferenceByDocument,
-	getReferenceById,
 	HandbookValidationError,
 	handbookReadStatusSchema,
 	listErrataForSection,
@@ -26,6 +25,8 @@ import {
 	setReadStatus,
 } from '@ab/bc-study/server';
 import { HANDBOOK_NOTES_MAX_LENGTH, HANDBOOK_READ_STATUSES, QUERY_PARAMS } from '@ab/constants';
+import { type SourceId, sourceIdForReference } from '@ab/sources';
+import { getCurrentEdition } from '@ab/sources/server';
 import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -45,21 +46,18 @@ export const load: PageServerLoad = async (event) => {
 	const view = await getHandbookSection(ref.id, chapterCode, sectionCode).catch(() => null);
 	if (!view) throw error(404, 'Section not found.');
 
-	const readState = await getReadState(user.id, view.section.id);
-	const citingNodes = await getNodesCitingSection({
-		referenceId: ref.id,
-		chapter: Number(chapterCode),
-		section: Number(sectionCode),
-	});
-
 	// Errata applied to this section (newest first). The reader's
 	// AmendmentPanel renders nothing when this list is empty, so we
 	// always pass the array through -- the component decides visibility.
 	// See ADR 020 + docs/work-packages/apply-errata-and-afh-mosaic/spec.md.
-	const errataRows = await listErrataForSection(view.section.id);
+	const [readState, citingNodes, errataRows, current] = await Promise.all([
+		getReadState(user.id, view.section.id),
+		getNodesCitingSection({ referenceId: ref.id, chapter: Number(chapterCode), section: Number(sectionCode) }),
+		listErrataForSection(view.section.id),
+		getCurrentEdition(sourceIdForReference(ref) as SourceId).catch(() => null),
+	]);
 	const errata = errataRows.map(formatErrataForDisplay);
-
-	const latest = ref.supersededById ? await getReferenceById(ref.supersededById).catch(() => null) : null;
+	const supersededByEdition = current !== null && current.editionLabel !== ref.edition ? current.editionLabel : null;
 
 	return {
 		reference: {
@@ -67,7 +65,7 @@ export const load: PageServerLoad = async (event) => {
 			documentSlug: ref.documentSlug,
 			edition: ref.edition,
 			title: ref.title,
-			supersededByEdition: latest?.edition ?? null,
+			supersededByEdition,
 		},
 		section: (() => {
 			const pages = faaPagesFromMetadata(view.section.metadata);

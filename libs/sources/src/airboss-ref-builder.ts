@@ -139,3 +139,37 @@ export function airbossRefForGenericDocument(corpus: string, documentSlug: strin
 	const tail = edition === undefined ? documentSlug : `${documentSlug}/${edition}`;
 	return `${SCHEME_PREFIX}${corpus}/${tail}`;
 }
+
+/**
+ * Per-`study.reference.kind` mapping to the `source_id` corpus segment used in
+ * `sources_registry.editions`. Single source of truth for the edition-agnostic
+ * registry-key shape -- consumed by `sourceIdForReference` (TS) and by the
+ * NOT EXISTS subquery builders in `@ab/bc-study` (SQL via `sourceIdSqlCaseForKind`).
+ *
+ * Kinds not listed here fall back to using the `kind` value verbatim as the
+ * corpus segment.
+ */
+export const CORPUS_PREFIX_FOR_REFERENCE_KIND: Readonly<Record<string, string>> = {
+	handbook: 'handbooks',
+	cfr: 'regs',
+};
+
+/**
+ * Edition-agnostic registry key for a `study.reference` row. Used by ADR 026
+ * callers that need to consult `sources_registry.editions` for "what is the
+ * current edition for this slug?": every edition row of the same logical
+ * document shares one `source_id`, varying only in `edition_label`.
+ *
+ * The shape is `airboss-ref:<corpus>/<documentSlug>` -- intentionally without
+ * an edition fragment, mirroring the registry's `source_id` column. Per-corpus
+ * mapping comes from `CORPUS_PREFIX_FOR_REFERENCE_KIND`; everything not listed
+ * there falls through to `airboss-ref:<kind>/<slug>`.
+ *
+ * Pure: no DB access, no side effects. Callers that need the actual edition
+ * row go through `getCurrentEdition(sourceIdFor(...))` from `@ab/sources/server`.
+ */
+export function sourceIdForReference(input: { readonly kind: string; readonly documentSlug: string }): string {
+	const { kind, documentSlug } = input;
+	const corpus = CORPUS_PREFIX_FOR_REFERENCE_KIND[kind] ?? kind;
+	return `${SCHEME_PREFIX}${corpus}/${documentSlug}`;
+}

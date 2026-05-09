@@ -29,10 +29,14 @@ import {
 	REFERENCE_KINDS,
 	type ReferenceKind,
 } from '@ab/constants';
-import { client } from '@ab/db/connection';
+import { client, db } from '@ab/db/connection';
+import { type SourceId, sourceIdForReference } from '@ab/sources';
+import { upsertEdition } from '@ab/sources/server';
+import { eq } from 'drizzle-orm';
 import { parse } from 'yaml';
 import { z } from 'zod';
-import { attachSupersededByLatest, getReferenceByDocument, upsertReference } from '../../libs/bc/study/src/references';
+import { upsertReference } from '../../libs/bc/study/src/references';
+import { reference } from '../../libs/bc/study/src/schema';
 import { loadPohAuthoring, type PohOverlay } from '../../libs/bc/study/src/seeders/poh-authoring';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -171,21 +175,33 @@ export async function seedReferences(options: SeedReferencesOptions = {}): Promi
 		}
 	}
 
-	// Wire `supersededById` chains for slugs that may have a manifest-seeded
-	// sibling (e.g. AFH 3B in YAML coexists with AFH 3C from the manifest
-	// seeder). The manifest seeder's own chain step only fires when it sees
-	// >1 edition in the manifest tree, so cross-path pairs (one YAML row,
-	// one manifest row) need this pass. Idempotent: a slug with one row in
-	// the DB resolves to itself and `attachSupersededByLatest` is a no-op
-	// (the WHERE clause excludes the latest id).
+	// Per ADR 026: edition supersession lives in `sources_registry.editions`.
+	// For each slug we touched, walk every reference row that exists for that
+	// slug (across YAML + manifest seeds), pick the lex-greatest edition as
+	// current, retire the rest. Mirrors the rule in
+	// `seed-references-from-manifest.ts` so a cross-path pair (one YAML row,
+	// one manifest row) converges on the same registry shape regardless of
+	// which seeder ran first.
 	//
-	// Caveat: relies on `phaseHandbooks` running before `phaseReferences` in
-	// seed-all.ts; standalone `bun scripts/db/seed-references.ts` on a fresh
-	// DB without a prior manifest seed will leave the chain unset until the
-	// manifest seeder runs. The combined seed flow is the authoritative path.
+	// Idempotent: re-seeding upserts each row in place. The current edition
+	// keeps `retired_at IS NULL`; older editions get a fresh `retired_at`
+	// timestamp on every run.
 	for (const slug of slugsTouched) {
-		const latest = await getReferenceByDocument(slug);
-		await attachSupersededByLatest(slug, latest.id);
+		const rows = await db.select().from(reference).where(eq(reference.documentSlug, slug));
+		if (rows.length === 0) continue;
+		const sorted = [...rows].sort((a, b) => a.edition.localeCompare(b.edition, 'en', { numeric: true }));
+		const now = new Date();
+		for (let i = 0; i < sorted.length; i += 1) {
+			const row = sorted[i];
+			if (row === undefined) continue;
+			const isLatest = i === sorted.length - 1;
+			await upsertEdition({
+				sourceId: sourceIdForReference(row) as SourceId,
+				editionLabel: row.edition,
+				publishedAt: row.createdAt,
+				retiredAt: isLatest ? null : now,
+			});
+		}
 	}
 
 	return summary;

@@ -59,6 +59,7 @@ import { isHandbookCitation, isStructuredCitation } from '@ab/types';
 import { generateReferenceFigureId, generateReferenceId, generateReferenceSectionId } from '@ab/utils';
 import { and, asc, desc, eq, inArray, isNull, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
+import { notSupersededInRegistry } from './edition-predicates.ts';
 import {
 	type HandbookManifestWarningCode,
 	type HandbookWarningTriageStatus,
@@ -123,7 +124,7 @@ export class HandbookValidationError extends Error {
 // ---------------------------------------------------------------------------
 
 export interface ListReferencesOptions {
-	/** Default false. When true, includes references whose `superseded_by_id` is set. */
+	/** Default false. When true, includes references whose registry row carries `retired_at` (superseded editions). */
 	includeSuperseded?: boolean;
 	/** Optional `kind` filter -- e.g. only handbooks. */
 	kind?: ReferenceRow['kind'];
@@ -132,12 +133,14 @@ export interface ListReferencesOptions {
 /**
  * List every reference, newest editions first within a `document_slug`.
  *
- * The default excludes superseded editions so the index page renders one card
- * per active handbook; opt in to `includeSuperseded` for archive views.
+ * The default excludes superseded editions (per ADR 026, "superseded" =
+ * `sources_registry.editions.retired_at IS NOT NULL` for the row's
+ * `(source_id, edition_label)` pair) so the index page renders one card per
+ * active handbook. Opt in to `includeSuperseded` for archive views.
  */
 export async function listReferences(options: ListReferencesOptions = {}, db: Db = defaultDb): Promise<ReferenceRow[]> {
 	const conditions = [];
-	if (!options.includeSuperseded) conditions.push(isNull(reference.supersededById));
+	if (!options.includeSuperseded) conditions.push(notSupersededInRegistry());
 	if (options.kind) conditions.push(eq(reference.kind, options.kind));
 	const where = conditions.length === 0 ? undefined : conditions.length === 1 ? conditions[0] : and(...conditions);
 	const query = db.select().from(reference).orderBy(asc(reference.documentSlug), asc(reference.edition));
@@ -179,7 +182,7 @@ export async function getReferenceByDocument(
 	const rows = await db
 		.select()
 		.from(reference)
-		.where(and(eq(reference.documentSlug, documentSlug), isNull(reference.supersededById)))
+		.where(and(eq(reference.documentSlug, documentSlug), notSupersededInRegistry()))
 		.orderBy(desc(reference.edition))
 		.limit(1);
 	const row = rows[0];
@@ -878,18 +881,24 @@ export interface ResolvedCitation {
 }
 
 /**
- * Build a slug -> latest non-superseded {@link ReferenceRow} index. Used by
- * the new ref-shape resolver to find the current edition when the citation
- * doesn't pin one (the amendment §1 default).
+ * Build a slug -> latest {@link ReferenceRow} index. Used by the new
+ * ref-shape resolver to find the current edition when the citation doesn't
+ * pin one (the amendment §1 default).
+ *
+ * Picks the lex-greatest edition string per slug. Pre-ADR-026 this also
+ * filtered `row.supersededById !== null`; that column is gone, and the
+ * registry-driven supersession is checked at SQL time before rows reach this
+ * helper. Callers that want active-only rows must already be filtering at
+ * the DB layer (`listReferences({ includeSuperseded: false })` -- the
+ * default).
  */
 function indexCurrentByDocumentSlug(references: ReadonlyArray<ReferenceRow>): Map<string, ReferenceRow> {
 	const map = new Map<string, ReferenceRow>();
 	for (const row of references) {
-		if (row.supersededById !== null) continue;
 		const existing = map.get(row.documentSlug);
-		// Deterministic pick when multiple non-superseded rows exist (rare; e.g.
-		// a half-seeded DB): prefer the lexicographically larger edition tag,
-		// matching the ORDER BY edition DESC in `getReferenceByDocument`.
+		// Deterministic pick when multiple rows exist for one slug: prefer the
+		// lexicographically larger edition tag, matching the ORDER BY edition
+		// DESC in `getReferenceByDocument`.
 		if (existing === undefined || row.edition > existing.edition) {
 			map.set(row.documentSlug, row);
 		}
@@ -2719,21 +2728,6 @@ export async function bulkReplaceFiguresForSections(
 		written += inserted.length;
 	}
 	return written;
-}
-
-/**
- * Wire a `superseded_by_id` chain: every reference for `documentSlug` other
- * than the given `latestReferenceId` is updated to point at it. Idempotent.
- */
-export async function attachSupersededByLatest(
-	documentSlug: string,
-	latestReferenceId: string,
-	db: Db = defaultDb,
-): Promise<void> {
-	await db
-		.update(reference)
-		.set({ supersededById: latestReferenceId, updatedAt: new Date() })
-		.where(and(eq(reference.documentSlug, documentSlug), sql`${reference.id} <> ${latestReferenceId}`));
 }
 
 // Re-export type guards so callers reading from a single barrel don't have

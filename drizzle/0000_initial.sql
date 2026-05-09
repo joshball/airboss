@@ -342,7 +342,6 @@ CREATE TABLE "study"."reference" (
 	"primary_cert" text,
 	"section_schema" jsonb DEFAULT '{}'::jsonb NOT NULL,
 	"metadata" jsonb DEFAULT '{}'::jsonb NOT NULL,
-	"superseded_by_id" text,
 	"seed_origin" text,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
@@ -579,7 +578,6 @@ CREATE TABLE "study"."syllabus" (
 	"edition" text NOT NULL,
 	"source_url" text,
 	"status" text DEFAULT 'active' NOT NULL,
-	"superseded_by_id" text,
 	"reference_id" text,
 	"seed_origin" text,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
@@ -994,7 +992,6 @@ ALTER TABLE "study"."knowledge_node" ADD CONSTRAINT "knowledge_node_author_id_ba
 ALTER TABLE "study"."knowledge_node_progress" ADD CONSTRAINT "knowledge_node_progress_user_id_bauth_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."bauth_user"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE "study"."knowledge_node_progress" ADD CONSTRAINT "knowledge_node_progress_node_id_knowledge_node_id_fk" FOREIGN KEY ("node_id") REFERENCES "study"."knowledge_node"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."memory_review_session" ADD CONSTRAINT "memory_review_session_user_id_bauth_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."bauth_user"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
-ALTER TABLE "study"."reference" ADD CONSTRAINT "reference_superseded_by_id_reference_id_fk" FOREIGN KEY ("superseded_by_id") REFERENCES "study"."reference"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."reference_figure" ADD CONSTRAINT "reference_figure_section_id_reference_section_id_fk" FOREIGN KEY ("section_id") REFERENCES "study"."reference_section"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."reference_section" ADD CONSTRAINT "reference_section_reference_id_reference_id_fk" FOREIGN KEY ("reference_id") REFERENCES "study"."reference"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."reference_section" ADD CONSTRAINT "reference_section_parent_id_reference_section_id_fk" FOREIGN KEY ("parent_id") REFERENCES "study"."reference_section"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
@@ -1018,7 +1015,6 @@ ALTER TABLE "study"."session_item_result" ADD CONSTRAINT "session_item_result_re
 ALTER TABLE "study"."session_item_result" ADD CONSTRAINT "session_item_result_chosen_option_id_scenario_option_id_fk" FOREIGN KEY ("chosen_option_id") REFERENCES "study"."scenario_option"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."session_item_result" ADD CONSTRAINT "session_item_result_session_owner_fk" FOREIGN KEY ("session_id","user_id") REFERENCES "study"."session"("id","user_id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE "study"."study_plan" ADD CONSTRAINT "study_plan_user_id_bauth_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."bauth_user"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
-ALTER TABLE "study"."syllabus" ADD CONSTRAINT "syllabus_superseded_by_id_syllabus_id_fk" FOREIGN KEY ("superseded_by_id") REFERENCES "study"."syllabus"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."syllabus" ADD CONSTRAINT "syllabus_reference_id_reference_id_fk" FOREIGN KEY ("reference_id") REFERENCES "study"."reference"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."syllabus_node" ADD CONSTRAINT "syllabus_node_syllabus_id_syllabus_id_fk" FOREIGN KEY ("syllabus_id") REFERENCES "study"."syllabus"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."syllabus_node" ADD CONSTRAINT "syllabus_node_parent_id_syllabus_node_id_fk" FOREIGN KEY ("parent_id") REFERENCES "study"."syllabus_node"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
@@ -1108,7 +1104,6 @@ CREATE INDEX "mrs_user_deck_status_idx" ON "study"."memory_review_session" USING
 CREATE INDEX "mrs_user_started_idx" ON "study"."memory_review_session" USING btree ("user_id","started_at");--> statement-breakpoint
 CREATE UNIQUE INDEX "reference_doc_edition_unique" ON "study"."reference" USING btree ("document_slug","edition");--> statement-breakpoint
 CREATE INDEX "reference_kind_idx" ON "study"."reference" USING btree ("kind");--> statement-breakpoint
-CREATE INDEX "reference_doc_superseded_idx" ON "study"."reference" USING btree ("document_slug","superseded_by_id");--> statement-breakpoint
 CREATE INDEX "reference_subjects_gin_idx" ON "study"."reference" USING gin ("subjects");--> statement-breakpoint
 CREATE INDEX "reference_figure_section_idx" ON "study"."reference_figure" USING btree ("section_id","ordinal");--> statement-breakpoint
 CREATE UNIQUE INDEX "reference_section_ref_code_unique" ON "study"."reference_section" USING btree ("reference_id","code");--> statement-breakpoint
@@ -1213,6 +1208,8 @@ CREATE INDEX "audit_log_timestamp_idx" ON "audit"."audit_log" USING btree ("time
 CREATE INDEX "audit_log_target_type_time_idx" ON "audit"."audit_log" USING btree ("target_type","timestamp");--> statement-breakpoint
 CREATE INDEX "editions_source_date_idx" ON "sources_registry"."editions" USING btree ("source_id","published_at");--> statement-breakpoint
 CREATE INDEX "editions_source_current_idx" ON "sources_registry"."editions" USING btree ("source_id") WHERE retired_at IS NULL;--> statement-breakpoint
+CREATE UNIQUE INDEX "editions_source_label_uq" ON "sources_registry"."editions" USING btree ("source_id","edition_label");--> statement-breakpoint
+CREATE INDEX "editions_source_label_superseded_idx" ON "sources_registry"."editions" USING btree ("source_id","edition_label") WHERE retired_at IS NOT NULL;--> statement-breakpoint
 CREATE INDEX "promotion_batches_corpus_date_idx" ON "sources_registry"."promotion_batches" USING btree ("corpus","promotion_date" DESC NULLS LAST);--> statement-breakpoint
 CREATE INDEX "promotion_batches_previous_batch_idx" ON "sources_registry"."promotion_batches" USING btree ("previous_batch_id");--> statement-breakpoint
 CREATE INDEX "promotion_batches_reviewer_date_idx" ON "sources_registry"."promotion_batches" USING btree ("reviewer_id","promotion_date" DESC NULLS LAST);

@@ -24,7 +24,7 @@
 import { PROMOTION_STATE_VALUES, SCHEMAS, SOURCE_LIFECYCLE_VALUES } from '@ab/constants';
 import { inList } from '@ab/db';
 import { sql } from 'drizzle-orm';
-import { check, foreignKey, index, jsonb, pgSchema, text, timestamp } from 'drizzle-orm/pg-core';
+import { check, foreignKey, index, jsonb, pgSchema, text, timestamp, uniqueIndex } from 'drizzle-orm/pg-core';
 
 export const sourcesRegistrySchema = pgSchema(SCHEMAS.SOURCES_REGISTRY);
 
@@ -157,6 +157,30 @@ export const editions = sourcesRegistrySchema.table(
 		 * one-row B-tree probe rather than a full scan.
 		 */
 		sourceCurrentIdx: index('editions_source_current_idx').on(t.sourceId).where(sql`retired_at IS NULL`),
+		/**
+		 * Per-source-id label uniqueness. ADR 026 hangs the registry on the
+		 * "exactly one row per `(source_id, edition_label)`" invariant -- the
+		 * resolver returns a single row for `getEditionByLabel`, the NOT EXISTS
+		 * subqueries in `library-by-cert.ts` / `references.ts` assume the lookup
+		 * is single-valued, and `markPriorEditionsRetired` relies on the
+		 * "single current row" guarantee. Enforced at the schema layer instead
+		 * of trusting seed discipline.
+		 *
+		 * Doubles as the covering index for `getEditionByLabel(sourceId, label)`.
+		 */
+		sourceLabelUniqueIdx: uniqueIndex('editions_source_label_uq').on(t.sourceId, t.editionLabel),
+		/**
+		 * Partial index for the inverse-of-current path: the NOT EXISTS subquery
+		 * in `notSupersededInRegistry` filters `retired_at IS NOT NULL` to ask
+		 * "is this `(source_id, edition_label)` retired?". The
+		 * `editions_source_current_idx` partial index above is built on the
+		 * complementary predicate (`IS NULL`) and cannot be reused, so this
+		 * index keeps the per-row probe on the library-by-cert hot path off a
+		 * full scan.
+		 */
+		sourceLabelSupersededIdx: index('editions_source_label_superseded_idx')
+			.on(t.sourceId, t.editionLabel)
+			.where(sql`retired_at IS NOT NULL`),
 	}),
 );
 

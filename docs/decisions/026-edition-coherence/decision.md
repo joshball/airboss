@@ -1,7 +1,8 @@
 ---
 title: 'ADR 026 -- edition coherence (registry as source of truth)'
-status: proposed
+status: accepted
 date: 2026-05-06
+accepted: 2026-05-09
 authors: Joshua Ball
 related:
   - docs/decisions/018-source-artifact-storage-policy/decision.md

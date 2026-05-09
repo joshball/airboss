@@ -261,8 +261,9 @@ export function extractCfrLocator(source: string, detail: string): { title: numb
 /**
  * AC document slug for a source like "AC 61-67C": stable across editions
  * (the trailing letter is the edition revision). The migration upserts
- * one synthetic row per unique AC number so future updates can wire
- * `superseded_by_id` between editions if desired.
+ * one synthetic row per unique AC number so future updates can publish
+ * additional editions to `sources_registry.editions` with the prior
+ * edition's `retired_at` set (per ADR 026).
  */
 function acSlugFromSource(source: string): { slug: string; edition: string; number: string } | null {
 	// Match "AC NN-NN(L)" -- e.g. "AC 61-67C", "AC 91-79B", "AC 00-6B".

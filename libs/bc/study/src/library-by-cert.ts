@@ -11,10 +11,12 @@
 
 import { CERT_APPLICABILITIES, CERT_APPLICABILITY_VALUES, type CertApplicability } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
+import { editions as editionsTable } from '@ab/sources/server';
 import { createLogger } from '@ab/utils';
-import { and, arrayContains, asc, eq, inArray, isNull, sql } from 'drizzle-orm';
+import { and, arrayContains, asc, eq, inArray, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { CredentialNotFoundError, getCertsCoveredBy, getCredentialBySlug } from './credentials';
+import { notSupersededInRegistry, sourceIdSqlForAliasedReference } from './edition-predicates.ts';
 import { type ReferenceRow, reference } from './schema';
 
 const log = createLogger('study:library-by-cert');
@@ -181,7 +183,7 @@ async function listPrimaryReferencesForCert(cert: CertApplicability, db: Db): Pr
 	return db
 		.select()
 		.from(reference)
-		.where(and(eq(reference.primaryCert, cert), isNull(reference.supersededById)))
+		.where(and(eq(reference.primaryCert, cert), notSupersededInRegistry()))
 		.orderBy(asc(reference.documentSlug), asc(reference.edition));
 }
 
@@ -199,7 +201,7 @@ async function listReferencesByPrimaryCerts(
 	const rows = await db
 		.select()
 		.from(reference)
-		.where(and(inArray(reference.primaryCert, certs as CertApplicability[]), isNull(reference.supersededById)))
+		.where(and(inArray(reference.primaryCert, certs as CertApplicability[]), notSupersededInRegistry()))
 		.orderBy(asc(reference.documentSlug), asc(reference.edition));
 	for (const row of rows) {
 		if (row.primaryCert === null) continue;
@@ -233,7 +235,7 @@ export async function listReferencesByTopic(topic: string, db: Db = defaultDb): 
 	return db
 		.select()
 		.from(reference)
-		.where(and(arrayContains(reference.subjects, [topic]), isNull(reference.supersededById)))
+		.where(and(arrayContains(reference.subjects, [topic]), notSupersededInRegistry()))
 		.orderBy(asc(reference.documentSlug), asc(reference.edition));
 }
 
@@ -242,10 +244,7 @@ export async function listReferencesByTopic(topic: string, db: Db = defaultDb): 
  * one count per `CERT_APPLICABILITIES` value (zero when none assigned).
  */
 export async function getReferenceCountsByCert(db: Db = defaultDb): Promise<Record<CertApplicability, number>> {
-	const rows = await db
-		.select({ primaryCert: reference.primaryCert })
-		.from(reference)
-		.where(isNull(reference.supersededById));
+	const rows = await db.select({ primaryCert: reference.primaryCert }).from(reference).where(notSupersededInRegistry());
 	const out = {} as Record<CertApplicability, number>;
 	for (const value of CERT_APPLICABILITY_VALUES) out[value] = 0;
 	for (const row of rows) {
@@ -268,8 +267,13 @@ export async function getReferenceCountsByCert(db: Db = defaultDb): Promise<Reco
  * routes through `db.execute(sql\`...\`)` per the project rule "Drizzle ORM
  * only, except where the SQL shape genuinely requires raw SQL." The shape
  * here (column-derived rowset that needs to participate in the FROM clause)
- * is one of those cases. The `superseded_by_id IS NULL` predicate matches
- * every other "active references only" probe in this BC.
+ * is one of those cases.
+ *
+ * Per ADR 026 the "active references only" predicate is a NOT EXISTS against
+ * `sources_registry.editions` (no row with both source_id + edition_label
+ * matching AND `retired_at IS NOT NULL`). The source_id concat mirrors
+ * `sourceIdForReference`: handbook -> handbooks, cfr -> regs, otherwise the
+ * kind itself.
  */
 export async function getReferenceCountsByTopic(db: Db = defaultDb): Promise<Record<string, number>> {
 	// `count(*)::int` so the row comes back as a JS number rather than the
@@ -277,11 +281,17 @@ export async function getReferenceCountsByTopic(db: Db = defaultDb): Promise<Rec
 	// `result as unknown as ReadonlyArray<...>` shape is used by
 	// `getCredentialIdsCoveredBy` for its recursive CTE -- postgres-js's
 	// `db.execute` returns the rowset directly as an iterable here.
+	const aliasedSourceId = sourceIdSqlForAliasedReference(sql`r.kind`, sql`r.document_slug`);
 	const result = await db.execute(sql`
 		SELECT s.subject, count(*)::int AS n
 		FROM ${reference} AS r,
 		LATERAL unnest(r.subjects) AS s(subject)
-		WHERE r.superseded_by_id IS NULL
+		WHERE NOT EXISTS (
+			SELECT 1 FROM ${editionsTable} AS e
+			WHERE e.source_id = ${aliasedSourceId}
+			  AND e.edition_label = r.edition
+			  AND e.retired_at IS NOT NULL
+		)
 		GROUP BY s.subject
 	`);
 	const rows = result as unknown as ReadonlyArray<{ subject: string; n: number }>;

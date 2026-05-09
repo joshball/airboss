@@ -120,7 +120,6 @@ export type {
 // seed scripts a single import surface and preserves the no-runtime-access
 // invariant.
 export {
-	attachSupersededByLatest,
 	bulkReplaceFiguresForSections,
 	bulkUpsertReferenceSections,
 	replaceFiguresForSection,

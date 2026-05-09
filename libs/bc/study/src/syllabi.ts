@@ -565,7 +565,6 @@ export async function upsertSyllabus(input: NewSyllabusRow, db: Db = defaultDb):
 				edition: input.edition,
 				sourceUrl: input.sourceUrl,
 				status: input.status,
-				supersededById: input.supersededById,
 				referenceId: input.referenceId,
 				seedOrigin: input.seedOrigin,
 				updatedAt: new Date(),
