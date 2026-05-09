@@ -33,7 +33,13 @@ import { REFERENCE_KINDS, REFERENCE_SECTION_LEVELS, type ReferenceKind } from '@
 import { airbossRefForInfo, airbossRefForSafo } from '@ab/sources';
 import type { BulletinSeedMappingEntry } from '@ab/sources/safo';
 import type { InfoManifest, SafoManifest } from '../manifest-validation';
-import { type SectionSchema, upsertReference, upsertReferenceSection } from '../references';
+import {
+	bulkUpsertReferenceSections,
+	type SectionSchema,
+	type UpsertReferenceSectionInput,
+	upsertReference,
+	upsertReferenceSection,
+} from '../references';
 import type { SeedContext, SeedSummary } from './types';
 
 /** Single legal level / depth -- bulletin body sits at depth 0. */
@@ -168,33 +174,41 @@ async function seedBulletinSections(
 	const sortedSections = [...manifest.sections].sort((a, b) => a.ordinal - b.ordinal);
 	const airbossRef = bulletinAirbossRef(options.referenceKind, manifest.bulletin_id);
 
-	for (const section of sortedSections) {
-		const bodyAbsPath = resolve(context.repoRoot, section.body_path);
-		if (!existsSync(bodyAbsPath)) {
-			throw new Error(
-				`${options.corpusLabel} manifest references missing section body: ${section.body_path} (resolved: ${bodyAbsPath})`,
-			);
-		}
-		const contentMd = await readFile(bodyAbsPath, 'utf-8');
-		const { changed } = await upsertReferenceSection({
-			referenceId,
-			parentId: null,
-			level: REFERENCE_SECTION_LEVELS.BULLETIN,
-			ordinal: section.ordinal,
-			depth: 0,
-			code: section.code,
-			airbossRef,
-			title: section.title,
-			sourceLocator: section.source_locator,
-			contentMd,
-			contentHash: section.content_hash,
-			hasFigures: false,
-			hasTables: false,
-			metadata: {},
-			seedOrigin: context.seedOrigin,
-		});
+	// Pre-read every section body in parallel.
+	const bodyByCode = new Map<string, string>();
+	await Promise.all(
+		sortedSections.map(async (section) => {
+			const bodyAbsPath = resolve(context.repoRoot, section.body_path);
+			if (!existsSync(bodyAbsPath)) {
+				throw new Error(
+					`${options.corpusLabel} manifest references missing section body: ${section.body_path} (resolved: ${bodyAbsPath})`,
+				);
+			}
+			bodyByCode.set(section.code, await readFile(bodyAbsPath, 'utf-8'));
+		}),
+	);
+
+	const inputs: UpsertReferenceSectionInput[] = sortedSections.map((section) => ({
+		referenceId,
+		parentId: null,
+		level: REFERENCE_SECTION_LEVELS.BULLETIN,
+		ordinal: section.ordinal,
+		depth: 0,
+		code: section.code,
+		airbossRef,
+		title: section.title,
+		sourceLocator: section.source_locator,
+		contentMd: bodyByCode.get(section.code) ?? '',
+		contentHash: section.content_hash,
+		hasFigures: false,
+		hasTables: false,
+		metadata: {},
+		seedOrigin: context.seedOrigin,
+	}));
+	const results = await bulkUpsertReferenceSections(inputs);
+	for (const result of results) {
 		summary.sectionsTouched += 1;
-		if (changed) summary.sectionsChanged += 1;
+		if (result.changed) summary.sectionsChanged += 1;
 	}
 }
 

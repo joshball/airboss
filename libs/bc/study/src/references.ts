@@ -46,7 +46,7 @@ import {
 	REFERENCE_SECTION_LEVELS,
 	ROUTES,
 } from '@ab/constants';
-import { db as defaultDb } from '@ab/db/connection';
+import { client, db as defaultDb } from '@ab/db/connection';
 import {
 	getAcSeedMappingByReference,
 	getCorpusResolver,
@@ -2253,6 +2253,392 @@ export async function upsertReferenceSection(
 	return { row, changed: true };
 }
 
+// ---------------------------------------------------------------------------
+// Bulk upsert (cold-path: one COPY-and-merge per `(referenceId, depth)` group)
+// ---------------------------------------------------------------------------
+
+/**
+ * Result of one entry in a {@link bulkUpsertReferenceSections} batch.
+ * Mirrors the per-row return shape of {@link upsertReferenceSection} so the
+ * seeder loop can stay structurally identical (return ids, fan out figures
+ * for changed rows, accumulate `summary.sectionsChanged`).
+ */
+export interface BulkUpsertReferenceSectionResult {
+	row: ReferenceSectionRow;
+	changed: boolean;
+}
+
+/**
+ * Bulk-upsert many `reference_section` rows on the cold seed path.
+ *
+ * Semantics match {@link upsertReferenceSection} run row-by-row, but the
+ * physical execution is:
+ *
+ *   1. Group inputs by `referenceId` (each reference's section index is
+ *      independent; FKs only point intra-reference via `parent_id`).
+ *   2. For each reference:
+ *        a. Load the process-local section index (cache fast-path; one
+ *           SELECT per reference, shared with {@link upsertReferenceSection}).
+ *        b. Partition into "no-op" rows (cache hit + content_hash match +
+ *           every scaffolding field equal) and "dirty" rows (everything
+ *           else). No-ops return the cached row with `changed: false` and
+ *           pay zero DB round-trips.
+ *        c. Group dirty rows by `depth` ascending so depth-0 rows land
+ *           before depth-1 etc. (`parent_id` FK is intra-reference and
+ *           always points to a strictly-lower depth).
+ *        d. For each depth group, open one connection-bound transaction:
+ *           COPY the rows into a temp table, then `INSERT ... SELECT ...
+ *           ON CONFLICT (reference_id, code) DO UPDATE` and `RETURNING *`.
+ *
+ * Net cost on a cold re-seed of 8.7k rows is ~1 SELECT + ~10 COPY+merge
+ * round trips (across all references and depths) instead of ~8.7k single-
+ * row INSERTs.
+ *
+ * Returns one {@link BulkUpsertReferenceSectionResult} per input, in the
+ * same order as `inputs`. The cache (`sectionIndexByReference`) is updated
+ * in place so subsequent calls -- including any leftover per-row
+ * {@link upsertReferenceSection} callers -- see the freshly-written rows.
+ *
+ * Uses the underlying `postgres-js` client for COPY because Drizzle does
+ * not surface the COPY protocol. The `db` argument is honored for the
+ * read-side cache load (so tests that point at an alternate DB still see
+ * the right index), but the write-side COPY always targets the prod
+ * `client` from `@ab/db/connection`. The seed pipeline only uses the
+ * default DB so this asymmetry never shows up in production. Per-row
+ * {@link upsertReferenceSection} remains the canonical API for callers
+ * that genuinely upsert one row at a time, and unit tests that need to
+ * write against a custom DB.
+ */
+export async function bulkUpsertReferenceSections(
+	inputs: ReadonlyArray<UpsertReferenceSectionInput>,
+	db: Db = defaultDb,
+): Promise<BulkUpsertReferenceSectionResult[]> {
+	const results: Array<BulkUpsertReferenceSectionResult | undefined> = new Array(inputs.length);
+	if (inputs.length === 0) return [];
+
+	// Group input indices by referenceId. Preserve original positions so the
+	// returned array maps back to the caller's input order.
+	const indicesByReference = new Map<string, number[]>();
+	for (let i = 0; i < inputs.length; i += 1) {
+		const input = inputs[i];
+		if (input === undefined) continue;
+		const list = indicesByReference.get(input.referenceId);
+		if (list) list.push(i);
+		else indicesByReference.set(input.referenceId, [i]);
+	}
+
+	for (const [referenceId, indices] of indicesByReference) {
+		await processReferenceBatch(referenceId, indices, inputs, results, db);
+	}
+
+	const out: BulkUpsertReferenceSectionResult[] = [];
+	for (let i = 0; i < inputs.length; i += 1) {
+		const r = results[i];
+		if (r === undefined) {
+			throw new HandbookValidationError(`bulkUpsertReferenceSections: missing result for input #${i}`);
+		}
+		out.push(r);
+	}
+	return out;
+}
+
+/**
+ * Process every input that targets one `referenceId`. Splits cache-hit
+ * no-ops from dirty rows, then drives one COPY+merge per depth (parents
+ * before children).
+ */
+async function processReferenceBatch(
+	referenceId: string,
+	indices: readonly number[],
+	inputs: ReadonlyArray<UpsertReferenceSectionInput>,
+	results: Array<BulkUpsertReferenceSectionResult | undefined>,
+	db: Db,
+): Promise<void> {
+	const index = await loadSectionIndex(referenceId, db);
+
+	// Build the per-input merged-metadata + dirty-flag without any DB
+	// round-trips. Cache hit + content_hash match + all scaffolding equal =
+	// no-op; everything else needs the COPY path.
+	interface DirtyRow {
+		readonly inputIdx: number;
+		readonly id: string;
+		readonly mergedMetadata: Record<string, unknown>;
+	}
+	const dirtyByDepth: Map<number, DirtyRow[]> = new Map();
+
+	for (const idx of indices) {
+		const input = inputs[idx];
+		if (input === undefined) continue;
+		const cached = index.get(input.code);
+
+		// No-op fast-path: identical to upsertReferenceSection's fast path.
+		if (cached !== undefined && cached.row.contentHash === input.contentHash) {
+			const prevRow = cached.row;
+			const refreshedMetadata = input.faaPages
+				? mergeFaaPagesIntoMetadata((prevRow.metadata as Record<string, unknown>) ?? {}, input.faaPages)
+				: ((input.metadata ?? (prevRow.metadata as Record<string, unknown>) ?? {}) as Record<string, unknown>);
+			const scaffoldingMatches =
+				prevRow.parentId === input.parentId &&
+				prevRow.ordinal === input.ordinal &&
+				prevRow.depth === input.depth &&
+				prevRow.airbossRef === input.airbossRef &&
+				prevRow.title === input.title &&
+				prevRow.sourceLocator === input.sourceLocator &&
+				prevRow.hasFigures === input.hasFigures &&
+				prevRow.hasTables === input.hasTables &&
+				metadataEqual(prevRow.metadata as Record<string, unknown> | null, refreshedMetadata);
+			if (scaffoldingMatches) {
+				results[idx] = { row: prevRow, changed: false };
+				continue;
+			}
+		}
+
+		// Dirty: ID is the existing one (if cached) or a fresh ULID. Merged
+		// metadata folds in faaPages exactly like the single-row path so
+		// re-seeded handbook rows stay byte-equivalent across the two writers.
+		const id = cached?.row.id ?? generateReferenceSectionId();
+		const mergedMetadata = mergeFaaPagesIntoMetadata(input.metadata, input.faaPages);
+		const list = dirtyByDepth.get(input.depth);
+		if (list) list.push({ inputIdx: idx, id, mergedMetadata });
+		else dirtyByDepth.set(input.depth, [{ inputIdx: idx, id, mergedMetadata }]);
+	}
+
+	if (dirtyByDepth.size === 0) return;
+
+	// Process depths ascending so parent rows commit before children. The
+	// FK is `parent_id -> reference_section.id`; intra-reference and
+	// strictly increasing depth (the seeders all enforce this).
+	const depths = [...dirtyByDepth.keys()].sort((a, b) => a - b);
+	for (const depth of depths) {
+		const rows = dirtyByDepth.get(depth);
+		if (!rows || rows.length === 0) continue;
+		await copyAndMerge(rows, inputs, results, index);
+	}
+}
+
+/**
+ * COPY the dirty rows into a temp table, then `INSERT ... SELECT ... ON
+ * CONFLICT DO UPDATE RETURNING *`. Returned rows are slotted into the
+ * caller's `results` array and the in-process index cache is refreshed.
+ *
+ * Each call opens its own transaction (and therefore its own pooled
+ * connection). The temp table is created `ON COMMIT DROP` so the
+ * connection comes back clean for the next caller.
+ */
+async function copyAndMerge(
+	dirty: ReadonlyArray<{
+		readonly inputIdx: number;
+		readonly id: string;
+		readonly mergedMetadata: Record<string, unknown>;
+	}>,
+	inputs: ReadonlyArray<UpsertReferenceSectionInput>,
+	results: Array<BulkUpsertReferenceSectionResult | undefined>,
+	index: Map<string, SectionIndexEntry>,
+): Promise<void> {
+	if (dirty.length === 0) return;
+	const now = new Date();
+
+	const csv = encodeReferenceSectionsAsCsv(dirty, inputs, now);
+
+	await client.begin(async (tx) => {
+		// `LIKE study.reference_section INCLUDING DEFAULTS` mirrors the live
+		// table's column inventory + defaults so a future column add doesn't
+		// silently shift the COPY column order. `ON COMMIT DROP` keeps the
+		// connection clean across pool reuse.
+		await tx`
+			CREATE TEMP TABLE _seed_section (LIKE study.reference_section INCLUDING DEFAULTS)
+			ON COMMIT DROP
+		`;
+
+		const writable = await tx`
+			COPY _seed_section (
+				id, reference_id, parent_id, level, ordinal, depth, code,
+				airboss_ref, title, source_locator, content_md, content_hash,
+				has_figures, has_tables, metadata, seed_origin, created_at, updated_at
+			) FROM STDIN WITH (FORMAT csv, HEADER false, NULL '\\N')
+		`.writable();
+		await new Promise<void>((resolvePromise, rejectPromise) => {
+			writable.on('error', rejectPromise);
+			writable.on('finish', () => resolvePromise());
+			writable.end(csv);
+		});
+
+		const merged = await tx<MergedRow[]>`
+			INSERT INTO study.reference_section (
+				id, reference_id, parent_id, level, ordinal, depth, code,
+				airboss_ref, title, source_locator, content_md, content_hash,
+				has_figures, has_tables, metadata, seed_origin, created_at, updated_at
+			)
+			SELECT
+				id, reference_id, parent_id, level, ordinal, depth, code,
+				airboss_ref, title, source_locator, content_md, content_hash,
+				has_figures, has_tables, metadata, seed_origin, created_at, updated_at
+			FROM _seed_section
+			ON CONFLICT (reference_id, code) DO UPDATE SET
+				parent_id      = EXCLUDED.parent_id,
+				level          = EXCLUDED.level,
+				ordinal        = EXCLUDED.ordinal,
+				depth          = EXCLUDED.depth,
+				airboss_ref    = EXCLUDED.airboss_ref,
+				title          = EXCLUDED.title,
+				source_locator = EXCLUDED.source_locator,
+				content_md     = EXCLUDED.content_md,
+				content_hash   = EXCLUDED.content_hash,
+				has_figures    = EXCLUDED.has_figures,
+				has_tables     = EXCLUDED.has_tables,
+				metadata       = EXCLUDED.metadata,
+				seed_origin    = EXCLUDED.seed_origin,
+				updated_at     = EXCLUDED.updated_at
+			RETURNING
+				id, reference_id AS "referenceId", parent_id AS "parentId", level, ordinal, depth, code,
+				airboss_ref AS "airbossRef", title, source_locator AS "sourceLocator",
+				content_md AS "contentMd", content_hash AS "contentHash",
+				has_figures AS "hasFigures", has_tables AS "hasTables", metadata,
+				seed_origin AS "seedOrigin",
+				created_at AS "createdAt", updated_at AS "updatedAt"
+		`;
+
+		// Map RETURNING rows back to the caller's input positions by code.
+		// Within one reference, code is unique, so the (code -> dirty entry)
+		// lookup is unambiguous.
+		const codeToDirty = new Map<string, { inputIdx: number }>();
+		for (const d of dirty) {
+			const input = inputs[d.inputIdx];
+			if (input === undefined) continue;
+			codeToDirty.set(input.code, { inputIdx: d.inputIdx });
+		}
+		for (const r of merged) {
+			const dest = codeToDirty.get(r.code);
+			if (dest === undefined) continue;
+			const row: ReferenceSectionRow = {
+				id: r.id,
+				referenceId: r.referenceId,
+				parentId: r.parentId,
+				level: r.level,
+				ordinal: r.ordinal,
+				depth: r.depth,
+				code: r.code,
+				airbossRef: r.airbossRef,
+				title: r.title,
+				sourceLocator: r.sourceLocator,
+				contentMd: r.contentMd,
+				contentHash: r.contentHash,
+				hasFigures: r.hasFigures,
+				hasTables: r.hasTables,
+				metadata: r.metadata,
+				seedOrigin: r.seedOrigin,
+				createdAt: r.createdAt,
+				updatedAt: r.updatedAt,
+			};
+			results[dest.inputIdx] = { row, changed: true };
+			index.set(row.code, { row });
+		}
+
+		// Validate every dirty row got a RETURNING entry. A miss means the
+		// COPY landed but the merge silently dropped a row (would only
+		// happen on a DB-level issue we want to surface loudly).
+		for (const d of dirty) {
+			if (results[d.inputIdx] === undefined) {
+				const input = inputs[d.inputIdx];
+				throw new HandbookValidationError(
+					`bulkUpsertReferenceSections: COPY+merge returned no row for ${
+						input ? `${input.referenceId} / ${input.code}` : `input #${d.inputIdx}`
+					}`,
+				);
+			}
+		}
+	});
+}
+
+/** Shape of one row returned by the COPY+merge `RETURNING` clause. */
+interface MergedRow {
+	id: string;
+	referenceId: string;
+	parentId: string | null;
+	level: string;
+	ordinal: number;
+	depth: number;
+	code: string;
+	airbossRef: string;
+	title: string;
+	sourceLocator: string;
+	contentMd: string;
+	contentHash: string;
+	hasFigures: boolean;
+	hasTables: boolean;
+	metadata: unknown;
+	seedOrigin: string | null;
+	createdAt: Date;
+	updatedAt: Date;
+}
+
+/**
+ * Encode dirty rows as CSV for `COPY ... FROM STDIN WITH (FORMAT csv,
+ * HEADER false, NULL '\\N')`.
+ *
+ * CSV format rules we honor:
+ *   - Fields containing `,`, `"`, `\r`, or `\n` are wrapped in `"..."`.
+ *   - `"` inside a wrapped field is doubled (`""`).
+ *   - `\N` is the NULL marker (matches the COPY option above).
+ *   - Booleans use postgres `t` / `f`.
+ *   - JSON metadata is serialized to text, then CSV-escaped; postgres
+ *     parses jsonb from the text.
+ *   - Timestamps use ISO-8601 (`toISOString`); postgres' `timestamptz` text
+ *     parser accepts this verbatim.
+ */
+function encodeReferenceSectionsAsCsv(
+	dirty: ReadonlyArray<{
+		readonly inputIdx: number;
+		readonly id: string;
+		readonly mergedMetadata: Record<string, unknown>;
+	}>,
+	inputs: ReadonlyArray<UpsertReferenceSectionInput>,
+	now: Date,
+): string {
+	const lines: string[] = [];
+	const ts = now.toISOString();
+	for (const d of dirty) {
+		const input = inputs[d.inputIdx];
+		if (input === undefined) continue;
+		const fields: string[] = [
+			d.id,
+			input.referenceId,
+			input.parentId === null ? '\\N' : input.parentId,
+			input.level,
+			String(input.ordinal),
+			String(input.depth),
+			input.code,
+			input.airbossRef,
+			input.title,
+			input.sourceLocator,
+			input.contentMd,
+			input.contentHash,
+			input.hasFigures ? 't' : 'f',
+			input.hasTables ? 't' : 'f',
+			JSON.stringify(d.mergedMetadata),
+			input.seedOrigin === undefined || input.seedOrigin === null ? '\\N' : input.seedOrigin,
+			ts,
+			ts,
+		];
+		lines.push(fields.map(csvEscape).join(','));
+	}
+	// Postgres' COPY is line-terminated; trailing newline is required.
+	return `${lines.join('\n')}\n`;
+}
+
+/**
+ * CSV-escape one field. The NULL sentinel `\N` is passed through verbatim
+ * (postgres recognises it before applying the CSV quoting rules).
+ */
+function csvEscape(field: string): string {
+	if (field === '\\N') return field;
+	// Quote when the field contains the delimiter, the quote char, CR, LF,
+	// or starts with `\N` literally (rare but safe).
+	const needsQuote = /[",\r\n]/.test(field);
+	if (!needsQuote) return field;
+	return `"${field.replace(/"/g, '""')}"`;
+}
+
 export interface FigureInput {
 	ordinal: number;
 	caption: string;
@@ -2285,6 +2671,54 @@ export async function replaceFiguresForSection(
 		seedOrigin,
 	}));
 	return db.insert(referenceFigure).values(values).returning();
+}
+
+/**
+ * Bulk variant of {@link replaceFiguresForSection}. Drops every figure for
+ * the given section ids in one DELETE, then inserts every new row in one
+ * chunked multi-row INSERT (chunk size capped to keep parameter counts
+ * within Postgres' protocol limits).
+ *
+ * The seed calls this for every section whose `content_hash` actually
+ * changed in this run; on a cold rebuild that's all 1.8k handbook
+ * sections, on a re-seed it's typically zero. Per-row
+ * {@link replaceFiguresForSection} remains for callers that change one
+ * section at a time.
+ */
+export async function bulkReplaceFiguresForSections(
+	inputs: ReadonlyArray<{ readonly sectionId: string; readonly figures: ReadonlyArray<FigureInput> }>,
+	db: Db = defaultDb,
+	seedOrigin: string | null = null,
+): Promise<number> {
+	if (inputs.length === 0) return 0;
+	const sectionIds = inputs.map((i) => i.sectionId);
+	await db.delete(referenceFigure).where(inArray(referenceFigure.sectionId, sectionIds));
+	const all: NewReferenceFigureRow[] = [];
+	for (const inp of inputs) {
+		for (const f of inp.figures) {
+			all.push({
+				id: generateReferenceFigureId(),
+				sectionId: inp.sectionId,
+				ordinal: f.ordinal,
+				caption: f.caption,
+				assetPath: f.assetPath,
+				width: f.width,
+				height: f.height,
+				seedOrigin,
+			});
+		}
+	}
+	if (all.length === 0) return 0;
+	// Chunk to stay well below Postgres' 65535-parameter cap. With 8 columns
+	// per row, 500 rows = 4000 params per call; comfortable headroom.
+	const CHUNK = 500;
+	let written = 0;
+	for (let i = 0; i < all.length; i += CHUNK) {
+		const slice = all.slice(i, i + CHUNK);
+		const inserted = await db.insert(referenceFigure).values(slice).returning({ id: referenceFigure.id });
+		written += inserted.length;
+	}
+	return written;
 }
 
 /**

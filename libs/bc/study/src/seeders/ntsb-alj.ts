@@ -33,7 +33,13 @@ import { resolve } from 'node:path';
 import { REFERENCE_KINDS, REFERENCE_SECTION_LEVELS } from '@ab/constants';
 import { airbossRefForNtsbAljDocument, airbossRefForNtsbAljSection } from '@ab/sources';
 import type { NtsbAljManifest } from '../manifest-validation';
-import { type SectionSchema, upsertReference, upsertReferenceSection } from '../references';
+import {
+	bulkUpsertReferenceSections,
+	type SectionSchema,
+	type UpsertReferenceSectionInput,
+	upsertReference,
+	upsertReferenceSection,
+} from '../references';
 import type { SeedContext, SeedSummary } from './types';
 
 /**
@@ -170,32 +176,39 @@ async function seedOpinionSections(
 ): Promise<void> {
 	const sortedSections = [...manifest.sections].sort((a, b) => a.ordinal - b.ordinal);
 
-	for (const section of sortedSections) {
-		const bodyAbsPath = resolve(context.repoRoot, section.body_path);
-		if (!existsSync(bodyAbsPath)) {
-			throw new Error(
-				`ntsb-alj manifest references missing section body: ${section.body_path} (resolved: ${bodyAbsPath})`,
-			);
-		}
-		const contentMd = await readFile(bodyAbsPath, 'utf-8');
-		const { changed } = await upsertReferenceSection({
-			referenceId,
-			parentId: documentSectionId,
-			level: section.level,
-			ordinal: section.ordinal,
-			depth: 1,
-			code: section.code,
-			airbossRef: airbossRefForNtsbAljSection(manifest.case_number, section.code),
-			title: section.title,
-			sourceLocator: `${manifest.case_number}/${section.code}`,
-			contentMd,
-			contentHash: section.content_hash,
-			hasFigures: false,
-			hasTables: false,
-			metadata: {},
-			seedOrigin: context.seedOrigin,
-		});
+	const bodyByCode = new Map<string, string>();
+	await Promise.all(
+		sortedSections.map(async (section) => {
+			const bodyAbsPath = resolve(context.repoRoot, section.body_path);
+			if (!existsSync(bodyAbsPath)) {
+				throw new Error(
+					`ntsb-alj manifest references missing section body: ${section.body_path} (resolved: ${bodyAbsPath})`,
+				);
+			}
+			bodyByCode.set(section.code, await readFile(bodyAbsPath, 'utf-8'));
+		}),
+	);
+
+	const inputs: UpsertReferenceSectionInput[] = sortedSections.map((section) => ({
+		referenceId,
+		parentId: documentSectionId,
+		level: section.level,
+		ordinal: section.ordinal,
+		depth: 1,
+		code: section.code,
+		airbossRef: airbossRefForNtsbAljSection(manifest.case_number, section.code),
+		title: section.title,
+		sourceLocator: `${manifest.case_number}/${section.code}`,
+		contentMd: bodyByCode.get(section.code) ?? '',
+		contentHash: section.content_hash,
+		hasFigures: false,
+		hasTables: false,
+		metadata: {},
+		seedOrigin: context.seedOrigin,
+	}));
+	const results = await bulkUpsertReferenceSections(inputs);
+	for (const result of results) {
 		summary.sectionsTouched += 1;
-		if (changed) summary.sectionsChanged += 1;
+		if (result.changed) summary.sectionsChanged += 1;
 	}
 }

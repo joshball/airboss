@@ -36,7 +36,13 @@ import { REFERENCE_KINDS, REFERENCE_SECTION_LEVELS } from '@ab/constants';
 import { airbossRefForAcDocument, airbossRefForAcSection } from '@ab/sources';
 import { getAcSeedMapping } from '@ab/sources/ac';
 import type { AcManifest } from '../manifest-validation';
-import { type SectionSchema, upsertReference, upsertReferenceSection } from '../references';
+import {
+	bulkUpsertReferenceSections,
+	type SectionSchema,
+	type UpsertReferenceSectionInput,
+	upsertReference,
+	upsertReferenceSection,
+} from '../references';
 import type { SeedContext, SeedSummary } from './types';
 
 /**
@@ -176,51 +182,82 @@ async function seedSectionTree(
 		return a.ordinal - b.ordinal;
 	});
 
-	const codeToSectionId = new Map<string, string>();
+	// Pre-read every section body in parallel so the bulk upsert path stays
+	// purely DB-bound; sequential awaits inside the per-row loop were the
+	// secondary cost on a cold AC re-seed.
+	const bodyByCode = new Map<string, string>();
+	await Promise.all(
+		sortedSections.map(async (section) => {
+			const bodyAbsPath = resolve(context.repoRoot, section.body_path);
+			if (!existsSync(bodyAbsPath)) {
+				throw new Error(`AC manifest references missing section body: ${section.body_path} (resolved: ${bodyAbsPath})`);
+			}
+			bodyByCode.set(section.code, await readFile(bodyAbsPath, 'utf-8'));
+		}),
+	);
 
+	// Bucket by depth: parents must be persisted before children so the
+	// `parent_id` FK resolves at INSERT time. AC has at most three depths
+	// (chapter -> section -> subsection per LEVEL_TO_DEPTH), so this loops
+	// at most three times.
+	const codeToSectionId = new Map<string, string>();
+	const byDepth = new Map<number, typeof sortedSections>();
 	for (const section of sortedSections) {
-		const parentId = section.parent_code === null ? null : (codeToSectionId.get(section.parent_code) ?? null);
-		if (section.parent_code !== null && parentId === null) {
-			throw new Error(
-				`AC seed: section ${section.code} references unknown parent ${section.parent_code} (edition ${edition})`,
-			);
-		}
-		const bodyAbsPath = resolve(context.repoRoot, section.body_path);
-		if (!existsSync(bodyAbsPath)) {
-			throw new Error(`AC manifest references missing section body: ${section.body_path} (resolved: ${bodyAbsPath})`);
-		}
-		const contentMd = await readFile(bodyAbsPath, 'utf-8');
-		// AC URIs only express integer chapter codes (`section-<n>` per
-		// libs/sources/src/ac/locator.ts:24). Deeper rows (sections / subsections
-		// inside a chapter) deep-link to their chapter ancestor's URI -- the
-		// flightbag reader scrolls to the chapter; sub-rows share that route
-		// per ADR 019 §1.2. For non-integer chapters (`appendix-a` etc.),
-		// fall back to the whole-doc URI.
-		const chapterCode = section.code.split('.')[0] ?? '';
-		const isIntegerChapter = /^[1-9][0-9]{0,2}$/.test(chapterCode);
-		const sectionRef = isIntegerChapter
-			? airbossRefForAcSection(manifest.doc_number, manifest.revision, chapterCode)
-			: airbossRefForAcDocument(manifest.doc_number, manifest.revision);
-		const { row, changed } = await upsertReferenceSection({
-			referenceId,
-			parentId,
-			level: section.level,
-			ordinal: section.ordinal,
-			depth: LEVEL_TO_DEPTH[section.level],
-			code: section.code,
-			airbossRef: sectionRef,
-			title: section.title,
-			faaPages: section.faa_page_start ? { start: section.faa_page_start, end: section.faa_page_end } : null,
-			sourceLocator: section.source_locator,
-			contentMd,
-			contentHash: section.content_hash,
-			hasFigures: false,
-			hasTables: false,
-			metadata: {},
-			seedOrigin: context.seedOrigin,
+		const depth = LEVEL_TO_DEPTH[section.level];
+		const list = byDepth.get(depth);
+		if (list) list.push(section);
+		else byDepth.set(depth, [section]);
+	}
+
+	const depths = [...byDepth.keys()].sort((a, b) => a - b);
+	for (const depth of depths) {
+		const sectionsAtDepth = byDepth.get(depth) ?? [];
+		const inputs: UpsertReferenceSectionInput[] = sectionsAtDepth.map((section) => {
+			const parentId = section.parent_code === null ? null : (codeToSectionId.get(section.parent_code) ?? null);
+			if (section.parent_code !== null && parentId === null) {
+				throw new Error(
+					`AC seed: section ${section.code} references unknown parent ${section.parent_code} (edition ${edition})`,
+				);
+			}
+			// AC URIs only express integer chapter codes (`section-<n>` per
+			// libs/sources/src/ac/locator.ts:24). Deeper rows (sections / subsections
+			// inside a chapter) deep-link to their chapter ancestor's URI -- the
+			// flightbag reader scrolls to the chapter; sub-rows share that route
+			// per ADR 019 §1.2. For non-integer chapters (`appendix-a` etc.),
+			// fall back to the whole-doc URI.
+			const chapterCode = section.code.split('.')[0] ?? '';
+			const isIntegerChapter = /^[1-9][0-9]{0,2}$/.test(chapterCode);
+			const sectionRef = isIntegerChapter
+				? airbossRefForAcSection(manifest.doc_number, manifest.revision, chapterCode)
+				: airbossRefForAcDocument(manifest.doc_number, manifest.revision);
+			return {
+				referenceId,
+				parentId,
+				level: section.level,
+				ordinal: section.ordinal,
+				depth,
+				code: section.code,
+				airbossRef: sectionRef,
+				title: section.title,
+				faaPages: section.faa_page_start ? { start: section.faa_page_start, end: section.faa_page_end } : null,
+				sourceLocator: section.source_locator,
+				contentMd: bodyByCode.get(section.code) ?? '',
+				contentHash: section.content_hash,
+				hasFigures: false,
+				hasTables: false,
+				metadata: {},
+				seedOrigin: context.seedOrigin,
+			};
 		});
-		codeToSectionId.set(section.code, row.id);
-		summary.sectionsTouched += 1;
-		if (changed) summary.sectionsChanged += 1;
+
+		const results = await bulkUpsertReferenceSections(inputs);
+		for (let i = 0; i < sectionsAtDepth.length; i += 1) {
+			const section = sectionsAtDepth[i];
+			const result = results[i];
+			if (!section || !result) continue;
+			codeToSectionId.set(section.code, result.row.id);
+			summary.sectionsTouched += 1;
+			if (result.changed) summary.sectionsChanged += 1;
+		}
 	}
 }

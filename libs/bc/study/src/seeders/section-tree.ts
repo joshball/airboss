@@ -18,7 +18,13 @@ import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { airbossRefForHandbookSection } from '@ab/sources';
 import type { HandbookManifestSection, SectionTreeManifest } from '../manifest-validation';
-import { replaceFiguresForSection, type SectionSchema, upsertReference, upsertReferenceSection } from '../references';
+import {
+	bulkReplaceFiguresForSections,
+	bulkUpsertReferenceSections,
+	type SectionSchema,
+	type UpsertReferenceSectionInput,
+	upsertReference,
+} from '../references';
 import type { SeedContext, SeedSummary } from './types';
 
 /**
@@ -61,8 +67,6 @@ export async function seedSectionTreeManifest(
 		seedOrigin: context.seedOrigin,
 	});
 
-	const codeToSectionId: Map<string, string> = new Map();
-
 	// Sort sections so depth-0 rows seed before their descendants and
 	// front-matter rows seed before chapters at the same depth (their
 	// ordinals already reflect that order). Sort by code length first
@@ -82,8 +86,12 @@ export async function seedSectionTreeManifest(
 		return a.code.localeCompare(b.code);
 	});
 
-	for (const section of sortedSections) {
-		const parentId = section.parent_code ? (codeToSectionId.get(section.parent_code) ?? null) : null;
+	// Read every body file in parallel before staging the upsert inputs so
+	// the bulk path is purely DB-bound. The single-row path used to
+	// interleave per-row reads with per-row upserts; once we batch the
+	// upserts, sequential reads become the bottleneck.
+	const bodyByCode = new Map<string, string>();
+	const bodyReads = sortedSections.map(async (section) => {
 		const bodyAbsPath = resolve(context.repoRoot, section.body_path);
 		// Mirror `whole-doc.ts`: a manifest that references a missing body
 		// file is a seed-time error, not a silent empty-content fall-through.
@@ -93,50 +101,96 @@ export async function seedSectionTreeManifest(
 				`section-tree manifest references missing body file: ${section.body_path} (resolved: ${bodyAbsPath})`,
 			);
 		}
-		const contentMd = await readFile(bodyAbsPath, 'utf-8');
-		const { row, changed } = await upsertReferenceSection({
+		bodyByCode.set(section.code, await readFile(bodyAbsPath, 'utf-8'));
+	});
+	await Promise.all(bodyReads);
+
+	// Bucket sections by depth so depth-0 rows commit before depth-1
+	// (parents must exist before child FKs land). Within a depth the
+	// `(reference_id, code)` unique constraint pins one row per code,
+	// so order is irrelevant.
+	const codeToSectionId: Map<string, string> = new Map();
+	const sectionsByDepth = new Map<number, HandbookManifestSection[]>();
+	for (const section of sortedSections) {
+		const depth = LEVEL_TO_DEPTH[section.level];
+		const list = sectionsByDepth.get(depth);
+		if (list) list.push(section);
+		else sectionsByDepth.set(depth, [section]);
+	}
+
+	const figuresToReplace: Array<{
+		readonly sectionId: string;
+		readonly figures: ReadonlyArray<{
+			readonly ordinal: number;
+			readonly caption: string;
+			readonly assetPath: string;
+			readonly width: number | null;
+			readonly height: number | null;
+		}>;
+	}> = [];
+
+	const depths = [...sectionsByDepth.keys()].sort((a, b) => a - b);
+	for (const depth of depths) {
+		const sectionsAtDepth = sectionsByDepth.get(depth) ?? [];
+		const inputs: UpsertReferenceSectionInput[] = sectionsAtDepth.map((section) => ({
 			referenceId: ref.id,
-			parentId,
+			parentId: section.parent_code ? (codeToSectionId.get(section.parent_code) ?? null) : null,
 			level: section.level,
 			ordinal: section.ordinal,
-			depth: LEVEL_TO_DEPTH[section.level],
+			depth,
 			code: section.code,
 			airbossRef: airbossRefForHandbookSection(manifest.document_slug, manifest.edition, section.code),
 			title: section.title,
 			faaPages: section.faa_page_start ? { start: section.faa_page_start, end: section.faa_page_end } : null,
 			sourceLocator: section.source_locator,
-			contentMd,
+			contentMd: bodyByCode.get(section.code) ?? '',
 			contentHash: section.content_hash,
 			hasFigures: section.has_figures,
 			hasTables: section.has_tables,
 			// Forward `metadata.extraction_status` (Sub-phase 1C) into the
 			// `study.reference_section.metadata` jsonb so the reader can
 			// surface placeholder badges + "merged from orphans" tooltips.
-			// Pre-1C manifests omit `metadata`; pass `undefined` so the
-			// upsert defers to the existing row's metadata (no overwrite).
+			// Pre-1C manifests omit `metadata`; the bulk upsert defers to
+			// the existing row's metadata when undefined arrives.
 			metadata: section.metadata,
 			seedOrigin: context.seedOrigin,
-		});
-		codeToSectionId.set(section.code, row.id);
-		summary.sectionsTouched += 1;
-		if (changed) {
-			summary.sectionsChanged += 1;
-			// Replace figures for this section since the body changed.
-			const figuresForSection = manifest.figures.filter((f) => f.section_code === section.code);
-			const written = await replaceFiguresForSection(
-				row.id,
-				figuresForSection.map((f) => ({
-					ordinal: f.ordinal,
-					caption: f.caption,
-					assetPath: f.asset_path,
-					width: f.width ?? null,
-					height: f.height ?? null,
-				})),
-				undefined,
-				context.seedOrigin,
-			);
-			summary.figuresWritten += written.length;
+		}));
+
+		const results = await bulkUpsertReferenceSections(inputs);
+
+		for (let i = 0; i < sectionsAtDepth.length; i += 1) {
+			const section = sectionsAtDepth[i];
+			const result = results[i];
+			if (!section || !result) continue;
+			codeToSectionId.set(section.code, result.row.id);
+			summary.sectionsTouched += 1;
+			if (result.changed) {
+				summary.sectionsChanged += 1;
+				const figuresForSection = manifest.figures.filter((f) => f.section_code === section.code);
+				if (figuresForSection.length > 0) {
+					figuresToReplace.push({
+						sectionId: result.row.id,
+						figures: figuresForSection.map((f) => ({
+							ordinal: f.ordinal,
+							caption: f.caption,
+							assetPath: f.asset_path,
+							width: f.width ?? null,
+							height: f.height ?? null,
+						})),
+					});
+				} else {
+					// Even when the new section has zero figures, prior rows
+					// might have had some -- the bulk replacer treats an
+					// empty figures[] as "drop everything for this section".
+					figuresToReplace.push({ sectionId: result.row.id, figures: [] });
+				}
+			}
 		}
+	}
+
+	if (figuresToReplace.length > 0) {
+		const written = await bulkReplaceFiguresForSections(figuresToReplace, undefined, context.seedOrigin);
+		summary.figuresWritten += written;
 	}
 
 	summary.editionsProcessed += 1;
