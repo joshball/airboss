@@ -55,11 +55,11 @@ import {
 	type SourceId,
 	sourceIdForReference,
 } from '@ab/sources';
-import { editions as editionsTable, isEditionSuperseded } from '@ab/sources/server';
+import { editions as editionsTable } from '@ab/sources/server';
 import type { Citation, StructuredCitation } from '@ab/types';
 import { isHandbookCitation, isStructuredCitation } from '@ab/types';
 import { generateReferenceFigureId, generateReferenceId, generateReferenceSectionId } from '@ab/utils';
-import { and, asc, desc, eq, inArray, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, inArray, isNull, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import {
 	type HandbookManifestWarningCode,

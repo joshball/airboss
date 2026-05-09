@@ -385,6 +385,15 @@ const STEP_HELP: Record<string, StepHelp> = {
 		how: '`bun scripts/lint/wp-frontmatter.ts`.',
 		links: ['scripts/lint/wp-frontmatter.ts', 'docs/work-packages/'],
 	},
+	'edition-cache-write-guard': {
+		tier: 'fast',
+		scopable: false,
+		summary: 'Block non-seed writes to study.reference.edition (ADR 026 §3)',
+		what: 'Greps every .ts under apps/, libs/, scripts/ for `.set({ edition: ... })` / `.values({ edition: ... })` patterns targeting the `reference` Drizzle handle. Allowed paths: the seed adapters and `references.ts` (the BC write helper). Anything else is a violation.',
+		why: 'ADR 026 §3 makes `study.reference.edition` a seed-only denormalized cache populated from `sources_registry.editions.edition_label`. A non-seed write would drift the cache out of sync with the registry. The guard is the load-bearing enforcement of the seed-only contract.',
+		how: '`bun scripts/lint/edition-cache-write-guard.ts`.',
+		links: ['scripts/lint/edition-cache-write-guard.ts', 'docs/decisions/026-edition-coherence/decision.md'],
+	},
 	'bug-frontmatter': {
 		tier: 'fast',
 		scopable: false,
@@ -1244,6 +1253,22 @@ function buildStepDefs(profile: Profile, dirty: readonly string[]): StepDef[] {
 		tier: 'fast',
 		relevantWhen: (d) => anyMatch(d, (f) => f.startsWith('docs/work-packages/') && f.endsWith('.md')),
 		fn: () => shellRun('bun', ['scripts/lint/wp-frontmatter.ts']),
+	});
+
+	defs.push({
+		name: 'edition-cache-write-guard',
+		tier: 'fast',
+		// Trigger on any .ts file change in apps/, libs/, or scripts/. The guard
+		// itself is cheap (single-pass grep) so running it on any production-code
+		// edit is fine.
+		relevantWhen: (d) =>
+			anyMatch(
+				d,
+				(f) =>
+					(f.startsWith('apps/') || f.startsWith('libs/') || f.startsWith('scripts/')) &&
+					(f.endsWith('.ts') || f.endsWith('.svelte.ts')),
+			),
+		fn: () => shellRun('bun', ['scripts/lint/edition-cache-write-guard.ts']),
 	});
 
 	defs.push({
