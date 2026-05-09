@@ -27,10 +27,11 @@ export const load: PageServerLoad = async (event) => {
 	const ref = await getReferenceByDocument(documentSlug, { edition: editionParam }).catch(() => null);
 	if (!ref) throw error(404, 'Handbook not found.');
 
-	const chapters = await listHandbookChapters(ref.id);
-	const progress = await getHandbookProgress(user.id, ref.id);
-
-	const current = await getCurrentEdition(sourceIdForReference(ref) as SourceId).catch(() => null);
+	const [chapters, progress, current] = await Promise.all([
+		listHandbookChapters(ref.id),
+		getHandbookProgress(user.id, ref.id),
+		getCurrentEdition(sourceIdForReference(ref) as SourceId).catch(() => null),
+	]);
 	const supersededByEdition = current !== null && current.editionLabel !== ref.edition ? current.editionLabel : null;
 
 	return {

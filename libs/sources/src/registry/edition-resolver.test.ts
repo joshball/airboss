@@ -8,6 +8,7 @@
  */
 
 import { db } from '@ab/db/connection';
+import { createId } from '@ab/utils';
 import { like } from 'drizzle-orm';
 import { afterEach, beforeEach, describe, expect, test } from 'vitest';
 import { editions as editionsTable } from '../db/schema.ts';
@@ -183,5 +184,30 @@ describe('upsertEdition idempotency', () => {
 		// Only one row total for the (sourceId, label) pair.
 		const rows = await listEditionsForSource(id);
 		expect(rows).toHaveLength(1);
+	});
+
+	test('UNIQUE(source_id, edition_label) blocks bypass-the-helper dupes', async () => {
+		// Direct insert of a duplicate `(sourceId, editionLabel)` pair must fail
+		// at the schema layer -- this is the load-bearing invariant the resolver
+		// (single-row return), the NOT EXISTS subquery (single-valued lookup),
+		// and `markPriorEditionsRetired` (one current row per source) all rely
+		// on. ADR 026 §6 / `editions_source_label_uq` partial of `db/schema.ts`.
+		const id = sourceId('uq-collision');
+		await upsertEdition({ sourceId: id, editionLabel: 'rev-a', publishedAt: new Date('2024-01-01') });
+		await expect(
+			db.insert(editionsTable).values({
+				id: createId('edition'),
+				sourceId: id,
+				editionLabel: 'rev-a',
+				publishedAt: new Date('2024-02-01'),
+				retiredAt: null,
+				metadata: null,
+			}),
+		).rejects.toThrow(/Failed query: insert into "sources_registry"\."editions"/);
+
+		// Pair with a different label is allowed -- the constraint is per-pair.
+		await expect(
+			upsertEdition({ sourceId: id, editionLabel: 'rev-b', publishedAt: new Date('2024-03-01') }),
+		).resolves.toMatchObject({ editionLabel: 'rev-b' });
 	});
 });

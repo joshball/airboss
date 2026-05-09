@@ -67,6 +67,7 @@ export {
 	airbossRefForNtsbAljSection,
 	airbossRefForSafo,
 	airbossRefForWholeDocHandbook,
+	CORPUS_PREFIX_FOR_REFERENCE_KIND,
 	sourceIdForReference,
 } from './airboss-ref-builder.ts';
 export {

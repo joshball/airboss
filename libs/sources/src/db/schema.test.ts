@@ -173,21 +173,37 @@ describe('editions', () => {
 		expect(config.schema).toBe(SCHEMAS.SOURCES_REGISTRY);
 	});
 
-	it('declares the 2 indexes the spec requires (one of them partial)', () => {
+	it('declares the 4 indexes the spec requires (two partial, one unique)', () => {
 		const config = getTableConfig(editions);
 		const indexNames = config.indexes.map((idx) => idx.config.name).sort();
-		expect(indexNames).toEqual(['editions_source_current_idx', 'editions_source_date_idx'].sort());
+		expect(indexNames).toEqual(
+			[
+				'editions_source_current_idx',
+				'editions_source_date_idx',
+				'editions_source_label_superseded_idx',
+				'editions_source_label_uq',
+			].sort(),
+		);
 
 		// The partial index for current-edition lookups must filter on retired_at IS NULL.
 		const currentIdx = config.indexes.find((idx) => idx.config.name === 'editions_source_current_idx');
 		expect(currentIdx).toBeDefined();
 		// Drizzle stores the WHERE clause as an SQL fragment; check the rendered
 		// query text for the predicate.
-		const whereSql = currentIdx?.config.where;
-		expect(whereSql).toBeDefined();
-		// The SQL fragment's queryChunks include the literal predicate text.
-		const fragment = JSON.stringify(whereSql);
-		expect(fragment).toContain('retired_at IS NULL');
+		const currentWhereFragment = JSON.stringify(currentIdx?.config.where);
+		expect(currentWhereFragment).toContain('retired_at IS NULL');
+
+		// The inverse partial index for the NOT EXISTS supersession path.
+		const supersededIdx = config.indexes.find((idx) => idx.config.name === 'editions_source_label_superseded_idx');
+		expect(supersededIdx).toBeDefined();
+		const supersededWhereFragment = JSON.stringify(supersededIdx?.config.where);
+		expect(supersededWhereFragment).toContain('retired_at IS NOT NULL');
+
+		// The UNIQUE index enforces the "single row per (source_id, edition_label)"
+		// invariant the resolver + NOT EXISTS subqueries assume (ADR 026).
+		const uniqueIdx = config.indexes.find((idx) => idx.config.name === 'editions_source_label_uq');
+		expect(uniqueIdx).toBeDefined();
+		expect(uniqueIdx?.config.unique).toBe(true);
 	});
 
 	it('does not declare any foreign keys (source_id is a code-resident SOURCES key)', () => {

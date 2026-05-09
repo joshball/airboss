@@ -53,14 +53,13 @@ import {
 	isParseError,
 	parseIdentifier,
 	type SourceId,
-	sourceIdForReference,
 } from '@ab/sources';
-import { editions as editionsTable } from '@ab/sources/server';
 import type { Citation, StructuredCitation } from '@ab/types';
 import { isHandbookCitation, isStructuredCitation } from '@ab/types';
 import { generateReferenceFigureId, generateReferenceId, generateReferenceSectionId } from '@ab/utils';
 import { and, asc, desc, eq, inArray, isNull, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
+import { notSupersededInRegistry } from './edition-predicates.ts';
 import {
 	type HandbookManifestWarningCode,
 	type HandbookWarningTriageStatus,
@@ -85,35 +84,6 @@ import {
 } from './schema';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
-
-/**
- * Drizzle predicate: "this `study.reference` row is NOT superseded according
- * to `sources_registry.editions`." Per ADR 026 the registry is the single
- * source of truth for edition supersession.
- *
- * Implementation mirrors `library-by-cert.ts:notSupersededInRegistry`. The
- * source-id concat (`airboss-ref:<corpus>/<slug>`) maps the reference row's
- * `(kind, document_slug)` to the registry's `source_id` column shape: kind
- * `handbook` -> `handbooks`, kind `cfr` -> `regs`, otherwise the kind itself.
- */
-function notSupersededInRegistry() {
-	const sourceIdExpr = sql`(
-		'airboss-ref:'
-		|| (CASE
-			WHEN ${reference.kind} = 'handbook' THEN 'handbooks'
-			WHEN ${reference.kind} = 'cfr' THEN 'regs'
-			ELSE ${reference.kind}
-		END)
-		|| '/'
-		|| ${reference.documentSlug}
-	)`;
-	return sql`NOT EXISTS (
-		SELECT 1 FROM ${editionsTable}
-		WHERE ${editionsTable.sourceId} = ${sourceIdExpr}
-		  AND ${editionsTable.editionLabel} = ${reference.edition}
-		  AND ${editionsTable.retiredAt} IS NOT NULL
-	)`;
-}
 
 // ---------------------------------------------------------------------------
 // Errors

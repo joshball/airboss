@@ -16,51 +16,12 @@ import { createLogger } from '@ab/utils';
 import { and, arrayContains, asc, eq, inArray, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { CredentialNotFoundError, getCertsCoveredBy, getCredentialBySlug } from './credentials';
+import { notSupersededInRegistry, sourceIdSqlForAliasedReference } from './edition-predicates.ts';
 import { type ReferenceRow, reference } from './schema';
 
 const log = createLogger('study:library-by-cert');
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
-
-/**
- * Drizzle predicate: "this `study.reference` row is NOT superseded according
- * to `sources_registry.editions`." Computes the row's edition-agnostic source
- * id via `sourceIdForReference(kind, document_slug)` (matching the registry's
- * `source_id` column shape) and asserts no edition row exists with both
- * `source_id` and `edition_label` matching AND `retired_at IS NOT NULL`.
- *
- * Per ADR 026: edition supersession lives in `sources_registry.editions`.
- * This BC's queries use the predicate to filter "current editions only" --
- * the same role the dropped `study.reference.supersededById` column played
- * pre-ADR-026.
- *
- * Implementation note: postgres concatenates `airboss-ref:<corpus>/<slug>`
- * into the `source_id` column at seed time via the same `sourceIdForReference`
- * mapping. Doing the concat inside the subquery keeps the predicate as a
- * single round-trip with the outer SELECT (no per-row N+1 lookups).
- */
-function notSupersededInRegistry() {
-	// Build the registry source-id at SQL time: `airboss-ref:<prefix>/<slug>`,
-	// where prefix is `handbooks` for kind=`handbook`, `regs` for kind=`cfr`,
-	// and `<kind>` for everything else. Mirrors `sourceIdForReference` in
-	// `libs/sources/src/airboss-ref-builder.ts`.
-	const sourceIdExpr = sql`(
-		'airboss-ref:'
-		|| (CASE
-			WHEN ${reference.kind} = 'handbook' THEN 'handbooks'
-			WHEN ${reference.kind} = 'cfr' THEN 'regs'
-			ELSE ${reference.kind}
-		END)
-		|| '/'
-		|| ${reference.documentSlug}
-	)`;
-	return sql`NOT EXISTS (
-		SELECT 1 FROM ${editionsTable}
-		WHERE ${editionsTable.sourceId} = ${sourceIdExpr}
-		  AND ${editionsTable.editionLabel} = ${reference.edition}
-		  AND ${editionsTable.retiredAt} IS NOT NULL
-	)`;
-}
 
 /**
  * Carryover bucket -- references owned by a prerequisite cert that still
@@ -320,22 +281,14 @@ export async function getReferenceCountsByTopic(db: Db = defaultDb): Promise<Rec
 	// `result as unknown as ReadonlyArray<...>` shape is used by
 	// `getCredentialIdsCoveredBy` for its recursive CTE -- postgres-js's
 	// `db.execute` returns the rowset directly as an iterable here.
+	const aliasedSourceId = sourceIdSqlForAliasedReference(sql`r.kind`, sql`r.document_slug`);
 	const result = await db.execute(sql`
 		SELECT s.subject, count(*)::int AS n
 		FROM ${reference} AS r,
 		LATERAL unnest(r.subjects) AS s(subject)
 		WHERE NOT EXISTS (
 			SELECT 1 FROM ${editionsTable} AS e
-			WHERE e.source_id = (
-				'airboss-ref:'
-				|| (CASE
-					WHEN r.kind = 'handbook' THEN 'handbooks'
-					WHEN r.kind = 'cfr' THEN 'regs'
-					ELSE r.kind
-				END)
-				|| '/'
-				|| r.document_slug
-			)
+			WHERE e.source_id = ${aliasedSourceId}
 			  AND e.edition_label = r.edition
 			  AND e.retired_at IS NOT NULL
 		)

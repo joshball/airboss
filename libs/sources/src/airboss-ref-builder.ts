@@ -141,6 +141,20 @@ export function airbossRefForGenericDocument(corpus: string, documentSlug: strin
 }
 
 /**
+ * Per-`study.reference.kind` mapping to the `source_id` corpus segment used in
+ * `sources_registry.editions`. Single source of truth for the edition-agnostic
+ * registry-key shape -- consumed by `sourceIdForReference` (TS) and by the
+ * NOT EXISTS subquery builders in `@ab/bc-study` (SQL via `sourceIdSqlCaseForKind`).
+ *
+ * Kinds not listed here fall back to using the `kind` value verbatim as the
+ * corpus segment.
+ */
+export const CORPUS_PREFIX_FOR_REFERENCE_KIND: Readonly<Record<string, string>> = {
+	handbook: 'handbooks',
+	cfr: 'regs',
+};
+
+/**
  * Edition-agnostic registry key for a `study.reference` row. Used by ADR 026
  * callers that need to consult `sources_registry.editions` for "what is the
  * current edition for this slug?": every edition row of the same logical
@@ -148,21 +162,14 @@ export function airbossRefForGenericDocument(corpus: string, documentSlug: strin
  *
  * The shape is `airboss-ref:<corpus>/<documentSlug>` -- intentionally without
  * an edition fragment, mirroring the registry's `source_id` column. Per-corpus
- * mapping:
- *
- *   - handbook   -> `airboss-ref:handbooks/<slug>`
- *   - cfr        -> `airboss-ref:regs/<slug>` (slug like `14cfr91`, `49cfr830`)
- *   - ac         -> `airboss-ref:ac/<slug>`
- *   - acs / pts  -> `airboss-ref:<kind>/<slug>`
- *   - aim / pcg  -> `airboss-ref:<kind>/<slug>` (single canonical slug)
- *   - everything else -> `airboss-ref:<kind>/<slug>` (generic fallback)
+ * mapping comes from `CORPUS_PREFIX_FOR_REFERENCE_KIND`; everything not listed
+ * there falls through to `airboss-ref:<kind>/<slug>`.
  *
  * Pure: no DB access, no side effects. Callers that need the actual edition
  * row go through `getCurrentEdition(sourceIdFor(...))` from `@ab/sources/server`.
  */
 export function sourceIdForReference(input: { readonly kind: string; readonly documentSlug: string }): string {
 	const { kind, documentSlug } = input;
-	if (kind === 'handbook') return `${SCHEME_PREFIX}handbooks/${documentSlug}`;
-	if (kind === 'cfr') return `${SCHEME_PREFIX}regs/${documentSlug}`;
-	return `${SCHEME_PREFIX}${kind}/${documentSlug}`;
+	const corpus = CORPUS_PREFIX_FOR_REFERENCE_KIND[kind] ?? kind;
+	return `${SCHEME_PREFIX}${corpus}/${documentSlug}`;
 }

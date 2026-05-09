@@ -45,15 +45,13 @@ export const load: PageServerLoad = async (event) => {
 	const chapter = await getHandbookChapter(ref.id, chapterCode).catch(() => null);
 	if (!chapter) throw error(404, 'Chapter not found.');
 
-	const sections = await listChapterSections(chapter.id);
+	const [sections, readState, citingNodes, current] = await Promise.all([
+		listChapterSections(chapter.id),
+		getReadState(user.id, chapter.id),
+		getNodesCitingSection({ referenceId: ref.id, chapter: Number(chapterCode) }),
+		getCurrentEdition(sourceIdForReference(ref) as SourceId).catch(() => null),
+	]);
 	const figures = sections.length === 0 ? await listFiguresForSection(chapter.id) : [];
-	const readState = await getReadState(user.id, chapter.id);
-	const citingNodes = await getNodesCitingSection({
-		referenceId: ref.id,
-		chapter: Number(chapterCode),
-	});
-
-	const current = await getCurrentEdition(sourceIdForReference(ref) as SourceId).catch(() => null);
 	const supersededByEdition = current !== null && current.editionLabel !== ref.edition ? current.editionLabel : null;
 
 	return {

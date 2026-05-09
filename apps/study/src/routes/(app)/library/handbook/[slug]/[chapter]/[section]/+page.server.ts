@@ -46,21 +46,17 @@ export const load: PageServerLoad = async (event) => {
 	const view = await getHandbookSection(ref.id, chapterCode, sectionCode).catch(() => null);
 	if (!view) throw error(404, 'Section not found.');
 
-	const readState = await getReadState(user.id, view.section.id);
-	const citingNodes = await getNodesCitingSection({
-		referenceId: ref.id,
-		chapter: Number(chapterCode),
-		section: Number(sectionCode),
-	});
-
 	// Errata applied to this section (newest first). The reader's
 	// AmendmentPanel renders nothing when this list is empty, so we
 	// always pass the array through -- the component decides visibility.
 	// See ADR 020 + docs/work-packages/apply-errata-and-afh-mosaic/spec.md.
-	const errataRows = await listErrataForSection(view.section.id);
+	const [readState, citingNodes, errataRows, current] = await Promise.all([
+		getReadState(user.id, view.section.id),
+		getNodesCitingSection({ referenceId: ref.id, chapter: Number(chapterCode), section: Number(sectionCode) }),
+		listErrataForSection(view.section.id),
+		getCurrentEdition(sourceIdForReference(ref) as SourceId).catch(() => null),
+	]);
 	const errata = errataRows.map(formatErrataForDisplay);
-
-	const current = await getCurrentEdition(sourceIdForReference(ref) as SourceId).catch(() => null);
 	const supersededByEdition = current !== null && current.editionLabel !== ref.edition ? current.editionLabel : null;
 
 	return {

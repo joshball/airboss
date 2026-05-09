@@ -1208,6 +1208,8 @@ CREATE INDEX "audit_log_timestamp_idx" ON "audit"."audit_log" USING btree ("time
 CREATE INDEX "audit_log_target_type_time_idx" ON "audit"."audit_log" USING btree ("target_type","timestamp");--> statement-breakpoint
 CREATE INDEX "editions_source_date_idx" ON "sources_registry"."editions" USING btree ("source_id","published_at");--> statement-breakpoint
 CREATE INDEX "editions_source_current_idx" ON "sources_registry"."editions" USING btree ("source_id") WHERE retired_at IS NULL;--> statement-breakpoint
+CREATE UNIQUE INDEX "editions_source_label_uq" ON "sources_registry"."editions" USING btree ("source_id","edition_label");--> statement-breakpoint
+CREATE INDEX "editions_source_label_superseded_idx" ON "sources_registry"."editions" USING btree ("source_id","edition_label") WHERE retired_at IS NOT NULL;--> statement-breakpoint
 CREATE INDEX "promotion_batches_corpus_date_idx" ON "sources_registry"."promotion_batches" USING btree ("corpus","promotion_date" DESC NULLS LAST);--> statement-breakpoint
 CREATE INDEX "promotion_batches_previous_batch_idx" ON "sources_registry"."promotion_batches" USING btree ("previous_batch_id");--> statement-breakpoint
 CREATE INDEX "promotion_batches_reviewer_date_idx" ON "sources_registry"."promotion_batches" USING btree ("reviewer_id","promotion_date" DESC NULLS LAST);

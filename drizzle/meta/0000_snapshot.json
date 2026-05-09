@@ -1,5 +1,5 @@
 {
-  "id": "6581ad88-1e74-4184-a967-5555256bb431",
+  "id": "c941f5d4-7d85-4f03-9413-2b0d337b86b3",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -9747,6 +9747,49 @@
           ],
           "isUnique": false,
           "where": "retired_at IS NULL",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "editions_source_label_uq": {
+          "name": "editions_source_label_uq",
+          "columns": [
+            {
+              "expression": "source_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "edition_label",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "editions_source_label_superseded_idx": {
+          "name": "editions_source_label_superseded_idx",
+          "columns": [
+            {
+              "expression": "source_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "edition_label",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "where": "retired_at IS NOT NULL",
           "concurrently": false,
           "method": "btree",
           "with": {}
