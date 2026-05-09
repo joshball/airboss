@@ -21,7 +21,7 @@ import {
 	listItems,
 	listItemsWithPassingSession,
 	updateBucket,
-} from '@ab/bc-hangar';
+} from '@ab/bc-hangar/server';
 import { AUDIT_TARGETS, ROLES, ROUTES } from '@ab/constants';
 import { db } from '@ab/db/connection';
 import { createLogger } from '@ab/utils';
@@ -32,7 +32,7 @@ import type { Actions, PageServerLoad } from './$types';
 const log = createLogger('hangar:review:admin:buckets:edit');
 
 /** Bucket-id prefix per `@ab/utils` `generateHangarReviewBucketId`. */
-const BUCKET_ID_PREFIX = 'hrb_';
+const BUCKET_ID_PREFIX = 'rbkt_';
 
 export const load: PageServerLoad = async (event) => {
 	requireRole(event, ROLES.ADMIN);

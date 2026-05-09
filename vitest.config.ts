@@ -38,6 +38,7 @@ const aliases = {
 	'@ab/bc-sim': resolve('./libs/bc/sim/src/index.ts'),
 	'@ab/bc-hangar/schema-types': resolve('./libs/bc/hangar/src/schema-types.ts'),
 	'@ab/bc-hangar/schema': resolve('./libs/bc/hangar/src/schema.ts'),
+	'@ab/bc-hangar/server': resolve('./libs/bc/hangar/src/server.ts'),
 	'@ab/bc-hangar/source-seed-registry': resolve('./libs/bc/hangar/src/source-seed-registry.ts'),
 	'@ab/bc-hangar': resolve('./libs/bc/hangar/src/index.ts'),
 	'@ab/aviation/sources': resolve('./libs/aviation/src/sources/index.ts'),

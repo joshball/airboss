@@ -5,7 +5,7 @@
  */
 
 import { requireRole } from '@ab/auth';
-import { listDocsTree, REPO_ROOT } from '@ab/bc-hangar';
+import { listDocsTree, REPO_ROOT } from '@ab/bc-hangar/server';
 import { ROLES } from '@ab/constants';
 import type { LayoutServerLoad } from './$types';
 

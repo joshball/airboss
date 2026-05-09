@@ -8,7 +8,7 @@ import {
 	softDeleteReference,
 	updateReference,
 	validateReferenceForm,
-} from '@ab/bc-hangar';
+} from '@ab/bc-hangar/server';
 import { ROLES, ROUTES } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { error, fail, redirect } from '@sveltejs/kit';

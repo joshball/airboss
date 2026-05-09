@@ -61,6 +61,7 @@ function installCommonMocks(bc: BcMocks): void {
 		requireRole: () => ({ id: 'user_test' }),
 	}));
 	vi.doMock('@ab/bc-hangar', () => ({ ...bc }));
+	vi.doMock('@ab/bc-hangar/server', () => ({ ...bc }));
 	vi.doMock('@ab/db/connection', () => ({
 		db: {
 			transaction: async (fn: (tx: unknown) => Promise<unknown>) => fn(TX_MARKER),

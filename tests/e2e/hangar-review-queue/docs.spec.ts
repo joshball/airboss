@@ -34,8 +34,10 @@ test.describe('docs browser: baseline rendering', () => {
 		await expect(article).toBeVisible();
 		const articleText = (await article.innerText()).trim();
 		expect(articleText.length).toBeGreaterThan(500);
-		// Breadcrumb nav surfaces the Docs root link.
-		await expect(page.getByRole('link', { name: /^Docs$/ })).toBeVisible();
+		// Breadcrumb nav surfaces the Docs root link. Scope to the breadcrumbs
+		// landmark -- the banner also exposes a `Docs` link, and we only care
+		// here that the breadcrumb is rendered for this deep-linked file.
+		await expect(page.getByTestId('breadcrumbs-root').getByRole('link', { name: /^Docs$/ })).toBeVisible();
 		// Frontmatter rail renders with at least one of the curated keys.
 		const rail = page.getByRole('complementary', { name: /frontmatter/i });
 		// ADR 011 has a `status` line in its frontmatter; the rail surfaces it.
@@ -47,6 +49,7 @@ test.describe('docs browser: baseline rendering', () => {
 test.describe('docs browser: full-text search', () => {
 	test('typing a multi-word phrase surfaces hits with snippets', async ({ page }) => {
 		await page.goto(ROUTES.HANGAR_DOCS);
+		await page.waitForLoadState('networkidle');
 		const search = page.getByRole('combobox', { name: /search docs/i });
 		await search.click();
 		await search.fill('discovery-first pedagogy');
@@ -63,6 +66,10 @@ test.describe('docs browser: full-text search', () => {
 
 	test('a query with no matches shows the empty state inside the popover', async ({ page }) => {
 		await page.goto(ROUTES.HANGAR_DOCS);
+		// Wait for hydration so `oninput` is bound; otherwise `fill` triggers
+		// the input event before the Svelte handler attaches and `open`
+		// never flips true.
+		await page.waitForLoadState('networkidle');
 		const search = page.getByRole('combobox', { name: /search docs/i });
 		await search.click();
 		await search.fill('zzqxzzqxzzqx');
@@ -73,6 +80,7 @@ test.describe('docs browser: full-text search', () => {
 
 	test('clicking a search hit navigates to its doc and the search clears', async ({ page }) => {
 		await page.goto(ROUTES.HANGAR_DOCS);
+		await page.waitForLoadState('networkidle');
 		const search = page.getByRole('combobox', { name: /search docs/i });
 		await search.click();
 		await search.fill('PIVOT');

@@ -1,5 +1,5 @@
 import { requireRole } from '@ab/auth';
-import { listReferences } from '@ab/bc-hangar';
+import { listReferences } from '@ab/bc-hangar/server';
 import {
 	type AviationTopic,
 	type CertApplicability,

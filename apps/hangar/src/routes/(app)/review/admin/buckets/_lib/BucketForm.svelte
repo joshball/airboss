@@ -129,7 +129,7 @@ let { initial, errors, submitLabel, saving }: BucketFormProps = $props();
 		</label>
 	</fieldset>
 
-	<details class="advanced">
+	<details class="advanced" open={errors.advancedJson ? true : undefined}>
 		<summary>Advanced JSON predicate</summary>
 		<label class="field">
 			<span class="label">Filter criteria JSON (overrides structured fields)</span>

@@ -41,11 +41,11 @@ interface BcMocks {
 
 function makeBc(overrides: Partial<BcMocks> = {}): BcMocks {
 	return {
-		createBucket: vi.fn().mockResolvedValue({ id: 'hrb_NEW', name: 'B', kindId: 'wp_spec' }),
-		updateBucket: vi.fn().mockResolvedValue({ id: 'hrb_EXISTING', name: 'B', kindId: 'wp_spec' }),
+		createBucket: vi.fn().mockResolvedValue({ id: 'rbkt_NEW', name: 'B', kindId: 'wp_spec' }),
+		updateBucket: vi.fn().mockResolvedValue({ id: 'rbkt_EXISTING', name: 'B', kindId: 'wp_spec' }),
 		deleteBucket: vi.fn().mockResolvedValue(undefined),
 		getBucket: vi.fn().mockResolvedValue({
-			id: 'hrb_EXISTING',
+			id: 'rbkt_EXISTING',
 			boardId: 'brd_test',
 			name: 'B',
 			kindId: 'wp_spec',
@@ -76,6 +76,7 @@ function installCommonMocks(bc: BcMocks): void {
 		auditWrite: vi.fn().mockResolvedValue({ id: 'audit_test' }),
 	}));
 	vi.doMock('@ab/bc-hangar', () => ({ ...bc }));
+	vi.doMock('@ab/bc-hangar/server', () => ({ ...bc }));
 	vi.doMock('@ab/db/connection', () => ({
 		db: {
 			transaction: async (fn: (tx: unknown) => Promise<unknown>) => fn(TX_MARKER),
@@ -205,7 +206,7 @@ describe('?/createBucket (default action on /review/admin/buckets/new)', () => {
 describe('?/update (edit page)', () => {
 	it('echoes form values back on validation failure', async () => {
 		const bc = makeBc();
-		const result = await runEditUpdate(bc, 'hrb_EXISTING', {
+		const result = await runEditUpdate(bc, 'rbkt_EXISTING', {
 			name: '',
 			kindId: 'wp_spec',
 			sortOrder: '0',
@@ -219,7 +220,7 @@ describe('?/update (edit page)', () => {
 
 	it('redirects to buckets list on success and threads the tx', async () => {
 		const bc = makeBc();
-		const result = await runEditUpdate(bc, 'hrb_EXISTING', {
+		const result = await runEditUpdate(bc, 'rbkt_EXISTING', {
 			name: 'Renamed',
 			kindId: 'wp_spec',
 			sortOrder: '0',
@@ -254,7 +255,7 @@ describe('?/update (edit page)', () => {
 describe('?/delete (edit page)', () => {
 	it('redirects to buckets list on success and threads the tx', async () => {
 		const bc = makeBc();
-		const result = await runEditDelete(bc, 'hrb_EXISTING');
+		const result = await runEditDelete(bc, 'rbkt_EXISTING');
 		expect(result.status).toBe(303);
 		expect(bc.deleteBucket).toHaveBeenCalledTimes(1);
 		expect(bc.deleteBucket.mock.calls[0]?.[1]).toBe(TX_MARKER);
@@ -262,7 +263,7 @@ describe('?/delete (edit page)', () => {
 
 	it('surfaces a friendly error message on failure', async () => {
 		const bc = makeBc({ deleteBucket: vi.fn().mockRejectedValue(new Error('boom')) });
-		const result = await runEditDelete(bc, 'hrb_EXISTING');
+		const result = await runEditDelete(bc, 'rbkt_EXISTING');
 		expect(result.status).toBe(500);
 		const data = result.data as { delete: string };
 		expect(data.delete).toMatch(/Bucket delete failed/);

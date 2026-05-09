@@ -81,6 +81,21 @@ function installMocks(setup: BcMocks): void {
 		everyStepPassed: setup.everyStepPassed,
 		REPO_ROOT: '/tmp/airboss-test-repo',
 	}));
+	vi.doMock('@ab/bc-hangar/server', () => ({
+		getItem: setup.getItem,
+		getReference: setup.getReference,
+		getOpenSession: setup.getOpenSession,
+		listSessions: setup.listSessions,
+		listSteps: setup.listSteps,
+		recordStep: setup.recordStep,
+		finishSession: setup.finishSession,
+		parseToc: setup.parseToc,
+		parseTestPlan: setup.parseTestPlan,
+		startSession: setup.startSession,
+		writeFrontmatterField: setup.writeFrontmatterField,
+		everyStepPassed: setup.everyStepPassed,
+		REPO_ROOT: '/tmp/airboss-test-repo',
+	}));
 	vi.doMock('node:fs/promises', () => ({
 		readFile: vi.fn(async () => '## Section\n'),
 	}));

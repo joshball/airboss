@@ -14,7 +14,7 @@
 
 import { AUDIT_OPS, auditWrite } from '@ab/audit';
 import { requireRole } from '@ab/auth';
-import { countDocsIndex, getLastLoaderRun, loadReviewItems, REPO_ROOT } from '@ab/bc-hangar';
+import { countDocsIndex, getLastLoaderRun, loadReviewItems, REPO_ROOT } from '@ab/bc-hangar/server';
 import { AUDIT_TARGETS, ROLES } from '@ab/constants';
 import { db } from '@ab/db/connection';
 import { createLogger } from '@ab/utils';

@@ -31,7 +31,7 @@ import {
 	pinItemToColumn,
 	REPO_ROOT,
 	writeFrontmatterField,
-} from '@ab/bc-hangar';
+} from '@ab/bc-hangar/server';
 import {
 	type FrontmatterReviewStatus,
 	type FrontmatterStatus,

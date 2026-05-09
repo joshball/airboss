@@ -47,6 +47,15 @@ function installMocks(setup: BcMocks): void {
 		writeFrontmatterField: setup.writeFrontmatterField,
 		REPO_ROOT: '/tmp/airboss-test-repo',
 	}));
+	vi.doMock('@ab/bc-hangar/server', () => ({
+		getItem: setup.getItem,
+		getOpenSession: setup.getOpenSession,
+		listSessions: setup.listSessions,
+		listSteps: setup.listSteps,
+		parseTestPlan: setup.parseTestPlan,
+		writeFrontmatterField: setup.writeFrontmatterField,
+		REPO_ROOT: '/tmp/airboss-test-repo',
+	}));
 	vi.doMock('node:fs/promises', () => ({
 		readFile: vi.fn(async () => '## Section\n'),
 	}));

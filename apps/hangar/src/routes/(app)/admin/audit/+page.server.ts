@@ -15,7 +15,7 @@
  */
 
 import { requireRole } from '@ab/auth';
-import { type AuditFilters, listAuditEntries, resolveActorForChip } from '@ab/bc-hangar';
+import { type AuditFilters, listAuditEntries, resolveActorForChip } from '@ab/bc-hangar/server';
 import { AUDIT_LIST_DEFAULT_LIMIT, ROLES } from '@ab/constants';
 import type { PageServerLoad } from './$types';
 import { decodeAuditFilters } from './filters';

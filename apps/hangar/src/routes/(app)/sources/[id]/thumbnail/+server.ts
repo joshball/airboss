@@ -13,7 +13,7 @@ import { stat } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { Readable } from 'node:stream';
 import { requireRole } from '@ab/auth';
-import { getSource, resolveHangarBlobRoot } from '@ab/bc-hangar';
+import { getSource, resolveHangarBlobRoot } from '@ab/bc-hangar/server';
 import { type ReferenceSourceType, ROLES, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from '@ab/constants';
 import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';

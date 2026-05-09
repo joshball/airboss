@@ -119,6 +119,16 @@ export const DOCS_SEARCH_ROOTS = ['docs', 'course', 'handbooks', 'regulations'] 
 export type DocsSearchRoot = (typeof DOCS_SEARCH_ROOTS)[number];
 
 /**
+ * Top-level repo files that the docs reader / loader should treat as
+ * first-class indexed documents. These are project-instruction files that
+ * live at the repo root (alongside `package.json`) and don't fit any of
+ * `DOCS_SEARCH_ROOTS`. Listed individually so we never accidentally surface
+ * `.gitignore`-style metadata files.
+ */
+export const DOCS_TOP_LEVEL_FILES = ['CLAUDE.md', 'README.md'] as const;
+export type DocsTopLevelFile = (typeof DOCS_TOP_LEVEL_FILES)[number];
+
+/**
  * Ad-hoc task `type` values. Kept small + opinionated; the dropdown stays
  * usable without resorting to a free-text field. Matches the project's
  * memory entry ("product taxonomy: product/feature/surface").

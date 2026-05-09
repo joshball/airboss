@@ -29,14 +29,12 @@ import {
 	type FrontmatterReviewStatus,
 	type FrontmatterStatus,
 	type ProductArea,
-	REVIEW_BOARD_COLUMN_NAMES,
 	REVIEW_BOARD_DEFAULT_COLUMNS,
 	REVIEW_BOARD_DEFAULT_NAME,
 	REVIEW_KIND_LABELS,
 	REVIEW_KIND_VALUES,
 	REVIEW_LIST_HARD_CAP,
 	REVIEW_SESSION_HISTORY_LIMIT,
-	type ReviewBoardDefaultColumn,
 	type ReviewKind,
 	type ReviewOutcome,
 	type SessionOutcome,
@@ -54,6 +52,7 @@ import {
 } from '@ab/utils';
 import { and, asc, desc, eq, inArray, isNull, not, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
+import { validateBucketFilterCriteria } from './review-pure';
 import {
 	type BucketFilterCriteria,
 	type CachedFrontmatterFields,
@@ -74,6 +73,14 @@ import {
 	hangarReviewStep,
 	type NewHangarBoardTaskRow,
 } from './schema';
+
+export {
+	everyStepPassed,
+	filterItemsByCriteria,
+	getDerivedColumnName,
+	resolveItemColumnId,
+	validateBucketFilterCriteria,
+} from './review-pure';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 
@@ -295,55 +302,7 @@ const DEFAULT_BUCKET_SEEDS: ReadonlyArray<{
 	},
 ];
 
-/**
- * Validate a bucket filter predicate at the BC boundary. Schema-level CHECK on
- * a deeply-nested jsonb path is fragile; the BC validator is the only write
- * path so unknown keys / wrong-typed values are rejected here before the row
- * lands. Throws a `RangeError` with a useful message; callers (form actions,
- * loader) surface it back to the user.
- */
-export function validateBucketFilterCriteria(input: unknown): BucketFilterCriteria {
-	if (input === null || typeof input !== 'object' || Array.isArray(input)) {
-		throw new RangeError('filterCriteria must be a structured object');
-	}
-	const obj = input as Record<string, unknown>;
-	const allowed = new Set(['kind', 'frontmatterStatus', 'reviewStatus', 'noPassingSession']);
-	for (const k of Object.keys(obj)) {
-		if (!allowed.has(k)) throw new RangeError(`filterCriteria: unknown key '${k}'`);
-	}
-	const out: { -readonly [K in keyof BucketFilterCriteria]: BucketFilterCriteria[K] } = {};
-	if (obj.kind !== undefined) {
-		if (typeof obj.kind !== 'string') throw new RangeError('filterCriteria.kind must be a string');
-		out.kind = obj.kind;
-	}
-	if (obj.frontmatterStatus !== undefined) {
-		if (!Array.isArray(obj.frontmatterStatus))
-			throw new RangeError('filterCriteria.frontmatterStatus must be a string array');
-		const fs: Array<'unread' | 'reading' | 'done'> = [];
-		for (const v of obj.frontmatterStatus) {
-			if (v !== 'unread' && v !== 'reading' && v !== 'done')
-				throw new RangeError(`filterCriteria.frontmatterStatus[]: invalid '${String(v)}'`);
-			fs.push(v);
-		}
-		out.frontmatterStatus = fs;
-	}
-	if (obj.reviewStatus !== undefined) {
-		if (!Array.isArray(obj.reviewStatus)) throw new RangeError('filterCriteria.reviewStatus must be a string array');
-		const rs: Array<'pending' | 'done'> = [];
-		for (const v of obj.reviewStatus) {
-			if (v !== 'pending' && v !== 'done')
-				throw new RangeError(`filterCriteria.reviewStatus[]: invalid '${String(v)}'`);
-			rs.push(v);
-		}
-		out.reviewStatus = rs;
-	}
-	if (obj.noPassingSession !== undefined) {
-		if (typeof obj.noPassingSession !== 'boolean')
-			throw new RangeError('filterCriteria.noPassingSession must be a boolean');
-		out.noPassingSession = obj.noPassingSession;
-	}
-	return out;
-}
+// validateBucketFilterCriteria moved to ./review-pure.ts -- see re-export below.
 
 /**
  * Insert any default buckets that are missing for the given board. Idempotent
@@ -715,83 +674,10 @@ export async function findItemByRef(
  *
  * Items with no frontmatter (e.g. `ad_hoc`) land in Backlog by default.
  */
-export function getDerivedColumnName(
-	frontmatterStatus: FrontmatterStatus | null,
-	reviewStatus: FrontmatterReviewStatus | null,
-): ReviewBoardDefaultColumn {
-	if (frontmatterStatus === 'reading') return REVIEW_BOARD_COLUMN_NAMES.IN_PROGRESS;
-	if (frontmatterStatus === 'done') {
-		if (reviewStatus === 'done') return REVIEW_BOARD_COLUMN_NAMES.DONE;
-		return REVIEW_BOARD_COLUMN_NAMES.REVIEW;
-	}
-	return REVIEW_BOARD_COLUMN_NAMES.BACKLOG;
-}
-
-/**
- * Resolve an item's effective column id. If the user explicitly pinned the
- * item via drag-drop, the pin wins. Otherwise the derived mapping above
- * applies; the matching column from `columns` is returned, falling back to
- * the first column when nothing matches (defensive -- a board missing
- * `Backlog` is malformed but shouldn't crash the page).
- */
-export function resolveItemColumnId(
-	item: {
-		pinnedColumnId: string | null;
-		frontmatterStatus: FrontmatterStatus | null;
-		reviewStatus: FrontmatterReviewStatus | null;
-	},
-	columns: ReadonlyArray<{ id: string; name: string }>,
-): string {
-	if (item.pinnedColumnId !== null) return item.pinnedColumnId;
-	const derived = getDerivedColumnName(item.frontmatterStatus, item.reviewStatus);
-	const match = columns.find((c) => c.name === derived);
-	if (match) return match.id;
-	const first = columns[0];
-	if (!first) throw new Error('resolveItemColumnId: board has no columns');
-	return first.id;
-}
-
-/**
- * Apply a `BucketFilterCriteria` predicate to an in-memory item list. Used
- * by the `/review` board to compute bucket counts + drawer items without a
- * round-trip per filter chip change.
- *
- * `passingSessionItemIds` is the (precomputed) set of items whose latest
- * session closed `outcome = 'pass'`. Required when any bucket uses the
- * `noPassingSession: true` predicate; otherwise the empty set works.
- */
-export function filterItemsByCriteria<
-	T extends {
-		kindId: string;
-		frontmatterStatus: FrontmatterStatus | null;
-		reviewStatus: FrontmatterReviewStatus | null;
-		id: string;
-	},
->(
-	items: ReadonlyArray<T>,
-	criteria: BucketFilterCriteria,
-	passingSessionItemIds: ReadonlySet<string> = new Set(),
-): ReadonlyArray<T> {
-	return items.filter((item) => {
-		if (criteria.kind !== undefined && item.kindId !== criteria.kind) return false;
-		if (
-			criteria.frontmatterStatus !== undefined &&
-			criteria.frontmatterStatus.length > 0 &&
-			(item.frontmatterStatus === null || !criteria.frontmatterStatus.includes(item.frontmatterStatus))
-		) {
-			return false;
-		}
-		if (
-			criteria.reviewStatus !== undefined &&
-			criteria.reviewStatus.length > 0 &&
-			(item.reviewStatus === null || !criteria.reviewStatus.includes(item.reviewStatus))
-		) {
-			return false;
-		}
-		if (criteria.noPassingSession === true && passingSessionItemIds.has(item.id)) return false;
-		return true;
-	});
-}
+// getDerivedColumnName, resolveItemColumnId, filterItemsByCriteria,
+// validateBucketFilterCriteria, everyStepPassed moved to ./review-pure.ts
+// so the runtime barrel can re-export them without dragging in
+// @ab/db/connection. Re-exported below; in-file callers use the import above.
 
 /**
  * Set of item ids whose most recent finished session closed with
@@ -1011,30 +897,7 @@ export async function listSteps(sessionId: string, db: Db = defaultDb): Promise<
  * Lives in the BC alongside the other test-plan helpers so it's reachable
  * from unit tests without touching the route layer.
  */
-export function everyStepPassed(
-	steps: ReadonlyArray<{ stepRef: string }>,
-	recorded: ReadonlyArray<{ stepRef: string; outcome: string }>,
-): boolean {
-	if (steps.length === 0) return false;
-	const planRefs = new Set(steps.map((s) => s.stepRef));
-	// Filter to plan stepRefs first; dedupe in case `recorded` somehow surfaces
-	// duplicates (defensive -- the unique index on `(sessionId, stepRef)`
-	// prevents duplicate rows, but the comparator stays robust if a future
-	// caller passes pre-merged data).
-	const passByRef = new Map<string, boolean>();
-	for (const r of recorded) {
-		if (!planRefs.has(r.stepRef)) continue;
-		// Once a non-pass row is seen for a ref, it stays non-pass; subsequent
-		// pass rows for the same ref do NOT promote it back. (Idempotency at
-		// the BC level means there's only one row per ref anyway.)
-		if (passByRef.get(r.stepRef) === false) continue;
-		passByRef.set(r.stepRef, r.outcome === 'pass');
-	}
-	for (const step of steps) {
-		if (passByRef.get(step.stepRef) !== true) return false;
-	}
-	return true;
-}
+// everyStepPassed moved to ./review-pure.ts -- see re-export above.
 
 // ---------------------------------------------------------------------------
 // Tasks (ad-hoc)

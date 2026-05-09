@@ -36,7 +36,7 @@ import {
 	startSession,
 	type TestPlanStep,
 	writeFrontmatterField,
-} from '@ab/bc-hangar';
+} from '@ab/bc-hangar/server';
 import { REVIEW_KINDS, REVIEW_OUTCOME_VALUES, type ReviewOutcome, ROLES, type SessionOutcome } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { error, fail } from '@sveltejs/kit';

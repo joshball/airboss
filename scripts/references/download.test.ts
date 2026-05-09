@@ -27,7 +27,7 @@ vi.mock('@ab/audit', () => ({
 	auditWrite: vi.fn(async () => {}),
 }));
 
-import type { SectionalFetchOutcome } from '@ab/bc-hangar';
+import type { SectionalFetchOutcome } from '@ab/bc-hangar/server';
 import { runDownloadCli } from './download';
 
 function captureIo() {

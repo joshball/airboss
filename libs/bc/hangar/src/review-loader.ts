@@ -17,7 +17,7 @@
 
 import { readdir, readFile, stat } from 'node:fs/promises';
 import { join, posix, resolve, sep } from 'node:path';
-import { DOCS_SEARCH_ROOTS } from '@ab/constants';
+import { DOCS_SEARCH_ROOTS, DOCS_TOP_LEVEL_FILES } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import { createLogger, parseFrontmatter } from '@ab/utils';
 import { and, eq, inArray, isNull, sql } from 'drizzle-orm';
@@ -211,6 +211,26 @@ async function rebuildDocsSearchIndex(
 			rows.push({ path: repoRel, title, body: parsed.body, frontmatter });
 			seenPaths.push(repoRel);
 		}
+	}
+	// Top-level repo docs (CLAUDE.md, README.md, ...). Indexed individually
+	// because they sit at the repo root, alongside `package.json`, and don't
+	// fit any of the directory roots above.
+	for (const repoRel of DOCS_TOP_LEVEL_FILES) {
+		const absPath = resolve(repoRoot, repoRel);
+		let text: string;
+		try {
+			text = await readFile(absPath, 'utf8');
+		} catch {
+			continue;
+		}
+		const parsed = parseFrontmatter(text);
+		const fm = new Map<string, string>();
+		for (const entry of parsed.entries) fm.set(entry.key, entry.value);
+		const title = fm.get('title') ?? extractFirstHeading(parsed.body) ?? posix.basename(repoRel);
+		const frontmatter: Record<string, string> = {};
+		for (const entry of parsed.entries) frontmatter[entry.key] = entry.value;
+		rows.push({ path: repoRel, title, body: parsed.body, frontmatter });
+		seenPaths.push(repoRel);
 	}
 	// Diff against the existing index to compute counts.
 	const existing = await db.select({ path: hangarDocsSearchIndex.path }).from(hangarDocsSearchIndex);

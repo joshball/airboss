@@ -20,7 +20,7 @@
 
 import { readdir, stat } from 'node:fs/promises';
 import { join, posix, sep } from 'node:path';
-import { DOCS_SEARCH_ROOTS, DOCS_TREE_CACHE_TTL_MS } from '@ab/constants';
+import { DOCS_SEARCH_ROOTS, DOCS_TOP_LEVEL_FILES, DOCS_TREE_CACHE_TTL_MS } from '@ab/constants';
 
 export interface DocsTreeFileNode {
 	readonly type: 'file';
@@ -155,6 +155,7 @@ function toRepoRelative(repoRoot: string, absPath: string): string {
 export function isDocsPathAllowed(repoRelPath: string): boolean {
 	if (repoRelPath === '' || repoRelPath.includes('..')) return false;
 	if (!repoRelPath.endsWith('.md')) return false;
+	if ((DOCS_TOP_LEVEL_FILES as readonly string[]).includes(repoRelPath)) return true;
 	for (const root of DOCS_SEARCH_ROOTS) {
 		if (repoRelPath === root) return false; // a root is a directory, not a file
 		if (repoRelPath.startsWith(`${root}/`)) return true;

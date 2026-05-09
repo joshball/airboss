@@ -12,7 +12,7 @@
  */
 
 import { requireRole } from '@ab/auth';
-import { getAuditEntry } from '@ab/bc-hangar';
+import { getAuditEntry } from '@ab/bc-hangar/server';
 import { ROLES } from '@ab/constants';
 import { redactSensitive } from '@ab/utils';
 import { error } from '@sveltejs/kit';

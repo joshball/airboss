@@ -12,7 +12,7 @@
 import { readdir, readFile, stat, unlink } from 'node:fs/promises';
 import { dirname, relative, resolve } from 'node:path';
 import { requireRole } from '@ab/auth';
-import { getSource, HANGAR_BLOB_DIR, resolveHangarBlobRoot } from '@ab/bc-hangar';
+import { getSource, HANGAR_BLOB_DIR, resolveHangarBlobRoot } from '@ab/bc-hangar/server';
 import {
 	EXTENSION_TO_PREVIEW_KIND,
 	PREVIEW_KINDS,

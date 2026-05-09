@@ -1,5 +1,5 @@
 import { requireRole } from '@ab/auth';
-import { countReviewQueueOpen, getBoard } from '@ab/bc-hangar';
+import { countReviewQueueOpen, getBoard } from '@ab/bc-hangar/server';
 import { appOrigins, HOST_PREFIXES, ROLES, siblingOrigin } from '@ab/constants';
 import type { LayoutServerLoad } from './$types';
 

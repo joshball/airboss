@@ -12,7 +12,7 @@
  */
 
 import { requireRole } from '@ab/auth';
-import { countItemsByCriteria, getOrCreateBoard, listBuckets } from '@ab/bc-hangar';
+import { countItemsByCriteria, getOrCreateBoard, listBuckets } from '@ab/bc-hangar/server';
 import { ROLES } from '@ab/constants';
 import type { PageServerLoad } from './$types';
 

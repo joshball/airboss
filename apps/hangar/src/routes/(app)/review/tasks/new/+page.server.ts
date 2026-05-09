@@ -16,7 +16,7 @@
  */
 
 import { requireRole } from '@ab/auth';
-import { createTask, getOrCreateBoard, listColumns, listTasks, upsertItem } from '@ab/bc-hangar';
+import { createTask, getOrCreateBoard, listColumns, listTasks, upsertItem } from '@ab/bc-hangar/server';
 import {
 	PRODUCT_AREA_LABELS,
 	PRODUCT_AREA_VALUES,

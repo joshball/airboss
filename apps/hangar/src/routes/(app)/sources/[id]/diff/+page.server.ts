@@ -11,7 +11,7 @@
  */
 
 import { requireRole } from '@ab/auth';
-import { getLatestCompleteJobForTarget, getSource } from '@ab/bc-hangar';
+import { getLatestCompleteJobForTarget, getSource } from '@ab/bc-hangar/server';
 import { JOB_KINDS, ROLES } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { error } from '@sveltejs/kit';

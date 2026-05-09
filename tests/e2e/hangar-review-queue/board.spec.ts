@@ -41,11 +41,22 @@ test.describe('review board: first visit + columns', () => {
 test.describe('review board: filters + URL persistence', () => {
 	test('clicking a top filter chip updates the URL search param', async ({ page }) => {
 		await page.goto(ROUTES.HANGAR_REVIEW);
+		// Wait for hydration: the chip's onclick handler is wired in
+		// `+page.svelte`, so click events only update `topFilter` (and
+		// therefore `aria-pressed`) after Svelte's runtime has bound the
+		// listener. Polling on `aria-pressed` after a click handles the
+		// race without coupling to a hydration sentinel.
 		const tasksChip = page.getByRole('button', { name: /^Tasks$/ });
-		await tasksChip.click();
-		await expect(tasksChip).toHaveAttribute('aria-pressed', 'true');
-		// URL persistence runs in a `$effect` that reads the filter state
-		// after the click; expect the URL to reflect the chip.
+		await expect(tasksChip).toHaveAttribute('aria-pressed', 'false');
+		await expect
+			.poll(
+				async () => {
+					await tasksChip.click();
+					return await tasksChip.getAttribute('aria-pressed');
+				},
+				{ timeout: 10_000 },
+			)
+			.toBe('true');
 		await expect.poll(() => new URL(page.url()).searchParams.get(REVIEW_BOARD_QUERY_PARAMS.TOP)).toBe('tasks');
 	});
 
@@ -64,9 +75,23 @@ test.describe('review board: filters + URL persistence', () => {
 
 	test('Clear filters returns the board to the default view', async ({ page }) => {
 		await page.goto(`${ROUTES.HANGAR_REVIEW}?${REVIEW_BOARD_QUERY_PARAMS.TOP}=tasks`);
-		await expect(page.getByRole('button', { name: /^Tasks$/ })).toHaveAttribute('aria-pressed', 'true');
-		await page.getByRole('button', { name: /clear filters/i }).click();
-		await expect(page.getByRole('button', { name: /^All$/ })).toHaveAttribute('aria-pressed', 'true');
+		await page.waitForLoadState('networkidle');
+		const toolbar = page.getByLabel('Board filters');
+		await expect(toolbar.getByRole('button', { name: /^Tasks$/ })).toHaveAttribute('aria-pressed', 'true');
+		const clearBtn = toolbar.getByRole('button', { name: /clear filters/i });
+		const allBtn = toolbar.getByRole('button', { name: /^All$/ });
+		// Poll the click against `aria-pressed` to absorb the hydration race --
+		// the chip's onclick is bound after Svelte's runtime mounts, so a
+		// single click can fire before the listener attaches.
+		await expect
+			.poll(
+				async () => {
+					await clearBtn.click();
+					return await allBtn.getAttribute('aria-pressed');
+				},
+				{ timeout: 10_000 },
+			)
+			.toBe('true');
 		await expect.poll(() => new URL(page.url()).searchParams.get(REVIEW_BOARD_QUERY_PARAMS.TOP)).toBeNull();
 	});
 });

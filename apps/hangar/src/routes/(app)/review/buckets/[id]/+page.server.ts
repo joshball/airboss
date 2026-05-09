@@ -5,7 +5,7 @@
  */
 
 import { requireRole } from '@ab/auth';
-import { filterItemsByCriteria, listBuckets, listItems, listItemsWithPassingSession } from '@ab/bc-hangar';
+import { filterItemsByCriteria, listBuckets, listItems, listItemsWithPassingSession } from '@ab/bc-hangar/server';
 import { ROLES } from '@ab/constants';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';

@@ -73,20 +73,25 @@ test.describe('bucket admin: CRUD', () => {
 		await page.goto(ROUTES.HANGAR_REVIEW_ADMIN_BUCKET_NEW);
 		// Native HTML5 validation: leave Name blank, click Create. Browser
 		// blocks the submit; the form stays on the same page with the input
-		// invalid. Force-submit via JS to bypass the native dialog so the
-		// server-side validator runs and returns the inline error.
-		await page.evaluate(() => {
-			const form = document.querySelector('form');
-			if (form instanceof HTMLFormElement) form.noValidate = true;
+		// invalid. Force a `requestSubmit()` call to bypass the native dialog
+		// AND wait for hydration so `use:enhance` is bound -- otherwise the
+		// click fires before the JS handler is attached and the submit is a
+		// silent no-op.
+		await page.waitForLoadState('networkidle');
+		// Scope to the bucket form -- the page also has the header search
+		// form, so a bare `page.locator('form')` strict-matches both.
+		await page.locator('form').filter({ has: page.locator('input[name="name"]') }).evaluate((form: HTMLFormElement) => {
+			form.noValidate = true;
+			form.requestSubmit();
 		});
-		await page.getByRole('button', { name: /create bucket/i }).click();
-		await expect(page.getByText(/name is required/i)).toBeVisible();
+		await expect(page.getByText(/name is required/i)).toBeVisible({ timeout: 10_000 });
 	});
 
 	test('create -> appears on list -> edit -> delete tail-cleans', async ({ page }, testInfo) => {
 		const name = `e2e bucket ${testInfo.testId.slice(0, 8)}`;
 		await test.step('create', async () => {
 			await page.goto(ROUTES.HANGAR_REVIEW_ADMIN_BUCKET_NEW);
+			await page.waitForLoadState('networkidle');
 			await page.locator('input[name="name"]').fill(name);
 			await page.locator('select[name="kindId"]').selectOption('wp_spec');
 			// Pick a frontmatter status so the bucket has a meaningful filter.
@@ -121,6 +126,7 @@ test.describe('bucket admin: CRUD', () => {
 	test('malformed advanced JSON predicate fails validation', async ({ page }, testInfo) => {
 		const name = `e2e bad json ${testInfo.testId.slice(0, 8)}`;
 		await page.goto(ROUTES.HANGAR_REVIEW_ADMIN_BUCKET_NEW);
+		await page.waitForLoadState('networkidle');
 		await page.locator('input[name="name"]').fill(name);
 		await page.locator('select[name="kindId"]').selectOption('wp_spec');
 		// Open the Advanced JSON details + paste invalid JSON.
@@ -128,7 +134,9 @@ test.describe('bucket admin: CRUD', () => {
 		await page.locator('textarea[name="advancedJson"]').fill('{ "kind": "wp_spec", '); // truncated JSON
 		await page.getByRole('button', { name: /create bucket/i }).click();
 		// The form stays on the new page with an inline error rendered by the
-		// BucketForm `errors.advancedJson` slot.
+		// BucketForm `errors.advancedJson` slot. The `<details>` auto-opens
+		// when the validator returns `errors.advancedJson` (controlled by
+		// `open={errors.advancedJson ? true : undefined}` in BucketForm.svelte).
 		await expect(
 			page
 				.getByText(/json/i)

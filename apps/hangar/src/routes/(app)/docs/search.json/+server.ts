@@ -12,7 +12,7 @@
  */
 
 import { requireRole } from '@ab/auth';
-import { searchDocs } from '@ab/bc-hangar';
+import { searchDocs } from '@ab/bc-hangar/server';
 import { DOCS_SEARCH_CACHE_MAX_AGE_S, ROLES } from '@ab/constants';
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';

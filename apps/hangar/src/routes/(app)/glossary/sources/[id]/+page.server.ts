@@ -9,7 +9,7 @@ import {
 	updateSource,
 	validateSourceForm,
 	validateSourceFormUrls,
-} from '@ab/bc-hangar';
+} from '@ab/bc-hangar/server';
 import { type ReferenceSourceType, ROLES, ROUTES, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { error, fail, redirect } from '@sveltejs/kit';
