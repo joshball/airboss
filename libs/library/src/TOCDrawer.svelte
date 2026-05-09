@@ -1,6 +1,6 @@
 <script lang="ts" module>
 /**
- * `<TOCDrawer>` -- the persistent left-rail table of contents that turns the
+ * `<TOCDrawer>` -- the persistent table-of-contents rail that turns the
  * flightbag from a reference reader into a book.
  *
  * Renders the entire reading order for the current document (chapters, every
@@ -10,7 +10,7 @@
  * back-back to chapter list, picking a chapter, picking a section.
  *
  * Visual design:
- * - 280px wide on desktop (≥60rem), sticky at the top of the viewport so it
+ * - 280px wide on desktop (>=60rem), sticky at the top of the viewport so it
  *   scrolls independently of the body.
  * - On mobile/tablet (<60rem), the drawer collapses to a top-of-page disclosure
  *   that toggles the full list inline. Defaults to closed on small viewports
@@ -22,6 +22,13 @@
  * - Sections with `readSet.has(sectionId)` render with a check glyph; the
  *   check is hidden from screen-readers (the `aria-label` carries the
  *   "(read)" suffix instead).
+ *
+ * Optional collapsible-groups mode (used by the ACS publication TOC, which
+ * is too tall to render flat): top-level entries with at least one child
+ * (a child is any entry whose `groupId` matches the parent's `sectionId`)
+ * render with an expand/collapse caret. Children are hidden when collapsed.
+ * Default expansion is driven by `defaultExpandedGroupIds`; the user's
+ * clicks toggle from there.
  *
  * The drawer is a `<nav>` with `aria-label="Table of contents"` so a screen-
  * reader user can skip to it via document landmarks.
@@ -40,6 +47,19 @@ export interface TOCDrawerEntry {
 	readonly minutesToRead: number;
 	/** True when this entry IS the current page; rendered highlighted. */
 	readonly isActive: boolean;
+	/**
+	 * Optional group id. When set, this entry is a child of the group whose
+	 * `sectionId` equals this value, and is hidden when that group is
+	 * collapsed. When unset (the default), the entry is a top-level entry --
+	 * either a "leaf" or a group header (a header is identified as any
+	 * top-level entry whose `sectionId` is referenced by other entries'
+	 * `groupId`).
+	 *
+	 * Only consulted when the drawer is mounted with `collapsibleGroups`.
+	 * Handbook readers (which don't group) leave this unset and the drawer
+	 * renders the flat list it always has.
+	 */
+	readonly groupId?: string | null;
 }
 
 export interface TOCDrawerProps {
@@ -57,11 +77,32 @@ export interface TOCDrawerProps {
 	 * Default `false` -- the body takes precedence on mobile.
 	 */
 	readonly initiallyOpenOnMobile?: boolean;
+	/**
+	 * When `true`, top-level entries with at least one child (an entry whose
+	 * `groupId` matches the parent's `sectionId`) render as collapsible group
+	 * headers. Children are hidden when their group is collapsed.
+	 */
+	readonly collapsibleGroups?: boolean;
+	/**
+	 * Group ids that should start expanded. Only consulted when
+	 * `collapsibleGroups` is true. Group ids not listed start collapsed.
+	 * The user's clicks toggle from there.
+	 */
+	readonly defaultExpandedGroupIds?: ReadonlyArray<string>;
 }
 </script>
 
 <script lang="ts">
-let { entries, readSet, heading, summary, headingHref, initiallyOpenOnMobile = false }: TOCDrawerProps = $props();
+let {
+	entries,
+	readSet,
+	heading,
+	summary,
+	headingHref,
+	initiallyOpenOnMobile = false,
+	collapsibleGroups = false,
+	defaultExpandedGroupIds,
+}: TOCDrawerProps = $props();
 
 // Capture only the initial value -- the user's toggle takes over from there.
 // Reading the prop in $state's initializer is the documented way to seed
@@ -70,8 +111,45 @@ let { entries, readSet, heading, summary, headingHref, initiallyOpenOnMobile = f
 // svelte-ignore state_referenced_locally
 let mobileOpen = $state(initiallyOpenOnMobile);
 
+// Collapsible-group state: which group ids the user has expanded. Initialized
+// from `defaultExpandedGroupIds`; subsequent toggles mutate this in place.
+// svelte-ignore state_referenced_locally
+let expandedGroups = $state(new Set<string>(defaultExpandedGroupIds ?? []));
+
 const reads = $derived(readSet ?? new Set<string>());
 const totalMinutes = $derived(entries.reduce((acc, e) => acc + e.minutesToRead, 0));
+
+/** Map of groupId -> whether at least one entry references it as a parent. */
+const groupHasChildren = $derived.by(() => {
+	const result = new Set<string>();
+	if (!collapsibleGroups) return result;
+	for (const e of entries) {
+		if (e.groupId) result.add(e.groupId);
+	}
+	return result;
+});
+
+function isGroupHeader(entry: TOCDrawerEntry): boolean {
+	if (!collapsibleGroups) return false;
+	if (entry.groupId) return false;
+	return groupHasChildren.has(entry.sectionId);
+}
+
+function isHidden(entry: TOCDrawerEntry): boolean {
+	if (!collapsibleGroups) return false;
+	if (!entry.groupId) return false;
+	return !expandedGroups.has(entry.groupId);
+}
+
+function toggleGroup(groupId: string): void {
+	const next = new Set(expandedGroups);
+	if (next.has(groupId)) {
+		next.delete(groupId);
+	} else {
+		next.add(groupId);
+	}
+	expandedGroups = next;
+}
 
 function entryAriaLabel(e: TOCDrawerEntry, isRead: boolean): string {
 	const parts = [e.code, e.title];
@@ -113,38 +191,64 @@ function entryAriaLabel(e: TOCDrawerEntry, isRead: boolean): string {
 		<ol class="entries">
 			{#each entries as entry (entry.sectionId)}
 				{@const isRead = reads.has(entry.sectionId)}
-				<li
-					class="entry depth-{Math.min(entry.depth, 4)}"
-					class:active={entry.isActive}
-					class:read={isRead}
-				>
-					{#if entry.href}
-						<a
-							href={entry.href}
-							aria-current={entry.isActive ? 'page' : undefined}
-							aria-label={entryAriaLabel(entry, isRead)}
-						>
-							<span class="entry-line">
-								{#if isRead}
-									<span class="check" aria-hidden="true">✓</span>
-								{:else}
-									<span class="check-spacer" aria-hidden="true"></span>
+				{@const groupHeader = isGroupHeader(entry)}
+				{@const expanded = groupHeader && expandedGroups.has(entry.sectionId)}
+				{@const hidden = isHidden(entry)}
+				{#if !hidden}
+					<li
+						class="entry depth-{Math.min(entry.depth, 4)}"
+						class:active={entry.isActive}
+						class:read={isRead}
+						class:group-header={groupHeader}
+						class:group-expanded={expanded}
+					>
+						{#if groupHeader}
+							<button
+								type="button"
+								class="group-toggle"
+								aria-expanded={expanded}
+								aria-label={`${expanded ? 'Collapse' : 'Expand'} ${entry.code} ${entry.title}`}
+								onclick={() => toggleGroup(entry.sectionId)}
+								title={`${entry.code} ${entry.title}`}
+							>
+								<span class="entry-line">
+									<span class="caret" aria-hidden="true">{expanded ? '▾' : '▸'}</span>
+									<span class="code">{entry.code}</span>
+									<span class="title">{entry.title}</span>
+								</span>
+								{#if entry.minutesToRead > 0}
+									<span class="minutes" aria-hidden="true">{entry.minutesToRead} min</span>
 								{/if}
+							</button>
+						{:else if entry.href}
+							<a
+								href={entry.href}
+								aria-current={entry.isActive ? 'page' : undefined}
+								aria-label={entryAriaLabel(entry, isRead)}
+								title={`${entry.code} ${entry.title}`}
+							>
+								<span class="entry-line">
+									{#if isRead}
+										<span class="check" aria-hidden="true">✓</span>
+									{:else}
+										<span class="check-spacer" aria-hidden="true"></span>
+									{/if}
+									<span class="code">{entry.code}</span>
+									<span class="title">{entry.title}</span>
+								</span>
+								{#if entry.minutesToRead > 0}
+									<span class="minutes" aria-hidden="true">{entry.minutesToRead} min</span>
+								{/if}
+							</a>
+						{:else}
+							<span class="entry-line non-link" title={`${entry.code} ${entry.title}`}>
+								<span class="check-spacer" aria-hidden="true"></span>
 								<span class="code">{entry.code}</span>
 								<span class="title">{entry.title}</span>
 							</span>
-							{#if entry.minutesToRead > 0}
-								<span class="minutes" aria-hidden="true">{entry.minutesToRead} min</span>
-							{/if}
-						</a>
-					{:else}
-						<span class="entry-line non-link">
-							<span class="check-spacer" aria-hidden="true"></span>
-							<span class="code">{entry.code}</span>
-							<span class="title">{entry.title}</span>
-						</span>
-					{/if}
-				</li>
+						{/if}
+					</li>
+				{/if}
 			{/each}
 		</ol>
 	</div>
@@ -240,7 +344,8 @@ function entryAriaLabel(e: TOCDrawerEntry, isRead: boolean): string {
 	}
 
 	.entry > a,
-	.entry > .entry-line.non-link {
+	.entry > .entry-line.non-link,
+	.entry > .group-toggle {
 		display: flex;
 		align-items: baseline;
 		justify-content: space-between;
@@ -249,10 +354,22 @@ function entryAriaLabel(e: TOCDrawerEntry, isRead: boolean): string {
 		border-radius: var(--radius-sm);
 		color: inherit;
 		text-decoration: none;
+		line-height: var(--line-height-tight, 1.3);
+	}
+
+	.entry > .group-toggle {
+		width: 100%;
+		background: transparent;
+		border: 0;
+		font: inherit;
+		text-align: left;
+		cursor: pointer;
 	}
 
 	.entry > a:hover,
-	.entry > a:focus-visible {
+	.entry > a:focus-visible,
+	.entry > .group-toggle:hover,
+	.entry > .group-toggle:focus-visible {
 		background: var(--surface-raised);
 		color: var(--ink-strong);
 	}
@@ -288,6 +405,22 @@ function entryAriaLabel(e: TOCDrawerEntry, isRead: boolean): string {
 	.check-spacer {
 		display: inline-block;
 		min-width: 1ch;
+	}
+
+	.caret {
+		font-family: var(--font-family-mono);
+		color: var(--ink-muted);
+		min-width: 1ch;
+		font-size: var(--font-size-xs);
+	}
+
+	.entry.group-header {
+		font-weight: var(--font-weight-semibold);
+	}
+
+	.entry.group-header > .group-toggle .code,
+	.entry.group-header > .group-toggle .title {
+		color: var(--ink-strong);
 	}
 
 	.code {
