@@ -84,6 +84,40 @@ Full reference: [docs/platform/theme-system/](../platform/theme-system/00-INDEX.
 - IDs via a `generateId(domain)` function -- deterministic, short, unique per domain.
 - Form actions don't have `parent()`. Use helper functions to get context.
 
+### Schema conventions
+
+#### String-list columns: `text[]` vs `jsonb<string[]>`
+
+Default to `text[]` for **enum-bounded string lists** where every value comes from a known closed set. Postgres array operators (`@>`, `<@`, `&&`), GIN indexing, and the `<@ ARRAY[...]::text[]` CHECK pattern are all first-class.
+
+Use `jsonb<string[]>` only for **shape-bearing or evolving** lists where the values may grow into objects later, or where order + JSON-shape semantics are load-bearing (e.g. `citations`, `regulatory_basis`, `relevance`; those carry `{ source, detail, note }` today or are expected to).
+
+```typescript
+// text[] for subjects from a closed AVIATION_TOPIC_VALUES set
+subjects: text('subjects').array().notNull().default(sql`'{}'::text[]`),
+// CHECK + GIN index pair (canonical pattern, libs/bc/study/src/schema.ts:1457, 1471)
+referenceSubjectsGinIdx: index('reference_subjects_gin_idx').using('gin', sql`"subjects"`),
+subjectsValuesCheck: check(
+  'reference_subjects_values_check',
+  sql.raw(`"subjects" <@ ARRAY[${inList(AVIATION_TOPIC_VALUES)}]::text[]`),
+),
+```
+
+Current state: `study.reference.subjects` and `study.knowledge_node_progress.{visited,completed}Phases` use `text[]` correctly. `study.knowledge_node.{crossDomains,knowledgeTypes,modalities,assessmentMethods}` and `study.plan.{focusDomains,skipDomains}` are `jsonb<string[]>` and remain on the deferred-tightening list (ADR 026 §Out of scope, item L). Migrate per-pass when the relevant table is touched.
+
+#### "Completed at" column naming
+
+Default name: `completedAt`. The verb is "complete," the column reads "the row was completed at this timestamp." Used by `study.session`, `study.session_item_result`, `study.memory_review_session`.
+
+Allowed deviations when the BC verb is unambiguously different:
+
+| Column       | Table               | Why the verb differs                                                                          |
+| ------------ | ------------------- | --------------------------------------------------------------------------------------------- |
+| `resolvedAt` | `study.card_snooze` | Snooze is "resolved" (the suspension lifts), not "completed"; the verb is part of the BC.     |
+| `endedAt`    | `sim.attempt`       | The schema docstring says "the run terminated"; "ended" matches outcome-or-aborted semantics. |
+
+Avoid `finishedAt`. `hangar.review_session.finishedAt` is the one outlier; rename to `completedAt` next time `hangar.review_session` is touched (ADR 026 §Out of scope, item O).
+
 ## Form Actions Pattern
 
 ```typescript
