@@ -3,9 +3,10 @@
 /**
  * Top-level tracking dispatcher. ADR 025.
  *
- * Single entry point for the airboss tracking system. Composes the existing
- * verbs (`wp`, `bug`, `tracking:generate`, `archive:*`, `format:md`,
- * `log:pr`) into a workflow-shaped CLI:
+ * Single entry point for the airboss tracking system. The other top-level
+ * commands (`wp`, `bug`) keep their direct entry points; this dispatcher
+ * composes them plus the underlying tools (md-format, archive, generate,
+ * log-pr) into a workflow-shaped CLI:
  *
  *   bun run track                  # alias for `track help`
  *   bun run track help             # commands index + when-to-use

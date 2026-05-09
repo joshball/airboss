@@ -732,7 +732,7 @@ async function main(): Promise<number> {
 			console.error(`  - ${d.relPath}${d.missing ? ' (missing on disk)' : ''}`);
 		}
 		console.error('');
-		console.error('Run `bun run tracking:generate` to refresh.');
+		console.error('Run `bun run track generate` to refresh.');
 		return 1;
 	}
 

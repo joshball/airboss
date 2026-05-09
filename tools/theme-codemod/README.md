@@ -21,8 +21,8 @@ bun tools/theme-codemod/bin.ts apps/study/src            # write in place
 
 After running, always:
 
-1. `bun run themes:emit` to refresh the generated CSS (if palette/contract changes landed alongside).
-2. `bun run check` to confirm svelte-check + biome + lint:theme stay green.
+1. `bun run themes emit` to refresh the generated CSS (if palette/contract changes landed alongside).
+2. `bun run check` to confirm svelte-check + biome + `bun run lint theme` stay green.
 3. Visual diff the affected pages; the rewrites should be pixel-identical when the legacy alias block is intact.
 
 ## Scope

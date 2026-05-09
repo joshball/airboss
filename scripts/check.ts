@@ -400,7 +400,7 @@ const STEP_HELP: Record<string, StepHelp> = {
 		summary: 'Verify BOARD.md / SHIPPED.md / per-product ROADMAP.md are in sync with WP frontmatter',
 		what: 'Re-runs `bun scripts/tracking/generate.ts --check`: re-generates the aggregator views in memory and diffs against the on-disk committed copies. Fails if any generated file is missing or has drifted.',
 		why: 'The generated views are the canonical board / roadmap / shipped log per ADR 025. A drift means either (a) an agent hand-edited a generated file or (b) WP frontmatter changed but the generator was not re-run. Either way the docs lie about the project state.',
-		how: '`bun run tracking:generate:check`. Run `bun run tracking:generate` to refresh.',
+		how: '`bun run track generate --check`. Run `bun run track generate` to refresh.',
 		links: ['scripts/tracking/generate.ts', 'docs/decisions/025-wp-frontmatter-contract/decision.md'],
 	},
 	'md-format': {
@@ -408,7 +408,7 @@ const STEP_HELP: Record<string, StepHelp> = {
 		scopable: false,
 		summary: 'Markdown formatting check (table alignment, blank lines, fence langs)',
 		what: 'Runs the project markdown formatter in `--check` mode. Enforces MD060 (pipe-table alignment), MD022 (blanks around headings), MD031 (blanks around fences), MD032 (blanks around lists), MD040 (fence language tags).',
-		why: 'Per CLAUDE.md, all markdown is aligned-style with strict spacing. Auto-format with `bun run format:md`.',
+		why: 'Per CLAUDE.md, all markdown is aligned-style with strict spacing. Auto-format with `bun run track format`.',
 		how: '`bun tools/md-format/bin.ts --check`. Run without `--check` to fix in place.',
 		links: ['tools/md-format/'],
 	},

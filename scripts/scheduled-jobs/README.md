@@ -12,6 +12,6 @@ scripts/scheduler/uninstall.sh             # unregister all jobs in this repo
 ```
 
 If `package.json` was wired up at install time, equivalent commands are available
-as `bun run schedule`, `bun run schedule:new <name>`, etc.
+as `bun run schedule`, `bun run schedule new <name>`, etc.
 
 See `~/src/_me/ai/agent-skills/skills/scheduled-jobs/SKILL.md` for the full skill docs.

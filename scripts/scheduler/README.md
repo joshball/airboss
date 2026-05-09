@@ -17,22 +17,22 @@ This re-runs the interactive prompts, regenerates `.scheduler-config`, and refre
 After bootstrap, register all enabled jobs:
 
 ```bash
-bun run schedule:install   # or: scripts/scheduler/install.sh
+bun run schedule install   # or: scripts/scheduler/install.sh
 ```
 
 ## Commands
 
-| Command                              | What                                                                |
-| ------------------------------------ | ------------------------------------------------------------------- |
-| `./list.sh`                          | List installed jobs + schedule + last run + last status             |
-| `./new-job.sh <name>`                | Scaffold a new job in `../scheduled-jobs/<name>/`                   |
-| `./install.sh`                       | Generate plists for every enabled job; `launchctl load` them        |
-| `./uninstall.sh`                     | Unload + remove plists for this repo                                |
-| `./uninstall.sh --all`               | Remove plists for every repo (global cleanup; prompts)              |
-| `./uninstall.sh --dry-run`           | Show what would be removed; combine with `--all`                    |
-| `./status.sh <name>`                 | Tail recent log for one job (`--err`, `--runs`, `--lines=N`)        |
+| Command                    | What                                                         |
+| -------------------------- | ------------------------------------------------------------ |
+| `./list.sh`                | List installed jobs + schedule + last run + last status      |
+| `./new-job.sh <name>`      | Scaffold a new job in `../scheduled-jobs/<name>/`            |
+| `./install.sh`             | Generate plists for every enabled job; `launchctl load` them |
+| `./uninstall.sh`           | Unload + remove plists for this repo                         |
+| `./uninstall.sh --all`     | Remove plists for every repo (global cleanup; prompts)       |
+| `./uninstall.sh --dry-run` | Show what would be removed; combine with `--all`             |
+| `./status.sh <name>`       | Tail recent log for one job (`--err`, `--runs`, `--lines=N`) |
 
-If `package.json` was wired up at install time, equivalent commands are available as `bun run schedule`, `bun run schedule:install`, `bun run schedule:uninstall`, `bun run schedule:status`, `bun run schedule:new`.
+If `package.json` was wired up at install time, equivalent commands are available as `bun run schedule`, `bun run schedule install`, `bun run schedule uninstall`, `bun run schedule status`, `bun run schedule new`.
 
 ## Files
 

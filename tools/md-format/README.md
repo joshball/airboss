@@ -26,11 +26,11 @@ bun tools/md-format/bin.ts --check             # report only, exit 1 if any file
 bun tools/md-format/bin.ts path/to/file.md     # explicit files
 ```
 
-Or via package.json scripts:
+Or via the track dispatcher:
 
 ```bash
-bun run format:md           # writes
-bun run format:md:check     # CI-style check
+bun run track format            # writes
+bun run track format --check    # CI-style check
 ```
 
 `bun run check` invokes `--check` mode and fails the pipeline on unformatted files.

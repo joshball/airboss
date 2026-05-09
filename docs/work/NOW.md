@@ -33,7 +33,7 @@ Single entry point for "what should I work on?" in airboss.
 
 ## Per-PR log
 
-Every merged PR lands as one entry under [docs/log/](../log/) via `bun run log:pr <number>`. The shipped log aggregates these reverse-chronologically.
+Every merged PR lands as one entry under [docs/log/](../log/) via `bun run track log <number>`. The shipped log aggregates these reverse-chronologically.
 
 ## Links
 

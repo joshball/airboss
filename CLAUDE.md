@@ -114,7 +114,7 @@ docs/                   PLATFORM
 - PRDs link to feature specs. Feature details live in feature dirs, not inline.
 - Session todos committed with work. One per session: `docs/work/todos/YYYYMMDD-NN-TODO.md`.
 - Update docs as part of the work, not as a separate task.
-- Old session-scoped docs in `docs/work/{handoffs,walkthroughs,reviews,build-reports}/` archive after 60 days. Run `bun run archive:dry` to preview, `bun run archive:apply` to execute. Skips `_template.md`, `INDEX.md`, `README.md`.
+- Old session-scoped docs in `docs/work/{handoffs,walkthroughs,reviews,build-reports}/` archive after 60 days. Run `bun run track archive` to preview, `bun run track archive --apply` to execute. Skips `_template.md`, `INDEX.md`, `README.md`.
 
 ## Before You Build
 
@@ -136,9 +136,27 @@ Read the relevant pattern doc before writing code in that area:
 
 ## Feature Work Rules
 
-Feature lifecycle is driven by shared skills:
+### When to use a work package (and when NOT to)
 
-- **New feature?** Run `/ball-wp-spec` -- generates work package docs (spec, tasks, test-plan, design, user-stories)
+Work packages are slow to author and review. Use them only when the cost is justified.
+
+**Use a work package when:**
+
+- The work is a **cohesive feature with user stories and visible work** (a new surface, a new flow, a new product capability someone could demo).
+- It's a multi-piece effort that has to ship together (multiple PRs, multiple phases, real coordination cost).
+
+**Do NOT use a work package when:**
+
+- The work is a schema migration, a refactor, a dependency bump, or other non-user-facing change.
+- It's a bug or a cluster of bugs. Use `bun run bug new <slug>` (or just fix it).
+- It's a bundle of unrelated work items. Either split into separate small efforts or put it on a session todo.
+- It's "tidy up these files" / "rename this thing" / "update the lint rule."
+
+For everything that doesn't earn a WP: a session todo at `docs/work/todos/YYYYMMDD-NN-TODO.md`, a bug entry, or just a PR with a clear description is enough.
+
+### Skills
+
+- **New feature (large, user-visible)?** Run `/ball-wp-spec` -- generates work package docs (spec, tasks, test-plan, design, user-stories). Author only when the WP threshold above is met.
 - **Ready to build?** Run `/ball-wp-build` -- phased implementation from signed-off work package, with per-phase reviews
 - **Need a review?** Run `/ball-review-full` -- 10 parallel spec-aware reviewers + fixer
 - **Periodic:** `/ball-wp-drift` to check spec/code divergence, `/ball-wp-coverage` for undocumented features
@@ -319,7 +337,7 @@ Every sub-agent dispatched via the Agent tool must end with one of exactly two o
 
 ### Markdown formatting
 
-Tables use aligned style. Run `bun run format:md` (or `bun tools/md-format/bin.ts`) on dirty files before commit. `bun run check` runs `--check` mode and fails the pipeline on unformatted files. Rules: pipe-table alignment (MD060), blank-line-around-headings (MD022), blank-line-around-fences (MD031), blank-line-around-lists (MD032), fence language tags (MD040). See [tools/md-format/README.md](tools/md-format/README.md).
+Tables use aligned style. Run `bun run track format` on dirty files before commit. `bun run check` runs `--check` mode and fails the pipeline on unformatted files. Rules: pipe-table alignment (MD060), blank-line-around-headings (MD022), blank-line-around-fences (MD031), blank-line-around-lists (MD032), fence language tags (MD040). See [tools/md-format/README.md](tools/md-format/README.md).
 
 ### Check pipeline
 
@@ -344,6 +362,12 @@ Before pushing or in CI: always `bun run check all`.
 - Line width: 120
 - Trailing commas: all
 - Semicolons: always
+
+## Scripts
+
+- **No colons in `package.json` script names.** Every script is either a single noun (`bun run check`, `bun run wp`, `bun run track`) or a noun-plus-subcommand dispatched by a TS file (`bun run track ship`, `bun run wp set`). When a noun grows past one or two operations, write a dispatcher at `scripts/<noun>.ts`.
+- The dispatcher pattern: `scripts/<noun>.ts` reads `process.argv.slice(2)`, switches on the first arg, prints help when called with no args / `help` / `-h` / `--help`. Mirror `scripts/wp.ts`, `scripts/bug.ts`, `scripts/track.ts`.
+- No backward-compatibility aliases. When a command is renamed, every caller updates.
 
 ## Git
 

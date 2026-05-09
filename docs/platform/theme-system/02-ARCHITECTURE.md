@@ -6,11 +6,11 @@ Read [01-LESSONS.md](01-LESSONS.md) first for *why* the shape is what it is. Rea
 
 ## The three axes (and only three)
 
-| Axis         | Values                                                                | Applied via                                             |
-| ------------ | --------------------------------------------------------------------- | ------------------------------------------------------- |
-| `theme`      | `airboss/default`, `study/sectional`, `study/flightdeck`, `sim/glass` | `data-theme` attribute                                  |
-| `appearance` | `light` \| `dark` (themes declare which they support)                 | `data-appearance` attribute                             |
-| `layout`     | `reading`, `dashboard`, `cockpit`                                     | `data-layout` attribute (+ layout CSS on the container) |
+| Axis         | Values                                                                | Applied via                                             |                             |
+| ------------ | --------------------------------------------------------------------- | ------------------------------------------------------- | --------------------------- |
+| `theme`      | `airboss/default`, `study/sectional`, `study/flightdeck`, `sim/glass` | `data-theme` attribute                                  |                             |
+| `appearance` | `light` \                                                             | `dark` (themes declare which they support)              | `data-appearance` attribute |
+| `layout`     | `reading`, `dashboard`, `cockpit`                                     | `data-layout` attribute (+ layout CSS on the container) |                             |
 
 That is the entire composition surface. Density, chrome, and elevation live inside a theme, not as separate axes.
 
@@ -220,7 +220,7 @@ rootFallbackBlock()                // airboss/default light, re-targeted to :roo
 REDUCED_MOTION_BLOCK               // @media (prefers-reduced-motion: reduce)
 ```
 
-Output is committed to `libs/themes/generated/tokens.css` and imported once at app root. CI reruns `bun run themes:emit` and fails on drift; the pipeline guarantees byte-identical output for unchanged sources.
+Output is committed to `libs/themes/generated/tokens.css` and imported once at app root. CI reruns `bun run themes emit` and fails on drift; the pipeline guarantees byte-identical output for unchanged sources.
 
 ### Currently emitted selector blocks
 
@@ -260,11 +260,11 @@ Adding a theme is one file: `libs/themes/<app>/<name>/index.ts` exports an objec
 
 Source: `libs/themes/resolve.ts`. `resolveThemeForPath(pathname, userAppearance, systemAppearance) -> ThemeSelection` is the single place that maps URL + appearance preference to theme selection. Routes never pick themes directly.
 
-| Path prefix        | Theme                 | Layout      |
-| ------------------ | --------------------- | ----------- |
-| `/sim`, `/sim/*`   | `sim/glass`           | `cockpit`   |
-| `/dashboard*`      | `study/flightdeck`    | `dashboard` |
-| everything else    | `study/sectional`     | `reading`   |
+| Path prefix      | Theme              | Layout      |
+| ---------------- | ------------------ | ----------- |
+| `/sim`, `/sim/*` | `sim/glass`        | `cockpit`   |
+| `/dashboard*`    | `study/flightdeck` | `dashboard` |
+| everything else  | `study/sectional`  | `reading`   |
 
 Appearance:
 
