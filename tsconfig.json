@@ -56,6 +56,7 @@
 			"@ab/hangar-jobs/*": ["libs/hangar-jobs/src/*"],
 			"@ab/hangar-sync": ["libs/hangar-sync/src/index.ts"],
 			"@ab/hangar-sync/*": ["libs/hangar-sync/src/*"],
+			"@ab/seed-courses": ["scripts/db/seed-courses.ts"],
 			"@ab/sources": ["libs/sources/src/index.ts"],
 			"@ab/sources/*": ["libs/sources/src/*"],
 			"@ab/library": ["libs/library/src/index.ts"],

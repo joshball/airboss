@@ -59,6 +59,8 @@ const aliases = {
 	'@ab/hangar-jobs/schema': resolve('./libs/hangar-jobs/src/schema.ts'),
 	'@ab/hangar-jobs': resolve('./libs/hangar-jobs/src/index.ts'),
 	'@ab/hangar-sync': resolve('./libs/hangar-sync/src/index.ts'),
+	// course-reader-and-editor WP, Phase 6: hangar editor invokes seed pipeline.
+	'@ab/seed-courses': resolve('./scripts/db/seed-courses.ts'),
 	'@ab/library/RenderedSection.svelte': resolve('./libs/library/src/RenderedSection.svelte'),
 	'@ab/library/CitationChip.svelte': resolve('./libs/library/src/CitationChip.svelte'),
 	'@ab/library/SourceLinks.svelte': resolve('./libs/library/src/SourceLinks.svelte'),
