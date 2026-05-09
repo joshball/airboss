@@ -244,7 +244,20 @@ async function seedOneSection(
 
 	for (const step of section.steps) {
 		summary.stepsScanned += 1;
-		const stepHash = hashStep(courseSlug, section.code, step, options.seedOrigin ?? null);
+		// `validateCourseTree` guarantees every step row that reaches here
+		// carries a non-empty `knowledge_node_id`. The Zod step schema types
+		// the field as optional so the friendlier seed-handler rejection can
+		// fire upstream; this guard restates the invariant for the upsert.
+		if (typeof step.knowledge_node_id !== 'string' || step.knowledge_node_id.length === 0) {
+			throw new CourseSeedError(`step '${courseSlug}.${step.code}' must carry knowledge_node_id`);
+		}
+		const knowledgeNodeId = step.knowledge_node_id;
+		const stepHash = hashStep(
+			courseSlug,
+			section.code,
+			{ ...step, knowledge_node_id: knowledgeNodeId },
+			options.seedOrigin ?? null,
+		);
 		const existingStep = existingByCode.get(step.code);
 		// Skip the write only when the hash AND the parent linkage are
 		// stable. A step that moved to a new section needs a row update so
@@ -262,7 +275,7 @@ async function seedOneSection(
 				code: step.code,
 				title: step.title,
 				bodyMd: step.body_md,
-				knowledgeNodeId: step.knowledge_node_id,
+				knowledgeNodeId,
 				contentHash: stepHash,
 				...(options.seedOrigin ? { seedOrigin: options.seedOrigin } : {}),
 			},
@@ -481,10 +494,16 @@ function validateCourseTree(manifest: CourseManifest, sections: readonly ParsedS
 }
 
 async function validateKnowledgeNodeRefs(manifest: CourseManifest, sections: readonly ParsedSection[]): Promise<void> {
+	// Every step here is guaranteed to carry `knowledge_node_id` -- the
+	// preceding `validateCourseTree` pass throws on missing values with the
+	// spec's friendlier message. The type guard below restates the
+	// invariant so the Zod-optional shape doesn't bleed into this loop.
 	const referencedNodeIds = new Set<string>();
 	for (const { section } of sections) {
 		for (const step of section.steps) {
-			referencedNodeIds.add(step.knowledge_node_id);
+			if (typeof step.knowledge_node_id === 'string' && step.knowledge_node_id.length > 0) {
+				referencedNodeIds.add(step.knowledge_node_id);
+			}
 		}
 	}
 	if (referencedNodeIds.size === 0) return;
@@ -495,6 +514,7 @@ async function validateKnowledgeNodeRefs(manifest: CourseManifest, sections: rea
 
 	for (const { section } of sections) {
 		for (const step of section.steps) {
+			if (typeof step.knowledge_node_id !== 'string' || step.knowledge_node_id.length === 0) continue;
 			if (!known.has(step.knowledge_node_id)) {
 				// `<course>.<step_code>` -- the step code already encodes
 				// its section prefix (e.g. `s1.3`). Matches the spec

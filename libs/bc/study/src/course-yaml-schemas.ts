@@ -12,15 +12,23 @@
  *     metadata (`code`, `ordinal`, `title`, optional `body_md`) and the
  *     inline list of child steps.
  *   - {@link courseStepSchema}: one step entry inside a section file.
- *     Steps require a `knowledge_node_id`; sections never carry one.
+ *     Steps SHOULD carry `knowledge_node_id`; sections SHOULD NOT. Both
+ *     fields are typed as optional here so the seed handler in
+ *     `scripts/db/seed-courses.ts` can fire the spec's verbatim rejection
+ *     messages (`step '...' must carry knowledge_node_id` /
+ *     `section '...' must not carry knowledge_node_id`) instead of Zod's
+ *     generic "Required" / "Unrecognized key" wording. The seed handler
+ *     owns the semantic; the schema only owns the shape.
  *
  * All three schemas are `.strict()` -- unknown YAML keys reject early so
  * authoring typos surface as a Zod error before any DB write.
  *
  * The friendlier rejections that the seed validator also fires (duplicate
  * ordinals, missing `knowledge_node_id` references, the reserved `personal`
- * kind, etc.) live in `scripts/db/seed-courses.ts`. The schemas here only
- * enforce the YAML shape; the seed pipeline handles cross-row consistency.
+ * kind, the section-carries-node / step-omits-node pair, etc.) live in
+ * `scripts/db/seed-courses.ts`. The schemas here only enforce the YAML
+ * shape; the seed pipeline handles cross-row consistency and the
+ * `knowledge_node_id` placement rule.
  *
  * Browser-safe: this file is pure Zod + constants. No `node:*` imports, no
  * `@ab/db/connection` reach. Re-exported as types from the runtime barrel
@@ -73,9 +81,16 @@ export const courseManifestSchema = z
 export type CourseManifest = z.infer<typeof courseManifestSchema>;
 
 /**
- * One `step` entry inside a section file. Every step row carries a
- * `knowledge_node_id` (required) -- the seed enforces FK existence before
- * any DB write. `body_md` defaults to `''` to match the DB column default.
+ * One `step` entry inside a section file.
+ *
+ * `knowledge_node_id` is typed as optional here so a step that omits the
+ * field reaches the seed handler's friendlier rejection
+ * (`step '<course>.<code>' must carry knowledge_node_id`) instead of
+ * Zod's generic `steps.N.knowledge_node_id: Required` message. The seed
+ * handler in `scripts/db/seed-courses.ts` enforces the requirement and
+ * also FK-checks the node id before any DB write.
+ *
+ * `body_md` defaults to `''` to match the DB column default.
  */
 export const courseStepSchema = z
 	.object({
@@ -83,7 +98,7 @@ export const courseStepSchema = z
 		ordinal: z.number().int().nonnegative(),
 		title: z.string().min(1),
 		body_md: z.string().optional().default(''),
-		knowledge_node_id: z.string().min(1),
+		knowledge_node_id: z.string().min(1).optional(),
 	})
 	.strict();
 
@@ -94,8 +109,16 @@ export type CourseStep = z.infer<typeof courseStepSchema>;
  * `course/courses/<slug>/sections/<file>.yaml`.
  *
  * Holds the section metadata + the inline list of child steps. Sections
- * never carry a `knowledge_node_id` -- the seed validator rejects any
- * section that does.
+ * never carry a `knowledge_node_id`, but the field is declared here as
+ * optional so a malformed section that smuggles the key reaches the seed
+ * handler's friendlier rejection
+ * (`section '<course>.<code>' must not carry knowledge_node_id`) instead
+ * of Zod's generic `Unrecognized key(s) in object: 'knowledge_node_id'`
+ * message. The seed handler in `scripts/db/seed-courses.ts` enforces the
+ * placement rule before any DB write.
+ *
+ * The `.strict()` guard is preserved so genuinely unknown keys still
+ * reject early with a typo-style Zod error.
  */
 export const courseSectionSchema = z
 	.object({
@@ -103,6 +126,7 @@ export const courseSectionSchema = z
 		ordinal: z.number().int().nonnegative(),
 		title: z.string().min(1),
 		body_md: z.string().optional().default(''),
+		knowledge_node_id: z.string().min(1).optional(),
 		steps: z.array(courseStepSchema).default([]),
 	})
 	.strict();
