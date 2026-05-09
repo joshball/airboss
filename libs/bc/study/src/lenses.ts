@@ -911,5 +911,5 @@ export type { ACSTriad };
 // `./server.ts` (`@ab/bc-study/server`). Consumers that want one import
 // site for every lens find them all here.
 
-export type { CourseLensFilters } from './lenses-course';
-export { courseLens } from './lenses-course';
+export type { CourseLensFilters, CourseOverlayLensFilters } from './lenses-course';
+export { courseLens, courseWithCertOverlayLens } from './lenses-course';
