@@ -123,6 +123,7 @@ export {
 	getCourseStepByCode,
 	getCourseStepsByCourse,
 	getCoursesByGoal,
+	getGoalCourses,
 	goalHasCourse,
 	listAllCourses,
 	listCoursesForReader,

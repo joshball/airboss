@@ -46,6 +46,7 @@ import {
 	type CourseStepRow,
 	course,
 	courseStep,
+	type GoalCourseRow,
 	type GoalRow,
 	goalCourse,
 	goalSyllabus,
@@ -547,4 +548,15 @@ export async function goalHasCourse(goalId: string, courseId: string, db: Db = d
 		.where(and(eq(goalCourse.goalId, goalId), eq(goalCourse.courseId, courseId)))
 		.limit(1);
 	return rows.length > 0;
+}
+
+/**
+ * Goal-course link rows for a goal, ordered by `course_id` ASC for stable
+ * read output. Mirrors {@link getGoalSyllabi} -- returns the link rows
+ * (with `weight`), not the joined course rows. Loaders that need both
+ * the link weights and the course metadata pair this with
+ * {@link getCoursesByGoal} (which returns the joined course rows alone).
+ */
+export async function getGoalCourses(goalId: string, db: Db = defaultDb): Promise<GoalCourseRow[]> {
+	return db.select().from(goalCourse).where(eq(goalCourse.goalId, goalId)).orderBy(asc(goalCourse.courseId));
 }

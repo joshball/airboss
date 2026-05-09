@@ -40,6 +40,7 @@ import {
 	getCourseStepByCode,
 	getCourseStepsByCourse,
 	getCoursesByGoal,
+	getGoalCourses,
 	goalHasCourse,
 	listAllCourses,
 	listCoursesForReader,
@@ -895,5 +896,38 @@ describe('goal-course composition helpers', () => {
 		expect(await goalHasCourse(g.id, c.id)).toBe(false);
 		const afterRemove = await getCoursesByGoal(g.id);
 		expect(afterRemove.map((cc) => cc.id)).not.toContain(c.id);
+	});
+
+	it('getGoalCourses returns link rows with weight ordered by courseId', async () => {
+		const cAlpha = await upsertCourse({
+			slug: slug('gc-list-alpha'),
+			kind: COURSE_KINDS.INSTRUCTOR,
+			title: 'GC list alpha',
+			seedOrigin: SUITE_TAG,
+		});
+		const cBeta = await upsertCourse({
+			slug: slug('gc-list-beta'),
+			kind: COURSE_KINDS.INSTRUCTOR,
+			title: 'GC list beta',
+			seedOrigin: SUITE_TAG,
+		});
+		const g = await createGoal({ userId: TEST_USER_ID, title: 'gc list goal', notesMd: '', isPrimary: false });
+
+		// Empty goal returns empty array.
+		expect(await getGoalCourses(g.id)).toEqual([]);
+
+		await addGoalCourse(g.id, cAlpha.id, 2.5);
+		await addGoalCourse(g.id, cBeta.id, 1.5);
+
+		const rows = await getGoalCourses(g.id);
+		expect(rows.length).toBe(2);
+		// Ordered by courseId ASC.
+		const orderedIds = [cAlpha.id, cBeta.id].sort();
+		expect(rows.map((r) => r.courseId)).toEqual(orderedIds);
+		// Weight is preserved on the link row (not lost like getCoursesByGoal).
+		const alphaRow = rows.find((r) => r.courseId === cAlpha.id);
+		const betaRow = rows.find((r) => r.courseId === cBeta.id);
+		expect(alphaRow?.weight).toBeCloseTo(2.5);
+		expect(betaRow?.weight).toBeCloseTo(1.5);
 	});
 });

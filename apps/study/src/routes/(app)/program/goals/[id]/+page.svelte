@@ -28,9 +28,13 @@ let { data, form }: { data: PageData; form: ActionData } = $props();
 const goal = $derived(data.goal);
 const syllabi = $derived(data.syllabi);
 const nodes = $derived(data.nodes);
+const courses = $derived(data.courses);
 const availableSyllabi = $derived(data.availableSyllabi);
 const availableNodes = $derived(data.availableNodes);
+const availableCourses = $derived(data.availableCourses);
 const syllabusTitleById = $derived(data.syllabusTitleById);
+const courseTitleById = $derived(data.courseTitleById);
+const courseSlugById = $derived(data.courseSlugById);
 const editing = $derived(page.url.searchParams.get(QUERY_PARAMS.EDIT) === '1');
 const detailHref = $derived(ROUTES.PROGRAM_GOAL(goal.id));
 const editHref = $derived(ROUTES.PROGRAM_GOAL_EDIT(goal.id));
@@ -178,6 +182,65 @@ const editHref = $derived(ROUTES.PROGRAM_GOAL_EDIT(goal.id));
 					<select name="syllabusId">
 						{#each availableSyllabi as opt (opt.id)}
 							<option value={opt.id}>{opt.credentialTitle} -- {opt.syllabusTitle}</option>
+						{/each}
+					</select>
+				</label>
+				<Button type="submit" variant="primary">Add</Button>
+			</form>
+		{/if}
+	</section>
+
+	<section class="block" aria-labelledby="courses-h">
+		<header class="block-head">
+			<h2 id="courses-h">Courses ({courses.length})</h2>
+		</header>
+		{#if courses.length === 0}
+			<EmptyState
+				title="No courses"
+				body="Add an instructor course (for example weather-comprehensive) to bring its step leaves into this goal."
+			/>
+		{:else}
+			<ul class="row-list">
+				{#each courses as gc (gc.courseId)}
+					<li class="row">
+						{#if courseSlugById[gc.courseId]}
+							<a class="row-title" href={ROUTES.COURSE(courseSlugById[gc.courseId])}>
+								{courseTitleById[gc.courseId] ?? gc.courseId}
+							</a>
+						{:else}
+							<span class="row-title">{courseTitleById[gc.courseId] ?? gc.courseId}</span>
+						{/if}
+						<form method="POST" action="?/setCourseWeight" class="weight-form">
+							<input type="hidden" name="courseId" value={gc.courseId} />
+							<label class="weight-label">
+								Weight
+								<input
+									type="number"
+									name="weight"
+									min={GOAL_SYLLABUS_WEIGHT_MIN}
+									max={GOAL_SYLLABUS_WEIGHT_MAX}
+									step="0.1"
+									value={gc.weight}
+								/>
+							</label>
+							<Button type="submit" variant="ghost">Save</Button>
+						</form>
+						<form method="POST" action="?/removeCourse">
+							<input type="hidden" name="courseId" value={gc.courseId} />
+							<Button type="submit" variant="ghost">Remove</Button>
+						</form>
+					</li>
+				{/each}
+			</ul>
+		{/if}
+
+		{#if availableCourses.length > 0}
+			<form method="POST" action="?/addCourse" class="add-form">
+				<label class="field-inline">
+					<span class="label">Add course</span>
+					<select name="courseId">
+						{#each availableCourses as opt (opt.id)}
+							<option value={opt.id}>{opt.title}</option>
 						{/each}
 					</select>
 				</label>
