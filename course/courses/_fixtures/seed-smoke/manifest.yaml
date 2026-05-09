@@ -1,0 +1,13 @@
+slug: seed-smoke
+kind: instructor
+title: Seed-Smoke Course Fixture
+status: active
+description: |
+  Fixture course used by `bun run db seed courses` smoke tests
+  (course-primitive WP, Phase 7). One section, two leaf steps; both
+  steps reference real `study.knowledge_node` rows from the weather
+  domain so the seed-time FK validator passes.
+
+  Do not author against this fixture from the UI. Do not add it to a
+  `goal_course` row outside a test fixture. The slug is reserved for
+  smoke acceptance.

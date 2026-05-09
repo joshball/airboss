@@ -380,6 +380,24 @@ async function doResetLoginAttempts(): Promise<void> {
 }
 
 async function doSeed(): Promise<void> {
+	// `bun run db seed courses` short-circuits to the standalone course
+	// seed handler (course-primitive WP Phase 6). Courses are not yet a
+	// phase in `seed-all.ts`; the handler is invoked directly so authors
+	// iterating on `course/courses/<slug>/` can re-run a single seed pass
+	// without rebuilding the whole DB. Idempotent + content-hashed; an
+	// unchanged YAML tree produces zero writes.
+	if (subTarget === 'courses') {
+		// Forward every arg AFTER `seed courses` to the standalone handler
+		// in its original order. The handler does its own positional /
+		// flag parsing (`--dir <path>`, optional course slug as the first
+		// positional). Preserving order matters because `--dir` consumes
+		// the next argv slot as its value.
+		const seedIdx = args.findIndex((a) => a === 'seed');
+		const after = seedIdx >= 0 ? args.slice(seedIdx + 2) : [];
+		const courseArgs = ['bun', 'scripts/db/seed-courses.ts', ...after];
+		await run(courseArgs);
+		return;
+	}
 	// seed-all.ts owns the production guard now; do not double-gate.
 	const seedArgs = ['bun', 'scripts/db/seed-all.ts'];
 	if (subTarget) seedArgs.push(subTarget);
@@ -595,17 +613,19 @@ const COMMAND_HELP: Record<string, CommandHelp> = {
 	},
 	seed: {
 		summary: 'Run seed orchestrator (users + knowledge + cards + abby by default)',
-		what: 'Runs `scripts/db/seed-all.ts`. With no sub-target, executes all phases in order: (1) dev users via better-auth, (2) knowledge graph build from `course/knowledge/**/node.md`, (3) course-sourced study.card rows for every DEV_ACCOUNTS user, (4) Abby (canonical dev-seed test learner) plus her personal cards / scenarios / plan / sessions / reviews. Sub-targets run only that phase.\n\n  bun run db seed            # all phases\n  bun run db seed users      # only better-auth dev users\n  bun run db seed knowledge  # only knowledge_node + knowledge_edge from markdown\n  bun run db seed cards      # only course-sourced study.card rows\n  bun run db seed abby       # only Abby + her chained content',
+		what: 'Runs `scripts/db/seed-all.ts`. With no sub-target, executes all phases in order: (1) dev users via better-auth, (2) knowledge graph build from `course/knowledge/**/node.md`, (3) course-sourced study.card rows for every DEV_ACCOUNTS user, (4) Abby (canonical dev-seed test learner) plus her personal cards / scenarios / plan / sessions / reviews. Sub-targets run only that phase.\n\n  bun run db seed            # all phases\n  bun run db seed users      # only better-auth dev users\n  bun run db seed knowledge  # only knowledge_node + knowledge_edge from markdown\n  bun run db seed cards      # only course-sourced study.card rows\n  bun run db seed abby       # only Abby + her chained content\n  bun run db seed courses    # only instructor courses from course/courses/<slug>/\n                              # (idempotent + content-hashed; pass a slug to scope)',
 		why: 'Single command to get a freshly-pushed DB to a usable state for dev. Every phase is idempotent -- safe to re-run at any time.',
-		how: 'The orchestrator (scripts/db/seed-all.ts) shells out to `scripts/db/seed-dev-users.ts` and `scripts/build-knowledge-index.ts`, and imports `seedCardsForUser` from `scripts/db/seed-cards.ts` once per DEV_ACCOUNTS entry.',
+		how: 'The orchestrator (scripts/db/seed-all.ts) shells out to `scripts/db/seed-dev-users.ts` and `scripts/build-knowledge-index.ts`, and imports `seedCardsForUser` from `scripts/db/seed-cards.ts` once per DEV_ACCOUNTS entry. The `courses` sub-target shorts to `scripts/db/seed-courses.ts` directly (course-primitive WP Phase 6); courses are not yet a phase in seed-all.ts.',
 		links: [
 			'scripts/db/seed-all.ts',
 			'scripts/db/seed-dev-users.ts',
 			'scripts/build-knowledge-index.ts',
 			'scripts/db/seed-cards.ts',
+			'scripts/db/seed-courses.ts',
 			'libs/constants/src/dev.ts',
 			'docs/decisions/011-knowledge-graph-learning-system/decision.md',
 			'docs/work-packages/knowledge-graph/spec.md',
+			'docs/work-packages/course-primitive/spec.md',
 		],
 	},
 	'seed:remove': {
