@@ -1,0 +1,23 @@
+{
+	"_doc": "NWS NEXRAD reflectivity color ramp (Z, dBZ). Each entry maps a dBZ value to a hex color. Phase A ships the file as a substrate placeholder; the consuming chart (radar-mosaic) lands in Phase B and reads the ramp via libs/wx-charts/src/raster/palettes.ts.",
+	"_source": "NWS NIDS Level III base reflectivity (N0R) standard ramp, 16 levels, 5 dBZ steps",
+	"_units": "dBZ",
+	"levels": [
+		{ "dbz": -32, "color": "#000000", "alpha": 0 },
+		{ "dbz": 5, "color": "#04E9E7" },
+		{ "dbz": 10, "color": "#019FF4" },
+		{ "dbz": 15, "color": "#0300F4" },
+		{ "dbz": 20, "color": "#02FD02" },
+		{ "dbz": 25, "color": "#01C501" },
+		{ "dbz": 30, "color": "#008E00" },
+		{ "dbz": 35, "color": "#FDF802" },
+		{ "dbz": 40, "color": "#E5BC00" },
+		{ "dbz": 45, "color": "#FD9500" },
+		{ "dbz": 50, "color": "#FD0000" },
+		{ "dbz": 55, "color": "#D40000" },
+		{ "dbz": 60, "color": "#BC0000" },
+		{ "dbz": 65, "color": "#F800FD" },
+		{ "dbz": 70, "color": "#9854C6" },
+		{ "dbz": 75, "color": "#FDFDFD" }
+	]
+}
