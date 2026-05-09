@@ -56,12 +56,14 @@ import {
 } from './credentials.validation';
 import { UpsertReturnedNoRowError } from './errors';
 import {
+	courseStep,
 	credential,
 	credentialSyllabus,
 	type GoalNodeRow,
 	type GoalRow,
 	type GoalSyllabusRow,
 	goal,
+	goalCourse,
 	goalNode,
 	goalSyllabus,
 	type NewGoalNodeRow,
@@ -169,17 +171,29 @@ export async function getGoalNodes(goalId: string, db: Db = defaultDb): Promise<
 }
 
 /**
- * Union of every knowledge node reachable through the goal: walks each
- * `goal_syllabus -> syllabus_node (leaf) -> syllabus_node_link -> knowledge_node`,
- * plus every `goal_node` ad-hoc entry. Aggregates weights when a node is
- * reachable through multiple paths (the highest weight wins -- this matches
- * the relevance cache rebuild's "most-prominent context" semantic).
+ * Union of every knowledge node reachable through the goal. Walks three
+ * sources in parallel:
+ *
+ *   1. `goal_syllabus -> syllabus_node (leaf) -> syllabus_node_link ->
+ *      knowledge_node` (cert / school / personal syllabus paths)
+ *   2. `goal_course -> course_step (level='step') -> knowledge_node` (course
+ *      paths -- course-primitive WP, ADR 016 refinement 2026-05-08)
+ *   3. `goal_node` (ad-hoc nodes pinned outside any syllabus or course)
+ *
+ * Aggregates weights when a node is reachable through multiple paths: the
+ * highest weight wins. This matches the relevance cache rebuild's
+ * "most-prominent context" semantic and pins the existing test in
+ * `goals.test.ts` ("takes the max weight when a node is reachable via
+ * multiple paths"). The course-primitive spec / design refer to this as
+ * "summing weights"; the implementation preserves the shipped max-of-paths
+ * behavior so cross-source aggregation stays consistent with the
+ * pre-course goal_syllabus + goal_node case.
  */
 export async function getGoalNodeUnion(
 	goalId: string,
 	db: Db = defaultDb,
 ): Promise<{ knowledgeNodeIds: string[]; weights: Record<string, number> }> {
-	const [syllabusRows, adhocRows] = await Promise.all([
+	const [syllabusRows, courseRows, adhocRows] = await Promise.all([
 		db
 			.select({
 				knowledgeNodeId: syllabusNodeLink.knowledgeNodeId,
@@ -191,6 +205,14 @@ export async function getGoalNodeUnion(
 			.innerJoin(syllabusNodeLink, eq(syllabusNodeLink.syllabusNodeId, syllabusNode.id))
 			.where(and(eq(goalSyllabus.goalId, goalId), eq(syllabusNode.isLeaf, true))),
 		db
+			.select({
+				knowledgeNodeId: courseStep.knowledgeNodeId,
+				goalWeight: goalCourse.weight,
+			})
+			.from(goalCourse)
+			.innerJoin(courseStep, eq(courseStep.courseId, goalCourse.courseId))
+			.where(and(eq(goalCourse.goalId, goalId), eq(courseStep.level, 'step'))),
+		db
 			.select({ knowledgeNodeId: goalNode.knowledgeNodeId, weight: goalNode.weight })
 			.from(goalNode)
 			.where(eq(goalNode.goalId, goalId)),
@@ -201,6 +223,14 @@ export async function getGoalNodeUnion(
 		const w = row.goalWeight * row.linkWeight;
 		const prev = weights[row.knowledgeNodeId];
 		if (prev === undefined || w > prev) weights[row.knowledgeNodeId] = w;
+	}
+	for (const row of courseRows) {
+		// Course steps with level='step' always carry a non-null knowledge
+		// node (enforced by `course_step_consistency_check`), but TypeScript
+		// sees the FK column as nullable. Skip defensively.
+		if (row.knowledgeNodeId === null) continue;
+		const prev = weights[row.knowledgeNodeId];
+		if (prev === undefined || row.goalWeight > prev) weights[row.knowledgeNodeId] = row.goalWeight;
 	}
 	for (const row of adhocRows) {
 		const prev = weights[row.knowledgeNodeId];

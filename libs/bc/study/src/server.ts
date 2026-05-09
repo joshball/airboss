@@ -112,6 +112,14 @@ export {
 	searchReferenceSections,
 	type TargetTypeTally,
 } from './citations';
+export type { UpsertCourseInput, UpsertCourseStepInput } from './courses';
+export {
+	getCourseBySlug,
+	getCourseStepsByCourse,
+	getCoursesByGoal,
+	upsertCourse,
+	upsertCourseStep,
+} from './courses';
 export type {
 	AreaMasteryRollup,
 	CredentialDagSnapshot,
