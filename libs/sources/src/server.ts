@@ -19,6 +19,12 @@ export {
 	listEditionsForSource,
 } from './registry/edition-resolver.ts';
 
+// Drizzle table handles for callers that need to author their own subqueries
+// (e.g. ADR 026 BC-consumers building a `notSupersededInRegistry` predicate
+// against `study.reference`). Surfaced from the server barrel because their
+// only legitimate consumers are query authors -- not types.
+export { editions, type EditionRow, type NewEditionRow } from './db/schema.ts';
+
 // ADR 026 §3 seed-time writer (the seed is the only caller; the
 // `edition-cache-write-guard` lint blocks non-seed call sites).
 export { markPriorEditionsRetired, type UpsertEditionInput, upsertEdition } from './registry/edition-writer.ts';

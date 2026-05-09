@@ -62,8 +62,12 @@ import { existsSync, readdirSync, statSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { attachSupersededByLatest, type Manifest, manifestSchema } from '@ab/bc-study/build';
-import { client } from '@ab/db/connection';
+import { type Manifest, manifestSchema } from '@ab/bc-study/build';
+import { client, db } from '@ab/db/connection';
+import { type SourceId, sourceIdForReference } from '@ab/sources';
+import { upsertEdition } from '@ab/sources/server';
+import { eq } from 'drizzle-orm';
+import { reference } from '../../libs/bc/study/src/schema';
 import { seedAcManifest } from '../../libs/bc/study/src/seeders/ac';
 import { seedAcsManifest } from '../../libs/bc/study/src/seeders/acs';
 import { seedAimManifest } from '../../libs/bc/study/src/seeders/aim';
@@ -232,17 +236,50 @@ async function seedOneCorpus(
 			}
 		}
 
-		// Wire `superseded_by_id` chains per slug (only when > 1 edition seen).
-		for (const [slug, refIds] of slugToEditionRefIds) {
-			if (refIds.length <= 1) continue;
-			const latestId = refIds[refIds.length - 1];
-			if (latestId === undefined) continue;
-			await attachSupersededByLatest(slug, latestId);
-			summary.supersededLinks += refIds.length - 1;
+		// Per ADR 026: edition supersession lives in `sources_registry.editions`.
+		// We collected the upserted reference ids per logical-document grouping
+		// (`slugToEditionRefIds`). To handle the mixed-source case (e.g. AFH 3B
+		// in YAML + AFH 3C in manifest), look up each ref's `document_slug`
+		// (the DB column may be `ac-61-83` while the on-disk `childDir` is just
+		// `61-83`) and walk EVERY row sharing that slug, not just the ones we
+		// upserted in this pass.
+		//
+		// Idempotency: re-seeding upserts each row in place. The current edition
+		// keeps `retired_at IS NULL`; older editions get a fresh `retired_at`
+		// timestamp on every run -- harmless, the partial index still points at
+		// the same row.
+		const documentSlugsTouched = new Set<string>();
+		for (const refIds of slugToEditionRefIds.values()) {
+			for (const id of refIds) {
+				const [row] = await db.select().from(reference).where(eq(reference.id, id)).limit(1);
+				if (row !== undefined) documentSlugsTouched.add(row.documentSlug);
+			}
+		}
+		for (const documentSlug of documentSlugsTouched) {
+			await publishSlugEditionsToRegistry(documentSlug, summary);
 		}
 	}
 
 	return summary;
+}
+
+async function publishSlugEditionsToRegistry(documentSlug: string, summary: SeedSummary): Promise<void> {
+	const rows = await db.select().from(reference).where(eq(reference.documentSlug, documentSlug));
+	if (rows.length === 0) return;
+	const sorted = [...rows].sort((a, b) => a.edition.localeCompare(b.edition, 'en', { numeric: true }));
+	const now = new Date();
+	for (let i = 0; i < sorted.length; i += 1) {
+		const row = sorted[i];
+		if (row === undefined) continue;
+		const isLatest = i === sorted.length - 1;
+		await upsertEdition({
+			sourceId: sourceIdForReference(row) as SourceId,
+			editionLabel: row.edition,
+			publishedAt: row.createdAt,
+			retiredAt: isLatest ? null : now,
+		});
+		if (!isLatest) summary.supersededLinks += 1;
+	}
 }
 
 /**

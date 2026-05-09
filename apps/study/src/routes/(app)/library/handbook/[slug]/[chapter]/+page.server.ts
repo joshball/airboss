@@ -16,7 +16,6 @@ import {
 	getNodesCitingSection,
 	getReadState,
 	getReferenceByDocument,
-	getReferenceById,
 	HandbookValidationError,
 	handbookReadStatusSchema,
 	listChapterSections,
@@ -27,6 +26,8 @@ import {
 	setReadStatus,
 } from '@ab/bc-study/server';
 import { HANDBOOK_NOTES_MAX_LENGTH, HANDBOOK_READ_STATUSES, QUERY_PARAMS } from '@ab/constants';
+import { type SourceId, sourceIdForReference } from '@ab/sources';
+import { getCurrentEdition } from '@ab/sources/server';
 import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -52,7 +53,8 @@ export const load: PageServerLoad = async (event) => {
 		chapter: Number(chapterCode),
 	});
 
-	const latest = ref.supersededById ? await getReferenceById(ref.supersededById).catch(() => null) : null;
+	const current = await getCurrentEdition(sourceIdForReference(ref) as SourceId).catch(() => null);
+	const supersededByEdition = current !== null && current.editionLabel !== ref.edition ? current.editionLabel : null;
 
 	return {
 		reference: {
@@ -60,7 +62,7 @@ export const load: PageServerLoad = async (event) => {
 			documentSlug: ref.documentSlug,
 			edition: ref.edition,
 			title: ref.title,
-			supersededByEdition: latest?.edition ?? null,
+			supersededByEdition,
 		},
 		chapter: (() => {
 			const pages = faaPagesFromMetadata(chapter.metadata);

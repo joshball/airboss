@@ -1347,8 +1347,14 @@ export type NewCardFeedbackRow = typeof cardFeedback.$inferInsert;
  * end-to-end; the schema is shaped to accept the rest as the cert-syllabus
  * and ref-extraction WPs land.
  *
- * `superseded_by_id` self-FK lets the seed wire each older edition to the
- * latest; `seed_origin` matches the project-wide dev-seed marker convention.
+ * Per ADR 026: edition supersession lives in `sources_registry.editions`
+ * (one row per `(source_id, edition_label)`, partial index
+ * `WHERE retired_at IS NULL` powers the "current edition" probe). The
+ * `edition` column on this row is a denormalized cache populated by the seed
+ * from the registry's `edition_label`; the seed is the only writer. The
+ * `edition-cache-write-guard` lint script blocks non-seed call sites.
+ *
+ * `seed_origin` matches the project-wide dev-seed marker convention.
  */
 export const reference = studySchema.table(
 	'reference',
@@ -1423,16 +1429,6 @@ export const reference = studySchema.table(
 		 * source-PDF page count for a whole-doc handbook.
 		 */
 		metadata: jsonb('metadata').notNull().default(sql`'{}'::jsonb`),
-		/**
-		 * Set when a newer edition exists. The reader surfaces "newer edition
-		 * available" when this points to a non-archived row; resolvers continue
-		 * to honor citations against the older edition so historical links
-		 * never break. `set null` so deleting a newer edition (rare) doesn't
-		 * cascade-destroy the older ones.
-		 */
-		supersededById: text('superseded_by_id').references((): AnyPgColumn => reference.id, {
-			onDelete: 'set null',
-		}),
 		/** Dev-seed marker; NULL on production rows. */
 		seedOrigin: text('seed_origin'),
 		...timestamps(),
@@ -1441,9 +1437,6 @@ export const reference = studySchema.table(
 		// One row per (document_slug, edition). The seed conflict-targets this.
 		referenceDocEditionUnique: uniqueIndex('reference_doc_edition_unique').on(t.documentSlug, t.edition),
 		referenceKindIdx: index('reference_kind_idx').on(t.kind),
-		// "Most-recent edition for this document" probe + the "is this row
-		// superseded?" filter both lean on (document_slug, superseded_by_id).
-		referenceDocSupersededIdx: index('reference_doc_superseded_idx').on(t.documentSlug, t.supersededById),
 		// GIN index on the `subjects` text[] column powers the topic-spine
 		// filter: `library-by-cert.ts` runs `subjects @> ARRAY[$topic]`
 		// (Drizzle `arrayContains`) per topic page render, plus a `LATERAL
@@ -1992,14 +1985,6 @@ export const syllabus = studySchema.table(
 		edition: text('edition').notNull(),
 		sourceUrl: text('source_url'),
 		status: text('status').notNull().default(SYLLABUS_STATUSES.ACTIVE),
-		/**
-		 * Set when a newer edition exists. Mirrors the `reference.superseded_by_id`
-		 * pattern: deleting a newer edition (rare) doesn't cascade-destroy the
-		 * older ones. Goals pinned to the older edition keep working.
-		 */
-		supersededById: text('superseded_by_id').references((): AnyPgColumn => syllabus.id, {
-			onDelete: 'set null',
-		}),
 		/**
 		 * Optional FK to the FAA publication that backs this syllabus. NULL
 		 * for school / personal syllabi.

@@ -67,6 +67,7 @@ export {
 	airbossRefForNtsbAljSection,
 	airbossRefForSafo,
 	airbossRefForWholeDocHandbook,
+	sourceIdForReference,
 } from './airboss-ref-builder.ts';
 export {
 	type BootstrapOptions,

@@ -25,7 +25,6 @@ function makeRow(overrides: Partial<ReferenceRow>): ReferenceRow {
 		subjects: [],
 		sectionSchema: {},
 		metadata: {},
-		supersededById: null,
 		seedOrigin: null,
 		createdAt: new Date(),
 		updatedAt: new Date(),

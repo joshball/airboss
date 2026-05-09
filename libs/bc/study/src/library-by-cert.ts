@@ -11,8 +11,9 @@
 
 import { CERT_APPLICABILITIES, CERT_APPLICABILITY_VALUES, type CertApplicability } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
+import { editions as editionsTable } from '@ab/sources/server';
 import { createLogger } from '@ab/utils';
-import { and, arrayContains, asc, eq, inArray, isNull, sql } from 'drizzle-orm';
+import { and, arrayContains, asc, eq, inArray, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { CredentialNotFoundError, getCertsCoveredBy, getCredentialBySlug } from './credentials';
 import { type ReferenceRow, reference } from './schema';
@@ -20,6 +21,46 @@ import { type ReferenceRow, reference } from './schema';
 const log = createLogger('study:library-by-cert');
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
+
+/**
+ * Drizzle predicate: "this `study.reference` row is NOT superseded according
+ * to `sources_registry.editions`." Computes the row's edition-agnostic source
+ * id via `sourceIdForReference(kind, document_slug)` (matching the registry's
+ * `source_id` column shape) and asserts no edition row exists with both
+ * `source_id` and `edition_label` matching AND `retired_at IS NOT NULL`.
+ *
+ * Per ADR 026: edition supersession lives in `sources_registry.editions`.
+ * This BC's queries use the predicate to filter "current editions only" --
+ * the same role the dropped `study.reference.supersededById` column played
+ * pre-ADR-026.
+ *
+ * Implementation note: postgres concatenates `airboss-ref:<corpus>/<slug>`
+ * into the `source_id` column at seed time via the same `sourceIdForReference`
+ * mapping. Doing the concat inside the subquery keeps the predicate as a
+ * single round-trip with the outer SELECT (no per-row N+1 lookups).
+ */
+function notSupersededInRegistry() {
+	// Build the registry source-id at SQL time: `airboss-ref:<prefix>/<slug>`,
+	// where prefix is `handbooks` for kind=`handbook`, `regs` for kind=`cfr`,
+	// and `<kind>` for everything else. Mirrors `sourceIdForReference` in
+	// `libs/sources/src/airboss-ref-builder.ts`.
+	const sourceIdExpr = sql`(
+		'airboss-ref:'
+		|| (CASE
+			WHEN ${reference.kind} = 'handbook' THEN 'handbooks'
+			WHEN ${reference.kind} = 'cfr' THEN 'regs'
+			ELSE ${reference.kind}
+		END)
+		|| '/'
+		|| ${reference.documentSlug}
+	)`;
+	return sql`NOT EXISTS (
+		SELECT 1 FROM ${editionsTable}
+		WHERE ${editionsTable.sourceId} = ${sourceIdExpr}
+		  AND ${editionsTable.editionLabel} = ${reference.edition}
+		  AND ${editionsTable.retiredAt} IS NOT NULL
+	)`;
+}
 
 /**
  * Carryover bucket -- references owned by a prerequisite cert that still
@@ -181,7 +222,7 @@ async function listPrimaryReferencesForCert(cert: CertApplicability, db: Db): Pr
 	return db
 		.select()
 		.from(reference)
-		.where(and(eq(reference.primaryCert, cert), isNull(reference.supersededById)))
+		.where(and(eq(reference.primaryCert, cert), notSupersededInRegistry()))
 		.orderBy(asc(reference.documentSlug), asc(reference.edition));
 }
 
@@ -199,7 +240,7 @@ async function listReferencesByPrimaryCerts(
 	const rows = await db
 		.select()
 		.from(reference)
-		.where(and(inArray(reference.primaryCert, certs as CertApplicability[]), isNull(reference.supersededById)))
+		.where(and(inArray(reference.primaryCert, certs as CertApplicability[]), notSupersededInRegistry()))
 		.orderBy(asc(reference.documentSlug), asc(reference.edition));
 	for (const row of rows) {
 		if (row.primaryCert === null) continue;
@@ -233,7 +274,7 @@ export async function listReferencesByTopic(topic: string, db: Db = defaultDb): 
 	return db
 		.select()
 		.from(reference)
-		.where(and(arrayContains(reference.subjects, [topic]), isNull(reference.supersededById)))
+		.where(and(arrayContains(reference.subjects, [topic]), notSupersededInRegistry()))
 		.orderBy(asc(reference.documentSlug), asc(reference.edition));
 }
 
@@ -245,7 +286,7 @@ export async function getReferenceCountsByCert(db: Db = defaultDb): Promise<Reco
 	const rows = await db
 		.select({ primaryCert: reference.primaryCert })
 		.from(reference)
-		.where(isNull(reference.supersededById));
+		.where(notSupersededInRegistry());
 	const out = {} as Record<CertApplicability, number>;
 	for (const value of CERT_APPLICABILITY_VALUES) out[value] = 0;
 	for (const row of rows) {
@@ -268,8 +309,13 @@ export async function getReferenceCountsByCert(db: Db = defaultDb): Promise<Reco
  * routes through `db.execute(sql\`...\`)` per the project rule "Drizzle ORM
  * only, except where the SQL shape genuinely requires raw SQL." The shape
  * here (column-derived rowset that needs to participate in the FROM clause)
- * is one of those cases. The `superseded_by_id IS NULL` predicate matches
- * every other "active references only" probe in this BC.
+ * is one of those cases.
+ *
+ * Per ADR 026 the "active references only" predicate is a NOT EXISTS against
+ * `sources_registry.editions` (no row with both source_id + edition_label
+ * matching AND `retired_at IS NOT NULL`). The source_id concat mirrors
+ * `sourceIdForReference`: handbook -> handbooks, cfr -> regs, otherwise the
+ * kind itself.
  */
 export async function getReferenceCountsByTopic(db: Db = defaultDb): Promise<Record<string, number>> {
 	// `count(*)::int` so the row comes back as a JS number rather than the
@@ -281,7 +327,21 @@ export async function getReferenceCountsByTopic(db: Db = defaultDb): Promise<Rec
 		SELECT s.subject, count(*)::int AS n
 		FROM ${reference} AS r,
 		LATERAL unnest(r.subjects) AS s(subject)
-		WHERE r.superseded_by_id IS NULL
+		WHERE NOT EXISTS (
+			SELECT 1 FROM ${editionsTable} AS e
+			WHERE e.source_id = (
+				'airboss-ref:'
+				|| (CASE
+					WHEN r.kind = 'handbook' THEN 'handbooks'
+					WHEN r.kind = 'cfr' THEN 'regs'
+					ELSE r.kind
+				END)
+				|| '/'
+				|| r.document_slug
+			)
+			  AND e.edition_label = r.edition
+			  AND e.retired_at IS NOT NULL
+		)
 		GROUP BY s.subject
 	`);
 	const rows = result as unknown as ReadonlyArray<{ subject: string; n: number }>;

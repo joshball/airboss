@@ -29,9 +29,10 @@
  * {@link listReferences} read; the `section` view layers a single
  * {@link listHandbookChapters} call on top; the `detail` view fans out the
  * per-section reads (`getHandbookSection`, `getReadState`,
- * `getNodesCitingSection`, `listErrataForSection`, `getReferenceById` for the
- * superseded-by chain) in parallel via `Promise.all` so the per-page latency
- * matches the pre-aggregator route loaders.
+ * `getNodesCitingSection`, `listErrataForSection`, `getCurrentEdition`
+ * against `sources_registry.editions` for the supersession probe) in
+ * parallel via `Promise.all` so the per-page latency matches the
+ * pre-aggregator route loaders.
  */
 
 import {
@@ -57,7 +58,10 @@ import {
 	type CfrTitleNumber,
 	findChapterForPart,
 	getCfrNavTree,
+	type SourceId,
+	sourceIdForReference,
 } from '@ab/sources';
+import { getCurrentEdition } from '@ab/sources/server';
 import { type ErrataDisplay, formatErrataForDisplay, listErrataForSection } from './reference-errata';
 import {
 	faaPagesFromMetadata,
@@ -65,7 +69,6 @@ import {
 	getHandbookSection,
 	getNodesCitingSection,
 	getReadState,
-	getReferenceById,
 	getReferenceSectionById,
 	listFlatTopLevelSections,
 	listHandbookChapters,
@@ -653,14 +656,21 @@ async function buildGroupView(kind: LibraryRegulationsKind, db: Db): Promise<Reg
 		// Map Part -> { count, representative ref } so group cards can carry the
 		// hand-authored official title / description / why-it-matters from the
 		// reference's metadata. Multiple refs for one Part (different editions)
-		// share copy via the latest non-superseded representative.
+		// share copy via the latest representative.
+		//
+		// `listReferences({})` already filters to current editions per the
+		// registry (see ADR 026 + the `notSupersededInRegistry` predicate in
+		// `references.ts`); the rep is therefore picked from already-current
+		// rows. When two current rows exist for one Part (rare, e.g. a half-
+		// seeded DB), the lex-greatest edition wins via `getReferenceByDocument`'s
+		// ordering, so picking the first row is deterministic for sorted input.
 		const byPart = new Map<string, { count: number; rep: ReferenceRow | null }>();
 		for (const ref of matching) {
 			const part = extractCfrPart(ref.documentSlug);
 			if (part === null) continue;
 			const cur = byPart.get(part) ?? { count: 0, rep: null };
 			cur.count += 1;
-			if (cur.rep === null || ref.supersededById === null) cur.rep = ref;
+			if (cur.rep === null) cur.rep = ref;
 			byPart.set(part, cur);
 		}
 		const titleNumber = kind === LIBRARY_REGULATIONS_KINDS.CFR_14 ? 14 : 49;
@@ -947,7 +957,14 @@ async function buildDetailView(
 	// Fan out the leaf-page reads in parallel. The pre-aggregator route loader
 	// issued these sequentially; parallelizing matches the per-page latency
 	// model the other library readers already use.
-	const [readState, citingNodes, errataRows, latestRow] = await Promise.all([
+	//
+	// Per ADR 026: edition supersession lives in `sources_registry.editions`.
+	// The "newer edition available" affordance reads the registry's current
+	// edition for this row's slug; if it differs from the loaded row's
+	// `edition`, the page surfaces the affordance. A current registry row
+	// matching the loaded edition (or no current row at all) means there is
+	// no newer edition to point at.
+	const [readState, citingNodes, errataRows, currentRegistryEdition] = await Promise.all([
 		getReadState(userId, view.section.id, db),
 		getNodesCitingSection(
 			{
@@ -958,12 +975,13 @@ async function buildDetailView(
 			db,
 		),
 		listErrataForSection(view.section.id, db),
-		getReferenceById(ref.id, db).catch(() => null),
+		getCurrentEdition(sourceIdForReference(ref) as SourceId).catch(() => null),
 	]);
 
-	const supersededByEdition = latestRow?.supersededById
-		? ((await getReferenceById(latestRow.supersededById, db).catch(() => null))?.edition ?? null)
-		: null;
+	const supersededByEdition =
+		currentRegistryEdition !== null && currentRegistryEdition.editionLabel !== ref.edition
+			? currentRegistryEdition.editionLabel
+			: null;
 
 	const errata = errataRows.map(formatErrataForDisplay);
 

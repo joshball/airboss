@@ -6,7 +6,10 @@
  *
  *   - fresh insert: rows land with correct counts.
  *   - idempotent re-run: 0 changes when the markdown / manifest is identical.
- *   - supersede: a second edition flips superseded_by_id on the older one.
+ *   - supersede: a second edition publishes the older edition to
+ *     `sources_registry.editions` with `retired_at IS NOT NULL` and the newer
+ *     with `retired_at IS NULL` (per ADR 026; the `supersededById` column is
+ *     gone).
  *   - figure replacement: bumping content_hash mass-replaces figures.
  *
  * Each spec uses a unique document_slug so parallel suites don't collide on
@@ -21,6 +24,8 @@ import { REFERENCE_KINDS, REFERENCE_SECTION_LEVELS } from '@ab/constants';
 import { db } from '@ab/db/connection';
 import { __ac_seed_mapping_internal__ } from '@ab/sources/ac';
 import { __acs_seed_mapping_internal__ } from '@ab/sources/acs';
+import { sourceIdForReference } from '@ab/sources';
+import { editions as editionsTable } from '@ab/sources/server';
 import { and, eq } from 'drizzle-orm';
 import { afterAll, describe, expect, it } from 'vitest';
 import { reference, referenceFigure, referenceSection } from '../../libs/bc/study/src/schema';
@@ -1314,7 +1319,7 @@ describe('seedReferencesFromManifest', () => {
 		__acs_seed_mapping_internal__.reset();
 	});
 
-	it('supersede chain wires older edition to the newest', async () => {
+	it('supersede chain publishes older edition with retired_at; newer with retired_at IS NULL', async () => {
 		const a = buildFixture('superseded-a', '2026-03-A', HASH_AAA);
 		buildFixture('superseded-a', '2026-03-B', HASH_BBB);
 		trackFixture(a.slug);
@@ -1322,7 +1327,7 @@ describe('seedReferencesFromManifest', () => {
 
 		const summary = await seedReferencesFromManifest({ documentSlug: a.slug });
 		expect(summary.editionsProcessed).toBe(2);
-		// One older edition gets pointed at the newer one.
+		// One older edition gets retired in the registry; one current.
 		expect(summary.supersededLinks).toBe(1);
 
 		const refs = await db.select().from(reference).where(eq(reference.documentSlug, a.slug));
@@ -1332,8 +1337,16 @@ describe('seedReferencesFromManifest', () => {
 		expect(older).toBeDefined();
 		expect(newer).toBeDefined();
 		if (!older || !newer) return;
-		expect(older.supersededById).toBe(newer.id);
-		expect(newer.supersededById).toBeNull();
+
+		// Per ADR 026: the registry is the source of truth. The older edition
+		// has `retired_at IS NOT NULL`; the newer has `retired_at IS NULL`.
+		const sourceId = sourceIdForReference(newer);
+		const editionRows = await db.select().from(editionsTable).where(eq(editionsTable.sourceId, sourceId));
+		expect(editionRows).toHaveLength(2);
+		const olderEdRow = editionRows.find((e) => e.editionLabel === '2026-03-A');
+		const newerEdRow = editionRows.find((e) => e.editionLabel === '2026-03-B');
+		expect(olderEdRow?.retiredAt).not.toBeNull();
+		expect(newerEdRow?.retiredAt).toBeNull();
 	});
 });
 

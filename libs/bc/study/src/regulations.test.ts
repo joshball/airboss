@@ -28,7 +28,13 @@ import {
 	REFERENCE_SECTION_LEVELS,
 } from '@ab/constants';
 import { db } from '@ab/db/connection';
-import { airbossRefForCfrSection, airbossRefForCfrSubpart } from '@ab/sources';
+import {
+	airbossRefForCfrSection,
+	airbossRefForCfrSubpart,
+	type SourceId,
+	sourceIdForReference,
+} from '@ab/sources';
+import { editions as editionsTable, upsertEdition } from '@ab/sources/server';
 import type { StructuredCitation } from '@ab/types';
 import { generateAuthId, generateReferenceFigureId, generateReferenceId, generateReferenceSectionId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
@@ -126,10 +132,12 @@ beforeAll(async () => {
 		updatedAt: now,
 	});
 
-	// Two editions of the test 14-CFR row -- the older one is superseded by
-	// the newer. The aggregator should never see the superseded row in the
-	// listReferences default; the supersededByEdition assertion checks the
-	// detail view surfaces the latest edition tag.
+	// Two editions of the test 14-CFR row -- the older is retired in the
+	// registry, the newer is current. Per ADR 026 supersession lives in
+	// `sources_registry.editions`; the aggregator's `listReferences` default
+	// filters via the registry so the superseded row never surfaces, and the
+	// `supersededByEdition` assertion checks the detail view reads the
+	// registry's current label.
 	await db.insert(reference).values([
 		{
 			id: CFR14_SUPERSEDED_REF_ID,
@@ -139,7 +147,6 @@ beforeAll(async () => {
 			title: `14 CFR Part ${CFR14_PART} (2023)`,
 			publisher: 'FAA',
 			url: null,
-			supersededById: CFR14_REF_ID,
 			seedOrigin: SUITE_TAG,
 			createdAt: now,
 			updatedAt: now,
@@ -252,6 +259,28 @@ beforeAll(async () => {
 			updatedAt: now,
 		},
 	]);
+
+	// Per ADR 026: seed registry editions so the BC's `notSupersededInRegistry`
+	// predicate has rows to consult. Two CFR-14 editions for CFR14_SLUG (the
+	// 2023 row retired, `current` current). Single rows for every other slug.
+	const cfr14SourceId = sourceIdForReference({ kind: 'cfr', documentSlug: CFR14_SLUG }) as SourceId;
+	const cfr14FlatSourceId = sourceIdForReference({ kind: 'cfr', documentSlug: CFR14_FLAT_SLUG }) as SourceId;
+	const cfr14TreeSourceId = sourceIdForReference({ kind: 'cfr', documentSlug: CFR14_TREE_SLUG }) as SourceId;
+	const cfr49SourceId = sourceIdForReference({ kind: 'cfr', documentSlug: CFR49_SLUG }) as SourceId;
+	const acSourceId = sourceIdForReference({ kind: 'ac', documentSlug: AC_SLUG }) as SourceId;
+	const acOrphanSourceId = sourceIdForReference({ kind: 'ac', documentSlug: AC_ORPHAN_SLUG }) as SourceId;
+	const aimSourceId = sourceIdForReference({ kind: 'aim', documentSlug: AIM_SLUG }) as SourceId;
+	const ntsbSourceId = sourceIdForReference({ kind: 'ntsb', documentSlug: NTSB_SLUG }) as SourceId;
+
+	await upsertEdition({ sourceId: cfr14SourceId, editionLabel: '2023', publishedAt: now, retiredAt: now });
+	await upsertEdition({ sourceId: cfr14SourceId, editionLabel: 'current', publishedAt: now });
+	await upsertEdition({ sourceId: cfr14FlatSourceId, editionLabel: 'current', publishedAt: now });
+	await upsertEdition({ sourceId: cfr14TreeSourceId, editionLabel: 'current', publishedAt: now });
+	await upsertEdition({ sourceId: cfr49SourceId, editionLabel: 'current', publishedAt: now });
+	await upsertEdition({ sourceId: acSourceId, editionLabel: 'A', publishedAt: now });
+	await upsertEdition({ sourceId: acOrphanSourceId, editionLabel: 'A', publishedAt: now });
+	await upsertEdition({ sourceId: aimSourceId, editionLabel: '2024', publishedAt: now });
+	await upsertEdition({ sourceId: ntsbSourceId, editionLabel: '2024', publishedAt: now });
 
 	// Inline section ingest for the 14-CFR test reference -- one chapter,
 	// two sections + one figure on §103. Mirrors the handbook fixture shape.
@@ -507,6 +536,20 @@ afterAll(async () => {
 	await db.delete(referenceFigure).where(eq(referenceFigure.seedOrigin, SUITE_TAG));
 	await db.delete(referenceSection).where(eq(referenceSection.seedOrigin, SUITE_TAG));
 	await db.delete(reference).where(eq(reference.seedOrigin, SUITE_TAG));
+	// Clean up registry editions seeded in beforeAll. Done by source-id since
+	// editions table has no `seedOrigin` column today.
+	for (const sid of [
+		sourceIdForReference({ kind: 'cfr', documentSlug: CFR14_SLUG }),
+		sourceIdForReference({ kind: 'cfr', documentSlug: CFR14_FLAT_SLUG }),
+		sourceIdForReference({ kind: 'cfr', documentSlug: CFR14_TREE_SLUG }),
+		sourceIdForReference({ kind: 'cfr', documentSlug: CFR49_SLUG }),
+		sourceIdForReference({ kind: 'ac', documentSlug: AC_SLUG }),
+		sourceIdForReference({ kind: 'ac', documentSlug: AC_ORPHAN_SLUG }),
+		sourceIdForReference({ kind: 'aim', documentSlug: AIM_SLUG }),
+		sourceIdForReference({ kind: 'ntsb', documentSlug: NTSB_SLUG }),
+	]) {
+		await db.delete(editionsTable).where(eq(editionsTable.sourceId, sid));
+	}
 	await db.delete(bauthUser).where(eq(bauthUser.id, TEST_USER_ID));
 });
 

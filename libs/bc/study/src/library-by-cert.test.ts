@@ -296,8 +296,8 @@ describe('getReferenceCountsByTopic', () => {
  * The `subjects @> ARRAY[$topic]` shape is GIN-indexable, but the small dev
  * catalog (≈80 rows) is well within the planner's seq-scan-is-cheaper
  * threshold, so an unconditional `EXPLAIN` against `listReferencesByTopic`
- * would not assert anything useful: the planner picks the btree-on-
- * `superseded_by_id` path on small data even when the GIN index is present.
+ * would not assert anything useful: the planner picks a sequential-scan
+ * path on small data even when the GIN index is present.
  *
  * Two assertions instead:
  *

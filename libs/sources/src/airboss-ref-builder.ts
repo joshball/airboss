@@ -139,3 +139,30 @@ export function airbossRefForGenericDocument(corpus: string, documentSlug: strin
 	const tail = edition === undefined ? documentSlug : `${documentSlug}/${edition}`;
 	return `${SCHEME_PREFIX}${corpus}/${tail}`;
 }
+
+/**
+ * Edition-agnostic registry key for a `study.reference` row. Used by ADR 026
+ * callers that need to consult `sources_registry.editions` for "what is the
+ * current edition for this slug?": every edition row of the same logical
+ * document shares one `source_id`, varying only in `edition_label`.
+ *
+ * The shape is `airboss-ref:<corpus>/<documentSlug>` -- intentionally without
+ * an edition fragment, mirroring the registry's `source_id` column. Per-corpus
+ * mapping:
+ *
+ *   - handbook   -> `airboss-ref:handbooks/<slug>`
+ *   - cfr        -> `airboss-ref:regs/<slug>` (slug like `14cfr91`, `49cfr830`)
+ *   - ac         -> `airboss-ref:ac/<slug>`
+ *   - acs / pts  -> `airboss-ref:<kind>/<slug>`
+ *   - aim / pcg  -> `airboss-ref:<kind>/<slug>` (single canonical slug)
+ *   - everything else -> `airboss-ref:<kind>/<slug>` (generic fallback)
+ *
+ * Pure: no DB access, no side effects. Callers that need the actual edition
+ * row go through `getCurrentEdition(sourceIdFor(...))` from `@ab/sources/server`.
+ */
+export function sourceIdForReference(input: { readonly kind: string; readonly documentSlug: string }): string {
+	const { kind, documentSlug } = input;
+	if (kind === 'handbook') return `${SCHEME_PREFIX}handbooks/${documentSlug}`;
+	if (kind === 'cfr') return `${SCHEME_PREFIX}regs/${documentSlug}`;
+	return `${SCHEME_PREFIX}${kind}/${documentSlug}`;
+}

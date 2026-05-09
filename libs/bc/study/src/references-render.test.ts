@@ -31,7 +31,6 @@ function buildReferenceRow(overrides: Partial<ReferenceRow> = {}): ReferenceRow 
 		primaryCert: null,
 		sectionSchema: {},
 		metadata: {},
-		supersededById: null,
 		seedOrigin: null,
 		createdAt: NOW,
 		updatedAt: NOW,
@@ -97,13 +96,16 @@ describe('resolveCitationsForRender (ADR 019 amendment 2026-05 step 5)', () => {
 	});
 
 	it('flags a pinned-prior-edition citation with isPriorEdition + pinnedEditionSlug', () => {
+		// Per ADR 026: edition supersession lives in `sources_registry.editions`.
+		// `resolveCitationsForRender` is pure; it picks the lex-greatest edition
+		// per slug as "current" so a citation pinned to FAA-H-8083-3B (the older)
+		// surfaces as `isPriorEdition: true`.
 		const refs: ReferenceRow[] = [
 			buildReferenceRow({
 				id: 'ref_afh_3b',
 				documentSlug: 'afh',
 				edition: 'FAA-H-8083-3B',
 				title: 'Airplane Flying Handbook',
-				supersededById: 'ref_afh_3c',
 			}),
 			buildReferenceRow({
 				id: 'ref_afh_3c',

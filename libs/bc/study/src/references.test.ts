@@ -33,7 +33,13 @@ import {
 	ROUTES,
 } from '@ab/constants';
 import { db } from '@ab/db/connection';
-import { __ac_seed_mapping_internal__, airbossRefForHandbookSection } from '@ab/sources';
+import {
+	__ac_seed_mapping_internal__,
+	airbossRefForHandbookSection,
+	type SourceId,
+	sourceIdForReference,
+} from '@ab/sources';
+import { editions as editionsTable, upsertEdition } from '@ab/sources/server';
 import type { LegacyCitation, StructuredCitation } from '@ab/types';
 import { generateAuthId, generateReferenceFigureId, generateReferenceId, generateReferenceSectionId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
@@ -116,17 +122,22 @@ beforeAll(async () => {
 		updatedAt: now,
 	});
 
-	// Two PHAK editions (25B superseded by 25C) and one AFH edition.
-	await db.insert(reference).values([
+	// Two PHAK editions (25B retired in registry, 25C current) and one AFH
+	// edition. Per ADR 026: edition supersession lives in
+	// `sources_registry.editions`; the `study.reference.edition` column
+	// remains a denormalized cache populated by the seed.
+	const phakSlugForRegistry = PHAK_SLUG;
+	const afhSlugForRegistry = AFH_SLUG;
+
+	const phakRows = [
 		{
 			id: PHAK_25B_ID,
 			kind: REFERENCE_KINDS.HANDBOOK,
-			documentSlug: PHAK_SLUG,
+			documentSlug: phakSlugForRegistry,
 			edition: 'FAA-H-8083-25B',
 			title: "Pilot's Handbook of Aeronautical Knowledge (25B)",
 			publisher: 'FAA',
 			url: null,
-			supersededById: PHAK_25C_ID,
 			seedOrigin: SUITE_TAG,
 			createdAt: now,
 			updatedAt: now,
@@ -134,12 +145,11 @@ beforeAll(async () => {
 		{
 			id: PHAK_25C_ID,
 			kind: REFERENCE_KINDS.HANDBOOK,
-			documentSlug: PHAK_SLUG,
+			documentSlug: phakSlugForRegistry,
 			edition: 'FAA-H-8083-25C',
 			title: "Pilot's Handbook of Aeronautical Knowledge (25C)",
 			publisher: 'FAA',
 			url: null,
-			supersededById: null,
 			seedOrigin: SUITE_TAG,
 			createdAt: now,
 			updatedAt: now,
@@ -147,17 +157,26 @@ beforeAll(async () => {
 		{
 			id: AFH_3C_ID,
 			kind: REFERENCE_KINDS.HANDBOOK,
-			documentSlug: AFH_SLUG,
+			documentSlug: afhSlugForRegistry,
 			edition: 'FAA-H-8083-3C',
 			title: 'Airplane Flying Handbook (3C)',
 			publisher: 'FAA',
 			url: null,
-			supersededById: null,
 			seedOrigin: SUITE_TAG,
 			createdAt: now,
 			updatedAt: now,
 		},
-	]);
+	];
+	await db.insert(reference).values(phakRows);
+
+	// Seed registry editions: PHAK 25B retired, PHAK 25C current, AFH 3C
+	// current. Mirrors the post-WP seed contract: the registry is the source
+	// of truth; the `notSupersededInRegistry` predicate consults these rows.
+	const phakSourceId = sourceIdForReference({ kind: 'handbook', documentSlug: phakSlugForRegistry }) as SourceId;
+	const afhSourceId = sourceIdForReference({ kind: 'handbook', documentSlug: afhSlugForRegistry }) as SourceId;
+	await upsertEdition({ sourceId: phakSourceId, editionLabel: 'FAA-H-8083-25B', publishedAt: now, retiredAt: now });
+	await upsertEdition({ sourceId: phakSourceId, editionLabel: 'FAA-H-8083-25C', publishedAt: now });
+	await upsertEdition({ sourceId: afhSourceId, editionLabel: 'FAA-H-8083-3C', publishedAt: now });
 
 	// PHAK-25C: chapter 12 with two sections, chapter 5 with one section. The
 	// codes mirror what the seed produces in Phase 9.
@@ -380,6 +399,10 @@ afterAll(async () => {
 	await db.delete(referenceFigure).where(eq(referenceFigure.seedOrigin, SUITE_TAG));
 	await db.delete(referenceSection).where(eq(referenceSection.seedOrigin, SUITE_TAG));
 	await db.delete(reference).where(eq(reference.seedOrigin, SUITE_TAG));
+	const phakSourceId = sourceIdForReference({ kind: 'handbook', documentSlug: PHAK_SLUG });
+	const afhSourceId = sourceIdForReference({ kind: 'handbook', documentSlug: AFH_SLUG });
+	await db.delete(editionsTable).where(eq(editionsTable.sourceId, phakSourceId));
+	await db.delete(editionsTable).where(eq(editionsTable.sourceId, afhSourceId));
 	await db.delete(bauthUser).where(eq(bauthUser.id, TEST_USER_ID));
 });
 
@@ -983,7 +1006,6 @@ describe('getOpenWarningsForReference', () => {
 			title: `AC 99-TEST ${SUITE_TOKEN}A`,
 			publisher: 'FAA',
 			url: null,
-			supersededById: null,
 			seedOrigin: SUITE_TAG,
 			createdAt: now,
 			updatedAt: now,
