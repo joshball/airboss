@@ -2,7 +2,7 @@
 title: 'Build Plan: Course Reader and Editor'
 feature: course-reader-and-editor
 type: build-plan
-status: in-progress
+status: complete
 created: 2026-05-09
 ---
 

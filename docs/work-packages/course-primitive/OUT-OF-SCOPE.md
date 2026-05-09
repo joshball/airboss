@@ -14,17 +14,17 @@ The source is the "Out" subsection of [spec.md](./spec.md) Scope + the "Out of s
 
 ## Summary
 
-| Item                                       | Status       | Trigger to revisit                                                  |
-| ------------------------------------------ | ------------ | ------------------------------------------------------------------- |
-| Course-to-course prerequisites             | Deferred     | When a second course needs to declare it requires another course    |
-| Parallel-ladder schema (track column)      | Deferred     | When two authored courses both need parallel tracks per section     |
-| Aux course attachment points               | Deferred     | When a course needs to attach optional supplements to a step        |
-| Per-node opt-out (goal_node_exclusion)     | Deferred     | When a learner asks to skip a specific node inside a goal           |
-| Course versioning / mutability semantics   | Deferred     | When goals start pinning to a course version, or rollback is needed |
-| Personal-course authoring UI               | Deferred     | When the learner-as-author use case earns its own WP                |
-| course.cert_alignment field                | Rejected     | Never -- see detail below                                           |
-| Course-step UI surfaces                    | Follow-on WP | When the course-reader-and-editor WP authors them                   |
-| Custom course-step kind on course_step row | Rejected     | Never -- see detail below                                           |
+| Item                                       | Status   | Trigger to revisit                                                  |
+| ------------------------------------------ | -------- | ------------------------------------------------------------------- |
+| Course-to-course prerequisites             | Deferred | When a second course needs to declare it requires another course    |
+| Parallel-ladder schema (track column)      | Deferred | When two authored courses both need parallel tracks per section     |
+| Aux course attachment points               | Deferred | When a course needs to attach optional supplements to a step        |
+| Per-node opt-out (goal_node_exclusion)     | Deferred | When a learner asks to skip a specific node inside a goal           |
+| Course versioning / mutability semantics   | Deferred | When goals start pinning to a course version, or rollback is needed |
+| Personal-course authoring UI               | Deferred | When the learner-as-author use case earns its own WP                |
+| course.cert_alignment field                | Rejected | Never -- see detail below                                           |
+| Course-step UI surfaces                    | Shipped  | course-reader-and-editor WP Phases 1-9                              |
+| Custom course-step kind on course_step row | Rejected | Never -- see detail below                                           |
 
 ## Course-to-course prerequisites
 
@@ -175,7 +175,7 @@ References:
 
 ## Course-step UI surfaces
 
-Status: Follow-on WP
+Status: Shipped (course-reader-and-editor WP, Phases 1-9)
 
 What was postponed:
 The actual study-app reader pages (`/courses`, `/courses/[slug]`, `/courses/[slug]/[stepCode]`) and the hangar-app editor pages (`/courses`, `/courses/[slug]`, `/courses/[slug]/sections/[code]`) that sit on top of the BC + lens. The course-primitive WP shipped data, BC helpers, lenses, the YAML pipeline, and the route constants -- but no SvelteKit pages.
@@ -183,14 +183,14 @@ The actual study-app reader pages (`/courses`, `/courses/[slug]`, `/courses/[slu
 Why:
 Per [spec.md](./spec.md) Out section: read-only lens output is sufficient for content authoring (the next WP authors weather content directly into YAML). UI is its own concern with its own scope, design tradeoffs, and review surface.
 
-Trigger that fires the follow-on:
-The follow-on WP is `course-reader-and-editor` (in flight as of 2026-05-09). It builds the dual UI on top of this WP's BC + lens + YAML pipeline. Once it ships, the pages exist; this entry resolves.
+Resolution:
+Built by the [course-reader-and-editor](../course-reader-and-editor/spec.md) WP. The follow-on shipped Phases 1-9: study reader (index + detail + step reader with cert-overlay surfaces, encoded-text ladder hints, transition rendering), hangar editor (index + manifest + section + step CRUD with the YAML-as-source-of-truth seed-pipeline integration), Courses block on the goal composer, and a chart stub component. This entry resolves.
 
 References:
 
 - [spec.md](./spec.md) Scope -> Out
 - [tasks.md](./tasks.md) Out of scope section
-- `docs/work-packages/course-reader-and-editor/spec.md` (the follow-on)
+- [course-reader-and-editor/spec.md](../course-reader-and-editor/spec.md) (the follow-on, shipped)
 
 ## Custom course-step kind on course_step row
 

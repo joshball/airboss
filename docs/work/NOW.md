@@ -7,7 +7,7 @@ Single entry point for "what should I work on?" in airboss.
 (Human-curated; the only hand-edited part of this file.)
 
 - `course-primitive` WP shipped (PRs #713, #721, #728, #730, #732, #734, #736, #737, #741, #742, #743; doc fixes #731, #739, #757 OOS extraction). Course is a peer primitive to Syllabus; weather-course content authoring unblocked.
-- `course-reader-and-editor` WP authored (PRs #760, #761) -- dual UI on top of course-primitive: study reader (`/courses` index + detail + step reader) and hangar editor (`/courses` index + course editor + section editor), plus Courses tab on `/program/goals/[id]`. Spec status `draft` pending walkthrough; `/ball-wp-build` dispatches happen in a separate session once human review signs off.
+- `course-reader-and-editor` WP authored (PRs #760, #761) and built across Phases 1-9 -- dual UI on top of course-primitive: study reader (`/courses` index + detail + step reader) and hangar editor (`/courses` index + manifest editor + section editor + step editor), plus Courses block on `/program/goals/[id]`. Phase 8 shipped a chart stub component for future WX chart embedding; per-tab encoded-text content is OOS. Pending Joshua's manual walkthrough; spec stays `draft` until `human_review_status: signed-off`.
 - `hangar-review-queue-cluster-fix` -- 24 e2e failures triaged; canonical Buffer-not-defined hydration leak (12 specs) + Postgres crash on `hangar.docs_search_index` (3 specs) are real bugs awaiting one focused investigation, not 12 patches.
 - Walkthroughs owed on shipped surfaces: cert-dashboard (#321), lens-ui (#323), goal-composer (#324). Code merged; `human_review_status: pending` on the WPs because no test plan has been walked.
 

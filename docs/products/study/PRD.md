@@ -7,15 +7,19 @@ Product requirements for the `apps/study` surface. The detailed feature specs li
 The study app ships five top-level sections, locked by the `ia-flow.spec.ts`
 nav contract and the `page-anchor` static guard:
 
-| Section   | Path           | Owns                                                    |
-| --------- | -------------- | ------------------------------------------------------- |
-| Home      | `/study`       | Daily CTA, today's session, pressure tiles              |
-| Learn     | `/study/learn` | Cards (`/memory`), Reps (`/reps`), Read (`/library`)    |
-| Program   | `/program`     | Quals / Goal / Plan / Coverage tabs                     |
-| Insights  | `/insights`    | Stats, Calibration, Lens (handbook + weakness)          |
-| Reference | `/reference`   | Knowledge graph, Glossary, Library link                 |
+| Section   | Path           | Owns                                                 |
+| --------- | -------------- | ---------------------------------------------------- |
+| Home      | `/study`       | Daily CTA, today's session, pressure tiles           |
+| Learn     | `/study/learn` | Cards (`/memory`), Reps (`/reps`), Read (`/library`) |
+| Program   | `/program`     | Quals / Goal / Plan / Coverage tabs                  |
+| Insights  | `/insights`    | Stats, Calibration, Lens (handbook + weakness)       |
+| Reference | `/reference`   | Knowledge graph, Glossary, Library link              |
 
 Memory and Reps URLs intentionally stay where they are; the Learn section is the unifying nav surface, not a relocation. Legacy paths (`/dashboard`, `/credentials`, `/goals`, `/plans`, `/calibration`, `/lens/*`, `/knowledge/*`, `/glossary/*`) 301-redirect to their canonical homes via `apps/study/src/lib/server/legacy-redirects.ts`. See work package: [study-app-ia-cleanup](../../.archive/work-packages/study-app-ia-cleanup/).
+
+## Course reader
+
+Instructor-authored courses live at `/courses` (index), `/courses/[slug]` (detail), and `/courses/[slug]/[stepCode]` (step reader). The detail page picks `courseLens` or `courseWithCertOverlayLens` based on whether the learner's primary goal holds at least one syllabus -- when active, the cert overlay surfaces "this step satisfies cert leaf X" chips on each step and a cert-gaps panel below the tree. The step reader renders the linked knowledge node body via the shared `KnowledgeNodeBody` component, with conditional rendering for transition-kind nodes (bridge styling) and encoded-text family nodes (Decode/Understand/Triage tab strip per `WX_DECODE_PRODUCT_SLUGS`). Goal composition gets a Courses block on `/program/goals/[id]` for adding instructor courses alongside syllabi and ad-hoc nodes (`addCourse`/`removeCourse`/`setCourseWeight` form actions). A `<CourseStepChart slug="..." />` component is shipped as a placeholder for future WX chart embedding. See work package: [course-reader-and-editor](../../work-packages/course-reader-and-editor/spec.md).
 
 ## Spaced rep adapts to recent sim performance
 
