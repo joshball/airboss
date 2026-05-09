@@ -6,8 +6,6 @@ import {
 	CITATION_SOURCE_TYPES,
 	type CitationSourceType,
 	domainLabel,
-	KNOWLEDGE_PHASE_LABELS,
-	type KnowledgePhase,
 	NODE_LIFECYCLE_LABELS,
 	NODE_MASTERY_GATE_LABELS,
 	type NodeMasteryGate,
@@ -20,7 +18,8 @@ import {
 } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import CitedByPanel, { type CitedByItem } from '@ab/ui/components/CitedByPanel.svelte';
-import { humanize, renderMarkdown } from '@ab/utils';
+import { humanize } from '@ab/utils';
+import KnowledgeNodeBody from '$lib/components/KnowledgeNodeBody.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -51,10 +50,6 @@ function sourceTypeLabel(type: CitationSourceType): string {
 	return CITATION_SOURCE_LABELS[type];
 }
 
-function phaseLabel(phase: string): string {
-	return (KNOWLEDGE_PHASE_LABELS as Record<KnowledgePhase, string>)[phase as KnowledgePhase] ?? humanize(phase);
-}
-
 function certLabel(slug: string): string {
 	return (CERT_LABELS as Record<Cert, string>)[slug as Cert] ?? slug;
 }
@@ -71,11 +66,6 @@ const masteryPct = $derived(Math.round(mastery.displayScore * 100));
 
 function gateLabel(gate: string): string {
 	return (NODE_MASTERY_GATE_LABELS as Record<NodeMasteryGate, string>)[gate as NodeMasteryGate] ?? gate;
-}
-
-function renderPhase(body: string | null): string {
-	if (!body) return '';
-	return renderMarkdown(body);
 }
 
 interface CitationDisplay {
@@ -331,26 +321,10 @@ const citedByItems = $derived<CitedByItem[]>(
 		</section>
 	{/if}
 
-	<section class="section phases" aria-label="Content phases">
+	<section class="section" aria-label="Content phases">
 		<h2>Content phases</h2>
-		{#each phases as p (p.phase)}
-			<article class="phase" aria-labelledby="phase-{p.phase}">
-				<h3 id="phase-{p.phase}" class="phase-title">{phaseLabel(p.phase)}</h3>
-				{#if p.body}
-					<div class="prose">{@html renderPhase(p.body)}</div>
-				{:else}
-					<p class="gap-body">Not yet authored.</p>
-				{/if}
-			</article>
-		{/each}
+		<KnowledgeNodeBody {phases} masteryCriteria={node.masteryCriteria} />
 	</section>
-
-	{#if node.masteryCriteria}
-		<section class="section" aria-label="Mastery criteria">
-			<h2>Mastery criteria</h2>
-			<div class="prose">{@html renderMarkdown(node.masteryCriteria)}</div>
-		</section>
-	{/if}
 
 	{#if referenceItems.length > 0}
 		<section class="section" aria-label="References">
@@ -699,81 +673,7 @@ const citedByItems = $derived<CitedByItem[]>(
 		font-size: var(--type-ui-caption-size);
 	}
 
-	.phases {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-md);
-	}
-
-	.phase {
-		background: var(--ink-inverse);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-lg);
-		padding: var(--space-lg) var(--space-lg);
-	}
-
-	.phase-title {
-		margin: 0 0 var(--space-sm);
-		font-size: var(--type-reading-body-size);
-		color: var(--ink-body);
-	}
-
-	.gap-body {
-		margin: 0;
-		color: var(--ink-faint);
-		font-style: italic;
-	}
-
-	.prose :global(h3),
-	.prose :global(h4),
-	.prose :global(h5) {
-		margin: var(--space-lg) 0 var(--space-sm);
-		color: var(--ink-body);
-	}
-
-	.prose :global(p) {
-		margin: 0 0 var(--space-md);
-		line-height: 1.55;
-		color: var(--ink-body);
-	}
-
-	.prose :global(ul),
-	.prose :global(ol) {
-		margin: 0 0 var(--space-md) var(--space-xl);
-		line-height: 1.55;
-		color: var(--ink-body);
-	}
-
-	.prose :global(li) {
-		margin-bottom: var(--space-2xs);
-	}
-
-	.prose :global(code) {
-		font-family: var(--font-family-mono);
-		font-size: var(--type-ui-label-size);
-		background: var(--surface-sunken);
-		padding: 0 var(--space-xs);
-		border-radius: var(--radius-xs);
-	}
-
-	.prose :global(pre) {
-		background: var(--ink-body);
-		color: var(--edge-default);
-		padding: var(--space-md) var(--space-lg);
-		border-radius: var(--radius-md);
-		overflow-x: auto;
-		font-size: var(--type-ui-label-size);
-	}
-
-	.prose :global(pre code) {
-		background: transparent;
-		padding: 0;
-		color: inherit;
-	}
-
-	.prose :global(a) {
-		color: var(--action-default-hover);
-	}
+	/* Content phases + mastery-criteria styles moved to KnowledgeNodeBody.svelte */
 
 	.refs {
 		list-style: none;
