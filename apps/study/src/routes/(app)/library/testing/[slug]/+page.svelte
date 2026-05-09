@@ -8,6 +8,12 @@ import type { PageData } from './$types';
 let { data }: { data: PageData } = $props();
 
 const isAcs = $derived(data.reference.testingKind === LIBRARY_TESTING_KINDS.ACS);
+// ACS publications have a flightbag reader (`/acs/<doc>`); PTS doesn't yet
+// have an in-app reader, so PtsCard never gets an `href`. The link crosses
+// subdomains (study -> flightbag), so prefix the route helper with the
+// layout-resolved flightbag origin instead of letting the relative path
+// resolve against study.airboss.test.
+const acsHref = $derived(isAcs ? `${data.flightbagOrigin}${ROUTES.FLIGHTBAG_ACS(data.reference.documentSlug)}` : null);
 </script>
 
 <svelte:head>
@@ -32,6 +38,7 @@ const isAcs = $derived(data.reference.testingKind === LIBRARY_TESTING_KINDS.ACS)
 			edition={data.reference.edition}
 			description={data.copy.description ?? null}
 			whyItMatters={data.copy.whyItMatters ?? null}
+			href={acsHref}
 			external={data.external}
 		/>
 	{:else}
