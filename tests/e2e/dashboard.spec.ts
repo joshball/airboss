@@ -54,7 +54,10 @@ test.describe('dashboard', () => {
 		await expect(page).toHaveURL((url) => url.pathname === ROUTES.LEARN);
 
 		await nav.getByRole('link', { name: 'Program', exact: true }).click();
-		await expect(page).toHaveURL((url) => url.pathname === ROUTES.PROGRAM);
+		// `/program` server-redirects to its default sub-tab (Goal / Quals /
+		// Plan / Coverage) per the IA-cleanup Phase 2 loader, so accept any
+		// `/program/*` landing rather than the bare index URL.
+		await expect(page).toHaveURL((url) => url.pathname.startsWith(`${ROUTES.PROGRAM}/`));
 
 		await nav.getByRole('link', { name: 'Reference', exact: true }).click();
 		await expect(page).toHaveURL((url) => url.pathname === ROUTES.REFERENCE);

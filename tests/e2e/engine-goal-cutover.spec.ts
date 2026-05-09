@@ -127,18 +127,20 @@ test.describe('engine-goal-cutover -- plan-creation submit redirects to goal com
 		// mode / length so the form is submittable as-is.
 		await page.getByRole('button', { name: /create plan/i }).click();
 
-		// Land somewhere under /goals. The exact path depends on whether the
-		// learner has a primary goal: GOAL_EDIT(primary) when one exists,
-		// GOALS_NEW otherwise. Both are correct post-cutover behavior.
-		await page.waitForURL(/\/goals(?:\/|$)/);
+		// Land somewhere under /program/goals. The exact path depends on
+		// whether the learner has a primary goal: PROGRAM_GOAL(primary) with
+		// `?edit=1` when one exists, PROGRAM_GOALS_NEW otherwise. Both are
+		// correct post-cutover behavior. The URL family is `/program/goals/...`
+		// post-IA-cleanup (previously `/goals/...`).
+		await page.waitForURL(/\/program\/goals(?:\/|$)/);
 		const url = new URL(page.url());
-		expect(url.pathname.startsWith('/goals')).toBe(true);
+		expect(url.pathname.startsWith('/program/goals')).toBe(true);
 
 		const onEdit = url.searchParams.get(QUERY_PARAMS.EDIT) === '1';
 		const onNew = url.pathname === ROUTES.PROGRAM_GOALS_NEW;
 		expect(
 			onEdit || onNew,
-			`expected /goals/<id>?edit=1 or ${ROUTES.PROGRAM_GOALS_NEW}, got ${url.pathname}${url.search}`,
+			`expected /program/goals/<id>?edit=1 or ${ROUTES.PROGRAM_GOALS_NEW}, got ${url.pathname}${url.search}`,
 		).toBe(true);
 
 		// Page should render either the goal detail/edit heading (existing
@@ -214,10 +216,11 @@ test.describe('engine-goal-cutover -- cross-flow plan -> goal composer link', ()
 		await expect(composerLink).toBeVisible();
 		await composerLink.click();
 
-		// Expect to land on /goals/<id>?edit=1 or /goals/new.
-		await page.waitForURL(/\/goals(?:\/|$)/);
+		// Expect to land on /program/goals/<id>?edit=1 or /program/goals/new.
+		// The URL family is `/program/goals/...` post-IA-cleanup.
+		await page.waitForURL(/\/program\/goals(?:\/|$)/);
 		const url = new URL(page.url());
-		expect(url.pathname.startsWith('/goals')).toBe(true);
+		expect(url.pathname.startsWith('/program/goals')).toBe(true);
 
 		const onEdit = url.searchParams.get(QUERY_PARAMS.EDIT) === '1';
 		const onNew = url.pathname === ROUTES.PROGRAM_GOALS_NEW;
