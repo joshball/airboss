@@ -1,0 +1,273 @@
+area:
+  code: I
+  ordinal: 1
+  title: Preflight Preparation
+  airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-01?at=2023-11'
+  citations: []
+
+# Only Task C (Weather Information) is transcribed in this PR. Tasks A
+# (Pilot Qualifications), B (Airworthiness Requirements), D (Cross-Country
+# Flight Planning), E (National Airspace System), F (Performance and
+# Limitations), G (Operation of Systems), and H (Human Factors) land in
+# follow-on PRs. Task ordinals reserve A=1, B=2, C=3 etc. so future
+# transcriptions slot in without renumbering.
+tasks:
+  - code: I.C
+    ordinal: 3
+    title: Weather Information
+    airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-01/task-c?at=2023-11'
+    classes: null
+    references:
+      - 14 CFR part 91
+      - 14 CFR part 121
+      - 14 CFR part 125
+      - 14 CFR part 135
+      - FAA-H-8083-2 (Risk Management Handbook)
+      - FAA-H-8083-25 (Pilot's Handbook of Aeronautical Knowledge)
+      - FAA-H-8083-28 (Aviation Weather Handbook)
+      - AC 00-6 (Aviation Weather)
+      - AC 00-45 (Aviation Weather Services)
+      - AIM
+    objective: |
+      To determine the applicant exhibits satisfactory knowledge, risk
+      management, and skills associated with weather information for a
+      flight under VFR.
+    elements:
+      - code: I.C.K1
+        triad: knowledge
+        ordinal: 1
+        required_bloom: understand
+        title: Sources of weather data for flight planning purposes.
+        description: |
+          Sources of weather data (e.g., National Weather Service, Flight
+          Service) for flight planning purposes.
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-01/task-c/elem-k01?at=2023-11'
+
+      - code: I.C.K2
+        triad: knowledge
+        ordinal: 2
+        required_bloom: understand
+        title: Acceptable weather products and resources for preflight planning.
+        description: |
+          Acceptable weather products and resources required for preflight
+          planning, current and forecast weather for departure, en route, and
+          arrival phases of flight such as:
+            a. Airport Observations (METAR and SPECI) and Pilot Observations (PIREP)
+            b. Surface Analysis Chart, Ceiling and Visibility Chart (CVA)
+            c. Terminal Aerodrome Forecasts (TAF)
+            d. Graphical Forecasts for Aviation (GFA)
+            e. Wind and Temperature Aloft Forecast (FB)
+            f. Convective Outlook (AC)
+            g. Inflight Aviation Weather Advisories including Airmen's Meteorological Information (AIRMET), Significant Meteorological Information (SIGMET), and Convective SIGMET
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-01/task-c/elem-k02?at=2023-11'
+
+      - code: I.C.K3
+        triad: knowledge
+        ordinal: 3
+        required_bloom: understand
+        title: Meteorology applicable to departure, en route, alternate, and destination under VFR.
+        description: |
+          Meteorology applicable to the departure, en route, alternate, and
+          destination under VFR in Class D, E, and G airspace, to include
+          expected climate and hazardous conditions such as:
+            a. Atmospheric composition and stability
+            b. Wind (e.g., crosswind, tailwind, windshear, mountain wave, etc.)
+            c. Temperature and moisture
+            d. Precipitation
+            e. Weather system formation, including air masses and fronts
+            f. Clouds
+            g. Turbulence
+            h. Thunderstorms and microbursts
+            i. Icing and freezing level information
+            j. Fog/mist
+            k. Frost
+            l. Obstructions to visibility (e.g., smoke, haze, volcanic ash, etc.)
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-01/task-c/elem-k03?at=2023-11'
+
+      - code: I.C.K4
+        triad: knowledge
+        ordinal: 4
+        required_bloom: understand
+        title: Flight deck displays of digital weather and aeronautical information.
+        description: Flight deck displays of digital weather and aeronautical information.
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-01/task-c/elem-k04?at=2023-11'
+
+      - code: I.C.R1
+        triad: risk_management
+        ordinal: 5
+        required_bloom: apply
+        title: Factors involved in making the go/no-go and continue/divert decisions.
+        description: |
+          Factors involved in making the go/no-go and continue/divert
+          decisions, to include:
+            a. Circumstances that would make diversion prudent
+            b. Personal weather minimums
+            c. Hazardous weather conditions to include known or forecast icing or turbulence aloft
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-01/task-c/elem-r01?at=2023-11'
+
+      - code: I.C.R2
+        triad: risk_management
+        ordinal: 6
+        required_bloom: apply
+        title: Limitations of onboard weather equipment, weather reports/forecasts, and inflight weather resources.
+        description: |
+          Limitations of:
+            a. Onboard weather equipment
+            b. Aviation weather reports and forecasts
+            c. Inflight weather resources
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-01/task-c/elem-r02?at=2023-11'
+
+      - code: I.C.S1
+        triad: skill
+        ordinal: 7
+        required_bloom: apply
+        title: Use available aviation weather resources to obtain an adequate weather briefing.
+        description: Use available aviation weather resources to obtain an adequate weather briefing.
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-01/task-c/elem-s01?at=2023-11'
+
+      - code: I.C.S2
+        triad: skill
+        ordinal: 8
+        required_bloom: apply
+        title: Analyze the implications of at least three meteorological conditions from K3.
+        description: |
+          Analyze the implications of at least three of the conditions listed
+          in K3a through K3l, using actual weather or weather conditions
+          scenario provided by the evaluator.
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-01/task-c/elem-s02?at=2023-11'
+
+      - code: I.C.S3
+        triad: skill
+        ordinal: 9
+        required_bloom: apply
+        title: Correlate weather information to make a competent go/no-go decision.
+        description: Correlate weather information to make a competent go/no-go decision.
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-01/task-c/elem-s03?at=2023-11'
+
+# Knowledge graph links: which course/knowledge nodes does each Task C
+# element-leaf exercise. `weight` defaults to 1.0; downweight when partial
+# coverage. Multiple links per leaf are encouraged when an element spans
+# several products or phenomena (K2 and K3 in particular).
+knowledge_links:
+  I.C.K1:
+    - node_id: wx-data-sources
+      weight: 1.0
+      notes: K1 sources of weather data -- direct match.
+    - node_id: wx-briefing-execution
+      weight: 0.5
+      notes: Sources resolve to a briefing flow; the procedural counterpart.
+
+  I.C.K2:
+    - node_id: wx-reading-metars-tafs
+      weight: 0.7
+      notes: K2a (METAR) and K2c (TAF) decode -- direct match.
+    - node_id: wx-product-pireps
+      weight: 0.6
+      notes: K2a PIREPs -- decode + when to file/use.
+    - node_id: wx-product-surface-analysis-and-cva
+      weight: 0.6
+      notes: K2b Surface Analysis Chart and Ceiling/Visibility Chart.
+    - node_id: wx-product-gfa
+      weight: 0.7
+      notes: K2d Graphical Forecasts for Aviation.
+    - node_id: wx-product-winds-aloft
+      weight: 0.7
+      notes: K2e Wind and Temperature Aloft Forecast (FB).
+    - node_id: wx-product-convective-outlook
+      weight: 0.5
+      notes: K2f Convective Outlook (AC).
+    - node_id: wx-product-airmets-sigmets
+      weight: 0.9
+      notes: K2g AIRMET / SIGMET / Convective SIGMET decode and use.
+
+  I.C.K3:
+    - node_id: wx-stability-and-instability
+      weight: 0.9
+      notes: K3a atmospheric composition and stability.
+    - node_id: wx-wind-systems
+      weight: 0.9
+      notes: K3b wind, crosswind, tailwind, windshear, mountain wave.
+    - node_id: wx-clouds-and-precipitation
+      weight: 0.9
+      notes: K3c (temperature/moisture), K3d (precipitation), K3f (clouds).
+    - node_id: wx-airmasses-and-fronts
+      weight: 0.9
+      notes: K3e weather system formation, air masses and fronts.
+    - node_id: wx-turbulence-types
+      weight: 0.8
+      notes: K3g turbulence types and their causes.
+    - node_id: wx-thunderstorm-hazards
+      weight: 1.0
+      notes: K3h thunderstorms and microbursts -- direct match.
+    - node_id: wx-icing-types-and-avoidance
+      weight: 1.0
+      notes: K3i icing and freezing-level information -- direct match.
+    - node_id: wx-fog-and-visibility-obstructions
+      weight: 0.9
+      notes: K3j (fog/mist), K3k (frost), K3l (smoke / haze / volcanic ash).
+
+  I.C.K4:
+    - node_id: wx-flight-deck-weather-displays
+      weight: 1.0
+      notes: K4 flight-deck digital weather displays -- direct match. Latency, NEXRAD interpretation pitfalls.
+
+  I.C.R1:
+    - node_id: wx-go-nogo-decision
+      weight: 1.0
+      notes: R1 go/no-go and divert decision framework.
+    - node_id: wx-personal-minimums
+      weight: 0.9
+      notes: R1b personal weather minimums.
+    - node_id: wx-icing-types-and-avoidance
+      weight: 0.5
+      notes: R1c known/forecast icing as a hazard input to the decision.
+    - node_id: wx-turbulence-types
+      weight: 0.4
+      notes: R1c forecast turbulence aloft as a hazard input to the decision.
+
+  I.C.R2:
+    - node_id: wx-equipment-and-data-limitations
+      weight: 1.0
+      notes: R2 limitations of onboard equipment, reports/forecasts, and inflight resources -- direct match.
+    - node_id: wx-flight-deck-weather-displays
+      weight: 0.5
+      notes: R2a onboard weather equipment is the same display surface K4 covers; the limitations framing is what R2 adds.
+
+  I.C.S1:
+    - node_id: wx-briefing-execution
+      weight: 1.0
+      notes: S1 obtain an adequate weather briefing -- direct match.
+    - node_id: wx-data-sources
+      weight: 0.5
+      notes: Skill leans on the source taxonomy from K1.
+
+  I.C.S2:
+    - node_id: wx-stability-and-instability
+      weight: 0.4
+      notes: S2 analysis of K3 conditions -- one of several K3 nodes the skill exercises.
+    - node_id: wx-airmasses-and-fronts
+      weight: 0.4
+      notes: S2 analysis of K3 conditions -- frontal mechanics.
+    - node_id: wx-thunderstorm-hazards
+      weight: 0.4
+      notes: S2 analysis of K3 conditions -- convective hazard interpretation.
+    - node_id: wx-icing-types-and-avoidance
+      weight: 0.4
+      notes: S2 analysis of K3 conditions -- icing scenario interpretation.
+    - node_id: wx-wind-systems
+      weight: 0.4
+      notes: S2 analysis of K3 conditions -- wind / crosswind / shear interpretation.
+    - node_id: wx-clouds-and-precipitation
+      weight: 0.4
+      notes: S2 analysis of K3 conditions -- cloud and precipitation interpretation.
+
+  I.C.S3:
+    - node_id: wx-go-nogo-decision
+      weight: 1.0
+      notes: S3 correlate weather to a competent go/no-go decision -- direct match.
+    - node_id: wx-personal-minimums
+      weight: 0.6
+      notes: S3 decision floor is set by personal minimums.
+    - node_id: proc-adm-hazardous-attitudes
+      weight: 0.5
+      notes: S3 ADM framework around the go/no-go decision (anti-authority, machismo, etc.).
