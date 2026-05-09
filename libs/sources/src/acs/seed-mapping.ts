@@ -2,42 +2,41 @@
  * ACS seed mapping registry (WP-ACS-V).
  *
  * The ACS ingest pipeline writes manifests under
- * `acs/<slug>/manifest.json` where `<slug>` is the locked-Q7 publication
- * slug (`<rating>-airplane-<edition>`, e.g. `ppl-airplane-6c`,
- * `cfi-airplane-25`). The DB-side `study.reference` rows are authored in
- * `course/references/acs-pts.yaml` with a presentation-friendly shape:
- * `document_slug` like `ppl-airplane-acs-6c` (carries an explicit `acs`
- * infix) and `edition` like `FAA-S-ACS-6C` (the canonical FAA designator).
+ * `acs/<slug>/manifest.json` where `<slug>` is the canonical publication
+ * slug (`<rating>-airplane-acs-<edition>`, e.g. `ppl-airplane-acs-6c`,
+ * `cfi-airplane-acs-25`). The DB-side `study.reference` rows are authored
+ * in `course/references/acs-pts.yaml` and use the SAME slug shape, so the
+ * `manifestSlug` and `documentSlug` are equal for every production ACS.
  *
- * The mismatch is "broad-survey gap 2" from the library-completeness
- * status snapshot: the `-acs-` infix in the YAML slug is missing from the
- * manifest slug. This registry is the explicit bridge.
+ * The remaining bridge value of this registry is the canonical FAA
+ * `edition` designator (`FAA-S-ACS-6C`, `FAA-S-ACS-25`, ...) which is
+ * authored, not computed: some FAA publications have lettered editions
+ * (`6C`) and some don't (`25`), and the YAML row is the source of truth
+ * for the exact edition string.
  *
  * The seed adapter (`libs/bc/study/src/seeders/acs.ts`) looks up the
  * manifest slug on each manifest it processes and uses the returned
- * (documentSlug, edition) to upsert the right `reference` row. A manifest
- * with no entry in this registry is a clear seed-time error -- the YAML
- * row must exist for the ACS to land as a readable card.
+ * `edition` (and `documentSlug`, which is the same value) to upsert the
+ * right `reference` row. A manifest with no entry in this registry is a
+ * clear seed-time error -- the YAML row must exist for the ACS to land as
+ * a readable card.
+ *
+ * Tests register synthetic mappings via `__acs_seed_mapping_internal__`
+ * with `manifestSlug !== documentSlug` to exercise the dispatcher's
+ * slug-translation path; the registry preserves the two-field shape so
+ * those tests stay green.
  *
  * Adding a new ACS publication:
  *   1. Run the ACS ingest pipeline so the manifest lands at
  *      `acs/<slug>/manifest.json`.
  *   2. Add the corresponding row to `course/references/acs-pts.yaml`.
  *   3. Add the (manifestSlug) -> (documentSlug, edition) entry here.
- *
- * The registry is hand-authored (vs derived from the YAML or from the
- * detected-edition map in `ingest.ts`) so we have a single review surface
- * for "this ACS is now readable" deltas. The slug-mapping rule is
- * deterministic (insert `-acs-` before the trailing edition suffix), but
- * the canonical FAA edition string (`FAA-S-ACS-6C`, `FAA-S-ACS-25`) is
- * authored, not computed -- some FAA publications have lettered editions
- * (`6C`) and some don't (`25`), and the YAML rows are the source of truth.
  */
 
 export interface AcsSeedMappingEntry {
-	/** On-disk manifest slug under `acs/<slug>/`. Locked-Q7 format: `<rating>-airplane-<edition>`. */
+	/** On-disk manifest slug under `acs/<slug>/`. Canonical format: `<rating>-airplane-acs-<edition>`. */
 	readonly manifestSlug: string;
-	/** DB `study.reference.document_slug` (matches `course/references/acs-pts.yaml`). */
+	/** DB `study.reference.document_slug` (matches `course/references/acs-pts.yaml`). Equal to `manifestSlug` for production rows. */
 	readonly documentSlug: string;
 	/** DB `study.reference.edition` (matches `course/references/acs-pts.yaml`). */
 	readonly edition: string;
@@ -46,13 +45,14 @@ export interface AcsSeedMappingEntry {
 /**
  * Production registry. Keep aligned with `course/references/acs-pts.yaml`
  * and `ACS_DETECTED_EDITION_TO_SLUG` in `libs/sources/src/acs/ingest.ts`.
+ * `manifestSlug === documentSlug` for every production ACS.
  */
 const BUILT_IN_ACS_SEED_MAPPINGS: readonly AcsSeedMappingEntry[] = [
-	{ manifestSlug: 'ppl-airplane-6c', documentSlug: 'ppl-airplane-acs-6c', edition: 'FAA-S-ACS-6C' },
-	{ manifestSlug: 'ir-airplane-8c', documentSlug: 'ir-airplane-acs-8c', edition: 'FAA-S-ACS-8C' },
-	{ manifestSlug: 'cpl-airplane-7b', documentSlug: 'cpl-airplane-acs-7b', edition: 'FAA-S-ACS-7B' },
-	{ manifestSlug: 'cfi-airplane-25', documentSlug: 'cfi-airplane-acs-25', edition: 'FAA-S-ACS-25' },
-	{ manifestSlug: 'atp-airplane-11a', documentSlug: 'atp-airplane-acs-11a', edition: 'FAA-S-ACS-11A' },
+	{ manifestSlug: 'ppl-airplane-acs-6c', documentSlug: 'ppl-airplane-acs-6c', edition: 'FAA-S-ACS-6C' },
+	{ manifestSlug: 'ir-airplane-acs-8c', documentSlug: 'ir-airplane-acs-8c', edition: 'FAA-S-ACS-8C' },
+	{ manifestSlug: 'cpl-airplane-acs-7b', documentSlug: 'cpl-airplane-acs-7b', edition: 'FAA-S-ACS-7B' },
+	{ manifestSlug: 'cfi-airplane-acs-25', documentSlug: 'cfi-airplane-acs-25', edition: 'FAA-S-ACS-25' },
+	{ manifestSlug: 'atp-airplane-acs-11a', documentSlug: 'atp-airplane-acs-11a', edition: 'FAA-S-ACS-11A' },
 ];
 
 /**

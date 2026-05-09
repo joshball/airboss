@@ -95,19 +95,21 @@ describe('urlForReference -- ac', () => {
 
 describe('urlForReference -- acs', () => {
 	it('maps an ACS task URI to FLIGHTBAG_ACS_TASK', () => {
-		expect(urlForReference(id('airboss-ref:acs/ppl-airplane-6c/area-01/task-a'))).toBe(
-			ROUTES.FLIGHTBAG_ACS_TASK('ppl-airplane-6c', '01', 'a'),
+		expect(urlForReference(id('airboss-ref:acs/ppl-airplane-acs-6c/area-01/task-a'))).toBe(
+			ROUTES.FLIGHTBAG_ACS_TASK('ppl-airplane-acs-6c', '01', 'a'),
 		);
 	});
 
 	it('element-depth ACS URI resolves to the parent task', () => {
-		expect(urlForReference(id('airboss-ref:acs/ppl-airplane-6c/area-01/task-a/elem-k01'))).toBe(
-			ROUTES.FLIGHTBAG_ACS_TASK('ppl-airplane-6c', '01', 'a'),
+		expect(urlForReference(id('airboss-ref:acs/ppl-airplane-acs-6c/area-01/task-a/elem-k01'))).toBe(
+			ROUTES.FLIGHTBAG_ACS_TASK('ppl-airplane-acs-6c', '01', 'a'),
 		);
 	});
 
 	it('whole-publication ACS URI maps to the publication landing', () => {
-		expect(urlForReference(id('airboss-ref:acs/ppl-airplane-6c'))).toBe(ROUTES.FLIGHTBAG_ACS('ppl-airplane-6c'));
+		expect(urlForReference(id('airboss-ref:acs/ppl-airplane-acs-6c'))).toBe(
+			ROUTES.FLIGHTBAG_ACS('ppl-airplane-acs-6c'),
+		);
 	});
 });
 

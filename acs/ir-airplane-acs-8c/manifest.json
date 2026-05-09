@@ -2,7 +2,7 @@
   "kind": "acs",
   "schema_version": 1,
   "corpus": "acs",
-  "slug": "ir-airplane-8c",
+  "slug": "ir-airplane-acs-8c",
   "title": "Instrument Rating – Airplane ACS",
   "publisher": "FAA",
   "publication_date": "2023-11-01",
@@ -18,7 +18,7 @@
         {
           "task": "a",
           "title": "Pilot Qualifications",
-          "body_path": "acs/ir-airplane-8c/area-01/task-a.md",
+          "body_path": "acs/ir-airplane-acs-8c/area-01/task-a.md",
           "body_sha256": "9ea68ddd528c5c2b4add36ac1c284e072788b4096d6a0c24763caac0fc1bed2f",
           "elements": [
             {
@@ -74,7 +74,7 @@
         {
           "task": "b",
           "title": "Weather Information",
-          "body_path": "acs/ir-airplane-8c/area-01/task-b.md",
+          "body_path": "acs/ir-airplane-acs-8c/area-01/task-b.md",
           "body_sha256": "30395fefcdd2c02ddf2f8261ba8f026bac14c61bc59c807c880f074a1c4cbd4f",
           "elements": [
             {
@@ -94,7 +94,7 @@
         {
           "task": "c",
           "title": "Cross-Country Flight Planning",
-          "body_path": "acs/ir-airplane-8c/area-01/task-c.md",
+          "body_path": "acs/ir-airplane-acs-8c/area-01/task-c.md",
           "body_sha256": "244aada1dd060bbe8d96d2285be2b62814101c604d75f708118be2f6b01575e6",
           "elements": [
             {
@@ -174,7 +174,7 @@
         {
           "task": "a",
           "title": "Aircraft Systems Related to Instrument Flight Rules (IFR) Operations",
-          "body_path": "acs/ir-airplane-8c/area-02/task-a.md",
+          "body_path": "acs/ir-airplane-acs-8c/area-02/task-a.md",
           "body_sha256": "d0495cee6f13eea493998509631f7c6141029d8993b38b514273189e9fb01924",
           "elements": [
             {
@@ -224,7 +224,7 @@
         {
           "task": "b",
           "title": "Aircraft Flight Instruments and Navigation Equipment",
-          "body_path": "acs/ir-airplane-8c/area-02/task-b.md",
+          "body_path": "acs/ir-airplane-acs-8c/area-02/task-b.md",
           "body_sha256": "e0b9ebc34fecaee3ab847faa0c348fbc5bedcbb0dabeb3ad372d385f312cb053",
           "elements": [
             {
@@ -244,7 +244,7 @@
         {
           "task": "c",
           "title": "Instrument Flight Deck Check",
-          "body_path": "acs/ir-airplane-8c/area-02/task-c.md",
+          "body_path": "acs/ir-airplane-acs-8c/area-02/task-c.md",
           "body_sha256": "a42ec2c6d4391d8b65f7dc9f0b530aab183de274f178e822d5a45a72c6879451",
           "elements": [
             {
@@ -294,7 +294,7 @@
         {
           "task": "a",
           "title": "Compliance with Air Traffic Control Clearances",
-          "body_path": "acs/ir-airplane-8c/area-03/task-a.md",
+          "body_path": "acs/ir-airplane-acs-8c/area-03/task-a.md",
           "body_sha256": "4b8c886d60cd3a318501169cc126108206cf321e72070d4b7edd90fcf7f74886",
           "elements": [
             {
@@ -386,7 +386,7 @@
         {
           "task": "b",
           "title": "Holding Procedures",
-          "body_path": "acs/ir-airplane-8c/area-03/task-b.md",
+          "body_path": "acs/ir-airplane-acs-8c/area-03/task-b.md",
           "body_sha256": "8ce693ac81e445c7007e6b45ccebca7179df29173d4d11e16791987fb645960b",
           "elements": []
         }
@@ -399,7 +399,7 @@
         {
           "task": "a",
           "title": "Instrument Flight",
-          "body_path": "acs/ir-airplane-8c/area-04/task-a.md",
+          "body_path": "acs/ir-airplane-acs-8c/area-04/task-a.md",
           "body_sha256": "34fb376c5534fe5ccd93d924e9cc4293e3312273c7d1a2bf79eeed1af4b5ae8e",
           "elements": [
             {
@@ -455,7 +455,7 @@
         {
           "task": "b",
           "title": "Recovery from Unusual Flight Attitudes",
-          "body_path": "acs/ir-airplane-8c/area-04/task-b.md",
+          "body_path": "acs/ir-airplane-acs-8c/area-04/task-b.md",
           "body_sha256": "9905458b01951337083422d7d7523e2a5ee80909473e11e360f03c6b61f6e765",
           "elements": [
             {
@@ -493,7 +493,7 @@
         {
           "task": "a",
           "title": "Intercepting and Tracking Navigational Systems and DME Arcs",
-          "body_path": "acs/ir-airplane-8c/area-05/task-a.md",
+          "body_path": "acs/ir-airplane-acs-8c/area-05/task-a.md",
           "body_sha256": "b4cd298deb96f913f468c19d4ef4c9cd84087b956d8ffd19462216968d28308c",
           "elements": [
             {
@@ -591,7 +591,7 @@
         {
           "task": "b",
           "title": "Departure, En Route, and Arrival Operations",
-          "body_path": "acs/ir-airplane-8c/area-05/task-b.md",
+          "body_path": "acs/ir-airplane-acs-8c/area-05/task-b.md",
           "body_sha256": "a3e8a2228827f09c8072c52082b2d98ab1f9e86664025f7ec07fee74ab4384cb",
           "elements": [
             {
@@ -695,7 +695,7 @@
         {
           "task": "a",
           "title": "Non-precision Approach",
-          "body_path": "acs/ir-airplane-8c/area-06/task-a.md",
+          "body_path": "acs/ir-airplane-acs-8c/area-06/task-a.md",
           "body_sha256": "4fa7097a65a53c185064261aa659cea8c90a80e7261323e8c9086a1c4b778a0c",
           "elements": [
             {
@@ -811,7 +811,7 @@
         {
           "task": "b",
           "title": "Precision Approach",
-          "body_path": "acs/ir-airplane-8c/area-06/task-b.md",
+          "body_path": "acs/ir-airplane-acs-8c/area-06/task-b.md",
           "body_sha256": "5e9f8ff061ca291c65c41bddb1a09e5d9ed1beb1cb5e94a410a7ecdfac645cd7",
           "elements": [
             {
@@ -873,21 +873,21 @@
         {
           "task": "c",
           "title": "Missed Approach",
-          "body_path": "acs/ir-airplane-8c/area-06/task-c.md",
+          "body_path": "acs/ir-airplane-acs-8c/area-06/task-c.md",
           "body_sha256": "21c1d2df3236c4856009b4ddd5dd4c4e9b2aec14538706c62db1ca4f2f235ba8",
           "elements": []
         },
         {
           "task": "d",
           "title": "Circling Approach",
-          "body_path": "acs/ir-airplane-8c/area-06/task-d.md",
+          "body_path": "acs/ir-airplane-acs-8c/area-06/task-d.md",
           "body_sha256": "8c5b51e9b5dfe53baa6e672e9716462a31b8c10578a8208f6ed5cba64690c267",
           "elements": []
         },
         {
           "task": "e",
           "title": "Landing from an Instrument Approach",
-          "body_path": "acs/ir-airplane-8c/area-06/task-e.md",
+          "body_path": "acs/ir-airplane-acs-8c/area-06/task-e.md",
           "body_sha256": "11697a7547bcf0630bd4e3d438671f9082bd8278969b3c76a0fa402081d3954a",
           "elements": []
         }
@@ -900,7 +900,7 @@
         {
           "task": "a",
           "title": "Loss of Communications",
-          "body_path": "acs/ir-airplane-8c/area-07/task-a.md",
+          "body_path": "acs/ir-airplane-acs-8c/area-07/task-a.md",
           "body_sha256": "4acfee2ab0e4292a862f2c1e95cf12282dc588e5549d13b48eaf7ff5db74ed4b",
           "elements": [
             {
@@ -956,7 +956,7 @@
         {
           "task": "b",
           "title": "One Engine Inoperative (Simulated) during Straight-and-Level Flight and Turns (AMEL, AMES)",
-          "body_path": "acs/ir-airplane-8c/area-07/task-b.md",
+          "body_path": "acs/ir-airplane-acs-8c/area-07/task-b.md",
           "body_sha256": "74f8aaed7e3e259f3017b0b1b723ca89faf13459206617b3ea64a51aeea9c232",
           "elements": [
             {
@@ -1000,7 +1000,7 @@
         {
           "task": "c",
           "title": "Instrument Approach and Landing with an Inoperative Engine (Simulated) (AMEL, AMES)",
-          "body_path": "acs/ir-airplane-8c/area-07/task-c.md",
+          "body_path": "acs/ir-airplane-acs-8c/area-07/task-c.md",
           "body_sha256": "d1067e7d69bd92479394adeb12f418b83fbb2a86001ee1a3820576d60e01e87e",
           "elements": [
             {
@@ -1038,7 +1038,7 @@
         {
           "task": "d",
           "title": "Approach with Loss of Primary Flight Instrument Indicators",
-          "body_path": "acs/ir-airplane-8c/area-07/task-d.md",
+          "body_path": "acs/ir-airplane-acs-8c/area-07/task-d.md",
           "body_sha256": "504e490a47866b697a476805ea41338df841e547c90d7a1ea161c41878772424",
           "elements": [
             {
@@ -1064,7 +1064,7 @@
         {
           "task": "a",
           "title": "Checking Instruments and Equipment",
-          "body_path": "acs/ir-airplane-8c/area-08/task-a.md",
+          "body_path": "acs/ir-airplane-acs-8c/area-08/task-a.md",
           "body_sha256": "347bc86a13081b0d8a045ca19b1bb87cd08098530ee09c85a6d6a134e5175721",
           "elements": [
             {

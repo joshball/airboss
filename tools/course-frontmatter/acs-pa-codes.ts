@@ -2,7 +2,7 @@
  * Canonical leaf codes for the FAA Private Pilot -- Airplane ACS
  * (FAA-S-ACS-6C). Used by the course-frontmatter validator so a lesson
  * may cite an ACS leaf the seed doesn't yet carry: the seed pipeline
- * (`course/syllabi/ppl-airplane-6c/`) only ingests Area V today, but
+ * (`course/syllabi/ppl-airplane-acs-6c/`) only ingests Area V today, but
  * the FAR-navigation course's regulatory content maps primarily to
  * Areas I, III, and IX.
  *

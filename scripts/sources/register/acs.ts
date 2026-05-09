@@ -6,7 +6,7 @@
  * manifest + per-task body markdown to `<repo>/acs/<slug>/`, and registers
  * entries in the @ab/sources registry under the locked-Q7 SourceId format.
  *
- * Slice scope: ppl-airplane-6c only; other publications are deferred until a
+ * Slice scope: ppl-airplane-acs-6c only; other publications are deferred until a
  * sibling lane lights them up.
  */
 
@@ -20,7 +20,7 @@ export const HELP = `bun run sources register acs [--cache=<path>] [--out=<path>
   <repo>/acs/<slug>/, and register entries into the @ab/sources registry.
   The downloader populates the cache; this command reads it and is idempotent.
 
-  Slice scope: ppl-airplane-6c only. Other publications parse and skip with
+  Slice scope: ppl-airplane-acs-6c only. Other publications parse and skip with
   an explicit reason until additional slug mappings are wired in.
 `;
 

@@ -12,17 +12,17 @@ This template is for private pilot solo cross-country planning, dual cross-count
 
 ## Flight Summary
 
-| Item | Value |
-| --- | --- |
-| Date/time of planned departure | |
-| Aircraft | |
-| Route | |
-| Purpose | Training / solo XC / checkride / passenger scenario |
-| PIC / student | |
-| Instructor reviewer | |
-| Planned passengers | |
-| Day/night | |
-| VFR/IFR | VFR |
+| Item                           | Value                                               |
+| ------------------------------ | --------------------------------------------------- |
+| Date/time of planned departure |                                                     |
+| Aircraft                       |                                                     |
+| Route                          |                                                     |
+| Purpose                        | Training / solo XC / checkride / passenger scenario |
+| PIC / student                  |                                                     |
+| Instructor reviewer            |                                                     |
+| Planned passengers             |                                                     |
+| Day/night                      |                                                     |
+| VFR/IFR                        | VFR                                                 |
 
 ## Pilot Readiness
 
@@ -53,16 +53,16 @@ Documents:
 
 Maintenance/inspection status:
 
-| Item | Due/current status | Verified by |
-| --- | --- | --- |
-| Annual | | |
-| 100-hour if applicable | | |
-| ELT | | |
-| Transponder | | |
-| Altimeter/static if needed | | |
-| AD compliance | | |
-| VOR check if needed | | |
-| Squawks/deferred items | | |
+| Item                       | Due/current status | Verified by |
+| -------------------------- | ------------------ | ----------- |
+| Annual                     |                    |             |
+| 100-hour if applicable     |                    |             |
+| ELT                        |                    |             |
+| Transponder                |                    |             |
+| Altimeter/static if needed |                    |             |
+| AD compliance              |                    |             |
+| VOR check if needed        |                    |             |
+| Squawks/deferred items     |                    |             |
 
 Required equipment:
 
@@ -76,11 +76,11 @@ Notes:
 
 ## Route Plan
 
-| Leg | From | To | Course | Distance | Altitude | Checkpoints | Notes |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | | | | | | | |
-| 2 | | | | | | | |
-| 3 | | | | | | | |
+| Leg | From | To  | Course | Distance | Altitude | Checkpoints | Notes |
+| --- | ---- | --- | ------ | -------- | -------- | ----------- | ----- |
+| 1   |      |     |        |          |          |             |       |
+| 2   |      |     |        |          |          |             |       |
+| 3   |      |     |        |          |          |             |       |
 
 Route rationale:
 
@@ -89,9 +89,9 @@ Route rationale:
 Alternate airports:
 
 | Airport | Reason useful | Runways/services | Weather/NOTAM concerns |
-| --- | --- | --- | --- |
-| | | | |
-| | | | |
+| ------- | ------------- | ---------------- | ---------------------- |
+|         |               |                  |                        |
+|         |               |                  |                        |
 
 Terrain/obstacles:
 
@@ -103,11 +103,11 @@ Special-use/TFR considerations:
 
 ## Airspace Plan
 
-| Segment | Airspace | Floor/ceiling | Requirements | Weather minimums | Communication plan |
-| --- | --- | --- | --- | --- | --- |
-| Departure | | | | | |
-| En route | | | | | |
-| Arrival | | | | | |
+| Segment   | Airspace | Floor/ceiling | Requirements | Weather minimums | Communication plan |
+| --------- | -------- | ------------- | ------------ | ---------------- | ------------------ |
+| Departure |          |               |              |                  |                    |
+| En route  |          |               |              |                  |                    |
+| Arrival   |          |               |              |                  |                    |
 
 Known complexities:
 
@@ -126,15 +126,15 @@ Action plan:
 
 ### Departure Airport
 
-| Item | Value |
-| --- | --- |
-| Airport | |
-| Field elevation | |
-| Runways | |
-| Pattern altitude/direction | |
-| Frequencies | |
-| Fuel/services | |
-| Remarks/hotspots/noise | |
+| Item                       | Value |
+| -------------------------- | ----- |
+| Airport                    |       |
+| Field elevation            |       |
+| Runways                    |       |
+| Pattern altitude/direction |       |
+| Frequencies                |       |
+| Fuel/services              |       |
+| Remarks/hotspots/noise     |       |
 
 Taxi/runway incursion notes:
 
@@ -142,15 +142,15 @@ Taxi/runway incursion notes:
 
 ### Destination Airport
 
-| Item | Value |
-| --- | --- |
-| Airport | |
-| Field elevation | |
-| Runways | |
-| Pattern altitude/direction | |
-| Frequencies | |
-| Fuel/services | |
-| Remarks/hotspots/noise | |
+| Item                       | Value |
+| -------------------------- | ----- |
+| Airport                    |       |
+| Field elevation            |       |
+| Runways                    |       |
+| Pattern altitude/direction |       |
+| Frequencies                |       |
+| Fuel/services              |       |
+| Remarks/hotspots/noise     |       |
 
 Arrival plan:
 
@@ -158,15 +158,15 @@ Arrival plan:
 
 ### Alternate Airport
 
-| Item | Value |
-| --- | --- |
-| Airport | |
-| Field elevation | |
-| Runways | |
-| Pattern altitude/direction | |
-| Frequencies | |
-| Fuel/services | |
-| Remarks/hotspots/noise | |
+| Item                       | Value |
+| -------------------------- | ----- |
+| Airport                    |       |
+| Field elevation            |       |
+| Runways                    |       |
+| Pattern altitude/direction |       |
+| Frequencies                |       |
+| Fuel/services              |       |
+| Remarks/hotspots/noise     |       |
 
 ## Weather Brief
 
@@ -244,15 +244,15 @@ Operational impact:
 
 ## Weight and Balance
 
-| Item | Weight | Arm | Moment |
-| --- | --- | --- | --- |
-| Empty aircraft | | | |
-| Pilot | | | |
-| Passenger(s) | | | |
-| Baggage | | | |
-| Fuel | | | |
-| Other | | | |
-| Total | | | |
+| Item           | Weight | Arm | Moment |
+| -------------- | ------ | --- | ------ |
+| Empty aircraft |        |     |        |
+| Pilot          |        |     |        |
+| Passenger(s)   |        |     |        |
+| Baggage        |        |     |        |
+| Fuel           |        |     |        |
+| Other          |        |     |        |
+| Total          |        |     |        |
 
 CG within envelope:
 
@@ -270,14 +270,14 @@ Fuel tradeoff considerations:
 
 Conditions:
 
-| Item | Departure | Destination | Alternate |
-| --- | --- | --- | --- |
-| Elevation | | | |
-| Temperature | | | |
-| Altimeter/pressure altitude | | | |
-| Wind | | | |
-| Runway | | | |
-| Surface/slope | | | |
+| Item                        | Departure | Destination | Alternate |
+| --------------------------- | --------- | ----------- | --------- |
+| Elevation                   |           |             |           |
+| Temperature                 |           |             |           |
+| Altimeter/pressure altitude |           |             |           |
+| Wind                        |           |             |           |
+| Runway                      |           |             |           |
+| Surface/slope               |           |             |           |
 
 Takeoff performance:
 
@@ -301,15 +301,15 @@ Performance decision:
 
 ## Fuel Plan
 
-| Leg | Time | Fuel burn | Reserve |
-| --- | --- | --- | --- |
-| Start/taxi/runup | | | |
-| Leg 1 | | | |
-| Leg 2 | | | |
-| Diversion allowance | | | |
-| Reserve | | | |
-| Total required | | | |
-| Fuel onboard | | | |
+| Leg                 | Time | Fuel burn | Reserve |
+| ------------------- | ---- | --------- | ------- |
+| Start/taxi/runup    |      |           |         |
+| Leg 1               |      |           |         |
+| Leg 2               |      |           |         |
+| Diversion allowance |      |           |         |
+| Reserve             |      |           |         |
+| Total required      |      |           |         |
+| Fuel onboard        |      |           |         |
 
 Fuel decision:
 
@@ -317,11 +317,11 @@ Fuel decision:
 
 ## Navigation Log
 
-| Checkpoint | TC | Wind | WCA | TH | Variation | MH | Distance | GS | ETE | ETA | Fuel |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| | | | | | | | | | | | |
-| | | | | | | | | | | | |
-| | | | | | | | | | | | |
+| Checkpoint | TC  | Wind | WCA | TH  | Variation | MH  | Distance | GS  | ETE | ETA | Fuel |
+| ---------- | --- | ---- | --- | --- | --------- | --- | -------- | --- | --- | --- | ---- |
+|            |     |      |     |     |           |     |          |     |     |     |      |
+|            |     |      |     |     |           |     |          |     |     |     |      |
+|            |     |      |     |     |           |     |          |     |     |     |      |
 
 Lost/diversion plan:
 
@@ -329,15 +329,15 @@ Lost/diversion plan:
 
 ## Communications Plan
 
-| Phase | Frequency | Call/action |
-| --- | --- | --- |
-| ATIS/AWOS/ASOS | | |
-| Clearance/ground if applicable | | |
-| Tower/CTAF departure | | |
-| Departure/approach/flight following | | |
-| En route CTAF/monitoring | | |
-| Destination weather | | |
-| Destination CTAF/tower | | |
+| Phase                               | Frequency | Call/action |
+| ----------------------------------- | --------- | ----------- |
+| ATIS/AWOS/ASOS                      |           |             |
+| Clearance/ground if applicable      |           |             |
+| Tower/CTAF departure                |           |             |
+| Departure/approach/flight following |           |             |
+| En route CTAF/monitoring            |           |             |
+| Destination weather                 |           |             |
+| Destination CTAF/tower              |           |             |
 
 Radio failure plan:
 
@@ -347,12 +347,12 @@ Radio failure plan:
 
 PAVE:
 
-| Category | Hazards | Controls |
-| --- | --- | --- |
-| Pilot | | |
-| Aircraft | | |
-| enVironment | | |
-| External pressures | | |
+| Category           | Hazards | Controls |
+| ------------------ | ------- | -------- |
+| Pilot              |         |          |
+| Aircraft           |         |          |
+| enVironment        |         |          |
+| External pressures |         |          |
 
 Top three risks:
 

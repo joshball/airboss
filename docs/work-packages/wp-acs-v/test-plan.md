@@ -26,9 +26,9 @@ status: pending
 - Reference row carries `section_schema = { levels: ['publication','area','task','element'], strictSequence: true }`.
 - The publication row has no parent and no `content_md`; the task rows carry `content_md`; element rows carry deterministic synthetic content hashes.
 
-### Slug mapping (broad-survey gap 2)
+### Slug mapping
 
-- `getAcsSeedMapping('ppl-airplane-6c')` returns `{ documentSlug: 'ppl-airplane-acs-6c', edition: 'FAA-S-ACS-6C' }`.
+- `getAcsSeedMapping('ppl-airplane-acs-6c')` returns `{ manifestSlug: 'ppl-airplane-acs-6c', documentSlug: 'ppl-airplane-acs-6c', edition: 'FAA-S-ACS-6C' }` (`manifestSlug === documentSlug` for production rows; the registry is the authored source of the canonical FAA edition designator).
 - Same coverage for the other 4 cached publications.
 - `getAcsSeedMapping('cfii-airplane-pts-9e')` returns `null` (not an ACS).
 

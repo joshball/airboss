@@ -12,33 +12,33 @@ Use this rubric to evaluate an online course, local class, CFI-run ground progra
 
 Score each category from 0 to 4.
 
-| Score | Meaning |
-| --- | --- |
-| 0 | Missing or unusable |
-| 1 | Present but weak |
-| 2 | Adequate |
-| 3 | Strong |
-| 4 | Excellent / model quality |
+| Score | Meaning                   |
+| ----- | ------------------------- |
+| 0     | Missing or unusable       |
+| 1     | Present but weak          |
+| 2     | Adequate                  |
+| 3     | Strong                    |
+| 4     | Excellent / model quality |
 
 ## Summary Scorecard
 
-| Category | Score | Notes |
-| --- | --- | --- |
-| FAA/regulatory alignment | | |
-| ACS integration | | |
-| Conceptual teaching depth | | |
-| Written-test preparation | | |
-| Oral/checkride preparation | | |
-| Flight lesson integration | | |
-| Aircraft-specific work | | |
-| Weather decision-making | | |
-| Navigation/cross-country planning | | |
-| ADM/risk management | | |
-| Instructor tools and progress tracking | | |
-| Practice and feedback quality | | |
-| Accessibility and learner fit | | |
-| Currency/update policy | | |
-| Cost/value | | |
+| Category                               | Score | Notes |
+| -------------------------------------- | ----- | ----- |
+| FAA/regulatory alignment               |       |       |
+| ACS integration                        |       |       |
+| Conceptual teaching depth              |       |       |
+| Written-test preparation               |       |       |
+| Oral/checkride preparation             |       |       |
+| Flight lesson integration              |       |       |
+| Aircraft-specific work                 |       |       |
+| Weather decision-making                |       |       |
+| Navigation/cross-country planning      |       |       |
+| ADM/risk management                    |       |       |
+| Instructor tools and progress tracking |       |       |
+| Practice and feedback quality          |       |       |
+| Accessibility and learner fit          |       |       |
+| Currency/update policy                 |       |       |
+| Cost/value                             |       |       |
 
 Total:
 

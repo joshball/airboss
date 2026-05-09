@@ -175,7 +175,7 @@ beforeAll(async () => {
 			triad: 'knowledge',
 			requiredBloom: 'understand',
 			isLeaf: true,
-			airbossRef: `airboss-ref:acs/ppl-airplane-6c/area-05/task-a/elem-k01`,
+			airbossRef: `airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-a/elem-k01`,
 			citations: [],
 			contentHash: null,
 			seedOrigin: SUITE_TAG,

@@ -12,12 +12,14 @@
  * after and overwrites those fields with the canonical YAML values via the
  * same `(document_slug, edition)` upsert key. Same pattern as AC.
  *
- * Bridges the on-disk shape (`<rating>-airplane-<edition>` slug under
- * `acs/`) to the DB-side shape (`<rating>-airplane-acs-<edition>` +
- * canonical FAA edition designator) via the explicit registry at
- * `@ab/sources/acs` :: `getAcsSeedMapping`. A manifest with no registry
- * entry raises a clear seed-time error -- the YAML row must exist for the
- * ACS to land as a readable card.
+ * Looks up the canonical FAA edition designator (`FAA-S-ACS-6C`,
+ * `FAA-S-ACS-25`, ...) for the manifest's slug via the registry at
+ * `@ab/sources/acs` :: `getAcsSeedMapping`. The slug itself round-trips
+ * unchanged between on-disk (`acs/<slug>/manifest.json`), DB
+ * (`study.reference.document_slug`), and the YAML row in
+ * `course/references/acs-pts.yaml`. A manifest with no registry entry
+ * raises a clear seed-time error -- the YAML row must exist for the ACS
+ * to land as a readable card.
  *
  * `section_schema = { levels: ['publication','area','task','element'],
  * strictSequence: true }` -- ACS is symmetric: publication -> area -> task

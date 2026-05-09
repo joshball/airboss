@@ -305,7 +305,7 @@ export interface ParsedHandbooksLocator {
  *   <slug>/area-<NN>/task-<x>/elem-<triad><NN>                element
  *
  * `<slug>` collapses cert+category+edition into one publication slug
- * (e.g. `ppl-airplane-6c`, `cfi-airplane-25`). Area + element ordinals are
+ * (e.g. `ppl-airplane-acs-6c`, `cfi-airplane-acs-25`). Area + element ordinals are
  * 2-digit zero-padded; task is a single lowercase letter; element prefix
  * is `elem-` (not `element-`) carrying the K/R/S triad letter.
  *
@@ -313,7 +313,7 @@ export interface ParsedHandbooksLocator {
  * belt-and-suspenders with the slug-encoded edition.
  */
 export interface ParsedAcsLocator {
-	/** Publication slug -- e.g. `ppl-airplane-6c`, `cfi-airplane-25`. Lowercase kebab-case. */
+	/** Publication slug -- e.g. `ppl-airplane-acs-6c`, `cfi-airplane-acs-25`. Lowercase kebab-case. */
 	readonly slug: string;
 	/** Area ordinal as written (2-digit zero-padded, e.g. `'05'`). */
 	readonly area?: string;
