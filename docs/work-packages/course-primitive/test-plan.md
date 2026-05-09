@@ -199,9 +199,12 @@ Manual acceptance tests for [spec.md](./spec.md). Prefix `CRS-`.
 
 ### CRS-52: overlay computes empty gap list when course covers all cert leaves
 
-1. Construct a fixture course whose steps collectively link to every node covered by PPL ACS Area V.
-2. Call the overlay lens.
-3. **Expected:** `result.certGaps` is `[]` (empty array, not undefined).
+1. Construct a fixture syllabus with one element-leaf carrying a single `syllabus_node_link` pointing at a known knowledge_node id.
+2. Construct a fixture course with one step linking to the same knowledge_node id.
+3. Call the overlay lens with the fixture course + fixture syllabus.
+4. **Expected:** `result.certGaps` is `[]` (empty array, not undefined).
+
+Note: the test must use a fixture syllabus that has every element-leaf linked. Running this against the seeded PPL ACS Area V is unsatisfiable today because most element-leaves have zero `syllabus_node_link` rows (content gap, not a BC bug -- `getCourseGaps` correctly emits zero-link leaves as gaps per its JSDoc). Backfilling Area V link coverage is a separate content-authoring task.
 
 ### CRS-53: overlay accepts syllabusId not on goal
 
@@ -252,10 +255,12 @@ Manual acceptance tests for [spec.md](./spec.md). Prefix `CRS-`.
 2. Run `bun run db seed courses`.
 3. **Expected:** seed succeeds; both courses exist; the shared node is referenced by both `course_step` rows. Reverse-lookup via `course_step.knowledge_node_id` index returns both rows.
 
-### CRS-74: CASCADE delete on course removes its steps
+### CRS-74: CASCADE delete on course removes its steps; goal_course blocks via RESTRICT
 
-1. `DELETE FROM study.course WHERE slug='seed-smoke';`.
-2. **Expected:** all `course_step` rows for that course are CASCADE-deleted; `goal_course` rows pointing at the deleted course are CASCADE-deleted as well.
+1. With NO `goal_course` rows pointing at the course: `DELETE FROM study.course WHERE slug='seed-smoke';`.
+2. **Expected:** delete succeeds; all `course_step` rows for that course are CASCADE-deleted (the `course_step.course_id` FK is `ON DELETE CASCADE`).
+3. With a `goal_course` row pointing at the course: try the same DELETE.
+4. **Expected:** delete fails with FK violation. The `goal_course.course_id` FK is `ON DELETE RESTRICT` -- a learner with the course in their goal must remove the goal_course row first. This protects against accidental loss of a course referenced by an active learner goal.
 
 ### CRS-75: RESTRICT delete on knowledge_node prevents loss
 
