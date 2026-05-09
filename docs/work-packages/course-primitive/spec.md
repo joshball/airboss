@@ -354,15 +354,4 @@ Existing `acsLens` / `domainLens` consumers see no behavior change: the `sources
 
 ## Out of scope
 
-See the "Out" subsection of [Scope](#scope) above. The deferred list is explicitly enumerated so future agents do not accidentally rebuild deferred features:
-
-- Course-to-course prerequisites
-- Parallel-ladder schema
-- Aux course attachment points
-- Per-node opt-out
-- Course versioning
-- Personal course UI
-- Course `cert_alignment` field
-- Course step UI surfaces (the read path is the lens; UI is a follow-on WP)
-
-When real authoring use of this WP surfaces a need from this list, it lands as a follow-on WP, not a silent extension here.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
