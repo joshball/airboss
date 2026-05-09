@@ -24,13 +24,21 @@ test.describe('goal create + detail', () => {
 	test('create flow: create then redirect to detail', async ({ page }) => {
 		await page.goto(ROUTES.PROGRAM_GOALS_NEW);
 		await expect(page.getByRole('heading', { name: 'New goal', exact: true, level: 1 })).toBeVisible();
+		// Wait for hydration before filling -- the input's `value={seed?.title
+		// ?? ''}` is a one-way bind that re-renders to '' if Svelte hydrates
+		// after `fill` has typed into the field, leaving the input visibly
+		// focused but valueless. HTML5 `required` then blocks the submit and
+		// the test sits at /program/goals/new until the assertion times out.
+		// Mirror the pattern in reps.spec.ts:50.
+		await page.waitForLoadState('networkidle');
 		const title = `e2e goal ${Date.now()}`;
 		await page.getByLabel('Title').fill(title);
 		await page.getByLabel(/notes/i).fill('A short e2e-created goal.');
 		await page.getByRole('button', { name: 'Create goal' }).click();
 
-		// Lands on /goals/<id>
-		await expect(page).toHaveURL(/\/goals\/goal_/);
+		// Lands on the goal detail surface. Post-IA-cleanup the URL family is
+		// `/program/goals/<id>` (see ROUTES.PROGRAM_GOAL).
+		await expect(page).toHaveURL(/\/program\/goals\/goal_/);
 		await expect(page.getByRole('heading', { name: title, level: 1 })).toBeVisible();
 	});
 
