@@ -1,0 +1,85 @@
+/**
+ * Study course detail loader (course-reader-and-editor WP, Phase 3).
+ *
+ * Loads one course by slug and projects it through `courseLens` (no overlay)
+ * or `courseWithCertOverlayLens` (overlay) based on whether the learner's
+ * primary goal holds at least one syllabus. The lens picks itself per the
+ * "one detail-page route, lens picked at load time" decision in design.md.
+ *
+ * 404s on:
+ *   - Slug not found in `study.course`
+ *   - Course `status === 'draft'` (drafts hidden from the learner per
+ *     spec.md "Course in `status='draft'`")
+ *
+ * The overlay syllabus is selected by `pickOverlaySyllabus`: highest-weight
+ * `goal_syllabus`, ties broken by `syllabus_id ASC` for determinism. A
+ * future picker UI is deferred per OUT-OF-SCOPE.
+ */
+
+import { requireAuth } from '@ab/auth';
+import {
+	type CourseRow,
+	courseLens,
+	courseWithCertOverlayLens,
+	getCourseBySlug,
+	getCourseStepsByCourse,
+	getPrimaryGoal,
+	type LensResult,
+	pickOverlaySyllabus,
+} from '@ab/bc-study/server';
+import { COURSE_STATUSES, COURSE_STEP_LEVELS } from '@ab/constants';
+import { db } from '@ab/db/connection';
+import { error } from '@sveltejs/kit';
+import type { PageServerLoad } from './$types';
+
+export interface CourseDetailData {
+	course: CourseRow;
+	lensResult: LensResult;
+	overlayActive: boolean;
+	/**
+	 * Maps `course_step.id` (`cst_<ulid>` -- the lens-emitted leaf id) to the
+	 * human-readable `course_step.code` (e.g. `s1.1`). The page uses the code
+	 * for step-reader URLs so they stay grep-able and shareable. The lens
+	 * does not carry the code -- the loader joins it on; the lookup is
+	 * cheap (one extra call to `getCourseStepsByCourse`, the same query the
+	 * lens itself runs).
+	 */
+	stepCodeById: Record<string, string>;
+}
+
+export const load: PageServerLoad = async (event) => {
+	const user = requireAuth(event);
+	const course = await getCourseBySlug(event.params.slug);
+	if (course === null) throw error(404, 'Course not found.');
+	if (course.status === COURSE_STATUSES.DRAFT) throw error(404, 'Course not found.');
+
+	const primaryGoal = await getPrimaryGoal(user.id);
+	const overlaySyllabusId = await pickOverlaySyllabus(primaryGoal);
+
+	const [lensResult, allSteps] = await Promise.all([
+		overlaySyllabusId !== null && primaryGoal !== null
+			? courseWithCertOverlayLens(db, user.id, {
+					goal: primaryGoal,
+					filters: { courseId: course.id, syllabusId: overlaySyllabusId },
+				})
+			: courseLens(db, user.id, {
+					goal: primaryGoal,
+					filters: { courseId: course.id },
+				}),
+		getCourseStepsByCourse(course.id),
+	]);
+
+	const stepCodeById: Record<string, string> = {};
+	for (const step of allSteps) {
+		if (step.level === COURSE_STEP_LEVELS.STEP) {
+			stepCodeById[step.id] = step.code;
+		}
+	}
+
+	return {
+		course,
+		lensResult,
+		overlayActive: overlaySyllabusId !== null,
+		stepCodeById,
+	} satisfies CourseDetailData;
+};
