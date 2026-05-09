@@ -207,7 +207,7 @@ $effect(() => {
 		aria-controls="docs-search-results"
 		aria-activedescendant={activeOptionId}
 	/>
-	{#if open && (hits.length > 0 || (loading && query.trim().length >= DOCS_SEARCH_MIN_QUERY_LEN))}
+	{#if open && query.trim().length >= DOCS_SEARCH_MIN_QUERY_LEN}
 		<ul
 			class="results"
 			id="docs-search-results"

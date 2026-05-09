@@ -86,12 +86,20 @@ test.describe('reference_toc view: TOC + outcome controls', () => {
 		// surfaced. The select carries an `option[value="reference_toc"]`
 		// because the kind id is the value the BC writes.
 		await page.goto(ROUTES.HANGAR_REVIEW);
+		// Wait for hydration so the kind-filter `<select>` is bound to the
+		// `kindFilter` rune; otherwise the change event fires before the
+		// $effect that narrows visible cards runs, and the next `.first()`
+		// pick lands on the wrong kind.
+		await page.waitForLoadState('networkidle');
 		await page
 			.locator('select')
 			.filter({ has: page.locator('option[value="reference_toc"]') })
 			.first()
 			.selectOption('reference_toc');
-		const candidate = page.locator(`a[href*="/review/items/"]`).first();
+		// Scope the candidate to a card that's actually a reference_toc, not
+		// just the first item link rendered (which may be a stale DOM node
+		// from before the client-side filter narrowed the list).
+		const candidate = page.locator(`article a[href*="/review/items/"]`).first();
 		const candidateCount = await candidate.count();
 		test.skip(candidateCount === 0, 'No reference_toc items in the seeded review_item set');
 		await Promise.all([page.waitForURL(/\/review\/reference_toc\//), candidate.click()]);
@@ -135,6 +143,7 @@ test.describe('ad_hoc dispatcher: 303 to task editor', () => {
 		// items-dispatcher -> ad_hoc redirect path.
 		const title = `e2e dispatcher ${testInfo.testId.slice(0, 8)}`;
 		await page.goto(ROUTES.HANGAR_REVIEW_TASK_NEW);
+		await page.waitForLoadState('networkidle');
 		await page.locator('input[name="title"]').fill(title);
 		await page.locator('select[name="type"]').selectOption({ index: 1 });
 		await page.locator('select[name="productArea"]').selectOption({ index: 1 });

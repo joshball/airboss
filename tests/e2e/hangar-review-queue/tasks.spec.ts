@@ -18,13 +18,17 @@ test.describe('ad-hoc tasks', () => {
 	test('submitting an empty title surfaces an inline validation error', async ({ page }) => {
 		await page.goto(ROUTES.HANGAR_REVIEW_TASK_NEW);
 		// Force-submit past the native required-field check so the server-side
-		// validator gets a chance to return its inline error.
+		// validator gets a chance to return its inline error. Wait for hydration
+		// so `use:enhance` is bound before we click; otherwise native submit
+		// gets blocked by `required` (we just unset it) but the JS handler that
+		// surfaces inline errors via the action result is also missing.
+		await page.waitForLoadState('networkidle');
 		await page.evaluate(() => {
 			const form = document.querySelector('form');
 			if (form instanceof HTMLFormElement) form.noValidate = true;
 		});
 		await page.getByRole('button', { name: /create task/i }).click();
-		await expect(page.getByText(/title is required/i)).toBeVisible();
+		await expect(page.getByText(/title is required/i)).toBeVisible({ timeout: 10_000 });
 	});
 
 	test('create -> visible on board -> edit -> delete', async ({ page }, testInfo) => {
@@ -32,6 +36,11 @@ test.describe('ad-hoc tasks', () => {
 
 		await test.step('create', async () => {
 			await page.goto(ROUTES.HANGAR_REVIEW_TASK_NEW);
+			// Wait for hydration so `use:enhance` is bound -- otherwise the
+			// click fires before the JS handler is attached and the POST goes
+			// out as a native submit but the page-level `enhance` lifecycle
+			// (which the redirect-following relies on) never runs.
+			await page.waitForLoadState('networkidle');
 			await page.locator('input[name="title"]').fill(title);
 			// Type + product area selects: pick the first non-blank option of
 			// each so the form passes validation regardless of which seed
