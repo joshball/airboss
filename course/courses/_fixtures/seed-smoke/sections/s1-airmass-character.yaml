@@ -1,0 +1,24 @@
+code: s1
+ordinal: 1
+title: Airmass Character (smoke fixture)
+body_md: |
+  Smoke-fixture section for Phase 6 / Phase 7 acceptance. The two child
+  steps below both link real weather knowledge nodes so the seed-time
+  FK validator can verify the upsert path without depending on
+  authoring-only nodes that may not exist yet.
+steps:
+  - code: s1.1
+    ordinal: 1
+    title: Thunderstorm hazards
+    body_md: |
+      Step under section s1. Re-uses an existing weather knowledge node
+      so the smoke seed has a stable FK target.
+    knowledge_node_id: wx-thunderstorm-hazards
+  - code: s1.2
+    ordinal: 2
+    title: Transition - thunderstorm hazards to icing avoidance
+    body_md: |
+      Bridges thunderstorm avoidance into the icing risk picture. In the
+      lens layer this surfaces as a transition step (the linked node's
+      `kind` carries the semantic kind, not the step row).
+    knowledge_node_id: wx-icing-types-and-avoidance
