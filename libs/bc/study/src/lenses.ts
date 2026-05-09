@@ -120,6 +120,49 @@ export interface LensLeafMastery {
 	missingKinds: readonly AssessmentMethod[];
 }
 
+/**
+ * Per-leaf provenance flags emitted by overlay lenses (course-primitive WP).
+ * Consumers use this to render "this step covers a PPL ACS element" badges.
+ *
+ * `inCourse` is set whenever the leaf was emitted by a course-aware lens
+ * (`courseLens` / `courseWithCertOverlayLens`). `inCert` is set when the
+ * step's linked knowledge node is also reachable from a syllabus referenced
+ * by the overlay; `certCode` carries the matching `syllabus_node.code` so
+ * the UI can render the cert-side anchor without a second query.
+ *
+ * Optional + additive: `acsLens` / `domainLens` do not populate the field,
+ * and existing consumers that ignore `LensLeaf.sources` are unaffected.
+ */
+export interface LensLeafSources {
+	inCourse: boolean;
+	inCert: boolean;
+	certCode?: string;
+}
+
+/**
+ * A cert leaf that is required by the goal's syllabus but is NOT covered by
+ * any step in the overlaid course. Returned by `courseWithCertOverlayLens`
+ * (and `getCourseGaps`) so the gap surface can render "this course covers
+ * X of PPL ACS; PPL still requires Z."
+ *
+ * Each entry pins back to the original `syllabus_node` by id + code + title,
+ * carries its `requiredBloom`, and lists every linked `knowledge_node_id`
+ * the leaf points at (multi-link leaves contribute every linked node id;
+ * the gap is only "closed" when at least one of those nodes is covered by
+ * a course step).
+ *
+ * Defined here -- the consumer set lives across `lenses.ts` (lens output)
+ * and `lenses-course.ts` (lens implementation + the helper); a single
+ * declaration keeps both sides on the same shape.
+ */
+export interface CertGap {
+	syllabusNodeId: string;
+	code: string;
+	title: string;
+	requiredBloom: BloomLevel | null;
+	knowledgeNodeIds: string[];
+}
+
 export interface LensLeaf {
 	id: string;
 	knowledgeNodeId: string;
@@ -134,6 +177,13 @@ export interface LensLeaf {
 	 * empty string.
 	 */
 	placeholder?: boolean;
+	/**
+	 * Per-leaf provenance flags (course-primitive WP). Populated by overlay
+	 * lenses (`courseLens` / `courseWithCertOverlayLens`); undefined for the
+	 * shipped `acsLens` / `domainLens`. Optional so existing consumers are
+	 * unaffected.
+	 */
+	sources?: LensLeafSources;
 }
 
 export interface LensTreeNode {
@@ -149,7 +199,8 @@ export interface LensTreeNode {
 		| 'handbook'
 		| 'chapter'
 		| 'section'
-		| 'node';
+		| 'node'
+		| 'course';
 	title: string;
 	rollup: MasteryRollup;
 	children: LensTreeNode[];
@@ -160,6 +211,13 @@ export interface LensResult {
 	tree: LensTreeNode[];
 	rollup: MasteryRollup;
 	leaves: LensLeaf[];
+	/**
+	 * Cert leaves required by the overlay's syllabus that no course step in
+	 * the overlay covers (course-primitive WP). Populated by
+	 * `courseWithCertOverlayLens`; undefined for `acsLens` / `domainLens` /
+	 * `courseLens`.
+	 */
+	certGaps?: CertGap[];
 }
 
 export type Lens<TFilters = Record<string, unknown>> = (
@@ -841,3 +899,17 @@ function computeDomainLeafMastery(
 // `ACSTriad` is exported here for follow-on UI surfaces that need the type
 // without pulling `@ab/constants` directly when reading lens output.
 export type { ACSTriad };
+
+// ---------------------------------------------------------------------------
+// Course lens (course-primitive WP) -- re-exports from `./lenses-course`
+// ---------------------------------------------------------------------------
+//
+// The course-aware lenses live in their own file because they pull from
+// `./courses` (which touches the DB via `@ab/db/connection`). The runtime
+// barrel (`./index.ts`) only re-exports the *types* (CourseLensFilters,
+// LensLeafSources, CertGap); the value implementations are surfaced through
+// `./server.ts` (`@ab/bc-study/server`). Consumers that want one import
+// site for every lens find them all here.
+
+export type { CourseLensFilters } from './lenses-course';
+export { courseLens } from './lenses-course';
