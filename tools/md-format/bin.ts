@@ -153,7 +153,7 @@ async function main(): Promise<number> {
 		console.error(`md-format: ${wouldChange.length} file(s) would be reformatted:`);
 		for (const rel of wouldChange) console.error(`  ${rel}`);
 		console.error('');
-		console.error('Run `bun run format:md` to fix.');
+		console.error('Run `bun run track format` to fix.');
 		return 1;
 	}
 

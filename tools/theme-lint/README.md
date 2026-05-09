@@ -15,13 +15,13 @@ Custom AST-free lint rule that blocks hardcoded visual values in `.svelte` `<sty
 ## Usage
 
 ```bash
-bun run lint:theme           # scan apps/ and libs/ui, respect ignore.txt
+bun run lint theme           # scan apps/ and libs/ui, respect ignore.txt
 bun tools/theme-lint/bin.ts --json    # machine-readable output
 bun tools/theme-lint/bin.ts --fix-ignore   # regenerate ignore.txt from current violations
 bun tools/theme-lint/bin.ts apps/sim  # lint a single subtree
 ```
 
-`bun run check` runs `lint:theme` as part of the pipeline.
+`bun run check` runs `lint theme` as part of the pipeline.
 
 ## Exceptions
 
@@ -42,6 +42,6 @@ When a new role token lands:
 
 1. Add it to `libs/themes/vocab.ts` (`TOKENS` object).
 2. Wire it through `libs/themes/emit.ts` so it appears in the generated CSS.
-3. `bun run lint:theme` will accept `var(--new-token)` references immediately.
+3. `bun run lint theme` will accept `var(--new-token)` references immediately.
 
 Adding tokens should be rare and deliberate; prefer composing existing tokens.

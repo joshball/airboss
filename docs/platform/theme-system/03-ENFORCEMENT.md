@@ -25,7 +25,7 @@ Read [02-ARCHITECTURE.md](02-ARCHITECTURE.md) for what the system looks like, [0
 
 A standalone Bun script. No Biome custom rule, no ESLint plugin. It tokenizes CSS declarations and runs a small set of pure rules against each declaration's value.
 
-Entry point: `bun run lint:theme` (aliased from `bun tools/theme-lint/bin.ts`).
+Entry point: `bun run lint theme` (dispatched to `bun tools/theme-lint/bin.ts`).
 
 Scope:
 
@@ -34,17 +34,17 @@ Scope:
 
 Rules (see `tools/theme-lint/rules.ts`):
 
-| Rule ID               | What it catches                                                                                                      |
-| --------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `hex-color`           | `#rrggbb`, `#rgb`, `#rrggbbaa` on any property                                                                       |
-| `rgb-color`           | `rgb(...)` / `rgba(...)` literals                                                                                    |
-| `hsl-color`           | `hsl(...)` / `hsla(...)` literals                                                                                    |
-| `oklch-literal`       | `oklch(...)` literals (palette OKLCH values belong in `libs/themes`)                                                 |
-| `named-color`         | `white`, `black`, `red`, ... on color-carrying properties                                                            |
+| Rule ID               | What it catches                                                                                                       |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `hex-color`           | `#rrggbb`, `#rgb`, `#rrggbbaa` on any property                                                                        |
+| `rgb-color`           | `rgb(...)` / `rgba(...)` literals                                                                                     |
+| `hsl-color`           | `hsl(...)` / `hsla(...)` literals                                                                                     |
+| `oklch-literal`       | `oklch(...)` literals (palette OKLCH values belong in `libs/themes`)                                                  |
+| `named-color`         | `white`, `black`, `red`, ... on color-carrying properties                                                             |
 | `raw-length`          | `Nrem`, `Nem`, `Npx` on spacing / sizing / radius / font properties (`1px` allowed for hairlines, `0` always allowed) |
-| `raw-duration`        | Hardcoded `Nms` / `Ns` in `transition-*` / `animation-*`                                                             |
-| `font-family-literal` | `font-family` without `var(...)` or an inherit keyword                                                               |
-| `unknown-token`       | `var(--foo)` where `--foo` is not in `vocab.ts` or an emitted prefix family                                          |
+| `raw-duration`        | Hardcoded `Nms` / `Ns` in `transition-*` / `animation-*`                                                              |
+| `font-family-literal` | `font-family` without `var(...)` or an inherit keyword                                                                |
+| `unknown-token`       | `var(--foo)` where `--foo` is not in `vocab.ts` or an emitted prefix family                                           |
 
 Known-token discovery:
 
@@ -74,7 +74,7 @@ Grandfather ignore file: `tools/theme-lint/ignore.txt`. Each non-blank, non-comm
 CLI usage:
 
 ```bash
-bun run lint:theme                  # lint the whole repo
+bun run lint theme                  # lint the whole repo
 bun tools/theme-lint/bin.ts apps/study    # lint one subtree
 bun tools/theme-lint/bin.ts --fix-ignore  # rewrite ignore.txt to current violations
 bun tools/theme-lint/bin.ts --json        # machine-readable output
@@ -84,7 +84,7 @@ bun tools/theme-lint/bin.ts --json        # machine-readable output
 
 Companion tool to the lint rule. Lint tells you what's broken; codemod fixes the mechanical cases. Run once per folder during migration.
 
-Entry point: `bun run codemod:theme`.
+Entry point: `bun run codemod theme`.
 
 Passes (run in this order -- see `runAllTransforms` in `tools/theme-codemod/transforms.ts`):
 
