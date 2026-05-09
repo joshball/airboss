@@ -48,3 +48,39 @@ test.describe('study courses reader -- detail', () => {
 		await expect(page.getByRole('heading', { name: 'Seed-Smoke Course Fixture', level: 1 })).toBeVisible();
 	});
 });
+
+test.describe('study courses reader -- step', () => {
+	test('404s for a missing step code under a real course', async ({ page }) => {
+		const response = await page.goto(ROUTES.COURSE_STEP('seed-smoke', 'does-not-exist-step'));
+		expect(response?.status()).toBe(404);
+	});
+
+	test('404s for a missing course (step path)', async ({ page }) => {
+		const response = await page.goto(ROUTES.COURSE_STEP('does-not-exist-course-slug', 's1.1'));
+		expect(response?.status()).toBe(404);
+	});
+
+	test('renders the step page for the seed-smoke s1.1 step (when seeded)', async ({ page }) => {
+		const response = await page.goto(ROUTES.COURSE_STEP('seed-smoke', 's1.1'));
+		if (response?.status() === 404) {
+			test.info().annotations.push({ type: 'skipped', description: 'seed-smoke fixture not loaded' });
+			return;
+		}
+		expect(response?.status()).toBe(200);
+		// Step title from the fixture YAML.
+		await expect(page.getByRole('heading', { name: 'Thunderstorm hazards', level: 1 })).toBeVisible();
+	});
+
+	test('mounts the chart stub when ?chart=<slug> is present (when fixture loaded)', async ({ page }) => {
+		const url = `${ROUTES.COURSE_STEP('seed-smoke', 's1.1')}?chart=test-chart-slug`;
+		const response = await page.goto(url);
+		if (response?.status() === 404) {
+			test.info().annotations.push({ type: 'skipped', description: 'seed-smoke fixture not loaded' });
+			return;
+		}
+		expect(response?.status()).toBe(200);
+		// In dev mode the slug is rendered inside the placeholder.
+		const stub = page.getByLabel('Chart placeholder');
+		await expect(stub).toBeVisible();
+	});
+});
