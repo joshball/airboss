@@ -1,0 +1,8 @@
+{
+	"_doc": "FAA flight-category color palette. Used by METAR plot, CVA, and any 'color by ceiling/visibility' rendering. Hex values are the canonical AviationWeather.gov NWS palette. Phase A ships the file as a substrate placeholder; the consuming charts land in Phase C (METAR plot) and Phase E (CVA).",
+	"_source": "AviationWeather.gov NWS standard flight category palette",
+	"VFR": "#078000",
+	"MVFR": "#0066CC",
+	"IFR": "#FF0000",
+	"LIFR": "#FF00FF"
+}

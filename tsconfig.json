@@ -59,7 +59,10 @@
 			"@ab/sources": ["libs/sources/src/index.ts"],
 			"@ab/sources/*": ["libs/sources/src/*"],
 			"@ab/library": ["libs/library/src/index.ts"],
-			"@ab/library/*": ["libs/library/src/*"]
+			"@ab/library/*": ["libs/library/src/*"],
+			"@ab/wx-charts": ["libs/wx-charts/src/index.ts"],
+			"@ab/wx-charts/server": ["libs/wx-charts/src/server.ts"],
+			"@ab/wx-charts/*": ["libs/wx-charts/src/*"]
 		}
 	},
 	"include": ["libs/*/src/**/*.ts", "libs/bc/*/src/**/*.ts", "libs/themes/**/*.ts", "apps/*/src/**/*.ts", "scripts/**/*.ts"],
