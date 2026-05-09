@@ -18,7 +18,7 @@ import { parseLesson } from './lesson-parser.ts';
 import { isParseError, parseIdentifier } from './parser.ts';
 import { productionRegistry } from './registry/index.ts';
 import type { ParsedIdentifier, RegistryReader, ValidationFinding } from './types.ts';
-import { type RuleContext, validateIdentifier } from './validator.ts';
+import { determineLocatorPrecision, type RuleContext, validateIdentifier } from './validator.ts';
 
 /**
  * Lesson content paths the validator walks. Phase 1 ships only `course/regulations/`.
@@ -122,6 +122,12 @@ export async function validateReferences(opts: ValidateOptions = {}): Promise<Va
 					location: occ.location,
 					occurrence: occ,
 					acknowledgments: lesson.acknowledgments,
+					// Per ADR 019 amendment 2026-05 §1, derive locator precision so
+					// unpinned doc-or-chapter-level citations (the common case for
+					// `airboss-ref:handbooks/phak/8083-25C/1/2`-style references)
+					// don't fire row-3 ERROR. Edition-sensitive locators
+					// (paragraph, figure/table, page) still require a pin.
+					locatorPrecision: parsedOk !== null ? determineLocatorPrecision(parsedOk) : undefined,
 				};
 				const occFindings = validateIdentifier(parsedOk, ctx, parseError);
 				findings.push(...occFindings);

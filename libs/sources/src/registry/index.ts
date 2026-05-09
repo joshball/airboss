@@ -105,11 +105,14 @@ export const productionRegistry: RegistryReader = {
 	listEditionsForSlug(corpus: string, slug: string): readonly RegistrySlugEdition[] {
 		// Walk every entry in `corpus` whose canonical id begins with the
 		// `<corpus>/<slug>/` segment, collect its edition map, and dedupe by
-		// edition slug. Lifecycle is per-entry (the entry's `lifecycle` field);
-		// supersession date comes from the entry's superseded edition's
-		// `last_amended_date` when available, else null. Result is oldest-first
-		// by supersession date with nulls last (so current/accepted bubbles to
-		// the end of the list).
+		// edition slug. Lifecycle is read through `getEntryLifecycle` so the
+		// in-memory promotion overlay (post-`commitIngestBatch`) wins over
+		// the static `entry.lifecycle` field; freshly-ingested entries
+		// otherwise look stuck in `pending` even after promotion to
+		// `accepted`. Supersession date comes from the entry's
+		// `last_amended_date` when the effective lifecycle is `superseded`,
+		// else null. Result is oldest-first by supersession date with nulls
+		// last (so current/accepted bubbles to the end of the list).
 		const prefix = `airboss-ref:${corpus}/${slug}/`;
 		const sources = getSources();
 		const seenEditions = new Map<string, RegistrySlugEdition>();
@@ -117,13 +120,14 @@ export const productionRegistry: RegistryReader = {
 			if (!id.startsWith(prefix)) continue;
 			const entry = sources[id];
 			if (entry === undefined) continue;
+			const lifecycle: SourceLifecycle = getEntryLifecycle(id) ?? entry.lifecycle;
 			const editions = getEditionsMap().get(id) ?? [];
 			for (const edition of editions) {
 				if (seenEditions.has(edition.id)) continue;
 				seenEditions.set(edition.id, {
 					edition: edition.id,
-					lifecycle: entry.lifecycle,
-					supersededAt: entry.lifecycle === 'superseded' ? entry.last_amended_date : null,
+					lifecycle,
+					supersededAt: lifecycle === 'superseded' ? entry.last_amended_date : null,
 				});
 			}
 		}

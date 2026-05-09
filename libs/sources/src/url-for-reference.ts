@@ -76,6 +76,12 @@ function urlForHandbooks(locator: string): string {
 	if (result.kind === 'error') return ROUTES.FLIGHTBAG_HOME;
 	const hb = result.handbooks;
 	if (hb === undefined) return ROUTES.FLIGHTBAG_HOME;
+	// A bare `handbooks/<slug>` locator (no edition pin) is malformed for the
+	// reader: every flightbag handbook route requires an edition segment so
+	// the URL deep-links to a specific cached edition. Without an edition the
+	// helper would emit `/handbook/<slug>/` which 404s; fall back to home so
+	// the citation chip lands somewhere useful.
+	if (hb.edition === '') return ROUTES.FLIGHTBAG_HOME;
 	if (hb.chapter !== undefined && hb.section !== undefined) {
 		return ROUTES.FLIGHTBAG_HANDBOOK_SECTION(hb.doc, hb.edition, hb.chapter, hb.section);
 	}
