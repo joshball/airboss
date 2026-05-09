@@ -129,7 +129,8 @@
 			"apps/**/*.ts",
 			"apps/**/*.svelte",
 			"scripts/**/*.ts",
-			"tools/course-frontmatter/**/*.ts"
+			"tools/course-frontmatter/**/*.ts",
+			"!spikes/**"
 		]
 	}
 }

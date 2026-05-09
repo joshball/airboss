@@ -21,7 +21,7 @@ import { formatMarkdown } from './format';
 
 const REPO_ROOT = resolve(import.meta.dir, '..', '..');
 
-const SKIP_PREFIXES = ['node_modules/', '.svelte-kit/', 'dist/', 'build/', '.claude/skills/', 'docs/.archive/'];
+const SKIP_PREFIXES = ['node_modules/', '.svelte-kit/', 'dist/', 'build/', '.claude/skills/', 'docs/.archive/', 'spikes/'];
 
 interface Args {
 	check: boolean;
