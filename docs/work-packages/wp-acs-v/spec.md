@@ -92,12 +92,7 @@ Sequence position 6 in [library-completeness](../library-completeness/spec.md). 
 
 ## Out of scope
 
-- **`cfii-airplane-pts-9e`** (Flight Instructor Instrument PTS). Listed in `acs-pts.yaml` with `kind: pts`; not an ACS document. Different shape (Practical Test Standards, pre-ACS) and not in the cached manifest set. Stays link-only.
-- **`faa-g-acs-2-companion-guide`** (ACS Companion Guide for Pilots). Listed in `acs-pts.yaml` with `kind: other`; the FAA publishes it as a guide rather than a per-cert ACS. No on-disk manifest. Stays link-only.
-- **CFI ACS element extraction**. The on-disk `cfi-airplane-acs-25/manifest.json` lists 0 elements per task. The body parser in `libs/sources/src/acs/ingest.ts` works fine; the FAA's CFI ACS PDF text simply doesn't carry the K/R/S code prefixes the parser keys off. A future ingest tweak (or a manual annotation pass) can add elements; this WP treats the empty `elements: []` arrays as a normal data fact.
-- **Element bodies**. ACS elements are short bullets within the task body (e.g. `PA.I.A.K1 Certification requirements, recent flight experience, and recordkeeping.`). The task body markdown is the read surface; element rows exist as DB anchors for citation but carry no `content_md`. A follow-up WP could split element bodies out if cited-by panels need it, but the spec ratifies "leave them flat for now" per WP-CFR's same call on CFR paragraphs.
-- **Cross-edition supersession**. Each ACS slug maps to one publication; no edition chain seeded. ADR 019's annual-diff plumbing is future operator workflow.
-- **Per-element metadata** (which knowledge node maps to which element). That's the cert-syllabus WP's lane, not this one.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md) for the deferred items, rationale, and revisit triggers.
 
 ## Pre-existing risk
 
