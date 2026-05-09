@@ -556,8 +556,11 @@ export {
 	DOMAINS,
 	type Domain,
 	domainLabel,
+	ENCODED_TEXT_LADDER_TAB_LABELS,
+	ENCODED_TEXT_LADDER_TABS,
 	ENGINE_TARGETING_SOURCE_VALUES,
 	ENGINE_TARGETING_SOURCES,
+	type EncodedTextLadderTab,
 	type EngineTargetingSource,
 	externalUrlForReference,
 	GOAL_NODE_NOTES_MAX_LENGTH,
@@ -750,6 +753,8 @@ export {
 	WEAK_AREA_REP_WEIGHT,
 	WEAK_AREA_WINDOW_DAYS,
 	WORDS_PER_MINUTE_READING_RATE,
+	WX_DECODE_PRODUCT_SLUGS,
+	type WxDecodeProductSlug,
 } from './study';
 export {
 	CITATION_ORDER_DEFAULT,

@@ -774,6 +774,44 @@ export const KNOWLEDGE_NODE_KIND_LABELS: Record<KnowledgeNodeKind, string> = {
 };
 
 /**
+ * Knowledge-node slugs in the encoded-text product family (METAR, TAF,
+ * PIREP, AIRMET/SIGMET, etc.). When a course step links one of these
+ * nodes, the step reader renders a Decode/Understand/Triage skill-ladder
+ * tab strip above the body to telegraph the shared pedagogy pattern.
+ *
+ * Per the encoded-text family memory and the course-reader-and-editor
+ * spec ("Encoded-text family rendering"). The list is constant-driven
+ * (option 1 in design.md) until the family grows past ~10-15 members,
+ * at which point a node-frontmatter field replaces the constant lookup.
+ *
+ * Adding a slug = one-line constants change. No data migration required;
+ * the rendering hint is purely orthogonal to the node body.
+ */
+export const WX_DECODE_PRODUCT_SLUGS = [
+	'wx-reading-metars-tafs',
+	'wx-product-pireps',
+	'wx-product-airmets-sigmets',
+] as const;
+
+export type WxDecodeProductSlug = (typeof WX_DECODE_PRODUCT_SLUGS)[number];
+
+/**
+ * Decoded skill-ladder tab labels rendered above the encoded-text body.
+ * The tabs are visual hints only (per OUT-OF-SCOPE.md "Encoded-text per-tab
+ * content" -- per-tab filtering is deferred until the family has authored
+ * skill-ladder cards).
+ */
+export const ENCODED_TEXT_LADDER_TABS = ['decode', 'understand', 'triage'] as const;
+
+export type EncodedTextLadderTab = (typeof ENCODED_TEXT_LADDER_TABS)[number];
+
+export const ENCODED_TEXT_LADDER_TAB_LABELS: Record<EncodedTextLadderTab, string> = {
+	decode: 'Decode',
+	understand: 'Understand',
+	triage: 'Triage',
+};
+
+/**
  * Dual-gate mastery thresholds (ADR 011, spec "Mastery computation").
  *
  * Mastery is a dual gate: card stability AND rep accuracy must each clear

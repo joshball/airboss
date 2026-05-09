@@ -29,15 +29,29 @@ import { bauthUser } from '@ab/auth/schema';
 import { COURSE_KINDS, COURSE_STATUSES, COURSE_STEP_LEVELS, SYLLABUS_STATUSES } from '@ab/constants';
 import { db } from '@ab/db/connection';
 import { generateAuthId, generateSyllabusId, generateSyllabusNodeId, generateSyllabusNodeLinkId } from '@ab/utils';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { getCourseBySlug, getCourseStepsByCourse, getCoursesByGoal, upsertCourse, upsertCourseStep } from '../courses';
+import {
+	deleteCourseRow,
+	deleteCourseStep,
+	getCourseById,
+	getCourseBySlug,
+	getCourseStepByCode,
+	getCourseStepsByCourse,
+	getCoursesByGoal,
+	listAllCourses,
+	listCoursesForReader,
+	pickOverlaySyllabus,
+	upsertCourse,
+	upsertCourseStep,
+} from '../courses';
 import { addGoalNode, addGoalSyllabus, createGoal, getGoalNodeUnion } from '../goals';
 import {
 	course,
 	courseStep,
 	goal,
 	goalCourse,
+	goalSyllabus,
 	knowledgeNode,
 	syllabus,
 	syllabusNode,
@@ -566,5 +580,296 @@ describe('getGoalNodeUnion -- course extension', () => {
 		expect(union.weights[SHARED_NODE_ID]).toBeCloseTo(2.0);
 		expect(union.weights[NODE_A_ID]).toBeCloseTo(2.0);
 		expect(union.weights[ADHOC_NODE_ID]).toBeCloseTo(1.5);
+	});
+});
+
+// ---------------------------------------------------------------------------
+// Reader / editor read paths (course-reader-and-editor WP, Phase 1)
+// ---------------------------------------------------------------------------
+
+describe('listCoursesForReader', () => {
+	it('filters by status and sorts by title ASC', async () => {
+		const activeSlug = slug('reader-active');
+		const draftSlug = slug('reader-draft');
+		const archivedSlug = slug('reader-archived');
+		await upsertCourse({
+			slug: archivedSlug,
+			kind: COURSE_KINDS.INSTRUCTOR,
+			title: 'Z reader-archived',
+			status: COURSE_STATUSES.ARCHIVED,
+			seedOrigin: SUITE_TAG,
+		});
+		await upsertCourse({
+			slug: activeSlug,
+			kind: COURSE_KINDS.INSTRUCTOR,
+			title: 'A reader-active',
+			status: COURSE_STATUSES.ACTIVE,
+			seedOrigin: SUITE_TAG,
+		});
+		await upsertCourse({
+			slug: draftSlug,
+			kind: COURSE_KINDS.INSTRUCTOR,
+			title: 'M reader-draft',
+			status: COURSE_STATUSES.DRAFT,
+			seedOrigin: SUITE_TAG,
+		});
+
+		const activeOnly = await listCoursesForReader(db, { statusIn: [COURSE_STATUSES.ACTIVE] });
+		const activeSlugs = activeOnly.map((c) => c.slug);
+		expect(activeSlugs).toContain(activeSlug);
+		expect(activeSlugs).not.toContain(draftSlug);
+		expect(activeSlugs).not.toContain(archivedSlug);
+
+		const activeAndArchived = await listCoursesForReader(db, {
+			statusIn: [COURSE_STATUSES.ACTIVE, COURSE_STATUSES.ARCHIVED],
+		});
+		const activeAndArchivedSlugs = activeAndArchived.map((c) => c.slug);
+		expect(activeAndArchivedSlugs).toContain(activeSlug);
+		expect(activeAndArchivedSlugs).toContain(archivedSlug);
+		expect(activeAndArchivedSlugs).not.toContain(draftSlug);
+
+		// Sort stability: titles within the suite arrive in ASC order.
+		const inSuite = activeAndArchived.filter((c) => c.slug.endsWith(SUITE_TOKEN));
+		const titles = inSuite.map((c) => c.title);
+		const sortedTitles = [...titles].sort((a, b) => a.localeCompare(b));
+		expect(titles).toEqual(sortedTitles);
+	});
+
+	it('returns every status when statusIn is omitted', async () => {
+		const all = await listCoursesForReader(db);
+		// At minimum, the rows planted above must appear (regardless of pre-suite content).
+		const slugs = new Set(all.map((c) => c.slug));
+		expect(slugs.has(slug('reader-active'))).toBe(true);
+		expect(slugs.has(slug('reader-draft'))).toBe(true);
+		expect(slugs.has(slug('reader-archived'))).toBe(true);
+	});
+});
+
+describe('listAllCourses', () => {
+	it('returns every course regardless of status, ordered by updated_at DESC', async () => {
+		const all = await listAllCourses(db);
+		const slugs = new Set(all.map((c) => c.slug));
+		// All three suite-planted courses are present (active + draft + archived).
+		expect(slugs.has(slug('reader-active'))).toBe(true);
+		expect(slugs.has(slug('reader-draft'))).toBe(true);
+		expect(slugs.has(slug('reader-archived'))).toBe(true);
+		// updated_at descends across rows.
+		for (let i = 1; i < all.length; i += 1) {
+			const previous = all[i - 1];
+			const current = all[i];
+			if (previous && current) {
+				expect(previous.updatedAt.getTime()).toBeGreaterThanOrEqual(current.updatedAt.getTime());
+			}
+		}
+	});
+});
+
+describe('getCourseById', () => {
+	it('returns the row for a known id and null for an unknown id', async () => {
+		const courseSlug = slug('by-id-course');
+		const c = await upsertCourse({
+			slug: courseSlug,
+			kind: COURSE_KINDS.INSTRUCTOR,
+			title: 'By id course',
+			seedOrigin: SUITE_TAG,
+		});
+		const row = await getCourseById(c.id);
+		expect(row?.id).toBe(c.id);
+		expect(row?.slug).toBe(courseSlug);
+
+		const missing = await getCourseById('crs_does_not_exist');
+		expect(missing).toBeNull();
+	});
+});
+
+describe('getCourseStepByCode', () => {
+	it('returns the row for a known (courseId, code) and null otherwise', async () => {
+		const courseSlug = slug('step-by-code-course');
+		const c = await upsertCourse({
+			slug: courseSlug,
+			kind: COURSE_KINDS.INSTRUCTOR,
+			title: 'Step-by-code course',
+			seedOrigin: SUITE_TAG,
+		});
+		const section = await upsertCourseStep({
+			courseId: c.id,
+			parentId: null,
+			level: COURSE_STEP_LEVELS.SECTION,
+			ordinal: 1,
+			code: 'sbc-s1',
+			title: 'Section',
+			bodyMd: '',
+			knowledgeNodeId: null,
+			contentHash: 'sbc-s1-hash',
+			seedOrigin: SUITE_TAG,
+		});
+		const step = await upsertCourseStep({
+			courseId: c.id,
+			parentId: section.id,
+			level: COURSE_STEP_LEVELS.STEP,
+			ordinal: 1,
+			code: 'sbc-s1.1',
+			title: 'Step 1',
+			bodyMd: '',
+			knowledgeNodeId: NODE_A_ID,
+			contentHash: 'sbc-s1.1-hash',
+			seedOrigin: SUITE_TAG,
+		});
+
+		const fetchedStep = await getCourseStepByCode(c.id, 'sbc-s1.1');
+		expect(fetchedStep?.id).toBe(step.id);
+		expect(fetchedStep?.knowledgeNodeId).toBe(NODE_A_ID);
+
+		const fetchedSection = await getCourseStepByCode(c.id, 'sbc-s1');
+		expect(fetchedSection?.id).toBe(section.id);
+
+		const missing = await getCourseStepByCode(c.id, 'sbc-not-found');
+		expect(missing).toBeNull();
+	});
+});
+
+describe('deleteCourseStep + deleteCourseRow', () => {
+	it('deleteCourseStep removes only the targeted row', async () => {
+		const courseSlug = slug('del-step-course');
+		const c = await upsertCourse({
+			slug: courseSlug,
+			kind: COURSE_KINDS.INSTRUCTOR,
+			title: 'Del step course',
+			seedOrigin: SUITE_TAG,
+		});
+		const section = await upsertCourseStep({
+			courseId: c.id,
+			parentId: null,
+			level: COURSE_STEP_LEVELS.SECTION,
+			ordinal: 1,
+			code: 'ds-s1',
+			title: 'Section',
+			bodyMd: '',
+			knowledgeNodeId: null,
+			contentHash: 'ds-s1-hash',
+			seedOrigin: SUITE_TAG,
+		});
+		const step = await upsertCourseStep({
+			courseId: c.id,
+			parentId: section.id,
+			level: COURSE_STEP_LEVELS.STEP,
+			ordinal: 1,
+			code: 'ds-s1.1',
+			title: 'Step',
+			bodyMd: '',
+			knowledgeNodeId: NODE_A_ID,
+			contentHash: 'ds-s1.1-hash',
+			seedOrigin: SUITE_TAG,
+		});
+
+		await deleteCourseStep(step.id);
+		const remaining = await getCourseStepsByCourse(c.id);
+		expect(remaining.find((r) => r.id === step.id)).toBeUndefined();
+		expect(remaining.find((r) => r.id === section.id)).toBeDefined();
+	});
+
+	it('deleteCourseRow cascades to course_step rows', async () => {
+		const courseSlug = slug('del-row-cascade-course');
+		const c = await upsertCourse({
+			slug: courseSlug,
+			kind: COURSE_KINDS.INSTRUCTOR,
+			title: 'Del row cascade course',
+			seedOrigin: SUITE_TAG,
+		});
+		const section = await upsertCourseStep({
+			courseId: c.id,
+			parentId: null,
+			level: COURSE_STEP_LEVELS.SECTION,
+			ordinal: 1,
+			code: 'drc-s1',
+			title: 'Section',
+			bodyMd: '',
+			knowledgeNodeId: null,
+			contentHash: 'drc-s1-hash',
+			seedOrigin: SUITE_TAG,
+		});
+		await upsertCourseStep({
+			courseId: c.id,
+			parentId: section.id,
+			level: COURSE_STEP_LEVELS.STEP,
+			ordinal: 1,
+			code: 'drc-s1.1',
+			title: 'Step',
+			bodyMd: '',
+			knowledgeNodeId: NODE_A_ID,
+			contentHash: 'drc-s1.1-hash',
+			seedOrigin: SUITE_TAG,
+		});
+
+		await deleteCourseRow(c.id);
+		const fetched = await getCourseById(c.id);
+		expect(fetched).toBeNull();
+		// All steps gone too (FK cascade).
+		const orphans = await db.select().from(courseStep).where(eq(courseStep.courseId, c.id));
+		expect(orphans).toHaveLength(0);
+	});
+});
+
+describe('pickOverlaySyllabus', () => {
+	it('returns null when goal is null', async () => {
+		expect(await pickOverlaySyllabus(null)).toBeNull();
+	});
+
+	it('returns null when goal holds zero goal_syllabus rows', async () => {
+		const g = await createGoal({
+			userId: TEST_USER_ID,
+			title: 'no-syllabi goal',
+			notesMd: '',
+			isPrimary: false,
+		});
+		const goalRow = await db.select().from(goal).where(eq(goal.id, g.id)).limit(1);
+		const row = goalRow[0];
+		if (!row) throw new Error('goal seed failed');
+		expect(await pickOverlaySyllabus(row)).toBeNull();
+	});
+
+	it('returns the highest-weight syllabus, ties broken by syllabus_id ASC', async () => {
+		// Plant a second syllabus so the tie-break path is exercised. The one
+		// from beforeAll (SYL_ID) is already available; add another.
+		const SECOND_SYL_ID = generateSyllabusId();
+		const now = new Date();
+		await db.insert(syllabus).values({
+			id: SECOND_SYL_ID,
+			slug: slug('test-syl-overlay-second'),
+			kind: 'acs',
+			title: 'Second test syllabus',
+			edition: `faa-s-acs-${SUITE_TOKEN}-2`,
+			status: SYLLABUS_STATUSES.ACTIVE,
+			seedOrigin: SUITE_TAG,
+			createdAt: now,
+			updatedAt: now,
+		});
+
+		const g = await createGoal({
+			userId: TEST_USER_ID,
+			title: 'overlay-pick goal',
+			notesMd: '',
+			isPrimary: false,
+		});
+		const goalRow = await db.select().from(goal).where(eq(goal.id, g.id)).limit(1);
+		const row = goalRow[0];
+		if (!row) throw new Error('goal seed failed');
+
+		// Equal weights -- tie-break should pick the lexically smaller syllabus_id.
+		await addGoalSyllabus(g.id, TEST_USER_ID, { syllabusId: SYL_ID, weight: 1.0 });
+		await addGoalSyllabus(g.id, TEST_USER_ID, { syllabusId: SECOND_SYL_ID, weight: 1.0 });
+		const tied = await pickOverlaySyllabus(row);
+		const expectedTie = [SYL_ID, SECOND_SYL_ID].sort()[0];
+		expect(tied).toBe(expectedTie);
+
+		// Differing weights -- highest wins regardless of id order.
+		const heavierSylId = SYL_ID === expectedTie ? SECOND_SYL_ID : SYL_ID;
+		// We want the OPPOSITE of the tie-break winner to win on weight.
+		await db
+			.update(goalSyllabus)
+			.set({ weight: 5.0 })
+			.where(and(eq(goalSyllabus.goalId, g.id), eq(goalSyllabus.syllabusId, heavierSylId)));
+		const winner = await pickOverlaySyllabus(row);
+		expect(winner).toBe(heavierSylId);
 	});
 });
