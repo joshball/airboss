@@ -1,5 +1,5 @@
 import { mapBetterAuthSession } from '@ab/auth';
-import { ROUTES } from '@ab/constants';
+import { ENV_VARS, ROUTES } from '@ab/constants';
 import { recoverOrphanedRunning, startWorker, type WorkerHandle } from '@ab/hangar-jobs';
 import { initRegistry } from '@ab/sources';
 import {
@@ -48,8 +48,17 @@ async function bootWorker(): Promise<void> {
  * `bootWorker` swallows its own errors so a transient DB hiccup during
  * startup doesn't take the app down.
  */
+function workerEnabled(): boolean {
+	const raw = (process.env[ENV_VARS.HANGAR_JOBS_WORKER] ?? '').toLowerCase();
+	return raw !== 'off' && raw !== '0' && raw !== 'false';
+}
+
 if (!building) {
-	void bootWorker();
+	if (workerEnabled()) {
+		void bootWorker();
+	} else {
+		log.info('hangar worker disabled via HANGAR_JOBS_WORKER');
+	}
 	// Hydrate the @ab/sources registry from Postgres so the lifecycle overlay
 	// + editions cache match the persisted audit trail. Non-blocking;
 	// failures log but never crash bootstrap.

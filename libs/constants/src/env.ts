@@ -35,6 +35,14 @@ export const ENV_VARS = {
 	/** Hangar sync-to-disk mode override. Values: `commit-local` | `pr`. */
 	HANGAR_SYNC_MODE: 'HANGAR_SYNC_MODE',
 	/**
+	 * Disable the in-process hangar-jobs worker. Set to `off` (or `0`/`false`)
+	 * to suppress the worker boot in `apps/hangar/src/hooks.server.ts`. Used
+	 * by the playwright e2e webServers, which don't need a worker and would
+	 * otherwise crash-loop while the e2e DB is being dropped + recreated by
+	 * `globalSetup`. Default: worker boots normally.
+	 */
+	HANGAR_JOBS_WORKER: 'HANGAR_JOBS_WORKER',
+	/**
 	 * Dev-only override for the sectional edition resolver. When set, the
 	 * binary-visual fetch pipeline loads HTML from this location (an http(s)://
 	 * URL or a local filesystem path) instead of the source's configured index
