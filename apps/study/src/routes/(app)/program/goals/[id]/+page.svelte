@@ -31,6 +31,8 @@ const nodes = $derived(data.nodes);
 const availableSyllabi = $derived(data.availableSyllabi);
 const availableNodes = $derived(data.availableNodes);
 const syllabusTitleById = $derived(data.syllabusTitleById);
+const courses = $derived(data.courses);
+const availableCourses = $derived(data.availableCourses);
 const editing = $derived(page.url.searchParams.get(QUERY_PARAMS.EDIT) === '1');
 const detailHref = $derived(ROUTES.PROGRAM_GOAL(goal.id));
 const editHref = $derived(ROUTES.PROGRAM_GOAL_EDIT(goal.id));
@@ -231,6 +233,59 @@ const editHref = $derived(ROUTES.PROGRAM_GOAL_EDIT(goal.id));
 					<select name="knowledgeNodeId">
 						{#each availableNodes as opt (opt.id)}
 							<option value={opt.id}>{opt.title} ({domainLabel(opt.domain)})</option>
+						{/each}
+					</select>
+				</label>
+				<Button type="submit" variant="primary">Add</Button>
+			</form>
+		{/if}
+	</section>
+
+	<section class="block" aria-labelledby="courses-h">
+		<header class="block-head">
+			<h2 id="courses-h">Courses ({courses.length})</h2>
+		</header>
+		{#if courses.length === 0}
+			<EmptyState
+				title="No courses"
+				body="Add an instructor-authored course to thread its steps into this goal. Courses contribute their linked knowledge nodes alongside any syllabi or ad-hoc nodes you've added."
+			/>
+		{:else}
+			<ul class="row-list">
+				{#each courses as gc (gc.course.id)}
+					<li class="row">
+						<a class="row-title" href={ROUTES.COURSE(gc.course.slug)}>{gc.course.title}</a>
+						<form method="POST" action="?/setCourseWeight" class="weight-form">
+							<input type="hidden" name="courseId" value={gc.course.id} />
+							<label class="weight-label">
+								Weight
+								<input
+									type="number"
+									name="weight"
+									min={GOAL_SYLLABUS_WEIGHT_MIN}
+									max={GOAL_SYLLABUS_WEIGHT_MAX}
+									step="0.1"
+									value={gc.weight}
+								/>
+							</label>
+							<Button type="submit" variant="ghost">Save</Button>
+						</form>
+						<form method="POST" action="?/removeCourse">
+							<input type="hidden" name="courseId" value={gc.course.id} />
+							<Button type="submit" variant="ghost">Remove</Button>
+						</form>
+					</li>
+				{/each}
+			</ul>
+		{/if}
+
+		{#if availableCourses.length > 0}
+			<form method="POST" action="?/addCourse" class="add-form">
+				<label class="field-inline">
+					<span class="label">Add course</span>
+					<select name="courseId">
+						{#each availableCourses as opt (opt.id)}
+							<option value={opt.id}>{opt.title}</option>
 						{/each}
 					</select>
 				</label>
