@@ -19,9 +19,8 @@
 import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import type { IssueInput } from '@ab/bc-ingest-review';
-import { applyOverride, getPlugin, upsertIssue } from '@ab/bc-ingest-review/server';
+import { applyOverride, getPlugin, listHandbookEditions, upsertIssue } from '@ab/bc-ingest-review/server';
 import { CORPUS_VALUES, type Corpus, INGEST_REVIEW } from '@ab/constants';
-import { listHandbookEditions } from '../../libs/bc/ingest-review/src/plugins/handbook-shared';
 import { parseSidecar } from './yaml-sidecar';
 
 interface CliOptions {

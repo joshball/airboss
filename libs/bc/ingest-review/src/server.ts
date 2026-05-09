@@ -27,6 +27,9 @@ export {
 	UnknownPluginKindError,
 } from './plugin';
 export { registerAllPlugins } from './plugins';
+// Handbook edition discovery -- exposed for the import-overrides script
+// so it can resolve a slug -> edition without re-implementing the walk.
+export { type HandbookEdition, listHandbookEditions } from './plugins/handbook-shared';
 export { type ProducerOptions, type ProducerSummary, runProducers } from './producer';
 // Server-only value exports.
 export {
