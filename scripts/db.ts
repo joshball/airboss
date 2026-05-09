@@ -468,6 +468,19 @@ async function doCheck(): Promise<void> {
 	await run(cmd);
 }
 
+/**
+ * `bun run db diagnose:school-personal-syllabi` -- course-primitive WP
+ * Phase 7 defensive diagnostic. Lists every `study.syllabus` row whose
+ * `kind` is `school` or `personal`. Pre-existing research confirmed zero
+ * such rows in shipped data; this script exists so that if any surface
+ * later, the human decides per-row whether to leave them, archive them,
+ * or hand-migrate to `study.course`. Informational only -- exits 0 in
+ * both the empty and non-empty cases.
+ */
+async function doDiagnoseSchoolPersonalSyllabi(): Promise<void> {
+	await run(['bun', 'scripts/db/diagnose-school-personal-syllabi.ts', ...passthroughFlags]);
+}
+
 async function doBuild(): Promise<void> {
 	await run(['bun', 'scripts/build-knowledge-index.ts', ...passthroughFlags]);
 }
@@ -742,6 +755,17 @@ const COMMAND_HELP: Record<string, CommandHelp> = {
 			'docs/work-packages/evidence-kind-data-layer/',
 		],
 	},
+	'diagnose:school-personal-syllabi': {
+		summary: "List study.syllabus rows with kind IN ('school','personal') (course-primitive WP guard)",
+		what: "Runs `scripts/db/diagnose-school-personal-syllabi.ts`. Reads `study.syllabus` and prints any rows with `kind IN ('school','personal')`. When zero rows match, prints `0 row(s) found with kind IN ('school','personal').` and exits 0. When matches exist, prints the count followed by a tabular listing (`id | slug | kind | title | edition | created_at`) and still exits 0 -- this is informational, not a failure gate.",
+		why: 'Course-primitive WP Phase 7 defensive diagnostic per [docs/work-packages/course-primitive/spec.md](../docs/work-packages/course-primitive/spec.md) "Migration guard": pre-existing research confirmed zero `school`/`personal` syllabi in shipped data, but if any appear later the human (Joshua) decides per-row whether to leave them, archive them, or hand-migrate to `study.course`. There is no automatic data migration.',
+		how: "Read-only `SELECT id, slug, kind, title, edition, created_at FROM study.syllabus WHERE kind IN ('school','personal') ORDER BY created_at, slug`. Plain-text output (no JSON, no colors). Exit 0 in both cases.",
+		links: [
+			'scripts/db/diagnose-school-personal-syllabi.ts',
+			'docs/work-packages/course-primitive/spec.md',
+			'docs/work-packages/course-primitive/test-plan.md (CRS-20, CRS-21)',
+		],
+	},
 	help: {
 		summary: 'Show the command index (or detailed help for one command)',
 		what: '`bun run db help` prints the index of every command with its one-line summary. `bun run db <command> --help` prints a what/why/how/links block for that command only.',
@@ -784,7 +808,10 @@ const COMMAND_GROUPS: readonly CommandGroup[] = [
 	{ label: 'Schema', commands: ['push', 'generate', 'migrate'] },
 	{ label: 'Data + content', commands: ['seed', 'seed:check', 'seed:remove', 'reset', 'reset-study'] },
 	{ label: 'Knowledge authoring', commands: ['new', 'build', 'build-all'] },
-	{ label: 'Maintenance', commands: ['backfill', 'check', 'reset-login-attempts'] },
+	{
+		label: 'Maintenance',
+		commands: ['backfill', 'check', 'diagnose:school-personal-syllabi', 'reset-login-attempts'],
+	},
 	{ label: 'Utility', commands: ['help'] },
 ];
 
@@ -838,6 +865,7 @@ const handlers: Record<string, () => Promise<void> | void> = {
 	new: doNew,
 	backfill: doBackfill,
 	check: doCheck,
+	'diagnose:school-personal-syllabi': doDiagnoseSchoolPersonalSyllabi,
 };
 
 if (wantsHelp) {
