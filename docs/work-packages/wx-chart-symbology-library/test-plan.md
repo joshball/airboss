@@ -1,7 +1,7 @@
 ---
 id: wx-chart-symbology-library
 title: 'Test Plan: Weather Chart Symbology Library'
-product: cross-product
+product: platform
 category: feature
 status: draft
 agent_review_status: pending
