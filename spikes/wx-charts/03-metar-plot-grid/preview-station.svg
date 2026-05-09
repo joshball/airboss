@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="410" viewBox="0 0 800 410" font-family="-apple-system, system-ui, sans-serif">
+<rect x="0" y="0" width="800" height="410" fill="#fafaf7" />
+<text x="20" y="28" font-size="16" font-weight="700" fill="#3d3a32">Station Model preview -- one glyph per cell</text>
+<text x="20" y="48" font-size="11" fill="#7a7568">Each cell shows the parsed METAR rendered at 1.5x scale. Validates wind direction, barb side, cloud-cover fill, weather glyph, temperature/dewpoint colors.</text>
+<g class="cell">
+<rect x="10" y="80" width="220" height="100" fill="white" stroke="#e0ddd2" stroke-width="0.6" />
+<text x="18" y="96" font-size="9" font-weight="600" fill="#3d3a32">KORD (snow, OVC, west wind 12kt)</text>
+<g transform="translate(0 0)">
+<g class="station" data-station="KORD" data-cat="MVFR" transform="translate(100.0,130.0)"><line x1="-5.64" y1="-2.05" x2="-26.31" y2="-9.58" stroke="#1f1d18" stroke-width="1.0" /><line x1="-25.37" y1="-9.23" x2="-28.45" y2="-0.78" stroke="#1f1d18" stroke-width="1.0" /><circle cx="0" cy="0" r="7.7" fill="none" stroke="#1565c0" stroke-width="1.4" opacity="0.85" /><circle cx="0" cy="0" r="6" fill="white" stroke="#1f1d18" stroke-width="1" /><circle cx="0" cy="0" r="6" fill="#1f1d18" /><text x="-10" y="-7" text-anchor="end" font-size="9" font-weight="600" fill="#cc1f1f">27</text><text x="-10" y="11" text-anchor="end" font-size="9" font-weight="600" fill="#2c8742">23</text><text x="10" y="-7" font-size="9" font-weight="600" fill="#1f1d18">937</text><text x="-22" y="3" text-anchor="end" font-size="9" font-weight="600" fill="#1f1d18">3</text><text x="-12" y="3" text-anchor="end" font-size="10" font-weight="700" fill="#7d3eb5">-SN</text><text x="0" y="17" text-anchor="middle" font-size="7" font-weight="500" fill="#7a7568" letter-spacing="0.2">ORD</text></g>
+</g>
+</g>
+<g class="cell">
+<rect x="250" y="80" width="220" height="100" fill="white" stroke="#e0ddd2" stroke-width="0.6" />
+<text x="258" y="96" font-size="9" font-weight="600" fill="#3d3a32">KJFK (fog, VV002, 1/8SM)</text>
+<g transform="translate(0 0)">
+<g class="station" data-station="KJFK" data-cat="LIFR" transform="translate(340.0,130.0)"><line x1="0.00" y1="6.00" x2="0.00" y2="28.00" stroke="#1f1d18" stroke-width="1.0" /><line x1="0.00" y1="27.00" x2="9.00" y2="27.00" stroke="#1f1d18" stroke-width="1.0" /><line x1="0.00" y1="23.50" x2="9.00" y2="23.50" stroke="#1f1d18" stroke-width="1.0" /><circle cx="0" cy="0" r="7.7" fill="none" stroke="#6a1b9a" stroke-width="1.4" opacity="0.85" /><circle cx="0" cy="0" r="6" fill="white" stroke="#1f1d18" stroke-width="1" /><line x1="-5" y1="-5" x2="5" y2="5" stroke="#1f1d18" stroke-width="1.2" />
+				<line x1="-5" y1="5" x2="5" y2="-5" stroke="#1f1d18" stroke-width="1.2" /><text x="-10" y="-7" text-anchor="end" font-size="9" font-weight="600" fill="#cc1f1f">52</text><text x="-10" y="11" text-anchor="end" font-size="9" font-weight="600" fill="#2c8742">52</text><text x="10" y="-7" font-size="9" font-weight="600" fill="#1f1d18">924</text><text x="-22" y="3" text-anchor="end" font-size="9" font-weight="600" fill="#1f1d18">1/8</text><text x="-12" y="3" text-anchor="end" font-size="10" font-weight="700" fill="#7d3eb5">FG</text><text x="0" y="17" text-anchor="middle" font-size="7" font-weight="500" fill="#7a7568" letter-spacing="0.2">JFK</text></g>
+</g>
+</g>
+<g class="cell">
+<rect x="490" y="80" width="220" height="100" fill="white" stroke="#e0ddd2" stroke-width="0.6" />
+<text x="498" y="96" font-size="9" font-weight="600" fill="#3d3a32">KMIA (sct, calm)</text>
+<g transform="translate(0 0)">
+<g class="station" data-station="KMIA" data-cat="VFR" transform="translate(580.0,130.0)"><line x1="-1.04" y1="5.91" x2="-4.86" y2="27.57" stroke="#1f1d18" stroke-width="1.0" /><line x1="-4.69" y1="26.59" x2="4.17" y2="28.15" stroke="#1f1d18" stroke-width="1.0" /><circle cx="0" cy="0" r="6" fill="white" stroke="#1f1d18" stroke-width="1" /><path d="M 0 0 L -0.00 -6.00 A 6 6 0 0 1 6.00 -0.00 Z" fill="#1f1d18" /><text x="-10" y="-7" text-anchor="end" font-size="9" font-weight="600" fill="#cc1f1f">75</text><text x="-10" y="11" text-anchor="end" font-size="9" font-weight="600" fill="#2c8742">72</text><text x="10" y="-7" font-size="9" font-weight="600" fill="#1f1d18">991</text><text x="0" y="17" text-anchor="middle" font-size="7" font-weight="500" fill="#7a7568" letter-spacing="0.2">MIA</text></g>
+</g>
+</g>
+<g class="cell">
+<rect x="10" y="190" width="220" height="100" fill="white" stroke="#e0ddd2" stroke-width="0.6" />
+<text x="18" y="206" font-size="9" font-weight="600" fill="#3d3a32">KFAR (blowing snow, gust, VV009)</text>
+<g transform="translate(0 0)">
+<g class="station" data-station="KFAR" data-cat="IFR" transform="translate(100.0,240.0)"><line x1="-5.20" y1="-3.00" x2="-24.25" y2="-14.00" stroke="#1f1d18" stroke-width="1.0" /><line x1="-23.38" y1="-13.50" x2="-27.88" y2="-5.71" stroke="#1f1d18" stroke-width="1.0" /><line x1="-20.35" y1="-11.75" x2="-24.85" y2="-3.96" stroke="#1f1d18" stroke-width="1.0" /><circle cx="0" cy="0" r="7.7" fill="none" stroke="#c62828" stroke-width="1.4" opacity="0.85" /><circle cx="0" cy="0" r="6" fill="white" stroke="#1f1d18" stroke-width="1" /><line x1="-5" y1="-5" x2="5" y2="5" stroke="#1f1d18" stroke-width="1.2" />
+				<line x1="-5" y1="5" x2="5" y2="-5" stroke="#1f1d18" stroke-width="1.2" /><text x="-10" y="-7" text-anchor="end" font-size="9" font-weight="600" fill="#cc1f1f">-2</text><text x="-10" y="11" text-anchor="end" font-size="9" font-weight="600" fill="#2c8742">-9</text><text x="10" y="-7" font-size="9" font-weight="600" fill="#1f1d18">002</text><text x="-22" y="3" text-anchor="end" font-size="9" font-weight="600" fill="#1f1d18">1</text><text x="-12" y="3" text-anchor="end" font-size="10" font-weight="700" fill="#7d3eb5">-SN</text><text x="0" y="17" text-anchor="middle" font-size="7" font-weight="500" fill="#7a7568" letter-spacing="0.2">FAR</text></g>
+</g>
+</g>
+<g class="cell">
+<rect x="250" y="190" width="220" height="100" fill="white" stroke="#e0ddd2" stroke-width="0.6" />
+<text x="258" y="206" font-size="9" font-weight="600" fill="#3d3a32">KGTF (very cold, calm, clear)</text>
+<g transform="translate(0 0)">
+<g class="station" data-station="KGTF" data-cat="VFR" transform="translate(340.0,240.0)"><circle cx="0" cy="0" r="10" fill="none" stroke="#1f1d18" stroke-width="0.7" /><circle cx="0" cy="0" r="6" fill="white" stroke="#1f1d18" stroke-width="1" /><text x="-10" y="-7" text-anchor="end" font-size="9" font-weight="600" fill="#cc1f1f">-35</text><text x="-10" y="11" text-anchor="end" font-size="9" font-weight="600" fill="#2c8742">-40</text><text x="10" y="-7" font-size="9" font-weight="600" fill="#1f1d18">017</text><text x="0" y="17" text-anchor="middle" font-size="7" font-weight="500" fill="#7a7568" letter-spacing="0.2">GTF</text></g>
+</g>
+</g>
+<g class="cell">
+<rect x="490" y="190" width="220" height="100" fill="white" stroke="#e0ddd2" stroke-width="0.6" />
+<text x="498" y="206" font-size="9" font-weight="600" fill="#3d3a32">KMIA (south wind 8kt SM)</text>
+<g transform="translate(0 0)">
+<g class="station" data-station="KMIA" data-cat="MVFR" transform="translate(580.0,240.0)"><line x1="0.00" y1="6.00" x2="0.00" y2="28.00" stroke="#1f1d18" stroke-width="1.0" /><line x1="0.00" y1="27.00" x2="9.00" y2="27.00" stroke="#1f1d18" stroke-width="1.0" /><line x1="0.00" y1="23.50" x2="9.00" y2="23.50" stroke="#1f1d18" stroke-width="1.0" /><line x1="0.00" y1="20.00" x2="9.00" y2="20.00" stroke="#1f1d18" stroke-width="1.0" /><line x1="0.00" y1="16.50" x2="9.00" y2="16.50" stroke="#1f1d18" stroke-width="1.0" /><line x1="0.00" y1="13.00" x2="4.50" y2="13.00" stroke="#1f1d18" stroke-width="1.0" /><circle cx="0" cy="0" r="7.7" fill="none" stroke="#1565c0" stroke-width="1.4" opacity="0.85" /><circle cx="0" cy="0" r="6" fill="white" stroke="#1f1d18" stroke-width="1" /><circle cx="0" cy="0" r="6" fill="#1f1d18" /><text x="-10" y="-7" text-anchor="end" font-size="9" font-weight="600" fill="#cc1f1f">72</text><text x="-10" y="11" text-anchor="end" font-size="9" font-weight="600" fill="#2c8742">66</text><text x="10" y="-7" font-size="9" font-weight="600" fill="#1f1d18">992</text><text x="-22" y="3" text-anchor="end" font-size="9" font-weight="600" fill="#1f1d18">5</text><text x="0" y="17" text-anchor="middle" font-size="7" font-weight="500" fill="#7a7568" letter-spacing="0.2">MIA</text></g>
+</g>
+</g>
+<g class="cell">
+<rect x="10" y="300" width="220" height="100" fill="white" stroke="#e0ddd2" stroke-width="0.6" />
+<text x="18" y="316" font-size="9" font-weight="600" fill="#3d3a32">High wind (45 KT, north)</text>
+<g transform="translate(0 0)">
+<g class="station" data-station="TEST" data-cat="MVFR" transform="translate(100.0,350.0)"><line x1="-0.00" y1="-6.00" x2="-0.00" y2="-28.00" stroke="#1f1d18" stroke-width="1.0" /><line x1="-0.00" y1="-27.00" x2="-9.00" y2="-27.00" stroke="#1f1d18" stroke-width="1.0" /><line x1="-0.00" y1="-23.50" x2="-9.00" y2="-23.50" stroke="#1f1d18" stroke-width="1.0" /><line x1="-0.00" y1="-20.00" x2="-9.00" y2="-20.00" stroke="#1f1d18" stroke-width="1.0" /><line x1="-0.00" y1="-16.50" x2="-9.00" y2="-16.50" stroke="#1f1d18" stroke-width="1.0" /><line x1="-0.00" y1="-13.00" x2="-4.50" y2="-13.00" stroke="#1f1d18" stroke-width="1.0" /><circle cx="0" cy="0" r="7.7" fill="none" stroke="#1565c0" stroke-width="1.4" opacity="0.85" /><circle cx="0" cy="0" r="6" fill="white" stroke="#1f1d18" stroke-width="1" /><circle cx="0" cy="0" r="6" fill="#1f1d18" /><text x="-10" y="-7" text-anchor="end" font-size="9" font-weight="600" fill="#cc1f1f">41</text><text x="-10" y="11" text-anchor="end" font-size="9" font-weight="600" fill="#2c8742">37</text><text x="10" y="-7" font-size="9" font-weight="600" fill="#1f1d18">992</text><text x="-22" y="3" text-anchor="end" font-size="9" font-weight="600" fill="#1f1d18">5</text><text x="-12" y="3" text-anchor="end" font-size="10" font-weight="700" fill="#7d3eb5">RA</text><text x="0" y="17" text-anchor="middle" font-size="7" font-weight="500" fill="#7a7568" letter-spacing="0.2">TEST</text></g>
+</g>
+</g>
+<g class="cell">
+<rect x="250" y="300" width="220" height="100" fill="white" stroke="#e0ddd2" stroke-width="0.6" />
+<text x="258" y="316" font-size="9" font-weight="600" fill="#3d3a32">High wind (65 KT, east)</text>
+<g transform="translate(0 0)">
+<g class="station" data-station="TEST" data-cat="MVFR" transform="translate(340.0,350.0)"><line x1="6.00" y1="-0.00" x2="28.00" y2="-0.00" stroke="#1f1d18" stroke-width="1.0" /><path d="M 27.00 -0.00 L 27.00 -9.00 L 21.75 -0.00 Z" fill="#1f1d18" /><line x1="20.00" y1="-0.00" x2="20.00" y2="-9.00" stroke="#1f1d18" stroke-width="1.0" /><line x1="16.50" y1="-0.00" x2="16.50" y2="-4.50" stroke="#1f1d18" stroke-width="1.0" /><circle cx="0" cy="0" r="7.7" fill="none" stroke="#1565c0" stroke-width="1.4" opacity="0.85" /><circle cx="0" cy="0" r="6" fill="white" stroke="#1f1d18" stroke-width="1" /><circle cx="0" cy="0" r="6" fill="#1f1d18" /><text x="-10" y="-7" text-anchor="end" font-size="9" font-weight="600" fill="#cc1f1f">28</text><text x="-10" y="11" text-anchor="end" font-size="9" font-weight="600" fill="#2c8742">25</text><text x="10" y="-7" font-size="9" font-weight="600" fill="#1f1d18">992</text><text x="-22" y="3" text-anchor="end" font-size="9" font-weight="600" fill="#1f1d18">5</text><text x="-12" y="3" text-anchor="end" font-size="10" font-weight="700" fill="#7d3eb5">SN</text><text x="0" y="17" text-anchor="middle" font-size="7" font-weight="500" fill="#7a7568" letter-spacing="0.2">TEST</text></g>
+</g>
+</g>
+</svg>

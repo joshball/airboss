@@ -1,0 +1,1983 @@
+{
+	"targetTimestamp": "2024-01-13T12:00:00Z",
+	"source": "IEM ASOS Archive (https://mesonet.agron.iastate.edu)",
+	"fetchedAt": "2026-05-09T19:05:12.812Z",
+	"count": 49,
+	"observations": [
+		{
+			"station": {
+				"icao": "KSEA",
+				"asos": "SEA",
+				"lat": 47.4502,
+				"lon": -122.3088,
+				"region": "NW"
+			},
+			"raw": "KSEA 131153Z 09015G22KT 10SM SCT240 M09/M19 A3012 RMK AO2 SLP211 T10941194 11083 21094 56023 $",
+			"parsed": {
+				"station": "KSEA",
+				"day": 13,
+				"hour": 11,
+				"minute": 53,
+				"wind": {
+					"directionDeg": 90,
+					"speedKt": 15,
+					"gustKt": 22,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 10,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "SCT",
+						"heightFtAgl": 24000
+					}
+				],
+				"tempC": -9,
+				"dewpointC": -19,
+				"altimeterInHg": 30.12,
+				"cavok": false,
+				"raw": "KSEA 131153Z 09015G22KT 10SM SCT240 M09/M19 A3012 RMK AO2 SLP211 T10941194 11083 21094 56023 $"
+			},
+			"observedAt": "2024-01-13T11:53:00.000Z",
+			"deltaMinutes": 7
+		},
+		{
+			"station": {
+				"icao": "KPDX",
+				"asos": "PDX",
+				"lat": 45.5887,
+				"lon": -122.5975,
+				"region": "NW"
+			},
+			"raw": "KPDX 131153Z 11024G33KT 10SM OVC029 M07/M14 A3011 RMK AO2 PK WND 11033/1133 SLP195 60000 T10671139 11050 21067 56017 $",
+			"parsed": {
+				"station": "KPDX",
+				"day": 13,
+				"hour": 11,
+				"minute": 53,
+				"wind": {
+					"directionDeg": 110,
+					"speedKt": 24,
+					"gustKt": 33,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 10,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "OVC",
+						"heightFtAgl": 2900
+					}
+				],
+				"tempC": -7,
+				"dewpointC": -14,
+				"altimeterInHg": 30.11,
+				"cavok": false,
+				"raw": "KPDX 131153Z 11024G33KT 10SM OVC029 M07/M14 A3011 RMK AO2 PK WND 11033/1133 SLP195 60000 T10671139 11050 21067 56017 $"
+			},
+			"observedAt": "2024-01-13T11:53:00.000Z",
+			"deltaMinutes": 7
+		},
+		{
+			"station": {
+				"icao": "KSFO",
+				"asos": "SFO",
+				"lat": 37.6189,
+				"lon": -122.375,
+				"region": "CA"
+			},
+			"raw": "KSFO 131156Z 00000KT 10SM SCT070 BKN085 08/06 A3016 RMK AO2 SLP212 T00830056 10106 20083 56016",
+			"parsed": {
+				"station": "KSFO",
+				"day": 13,
+				"hour": 11,
+				"minute": 56,
+				"wind": {
+					"directionDeg": 0,
+					"speedKt": 0,
+					"gustKt": null,
+					"variable": false,
+					"calm": true
+				},
+				"visibilitySM": 10,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "SCT",
+						"heightFtAgl": 7000
+					},
+					{
+						"cover": "BKN",
+						"heightFtAgl": 8500
+					}
+				],
+				"tempC": 8,
+				"dewpointC": 6,
+				"altimeterInHg": 30.16,
+				"cavok": false,
+				"raw": "KSFO 131156Z 00000KT 10SM SCT070 BKN085 08/06 A3016 RMK AO2 SLP212 T00830056 10106 20083 56016"
+			},
+			"observedAt": "2024-01-13T11:56:00.000Z",
+			"deltaMinutes": 4
+		},
+		{
+			"station": {
+				"icao": "KLAX",
+				"asos": "LAX",
+				"lat": 33.9416,
+				"lon": -118.4081,
+				"region": "CA"
+			},
+			"raw": "KLAX 131153Z 00000KT 10SM SCT250 07/01 A3007 RMK AO2 SLP183 T00720011 10117 20072 58007 $",
+			"parsed": {
+				"station": "KLAX",
+				"day": 13,
+				"hour": 11,
+				"minute": 53,
+				"wind": {
+					"directionDeg": 0,
+					"speedKt": 0,
+					"gustKt": null,
+					"variable": false,
+					"calm": true
+				},
+				"visibilitySM": 10,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "SCT",
+						"heightFtAgl": 25000
+					}
+				],
+				"tempC": 7,
+				"dewpointC": 1,
+				"altimeterInHg": 30.07,
+				"cavok": false,
+				"raw": "KLAX 131153Z 00000KT 10SM SCT250 07/01 A3007 RMK AO2 SLP183 T00720011 10117 20072 58007 $"
+			},
+			"observedAt": "2024-01-13T11:53:00.000Z",
+			"deltaMinutes": 7
+		},
+		{
+			"station": {
+				"icao": "KSLC",
+				"asos": "SLC",
+				"lat": 40.7884,
+				"lon": -111.9778,
+				"region": "MW"
+			},
+			"raw": "KSLC 131154Z 32003KT 10SM BKN039 BKN045 OVC060 M02/M10 A3000 RMK AO2 4/001",
+			"parsed": {
+				"station": "KSLC",
+				"day": 13,
+				"hour": 11,
+				"minute": 54,
+				"wind": {
+					"directionDeg": 320,
+					"speedKt": 3,
+					"gustKt": null,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 10,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "BKN",
+						"heightFtAgl": 3900
+					},
+					{
+						"cover": "BKN",
+						"heightFtAgl": 4500
+					},
+					{
+						"cover": "OVC",
+						"heightFtAgl": 6000
+					}
+				],
+				"tempC": -2,
+				"dewpointC": -10,
+				"altimeterInHg": 30,
+				"cavok": false,
+				"raw": "KSLC 131154Z 32003KT 10SM BKN039 BKN045 OVC060 M02/M10 A3000 RMK AO2 4/001"
+			},
+			"observedAt": "2024-01-13T11:54:00.000Z",
+			"deltaMinutes": 6
+		},
+		{
+			"station": {
+				"icao": "KDEN",
+				"asos": "DEN",
+				"lat": 39.8617,
+				"lon": -104.6737,
+				"region": "MW"
+			},
+			"raw": "KDEN 131153Z 06010KT 1 1/2SM -SN OVC022 M22/M26 A2976 RMK AO2 SLP140 P0001 60008 70008 T12221256 11178 21222 53014",
+			"parsed": {
+				"station": "KDEN",
+				"day": 13,
+				"hour": 11,
+				"minute": 53,
+				"wind": {
+					"directionDeg": 60,
+					"speedKt": 10,
+					"gustKt": null,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 1.5,
+				"weather": [
+					"-SN"
+				],
+				"clouds": [
+					{
+						"cover": "OVC",
+						"heightFtAgl": 2200
+					}
+				],
+				"tempC": -22,
+				"dewpointC": -26,
+				"altimeterInHg": 29.76,
+				"cavok": false,
+				"raw": "KDEN 131153Z 06010KT 1 1/2SM -SN OVC022 M22/M26 A2976 RMK AO2 SLP140 P0001 60008 70008 T12221256 11178 21222 53014"
+			},
+			"observedAt": "2024-01-13T11:53:00.000Z",
+			"deltaMinutes": 7
+		},
+		{
+			"station": {
+				"icao": "KABQ",
+				"asos": "ABQ",
+				"lat": 35.0402,
+				"lon": -106.6092,
+				"region": "MW"
+			},
+			"raw": "KABQ 131152Z 15005KT 10SM FEW080 FEW200 01/M12 A2992 RMK AO2 SLP133 T00061117 10028 21022 51003",
+			"parsed": {
+				"station": "KABQ",
+				"day": 13,
+				"hour": 11,
+				"minute": 52,
+				"wind": {
+					"directionDeg": 150,
+					"speedKt": 5,
+					"gustKt": null,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 10,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "FEW",
+						"heightFtAgl": 8000
+					},
+					{
+						"cover": "FEW",
+						"heightFtAgl": 20000
+					}
+				],
+				"tempC": 1,
+				"dewpointC": -12,
+				"altimeterInHg": 29.92,
+				"cavok": false,
+				"raw": "KABQ 131152Z 15005KT 10SM FEW080 FEW200 01/M12 A2992 RMK AO2 SLP133 T00061117 10028 21022 51003"
+			},
+			"observedAt": "2024-01-13T11:52:00.000Z",
+			"deltaMinutes": 8
+		},
+		{
+			"station": {
+				"icao": "KPHX",
+				"asos": "PHX",
+				"lat": 33.4342,
+				"lon": -112.0078,
+				"region": "SW"
+			},
+			"raw": "KPHX 131151Z 00000KT 10SM FEW250 04/M04 A3006 RMK AO2 SLP176 T00391044 10078 20039 53001",
+			"parsed": {
+				"station": "KPHX",
+				"day": 13,
+				"hour": 11,
+				"minute": 51,
+				"wind": {
+					"directionDeg": 0,
+					"speedKt": 0,
+					"gustKt": null,
+					"variable": false,
+					"calm": true
+				},
+				"visibilitySM": 10,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "FEW",
+						"heightFtAgl": 25000
+					}
+				],
+				"tempC": 4,
+				"dewpointC": -4,
+				"altimeterInHg": 30.06,
+				"cavok": false,
+				"raw": "KPHX 131151Z 00000KT 10SM FEW250 04/M04 A3006 RMK AO2 SLP176 T00391044 10078 20039 53001"
+			},
+			"observedAt": "2024-01-13T11:51:00.000Z",
+			"deltaMinutes": 9
+		},
+		{
+			"station": {
+				"icao": "KBOI",
+				"asos": "BOI",
+				"lat": 43.5644,
+				"lon": -116.2228,
+				"region": "NW"
+			},
+			"raw": "KBOI 131153Z 00000KT 10SM SCT038 M12/M17 A3010 RMK AO2 SLP228 70013 T11171167 11067 21117 51004",
+			"parsed": {
+				"station": "KBOI",
+				"day": 13,
+				"hour": 11,
+				"minute": 53,
+				"wind": {
+					"directionDeg": 0,
+					"speedKt": 0,
+					"gustKt": null,
+					"variable": false,
+					"calm": true
+				},
+				"visibilitySM": 10,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "SCT",
+						"heightFtAgl": 3800
+					}
+				],
+				"tempC": -12,
+				"dewpointC": -17,
+				"altimeterInHg": 30.1,
+				"cavok": false,
+				"raw": "KBOI 131153Z 00000KT 10SM SCT038 M12/M17 A3010 RMK AO2 SLP228 70013 T11171167 11067 21117 51004"
+			},
+			"observedAt": "2024-01-13T11:53:00.000Z",
+			"deltaMinutes": 7
+		},
+		{
+			"station": {
+				"icao": "KBIL",
+				"asos": "BIL",
+				"lat": 45.8077,
+				"lon": -108.5429,
+				"region": "NPL"
+			},
+			"raw": "KBIL 131153Z 22008KT 10SM FEW003 M32/M36 A3017 RMK AO2 SLP343 4/002 70004 I1000 I6000 T13171361 11306 21322 51002",
+			"parsed": {
+				"station": "KBIL",
+				"day": 13,
+				"hour": 11,
+				"minute": 53,
+				"wind": {
+					"directionDeg": 220,
+					"speedKt": 8,
+					"gustKt": null,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 10,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "FEW",
+						"heightFtAgl": 300
+					}
+				],
+				"tempC": -32,
+				"dewpointC": -36,
+				"altimeterInHg": 30.17,
+				"cavok": false,
+				"raw": "KBIL 131153Z 22008KT 10SM FEW003 M32/M36 A3017 RMK AO2 SLP343 4/002 70004 I1000 I6000 T13171361 11306 21322 51002"
+			},
+			"observedAt": "2024-01-13T11:53:00.000Z",
+			"deltaMinutes": 7
+		},
+		{
+			"station": {
+				"icao": "KOKC",
+				"asos": "OKC",
+				"lat": 35.3931,
+				"lon": -97.6007,
+				"region": "SPL"
+			},
+			"raw": "KOKC 131152Z 05008KT 10SM CLR M08/M11 A2987 RMK AO2 SLP127 T10781106 11050 21083 55008",
+			"parsed": {
+				"station": "KOKC",
+				"day": 13,
+				"hour": 11,
+				"minute": 52,
+				"wind": {
+					"directionDeg": 50,
+					"speedKt": 8,
+					"gustKt": null,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 10,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "CLR",
+						"heightFtAgl": null
+					}
+				],
+				"tempC": -8,
+				"dewpointC": -11,
+				"altimeterInHg": 29.87,
+				"cavok": false,
+				"raw": "KOKC 131152Z 05008KT 10SM CLR M08/M11 A2987 RMK AO2 SLP127 T10781106 11050 21083 55008"
+			},
+			"observedAt": "2024-01-13T11:52:00.000Z",
+			"deltaMinutes": 8
+		},
+		{
+			"station": {
+				"icao": "KDSM",
+				"asos": "DSM",
+				"lat": 41.534,
+				"lon": -93.6631,
+				"region": "PL"
+			},
+			"raw": "KDSM 131154Z COR 32015G22KT 6SM BLSN BR OVC011 M16/M18 A2984 RMK AO2 PK WND 31028/1108 SLP126 4/014 60001 70019 T11561178 11144 21156 51017 $",
+			"parsed": {
+				"station": "KDSM",
+				"day": 13,
+				"hour": 11,
+				"minute": 54,
+				"wind": {
+					"directionDeg": 320,
+					"speedKt": 15,
+					"gustKt": 22,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 6,
+				"weather": [
+					"BLSN",
+					"BR"
+				],
+				"clouds": [
+					{
+						"cover": "OVC",
+						"heightFtAgl": 1100
+					}
+				],
+				"tempC": -16,
+				"dewpointC": -18,
+				"altimeterInHg": 29.84,
+				"cavok": false,
+				"raw": "KDSM 131154Z COR 32015G22KT 6SM BLSN BR OVC011 M16/M18 A2984 RMK AO2 PK WND 31028/1108 SLP126 4/014 60001 70019 T11561178 11144 21156 51017 $"
+			},
+			"observedAt": "2024-01-13T11:54:00.000Z",
+			"deltaMinutes": 6
+		},
+		{
+			"station": {
+				"icao": "KMSP",
+				"asos": "MSP",
+				"lat": 44.882,
+				"lon": -93.2218,
+				"region": "NPL"
+			},
+			"raw": "KMSP 131153Z 32018G25KT 5SM -SN FEW020 OVC036 M14/M18 A2978 RMK AO2 PK WND 31027/1113 SLP101 4/001 P0000 60000 70005 T11391178 11111 21139 51012 $",
+			"parsed": {
+				"station": "KMSP",
+				"day": 13,
+				"hour": 11,
+				"minute": 53,
+				"wind": {
+					"directionDeg": 320,
+					"speedKt": 18,
+					"gustKt": 25,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 5,
+				"weather": [
+					"-SN"
+				],
+				"clouds": [
+					{
+						"cover": "FEW",
+						"heightFtAgl": 2000
+					},
+					{
+						"cover": "OVC",
+						"heightFtAgl": 3600
+					}
+				],
+				"tempC": -14,
+				"dewpointC": -18,
+				"altimeterInHg": 29.78,
+				"cavok": false,
+				"raw": "KMSP 131153Z 32018G25KT 5SM -SN FEW020 OVC036 M14/M18 A2978 RMK AO2 PK WND 31027/1113 SLP101 4/001 P0000 60000 70005 T11391178 11111 21139 51012 $"
+			},
+			"observedAt": "2024-01-13T11:53:00.000Z",
+			"deltaMinutes": 7
+		},
+		{
+			"station": {
+				"icao": "KOMA",
+				"asos": "OMA",
+				"lat": 41.3032,
+				"lon": -95.8941,
+				"region": "PL"
+			},
+			"raw": "KOMA 131152Z 32019KT 10SM FEW014 OVC026 M18/M21 A3000 RMK AO2 PK WND 32027/1137 SLP184 4/009 60000 70009 T11781211 11172 21183 53021 $",
+			"parsed": {
+				"station": "KOMA",
+				"day": 13,
+				"hour": 11,
+				"minute": 52,
+				"wind": {
+					"directionDeg": 320,
+					"speedKt": 19,
+					"gustKt": null,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 10,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "FEW",
+						"heightFtAgl": 1400
+					},
+					{
+						"cover": "OVC",
+						"heightFtAgl": 2600
+					}
+				],
+				"tempC": -18,
+				"dewpointC": -21,
+				"altimeterInHg": 30,
+				"cavok": false,
+				"raw": "KOMA 131152Z 32019KT 10SM FEW014 OVC026 M18/M21 A3000 RMK AO2 PK WND 32027/1137 SLP184 4/009 60000 70009 T11781211 11172 21183 53021 $"
+			},
+			"observedAt": "2024-01-13T11:52:00.000Z",
+			"deltaMinutes": 8
+		},
+		{
+			"station": {
+				"icao": "KFAR",
+				"asos": "FAR",
+				"lat": 46.9207,
+				"lon": -96.8158,
+				"region": "NPL"
+			},
+			"raw": "KFAR 131203Z 30019G28KT 1SM R36/P6000FT -SN VV009 M19/M23 A3002 RMK AO2 PK WND 32028/1158 P0000 T11941233 $",
+			"parsed": {
+				"station": "KFAR",
+				"day": 13,
+				"hour": 12,
+				"minute": 3,
+				"wind": {
+					"directionDeg": 300,
+					"speedKt": 19,
+					"gustKt": 28,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 1,
+				"weather": [
+					"-SN"
+				],
+				"clouds": [
+					{
+						"cover": "VV",
+						"heightFtAgl": 900
+					}
+				],
+				"tempC": -19,
+				"dewpointC": -23,
+				"altimeterInHg": 30.02,
+				"cavok": false,
+				"raw": "KFAR 131203Z 30019G28KT 1SM R36/P6000FT -SN VV009 M19/M23 A3002 RMK AO2 PK WND 32028/1158 P0000 T11941233 $"
+			},
+			"observedAt": "2024-01-13T12:03:00.000Z",
+			"deltaMinutes": 3
+		},
+		{
+			"station": {
+				"icao": "KORD",
+				"asos": "ORD",
+				"lat": 41.9742,
+				"lon": -87.9048,
+				"region": "GL"
+			},
+			"raw": "KORD 131151Z 29012G23KT 3SM -SN BLSN FEW012 OVC018 M03/M05 A2937 RMK AO2 PK WND 30028/1109 SLP953 4/005 P0000 60003 70068 T10281050 10006 21028 53052",
+			"parsed": {
+				"station": "KORD",
+				"day": 13,
+				"hour": 11,
+				"minute": 51,
+				"wind": {
+					"directionDeg": 290,
+					"speedKt": 12,
+					"gustKt": 23,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 3,
+				"weather": [
+					"-SN",
+					"BLSN"
+				],
+				"clouds": [
+					{
+						"cover": "FEW",
+						"heightFtAgl": 1200
+					},
+					{
+						"cover": "OVC",
+						"heightFtAgl": 1800
+					}
+				],
+				"tempC": -3,
+				"dewpointC": -5,
+				"altimeterInHg": 29.37,
+				"cavok": false,
+				"raw": "KORD 131151Z 29012G23KT 3SM -SN BLSN FEW012 OVC018 M03/M05 A2937 RMK AO2 PK WND 30028/1109 SLP953 4/005 P0000 60003 70068 T10281050 10006 21028 53052"
+			},
+			"observedAt": "2024-01-13T11:51:00.000Z",
+			"deltaMinutes": 9
+		},
+		{
+			"station": {
+				"icao": "KMKE",
+				"asos": "MKE",
+				"lat": 42.9472,
+				"lon": -87.8966,
+				"region": "GL"
+			},
+			"raw": "KMKE 131152Z 31010KT 1 1/2SM -SN BLSN BR BKN016 OVC020 M03/M06 A2932 RMK AO2 TWR VIS 2 SLP935 4/006 P0001 60007 70097 T10281056 10006 21028 51032",
+			"parsed": {
+				"station": "KMKE",
+				"day": 13,
+				"hour": 11,
+				"minute": 52,
+				"wind": {
+					"directionDeg": 310,
+					"speedKt": 10,
+					"gustKt": null,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 1.5,
+				"weather": [
+					"-SN",
+					"BLSN",
+					"BR"
+				],
+				"clouds": [
+					{
+						"cover": "BKN",
+						"heightFtAgl": 1600
+					},
+					{
+						"cover": "OVC",
+						"heightFtAgl": 2000
+					}
+				],
+				"tempC": -3,
+				"dewpointC": -6,
+				"altimeterInHg": 29.32,
+				"cavok": false,
+				"raw": "KMKE 131152Z 31010KT 1 1/2SM -SN BLSN BR BKN016 OVC020 M03/M06 A2932 RMK AO2 TWR VIS 2 SLP935 4/006 P0001 60007 70097 T10281056 10006 21028 51032"
+			},
+			"observedAt": "2024-01-13T11:52:00.000Z",
+			"deltaMinutes": 8
+		},
+		{
+			"station": {
+				"icao": "KDTW",
+				"asos": "DTW",
+				"lat": 42.2124,
+				"lon": -83.3534,
+				"region": "GL"
+			},
+			"raw": "KDTW 131153Z 22029G41KT 3SM -SN BLSN SCT006 OVC014 M04/M07 A2918 RMK AO2 PK WND 22042/1115 SLP886 P0000 60000 70104 T10391067 10017 21039 51012 $",
+			"parsed": {
+				"station": "KDTW",
+				"day": 13,
+				"hour": 11,
+				"minute": 53,
+				"wind": {
+					"directionDeg": 220,
+					"speedKt": 29,
+					"gustKt": 41,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 3,
+				"weather": [
+					"-SN",
+					"BLSN"
+				],
+				"clouds": [
+					{
+						"cover": "SCT",
+						"heightFtAgl": 600
+					},
+					{
+						"cover": "OVC",
+						"heightFtAgl": 1400
+					}
+				],
+				"tempC": -4,
+				"dewpointC": -7,
+				"altimeterInHg": 29.18,
+				"cavok": false,
+				"raw": "KDTW 131153Z 22029G41KT 3SM -SN BLSN SCT006 OVC014 M04/M07 A2918 RMK AO2 PK WND 22042/1115 SLP886 P0000 60000 70104 T10391067 10017 21039 51012 $"
+			},
+			"observedAt": "2024-01-13T11:53:00.000Z",
+			"deltaMinutes": 7
+		},
+		{
+			"station": {
+				"icao": "KCLE",
+				"asos": "CLE",
+				"lat": 41.4117,
+				"lon": -81.8498,
+				"region": "GL"
+			},
+			"raw": "KCLE 131151Z 23020G35KT 6SM -SN OVC018 M01/M04 A2925 RMK AO2 PK WND 23039/1056 SLP928 P0000 60010 70042 T10111044 10083 21011 53032 $",
+			"parsed": {
+				"station": "KCLE",
+				"day": 13,
+				"hour": 11,
+				"minute": 51,
+				"wind": {
+					"directionDeg": 230,
+					"speedKt": 20,
+					"gustKt": 35,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 6,
+				"weather": [
+					"-SN"
+				],
+				"clouds": [
+					{
+						"cover": "OVC",
+						"heightFtAgl": 1800
+					}
+				],
+				"tempC": -1,
+				"dewpointC": -4,
+				"altimeterInHg": 29.25,
+				"cavok": false,
+				"raw": "KCLE 131151Z 23020G35KT 6SM -SN OVC018 M01/M04 A2925 RMK AO2 PK WND 23039/1056 SLP928 P0000 60010 70042 T10111044 10083 21011 53032 $"
+			},
+			"observedAt": "2024-01-13T11:51:00.000Z",
+			"deltaMinutes": 9
+		},
+		{
+			"station": {
+				"icao": "KIND",
+				"asos": "IND",
+				"lat": 39.7173,
+				"lon": -86.2944,
+				"region": "MW"
+			},
+			"raw": "KIND 131154Z 24020G33KT 3SM -SN OVC022 M08/M11 A2957 RMK AO2 PK WND 26036/1124 SFC VIS 6 SLP021 P0000 60000 70073 T10781106 11050 21078 53035 $",
+			"parsed": {
+				"station": "KIND",
+				"day": 13,
+				"hour": 11,
+				"minute": 54,
+				"wind": {
+					"directionDeg": 240,
+					"speedKt": 20,
+					"gustKt": 33,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 3,
+				"weather": [
+					"-SN"
+				],
+				"clouds": [
+					{
+						"cover": "OVC",
+						"heightFtAgl": 2200
+					}
+				],
+				"tempC": -8,
+				"dewpointC": -11,
+				"altimeterInHg": 29.57,
+				"cavok": false,
+				"raw": "KIND 131154Z 24020G33KT 3SM -SN OVC022 M08/M11 A2957 RMK AO2 PK WND 26036/1124 SFC VIS 6 SLP021 P0000 60000 70073 T10781106 11050 21078 53035 $"
+			},
+			"observedAt": "2024-01-13T11:54:00.000Z",
+			"deltaMinutes": 6
+		},
+		{
+			"station": {
+				"icao": "KSTL",
+				"asos": "STL",
+				"lat": 38.7487,
+				"lon": -90.37,
+				"region": "MW"
+			},
+			"raw": "KSTL 131151Z COR 28015G23KT 9SM -SN OVC017 M08/M13 A2983 RMK AO2 SLP119 P0000 60000 70008 T10781133 11072 21078 53036 $",
+			"parsed": {
+				"station": "KSTL",
+				"day": 13,
+				"hour": 11,
+				"minute": 51,
+				"wind": {
+					"directionDeg": 280,
+					"speedKt": 15,
+					"gustKt": 23,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 9,
+				"weather": [
+					"-SN"
+				],
+				"clouds": [
+					{
+						"cover": "OVC",
+						"heightFtAgl": 1700
+					}
+				],
+				"tempC": -8,
+				"dewpointC": -13,
+				"altimeterInHg": 29.83,
+				"cavok": false,
+				"raw": "KSTL 131151Z COR 28015G23KT 9SM -SN OVC017 M08/M13 A2983 RMK AO2 SLP119 P0000 60000 70008 T10781133 11072 21078 53036 $"
+			},
+			"observedAt": "2024-01-13T11:51:00.000Z",
+			"deltaMinutes": 9
+		},
+		{
+			"station": {
+				"icao": "KMEM",
+				"asos": "MEM",
+				"lat": 35.0421,
+				"lon": -89.9792,
+				"region": "SE"
+			},
+			"raw": "KMEM 131154Z 27006KT 10SM CLR M02/M08 A2995 RMK AO2 SLP145 70060 T10221078 11011 21022 52018 $",
+			"parsed": {
+				"station": "KMEM",
+				"day": 13,
+				"hour": 11,
+				"minute": 54,
+				"wind": {
+					"directionDeg": 270,
+					"speedKt": 6,
+					"gustKt": null,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 10,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "CLR",
+						"heightFtAgl": null
+					}
+				],
+				"tempC": -2,
+				"dewpointC": -8,
+				"altimeterInHg": 29.95,
+				"cavok": false,
+				"raw": "KMEM 131154Z 27006KT 10SM CLR M02/M08 A2995 RMK AO2 SLP145 70060 T10221078 11011 21022 52018 $"
+			},
+			"observedAt": "2024-01-13T11:54:00.000Z",
+			"deltaMinutes": 6
+		},
+		{
+			"station": {
+				"icao": "KBOS",
+				"asos": "BOS",
+				"lat": 42.3656,
+				"lon": -71.0096,
+				"region": "NE"
+			},
+			"raw": "KBOS 131154Z 11021G28KT 2SM +RA BR BKN006 OVC010 07/07 A2951 RMK AO2 PK WND 10030/1134 SLP992 P0015 60062 70062 T00670067 10067 20056 58071",
+			"parsed": {
+				"station": "KBOS",
+				"day": 13,
+				"hour": 11,
+				"minute": 54,
+				"wind": {
+					"directionDeg": 110,
+					"speedKt": 21,
+					"gustKt": 28,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 2,
+				"weather": [
+					"+RA",
+					"BR"
+				],
+				"clouds": [
+					{
+						"cover": "BKN",
+						"heightFtAgl": 600
+					},
+					{
+						"cover": "OVC",
+						"heightFtAgl": 1000
+					}
+				],
+				"tempC": 7,
+				"dewpointC": 7,
+				"altimeterInHg": 29.51,
+				"cavok": false,
+				"raw": "KBOS 131154Z 11021G28KT 2SM +RA BR BKN006 OVC010 07/07 A2951 RMK AO2 PK WND 10030/1134 SLP992 P0015 60062 70062 T00670067 10067 20056 58071"
+			},
+			"observedAt": "2024-01-13T11:54:00.000Z",
+			"deltaMinutes": 6
+		},
+		{
+			"station": {
+				"icao": "KBDL",
+				"asos": "BDL",
+				"lat": 41.9389,
+				"lon": -72.6832,
+				"region": "NE"
+			},
+			"raw": "KBDL 131151Z VRB04KT 2SM -RA BR BKN012 OVC017 08/07 A2935 RMK AO2 SFC VIS 3 SLP938 P0014 60097 70100 T00830072 10083 20050 58051 $",
+			"parsed": {
+				"station": "KBDL",
+				"day": 13,
+				"hour": 11,
+				"minute": 51,
+				"wind": {
+					"directionDeg": null,
+					"speedKt": 4,
+					"gustKt": null,
+					"variable": true,
+					"calm": false
+				},
+				"visibilitySM": 2,
+				"weather": [
+					"-RA",
+					"BR"
+				],
+				"clouds": [
+					{
+						"cover": "BKN",
+						"heightFtAgl": 1200
+					},
+					{
+						"cover": "OVC",
+						"heightFtAgl": 1700
+					}
+				],
+				"tempC": 8,
+				"dewpointC": 7,
+				"altimeterInHg": 29.35,
+				"cavok": false,
+				"raw": "KBDL 131151Z VRB04KT 2SM -RA BR BKN012 OVC017 08/07 A2935 RMK AO2 SFC VIS 3 SLP938 P0014 60097 70100 T00830072 10083 20050 58051 $"
+			},
+			"observedAt": "2024-01-13T11:51:00.000Z",
+			"deltaMinutes": 9
+		},
+		{
+			"station": {
+				"icao": "KJFK",
+				"asos": "JFK",
+				"lat": 40.6413,
+				"lon": -73.7781,
+				"region": "NE"
+			},
+			"raw": "KJFK 131204Z 18018KT 1/8SM FG VV002 11/11 A2924 RMK AO2 SFC VIS 1/2 T01060106 RVRNO $",
+			"parsed": {
+				"station": "KJFK",
+				"day": 13,
+				"hour": 12,
+				"minute": 4,
+				"wind": {
+					"directionDeg": 180,
+					"speedKt": 18,
+					"gustKt": null,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 0.125,
+				"weather": [
+					"FG"
+				],
+				"clouds": [
+					{
+						"cover": "VV",
+						"heightFtAgl": 200
+					}
+				],
+				"tempC": 11,
+				"dewpointC": 11,
+				"altimeterInHg": 29.24,
+				"cavok": false,
+				"raw": "KJFK 131204Z 18018KT 1/8SM FG VV002 11/11 A2924 RMK AO2 SFC VIS 1/2 T01060106 RVRNO $"
+			},
+			"observedAt": "2024-01-13T12:04:00.000Z",
+			"deltaMinutes": 4
+		},
+		{
+			"station": {
+				"icao": "KLGA",
+				"asos": "LGA",
+				"lat": 40.7769,
+				"lon": -73.874,
+				"region": "NE"
+			},
+			"raw": "KLGA 131151Z 17010KT 1/2SM R04/P6000FT BR OVC004 12/11 A2923 RMK AO2 SFC VIS 2 SLP897 60094 70108 T01220111 10128 20094 56055",
+			"parsed": {
+				"station": "KLGA",
+				"day": 13,
+				"hour": 11,
+				"minute": 51,
+				"wind": {
+					"directionDeg": 170,
+					"speedKt": 10,
+					"gustKt": null,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 0.5,
+				"weather": [
+					"BR"
+				],
+				"clouds": [
+					{
+						"cover": "OVC",
+						"heightFtAgl": 400
+					}
+				],
+				"tempC": 12,
+				"dewpointC": 11,
+				"altimeterInHg": 29.23,
+				"cavok": false,
+				"raw": "KLGA 131151Z 17010KT 1/2SM R04/P6000FT BR OVC004 12/11 A2923 RMK AO2 SFC VIS 2 SLP897 60094 70108 T01220111 10128 20094 56055"
+			},
+			"observedAt": "2024-01-13T11:51:00.000Z",
+			"deltaMinutes": 9
+		},
+		{
+			"station": {
+				"icao": "KEWR",
+				"asos": "EWR",
+				"lat": 40.6925,
+				"lon": -74.1687,
+				"region": "NE"
+			},
+			"raw": "KEWR 131151Z 16009KT 8SM BKN007 OVC022 14/13 A2921 RMK AO2 RAE31 SLP890 P0000 6//// 7//// T01440133 10144 20089 $",
+			"parsed": {
+				"station": "KEWR",
+				"day": 13,
+				"hour": 11,
+				"minute": 51,
+				"wind": {
+					"directionDeg": 160,
+					"speedKt": 9,
+					"gustKt": null,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 8,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "BKN",
+						"heightFtAgl": 700
+					},
+					{
+						"cover": "OVC",
+						"heightFtAgl": 2200
+					}
+				],
+				"tempC": 14,
+				"dewpointC": 13,
+				"altimeterInHg": 29.21,
+				"cavok": false,
+				"raw": "KEWR 131151Z 16009KT 8SM BKN007 OVC022 14/13 A2921 RMK AO2 RAE31 SLP890 P0000 6//// 7//// T01440133 10144 20089 $"
+			},
+			"observedAt": "2024-01-13T11:51:00.000Z",
+			"deltaMinutes": 9
+		},
+		{
+			"station": {
+				"icao": "KPHL",
+				"asos": "PHL",
+				"lat": 39.8729,
+				"lon": -75.2437,
+				"region": "NE"
+			},
+			"raw": "KPHL 131154Z 23014KT 10SM BKN008 OVC014 14/13 A2923 RMK AO2 WSHFT 1053 RAE27 SLP897 P0001 60008 70073 T01390128 10150 20117 56012 $",
+			"parsed": {
+				"station": "KPHL",
+				"day": 13,
+				"hour": 11,
+				"minute": 54,
+				"wind": {
+					"directionDeg": 230,
+					"speedKt": 14,
+					"gustKt": null,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 10,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "BKN",
+						"heightFtAgl": 800
+					},
+					{
+						"cover": "OVC",
+						"heightFtAgl": 1400
+					}
+				],
+				"tempC": 14,
+				"dewpointC": 13,
+				"altimeterInHg": 29.23,
+				"cavok": false,
+				"raw": "KPHL 131154Z 23014KT 10SM BKN008 OVC014 14/13 A2923 RMK AO2 WSHFT 1053 RAE27 SLP897 P0001 60008 70073 T01390128 10150 20117 56012 $"
+			},
+			"observedAt": "2024-01-13T11:54:00.000Z",
+			"deltaMinutes": 6
+		},
+		{
+			"station": {
+				"icao": "KBWI",
+				"asos": "BWI",
+				"lat": 39.1754,
+				"lon": -76.6683,
+				"region": "NE"
+			},
+			"raw": "KBWI 131154Z 20007KT 10SM BKN010 11/09 A2927 RMK AO2 DZE16 SLP911 P0000 60007 70048 T01060089 10133 20106 55003",
+			"parsed": {
+				"station": "KBWI",
+				"day": 13,
+				"hour": 11,
+				"minute": 54,
+				"wind": {
+					"directionDeg": 200,
+					"speedKt": 7,
+					"gustKt": null,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 10,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "BKN",
+						"heightFtAgl": 1000
+					}
+				],
+				"tempC": 11,
+				"dewpointC": 9,
+				"altimeterInHg": 29.27,
+				"cavok": false,
+				"raw": "KBWI 131154Z 20007KT 10SM BKN010 11/09 A2927 RMK AO2 DZE16 SLP911 P0000 60007 70048 T01060089 10133 20106 55003"
+			},
+			"observedAt": "2024-01-13T11:54:00.000Z",
+			"deltaMinutes": 6
+		},
+		{
+			"station": {
+				"icao": "KIAD",
+				"asos": "IAD",
+				"lat": 38.9445,
+				"lon": -77.4558,
+				"region": "NE"
+			},
+			"raw": "KIAD 131159Z 20011KT 10SM BR OVC005 08/07 A2928 RMK AO2 T00830067 $",
+			"parsed": {
+				"station": "KIAD",
+				"day": 13,
+				"hour": 11,
+				"minute": 59,
+				"wind": {
+					"directionDeg": 200,
+					"speedKt": 11,
+					"gustKt": null,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 10,
+				"weather": [
+					"BR"
+				],
+				"clouds": [
+					{
+						"cover": "OVC",
+						"heightFtAgl": 500
+					}
+				],
+				"tempC": 8,
+				"dewpointC": 7,
+				"altimeterInHg": 29.28,
+				"cavok": false,
+				"raw": "KIAD 131159Z 20011KT 10SM BR OVC005 08/07 A2928 RMK AO2 T00830067 $"
+			},
+			"observedAt": "2024-01-13T11:59:00.000Z",
+			"deltaMinutes": 1
+		},
+		{
+			"station": {
+				"icao": "KDCA",
+				"asos": "DCA",
+				"lat": 38.8512,
+				"lon": -77.0402,
+				"region": "NE"
+			},
+			"raw": "KDCA 131205Z 21011KT 10SM OVC008 09/08 A2929 RMK AO2 T00940078",
+			"parsed": {
+				"station": "KDCA",
+				"day": 13,
+				"hour": 12,
+				"minute": 5,
+				"wind": {
+					"directionDeg": 210,
+					"speedKt": 11,
+					"gustKt": null,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 10,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "OVC",
+						"heightFtAgl": 800
+					}
+				],
+				"tempC": 9,
+				"dewpointC": 8,
+				"altimeterInHg": 29.29,
+				"cavok": false,
+				"raw": "KDCA 131205Z 21011KT 10SM OVC008 09/08 A2929 RMK AO2 T00940078"
+			},
+			"observedAt": "2024-01-13T12:05:00.000Z",
+			"deltaMinutes": 5
+		},
+		{
+			"station": {
+				"icao": "KBUF",
+				"asos": "BUF",
+				"lat": 42.9405,
+				"lon": -78.7322,
+				"region": "NE"
+			},
+			"raw": "KBUF 131154Z 25018G30KT 10SM -RASN BKN009 BKN019 OVC029 02/01 A2913 RMK AO2 PK WND 22049/1121 WSHFT 1114 SNB36 SLP868 P0003 60003 70017 T00170006 10067 20017 53003 $",
+			"parsed": {
+				"station": "KBUF",
+				"day": 13,
+				"hour": 11,
+				"minute": 54,
+				"wind": {
+					"directionDeg": 250,
+					"speedKt": 18,
+					"gustKt": 30,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 10,
+				"weather": [
+					"-RASN"
+				],
+				"clouds": [
+					{
+						"cover": "BKN",
+						"heightFtAgl": 900
+					},
+					{
+						"cover": "BKN",
+						"heightFtAgl": 1900
+					},
+					{
+						"cover": "OVC",
+						"heightFtAgl": 2900
+					}
+				],
+				"tempC": 2,
+				"dewpointC": 1,
+				"altimeterInHg": 29.13,
+				"cavok": false,
+				"raw": "KBUF 131154Z 25018G30KT 10SM -RASN BKN009 BKN019 OVC029 02/01 A2913 RMK AO2 PK WND 22049/1121 WSHFT 1114 SNB36 SLP868 P0003 60003 70017 T00170006 10067 20017 53003 $"
+			},
+			"observedAt": "2024-01-13T11:54:00.000Z",
+			"deltaMinutes": 6
+		},
+		{
+			"station": {
+				"icao": "KALB",
+				"asos": "ALB",
+				"lat": 42.7483,
+				"lon": -73.8017,
+				"region": "NE"
+			},
+			"raw": "KALB 131151Z 17006G16KT 9SM -DZ OVC028 08/04 A2924 RMK AO2 RAE07DZB26 PRESFR SLP902 P0000 60037 70040 T00780039 10078 20050 56080",
+			"parsed": {
+				"station": "KALB",
+				"day": 13,
+				"hour": 11,
+				"minute": 51,
+				"wind": {
+					"directionDeg": 170,
+					"speedKt": 6,
+					"gustKt": 16,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 9,
+				"weather": [
+					"-DZ"
+				],
+				"clouds": [
+					{
+						"cover": "OVC",
+						"heightFtAgl": 2800
+					}
+				],
+				"tempC": 8,
+				"dewpointC": 4,
+				"altimeterInHg": 29.24,
+				"cavok": false,
+				"raw": "KALB 131151Z 17006G16KT 9SM -DZ OVC028 08/04 A2924 RMK AO2 RAE07DZB26 PRESFR SLP902 P0000 60037 70040 T00780039 10078 20050 56080"
+			},
+			"observedAt": "2024-01-13T11:51:00.000Z",
+			"deltaMinutes": 9
+		},
+		{
+			"station": {
+				"icao": "KATL",
+				"asos": "ATL",
+				"lat": 33.6407,
+				"lon": -84.4277,
+				"region": "SE"
+			},
+			"raw": "KATL 131152Z 27015G24KT 10SM FEW020 00/M05 A2985 RMK AO2 SLP113 70022 T00001050 10083 20000 53031",
+			"parsed": {
+				"station": "KATL",
+				"day": 13,
+				"hour": 11,
+				"minute": 52,
+				"wind": {
+					"directionDeg": 270,
+					"speedKt": 15,
+					"gustKt": 24,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 10,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "FEW",
+						"heightFtAgl": 2000
+					}
+				],
+				"tempC": 0,
+				"dewpointC": -5,
+				"altimeterInHg": 29.85,
+				"cavok": false,
+				"raw": "KATL 131152Z 27015G24KT 10SM FEW020 00/M05 A2985 RMK AO2 SLP113 70022 T00001050 10083 20000 53031"
+			},
+			"observedAt": "2024-01-13T11:52:00.000Z",
+			"deltaMinutes": 8
+		},
+		{
+			"station": {
+				"icao": "KCLT",
+				"asos": "CLT",
+				"lat": 35.214,
+				"lon": -80.9431,
+				"region": "SE"
+			},
+			"raw": "KCLT 131152Z 23014G28KT 10SM CLR 06/01 A2957 RMK AO2 PK WND 23028/1152 SLP029 70090 T00610011 10106 20061 53026",
+			"parsed": {
+				"station": "KCLT",
+				"day": 13,
+				"hour": 11,
+				"minute": 52,
+				"wind": {
+					"directionDeg": 230,
+					"speedKt": 14,
+					"gustKt": 28,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 10,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "CLR",
+						"heightFtAgl": null
+					}
+				],
+				"tempC": 6,
+				"dewpointC": 1,
+				"altimeterInHg": 29.57,
+				"cavok": false,
+				"raw": "KCLT 131152Z 23014G28KT 10SM CLR 06/01 A2957 RMK AO2 PK WND 23028/1152 SLP029 70090 T00610011 10106 20061 53026"
+			},
+			"observedAt": "2024-01-13T11:52:00.000Z",
+			"deltaMinutes": 8
+		},
+		{
+			"station": {
+				"icao": "KRDU",
+				"asos": "RDU",
+				"lat": 35.8801,
+				"lon": -78.7881,
+				"region": "SE"
+			},
+			"raw": "KRDU 131151Z COR 24015G22KT 10SM FEW050 11/04 A2949 RMK AO2 PK WND 24026/1129 SLP986 60000 70100 T01060039 10183 20106 53019",
+			"parsed": {
+				"station": "KRDU",
+				"day": 13,
+				"hour": 11,
+				"minute": 51,
+				"wind": {
+					"directionDeg": 240,
+					"speedKt": 15,
+					"gustKt": 22,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 10,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "FEW",
+						"heightFtAgl": 5000
+					}
+				],
+				"tempC": 11,
+				"dewpointC": 4,
+				"altimeterInHg": 29.49,
+				"cavok": false,
+				"raw": "KRDU 131151Z COR 24015G22KT 10SM FEW050 11/04 A2949 RMK AO2 PK WND 24026/1129 SLP986 60000 70100 T01060039 10183 20106 53019"
+			},
+			"observedAt": "2024-01-13T11:51:00.000Z",
+			"deltaMinutes": 9
+		},
+		{
+			"station": {
+				"icao": "KJAX",
+				"asos": "JAX",
+				"lat": 30.4941,
+				"lon": -81.6879,
+				"region": "SE"
+			},
+			"raw": "KJAX 131156Z 30012G20KT 10SM OVC250 16/07 A2982 RMK AO2 SLP097 70008 T01560072 10228 20156 53035",
+			"parsed": {
+				"station": "KJAX",
+				"day": 13,
+				"hour": 11,
+				"minute": 56,
+				"wind": {
+					"directionDeg": 300,
+					"speedKt": 12,
+					"gustKt": 20,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 10,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "OVC",
+						"heightFtAgl": 25000
+					}
+				],
+				"tempC": 16,
+				"dewpointC": 7,
+				"altimeterInHg": 29.82,
+				"cavok": false,
+				"raw": "KJAX 131156Z 30012G20KT 10SM OVC250 16/07 A2982 RMK AO2 SLP097 70008 T01560072 10228 20156 53035"
+			},
+			"observedAt": "2024-01-13T11:56:00.000Z",
+			"deltaMinutes": 4
+		},
+		{
+			"station": {
+				"icao": "KMIA",
+				"asos": "MIA",
+				"lat": 25.7959,
+				"lon": -80.2906,
+				"region": "FL"
+			},
+			"raw": "KMIA 131153Z 19008KT 9SM FEW020 FEW080 24/22 A2991 RMK AO2 SLP127 T02390222 10244 20233 51006 $",
+			"parsed": {
+				"station": "KMIA",
+				"day": 13,
+				"hour": 11,
+				"minute": 53,
+				"wind": {
+					"directionDeg": 190,
+					"speedKt": 8,
+					"gustKt": null,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 9,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "FEW",
+						"heightFtAgl": 2000
+					},
+					{
+						"cover": "FEW",
+						"heightFtAgl": 8000
+					}
+				],
+				"tempC": 24,
+				"dewpointC": 22,
+				"altimeterInHg": 29.91,
+				"cavok": false,
+				"raw": "KMIA 131153Z 19008KT 9SM FEW020 FEW080 24/22 A2991 RMK AO2 SLP127 T02390222 10244 20233 51006 $"
+			},
+			"observedAt": "2024-01-13T11:53:00.000Z",
+			"deltaMinutes": 7
+		},
+		{
+			"station": {
+				"icao": "KMCO",
+				"asos": "MCO",
+				"lat": 28.4294,
+				"lon": -81.3089,
+				"region": "FL"
+			},
+			"raw": "KMCO 131153Z 29009KT 10SM BKN020 BKN030 OVC065 21/18 A2984 RMK AO2 WSHFT 1058 LTG DSNT E AND SE RAB01E18 TSB1054E1055B01E09B10E16 SLP103 CB S-SE MOV NE P0000 60001 70005 T02060178 10244 20206 53021",
+			"parsed": {
+				"station": "KMCO",
+				"day": 13,
+				"hour": 11,
+				"minute": 53,
+				"wind": {
+					"directionDeg": 290,
+					"speedKt": 9,
+					"gustKt": null,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 10,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "BKN",
+						"heightFtAgl": 2000
+					},
+					{
+						"cover": "BKN",
+						"heightFtAgl": 3000
+					},
+					{
+						"cover": "OVC",
+						"heightFtAgl": 6500
+					}
+				],
+				"tempC": 21,
+				"dewpointC": 18,
+				"altimeterInHg": 29.84,
+				"cavok": false,
+				"raw": "KMCO 131153Z 29009KT 10SM BKN020 BKN030 OVC065 21/18 A2984 RMK AO2 WSHFT 1058 LTG DSNT E AND SE RAB01E18 TSB1054E1055B01E09B10E16 SLP103 CB S-SE MOV NE P0000 60001 70005 T02060178 10244 20206 53021"
+			},
+			"observedAt": "2024-01-13T11:53:00.000Z",
+			"deltaMinutes": 7
+		},
+		{
+			"station": {
+				"icao": "KTPA",
+				"asos": "TPA",
+				"lat": 27.9755,
+				"lon": -82.5332,
+				"region": "FL"
+			},
+			"raw": "KTPA 131153Z 31012KT 10SM SCT027 18/11 A2988 RMK AO2 SLP119 60001 70001 T01780111 10222 20178 53026",
+			"parsed": {
+				"station": "KTPA",
+				"day": 13,
+				"hour": 11,
+				"minute": 53,
+				"wind": {
+					"directionDeg": 310,
+					"speedKt": 12,
+					"gustKt": null,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 10,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "SCT",
+						"heightFtAgl": 2700
+					}
+				],
+				"tempC": 18,
+				"dewpointC": 11,
+				"altimeterInHg": 29.88,
+				"cavok": false,
+				"raw": "KTPA 131153Z 31012KT 10SM SCT027 18/11 A2988 RMK AO2 SLP119 60001 70001 T01780111 10222 20178 53026"
+			},
+			"observedAt": "2024-01-13T11:53:00.000Z",
+			"deltaMinutes": 7
+		},
+		{
+			"station": {
+				"icao": "KMSY",
+				"asos": "MSY",
+				"lat": 29.9934,
+				"lon": -90.258,
+				"region": "GULF"
+			},
+			"raw": "KMSY 131153Z COR 34005KT 10SM SCT250 05/M04 A3011 RMK SLP197 70008 T00501039 10078 20050 53016",
+			"parsed": {
+				"station": "KMSY",
+				"day": 13,
+				"hour": 11,
+				"minute": 53,
+				"wind": {
+					"directionDeg": 340,
+					"speedKt": 5,
+					"gustKt": null,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 10,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "SCT",
+						"heightFtAgl": 25000
+					}
+				],
+				"tempC": 5,
+				"dewpointC": -4,
+				"altimeterInHg": 30.11,
+				"cavok": false,
+				"raw": "KMSY 131153Z COR 34005KT 10SM SCT250 05/M04 A3011 RMK SLP197 70008 T00501039 10078 20050 53016"
+			},
+			"observedAt": "2024-01-13T11:53:00.000Z",
+			"deltaMinutes": 7
+		},
+		{
+			"station": {
+				"icao": "KDFW",
+				"asos": "DFW",
+				"lat": 32.8998,
+				"lon": -97.0403,
+				"region": "TX"
+			},
+			"raw": "KDFW 131153Z 20007KT 10SM BKN250 00/M06 A2991 RMK AO2 SLP130 T00001056 10017 21011 58003",
+			"parsed": {
+				"station": "KDFW",
+				"day": 13,
+				"hour": 11,
+				"minute": 53,
+				"wind": {
+					"directionDeg": 200,
+					"speedKt": 7,
+					"gustKt": null,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 10,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "BKN",
+						"heightFtAgl": 25000
+					}
+				],
+				"tempC": 0,
+				"dewpointC": -6,
+				"altimeterInHg": 29.91,
+				"cavok": false,
+				"raw": "KDFW 131153Z 20007KT 10SM BKN250 00/M06 A2991 RMK AO2 SLP130 T00001056 10017 21011 58003"
+			},
+			"observedAt": "2024-01-13T11:53:00.000Z",
+			"deltaMinutes": 7
+		},
+		{
+			"station": {
+				"icao": "KIAH",
+				"asos": "IAH",
+				"lat": 29.9844,
+				"lon": -95.3414,
+				"region": "TX"
+			},
+			"raw": "KIAH 131153Z 00000KT 10SM CLR 01/M02 A3006 RMK AO2 SLP179 T00111022 10028 20000 53009",
+			"parsed": {
+				"station": "KIAH",
+				"day": 13,
+				"hour": 11,
+				"minute": 53,
+				"wind": {
+					"directionDeg": 0,
+					"speedKt": 0,
+					"gustKt": null,
+					"variable": false,
+					"calm": true
+				},
+				"visibilitySM": 10,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "CLR",
+						"heightFtAgl": null
+					}
+				],
+				"tempC": 1,
+				"dewpointC": -2,
+				"altimeterInHg": 30.06,
+				"cavok": false,
+				"raw": "KIAH 131153Z 00000KT 10SM CLR 01/M02 A3006 RMK AO2 SLP179 T00111022 10028 20000 53009"
+			},
+			"observedAt": "2024-01-13T11:53:00.000Z",
+			"deltaMinutes": 7
+		},
+		{
+			"station": {
+				"icao": "KAUS",
+				"asos": "AUS",
+				"lat": 30.1945,
+				"lon": -97.6699,
+				"region": "TX"
+			},
+			"raw": "KAUS 131153Z 00000KT 10SM FEW250 M04/M07 A3005 RMK AO2 SLP182 T10441067 10017 21050 53007",
+			"parsed": {
+				"station": "KAUS",
+				"day": 13,
+				"hour": 11,
+				"minute": 53,
+				"wind": {
+					"directionDeg": 0,
+					"speedKt": 0,
+					"gustKt": null,
+					"variable": false,
+					"calm": true
+				},
+				"visibilitySM": 10,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "FEW",
+						"heightFtAgl": 25000
+					}
+				],
+				"tempC": -4,
+				"dewpointC": -7,
+				"altimeterInHg": 30.05,
+				"cavok": false,
+				"raw": "KAUS 131153Z 00000KT 10SM FEW250 M04/M07 A3005 RMK AO2 SLP182 T10441067 10017 21050 53007"
+			},
+			"observedAt": "2024-01-13T11:53:00.000Z",
+			"deltaMinutes": 7
+		},
+		{
+			"station": {
+				"icao": "KSAT",
+				"asos": "SAT",
+				"lat": 29.5337,
+				"lon": -98.4698,
+				"region": "TX"
+			},
+			"raw": "KSAT 131151Z 31003KT 10SM FEW250 00/M04 A3004 RMK AO2 SLP165 T00001044 10033 21006 51004",
+			"parsed": {
+				"station": "KSAT",
+				"day": 13,
+				"hour": 11,
+				"minute": 51,
+				"wind": {
+					"directionDeg": 310,
+					"speedKt": 3,
+					"gustKt": null,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 10,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "FEW",
+						"heightFtAgl": 25000
+					}
+				],
+				"tempC": 0,
+				"dewpointC": -4,
+				"altimeterInHg": 30.04,
+				"cavok": false,
+				"raw": "KSAT 131151Z 31003KT 10SM FEW250 00/M04 A3004 RMK AO2 SLP165 T00001044 10033 21006 51004"
+			},
+			"observedAt": "2024-01-13T11:51:00.000Z",
+			"deltaMinutes": 9
+		},
+		{
+			"station": {
+				"icao": "KLBB",
+				"asos": "LBB",
+				"lat": 33.6636,
+				"lon": -101.8228,
+				"region": "TX"
+			},
+			"raw": "KLBB 131153Z 26008KT 10SM CLR M01/M11 A2980 RMK AO2 SLP093 T10111111 10000 21033 56013",
+			"parsed": {
+				"station": "KLBB",
+				"day": 13,
+				"hour": 11,
+				"minute": 53,
+				"wind": {
+					"directionDeg": 260,
+					"speedKt": 8,
+					"gustKt": null,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 10,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "CLR",
+						"heightFtAgl": null
+					}
+				],
+				"tempC": -1,
+				"dewpointC": -11,
+				"altimeterInHg": 29.8,
+				"cavok": false,
+				"raw": "KLBB 131153Z 26008KT 10SM CLR M01/M11 A2980 RMK AO2 SLP093 T10111111 10000 21033 56013"
+			},
+			"observedAt": "2024-01-13T11:53:00.000Z",
+			"deltaMinutes": 7
+		},
+		{
+			"station": {
+				"icao": "KGTF",
+				"asos": "GTF",
+				"lat": 47.482,
+				"lon": -111.3711,
+				"region": "MW"
+			},
+			"raw": "KGTF 131153Z 23007KT 10SM CLR M37/ A3017 RMK AO2 SLP370 70001 T1372 11333 21383 58009",
+			"parsed": {
+				"station": "KGTF",
+				"day": 13,
+				"hour": 11,
+				"minute": 53,
+				"wind": {
+					"directionDeg": 230,
+					"speedKt": 7,
+					"gustKt": null,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 10,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "CLR",
+						"heightFtAgl": null
+					}
+				],
+				"tempC": -37,
+				"dewpointC": null,
+				"altimeterInHg": 30.17,
+				"cavok": false,
+				"raw": "KGTF 131153Z 23007KT 10SM CLR M37/ A3017 RMK AO2 SLP370 70001 T1372 11333 21383 58009"
+			},
+			"observedAt": "2024-01-13T11:53:00.000Z",
+			"deltaMinutes": 7
+		},
+		{
+			"station": {
+				"icao": "KMSO",
+				"asos": "MSO",
+				"lat": 46.9163,
+				"lon": -114.0906,
+				"region": "MW"
+			},
+			"raw": "KMSO 131153Z AUTO 11008KT 10SM FEW038 M28/M34 A3030 RMK AO2 SLP366 70003 T12831344 11261 21283 50004 $",
+			"parsed": {
+				"station": "KMSO",
+				"day": 13,
+				"hour": 11,
+				"minute": 53,
+				"wind": {
+					"directionDeg": 110,
+					"speedKt": 8,
+					"gustKt": null,
+					"variable": false,
+					"calm": false
+				},
+				"visibilitySM": 10,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "FEW",
+						"heightFtAgl": 3800
+					}
+				],
+				"tempC": -28,
+				"dewpointC": -34,
+				"altimeterInHg": 30.3,
+				"cavok": false,
+				"raw": "KMSO 131153Z AUTO 11008KT 10SM FEW038 M28/M34 A3030 RMK AO2 SLP366 70003 T12831344 11261 21283 50004 $"
+			},
+			"observedAt": "2024-01-13T11:53:00.000Z",
+			"deltaMinutes": 7
+		},
+		{
+			"station": {
+				"icao": "KCOD",
+				"asos": "COD",
+				"lat": 44.5202,
+				"lon": -109.0238,
+				"region": "MW"
+			},
+			"raw": "KCOD 131156Z AUTO 00000KT 8SM CLR M33/M37 A2996 RMK AO2 SLP329 60000 T13331367 11306 21344 51008 FZRANO",
+			"parsed": {
+				"station": "KCOD",
+				"day": 13,
+				"hour": 11,
+				"minute": 56,
+				"wind": {
+					"directionDeg": 0,
+					"speedKt": 0,
+					"gustKt": null,
+					"variable": false,
+					"calm": true
+				},
+				"visibilitySM": 8,
+				"weather": [],
+				"clouds": [
+					{
+						"cover": "CLR",
+						"heightFtAgl": null
+					}
+				],
+				"tempC": -33,
+				"dewpointC": -37,
+				"altimeterInHg": 29.96,
+				"cavok": false,
+				"raw": "KCOD 131156Z AUTO 00000KT 8SM CLR M33/M37 A2996 RMK AO2 SLP329 60000 T13331367 11306 21344 51008 FZRANO"
+			},
+			"observedAt": "2024-01-13T11:56:00.000Z",
+			"deltaMinutes": 4
+		}
+	]
+}
