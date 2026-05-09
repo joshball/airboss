@@ -82,6 +82,9 @@ const aliases = {
 	// Hangar `/roadmap` Phase 8 imports the read-only WP loader through
 	// this alias. Mirrors the SvelteKit alias in `apps/hangar/svelte.config.js`.
 	'@ab/wp-loader': resolve('./scripts/lib/wp-loader.ts'),
+	// course-reader-and-editor WP -- hangar courses editor wraps seedCourses
+	// from the seed pipeline. Mirrors the alias in `apps/hangar/svelte.config.js`.
+	'@ab/seed-courses': resolve('./scripts/db/seed-courses.ts'),
 };
 
 // `$app/state` is a SvelteKit runtime module. The standalone DOM project
