@@ -28,34 +28,34 @@ The 5 whole-doc handbooks are scheduled for promotion to section-tree shape on 2
 
 ## Per-WP status (against spec.md §6)
 
-| # | WP | Status | What's done | What's blocking |
-| - | -- | ------ | ------------ | --------------- |
-| 1 | **WP-SUB** (substrate) | ✅ Shipped 2026-05-01 (#393 + #396) | `reference_section` substrate, two-shape seeder dispatch, `getReadableReferenceIds()` content-based, primary_cert column preserved | — |
-| 2 | **WP-MTN** (Mountain Flying pamphlet) | ✅ Shipped 2026-05-03 (whole-doc + section-tree) | Hand-cleaned override at `scripts/sources/config/handbooks-extras-overrides/faa-mtn-tips.md` via the `body_override` mechanism (#489); section-tree promotion via WP-MTN-section-tree parses the override into 12 chapter rows + 36 section rows under `kind: 'handbook'`. | — |
-| 3 | **WP-AIM** | ✅ Shipped (pre-session) | 744 entries (10 chapters + 38 sections + 396 paragraphs + 297 glossary terms + 3 appendices) seeded as section-tree | — |
-| 4 | **WP-CFR-V** (CFR seed) | ✅ Shipped 2026-05-03 (#491) | 825 sections across 11 references; `kind: 'cfr'` schema + `seedCfrManifest` adapter + dispatcher case + `kind: 'cfr'` backfilled on 3 manifests | — |
-| 5 | **WP-AC-V** (AC visibility) | ✅ Shipped 2026-05-02 (#480), reconciliation followup ✅ shipped via references cleanup sweep | All 9 on-disk AC manifests seed as readable references via `kind: 'ac'` schema + `seedAcManifest` adapter + dispatcher case + `seed-mapping.ts` registry (9 entries). YAML phase now enriches all 9 (4 missing rows added in cleanup sweep: `ac-25-7`, `ac-61-65`, `ac-91-21-1`, `ac-120-71`). | The 12 cards with NO manifest still need WP-AC-FULL (download + extract). |
-| 6 | **WP-ACS-V** (ACS visibility) | ✅ Shipped 2026-05-03 (#501) | 5 ACS publications seeded as section-tree (publication → area → task → element). 1,910 sections total. PPL/IR/CPL/CFI/ATP all readable in-app. CFI has empty `elements: []` because FAA didn't carry K/R/S codes. Slug-mapping fixed (`<rating>-airplane-<edition>` → `<rating>-airplane-acs-<edition>`). | The 2 link-only ACS cards (`cfii-airplane-pts-9e` PTS, `faa-g-acs-2-companion-guide`) stay link-only; need their own pipelines. |
-| 7 | **WP-CC** (Chief Counsel) | ❌ Not started | Has umbrella card via `course/references/other-publications.yaml` | New corpus pipeline: source/extract/register. ADR 019 already provisions the URI. |
-| 8 | **WP-NTSB-ALJ** | ❌ Not started | Has umbrella card via `course/references/ntsb.yaml` | New corpus pipeline. NTSB has its own data model (accident reports, recommendations, factual reports). |
-| 9 | **WP-SAFO + WP-INFO** | ❌ Not started | No cards yet | New corpus pipeline (DRS-first per spec §4.C/4.D ratification). |
-| 10 | **WP-AC-FULL** | ❌ Not started | Depends on WP-AC-V landing first | Expand AC config from 17 → ~50 curated-relevance ACs. Content-only WP. |
-| 11 | **WP-O8900-V5** | ❌ Deferred | — | Trigger to revisit per spec: "we ship CFI training content that benefits from Vol 5." |
-| 12 | **WP-SAFETY-BRIEF** | ❌ Deferred | — | Per spec §5 ratification (low priority). |
+| #   | WP                                    | Status                                                                                      | What's done                                                                                                                                                                                                                                                                                               | What's blocking                                                                                                                 |
+| --- | ------------------------------------- | ------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | **WP-SUB** (substrate)                | ✅ Shipped 2026-05-01 (#393 + #396)                                                          | `reference_section` substrate, two-shape seeder dispatch, `getReadableReferenceIds()` content-based, primary_cert column preserved                                                                                                                                                                        | —                                                                                                                               |
+| 2   | **WP-MTN** (Mountain Flying pamphlet) | ✅ Shipped 2026-05-03 (whole-doc + section-tree)                                             | Hand-cleaned override at `scripts/sources/config/handbooks-extras-overrides/faa-mtn-tips.md` via the `body_override` mechanism (#489); section-tree promotion via WP-MTN-section-tree parses the override into 12 chapter rows + 36 section rows under `kind: 'handbook'`.                                | —                                                                                                                               |
+| 3   | **WP-AIM**                            | ✅ Shipped (pre-session)                                                                     | 744 entries (10 chapters + 38 sections + 396 paragraphs + 297 glossary terms + 3 appendices) seeded as section-tree                                                                                                                                                                                       | —                                                                                                                               |
+| 4   | **WP-CFR-V** (CFR seed)               | ✅ Shipped 2026-05-03 (#491)                                                                 | 825 sections across 11 references; `kind: 'cfr'` schema + `seedCfrManifest` adapter + dispatcher case + `kind: 'cfr'` backfilled on 3 manifests                                                                                                                                                           | —                                                                                                                               |
+| 5   | **WP-AC-V** (AC visibility)           | ✅ Shipped 2026-05-02 (#480), reconciliation followup ✅ shipped via references cleanup sweep | All 9 on-disk AC manifests seed as readable references via `kind: 'ac'` schema + `seedAcManifest` adapter + dispatcher case + `seed-mapping.ts` registry (9 entries). YAML phase now enriches all 9 (4 missing rows added in cleanup sweep: `ac-25-7`, `ac-61-65`, `ac-91-21-1`, `ac-120-71`).            | The 12 cards with NO manifest still need WP-AC-FULL (download + extract).                                                       |
+| 6   | **WP-ACS-V** (ACS visibility)         | ✅ Shipped 2026-05-03 (#501)                                                                 | 5 ACS publications seeded as section-tree (publication → area → task → element). 1,910 sections total. PPL/IR/CPL/CFI/ATP all readable in-app. CFI has empty `elements: []` because FAA didn't carry K/R/S codes. Slug-mapping fixed (`<rating>-airplane-<edition>` → `<rating>-airplane-acs-<edition>`). | The 2 link-only ACS cards (`cfii-airplane-pts-9e` PTS, `faa-g-acs-2-companion-guide`) stay link-only; need their own pipelines. |
+| 7   | **WP-CC** (Chief Counsel)             | ❌ Not started                                                                               | Has umbrella card via `course/references/other-publications.yaml`                                                                                                                                                                                                                                         | New corpus pipeline: source/extract/register. ADR 019 already provisions the URI.                                               |
+| 8   | **WP-NTSB-ALJ**                       | ❌ Not started                                                                               | Has umbrella card via `course/references/ntsb.yaml`                                                                                                                                                                                                                                                       | New corpus pipeline. NTSB has its own data model (accident reports, recommendations, factual reports).                          |
+| 9   | **WP-SAFO + WP-INFO**                 | ❌ Not started                                                                               | No cards yet                                                                                                                                                                                                                                                                                              | New corpus pipeline (DRS-first per spec §4.C/4.D ratification).                                                                 |
+| 10  | **WP-AC-FULL**                        | ❌ Not started                                                                               | Depends on WP-AC-V landing first                                                                                                                                                                                                                                                                          | Expand AC config from 17 → ~50 curated-relevance ACs. Content-only WP.                                                          |
+| 11  | **WP-O8900-V5**                       | ❌ Deferred                                                                                  | —                                                                                                                                                                                                                                                                                                         | Trigger to revisit per spec: "we ship CFI training content that benefits from Vol 5."                                           |
+| 12  | **WP-SAFETY-BRIEF**                   | ❌ Deferred                                                                                  | —                                                                                                                                                                                                                                                                                                         | Per spec §5 ratification (low priority).                                                                                        |
 
 ## In-flight 2026-05-03 (parallel agent dispatch)
 
 7 background agents dispatched at 2026-05-03 ~18:50 UTC. See [docs/work-packages/whole-doc-promotion/sequence.md](../whole-doc-promotion/sequence.md) for tracking.
 
-| WP | Effect |
-|----|--------|
-| WP-MTN section-tree promotion | Mountain-flying becomes section-tree (parse existing override) |
-| WP-RMH section-tree promotion | Risk Management Handbook becomes section-tree (bookmark extraction) |
-| WP-AIH section-tree promotion | Aviation Instructor's Handbook becomes section-tree (Class A2 chapter PDFs) |
-| WP-IPH section-tree promotion | Instrument Procedures Handbook becomes section-tree (chapter PDFs + sidecar TOC) |
-| WP-IFH section-tree promotion | Instrument Flying Handbook becomes section-tree (TOC-file parser) |
-| Cleanup sweep | AC YAML reconciliation + dupe-row delete + PCG decision + AIM `current` orphan delete |
-| Flightbag scaffold | `apps/flightbag/` + `libs/library/` + `urlForReference()` helper + `ROUTES.FLIGHTBAG_*` constants |
+| WP                            | Effect                                                                                            |
+| ----------------------------- | ------------------------------------------------------------------------------------------------- |
+| WP-MTN section-tree promotion | Mountain-flying becomes section-tree (parse existing override)                                    |
+| WP-RMH section-tree promotion | Risk Management Handbook becomes section-tree (bookmark extraction)                               |
+| WP-AIH section-tree promotion | Aviation Instructor's Handbook becomes section-tree (Class A2 chapter PDFs)                       |
+| WP-IPH section-tree promotion | Instrument Procedures Handbook becomes section-tree (chapter PDFs + sidecar TOC)                  |
+| WP-IFH section-tree promotion | Instrument Flying Handbook becomes section-tree (TOC-file parser)                                 |
+| Cleanup sweep                 | AC YAML reconciliation + dupe-row delete + PCG decision + AIM `current` orphan delete             |
+| Flightbag scaffold            | `apps/flightbag/` + `libs/library/` + `urlForReference()` helper + `ROUTES.FLIGHTBAG_*` constants |
 
 After all 7 land:
 
@@ -70,20 +70,20 @@ After all 7 land:
 
 ### 12 cards with NO manifest (need full pipeline: download → extract → register → seed)
 
-| Card slug | What it is | Why it's still link-only |
-| --------- | ---------- | ------------------------ |
-| ac-00-24 | Thunderstorms | Not in `scripts/sources/config/ac.yaml` → no download |
-| ac-00-45 | Aviation Weather Services | Same |
-| ac-60-22 | Aeronautical Decision Making | Same |
-| ac-61-27 | Instrument Flying Handbook (legacy AC; superseded by FAA-H-8083-15B but still cited) | Same |
-| ac-61-67 | Stall and Spin Awareness Training | Same |
-| ac-61-84 | Role of Preflight Preparation | Same |
-| ac-61-134 | General Aviation Controlled-Flight-Into-Terrain Awareness | Same |
-| ac-90-100 | U.S. Terminal and En Route Area Navigation (RNAV) Operations | Same |
-| ac-91-23 | Pilot's Weight and Balance Handbook | Same |
-| ac-91-44 | Operational and Maintenance Practices for Emergency Locator Transmitters and Receivers | Same |
-| ac-91-74 | Pilot Guide: Flight in Icing Conditions | Same |
-| ac-91-75 | Attitude Indicator | Same |
+| Card slug | What it is                                                                             | Why it's still link-only                              |
+| --------- | -------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| ac-00-24  | Thunderstorms                                                                          | Not in `scripts/sources/config/ac.yaml` → no download |
+| ac-00-45  | Aviation Weather Services                                                              | Same                                                  |
+| ac-60-22  | Aeronautical Decision Making                                                           | Same                                                  |
+| ac-61-27  | Instrument Flying Handbook (legacy AC; superseded by FAA-H-8083-15B but still cited)   | Same                                                  |
+| ac-61-67  | Stall and Spin Awareness Training                                                      | Same                                                  |
+| ac-61-84  | Role of Preflight Preparation                                                          | Same                                                  |
+| ac-61-134 | General Aviation Controlled-Flight-Into-Terrain Awareness                              | Same                                                  |
+| ac-90-100 | U.S. Terminal and En Route Area Navigation (RNAV) Operations                           | Same                                                  |
+| ac-91-23  | Pilot's Weight and Balance Handbook                                                    | Same                                                  |
+| ac-91-44  | Operational and Maintenance Practices for Emergency Locator Transmitters and Receivers | Same                                                  |
+| ac-91-74  | Pilot Guide: Flight in Icing Conditions                                                | Same                                                  |
+| ac-91-75  | Attitude Indicator                                                                     | Same                                                  |
 
 These need to be added to `scripts/sources/config/ac.yaml` first, then `bun run sources download && bun run sources register ac` produces manifests, THEN the seed adapter can wire them into `reference_section`.
 
@@ -91,12 +91,12 @@ These need to be added to `scripts/sources/config/ac.yaml` first, then `bun run 
 
 All four manifests now have authored YAML rows in `course/references/advisory-circulars.yaml` so the library page renders them with subjects + primary_cert:
 
-| Manifest | DB slug / edition | YAML row added |
-| -------- | ----------------- | -------------- |
-| ac/120-71/b | `ac-120-71` / `AC 120-71B` | subjects: procedures, human-factors, training-ops |
-| ac/25-7/d   | `ac-25-7` / `AC 25-7D`     | subjects: aerodynamics, performance (engineering doc, kept per "anything downloaded gets a card") |
-| ac/61-65/j  | `ac-61-65` / `AC 61-65J`   | subjects: certification, regulations, training-ops; primary_cert: cfi |
-| ac/91-21-1/d | `ac-91-21-1` / `AC 91.21-1D` | subjects: regulations, procedures, aircraft-systems |
+| Manifest     | DB slug / edition            | YAML row added                                                                                    |
+| ------------ | ---------------------------- | ------------------------------------------------------------------------------------------------- |
+| ac/120-71/b  | `ac-120-71` / `AC 120-71B`   | subjects: procedures, human-factors, training-ops                                                 |
+| ac/25-7/d    | `ac-25-7` / `AC 25-7D`       | subjects: aerodynamics, performance (engineering doc, kept per "anything downloaded gets a card") |
+| ac/61-65/j   | `ac-61-65` / `AC 61-65J`     | subjects: certification, regulations, training-ops; primary_cert: cfi                             |
+| ac/91-21-1/d | `ac-91-21-1` / `AC 91.21-1D` | subjects: regulations, procedures, aircraft-systems                                               |
 
 After the cleanup sweep: 21 AC YAML rows (was 17). All 9 on-disk manifests are now enriched.
 
@@ -106,16 +106,14 @@ After the cleanup sweep: 21 AC YAML rows (was 17). All 9 on-disk manifests are n
 
 ### 2 cards with NO manifest
 
-| Card slug | What it is | Path forward |
-| --------- | ---------- | ------------ |
-| cfii-airplane-pts-9e | CFI-Instrument PTS (still on PTS, not converted to ACS) | Different doc shape (PTS vs ACS); decide whether to ingest as ACS-shape or skip until FAA converts |
-| faa-g-acs-2-companion-guide | ACS Companion Guide for Pilots | Add to `scripts/sources/config/acs.yaml`, fetch, extract |
+| Card slug                   | What it is                                              | Path forward                                                                                       |
+| --------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| cfii-airplane-pts-9e        | CFI-Instrument PTS (still on PTS, not converted to ACS) | Different doc shape (PTS vs ACS); decide whether to ingest as ACS-shape or skip until FAA converts |
+| faa-g-acs-2-companion-guide | ACS Companion Guide for Pilots                          | Add to `scripts/sources/config/acs.yaml`, fetch, extract                                           |
 
-### Slug edition mismatch (broad-survey gap 2)
+### Slug edition mismatch (broad-survey gap 2) -- RESOLVED
 
-The 5 on-disk manifest slugs are `ir-airplane-8c`, `ppl-airplane-6c`, `cfi-airplane-25`, `cpl-airplane-7b`, `atp-airplane-11a`. The 7 YAML card slugs are `ppl-airplane-acs-6c`, `ir-airplane-acs-8c`, `cpl-airplane-acs-7b`, `cfi-airplane-acs-25`, `cfii-airplane-pts-9e`, `atp-airplane-acs-11a`, `faa-g-acs-2-companion-guide`.
-
-Pattern: YAML uses `<rating>-<aircraft-type>-acs-<edition>`, manifests use `<rating>-<aircraft-type>-<edition>` (no `-acs-` infix). Need a slug-mapping pass before any seeder can join them.
+Resolved by the ACS canonical-slug rename: the 5 on-disk manifest slugs and the YAML card slugs share the canonical `<rating>-<aircraft-type>-acs-<edition>` shape (`ppl-airplane-acs-6c`, `ir-airplane-acs-8c`, `cpl-airplane-acs-7b`, `cfi-airplane-acs-25`, `atp-airplane-acs-11a`). PTS (`cfii-airplane-pts-9e`) and the companion guide (`faa-g-acs-2-companion-guide`) still ship as separate kinds; no change needed there.
 
 ## CFR — does WP-CFR cover everything we need?
 

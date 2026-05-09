@@ -12,8 +12,8 @@
  *
  * Where:
  *
- * - `<slug>` is the cert+class+edition slug (e.g. `ppl-airplane-6c`,
- *   `cfi-airplane-25`). One slug per FAA publication. The category and
+ * - `<slug>` is the cert+class+edition slug (e.g. `ppl-airplane-acs-6c`,
+ *   `cfi-airplane-acs-25`). One slug per FAA publication. The category and
  *   edition collapse into the slug; class scope (when present) lives on
  *   `syllabus_node.classes`, not in the locator. This matches the FAA's
  *   reality: PPL Airplane is one ACS-6C document covering ASEL + AMEL;
@@ -35,19 +35,24 @@
 import type { LocatorError, ParsedAcsLocator, ParsedLocator } from '../types.ts';
 
 /**
- * Enumerated ACS publication slugs. Format: `<cert-and-category>-<edition>`,
- * kebab-case lowercase. The corpus name (`acs`) is the prefix; this slug
- * never carries an `acs-` prefix itself.
+ * Enumerated ACS publication slugs. Format:
+ * `<cert-and-category>-acs-<edition>`, kebab-case lowercase. The slug
+ * carries an explicit `-acs-` infix so it round-trips with the
+ * `study.reference.document_slug` column and the YAML rows in
+ * `course/references/acs-pts.yaml`. The corpus name (`acs`) is also the
+ * URI prefix; the infix is redundant with that prefix, but keeps the slug
+ * self-describing in contexts (DB rows, URLs) where the corpus is not
+ * carried alongside.
  *
  * Adding a new publication is non-breaking; the parser rejects unknown
  * slugs to catch typos at the earliest layer.
  */
 export const ACS_PUBLICATION_SLUGS: readonly string[] = [
-	'ppl-airplane-6c', // Private Pilot -- Airplane (FAA-S-ACS-6C, Nov 2023)
-	'ir-airplane-8c', // Instrument Rating -- Airplane (FAA-S-ACS-8C, Nov 2023)
-	'cpl-airplane-7b', // Commercial Pilot -- Airplane (FAA-S-ACS-7B, Nov 2023)
-	'cfi-airplane-25', // CFI -- Airplane (FAA-S-ACS-25, Nov 2023; covers ASEL/AMEL/ASES/AMES, includes MEI scope)
-	'atp-airplane-11a', // ATP -- Airplane (FAA-S-ACS-11A, Apr 2024)
+	'ppl-airplane-acs-6c', // Private Pilot -- Airplane (FAA-S-ACS-6C, Nov 2023)
+	'ir-airplane-acs-8c', // Instrument Rating -- Airplane (FAA-S-ACS-8C, Nov 2023)
+	'cpl-airplane-acs-7b', // Commercial Pilot -- Airplane (FAA-S-ACS-7B, Nov 2023)
+	'cfi-airplane-acs-25', // CFI -- Airplane (FAA-S-ACS-25, Nov 2023; covers ASEL/AMEL/ASES/AMES, includes MEI scope)
+	'atp-airplane-acs-11a', // ATP -- Airplane (FAA-S-ACS-11A, Apr 2024)
 ];
 
 /**

@@ -22,7 +22,7 @@ Depends on: cert-syllabus-and-goal-composer (shipped; provides `syllabus`, `syll
 - [ ] Read `libs/bc/study/src/goals.ts` (specifically `getGoalNodeUnion`). Course extension follows the same pattern.
 - [ ] Read `libs/constants/src/credentials.ts` -- the `SYLLABUS_KINDS` shape is the template for `COURSE_KINDS`.
 - [ ] Read `libs/constants/src/routes.ts`. `ROUTES` pattern understood.
-- [ ] Read [course/syllabi/ppl-airplane-6c/manifest.yaml](../../../course/syllabi/ppl-airplane-6c/manifest.yaml) and [course/syllabi/ppl-airplane-6c/areas/05-performance-maneuvers.yaml](../../../course/syllabi/ppl-airplane-6c/areas/05-performance-maneuvers.yaml). Course YAML mirrors this shape.
+- [ ] Read [course/syllabi/ppl-airplane-acs-6c/manifest.yaml](../../../course/syllabi/ppl-airplane-acs-6c/manifest.yaml) and [course/syllabi/ppl-airplane-acs-6c/areas/05-performance-maneuvers.yaml](../../../course/syllabi/ppl-airplane-acs-6c/areas/05-performance-maneuvers.yaml). Course YAML mirrors this shape.
 - [ ] Verify DB is running (OrbStack postgres on port 5435).
 - [ ] Confirm zero `syllabus.kind IN ('school','personal')` rows exist: `psql -d airboss -c "SELECT COUNT(*) FROM study.syllabus WHERE kind IN ('school','personal');"`.
 

@@ -246,12 +246,12 @@ Output:
 
 Use this if the learner is still learning, not just reviewing.
 
-| Week | Focus | Output |
-| --- | --- | --- |
-| 1 | Regulations, certificates, aircraft systems, aerodynamics | Privileges oral, systems oral, aerodynamics quiz |
-| 2 | W&B, performance, airports, airspace, communications | Performance packet, route airspace analysis |
-| 3 | Weather theory/products, navigation, cross-country planning | Weather brief, nav log, XC mini-packet |
-| 4 | ADM, emergencies, practice tests, weak-code remediation | 2-3 practice tests, endorsement review |
+| Week | Focus                                                       | Output                                           |
+| ---- | ----------------------------------------------------------- | ------------------------------------------------ |
+| 1    | Regulations, certificates, aircraft systems, aerodynamics   | Privileges oral, systems oral, aerodynamics quiz |
+| 2    | W&B, performance, airports, airspace, communications        | Performance packet, route airspace analysis      |
+| 3    | Weather theory/products, navigation, cross-country planning | Weather brief, nav log, XC mini-packet           |
+| 4    | ADM, emergencies, practice tests, weak-code remediation     | 2-3 practice tests, endorsement review           |
 
 Weekly rule:
 
@@ -264,9 +264,9 @@ Weekly rule:
 
 Use this table for every missed practice question.
 
-| Date | Topic | Miss type | Why I missed it | Correct concept | Source | Oral explanation ready? |
-| --- | --- | --- | --- | --- | --- | --- |
-| | | Knowledge / reading / calculation / rushing | | | | Yes / No |
+| Date | Topic | Miss type                                   | Why I missed it | Correct concept | Source | Oral explanation ready? |
+| ---- | ----- | ------------------------------------------- | --------------- | --------------- | ------ | ----------------------- |
+|      |       | Knowledge / reading / calculation / rushing |                 |                 |        | Yes / No                |
 
 Miss types:
 

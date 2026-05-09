@@ -228,15 +228,15 @@ Note: the dispatcher numbered this as Phase 17/18 in the PR #264 commits; tasks.
 
 ### Phase 16: PPL ACS Area V transcription -- shipped (PR #264)
 
-- [x] Create `course/syllabi/ppl-airplane-6c/manifest.yaml` with the verified edition (FAA-S-ACS-6C, Nov 2023) (PR #264).
-- [x] Create `course/syllabi/ppl-airplane-6c/areas/05-performance-maneuvers.yaml` (PR #264).
+- [x] Create `course/syllabi/ppl-airplane-acs-6c/manifest.yaml` with the verified edition (FAA-S-ACS-6C, Nov 2023) (PR #264).
+- [x] Create `course/syllabi/ppl-airplane-acs-6c/areas/05-performance-maneuvers.yaml` (PR #264).
 - [x] Transcribe Area V from the FAA-published PPL ACS:
   - [x] Task A "Steep Turns" with K1-K2, R1-R5, S1-S5 elements (PR #264).
   - [x] Task B "Ground Reference Maneuvers" with K1-K2, R1-R6, S1-S6 elements (PR #264). Note: PR #264 corrected the spec dispatcher's mistake -- PPL Area V is two tasks (Steep Turns + Ground Reference Maneuvers), not three; "Steep Spirals" and "Chandelles" are commercial tasks.
   - [ ] Task C (Chandelles). Not in PPL ACS-6C; this dispatcher item was incorrect, dropped.
   - [x] Each element row includes code/triad/title/required_bloom/description/`airboss_ref` per locked Q7 format (PR #264). 28 element rows transcribed.
 - [x] Run `bun run db seed syllabi`. Verify Area V lands cleanly; PR body reports 12 syllabus_node_link rows binding leaves to existing knowledge nodes (PR #264).
-- [x] Commit `course/syllabi/ppl-airplane-6c/` with manifest + Area V YAML (PR #264).
+- [x] Commit `course/syllabi/ppl-airplane-acs-6c/` with manifest + Area V YAML (PR #264).
 
 ### Phase 17: knowledge_node.references migration to uniform StructuredCitation -- shipped (PR 5)
 
@@ -331,13 +331,13 @@ The cert-syllabus-and-goal-composer WP shipped across 6 PRs: #248 / #254 / #264 
 
 ### Per-PR closure summary
 
-| PR   | Phases closed                                              | Notes                                                                                                                          |
-| ---- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| #248 | 0, 1, 2, 3 (initial), 4 (initial), 5 (initial), 6, 7       | Contract + schema + migration `0003_cert_syllabus_goal.sql`. `StructuredCitation` extended with `framing` + `airboss_ref`.     |
-| #254 | 8 (acs resolver), 9, 10, 11 (URL resolver), 12, 13, 23     | BC modules + acs corpus resolver + cross-kind URL resolver. 124 new tests.                                                     |
-| #264 | 8 (pts resolver + ref seed), 14, 15, 16, 18 (dry-run)      | Locked Q7 ACS locator format. Phase 14 schema delta `0004_classes_and_relevance.sql`. PPL Area V transcription (28 elements).  |
-| #270 | 18 (live write), 19, 20, 21                                | Gate A signoff, Gate B strip, study_plan -> Goal migration. Abby's PPL plan migrated cleanly.                                  |
-| #274 | 4 (target_date refinement), 10 (cleanup), 13 (cleanup), 24 | `/ball-review-full` 12-axis pass + fixer. 22 findings closed. Migration `0006_goal_target_date_to_date.sql`.                   |
+| PR   | Phases closed                                              | Notes                                                                                                                         |
+| ---- | ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| #248 | 0, 1, 2, 3 (initial), 4 (initial), 5 (initial), 6, 7       | Contract + schema + migration `0003_cert_syllabus_goal.sql`. `StructuredCitation` extended with `framing` + `airboss_ref`.    |
+| #254 | 8 (acs resolver), 9, 10, 11 (URL resolver), 12, 13, 23     | BC modules + acs corpus resolver + cross-kind URL resolver. 124 new tests.                                                    |
+| #264 | 8 (pts resolver + ref seed), 14, 15, 16, 18 (dry-run)      | Locked Q7 ACS locator format. Phase 14 schema delta `0004_classes_and_relevance.sql`. PPL Area V transcription (28 elements). |
+| #270 | 18 (live write), 19, 20, 21                                | Gate A signoff, Gate B strip, study_plan -> Goal migration. Abby's PPL plan migrated cleanly.                                 |
+| #274 | 4 (target_date refinement), 10 (cleanup), 13 (cleanup), 24 | `/ball-review-full` 12-axis pass + fixer. 22 findings closed. Migration `0006_goal_target_date_to_date.sql`.                  |
 
 ### Phases unstarted (PR 5 candidate)
 

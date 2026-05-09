@@ -704,7 +704,7 @@ describe('resolveCitationUrl', () => {
 				kind: REFERENCE_KINDS.ACS,
 				reference_id: 'ref_ppl_acs_25',
 				locator: { area: 'V', task: 'A', element: 'K1' },
-				airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-a/elem-k01',
+				airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-a/elem-k01',
 			},
 			[],
 		);

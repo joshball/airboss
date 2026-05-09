@@ -17,27 +17,27 @@ The syllabus assumes 35-45 hours of organized ground instruction, plus homework,
 
 Use current editions at the time of training. The references below were checked on 2026-05-05.
 
-| Reference | Role in course | Use point |
-| --- | --- | --- |
-| 14 CFR 61.105 | Required private pilot aeronautical knowledge areas | Course design checklist; final audit before knowledge-test endorsement |
-| 14 CFR 61.107 | Private pilot flight proficiency areas of operation | Integration with flight lessons; oral and checkride readiness mapping |
-| 14 CFR 61.109 | Private pilot airplane aeronautical experience requirements | Solo/cross-country/night/test-prep planning |
-| 14 CFR Part 91 | Operating rules for real flight decisions | Regulations, weather minimums, equipment, maintenance, flight planning |
-| 14 CFR Part 141 Appendix B | Approved-school private pilot curriculum minimums | Alternative syllabus model; useful quality-control benchmark |
-| FAA-S-ACS-6C, Private Pilot for Airplane Category ACS | Practical-test standard and knowledge/risk/skill task framework | From day one; primary oral/checkride readiness map |
-| FAA-G-ACS-2, ACS Companion Guide for Pilots | How to understand ACS structure and testing philosophy | Week 1 orientation; final checkride preparation |
-| FAA-H-8083-25C, Pilot's Handbook of Aeronautical Knowledge | Primary ground-school text | Throughout |
-| FAA-H-8083-3C, Airplane Flying Handbook | Flight-maneuver and operational context | Parallel with flight lessons; especially airport ops, maneuvers, night, emergencies |
-| FAA-H-8083-28B, Aviation Weather Handbook | Weather theory and weather services | Weather blocks and cross-country planning |
-| FAA-H-8083-2A, Risk Management Handbook | ADM, SRM, personal minimums, hazards | Throughout; especially scenario work |
-| Aeronautical Information Manual and Pilot/Controller Glossary | Airspace, ATC services, communications, airport ops, phraseology | Communications, airspace, airport operations, navigation |
-| Chart Supplement, VFR chart, TAC/Flyway chart if local, digital EFB chart set | Real planning documents | Navigation and cross-country weeks |
-| POH/AFM for the training aircraft | Aircraft systems, limitations, performance, W&B | Aircraft systems through final checkride |
-| Aircraft maintenance records and required documents | Airworthiness, inspections, ADs, equipment status | Pre-solo and checkride-prep stages |
-| FAA-CT-8080-2H, Airman Knowledge Testing Supplement | Figures, charts, legends, and examples used in knowledge testing | Performance, navigation, weather, test preparation |
-| AC 61-65, Certification: Pilots and Flight and Ground Instructors | Endorsements and instructor sign-off framework | Instructor use before solo, knowledge test, practical test |
-| AC 90-66, Non-Towered Airport Flight Operations | Pattern entries and non-towered procedures | Airport operations |
-| NTSB Part 830 | Accident and incident notification/reporting | Regulations and emergency-response block |
+| Reference                                                                     | Role in course                                                   | Use point                                                                           |
+| ----------------------------------------------------------------------------- | ---------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| 14 CFR 61.105                                                                 | Required private pilot aeronautical knowledge areas              | Course design checklist; final audit before knowledge-test endorsement              |
+| 14 CFR 61.107                                                                 | Private pilot flight proficiency areas of operation              | Integration with flight lessons; oral and checkride readiness mapping               |
+| 14 CFR 61.109                                                                 | Private pilot airplane aeronautical experience requirements      | Solo/cross-country/night/test-prep planning                                         |
+| 14 CFR Part 91                                                                | Operating rules for real flight decisions                        | Regulations, weather minimums, equipment, maintenance, flight planning              |
+| 14 CFR Part 141 Appendix B                                                    | Approved-school private pilot curriculum minimums                | Alternative syllabus model; useful quality-control benchmark                        |
+| FAA-S-ACS-6C, Private Pilot for Airplane Category ACS                         | Practical-test standard and knowledge/risk/skill task framework  | From day one; primary oral/checkride readiness map                                  |
+| FAA-G-ACS-2, ACS Companion Guide for Pilots                                   | How to understand ACS structure and testing philosophy           | Week 1 orientation; final checkride preparation                                     |
+| FAA-H-8083-25C, Pilot's Handbook of Aeronautical Knowledge                    | Primary ground-school text                                       | Throughout                                                                          |
+| FAA-H-8083-3C, Airplane Flying Handbook                                       | Flight-maneuver and operational context                          | Parallel with flight lessons; especially airport ops, maneuvers, night, emergencies |
+| FAA-H-8083-28B, Aviation Weather Handbook                                     | Weather theory and weather services                              | Weather blocks and cross-country planning                                           |
+| FAA-H-8083-2A, Risk Management Handbook                                       | ADM, SRM, personal minimums, hazards                             | Throughout; especially scenario work                                                |
+| Aeronautical Information Manual and Pilot/Controller Glossary                 | Airspace, ATC services, communications, airport ops, phraseology | Communications, airspace, airport operations, navigation                            |
+| Chart Supplement, VFR chart, TAC/Flyway chart if local, digital EFB chart set | Real planning documents                                          | Navigation and cross-country weeks                                                  |
+| POH/AFM for the training aircraft                                             | Aircraft systems, limitations, performance, W&B                  | Aircraft systems through final checkride                                            |
+| Aircraft maintenance records and required documents                           | Airworthiness, inspections, ADs, equipment status                | Pre-solo and checkride-prep stages                                                  |
+| FAA-CT-8080-2H, Airman Knowledge Testing Supplement                           | Figures, charts, legends, and examples used in knowledge testing | Performance, navigation, weather, test preparation                                  |
+| AC 61-65, Certification: Pilots and Flight and Ground Instructors             | Endorsements and instructor sign-off framework                   | Instructor use before solo, knowledge test, practical test                          |
+| AC 90-66, Non-Towered Airport Flight Operations                               | Pattern entries and non-towered procedures                       | Airport operations                                                                  |
+| NTSB Part 830                                                                 | Accident and incident notification/reporting                     | Regulations and emergency-response block                                            |
 
 Commercial textbooks and courses are useful but secondary. ASA, Jeppesen, Gleim, King Schools, Sporty's, Gold Seal, Rod Machado, MzeroA, Pilot Institute, and similar providers can supply readings, videos, test banks, and lesson structure. The FAA/regulatory documents remain the controlling source for standards and privileges.
 
@@ -467,16 +467,16 @@ Exit evidence:
 
 ## Reference Timing Map
 
-| Course point | FAA/regulatory references | Aircraft/local references | Practice products |
-| --- | --- | --- | --- |
-| Orientation | ACS, ACS Companion Guide, 61.103/105/107/109 | Training agreement, local syllabus | ACS lookup drill |
-| Pre-solo ground | Part 61, Part 91, AIM airport ops, AC 90-66 | POH/AFM, local airport diagrams, school SOPs | Pre-solo written/oral |
-| Systems/performance | PHAK, AFH, 91.205/213 | POH/AFM, equipment list, maintenance records | W&B and takeoff/landing scenarios |
-| Weather | Aviation Weather Handbook, AIM weather services | Local weather patterns, EFB/briefing provider | Weather brief and go/no-go drills |
-| Cross-country | 91.103, PHAK navigation, AIM, Chart Supplement | VFR charts, POH/AFM, local airspace notes | Nav log, diversion, flight following calls |
-| Night | AFH night ops, AIM lighting/medical | POH lighting/electrical systems, airport lighting | Night risk assessment |
-| Knowledge test | ACS, testing supplement, 61.35/61.105 | Instructor endorsement records | Timed exams, ACS-code remediation |
-| Checkride | ACS, ACS Companion Guide, Part 61/91 | Aircraft documents, logs, POH/AFM | Mock oral and capstone dispatch |
+| Course point        | FAA/regulatory references                       | Aircraft/local references                         | Practice products                          |
+| ------------------- | ----------------------------------------------- | ------------------------------------------------- | ------------------------------------------ |
+| Orientation         | ACS, ACS Companion Guide, 61.103/105/107/109    | Training agreement, local syllabus                | ACS lookup drill                           |
+| Pre-solo ground     | Part 61, Part 91, AIM airport ops, AC 90-66     | POH/AFM, local airport diagrams, school SOPs      | Pre-solo written/oral                      |
+| Systems/performance | PHAK, AFH, 91.205/213                           | POH/AFM, equipment list, maintenance records      | W&B and takeoff/landing scenarios          |
+| Weather             | Aviation Weather Handbook, AIM weather services | Local weather patterns, EFB/briefing provider     | Weather brief and go/no-go drills          |
+| Cross-country       | 91.103, PHAK navigation, AIM, Chart Supplement  | VFR charts, POH/AFM, local airspace notes         | Nav log, diversion, flight following calls |
+| Night               | AFH night ops, AIM lighting/medical             | POH lighting/electrical systems, airport lighting | Night risk assessment                      |
+| Knowledge test      | ACS, testing supplement, 61.35/61.105           | Instructor endorsement records                    | Timed exams, ACS-code remediation          |
+| Checkride           | ACS, ACS Companion Guide, Part 61/91            | Aircraft documents, logs, POH/AFM                 | Mock oral and capstone dispatch            |
 
 ## Typical Stage Gates
 

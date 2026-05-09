@@ -2,14 +2,14 @@ area:
   code: V
   ordinal: 5
   title: Performance Maneuvers and Ground Reference Maneuvers
-  airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05?at=2023-11'
+  airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05?at=2023-11'
   citations: []
 
 tasks:
   - code: V.A
     ordinal: 1
     title: Steep Turns
-    airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-a?at=2023-11'
+    airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-a?at=2023-11'
     classes: null
     references:
       - FAA-H-8083-2 (Risk Management Handbook)
@@ -26,7 +26,7 @@ tasks:
         required_bloom: understand
         title: How to conduct a proper steep turn.
         description: How to conduct a proper steep turn.
-        airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-a/elem-k01?at=2023-11'
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-a/elem-k01?at=2023-11'
 
       - code: V.A.K2
         triad: knowledge
@@ -40,7 +40,7 @@ tasks:
             c. Maneuvering speed, including the impact of weight changes
             d. Load factor and accelerated stalls
             e. Rate and radius of turn
-        airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-a/elem-k02?at=2023-11'
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-a/elem-k02?at=2023-11'
 
       - code: V.A.R1
         triad: risk_management
@@ -48,7 +48,7 @@ tasks:
         required_bloom: apply
         title: Division of attention between aircraft control and orientation.
         description: Division of attention between aircraft control and orientation.
-        airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-a/elem-r01?at=2023-11'
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-a/elem-r01?at=2023-11'
 
       - code: V.A.R2
         triad: risk_management
@@ -56,7 +56,7 @@ tasks:
         required_bloom: apply
         title: Collision hazards.
         description: Collision hazards.
-        airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-a/elem-r02?at=2023-11'
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-a/elem-r02?at=2023-11'
 
       - code: V.A.R3
         triad: risk_management
@@ -64,7 +64,7 @@ tasks:
         required_bloom: apply
         title: Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT).
         description: Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT).
-        airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-a/elem-r03?at=2023-11'
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-a/elem-r03?at=2023-11'
 
       - code: V.A.R4
         triad: risk_management
@@ -72,7 +72,7 @@ tasks:
         required_bloom: apply
         title: Distractions, task prioritization, loss of situational awareness, or disorientation.
         description: Distractions, task prioritization, loss of situational awareness, or disorientation.
-        airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-a/elem-r04?at=2023-11'
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-a/elem-r04?at=2023-11'
 
       - code: V.A.R5
         triad: risk_management
@@ -80,7 +80,7 @@ tasks:
         required_bloom: apply
         title: Uncoordinated flight.
         description: Uncoordinated flight.
-        airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-a/elem-r05?at=2023-11'
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-a/elem-r05?at=2023-11'
 
       - code: V.A.S1
         triad: skill
@@ -88,7 +88,7 @@ tasks:
         required_bloom: apply
         title: Clear the area.
         description: Clear the area.
-        airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-a/elem-s01?at=2023-11'
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-a/elem-s01?at=2023-11'
 
       - code: V.A.S2
         triad: skill
@@ -98,7 +98,7 @@ tasks:
         description: |
           Establish the manufacturer's recommended airspeed; or if one is not
           available, an airspeed not to exceed the maneuvering speed (VA).
-        airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-a/elem-s02?at=2023-11'
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-a/elem-s02?at=2023-11'
 
       - code: V.A.S3
         triad: skill
@@ -106,7 +106,7 @@ tasks:
         required_bloom: apply
         title: 'Roll into a coordinated 360° steep turn with approximately a 45° bank.'
         description: 'Roll into a coordinated 360° steep turn with approximately a 45° bank.'
-        airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-a/elem-s03?at=2023-11'
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-a/elem-s03?at=2023-11'
 
       - code: V.A.S4
         triad: skill
@@ -114,7 +114,7 @@ tasks:
         required_bloom: apply
         title: 'Perform the Task in the opposite direction, as specified by evaluator.'
         description: 'Perform the Task in the opposite direction, as specified by evaluator.'
-        airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-a/elem-s04?at=2023-11'
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-a/elem-s04?at=2023-11'
 
       - code: V.A.S5
         triad: skill
@@ -124,12 +124,12 @@ tasks:
         description: |
           Maintain the entry altitude ±100 feet, airspeed ±10 knots, bank ±5°,
           and roll out on the entry heading ±10°.
-        airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-a/elem-s05?at=2023-11'
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-a/elem-s05?at=2023-11'
 
   - code: V.B
     ordinal: 2
     title: Ground Reference Maneuvers
-    airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-b?at=2023-11'
+    airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b?at=2023-11'
     classes: null
     references:
       - 14 CFR part 61
@@ -151,7 +151,7 @@ tasks:
         required_bloom: understand
         title: Purpose of ground reference maneuvers.
         description: Purpose of ground reference maneuvers.
-        airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-b/elem-k01?at=2023-11'
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-k01?at=2023-11'
 
       - code: V.B.K2
         triad: knowledge
@@ -159,7 +159,7 @@ tasks:
         required_bloom: understand
         title: Effects of wind on ground track and relation to a ground reference.
         description: Effects of wind on ground track and relation to a ground reference.
-        airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-b/elem-k02?at=2023-11'
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-k02?at=2023-11'
 
       - code: V.B.K3
         triad: knowledge
@@ -167,7 +167,7 @@ tasks:
         required_bloom: understand
         title: Effects of bank angle and groundspeed on rate and radius of turn.
         description: Effects of bank angle and groundspeed on rate and radius of turn.
-        airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-b/elem-k03?at=2023-11'
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-k03?at=2023-11'
 
       - code: V.B.K4
         triad: knowledge
@@ -175,7 +175,7 @@ tasks:
         required_bloom: understand
         title: Relationship of rectangular course to airport traffic pattern.
         description: Relationship of rectangular course to airport traffic pattern.
-        airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-b/elem-k04?at=2023-11'
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-k04?at=2023-11'
 
       - code: V.B.R1
         triad: risk_management
@@ -183,7 +183,7 @@ tasks:
         required_bloom: apply
         title: Division of attention between aircraft control and orientation.
         description: Division of attention between aircraft control and orientation.
-        airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-b/elem-r01?at=2023-11'
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-r01?at=2023-11'
 
       - code: V.B.R2
         triad: risk_management
@@ -191,7 +191,7 @@ tasks:
         required_bloom: apply
         title: Collision hazards.
         description: Collision hazards.
-        airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-b/elem-r02?at=2023-11'
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-r02?at=2023-11'
 
       - code: V.B.R3
         triad: risk_management
@@ -199,7 +199,7 @@ tasks:
         required_bloom: apply
         title: Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT).
         description: Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT).
-        airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-b/elem-r03?at=2023-11'
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-r03?at=2023-11'
 
       - code: V.B.R4
         triad: risk_management
@@ -207,7 +207,7 @@ tasks:
         required_bloom: apply
         title: Distractions, task prioritization, loss of situational awareness, or disorientation.
         description: Distractions, task prioritization, loss of situational awareness, or disorientation.
-        airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-b/elem-r04?at=2023-11'
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-r04?at=2023-11'
 
       - code: V.B.R5
         triad: risk_management
@@ -215,7 +215,7 @@ tasks:
         required_bloom: apply
         title: Uncoordinated flight.
         description: Uncoordinated flight.
-        airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-b/elem-r05?at=2023-11'
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-r05?at=2023-11'
 
       - code: V.B.S1
         triad: skill
@@ -223,7 +223,7 @@ tasks:
         required_bloom: apply
         title: Clear the area.
         description: Clear the area.
-        airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-b/elem-s01?at=2023-11'
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-s01?at=2023-11'
 
       - code: V.B.S2
         triad: skill
@@ -231,7 +231,7 @@ tasks:
         required_bloom: apply
         title: Select a suitable ground reference area, line, or point as appropriate.
         description: Select a suitable ground reference area, line, or point as appropriate.
-        airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-b/elem-s02?at=2023-11'
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-s02?at=2023-11'
 
       - code: V.B.S3
         triad: skill
@@ -243,7 +243,7 @@ tasks:
             a. Rectangular course: enter a left or right pattern, 600 to 1,000 feet above ground level (AGL) at an appropriate distance from the selected reference area, 45° to the downwind leg
             b. S-turns: enter perpendicular to the selected reference line, 600 to 1,000 feet AGL at an appropriate distance from the selected reference area
             c. Turns around a point: enter at an appropriate distance from the reference point, 600 to 1,000 feet AGL at an appropriate distance from the selected reference area
-        airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-b/elem-s03?at=2023-11'
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-s03?at=2023-11'
 
       - code: V.B.S4
         triad: skill
@@ -255,7 +255,7 @@ tasks:
           to maintain a constant ground track around a rectangular reference area,
           or to maintain a constant radius turn on each side of a selected
           reference line or point.
-        airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-b/elem-s04?at=2023-11'
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-s04?at=2023-11'
 
       - code: V.B.S5
         triad: skill
@@ -266,7 +266,7 @@ tasks:
           If performing S-Turns, reverse the turn directly over the selected
           reference line; if performing turns around a point, complete turns in
           either direction, as specified by the evaluator.
-        airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-b/elem-s05?at=2023-11'
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-s05?at=2023-11'
 
       - code: V.B.S6
         triad: skill
@@ -276,7 +276,7 @@ tasks:
         description: |
           Divide attention between airplane control, traffic avoidance and the
           ground track while maintaining coordinated flight.
-        airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-b/elem-s06?at=2023-11'
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-s06?at=2023-11'
 
       - code: V.B.S7
         triad: skill
@@ -284,7 +284,7 @@ tasks:
         required_bloom: apply
         title: Maintain altitude ±100 ft; maintain airspeed ±10 kt.
         description: Maintain altitude ±100 feet; maintain airspeed ±10 knots.
-        airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-b/elem-s07?at=2023-11'
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-s07?at=2023-11'
 
 # Knowledge graph links: which course/knowledge nodes does each leaf
 # exercise? `weight` defaults to 1.0; downweight when partial coverage.

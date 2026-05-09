@@ -13,7 +13,7 @@
  * after their respective ingests run, proving the corpus resolvers compose
  * without stepping on each other.
  *
- * Slice scope: `ppl-airplane-6c` only. Other publications are skipped with
+ * Slice scope: `ppl-airplane-acs-6c` only. Other publications are skipped with
  * explicit reasons by the ingest until additional slug mappings are wired
  * into `ACS_DETECTED_EDITION_TO_SLUG`.
  */
@@ -53,7 +53,7 @@ async function ingestRealAcsCorpus(): Promise<void> {
 	await runAcsIngest({ cacheRoot, derivativeRoot: ACS_DERIVATIVE_ROOT });
 }
 
-describe('phase-10 ACS validator smoke (ppl-airplane-6c slice)', () => {
+describe('phase-10 ACS validator smoke (ppl-airplane-acs-6c slice)', () => {
 	it('validates a lesson citing an ACS task with zero ERRORs', async () => {
 		await ingestRealAcsCorpus();
 
@@ -67,7 +67,7 @@ section_order: "01"
 
 # ACS task smoke test
 
-Pilot Qualifications is covered in [@cite](airboss-ref:acs/ppl-airplane-6c/area-01/task-a).
+Pilot Qualifications is covered in [@cite](airboss-ref:acs/ppl-airplane-acs-6c/area-01/task-a).
 `;
 		writeFileSync(join(lessonsDir, 'acs-task.md'), lessonContent, 'utf-8');
 
@@ -94,7 +94,7 @@ section_order: "01"
 ---
 
 The recordkeeping requirement is captured in
-[@cite](airboss-ref:acs/ppl-airplane-6c/area-01/task-a/elem-k01).
+[@cite](airboss-ref:acs/ppl-airplane-acs-6c/area-01/task-a/elem-k01).
 `;
 		writeFileSync(join(lessonsDir, 'acs-element.md'), lessonContent, 'utf-8');
 
@@ -133,7 +133,7 @@ section_order: "01"
 ---
 
 The pilot-qualification standard is in
-[@cite](airboss-ref:acs/ppl-airplane-6c/area-01/task-a); the underlying
+[@cite](airboss-ref:acs/ppl-airplane-acs-6c/area-01/task-a); the underlying
 regulation is [@cite](airboss-ref:regs/cfr-14/61/3?at=2026).
 `;
 		writeFileSync(join(lessonsDir, 'cross-corpus.md'), lessonContent, 'utf-8');

@@ -12,16 +12,16 @@ Part 61 and Part 141 private pilot students take the same FAA knowledge test and
 
 ## Short Version
 
-| Question | Part 61 | Part 141 |
-| --- | --- | --- |
-| Who controls the syllabus? | The instructor/school, as long as Part 61 requirements are met | The FAA-approved Training Course Outline (TCO) |
-| Ground school format | Flexible | Approved curriculum with required content and records |
-| Minimum private airplane flight time | 40 hours under 61.109(a) | 35 hours under Part 141 Appendix B if all course requirements are met |
-| Ground training minimum | No fixed national hour minimum for a Part 61 ground course, but 61.105 knowledge must be covered | Appendix B specifies at least 35 hours of ground training for airplane private pilot certification courses |
-| Stage checks | Optional, school/CFI choice | Built into the approved school/course structure |
-| Records | Logbook endorsements and school records as applicable | Formal training records tied to stages/lessons/TCO |
-| Flexibility | High | Lower; changes must fit the approved TCO |
-| Best for | Independent learners, small schools, flexible schedules | Structured schools, colleges, VA/financing contexts, learners who benefit from gates |
+| Question                             | Part 61                                                                                          | Part 141                                                                                                   |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------- |
+| Who controls the syllabus?           | The instructor/school, as long as Part 61 requirements are met                                   | The FAA-approved Training Course Outline (TCO)                                                             |
+| Ground school format                 | Flexible                                                                                         | Approved curriculum with required content and records                                                      |
+| Minimum private airplane flight time | 40 hours under 61.109(a)                                                                         | 35 hours under Part 141 Appendix B if all course requirements are met                                      |
+| Ground training minimum              | No fixed national hour minimum for a Part 61 ground course, but 61.105 knowledge must be covered | Appendix B specifies at least 35 hours of ground training for airplane private pilot certification courses |
+| Stage checks                         | Optional, school/CFI choice                                                                      | Built into the approved school/course structure                                                            |
+| Records                              | Logbook endorsements and school records as applicable                                            | Formal training records tied to stages/lessons/TCO                                                         |
+| Flexibility                          | High                                                                                             | Lower; changes must fit the approved TCO                                                                   |
+| Best for                             | Independent learners, small schools, flexible schedules                                          | Structured schools, colleges, VA/financing contexts, learners who benefit from gates                       |
 
 ## What Does Not Change
 

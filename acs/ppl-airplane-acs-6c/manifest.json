@@ -2,7 +2,7 @@
   "kind": "acs",
   "schema_version": 1,
   "corpus": "acs",
-  "slug": "ppl-airplane-6c",
+  "slug": "ppl-airplane-acs-6c",
   "title": "Private Pilot for Airplane Category ACS",
   "publisher": "FAA",
   "publication_date": "2023-11-01",
@@ -18,7 +18,7 @@
         {
           "task": "a",
           "title": "Pilot Qualifications",
-          "body_path": "acs/ppl-airplane-6c/area-01/task-a.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-01/task-a.md",
           "body_sha256": "e7d934ba34e4a4e7b1321f5a83837e5c67e6f3a870b7070749b2a5c52ecc343a",
           "elements": [
             {
@@ -74,7 +74,7 @@
         {
           "task": "b",
           "title": "Airworthiness Requirements",
-          "body_path": "acs/ppl-airplane-6c/area-01/task-b.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-01/task-b.md",
           "body_sha256": "54a773df5675820f691108a11bd5a0f454564582b1b8c9d956fec3ec9efe93ec",
           "elements": [
             {
@@ -100,7 +100,7 @@
         {
           "task": "c",
           "title": "Weather Information",
-          "body_path": "acs/ppl-airplane-6c/area-01/task-c.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-01/task-c.md",
           "body_sha256": "e743a0994a094e75554447667498a75bcfe5710ca4e7c8fc815bfce8279ae7ae",
           "elements": [
             {
@@ -126,21 +126,21 @@
         {
           "task": "d",
           "title": "Cross-Country Flight Planning",
-          "body_path": "acs/ppl-airplane-6c/area-01/task-d.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-01/task-d.md",
           "body_sha256": "64d44e0bc748ea01994915ddd452d6376dec8f182a8021bf31e4981b1f3bfde9",
           "elements": []
         },
         {
           "task": "e",
           "title": "National Airspace System",
-          "body_path": "acs/ppl-airplane-6c/area-01/task-e.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-01/task-e.md",
           "body_sha256": "a0cc8dd4cab39c0a92408d8995912f71e85738e74397fde8b447e76d9317c2fc",
           "elements": []
         },
         {
           "task": "f",
           "title": "Performance and Limitations",
-          "body_path": "acs/ppl-airplane-6c/area-01/task-f.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-01/task-f.md",
           "body_sha256": "320c3790311faea8891e9db1c9f382ed89a9a12ee0cc9b7be14e61dbe3740c97",
           "elements": [
             {
@@ -184,7 +184,7 @@
         {
           "task": "g",
           "title": "Operation of Systems",
-          "body_path": "acs/ppl-airplane-6c/area-01/task-g.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-01/task-g.md",
           "body_sha256": "a48574cf1e3947ac988593c01313ed9f159e3457c11600ca2057ac24a0393d32",
           "elements": [
             {
@@ -234,7 +234,7 @@
         {
           "task": "h",
           "title": "Human Factors",
-          "body_path": "acs/ppl-airplane-6c/area-01/task-h.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-01/task-h.md",
           "body_sha256": "aace2531ae126faba9318becd5ad8115215a57b6efe39bedc7abeff8a91f0a93",
           "elements": [
             {
@@ -302,7 +302,7 @@
         {
           "task": "i",
           "title": "Water and Seaplane Characteristics, Seaplane Bases, Maritime Rules, and Aids to Marine",
-          "body_path": "acs/ppl-airplane-6c/area-01/task-i.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-01/task-i.md",
           "body_sha256": "bb07a86aea46d593626f58ea331a559d64779a66484244a648747cd78df84dff",
           "elements": [
             {
@@ -406,7 +406,7 @@
         {
           "task": "a",
           "title": "Preflight Assessment",
-          "body_path": "acs/ppl-airplane-6c/area-02/task-a.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-02/task-a.md",
           "body_sha256": "2a4e9acf541ac7438e9a82d6fdfa9064fc91f866b1057760a4d6c919d49df0ae",
           "elements": [
             {
@@ -492,14 +492,14 @@
         {
           "task": "b",
           "title": "Flight Deck Management",
-          "body_path": "acs/ppl-airplane-6c/area-02/task-b.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-02/task-b.md",
           "body_sha256": "58a1fecbb0d79d3d7063f6faec2872d06594d5d0c74b4ec19459d07d91789c2b",
           "elements": []
         },
         {
           "task": "c",
           "title": "Engine Starting",
-          "body_path": "acs/ppl-airplane-6c/area-02/task-c.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-02/task-c.md",
           "body_sha256": "fe1cbb5b6bace2a83a5868f210761e638e2055b8e688f7b3b670572c578af176",
           "elements": [
             {
@@ -549,7 +549,7 @@
         {
           "task": "d",
           "title": "Taxiing (ASEL, AMEL)",
-          "body_path": "acs/ppl-airplane-6c/area-02/task-d.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-02/task-d.md",
           "body_sha256": "45be1f0cd73d9c7261757d9a25ab6c540b048df84aee35ff1188b0160534220d",
           "elements": [
             {
@@ -665,7 +665,7 @@
         {
           "task": "e",
           "title": "Taxiing and Sailing (ASES, AMES)",
-          "body_path": "acs/ppl-airplane-6c/area-02/task-e.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-02/task-e.md",
           "body_sha256": "c3848bc8ed332b4bf976e52b275917483c45b6b34119306a7c025e5034a3b92b",
           "elements": [
             {
@@ -787,7 +787,7 @@
         {
           "task": "f",
           "title": "Before Takeoff Check",
-          "body_path": "acs/ppl-airplane-6c/area-02/task-f.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-02/task-f.md",
           "body_sha256": "138cabe9b3dcf6c5b09a818941f23d40b11bf1513ab450fbcee045b301dd0399",
           "elements": [
             {
@@ -861,7 +861,7 @@
         {
           "task": "a",
           "title": "Communications, Light Signals, and Runway Lighting Systems",
-          "body_path": "acs/ppl-airplane-6c/area-03/task-a.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-03/task-a.md",
           "body_sha256": "882fb3049ecde7e12c74c2c2b57fdfdccfc9b44344804cfff4f62189342e1e9b",
           "elements": [
             {
@@ -965,7 +965,7 @@
         {
           "task": "b",
           "title": "Traffic Patterns",
-          "body_path": "acs/ppl-airplane-6c/area-03/task-b.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-03/task-b.md",
           "body_sha256": "f481b633cc82459fb7e3d91e5cb3d0f29d827ffba6d351d62d3ceafb18597a9d",
           "elements": [
             {
@@ -985,7 +985,7 @@
         {
           "task": "a",
           "title": "Normal Takeoff and Climb",
-          "body_path": "acs/ppl-airplane-6c/area-04/task-a.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-04/task-a.md",
           "body_sha256": "45858373506f3ee407a7eb84c2e75e0925e39a4219cfa9973b0c43d0b5c8c1d4",
           "elements": [
             {
@@ -1077,7 +1077,7 @@
         {
           "task": "b",
           "title": "Normal Approach and Landing",
-          "body_path": "acs/ppl-airplane-6c/area-04/task-b.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-04/task-b.md",
           "body_sha256": "14aba5b8dadde0042eadb89455d8af7a6fe2a51607f65ad9ca9d8d7a2a240e3b",
           "elements": [
             {
@@ -1115,7 +1115,7 @@
         {
           "task": "c",
           "title": "Soft-Field Takeoff and Climb (ASEL)",
-          "body_path": "acs/ppl-airplane-6c/area-04/task-c.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-04/task-c.md",
           "body_sha256": "a6b8656934e1d6fec194b470712a587cc2b837c4d948a55a67a1cf38025f705e",
           "elements": [
             {
@@ -1141,7 +1141,7 @@
         {
           "task": "d",
           "title": "Soft-Field Approach and Landing (ASEL)",
-          "body_path": "acs/ppl-airplane-6c/area-04/task-d.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-04/task-d.md",
           "body_sha256": "9ec9a0ceb4cdc3b7a0ce6bd20b25ccd7bd0e8267500238237a56de72a46cb656",
           "elements": [
             {
@@ -1221,7 +1221,7 @@
         {
           "task": "e",
           "title": "Short-Field Takeoff and Maximum Performance Climb (ASEL, AMEL)",
-          "body_path": "acs/ppl-airplane-6c/area-04/task-e.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-04/task-e.md",
           "body_sha256": "bd8ebafa76a3707b015574e8d4b604cf5b3293a1b2870f7b8f3ce4a70147e4e3",
           "elements": [
             {
@@ -1259,7 +1259,7 @@
         {
           "task": "f",
           "title": "Short-Field Approach and Landing (ASEL, AMEL)",
-          "body_path": "acs/ppl-airplane-6c/area-04/task-f.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-04/task-f.md",
           "body_sha256": "b1f39f8d57512c45b106a79a65b17427af77f45d3d989bd4c3c5ccd3c06eab89",
           "elements": [
             {
@@ -1273,7 +1273,7 @@
         {
           "task": "g",
           "title": "Confined Area Takeoff and Maximum Performance Climb (ASES, AMES)",
-          "body_path": "acs/ppl-airplane-6c/area-04/task-g.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-04/task-g.md",
           "body_sha256": "1afcaebfb0f53a7f429e3b9a71e08260ffe2c874e686aadc7ed46cbb6f47bcba",
           "elements": [
             {
@@ -1365,7 +1365,7 @@
         {
           "task": "h",
           "title": "Confined Area Approach and Landing (ASES, AMES)",
-          "body_path": "acs/ppl-airplane-6c/area-04/task-h.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-04/task-h.md",
           "body_sha256": "247be2595f8f98c693dfaf0e89641a4e0425647365692abcea47742fa2d0d679",
           "elements": [
             {
@@ -1403,7 +1403,7 @@
         {
           "task": "i",
           "title": "Glassy Water Takeoff and Climb (ASES, AMES)",
-          "body_path": "acs/ppl-airplane-6c/area-04/task-i.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-04/task-i.md",
           "body_sha256": "2ac16a0c93b9e92d3e57ccda35834b2835512586ace384f66199eff74dce786b",
           "elements": [
             {
@@ -1423,7 +1423,7 @@
         {
           "task": "j",
           "title": "Glassy Water Approach and Landing (ASES, AMES)",
-          "body_path": "acs/ppl-airplane-6c/area-04/task-j.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-04/task-j.md",
           "body_sha256": "c2de928d51df914af57b1641ee2925eb1af248e72867f0f1e1599960a21977bd",
           "elements": [
             {
@@ -1551,7 +1551,7 @@
         {
           "task": "k",
           "title": "Rough Water Takeoff and Climb (ASES, AMES)",
-          "body_path": "acs/ppl-airplane-6c/area-04/task-k.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-04/task-k.md",
           "body_sha256": "5f5aa92f64e3db7f8e99ed9b9cc788ffb30b0d599f3c6a06c568f294297adaa8",
           "elements": [
             {
@@ -1655,7 +1655,7 @@
         {
           "task": "l",
           "title": "Rough Water Approach and Landing (ASES, AMES)",
-          "body_path": "acs/ppl-airplane-6c/area-04/task-l.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-04/task-l.md",
           "body_sha256": "85d64aef135cb0ff8bfa068bbcaf00acb3d564033b8cdda60554b1ae3cd81803",
           "elements": [
             {
@@ -1705,7 +1705,7 @@
         {
           "task": "m",
           "title": "Forward Slip to a Landing (ASEL, ASES)",
-          "body_path": "acs/ppl-airplane-6c/area-04/task-m.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-04/task-m.md",
           "body_sha256": "955e36d09c705b745496fc810655125a77e820b4f8f9d093e3100a79bfb487e8",
           "elements": [
             {
@@ -1749,7 +1749,7 @@
         {
           "task": "n",
           "title": "Go-Around/Rejected Landing",
-          "body_path": "acs/ppl-airplane-6c/area-04/task-n.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-04/task-n.md",
           "body_sha256": "bbba3c16c0368fc3d3e3276d876f782e45a330f1233b0ba6b7c9e189ba514871",
           "elements": []
         }
@@ -1762,7 +1762,7 @@
         {
           "task": "a",
           "title": "Steep Turns",
-          "body_path": "acs/ppl-airplane-6c/area-05/task-a.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-05/task-a.md",
           "body_sha256": "33dafa1dda7905c6d1e6c2eefa383c165b9a51975f845b0b9b6a16a161a78681",
           "elements": [
             {
@@ -1842,7 +1842,7 @@
         {
           "task": "b",
           "title": "Ground Reference Maneuvers",
-          "body_path": "acs/ppl-airplane-6c/area-05/task-b.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-05/task-b.md",
           "body_sha256": "61ab7adc59bb0333e7e9ff517f1f314c92b7503a97347c9f07e3b31bfe86295f",
           "elements": []
         }
@@ -1855,7 +1855,7 @@
         {
           "task": "a",
           "title": "Pilotage and Dead Reckoning",
-          "body_path": "acs/ppl-airplane-6c/area-06/task-a.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-06/task-a.md",
           "body_sha256": "8b2a1bc94b413f0741089a45b6d4351d2e72c78ad13cbd3e36e1a96f31d75b82",
           "elements": [
             {
@@ -1953,7 +1953,7 @@
         {
           "task": "b",
           "title": "Navigation Systems and Radar Services",
-          "body_path": "acs/ppl-airplane-6c/area-06/task-b.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-06/task-b.md",
           "body_sha256": "39a56164aaca5114dc32a3e01c7ca8f3f5a15fb9b817110033ff4b28ff6a49fb",
           "elements": [
             {
@@ -2057,14 +2057,14 @@
         {
           "task": "c",
           "title": "Diversion",
-          "body_path": "acs/ppl-airplane-6c/area-06/task-c.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-06/task-c.md",
           "body_sha256": "88a181b752ae514dd4155a8e3533285ce8b958bfcba3cc9c47c4693fc096b89a",
           "elements": []
         },
         {
           "task": "d",
           "title": "Lost Procedures",
-          "body_path": "acs/ppl-airplane-6c/area-06/task-d.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-06/task-d.md",
           "body_sha256": "eb68ed87d0e062899f9b5e43c1da6786bde1d511499f89cbb5ad5f2b2c793adb",
           "elements": [
             {
@@ -2108,7 +2108,7 @@
         {
           "task": "a",
           "title": "Maneuvering During Slow Flight",
-          "body_path": "acs/ppl-airplane-6c/area-07/task-a.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-07/task-a.md",
           "body_sha256": "f4a5acc29f054a24a0ff857033b86e1ccdbabeb7a5f4a87d574528553f42a1ac",
           "elements": [
             {
@@ -2188,14 +2188,14 @@
         {
           "task": "b",
           "title": "Power-Off Stalls",
-          "body_path": "acs/ppl-airplane-6c/area-07/task-b.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-07/task-b.md",
           "body_sha256": "6b32afa19f97d7e1a97d308429a65af6ca59f59a154b81b84cdda65c126fd3d6",
           "elements": []
         },
         {
           "task": "c",
           "title": "Power-On Stalls",
-          "body_path": "acs/ppl-airplane-6c/area-07/task-c.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-07/task-c.md",
           "body_sha256": "35bd8876d57c8458643355ff424ba71c873ad12ad656650e4cdba3cb97364be8",
           "elements": [
             {
@@ -2317,7 +2317,7 @@
         {
           "task": "d",
           "title": "Spin Awareness",
-          "body_path": "acs/ppl-airplane-6c/area-07/task-d.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-07/task-d.md",
           "body_sha256": "dae5c58b1b757f7ff85bc7174596a4bdc50b7ec1c3135899c5c463e01eb575f8",
           "elements": [
             {
@@ -2385,7 +2385,7 @@
         {
           "task": "a",
           "title": "Straight-and-Level Flight",
-          "body_path": "acs/ppl-airplane-6c/area-08/task-a.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-08/task-a.md",
           "body_sha256": "9aa040c20ff720df67201ff5ab44418e992636a43c2781c44d734b52506a7c17",
           "elements": [
             {
@@ -2459,7 +2459,7 @@
         {
           "task": "b",
           "title": "Constant Airspeed Climbs",
-          "body_path": "acs/ppl-airplane-6c/area-08/task-b.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-08/task-b.md",
           "body_sha256": "4ba1f8866dc5eac4d8985a9587426f7cba40d098797767d00ad101b1ff081fb8",
           "elements": [
             {
@@ -2473,7 +2473,7 @@
         {
           "task": "c",
           "title": "Constant Airspeed Descents",
-          "body_path": "acs/ppl-airplane-6c/area-08/task-c.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-08/task-c.md",
           "body_sha256": "dedbab43b6ea8a124ba40ca571807d77f72e798d6a35dc4dfdbb79ff1ad34514",
           "elements": [
             {
@@ -2493,7 +2493,7 @@
         {
           "task": "d",
           "title": "Turns to Headings",
-          "body_path": "acs/ppl-airplane-6c/area-08/task-d.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-08/task-d.md",
           "body_sha256": "6dec08bfc3b26cea24331bab1f5eb0f5c63a00bb0252e57f4bc88a8eec79db19",
           "elements": [
             {
@@ -2549,7 +2549,7 @@
         {
           "task": "e",
           "title": "Recovery from Unusual Flight Attitudes",
-          "body_path": "acs/ppl-airplane-6c/area-08/task-e.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-08/task-e.md",
           "body_sha256": "4e440fbb5c84c5c426f82448b532502e11022575a777f3067ab4c665ba719284",
           "elements": [
             {
@@ -2641,7 +2641,7 @@
         {
           "task": "f",
           "title": "Radio Communications, Navigation Systems/Facilities, and Radar Services",
-          "body_path": "acs/ppl-airplane-6c/area-08/task-f.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-08/task-f.md",
           "body_sha256": "4eebab8af8a73d32975d4d55153cb4d1ff82364e712a31b4727ffb0dca2fbee1",
           "elements": [
             {
@@ -2703,7 +2703,7 @@
         {
           "task": "a",
           "title": "Emergency Descent",
-          "body_path": "acs/ppl-airplane-6c/area-09/task-a.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-09/task-a.md",
           "body_sha256": "df3b32a76697e94db50fe9606f5dd6d43e4f0035bb02ecb610868b4f2c90500f",
           "elements": [
             {
@@ -2807,21 +2807,21 @@
         {
           "task": "b",
           "title": "Emergency Approach and Landing (Simulated) (ASEL, ASES)",
-          "body_path": "acs/ppl-airplane-6c/area-09/task-b.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-09/task-b.md",
           "body_sha256": "1119d582cd8595f7948d10b800d9c8fd327c9149448456b7629d99e9c4bad0d1",
           "elements": []
         },
         {
           "task": "c",
           "title": "Systems and Equipment Malfunctions",
-          "body_path": "acs/ppl-airplane-6c/area-09/task-c.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-09/task-c.md",
           "body_sha256": "1a0bc14792c4c06e109d9c9231907d69c1849a2de1925ef176ed77fcd7508ac7",
           "elements": []
         },
         {
           "task": "d",
           "title": "Emergency Equipment and Survival Gear",
-          "body_path": "acs/ppl-airplane-6c/area-09/task-d.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-09/task-d.md",
           "body_sha256": "b2051d42e7caa076b86d4cdae30dc3537722b183a1d6e4f5fb941cc290419f9f",
           "elements": [
             {
@@ -2835,7 +2835,7 @@
         {
           "task": "e",
           "title": "Engine Failure During Takeoff Before VMC (Simulated) (AMEL, AMES)",
-          "body_path": "acs/ppl-airplane-6c/area-09/task-e.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-09/task-e.md",
           "body_sha256": "abde3b178884cc6ba8093701432c91c94226d7a6697fd2bd076132ed59a54110",
           "elements": [
             {
@@ -2879,7 +2879,7 @@
         {
           "task": "f",
           "title": "Engine Failure After Liftoff (Simulated) (AMEL, AMES)",
-          "body_path": "acs/ppl-airplane-6c/area-09/task-f.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-09/task-f.md",
           "body_sha256": "f31d5bd4e47bfe0f263cd85a3a526a0ff9a08680223edd7554dc7bec7f6f4ba2",
           "elements": [
             {
@@ -2989,7 +2989,7 @@
         {
           "task": "g",
           "title": "Approach and Landing with an Inoperative Engine (Simulated)(AMEL, AMES)",
-          "body_path": "acs/ppl-airplane-6c/area-09/task-g.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-09/task-g.md",
           "body_sha256": "9a2209b8545a5e98fc9aea74b8cb32d03f5792f014078d3032dad7cb4a12a2cc",
           "elements": [
             {
@@ -3093,7 +3093,7 @@
         {
           "task": "a",
           "title": "Maneuvering with One Engine Inoperative (AMEL, AMES)",
-          "body_path": "acs/ppl-airplane-6c/area-10/task-a.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-10/task-a.md",
           "body_sha256": "29501562f89db3d396238e79e41181eb3886e5e9558d0d464f11e33a71f1fa06",
           "elements": [
             {
@@ -3209,7 +3209,7 @@
         {
           "task": "b",
           "title": "VMC Demonstration (AMEL, AMES)",
-          "body_path": "acs/ppl-airplane-6c/area-10/task-b.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-10/task-b.md",
           "body_sha256": "7654ec8c8edcf19fbe1935456173a3ffb7b9579a7b7502daa17315ca87800870",
           "elements": [
             {
@@ -3301,7 +3301,7 @@
         {
           "task": "c",
           "title": "One Engine Inoperative (Simulated) (solely by Reference to Instruments) During Straight-and-",
-          "body_path": "acs/ppl-airplane-6c/area-10/task-c.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-10/task-c.md",
           "body_sha256": "40b6ec338232299019ce4fbd1865ad17e2ce503e3451bd21b76731d658abd4f5",
           "elements": [
             {
@@ -3411,7 +3411,7 @@
         {
           "task": "d",
           "title": "Instrument Approach and Landing with an Inoperative Engine (Simulated) (AMEL, AMES)",
-          "body_path": "acs/ppl-airplane-6c/area-10/task-d.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-10/task-d.md",
           "body_sha256": "33eb972bf6078e966d47abaf2687b6435cf7273a2029c8fc4142884d38c0bb0c",
           "elements": [
             {
@@ -3521,7 +3521,7 @@
         {
           "task": "a",
           "title": "Night Operations",
-          "body_path": "acs/ppl-airplane-6c/area-11/task-a.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-11/task-a.md",
           "body_sha256": "89992a139aecfb4af478f3967fa901eb713820bb3129de60a4aa515f82575729",
           "elements": [
             {
@@ -3625,7 +3625,7 @@
         {
           "task": "a",
           "title": "After Landing, Parking, and Securing (ASEL, AMEL)",
-          "body_path": "acs/ppl-airplane-6c/area-12/task-a.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-12/task-a.md",
           "body_sha256": "20b1ffac5a42b567980ef6b180624e75449e6a9af43277a99c31ae57a213b125",
           "elements": [
             {
@@ -3699,7 +3699,7 @@
         {
           "task": "b",
           "title": "Seaplane Post-Landing Procedures (ASES, AMES)",
-          "body_path": "acs/ppl-airplane-6c/area-12/task-b.md",
+          "body_path": "acs/ppl-airplane-acs-6c/area-12/task-b.md",
           "body_sha256": "4b1bdad7875ab9510e6539dc49cfda40339b0e23e74cd22b8c7c9fce651406d8",
           "elements": [
             {

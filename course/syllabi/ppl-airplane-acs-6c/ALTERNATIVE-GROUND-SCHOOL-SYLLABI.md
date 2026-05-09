@@ -15,17 +15,17 @@ The alternatives below all cover the same regulatory and ACS universe. They diff
 
 ## Baseline Comparison
 
-| Model | Best for | Strength | Risk |
-| --- | --- | --- | --- |
-| Traditional topic-block course | Weekend/evening cohorts, predictable school calendar | Easy to schedule and audit | Can become disconnected from flight lessons |
-| Flight-integrated Part 61 course | One-on-one CFI/student training | Ground lessons arrive just before flight use | Can leave gaps if the instructor does not track 61.105/ACS coverage |
-| Part 141-style stage course | Schools needing records, gates, standardization | Strong quality control and stage checks | Less flexible; paperwork and stage order matter |
-| Scenario-based course | Adult learners, returning learners, safety-focused schools | Builds PIC judgment early | Requires a strong instructor and good scenarios |
-| Accelerated bootcamp | Motivated learners before intensive flight training | Fast test completion and shared momentum | Retention and operational judgment can be thin |
-| Self-study plus instructor seminars | Cost-sensitive or remote learners | Efficient and flexible | Easy to overfit test prep and underprepare oral scenarios |
-| Oral/checkride-first course | Learners who already passed the written or are late-stage | Converts facts into practical-test performance | Poor for beginners if used too soon |
-| Local-ops-first course | Complex towered, mountain, coastal, desert, or special-use environments | Highly relevant to actual flying | Must still teach national/general knowledge |
-| Instrument-readiness PPL course | Learners intending to start instrument training immediately | Strong weather, nav, ATC, cockpit-management foundation | Can overload a new learner if basics are not protected |
+| Model                               | Best for                                                                | Strength                                                | Risk                                                                |
+| ----------------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------- |
+| Traditional topic-block course      | Weekend/evening cohorts, predictable school calendar                    | Easy to schedule and audit                              | Can become disconnected from flight lessons                         |
+| Flight-integrated Part 61 course    | One-on-one CFI/student training                                         | Ground lessons arrive just before flight use            | Can leave gaps if the instructor does not track 61.105/ACS coverage |
+| Part 141-style stage course         | Schools needing records, gates, standardization                         | Strong quality control and stage checks                 | Less flexible; paperwork and stage order matter                     |
+| Scenario-based course               | Adult learners, returning learners, safety-focused schools              | Builds PIC judgment early                               | Requires a strong instructor and good scenarios                     |
+| Accelerated bootcamp                | Motivated learners before intensive flight training                     | Fast test completion and shared momentum                | Retention and operational judgment can be thin                      |
+| Self-study plus instructor seminars | Cost-sensitive or remote learners                                       | Efficient and flexible                                  | Easy to overfit test prep and underprepare oral scenarios           |
+| Oral/checkride-first course         | Learners who already passed the written or are late-stage               | Converts facts into practical-test performance          | Poor for beginners if used too soon                                 |
+| Local-ops-first course              | Complex towered, mountain, coastal, desert, or special-use environments | Highly relevant to actual flying                        | Must still teach national/general knowledge                         |
+| Instrument-readiness PPL course     | Learners intending to start instrument training immediately             | Strong weather, nav, ATC, cockpit-management foundation | Can overload a new learner if basics are not protected              |
 
 ## Alternative 1: Traditional 10-Week Topic-Block Course
 

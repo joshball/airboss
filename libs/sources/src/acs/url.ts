@@ -30,11 +30,11 @@ export const ACS_TEST_STANDARDS_INDEX_URL = 'https://www.faa.gov/training_testin
  * Missing slug -> falls back to the index URL.
  */
 export const ACS_PUBLICATION_LIVE_URLS: Record<string, string> = {
-	'ppl-airplane-6c': 'https://www.faa.gov/training_testing/testing/acs/private_airplane_acs_6.pdf',
-	'ir-airplane-8c': 'https://www.faa.gov/training_testing/testing/acs/instrument_rating_airplane_acs_8.pdf',
-	'cpl-airplane-7b': 'https://www.faa.gov/training_testing/testing/acs/commercial_airplane_acs_7.pdf',
-	'cfi-airplane-25': 'https://www.faa.gov/training_testing/testing/acs/cfi_airplane_acs_25.pdf',
-	'atp-airplane-11a': 'https://www.faa.gov/training_testing/testing/acs/atp_airplane_acs_11.pdf',
+	'ppl-airplane-acs-6c': 'https://www.faa.gov/training_testing/testing/acs/private_airplane_acs_6.pdf',
+	'ir-airplane-acs-8c': 'https://www.faa.gov/training_testing/testing/acs/instrument_rating_airplane_acs_8.pdf',
+	'cpl-airplane-acs-7b': 'https://www.faa.gov/training_testing/testing/acs/commercial_airplane_acs_7.pdf',
+	'cfi-airplane-acs-25': 'https://www.faa.gov/training_testing/testing/acs/cfi_airplane_acs_25.pdf',
+	'atp-airplane-acs-11a': 'https://www.faa.gov/training_testing/testing/acs/atp_airplane_acs_11.pdf',
 };
 
 /**

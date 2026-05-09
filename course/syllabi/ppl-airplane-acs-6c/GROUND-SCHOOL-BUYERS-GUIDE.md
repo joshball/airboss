@@ -14,18 +14,18 @@ The honest answer is: buy the one you will actually finish, then use an instruct
 
 ## Fast Recommendation
 
-| If you want... | Start with... | Add if needed |
-| --- | --- | --- |
-| Safest all-around mainstream choice | Sporty's | ASA or Gleim test prep near the written |
-| Classic proven video instruction | King Schools | POH/AFM and local CFI oral scenarios |
-| Modern, patient conceptual teaching | Pilot Institute | Focused PAR practice tests |
-| Interactive lessons and CFI monitoring | Gold Seal | Extra written-test practice if scores lag |
-| Lowest reasonable cost | Gleim or ASA | CFI-led oral/checkride sessions |
-| Deep comprehensive study | Rod Machado | Time buffer; it is not a quick cram course |
-| Flight lesson integration | The Finer Points | Dedicated FAA written-test drill |
-| Busy learner support/community | Part Time Pilot | CFI review of aircraft/local procedures |
-| Visual professor-style instruction | FlightInsight | Broader checkride/oral packet |
-| School/college/Part 141 structure | Jeppesen or local school course | Self-study videos if classroom pace is slow |
+| If you want...                         | Start with...                   | Add if needed                               |
+| -------------------------------------- | ------------------------------- | ------------------------------------------- |
+| Safest all-around mainstream choice    | Sporty's                        | ASA or Gleim test prep near the written     |
+| Classic proven video instruction       | King Schools                    | POH/AFM and local CFI oral scenarios        |
+| Modern, patient conceptual teaching    | Pilot Institute                 | Focused PAR practice tests                  |
+| Interactive lessons and CFI monitoring | Gold Seal                       | Extra written-test practice if scores lag   |
+| Lowest reasonable cost                 | Gleim or ASA                    | CFI-led oral/checkride sessions             |
+| Deep comprehensive study               | Rod Machado                     | Time buffer; it is not a quick cram course  |
+| Flight lesson integration              | The Finer Points                | Dedicated FAA written-test drill            |
+| Busy learner support/community         | Part Time Pilot                 | CFI review of aircraft/local procedures     |
+| Visual professor-style instruction     | FlightInsight                   | Broader checkride/oral packet               |
+| School/college/Part 141 structure      | Jeppesen or local school course | Self-study videos if classroom pace is slow |
 
 ## Default Shortlist
 
