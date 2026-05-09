@@ -1,0 +1,1093 @@
+{
+  "kind": "acs",
+  "schema_version": 1,
+  "corpus": "acs",
+  "slug": "ir-airplane-acs-8c",
+  "title": "Instrument Rating – Airplane ACS",
+  "publisher": "FAA",
+  "publication_date": "2023-11-01",
+  "source_url": "https://www.faa.gov/training_testing/testing/acs/instrument_rating_airplane_acs_8.pdf",
+  "source_sha256": "5facdf8fdb8ed8c85991f2440d5ba2ea50c0c996d5c02c3d9a9fa5dfa5011864",
+  "fetched_at": "2026-04-27T21:20:48.688Z",
+  "page_count": 40,
+  "areas": [
+    {
+      "area": "01",
+      "title": "Preflight Preparation",
+      "tasks": [
+        {
+          "task": "a",
+          "title": "Pilot Qualifications",
+          "body_path": "acs/ir-airplane-acs-8c/area-01/task-a.md",
+          "body_sha256": "9ea68ddd528c5c2b4add36ac1c284e072788b4096d6a0c24763caac0fc1bed2f",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "IR.I.A.K1",
+              "title": "Certification requirements, recency of experience, and recordkeeping."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "IR.I.A.K2",
+              "title": "Privileges and limitations."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "IR.I.A.K3",
+              "title": "Part 68 BasicMed privileges and limitations."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "IR.I.A.R1",
+              "title": "Proficiency versus currency."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "IR.I.A.R2",
+              "title": "Personal minimums."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "IR.I.A.R3",
+              "title": "Fitness for flight and physiological factors that might affect the pilot’s ability to fly under instrument"
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "IR.I.A.R4",
+              "title": "Flying unfamiliar aircraft or operating with unfamiliar flight display systems and avionics."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "IR.I.A.S1",
+              "title": "Apply requirements to act as pilot-in-command (PIC) under Instrument Flight Rules (IFR) in a scenario"
+            }
+          ]
+        },
+        {
+          "task": "b",
+          "title": "Weather Information",
+          "body_path": "acs/ir-airplane-acs-8c/area-01/task-b.md",
+          "body_sha256": "30395fefcdd2c02ddf2f8261ba8f026bac14c61bc59c807c880f074a1c4cbd4f",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "IR.I.B.K1",
+              "title": "Sources of weather data (e.g., National Weather Service, Flight Service) for flight planning purposes."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "IR.I.B.K2",
+              "title": "Acceptable weather products and resources required for preflight planning, current and forecast"
+            }
+          ]
+        },
+        {
+          "task": "c",
+          "title": "Cross-Country Flight Planning",
+          "body_path": "acs/ir-airplane-acs-8c/area-01/task-c.md",
+          "body_sha256": "244aada1dd060bbe8d96d2285be2b62814101c604d75f708118be2f6b01575e6",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "IR.I.C.K1",
+              "title": "Route planning, including consideration of:"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "IR.I.C.K2",
+              "title": "Altitude selection accounting for terrain and obstacles, glide distance of airplane, IFR cruising"
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "IR.I.C.K3",
+              "title": "Calculating:"
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "IR.I.C.K4",
+              "title": "Elements of an IFR flight plan."
+            },
+            {
+              "triad": "k",
+              "ordinal": "05",
+              "code": "IR.I.C.K5",
+              "title": "Procedures for activating and closing an IFR flight plan in controlled and uncontrolled airspace."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "IR.I.C.R1",
+              "title": "Pilot."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "IR.I.C.R2",
+              "title": "Aircraft."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "IR.I.C.R3",
+              "title": "Environment (e.g., weather, airports, airspace, terrain, obstacles)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "IR.I.C.R4",
+              "title": "External pressures."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "IR.I.C.R5",
+              "title": "Limitations of air traffic control (ATC) services."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "IR.I.C.R6",
+              "title": "Limitations of electronic planning applications and programs."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": "02",
+      "title": "Preflight Procedures",
+      "tasks": [
+        {
+          "task": "a",
+          "title": "Aircraft Systems Related to Instrument Flight Rules (IFR) Operations",
+          "body_path": "acs/ir-airplane-acs-8c/area-02/task-a.md",
+          "body_sha256": "d0495cee6f13eea493998509631f7c6141029d8993b38b514273189e9fb01924",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "IR.II.A.K1",
+              "title": "The general operational characteristics and limitations of applicable anti-icing and deicing systems,"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "IR.II.A.K2",
+              "title": "Flight control systems."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "IR.II.A.R1",
+              "title": "Operations in icing conditions."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "IR.II.A.R2",
+              "title": "Limitations of anti-icing and deicing systems."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "IR.II.A.R3",
+              "title": "Use of automated systems in instrument conditions."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "IR.II.A.S1",
+              "title": "Demonstrate familiarity with anti- or de-icing procedures or information published by the manufacturer"
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "IR.II.A.S2",
+              "title": "Demonstrate familiarity with the automatic flight control system (AFCS) procedures or information"
+            }
+          ]
+        },
+        {
+          "task": "b",
+          "title": "Aircraft Flight Instruments and Navigation Equipment",
+          "body_path": "acs/ir-airplane-acs-8c/area-02/task-b.md",
+          "body_sha256": "e0b9ebc34fecaee3ab847faa0c348fbc5bedcbb0dabeb3ad372d385f312cb053",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "IR.II.B.K1",
+              "title": "Operation of the aircraft’s applicable flight instrument system(s), including:"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "IR.II.B.K2",
+              "title": "Operation of the aircraft’s applicable navigation system(s), including:"
+            }
+          ]
+        },
+        {
+          "task": "c",
+          "title": "Instrument Flight Deck Check",
+          "body_path": "acs/ir-airplane-acs-8c/area-02/task-c.md",
+          "body_sha256": "a42ec2c6d4391d8b65f7dc9f0b530aab183de274f178e822d5a45a72c6879451",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "IR.II.C.K1",
+              "title": "Purpose of performing an instrument flight deck check and how to detect possible defects."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "IR.II.C.K2",
+              "title": "IFR airworthiness, including aircraft inspection requirements and required equipment for IFR flight."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "IR.II.C.K3",
+              "title": "Required procedures, documentation, and limitations of flying with inoperative equipment."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "IR.II.C.R1",
+              "title": "Operating with inoperative equipment."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "IR.II.C.R2",
+              "title": "Operating with outdated navigation publications or databases."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "IR.II.C.S1",
+              "title": "Perform preflight inspection by following the checklist appropriate to the aircraft and determine if the"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": "03",
+      "title": "Air Traffic Control (ATC) Clearances and Procedures",
+      "tasks": [
+        {
+          "task": "a",
+          "title": "Compliance with Air Traffic Control Clearances",
+          "body_path": "acs/ir-airplane-acs-8c/area-03/task-a.md",
+          "body_sha256": "4b8c886d60cd3a318501169cc126108206cf321e72070d4b7edd90fcf7f74886",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "IR.III.A.K1",
+              "title": "Elements and procedures related to ATC clearances and pilot/controller responsibilities for departure,"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "IR.III.A.K2",
+              "title": "Pilot-in-Command (PIC) emergency authority."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "IR.III.A.K3",
+              "title": "Lost communication procedures and procedures for flights outside of radar environments."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "IR.III.A.R1",
+              "title": "Less than full understanding of an ATC clearance."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "IR.III.A.R2",
+              "title": "Inappropriate, incomplete, or incorrect ATC clearances."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "IR.III.A.R3",
+              "title": "ATC clearance inconsistent with aircraft performance or navigation capability."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "IR.III.A.R4",
+              "title": "ATC clearance intended for other aircraft with similar call signs."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "IR.III.A.S1",
+              "title": "Correctly copy, read back, interpret, and comply with simulated or actual ATC clearances in a timely"
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "IR.III.A.S2",
+              "title": "Correctly set communication frequencies, navigation systems (identifying when appropriate), and"
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "IR.III.A.S3",
+              "title": "Use the current and appropriate paper or electronic navigation publications."
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "IR.III.A.S4",
+              "title": "Intercept all courses, radials, and bearings appropriate to the procedure, route, or clearance in a timely"
+            },
+            {
+              "triad": "s",
+              "ordinal": "05",
+              "code": "IR.III.A.S5",
+              "title": "Maintain the applicable airspeed ±10 knots, headings ±10°, altitude ±100 feet; track a course, radial, or"
+            },
+            {
+              "triad": "s",
+              "ordinal": "06",
+              "code": "IR.III.A.S6",
+              "title": "Use single-pilot resource management (SRM) or crew resource management (CRM), as appropriate."
+            },
+            {
+              "triad": "s",
+              "ordinal": "07",
+              "code": "IR.III.A.S7",
+              "title": "Perform the appropriate checklist items relative to the phase of flight."
+            }
+          ]
+        },
+        {
+          "task": "b",
+          "title": "Holding Procedures",
+          "body_path": "acs/ir-airplane-acs-8c/area-03/task-b.md",
+          "body_sha256": "8ce693ac81e445c7007e6b45ccebca7179df29173d4d11e16791987fb645960b",
+          "elements": []
+        }
+      ]
+    },
+    {
+      "area": "04",
+      "title": "Flight by Reference to Instruments",
+      "tasks": [
+        {
+          "task": "a",
+          "title": "Instrument Flight",
+          "body_path": "acs/ir-airplane-acs-8c/area-04/task-a.md",
+          "body_sha256": "34fb376c5534fe5ccd93d924e9cc4293e3312273c7d1a2bf79eeed1af4b5ae8e",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "IR.IV.A.K1",
+              "title": "Elements related to attitude instrument flying during straight-and-level flight, climbs, turns, and"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "IR.IV.A.K2",
+              "title": "Interpretation, operation, and limitations of pitch, bank, and power instruments."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "IR.IV.A.K3",
+              "title": "Normal and abnormal instrument indications and operations."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "IR.IV.A.R1",
+              "title": "Situations that can affect physiology and degrade instrument cross-check."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "IR.IV.A.R2",
+              "title": "Spatial disorientation and optical illusions."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "IR.IV.A.R3",
+              "title": "Flying unfamiliar aircraft or operating with unfamiliar flight display systems and avionics."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "IR.IV.A.S1",
+              "title": "Maintain altitude ±100 feet during level flight, selected headings ±10°, airspeed ±10 knots, and bank"
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "IR.IV.A.S2",
+              "title": "Use proper instrument cross-check and interpretation, and apply the appropriate pitch, bank, power,"
+            }
+          ]
+        },
+        {
+          "task": "b",
+          "title": "Recovery from Unusual Flight Attitudes",
+          "body_path": "acs/ir-airplane-acs-8c/area-04/task-b.md",
+          "body_sha256": "9905458b01951337083422d7d7523e2a5ee80909473e11e360f03c6b61f6e765",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "IR.IV.B.K1",
+              "title": "Procedures for recovery from unusual attitudes in flight."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "IR.IV.B.K2",
+              "title": "Prevention of unusual attitudes, including flight causal, physiological, and environmental factors, and"
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "IR.IV.B.K3",
+              "title": "Procedures available to safely regain visual meteorological conditions (VMC) after flight into"
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "IR.IV.B.K4",
+              "title": "Appropriate use of automation, if applicable."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": "05",
+      "title": "Navigation Systems",
+      "tasks": [
+        {
+          "task": "a",
+          "title": "Intercepting and Tracking Navigational Systems and DME Arcs",
+          "body_path": "acs/ir-airplane-acs-8c/area-05/task-a.md",
+          "body_sha256": "b4cd298deb96f913f468c19d4ef4c9cd84087b956d8ffd19462216968d28308c",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "IR.V.A.K1",
+              "title": "Ground-based navigation (orientation, course determination, equipment, tests, and regulations),"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "IR.V.A.K2",
+              "title": "Satellite-based navigation (orientation, course determination, equipment, tests, regulations,"
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "IR.V.A.R1",
+              "title": "Management of automated navigation and autoflight systems."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "IR.V.A.R2",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "IR.V.A.R3",
+              "title": "Limitations of the navigation system in use."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "IR.V.A.S1",
+              "title": "Tune and identify the navigation facility/program the navigation system and verify system accuracy as"
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "IR.V.A.S2",
+              "title": "Determine aircraft position relative to the navigational facility or waypoint."
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "IR.V.A.S3",
+              "title": "Set and orient to the course to be intercepted."
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "IR.V.A.S4",
+              "title": "Intercept the specified course at appropriate angle, inbound to or outbound from a navigational facility"
+            },
+            {
+              "triad": "s",
+              "ordinal": "05",
+              "code": "IR.V.A.S5",
+              "title": "Maintain airspeed ±10 knots, altitude ±100 feet, and selected headings ±5°."
+            },
+            {
+              "triad": "s",
+              "ordinal": "06",
+              "code": "IR.V.A.S6",
+              "title": "Apply proper correction to maintain a course, allowing no more than ¾-scale deflection of the course"
+            },
+            {
+              "triad": "s",
+              "ordinal": "07",
+              "code": "IR.V.A.S7",
+              "title": "Recognize navigational system or facility failure, and when required, report the failure to air traffic"
+            },
+            {
+              "triad": "s",
+              "ordinal": "08",
+              "code": "IR.V.A.S8",
+              "title": "Use a multi-function display (MFD) and other graphical navigation displays, if installed, to monitor"
+            },
+            {
+              "triad": "s",
+              "ordinal": "09",
+              "code": "IR.V.A.S9",
+              "title": "At the discretion of the evaluator, use the autopilot to make appropriate course intercepts, if installed."
+            },
+            {
+              "triad": "s",
+              "ordinal": "10",
+              "code": "IR.V.A.S10",
+              "title": "Use single-pilot resource management (SRM) or crew resource management (CRM), as appropriate."
+            }
+          ]
+        },
+        {
+          "task": "b",
+          "title": "Departure, En Route, and Arrival Operations",
+          "body_path": "acs/ir-airplane-acs-8c/area-05/task-b.md",
+          "body_sha256": "a3e8a2228827f09c8072c52082b2d98ab1f9e86664025f7ec07fee74ab4384cb",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "IR.V.B.K1",
+              "title": "Elements related to ATC routes, including departure procedures (DPs) and associated climb gradients;"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "IR.V.B.K2",
+              "title": "Pilot/controller responsibilities, communication procedures, and ATC services available to pilots."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "IR.V.B.R1",
+              "title": "ATC communications and compliance with published procedures."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "IR.V.B.R2",
+              "title": "Limitations of traffic avoidance equipment."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "IR.V.B.R3",
+              "title": "Responsibility to use \"see and avoid\" techniques when possible."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "IR.V.B.S1",
+              "title": "Select, identify (as necessary) and use the appropriate communication and navigation facilities"
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "IR.V.B.S2",
+              "title": "Perform the appropriate checklist items relative to the phase of flight."
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "IR.V.B.S3",
+              "title": "Use the current and appropriate paper or electronic navigation publications."
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "IR.V.B.S4",
+              "title": "Establish two-way communications with the proper controlling agency, use proper phraseology, and"
+            },
+            {
+              "triad": "s",
+              "ordinal": "05",
+              "code": "IR.V.B.S5",
+              "title": "Intercept all courses, radials, and bearings appropriate to the procedure, route, or clearance in a timely"
+            },
+            {
+              "triad": "s",
+              "ordinal": "06",
+              "code": "IR.V.B.S6",
+              "title": "Comply with all applicable charted procedures."
+            },
+            {
+              "triad": "s",
+              "ordinal": "07",
+              "code": "IR.V.B.S7",
+              "title": "Maintain airspeed ±10 knots, altitude ±100 feet, and selected headings ±10°, and apply proper"
+            },
+            {
+              "triad": "s",
+              "ordinal": "08",
+              "code": "IR.V.B.S8",
+              "title": "Update/interpret weather in flight."
+            },
+            {
+              "triad": "s",
+              "ordinal": "09",
+              "code": "IR.V.B.S9",
+              "title": "Use displays of digital weather and aeronautical information, as applicable to maintain situational"
+            },
+            {
+              "triad": "s",
+              "ordinal": "10",
+              "code": "IR.V.B.S10",
+              "title": "Use single-pilot resource management (SRM) or crew resource management (CRM), as appropriate."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": "06",
+      "title": "Instrument Approach Procedures",
+      "tasks": [
+        {
+          "task": "a",
+          "title": "Non-precision Approach",
+          "body_path": "acs/ir-airplane-acs-8c/area-06/task-a.md",
+          "body_sha256": "4fa7097a65a53c185064261aa659cea8c90a80e7261323e8c9086a1c4b778a0c",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "IR.VI.A.K1",
+              "title": "Procedures and limitations associated with a non-precision approach, including the differences"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "IR.VI.A.K2",
+              "title": "Navigation system indications and annunciations expected during an area navigation (RNAV)"
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "IR.VI.A.K3",
+              "title": "Ground-based and satellite-based navigation systems used for a non-precision approach."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "IR.VI.A.K4",
+              "title": "A stabilized approach, including energy management concepts."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "IR.VI.A.R1",
+              "title": "Deviating from the assigned approach procedure."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "IR.VI.A.R2",
+              "title": "Selecting a navigation frequency."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "IR.VI.A.R3",
+              "title": "Management of automated navigation and autoflight systems."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "IR.VI.A.R4",
+              "title": "Aircraft configuration during an approach and missed approach."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "IR.VI.A.R5",
+              "title": "An unstable approach, including excessive descent rates."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "IR.VI.A.R6",
+              "title": "Deteriorating weather conditions on approach."
+            },
+            {
+              "triad": "r",
+              "ordinal": "07",
+              "code": "IR.VI.A.R7",
+              "title": "Operating below the minimum descent altitude (MDA) without proper visual references."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "IR.VI.A.S1",
+              "title": "Accomplish the non-precision instrument approaches selected by the evaluator."
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "IR.VI.A.S2",
+              "title": "Establish two-way communications with air traffic control (ATC) appropriate for the phase of flight or"
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "IR.VI.A.S3",
+              "title": "Select, tune, identify, and confirm the operational status of navigation equipment to be used for the"
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "IR.VI.A.S4",
+              "title": "Comply with all clearances issued by ATC or the evaluator."
+            },
+            {
+              "triad": "s",
+              "ordinal": "05",
+              "code": "IR.VI.A.S5",
+              "title": "Recognize if any flight instrumentation is inaccurate or inoperative, and take appropriate action."
+            },
+            {
+              "triad": "s",
+              "ordinal": "06",
+              "code": "IR.VI.A.S6",
+              "title": "Advise ATC or the evaluator if unable to comply with a clearance."
+            },
+            {
+              "triad": "s",
+              "ordinal": "07",
+              "code": "IR.VI.A.S7",
+              "title": "Complete the appropriate checklist(s)."
+            }
+          ]
+        },
+        {
+          "task": "b",
+          "title": "Precision Approach",
+          "body_path": "acs/ir-airplane-acs-8c/area-06/task-b.md",
+          "body_sha256": "5e9f8ff061ca291c65c41bddb1a09e5d9ed1beb1cb5e94a410a7ecdfac645cd7",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "IR.VI.B.K1",
+              "title": "Procedures and limitations associated with a precision approach, including determining required"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "IR.VI.B.K2",
+              "title": "Navigation system displays, annunciations, and modes of operation."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "IR.VI.B.K3",
+              "title": "Ground-based and satellite-based navigation systems (orientation, course determination, equipment,"
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "IR.VI.B.K4",
+              "title": "A stabilized approach, including energy management concepts."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "IR.VI.B.R1",
+              "title": "Deviating from the assigned approach procedure."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "IR.VI.B.R2",
+              "title": "Selecting a navigation frequency."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "IR.VI.B.R3",
+              "title": "Management of automated navigation and autoflight systems."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "IR.VI.B.R4",
+              "title": "Aircraft configuration during an approach and missed approach."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "IR.VI.B.R5",
+              "title": "An unstable approach, including excessive descent rates."
+            }
+          ]
+        },
+        {
+          "task": "c",
+          "title": "Missed Approach",
+          "body_path": "acs/ir-airplane-acs-8c/area-06/task-c.md",
+          "body_sha256": "21c1d2df3236c4856009b4ddd5dd4c4e9b2aec14538706c62db1ca4f2f235ba8",
+          "elements": []
+        },
+        {
+          "task": "d",
+          "title": "Circling Approach",
+          "body_path": "acs/ir-airplane-acs-8c/area-06/task-d.md",
+          "body_sha256": "8c5b51e9b5dfe53baa6e672e9716462a31b8c10578a8208f6ed5cba64690c267",
+          "elements": []
+        },
+        {
+          "task": "e",
+          "title": "Landing from an Instrument Approach",
+          "body_path": "acs/ir-airplane-acs-8c/area-06/task-e.md",
+          "body_sha256": "11697a7547bcf0630bd4e3d438671f9082bd8278969b3c76a0fa402081d3954a",
+          "elements": []
+        }
+      ]
+    },
+    {
+      "area": "07",
+      "title": "Emergency Operations",
+      "tasks": [
+        {
+          "task": "a",
+          "title": "Loss of Communications",
+          "body_path": "acs/ir-airplane-acs-8c/area-07/task-a.md",
+          "body_sha256": "4acfee2ab0e4292a862f2c1e95cf12282dc588e5549d13b48eaf7ff5db74ed4b",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "IR.VII.A.K1",
+              "title": "Procedures to follow in the event of lost communication during various phases of flight, including"
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "IR.VII.A.R1",
+              "title": "Possible reasons for loss of communication."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "IR.VII.A.R2",
+              "title": "Deviation from procedures for lost communications."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "IR.VII.A.S1",
+              "title": "Recognize a simulated loss of communication."
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "IR.VII.A.S2",
+              "title": "Simulate actions to re-establish communication."
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "IR.VII.A.S3",
+              "title": "Determine whether to continue to flight plan destination or deviate."
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "IR.VII.A.S4",
+              "title": "Determine appropriate time to begin an approach."
+            },
+            {
+              "triad": "s",
+              "ordinal": "05",
+              "code": "IR.VII.A.S5",
+              "title": "Use single-pilot resource management (SRM) or crew resource management (CRM), as appropriate."
+            }
+          ]
+        },
+        {
+          "task": "b",
+          "title": "One Engine Inoperative (Simulated) during Straight-and-Level Flight and Turns (AMEL, AMES)",
+          "body_path": "acs/ir-airplane-acs-8c/area-07/task-b.md",
+          "body_sha256": "74f8aaed7e3e259f3017b0b1b723ca89faf13459206617b3ea64a51aeea9c232",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "IR.VII.B.K1",
+              "title": "Procedures used if engine failure occurs during straight-and-level flight and turns while on instruments."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "IR.VII.B.R1",
+              "title": "Identification of the inoperative engine."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "IR.VII.B.R2",
+              "title": "Inability to climb or maintain altitude with an inoperative engine."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "IR.VII.B.R3",
+              "title": "Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "IR.VII.B.R4",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "IR.VII.B.R5",
+              "title": "Fuel management during single-engine operation."
+            }
+          ]
+        },
+        {
+          "task": "c",
+          "title": "Instrument Approach and Landing with an Inoperative Engine (Simulated) (AMEL, AMES)",
+          "body_path": "acs/ir-airplane-acs-8c/area-07/task-c.md",
+          "body_sha256": "d1067e7d69bd92479394adeb12f418b83fbb2a86001ee1a3820576d60e01e87e",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "IR.VII.C.K1",
+              "title": "Instrument approach procedures with one engine inoperative."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "IR.VII.C.R1",
+              "title": "Potential engine failure during approach and landing."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "IR.VII.C.R2",
+              "title": "[Archived]"
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "IR.VII.C.R3",
+              "title": "Configuring the airplane."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "IR.VII.C.R4",
+              "title": "Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT)."
+            }
+          ]
+        },
+        {
+          "task": "d",
+          "title": "Approach with Loss of Primary Flight Instrument Indicators",
+          "body_path": "acs/ir-airplane-acs-8c/area-07/task-d.md",
+          "body_sha256": "504e490a47866b697a476805ea41338df841e547c90d7a1ea161c41878772424",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "IR.VII.D.K1",
+              "title": "Recognizing if primary flight instruments are inaccurate or inoperative, and advising ATC or the"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "IR.VII.D.K2",
+              "title": "Possible failure modes of primary instruments and how to correct or minimize the effect of the loss."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": "08",
+      "title": "Postflight Procedures",
+      "tasks": [
+        {
+          "task": "a",
+          "title": "Checking Instruments and Equipment",
+          "body_path": "acs/ir-airplane-acs-8c/area-08/task-a.md",
+          "body_sha256": "347bc86a13081b0d8a045ca19b1bb87cd08098530ee09c85a6d6a134e5175721",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "IR.VIII.A.K1",
+              "title": "Procedures for documenting in-flight/postflight discrepancies."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "IR.VIII.A.R1",
+              "title": "Performance and documentation of postflight inspection and aircraft discrepancies."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "IR.VIII.A.S1",
+              "title": "Conduct a postflight inspection and document discrepancies and servicing requirements, if any."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

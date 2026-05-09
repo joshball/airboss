@@ -173,6 +173,17 @@
         "@ab/utils": "workspace:*",
       },
     },
+    "libs/bc/ingest-review": {
+      "name": "@ab/bc-ingest-review",
+      "dependencies": {
+        "@ab/audit": "workspace:*",
+        "@ab/auth": "workspace:*",
+        "@ab/bc-hangar": "workspace:*",
+        "@ab/constants": "workspace:*",
+        "@ab/db": "workspace:*",
+        "@ab/utils": "workspace:*",
+      },
+    },
     "libs/bc/sim": {
       "name": "@ab/bc-sim",
       "dependencies": {
@@ -295,6 +306,8 @@
     "@ab/bc-avionics": ["@ab/bc-avionics@workspace:libs/bc/avionics"],
 
     "@ab/bc-hangar": ["@ab/bc-hangar@workspace:libs/bc/hangar"],
+
+    "@ab/bc-ingest-review": ["@ab/bc-ingest-review@workspace:libs/bc/ingest-review"],
 
     "@ab/bc-sim": ["@ab/bc-sim@workspace:libs/bc/sim"],
 

@@ -56,6 +56,8 @@ const config = {
 			'@ab/hangar-sync/*': '../../libs/hangar-sync/src/*',
 			'@ab/bc-hangar': '../../libs/bc/hangar/src/index.ts',
 			'@ab/bc-hangar/*': '../../libs/bc/hangar/src/*',
+			'@ab/bc-ingest-review': '../../libs/bc/ingest-review/src/index.ts',
+			'@ab/bc-ingest-review/*': '../../libs/bc/ingest-review/src/*',
 			'@ab/bc-avionics': '../../libs/bc/avionics/src/index.ts',
 			'@ab/bc-avionics/*': '../../libs/bc/avionics/src/*',
 			'@ab/help': '../../libs/help/src/index.ts',

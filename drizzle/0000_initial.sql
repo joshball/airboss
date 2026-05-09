@@ -851,6 +851,36 @@ CREATE TABLE "hangar"."sync_log" (
 	CONSTRAINT "hangar_sync_log_outcome_check" CHECK ("outcome" IN ('success', 'noop', 'conflict', 'failed'))
 );
 --> statement-breakpoint
+CREATE TABLE "hangar"."ingest_issue" (
+	"id" text PRIMARY KEY NOT NULL,
+	"corpus" text NOT NULL,
+	"source_id" text NOT NULL,
+	"edition" text,
+	"page_num" integer,
+	"kind" text NOT NULL,
+	"external_id" text NOT NULL,
+	"payload" jsonb NOT NULL,
+	"status" text DEFAULT 'unresolved' NOT NULL,
+	"first_seen_at" timestamp with time zone NOT NULL,
+	"last_seen_at" timestamp with time zone NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "hangar_ingest_issue_corpus_chk" CHECK ("corpus" IN ('handbook', 'regs', 'knowledge')),
+	CONSTRAINT "hangar_ingest_issue_kind_chk" CHECK ("kind" IN ('handbook.caption-orphan', 'handbook.image-orphan')),
+	CONSTRAINT "hangar_ingest_issue_status_chk" CHECK ("status" IN ('unresolved', 'resolved', 'stale', 'dismissed'))
+);
+--> statement-breakpoint
+CREATE TABLE "hangar"."ingest_override" (
+	"id" text PRIMARY KEY NOT NULL,
+	"issue_id" text NOT NULL,
+	"action" text NOT NULL,
+	"payload" jsonb NOT NULL,
+	"created_by_user_id" text,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "hangar_ingest_override_action_chk" CHECK ("action" IN ('pair', 'mark-no-figure', 'mark-false-caption', 'mark-extraneous', 'mark-decorative'))
+);
+--> statement-breakpoint
 CREATE TABLE "hangar"."job" (
 	"id" text PRIMARY KEY NOT NULL,
 	"kind" text NOT NULL,
@@ -1017,6 +1047,8 @@ ALTER TABLE "hangar"."review_session" ADD CONSTRAINT "review_session_user_id_bau
 ALTER TABLE "hangar"."review_step" ADD CONSTRAINT "review_step_session_id_review_session_id_fk" FOREIGN KEY ("session_id") REFERENCES "hangar"."review_session"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE "hangar"."source" ADD CONSTRAINT "source_updated_by_bauth_user_id_fk" FOREIGN KEY ("updated_by") REFERENCES "public"."bauth_user"("id") ON DELETE set null ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE "hangar"."sync_log" ADD CONSTRAINT "sync_log_actor_id_bauth_user_id_fk" FOREIGN KEY ("actor_id") REFERENCES "public"."bauth_user"("id") ON DELETE set null ON UPDATE cascade;--> statement-breakpoint
+ALTER TABLE "hangar"."ingest_override" ADD CONSTRAINT "ingest_override_issue_id_ingest_issue_id_fk" FOREIGN KEY ("issue_id") REFERENCES "hangar"."ingest_issue"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
+ALTER TABLE "hangar"."ingest_override" ADD CONSTRAINT "ingest_override_created_by_user_id_bauth_user_id_fk" FOREIGN KEY ("created_by_user_id") REFERENCES "public"."bauth_user"("id") ON DELETE set null ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE "hangar"."job" ADD CONSTRAINT "job_actor_id_bauth_user_id_fk" FOREIGN KEY ("actor_id") REFERENCES "public"."bauth_user"("id") ON DELETE set null ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE "hangar"."job_log" ADD CONSTRAINT "job_log_job_id_job_id_fk" FOREIGN KEY ("job_id") REFERENCES "hangar"."job"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE "sim"."attempt" ADD CONSTRAINT "attempt_user_id_bauth_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."bauth_user"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
@@ -1163,6 +1195,11 @@ CREATE INDEX "hangar_source_updated_idx" ON "hangar"."source" USING btree ("upda
 CREATE INDEX "hangar_sync_log_actor_idx" ON "hangar"."sync_log" USING btree ("actor_id","started_at");--> statement-breakpoint
 CREATE INDEX "hangar_sync_log_outcome_idx" ON "hangar"."sync_log" USING btree ("outcome","started_at");--> statement-breakpoint
 CREATE INDEX "hangar_sync_log_kind_idx" ON "hangar"."sync_log" USING btree ("kind","started_at");--> statement-breakpoint
+CREATE UNIQUE INDEX "hangar_ingest_issue_kind_external_id_uq" ON "hangar"."ingest_issue" USING btree ("kind","external_id");--> statement-breakpoint
+CREATE INDEX "hangar_ingest_issue_corpus_source_ix" ON "hangar"."ingest_issue" USING btree ("corpus","source_id","status");--> statement-breakpoint
+CREATE INDEX "hangar_ingest_issue_status_ix" ON "hangar"."ingest_issue" USING btree ("status");--> statement-breakpoint
+CREATE UNIQUE INDEX "hangar_ingest_override_issue_id_uq" ON "hangar"."ingest_override" USING btree ("issue_id");--> statement-breakpoint
+CREATE INDEX "hangar_ingest_override_created_by_ix" ON "hangar"."ingest_override" USING btree ("created_by_user_id");--> statement-breakpoint
 CREATE INDEX "hangar_job_status_idx" ON "hangar"."job" USING btree ("status","created_at");--> statement-breakpoint
 CREATE INDEX "hangar_job_kind_idx" ON "hangar"."job" USING btree ("kind","created_at");--> statement-breakpoint
 CREATE INDEX "hangar_job_target_idx" ON "hangar"."job" USING btree ("target_type","target_id","created_at");--> statement-breakpoint

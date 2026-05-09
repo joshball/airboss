@@ -137,7 +137,7 @@ const VALID_ACS = {
 	kind: 'acs',
 	schema_version: 1,
 	corpus: 'acs',
-	slug: 'ppl-airplane-6c',
+	slug: 'ppl-airplane-acs-6c',
 	title: 'Private Pilot for Airplane Category ACS',
 	publisher: 'FAA',
 	publication_date: '2023-11-01',
@@ -153,7 +153,7 @@ const VALID_ACS = {
 				{
 					task: 'a',
 					title: 'Pilot Qualifications',
-					body_path: 'acs/ppl-airplane-6c/area-01/task-a.md',
+					body_path: 'acs/ppl-airplane-acs-6c/area-01/task-a.md',
 					body_sha256: 'b'.repeat(64),
 					elements: [
 						{
@@ -1047,11 +1047,11 @@ describe('on-disk manifest fixtures (InFO)', () => {
 
 describe('on-disk manifest fixtures (ACS)', () => {
 	const ACS_FIXTURES = [
-		{ slug: 'ppl-airplane-6c', expectedAreas: 12 },
-		{ slug: 'ir-airplane-8c', expectedAreas: 8 },
-		{ slug: 'cpl-airplane-7b', expectedAreas: 11 },
-		{ slug: 'cfi-airplane-25', expectedAreas: 14 },
-		{ slug: 'atp-airplane-11a', expectedAreas: 8 },
+		{ slug: 'ppl-airplane-acs-6c', expectedAreas: 12 },
+		{ slug: 'ir-airplane-acs-8c', expectedAreas: 8 },
+		{ slug: 'cpl-airplane-acs-7b', expectedAreas: 11 },
+		{ slug: 'cfi-airplane-acs-25', expectedAreas: 14 },
+		{ slug: 'atp-airplane-acs-11a', expectedAreas: 8 },
 	] as const;
 
 	for (const { slug, expectedAreas } of ACS_FIXTURES) {

@@ -1,0 +1,18 @@
+slug: ppl-airplane-acs-6c
+kind: acs
+title: Private Pilot -- Airplane Airman Certification Standards
+edition: FAA-S-ACS-6C
+edition_pin: 2023-11
+reference_slug: ppl-airplane-acs-6c
+status: active
+source_url: https://www.faa.gov/training_testing/testing/acs/private_airplane_acs_6.pdf
+notes: |
+  Verbatim transcription of FAA-S-ACS-6C, published November 2023.
+  Areas land per task; remaining areas land in follow-on PRs.
+
+  Currently transcribed:
+    - Area V (Performance Maneuvers and Ground Reference Maneuvers).
+      Two tasks: A (Steep Turns), B (Ground Reference Maneuvers).
+      Tasks like Chandelles and Lazy Eights are CPL/CFI scope, not PPL.
+    - Area I, Task C (Weather Information). Drives the weather course.
+      Other Area I tasks (A, B, D, E, F, G, H) deferred.

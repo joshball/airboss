@@ -17,6 +17,8 @@
  *   bun run track format           # markdown formatter (dirty by default)
  *   bun run track archive          # rolling archive (dry-run by default)
  *   bun run track log <pr>         # emit one log entry
+ *   bun run track oos-audit        # report WPs with deferred items but no OUT-OF-SCOPE.md
+ *   bun run track oos-pick [--n=3] # emit a paste-into-claude prompt for extraction
  *
  * Power-user CLIs (`bun run wp`, `bun run bug`) keep their direct entry
  * points; this dispatcher does NOT shadow them.
@@ -142,6 +144,15 @@ function commandHelp(): number {
 		`                      docs/log/. Run after every merge to keep SHIPPED.md`,
 		`                      fresh.`,
 		'',
+		`  ${green('oos-audit')}           Report WPs with "Out of scope" / "Deferred" sections in`,
+		`                      spec.md or tasks.md but no OUT-OF-SCOPE.md. The`,
+		`                      backlog gauge for the WP out-of-scope extraction`,
+		`                      discipline (docs/agents/wp-out-of-scope-extraction.md).`,
+		'',
+		`  ${green('oos-pick [--n=3]')}    Emit a self-contained prompt to paste into a fresh`,
+		`                      \`claude\` session. Picks the N most-recently-shipped`,
+		`                      WPs needing extraction. Default N=3.`,
+		'',
 		`  ${green('help')}                This index.`,
 		'',
 		bold('wp subcommands (power-user CLI)'),
@@ -215,6 +226,8 @@ function commandHelp(): number {
 		`  bun run track archive               ${dim('# preview what would archive')}`,
 		`  bun run track archive --apply       ${dim('# execute')}`,
 		`  bun run track generate              ${dim('# rebuild BOARD/ROADMAP/SHIPPED')}`,
+		`  bun run track oos-audit             ${dim('# WPs needing OUT-OF-SCOPE.md extraction')}`,
+		`  bun run track oos-pick              ${dim('# emit a paste-into-claude prompt for 3')}`,
 		'',
 		bold('Where the contracts live'),
 		'',
@@ -600,6 +613,14 @@ function commandLog(argv: readonly string[]): number {
 	return runBun(['scripts/log-pr.ts', ...argv]);
 }
 
+function commandOosAudit(argv: readonly string[]): number {
+	return runBun(['scripts/tracking/oos.ts', 'audit', ...argv]);
+}
+
+function commandOosPick(argv: readonly string[]): number {
+	return runBun(['scripts/tracking/oos.ts', 'pick', ...argv]);
+}
+
 // ---- dispatch ------------------------------------------------------------
 
 const argv = process.argv.slice(2);
@@ -632,6 +653,12 @@ switch (head) {
 		break;
 	case 'log':
 		exitCode = commandLog(rest);
+		break;
+	case 'oos-audit':
+		exitCode = commandOosAudit(rest);
+		break;
+	case 'oos-pick':
+		exitCode = commandOosPick(rest);
 		break;
 	default:
 		console.error(`track: unknown command "${head}"`);

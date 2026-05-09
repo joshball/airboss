@@ -117,15 +117,15 @@ The brief stated "~850 `index.md` files" for AIM. **The actual count is 48.** So
 
 All seven (AMT-G + AMT-P **included** despite ingestion-priority deferral; see §3.5 and §6.1):
 
-| slug                  | edition         | in scope |
-| --------------------- | --------------- | -------- |
-| `risk-management`     | `FAA-H-8083-2A` | yes      |
-| `ifh`                 | `FAA-H-8083-15B`| yes      |
-| `iph`                 | `FAA-H-8083-16B`| yes      |
-| `aviation-instructor` | `FAA-H-8083-9`  | yes      |
-| `tips-mountain-flying`| `MTN-2003`      | yes      |
-| `amt-general`         | `FAA-H-8083-30B`| yes      |
-| `amt-powerplant`      | `FAA-H-8083-32B`| yes      |
+| slug                   | edition          | in scope |
+| ---------------------- | ---------------- | -------- |
+| `risk-management`      | `FAA-H-8083-2A`  | yes      |
+| `ifh`                  | `FAA-H-8083-15B` | yes      |
+| `iph`                  | `FAA-H-8083-16B` | yes      |
+| `aviation-instructor`  | `FAA-H-8083-9`   | yes      |
+| `tips-mountain-flying` | `MTN-2003`       | yes      |
+| `amt-general`          | `FAA-H-8083-30B` | yes      |
+| `amt-powerplant`       | `FAA-H-8083-32B` | yes      |
 
 - One `document.md` per edition.
 - One `manifest.json` per edition (whole-doc kind, with top-level `body_path`).
@@ -137,11 +137,11 @@ The brief mentioned "~271 of these total when AMT is included." **The actual cou
 
 Per the user decision (open question 6 resolved): AC is folded into this WP. Same `document.md` problem as whole-doc handbooks; same emitter pattern.
 
-| count | item                                          |
-| ----- | --------------------------------------------- |
-| 9     | `document.md` files across 9 AC docs/revisions|
-| 9     | `manifest.json` files (one per `ac/<doc>/<rev>/`)|
-| 1     | TS emitter file (`libs/sources/src/ac/ingest.ts`)|
+| count | item                                              |
+| ----- | ------------------------------------------------- |
+| 9     | `document.md` files across 9 AC docs/revisions    |
+| 9     | `manifest.json` files (one per `ac/<doc>/<rev>/`) |
+| 1     | TS emitter file (`libs/sources/src/ac/ingest.ts`) |
 
 The "cheap addition" framing in the spike was understated. Corrected scope: 9 file moves + 9 manifest `body_path` rewrites + 1 emitter change + AC test updates + AC doc-comment updates + spike-style verification of one rename. Bundle into the same WP because the rename rule is identical to whole-doc handbooks; running this as a separate WP later means re-litigating the same rule and re-doing the same review pass.
 
@@ -168,23 +168,23 @@ ACS already self-describing: `acs/<doc>/area-<NN>/task-<L>.md`. No `index.md` or
 
 ### 3.1 Naming rules (precise)
 
-| Concept              | Before                                          | After                                                      |
-| -------------------- | ----------------------------------------------- | ---------------------------------------------------------- |
-| chapter directory    | `<NN>/`                                         | `<NN>-<chapter-slug>/`                                     |
-| chapter overview     | `<chapter-dir>/index.md`                        | `<chapter-dir>/00-<chapter-slug>.md`                       |
-| section file (top)   | `<NN>-<section-slug>.md` (already conformant)   | unchanged                                                  |
-| section file (nested)| `<NN>-<MM>-<section-slug>.md` (conformant)      | unchanged                                                  |
-| errata sibling       | `<basename>.errata.md`                          | unchanged (always pairs with `<basename>.md`)              |
-| AIM chapter dir      | `chapter-<N>/`                                  | `<NN>-<chapter-slug>/`                                     |
-| AIM section dir      | `section-<N>/`                                  | `<NN>-<section-slug>/`                                     |
-| AIM section overview | `<section-dir>/index.md`                        | `<section-dir>/00-<section-slug>.md`                       |
-| AIM paragraph        | `paragraph-<N>.md`                              | `<NN>-<paragraph-slug>.md`                                 |
-| AIM appendix         | `appendix-<N>.md`                               | unchanged (already self-naming, file-not-dir scope)        |
-| AIM glossary term    | `glossary/<term-slug>.md`                       | unchanged                                                  |
-| whole-doc body       | `<doc>/<edition>/document.md`                   | `<doc>/<edition>/<slug>-<edition>.md` (Option B; see §3.4) |
-| AC body              | `ac/<doc>/<rev>/document.md`                    | `ac/<doc>/<rev>/ac-<doc>-<rev>.md` (corpus-prefixed; see §3.4 for the disambiguation rationale) |
-| `figures/`, `tables/`| `<edition>/figures/`, `<edition>/tables/`       | unchanged (corpus-level dirs, not inside chapter dirs)     |
-| Debug artifacts      | `<chapter-dir>/_*.txt`, `_*.json`               | unchanged (move with chapter dir, names preserved)         |
+| Concept               | Before                                        | After                                                                                           |
+| --------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| chapter directory     | `<NN>/`                                       | `<NN>-<chapter-slug>/`                                                                          |
+| chapter overview      | `<chapter-dir>/index.md`                      | `<chapter-dir>/00-<chapter-slug>.md`                                                            |
+| section file (top)    | `<NN>-<section-slug>.md` (already conformant) | unchanged                                                                                       |
+| section file (nested) | `<NN>-<MM>-<section-slug>.md` (conformant)    | unchanged                                                                                       |
+| errata sibling        | `<basename>.errata.md`                        | unchanged (always pairs with `<basename>.md`)                                                   |
+| AIM chapter dir       | `chapter-<N>/`                                | `<NN>-<chapter-slug>/`                                                                          |
+| AIM section dir       | `section-<N>/`                                | `<NN>-<section-slug>/`                                                                          |
+| AIM section overview  | `<section-dir>/index.md`                      | `<section-dir>/00-<section-slug>.md`                                                            |
+| AIM paragraph         | `paragraph-<N>.md`                            | `<NN>-<paragraph-slug>.md`                                                                      |
+| AIM appendix          | `appendix-<N>.md`                             | unchanged (already self-naming, file-not-dir scope)                                             |
+| AIM glossary term     | `glossary/<term-slug>.md`                     | unchanged                                                                                       |
+| whole-doc body        | `<doc>/<edition>/document.md`                 | `<doc>/<edition>/<slug>-<edition>.md` (Option B; see §3.4)                                      |
+| AC body               | `ac/<doc>/<rev>/document.md`                  | `ac/<doc>/<rev>/ac-<doc>-<rev>.md` (corpus-prefixed; see §3.4 for the disambiguation rationale) |
+| `figures/`, `tables/` | `<edition>/figures/`, `<edition>/tables/`     | unchanged (corpus-level dirs, not inside chapter dirs)                                          |
+| Debug artifacts       | `<chapter-dir>/_*.txt`, `_*.json`             | unchanged (move with chapter dir, names preserved)                                              |
 
 ### 3.2 Slug rule
 
@@ -226,13 +226,13 @@ If a future AIM publishes >99 paragraphs in a section (none today), bump to 3-di
 
 Five options were considered in the initial spike. **Per user decision (open question 1): Option B, `<slug>-<edition>.md`** (e.g. `risk-management-FAA-H-8083-2A.md`, `tips-mountain-flying-MTN-2003.md`).
 
-| Option | Example | Status |
-| ------ | ------- | ------ |
-| A | `<edition>-handbook.md` | rejected: drops the readable slug, keeps unreadable edition number, redundant `-handbook` suffix |
-| **B** | `<slug>-<edition>.md` (`risk-management-FAA-H-8083-2A.md`) | **selected** |
-| C | `<slug>.md` (`risk-management.md`) | rejected: redundant with parent dir |
-| D | `<edition>.md` (`FAA-H-8083-2A.md`) | rejected: looks like a PDF filename |
-| E | `body.md` | rejected: still generic |
+| Option | Example                                                    | Status                                                                                           |
+| ------ | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| A      | `<edition>-handbook.md`                                    | rejected: drops the readable slug, keeps unreadable edition number, redundant `-handbook` suffix |
+| **B**  | `<slug>-<edition>.md` (`risk-management-FAA-H-8083-2A.md`) | **selected**                                                                                     |
+| C      | `<slug>.md` (`risk-management.md`)                         | rejected: redundant with parent dir                                                              |
+| D      | `<edition>.md` (`FAA-H-8083-2A.md`)                        | rejected: looks like a PDF filename                                                              |
+| E      | `body.md`                                                  | rejected: still generic                                                                          |
 
 Why B wins: maximally self-describing. A `grep -r 'risk-management-FAA-H-8083-2A'` returns the canonical body file with one query. The redundancy with parent-dir (slug appears twice in the path) is minor compared to the search and IDE-tab benefit.
 
@@ -314,56 +314,56 @@ The audit was run against `libs/`, `scripts/`, `apps/`, `tools/handbook-ingest/`
 
 ### 4.1 Hits referencing `index.md`
 
-| File:Line | Category | Notes |
-| --- | --- | --- |
-| `libs/sources/src/aim/source-ingest.ts:227` | logic | Writes the chapter `index.md`; must change to `00-<slug>.md` and accept the chapter title. |
-| `libs/sources/src/aim/source-ingest.ts:234` | logic | Sets `body_path` to `aim/.../chapter-<N>/index.md`. New shape: `aim/.../<NN>-<slug>/00-<slug>.md`. |
-| `libs/sources/src/aim/source-ingest.ts:243` | logic | Section `index.md`; same change for sections. |
-| `libs/sources/src/aim/source-ingest.ts:250` | logic | Section `body_path`. |
-| `libs/sources/src/aim/source-ingest.ts:259` | logic | Paragraph `paragraph-<N>.md` -> `<NN>-<slug>.md`. |
-| `libs/sources/src/aim/source-ingest.ts:266` | logic | Paragraph `body_path`. |
-| `libs/sources/src/aim/source-ingest.ts:29-31` | trivial | Doc-comment example paths. |
-| `libs/sources/src/aim/derivative-reader.ts:7-9` | trivial | Doc-comment example paths. The reader itself uses `body_path` from the manifest, so no logic change. |
-| `libs/sources/src/handbooks/derivative-reader.ts:130` | trivial | Comment about chapter `index.md`. |
-| `libs/sources/src/regs/resolver.ts:180` | flagged | Dead-code reference to `regs/cfr-<title>/<edition>/<part>/index.md`. CFR not in scope; flag for cleanup in future regs WP. |
-| `libs/sources/src/regs/derivative-writer.ts:137` | flagged | Same dead-code regs `index.md`. Flag for cleanup in future regs WP. |
-| `libs/sources/src/diff/body-hasher.ts:101` | flagged | Hashes regs body via `<edition>/<part>/index.md`. Dead path. Flag. |
-| `libs/sources/src/bootstrap.ts:85` | flagged | Comment about regs `<part>/index.md`. Dead-path doc. Update or remove in the regs cleanup follow-up WP. |
-| `libs/sources/src/bootstrap.ts:222` | flagged | Comment about regs `<part>/index.md` title synthesis. Same follow-up. |
-| `libs/bc/study/src/manifest-validation.ts:93` | trivial | Comment: `NULL on a chapter-level index.md`. |
-| `tools/handbook-ingest/ingest/normalize.py:182` | logic | Python pipeline writes `<chapter>/index.md`. Must change to `<chapter-dir>/00-<slug>.md` and pass title in. |
-| `tools/handbook-ingest/ingest/apply_errata.py:430` | logic | Special-cases `if md_path.name == "index.md"`. Update to the structural-prefix-plus-semantic-slug check defined in §3.5. |
-| `tools/handbook-ingest/ingest/normalize.py:178` | trivial | Docstring referencing `index.md`. |
-| `tools/handbook-ingest/ingest/normalize.py:215` | trivial | Comment about cover-page residue in `index.md`. |
+| File:Line                                                                  | Category | Notes                                                                                                                                                                                                                                                                                        |
+| -------------------------------------------------------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `libs/sources/src/aim/source-ingest.ts:227`                                | logic    | Writes the chapter `index.md`; must change to `00-<slug>.md` and accept the chapter title.                                                                                                                                                                                                   |
+| `libs/sources/src/aim/source-ingest.ts:234`                                | logic    | Sets `body_path` to `aim/.../chapter-<N>/index.md`. New shape: `aim/.../<NN>-<slug>/00-<slug>.md`.                                                                                                                                                                                           |
+| `libs/sources/src/aim/source-ingest.ts:243`                                | logic    | Section `index.md`; same change for sections.                                                                                                                                                                                                                                                |
+| `libs/sources/src/aim/source-ingest.ts:250`                                | logic    | Section `body_path`.                                                                                                                                                                                                                                                                         |
+| `libs/sources/src/aim/source-ingest.ts:259`                                | logic    | Paragraph `paragraph-<N>.md` -> `<NN>-<slug>.md`.                                                                                                                                                                                                                                            |
+| `libs/sources/src/aim/source-ingest.ts:266`                                | logic    | Paragraph `body_path`.                                                                                                                                                                                                                                                                       |
+| `libs/sources/src/aim/source-ingest.ts:29-31`                              | trivial  | Doc-comment example paths.                                                                                                                                                                                                                                                                   |
+| `libs/sources/src/aim/derivative-reader.ts:7-9`                            | trivial  | Doc-comment example paths. The reader itself uses `body_path` from the manifest, so no logic change.                                                                                                                                                                                         |
+| `libs/sources/src/handbooks/derivative-reader.ts:130`                      | trivial  | Comment about chapter `index.md`.                                                                                                                                                                                                                                                            |
+| `libs/sources/src/regs/resolver.ts:180`                                    | flagged  | Dead-code reference to `regs/cfr-<title>/<edition>/<part>/index.md`. CFR not in scope; flag for cleanup in future regs WP.                                                                                                                                                                   |
+| `libs/sources/src/regs/derivative-writer.ts:137`                           | flagged  | Same dead-code regs `index.md`. Flag for cleanup in future regs WP.                                                                                                                                                                                                                          |
+| `libs/sources/src/diff/body-hasher.ts:101`                                 | flagged  | Hashes regs body via `<edition>/<part>/index.md`. Dead path. Flag.                                                                                                                                                                                                                           |
+| `libs/sources/src/bootstrap.ts:85`                                         | flagged  | Comment about regs `<part>/index.md`. Dead-path doc. Update or remove in the regs cleanup follow-up WP.                                                                                                                                                                                      |
+| `libs/sources/src/bootstrap.ts:222`                                        | flagged  | Comment about regs `<part>/index.md` title synthesis. Same follow-up.                                                                                                                                                                                                                        |
+| `libs/bc/study/src/manifest-validation.ts:93`                              | trivial  | Comment: `NULL on a chapter-level index.md`.                                                                                                                                                                                                                                                 |
+| `tools/handbook-ingest/ingest/normalize.py:182`                            | logic    | Python pipeline writes `<chapter>/index.md`. Must change to `<chapter-dir>/00-<slug>.md` and pass title in.                                                                                                                                                                                  |
+| `tools/handbook-ingest/ingest/apply_errata.py:430`                         | logic    | Special-cases `if md_path.name == "index.md"`. Update to the structural-prefix-plus-semantic-slug check defined in §3.5.                                                                                                                                                                     |
+| `tools/handbook-ingest/ingest/normalize.py:178`                            | trivial  | Docstring referencing `index.md`.                                                                                                                                                                                                                                                            |
+| `tools/handbook-ingest/ingest/normalize.py:215`                            | trivial  | Comment about cover-page residue in `index.md`.                                                                                                                                                                                                                                              |
 | `tools/handbook-ingest/ingest/prompts/section-extraction/parameters.md:73` | external | Prompt-out source instruction "Do NOT write the chapter's `index.md`". Update wording to match new chapter overview filename. **`tools/handbook-ingest/prompts-out/` archive snapshots are NOT rewritten** (per user decision, open question 9; they are historical artifacts of past runs). |
-| `scripts/sources/config/handbooks/afh.yaml:113` | trivial | Comment. |
-| `scripts/sources/config/handbooks/avwx.yaml:95` | trivial | Comment. |
-| `scripts/sources/register/handbooks-extras.ts:21` | trivial | Comment. |
-| `scripts/sources/register/ac.ts:14` | logic | AC pipeline registration. Update to match new AC body filename. |
-| `scripts/build-knowledge-index.ts:712` | external | `course/knowledge/graph-index.md`; different file (knowledge graph, not handbook content). NOT affected. |
-| `scripts/dev.ts:33,109,118` | external | Same `graph-index.md`. NOT affected. |
-| `tools/handbook-ingest/README.md:212` | trivial | Doc layout block. |
+| `scripts/sources/config/handbooks/afh.yaml:113`                            | trivial  | Comment.                                                                                                                                                                                                                                                                                     |
+| `scripts/sources/config/handbooks/avwx.yaml:95`                            | trivial  | Comment.                                                                                                                                                                                                                                                                                     |
+| `scripts/sources/register/handbooks-extras.ts:21`                          | trivial  | Comment.                                                                                                                                                                                                                                                                                     |
+| `scripts/sources/register/ac.ts:14`                                        | logic    | AC pipeline registration. Update to match new AC body filename.                                                                                                                                                                                                                              |
+| `scripts/build-knowledge-index.ts:712`                                     | external | `course/knowledge/graph-index.md`; different file (knowledge graph, not handbook content). NOT affected.                                                                                                                                                                                     |
+| `scripts/dev.ts:33,109,118`                                                | external | Same `graph-index.md`. NOT affected.                                                                                                                                                                                                                                                         |
+| `tools/handbook-ingest/README.md:212`                                      | trivial  | Doc layout block.                                                                                                                                                                                                                                                                            |
 
 ### 4.2 Hits referencing `document.md`
 
-| File:Line | Category | Notes |
-| --- | --- | --- |
-| `libs/sources/src/handbooks-extras/ingest.ts:294` | logic | Writes the whole-doc body. Change `document.md` -> `<slug>-<edition>.md`. |
-| `libs/sources/src/handbooks-extras/ingest.ts:307` | logic | Sets `body_path` to `handbooks/<slug>/<edition>/document.md`. Update string. |
-| `libs/sources/src/handbooks-extras/ingest.ts:25` | trivial | Doc-comment. |
-| `libs/sources/src/handbooks-extras/ingest.ts:408` | trivial | Comment. |
-| `libs/sources/src/handbooks-extras/derivative-reader.ts:16` | trivial | Doc-comment. |
-| `libs/sources/src/ac/ingest.ts:340` | logic | AC pipeline writes `document.md`. Change to `<doc>-<rev>.md`. |
-| `libs/sources/src/ac/ingest.ts:357` | logic | AC `body_path`. Update string. |
-| `libs/sources/src/ac/ingest.ts:14` | trivial | Doc-comment. |
-| `libs/sources/src/ac/derivative-reader.ts:8` | trivial | Doc-comment. |
-| `libs/bc/study/src/manifest-validation.ts:344` | trivial | Comment: "Body lives in a single file (`document.md`)". |
+| File:Line                                                   | Category | Notes                                                                        |
+| ----------------------------------------------------------- | -------- | ---------------------------------------------------------------------------- |
+| `libs/sources/src/handbooks-extras/ingest.ts:294`           | logic    | Writes the whole-doc body. Change `document.md` -> `<slug>-<edition>.md`.    |
+| `libs/sources/src/handbooks-extras/ingest.ts:307`           | logic    | Sets `body_path` to `handbooks/<slug>/<edition>/document.md`. Update string. |
+| `libs/sources/src/handbooks-extras/ingest.ts:25`            | trivial  | Doc-comment.                                                                 |
+| `libs/sources/src/handbooks-extras/ingest.ts:408`           | trivial  | Comment.                                                                     |
+| `libs/sources/src/handbooks-extras/derivative-reader.ts:16` | trivial  | Doc-comment.                                                                 |
+| `libs/sources/src/ac/ingest.ts:340`                         | logic    | AC pipeline writes `document.md`. Change to `<doc>-<rev>.md`.                |
+| `libs/sources/src/ac/ingest.ts:357`                         | logic    | AC `body_path`. Update string.                                               |
+| `libs/sources/src/ac/ingest.ts:14`                          | trivial  | Doc-comment.                                                                 |
+| `libs/sources/src/ac/derivative-reader.ts:8`                | trivial  | Doc-comment.                                                                 |
+| `libs/bc/study/src/manifest-validation.ts:344`              | trivial  | Comment: "Body lives in a single file (`document.md`)".                      |
 
 ### 4.3 Hits referencing `paragraph-N.md`, `chapter-N/`, `section-N/`
 
-| File:Line | Category | Notes |
-| --- | --- | --- |
-| `libs/sources/src/aim/source-ingest.ts:225,241,257` | logic | Constructs `chapter-<N>` and `section-<M>` directories. Must change to slugged dir names per §3.3. |
+| File:Line                                           | Category | Notes                                                                                              |
+| --------------------------------------------------- | -------- | -------------------------------------------------------------------------------------------------- |
+| `libs/sources/src/aim/source-ingest.ts:225,241,257` | logic    | Constructs `chapter-<N>` and `section-<M>` directories. Must change to slugged dir names per §3.3. |
 
 The `chapter-N` / `section-N` strings exist in `apps/study/src/lib/help/content/bodies/...` and in `scripts/migrate-lessons.ts`, but those are eCFR URL fragments, not file paths. NOT affected.
 
@@ -373,29 +373,29 @@ Two categories of test impact: hardcoded path strings inside `*.test.ts` files (
 
 #### 4.4.1 Test code with hardcoded paths
 
-| File:Line | Category | Notes |
-| --- | --- | --- |
-| `libs/sources/src/aim/source-ingest.test.ts:317-319,353-354` | logic | Asserts on `chapter-1/index.md`, `paragraph-1.md`. Update to new shape. |
-| `libs/sources/src/aim/derivative-reader.test.ts:105` | logic | `chapter-5/section-1/paragraph-7.md` fixture path. |
-| `libs/sources/src/handbooks-extras/ingest.test.ts:337` | logic | Asserts `document.md` written. |
-| `libs/sources/src/handbooks-extras/ingest.test.ts:359` | logic | Asserts `body_path` ends with `document.md`. |
-| `libs/sources/src/ac/ingest-cli.test.ts` | logic | AC ingest-CLI tests; audit for `document.md` references during spec phase. (Note: there is no `libs/sources/src/ac/ingest.test.ts`; the AC test files are `ingest-cli`, `locator`, `resolver`, `smoke`, `url`.) |
-| `libs/bc/study/src/manifest-validation.test.ts:44,68,75,82,116` | logic | Test fixtures with hardcoded `body_path` strings. |
-| `scripts/db/seed-references-from-manifest.test.ts:200,220,268-270,294,301,308,370,390` | logic | Multiple hardcoded `body_path` and write-file paths. (The test creates its own throwaway tree, independent of real fixtures.) |
+| File:Line                                                                              | Category | Notes                                                                                                                                                                                                           |
+| -------------------------------------------------------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `libs/sources/src/aim/source-ingest.test.ts:317-319,353-354`                           | logic    | Asserts on `chapter-1/index.md`, `paragraph-1.md`. Update to new shape.                                                                                                                                         |
+| `libs/sources/src/aim/derivative-reader.test.ts:105`                                   | logic    | `chapter-5/section-1/paragraph-7.md` fixture path.                                                                                                                                                              |
+| `libs/sources/src/handbooks-extras/ingest.test.ts:337`                                 | logic    | Asserts `document.md` written.                                                                                                                                                                                  |
+| `libs/sources/src/handbooks-extras/ingest.test.ts:359`                                 | logic    | Asserts `body_path` ends with `document.md`.                                                                                                                                                                    |
+| `libs/sources/src/ac/ingest-cli.test.ts`                                               | logic    | AC ingest-CLI tests; audit for `document.md` references during spec phase. (Note: there is no `libs/sources/src/ac/ingest.test.ts`; the AC test files are `ingest-cli`, `locator`, `resolver`, `smoke`, `url`.) |
+| `libs/bc/study/src/manifest-validation.test.ts:44,68,75,82,116`                        | logic    | Test fixtures with hardcoded `body_path` strings.                                                                                                                                                               |
+| `scripts/db/seed-references-from-manifest.test.ts:200,220,268-270,294,301,308,370,390` | logic    | Multiple hardcoded `body_path` and write-file paths. (The test creates its own throwaway tree, independent of real fixtures.)                                                                                   |
 
 #### 4.4.2 Committed test-fixture content trees
 
 These are real markdown files and manifests committed under `tests/fixtures/` that the e2e suite loads. They mirror the production layout and must be migrated alongside the production rename, with their internal manifests rewritten in lockstep. Otherwise the new CI assertion (§5.5 step 7) will fire on these fixture manifests the moment it lands.
 
-| Fixture path | Category | Notes |
-| --- | --- | --- |
-| `tests/fixtures/handbooks/phak-fixture/phak/FAA-H-8083-25C/01/index.md` | logic | Chapter overview file. Renames to `01-<chapter-slug>/00-<chapter-slug>.md` per §3.1. |
-| `tests/fixtures/handbooks/phak-fixture/phak/FAA-H-8083-25C/manifest.json` | logic | 4 `body_path` strings include `01/index.md` and section paths. Rewrite all per §5.1. |
-| `tests/fixtures/aim/aim-fixture/aim/2026-09/chapter-5/index.md` | logic | AIM chapter overview. Renames to `05-<chapter-slug>/00-<chapter-slug>.md`. |
-| `tests/fixtures/aim/aim-fixture/aim/2026-09/chapter-5/section-1/index.md` | logic | AIM section overview. Renames to `05-<chapter-slug>/01-<section-slug>/00-<section-slug>.md`. |
-| `tests/fixtures/aim/aim-fixture/aim/2026-09/chapter-5/section-1/paragraph-7.md` | logic | Renames to `<NN>-<paragraph-slug>.md`. |
-| `tests/fixtures/aim/aim-fixture/aim/2026-09/chapter-5/section-1/paragraph-8.md` | logic | Same. |
-| `tests/fixtures/aim/aim-fixture/aim/2026-09/manifest.json` | logic | 6 fixture `body_path` strings (chapter overview, section overview, paragraphs, glossary, appendix). Rewrite per §5.2. |
+| Fixture path                                                                    | Category | Notes                                                                                                                 |
+| ------------------------------------------------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------- |
+| `tests/fixtures/handbooks/phak-fixture/phak/FAA-H-8083-25C/01/index.md`         | logic    | Chapter overview file. Renames to `01-<chapter-slug>/00-<chapter-slug>.md` per §3.1.                                  |
+| `tests/fixtures/handbooks/phak-fixture/phak/FAA-H-8083-25C/manifest.json`       | logic    | 4 `body_path` strings include `01/index.md` and section paths. Rewrite all per §5.1.                                  |
+| `tests/fixtures/aim/aim-fixture/aim/2026-09/chapter-5/index.md`                 | logic    | AIM chapter overview. Renames to `05-<chapter-slug>/00-<chapter-slug>.md`.                                            |
+| `tests/fixtures/aim/aim-fixture/aim/2026-09/chapter-5/section-1/index.md`       | logic    | AIM section overview. Renames to `05-<chapter-slug>/01-<section-slug>/00-<section-slug>.md`.                          |
+| `tests/fixtures/aim/aim-fixture/aim/2026-09/chapter-5/section-1/paragraph-7.md` | logic    | Renames to `<NN>-<paragraph-slug>.md`.                                                                                |
+| `tests/fixtures/aim/aim-fixture/aim/2026-09/chapter-5/section-1/paragraph-8.md` | logic    | Same.                                                                                                                 |
+| `tests/fixtures/aim/aim-fixture/aim/2026-09/manifest.json`                      | logic    | 6 fixture `body_path` strings (chapter overview, section overview, paragraphs, glossary, appendix). Rewrite per §5.2. |
 
 The fixtures use synthetic chapter/section titles, so the slugs in the renamed paths come from the fixture's own manifest titles, not from the production AIM corpus. The migration script must operate uniformly on production and fixture trees (driven by manifests), so this falls out of the existing rename plan as long as the script is pointed at both `handbooks/`, `aim/`, `ac/`, AND `tests/fixtures/`.
 
@@ -433,7 +433,7 @@ The most load-bearing safety claim of this WP: **none of the user-facing `airbos
 grep -rh "airboss-ref:" --include="*.ts" --include="*.test.ts" | grep -oE "airboss-ref:[a-z0-9/-]+"
 ```
 
-Returns shapes like `airboss-ref:handbooks/phak/8083-25C/12` and `airboss-ref:acs/ppl-airplane-6c/area-05/task-a/elem-k01`. The URI is `<corpus>/<slug>/<edition-slug>/<chapter-or-area>/...`, using structural identifiers (`12`, `area-05`, `elem-k01`), NOT filename strings. Renaming `12/index.md` to `12-emergency-procedures/00-emergency-procedures.md` does not change the chapter code `12` that the URI uses. Citation databases stay valid.
+Returns shapes like `airboss-ref:handbooks/phak/8083-25C/12` and `airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-a/elem-k01`. The URI is `<corpus>/<slug>/<edition-slug>/<chapter-or-area>/...`, using structural identifiers (`12`, `area-05`, `elem-k01`), NOT filename strings. Renaming `12/index.md` to `12-emergency-procedures/00-emergency-procedures.md` does not change the chapter code `12` that the URI uses. Citation databases stay valid.
 
 `ROUTES.LIBRARY_HANDBOOK_*` follow the same pattern: keyed by chapter/section codes, not filenames. Verified at `libs/constants/src/routes.ts`.
 
@@ -590,59 +590,59 @@ The earlier mitigation about "all files in the chapter dir" (§6.1) is satisfied
 
 NO TIME ESTIMATES. Scope by counts:
 
-| Item                                               | Count                                         |
-| -------------------------------------------------- | --------------------------------------------- |
-| Markdown files moved                               | ~2,640 (every `.md` in `handbooks/` + `aim/` + `ac/`) |
-| Chapter directories renamed (handbooks)            | 17 + 18 + 28 = 63                             |
-| AIM chapter directories renamed                    | 10                                            |
-| AIM section directories renamed                    | 38                                            |
-| `index.md` -> `00-<slug>.md` renames               | 17 + 18 + 28 + 48 = 111                       |
-| `document.md` -> `<slug>-<edition>.md` renames     | 7 (whole-doc) + 9 (AC) = 16                   |
-| AIM `paragraph-N.md` -> `<NN>-<slug>.md` renames   | 396                                           |
-| Errata files moved (no rename, just dir change)    | 20                                            |
-| Manifest path-field rewrites (body_path + section_path + errata_note_path) | ~2,680 entries across 13+ manifests (verified by `find handbooks/ aim/ ac/ -name 'manifest.json' \| xargs grep -h 'body_path\|section_path\|errata_note_path' \| wc -l`) |
-| Production TS/Python emitter LOC changed           | ~15 (concentrated in 4 files)                 |
-| Test fixture updates                               | ~25 hardcoded path strings across 7 test files|
-| Doc-comment updates                                | ~17 sites                                     |
-| CI assertions added                                | 2 (forbidden filename + glossary collision)   |
+| Item                                                                       | Count                                                                                              |                           |               |                     |         |
+| -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ------------------------- | ------------- | ------------------- | ------- |
+| Markdown files moved                                                       | ~2,640 (every `.md` in `handbooks/` + `aim/` + `ac/`)                                              |                           |               |                     |         |
+| Chapter directories renamed (handbooks)                                    | 17 + 18 + 28 = 63                                                                                  |                           |               |                     |         |
+| AIM chapter directories renamed                                            | 10                                                                                                 |                           |               |                     |         |
+| AIM section directories renamed                                            | 38                                                                                                 |                           |               |                     |         |
+| `index.md` -> `00-<slug>.md` renames                                       | 17 + 18 + 28 + 48 = 111                                                                            |                           |               |                     |         |
+| `document.md` -> `<slug>-<edition>.md` renames                             | 7 (whole-doc) + 9 (AC) = 16                                                                        |                           |               |                     |         |
+| AIM `paragraph-N.md` -> `<NN>-<slug>.md` renames                           | 396                                                                                                |                           |               |                     |         |
+| Errata files moved (no rename, just dir change)                            | 20                                                                                                 |                           |               |                     |         |
+| Manifest path-field rewrites (body_path + section_path + errata_note_path) | ~2,680 entries across 13+ manifests (verified by `find handbooks/ aim/ ac/ -name 'manifest.json' \ | xargs grep -h 'body_path\ | section_path\ | errata_note_path' \ | wc -l`) |
+| Production TS/Python emitter LOC changed                                   | ~15 (concentrated in 4 files)                                                                      |                           |               |                     |         |
+| Test fixture updates                                                       | ~25 hardcoded path strings across 7 test files                                                     |                           |               |                     |         |
+| Doc-comment updates                                                        | ~17 sites                                                                                          |                           |               |                     |         |
+| CI assertions added                                                        | 2 (forbidden filename + glossary collision)                                                        |                           |               |                     |         |
 
 ### 6.1 Risk areas
 
-| Risk | Mitigation |
-| --- | --- |
-| Migration runs partial, half the tree is renamed and the other half not | Migration script must be idempotent (skip if new path exists, error if both old + new exist). Same pattern as `source-cache-flat-naming`'s `migrate-cache-flat.ts`. |
-| Manifests + filesystem out of sync after migration | Migration script writes manifests last, and only after all `mv`s succeed. The script asserts `existsSync` on every new path before writing the manifest. |
-| Three emitter pipelines (Python ingest + TS AIM + TS handbooks-extras+AC) drift | They already drift today (separate paths, no shared library). Acceptance criteria in §5.5 step 4-6: byte-diff one chapter / section / whole-doc / AC each, expect zero diffs. |
-| `_*.txt` / `_*.json` debug artifacts accidentally lost in the rename | Migration script does a glob-mv of all files in the old chapter dir to the new chapter dir, not just `*.md`. |
-| AIM glossary or appendix files accidentally renumbered | Migration script special-cases AIM: only files matching `paragraph-N.md` are renumbered; `glossary/*.md` and `appendix-N.md` are untouched. |
-| User has uncommitted lesson seed data referencing old paths | `body_path` is sourced from manifests during seeding; after the rename, manifests carry the new paths, so re-seeding produces correct rows. |
-| Open PRs in flight referencing old paths | The rename is one large commit. Open PRs rebase against it. The user runs solo, so coordination cost is minimal. |
-| Future edition ingest produces old-shape filenames (regression) | CI assertion in `manifest-validation.ts` (§5.5 step 7) rejects any `body_path` ending in `index.md` or `document.md`. Catches at validate-time, before merge. |
-| AMT un-deferral re-creates orphan files | AMT files renamed in this WP (per §3.5). The next AMT ingest run will produce new-shape filenames matching what's already on disk; no orphan creation possible. |
-| Future glossary term truncates to a colliding slug | CI assertion (§5.5 step 8) rejects merge if any two glossary slugs collide. |
-| Regs writer is live, not dead; first post-merge `register cfr` writes `index.md` files into the repo | §2.7 documents the constraint. Regs ingest must stay paused until `regs-derivative-cleanup` WP rewrites the writer. CI assertion explicitly carves out `regulations/` paths until that WP lands. Sign-off requires explicit acknowledgement. |
-| `section_path` and `errata_note_path` rewrites missed | §5.1 step 3 explicitly enumerates ALL three path-bearing fields. The migration script must rewrite all three; production scope is 28+ entries (PHAK 21, AFH 7) for `section_path` plus errata pairs for `errata_note_path`. |
-| `apply_errata.py` chapter_dir lookup breaks after rename | §5.4 calls out lines 409 AND 430 explicitly. The script update derives chapter dirs from the manifest's title-slug, not from the bare 2-digit chapter code. Tested by re-applying one errata patch end-to-end as part of validation §5.5 step 4. |
+| Risk                                                                                                 | Mitigation                                                                                                                                                                                                                                       |
+| ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Migration runs partial, half the tree is renamed and the other half not                              | Migration script must be idempotent (skip if new path exists, error if both old + new exist). Same pattern as `source-cache-flat-naming`'s `migrate-cache-flat.ts`.                                                                              |
+| Manifests + filesystem out of sync after migration                                                   | Migration script writes manifests last, and only after all `mv`s succeed. The script asserts `existsSync` on every new path before writing the manifest.                                                                                         |
+| Three emitter pipelines (Python ingest + TS AIM + TS handbooks-extras+AC) drift                      | They already drift today (separate paths, no shared library). Acceptance criteria in §5.5 step 4-6: byte-diff one chapter / section / whole-doc / AC each, expect zero diffs.                                                                    |
+| `_*.txt` / `_*.json` debug artifacts accidentally lost in the rename                                 | Migration script does a glob-mv of all files in the old chapter dir to the new chapter dir, not just `*.md`.                                                                                                                                     |
+| AIM glossary or appendix files accidentally renumbered                                               | Migration script special-cases AIM: only files matching `paragraph-N.md` are renumbered; `glossary/*.md` and `appendix-N.md` are untouched.                                                                                                      |
+| User has uncommitted lesson seed data referencing old paths                                          | `body_path` is sourced from manifests during seeding; after the rename, manifests carry the new paths, so re-seeding produces correct rows.                                                                                                      |
+| Open PRs in flight referencing old paths                                                             | The rename is one large commit. Open PRs rebase against it. The user runs solo, so coordination cost is minimal.                                                                                                                                 |
+| Future edition ingest produces old-shape filenames (regression)                                      | CI assertion in `manifest-validation.ts` (§5.5 step 7) rejects any `body_path` ending in `index.md` or `document.md`. Catches at validate-time, before merge.                                                                                    |
+| AMT un-deferral re-creates orphan files                                                              | AMT files renamed in this WP (per §3.5). The next AMT ingest run will produce new-shape filenames matching what's already on disk; no orphan creation possible.                                                                                  |
+| Future glossary term truncates to a colliding slug                                                   | CI assertion (§5.5 step 8) rejects merge if any two glossary slugs collide.                                                                                                                                                                      |
+| Regs writer is live, not dead; first post-merge `register cfr` writes `index.md` files into the repo | §2.7 documents the constraint. Regs ingest must stay paused until `regs-derivative-cleanup` WP rewrites the writer. CI assertion explicitly carves out `regulations/` paths until that WP lands. Sign-off requires explicit acknowledgement.     |
+| `section_path` and `errata_note_path` rewrites missed                                                | §5.1 step 3 explicitly enumerates ALL three path-bearing fields. The migration script must rewrite all three; production scope is 28+ entries (PHAK 21, AFH 7) for `section_path` plus errata pairs for `errata_note_path`.                      |
+| `apply_errata.py` chapter_dir lookup breaks after rename                                             | §5.4 calls out lines 409 AND 430 explicitly. The script update derives chapter dirs from the manifest's title-slug, not from the bare 2-digit chapter code. Tested by re-applying one errata patch end-to-end as part of validation §5.5 step 4. |
 
 ## 7. Pros and cons
 
-| Aspect                            | Pro                                                                               | Con                                                                          |
-| --------------------------------- | --------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| IDE tab readability               | Every tab title says what it is; no more 5 tabs all named `index.md`              | -                                                                            |
-| `find` / `rg` UX                  | `rg ground-operations` returns the right file directly                            | Slug-truncation makes `rg`'s exact matches less reliable for long titles     |
-| Git history readability           | `git log <new-path>` follows file moves cleanly; renames preserved by `git`       | One commit-large rename creates a 2,640-file diff that's hard to review     |
-| Citation stability                | `airboss-ref:` URIs unchanged (verified §4.7); `ROUTES.LIBRARY_HANDBOOK_*` unchanged | -                                                                            |
-| Schema impact                     | None; `body_path` is `z.string().min(1)`                                          | -                                                                            |
-| Cross-doc internal links          | None to break (no relative MD links exist)                                        | -                                                                            |
-| Pipeline complexity               | Same number of writes per ingest run; no new fields                               | Three emitters (Python + TS AIM + TS handbooks-extras+AC) must change in lockstep |
-| Migration risk                    | Idempotent script + manifest rewrite is well-trodden territory (ADR-021 precedent) | A bug in the rename map silently corrupts citation lookups (mitigated by post-run verification §5.5) |
-| Onboarding / discoverability      | New developer reading the tree understands the corpus structure without docs     | -                                                                            |
-| Errata pairing                    | Simple rule (basename equality minus `.errata`) is automatable                   | Chapter-overview errata special-case needs the structural+semantic check (§3.5) |
-| Whole-doc filename                | `<slug>-<edition>.md` is maximally self-describing                                | Slug appears twice in path (slug dir + slug filename)                        |
-| AIM directory rename              | Self-describing dir names mirror the file rename                                  | Adds the slug-stability concern (mitigated by edition-scoped paths)         |
-| Slug stability over editions      | -                                                                                 | If a chapter title shifts (e.g. AIM 2026-04 vs 2026-08), the dir renames; downstream tooling that hardcodes a path breaks. Mitigation: hardcode by `code`, not path. |
-| Future-regression prevention      | CI assertions (forbidden filename + glossary collision) catch at validate-time   | Two new assertions to maintain                                               |
-| AC inclusion                      | Same rule applies cleanly; one WP instead of two                                  | Adds 9 file moves + 9 manifest rewrites + tests; not free                    |
+| Aspect                       | Pro                                                                                  | Con                                                                                                                                                                  |
+| ---------------------------- | ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| IDE tab readability          | Every tab title says what it is; no more 5 tabs all named `index.md`                 | -                                                                                                                                                                    |
+| `find` / `rg` UX             | `rg ground-operations` returns the right file directly                               | Slug-truncation makes `rg`'s exact matches less reliable for long titles                                                                                             |
+| Git history readability      | `git log <new-path>` follows file moves cleanly; renames preserved by `git`          | One commit-large rename creates a 2,640-file diff that's hard to review                                                                                              |
+| Citation stability           | `airboss-ref:` URIs unchanged (verified §4.7); `ROUTES.LIBRARY_HANDBOOK_*` unchanged | -                                                                                                                                                                    |
+| Schema impact                | None; `body_path` is `z.string().min(1)`                                             | -                                                                                                                                                                    |
+| Cross-doc internal links     | None to break (no relative MD links exist)                                           | -                                                                                                                                                                    |
+| Pipeline complexity          | Same number of writes per ingest run; no new fields                                  | Three emitters (Python + TS AIM + TS handbooks-extras+AC) must change in lockstep                                                                                    |
+| Migration risk               | Idempotent script + manifest rewrite is well-trodden territory (ADR-021 precedent)   | A bug in the rename map silently corrupts citation lookups (mitigated by post-run verification §5.5)                                                                 |
+| Onboarding / discoverability | New developer reading the tree understands the corpus structure without docs         | -                                                                                                                                                                    |
+| Errata pairing               | Simple rule (basename equality minus `.errata`) is automatable                       | Chapter-overview errata special-case needs the structural+semantic check (§3.5)                                                                                      |
+| Whole-doc filename           | `<slug>-<edition>.md` is maximally self-describing                                   | Slug appears twice in path (slug dir + slug filename)                                                                                                                |
+| AIM directory rename         | Self-describing dir names mirror the file rename                                     | Adds the slug-stability concern (mitigated by edition-scoped paths)                                                                                                  |
+| Slug stability over editions | -                                                                                    | If a chapter title shifts (e.g. AIM 2026-04 vs 2026-08), the dir renames; downstream tooling that hardcodes a path breaks. Mitigation: hardcode by `code`, not path. |
+| Future-regression prevention | CI assertions (forbidden filename + glossary collision) catch at validate-time       | Two new assertions to maintain                                                                                                                                       |
+| AC inclusion                 | Same rule applies cleanly; one WP instead of two                                     | Adds 9 file moves + 9 manifest rewrites + tests; not free                                                                                                            |
 
 ## 8. Decisions resolved (formerly open questions)
 

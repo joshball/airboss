@@ -41,13 +41,13 @@ describe('paddedOrdinalToRoman', () => {
 });
 
 describe('getAcsSeedMapping (slug-mapping verification)', () => {
-	it('maps every cached manifest slug to its YAML documentSlug + canonical FAA edition', () => {
+	it('maps every cached manifest slug to its YAML documentSlug (identity for production rows) + canonical FAA edition', () => {
 		const expected: ReadonlyArray<readonly [string, string, string]> = [
-			['ppl-airplane-6c', 'ppl-airplane-acs-6c', 'FAA-S-ACS-6C'],
-			['ir-airplane-8c', 'ir-airplane-acs-8c', 'FAA-S-ACS-8C'],
-			['cpl-airplane-7b', 'cpl-airplane-acs-7b', 'FAA-S-ACS-7B'],
-			['cfi-airplane-25', 'cfi-airplane-acs-25', 'FAA-S-ACS-25'],
-			['atp-airplane-11a', 'atp-airplane-acs-11a', 'FAA-S-ACS-11A'],
+			['ppl-airplane-acs-6c', 'ppl-airplane-acs-6c', 'FAA-S-ACS-6C'],
+			['ir-airplane-acs-8c', 'ir-airplane-acs-8c', 'FAA-S-ACS-8C'],
+			['cpl-airplane-acs-7b', 'cpl-airplane-acs-7b', 'FAA-S-ACS-7B'],
+			['cfi-airplane-acs-25', 'cfi-airplane-acs-25', 'FAA-S-ACS-25'],
+			['atp-airplane-acs-11a', 'atp-airplane-acs-11a', 'FAA-S-ACS-11A'],
 		];
 		for (const [manifestSlug, documentSlug, edition] of expected) {
 			const mapping = getAcsSeedMapping(manifestSlug);

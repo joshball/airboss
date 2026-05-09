@@ -117,10 +117,17 @@ export function loadHandbookConfig(slug: string): HandbookConfig {
 export function listHandbookSlugs(): readonly string[] {
 	const dir = join(CONFIG_DIR, 'handbooks');
 	if (!existsSync(dir)) return [];
-	return readdirSync(dir)
-		.filter((f) => f.endsWith('.yaml'))
-		.map((f) => f.replace(/\.yaml$/, ''))
-		.sort();
+	return (
+		readdirSync(dir)
+			.filter((f) => f.endsWith('.yaml'))
+			// `<slug>-overrides.yaml` sidecars from the hangar ingest-review queue
+			// share this directory but are not handbook configs; skip them so a
+			// caller iterating slugs (`bun run sources verify`, `inventory`,
+			// `download`) doesn't try to validate them against `HandbookConfigSchema`.
+			.filter((f) => !f.endsWith('-overrides.yaml'))
+			.map((f) => f.replace(/\.yaml$/, ''))
+			.sort()
+	);
 }
 
 /**

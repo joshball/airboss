@@ -28,7 +28,9 @@ describe('isSoftSkip', () => {
 
 	test('EX-05: extraction errors are HARD skips', () => {
 		expect(isSoftSkip('ac/61-65/j: extraction failed -- TypeError: cannot read property')).toBe(false);
-		expect(isSoftSkip('acs/ppl-airplane-6c: parsed 0 task blocks -- heading regexes did not match (skip)')).toBe(false);
+		expect(isSoftSkip('acs/ppl-airplane-acs-6c: parsed 0 task blocks -- heading regexes did not match (skip)')).toBe(
+			false,
+		);
 		expect(isSoftSkip('aim/2026-04: ENOENT: file not found')).toBe(false);
 	});
 

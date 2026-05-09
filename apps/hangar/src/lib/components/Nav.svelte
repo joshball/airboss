@@ -23,6 +23,7 @@ const sourcesActive = $derived(isActive(ROUTES.HANGAR_SOURCES));
 const glossaryActive = $derived(isActive(ROUTES.HANGAR_GLOSSARY));
 const docsActive = $derived(isActive(ROUTES.HANGAR_DOCS));
 const reviewActive = $derived(isActive(ROUTES.HANGAR_REVIEW));
+const ingestReviewActive = $derived(isActive(ROUTES.HANGAR_INGEST_REVIEW));
 const roadmapActive = $derived(isActive(ROUTES.HANGAR_ROADMAP));
 const usersActive = $derived(isActive(ROUTES.HANGAR_USERS));
 const jobsActive = $derived(isActive(ROUTES.HANGAR_JOBS));
@@ -45,6 +46,7 @@ const reviewQueueCount = $derived<number>(
 			>{reviewQueueCount}</span>
 		{/if}
 	</a>
+	<a href={ROUTES.HANGAR_INGEST_REVIEW} aria-current={ingestReviewActive ? 'page' : undefined}>Ingest review</a>
 	<a href={ROUTES.HANGAR_ROADMAP} aria-current={roadmapActive ? 'page' : undefined}>Roadmap</a>
 	{#if isAdmin}
 		<a href={ROUTES.HANGAR_USERS} aria-current={usersActive ? 'page' : undefined}>Users</a>

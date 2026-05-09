@@ -44,7 +44,7 @@ baseTest.describe('credentials detail (shared seed)', () => {
 	});
 
 	baseTest('renders detail page when a credential exists', async ({ page }) => {
-		// `private` is the credential the seeded `ppl-airplane-6c` syllabus
+		// `private` is the credential the seeded `ppl-airplane-acs-6c` syllabus
 		// links to, so the detail page deterministically renders the mastery
 		// rollup against the shared dev-seed.
 		await page.goto(ROUTES.PROGRAM_QUAL('private'));

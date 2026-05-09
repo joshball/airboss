@@ -1,0 +1,488 @@
+area:
+  code: V
+  ordinal: 5
+  title: Performance Maneuvers and Ground Reference Maneuvers
+  airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05?at=2023-11'
+  citations: []
+
+tasks:
+
+  - code: V.A
+    ordinal: 1
+    title: Steep Turns
+    airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-a?at=2023-11'
+    classes: null
+    references:
+      - FAA-H-8083-2 (Risk Management Handbook)
+      - FAA-H-8083-3 (Airplane Flying Handbook)
+      - FAA-H-8083-25 (Pilot's Handbook of Aeronautical Knowledge)
+      - POH/AFM
+    objective: |
+      To determine the applicant exhibits satisfactory knowledge, risk
+      management, and skills associated with steep turns.
+    elements:
+      - code: V.A.K1
+        triad: knowledge
+        ordinal: 1
+        required_bloom: understand
+        title: How to conduct a proper steep turn.
+        description: How to conduct a proper steep turn.
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-a/elem-k01?at=2023-11'
+
+      - code: V.A.K2
+        triad: knowledge
+        ordinal: 2
+        required_bloom: understand
+        title: 'Aerodynamics associated with steep turns'
+        description: |
+          Aerodynamics associated with steep turns, including:
+            a. Maintaining coordinated flight
+            b. Overbanking tendencies
+            c. Maneuvering speed, including the impact of weight changes
+            d. Load factor and accelerated stalls
+            e. Rate and radius of turn
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-a/elem-k02?at=2023-11'
+
+      - code: V.A.R1
+        triad: risk_management
+        ordinal: 3
+        required_bloom: apply
+        title: Division of attention between aircraft control and orientation.
+        description: Division of attention between aircraft control and orientation.
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-a/elem-r01?at=2023-11'
+
+      - code: V.A.R2
+        triad: risk_management
+        ordinal: 4
+        required_bloom: apply
+        title: Collision hazards.
+        description: Collision hazards.
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-a/elem-r02?at=2023-11'
+
+      - code: V.A.R3
+        triad: risk_management
+        ordinal: 5
+        required_bloom: apply
+        title: Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT).
+        description: Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT).
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-a/elem-r03?at=2023-11'
+
+      - code: V.A.R4
+        triad: risk_management
+        ordinal: 6
+        required_bloom: apply
+        title: Distractions, task prioritization, loss of situational awareness, or disorientation.
+        description: Distractions, task prioritization, loss of situational awareness, or disorientation.
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-a/elem-r04?at=2023-11'
+
+      - code: V.A.R5
+        triad: risk_management
+        ordinal: 7
+        required_bloom: apply
+        title: Uncoordinated flight.
+        description: Uncoordinated flight.
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-a/elem-r05?at=2023-11'
+
+      - code: V.A.S1
+        triad: skill
+        ordinal: 8
+        required_bloom: apply
+        title: Clear the area.
+        description: Clear the area.
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-a/elem-s01?at=2023-11'
+
+      - code: V.A.S2
+        triad: skill
+        ordinal: 9
+        required_bloom: apply
+        title: 'Establish the manufacturer''s recommended airspeed.'
+        description: |
+          Establish the manufacturer's recommended airspeed; or if one is not
+          available, an airspeed not to exceed the maneuvering speed (VA).
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-a/elem-s02?at=2023-11'
+
+      - code: V.A.S3
+        triad: skill
+        ordinal: 10
+        required_bloom: apply
+        title: 'Roll into a coordinated 360° steep turn with approximately a 45° bank.'
+        description: 'Roll into a coordinated 360° steep turn with approximately a 45° bank.'
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-a/elem-s03?at=2023-11'
+
+      - code: V.A.S4
+        triad: skill
+        ordinal: 11
+        required_bloom: apply
+        title: 'Perform the Task in the opposite direction, as specified by evaluator.'
+        description: 'Perform the Task in the opposite direction, as specified by evaluator.'
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-a/elem-s04?at=2023-11'
+
+      - code: V.A.S5
+        triad: skill
+        ordinal: 12
+        required_bloom: apply
+        title: 'Maintain entry altitude ±100 ft, airspeed ±10 kt, bank ±5°, roll out on heading ±10°.'
+        description: |
+          Maintain the entry altitude ±100 feet, airspeed ±10 knots, bank ±5°,
+          and roll out on the entry heading ±10°.
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-a/elem-s05?at=2023-11'
+
+  - code: V.B
+    ordinal: 2
+    title: Ground Reference Maneuvers
+    airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b?at=2023-11'
+    classes: null
+    references:
+      - 14 CFR part 61
+      - FAA-H-8083-2 (Risk Management Handbook)
+      - FAA-H-8083-3 (Airplane Flying Handbook)
+      - FAA-H-8083-25 (Pilot's Handbook of Aeronautical Knowledge)
+    objective: |
+      To determine the applicant exhibits satisfactory knowledge, risk
+      management, and skills associated with ground reference maneuvering
+      which may include a rectangular course, S-turns, and turns around a
+      point.
+
+      Note: The evaluator selects at least one ground reference maneuver
+      for the applicant to demonstrate.
+    elements:
+      - code: V.B.K1
+        triad: knowledge
+        ordinal: 1
+        required_bloom: understand
+        title: Purpose of ground reference maneuvers.
+        description: Purpose of ground reference maneuvers.
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-k01?at=2023-11'
+
+      - code: V.B.K2
+        triad: knowledge
+        ordinal: 2
+        required_bloom: understand
+        title: Effects of wind on ground track and relation to a ground reference.
+        description: Effects of wind on ground track and relation to a ground reference.
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-k02?at=2023-11'
+
+      - code: V.B.K3
+        triad: knowledge
+        ordinal: 3
+        required_bloom: understand
+        title: Effects of bank angle and groundspeed on rate and radius of turn.
+        description: Effects of bank angle and groundspeed on rate and radius of turn.
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-k03?at=2023-11'
+
+      - code: V.B.K4
+        triad: knowledge
+        ordinal: 4
+        required_bloom: understand
+        title: Relationship of rectangular course to airport traffic pattern.
+        description: Relationship of rectangular course to airport traffic pattern.
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-k04?at=2023-11'
+
+      - code: V.B.R1
+        triad: risk_management
+        ordinal: 5
+        required_bloom: apply
+        title: Division of attention between aircraft control and orientation.
+        description: Division of attention between aircraft control and orientation.
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-r01?at=2023-11'
+
+      - code: V.B.R2
+        triad: risk_management
+        ordinal: 6
+        required_bloom: apply
+        title: Collision hazards.
+        description: Collision hazards.
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-r02?at=2023-11'
+
+      - code: V.B.R3
+        triad: risk_management
+        ordinal: 7
+        required_bloom: apply
+        title: Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT).
+        description: Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT).
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-r03?at=2023-11'
+
+      - code: V.B.R4
+        triad: risk_management
+        ordinal: 8
+        required_bloom: apply
+        title: Distractions, task prioritization, loss of situational awareness, or disorientation.
+        description: Distractions, task prioritization, loss of situational awareness, or disorientation.
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-r04?at=2023-11'
+
+      - code: V.B.R5
+        triad: risk_management
+        ordinal: 9
+        required_bloom: apply
+        title: Uncoordinated flight.
+        description: Uncoordinated flight.
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-r05?at=2023-11'
+
+      - code: V.B.S1
+        triad: skill
+        ordinal: 10
+        required_bloom: apply
+        title: Clear the area.
+        description: Clear the area.
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-s01?at=2023-11'
+
+      - code: V.B.S2
+        triad: skill
+        ordinal: 11
+        required_bloom: apply
+        title: Select a suitable ground reference area, line, or point as appropriate.
+        description: Select a suitable ground reference area, line, or point as appropriate.
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-s02?at=2023-11'
+
+      - code: V.B.S3
+        triad: skill
+        ordinal: 12
+        required_bloom: apply
+        title: 'Plan the maneuver (rectangular course, S-turns, turns around a point).'
+        description: |
+          Plan the maneuver:
+            a. Rectangular course: enter a left or right pattern, 600 to 1,000 feet above ground level (AGL) at an appropriate distance from the selected reference area, 45° to the downwind leg
+            b. S-turns: enter perpendicular to the selected reference line, 600 to 1,000 feet AGL at an appropriate distance from the selected reference area
+            c. Turns around a point: enter at an appropriate distance from the reference point, 600 to 1,000 feet AGL at an appropriate distance from the selected reference area
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-s03?at=2023-11'
+
+      - code: V.B.S4
+        triad: skill
+        ordinal: 13
+        required_bloom: apply
+        title: Apply adequate wind-drift correction.
+        description: |
+          Apply adequate wind-drift correction during straight and turning flight
+          to maintain a constant ground track around a rectangular reference area,
+          or to maintain a constant radius turn on each side of a selected
+          reference line or point.
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-s04?at=2023-11'
+
+      - code: V.B.S5
+        triad: skill
+        ordinal: 14
+        required_bloom: apply
+        title: Reverse the turn directly over the reference line; complete turns in either direction as specified.
+        description: |
+          If performing S-Turns, reverse the turn directly over the selected
+          reference line; if performing turns around a point, complete turns in
+          either direction, as specified by the evaluator.
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-s05?at=2023-11'
+
+      - code: V.B.S6
+        triad: skill
+        ordinal: 15
+        required_bloom: apply
+        title: Divide attention between airplane control, traffic avoidance, and the ground track while maintaining coordinated flight.
+        description: |
+          Divide attention between airplane control, traffic avoidance and the
+          ground track while maintaining coordinated flight.
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-s06?at=2023-11'
+
+      - code: V.B.S7
+        triad: skill
+        ordinal: 16
+        required_bloom: apply
+        title: Maintain altitude ±100 ft; maintain airspeed ±10 kt.
+        description: Maintain altitude ±100 feet; maintain airspeed ±10 knots.
+        airboss_ref: 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-b/elem-s07?at=2023-11'
+
+# Knowledge graph links: which course/knowledge nodes does each leaf
+
+# exercise? `weight` defaults to 1.0; downweight when partial coverage.
+
+# Full Area V coverage: every leaf carries at least one link. Nine new
+
+# knowledge nodes added in the same PR to anchor leaves the original
+
+# 46-node corpus did not cover (attention management, clearing the area,
+
+# collision avoidance, ground reference maneuvers, rate/radius of turn,
+
+# uncoordinated flight, maneuvering airspeeds, ACS tolerances, executing
+
+# a steep turn).
+
+knowledge_links:
+  V.A.K1:
+    - node_id: proc-execute-steep-turn
+      weight: 1.0
+      notes: This leaf IS the steep-turn execution procedure -- direct match.
+    - node_id: aero-coordination-rudder
+      weight: 0.5
+      notes: Coordinated flight is the foundation of a proper steep turn.
+  V.A.K2:
+    # Steep-turn aerodynamics: load factor + accelerated stalls
+    - node_id: aero-load-factor-and-bank-angle
+      weight: 1.0
+      notes: Load factor and accelerated stalls in steep turns -- direct match.
+    - node_id: aero-four-forces
+      weight: 0.6
+      notes: Steep-turn aerodynamics composes on the four-forces analysis.
+    - node_id: aero-coordination-rudder
+      weight: 0.5
+      notes: Maintaining coordinated flight under bank.
+    - node_id: aero-angle-of-attack-and-stall
+      weight: 0.5
+      notes: Accelerated-stall awareness during high-bank maneuvers.
+    - node_id: proc-maneuvering-airspeeds
+      weight: 0.6
+      notes: Va is named in this element (item c -- maneuvering speed including weight changes).
+    - node_id: aero-rate-radius-of-turn
+      weight: 0.5
+      notes: Rate and radius of turn (item e) -- the bank/airspeed/radius math.
+  V.A.R1:
+    - node_id: proc-attention-management
+      weight: 1.0
+      notes: Division of attention between aircraft control and orientation -- direct match.
+  V.A.R2:
+    - node_id: proc-collision-avoidance
+      weight: 1.0
+      notes: Collision hazards in shared maneuver airspace -- direct match.
+  V.A.R3:
+    - node_id: aero-angle-of-attack-and-stall
+      weight: 0.7
+      notes: Low-altitude stall / spin awareness during steep turns.
+    - node_id: proc-stall-recovery
+      weight: 0.5
+      notes: Recovery skill if a steep-turn stall develops.
+    - node_id: aero-uncoordinated-flight
+      weight: 0.7
+      notes: Spin entry geometry comes from uncoordinated stalls -- the canonical steep-turn-spin chain.
+  V.A.R4:
+    - node_id: proc-attention-management
+      weight: 1.0
+      notes: Distractions, task prioritization, loss of SA -- direct match (aviate-navigate-communicate framework).
+    - node_id: proc-spatial-disorientation
+      weight: 0.4
+      notes: Disorientation aspect; primary failure mode in IMC, secondary in VMC steep turns.
+  V.A.R5:
+    - node_id: aero-uncoordinated-flight
+      weight: 1.0
+      notes: Slips and skids; the kill chain in steep turns -- direct match.
+    - node_id: aero-coordination-rudder
+      weight: 0.7
+      notes: Uncoordinated-flight recognition links to rudder coordination.
+  V.A.S1:
+    - node_id: proc-clear-the-area
+      weight: 1.0
+      notes: The pre-maneuver clearing procedure -- direct match.
+  V.A.S2:
+    - node_id: proc-maneuvering-airspeeds
+      weight: 1.0
+      notes: Manufacturer's recommended airspeed and the Va default -- direct match.
+  V.A.S3:
+    - node_id: proc-execute-steep-turn
+      weight: 1.0
+      notes: The 360 coordinated steep turn at ~45 bank -- direct match.
+    - node_id: aero-load-factor-and-bank-angle
+      weight: 0.5
+      notes: 45 bank physics (1.41 G, +19% Vs).
+  V.A.S4:
+    - node_id: proc-execute-steep-turn
+      weight: 1.0
+      notes: Opposite-direction execution of the steep turn -- direct match (covered in node procedure).
+  V.A.S5:
+    - node_id: proc-acs-tolerances
+      weight: 1.0
+      notes: ACS tolerances ±100 ft / ±10 kt / ±5 deg / ±10 deg -- direct match.
+    - node_id: aero-load-factor-and-bank-angle
+      weight: 0.4
+      notes: Maintaining bank ±5° connects to load-factor reasoning under bank.
+  V.B.K1:
+    - node_id: proc-ground-reference-maneuvers
+      weight: 1.0
+      notes: Purpose of GRM (division of attention, wind awareness, ground-track control) -- direct match.
+  V.B.K2:
+    - node_id: perf-crosswind-component
+      weight: 0.6
+      notes: Wind drift correction in ground reference is the same wind-vector reasoning crosswind component teaches.
+    - node_id: proc-ground-reference-maneuvers
+      weight: 0.7
+      notes: Wind effect on ground track is the central perceptual concept of GRM.
+  V.B.K3:
+    - node_id: aero-rate-radius-of-turn
+      weight: 1.0
+      notes: Effects of bank angle and groundspeed on rate and radius of turn -- direct match.
+  V.B.K4:
+    - node_id: proc-traffic-pattern
+      weight: 0.9
+      notes: Rectangular course IS a traffic pattern; this leaf and the node are near-identical scope at PPL bloom.
+    - node_id: proc-ground-reference-maneuvers
+      weight: 0.6
+      notes: The rectangular course is one of the three GRM canonical maneuvers.
+  V.B.R1:
+    - node_id: proc-attention-management
+      weight: 1.0
+      notes: Division of attention between aircraft control and orientation -- direct match.
+  V.B.R2:
+    - node_id: proc-collision-avoidance
+      weight: 1.0
+      notes: Collision hazards in shared maneuver airspace -- direct match.
+  V.B.R3:
+    - node_id: aero-angle-of-attack-and-stall
+      weight: 0.5
+      notes: Low-altitude stall / spin awareness during ground reference maneuvers.
+    - node_id: aero-uncoordinated-flight
+      weight: 0.7
+      notes: Skidding stall at 800 AGL is the canonical fatal accident geometry.
+    - node_id: proc-stall-recovery
+      weight: 0.4
+      notes: Recovery procedure if a stall develops at low altitude.
+  V.B.R4:
+    - node_id: proc-attention-management
+      weight: 1.0
+      notes: Distractions, task prioritization, loss of SA -- direct match.
+    - node_id: proc-spatial-disorientation
+      weight: 0.3
+      notes: Disorientation aspect; lower weight in VMC GRM than in IMC work.
+  V.B.R5:
+    - node_id: aero-uncoordinated-flight
+      weight: 1.0
+      notes: Slip and skid recognition in low-altitude maneuvering -- direct match.
+    - node_id: aero-coordination-rudder
+      weight: 0.7
+      notes: Coordination foundation that uncoordinated-flight builds on.
+  V.B.S1:
+    - node_id: proc-clear-the-area
+      weight: 1.0
+      notes: The pre-maneuver clearing procedure -- direct match.
+  V.B.S2:
+    - node_id: proc-ground-reference-maneuvers
+      weight: 0.8
+      notes: Reference selection (suitable area, line, or point) covered in the GRM procedure.
+  V.B.S3:
+    - node_id: proc-ground-reference-maneuvers
+      weight: 1.0
+      notes: Maneuver planning (rectangular course, S-turns, turns around a point) with entry geometry -- direct match.
+  V.B.S4:
+    - node_id: proc-ground-reference-maneuvers
+      weight: 0.9
+      notes: Wind-drift correction (continuous bank variation) is the central skill of GRM.
+    - node_id: aero-rate-radius-of-turn
+      weight: 0.7
+      notes: Bank-vs-groundspeed math underlies wind-drift correction in turns.
+    - node_id: perf-crosswind-component
+      weight: 0.6
+      notes: Wind-drift correction in straight flight uses the same wind-vector reasoning.
+  V.B.S5:
+    - node_id: proc-ground-reference-maneuvers
+      weight: 0.5
+      notes: >-
+        Skill-execution leaf -- reversal over reference line in S-turns is
+        primarily a motor skill. Linked to GRM for the procedural context;
+        weight reduced because the leaf is execution, not knowledge.
+  V.B.S6:
+    - node_id: proc-attention-management
+      weight: 1.0
+      notes: Divide attention between airplane control, traffic avoidance, and ground track -- direct match (multi-channel scan).
+    - node_id: proc-collision-avoidance
+      weight: 0.7
+      notes: Traffic-avoidance channel of the divided attention.
+    - node_id: aero-coordination-rudder
+      weight: 0.4
+      notes: Coordinated flight as part of the multi-channel scan.
+  V.B.S7:
+    - node_id: proc-acs-tolerances
+      weight: 1.0
+      notes: ACS tolerances ±100 ft altitude, ±10 kt airspeed -- direct match.
