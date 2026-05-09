@@ -8,8 +8,8 @@ import type { ReferenceSectionReadStateRow } from '@ab/bc-study/server';
 import { HANDBOOK_READ_STATUSES } from '@ab/constants';
 import { describe, expect, test, vi } from 'vitest';
 
-vi.mock('@ab/bc-study', async (importOriginal) => {
-	const actual = await importOriginal<typeof import('@ab/bc-study')>();
+vi.mock('@ab/bc-study/server', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('@ab/bc-study/server')>();
 	return {
 		...actual,
 		listReadStatesForReference: vi.fn(),

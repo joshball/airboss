@@ -91,6 +91,73 @@ const REASON_SLUG_NOTICE_THRESHOLD = 48;
 const EDITIONLESS_CORPORA: ReadonlySet<string> = new Set(['ntsb', 'ntsb-alj', 'asrs', 'interp', 'tcds']);
 
 /**
+ * Per ADR 019 amendment 2026-05 §1: derive `locatorPrecision` from a parsed
+ * identifier so callers (e.g. `validateReferences`) don't have to re-parse
+ * the locator. The amendment defines three classes:
+ *
+ *   - `editionless-corpus` -- corpora whose identifiers never carry editions
+ *     (NTSB rulings, ASRS reports, Chief Counsel interpretations, TCDS).
+ *   - `edition-sensitive` -- locator includes a paragraph, figure/table, or
+ *     page-level token whose meaning depends on the cited edition. Unpinned
+ *     is ERROR.
+ *   - `doc-or-chapter-level` -- doc-only, doc+chapter, doc+chapter+section,
+ *     or doc+chapter+section+subsection. Unpinned resolves to current edition.
+ *
+ * Pattern-matching on the locator string keeps this helper independent of
+ * the per-corpus parsers: callers don't need a fully parsed locator to
+ * decide pin policy. Each corpus is handled explicitly so a future
+ * "page-12" or "para-7" extension lands as a one-line edit here.
+ */
+export function determineLocatorPrecision(
+	parsed: ParsedIdentifier,
+): 'doc-or-chapter-level' | 'edition-sensitive' | 'editionless-corpus' {
+	if (EDITIONLESS_CORPORA.has(parsed.corpus)) return 'editionless-corpus';
+	const locator = parsed.locator;
+	switch (parsed.corpus) {
+		case 'handbooks':
+			// `<doc>/<edition>/<chapter>/<section>/para-N` (paragraph),
+			// `<doc>/<edition>/fig-<N>-<M>` (figure),
+			// `<doc>/<edition>/tbl-<N>-<M>` (table) -- all edition-sensitive.
+			if (/\/para-[0-9]/.test(locator)) return 'edition-sensitive';
+			if (/\/fig-[0-9]/.test(locator)) return 'edition-sensitive';
+			if (/\/tbl-[0-9]/.test(locator)) return 'edition-sensitive';
+			return 'doc-or-chapter-level';
+		case 'regs': {
+			// `cfr-<title>/<part>/<section>/<paragraph>...` -- 4+ segments past
+			// the title prefix means a paragraph component is present.
+			const segments = locator.split('/');
+			// segments[0] = "cfr-14" / "cfr-49"; section is segments[2]; any
+			// segment beyond that is paragraph-level (per ADR, paragraph
+			// numbering can shift across edition snapshots).
+			if (segments.length > 3) return 'edition-sensitive';
+			return 'doc-or-chapter-level';
+		}
+		case 'aim':
+			// AIM glossary entries (`/glossary/<slug>`) are slug-pinned to the
+			// edition catalog and don't carry edition-sensitive precision; the
+			// chapter-section-paragraph shape (`5-1-7`) does NOT include a
+			// paragraph beyond what the locator already encodes via the third
+			// numeric segment, but per ADR amendment those triples are still
+			// "doc-or-chapter-level" precision (paragraph numbering is
+			// AIM-section-stable across the rolling-update editions). Unpinned
+			// is OK for the entire AIM corpus until we re-classify post-launch.
+			return 'doc-or-chapter-level';
+		case 'orders':
+			// `<authority>/<order>/par-<N>` or `<authority>/<order>/page-<N>`
+			// would be edition-sensitive; whole-order / chapter is not.
+			if (/\/par-[0-9]/.test(locator)) return 'edition-sensitive';
+			if (/\/page-[0-9]/.test(locator)) return 'edition-sensitive';
+			return 'doc-or-chapter-level';
+		default:
+			// AC, ACS, PTS, statutes, sectionals, plates, pohs, forms, info,
+			// safo: locator shapes don't carry paragraph/page tokens today, so
+			// they're always doc-or-chapter-level. New corpora landing with
+			// edition-sensitive precision must extend this switch.
+			return 'doc-or-chapter-level';
+	}
+}
+
+/**
  * Validate one identifier occurrence and return all findings (zero or more).
  *
  * @param parsed   Output of `parseIdentifier` for this occurrence's URL.
