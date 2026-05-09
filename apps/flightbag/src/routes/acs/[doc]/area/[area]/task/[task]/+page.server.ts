@@ -44,6 +44,21 @@ interface TaskNeighbor {
 	readonly code: string;
 }
 
+interface AreaTaskView {
+	readonly id: string;
+	readonly code: string;
+	readonly title: string;
+	readonly letter: string;
+}
+
+interface AreaView {
+	readonly id: string;
+	readonly code: string;
+	readonly title: string;
+	readonly padded: string;
+	readonly tasks: ReadonlyArray<AreaTaskView>;
+}
+
 function readStringMetadata(metadata: unknown, key: string): string | null {
 	if (typeof metadata !== 'object' || metadata === null) return null;
 	const value = (metadata as Record<string, unknown>)[key];
@@ -188,6 +203,32 @@ export const load: PageServerLoad = async ({ params }) => {
 	const prev = currentIdx > 0 ? neighborFor(currentIdx - 1) : null;
 	const next = currentIdx >= 0 ? neighborFor(currentIdx + 1) : null;
 
+	// Whole-publication TOC payload. Drives the persistent right-rail
+	// `<TOCDrawer>` so the user can hop to any task without round-tripping
+	// the publication landing. Structurally identical to the publication
+	// page-loader's `areas[]` shape so `buildAcsTocEntries` works on either
+	// page without a second adapter.
+	const areaRowsOrdered = sections
+		.filter((s) => s.level === REFERENCE_SECTION_LEVELS.AREA)
+		.sort((a, b) => a.ordinal - b.ordinal);
+	const tasksByAreaId = new Map<string, typeof allTaskRowsOrdered>();
+	for (const t of allTaskRowsOrdered) {
+		if (t.parentId === null) continue;
+		const list = tasksByAreaId.get(t.parentId) ?? [];
+		list.push(t);
+		tasksByAreaId.set(t.parentId, list);
+	}
+	const areas: AreaView[] = areaRowsOrdered.map((area) => {
+		const padded = readStringMetadata(area.metadata, 'area_padded') ?? String(area.ordinal + 1).padStart(2, '0');
+		const tasks: AreaTaskView[] = (tasksByAreaId.get(area.id) ?? []).map((t) => ({
+			id: t.id,
+			code: t.code,
+			title: t.title,
+			letter: readStringMetadata(t.metadata, 'task_letter') ?? t.code.split('.').at(-1)?.toLowerCase() ?? '',
+		}));
+		return { id: area.id, code: area.code, title: area.title, padded, tasks };
+	});
+
 	const sourceLinks = buildSourceLinks({
 		kind: ref.kind as ReferenceKind,
 		documentSlug: ref.documentSlug,
@@ -228,5 +269,6 @@ export const load: PageServerLoad = async ({ params }) => {
 			prev,
 			next,
 		},
+		areas,
 	};
 };

@@ -1,6 +1,7 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
 import Breadcrumbs from '@ab/library/Breadcrumbs.svelte';
+import ReaderLayout from '@ab/library/ReaderLayout.svelte';
 import ReaderNav from '@ab/library/ReaderNav.svelte';
 import RenderedSection from '@ab/library/RenderedSection.svelte';
 import SourceLinks from '@ab/library/SourceLinks.svelte';
@@ -44,8 +45,8 @@ function formatReadSummary(state: typeof data.readState): string | undefined {
 	<title>{data.section.title} -- {data.reference.title}</title>
 </svelte:head>
 
-<div class="reader">
-	<aside class="toc-rail">
+<ReaderLayout>
+	{#snippet tocSidebar()}
 		<TOCDrawer
 			entries={data.toc.entries}
 			{readSet}
@@ -53,65 +54,39 @@ function formatReadSummary(state: typeof data.readState): string | undefined {
 			headingHref={data.reference.handbookHref}
 			summary={tocSummary}
 		/>
-	</aside>
-	<div class="primary">
-		<RenderedSection
-			title={data.section.title}
-			id={data.uri}
-			body={data.section.contentMd}
-			figures={data.figures}
-			locator={data.section.sourceLocator}
-			metadata={data.section.metadata}
-			readingTimeMinutes={data.readingTime.sectionMinutes}
-		>
-			{#snippet breadcrumb()}
-				<Breadcrumbs {segments} />
-				<SourceLinks
-					localPdfHref={data.sourceLinks.localPdfHref}
-					onlineUrl={data.sourceLinks.onlineUrl}
-					localPdfMissing={data.sourceLinks.localPdfMissing}
-				/>
-				{#if readSummary}
-					<p class="read-summary">{readSummary}</p>
-				{/if}
-			{/snippet}
-			{#snippet emptyFallback()}
-				<ReaderNav nav={data.nav} variant="empty" />
-			{/snippet}
-			{#snippet footer()}
-				<ReaderNav nav={data.nav} variant="footer" />
-			{/snippet}
-		</RenderedSection>
-		<HeartbeatTicker sectionId={data.section.id} enabled={data.isAuthenticated} />
-	</div>
-</div>
+	{/snippet}
+
+	<RenderedSection
+		title={data.section.title}
+		id={data.uri}
+		body={data.section.contentMd}
+		figures={data.figures}
+		locator={data.section.sourceLocator}
+		metadata={data.section.metadata}
+		readingTimeMinutes={data.readingTime.sectionMinutes}
+	>
+		{#snippet breadcrumb()}
+			<Breadcrumbs {segments} />
+			<SourceLinks
+				localPdfHref={data.sourceLinks.localPdfHref}
+				onlineUrl={data.sourceLinks.onlineUrl}
+				localPdfMissing={data.sourceLinks.localPdfMissing}
+			/>
+			{#if readSummary}
+				<p class="read-summary">{readSummary}</p>
+			{/if}
+		{/snippet}
+		{#snippet emptyFallback()}
+			<ReaderNav nav={data.nav} variant="empty" />
+		{/snippet}
+		{#snippet footer()}
+			<ReaderNav nav={data.nav} variant="footer" />
+		{/snippet}
+	</RenderedSection>
+	<HeartbeatTicker sectionId={data.section.id} enabled={data.isAuthenticated} />
+</ReaderLayout>
 
 <style>
-	.reader {
-		display: grid;
-		grid-template-columns: 18rem minmax(0, 1fr);
-		gap: var(--space-lg);
-		align-items: start;
-	}
-
-	.toc-rail {
-		position: sticky;
-		top: var(--space-md);
-	}
-
-	.primary {
-		min-width: 0;
-	}
-
-	@media (max-width: 60rem) {
-		.reader {
-			grid-template-columns: 1fr;
-		}
-		.toc-rail {
-			position: static;
-		}
-	}
-
 	.read-summary {
 		margin: var(--space-xs) 0 0;
 		color: var(--ink-muted);

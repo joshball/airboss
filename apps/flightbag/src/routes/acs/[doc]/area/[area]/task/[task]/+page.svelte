@@ -1,7 +1,10 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
 import Breadcrumbs from '@ab/library/Breadcrumbs.svelte';
+import ReaderLayout from '@ab/library/ReaderLayout.svelte';
 import SourceLinks from '@ab/library/SourceLinks.svelte';
+import TOCDrawer from '@ab/library/TOCDrawer.svelte';
+import { buildAcsTocEntries, findAreaIdForTask } from '../../../../../../../lib/acs-toc';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -9,6 +12,19 @@ let { data }: { data: PageData } = $props();
 const hasElements = $derived(
 	data.elements.knowledge.length + data.elements.risk.length + data.elements.skill.length > 0,
 );
+
+const tocEntries = $derived(
+	buildAcsTocEntries({
+		documentSlug: data.reference.documentSlug,
+		areas: data.areas,
+		activeTaskId: data.task.id,
+	}),
+);
+
+const expandedGroupIds = $derived.by(() => {
+	const id = findAreaIdForTask(data.areas, data.task.id);
+	return id ? [id] : [];
+});
 </script>
 
 <svelte:head>
@@ -17,143 +33,151 @@ const hasElements = $derived(
 	</title>
 </svelte:head>
 
-<Breadcrumbs
-	segments={[
-		{ label: 'Flightbag', href: ROUTES.FLIGHTBAG_HOME },
-		{ label: data.reference.title, href: data.reference.acsHref },
-		{ label: `Area ${data.area.code}: ${data.area.title}`, href: data.reference.acsHref },
-		{ label: `Task ${data.task.letter.toUpperCase()}: ${data.task.title}`, href: null },
-	]}
-/>
+<ReaderLayout>
+	{#snippet breadcrumb()}
+		<Breadcrumbs
+			segments={[
+				{ label: 'Flightbag', href: ROUTES.FLIGHTBAG_HOME },
+				{ label: data.reference.title, href: data.reference.acsHref },
+				{ label: `Area ${data.area.code}: ${data.area.title}`, href: data.reference.acsHref },
+				{ label: `Task ${data.task.letter.toUpperCase()}: ${data.task.title}`, href: null },
+			]}
+		/>
+	{/snippet}
 
-<SourceLinks
-	localPdfHref={data.sourceLinks.localPdfHref}
-	onlineUrl={data.sourceLinks.onlineUrl}
-	localPdfMissing={data.sourceLinks.localPdfMissing}
-/>
+	{#snippet sourceLinks()}
+		<SourceLinks
+			localPdfHref={data.sourceLinks.localPdfHref}
+			onlineUrl={data.sourceLinks.onlineUrl}
+			localPdfMissing={data.sourceLinks.localPdfMissing}
+		/>
+	{/snippet}
 
-<header class="page-header">
-	<p class="eyebrow">
+	{#snippet eyebrow()}
 		Area of Operation {data.area.code} &middot; {data.area.title}
-	</p>
-	<h1>Task {data.task.letter.toUpperCase()}. {data.task.title}</h1>
-	<p class="task-code">{data.task.code}</p>
-</header>
+	{/snippet}
 
-{#if data.task.references}
-	<section class="meta-block" aria-labelledby="references-h">
-		<h2 id="references-h">References</h2>
-		<p>{data.task.references}</p>
-	</section>
-{/if}
+	{#snippet title()}
+		Task {data.task.letter.toUpperCase()}. {data.task.title}
+	{/snippet}
 
-{#if data.task.objective}
-	<section class="meta-block" aria-labelledby="objective-h">
-		<h2 id="objective-h">Objective</h2>
-		<p>{data.task.objective}</p>
-	</section>
-{/if}
+	{#snippet subtitle()}
+		<span class="task-code">{data.task.code}</span>
+	{/snippet}
 
-{#if hasElements}
-	<section class="elements" aria-labelledby="knowledge-h">
-		{#if data.elements.knowledge.length > 0}
-			<h2 id="knowledge-h">Knowledge</h2>
-			<p class="lede">The applicant demonstrates understanding of:</p>
-			<ul class="element-list">
-				{#each data.elements.knowledge as element (element.id)}
-					<li>
-						<span class="element-code">{element.code}</span>
-						<span class="element-title">{element.title}</span>
-					</li>
-				{/each}
-			</ul>
-		{/if}
+	{#snippet tocSidebar()}
+		<TOCDrawer
+			entries={tocEntries}
+			heading={data.reference.title}
+			headingHref={data.reference.acsHref}
+			summary={`${data.areas.length} areas`}
+			collapsibleGroups
+			defaultExpandedGroupIds={expandedGroupIds}
+		/>
+	{/snippet}
 
-		{#if data.elements.risk.length > 0}
-			<h2 id="risk-h">Risk Management</h2>
-			<p class="lede">The applicant identifies, assesses, and mitigates risk associated with:</p>
-			<ul class="element-list">
-				{#each data.elements.risk as element (element.id)}
-					<li>
-						<span class="element-code">{element.code}</span>
-						<span class="element-title">{element.title}</span>
-					</li>
-				{/each}
-			</ul>
-		{/if}
-
-		{#if data.elements.skill.length > 0}
-			<h2 id="skills-h">Skills</h2>
-			<p class="lede">The applicant exhibits the skill to:</p>
-			<ul class="element-list">
-				{#each data.elements.skill as element (element.id)}
-					<li>
-						<span class="element-code">{element.code}</span>
-						<span class="element-title">{element.title}</span>
-					</li>
-				{/each}
-			</ul>
-		{/if}
-	</section>
-{:else}
-	<section class="callout">
-		<h2>No element rows seeded for this task.</h2>
-		<p>
-			The task body is in the FAA PDF below. Element-level extraction has not yet produced K/R/S rows for this
-			task.
-		</p>
-		{#if data.reference.externalUrl}
-			<p>
-				<a class="external-link" href={data.reference.externalUrl} target="_blank" rel="noopener noreferrer">
-					Open ACS portal &rarr;
+	{#snippet footer()}
+		<nav class="task-nav" aria-label="Task navigation">
+			{#if data.nav.prev}
+				<a class="nav-link prev" href={data.nav.prev.href}>
+					<span class="nav-direction">&larr; Previous task</span>
+					<span class="nav-code">{data.nav.prev.code}</span>
+					<span class="nav-label">{data.nav.prev.label}</span>
 				</a>
-			</p>
-		{/if}
-	</section>
-{/if}
+			{:else}
+				<span class="nav-spacer"></span>
+			{/if}
+			<a class="nav-link up" href={data.reference.acsHref}>
+				<span class="nav-direction">Up to publication</span>
+				<span class="nav-label">{data.reference.title}</span>
+			</a>
+			{#if data.nav.next}
+				<a class="nav-link next" href={data.nav.next.href}>
+					<span class="nav-direction">Next task &rarr;</span>
+					<span class="nav-code">{data.nav.next.code}</span>
+					<span class="nav-label">{data.nav.next.label}</span>
+				</a>
+			{:else}
+				<span class="nav-spacer"></span>
+			{/if}
+		</nav>
+	{/snippet}
 
-<nav class="task-nav" aria-label="Task navigation">
-	{#if data.nav.prev}
-		<a class="nav-link prev" href={data.nav.prev.href}>
-			<span class="nav-direction">&larr; Previous task</span>
-			<span class="nav-code">{data.nav.prev.code}</span>
-			<span class="nav-label">{data.nav.prev.label}</span>
-		</a>
-	{:else}
-		<span class="nav-spacer"></span>
+	{#if data.task.references}
+		<section class="meta-block" aria-labelledby="references-h">
+			<h2 id="references-h">References</h2>
+			<p>{data.task.references}</p>
+		</section>
 	{/if}
-	<a class="nav-link up" href={data.reference.acsHref}>
-		<span class="nav-direction">Up to publication</span>
-		<span class="nav-label">{data.reference.title}</span>
-	</a>
-	{#if data.nav.next}
-		<a class="nav-link next" href={data.nav.next.href}>
-			<span class="nav-direction">Next task &rarr;</span>
-			<span class="nav-code">{data.nav.next.code}</span>
-			<span class="nav-label">{data.nav.next.label}</span>
-		</a>
-	{:else}
-		<span class="nav-spacer"></span>
+
+	{#if data.task.objective}
+		<section class="meta-block" aria-labelledby="objective-h">
+			<h2 id="objective-h">Objective</h2>
+			<p>{data.task.objective}</p>
+		</section>
 	{/if}
-</nav>
+
+	{#if hasElements}
+		<section class="elements" aria-labelledby="knowledge-h">
+			{#if data.elements.knowledge.length > 0}
+				<h2 id="knowledge-h">Knowledge</h2>
+				<p class="lede">The applicant demonstrates understanding of:</p>
+				<ul class="element-list">
+					{#each data.elements.knowledge as element (element.id)}
+						<li>
+							<span class="element-code">{element.code}</span>
+							<span class="element-title">{element.title}</span>
+						</li>
+					{/each}
+				</ul>
+			{/if}
+
+			{#if data.elements.risk.length > 0}
+				<h2 id="risk-h">Risk Management</h2>
+				<p class="lede">The applicant identifies, assesses, and mitigates risk associated with:</p>
+				<ul class="element-list">
+					{#each data.elements.risk as element (element.id)}
+						<li>
+							<span class="element-code">{element.code}</span>
+							<span class="element-title">{element.title}</span>
+						</li>
+					{/each}
+				</ul>
+			{/if}
+
+			{#if data.elements.skill.length > 0}
+				<h2 id="skills-h">Skills</h2>
+				<p class="lede">The applicant exhibits the skill to:</p>
+				<ul class="element-list">
+					{#each data.elements.skill as element (element.id)}
+						<li>
+							<span class="element-code">{element.code}</span>
+							<span class="element-title">{element.title}</span>
+						</li>
+					{/each}
+				</ul>
+			{/if}
+		</section>
+	{:else}
+		<section class="callout">
+			<h2>No element rows seeded for this task.</h2>
+			<p>
+				The task body is in the FAA PDF below. Element-level extraction has not yet produced K/R/S rows for this
+				task.
+			</p>
+			{#if data.reference.externalUrl}
+				<p>
+					<a class="external-link" href={data.reference.externalUrl} target="_blank" rel="noopener noreferrer">
+						Open ACS portal &rarr;
+					</a>
+				</p>
+			{/if}
+		</section>
+	{/if}
+</ReaderLayout>
 
 <style>
-	.page-header {
-		margin-bottom: var(--space-lg);
-	}
-	.page-header h1 {
-		margin: 0 0 var(--space-2xs);
-	}
-	.eyebrow {
-		margin: 0 0 var(--space-2xs);
-		color: var(--ink-muted);
-		font-family: var(--font-family-mono);
-		font-size: var(--font-size-xs);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-caps);
-	}
 	.task-code {
-		margin: 0;
 		color: var(--ink-muted);
 		font-family: var(--font-family-mono);
 		font-size: var(--font-size-sm);
@@ -245,7 +269,6 @@ const hasElements = $derived(
 	}
 
 	.task-nav {
-		margin-top: var(--space-2xl);
 		padding-top: var(--space-md);
 		border-top: 1px solid var(--edge-default);
 		display: grid;

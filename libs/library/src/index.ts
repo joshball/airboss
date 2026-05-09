@@ -21,6 +21,7 @@
 
 export type { BreadcrumbSegment, BreadcrumbsProps } from './Breadcrumbs.svelte';
 export type { CitationChipProps } from './CitationChip.svelte';
+export type { ReaderLayoutProps } from './ReaderLayout.svelte';
 export type { ReaderNavData, ReaderNavLink, ReaderNavProps } from './ReaderNav.svelte';
 export type { ReadingTimeProps } from './ReadingTime.svelte';
 export type { RenderedSectionFigure, RenderedSectionProps } from './RenderedSection.svelte';
