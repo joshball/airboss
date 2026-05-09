@@ -187,10 +187,10 @@ function pairPayloadJson(): string {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-md);
-		background: var(--surface-elevated);
+		background: var(--surface-raised);
 		padding: var(--space-lg);
 		border-radius: var(--radius-md);
-		border: 1px solid var(--border-subtle);
+		border: 1px solid var(--edge-subtle);
 	}
 
 	.meta {
@@ -210,7 +210,7 @@ function pairPayloadJson(): string {
 		color: var(--ink-muted);
 		font-size: var(--type-ui-caption-size);
 		text-transform: uppercase;
-		letter-spacing: 0.05em;
+		letter-spacing: var(--letter-spacing-wide);
 	}
 
 	.meta dd {
@@ -221,7 +221,7 @@ function pairPayloadJson(): string {
 	.caption blockquote {
 		margin: 0;
 		padding: var(--space-md);
-		background: var(--surface-base);
+		background: var(--surface-page);
 		border-left: 3px solid var(--action-default);
 		border-radius: var(--radius-sm);
 		font-style: italic;
@@ -246,7 +246,7 @@ function pairPayloadJson(): string {
 	.action-row.secondary {
 		margin-top: var(--space-sm);
 		padding-top: var(--space-sm);
-		border-top: 1px solid var(--border-subtle);
+		border-top: 1px solid var(--edge-subtle);
 	}
 
 	.external {
@@ -259,21 +259,21 @@ function pairPayloadJson(): string {
 	}
 
 	.error {
-		color: var(--state-error-ink, var(--ink-body));
-		background: var(--state-error-wash, var(--surface-elevated));
+		color: var(--signal-danger-ink, var(--ink-body));
+		background: var(--signal-danger-wash, var(--surface-raised));
 		padding: var(--space-sm);
 		border-radius: var(--radius-sm);
 	}
 
 	.success {
-		color: var(--state-success-ink, var(--ink-body));
-		background: var(--state-success-wash, var(--surface-elevated));
+		color: var(--signal-success-ink, var(--ink-body));
+		background: var(--signal-success-wash, var(--surface-raised));
 		padding: var(--space-sm);
 		border-radius: var(--radius-sm);
 	}
 
 	.current-override code {
-		background: var(--surface-base);
+		background: var(--surface-page);
 		padding: var(--space-3xs) var(--space-2xs);
 		border-radius: var(--radius-xs);
 	}

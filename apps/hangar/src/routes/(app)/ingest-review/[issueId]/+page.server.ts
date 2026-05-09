@@ -13,6 +13,7 @@
  */
 
 import { requireRole } from '@ab/auth';
+import type { IssueRecord } from '@ab/bc-ingest-review';
 import {
 	applyOverride,
 	dismissIssue,
@@ -27,6 +28,17 @@ import { INGEST_REVIEW, type IngestOverrideAction, ROLES } from '@ab/constants';
 import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
+/**
+ * Narrow `IssueRecord<unknown>` (the BC's storage projection) to
+ * `IssueRecord<Record<string, unknown>>` (the plugin contract's payload
+ * shape). The BC stores `payload` as `unknown` because it never inspects
+ * it; the plugin owns the schema. This cast is the boundary between the
+ * two type worlds.
+ */
+function asPluginIssue(issue: IssueRecord): IssueRecord<Record<string, unknown>> {
+	return issue as IssueRecord<Record<string, unknown>>;
+}
+
 export const load: PageServerLoad = async (event) => {
 	requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
 	const issueId = event.params.issueId;
@@ -37,7 +49,7 @@ export const load: PageServerLoad = async (event) => {
 	});
 	const plugin = getPlugin(issue.kind);
 	const currentOverride = await getCurrentOverride(issue.id);
-	const candidates = await plugin.findCandidates(issue, {
+	const candidates = await plugin.findCandidates(asPluginIssue(issue), {
 		corpus: issue.corpus,
 		sourceId: issue.sourceId,
 		edition: issue.edition,
@@ -66,7 +78,7 @@ async function applyActionFromForm(event: Parameters<Actions['pair']>[0], action
 	const issue = await getIssue(issueId);
 	const plugin = getPlugin(issue.kind);
 	try {
-		plugin.validateAction(issue, { action, payload });
+		plugin.validateAction(asPluginIssue(issue), { action, payload });
 	} catch (err) {
 		if (err instanceof InvalidActionPayloadError) {
 			return fail(400, { ok: false, error: err.message });

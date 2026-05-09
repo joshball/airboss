@@ -18,8 +18,9 @@ import type { PageProps } from './$types';
 
 const { data, form }: PageProps = $props();
 
+type IssueRow = (typeof data.issues)[number];
 const issuesByGroup = $derived.by(() => {
-	const map = new Map<string, { corpus: Corpus; sourceId: string; issues: typeof data.issues }>();
+	const map = new Map<string, { corpus: Corpus; sourceId: string; issues: IssueRow[] }>();
 	for (const issue of data.issues) {
 		const key = `${issue.corpus}::${issue.sourceId}`;
 		const existing = map.get(key);
@@ -133,11 +134,11 @@ function buildFilterUrl(
 	<span class="hint">Re-scan handbook warnings.json files and refresh the queue.</span>
 </form>
 
-{#if form?.ok}
+{#if form?.ok && form.summary}
 	<p class="run-summary">
 		Producers ran: upserted {form.summary.totalUpserted}, staled {form.summary.totalStaled}, errors {form.summary.totalErrors}.
 	</p>
-{:else if form?.error}
+{:else if form && !form.ok && form.error}
 	<p class="run-error">Producer run failed: {form.error}</p>
 {/if}
 
@@ -172,8 +173,8 @@ function buildFilterUrl(
 		flex-direction: column;
 		gap: var(--space-sm);
 		padding: var(--space-md);
-		background: var(--surface-elevated);
-		border: 1px solid var(--border-subtle);
+		background: var(--surface-raised);
+		border: 1px solid var(--edge-subtle);
 		border-radius: var(--radius-md);
 	}
 
@@ -197,10 +198,10 @@ function buildFilterUrl(
 		gap: var(--space-3xs);
 		padding: var(--space-3xs) var(--space-2xs);
 		border-radius: var(--radius-pill, 999px);
-		background: var(--surface-base);
+		background: var(--surface-page);
 		color: var(--ink-body);
 		text-decoration: none;
-		border: 1px solid var(--border-subtle);
+		border: 1px solid var(--edge-subtle);
 		font-size: var(--type-ui-caption-size);
 	}
 
@@ -232,23 +233,23 @@ function buildFilterUrl(
 	}
 
 	.run-summary {
-		color: var(--state-success-ink, var(--ink-body));
-		background: var(--state-success-wash, var(--surface-elevated));
+		color: var(--signal-success-ink, var(--ink-body));
+		background: var(--signal-success-wash, var(--surface-raised));
 		padding: var(--space-sm);
 		border-radius: var(--radius-sm);
 	}
 
 	.run-error {
-		color: var(--state-error-ink, var(--ink-body));
-		background: var(--state-error-wash, var(--surface-elevated));
+		color: var(--signal-danger-ink, var(--ink-body));
+		background: var(--signal-danger-wash, var(--surface-raised));
 		padding: var(--space-sm);
 		border-radius: var(--radius-sm);
 	}
 
 	.empty-state {
 		padding: var(--space-lg);
-		background: var(--surface-elevated);
-		border: 1px dashed var(--border-subtle);
+		background: var(--surface-raised);
+		border: 1px dashed var(--edge-subtle);
 		border-radius: var(--radius-md);
 		color: var(--ink-muted);
 	}
@@ -274,9 +275,9 @@ function buildFilterUrl(
 	}
 
 	.issue-row {
-		border: 1px solid var(--border-subtle);
+		border: 1px solid var(--edge-subtle);
 		border-radius: var(--radius-sm);
-		background: var(--surface-base);
+		background: var(--surface-page);
 	}
 
 	.issue-link {

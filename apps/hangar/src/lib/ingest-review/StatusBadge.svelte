@@ -23,13 +23,13 @@ const { status }: Props = $props();
 	}
 
 	.badge[data-status='unresolved'] {
-		background: var(--state-warning-wash, var(--surface-sunken));
-		color: var(--state-warning-ink, var(--ink-body));
+		background: var(--signal-warning-wash, var(--surface-sunken));
+		color: var(--signal-warning-ink, var(--ink-body));
 	}
 
 	.badge[data-status='resolved'] {
-		background: var(--state-success-wash, var(--surface-sunken));
-		color: var(--state-success-ink, var(--ink-body));
+		background: var(--signal-success-wash, var(--surface-sunken));
+		color: var(--signal-success-ink, var(--ink-body));
 	}
 
 	.badge[data-status='stale'] {

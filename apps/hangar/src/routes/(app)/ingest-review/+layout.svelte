@@ -37,7 +37,7 @@ const { children }: LayoutProps = $props();
 	}
 
 	.page-head h1 {
-		font-size: var(--type-display-size);
+		font-size: var(--type-heading-1-size);
 		margin: 0;
 	}
 

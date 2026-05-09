@@ -45,8 +45,8 @@ const { candidates, selectedId, onSelect }: Props = $props();
 <style>
 	.empty {
 		padding: var(--space-md);
-		background: var(--surface-elevated);
-		border: 1px dashed var(--border-subtle);
+		background: var(--surface-raised);
+		border: 1px dashed var(--edge-subtle);
 		border-radius: var(--radius-sm);
 		color: var(--ink-muted);
 	}
@@ -63,8 +63,8 @@ const { candidates, selectedId, onSelect }: Props = $props();
 		flex-direction: column;
 		gap: var(--space-2xs);
 		padding: var(--space-2xs);
-		background: var(--surface-base);
-		border: 2px solid var(--border-subtle);
+		background: var(--surface-page);
+		border: 2px solid var(--edge-subtle);
 		border-radius: var(--radius-sm);
 		cursor: pointer;
 		min-width: 12rem;
@@ -113,6 +113,7 @@ const { candidates, selectedId, onSelect }: Props = $props();
 		text-overflow: ellipsis;
 		display: -webkit-box;
 		-webkit-line-clamp: 2;
+		line-clamp: 2;
 		-webkit-box-orient: vertical;
 	}
 </style>
