@@ -35,6 +35,10 @@ import {
 	type Cert,
 	CONTENT_SOURCE_VALUES,
 	CONTENT_SOURCES,
+	COURSE_KIND_VALUES,
+	COURSE_STATUS_VALUES,
+	COURSE_STATUSES,
+	COURSE_STEP_LEVEL_VALUES,
 	CREDENTIAL_CATEGORY_VALUES,
 	CREDENTIAL_CLASS_VALUES,
 	CREDENTIAL_KIND_VALUES,
@@ -56,6 +60,8 @@ import {
 	HANDBOOK_READ_STATUS_VALUES,
 	HANDBOOK_READ_STATUSES,
 	KNOWLEDGE_EDGE_TYPE_VALUES,
+	KNOWLEDGE_NODE_KIND_VALUES,
+	KNOWLEDGE_NODE_KINDS,
 	MASTERY_STABILITY_DAYS,
 	MAX_SESSION_LENGTH,
 	MIN_SESSION_LENGTH,
@@ -222,6 +228,19 @@ export const knowledgeNode = studySchema.table(
 		 */
 		lifecycle: text('lifecycle').default(NODE_LIFECYCLES.SKELETON),
 		/**
+		 * Semantic kind of this knowledge node. Drives lens-layer rendering
+		 * differences (e.g. transitions framed differently from concepts) and
+		 * lets a course step inherit its semantic shape from the linked node
+		 * rather than re-declaring it. Single source of truth: a node is a
+		 * transition regardless of which course references it (course-primitive
+		 * WP, ADR 016 refinement 2026-05-08; LEARNING_PHILOSOPHY principle 11).
+		 *
+		 * Defaulted to `'concept'` on every existing row at migration time --
+		 * the dominant kind in the shipped corpus -- so the column lands without
+		 * a row-by-row backfill script.
+		 */
+		kind: text('kind').notNull().default(KNOWLEDGE_NODE_KINDS.CONCEPT),
+		/**
 		 * Cert-syllabus WP migration flag. False on every existing row at
 		 * migration time; flips true after `migrate-references-to-structured.ts`
 		 * has reshaped the row's `references` JSONB array from `LegacyCitation`
@@ -272,6 +291,7 @@ export const knowledgeNode = studySchema.table(
 			'knowledge_node_study_priority_check',
 			sql.raw(`"study_priority" IS NULL OR "study_priority" IN (${inList(STUDY_PRIORITY_VALUES)})`),
 		),
+		kindCheck: check('knowledge_node_kind_check', sql.raw(`"kind" IN (${inList(KNOWLEDGE_NODE_KIND_VALUES)})`)),
 	}),
 );
 
@@ -2312,6 +2332,122 @@ export const goalNode = studySchema.table(
 	}),
 );
 
+/**
+ * Instructor-authored course -- peer primitive to {@link syllabus}. See ADR
+ * 016 refinement (2026-05-08) and LEARNING_PHILOSOPHY principle 11. Mutable
+ * (no edition lock); composes into goals via {@link goalCourse}.
+ *
+ * The cert-vs-course overlay is a render-time lens computation
+ * (`courseWithCertOverlayLens`); it is NOT authored on this row -- a course
+ * carries no `cert_alignment` field. Alignment is the learner's goal, not
+ * the course author's declaration.
+ */
+export const course = studySchema.table(
+	'course',
+	{
+		id: text('id').primaryKey(),
+		slug: text('slug').notNull(),
+		kind: text('kind').notNull(),
+		title: text('title').notNull(),
+		description: text('description').notNull().default(''),
+		status: text('status').notNull().default(COURSE_STATUSES.ACTIVE),
+		seedOrigin: text('seed_origin'),
+		...timestamps(),
+	},
+	(t) => ({
+		courseSlugUnique: uniqueIndex('course_slug_unique').on(t.slug),
+		courseKindStatusIdx: index('course_kind_status_idx').on(t.kind, t.status),
+		kindCheck: check('course_kind_check', sql.raw(`"kind" IN (${inList(COURSE_KIND_VALUES)})`)),
+		statusCheck: check('course_status_check', sql.raw(`"status" IN (${inList(COURSE_STATUS_VALUES)})`)),
+		slugShapeCheck: check('course_slug_shape_check', sql.raw(`"slug" ~ '^[a-z0-9][a-z0-9-]{1,62}[a-z0-9]$'`)),
+	}),
+);
+
+/**
+ * One node in a course tree. Two structural levels: top-level `section`
+ * rows (no parent, no knowledge_node_id) and child `step` rows (parent
+ * points at a section, knowledge_node_id required). Steps are leaves;
+ * sections are not.
+ *
+ * `level` / `parent_id` / `knowledge_node_id` / `is_leaf` consistency is
+ * enforced by `course_step_consistency_check` (single CHECK covering both
+ * legal shapes). The seed pipeline hashes the canonicalized YAML into
+ * `content_hash` so an unchanged file produces zero writes.
+ *
+ * The FK to `knowledge_node` is RESTRICT on delete: nodes are referenced
+ * from cards, syllabi, and other courses; the author must explicitly
+ * remove the course step before the node can vanish.
+ */
+export const courseStep = studySchema.table(
+	'course_step',
+	{
+		id: text('id').primaryKey(),
+		courseId: text('course_id')
+			.notNull()
+			.references(() => course.id, { onDelete: 'cascade' }),
+		parentId: text('parent_id').references((): AnyPgColumn => courseStep.id, {
+			onDelete: 'cascade',
+		}),
+		level: text('level').notNull(),
+		ordinal: integer('ordinal').notNull(),
+		code: text('code').notNull(),
+		title: text('title').notNull(),
+		bodyMd: text('body_md').notNull().default(''),
+		knowledgeNodeId: text('knowledge_node_id').references(() => knowledgeNode.id, { onDelete: 'restrict' }),
+		isLeaf: boolean('is_leaf').notNull().default(false),
+		contentHash: text('content_hash'),
+		seedOrigin: text('seed_origin'),
+		...timestamps(),
+	},
+	(t) => ({
+		courseStepCourseCodeUnique: uniqueIndex('course_step_course_code_unique').on(t.courseId, t.code),
+		// Tree walk: parent -> children, ordered by ordinal.
+		courseStepTreeIdx: index('course_step_tree_idx').on(t.courseId, t.parentId, t.ordinal),
+		// Reverse lookup: "what course steps reference this knowledge node?"
+		courseStepNodeIdx: index('course_step_node_idx').on(t.knowledgeNodeId),
+		levelCheck: check('course_step_level_check', sql.raw(`"level" IN (${inList(COURSE_STEP_LEVEL_VALUES)})`)),
+		// Combined consistency rule: section rows have no parent, no node, are
+		// not leaves; step rows have a parent, have a node, and are leaves.
+		consistencyCheck: check(
+			'course_step_consistency_check',
+			sql.raw(
+				`(("level" = 'section' AND "parent_id" IS NULL AND "knowledge_node_id" IS NULL AND "is_leaf" = false) OR ("level" = 'step' AND "parent_id" IS NOT NULL AND "knowledge_node_id" IS NOT NULL AND "is_leaf" = true))`,
+			),
+		),
+		ordinalCheck: check('course_step_ordinal_check', sql.raw(`"ordinal" >= 0`)),
+	}),
+);
+
+/**
+ * Many-to-many between goals and courses. Mirrors {@link goalSyllabus} in
+ * shape. The session engine's `getGoalNodeUnion` walks
+ * `goal_course -> course_step (level='step') -> knowledge_node_id` and
+ * merges with goal_syllabus + goal_node into one deduped node set.
+ */
+export const goalCourse = studySchema.table(
+	'goal_course',
+	{
+		goalId: text('goal_id')
+			.notNull()
+			.references(() => goal.id, { onDelete: 'cascade' }),
+		courseId: text('course_id')
+			.notNull()
+			.references(() => course.id, { onDelete: 'restrict' }),
+		weight: real('weight').notNull().default(1.0),
+		seedOrigin: text('seed_origin'),
+		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+	},
+	(t) => ({
+		pk: primaryKey({ columns: [t.goalId, t.courseId] }),
+		// Reverse: "what goals reference this course?"
+		goalCourseByCourseIdx: index('goal_course_by_course_idx').on(t.courseId),
+		weightRangeCheck: check(
+			'goal_course_weight_check',
+			sql.raw(`"weight" >= ${GOAL_SYLLABUS_WEIGHT_MIN} AND "weight" <= ${GOAL_SYLLABUS_WEIGHT_MAX}`),
+		),
+	}),
+);
+
 export type CredentialRow = typeof credential.$inferSelect;
 export type NewCredentialRow = typeof credential.$inferInsert;
 export type CredentialPrereqRow = typeof credentialPrereq.$inferSelect;
@@ -2330,6 +2466,12 @@ export type GoalSyllabusRow = typeof goalSyllabus.$inferSelect;
 export type NewGoalSyllabusRow = typeof goalSyllabus.$inferInsert;
 export type GoalNodeRow = typeof goalNode.$inferSelect;
 export type NewGoalNodeRow = typeof goalNode.$inferInsert;
+export type CourseRow = typeof course.$inferSelect;
+export type NewCourseRow = typeof course.$inferInsert;
+export type CourseStepRow = typeof courseStep.$inferSelect;
+export type NewCourseStepRow = typeof courseStep.$inferInsert;
+export type GoalCourseRow = typeof goalCourse.$inferSelect;
+export type NewGoalCourseRow = typeof goalCourse.$inferInsert;
 
 /**
  * Per-user, per-key preference store.

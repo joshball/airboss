@@ -1,5 +1,5 @@
 {
-  "id": "59bc2bc6-90e7-4603-a68b-338fa3b35522",
+  "id": "9205388e-32f6-4d1f-bbe7-62b69ea31e7a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -1316,6 +1316,348 @@
       },
       "isRLSEnabled": false
     },
+    "study.course": {
+      "name": "course",
+      "schema": "study",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kind": {
+          "name": "kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'active'"
+        },
+        "seed_origin": {
+          "name": "seed_origin",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "course_slug_unique": {
+          "name": "course_slug_unique",
+          "columns": [
+            {
+              "expression": "slug",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "course_kind_status_idx": {
+          "name": "course_kind_status_idx",
+          "columns": [
+            {
+              "expression": "kind",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "course_kind_check": {
+          "name": "course_kind_check",
+          "value": "\"kind\" IN ('instructor', 'personal')"
+        },
+        "course_status_check": {
+          "name": "course_status_check",
+          "value": "\"status\" IN ('draft', 'active', 'archived')"
+        },
+        "course_slug_shape_check": {
+          "name": "course_slug_shape_check",
+          "value": "\"slug\" ~ '^[a-z0-9][a-z0-9-]{1,62}[a-z0-9]$'"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "study.course_step": {
+      "name": "course_step",
+      "schema": "study",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "course_id": {
+          "name": "course_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "parent_id": {
+          "name": "parent_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "level": {
+          "name": "level",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ordinal": {
+          "name": "ordinal",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "code": {
+          "name": "code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "body_md": {
+          "name": "body_md",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "knowledge_node_id": {
+          "name": "knowledge_node_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_leaf": {
+          "name": "is_leaf",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "content_hash": {
+          "name": "content_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seed_origin": {
+          "name": "seed_origin",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "course_step_course_code_unique": {
+          "name": "course_step_course_code_unique",
+          "columns": [
+            {
+              "expression": "course_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "code",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "course_step_tree_idx": {
+          "name": "course_step_tree_idx",
+          "columns": [
+            {
+              "expression": "course_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "ordinal",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "course_step_node_idx": {
+          "name": "course_step_node_idx",
+          "columns": [
+            {
+              "expression": "knowledge_node_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "course_step_course_id_course_id_fk": {
+          "name": "course_step_course_id_course_id_fk",
+          "tableFrom": "course_step",
+          "tableTo": "course",
+          "schemaTo": "study",
+          "columnsFrom": [
+            "course_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "course_step_parent_id_course_step_id_fk": {
+          "name": "course_step_parent_id_course_step_id_fk",
+          "tableFrom": "course_step",
+          "tableTo": "course_step",
+          "schemaTo": "study",
+          "columnsFrom": [
+            "parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "course_step_knowledge_node_id_knowledge_node_id_fk": {
+          "name": "course_step_knowledge_node_id_knowledge_node_id_fk",
+          "tableFrom": "course_step",
+          "tableTo": "knowledge_node",
+          "schemaTo": "study",
+          "columnsFrom": [
+            "knowledge_node_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "course_step_level_check": {
+          "name": "course_step_level_check",
+          "value": "\"level\" IN ('section', 'step')"
+        },
+        "course_step_consistency_check": {
+          "name": "course_step_consistency_check",
+          "value": "((\"level\" = 'section' AND \"parent_id\" IS NULL AND \"knowledge_node_id\" IS NULL AND \"is_leaf\" = false) OR (\"level\" = 'step' AND \"parent_id\" IS NOT NULL AND \"knowledge_node_id\" IS NOT NULL AND \"is_leaf\" = true))"
+        },
+        "course_step_ordinal_check": {
+          "name": "course_step_ordinal_check",
+          "value": "\"ordinal\" >= 0"
+        }
+      },
+      "isRLSEnabled": false
+    },
     "study.credential": {
       "name": "credential",
       "schema": "study",
@@ -1931,6 +2273,109 @@
       },
       "isRLSEnabled": false
     },
+    "study.goal_course": {
+      "name": "goal_course",
+      "schema": "study",
+      "columns": {
+        "goal_id": {
+          "name": "goal_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "course_id": {
+          "name": "course_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "weight": {
+          "name": "weight",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        },
+        "seed_origin": {
+          "name": "seed_origin",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "goal_course_by_course_idx": {
+          "name": "goal_course_by_course_idx",
+          "columns": [
+            {
+              "expression": "course_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "goal_course_goal_id_goal_id_fk": {
+          "name": "goal_course_goal_id_goal_id_fk",
+          "tableFrom": "goal_course",
+          "tableTo": "goal",
+          "schemaTo": "study",
+          "columnsFrom": [
+            "goal_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "goal_course_course_id_course_id_fk": {
+          "name": "goal_course_course_id_course_id_fk",
+          "tableFrom": "goal_course",
+          "tableTo": "course",
+          "schemaTo": "study",
+          "columnsFrom": [
+            "course_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "goal_course_goal_id_course_id_pk": {
+          "name": "goal_course_goal_id_course_id_pk",
+          "columns": [
+            "goal_id",
+            "course_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "goal_course_weight_check": {
+          "name": "goal_course_weight_check",
+          "value": "\"weight\" >= 0 AND \"weight\" <= 10"
+        }
+      },
+      "isRLSEnabled": false
+    },
     "study.goal_node": {
       "name": "goal_node",
       "schema": "study",
@@ -2165,13 +2610,6 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
-        },
-        "target_exists": {
-          "name": "target_exists",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": false
         },
         "created_at": {
           "name": "created_at",
@@ -2415,6 +2853,13 @@
           "notNull": false,
           "default": "'skeleton'"
         },
+        "kind": {
+          "name": "kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'concept'"
+        },
         "references_v2_migrated": {
           "name": "references_v2_migrated",
           "type": "boolean",
@@ -2551,6 +2996,10 @@
         "knowledge_node_study_priority_check": {
           "name": "knowledge_node_study_priority_check",
           "value": "\"study_priority\" IS NULL OR \"study_priority\" IN ('critical', 'standard', 'stretch')"
+        },
+        "knowledge_node_kind_check": {
+          "name": "knowledge_node_kind_check",
+          "value": "\"kind\" IN ('concept', 'procedure', 'case_study', 'transition', 'reference_anchor')"
         }
       },
       "isRLSEnabled": false
@@ -2575,7 +3024,7 @@
           "name": "node_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "visited_phases": {
           "name": "visited_phases",
@@ -2668,7 +3117,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -3032,7 +3481,7 @@
         },
         "reference_subjects_values_check": {
           "name": "reference_subjects_values_check",
-          "value": "\"subjects\" <@ ARRAY['regulations', 'weather', 'navigation', 'communications', 'airspace', 'aerodynamics', 'performance', 'weight-balance', 'aircraft-systems', 'flight-instruments', 'procedures', 'human-factors', 'medical', 'certification', 'maintenance', 'airports', 'emergencies', 'training-ops']::text[]"
+          "value": "\"subjects\" <@ ARRAY['regulations', 'definitions', 'weather', 'navigation', 'communications', 'airspace', 'aerodynamics', 'performance', 'weight-balance', 'aircraft-systems', 'flight-instruments', 'procedures', 'instrument-procedures', 'operations', 'commercial-operations', 'rotorcraft', 'equipment', 'human-factors', 'medical', 'airworthiness', 'certification', 'maintenance', 'airports', 'emergencies', 'accident-reporting', 'security', 'training-ops']::text[]"
         },
         "reference_primary_cert_check": {
           "name": "reference_primary_cert_check",
@@ -3213,18 +3662,6 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
-        },
-        "faa_page_start": {
-          "name": "faa_page_start",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "faa_page_end": {
-          "name": "faa_page_end",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
         },
         "source_locator": {
           "name": "source_locator",
@@ -3440,10 +3877,6 @@
         "reference_section_airboss_ref_shape_check": {
           "name": "reference_section_airboss_ref_shape_check",
           "value": "\"airboss_ref\" ~ '^airboss-ref:'"
-        },
-        "reference_section_faa_pages_check": {
-          "name": "reference_section_faa_pages_check",
-          "value": "(\"faa_page_start\" IS NULL AND \"faa_page_end\" IS NULL) OR \"faa_page_start\" IS NOT NULL"
         }
       },
       "isRLSEnabled": false
@@ -4244,6 +4677,13 @@
         },
         "created_at": {
           "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": true,
@@ -5778,10 +6218,6 @@
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {
-        "syllabus_node_level_check": {
-          "name": "syllabus_node_level_check",
-          "value": "\"level\" IN ('area', 'task', 'element', 'chapter', 'section', 'subsection')"
-        },
         "syllabus_node_triad_check": {
           "name": "syllabus_node_triad_check",
           "value": "\"triad\" IS NULL OR \"triad\" IN ('knowledge', 'risk_management', 'skill')"
@@ -5789,10 +6225,6 @@
         "syllabus_node_required_bloom_check": {
           "name": "syllabus_node_required_bloom_check",
           "value": "\"required_bloom\" IS NULL OR \"required_bloom\" IN ('remember', 'understand', 'apply', 'analyze', 'evaluate', 'create')"
-        },
-        "syllabus_node_parent_level_check": {
-          "name": "syllabus_node_parent_level_check",
-          "value": "(\"level\" IN ('area', 'chapter') AND \"parent_id\" IS NULL) OR (\"level\" NOT IN ('area', 'chapter') AND \"parent_id\" IS NOT NULL)"
         },
         "syllabus_node_triad_level_check": {
           "name": "syllabus_node_triad_level_check",
@@ -6102,6 +6534,82 @@
       },
       "isRLSEnabled": false
     },
+    "study.user_pref": {
+      "name": "user_pref",
+      "schema": "study",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "key": {
+          "name": "key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "value": {
+          "name": "value",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "user_pref_key_idx": {
+          "name": "user_pref_key_idx",
+          "columns": [
+            {
+              "expression": "key",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "user_pref_user_id_bauth_user_id_fk": {
+          "name": "user_pref_user_id_bauth_user_id_fk",
+          "tableFrom": "user_pref",
+          "tableTo": "bauth_user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "user_pref_user_id_key_pk": {
+          "name": "user_pref_user_id_key_pk",
+          "columns": [
+            "user_id",
+            "key"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "study.content_citations": {
       "name": "content_citations",
       "schema": "study",
@@ -6304,6 +6812,456 @@
           "value": "\"citation_context\" IS NULL OR char_length(\"citation_context\") <= 500"
         }
       },
+      "isRLSEnabled": false
+    },
+    "hangar.board": {
+      "name": "board",
+      "schema": "hangar",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "hangar_board_name_unique_idx": {
+          "name": "hangar_board_name_unique_idx",
+          "columns": [
+            {
+              "expression": "name",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "hangar.board_column": {
+      "name": "board_column",
+      "schema": "hangar",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "board_id": {
+          "name": "board_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sort_order": {
+          "name": "sort_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "hangar_board_column_board_idx": {
+          "name": "hangar_board_column_board_idx",
+          "columns": [
+            {
+              "expression": "board_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "sort_order",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "hangar_board_column_name_unique_idx": {
+          "name": "hangar_board_column_name_unique_idx",
+          "columns": [
+            {
+              "expression": "board_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "name",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "board_column_board_id_board_id_fk": {
+          "name": "board_column_board_id_board_id_fk",
+          "tableFrom": "board_column",
+          "tableTo": "board",
+          "schemaTo": "hangar",
+          "columnsFrom": [
+            "board_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "hangar.board_task": {
+      "name": "board_task",
+      "schema": "hangar",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "board_id": {
+          "name": "board_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "column_id": {
+          "name": "column_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "product_area": {
+          "name": "product_area",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "assignee_id": {
+          "name": "assignee_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sort_order": {
+          "name": "sort_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "hangar_board_task_board_idx": {
+          "name": "hangar_board_task_board_idx",
+          "columns": [
+            {
+              "expression": "board_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "sort_order",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "hangar_board_task_column_idx": {
+          "name": "hangar_board_task_column_idx",
+          "columns": [
+            {
+              "expression": "column_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "where": "\"hangar\".\"board_task\".\"column_id\" IS NOT NULL",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "hangar_board_task_assignee_idx": {
+          "name": "hangar_board_task_assignee_idx",
+          "columns": [
+            {
+              "expression": "assignee_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "where": "\"hangar\".\"board_task\".\"assignee_id\" IS NOT NULL",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "board_task_board_id_board_id_fk": {
+          "name": "board_task_board_id_board_id_fk",
+          "tableFrom": "board_task",
+          "tableTo": "board",
+          "schemaTo": "hangar",
+          "columnsFrom": [
+            "board_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "board_task_column_id_board_column_id_fk": {
+          "name": "board_task_column_id_board_column_id_fk",
+          "tableFrom": "board_task",
+          "tableTo": "board_column",
+          "schemaTo": "hangar",
+          "columnsFrom": [
+            "column_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "cascade"
+        },
+        "board_task_assignee_id_bauth_user_id_fk": {
+          "name": "board_task_assignee_id_bauth_user_id_fk",
+          "tableFrom": "board_task",
+          "tableTo": "bauth_user",
+          "columnsFrom": [
+            "assignee_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "cascade"
+        },
+        "board_task_created_by_bauth_user_id_fk": {
+          "name": "board_task_created_by_bauth_user_id_fk",
+          "tableFrom": "board_task",
+          "tableTo": "bauth_user",
+          "columnsFrom": [
+            "created_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "hangar_board_task_type_check": {
+          "name": "hangar_board_task_type_check",
+          "value": "\"type\" IN ('bug', 'feature', 'chore', 'investigation', 'follow-up')"
+        },
+        "hangar_board_task_product_area_check": {
+          "name": "hangar_board_task_product_area_check",
+          "value": "\"product_area\" IN ('hangar', 'study', 'sim', 'flightbag', 'avionics', 'platform', 'docs')"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "hangar.docs_search_index": {
+      "name": "docs_search_index",
+      "schema": "hangar",
+      "columns": {
+        "path": {
+          "name": "path",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "body": {
+          "name": "body",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "frontmatter": {
+          "name": "frontmatter",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::jsonb"
+        },
+        "tsv": {
+          "name": "tsv",
+          "type": "tsvector",
+          "primaryKey": false,
+          "notNull": false,
+          "generated": {
+            "as": "setweight(to_tsvector('english', coalesce(title, '')), 'A') || setweight(to_tsvector('english', coalesce(body, '')), 'B')",
+            "type": "stored"
+          }
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "hangar_docs_search_tsv_idx": {
+          "name": "hangar_docs_search_tsv_idx",
+          "columns": [
+            {
+              "expression": "tsv",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
       "isRLSEnabled": false
     },
     "hangar.invitation": {
@@ -6690,6 +7648,783 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "hangar.review_bucket": {
+      "name": "review_bucket",
+      "schema": "hangar",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "board_id": {
+          "name": "board_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kind_id": {
+          "name": "kind_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "filter_criteria": {
+          "name": "filter_criteria",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::jsonb"
+        },
+        "sort_order": {
+          "name": "sort_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "hangar_review_bucket_board_idx": {
+          "name": "hangar_review_bucket_board_idx",
+          "columns": [
+            {
+              "expression": "board_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "sort_order",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "hangar_review_bucket_name_unique_idx": {
+          "name": "hangar_review_bucket_name_unique_idx",
+          "columns": [
+            {
+              "expression": "board_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "name",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "hangar_review_bucket_kind_idx": {
+          "name": "hangar_review_bucket_kind_idx",
+          "columns": [
+            {
+              "expression": "kind_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "review_bucket_board_id_board_id_fk": {
+          "name": "review_bucket_board_id_board_id_fk",
+          "tableFrom": "review_bucket",
+          "tableTo": "board",
+          "schemaTo": "hangar",
+          "columnsFrom": [
+            "board_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "review_bucket_kind_id_review_kind_id_fk": {
+          "name": "review_bucket_kind_id_review_kind_id_fk",
+          "tableFrom": "review_bucket",
+          "tableTo": "review_kind",
+          "schemaTo": "hangar",
+          "columnsFrom": [
+            "kind_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "hangar.review_item": {
+      "name": "review_item",
+      "schema": "hangar",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "board_id": {
+          "name": "board_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pinned_column_id": {
+          "name": "pinned_column_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kind_id": {
+          "name": "kind_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ref": {
+          "name": "ref",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "frontmatter_status": {
+          "name": "frontmatter_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "review_status": {
+          "name": "review_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cached_fields": {
+          "name": "cached_fields",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{\"otherFields\":{}}'::jsonb"
+        },
+        "sort_order": {
+          "name": "sort_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "hangar_review_item_kind_idx": {
+          "name": "hangar_review_item_kind_idx",
+          "columns": [
+            {
+              "expression": "kind_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "updated_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "where": "\"hangar\".\"review_item\".\"deleted_at\" IS NULL",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "hangar_review_item_ref_unique_idx": {
+          "name": "hangar_review_item_ref_unique_idx",
+          "columns": [
+            {
+              "expression": "board_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "kind_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "ref",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"hangar\".\"review_item\".\"deleted_at\" IS NULL",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "hangar_review_item_frontmatter_status_idx": {
+          "name": "hangar_review_item_frontmatter_status_idx",
+          "columns": [
+            {
+              "expression": "board_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "frontmatter_status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "where": "\"hangar\".\"review_item\".\"deleted_at\" IS NULL",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "hangar_review_item_review_status_idx": {
+          "name": "hangar_review_item_review_status_idx",
+          "columns": [
+            {
+              "expression": "board_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "review_status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "where": "\"hangar\".\"review_item\".\"deleted_at\" IS NULL",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "hangar_review_item_board_idx": {
+          "name": "hangar_review_item_board_idx",
+          "columns": [
+            {
+              "expression": "board_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "deleted_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "hangar_review_item_pinned_column_idx": {
+          "name": "hangar_review_item_pinned_column_idx",
+          "columns": [
+            {
+              "expression": "pinned_column_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "where": "\"hangar\".\"review_item\".\"pinned_column_id\" IS NOT NULL",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "review_item_board_id_board_id_fk": {
+          "name": "review_item_board_id_board_id_fk",
+          "tableFrom": "review_item",
+          "tableTo": "board",
+          "schemaTo": "hangar",
+          "columnsFrom": [
+            "board_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "review_item_pinned_column_id_board_column_id_fk": {
+          "name": "review_item_pinned_column_id_board_column_id_fk",
+          "tableFrom": "review_item",
+          "tableTo": "board_column",
+          "schemaTo": "hangar",
+          "columnsFrom": [
+            "pinned_column_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "cascade"
+        },
+        "review_item_kind_id_review_kind_id_fk": {
+          "name": "review_item_kind_id_review_kind_id_fk",
+          "tableFrom": "review_item",
+          "tableTo": "review_kind",
+          "schemaTo": "hangar",
+          "columnsFrom": [
+            "kind_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "hangar_review_item_frontmatter_status_check": {
+          "name": "hangar_review_item_frontmatter_status_check",
+          "value": "\"frontmatter_status\" IS NULL OR \"frontmatter_status\" IN ('unread', 'reading', 'done')"
+        },
+        "hangar_review_item_review_status_check": {
+          "name": "hangar_review_item_review_status_check",
+          "value": "\"review_status\" IS NULL OR \"review_status\" IN ('pending', 'done')"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "hangar.review_kind": {
+      "name": "review_kind",
+      "schema": "hangar",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "label": {
+          "name": "label",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "hangar_review_kind_id_check": {
+          "name": "hangar_review_kind_id_check",
+          "value": "\"id\" IN ('wp_spec', 'wp_test_plan', 'reference_toc', 'knowledge_node', 'ad_hoc')"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "hangar.review_session": {
+      "name": "review_session",
+      "schema": "hangar",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "item_id": {
+          "name": "item_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "started_at": {
+          "name": "started_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "finished_at": {
+          "name": "finished_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "outcome": {
+          "name": "outcome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "note": {
+          "name": "note",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "hangar_review_session_item_user_idx": {
+          "name": "hangar_review_session_item_user_idx",
+          "columns": [
+            {
+              "expression": "item_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "started_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "hangar_review_session_item_started_idx": {
+          "name": "hangar_review_session_item_started_idx",
+          "columns": [
+            {
+              "expression": "item_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "\"started_at\" desc",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "hangar_review_session_open_unique_idx": {
+          "name": "hangar_review_session_open_unique_idx",
+          "columns": [
+            {
+              "expression": "item_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"hangar\".\"review_session\".\"finished_at\" IS NULL",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "review_session_item_id_review_item_id_fk": {
+          "name": "review_session_item_id_review_item_id_fk",
+          "tableFrom": "review_session",
+          "tableTo": "review_item",
+          "schemaTo": "hangar",
+          "columnsFrom": [
+            "item_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "review_session_user_id_bauth_user_id_fk": {
+          "name": "review_session_user_id_bauth_user_id_fk",
+          "tableFrom": "review_session",
+          "tableTo": "bauth_user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "hangar_review_session_outcome_check": {
+          "name": "hangar_review_session_outcome_check",
+          "value": "\"outcome\" IS NULL OR \"outcome\" IN ('pass', 'fail', 'abandoned')"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "hangar.review_step": {
+      "name": "review_step",
+      "schema": "hangar",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "session_id": {
+          "name": "session_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "step_index": {
+          "name": "step_index",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "step_ref": {
+          "name": "step_ref",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "outcome": {
+          "name": "outcome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "note": {
+          "name": "note",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "hangar_review_step_session_idx": {
+          "name": "hangar_review_step_session_idx",
+          "columns": [
+            {
+              "expression": "session_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "step_index",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "hangar_review_step_ref_unique_idx": {
+          "name": "hangar_review_step_ref_unique_idx",
+          "columns": [
+            {
+              "expression": "session_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "step_ref",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "review_step_session_id_review_session_id_fk": {
+          "name": "review_step_session_id_review_session_id_fk",
+          "tableFrom": "review_step",
+          "tableTo": "review_session",
+          "schemaTo": "hangar",
+          "columnsFrom": [
+            "session_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "hangar_review_step_outcome_check": {
+          "name": "hangar_review_step_outcome_check",
+          "value": "\"outcome\" IN ('pass', 'fail', 'blocked')"
+        }
+      },
+      "isRLSEnabled": false
+    },
     "hangar.source": {
       "name": "source",
       "schema": "hangar",
@@ -6747,13 +8482,13 @@
           "name": "checksum",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "downloaded_at": {
           "name": "downloaded_at",
-          "type": "text",
+          "type": "timestamp with time zone",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "size_bytes": {
           "name": "size_bytes",
@@ -6884,6 +8619,10 @@
         "hangar_source_type_check": {
           "name": "hangar_source_type_check",
           "value": "\"type\" IN ('cfr', 'aim', 'pcg', 'ac', 'acs', 'phak', 'afh', 'ifh', 'poh', 'ntsb', 'gajsc', 'aopa', 'faa-safety', 'sop', 'authored', 'derived', 'sectional')"
+        },
+        "hangar_source_downloaded_pair_check": {
+          "name": "hangar_source_downloaded_pair_check",
+          "value": "(\"checksum\" IS NULL) = (\"downloaded_at\" IS NULL)"
         }
       },
       "isRLSEnabled": false
@@ -7699,10 +9438,6 @@
         "audit_log_op_check": {
           "name": "audit_log_op_check",
           "value": "\"op\" IN ('create', 'update', 'delete', 'action')"
-        },
-        "audit_log_target_type_check": {
-          "name": "audit_log_target_type_check",
-          "value": "\"target_type\" IN ('hangar.reference', 'hangar.source', 'hangar.sync', 'hangar.job', 'hangar.source.edition-resolved', 'hangar.source.edition-drift', 'hangar.source.thumbnail-generated', 'hangar.user', 'study.session_item_result', 'auth.login', 'auth.login-failed', 'auth.logout', 'hangar.invitation', 'hangar.ping')"
         }
       },
       "isRLSEnabled": false
