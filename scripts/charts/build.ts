@@ -12,22 +12,22 @@
  */
 
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
-import { CHART_RENDERERS } from '@ab/wx-charts/server';
 import {
+	CHART_TYPE_VALUES,
+	type ChartType,
 	WX_CHART_SVG_HARD_LIMIT_BYTES,
 	WX_CHART_SVG_WARN_BYTES,
-	type ChartType,
-	CHART_TYPE_VALUES,
 } from '@ab/constants';
+import { CHART_RENDERERS } from '@ab/wx-charts/server';
 import {
 	computeContentHash,
 	defaultBasemapPath,
 	getLibraryVersion,
+	type LoadedSpec,
 	listChartSlugs,
 	loadSpec,
-	readSourceBytesByKey,
-	type LoadedSpec,
 	type ResolvedSource,
+	readSourceBytesByKey,
 } from './lib';
 
 interface BuildResult {
@@ -154,7 +154,7 @@ async function buildOne(slug: string): Promise<BuildResult> {
 	// Render.
 	const sourcesByKey: Record<string, Uint8Array | string> = {};
 	for (const s of sources) sourcesByKey[s.key] = s.bytes;
-	let render;
+	let render: Awaited<ReturnType<(typeof registration)['render']>>;
 	try {
 		render = await registration.render({
 			spec: parsedSpec as never,

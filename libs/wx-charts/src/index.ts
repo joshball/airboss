@@ -26,83 +26,6 @@
  */
 
 // ----------------------------------------------------------------------
-// Substrate primitives (browser-safe)
-// ----------------------------------------------------------------------
-export {
-	buildConusProjection,
-	CHART_MARGIN,
-	CONUS_CENTRAL_MERIDIAN,
-	CONUS_REFERENCE_LAT,
-	CONUS_STD_PARALLELS,
-	type FitTarget,
-	lambertProjection,
-	type LambertProjectionOptions,
-	SVG_HEIGHT,
-	SVG_WIDTH,
-	TITLE_BAND_HEIGHT,
-} from './projection';
-export {
-	type BasemapData,
-	conusBorderMesh,
-	conusStateMesh,
-	loadConusBasemap,
-	loadConusBasemapFromString,
-	NON_CONUS_FIPS,
-} from './basemap';
-export { renderGraticule, type GraticuleOptions } from './graticule';
-export { buildChrome, type ChromeInput, type ChromeOutput } from './chrome';
-export {
-	composeChart,
-	emptyLayerBands,
-	type LayerBandMap,
-	LayerBandError,
-} from './layers';
-export {
-	type CollisionInput,
-	type CollisionPoint,
-	type CollisionResult,
-	resolveCollisions,
-} from './point/collision';
-export { renderLeaderLines } from './point/leader-lines';
-
-// ----------------------------------------------------------------------
-// Symbology helpers (pure SVG-string emitters)
-// ----------------------------------------------------------------------
-export {
-	renderColdFront,
-	renderFront,
-	renderOccludedFront,
-	renderStationaryFront,
-	renderWarmFront,
-} from './symbology/fronts';
-export type { FrontDef, FrontKind, PipSide } from './symbology/fronts';
-export { renderPolylinePips, type PipDef, type PipShape, type ScreenVec } from './symbology/polyline-pips';
-export { renderScalarContours, type ScalarContourOptions } from './symbology/contours';
-export { renderPressureCenter, type PressureCenter } from './symbology/pressure-centers';
-export { renderAirport, type AirportMarker } from './symbology/airports';
-export { renderLegend, type LegendDef, type LegendEntry } from './symbology/legend';
-export { renderStationModel, type StationModelOptions, type StationOb } from './symbology/station-model';
-
-// ----------------------------------------------------------------------
-// Chart-renderer contract types (browser-safe)
-// ----------------------------------------------------------------------
-export type {
-	ChartProjectionSpec,
-	ChartRenderInput,
-	ChartRenderMeta,
-	ChartRenderResult,
-	ChartRenderer,
-	ChartSpec,
-} from './types';
-
-// ----------------------------------------------------------------------
-// Type-only re-exports of server-only chart renderers + their spec types.
-// Apps and components import the spec types via `import type` without
-// dragging the renderer's runtime imports (sharp, fs) into the bundle.
-// ----------------------------------------------------------------------
-export type { SurfaceAnalysisSpec } from './charts/surface-analysis';
-
-// ----------------------------------------------------------------------
 // Re-exports of constants for ergonomic single-import consumers.
 // ----------------------------------------------------------------------
 export {
@@ -120,3 +43,76 @@ export {
 	WX_CHART_SVG_HARD_LIMIT_BYTES,
 	WX_CHART_SVG_WARN_BYTES,
 } from '@ab/constants';
+export {
+	type BasemapData,
+	conusBorderMesh,
+	conusStateMesh,
+	loadConusBasemap,
+	loadConusBasemapFromString,
+	NON_CONUS_FIPS,
+} from './basemap';
+// ----------------------------------------------------------------------
+// Type-only re-exports of server-only chart renderers + their spec types.
+// Apps and components import the spec types via `import type` without
+// dragging the renderer's runtime imports (sharp, fs) into the bundle.
+// ----------------------------------------------------------------------
+export type { SurfaceAnalysisSpec } from './charts/surface-analysis';
+export { buildChrome, type ChromeInput, type ChromeOutput } from './chrome';
+export { type GraticuleOptions, renderGraticule } from './graticule';
+export {
+	composeChart,
+	emptyLayerBands,
+	LayerBandError,
+	type LayerBandMap,
+} from './layers';
+export {
+	type CollisionInput,
+	type CollisionPoint,
+	type CollisionResult,
+	resolveCollisions,
+} from './point/collision';
+export { renderLeaderLines } from './point/leader-lines';
+// ----------------------------------------------------------------------
+// Substrate primitives (browser-safe)
+// ----------------------------------------------------------------------
+export {
+	buildConusProjection,
+	CHART_MARGIN,
+	CONUS_CENTRAL_MERIDIAN,
+	CONUS_REFERENCE_LAT,
+	CONUS_STD_PARALLELS,
+	type FitTarget,
+	type LambertProjectionOptions,
+	lambertProjection,
+	SVG_HEIGHT,
+	SVG_WIDTH,
+	TITLE_BAND_HEIGHT,
+} from './projection';
+export { type AirportMarker, renderAirport } from './symbology/airports';
+export { renderScalarContours, type ScalarContourOptions } from './symbology/contours';
+export type { FrontDef, FrontKind, PipSide } from './symbology/fronts';
+// ----------------------------------------------------------------------
+// Symbology helpers (pure SVG-string emitters)
+// ----------------------------------------------------------------------
+export {
+	renderColdFront,
+	renderFront,
+	renderOccludedFront,
+	renderStationaryFront,
+	renderWarmFront,
+} from './symbology/fronts';
+export { type LegendDef, type LegendEntry, renderLegend } from './symbology/legend';
+export { type PipDef, type PipShape, renderPolylinePips, type ScreenVec } from './symbology/polyline-pips';
+export { type PressureCenter, renderPressureCenter } from './symbology/pressure-centers';
+export { renderStationModel, type StationModelOptions, type StationOb } from './symbology/station-model';
+// ----------------------------------------------------------------------
+// Chart-renderer contract types (browser-safe)
+// ----------------------------------------------------------------------
+export type {
+	ChartProjectionSpec,
+	ChartRenderer,
+	ChartRenderInput,
+	ChartRenderMeta,
+	ChartRenderResult,
+	ChartSpec,
+} from './types';

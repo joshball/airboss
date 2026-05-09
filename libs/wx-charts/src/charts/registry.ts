@@ -9,8 +9,8 @@
  * additional entries as each chart-type ships.
  */
 
-import type { z } from 'zod';
 import { CHART_TYPES, type ChartType } from '@ab/constants';
+import type { z } from 'zod';
 import type { ChartRenderer, ChartSpec } from '../types';
 import { renderSurfaceAnalysis, surfaceAnalysisSpecSchema } from './surface-analysis';
 

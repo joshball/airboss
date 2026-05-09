@@ -21,8 +21,8 @@
  * the relative `node:fs` import replaced by the lazy pattern.
  */
 
-import { feature, mesh } from 'topojson-client';
 import type { Feature, FeatureCollection, MultiLineString, MultiPolygon, Polygon } from 'geojson';
+import { feature, mesh } from 'topojson-client';
 import type { GeometryCollection, Topology } from 'topojson-specification';
 
 /** FIPS state codes that are NOT in CONUS. */

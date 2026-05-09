@@ -23,19 +23,19 @@
  * module's value exports via @ab/wx-charts/server.)
  */
 
-import { z } from 'zod';
 import { CHART_TYPES, LAYER_BANDS } from '@ab/constants';
-import { type FitTarget, lambertProjection } from '../projection';
+import { geoPath } from 'd3-geo';
+import { z } from 'zod';
 import { loadConusBasemapFromString } from '../basemap';
-import { renderGraticule } from '../graticule';
 import { buildChrome } from '../chrome';
+import { renderGraticule } from '../graticule';
 import { composeChart, type LayerBandMap } from '../layers';
-import { renderFront, type FrontDef, type PipSide } from '../symbology/fronts';
-import { renderPressureCenter } from '../symbology/pressure-centers';
+import { type FitTarget, lambertProjection } from '../projection';
 import { renderScalarContours } from '../symbology/contours';
+import { type FrontDef, type PipSide, renderFront } from '../symbology/fronts';
+import { renderPressureCenter } from '../symbology/pressure-centers';
 import { renderStationModel, type SkyCover } from '../symbology/station-model';
 import type { ChartRenderInput, ChartRenderResult, ChartSpec } from '../types';
-import { geoPath } from 'd3-geo';
 
 // ------------------------------------------------------------------
 // Spec schema

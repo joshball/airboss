@@ -14,11 +14,15 @@
 
 import { createHash } from 'node:crypto';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
-import { resolve } from 'node:path';
-import { parse as parseYaml, stringify } from 'yaml';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { resolveCacheRoot } from '@ab/constants';
+import { parse as parseYaml, stringify } from 'yaml';
 
-const REPO_ROOT = resolve(import.meta.dir, '..', '..');
+// Resolve the repo root relative to this file. `import.meta.url` is
+// portable across Bun + vitest (whereas `import.meta.dir` is Bun-only).
+const HERE = dirname(fileURLToPath(import.meta.url));
+const REPO_ROOT = resolve(HERE, '..', '..');
 
 export function chartsDir(): string {
 	return resolve(REPO_ROOT, 'data', 'charts', 'wx');

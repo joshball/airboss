@@ -7,9 +7,9 @@
  */
 
 import { existsSync } from 'node:fs';
-import { WX_CHART_SLUG_REGEX, type ChartType, CHART_TYPE_VALUES } from '@ab/constants';
+import { CHART_TYPE_VALUES, type ChartType, WX_CHART_SLUG_REGEX } from '@ab/constants';
 import { CHART_RENDERERS } from '@ab/wx-charts/server';
-import { listChartSlugs, loadSpec, resolveSourceUri } from './lib';
+import { type LoadedSpec, listChartSlugs, loadSpec, resolveSourceUri } from './lib';
 
 interface ValidateResult {
 	slug: string;
@@ -45,7 +45,7 @@ function validateOne(slug: string): ValidateResult {
 		errors.push(`slug '${slug}' does not match shape ${WX_CHART_SLUG_REGEX.source}`);
 	}
 
-	let spec;
+	let spec: LoadedSpec;
 	try {
 		spec = loadSpec(slug);
 	} catch (err) {
