@@ -76,7 +76,7 @@ The type extension also future-proofs other overlay scenarios: a "weakness × ce
 
 ## Goal composes course + syllabus + ad-hoc as peers
 
-`goal_course` mirrors `goal_syllabus` in shape (composite PK on goal_id + ref_id, weight, seed_origin). The session engine's `getGoalNodeUnion` aggregates all three sources (syllabus, course, ad-hoc node) into a single deduped node set with summed weights.
+`goal_course` mirrors `goal_syllabus` in shape (composite PK on goal_id + ref_id, weight, seed_origin). The session engine's `getGoalNodeUnion` aggregates all three sources (syllabus, course, ad-hoc node) into a single deduped node set; per-node weight is the **maximum** across reachable paths ("most-prominent context wins"), matching the relevance-cache rebuild semantic.
 
 Considered:
 
@@ -86,7 +86,7 @@ Considered:
 
 Picked: 2.
 
-Reasoning: same as the schema decision. Goal sees both as "things I'm consuming"; the lens layer cares about which is which (overlay computation), the engine doesn't (just wants the union of nodes to schedule). Three sources -> one union with summed weights matches the existing pattern; no new aggregation logic is needed.
+Reasoning: same as the schema decision. Goal sees both as "things I'm consuming"; the lens layer cares about which is which (overlay computation), the engine doesn't (just wants the union of nodes to schedule). Three sources -> one union with **max-of-paths** weight (the existing relevance-cache "most-prominent context wins" rule) matches the existing pattern; no new aggregation logic is needed.
 
 ## Schema
 
@@ -294,7 +294,7 @@ export const courseWithCertOverlayLens: Lens<CourseOverlayLensFilters>;
 
 ### Goal node union extension (`libs/bc/study/src/goals.ts`)
 
-The existing `getGoalNodeUnion(goalId, db)` walks `goal_syllabus -> syllabus_node_link` and `goal_node`. Extend to ALSO walk `goal_course -> course_step (level='step') -> knowledge_node_id`. Dedup by node id; sum weights when a node is reached via multiple sources. The session engine consumes the existing function unchanged.
+The existing `getGoalNodeUnion(goalId, db)` walks `goal_syllabus -> syllabus_node_link` and `goal_node`. Extend to ALSO walk `goal_course -> course_step (level='step') -> knowledge_node_id`. Dedup by node id; per-node weight is the **maximum** across reachable paths -- preserves the existing "most-prominent context wins" semantic that the relevance-cache rebuild and the goal_syllabus + goal_node aggregation already use. The session engine consumes the existing function unchanged.
 
 ## YAML authoring shape
 
@@ -322,14 +322,14 @@ The seed pipeline:
 
 ## Key decisions
 
-| Decision                                                                              | Why                                                                                                                                                              |
-| ------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Two tables (course / syllabus) instead of widening syllabus                           | Syllabus is FAA-shaped; warping it to fit course pedagogy damages every consumer that needs the FAA shape. Two clean tables + overlay lens > one muddy table.    |
-| Two-level course tree (section + step) instead of arbitrary depth                     | All foreseeable courses decompose naturally into modules + lessons. Arbitrary depth invites authoring complexity without a use case.                             |
-| `knowledge_node.kind` lives on the node, not the step                                 | A node's semantic kind is global (a transition is a transition). Step-level kind would let courses disagree about the same node.                                 |
-| Lens types extend additively (optional `sources`, `certGaps` fields)                  | Existing consumers (cert dashboard, ACS lens) see no shape change. New consumers opt in.                                                                         |
-| Course YAML has NO `cert_alignment` field                                             | Per principle 11: alignment is the learner's goal, not the course author's declaration. Overlay is computed from `goal_course` + `goal_syllabus` at render time. |
-| `course_step.knowledge_node_id` FK is RESTRICT, not CASCADE                           | Knowledge nodes are referenced from many places (cards, syllabi). RESTRICT prevents accidental loss; the author must explicitly remove the course step first.    |
-| Section file structure with inline steps (one YAML per section, not per step)         | Sections average 5-10 steps; one file per step explodes the directory. One per section is the navigation sweet spot for authors.                                 |
-| `syllabus.kind='school'/'personal'` rows are diagnosed defensively, not auto-migrated | Research confirmed zero such rows exist. The diagnostic surfaces any planted rows; the human decides per-row. No silent data movement.                           |
-| `getGoalNodeUnion` extension dedups by node id and sums weights                       | Mirrors the existing goal_syllabus + goal_node aggregation. The session engine sees one union; doesn't care which source contributed each node.                  |
+| Decision                                                                              | Why                                                                                                                                                                                                     |
+| ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Two tables (course / syllabus) instead of widening syllabus                           | Syllabus is FAA-shaped; warping it to fit course pedagogy damages every consumer that needs the FAA shape. Two clean tables + overlay lens > one muddy table.                                           |
+| Two-level course tree (section + step) instead of arbitrary depth                     | All foreseeable courses decompose naturally into modules + lessons. Arbitrary depth invites authoring complexity without a use case.                                                                    |
+| `knowledge_node.kind` lives on the node, not the step                                 | A node's semantic kind is global (a transition is a transition). Step-level kind would let courses disagree about the same node.                                                                        |
+| Lens types extend additively (optional `sources`, `certGaps` fields)                  | Existing consumers (cert dashboard, ACS lens) see no shape change. New consumers opt in.                                                                                                                |
+| Course YAML has NO `cert_alignment` field                                             | Per principle 11: alignment is the learner's goal, not the course author's declaration. Overlay is computed from `goal_course` + `goal_syllabus` at render time.                                        |
+| `course_step.knowledge_node_id` FK is RESTRICT, not CASCADE                           | Knowledge nodes are referenced from many places (cards, syllabi). RESTRICT prevents accidental loss; the author must explicitly remove the course step first.                                           |
+| Section file structure with inline steps (one YAML per section, not per step)         | Sections average 5-10 steps; one file per step explodes the directory. One per section is the navigation sweet spot for authors.                                                                        |
+| `syllabus.kind='school'/'personal'` rows are diagnosed defensively, not auto-migrated | Research confirmed zero such rows exist. The diagnostic surfaces any planted rows; the human decides per-row. No silent data movement.                                                                  |
+| `getGoalNodeUnion` extension dedups by node id; weight = MAX across paths             | Mirrors the existing goal_syllabus + goal_node aggregation ("most-prominent context wins" -- relevance-cache rule). The session engine sees one union; doesn't care which source contributed each node. |
