@@ -55,16 +55,16 @@ This work package is **scaffold only**. It stands up the new app, the new lib, t
 
 ### `libs/constants/src/routes.ts` -- new entries
 
-| Constant | Shape |
-|----------|-------|
-| `ROUTES.FLIGHTBAG_HOME`               | `/`                                                       |
-| `ROUTES.FLIGHTBAG_HANDBOOK`           | `/handbook/{slug}/{edition}`                              |
-| `ROUTES.FLIGHTBAG_HANDBOOK_CHAPTER`   | `/handbook/{slug}/{edition}/{chapter}`                    |
-| `ROUTES.FLIGHTBAG_HANDBOOK_SECTION`   | `/handbook/{slug}/{edition}/{chapter}/{section}`          |
-| `ROUTES.FLIGHTBAG_AIM_PARAGRAPH`      | `/aim/{chapter}/{section}/{paragraph}`                    |
-| `ROUTES.FLIGHTBAG_CFR_SECTION`        | `/cfr/{title}/{part}/{section}`                           |
-| `ROUTES.FLIGHTBAG_AC`                 | `/ac/{doc}/{rev}`                                         |
-| `ROUTES.FLIGHTBAG_ACS_TASK`           | `/acs/{doc}/area/{area}/task/{task}`                      |
+| Constant                            | Shape                                            |
+| ----------------------------------- | ------------------------------------------------ |
+| `ROUTES.FLIGHTBAG_HOME`             | `/`                                              |
+| `ROUTES.FLIGHTBAG_HANDBOOK`         | `/handbook/{slug}/{edition}`                     |
+| `ROUTES.FLIGHTBAG_HANDBOOK_CHAPTER` | `/handbook/{slug}/{edition}/{chapter}`           |
+| `ROUTES.FLIGHTBAG_HANDBOOK_SECTION` | `/handbook/{slug}/{edition}/{chapter}/{section}` |
+| `ROUTES.FLIGHTBAG_AIM_PARAGRAPH`    | `/aim/{chapter}/{section}/{paragraph}`           |
+| `ROUTES.FLIGHTBAG_CFR_SECTION`      | `/cfr/{title}/{part}/{section}`                  |
+| `ROUTES.FLIGHTBAG_AC`               | `/ac/{doc}/{rev}`                                |
+| `ROUTES.FLIGHTBAG_ACS_TASK`         | `/acs/{doc}/area/{area}/task/{task}`             |
 
 All parameterised entries are typed functions returning `as const` template literal strings.
 
@@ -76,26 +76,26 @@ export function urlForReference(uri: SourceId): string;
 
 Parses the URI (via the existing `parseIdentifier` + per-corpus locator parsers) and dispatches on `corpus`:
 
-| Corpus      | Output |
-|-------------|--------|
-| `handbooks` | `ROUTES.FLIGHTBAG_HANDBOOK*` (depth depends on locator) |
+| Corpus      | Output                                                        |
+| ----------- | ------------------------------------------------------------- |
+| `handbooks` | `ROUTES.FLIGHTBAG_HANDBOOK*` (depth depends on locator)       |
 | `aim`       | `ROUTES.FLIGHTBAG_AIM_PARAGRAPH(chapter, section, paragraph)` |
-| `regs`      | `ROUTES.FLIGHTBAG_CFR_SECTION(title, part, section)` |
-| `ac`        | `ROUTES.FLIGHTBAG_AC(docNumber, revision)` |
-| `acs`       | `ROUTES.FLIGHTBAG_ACS_TASK(slug, area, task)` |
+| `regs`      | `ROUTES.FLIGHTBAG_CFR_SECTION(title, part, section)`          |
+| `ac`        | `ROUTES.FLIGHTBAG_AC(docNumber, revision)`                    |
+| `acs`       | `ROUTES.FLIGHTBAG_ACS_TASK(slug, area, task)`                 |
 | other       | `ROUTES.FLIGHTBAG_HOME` (corpus not yet covered by flightbag) |
 
 Returns the URL path (no origin); callers prefix with the flightbag origin via `siblingOrigin` when the link crosses app boundaries.
 
 ### `libs/library/` -- new lib
 
-| File | Purpose |
-|------|---------|
-| `package.json`              | `@ab/library` workspace package; deps on `@ab/constants`, `@ab/sources`, `@ab/ui` |
-| `src/index.ts`              | Barrel re-exports |
-| `src/RenderedSection.svelte`| Stub component that renders a `body` markdown string into a `<section>` |
-| `src/CitationChip.svelte`   | Stub component that renders an `airboss-ref:` URI as a link via `urlForReference` |
-| `src/index.test.ts`         | Smoke test that the components import + render |
+| File                         | Purpose                                                                           |
+| ---------------------------- | --------------------------------------------------------------------------------- |
+| `package.json`               | `@ab/library` workspace package; deps on `@ab/constants`, `@ab/sources`, `@ab/ui` |
+| `src/index.ts`               | Barrel re-exports                                                                 |
+| `src/RenderedSection.svelte` | Stub component that renders a `body` markdown string into a `<section>`           |
+| `src/CitationChip.svelte`    | Stub component that renders an `airboss-ref:` URI as a link via `urlForReference` |
+| `src/index.test.ts`          | Smoke test that the components import + render                                    |
 
 The stubs are intentionally minimal -- enough to prove the lib is wired into the workspace and the URL bridge works. Real rendering (figure resolution, footnotes, adjacency groups, token substitution) belongs to a downstream WP.
 
@@ -103,27 +103,22 @@ The stubs are intentionally minimal -- enough to prove the lib is wired into the
 
 Modeled after `apps/avionics/` (the most recent app scaffold). Dev port `9640` allocated in `libs/constants/src/ports.ts`.
 
-| Route | Purpose |
-|-------|---------|
-| `/`                                                                             | Corpus index (placeholder) |
-| `/handbook/[slug]/[edition]/+page.svelte`                                       | Handbook landing |
-| `/handbook/[slug]/[edition]/[chapter]/+page.svelte`                             | Handbook chapter |
-| `/handbook/[slug]/[edition]/[chapter]/[section]/+page.svelte`                   | Handbook section (leaf reader) |
-| `/aim/[chapter]/[section]/[paragraph]/+page.svelte`                             | AIM paragraph |
-| `/cfr/[title]/[part]/[section]/+page.svelte`                                    | CFR section |
-| `/ac/[doc]/[rev]/+page.svelte`                                                  | AC root (whole-doc until promoted) |
-| `/acs/[doc]/area/[area]/task/[task]/+page.svelte`                               | ACS task |
+| Route                                                         | Purpose                            |
+| ------------------------------------------------------------- | ---------------------------------- |
+| `/`                                                           | Corpus index (placeholder)         |
+| `/handbook/[slug]/[edition]/+page.svelte`                     | Handbook landing                   |
+| `/handbook/[slug]/[edition]/[chapter]/+page.svelte`           | Handbook chapter                   |
+| `/handbook/[slug]/[edition]/[chapter]/[section]/+page.svelte` | Handbook section (leaf reader)     |
+| `/aim/[chapter]/[section]/[paragraph]/+page.svelte`           | AIM paragraph                      |
+| `/cfr/[title]/[part]/[section]/+page.svelte`                  | CFR section                        |
+| `/ac/[doc]/[rev]/+page.svelte`                                | AC root (whole-doc until promoted) |
+| `/acs/[doc]/area/[area]/task/[task]/+page.svelte`             | ACS task                           |
 
 Each placeholder page uses the URI corresponding to its params to call into `@ab/sources` resolvers and pass the resolved body markdown into `<RenderedSection>` from `@ab/library`. This proves the pipe works end-to-end.
 
 ## Out of scope (captured here, not implemented)
 
-- Migrating study's `/library/...` routes to flightbag (separate WP)
-- Rewiring study citation chips through `urlForReference()` (separate WP)
-- The hangar references admin dashboard (separate WP, IDEAS.md entry)
-- Auth gates on flightbag (deferred -- public reader by default)
-- Theme polish on the placeholder pages (deferred)
-- Playwright e2e suite for flightbag (smoke build is the gate at scaffold; e2e ships with real content)
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md) for the deferred items, rationale, and revisit triggers.
 
 ## Acceptance criteria
 
