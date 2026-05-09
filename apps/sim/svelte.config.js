@@ -50,6 +50,8 @@ const config = {
 			'@ab/bc-avionics/*': '../../libs/bc/avionics/src/*',
 			'@ab/activities': '../../libs/activities/src/index.ts',
 			'@ab/activities/*': '../../libs/activities/src/*',
+			'@ab/aviation': '../../libs/aviation/src/index.ts',
+			'@ab/aviation/*': '../../libs/aviation/src/*',
 			'@ab/help': '../../libs/help/src/index.ts',
 			'@ab/help/*': '../../libs/help/src/*',
 		},

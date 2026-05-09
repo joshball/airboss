@@ -20,7 +20,7 @@
  * alphabetically by title.
  */
 
-import { search as aviationSearch, listReferences, type Reference, type TagQuery } from '@ab/aviation';
+import { search as aviationSearch, listReferences, type Reference, type SearchHit, type TagQuery } from '@ab/aviation';
 import {
 	AVIATION_TOPIC_VALUES,
 	type AviationTopic,
@@ -86,7 +86,7 @@ function searchAviation(parsed: ParsedQuery, limit: number): readonly SearchResu
 		text: parsed.freeText.length > 0 ? parsed.freeText : undefined,
 		tags: hasAnyAxis(tagQuery) ? tagQuery : undefined,
 	});
-	const refs: readonly Reference[] = hits.map((h) => h.reference);
+	const refs: readonly Reference[] = hits.map((h: SearchHit) => h.reference);
 	const needle = parsed.freeText.trim().toLowerCase();
 
 	const results: SearchResult[] = [];

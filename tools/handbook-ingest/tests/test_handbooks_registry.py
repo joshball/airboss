@@ -7,6 +7,7 @@ import pytest
 from ingest.handbooks import (
     REGISTRY,
     AfhHandbook,
+    AviationInstructorHandbook,
     AvwxHandbook,
     HandbookPlugin,
     PhakHandbook,
@@ -14,15 +15,21 @@ from ingest.handbooks import (
     get_handbook,
 )
 
+# Source of truth for the registered handbook slugs. New handbooks should
+# extend this list (and the corresponding `REGISTRY` entry) together so the
+# membership / discovery / error-message tests stay in sync.
+KNOWN_SLUGS: list[str] = ['afh', 'aviation-instructor', 'avwx', 'phak']
 
-def test_registry_resolves_all_three_known_handbooks() -> None:
+
+def test_registry_resolves_all_known_handbooks() -> None:
     assert isinstance(get_handbook('phak'), PhakHandbook)
     assert isinstance(get_handbook('afh'), AfhHandbook)
     assert isinstance(get_handbook('avwx'), AvwxHandbook)
+    assert isinstance(get_handbook('aviation-instructor'), AviationInstructorHandbook)
 
 
 def test_registry_membership_matches_known_slugs() -> None:
-    assert sorted(REGISTRY.keys()) == ['afh', 'avwx', 'phak']
+    assert sorted(REGISTRY.keys()) == KNOWN_SLUGS
 
 
 def test_unknown_slug_raises_typed_error_with_available_slugs() -> None:
@@ -30,12 +37,14 @@ def test_unknown_slug_raises_typed_error_with_available_slugs() -> None:
         get_handbook('unknown-handbook')
     msg = str(excinfo.value)
     assert "unknown-handbook" in msg
-    # The available list helps the user discover the right slug; the
-    # exact wording is documented in the plugin module.
-    assert 'phak' in msg and 'afh' in msg and 'avwx' in msg
+    # The available list helps the user discover the right slug; every
+    # registered slug must appear so the operator can pick one without
+    # cross-referencing source.
+    for slug in KNOWN_SLUGS:
+        assert slug in msg, f"expected slug {slug!r} in error message: {msg!r}"
 
 
-@pytest.mark.parametrize('slug', ['phak', 'afh', 'avwx'])
+@pytest.mark.parametrize('slug', KNOWN_SLUGS)
 def test_each_plugin_exposes_discovery_surface(slug: str) -> None:
     plugin = get_handbook(slug)
     assert isinstance(plugin, HandbookPlugin)
@@ -45,10 +54,15 @@ def test_each_plugin_exposes_discovery_surface(slug: str) -> None:
     patterns = plugin.discovery_link_patterns()
     assert isinstance(patterns, list)
     assert all(p.search is not None for p in patterns)
-    # Slug-anchored: the patterns should at least contain the slug
-    # token (case-insensitively) so AFH patterns don't catch PHAK URLs.
+    # Slug-anchored: the patterns should at least contain a slug-derived
+    # token (case-insensitively) so e.g. AFH patterns don't catch PHAK URLs.
+    # AvWX patterns use 'Aviation_Weather'; aviation-instructor patterns
+    # use 'AIH' or 'aviation_instructor'.
     pattern_text = ' '.join(p.pattern for p in patterns).lower()
-    assert slug in pattern_text or 'aviation' in pattern_text  # AvWX uses 'Aviation_Weather'
+    slug_tokens = [slug, 'aviation', 'aih']
+    assert any(token in pattern_text for token in slug_tokens), (
+        f"plugin {slug!r} discovery patterns must reference one of {slug_tokens}: {pattern_text!r}"
+    )
 
 
 def test_phak_pattern_matches_mosaic_addendum_url() -> None:

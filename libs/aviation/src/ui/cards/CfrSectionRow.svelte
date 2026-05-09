@@ -17,6 +17,8 @@
  * notes).
  */
 
+import { untrack } from 'svelte';
+
 interface CardLink {
 	readonly url: string;
 	readonly label: string;
@@ -40,7 +42,12 @@ let {
 	expanded?: boolean;
 } = $props();
 
-let open = $state(expanded);
+// Capture the initial value of `expanded`; the `$effect` below keeps `open`
+// in sync when the parent flips Expand all / Collapse all. `untrack` makes
+// the initial-only read explicit and silences the `state_referenced_locally`
+// warning Svelte emits when a `$state(...)` initializer reads a reactive
+// value directly.
+let open = $state(untrack(() => expanded));
 let html = $state<string | null>(null);
 let loading = $state(false);
 let loadError = $state<string | null>(null);

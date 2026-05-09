@@ -333,7 +333,9 @@ function validateRefShape(value: unknown): RefShapeValidation {
 	}
 	for (const key of Object.keys(obj)) {
 		if (!REF_SHAPE_OPTIONAL_KEYS.has(key)) {
-			return { ok: false, reason: `unknown sentinel field '${key}'; update REF_SHAPE_OPTIONAL_KEYS in scripts/db/migrate-references-to-structured.ts`,
+			return {
+				ok: false,
+				reason: `unknown sentinel field '${key}'; update REF_SHAPE_OPTIONAL_KEYS in scripts/db/migrate-references-to-structured.ts`,
 			};
 		}
 		const v = obj[key];

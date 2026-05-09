@@ -156,9 +156,11 @@ export async function seedReferencesFromManifest(options: SeedReferencesOptions 
 	// receives its own per-corpus summary which we reduce into the shared
 	// total at the end so accumulation stays race-free.
 	const perCorpus = await Promise.all(
-		CORPUS_DIRS.map((corpusDir) => seedOneCorpus(corpusDir, context, options).catch((err) => {
-			throw new Error(`seedReferencesFromManifest: corpus '${corpusDir}' failed: ${(err as Error).message}`);
-		})),
+		CORPUS_DIRS.map((corpusDir) =>
+			seedOneCorpus(corpusDir, context, options).catch((err) => {
+				throw new Error(`seedReferencesFromManifest: corpus '${corpusDir}' failed: ${(err as Error).message}`);
+			}),
+		),
 	);
 	for (const partial of perCorpus) {
 		summary.editionsProcessed += partial.editionsProcessed;
@@ -179,7 +181,6 @@ async function seedOneCorpus(
 	const corpusAbs = resolve(REPO_ROOT, corpusDir);
 	if (!existsSync(corpusAbs)) return summary;
 	{
-
 		// Two supported layouts coexist within a corpus:
 		//   (a) Multi-doc:  <corpus>/<slug>/<edition>/manifest.json  (handbooks)
 		//   (b) Single-doc: <corpus>/<edition>/manifest.json         (aim)

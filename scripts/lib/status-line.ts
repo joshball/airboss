@@ -65,7 +65,8 @@ export function startStatusLine(initialLabel: string): StatusLine {
 		if (isTty) {
 			const spinner = SPINNER_FRAMES[frameIndex % SPINNER_FRAMES.length];
 			frameIndex += 1;
-			const line = detail.length > 0 ? `${spinner} ${label} (${elapsed}) -- ${detail}` : `${spinner} ${label} (${elapsed})`;
+			const line =
+				detail.length > 0 ? `${spinner} ${label} (${elapsed}) -- ${detail}` : `${spinner} ${label} (${elapsed})`;
 			process.stdout.write(`${ANSI_CR}${ANSI_CLEAR_LINE}${truncateForTerminal(line)}`);
 		} else {
 			// Non-TTY: emit plain lines but throttle to once every 5s so a

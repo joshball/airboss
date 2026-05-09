@@ -2167,11 +2167,7 @@ export async function upsertReferenceSection(
 	// row only when the cache suggests it exists; otherwise straight to insert.
 	let prev: ReferenceSectionRow | undefined;
 	if (cachedHit !== undefined) {
-		const existing = await db
-			.select()
-			.from(referenceSection)
-			.where(eq(referenceSection.id, cachedHit.row.id))
-			.limit(1);
+		const existing = await db.select().from(referenceSection).where(eq(referenceSection.id, cachedHit.row.id)).limit(1);
 		prev = existing[0];
 	}
 
