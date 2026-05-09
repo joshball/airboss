@@ -19,13 +19,13 @@ Scenarios run: CRS-10 through CRS-18, CRS-20, CRS-21. CRS-30+ depend on Phase 5 
 
 ## Summary
 
-| Result  | Count | Scenarios                                         |
-| ------- | ----- | ------------------------------------------------- |
-| PASS    | 9     | CRS-10, 11, 12, 13, 14, 15, 18, 20, 21            |
-| GAP     | 2     | CRS-16, CRS-17 (rejection works; message differs) |
-| BLOCKER | 0     | -                                                 |
+| Result  | Count | Scenarios                                      |
+| ------- | ----- | ---------------------------------------------- |
+| PASS    | 11    | CRS-10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 21 |
+| GAP     | 0     | -                                              |
+| BLOCKER | 0     | -                                              |
 
-The two GAP rows are not behavior failures: both bad inputs are correctly rejected with no DB writes. The exact rejection string differs from the spec's verbatim wording because the Zod schema layer (`libs/bc/study/src/course-yaml-schemas.ts`) catches the malformed YAML before the seed-handler validator (`scripts/db/seed-courses.ts`) reaches its friendlier message. The verbatim spec strings DO exist in the seed handler (lines 431, 449); they are simply unreachable for these two cases. See "Gap notes" below for proposed follow-up.
+CRS-16 and CRS-17 originally surfaced as GAP rows in the Phase 7 acceptance pass: both bad inputs were correctly rejected with no DB writes, but the rejection string came from Zod (`steps.0.knowledge_node_id: Required` / `Unrecognized key(s) in object: 'knowledge_node_id'`) instead of the spec's verbatim seed-handler messages. Resolved in the follow-up commit by loosening the Zod step + section schemas so the seed handler in `scripts/db/seed-courses.ts` owns the `knowledge_node_id` placement semantic. Both scenarios now emit the spec-verbatim strings -- see CRS-16 and CRS-17 below.
 
 ## Seed pipeline
 
@@ -94,19 +94,19 @@ The two GAP rows are not behavior failures: both bad inputs are correctly reject
 
 ### CRS-16: validator rejects step missing knowledge_node_id
 
-- Result: GAP (rejection works; message differs from spec)
-- Fixture: one step with no `knowledge_node_id` field in the YAML.
-- Output: `seed-courses: course 'missing-node': section 's1.yaml' validation failed: steps.0.knowledge_node_id: Required`
-- Spec expected: `step '...' must carry knowledge_node_id`
-- Behavior is correct: the malformed YAML is rejected with a non-zero exit and no DB writes. The Zod schema layer (`courseStepSchema.knowledge_node_id: z.string().min(1)`) catches the missing field before the seed handler's friendlier check at `scripts/db/seed-courses.ts:449` can fire.
+- Result: PASS (resolved in follow-up commit)
+- Fixture: smoke fixture's `s1.1` step with the `knowledge_node_id` field removed.
+- Output: `seed-courses: step 'seed-smoke.s1.1' must carry knowledge_node_id`
+- Exit code: non-zero. No partial writes (idempotent re-run on the unmodified fixture afterwards reports 0 written, 1/3 unchanged).
+- Matches spec rejection message verbatim. The fix loosened `courseStepSchema.knowledge_node_id` to `.optional()` so the seed handler's friendlier check (`scripts/db/seed-courses.ts`, in `validateCourseTree` and at the upsert call site) fires instead of Zod's generic "Required" message.
 
 ### CRS-17: validator rejects section carrying knowledge_node_id
 
-- Result: GAP (rejection works; message differs from spec)
-- Fixture: one section with a `knowledge_node_id` field.
-- Output: `seed-courses: course 'section-with-node': section 's1.yaml' validation failed: <root>: Unrecognized key(s) in object: 'knowledge_node_id'`
-- Spec expected: `section '...' must not carry knowledge_node_id`
-- Behavior is correct: `courseSectionSchema` is `.strict()`, so any extra key (`knowledge_node_id` included) trips the Zod-strict guard before the seed handler's friendlier check at `scripts/db/seed-courses.ts:431` can fire.
+- Result: PASS (resolved in follow-up commit)
+- Fixture: smoke fixture's `s1` section with a `knowledge_node_id: wx-thunderstorm-hazards` field added.
+- Output: `seed-courses: section 'seed-smoke.s1' must not carry knowledge_node_id`
+- Exit code: non-zero. No partial writes.
+- Matches spec rejection message verbatim. The fix added `knowledge_node_id: z.string().min(1).optional()` to `courseSectionSchema` (preserving `.strict()` so genuinely unknown keys still reject early) so the seed handler's friendlier `validateCourseTree` check at `scripts/db/seed-courses.ts` fires instead of Zod's generic "Unrecognized key" message.
 
 ### CRS-18: kind='personal' rejected as reserved
 
@@ -139,17 +139,6 @@ The two GAP rows are not behavior failures: both bad inputs are correctly reject
 
   4. Exit code: 0.
   5. Cleanup: `DELETE FROM study.syllabus WHERE id='syl_diag_test';`. Re-ran diagnostic; back to `0 row(s) found...`.
-
-## Gap notes
-
-CRS-16 and CRS-17 reject correctly but with the Zod-layer message instead of the spec's verbatim seed-handler message. The verbatim strings exist at `scripts/db/seed-courses.ts:431` (`section '...' must not carry knowledge_node_id`) and `scripts/db/seed-courses.ts:449` (`step '...' must carry knowledge_node_id`); they are unreachable because the schemas in `libs/bc/study/src/course-yaml-schemas.ts` reject the malformed YAML first.
-
-Two ways to bring the surfaces in line, both deferable:
-
-1. Loosen the schemas. Make `courseStepSchema.knowledge_node_id` optional and drop `.strict()` from `courseSectionSchema`. The seed handler then owns both rejections and the friendlier wording wins.
-2. Re-word the seed handler's checks to align with the spec's expected wording, and accept that the Zod layer is the canonical message source for missing/extra-key cases.
-
-Either is a small Phase 6 follow-up. Not shipping a fix in this PR -- per task constraints, the diagnostic is the Phase 7 deliverable; documenting the gap leaves the call to the human.
 
 ## Not run in this pass
 
