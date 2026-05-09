@@ -58,6 +58,12 @@ const config = {
 			'@ab/bc-hangar/*': '../../libs/bc/hangar/src/*',
 			'@ab/bc-ingest-review': '../../libs/bc/ingest-review/src/index.ts',
 			'@ab/bc-ingest-review/*': '../../libs/bc/ingest-review/src/*',
+			// course-reader-and-editor WP, Phase 6: the hangar courses editor
+			// imports the study BC for course CRUD + the YAML schemas. The
+			// editor never writes to study tables directly; the BC's read
+			// helpers + `seedCourses()` pipeline carry the writes.
+			'@ab/bc-study': '../../libs/bc/study/src/index.ts',
+			'@ab/bc-study/*': '../../libs/bc/study/src/*',
 			'@ab/bc-avionics': '../../libs/bc/avionics/src/index.ts',
 			'@ab/bc-avionics/*': '../../libs/bc/avionics/src/*',
 			'@ab/help': '../../libs/help/src/index.ts',
@@ -71,6 +77,11 @@ const config = {
 			// `+page.server.ts` import path stays grep-able and survives a
 			// future loader move into a `libs/tracking/` server entry point.
 			'@ab/wp-loader': '../../scripts/lib/wp-loader.ts',
+			// course-reader-and-editor WP, Phase 6: hangar editor save actions
+			// invoke the seed pipeline directly. Aliased so the import path
+			// stays grep-able + a future move of the seed entry into
+			// `libs/bc/study/src/seed-courses.ts` only touches one place.
+			'@ab/seed-courses': '../../scripts/db/seed-courses.ts',
 		},
 		env: {
 			dir: '../../',
