@@ -818,12 +818,13 @@ export const acManifestSchema = z.object({
 export type AcManifest = z.infer<typeof acManifestSchema>;
 
 /**
- * ACS publication slug regex (manifest-side). Matches the locked-Q7 publication
+ * ACS publication slug regex (manifest-side). Matches the canonical publication
  * slug format used under `acs/<slug>/manifest.json`: lowercase kebab-case,
- * begins with `<rating>-airplane-<edition>` (e.g. `ppl-airplane-6c`,
- * `cfi-airplane-25`). The seed adapter computes the YAML/DB slug by inserting
- * `-acs-` before the trailing edition suffix; that mapping lives in
- * `libs/sources/src/acs/seed-mapping.ts`.
+ * begins with `<rating>-airplane-acs-<edition>` (e.g. `ppl-airplane-acs-6c`,
+ * `cfi-airplane-acs-25`). The same slug shape is used in the YAML rows at
+ * `course/references/acs-pts.yaml` and in the `study.reference.document_slug`
+ * column. The seed adapter looks up the canonical FAA `edition` designator
+ * via the registry at `libs/sources/src/acs/seed-mapping.ts`.
  */
 const ACS_MANIFEST_SLUG_REGEX = /^[a-z0-9][a-z0-9-]*[a-z0-9]$/;
 
@@ -886,15 +887,13 @@ export type AcsManifestArea = z.infer<typeof acsManifestAreaSchema>;
  * publication. Shape mirrors `AcsManifestFile` in
  * `libs/sources/src/acs/derivative-reader.ts`.
  *
- * Slug + edition are NOT on the top-level manifest in the form the DB carries
- * them. The on-disk `slug` is the locked-Q7 publication slug
- * (`<rating>-airplane-<edition>`); the seed adapter computes the DB
- * `document_slug` (`<rating>-airplane-acs-<edition>`) and DB `edition`
- * (`FAA-S-ACS-<UPPER-EDITION>`) via the registry at
- * `libs/sources/src/acs/seed-mapping.ts`. Subjects + primary_cert are NOT
- * carried on the manifest -- those live on the YAML row in
- * `course/references/acs-pts.yaml` and survive seed via `upsertReference`'s
- * null-default-on-conflict path (same pattern as AC).
+ * The on-disk `slug` matches the DB `document_slug` and the YAML slug
+ * (canonical form: `<rating>-airplane-acs-<edition>`). The seed adapter
+ * looks up the DB `edition` designator (`FAA-S-ACS-<UPPER-EDITION>`) via
+ * the registry at `libs/sources/src/acs/seed-mapping.ts`. Subjects +
+ * primary_cert are NOT carried on the manifest -- those live on the YAML
+ * row in `course/references/acs-pts.yaml` and survive seed via
+ * `upsertReference`'s null-default-on-conflict path (same pattern as AC).
  */
 export const acsManifestSchema = z.object({
 	kind: z.literal('acs'),

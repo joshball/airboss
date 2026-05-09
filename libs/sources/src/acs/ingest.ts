@@ -5,7 +5,7 @@
  * Source of truth: ADR 019 §1.2 ("ACS"), §2.4 (atomic batch promotion), §2.6
  * (registry population), cert-syllabus WP locked Q7 (2026-04-27).
  *
- * Slice scope: PPL Airplane (`ppl-airplane-6c` / `faa-s-acs-6` family) only.
+ * Slice scope: PPL Airplane (`ppl-airplane-acs-6c` / `faa-s-acs-6` family) only.
  * Per ADR 021 the downloader populates `~/Documents/airboss-handbook-cache/acs/`
  * with one flat `<doc-id>.pdf` per publication and a single
  * `acs/manifest.json` per-corpus index; this ingest walks only the entries
@@ -22,7 +22,7 @@
  *   2. Run `extractPdf` on the ACS PDF; detect the canonical edition slug (e.g.
  *      `faa-s-acs-6c`) from the cover and the effective date.
  *   3. Map the detected edition slug to a locked publication slug
- *      (`faa-s-acs-6c` -> `ppl-airplane-6c`). Skip with explicit reason when
+ *      (`faa-s-acs-6c` -> `ppl-airplane-acs-6c`). Skip with explicit reason when
  *      no mapping is registered.
  *   4. Parse the body into Areas of Operation -> Tasks -> Elements using the
  *      heading + element-code regex pack defined here. ACS PDFs are highly
@@ -85,11 +85,11 @@ const CORPUS = 'acs';
  * `SLUG_NAMES` (this file), and `ACS_PUBLICATION_LIVE_URLS` (url.ts).
  */
 const ACS_DETECTED_EDITION_TO_SLUG: Readonly<Record<string, string>> = {
-	'faa-s-acs-6c': 'ppl-airplane-6c',
-	'faa-s-acs-7b': 'cpl-airplane-7b',
-	'faa-s-acs-8c': 'ir-airplane-8c',
-	'faa-s-acs-25': 'cfi-airplane-25',
-	'faa-s-acs-11a': 'atp-airplane-11a',
+	'faa-s-acs-6c': 'ppl-airplane-acs-6c',
+	'faa-s-acs-7b': 'cpl-airplane-acs-7b',
+	'faa-s-acs-8c': 'ir-airplane-acs-8c',
+	'faa-s-acs-25': 'cfi-airplane-acs-25',
+	'faa-s-acs-11a': 'atp-airplane-acs-11a',
 };
 
 /**
@@ -100,11 +100,11 @@ const ACS_DETECTED_EDITION_TO_SLUG: Readonly<Record<string, string>> = {
  * Table-of-Contents reference list with an actual element bullet.
  */
 const ACS_SLUG_CODE_PREFIX: Readonly<Record<string, string>> = {
-	'ppl-airplane-6c': 'PA',
-	'ir-airplane-8c': 'IR',
-	'cpl-airplane-7b': 'CA',
-	'cfi-airplane-25': 'FA',
-	'atp-airplane-11a': 'AA',
+	'ppl-airplane-acs-6c': 'PA',
+	'ir-airplane-acs-8c': 'IR',
+	'cpl-airplane-acs-7b': 'CA',
+	'cfi-airplane-acs-25': 'FA',
+	'atp-airplane-acs-11a': 'AA',
 };
 
 export interface IngestArgs {
@@ -569,23 +569,23 @@ interface SlugNames {
 }
 
 const SLUG_NAMES: Readonly<Record<string, SlugNames>> = {
-	'ppl-airplane-6c': {
+	'ppl-airplane-acs-6c': {
 		canonicalShortPrefix: 'PPL ACS',
 		canonicalFormalPrefix: 'Private Pilot -- Airplane ACS',
 	},
-	'ir-airplane-8c': {
+	'ir-airplane-acs-8c': {
 		canonicalShortPrefix: 'IR ACS',
 		canonicalFormalPrefix: 'Instrument Rating -- Airplane ACS',
 	},
-	'cpl-airplane-7b': {
+	'cpl-airplane-acs-7b': {
 		canonicalShortPrefix: 'CPL ACS',
 		canonicalFormalPrefix: 'Commercial Pilot -- Airplane ACS',
 	},
-	'cfi-airplane-25': {
+	'cfi-airplane-acs-25': {
 		canonicalShortPrefix: 'CFI ACS',
 		canonicalFormalPrefix: 'CFI -- Airplane ACS',
 	},
-	'atp-airplane-11a': {
+	'atp-airplane-acs-11a': {
 		canonicalShortPrefix: 'ATP ACS',
 		canonicalFormalPrefix: 'ATP -- Airplane ACS',
 	},
@@ -940,8 +940,8 @@ const USAGE = `usage:
 
   --slug=<slug> may be repeated (or comma-separated) to limit the run to a
   subset of registered publication slugs. Defaults to every slug wired in
-  ACS_DETECTED_EDITION_TO_SLUG (currently: ppl-airplane-6c, cpl-airplane-7b,
-  ir-airplane-8c, cfi-airplane-25, atp-airplane-11a).
+  ACS_DETECTED_EDITION_TO_SLUG (currently: ppl-airplane-acs-6c, cpl-airplane-acs-7b,
+  ir-airplane-acs-8c, cfi-airplane-acs-25, atp-airplane-acs-11a).
 `;
 
 export interface CliArgs {

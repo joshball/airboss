@@ -1,0 +1,6 @@
+# Manual ingest overrides for IFH (FAA-H-8083-15B).
+#
+# Authored via the hangar /ingest-review queue and exported with
+# `bun scripts/ingest-review/export-overrides.ts --corpus handbook --source ifh`.
+# Read by tools/handbook-ingest/ingest/normalize.py during re-extraction.
+overrides: []

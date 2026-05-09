@@ -1,5 +1,5 @@
 {
-  "id": "9205388e-32f6-4d1f-bbe7-62b69ea31e7a",
+  "id": "61f8a7ca-f9cc-4c04-b451-1619f1b66b7d",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -8805,6 +8805,298 @@
         "hangar_sync_log_outcome_check": {
           "name": "hangar_sync_log_outcome_check",
           "value": "\"outcome\" IN ('success', 'noop', 'conflict', 'failed')"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "hangar.ingest_issue": {
+      "name": "ingest_issue",
+      "schema": "hangar",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "corpus": {
+          "name": "corpus",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source_id": {
+          "name": "source_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "edition": {
+          "name": "edition",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "page_num": {
+          "name": "page_num",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kind": {
+          "name": "kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "external_id": {
+          "name": "external_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "payload": {
+          "name": "payload",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'unresolved'"
+        },
+        "first_seen_at": {
+          "name": "first_seen_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "last_seen_at": {
+          "name": "last_seen_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "hangar_ingest_issue_kind_external_id_uq": {
+          "name": "hangar_ingest_issue_kind_external_id_uq",
+          "columns": [
+            {
+              "expression": "kind",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "external_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "hangar_ingest_issue_corpus_source_ix": {
+          "name": "hangar_ingest_issue_corpus_source_ix",
+          "columns": [
+            {
+              "expression": "corpus",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "source_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "hangar_ingest_issue_status_ix": {
+          "name": "hangar_ingest_issue_status_ix",
+          "columns": [
+            {
+              "expression": "status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "hangar_ingest_issue_corpus_chk": {
+          "name": "hangar_ingest_issue_corpus_chk",
+          "value": "\"corpus\" IN ('handbook', 'regs', 'knowledge')"
+        },
+        "hangar_ingest_issue_kind_chk": {
+          "name": "hangar_ingest_issue_kind_chk",
+          "value": "\"kind\" IN ('handbook.caption-orphan', 'handbook.image-orphan')"
+        },
+        "hangar_ingest_issue_status_chk": {
+          "name": "hangar_ingest_issue_status_chk",
+          "value": "\"status\" IN ('unresolved', 'resolved', 'stale', 'dismissed')"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "hangar.ingest_override": {
+      "name": "ingest_override",
+      "schema": "hangar",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "issue_id": {
+          "name": "issue_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "action": {
+          "name": "action",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "payload": {
+          "name": "payload",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_by_user_id": {
+          "name": "created_by_user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "hangar_ingest_override_issue_id_uq": {
+          "name": "hangar_ingest_override_issue_id_uq",
+          "columns": [
+            {
+              "expression": "issue_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "hangar_ingest_override_created_by_ix": {
+          "name": "hangar_ingest_override_created_by_ix",
+          "columns": [
+            {
+              "expression": "created_by_user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "ingest_override_issue_id_ingest_issue_id_fk": {
+          "name": "ingest_override_issue_id_ingest_issue_id_fk",
+          "tableFrom": "ingest_override",
+          "tableTo": "ingest_issue",
+          "schemaTo": "hangar",
+          "columnsFrom": [
+            "issue_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "ingest_override_created_by_user_id_bauth_user_id_fk": {
+          "name": "ingest_override_created_by_user_id_bauth_user_id_fk",
+          "tableFrom": "ingest_override",
+          "tableTo": "bauth_user",
+          "columnsFrom": [
+            "created_by_user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "hangar_ingest_override_action_chk": {
+          "name": "hangar_ingest_override_action_chk",
+          "value": "\"action\" IN ('pair', 'mark-no-figure', 'mark-false-caption', 'mark-extraneous', 'mark-decorative')"
         }
       },
       "isRLSEnabled": false

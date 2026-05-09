@@ -2,7 +2,7 @@
 
 # Bugs
 
-5 open bugs of 5 total.
+4 open bugs of 5 total.
 Closed bugs (fixed / wontfix / duplicate) stay on disk for history but
 are excluded from this index.
 
@@ -10,12 +10,11 @@ Author or mutate via `bun run bug` (see `scripts/bug.ts` for the CLI).
 
 ## Per-product
 
-### Study (open: 3)
+### Study (open: 2)
 
 #### Major
 
 - [bug-ac-url-helper-drift](bug-ac-url-helper-drift.md) -- AC URL helper produces stray dot in path (PR #636)
-- [bug-acs-slug-shape-mismatch](bug-acs-slug-shape-mismatch.md) -- ACS slug-shape disagreement causes citation chips to 404
 
 #### Nit
 

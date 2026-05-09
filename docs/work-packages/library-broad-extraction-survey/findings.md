@@ -13,17 +13,17 @@ A pass to drive every configured corpus through its register/extract pipeline an
 
 ## Per-corpus status (2026-04-30)
 
-| Corpus | Configured | Cached | Pipeline runs? | Entries registered | Notes |
-| ------ | ---------- | ------ | -------------- | ------------------ | ----- |
-| **PHAK** FAA-H-8083-25C | ✅ | ✅ | ✅ | **850** | LLM section trees + 357 disagreements committed under contract v4. |
-| **AFH** FAA-H-8083-3C | ✅ | ✅ | ✅ | **531** | TOC strategy. Re-extract + single errata re-apply produces fewer paragraphs than current main (main has duplicate-applied MOSAIC errata; stashed cleanup at `agent-library-extract`). |
-| **AVWX** FAA-H-8083-28B | ✅ | ✅ | ✅ | **480** | TOC strategy. Re-extract is byte-identical to main (only manifest timestamp drift). |
-| **AIM** | ✅ | ✅ | ✅ | **744** | HTML chapter extraction; chapters 1-11 + 5 appendices. |
-| **CFR Title 14** | ✅ | ✅ | ✅ | **7,218** | Fresh ingest at edition 2026-04-22. 13,545 .md files written under `regulations/cfr-14/` (gitignored per ADR 018 scale exception). |
-| **CFR Title 49** | ✅ | ✅ | ❌ FAIL | 0 | Walker expects `<DIV1 TYPE="TITLE">` root; cache has `<DIV5 TYPE="PART">` root (parts 830 + 1552 only, downloaded as the filtered subset). See `xml-walker.ts:321`. |
-| **AC** | ✅ | 12 cached | Partial | **9** | 3 skipped: `ac-150-5210-7d` (slash-style doc number not yet supported by locator), `ac-60-22` and `ac-91-92` (null edition rejected by ADR 019 §1.2 validator). |
-| **ACS** | ✅ | 5 cached | Partial | **1** | 4 skipped: `acs-7`, `acs-8`, `acs-11`, `acs-25` (detected editions not wired in `ACS_DETECTED_EDITION_TO_SLUG`). |
-| **Handbooks-extras** | ✅ | 6 cached (risk-mgmt, instructor, IFH, IPH, AMT-G, AMT-P) | ❌ NO PIPELINE | 0 | The `register handbooks` dispatcher only knows `phak`/`afh`/`avwx`. Extras are downloaded but not registered. |
+| Corpus                  | Configured | Cached                                                   | Pipeline runs? | Entries registered | Notes                                                                                                                                                                                 |
+| ----------------------- | ---------- | -------------------------------------------------------- | -------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **PHAK** FAA-H-8083-25C | ✅          | ✅                                                        | ✅              | **850**            | LLM section trees + 357 disagreements committed under contract v4.                                                                                                                    |
+| **AFH** FAA-H-8083-3C   | ✅          | ✅                                                        | ✅              | **531**            | TOC strategy. Re-extract + single errata re-apply produces fewer paragraphs than current main (main has duplicate-applied MOSAIC errata; stashed cleanup at `agent-library-extract`). |
+| **AVWX** FAA-H-8083-28B | ✅          | ✅                                                        | ✅              | **480**            | TOC strategy. Re-extract is byte-identical to main (only manifest timestamp drift).                                                                                                   |
+| **AIM**                 | ✅          | ✅                                                        | ✅              | **744**            | HTML chapter extraction; chapters 1-11 + 5 appendices.                                                                                                                                |
+| **CFR Title 14**        | ✅          | ✅                                                        | ✅              | **7,218**          | Fresh ingest at edition 2026-04-22. 13,545 .md files written under `regulations/cfr-14/` (gitignored per ADR 018 scale exception).                                                    |
+| **CFR Title 49**        | ✅          | ✅                                                        | ❌ FAIL         | 0                  | Walker expects `<DIV1 TYPE="TITLE">` root; cache has `<DIV5 TYPE="PART">` root (parts 830 + 1552 only, downloaded as the filtered subset). See `xml-walker.ts:321`.                   |
+| **AC**                  | ✅          | 12 cached                                                | Partial        | **9**              | 3 skipped: `ac-150-5210-7d` (slash-style doc number not yet supported by locator), `ac-60-22` and `ac-91-92` (null edition rejected by ADR 019 §1.2 validator).                       |
+| **ACS**                 | ✅          | 5 cached                                                 | Partial        | **1**              | 4 skipped: `acs-7`, `acs-8`, `acs-11`, `acs-25` (detected editions not wired in `ACS_DETECTED_EDITION_TO_SLUG`).                                                                      |
+| **Handbooks-extras**    | ✅          | 6 cached (risk-mgmt, instructor, IFH, IPH, AMT-G, AMT-P) | ❌ NO PIPELINE  | 0                  | The `register handbooks` dispatcher only knows `phak`/`afh`/`avwx`. Extras are downloaded but not registered.                                                                         |
 
 ## Total queryable
 
@@ -41,7 +41,7 @@ These are not part of the broad pass; they need real fixes:
 
 ### Gap 2 -- ACS edition slug mapping
 
-`libs/sources/src/acs/ingest.ts` uses `ACS_DETECTED_EDITION_TO_SLUG` to translate detected editions to publication slugs. Five ACSes are cached; only one (`faa-s-acs-6c` -> `ppl-airplane-6c`) is wired. Add four more entries: `faa-s-acs-7b`, `faa-s-acs-8c`, `faa-s-acs-11a`, `faa-s-acs-25` -> respective publication slugs.
+`libs/sources/src/acs/ingest.ts` uses `ACS_DETECTED_EDITION_TO_SLUG` to translate detected editions to publication slugs. All five ACSes are now wired (`faa-s-acs-6c` -> `ppl-airplane-acs-6c`, `faa-s-acs-7b` -> `cpl-airplane-acs-7b`, `faa-s-acs-8c` -> `ir-airplane-acs-8c`, `faa-s-acs-11a` -> `atp-airplane-acs-11a`, `faa-s-acs-25` -> `cfi-airplane-acs-25`). The slug carries the `-acs-` infix so manifests, YAML rows, and DB `document_slug` round-trip without translation.
 
 ### Gap 3 -- AC slash-style doc numbers
 

@@ -1,36 +1,36 @@
 {
   "schema_version": 1,
-  "fetched_at": "2026-04-30T23:51:05.635Z",
+  "fetched_at": "2026-04-27T21:20:51.159Z",
   "entries": [
     {
-      "slug": "atp-airplane-11a",
+      "slug": "atp-airplane-acs-11a",
       "title": "Airline Transport Pilot and Type Rating for Airplane Category ACS",
       "publication_date": "2023-11-01",
-      "manifest_path": "acs/atp-airplane-11a/manifest.json"
+      "manifest_path": "acs/atp-airplane-acs-11a/manifest.json"
     },
     {
-      "slug": "cfi-airplane-25",
+      "slug": "cfi-airplane-acs-25",
       "title": "Flight Instructor for Airplane Category ACS",
       "publication_date": "2023-11-01",
-      "manifest_path": "acs/cfi-airplane-25/manifest.json"
+      "manifest_path": "acs/cfi-airplane-acs-25/manifest.json"
     },
     {
-      "slug": "cpl-airplane-7b",
+      "slug": "cpl-airplane-acs-7b",
       "title": "Commercial Pilot for Airplane Category ACS",
       "publication_date": "2023-11-01",
-      "manifest_path": "acs/cpl-airplane-7b/manifest.json"
+      "manifest_path": "acs/cpl-airplane-acs-7b/manifest.json"
     },
     {
-      "slug": "ir-airplane-8c",
+      "slug": "ir-airplane-acs-8c",
       "title": "Instrument Rating – Airplane ACS",
       "publication_date": "2023-11-01",
-      "manifest_path": "acs/ir-airplane-8c/manifest.json"
+      "manifest_path": "acs/ir-airplane-acs-8c/manifest.json"
     },
     {
-      "slug": "ppl-airplane-6c",
+      "slug": "ppl-airplane-acs-6c",
       "title": "Private Pilot for Airplane Category ACS",
       "publication_date": "2023-11-01",
-      "manifest_path": "acs/ppl-airplane-6c/manifest.json"
+      "manifest_path": "acs/ppl-airplane-acs-6c/manifest.json"
     }
   ]
 }

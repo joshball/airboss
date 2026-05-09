@@ -45,6 +45,6 @@ describe('ROUTES.FLIGHTBAG_*', () => {
 	});
 
 	it('acs task encodes doc + area + task', () => {
-		expect(ROUTES.FLIGHTBAG_ACS_TASK('ppl-airplane-6c', '1', 'A')).toBe('/acs/ppl-airplane-6c/area/1/task/A');
+		expect(ROUTES.FLIGHTBAG_ACS_TASK('ppl-airplane-acs-6c', '1', 'A')).toBe('/acs/ppl-airplane-acs-6c/area/1/task/A');
 	});
 });

@@ -8,7 +8,7 @@
  *   acs/<slug>/manifest.json                                          per-publication manifest
  *   acs/<slug>/area-<NN>/task-<letter>.md                             per-task body markdown
  *
- * Where `<slug>` is the locked publication slug (e.g. `ppl-airplane-6c`)
+ * Where `<slug>` is the canonical publication slug (e.g. `ppl-airplane-acs-6c`)
  * and `<NN>` is the 2-digit zero-padded area ordinal. Cert + edition
  * collapse into the slug per the locked Q7 resolution.
  *
@@ -47,7 +47,7 @@ export interface AcsManifestFile {
 	readonly kind: 'acs';
 	readonly schema_version: 1;
 	readonly corpus: 'acs';
-	/** Publication slug (matches `ACS_PUBLICATION_SLUGS` in `locator.ts`). E.g. `'ppl-airplane-6c'`. */
+	/** Publication slug (matches `ACS_PUBLICATION_SLUGS` in `locator.ts`). E.g. `'ppl-airplane-acs-6c'`. */
 	readonly slug: string;
 	/** Title from the ACS cover page. */
 	readonly title: string;

@@ -106,7 +106,7 @@ export function describeSourcePdf(args: {
 
 /**
  * ACS publication slug -> cache filename mapping. The slug authored in the
- * registry (e.g. `ppl-airplane-6c`) does not always match the cache filename
+ * registry (e.g. `ppl-airplane-acs-6c`) does not always match the cache filename
  * the FAA distributes (e.g. `faa-s-acs-6.pdf`). Until we have a registry-
  * driven mapping, we default to `<slug>.pdf` and let the existence check
  * fail loudly on a fresh dev box rather than guessing.

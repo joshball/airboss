@@ -113,15 +113,16 @@ The route layout, queue page, detail page, and orphan-card component. Layout ske
 | `apps/hangar/src/routes/(app)/ingest-review/+layout.server.ts`         | new    | 60         |
 | `apps/hangar/src/routes/(app)/ingest-review/+layout.svelte`            | new    | 80         |
 | `apps/hangar/src/routes/(app)/ingest-review/+page.server.ts`           | new    | 140        |
-| `apps/hangar/src/routes/(app)/ingest-review/+page.svelte`              | new    | 160        |
+| `apps/hangar/src/routes/(app)/ingest-review/+page.svelte`              | new    | 200        |
 | `apps/hangar/src/routes/(app)/ingest-review/[issueId]/+page.server.ts` | new    | 180        |
-| `apps/hangar/src/routes/(app)/ingest-review/[issueId]/+page.svelte`    | new    | 220        |
-| `apps/hangar/src/lib/ingest-review/OrphanCard.svelte`                  | new    | 180        |
+| `apps/hangar/src/routes/(app)/ingest-review/[issueId]/+page.svelte`    | new    | 280        |
 | `apps/hangar/src/lib/ingest-review/CandidateStrip.svelte`              | new    | 140        |
-| `apps/hangar/src/lib/ingest-review/ActionBar.svelte`                   | new    | 80         |
+| `apps/hangar/src/lib/ingest-review/StatusBadge.svelte`                 | new    | 50         |
 | `apps/hangar/src/lib/ingest-review/pdf-link.ts` (file:// URL builder)  | new    | 50         |
 | `tests/e2e/hangar/ingest-review.spec.ts`                               | new    | 220        |
 | `libs/constants/src/routes.ts`                                         | edit   | 15         |
+
+The original plan named two extra components (`OrphanCard.svelte` and `ActionBar.svelte`); they were folded inline into `[issueId]/+page.svelte`. The page is small enough that the inline render reads cleaner than three separately mounted snippet components. `StatusBadge.svelte` was extracted instead since it is reused across the queue list and the detail page.
 
 Definition of done:
 

@@ -3,10 +3,10 @@ import { resetRegistry, withTestEditions, withTestEntries } from '../registry/__
 import type { Edition, SourceEntry, SourceId } from '../types.ts';
 import { ACS_RESOLVER } from './resolver.ts';
 
-const ELEMENT_ID = 'airboss-ref:acs/ppl-airplane-6c/area-05/task-a/elem-k01' as SourceId;
-const TASK_ID = 'airboss-ref:acs/ppl-airplane-6c/area-05/task-a' as SourceId;
-const CFI_ELEMENT_ID = 'airboss-ref:acs/cfi-airplane-25/area-01/task-a/elem-r01' as SourceId;
-const PUBLICATION_ID = 'airboss-ref:acs/ppl-airplane-6c' as SourceId;
+const ELEMENT_ID = 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-a/elem-k01' as SourceId;
+const TASK_ID = 'airboss-ref:acs/ppl-airplane-acs-6c/area-05/task-a' as SourceId;
+const CFI_ELEMENT_ID = 'airboss-ref:acs/cfi-airplane-acs-25/area-01/task-a/elem-r01' as SourceId;
+const PUBLICATION_ID = 'airboss-ref:acs/ppl-airplane-acs-6c' as SourceId;
 
 function makeEntry(id: SourceId, overrides: Partial<SourceEntry> = {}): SourceEntry {
 	return {
@@ -22,7 +22,7 @@ function makeEntry(id: SourceId, overrides: Partial<SourceEntry> = {}): SourceEn
 }
 
 const editionRecord: Edition = {
-	id: 'ppl-airplane-6c',
+	id: 'ppl-airplane-acs-6c',
 	published_date: new Date('2023-11-01T00:00:00Z'),
 	source_url: 'https://www.faa.gov/training_testing/testing/acs/private_airplane_acs_6.pdf',
 };
@@ -37,11 +37,11 @@ describe('ACS_RESOLVER', () => {
 	});
 
 	it('parses an element locator via the resolver', () => {
-		const parsed = ACS_RESOLVER.parseLocator('ppl-airplane-6c/area-05/task-a/elem-k01');
+		const parsed = ACS_RESOLVER.parseLocator('ppl-airplane-acs-6c/area-05/task-a/elem-k01');
 		expect(parsed.kind).toBe('ok');
 		if (parsed.kind !== 'ok') return;
 		expect(parsed.acs).toEqual({
-			slug: 'ppl-airplane-6c',
+			slug: 'ppl-airplane-acs-6c',
 			area: '05',
 			task: 'a',
 			elementTriad: 'k',
@@ -56,38 +56,38 @@ describe('ACS_RESOLVER', () => {
 		expect(ACS_RESOLVER.formatCitation(entry, 'title')).toBe('Aerodynamics of steep turns');
 	});
 
-	it('builds a per-publication live URL for ppl-airplane-6c', () => {
-		expect(ACS_RESOLVER.getLiveUrl(ELEMENT_ID, 'ppl-airplane-6c')).toBe(
+	it('builds a per-publication live URL for ppl-airplane-acs-6c', () => {
+		expect(ACS_RESOLVER.getLiveUrl(ELEMENT_ID, 'ppl-airplane-acs-6c')).toBe(
 			'https://www.faa.gov/training_testing/testing/acs/private_airplane_acs_6.pdf',
 		);
 	});
 
-	it('builds a per-publication live URL for cfi-airplane-25', () => {
-		expect(ACS_RESOLVER.getLiveUrl(CFI_ELEMENT_ID, 'cfi-airplane-25')).toBe(
+	it('builds a per-publication live URL for cfi-airplane-acs-25', () => {
+		expect(ACS_RESOLVER.getLiveUrl(CFI_ELEMENT_ID, 'cfi-airplane-acs-25')).toBe(
 			'https://www.faa.gov/training_testing/testing/acs/cfi_airplane_acs_25.pdf',
 		);
 	});
 
 	it('returns null for a SourceId that does not start with the acs prefix', () => {
 		expect(
-			ACS_RESOLVER.getLiveUrl('airboss-ref:handbooks/phak/8083-25C/12/3' as SourceId, 'ppl-airplane-6c'),
+			ACS_RESOLVER.getLiveUrl('airboss-ref:handbooks/phak/8083-25C/12/3' as SourceId, 'ppl-airplane-acs-6c'),
 		).toBeNull();
 	});
 
 	it('returns null for an unparseable acs locator', () => {
-		expect(ACS_RESOLVER.getLiveUrl('airboss-ref:acs/' as SourceId, 'ppl-airplane-6c')).toBeNull();
+		expect(ACS_RESOLVER.getLiveUrl('airboss-ref:acs/' as SourceId, 'ppl-airplane-acs-6c')).toBeNull();
 	});
 
 	it('getDerivativeContent returns null when no manifest exists for the requested slug', () => {
-		// `cfi-airplane-25` is not the slice we ingest at this seed layer -- the
+		// `cfi-airplane-acs-25` is not the slice we ingest at this seed layer -- the
 		// slice ships only the PPL publication we actually have on disk. Asking
 		// for a SourceId carrying an un-ingested slug returns null. Real-tree
 		// resolution is exercised by the smoke test in `smoke.test.ts`.
-		expect(ACS_RESOLVER.getDerivativeContent(CFI_ELEMENT_ID, 'cfi-airplane-25')).toBeNull();
+		expect(ACS_RESOLVER.getDerivativeContent(CFI_ELEMENT_ID, 'cfi-airplane-acs-25')).toBeNull();
 	});
 
 	it('getIndexedContent returns null when no manifest exists for the requested slug', async () => {
-		expect(await ACS_RESOLVER.getIndexedContent(CFI_ELEMENT_ID, 'cfi-airplane-25')).toBeNull();
+		expect(await ACS_RESOLVER.getIndexedContent(CFI_ELEMENT_ID, 'cfi-airplane-acs-25')).toBeNull();
 	});
 
 	it('getCurrentEdition returns max edition across acs corpus', () => {
@@ -99,11 +99,11 @@ describe('ACS_RESOLVER', () => {
 		const editions = new Map<SourceId, readonly Edition[]>([
 			[ELEMENT_ID, [editionRecord]],
 			[TASK_ID, [editionRecord]],
-			[PUBLICATION_ID, [editionRecord, { ...editionRecord, id: 'ppl-airplane-7' }]],
+			[PUBLICATION_ID, [editionRecord, { ...editionRecord, id: 'ppl-airplane-acs-7' }]],
 		]);
 		withTestEntries(entries, () => {
 			withTestEditions(editions, () => {
-				expect(ACS_RESOLVER.getCurrentEdition()).toBe('ppl-airplane-7');
+				expect(ACS_RESOLVER.getCurrentEdition()).toBe('ppl-airplane-acs-7');
 			});
 		});
 	});
