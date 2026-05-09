@@ -44,9 +44,7 @@ setup('authenticate learner', async ({ page }) => {
 	// Confirm we landed on a known authenticated surface. Study home renders
 	// the "Study" H1; the older /dashboard surface still uses "Dashboard".
 	// Accept either so the storage-state capture stays stable across the
-	// home redirect target. The regex is anchored (^...$) because `/study`
-	// also mounts a visually-hidden "Study Home" anchor H1 -- a substring
-	// "study" name match would strict-mode-violate against both.
+	// home redirect target.
 	await expect(page.getByRole('heading', { name: /^(study|learning dashboard|dashboard)$/i, level: 1 })).toBeVisible();
 
 	await page.context().storageState({ path: STORAGE });

@@ -124,13 +124,16 @@ async function waitForFormAction(
 	// Pin a generous wait timeout -- the playwright config's default
 	// `actionTimeout: 5000` would cap the wait below the cold-start cost
 	// of the SvelteKit form action's first POST (drizzle prepared-statement
-	// warmup + section-resolve query + audit insert). 15s leaves room for
-	// that without papering over a real regression.
+	// warmup + section-resolve query + audit insert). 30s covers the
+	// observed cold-compile chain on the first POST after a fresh dev
+	// server boot (15s consistently tripped on full-suite chromium runs
+	// without exposing a real regression -- mirror of the PR #719 fix on
+	// the auth setup path).
 	const responsePromise = page.waitForResponse(
 		(res) => res.request().method() === 'POST' && res.url().includes(`?/${actionName}`),
-		{ timeout: 15_000 },
+		{ timeout: 30_000 },
 	);
-	const urlPromise = page.waitForURL((u) => u.search.includes(`/${actionName}`), { timeout: 15_000 });
+	const urlPromise = page.waitForURL((u) => u.search.includes(`/${actionName}`), { timeout: 30_000 });
 	await trigger();
 	await Promise.all([responsePromise, urlPromise]);
 	await page.waitForLoadState('load');

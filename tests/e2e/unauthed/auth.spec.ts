@@ -82,10 +82,9 @@ test.describe('authentication', () => {
 		// view; the primary landing surface is `/study`. Allow extra time on
 		// toHaveURL so we wait past the cold-compile redirect chain.
 		await expect(page).toHaveURL((url) => url.pathname === ROUTES.STUDY, { timeout: 30_000 });
-		// `/study` mounts both a visible "Study" H1 (PageHeader) and a
-		// visually-hidden "Study Home" anchor H1 -- a substring "study"
-		// name match strict-mode-violates against both. `exact: true`
-		// pins to the visible heading.
+		// `/study` mounts a single visible "Study" H1 (via PageHeader). Use
+		// `exact: true` to pin to it (the Study lens entry "Study by ..." in
+		// the secondary nav also contains "study").
 		await expect(page.getByRole('heading', { name: 'Study', level: 1, exact: true })).toBeVisible();
 	});
 

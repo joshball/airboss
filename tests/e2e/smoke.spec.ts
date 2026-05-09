@@ -7,7 +7,9 @@ import { ROUTES } from '../../libs/constants/src';
  * when there are due cards.
  */
 const AUTHED_ROUTES: ReadonlyArray<{ path: string; heading: RegExp }> = [
-	{ path: ROUTES.DASHBOARD, heading: /^dashboard$/i },
+	// ROUTES.DASHBOARD now resolves to `/insights` (study-app-ia-cleanup
+	// Phase 3 renamed the surface). The page H1 is "Insights".
+	{ path: ROUTES.DASHBOARD, heading: /^insights$/i },
 	{ path: ROUTES.MEMORY, heading: /^memory$/i },
 	{ path: ROUTES.MEMORY_NEW, heading: /new card/i },
 	{ path: ROUTES.MEMORY_BROWSE, heading: /browse/i },
@@ -54,8 +56,9 @@ test.describe('smoke: authed routes load', () => {
 		page.on('console', (msg) => {
 			if (msg.type() === 'error') errors.push(msg.text());
 		});
+		// ROUTES.DASHBOARD now resolves to `/insights`; the H1 is "Insights".
 		await page.goto(ROUTES.DASHBOARD);
-		await expect(page.getByRole('heading', { name: 'Dashboard', level: 1 })).toBeVisible();
+		await expect(page.getByRole('heading', { name: 'Insights', level: 1 })).toBeVisible();
 		// SvelteKit/Vite inject HMR-only inline scripts in dev that aren't on
 		// our hashed CSP allow-list. The pre-hydration script (the one we own)
 		// has its hash baked into svelte.config.js, so it never trips this. In

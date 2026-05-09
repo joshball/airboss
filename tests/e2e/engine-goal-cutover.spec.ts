@@ -108,10 +108,13 @@ test.describe('engine-goal-cutover -- plan UI no longer surfaces cert chooser', 
 
 		// The link target is either the goal-edit URL (existing primary) or the
 		// goal-create URL (no primary). Both are valid post-cutover landings;
-		// reject anything that points back inside /plans.
+		// reject anything that points back inside /plans. The goal composer
+		// surface lives at `/program/goals/...` post-IA-cleanup (see ROUTES.
+		// PROGRAM_GOAL / PROGRAM_GOALS_NEW); previously the URL family was
+		// `/goals/...`.
 		const href = await composerLink.getAttribute('href');
 		expect(href).toBeTruthy();
-		expect(href).toMatch(/^\/goals\//);
+		expect(href).toMatch(/^\/program\/goals\//);
 	});
 });
 

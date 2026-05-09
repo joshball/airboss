@@ -1,31 +1,34 @@
 import { expect, test } from '@playwright/test';
 import { ROUTES } from '../../libs/constants/src';
 
+/**
+ * `dashboard.spec.ts` covers the post-login surface that ROUTES.DASHBOARD
+ * resolves to. Post-IA-cleanup (Phase 3) the surface lives at `/insights`
+ * with H1 "Insights"; the legacy "Dashboard" / "Stats" naming was retired
+ * along with the standalone Memory / Reps / Calibration nav entries (now
+ * consolidated under the Learn + Insights sections).
+ */
 test.describe('dashboard', () => {
-	test('renders Dashboard heading', async ({ page }) => {
+	test('renders Insights heading', async ({ page }) => {
 		await page.goto(ROUTES.DASHBOARD);
-		await expect(page.getByRole('heading', { name: 'Dashboard', level: 1 })).toBeVisible();
+		await expect(page.getByRole('heading', { name: 'Insights', level: 1 })).toBeVisible();
 	});
 
 	test('primary nav exposes all surfaces', async ({ page }) => {
 		await page.goto(ROUTES.DASHBOARD);
 		const nav = page.getByRole('navigation', { name: 'Primary' });
-		// Post-study-home WP: the legacy "Dashboard" nav label was renamed to
-		// "Stats" while keeping its URL. The Study-home page is the new
-		// post-login home.
-		await expect(nav.getByRole('link', { name: 'Stats' })).toHaveAttribute('aria-current', 'page');
-		// Memory is a `<details><summary>` disclosure group. `<summary>` has no
-		// stable cross-browser ARIA role (Chromium exposes it without role),
-		// so locate it by tag/text instead of role.
-		await expect(nav.locator('summary').filter({ hasText: 'Memory' })).toBeVisible();
-		await expect(nav.getByRole('link', { name: 'Reps' })).toBeVisible();
-		await expect(nav.getByRole('link', { name: 'Calibration' })).toBeVisible();
-		// Flightbag link moved out of the Primary nav and into the header's
-		// right cluster (Help/Flightbag/theme/account) per the shared
-		// `AppHeader` rollout. It points at the cross-subdomain flightbag app
-		// derived from the live request URL so dev and prod both work without
-		// a hardcoded origin. Assert it's reachable from the page banner with
-		// an absolute href that resolves to the flightbag subdomain.
+		// Post-IA-cleanup nav: Study / Learn / Program / Insights / Reference.
+		// Insights is the active surface here, so it carries `aria-current`.
+		await expect(nav.getByRole('link', { name: 'Insights', exact: true })).toHaveAttribute('aria-current', 'page');
+		await expect(nav.getByRole('link', { name: 'Study', exact: true })).toBeVisible();
+		await expect(nav.getByRole('link', { name: 'Learn', exact: true })).toBeVisible();
+		await expect(nav.getByRole('link', { name: 'Program', exact: true })).toBeVisible();
+		await expect(nav.getByRole('link', { name: 'Reference', exact: true })).toBeVisible();
+		// Flightbag link lives in the header's right cluster (Help / search /
+		// glossary / Flightbag / theme / account) per the shared `AppHeader`
+		// rollout. It points at the cross-subdomain flightbag app derived
+		// from the live request URL so dev and prod both work without a
+		// hardcoded origin.
 		const banner = page.getByRole('banner');
 		const flightbag = banner.getByRole('link', { name: 'Flightbag' });
 		await expect(flightbag).toBeVisible();
@@ -35,7 +38,7 @@ test.describe('dashboard', () => {
 
 	test('root path redirects to study home', async ({ page }) => {
 		// Post-WP study-home: `/` redirects to `/study` (the new post-login
-		// home). `/dashboard` is preserved at its URL as the "Stats" view.
+		// home). `/insights` is the rebranded former dashboard surface.
 		await page.goto('/');
 		await expect(page).toHaveURL((url) => url.pathname === ROUTES.STUDY);
 	});
@@ -44,26 +47,25 @@ test.describe('dashboard', () => {
 		await page.goto(ROUTES.DASHBOARD);
 		const nav = page.getByRole('navigation', { name: 'Primary' });
 
-		// Memory is a `<details>` menu; expand the summary first then click
-		// the Overview menu item that targets ROUTES.MEMORY. `<summary>` is
-		// not reliably exposed via role in Chromium, so click by tag/text.
-		await nav.locator('summary').filter({ hasText: 'Memory' }).click();
-		await nav.getByRole('menuitem', { name: 'Overview' }).click();
-		await expect(page).toHaveURL((url) => url.pathname === ROUTES.MEMORY);
+		await nav.getByRole('link', { name: 'Study', exact: true }).click();
+		await expect(page).toHaveURL((url) => url.pathname === ROUTES.STUDY);
 
-		await nav.getByRole('link', { name: 'Reps' }).click();
-		await expect(page).toHaveURL((url) => url.pathname === ROUTES.REPS);
+		await nav.getByRole('link', { name: 'Learn', exact: true }).click();
+		await expect(page).toHaveURL((url) => url.pathname === ROUTES.LEARN);
 
-		await nav.getByRole('link', { name: 'Calibration' }).click();
-		await expect(page).toHaveURL((url) => url.pathname === ROUTES.CALIBRATION);
+		await nav.getByRole('link', { name: 'Program', exact: true }).click();
+		await expect(page).toHaveURL((url) => url.pathname === ROUTES.PROGRAM);
 
-		await nav.getByRole('link', { name: 'Stats' }).click();
-		await expect(page).toHaveURL((url) => url.pathname === ROUTES.DASHBOARD);
+		await nav.getByRole('link', { name: 'Reference', exact: true }).click();
+		await expect(page).toHaveURL((url) => url.pathname === ROUTES.REFERENCE);
+
+		await nav.getByRole('link', { name: 'Insights', exact: true }).click();
+		await expect(page).toHaveURL((url) => url.pathname === ROUTES.INSIGHTS);
 	});
 
 	test('logout clears session and returns to login', async ({ page }) => {
 		await page.goto(ROUTES.DASHBOARD);
-		await expect(page.getByRole('heading', { name: 'Dashboard', level: 1 })).toBeVisible();
+		await expect(page.getByRole('heading', { name: 'Insights', level: 1 })).toBeVisible();
 
 		// Logout is POST-only (no UI button today). Build a form in the page
 		// and submit it so cookies flow through the same browser context.
