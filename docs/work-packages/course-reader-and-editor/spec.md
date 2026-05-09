@@ -38,6 +38,16 @@ Two surfaces, one BC layer:
 
 This split honors the project rule that YAML-in-repo is the source of truth for instructor content (per [ADR 018](../../decisions/018-source-artifact-storage-policy/decision.md) reasoning: reviewable, diffable, versioned by git). The editor never writes course rows directly.
 
+## Resolved decisions (2026-05-09)
+
+Recorded so the build agent has the answers without re-asking:
+
+- **Auth**: routes live under `(app)` group; unauthenticated visitors redirect to login. No public-facing surface this WP.
+- **Knowledge-node picker** in the hangar step editor: archived-lifecycle nodes are filterable but excluded by default; an "include archived" checkbox surfaces them.
+- **`KnowledgeNodeBody` location**: `apps/study/src/lib/components/`. The hangar editor does not consume the renderer (its job is editing), and the second cross-app consumer is speculative -- defer the lift to `libs/ui/` until a real second consumer exists.
+- **Hangar role gate**: `AUTHOR | OPERATOR | ADMIN` -- matches the existing `/sources` and `/glossary` surfaces.
+- **First authored course slug**: `weather-comprehensive`. The smoke fixture stays at `seed-smoke`.
+
 ## Anchor docs
 
 - [course-primitive/spec.md](../course-primitive/spec.md) -- the foundation this WP consumes
@@ -78,7 +88,7 @@ Lists every course with `status IN ('active', 'archived')` (drafts excluded by d
 
 Filtering: status (active / archived / all). Sort: title ascending; the "currently in goal" courses pin to the top.
 
-Anonymous browse (no goal) still works: the list renders with empty mastery on every row.
+Auth: routes live under the `(app)` group. Unauthenticated visitors are redirected to login per the existing layout guard. "Anonymous browse" in this spec means logged-in-but-no-goal -- the page renders with empty mastery on every row, no public surface.
 
 ### Study app: `/courses/[slug]` detail
 
@@ -150,7 +160,7 @@ Step editor: a small inline form (or modal) with:
 - code (text) -- defaults to `<section_code>.<next_ordinal>` (e.g., `s1.4`)
 - title (text)
 - body_md (textarea)
-- knowledge_node_id (picker -- search/filter by domain, topic, kind; uses existing `/reference/knowledge` browse data)
+- knowledge_node_id (picker -- search/filter by domain, topic, kind; uses existing `/reference/knowledge` browse data; archived-lifecycle nodes are filterable but excluded by default with an "include archived" checkbox)
 - ordinal (number, suggested as max(existing) + 1)
 
 Save = re-write the section's YAML file (the entire file, since steps are inline) + re-run seed. Reorder = same operation; the YAML is re-emitted with new ordinals.
