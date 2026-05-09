@@ -6,6 +6,7 @@ area:
   citations: []
 
 tasks:
+
   - code: V.A
     ordinal: 1
     title: Steep Turns
@@ -287,12 +288,26 @@ tasks:
         airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-b/elem-s07?at=2023-11'
 
 # Knowledge graph links: which course/knowledge nodes does each leaf
+
 # exercise? `weight` defaults to 1.0; downweight when partial coverage.
-# Phase 20 wires these from the existing 46 nodes; for now this PR
-# ships the verbatim FAA text and links empty -- syllabus_node_link
-# rows land in a follow-on commit.
+
+# Full Area V coverage: every leaf carries at least one link. Nine new
+
+# knowledge nodes added in the same PR to anchor leaves the original
+
+# 46-node corpus did not cover (attention management, clearing the area,
+
+# collision avoidance, ground reference maneuvers, rate/radius of turn,
+
+# uncoordinated flight, maneuvering airspeeds, ACS tolerances, executing
+
+# a steep turn).
+
 knowledge_links:
   V.A.K1:
+    - node_id: proc-execute-steep-turn
+      weight: 1.0
+      notes: This leaf IS the steep-turn execution procedure -- direct match.
     - node_id: aero-coordination-rudder
       weight: 0.5
       notes: Coordinated flight is the foundation of a proper steep turn.
@@ -310,6 +325,20 @@ knowledge_links:
     - node_id: aero-angle-of-attack-and-stall
       weight: 0.5
       notes: Accelerated-stall awareness during high-bank maneuvers.
+    - node_id: proc-maneuvering-airspeeds
+      weight: 0.6
+      notes: Va is named in this element (item c -- maneuvering speed including weight changes).
+    - node_id: aero-rate-radius-of-turn
+      weight: 0.5
+      notes: Rate and radius of turn (item e) -- the bank/airspeed/radius math.
+  V.A.R1:
+    - node_id: proc-attention-management
+      weight: 1.0
+      notes: Division of attention between aircraft control and orientation -- direct match.
+  V.A.R2:
+    - node_id: proc-collision-avoidance
+      weight: 1.0
+      notes: Collision hazards in shared maneuver airspace -- direct match.
   V.A.R3:
     - node_id: aero-angle-of-attack-and-stall
       weight: 0.7
@@ -317,23 +346,143 @@ knowledge_links:
     - node_id: proc-stall-recovery
       weight: 0.5
       notes: Recovery skill if a steep-turn stall develops.
+    - node_id: aero-uncoordinated-flight
+      weight: 0.7
+      notes: Spin entry geometry comes from uncoordinated stalls -- the canonical steep-turn-spin chain.
+  V.A.R4:
+    - node_id: proc-attention-management
+      weight: 1.0
+      notes: Distractions, task prioritization, loss of SA -- direct match (aviate-navigate-communicate framework).
+    - node_id: proc-spatial-disorientation
+      weight: 0.4
+      notes: Disorientation aspect; primary failure mode in IMC, secondary in VMC steep turns.
   V.A.R5:
+    - node_id: aero-uncoordinated-flight
+      weight: 1.0
+      notes: Slips and skids; the kill chain in steep turns -- direct match.
     - node_id: aero-coordination-rudder
       weight: 0.7
       notes: Uncoordinated-flight recognition links to rudder coordination.
+  V.A.S1:
+    - node_id: proc-clear-the-area
+      weight: 1.0
+      notes: The pre-maneuver clearing procedure -- direct match.
+  V.A.S2:
+    - node_id: proc-maneuvering-airspeeds
+      weight: 1.0
+      notes: Manufacturer's recommended airspeed and the Va default -- direct match.
+  V.A.S3:
+    - node_id: proc-execute-steep-turn
+      weight: 1.0
+      notes: The 360 coordinated steep turn at ~45 bank -- direct match.
+    - node_id: aero-load-factor-and-bank-angle
+      weight: 0.5
+      notes: 45 bank physics (1.41 G, +19% Vs).
+  V.A.S4:
+    - node_id: proc-execute-steep-turn
+      weight: 1.0
+      notes: Opposite-direction execution of the steep turn -- direct match (covered in node procedure).
   V.A.S5:
+    - node_id: proc-acs-tolerances
+      weight: 1.0
+      notes: ACS tolerances ±100 ft / ±10 kt / ±5 deg / ±10 deg -- direct match.
     - node_id: aero-load-factor-and-bank-angle
       weight: 0.4
       notes: Maintaining bank ±5° connects to load-factor reasoning under bank.
+  V.B.K1:
+    - node_id: proc-ground-reference-maneuvers
+      weight: 1.0
+      notes: Purpose of GRM (division of attention, wind awareness, ground-track control) -- direct match.
   V.B.K2:
     - node_id: perf-crosswind-component
       weight: 0.6
       notes: Wind drift correction in ground reference is the same wind-vector reasoning crosswind component teaches.
+    - node_id: proc-ground-reference-maneuvers
+      weight: 0.7
+      notes: Wind effect on ground track is the central perceptual concept of GRM.
+  V.B.K3:
+    - node_id: aero-rate-radius-of-turn
+      weight: 1.0
+      notes: Effects of bank angle and groundspeed on rate and radius of turn -- direct match.
   V.B.K4:
     - node_id: proc-traffic-pattern
       weight: 0.9
       notes: Rectangular course IS a traffic pattern; this leaf and the node are near-identical scope at PPL bloom.
+    - node_id: proc-ground-reference-maneuvers
+      weight: 0.6
+      notes: The rectangular course is one of the three GRM canonical maneuvers.
+  V.B.R1:
+    - node_id: proc-attention-management
+      weight: 1.0
+      notes: Division of attention between aircraft control and orientation -- direct match.
+  V.B.R2:
+    - node_id: proc-collision-avoidance
+      weight: 1.0
+      notes: Collision hazards in shared maneuver airspace -- direct match.
   V.B.R3:
     - node_id: aero-angle-of-attack-and-stall
       weight: 0.5
       notes: Low-altitude stall / spin awareness during ground reference maneuvers.
+    - node_id: aero-uncoordinated-flight
+      weight: 0.7
+      notes: Skidding stall at 800 AGL is the canonical fatal accident geometry.
+    - node_id: proc-stall-recovery
+      weight: 0.4
+      notes: Recovery procedure if a stall develops at low altitude.
+  V.B.R4:
+    - node_id: proc-attention-management
+      weight: 1.0
+      notes: Distractions, task prioritization, loss of SA -- direct match.
+    - node_id: proc-spatial-disorientation
+      weight: 0.3
+      notes: Disorientation aspect; lower weight in VMC GRM than in IMC work.
+  V.B.R5:
+    - node_id: aero-uncoordinated-flight
+      weight: 1.0
+      notes: Slip and skid recognition in low-altitude maneuvering -- direct match.
+    - node_id: aero-coordination-rudder
+      weight: 0.7
+      notes: Coordination foundation that uncoordinated-flight builds on.
+  V.B.S1:
+    - node_id: proc-clear-the-area
+      weight: 1.0
+      notes: The pre-maneuver clearing procedure -- direct match.
+  V.B.S2:
+    - node_id: proc-ground-reference-maneuvers
+      weight: 0.8
+      notes: Reference selection (suitable area, line, or point) covered in the GRM procedure.
+  V.B.S3:
+    - node_id: proc-ground-reference-maneuvers
+      weight: 1.0
+      notes: Maneuver planning (rectangular course, S-turns, turns around a point) with entry geometry -- direct match.
+  V.B.S4:
+    - node_id: proc-ground-reference-maneuvers
+      weight: 0.9
+      notes: Wind-drift correction (continuous bank variation) is the central skill of GRM.
+    - node_id: aero-rate-radius-of-turn
+      weight: 0.7
+      notes: Bank-vs-groundspeed math underlies wind-drift correction in turns.
+    - node_id: perf-crosswind-component
+      weight: 0.6
+      notes: Wind-drift correction in straight flight uses the same wind-vector reasoning.
+  V.B.S5:
+    - node_id: proc-ground-reference-maneuvers
+      weight: 0.5
+      notes: >-
+        Skill-execution leaf -- reversal over reference line in S-turns is
+        primarily a motor skill. Linked to GRM for the procedural context;
+        weight reduced because the leaf is execution, not knowledge.
+  V.B.S6:
+    - node_id: proc-attention-management
+      weight: 1.0
+      notes: Divide attention between airplane control, traffic avoidance, and ground track -- direct match (multi-channel scan).
+    - node_id: proc-collision-avoidance
+      weight: 0.7
+      notes: Traffic-avoidance channel of the divided attention.
+    - node_id: aero-coordination-rudder
+      weight: 0.4
+      notes: Coordinated flight as part of the multi-channel scan.
+  V.B.S7:
+    - node_id: proc-acs-tolerances
+      weight: 1.0
+      notes: ACS tolerances ±100 ft altitude, ±10 kt airspeed -- direct match.
