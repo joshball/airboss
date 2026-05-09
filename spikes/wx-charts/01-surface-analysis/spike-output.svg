@@ -155,6 +155,126 @@
   <path d="M 871.3 152.9 A 7 7 0 0 0 877.1 140.2 Z" fill="#6a1f8f" stroke="#6a1f8f" stroke-width="0.5" stroke-linejoin="round" />
 <path d="M 893.3 101.4 A 7 7 0 0 0 898.5 88.5 Z" fill="#6a1f8f" stroke="#6a1f8f" stroke-width="0.5" stroke-linejoin="round" />
 </g></g>
+<g class="stations"><g class="station" data-id="KSEA">
+  <circle cx="160.26405494328793" cy="126.24544339312138" r="4" fill="#3d3a32" stroke="#3d3a32" stroke-width="1" />
+  <line x1="158.90" y1="130.00" x2="151.37" y2="150.68" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+<line x1="151.37" y1="150.68" x2="159.83" y2="153.76" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+<line x1="153.08" y1="145.98" x2="161.54" y2="149.06" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+<line x1="154.79" y1="141.28" x2="159.02" y2="142.82" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+  <text x="152.26405494328793" y="120.24544339312138" text-anchor="end" font-size="9" font-weight="600" fill="#3d3a32">41</text>
+  <text x="152.26405494328793" y="138.24544339312138" text-anchor="end" font-size="9" font-weight="600" fill="#1f4ea8">38</text>
+  <text x="168.26405494328793" y="120.24544339312138" text-anchor="start" font-size="9" font-weight="600" fill="#3d3a32">1003</text>
+</g>
+<g class="station" data-id="KSFO">
+  <g>
+    <circle cx="87.39224044485479" cy="366.6363870489299" r="4" fill="white" stroke="#3d3a32" stroke-width="1" />
+    <path d="M 87.39224044485479 366.6363870489299 L 87.39224044485479 362.6363870489299 A 4 4 0 1 1 83.39 366.64 Z" fill="#3d3a32" stroke="none" />
+  </g>
+  <line x1="83.63" y1="365.27" x2="62.96" y2="357.74" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+<line x1="62.96" y1="357.74" x2="59.88" y2="366.20" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+  <text x="79.39224044485479" y="360.6363870489299" text-anchor="end" font-size="9" font-weight="600" fill="#3d3a32">50</text>
+  <text x="79.39224044485479" y="378.6363870489299" text-anchor="end" font-size="9" font-weight="600" fill="#1f4ea8">44</text>
+  <text x="95.39224044485479" y="360.6363870489299" text-anchor="start" font-size="9" font-weight="600" fill="#3d3a32">1018</text>
+</g>
+<g class="station" data-id="KLAX">
+  <g>
+    <circle cx="141.52639007856084" cy="478.8987466794232" r="4" fill="white" stroke="#3d3a32" stroke-width="1" />
+    <path d="M 141.52639007856084 478.8987466794232 L 141.52639007856084 474.8987466794232 A 4 4 0 0 1 145.53 478.90 Z" fill="#3d3a32" stroke="none" />
+  </g>
+  <line x1="138.06" y1="480.90" x2="119.01" y2="491.90" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+<line x1="119.01" y1="491.90" x2="123.51" y2="499.69" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+  <text x="133.52639007856084" y="472.8987466794232" text-anchor="end" font-size="9" font-weight="600" fill="#3d3a32">56</text>
+  <text x="133.52639007856084" y="490.8987466794232" text-anchor="end" font-size="9" font-weight="600" fill="#1f4ea8">41</text>
+  <text x="149.52639007856084" y="472.8987466794232" text-anchor="start" font-size="9" font-weight="600" fill="#3d3a32">1019</text>
+</g>
+<g class="station" data-id="KDEN">
+  <circle cx="442.89958254934686" cy="378.1698391844459" r="4" fill="white" stroke="#3d3a32" stroke-width="1" />
+  <line x1="440.33" y1="375.11" x2="426.19" y2="358.25" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+<line x1="426.19" y1="358.25" x2="419.29" y2="364.04" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+<line x1="429.40" y1="362.08" x2="425.95" y2="364.98" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+  <text x="434.89958254934686" y="372.1698391844459" text-anchor="end" font-size="9" font-weight="600" fill="#3d3a32">28</text>
+  <text x="434.89958254934686" y="390.1698391844459" text-anchor="end" font-size="9" font-weight="600" fill="#1f4ea8">14</text>
+  <text x="450.89958254934686" y="372.1698391844459" text-anchor="start" font-size="9" font-weight="600" fill="#3d3a32">1027</text>
+</g>
+<g class="station" data-id="KDFW">
+  <circle cx="589.8177450992662" cy="563.7177341668561" r="4" fill="#3d3a32" stroke="#3d3a32" stroke-width="1" />
+  <line x1="589.82" y1="567.72" x2="589.82" y2="589.72" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+<line x1="589.82" y1="589.72" x2="598.82" y2="589.72" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+  <text x="581.8177450992662" y="557.7177341668561" text-anchor="end" font-size="9" font-weight="600" fill="#3d3a32">60</text>
+  <text x="581.8177450992662" y="575.7177341668561" text-anchor="end" font-size="9" font-weight="600" fill="#1f4ea8">55</text>
+  <text x="597.8177450992662" y="557.7177341668561" text-anchor="start" font-size="9" font-weight="600" fill="#3d3a32">1015</text>
+</g>
+<g class="station" data-id="KMSP">
+  <g>
+    <circle cx="662.6234621537061" cy="257.3473270526465" r="4" fill="white" stroke="#3d3a32" stroke-width="1" />
+    <path d="M 662.6234621537061 257.3473270526465 L 662.6234621537061 253.3473270526465 A 4 4 0 1 1 658.62 257.35 Z" fill="#3d3a32" stroke="none" />
+  </g>
+  <line x1="658.86" y1="255.98" x2="638.19" y2="248.45" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+<line x1="638.19" y1="248.45" x2="635.11" y2="256.91" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+<line x1="642.89" y1="250.16" x2="639.81" y2="258.62" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+  <text x="654.6234621537061" y="251.3473270526465" text-anchor="end" font-size="9" font-weight="600" fill="#3d3a32">18</text>
+  <text x="654.6234621537061" y="269.3473270526465" text-anchor="end" font-size="9" font-weight="600" fill="#1f4ea8">12</text>
+  <text x="670.6234621537061" y="251.3473270526465" text-anchor="start" font-size="9" font-weight="600" fill="#3d3a32">1019</text>
+</g>
+<g class="station" data-id="KORD">
+  <circle cx="765.3770694547526" cy="325.39396173881096" r="4" fill="#3d3a32" stroke="#3d3a32" stroke-width="1" />
+  <line x1="761.91" y1="327.39" x2="742.86" y2="338.39" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+<line x1="742.86" y1="338.39" x2="747.36" y2="346.19" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+<line x1="747.19" y1="335.89" x2="751.69" y2="343.69" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+<line x1="751.52" y1="333.39" x2="753.77" y2="337.29" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+  <text x="757.3770694547526" y="319.39396173881096" text-anchor="end" font-size="9" font-weight="600" fill="#3d3a32">35</text>
+  <text x="757.3770694547526" y="337.39396173881096" text-anchor="end" font-size="9" font-weight="600" fill="#1f4ea8">32</text>
+  <text x="773.3770694547526" y="319.39396173881096" text-anchor="start" font-size="9" font-weight="600" fill="#3d3a32">1006</text>
+</g>
+<g class="station" data-id="KATL">
+  <circle cx="857.9755492485922" cy="529.2330151648376" r="4" fill="#3d3a32" stroke="#3d3a32" stroke-width="1" />
+  <line x1="856.61" y1="532.99" x2="849.08" y2="553.67" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+<line x1="849.08" y1="553.67" x2="857.54" y2="556.74" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+<line x1="850.79" y1="548.97" x2="855.02" y2="550.51" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+  <text x="849.9755492485922" y="523.2330151648376" text-anchor="end" font-size="9" font-weight="600" fill="#3d3a32">58</text>
+  <text x="849.9755492485922" y="541.2330151648376" text-anchor="end" font-size="9" font-weight="600" fill="#1f4ea8">54</text>
+  <text x="865.9755492485922" y="523.2330151648376" text-anchor="start" font-size="9" font-weight="600" fill="#3d3a32">1011</text>
+</g>
+<g class="station" data-id="KMIA">
+  <g>
+    <circle cx="980.0309266413856" cy="715.7326358690171" r="4" fill="white" stroke="#3d3a32" stroke-width="1" />
+    <path d="M 980.0309266413856 715.7326358690171 L 980.0309266413856 711.7326358690171 A 4 4 0 0 1 980.03 719.73 Z" fill="#3d3a32" stroke="none" />
+  </g>
+  <line x1="983.79" y1="717.10" x2="1004.46" y2="724.63" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+<line x1="1004.46" y1="724.63" x2="1007.54" y2="716.17" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+  <text x="972.0309266413856" y="709.7326358690171" text-anchor="end" font-size="9" font-weight="600" fill="#3d3a32">76</text>
+  <text x="972.0309266413856" y="727.7326358690171" text-anchor="end" font-size="9" font-weight="600" fill="#1f4ea8">70</text>
+  <text x="988.0309266413856" y="709.7326358690171" text-anchor="start" font-size="9" font-weight="600" fill="#3d3a32">1017</text>
+</g>
+<g class="station" data-id="KJFK">
+  <circle cx="1037.579096814212" cy="314.11168021875596" r="4" fill="#3d3a32" stroke="#3d3a32" stroke-width="1" />
+  <line x1="1040.64" y1="316.68" x2="1057.50" y2="330.82" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+<line x1="1057.50" y1="330.82" x2="1063.28" y2="323.93" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+<line x1="1053.67" y1="327.61" x2="1059.45" y2="320.72" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+  <text x="1029.579096814212" y="308.11168021875596" text-anchor="end" font-size="9" font-weight="600" fill="#3d3a32">42</text>
+  <text x="1029.579096814212" y="326.11168021875596" text-anchor="end" font-size="9" font-weight="600" fill="#1f4ea8">38</text>
+  <text x="1045.579096814212" y="308.11168021875596" text-anchor="start" font-size="9" font-weight="600" fill="#3d3a32">1004</text>
+</g>
+<g class="station" data-id="KBOS">
+  <circle cx="1077.616126024188" cy="258.0969377654885" r="4" fill="#3d3a32" stroke="#3d3a32" stroke-width="1" />
+  <line x1="1081.56" y1="258.79" x2="1103.22" y2="262.61" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+<line x1="1103.22" y1="262.61" x2="1104.78" y2="253.75" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+<line x1="1098.30" y1="261.74" x2="1099.86" y2="252.88" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+  <text x="1069.616126024188" y="252.09693776548852" text-anchor="end" font-size="9" font-weight="600" fill="#3d3a32">39</text>
+  <text x="1069.616126024188" y="270.0969377654885" text-anchor="end" font-size="9" font-weight="600" fill="#1f4ea8">35</text>
+  <text x="1085.616126024188" y="252.09693776548852" text-anchor="start" font-size="9" font-weight="600" fill="#3d3a32">1002</text>
+</g>
+<g class="station" data-id="KBIS">
+  <g>
+    <circle cx="528.5694625387065" cy="207.43961949678715" r="4" fill="white" stroke="#3d3a32" stroke-width="1" />
+    <path d="M 528.5694625387065 207.43961949678715 L 528.5694625387065 203.43961949678715 A 4 4 0 0 1 532.57 207.44 Z" fill="#3d3a32" stroke="none" />
+  </g>
+  <line x1="525.51" y1="204.87" x2="508.65" y2="190.73" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+<line x1="508.65" y1="190.73" x2="502.87" y2="197.62" stroke="#3d3a32" stroke-width="1" stroke-linecap="round" />
+  <text x="520.5694625387065" y="201.43961949678715" text-anchor="end" font-size="9" font-weight="600" fill="#3d3a32">8</text>
+  <text x="520.5694625387065" y="219.43961949678715" text-anchor="end" font-size="9" font-weight="600" fill="#1f4ea8">4</text>
+  <text x="536.5694625387065" y="201.43961949678715" text-anchor="start" font-size="9" font-weight="600" fill="#3d3a32">1023</text>
+</g></g>
 <g class="pressure-centers">
   <g class="center-L">
     <text x="856.8698607857084" y="180.8250089943458" text-anchor="middle" font-size="28" font-weight="700" fill="#b8232f">L</text>

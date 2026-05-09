@@ -9,11 +9,13 @@
 import type { GeoProjection } from 'd3-geo';
 import type { Front, PressureCenter, SurfaceAnalysisData } from './data-load';
 import { renderIsobars } from './isobars';
+import { renderStations } from './stations';
 
 export function renderSymbology(projection: GeoProjection, data: SurfaceAnalysisData): string {
 	return [
 		renderIsobars(projection, data),
 		renderFronts(projection, data.fronts),
+		renderStations(projection, data.stations ?? []),
 		renderPressureCenters(projection, data.centers),
 	].join('\n');
 }

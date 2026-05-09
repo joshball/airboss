@@ -13,12 +13,13 @@ async function main(): Promise<void> {
 	const outPath = resolve(root, 'spike-preview.png');
 
 	const browser = await chromium.launch();
-	const context = await browser.newContext({ viewport: { width: 1300, height: 900 }, deviceScaleFactor: 2 });
+	const context = await browser.newContext({ viewport: { width: 2400, height: 1600 }, deviceScaleFactor: 1 });
 	const page = await context.newPage();
 	await page.goto(`file://${htmlPath}`);
 	await page.waitForLoadState('networkidle');
-	const chart = page.locator('.chart');
-	await chart.screenshot({ path: outPath });
+	// Render the inline svg directly at native pixel size for sharpness.
+	const svg = page.locator('.chart svg');
+	await svg.screenshot({ path: outPath });
 	await browser.close();
 	console.log(`Wrote ${outPath}`);
 }
