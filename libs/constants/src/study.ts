@@ -774,6 +774,31 @@ export const KNOWLEDGE_NODE_KIND_LABELS: Record<KnowledgeNodeKind, string> = {
 };
 
 /**
+ * Knowledge-node slugs in the encoded-text product family (METAR/TAF/PIREP/
+ * AIRMET/SIGMET decode skill ladder). The course step reader checks a step's
+ * linked node slug against this list; a match renders the Decode/Understand/
+ * Triage tab strip above the body as a skill-ladder hint.
+ *
+ * The tabs are visual orientation only in the course-reader-and-editor WP --
+ * clicking does not filter content. Per-tab content is deferred (see
+ * `docs/work-packages/course-reader-and-editor/OUT-OF-SCOPE.md`).
+ *
+ * Adding a new slug to this list is a one-line change. When the family grows
+ * past ~10-15 members the constant migrates to a frontmatter field on the
+ * node row (see the WP design doc).
+ *
+ * Source: project memory `project_encoded_text_family.md` -- the family
+ * shares one skill ladder regardless of product format.
+ */
+export const WX_DECODE_PRODUCT_SLUGS = [
+	'wx-reading-metars-tafs',
+	'wx-product-pireps',
+	'wx-product-airmets-sigmets',
+] as const;
+
+export type WxDecodeProductSlug = (typeof WX_DECODE_PRODUCT_SLUGS)[number];
+
+/**
  * Dual-gate mastery thresholds (ADR 011, spec "Mastery computation").
  *
  * Mastery is a dual gate: card stability AND rep accuracy must each clear

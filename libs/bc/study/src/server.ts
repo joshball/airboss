@@ -112,12 +112,23 @@ export {
 	searchReferenceSections,
 	type TargetTypeTally,
 } from './citations';
-export type { UpsertCourseInput, UpsertCourseStepInput } from './courses';
+export type { ListCoursesForReaderOpts, UpsertCourseInput, UpsertCourseStepInput } from './courses';
 export {
+	addGoalCourse,
+	deleteCourseRow,
+	deleteCourseStep,
+	getCourseById,
 	getCourseBySlug,
 	getCourseGaps,
+	getCourseStepByCode,
 	getCourseStepsByCourse,
 	getCoursesByGoal,
+	goalHasCourse,
+	listAllCourses,
+	listCoursesForReader,
+	pickOverlaySyllabus,
+	removeGoalCourse,
+	setGoalCourseWeight,
 	upsertCourse,
 	upsertCourseStep,
 } from './courses';

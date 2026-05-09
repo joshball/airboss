@@ -37,7 +37,7 @@ import {
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import { createId } from '@ab/utils';
-import { and, asc, eq, inArray, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, inArray, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { UpsertReturnedNoRowError } from './errors';
 import type { CertGap } from './lenses';
@@ -46,7 +46,9 @@ import {
 	type CourseStepRow,
 	course,
 	courseStep,
+	type GoalRow,
 	goalCourse,
+	goalSyllabus,
 	syllabusNode,
 	syllabusNodeLink,
 } from './schema';
@@ -351,4 +353,198 @@ export async function getCourseGaps(
 		return a.code.localeCompare(b.code);
 	});
 	return gaps;
+}
+
+// ---------------------------------------------------------------------------
+// Reader / editor read-helpers (course-reader-and-editor WP)
+// ---------------------------------------------------------------------------
+
+/** Filter options for {@link listCoursesForReader}. */
+export interface ListCoursesForReaderOpts {
+	/**
+	 * When set, restrict the result to courses whose `status` is in this list.
+	 * Defaults to `['active', 'archived']` -- drafts are hidden from the
+	 * study reader by default. Pass `[...COURSE_STATUS_VALUES]` to include
+	 * drafts (the hangar editor uses {@link listAllCourses} instead).
+	 */
+	statusIn?: readonly CourseStatus[];
+}
+
+/**
+ * List courses for the study reader. Filters by status (drafts excluded by
+ * default). Sorted by title ascending so the index page renders deterministically.
+ *
+ * Pure read; safe to call from a route loader on every render. Used by the
+ * `/courses` index page (`apps/study/src/routes/(app)/courses/+page.server.ts`).
+ */
+export async function listCoursesForReader(
+	db: Db = defaultDb,
+	opts: ListCoursesForReaderOpts = {},
+): Promise<CourseRow[]> {
+	const statusIn = opts.statusIn ?? [COURSE_STATUSES.ACTIVE, COURSE_STATUSES.ARCHIVED];
+	if (statusIn.length === 0) return [];
+	return db
+		.select()
+		.from(course)
+		.where(inArray(course.status, statusIn as CourseStatus[]))
+		.orderBy(asc(course.title));
+}
+
+/**
+ * List every course in the system regardless of status. Used by the hangar
+ * editor's `/courses` index page; the editor surfaces all statuses (draft +
+ * active + archived) so authors can iterate on draft work.
+ *
+ * Sorted by `updatedAt` descending so the most-recently-edited course is
+ * surfaced first -- matches the hangar /glossary pattern.
+ */
+export async function listAllCourses(db: Db = defaultDb): Promise<CourseRow[]> {
+	return db.select().from(course).orderBy(desc(course.updatedAt));
+}
+
+/**
+ * Resolve a course by its primary id. Returns null when missing -- callers
+ * (the hangar manifest editor's loader, the orphan-cleanup action) handle
+ * the missing-row case explicitly.
+ */
+export async function getCourseById(id: string, db: Db = defaultDb): Promise<CourseRow | null> {
+	const rows = await db.select().from(course).where(eq(course.id, id)).limit(1);
+	return rows[0] ?? null;
+}
+
+/**
+ * Resolve a single course step by `(course_id, code)`. Returns null when
+ * missing. Used by the step-reader page's loader to resolve a `:slug/:stepCode`
+ * URL pair without scanning the entire course tree.
+ */
+export async function getCourseStepByCode(
+	courseId: string,
+	code: string,
+	db: Db = defaultDb,
+): Promise<CourseStepRow | null> {
+	const rows = await db
+		.select()
+		.from(courseStep)
+		.where(and(eq(courseStep.courseId, courseId), eq(courseStep.code, code)))
+		.limit(1);
+	return rows[0] ?? null;
+}
+
+/**
+ * Delete a single course_step row by id. Used by the hangar orphan-cleanup
+ * action; the FK to `knowledge_node` is RESTRICT but the row itself can be
+ * deleted any time -- the cascade on `course.id` handles the parent-side.
+ */
+export async function deleteCourseStep(id: string, db: Db = defaultDb): Promise<void> {
+	await db.delete(courseStep).where(eq(courseStep.id, id));
+}
+
+/**
+ * Delete a course row by id. Cascades to every `course_step` row under the
+ * course (`onDelete: 'cascade'` on `course_step.course_id`) AND to every
+ * `goal_course` row that linked to the course (`onDelete: 'cascade'` on
+ * `goal_course.goal_id` would not fire here -- the FK on
+ * `goal_course.course_id` is `onDelete: 'restrict'`, so a course that is
+ * still in any goal will reject this delete with a Postgres FK error). The
+ * hangar editor's delete-course flow checks `goal_course` before invoking
+ * this helper and surfaces the FK rejection as a form error if it slips
+ * through.
+ */
+export async function deleteCourseRow(id: string, db: Db = defaultDb): Promise<void> {
+	await db.delete(course).where(eq(course.id, id));
+}
+
+/**
+ * Pick the syllabus the cert-overlay should run against, given a learner's
+ * goal. The selection rule (deterministic so the overlay is stable across
+ * refreshes):
+ *
+ *   1. Highest-weight `goal_syllabus.weight` row.
+ *   2. Tie-break by `syllabus_id` ascending (lexicographic).
+ *
+ * Returns null when the goal is null OR has no `goal_syllabus` rows. The
+ * detail-page loader uses this to choose between `courseLens` (no overlay)
+ * and `courseWithCertOverlayLens` (overlay against the picked syllabus).
+ *
+ * A user-facing syllabus picker is deferred (see
+ * `docs/work-packages/course-reader-and-editor/OUT-OF-SCOPE.md` -- "Multi-
+ * syllabus overlay picker"). When that lands the picker overrides this
+ * auto-pick via a `?cert=<id>` query param.
+ */
+export async function pickOverlaySyllabus(goal: GoalRow | null, db: Db = defaultDb): Promise<string | null> {
+	if (goal === null) return null;
+	const rows = await db
+		.select({ syllabusId: goalSyllabus.syllabusId, weight: goalSyllabus.weight })
+		.from(goalSyllabus)
+		.where(eq(goalSyllabus.goalId, goal.id))
+		.orderBy(desc(goalSyllabus.weight), asc(goalSyllabus.syllabusId))
+		.limit(1);
+	return rows[0]?.syllabusId ?? null;
+}
+
+// ---------------------------------------------------------------------------
+// Goal-course composition (course-reader-and-editor WP -- mirrors the
+// goal_syllabus helpers in `./goals.ts`)
+// ---------------------------------------------------------------------------
+
+/**
+ * Add a course to a goal. Idempotent on the `(goal_id, course_id)` composite
+ * PK -- re-running with a different weight updates the weight in place.
+ *
+ * Validation lives at the route layer (the form action checks course
+ * existence + status='active' + already-in-goal explicitly). This helper is
+ * the thin write path; it does not parse a Zod schema because callers
+ * already did the per-action validation upstream and the column-level CHECK
+ * (`goal_course_weight_check`) backs up the weight bound at the DB layer.
+ */
+export async function addGoalCourse(
+	goalId: string,
+	courseId: string,
+	weight: number,
+	db: Db = defaultDb,
+): Promise<void> {
+	await db
+		.insert(goalCourse)
+		.values({ goalId, courseId, weight, seedOrigin: null, createdAt: new Date() })
+		.onConflictDoUpdate({
+			target: [goalCourse.goalId, goalCourse.courseId],
+			set: { weight },
+		});
+}
+
+/** Remove a course from a goal. No-op when not linked. */
+export async function removeGoalCourse(goalId: string, courseId: string, db: Db = defaultDb): Promise<void> {
+	await db.delete(goalCourse).where(and(eq(goalCourse.goalId, goalId), eq(goalCourse.courseId, courseId)));
+}
+
+/**
+ * Update the weight on an existing `goal_course` row. Silent no-op when the
+ * `(goalId, courseId)` pair has no row (the form action checks existence
+ * first; this matches the `setGoalSyllabusWeight` shape).
+ */
+export async function setGoalCourseWeight(
+	goalId: string,
+	courseId: string,
+	weight: number,
+	db: Db = defaultDb,
+): Promise<void> {
+	await db
+		.update(goalCourse)
+		.set({ weight })
+		.where(and(eq(goalCourse.goalId, goalId), eq(goalCourse.courseId, courseId)));
+}
+
+/**
+ * Check whether a goal already has a row for a given course. Used by the
+ * `addCourse` form action to surface "Course already in goal" before
+ * attempting the upsert (the upsert would silently update weight, which
+ * is the wrong UX for a duplicate add).
+ */
+export async function goalHasCourse(goalId: string, courseId: string, db: Db = defaultDb): Promise<boolean> {
+	const rows = await db
+		.select({ goalId: goalCourse.goalId })
+		.from(goalCourse)
+		.where(and(eq(goalCourse.goalId, goalId), eq(goalCourse.courseId, courseId)))
+		.limit(1);
+	return rows.length > 0;
 }

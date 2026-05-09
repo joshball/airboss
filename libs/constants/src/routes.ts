@@ -760,7 +760,7 @@ export const ROUTES = {
 
 	// Study -- Courses (course-primitive WP, ADR 016 refinement). Course is a
 	// peer primitive to syllabus per principle 11 of LEARNING_PHILOSOPHY.md.
-	// Definitions only in this WP; the consumer pages land in a follow-on UI WP.
+	// Reader pages added in the course-reader-and-editor WP.
 	/** Courses index (list of instructor-authored courses). */
 	COURSES: '/courses',
 	/** Single course detail page, keyed by course slug. */
@@ -768,6 +768,51 @@ export const ROUTES = {
 	/** One step inside a course, keyed by course slug + step code (e.g. `s1.3`). */
 	COURSE_STEP: (slug: string, stepCode: string) =>
 		`/courses/${encodeURIComponent(slug)}/${encodeURIComponent(stepCode)}` as const,
+
+	// Study -- Goal composer course actions (course-reader-and-editor WP).
+	// Adds three actions to the existing `/program/goals/[id]` page.
+	/** Form-action id: link a course to the goal (`?/addCourse`). */
+	STUDY_GOAL_ADD_COURSE_ACTION: '?/addCourse',
+	/** Form-action id: unlink a course from the goal (`?/removeCourse`). */
+	STUDY_GOAL_REMOVE_COURSE_ACTION: '?/removeCourse',
+	/** Form-action id: update an existing goal_course weight (`?/setCourseWeight`). */
+	STUDY_GOAL_SET_COURSE_WEIGHT_ACTION: '?/setCourseWeight',
+
+	// Hangar -- Courses authoring surface (course-reader-and-editor WP).
+	// Lives at /courses inside the hangar app. Role-gated per the existing
+	// /sources and /glossary surfaces. Editor reads + writes
+	// course/courses/<slug>/ YAML files and triggers seedCourses() on save.
+	/** Hangar courses index. */
+	HANGAR_COURSES: '/courses',
+	/** Hangar course editor for a single course (manifest + section list). */
+	HANGAR_COURSE: (slug: string) => `/courses/${encodeURIComponent(slug)}` as const,
+	/** Hangar section editor (section metadata + inline step list). */
+	HANGAR_COURSE_SECTION: (slug: string, code: string) =>
+		`/courses/${encodeURIComponent(slug)}/sections/${encodeURIComponent(code)}` as const,
+	/** Form-action id: create a new course directory + manifest (`?/createCourse`). */
+	HANGAR_COURSE_CREATE_ACTION: '?/createCourse',
+	/** Form-action id: write the manifest YAML + reseed (`?/updateManifest`). */
+	HANGAR_COURSE_UPDATE_MANIFEST_ACTION: '?/updateManifest',
+	/** Form-action id: remove the entire course directory + reseed (`?/deleteCourse`). */
+	HANGAR_COURSE_DELETE_ACTION: '?/deleteCourse',
+	/** Form-action id: add a new section file to a course (`?/addSection`). */
+	HANGAR_COURSE_ADD_SECTION_ACTION: '?/addSection',
+	/** Form-action id: re-emit a section file with edited fields (`?/updateSection`). */
+	HANGAR_COURSE_UPDATE_SECTION_ACTION: '?/updateSection',
+	/** Form-action id: remove a section file (`?/deleteSection`). */
+	HANGAR_COURSE_DELETE_SECTION_ACTION: '?/deleteSection',
+	/** Form-action id: rewrite section ordinals across the course (`?/reorderSections`). */
+	HANGAR_COURSE_REORDER_SECTIONS_ACTION: '?/reorderSections',
+	/** Form-action id: append a step to a section file (`?/addStep`). */
+	HANGAR_COURSE_ADD_STEP_ACTION: '?/addStep',
+	/** Form-action id: re-emit a section file with an edited step (`?/updateStep`). */
+	HANGAR_COURSE_UPDATE_STEP_ACTION: '?/updateStep',
+	/** Form-action id: remove a step from a section file (`?/deleteStep`). */
+	HANGAR_COURSE_DELETE_STEP_ACTION: '?/deleteStep',
+	/** Form-action id: rewrite step ordinals within a section (`?/reorderSteps`). */
+	HANGAR_COURSE_REORDER_STEPS_ACTION: '?/reorderSteps',
+	/** Form-action id: delete orphan course / step / section rows (`?/cleanupOrphans`). */
+	HANGAR_COURSE_CLEANUP_ORPHANS_ACTION: '?/cleanupOrphans',
 } as const;
 
 /**
