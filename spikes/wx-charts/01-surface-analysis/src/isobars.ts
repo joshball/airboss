@@ -17,6 +17,7 @@
 import { geoPath, type GeoProjection } from 'd3-geo';
 import { contours } from 'd3-contour';
 import type { SurfaceAnalysisData, PressureCenter } from './data-load';
+import { CHART_MARGIN, SVG_HEIGHT, SVG_WIDTH, TITLE_BAND_HEIGHT } from './projection';
 
 // Grid resolution covering CONUS extent.
 const GRID_LON_MIN = -130;
@@ -85,23 +86,37 @@ export function renderIsobars(projection: GeoProjection, data: SurfaceAnalysisDa
 			elements.push(`<path d="${d}" fill="none" stroke="${stroke}" stroke-width="${width}" />`);
 		}
 
-		// Place a label for this isobar at a sensible location: take the
-		// outermost ring's first long-enough segment, project the midpoint.
+		// Place 1-2 labels per isobar at points that are inside the
+		// chart canvas (between TITLE_BAND and bottom edge). Walk each
+		// ring, find candidate points spaced apart, and emit labels.
+		const labelsPerContour = 2;
+		const placed: [number, number][] = [];
 		for (const polygon of lonLatRings) {
 			for (const ring of polygon) {
 				if (ring.length < 4) continue;
-				const midIdx = Math.floor(ring.length / 2);
-				const [lon, lat] = ring[midIdx];
-				if (lon < GRID_LON_MIN + 2 || lon > GRID_LON_MAX - 2) continue;
-				if (lat < GRID_LAT_MIN + 2 || lat > GRID_LAT_MAX - 2) continue;
-				const pos = projection([lon, lat]);
-				if (!pos) continue;
-				labelElements.push(
-					`<g class="isobar-label"><rect x="${(pos[0] - 11).toFixed(1)}" y="${(pos[1] - 6).toFixed(1)}" width="22" height="12" fill="#fafaf7" stroke="none" /><text x="${pos[0].toFixed(1)}" y="${(pos[1] + 3).toFixed(1)}" text-anchor="middle" font-size="9" font-weight="600" fill="#5a5750">${poly.value}</text></g>`,
-				);
-				break;
+				// Check candidates evenly across the ring.
+				const numCandidates = labelsPerContour * 4;
+				for (let i = 0; i < numCandidates && placed.length < labelsPerContour; i++) {
+					const t = (i + 0.5) / numCandidates;
+					const idx = Math.floor(t * ring.length);
+					const [lon, lat] = ring[idx];
+					const pos = projection([lon, lat]);
+					if (!pos) continue;
+					const [x, y] = pos;
+					// Must be inside chart drawing area (rough bounds; we
+					// don't need pixel-perfect because labels are tiny).
+					if (x < CHART_MARGIN + 6 || x > SVG_WIDTH - CHART_MARGIN - 6) continue;
+					if (y < TITLE_BAND_HEIGHT + 10 || y > SVG_HEIGHT - CHART_MARGIN - 4) continue;
+					// Avoid placing labels too close to one another.
+					if (placed.some(([px, py]) => Math.hypot(x - px, y - py) < 80)) continue;
+					placed.push([x, y]);
+					labelElements.push(
+						`<g class="isobar-label"><rect x="${(x - 12).toFixed(1)}" y="${(y - 6).toFixed(1)}" width="24" height="12" fill="#fafaf7" stroke="none" /><text x="${x.toFixed(1)}" y="${(y + 3).toFixed(1)}" text-anchor="middle" font-size="9" font-weight="600" fill="#5a5750">${poly.value}</text></g>`,
+					);
+				}
+				if (placed.length >= labelsPerContour) break;
 			}
-			break;
+			if (placed.length >= labelsPerContour) break;
 		}
 	}
 
