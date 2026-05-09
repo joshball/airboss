@@ -740,6 +740,17 @@ export const ROUTES = {
 	 */
 	FLIGHTBAG_SECTION_HEARTBEAT: (sectionId: string) =>
 		`/api/section/${encodeURIComponent(sectionId)}/heartbeat` as const,
+
+	// Study -- Courses (course-primitive WP, ADR 016 refinement). Course is a
+	// peer primitive to syllabus per principle 11 of LEARNING_PHILOSOPHY.md.
+	// Definitions only in this WP; the consumer pages land in a follow-on UI WP.
+	/** Courses index (list of instructor-authored courses). */
+	COURSES: '/courses',
+	/** Single course detail page, keyed by course slug. */
+	COURSE: (slug: string) => `/courses/${encodeURIComponent(slug)}` as const,
+	/** One step inside a course, keyed by course slug + step code (e.g. `s1.3`). */
+	COURSE_STEP: (slug: string, stepCode: string) =>
+		`/courses/${encodeURIComponent(slug)}/${encodeURIComponent(stepCode)}` as const,
 } as const;
 
 /**

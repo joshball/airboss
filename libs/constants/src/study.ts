@@ -736,6 +736,44 @@ export const NODE_LIFECYCLE_LABELS: Record<NodeLifecycle, string> = {
 };
 
 /**
+ * `knowledge_node.kind` values. Closed enum mirrored by a DB CHECK.
+ *
+ * Course-primitive WP (ADR 016 refinement, principle 11). The lens layer
+ * reads this column to render different node framings (e.g. transition
+ * steps as bridges between sections). The seed validator does NOT require
+ * nodes referenced by a course step to be a particular kind; the kind is
+ * informational, not gating.
+ *
+ * - `concept`: a single concept the learner internalizes. Default value;
+ *   backfilled to every existing knowledge_node row at migration time.
+ * - `procedure`: a stepwise procedure (checklist, flow, callout sequence).
+ * - `case_study`: a worked example or scenario walkthrough.
+ * - `transition`: a bridge step that frames the move from one section /
+ *   topic to the next. Pedagogical glue, not new content.
+ * - `reference_anchor`: a node that exists primarily to host citations or
+ *   anchor cross-references; minimal authored body.
+ */
+export const KNOWLEDGE_NODE_KINDS = {
+	CONCEPT: 'concept',
+	PROCEDURE: 'procedure',
+	CASE_STUDY: 'case_study',
+	TRANSITION: 'transition',
+	REFERENCE_ANCHOR: 'reference_anchor',
+} as const;
+
+export type KnowledgeNodeKind = (typeof KNOWLEDGE_NODE_KINDS)[keyof typeof KNOWLEDGE_NODE_KINDS];
+
+export const KNOWLEDGE_NODE_KIND_VALUES: readonly KnowledgeNodeKind[] = Object.values(KNOWLEDGE_NODE_KINDS);
+
+export const KNOWLEDGE_NODE_KIND_LABELS: Record<KnowledgeNodeKind, string> = {
+	[KNOWLEDGE_NODE_KINDS.CONCEPT]: 'Concept',
+	[KNOWLEDGE_NODE_KINDS.PROCEDURE]: 'Procedure',
+	[KNOWLEDGE_NODE_KINDS.CASE_STUDY]: 'Case study',
+	[KNOWLEDGE_NODE_KINDS.TRANSITION]: 'Transition',
+	[KNOWLEDGE_NODE_KINDS.REFERENCE_ANCHOR]: 'Reference anchor',
+};
+
+/**
  * Dual-gate mastery thresholds (ADR 011, spec "Mastery computation").
  *
  * Mastery is a dual gate: card stability AND rep accuracy must each clear

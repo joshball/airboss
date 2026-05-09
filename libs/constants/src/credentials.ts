@@ -179,6 +179,82 @@ export const SYLLABUS_KIND_LABELS: Record<SyllabusKind, string> = {
 };
 
 /**
+ * `course.kind` values. Closed enum mirrored by a DB CHECK.
+ *
+ * Course is a peer primitive to syllabus, per the 2026-05-08 refinement to
+ * ADR 016 and principle 11 of LEARNING_PHILOSOPHY.md: instructors author
+ * courses, the FAA authors syllabi, learners author goals; cert-vs-course
+ * overlay is a render-time lens computation, not authored data.
+ *
+ * - `instructor`: instructor-authored course (the only authored value in the
+ *   course-primitive WP).
+ * - `personal`: per-learner authored course. Reserved as a value; no UI in
+ *   this WP. Seed validator rejects authoring with this kind.
+ */
+export const COURSE_KINDS = {
+	INSTRUCTOR: 'instructor',
+	PERSONAL: 'personal',
+} as const;
+
+export type CourseKind = (typeof COURSE_KINDS)[keyof typeof COURSE_KINDS];
+
+export const COURSE_KIND_VALUES: readonly CourseKind[] = Object.values(COURSE_KINDS);
+
+export const COURSE_KIND_LABELS: Record<CourseKind, string> = {
+	[COURSE_KINDS.INSTRUCTOR]: 'Instructor',
+	[COURSE_KINDS.PERSONAL]: 'Personal',
+};
+
+/**
+ * `course.status` values. Closed enum mirrored by a DB CHECK.
+ *
+ * - `draft`: authored but not yet published; learners may not target it.
+ * - `active`: published; learners can hold a `goal_course` row pointing at it.
+ *   Default on the `course.status` column when the table lands in Phase 2.
+ * - `archived`: superseded; existing goals retain their link, no new goals
+ *   target it. The lens still renders archived courses.
+ */
+export const COURSE_STATUSES = {
+	DRAFT: 'draft',
+	ACTIVE: 'active',
+	ARCHIVED: 'archived',
+} as const;
+
+export type CourseStatus = (typeof COURSE_STATUSES)[keyof typeof COURSE_STATUSES];
+
+export const COURSE_STATUS_VALUES: readonly CourseStatus[] = Object.values(COURSE_STATUSES);
+
+export const COURSE_STATUS_LABELS: Record<CourseStatus, string> = {
+	[COURSE_STATUSES.DRAFT]: 'Draft',
+	[COURSE_STATUSES.ACTIVE]: 'Active',
+	[COURSE_STATUSES.ARCHIVED]: 'Archived',
+};
+
+/**
+ * `course_step.level` values. Closed enum mirrored by a DB CHECK.
+ *
+ * Two-level pedagogical tree:
+ *
+ * - `section`: top-level grouping under a course. NULL `parent_id`, NULL
+ *   `knowledge_node_id`, `is_leaf=false`.
+ * - `step`: leaf under a section. NOT NULL `parent_id` (the section), NOT
+ *   NULL `knowledge_node_id`, `is_leaf=true`.
+ */
+export const COURSE_STEP_LEVELS = {
+	SECTION: 'section',
+	STEP: 'step',
+} as const;
+
+export type CourseStepLevel = (typeof COURSE_STEP_LEVELS)[keyof typeof COURSE_STEP_LEVELS];
+
+export const COURSE_STEP_LEVEL_VALUES: readonly CourseStepLevel[] = Object.values(COURSE_STEP_LEVELS);
+
+export const COURSE_STEP_LEVEL_LABELS: Record<CourseStepLevel, string> = {
+	[COURSE_STEP_LEVELS.SECTION]: 'Section',
+	[COURSE_STEP_LEVELS.STEP]: 'Step',
+};
+
+/**
  * `syllabus.status` values. Closed enum.
  *
  * - `active`: visible to learners, used by lenses, included in relevance
