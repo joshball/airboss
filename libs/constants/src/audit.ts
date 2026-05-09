@@ -98,6 +98,20 @@ export const AUDIT_TARGETS = {
 	 * trail is only for the admin-pressed-button path.
 	 */
 	HANGAR_REVIEW_LOADER: 'hangar.review_loader',
+	/**
+	 * Per-issue lifecycle event on `hangar.ingest_issue` (dismiss / reopen).
+	 * `targetId` is the issue id; `op = update`; `metadata.subKind` carries
+	 * `dismiss` or `reopen` so the audit reader can split the two without
+	 * a join. Override writes get their own target type below.
+	 */
+	HANGAR_INGEST_ISSUE: 'hangar.ingest_issue',
+	/**
+	 * Per-action override write on `hangar.ingest_override` (the queue's
+	 * resolution payload). `targetId` is the parent issue id (one current
+	 * override per issue); `op = create | update`; `before / after` snapshot
+	 * the override row.
+	 */
+	HANGAR_INGEST_OVERRIDE: 'hangar.ingest_override',
 } as const;
 
 export type AuditTarget = (typeof AUDIT_TARGETS)[keyof typeof AUDIT_TARGETS];

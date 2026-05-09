@@ -392,7 +392,7 @@ async function doSeed(): Promise<void> {
 		// flag parsing (`--dir <path>`, optional course slug as the first
 		// positional). Preserving order matters because `--dir` consumes
 		// the next argv slot as its value.
-		const seedIdx = args.findIndex((a) => a === 'seed');
+		const seedIdx = args.indexOf('seed');
 		const after = seedIdx >= 0 ? args.slice(seedIdx + 2) : [];
 		const courseArgs = ['bun', 'scripts/db/seed-courses.ts', ...after];
 		await run(courseArgs);

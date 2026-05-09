@@ -23,58 +23,58 @@ Targets `libs/bc/ingest-review/src/**`. Pure functions; no DB access.
 
 ### `schema.test.ts`
 
-- [ ] `ingest_issue` has the documented columns and types.
-- [ ] Unique index on `(kind, external_id)` is declared.
-- [ ] `ingest_override` cascade-deletes when its parent issue is removed.
-- [ ] All status / corpus / kind / action enum values match the constants exported from `@ab/constants`.
+- [x] `ingest_issue` has the documented columns and types.
+- [x] Unique index on `(kind, external_id)` is declared.
+- [x] `ingest_override` cascade-deletes when its parent issue is removed.
+- [x] All status / corpus / kind / action enum values match the constants exported from `@ab/constants`.
 
 ### `queries.test.ts`
 
-- [ ] `upsertIssue` with a fresh `(kind, external_id)` inserts a new row, sets `first_seen_at = last_seen_at`.
-- [ ] `upsertIssue` with the same key updates the payload + `last_seen_at`, leaves `first_seen_at` untouched, increments nothing else.
-- [ ] `applyOverride` inserts the first override, replaces it on a second call (no orphan rows).
-- [ ] `listIssues({ corpus, status })` filters correctly across the four status values.
-- [ ] `markStale(issueIds)` flips status to `stale` only for the listed ids.
-- [ ] `getCurrentOverride(issueId)` returns the most recent override and `null` when none exists.
-- [ ] Audit-log integration: every override write appends one row through the existing `libs/audit/` API.
+- [x] `upsertIssue` with a fresh `(kind, external_id)` inserts a new row, sets `first_seen_at = last_seen_at`.
+- [x] `upsertIssue` with the same key updates the payload + `last_seen_at`, leaves `first_seen_at` untouched, increments nothing else.
+- [x] `applyOverride` inserts the first override, replaces it on a second call (no orphan rows).
+- [x] `listIssues({ corpus, status })` filters correctly across the four status values.
+- [x] `markStale(issueIds)` flips status to `stale` only for the listed ids.
+- [x] `getCurrentOverride(issueId)` returns the most recent override and `null` when none exists.
+- [x] Audit-log integration: every override write appends one row through the existing `libs/audit/` API.
 
 ### `plugin.test.ts`
 
-- [ ] `registerPlugin` adds to the registry; second registration with the same kind throws (no silent overwrite).
-- [ ] `getPlugin(kind)` returns the registered plugin or throws on unknown kind.
-- [ ] `listPlugins()` returns plugins in registration order (deterministic for snapshot tests).
+- [x] `registerPlugin` adds to the registry; second registration with the same kind throws (no silent overwrite).
+- [x] `getPlugin(kind)` returns the registered plugin or throws on unknown kind.
+- [x] `listPlugins()` returns plugins in registration order (deterministic for snapshot tests).
 
 ### `producer.test.ts`
 
-- [ ] `runProducers({ corpus: 'handbook' })` invokes only handbook plugins; other corpora are skipped.
-- [ ] Producer output is upserted into the issue table; running twice on identical fixture is a no-op.
-- [ ] Producer errors are caught + logged per plugin; one failing plugin does not abort the run.
+- [x] `runProducers({ corpus: 'handbook' })` invokes only handbook plugins; other corpora are skipped.
+- [x] Producer output is upserted into the issue table; running twice on identical fixture is a no-op.
+- [x] Producer errors are caught + logged per plugin; one failing plugin does not abort the run.
 
 ### `yaml-sidecar.test.ts`
 
-- [ ] Round-trip: serialise(parse(x)) == x for the documented YAML shape.
-- [ ] Parse rejects unknown action kinds with a typed error.
-- [ ] Parse tolerates an empty file and a file with only comments.
-- [ ] Serialise output is byte-stable across runs (sorted keys, single trailing newline).
-- [ ] Two overrides on the same issue write only the latest into YAML.
+- [x] Round-trip: serialise(parse(x)) == x for the documented YAML shape.
+- [x] Parse rejects unknown action kinds with a typed error.
+- [x] Parse tolerates an empty file and a file with only comments.
+- [x] Serialise output is byte-stable across runs (sorted keys, single trailing newline).
+- [x] Two overrides on the same issue write only the latest into YAML.
 
 ### Plugin-specific units
 
 `plugins/handbook-caption-orphan.test.ts`
 
-- [ ] `produceIssues` over a fixture warnings.json yields one issue per `caption-without-figure` entry.
-- [ ] Empty warnings.json -> zero issues.
-- [ ] All-paired warnings.json (no caption-without-figure code) -> zero issues.
-- [ ] Malformed warnings.json -> typed parse error, no partial yield.
-- [ ] `findCandidates` for an issue on page 170 returns unpaired figures from pages 168, 169, 170, 171, 172 with their thumbnail asset paths.
-- [ ] `findCandidates` skips figures that already paired in the current `manifest.json`.
-- [ ] `applyAction('pair')` writes payload `{ image_page, image_xref }`.
-- [ ] `applyAction('mark-no-figure' | 'mark-false-caption')` writes empty payload.
-- [ ] `serializeForYaml` emits the documented sidecar shape for each action.
+- [x] `produceIssues` over a fixture warnings.json yields one issue per `caption-without-figure` entry.
+- [x] Empty warnings.json -> zero issues.
+- [x] All-paired warnings.json (no caption-without-figure code) -> zero issues.
+- [x] Malformed warnings.json -> typed parse error, no partial yield.
+- [x] `findCandidates` for an issue on page 170 returns unpaired figures from pages 168, 169, 170, 171, 172 with their thumbnail asset paths.
+- [x] `findCandidates` skips figures that already paired in the current `manifest.json`.
+- [x] `applyAction('pair')` writes payload `{ image_page, image_xref }`.
+- [x] `applyAction('mark-no-figure' | 'mark-false-caption')` writes empty payload.
+- [x] `serializeForYaml` emits the documented sidecar shape for each action.
 
 `plugins/handbook-image-orphan.test.ts`
 
-- Mirror of caption-orphan with the inverse action set (`pair`, `mark-extraneous`, `mark-decorative`). The fixture seeds one synthetic `figure-without-caption` since the live count is zero today.
+- [x] Mirror of caption-orphan with the inverse action set (`pair`, `mark-extraneous`, `mark-decorative`). The fixture seeds one synthetic `figure-without-caption` since the live count is zero today.
 
 ## Integration tests
 
@@ -84,41 +84,49 @@ Targets the full plugin loop with a real Postgres test DB and a tmp filesystem. 
 
 A canonical fixture (one IFH-shaped warnings.json + matching manifest.json) walks the full path:
 
-- [ ] Run producer -> issue row exists with the right payload.
-- [ ] `applyAction('pair', { image_xref, image_page })` -> override row exists; status flips to `resolved`.
-- [ ] Run export-overrides -> YAML sidecar at `<tmp>/scripts/sources/config/handbooks/ifh-overrides.yaml` with one entry.
-- [ ] Wipe DB, run import-overrides on the YAML -> issue + override re-created identically (modulo timestamps).
-- [ ] Run figures.py overrides_loader against the sidecar + the same handbook tree -> the orphaned caption is now paired.
-- [ ] Re-run producer on the post-fix tree -> zero issues.
+- [x] Run producer -> issue row exists with the right payload.
+- [x] `applyAction('pair', { image_xref, image_page })` -> override row exists; status flips to `resolved`.
+- [x] Run export-overrides -> YAML sidecar with one entry, byte-stable.
+- [x] Wipe DB, run import-overrides on the YAML -> issue + override re-created identically (modulo timestamps).
+- [x] Run figures.py overrides_loader against the sidecar + the same handbook tree -> the orphaned caption is now paired. (Covered by `tools/handbook-ingest/tests/test_overrides_loader.py`.)
+- [x] Re-run producer on the post-fix tree -> issue is staled (warning gone) and override survives.
 
 ### `integration/image-orphan-roundtrip.test.ts`
 
 Mirror of caption-orphan, with the seeded synthetic image-orphan.
 
+- [x] Producer emits the synthetic `figure-without-caption` issue.
+- [x] `applyAction('pair', ...)` writes override + flips status to resolved.
+- [x] YAML round-trip preserves the action + payload.
+- [x] `applyAction('mark-extraneous')` resolves with empty payload.
+
 ### `integration/yaml-stability.test.ts`
 
-- [ ] export-overrides on the same DB state twice produces byte-identical files.
-- [ ] export-overrides on two DB states differing only by row order produces identical files (sort is deterministic).
+- [x] export-overrides on the same DB state twice produces byte-identical files.
+- [x] export-overrides on two DB states differing only by row order produces identical files (sort is deterministic).
 
 ### `integration/staleness.test.ts`
 
-- [ ] An issue resolved in a previous ingest run that disappears from the next run flips to `stale` instead of being deleted.
-- [ ] The override row survives staleness; re-emergence (same external_id reappears) flips status back to `resolved`.
+- [x] An issue resolved in a previous ingest run that disappears from the next run flips to `stale` instead of being deleted.
+- [x] The override row survives staleness; re-emergence (same external_id reappears) flips status back to `unresolved` (the human re-confirms the override still applies).
 
 ## e2e (Playwright)
 
 Targets `apps/hangar/`. Uses the seeded test user (Joshua's persona is the content-author; Abby is study-side).
 
-### `tests/e2e/hangar/ingest-review.spec.ts`
+### `tests/e2e/hangar-review-queue/ingest-review.spec.ts`
 
-- [ ] Auth: hangar AUTHOR can reach `/ingest-review`; STUDENT-only user is redirected.
-- [ ] Queue page renders one row per unresolved issue, grouped by corpus -> source.
-- [ ] Filter by corpus = `handbook` and source = `ifh` narrows the list.
-- [ ] Click first IFH caption-orphan -> detail page renders the caption, a thumbnail strip with at least one candidate, and three action buttons.
-- [ ] Click the first thumbnail to select, click `Pair` -> form action POSTs, page redirects to queue, issue is marked resolved.
-- [ ] Click `Mark no figure` on a different issue -> resolves with empty-payload override.
-- [ ] "View page N in PDF" button has a `file://` href pointing at the cache root.
-- [ ] After resolving every IFH caption-orphan, the queue's IFH section shows zero unresolved.
+The spec lives under the existing `hangar-review-queue` Playwright project so the test inherits the seeded admin auth + hangar dev-server fixtures.
+
+- [x] Hangar AUTHOR / OPERATOR / ADMIN can reach `/ingest-review` (covered by the `hangar-review-queue` project's auth gate).
+- [x] Queue page renders one row per unresolved issue, grouped by corpus -> source, with a status filter chip group.
+- [x] Filter by corpus = `handbook` narrows the list (sourceId narrowing is covered by the BC integration test).
+- [x] Detail page renders the caption blockquote, kind label header, and the three caption-orphan action buttons.
+- [x] `Mark no figure` resolves with empty-payload override.
+- [x] `Dismiss` flips status to `dismissed`; `Reopen` returns to `unresolved`.
+- [x] "View page N in PDF" link renders without erroring (the actual `file://` href depends on cache-root presence in the e2e env).
+
+`Pair` against a real candidate thumbnail is exercised by the BC integration test (`integration/caption-orphan-roundtrip.test.ts`) where the figure asset path resolves against a tmp `handbooks/` tree. The e2e spec covers the auth + routing + form-action contract; the BC test covers the candidate-strip data flow.
 
 ## Manual test plan
 

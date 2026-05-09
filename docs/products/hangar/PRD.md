@@ -15,29 +15,31 @@ For the why, see [VISION.md](VISION.md). For what's queued next, see [ROADMAP.md
 
 ## Shipped
 
-| Surface             | What it does                                                                                       | Spec                                                                       |
-| ------------------- | -------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| `/` dashboard       | Three tiles -- Content, People, System -- with live counts                                         | --                                                                         |
-| `/sources`          | Reference-document pipeline: register, fetch, extract, diff, validate                              | [hangar-sources-v1](../../work-packages/hangar-sources-v1/spec.md)         |
-| `/sources/[id]`     | Source detail + filesystem browser                                                                 | [hangar-sources-v1](../../work-packages/hangar-sources-v1/spec.md)         |
-| `/glossary`         | Term registry: definitions, citations, knowledge-kind taxonomy                                     | [hangar-non-textual](../../work-packages/hangar-non-textual/spec.md)       |
-| `/glossary/[id]`    | Term detail + edit                                                                                 | [hangar-non-textual](../../work-packages/hangar-non-textual/spec.md)       |
-| `/users`            | User list (ADMIN-only): name, email, role, last seen, banned                                       | --                                                                         |
-| `/users/[id]`       | User detail (ADMIN-only): role picker, ban / unban, session revoke, sessions + audit               | [hangar-users-editing](../../work-packages/hangar-users-editing/spec.md)   |
-| `/users/invitations`| Invitation list (ADMIN-only): pending / accepted / revoked / expired tabs + invite-user modal     | [hangar-invite-flow](../../work-packages/hangar-invite-flow/spec.md)       |
-| `/users/invitations/[id]` | Invitation detail (ADMIN-only): full row + audit history + revoke / resend actions          | [hangar-invite-flow](../../work-packages/hangar-invite-flow/spec.md)       |
-| `/jobs`             | Background-job log with 1Hz live polling                                                           | [hangar-registry](../../work-packages/hangar-registry/spec.md)             |
-| `/admin/audit`      | Cross-cutting audit explorer (ADMIN-only): filter by actor / target / op / time window, paginate   | [hangar-audit-explorer](../../work-packages/hangar-audit-explorer/spec.md) |
-| `/admin/audit/[id]` | Detail view: actor card, side-by-side before/after jsonb panes, metadata, cross-links              | [hangar-audit-explorer](../../work-packages/hangar-audit-explorer/spec.md) |
-| Auth gate           | Layout-level `requireRole(AUTHOR                                                                   | OPERATOR                                                                   |
+| Surface                    | What it does                                                                                     | Spec                                                                                 |
+| -------------------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
+| `/` dashboard              | Three tiles -- Content, People, System -- with live counts                                       | --                                                                                   |
+| `/sources`                 | Reference-document pipeline: register, fetch, extract, diff, validate                            | [hangar-sources-v1](../../work-packages/hangar-sources-v1/spec.md)                   |
+| `/sources/[id]`            | Source detail + filesystem browser                                                               | [hangar-sources-v1](../../work-packages/hangar-sources-v1/spec.md)                   |
+| `/glossary`                | Term registry: definitions, citations, knowledge-kind taxonomy                                   | [hangar-non-textual](../../work-packages/hangar-non-textual/spec.md)                 |
+| `/glossary/[id]`           | Term detail + edit                                                                               | [hangar-non-textual](../../work-packages/hangar-non-textual/spec.md)                 |
+| `/users`                   | User list (ADMIN-only): name, email, role, last seen, banned                                     | --                                                                                   |
+| `/users/[id]`              | User detail (ADMIN-only): role picker, ban / unban, session revoke, sessions + audit             | [hangar-users-editing](../../work-packages/hangar-users-editing/spec.md)             |
+| `/users/invitations`       | Invitation list (ADMIN-only): pending / accepted / revoked / expired tabs + invite-user modal    | [hangar-invite-flow](../../work-packages/hangar-invite-flow/spec.md)                 |
+| `/users/invitations/[id]`  | Invitation detail (ADMIN-only): full row + audit history + revoke / resend actions               | [hangar-invite-flow](../../work-packages/hangar-invite-flow/spec.md)                 |
+| `/jobs`                    | Background-job log with 1Hz live polling                                                         | [hangar-registry](../../work-packages/hangar-registry/spec.md)                       |
+| `/admin/audit`             | Cross-cutting audit explorer (ADMIN-only): filter by actor / target / op / time window, paginate | [hangar-audit-explorer](../../work-packages/hangar-audit-explorer/spec.md)           |
+| `/admin/audit/[id]`        | Detail view: actor card, side-by-side before/after jsonb panes, metadata, cross-links            | [hangar-audit-explorer](../../work-packages/hangar-audit-explorer/spec.md)           |
+| `/ingest-review`           | Plugin-shaped queue for residual ingest-pipeline issues (figure-pairing orphans today)           | [hangar-ingest-review-queue](../../work-packages/hangar-ingest-review-queue/spec.md) |
+| `/ingest-review/[issueId]` | Orphan-card with caption text, candidate-strip, action bar, PDF link                             | [hangar-ingest-review-queue](../../work-packages/hangar-ingest-review-queue/spec.md) |
+| Auth gate                  | Layout-level `requireRole(AUTHOR                                                                 | OPERATOR                                                                             |
 
 ## In flight or imminent
 
-| Item                        | State       | Notes                                                                                                                                                                   |
-| --------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Item                        | State       | Notes                                                                                                                                                                                 |
+| --------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Hangar Playwright e2e infra | Not started | Tracked at [hangar-e2e-infrastructure](../../work-packages/hangar-e2e-infrastructure/spec.md). Prerequisite for the deferred audit-explorer + users-editing + invite-flow e2e suites. |
-| Scenarios authoring         | Not scoped  | Will follow the scenario tick model from `airboss-firc/libs/engine/`. Stand up only after engine migrates.                                                              |
-| Cards authoring             | Not scoped  | Cards (study) are seeded today; admin authoring UI is downstream of stable card spec.                                                                                   |
+| Scenarios authoring         | Not scoped  | Will follow the scenario tick model from `airboss-firc/libs/engine/`. Stand up only after engine migrates.                                                                            |
+| Cards authoring             | Not scoped  | Cards (study) are seeded today; admin authoring UI is downstream of stable card spec.                                                                                                 |
 
 ## Tracking
 

@@ -92,8 +92,10 @@ export const QUERY_PARAMS = {
 	SINCE_SEQ: 'sinceSeq',
 	/** Citation picker `target` param (regulation / ac / handbook). */
 	TARGET: 'target',
-	/** Hangar /jobs filter: job kind. */
+	/** Hangar /jobs filter: job kind. Also reused by hangar `/ingest-review` for issue kind. */
 	KIND: 'kind',
+	/** Hangar /ingest-review filter: corpus (`handbook` | `regs` | `knowledge`). */
+	CORPUS: 'corpus',
 	/** Hangar /glossary filter: rule set. */
 	RULES: 'rules',
 	/** Hangar /glossary filter: format. */
@@ -632,6 +634,21 @@ export const ROUTES = {
 	HANGAR_REVIEW_ADMIN_BUCKET_NEW: '/review/admin/buckets/new',
 	HANGAR_REVIEW_ADMIN_BUCKET_EDIT: (id: string) => `/review/admin/buckets/${encodeURIComponent(id)}/edit` as const,
 
+	// Hangar -- /ingest-review queue surface for triaging residual issues
+	// emitted by the ingest pipelines (figure-pairing today; regs /
+	// knowledge tomorrow). See
+	// `docs/work-packages/hangar-ingest-review-queue/spec.md`.
+	HANGAR_INGEST_REVIEW: '/ingest-review',
+	HANGAR_INGEST_REVIEW_ISSUE: (issueId: string) => `/ingest-review/${encodeURIComponent(issueId)}` as const,
+	HANGAR_INGEST_REVIEW_PAIR_ACTION: '?/pair',
+	HANGAR_INGEST_REVIEW_MARK_NO_FIGURE_ACTION: '?/markNoFigure',
+	HANGAR_INGEST_REVIEW_MARK_FALSE_CAPTION_ACTION: '?/markFalseCaption',
+	HANGAR_INGEST_REVIEW_MARK_EXTRANEOUS_ACTION: '?/markExtraneous',
+	HANGAR_INGEST_REVIEW_MARK_DECORATIVE_ACTION: '?/markDecorative',
+	HANGAR_INGEST_REVIEW_DISMISS_ACTION: '?/dismiss',
+	HANGAR_INGEST_REVIEW_REOPEN_ACTION: '?/reopen',
+	HANGAR_INGEST_REVIEW_RUN_PRODUCERS_ACTION: '?/runProducers',
+
 	// Hangar -- /roadmap read-only WP browser (Phase 8 of the
 	// tracking-system-overhaul WP). Backed by `scripts/lib/wp-loader.ts`
 	// (server-only); writebacks go through `bun run wp set`. See
@@ -846,6 +863,7 @@ export const NAV_LABELS = {
 	HELP_INDEX: 'Help index',
 	HELP_CONCEPTS: 'Concepts',
 	HANGAR_DOCS: 'Docs',
+	HANGAR_INGEST_REVIEW: 'Ingest review',
 	HANGAR_REVIEW: 'Review',
 	HANGAR_REVIEW_BOARD: 'Board',
 	HANGAR_REVIEW_BUCKETS: 'Buckets',

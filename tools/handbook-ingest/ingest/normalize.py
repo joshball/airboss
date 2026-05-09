@@ -32,6 +32,7 @@ from .fetch import FetchResult
 from .figures import FigureRecord, FigureWarning
 from .ocr_leak import detect_ocr_leaks, elide_ocr_leaks
 from .outline import OutlineNode
+from .overrides_loader import load_sidecar, sidecar_path_for
 from .paths import edition_root, ensure_dir, relative_to_repo
 from .sections import SectionBody
 from .tables import TableRecord, TableWarning
@@ -277,6 +278,22 @@ def write_outputs(
                 "message": message,
             }
         )
+
+    # Apply per-handbook YAML sidecar overrides (hangar `/ingest-review`
+    # exports). When the sidecar exists, every warning whose `id` has an
+    # override row is dropped from `manifest_warnings`. The filter is a
+    # no-op when the sidecar is absent or empty -- a clean clone with no
+    # sidecar behaves identically to the pre-WP pipeline.
+    #
+    # Per `docs/work-packages/hangar-ingest-review-queue/spec.md` step 3
+    # ("YAML -> ingest pipeline"): the figure-pairing pipeline reads the
+    # sidecar at the start of figure extraction and applies overrides as
+    # a final pass. The drop-from-warnings step here is the surface that
+    # makes "I resolved this in the queue" stick across re-extracts.
+    manifest_warnings = _apply_ingest_review_overrides(
+        config.document_slug,
+        manifest_warnings,
+    )
 
     manifest: dict[str, object] = {
         "document_slug": config.document_slug,
@@ -558,6 +575,41 @@ def _compose_markdown(
             lines.append("</div>")
             lines.append("")
     return "\n".join(lines).rstrip() + "\n"
+
+
+def _apply_ingest_review_overrides(
+    document_slug: str,
+    manifest_warnings: list[dict[str, object]],
+) -> list[dict[str, object]]:
+    """Drop manifest warnings whose `id` has a sidecar override.
+
+    Resolves the sidecar path against the repo root (computed by walking
+    up from the module's file location). Missing or empty sidecar -> no
+    filtering. Any warning whose `id` matches an override entry's
+    `external_id` is dropped from the returned list.
+
+    Per the WP design (DB-first, YAML on export). The sidecar is the
+    durable, repo-checked artifact that survives a fresh clone; the DB
+    is the editing surface. This helper is the read-side connection
+    between the two.
+    """
+    repo_root = _resolve_repo_root()
+    sidecar_path = sidecar_path_for(repo_root, document_slug)
+    overrides = load_sidecar(sidecar_path)
+    if overrides.is_empty:
+        return manifest_warnings
+    overridden = set(overrides.by_external_id.keys())
+    return [w for w in manifest_warnings if str(w.get("id", "")) not in overridden]
+
+
+def _resolve_repo_root() -> Path:
+    """Compute the airboss repo root by walking up from this module.
+
+    `tools/handbook-ingest/ingest/normalize.py` -> repo root is three
+    parents up. Defensive: prefer the env var when set, so a future
+    pipeline-runner that copies the module out of tree still resolves.
+    """
+    return Path(__file__).resolve().parents[3]
 
 
 def _faa_pages_str(start: str | None, end: str | None) -> str:
