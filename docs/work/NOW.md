@@ -6,10 +6,9 @@ Single entry point for "what should I work on?" in airboss.
 
 (Human-curated; the only hand-edited part of this file.)
 
-- Closing out `tracking-system-overhaul` -- Phase 5 (NOW.md trim + log backfill) and Phase 7 (doc home consolidation) are the active fronts.
-- After Phase 5 + 7 land, the `wp-hangar-roadmap-view` WP can pick up the in-app surface evolution.
-- Manual test passes on the cert-syllabus surfaces (#321 / #323 / #324) still owed.
-- `course-primitive` WP shipped (PRs #713, #721, #728, #730, #732, #734, #736, #737; doc fixes #731, #739). Course is a peer primitive to Syllabus; weather-course content authoring unblocked.
+- `course-primitive` WP shipped (PRs #713, #721, #728, #730, #732, #734, #736, #737, #741, #742, #743; doc fixes #731, #739). Course is a peer primitive to Syllabus; weather-course content authoring unblocked.
+- `hangar-review-queue-cluster-fix` -- 24 e2e failures triaged; canonical Buffer-not-defined hydration leak (12 specs) + Postgres crash on `hangar.docs_search_index` (3 specs) are real bugs awaiting one focused investigation, not 12 patches.
+- Walkthroughs owed on shipped surfaces: cert-dashboard (#321), lens-ui (#323), goal-composer (#324). Code merged; `human_review_status: pending` on the WPs because no test plan has been walked.
 
 ## Live views
 
