@@ -25,8 +25,6 @@
 // pure helpers + DB-touching helpers without needing two import lines per
 // `+page.server.ts`.
 
-export * from './index';
-
 export {
 	type ActorSearchHit,
 	AUDIT_ACTOR_SYSTEM,
@@ -58,6 +56,7 @@ export { countDocsIndex, readIndexedDoc, searchDocs } from './docs-search';
 export { bustDocsTreeCache, isDocsPathAllowed, listDocsTree } from './docs-tree';
 export type { FetchHtmlFn } from './edition-stub';
 export { makeStubFetchHtml, withEditionStub } from './edition-stub';
+export * from './index';
 export {
 	type AcceptInvitationInput,
 	type AcceptInvitationResult,
