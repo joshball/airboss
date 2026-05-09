@@ -6,7 +6,7 @@ severity: major
 status: fixed
 discovered_pr: null
 discovered_date: 2026-05-04
-fix_pr: null
+fix_pr: 750
 fix_wp: null
 repro: |
   ACS_PUBLICATION_SLUGS ships `ir-airplane-8c` but
