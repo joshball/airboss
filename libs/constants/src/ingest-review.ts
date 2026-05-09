@@ -142,14 +142,6 @@ export const INGEST_REVIEW = {
 } as const;
 
 /**
- * Audit-target tag for ingest-override mutations. Mirrors the
- * `hangar.review_bucket` precedent: per-row mutations write through
- * `auditWrite({ targetType: AUDIT_INGEST_OVERRIDE, ... })` so the
- * existing audit explorer already filters them.
- */
-export const AUDIT_INGEST_OVERRIDE = 'hangar.ingest_override';
-
-/**
  * ID prefixes minted via `@ab/utils` `createId(prefix)`.
  */
 export const INGEST_ISSUE_ID_PREFIX = 'isiss';

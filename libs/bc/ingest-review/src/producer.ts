@@ -73,7 +73,12 @@ export async function runProducers(opts: ProducerOptions, db: Db = defaultDb): P
 			if (batch.length > 0) {
 				await upsertIssues(batch, db);
 			}
-			const staled = await markStaleByDifference({ corpus: opts.corpus, kind: plugin.kind }, seenExternalIds, db);
+			const staleScope: { corpus: typeof opts.corpus; kind: typeof plugin.kind; sourceId?: string } = {
+				corpus: opts.corpus,
+				kind: plugin.kind,
+				...(opts.sourceId !== undefined ? { sourceId: opts.sourceId } : {}),
+			};
+			const staled = await markStaleByDifference(staleScope, seenExternalIds, db);
 			perPlugin.push({ kind: plugin.kind, upserted: batch.length, staled: staled.length });
 			totalUpserted += batch.length;
 			totalStaled += staled.length;

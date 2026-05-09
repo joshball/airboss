@@ -197,7 +197,6 @@ export {
 } from './hosts';
 export { MIN_PASSWORD_LENGTH, USER_STATUS, type UserStatus } from './identity';
 export {
-	AUDIT_INGEST_OVERRIDE,
 	CORPUS_LABELS,
 	CORPUS_VALUES,
 	type Corpus,

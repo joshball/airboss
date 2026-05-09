@@ -10,7 +10,6 @@
 
 import { auditWrite } from '@ab/audit';
 import {
-	AUDIT_INGEST_OVERRIDE,
 	AUDIT_TARGETS,
 	type Corpus,
 	INGEST_ISSUE_ID_PREFIX,
@@ -280,7 +279,7 @@ export async function applyOverride(input: ApplyOverrideInput, db: Db = defaultD
 			{
 				actorId: input.actorUserId,
 				op: previous ? 'update' : 'create',
-				targetType: AUDIT_INGEST_OVERRIDE,
+				targetType: AUDIT_TARGETS.HANGAR_INGEST_OVERRIDE,
 				targetId: input.issueId,
 				before: previous,
 				after: overrideRowToRecord(row),
@@ -309,7 +308,7 @@ export async function dismissIssue(issueId: string, actorUserId: string | null, 
 			{
 				actorId: actorUserId,
 				op: 'update',
-				targetType: AUDIT_TARGETS.HANGAR_REVIEW_BUCKET,
+				targetType: AUDIT_TARGETS.HANGAR_INGEST_ISSUE,
 				targetId: issueId,
 				before: { status: issue.status },
 				after: { status: INGEST_REVIEW.STATUS.DISMISSED },
@@ -333,7 +332,7 @@ export async function reopenIssue(issueId: string, actorUserId: string | null, d
 			{
 				actorId: actorUserId,
 				op: 'update',
-				targetType: AUDIT_TARGETS.HANGAR_REVIEW_BUCKET,
+				targetType: AUDIT_TARGETS.HANGAR_INGEST_ISSUE,
 				targetId: issueId,
 				before: { status: issue.status },
 				after: { status: INGEST_REVIEW.STATUS.UNRESOLVED },
@@ -350,11 +349,17 @@ export async function reopenIssue(issueId: string, actorUserId: string | null, d
  * don't pollute the live queue.
  */
 export async function markStaleByDifference(
-	scope: { corpus: Corpus; kind: IngestIssueKind },
+	scope: { corpus: Corpus; kind: IngestIssueKind; sourceId?: string },
 	seenExternalIds: readonly string[],
 	db: Db = defaultDb,
 ): Promise<readonly string[]> {
 	const conditions = [eq(ingestIssue.corpus, scope.corpus), eq(ingestIssue.kind, scope.kind)];
+	if (scope.sourceId !== undefined) {
+		// Scope to one source so a `--source ifh` producer never staleds
+		// rows from `phak` etc. Without this, every per-source run treats
+		// every other source's rows as "disappeared" and flips them all.
+		conditions.push(eq(ingestIssue.sourceId, scope.sourceId));
+	}
 	if (seenExternalIds.length > 0) {
 		// Postgres NOT IN with parameter list. Drizzle's `notInArray` would
 		// emit `<> ALL`, which is equivalent for our case but less greppable.
