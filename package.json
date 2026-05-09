@@ -14,6 +14,7 @@
 		"db": "bun scripts/db.ts",
 		"sources": "bun scripts/sources.ts",
 		"references": "bun scripts/references.ts",
+		"charts": "bun scripts/charts.ts",
 		"airboss-ref": "bun scripts/airboss-ref.ts",
 		"wp": "bun scripts/wp.ts",
 		"bug": "bun scripts/bug.ts",
