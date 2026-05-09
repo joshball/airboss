@@ -75,10 +75,23 @@ test.describe('review board: filters + URL persistence', () => {
 
 	test('Clear filters returns the board to the default view', async ({ page }) => {
 		await page.goto(`${ROUTES.HANGAR_REVIEW}?${REVIEW_BOARD_QUERY_PARAMS.TOP}=tasks`);
+		await page.waitForLoadState('networkidle');
 		const toolbar = page.getByLabel('Board filters');
 		await expect(toolbar.getByRole('button', { name: /^Tasks$/ })).toHaveAttribute('aria-pressed', 'true');
-		await toolbar.getByRole('button', { name: /clear filters/i }).click();
-		await expect(toolbar.getByRole('button', { name: /^All$/ })).toHaveAttribute('aria-pressed', 'true');
+		const clearBtn = toolbar.getByRole('button', { name: /clear filters/i });
+		const allBtn = toolbar.getByRole('button', { name: /^All$/ });
+		// Poll the click against `aria-pressed` to absorb the hydration race --
+		// the chip's onclick is bound after Svelte's runtime mounts, so a
+		// single click can fire before the listener attaches.
+		await expect
+			.poll(
+				async () => {
+					await clearBtn.click();
+					return await allBtn.getAttribute('aria-pressed');
+				},
+				{ timeout: 10_000 },
+			)
+			.toBe('true');
 		await expect.poll(() => new URL(page.url()).searchParams.get(REVIEW_BOARD_QUERY_PARAMS.TOP)).toBeNull();
 	});
 });

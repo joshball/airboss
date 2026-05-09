@@ -17,17 +17,15 @@ test.describe('ad-hoc tasks', () => {
 
 	test('submitting an empty title surfaces an inline validation error', async ({ page }) => {
 		await page.goto(ROUTES.HANGAR_REVIEW_TASK_NEW);
-		// Force-submit past the native required-field check so the server-side
-		// validator gets a chance to return its inline error. Wait for hydration
-		// so `use:enhance` is bound before we click; otherwise native submit
-		// gets blocked by `required` (we just unset it) but the JS handler that
-		// surfaces inline errors via the action result is also missing.
+		// Force-submit past the native required-field check via requestSubmit()
+		// so the server-side validator runs. Wait for hydration so `use:enhance`
+		// is bound; otherwise the click fires before the JS handler is attached
+		// and the submit is a silent no-op.
 		await page.waitForLoadState('networkidle');
-		await page.evaluate(() => {
-			const form = document.querySelector('form');
-			if (form instanceof HTMLFormElement) form.noValidate = true;
+		await page.locator('form').evaluate((form: HTMLFormElement) => {
+			form.noValidate = true;
+			form.requestSubmit();
 		});
-		await page.getByRole('button', { name: /create task/i }).click();
 		await expect(page.getByText(/title is required/i)).toBeVisible({ timeout: 10_000 });
 	});
 
@@ -84,8 +82,11 @@ test.describe('ad-hoc tasks', () => {
 				page.waitForURL(new RegExp(`${ROUTES.HANGAR_REVIEW.replace('/', '\\/')}(\\?|$)`)),
 				page.getByRole('button', { name: /confirm delete/i }).click(),
 			]);
-			// Card no longer surfaces.
-			await expect(page.getByText(title)).toHaveCount(0);
+			// Card no longer surfaces. The title prefix is shared with the
+			// post-rename `${title} edited` card, so wait for the article-level
+			// match (the toast/announcer surfaces are non-article and would
+			// otherwise inflate `toHaveCount` past 0 transiently).
+			await expect(page.getByRole('article').filter({ hasText: title })).toHaveCount(0);
 		});
 	});
 });

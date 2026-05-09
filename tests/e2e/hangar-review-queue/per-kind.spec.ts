@@ -27,10 +27,14 @@ test.describe('wp_spec view: tabs + frontmatter', () => {
 		await page.goto(ROUTES.HANGAR_REVIEW);
 		// Filter to the hangar-review-queue work package so we click a
 		// deterministic card. Search by ref substring rather than title text.
+		// Wait for hydration so the searchbox `oninput` is bound and the
+		// client-side filter narrows the visible cards before we pick `.first()`.
+		await page.waitForLoadState('networkidle');
 		await page.getByRole('searchbox', { name: /search title or ref/i }).fill('hangar-review-queue');
-		// Cards link out via `/review/items/[itemId]`; pick the first link
-		// that carries `/review/items/` and matches the WP slug.
-		const itemLink = page.locator(`a[href*="/review/items/"]`).first();
+		// Scope the link locator to a visible article so we don't pick up a
+		// hidden card from the SSR'd DOM that the client-side filter has
+		// already narrowed away.
+		const itemLink = page.locator(`article a[href*="/review/items/"]`).first();
 		await expect(itemLink).toBeVisible();
 		await itemLink.click();
 		// Server redirects items/<id> -> [kind]/<id>; the URL settles on the
@@ -44,8 +48,9 @@ test.describe('wp_spec view: tabs + frontmatter', () => {
 		// Resolve the wp_spec URL via the dispatcher -- a deep-link by item
 		// ref is not exposed, so we walk: board -> filter -> click first card.
 		await page.goto(ROUTES.HANGAR_REVIEW);
+		await page.waitForLoadState('networkidle');
 		await page.getByRole('searchbox', { name: /search title or ref/i }).fill('hangar-review-queue');
-		const itemLink = page.locator(`a[href*="/review/items/"]`).first();
+		const itemLink = page.locator(`article a[href*="/review/items/"]`).first();
 		await Promise.all([page.waitForURL(/\/review\/wp_spec\//), itemLink.click()]);
 
 		// Tab list contains: spec, tasks, test-plan, design, user-stories,
@@ -67,8 +72,9 @@ test.describe('wp_spec view: tabs + frontmatter', () => {
 
 	test('walker-link card surfaces and points at the test-plan walker route', async ({ page }) => {
 		await page.goto(ROUTES.HANGAR_REVIEW);
+		await page.waitForLoadState('networkidle');
 		await page.getByRole('searchbox', { name: /search title or ref/i }).fill('hangar-review-queue');
-		const itemLink = page.locator(`a[href*="/review/items/"]`).first();
+		const itemLink = page.locator(`article a[href*="/review/items/"]`).first();
 		await Promise.all([page.waitForURL(/\/review\/wp_spec\//), itemLink.click()]);
 		// Sidebar holds an Actions card with a walker link. The href ends in
 		// `/walker`; the link copy reads "Open" or "Resume" depending on

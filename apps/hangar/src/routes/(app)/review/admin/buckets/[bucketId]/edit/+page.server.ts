@@ -32,7 +32,7 @@ import type { Actions, PageServerLoad } from './$types';
 const log = createLogger('hangar:review:admin:buckets:edit');
 
 /** Bucket-id prefix per `@ab/utils` `generateHangarReviewBucketId`. */
-const BUCKET_ID_PREFIX = 'hrb_';
+const BUCKET_ID_PREFIX = 'rbkt_';
 
 export const load: PageServerLoad = async (event) => {
 	requireRole(event, ROLES.ADMIN);

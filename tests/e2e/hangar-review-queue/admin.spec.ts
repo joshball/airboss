@@ -73,14 +73,15 @@ test.describe('bucket admin: CRUD', () => {
 		await page.goto(ROUTES.HANGAR_REVIEW_ADMIN_BUCKET_NEW);
 		// Native HTML5 validation: leave Name blank, click Create. Browser
 		// blocks the submit; the form stays on the same page with the input
-		// invalid. Force-submit via JS to bypass the native dialog so the
-		// server-side validator runs and returns the inline error.
+		// invalid. Force a `requestSubmit()` call to bypass the native dialog
+		// AND wait for hydration so `use:enhance` is bound -- otherwise the
+		// click fires before the JS handler is attached and the submit is a
+		// silent no-op.
 		await page.waitForLoadState('networkidle');
-		await page.evaluate(() => {
-			const form = document.querySelector('form');
-			if (form instanceof HTMLFormElement) form.noValidate = true;
+		await page.locator('form').evaluate((form: HTMLFormElement) => {
+			form.noValidate = true;
+			form.requestSubmit();
 		});
-		await page.getByRole('button', { name: /create bucket/i }).click();
 		await expect(page.getByText(/name is required/i)).toBeVisible({ timeout: 10_000 });
 	});
 

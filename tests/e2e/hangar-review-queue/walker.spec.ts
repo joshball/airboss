@@ -20,8 +20,9 @@ test.describe('test-plan walker: progress + pause', () => {
 		// Route through the board -> spec -> walker so we work with whatever
 		// review_item id the loader assigned.
 		await page.goto(ROUTES.HANGAR_REVIEW);
+		await page.waitForLoadState('networkidle');
 		await page.getByRole('searchbox', { name: /search title or ref/i }).fill('hangar-review-queue');
-		const itemLink = page.locator(`a[href*="/review/items/"]`).first();
+		const itemLink = page.locator(`article a[href*="/review/items/"]`).first();
 		await Promise.all([page.waitForURL(/\/review\/wp_spec\//), itemLink.click()]);
 		const walkerLink = page.locator(`a[href$="/walker"]`).first();
 		await Promise.all([page.waitForURL(/\/walker$/), walkerLink.click()]);
@@ -38,8 +39,9 @@ test.describe('test-plan walker: progress + pause', () => {
 
 	test('keyboard shortcut hint surfaces in the progress aside', async ({ page }) => {
 		await page.goto(ROUTES.HANGAR_REVIEW);
+		await page.waitForLoadState('networkidle');
 		await page.getByRole('searchbox', { name: /search title or ref/i }).fill('hangar-review-queue');
-		const itemLink = page.locator(`a[href*="/review/items/"]`).first();
+		const itemLink = page.locator(`article a[href*="/review/items/"]`).first();
 		await Promise.all([page.waitForURL(/\/review\/wp_spec\//), itemLink.click()]);
 		const walkerLink = page.locator(`a[href$="/walker"]`).first();
 		await Promise.all([page.waitForURL(/\/walker$/), walkerLink.click()]);
@@ -51,8 +53,9 @@ test.describe('test-plan walker: progress + pause', () => {
 
 	test('pause returns to the spec surface', async ({ page }) => {
 		await page.goto(ROUTES.HANGAR_REVIEW);
+		await page.waitForLoadState('networkidle');
 		await page.getByRole('searchbox', { name: /search title or ref/i }).fill('hangar-review-queue');
-		const itemLink = page.locator(`a[href*="/review/items/"]`).first();
+		const itemLink = page.locator(`article a[href*="/review/items/"]`).first();
 		await Promise.all([page.waitForURL(/\/review\/wp_spec\//), itemLink.click()]);
 		const walkerLink = page.locator(`a[href$="/walker"]`).first();
 		await Promise.all([page.waitForURL(/\/walker$/), walkerLink.click()]);
