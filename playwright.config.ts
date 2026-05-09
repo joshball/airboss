@@ -52,9 +52,18 @@ const rootEnv = loadRootEnv();
 
 // Every webServer command inherits this env so the SvelteKit/Drizzle layer
 // connects to the e2e DB instead of the developer's working dataset.
+//
+// `HANGAR_JOBS_WORKER=off` disables the in-process hangar-jobs poller in the
+// hangar webServer. Playwright launches webServers in parallel with
+// `globalSetup`, so a worker that boots before the seed lands the schema
+// crash-loops on `select ... from "hangar"."job"` and floods the test
+// output with stack traces. No e2e spec depends on the in-process worker
+// (specs that touch the queue insert + inspect rows directly), so leaving
+// it off in this context is loss-free.
 const e2eEnv = {
 	...rootEnv,
 	[ENV_VARS.DATABASE_URL]: DEV_DB_URL_E2E,
+	[ENV_VARS.HANGAR_JOBS_WORKER]: 'off',
 };
 
 export default defineConfig({
