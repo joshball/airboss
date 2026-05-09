@@ -18,7 +18,7 @@ import { serializeSidecar } from '../../../../../scripts/ingest-review/yaml-side
 import { handbookCaptionOrphanPlugin } from '../plugins/handbook-caption-orphan';
 import { applyOverride, listOverridesWithIssues, upsertIssue } from '../queries';
 import { ingestIssue } from '../schema';
-import type { IssueInput, YamlSidecarEntry } from '../types';
+import type { HandbookCaptionOrphanPayload, IssueInput, IssueRecord, YamlSidecarEntry } from '../types';
 
 const TEST_USER_ID = generateAuthId();
 const TEST_TAG = TEST_USER_ID.slice(-12);
@@ -84,12 +84,12 @@ async function buildSidecarText(): Promise<string> {
 		corpus: INGEST_REVIEW.CORPUSES.HANDBOOK,
 		sourceId: SLUG,
 	});
-	const entries: YamlSidecarEntry[] = pairs.map(({ issue, override }) =>
-		handbookCaptionOrphanPlugin.serializeForYaml(
-			{ ...issue, payload: issue.payload as never },
-			{ ...override, payload: override.payload as never },
-		),
-	);
+	const entries: YamlSidecarEntry[] = pairs.map(({ issue, override }) => {
+		// Narrow to the plugin's typed payload shape -- the rows were seeded
+		// through `handbookCaptionOrphanPlugin` one step earlier.
+		const typedIssue = issue as IssueRecord<HandbookCaptionOrphanPayload>;
+		return handbookCaptionOrphanPlugin.serializeForYaml(typedIssue, override);
+	});
 	return serializeSidecar({ slug: SLUG, edition: EDITION, overrides: entries });
 }
 

@@ -22,7 +22,7 @@ import { handbookImageOrphanPlugin } from '../plugins/handbook-image-orphan';
 import { runProducers } from '../producer';
 import { applyOverride, getCurrentOverride, getIssue, listOverridesWithIssues } from '../queries';
 import { ingestIssue } from '../schema';
-import type { ImageOrphanPairPayload, YamlSidecarEntry } from '../types';
+import type { HandbookImageOrphanPayload, ImageOrphanPairPayload, IssueRecord, YamlSidecarEntry } from '../types';
 
 const TEST_USER_ID = generateAuthId();
 const TEST_TAG = TEST_USER_ID.slice(-12);
@@ -153,12 +153,13 @@ describe('image-orphan integration round-trip', () => {
 			corpus: INGEST_REVIEW.CORPUSES.HANDBOOK,
 			sourceId: SLUG,
 		});
-		const yamlEntries: YamlSidecarEntry[] = pairs.map(({ issue, override }) =>
-			handbookImageOrphanPlugin.serializeForYaml(
-				{ ...issue, payload: issue.payload as never },
-				{ ...override, payload: override.payload as never },
-			),
-		);
+		const yamlEntries: YamlSidecarEntry[] = pairs.map(({ issue, override }) => {
+			// Narrow the BC's unknown-payload row to the plugin's typed shape;
+			// safe in test scope because we seeded the row through the
+			// image-orphan plugin one step earlier.
+			const typedIssue = issue as IssueRecord<HandbookImageOrphanPayload>;
+			return handbookImageOrphanPlugin.serializeForYaml(typedIssue, override);
+		});
 		const yamlText = serializeSidecar({ slug: SLUG, edition: EDITION, overrides: yamlEntries });
 		expect(yamlText).toContain(captionId);
 

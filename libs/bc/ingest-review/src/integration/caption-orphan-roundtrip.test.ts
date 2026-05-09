@@ -30,7 +30,13 @@ import { handbookCaptionOrphanPlugin } from '../plugins/handbook-caption-orphan'
 import { runProducers } from '../producer';
 import { applyOverride, getCurrentOverride, getIssue, listOverridesWithIssues, upsertIssue } from '../queries';
 import { ingestIssue } from '../schema';
-import type { CaptionOrphanPairPayload, IssueInput, YamlSidecarEntry } from '../types';
+import type {
+	CaptionOrphanPairPayload,
+	HandbookCaptionOrphanPayload,
+	IssueInput,
+	IssueRecord,
+	YamlSidecarEntry,
+} from '../types';
 
 const TEST_USER_ID = generateAuthId();
 const TEST_TAG = TEST_USER_ID.slice(-12);
@@ -197,11 +203,11 @@ describe('caption-orphan integration round-trip', () => {
 			sourceId: SLUG,
 		});
 		const yamlEntries: YamlSidecarEntry[] = pairs.map(({ issue, override }) => {
-			const plugin = handbookCaptionOrphanPlugin;
-			return plugin.serializeForYaml(
-				{ ...issue, payload: issue.payload as never },
-				{ ...override, payload: override.payload as never },
-			);
+			// Narrow the BC's unknown-payload row to the plugin's typed payload
+			// shape. Safe within this test scope because we just emitted the
+			// row from the caption-orphan plugin one step earlier.
+			const typedIssue = issue as IssueRecord<HandbookCaptionOrphanPayload>;
+			return handbookCaptionOrphanPlugin.serializeForYaml(typedIssue, override);
 		});
 		const yamlText = serializeSidecar({ slug: SLUG, edition: EDITION, overrides: yamlEntries });
 		expect(yamlText).toContain(warningId);
