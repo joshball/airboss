@@ -65,6 +65,7 @@ const SERVER_ONLY_PACKAGE_PATTERNS = [
 	/^\s*import\s+(?!type\s)[^;]*\bfrom\s+['"]@ab\/bc-study\/server['"]/,
 	/^\s*import\s+(?!type\s)[^;]*\bfrom\s+['"]@ab\/bc-study\/build['"]/,
 	/^\s*import\s+(?!type\s)[^;]*\bfrom\s+['"]@ab\/bc-hangar\/server['"]/,
+	/^\s*import\s+(?!type\s)[^;]*\bfrom\s+['"]@ab\/sources\/server['"]/,
 	/^\s*import\s+(?!type\s)[^;]*\bfrom\s+['"]postgres['"]/,
 	/^\s*import\s+(?!type\s)[^;]*\bfrom\s+['"]node:[^'"]+['"]/,
 ];
@@ -228,6 +229,7 @@ const SERVER_ONLY_SPECIFIERS = [
 	'@ab/bc-study/server',
 	'@ab/bc-study/build',
 	'@ab/bc-ingest-review/server',
+	'@ab/sources/server',
 	'postgres',
 	'drizzle-orm/postgres-js',
 ];
