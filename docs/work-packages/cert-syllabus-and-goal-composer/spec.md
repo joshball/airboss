@@ -87,14 +87,7 @@ This WP is the data substrate. Cert dashboard pages, lens UI, and goal composer 
 
 ## Out of Scope (explicit)
 
-- **Cert dashboard page rendering.** Routes are defined and BC functions land here; `+page.svelte` work is a follow-on WP (`cert-dashboard`).
-- **Personal goal composer page rendering.** Routes are defined and BC functions land here; `+page.svelte` work is a follow-on WP (`goal-composer-ui`).
-- **Lens framework UI for non-ACS / non-Domain lenses.** Type signatures land here for handbook, weakness, bloom, phase-of-flight, and custom lenses; their implementations are follow-on WPs once the cert-dashboard page work proves the lens primitives.
-- **Mastery evidence-kind gating.** ADR 016 says "S leaf needs scenario evidence; K leaf needs card evidence." This WP records the data shape (`triad`, `assessment_methods`) so the rule can be enforced. Shipped via the [evidence-kind-gating WP](../evidence-kind-gating/spec.md): per-cert triad mapping + `requires_teaching` flag + `isLeafMastered` BC primitive + per-kind decomposition surfaced through `getCredentialMastery`, `acsLens`, and `domainLens`. The richer cert-dashboard / goal-composer UI that consumes the new state remains a follow-on UI WP.
-- **Full ACS / PTS / endorsement transcription beyond the Area V pilot.** Iterative human content work after merge -- ADR 016 phase 10. The WP ships the YAML schema and validator; full PPL/IR/CPL/CFI/CFII/MEI/MEII content lands incrementally.
-- **ACS edition diff surface.** When the FAA publishes a new ACS, a new `syllabus` row is inserted (resolved decision in ADR 016). A diff viewer that shows what changed (added / removed / renamed leaves) is spec'd lightly here as design future work but full implementation waits until a real second edition publishes.
-- **Multi-tenant goal sharing.** Goals are per-user. Sharing is a future feature requiring auth + ACL design.
-- **The `study_plan` cutover to read from goals.** Stays for backwards compatibility; a follow-on WP migrates the session engine to read goal-derived filters and removes the `cert_goals` column.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md) for the deferred items, rationale, and revisit triggers.
 
 ## Architecture overview
 
@@ -181,19 +174,19 @@ The `airboss_ref` field on a `StructuredCitation` is a denormalization: when pre
 
 Umbrella table for pilot certs, instructor certs, ratings, and endorsements.
 
-| Column            | Type        | Constraints                                                | Notes                                                                                              |
-| ----------------- | ----------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| id                | text        | PK                                                         | `cred_` prefix.                                                                                    |
-| kind              | text        | NOT NULL, CHECK in `CREDENTIAL_KIND_VALUES`                | pilot_cert / instructor_cert / rating / endorsement.                                               |
-| slug              | text        | NOT NULL, UNIQUE                                           | `private`, `cfi`, `instrument`, `complex`, etc. (full list in In Scope above).                     |
-| title             | text        | NOT NULL                                                   | "Private Pilot Certificate"; "Multi-Engine Land Class Rating"; "Complex Endorsement (61.31(e))".   |
-| category          | text        | NOT NULL, CHECK in `CREDENTIAL_CATEGORY_VALUES`            | airplane / rotorcraft / glider / balloon / powered-lift / none.                                    |
-| class             | text        | NULL, CHECK in `CREDENTIAL_CLASS_VALUES`                   | single-engine-land / multi-engine-land / single-engine-sea / multi-engine-sea / null (N/A).        |
-| regulatory_basis  | jsonb       | NOT NULL, DEFAULT '[]'                                     | Array of `StructuredCitation` shapes (typically `kind: 'cfr'`) for sections defining this cred.    |
-| status            | text        | NOT NULL, DEFAULT 'active', CHECK in `CREDENTIAL_STATUS_VALUES` | active / archived. Archived = retired by FAA or replaced.                                     |
-| seed_origin       | text        | NULL                                                       |                                                                                                    |
-| created_at        | timestamptz | NOT NULL, DEFAULT now()                                    |                                                                                                    |
-| updated_at        | timestamptz | NOT NULL, DEFAULT now()                                    |                                                                                                    |
+| Column           | Type        | Constraints                                                     | Notes                                                                                            |
+| ---------------- | ----------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| id               | text        | PK                                                              | `cred_` prefix.                                                                                  |
+| kind             | text        | NOT NULL, CHECK in `CREDENTIAL_KIND_VALUES`                     | pilot_cert / instructor_cert / rating / endorsement.                                             |
+| slug             | text        | NOT NULL, UNIQUE                                                | `private`, `cfi`, `instrument`, `complex`, etc. (full list in In Scope above).                   |
+| title            | text        | NOT NULL                                                        | "Private Pilot Certificate"; "Multi-Engine Land Class Rating"; "Complex Endorsement (61.31(e))". |
+| category         | text        | NOT NULL, CHECK in `CREDENTIAL_CATEGORY_VALUES`                 | airplane / rotorcraft / glider / balloon / powered-lift / none.                                  |
+| class            | text        | NULL, CHECK in `CREDENTIAL_CLASS_VALUES`                        | single-engine-land / multi-engine-land / single-engine-sea / multi-engine-sea / null (N/A).      |
+| regulatory_basis | jsonb       | NOT NULL, DEFAULT '[]'                                          | Array of `StructuredCitation` shapes (typically `kind: 'cfr'`) for sections defining this cred.  |
+| status           | text        | NOT NULL, DEFAULT 'active', CHECK in `CREDENTIAL_STATUS_VALUES` | active / archived. Archived = retired by FAA or replaced.                                        |
+| seed_origin      | text        | NULL                                                            |                                                                                                  |
+| created_at       | timestamptz | NOT NULL, DEFAULT now()                                         |                                                                                                  |
+| updated_at       | timestamptz | NOT NULL, DEFAULT now()                                         |                                                                                                  |
 
 Indexes: `(kind)`, `(category, class)`, `(status)`. `slug` UNIQUE.
 
@@ -201,14 +194,14 @@ Indexes: `(kind)`, `(category, class)`, `(status)`. `slug` UNIQUE.
 
 Prerequisite DAG. `(credential_id, prereq_id)` composite PK. Cycles forbidden -- enforced at seed time by topological sort.
 
-| Column         | Type        | Constraints                                                  | Notes                                                                |
-| -------------- | ----------- | ------------------------------------------------------------ | -------------------------------------------------------------------- |
-| credential_id  | text        | NOT NULL, FK `study.credential.id` ON DELETE CASCADE         |                                                                      |
-| prereq_id      | text        | NOT NULL, FK `study.credential.id` ON DELETE RESTRICT        | Restrict so a referenced prereq can't be silently deleted.           |
-| kind           | text        | NOT NULL, DEFAULT 'required', CHECK in `CREDENTIAL_PREREQ_KIND_VALUES` | required / recommended.                                       |
-| notes          | text        | NULL                                                         |                                                                      |
-| seed_origin    | text        | NULL                                                         |                                                                      |
-| created_at     | timestamptz | NOT NULL, DEFAULT now()                                      |                                                                      |
+| Column        | Type        | Constraints                                                            | Notes                                                      |
+| ------------- | ----------- | ---------------------------------------------------------------------- | ---------------------------------------------------------- |
+| credential_id | text        | NOT NULL, FK `study.credential.id` ON DELETE CASCADE                   |                                                            |
+| prereq_id     | text        | NOT NULL, FK `study.credential.id` ON DELETE RESTRICT                  | Restrict so a referenced prereq can't be silently deleted. |
+| kind          | text        | NOT NULL, DEFAULT 'required', CHECK in `CREDENTIAL_PREREQ_KIND_VALUES` | required / recommended.                                    |
+| notes         | text        | NULL                                                                   |                                                            |
+| seed_origin   | text        | NULL                                                                   |                                                            |
+| created_at    | timestamptz | NOT NULL, DEFAULT now()                                                |                                                            |
 
 Composite PK `(credential_id, prereq_id, kind)`. Index `(prereq_id)` for reverse-lookup.
 
@@ -216,13 +209,13 @@ Composite PK `(credential_id, prereq_id, kind)`. Index `(prereq_id)` for reverse
 
 Maps a credential to its primary and alternate syllabi.
 
-| Column         | Type        | Constraints                                                | Notes                                                                                              |
-| -------------- | ----------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| credential_id  | text        | NOT NULL, FK `study.credential.id` ON DELETE CASCADE       |                                                                                                    |
-| syllabus_id    | text        | NOT NULL, FK `study.syllabus.id` ON DELETE RESTRICT        | Restrict; deleting a referenced syllabus must be explicit.                                         |
-| primacy        | text        | NOT NULL, DEFAULT 'primary', CHECK in `SYLLABUS_PRIMACY_VALUES` | primary / alternate. The FAA's ACS is primary; a school's syllabus is alternate.               |
-| seed_origin    | text        | NULL                                                       |                                                                                                    |
-| created_at     | timestamptz | NOT NULL, DEFAULT now()                                    |                                                                                                    |
+| Column        | Type        | Constraints                                                     | Notes                                                                            |
+| ------------- | ----------- | --------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| credential_id | text        | NOT NULL, FK `study.credential.id` ON DELETE CASCADE            |                                                                                  |
+| syllabus_id   | text        | NOT NULL, FK `study.syllabus.id` ON DELETE RESTRICT             | Restrict; deleting a referenced syllabus must be explicit.                       |
+| primacy       | text        | NOT NULL, DEFAULT 'primary', CHECK in `SYLLABUS_PRIMACY_VALUES` | primary / alternate. The FAA's ACS is primary; a school's syllabus is alternate. |
+| seed_origin   | text        | NULL                                                            |                                                                                  |
+| created_at    | timestamptz | NOT NULL, DEFAULT now()                                         |                                                                                  |
 
 Composite PK `(credential_id, syllabus_id)`. Partial UNIQUE: `(credential_id) WHERE primacy = 'primary'` -- a credential has at most one primary syllabus.
 
@@ -230,19 +223,19 @@ Composite PK `(credential_id, syllabus_id)`. Partial UNIQUE: `(credential_id) WH
 
 Authored projection onto the knowledge graph. ACS, PTS, 14 CFR 61.31 endorsement requirements, school syllabi, personal curricula -- all the same shape.
 
-| Column                 | Type        | Constraints                                              | Notes                                                                                              |
-| ---------------------- | ----------- | -------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| id                     | text        | PK                                                       | `syl_` prefix.                                                                                     |
-| slug                   | text        | NOT NULL                                                 | `ppl-acs-2024-09`, `cfi-pts-2024`, `complex-endorsement-61-31-e`, `personal-cfi-rebuild`. Edition baked in for FAA syllabi (a new edition is a new row, not an edit). |
-| kind                   | text        | NOT NULL, CHECK in `SYLLABUS_KIND_VALUES`                | acs / pts / endorsement / school / personal.                                                       |
-| title                  | text        | NOT NULL                                                 | "Private Pilot Airplane ACS"; "Complex Endorsement -- 14 CFR 61.31(e)".                            |
-| edition                | text        | NOT NULL                                                 | `FAA-S-ACS-6B`, `FAA-S-ACS-15`, `2024-09`, etc. Free-form per kind.                                |
-| edition_published_at   | date        | NULL                                                     | When the FAA published this edition (or the personal syllabus was last edited).                    |
-| source_url             | text        | NULL                                                     | Official FAA URL when applicable.                                                                  |
-| status                 | text        | NOT NULL, DEFAULT 'draft', CHECK in `SYLLABUS_STATUS_VALUES` | draft / active / archived.                                                                     |
-| seed_origin            | text        | NULL                                                     |                                                                                                    |
-| created_at             | timestamptz | NOT NULL, DEFAULT now()                                  |                                                                                                    |
-| updated_at             | timestamptz | NOT NULL, DEFAULT now()                                  |                                                                                                    |
+| Column               | Type        | Constraints                                                  | Notes                                                                                                                                                                 |
+| -------------------- | ----------- | ------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| id                   | text        | PK                                                           | `syl_` prefix.                                                                                                                                                        |
+| slug                 | text        | NOT NULL                                                     | `ppl-acs-2024-09`, `cfi-pts-2024`, `complex-endorsement-61-31-e`, `personal-cfi-rebuild`. Edition baked in for FAA syllabi (a new edition is a new row, not an edit). |
+| kind                 | text        | NOT NULL, CHECK in `SYLLABUS_KIND_VALUES`                    | acs / pts / endorsement / school / personal.                                                                                                                          |
+| title                | text        | NOT NULL                                                     | "Private Pilot Airplane ACS"; "Complex Endorsement -- 14 CFR 61.31(e)".                                                                                               |
+| edition              | text        | NOT NULL                                                     | `FAA-S-ACS-6B`, `FAA-S-ACS-15`, `2024-09`, etc. Free-form per kind.                                                                                                   |
+| edition_published_at | date        | NULL                                                         | When the FAA published this edition (or the personal syllabus was last edited).                                                                                       |
+| source_url           | text        | NULL                                                         | Official FAA URL when applicable.                                                                                                                                     |
+| status               | text        | NOT NULL, DEFAULT 'draft', CHECK in `SYLLABUS_STATUS_VALUES` | draft / active / archived.                                                                                                                                            |
+| seed_origin          | text        | NULL                                                         |                                                                                                                                                                       |
+| created_at           | timestamptz | NOT NULL, DEFAULT now()                                      |                                                                                                                                                                       |
+| updated_at           | timestamptz | NOT NULL, DEFAULT now()                                      |                                                                                                                                                                       |
 
 Unique: `(slug)` and `(kind, edition)` for FAA syllabi (a kind+edition pair is one canonical syllabus). Indexes: `(status)`, `(kind)`.
 
@@ -250,24 +243,24 @@ Unique: `(slug)` and `(kind, edition)` for FAA syllabi (a kind+edition pair is o
 
 The tree. Areas at the top, then Tasks, then Elements (ACS triad split: separate leaves for K, R, S each), then optional sub-element Sections.
 
-| Column          | Type        | Constraints                                                | Notes                                                                                              |
-| --------------- | ----------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| id              | text        | PK                                                         | `sln_` prefix.                                                                                     |
-| syllabus_id     | text        | NOT NULL, FK `study.syllabus.id` ON DELETE CASCADE         |                                                                                                    |
-| parent_id       | text        | NULL, FK `study.syllabus_node.id` ON DELETE CASCADE        | NULL for area rows; the area for tasks; the task for elements; the element for subsection rows.    |
-| ordinal         | integer     | NOT NULL                                                   | Stable within-parent sort order.                                                                   |
-| level           | text        | NOT NULL, CHECK in `SYLLABUS_NODE_LEVEL_VALUES`            | area / task / element / section.                                                                   |
-| code            | text        | NOT NULL                                                   | Human-readable citation code: `I`, `I.A`, `I.A.K1`. ACS / PTS conventions; free-form for non-ACS.  |
-| airboss_ref     | text        | NULL                                                       | Canonical `airboss-ref:` identifier per ADR 019 §1.2. See "airboss-ref composition" below.         |
-| title           | text        | NOT NULL                                                   |                                                                                                    |
-| description     | text        | NULL                                                       | Optional prose. Often the verbatim ACS element text.                                               |
-| triad           | text        | NULL, CHECK in `ACS_TRIAD_VALUES`                          | knowledge / risk_management / skill / null. Set only when `level='element'` for ACS / PTS syllabi. |
-| required_bloom  | text        | NULL, CHECK in `BLOOM_LEVEL_VALUES`                        | The bloom level expected at this leaf. NULL for non-leaf rows. Drives derived `relevance` cache.   |
-| citations       | jsonb       | NOT NULL, DEFAULT '[]'                                     | Array of `StructuredCitation` shapes (matching `knowledge_node.references` post-migration).        |
-| is_leaf         | boolean     | NOT NULL                                                   | True when this row has no children. Maintained by the seed.                                        |
-| seed_origin     | text        | NULL                                                       |                                                                                                    |
-| created_at      | timestamptz | NOT NULL, DEFAULT now()                                    |                                                                                                    |
-| updated_at      | timestamptz | NOT NULL, DEFAULT now()                                    |                                                                                                    |
+| Column         | Type        | Constraints                                         | Notes                                                                                              |
+| -------------- | ----------- | --------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| id             | text        | PK                                                  | `sln_` prefix.                                                                                     |
+| syllabus_id    | text        | NOT NULL, FK `study.syllabus.id` ON DELETE CASCADE  |                                                                                                    |
+| parent_id      | text        | NULL, FK `study.syllabus_node.id` ON DELETE CASCADE | NULL for area rows; the area for tasks; the task for elements; the element for subsection rows.    |
+| ordinal        | integer     | NOT NULL                                            | Stable within-parent sort order.                                                                   |
+| level          | text        | NOT NULL, CHECK in `SYLLABUS_NODE_LEVEL_VALUES`     | area / task / element / section.                                                                   |
+| code           | text        | NOT NULL                                            | Human-readable citation code: `I`, `I.A`, `I.A.K1`. ACS / PTS conventions; free-form for non-ACS.  |
+| airboss_ref    | text        | NULL                                                | Canonical `airboss-ref:` identifier per ADR 019 §1.2. See "airboss-ref composition" below.         |
+| title          | text        | NOT NULL                                            |                                                                                                    |
+| description    | text        | NULL                                                | Optional prose. Often the verbatim ACS element text.                                               |
+| triad          | text        | NULL, CHECK in `ACS_TRIAD_VALUES`                   | knowledge / risk_management / skill / null. Set only when `level='element'` for ACS / PTS syllabi. |
+| required_bloom | text        | NULL, CHECK in `BLOOM_LEVEL_VALUES`                 | The bloom level expected at this leaf. NULL for non-leaf rows. Drives derived `relevance` cache.   |
+| citations      | jsonb       | NOT NULL, DEFAULT '[]'                              | Array of `StructuredCitation` shapes (matching `knowledge_node.references` post-migration).        |
+| is_leaf        | boolean     | NOT NULL                                            | True when this row has no children. Maintained by the seed.                                        |
+| seed_origin    | text        | NULL                                                |                                                                                                    |
+| created_at     | timestamptz | NOT NULL, DEFAULT now()                             |                                                                                                    |
+| updated_at     | timestamptz | NOT NULL, DEFAULT now()                             |                                                                                                    |
 
 Unique: `(syllabus_id, code)`. Indexes: `(syllabus_id, parent_id, ordinal)` for tree walks; `(syllabus_id, level, ordinal)` for level-filtered listings; `(syllabus_id, is_leaf)` for "all leaves" queries.
 
@@ -313,15 +306,15 @@ When the `airboss_ref` column is set, it is the contract; `code` is the human-re
 
 Many-to-many edge from a leaf `syllabus_node` to a `knowledge_node`. One leaf can link to many nodes (a task often spans several concepts); one node can be linked from many leaves (the same node is on several certs at different bloom levels).
 
-| Column              | Type        | Constraints                                                | Notes                                                                                              |
-| ------------------- | ----------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| id                  | text        | PK                                                         | `snl_` prefix.                                                                                     |
-| syllabus_node_id    | text        | NOT NULL, FK `study.syllabus_node.id` ON DELETE CASCADE    | Must point at a leaf row -- enforced by seed (BC layer). DB CHECK can't express "is_leaf=true on the referenced row." |
-| knowledge_node_id   | text        | NOT NULL, FK `study.knowledge_node.id` ON DELETE CASCADE   |                                                                                                    |
-| weight              | real        | NOT NULL, DEFAULT 1.0                                      | For partial coverage (this leaf only partly covers the node).                                      |
-| notes               | text        | NULL                                                       |                                                                                                    |
-| seed_origin         | text        | NULL                                                       |                                                                                                    |
-| created_at          | timestamptz | NOT NULL, DEFAULT now()                                    |                                                                                                    |
+| Column            | Type        | Constraints                                              | Notes                                                                                                                 |
+| ----------------- | ----------- | -------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| id                | text        | PK                                                       | `snl_` prefix.                                                                                                        |
+| syllabus_node_id  | text        | NOT NULL, FK `study.syllabus_node.id` ON DELETE CASCADE  | Must point at a leaf row -- enforced by seed (BC layer). DB CHECK can't express "is_leaf=true on the referenced row." |
+| knowledge_node_id | text        | NOT NULL, FK `study.knowledge_node.id` ON DELETE CASCADE |                                                                                                                       |
+| weight            | real        | NOT NULL, DEFAULT 1.0                                    | For partial coverage (this leaf only partly covers the node).                                                         |
+| notes             | text        | NULL                                                     |                                                                                                                       |
+| seed_origin       | text        | NULL                                                     |                                                                                                                       |
+| created_at        | timestamptz | NOT NULL, DEFAULT now()                                  |                                                                                                                       |
 
 Unique: `(syllabus_node_id, knowledge_node_id)`. Indexes: `(knowledge_node_id, syllabus_node_id)` for reverse-lookup ("which leaves point at this node"); `(syllabus_node_id)` for forward.
 
@@ -329,17 +322,17 @@ Unique: `(syllabus_node_id, knowledge_node_id)`. Indexes: `(knowledge_node_id, s
 
 Learner-owned. References zero or more syllabi (with weights and optional sequencing) plus ad-hoc graph nodes. Goals can be cert-agnostic (BFR prep, "stay sharp") or multi-cert.
 
-| Column          | Type        | Constraints                                              | Notes                                                                                              |
-| --------------- | ----------- | -------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| id              | text        | PK                                                       | `goal_` prefix.                                                                                    |
-| user_id         | text        | NOT NULL, FK `bauth_user.id` ON DELETE CASCADE           |                                                                                                    |
-| title           | text        | NOT NULL                                                 |                                                                                                    |
-| status          | text        | NOT NULL, DEFAULT 'active', CHECK in `GOAL_STATUS_VALUES` | active / paused / archived.                                                                       |
-| is_primary      | boolean     | NOT NULL, DEFAULT false                                  | Resolves Open Question 1: multiple active allowed; exactly one is `is_primary` per user. Drives the session engine targeting. |
-| notes_md        | text        | NOT NULL, DEFAULT ''                                     | User's free-form markdown notes about the goal.                                                    |
-| seed_origin     | text        | NULL                                                     |                                                                                                    |
-| created_at      | timestamptz | NOT NULL, DEFAULT now()                                  |                                                                                                    |
-| updated_at      | timestamptz | NOT NULL, DEFAULT now()                                  |                                                                                                    |
+| Column      | Type        | Constraints                                               | Notes                                                                                                                         |
+| ----------- | ----------- | --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| id          | text        | PK                                                        | `goal_` prefix.                                                                                                               |
+| user_id     | text        | NOT NULL, FK `bauth_user.id` ON DELETE CASCADE            |                                                                                                                               |
+| title       | text        | NOT NULL                                                  |                                                                                                                               |
+| status      | text        | NOT NULL, DEFAULT 'active', CHECK in `GOAL_STATUS_VALUES` | active / paused / archived.                                                                                                   |
+| is_primary  | boolean     | NOT NULL, DEFAULT false                                   | Resolves Open Question 1: multiple active allowed; exactly one is `is_primary` per user. Drives the session engine targeting. |
+| notes_md    | text        | NOT NULL, DEFAULT ''                                      | User's free-form markdown notes about the goal.                                                                               |
+| seed_origin | text        | NULL                                                      |                                                                                                                               |
+| created_at  | timestamptz | NOT NULL, DEFAULT now()                                   |                                                                                                                               |
+| updated_at  | timestamptz | NOT NULL, DEFAULT now()                                   |                                                                                                                               |
 
 Indexes: `(user_id, status)`. Partial UNIQUE: `(user_id) WHERE is_primary = true` -- enforces at-most-one-primary-goal per user.
 
@@ -347,15 +340,15 @@ Indexes: `(user_id, status)`. Partial UNIQUE: `(user_id) WHERE is_primary = true
 
 Which syllabi a goal includes, with weight and optional sequencing.
 
-| Column         | Type        | Constraints                                              | Notes                                                                                              |
-| -------------- | ----------- | -------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| goal_id        | text        | NOT NULL, FK `study.goal.id` ON DELETE CASCADE           |                                                                                                    |
-| syllabus_id    | text        | NOT NULL, FK `study.syllabus.id` ON DELETE RESTRICT      | Restrict so a referenced syllabus can't be silently deleted.                                       |
-| weight         | real        | NOT NULL, DEFAULT 1.0                                    | Relative emphasis across goal syllabi.                                                             |
-| sequence_hint  | integer     | NULL                                                     | Optional ordering hint (lower = study first). Advisory, not a hard gate.                           |
-| focus_filter   | jsonb       | NULL                                                     | Subset of areas / tasks the user cares about within this syllabus. Shape: `{ areaCodes?: string[]; taskCodes?: string[]; elementCodes?: string[] }`. |
-| seed_origin    | text        | NULL                                                     |                                                                                                    |
-| created_at     | timestamptz | NOT NULL, DEFAULT now()                                  |                                                                                                    |
+| Column        | Type        | Constraints                                         | Notes                                                                                                                                                |
+| ------------- | ----------- | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| goal_id       | text        | NOT NULL, FK `study.goal.id` ON DELETE CASCADE      |                                                                                                                                                      |
+| syllabus_id   | text        | NOT NULL, FK `study.syllabus.id` ON DELETE RESTRICT | Restrict so a referenced syllabus can't be silently deleted.                                                                                         |
+| weight        | real        | NOT NULL, DEFAULT 1.0                               | Relative emphasis across goal syllabi.                                                                                                               |
+| sequence_hint | integer     | NULL                                                | Optional ordering hint (lower = study first). Advisory, not a hard gate.                                                                             |
+| focus_filter  | jsonb       | NULL                                                | Subset of areas / tasks the user cares about within this syllabus. Shape: `{ areaCodes?: string[]; taskCodes?: string[]; elementCodes?: string[] }`. |
+| seed_origin   | text        | NULL                                                |                                                                                                                                                      |
+| created_at    | timestamptz | NOT NULL, DEFAULT now()                             |                                                                                                                                                      |
 
 Composite PK `(goal_id, syllabus_id)`. Index `(syllabus_id)` for "which goals include this syllabus."
 
@@ -363,13 +356,13 @@ Composite PK `(goal_id, syllabus_id)`. Index `(syllabus_id)` for "which goals in
 
 Ad-hoc knowledge nodes a goal includes outside any syllabus (weak areas, personal interest, BFR currency items).
 
-| Column              | Type        | Constraints                                                | Notes                                                                                              |
-| ------------------- | ----------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| goal_id             | text        | NOT NULL, FK `study.goal.id` ON DELETE CASCADE             |                                                                                                    |
-| knowledge_node_id   | text        | NOT NULL, FK `study.knowledge_node.id` ON DELETE CASCADE   |                                                                                                    |
-| reason              | text        | NULL                                                       | "weak area"; "personal interest"; "checkride hot topic". Free-form.                                |
-| seed_origin         | text        | NULL                                                       |                                                                                                    |
-| created_at          | timestamptz | NOT NULL, DEFAULT now()                                    |                                                                                                    |
+| Column            | Type        | Constraints                                              | Notes                                                               |
+| ----------------- | ----------- | -------------------------------------------------------- | ------------------------------------------------------------------- |
+| goal_id           | text        | NOT NULL, FK `study.goal.id` ON DELETE CASCADE           |                                                                     |
+| knowledge_node_id | text        | NOT NULL, FK `study.knowledge_node.id` ON DELETE CASCADE |                                                                     |
+| reason            | text        | NULL                                                     | "weak area"; "personal interest"; "checkride hot topic". Free-form. |
+| seed_origin       | text        | NULL                                                     |                                                                     |
+| created_at        | timestamptz | NOT NULL, DEFAULT now()                                  |                                                                     |
 
 Composite PK `(goal_id, knowledge_node_id)`. Index `(knowledge_node_id)`.
 
@@ -531,27 +524,27 @@ Citation entries in YAML follow the `StructuredCitation` shape (the `kind` discr
 
 Validation (build-time, fail loud):
 
-| Rule                                                                                               | Severity |
-| -------------------------------------------------------------------------------------------------- | -------- |
-| `manifest.yaml` exists for every syllabus directory.                                               | error    |
-| Every area file's `code` is unique within the syllabus.                                            | error    |
-| Every task's `code` is unique within its area.                                                     | error    |
-| Every element's `code` is unique within its task.                                                  | error    |
-| Element-level rows declare `triad` for ACS / PTS syllabi.                                          | error    |
-| Element rows are leaves (no children) and carry `required_bloom`.                                  | error    |
-| `parent_id` consistency (DB CHECK; matches YAML hierarchy).                                        | error    |
-| `knowledge_nodes[].slug` resolves to an existing `knowledge_node.id`.                              | error    |
-| `citations[].reference` resolves to an existing `study.reference.document_slug`.                   | error    |
-| Citation `locator` shape matches the `kind` discriminator (per `StructuredCitation`).              | error    |
-| Citation `airboss_ref` (when present) parses via `@ab/sources` parser.                             | error    |
-| Citation `airboss_ref` corpus matches the citation `kind` (handbook -> handbooks; cfr -> regs).    | error    |
-| `syllabus_node.airboss_ref` parses via `@ab/sources` parser.                                       | error    |
-| ACS / PTS syllabi -- every element-level row has `airboss_ref` set with corpus `acs`.              | error    |
-| `airboss_ref` denotes a corpus the registry knows (per ADR 019 §1.2).                              | error    |
-| Tree depth never exceeds element / section level.                                                  | error    |
-| No cycles (parent of X must not be a descendant of X).                                             | error    |
-| Element triad is one of K, R, S, or null (per ADR 016 -- separate K1/R1/S1 leaves preferred).      | warning  |
-| `airboss_ref` pin is older than current `accepted` edition by > 1 (per ADR 019 §1.5).              | warning  |
+| Rule                                                                                            | Severity |
+| ----------------------------------------------------------------------------------------------- | -------- |
+| `manifest.yaml` exists for every syllabus directory.                                            | error    |
+| Every area file's `code` is unique within the syllabus.                                         | error    |
+| Every task's `code` is unique within its area.                                                  | error    |
+| Every element's `code` is unique within its task.                                               | error    |
+| Element-level rows declare `triad` for ACS / PTS syllabi.                                       | error    |
+| Element rows are leaves (no children) and carry `required_bloom`.                               | error    |
+| `parent_id` consistency (DB CHECK; matches YAML hierarchy).                                     | error    |
+| `knowledge_nodes[].slug` resolves to an existing `knowledge_node.id`.                           | error    |
+| `citations[].reference` resolves to an existing `study.reference.document_slug`.                | error    |
+| Citation `locator` shape matches the `kind` discriminator (per `StructuredCitation`).           | error    |
+| Citation `airboss_ref` (when present) parses via `@ab/sources` parser.                          | error    |
+| Citation `airboss_ref` corpus matches the citation `kind` (handbook -> handbooks; cfr -> regs). | error    |
+| `syllabus_node.airboss_ref` parses via `@ab/sources` parser.                                    | error    |
+| ACS / PTS syllabi -- every element-level row has `airboss_ref` set with corpus `acs`.           | error    |
+| `airboss_ref` denotes a corpus the registry knows (per ADR 019 §1.2).                           | error    |
+| Tree depth never exceeds element / section level.                                               | error    |
+| No cycles (parent of X must not be a descendant of X).                                          | error    |
+| Element triad is one of K, R, S, or null (per ADR 016 -- separate K1/R1/S1 leaves preferred).   | warning  |
+| `airboss_ref` pin is older than current `accepted` edition by > 1 (per ADR 019 §1.5).           | warning  |
 
 Errors abort the seed; warnings print and continue.
 
@@ -688,52 +681,52 @@ There is no `citations.ts` BC file because there is no separate citation table. 
 
 ### Functions
 
-| File             | Function                                  | Signature                                                                                                          |
-| ---------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| `knowledge.ts`   | `getCitationsForKnowledgeNode`            | `(db, knowledgeNodeId: string) -> StructuredCitation[]`                                                            |
-| `syllabi.ts`     | `getCitationsForSyllabusNode`             | `(db, syllabusNodeId: string) -> StructuredCitation[]`                                                             |
-| `handbooks.ts`   | `resolveCitationUrl` (extended)           | `(citation: StructuredCitation, references: ReferenceRow[]) -> string \| null` (every kind covered)                |
-| `credentials.ts` | `listCredentials`                         | `(db, opts?: { kind?: CredentialKind; status?: CredentialStatus }) -> CredentialRow[]`                             |
-| `credentials.ts` | `getCredentialBySlug`                     | `(db, slug: string) -> CredentialRow \| null`                                                                      |
-| `credentials.ts` | `getCertsCoveredBy`                       | `(db, credentialId: string) -> string[]` (credential slugs, includes self, recursive over `credential_prereq`)     |
-| `credentials.ts` | `getCredentialPrereqDag`                  | `(db) -> { nodes: CredentialRow[]; edges: CredentialPrereqRow[] }` (for visualisation / future graph surfaces)      |
-| `credentials.ts` | `getCredentialPrimarySyllabus`            | `(db, credentialId: string) -> SyllabusRow \| null`                                                                |
-| `credentials.ts` | `getCredentialMastery`                    | `(db, userId: string, credentialSlug: string) -> CredentialMasteryRollup`                                          |
-| `syllabi.ts`     | `listSyllabi`                             | `(db, opts?: { kind?: SyllabusKind; status?: SyllabusStatus }) -> SyllabusRow[]`                                   |
-| `syllabi.ts`     | `getSyllabusBySlug`                       | `(db, slug: string) -> SyllabusRow \| null`                                                                        |
-| `syllabi.ts`     | `getSyllabusTree`                         | `(db, syllabusId: string) -> SyllabusNodeRow[]` (in-order, full tree for the syllabus)                             |
-| `syllabi.ts`     | `getSyllabusArea`                         | `(db, syllabusId: string, areaCode: string) -> { area: SyllabusNodeRow; tasks: SyllabusNodeRow[]; elements: SyllabusNodeRow[] }` |
-| `syllabi.ts`     | `getSyllabusLeavesForNode`                | `(db, knowledgeNodeId: string) -> SyllabusNodeWithSyllabusRow[]` (every leaf that links to this node)              |
-| `syllabi.ts`     | `getNodesForSyllabusLeaf`                 | `(db, syllabusNodeId: string) -> KnowledgeNodeRow[]` (every node a leaf links to)                                  |
-| `goals.ts`       | `listGoals`                               | `(db, userId: string, opts?: { status?: GoalStatus }) -> GoalRow[]`                                                |
-| `goals.ts`       | `getActiveGoals`                          | `(db, userId: string) -> GoalRow[]` (all `status='active'`; multiple allowed per Open Question 1)                  |
-| `goals.ts`       | `getPrimaryGoal`                          | `(db, userId: string) -> GoalRow \| null`                                                                          |
-| `goals.ts`       | `createGoal`                              | `(db, data: CreateGoalInput) -> GoalRow`                                                                           |
-| `goals.ts`       | `updateGoal`                              | `(db, goalId, userId, data: UpdateGoalInput) -> GoalRow`                                                           |
-| `goals.ts`       | `setPrimaryGoal`                          | `(db, goalId, userId) -> GoalRow` (transactional: clears `is_primary` on others; sets on this one)                 |
-| `goals.ts`       | `archiveGoal`                             | `(db, goalId, userId) -> void`                                                                                     |
-| `goals.ts`       | `addGoalSyllabus`                         | `(db, goalId, userId, data: AddGoalSyllabusInput) -> GoalSyllabusRow`                                              |
-| `goals.ts`       | `removeGoalSyllabus`                      | `(db, goalId, userId, syllabusId) -> void`                                                                         |
-| `goals.ts`       | `addGoalNode`                             | `(db, goalId, userId, knowledgeNodeId, reason?) -> GoalNodeRow`                                                    |
-| `goals.ts`       | `removeGoalNode`                          | `(db, goalId, userId, knowledgeNodeId) -> void`                                                                    |
-| `goals.ts`       | `getGoalNodeUnion`                        | `(db, goalId) -> { knowledgeNodeIds: string[]; weights: Record<string, number> }` (every node reachable through the goal's syllabi + ad-hoc nodes, with weights aggregated) |
-| `goals.ts`       | `getDerivedCertGoals`                     | `(db, userId: string) -> string[]` (cert slugs derived from primary goal's syllabi -- backwards-compat for engine) |
-| `lenses.ts`      | `acsLens`                                 | `Lens` (Area -> Task -> Element tree)                                                                              |
-| `lenses.ts`      | `domainLens`                              | `Lens` (Domain -> nodes tree)                                                                                      |
+| File             | Function                        | Signature                                                                                                                                                                   |                            |
+| ---------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `knowledge.ts`   | `getCitationsForKnowledgeNode`  | `(db, knowledgeNodeId: string) -> StructuredCitation[]`                                                                                                                     |                            |
+| `syllabi.ts`     | `getCitationsForSyllabusNode`   | `(db, syllabusNodeId: string) -> StructuredCitation[]`                                                                                                                      |                            |
+| `handbooks.ts`   | `resolveCitationUrl` (extended) | `(citation: StructuredCitation, references: ReferenceRow[]) -> string \                                                                                                     | null` (every kind covered) |
+| `credentials.ts` | `listCredentials`               | `(db, opts?: { kind?: CredentialKind; status?: CredentialStatus }) -> CredentialRow[]`                                                                                      |                            |
+| `credentials.ts` | `getCredentialBySlug`           | `(db, slug: string) -> CredentialRow \                                                                                                                                      | null`                      |
+| `credentials.ts` | `getCertsCoveredBy`             | `(db, credentialId: string) -> string[]` (credential slugs, includes self, recursive over `credential_prereq`)                                                              |                            |
+| `credentials.ts` | `getCredentialPrereqDag`        | `(db) -> { nodes: CredentialRow[]; edges: CredentialPrereqRow[] }` (for visualisation / future graph surfaces)                                                              |                            |
+| `credentials.ts` | `getCredentialPrimarySyllabus`  | `(db, credentialId: string) -> SyllabusRow \                                                                                                                                | null`                      |
+| `credentials.ts` | `getCredentialMastery`          | `(db, userId: string, credentialSlug: string) -> CredentialMasteryRollup`                                                                                                   |                            |
+| `syllabi.ts`     | `listSyllabi`                   | `(db, opts?: { kind?: SyllabusKind; status?: SyllabusStatus }) -> SyllabusRow[]`                                                                                            |                            |
+| `syllabi.ts`     | `getSyllabusBySlug`             | `(db, slug: string) -> SyllabusRow \                                                                                                                                        | null`                      |
+| `syllabi.ts`     | `getSyllabusTree`               | `(db, syllabusId: string) -> SyllabusNodeRow[]` (in-order, full tree for the syllabus)                                                                                      |                            |
+| `syllabi.ts`     | `getSyllabusArea`               | `(db, syllabusId: string, areaCode: string) -> { area: SyllabusNodeRow; tasks: SyllabusNodeRow[]; elements: SyllabusNodeRow[] }`                                            |                            |
+| `syllabi.ts`     | `getSyllabusLeavesForNode`      | `(db, knowledgeNodeId: string) -> SyllabusNodeWithSyllabusRow[]` (every leaf that links to this node)                                                                       |                            |
+| `syllabi.ts`     | `getNodesForSyllabusLeaf`       | `(db, syllabusNodeId: string) -> KnowledgeNodeRow[]` (every node a leaf links to)                                                                                           |                            |
+| `goals.ts`       | `listGoals`                     | `(db, userId: string, opts?: { status?: GoalStatus }) -> GoalRow[]`                                                                                                         |                            |
+| `goals.ts`       | `getActiveGoals`                | `(db, userId: string) -> GoalRow[]` (all `status='active'`; multiple allowed per Open Question 1)                                                                           |                            |
+| `goals.ts`       | `getPrimaryGoal`                | `(db, userId: string) -> GoalRow \                                                                                                                                          | null`                      |
+| `goals.ts`       | `createGoal`                    | `(db, data: CreateGoalInput) -> GoalRow`                                                                                                                                    |                            |
+| `goals.ts`       | `updateGoal`                    | `(db, goalId, userId, data: UpdateGoalInput) -> GoalRow`                                                                                                                    |                            |
+| `goals.ts`       | `setPrimaryGoal`                | `(db, goalId, userId) -> GoalRow` (transactional: clears `is_primary` on others; sets on this one)                                                                          |                            |
+| `goals.ts`       | `archiveGoal`                   | `(db, goalId, userId) -> void`                                                                                                                                              |                            |
+| `goals.ts`       | `addGoalSyllabus`               | `(db, goalId, userId, data: AddGoalSyllabusInput) -> GoalSyllabusRow`                                                                                                       |                            |
+| `goals.ts`       | `removeGoalSyllabus`            | `(db, goalId, userId, syllabusId) -> void`                                                                                                                                  |                            |
+| `goals.ts`       | `addGoalNode`                   | `(db, goalId, userId, knowledgeNodeId, reason?) -> GoalNodeRow`                                                                                                             |                            |
+| `goals.ts`       | `removeGoalNode`                | `(db, goalId, userId, knowledgeNodeId) -> void`                                                                                                                             |                            |
+| `goals.ts`       | `getGoalNodeUnion`              | `(db, goalId) -> { knowledgeNodeIds: string[]; weights: Record<string, number> }` (every node reachable through the goal's syllabi + ad-hoc nodes, with weights aggregated) |                            |
+| `goals.ts`       | `getDerivedCertGoals`           | `(db, userId: string) -> string[]` (cert slugs derived from primary goal's syllabi -- backwards-compat for engine)                                                          |                            |
+| `lenses.ts`      | `acsLens`                       | `Lens` (Area -> Task -> Element tree)                                                                                                                                       |                            |
+| `lenses.ts`      | `domainLens`                    | `Lens` (Domain -> nodes tree)                                                                                                                                               |                            |
 
 ### Build-script-only helpers (not exported from BC barrel)
 
-| File             | Function                                  | Signature                                                                                                          |
-| ---------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| `handbooks.ts`   | `upsertReference` (existing)              | Already shipped by WP #1; consumed here to seed ACS / PTS rows.                                                    |
-| `credentials.ts` | `upsertCredential`                        | `(db, data: NewCredentialRow) -> string`                                                                           |
-| `credentials.ts` | `upsertCredentialPrereq`                  | `(db, data: NewCredentialPrereqRow) -> void`                                                                       |
-| `credentials.ts` | `upsertCredentialSyllabus`                | `(db, data: NewCredentialSyllabusRow) -> void`                                                                     |
-| `syllabi.ts`     | `upsertSyllabus`                          | `(db, data: NewSyllabusRow) -> string`                                                                             |
-| `syllabi.ts`     | `upsertSyllabusNode`                      | `(db, data: NewSyllabusNodeRow) -> string`                                                                         |
-| `syllabi.ts`     | `replaceSyllabusNodeLinks`                | `(db, syllabusNodeId: string, links: NewSyllabusNodeLinkRow[]) -> void`                                            |
-| `syllabi.ts`     | `rebuildKnowledgeNodeRelevanceCache`      | `(db, opts?: { dryRun?: boolean }) -> RelevanceCacheReport`                                                        |
-| `syllabi.ts`     | `validateAirbossRefForLeaf`               | `(ref: string, leaf: NewSyllabusNodeRow) -> void` (parses via `@ab/sources`; throws on shape mismatch)             |
+| File             | Function                             | Signature                                                                                              |
+| ---------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| `handbooks.ts`   | `upsertReference` (existing)         | Already shipped by WP #1; consumed here to seed ACS / PTS rows.                                        |
+| `credentials.ts` | `upsertCredential`                   | `(db, data: NewCredentialRow) -> string`                                                               |
+| `credentials.ts` | `upsertCredentialPrereq`             | `(db, data: NewCredentialPrereqRow) -> void`                                                           |
+| `credentials.ts` | `upsertCredentialSyllabus`           | `(db, data: NewCredentialSyllabusRow) -> void`                                                         |
+| `syllabi.ts`     | `upsertSyllabus`                     | `(db, data: NewSyllabusRow) -> string`                                                                 |
+| `syllabi.ts`     | `upsertSyllabusNode`                 | `(db, data: NewSyllabusNodeRow) -> string`                                                             |
+| `syllabi.ts`     | `replaceSyllabusNodeLinks`           | `(db, syllabusNodeId: string, links: NewSyllabusNodeLinkRow[]) -> void`                                |
+| `syllabi.ts`     | `rebuildKnowledgeNodeRelevanceCache` | `(db, opts?: { dryRun?: boolean }) -> RelevanceCacheReport`                                            |
+| `syllabi.ts`     | `validateAirbossRefForLeaf`          | `(ref: string, leaf: NewSyllabusNodeRow) -> void` (parses via `@ab/sources`; throws on shape mismatch) |
 
 ### Errors
 
@@ -907,36 +900,36 @@ export const GOAL_ID_PREFIX = 'goal';
 
 ## Validation
 
-| Field / surface                                          | Rule                                                                                                       |
-| -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `StructuredCitation.kind`                                | In `REFERENCE_KIND_VALUES` (from WP #1). Validated at BC + seed.                                            |
-| `StructuredCitation.framing` (optional)                  | NULL or in `CITATION_FRAMING_VALUES`. Validated at BC + seed.                                              |
-| `StructuredCitation.locator`                             | Shape matches `kind` per `libs/types/src/citation.ts`. Validated at BC + seed; DB CHECK can't express it. |
-| `StructuredCitation.airboss_ref` (optional)              | Parses via `@ab/sources` parser; corpus matches `kind` (handbook -> handbooks; cfr -> regs; acs -> acs).   |
-| `credential.kind`                                        | In `CREDENTIAL_KIND_VALUES`. CHECK.                                                                        |
-| `credential.category`                                    | In `CREDENTIAL_CATEGORY_VALUES`. CHECK.                                                                    |
-| `credential.class`                                       | NULL or in `CREDENTIAL_CLASS_VALUES`. CHECK.                                                               |
-| `credential.slug`                                        | UNIQUE, kebab-case, 2-64 chars.                                                                            |
-| `credential_prereq` cycle                                | Build script aborts if a cycle is detected (topological sort).                                             |
-| `credential_syllabus` primary uniqueness                 | Partial UNIQUE on `(credential_id) WHERE primacy='primary'`.                                               |
-| `syllabus.kind`                                          | In `SYLLABUS_KIND_VALUES`. CHECK.                                                                          |
-| `syllabus.status`                                        | In `SYLLABUS_STATUS_VALUES`. CHECK.                                                                        |
-| `syllabus (slug)`                                        | UNIQUE.                                                                                                    |
-| `syllabus (kind, edition)`                               | UNIQUE for `kind IN ('acs','pts')`. Partial unique index.                                                  |
-| `syllabus_node.level`                                    | In `SYLLABUS_NODE_LEVEL_VALUES`. CHECK.                                                                    |
-| `syllabus_node.parent_id` / `level` consistency          | DB CHECK (see Data Model).                                                                                 |
-| `syllabus_node.triad`                                    | NULL or in `ACS_TRIAD_VALUES`; non-NULL only when `level='element'`. CHECK.                                |
-| `syllabus_node.required_bloom`                           | NULL or in `BLOOM_LEVEL_VALUES`; non-NULL only when `is_leaf=true`. CHECK.                                 |
-| `syllabus_node (syllabus_id, code)`                      | UNIQUE.                                                                                                    |
-| `syllabus_node_link.syllabus_node_id`                    | Must point at a leaf row. Enforced by BC + seed.                                                           |
-| `syllabus_node_link (syllabus_node_id, knowledge_node_id)` | UNIQUE.                                                                                                  |
-| `goal.status`                                            | In `GOAL_STATUS_VALUES`. CHECK.                                                                            |
-| `goal.is_primary` per user                               | Partial UNIQUE on `(user_id) WHERE is_primary=true`.                                                       |
-| `goal_syllabus.weight`                                   | `> 0 AND <= 10.0`. CHECK.                                                                                  |
-| `goal_syllabus (goal_id, syllabus_id)`                   | Composite PK.                                                                                              |
-| `goal_node (goal_id, knowledge_node_id)`                 | Composite PK.                                                                                              |
-| `knowledge_node.references` post-migration               | Every entry is a `StructuredCitation`; no `LegacyCitation` survivors. Build script enforces.               |
-| `syllabus_node.airboss_ref`                              | Starts with `airboss-ref:` (DB CHECK); parses via `@ab/sources` (BC + seed); ACS leaves require it.        |
+| Field / surface                                            | Rule                                                                                                      |
+| ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `StructuredCitation.kind`                                  | In `REFERENCE_KIND_VALUES` (from WP #1). Validated at BC + seed.                                          |
+| `StructuredCitation.framing` (optional)                    | NULL or in `CITATION_FRAMING_VALUES`. Validated at BC + seed.                                             |
+| `StructuredCitation.locator`                               | Shape matches `kind` per `libs/types/src/citation.ts`. Validated at BC + seed; DB CHECK can't express it. |
+| `StructuredCitation.airboss_ref` (optional)                | Parses via `@ab/sources` parser; corpus matches `kind` (handbook -> handbooks; cfr -> regs; acs -> acs).  |
+| `credential.kind`                                          | In `CREDENTIAL_KIND_VALUES`. CHECK.                                                                       |
+| `credential.category`                                      | In `CREDENTIAL_CATEGORY_VALUES`. CHECK.                                                                   |
+| `credential.class`                                         | NULL or in `CREDENTIAL_CLASS_VALUES`. CHECK.                                                              |
+| `credential.slug`                                          | UNIQUE, kebab-case, 2-64 chars.                                                                           |
+| `credential_prereq` cycle                                  | Build script aborts if a cycle is detected (topological sort).                                            |
+| `credential_syllabus` primary uniqueness                   | Partial UNIQUE on `(credential_id) WHERE primacy='primary'`.                                              |
+| `syllabus.kind`                                            | In `SYLLABUS_KIND_VALUES`. CHECK.                                                                         |
+| `syllabus.status`                                          | In `SYLLABUS_STATUS_VALUES`. CHECK.                                                                       |
+| `syllabus (slug)`                                          | UNIQUE.                                                                                                   |
+| `syllabus (kind, edition)`                                 | UNIQUE for `kind IN ('acs','pts')`. Partial unique index.                                                 |
+| `syllabus_node.level`                                      | In `SYLLABUS_NODE_LEVEL_VALUES`. CHECK.                                                                   |
+| `syllabus_node.parent_id` / `level` consistency            | DB CHECK (see Data Model).                                                                                |
+| `syllabus_node.triad`                                      | NULL or in `ACS_TRIAD_VALUES`; non-NULL only when `level='element'`. CHECK.                               |
+| `syllabus_node.required_bloom`                             | NULL or in `BLOOM_LEVEL_VALUES`; non-NULL only when `is_leaf=true`. CHECK.                                |
+| `syllabus_node (syllabus_id, code)`                        | UNIQUE.                                                                                                   |
+| `syllabus_node_link.syllabus_node_id`                      | Must point at a leaf row. Enforced by BC + seed.                                                          |
+| `syllabus_node_link (syllabus_node_id, knowledge_node_id)` | UNIQUE.                                                                                                   |
+| `goal.status`                                              | In `GOAL_STATUS_VALUES`. CHECK.                                                                           |
+| `goal.is_primary` per user                                 | Partial UNIQUE on `(user_id) WHERE is_primary=true`.                                                      |
+| `goal_syllabus.weight`                                     | `> 0 AND <= 10.0`. CHECK.                                                                                 |
+| `goal_syllabus (goal_id, syllabus_id)`                     | Composite PK.                                                                                             |
+| `goal_node (goal_id, knowledge_node_id)`                   | Composite PK.                                                                                             |
+| `knowledge_node.references` post-migration                 | Every entry is a `StructuredCitation`; no `LegacyCitation` survivors. Build script enforces.              |
+| `syllabus_node.airboss_ref`                                | Starts with `airboss-ref:` (DB CHECK); parses via `@ab/sources` (BC + seed); ACS leaves require it.       |
 
 ## Edge cases
 
@@ -966,21 +959,21 @@ The user resolves each before tasks/test-plan finalize. Each carries a recommend
 
 The `is_primary` goal drives the session engine's targeting (the cert/syllabus filter the engine reads). Other active goals exist for parallel tracks (e.g., "PPL refresher" primary + "BFR currency" parallel) and are visible in the goal list, but they don't compete for engine time without an explicit primary swap.
 
-| Option                                            | For                                                                                                              | Against                                                                                                                                |
-| ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| Multiple active, one primary (recommended)        | Mirrors how user zero actually thinks ("I'm working on PPL refresh + add IR + stay BFR-current"). Primary is unambiguous for the engine. | Two affordances (active + primary) require a clear UI to avoid confusion. Mitigated by surfacing primary on every relevant page.      |
-| Strictly one active per user                      | Simpler model. Engine never has to disambiguate.                                                                 | Forces user zero to archive a goal whenever he wants to push a parallel track, even though both are "things I am working on."         |
-| Unlimited active treated equally                  | No primary concept. Engine takes a weighted union across all actives.                                            | Engine has no clean handle for "which goal am I in right now?" Surfacing the right one on the dashboard becomes a heuristic.          |
+| Option                                     | For                                                                                                                                      | Against                                                                                                                          |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| Multiple active, one primary (recommended) | Mirrors how user zero actually thinks ("I'm working on PPL refresh + add IR + stay BFR-current"). Primary is unambiguous for the engine. | Two affordances (active + primary) require a clear UI to avoid confusion. Mitigated by surfacing primary on every relevant page. |
+| Strictly one active per user               | Simpler model. Engine never has to disambiguate.                                                                                         | Forces user zero to archive a goal whenever he wants to push a parallel track, even though both are "things I am working on."    |
+| Unlimited active treated equally           | No primary concept. Engine takes a weighted union across all actives.                                                                    | Engine has no clean handle for "which goal am I in right now?" Surfacing the right one on the dashboard becomes a heuristic.     |
 
 ### 2. Syllabus YAML authoring shape -- one big file per syllabus, or directory tree?
 
 **Recommended: directory tree mirroring the FAA hierarchy. One file per Area under `course/syllabi/<slug>/areas/<area-code>-<slug>.yaml`, with a top-level `manifest.yaml` for syllabus metadata.**
 
-| Option                              | For                                                                                                              | Against                                                                                                                                |
-| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| One file per Area (recommended)     | Matches the FAA's organization. Each file is reviewable independently. Diffs in PRs stay local to one area. Authoring concurrency: one author can transcribe Area V while another transcribes Area VIII. | More files. Adds a layer of indirection (the manifest aggregates).                                                                    |
-| One big file per syllabus           | One file. Simple to author for tiny syllabi (endorsements with 5-10 leaves).                                     | PPL ACS has ~600 element leaves. One YAML file would be unreadable, slow to render in IDEs, awful to diff.                            |
-| One file per Task (deeper tree)     | Even tighter scoping per file.                                                                                   | More boilerplate per file. The Area boundary is the natural unit of FAA authorship and grading; below that is over-decomposition.    |
+| Option                          | For                                                                                                                                                                                                      | Against                                                                                                                           |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| One file per Area (recommended) | Matches the FAA's organization. Each file is reviewable independently. Diffs in PRs stay local to one area. Authoring concurrency: one author can transcribe Area V while another transcribes Area VIII. | More files. Adds a layer of indirection (the manifest aggregates).                                                                |
+| One big file per syllabus       | One file. Simple to author for tiny syllabi (endorsements with 5-10 leaves).                                                                                                                             | PPL ACS has ~600 element leaves. One YAML file would be unreadable, slow to render in IDEs, awful to diff.                        |
+| One file per Task (deeper tree) | Even tighter scoping per file.                                                                                                                                                                           | More boilerplate per file. The Area boundary is the natural unit of FAA authorship and grading; below that is over-decomposition. |
 
 For very small syllabi (endorsements), the manifest can carry the full tree inline; the `areas/` directory becomes optional. Validator handles both shapes.
 
@@ -998,11 +991,11 @@ Trade-off: every consumer carrying the same citation duplicates the JSONB shape 
 
 **Resolution:** the follow-on lives at [`docs/work-packages/engine-goal-cutover/`](../engine-goal-cutover/spec.md). It introduces a `getEngineTargeting(userId)` helper, switches `previewSession` to read from the helper, and stages a drop migration gated on a 14-day telemetry trigger. The dual-read window keeps the engine resolving goal-first with plan fallback so no learner is stuck on stale state.
 
-| Option                                                       | For                                                                                                              | Against                                                                                                                                |
-| ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| Derived view, deprecated, removed in follow-on (recommended) | Zero-risk migration -- the engine keeps reading `cert_goals` and gets the same data. Removal is a clean follow-on. | Two paths to "what is this user studying for" until the follow-on lands. Mitigated by clear deprecation comment.                      |
-| Hard cutover -- engine reads goal directly from day one      | Single source of truth from the start.                                                                           | Couples this WP to a session-engine refactor. Engine tests + plan-edit flows + skip-domain mutations all need touching. Wider blast radius. |
-| Drop `cert_goals` immediately, leave engine reading nothing  | (No, this is broken; listed for completeness.)                                                                   | Engine breaks.                                                                                                                         |
+| Option                                                       | For                                                                                                                | Against                                                                                                                                     |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| Derived view, deprecated, removed in follow-on (recommended) | Zero-risk migration -- the engine keeps reading `cert_goals` and gets the same data. Removal is a clean follow-on. | Two paths to "what is this user studying for" until the follow-on lands. Mitigated by clear deprecation comment.                            |
+| Hard cutover -- engine reads goal directly from day one      | Single source of truth from the start.                                                                             | Couples this WP to a session-engine refactor. Engine tests + plan-edit flows + skip-domain mutations all need touching. Wider blast radius. |
+| Drop `cert_goals` immediately, leave engine reading nothing  | (No, this is broken; listed for completeness.)                                                                     | Engine breaks.                                                                                                                              |
 
 ### 5. PPL ACS edition
 
@@ -1024,10 +1017,10 @@ Why this Area:
 
 Alternates considered:
 
-| Alternate                                | For                                                            | Against                                                                                                                  |
-| ---------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| Area I "Preflight Preparation"           | First in the ACS; large variety of K elements.                 | Mostly K elements, weak on R / S. Doesn't exercise the full triad split.                                                 |
-| Area IX "Emergency Operations"           | High-stakes; exercises judgment + skill leaves richly.         | Cross-references many knowledge nodes that aren't authored yet. Linking phase blocks on graph content, not the WP shape. |
+| Alternate                      | For                                                    | Against                                                                                                                  |
+| ------------------------------ | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| Area I "Preflight Preparation" | First in the ACS; large variety of K elements.         | Mostly K elements, weak on R / S. Doesn't exercise the full triad split.                                                 |
+| Area IX "Emergency Operations" | High-stakes; exercises judgment + skill leaves richly. | Cross-references many knowledge nodes that aren't authored yet. Linking phase blocks on graph content, not the WP shape. |
 
 ### 7. `acs` corpus locator convention -- finalize before ACS YAML transcription begins?
 
@@ -1056,17 +1049,17 @@ If a future review surfaces a better shape, the convention is updatable via a fo
 
 ## Risks
 
-| Risk                                                                                            | Mitigation                                                                                                       |
-| ----------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| ACS transcription is slower than estimated and Area V doesn't ship in this WP.                  | Transcription is bounded human work, not blocking on WP merge; the schema, validator, and seed pipeline ship regardless. |
-| Knowledge node slugs change after a syllabus links to them, breaking links.                     | Build validator hard-fails on dangling links. CI rejects PRs that break the link contract; user sees the error before merge. |
-| Credential DAG seed data has a cycle the topological sort misses.                               | Unit test that runs the topological sort against the seed YAML fixtures; coverage of every kind of cred. Test fails before merge. |
-| Existing per-node authored `relevance` array disagrees with the rebuilt cache.                  | Rebuild script with `--dry-run` produces a diff manifest. User reviews and signs off before the cache writes. |
-| Two follow-on WPs (cert dashboard pages, goal composer pages) get blocked on this WP's BC shape. | This WP's BC functions ship complete with unit tests; the follow-ons consume the BC, not the schema, so internal schema changes don't leak. |
-| `study_plan.cert_goals` derived view drifts from goal data because the engine writes both.      | One-way derivation: goal is source, `cert_goals` is computed on read. Engine never writes `cert_goals` after migration; engine writes go to goal_syllabus. |
+| Risk                                                                                               | Mitigation                                                                                                                                                                   |
+| -------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ACS transcription is slower than estimated and Area V doesn't ship in this WP.                     | Transcription is bounded human work, not blocking on WP merge; the schema, validator, and seed pipeline ship regardless.                                                     |
+| Knowledge node slugs change after a syllabus links to them, breaking links.                        | Build validator hard-fails on dangling links. CI rejects PRs that break the link contract; user sees the error before merge.                                                 |
+| Credential DAG seed data has a cycle the topological sort misses.                                  | Unit test that runs the topological sort against the seed YAML fixtures; coverage of every kind of cred. Test fails before merge.                                            |
+| Existing per-node authored `relevance` array disagrees with the rebuilt cache.                     | Rebuild script with `--dry-run` produces a diff manifest. User reviews and signs off before the cache writes.                                                                |
+| Two follow-on WPs (cert dashboard pages, goal composer pages) get blocked on this WP's BC shape.   | This WP's BC functions ship complete with unit tests; the follow-ons consume the BC, not the schema, so internal schema changes don't leak.                                  |
+| `study_plan.cert_goals` derived view drifts from goal data because the engine writes both.         | One-way derivation: goal is source, `cert_goals` is computed on read. Engine never writes `cert_goals` after migration; engine writes go to goal_syllabus.                   |
 | Multi-engine-instrument-instructor (`meii`) is not a clean atomic credential in real FAA practice. | Document the modeling decision in design.md (`meii = mei + ii_addon` or `meii = cfii + multi-engine class rating`); pick one based on how 14 CFR 61.183 actually decomposes. |
-| Schema migration `0011` lands while existing PRs touch `knowledge_node.references`.             | Coordinate merge order. Open PRs that touch `references` rebase before this WP's migration; this WP's migration handles both legacy and structured shapes.  |
-| Lens framework type signature is too narrow and follow-on lenses can't fit.                     | Ship two lenses in this WP (ACS, Domain) -- two different shapes -- so the type proves it generalizes before more land. |
+| Schema migration `0011` lands while existing PRs touch `knowledge_node.references`.                | Coordinate merge order. Open PRs that touch `references` rebase before this WP's migration; this WP's migration handles both legacy and structured shapes.                   |
+| Lens framework type signature is too narrow and follow-on lenses can't fit.                        | Ship two lenses in this WP (ACS, Domain) -- two different shapes -- so the type proves it generalizes before more land.                                                      |
 
 ## References
 
