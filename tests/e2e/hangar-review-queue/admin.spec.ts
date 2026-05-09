@@ -78,7 +78,9 @@ test.describe('bucket admin: CRUD', () => {
 		// click fires before the JS handler is attached and the submit is a
 		// silent no-op.
 		await page.waitForLoadState('networkidle');
-		await page.locator('form').evaluate((form: HTMLFormElement) => {
+		// Scope to the bucket form -- the page also has the header search
+		// form, so a bare `page.locator('form')` strict-matches both.
+		await page.locator('form').filter({ has: page.locator('input[name="name"]') }).evaluate((form: HTMLFormElement) => {
 			form.noValidate = true;
 			form.requestSubmit();
 		});

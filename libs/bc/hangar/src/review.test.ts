@@ -549,7 +549,7 @@ describe('getBucket', () => {
 	});
 
 	it('returns null for unknown ids', async () => {
-		expect(await getBucket('hrb_does_not_exist')).toBeNull();
+		expect(await getBucket('rbkt_does_not_exist')).toBeNull();
 	});
 });
 

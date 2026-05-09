@@ -22,10 +22,14 @@ test.describe('ad-hoc tasks', () => {
 		// is bound; otherwise the click fires before the JS handler is attached
 		// and the submit is a silent no-op.
 		await page.waitForLoadState('networkidle');
-		await page.locator('form').evaluate((form: HTMLFormElement) => {
-			form.noValidate = true;
-			form.requestSubmit();
-		});
+		// Scope to the task form -- the page also has the header search form.
+		await page
+			.locator('form')
+			.filter({ has: page.locator('input[name="title"]') })
+			.evaluate((form: HTMLFormElement) => {
+				form.noValidate = true;
+				form.requestSubmit();
+			});
 		await expect(page.getByText(/title is required/i)).toBeVisible({ timeout: 10_000 });
 	});
 

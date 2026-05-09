@@ -56,6 +56,10 @@ function installMocks(setup: MockSetup): void {
 		getSource: setup.getSource,
 		getActiveJobForTarget: setup.getActiveJobForTarget,
 	}));
+	vi.doMock('@ab/bc-hangar/server', () => ({
+		getSource: setup.getSource,
+		getActiveJobForTarget: setup.getActiveJobForTarget,
+	}));
 	vi.doMock('@ab/hangar-jobs', () => ({
 		enqueueJob: setup.enqueueJob,
 	}));

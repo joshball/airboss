@@ -54,6 +54,7 @@ function installCommonMocks(bc: LoaderMocks): void {
 		auditWrite: auditWriteMock,
 	}));
 	vi.doMock('@ab/bc-hangar', () => ({ ...bc }));
+	vi.doMock('@ab/bc-hangar/server', () => ({ ...bc }));
 	vi.doMock('@ab/db/connection', () => ({
 		db: {},
 	}));
