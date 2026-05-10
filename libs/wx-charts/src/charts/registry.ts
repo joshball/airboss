@@ -18,6 +18,8 @@ import { pirepPlotGridSpecSchema, renderPirepPlotGrid } from './pirep-plot-grid'
 import { radarMosaicSpecSchema, renderRadarMosaic } from './radar-mosaic';
 import { renderSurfaceAnalysis, surfaceAnalysisSpecSchema } from './surface-analysis';
 import { renderTafTimeline, tafTimelineSpecSchema } from './taf-timeline';
+import { renderTurbulenceGairmet, turbulenceGairmetSpecSchema } from './turbulence-gairmet';
+import { renderTurbulenceGtg, turbulenceGtgSpecSchema } from './turbulence-gtg';
 import { renderWindsAloftFb, windsAloftFbSpecSchema } from './winds-aloft-fb';
 
 export interface ChartRendererRegistration<TSpec extends ChartSpec = ChartSpec> {
@@ -61,8 +63,17 @@ export const CHART_RENDERERS: Record<ChartType, ChartRendererRegistration> = {
 	[CHART_TYPES.PROG_CHART]: notYetRegistered(CHART_TYPES.PROG_CHART),
 	[CHART_TYPES.GFA]: notYetRegistered(CHART_TYPES.GFA),
 	[CHART_TYPES.CONVECTIVE_OUTLOOK]: notYetRegistered(CHART_TYPES.CONVECTIVE_OUTLOOK),
-	// Phase E
+	// Phase D (CVA promoted from original Phase E per spec amendment)
 	[CHART_TYPES.CVA]: notYetRegistered(CHART_TYPES.CVA),
+	// Phase E (icing + turbulence forecast cluster)
+	[CHART_TYPES.TURBULENCE_GAIRMET]: {
+		render: renderTurbulenceGairmet as ChartRenderer<ChartSpec>,
+		schema: turbulenceGairmetSpecSchema,
+	},
+	[CHART_TYPES.TURBULENCE_GTG]: {
+		render: renderTurbulenceGtg as ChartRenderer<ChartSpec>,
+		schema: turbulenceGtgSpecSchema,
+	},
 	// Phase G
 	[CHART_TYPES.TAF_TIMELINE]: {
 		render: renderTafTimeline as ChartRenderer<ChartSpec>,
@@ -83,8 +94,7 @@ function notYetRegistered(type: ChartType): ChartRendererRegistration {
 		'prog-chart': 'D',
 		gfa: 'D',
 		'convective-outlook': 'D',
-		cva: 'E',
-		'taf-timeline': 'G',
+		cva: 'D',
 	};
 	const phase = phaseFor[type] ?? '?';
 	const message = `chart type '${type}' renderer not yet registered (scheduled for Phase ${phase}; see docs/work-packages/wx-chart-symbology-library/tasks.md)`;

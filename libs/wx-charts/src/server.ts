@@ -37,6 +37,12 @@ export {
 } from './charts/surface-analysis';
 export { renderTafTimeline, type TafTimelineSpec, tafTimelineSpecSchema } from './charts/taf-timeline';
 export {
+	renderTurbulenceGairmet,
+	type TurbulenceGairmetSpec,
+	turbulenceGairmetSpecSchema,
+} from './charts/turbulence-gairmet';
+export { renderTurbulenceGtg, type TurbulenceGtgSpec, turbulenceGtgSpecSchema } from './charts/turbulence-gtg';
+export {
 	renderWindsAloftFb,
 	type WindsAloftFbSpec,
 	windsAloftFbSpecSchema,
