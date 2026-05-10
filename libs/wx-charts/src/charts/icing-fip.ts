@@ -17,8 +17,8 @@
 
 import { CHART_TYPES } from '@ab/constants';
 import { z } from 'zod';
-import { renderCipFipShared } from './icing-cip';
 import type { ChartRenderInput, ChartRenderResult, ChartSpec } from '../types';
+import { renderCipFipShared } from './icing-cip';
 
 // ------------------------------------------------------------------
 // Spec schema
