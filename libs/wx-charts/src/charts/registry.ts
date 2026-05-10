@@ -20,6 +20,9 @@ import { icingGairmetSpecSchema, renderIcingGairmet } from './icing-gairmet';
 import { metarPlotGridSpecSchema, renderMetarPlotGrid } from './metar-plot-grid';
 import { pirepPlotGridSpecSchema, renderPirepPlotGrid } from './pirep-plot-grid';
 import { radarMosaicSpecSchema, renderRadarMosaic } from './radar-mosaic';
+import { renderSatelliteIr, satelliteIrSpecSchema } from './satellite-ir';
+import { renderSatelliteVis, satelliteVisSpecSchema } from './satellite-vis';
+import { renderSatelliteWv, satelliteWvSpecSchema } from './satellite-wv';
 import { renderSurfaceAnalysis, surfaceAnalysisSpecSchema } from './surface-analysis';
 import { renderTafTimeline, tafTimelineSpecSchema } from './taf-timeline';
 import { renderTurbulenceGairmet, turbulenceGairmetSpecSchema } from './turbulence-gairmet';
@@ -92,6 +95,19 @@ export const CHART_RENDERERS: Record<ChartType, ChartRendererRegistration> = {
 	[CHART_TYPES.FREEZING_LEVEL]: {
 		render: renderFreezingLevel as ChartRenderer<ChartSpec>,
 		schema: freezingLevelSpecSchema,
+	},
+	// Phase F (GOES satellite -- IR, visible, water vapor)
+	[CHART_TYPES.SATELLITE_IR]: {
+		render: renderSatelliteIr as ChartRenderer<ChartSpec>,
+		schema: satelliteIrSpecSchema,
+	},
+	[CHART_TYPES.SATELLITE_VISIBLE]: {
+		render: renderSatelliteVis as ChartRenderer<ChartSpec>,
+		schema: satelliteVisSpecSchema,
+	},
+	[CHART_TYPES.SATELLITE_WATER_VAPOR]: {
+		render: renderSatelliteWv as ChartRenderer<ChartSpec>,
+		schema: satelliteWvSpecSchema,
 	},
 	// Phase G
 	[CHART_TYPES.TAF_TIMELINE]: {

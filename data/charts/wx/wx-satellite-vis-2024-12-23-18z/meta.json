@@ -1,0 +1,17 @@
+{
+  "slug": "wx-satellite-vis-2024-12-23-18z",
+  "type": "satellite-visible",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-10T17:54:34.463Z",
+  "content_hash": "sha256:c63fd9775b65fb06c9c8009861b9ff4a16f4e410f8aec33a1d33d79ba7be0a5f",
+  "source_hashes": {
+    "vis_png": "65ab2cc7db01ea80bdf3c7be23f332a4f8e4fe005da1a91f42df875d40fb6d30",
+    "vis_world": "f8b3b6876b0d2d3c7d26b1d3018f6cca57ea6a27d7045488627e9b476e6eb8e7"
+  },
+  "layer_counts": {
+    "raster-overlay": 1
+  },
+  "drawn_pixels": 676251,
+  "parser_warnings": [],
+  "svg_bytes": 919289
+}

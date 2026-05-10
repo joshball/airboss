@@ -64,6 +64,9 @@ export type { IcingGairmetSpec } from './charts/icing-gairmet';
 export type { MetarPlotGridSpec } from './charts/metar-plot-grid';
 export type { PirepPlotGridSpec } from './charts/pirep-plot-grid';
 export type { RadarMosaicSpec } from './charts/radar-mosaic';
+export type { SatelliteIrSpec } from './charts/satellite-ir';
+export type { SatelliteVisSpec } from './charts/satellite-vis';
+export type { SatelliteWvSpec } from './charts/satellite-wv';
 export type { SurfaceAnalysisSpec } from './charts/surface-analysis';
 export type { TafTimelineSpec } from './charts/taf-timeline';
 export type { TurbulenceGairmetSpec } from './charts/turbulence-gairmet';
@@ -100,6 +103,19 @@ export {
 	SVG_WIDTH,
 	TITLE_BAND_HEIGHT,
 } from './projection';
+export {
+	EARTH_RADIUS_KM,
+	GOES_ALTITUDE_KM,
+	GOES_DISTANCE_EARTH_RADII,
+	GOES_EAST_LONGITUDE,
+	GOES_SUBSATELLITE_LATITUDE,
+	GOES_WEST_LONGITUDE,
+	type GoesProjectionOptions,
+	goesEastProjection,
+	goesProjection,
+	goesWestProjection,
+} from './projection-geostationary';
+export type { ApplyPaletteInput, ApplyPaletteResult } from './raster/apply-palette';
 // ----------------------------------------------------------------------
 // Raster substrate -- type-only re-exports of the server-only warp module.
 // The value export of `warpRaster` lives at @ab/wx-charts/server because
@@ -113,10 +129,14 @@ export {
 	FREEZING_LEVEL_BANDS,
 	FREEZING_LEVEL_EMPHASIZED_LINE_STROKE,
 	FREEZING_LEVEL_LINE_STROKE,
+	goesIrPalette,
+	goesVisPalette,
+	goesWvPalette,
 	ICING_INTENSITY_PALETTE,
 	isReflectivityNoData,
 	NWS_REFLECTIVITY_STOPS,
 	type ReflectivityStop,
+	type RGB,
 	type ScalarBandStop,
 } from './raster/palettes';
 export type { WarpInput, WarpResult } from './raster/warp';

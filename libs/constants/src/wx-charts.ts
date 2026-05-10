@@ -35,6 +35,9 @@ export const CHART_TYPES = {
 	ICING_CIP: 'icing-cip',
 	ICING_FIP: 'icing-fip',
 	FREEZING_LEVEL: 'freezing-level',
+	SATELLITE_IR: 'satellite-ir',
+	SATELLITE_VISIBLE: 'satellite-visible',
+	SATELLITE_WATER_VAPOR: 'satellite-water-vapor',
 } as const;
 
 export const CHART_TYPE_VALUES = Object.values(CHART_TYPES);
@@ -58,6 +61,9 @@ export const CHART_TYPE_LABELS: Record<ChartType, string> = {
 	'icing-cip': 'Current Icing Product (CIP)',
 	'icing-fip': 'Forecast Icing Product (FIP)',
 	'freezing-level': 'Freezing Level Forecast',
+	'satellite-ir': 'GOES IR Satellite',
+	'satellite-visible': 'GOES Visible Satellite',
+	'satellite-water-vapor': 'GOES Water Vapor Satellite',
 };
 
 export const LAYER_BANDS = {

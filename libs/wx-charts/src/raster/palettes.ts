@@ -77,6 +77,144 @@ export interface AdvisoryPaletteEntry {
 	label: string;
 }
 
+// ----------------------------------------------------------------------
+// GOES satellite palettes (Phase F)
+// ----------------------------------------------------------------------
+// Each palette is a function `(value) -> [r, g, b]`. The "value" semantics
+// per palette:
+//   - IR:  brightness temperature in degrees Celsius (warmer = lower
+//          cloud tops; colder = higher / more intense convection).
+//   - WV:  brightness temperature in degrees Celsius from the water-vapor
+//          band (drier mid/upper troposphere appears warmer in BT terms;
+//          moister appears colder).
+//   - VIS: 8-bit visible-band reflectance (0-255). Linear grayscale ramp.
+//
+// These functions are designed to be called inline from the warp pipeline:
+// the warp samples a brightness-temperature byte from the source raster
+// (per the source product's encoding) and routes it through the palette
+// function. Inputs are clamped at the palette boundaries.
+
+export type RGB = [r: number, g: number, b: number];
+
+interface IrStop {
+	tempC: number;
+	rgb: RGB;
+}
+
+/**
+ * Standard NWS IR enhancement curve (sometimes called the "AVN" or
+ * "RAMSDIS" enhancement). Interpolates between the published color stops
+ * below. Above ~+25 C the curve is solid black (no cloud signal); from
+ * +25 down to -32 C it is a smooth gray ramp (warm low cloud tops);
+ * colder than -32 C the curve enters a colored regime (white, then
+ * yellow/orange/red/purple as the tops climb above -64 C, signalling
+ * deep convection).
+ *
+ * The exact stops and ramps vary by product (the AVN, RAMSDIS, and CIRA
+ * enhancement curves all differ slightly). The curve below is faithful
+ * to the published AC 00-45H Chapter 4 IR satellite reading guide and
+ * matches the AWC standard rendering.
+ */
+const IR_STOPS: readonly IrStop[] = [
+	{ tempC: 30, rgb: [0, 0, 0] }, // warm: black (no cloud, ground-temp signal)
+	{ tempC: 0, rgb: [180, 180, 180] }, // 0 C: medium gray (warm clouds, low tops)
+	{ tempC: -32, rgb: [255, 255, 255] }, // -32 C: white (mid-level cloud tops)
+	{ tempC: -42, rgb: [255, 255, 0] }, // -42 C: yellow (transition into deep cloud)
+	{ tempC: -52, rgb: [255, 128, 0] }, // -52 C: orange
+	{ tempC: -62, rgb: [255, 0, 0] }, // -62 C: red (overshooting tops)
+	{ tempC: -72, rgb: [128, 0, 128] }, // -72 C: purple
+	{ tempC: -85, rgb: [0, 0, 0] }, // <= -85 C: black (extreme tops)
+];
+
+function interpolateRgb(a: RGB, b: RGB, t: number): RGB {
+	const clamped = t < 0 ? 0 : t > 1 ? 1 : t;
+	return [
+		Math.round(a[0] + (b[0] - a[0]) * clamped),
+		Math.round(a[1] + (b[1] - a[1]) * clamped),
+		Math.round(a[2] + (b[2] - a[2]) * clamped),
+	];
+}
+
+/**
+ * Map a GOES IR brightness temperature (Celsius) to an enhanced RGB.
+ * Values above the warmest stop snap to that stop; values below the
+ * coldest stop snap to that stop.
+ */
+export function goesIrPalette(brightnessTempC: number): RGB {
+	const stops = IR_STOPS;
+	if (brightnessTempC >= stops[0].tempC) return stops[0].rgb;
+	const last = stops[stops.length - 1];
+	if (brightnessTempC <= last.tempC) return last.rgb;
+	for (let i = 0; i < stops.length - 1; i += 1) {
+		const a = stops[i];
+		const b = stops[i + 1];
+		if (brightnessTempC <= a.tempC && brightnessTempC > b.tempC) {
+			// Lerp from a -> b. tempC decreases monotonically, so:
+			//   t = (a.tempC - bt) / (a.tempC - b.tempC)
+			const t = (a.tempC - brightnessTempC) / (a.tempC - b.tempC);
+			return interpolateRgb(a.rgb, b.rgb, t);
+		}
+	}
+	return last.rgb;
+}
+
+/**
+ * GOES visible-band palette: linear grayscale 0..255. The visible band
+ * encodes top-of-atmosphere reflectance; brighter pixels = more
+ * reflective surface (cloud, snow, sun glint). Pure passthrough: the
+ * source byte IS the rendered intensity.
+ */
+export function goesVisPalette(reflectance0to255: number): RGB {
+	const v = reflectance0to255 < 0 ? 0 : reflectance0to255 > 255 ? 255 : Math.round(reflectance0to255);
+	return [v, v, v];
+}
+
+interface WvStop {
+	tempC: number;
+	rgb: RGB;
+}
+
+/**
+ * GOES water-vapor enhancement curve. The 6.2 / 6.9 / 7.3 micron WV bands
+ * sense mid- and upper-tropospheric moisture as brightness temperature.
+ * Drier columns appear *warmer* (radiation reaches the satellite from
+ * lower / warmer atmospheric layers); moister columns appear *colder*.
+ *
+ * The standard NWS WV enhancement uses a brown -> yellow -> green -> blue
+ * ramp from warm/dry to cold/moist. This matches the AWC GOES WV product
+ * commonly seen on aviationweather.gov.
+ */
+const WV_STOPS: readonly WvStop[] = [
+	{ tempC: 10, rgb: [120, 60, 20] }, // very warm/dry: brown
+	{ tempC: -20, rgb: [200, 130, 30] }, // dry: tan
+	{ tempC: -40, rgb: [240, 220, 60] }, // borderline: yellow
+	{ tempC: -50, rgb: [120, 200, 80] }, // moistening: green
+	{ tempC: -60, rgb: [40, 160, 220] }, // moist: cyan
+	{ tempC: -70, rgb: [40, 60, 200] }, // very moist: blue
+	{ tempC: -80, rgb: [160, 0, 200] }, // upper-trop moist + cold tops: purple
+];
+
+/**
+ * Map a GOES water-vapor brightness temperature (Celsius) to RGB. Same
+ * lookup shape as `goesIrPalette`. Inputs are clamped at the palette
+ * boundaries.
+ */
+export function goesWvPalette(brightnessTempC: number): RGB {
+	const stops = WV_STOPS;
+	if (brightnessTempC >= stops[0].tempC) return stops[0].rgb;
+	const last = stops[stops.length - 1];
+	if (brightnessTempC <= last.tempC) return last.rgb;
+	for (let i = 0; i < stops.length - 1; i += 1) {
+		const a = stops[i];
+		const b = stops[i + 1];
+		if (brightnessTempC <= a.tempC && brightnessTempC > b.tempC) {
+			const t = (a.tempC - brightnessTempC) / (a.tempC - b.tempC);
+			return interpolateRgb(a.rgb, b.rgb, t);
+		}
+	}
+	return last.rgb;
+}
+
 export const ADVISORY_PALETTE: Record<string, AdvisoryPaletteEntry> = {
 	'airmet-sierra': {
 		stroke: '#c2a200',

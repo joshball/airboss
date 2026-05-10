@@ -20,12 +20,11 @@ import {
 } from './wx-charts';
 
 describe('CHART_TYPES', () => {
-	it('enumerates the v1 chart types (10 ACS map products + 4 icing + 2 turbulence + Phase G TAF timeline)', () => {
-		// The spec amendments expanded the v1 chart inventory from the ten
-		// PPL ACS Task C K2 cluster types to seventeen by adding G-AIRMET
-		// turbulence + GTG (PR #783), G-AIRMET icing + CIP + FIP +
-		// freezing-level (PR #785), and TAF timeline (PR #784).
-		expect(CHART_TYPE_VALUES).toHaveLength(17);
+	it('enumerates all v1 chart types (20 total)', () => {
+		// 10 PPL ACS Task C K2 cluster types + G-AIRMET turbulence + GTG (#783)
+		// + G-AIRMET icing + CIP + FIP + freezing-level (#785) + TAF timeline
+		// (#784) + GOES IR / VIS / WV satellite (#786) = 20.
+		expect(CHART_TYPE_VALUES).toHaveLength(20);
 	});
 
 	it('every value has a matching label', () => {
@@ -41,6 +40,12 @@ describe('CHART_TYPES', () => {
 
 	it('includes the Phase A surface-analysis type', () => {
 		expect(CHART_TYPE_VALUES).toContain(CHART_TYPES.SURFACE_ANALYSIS);
+	});
+
+	it('includes the Phase F satellite types (IR, visible, water vapor)', () => {
+		expect(CHART_TYPE_VALUES).toContain(CHART_TYPES.SATELLITE_IR);
+		expect(CHART_TYPE_VALUES).toContain(CHART_TYPES.SATELLITE_VISIBLE);
+		expect(CHART_TYPE_VALUES).toContain(CHART_TYPES.SATELLITE_WATER_VAPOR);
 	});
 
 	it('includes the icing + freezing-level forecast types', () => {
