@@ -56,6 +56,8 @@ export {
 // Apps and components import the spec types via `import type` without
 // dragging the renderer's runtime imports (sharp, fs) into the bundle.
 // ----------------------------------------------------------------------
+export type { AirmetSigmetSpec } from './charts/airmet-sigmet';
+export type { RadarMosaicSpec } from './charts/radar-mosaic';
 export type { SurfaceAnalysisSpec } from './charts/surface-analysis';
 export { buildChrome, type ChromeInput, type ChromeOutput } from './chrome';
 export { type GraticuleOptions, renderGraticule } from './graticule';
@@ -88,6 +90,20 @@ export {
 	SVG_WIDTH,
 	TITLE_BAND_HEIGHT,
 } from './projection';
+// ----------------------------------------------------------------------
+// Raster substrate -- type-only re-exports of the server-only warp module.
+// The value export of `warpRaster` lives at @ab/wx-charts/server because
+// it lazy-loads `sharp` and Node built-ins.
+// ----------------------------------------------------------------------
+export {
+	ADVISORY_PALETTE,
+	type AdvisoryPaletteEntry,
+	isReflectivityNoData,
+	NWS_REFLECTIVITY_STOPS,
+	type ReflectivityStop,
+} from './raster/palettes';
+export type { WarpInput, WarpResult } from './raster/warp';
+export { parseWorldFile, pixelToWorld, type WorldFile, worldToPixel } from './raster/worldfile';
 export { type AirportMarker, renderAirport } from './symbology/airports';
 export { renderScalarContours, type ScalarContourOptions } from './symbology/contours';
 export type { FrontDef, FrontKind, PipSide } from './symbology/fronts';
@@ -102,6 +118,14 @@ export {
 	renderWarmFront,
 } from './symbology/fronts';
 export { type LegendDef, type LegendEntry, renderLegend } from './symbology/legend';
+export {
+	type PolygonLabel,
+	type PolygonOverlay,
+	type PolygonRing,
+	type PolygonStyle,
+	type RenderPolygonOverlaysOptions,
+	renderPolygonOverlays,
+} from './symbology/polygons';
 export { type PipDef, type PipShape, renderPolylinePips, type ScreenVec } from './symbology/polyline-pips';
 export { type PressureCenter, renderPressureCenter } from './symbology/pressure-centers';
 export { renderStationModel, type StationModelOptions, type StationOb } from './symbology/station-model';
