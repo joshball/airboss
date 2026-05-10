@@ -52,9 +52,7 @@ Section extraction is a multi-session, human-paced task. Per [docs/ingestion-pip
 
 ## Non-goals
 
-- Not changing the library cert/topic/regulations/handbook UI. The substrate already handles two editions of one slug; this WP just populates the second one.
-- Not auditing or rewriting the 15 citing nodes. They keep working as-is.
-- Not deprecating 3B at the corpus level. Keeping it readable is the whole point.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Acceptance
 
@@ -64,6 +62,6 @@ Section extraction is a multi-session, human-paced task. Per [docs/ingestion-pip
 - `/library/cert/private` shows one AFH row (3C as the current edition).
 - Following a 3B citation from any of the 15 citing knowledge nodes lands on a real 3B reader page, not "no link available."
 
-## Out of scope -- captured for future work
+## Out of scope
 
-- Repointing knowledge-node citations from 3B to 3C where the chapter content is unchanged. Defer until either (a) those nodes are being edited for an unrelated reason, or (b) a renderer pass flags them. Triggered: NEVER autonomously; only on explicit content-audit request.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
