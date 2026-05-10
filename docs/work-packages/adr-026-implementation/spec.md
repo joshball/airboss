@@ -37,10 +37,7 @@ The repo has no migrations -- `drizzle/0000_initial.sql` is regenerated from `li
 
 ## Non-goals
 
-- Dropping `study.reference.edition` itself. ADR 026 §3 keeps it as a seed-only denormalized cache (conservative default, revisit when the next column-touching pass is in flight).
-- Removing `study.syllabus.edition` for personal/school syllabi. ADR 026 §4 keeps it free-form for non-FAA syllabi (conservative default, revisit when FAA-syllabus share crosses 50%).
-- Building any of items B / C / D / G / L / O / nits T / U / X / Y / Z / AA from ADR 026's "Out of scope -- captured for future work" section. Each has a defined trigger; this WP unblocks B / C / D by landing the resolver API but does not implement them.
-- Touching the amendment 2026-05 branch's validator, `migrate-knowledge-citations` script, or `redirected_from` plumbing. The amendment lands on a separate branch; this WP rebases into it cleanly.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md) for the deferred items, rationale, and revisit triggers.
 
 ## Why this matters
 

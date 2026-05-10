@@ -17,6 +17,7 @@
  * the remaining chart renderers.
  */
 
+export { type AirmetSigmetSpec, airmetSigmetSpecSchema, renderAirmetSigmet } from './charts/airmet-sigmet';
 export {
 	type MetarPlotGridSpec,
 	metarPlotGridSpecSchema,
@@ -27,6 +28,7 @@ export {
 	pirepPlotGridSpecSchema,
 	renderPirepPlotGrid,
 } from './charts/pirep-plot-grid';
+export { type RadarMosaicSpec, radarMosaicSpecSchema, renderRadarMosaic } from './charts/radar-mosaic';
 export { CHART_RENDERERS } from './charts/registry';
 export {
 	renderSurfaceAnalysis,
@@ -38,3 +40,4 @@ export {
 	type WindsAloftFbSpec,
 	windsAloftFbSpecSchema,
 } from './charts/winds-aloft-fb';
+export { warpRaster } from './raster/warp';

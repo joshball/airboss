@@ -12,8 +12,10 @@
 import { CHART_TYPES, type ChartType } from '@ab/constants';
 import type { z } from 'zod';
 import type { ChartRenderer, ChartSpec } from '../types';
+import { airmetSigmetSpecSchema, renderAirmetSigmet } from './airmet-sigmet';
 import { metarPlotGridSpecSchema, renderMetarPlotGrid } from './metar-plot-grid';
 import { pirepPlotGridSpecSchema, renderPirepPlotGrid } from './pirep-plot-grid';
+import { radarMosaicSpecSchema, renderRadarMosaic } from './radar-mosaic';
 import { renderSurfaceAnalysis, surfaceAnalysisSpecSchema } from './surface-analysis';
 import { renderWindsAloftFb, windsAloftFbSpecSchema } from './winds-aloft-fb';
 
@@ -33,8 +35,14 @@ export const CHART_RENDERERS: Record<ChartType, ChartRendererRegistration> = {
 		schema: surfaceAnalysisSpecSchema,
 	},
 	// Phase B
-	[CHART_TYPES.RADAR_MOSAIC]: notYetRegistered(CHART_TYPES.RADAR_MOSAIC),
-	[CHART_TYPES.ADVISORY_OVERLAY]: notYetRegistered(CHART_TYPES.ADVISORY_OVERLAY),
+	[CHART_TYPES.RADAR_MOSAIC]: {
+		render: renderRadarMosaic as ChartRenderer<ChartSpec>,
+		schema: radarMosaicSpecSchema,
+	},
+	[CHART_TYPES.ADVISORY_OVERLAY]: {
+		render: renderAirmetSigmet as ChartRenderer<ChartSpec>,
+		schema: airmetSigmetSpecSchema,
+	},
 	// Phase C
 	[CHART_TYPES.METAR_PLOT_GRID]: {
 		render: renderMetarPlotGrid as ChartRenderer<ChartSpec>,
@@ -63,8 +71,6 @@ export const CHART_RENDERERS: Record<ChartType, ChartRendererRegistration> = {
  */
 function notYetRegistered(type: ChartType): ChartRendererRegistration {
 	const phaseFor: Partial<Record<ChartType, string>> = {
-		'radar-mosaic': 'B',
-		'advisory-overlay': 'B',
 		'metar-plot-grid': 'C',
 		'pirep-plot-grid': 'C',
 		'winds-aloft-fb': 'C',
