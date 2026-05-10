@@ -71,33 +71,29 @@ The corpus is chosen third (after `regs` + `handbooks`) because:
 
 ## Out of scope
 
-- Live AIM source-document ingestion (PDF / HTML fetch, markdown extraction). That's a separate operator pipeline -- a follow-up to ADR 016 phase 0 -- and not Phase 7's concern. Phase 7 consumes whatever derivatives the operator wrote.
-- Per-glossary-term content lookup beyond the title. Glossary entries get a `SourceEntry` (title + body markdown), but the renderer's structured glossary surface (definition, see-also references, etc.) is a follow-up.
-- Cross-edition aliases. AIM revises paragraphs without renumbering routinely; if 2026-09 -> 2027-04 silently changes the text of 5-1-7, Phase 5's diff job catches it. If 2027-04 renumbers (rare; the FAA tries hard not to), an alias entry is added by hand at that time.
-- Sub-paragraph identifiers (`5-1-7-a-1`). The ADR 019 §1.2 "AIM" spec stops at paragraph granularity. AIM paragraphs occasionally use lettered sub-paragraphs internally; lessons that need to deep-link to one quote the paragraph and reference by content. Adding sub-paragraph identifiers is a follow-up if/when the user wants finer granularity.
-- The full AIM catalog walk. Phase 7 ships the resolver + fixture-driven tests. Real-tree ingestion happens once the source-ingestion pipeline lands and an operator runs it.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Data Model
 
 The registry shape is the same `SourceEntry` Phase 3 + 6 used. Per-AIM-entry fields:
 
-| Field | Value |
-| --- | --- |
-| `id` | `airboss-ref:aim/<chapter>-<section>-<paragraph>`, `airboss-ref:aim/<chapter>-<section>`, `airboss-ref:aim/<chapter>`, `airboss-ref:aim/glossary/<slug>`, `airboss-ref:aim/appendix-<N>` |
-| `corpus` | `'aim'` |
-| `canonical_short` | `'AIM 5-1-7'`, `'AIM Glossary - Pilot In Command'`, `'AIM Appendix 1'` |
-| `canonical_formal` | `'Aeronautical Information Manual, Chapter 5, Section 1, Paragraph 7'`, `'Aeronautical Information Manual, Pilot/Controller Glossary, Pilot In Command'`, `'Aeronautical Information Manual, Appendix 1'` |
-| `canonical_title` | The entry's title from `manifest.json` (e.g. `'Pilot Responsibility upon Clearance Issuance'`) |
-| `last_amended_date` | `manifest.fetched_at` (the FAA edition publication date the manifest records) |
-| `lifecycle` | `'pending'` after ingest, `'accepted'` after batch promotion |
+| Field               | Value                                                                                                                                                                                                     |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`                | `airboss-ref:aim/<chapter>-<section>-<paragraph>`, `airboss-ref:aim/<chapter>-<section>`, `airboss-ref:aim/<chapter>`, `airboss-ref:aim/glossary/<slug>`, `airboss-ref:aim/appendix-<N>`                  |
+| `corpus`            | `'aim'`                                                                                                                                                                                                   |
+| `canonical_short`   | `'AIM 5-1-7'`, `'AIM Glossary - Pilot In Command'`, `'AIM Appendix 1'`                                                                                                                                    |
+| `canonical_formal`  | `'Aeronautical Information Manual, Chapter 5, Section 1, Paragraph 7'`, `'Aeronautical Information Manual, Pilot/Controller Glossary, Pilot In Command'`, `'Aeronautical Information Manual, Appendix 1'` |
+| `canonical_title`   | The entry's title from `manifest.json` (e.g. `'Pilot Responsibility upon Clearance Issuance'`)                                                                                                            |
+| `last_amended_date` | `manifest.fetched_at` (the FAA edition publication date the manifest records)                                                                                                                             |
+| `lifecycle`         | `'pending'` after ingest, `'accepted'` after batch promotion                                                                                                                                              |
 
 The `Edition` shape:
 
-| Field | Value |
-| --- | --- |
-| `id` | `'2026-09'` (year-month) |
+| Field            | Value                                    |
+| ---------------- | ---------------------------------------- |
+| `id`             | `'2026-09'` (year-month)                 |
 | `published_date` | `manifest.fetched_at` parsed as ISO date |
-| `source_url` | `manifest.source_url` (the FAA AIM URL) |
+| `source_url`     | `manifest.source_url` (the FAA AIM URL)  |
 
 The locator shape (per ADR 019 §1.2):
 
