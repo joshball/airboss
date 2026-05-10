@@ -5,21 +5,25 @@ This WP ships the component as a placeholder per OUT-OF-SCOPE.md "Real WX
 chart embedding in step reader." The follow-on WP wires the wx-charts
 library output into the body without changing the call site.
 
-In dev the slug is visible inside the bordered container so an author can
-see which chart a step is asking for. In prod the wrapper renders empty.
+In dev (`import.meta.env.DEV`) the slug is visible inside the bordered
+container so an author can see which chart a step is asking for. In prod
+the wrapper renders empty.
 -->
 <script lang="ts">
-import { dev } from '$app/environment';
-
 interface Props {
 	slug: string;
 }
 
 let { slug }: Props = $props();
+
+// Vite's `import.meta.env.DEV` is true in dev + test; false in prod.
+// Avoids `$app/environment` so the component is testable in isolation
+// (Svelte's `$app/*` aliases require SvelteKit's vite plugin loaded).
+const isDev = import.meta.env.DEV ?? false;
 </script>
 
 <figure class="chart-stub" aria-label="Chart placeholder">
-	{#if dev}
+	{#if isDev}
 		<figcaption class="caption">
 			Chart slot (placeholder): <code>{slug}</code>
 		</figcaption>
