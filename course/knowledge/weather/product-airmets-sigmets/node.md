@@ -50,6 +50,25 @@ mastery_criteria: >
 
 # AIRMETs, SIGMETs, and Convective SIGMETs
 
+In-flight advisories are members of the encoded-text family (see
+[wx-reading-metars-tafs](../reading-metars-tafs/node.md) for the full
+family pattern). The three-stage ladder applies:
+
+- **Decode** -- product type (AIRMET / SIGMET / Convective SIGMET),
+  letter (Sierra / Tango / Zulu), region (C / E / W), validity time,
+  hazard, polygon coordinates, altitudes, motion vector.
+- **Understand** -- which synoptic story produced the polygon, how
+  it relates to the surface analysis and the GFA, and what
+  hazard severity threshold the advisory crossed.
+- **Triage** -- does the polygon intersect my route at my time, at
+  my altitude? An AIRMET that ends two hours before I depart is a
+  briefing artifact, not a flight input.
+
+The family rule applies cleanly here: a learner who reads only the
+hazard text and not the polygon-and-time has decoded but not
+triaged. The polygon and validity are what tell you whether the
+advisory is *yours*.
+
 ## Context
 
 You're 30 minutes into a flight when ATC says, "Cessna 345, advise you

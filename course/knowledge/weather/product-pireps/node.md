@@ -47,6 +47,25 @@ mastery_criteria: >
 
 # PIREPs -- Reading and Filing
 
+PIREPs are members of the encoded-text family (see
+[wx-reading-metars-tafs](../reading-metars-tafs/node.md) for the full
+treatment of the family pattern). Read them through the same
+three-stage ladder:
+
+- **Decode** -- mechanical translation of the slash-delimited fields
+  to facts.
+- **Understand** -- placing the report into the synoptic picture
+  and the reporting aircraft's perspective. A 737's "light chop" is
+  a Cherokee's "moderate."
+- **Triage** -- separating the reports that matter for *this flight*
+  from the ones that don't. Type, altitude, position relative to your
+  route, and time-since-report all gate relevance.
+
+PIREPs are the only weather product authored by another pilot in
+flight, which makes them the highest-fidelity record of what an
+airframe is actually feeling at altitude. The pilot habit is to grow
+the system by filing as well as consuming.
+
 ## Context
 
 You're climbing to your filed altitude over the central valley and the
@@ -66,8 +85,10 @@ you have to read them quickly and to grow them you have to file them.
 
 ## Discover
 
-Decode the example above field by field, deriving the encoding from
-context rather than memorizing a key:
+### Stage 1: Decode
+
+Walk the example field by field, deriving the encoding from context
+rather than memorizing a key:
 
 - `UA` -- routine pilot report (vs. `UUA` -- urgent).
 - `/OV PXN360010` -- over Panoche VOR, 360 radial, 10 NM (a position
@@ -79,9 +100,32 @@ context rather than memorizing a key:
 - `/TB MOD CHOP` -- moderate chop (intensity + character).
 - `/RM CONTINUOUS` -- remarks: continuous (vs. occasional / intermittent).
 
-Now ask: why does the type matter? Because a Citation's "light chop" is a
+### Stage 2: Understand
+
+Now ask why the type matters: because a Citation's "light chop" is a
 Cherokee's "moderate." Severity is encoded relative to the reporting
-airplane.
+airplane, and that's the most-missed reading skill on PIREPs.
+
+The Panoche position at 8,500 with continuous moderate chop in a
+C172 places the report in the boundary-layer altitudes over the
+California Central Valley -- a classic afternoon thermal-turbulence
+setup over hot inland terrain on a sunny day. The synoptic frame
+explains the report: convective mixing in unstable air over warm
+ground, smoothing out above the convective-layer top.
+
+### Stage 3: Triage
+
+For your own flight at 8,500 over the same area, the relevant
+questions are time-since-report (15 minutes is current; 90 minutes
+is stale because thermals don't sit still), aircraft-type match
+(C172 to your C182 is close enough for a near-direct read), and
+whether climbing above the convective-layer top is feasible. If
+the answer is yes, the PIREP is a strong "climb to 11,500" cue.
+
+For a Citation pilot reading the same report, triage flips: a C172
+moderate is a Citation light, the time-of-day is the strong cue,
+and the report shifts from "climb out of it" to "expect bumps for
+five minutes; ride them out."
 
 ## Reveal
 

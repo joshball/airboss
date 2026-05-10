@@ -47,6 +47,28 @@ mastery_criteria: >
 
 # Convective Outlook (AC)
 
+The convective outlook is a graphical product, not encoded text in the
+strict METAR / TAF sense -- but the same three-stage skill applies:
+
+- **Decode** -- the categorical risk tiers (TSTM / MRGL / SLGT / ENH /
+  MDT / HIGH), the day-window the outlook covers, the percent-
+  probability convention used in the Day 4-8 product. The convention
+  is small but the categories repeat across every issuance and
+  recognizing them at a glance is the floor.
+- **Understand** -- the synoptic setup that drove the polygons. The
+  text discussion is where the forecaster explains why a trough,
+  dryline, instability budget, or shear environment justified the
+  category. The map without the discussion is a guess about a guess.
+- **Triage** -- a categorical risk over the route within the day's
+  window is a "this flight needs more weather attention" trigger,
+  not yet a no-go. The triage question is: at what tier do I shift
+  from monitoring to actively planning around convection? For a
+  light single, that line is around SLGT; for a turboprop with
+  onboard radar, ENH.
+
+(Family pattern reference:
+[wx-reading-metars-tafs](../reading-metars-tafs/node.md).)
+
 ## Context
 
 It's Tuesday night and you're planning a Saturday flight. METARs and

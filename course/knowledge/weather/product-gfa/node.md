@@ -49,6 +49,30 @@ mastery_criteria: >
 
 # Graphical Forecasts for Aviation (GFA)
 
+The GFA is the graphical-product cousin in the encoded-text family
+(see [wx-reading-metars-tafs](../reading-metars-tafs/node.md)). The
+three-stage skill ladder still applies, with the encoding shifted
+from text symbols to color-coded layers:
+
+- **Decode** -- the layer set (clouds, weather, cig/vis, precip,
+  icing, turbulence, winds), the time scrubber semantics
+  (observation / analysis / forecast windows), the categorical
+  color conventions (VFR green, MVFR blue, IFR red, LIFR magenta).
+  Like the FB, the conventions are arbitrary; like the METAR, they
+  repeat across every read.
+- **Understand** -- the GFA is a *front-end* over the underlying
+  models (FIP / CIP for icing, GTG for turbulence, NDFD for cig /
+  vis / wind / weather, plus AIRMET / SIGMET overlays). A color
+  block is the rendering of a model output; understanding the GFA
+  means knowing which model produced the picture and what its
+  failure modes are.
+- **Triage** -- the GFA invites layer-scrolling without depth.
+  Pick the *one* layer that drives this flight (icing for a
+  winter cross-country, cig/vis for a marginal-VFR planning
+  question, turbulence for a known-rough route) and read it
+  carefully across the time horizon you'll fly. Other layers are
+  confirmation.
+
 ## Context
 
 You're planning a 250 NM cross-country that takes you from clear coastal

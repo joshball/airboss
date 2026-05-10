@@ -47,6 +47,25 @@ mastery_criteria: >
 
 # Wind and Temperature Aloft Forecast (FB)
 
+The FB is a member of the encoded-text family (see
+[wx-reading-metars-tafs](../reading-metars-tafs/node.md) for the full
+family pattern). The three-stage ladder applies, with the FB's own
+twist on each stage:
+
+- **Decode** -- the six-digit groups, the >100 KT convention, the
+  implicit-negative temperature convention above 24,000 ft. The
+  decode is more arbitrary than the METAR's, and the conventions
+  bite checkrides because they're rare in everyday flying.
+- **Understand** -- the FB is a *forecast* sampled at coarse
+  altitudes (3,000 / 6,000 / 9,000 / 12,000 / 18,000 / 24,000 / ...
+  ft). Real wind interpolates between rows; real wind also varies
+  spatially between stations. The grid is a sparse approximation of
+  a continuous field.
+- **Triage** -- two operational questions drive the read: which
+  cruise altitude maximizes groundspeed (or minimizes fuel burn,
+  often the same thing), and at which altitude does the temperature
+  column put you below freezing. The other rows are confirmation.
+
 ## Context
 
 You're flying KMRY -> KSAC with a 220-degree course at 5,500 ft. The

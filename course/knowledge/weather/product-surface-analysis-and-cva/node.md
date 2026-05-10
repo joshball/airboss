@@ -47,6 +47,27 @@ mastery_criteria: >
 
 # Surface Analysis and Ceiling/Visibility Charts
 
+The surface analysis is the synoptic-symbol cousin in the
+encoded-text family (see
+[wx-reading-metars-tafs](../reading-metars-tafs/node.md)). Same
+three-stage skill ladder, different alphabet:
+
+- **Decode** -- the chart symbols (H / L pressure centers, isobars,
+  cold / warm / occluded / stationary front symbols, station models
+  with their compressed METAR glyphs). The station model is itself a
+  miniature METAR -- a learner who can read a METAR can read a
+  station model with about ten minutes of practice.
+- **Understand** -- what synoptic story produced this picture? Where
+  is the energy, where is it going, what airmass is replacing what?
+  This is the layer where the surface analysis stops being a chart
+  and starts being a forecast in your head.
+- **Triage** -- for a given route at a given time, which features
+  on the chart matter? An occluded front 800 NM north of the route
+  is irrelevant; a tight pressure gradient over the route's middle
+  third is the operational signal. The CVA is the triage shortcut:
+  it converts the whole synoptic picture into a single VFR / MVFR /
+  IFR / LIFR color along the route.
+
 ## Context
 
 Two pilots brief the same flight from KSAC to KRDD. One opens the METAR
