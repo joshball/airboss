@@ -63,6 +63,7 @@ export type { IcingFipSpec } from './charts/icing-fip';
 export type { IcingGairmetSpec } from './charts/icing-gairmet';
 export type { MetarPlotGridSpec } from './charts/metar-plot-grid';
 export type { PirepPlotGridSpec } from './charts/pirep-plot-grid';
+export type { ProgChartSpec } from './charts/prog-chart';
 export type { RadarMosaicSpec } from './charts/radar-mosaic';
 export type { SatelliteIrSpec } from './charts/satellite-ir';
 export type { SatelliteVisSpec } from './charts/satellite-vis';

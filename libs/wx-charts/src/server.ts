@@ -36,6 +36,7 @@ export {
 	pirepPlotGridSpecSchema,
 	renderPirepPlotGrid,
 } from './charts/pirep-plot-grid';
+export { type ProgChartSpec, progChartSpecSchema, renderProgChart } from './charts/prog-chart';
 export { type RadarMosaicSpec, radarMosaicSpecSchema, renderRadarMosaic } from './charts/radar-mosaic';
 export { CHART_RENDERERS } from './charts/registry';
 export { renderSatelliteIr, type SatelliteIrSpec, satelliteIrSpecSchema } from './charts/satellite-ir';
