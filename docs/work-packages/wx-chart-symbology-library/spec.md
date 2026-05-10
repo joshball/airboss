@@ -243,6 +243,27 @@ Slug shape: `wx-<chart-type>-<isodate>[-<frame>]`. Examples: `wx-surface-analysi
 | F     | satellite-ir, satellite-visible, satellite-water-vapor             | B          | Satellite imagery -- new geostationary raster pipeline branch; uses Phase B's sharp warp infrastructure with a different projection. Parallelizable with D / E          |
 | G     | taf-timeline                                                       | C          | TAF timeline -- new 1D timeline visualization paradigm, no map. Depends on Phase C's TAF parser. Parallelizable with D / E / F                                          |
 
+### Author-priority order (pedagogical sequencing)
+
+Phasing above is a dependency / parallelization plan -- "what can ship together without merge conflicts." This section is the **pedagogical** priority: when multiple charts are unblocked at the same time, which one should an author build next? The order below maximizes the value of each new chart to a learner walking the weather-comprehensive course, not the order of substrate dependencies.
+
+The first ten charts, in author priority:
+
+1. **METAR plot grid** -- the answer to "what is happening right now?" Every preflight starts here. Without it, no other observation chart has a referent.
+2. **TAF timeline** -- the answer to "what is forecast for my destination over my arrival window?" The METAR/TAF pair is the first real pilot-weather loop.
+3. **Radar mosaic** (single-frame) -- the answer to "what is moving, and where?" Radar is the most-glanced chart in actual preflight; learners need to read it before they can read the products that explain it.
+4. **Surface analysis** -- the answer to "what system is causing all this?" The synoptic frame that makes METAR + TAF + radar stop being three independent readings and start being one story.
+5. **Satellite IR** -- the answer to "what clouds and structure are hiding the hazards?" IR is the cleanest synoptic context layer and the easiest satellite product for a learner to interpret first (before VIS, before WV).
+6. **AIRMET / SIGMET overlay** -- the answer to "what hazards have forecasters explicitly named?" Closes the first preflight loop: observations + forecast + motion + system + named hazards.
+7. **GFA** -- the answer to "show me the picture for the next 18 hours." Once the learner can read each of the above products individually, GFA is the composite they reach for in real briefings.
+8. **Winds aloft FB** -- the answer to "what altitude and what fuel burn?" Routing decisions belong after hazards are understood, not before.
+9. **Convective outlook** -- the answer to "is tomorrow / day-after-tomorrow a thunderstorm day?" Multi-day planning slots in after single-day briefing is solid.
+10. **CVA (ceiling and visibility analysis)** -- the answer to "where is it actually flyable right now?" The pilot-relevant projection of the surface analysis; valuable, but the learner has to read the surface analysis first.
+
+The remaining ten charts (PIREP plot, prog chart, G-AIRMET icing, CIP, FIP, freezing-level, G-AIRMET turbulence, GTG, satellite visible, satellite water-vapor) ship as their phases land. Their pedagogical value depends on the first ten being readable, so author order inside each later phase is less load-bearing -- ship by whatever is fastest to wire up.
+
+This order is advisory for *authoring* (which chart instance to build into `data/charts/wx/` next, and which renderer to land first inside a phase). It does **not** override the phase-dependency contract above: a Phase D chart still cannot ship before its Phase A + B + C substrate. When phase dependencies and pedagogical priority conflict, dependencies win.
+
 ## Behavior
 
 ### Chart authoring flow
