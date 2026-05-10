@@ -43,12 +43,7 @@ Signed-off architecture: [docs/work/todos/20260422-reference-system-architecture
 
 ## Out of Scope
 
-- Source extraction pipeline: CFR XML parser, AIM PDF parser, POH parser, `data/sources/` corpus layout, `scripts/references/build.ts`, `scripts/references/extract.ts`, yearly refresh tooling. Owned by `wp-reference-extraction-pipeline`. The `Source` / `SourceCitation` / `VerbatimBlock` types live here; the parsers that produce `VerbatimBlock` instances land there.
-- `libs/help/` workspace, `/help` route, per-app help content registration, cross-library faceted search widget. Owned by `wp-help-library`. `/glossary` search in this package is aviation-only; the cross-library widget is a separate primitive.
-- Materialized `cfr-generated.ts` / `aim-generated.ts` / `poh-generated.ts` reference files. Those are outputs of the extraction pipeline.
-- NTSB, AOPA, PCG, AC, FAA-Safety parsers. Phase 6 + 8 of the architecture roadmap, later packages.
-- Knowledge-graph phase content authoring. Phase content consumes `@ab/aviation`; authoring workflow is its own package.
-- Carrier-metaphor feature names and FIRC-specific vocabulary (Trap, Bolter, Greenie Board, etc.) from the old `VOCABULARY.md`. Per the glossary port plan, these do not port. They belong to the future `apps/firc/` surface if they return at all.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Data Model
 
@@ -78,11 +73,11 @@ Source of truth: architecture doc's [Source registry section](../../work/todos/2
 
 Canonical syntax `[[DISPLAY::id]]`. Three valid modes per the architecture doc's [wiki-link syntax table](../../work/todos/20260422-reference-system-architecture.md#wiki-link-syntax):
 
-| Form                              | Resolution                                                        | Render                                                  |
-| --------------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------- |
-| `[[VFR minimums::cfr-14-91-155]]` | Both known. Validator confirms `cfr-14-91-155` exists in registry | "VFR minimums" as link/tooltip to the reference         |
-| `[[VFR minimums::]]`              | Display known, id TBD. Scanner collects for TODO report           | "VFR minimums" with dev-only yellow underline           |
-| `[[::cfr-14-91-155]]`             | Id known, use reference's `displayName`                           | "14 CFR 91.155" (the reference's displayName)           |
+| Form                              | Resolution                                                        | Render                                          |
+| --------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------- |
+| `[[VFR minimums::cfr-14-91-155]]` | Both known. Validator confirms `cfr-14-91-155` exists in registry | "VFR minimums" as link/tooltip to the reference |
+| `[[VFR minimums::]]`              | Display known, id TBD. Scanner collects for TODO report           | "VFR minimums" with dev-only yellow underline   |
+| `[[::cfr-14-91-155]]`             | Id known, use reference's `displayName`                           | "14 CFR 91.155" (the reference's displayName)   |
 
 Invalid forms (parser errors): `[[::]]`, nested `[[…[[…]]…]]`. Non-wiki-link bracket syntax (`[[text]]` without `::`) is ignored and passes through as plain text. Whitespace around `::` is trimmed.
 
@@ -177,8 +172,4 @@ Ratified during this spec, not deferred:
 - Tooltip behavior: hover-popover on desktop, tap-to-open on touch, focus-shows for keyboard/a11y (architecture recommendation).
 - Paraphrase-only references (verbatim pending): show paraphrase + pending-badge + deep link to source URL (architecture recommendation).
 
-Still open, not blocking this package (belong to follow-on packages):
-
-- ACS task codes: separate axis vs freeform keywords. Will be revisited when ACS mapping work begins.
-- `governance` as an `aviationTopic` value for organization entries (FAA, ICAO, EASA). Current entries use `knowledgeKind: reference` + `sourceType: authored`; revisit if that's awkward in practice.
-- `data/sources/` size-by-source decision. Owned by extraction-pipeline package.
+Still open, not blocking this package (belong to follow-on packages): see [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
