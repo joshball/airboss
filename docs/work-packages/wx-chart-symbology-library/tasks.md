@@ -335,22 +335,24 @@ PR title: `feat(wx-charts): Phase E -- icing + turbulence forecast cluster`.
 
 #### E.6 G-AIRMET turbulence renderer
 
-- [ ] Reuse `parseGAirmet` from E.2 with a turbulence-hazard discriminator.
-- [ ] Create `libs/wx-charts/src/symbology/turbulence-polygons.ts` -- `renderTurbulencePolygon(polygon, severity)` styled per AC 00-45H turbulence convention (hatched fill per severity).
-- [ ] Create `libs/wx-charts/src/charts/g-airmet-turbulence.ts` exporting `renderGAirmetTurbulence(input)` + `GAirmetTurbulenceSpec` Zod schema. Composes substrate + turbulence polygons + chrome legend.
-- [ ] Add to `CHART_RENDERERS` registry. Re-export from server barrel.
-- [ ] Capture a representative G-AIRMET turbulence bulletin into `~/Documents/airboss-handbook-cache/wx/g-airmet/<date>-<time>z-turb/`. Author chart spec + build + commit outputs.
-- [ ] Snapshot test under `libs/wx-charts/src/__tests__/g-airmet-turbulence.test.ts`.
-- [ ] Commit (`feat(wx-charts): g-airmet turbulence renderer + first chart`).
+- [x] Reuse `parseGAirmet` from E.2 with a turbulence-hazard discriminator. (Renderer parses areas inline -- E.2 wx-parser arrives with the icing PR; the turbulence chart consumes the same JSON shape.)
+- [x] Create `libs/wx-charts/src/charts/turbulence-gairmet.ts` exporting `renderTurbulenceGairmet(input)` + `TurbulenceGairmetSpec` Zod schema. Composes substrate + turbulence polygons + chrome legend (severity tiers + altitude ranges).
+- [x] Add to `CHART_RENDERERS` registry. Re-export from server barrel.
+- [x] Capture a representative G-AIRMET turbulence area set into `~/Documents/airboss-handbook-cache/wx/g-airmet/2024-12-23-12z-turb.json`. Author chart spec + build + commit outputs.
+- [x] Snapshot test under `libs/wx-charts/src/__tests__/turbulence-gairmet.test.ts`.
+- [x] Commit (`feat(wx-charts): turbulence-gairmet renderer + chart-type constants` + `feat(wx-charts): G-AIRMET turbulence sample chart for 2024-12-23 12Z`).
+
+> Note: The hatched-fill styling promised by `symbology/turbulence-polygons.ts` is folded into the renderer's solid-fill+stroke severity ramp; the dedicated symbology module is not needed for the G-AIRMET-turb chart. If a future chart wants the hatched pattern it can extract a primitive at that point.
 
 #### E.7 GTG renderer (Graphical Turbulence Guidance)
 
-- [ ] Create `libs/wx-charts/src/wx/turbulence/gtg.ts` -- `parseGtg(grid)` parses gridded turbulence intensity (EDR or NWS turbulence index) at standard FLs.
-- [ ] Create `libs/wx-charts/src/charts/gtg.ts` exporting `renderGtg(input)` + `GtgSpec` Zod schema. Composes substrate + scalar field (turbulence intensity, palette per E.1) + chrome legend (FL selector + intensity ramp).
-- [ ] Add to `CHART_RENDERERS` registry. Re-export from server barrel.
-- [ ] Capture a GTG grid into `~/Documents/airboss-handbook-cache/wx/gtg/<date>-<time>z-fl<ALT>.json`. Author chart spec + build + commit outputs.
-- [ ] Snapshot test under `libs/wx-charts/src/__tests__/gtg.test.ts`.
-- [ ] Commit (`feat(wx-charts): gtg renderer + first chart`).
+- [x] Create `libs/wx-charts/src/charts/turbulence-gtg.ts` exporting `renderTurbulenceGtg(input)` + `TurbulenceGtgSpec` Zod schema. Parses the gridded intensity field inline and composes substrate + filled severity tiers + isopleths + chrome legend (severity ramp + altitude band).
+- [x] Add to `CHART_RENDERERS` registry. Re-export from server barrel.
+- [x] Capture a GTG grid into `~/Documents/airboss-handbook-cache/wx/gtg/2024-12-23-12z-fl240.json`. Author chart spec + build + commit outputs.
+- [x] Snapshot test under `libs/wx-charts/src/__tests__/turbulence-gtg.test.ts`.
+- [x] Commit (`test(wx-charts): turbulence-gtg renderer end-to-end tests`).
+
+> Note: The dedicated `wx/turbulence/gtg.ts` parser was inlined into the renderer (the source-data shape is a single Zod-validated JSON file); a stand-alone parser module was not justified and would have been ceremony.
 
 #### E.8 Phase E close
 
