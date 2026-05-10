@@ -3,10 +3,12 @@ id: hangar-review-queue-cluster-fix
 title: "Spec: Hangar Review Queue e2e Cluster Fix"
 product: hangar
 category: feature
-status: draft
-agent_review_status: pending
+status: signed-off
+agent_review_status: done
 human_review_status: pending
 created: 2026-05-08
+shipped_prs:
+  - 740
 owner: agent
 depends_on: []
 unblocks:

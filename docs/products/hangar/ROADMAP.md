@@ -20,23 +20,23 @@ Within each section WPs sort alphabetically by id.
 | [hangar-users-editing](../../work-packages/hangar-users-editing/spec.md)           | Spec: Hangar Users Editing           | hangar  | feature  | pending      | pending      |
 | [retire-audit-ping](../../work-packages/retire-audit-ping/spec.md)                 | Retire /admin/audit-ping             | hangar  | platform | done         | pending      |
 
-## Signed off (7)
+## Signed off (8)
 
-| ID                                                                                       | Title                                                                  | Product | Category | Agent review | Human review |
-| ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ------- | -------- | ------------ | ------------ |
-| [hangar-non-textual](../../work-packages/hangar-non-textual/spec.md)                     | Spec: Hangar non-textual sources (sectional chart first)               | hangar  | feature  | pending      | pending      |
-| [hangar-platform-dashboard](../../work-packages/hangar-platform-dashboard/spec.md)       | Hangar Platform Dashboard -- Spec                                      | hangar  | feature  | pending      | pending      |
-| [hangar-registry](../../work-packages/hangar-registry/spec.md)                           | Spec: Hangar registry (TOML-hybrid)                                    | hangar  | product  | pending      | pending      |
-| [hangar-review-queue](../../work-packages/hangar-review-queue/spec.md)                   | Hangar Review Queue -- Spec                                            | hangar  | feature  | pending      | pending      |
-| [hangar-scaffold](../../work-packages/hangar-scaffold/spec.md)                           | Spec: Hangar scaffold                                                  | hangar  | product  | pending      | pending      |
-| [hangar-sources-v1](../../work-packages/hangar-sources-v1/spec.md)                       | Spec: Hangar sources v1                                                | hangar  | feature  | pending      | pending      |
-| [wp-handbook-re-extraction-v2](../../work-packages/wp-handbook-re-extraction-v2/spec.md) | Spec: WP-HANDBOOK-RE-EXTRACTION-V2 -- fix what survived the first pass | hangar  | feature  | pending      | pending      |
+| ID                                                                                             | Title                                                                  | Product | Category | Agent review | Human review |
+| ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ------- | -------- | ------------ | ------------ |
+| [hangar-non-textual](../../work-packages/hangar-non-textual/spec.md)                           | Spec: Hangar non-textual sources (sectional chart first)               | hangar  | feature  | pending      | pending      |
+| [hangar-platform-dashboard](../../work-packages/hangar-platform-dashboard/spec.md)             | Hangar Platform Dashboard -- Spec                                      | hangar  | feature  | pending      | pending      |
+| [hangar-registry](../../work-packages/hangar-registry/spec.md)                                 | Spec: Hangar registry (TOML-hybrid)                                    | hangar  | product  | pending      | pending      |
+| [hangar-review-queue](../../work-packages/hangar-review-queue/spec.md)                         | Hangar Review Queue -- Spec                                            | hangar  | feature  | pending      | pending      |
+| [hangar-review-queue-cluster-fix](../../work-packages/hangar-review-queue-cluster-fix/spec.md) | Spec: Hangar Review Queue e2e Cluster Fix                              | hangar  | feature  | done         | pending      |
+| [hangar-scaffold](../../work-packages/hangar-scaffold/spec.md)                                 | Spec: Hangar scaffold                                                  | hangar  | product  | pending      | pending      |
+| [hangar-sources-v1](../../work-packages/hangar-sources-v1/spec.md)                             | Spec: Hangar sources v1                                                | hangar  | feature  | pending      | pending      |
+| [wp-handbook-re-extraction-v2](../../work-packages/wp-handbook-re-extraction-v2/spec.md)       | Spec: WP-HANDBOOK-RE-EXTRACTION-V2 -- fix what survived the first pass | hangar  | feature  | pending      | pending      |
 
-## Draft (4)
+## Draft (3)
 
-| ID                                                                                             | Title                                                              | Product | Category | Agent review | Human review |
-| ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ------- | -------- | ------------ | ------------ |
-| [hangar-ingest-review-queue](../../work-packages/hangar-ingest-review-queue/spec.md)           | Spec: Hangar Ingest-Review Queue                                   | hangar  | feature  | pending      | pending      |
-| [hangar-review-queue-cluster-fix](../../work-packages/hangar-review-queue-cluster-fix/spec.md) | Spec: Hangar Review Queue e2e Cluster Fix                          | hangar  | feature  | pending      | pending      |
-| [wp-hangar-references-dashboard](../../work-packages/wp-hangar-references-dashboard/spec.md)   | Spec: WP-HANGAR-REFS -- references admin dashboard in hangar       | hangar  | feature  | pending      | pending      |
-| [wp-toc-validation-schema](../../work-packages/wp-toc-validation-schema/spec.md)               | Spec: WP-TOC-VALIDATION-SCHEMA -- TOC validation persistence shape | hangar  | feature  | pending      | pending      |
+| ID                                                                                           | Title                                                              | Product | Category | Agent review | Human review |
+| -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ------- | -------- | ------------ | ------------ |
+| [hangar-ingest-review-queue](../../work-packages/hangar-ingest-review-queue/spec.md)         | Spec: Hangar Ingest-Review Queue                                   | hangar  | feature  | pending      | pending      |
+| [wp-hangar-references-dashboard](../../work-packages/wp-hangar-references-dashboard/spec.md) | Spec: WP-HANGAR-REFS -- references admin dashboard in hangar       | hangar  | feature  | pending      | pending      |
+| [wp-toc-validation-schema](../../work-packages/wp-toc-validation-schema/spec.md)             | Spec: WP-TOC-VALIDATION-SCHEMA -- TOC validation persistence shape | hangar  | feature  | pending      | pending      |
