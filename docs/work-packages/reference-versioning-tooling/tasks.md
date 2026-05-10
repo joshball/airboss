@@ -111,8 +111,4 @@ Phase 5 of the ADR 019 rollout. Implementation order is tight: build pair-walker
 
 ## Out of scope (revisit triggers)
 
-- PR-creation tooling for `advance` -- operator opens manually.
-- Notifications on diff job result -- `revisit.md` R3, R14.
-- Cross-reference staleness -- `revisit.md` R4.
-- Multi-corpus diff in one run -- ergonomics, not a Phase 5 requirement.
-- Hangar UI for review -- when `apps/hangar/` revives.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).

@@ -88,13 +88,7 @@ Phase 5 makes the rollover mechanical for the no-change case (the vast majority 
 
 ### Out
 
-- **PR creation tooling.** `advance` writes the rewrite commit on the current branch; it does NOT call `gh pr create`. Opening the PR is the operator's job. Rationale: every annual rollover wants different review choreography (which sections to advance, whether to bundle with other content edits) and automating the PR step is premature.
-- **Live eCFR API calls in tests.** All Phase 5 tests are fixture-driven. The CLI accepts `--fixture-pair` for the same reason. Live ingestion is a Phase 3 concern.
-- **Notifications.** `revisit.md` R3 (Slack notify on diff job result) and R14 (digest emails for stale pins) stay deferred. Surfaces a runtime concern that the diff job's stdout already covers for the operator-run-by-hand pattern.
-- **Cross-reference staleness propagation.** `revisit.md` R4 (when section X is amended, every lesson that cites a related section gets a notice) is deferred. Phase 5 only handles per-section pin advancement.
-- **Multi-corpus diffing in one run.** The CLI takes a single `--corpus=` filter (default `regs`). When handbooks land in Phase 6, operators run diff per-corpus. Combining is a future ergonomics improvement, not a Phase 5 requirement.
-- **Hangar UI for reviewing the needs-review report.** Future when `apps/hangar/` revives. The JSON report is structured to make a UI trivial later.
-- **Postgres-backed historical edition storage.** ADR 019 §2.5 names Postgres for the indexed tier; Phase 5 reads derivatives from disk (the same path Phase 3 writes to). Migration to Postgres is a separate WP whenever the volume warrants it.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Data Model
 
