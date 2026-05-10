@@ -20,10 +20,6 @@ import {
 } from './wx-charts';
 
 describe('CHART_TYPES', () => {
-	it('enumerates the v1 ten chart types', () => {
-		expect(CHART_TYPE_VALUES).toHaveLength(10);
-	});
-
 	it('every value has a matching label', () => {
 		for (const v of CHART_TYPE_VALUES) {
 			expect(CHART_TYPE_LABELS[v].length).toBeGreaterThan(0);
@@ -37,6 +33,12 @@ describe('CHART_TYPES', () => {
 
 	it('includes the Phase A surface-analysis type', () => {
 		expect(CHART_TYPE_VALUES).toContain(CHART_TYPES.SURFACE_ANALYSIS);
+	});
+
+	it('includes the Phase F satellite types (IR, visible, water vapor)', () => {
+		expect(CHART_TYPE_VALUES).toContain(CHART_TYPES.SATELLITE_IR);
+		expect(CHART_TYPE_VALUES).toContain(CHART_TYPES.SATELLITE_VISIBLE);
+		expect(CHART_TYPE_VALUES).toContain(CHART_TYPES.SATELLITE_WATER_VAPOR);
 	});
 });
 

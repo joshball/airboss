@@ -28,6 +28,9 @@ export const CHART_TYPES = {
 	CVA: 'cva',
 	TURBULENCE_GAIRMET: 'turbulence-gairmet',
 	TURBULENCE_GTG: 'turbulence-gtg',
+	SATELLITE_IR: 'satellite-ir',
+	SATELLITE_VISIBLE: 'satellite-visible',
+	SATELLITE_WATER_VAPOR: 'satellite-water-vapor',
 } as const;
 
 export const CHART_TYPE_VALUES = Object.values(CHART_TYPES);
@@ -46,6 +49,9 @@ export const CHART_TYPE_LABELS: Record<ChartType, string> = {
 	cva: 'Ceiling and Visibility Analysis',
 	'turbulence-gairmet': 'Turbulence G-AIRMET',
 	'turbulence-gtg': 'Graphical Turbulence Guidance',
+	'satellite-ir': 'GOES IR Satellite',
+	'satellite-visible': 'GOES Visible Satellite',
+	'satellite-water-vapor': 'GOES Water Vapor Satellite',
 };
 
 export const LAYER_BANDS = {
