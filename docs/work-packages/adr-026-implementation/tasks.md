@@ -180,18 +180,9 @@ Per [test-plan.md](./test-plan.md), walk the four banner-bearing routes after se
 
 Definition of done: all eight success-criteria boxes from [spec.md §"Success criteria"](./spec.md#success-criteria) tick.
 
-## Out of scope -- explicitly deferred
+## Out of scope
 
-Per ADR 026's "Out of scope -- captured for future work" section, these have defined triggers and are NOT touched in this WP. Each becomes its own WP when its trigger fires.
-
-| Item | Trigger                                                                                                                     |
-| ---- | --------------------------------------------------------------------------------------------------------------------------- |
-| B    | Drop / generate `study.reference_section.airboss_ref` -- triggered by ADR 019 path-grammar evolution. Unblocked by this WP. |
-| C    | Move `study.knowledge_node.references` jsonb to `content_citations`. Unblocked by this WP.                                  |
-| D    | Migrate `study.scenario.regReferences` jsonb to `content_citations`. Unblocked by this WP.                                  |
-| G    | CHECK enforcing "edition-sensitive locator implies edition pinned." Triggered alongside C.                                  |
-
-This WP unblocks B / C / D by landing the resolver API. Their implementation lives in their own work packages.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md) for the deferred items, rationale, and revisit triggers.
 
 ## Total scope
 
