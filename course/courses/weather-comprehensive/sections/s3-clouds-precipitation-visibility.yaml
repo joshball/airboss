@@ -15,6 +15,23 @@ body_md: |
 
   The framing question for both steps: what is this cloud telling me
   about the air I'm about to enter?
+
+  Two satellite views of the same December 23 atmosphere we met in
+  s2. The infrared image works day or night and shows cloud-top
+  temperature -- colder tops are higher tops, and higher tops mean
+  more vertical development:
+
+  :::chart slug="wx-satellite-ir-2024-12-23-12z"
+  :::
+
+  The visible image (six hours later, when the sun is up) shows the
+  same cloud field by reflected sunlight. Compare the two: which
+  features show up bright on visible but cold on IR, and what does
+  that combination mean for the cloud type and the flight through
+  it?
+
+  :::chart slug="wx-satellite-vis-2024-12-23-18z"
+  :::
 steps:
   - code: s3.1
     ordinal: 1

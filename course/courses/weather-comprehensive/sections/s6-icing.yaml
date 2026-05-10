@@ -42,4 +42,37 @@ steps:
       exists, turn around now while you still have the control
       authority to do so. Anti-ice and de-ice equipment buy you
       minutes, not hours.
+
+      Where CIP (the section opener) is current icing, FIP is the
+      forecast counterpart -- same gridded scalar field, projected
+      forward in time. Compare this 18Z forecast to the 12Z CIP we
+      opened the section with and ask: where is icing expected to
+      worsen over the next six hours, and would that change a
+      decision we made at briefing?
+
+      :::chart slug="wx-icing-fip-2024-12-23-18z"
+      :::
     knowledge_node_id: wx-icing-types-and-avoidance
+
+  - code: s6.2
+    ordinal: 2
+    title: Freezing level
+    body_md: |
+      Icing requires two ingredients in the same air: liquid water and
+      a temperature at or below freezing. The freezing level is where
+      the second ingredient starts. Above it, any cloud you fly through
+      is a candidate; below it, you can be in cloud all day without
+      ice. Knowing where the freezing level sits along your route is
+      the difference between "I can climb out of icing" and "there is
+      no out."
+
+      The forecast freezing-level chart for the same December 23
+      synoptic setup. Read it together with the CIP / FIP charts from
+      s6.1: where is the freezing level low enough that the
+      below-freezing layer reaches the ground (so descending is not
+      an out), and where would a climb actually leave the icing
+      layer behind?
+
+      :::chart slug="wx-freezing-level-2024-12-23-12z"
+      :::
+    knowledge_node_id: wx-freezing-level
