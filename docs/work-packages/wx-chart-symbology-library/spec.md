@@ -24,29 +24,32 @@ legacy_fields:
 
 # Spec: Weather Chart Symbology Library
 
-A pure-code TypeScript library at `libs/wx-charts/` that renders ten FAA-style aviation weather chart types as static SVG. Outputs go to `data/charts/wx/<slug>/chart.svg` and are mounted into courses via the `<CourseStepChart slug="..." />` component shipped by the [course-reader-and-editor WP](../course-reader-and-editor/spec.md).
+A pure-code TypeScript library at `libs/wx-charts/` that renders fourteen FAA-style aviation weather chart types as static SVG (and, for TAF, as a static timeline visualization). Outputs go to `data/charts/wx/<slug>/chart.svg` and are mounted into courses via the `<CourseStepChart slug="..." />` component shipped by the [course-reader-and-editor WP](../course-reader-and-editor/spec.md).
 
 ## Why this WP exists
 
-Three throwaway spikes ([01-surface-analysis](../../../spikes/wx-charts/01-surface-analysis/spike-notes.md), [02-radar-mosaic](../../../spikes/wx-charts/02-radar-mosaic/spike-notes.md), [03-metar-plot-grid](../../../spikes/wx-charts/03-metar-plot-grid/spike-notes.md)) proved three orthogonal patterns: pure-vector polyline+symbol charts (Spike 1), raster compositing under vector basemaps (Spike 2), and dense glyph grids over CONUS with collision-avoidance (Spike 3). Each spike confirmed the same projection / basemap / chrome substrate is reusable. Spike 3 produced the canonical library shape recommendation; this WP captures and refines it, then ships ten chart types organized into five phases.
+Three throwaway spikes ([01-surface-analysis](../../../spikes/wx-charts/01-surface-analysis/spike-notes.md), [02-radar-mosaic](../../../spikes/wx-charts/02-radar-mosaic/spike-notes.md), [03-metar-plot-grid](../../../spikes/wx-charts/03-metar-plot-grid/spike-notes.md)) proved three orthogonal patterns: pure-vector polyline+symbol charts (Spike 1), raster compositing under vector basemaps (Spike 2), and dense glyph grids over CONUS with collision-avoidance (Spike 3). Each spike confirmed the same projection / basemap / chrome substrate is reusable. Spike 3 produced the canonical library shape recommendation; this WP captures and refines it, then ships fourteen chart types organized into seven phases (A through G).
 
-The pedagogical opportunity is the reason: the live NWS / WPC / IEM charts already exist on the public web. The product value is **teaching-annotated** charts -- the same operational symbology with overlays a CFI would draw on a whiteboard (flight-category rings, frontal interpretation cues, hail-core annotations, TAF/METAR delta panels). The library substrate must support those overlays as first-class layers, not afterthoughts. This WP ships the substrate plus the bare ten charts; per-overlay micro-WPs follow as course content needs them.
+The pedagogical opportunity is the reason: the live NWS / WPC / IEM / SPC / AWC charts already exist on the public web. The product value is **teaching-annotated** charts -- the same operational symbology with overlays a CFI would draw on a whiteboard (flight-category rings, frontal interpretation cues, hail-core annotations, TAF/METAR delta panels, icing-vs-freezing-level overlays). The library substrate must support those overlays as first-class layers, not afterthoughts. This WP ships the substrate plus the bare fourteen charts; per-overlay micro-WPs follow as course content needs them.
+
+The fourteen charts cover the full FAA aviation weather product set a pilot reads in a typical preflight: surface analysis, radar, METAR/PIREP/winds-aloft observations, TAF terminal forecasts, AIRMET/SIGMET/Convective SIGMET advisories, GFA + prog + convective outlook + CVA forecasts, satellite (IR/VIS/WV) imagery, and the icing + turbulence forecast cluster (G-AIRMET icing/turbulence, CIP, FIP, freezing level, GTG). Two product families are deliberately left to separate WPs: low/high IFR enroute charts (navigation, not weather -- separate WP `nav-chart-symbology-library`), and the radar-loop / time-scrubber playback UI (its own WP / phase, gated on real-use signal).
 
 ## Scope
 
 In:
 
-- One new lib at `libs/wx-charts/` exporting projection / basemap / chrome / chart primitives
-- Ten chart-type renderers (one per FAA chart in the PPL ACS Task C K2 cluster, see "Chart inventory" below)
+- One new lib at `libs/wx-charts/` exporting projection / basemap / chrome / chart / timeline primitives
+- Fourteen chart-type renderers covering the full FAA aviation weather product set a pilot reads pre-flight (PPL ACS Task C K2 cluster + the icing + satellite + TAF + turbulence + freezing-level products that surface in the Aviation Weather Handbook and AC 00-45H -- see "Chart inventory" below)
 - One `data/charts/wx/<slug>/` output convention (`spec.yaml` + `chart.svg` + `meta.json` per chart)
 - One authoring CLI dispatcher at `scripts/charts.ts` (`bun run charts build <slug>`, `bun run charts list`, `bun run charts validate`)
 - Constants: `CHART_TYPES`, `CHART_TYPE_VALUES`, `CHART_TYPE_LABELS`, `LAYER_BANDS`, `LAYER_BAND_VALUES`, `FAA_FLIGHT_CATEGORIES`, `FAA_FLIGHT_CATEGORY_VALUES`
 - Routes: none directly (the consumer WP's `CourseStepChart` mounts SVGs as static assets)
-- Storage policy: chart `spec.yaml` and `meta.json` are committed; `chart.svg` is committed (small, deterministic, deduplicates on content hash); raw source bytes (PNG radar tiles, TAF/METAR archives) live in the dev cache per [ADR 018](../../decisions/018-source-artifact-storage-policy/decision.md) (`~/Documents/airboss-handbook-cache/wx/`)
-- Raster warp via `sharp` (npm, native) -- replaces the headless-chromium approach the spikes used
-- Manual data-prep workflow: each chart's source data is captured into the cache (METAR strings, radar PNG + worldfile, GFA polygons, etc.) before `bun run charts build <slug>` runs
+- Storage policy: chart `spec.yaml` and `meta.json` are committed; `chart.svg` is committed (small, deterministic, deduplicates on content hash); raw source bytes (PNG radar tiles, TAF/METAR archives, satellite GeoTIFF / PNG bands, gridded icing/turb scalar fields) live in the dev cache per [ADR 018](../../decisions/018-source-artifact-storage-policy/decision.md) (`~/Documents/airboss-handbook-cache/wx/`)
+- Raster warp via `sharp` (npm, native) -- replaces the headless-chromium approach the spikes used. Two projection branches in v1: Lambert Conformal (CONUS map products) and Geostationary (GOES satellite products, Phase F)
+- Timeline visualization branch (Phase G) for the TAF chart -- 1D-plus-categorical-band rendering of FM/BECMG/TEMPO/PROB blocks against the TAF valid period (no map; same SVG / chrome substrate, different `extent` and absent projection / basemap bands)
+- Manual data-prep workflow: each chart's source data is captured into the cache (METAR strings, radar PNG + worldfile, GFA polygons, satellite imagery, gridded icing/turb fields, TAF strings, etc.) before `bun run charts build <slug>` runs
 - Validator: chart slug shape, spec.yaml shape per chart-type, sources resolvable, output deterministic (re-run on unchanged spec produces zero writes)
-- Phasing: five phases (A through E), each ships its own PR
+- Phasing: seven phases (A through G), each ships its own PR
 - Type signatures and module layout per Spike 3's "Suggested library shape (refined from Spike 2)" recommendation
 
 Out (deferred items captured per the WP discipline):
@@ -62,6 +65,20 @@ See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 - [ADR 018 -- source-artifact storage policy](../../decisions/018-source-artifact-storage-policy/decision.md)
 - [docs/platform/STORAGE.md](../../platform/STORAGE.md)
 - PPL ACS Task C (Weather Information): K2a (METAR/PIREP), K2b (surface analysis / CVA), K2d (GFA), K2e (winds aloft FB), K2f (convective outlook), K2g (AIRMET/SIGMET)
+
+### FAA documentation set (canonical reference inventory)
+
+The fourteen chart types map to FAA primary sources. Authors write spec.yaml + capture data from real archived bulletins; renderers reproduce the official symbology as documented in:
+
+- **AC 00-45H** -- Aviation Weather Services. The canonical handbook for the products themselves: which agency issues each chart, what valid period each covers, what symbology each uses, and how a pilot reads them. Drives every chart-type renderer's symbology choices.
+- **AC 00-6B** -- Aviation Weather. Background atmospheric science (fronts, pressure systems, icing types, turbulence types, convective development). The "why" behind the symbology AC 00-45H standardizes.
+- **FMH-1** -- Federal Meteorological Handbook No. 1 (Surface Weather Observations and Reports). The METAR / SPECI standard that drives `parseMetar` and the station-model glyph (cloud-cover wedges, wind-barb conventions, weather codes, pressure tendency).
+- **AIM 7-1-6** -- Categorical Outlooks for Pilots (VFR / MVFR / IFR / LIFR thresholds). Drives `computeFlightCategory` rule and the FAA flight-category palette used by METAR plot, CVA, and GFA.
+- **SPC product description** -- NWS Storm Prediction Center's documentation of the convective outlook tier definitions (TSTM / MRGL / SLGT / ENH / MDT / HIGH) and the polygon ordering convention. Drives the convective-outlook renderer.
+- **Aeronautical Chart User's Guide** -- FAA's chart-symbology reference for navigation products (sectionals, low/high IFR enroute, terminal area). Referenced as out-of-scope context for the IFR enroute follow-on WP `nav-chart-symbology-library`.
+- **Aviation Weather Handbook (FAA-H-8083-28)** -- the consolidating handbook that covers the broader product set including satellite (Chapter 14), G-AIRMET / CIP / FIP icing forecasts (Chapter 19), and GTG turbulence (Chapter 20). Drives the Phase E icing/turbulence and Phase F satellite renderers.
+
+The library does not consume these PDFs at build time. They are author-side references; the renderers' visual conventions match the specifications in these documents.
 
 ## Architecture overview
 
@@ -80,15 +97,21 @@ scripts/charts.ts                        <-- CLI dispatcher
 
 libs/wx-charts/src/                      <-- pure code only
   index.ts                               public exports
-  projection.ts                          Lambert helper, fitExtent
+  projection.ts                          Lambert helper, geostationary helper (Phase F), fitExtent
   basemap.ts                             us-atlas loader, CONUS filter, mesh builders
   graticule.ts                           lat/lon graticule renderer
   chrome.ts                              title band + optional footer band
   layers.ts                              z-band contract, layer ordering
+  timeline/                              <-- Phase G: 1D + categorical-band visualization
+    axis.ts                              time-axis renderer (UTC ticks, labels, valid-period bracket)
+    band.ts                              categorical band stacking (one band per output element: ceiling, vis, wind)
+    block.ts                             FM/BECMG/TEMPO/PROB block rendering (boundaries, hatch styles)
   raster/
-    warp.ts                              raster warp via sharp
-    palettes.ts                          NWS reflectivity, IR satellite, flight-category, etc.
-    worldfile.ts                         ESRI world file parser
+    warp.ts                              raster warp via sharp (Lambert + geostationary variants)
+    palettes.ts                          NWS reflectivity, IR satellite, water-vapor, visible, icing-prob, GTG, flight-category, etc.
+    worldfile.ts                         ESRI world file parser (Lambert / Plate Carree sources)
+    geostationary.ts                     GOES projection helpers (Phase F)
+    scalar-field.ts                      gridded scalar field renderer (Phase E icing/turb gridded products + Phase A contour reuse)
     sharp-bridge.ts                      thin server-only sharp wrapper (lazy-loaded)
   point/
     collision.ts                         pairwise repulsion + leader metadata
@@ -101,13 +124,27 @@ libs/wx-charts/src/                      <-- pure code only
       parser.ts                          PIREP string -> ParsedPirep
       types.ts                           ParsedPirep
     taf/
-      parser.ts                          TAF string -> ParsedTaf (used by future overlays)
+      parser.ts                          TAF string -> ParsedTaf (used by Phase G timeline + future overlays)
+      types.ts                           ParsedTaf, TafBlock, TafChangeKind
     sigmet/
       parser.ts                          AIRMET/SIGMET text -> ParsedAdvisory
     gfa/
       parser.ts                          GFA TAC text + FA polygons -> ParsedGfa
     winds-aloft/
       parser.ts                          FB grid -> ParsedFbGrid
+    g-airmet/
+      parser.ts                          G-AIRMET icing / turbulence polygon parser (Phase E)
+      types.ts                           ParsedGAirmet, GAirmetHazardKind
+    icing/
+      cip.ts                             Current Icing Product (CIP) gridded scalar parser (Phase E)
+      fip.ts                             Forecast Icing Product (FIP) gridded scalar parser (Phase E)
+      freezing-level.ts                  Freezing-level forecast scalar parser (Phase E)
+    turbulence/
+      gtg.ts                             Graphical Turbulence Guidance (GTG) gridded scalar parser (Phase E)
+    satellite/
+      ir.ts                              GOES IR brightness-temperature parser (Phase F)
+      visible.ts                         GOES visible reflectance parser (Phase F)
+      water-vapor.ts                     GOES water-vapor brightness-temperature parser (Phase F)
     rules.ts                             flight-category, ceiling-from-clouds, derived rules
   symbology/
     polyline-pips.ts                     generic pip-along-polyline (fronts, jets, troughs)
@@ -120,9 +157,12 @@ libs/wx-charts/src/                      <-- pure code only
     convective-outlook.ts                SPC outlook polygon styling per risk tier
     airports.ts                          airport markers + label halos
     legend.ts                            ramp / scale / category legends
+    icing-polygons.ts                    G-AIRMET icing polygon styling (Phase E)
+    turbulence-polygons.ts               G-AIRMET turbulence polygon styling (Phase E)
+    taf-block.ts                         TAF FM/BECMG/TEMPO/PROB block visual conventions (Phase G)
   charts/
     surface-analysis.ts                  composes substrate -> Spike 1 chart
-    radar-mosaic.ts                      composes substrate -> Spike 2 chart
+    radar-mosaic.ts                      composes substrate -> Spike 2 chart (single-frame; playback OOS)
     metar-plot-grid.ts                   composes substrate -> Spike 3 chart
     pirep-plot-grid.ts                   composes substrate -> PIREP chart
     advisory-overlay.ts                  AIRMET/SIGMET/Convective SIGMET chart
@@ -131,6 +171,16 @@ libs/wx-charts/src/                      <-- pure code only
     winds-aloft-fb.ts                    FB grid renderer
     convective-outlook.ts                SPC outlook chart
     cva.ts                               Ceiling and Visibility Analysis
+    g-airmet-icing.ts                    G-AIRMET icing polygons (Phase E)
+    g-airmet-turbulence.ts               G-AIRMET turbulence polygons (Phase E)
+    cip.ts                               Current Icing Product gridded scalar (Phase E)
+    fip.ts                               Forecast Icing Product gridded scalar (Phase E)
+    freezing-level.ts                    Freezing-level forecast (Phase E)
+    gtg.ts                               Graphical Turbulence Guidance gridded scalar (Phase E)
+    satellite-ir.ts                      GOES IR satellite (Phase F)
+    satellite-visible.ts                 GOES visible satellite (Phase F)
+    satellite-water-vapor.ts             GOES water-vapor satellite (Phase F)
+    taf-timeline.ts                      TAF timeline visualization (Phase G; uses timeline/, not projection/basemap)
   types.ts                               public types (ChartSpec, ChartType, RenderResult)
 
 data/references/basemaps/                <-- substrate data inputs (committed)
@@ -150,22 +200,48 @@ data/references/palettes/                <-- substrate data inputs (committed)
 
 The library accepts data shapes as inputs; it does not import from `data/` relatively. Callers (the CLI, tests, future overlays) load the data and pass it in. Substrate data files (basemaps, palettes) live at `data/references/` because they are stable, small, and load-bearing for every chart -- they are committed and the library accepts the path as a config option (default points to `data/references/basemaps/us-states-10m.json` resolved via `process.cwd()` at CLI time).
 
-## Chart inventory (v1: ten types)
+## Chart inventory (v1: fourteen types)
 
-| Slug suffix        | Chart type                       | ACS hook  | Substrate                              | Phase |
-| ------------------ | -------------------------------- | --------- | -------------------------------------- | ----- |
-| surface-analysis   | NWS surface analysis             | C K2b     | vector polylines + isobars + stations  | A     |
-| radar-mosaic       | NEXRAD reflectivity mosaic       | implicit  | raster warp + state border re-stroke   | B     |
-| advisory-overlay   | AIRMET / SIGMET / Conv SIGMET    | C K2g     | polygon styling + advisory text panel  | B     |
-| metar-plot-grid    | METAR station-model plot         | C K2a     | dense point glyphs + collision         | C     |
-| pirep-plot-grid    | PIREP station plot               | C K2a-2nd | dense point glyphs + collision         | C     |
-| winds-aloft-fb     | Winds / Temps Aloft FB grid      | C K2e     | text grid table over basemap           | C     |
-| prog-chart         | Forecast surface analysis        | derived   | same substrate as surface-analysis     | D     |
-| gfa                | Graphical Forecasts for Aviation | C K2d     | layered polygon overlay (FA, AIRMET)   | D     |
-| convective-outlook | SPC convective outlook           | C K2f     | risk-tier polygons (MRGL/SLGT/ENH/MDT) | D     |
-| cva                | Ceiling and Visibility Analysis  | C K2b-2nd | gridded ceiling/vis polygon shading    | E     |
+The fourteen chart types ship across seven phases (A through G). Phase A ships first; B/C ship in parallel; D follows B+C; E parallels D after B+C land; F parallels E after B+C land; G parallels after the wx-parser substrate (Phase C) lands.
 
-Slug shape: `wx-<chart-type>-<isodate>[-<frame>]`. Examples: `wx-surface-analysis-2024-12-23-12z`, `wx-radar-mosaic-2024-05-21-22z`, `wx-metar-plot-grid-2024-01-13-12z`. The slug is unique across all `data/charts/wx/<slug>/` directories.
+| Slug suffix           | Chart type                       | ACS hook  | Substrate                                           | Phase |
+| --------------------- | -------------------------------- | --------- | --------------------------------------------------- | ----- |
+| surface-analysis      | NWS surface analysis             | C K2b     | vector polylines + isobars + stations               | A     |
+| radar-mosaic          | NEXRAD reflectivity mosaic       | implicit  | raster warp + state border re-stroke (single-frame) | B     |
+| advisory-overlay      | AIRMET / SIGMET / Conv SIGMET    | C K2g     | polygon styling + advisory text panel               | B     |
+| metar-plot-grid       | METAR station-model plot         | C K2a     | dense point glyphs + collision                      | C     |
+| pirep-plot-grid       | PIREP station plot               | C K2a-2nd | dense point glyphs + collision                      | C     |
+| winds-aloft-fb        | Winds / Temps Aloft FB grid      | C K2e     | text grid table over basemap                        | C     |
+| prog-chart            | Forecast surface analysis        | derived   | same substrate as surface-analysis                  | D     |
+| gfa                   | Graphical Forecasts for Aviation | C K2d     | layered polygon overlay (FA, AIRMET)                | D     |
+| convective-outlook    | SPC convective outlook           | C K2f     | risk-tier polygons (MRGL/SLGT/ENH/MDT/HIGH)         | D     |
+| cva                   | Ceiling and Visibility Analysis  | C K2b-2nd | gridded ceiling/vis polygon shading                 | D     |
+| g-airmet-icing        | G-AIRMET icing                   | derived   | polygon overlay + chrome legend (icing severity)    | E     |
+| cip                   | Current Icing Product            | derived   | gridded scalar field (icing probability + severity) | E     |
+| fip                   | Forecast Icing Product           | derived   | gridded scalar field (icing probability + severity) | E     |
+| freezing-level        | Freezing-level forecast          | derived   | gridded scalar contour (height of 0 degC isotherm)  | E     |
+| g-airmet-turbulence   | G-AIRMET turbulence              | derived   | polygon overlay + chrome legend (turb severity)     | E     |
+| gtg                   | Graphical Turbulence Guidance    | derived   | gridded scalar field (turb intensity at FL)         | E     |
+| satellite-ir          | GOES IR (infrared)               | derived   | geostationary raster + IR brightness-temp palette   | F     |
+| satellite-visible     | GOES visible                     | derived   | geostationary raster + reflectance grayscale        | F     |
+| satellite-water-vapor | GOES water vapor                 | derived   | geostationary raster + WV brightness-temp palette   | F     |
+| taf-timeline          | TAF timeline                     | C K2a     | 1D time axis + categorical change-blocks (no map)   | G     |
+
+Note: rows are grouped by phase. Phase E ships six sub-products (icing + turbulence forecasts); they share rendering infrastructure (gridded scalar fields plus polygon overlays) and parallelize within the phase. Phase F ships three satellite bands (IR, VIS, WV) sharing the GOES geostationary projection branch but each its own renderer + palette. Phase G ships one chart whose paradigm differs from every other (1D timeline, no map projection / basemap).
+
+Slug shape: `wx-<chart-type>-<isodate>[-<frame>]`. Examples: `wx-surface-analysis-2024-12-23-12z`, `wx-radar-mosaic-2024-05-21-22z`, `wx-metar-plot-grid-2024-01-13-12z`, `wx-satellite-ir-2024-08-12-18z`, `wx-taf-timeline-kbos-2024-01-13-1720z`. The slug is unique across all `data/charts/wx/<slug>/` directories.
+
+### Phase ordering and dependencies
+
+| Phase | Charts                                                             | Depends on | Why this grouping                                                                                                                                                       |
+| ----- | ------------------------------------------------------------------ | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A     | substrate + surface-analysis                                       | (none)     | Substrate cannot be partially shipped; surface-analysis proves the renderer contract end-to-end                                                                         |
+| B     | radar-mosaic, advisory-overlay                                     | A          | Adds raster + polygon styling on the substrate                                                                                                                          |
+| C     | metar-plot-grid, pirep-plot-grid, winds-aloft-fb                   | A          | Point-glyph cluster + the wx-parser substrate (METAR / PIREP / FB / TAF parsers land here)                                                                              |
+| D     | prog-chart, gfa, convective-outlook, cva                           | B + C      | Forecast cluster -- prog re-uses surface-analysis; gfa composes Phase B advisory polygons; convective-outlook + cva share polygon-tier shading                          |
+| E     | g-airmet-icing, cip, fip, freezing-level, g-airmet-turbulence, gtg | B + C      | Icing + turbulence forecasts -- gridded scalar fields (Phase A contour primitive reused) + polygon overlays (Phase B advisory primitives reused). Parallelizable with D |
+| F     | satellite-ir, satellite-visible, satellite-water-vapor             | B          | Satellite imagery -- new geostationary raster pipeline branch; uses Phase B's sharp warp infrastructure with a different projection. Parallelizable with D / E          |
+| G     | taf-timeline                                                       | C          | TAF timeline -- new 1D timeline visualization paradigm, no map. Depends on Phase C's TAF parser. Parallelizable with D / E / F                                          |
 
 ## Behavior
 
@@ -311,6 +387,16 @@ export const CHART_TYPES = {
   GFA: 'gfa',
   CONVECTIVE_OUTLOOK: 'convective-outlook',
   CVA: 'cva',
+  G_AIRMET_ICING: 'g-airmet-icing',
+  CIP: 'cip',
+  FIP: 'fip',
+  FREEZING_LEVEL: 'freezing-level',
+  G_AIRMET_TURBULENCE: 'g-airmet-turbulence',
+  GTG: 'gtg',
+  SATELLITE_IR: 'satellite-ir',
+  SATELLITE_VISIBLE: 'satellite-visible',
+  SATELLITE_WATER_VAPOR: 'satellite-water-vapor',
+  TAF_TIMELINE: 'taf-timeline',
 } as const;
 
 export const CHART_TYPE_VALUES = Object.values(CHART_TYPES);
@@ -327,6 +413,16 @@ export const CHART_TYPE_LABELS: Record<ChartType, string> = {
   gfa: 'Graphical Forecasts for Aviation',
   'convective-outlook': 'Convective Outlook',
   cva: 'Ceiling and Visibility Analysis',
+  'g-airmet-icing': 'G-AIRMET Icing',
+  cip: 'Current Icing Product',
+  fip: 'Forecast Icing Product',
+  'freezing-level': 'Freezing Level Forecast',
+  'g-airmet-turbulence': 'G-AIRMET Turbulence',
+  gtg: 'Graphical Turbulence Guidance',
+  'satellite-ir': 'Satellite IR',
+  'satellite-visible': 'Satellite Visible',
+  'satellite-water-vapor': 'Satellite Water Vapor',
+  'taf-timeline': 'TAF Timeline',
 };
 
 export const LAYER_BANDS = {
@@ -357,23 +453,23 @@ export type FaaFlightCategory = (typeof FAA_FLIGHT_CATEGORY_VALUES)[number];
 
 ## Validation
 
-| Field                       | Rule                                                                                                                               |
-| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `spec.slug`                 | `^wx-[a-z0-9][a-z0-9-]{1,80}[a-z0-9]$`, must equal the directory name under `data/charts/wx/`                                      |
-| `spec.type`                 | One of `CHART_TYPE_VALUES`                                                                                                         |
-| `spec.title`                | Non-empty                                                                                                                          |
-| `spec.subtitle`             | Optional string                                                                                                                    |
-| `spec.sources`              | Object; every value parseable as `cache://<relative path>` or a relative repo path; resolved file must exist at validate time      |
-| `spec.options`              | Per-chart Zod schema; unknown keys rejected                                                                                        |
-| `spec.projection`           | One of the supported projection variants (Lambert with parallels/rotate; Plate Carree; Web Mercator -- only Lambert needed for v1) |
-| `spec.extent`               | One of `conus` / `alaska` / `hawaii` / a custom `{lon_min, lat_min, lon_max, lat_max}` object                                      |
-| METAR string                | Parser rejects unparseable wind tokens (sets `wind: null` and emits a parser warning to meta.json)                                 |
-| Visibility format           | `M1/4SM` -> 0.125, `1 1/2SM` -> 1.5, `1/8SM` -> 0.125; unparseable tokens -> `visibility: null` + warning                          |
-| Sharp warp source           | Source PNG must decode; world file numeric fields must parse; output canvas dims must be positive integers                         |
-| Layer band ordering         | `composeChart` rejects bands outside `LAYER_BAND_VALUES`; missing bands render as empty `<g>`                                      |
-| Color palette               | Reflectivity ramp values must be in [-32, 95] dBZ; flight-category palette accepts only `FAA_FLIGHT_CATEGORY_VALUES` keys          |
-| `meta.json.library_version` | Semver string read from `libs/wx-charts/package.json`                                                                              |
-| `meta.json.content_hash`    | SHA-256 of `(canonical(spec.yaml) + sorted source bytes + library_version)`                                                        |
+| Field                       | Rule                                                                                                                                                                                                                      |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `spec.slug`                 | `^wx-[a-z0-9][a-z0-9-]{1,80}[a-z0-9]$`, must equal the directory name under `data/charts/wx/`                                                                                                                             |
+| `spec.type`                 | One of `CHART_TYPE_VALUES`                                                                                                                                                                                                |
+| `spec.title`                | Non-empty                                                                                                                                                                                                                 |
+| `spec.subtitle`             | Optional string                                                                                                                                                                                                           |
+| `spec.sources`              | Object; every value parseable as `cache://<relative path>` or a relative repo path; resolved file must exist at validate time                                                                                             |
+| `spec.options`              | Per-chart Zod schema; unknown keys rejected                                                                                                                                                                               |
+| `spec.projection`           | One of the supported projection variants. v1 ships Lambert (Phases A-E, all CONUS map products) and Geostationary (Phase F satellite). Phase G `taf-timeline` charts omit `projection` -- they use a 1D time axis instead |
+| `spec.extent`               | One of `conus` / `alaska` / `hawaii` / `goes-east` / `goes-west` (Phase F) / `time` (Phase G; carries the TAF valid-from / valid-to ISO timestamps) / a custom `{lon_min, lat_min, lon_max, lat_max}` object              |
+| METAR string                | Parser rejects unparseable wind tokens (sets `wind: null` and emits a parser warning to meta.json)                                                                                                                        |
+| Visibility format           | `M1/4SM` -> 0.125, `1 1/2SM` -> 1.5, `1/8SM` -> 0.125; unparseable tokens -> `visibility: null` + warning                                                                                                                 |
+| Sharp warp source           | Source PNG must decode; world file numeric fields must parse; output canvas dims must be positive integers                                                                                                                |
+| Layer band ordering         | `composeChart` rejects bands outside `LAYER_BAND_VALUES`; missing bands render as empty `<g>`                                                                                                                             |
+| Color palette               | Reflectivity ramp values must be in [-32, 95] dBZ; flight-category palette accepts only `FAA_FLIGHT_CATEGORY_VALUES` keys                                                                                                 |
+| `meta.json.library_version` | Semver string read from `libs/wx-charts/package.json`                                                                                                                                                                     |
+| `meta.json.content_hash`    | SHA-256 of `(canonical(spec.yaml) + sorted source bytes + library_version)`                                                                                                                                               |
 
 ## Edge cases
 
@@ -388,7 +484,10 @@ export type FaaFlightCategory = (typeof FAA_FLIGHT_CATEGORY_VALUES)[number];
 - **Two chart specs reference the same source data file**: legal. Each computes its own content hash including the shared bytes. If the source changes, both rebuild on the next `--all` pass.
 - **Output SVG exceeds size budget**: the validator emits a warning at >500 KB (consider raster-overlay PNG re-compression) and a hard error at >5 MB (something is wrong; abort). Spike 2's 548 KB warped-radar chart is the realistic upper end; pure-vector charts are typically <200 KB.
 - **Empty source for a chart that requires it**: e.g., a METAR plot spec with zero observations in the bulk CSV. Renderer emits the basemap + chrome with an empty point-symbology band, and embeds a chrome notice "no observations in window." Not an error; useful as a "what does the chart look like with no data?" placeholder.
-- **Unsupported projection combination**: only Lambert Conformal is required for v1 (every CONUS chart uses it). The validator rejects other projections with `projection 'X' not yet supported in v1; see OUT-OF-SCOPE.md`.
+- **Unsupported projection combination**: v1 supports Lambert Conformal (every CONUS chart, Phases A-E) and Geostationary (every Phase F satellite chart). Phase G `taf-timeline` omits `projection` entirely (1D time axis). The validator rejects other projections (Web Mercator, Plate Carree as a chart projection, Mollweide, etc.) with `projection 'X' not yet supported in v1; see OUT-OF-SCOPE.md`.
+- **TAF timeline missing valid period**: a `taf-timeline` spec.yaml whose parsed TAF has no valid-from / valid-to fails validation with `taf-timeline requires extent.from and extent.to ISO timestamps`. The author re-captures a complete TAF.
+- **Satellite source missing georeference metadata**: GOES PNG / GeoTIFF captures must carry the satellite sub-point lon + scan-area extent. If absent, validator surfaces `satellite source 'X' missing georeference; expected sub_point_lon and scan_extent in spec.yaml or sidecar`.
+- **Gridded scalar field outside spec range**: CIP / FIP / GTG / freezing-level inputs are gridded scalars. Values outside the documented FAA range (e.g., GTG intensity > 10) are clamped at render time; `meta.json.parser_warnings` records the clamp count.
 - **Future overlay registers a new layer band**: the constant `LAYER_BANDS` is closed in v1. Adding a new band (e.g., `motion-vectors-overlay`) requires bumping `library_version`, adding the constant, updating `composeChart`, and re-running `--all` to regenerate every chart -- which is the right gate for a substrate change.
 - **Author edits chart.svg by hand**: the next `bun run charts build` overwrites it. There is no protection; the spec.yaml is the source of truth. The validator does not detect hand-edits (the meta.json.content_hash check only catches spec / source drift, not output-file tampering).
 
