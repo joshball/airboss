@@ -105,14 +105,7 @@ The corpus chosen first is regulations because:
 
 ### Out
 
-- **Phase 4 (renderer).** Token substitution at render time. Phase 3's `getDerivativeContent` and `getIndexedContent` are the substrate; the renderer is the consumer.
-- **Phase 5 (annual diff job).** Phase 3 ingests one edition at a time. Phase 5 runs the next edition through Phase 3, then hash-compares editions and rewrites lesson pins. Phase 3 leaves the annual rollover machinery to Phase 5.
-- **Per-paragraph SourceEntries.** Phase 3 stores one entry per section (and per subpart, per Part). Paragraph-level identifiers (`91.103/b/1/i`) parse via `parseLocator` and resolve to the section's entry; the renderer (Phase 4) descends into the section text.
-- **49 USC (statutes corpus).** ADR 019 §1.2 lists `statutes` as its own corpus. Out of scope here; covered later if a lesson cites a statute that isn't already in 14 CFR.
-- **Cross-corpus supersession of CFR sections.** Some CFR sections are replaced by ICAO-aligned standards in different corpora; that's Phase 10 territory under the ADR 016 reorganization scenario.
-- **Postgres-backed indexed tier.** ADR 019 §2.5 names Postgres for the indexed tier. Phase 3 ships an in-repo JSON file (`sections.json`) at the indexed tier slot. The resolver's `getIndexedContent` reads from JSON; future phases swap the read path to Postgres without touching the resolver's contract.
-- **A real `phase-3` reviewer identity.** ADR 019 §2.4 requires a reviewer ID for batch promotion; in this automated context the agent records the promotion under the placeholder reviewer `'phase-3-bulk-ingestion'`. The PR body documents this so the user can re-promote (or de-promote) under his own reviewer ID if he chooses.
-- **Hangar-driven editing UI** for non-engineer registry curation. revisit.md R5; deferred until `apps/hangar/` revives.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Data Model
 
@@ -271,24 +264,24 @@ This is the test that proves the publish gate works for `regs`.
 
 ## Validation
 
-| Concern | Where it runs |
-| --- | --- |
-| `parseLocator` accepts every shape from §1.2 | Vitest unit (`locator.test.ts`) |
-| `parseLocator` rejects malformed input with clear messages | Vitest unit |
-| `formatCitation` produces `§91.103`, `14 CFR § 91.103`, title | Vitest unit (`citation.test.ts`) |
-| `getLiveUrl` builds correct eCFR Versioner URLs | Vitest unit (`url.test.ts`) |
-| `getCurrentEdition()` returns the most recent `accepted` edition | Vitest unit (`resolver.test.ts`) |
-| XML walker emits expected count of Parts / subparts / sections | Vitest unit (`xml-walker.test.ts`) against fixture |
-| Normalizer NFC-normalizes section text + sets `last_amended_date` | Vitest unit (`normalizer.test.ts`) |
-| Derivative writer hash-compares + skips unchanged | Vitest unit (`derivative-writer.test.ts`) |
-| Ingestion populates SOURCES + EDITIONS + records batch promotion | Vitest integration (`ingest.test.ts`) |
-| Re-running ingestion is a no-op | Vitest integration (`idempotence.test.ts`) |
-| Atomic batch failure rolls back nothing (no half-write) | Vitest unit |
-| Validator zero-ERROR for a real `airboss-ref:regs/...?at=2026` | Vitest integration (`smoke.test.ts`) |
-| Cache miss + network failure exits non-zero | Manual smoke (with network disabled) |
-| `bun run sources register cfr --fixture=...` exits 0 | Manual smoke |
-| `bun run check` exits 0 | Manual gate |
-| `bun test libs/sources/` passes | Manual gate |
+| Concern                                                           | Where it runs                                      |
+| ----------------------------------------------------------------- | -------------------------------------------------- |
+| `parseLocator` accepts every shape from §1.2                      | Vitest unit (`locator.test.ts`)                    |
+| `parseLocator` rejects malformed input with clear messages        | Vitest unit                                        |
+| `formatCitation` produces `§91.103`, `14 CFR § 91.103`, title     | Vitest unit (`citation.test.ts`)                   |
+| `getLiveUrl` builds correct eCFR Versioner URLs                   | Vitest unit (`url.test.ts`)                        |
+| `getCurrentEdition()` returns the most recent `accepted` edition  | Vitest unit (`resolver.test.ts`)                   |
+| XML walker emits expected count of Parts / subparts / sections    | Vitest unit (`xml-walker.test.ts`) against fixture |
+| Normalizer NFC-normalizes section text + sets `last_amended_date` | Vitest unit (`normalizer.test.ts`)                 |
+| Derivative writer hash-compares + skips unchanged                 | Vitest unit (`derivative-writer.test.ts`)          |
+| Ingestion populates SOURCES + EDITIONS + records batch promotion  | Vitest integration (`ingest.test.ts`)              |
+| Re-running ingestion is a no-op                                   | Vitest integration (`idempotence.test.ts`)         |
+| Atomic batch failure rolls back nothing (no half-write)           | Vitest unit                                        |
+| Validator zero-ERROR for a real `airboss-ref:regs/...?at=2026`    | Vitest integration (`smoke.test.ts`)               |
+| Cache miss + network failure exits non-zero                       | Manual smoke (with network disabled)               |
+| `bun run sources register cfr --fixture=...` exits 0              | Manual smoke                                       |
+| `bun run check` exits 0                                           | Manual gate                                        |
+| `bun test libs/sources/` passes                                   | Manual gate                                        |
 
 ## Edge Cases
 
@@ -306,15 +299,7 @@ This is the test that proves the publish gate works for `regs`.
 
 ## Out of Scope (resolved, not deferred)
 
-| Surfaced consideration | Resolution |
-| --- | --- |
-| Per-paragraph SourceEntries | Drop. Phase 3 ships section-level entries; paragraph-level identifiers parse and resolve to the section. Phase 4 (renderer) handles paragraph-text descent. |
-| 49 USC ingestion | Drop from Phase 3. Separate corpus (`statutes`); separate WP if needed. |
-| Postgres indexed tier | Drop. Phase 3 ships JSON-file indexed tier; future phase swaps backend without touching the resolver contract. |
-| Cross-corpus supersession of CFR | Drop. Phase 10 + ADR 016 reorganization scenarios. |
-| Annual rollover diff | Drop. Phase 5. |
-| Reviewer auth integration | Drop. Phase 3 records batch promotion under placeholder `'phase-3-bulk-ingestion'`. Real auth integration is a separate WP; the audit-trail shape is final. |
-| Hangar UI for entry curation | Drop. revisit.md R5; hangar revival ADR. |
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Open Items
 
