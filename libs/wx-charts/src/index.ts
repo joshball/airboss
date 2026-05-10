@@ -56,6 +56,7 @@ export {
 // Apps and components import the spec types via `import type` without
 // dragging the renderer's runtime imports (sharp, fs) into the bundle.
 // ----------------------------------------------------------------------
+export type { AirmetSigmetSpec } from './charts/airmet-sigmet';
 export type { RadarMosaicSpec } from './charts/radar-mosaic';
 export type { SurfaceAnalysisSpec } from './charts/surface-analysis';
 export { buildChrome, type ChromeInput, type ChromeOutput } from './chrome';
@@ -117,6 +118,14 @@ export {
 	renderWarmFront,
 } from './symbology/fronts';
 export { type LegendDef, type LegendEntry, renderLegend } from './symbology/legend';
+export {
+	type PolygonLabel,
+	type PolygonOverlay,
+	type PolygonRing,
+	type PolygonStyle,
+	renderPolygonOverlays,
+	type RenderPolygonOverlaysOptions,
+} from './symbology/polygons';
 export { type PipDef, type PipShape, renderPolylinePips, type ScreenVec } from './symbology/polyline-pips';
 export { type PressureCenter, renderPressureCenter } from './symbology/pressure-centers';
 export { renderStationModel, type StationModelOptions, type StationOb } from './symbology/station-model';

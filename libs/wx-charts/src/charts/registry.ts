@@ -12,6 +12,7 @@
 import { CHART_TYPES, type ChartType } from '@ab/constants';
 import type { z } from 'zod';
 import type { ChartRenderer, ChartSpec } from '../types';
+import { airmetSigmetSpecSchema, renderAirmetSigmet } from './airmet-sigmet';
 import { radarMosaicSpecSchema, renderRadarMosaic } from './radar-mosaic';
 import { renderSurfaceAnalysis, surfaceAnalysisSpecSchema } from './surface-analysis';
 
@@ -35,7 +36,10 @@ export const CHART_RENDERERS: Record<ChartType, ChartRendererRegistration> = {
 		render: renderRadarMosaic as ChartRenderer<ChartSpec>,
 		schema: radarMosaicSpecSchema,
 	},
-	[CHART_TYPES.ADVISORY_OVERLAY]: notYetRegistered(CHART_TYPES.ADVISORY_OVERLAY),
+	[CHART_TYPES.ADVISORY_OVERLAY]: {
+		render: renderAirmetSigmet as ChartRenderer<ChartSpec>,
+		schema: airmetSigmetSpecSchema,
+	},
 	// Phase C
 	[CHART_TYPES.METAR_PLOT_GRID]: notYetRegistered(CHART_TYPES.METAR_PLOT_GRID),
 	[CHART_TYPES.PIREP_PLOT_GRID]: notYetRegistered(CHART_TYPES.PIREP_PLOT_GRID),
