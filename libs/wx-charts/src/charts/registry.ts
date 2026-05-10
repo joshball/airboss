@@ -14,6 +14,7 @@ import type { z } from 'zod';
 import type { ChartRenderer, ChartSpec } from '../types';
 import { airmetSigmetSpecSchema, renderAirmetSigmet } from './airmet-sigmet';
 import { convectiveOutlookSpecSchema, renderConvectiveOutlook } from './convective-outlook';
+import { cvaSpecSchema, renderCva } from './cva';
 import { freezingLevelSpecSchema, renderFreezingLevel } from './freezing-level';
 import { gfaSpecSchema, renderGfa } from './gfa';
 import { icingCipSpecSchema, renderIcingCip } from './icing-cip';
@@ -82,7 +83,10 @@ export const CHART_RENDERERS: Record<ChartType, ChartRendererRegistration> = {
 		render: renderConvectiveOutlook as ChartRenderer<ChartSpec>,
 		schema: convectiveOutlookSpecSchema,
 	},
-	[CHART_TYPES.CVA]: notYetRegistered(CHART_TYPES.CVA),
+	[CHART_TYPES.CVA]: {
+		render: renderCva as ChartRenderer<ChartSpec>,
+		schema: cvaSpecSchema,
+	},
 	// Phase E (icing + turbulence forecast cluster)
 	[CHART_TYPES.TURBULENCE_GAIRMET]: {
 		render: renderTurbulenceGairmet as ChartRenderer<ChartSpec>,

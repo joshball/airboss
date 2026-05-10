@@ -44,7 +44,7 @@ import { buildChrome } from '../chrome';
 import { renderGraticule } from '../graticule';
 import { composeChart, type LayerBandMap } from '../layers';
 import { CHART_MARGIN, type FitTarget, lambertProjection, SVG_HEIGHT, SVG_WIDTH } from '../projection';
-import { CONVECTIVE_OUTLOOK_PALETTE, type ConvectiveOutlookTier, CONVECTIVE_OUTLOOK_TIERS } from '../raster/palettes';
+import { CONVECTIVE_OUTLOOK_PALETTE, CONVECTIVE_OUTLOOK_TIERS, type ConvectiveOutlookTier } from '../raster/palettes';
 import { type PolygonOverlay, renderPolygonOverlays } from '../symbology/polygons';
 import type { ChartRenderInput, ChartRenderResult, ChartSpec } from '../types';
 

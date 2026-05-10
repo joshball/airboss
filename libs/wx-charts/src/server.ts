@@ -23,6 +23,7 @@ export {
 	convectiveOutlookSpecSchema,
 	renderConvectiveOutlook,
 } from './charts/convective-outlook';
+export { type CvaSpec, cvaSpecSchema, renderCva } from './charts/cva';
 export {
 	type FreezingLevelSpec,
 	freezingLevelSpecSchema,
