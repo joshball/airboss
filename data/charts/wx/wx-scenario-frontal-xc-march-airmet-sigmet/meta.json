@@ -1,0 +1,17 @@
+{
+  "slug": "wx-scenario-frontal-xc-march-airmet-sigmet",
+  "type": "advisory-overlay",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-10T23:27:04.720Z",
+  "content_hash": "sha256:580375fbc0ba0bb0b8482e953c61cc541df1721ff3613a2444dfb53091ce5ec8",
+  "source_hashes": {
+    "advisories": "81e1d500cdf0d0c19703359e99d30f4d76da554bb17c2d6775bcc1b5f5ea25e3"
+  },
+  "layer_counts": {
+    "vector-symbology": 3,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 287037
+}

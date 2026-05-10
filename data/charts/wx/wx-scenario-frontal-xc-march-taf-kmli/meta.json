@@ -1,0 +1,17 @@
+{
+  "slug": "wx-scenario-frontal-xc-march-taf-kmli",
+  "type": "taf-timeline",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-10T23:28:22.651Z",
+  "content_hash": "sha256:4de129f131db6827666fab99982b8c7b80c8817386f6da910703d2988bc75d37",
+  "source_hashes": {
+    "taf": "4811a817554a528a44d90e93ce36f23c22baec7e3869780cdf15adcd007a1bfb"
+  },
+  "layer_counts": {
+    "vector-symbology": 7,
+    "point-symbology": 1
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 6120
+}

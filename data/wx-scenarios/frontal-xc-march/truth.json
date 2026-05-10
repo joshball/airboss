@@ -1,0 +1,532 @@
+{
+  "scenarioId": "frontal-xc-march",
+  "validAt": "2026-03-19T19:00:00Z",
+  "primaryTimeZone": "America/Chicago",
+  "narrative": "Winter frontal passage during a midwest XC, KSTL -> KORD. Synoptic-scale low over the Upper Midwest with a cold front trailing SSE. Pre-frontal warm sector ahead of the front (KSTL/KCPS); post-frontal cold sector behind it (KSPI/KMLI). KORD ahead of the front, will see passage 2-4 hours later.",
+  "stations": {
+    "KSTL": {
+      "icao": "KSTL",
+      "lon": -90.37,
+      "lat": 38.75,
+      "elevationFt": 605,
+      "name": "St. Louis Lambert"
+    },
+    "KCPS": {
+      "icao": "KCPS",
+      "lon": -90.16,
+      "lat": 38.57,
+      "elevationFt": 413,
+      "name": "St. Louis Downtown (Cahokia)"
+    },
+    "KSPI": {
+      "icao": "KSPI",
+      "lon": -89.68,
+      "lat": 39.84,
+      "elevationFt": 597,
+      "name": "Springfield Capital"
+    },
+    "KMLI": {
+      "icao": "KMLI",
+      "lon": -90.51,
+      "lat": 41.45,
+      "elevationFt": 590,
+      "name": "Quad Cities (Moline)"
+    },
+    "KORD": {
+      "icao": "KORD",
+      "lon": -87.91,
+      "lat": 41.98,
+      "elevationFt": 672,
+      "name": "Chicago O'Hare"
+    },
+    "KMSP": {
+      "icao": "KMSP",
+      "lon": -93.22,
+      "lat": 44.88,
+      "elevationFt": 841,
+      "name": "Minneapolis-St. Paul"
+    },
+    "KDSM": {
+      "icao": "KDSM",
+      "lon": -93.65,
+      "lat": 41.53,
+      "elevationFt": 958,
+      "name": "Des Moines"
+    },
+    "KIND": {
+      "icao": "KIND",
+      "lon": -86.29,
+      "lat": 39.72,
+      "elevationFt": 797,
+      "name": "Indianapolis"
+    }
+  },
+  "synoptic": {
+    "pressureSystems": [
+      {
+        "id": "L-upper-midwest",
+        "kind": "L",
+        "lon": -91,
+        "lat": 44,
+        "centralPressureMb": 996,
+        "motionDegTrue": 56,
+        "motionKt": 25
+      },
+      {
+        "id": "H-southeast",
+        "kind": "H",
+        "lon": -82,
+        "lat": 32,
+        "centralPressureMb": 1023,
+        "motionDegTrue": 56,
+        "motionKt": 12
+      },
+      {
+        "id": "H-rockies",
+        "kind": "H",
+        "lon": -109,
+        "lat": 41,
+        "centralPressureMb": 1028,
+        "motionDegTrue": 90,
+        "motionKt": 18
+      }
+    ],
+    "fronts": [
+      {
+        "id": "F-cold-main",
+        "kind": "cold",
+        "points": [
+          [
+            -88,
+            44
+          ],
+          [
+            -88.5,
+            42.5
+          ],
+          [
+            -89,
+            41.5
+          ],
+          [
+            -89.4,
+            39.8
+          ],
+          [
+            -90.8,
+            38.5
+          ],
+          [
+            -92,
+            35
+          ],
+          [
+            -93,
+            33
+          ]
+        ],
+        "pipSide": "E",
+        "motionDegTrue": 110,
+        "motionKt": 25,
+        "intensity": "strong"
+      },
+      {
+        "id": "F-warm-east",
+        "kind": "warm",
+        "points": [
+          [
+            -88,
+            44
+          ],
+          [
+            -83,
+            44.5
+          ],
+          [
+            -78,
+            44
+          ]
+        ],
+        "pipSide": "N",
+        "motionDegTrue": 48,
+        "motionKt": 15,
+        "intensity": "moderate"
+      }
+    ]
+  },
+  "airMasses": [
+    {
+      "id": "AM-warm-sector",
+      "classification": "mT",
+      "polygon": [
+        [
+          -93,
+          33
+        ],
+        [
+          -92,
+          35
+        ],
+        [
+          -90.8,
+          38.5
+        ],
+        [
+          -89.4,
+          39.8
+        ],
+        [
+          -89,
+          41.5
+        ],
+        [
+          -88.5,
+          42.5
+        ],
+        [
+          -88,
+          44
+        ],
+        [
+          -83,
+          44.5
+        ],
+        [
+          -78,
+          44
+        ],
+        [
+          -78,
+          30
+        ],
+        [
+          -93,
+          30
+        ],
+        [
+          -93,
+          33
+        ]
+      ],
+      "surfaceTempC": 17,
+      "surfaceDewpointC": 13,
+      "stability": "conditionally-unstable",
+      "surfaceWindDirDeg": 200,
+      "surfaceWindKt": 14,
+      "meanCloudCover": "BKN",
+      "meanCloudBaseFtAgl": 4500,
+      "meanCloudTopFtAgl": 12000
+    },
+    {
+      "id": "AM-cold-sector",
+      "classification": "cP",
+      "polygon": [
+        [
+          -93,
+          33
+        ],
+        [
+          -92,
+          35
+        ],
+        [
+          -90.8,
+          38.5
+        ],
+        [
+          -89.4,
+          39.8
+        ],
+        [
+          -89,
+          41.5
+        ],
+        [
+          -88.5,
+          42.5
+        ],
+        [
+          -88,
+          44
+        ],
+        [
+          -90,
+          47
+        ],
+        [
+          -103,
+          48
+        ],
+        [
+          -103,
+          33
+        ],
+        [
+          -93,
+          33
+        ]
+      ],
+      "surfaceTempC": 4,
+      "surfaceDewpointC": -3,
+      "stability": "stable",
+      "surfaceWindDirDeg": 320,
+      "surfaceWindKt": 20,
+      "meanCloudCover": "OVC",
+      "meanCloudBaseFtAgl": 2500,
+      "meanCloudTopFtAgl": 7000
+    }
+  ],
+  "upperLevel": {
+    "jetAxis": [
+      [
+        -110,
+        36
+      ],
+      [
+        -100,
+        40
+      ],
+      [
+        -92,
+        44
+      ],
+      [
+        -82,
+        47
+      ]
+    ],
+    "jetMaxKt": 110,
+    "windByAltitude": [
+      {
+        "altitudeFt": 3000,
+        "meanDirDeg": 220,
+        "meanSpeedKt": 22,
+        "meanTempC": 5
+      },
+      {
+        "altitudeFt": 6000,
+        "meanDirDeg": 240,
+        "meanSpeedKt": 30,
+        "meanTempC": 0
+      },
+      {
+        "altitudeFt": 9000,
+        "meanDirDeg": 260,
+        "meanSpeedKt": 38,
+        "meanTempC": -5
+      },
+      {
+        "altitudeFt": 12000,
+        "meanDirDeg": 270,
+        "meanSpeedKt": 45,
+        "meanTempC": -11
+      },
+      {
+        "altitudeFt": 18000,
+        "meanDirDeg": 280,
+        "meanSpeedKt": 60,
+        "meanTempC": -23
+      },
+      {
+        "altitudeFt": 24000,
+        "meanDirDeg": 285,
+        "meanSpeedKt": 80,
+        "meanTempC": -36
+      },
+      {
+        "altitudeFt": 30000,
+        "meanDirDeg": 290,
+        "meanSpeedKt": 95,
+        "meanTempC": -50
+      },
+      {
+        "altitudeFt": 34000,
+        "meanDirDeg": 295,
+        "meanSpeedKt": 105,
+        "meanTempC": -55
+      },
+      {
+        "altitudeFt": 39000,
+        "meanDirDeg": 300,
+        "meanSpeedKt": 95,
+        "meanTempC": -58
+      }
+    ]
+  },
+  "convection": {
+    "cells": [
+      {
+        "id": "C-prefront-1",
+        "lon": -89,
+        "lat": 38,
+        "radiusKm": 25,
+        "peakDbz": 48
+      },
+      {
+        "id": "C-prefront-2",
+        "lon": -88.5,
+        "lat": 36,
+        "radiusKm": 20,
+        "peakDbz": 42
+      }
+    ],
+    "frontalBand": {
+      "axis": [
+        [
+          -89,
+          41.5
+        ],
+        [
+          -89.4,
+          39.8
+        ],
+        [
+          -90.8,
+          38.5
+        ],
+        [
+          -92,
+          35
+        ]
+      ],
+      "widthKm": 60,
+      "peakDbz": 45
+    },
+    "capeJperKgByStation": {
+      "KSTL": 800,
+      "KCPS": 800,
+      "KSPI": 100,
+      "KMLI": 50,
+      "KORD": 600,
+      "KMSP": 0,
+      "KDSM": 50,
+      "KIND": 700
+    }
+  },
+  "diurnal": {
+    "solarNoonUtcHour": 18,
+    "mixingHeightFtMsl": 6000,
+    "nocturnalInversion": false
+  },
+  "hazardZones": [
+    {
+      "id": "HZ-postfrontal-ifr",
+      "kind": "ifr",
+      "polygon": [
+        [
+          -89.5,
+          39.8
+        ],
+        [
+          -89.2,
+          41.5
+        ],
+        [
+          -89,
+          43
+        ],
+        [
+          -92,
+          44
+        ],
+        [
+          -95,
+          43
+        ],
+        [
+          -95,
+          40
+        ],
+        [
+          -91,
+          39
+        ],
+        [
+          -89.5,
+          39.8
+        ]
+      ],
+      "altitudeBandFtMsl": {
+        "min": 0,
+        "max": 4000
+      },
+      "source": "Post-frontal cold-sector IFR: lifted air-mass moisture trapped beneath a stable inversion",
+      "severity": "moderate"
+    },
+    {
+      "id": "HZ-postfrontal-turb",
+      "kind": "turbulence",
+      "polygon": [
+        [
+          -90,
+          36
+        ],
+        [
+          -89.5,
+          39.8
+        ],
+        [
+          -89,
+          43
+        ],
+        [
+          -93,
+          44.5
+        ],
+        [
+          -97,
+          44
+        ],
+        [
+          -98,
+          36
+        ],
+        [
+          -90,
+          36
+        ]
+      ],
+      "altitudeBandFtMsl": {
+        "min": 6000,
+        "max": 24000
+      },
+      "source": "Cold-sector turbulence: cold advection behind front, tightening surface gradient, jet-exit ageostrophic flow aloft",
+      "severity": "moderate"
+    },
+    {
+      "id": "HZ-prefrontal-tsra",
+      "kind": "turbulence",
+      "polygon": [
+        [
+          -89.4,
+          36
+        ],
+        [
+          -87,
+          36
+        ],
+        [
+          -87,
+          42
+        ],
+        [
+          -89,
+          42
+        ],
+        [
+          -89.4,
+          36
+        ]
+      ],
+      "altitudeBandFtMsl": {
+        "min": 0,
+        "max": 30000
+      },
+      "source": "Pre-frontal warm-sector convection along cold front; isolated cells with embedded turbulence",
+      "severity": "moderate"
+    }
+  ],
+  "terrain": {
+    "ridges": []
+  }
+}

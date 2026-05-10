@@ -1,0 +1,113 @@
+[
+  {
+    "station": "KORD",
+    "kind": "UA",
+    "location": {
+      "raw": "ORD180020",
+      "station": "ORD",
+      "radialDeg": 180,
+      "distanceNm": 20
+    },
+    "timeHhmmZ": 1835,
+    "altitudeFt": 8000,
+    "aircraftType": "B738",
+    "skyCover": [
+      {
+        "cover": "BKN",
+        "baseFt": 4500,
+        "topFt": null
+      },
+      {
+        "cover": "OVC",
+        "baseFt": 12000,
+        "topFt": null
+      }
+    ],
+    "weather": [],
+    "temperatureC": null,
+    "wind": null,
+    "turbulence": {
+      "intensity": "LGT",
+      "altitudeBandFt": null,
+      "raw": "LGT"
+    },
+    "icing": null,
+    "remarks": "SMOOTH BELOW 070",
+    "raw": "KORD UA /OV ORD180020/TM 1835/FL080/TP B738/TB LGT/SK BKN045 OVC120/RM SMOOTH BELOW 070",
+    "warnings": []
+  },
+  {
+    "station": "KSPI",
+    "kind": "UUA",
+    "location": {
+      "raw": "SPI270010",
+      "station": "SPI",
+      "radialDeg": 270,
+      "distanceNm": 10
+    },
+    "timeHhmmZ": 1848,
+    "altitudeFt": 6000,
+    "aircraftType": "C172",
+    "skyCover": [
+      {
+        "cover": "OVC",
+        "baseFt": 2000,
+        "topFt": null
+      }
+    ],
+    "weather": [
+      "RA"
+    ],
+    "temperatureC": null,
+    "wind": null,
+    "turbulence": {
+      "intensity": "MOD",
+      "altitudeBandFt": {
+        "min": 5000,
+        "max": 8000
+      },
+      "raw": "MOD 050-080"
+    },
+    "icing": null,
+    "remarks": "CONT MOD CHOP IN PRECIP",
+    "raw": "KSPI UUA /OV SPI270010/TM 1848/FL060/TP C172/TB MOD 050-080/SK OVC020/WX RA/RM CONT MOD CHOP IN PRECIP",
+    "warnings": []
+  },
+  {
+    "station": "KMLI",
+    "kind": "UA",
+    "location": {
+      "raw": "MLI020015",
+      "station": "MLI",
+      "radialDeg": 20,
+      "distanceNm": 15
+    },
+    "timeHhmmZ": 1855,
+    "altitudeFt": 5000,
+    "aircraftType": "B190",
+    "skyCover": [
+      {
+        "cover": "OVC",
+        "baseFt": 2500,
+        "topFt": null
+      }
+    ],
+    "weather": [
+      "FU"
+    ],
+    "temperatureC": null,
+    "wind": null,
+    "turbulence": {
+      "intensity": "LGT",
+      "altitudeBandFt": {
+        "min": 5000,
+        "max": 8000
+      },
+      "raw": "LGT 050-080"
+    },
+    "icing": null,
+    "remarks": "SMOOTH ABV 080 CONT NW WIND 30KT",
+    "raw": "KMLI UA /OV MLI020015/TM 1855/FL050/TP B190/TB LGT 050-080/SK OVC025/WX FU/RM SMOOTH ABV 080 CONT NW WIND 30KT",
+    "warnings": []
+  }
+]
