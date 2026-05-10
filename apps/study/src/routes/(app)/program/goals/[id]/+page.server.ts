@@ -1,17 +1,22 @@
 import { requireAuth } from '@ab/auth';
+import { goalCourse } from '@ab/bc-study';
 import {
 	addGoalNode,
 	addGoalSyllabus,
 	archiveGoal,
+	type CourseRow,
 	type GoalNodeRow,
 	GoalNotFoundError,
 	GoalNotOwnedError,
 	type GoalRow,
 	type GoalSyllabusRow,
+	getCourseById,
+	getCoursesByGoal,
 	getCredentialSyllabi,
 	getGoalNodes,
 	getGoalSyllabi,
 	getOwnedGoal,
+	listCoursesForReader,
 	listCredentials,
 	listNodesWithFacets,
 	removeGoalNode,
@@ -23,6 +28,7 @@ import {
 	updateGoal,
 } from '@ab/bc-study/server';
 import {
+	COURSE_STATUSES,
 	CREDENTIAL_STATUSES,
 	GOAL_NOTES_MAX_LENGTH,
 	GOAL_STATUS_VALUES,
@@ -33,13 +39,20 @@ import {
 	ROUTES,
 	SYLLABUS_PRIMACY,
 } from '@ab/constants';
+import { db } from '@ab/db/connection';
 import { error, fail, redirect } from '@sveltejs/kit';
+import { and, eq } from 'drizzle-orm';
 import type { Actions, PageServerLoad } from './$types';
 
 export interface SyllabusOption {
 	id: string;
 	credentialTitle: string;
 	syllabusTitle: string;
+}
+
+export interface CourseWithLink {
+	course: CourseRow;
+	weight: number;
 }
 
 export interface GoalDetailData {
@@ -49,6 +62,8 @@ export interface GoalDetailData {
 	nodes: GoalNodeRow[];
 	availableSyllabi: SyllabusOption[];
 	availableNodes: Array<{ id: string; title: string; domain: string }>;
+	courses: CourseWithLink[];
+	availableCourses: CourseRow[];
 }
 
 export const load: PageServerLoad = async (event) => {
@@ -108,6 +123,22 @@ export const load: PageServerLoad = async (event) => {
 		.slice(0, 25)
 		.map((n) => ({ id: n.id, title: n.title, domain: n.domain }));
 
+	// Course tab data (course-reader-and-editor WP, Phase 5).
+	// Goal-held courses + the per-link weight, plus a picker of every
+	// active course not currently in the goal.
+	const [goalCoursesRows, allActiveCourses] = await Promise.all([
+		getCoursesByGoal(goal.id),
+		listCoursesForReader(db, { statusIn: [COURSE_STATUSES.ACTIVE] }),
+	]);
+	const goalCourseLinkRows = await db.select().from(goalCourse).where(eq(goalCourse.goalId, goal.id));
+	const weightByCourseId = new Map(goalCourseLinkRows.map((row) => [row.courseId, row.weight]));
+	const courses: CourseWithLink[] = goalCoursesRows.map((row) => ({
+		course: row,
+		weight: weightByCourseId.get(row.id) ?? 1.0,
+	}));
+	const presentCourseIds = new Set(goalCoursesRows.map((c) => c.id));
+	const availableCourses = allActiveCourses.filter((c) => !presentCourseIds.has(c.id));
+
 	return {
 		goal,
 		syllabi,
@@ -115,6 +146,8 @@ export const load: PageServerLoad = async (event) => {
 		nodes,
 		availableSyllabi,
 		availableNodes,
+		courses,
+		availableCourses,
 	} satisfies GoalDetailData;
 };
 
@@ -306,5 +339,82 @@ export const actions: Actions = {
 			throw err;
 		}
 		return { intent: 'setNodeWeight', success: true };
+	},
+
+	// course-reader-and-editor WP, Phase 5: course tab actions.
+	addCourse: async (event) => {
+		const user = requireAuth(event);
+		const form = await event.request.formData();
+		const courseId = String(form.get('courseId') ?? '').trim();
+		const weight = clampWeight(String(form.get('weight') ?? '1'));
+		if (courseId === '') return fail(400, { intent: 'addCourse', error: 'Pick a course.' });
+
+		// Verify the goal is owned + reachable BEFORE inserting (matches the
+		// addSyllabus / addNode pattern -- ownership check first, write second).
+		try {
+			await getOwnedGoal(event.params.id, user.id);
+		} catch (err) {
+			if (err instanceof GoalNotFoundError || err instanceof GoalNotOwnedError) {
+				throw error(404, 'Goal not found.');
+			}
+			throw err;
+		}
+		const course = await getCourseById(courseId);
+		if (course === null) return fail(400, { intent: 'addCourse', error: 'Course not found.' });
+		if (course.status !== COURSE_STATUSES.ACTIVE) {
+			return fail(400, { intent: 'addCourse', error: 'Course is not active.' });
+		}
+		const existing = await db
+			.select()
+			.from(goalCourse)
+			.where(and(eq(goalCourse.goalId, event.params.id), eq(goalCourse.courseId, courseId)))
+			.limit(1);
+		if (existing[0] !== undefined) {
+			return fail(400, { intent: 'addCourse', error: 'Course already in goal.' });
+		}
+		await db.insert(goalCourse).values({ goalId: event.params.id, courseId, weight });
+		return { intent: 'addCourse', success: true };
+	},
+
+	removeCourse: async (event) => {
+		const user = requireAuth(event);
+		const form = await event.request.formData();
+		const courseId = String(form.get('courseId') ?? '').trim();
+		if (courseId === '') return fail(400, { intent: 'removeCourse', error: 'Missing courseId.' });
+		try {
+			await getOwnedGoal(event.params.id, user.id);
+		} catch (err) {
+			if (err instanceof GoalNotFoundError || err instanceof GoalNotOwnedError) {
+				throw error(404, 'Goal not found.');
+			}
+			throw err;
+		}
+		await db.delete(goalCourse).where(and(eq(goalCourse.goalId, event.params.id), eq(goalCourse.courseId, courseId)));
+		return { intent: 'removeCourse', success: true };
+	},
+
+	setCourseWeight: async (event) => {
+		const user = requireAuth(event);
+		const form = await event.request.formData();
+		const courseId = String(form.get('courseId') ?? '').trim();
+		const weight = clampWeight(String(form.get('weight') ?? '1'));
+		if (courseId === '') return fail(400, { intent: 'setCourseWeight', error: 'Missing courseId.' });
+		try {
+			await getOwnedGoal(event.params.id, user.id);
+		} catch (err) {
+			if (err instanceof GoalNotFoundError || err instanceof GoalNotOwnedError) {
+				throw error(404, 'Goal not found.');
+			}
+			throw err;
+		}
+		const result = await db
+			.update(goalCourse)
+			.set({ weight })
+			.where(and(eq(goalCourse.goalId, event.params.id), eq(goalCourse.courseId, courseId)))
+			.returning();
+		if (result.length === 0) {
+			return fail(400, { intent: 'setCourseWeight', error: 'Course not in goal.' });
+		}
+		return { intent: 'setCourseWeight', success: true };
 	},
 };
