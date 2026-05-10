@@ -30,6 +30,9 @@ export {
 } from './charts/pirep-plot-grid';
 export { type RadarMosaicSpec, radarMosaicSpecSchema, renderRadarMosaic } from './charts/radar-mosaic';
 export { CHART_RENDERERS } from './charts/registry';
+export { renderSatelliteIr, type SatelliteIrSpec, satelliteIrSpecSchema } from './charts/satellite-ir';
+export { renderSatelliteVis, type SatelliteVisSpec, satelliteVisSpecSchema } from './charts/satellite-vis';
+export { renderSatelliteWv, type SatelliteWvSpec, satelliteWvSpecSchema } from './charts/satellite-wv';
 export {
 	renderSurfaceAnalysis,
 	type SurfaceAnalysisSpec,
@@ -46,4 +49,9 @@ export {
 	type WindsAloftFbSpec,
 	windsAloftFbSpecSchema,
 } from './charts/winds-aloft-fb';
+export {
+	applyPalette,
+	type ApplyPaletteInput,
+	type ApplyPaletteResult,
+} from './raster/apply-palette';
 export { warpRaster } from './raster/warp';

@@ -60,6 +60,9 @@ export type { AirmetSigmetSpec } from './charts/airmet-sigmet';
 export type { MetarPlotGridSpec } from './charts/metar-plot-grid';
 export type { PirepPlotGridSpec } from './charts/pirep-plot-grid';
 export type { RadarMosaicSpec } from './charts/radar-mosaic';
+export type { SatelliteIrSpec } from './charts/satellite-ir';
+export type { SatelliteVisSpec } from './charts/satellite-vis';
+export type { SatelliteWvSpec } from './charts/satellite-wv';
 export type { SurfaceAnalysisSpec } from './charts/surface-analysis';
 export type { TurbulenceGairmetSpec } from './charts/turbulence-gairmet';
 export type { TurbulenceGtgSpec } from './charts/turbulence-gtg';
@@ -123,6 +126,7 @@ export {
 	type ReflectivityStop,
 	type RGB,
 } from './raster/palettes';
+export type { ApplyPaletteInput, ApplyPaletteResult } from './raster/apply-palette';
 export type { WarpInput, WarpResult } from './raster/warp';
 export { parseWorldFile, pixelToWorld, type WorldFile, worldToPixel } from './raster/worldfile';
 export { type AirportMarker, renderAirport } from './symbology/airports';
