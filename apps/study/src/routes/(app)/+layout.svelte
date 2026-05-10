@@ -108,16 +108,17 @@ function pathMatches(current: string, prefix: string): boolean {
 	return current === prefix || current.startsWith(`${prefix}/`);
 }
 
-// Phase 4 of study-app-ia-cleanup locks the top nav to five sections:
+// Phase 4 of study-app-ia-cleanup locked the top nav to five sections:
 // Home / Learn / Program / Insights / Reference. The Memory dropdown
 // and the local Help dropdown that lived here in earlier phases are
 // removed; section index pages now carry the sub-nav (e.g. `/study/learn`
 // shows Cards / Reps / Read tabs via `LearnTabs.svelte`). The global
 // Help search lives in `AppHeader.svelte` and is the only Help affordance
-// in the chrome. The five testids (`nav-home`, `nav-learn`, `nav-program`,
-// `nav-insights`, `nav-reference`) are the locked contract -- the
-// `ia-flow.spec.ts` and `ia-page-anchor-guard.spec.ts` CI guards depend
-// on them.
+// in the chrome. The course-primitive WP added a sixth section (`Courses`,
+// testid `nav-courses`) for instructor-authored pedagogical content.
+// The full set of locked testids -- `nav-home`, `nav-learn`, `nav-courses`,
+// `nav-program`, `nav-insights`, `nav-reference` -- is the contract that
+// the `ia-flow.spec.ts` and `ia-page-anchor-guard.spec.ts` guards enforce.
 const studyActive = $derived(page.url.pathname === ROUTES.STUDY);
 // `/study/learn` consolidates Cards (`/memory`), Reps (`/reps`), and
 // Read (`/library`). The highlight matches anywhere under `/study/learn`,
@@ -129,6 +130,9 @@ const learnActive = $derived(
 		pathMatches(page.url.pathname, ROUTES.REPS) ||
 		pathMatches(page.url.pathname, ROUTES.LIBRARY),
 );
+// `/courses` -- instructor-authored courses (course-primitive WP). Pedagogical
+// content the learner consumes; lives next to Learn in the nav.
+const coursesActive = $derived(pathMatches(page.url.pathname, ROUTES.COURSES));
 // `/insights` rolls Stats / Calibration / Lens onto one section
 // (study-app-ia-cleanup Phase 3). The nav highlight matches anywhere
 // under `/insights/*`.
@@ -201,6 +205,9 @@ const themePickerLocked = $derived(themePref != null && selection.theme !== them
 			>
 			<a href={ROUTES.LEARN} aria-current={learnActive ? 'page' : undefined} data-testid="nav-learn"
 				>{NAV_LABELS.LEARN}</a
+			>
+			<a href={ROUTES.COURSES} aria-current={coursesActive ? 'page' : undefined} data-testid="nav-courses"
+				>{NAV_LABELS.COURSES}</a
 			>
 			<a href={ROUTES.PROGRAM} aria-current={programActive ? 'page' : undefined} data-testid="nav-program"
 				>{NAV_LABELS.PROGRAM}</a

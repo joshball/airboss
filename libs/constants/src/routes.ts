@@ -849,6 +849,12 @@ export const NAV_LABELS = {
 	LEARN_REPS: 'Reps',
 	LEARN_READ: 'Read',
 	/**
+	 * `/courses` -- instructor-authored courses index (course-primitive WP).
+	 * Pedagogical content the learner consumes; sits in the top nav alongside
+	 * Learn so courses are discoverable without knowing the URL.
+	 */
+	COURSES: 'Courses',
+	/**
 	 * @deprecated The legacy `/dashboard` page; renamed to "Stats" pre-IA-
 	 * cleanup. Phase 3 renames the surface to `/insights` and prefers
 	 * `INSIGHTS` below. Kept so existing call sites still type-check.

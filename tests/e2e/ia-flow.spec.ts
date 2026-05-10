@@ -51,6 +51,8 @@ const FLOW: ReadonlyArray<Stop> = [
 		path: ROUTES.LIBRARY,
 		subAnchors: ['learn-tab-read'],
 	},
+	// Courses section -- instructor-authored courses index (course-primitive WP).
+	{ label: 'courses', path: ROUTES.COURSES },
 	// Program section -- Quals / Goal / Plan / Coverage (Phase 2).
 	{
 		label: 'program',
@@ -94,12 +96,14 @@ test.describe('IA flow -- existence sweep', () => {
 		expect(errors, `runtime errors during flow:\n${errors.join('\n')}`).toEqual([]);
 	});
 
-	// Phase 4 CI guard -- the five-section nav is the locked contract. Any
-	// regression that drops, renames, or adds a top-level nav entry without
-	// updating this list (and the FLOW above) fails here.
-	test('top nav exposes exactly the five locked testids', async ({ page }) => {
+	// Phase 4 CI guard -- the locked top-nav testids are the contract. Any
+	// regression that drops or renames a top-level nav entry without updating
+	// this list (and the FLOW above) fails here. Adding a new entry requires
+	// extending the list intentionally (e.g. `nav-courses` for the
+	// course-primitive WP).
+	test('top nav exposes the locked testids', async ({ page }) => {
 		await page.goto(ROUTES.STUDY);
-		const required = ['nav-home', 'nav-learn', 'nav-program', 'nav-insights', 'nav-reference'];
+		const required = ['nav-home', 'nav-learn', 'nav-courses', 'nav-program', 'nav-insights', 'nav-reference'];
 		for (const id of required) {
 			await expect(page.getByTestId(id), `${id} missing from top nav`).toBeVisible();
 		}
