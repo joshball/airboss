@@ -58,6 +58,7 @@ export {
 // ----------------------------------------------------------------------
 export type { AirmetSigmetSpec } from './charts/airmet-sigmet';
 export type { FreezingLevelSpec } from './charts/freezing-level';
+export type { GfaSpec } from './charts/gfa';
 export type { IcingCipSpec } from './charts/icing-cip';
 export type { IcingFipSpec } from './charts/icing-fip';
 export type { IcingGairmetSpec } from './charts/icing-gairmet';

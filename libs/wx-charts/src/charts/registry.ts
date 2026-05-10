@@ -14,6 +14,7 @@ import type { z } from 'zod';
 import type { ChartRenderer, ChartSpec } from '../types';
 import { airmetSigmetSpecSchema, renderAirmetSigmet } from './airmet-sigmet';
 import { freezingLevelSpecSchema, renderFreezingLevel } from './freezing-level';
+import { gfaSpecSchema, renderGfa } from './gfa';
 import { icingCipSpecSchema, renderIcingCip } from './icing-cip';
 import { icingFipSpecSchema, renderIcingFip } from './icing-fip';
 import { icingGairmetSpecSchema, renderIcingGairmet } from './icing-gairmet';
@@ -72,7 +73,10 @@ export const CHART_RENDERERS: Record<ChartType, ChartRendererRegistration> = {
 		render: renderProgChart as ChartRenderer<ChartSpec>,
 		schema: progChartSpecSchema,
 	},
-	[CHART_TYPES.GFA]: notYetRegistered(CHART_TYPES.GFA),
+	[CHART_TYPES.GFA]: {
+		render: renderGfa as ChartRenderer<ChartSpec>,
+		schema: gfaSpecSchema,
+	},
 	[CHART_TYPES.CONVECTIVE_OUTLOOK]: notYetRegistered(CHART_TYPES.CONVECTIVE_OUTLOOK),
 	[CHART_TYPES.CVA]: notYetRegistered(CHART_TYPES.CVA),
 	// Phase E (icing + turbulence forecast cluster)

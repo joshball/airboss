@@ -23,6 +23,7 @@ export {
 	freezingLevelSpecSchema,
 	renderFreezingLevel,
 } from './charts/freezing-level';
+export { type GfaSpec, gfaSpecSchema, renderGfa } from './charts/gfa';
 export { type IcingCipSpec, icingCipSpecSchema, renderCipFipShared, renderIcingCip } from './charts/icing-cip';
 export { type IcingFipSpec, icingFipSpecSchema, renderIcingFip } from './charts/icing-fip';
 export { type IcingGairmetSpec, icingGairmetSpecSchema, renderIcingGairmet } from './charts/icing-gairmet';
