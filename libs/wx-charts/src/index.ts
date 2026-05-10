@@ -57,12 +57,16 @@ export {
 // dragging the renderer's runtime imports (sharp, fs) into the bundle.
 // ----------------------------------------------------------------------
 export type { AirmetSigmetSpec } from './charts/airmet-sigmet';
+export type { ConvectiveOutlookSpec } from './charts/convective-outlook';
+export type { CvaSpec } from './charts/cva';
 export type { FreezingLevelSpec } from './charts/freezing-level';
+export type { GfaSpec } from './charts/gfa';
 export type { IcingCipSpec } from './charts/icing-cip';
 export type { IcingFipSpec } from './charts/icing-fip';
 export type { IcingGairmetSpec } from './charts/icing-gairmet';
 export type { MetarPlotGridSpec } from './charts/metar-plot-grid';
 export type { PirepPlotGridSpec } from './charts/pirep-plot-grid';
+export type { ProgChartSpec } from './charts/prog-chart';
 export type { RadarMosaicSpec } from './charts/radar-mosaic';
 export type { SatelliteIrSpec } from './charts/satellite-ir';
 export type { SatelliteVisSpec } from './charts/satellite-vis';

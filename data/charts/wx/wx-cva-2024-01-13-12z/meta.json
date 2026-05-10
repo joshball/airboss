@@ -1,0 +1,18 @@
+{
+  "slug": "wx-cva-2024-01-13-12z",
+  "type": "cva",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-10T18:46:43.256Z",
+  "content_hash": "sha256:b7be25df2d6a586077be614095ec02cff8fe0ba1edd18d3fe88fab394fab6c7b",
+  "source_hashes": {
+    "observations": "7877f9c1b1163457795071e97463778caa42ee9a30d365dd5fcd976108f0cb10"
+  },
+  "layer_counts": {
+    "vector-symbology": 0,
+    "point-symbology": 49,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 299227
+}

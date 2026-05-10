@@ -13,12 +13,16 @@ import { CHART_TYPES, type ChartType } from '@ab/constants';
 import type { z } from 'zod';
 import type { ChartRenderer, ChartSpec } from '../types';
 import { airmetSigmetSpecSchema, renderAirmetSigmet } from './airmet-sigmet';
+import { convectiveOutlookSpecSchema, renderConvectiveOutlook } from './convective-outlook';
+import { cvaSpecSchema, renderCva } from './cva';
 import { freezingLevelSpecSchema, renderFreezingLevel } from './freezing-level';
+import { gfaSpecSchema, renderGfa } from './gfa';
 import { icingCipSpecSchema, renderIcingCip } from './icing-cip';
 import { icingFipSpecSchema, renderIcingFip } from './icing-fip';
 import { icingGairmetSpecSchema, renderIcingGairmet } from './icing-gairmet';
 import { metarPlotGridSpecSchema, renderMetarPlotGrid } from './metar-plot-grid';
 import { pirepPlotGridSpecSchema, renderPirepPlotGrid } from './pirep-plot-grid';
+import { progChartSpecSchema, renderProgChart } from './prog-chart';
 import { radarMosaicSpecSchema, renderRadarMosaic } from './radar-mosaic';
 import { renderSatelliteIr, satelliteIrSpecSchema } from './satellite-ir';
 import { renderSatelliteVis, satelliteVisSpecSchema } from './satellite-vis';
@@ -66,11 +70,23 @@ export const CHART_RENDERERS: Record<ChartType, ChartRendererRegistration> = {
 		render: renderWindsAloftFb as ChartRenderer<ChartSpec>,
 		schema: windsAloftFbSpecSchema,
 	},
-	// Phase D (CVA promoted from original Phase E per spec amendment)
-	[CHART_TYPES.PROG_CHART]: notYetRegistered(CHART_TYPES.PROG_CHART),
-	[CHART_TYPES.GFA]: notYetRegistered(CHART_TYPES.GFA),
-	[CHART_TYPES.CONVECTIVE_OUTLOOK]: notYetRegistered(CHART_TYPES.CONVECTIVE_OUTLOOK),
-	[CHART_TYPES.CVA]: notYetRegistered(CHART_TYPES.CVA),
+	// Phase D (forecast cluster: prog + GFA + convective outlook + CVA)
+	[CHART_TYPES.PROG_CHART]: {
+		render: renderProgChart as ChartRenderer<ChartSpec>,
+		schema: progChartSpecSchema,
+	},
+	[CHART_TYPES.GFA]: {
+		render: renderGfa as ChartRenderer<ChartSpec>,
+		schema: gfaSpecSchema,
+	},
+	[CHART_TYPES.CONVECTIVE_OUTLOOK]: {
+		render: renderConvectiveOutlook as ChartRenderer<ChartSpec>,
+		schema: convectiveOutlookSpecSchema,
+	},
+	[CHART_TYPES.CVA]: {
+		render: renderCva as ChartRenderer<ChartSpec>,
+		schema: cvaSpecSchema,
+	},
 	// Phase E (icing + turbulence forecast cluster)
 	[CHART_TYPES.TURBULENCE_GAIRMET]: {
 		render: renderTurbulenceGairmet as ChartRenderer<ChartSpec>,

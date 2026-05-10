@@ -19,10 +19,17 @@
 
 export { type AirmetSigmetSpec, airmetSigmetSpecSchema, renderAirmetSigmet } from './charts/airmet-sigmet';
 export {
+	type ConvectiveOutlookSpec,
+	convectiveOutlookSpecSchema,
+	renderConvectiveOutlook,
+} from './charts/convective-outlook';
+export { type CvaSpec, cvaSpecSchema, renderCva } from './charts/cva';
+export {
 	type FreezingLevelSpec,
 	freezingLevelSpecSchema,
 	renderFreezingLevel,
 } from './charts/freezing-level';
+export { type GfaSpec, gfaSpecSchema, renderGfa } from './charts/gfa';
 export { type IcingCipSpec, icingCipSpecSchema, renderCipFipShared, renderIcingCip } from './charts/icing-cip';
 export { type IcingFipSpec, icingFipSpecSchema, renderIcingFip } from './charts/icing-fip';
 export { type IcingGairmetSpec, icingGairmetSpecSchema, renderIcingGairmet } from './charts/icing-gairmet';
@@ -36,6 +43,7 @@ export {
 	pirepPlotGridSpecSchema,
 	renderPirepPlotGrid,
 } from './charts/pirep-plot-grid';
+export { type ProgChartSpec, progChartSpecSchema, renderProgChart } from './charts/prog-chart';
 export { type RadarMosaicSpec, radarMosaicSpecSchema, renderRadarMosaic } from './charts/radar-mosaic';
 export { CHART_RENDERERS } from './charts/registry';
 export { renderSatelliteIr, type SatelliteIrSpec, satelliteIrSpecSchema } from './charts/satellite-ir';

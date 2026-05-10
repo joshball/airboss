@@ -361,3 +361,167 @@ export const FREEZING_LEVEL_BANDS: readonly ScalarBandStop[] = [
  */
 export const FREEZING_LEVEL_LINE_STROKE = '#3d3a32';
 export const FREEZING_LEVEL_EMPHASIZED_LINE_STROKE = '#1a1a1a';
+
+/**
+ * SPC convective outlook tier palette per the NWS Storm Prediction Center
+ * categorical-outlook product description (https://www.spc.noaa.gov/misc/about.html).
+ * Six tiers from "general thunderstorm" through "high risk." The colour palette
+ * matches the SPC standard rendering used on every SPC outlook PNG.
+ *
+ * Outermost tier (TSTM) is drawn first so layered higher-risk tiers stack on
+ * top -- the renderer enforces this ordering by sorting on tier index before
+ * emission.
+ */
+export interface ConvectiveOutlookTierEntry {
+	stroke: string;
+	fill: string;
+	fillOpacity: number;
+	label: string;
+	/** Visual ordering: 0 = outermost / lowest risk, increases inward. */
+	order: number;
+}
+
+export const CONVECTIVE_OUTLOOK_TIERS = {
+	TSTM: 'tstm',
+	MRGL: 'mrgl',
+	SLGT: 'slgt',
+	ENH: 'enh',
+	MDT: 'mdt',
+	HIGH: 'high',
+} as const;
+
+export type ConvectiveOutlookTier = (typeof CONVECTIVE_OUTLOOK_TIERS)[keyof typeof CONVECTIVE_OUTLOOK_TIERS];
+
+export const CONVECTIVE_OUTLOOK_PALETTE: Record<ConvectiveOutlookTier, ConvectiveOutlookTierEntry> = {
+	tstm: { stroke: '#5a8a3a', fill: '#c4e4a0', fillOpacity: 0.36, label: 'TSTM (General thunder)', order: 0 },
+	mrgl: { stroke: '#2f6e2a', fill: '#7ec57a', fillOpacity: 0.42, label: 'MRGL (Marginal risk)', order: 1 },
+	slgt: { stroke: '#a08020', fill: '#f4d77a', fillOpacity: 0.5, label: 'SLGT (Slight risk)', order: 2 },
+	enh: { stroke: '#a85020', fill: '#f0a060', fillOpacity: 0.55, label: 'ENH (Enhanced risk)', order: 3 },
+	mdt: { stroke: '#a01616', fill: '#e85050', fillOpacity: 0.6, label: 'MDT (Moderate risk)', order: 4 },
+	high: { stroke: '#5a0a8a', fill: '#c060e0', fillOpacity: 0.65, label: 'HIGH (High risk)', order: 5 },
+};
+
+/**
+ * FAA flight-category fill palette for CVA (Ceiling and Visibility Analysis)
+ * area shading per AIM 7-1-6 + AC 00-45H Ch 5. The CVA product shows current
+ * VFR / MVFR / IFR / LIFR areas as filled polygons across CONUS. The colours
+ * match the AWC standard rendering used on aviationweather.gov/cva.
+ *
+ * VFR uses a low-opacity green so basemap detail still reads through; the
+ * non-VFR tiers escalate through blue / red / magenta with rising contrast.
+ */
+export interface FlightCategoryFillEntry {
+	stroke: string;
+	fill: string;
+	fillOpacity: number;
+	label: string;
+}
+
+export const FLIGHT_CATEGORY_FILL: Record<string, FlightCategoryFillEntry> = {
+	VFR: { stroke: '#2f7a2f', fill: '#9fd99f', fillOpacity: 0.35, label: 'VFR (>= 3 SM and >= 3000 ft ceiling)' },
+	MVFR: { stroke: '#1565c0', fill: '#7ab0e8', fillOpacity: 0.42, label: 'MVFR (3-5 SM or 1000-3000 ft)' },
+	IFR: { stroke: '#c62828', fill: '#f08585', fillOpacity: 0.5, label: 'IFR (1-3 SM or 500-1000 ft)' },
+	LIFR: { stroke: '#6a1b9a', fill: '#c080d8', fillOpacity: 0.55, label: 'LIFR (< 1 SM or < 500 ft)' },
+};
+
+/**
+ * GFA (Graphical Forecasts for Aviation) cloud-coverage / precipitation
+ * polygon palette per AC 00-45H Ch 5 + AWC product page
+ * (https://aviationweather.gov/gfa). The GFA renders cloud areas, precip
+ * areas, and IFR conditions as polygons; this palette is the AWC standard
+ * for each polygon family.
+ */
+export interface GfaPolygonEntry {
+	stroke: string;
+	fill: string;
+	fillOpacity: number;
+	label: string;
+	dasharray?: string;
+}
+
+export const GFA_PALETTE = {
+	clouds_few_sct: {
+		stroke: '#8aa0c4',
+		fill: '#c0d0e8',
+		fillOpacity: 0.3,
+		label: 'FEW/SCT clouds',
+	},
+	clouds_bkn_ovc: {
+		stroke: '#4a6080',
+		fill: '#8090b0',
+		fillOpacity: 0.45,
+		label: 'BKN/OVC clouds',
+	},
+	precip_rain: {
+		stroke: '#2a8a3a',
+		fill: '#7ec57a',
+		fillOpacity: 0.45,
+		label: 'Rain (-RA / RA)',
+	},
+	precip_snow: {
+		stroke: '#5060a0',
+		fill: '#b0c0e0',
+		fillOpacity: 0.5,
+		label: 'Snow (-SN / SN)',
+	},
+	precip_mixed: {
+		stroke: '#7a4080',
+		fill: '#d0a0e0',
+		fillOpacity: 0.45,
+		label: 'Mixed precipitation',
+	},
+	precip_tstm: {
+		stroke: '#a01616',
+		fill: '#ff7575',
+		fillOpacity: 0.45,
+		label: 'Thunderstorms',
+		dasharray: '6 4',
+	},
+	ifr_area: {
+		stroke: '#c62828',
+		fill: '#f08585',
+		fillOpacity: 0.32,
+		label: 'IFR conditions',
+		dasharray: '8 4',
+	},
+	mvfr_area: {
+		stroke: '#1565c0',
+		fill: '#7ab0e8',
+		fillOpacity: 0.28,
+		label: 'MVFR conditions',
+		dasharray: '8 4',
+	},
+} as const satisfies Record<string, GfaPolygonEntry>;
+
+export type GfaPolygonKind = keyof typeof GFA_PALETTE;
+
+/**
+ * Prog-chart hazard polygon palette. Prog charts pair frontal symbology with
+ * forecast hazard areas (turbulence, icing, IFR conditions) drawn as dashed
+ * polygons per AC 00-45H Ch 5 SIGWX guidance.
+ */
+export const PROG_HAZARD_PALETTE = {
+	turbulence: {
+		stroke: '#c4661f',
+		fill: '#ffb070',
+		fillOpacity: 0.18,
+		dasharray: '4 4',
+		label: 'Turbulence forecast',
+	},
+	icing: {
+		stroke: '#1f63c4',
+		fill: '#88b6ff',
+		fillOpacity: 0.18,
+		dasharray: '4 4',
+		label: 'Icing forecast',
+	},
+	ifr: {
+		stroke: '#c62828',
+		fill: '#f08585',
+		fillOpacity: 0.18,
+		dasharray: '6 4',
+		label: 'IFR conditions forecast',
+	},
+} as const;
+
+export type ProgHazardKind = keyof typeof PROG_HAZARD_PALETTE;
