@@ -70,14 +70,7 @@ Closing those four loose ends unblocks Phase 3 (CFR ingestion), Phase 4 (rendere
 
 ### Out
 
-- Actual corpus content. CFR (Phase 3), handbooks (Phase 6), AIM (Phase 7), AC (Phase 8), irregulars (Phase 10). Phase 2 ships empty; the table type is the contract.
-- The annual diff job (Phase 5).
-- The renderer (Phase 4).
-- The lesson migration tool that rewrites pre-ADR-019 lessons (Phase 9).
-- `apps/hangar/` UI for non-engineer registry editing (revisit.md R5, deferred until hangar ships).
-- HTTP API for external tools. Per ADR 019 §2.7, external tools import the query API directly; no HTTP surface.
-- Persisted lifecycle state. Phase 2's `promotion_batches` map is in-memory; later phases (or a follow-on registry-persistence WP) can move it to Postgres if real promotion runs require durability. The audit-trail shape is final; only the storage backend is provisional.
-- Citation formatters beyond the per-corpus resolver's `formatCitation`. The token vocabulary lives in Phase 4 (renderer); Phase 2 exposes `formatCitation(entry, style)` so the renderer has a place to call.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Data Model
 
@@ -211,13 +204,13 @@ export function isPinStale(id: SourceId, pin: EditionId): Promise<boolean>;
 
 Behavior per ADR 019 §1.3:
 
-| Case | `--fix` action |
-| --- | --- |
+| Case                                                                                      | `--fix` action                                                                                                                                                            |
+| ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Identifier has no `?at=` AND its corpus's resolver has no slug-encoded edition convention | Look up `getCurrentAcceptedEdition(corpus)`. If non-null, append `?at=<edition>` to the URL in the lesson file. If null, leave alone (validator still emits row-3 ERROR). |
-| Identifier has `?at=...` already | Leave alone. (`--fix` does not advance stale pins; the diff job in Phase 5 owns that.) |
-| Identifier uses slug-encoded edition (e.g. `airboss-ref:ac/61-65/j`) | Leave alone. Per ADR 019 §1.3 the slug satisfies the pinning rule. |
-| Identifier is unknown-corpus (`airboss-ref:unknown/...`) | Leave alone. `--fix` does not invent corpora. |
-| Identifier is malformed (path-absolute, authority-based, etc.) | Leave alone. `--fix` does not repair shape errors. |
+| Identifier has `?at=...` already                                                          | Leave alone. (`--fix` does not advance stale pins; the diff job in Phase 5 owns that.)                                                                                    |
+| Identifier uses slug-encoded edition (e.g. `airboss-ref:ac/61-65/j`)                      | Leave alone. Per ADR 019 §1.3 the slug satisfies the pinning rule.                                                                                                        |
+| Identifier is unknown-corpus (`airboss-ref:unknown/...`)                                  | Leave alone. `--fix` does not invent corpora.                                                                                                                             |
+| Identifier is malformed (path-absolute, authority-based, etc.)                            | Leave alone. `--fix` does not repair shape errors.                                                                                                                        |
 
 The rewriter:
 
@@ -297,19 +290,19 @@ The reverse index is built on demand. Implementation:
 
 ## Validation
 
-| Concern | Where it runs |
-| --- | --- |
-| Query API correctness (12 functions) | Vitest unit (`registry/query.test.ts`) |
-| Lifecycle transitions per §2.4 | Vitest unit (`registry/lifecycle.test.ts`) |
-| Atomic batch promotion all-or-nothing | Vitest unit |
-| `--fix` rewrites only unpinned identifiers; preserves slug-encoded editions | Vitest unit (`fix.test.ts`) using temp directory + fixture lessons |
-| `--fix` is idempotent: second run is a no-op | Vitest unit |
-| `--fix` refuses to run in CI (`CI === 'true'`) | Vitest unit (process.env stub) |
-| Snapshot JSON shape matches schema | Vitest unit (`snapshot.test.ts`) |
-| Validator row 1 fires on unknown corpus via production registry | Vitest unit |
-| `findLessonsCitingEntry` walks lesson files correctly | Vitest unit |
-| `bun run check` exits 0 on `course/regulations/**` (no airboss-ref: URLs today) | Manual gate |
-| `bun run check --fix` is a no-op when no unpinned URLs exist | Manual gate |
+| Concern                                                                         | Where it runs                                                      |
+| ------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| Query API correctness (12 functions)                                            | Vitest unit (`registry/query.test.ts`)                             |
+| Lifecycle transitions per §2.4                                                  | Vitest unit (`registry/lifecycle.test.ts`)                         |
+| Atomic batch promotion all-or-nothing                                           | Vitest unit                                                        |
+| `--fix` rewrites only unpinned identifiers; preserves slug-encoded editions     | Vitest unit (`fix.test.ts`) using temp directory + fixture lessons |
+| `--fix` is idempotent: second run is a no-op                                    | Vitest unit                                                        |
+| `--fix` refuses to run in CI (`CI === 'true'`)                                  | Vitest unit (process.env stub)                                     |
+| Snapshot JSON shape matches schema                                              | Vitest unit (`snapshot.test.ts`)                                   |
+| Validator row 1 fires on unknown corpus via production registry                 | Vitest unit                                                        |
+| `findLessonsCitingEntry` walks lesson files correctly                           | Vitest unit                                                        |
+| `bun run check` exits 0 on `course/regulations/**` (no airboss-ref: URLs today) | Manual gate                                                        |
+| `bun run check --fix` is a no-op when no unpinned URLs exist                    | Manual gate                                                        |
 
 ## Edge Cases
 
@@ -324,16 +317,7 @@ The reverse index is built on demand. Implementation:
 
 ## Out of Scope (resolved, not deferred)
 
-| Surfaced consideration | Resolution |
-| --- | --- |
-| Persisting lifecycle state to Postgres | Drop. Phase 2 keeps `promotion_batches` in-memory. Future WP if/when promotion runs need durability across processes. The shape is final; only the backend is provisional. |
-| HTTP API for external tools | Drop. Per ADR 019 §2.7, external tools import `@ab/sources` directly. |
-| Citation formatters (academic style, etc.) | Drop. Token vocabulary in Phase 4. The per-corpus `formatCitation` is the substrate. |
-| Lesson-to-lesson reference graph | Drop from Phase 2. `findLessonsTransitivelyCitingEntry` ships but degrades to `findLessonsCitingEntry` until lesson-to-lesson refs are introduced (no ADR 019 phase has them yet). |
-| Hangar UI | Drop. revisit.md R5; hangar revival ADR. |
-| Annual diff job | Drop. Phase 5. |
-| Renderer + token substitution | Drop. Phase 4. |
-| Lesson migration tool (rewrites pre-ADR-019 lessons) | Drop. Phase 9. |
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Open Items
 
