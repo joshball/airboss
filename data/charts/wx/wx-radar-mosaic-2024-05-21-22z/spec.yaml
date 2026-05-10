@@ -1,0 +1,22 @@
+slug: wx-radar-mosaic-2024-05-21-22z
+type: radar-mosaic
+title: Radar Mosaic
+subtitle: '2024-05-21 22:00Z -- NEXRAD composite reflectivity (n0r, IEM archive)'
+projection:
+  kind: lambert
+  parallels: [33, 45]
+  rotate: [-96, -39]
+extent: conus
+sources:
+  radar_png: cache://radar/n0r_202405212200.png
+  radar_world: cache://radar/n0r_202405212200.wld
+options:
+  raster_opacity: 0.78
+  show_airports: true
+  show_legend: true
+  source_attribution: IEM NEXRAD composite reflectivity (n0r, 2024-05-21 22Z archive)
+  source_bounds:
+    lon_min: -126
+    lon_max: -66
+    lat_min: 24
+    lat_max: 50

@@ -56,6 +56,7 @@ export {
 // Apps and components import the spec types via `import type` without
 // dragging the renderer's runtime imports (sharp, fs) into the bundle.
 // ----------------------------------------------------------------------
+export type { RadarMosaicSpec } from './charts/radar-mosaic';
 export type { SurfaceAnalysisSpec } from './charts/surface-analysis';
 export { buildChrome, type ChromeInput, type ChromeOutput } from './chrome';
 export { type GraticuleOptions, renderGraticule } from './graticule';

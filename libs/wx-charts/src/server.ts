@@ -18,6 +18,7 @@
  */
 
 export { CHART_RENDERERS } from './charts/registry';
+export { radarMosaicSpecSchema, renderRadarMosaic, type RadarMosaicSpec } from './charts/radar-mosaic';
 export {
 	renderSurfaceAnalysis,
 	type SurfaceAnalysisSpec,

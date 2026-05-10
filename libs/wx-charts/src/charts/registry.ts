@@ -12,6 +12,7 @@
 import { CHART_TYPES, type ChartType } from '@ab/constants';
 import type { z } from 'zod';
 import type { ChartRenderer, ChartSpec } from '../types';
+import { radarMosaicSpecSchema, renderRadarMosaic } from './radar-mosaic';
 import { renderSurfaceAnalysis, surfaceAnalysisSpecSchema } from './surface-analysis';
 
 export interface ChartRendererRegistration<TSpec extends ChartSpec = ChartSpec> {
@@ -30,7 +31,10 @@ export const CHART_RENDERERS: Record<ChartType, ChartRendererRegistration> = {
 		schema: surfaceAnalysisSpecSchema,
 	},
 	// Phase B
-	[CHART_TYPES.RADAR_MOSAIC]: notYetRegistered(CHART_TYPES.RADAR_MOSAIC),
+	[CHART_TYPES.RADAR_MOSAIC]: {
+		render: renderRadarMosaic as ChartRenderer<ChartSpec>,
+		schema: radarMosaicSpecSchema,
+	},
 	[CHART_TYPES.ADVISORY_OVERLAY]: notYetRegistered(CHART_TYPES.ADVISORY_OVERLAY),
 	// Phase C
 	[CHART_TYPES.METAR_PLOT_GRID]: notYetRegistered(CHART_TYPES.METAR_PLOT_GRID),
@@ -51,8 +55,6 @@ export const CHART_RENDERERS: Record<ChartType, ChartRendererRegistration> = {
  */
 function notYetRegistered(type: ChartType): ChartRendererRegistration {
 	const phaseFor: Partial<Record<ChartType, string>> = {
-		'radar-mosaic': 'B',
-		'advisory-overlay': 'B',
 		'metar-plot-grid': 'C',
 		'pirep-plot-grid': 'C',
 		'winds-aloft-fb': 'C',
