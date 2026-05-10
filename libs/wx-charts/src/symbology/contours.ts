@@ -90,3 +90,82 @@ export function renderScalarContours(opts: ScalarContourOptions): ScalarContourR
 
 	return { svg: elements.join('\n'), contourCount: polys.length };
 }
+
+/**
+ * Filled scalar-band stop. Cells whose value is in `[min, max)` are filled
+ * with `fill` at `fillOpacity`. Stops with `min === Number.NEGATIVE_INFINITY`
+ * cover the bottom; stops with `max === Number.POSITIVE_INFINITY` cover the
+ * top. Mirrors the `ScalarBandStop` shape exported from `raster/palettes`
+ * (kept duplicated here so the symbology layer doesn't reach back into
+ * raster -- one-way dep direction).
+ */
+export interface FilledBandStop {
+	min: number;
+	max: number;
+	fill: string;
+	fillOpacity: number;
+}
+
+export interface FilledScalarBandsOptions {
+	/** Grid values laid out row-major: `grid[iy * gridWidth + ix]`. */
+	grid: Float64Array | number[];
+	gridWidth: number;
+	gridHeight: number;
+	bands: ReadonlyArray<FilledBandStop>;
+	gridToLonLat: (gx: number, gy: number) => [number, number];
+	projection: GeoProjection;
+}
+
+export interface FilledScalarBandsResult {
+	svg: string;
+	bandCount: number;
+}
+
+/**
+ * Render filled scalar-field bands using `d3-contour`'s polygon output. For
+ * each band stop, generates the contour polygon at `min` (the lower bound
+ * of the band) and emits a filled SVG path. The polygons are stacked back-to-front
+ * by ascending `min` so higher-value bands overlay lower-value bands; with
+ * the canonical CIP / FIP / freezing-level ramps that's exactly the right
+ * z-order (deeper colour on top of lighter colour for higher severity).
+ *
+ * A grid cell value `v` falls into band `i` iff `bands[i].min <= v < bands[i].max`.
+ * Top-tier bands typically use `Number.POSITIVE_INFINITY` for `max`.
+ */
+export function renderFilledScalarBands(opts: FilledScalarBandsOptions): FilledScalarBandsResult {
+	const { grid, gridWidth, gridHeight, bands, gridToLonLat, projection } = opts;
+	if (bands.length === 0) return { svg: '', bandCount: 0 };
+
+	const path = geoPath(projection);
+	// d3-contour treats each threshold as the lower bound of a "polygon
+	// containing all cells >= threshold". One band per stop; the upper
+	// bound is enforced visually by stacking the next band on top.
+	const thresholds = bands.map((b) => b.min);
+	const contourGen = contours().size([gridWidth, gridHeight]).thresholds(thresholds);
+	const polys = contourGen(grid as unknown as number[]);
+
+	const elements: string[] = [];
+	let bandCount = 0;
+	for (const poly of polys) {
+		// Match the polygon back to its band by min-value.
+		const band = bands.find((b) => b.min === poly.value);
+		if (band === undefined) continue;
+		const lonLatRings = poly.coordinates.map((polygon) =>
+			polygon.map((ring) => ring.map(([gx, gy]) => gridToLonLat(gx, gy))),
+		);
+		const features = lonLatRings.map((coords) => ({
+			type: 'Polygon' as const,
+			coordinates: coords as [number, number][][],
+		}));
+		for (const feature of features) {
+			const d = path(feature);
+			if (d === null) continue;
+			elements.push(
+				`<path d="${d}" fill="${band.fill}" fill-opacity="${band.fillOpacity.toFixed(2)}" stroke="none" />`,
+			);
+			bandCount += 1;
+		}
+	}
+
+	return { svg: elements.join('\n'), bandCount };
+}
