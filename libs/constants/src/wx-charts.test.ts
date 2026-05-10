@@ -20,12 +20,12 @@ import {
 } from './wx-charts';
 
 describe('CHART_TYPES', () => {
-	it('enumerates the ten ACS types plus the four icing + two turbulence forecasts', () => {
+	it('enumerates the v1 chart types (10 ACS map products + 4 icing + 2 turbulence + Phase G TAF timeline)', () => {
 		// The spec amendments expanded the v1 chart inventory from the ten
-		// PPL ACS Task C K2 cluster types to sixteen by adding G-AIRMET
-		// turbulence + GTG (PR #783), then G-AIRMET icing, CIP, FIP, and
-		// freezing-level forecast renderers (this PR).
-		expect(CHART_TYPE_VALUES).toHaveLength(16);
+		// PPL ACS Task C K2 cluster types to seventeen by adding G-AIRMET
+		// turbulence + GTG (PR #783), G-AIRMET icing + CIP + FIP +
+		// freezing-level (PR #785), and TAF timeline (PR #784).
+		expect(CHART_TYPE_VALUES).toHaveLength(17);
 	});
 
 	it('every value has a matching label', () => {

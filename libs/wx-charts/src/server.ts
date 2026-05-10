@@ -43,6 +43,7 @@ export {
 	type SurfaceAnalysisSpec,
 	surfaceAnalysisSpecSchema,
 } from './charts/surface-analysis';
+export { renderTafTimeline, type TafTimelineSpec, tafTimelineSpecSchema } from './charts/taf-timeline';
 export {
 	renderTurbulenceGairmet,
 	type TurbulenceGairmetSpec,
