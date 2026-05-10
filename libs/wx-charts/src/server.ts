@@ -29,6 +29,11 @@ export {
 	renderPirepPlotGrid,
 } from './charts/pirep-plot-grid';
 export {
+	renderWindsAloftFb,
+	type WindsAloftFbSpec,
+	windsAloftFbSpecSchema,
+} from './charts/winds-aloft-fb';
+export {
 	renderSurfaceAnalysis,
 	type SurfaceAnalysisSpec,
 	surfaceAnalysisSpecSchema,

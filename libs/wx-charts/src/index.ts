@@ -59,6 +59,7 @@ export {
 export type { MetarPlotGridSpec } from './charts/metar-plot-grid';
 export type { PirepPlotGridSpec } from './charts/pirep-plot-grid';
 export type { SurfaceAnalysisSpec } from './charts/surface-analysis';
+export type { WindsAloftFbSpec } from './charts/winds-aloft-fb';
 export { buildChrome, type ChromeInput, type ChromeOutput } from './chrome';
 export { type GraticuleOptions, renderGraticule } from './graticule';
 export {
@@ -144,3 +145,5 @@ export type {
 } from './wx/pirep/types';
 export { ceilingFtAgl, celsiusToFahrenheit, computeFlightCategory, flightCategory, summarizeCover } from './wx/rules';
 export { type PirepGlyphInput, type PirepGlyphOptions, renderPirepGlyph } from './symbology/pirep-glyph';
+export { parseFbGrid } from './wx/winds-aloft/parser';
+export type { ParsedFbGrid, ParsedFbStation, WindsAloftRow } from './wx/winds-aloft/types';

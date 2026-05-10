@@ -15,6 +15,7 @@ import type { ChartRenderer, ChartSpec } from '../types';
 import { metarPlotGridSpecSchema, renderMetarPlotGrid } from './metar-plot-grid';
 import { pirepPlotGridSpecSchema, renderPirepPlotGrid } from './pirep-plot-grid';
 import { renderSurfaceAnalysis, surfaceAnalysisSpecSchema } from './surface-analysis';
+import { renderWindsAloftFb, windsAloftFbSpecSchema } from './winds-aloft-fb';
 
 export interface ChartRendererRegistration<TSpec extends ChartSpec = ChartSpec> {
 	render: ChartRenderer<TSpec>;
@@ -43,7 +44,10 @@ export const CHART_RENDERERS: Record<ChartType, ChartRendererRegistration> = {
 		render: renderPirepPlotGrid as ChartRenderer<ChartSpec>,
 		schema: pirepPlotGridSpecSchema,
 	},
-	[CHART_TYPES.WINDS_ALOFT_FB]: notYetRegistered(CHART_TYPES.WINDS_ALOFT_FB),
+	[CHART_TYPES.WINDS_ALOFT_FB]: {
+		render: renderWindsAloftFb as ChartRenderer<ChartSpec>,
+		schema: windsAloftFbSpecSchema,
+	},
 	// Phase D
 	[CHART_TYPES.PROG_CHART]: notYetRegistered(CHART_TYPES.PROG_CHART),
 	[CHART_TYPES.GFA]: notYetRegistered(CHART_TYPES.GFA),
