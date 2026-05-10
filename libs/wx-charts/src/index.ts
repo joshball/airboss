@@ -157,8 +157,6 @@ export type {
 // ----------------------------------------------------------------------
 export { parseMetar } from './wx/metar/parser';
 export type { CloudLayer, ParsedMetar, SkyCover, WindGroup } from './wx/metar/types';
-export { parseTaf } from './wx/taf/parser';
-export type { ParsedTaf, TafChangeKind, TafPeriod } from './wx/taf/types';
 export { parsePirep } from './wx/pirep/parser';
 export type {
 	IcingIntensity,
@@ -172,5 +170,7 @@ export type {
 	TurbulenceReport,
 } from './wx/pirep/types';
 export { ceilingFtAgl, celsiusToFahrenheit, computeFlightCategory, flightCategory, summarizeCover } from './wx/rules';
+export { parseTaf } from './wx/taf/parser';
+export type { ParsedTaf, TafChangeKind, TafPeriod } from './wx/taf/types';
 export { parseFbGrid } from './wx/winds-aloft/parser';
 export type { ParsedFbGrid, ParsedFbStation, WindsAloftRow } from './wx/winds-aloft/types';

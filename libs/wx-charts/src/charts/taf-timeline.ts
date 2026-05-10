@@ -30,7 +30,7 @@ import { buildChrome } from '../chrome';
 import { composeChart, type LayerBandMap } from '../layers';
 import { SVG_WIDTH } from '../projection';
 import type { ChartRenderInput, ChartRenderResult, ChartSpec } from '../types';
-import { computeFlightCategory, ceilingFtAgl } from '../wx/rules';
+import { ceilingFtAgl, computeFlightCategory } from '../wx/rules';
 import { parseTaf } from '../wx/taf/parser';
 import type { ParsedTaf, TafPeriod } from '../wx/taf/types';
 
