@@ -34,9 +34,11 @@
  * Re-exported from `@ab/wx-charts/server` (not the runtime barrel).
  */
 
-import { CHART_TYPES } from '@ab/constants';
+import { CHART_TYPES, LAYER_BANDS } from '@ab/constants';
 import { z } from 'zod';
+import { composeChart } from '../layers';
 import { goesIrPalette, type RGB } from '../raster/palettes';
+import type { ChartRenderInput, ChartRenderResult, ChartSpec } from '../types';
 import {
 	buildSatelliteSubstrate,
 	CHART_MARGIN,
@@ -44,9 +46,6 @@ import {
 	SVG_HEIGHT,
 	SVG_WIDTH,
 } from './satellite-shared';
-import { composeChart } from '../layers';
-import { LAYER_BANDS } from '@ab/constants';
-import type { ChartRenderInput, ChartRenderResult, ChartSpec } from '../types';
 
 // ------------------------------------------------------------------
 // Spec schema

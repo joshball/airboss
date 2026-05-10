@@ -22,8 +22,8 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { LAYER_BAND_VALUES } from '@ab/constants';
-import { describe, expect, it } from 'vitest';
 import sharp from 'sharp';
+import { describe, expect, it } from 'vitest';
 import { renderSatelliteIr, type SatelliteIrSpec } from '../charts/satellite-ir';
 import { renderSatelliteVis, type SatelliteVisSpec } from '../charts/satellite-vis';
 import { renderSatelliteWv, type SatelliteWvSpec } from '../charts/satellite-wv';

@@ -33,10 +33,10 @@
  */
 
 import { mkdirSync, writeFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { homedir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createRequire } from 'node:module';
 
 // sharp lives in libs/wx-charts/node_modules (it's a transitive workspace dep
 // for the chart renderers). The synth fixture script is a utility -- it pulls
@@ -45,7 +45,10 @@ import { createRequire } from 'node:module';
 const here = dirname(fileURLToPath(import.meta.url));
 const wxChartsPkg = resolve(here, '..', '..', 'libs', 'wx-charts', 'package.json');
 const requireFromWxCharts = createRequire(wxChartsPkg);
-const sharp = requireFromWxCharts('sharp') as (input: Buffer | Uint8Array, opts?: unknown) => {
+const sharp = requireFromWxCharts('sharp') as (
+	input: Buffer | Uint8Array,
+	opts?: unknown,
+) => {
 	png: () => { toBuffer: () => Promise<Buffer> };
 };
 

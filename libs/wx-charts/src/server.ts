@@ -50,8 +50,8 @@ export {
 	windsAloftFbSpecSchema,
 } from './charts/winds-aloft-fb';
 export {
-	applyPalette,
 	type ApplyPaletteInput,
 	type ApplyPaletteResult,
+	applyPalette,
 } from './raster/apply-palette';
 export { warpRaster } from './raster/warp';

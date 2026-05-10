@@ -59,7 +59,7 @@ import { type GeoProjection, geoPath } from 'd3-geo';
 import { loadConusBasemapFromString } from '../basemap';
 import { buildChrome, type ChromeOutput } from '../chrome';
 import { renderGraticule } from '../graticule';
-import { type LayerBandMap } from '../layers';
+import type { LayerBandMap } from '../layers';
 import {
 	CHART_MARGIN,
 	type FitTarget,
@@ -70,7 +70,7 @@ import {
 } from '../projection';
 import { applyPalette } from '../raster/apply-palette';
 import type { RGB } from '../raster/palettes';
-import { warpRaster, type WarpResult } from '../raster/warp';
+import { type WarpResult, warpRaster } from '../raster/warp';
 import { parseWorldFile, type WorldFile } from '../raster/worldfile';
 import type { ChartRenderInput, ChartRenderResult, ChartSpec } from '../types';
 

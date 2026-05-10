@@ -34,6 +34,7 @@ import { CHART_TYPES, LAYER_BANDS } from '@ab/constants';
 import { z } from 'zod';
 import { composeChart } from '../layers';
 import { goesWvPalette, type RGB } from '../raster/palettes';
+import type { ChartRenderInput, ChartRenderResult, ChartSpec } from '../types';
 import {
 	buildSatelliteSubstrate,
 	CHART_MARGIN,
@@ -41,7 +42,6 @@ import {
 	SVG_HEIGHT,
 	SVG_WIDTH,
 } from './satellite-shared';
-import type { ChartRenderInput, ChartRenderResult, ChartSpec } from '../types';
 
 // ------------------------------------------------------------------
 // Spec schema

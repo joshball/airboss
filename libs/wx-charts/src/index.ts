@@ -110,6 +110,7 @@ export {
 	goesProjection,
 	goesWestProjection,
 } from './projection-geostationary';
+export type { ApplyPaletteInput, ApplyPaletteResult } from './raster/apply-palette';
 // ----------------------------------------------------------------------
 // Raster substrate -- type-only re-exports of the server-only warp module.
 // The value export of `warpRaster` lives at @ab/wx-charts/server because
@@ -126,7 +127,6 @@ export {
 	type ReflectivityStop,
 	type RGB,
 } from './raster/palettes';
-export type { ApplyPaletteInput, ApplyPaletteResult } from './raster/apply-palette';
 export type { WarpInput, WarpResult } from './raster/warp';
 export { parseWorldFile, pixelToWorld, type WorldFile, worldToPixel } from './raster/worldfile';
 export { type AirportMarker, renderAirport } from './symbology/airports';
