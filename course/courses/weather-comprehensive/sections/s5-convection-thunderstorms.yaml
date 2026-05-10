@@ -17,11 +17,10 @@ body_md: |
   thunderstorm picture and then immediately re-trains the personal
   minimum that says "if I'm closer than 20 NM, I'm not flying."
 
-  A real radar mosaic from a severe-weather day (placeholder slug;
-  resolves to live SVG when the wx-charts radar mosaic renderer
-  ships):
+  A real radar mosaic from a severe-weather day (renders against the
+  authored chart instance via the wx-charts library):
 
-  :::chart slug="wx-radar-2024-05-21-22z"
+  :::chart slug="wx-radar-mosaic-2024-05-21-22z"
   :::
 
   Read the chart with the question: where would I have to be to

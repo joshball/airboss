@@ -49,6 +49,21 @@ steps:
       reroute candidate. Severe is a 180. Extreme is "you should not
       have been there." Knowing the source lets you predict the
       severity before you enter the air.
+
+      The turbulence G-AIRMET is the graphical descendant of the
+      textual AIRMET-Tango -- six-hour forecast windows of where
+      moderate-or-greater turbulence is expected:
+
+      :::chart slug="wx-turbulence-gairmet-2024-12-23-12z"
+      :::
+
+      GTG (Graphical Turbulence Guidance) refines that picture into
+      a high-resolution gridded forecast at specific flight levels.
+      Use the G-AIRMET for "is there any turbulence concern on this
+      route?" and GTG for "exactly which altitudes are smooth?":
+
+      :::chart slug="wx-turbulence-gtg-2024-12-23-12z"
+      :::
     knowledge_node_id: wx-turbulence-types
 
   - code: s4.3

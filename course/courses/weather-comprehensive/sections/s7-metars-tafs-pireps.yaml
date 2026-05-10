@@ -15,10 +15,10 @@ body_md: |
   pilot who can read every line from a pilot who can identify the
   three lines that change the go/no-go decision.
 
-  A METAR plot for an iconic mid-Atlantic morning (placeholder slug;
-  resolves to live SVG when the wx-charts METAR plot renderer ships):
+  A METAR plot for an iconic mid-Atlantic morning (renders against the
+  authored chart instance via the wx-charts library):
 
-  :::chart slug="wx-metar-plot-2024-01-13-12z"
+  :::chart slug="wx-metar-plot-grid-2024-01-13-12z"
   :::
 steps:
   - code: s7.1
@@ -34,6 +34,14 @@ steps:
       compare the current METAR to the most recent TAF amendment --
       if reality is already running ahead of the forecast, the
       forecast is suspect for the rest of its valid period.
+
+      A TAF read as a timeline rather than a wall of encoded text --
+      every FM, TEMPO, and PROB block becomes a visible change in
+      ceiling, visibility, wind, or weather. Look at the chart and
+      ask: where does this airport go IFR, and for how long?
+
+      :::chart slug="wx-taf-timeline-kmem-2026-05-10-1720z"
+      :::
     knowledge_node_id: wx-reading-metars-tafs
 
   - code: s7.2
@@ -44,6 +52,13 @@ steps:
       the only product authored by another pilot in the air, and that
       makes them the highest-fidelity report you have for what the
       airframe is actually feeling at altitude.
+
+      A real PIREP plot from the same severe-weather day as the s5
+      radar mosaic -- read this against the radar and ask which cells
+      have a pilot report nearby and which do not:
+
+      :::chart slug="wx-pirep-plot-grid-2024-05-21-22z"
+      :::
 
       Read every PIREP within 100 NM of your route, especially the
       ones that mention turbulence, icing, or cloud tops -- those are

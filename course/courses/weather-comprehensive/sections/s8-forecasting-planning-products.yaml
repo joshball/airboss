@@ -59,6 +59,15 @@ steps:
       in depth. Pick the layer that matters for this flight (icing
       for a winter cross-country, convection for a summer afternoon)
       and read it carefully before zooming out.
+
+      A water-vapor satellite image from the same December 23 setup
+      -- WV reads moisture in the upper atmosphere and is the cleanest
+      view of jet-stream structure and dry-air intrusions. Use it as
+      a synoptic context layer alongside the GFA when you're trying
+      to understand why a forecast looks the way it does:
+
+      :::chart slug="wx-satellite-wv-2024-12-23-12z"
+      :::
     knowledge_node_id: wx-product-gfa
 
   - code: s8.4
@@ -76,6 +85,13 @@ steps:
       12,000 ft -- so interpolate when your cruise altitude isn't on
       the list, and remember the forecast is for the time stamp on
       the product, not for when you'll actually be there.
+
+      A real FB grid -- pick a cruise altitude and a leg, read the
+      wind at the nearest station, and ask whether the temperature
+      column puts you in icing range:
+
+      :::chart slug="wx-winds-aloft-fb-2024-05-21-18z"
+      :::
     knowledge_node_id: wx-product-winds-aloft
 
   - code: s8.5
@@ -94,6 +110,21 @@ steps:
       what actually happens?" The forecaster wrote the AIRMET because
       the conditions are likely; treat them as likely, not as
       worst-case framing.
+
+      The combined AIRMET / SIGMET overlay for the December 23
+      synoptic setup -- read it against the s2 surface analysis and
+      ask: which of these polygons is a frontal consequence, and
+      which is something else?
+
+      :::chart slug="wx-airmet-sigmet-2024-12-23-12z"
+      :::
+
+      The icing G-AIRMET is the graphical, time-sliced descendant of
+      the textual AIRMET-Zulu -- six-hour forecast windows showing
+      where icing is expected and at what altitudes:
+
+      :::chart slug="wx-icing-gairmet-2024-12-23-12z"
+      :::
     knowledge_node_id: wx-product-airmets-sigmets
 
   - code: s8.6
