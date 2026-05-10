@@ -123,8 +123,8 @@ export {
 	type PolygonOverlay,
 	type PolygonRing,
 	type PolygonStyle,
-	renderPolygonOverlays,
 	type RenderPolygonOverlaysOptions,
+	renderPolygonOverlays,
 } from './symbology/polygons';
 export { type PipDef, type PipShape, renderPolylinePips, type ScreenVec } from './symbology/polyline-pips';
 export { type PressureCenter, renderPressureCenter } from './symbology/pressure-centers';

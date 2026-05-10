@@ -17,9 +17,9 @@
  * the remaining chart renderers.
  */
 
-export { airmetSigmetSpecSchema, type AirmetSigmetSpec, renderAirmetSigmet } from './charts/airmet-sigmet';
+export { type AirmetSigmetSpec, airmetSigmetSpecSchema, renderAirmetSigmet } from './charts/airmet-sigmet';
+export { type RadarMosaicSpec, radarMosaicSpecSchema, renderRadarMosaic } from './charts/radar-mosaic';
 export { CHART_RENDERERS } from './charts/registry';
-export { radarMosaicSpecSchema, renderRadarMosaic, type RadarMosaicSpec } from './charts/radar-mosaic';
 export {
 	renderSurfaceAnalysis,
 	type SurfaceAnalysisSpec,
