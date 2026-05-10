@@ -6,8 +6,6 @@ import {
 	CITATION_SOURCE_TYPES,
 	type CitationSourceType,
 	domainLabel,
-	KNOWLEDGE_PHASE_LABELS,
-	type KnowledgePhase,
 	NODE_LIFECYCLE_LABELS,
 	NODE_MASTERY_GATE_LABELS,
 	type NodeMasteryGate,
@@ -21,6 +19,7 @@ import {
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import CitedByPanel, { type CitedByItem } from '@ab/ui/components/CitedByPanel.svelte';
 import { humanize, renderMarkdown } from '@ab/utils';
+import KnowledgeNodeBody from '$lib/components/KnowledgeNodeBody.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -51,10 +50,6 @@ function sourceTypeLabel(type: CitationSourceType): string {
 	return CITATION_SOURCE_LABELS[type];
 }
 
-function phaseLabel(phase: string): string {
-	return (KNOWLEDGE_PHASE_LABELS as Record<KnowledgePhase, string>)[phase as KnowledgePhase] ?? humanize(phase);
-}
-
 function certLabel(slug: string): string {
 	return (CERT_LABELS as Record<Cert, string>)[slug as Cert] ?? slug;
 }
@@ -71,11 +66,6 @@ const masteryPct = $derived(Math.round(mastery.displayScore * 100));
 
 function gateLabel(gate: string): string {
 	return (NODE_MASTERY_GATE_LABELS as Record<NodeMasteryGate, string>)[gate as NodeMasteryGate] ?? gate;
-}
-
-function renderPhase(body: string | null): string {
-	if (!body) return '';
-	return renderMarkdown(body);
 }
 
 interface CitationDisplay {
@@ -331,18 +321,9 @@ const citedByItems = $derived<CitedByItem[]>(
 		</section>
 	{/if}
 
-	<section class="section phases" aria-label="Content phases">
-		<h2>Content phases</h2>
-		{#each phases as p (p.phase)}
-			<article class="phase" aria-labelledby="phase-{p.phase}">
-				<h3 id="phase-{p.phase}" class="phase-title">{phaseLabel(p.phase)}</h3>
-				{#if p.body}
-					<div class="prose">{@html renderPhase(p.body)}</div>
-				{:else}
-					<p class="gap-body">Not yet authored.</p>
-				{/if}
-			</article>
-		{/each}
+	<section class="section" aria-labelledby="content-phases-heading">
+		<h2 id="content-phases-heading">Content phases</h2>
+		<KnowledgeNodeBody {phases} />
 	</section>
 
 	{#if node.masteryCriteria}
@@ -697,31 +678,6 @@ const citedByItems = $derived<CitedByItem[]>(
 	.gap-note {
 		color: var(--ink-faint);
 		font-size: var(--type-ui-caption-size);
-	}
-
-	.phases {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-md);
-	}
-
-	.phase {
-		background: var(--ink-inverse);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-lg);
-		padding: var(--space-lg) var(--space-lg);
-	}
-
-	.phase-title {
-		margin: 0 0 var(--space-sm);
-		font-size: var(--type-reading-body-size);
-		color: var(--ink-body);
-	}
-
-	.gap-body {
-		margin: 0;
-		color: var(--ink-faint);
-		font-style: italic;
 	}
 
 	.prose :global(h3),
