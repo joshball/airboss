@@ -20,8 +20,12 @@ import {
 } from './wx-charts';
 
 describe('CHART_TYPES', () => {
-	it('enumerates the v1 ten chart types', () => {
-		expect(CHART_TYPE_VALUES).toHaveLength(10);
+	it('enumerates the ten ACS types plus the four icing + two turbulence forecasts', () => {
+		// The spec amendments expanded the v1 chart inventory from the ten
+		// PPL ACS Task C K2 cluster types to sixteen by adding G-AIRMET
+		// turbulence + GTG (PR #783), then G-AIRMET icing, CIP, FIP, and
+		// freezing-level forecast renderers (this PR).
+		expect(CHART_TYPE_VALUES).toHaveLength(16);
 	});
 
 	it('every value has a matching label', () => {
@@ -37,6 +41,13 @@ describe('CHART_TYPES', () => {
 
 	it('includes the Phase A surface-analysis type', () => {
 		expect(CHART_TYPE_VALUES).toContain(CHART_TYPES.SURFACE_ANALYSIS);
+	});
+
+	it('includes the icing + freezing-level forecast types', () => {
+		expect(CHART_TYPE_VALUES).toContain(CHART_TYPES.ICING_GAIRMET);
+		expect(CHART_TYPE_VALUES).toContain(CHART_TYPES.ICING_CIP);
+		expect(CHART_TYPE_VALUES).toContain(CHART_TYPES.ICING_FIP);
+		expect(CHART_TYPE_VALUES).toContain(CHART_TYPES.FREEZING_LEVEL);
 	});
 });
 
