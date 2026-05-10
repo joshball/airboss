@@ -1,0 +1,17 @@
+{
+  "slug": "wx-convective-outlook-day1-2024-05-21",
+  "type": "convective-outlook",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-10T18:42:37.757Z",
+  "content_hash": "sha256:721179a07b3afc14640a3c961bf451a6efdc92371b8b288bc2c7dfb89c30d7d2",
+  "source_hashes": {
+    "outlook": "b60517b5abd98930c9d58bf852e414f5bbc4d793d5cf8ba30f9969e86b07bee5"
+  },
+  "layer_counts": {
+    "vector-symbology": 6,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 289523
+}

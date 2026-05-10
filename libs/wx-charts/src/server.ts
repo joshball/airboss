@@ -19,6 +19,11 @@
 
 export { type AirmetSigmetSpec, airmetSigmetSpecSchema, renderAirmetSigmet } from './charts/airmet-sigmet';
 export {
+	type ConvectiveOutlookSpec,
+	convectiveOutlookSpecSchema,
+	renderConvectiveOutlook,
+} from './charts/convective-outlook';
+export {
 	type FreezingLevelSpec,
 	freezingLevelSpecSchema,
 	renderFreezingLevel,
