@@ -1,0 +1,17 @@
+{
+  "slug": "wx-scenario-frontal-xc-march-winds-aloft",
+  "type": "winds-aloft-fb",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-10T23:27:38.172Z",
+  "content_hash": "sha256:4f8c0b2b4e9e935a3aa6361d2c400faf234403c4788583ffe9c0e1a86a87e813",
+  "source_hashes": {
+    "bulletin": "8ef61048bf31c89386c811229fe8fdb8105f873a9c4e249142bd4274ac9e5d54"
+  },
+  "layer_counts": {
+    "point-symbology": 5,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 293822
+}

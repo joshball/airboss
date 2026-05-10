@@ -1,0 +1,18 @@
+{
+  "slug": "wx-scenario-frontal-xc-march-pirep-plot",
+  "type": "pirep-plot-grid",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-10T23:27:27.031Z",
+  "content_hash": "sha256:d2d9bb879cb1c97a9fe77d2f56b2a2012ca3fedd46457a8931c6cd9724984557",
+  "source_hashes": {
+    "reports": "c9ed619c27983f9ee19847de5ca4bc3a8fa4fed5cdb4241056b59130aac744af"
+  },
+  "layer_counts": {
+    "vector-symbology": 0,
+    "point-symbology": 3,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 288391
+}
