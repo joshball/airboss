@@ -1,0 +1,16 @@
+slug: wx-turbulence-gtg-2024-12-23-12z
+type: turbulence-gtg
+title: Graphical Turbulence Guidance
+subtitle: '2024-12-23 12Z (Mon) FL240 -- composes with the same-date surface analysis + G-AIRMET turbulence'
+projection:
+  kind: lambert
+  parallels: [33, 45]
+  rotate: [-96, -39]
+extent: conus
+sources:
+  intensity_grid: cache://gtg/2024-12-23-12z-fl240.json
+options:
+  altitude_band: mid
+  show_legend: true
+  show_isopleths: true
+  source_attribution: AWC GTG synthesized for 2024-12-23 12Z (illustrative; not for ops use)

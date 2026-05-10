@@ -26,6 +26,8 @@ export const CHART_TYPES = {
 	GFA: 'gfa',
 	CONVECTIVE_OUTLOOK: 'convective-outlook',
 	CVA: 'cva',
+	TURBULENCE_GAIRMET: 'turbulence-gairmet',
+	TURBULENCE_GTG: 'turbulence-gtg',
 } as const;
 
 export const CHART_TYPE_VALUES = Object.values(CHART_TYPES);
@@ -42,6 +44,8 @@ export const CHART_TYPE_LABELS: Record<ChartType, string> = {
 	gfa: 'Graphical Forecasts for Aviation',
 	'convective-outlook': 'Convective Outlook',
 	cva: 'Ceiling and Visibility Analysis',
+	'turbulence-gairmet': 'Turbulence G-AIRMET',
+	'turbulence-gtg': 'Graphical Turbulence Guidance',
 };
 
 export const LAYER_BANDS = {

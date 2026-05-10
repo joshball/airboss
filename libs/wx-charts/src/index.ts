@@ -61,6 +61,8 @@ export type { MetarPlotGridSpec } from './charts/metar-plot-grid';
 export type { PirepPlotGridSpec } from './charts/pirep-plot-grid';
 export type { RadarMosaicSpec } from './charts/radar-mosaic';
 export type { SurfaceAnalysisSpec } from './charts/surface-analysis';
+export type { TurbulenceGairmetSpec } from './charts/turbulence-gairmet';
+export type { TurbulenceGtgSpec } from './charts/turbulence-gtg';
 export type { WindsAloftFbSpec } from './charts/winds-aloft-fb';
 export { buildChrome, type ChromeInput, type ChromeOutput } from './chrome';
 export { type GraticuleOptions, renderGraticule } from './graticule';
