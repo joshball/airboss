@@ -111,17 +111,7 @@ After Phase 4, the regs corpus's full ADR 019 contract -- ingestion -> registry 
 
 ### Out
 
-- **Real PDF rasterization.** Phase 4's `print` mode emits HTML-flavored footnote markup. A real PDF surface (Puppeteer / wkhtmltopdf / etc.) is downstream; the render API is contract-complete for it.
-- **Real audio TTS pipeline.** Phase 4's `tts` mode emits a text string with the identifier removed and tokens substituted. Spoken-form alias generation (R2 in revisit.md) ships when `apps/audio/` exists.
-- **Hangar UI for editing references.** revisit.md R5; deferred until `apps/hangar/` revives.
-- **IDE language-server integration for NOTICE-tier feedback.** revisit.md R7.
-- **Annual diff job (Phase 5).** Phase 4 reads the registry; Phase 5 walks editions and rewrites lesson pins. The two share the `@ab/sources/render` API but are separate WPs.
-- **Lesson migration tool (Phase 9).** Phase 4 makes existing `airboss-ref:` references render correctly; Phase 9 rewrites pre-ADR-019 lessons to use them.
-- **RAG pipeline implementation.** Phase 4's `rag` mode emits the right shape; the actual embeddings + retrieval is downstream.
-- **Real share-card image generation.** Phase 4's `share-card` mode emits the truncated text; a real `1200x630` rasterizer is downstream.
-- **Postgres-backed indexed tier.** Phase 3 ships a JSON-file indexed tier; Phase 4 reads it via the resolver. A future phase swaps backends without touching Phase 4.
-- **Production lesson page integration.** Phase 4 ships the demo route under `(dev)/`; a production lesson page consumer lands when the lesson route shape is finalized (separate WP under `apps/study/`).
-- **The `acknowledgments` ack-chain `unbroken` cycle detector.** `walkSupersessionChain` already detects cycles in the registry; Phase 4 trusts that. A separate cycle detector for `acknowledgments` itself is YAGNI -- the schema doesn't recurse.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Data Model
 
@@ -286,19 +276,19 @@ The text format for each kind is fixed; tests snapshot it.
 
 ### Per-mode annotation placement (per §3.1's table)
 
-| Mode | Annotation placement |
-| --- | --- |
-| `web` | Inline `<span class="ab-ref-annotation ab-ref-{kind}">...</span>` after the anchor; tooltip (`title=`) for the optional ack `note` field. |
-| `print` | `<sup>` footnote marker after anchor; footnote text in trailing `<aside class="ab-ref-footnotes">` block; ack `note` rendered as the footnote body. |
-| `tts` | Annotation omitted from spoken output. |
-| `screen-reader` | Annotation included in the anchor's `aria-label`. |
-| `plain-text` | Inline-parenthetical `(<annotation>)` after substituted text. |
-| `rss` | Inline as in `web` (recipients are HTML-capable). |
-| `share-card` | Annotation omitted (truncated to 80 chars). |
-| `rag` | Annotation included as the citation footnote alongside the URL. |
-| `slack-unfurl` | Annotation appended to the description. |
-| `transclusion` | Inline as in `web` (the host page is HTML). |
-| `tooltip` | Annotation included; truncates the whole token-substituted text to 200 chars. |
+| Mode            | Annotation placement                                                                                                                                |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `web`           | Inline `<span class="ab-ref-annotation ab-ref-{kind}">...</span>` after the anchor; tooltip (`title=`) for the optional ack `note` field.           |
+| `print`         | `<sup>` footnote marker after anchor; footnote text in trailing `<aside class="ab-ref-footnotes">` block; ack `note` rendered as the footnote body. |
+| `tts`           | Annotation omitted from spoken output.                                                                                                              |
+| `screen-reader` | Annotation included in the anchor's `aria-label`.                                                                                                   |
+| `plain-text`    | Inline-parenthetical `(<annotation>)` after substituted text.                                                                                       |
+| `rss`           | Inline as in `web` (recipients are HTML-capable).                                                                                                   |
+| `share-card`    | Annotation omitted (truncated to 80 chars).                                                                                                         |
+| `rag`           | Annotation included as the citation footnote alongside the URL.                                                                                     |
+| `slack-unfurl`  | Annotation appended to the description.                                                                                                             |
+| `transclusion`  | Inline as in `web` (the host page is HTML).                                                                                                         |
+| `tooltip`       | Annotation included; truncates the whole token-substituted text to 200 chars.                                                                       |
 
 ### Render-mode dispatch
 
@@ -364,35 +354,35 @@ Component is dumb. All work happens server-side; the client just renders the pre
 
 ## Validation
 
-| Concern | Where it runs |
-| --- | --- |
-| `extractIdentifiers` returns dedup, source-ordered list | Vitest unit (`extract.test.ts`) |
-| `extractIdentifiers` skips fenced code, inline code, ref-defs | Vitest unit |
-| `batchResolve` resolves static-only identifiers via `SOURCES` | Vitest unit (`batch-resolve.test.ts`) |
-| `batchResolve` reads indexed-tier content for `@text`/`@quote` body presence | Vitest unit |
-| `batchResolve` walks supersession chain | Vitest unit |
-| `batchResolve` returns null `entry` for unknown id (defensive) | Vitest unit |
-| Token registration: each of the 12 §3.1 tokens is registered at module init | Vitest unit (`tokens.test.ts`) |
-| `registerToken({...})` adds a custom token; `getToken('@custom')` returns it | Vitest unit |
-| Per-token substitution produces the §3.1-specified output | Vitest unit |
-| Adjacency merge produces range form for contiguous numeric run | Vitest unit (`adjacency.test.ts`) |
-| Adjacency merge produces comma-list form for non-contiguous | Vitest unit |
-| Adjacency does NOT merge across corpora or pins | Vitest unit |
-| Annotation kind = `covered` when ack matches chain end | Vitest unit (`annotations.test.ts`) |
-| Annotation kind = `chain-advanced` when chain end != ack superseder | Vitest unit |
-| Annotation kind = `historical` when ack `historical: true` OR `historical_lens` | Vitest unit |
-| Annotation kind = `cross-corpus` when chain crosses corpora | Vitest unit |
-| `substituteTokens('web')` emits expected `<a>` HTML against fixture | Vitest snapshot (`substitute.test.ts`) |
-| `substituteTokens('plain-text')` emits expected text + URL against fixture | Vitest snapshot |
-| `substituteTokens('print')` emits HTML with footnote machinery | Vitest snapshot |
-| `substituteTokens('tts')` emits text-only with identifier removed | Vitest snapshot |
+| Concern                                                                                                                               | Where it runs                             |
+| ------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| `extractIdentifiers` returns dedup, source-ordered list                                                                               | Vitest unit (`extract.test.ts`)           |
+| `extractIdentifiers` skips fenced code, inline code, ref-defs                                                                         | Vitest unit                               |
+| `batchResolve` resolves static-only identifiers via `SOURCES`                                                                         | Vitest unit (`batch-resolve.test.ts`)     |
+| `batchResolve` reads indexed-tier content for `@text`/`@quote` body presence                                                          | Vitest unit                               |
+| `batchResolve` walks supersession chain                                                                                               | Vitest unit                               |
+| `batchResolve` returns null `entry` for unknown id (defensive)                                                                        | Vitest unit                               |
+| Token registration: each of the 12 §3.1 tokens is registered at module init                                                           | Vitest unit (`tokens.test.ts`)            |
+| `registerToken({...})` adds a custom token; `getToken('@custom')` returns it                                                          | Vitest unit                               |
+| Per-token substitution produces the §3.1-specified output                                                                             | Vitest unit                               |
+| Adjacency merge produces range form for contiguous numeric run                                                                        | Vitest unit (`adjacency.test.ts`)         |
+| Adjacency merge produces comma-list form for non-contiguous                                                                           | Vitest unit                               |
+| Adjacency does NOT merge across corpora or pins                                                                                       | Vitest unit                               |
+| Annotation kind = `covered` when ack matches chain end                                                                                | Vitest unit (`annotations.test.ts`)       |
+| Annotation kind = `chain-advanced` when chain end != ack superseder                                                                   | Vitest unit                               |
+| Annotation kind = `historical` when ack `historical: true` OR `historical_lens`                                                       | Vitest unit                               |
+| Annotation kind = `cross-corpus` when chain crosses corpora                                                                           | Vitest unit                               |
+| `substituteTokens('web')` emits expected `<a>` HTML against fixture                                                                   | Vitest snapshot (`substitute.test.ts`)    |
+| `substituteTokens('plain-text')` emits expected text + URL against fixture                                                            | Vitest snapshot                           |
+| `substituteTokens('print')` emits HTML with footnote machinery                                                                        | Vitest snapshot                           |
+| `substituteTokens('tts')` emits text-only with identifier removed                                                                     | Vitest snapshot                           |
 | Forward-compatible modes (`screen-reader`, `rss`, `share-card`, `rag`, `slack-unfurl`, `transclusion`, `tooltip`) emit shape per §3.1 | Vitest snapshot (`modes/default.test.ts`) |
-| `loadLessonReferences` server helper returns serializable payload | Vitest unit (in apps/study) |
-| `RenderedLesson.svelte` renders without error against fixture data | Manual smoke (`/references` demo route) |
-| Demo route at `/references` works for `web` and `?mode=plain-text` | Manual smoke |
-| `bun run check` exits 0 | Manual gate |
-| `bun test libs/sources/` passes | Manual gate |
-| `bun test apps/study/` passes | Manual gate |
+| `loadLessonReferences` server helper returns serializable payload                                                                     | Vitest unit (in apps/study)               |
+| `RenderedLesson.svelte` renders without error against fixture data                                                                    | Manual smoke (`/references` demo route)   |
+| Demo route at `/references` works for `web` and `?mode=plain-text`                                                                    | Manual smoke                              |
+| `bun run check` exits 0                                                                                                               | Manual gate                               |
+| `bun test libs/sources/` passes                                                                                                       | Manual gate                               |
+| `bun test apps/study/` passes                                                                                                         | Manual gate                               |
 
 ## Edge Cases
 
@@ -417,19 +407,7 @@ Component is dumb. All work happens server-side; the client just renders the pre
 
 ## Out of Scope (resolved, not deferred)
 
-| Surfaced consideration | Resolution |
-| --- | --- |
-| `@text` / `@quote` content rendering at paragraph granularity | Drop. Phase 3 stores section-level content; paragraph-level descent is a Phase-6+ resolver enhancement. Phase 4's `@text` substitutes whole-section text. |
-| Spoken-form aliases for TTS | Drop. R2 deferral; ships when `apps/audio/` lands. Phase 4's TTS mode produces a substitution that feeds the downstream TTS engine verbatim. |
-| Postgres-backed indexed tier | Drop. Phase 3's JSON-file tier is the read substrate. Future swap of the resolver's `getIndexedContent` doesn't touch Phase 4. |
-| Real PDF rasterization | Drop. Phase 4's `print` mode is HTML+footnotes; downstream PDF surface consumes that. |
-| Real share-card image generation | Drop. Phase 4's `share-card` mode is a string; downstream image builder consumes it. |
-| RAG embedding generation | Drop. Phase 4's `rag` mode emits the citation snippet shape; downstream pipeline consumes it. |
-| Production lesson page integration | Drop. Phase 4 ships a `(dev)/` demo route. Production lesson pages swap their fixture for an on-disk lesson loader in a separate WP. |
-| Hangar UI for ack editing | Drop. revisit.md R5; hangar revival ADR. |
-| IDE language-server NOTICE-tier feedback | Drop. revisit.md R7. |
-| Annual diff job | Drop. Phase 5. |
-| Lesson migration tool | Drop. Phase 9. |
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Open Items
 
