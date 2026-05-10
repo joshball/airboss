@@ -1,0 +1,55 @@
+code: s7
+ordinal: 7
+title: Reading weather products - METARs, TAFs, PIREPs
+body_md: |
+  Sections 2-6 built the synoptic story; this section is where the
+  story meets the printed page. METARs, TAFs, and PIREPs are the
+  three workhorse products you will read on every flight, and reading
+  them well is a three-stage skill: decode the symbols, understand
+  the picture they describe, triage what matters for this flight.
+
+  The decode stage is mechanical -- it's the alphabet. The understand
+  stage is where pilots get stuck because the products are written
+  for a meteorologist, not a pilot, and require the synoptic frame
+  from earlier sections to make sense. The triage stage separates a
+  pilot who can read every line from a pilot who can identify the
+  three lines that change the go/no-go decision.
+
+  A METAR plot for an iconic mid-Atlantic morning (placeholder slug;
+  resolves to live SVG when the wx-charts METAR plot renderer ships):
+
+  :::chart slug="wx-metar-plot-2024-01-13-12z"
+  :::
+steps:
+  - code: s7.1
+    ordinal: 1
+    title: Reading METARs and TAFs
+    body_md: |
+      A METAR is a snapshot; a TAF is a forecast for a 5-statute-mile
+      radius around the reporting station. Together they're the most
+      airport-specific weather products you'll read.
+
+      The pilot-relevant lines: wind (with gust spread), visibility,
+      ceiling, weather phenomena, altimeter. The triage habit is to
+      compare the current METAR to the most recent TAF amendment --
+      if reality is already running ahead of the forecast, the
+      forecast is suspect for the rest of its valid period.
+    knowledge_node_id: wx-reading-metars-tafs
+
+  - code: s7.2
+    ordinal: 2
+    title: PIREPs - reading and filing
+    body_md: |
+      Every other product in this section is generated. PIREPs are
+      the only product authored by another pilot in the air, and that
+      makes them the highest-fidelity report you have for what the
+      airframe is actually feeling at altitude.
+
+      Read every PIREP within 100 NM of your route, especially the
+      ones that mention turbulence, icing, or cloud tops -- those are
+      the conditions hardest to forecast and most useful to know. And
+      then file your own. The PIREP system only works if pilots feed
+      it; the urgent (UUA) one you file at 11,500 about moderate
+      mixed icing might be the data point that turns another pilot
+      around at 9,500.
+    knowledge_node_id: wx-product-pireps

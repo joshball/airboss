@@ -1,0 +1,57 @@
+code: s10
+ordinal: 10
+title: Briefing and the integrated go/no-go decision
+body_md: |
+  Walk back to the wedding-trip scenario from s1. You now have the
+  synoptic story (s2), the cloud and visibility picture (s3), the
+  energy-on-airframe variables (s4), the convective and icing
+  exposure (s5-s6), the products (s7-s8), and the in-flight tools
+  to update everything as the day unfolds (s9). What does a real
+  briefing for that flight actually look like, and where in the
+  briefing does the go/no-go get decided?
+
+  This closing section is the integration. The briefing step walks an
+  end-to-end weather brief in the order a working pilot reads it; the
+  decision step revisits the go/no-go from s1 with the full toolkit
+  in hand and the personal minimums set against the actual numbers.
+
+  The framing question to bring to both steps: at what point in the
+  briefing did the decision crystallize, and what new information
+  would have to arrive in the next hour to change it?
+steps:
+  - code: s10.1
+    ordinal: 1
+    title: Weather briefing execution
+    body_md: |
+      A briefing is not a document; it's a sequence. Synoptic frame
+      first (so the products land on a picture, not on a blank page).
+      Hazards next (icing, convection, turbulence, IFR conditions --
+      the things that change the decision). Route-and-altitude next
+      (winds aloft, freezing levels, ceiling and visibility along the
+      track). Departure, destination, alternate weather last
+      (METAR/TAF for the airports that matter).
+
+      The discipline is to read in that order every time. Pilots who
+      jump straight to the destination METAR develop the bad habit of
+      finishing the briefing with the easiest data and missing the
+      hazards that should have stopped the flight before the route
+      planning started.
+    knowledge_node_id: wx-briefing-execution
+
+  - code: s10.2
+    ordinal: 2
+    title: Go/no-go - the integrated picture
+    body_md: |
+      The decision is a comparison: actual conditions and the next-six-hours
+      trend versus your personal minimums for this flight, in this
+      airplane, on this route, today. If the actual is inside your
+      minimums and the trend is favorable, you go. If the actual is
+      outside your minimums or the trend is unfavorable, you stop.
+      Edge cases get a delay, not a launch.
+
+      We met this node in s1 as a frame. We meet it again here as a
+      checklist -- the synthesis that ties every section of the
+      course back to a single output: the call you make to your
+      passenger, your dispatcher, or yourself in the next ten
+      minutes.
+    knowledge_node_id: wx-go-nogo-decision

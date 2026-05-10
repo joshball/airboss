@@ -1,0 +1,29 @@
+slug: weather-comprehensive
+kind: instructor
+title: Weather, Comprehensive
+status: active
+description: |
+  A working pilot's weather curriculum. Built for the returning private
+  pilot who wants the synoptic story and the cockpit decision in the
+  same place; equally usable by an instrument candidate looking to
+  rebuild the products + decision habits before checkride prep.
+
+  The course runs the same arc weather always runs: a frame for why it
+  matters, the physics that drive the air, the products that report it,
+  and the briefing + go/no-go habit that ties everything to a single
+  decision before each flight. Each step frames the topic and then
+  hands off to its knowledge node for the seven-phase discovery walk
+  (per ADR 011) -- the step prose is the runway, the node body is the
+  takeoff.
+
+  Pair this course with a PPL ACS goal to surface the cert-overlay
+  view: every step shows which Area I Task C element it satisfies,
+  and every gap in coverage is visible at a glance. Layer the same
+  course under an instrument or commercial goal later and the overlay
+  re-projects against that ACS without re-authoring a single step.
+
+  Charts embedded inline (`:::chart slug="..."`) are wired through the
+  shared wx-charts library and re-render against live (or sample)
+  weather data each session. The slugs are stable contracts: when the
+  charts library lands a real surface analysis or radar mosaic the
+  same course renders the live SVG without any edit here.

@@ -1,0 +1,69 @@
+code: s4
+ordinal: 4
+title: Wind, turbulence, and density altitude
+body_md: |
+  Three forces decide whether your airplane wants to fly today:
+  airflow over the wing (wind), the smoothness or roughness of that
+  airflow (turbulence), and the actual density of the air doing the
+  lifting (density altitude). All three live in the same family --
+  they're how the atmosphere transmits energy to the airframe -- and
+  the pilot's job is to read them as one picture rather than three
+  unrelated numbers.
+
+  This section is the runway-to-cruise reality check. A perfectly
+  acceptable forecast can still produce an unflyable Saturday morning
+  if the runway is short, the elevation is high, the temperature is
+  hot, and the wind is gusting at 30 degrees off centerline. Each
+  step here is a single variable in that equation.
+steps:
+  - code: s4.1
+    ordinal: 1
+    title: Wind systems
+    body_md: |
+      Wind isn't one thing. It's the daily reversal of the sea breeze,
+      the diurnal mountain-valley flow, the channeling effect of a
+      pass, the rotor downstream of a ridge, the shear at the top of
+      the boundary layer. The forecast wind at 3,000 feet AGL is a
+      single point estimate of an extremely structured field.
+
+      The pilot-relevant categories: surface wind (crosswind +
+      headwind component), wind aloft (planning), shear (transition
+      between layers), gust (instantaneous variability), and mountain
+      wave (the most violent of the lot, often invisible until you
+      enter it).
+    knowledge_node_id: wx-wind-systems
+
+  - code: s4.2
+    ordinal: 2
+    title: Turbulence types
+    body_md: |
+      Turbulence is the airframe feeling differential energy in the
+      airflow. The cause matters because the avoidance strategy
+      differs: thermal turbulence (climb above the convective layer or
+      fly early), mechanical turbulence (give the obstacle clearance),
+      wind shear turbulence (cross the layer perpendicular and quickly),
+      wake turbulence (stay above and upwind), clear-air turbulence
+      (deviate off the jet stream).
+
+      Severity matters too. Light is information. Moderate is a
+      reroute candidate. Severe is a 180. Extreme is "you should not
+      have been there." Knowing the source lets you predict the
+      severity before you enter the air.
+    knowledge_node_id: wx-turbulence-types
+
+  - code: s4.3
+    ordinal: 3
+    title: Density altitude
+    body_md: |
+      The airplane doesn't care what the altimeter reads. It cares how
+      many air molecules per cubic foot are flowing over the wing,
+      down the prop, and through the engine. Density altitude
+      collapses pressure altitude, temperature, and (to a smaller
+      degree) humidity into a single number that says "today, your
+      airplane thinks the runway is at this elevation."
+
+      The danger isn't the math; it's the math denied. A pilot who
+      computes 7,800 ft density altitude on a 4,200 ft runway and
+      then loads four people, full fuel, and a hot day is making a
+      decision the airplane has already made for them.
+    knowledge_node_id: wx-density-altitude

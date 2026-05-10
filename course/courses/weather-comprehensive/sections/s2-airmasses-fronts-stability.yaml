@@ -1,0 +1,59 @@
+code: s2
+ordinal: 2
+title: Air masses, fronts, and stability
+body_md: |
+  Pull up tomorrow's surface analysis. You see a cold front sweeping
+  east through your route, a high pressure system parked over the
+  destination, isobars tightly packed across the middle leg. Without
+  reading any TAF or METAR, what do you already know about how the day
+  will look?
+
+  This is the synoptic story -- the big-picture air-mass behavior that
+  drives every product you'll read in later sections. Get the frame
+  right and the products stop being numbers and start being
+  confirmations of what you already expected. Get the frame wrong and
+  the products are noise: you can read every chart correctly and still
+  miss the picture.
+
+  The current surface analysis (placeholder slug; renders against live
+  data when the wx-charts library lands the surface analysis renderer):
+
+  :::chart slug="wx-surface-analysis-2024-12-23-12z"
+  :::
+
+  Read the chart with the question: where is the air going, and what
+  is it carrying with it?
+steps:
+  - code: s2.1
+    ordinal: 1
+    title: Air masses and fronts
+    body_md: |
+      An air mass is a body of air with consistent temperature and
+      moisture across hundreds of miles. A front is the boundary where
+      two of them collide. The character of the front tells you what
+      kind of weather you'll get: warm fronts give widespread cloud
+      and steady precipitation; cold fronts give narrow bands of
+      vigorous lift and embedded thunderstorms; occluded fronts hand
+      you the worst of both.
+
+      The framing question: what air mass am I sitting in right now,
+      where is it going, and what is replacing it?
+    knowledge_node_id: wx-airmasses-and-fronts
+
+  - code: s2.2
+    ordinal: 2
+    title: Stability and instability
+    body_md: |
+      Two air parcels at the same altitude can carry wildly different
+      flight implications depending on what happens when you nudge one
+      upward. Stable air resists vertical motion -- smooth ride, layered
+      clouds, steady visibility, but trapped pollution and fog risk.
+      Unstable air amplifies vertical motion -- bumpy ride, cumulus
+      build-ups, showers, and (if it goes far enough) thunderstorms.
+
+      The lapse rate is the diagnostic. Lift a parcel; compare its
+      cooling rate to the surrounding air. If it stays warmer it keeps
+      rising. If it cools faster than the environment it sinks back.
+      Stability is a forecast input you'll feel in the airplane within
+      minutes of takeoff.
+    knowledge_node_id: wx-stability-and-instability

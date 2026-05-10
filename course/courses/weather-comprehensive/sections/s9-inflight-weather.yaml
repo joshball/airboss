@@ -1,0 +1,50 @@
+code: s9
+ordinal: 9
+title: In-flight weather
+body_md: |
+  The briefing ended at the run-up. From taxi onward you're flying
+  with whatever weather picture you can build in real time -- and the
+  picture is necessarily incomplete.
+
+  Modern cockpits have made this picture richer than any prior
+  generation of GA flying: ADS-B FIS-B brings METARs, TAFs, NEXRAD,
+  AIRMETs, SIGMETs, and PIREPs into the flight deck. XM weather adds
+  graphical lightning and high-resolution radar. EFBs overlay all of
+  it on the moving map. The risk is treating the cockpit display as
+  ground truth; latency, gaps, and resolution all change what the
+  display means.
+
+  This section is about flying the picture without trusting it more
+  than it deserves.
+steps:
+  - code: s9.1
+    ordinal: 1
+    title: Flight deck weather displays
+    body_md: |
+      What's on the display, where does it come from, and how often
+      does it update? Different sources have different refresh
+      cadences, different resolutions, and different latencies between
+      observation and display.
+
+      The pilot habit: every weather display should be paired with the
+      mental question "how old is this image?" If you can't answer it
+      from the display itself, you don't know what you're looking at.
+    knowledge_node_id: wx-flight-deck-weather-displays
+
+  - code: s9.2
+    ordinal: 2
+    title: Weather equipment and data limitations
+    body_md: |
+      NEXRAD via FIS-B can be five to fifteen minutes old. A
+      thunderstorm cell that wasn't on the screen at briefing might
+      already be where you're flying. Composite reflectivity averages
+      the entire vertical column -- a green echo can hide a yellow
+      cell at altitude. PIREPs are voluntary and sparse. Ceiling and
+      visibility reports are point observations, not area conditions.
+
+      Every limitation translates to a single rule: in-flight weather
+      tightens your decision interval, it does not expand your
+      decision authority. If the picture you're getting in the air
+      tells you "this is not the weather you briefed," the next
+      action is a course correction, not a continuation.
+    knowledge_node_id: wx-equipment-and-data-limitations

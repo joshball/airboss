@@ -1,0 +1,51 @@
+code: s3
+ordinal: 3
+title: Clouds, precipitation, and visibility
+body_md: |
+  A cloud is the visible answer to a question the atmosphere already
+  asked: where did the rising air cool to its dew point? The shape of
+  the cloud tells you which mechanism lifted the air, how stable the
+  layer was, and what's likely to come next.
+
+  This section connects the synoptic story (s2) to what you actually
+  see out the windscreen. Cloud type, base height, and precipitation
+  pattern aren't decorations -- they're a real-time diagnostic of the
+  air mass you're flying through, and (usually) the most accurate
+  forecast available because you're reading it firsthand.
+
+  The framing question for both steps: what is this cloud telling me
+  about the air I'm about to enter?
+steps:
+  - code: s3.1
+    ordinal: 1
+    title: Clouds, temperature/moisture, and precipitation
+    body_md: |
+      Cumulus, stratus, cirrus -- the three families and their hybrids.
+      Each shape implies a lifting mechanism and a stability profile.
+      Cumulus = unstable + convective lift. Stratus = stable +
+      widespread lift. Cirrus = high, ice, often the leading edge of
+      an approaching front.
+
+      Precipitation type follows from the same physics: rain from
+      warm/melting precip, snow from sub-freezing crystals all the way
+      down, freezing rain from a warm layer aloft over a cold layer
+      below (the most dangerous icing setup we'll meet again in s6).
+    knowledge_node_id: wx-clouds-and-precipitation
+
+  - code: s3.2
+    ordinal: 2
+    title: Fog, frost, and visibility obstructions
+    body_md: |
+      Visibility kills more pilots than ceiling. A 1,000-foot ceiling
+      with 10 SM visibility is workable; an 800-foot ceiling with 1
+      SM visibility is a different flight entirely.
+
+      Fog is the most variable component of any forecast: it forms by
+      multiple mechanisms (radiation, advection, upslope, freezing,
+      ice, steam), each with a different dispersal trigger. Frost on
+      the airframe degrades lift more than its mass would suggest.
+      Smoke, haze, blowing dust, blowing snow, volcanic ash -- all
+      reduce slant visibility differently than they reduce reported
+      surface visibility. The product number is a starting point, not
+      the ground truth.
+    knowledge_node_id: wx-fog-and-visibility-obstructions
