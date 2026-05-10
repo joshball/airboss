@@ -1,0 +1,58 @@
+code: s1
+ordinal: 1
+title: Why weather matters
+body_md: |
+  A friend asks you to fly them to a wedding three states away on
+  Saturday. Conditions look "fine" -- nothing in the area forecast jumps
+  out, the destination is showing 4,000 broken, winds light. You know
+  how to read a METAR. You know what a frontal passage looks like. You
+  trust the airplane.
+
+  You launch. Two hours in, ceilings start dropping faster than the
+  TAF said. You divert. The wedding gets a story; you get an
+  experience. Now ask yourself: at what point did the flight become
+  inadvisable, and what would you have needed to see -- before takeoff
+  -- to make a different call?
+
+  Weather is the single largest contributor to fatal general aviation
+  accidents. Not pilots who don't know weather; pilots who knew enough
+  to launch and not enough to stop. The frame for this whole course is
+  the same frame every flight starts with: a go/no-go decision built
+  on personal minimums, calibrated to the airframe, the route, and the
+  pilot in command on that day.
+
+  This first section sets the decision habit. Every section after this
+  feeds it -- the synoptic story (s2), the products (s7-s8), the
+  in-flight picture (s9) all exist to inform a decision. We close in
+  s10 by walking a real briefing end-to-end and revisiting the
+  go/no-go with the full toolkit in hand.
+steps:
+  - code: s1.1
+    ordinal: 1
+    title: The go/no-go decision
+    body_md: |
+      The decision isn't "is the weather flyable?" It's "is the weather
+      flyable for me, in this airplane, on this route, today?" Three
+      pilots looking at the same TAF will arrive at three different
+      answers and all three can be correct.
+
+      The framing question to bring to the next reading: what would
+      have to be true for me to fly this trip, and what would have to
+      change for me to cancel it?
+    knowledge_node_id: wx-go-nogo-decision
+
+  - code: s1.2
+    ordinal: 2
+    title: Personal minimums
+    body_md: |
+      A go/no-go decision needs a yardstick. Personal minimums are the
+      yardstick: ceilings, visibility, winds, crosswind, gust spread,
+      density altitude, fuel reserve, day/night -- numbers you commit
+      to before the trip pressure arrives.
+
+      The trap is setting them once and never revisiting. They should
+      tighten when you're rusty, loosen as you accumulate currency in
+      type, and tighten again the moment something feels off. Read
+      this with your last 90 days in mind: are your numbers still
+      yours, or are they the numbers from when you finished training?
+    knowledge_node_id: wx-personal-minimums
