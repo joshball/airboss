@@ -50,7 +50,7 @@ Sections sort by status; within each section WPs sort alphabetically by id.
 | [wp-rmh-section-tree](../work-packages/wp-rmh-section-tree/spec.md)                         | WP-RMH -- promote Risk Management Handbook to section-tree                                      | course    | content  | pending      | pending      |
 | [wp-safo-info](../work-packages/wp-safo-info/spec.md)                                       | Spec: WP-SAFO-INFO -- pipelines for FAA Safety Alerts For Operators + Information For Operators | course    | content  | pending      | pending      |
 
-## Signed off (47)
+## Signed off (48)
 
 | ID                                                                                                      | Title                                                                         | Product   | Category | Agent review | Human review |
 | ------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | --------- | -------- | ------------ | ------------ |
@@ -71,6 +71,7 @@ Sections sort by status; within each section WPs sort alphabetically by id.
 | [hangar-platform-dashboard](../work-packages/hangar-platform-dashboard/spec.md)                         | Hangar Platform Dashboard -- Spec                                             | hangar    | feature  | pending      | pending      |
 | [hangar-registry](../work-packages/hangar-registry/spec.md)                                             | Spec: Hangar registry (TOML-hybrid)                                           | hangar    | product  | pending      | pending      |
 | [hangar-review-queue](../work-packages/hangar-review-queue/spec.md)                                     | Hangar Review Queue -- Spec                                                   | hangar    | feature  | pending      | pending      |
+| [hangar-review-queue-cluster-fix](../work-packages/hangar-review-queue-cluster-fix/spec.md)             | Spec: Hangar Review Queue e2e Cluster Fix                                     | hangar    | feature  | done         | pending      |
 | [hangar-scaffold](../work-packages/hangar-scaffold/spec.md)                                             | Spec: Hangar scaffold                                                         | hangar    | product  | pending      | pending      |
 | [hangar-sources-v1](../work-packages/hangar-sources-v1/spec.md)                                         | Spec: Hangar sources v1                                                       | hangar    | feature  | pending      | pending      |
 | [help-library](../work-packages/help-library/spec.md)                                                   | Spec: Help Library                                                            | study     | feature  | pending      | pending      |
@@ -102,7 +103,7 @@ Sections sort by status; within each section WPs sort alphabetically by id.
 | [wp-mtn-mountain-flying](../work-packages/wp-mtn-mountain-flying/spec.md)                               | WP-MTN -- Tips on Mountain Flying pamphlet ingestion                          | course    | content  | pending      | pending      |
 | [wp-mtn-section-tree](../work-packages/wp-mtn-section-tree/spec.md)                                     | WP-MTN -- promote Tips on Mountain Flying to section-tree                     | course    | content  | pending      | pending      |
 
-## Draft (18)
+## Draft (17)
 
 | ID                                                                                            | Title                                                                                     | Product   | Category | Agent review | Human review |
 | --------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | --------- | -------- | ------------ | ------------ |
@@ -112,7 +113,6 @@ Sections sort by status; within each section WPs sort alphabetically by id.
 | [flight-evidence-and-cfi-feedback](../work-packages/flight-evidence-and-cfi-feedback/spec.md) | Spec: Flight evidence and teacher feedback                                                | study     | feature  | pending      | pending      |
 | [goal-composer](../work-packages/goal-composer/spec.md)                                       | Spec: Goal Composer                                                                       | study     | feature  | pending      | pending      |
 | [hangar-ingest-review-queue](../work-packages/hangar-ingest-review-queue/spec.md)             | Spec: Hangar Ingest-Review Queue                                                          | hangar    | feature  | pending      | pending      |
-| [hangar-review-queue-cluster-fix](../work-packages/hangar-review-queue-cluster-fix/spec.md)   | Spec: Hangar Review Queue e2e Cluster Fix                                                 | hangar    | feature  | pending      | pending      |
 | [lens-ui](../work-packages/lens-ui/spec.md)                                                   | Spec: Lens UI                                                                             | study     | feature  | pending      | pending      |
 | [node-render-modes](../work-packages/node-render-modes/spec.md)                               | Spec: Node render modes                                                                   | study     | feature  | pending      | pending      |
 | [study-home](../work-packages/study-home/spec.md)                                             | Spec: Study home                                                                          | study     | feature  | pending      | pending      |
