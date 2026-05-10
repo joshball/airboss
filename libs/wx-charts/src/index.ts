@@ -57,6 +57,7 @@ export {
 // dragging the renderer's runtime imports (sharp, fs) into the bundle.
 // ----------------------------------------------------------------------
 export type { MetarPlotGridSpec } from './charts/metar-plot-grid';
+export type { PirepPlotGridSpec } from './charts/pirep-plot-grid';
 export type { SurfaceAnalysisSpec } from './charts/surface-analysis';
 export { buildChrome, type ChromeInput, type ChromeOutput } from './chrome';
 export { type GraticuleOptions, renderGraticule } from './graticule';
@@ -129,4 +130,17 @@ export type {
 // ----------------------------------------------------------------------
 export { parseMetar } from './wx/metar/parser';
 export type { CloudLayer, ParsedMetar, SkyCover, WindGroup } from './wx/metar/types';
+export { parsePirep } from './wx/pirep/parser';
+export type {
+	IcingIntensity,
+	IcingReport,
+	IcingType,
+	ParsedPirep,
+	PirepCloudLayer,
+	PirepKind,
+	PirepLocation,
+	TurbulenceIntensity,
+	TurbulenceReport,
+} from './wx/pirep/types';
 export { ceilingFtAgl, celsiusToFahrenheit, computeFlightCategory, flightCategory, summarizeCover } from './wx/rules';
+export { type PirepGlyphInput, type PirepGlyphOptions, renderPirepGlyph } from './symbology/pirep-glyph';

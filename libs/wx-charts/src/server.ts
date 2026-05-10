@@ -24,6 +24,11 @@ export {
 	renderMetarPlotGrid,
 } from './charts/metar-plot-grid';
 export {
+	type PirepPlotGridSpec,
+	pirepPlotGridSpecSchema,
+	renderPirepPlotGrid,
+} from './charts/pirep-plot-grid';
+export {
 	renderSurfaceAnalysis,
 	type SurfaceAnalysisSpec,
 	surfaceAnalysisSpecSchema,
