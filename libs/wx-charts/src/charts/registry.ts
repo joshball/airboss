@@ -13,8 +13,11 @@ import { CHART_TYPES, type ChartType } from '@ab/constants';
 import type { z } from 'zod';
 import type { ChartRenderer, ChartSpec } from '../types';
 import { airmetSigmetSpecSchema, renderAirmetSigmet } from './airmet-sigmet';
+import { metarPlotGridSpecSchema, renderMetarPlotGrid } from './metar-plot-grid';
+import { pirepPlotGridSpecSchema, renderPirepPlotGrid } from './pirep-plot-grid';
 import { radarMosaicSpecSchema, renderRadarMosaic } from './radar-mosaic';
 import { renderSurfaceAnalysis, surfaceAnalysisSpecSchema } from './surface-analysis';
+import { renderWindsAloftFb, windsAloftFbSpecSchema } from './winds-aloft-fb';
 
 export interface ChartRendererRegistration<TSpec extends ChartSpec = ChartSpec> {
 	render: ChartRenderer<TSpec>;
@@ -41,9 +44,18 @@ export const CHART_RENDERERS: Record<ChartType, ChartRendererRegistration> = {
 		schema: airmetSigmetSpecSchema,
 	},
 	// Phase C
-	[CHART_TYPES.METAR_PLOT_GRID]: notYetRegistered(CHART_TYPES.METAR_PLOT_GRID),
-	[CHART_TYPES.PIREP_PLOT_GRID]: notYetRegistered(CHART_TYPES.PIREP_PLOT_GRID),
-	[CHART_TYPES.WINDS_ALOFT_FB]: notYetRegistered(CHART_TYPES.WINDS_ALOFT_FB),
+	[CHART_TYPES.METAR_PLOT_GRID]: {
+		render: renderMetarPlotGrid as ChartRenderer<ChartSpec>,
+		schema: metarPlotGridSpecSchema,
+	},
+	[CHART_TYPES.PIREP_PLOT_GRID]: {
+		render: renderPirepPlotGrid as ChartRenderer<ChartSpec>,
+		schema: pirepPlotGridSpecSchema,
+	},
+	[CHART_TYPES.WINDS_ALOFT_FB]: {
+		render: renderWindsAloftFb as ChartRenderer<ChartSpec>,
+		schema: windsAloftFbSpecSchema,
+	},
 	// Phase D
 	[CHART_TYPES.PROG_CHART]: notYetRegistered(CHART_TYPES.PROG_CHART),
 	[CHART_TYPES.GFA]: notYetRegistered(CHART_TYPES.GFA),

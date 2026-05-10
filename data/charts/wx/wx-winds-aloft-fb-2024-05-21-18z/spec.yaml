@@ -1,0 +1,15 @@
+slug: wx-winds-aloft-fb-2024-05-21-18z
+type: winds-aloft-fb
+title: Winds and Temperatures Aloft (FB)
+subtitle: '2024-05-21 18Z (Tue) -- 19 forecast points (hand-traced composite)'
+projection:
+  kind: lambert
+  parallels: [33, 45]
+  rotate: [-96, -39]
+extent: conus
+sources:
+  bulletin: cache://winds-aloft/2024-05-21-18z.json
+options:
+  altitudes_ft: [3000, 6000, 9000, 12000, 18000]
+  show_legend: true
+  source_attribution: FAA winds aloft (FB) bulletin (hand-traced composite)

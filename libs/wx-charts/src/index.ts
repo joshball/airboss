@@ -57,8 +57,11 @@ export {
 // dragging the renderer's runtime imports (sharp, fs) into the bundle.
 // ----------------------------------------------------------------------
 export type { AirmetSigmetSpec } from './charts/airmet-sigmet';
+export type { MetarPlotGridSpec } from './charts/metar-plot-grid';
+export type { PirepPlotGridSpec } from './charts/pirep-plot-grid';
 export type { RadarMosaicSpec } from './charts/radar-mosaic';
 export type { SurfaceAnalysisSpec } from './charts/surface-analysis';
+export type { WindsAloftFbSpec } from './charts/winds-aloft-fb';
 export { buildChrome, type ChromeInput, type ChromeOutput } from './chrome';
 export { type GraticuleOptions, renderGraticule } from './graticule';
 export {
@@ -118,6 +121,7 @@ export {
 	renderWarmFront,
 } from './symbology/fronts';
 export { type LegendDef, type LegendEntry, renderLegend } from './symbology/legend';
+export { type PirepGlyphInput, type PirepGlyphOptions, renderPirepGlyph } from './symbology/pirep-glyph';
 export {
 	type PolygonLabel,
 	type PolygonOverlay,
@@ -128,7 +132,14 @@ export {
 } from './symbology/polygons';
 export { type PipDef, type PipShape, renderPolylinePips, type ScreenVec } from './symbology/polyline-pips';
 export { type PressureCenter, renderPressureCenter } from './symbology/pressure-centers';
-export { renderStationModel, type StationModelOptions, type StationOb } from './symbology/station-model';
+export {
+	type DenseStationGlyphInput,
+	type DenseStationModelOptions,
+	renderStationModel,
+	renderStationModelFromMetar,
+	type StationModelOptions,
+	type StationOb,
+} from './symbology/station-model';
 // ----------------------------------------------------------------------
 // Chart-renderer contract types (browser-safe)
 // ----------------------------------------------------------------------
@@ -140,3 +151,23 @@ export type {
 	ChartRenderResult,
 	ChartSpec,
 } from './types';
+// ----------------------------------------------------------------------
+// Weather-product parsers + derivation rules (Phase C)
+// ----------------------------------------------------------------------
+export { parseMetar } from './wx/metar/parser';
+export type { CloudLayer, ParsedMetar, SkyCover, WindGroup } from './wx/metar/types';
+export { parsePirep } from './wx/pirep/parser';
+export type {
+	IcingIntensity,
+	IcingReport,
+	IcingType,
+	ParsedPirep,
+	PirepCloudLayer,
+	PirepKind,
+	PirepLocation,
+	TurbulenceIntensity,
+	TurbulenceReport,
+} from './wx/pirep/types';
+export { ceilingFtAgl, celsiusToFahrenheit, computeFlightCategory, flightCategory, summarizeCover } from './wx/rules';
+export { parseFbGrid } from './wx/winds-aloft/parser';
+export type { ParsedFbGrid, ParsedFbStation, WindsAloftRow } from './wx/winds-aloft/types';
