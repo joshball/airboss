@@ -17,6 +17,7 @@ import { metarPlotGridSpecSchema, renderMetarPlotGrid } from './metar-plot-grid'
 import { pirepPlotGridSpecSchema, renderPirepPlotGrid } from './pirep-plot-grid';
 import { radarMosaicSpecSchema, renderRadarMosaic } from './radar-mosaic';
 import { renderSurfaceAnalysis, surfaceAnalysisSpecSchema } from './surface-analysis';
+import { renderTafTimeline, tafTimelineSpecSchema } from './taf-timeline';
 import { renderWindsAloftFb, windsAloftFbSpecSchema } from './winds-aloft-fb';
 
 export interface ChartRendererRegistration<TSpec extends ChartSpec = ChartSpec> {
@@ -62,6 +63,11 @@ export const CHART_RENDERERS: Record<ChartType, ChartRendererRegistration> = {
 	[CHART_TYPES.CONVECTIVE_OUTLOOK]: notYetRegistered(CHART_TYPES.CONVECTIVE_OUTLOOK),
 	// Phase E
 	[CHART_TYPES.CVA]: notYetRegistered(CHART_TYPES.CVA),
+	// Phase G
+	[CHART_TYPES.TAF_TIMELINE]: {
+		render: renderTafTimeline as ChartRenderer<ChartSpec>,
+		schema: tafTimelineSpecSchema,
+	},
 };
 
 /**
@@ -78,6 +84,7 @@ function notYetRegistered(type: ChartType): ChartRendererRegistration {
 		gfa: 'D',
 		'convective-outlook': 'D',
 		cva: 'E',
+		'taf-timeline': 'G',
 	};
 	const phase = phaseFor[type] ?? '?';
 	const message = `chart type '${type}' renderer not yet registered (scheduled for Phase ${phase}; see docs/work-packages/wx-chart-symbology-library/tasks.md)`;

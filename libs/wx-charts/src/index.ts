@@ -61,6 +61,7 @@ export type { MetarPlotGridSpec } from './charts/metar-plot-grid';
 export type { PirepPlotGridSpec } from './charts/pirep-plot-grid';
 export type { RadarMosaicSpec } from './charts/radar-mosaic';
 export type { SurfaceAnalysisSpec } from './charts/surface-analysis';
+export type { TafTimelineSpec } from './charts/taf-timeline';
 export type { WindsAloftFbSpec } from './charts/winds-aloft-fb';
 export { buildChrome, type ChromeInput, type ChromeOutput } from './chrome';
 export { type GraticuleOptions, renderGraticule } from './graticule';
@@ -156,6 +157,8 @@ export type {
 // ----------------------------------------------------------------------
 export { parseMetar } from './wx/metar/parser';
 export type { CloudLayer, ParsedMetar, SkyCover, WindGroup } from './wx/metar/types';
+export { parseTaf } from './wx/taf/parser';
+export type { ParsedTaf, TafChangeKind, TafPeriod } from './wx/taf/types';
 export { parsePirep } from './wx/pirep/parser';
 export type {
 	IcingIntensity,
