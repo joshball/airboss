@@ -23,3 +23,4 @@ export {
 	type SurfaceAnalysisSpec,
 	surfaceAnalysisSpecSchema,
 } from './charts/surface-analysis';
+export { warpRaster } from './raster/warp';

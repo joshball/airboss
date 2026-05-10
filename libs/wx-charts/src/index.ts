@@ -88,6 +88,20 @@ export {
 	SVG_WIDTH,
 	TITLE_BAND_HEIGHT,
 } from './projection';
+// ----------------------------------------------------------------------
+// Raster substrate -- type-only re-exports of the server-only warp module.
+// The value export of `warpRaster` lives at @ab/wx-charts/server because
+// it lazy-loads `sharp` and Node built-ins.
+// ----------------------------------------------------------------------
+export {
+	ADVISORY_PALETTE,
+	type AdvisoryPaletteEntry,
+	isReflectivityNoData,
+	NWS_REFLECTIVITY_STOPS,
+	type ReflectivityStop,
+} from './raster/palettes';
+export type { WarpInput, WarpResult } from './raster/warp';
+export { parseWorldFile, pixelToWorld, type WorldFile, worldToPixel } from './raster/worldfile';
 export { type AirportMarker, renderAirport } from './symbology/airports';
 export { renderScalarContours, type ScalarContourOptions } from './symbology/contours';
 export type { FrontDef, FrontKind, PipSide } from './symbology/fronts';
