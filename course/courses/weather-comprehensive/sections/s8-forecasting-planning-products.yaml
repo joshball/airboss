@@ -43,6 +43,14 @@ steps:
 
       Both charts are pictures of the same data. Disagreement between
       them is a flag, not a contradiction.
+
+      The CVA below pairs with the s2 surface analysis -- same weather,
+      pilot-relevant projection. Find a region where the CVA shows
+      IFR/MVFR and ask: which feature on the surface analysis is
+      causing it?
+
+      :::chart slug="wx-cva-2024-01-13-12z"
+      :::
     knowledge_node_id: wx-product-surface-analysis-and-cva
 
   - code: s8.3
@@ -59,6 +67,14 @@ steps:
       in depth. Pick the layer that matters for this flight (icing
       for a winter cross-country, convection for a summer afternoon)
       and read it carefully before zooming out.
+
+      A real GFA snapshot -- read it the same way you'd read a
+      briefing in flight: name one hazard layer that matters for an
+      imaginary flight across this region, then look only at that
+      layer and ignore the rest:
+
+      :::chart slug="wx-gfa-2024-12-23-15z"
+      :::
 
       A water-vapor satellite image from the same December 23 setup
       -- WV reads moisture in the upper atmosphere and is the cleanest
@@ -142,4 +158,12 @@ steps:
       slight is a "plan early" day, enhanced is a "consider the
       backup plan now" day, moderate or high is a "this trip is
       probably not happening" day.
+
+      A real Day 1 convective outlook -- pick the highest risk-tier
+      polygon and trace its outline mentally onto a sectional. Would
+      a planned afternoon flight intersect it? At what point in the
+      day does the outlook say the risk peaks?
+
+      :::chart slug="wx-convective-outlook-day1-2024-05-21"
+      :::
     knowledge_node_id: wx-product-convective-outlook

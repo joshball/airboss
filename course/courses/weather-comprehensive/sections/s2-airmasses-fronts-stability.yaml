@@ -23,6 +23,15 @@ body_md: |
 
   Read the chart with the question: where is the air going, and what
   is it carrying with it?
+
+  Now the same date, projected twelve hours forward -- the prog chart.
+  Compare the two side by side. Where has the front moved? Which way
+  did the surface low track? Did the high strengthen or weaken? The
+  prog answers "where is this going next?" before you ever read a
+  TAF:
+
+  :::chart slug="wx-prog-chart-12hr-2024-12-23-12z"
+  :::
 steps:
   - code: s2.1
     ordinal: 1
