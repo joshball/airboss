@@ -4,13 +4,15 @@ import { page } from '$app/state';
 
 /**
  * Hangar top-level nav shell. Links to the primary admin surfaces:
- * Sources, Glossary, Users (admin-only), Jobs. Active-route highlighting
- * via `aria-current` matches the study-app pattern. Colors + spacing
- * resolve from role tokens (04-VOCABULARY.md) so light/dark + future
- * themes work.
+ * Sources, Glossary, Courses, Docs, Review, Ingest review, Roadmap, Users
+ * (admin-only), Jobs. Active-route highlighting via `aria-current` matches
+ * the study-app pattern. Colors + spacing resolve from role tokens
+ * (04-VOCABULARY.md) so light/dark + future themes work.
  *
  * Sources comes first because /sources (the operational flow diagram)
- * is the post-sources-v1 primary landing. Users is hidden for non-admin
+ * is the post-sources-v1 primary landing. Courses sits with the other
+ * authoring surfaces (Glossary / Docs) since the course-reader-and-editor
+ * WP ships an authoring UI under /courses. Users is hidden for non-admin
  * roles to match the route gate -- showing a link that 403s on click is
  * worse than not showing it.
  */
@@ -21,6 +23,7 @@ function isActive(prefix: string): boolean {
 
 const sourcesActive = $derived(isActive(ROUTES.HANGAR_SOURCES));
 const glossaryActive = $derived(isActive(ROUTES.HANGAR_GLOSSARY));
+const coursesActive = $derived(isActive(ROUTES.HANGAR_COURSES));
 const docsActive = $derived(isActive(ROUTES.HANGAR_DOCS));
 const reviewActive = $derived(isActive(ROUTES.HANGAR_REVIEW));
 const ingestReviewActive = $derived(isActive(ROUTES.HANGAR_INGEST_REVIEW));
@@ -36,6 +39,7 @@ const reviewQueueCount = $derived<number>(
 <div class="nav-sections">
 	<a href={ROUTES.HANGAR_SOURCES} aria-current={sourcesActive ? 'page' : undefined}>Sources</a>
 	<a href={ROUTES.HANGAR_GLOSSARY} aria-current={glossaryActive ? 'page' : undefined}>Glossary</a>
+	<a href={ROUTES.HANGAR_COURSES} aria-current={coursesActive ? 'page' : undefined}>Courses</a>
 	<a href={ROUTES.HANGAR_DOCS} aria-current={docsActive ? 'page' : undefined}>Docs</a>
 	<a href={ROUTES.HANGAR_REVIEW} aria-current={reviewActive ? 'page' : undefined}>
 		Review
