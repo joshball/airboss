@@ -205,7 +205,7 @@ export function renderStationModel(s: StationOb, options: StationModelOptions = 
 // Spike 03 layout constants tuned for ~50-glyph CONUS density.
 
 import type { FaaFlightCategory } from '@ab/constants';
-import type { ParsedMetar, SkyCover as MetarSkyCover } from '../wx/metar/types';
+import type { SkyCover as MetarSkyCover, ParsedMetar } from '../wx/metar/types';
 import { ceilingFtAgl, celsiusToFahrenheit, flightCategory, summarizeCover } from '../wx/rules';
 
 const COLOR_TEMP = '#cc1f1f';

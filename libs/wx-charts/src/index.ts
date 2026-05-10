@@ -105,6 +105,7 @@ export {
 	renderWarmFront,
 } from './symbology/fronts';
 export { type LegendDef, type LegendEntry, renderLegend } from './symbology/legend';
+export { type PirepGlyphInput, type PirepGlyphOptions, renderPirepGlyph } from './symbology/pirep-glyph';
 export { type PipDef, type PipShape, renderPolylinePips, type ScreenVec } from './symbology/polyline-pips';
 export { type PressureCenter, renderPressureCenter } from './symbology/pressure-centers';
 export {
@@ -144,6 +145,5 @@ export type {
 	TurbulenceReport,
 } from './wx/pirep/types';
 export { ceilingFtAgl, celsiusToFahrenheit, computeFlightCategory, flightCategory, summarizeCover } from './wx/rules';
-export { type PirepGlyphInput, type PirepGlyphOptions, renderPirepGlyph } from './symbology/pirep-glyph';
 export { parseFbGrid } from './wx/winds-aloft/parser';
 export type { ParsedFbGrid, ParsedFbStation, WindsAloftRow } from './wx/winds-aloft/types';

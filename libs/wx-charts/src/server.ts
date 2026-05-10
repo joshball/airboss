@@ -17,7 +17,6 @@
  * the remaining chart renderers.
  */
 
-export { CHART_RENDERERS } from './charts/registry';
 export {
 	type MetarPlotGridSpec,
 	metarPlotGridSpecSchema,
@@ -28,13 +27,14 @@ export {
 	pirepPlotGridSpecSchema,
 	renderPirepPlotGrid,
 } from './charts/pirep-plot-grid';
-export {
-	renderWindsAloftFb,
-	type WindsAloftFbSpec,
-	windsAloftFbSpecSchema,
-} from './charts/winds-aloft-fb';
+export { CHART_RENDERERS } from './charts/registry';
 export {
 	renderSurfaceAnalysis,
 	type SurfaceAnalysisSpec,
 	surfaceAnalysisSpecSchema,
 } from './charts/surface-analysis';
+export {
+	renderWindsAloftFb,
+	type WindsAloftFbSpec,
+	windsAloftFbSpecSchema,
+} from './charts/winds-aloft-fb';

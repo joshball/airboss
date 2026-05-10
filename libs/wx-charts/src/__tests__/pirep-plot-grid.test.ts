@@ -45,6 +45,7 @@ const MINIMAL_BASEMAP = JSON.stringify({
 // reads the committed substrate basemap.
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+
 const REPO_ROOT = resolve(import.meta.dirname, '..', '..', '..', '..');
 const BASEMAP_PATH = resolve(REPO_ROOT, 'data', 'references', 'basemaps', 'us-states-10m.json');
 
