@@ -1,0 +1,17 @@
+{
+  "slug": "wx-taf-timeline-kmem-2026-05-10-1720z",
+  "type": "taf-timeline",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-10T17:55:49.158Z",
+  "content_hash": "sha256:452845eaec2bbf4ea10a145d6fcf05039df137eaad0c287a0c8f6b889c0735c8",
+  "source_hashes": {
+    "taf": "554e41c2ce4b18aa7675de3f1e10387dfc3c1aee1b5c771bda5b5faf5f7736fe"
+  },
+  "layer_counts": {
+    "vector-symbology": 31,
+    "point-symbology": 6
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 14098
+}
