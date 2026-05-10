@@ -1,0 +1,47 @@
+code: s5
+ordinal: 5
+title: Convection - thunderstorms and severe weather
+body_md: |
+  A thunderstorm is the atmosphere taking the lid off a stable layer
+  and letting unstable air go vertical -- 30,000, 40,000, sometimes
+  60,000 feet of vertical motion. Inside a mature cell are updrafts
+  and downdrafts that exceed any general aviation airframe's design
+  envelope, hail that can shatter a windscreen, microbursts that have
+  put airliners into the ground, and electrical activity that can
+  blind avionics for the rest of the flight.
+
+  The pilot rule is uncomplicated: 20 nautical miles of clearance from
+  any cell with a top above the freezing level. The pilot reality is
+  that cells move, build, and merge, so 20 NM at the time of briefing
+  is not 20 NM at the time of arrival. This section trains the
+  thunderstorm picture and then immediately re-trains the personal
+  minimum that says "if I'm closer than 20 NM, I'm not flying."
+
+  A real radar mosaic from a severe-weather day (placeholder slug;
+  resolves to live SVG when the wx-charts radar mosaic renderer
+  ships):
+
+  :::chart slug="wx-radar-2024-05-21-22z"
+  :::
+
+  Read the chart with the question: where would I have to be to
+  maintain 20 NM clearance from every cell, and how does that change
+  as the cells move?
+steps:
+  - code: s5.1
+    ordinal: 1
+    title: Thunderstorm hazards
+    body_md: |
+      Thunderstorms are the only weather phenomenon where the FAA
+      gives a numeric clearance distance, because they're the only
+      phenomenon where every other rule of thumb has failed pilots
+      enough times to need one. The 20 NM number comes from the
+      observed reach of hail, downdrafts, and lightning beyond the
+      visible cell boundary.
+
+      Every secondary hazard -- microbursts, gust fronts, hail shafts,
+      tornadoes, lightning damage, embedded turbulence -- compounds
+      the primary one. A pilot who treats the cell as a single
+      avoidable obstacle will eventually meet a hazard that wasn't on
+      the cell's edge.
+    knowledge_node_id: wx-thunderstorm-hazards
