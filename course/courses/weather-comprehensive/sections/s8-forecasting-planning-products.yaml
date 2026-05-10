@@ -1,0 +1,114 @@
+code: s8
+ordinal: 8
+title: Forecasting and planning products
+body_md: |
+  Section 7 was airport-specific. This section is route-and-region.
+  GFA, surface analysis, AIRMETs, SIGMETs, winds aloft, convective
+  outlook -- each product zooms out and looks at the same atmosphere
+  from a different angle. The skill is knowing which product answers
+  which question, so you reach for the right one without having to
+  read all six.
+
+  A practical heuristic: GFA for the briefing overview, surface
+  analysis for the synoptic frame, winds aloft for routing and fuel,
+  AIRMETs/SIGMETs for hazard alerts, convective outlook for thunderstorm
+  probability beyond the next few hours. Each step in this section
+  walks one of those products in turn.
+steps:
+  - code: s8.1
+    ordinal: 1
+    title: Weather data sources for flight planning
+    body_md: |
+      Where does briefing data come from, and what are the
+      authoritative sources versus the convenience aggregators? 1800wxbrief
+      is the canonical FAA system; ForeFlight, Garmin Pilot, SkyVector,
+      and the rest pull from the same upstream feeds and add their
+      own visualization on top.
+
+      A pilot who briefs only through a single app develops a single
+      mental model of the weather. Cross-checking through a different
+      product or source will often surface a detail the favored app
+      smoothed away.
+    knowledge_node_id: wx-data-sources
+
+  - code: s8.2
+    ordinal: 2
+    title: Surface analysis and ceiling/visibility charts
+    body_md: |
+      The surface analysis is the master chart -- highs, lows, fronts,
+      isobars, station observations -- and the ceiling/visibility
+      analysis (CVA) projects the same weather into the two
+      pilot-relevant numbers. Read the surface analysis to understand
+      why; read the CVA to know where it's actually flyable.
+
+      Both charts are pictures of the same data. Disagreement between
+      them is a flag, not a contradiction.
+    knowledge_node_id: wx-product-surface-analysis-and-cva
+
+  - code: s8.3
+    ordinal: 3
+    title: Graphical Forecasts for Aviation (GFA)
+    body_md: |
+      GFA replaced the old textual area forecast with an interactive
+      graphical product covering ceiling, visibility, wind, turbulence,
+      icing, clouds, and thunderstorms across CONUS. It's the single
+      best product for "show me the picture for the next 18 hours."
+
+      The catch is the same catch with every graphical product: the
+      pilot can scroll through the layers without reading any of them
+      in depth. Pick the layer that matters for this flight (icing
+      for a winter cross-country, convection for a summer afternoon)
+      and read it carefully before zooming out.
+    knowledge_node_id: wx-product-gfa
+
+  - code: s8.4
+    ordinal: 4
+    title: Wind and temperature aloft forecast (FB)
+    body_md: |
+      The FB product gives wind and temperature at standard pressure
+      altitudes for thousands of stations. Pilot use is two-fold:
+      pick the cruise altitude that gives the best
+      groundspeed-versus-fuel tradeoff, and predict whether you'll
+      meet icing aloft (the temperature column tells you when the
+      freezing level intersects your cruise altitude).
+
+      The forecast resolution is coarse -- 3,000 / 6,000 / 9,000 /
+      12,000 ft -- so interpolate when your cruise altitude isn't on
+      the list, and remember the forecast is for the time stamp on
+      the product, not for when you'll actually be there.
+    knowledge_node_id: wx-product-winds-aloft
+
+  - code: s8.5
+    ordinal: 5
+    title: AIRMETs, SIGMETs, and Convective SIGMETs
+    body_md: |
+      AIRMETs flag widespread weather hazardous to general aviation
+      (turbulence, icing, IFR conditions, mountain obscuration).
+      SIGMETs flag hazards to all aircraft (severe turbulence, severe
+      icing, dust storms, volcanic ash). Convective SIGMETs flag
+      thunderstorms specifically.
+
+      The pilot habit is to read every AIRMET and SIGMET that
+      intersects the route, then ask "what would my flight look like
+      if the AIRMET-Sierra (IFR conditions) lower-end of the range is
+      what actually happens?" The forecaster wrote the AIRMET because
+      the conditions are likely; treat them as likely, not as
+      worst-case framing.
+    knowledge_node_id: wx-product-airmets-sigmets
+
+  - code: s8.6
+    ordinal: 6
+    title: Convective outlook
+    body_md: |
+      The Storm Prediction Center's convective outlook gives 1-3 day
+      probabilistic guidance for severe weather: marginal, slight,
+      enhanced, moderate, high. The product is built for severe
+      weather forecasters but it's the cleanest "should I plan a
+      summer afternoon flight three days from now?" tool a GA pilot
+      has.
+
+      The pilot rule of thumb: marginal is a "watch the trends" day,
+      slight is a "plan early" day, enhanced is a "consider the
+      backup plan now" day, moderate or high is a "this trip is
+      probably not happening" day.
+    knowledge_node_id: wx-product-convective-outlook
