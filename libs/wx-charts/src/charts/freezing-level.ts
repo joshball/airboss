@@ -140,8 +140,8 @@ const DEFAULT_GRID = {
 	lonMax: -65,
 	latMin: 22,
 	latMax: 52,
-	width: 130,
-	height: 60,
+	width: 80,
+	height: 38,
 } as const;
 
 interface ScalarGrid {

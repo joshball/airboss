@@ -136,7 +136,6 @@ export function renderFilledScalarBands(opts: FilledScalarBandsOptions): FilledS
 	const { grid, gridWidth, gridHeight, bands, gridToLonLat, projection } = opts;
 	if (bands.length === 0) return { svg: '', bandCount: 0 };
 
-	const path = geoPath(projection);
 	// d3-contour treats each threshold as the lower bound of a "polygon
 	// containing all cells >= threshold". One band per stop; the upper
 	// bound is enforced visually by stacking the next band on top.
@@ -150,18 +149,26 @@ export function renderFilledScalarBands(opts: FilledScalarBandsOptions): FilledS
 		// Match the polygon back to its band by min-value.
 		const band = bands.find((b) => b.min === poly.value);
 		if (band === undefined) continue;
-		const lonLatRings = poly.coordinates.map((polygon) =>
-			polygon.map((ring) => ring.map(([gx, gy]) => gridToLonLat(gx, gy))),
-		);
-		const features = lonLatRings.map((coords) => ({
-			type: 'Polygon' as const,
-			coordinates: coords as [number, number][][],
-		}));
-		for (const feature of features) {
-			const d = path(feature);
-			if (d === null) continue;
+		for (const polygon of poly.coordinates) {
+			const ringFragments: string[] = [];
+			for (const ring of polygon) {
+				const projected: Array<[number, number]> = [];
+				for (const [gx, gy] of ring) {
+					const [lon, lat] = gridToLonLat(gx, gy);
+					const xy = projection([lon, lat]);
+					if (xy === null) continue;
+					if (!Number.isFinite(xy[0]) || !Number.isFinite(xy[1])) continue;
+					projected.push([xy[0], xy[1]]);
+				}
+				if (projected.length < 3) continue;
+				const segments = projected
+					.map((p, i) => `${i === 0 ? 'M' : 'L'}${p[0].toFixed(1)} ${p[1].toFixed(1)}`)
+					.join(' ');
+				ringFragments.push(`${segments} Z`);
+			}
+			if (ringFragments.length === 0) continue;
 			elements.push(
-				`<path d="${d}" fill="${band.fill}" fill-opacity="${band.fillOpacity.toFixed(2)}" stroke="none" />`,
+				`<path d="${ringFragments.join(' ')}" fill="${band.fill}" fill-opacity="${band.fillOpacity.toFixed(2)}" stroke="none" fill-rule="evenodd" />`,
 			);
 			bandCount += 1;
 		}
