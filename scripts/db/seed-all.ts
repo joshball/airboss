@@ -79,6 +79,7 @@ import { seedCredentials } from './seed-credentials';
 import { decideSeedGuard } from './seed-guard';
 import { seedReferences } from './seed-references';
 import { seedReferencesFromManifest } from './seed-references-from-manifest';
+import { seedCourses } from './seed-courses';
 import { seedSyllabi } from './seed-syllabi';
 
 type Phase =
@@ -92,6 +93,7 @@ type Phase =
 	| 'reference-corpus-seed'
 	| 'migrate-references'
 	| 'cards'
+	| 'courses'
 	| 'abby';
 
 const PHASES: readonly Phase[] = [
@@ -105,6 +107,7 @@ const PHASES: readonly Phase[] = [
 	'reference-corpus-seed',
 	'migrate-references',
 	'cards',
+	'courses',
 	'abby',
 ] as const;
 const REPO_ROOT = resolve(import.meta.dir, '..', '..');
@@ -355,6 +358,14 @@ function printYellowDevSeedBanner(counts: AbbySeedCounts): void {
 	process.stdout.write(`\n${lines.join('\n')}\n`);
 }
 
+async function phaseCourses(progress: ProgressFn): Promise<PhaseSummary> {
+	progress('seeding instructor courses from course/courses/<slug>/');
+	const summary = await seedCourses();
+	return {
+		headline: `${summary.coursesWritten}/${summary.coursesScanned} courses written, ${summary.stepsWritten}/${summary.stepsScanned} steps written`,
+	};
+}
+
 async function phaseAbby(progress: ProgressFn): Promise<PhaseSummary> {
 	progress('seeding Abby + chained content');
 	const counts = await seedAbby();
@@ -376,6 +387,7 @@ const PHASE_FNS: Record<Phase, PhaseFn> = {
 	'reference-corpus-seed': phaseReferenceCorpusSeed,
 	'migrate-references': phaseMigrateReferences,
 	cards: phaseCards,
+	courses: phaseCourses,
 	abby: phaseAbby,
 };
 
