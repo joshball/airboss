@@ -55,28 +55,179 @@ mastery_criteria: >
 
 ## Context
 
-<!-- Skeleton. -->
+The same trip that opened section 1 of the course: a friend asks
+you to fly them to a wedding three states away on Saturday. You're
+at the keyboard at 0500 with the brief in front of you. METARs at
+departure are clean, METARs at destination show 4,000 broken with
+6 SM in light rain, the surface analysis has a stationary front
+draped across the middle leg, the GFA shows MVFR ceilings along a
+100 NM stretch of the route, and the latest TAF amendment ran six
+hours ago and predicted slightly better conditions than reality.
+
+Three pilots could read this same brief and arrive at three
+different defensible answers. The decision isn't "is the weather
+flyable?" It's "is the weather flyable for me, in this airplane,
+on this route, today?"
 
 ## Problem
 
-<!-- Skeleton. -->
+The go/no-go decision is the synthesis target for everything else
+in the weather course. Air masses, fronts, products, in-flight
+displays -- all of them feed this single decision. Two failure
+modes dominate:
+
+- **Decoded but undecided.** The pilot reads every METAR / TAF /
+  AIRMET correctly but can't synthesize them into a decision. The
+  data is fluent; the call is paralyzed. Default action becomes
+  "go and see," which is the decision the data was supposed to
+  prevent.
+- **Decided but uncalibrated.** The pilot makes the call from
+  habit -- "I always fly this trip" or "the destination is fine,
+  let's go" -- without integrating the variables that distinguish
+  *this* day from average. Default action is the same flight
+  every time, regardless of what the brief showed.
+
+The pilot job is to convert the brief into a decision that names
+the specific hazard or specific uncertainty that drives it. "I'm
+going" or "I'm not going" without a named driver is a guess. The
+named driver is what makes the decision defensible -- to yourself
+when the trip-pressure builds, and to whoever was counting on the
+trip if it doesn't happen.
 
 ## Discover
 
-<!-- Skeleton. -->
+A go/no-go decision has three branches, not two:
+
+- **Go** -- conditions and trends are within your personal
+  minimums; the route's worst-case forecast is flyable; the out
+  exists if conditions degrade.
+- **No-go** -- a specific hazard or trend exceeds your minimums.
+  Name the driver. ("The freezing level is at the surface along
+  60 NM of route" beats "weather looks bad.")
+- **Delay** -- the brief shows the trip becomes flyable in N
+  hours. Wait, then re-brief. The delay branch is the one most
+  pilots underuse; it's not "no-go," it's "not yet."
+
+Bring three categories of input to the decision:
+
+- **The hazards** -- thunderstorms, icing, turbulence, IFR
+  conditions, fog, terrain. Each comes from one or more products
+  earlier in the course (s5, s6, s4, s3, s8). Each hazard either
+  is present, is forecast, or isn't.
+- **The trends** -- is the forecast getting better, getting
+  worse, or holding? A good current condition with a deteriorating
+  trend is more dangerous than a marginal current condition with
+  an improving trend. Compare the latest METAR to the most recent
+  TAF amendment; if reality is already running ahead of the
+  forecast, the forecast is suspect for the rest of its valid
+  period.
+- **The personal limits** -- this airplane, this route, this
+  pilot, this day. Personal minimums (wx-personal-minimums) are
+  the floor.
+
+Then run a structured framework. The two best-known are PAVE and
+DECIDE.
+
+**PAVE** asks four questions about pilot, aircraft, environment,
+external pressures:
+
+- **P** -- Pilot. Currency, fatigue, recent practice in this
+  airplane, recent practice in this kind of weather.
+- **A** -- Aircraft. Performance for this density altitude,
+  equipment for this weather (anti-ice, instrument capability,
+  autopilot status, fuel range with reserves).
+- **V** (E in some texts) -- enVironment. The weather; the route;
+  the terrain; the airports along the way; daylight or
+  not-daylight.
+- **E** -- External pressures. The wedding, the meeting, the
+  passenger expectations, the rental clock. External pressures
+  are the most-cited contributing factor in fatal weather
+  accidents because they bias the call before the brief begins.
+
+**DECIDE** is a six-step decision-cycle: Detect a change, Estimate
+the need to react, Choose an outcome, Identify actions, Do, and
+Evaluate. It's a continuous-loop framework, useful in flight as
+much as in preflight.
+
+A working pilot's compressed version: read the brief in synoptic
+order (frame first, then hazards, then route, then airports last),
+name the worst-case along the route, ask if the flight survives
+the worst case with reserves, and ask what trend would change the
+answer in the next two hours.
 
 ## Reveal
 
-<!-- Skeleton. -->
+The go/no-go isn't a single moment; it's a sequence of moments,
+each a chance to recommit or to reverse:
+
+| Moment                    | What's available                                  |
+| ------------------------- | ------------------------------------------------- |
+| At the keyboard, day-of   | Full brief, full latitude, no money on the table  |
+| At the airport, preflight | Updated brief, runup observations, last latitude  |
+| Run-up complete           | Real airplane health; weather still on the ground |
+| Climb-out                 | Real outside air, real ride, FIS-B coming online  |
+| At top-of-climb / cruise  | Full in-flight picture, divert option still cheap |
+| Descent / approach        | Decision window narrows; commit pressure rises    |
+
+The discipline is to hold the decision lightly through every
+moment until the sequence ends. Pilots who decide once and never
+reopen the question are pilots who fly into weather that updated
+underneath them.
+
+The no-go conditions that don't need a framework -- the ones that
+should produce immediate stop without negotiation:
+
+- Thunderstorms or Convective SIGMET on the route at your time.
+- Severe icing forecast or PIREP'd along the route at any usable
+  altitude.
+- Mountain wave / severe turbulence forecast or PIREP'd along the
+  route in airplanes that aren't structurally rated for it.
+- IFR conditions for a VFR pilot or non-instrument-rated pilot.
+- Personal minimums exceeded and not recoverable by route or
+  altitude change.
+
+The trip pressure framework: every decision should produce a
+specific named driver. "Embedded thunderstorms in convective SIGMET
+on the middle leg" is a driver; "weather looks bad" is not.
 
 ## Practice
 
-<!-- Skeleton. -->
+For your next planned cross-country, walk the brief from synoptic
+to point. At each layer write down (a) the hazard or condition
+present, (b) the trend (improving / steady / degrading), (c)
+whether it crosses a personal minimum. At the end, write the
+decision (go / no-go / delay) and the named driver. If you can't
+name a driver, the decision isn't yet supported.
+
+A more demanding version: brief tomorrow's flight today and write
+your decision. Tomorrow morning, brief it again and compare. If
+your decision changes between today and tomorrow, identify which
+input drove the change. That input is the variable you most need
+to monitor for that route.
 
 ## Connect
 
-<!-- Skeleton. -->
+This node is the synthesis target for the weather course. Every
+preceding node feeds it: the synoptic story (s2), the hazards
+(s3-s6), the products (s7-s8), the in-flight tools (s9). Personal
+minimums (wx-personal-minimums) are the threshold the decision is
+measured against; ADM hazardous attitudes (proc-adm-hazardous-
+attitudes) are the framework for recognizing trip-pressure bias.
+
+The decision is the same shape for every flight, but the inputs
+shift. A summer afternoon flight is convection-dominated; a winter
+cross-country is icing-dominated; a marginal-VFR night flight is
+ceiling-dominated. The framework holds; the named drivers change.
 
 ## Verify
 
-<!-- Skeleton. -->
+For a flight you have already flown, walk the brief from memory
+and reconstruct the decision. Did you go because the brief
+supported it, or because the trip was already on the calendar?
+Was there a named driver? Did the flight expose a hazard the brief
+either named or missed?
+
+For a flight that turned out worse than briefed, walk the brief
+again. What input would have changed your call if it had been
+weighted higher? Whichever input that is, it's the variable the
+brief most needs to surface for you next time.
