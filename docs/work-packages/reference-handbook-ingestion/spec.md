@@ -72,33 +72,29 @@ The corpus is chosen second (after `regs`) because:
 
 ## Out of scope
 
-- Re-authoring the handbook ingestion pipeline. PR #242 (ADR 016 phase 0) already shipped a Python pipeline at `tools/handbook-ingest/` that fetches PDFs, extracts markdown / figures / tables, and writes the manifest. Phase 6 consumes that output.
-- Per-paragraph registry entries. Paragraph identifiers (`.../para-2`) parse via `parseLocator` and resolve to the containing section. Same approach as Phase 3's paragraph descent.
-- Figure / table content lookups. Figures and tables are addressable derivative files (`figures/fig-12-7-...png`, `tables/tbl-12-3-...html`); the renderer descends to them when a `@text` / `@quote` token binds. Phase 6 ingests metadata only.
-- Cross-edition aliases. Handbooks rarely renumber within an edition letter; if 8083-25D introduces structural changes, that's a new doc slug entirely (no aliases, just a new ingest run). The cross-edition diff is Phase 5's job and only applies to corpora with calendar-year editions.
-- The full FAA handbook catalog. Phase 6 covers PHAK + AFH + AvWX -- the three on disk today. Adding IFH, AIH, etc. is a follow-up that re-runs the same code path against new derivatives.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Data Model
 
 The registry shape is the same `SourceEntry` Phase 3 used. Per-handbook fields:
 
-| Field | Value |
-| --- | --- |
-| `id` | `airboss-ref:handbooks/<doc>/<edition>/<chapter>(/<section>(/<subsection>)?)?` |
-| `corpus` | `'handbooks'` |
-| `canonical_short` | `'PHAK Ch.12.3'`, `'AFH Ch.5'`, `'AvWX Ch.3.2'` |
-| `canonical_formal` | `'Pilot\'s Handbook of Aeronautical Knowledge (FAA-H-8083-25C), Chapter 12, Section 3'` |
-| `canonical_title` | The section's title from `manifest.json` (e.g. `'Coriolis Force'`) |
+| Field               | Value                                                                                                                 |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `id`                | `airboss-ref:handbooks/<doc>/<edition>/<chapter>(/<section>(/<subsection>)?)?`                                        |
+| `corpus`            | `'handbooks'`                                                                                                         |
+| `canonical_short`   | `'PHAK Ch.12.3'`, `'AFH Ch.5'`, `'AvWX Ch.3.2'`                                                                       |
+| `canonical_formal`  | `'Pilot\'s Handbook of Aeronautical Knowledge (FAA-H-8083-25C), Chapter 12, Section 3'`                               |
+| `canonical_title`   | The section's title from `manifest.json` (e.g. `'Coriolis Force'`)                                                    |
 | `last_amended_date` | `manifest.fetched_at` (the date the FAA published the PDF; we don't have section-level amendment dates for handbooks) |
-| `lifecycle` | `'pending'` after ingest, `'accepted'` after batch promotion |
+| `lifecycle`         | `'pending'` after ingest, `'accepted'` after batch promotion                                                          |
 
 The `Edition` shape:
 
-| Field | Value |
-| --- | --- |
-| `id` | `'8083-25C'` (edition slug, drops the `FAA-H-` prefix) |
-| `published_date` | `manifest.fetched_at` parsed as ISO date |
-| `source_url` | `manifest.source_url` (the FAA PDF URL) |
+| Field            | Value                                                  |
+| ---------------- | ------------------------------------------------------ |
+| `id`             | `'8083-25C'` (edition slug, drops the `FAA-H-` prefix) |
+| `published_date` | `manifest.fetched_at` parsed as ISO date               |
+| `source_url`     | `manifest.source_url` (the FAA PDF URL)                |
 
 The locator shape (per ADR 019 §1.2):
 
