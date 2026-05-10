@@ -29,19 +29,21 @@ The source is the "Out" subsection of [spec.md](./spec.md) Scope. The deeper rat
 
 ## Summary
 
-| Item                                              | Status       | Trigger to revisit                                                              |
-| ------------------------------------------------- | ------------ | ------------------------------------------------------------------------------- |
-| Real-time chart updates (live data fetch on read) | Deferred     | When a course needs charts that update inside a learner session                 |
-| Satellite charts                                  | Deferred     | When a course needs satellite imagery (different rendering paradigm)            |
-| IFR enroute charts                                | Deferred     | When a course covers enroute IFR navigation visually                            |
-| Terminal area charts (TAC / sectional terminals)  | Deferred     | When a course covers terminal-area airspace visually                            |
-| Animation / time-scrubber UI                      | Deferred     | When a course needs to show wx evolution within a single chart                  |
-| Hangar editor for chart specs                     | Follow-on WP | When YAML authoring friction is documented as blocking content velocity         |
-| Per-chart pedagogical overlays                    | Follow-on WP | When a specific course step needs a substrate-supported overlay (per-overlay)   |
-| Color palette variants (colorblind, print)        | Deferred     | When a learner files an accessibility request or the design system grows themes |
-| Truth-aware wx engine                             | Follow-on WP | When wx scenario generation moves past the chart-rendering stage                |
-| Scenario DSL + translator                         | Follow-on WP | After the truth-aware engine ships and an authoring DSL is needed               |
-| Data tree consolidation (`ac/` -> `data/`, etc.)  | Follow-on WP | When the multi-root data layout creates a documented authoring friction         |
+| Item                                                   | Status       | Trigger to revisit                                                                            |
+| ------------------------------------------------------ | ------------ | --------------------------------------------------------------------------------------------- |
+| Real-time chart updates (live data fetch on read)      | Deferred     | When a course needs charts that update inside a learner session                               |
+| Radar playback / multi-frame time-scrubber UI          | Follow-on WP | After dual-UI surface in real use and learners reading single-frame radar charts              |
+| IFR enroute charts (low / high)                        | Follow-on WP | When the IR / Instrument Procedures product needs visual chart support (separate WP)          |
+| Terminal area charts (TAC / sectional terminals)       | Deferred     | When a course covers terminal-area airspace visually                                          |
+| Animation / time-scrubber UI (single time slice in v1) | Deferred     | When a course needs to show wx evolution within a single chart (radar playback handled above) |
+| Hangar editor for chart specs                          | Follow-on WP | When YAML authoring friction is documented as blocking content velocity                       |
+| Per-chart pedagogical overlays                         | Follow-on WP | When a specific course step needs a substrate-supported overlay (per-overlay)                 |
+| Color palette variants (colorblind, print)             | Deferred     | When a learner files an accessibility request or the design system grows themes               |
+| Truth-aware wx engine                                  | Follow-on WP | When wx scenario generation moves past the chart-rendering stage                              |
+| Scenario DSL + translator                              | Follow-on WP | After the truth-aware engine ships and an authoring DSL is needed                             |
+| Data tree consolidation (`ac/` -> `data/`, etc.)       | Follow-on WP | When the multi-root data layout creates a documented authoring friction                       |
+
+Note on items previously in this list now in scope: satellite charts (Phase F), icing forecasts (Phase E -- G-AIRMET icing, CIP, FIP, freezing-level), and turbulence forecasts (Phase E -- G-AIRMET turbulence, GTG) were moved into the WP's in-scope inventory in the v2 spec expansion. Their entries below are removed; see [spec.md](./spec.md) "Chart inventory (v1: fourteen types)" for the current scope.
 
 ## Real-time chart updates (live data fetch on read)
 
@@ -65,46 +67,53 @@ References:
 - [spec.md](./spec.md) "Behavior" -> "Chart authoring flow" (manual capture)
 - All three spike notes' "Why static charts" sections
 
-## Satellite charts (visible / IR / water vapor)
+## Radar playback / multi-frame time-scrubber UI
 
-Status: Deferred
+Status: Follow-on WP
 
-What was deferred:
-Satellite chart renderers (visible-light, IR, water vapor). The v1 chart inventory has ten charts; satellite is not among them.
+What was postponed:
+Multi-frame radar mosaic charts (e.g., a 12-frame loop at 5-minute intervals) plus a learner-side time-slider UI in the consumer (`<CourseStepChart>`) that scrubs across frames. The v1 radar-mosaic chart in Phase B ships exactly one time slice per slug; the slug encodes the time stamp.
 
 Why:
-Per [spec.md](./spec.md) Scope -> Out: satellite charts use a different rendering paradigm (raster-only, no vector overlay other than chrome + state borders) that the v1 substrate technically supports but did not need to ship. The PPL ACS Task C K2 cluster does not require satellite reading at the leaf-knowledge level (it surfaces in flight planning context, not as a standalone reading skill).
+Single-frame radar mosaic ships in Phase B and proves the warp + symbology pipeline. Playback is a fundamentally larger ask: it requires (1) a multi-frame ingest pipeline (12 frames x 5-min intervals = 12 source PNGs + 12 worldfiles, plus a sequencing convention), (2) a client-side time-slider UI that lives in the study app's step reader (touches the consumer surface, not just the chart library), and (3) a different consumption pattern (learners interact with the chart instead of reading a static SVG). Bundling playback with the substrate-shipping WP would expand scope and conflate two separable problems.
 
-Trigger to revisit:
-When a course needs satellite imagery as a primary teaching surface (not just a reference). Likely scenarios: a "wx interpretation" advanced course, a "TAFS vs satellite" reasoning exercise, or a thunderstorm-evolution module.
+Trigger that fires the follow-on:
+After the dual-UI surface (course-reader-and-editor) is in real use AND learners are reading single-frame radar charts in real courses. Concretely: when a CFI authoring a thunderstorm-evolution lesson asks for "the radar from 22:00, 22:05, 22:10, 22:15 with a slider" rather than four separate charts in sequence.
 
 Implementation pattern when triggered:
-Add `satellite-visible`, `satellite-ir`, `satellite-water-vapor` to `CHART_TYPES`. Each is a raster-overlay chart (re-uses Phase B's `raster/warp.ts` + `sharp-bridge.ts`) with palette functions for the IR and water-vapor color tables. Substrate stack: basemap-fill + raster-overlay + basemap-re-stroke + chrome. Mirror Phase B's radar-mosaic shape -- this is a one-PR add per chart type.
+Either ships as Phase H of this WP (after F+G land) OR as a follow-on WP `wx-chart-radar-playback`. Implementation outline (whichever path is chosen):
+
+- Extend the radar-mosaic chart spec.yaml with a `frames:` array (each entry is a `{time, png_source, worldfile_source}`) instead of single source bytes.
+- Output convention: `data/charts/wx/<slug>/frames/frame-NNNN.svg` plus a single `manifest.json` describing the sequence + per-frame valid time.
+- Update `<CourseStepChart slug="..." />` to detect a multi-frame slug and mount a scrubber UI (HTML range input + JS frame swap, or a Svelte timeline component shared with the TAF timeline -- decision deferred to the follow-on WP).
+- Per-frame renderer is unchanged: each frame is a single-frame `renderRadarMosaic` call. The multi-frame layer sits at the spec / output / consumer layer, not in the renderer.
 
 References:
 
 - [spec.md](./spec.md) Scope -> Out
-- [spec.md](./spec.md) "Chart inventory" (the v1 ten)
+- [spec.md](./spec.md) "Chart inventory" radar-mosaic row (single-frame)
+- Phase B in [tasks.md](./tasks.md) for the single-frame contract
 
-## IFR enroute charts
+## IFR enroute charts (low / high)
 
-Status: Deferred
+Status: Follow-on WP
 
-What was deferred:
-IFR low / high enroute chart renderers. Different chart family (FAA pubs vs NWS / WPC / SPC products); different cartographic conventions; different symbology library (airways, fixes, MEAs, MOCAs, MAAs, COPs, holds).
+What was postponed:
+IFR low / high enroute chart renderers. Different chart family (FAA pubs vs NWS / WPC / SPC weather products); different cartographic conventions; different symbology library (airways, fixes, MEAs, MOCAs, MAAs, COPs, holds, victor / jet routes, ILS feathers).
 
 Why:
-Per [spec.md](./spec.md) Scope -> Out: IFR enroute charts are a fundamentally different visual product -- not weather, but navigation. The wx-charts library's substrate (CONUS Lambert + state borders + weather symbology) is wrong scaffolding for IFR enroute. Forcing them in would expand the substrate's surface area for one chart family that doesn't share inputs with the rest.
+Per [spec.md](./spec.md) Scope -> Out and the FAA Aeronautical Chart User's Guide: IFR enroute charts are a fundamentally different visual product -- navigation, not weather. The wx-charts library's substrate (CONUS Lambert + state borders + weather symbology) is wrong scaffolding for IFR enroute. Forcing them in would expand the substrate's surface area for one chart family that doesn't share inputs with the rest of the wx product set.
 
-Trigger to revisit:
-When the IR / Instrument Procedures product (per [docs/platform/PRODUCT_BRAINSTORM.md](../../platform/PRODUCT_BRAINSTORM.md) IFR cluster) needs visual chart support. Even then, it likely launches as a separate library `libs/ifr-charts/` rather than an extension here.
+Trigger that fires the follow-on:
+When the IR / Instrument Procedures product (per [docs/platform/PRODUCT_BRAINSTORM.md](../../platform/PRODUCT_BRAINSTORM.md) IFR cluster) needs visual chart support. Spawns a separate WP `nav-chart-symbology-library` rather than an extension to this one.
 
 Implementation pattern when triggered:
-A new library, not an extension. Mirror the layout of `libs/wx-charts/` (substrate + per-chart renderers + CLI dispatcher at `scripts/ifr-charts.ts` + outputs at `data/charts/ifr/<slug>/`). Both libraries can share the projection + sharp-bridge primitives via a third lib (`libs/chart-substrate/`) if the duplication justifies it; cross-lib extraction is a follow-on after both libraries are stable.
+A new library, not an extension. Mirror the layout of `libs/wx-charts/` (substrate + per-chart renderers + CLI dispatcher at `scripts/nav-charts.ts` + outputs at `data/charts/nav/<slug>/`). The new library carries its own projection set (commonly Lambert with chart-specific parallels matching FAA enroute conventions, or polar stereographic for high-latitude variants), its own symbology (airway segments, fix glyphs, MEA labels, COP markers, holds), and its own data inputs (FAA NASR, fix definitions, airway tables). Both libraries can share the projection + sharp-bridge primitives via a third lib (`libs/chart-substrate/`) if the duplication justifies it; cross-lib extraction is a follow-on after both libraries are stable.
 
 References:
 
 - [spec.md](./spec.md) Scope -> Out
+- [spec.md](./spec.md) Anchor docs (Aeronautical Chart User's Guide referenced as the canonical symbology source)
 - [docs/platform/PRODUCT_BRAINSTORM.md](../../platform/PRODUCT_BRAINSTORM.md) IFR product cluster
 
 ## Terminal area charts (TAC / sectional terminal-area insets)
@@ -128,26 +137,27 @@ References:
 - [spec.md](./spec.md) Scope -> Out
 - [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](../../platform/MULTI_PRODUCT_ARCHITECTURE.md) spatial surface
 
-## Animation / time-scrubber UI (single time slice per chart in v1)
+## Animation / time-scrubber UI (static chart catalog only in v1)
 
 Status: Deferred
 
 What was deferred:
-Multi-frame chart authoring (e.g., a 6-hour radar loop) and a learner-side time-scrubber UI in the consumer. Each v1 chart is exactly one time slice; the slug encodes the time stamp.
+Generic multi-frame chart authoring across chart types other than radar (e.g., a multi-frame surface analysis loop, satellite loop, GFA loop), and a generic learner-side time-scrubber UI in the consumer. Each v1 chart is exactly one time slice; the slug encodes the time stamp. This entry is now narrow to mean the **static-catalog-only** stance for non-radar chart types -- the radar-specific playback ask is captured separately above ("Radar playback / multi-frame time-scrubber UI").
 
 Why:
-Per [spec.md](./spec.md) Scope -> Out and design.md "Output discoverability": one chart = one slug = one directory = one SVG. Adding a frame dimension to `data/charts/wx/<slug>/` (`frame-0001.svg`, `frame-0002.svg`, ...) plus a multi-frame mounting component in the consumer doubles the output surface and changes the consumer contract. Better to keep v1 simple and add animation as a deliberate follow-on once a learner-facing use case justifies it.
+Per [spec.md](./spec.md) Scope -> Out and design.md "Output discoverability": one chart = one slug = one directory = one SVG. Adding a frame dimension to `data/charts/wx/<slug>/` plus a generic multi-frame mounting component in the consumer doubles the output surface and changes the consumer contract for every chart type. Better to keep v1 simple and add animation as a deliberate follow-on once specific use cases justify it. Radar gets first dibs on the playback infrastructure (separate entry); other chart types follow the same pattern when they earn it.
 
 Trigger to revisit:
-When a course needs to show wx evolution over time as a primary teaching mechanic (not just "show me the 12Z chart, then the 18Z chart, side by side" -- the side-by-side case is already handled by referencing two slugs in the same step).
+When a course needs to show wx evolution over time as a primary teaching mechanic for a chart type other than radar (e.g., a satellite loop showing thunderstorm initiation, a multi-frame surface analysis showing frontal advance). The radar case has a dedicated trigger above and may ship first; the generic-chart case waits until at least one non-radar chart type asks for the same affordance.
 
 Implementation pattern when triggered:
-Extend the slug convention with a frame suffix (`wx-radar-mosaic-2024-05-21-22z-frame-0001`) OR add a `frames` array to the spec.yaml that produces a sibling `frames/` directory. Update `<CourseStepChart slug="..." />` to detect a multi-frame slug and mount a scrubber UI. The library itself stays one-frame-per-renderer; the multi-frame layer sits at the spec / output / consumer layer, not in the renderer.
+Same shape as the radar-playback follow-on (see above) -- extend spec.yaml with a `frames:` array, output to a `frames/` sub-directory, multi-frame `<CourseStepChart>` UI. Once radar playback ships, the generic-chart variant likely is a small extension of the same code path rather than a separate WP.
 
 References:
 
 - [spec.md](./spec.md) Scope -> Out
 - [design.md](./design.md) "Output discoverability"
+- "Radar playback / multi-frame time-scrubber UI" entry above (the chart-type-specific case)
 
 ## Hangar editor for chart specs
 
