@@ -20,6 +20,13 @@ import {
 } from './wx-charts';
 
 describe('CHART_TYPES', () => {
+	it('enumerates all v1 chart types (20 total)', () => {
+		// 10 PPL ACS Task C K2 cluster types + G-AIRMET turbulence + GTG (#783)
+		// + G-AIRMET icing + CIP + FIP + freezing-level (#785) + TAF timeline
+		// (#784) + GOES IR / VIS / WV satellite (#786) = 20.
+		expect(CHART_TYPE_VALUES).toHaveLength(20);
+	});
+
 	it('every value has a matching label', () => {
 		for (const v of CHART_TYPE_VALUES) {
 			expect(CHART_TYPE_LABELS[v].length).toBeGreaterThan(0);
@@ -39,6 +46,13 @@ describe('CHART_TYPES', () => {
 		expect(CHART_TYPE_VALUES).toContain(CHART_TYPES.SATELLITE_IR);
 		expect(CHART_TYPE_VALUES).toContain(CHART_TYPES.SATELLITE_VISIBLE);
 		expect(CHART_TYPE_VALUES).toContain(CHART_TYPES.SATELLITE_WATER_VAPOR);
+	});
+
+	it('includes the icing + freezing-level forecast types', () => {
+		expect(CHART_TYPE_VALUES).toContain(CHART_TYPES.ICING_GAIRMET);
+		expect(CHART_TYPE_VALUES).toContain(CHART_TYPES.ICING_CIP);
+		expect(CHART_TYPE_VALUES).toContain(CHART_TYPES.ICING_FIP);
+		expect(CHART_TYPE_VALUES).toContain(CHART_TYPES.FREEZING_LEVEL);
 	});
 });
 

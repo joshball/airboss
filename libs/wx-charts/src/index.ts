@@ -57,6 +57,10 @@ export {
 // dragging the renderer's runtime imports (sharp, fs) into the bundle.
 // ----------------------------------------------------------------------
 export type { AirmetSigmetSpec } from './charts/airmet-sigmet';
+export type { FreezingLevelSpec } from './charts/freezing-level';
+export type { IcingCipSpec } from './charts/icing-cip';
+export type { IcingFipSpec } from './charts/icing-fip';
+export type { IcingGairmetSpec } from './charts/icing-gairmet';
 export type { MetarPlotGridSpec } from './charts/metar-plot-grid';
 export type { PirepPlotGridSpec } from './charts/pirep-plot-grid';
 export type { RadarMosaicSpec } from './charts/radar-mosaic';
@@ -64,6 +68,7 @@ export type { SatelliteIrSpec } from './charts/satellite-ir';
 export type { SatelliteVisSpec } from './charts/satellite-vis';
 export type { SatelliteWvSpec } from './charts/satellite-wv';
 export type { SurfaceAnalysisSpec } from './charts/surface-analysis';
+export type { TafTimelineSpec } from './charts/taf-timeline';
 export type { TurbulenceGairmetSpec } from './charts/turbulence-gairmet';
 export type { TurbulenceGtgSpec } from './charts/turbulence-gtg';
 export type { WindsAloftFbSpec } from './charts/winds-aloft-fb';
@@ -119,18 +124,32 @@ export type { ApplyPaletteInput, ApplyPaletteResult } from './raster/apply-palet
 export {
 	ADVISORY_PALETTE,
 	type AdvisoryPaletteEntry,
+	CIP_PROBABILITY_BANDS,
+	CIP_SEVERITY_TIERS,
+	FREEZING_LEVEL_BANDS,
+	FREEZING_LEVEL_EMPHASIZED_LINE_STROKE,
+	FREEZING_LEVEL_LINE_STROKE,
 	goesIrPalette,
 	goesVisPalette,
 	goesWvPalette,
+	ICING_INTENSITY_PALETTE,
 	isReflectivityNoData,
 	NWS_REFLECTIVITY_STOPS,
 	type ReflectivityStop,
 	type RGB,
+	type ScalarBandStop,
 } from './raster/palettes';
 export type { WarpInput, WarpResult } from './raster/warp';
 export { parseWorldFile, pixelToWorld, type WorldFile, worldToPixel } from './raster/worldfile';
 export { type AirportMarker, renderAirport } from './symbology/airports';
-export { renderScalarContours, type ScalarContourOptions } from './symbology/contours';
+export {
+	type FilledBandStop,
+	type FilledScalarBandsOptions,
+	type FilledScalarBandsResult,
+	renderFilledScalarBands,
+	renderScalarContours,
+	type ScalarContourOptions,
+} from './symbology/contours';
 export type { FrontDef, FrontKind, PipSide } from './symbology/fronts';
 // ----------------------------------------------------------------------
 // Symbology helpers (pure SVG-string emitters)
@@ -191,5 +210,7 @@ export type {
 	TurbulenceReport,
 } from './wx/pirep/types';
 export { ceilingFtAgl, celsiusToFahrenheit, computeFlightCategory, flightCategory, summarizeCover } from './wx/rules';
+export { parseTaf } from './wx/taf/parser';
+export type { ParsedTaf, TafChangeKind, TafPeriod } from './wx/taf/types';
 export { parseFbGrid } from './wx/winds-aloft/parser';
 export type { ParsedFbGrid, ParsedFbStation, WindsAloftRow } from './wx/winds-aloft/types';

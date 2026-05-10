@@ -13,6 +13,10 @@ import { CHART_TYPES, type ChartType } from '@ab/constants';
 import type { z } from 'zod';
 import type { ChartRenderer, ChartSpec } from '../types';
 import { airmetSigmetSpecSchema, renderAirmetSigmet } from './airmet-sigmet';
+import { freezingLevelSpecSchema, renderFreezingLevel } from './freezing-level';
+import { icingCipSpecSchema, renderIcingCip } from './icing-cip';
+import { icingFipSpecSchema, renderIcingFip } from './icing-fip';
+import { icingGairmetSpecSchema, renderIcingGairmet } from './icing-gairmet';
 import { metarPlotGridSpecSchema, renderMetarPlotGrid } from './metar-plot-grid';
 import { pirepPlotGridSpecSchema, renderPirepPlotGrid } from './pirep-plot-grid';
 import { radarMosaicSpecSchema, renderRadarMosaic } from './radar-mosaic';
@@ -20,6 +24,7 @@ import { renderSatelliteIr, satelliteIrSpecSchema } from './satellite-ir';
 import { renderSatelliteVis, satelliteVisSpecSchema } from './satellite-vis';
 import { renderSatelliteWv, satelliteWvSpecSchema } from './satellite-wv';
 import { renderSurfaceAnalysis, surfaceAnalysisSpecSchema } from './surface-analysis';
+import { renderTafTimeline, tafTimelineSpecSchema } from './taf-timeline';
 import { renderTurbulenceGairmet, turbulenceGairmetSpecSchema } from './turbulence-gairmet';
 import { renderTurbulenceGtg, turbulenceGtgSpecSchema } from './turbulence-gtg';
 import { renderWindsAloftFb, windsAloftFbSpecSchema } from './winds-aloft-fb';
@@ -61,11 +66,10 @@ export const CHART_RENDERERS: Record<ChartType, ChartRendererRegistration> = {
 		render: renderWindsAloftFb as ChartRenderer<ChartSpec>,
 		schema: windsAloftFbSpecSchema,
 	},
-	// Phase D
+	// Phase D (CVA promoted from original Phase E per spec amendment)
 	[CHART_TYPES.PROG_CHART]: notYetRegistered(CHART_TYPES.PROG_CHART),
 	[CHART_TYPES.GFA]: notYetRegistered(CHART_TYPES.GFA),
 	[CHART_TYPES.CONVECTIVE_OUTLOOK]: notYetRegistered(CHART_TYPES.CONVECTIVE_OUTLOOK),
-	// Phase D (CVA promoted from original Phase E per spec amendment)
 	[CHART_TYPES.CVA]: notYetRegistered(CHART_TYPES.CVA),
 	// Phase E (icing + turbulence forecast cluster)
 	[CHART_TYPES.TURBULENCE_GAIRMET]: {
@@ -75,6 +79,22 @@ export const CHART_RENDERERS: Record<ChartType, ChartRendererRegistration> = {
 	[CHART_TYPES.TURBULENCE_GTG]: {
 		render: renderTurbulenceGtg as ChartRenderer<ChartSpec>,
 		schema: turbulenceGtgSpecSchema,
+	},
+	[CHART_TYPES.ICING_GAIRMET]: {
+		render: renderIcingGairmet as ChartRenderer<ChartSpec>,
+		schema: icingGairmetSpecSchema,
+	},
+	[CHART_TYPES.ICING_CIP]: {
+		render: renderIcingCip as ChartRenderer<ChartSpec>,
+		schema: icingCipSpecSchema,
+	},
+	[CHART_TYPES.ICING_FIP]: {
+		render: renderIcingFip as ChartRenderer<ChartSpec>,
+		schema: icingFipSpecSchema,
+	},
+	[CHART_TYPES.FREEZING_LEVEL]: {
+		render: renderFreezingLevel as ChartRenderer<ChartSpec>,
+		schema: freezingLevelSpecSchema,
 	},
 	// Phase F (GOES satellite -- IR, visible, water vapor)
 	[CHART_TYPES.SATELLITE_IR]: {
@@ -88,6 +108,11 @@ export const CHART_RENDERERS: Record<ChartType, ChartRendererRegistration> = {
 	[CHART_TYPES.SATELLITE_WATER_VAPOR]: {
 		render: renderSatelliteWv as ChartRenderer<ChartSpec>,
 		schema: satelliteWvSpecSchema,
+	},
+	// Phase G
+	[CHART_TYPES.TAF_TIMELINE]: {
+		render: renderTafTimeline as ChartRenderer<ChartSpec>,
+		schema: tafTimelineSpecSchema,
 	},
 };
 
