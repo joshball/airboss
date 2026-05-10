@@ -104,7 +104,14 @@ export {
 export { type LegendDef, type LegendEntry, renderLegend } from './symbology/legend';
 export { type PipDef, type PipShape, renderPolylinePips, type ScreenVec } from './symbology/polyline-pips';
 export { type PressureCenter, renderPressureCenter } from './symbology/pressure-centers';
-export { renderStationModel, type StationModelOptions, type StationOb } from './symbology/station-model';
+export {
+	type DenseStationGlyphInput,
+	type DenseStationModelOptions,
+	renderStationModel,
+	renderStationModelFromMetar,
+	type StationModelOptions,
+	type StationOb,
+} from './symbology/station-model';
 // ----------------------------------------------------------------------
 // Chart-renderer contract types (browser-safe)
 // ----------------------------------------------------------------------
@@ -116,3 +123,9 @@ export type {
 	ChartRenderResult,
 	ChartSpec,
 } from './types';
+// ----------------------------------------------------------------------
+// Weather-product parsers + derivation rules (Phase C)
+// ----------------------------------------------------------------------
+export { parseMetar } from './wx/metar/parser';
+export type { CloudLayer, ParsedMetar, SkyCover, WindGroup } from './wx/metar/types';
+export { ceilingFtAgl, celsiusToFahrenheit, computeFlightCategory, flightCategory, summarizeCover } from './wx/rules';
