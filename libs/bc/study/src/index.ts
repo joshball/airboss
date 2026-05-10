@@ -290,7 +290,7 @@ export type {
 	SectionSearchResult,
 	TargetTypeTally,
 } from './citations';
-export type { UpsertCourseInput, UpsertCourseStepInput } from './courses';
+export type { ListCoursesForReaderOpts, UpsertCourseInput, UpsertCourseStepInput } from './courses';
 export type {
 	AreaMasteryRollup,
 	CredentialDagSnapshot,

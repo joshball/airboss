@@ -37,7 +37,7 @@ import {
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import { createId } from '@ab/utils';
-import { and, asc, eq, inArray, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, inArray, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { UpsertReturnedNoRowError } from './errors';
 import type { CertGap } from './lenses';
@@ -46,7 +46,9 @@ import {
 	type CourseStepRow,
 	course,
 	courseStep,
+	type GoalRow,
 	goalCourse,
+	goalSyllabus,
 	syllabusNode,
 	syllabusNodeLink,
 } from './schema';
@@ -351,4 +353,128 @@ export async function getCourseGaps(
 		return a.code.localeCompare(b.code);
 	});
 	return gaps;
+}
+
+// ---------------------------------------------------------------------------
+// Reader / editor read paths (course-reader-and-editor WP, Phase 1)
+// ---------------------------------------------------------------------------
+
+/**
+ * Optional filters for {@link listCoursesForReader}. The reader index page
+ * passes `statusIn: ['active', 'archived']` to hide drafts; the goal-composer
+ * "add course" picker passes `statusIn: ['active']` to filter to courses
+ * the learner can actually subscribe to.
+ */
+export interface ListCoursesForReaderOpts {
+	/** Allowed status values. Empty / undefined returns every status. */
+	statusIn?: readonly CourseStatus[];
+}
+
+/**
+ * Reader-facing course list. Sorted by `title ASC` (stable) for the index
+ * page's default ordering; consumers that need a different sort apply it
+ * client-side. `statusIn` filters by `course.status`; passing
+ * `[COURSE_STATUSES.ACTIVE]` yields the goal-composer add-course picker
+ * shape (drafts and archives hidden).
+ */
+export async function listCoursesForReader(
+	db: Db = defaultDb,
+	opts: ListCoursesForReaderOpts = {},
+): Promise<CourseRow[]> {
+	const statusIn = opts.statusIn;
+	const baseQuery = db.select().from(course);
+	const filtered =
+		statusIn !== undefined && statusIn.length > 0
+			? baseQuery.where(inArray(course.status, statusIn as CourseStatus[]))
+			: baseQuery;
+	return filtered.orderBy(asc(course.title));
+}
+
+/**
+ * Hangar-editor course list. Returns every course regardless of status (the
+ * editor must surface drafts + archived courses). Sorted by
+ * `updated_at DESC` so the most recently edited course lands at the top of
+ * the editor index.
+ */
+export async function listAllCourses(db: Db = defaultDb): Promise<CourseRow[]> {
+	return db.select().from(course).orderBy(desc(course.updatedAt));
+}
+
+/** Resolve a course by id. Returns null when missing. Used by the goal
+ *  composer's `addCourse` action to validate the form's `courseId` and by
+ *  the orphan-cleanup flow to verify the row before deleting. */
+export async function getCourseById(id: string, db: Db = defaultDb): Promise<CourseRow | null> {
+	const rows = await db.select().from(course).where(eq(course.id, id)).limit(1);
+	return rows[0] ?? null;
+}
+
+/**
+ * Resolve one step row inside a course by its `code`. Used by the study
+ * step-reader page (`/courses/[slug]/[stepCode]`) to load the step row for
+ * the current URL. Returns null when the course has no step with that code.
+ */
+export async function getCourseStepByCode(
+	courseId: string,
+	code: string,
+	db: Db = defaultDb,
+): Promise<CourseStepRow | null> {
+	const rows = await db
+		.select()
+		.from(courseStep)
+		.where(and(eq(courseStep.courseId, courseId), eq(courseStep.code, code)))
+		.limit(1);
+	return rows[0] ?? null;
+}
+
+/**
+ * Delete one course-step row. The schema cascades to no other rows -- the
+ * caller (typically the hangar orphan-cleanup action) is responsible for
+ * removing the matching YAML file separately. Returns void; a missing id
+ * is a no-op rather than an error.
+ */
+export async function deleteCourseStep(id: string, db: Db = defaultDb): Promise<void> {
+	await db.delete(courseStep).where(eq(courseStep.id, id));
+}
+
+/**
+ * Delete one course row. The schema cascades to `course_step` (the FK
+ * `course_step_course_id_fkey` is `ON DELETE CASCADE`). The caller is
+ * responsible for removing the `course/courses/<slug>/` directory before
+ * calling this; a future re-seed without the directory leaves the row
+ * orphan otherwise.
+ *
+ * The `goal_course.course_id` FK is `ON DELETE RESTRICT`, so a course that
+ * any goal references rejects deletion at the DB layer (Postgres surfaces
+ * the constraint name in the error message). The hangar UI surfaces this
+ * as a "course is in use; remove from goals first" error.
+ */
+export async function deleteCourseRow(id: string, db: Db = defaultDb): Promise<void> {
+	await db.delete(course).where(eq(course.id, id));
+}
+
+/**
+ * Pick the cert syllabus that should overlay against the course detail page,
+ * given the learner's primary goal. Returns the `syllabus_id` of the
+ * highest-weight `goal_syllabus` row for that goal, with ties broken by
+ * `syllabus_id ASC` for deterministic output across refreshes.
+ *
+ * Returns null when:
+ *   - `goal === null` (anonymous browse / no primary goal)
+ *   - the goal holds zero `goal_syllabus` rows
+ *
+ * The picker is called from the course detail / step pages' load functions.
+ * Per spec.md "Cert overlay: which syllabus" -- a multi-syllabus picker UI
+ * is deferred per OUT-OF-SCOPE; until then the lens overlay is a single
+ * syllabus selected deterministically.
+ */
+export async function pickOverlaySyllabus(goal: GoalRow | null, db: Db = defaultDb): Promise<string | null> {
+	if (goal === null) return null;
+	const rows = await db
+		.select({ syllabusId: goalSyllabus.syllabusId, weight: goalSyllabus.weight })
+		.from(goalSyllabus)
+		.where(eq(goalSyllabus.goalId, goal.id))
+		.orderBy(desc(goalSyllabus.weight), asc(goalSyllabus.syllabusId))
+		.limit(1);
+	const row = rows[0];
+	return row ? row.syllabusId : null;
 }
