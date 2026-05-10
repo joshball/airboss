@@ -205,7 +205,7 @@ export function renderStationModel(s: StationOb, options: StationModelOptions = 
 // Spike 03 layout constants tuned for ~50-glyph CONUS density.
 
 import type { FaaFlightCategory } from '@ab/constants';
-import type { ParsedMetar } from '../wx/metar/types';
+import type { ParsedMetar, SkyCover as MetarSkyCover } from '../wx/metar/types';
 import { ceilingFtAgl, celsiusToFahrenheit, flightCategory, summarizeCover } from '../wx/rules';
 
 const COLOR_TEMP = '#cc1f1f';
@@ -223,18 +223,31 @@ const CATEGORY_RING: Record<FaaFlightCategory, string | null> = {
 	LIFR: '#6a1b9a',
 };
 
-const DENSE_DEFAULTS = {
+interface DenseDefaults {
+	glyphRadiusPx: number;
+	shaftLenPx: number;
+	barbLenPx: number;
+	barbSpacingPx: number;
+	barbOffsetFromTipPx: number;
+	tempUnit: 'F' | 'C';
+	categoryRing: 'show' | 'hide';
+	multiLayer: 'summary' | 'stack';
+	calmRingThresholdKt: number;
+	showStationId: boolean;
+}
+
+const DENSE_DEFAULTS: DenseDefaults = {
 	glyphRadiusPx: 6,
 	shaftLenPx: 22,
 	barbLenPx: 9,
 	barbSpacingPx: 3.5,
 	barbOffsetFromTipPx: 1,
-	tempUnit: 'F' as 'F' | 'C',
-	categoryRing: 'show' as 'show' | 'hide',
-	multiLayer: 'summary' as 'summary' | 'stack',
+	tempUnit: 'F',
+	categoryRing: 'show',
+	multiLayer: 'summary',
 	calmRingThresholdKt: 3,
 	showStationId: true,
-} as const;
+};
 
 export interface DenseStationModelOptions {
 	/** Cloud-cover circle radius (px). Default 6. */
@@ -382,7 +395,7 @@ export function renderStationModelFromMetar(
 	return parts.join('');
 }
 
-function renderDenseCloudCircle(cover: SkyCover, cat: FaaFlightCategory, opts: typeof DENSE_DEFAULTS): string {
+function renderDenseCloudCircle(cover: MetarSkyCover, cat: FaaFlightCategory, opts: DenseDefaults): string {
 	const r = opts.glyphRadiusPx;
 	const ringColor = opts.categoryRing === 'show' ? CATEGORY_RING[cat] : null;
 	const ringSvg =
@@ -443,7 +456,7 @@ function polar(r: number, deg: number): { x: number; y: number } {
  *
  * Speed is rounded to the nearest 5 KT before decomposing.
  */
-function renderDenseWindShaft(wind: NonNullable<ParsedMetar['wind']>, opts: typeof DENSE_DEFAULTS): string {
+function renderDenseWindShaft(wind: NonNullable<ParsedMetar['wind']>, opts: DenseDefaults): string {
 	if (wind.directionDeg === null) return '';
 	if (wind.speedKt < opts.calmRingThresholdKt) return '';
 

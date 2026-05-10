@@ -19,6 +19,11 @@
 
 export { CHART_RENDERERS } from './charts/registry';
 export {
+	type MetarPlotGridSpec,
+	metarPlotGridSpecSchema,
+	renderMetarPlotGrid,
+} from './charts/metar-plot-grid';
+export {
 	renderSurfaceAnalysis,
 	type SurfaceAnalysisSpec,
 	surfaceAnalysisSpecSchema,
