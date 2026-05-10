@@ -59,18 +59,9 @@ ADR 016 phase 0 is the contract. This spec implements it.
 10. **Routes.** `HANDBOOKS`, `HANDBOOK`, `HANDBOOK_CHAPTER`, `HANDBOOK_SECTION` (and edition-pinned variants) added to `libs/constants/src/routes.ts`.
 11. **Pareto handbooks.** PHAK (FAA-H-8083-25C) ingested end-to-end as the v1 ship gate. AFH (FAA-H-8083-3) and AvWX (FAA-H-8083-28) ingested before this WP closes; pipeline proves out on three handbooks before declaring stability.
 
-## Out of Scope (explicit)
+## Out of Scope
 
-- **Commercial publisher content.** Jeppesen, ASA, Sporty's, King, Gleim. Out by license, not by interest.
-- **Migration of existing node `references` arrays.** All existing freeform strings stay freeform until the cert-syllabus WP runs the migration pass. The schema accepts both shapes; resolution and UI prefer structured when present.
-- **The `Citation` table.** ADR 016 phase 1. This WP delivers the `reference` and `handbook_section` tables; per-citation rows on a separate table land later.
-- **Handbook lens / browse-by-handbook on the dashboard.** ADR 016 phase 8 (lens framework). The reader exists; the dashboard surface that ranks handbooks by coverage does not.
-- **AIM ingestion.** AIM is published as a continuously revised document with frequent change pages; the parser must track changes per paragraph rather than per edition. Different pipeline, different cadence, separate WP.
-- **Pilot/Controller Glossary, Advisory Circulars, NTSB reports, POH excerpts.** Each will get its own ingestion WP when needed. Their citations resolve through the same `reference` table; the parser shapes differ enough that lumping them in here would inflate scope without payoff.
-- **Multi-tenant content sharing.** Notes and read-state are per-user and private. No "share my notes" surface in v1.
-- **Handbook authoring inside airboss.** Hangar may eventually surface FAA edition diffs, but that is a hangar feature, not part of this WP.
-- **Audio narration of sections.** Audio surface lives in the future `audio/` app; a handbook-section "listen" button is a downstream candidate, not v1.
-- **Cross-handbook search.** A search box scoped to handbooks is a follow-up; v1 relies on the existing references / glossary search and the per-handbook table of contents.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Architecture overview
 
@@ -113,19 +104,19 @@ All tables in the `study` Postgres schema namespace. IDs use `prefix_ULID` via `
 
 The first-class citation source. Edition-versioned. One row per (`document_slug`, `edition`).
 
-| Column           | Type        | Constraints                                                                                        | Notes                                                                                                                |
-| ---------------- | ----------- | -------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| id               | text        | PK                                                                                                 | `ref_` prefix.                                                                                                       |
-| kind             | text        | NOT NULL, CHECK in `REFERENCE_KIND_VALUES`                                                         | handbook / cfr / ac / acs / pts / aim / pcg / ntsb / poh / other.                                                    |
-| document_slug    | text        | NOT NULL                                                                                           | `phak`, `afh`, `avwx`, `ifh`, `iph`, `14cfr61`, `ac61-65`, etc. Stable across editions.                              |
-| edition          | text        | NOT NULL                                                                                           | `FAA-H-8083-25C`, `2024-09`, revision date. Free-form per kind.                                                      |
-| title            | text        | NOT NULL                                                                                           | Display name: "Pilot's Handbook of Aeronautical Knowledge".                                                          |
-| publisher        | text        | NOT NULL, DEFAULT 'FAA'                                                                            | Manufacturer for POHs; 'FAA' for everything else in v1.                                                              |
-| url              | text        | NULL                                                                                               | Official source URL when available.                                                                                  |
-| superseded_by_id | text        | NULL, FK `study.reference.id` ON DELETE SET NULL                                                   | Set when a newer edition exists. Reader surfaces "newer edition available" when this points to a non-archived row.   |
-| seed_origin      | text        | NULL                                                                                               | Standard project-wide dev-seed marker (matches every other seedable table). NULL on production rows.                 |
-| created_at       | timestamptz | NOT NULL, DEFAULT now()                                                                            |                                                                                                                      |
-| updated_at       | timestamptz | NOT NULL, DEFAULT now()                                                                            |                                                                                                                      |
+| Column           | Type        | Constraints                                      | Notes                                                                                                              |
+| ---------------- | ----------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| id               | text        | PK                                               | `ref_` prefix.                                                                                                     |
+| kind             | text        | NOT NULL, CHECK in `REFERENCE_KIND_VALUES`       | handbook / cfr / ac / acs / pts / aim / pcg / ntsb / poh / other.                                                  |
+| document_slug    | text        | NOT NULL                                         | `phak`, `afh`, `avwx`, `ifh`, `iph`, `14cfr61`, `ac61-65`, etc. Stable across editions.                            |
+| edition          | text        | NOT NULL                                         | `FAA-H-8083-25C`, `2024-09`, revision date. Free-form per kind.                                                    |
+| title            | text        | NOT NULL                                         | Display name: "Pilot's Handbook of Aeronautical Knowledge".                                                        |
+| publisher        | text        | NOT NULL, DEFAULT 'FAA'                          | Manufacturer for POHs; 'FAA' for everything else in v1.                                                            |
+| url              | text        | NULL                                             | Official source URL when available.                                                                                |
+| superseded_by_id | text        | NULL, FK `study.reference.id` ON DELETE SET NULL | Set when a newer edition exists. Reader surfaces "newer edition available" when this points to a non-archived row. |
+| seed_origin      | text        | NULL                                             | Standard project-wide dev-seed marker (matches every other seedable table). NULL on production rows.               |
+| created_at       | timestamptz | NOT NULL, DEFAULT now()                          |                                                                                                                    |
+| updated_at       | timestamptz | NOT NULL, DEFAULT now()                          |                                                                                                                    |
 
 Unique: `(document_slug, edition)`. Index: `(kind)`, `(document_slug, superseded_by_id)`.
 
@@ -133,25 +124,25 @@ Unique: `(document_slug, edition)`. Index: `(kind)`, `(document_slug, superseded
 
 Per-section content row. One row per `<chapter>/<section>.md` file. Tree-shaped via `parent_id` (a chapter is a row at `level='chapter'` with `parent_id IS NULL`; sections and subsections nest underneath).
 
-| Column          | Type        | Constraints                                                              | Notes                                                                                                       |
-| --------------- | ----------- | ------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
-| id              | text        | PK                                                                       | `hbs_` prefix.                                                                                              |
-| reference_id    | text        | NOT NULL, FK `study.reference.id` ON DELETE CASCADE                      | Edition-binding live here, not on the section.                                                              |
-| parent_id       | text        | NULL, FK `study.handbook_section.id` ON DELETE CASCADE                   | NULL for chapter rows; the chapter for sections; the section for subsections.                               |
-| level           | text        | NOT NULL, CHECK in `HANDBOOK_SECTION_LEVEL_VALUES`                       | chapter / section / subsection.                                                                             |
-| ordinal         | integer     | NOT NULL                                                                 | Within-parent sort order.                                                                                   |
-| code            | text        | NOT NULL                                                                 | Citation code: `12` for chapter 12, `12.3` for section 3, `12.3.2` for subsection.                          |
-| title           | text        | NOT NULL                                                                 | Section title from the handbook.                                                                            |
-| faa_page_start  | text        | NULL                                                                     | First FAA-printed page reference verbatim (e.g., `"12-7"`). Text because FAA pagination is hyphenated.      |
-| faa_page_end    | text        | NULL                                                                     | Last FAA-printed page reference in the range. NULL when the section ends on `faa_page_start`.               |
-| source_locator  | text        | NOT NULL                                                                 | Canonical citation string: "PHAK Ch 12 §3 (pp. 12-7..12-9)". Cached for display.                            |
-| content_md      | text        | NOT NULL, DEFAULT ''                                                     | Section body markdown. Empty for chapter rows.                                                              |
-| content_hash    | text        | NOT NULL                                                                 | SHA-256 of the source markdown file. Drives idempotent seed.                                                |
-| has_figures     | boolean     | NOT NULL, DEFAULT false                                                  | True when the section's `handbook_figure` count is > 0. Cached for fast list rendering.                     |
-| has_tables      | boolean     | NOT NULL, DEFAULT false                                                  | True when the markdown carries one or more extracted tables.                                                |
-| seed_origin     | text        | NULL                                                                     | Dev-seed marker.                                                                                            |
-| created_at      | timestamptz | NOT NULL, DEFAULT now()                                                  |                                                                                                             |
-| updated_at      | timestamptz | NOT NULL, DEFAULT now()                                                  |                                                                                                             |
+| Column         | Type        | Constraints                                            | Notes                                                                                                  |
+| -------------- | ----------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| id             | text        | PK                                                     | `hbs_` prefix.                                                                                         |
+| reference_id   | text        | NOT NULL, FK `study.reference.id` ON DELETE CASCADE    | Edition-binding live here, not on the section.                                                         |
+| parent_id      | text        | NULL, FK `study.handbook_section.id` ON DELETE CASCADE | NULL for chapter rows; the chapter for sections; the section for subsections.                          |
+| level          | text        | NOT NULL, CHECK in `HANDBOOK_SECTION_LEVEL_VALUES`     | chapter / section / subsection.                                                                        |
+| ordinal        | integer     | NOT NULL                                               | Within-parent sort order.                                                                              |
+| code           | text        | NOT NULL                                               | Citation code: `12` for chapter 12, `12.3` for section 3, `12.3.2` for subsection.                     |
+| title          | text        | NOT NULL                                               | Section title from the handbook.                                                                       |
+| faa_page_start | text        | NULL                                                   | First FAA-printed page reference verbatim (e.g., `"12-7"`). Text because FAA pagination is hyphenated. |
+| faa_page_end   | text        | NULL                                                   | Last FAA-printed page reference in the range. NULL when the section ends on `faa_page_start`.          |
+| source_locator | text        | NOT NULL                                               | Canonical citation string: "PHAK Ch 12 §3 (pp. 12-7..12-9)". Cached for display.                       |
+| content_md     | text        | NOT NULL, DEFAULT ''                                   | Section body markdown. Empty for chapter rows.                                                         |
+| content_hash   | text        | NOT NULL                                               | SHA-256 of the source markdown file. Drives idempotent seed.                                           |
+| has_figures    | boolean     | NOT NULL, DEFAULT false                                | True when the section's `handbook_figure` count is > 0. Cached for fast list rendering.                |
+| has_tables     | boolean     | NOT NULL, DEFAULT false                                | True when the markdown carries one or more extracted tables.                                           |
+| seed_origin    | text        | NULL                                                   | Dev-seed marker.                                                                                       |
+| created_at     | timestamptz | NOT NULL, DEFAULT now()                                |                                                                                                        |
+| updated_at     | timestamptz | NOT NULL, DEFAULT now()                                |                                                                                                        |
 
 Unique: `(reference_id, code)`. Indexes: `(reference_id, parent_id, ordinal)` for tree walks; `(reference_id, level, ordinal)` for chapter listings.
 
@@ -159,17 +150,17 @@ Unique: `(reference_id, code)`. Indexes: `(reference_id, parent_id, ordinal)` fo
 
 Per-figure record. Bound to a section by FK; ordered by `ordinal` within the section. Figure-caption pairing correctness (the line-anchored caption regex, doc-wide image dictionary, vector-figure rasterizer, caption-number rescoping that drives this row's `section_id`) is owned by the [handbook-figure-pairing](../handbook-figure-pairing/spec.md) work package.
 
-| Column      | Type        | Constraints                                                  | Notes                                                                                                |
-| ----------- | ----------- | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- |
-| id          | text        | PK                                                           | `hbf_` prefix.                                                                                       |
-| section_id  | text        | NOT NULL, FK `study.handbook_section.id` ON DELETE CASCADE   |                                                                                                      |
-| ordinal     | integer     | NOT NULL                                                     | Within-section order.                                                                                |
-| caption     | text        | NOT NULL, DEFAULT ''                                         | "Figure 12-7. ..." text from the PDF.                                                                |
-| asset_path  | text        | NOT NULL                                                     | Repo-relative path under `handbooks/<doc>/<edition>/figures/`.                                       |
-| width       | integer     | NULL                                                         | In pixels.                                                                                           |
-| height      | integer     | NULL                                                         |                                                                                                      |
-| seed_origin | text        | NULL                                                         |                                                                                                      |
-| created_at  | timestamptz | NOT NULL, DEFAULT now()                                      |                                                                                                      |
+| Column      | Type        | Constraints                                                | Notes                                                          |
+| ----------- | ----------- | ---------------------------------------------------------- | -------------------------------------------------------------- |
+| id          | text        | PK                                                         | `hbf_` prefix.                                                 |
+| section_id  | text        | NOT NULL, FK `study.handbook_section.id` ON DELETE CASCADE |                                                                |
+| ordinal     | integer     | NOT NULL                                                   | Within-section order.                                          |
+| caption     | text        | NOT NULL, DEFAULT ''                                       | "Figure 12-7. ..." text from the PDF.                          |
+| asset_path  | text        | NOT NULL                                                   | Repo-relative path under `handbooks/<doc>/<edition>/figures/`. |
+| width       | integer     | NULL                                                       | In pixels.                                                     |
+| height      | integer     | NULL                                                       |                                                                |
+| seed_origin | text        | NULL                                                       |                                                                |
+| created_at  | timestamptz | NOT NULL, DEFAULT now()                                    |                                                                |
 
 Index: `(section_id, ordinal)`.
 
@@ -177,19 +168,19 @@ Index: `(section_id, ordinal)`.
 
 Per-(user, section) read tracking. Composite PK so a user has at most one row per section (across all editions; if they read PHAK 25B and now PHAK 25C is current, they get a fresh row for the 25C section because `handbook_section.id` differs).
 
-| Column                  | Type        | Constraints                                                | Notes                                                                                            |
-| ----------------------- | ----------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| user_id                 | text        | NOT NULL, FK `bauth_user.id` ON DELETE CASCADE             |                                                                                                  |
-| handbook_section_id     | text        | NOT NULL, FK `study.handbook_section.id` ON DELETE CASCADE | Reference + edition reachable transitively via the section row.                                  |
-| status                  | text        | NOT NULL, DEFAULT 'unread', CHECK in `HANDBOOK_READ_STATUS_VALUES` | unread / reading / read.                                                                  |
-| comprehended            | boolean     | NOT NULL, DEFAULT false                                    | "Read but didn't get it" toggle. Counts as read for coverage; queryable for a "to revisit" lens. |
-| last_read_at            | timestamptz | NULL                                                       | Most recent heartbeat.                                                                           |
-| opened_count            | integer     | NOT NULL, DEFAULT 0                                        | Increments each distinct page open (debounced at the BC layer).                                  |
-| total_seconds_visible   | integer     | NOT NULL, DEFAULT 0                                        | Sum of heartbeat-windowed seconds the section was on screen and visible.                         |
-| notes_md                | text        | NOT NULL, DEFAULT ''                                       | User's private markdown notes scoped to this section.                                            |
-| seed_origin             | text        | NULL                                                       |                                                                                                  |
-| created_at              | timestamptz | NOT NULL, DEFAULT now()                                    |                                                                                                  |
-| updated_at              | timestamptz | NOT NULL, DEFAULT now()                                    |                                                                                                  |
+| Column                | Type        | Constraints                                                        | Notes                                                                                            |
+| --------------------- | ----------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
+| user_id               | text        | NOT NULL, FK `bauth_user.id` ON DELETE CASCADE                     |                                                                                                  |
+| handbook_section_id   | text        | NOT NULL, FK `study.handbook_section.id` ON DELETE CASCADE         | Reference + edition reachable transitively via the section row.                                  |
+| status                | text        | NOT NULL, DEFAULT 'unread', CHECK in `HANDBOOK_READ_STATUS_VALUES` | unread / reading / read.                                                                         |
+| comprehended          | boolean     | NOT NULL, DEFAULT false                                            | "Read but didn't get it" toggle. Counts as read for coverage; queryable for a "to revisit" lens. |
+| last_read_at          | timestamptz | NULL                                                               | Most recent heartbeat.                                                                           |
+| opened_count          | integer     | NOT NULL, DEFAULT 0                                                | Increments each distinct page open (debounced at the BC layer).                                  |
+| total_seconds_visible | integer     | NOT NULL, DEFAULT 0                                                | Sum of heartbeat-windowed seconds the section was on screen and visible.                         |
+| notes_md              | text        | NOT NULL, DEFAULT ''                                               | User's private markdown notes scoped to this section.                                            |
+| seed_origin           | text        | NULL                                                               |                                                                                                  |
+| created_at            | timestamptz | NOT NULL, DEFAULT now()                                            |                                                                                                  |
+| updated_at            | timestamptz | NOT NULL, DEFAULT now()                                            |                                                                                                  |
 
 Composite PK: `(user_id, handbook_section_id)`. Indexes: `(user_id, status)` for "unread sections in handbook X" queries; `(handbook_section_id)` for cross-user analytics (later).
 
@@ -370,13 +361,13 @@ inline...
 
 Validation gates inside the pipeline:
 
-| Rule                                                            | Severity |
-| --------------------------------------------------------------- | -------- |
-| The PDF outline parsed cleanly into chapter/section/subsection. | error    |
-| Every section's text is non-empty.                              | error    |
-| Every figure caption that matches `Figure N-N.` binds to an image. | warning |
-| Every cross-page table merged without a gap.                    | warning  |
-| Every internal "see Chapter N" cross-reference resolves to a chapter that exists in this edition. | warning |
+| Rule                                                                                              | Severity |
+| ------------------------------------------------------------------------------------------------- | -------- |
+| The PDF outline parsed cleanly into chapter/section/subsection.                                   | error    |
+| Every section's text is non-empty.                                                                | error    |
+| Every figure caption that matches `Figure N-N.` binds to an image.                                | warning  |
+| Every cross-page table merged without a gap.                                                      | warning  |
+| Every internal "see Chapter N" cross-reference resolves to a chapter that exists in this edition. | warning  |
 
 Errors fail the run; warnings print and continue. Manifest records counts of each.
 
@@ -401,13 +392,13 @@ Wired into `scripts/db/seed-all.ts` as a phase named `handbooks`. Runs after `us
 
 Routes (Open Question 2; recommended):
 
-| Route                                                | Purpose                                                                                              |
-| ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| `/handbooks`                                         | Index of all handbooks. One card per non-superseded reference.                                       |
-| `/handbooks/[doc]`                                   | Per-handbook chapter list. Edition badge (latest by default).                                        |
-| `/handbooks/[doc]/[chapter]`                         | Chapter overview: title, page range, list of sections, list of nodes that cite anything in chapter.  |
-| `/handbooks/[doc]/[chapter]/[section]`               | Readable section. Markdown, figures, sticky TOC, citing-nodes panel, read-progress control.          |
-| `/handbooks/[doc]/[chapter]/[section]?edition=8083-25B` | Explicit edition pinning. Default = latest non-superseded edition.                                |
+| Route                                                   | Purpose                                                                                             |
+| ------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `/handbooks`                                            | Index of all handbooks. One card per non-superseded reference.                                      |
+| `/handbooks/[doc]`                                      | Per-handbook chapter list. Edition badge (latest by default).                                       |
+| `/handbooks/[doc]/[chapter]`                            | Chapter overview: title, page range, list of sections, list of nodes that cite anything in chapter. |
+| `/handbooks/[doc]/[chapter]/[section]`                  | Readable section. Markdown, figures, sticky TOC, citing-nodes panel, read-progress control.         |
+| `/handbooks/[doc]/[chapter]/[section]?edition=8083-25B` | Explicit edition pinning. Default = latest non-superseded edition.                                  |
 
 URL grammar uses chapter/section codes from `handbook_section.code` so URLs are stable across editions even if titles drift.
 
@@ -432,12 +423,12 @@ The section page is the only page that runs the heartbeat.
 
 Defaults proposed for the heuristic (Open Question 5):
 
-| Constant                          | Value         | Notes                                                                |
-| --------------------------------- | ------------- | -------------------------------------------------------------------- |
-| `HANDBOOK_HEARTBEAT_INTERVAL_SEC` | 15            | Throttled client heartbeat. Tradeoff between accuracy and load.      |
-| `HANDBOOK_SUGGEST_OPEN_SECONDS`   | 60            | Minimum live time on the page in this session before prompting.      |
-| `HANDBOOK_SUGGEST_TOTAL_SECONDS`  | 90            | Aggregate `total_seconds_visible` across visits before prompting.    |
-| `HANDBOOK_SUGGEST_REQUIRES_SCROLL_END` | true     | Must reach scroll-bottom for the prompt to surface.                  |
+| Constant                               | Value | Notes                                                             |
+| -------------------------------------- | ----- | ----------------------------------------------------------------- |
+| `HANDBOOK_HEARTBEAT_INTERVAL_SEC`      | 15    | Throttled client heartbeat. Tradeoff between accuracy and load.   |
+| `HANDBOOK_SUGGEST_OPEN_SECONDS`        | 60    | Minimum live time on the page in this session before prompting.   |
+| `HANDBOOK_SUGGEST_TOTAL_SECONDS`       | 90    | Aggregate `total_seconds_visible` across visits before prompting. |
+| `HANDBOOK_SUGGEST_REQUIRES_SCROLL_END` | true  | Must reach scroll-bottom for the prompt to surface.               |
 
 ### Bidirectional citation -- `resolveCitationUrl`
 
@@ -533,23 +524,23 @@ HANDBOOK_SECTION_AT_EDITION: (doc: string, chapter: number | string, section: nu
 
 ## Validation
 
-| Field / surface                                 | Rule                                                                                                       |
-| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `reference.document_slug`                       | NOT NULL, kebab-case, 3-32 chars.                                                                          |
-| `reference.edition`                             | NOT NULL, 1-64 chars.                                                                                      |
-| `reference.kind`                                | In `REFERENCE_KIND_VALUES`. CHECK on the column.                                                           |
-| `reference (document_slug, edition)`            | Unique.                                                                                                    |
-| `handbook_section.code`                         | Matches `^\d+(\.\d+){0,2}$`. Composed deterministically by the seed.                                       |
-| `handbook_section.level`                        | In `HANDBOOK_SECTION_LEVEL_VALUES`. CHECK.                                                                  |
-| `handbook_section.parent_id`                    | NULL when `level='chapter'`; non-NULL otherwise. Enforced by seed + DB trigger or check.                   |
-| `handbook_section (reference_id, code)`         | Unique.                                                                                                    |
-| `handbook_figure.asset_path`                    | NOT NULL; file must exist on disk at seed time (seed errors otherwise).                                    |
-| `handbook_read_state.status`                    | In `HANDBOOK_READ_STATUS_VALUES`. CHECK.                                                                   |
-| `handbook_read_state.total_seconds_visible`     | `>= 0`. CHECK.                                                                                             |
-| `handbook_read_state.notes_md`                  | Bounded length 0..16384 chars (BC layer; UI advises against essays here).                                  |
+| Field / surface                                        | Rule                                                                                                                                        |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `reference.document_slug`                              | NOT NULL, kebab-case, 3-32 chars.                                                                                                           |
+| `reference.edition`                                    | NOT NULL, 1-64 chars.                                                                                                                       |
+| `reference.kind`                                       | In `REFERENCE_KIND_VALUES`. CHECK on the column.                                                                                            |
+| `reference (document_slug, edition)`                   | Unique.                                                                                                                                     |
+| `handbook_section.code`                                | Matches `^\d+(\.\d+){0,2}$`. Composed deterministically by the seed.                                                                        |
+| `handbook_section.level`                               | In `HANDBOOK_SECTION_LEVEL_VALUES`. CHECK.                                                                                                  |
+| `handbook_section.parent_id`                           | NULL when `level='chapter'`; non-NULL otherwise. Enforced by seed + DB trigger or check.                                                    |
+| `handbook_section (reference_id, code)`                | Unique.                                                                                                                                     |
+| `handbook_figure.asset_path`                           | NOT NULL; file must exist on disk at seed time (seed errors otherwise).                                                                     |
+| `handbook_read_state.status`                           | In `HANDBOOK_READ_STATUS_VALUES`. CHECK.                                                                                                    |
+| `handbook_read_state.total_seconds_visible`            | `>= 0`. CHECK.                                                                                                                              |
+| `handbook_read_state.notes_md`                         | Bounded length 0..16384 chars (BC layer; UI advises against essays here).                                                                   |
 | `Citation` (structured) on `knowledge_node.references` | Must have `kind` in `REFERENCE_KINDS`, `reference_id` resolves to a `reference` row, locator matches kind. Validated by `bun run db build`. |
-| Heartbeat POST                                  | Rejects intervals < 5s (anti-flood). Caps the recorded delta at `HANDBOOK_HEARTBEAT_INTERVAL_SEC * 4`.     |
-| Read-state status flip                          | UI permits any (`unread <-> reading <-> read`) transition. The system never automatically advances to `read`. |
+| Heartbeat POST                                         | Rejects intervals < 5s (anti-flood). Caps the recorded delta at `HANDBOOK_HEARTBEAT_INTERVAL_SEC * 4`.                                      |
+| Read-state status flip                                 | UI permits any (`unread <-> reading <-> read`) transition. The system never automatically advances to `read`.                               |
 
 ## Edge cases
 
@@ -574,11 +565,11 @@ The five questions below were originally posed as Open Questions for the user to
 
 **Resolved: top-level `handbooks/` for inline derivatives only. Source PDFs live in `$AIRBOSS_HANDBOOK_CACHE/handbooks/<doc>/<edition>/<edition>.pdf` (developer-local cache, default `~/Documents/airboss-handbook-cache/`) per [ADR 018](../../decisions/018-source-artifact-storage-policy/decision.md) (filename layout per [ADR 021](../../decisions/021-source-cache-flat-naming/decision.md)). LFS plumbing in `.gitattributes` is dormant; `.gitignore` blocks PDFs from staging. Derivatives (markdown, figures, tables, manifest.json) are inline.**
 
-| Option                | For                                                                                                                                    | Against                                                                                                |
-| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `handbooks/`          | Versioned reference corpus with its own lifecycle (re-ingestion, edition bumps). Not authored by the team. Distinct from `course/`.    | Adds a top-level entry. New rule for everyone.                                                         |
-| `course/handbooks/`   | Co-locates with other aviation content; `course/` is already the aviation-knowledge bucket.                                            | `course/` today is information-architecture layered (L01-L05); handbooks aren't authored work, they're imported. Mixing creates a different lifecycle inside `course/`. |
-| `content/handbooks/`  | Generic name; could later host other reference corpora (POH excerpts, AC PDFs).                                                         | New top-level for one feature; `course/` already serves a similar role; `content/` is vague.            |
+| Option               | For                                                                                                                                 | Against                                                                                                                                                                 |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `handbooks/`         | Versioned reference corpus with its own lifecycle (re-ingestion, edition bumps). Not authored by the team. Distinct from `course/`. | Adds a top-level entry. New rule for everyone.                                                                                                                          |
+| `course/handbooks/`  | Co-locates with other aviation content; `course/` is already the aviation-knowledge bucket.                                         | `course/` today is information-architecture layered (L01-L05); handbooks aren't authored work, they're imported. Mixing creates a different lifecycle inside `course/`. |
+| `content/handbooks/` | Generic name; could later host other reference corpora (POH excerpts, AC PDFs).                                                     | New top-level for one feature; `course/` already serves a similar role; `content/` is vague.                                                                            |
 
 Top-level `handbooks/` reflects the lifecycle separation: ingested, edition-locked, gitignored binaries, committed markdown + figures. The directory structure is unique to this kind of artifact (per-edition subtree, manifest.json, figure assets). Co-locating with `course/` would invite confusion between authored and imported material.
 
@@ -594,11 +585,11 @@ Alternate: `/study/handbooks/*` would imply a future per-app route group. None e
 
 **Resolved: ingestion produces committed markdown + assets; `bun run db seed handbooks` rebuilds the DB tables from that committed content. Source PDFs are cached locally (per ADR 018) so re-extraction does not require an FAA round-trip after the first pull.**
 
-| Option                               | For                                                                                                                                         | Against                                                                                                                                                         |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Committed markdown + DB seed         | Reviewable in PRs (figure differences show in `git diff`). Re-ingestion is explicit -- author runs the pipeline, commits the diff. Fast seed. | Repo grows with figure binaries. Mitigated by: figures are PNG, deduplicated, average ~50KB; entire PHAK figure set is < 50MB; LFS only if it actually grows.   |
-| Build-time regen on every `bun run build` | DB always matches the latest PDFs. No commit step.                                                                                          | Pulls Python toolchain into every build host (CI, every dev). Slow. Hard to review FAA edition diffs in code review.                                            |
-| Scheduled cron refresh               | DB stays current with FAA URL changes.                                                                                                      | The FAA does not publish on a schedule we can subscribe to. Unnecessary infrastructure.                                                                          |
+| Option                                    | For                                                                                                                                           | Against                                                                                                                                                       |
+| ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Committed markdown + DB seed              | Reviewable in PRs (figure differences show in `git diff`). Re-ingestion is explicit -- author runs the pipeline, commits the diff. Fast seed. | Repo grows with figure binaries. Mitigated by: figures are PNG, deduplicated, average ~50KB; entire PHAK figure set is < 50MB; LFS only if it actually grows. |
+| Build-time regen on every `bun run build` | DB always matches the latest PDFs. No commit step.                                                                                            | Pulls Python toolchain into every build host (CI, every dev). Slow. Hard to review FAA edition diffs in code review.                                          |
+| Scheduled cron refresh                    | DB stays current with FAA URL changes.                                                                                                        | The FAA does not publish on a schedule we can subscribe to. Unnecessary infrastructure.                                                                       |
 
 The committed-markdown model matches how `course/knowledge/` works today: authoring happens in markdown, the seed builds the DB. Reviewability of FAA edition diffs is the load-bearing argument -- a new PHAK edition is a content event, not a build event.
 
@@ -606,11 +597,11 @@ The committed-markdown model matches how `course/knowledge/` works today: author
 
 **Resolved: segmented Unread / Reading / Read control at the section foot, plus a secondary "Read but didn't get it" toggle that only enables once `status >= reading`.**
 
-| Option                                | For                                                                                                          | Against                                                                                                       |
-| ------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
-| Segmented three-state + comprehended toggle | Mirrors the data model. Discoverable. The middle state ("Reading") legitimizes "I'm partway through."    | Two affordances. Slightly heavier than a single button.                                                       |
-| Toggle "Mark read" + secondary "didn't get it" | Lighter. Read is the goal state.                                                                          | Loses the "Reading" middle state. If the user opens a section then leaves, the system can't distinguish from "never opened." |
-| Star rating / thumbs                  | Familiar pattern.                                                                                            | Star ratings are quality judgments, not progress states. Fails the "what does this mean for the dashboard?" sniff test. |
+| Option                                         | For                                                                                                   | Against                                                                                                                      |
+| ---------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| Segmented three-state + comprehended toggle    | Mirrors the data model. Discoverable. The middle state ("Reading") legitimizes "I'm partway through." | Two affordances. Slightly heavier than a single button.                                                                      |
+| Toggle "Mark read" + secondary "didn't get it" | Lighter. Read is the goal state.                                                                      | Loses the "Reading" middle state. If the user opens a section then leaves, the system can't distinguish from "never opened." |
+| Star rating / thumbs                           | Familiar pattern.                                                                                     | Star ratings are quality judgments, not progress states. Fails the "what does this mean for the dashboard?" sniff test.      |
 
 The segmented control resolves intent at every state and gives the suggestion heuristic a clean target ("Mark read?" advances Reading -> Read). The "didn't get it" toggle is positioned beneath as a secondary-line affordance to keep the primary control simple.
 
@@ -629,14 +620,14 @@ These are starting numbers, not gospel. The real evidence comes from user zero's
 
 ## Risks
 
-| Risk                                                            | Mitigation                                                                                       |
-| --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| FAA PDF outline is unreliable on some handbooks.                | Per-handbook config `outline.yaml` override; pipeline aborts with a clear error if no outline.   |
-| Figure extraction picks up watermarks or page chrome.           | Per-handbook crop regions in config; visual review pass per handbook before committing.          |
-| Repo size grows uncomfortably as more handbooks land.           | Figures compressed (PNG, palette-reduced where possible). Move binary blobs to git-LFS only if the repo crosses a measured threshold (proposed: > 500MB total). Defer. |
-| Heartbeat traffic load.                                         | 15s interval, gated by `visibilityState`; back-off on sustained 5xx. v1 traffic is one user.     |
-| Edition churn breaks node citations.                            | Citations bind to `reference_id` (edition-specific). Old edition's `reference_id` stays valid; old citations keep resolving. New citations point at the new edition. The cert-syllabus WP runs the bulk-migrate when a node author chooses to update. |
-| Markdown output drifts from PDF semantics over time.            | `manifest.json` records SHA-256 of every section. A diff job compares the source PDF's extracted text to the committed markdown to surface drift. Ships in a follow-up. |
+| Risk                                                  | Mitigation                                                                                                                                                                                                                                            |
+| ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| FAA PDF outline is unreliable on some handbooks.      | Per-handbook config `outline.yaml` override; pipeline aborts with a clear error if no outline.                                                                                                                                                        |
+| Figure extraction picks up watermarks or page chrome. | Per-handbook crop regions in config; visual review pass per handbook before committing.                                                                                                                                                               |
+| Repo size grows uncomfortably as more handbooks land. | Figures compressed (PNG, palette-reduced where possible). Move binary blobs to git-LFS only if the repo crosses a measured threshold (proposed: > 500MB total). Defer.                                                                                |
+| Heartbeat traffic load.                               | 15s interval, gated by `visibilityState`; back-off on sustained 5xx. v1 traffic is one user.                                                                                                                                                          |
+| Edition churn breaks node citations.                  | Citations bind to `reference_id` (edition-specific). Old edition's `reference_id` stays valid; old citations keep resolving. New citations point at the new edition. The cert-syllabus WP runs the bulk-migrate when a node author chooses to update. |
+| Markdown output drifts from PDF semantics over time.  | `manifest.json` records SHA-256 of every section. A diff job compares the source PDF's extracted text to the committed markdown to surface drift. Ships in a follow-up.                                                                               |
 
 ## References
 
