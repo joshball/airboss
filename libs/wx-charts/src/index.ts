@@ -95,6 +95,18 @@ export {
 	SVG_WIDTH,
 	TITLE_BAND_HEIGHT,
 } from './projection';
+export {
+	EARTH_RADIUS_KM,
+	GOES_ALTITUDE_KM,
+	GOES_DISTANCE_EARTH_RADII,
+	GOES_EAST_LONGITUDE,
+	GOES_SUBSATELLITE_LATITUDE,
+	GOES_WEST_LONGITUDE,
+	type GoesProjectionOptions,
+	goesEastProjection,
+	goesProjection,
+	goesWestProjection,
+} from './projection-geostationary';
 // ----------------------------------------------------------------------
 // Raster substrate -- type-only re-exports of the server-only warp module.
 // The value export of `warpRaster` lives at @ab/wx-charts/server because
@@ -103,9 +115,13 @@ export {
 export {
 	ADVISORY_PALETTE,
 	type AdvisoryPaletteEntry,
+	goesIrPalette,
+	goesVisPalette,
+	goesWvPalette,
 	isReflectivityNoData,
 	NWS_REFLECTIVITY_STOPS,
 	type ReflectivityStop,
+	type RGB,
 } from './raster/palettes';
 export type { WarpInput, WarpResult } from './raster/warp';
 export { parseWorldFile, pixelToWorld, type WorldFile, worldToPixel } from './raster/worldfile';
