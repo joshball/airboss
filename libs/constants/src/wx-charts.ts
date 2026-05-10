@@ -5,7 +5,9 @@
  *   ../../../docs/work-packages/wx-chart-symbology-library/spec.md
  * ) "Constants" section.
  *
- * - `CHART_TYPES` enumerates the v1 ten chart types (PPL ACS Task C K2 cluster).
+ * - `CHART_TYPES` enumerates the v1 chart types covering the PPL ACS Task C
+ *   K2 cluster plus the icing/freezing-level forecast products added by the
+ *   spec amendment (G-AIRMET icing, CIP, FIP, freezing-level forecast).
  * - `LAYER_BANDS` is the closed substrate z-order contract (Spike 02). Changing
  *   the set is a substrate change: bump `libs/wx-charts/package.json` version
  *   and regenerate every chart via `bun run charts build --all`.
@@ -29,6 +31,10 @@ export const CHART_TYPES = {
 	TAF_TIMELINE: 'taf-timeline',
 	TURBULENCE_GAIRMET: 'turbulence-gairmet',
 	TURBULENCE_GTG: 'turbulence-gtg',
+	ICING_GAIRMET: 'icing-gairmet',
+	ICING_CIP: 'icing-cip',
+	ICING_FIP: 'icing-fip',
+	FREEZING_LEVEL: 'freezing-level',
 } as const;
 
 export const CHART_TYPE_VALUES = Object.values(CHART_TYPES);
@@ -48,6 +54,10 @@ export const CHART_TYPE_LABELS: Record<ChartType, string> = {
 	'taf-timeline': 'TAF Timeline',
 	'turbulence-gairmet': 'Turbulence G-AIRMET',
 	'turbulence-gtg': 'Graphical Turbulence Guidance',
+	'icing-gairmet': 'G-AIRMET Icing',
+	'icing-cip': 'Current Icing Product (CIP)',
+	'icing-fip': 'Forecast Icing Product (FIP)',
+	'freezing-level': 'Freezing Level Forecast',
 };
 
 export const LAYER_BANDS = {

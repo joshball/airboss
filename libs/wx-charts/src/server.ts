@@ -19,6 +19,14 @@
 
 export { type AirmetSigmetSpec, airmetSigmetSpecSchema, renderAirmetSigmet } from './charts/airmet-sigmet';
 export {
+	type FreezingLevelSpec,
+	freezingLevelSpecSchema,
+	renderFreezingLevel,
+} from './charts/freezing-level';
+export { type IcingCipSpec, icingCipSpecSchema, renderCipFipShared, renderIcingCip } from './charts/icing-cip';
+export { type IcingFipSpec, icingFipSpecSchema, renderIcingFip } from './charts/icing-fip';
+export { type IcingGairmetSpec, icingGairmetSpecSchema, renderIcingGairmet } from './charts/icing-gairmet';
+export {
 	type MetarPlotGridSpec,
 	metarPlotGridSpecSchema,
 	renderMetarPlotGrid,

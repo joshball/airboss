@@ -57,6 +57,10 @@ export {
 // dragging the renderer's runtime imports (sharp, fs) into the bundle.
 // ----------------------------------------------------------------------
 export type { AirmetSigmetSpec } from './charts/airmet-sigmet';
+export type { FreezingLevelSpec } from './charts/freezing-level';
+export type { IcingCipSpec } from './charts/icing-cip';
+export type { IcingFipSpec } from './charts/icing-fip';
+export type { IcingGairmetSpec } from './charts/icing-gairmet';
 export type { MetarPlotGridSpec } from './charts/metar-plot-grid';
 export type { PirepPlotGridSpec } from './charts/pirep-plot-grid';
 export type { RadarMosaicSpec } from './charts/radar-mosaic';
@@ -104,14 +108,28 @@ export {
 export {
 	ADVISORY_PALETTE,
 	type AdvisoryPaletteEntry,
+	CIP_PROBABILITY_BANDS,
+	CIP_SEVERITY_TIERS,
+	FREEZING_LEVEL_BANDS,
+	FREEZING_LEVEL_EMPHASIZED_LINE_STROKE,
+	FREEZING_LEVEL_LINE_STROKE,
+	ICING_INTENSITY_PALETTE,
 	isReflectivityNoData,
 	NWS_REFLECTIVITY_STOPS,
 	type ReflectivityStop,
+	type ScalarBandStop,
 } from './raster/palettes';
 export type { WarpInput, WarpResult } from './raster/warp';
 export { parseWorldFile, pixelToWorld, type WorldFile, worldToPixel } from './raster/worldfile';
 export { type AirportMarker, renderAirport } from './symbology/airports';
-export { renderScalarContours, type ScalarContourOptions } from './symbology/contours';
+export {
+	type FilledBandStop,
+	type FilledScalarBandsOptions,
+	type FilledScalarBandsResult,
+	renderFilledScalarBands,
+	renderScalarContours,
+	type ScalarContourOptions,
+} from './symbology/contours';
 export type { FrontDef, FrontKind, PipSide } from './symbology/fronts';
 // ----------------------------------------------------------------------
 // Symbology helpers (pure SVG-string emitters)
