@@ -26,6 +26,7 @@ export const CHART_TYPES = {
 	GFA: 'gfa',
 	CONVECTIVE_OUTLOOK: 'convective-outlook',
 	CVA: 'cva',
+	TAF_TIMELINE: 'taf-timeline',
 } as const;
 
 export const CHART_TYPE_VALUES = Object.values(CHART_TYPES);
@@ -42,6 +43,7 @@ export const CHART_TYPE_LABELS: Record<ChartType, string> = {
 	gfa: 'Graphical Forecasts for Aviation',
 	'convective-outlook': 'Convective Outlook',
 	cva: 'Ceiling and Visibility Analysis',
+	'taf-timeline': 'TAF Timeline',
 };
 
 export const LAYER_BANDS = {
