@@ -61,6 +61,7 @@ export type { MetarPlotGridSpec } from './charts/metar-plot-grid';
 export type { PirepPlotGridSpec } from './charts/pirep-plot-grid';
 export type { RadarMosaicSpec } from './charts/radar-mosaic';
 export type { SurfaceAnalysisSpec } from './charts/surface-analysis';
+export type { TafTimelineSpec } from './charts/taf-timeline';
 export type { TurbulenceGairmetSpec } from './charts/turbulence-gairmet';
 export type { TurbulenceGtgSpec } from './charts/turbulence-gtg';
 export type { WindsAloftFbSpec } from './charts/winds-aloft-fb';
@@ -171,5 +172,7 @@ export type {
 	TurbulenceReport,
 } from './wx/pirep/types';
 export { ceilingFtAgl, celsiusToFahrenheit, computeFlightCategory, flightCategory, summarizeCover } from './wx/rules';
+export { parseTaf } from './wx/taf/parser';
+export type { ParsedTaf, TafChangeKind, TafPeriod } from './wx/taf/types';
 export { parseFbGrid } from './wx/winds-aloft/parser';
 export type { ParsedFbGrid, ParsedFbStation, WindsAloftRow } from './wx/winds-aloft/types';

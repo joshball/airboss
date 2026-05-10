@@ -26,6 +26,7 @@ export const CHART_TYPES = {
 	GFA: 'gfa',
 	CONVECTIVE_OUTLOOK: 'convective-outlook',
 	CVA: 'cva',
+	TAF_TIMELINE: 'taf-timeline',
 	TURBULENCE_GAIRMET: 'turbulence-gairmet',
 	TURBULENCE_GTG: 'turbulence-gtg',
 } as const;
@@ -44,6 +45,7 @@ export const CHART_TYPE_LABELS: Record<ChartType, string> = {
 	gfa: 'Graphical Forecasts for Aviation',
 	'convective-outlook': 'Convective Outlook',
 	cva: 'Ceiling and Visibility Analysis',
+	'taf-timeline': 'TAF Timeline',
 	'turbulence-gairmet': 'Turbulence G-AIRMET',
 	'turbulence-gtg': 'Graphical Turbulence Guidance',
 };

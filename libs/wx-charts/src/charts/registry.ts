@@ -17,6 +17,7 @@ import { metarPlotGridSpecSchema, renderMetarPlotGrid } from './metar-plot-grid'
 import { pirepPlotGridSpecSchema, renderPirepPlotGrid } from './pirep-plot-grid';
 import { radarMosaicSpecSchema, renderRadarMosaic } from './radar-mosaic';
 import { renderSurfaceAnalysis, surfaceAnalysisSpecSchema } from './surface-analysis';
+import { renderTafTimeline, tafTimelineSpecSchema } from './taf-timeline';
 import { renderTurbulenceGairmet, turbulenceGairmetSpecSchema } from './turbulence-gairmet';
 import { renderTurbulenceGtg, turbulenceGtgSpecSchema } from './turbulence-gtg';
 import { renderWindsAloftFb, windsAloftFbSpecSchema } from './winds-aloft-fb';
@@ -72,6 +73,11 @@ export const CHART_RENDERERS: Record<ChartType, ChartRendererRegistration> = {
 	[CHART_TYPES.TURBULENCE_GTG]: {
 		render: renderTurbulenceGtg as ChartRenderer<ChartSpec>,
 		schema: turbulenceGtgSpecSchema,
+	},
+	// Phase G
+	[CHART_TYPES.TAF_TIMELINE]: {
+		render: renderTafTimeline as ChartRenderer<ChartSpec>,
+		schema: tafTimelineSpecSchema,
 	},
 };
 

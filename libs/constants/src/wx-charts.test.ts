@@ -20,8 +20,8 @@ import {
 } from './wx-charts';
 
 describe('CHART_TYPES', () => {
-	it('enumerates the v1 ten chart types', () => {
-		expect(CHART_TYPE_VALUES).toHaveLength(10);
+	it('enumerates the v1 chart types (10 map products + Phase G TAF timeline)', () => {
+		expect(CHART_TYPE_VALUES).toHaveLength(11);
 	});
 
 	it('every value has a matching label', () => {
