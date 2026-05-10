@@ -1,0 +1,18 @@
+{
+  "slug": "wx-scenario-frontal-xc-march-surface-analysis",
+  "type": "surface-analysis",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-10T23:26:03.228Z",
+  "content_hash": "sha256:06143c76fa1847c33d036b6283c5ab2a52e74bd9300925de2d394b5046d81127",
+  "source_hashes": {
+    "fronts": "d9868099e7f25e837cd205101f1314c5585be39d6ca97e1c45078ac45471db22"
+  },
+  "layer_counts": {
+    "vector-symbology": 9,
+    "point-symbology": 8,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 330978
+}

@@ -1,0 +1,193 @@
+/**
+ * Spike 01 -- Layer 4 Socratic commentary derivation.
+ *
+ * Authored from the truth state. Each callout pins to one product or
+ * chart element and explains the WHY by citing the truth-model element
+ * that produced it. Discovery-first phrasing per ADR 011 + the airboss
+ * pedagogy: lead with WHY, let the learner derive the answer.
+ */
+
+import type { TruthModel } from '../truth/types';
+import type { ChartArtifact } from '../charts/types';
+import type { ScenarioProducts } from '../engine';
+
+export interface CommentaryCallout {
+	id: string;
+	target: {
+		kind: 'metar' | 'taf-period' | 'chart-feature' | 'airmet' | 'pirep' | 'fb-row';
+		chartSlug?: string;
+		elementId?: string;
+	};
+	question: string;
+	observation: string;
+	reason: string;
+	knowledgeNodeIds: string[];
+	mode: 'socratic' | 'glance';
+}
+
+export function deriveCommentary(
+	truth: TruthModel,
+	products: ScenarioProducts,
+	charts: ChartArtifact[],
+): CommentaryCallout[] {
+	const callouts: CommentaryCallout[] = [];
+
+	const surfaceChart = charts.find((c) => c.spec && (c.spec as { type: string }).type === 'surface-analysis');
+	const progChart = charts.find((c) => (c.spec as { type: string }).type === 'prog-chart');
+	const airmetChart = charts.find((c) => (c.spec as { type: string }).type === 'advisory-overlay');
+
+	const ksTl = products.metars.find((m) => m.parsed.station === 'KSTL');
+	const ksPi = products.metars.find((m) => m.parsed.station === 'KSPI');
+	const kmLi = products.metars.find((m) => m.parsed.station === 'KMLI');
+	const ksTlTaf = products.tafs.find((t) => t.parsed.station === 'KSTL');
+	const korDTaf = products.tafs.find((t) => t.parsed.station === 'KORD');
+
+	// 1. Pre-frontal warm-sector callout (KSTL METAR).
+	if (ksTl !== undefined) {
+		callouts.push({
+			id: 'cal-001-warm-sector-wind',
+			target: { kind: 'metar', elementId: 'KSTL' },
+			mode: 'socratic',
+			question: 'Look at KSTL: wind 200 at 14, temp 17C. Why is the wind from the south here?',
+			observation: `KSTL METAR: \`${ksTl.raw}\``,
+			reason:
+				"KSTL sits in the pre-frontal warm sector (mT, maritime tropical air mass) ahead of an approaching cold front. In the warm sector, surface flow circulates around the parent low to the north, drawing southerly air up from the Gulf -- hence the 200/14 wind. Compare to the post-frontal stations (KMLI, KSPI) where the wind has shifted to NW (320). The wind shift IS the front passage.",
+			knowledgeNodeIds: ['wx-airmasses-and-fronts', 'wx-wind-systems'],
+		});
+	}
+
+	// 2. Front-passage callout (KSPI vs KSTL contrast).
+	if (ksPi !== undefined && ksTl !== undefined) {
+		callouts.push({
+			id: 'cal-002-front-contrast',
+			target: { kind: 'metar', elementId: 'KSPI' },
+			mode: 'socratic',
+			question:
+				'KSPI just had the front pass: wind 320 G33, temp 4C, OVC015, vis 3SM in BR. KSTL one airport south is still 200/14, 17C, BKN045. What changed in the air column at KSPI in the last hour?',
+			observation: `KSPI: \`${ksPi.raw}\`\nKSTL: \`${ksTl.raw}\``,
+			reason:
+				'A surface cold front swept through KSPI moments ago. The temperature dropped 13C, the dewpoint dropped 16C (mT replaced by cP), the wind backed 120 degrees and gained gusts (steep post-frontal pressure gradient + cold advection coupling momentum down), the ceiling dropped (lifted moisture trapped beneath the post-frontal stable layer), and visibility crashed (mist in the cooler air). Every change traces back to one event: a different air mass is now over the field.',
+			knowledgeNodeIds: ['wx-airmasses-and-fronts', 'wx-stability-and-instability', 'wx-clouds-and-precipitation'],
+		});
+	}
+
+	// 3. Post-frontal gust callout (KMLI).
+	if (kmLi !== undefined) {
+		callouts.push({
+			id: 'cal-003-postfrontal-gust',
+			target: { kind: 'metar', elementId: 'KMLI' },
+			mode: 'socratic',
+			question:
+				'KMLI is well behind the front: wind 320 at 20 gusting 32. The surface is heating with the afternoon sun -- shouldnt the gusts have died down by now in the cP air?',
+			observation: `KMLI: \`${kmLi.raw}\``,
+			reason:
+				'The gusts come from two sources, both still active. (1) The pressure gradient is tightening as the parent low deepens off to the NE -- isobars pack tighter behind a deepening trough, so the geostrophic wind speeds up. (2) Cold advection in the post-frontal sector keeps the boundary layer well-mixed: mid-level momentum keeps coupling down to the surface as gusts. The "gusts die at sunset" rule applies in stable air; in active cold advection it does not.',
+			knowledgeNodeIds: ['wx-wind-systems', 'wx-airmasses-and-fronts'],
+		});
+	}
+
+	// 4. TAF transition callout (KORD).
+	if (korDTaf !== undefined) {
+		callouts.push({
+			id: 'cal-004-taf-transition-kord',
+			target: { kind: 'taf-period', elementId: 'KORD' },
+			mode: 'socratic',
+			question:
+				'KORDs TAF: starts 200/14 P6SM BKN045, then "FM 21Z 320/20 G30 OVC025." Whats the FM telling you to plan for if youre arriving at 22Z?',
+			observation: `KORD TAF: \`${korDTaf.raw}\``,
+			reason:
+				"FM21Z is the forecast time the cold front passes KORD. After 21Z: ceiling drops to 2500 ft (still VFR but now under an OVC deck instead of broken cumulus), wind shifts 120 degrees and gains gusts (your runway selection changes -- check the gust-front quartering crosswind), and you're now flying through cP air -- denser, drier, colder -- which affects performance numbers. The truth-model front is currently 66km east of KORD moving ESE at 25 kt; do the math, that's about 2.6 hours, FM21Z is 2 hours after issue.",
+			knowledgeNodeIds: ['wx-airmasses-and-fronts', 'wx-go-nogo-decision'],
+		});
+	}
+
+	// 5. AIRMET-Sierra (post-frontal IFR) callout.
+	if (airmetChart !== undefined) {
+		callouts.push({
+			id: 'cal-005-airmet-sierra',
+			target: { kind: 'airmet', chartSlug: airmetChart.slug, elementId: 'WAUS41-WXENGINE-HZ-postfrontal-ifr' },
+			mode: 'socratic',
+			question:
+				'AIRMET Sierra covers the area west of the cold front. Why does ceiling drop in the cold air after a front passes?',
+			observation: 'See the AIRMET Sierra polygon over the IL/IA region on the AIRMET overlay chart.',
+			reason:
+				"Post-frontal cold air is denser; it pushes under the warmer pre-frontal moisture and lifts it. The lifted moisture condenses just above the surface (forms the OVC015 layer KSPI is reporting). The air mass behind the front is also stable -- a low-level inversion caps the moisture, trapping it as a uniform deck of stratocumulus rather than letting it mix vertically. Same moisture, different stability, different ceiling.",
+			knowledgeNodeIds: ['wx-clouds-and-precipitation', 'wx-stability-and-instability'],
+		});
+	}
+
+	// 6. AIRMET-Tango callout.
+	if (airmetChart !== undefined) {
+		callouts.push({
+			id: 'cal-006-airmet-tango',
+			target: { kind: 'airmet', chartSlug: airmetChart.slug, elementId: 'WAUS41-WXENGINE-HZ-postfrontal-turb' },
+			mode: 'socratic',
+			question:
+				'AIRMET Tango: turbulence FL060-FL240 in the cold sector behind the front. What two physical sources stack up to produce the turbulence in this band?',
+			observation: 'See the AIRMET Tango polygon overlapping the cold-sector region.',
+			reason:
+				"Two sources. (1) Cold advection: cP air sliding south over relatively warmer surface generates mechanical turbulence as the boundary layer struggles to stay mixed. (2) The 250 mb jet axis runs roughly through this region with a max of 110 kt; on the cold side of the jet, ageostrophic flow descends and accelerates -- classic clear-air turbulence at the jet exit. The two sources reinforce vertically through the layer FL060-FL240.",
+			knowledgeNodeIds: ['wx-wind-systems', 'wx-stability-and-instability'],
+		});
+	}
+
+	// 7. Surface-analysis isobar gradient callout.
+	if (surfaceChart !== undefined) {
+		callouts.push({
+			id: 'cal-007-isobar-gradient',
+			target: { kind: 'chart-feature', chartSlug: surfaceChart.slug, elementId: 'isobar-pack' },
+			mode: 'glance',
+			question: 'Why are the isobars packed so tightly behind the cold front (the western side of the chart)?',
+			observation:
+				'On the surface analysis, count the isobars between the L (996 mb) over the Upper Midwest and the H (1028 mb) over the Rockies. They are very close together west of the front.',
+			reason:
+				'Tight isobars = strong pressure gradient = strong wind. Behind the front, the deepening low draws air strongly toward its center while the high to the west pushes air outward. The gradient bridges the difference. Surface friction veers the wind ~30 deg right of the gradient direction; that is why KMLI wind is 320 (NW-ish) rather than pure W (the gradient direction in this geometry).',
+			knowledgeNodeIds: ['wx-wind-systems'],
+		});
+	}
+
+	// 8. Prog chart callout.
+	if (progChart !== undefined) {
+		callouts.push({
+			id: 'cal-008-prog-front-progress',
+			target: { kind: 'chart-feature', chartSlug: progChart.slug, elementId: 'front-position' },
+			mode: 'socratic',
+			question:
+				'Compare the prog chart to the current surface analysis. Where is the front in 12 hours? Has KORD been overrun by then?',
+			observation: 'Surface analysis: front near KSPI/KMLI longitude. 12hr prog: front projected forward.',
+			reason:
+				'Front is moving 110 deg true at 25 kt. In 12 hours: about 555 km ESE. KORD (~88 W) will be deep in the cold sector by the prog time; KIND likely too. The L center has tracked to the NE into Canada. The forecast story is: "you better be at your destination before the front, or be ready to fly the cold air."',
+			knowledgeNodeIds: ['wx-airmasses-and-fronts', 'wx-go-nogo-decision'],
+		});
+	}
+
+	// 9. PIREP-supported callout.
+	const banPirep = products.pireps.find((p) => p.parsed.station === 'KSPI');
+	if (banPirep !== undefined) {
+		callouts.push({
+			id: 'cal-009-pirep-corroboration',
+			target: { kind: 'pirep', elementId: 'KSPI' },
+			mode: 'glance',
+			question: 'Note the KSPI PIREP: "MOD 050-080 in PRECIP." Does this match what you predicted from the surface chart + AIRMETs?',
+			observation: `\`${banPirep.raw}\``,
+			reason:
+				'Yes -- the truth-model frontal precipitation band runs through KSPI exactly. The pilot is reporting moderate chop in the rain band, which the AIRMET Tango polygon already covers and the post-frontal pressure gradient predicts. Three independent products (chart, AIRMET, PIREP) all agree because all three derive from the same physical truth.',
+			knowledgeNodeIds: ['wx-thunderstorm-hazards', 'wx-airmasses-and-fronts'],
+		});
+	}
+
+	// 10. Go/no-go decision callout.
+	callouts.push({
+		id: 'cal-010-go-no-go',
+		target: { kind: 'chart-feature', elementId: 'route-summary' },
+		mode: 'socratic',
+		question:
+			'You are planning KSTL -> KORD departing at 19Z. Given everything above (front passing KSTL within the hour, post-frontal IFR + turbulence west of the front, KORD ahead of the front but with FM21Z transition), what is your go/no-go?',
+		observation: 'Synthesize across surface analysis, prog, AIRMETs, METARs, TAFs, and PIREPs.',
+		reason:
+			"This is a judgement call, not a formula -- the engine's job is to lay out the truth. Pieces in play: (1) departure side of front is moving through KSTL right now -- you may launch into post-frontal conditions immediately. (2) Route west of front is in IFR + moderate turbulence per AIRMET. (3) Destination is ahead of front but you'll be flying through frontal precipitation band somewhere mid-route. (4) Arrival timing matters: arrive before 21Z and KORD is still warm-sector VFR; arrive after, you're landing in NW gusts and an OVC025 deck. The pedagogy here is making the pilot SEE all the pieces and weigh them, not telling them the answer.",
+		knowledgeNodeIds: ['wx-go-nogo-decision', 'wx-airmasses-and-fronts'],
+	});
+
+	return callouts;
+}

@@ -1,0 +1,22 @@
+{
+  "targetTimestamp": "2026-03-19T19:00:00Z",
+  "source": "Spike 01 wx-engine -- truth-derived synthetic PIREPs",
+  "count": 3,
+  "reports": [
+    {
+      "raw": "KORD UA /OV ORD180020/TM 1835/FL080/TP B738/TB LGT/SK BKN045 OVC120/RM SMOOTH BELOW 070",
+      "lat": 41.68,
+      "lon": -87.91
+    },
+    {
+      "raw": "KSPI UUA /OV SPI270010/TM 1848/FL060/TP C172/TB MOD 050-080/SK OVC020/WX RA/RM CONT MOD CHOP IN PRECIP",
+      "lat": 39.84,
+      "lon": -89.88000000000001
+    },
+    {
+      "raw": "KMLI UA /OV MLI020015/TM 1855/FL050/TP B190/TB LGT 050-080/SK OVC025/WX FU/RM SMOOTH ABV 080 CONT NW WIND 30KT",
+      "lat": 41.75,
+      "lon": -90.51
+    }
+  ]
+}

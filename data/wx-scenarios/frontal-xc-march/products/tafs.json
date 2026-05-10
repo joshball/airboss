@@ -1,0 +1,246 @@
+[
+  {
+    "station": "KSTL",
+    "amended": false,
+    "corrected": false,
+    "issuedAt": "2026-04-19T18:20:00.000Z",
+    "validFrom": "2026-04-19T19:00:00.000Z",
+    "validTo": "2026-04-20T07:00:00.000Z",
+    "periods": [
+      {
+        "kind": "INITIAL",
+        "start": "2026-04-19T19:00:00.000Z",
+        "end": "2026-04-19T20:00:00.000Z",
+        "probability": null,
+        "raw": "20014KT 5SM VCSH BKN045",
+        "wind": {
+          "directionDeg": 200,
+          "speedKt": 14,
+          "gustKt": null,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 5,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "BKN",
+            "heightFtAgl": 4500
+          }
+        ],
+        "cavok": false
+      },
+      {
+        "kind": "FM",
+        "start": "2026-04-19T20:00:00.000Z",
+        "end": "2026-04-20T07:00:00.000Z",
+        "probability": null,
+        "raw": "FM192000 32020G30KT 5SM VCSH OVC025",
+        "wind": {
+          "directionDeg": 320,
+          "speedKt": 20,
+          "gustKt": 30,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 5,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "OVC",
+            "heightFtAgl": 2500
+          }
+        ],
+        "cavok": false
+      }
+    ],
+    "raw": "TAF KSTL 191820Z 1919/2007 20014KT 5SM VCSH BKN045 FM192000 32020G30KT 5SM VCSH OVC025",
+    "warnings": []
+  },
+  {
+    "station": "KCPS",
+    "amended": false,
+    "corrected": false,
+    "issuedAt": "2026-04-19T18:20:00.000Z",
+    "validFrom": "2026-04-19T19:00:00.000Z",
+    "validTo": "2026-04-20T07:00:00.000Z",
+    "periods": [
+      {
+        "kind": "INITIAL",
+        "start": "2026-04-19T19:00:00.000Z",
+        "end": "2026-04-19T20:00:00.000Z",
+        "probability": null,
+        "raw": "20014KT 5SM VCSH BKN045",
+        "wind": {
+          "directionDeg": 200,
+          "speedKt": 14,
+          "gustKt": null,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 5,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "BKN",
+            "heightFtAgl": 4500
+          }
+        ],
+        "cavok": false
+      },
+      {
+        "kind": "FM",
+        "start": "2026-04-19T20:00:00.000Z",
+        "end": "2026-04-20T07:00:00.000Z",
+        "probability": null,
+        "raw": "FM192000 32020G30KT 5SM VCSH OVC025",
+        "wind": {
+          "directionDeg": 320,
+          "speedKt": 20,
+          "gustKt": 30,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 5,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "OVC",
+            "heightFtAgl": 2500
+          }
+        ],
+        "cavok": false
+      }
+    ],
+    "raw": "TAF KCPS 191820Z 1919/2007 20014KT 5SM VCSH BKN045 FM192000 32020G30KT 5SM VCSH OVC025",
+    "warnings": []
+  },
+  {
+    "station": "KSPI",
+    "amended": false,
+    "corrected": false,
+    "issuedAt": "2026-04-19T18:20:00.000Z",
+    "validFrom": "2026-04-19T19:00:00.000Z",
+    "validTo": "2026-04-20T07:00:00.000Z",
+    "periods": [
+      {
+        "kind": "INITIAL",
+        "start": "2026-04-19T19:00:00.000Z",
+        "end": "2026-04-20T07:00:00.000Z",
+        "probability": null,
+        "raw": "32020G30KT 3SM VCSH OVC015",
+        "wind": {
+          "directionDeg": 320,
+          "speedKt": 20,
+          "gustKt": 30,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 3,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "OVC",
+            "heightFtAgl": 1500
+          }
+        ],
+        "cavok": false
+      }
+    ],
+    "raw": "TAF KSPI 191820Z 1919/2007 32020G30KT 3SM VCSH OVC015",
+    "warnings": []
+  },
+  {
+    "station": "KMLI",
+    "amended": false,
+    "corrected": false,
+    "issuedAt": "2026-04-19T18:20:00.000Z",
+    "validFrom": "2026-04-19T19:00:00.000Z",
+    "validTo": "2026-04-20T07:00:00.000Z",
+    "periods": [
+      {
+        "kind": "INITIAL",
+        "start": "2026-04-19T19:00:00.000Z",
+        "end": "2026-04-20T07:00:00.000Z",
+        "probability": null,
+        "raw": "32020G30KT 3SM OVC015",
+        "wind": {
+          "directionDeg": 320,
+          "speedKt": 20,
+          "gustKt": 30,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 3,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "OVC",
+            "heightFtAgl": 1500
+          }
+        ],
+        "cavok": false
+      }
+    ],
+    "raw": "TAF KMLI 191820Z 1919/2007 32020G30KT 3SM OVC015",
+    "warnings": []
+  },
+  {
+    "station": "KORD",
+    "amended": false,
+    "corrected": false,
+    "issuedAt": "2026-04-19T18:20:00.000Z",
+    "validFrom": "2026-04-19T19:00:00.000Z",
+    "validTo": "2026-04-20T07:00:00.000Z",
+    "periods": [
+      {
+        "kind": "INITIAL",
+        "start": "2026-04-19T19:00:00.000Z",
+        "end": "2026-04-19T21:00:00.000Z",
+        "probability": null,
+        "raw": "20014KT 6SM BKN045",
+        "wind": {
+          "directionDeg": 200,
+          "speedKt": 14,
+          "gustKt": null,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 6,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "BKN",
+            "heightFtAgl": 4500
+          }
+        ],
+        "cavok": false
+      },
+      {
+        "kind": "FM",
+        "start": "2026-04-19T21:00:00.000Z",
+        "end": "2026-04-20T07:00:00.000Z",
+        "probability": null,
+        "raw": "FM192100 32020G30KT 6SM OVC025",
+        "wind": {
+          "directionDeg": 320,
+          "speedKt": 20,
+          "gustKt": 30,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 6,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "OVC",
+            "heightFtAgl": 2500
+          }
+        ],
+        "cavok": false
+      }
+    ],
+    "raw": "TAF KORD 191820Z 1919/2007 20014KT 6SM BKN045 FM192100 32020G30KT 6SM OVC025",
+    "warnings": []
+  }
+]
