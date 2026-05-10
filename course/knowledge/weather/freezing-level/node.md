@@ -1,0 +1,169 @@
+---
+id: wx-freezing-level
+title: Freezing Level
+domain: weather
+cross_domains: [flight-planning]
+
+knowledge_types: [conceptual, procedural]
+technical_depth: working
+stability: stable
+
+minimum_cert: private
+study_priority: critical
+requires:
+  - wx-icing-types-and-avoidance
+deepens: []
+applied_by:
+  - wx-go-nogo-decision
+  - plan-vfr-cross-country
+  - plan-ifr-cross-country
+taught_by: []
+related:
+  - wx-product-winds-aloft
+  - wx-product-airmets-sigmets
+
+modalities: [reading, cards]
+estimated_time_minutes: 25
+review_time_minutes: 5
+
+references:
+  - source: AC 00-45H
+    detail: Aviation Weather Services, Freezing Level chart section
+    note: Format spec for the freezing-level forecast product including isotherm contour intervals.
+  - source: FAA-H-8083-28
+    detail: Aviation Weather Handbook (Aviation Weather Handbook)
+    note: Modern consolidated reference for icing meteorology and the freezing-level product. Verify chapter.
+  - source: AC 91-74B
+    detail: Pilot Guide, Flight in Icing Conditions
+    note: Operational treatment of freezing level in icing avoidance and escape decisions.
+  - source: AIM
+    detail: 7-1-21 -- Icing
+    note: Operational guidance referencing the freezing level as part of the icing decision.
+
+assessable: true
+assessment_methods: [recall, scenario]
+mastery_criteria: >
+  Learner can read a freezing-level forecast chart, locate the height
+  of the 0 deg C isotherm along a planned route, recognize when the
+  freezing level intersects terrain (no climb-out, no descent-out),
+  and integrate freezing-level position with CIP / FIP / temperature
+  aloft to identify whether an out exists from the icing layer.
+---
+
+# Freezing Level
+
+## Context
+
+You're planning a winter cross-country in a non-deiced piston single.
+The icing forecast (CIP / FIP) shows moderate icing along your route
+between 4,000 and 10,000 feet. The decision rule from s6.1 says:
+climb above the moisture, or descend below the freezing level, or
+turn around. Climbing above is not an option in this airframe at this
+weight. So everything depends on the third option -- where exactly is
+the freezing level, and is it high enough above the terrain to give
+you a below-freezing-level altitude that's both flyable and clear of
+the icing layer?
+
+## Problem
+
+"Below the freezing level" is the canonical icing escape, but it is
+only an escape when there's actually an above-freezing layer between
+the ice and the ground. On a cold day in the mountains, the freezing
+level can be at the surface. On a marine-air winter day at the coast,
+it can be at 6,000 feet. Same icing forecast, two completely
+different decisions. The freezing-level chart is the product that
+turns "is there an out?" from a guess into a read.
+
+## Discover
+
+The freezing level is where the temperature of the air column passes
+through 0 deg C. Two facts make it useful:
+
+- It moves. Diurnally (warmer afternoons push it higher), seasonally,
+  with airmass changes. The forecast chart is a snapshot in time.
+- It varies by region. In a single forecast, the freezing level might
+  be at the surface in the upper Midwest, at 4,000 feet in the
+  mid-Atlantic, and at 10,000 feet over Florida.
+
+For icing decisions, three position questions matter:
+
+- Is the freezing level above the cloud bases? If yes, there is a
+  below-freezing-level layer of cloud that's a candidate for icing.
+- Is the freezing level above the highest terrain on the route? If
+  no, the "descend below freezing level" out doesn't exist; you'd be
+  flying into terrain.
+- Is the freezing level above your ceiling? If yes, you cannot climb
+  above the freezing level even if the airframe is capable -- you'd
+  need to climb above the entire moist layer instead, which is a
+  different and usually higher target.
+
+The interaction with FB temperatures is direct: if the FB at your
+cruise altitude shows -3 C, you are 3 C below freezing -- which is
+within the structural icing band (+2 C to -20 C is the high-risk
+band, with peak severity around -2 C to -10 C). The FB is the
+station-by-station, altitude-by-altitude version of the same data
+the freezing-level chart smooths into a contour.
+
+## Reveal
+
+The freezing-level chart is published as part of the AC 00-45H
+graphical forecast suite. Standard contour interval is 4,000 feet
+(SFC, 4,000, 8,000, 12,000, ...), with the surface-freezing region
+shaded distinctly. Forecast horizons are typically same-day and 6 /
+12 hours.
+
+The pilot read is three numbers:
+
+- Lowest freezing level along the route -- determines whether a
+  below-freezing-layer descent is possible at any point.
+- Highest freezing level along the route -- determines how high you
+  must climb to be reliably above-freezing.
+- Freezing-level trend over the duration of the flight -- a falling
+  freezing level during the flight (cold front passing in front of
+  you) means your "out" is closing as you go.
+
+Layer this against:
+
+- CIP / FIP for where icing is currently / forecast. The freezing
+  level tells you the bottom of the icing layer; CIP / FIP tells you
+  the top.
+- Cloud bases and tops from the GFA / METAR / PIREPs. Icing requires
+  a cloud and below-freezing temperature. Either alone is fine.
+- Terrain along the route. A freezing level at 5,000 feet over the
+  Appalachian ridges is much different from one over the coastal
+  plain.
+
+## Practice
+
+For a planned flight, walk the route on a freezing-level chart and
+record three values: lowest freezing level, highest freezing level,
+trend over the flight duration. Cross-check against the FB at the
+nearest stations -- the FB temperatures should bracket the
+freezing-level contours.
+
+For each leg, ask: if I encountered icing at cruise, what altitude
+would put me above-freezing without descending into terrain? Write
+down the answer. If the answer is "no such altitude exists," that's
+your no-go signal regardless of what the icing forecast itself says.
+
+## Connect
+
+The freezing-level chart is one input to the icing go/no-go that the
+icing-types-and-avoidance node frames. CIP / FIP tell you where icing
+is; the freezing-level chart tells you where the boundary of the
+below-freezing region is. Together they shape the "is there an out?"
+question.
+
+The temperature aloft from the FB is the same data sampled at
+specific stations and altitudes. When the chart and the FB
+disagree, the FB wins for point-source decisions and the chart wins
+for the synoptic picture.
+
+## Verify
+
+Pick a recent winter day and pull the freezing-level forecast that
+was valid for that day. Compare it to the actual radiosonde
+soundings (KIAD, KOMA, KFFC, etc.) for that day. How accurate was
+the freezing-level forecast? Where did it err? In which kind of
+synoptic setup is the chart most reliable, and in which is it
+something to verify against PIREPs as you fly?

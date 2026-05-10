@@ -200,8 +200,11 @@ knowledge_links:
       weight: 1.0
       notes: K3h thunderstorms and microbursts -- direct match.
     - node_id: wx-icing-types-and-avoidance
-      weight: 1.0
-      notes: K3i icing and freezing-level information -- direct match.
+      weight: 0.7
+      notes: K3i icing portion -- types, avoidance, and the icing decision habit.
+    - node_id: wx-freezing-level
+      weight: 0.5
+      notes: K3i freezing-level portion -- reading the chart and integrating it with the icing forecast.
     - node_id: wx-fog-and-visibility-obstructions
       weight: 0.9
       notes: K3j (fog/mist), K3k (frost), K3l (smoke / haze / volcanic ash).
