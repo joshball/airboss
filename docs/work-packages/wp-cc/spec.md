@@ -111,9 +111,7 @@ Probably 2-3x WP-CFR effort.
 
 ## Out of scope
 
-- Cross-reference UI surfacing (depends on stage 5 / citation system maturity)
-- Automated new-opinion ingestion (future)
-- Search UI inside the corpus (future, possibly fold into flightbag)
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Anchors
 
