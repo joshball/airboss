@@ -38,6 +38,35 @@ export type {
 	AdvisoriesViewParams,
 } from './advisories';
 export { AdvisoriesViewNotFoundError, getAdvisoriesView } from './advisories';
+// Annotations BC -- highlights, note-anchors, card-draft-anchors, drafts
+// (wp-flightbag-rich-reader).
+export type {
+	CreateCardDraftInput,
+	CreateCardDraftParsed,
+	ListAnnotationsOpts,
+	ListDraftsOpts,
+	UpdateCardDraftInput,
+} from './annotations';
+export {
+	AnnotationNotFoundError,
+	CardDraftAlreadyPromotedError,
+	CardDraftNotFoundError,
+	createCardDraft,
+	createCardDraftInputSchema,
+	createHighlight,
+	deleteAnnotation,
+	discardCardDraft,
+	getCardDraft,
+	listAnnotationsForSection,
+	listAnnotationsForUser,
+	listHighlightsForSection,
+	listOpenCardDrafts,
+	markDraftPromoted,
+	promoteDraftToCard,
+	updateCardDraft,
+	updateCardDraftInputSchema,
+	updateHighlightColor,
+} from './annotations';
 export type {
 	CalibrationBucket,
 	CalibrationPageData,
@@ -311,6 +340,7 @@ export {
 	clearFollowUp,
 	createNote,
 	createNoteInputSchema,
+	createNoteWithAnchor,
 	deleteNote,
 	getNote,
 	listDistinctTags,

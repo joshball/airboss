@@ -2,8 +2,10 @@ export { createErrorHandler } from './error-handler';
 export { type RequireIntResult, requireInt } from './form';
 export {
 	createId,
+	generateAnnotationId,
 	generateAuditLogId,
 	generateAuthId,
+	generateCardDraftId,
 	generateCardFeedbackId,
 	generateCardId,
 	generateCardSnoozeId,
@@ -69,6 +71,7 @@ export {
 } from './outbound-url';
 export { isSensitiveKey, REDACTED_PLACEHOLDER, redactSensitive } from './redact';
 export { humanize } from './strings';
+export { captureAnchor, reanchor, type TextAnchor, type TextRange } from './text-anchors';
 export { type DiffOp, wordDiff } from './text-diff';
 export { MS_PER_DAY, MS_PER_HOUR, MS_PER_MINUTE, MS_PER_SECOND, userStartOfDay } from './time';
 export { buildQuery } from './url';

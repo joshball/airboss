@@ -1,13 +1,32 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
+import { useComposerState, useSectionContext } from '@ab/library';
 import Breadcrumbs from '@ab/library/Breadcrumbs.svelte';
 import ReaderLayout from '@ab/library/ReaderLayout.svelte';
 import SourceLinks from '@ab/library/SourceLinks.svelte';
 import TOCDrawer from '@ab/library/TOCDrawer.svelte';
 import { buildAcsTocEntries, findAreaIdForTask } from '../../../../../../../lib/acs-toc';
+import RichReaderComposerPanel from '../../../../../../../lib/RichReaderComposerPanel.svelte';
+import RichReaderHost from '../../../../../../../lib/RichReaderHost.svelte';
 import type { PageData } from './$types';
 
+const composerState = useComposerState();
+const sectionContext = useSectionContext();
+const composerOpen = $derived(Boolean((composerState && composerState.kind !== null) || sectionContext?.section));
+
 let { data }: { data: PageData } = $props();
+
+const acsBodyText = $derived(
+	[
+		data.task.references ?? '',
+		data.task.objective ?? '',
+		...data.elements.knowledge.map((e) => `${e.code} ${e.title}`),
+		...data.elements.risk.map((e) => `${e.code} ${e.title}`),
+		...data.elements.skill.map((e) => `${e.code} ${e.title}`),
+	]
+		.filter(Boolean)
+		.join('\n\n'),
+);
 
 const hasElements = $derived(
 	data.elements.knowledge.length + data.elements.risk.length + data.elements.skill.length > 0,
@@ -33,7 +52,7 @@ const expandedGroupIds = $derived.by(() => {
 	</title>
 </svelte:head>
 
-<ReaderLayout>
+<ReaderLayout composerOpen={composerOpen}>
 	{#snippet breadcrumb()}
 		<Breadcrumbs
 			segments={[
@@ -76,6 +95,10 @@ const expandedGroupIds = $derived.by(() => {
 		/>
 	{/snippet}
 
+	{#snippet composer()}
+		<RichReaderComposerPanel />
+	{/snippet}
+
 	{#snippet footer()}
 		<nav class="task-nav" aria-label="Task navigation">
 			{#if data.nav.prev}
@@ -103,6 +126,7 @@ const expandedGroupIds = $derived.by(() => {
 		</nav>
 	{/snippet}
 
+	<div data-annotatable-body data-section-id={data.task.id} class="acs-body">
 	{#if data.task.references}
 		<section class="meta-block" aria-labelledby="references-h">
 			<h2 id="references-h">References</h2>
@@ -174,7 +198,20 @@ const expandedGroupIds = $derived.by(() => {
 			{/if}
 		</section>
 	{/if}
+	</div>
 </ReaderLayout>
+
+<RichReaderHost
+	section={{
+		id: data.task.id,
+		title: data.task.title,
+		code: `Task ${data.task.code}`,
+		airbossRef: data.uri,
+	}}
+	bodyText={acsBodyText}
+	isAuthenticated={data.isAuthenticated}
+	annotationContext={data.annotationContext}
+/>
 
 <style>
 	.task-code {

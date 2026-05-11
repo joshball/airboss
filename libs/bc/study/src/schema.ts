@@ -19,6 +19,9 @@ import { bauthUser } from '@ab/auth/schema';
 import {
 	ACS_TRIAD_VALUES,
 	AIRPLANE_CLASS_VALUES,
+	ANNOTATION_ANCHOR_TEXT_MAX_LENGTH,
+	ANNOTATION_CONTEXT_MAX_LENGTH,
+	ANNOTATION_KIND_VALUES,
 	ASSESSMENT_METHODS,
 	type AssessmentMethod,
 	AVIATION_TOPIC_VALUES,
@@ -58,6 +61,7 @@ import {
 	HANDBOOK_ERRATA_PATCH_KIND_VALUES,
 	HANDBOOK_READ_STATUS_VALUES,
 	HANDBOOK_READ_STATUSES,
+	HIGHLIGHT_COLOR_VALUES,
 	KNOWLEDGE_EDGE_TYPE_VALUES,
 	KNOWLEDGE_NODE_KIND_VALUES,
 	KNOWLEDGE_NODE_KINDS,
@@ -2618,3 +2622,169 @@ export const note = studySchema.table(
 
 export type NoteRow = typeof note.$inferSelect;
 export type NewNoteRow = typeof note.$inferInsert;
+
+// ---------------------------------------------------------------------------
+// wp-flightbag-rich-reader -- annotations + card drafts.
+//
+// `study.reference_section_annotation` is one row per highlight, note-anchor,
+// or card-draft-anchor. The kind enum + color enum live in
+// `@ab/constants/annotations`; the schema CHECK constraints reference those
+// value lists.
+//
+// `study.card_draft` holds prefilled-card content awaiting the user's
+// promote / discard decision in `/memory/drafts`. When promoted the resulting
+// `study.card.id` is stamped into `promoted_to_card_id` so the audit trail
+// links the draft to the live card.
+//
+// The two tables FK each other via the `card_draft_id` and `note_id`
+// columns on `referenceSectionAnnotation`. `card_draft` is declared first;
+// the annotation table's FK back to `card_draft.id` uses `foreignKey()` in
+// the table-meta callback so the type-checker sees the reference late.
+// ---------------------------------------------------------------------------
+export const cardDraft = studySchema.table(
+	'card_draft',
+	{
+		id: text('id').primaryKey(), // draft_<ULID>
+		userId: text('user_id')
+			.notNull()
+			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
+
+		/** Pre-filled card fields. User edits before promotion. */
+		front: text('front').notNull().default(''),
+		back: text('back').notNull().default(''),
+		domain: text('domain'),
+		cardType: text('card_type').notNull().default('basic'),
+		kind: text('kind').notNull().default('recall'),
+		tags: text('tags').array().notNull().default(sql`ARRAY[]::text[]`),
+
+		/** Optional context FKs (mirror note schema). */
+		referenceSectionId: text('reference_section_id').references(() => referenceSection.id, { onDelete: 'set null' }),
+		/**
+		 * Free-form knowledge-graph node id (mirror of note.knowledgeNodeId
+		 * shape). Wired without a Drizzle FK so the existing knowledge-node
+		 * delete contract isn't disturbed.
+		 */
+		knowledgeNodeId: text('knowledge_node_id'),
+		courseId: text('course_id').references(() => course.id, { onDelete: 'set null' }),
+		goalId: text('goal_id').references(() => goal.id, { onDelete: 'set null' }),
+
+		/**
+		 * When promoted, the resulting card row id is stamped here for audit +
+		 * UI flash. The card row itself is created by `promoteDraftToCard`
+		 * via the existing `createCard` BC; the FK is intentionally NOT
+		 * declared so a cascade on the card row doesn't erase the draft's
+		 * audit trail.
+		 */
+		promotedToCardId: text('promoted_to_card_id'),
+		promotedAt: timestamp('promoted_at', { withTimezone: true }),
+
+		...timestamps(),
+	},
+	(t) => ({
+		// Hot path: "open drafts inbox for user X." Partial index over
+		// `promoted_at IS NULL` so the index pages stay tight as drafts
+		// promote.
+		userOpenIdx: index('card_draft_user_open_idx').on(t.userId, t.createdAt).where(sql`promoted_at IS NULL`),
+		userIdx: index('card_draft_user_idx').on(t.userId, t.createdAt),
+	}),
+);
+
+export type CardDraftRow = typeof cardDraft.$inferSelect;
+export type NewCardDraftRow = typeof cardDraft.$inferInsert;
+
+export const referenceSectionAnnotation = studySchema.table(
+	'reference_section_annotation',
+	{
+		id: text('id').primaryKey(), // ann_<ULID>
+		userId: text('user_id')
+			.notNull()
+			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
+		referenceSectionId: text('reference_section_id')
+			.notNull()
+			.references(() => referenceSection.id, { onDelete: 'cascade' }),
+
+		/** One of `ANNOTATION_KIND_VALUES`. */
+		kind: text('kind').notNull(),
+
+		/**
+		 * Highlight color when `kind = 'highlight'`; null for the other
+		 * kinds. Validated against `HIGHLIGHT_COLOR_VALUES`.
+		 */
+		color: text('color'),
+
+		/** Plain-text excerpt as it appeared at annotation time (re-anchor fallback). */
+		anchorText: text('anchor_text').notNull(),
+		/** UTF-16 offset in the section's plain-text projection at annotation time. */
+		anchorStart: integer('anchor_start').notNull(),
+		anchorEnd: integer('anchor_end').notNull(),
+
+		/** Optional contextual prefix/suffix snippets used by the re-anchor matcher. */
+		prefixContext: text('prefix_context').notNull().default(''),
+		suffixContext: text('suffix_context').notNull().default(''),
+
+		/**
+		 * Forward link to the resulting note when `kind = 'note_anchor'`. FK
+		 * so a note delete cascades the anchor row away (the highlight
+		 * underline becomes meaningless without its note).
+		 */
+		noteId: text('note_id').references(() => note.id, { onDelete: 'cascade' }),
+
+		/**
+		 * Forward link to the resulting card draft when
+		 * `kind = 'card_draft_anchor'`. FK so a draft delete cascades the
+		 * anchor row away.
+		 */
+		cardDraftId: text('card_draft_id').references(() => cardDraft.id, { onDelete: 'cascade' }),
+
+		...timestamps(),
+	},
+	(t) => ({
+		userSectionIdx: index('reference_section_annotation_user_section_idx').on(t.userId, t.referenceSectionId),
+		sectionIdx: index('reference_section_annotation_section_idx').on(t.referenceSectionId),
+		userKindIdx: index('reference_section_annotation_user_kind_idx').on(t.userId, t.kind),
+		userCreatedIdx: index('reference_section_annotation_user_created_idx').on(t.userId, t.createdAt),
+		kindCheck: check(
+			'reference_section_annotation_kind_check',
+			sql.raw(`"kind" IN (${inList(ANNOTATION_KIND_VALUES)})`),
+		),
+		colorCheck: check(
+			'reference_section_annotation_color_check',
+			sql.raw(`"color" IS NULL OR "color" IN (${inList(HIGHLIGHT_COLOR_VALUES)})`),
+		),
+		// Highlight rows must carry a color; non-highlight rows must not.
+		highlightColorRequired: check(
+			'reference_section_annotation_highlight_color_required',
+			sql.raw(`("kind" = 'highlight') = ("color" IS NOT NULL)`),
+		),
+		// Per-kind FK invariants:
+		// `note_anchor` -> `note_id` set; `card_draft_anchor` -> `card_draft_id`
+		// set; `highlight` -> both null.
+		noteAnchorRequiresNote: check(
+			'reference_section_annotation_note_anchor_requires_note',
+			sql.raw(`("kind" = 'note_anchor') = ("note_id" IS NOT NULL)`),
+		),
+		cardDraftAnchorRequiresDraft: check(
+			'reference_section_annotation_card_draft_anchor_requires_draft',
+			sql.raw(`("kind" = 'card_draft_anchor') = ("card_draft_id" IS NOT NULL)`),
+		),
+		anchorTextLengthCheck: check(
+			'reference_section_annotation_anchor_text_length_check',
+			sql.raw(`char_length("anchor_text") > 0 AND char_length("anchor_text") <= ${ANNOTATION_ANCHOR_TEXT_MAX_LENGTH}`),
+		),
+		prefixContextLengthCheck: check(
+			'reference_section_annotation_prefix_context_length_check',
+			sql.raw(`char_length("prefix_context") <= ${ANNOTATION_CONTEXT_MAX_LENGTH}`),
+		),
+		suffixContextLengthCheck: check(
+			'reference_section_annotation_suffix_context_length_check',
+			sql.raw(`char_length("suffix_context") <= ${ANNOTATION_CONTEXT_MAX_LENGTH}`),
+		),
+		anchorRangeCheck: check(
+			'reference_section_annotation_anchor_range_check',
+			sql.raw(`"anchor_start" >= 0 AND "anchor_end" >= "anchor_start"`),
+		),
+	}),
+);
+
+export type ReferenceSectionAnnotationRow = typeof referenceSectionAnnotation.$inferSelect;
+export type NewReferenceSectionAnnotationRow = typeof referenceSectionAnnotation.$inferInsert;

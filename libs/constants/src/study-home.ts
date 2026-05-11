@@ -96,6 +96,12 @@ export const USER_PREF_KEYS = {
 	 * Phase 3.
 	 */
 	READING_HEADING_SCALE: 'study.reading.heading_scale',
+	/**
+	 * Reader annotation visibility filter -- one of `ANNOTATION_FILTER_VALUES`.
+	 * Persists the user's "Show: All / Highlights only / Notes only / Hidden"
+	 * choice across sections. Owned by `wp-flightbag-rich-reader` Phase 6.
+	 */
+	READING_ANNOTATION_FILTER: 'study.reading.annotation_filter',
 } as const;
 
 export type UserPrefKey = (typeof USER_PREF_KEYS)[keyof typeof USER_PREF_KEYS];
@@ -113,6 +119,7 @@ export const READING_PREF_KEYS: readonly UserPrefKey[] = [
 	USER_PREF_KEYS.READING_DENSITY,
 	USER_PREF_KEYS.READING_MEASURE,
 	USER_PREF_KEYS.READING_HEADING_SCALE,
+	USER_PREF_KEYS.READING_ANNOTATION_FILTER,
 ];
 
 /**

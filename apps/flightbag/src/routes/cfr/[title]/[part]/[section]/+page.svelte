@@ -3,6 +3,7 @@ import HeartbeatTicker from '@ab/library/HeartbeatTicker.svelte';
 import ReaderEmptyState from '@ab/library/ReaderEmptyState.svelte';
 import ReaderNav from '@ab/library/ReaderNav.svelte';
 import RenderedSection from '@ab/library/RenderedSection.svelte';
+import RichReaderHost from '../../../../../lib/RichReaderHost.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -37,6 +38,17 @@ const isEndOfDoc = $derived(data.nav.next === null);
 	{#if data.isAuthenticated}
 		<HeartbeatTicker sectionId={data.section.id} enabled={data.isAuthenticated} />
 	{/if}
+	<RichReaderHost
+		section={{
+			id: data.section.id,
+			title: data.section.title,
+			code: `${data.raw.title} CFR §${data.raw.part}.${data.raw.section}`,
+			airbossRef: data.uri,
+		}}
+		bodyText={data.section.contentMd}
+		isAuthenticated={data.isAuthenticated}
+		annotationContext={data.annotationContext}
+	/>
 {:else}
 	<header class="page-header-inline">
 		<h1>{data.raw.title} CFR §{data.raw.part}.{data.raw.section}</h1>

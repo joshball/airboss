@@ -17,7 +17,8 @@
 		"@ab/themes": "workspace:*",
 		"@ab/types": "workspace:*",
 		"@ab/ui": "workspace:*",
-		"@ab/utils": "workspace:*"
+		"@ab/utils": "workspace:*",
+		"zod": "^3.25.36"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-node": "^5.2.12",

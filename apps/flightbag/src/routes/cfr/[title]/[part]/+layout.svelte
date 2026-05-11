@@ -1,14 +1,20 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
+import { useComposerState, useSectionContext } from '@ab/library';
 import Breadcrumbs from '@ab/library/Breadcrumbs.svelte';
 import ReaderLayout from '@ab/library/ReaderLayout.svelte';
 import SourceLinks from '@ab/library/SourceLinks.svelte';
 import TOCRender, { type TOCRenderEntry } from '@ab/library/TOCRender.svelte';
 import type { Snippet } from 'svelte';
 import { page } from '$app/state';
+import RichReaderComposerPanel from '../../../../lib/RichReaderComposerPanel.svelte';
 import type { LayoutData } from './$types';
 
 let { data, children }: { data: LayoutData; children: Snippet } = $props();
+
+const composerState = useComposerState();
+const sectionContext = useSectionContext();
+const composerOpen = $derived(Boolean((composerState && composerState.kind !== null) || sectionContext?.section));
 
 const partLandingHref = $derived(ROUTES.FLIGHTBAG_CFR_PART(data.cfr.titleParam, data.cfr.partParam));
 
@@ -50,7 +56,7 @@ const tocSummary = $derived.by(() => {
 });
 </script>
 
-<ReaderLayout>
+<ReaderLayout composerOpen={composerOpen}>
 	{#snippet tocSidebar()}
 		{#if tocEntries.length > 0}
 			<TOCRender
@@ -79,6 +85,10 @@ const tocSummary = $derived.by(() => {
 			onlineUrl={data.sourceLinks.onlineUrl}
 			localPdfMissing={data.sourceLinks.localPdfMissing}
 		/>
+	{/snippet}
+
+	{#snippet composer()}
+		<RichReaderComposerPanel />
 	{/snippet}
 
 	{@render children()}

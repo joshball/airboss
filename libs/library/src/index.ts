@@ -19,10 +19,25 @@
  *   import type { RenderedSectionProps } from '@ab/library';
  */
 
+export type { AnnotationFilterChipProps } from './AnnotationFilterChip.svelte';
+export type { AnnotationLayerProps, AnnotationLayerRecord } from './AnnotationLayer.svelte';
 export type { BreadcrumbSegment, BreadcrumbsProps } from './Breadcrumbs.svelte';
 export type { ChapterTileProps } from './ChapterTile.svelte';
 export type { CitationChipProps } from './CitationChip.svelte';
+export type {
+	CardComposerPrefill,
+	ComposerKind,
+	ComposerState,
+	NoteComposerPrefill,
+} from './composer-state.svelte';
+export {
+	createComposerState,
+	provideComposerState,
+	useComposerState,
+} from './composer-state.svelte';
 export type { HeartbeatTickerProps } from './HeartbeatTicker.svelte';
+export type { InlineCardComposerProps } from './InlineCardComposer.svelte';
+export type { InlineNoteComposerProps } from './InlineNoteComposer.svelte';
 export type { ReaderEmptyStateKind, ReaderEmptyStateProps } from './ReaderEmptyState.svelte';
 export type { ReaderLayoutProps } from './ReaderLayout.svelte';
 export type { ReaderNavData, ReaderNavLink, ReaderNavProps } from './ReaderNav.svelte';
@@ -30,7 +45,24 @@ export type { ReaderPrefsButtonProps, ReadingPrefKey, ReadingPrefValue } from '.
 export type { ReadingTimeProps } from './ReadingTime.svelte';
 export type { ReferenceCardProps } from './ReferenceCard.svelte';
 export type { RenderedSectionFigure, RenderedSectionProps } from './RenderedSection.svelte';
+export type { SectionNoteListItem, SectionNotesPanelProps } from './SectionNotesPanel.svelte';
+export type { SelectionToolbarProps, SelectionToolbarSection } from './SelectionToolbar.svelte';
 export type { SourceLinksProps } from './SourceLinks.svelte';
 export type { SubjectChipProps } from './SubjectChip.svelte';
+export type {
+	SectionContext,
+	SectionContextNote,
+	SectionContextSection,
+} from './section-context.svelte';
+export {
+	createSectionContext,
+	provideSectionContext,
+	useSectionContext,
+} from './section-context.svelte';
+export {
+	plainTextFromElement,
+	plainTextFromMarkdown,
+	rangeToOffsets,
+} from './section-text';
 export type { TOCDrawerEntry, TOCDrawerProps } from './TOCDrawer.svelte';
 export type { TOCRenderEntry, TOCRenderMode, TOCRenderProps } from './TOCRender.svelte';

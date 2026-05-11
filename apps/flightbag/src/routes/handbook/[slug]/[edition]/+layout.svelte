@@ -1,5 +1,6 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
+import { useComposerState, useSectionContext } from '@ab/library';
 import Breadcrumbs from '@ab/library/Breadcrumbs.svelte';
 import ReaderLayout from '@ab/library/ReaderLayout.svelte';
 import SourceLinks from '@ab/library/SourceLinks.svelte';
@@ -9,9 +10,14 @@ import { withViewTransition } from '@ab/utils';
 import type { Snippet } from 'svelte';
 import { goto, onNavigate } from '$app/navigation';
 import { page } from '$app/state';
+import RichReaderComposerPanel from '../../../../lib/RichReaderComposerPanel.svelte';
 import type { LayoutData } from './$types';
 
 let { data, children }: { data: LayoutData; children: Snippet } = $props();
+
+const composerState = useComposerState();
+const sectionContext = useSectionContext();
+const composerOpen = $derived(Boolean((composerState && composerState.kind !== null) || sectionContext?.section));
 
 // Resolve the active section id from the URL. The route segments
 // `[chapter]` and `[section]` map onto the reading-order codes.
@@ -149,6 +155,15 @@ const cheatsheetGroups: ReadonlyArray<KeyboardShortcutGroup> = [
 		],
 	},
 	{
+		title: 'Selection',
+		entries: [
+			{ key: 'h', description: 'Highlight selection (yellow)' },
+			{ key: 'n', description: 'Note from selection' },
+			{ key: 'c', description: 'Card now from selection' },
+			{ key: 'd', description: 'Card later from selection' },
+		],
+	},
+	{
 		title: 'Help',
 		entries: [
 			{ key: '?', description: 'Open this cheatsheet' },
@@ -160,7 +175,7 @@ const cheatsheetGroups: ReadonlyArray<KeyboardShortcutGroup> = [
 
 <svelte:window onkeydown={handleKeydown} />
 
-<ReaderLayout>
+<ReaderLayout composerOpen={composerOpen}>
 	{#snippet tocSidebar()}
 		<TOCRender
 			mode="rail"
@@ -187,6 +202,10 @@ const cheatsheetGroups: ReadonlyArray<KeyboardShortcutGroup> = [
 			onlineUrl={data.sourceLinks.onlineUrl}
 			localPdfMissing={data.sourceLinks.localPdfMissing}
 		/>
+	{/snippet}
+
+	{#snippet composer()}
+		<RichReaderComposerPanel />
 	{/snippet}
 
 	{@render children()}

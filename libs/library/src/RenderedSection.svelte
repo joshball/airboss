@@ -292,7 +292,7 @@ function stringifyMetadataValue(value: unknown): string {
 		{/if}
 	</header>
 	{#if hasContent}
-		<article class="body">
+		<article class="body" data-annotatable-body data-section-id={id}>
 			{#if stripped.trim().length > 0}
 				<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 				{@html bodyHtml}

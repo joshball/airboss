@@ -14,6 +14,7 @@
 
 import { AUDIT_OPS, auditWrite } from '@ab/audit';
 import {
+	ANNOTATION_FILTER_VALUES,
 	AUDIT_TARGETS,
 	CITATION_ORDER_VALUES,
 	READING_DENSITY_VALUES,
@@ -120,6 +121,12 @@ export const USER_PREF_SCHEMAS = {
 				(READING_HEADING_SCALE_VALUES as readonly number[]).includes(v),
 			{ message: 'heading_scale must be one of READING_HEADING_SCALE_VALUES' },
 		),
+	// wp-flightbag-rich-reader Phase 6 -- annotation visibility filter chip in
+	// the reader chrome. Closed value set lives in `ANNOTATION_FILTER_VALUES`.
+	'study.reading.annotation_filter': z.enum([ANNOTATION_FILTER_VALUES[0], ...ANNOTATION_FILTER_VALUES.slice(1)] as [
+		(typeof ANNOTATION_FILTER_VALUES)[number],
+		...(typeof ANNOTATION_FILTER_VALUES)[number][],
+	]),
 } satisfies Record<UserPrefKey, z.ZodType>;
 
 export class UnknownUserPrefKeyError extends Error {

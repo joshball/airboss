@@ -12,6 +12,7 @@ import {
 } from '@ab/constants';
 import { listGlossaryEntries } from '@ab/help/glossary';
 import HelpSearch from '@ab/help/ui/HelpSearch.svelte';
+import HighlightTokens from '@ab/library/HighlightTokens.svelte';
 import ReaderPrefsButton, { type ReadingPrefKey, type ReadingPrefValue } from '@ab/library/ReaderPrefsButton.svelte';
 import {
 	type AppearanceMode,
@@ -318,9 +319,11 @@ const themePickerLocked = $derived(themePref != null && selection.theme !== them
 		measure={readingPrefs.measure}
 		headingScale={readingPrefs.headingScale}
 	>
-		<main id="main" tabindex="-1" class:full-bleed={fullBleed}>
-			{@render children()}
-		</main>
+		<HighlightTokens>
+			<main id="main" tabindex="-1" class:full-bleed={fullBleed}>
+				{@render children()}
+			</main>
+		</HighlightTokens>
 	</ReadableScope>
 </ThemeProvider>
 

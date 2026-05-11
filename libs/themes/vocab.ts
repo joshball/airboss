@@ -157,6 +157,21 @@ export const TOKENS = {
 	readerMeasureCh: '--reader-measure-ch',
 	readerHeadingScale: '--reader-heading-scale',
 
+	// -------- highlights (WP-FLIGHTBAG-RICH-READER Phase 2) --------
+	// Per-color swatch + wash pair for the rich-reader's selection
+	// highlight overlays. The swatch is the opaque chip used in the picker;
+	// the wash is the semi-transparent paint applied over the body. Both
+	// land as light-mode tokens by default and dark-mode themes can
+	// override the wash hue/lightness for legibility.
+	highlightYellow: '--highlight-yellow',
+	highlightYellowWash: '--highlight-yellow-wash',
+	highlightBlue: '--highlight-blue',
+	highlightBlueWash: '--highlight-blue-wash',
+	highlightGreen: '--highlight-green',
+	highlightGreenWash: '--highlight-green-wash',
+	highlightPink: '--highlight-pink',
+	highlightPinkWash: '--highlight-pink-wash',
+
 	// -------- scale: spacing --------
 	space4xs: '--space-4xs',
 	space3xs: '--space-3xs',

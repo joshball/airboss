@@ -70,6 +70,20 @@ export interface ReaderLayoutProps {
 	 * tick on behalf of an anonymous user.
 	 */
 	readonly heartbeatEnabled?: boolean;
+	/**
+	 * Optional right-column content (wp-flightbag-rich-reader Phase 4+5).
+	 * The snippet renders inside the third grid column; the column appears
+	 * only when `composerOpen === true` so an empty snippet doesn't push
+	 * the body around. Used by the inline card composer + per-section
+	 * notes panel.
+	 */
+	readonly composer?: Snippet;
+	/**
+	 * Activate the third (composer) grid column. When false, the snippet
+	 * is not mounted and the layout falls back to the two-column shape.
+	 * Defaults to false so a forgetful caller doesn't get a phantom column.
+	 */
+	readonly composerOpen?: boolean;
 }
 </script>
 
@@ -88,12 +102,15 @@ let {
 	footer,
 	sectionId,
 	heartbeatEnabled = false,
+	composer,
+	composerOpen = false,
 }: ReaderLayoutProps = $props();
 
 const showHeartbeat = $derived(Boolean(sectionId) && heartbeatEnabled);
+const showComposer = $derived(composerOpen && composer !== undefined);
 </script>
 
-<div class="reader">
+<div class="reader" class:has-composer={showComposer}>
 	<div class="primary">
 		{#if breadcrumb || sourceLinks}
 			<div class="header-eyebrow">
@@ -135,6 +152,11 @@ const showHeartbeat = $derived(Boolean(sectionId) && heartbeatEnabled);
 			{@render tocSidebar()}
 		</aside>
 	{/if}
+	{#if showComposer && composer}
+		<aside class="composer-rail" data-testid="reader-composer-rail">
+			{@render composer()}
+		</aside>
+	{/if}
 	{#if showHeartbeat && sectionId}
 		<HeartbeatTicker {sectionId} enabled={heartbeatEnabled} />
 	{/if}
@@ -148,9 +170,20 @@ const showHeartbeat = $derived(Boolean(sectionId) && heartbeatEnabled);
 		align-items: start;
 	}
 
+	.reader.has-composer {
+		grid-template-columns: minmax(0, 1fr) 18rem 22rem;
+	}
+
 	.toc-rail {
 		position: sticky;
 		top: var(--space-md);
+	}
+
+	.composer-rail {
+		position: sticky;
+		top: var(--space-md);
+		max-height: calc(100vh - var(--space-2xl));
+		overflow: auto;
 	}
 
 	.primary {
@@ -211,8 +244,32 @@ const showHeartbeat = $derived(Boolean(sectionId) && heartbeatEnabled);
 		margin-top: var(--space-2xl);
 	}
 
+	@media (max-width: 80rem) {
+		/* Below 80rem the composer becomes a right-side sheet instead of
+		   a third grid column so the body keeps a comfortable measure. */
+		.reader.has-composer {
+			grid-template-columns: minmax(0, 1fr) 18rem;
+		}
+		.composer-rail {
+			position: fixed;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			width: min(22rem, 100vw);
+			max-height: 100vh;
+			background: var(--surface-page);
+			border-left: 1px solid var(--edge-default);
+			padding: var(--space-md);
+			z-index: var(--z-popover);
+			box-shadow: var(--shadow-lg);
+		}
+	}
+
 	@media (max-width: 60rem) {
 		.reader {
+			grid-template-columns: 1fr;
+		}
+		.reader.has-composer {
 			grid-template-columns: 1fr;
 		}
 		.toc-rail {

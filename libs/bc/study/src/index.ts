@@ -109,6 +109,7 @@ export {
 // Table objects are exported here so cross-BC code, scripts, and SSR can
 // reference them without dragging postgres into the client bundle.
 export type {
+	CardDraftRow,
 	CardFeedbackRow,
 	CardRow,
 	CardSnoozeRow,
@@ -126,6 +127,7 @@ export type {
 	KnowledgeNodeProgressRow,
 	KnowledgeNodeRow,
 	MemoryReviewSessionRow,
+	NewCardDraftRow,
 	NewCardFeedbackRow,
 	NewCardRow,
 	NewCardSnoozeRow,
@@ -146,6 +148,7 @@ export type {
 	NewNoteRow,
 	NewReferenceFigureRow,
 	NewReferenceRow,
+	NewReferenceSectionAnnotationRow,
 	NewReferenceSectionReadStateRow,
 	NewReferenceSectionRow,
 	NewReviewRow,
@@ -161,6 +164,7 @@ export type {
 	NoteRow,
 	ReferenceFigureRow,
 	ReferenceRow,
+	ReferenceSectionAnnotationRow,
 	ReferenceSectionReadStateRow,
 	ReferenceSectionRow,
 	ReviewRow,
@@ -180,6 +184,7 @@ export type {
 } from './schema';
 export {
 	card,
+	cardDraft,
 	cardFeedback,
 	cardSnooze,
 	cardState,
@@ -200,6 +205,7 @@ export {
 	reference,
 	referenceFigure,
 	referenceSection,
+	referenceSectionAnnotation,
 	referenceSectionErrata,
 	referenceSectionReadState,
 	review,
@@ -258,6 +264,13 @@ export type {
 	AdvisoriesViewNotFoundKey,
 	AdvisoriesViewParams,
 } from './advisories';
+export type {
+	CreateCardDraftInput,
+	CreateCardDraftParsed,
+	ListAnnotationsOpts,
+	ListDraftsOpts,
+	UpdateCardDraftInput,
+} from './annotations';
 export type {
 	CalibrationBucket,
 	CalibrationPageData,

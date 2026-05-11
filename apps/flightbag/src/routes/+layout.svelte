@@ -11,6 +11,8 @@ import {
 	type UserPrefKey,
 } from '@ab/constants';
 import HelpSearch from '@ab/help/ui/HelpSearch.svelte';
+import { provideComposerState, provideSectionContext } from '@ab/library';
+import HighlightTokens from '@ab/library/HighlightTokens.svelte';
 import ReaderPrefsButton, { type ReadingPrefKey, type ReadingPrefValue } from '@ab/library/ReaderPrefsButton.svelte';
 import {
 	type AppearanceMode,
@@ -31,6 +33,14 @@ import '$lib/help/register';
 import type { LayoutData } from './$types';
 
 let { data, children }: { data: LayoutData; children: Snippet } = $props();
+
+// Provide the rich-reader composer state + section context at the root
+// so the per-doc layout's composer slot, the per-section RichReaderHost's
+// toolbar, and the per-section notes panel all coordinate. The host on
+// each section page calls `setSection(...)` to populate the section
+// context with that section's id + notes. Contracts in @ab/library.
+provideComposerState();
+provideSectionContext();
 
 // Optimistic-flip pattern for reader prefs: each control updates the
 // override immediately so the UI reflows without waiting for the POST.
@@ -204,9 +214,11 @@ async function setAppearance(value: AppearancePreference) {
 	measure={readingPrefs.measure}
 	headingScale={readingPrefs.headingScale}
 >
-	<main id="main" tabindex="-1" class="page">
-		{@render children()}
-	</main>
+	<HighlightTokens>
+		<main id="main" tabindex="-1" class="page">
+			{@render children()}
+		</main>
+	</HighlightTokens>
 </ReadableScope>
 
 <style>

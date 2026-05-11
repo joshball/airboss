@@ -125,6 +125,13 @@ export const QUERY_PARAMS = {
 	NOTE_GOAL_ID: 'goalId',
 	NOTE_SYLLABUS_NODE_ID: 'syllabusNodeId',
 
+	/**
+	 * Card-draft prefill on `/memory/new` (wp-flightbag-rich-reader Phase 3).
+	 * When set, the form pre-fills from the matching `study.card_draft` row
+	 * and the submit handler stamps the draft as promoted.
+	 */
+	DRAFT: 'draft',
+
 	// Hangar /admin/audit filters (audit-explorer WP).
 	/** Resolved actor user id (hangar audit explorer). */
 	AUDIT_ACTOR: 'actor',
@@ -246,6 +253,14 @@ export const ROUTES = {
 	MEMORY_REVIEW_SESSION: (sessionId: string) => `/memory/review/${encodeURIComponent(sessionId)}` as const,
 	MEMORY_NEW: '/memory/new',
 	MEMORY_BROWSE: '/memory/browse',
+	/**
+	 * Card-draft inbox (wp-flightbag-rich-reader Phase 3). Lists open drafts
+	 * (`promoted_at IS NULL`) queued from the flightbag selection toolbar's
+	 * "Card later" action. Each row offers Edit + promote / Promote as-is /
+	 * Discard.
+	 */
+	MEMORY_DRAFTS: '/memory/drafts',
+	MEMORY_DRAFT_DETAIL: (id: string) => `/memory/drafts/${encodeURIComponent(id)}` as const,
 	MEMORY_CARD: (id: string) => `/memory/${id}` as const,
 	/**
 	 * Path pattern for the memory-card detail surface, used by help-page
@@ -283,7 +298,7 @@ export const ROUTES = {
 	 * Filtered index. `view` is one of `NOTES_VIEW_VALUES`; the loader
 	 * rejects out-of-set values by falling back to `NOTES_VIEW_DEFAULT`.
 	 */
-	NOTES_FILTER: (view: 'all' | 'follow-ups' | 'archived' | 'by-context') =>
+	NOTES_FILTER: (view: 'all' | 'follow-ups' | 'archived' | 'by-context' | 'highlights') =>
 		`/notes?${QUERY_PARAMS.VIEW}=${view}` as const,
 
 	// Study -- Reps

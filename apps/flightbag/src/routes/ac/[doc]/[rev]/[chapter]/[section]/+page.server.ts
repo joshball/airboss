@@ -15,6 +15,7 @@ import {
 import { REFERENCE_KINDS, type ReferenceKind, ROUTES, readingMinutesForWords } from '@ab/constants';
 import { error } from '@sveltejs/kit';
 import { computeSiblingNav } from '../../../../../../lib/section-nav';
+import { loadSectionAnnotationContext } from '../../../../../../lib/server/section-annotations';
 import { buildSourceLinks } from '../../../../../../lib/source-links';
 import { buildTOCEntries, totalReadingMinutes } from '../../../../../../lib/toc';
 import type { PageServerLoad } from './$types';
@@ -69,6 +70,8 @@ export const load: PageServerLoad = async (event) => {
 	const sectionEntry = readingOrder.find((e) => e.sectionId === view.section.id);
 	const sectionMinutes = sectionEntry ? readingMinutesForWords(sectionEntry.wordCount) : 0;
 
+	const annotationContext = await loadSectionAnnotationContext(event.locals.user?.id ?? null, view.section.id);
+
 	return {
 		uri: `airboss-ref:ac/${params.doc}/${params.rev}/section-${params.chapter}`,
 		sourceLinks,
@@ -118,5 +121,6 @@ export const load: PageServerLoad = async (event) => {
 			sectionMinutes,
 		},
 		isAuthenticated: event.locals.user !== null,
+		annotationContext,
 	};
 };

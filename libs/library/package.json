@@ -8,10 +8,15 @@
 			"types": "./src/index.ts",
 			"default": "./src/index.ts"
 		},
+		"./AnnotationFilterChip.svelte": "./src/AnnotationFilterChip.svelte",
+		"./AnnotationLayer.svelte": "./src/AnnotationLayer.svelte",
 		"./Breadcrumbs.svelte": "./src/Breadcrumbs.svelte",
 		"./ChapterTile.svelte": "./src/ChapterTile.svelte",
 		"./CitationChip.svelte": "./src/CitationChip.svelte",
 		"./HeartbeatTicker.svelte": "./src/HeartbeatTicker.svelte",
+		"./HighlightTokens.svelte": "./src/HighlightTokens.svelte",
+		"./InlineCardComposer.svelte": "./src/InlineCardComposer.svelte",
+		"./InlineNoteComposer.svelte": "./src/InlineNoteComposer.svelte",
 		"./ReaderEmptyState.svelte": "./src/ReaderEmptyState.svelte",
 		"./ReaderLayout.svelte": "./src/ReaderLayout.svelte",
 		"./ReaderNav.svelte": "./src/ReaderNav.svelte",
@@ -19,6 +24,8 @@
 		"./ReadingTime.svelte": "./src/ReadingTime.svelte",
 		"./ReferenceCard.svelte": "./src/ReferenceCard.svelte",
 		"./RenderedSection.svelte": "./src/RenderedSection.svelte",
+		"./SectionNotesPanel.svelte": "./src/SectionNotesPanel.svelte",
+		"./SelectionToolbar.svelte": "./src/SelectionToolbar.svelte",
 		"./SourceLinks.svelte": "./src/SourceLinks.svelte",
 		"./SubjectChip.svelte": "./src/SubjectChip.svelte",
 		"./TOCDrawer.svelte": "./src/TOCDrawer.svelte",
@@ -30,5 +37,8 @@
 		"@ab/ui": "workspace:*",
 		"@ab/utils": "workspace:*",
 		"svelte": "^5.34.7"
+	},
+	"devDependencies": {
+		"vitest": "^4.1.0"
 	}
 }
