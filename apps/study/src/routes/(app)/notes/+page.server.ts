@@ -26,6 +26,8 @@
 
 import { requireAuth } from '@ab/auth';
 import {
+	getReferenceSectionById,
+	listAnnotationsForUser,
 	listNotesForUser,
 	listOpenFollowUps,
 	listSavedSearches,
@@ -47,6 +49,7 @@ import {
 	type NotesView,
 	QUERY_PARAMS,
 } from '@ab/constants';
+import { type SourceId, urlForReference } from '@ab/sources';
 import type { PageServerLoad } from './$types';
 
 export interface NotesIndexNote {
@@ -75,6 +78,18 @@ export interface SavedSearchEntry {
 	createdAt: string;
 }
 
+export interface HighlightsListRow {
+	id: string;
+	kind: 'highlight' | 'note_anchor';
+	color: string | null;
+	anchorText: string;
+	createdAt: string;
+	noteId: string | null;
+	sectionId: string;
+	sourceTitle: string | null;
+	sourceUrl: string | null;
+}
+
 export interface NotesIndexData {
 	view: NotesView;
 	sort: NotesSort;
@@ -93,6 +108,7 @@ export interface NotesIndexData {
 	nextCursor: string | null;
 	tagCloud: Array<{ tag: string; count: number }>;
 	savedSearches: SavedSearchEntry[];
+	highlights: HighlightsListRow[];
 }
 
 function readView(raw: string | null): NotesView {
@@ -231,7 +247,43 @@ export const load: PageServerLoad = async (event) => {
 	let notes: NotesIndexNote[] = [];
 	let nextCursor: string | null = null;
 	let followUpMonths: FollowUpMonthGroup[] | null = null;
+	let highlights: HighlightsListRow[] = [];
 	const noteContextById = new Map<string, ContextRow>();
+
+	if (view === NOTES_VIEWS.HIGHLIGHTS) {
+		const rows = await listAnnotationsForUser(user.id, { limit: 200 });
+		const filtered = rows.filter((r) => r.kind === 'highlight' || r.kind === 'note_anchor');
+		const sectionCache = new Map<string, { title: string; code: string; airbossRef: string } | null>();
+		highlights = await Promise.all(
+			filtered.map(async (row) => {
+				let cached = sectionCache.get(row.referenceSectionId);
+				if (cached === undefined) {
+					const sec = await getReferenceSectionById(row.referenceSectionId).catch(() => null);
+					cached = sec ? { title: sec.title, code: sec.code, airbossRef: sec.airbossRef } : null;
+					sectionCache.set(row.referenceSectionId, cached);
+				}
+				let sourceUrl: string | null = null;
+				if (cached) {
+					try {
+						sourceUrl = urlForReference(cached.airbossRef as SourceId);
+					} catch {
+						sourceUrl = null;
+					}
+				}
+				return {
+					id: row.id,
+					kind: row.kind === 'highlight' ? 'highlight' : 'note_anchor',
+					color: row.color,
+					anchorText: row.anchorText,
+					createdAt: row.createdAt instanceof Date ? row.createdAt.toISOString() : new Date().toISOString(),
+					noteId: row.noteId,
+					sectionId: row.referenceSectionId,
+					sourceTitle: cached ? `${cached.title} (${cached.code})` : null,
+					sourceUrl,
+				};
+			}),
+		);
+	}
 
 	if (view === NOTES_VIEWS.FOLLOW_UPS) {
 		const rows = await listOpenFollowUps(user.id);
@@ -295,5 +347,6 @@ export const load: PageServerLoad = async (event) => {
 		nextCursor,
 		tagCloud,
 		savedSearches,
+		highlights,
 	} satisfies NotesIndexData;
 };

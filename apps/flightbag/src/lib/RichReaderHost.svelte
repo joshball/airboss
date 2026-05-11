@@ -58,7 +58,9 @@ export interface RichReaderHostProps {
 </script>
 
 <script lang="ts">
+import { ROUTES, USER_PREF_KEYS } from '@ab/constants';
 import { useComposerState, useSectionContext } from '@ab/library';
+import AnnotationFilterChip from '@ab/library/AnnotationFilterChip.svelte';
 import AnnotationLayer from '@ab/library/AnnotationLayer.svelte';
 import SelectionToolbar from '@ab/library/SelectionToolbar.svelte';
 import Toast from '@ab/ui/components/Toast.svelte';
@@ -109,6 +111,27 @@ let toastVisible = $state(false);
 let toastMessage = $state('');
 let toastTimer: ReturnType<typeof setTimeout> | null = null;
 let orphans = $state<AnnotationLayerRecord[]>([]);
+let filter = $state<AnnotationFilter>(annotationContext.filter);
+
+$effect(() => {
+	// Re-sync filter when navigating to a different section (the
+	// page-server reads the user pref again and the prop updates).
+	filter = annotationContext.filter;
+});
+
+async function onFilterChange(next: AnnotationFilter) {
+	filter = next;
+	try {
+		await fetch(ROUTES.READING_PREFS, {
+			method: 'POST',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify({ key: USER_PREF_KEYS.READING_ANNOTATION_FILTER, value: next }),
+		});
+	} catch {
+		// Non-fatal: the cookie / pref just won't persist this turn. The
+		// in-page filter has already flipped via $state above.
+	}
+}
 
 function showToast(message: string) {
 	toastMessage = message;
@@ -264,9 +287,12 @@ function onNoteAnchorClicked(noteId: string) {
 		{onNote}
 		{onCopied}
 	/>
+	<div class="reader-chrome" data-testid="reader-chrome">
+		<AnnotationFilterChip value={filter} onchange={onFilterChange} />
+	</div>
 	<AnnotationLayer
 		{annotations}
-		filter={annotationContext.filter}
+		{filter}
 		{onEditColor}
 		{onRemove}
 		onorphans={onOrphans}
@@ -300,8 +326,15 @@ function onNoteAnchorClicked(noteId: string) {
 		bottom: var(--space-lg);
 		left: 50%;
 		transform: translateX(-50%);
-		z-index: 80;
+		z-index: var(--z-toast);
 		pointer-events: none;
+	}
+
+	.reader-chrome {
+		display: flex;
+		justify-content: flex-end;
+		gap: var(--space-xs);
+		margin: var(--space-xs) 0;
 	}
 
 	.orphan-panel {

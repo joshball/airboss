@@ -19,6 +19,7 @@
  *   import type { RenderedSectionProps } from '@ab/library';
  */
 
+export type { AnnotationFilterChipProps } from './AnnotationFilterChip.svelte';
 export type { AnnotationLayerProps, AnnotationLayerRecord } from './AnnotationLayer.svelte';
 export type { BreadcrumbSegment, BreadcrumbsProps } from './Breadcrumbs.svelte';
 export type { ChapterTileProps } from './ChapterTile.svelte';

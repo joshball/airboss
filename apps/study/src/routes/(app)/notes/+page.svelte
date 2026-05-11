@@ -21,6 +21,7 @@ const tabHrefs = $derived<Record<NotesView, string>>({
 	[NOTES_VIEWS.FOLLOW_UPS]: ROUTES.NOTES_FILTER(NOTES_VIEWS.FOLLOW_UPS),
 	[NOTES_VIEWS.ARCHIVED]: ROUTES.NOTES_FILTER(NOTES_VIEWS.ARCHIVED),
 	[NOTES_VIEWS.BY_CONTEXT]: ROUTES.NOTES_FILTER(NOTES_VIEWS.BY_CONTEXT),
+	[NOTES_VIEWS.HIGHLIGHTS]: ROUTES.NOTES_FILTER(NOTES_VIEWS.HIGHLIGHTS),
 });
 
 let savedSearchName = $state('');
@@ -197,6 +198,36 @@ const followUpMonths = $derived(data.followUpMonths ?? []);
 						</section>
 					{/each}
 				{/if}
+			{:else if data.view === NOTES_VIEWS.HIGHLIGHTS}
+				{#if data.highlights.length === 0}
+					<div class="empty" data-testid="notes-highlights-empty">
+						<h3>No highlights yet</h3>
+						<p>Open the flightbag, select a passage, and pick the highlight color from the toolbar.</p>
+					</div>
+				{:else}
+					<ul class="highlight-list" data-testid="notes-highlights-list">
+						{#each data.highlights as h (h.id)}
+							<li class="highlight-row" data-testid="notes-highlight-row" data-color={h.color ?? ''}>
+								<header class="highlight-head">
+									<span class="kind-chip" data-kind={h.kind}>
+										{h.kind === 'highlight' ? 'Highlight' : 'Note anchor'}
+									</span>
+									{#if h.color}
+										<span class="color-chip" data-color={h.color}></span>
+									{/if}
+								</header>
+								<blockquote class="anchor-text">"{h.anchorText}"</blockquote>
+								<footer class="highlight-foot">
+									{#if h.sourceUrl && h.sourceTitle}
+										<a class="source" href={h.sourceUrl}>{h.sourceTitle}</a>
+									{:else if h.sourceTitle}
+										<span class="source">{h.sourceTitle}</span>
+									{/if}
+								</footer>
+							</li>
+						{/each}
+					</ul>
+				{/if}
 			{:else}
 				<NotesList
 					notes={data.notes}
@@ -250,6 +281,90 @@ const followUpMonths = $derived(data.followUpMonths ?? []);
 		margin: 0;
 		font-size: var(--font-size-xs);
 		color: var(--ink-muted);
+	}
+
+	.highlight-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-sm);
+	}
+
+	.highlight-row {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-xs);
+		padding: var(--space-sm) var(--space-md);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-md);
+		background: var(--surface-panel);
+	}
+
+	.highlight-head {
+		display: flex;
+		gap: var(--space-xs);
+		align-items: center;
+	}
+
+	.kind-chip {
+		display: inline-block;
+		padding: var(--space-3xs) var(--space-2xs);
+		border-radius: var(--radius-sm);
+		background: var(--surface-sunken);
+		color: var(--ink-muted);
+		font-size: var(--font-size-xs);
+		text-transform: uppercase;
+		letter-spacing: var(--letter-spacing-caps);
+	}
+
+	.color-chip {
+		display: inline-block;
+		width: 0.85em;
+		height: 0.85em;
+		border-radius: var(--radius-sm);
+		border: 1px solid var(--edge-default);
+	}
+
+	.color-chip[data-color='yellow'] {
+		background: var(--highlight-yellow);
+	}
+
+	.color-chip[data-color='blue'] {
+		background: var(--highlight-blue);
+	}
+
+	.color-chip[data-color='green'] {
+		background: var(--highlight-green);
+	}
+
+	.color-chip[data-color='pink'] {
+		background: var(--highlight-pink);
+	}
+
+	.anchor-text {
+		margin: 0;
+		padding: var(--space-2xs) var(--space-sm);
+		border-left: 3px solid var(--edge-strong);
+		background: var(--surface-sunken);
+		color: var(--ink-body);
+		font-style: italic;
+	}
+
+	.highlight-foot {
+		display: flex;
+		justify-content: flex-end;
+	}
+
+	.source {
+		color: var(--ink-muted);
+		font-size: var(--font-size-sm);
+		text-decoration: none;
+	}
+
+	.source:hover {
+		text-decoration: underline;
 	}
 	.saved-list {
 		list-style: none;

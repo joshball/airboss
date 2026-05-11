@@ -8,6 +8,7 @@
 			"types": "./src/index.ts",
 			"default": "./src/index.ts"
 		},
+		"./AnnotationFilterChip.svelte": "./src/AnnotationFilterChip.svelte",
 		"./AnnotationLayer.svelte": "./src/AnnotationLayer.svelte",
 		"./Breadcrumbs.svelte": "./src/Breadcrumbs.svelte",
 		"./ChapterTile.svelte": "./src/ChapterTile.svelte",

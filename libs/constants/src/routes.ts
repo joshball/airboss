@@ -298,7 +298,7 @@ export const ROUTES = {
 	 * Filtered index. `view` is one of `NOTES_VIEW_VALUES`; the loader
 	 * rejects out-of-set values by falling back to `NOTES_VIEW_DEFAULT`.
 	 */
-	NOTES_FILTER: (view: 'all' | 'follow-ups' | 'archived' | 'by-context') =>
+	NOTES_FILTER: (view: 'all' | 'follow-ups' | 'archived' | 'by-context' | 'highlights') =>
 		`/notes?${QUERY_PARAMS.VIEW}=${view}` as const,
 
 	// Study -- Reps

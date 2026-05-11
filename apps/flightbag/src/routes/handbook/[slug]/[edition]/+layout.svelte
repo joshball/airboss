@@ -155,6 +155,15 @@ const cheatsheetGroups: ReadonlyArray<KeyboardShortcutGroup> = [
 		],
 	},
 	{
+		title: 'Selection',
+		entries: [
+			{ key: 'h', description: 'Highlight selection (yellow)' },
+			{ key: 'n', description: 'Note from selection' },
+			{ key: 'c', description: 'Card now from selection' },
+			{ key: 'd', description: 'Card later from selection' },
+		],
+	},
+	{
 		title: 'Help',
 		entries: [
 			{ key: '?', description: 'Open this cheatsheet' },

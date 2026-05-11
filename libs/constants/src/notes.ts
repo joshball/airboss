@@ -82,6 +82,14 @@ export const NOTES_VIEWS = {
 	FOLLOW_UPS: 'follow-ups',
 	ARCHIVED: 'archived',
 	BY_CONTEXT: 'by-context',
+	/**
+	 * Highlights tab (wp-flightbag-rich-reader Phase 6). Lists every
+	 * `study.reference_section_annotation` row of kind `highlight` /
+	 * `note_anchor` with the anchor text + jump-to-source link. The
+	 * underlying query reuses `listAnnotationsForUser` from the
+	 * annotations BC.
+	 */
+	HIGHLIGHTS: 'highlights',
 } as const;
 
 export type NotesView = (typeof NOTES_VIEWS)[keyof typeof NOTES_VIEWS];
@@ -98,6 +106,7 @@ export const NOTES_VIEW_LABELS: Record<NotesView, string> = {
 	[NOTES_VIEWS.FOLLOW_UPS]: 'Follow-ups',
 	[NOTES_VIEWS.ARCHIVED]: 'Archived',
 	[NOTES_VIEWS.BY_CONTEXT]: 'By context',
+	[NOTES_VIEWS.HIGHLIGHTS]: 'Highlights',
 };
 
 /**
