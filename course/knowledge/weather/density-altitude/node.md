@@ -193,6 +193,170 @@ ISA at PA = 15 - 2 x PA/1000. Deviation = OAT - ISA. DA = PA +
 120 x deviation. The math is fast with practice; doing it on
 every takeoff makes it muscle memory.
 
+### Cards (spaced repetition)
+
+Cards mined from the body. Calculation cards drill the four-step
+formula chain; recall cards lock in the rules of thumb; one cloze
+card holds the conceptual chain (less density -> less lift / less
+thrust / less HP).
+
+```yaml-cards
+- front: "Compute pressure altitude. Field elevation 6,752 ft, altimeter setting 30.10."
+  back: |
+    PA = field elevation + (29.92 - altimeter) x 1,000
+    PA = 6,752 + (29.92 - 30.10) x 1,000
+    PA = 6,752 + (-0.18) x 1,000
+    PA = 6,752 - 180 = 6,572 ft.
+    Higher-than-standard pressure means PA is *lower* than field elevation.
+  cardType: calculation
+  kind: calculation
+  tags: [weather, density-altitude, pressure-altitude, calculation, phak-11]
+  source_ref: |
+    PHAK Ch 11, Aircraft Performance; body Reveal section worked example.
+
+- front: "Compute ISA temperature at a pressure altitude of 6,572 ft."
+  back: |
+    ISA at PA = 15 - 2 x (PA / 1,000)
+    ISA = 15 - 2 x 6.572
+    ISA = 15 - 13.1 = 1.9 deg C.
+    Standard atmosphere: 15 deg C at sea level, lapse 2 deg C per 1,000 ft.
+  cardType: calculation
+  kind: calculation
+  tags: [weather, density-altitude, isa, calculation, phak-11]
+  source_ref: |
+    PHAK Ch 11; body Reveal worked example.
+
+- front: "Compute density altitude. PA = 6,572 ft, OAT = 96 deg F."
+  back: |
+    Convert OAT: 96 deg F = (96 - 32) x 5/9 = 35.5 deg C.
+    ISA at PA 6,572 = 15 - 2 x 6.572 = 1.9 deg C.
+    Deviation = OAT - ISA = 35.5 - 1.9 = 33.6 deg C above ISA.
+    DA = PA + 120 x deviation = 6,572 + 120 x 33.6 = 6,572 + 4,032 = 10,604 ft.
+    The airplane "thinks" the runway is at over 10,000 ft -- on a 4,500 ft
+    runway at gross, this is a no-go without changing loading or time of day.
+  cardType: calculation
+  kind: calculation
+  tags: [weather, density-altitude, calculation, go-nogo, phak-11, aim-7-5-6]
+  source_ref: |
+    PHAK Ch 11; body Context (Big Bear / KL35) + Reveal worked example.
+  rationale: |
+    The full four-step chain in one card. The Context-to-Reveal example is the
+    body's anchor scenario; this card forces the learner to walk it.
+
+- front: "Density-altitude rule of thumb: how much DA does each degree C above ISA add?"
+  back: |
+    Approximately 120 ft of density altitude per deg C above ISA at the
+    pressure altitude. Example: 27 deg C above ISA -> 27 x 120 = 3,240 ft of
+    DA above PA. Accurate within a few percent below 10,000 ft PA; deviation
+    grows above that -- use the POH chart for high-altitude / high-temperature.
+  cardType: basic
+  kind: recall
+  tags: [weather, density-altitude, rule-of-thumb, phak-11]
+  source_ref: |
+    PHAK Ch 11; body Discover and Reveal sections.
+
+- front: "Density-altitude takeoff/landing distance heuristic: how much does each 1,000 ft of DA add to the ground roll?"
+  back: |
+    Roughly +10 percent per 1,000 ft of density altitude. So 5,000 ft DA
+    adds ~50 percent to takeoff and landing roll. Climb rate drops
+    proportionally; service ceiling lowers. Use this for the back-of-envelope
+    go/no-go; the POH chart gives the exact numbers for the actual decision.
+  cardType: basic
+  kind: recall
+  tags: [weather, density-altitude, performance, takeoff, landing, phak-11]
+  source_ref: |
+    PHAK Ch 11; body Reveal "practical heuristic."
+
+- front: "Naturally aspirated piston engine HP loss per 1,000 ft of density altitude?"
+  back: |
+    Approximately 3 percent of available horsepower per 1,000 ft of density
+    altitude. A 200-hp engine at sea level makes about 140 hp at 10,000 ft DA
+    on a standard day -- and less on a hot day at the same altitude.
+    Turbocharged / turbonormalized engines escape this curve up to their
+    critical altitude.
+  cardType: basic
+  kind: recall
+  tags: [weather, density-altitude, engine, performance, phak-11]
+  source_ref: |
+    PHAK Ch 11; body Discover (third effect on the airplane).
+
+- front: "Why does true airspeed at takeoff increase with density altitude even though indicated airspeed stays the same?"
+  back: |
+    Lift is proportional to air density. At lower density, the wing needs
+    higher TAS to generate the same lift -- so the airplane lifts off at the
+    same IAS but a higher TAS (and groundspeed). Airspeed indicators are
+    calibrated to read lift-equivalent IAS, which is why the rotation number
+    in the POH stays the same; the runway eaten getting to that number does
+    not.
+  cardType: basic
+  kind: recall
+  tags: [weather, density-altitude, true-airspeed, lift, phak-11]
+  source_ref: |
+    PHAK Ch 11; body Discover (the wing).
+
+- front: "Density altitude reduces three things about the airplane in parallel: {{c1::lift}} from the wing (needs higher TAS for same lift), {{c2::thrust}} from the propeller (less air per blade pass), and {{c3::horsepower}} from the engine (~3 percent loss per 1,000 ft DA, naturally aspirated)."
+  back: |
+    The conceptual chain: less air density -> less mass flow over wing,
+    propeller, and into the intake. All three effects compound. A high-DA
+    takeoff reduces both the maximum performance available *and* the rate at
+    which it builds (longer roll, slower acceleration, slower climb), which
+    is why the heuristic 10 percent per 1,000 ft DA understates the felt
+    impact on a hot, high, gross-weight day.
+  cardType: cloze
+  kind: recall
+  tags: [weather, density-altitude, lift, thrust, engine, phak-11]
+  source_ref: |
+    PHAK Ch 11; body Discover ("three things stop working as advertised").
+
+- front: "You're at a 6,000 ft elevation airport. OAT 30 deg C, altimeter 29.92. Estimate density altitude using the 120 ft/deg C rule."
+  back: |
+    Altimeter at 29.92 means PA = field elevation = 6,000 ft.
+    ISA at 6,000 ft = 15 - 2 x 6 = 3 deg C.
+    Deviation = 30 - 3 = 27 deg C above ISA.
+    DA = 6,000 + 120 x 27 = 6,000 + 3,240 = 9,240 ft.
+    The airplane thinks the runway is at ~9,200 ft. Body example.
+  cardType: calculation
+  kind: calculation
+  tags: [weather, density-altitude, calculation, rule-of-thumb, phak-11]
+  source_ref: |
+    PHAK Ch 11; body Discover worked example (6,000 ft, 30 deg C).
+
+- front: "Reverse: a Cessna 182 at gross weight on a 4,500 ft runway is calculated to have over 10,000 ft of density altitude and POH says it's a no-go. Which input combinations cause this profile? Pick the ones that fit."
+  back: |
+    Per the body's Big Bear example: high field elevation (KL35 = 6,752 ft) +
+    hot afternoon (96 deg F / 35.5 deg C) + below-standard pressure
+    (altimeter 30.10 only modestly low; high temperature is the dominant
+    driver). Other combinations that produce >10,000 ft DA: a sea-level
+    airport on a very hot day will not get there from temperature alone
+    (you need both altitude and heat); a 5,000 ft airport on an extremely
+    hot day (ISA + 35 deg C) will. The fix list: lighter loading, earlier or
+    later in the day, different runway, different airplane.
+  cardType: basic
+  kind: recall
+  tags: [weather, density-altitude, go-nogo, performance, phak-11, aim-7-5-6]
+  source_ref: |
+    PHAK Ch 11; AIM 7-5-6 Potential Flight Hazards (High Density Altitude);
+    body Context + Practice "fix is one of" enumeration.
+  rationale: |
+    Reverse-direction card per the spec. Forces the learner to reason from
+    "the bad outcome" back to "what inputs produced it" -- the diagnosis skill
+    that catches a hot-and-high vacation trip before it bites.
+
+- front: "Humidity's effect on density altitude -- how much, and why is it usually ignored on POH charts?"
+  back: |
+    Humidity adds roughly 5-10 percent additional DA penalty in extremely
+    humid conditions. Water vapor displaces denser nitrogen and oxygen, so
+    humid air is *less* dense at the same temperature and pressure. Most POH
+    performance charts ignore it because the effect is small relative to
+    temperature, but a high-humidity day at high DA earns extra runway-length
+    margin in the planning calculation.
+  cardType: basic
+  kind: recall
+  tags: [weather, density-altitude, humidity, phak-11]
+  source_ref: |
+    PHAK Ch 11; body Reveal humidity paragraph.
+```
+
 ## Connect
 
 Density altitude lives at the intersection of weather and
