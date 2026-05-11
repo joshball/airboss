@@ -24,7 +24,8 @@
 		"themes": "bun scripts/themes.ts",
 		"lint": "bun scripts/lint.ts",
 		"codemod": "bun scripts/codemod.ts",
-		"schedule": "bun scripts/schedule.ts"
+		"schedule": "bun scripts/schedule.ts",
+		"dep-audit": "bun scripts/dep-audit.ts"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.4.7",
