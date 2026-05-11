@@ -25,6 +25,7 @@ export type { HeartbeatTickerProps } from './HeartbeatTicker.svelte';
 export type { ReaderEmptyStateKind, ReaderEmptyStateProps } from './ReaderEmptyState.svelte';
 export type { ReaderLayoutProps } from './ReaderLayout.svelte';
 export type { ReaderNavData, ReaderNavLink, ReaderNavProps } from './ReaderNav.svelte';
+export type { ReaderPrefsButtonProps, ReadingPrefKey, ReadingPrefValue } from './ReaderPrefsButton.svelte';
 export type { ReadingTimeProps } from './ReadingTime.svelte';
 export type { ReferenceCardProps } from './ReferenceCard.svelte';
 export type { RenderedSectionFigure, RenderedSectionProps } from './RenderedSection.svelte';

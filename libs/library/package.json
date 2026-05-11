@@ -14,6 +14,7 @@
 		"./ReaderEmptyState.svelte": "./src/ReaderEmptyState.svelte",
 		"./ReaderLayout.svelte": "./src/ReaderLayout.svelte",
 		"./ReaderNav.svelte": "./src/ReaderNav.svelte",
+		"./ReaderPrefsButton.svelte": "./src/ReaderPrefsButton.svelte",
 		"./ReadingTime.svelte": "./src/ReadingTime.svelte",
 		"./ReferenceCard.svelte": "./src/ReferenceCard.svelte",
 		"./RenderedSection.svelte": "./src/RenderedSection.svelte",

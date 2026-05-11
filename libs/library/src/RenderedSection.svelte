@@ -330,7 +330,10 @@ section {
 	display: flex;
 	flex-direction: column;
 	gap: var(--space-md);
-	max-width: 72ch;
+	/* Honor the user's reader-measure preference (WP-FLIGHTBAG-READER-UX
+	 * Phase 3); fall through to the platform default when no
+	 * `<ReadableScope>` is mounted. */
+	max-width: var(--reader-measure-ch, 72ch);
 }
 
 .head {
@@ -439,21 +442,51 @@ h1 {
 }
 
 .body {
-	font-family: var(--font-family-base);
-	font-size: var(--font-size-base);
-	line-height: var(--line-height-relaxed);
+	/* Reader-pref tokens (WP-FLIGHTBAG-READER-UX Phase 3) -- when a
+	 * `<ReadableScope>` is mounted in the layout, the user's typography
+	 * preference flows in via the cascade. Without the scope, the
+	 * fallback to the platform tokens keeps anonymous / non-reader
+	 * surfaces visually identical to pre-WP behavior. */
+	font-family: var(--reader-body-font-family, var(--font-family-base));
+	font-size: var(--reader-body-font-size, var(--font-size-base));
+	line-height: var(--reader-body-line-height, var(--line-height-relaxed));
 	color: var(--ink-body);
+	/* Animate font-size changes so the user feels the resize as a
+	 * deliberate gesture rather than a hard cut. Respect reduced-motion. */
+	transition: font-size var(--motion-fast, 200ms) ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.body {
+		transition: none;
+	}
 }
 
 .body :global(p) {
 	margin: 0 0 var(--space-sm) 0;
 }
 
-.body :global(h3),
+/* Heading sizes scale against the reader body size + the user's
+ * heading-scale multiplier. Per-level ratios approximate the platform's
+ * type system but compute relative to whatever body size the user picked. */
+.body :global(h2) {
+	margin: var(--space-xl) 0 var(--space-sm) 0;
+	font-size: calc(var(--reader-body-font-size, var(--font-size-base)) * 1.5 * var(--reader-heading-scale, 1));
+	line-height: var(--line-height-tight);
+}
+
+.body :global(h3) {
+	margin: var(--space-lg) 0 var(--space-xs) 0;
+	font-size: calc(var(--reader-body-font-size, var(--font-size-base)) * 1.25 * var(--reader-heading-scale, 1));
+	line-height: var(--line-height-tight);
+}
+
 .body :global(h4),
 .body :global(h5),
 .body :global(h6) {
 	margin: var(--space-lg) 0 var(--space-xs) 0;
+	font-size: calc(var(--reader-body-font-size, var(--font-size-base)) * 1.1 * var(--reader-heading-scale, 1));
+	line-height: var(--line-height-tight);
 }
 
 .body :global(ul),

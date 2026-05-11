@@ -143,6 +143,7 @@ export const TOKENS = {
 	fontFamilySans: '--font-family-sans',
 	fontFamilyMono: '--font-family-mono',
 	fontFamilyBase: '--font-family-base',
+	fontFamilySerif: '--font-family-serif',
 
 	// -------- scale: spacing --------
 	space4xs: '--space-4xs',

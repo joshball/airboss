@@ -58,11 +58,54 @@ export const USER_PREF_KEYS = {
 	 * only. Owned by the `study-app-ia-cleanup` WP.
 	 */
 	PAGE_EXPLAINER_DISMISSED: 'study.page_explainer.dismissed',
+	/**
+	 * Reader body font family. One of `serif` / `sans` / `mono`. Drives
+	 * `--reader-body-font-family` via `<ReadableScope>`. Owned by
+	 * `wp-flightbag-reader-ux` Phase 3.
+	 */
+	READING_FONT_FAMILY: 'study.reading.font_family',
+	/**
+	 * Reader body font scale -- one of `READING_FONT_SCALES`. Multiplied
+	 * against `--font-size-base` to drive `--reader-body-font-size`. Owned
+	 * by `wp-flightbag-reader-ux` Phase 3.
+	 */
+	READING_FONT_SCALE: 'study.reading.font_scale',
+	/**
+	 * Reader prose density. One of `compact` / `comfortable` / `spacious`.
+	 * Drives `--reader-body-line-height`. Owned by `wp-flightbag-reader-ux`
+	 * Phase 3.
+	 */
+	READING_DENSITY: 'study.reading.density',
+	/**
+	 * Reader column measure. One of `narrow` / `normal` / `wide` -- maps
+	 * to a `ch`-relative max-width. Drives `--reader-measure-ch`. Owned
+	 * by `wp-flightbag-reader-ux` Phase 3.
+	 */
+	READING_MEASURE: 'study.reading.measure',
+	/**
+	 * Reader heading scale multiplier -- one of `READING_HEADING_SCALES`.
+	 * Drives `--reader-heading-scale`. Owned by `wp-flightbag-reader-ux`
+	 * Phase 3.
+	 */
+	READING_HEADING_SCALE: 'study.reading.heading_scale',
 } as const;
 
 export type UserPrefKey = (typeof USER_PREF_KEYS)[keyof typeof USER_PREF_KEYS];
 
 export const USER_PREF_KEY_VALUES: readonly UserPrefKey[] = Object.values(USER_PREF_KEYS);
+
+/**
+ * Closed list of reading-pref keys (WP-FLIGHTBAG-READER-UX Phase 3).
+ * Batch-read in `+layout.server.ts` loaders so `<ReadableScope>` gets all
+ * five values in one query instead of five.
+ */
+export const READING_PREF_KEYS: readonly UserPrefKey[] = [
+	USER_PREF_KEYS.READING_FONT_FAMILY,
+	USER_PREF_KEYS.READING_FONT_SCALE,
+	USER_PREF_KEYS.READING_DENSITY,
+	USER_PREF_KEYS.READING_MEASURE,
+	USER_PREF_KEYS.READING_HEADING_SCALE,
+];
 
 /**
  * Citation panel order. `'hb'` puts the handbook stack open by default,

@@ -16,6 +16,11 @@ import { AUDIT_OPS, auditWrite } from '@ab/audit';
 import {
 	AUDIT_TARGETS,
 	CITATION_ORDER_VALUES,
+	READING_DENSITY_VALUES,
+	READING_FONT_FAMILY_VALUES,
+	READING_FONT_SCALE_VALUES,
+	READING_HEADING_SCALE_VALUES,
+	READING_MEASURE_VALUES,
 	RENDER_MODE_VALUES,
 	STUDY_MAP_TAB_VALUES,
 	USER_PREF_KEY_VALUES,
@@ -64,7 +69,39 @@ export const USER_PREF_SCHEMAS = {
 	// closed key list in `USER_PREF_KEYS` does not have to grow with
 	// every new page that mounts an explainer.
 	'study.page_explainer.dismissed': z.record(z.string().min(1), z.literal(true)),
+	// WP-FLIGHTBAG-READER-UX Phase 3 -- five reader typography preferences.
+	// Each validates against the closed value set exported by
+	// `libs/constants/src/reading.ts` so a malformed POST is rejected
+	// before the upsert.
+	'study.reading.font_family': z.enum([READING_FONT_FAMILY_VALUES[0], ...READING_FONT_FAMILY_VALUES.slice(1)] as [
+		(typeof READING_FONT_FAMILY_VALUES)[number],
+		...(typeof READING_FONT_FAMILY_VALUES)[number][],
+	]),
+	// Font scale is a number, not an enum -- a refine over the closed
+	// numeric set so `1.0` round-trips as `1.0` (not `1`). z.union over
+	// literals would be ideal but Zod's union signature wants explicit
+	// types per arm; refine is simpler and equally narrow.
+	'study.reading.font_scale': z
+		.number()
+		.refine((v): v is (typeof READING_FONT_SCALE_VALUES)[number] => (READING_FONT_SCALE_VALUES as readonly number[]).includes(v), {
+			message: 'font_scale must be one of READING_FONT_SCALE_VALUES',
+		}),
+	'study.reading.density': z.enum([READING_DENSITY_VALUES[0], ...READING_DENSITY_VALUES.slice(1)] as [
+		(typeof READING_DENSITY_VALUES)[number],
+		...(typeof READING_DENSITY_VALUES)[number][],
+	]),
+	'study.reading.measure': z.enum([READING_MEASURE_VALUES[0], ...READING_MEASURE_VALUES.slice(1)] as [
+		(typeof READING_MEASURE_VALUES)[number],
+		...(typeof READING_MEASURE_VALUES)[number][],
+	]),
+	'study.reading.heading_scale': z
+		.number()
+		.refine(
+			(v): v is (typeof READING_HEADING_SCALE_VALUES)[number] => (READING_HEADING_SCALE_VALUES as readonly number[]).includes(v),
+			{ message: 'heading_scale must be one of READING_HEADING_SCALE_VALUES' },
+		),
 } satisfies Record<UserPrefKey, z.ZodType>;
+
 
 export class UnknownUserPrefKeyError extends Error {
 	constructor(public readonly key: string) {

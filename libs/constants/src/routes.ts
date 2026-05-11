@@ -155,6 +155,13 @@ export const ROUTES = {
 	/** Theme-preference endpoint. POST `{ value: '<registered theme id>' }`. */
 	THEME: '/theme',
 	/**
+	 * Reading-prefs endpoint (WP-FLIGHTBAG-READER-UX Phase 3). POST
+	 * `{ key: <USER_PREF_KEYS.READING_*>, value: <validated-per-key> }`.
+	 * Mirrored on flightbag and study so each app can persist prefs from
+	 * its own origin without a cross-origin POST. Auth-gated.
+	 */
+	READING_PREFS: '/reading-prefs',
+	/**
 	 * Citation picker search endpoint. GET `?target=<CitationTargetType>&q=<term>`
 	 * returns `{ results: { id, label, detail }[] }`. Auth-gated.
 	 */
