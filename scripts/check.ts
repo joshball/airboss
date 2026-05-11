@@ -412,6 +412,15 @@ const STEP_HELP: Record<string, StepHelp> = {
 		how: '`bun run track generate --check`. Run `bun run track generate` to refresh.',
 		links: ['scripts/tracking/generate.ts', 'docs/decisions/025-wp-frontmatter-contract/decision.md'],
 	},
+	'dep-audit': {
+		tier: 'fast',
+		scopable: false,
+		summary: 'Block undeclared deps and root/workspace duplicate declarations',
+		what: 'Walks every workspace src/ via Bun.Transpiler, compares imports to each package.json, fails if any workspace imports a package it does not declare or if a package is declared in both root and a workspace.',
+		why: 'Per the monorepo dep hygiene plan, workspaces must declare every runtime dep they consume. Relying on root hoisting silently breaks for external consumers and stricter installers. This guard locks in Phases 1-4.',
+		how: '`bun scripts/dep-audit.ts --strict`.',
+		links: ['scripts/dep-audit.ts', 'docs/work/plans/2026-05-10-monorepo-dep-hygiene.md'],
+	},
 	'md-format': {
 		tier: 'fast',
 		scopable: false,
@@ -1276,6 +1285,24 @@ function buildStepDefs(profile: Profile, dirty: readonly string[]): StepDef[] {
 		tier: 'fast',
 		relevantWhen: (d) => anyMatch(d, (f) => f.startsWith('docs/bugs/') && f.endsWith('.md')),
 		fn: () => shellRun('bun', ['scripts/lint/bugs.ts']),
+	});
+
+	defs.push({
+		name: 'dep-audit',
+		tier: 'fast',
+		// Trigger on any package.json change or any source-file change in a workspace.
+		// The audit walks every workspace's src/ regardless, so a source-file change in
+		// any workspace can introduce a new undeclared import.
+		relevantWhen: (d) =>
+			anyMatch(
+				d,
+				(f) =>
+					f === 'package.json' ||
+					f.endsWith('/package.json') ||
+					((f.startsWith('apps/') || f.startsWith('libs/')) &&
+						(f.endsWith('.ts') || f.endsWith('.svelte') || f.endsWith('.tsx') || f.endsWith('.js'))),
+			),
+		fn: () => shellRun('bun', ['scripts/dep-audit.ts', '--strict']),
 	});
 
 	defs.push({

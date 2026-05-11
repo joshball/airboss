@@ -201,9 +201,20 @@ Each phase is one PR. Total: 6 PRs.
 
 ### Phase progress
 
-- [ ] Phase 0 -- audit script
-- [ ] Phase 1 -- demote 8 duplicates
-- [ ] Phase 2 -- single-owner declarations
-- [ ] Phase 3 -- multi-owner data layer
-- [ ] Phase 4 -- toolchain declarations
-- [ ] Phase 5 -- wire into `bun run check`
+- [x] Phase 0 -- audit script (PR #805)
+- [x] Phase 1 -- demote 5 fully-duplicated deps (PR #806; revised from 8, see plan note above)
+- [x] Phase 2 -- single-owner declarations (PR #807)
+- [x] Phase 3 -- multi-owner data layer (PR #809)
+- [x] Phase 4 -- toolchain declarations (PR #810)
+- [x] Phase 5 -- wire into `bun run check` (this PR)
+
+### Final state
+
+```text
+$ bun run dep-audit
+=== DUPLICATED (0) === (none)
+=== UNDECLARED (0) === (none)
+=== ROOT-ONLY (2) ===  @playwright/test, bun  (legitimate)
+```
+
+The cleanup is complete. The `dep-audit` step in `bun run check` will fail any future PR that introduces an undeclared dep or a root/workspace duplicate.
