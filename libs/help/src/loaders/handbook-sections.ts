@@ -4,7 +4,7 @@
  * to `study.reference` where `reference.kind = 'handbook'` and matches the
  * needle against the section's `code` + `title` + `content_md` (the body
  * substrate). Returns one `faa.handbook.chapter` row per match, carrying the
- * parent handbook's `documentSlug` as `parentDocCode` so the FAA Resources
+ * parent handbook's `documentSlug` as `clusterKey` so the FAA Resources
  * column can cluster the chapter under its handbook root.
  *
  * Runs server-side only: imports `@ab/db/connection`. The palette UI feeds

@@ -3,7 +3,7 @@
  * CFR-sections loader (DB-backed). Walks `study.reference_section` joined to
  * `study.reference` where `reference.kind = 'cfr'` and matches the needle
  * against the section's `code` + `title` + `content_md`. Returns
- * `faa.cfr.sect` rows clustered under the parent CFR Part (`parentDocCode`).
+ * `faa.cfr.sect` rows clustered under the parent CFR Part (`clusterKey`).
  *
  * Title discrimination: `reference.kind` is a single value covering 14 CFR
  * AND 49 CFR. The CFR seeder convention builds `documentSlug` as

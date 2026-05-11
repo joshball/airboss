@@ -400,9 +400,10 @@ export function searchGrouped(
 	const bannerHit = tierOnes.length === 1 ? (tierOnes[0] ?? null) : null;
 
 	// FAA Resources clusters. A handbook root row "owns" any chapter that
-	// names its doc-code as `parentDocCode`; a CFR part owns sections that
-	// reference its id. Children sort by title (the loader sets a stable
-	// title; an ordinal field could plug in here later).
+	// shares its `clusterKey` (canonical doc slug); a CFR part owns
+	// sections whose `clusterKey` matches its slug. Children sort by title
+	// (the loader sets a stable title; an ordinal field could plug in here
+	// later).
 	const clusters = buildClusters(columns['faa-resources']);
 
 	// Synonym chips: ask the aviation expander what it would rewrite the
