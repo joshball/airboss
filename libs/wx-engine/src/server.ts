@@ -13,12 +13,14 @@
  * ergonomic `import type { ... }` consumption.
  *
  * Phase A populates this barrel with the Zod schema, geometry helpers,
- * `advanceTruth`, the scenario registry (A.4), and the engine entrypoint
- * (A.5). Phase B / C / D append derivation entrypoints here.
+ * `advanceTruth`, the scenario registry, and the engine entrypoint. Phase
+ * B appends the five product derivations; Phase C appends the 13 chart
+ * derivations + the deriveAllCharts orchestrator.
  */
 
 // ----------------------------------------------------------------------
-// Engine entrypoint + bundle writer. Phase B: products wired in.
+// Engine entrypoint + bundle writer. Phase B: products wired in. Phase C:
+// charts wired in.
 // ----------------------------------------------------------------------
 export {
 	generateScenario,
@@ -30,6 +32,24 @@ export {
 	type ScenarioSeed,
 	writeScenarioBundle,
 } from './engine';
+// ----------------------------------------------------------------------
+// Phase C: layer-3 chart-spec derivations + the orchestrator.
+// ----------------------------------------------------------------------
+export { deriveAdvisoryOverlayChart } from './charts/advisory-overlay';
+export { deriveConvectiveOutlookChart } from './charts/convective-outlook';
+export { deriveCvaChart } from './charts/cva';
+export { type ChartProductInputs, deriveAllCharts, getFbStations, getRouteStations } from './charts/derive-all';
+export { deriveFreezingLevelChart } from './charts/freezing-level';
+export { deriveGAirmetIcingChart } from './charts/g-airmet-icing';
+export { deriveGAirmetTurbulenceChart } from './charts/g-airmet-turbulence';
+export { deriveGfaChart } from './charts/gfa';
+export { deriveMetarPlotChart } from './charts/metar-plot';
+export { derivePirepPlotChart } from './charts/pirep-plot';
+export { deriveProgChart } from './charts/prog-chart';
+export { deriveSurfaceAnalysisChart } from './charts/surface-analysis';
+export { deriveTafTimelineChart } from './charts/taf-timeline';
+export type { ChartArtifact, ChartArtifactSource } from './charts/types';
+export { deriveWindsAloftChart } from './charts/winds-aloft';
 // ----------------------------------------------------------------------
 // Layer-2 product derivations. Pure functions of TruthModel + opts.
 // ----------------------------------------------------------------------

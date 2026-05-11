@@ -42,6 +42,10 @@ export type {
 // ----------------------------------------------------------------------
 export type { AirmetAdvisory, DerivedFbGrid, DerivedMetar, DerivedPirep, DerivedTaf } from './products/types';
 // ----------------------------------------------------------------------
+// Layer-3 chart artifact shape. Pure types -- safe at any tier.
+// ----------------------------------------------------------------------
+export type { ChartArtifact, ChartArtifactSource } from './charts/types';
+// ----------------------------------------------------------------------
 // Zod schema (inferred type only; the schema value lives in `./server.ts`).
 // Re-exporting the schema value from this barrel is intentionally avoided
 // so the runtime barrel stays free of value re-exports per spec.md

@@ -3,6 +3,7 @@
  *
  * `generateScenario(seed)` returns a `ScenarioBundle` with the truth-model
  * populated and (as of Phase B) the five layer-2 product derivations wired in.
+ * Phase C wires in the layer-3 chart-spec derivations.
  * `writeScenarioBundle(bundle, opts)` lands the artifacts on disk per the
  * spec's "Output layout" section.
  *
@@ -11,15 +12,20 @@
  * Phase A wired `generateScenario` to load the validated truth via the
  * registry and return empty product / chart / commentary collections.
  *
- * Phase B (this commit) widens `ScenarioProducts` to the canonical
- * `DerivedMetar[]` / `DerivedTaf[]` / `AirmetAdvisory[]` / `DerivedFbGrid` /
- * `DerivedPirep[]` shapes and runs the five derivation functions over the
- * scenario's `routeStations` + `fbStations` metadata. The writer now emits
- * `data/wx-scenarios/<slug>/products/{metars,tafs,fb-bulletin,pireps}.{txt,json}`
- * and `products/airmets.json` whenever the corresponding bundle field is
- * populated.
+ * Phase B widened `ScenarioProducts` to the canonical `DerivedMetar[]` /
+ * `DerivedTaf[]` / `AirmetAdvisory[]` / `DerivedFbGrid` / `DerivedPirep[]`
+ * shapes and runs the five derivation functions over the scenario's
+ * `routeStations` + `fbStations` metadata. The writer emits the layer-2
+ * products under `data/wx-scenarios/<slug>/products/`.
  *
- * Phase C / D widen `charts` and `commentary` and append their writers.
+ * Phase C (this commit) widens `ScenarioCharts` to `ChartArtifact[]` and
+ * calls `deriveAllCharts(truth, products, scenarioId)` to fill it in. The
+ * writer now emits per-chart spec.yaml + sources, mirrored into
+ * `data/charts/wx/<chart-slug>/spec.yaml` for the chart-build CLI and
+ * into `~/Documents/airboss-handbook-cache/wx/<source-rel-path>` per
+ * ADR 018.
+ *
+ * Phase D widens `commentary` and appends its writer.
  *
  * # Browser safety
  *
@@ -31,6 +37,9 @@
  */
 
 import type { WxScenario } from '@ab/constants';
+import { stringify as yamlStringify } from 'yaml';
+import { type ChartProductInputs, deriveAllCharts } from './charts/derive-all';
+import type { ChartArtifact } from './charts/types';
 import { deriveAirmets } from './products/airmet';
 import { deriveMetar } from './products/metar';
 import { derivePireps } from './products/pirep';
@@ -71,11 +80,10 @@ export interface ScenarioProducts {
 }
 
 /**
- * Layer-3 chart artifacts. Phase A returns an empty array; Phase C
- * narrows to the `ChartArtifact[]` type from `./charts/types.ts` and
- * populates the per-chart derivations.
+ * Layer-3 chart artifacts. Phase C widens this to `ChartArtifact[]` and
+ * populates the per-chart derivations via `deriveAllCharts`.
  */
-export type ScenarioCharts = never[];
+export type ScenarioCharts = ChartArtifact[];
 
 /**
  * Layer-4 commentary callouts. Phase A returns an empty array; Phase D
@@ -111,25 +119,30 @@ export interface ScenarioRunOptions {
 
 /**
  * Produce a complete ScenarioBundle for the given seed. Phase B populates
- * truth + every layer-2 product. Charts / commentary remain empty
- * placeholders (filled in by Phase C / D).
+ * truth + every layer-2 product. Phase C populates layer-3 chart
+ * artifacts via `deriveAllCharts`. Commentary remains empty until Phase D.
  */
 export function generateScenario(seed: ScenarioSeed): ScenarioBundle {
 	const slug = seed.kind as WxScenario;
 	const truth = loadScenario(slug);
 
+	// === Phase B: products ===
 	const tafValidHours = truth.tafValidHours ?? 12;
 	const metars = truth.routeStations.map((icao) => deriveMetar(truth, icao));
 	const tafs = truth.routeStations.map((icao) => deriveTaf(truth, icao, { validHours: tafValidHours }));
 	const airmets = deriveAirmets(truth);
 	const fbGrid = truth.fbStations.length > 0 ? deriveFbGrid(truth, truth.fbStations) : null;
 	const pireps = derivePireps(truth);
+	const products: ScenarioProducts = { metars, tafs, airmets, fbGrid, pireps };
+
+	// === Phase C: charts ===
+	const charts = deriveAllCharts(truth, products satisfies ChartProductInputs, truth.scenarioId);
 
 	return {
 		scenarioId: truth.scenarioId,
 		truth,
-		products: { metars, tafs, airmets, fbGrid, pireps },
-		charts: [],
+		products,
+		charts,
 		commentary: [],
 	};
 }
@@ -146,7 +159,11 @@ type NodeFs = {
 type NodePath = {
 	resolve: (...parts: string[]) => string;
 	dirname: (p: string) => string;
+	basename: (p: string) => string;
 };
+type NodeOs = { homedir: () => string };
+
+const DEFAULT_CACHE_SUBDIR = ['Documents', 'airboss-handbook-cache'] as const;
 
 type GetBuiltinModule = (spec: string) => unknown;
 
@@ -175,8 +192,15 @@ function loadBuiltin<T>(spec: string): T {
  *   pireps.{txt,json}      one PIREP per line / array of ParsedPirep
  *   airmets.json           array of AirmetAdvisory
  *
- * Empty product collections skip their writers; charts / commentary writers
- * land in Phase C / D.
+ * Phase C writes the chart artifacts produced by `deriveAllCharts` under
+ * `data/wx-scenarios/<slug>/charts/<chart-slug>/spec.yaml`,
+ * `data/wx-scenarios/<slug>/charts/<chart-slug>/sources/<name>.json`,
+ * mirrored into `data/charts/wx/<chart-slug>/spec.yaml` for `bun run charts
+ * build`, and mirrored into the wx cache at
+ * `~/Documents/airboss-handbook-cache/wx/<source-rel-path>` per ADR 018.
+ *
+ * Empty product / chart / commentary arrays skip their writers; commentary
+ * writer lands in Phase D.
  */
 export async function writeScenarioBundle(bundle: ScenarioBundle, options: ScenarioRunOptions): Promise<void> {
 	const fs = loadBuiltin<NodeFs>('node:fs');
@@ -224,7 +248,12 @@ export async function writeScenarioBundle(bundle: ScenarioBundle, options: Scena
 	if (products.fbGrid !== null) {
 		ensureDir(fs, productsOut);
 		writeFile(fs, path, path.resolve(productsOut, 'fb-bulletin.txt'), products.fbGrid.raw);
-		writeFile(fs, path, path.resolve(productsOut, 'fb-bulletin.json'), JSON.stringify(products.fbGrid.parsed, null, 2));
+		writeFile(
+			fs,
+			path,
+			path.resolve(productsOut, 'fb-bulletin.json'),
+			JSON.stringify(products.fbGrid.parsed, null, 2),
+		);
 	}
 
 	if (products.pireps.length > 0) {
@@ -247,9 +276,52 @@ export async function writeScenarioBundle(bundle: ScenarioBundle, options: Scena
 		writeFile(fs, path, path.resolve(productsOut, 'airmets.json'), JSON.stringify(products.airmets, null, 2));
 	}
 
-	// Charts / commentary writers land in Phase C / D.
-	void options.cacheRoot;
-	void options.mirrorIntoChartsDir;
+	// Charts: write per-chart spec.yaml + source bytes; mirror into the
+	// canonical chart-build directory + the wx cache root.
+	if (bundle.charts.length > 0) {
+		const chartsOut = path.resolve(scenarioOut, 'charts');
+		ensureDir(fs, chartsOut);
+		const mirrorIntoChartsDir = options.mirrorIntoChartsDir !== false;
+		const cacheRoot = resolveCacheRoot(options.cacheRoot);
+		const cacheWxRoot = path.resolve(cacheRoot, 'wx');
+
+		for (const chart of bundle.charts) {
+			const chartDir = path.resolve(chartsOut, chart.slug);
+			const sourcesDir = path.resolve(chartDir, 'sources');
+			ensureDir(fs, sourcesDir);
+
+			const specYaml = yamlStringify(chart.spec);
+			writeFile(fs, path, path.resolve(chartDir, 'spec.yaml'), specYaml);
+
+			for (const src of chart.sources) {
+				const filename = path.basename(src.path);
+				writeFile(fs, path, path.resolve(sourcesDir, filename), src.bytes);
+
+				// Mirror into the wx cache root so the chart CLI's cache://
+				// resolver finds the bytes via `cache://<rel>`.
+				const cacheTarget = path.resolve(cacheWxRoot, src.path);
+				writeFile(fs, path, cacheTarget, src.bytes);
+			}
+
+			if (mirrorIntoChartsDir) {
+				const mirrorDir = path.resolve(options.repoRoot, 'data', 'charts', 'wx', chart.slug);
+				ensureDir(fs, mirrorDir);
+				writeFile(fs, path, path.resolve(mirrorDir, 'spec.yaml'), specYaml);
+			}
+		}
+	}
+
+	// Phase D appends commentary writer here.
+}
+
+function resolveCacheRoot(override: string | undefined): string {
+	if (override !== undefined && override.length > 0) return override;
+	const envOverride =
+		typeof process !== 'undefined' && process.env !== undefined ? process.env.AIRBOSS_HANDBOOK_CACHE : undefined;
+	if (envOverride !== undefined && envOverride.length > 0) return envOverride;
+	const os = loadBuiltin<NodeOs>('node:os');
+	const path = loadBuiltin<NodePath>('node:path');
+	return path.resolve(os.homedir(), ...DEFAULT_CACHE_SUBDIR);
 }
 
 function ensureDir(fs: NodeFs, p: string): void {
