@@ -30,21 +30,22 @@ This is a Wave 4 cleanup WP. Pre-condition: all 5 handbook section-tree promotio
 
 ## In scope: 9 ACs
 
-| FAA number | DB slug | Common name | Page count (approx) |
-|------------|---------|-------------|---------------------|
-| AC 00-6B | ac-00-6 | Aviation Weather | 296 |
-| AC 25-7D | ac-25-7 | Flight Test Guide for Transport Category Airplanes | 600 |
-| AC 61-65J | ac-61-65 | Certification: Pilots and Flight/Ground Instructors | 80 |
-| AC 61-83J | ac-61-83 | Industry-Conducted Flight Instructor Refresher Course | 30 |
-| AC 61-98D | ac-61-98 | Flight Review and IPC Currency | 25 |
-| AC 90-66C | ac-90-66 | Non-Towered Airport Flight Operations | 30 |
-| AC 91-21.1D | ac-91-21-1 | Use of Portable Electronic Devices Aboard Aircraft | 15 |
-| AC 91-79A | ac-91-79 | Mitigating Runway Overrun | 20 |
-| AC 120-71B | ac-120-71 | SOPs and Pilot Monitoring Duties | 30 |
+| FAA number  | DB slug    | Common name                                           | Page count (approx) |
+| ----------- | ---------- | ----------------------------------------------------- | ------------------- |
+| AC 00-6B    | ac-00-6    | Aviation Weather                                      | 296                 |
+| AC 25-7D    | ac-25-7    | Flight Test Guide for Transport Category Airplanes    | 600                 |
+| AC 61-65J   | ac-61-65   | Certification: Pilots and Flight/Ground Instructors   | 80                  |
+| AC 61-83J   | ac-61-83   | Industry-Conducted Flight Instructor Refresher Course | 30                  |
+| AC 61-98D   | ac-61-98   | Flight Review and IPC Currency                        | 25                  |
+| AC 90-66C   | ac-90-66   | Non-Towered Airport Flight Operations                 | 30                  |
+| AC 91-21.1D | ac-91-21-1 | Use of Portable Electronic Devices Aboard Aircraft    | 15                  |
+| AC 91-79A   | ac-91-79   | Mitigating Runway Overrun                             | 20                  |
+| AC 120-71B  | ac-120-71  | SOPs and Pilot Monitoring Duties                      | 30                  |
 
 ## Per-AC strategy
 
 Each AC's PDF needs to be examined for:
+
 1. Embedded TOC (`fitz.get_toc()`)
 2. Printed TOC page
 3. Internal heading structure
@@ -63,6 +64,7 @@ AC 25-7D (600 pages, transport-category cert) is the outlier — engineering doc
 ### Phase 1: Per-AC research
 
 Mirror `docs/work-packages/whole-doc-promotion/research.md` shape. For each AC:
+
 - Open the cached PDF
 - Run `fitz.get_toc()`
 - Inspect the printed TOC if no embedded
@@ -72,6 +74,7 @@ Mirror `docs/work-packages/whole-doc-promotion/research.md` shape. For each AC:
 ### Phase 2: Update AC ingest pipeline
 
 The current AC seeder (#480) is whole-doc only. Extend to support section-tree shape:
+
 - Schema: keep `kind: 'ac'` but add optional `sections[]` array (mirrors handbooks shape)
 - Seeder: branch on `sections.length === 0` (whole-doc behavior — preserved) vs `sections.length > 0` (new section-tree behavior)
 - Manifest writer: emit `sections[]` when extraction produces them
@@ -98,8 +101,7 @@ Expected: all 9 ACs render in flightbag with chapter/section drill-down (or sing
 
 ## Out of scope
 
-- The 12 link-only AC cards — covered by WP-AC-LINK-ONLY (separate WP)
-- Removing `kind: 'whole-doc'` from manifest schema — happens via WP-EXTRAS-RETIRE after handbooks-extras corpus is empty
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Anchors
 
