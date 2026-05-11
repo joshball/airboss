@@ -70,12 +70,12 @@ const BUILD_ONLY_SYMBOLS = [
  * Symbols the runtime barrel MUST keep exposing. Route loaders / form
  * actions parse request bodies against the handbook input schemas, and
  * the runtime barrel is the only path TS routes resolve.
+ *
+ * `handbookNotesInputSchema` was retired by wp-notes-primitive: per-section
+ * notes now live on `study.note` and are validated by `createNoteInputSchema`
+ * / `updateNoteInputSchema` from `./notes`.
  */
-const RUNTIME_REQUIRED_SYMBOLS = [
-	'handbookHeartbeatInputSchema',
-	'handbookNotesInputSchema',
-	'handbookReadStatusSchema',
-] as const;
+const RUNTIME_REQUIRED_SYMBOLS = ['handbookHeartbeatInputSchema', 'handbookReadStatusSchema'] as const;
 
 describe('@ab/bc-study barrel split', () => {
 	it('runtime + build barrel re-export disjoint sets', () => {

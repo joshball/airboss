@@ -40,9 +40,10 @@ export {
 // refresh per the 2026-05-06 schema review §E.
 export { replaceNodeEdges, upsertKnowledgeNode } from './knowledge';
 // Manifest schemas + types -- consumed exclusively by seeders. Read-state
-// runtime input schemas (handbookHeartbeatInputSchema, handbookNotesInputSchema,
-// handbookReadStatusSchema) stay in the runtime barrel because route handlers
-// parse `+server.ts` request bodies against them.
+// runtime input schemas (handbookHeartbeatInputSchema, handbookReadStatusSchema)
+// stay in the runtime barrel because route handlers parse `+server.ts`
+// request bodies against them. The legacy handbookNotesInputSchema was
+// retired by wp-notes-primitive (per-section notes now live on `study.note`).
 export {
 	type AcManifest,
 	type AcsManifest,

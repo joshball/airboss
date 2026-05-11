@@ -1,6 +1,7 @@
 import {
 	CREDENTIAL_ID_PREFIX,
 	GOAL_ID_PREFIX,
+	NOTE_ID_PREFIX,
 	SYLLABUS_ID_PREFIX,
 	SYLLABUS_NODE_ID_PREFIX,
 	SYLLABUS_NODE_LINK_ID_PREFIX,
@@ -101,3 +102,7 @@ export const generateSyllabusId = (): string => createId(SYLLABUS_ID_PREFIX);
 export const generateSyllabusNodeId = (): string => createId(SYLLABUS_NODE_ID_PREFIX);
 export const generateSyllabusNodeLinkId = (): string => createId(SYLLABUS_NODE_LINK_ID_PREFIX);
 export const generateGoalId = (): string => createId(GOAL_ID_PREFIX);
+
+// Notes BC (wp-notes-primitive). One row per note; the markdown body
+// + context FKs + tags live on `study.note`.
+export const generateNoteId = (): string => createId(NOTE_ID_PREFIX);

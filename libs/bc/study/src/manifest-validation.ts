@@ -1408,6 +1408,7 @@ export const handbookHeartbeatInputSchema = z.object({
 	delta: z.number().int().positive(),
 });
 
-export const handbookNotesInputSchema = z.object({
-	notesMd: z.string().max(16384),
-});
+// `handbookNotesInputSchema` retired by wp-notes-primitive: per-section
+// single-blob notes are superseded by `study.note` rows. Notes are
+// validated by `createNoteInputSchema` / `updateNoteInputSchema` in
+// `./notes`.

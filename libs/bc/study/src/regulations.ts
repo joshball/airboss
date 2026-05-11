@@ -249,7 +249,6 @@ export interface RegulationsCitingNode {
 export interface RegulationsReadState {
 	status: ReferenceSectionReadStateRow['status'];
 	comprehended: boolean;
-	notesMd: string;
 	totalSecondsVisible: number;
 }
 
@@ -1032,13 +1031,11 @@ async function buildDetailView(
 			? {
 					status: readState.status,
 					comprehended: readState.comprehended,
-					notesMd: readState.notesMd,
 					totalSecondsVisible: readState.totalSecondsVisible,
 				}
 			: {
 					status: HANDBOOK_READ_STATUSES.UNREAD,
 					comprehended: false,
-					notesMd: '',
 					totalSecondsVisible: 0,
 				},
 		citingNodes: citingNodes.map((n) => ({

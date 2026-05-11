@@ -331,56 +331,18 @@ test.describe('handbook reader: read-state controls', () => {
 		await expect(page.locator('input[type=checkbox][name=comprehended]')).toBeDisabled();
 	});
 
-	test('notes save and persist across reload', async ({ page }) => {
+	test('notes link surfaces and points at /notes/new with section pre-fill', async ({ page }) => {
+		// wp-notes-primitive replaced the inline `<HandbookSectionNotes>` editor
+		// with a link to the standalone /notes surface. The inline composer
+		// ships in wp-flightbag-rich-reader; until then the smoke confirms
+		// the link is wired correctly.
 		const url = ROUTES.LIBRARY_HANDBOOK_SECTION(PHAK_DOC, PHAK_CHAPTER_12, PHAK_SECTION_9);
 		await page.goto(url);
 
-		const stamp = `e2e-note-${Date.now()}`;
-		const textarea = page.locator('textarea#handbook-notes-md');
-		// Svelte 5's `bind:value` does not pick up Playwright's fast-fill on
-		// a textarea reliably. Issuing real keyboard input dispatches the
-		// `input` events Svelte's reactive binding listens for, so the form
-		// submit serializes the right `notesMd` payload. Click first to
-		// guarantee focus before the keystrokes flow.
-		await textarea.click();
-		// Wait for the textarea to be the focused element before clearing/typing.
-		// Svelte 5 may re-bind on initial paint; a stray re-render can swallow
-		// leading keystrokes. Locking on focus before typing avoids that race.
-		await expect(textarea).toBeFocused();
-		await textarea.press('ControlOrMeta+A');
-		await page.keyboard.press('Delete');
-		await expect(textarea).toHaveValue('');
-		await page.keyboard.type(stamp, { delay: 25 });
-		await expect(textarea).toHaveValue(stamp);
-
-		// Form is non-enhanced (no `use:enhance`), so submit POSTs to
-		// `?/set-notes` and the action's `{ ok: true }` return body lands as
-		// the page response. The DB write completes synchronously inside the
-		// action; we just need to wait for the POST to come back before
-		// re-navigating to verify persistence.
-		const postResponse = page.waitForResponse(
-			(res) => res.request().method() === 'POST' && res.url().includes('set-notes'),
-		);
-		await page.getByRole('button', { name: /save notes/i }).click();
-		await postResponse;
-
-		// Re-navigate (fresh load) to confirm the notes persisted to DB.
-		await page.goto(url);
-		await expect(page.locator('textarea#handbook-notes-md')).toHaveValue(stamp);
-
-		// Cleanup: empty the notes so subsequent runs start clean. Click +
-		// keyboard select-all + delete drives the same keyboard-input path
-		// that Svelte's bind:value listens on.
-		const ta = page.locator('textarea#handbook-notes-md');
-		await ta.click();
-		await ta.press('ControlOrMeta+A');
-		await page.keyboard.press('Delete');
-		await expect(ta).toHaveValue('');
-		const cleanupResponse = page.waitForResponse(
-			(res) => res.request().method() === 'POST' && res.url().includes('set-notes'),
-		);
-		await page.getByRole('button', { name: /save notes/i }).click();
-		await cleanupResponse;
+		const newLink = page.locator('[data-testid=handbook-notes-link-new]');
+		await expect(newLink).toBeVisible();
+		const href = await newLink.getAttribute('href');
+		expect(href).toMatch(/^\/notes\/new\?referenceSectionId=/);
 	});
 });
 

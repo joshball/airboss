@@ -102,7 +102,6 @@ export type { CourseLensFilters, CourseOverlayLensFilters } from './lenses-cours
 // `@ab/bc-study/build`.
 export {
 	handbookHeartbeatInputSchema,
-	handbookNotesInputSchema,
 	handbookReadStatusSchema,
 } from './manifest-validation';
 // Drizzle table objects + row types. Drizzle's `pg-core` is browser-safe
@@ -144,6 +143,7 @@ export type {
 	NewKnowledgeNodeProgressRow,
 	NewKnowledgeNodeRow,
 	NewMemoryReviewSessionRow,
+	NewNoteRow,
 	NewReferenceFigureRow,
 	NewReferenceRow,
 	NewReferenceSectionReadStateRow,
@@ -158,6 +158,7 @@ export type {
 	NewSyllabusNodeLinkRow,
 	NewSyllabusNodeRow,
 	NewSyllabusRow,
+	NoteRow,
 	ReferenceFigureRow,
 	ReferenceRow,
 	ReferenceSectionReadStateRow,
@@ -195,6 +196,7 @@ export {
 	knowledgeNode,
 	knowledgeNodeProgress,
 	memoryReviewSession,
+	note,
 	reference,
 	referenceFigure,
 	referenceSection,
@@ -338,6 +340,15 @@ export type {
 // Pure projection -- no DB / no `node:*` imports. Safe in the runtime barrel.
 export { projectReferenceToLibraryCard } from './library-card-projection';
 export type { GateState, LeafMasteryState, NodeEvidenceState } from './mastery';
+export type {
+	CreateNoteInput,
+	ListOpts as NotesListOpts,
+	NotesListResult,
+	UpdateNoteInput,
+} from './notes';
+// Pure display helpers from a separate module so the runtime barrel stays
+// browser-safe (the DB-touching `./notes` cannot be value-re-exported here).
+export { deriveNoteTitle, encodeNotesCursor } from './notes-display';
 export type { CreatePlanInput, UpdatePlanInput } from './plans';
 export type {
 	ErrataDisplay,

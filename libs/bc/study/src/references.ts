@@ -19,8 +19,12 @@
  *   - resolveCitationUrl                              link out from node refs
  *
  * Write paths:
- *   - setReadStatus / setComprehended / markAsReread / setNotes
+ *   - setReadStatus / setComprehended / markAsReread
  *   - recordHeartbeat
+ *
+ * Per-section notes are owned by the wp-notes-primitive `study.note`
+ * table (see `libs/bc/study/src/notes.ts`); the legacy `setNotes`
+ * blob writer was retired with that WP.
  *
  * Build-only helpers (not exported from the BC barrel):
  *   - upsertReference / upsertReferenceSection
@@ -39,7 +43,6 @@ import {
 	CITATION_URL_TEMPLATES,
 	HANDBOOK_HEARTBEAT_INTERVAL_SEC,
 	HANDBOOK_HEARTBEAT_MIN_DELTA_SEC,
-	HANDBOOK_NOTES_MAX_LENGTH,
 	HANDBOOK_READ_STATUSES,
 	type HandbookReadStatus,
 	REFERENCE_KINDS,
@@ -1465,7 +1468,6 @@ export async function listReadStatesForReference(
 			lastReadAt: referenceSectionReadState.lastReadAt,
 			openedCount: referenceSectionReadState.openedCount,
 			totalSecondsVisible: referenceSectionReadState.totalSecondsVisible,
-			notesMd: referenceSectionReadState.notesMd,
 			seedOrigin: referenceSectionReadState.seedOrigin,
 			createdAt: referenceSectionReadState.createdAt,
 			updatedAt: referenceSectionReadState.updatedAt,
@@ -1665,7 +1667,6 @@ export async function setReadStatus(
 		lastReadAt: new Date(),
 		openedCount: 0,
 		totalSecondsVisible: 0,
-		notesMd: '',
 	} satisfies Omit<ReferenceSectionReadStateRow, 'createdAt' | 'updatedAt' | 'seedOrigin'> & {
 		seedOrigin?: string | null;
 	};
@@ -1715,7 +1716,6 @@ export async function setComprehended(
 		lastReadAt: existing?.lastReadAt ?? null,
 		openedCount: existing?.openedCount ?? 0,
 		totalSecondsVisible: existing?.totalSecondsVisible ?? 0,
-		notesMd: existing?.notesMd ?? '',
 	};
 
 	const rows = await db
@@ -1769,43 +1769,11 @@ export async function markAsReread(
 	return row;
 }
 
-/** Persist user notes for a section. Validates length against `HANDBOOK_NOTES_MAX_LENGTH`. */
-export async function setNotes(
-	userId: string,
-	referenceSectionId: string,
-	notesMd: string,
-	db: Db = defaultDb,
-): Promise<ReferenceSectionReadStateRow> {
-	if (notesMd.length > HANDBOOK_NOTES_MAX_LENGTH) {
-		throw new HandbookValidationError(`Notes exceed ${HANDBOOK_NOTES_MAX_LENGTH} characters.`);
-	}
-
-	const insert = {
-		userId,
-		referenceSectionId,
-		status: HANDBOOK_READ_STATUSES.UNREAD,
-		comprehended: false,
-		openedCount: 0,
-		totalSecondsVisible: 0,
-		notesMd,
-	};
-
-	const rows = await db
-		.insert(referenceSectionReadState)
-		.values(insert)
-		.onConflictDoUpdate({
-			target: [referenceSectionReadState.userId, referenceSectionReadState.referenceSectionId],
-			set: {
-				notesMd,
-				updatedAt: new Date(),
-			},
-		})
-		.returning();
-
-	const row = rows[0];
-	if (!row) throw new HandbookValidationError('setNotes: upsert returned no row');
-	return row;
-}
+// `setNotes` removed by wp-notes-primitive: per-section single-blob notes
+// on `reference_section_read_state.notes_md` are superseded by 1+ rows on
+// `study.note` referencing the same `referenceSectionId`. Reader UI now
+// links to `/notes?referenceSectionId=...` for capture/browse; the
+// inline composer ships in wp-flightbag-rich-reader.
 
 /**
  * Heartbeat tick from the section reader. Increments `total_seconds_visible`
@@ -1836,7 +1804,6 @@ export async function recordHeartbeat(
 		lastReadAt: now,
 		openedCount: 1,
 		totalSecondsVisible: cappedDelta,
-		notesMd: '',
 	};
 
 	const rows = await db

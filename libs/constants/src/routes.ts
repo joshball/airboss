@@ -106,6 +106,24 @@ export const QUERY_PARAMS = {
 	NAME: 'name',
 	/** Render-mode override on /references dev page. */
 	MODE: 'mode',
+	/**
+	 * Active view selector on the `/notes` index. Closed value set lives in
+	 * `NOTES_VIEW_VALUES`; the loader rejects out-of-set values by falling
+	 * back to `NOTES_VIEW_DEFAULT`.
+	 */
+	VIEW: 'view',
+	/**
+	 * Optional context-FK pre-fill on `/notes/new`. Each is a column on
+	 * `study.note`; the creator form picks the value up so a "+ Note from
+	 * here" affordance from any surface can hand off context without form
+	 * state.
+	 */
+	NOTE_REFERENCE_ID: 'referenceId',
+	NOTE_REFERENCE_SECTION_ID: 'referenceSectionId',
+	NOTE_KNOWLEDGE_NODE_ID: 'knowledgeNodeId',
+	NOTE_COURSE_ID: 'courseId',
+	NOTE_GOAL_ID: 'goalId',
+	NOTE_SYLLABUS_NODE_ID: 'syllabusNodeId',
 
 	// Hangar /admin/audit filters (audit-explorer WP).
 	/** Resolved actor user id (hangar audit explorer). */
@@ -237,6 +255,29 @@ export const ROUTES = {
 	 * surface still shows them.
 	 */
 	CARD_PUBLIC: (id: string) => `/cards/${encodeURIComponent(id)}` as const,
+
+	// Study -- Notes (wp-notes-primitive). Standalone primitive: a markdown
+	// thought attached to optional context (reference / section / knowledge
+	// node / course / goal / syllabus node) plus free-form tags. Reachable
+	// from the global "+ Note" affordance and from per-context surfaces in
+	// later phases.
+	NOTES: '/notes',
+	NOTES_NEW: '/notes/new',
+	NOTE_DETAIL: (id: string) => `/notes/${encodeURIComponent(id)}` as const,
+	/**
+	 * Path pattern for the note detail surface, used by help-page metadata
+	 * + e2e selectors where the route is referenced as a shape rather than
+	 * navigated to. Runtime navigation still uses `NOTE_DETAIL(id)`.
+	 */
+	NOTE_DETAIL_PATTERN: '/notes/[id]',
+	/** Detail page with the inline edit-mode flag set. */
+	NOTE_EDIT: (id: string) => `/notes/${encodeURIComponent(id)}?${QUERY_PARAMS.EDIT}=1` as const,
+	/**
+	 * Filtered index. `view` is one of `NOTES_VIEW_VALUES`; the loader
+	 * rejects out-of-set values by falling back to `NOTES_VIEW_DEFAULT`.
+	 */
+	NOTES_FILTER: (view: 'all' | 'follow-ups' | 'archived' | 'by-context') =>
+		`/notes?${QUERY_PARAMS.VIEW}=${view}` as const,
 
 	// Study -- Reps
 	// `REPS_SESSION` retired by ADR 012 phase 3; the `/reps/session` route
@@ -938,6 +979,9 @@ export const NAV_LABELS = {
 	MEMORY_BROWSE: 'Browse',
 	MEMORY_REVIEW: 'Review',
 	MEMORY_NEW: 'New card',
+	/** wp-notes-primitive top-nav entry. */
+	NOTES: 'Notes',
+	NOTES_NEW: 'New note',
 	REPS: 'Reps',
 	KNOWLEDGE: 'Knowledge',
 	GLOSSARY: 'Glossary',

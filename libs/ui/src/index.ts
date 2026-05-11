@@ -33,6 +33,17 @@ export type { DrawerSide, DrawerSize } from './components/Drawer.svelte';
 export type { FilterBarProps } from './components/FilterBar.svelte';
 export type { FilterCardProps } from './components/FilterCard.svelte';
 export type { FilterChipDef, FilterChipsProps } from './components/FilterChips.svelte';
+export type {
+	NoteContext,
+	NoteContextChip,
+	NoteContextKind,
+	NoteContextOption,
+	NoteContextOptions,
+} from './components/notes/note-context-types';
+export {
+	EMPTY_NOTE_CONTEXT,
+	NOTE_CONTEXT_KINDS,
+} from './components/notes/note-context-types';
 export type { PagerProps } from './components/Pager.svelte';
 export type { RadioGroupOrientation, RadioOption } from './components/RadioGroup.svelte';
 export type { ResultSummaryProps } from './components/ResultSummary.svelte';

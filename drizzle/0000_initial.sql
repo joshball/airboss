@@ -330,6 +330,34 @@ CREATE TABLE "study"."memory_review_session" (
 	CONSTRAINT "mrs_current_index_check" CHECK ("current_index" >= 0)
 );
 --> statement-breakpoint
+CREATE TABLE "study"."note" (
+	"id" text PRIMARY KEY NOT NULL,
+	"user_id" text NOT NULL,
+	"body_md" text NOT NULL,
+	"title" text DEFAULT '' NOT NULL,
+	"quoted_excerpt" text DEFAULT '' NOT NULL,
+	"reference_id" text,
+	"reference_section_id" text,
+	"knowledge_node_id" text,
+	"course_id" text,
+	"goal_id" text,
+	"syllabus_node_id" text,
+	"tags" text[] DEFAULT ARRAY[]::text[] NOT NULL,
+	"follow_up_md" text DEFAULT '' NOT NULL,
+	"follow_up_done_at" timestamp with time zone,
+	"archived_at" timestamp with time zone,
+	"seed_origin" text,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "note_body_length_check" CHECK (char_length("body_md") <= 64000),
+	CONSTRAINT "note_body_not_empty_check" CHECK (char_length("body_md") > 0),
+	CONSTRAINT "note_title_length_check" CHECK (char_length("title") <= 200),
+	CONSTRAINT "note_excerpt_length_check" CHECK (char_length("quoted_excerpt") <= 4000),
+	CONSTRAINT "note_follow_up_length_check" CHECK (char_length("follow_up_md") <= 4000),
+	CONSTRAINT "note_tags_count_check" CHECK (array_length("tags", 1) IS NULL OR array_length("tags", 1) <= 16),
+	CONSTRAINT "note_follow_up_done_requires_follow_up_check" CHECK ("follow_up_done_at" IS NULL OR "follow_up_md" != '')
+);
+--> statement-breakpoint
 CREATE TABLE "study"."reference" (
 	"id" text PRIMARY KEY NOT NULL,
 	"kind" text NOT NULL,
@@ -417,15 +445,13 @@ CREATE TABLE "study"."reference_section_read_state" (
 	"last_read_at" timestamp with time zone,
 	"opened_count" integer DEFAULT 0 NOT NULL,
 	"total_seconds_visible" integer DEFAULT 0 NOT NULL,
-	"notes_md" text DEFAULT '' NOT NULL,
 	"seed_origin" text,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
 	CONSTRAINT "reference_section_read_state_user_id_reference_section_id_pk" PRIMARY KEY("user_id","reference_section_id"),
 	CONSTRAINT "reference_section_read_state_status_check" CHECK ("status" IN ('unread', 'reading', 'read')),
 	CONSTRAINT "reference_section_read_state_total_seconds_check" CHECK ("total_seconds_visible" >= 0),
-	CONSTRAINT "reference_section_read_state_opened_count_check" CHECK ("opened_count" >= 0),
-	CONSTRAINT "reference_section_read_state_notes_length_check" CHECK (char_length("notes_md") <= 16384)
+	CONSTRAINT "reference_section_read_state_opened_count_check" CHECK ("opened_count" >= 0)
 );
 --> statement-breakpoint
 CREATE TABLE "study"."review" (
@@ -992,6 +1018,12 @@ ALTER TABLE "study"."knowledge_node" ADD CONSTRAINT "knowledge_node_author_id_ba
 ALTER TABLE "study"."knowledge_node_progress" ADD CONSTRAINT "knowledge_node_progress_user_id_bauth_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."bauth_user"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE "study"."knowledge_node_progress" ADD CONSTRAINT "knowledge_node_progress_node_id_knowledge_node_id_fk" FOREIGN KEY ("node_id") REFERENCES "study"."knowledge_node"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."memory_review_session" ADD CONSTRAINT "memory_review_session_user_id_bauth_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."bauth_user"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
+ALTER TABLE "study"."note" ADD CONSTRAINT "note_user_id_bauth_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."bauth_user"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
+ALTER TABLE "study"."note" ADD CONSTRAINT "note_reference_id_reference_id_fk" FOREIGN KEY ("reference_id") REFERENCES "study"."reference"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "study"."note" ADD CONSTRAINT "note_reference_section_id_reference_section_id_fk" FOREIGN KEY ("reference_section_id") REFERENCES "study"."reference_section"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "study"."note" ADD CONSTRAINT "note_course_id_course_id_fk" FOREIGN KEY ("course_id") REFERENCES "study"."course"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "study"."note" ADD CONSTRAINT "note_goal_id_goal_id_fk" FOREIGN KEY ("goal_id") REFERENCES "study"."goal"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "study"."note" ADD CONSTRAINT "note_syllabus_node_id_syllabus_node_id_fk" FOREIGN KEY ("syllabus_node_id") REFERENCES "study"."syllabus_node"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."reference_figure" ADD CONSTRAINT "reference_figure_section_id_reference_section_id_fk" FOREIGN KEY ("section_id") REFERENCES "study"."reference_section"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."reference_section" ADD CONSTRAINT "reference_section_reference_id_reference_id_fk" FOREIGN KEY ("reference_id") REFERENCES "study"."reference"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."reference_section" ADD CONSTRAINT "reference_section_parent_id_reference_section_id_fk" FOREIGN KEY ("parent_id") REFERENCES "study"."reference_section"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
@@ -1102,6 +1134,16 @@ CREATE UNIQUE INDEX "knp_user_node_unique" ON "study"."knowledge_node_progress" 
 CREATE INDEX "knp_node_idx" ON "study"."knowledge_node_progress" USING btree ("node_id");--> statement-breakpoint
 CREATE INDEX "mrs_user_deck_status_idx" ON "study"."memory_review_session" USING btree ("user_id","deck_hash","status");--> statement-breakpoint
 CREATE INDEX "mrs_user_started_idx" ON "study"."memory_review_session" USING btree ("user_id","started_at");--> statement-breakpoint
+CREATE INDEX "note_user_idx" ON "study"."note" USING btree ("user_id","created_at");--> statement-breakpoint
+CREATE INDEX "note_reference_idx" ON "study"."note" USING btree ("reference_id") WHERE reference_id IS NOT NULL;--> statement-breakpoint
+CREATE INDEX "note_section_idx" ON "study"."note" USING btree ("reference_section_id") WHERE reference_section_id IS NOT NULL;--> statement-breakpoint
+CREATE INDEX "note_goal_idx" ON "study"."note" USING btree ("goal_id") WHERE goal_id IS NOT NULL;--> statement-breakpoint
+CREATE INDEX "note_course_idx" ON "study"."note" USING btree ("course_id") WHERE course_id IS NOT NULL;--> statement-breakpoint
+CREATE INDEX "note_knowledge_idx" ON "study"."note" USING btree ("knowledge_node_id") WHERE knowledge_node_id IS NOT NULL;--> statement-breakpoint
+CREATE INDEX "note_syllabus_idx" ON "study"."note" USING btree ("syllabus_node_id") WHERE syllabus_node_id IS NOT NULL;--> statement-breakpoint
+CREATE INDEX "note_tags_gin_idx" ON "study"."note" USING gin ("tags");--> statement-breakpoint
+CREATE INDEX "note_follow_up_open_idx" ON "study"."note" USING btree ("user_id","created_at") WHERE follow_up_md != '' AND follow_up_done_at IS NULL AND archived_at IS NULL;--> statement-breakpoint
+CREATE INDEX "note_user_open_idx" ON "study"."note" USING btree ("user_id","created_at") WHERE archived_at IS NULL;--> statement-breakpoint
 CREATE UNIQUE INDEX "reference_doc_edition_unique" ON "study"."reference" USING btree ("document_slug","edition");--> statement-breakpoint
 CREATE INDEX "reference_kind_idx" ON "study"."reference" USING btree ("kind");--> statement-breakpoint
 CREATE INDEX "reference_subjects_gin_idx" ON "study"."reference" USING gin ("subjects");--> statement-breakpoint
