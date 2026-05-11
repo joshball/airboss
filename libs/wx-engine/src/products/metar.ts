@@ -94,15 +94,19 @@ export function deriveMetar(truth: TruthModel, stationIcao: string, observationT
 	}
 
 	// IFR hazard zone over surface -> drop ceiling + visibility.
+	// Severe == dense-fog/LIFR class (visibility under 1 SM, ceiling under 1000 ft);
+	// moderate == IFR (1-3 SM, 1000-1500 ft); light == MVFR-margin (5 SM, 2500 ft).
 	for (const hazard of truth.hazardZones) {
 		if (hazard.kind !== 'ifr' && hazard.kind !== 'mountain-obscuration') continue;
 		if (hazard.altitudeBandFtMsl.min > station.elevationFt + 500) continue;
 		if (!pointInPolygon([station.lon, station.lat], hazard.polygon)) continue;
-		const ifrCeiling = hazard.severity === 'severe' ? 700 : hazard.severity === 'moderate' ? 1500 : 2500;
+		const ifrCeiling = hazard.severity === 'severe' ? 300 : hazard.severity === 'moderate' ? 1500 : 2500;
 		cloudCover = 'OVC';
 		cloudBaseFt = ifrCeiling;
-		visibilitySm = hazard.severity === 'severe' ? 1 : hazard.severity === 'moderate' ? 3 : 5;
-		if (visibilitySm <= 5) weatherCodes.push('BR');
+		visibilitySm = hazard.severity === 'severe' ? 0.5 : hazard.severity === 'moderate' ? 3 : 5;
+		// Dense-fog visibilities take FG (fog); higher BR (mist) per FMH-1 convention.
+		if (visibilitySm < 1) weatherCodes.push('FG');
+		else if (visibilitySm <= 5) weatherCodes.push('BR');
 	}
 
 	// Convective cell within (radius + 10 nm) -> +TSRA + BKN CB + OVC.
