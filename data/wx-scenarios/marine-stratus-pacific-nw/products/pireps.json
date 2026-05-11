@@ -1,0 +1,70 @@
+[
+  {
+    "station": "KSFO",
+    "kind": "UA",
+    "location": {
+      "raw": "SFO190035",
+      "station": "SFO",
+      "radialDeg": 190,
+      "distanceNm": 35
+    },
+    "timeHhmmZ": 1530,
+    "altitudeFt": 1500,
+    "aircraftType": "C172",
+    "skyCover": [
+      {
+        "cover": "OVC",
+        "baseFt": 800,
+        "topFt": null
+      }
+    ],
+    "weather": [
+      "BR"
+    ],
+    "temperatureC": null,
+    "wind": null,
+    "turbulence": {
+      "intensity": "LGT",
+      "altitudeBandFt": null,
+      "raw": "LGT"
+    },
+    "icing": null,
+    "remarks": "IFR BELOW LAYER",
+    "raw": "KSFO UA /OV SFO190035/TM 1530/FL015/TP C172/TB LGT/SK OVC008/WX BR/RM IFR BELOW LAYER",
+    "warnings": []
+  },
+  {
+    "station": "KMRY",
+    "kind": "UA",
+    "location": {
+      "raw": "MRY020040",
+      "station": "MRY",
+      "radialDeg": 20,
+      "distanceNm": 40
+    },
+    "timeHhmmZ": 1535,
+    "altitudeFt": 2500,
+    "aircraftType": "C172",
+    "skyCover": [
+      {
+        "cover": "BKN",
+        "baseFt": 3000,
+        "topFt": null
+      }
+    ],
+    "weather": [
+      "FU"
+    ],
+    "temperatureC": null,
+    "wind": null,
+    "turbulence": {
+      "intensity": "LGT",
+      "altitudeBandFt": null,
+      "raw": "LGT"
+    },
+    "icing": null,
+    "remarks": "MTN OBSCURED IN STRATUS",
+    "raw": "KMRY UA /OV MRY020040/TM 1535/FL025/TP C172/TB LGT/SK BKN030/WX FU/RM MTN OBSCURED IN STRATUS",
+    "warnings": []
+  }
+]

@@ -1,0 +1,21 @@
+slug: wx-scenario-marine-stratus-pacific-nw-taf-ksfo
+type: taf-timeline
+title: TAF Timeline -- KSFO (truth-derived)
+subtitle: 2026-06-18T15:20:00.000Z TAF -- valid 2026-06-18T16:00:00.000Z to
+  2026-06-19T04:00:00.000Z
+extent: time
+stationIcao: KSFO
+projection:
+  kind: lambert
+  parallels:
+    - 33
+    - 45
+  rotate:
+    - -96
+    - -39
+sources:
+  taf: cache://scenarios/marine-stratus-pacific-nw/taf-ksfo.json
+options:
+  axis_tick_hours: 3
+  show_legend: true
+  source_attribution: wx-engine -- truth-derived synthetic

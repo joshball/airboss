@@ -1,0 +1,17 @@
+{
+  "slug": "wx-scenario-marine-stratus-pacific-nw-airmet-sigmet",
+  "type": "advisory-overlay",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-11T14:04:27.378Z",
+  "content_hash": "sha256:728c31a0a855220a7f264cf6e8497f4523e1f6cd310d1357c2ca443dd71e6afa",
+  "source_hashes": {
+    "advisories": "1fa9c1fc2c10eeb779aa220d457cf98ea8e15aee5c025f19f5da0b7870c56290"
+  },
+  "layer_counts": {
+    "vector-symbology": 2,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 285817
+}

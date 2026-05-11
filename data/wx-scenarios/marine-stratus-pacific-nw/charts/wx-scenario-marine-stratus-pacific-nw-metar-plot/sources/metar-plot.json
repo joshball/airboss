@@ -1,0 +1,188 @@
+{
+  "targetTimestamp": "2026-06-18T16:00:00Z",
+  "source": "wx-engine -- truth-derived synthetic METARs",
+  "count": 5,
+  "observations": [
+    {
+      "station": {
+        "icao": "KMRY",
+        "lat": 36.59,
+        "lon": -121.84
+      },
+      "raw": "KMRY 181653Z 30008KT 3SM BR OVC015 12/11 A3012",
+      "parsed": {
+        "station": "KMRY",
+        "day": 18,
+        "hour": 16,
+        "minute": 53,
+        "wind": {
+          "directionDeg": 300,
+          "speedKt": 8,
+          "gustKt": null,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 3,
+        "weather": [
+          "BR"
+        ],
+        "clouds": [
+          {
+            "cover": "OVC",
+            "heightFtAgl": 1500
+          }
+        ],
+        "tempC": 12,
+        "dewpointC": 11,
+        "altimeterInHg": 30.12,
+        "cavok": false,
+        "raw": "KMRY 181653Z 30008KT 3SM BR OVC015 12/11 A3012",
+        "warnings": []
+      }
+    },
+    {
+      "station": {
+        "icao": "KSFO",
+        "lat": 37.62,
+        "lon": -122.37
+      },
+      "raw": "KSFO 181653Z 30008KT 3SM BR OVC015 12/11 A3013",
+      "parsed": {
+        "station": "KSFO",
+        "day": 18,
+        "hour": 16,
+        "minute": 53,
+        "wind": {
+          "directionDeg": 300,
+          "speedKt": 8,
+          "gustKt": null,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 3,
+        "weather": [
+          "BR"
+        ],
+        "clouds": [
+          {
+            "cover": "OVC",
+            "heightFtAgl": 1500
+          }
+        ],
+        "tempC": 12,
+        "dewpointC": 11,
+        "altimeterInHg": 30.13,
+        "cavok": false,
+        "raw": "KSFO 181653Z 30008KT 3SM BR OVC015 12/11 A3013",
+        "warnings": []
+      }
+    },
+    {
+      "station": {
+        "icao": "KOAK",
+        "lat": 37.72,
+        "lon": -122.22
+      },
+      "raw": "KOAK 181653Z 30008KT 3SM BR OVC015 12/11 A3013",
+      "parsed": {
+        "station": "KOAK",
+        "day": 18,
+        "hour": 16,
+        "minute": 53,
+        "wind": {
+          "directionDeg": 300,
+          "speedKt": 8,
+          "gustKt": null,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 3,
+        "weather": [
+          "BR"
+        ],
+        "clouds": [
+          {
+            "cover": "OVC",
+            "heightFtAgl": 1500
+          }
+        ],
+        "tempC": 12,
+        "dewpointC": 11,
+        "altimeterInHg": 30.13,
+        "cavok": false,
+        "raw": "KOAK 181653Z 30008KT 3SM BR OVC015 12/11 A3013",
+        "warnings": []
+      }
+    },
+    {
+      "station": {
+        "icao": "KSCK",
+        "lat": 37.89,
+        "lon": -121.24
+      },
+      "raw": "KSCK 181653Z 03006KT 10SM SKC 18/04 A3011",
+      "parsed": {
+        "station": "KSCK",
+        "day": 18,
+        "hour": 16,
+        "minute": 53,
+        "wind": {
+          "directionDeg": 30,
+          "speedKt": 6,
+          "gustKt": null,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 10,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "SKC",
+            "heightFtAgl": null
+          }
+        ],
+        "tempC": 18,
+        "dewpointC": 4,
+        "altimeterInHg": 30.11,
+        "cavok": false,
+        "raw": "KSCK 181653Z 03006KT 10SM SKC 18/04 A3011",
+        "warnings": []
+      }
+    },
+    {
+      "station": {
+        "icao": "KSAC",
+        "lat": 38.51,
+        "lon": -121.5
+      },
+      "raw": "KSAC 181653Z 03006KT 10SM SKC 18/04 A3011",
+      "parsed": {
+        "station": "KSAC",
+        "day": 18,
+        "hour": 16,
+        "minute": 53,
+        "wind": {
+          "directionDeg": 30,
+          "speedKt": 6,
+          "gustKt": null,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 10,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "SKC",
+            "heightFtAgl": null
+          }
+        ],
+        "tempC": 18,
+        "dewpointC": 4,
+        "altimeterInHg": 30.11,
+        "cavok": false,
+        "raw": "KSAC 181653Z 03006KT 10SM SKC 18/04 A3011",
+        "warnings": []
+      }
+    }
+  ]
+}
