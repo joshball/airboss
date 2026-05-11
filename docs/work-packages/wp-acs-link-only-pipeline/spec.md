@@ -40,10 +40,10 @@ Build the download → extract → register → seed pipeline for the 2 ACS / PT
 
 ## In scope
 
-| Card slug | FAA number | Common name | Status |
-|-----------|-----------|-------------|--------|
-| cfii-airplane-pts-9e | FAA-S-ACS-9E | Flight Instructor – Instrument Airplane PTS | Still on PTS, not ACS |
-| faa-g-acs-2-companion-guide | FAA-G-ACS-2 | ACS Companion Guide for Pilots | Not in download config |
+| Card slug                   | FAA number   | Common name                                 | Status                 |
+| --------------------------- | ------------ | ------------------------------------------- | ---------------------- |
+| cfii-airplane-pts-9e        | FAA-S-ACS-9E | Flight Instructor – Instrument Airplane PTS | Still on PTS, not ACS  |
+| faa-g-acs-2-companion-guide | FAA-G-ACS-2  | ACS Companion Guide for Pilots              | Not in download config |
 
 ## Decisions
 
@@ -101,8 +101,7 @@ Verify both new references show readable on /library.
 
 ## Out of scope
 
-- Adding more PTS docs beyond CFII (no others in YAML)
-- Restructuring the ACS schema (we're using degradation, not new fields)
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Anchors
 
