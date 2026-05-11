@@ -19,12 +19,34 @@ import { dirname, join, resolve } from 'node:path';
 const REPO_ROOT = resolve(dirname(new URL(import.meta.url).pathname), '..');
 const OUTPUT_PATH = join(REPO_ROOT, 'libs/aviation/src/references/faa-docs.ts');
 
+/**
+ * Source-type values emitted by this generator. Mirrors a subset of
+ * REFERENCE_SOURCE_TYPES (kept as a literal union here rather than imported
+ * because the generator runs under bun outside the build graph; keeping the
+ * union literal is faster to read and matches the snapshot the emitter writes).
+ */
+type EmittedSourceType =
+	| 'cfr'
+	| 'aim'
+	| 'ac'
+	| 'acs'
+	| 'phak'
+	| 'afh'
+	| 'ifh'
+	| 'avwx'
+	| 'iph'
+	| 'rmh'
+	| 'aih'
+	| 'hfh'
+	| 'gfh'
+	| 'bfh';
+
 interface DocRow {
 	id: string;
 	displayName: string;
 	aliases: string[];
 	keywords: string[];
-	sourceType: 'cfr' | 'ac' | 'acs' | 'phak' | 'afh' | 'ifh' | 'aim';
+	sourceType: EmittedSourceType;
 	aviationTopic: readonly string[];
 	flightRules: 'vfr' | 'ifr' | 'both' | 'na';
 	knowledgeKind: 'reference' | 'regulation';
@@ -90,7 +112,36 @@ const HANDBOOK_ABBREVIATIONS: Record<string, string[]> = {
 	'FAA-H-8083-28B': ['AvWX'],
 	'FAA-H-8083-2A': ['RMH'],
 	'FAA-H-8083-9': ['AIH', 'IAH'],
+	'FAA-H-8083-21': ['HFH'],
+	'FAA-H-8083-1': ['GFH'],
+	'FAA-H-8083-11': ['BFH'],
 };
+
+/**
+ * Map a handbook edition code (`FAA-H-8083-NN[X]`) to its dedicated source-type
+ * slot. ONE SLOT PER HANDBOOK per the command-palette WP Decision #7. PHAK,
+ * AFH, IFH already had slots; AVWX/IPH/RMH/AIH/HFH/GFH/BFH are new in Phase 2.
+ * Unrecognised editions fall back to `phak` (the umbrella historical default).
+ */
+function handbookSourceType(edition: string): EmittedSourceType {
+	const m = edition.match(/^FAA-H-8083-(\d+)([A-Z])?$/);
+	if (!m) return 'phak';
+	const n = m[1] ?? '';
+	// -25 PHAK, -3 AFH, -15 IFH, -16 IPH, -28 AvWX, -2 RMH, -9 AIH, -21 HFH,
+	// -1 GFH, -11 BFH. Each is a discrete document family ("one slot per
+	// handbook" -- WP Decision #7).
+	if (n === '25') return 'phak';
+	if (n === '3') return 'afh';
+	if (n === '15') return 'ifh';
+	if (n === '16') return 'iph';
+	if (n === '28') return 'avwx';
+	if (n === '2') return 'rmh';
+	if (n === '9') return 'aih';
+	if (n === '21') return 'hfh';
+	if (n === '1') return 'gfh';
+	if (n === '11') return 'bfh';
+	return 'phak';
+}
 
 const TOPIC_BY_SUBJECT: Record<string, string[]> = {
 	weather: ['weather'],
@@ -164,7 +215,7 @@ function scanHandbooks(): DocRow[] {
 			}
 			keywords.add(stripPunct(manifest.title));
 
-			const sourceType = slug === 'phak' ? 'phak' : slug === 'afh' ? 'afh' : slug === 'ifh' ? 'ifh' : ('phak' as const); // fallback for handbooks without a dedicated source type
+			const sourceType: EmittedSourceType = handbookSourceType(code);
 
 			rows.push({
 				id: `doc-${stripPunct(code)}`,
@@ -294,6 +345,10 @@ function scanAcs2(): DocRow[] {
 
 // ---------- CFR scanner ----------
 
+interface CfrManifest {
+	parts?: ReadonlyArray<{ number: string; officialTitle?: string }>;
+}
+
 function scanCfr(title: 14 | 49): DocRow[] {
 	const titleRoot = join(REPO_ROOT, `regulations/cfr-${title}`);
 	if (!existsSync(titleRoot)) return [];
@@ -307,9 +362,23 @@ function scanCfr(title: 14 | 49): DocRow[] {
 	if (!snapshot) return [];
 
 	const snapshotDir = join(titleRoot, snapshot);
-	const parts = readdirSync(snapshotDir).filter((n) => statSync(join(snapshotDir, n)).isDirectory());
+	// Newer snapshot layout: a single manifest.json carries `parts` with
+	// `{ number, officialTitle }`. Older layout (pre-PR #817) used per-part
+	// subdirectories. Prefer the manifest when present.
+	const manifestPath = join(snapshotDir, 'manifest.json');
+	let parts: Array<{ number: string; title?: string }> = [];
+	if (existsSync(manifestPath)) {
+		const manifest = JSON.parse(readFileSync(manifestPath, 'utf-8')) as CfrManifest;
+		for (const p of manifest.parts ?? []) {
+			parts.push({ number: p.number, title: p.officialTitle });
+		}
+	} else {
+		parts = readdirSync(snapshotDir)
+			.filter((n) => statSync(join(snapshotDir, n)).isDirectory())
+			.map((number) => ({ number }));
+	}
 
-	return parts.map((part) => {
+	return parts.map(({ number: part, title: officialTitle }) => {
 		const aliases = new Set<string>([
 			`${title} CFR ${part}`,
 			`${title} CFR Part ${part}`,
@@ -317,21 +386,24 @@ function scanCfr(title: 14 | 49): DocRow[] {
 			`${title} CFR §${part}`,
 			part,
 		]);
+		if (officialTitle) aliases.add(officialTitle);
 		const keywords = new Set<string>();
 		for (const a of aliases) keywords.add(stripPunct(a));
 		keywords.add(stripPunct(`${title}cfr${part}`));
 		keywords.add(stripPunct(`cfr${title}${part}`));
 
+		const display = officialTitle ? `${title} CFR Part ${part} -- ${officialTitle}` : `${title} CFR Part ${part}`;
+
 		return {
 			id: `doc-cfr-${title}-${part}`,
-			displayName: `${title} CFR Part ${part}`,
+			displayName: display,
 			aliases: [...aliases].filter(Boolean).sort(),
 			keywords: [...keywords].filter(Boolean).sort(),
 			sourceType: 'cfr',
 			aviationTopic: ['regulations'],
 			flightRules: 'both',
 			knowledgeKind: 'regulation',
-			paraphrase: `Title ${title} of the Code of Federal Regulations, Part ${part}.`,
+			paraphrase: `Title ${title} of the Code of Federal Regulations, Part ${part}${officialTitle ? ` -- ${officialTitle}` : ''}.`,
 		};
 	});
 }
