@@ -260,7 +260,7 @@ const showComposer = $derived(composerOpen && composer !== undefined);
 			background: var(--surface-page);
 			border-left: 1px solid var(--edge-default);
 			padding: var(--space-md);
-			z-index: var(--z-overlay, 70);
+			z-index: var(--z-popover);
 			box-shadow: var(--shadow-lg);
 		}
 	}

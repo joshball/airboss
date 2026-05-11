@@ -80,3 +80,39 @@ export async function createCardDraftApi(input: CardDraftApiInput): Promise<Card
 	if (!res.ok) throw new Error(`createCardDraft failed (${res.status})`);
 	return (await res.json()) as CardDraftApiResult;
 }
+
+export interface CreateNoteApiInput {
+	bodyMd: string;
+	title?: string;
+	quotedExcerpt?: string;
+	tags?: readonly string[];
+	sectionId?: string;
+	anchor?: TextAnchor;
+}
+
+export interface CreateNoteApiResult {
+	note: {
+		id: string;
+		title: string;
+		bodyMd: string;
+		quotedExcerpt: string;
+		tags: string[];
+		followUpMd: string;
+		createdAt: string;
+		updatedAt: string;
+	};
+	annotation: AnnotationApiRow | null;
+}
+
+export async function createNoteWithAnchorApi(input: CreateNoteApiInput): Promise<CreateNoteApiResult> {
+	const res = await fetch('/api/notes', {
+		method: 'POST',
+		headers: { 'content-type': 'application/json' },
+		body: JSON.stringify(input),
+	});
+	if (!res.ok) {
+		const payload = (await res.json().catch(() => null)) as { error?: string } | null;
+		throw new Error(payload?.error ?? `createNote failed (${res.status})`);
+	}
+	return (await res.json()) as CreateNoteApiResult;
+}

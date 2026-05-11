@@ -1,6 +1,6 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
-import { useComposerState } from '@ab/library';
+import { useComposerState, useSectionContext } from '@ab/library';
 import Breadcrumbs from '@ab/library/Breadcrumbs.svelte';
 import ReaderLayout from '@ab/library/ReaderLayout.svelte';
 import SourceLinks from '@ab/library/SourceLinks.svelte';
@@ -13,7 +13,8 @@ import type { LayoutData } from './$types';
 let { data, children }: { data: LayoutData; children: Snippet } = $props();
 
 const composerState = useComposerState();
-const composerOpen = $derived(Boolean(composerState && composerState.kind !== null));
+const sectionContext = useSectionContext();
+const composerOpen = $derived(Boolean((composerState && composerState.kind !== null) || sectionContext?.section));
 
 const acLandingHref = $derived(ROUTES.FLIGHTBAG_AC(data.ac.docParam, data.ac.revParam));
 

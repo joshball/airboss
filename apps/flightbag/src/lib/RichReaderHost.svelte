@@ -34,6 +34,16 @@ export interface RichReaderAnnotationContext {
 		createdAt: string | null;
 		anchor: { text: string; start: number; end: number; prefix: string; suffix: string };
 	}>;
+	readonly notes: ReadonlyArray<{
+		id: string;
+		title: string;
+		bodyMd: string;
+		quotedExcerpt: string;
+		tags: ReadonlyArray<string>;
+		followUpMd: string;
+		createdAt: string;
+		updatedAt: string;
+	}>;
 	readonly filter: AnnotationFilter;
 }
 
@@ -48,13 +58,14 @@ export interface RichReaderHostProps {
 </script>
 
 <script lang="ts">
-import { useComposerState } from '@ab/library';
+import { useComposerState, useSectionContext } from '@ab/library';
 import AnnotationLayer from '@ab/library/AnnotationLayer.svelte';
 import SelectionToolbar from '@ab/library/SelectionToolbar.svelte';
 import Toast from '@ab/ui/components/Toast.svelte';
 import {
 	createCardDraftApi,
 	createHighlightApi,
+	createNoteWithAnchorApi,
 	deleteAnnotationApi,
 	updateHighlightColorApi,
 } from './annotations-client';
@@ -62,6 +73,26 @@ import {
 let { section, bodyText, isAuthenticated, annotationContext, onToast }: RichReaderHostProps = $props();
 
 const composerState = useComposerState();
+
+// Use the section context provided at the flightbag root layout. The
+// host populates it on every section change so the layout's composer
+// panel can render the per-section notes list.
+const sectionContext = useSectionContext();
+$effect(() => {
+	sectionContext?.setSection(
+		section,
+		annotationContext.notes.map((n) => ({
+			id: n.id,
+			title: n.title,
+			bodyMd: n.bodyMd,
+			quotedExcerpt: n.quotedExcerpt,
+			tags: n.tags,
+			followUpMd: n.followUpMd,
+			createdAt: n.createdAt,
+			updatedAt: n.updatedAt,
+		})),
+	);
+});
 
 let annotations = $state<AnnotationLayerRecord[]>(
 	annotationContext.annotations.map((a) => ({
@@ -144,6 +175,18 @@ async function onRemove(id: string) {
 	}
 }
 
+function onNote(anchor: TextAnchor) {
+	if (!isAuthenticated || !composerState) {
+		showToast('Sign in to take notes.');
+		return;
+	}
+	composerState.openNoteComposer({
+		anchor,
+		sourceSectionId: section.id,
+		prefill: { quotedExcerpt: anchor.text, bodyMd: '' },
+	});
+}
+
 function onCardNow(anchor: TextAnchor) {
 	if (!isAuthenticated || !composerState) {
 		showToast('Sign in to author cards.');
@@ -205,6 +248,10 @@ function onCopied() {
 function onOrphans(list: readonly AnnotationLayerRecord[]) {
 	orphans = [...list];
 }
+
+function onNoteAnchorClicked(noteId: string) {
+	composerState?.openNoteForEdit(noteId);
+}
 </script>
 
 {#if isAuthenticated}
@@ -214,6 +261,7 @@ function onOrphans(list: readonly AnnotationLayerRecord[]) {
 		{onHighlight}
 		{onCardDraft}
 		{onCardNow}
+		{onNote}
 		{onCopied}
 	/>
 	<AnnotationLayer
@@ -222,6 +270,7 @@ function onOrphans(list: readonly AnnotationLayerRecord[]) {
 		{onEditColor}
 		{onRemove}
 		onorphans={onOrphans}
+		onNoteClicked={onNoteAnchorClicked}
 	/>
 	{#if orphans.length > 0}
 		<aside class="orphan-panel" aria-label="Orphan annotations" data-testid="orphan-panel">

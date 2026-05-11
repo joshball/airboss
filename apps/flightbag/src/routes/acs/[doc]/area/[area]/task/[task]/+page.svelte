@@ -1,6 +1,6 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
-import { useComposerState } from '@ab/library';
+import { useComposerState, useSectionContext } from '@ab/library';
 import Breadcrumbs from '@ab/library/Breadcrumbs.svelte';
 import ReaderLayout from '@ab/library/ReaderLayout.svelte';
 import SourceLinks from '@ab/library/SourceLinks.svelte';
@@ -11,7 +11,8 @@ import RichReaderHost from '../../../../../../../lib/RichReaderHost.svelte';
 import type { PageData } from './$types';
 
 const composerState = useComposerState();
-const composerOpen = $derived(Boolean(composerState && composerState.kind !== null));
+const sectionContext = useSectionContext();
+const composerOpen = $derived(Boolean((composerState && composerState.kind !== null) || sectionContext?.section));
 
 let { data }: { data: PageData } = $props();
 
