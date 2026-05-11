@@ -322,4 +322,13 @@ export const FRONTAL_XC_MARCH: TruthModel = {
 	terrain: {
 		ridges: [], // no significant terrain in the midwest XC
 	},
+
+	// Spike-parity: 5 route stations along KSTL -> KORD; FB grid covers the 5
+	// regional reference stations (KSTL/KORD anchor + KMSP/KIND/KDSM surround)
+	// per data/wx-scenarios/frontal-xc-march/products/fb-bulletin.txt.
+	routeStations: ['KSTL', 'KCPS', 'KSPI', 'KMLI', 'KORD'],
+	fbStations: ['KSTL', 'KORD', 'KMSP', 'KIND', 'KDSM'],
+	// 12-hour analysis-time-anchored window so the upcoming frontal passage
+	// drives an FM transition rather than rolling off the end of the TAF.
+	tafValidHours: 12,
 };

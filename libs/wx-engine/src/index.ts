@@ -37,6 +37,11 @@ export type {
 	ScenarioSeed,
 } from './engine';
 // ----------------------------------------------------------------------
+// Layer-2 product types. Values (deriveMetar, deriveTaf, deriveAirmets,
+// deriveFbGrid, derivePireps) live in `./server.ts`.
+// ----------------------------------------------------------------------
+export type { AirmetAdvisory, DerivedFbGrid, DerivedMetar, DerivedPirep, DerivedTaf } from './products/types';
+// ----------------------------------------------------------------------
 // Zod schema (inferred type only; the schema value lives in `./server.ts`).
 // Re-exporting the schema value from this barrel is intentionally avoided
 // so the runtime barrel stays free of value re-exports per spec.md

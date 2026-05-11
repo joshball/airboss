@@ -175,20 +175,45 @@ const terrainStateSchema = z.object({
  * `loadScenario`. The inferred type matches the `TruthModel` interface in
  * `./types.ts` exactly.
  */
-export const truthModelSchema = z.object({
-	scenarioId: z.string().min(1),
-	validAt: z.string().min(1),
-	primaryTimeZone: z.string().min(1),
-	narrative: z.string().min(1),
-	stations: z.record(z.string().min(1), stationRecordSchema),
-	synoptic: synopticStateSchema,
-	airMasses: z.array(airMassSchema),
-	upperLevel: upperLevelStateSchema,
-	convection: convectionStateSchema,
-	diurnal: diurnalCycleSchema,
-	hazardZones: z.array(hazardZoneSchema),
-	terrain: terrainStateSchema,
-});
+export const truthModelSchema = z
+	.object({
+		scenarioId: z.string().min(1),
+		validAt: z.string().min(1),
+		primaryTimeZone: z.string().min(1),
+		narrative: z.string().min(1),
+		stations: z.record(z.string().min(1), stationRecordSchema),
+		synoptic: synopticStateSchema,
+		airMasses: z.array(airMassSchema),
+		upperLevel: upperLevelStateSchema,
+		convection: convectionStateSchema,
+		diurnal: diurnalCycleSchema,
+		hazardZones: z.array(hazardZoneSchema),
+		terrain: terrainStateSchema,
+		routeStations: z.array(z.string().min(1)).min(1, 'routeStations must list at least one station'),
+		fbStations: z.array(z.string().min(1)).min(1, 'fbStations must list at least one station'),
+		tafValidHours: z.number().int().positive().optional(),
+	})
+	.superRefine((model, ctx) => {
+		const known = Object.keys(model.stations);
+		for (const icao of model.routeStations) {
+			if (!known.includes(icao)) {
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					path: ['routeStations'],
+					message: `routeStations references unknown station '${icao}' (not in stations registry)`,
+				});
+			}
+		}
+		for (const icao of model.fbStations) {
+			if (!known.includes(icao)) {
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					path: ['fbStations'],
+					message: `fbStations references unknown station '${icao}' (not in stations registry)`,
+				});
+			}
+		}
+	});
 
 /** Inferred type from the schema. Equal-by-construction to `TruthModel`. */
 export type TruthModelSchema = z.infer<typeof truthModelSchema>;

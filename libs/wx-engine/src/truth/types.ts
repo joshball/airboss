@@ -38,6 +38,24 @@ export interface TruthModel {
 	diurnal: DiurnalCycle;
 	hazardZones: HazardZone[];
 	terrain: TerrainState;
+	/**
+	 * Stations along the planned route. Drives METAR + TAF emission. Every
+	 * entry must resolve in `stations`. Order is the canonical iteration
+	 * order for the per-scenario product collections.
+	 */
+	routeStations: string[];
+	/**
+	 * Stations included in the winds-aloft FB bulletin. Often equals
+	 * `routeStations` plus a handful of regional references (KMSP, KDSM,
+	 * KIND in the spike scenario). Every entry must resolve in `stations`.
+	 */
+	fbStations: string[];
+	/**
+	 * TAF valid window in hours. Defaults to 12 when absent -- the spike's
+	 * analysis-time-anchored window that surfaces the upcoming frontal
+	 * passage.
+	 */
+	tafValidHours?: number;
 }
 
 export interface StationRecord {

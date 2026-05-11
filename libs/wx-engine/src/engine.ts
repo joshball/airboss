@@ -2,26 +2,24 @@
  * Engine entrypoint + bundle writer.
  *
  * `generateScenario(seed)` returns a `ScenarioBundle` with the truth-model
- * populated. `writeScenarioBundle(bundle, opts)` lands the artifacts on
- * disk per the spec's "Output layout" section.
+ * populated and (as of Phase B) the five layer-2 product derivations wired in.
+ * `writeScenarioBundle(bundle, opts)` lands the artifacts on disk per the
+ * spec's "Output layout" section.
  *
  * # Phase scoping
  *
- * Phase A (this commit) wires `generateScenario` to load the validated
- * truth via the registry and return:
+ * Phase A wired `generateScenario` to load the validated truth via the
+ * registry and return empty product / chart / commentary collections.
  *
- *   { scenarioId, truth, products: <empty>, charts: [], commentary: [] }
+ * Phase B (this commit) widens `ScenarioProducts` to the canonical
+ * `DerivedMetar[]` / `DerivedTaf[]` / `AirmetAdvisory[]` / `DerivedFbGrid` /
+ * `DerivedPirep[]` shapes and runs the five derivation functions over the
+ * scenario's `routeStations` + `fbStations` metadata. The writer now emits
+ * `data/wx-scenarios/<slug>/products/{metars,tafs,fb-bulletin,pireps}.{txt,json}`
+ * and `products/airmets.json` whenever the corresponding bundle field is
+ * populated.
  *
- * `writeScenarioBundle` writes `data/wx-scenarios/<slug>/truth.json` and
- * SKIPS the per-product / per-chart / commentary writes when their arrays
- * are empty -- the WXENG-5 acceptance test for Phase A explicitly requires
- * the existing spike outputs at `data/wx-scenarios/frontal-xc-march/products/*`
- * to be untouched. Phase B / C / D widen `ScenarioProducts.<field>` from
- * the `never[]` placeholder types to the canonical `DerivedX[]` arrays and
- * append the per-array writers.
- *
- * The `ScenarioSeed` tagged union ships all six variants in Phase A so
- * Phase E adds scenarios with no retroactive edits to the engine surface.
+ * Phase C / D widen `charts` and `commentary` and append their writers.
  *
  * # Browser safety
  *
@@ -33,6 +31,12 @@
  */
 
 import type { WxScenario } from '@ab/constants';
+import { deriveAirmets } from './products/airmet';
+import { deriveMetar } from './products/metar';
+import { derivePireps } from './products/pirep';
+import { deriveTaf } from './products/taf';
+import { deriveFbGrid } from './products/winds-aloft';
+import type { AirmetAdvisory, DerivedFbGrid, DerivedMetar, DerivedPirep, DerivedTaf } from './products/types';
 import { loadScenario } from './truth/scenarios/registry';
 import type { TruthModel } from './truth/types';
 
@@ -53,21 +57,17 @@ export type ScenarioSeed =
 	| { kind: 'dense-fog-radiation-central-valley' };
 
 /**
- * Layer-2 product collections. Phase A populates each field as an empty
- * `never[]` placeholder (or `null` for the single `fbGrid`); Phase B
- * widens these to the canonical `DerivedMetar[]` / `DerivedTaf[]` /
- * `AirmetAdvisory[]` / `DerivedFbGrid` / `DerivedPirep[]` types and
- * populates them via the derivation functions.
- *
- * The field names match the spec's "Engine API" section so the surface
- * stays stable across phases.
+ * Layer-2 product collections. Phase B populates each field via the
+ * derivation functions; field names match the spec's "Engine API" section.
+ * `fbGrid` is null only when `truth.fbStations` is empty (defensive --
+ * the Zod schema requires at least one entry).
  */
 export interface ScenarioProducts {
-	metars: never[];
-	tafs: never[];
-	airmets: never[];
-	fbGrid: null;
-	pireps: never[];
+	metars: DerivedMetar[];
+	tafs: DerivedTaf[];
+	airmets: AirmetAdvisory[];
+	fbGrid: DerivedFbGrid | null;
+	pireps: DerivedPirep[];
 }
 
 /**
@@ -110,29 +110,27 @@ export interface ScenarioRunOptions {
 // ----------------------------------------------------------------------
 
 /**
- * Produce a complete ScenarioBundle for the given seed. Phase A populates
- * the truth field via the registry; products / charts / commentary are
- * empty placeholders (filled in across Phase B / C / D).
+ * Produce a complete ScenarioBundle for the given seed. Phase B populates
+ * truth + every layer-2 product. Charts / commentary remain empty
+ * placeholders (filled in by Phase C / D).
  */
 export function generateScenario(seed: ScenarioSeed): ScenarioBundle {
 	const slug = seed.kind as WxScenario;
 	const truth = loadScenario(slug);
+
+	const tafValidHours = truth.tafValidHours ?? 12;
+	const metars = truth.routeStations.map((icao) => deriveMetar(truth, icao));
+	const tafs = truth.routeStations.map((icao) => deriveTaf(truth, icao, { validHours: tafValidHours }));
+	const airmets = deriveAirmets(truth);
+	const fbGrid = truth.fbStations.length > 0 ? deriveFbGrid(truth, truth.fbStations) : null;
+	const pireps = derivePireps(truth);
+
 	return {
 		scenarioId: truth.scenarioId,
 		truth,
-		products: emptyProducts(),
+		products: { metars, tafs, airmets, fbGrid, pireps },
 		charts: [],
 		commentary: [],
-	};
-}
-
-function emptyProducts(): ScenarioProducts {
-	return {
-		metars: [],
-		tafs: [],
-		airmets: [],
-		fbGrid: null,
-		pireps: [],
 	};
 }
 
@@ -149,7 +147,6 @@ type NodePath = {
 	resolve: (...parts: string[]) => string;
 	dirname: (p: string) => string;
 };
-type NodeOs = { homedir: () => string };
 
 type GetBuiltinModule = (spec: string) => unknown;
 
@@ -169,33 +166,83 @@ function loadBuiltin<T>(spec: string): T {
 /**
  * Write the scenario bundle to disk.
  *
- * Phase A writes `data/wx-scenarios/<slug>/truth.json` only. Empty products
- * / charts / commentary arrays SKIP their respective writers -- the spike
- * outputs already on disk under `data/wx-scenarios/<slug>/products/*` and
- * `data/wx-scenarios/<slug>/charts/*` stay untouched until Phase B / C / D
- * widen the bundle and overwrite them with the production lib's derivations.
+ * Phase B writes truth.json plus the layer-2 product collections under
+ * `data/wx-scenarios/<slug>/products/`:
  *
- * Phase B / C / D append product / chart / commentary writers here.
+ *   metars.{txt,json}      one METAR per line / array of ParsedMetar
+ *   tafs.{txt,json}        one TAF per blank-line-separated block / array
+ *   fb-bulletin.{txt,json} the bulletin text / the ParsedFbGrid
+ *   pireps.{txt,json}      one PIREP per line / array of ParsedPirep
+ *   airmets.json           array of AirmetAdvisory
+ *
+ * Empty product collections skip their writers; charts / commentary writers
+ * land in Phase C / D.
  */
 export async function writeScenarioBundle(bundle: ScenarioBundle, options: ScenarioRunOptions): Promise<void> {
 	const fs = loadBuiltin<NodeFs>('node:fs');
 	const path = loadBuiltin<NodePath>('node:path');
 
 	const scenarioOut = path.resolve(options.repoRoot, 'data', 'wx-scenarios', bundle.scenarioId);
+	const productsOut = path.resolve(scenarioOut, 'products');
 	ensureDir(fs, scenarioOut);
 
 	// Truth.json -- the always-written artifact.
 	writeFile(fs, path, path.resolve(scenarioOut, 'truth.json'), `${JSON.stringify(bundle.truth, null, 2)}\n`);
 
-	// Phase A: products / charts / commentary are empty placeholders. Skip
-	// their writers so the existing spike outputs on disk stay untouched
-	// until Phase B / C / D widen the bundle types and overwrite them.
-	// Phase B will branch here on `bundle.products.metars.length > 0` etc.
-	// and append the per-product / per-chart / commentary writers.
+	const { products } = bundle;
+
+	if (products.metars.length > 0) {
+		ensureDir(fs, productsOut);
+		writeFile(fs, path, path.resolve(productsOut, 'metars.txt'), products.metars.map((m) => m.raw).join('\n'));
+		writeFile(
+			fs,
+			path,
+			path.resolve(productsOut, 'metars.json'),
+			JSON.stringify(products.metars.map((m) => m.parsed), null, 2),
+		);
+	}
+
+	if (products.tafs.length > 0) {
+		ensureDir(fs, productsOut);
+		writeFile(fs, path, path.resolve(productsOut, 'tafs.txt'), products.tafs.map((t) => t.raw).join('\n\n'));
+		writeFile(
+			fs,
+			path,
+			path.resolve(productsOut, 'tafs.json'),
+			JSON.stringify(products.tafs.map((t) => t.parsed), null, 2),
+		);
+	}
+
+	if (products.fbGrid !== null) {
+		ensureDir(fs, productsOut);
+		writeFile(fs, path, path.resolve(productsOut, 'fb-bulletin.txt'), products.fbGrid.raw);
+		writeFile(
+			fs,
+			path,
+			path.resolve(productsOut, 'fb-bulletin.json'),
+			JSON.stringify(products.fbGrid.parsed, null, 2),
+		);
+	}
+
+	if (products.pireps.length > 0) {
+		ensureDir(fs, productsOut);
+		writeFile(fs, path, path.resolve(productsOut, 'pireps.txt'), products.pireps.map((p) => p.raw).join('\n'));
+		writeFile(
+			fs,
+			path,
+			path.resolve(productsOut, 'pireps.json'),
+			JSON.stringify(products.pireps.map((p) => p.parsed), null, 2),
+		);
+	}
+
+	if (products.airmets.length > 0) {
+		ensureDir(fs, productsOut);
+		writeFile(fs, path, path.resolve(productsOut, 'airmets.json'), JSON.stringify(products.airmets, null, 2));
+	}
+
+	// Charts / commentary writers land in Phase C / D.
 	void options.cacheRoot;
 	void options.mirrorIntoChartsDir;
-	// Resolve `os` lazily once Phase B needs the default cache root.
-	void loadBuiltin<NodeOs>;
 }
 
 function ensureDir(fs: NodeFs, p: string): void {
