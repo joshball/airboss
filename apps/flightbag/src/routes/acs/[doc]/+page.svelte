@@ -1,6 +1,7 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
 import Breadcrumbs from '@ab/library/Breadcrumbs.svelte';
+import ReaderEmptyState from '@ab/library/ReaderEmptyState.svelte';
 import ReaderLayout from '@ab/library/ReaderLayout.svelte';
 import RenderedSection from '@ab/library/RenderedSection.svelte';
 import SourceLinks from '@ab/library/SourceLinks.svelte';
@@ -116,23 +117,14 @@ const tocEntries = $derived(
 			</ol>
 		</section>
 	{:else}
-		<section class="callout" data-testid="acs-sourced-only">
-			<p class="badge">Sourced only</p>
-			<h2>This ACS hasn't been ingested into the reader yet.</h2>
-			<p>
-				The areas of operation and per-task content live in the FAA PDF until ACS ingest produces section rows here.
-			</p>
-			<div class="callout-actions">
-				{#if data.sourceLinks.localPdfHref}
-					<a class="local-link" href={data.sourceLinks.localPdfHref}>Local PDF</a>
-				{/if}
-				{#if data.reference.externalUrl}
-					<a class="external-link" href={data.reference.externalUrl} target="_blank" rel="noopener noreferrer">
-						Online PDF &rarr;
-					</a>
-				{/if}
-			</div>
-		</section>
+		<ReaderEmptyState
+			kind="sourced-only"
+			localPdfHref={data.sourceLinks.localPdfHref}
+			externalUrl={data.reference.externalUrl}
+			heading="This ACS hasn't been ingested into the reader yet."
+			note="The areas of operation and per-task content live in the FAA PDF until ACS ingest produces section rows here."
+			externalLabel="Online PDF"
+		/>
 	{/if}
 </ReaderLayout>
 
@@ -237,54 +229,5 @@ const tocEntries = $derived(
 	}
 	.task-title {
 		flex: 1;
-	}
-
-	.callout {
-		padding: var(--space-md);
-		border-radius: var(--radius-md);
-		background: var(--surface-sunken);
-		max-width: 72ch;
-	}
-	.callout h2 {
-		margin: 0 0 var(--space-xs);
-	}
-	.callout p {
-		margin: 0 0 var(--space-sm);
-	}
-	.callout p:last-child {
-		margin-bottom: 0;
-	}
-	.badge {
-		display: inline-block;
-		padding: var(--space-3xs) var(--space-2xs);
-		background: var(--surface-raised);
-		color: var(--ink-muted);
-		border-radius: var(--radius-sm);
-		font-family: var(--font-family-mono);
-		font-size: var(--font-size-xs);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-caps);
-		margin: 0 0 var(--space-xs);
-	}
-	.callout-actions {
-		display: flex;
-		gap: var(--space-sm);
-		flex-wrap: wrap;
-		margin-top: var(--space-sm);
-	}
-	.external-link,
-	.local-link {
-		display: inline-block;
-		padding: var(--space-xs) var(--space-md);
-		border-radius: var(--radius-sm);
-		background: var(--action-default);
-		color: var(--action-default-ink, var(--ink-strong));
-		text-decoration: none;
-		font-weight: var(--font-weight-medium);
-	}
-	.local-link {
-		background: var(--surface-raised);
-		color: var(--ink-body);
-		border: 1px solid var(--edge-default);
 	}
 </style>

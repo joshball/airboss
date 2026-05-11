@@ -1,6 +1,8 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
 import Breadcrumbs from '@ab/library/Breadcrumbs.svelte';
+import ReaderEmptyState from '@ab/library/ReaderEmptyState.svelte';
+import ReaderLayout from '@ab/library/ReaderLayout.svelte';
 import SourceLinks from '@ab/library/SourceLinks.svelte';
 import type { PageData } from './$types';
 
@@ -11,46 +13,55 @@ let { data }: { data: PageData } = $props();
 	<title>AIM Chapter {data.chapter.code} -- {data.chapter.title}</title>
 </svelte:head>
 
-<Breadcrumbs
-	segments={[
-		{ label: 'Flightbag', href: ROUTES.FLIGHTBAG_HOME },
-		{ label: data.reference.title, href: ROUTES.FLIGHTBAG_AIM },
-		{ label: `Chapter ${data.chapter.code}`, href: null },
-	]}
-/>
+<ReaderLayout>
+	{#snippet breadcrumb()}
+		<Breadcrumbs
+			segments={[
+				{ label: 'Flightbag', href: ROUTES.FLIGHTBAG_HOME },
+				{ label: data.reference.title, href: ROUTES.FLIGHTBAG_AIM },
+				{ label: `Chapter ${data.chapter.code}`, href: null },
+			]}
+		/>
+	{/snippet}
 
-<SourceLinks
-	localPdfHref={data.sourceLinks.localPdfHref}
-	onlineUrl={data.sourceLinks.onlineUrl}
-	localPdfMissing={data.sourceLinks.localPdfMissing}
-/>
+	{#snippet sourceLinks()}
+		<SourceLinks
+			localPdfHref={data.sourceLinks.localPdfHref}
+			onlineUrl={data.sourceLinks.onlineUrl}
+			localPdfMissing={data.sourceLinks.localPdfMissing}
+		/>
+	{/snippet}
 
-<header class="page-header">
-	<h1>Chapter {data.chapter.code}: {data.chapter.title}</h1>
-</header>
+	{#snippet title()}
+		Chapter {data.chapter.code}: {data.chapter.title}
+	{/snippet}
 
-{#if data.sections.length === 0}
-	<p class="empty">No sections seeded under this chapter.</p>
-{:else}
-	<section aria-label="Sections">
-		<h2>Sections</h2>
-		<ol class="sections">
-			{#each data.sections as section (section.id)}
-				<li>
-					<a href={section.href}>
-						<span class="section-code">§{section.code}</span>
-						<span class="section-title">{section.title}</span>
-					</a>
-				</li>
-			{/each}
-		</ol>
-	</section>
-{/if}
+	{#if data.sections.length === 0}
+		<ReaderEmptyState
+			kind="no-children"
+			localPdfHref={data.sourceLinks.localPdfHref}
+			externalUrl={data.sourceLinks.onlineUrl}
+			heading="No sections seeded under this chapter."
+			note="The chapter is catalogued but its sections aren't ingested into the reader yet."
+		/>
+	{:else}
+		<section aria-label="Sections">
+			<h2>Sections</h2>
+			<ol class="sections">
+				{#each data.sections as section (section.id)}
+					<li>
+						<a href={section.href}>
+							<span class="section-code">§{section.code}</span>
+							<span class="section-title">{section.title}</span>
+						</a>
+					</li>
+				{/each}
+			</ol>
+		</section>
+	{/if}
+</ReaderLayout>
 
 <style>
-	.page-header h1 {
-		margin: 0 0 var(--space-xs);
-	}
 	.sections {
 		list-style: none;
 		padding: 0;
@@ -77,9 +88,5 @@ let { data }: { data: PageData } = $props();
 		font-family: var(--font-family-mono);
 		color: var(--ink-muted);
 		min-width: 4rem;
-	}
-	.empty {
-		color: var(--ink-muted);
-		font-style: italic;
 	}
 </style>

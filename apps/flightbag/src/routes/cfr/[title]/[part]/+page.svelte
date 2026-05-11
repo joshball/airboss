@@ -1,102 +1,92 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
 import Breadcrumbs from '@ab/library/Breadcrumbs.svelte';
+import ReaderEmptyState from '@ab/library/ReaderEmptyState.svelte';
+import ReaderLayout from '@ab/library/ReaderLayout.svelte';
 import SourceLinks from '@ab/library/SourceLinks.svelte';
+import SubjectChip from '@ab/library/SubjectChip.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
+
+const partLabel = $derived(data.reference.documentSlug.replace(/^\d+cfr/, ''));
 </script>
 
 <svelte:head>
 	<title>{data.reference.title}</title>
 </svelte:head>
 
-<Breadcrumbs
-	segments={[
-		{ label: 'Flightbag', href: ROUTES.FLIGHTBAG_HOME },
-		{ label: data.reference.title, href: null },
-	]}
-/>
+<ReaderLayout>
+	{#snippet breadcrumb()}
+		<Breadcrumbs
+			segments={[
+				{ label: 'Flightbag', href: ROUTES.FLIGHTBAG_HOME },
+				{ label: data.reference.title, href: null },
+			]}
+		/>
+	{/snippet}
 
-<SourceLinks
-	localPdfHref={data.sourceLinks.localPdfHref}
-	onlineUrl={data.sourceLinks.onlineUrl}
-	localPdfMissing={data.sourceLinks.localPdfMissing}
-/>
+	{#snippet sourceLinks()}
+		<SourceLinks
+			localPdfHref={data.sourceLinks.localPdfHref}
+			onlineUrl={data.sourceLinks.onlineUrl}
+			localPdfMissing={data.sourceLinks.localPdfMissing}
+		/>
+	{/snippet}
 
-<header class="page-header">
-	<h1>{data.reference.title}</h1>
-	<p class="meta">
+	{#snippet title()}
+		{data.reference.title}
+	{/snippet}
+
+	{#snippet subtitle()}
 		<span class="edition">{data.reference.edition}</span>
 		<span class="publisher">{data.reference.publisher}</span>
-	</p>
-	{#if data.reference.subjects.length > 0}
-		<p class="subjects">
-			{#each data.reference.subjects as subject (subject)}
-				<span class="subject">{subject}</span>
-			{/each}
-		</p>
-	{/if}
-</header>
+	{/snippet}
 
-{#if data.sections.length > 0}
-	<section aria-label="Sections">
-		<h2>Sections</h2>
-		<ol class="sections">
-			{#each data.sections as section (section.id)}
-				<li>
-					<a href={section.href}>
-						<span class="section-code">§{section.code}</span>
-						<span class="section-title">{section.title}</span>
-					</a>
-				</li>
-			{/each}
-		</ol>
-	</section>
-{:else}
-	<section class="callout">
-		<h2>Read on eCFR</h2>
-		<p>
-			This Part has been catalogued in airboss but its individual sections aren't ingested into the flightbag
-			reader yet. The authoritative source is the federal eCFR site -- it stays current with amendments and
-			supports per-section deep links.
-		</p>
-		{#if data.ecfrUrl}
-			<p>
-				<a class="ecfr-link" href={data.ecfrUrl} target="_blank" rel="noopener noreferrer">
-					Open Part {data.reference.documentSlug.replace(/^\d+cfr/, '')} on eCFR &rarr;
-				</a>
+	{#snippet pageHeaderExtra()}
+		{#if data.reference.subjects.length > 0}
+			<p class="subjects">
+				{#each data.reference.subjects as subject (subject)}
+					<SubjectChip {subject} />
+				{/each}
 			</p>
 		{/if}
-	</section>
-{/if}
+	{/snippet}
+
+	{#if data.sections.length > 0}
+		<section aria-label="Sections">
+			<h2>Sections</h2>
+			<ol class="sections">
+				{#each data.sections as section (section.id)}
+					<li>
+						<a href={section.href}>
+							<span class="section-code">§{section.code}</span>
+							<span class="section-title">{section.title}</span>
+						</a>
+					</li>
+				{/each}
+			</ol>
+		</section>
+	{:else}
+		<ReaderEmptyState
+			kind="not-yet-ingested"
+			externalUrl={data.ecfrUrl}
+			heading="Read on eCFR"
+			note="This Part has been catalogued in airboss but its individual sections aren't ingested into the flightbag reader yet. The federal eCFR site is the authoritative source -- it stays current with amendments and supports per-section deep links."
+			externalLabel={`Open Part ${partLabel} on eCFR`}
+		/>
+	{/if}
+</ReaderLayout>
 
 <style>
-	.page-header h1 {
-		margin: 0 0 var(--space-xs);
-	}
-	.meta {
-		margin: 0 0 var(--space-xs);
-		display: flex;
-		gap: var(--space-sm);
-		color: var(--ink-muted);
-		font-size: var(--font-size-sm);
-	}
 	.edition {
 		font-family: var(--font-family-mono);
 	}
 	.subjects {
-		margin: 0;
+		margin: var(--space-2xs) 0 0;
 		display: flex;
 		flex-wrap: wrap;
 		gap: var(--space-2xs);
-	}
-	.subject {
-		font-size: var(--font-size-xs);
-		color: var(--ink-muted);
-		padding: var(--space-2xs) var(--space-xs);
-		background: var(--surface-sunken);
-		border-radius: var(--radius-sm);
 	}
 
 	.sections {
@@ -125,31 +115,5 @@ let { data }: { data: PageData } = $props();
 		font-family: var(--font-family-mono);
 		color: var(--ink-muted);
 		min-width: 4rem;
-	}
-
-	.callout {
-		padding: var(--space-md);
-		border-radius: var(--radius-md);
-		background: var(--surface-sunken);
-		max-width: 72ch;
-	}
-	.callout h2 {
-		margin: 0 0 var(--space-xs);
-		font-size: var(--font-size-lg);
-	}
-	.callout p {
-		margin: 0 0 var(--space-sm);
-	}
-	.callout p:last-child {
-		margin-bottom: 0;
-	}
-	.ecfr-link {
-		display: inline-block;
-		padding: var(--space-xs) var(--space-md);
-		border-radius: var(--radius-sm);
-		background: var(--action-default);
-		color: var(--action-default-ink, var(--ink-strong));
-		text-decoration: none;
-		font-weight: var(--font-weight-medium);
 	}
 </style>

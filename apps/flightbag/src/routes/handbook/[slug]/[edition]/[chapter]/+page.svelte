@@ -1,6 +1,7 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
 import Breadcrumbs from '@ab/library/Breadcrumbs.svelte';
+import ReaderLayout from '@ab/library/ReaderLayout.svelte';
 import ReaderNav from '@ab/library/ReaderNav.svelte';
 import ReadingTime from '@ab/library/ReadingTime.svelte';
 import RenderedSection from '@ab/library/RenderedSection.svelte';
@@ -36,8 +37,8 @@ function buildTocSummary(total: number, minutes: number, read: number): string |
 	<title>{data.reference.title} -- Chapter {data.chapter.code}</title>
 </svelte:head>
 
-<div class="reader">
-	<aside class="toc-rail">
+<ReaderLayout>
+	{#snippet tocSidebar()}
 		<TOCDrawer
 			entries={data.toc.entries}
 			{readSet}
@@ -45,71 +46,22 @@ function buildTocSummary(total: number, minutes: number, read: number): string |
 			headingHref={data.reference.handbookHref}
 			summary={tocSummary}
 		/>
-	</aside>
+	{/snippet}
 
-	<div class="primary">
-		{#if hasSections}
-			<Breadcrumbs {segments} />
+	{#snippet breadcrumb()}
+		<Breadcrumbs {segments} />
+	{/snippet}
 
-			<SourceLinks
-				localPdfHref={data.sourceLinks.localPdfHref}
-				onlineUrl={data.sourceLinks.onlineUrl}
-				localPdfMissing={data.sourceLinks.localPdfMissing}
-			/>
+	{#snippet sourceLinks()}
+		<SourceLinks
+			localPdfHref={data.sourceLinks.localPdfHref}
+			onlineUrl={data.sourceLinks.onlineUrl}
+			localPdfMissing={data.sourceLinks.localPdfMissing}
+		/>
+	{/snippet}
 
-			{#if hasPreamble}
-				<RenderedSection
-					title={`Chapter ${data.chapter.code}: ${data.chapter.title}`}
-					id={data.uri}
-					body={data.chapter.contentMd}
-					figures={data.figures}
-					locator={data.chapter.sourceLocator}
-					metadata={data.chapter.metadata}
-					readingTimeMinutes={data.readingTime.chapterMinutes}
-				/>
-			{:else}
-				<header class="page-header">
-					<h1>Chapter {data.chapter.code}: {data.chapter.title}</h1>
-					<p class="meta-row">
-						{#if data.chapter.sourceLocator}
-							<span class="locator">{data.chapter.sourceLocator}</span>
-						{/if}
-						<ReadingTime
-							minutes={data.readingTime.chapterMinutes}
-							ariaLabel={`Approximately ${data.readingTime.chapterMinutes} minutes to read this chapter`}
-						/>
-					</p>
-				</header>
-			{/if}
-
-			<section aria-label="Sections">
-				<header class="sections-header">
-					<h2>Sections</h2>
-					{#if data.isAuthenticated && data.readProgress.total > 0}
-						<p class="progress" aria-label="Chapter reading progress">
-							Read <strong>{data.readProgress.read}</strong> of {data.readProgress.total}
-							{data.readProgress.total === 1 ? 'section' : 'sections'}
-						</p>
-					{/if}
-				</header>
-				<ol class="sections">
-					{#each data.sections as section (section.id)}
-						{@const isRead = readSet.has(section.id)}
-						<li>
-							<a href={section.href} class:read={isRead} aria-label={`§${section.code} ${section.title}${isRead ? ' (read)' : ''}`}>
-								<span class="section-code">§{section.code}</span>
-								<span class="section-title">{section.title}</span>
-								{#if isRead}
-									<span class="check" aria-hidden="true">✓</span>
-								{/if}
-							</a>
-						</li>
-					{/each}
-				</ol>
-			</section>
-
-			<ReaderNav nav={data.nav} variant="footer" />
-		{:else}
+	{#if hasSections}
+		{#if hasPreamble}
 			<RenderedSection
 				title={`Chapter ${data.chapter.code}: ${data.chapter.title}`}
 				id={data.uri}
@@ -118,56 +70,74 @@ function buildTocSummary(total: number, minutes: number, read: number): string |
 				locator={data.chapter.sourceLocator}
 				metadata={data.chapter.metadata}
 				readingTimeMinutes={data.readingTime.chapterMinutes}
-			>
-				{#snippet breadcrumb()}
-					<Breadcrumbs {segments} />
-					<SourceLinks
-						localPdfHref={data.sourceLinks.localPdfHref}
-						onlineUrl={data.sourceLinks.onlineUrl}
-						localPdfMissing={data.sourceLinks.localPdfMissing}
+			/>
+		{:else}
+			<header class="page-header-inline">
+				<h1>Chapter {data.chapter.code}: {data.chapter.title}</h1>
+				<p class="meta-row">
+					{#if data.chapter.sourceLocator}
+						<span class="locator">{data.chapter.sourceLocator}</span>
+					{/if}
+					<ReadingTime
+						minutes={data.readingTime.chapterMinutes}
+						ariaLabel={`Approximately ${data.readingTime.chapterMinutes} minutes to read this chapter`}
 					/>
-				{/snippet}
-				{#snippet emptyFallback()}
-					<ReaderNav nav={data.nav} variant="empty" />
-				{/snippet}
-				{#snippet footer()}
-					<ReaderNav nav={data.nav} variant="footer" />
-				{/snippet}
-			</RenderedSection>
+				</p>
+			</header>
 		{/if}
-	</div>
-</div>
+
+		<section aria-label="Sections">
+			<header class="sections-header">
+				<h2>Sections</h2>
+				{#if data.isAuthenticated && data.readProgress.total > 0}
+					<p class="progress" aria-label="Chapter reading progress">
+						Read <strong>{data.readProgress.read}</strong> of {data.readProgress.total}
+						{data.readProgress.total === 1 ? 'section' : 'sections'}
+					</p>
+				{/if}
+			</header>
+			<ol class="sections">
+				{#each data.sections as section (section.id)}
+					{@const isRead = readSet.has(section.id)}
+					<li>
+						<a href={section.href} class:read={isRead} aria-label={`§${section.code} ${section.title}${isRead ? ' (read)' : ''}`}>
+							<span class="section-code">§{section.code}</span>
+							<span class="section-title">{section.title}</span>
+							{#if isRead}
+								<span class="check" aria-hidden="true">✓</span>
+							{/if}
+						</a>
+					</li>
+				{/each}
+			</ol>
+		</section>
+
+		<ReaderNav nav={data.nav} variant="footer" />
+	{:else}
+		<RenderedSection
+			title={`Chapter ${data.chapter.code}: ${data.chapter.title}`}
+			id={data.uri}
+			body={data.chapter.contentMd}
+			figures={data.figures}
+			locator={data.chapter.sourceLocator}
+			metadata={data.chapter.metadata}
+			readingTimeMinutes={data.readingTime.chapterMinutes}
+		>
+			{#snippet emptyFallback()}
+				<ReaderNav nav={data.nav} variant="empty" />
+			{/snippet}
+			{#snippet footer()}
+				<ReaderNav nav={data.nav} variant="footer" />
+			{/snippet}
+		</RenderedSection>
+	{/if}
+</ReaderLayout>
 
 <style>
-	.reader {
-		display: grid;
-		grid-template-columns: 18rem minmax(0, 1fr);
-		gap: var(--space-lg);
-		align-items: start;
-	}
-
-	.toc-rail {
-		position: sticky;
-		top: var(--space-md);
-	}
-
-	.primary {
-		min-width: 0;
-	}
-
-	@media (max-width: 60rem) {
-		.reader {
-			grid-template-columns: 1fr;
-		}
-		.toc-rail {
-			position: static;
-		}
-	}
-
-	.page-header {
+	.page-header-inline {
 		margin-bottom: var(--space-lg);
 	}
-	.page-header h1 {
+	.page-header-inline h1 {
 		margin: 0 0 var(--space-xs);
 		font-size: var(--font-size-2xl);
 		font-weight: var(--font-weight-bold);

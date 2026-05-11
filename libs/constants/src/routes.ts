@@ -303,69 +303,107 @@ export const ROUTES = {
 	 */
 	GLOSSARY_ID: (id: string) => `/reference/glossary/${encodeURIComponent(id)}` as const,
 
-	// Study -- Library (the user-facing reference browse + reader surface).
-	// Hosts the in-app handbook reader (per-edition markdown + figures committed
-	// to `handbooks/<doc>/<edition>/`) plus the subject-grouped index over every
-	// `study.reference` row, regardless of kind. Sibling surface to
-	// `/glossary` and `/references`: a reference-shaped read view that other
-	// surfaces (knowledge nodes, citations) link into. See
-	// `docs/work-packages/handbook-ingestion-and-reader/spec.md` and
-	// `docs/decisions/016-cert-syllabus-goal-model/decision.md`.
+	// Study -- Library (LEGACY -- redirects to the flightbag).
+	//
+	// Per ADR 023 + WP-FLIGHTBAG-READER-UX Phase 2, the canonical reference
+	// browse + reader surface lives in the flightbag app. Every `LIBRARY_*`
+	// constant below now resolves to a study URL that 301s to its flightbag
+	// equivalent. The constants stay exported (for stable in-flight callers)
+	// but every new caller MUST use the corresponding `FLIGHTBAG_*` constant
+	// + the cross-app origin (`siblingOrigin(url, HOST_PREFIXES.FLIGHTBAG)`)
+	// so links don't take an extra HTTP roundtrip.
+	/**
+	 * @deprecated Use `FLIGHTBAG_HOME` on the flightbag origin. The legacy
+	 * `/library` URL 301s to the flightbag landing.
+	 */
 	LIBRARY: '/library',
 	/**
+	 * @deprecated Use the flightbag catalog with a future `?cert=` filter
+	 * once that surface ships. The legacy URL 301s to the flightbag landing.
+	 *
 	 * Cert spine -- references whose `primary_cert` matches plus carryover
 	 * groups inherited via the prereq DAG. See `library-by-cert` BC.
 	 */
 	LIBRARY_CERT: (cert: CertApplicability) => `/library/cert/${encodeURIComponent(cert)}` as const,
-	/** Topic cross-cut -- references tagged with the given aviation topic. */
+	/**
+	 * @deprecated Use the flightbag catalog with a future `?topic=` filter.
+	 * The legacy URL 301s to the flightbag landing.
+	 */
 	LIBRARY_TOPIC: (topic: AviationTopic) => `/library/topic/${encodeURIComponent(topic)}` as const,
-	/** Top-level regulations & policy index. */
+	/**
+	 * @deprecated Use `FLIGHTBAG_HOME` on the flightbag origin.
+	 */
 	LIBRARY_REGULATIONS: '/library/regulations',
-	/** One bucket inside the regulations index (`14-cfr`, `aim`, ...). */
+	/**
+	 * @deprecated Use `FLIGHTBAG_HOME` on the flightbag origin.
+	 */
 	LIBRARY_REGULATIONS_KIND: (kind: LibraryRegulationsKind) =>
 		`/library/regulations/${encodeURIComponent(kind)}` as const,
 	/**
-	 * One group inside a regulations bucket -- a CFR Part, an AIM Chapter,
-	 * an AC series, etc. Forward-compatible with future per-section reader
-	 * URLs; today renders the umbrella card when no inline sections exist.
+	 * @deprecated Use `FLIGHTBAG_CFR_PART` (CFR), `FLIGHTBAG_AIM_CHAPTER`
+	 * (AIM), or `FLIGHTBAG_AC` (AC) on the flightbag origin.
 	 */
 	LIBRARY_REGULATIONS_GROUP: (kind: LibraryRegulationsKind, group: string) =>
 		`/library/regulations/${encodeURIComponent(kind)}/${encodeURIComponent(group)}` as const,
-	/** Per-section leaf reader inside a regulations group. */
+	/**
+	 * @deprecated Use `FLIGHTBAG_CFR_SECTION` / `FLIGHTBAG_AIM_SECTION` on
+	 * the flightbag origin.
+	 */
 	LIBRARY_REGULATIONS_SECTION: (kind: LibraryRegulationsKind, group: string, section: string) =>
 		`/library/regulations/${encodeURIComponent(kind)}/${encodeURIComponent(group)}/${encodeURIComponent(section)}` as const,
-	/** Top-level testing standards index (ACS + PTS). */
+	/**
+	 * @deprecated Use `FLIGHTBAG_HOME` on the flightbag origin.
+	 */
 	LIBRARY_TESTING: '/library/testing',
-	/** Detail page for one ACS / PTS publication, keyed by reference document slug. */
+	/**
+	 * @deprecated Use `FLIGHTBAG_ACS` on the flightbag origin.
+	 */
 	LIBRARY_TESTING_DETAIL: (slug: string) => `/library/testing/${encodeURIComponent(slug)}` as const,
 	/**
-	 * Optional kind-only filter inside the testing index. Today the landing
-	 * page renders both kinds together, but this constant exists so future
-	 * deep-links / filters route through ROUTES instead of inline strings.
+	 * @deprecated Use `FLIGHTBAG_HOME` on the flightbag origin.
 	 */
 	LIBRARY_TESTING_KIND: (kind: LibraryTestingKind) => `/library/testing?kind=${encodeURIComponent(kind)}` as const,
-	/** Handbook TOC by document slug (PHAK, AFH, IFH, ...). */
+	/**
+	 * @deprecated Use `FLIGHTBAG_HANDBOOK` on the flightbag origin (note:
+	 * the flightbag URL takes an explicit `edition` argument; resolve the
+	 * latest non-superseded edition via `getReferenceByDocument`).
+	 */
 	LIBRARY_HANDBOOK: (slug: string) => `/library/handbook/${encodeURIComponent(slug)}` as const,
-	/** Single chapter inside a handbook. */
+	/**
+	 * @deprecated Use `FLIGHTBAG_HANDBOOK_CHAPTER` on the flightbag origin.
+	 */
 	LIBRARY_HANDBOOK_CHAPTER: (slug: string, chapter: number | string) =>
 		`/library/handbook/${encodeURIComponent(slug)}/${encodeURIComponent(String(chapter))}` as const,
-	/** Single section inside a handbook chapter (leaf reader). */
+	/**
+	 * @deprecated Use `FLIGHTBAG_HANDBOOK_SECTION` on the flightbag origin.
+	 */
 	LIBRARY_HANDBOOK_SECTION: (slug: string, chapter: number | string, section: number | string) =>
 		`/library/handbook/${encodeURIComponent(slug)}/${encodeURIComponent(String(chapter))}/${encodeURIComponent(String(section))}` as const,
-	/** POST endpoint for client heartbeat ticks while reading a handbook section. */
+	/**
+	 * @deprecated Use `FLIGHTBAG_SECTION_HEARTBEAT(sectionId)` on the
+	 * flightbag origin. Path-keyed on section id, not on doc-locator tuple.
+	 */
 	LIBRARY_HANDBOOK_SECTION_HEARTBEAT: (slug: string, chapter: number | string, section: number | string) =>
 		`/library/handbook/${encodeURIComponent(slug)}/${encodeURIComponent(String(chapter))}/${encodeURIComponent(String(section))}/heartbeat` as const,
-	/** Aircraft-specific (POH/AFM) landing -- grid of every authored aircraft. */
+	/**
+	 * @deprecated Use `FLIGHTBAG_HOME` on the flightbag origin. The flightbag
+	 * has no per-aircraft (POH/AFM) reader surface yet; the legacy URL returns
+	 * 410 Gone with a pointer to the flightbag catalog.
+	 */
 	LIBRARY_AIRCRAFT_LANDING: '/library/aircraft',
-	/** Aircraft-specific (POH/AFM) umbrella surface. */
+	/**
+	 * @deprecated Use `FLIGHTBAG_HOME` on the flightbag origin. The legacy
+	 * URL returns 410 Gone (no per-aircraft reader exists yet).
+	 */
 	LIBRARY_AIRCRAFT: (slug: string) => `/library/aircraft/${encodeURIComponent(slug)}` as const,
 	/**
-	 * Advisories landing -- SAFO + InFO bulletin index. Sibling to
-	 * `/library/regulations` but partitioned by FAA Flight Standards bulletin
-	 * program rather than by regulator/publisher family.
+	 * @deprecated Use `FLIGHTBAG_HOME` on the flightbag origin.
 	 */
 	LIBRARY_ADVISORIES: '/library/advisories',
-	/** Per-bulletin detail (SAFO or InFO). Slug example: `safo-23001` / `info-23001`. */
+	/**
+	 * @deprecated Use `FLIGHTBAG_SAFO(id)` / `FLIGHTBAG_INFO(id)` on the
+	 * flightbag origin (slug shape `safo-23001` -> `<id> = 23001`).
+	 */
 	LIBRARY_ADVISORIES_DETAIL: (slug: string) => `/library/advisories/${encodeURIComponent(slug)}` as const,
 
 	// Study -- Invite acceptance (hangar-invite-flow WP).

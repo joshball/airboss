@@ -21,7 +21,8 @@ const NUM_SHAPE = /^\d+$/;
 const PART_SHAPE = /^[a-z0-9-]+$/i;
 const SECTION_SHAPE = /^[a-z0-9-]+$/i;
 
-export const load: PageServerLoad = async ({ params }) => {
+export const load: PageServerLoad = async (event) => {
+	const { params } = event;
 	if (!NUM_SHAPE.test(params.title)) throw error(404, 'Invalid CFR title.');
 	if (!PART_SHAPE.test(params.part)) throw error(404, 'Invalid CFR part.');
 	if (!SECTION_SHAPE.test(params.section)) throw error(404, 'Invalid CFR section.');
@@ -109,5 +110,6 @@ export const load: PageServerLoad = async ({ params }) => {
 		readingTime: {
 			sectionMinutes,
 		},
+		isAuthenticated: event.locals.user !== null,
 	};
 };
