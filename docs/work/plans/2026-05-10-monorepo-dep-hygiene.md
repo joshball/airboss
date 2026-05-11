@@ -97,15 +97,17 @@ The script also gets wired into `bun run check` as a new step (`dep-audit`) once
 
 Acceptance: `bun run track audit-deps` (new script entry) prints the audit. `--json` flag for machine-readable output. Re-runs in <2s.
 
-### Phase 1 -- Demote duplicated runtime deps (8 packages)
+### Phase 1 -- Demote fully-duplicated runtime deps (5 packages)
 
-The eight from Problem 1. Each is already declared in a workspace; remove from root devDeps.
+Of the eight duplicates from Problem 1, only five are fully-duplicate (every consuming workspace already declares them): `d3-contour`, `d3-geo`, `d3-geo-projection`, `smol-toml`, `topojson-client`. Remove from root devDeps.
+
+The remaining three (`drizzle-orm`, `yaml`, `zod`) are partially-duplicated: declared at some consuming workspaces and undeclared at others. Removing them from root in Phase 1 would break the undeclared consumers. These move to **Phase 3** (their dedicated phase, which adds workspace declarations and removes the root entry in one PR).
 
 - Files: `package.json` (root), `bun.lock`
 - Commands: edit, `bun install`, audit
-- Risk: trivial. The workspace declaration is the active one; removing the root entry should not change resolution.
+- Risk: trivial. Every consumer already has the workspace declaration.
 
-Acceptance: dep-audit reports zero "duplicated" entries. `bun run check all` clean.
+Acceptance: dep-audit shows the duplicated set shrunk to the three Phase-3 packages. `bun run check all` clean.
 
 ### Phase 2 -- Declare deps for single-owner imports (5 packages, 5 workspaces)
 
