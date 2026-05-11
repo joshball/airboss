@@ -1,0 +1,30 @@
+/**
+ * `@ab/wx-engine` -- runtime / browser-safe barrel.
+ *
+ * Source of truth: [docs/work-packages/wx-engine/spec.md](
+ *   ../../../docs/work-packages/wx-engine/spec.md
+ * ) and [docs/work-packages/wx-engine/design.md](
+ *   ../../../docs/work-packages/wx-engine/design.md
+ * ).
+ *
+ * # Browser safety
+ *
+ * `libs/wx-engine/` is server-only. The bundle writer touches the filesystem;
+ * scenario literals are large (~300 lines each, six scenarios total) and have
+ * no business in any browser bundle. This barrel re-exports types ONLY.
+ *
+ * Every value lives in `./server.ts` (`@ab/wx-engine/server`), which is tagged
+ * `// @browser-globals: server-only -- never imported by client .svelte`.
+ * `scripts/wx-scenario.ts`, server-side tests, and the future course-step
+ * `:::scenario` directive consumer's `+page.server.ts` data loader consume the
+ * `/server` entry point.
+ *
+ * Phase A populates the truth-model types, the Zod schema's inferred type,
+ * and the engine API types as type-only re-exports. Phase B / C / D append
+ * derivation-result types here.
+ */
+
+// Phase A re-exports land in the next commits (A.3 truth types + schema,
+// A.5 engine API types). The barrel is intentionally empty in the scaffold
+// commit so the lib structure is reviewable in isolation.
+export {};

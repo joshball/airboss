@@ -63,7 +63,10 @@
 			"@ab/library/*": ["libs/library/src/*"],
 			"@ab/wx-charts": ["libs/wx-charts/src/index.ts"],
 			"@ab/wx-charts/server": ["libs/wx-charts/src/server.ts"],
-			"@ab/wx-charts/*": ["libs/wx-charts/src/*"]
+			"@ab/wx-charts/*": ["libs/wx-charts/src/*"],
+			"@ab/wx-engine": ["libs/wx-engine/src/index.ts"],
+			"@ab/wx-engine/server": ["libs/wx-engine/src/server.ts"],
+			"@ab/wx-engine/*": ["libs/wx-engine/src/*"]
 		}
 	},
 	"include": ["libs/*/src/**/*.ts", "libs/bc/*/src/**/*.ts", "libs/themes/**/*.ts", "apps/*/src/**/*.ts", "scripts/**/*.ts"],

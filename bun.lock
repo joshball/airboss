@@ -413,6 +413,19 @@
         "vitest": "^4.1.0",
       },
     },
+    "libs/wx-engine": {
+      "name": "@ab/wx-engine",
+      "version": "0.1.0",
+      "dependencies": {
+        "@ab/constants": "workspace:*",
+        "@ab/wx-charts": "workspace:*",
+        "yaml": "^2.8.3",
+        "zod": "^3.25.36",
+      },
+      "devDependencies": {
+        "vitest": "^4.1.0",
+      },
+    },
   },
   "packages": {
     "@ab/activities": ["@ab/activities@workspace:libs/activities"],
@@ -466,6 +479,8 @@
     "@ab/utils": ["@ab/utils@workspace:libs/utils"],
 
     "@ab/wx-charts": ["@ab/wx-charts@workspace:libs/wx-charts"],
+
+    "@ab/wx-engine": ["@ab/wx-engine@workspace:libs/wx-engine"],
 
     "@adobe/css-tools": ["@adobe/css-tools@4.4.4", "", {}, "sha512-Elp+iwUx5rN5+Y8xLt5/GRoG20WGoDCQ/1Fb+1LiGtvwbDavuSk0jhD/eZdckHAuzcDzccnkv+rEjyWfRx18gg=="],
 
