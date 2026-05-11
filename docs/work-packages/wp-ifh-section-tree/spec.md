@@ -56,10 +56,10 @@ Chapter 7, Section II   Airplane Basic Flight Maneuvers Using an Electronic Flig
 
 The schema (`tools/handbook-ingest/ingest/section_tree.py`) caps section depth at `chapter / section / subsection` (3 levels). Two ways to model the I / II split:
 
-| Option | Description | Effect on schema | Effect on FAA semantics |
-|--------|-------------|------------------|-------------------------|
-| (a) Four chapters | Treat 6.I, 6.II, 7.I, 7.II as four standalone chapters with their own ordinals (6, 7, 8, 9), renumber subsequent chapters | Clean -- each chapter has its own subtree | Breaks -- FAA prints `8-1` for chapter 8, not what was the second half of chapter 6 |
-| (b) Two chapters, two top-level sections each | Chapter 6 holds level-1 section `6.1` (Section I) and `6.2` (Section II); same for Chapter 7. Deeper TOC entries become subsections | Clean -- fits 3-level schema | Preserves -- FAA chapter ordinals 1-11 unchanged; FAA page anchors `6-1..6-32` map to chapter 6 unchanged |
+| Option                                        | Description                                                                                                                         | Effect on schema                          | Effect on FAA semantics                                                                                   |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| (a) Four chapters                             | Treat 6.I, 6.II, 7.I, 7.II as four standalone chapters with their own ordinals (6, 7, 8, 9), renumber subsequent chapters           | Clean -- each chapter has its own subtree | Breaks -- FAA prints `8-1` for chapter 8, not what was the second half of chapter 6                       |
+| (b) Two chapters, two top-level sections each | Chapter 6 holds level-1 section `6.1` (Section I) and `6.2` (Section II); same for Chapter 7. Deeper TOC entries become subsections | Clean -- fits 3-level schema              | Preserves -- FAA chapter ordinals 1-11 unchanged; FAA page anchors `6-1..6-32` map to chapter 6 unchanged |
 
 **Decision: option (b).** Rationale:
 
@@ -69,10 +69,9 @@ The schema (`tools/handbook-ingest/ingest/section_tree.py`) caps section depth a
 
 Section titles preserve the `Section I --` / `Section II --` prefix in the rendered title so the TOC's split is visible in chips, breadcrumbs, and the cited-by panel.
 
-## Out of scope (explicitly punted, not deferred)
+## Out of scope
 
-- **The 3 FAA amendment PDFs** (`ifh_errata.pdf`, `ifh_addendum.pdf`, `ifh_addendum_b.pdf`). Tracked under a follow-up WP using ADR 020 errata-flow. Surfacing as a `errata: []` placeholder in `ifh.yaml` keeps the field uniform with other handbooks; entries get added by the follow-up WP.
-- **Re-running the prompt-flow as verification.** Optional follow-up to cross-check the deterministic TOC-file output against an LLM second opinion.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Anchors
 
