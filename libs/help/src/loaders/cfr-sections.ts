@@ -5,63 +5,48 @@
  * against the section's `code` + `title` + `content_md`. Returns
  * `faa.cfr.sect` rows clustered under the parent CFR Part (`parentDocCode`).
  *
+ * Title discrimination: `reference.kind` is a single value covering 14 CFR
+ * AND 49 CFR. The CFR seeder convention builds `documentSlug` as
+ * `${title}cfr${partKey}` (e.g. `14cfr91`, `49cfr175`). The leading numeric
+ * prefix is the title; this loader parses it off the slug to route to the
+ * correct title in `LIBRARY_REGULATIONS_KINDS` + format the title prefix.
+ *
  * Server-only -- imports `@ab/db/connection`. Wire through the
  * `/api/palette/search` endpoint, then merge into `searchGrouped()`'s
  * `injected` arg.
- *
- * CFR `code` shape: `"91.103"`, `"91.103(b)"`, `"91.103(b)(1)(i)"`. The
- * flightbag route emits `/cfr/<title>/<part>/<section>`; for the in-app
- * library link this loader uses `LIBRARY_REGULATIONS_SECTION` with
- * `kind='cfr'` and the parent reference's documentSlug as the group.
  */
 
 import { reference, referenceSection } from '@ab/bc-study';
-import { LIBRARY_REGULATIONS_KINDS, REFERENCE_KINDS, ROUTES } from '@ab/constants';
+import {
+	LIBRARY_REGULATIONS_KIND_LABELS,
+	LIBRARY_REGULATIONS_KINDS,
+	type LibraryRegulationsKind,
+	REFERENCE_KINDS,
+	ROUTES,
+} from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
-import { and, eq, ilike, or } from 'drizzle-orm';
-import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
+import { and, eq, ilike, or, type SQL } from 'drizzle-orm';
 import type { ParsedQuery } from '../schema/help-registry';
-import type { PaletteHost, RankBucket, SearchResult } from '../schema/result-types';
-
-type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
+import type { PaletteHost, SearchResult } from '../schema/result-types';
+import { bodySnippet, bucketByMatch, buildIlikePattern, type LoaderDb, MIN_BODY_NEEDLE_LENGTH } from './_shared';
 
 const LOADER_LIMIT = 30;
-const CFR_KIND = LIBRARY_REGULATIONS_KINDS.CFR_14;
-
-function bucketFor(needle: string, code: string, title: string): RankBucket {
-	if (needle.length === 0) return 4;
-	const n = needle.toLowerCase();
-	if (code.toLowerCase() === n) return 1;
-	if (code.toLowerCase().startsWith(n)) return 2;
-	if (title.toLowerCase() === n) return 1;
-	if (title.toLowerCase().startsWith(n)) return 2;
-	if (title.toLowerCase().includes(n)) return 3;
-	return 5;
-}
-
-function escapePattern(s: string): string {
-	return s.replace(/[\\%_]/g, (m) => `\\${m}`);
-}
-
-function bodySnippet(body: string, needle: string): string {
-	if (body.length === 0) return '';
-	const idx = needle.length > 0 ? body.toLowerCase().indexOf(needle.toLowerCase()) : -1;
-	const start = idx < 0 ? 0 : Math.max(0, idx - 30);
-	const end = Math.min(body.length, start + 140);
-	const slice = body.slice(start, end).replace(/\s+/g, ' ').trim();
-	return start === 0 ? slice : `…${slice}`;
-}
 
 export async function loadCfrSections(
 	parsed: ParsedQuery,
 	host: PaletteHost,
-	db: Db = defaultDb,
+	db: LoaderDb = defaultDb,
 ): Promise<readonly SearchResult[]> {
 	void host;
 	const needle = parsed.freeText.trim();
 	if (needle.length === 0) return [];
 
-	const pattern = `%${escapePattern(needle)}%`;
+	const pattern = buildIlikePattern(needle);
+	const fieldMatches: SQL[] = [ilike(referenceSection.code, pattern), ilike(referenceSection.title, pattern)];
+	if (needle.length >= MIN_BODY_NEEDLE_LENGTH) {
+		fieldMatches.push(ilike(referenceSection.contentMd, pattern));
+	}
+
 	const rows = await db
 		.select({
 			sectionId: referenceSection.id,
@@ -73,32 +58,36 @@ export async function loadCfrSections(
 		})
 		.from(referenceSection)
 		.innerJoin(reference, eq(reference.id, referenceSection.referenceId))
-		.where(
-			and(
-				eq(reference.kind, REFERENCE_KINDS.CFR),
-				or(
-					ilike(referenceSection.code, pattern),
-					ilike(referenceSection.title, pattern),
-					ilike(referenceSection.contentMd, pattern),
-				),
-			),
-		)
+		.where(and(eq(reference.kind, REFERENCE_KINDS.CFR), or(...fieldMatches)))
 		.orderBy(reference.documentSlug, referenceSection.code)
 		.limit(LOADER_LIMIT);
 
 	const out: SearchResult[] = [];
 	for (const r of rows) {
+		const cfrKind = cfrTitleFromSlug(r.documentSlug);
+		const titlePrefix = LIBRARY_REGULATIONS_KIND_LABELS[cfrKind];
 		const result: SearchResult = {
 			id: r.sectionId,
 			type: 'faa.cfr.sect',
-			title: `14 CFR §${r.code} - ${r.title}`,
+			title: `${titlePrefix} §${r.code} - ${r.title}`,
 			subtitle: `${r.documentSlug.toUpperCase()} - ${r.referenceTitle}`,
 			snippet: bodySnippet(r.contentMd, needle),
-			href: ROUTES.LIBRARY_REGULATIONS_SECTION(CFR_KIND, r.documentSlug, r.code),
-			rankBucket: bucketFor(needle, r.code, r.title),
+			href: ROUTES.LIBRARY_REGULATIONS_SECTION(cfrKind, r.documentSlug, r.code),
+			rankBucket: bucketByMatch(needle, r.code, r.title),
 			parentDocCode: r.documentSlug,
 		};
 		out.push(result);
 	}
 	return out;
+}
+
+/**
+ * Parse the title number off a CFR `documentSlug` and resolve to the matching
+ * `LIBRARY_REGULATIONS_KINDS` value. Returns CFR_14 as the default when the
+ * slug shape doesn't match the seeder convention (a future "5 CFR" or test
+ * fixture won't break the loader, just defaults to Title 14 routing).
+ */
+function cfrTitleFromSlug(documentSlug: string): LibraryRegulationsKind {
+	if (documentSlug.startsWith('49')) return LIBRARY_REGULATIONS_KINDS.CFR_49;
+	return LIBRARY_REGULATIONS_KINDS.CFR_14;
 }

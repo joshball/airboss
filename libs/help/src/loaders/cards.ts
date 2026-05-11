@@ -14,48 +14,22 @@ import { card } from '@ab/bc-study';
 import { CARD_STATUSES, ROUTES } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import { and, desc, eq, ilike, ne, or } from 'drizzle-orm';
-import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import type { ParsedQuery } from '../schema/help-registry';
-import type { PaletteHost, RankBucket, SearchResult } from '../schema/result-types';
-
-type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
+import type { PaletteHost, SearchResult } from '../schema/result-types';
+import { bucketByMatch, buildIlikePattern, type LoaderDb, truncateOneLine } from './_shared';
 
 const LOADER_LIMIT = 30;
-
-function bucketFor(needle: string, front: string, back: string): RankBucket {
-	if (needle.length === 0) return 4;
-	const n = needle.toLowerCase();
-	if (front.toLowerCase() === n) return 1;
-	if (front.toLowerCase().startsWith(n)) return 2;
-	if (front.toLowerCase().includes(n)) return 3;
-	if (back.toLowerCase().includes(n)) return 4;
-	return 5;
-}
-
-function escapePattern(s: string): string {
-	return s.replace(/[\\%_]/g, (m) => `\\${m}`);
-}
-
-function titleFromFront(front: string): string {
-	const oneLine = front.replace(/\s+/g, ' ').trim();
-	return oneLine.length <= 80 ? oneLine : `${oneLine.slice(0, 77)}…`;
-}
-
-function snippetFromBack(back: string): string {
-	const oneLine = back.replace(/\s+/g, ' ').trim();
-	return oneLine.length <= 140 ? oneLine : `${oneLine.slice(0, 137)}…`;
-}
 
 export async function loadCards(
 	parsed: ParsedQuery,
 	host: PaletteHost,
-	db: Db = defaultDb,
+	db: LoaderDb = defaultDb,
 ): Promise<readonly SearchResult[]> {
 	if (!host.userId) return [];
 	const needle = parsed.freeText.trim();
 	if (needle.length === 0) return [];
 
-	const pattern = `%${escapePattern(needle)}%`;
+	const pattern = buildIlikePattern(needle);
 	const rows = await db
 		.select({
 			id: card.id,
@@ -79,11 +53,11 @@ export async function loadCards(
 		const result: SearchResult = {
 			id: r.id,
 			type: 'mine.card',
-			title: titleFromFront(r.front),
+			title: truncateOneLine(r.front, 80),
 			subtitle: `Card - ${r.domain}`,
-			snippet: snippetFromBack(r.back),
+			snippet: truncateOneLine(r.back, 140),
 			href: ROUTES.MEMORY_CARD(r.id),
-			rankBucket: bucketFor(needle, r.front, r.back),
+			rankBucket: bucketByMatch(needle, r.front, r.back),
 			source: 'index',
 		};
 		out.push(result);

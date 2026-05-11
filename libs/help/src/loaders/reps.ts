@@ -12,49 +12,32 @@
  *
  * Empty when host has no `userId`.
  *
+ * Rating label routes through `REVIEW_RATING_LABELS` so the palette renders
+ * the project's chosen names (`Wrong / Hard / Right / Easy`), not FSRS's.
+ *
  * Server-only -- imports `@ab/db/connection`.
  */
 
 import { card, review } from '@ab/bc-study';
-import { ROUTES } from '@ab/constants';
+import { REVIEW_RATING_LABELS, type ReviewRating, ROUTES } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import { and, desc, eq, ilike, or } from 'drizzle-orm';
-import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import type { ParsedQuery } from '../schema/help-registry';
-import type { PaletteHost, RankBucket, SearchResult } from '../schema/result-types';
-
-type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
+import type { PaletteHost, SearchResult } from '../schema/result-types';
+import { bucketByMatch, buildIlikePattern, type LoaderDb, truncateOneLine } from './_shared';
 
 const LOADER_LIMIT = 20;
-
-function escapePattern(s: string): string {
-	return s.replace(/[\\%_]/g, (m) => `\\${m}`);
-}
-
-function bucketFor(needle: string, front: string): RankBucket {
-	if (needle.length === 0) return 4;
-	const n = needle.toLowerCase();
-	if (front.toLowerCase() === n) return 1;
-	if (front.toLowerCase().startsWith(n)) return 2;
-	if (front.toLowerCase().includes(n)) return 3;
-	return 4;
-}
-
-function titleFromFront(front: string): string {
-	const oneLine = front.replace(/\s+/g, ' ').trim();
-	return oneLine.length <= 80 ? oneLine : `${oneLine.slice(0, 77)}…`;
-}
 
 export async function loadReps(
 	parsed: ParsedQuery,
 	host: PaletteHost,
-	db: Db = defaultDb,
+	db: LoaderDb = defaultDb,
 ): Promise<readonly SearchResult[]> {
 	if (!host.userId) return [];
 	const needle = parsed.freeText.trim();
 	if (needle.length === 0) return [];
 
-	const pattern = `%${escapePattern(needle)}%`;
+	const pattern = buildIlikePattern(needle);
 	// One row per card -- DISTINCT ON the card id, ordered by most-recent
 	// review so the returned reviewId is the freshest one. This matches the
 	// "recent reps on cards matching X" mental model the palette presents
@@ -78,10 +61,10 @@ export async function loadReps(
 		const result: SearchResult = {
 			id: r.reviewId,
 			type: 'mine.rep',
-			title: titleFromFront(r.front),
-			subtitle: `Rep - ${formatRating(r.rating)} - ${formatDate(r.reviewedAt)}`,
+			title: truncateOneLine(r.front, 80),
+			subtitle: `Rep - ${ratingLabel(r.rating)} - ${formatDate(r.reviewedAt)}`,
 			href: ROUTES.MEMORY_CARD(r.cardId),
-			rankBucket: bucketFor(needle, r.front),
+			rankBucket: bucketByMatch(needle, r.front),
 			source: 'index',
 		};
 		out.push(result);
@@ -89,19 +72,9 @@ export async function loadReps(
 	return out;
 }
 
-function formatRating(rating: number): string {
-	switch (rating) {
-		case 1:
-			return 'Again';
-		case 2:
-			return 'Hard';
-		case 3:
-			return 'Good';
-		case 4:
-			return 'Easy';
-		default:
-			return `Rating ${rating}`;
-	}
+function ratingLabel(rating: number): string {
+	const label = REVIEW_RATING_LABELS[rating as ReviewRating];
+	return label ?? `Rating ${rating}`;
 }
 
 function formatDate(d: Date): string {

@@ -16,44 +16,22 @@ import { course } from '@ab/bc-study';
 import { COURSE_STATUSES, ROUTES } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import { and, ilike, ne, or } from 'drizzle-orm';
-import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import type { ParsedQuery } from '../schema/help-registry';
-import type { PaletteHost, RankBucket, SearchResult } from '../schema/result-types';
-
-type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
+import type { PaletteHost, SearchResult } from '../schema/result-types';
+import { bucketByMatch, buildIlikePattern, type LoaderDb, truncateOneLine } from './_shared';
 
 const LOADER_LIMIT = 20;
-
-function bucketFor(needle: string, slug: string, title: string): RankBucket {
-	if (needle.length === 0) return 4;
-	const n = needle.toLowerCase();
-	if (slug.toLowerCase() === n) return 1;
-	if (title.toLowerCase() === n) return 1;
-	if (slug.toLowerCase().startsWith(n)) return 2;
-	if (title.toLowerCase().startsWith(n)) return 2;
-	if (title.toLowerCase().includes(n) || slug.toLowerCase().includes(n)) return 3;
-	return 5;
-}
-
-function escapePattern(s: string): string {
-	return s.replace(/[\\%_]/g, (m) => `\\${m}`);
-}
-
-function snippet(description: string): string {
-	const oneLine = description.replace(/\s+/g, ' ').trim();
-	return oneLine.length <= 140 ? oneLine : `${oneLine.slice(0, 137)}…`;
-}
 
 export async function loadCourses(
 	parsed: ParsedQuery,
 	host: PaletteHost,
-	db: Db = defaultDb,
+	db: LoaderDb = defaultDb,
 ): Promise<readonly SearchResult[]> {
 	void host;
 	const needle = parsed.freeText.trim();
 	if (needle.length === 0) return [];
 
-	const pattern = `%${escapePattern(needle)}%`;
+	const pattern = buildIlikePattern(needle);
 	const rows = await db
 		.select({
 			id: course.id,
@@ -79,9 +57,9 @@ export async function loadCourses(
 			type: 'airboss.course',
 			title: r.title,
 			subtitle: `Course - ${r.slug}`,
-			snippet: snippet(r.description),
+			snippet: truncateOneLine(r.description, 140),
 			href: ROUTES.COURSE(r.slug),
-			rankBucket: bucketFor(needle, r.slug, r.title),
+			rankBucket: bucketByMatch(needle, r.slug, r.title),
 		};
 		out.push(result);
 	}

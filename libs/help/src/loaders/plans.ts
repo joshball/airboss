@@ -13,37 +13,22 @@ import { studyPlan } from '@ab/bc-study';
 import { ROUTES } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import { and, desc, eq, ilike } from 'drizzle-orm';
-import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import type { ParsedQuery } from '../schema/help-registry';
-import type { PaletteHost, RankBucket, SearchResult } from '../schema/result-types';
-
-type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
+import type { PaletteHost, SearchResult } from '../schema/result-types';
+import { bucketByMatch, buildIlikePattern, type LoaderDb } from './_shared';
 
 const LOADER_LIMIT = 15;
-
-function bucketFor(needle: string, title: string): RankBucket {
-	if (needle.length === 0) return 4;
-	const n = needle.toLowerCase();
-	if (title.toLowerCase() === n) return 1;
-	if (title.toLowerCase().startsWith(n)) return 2;
-	if (title.toLowerCase().includes(n)) return 3;
-	return 5;
-}
-
-function escapePattern(s: string): string {
-	return s.replace(/[\\%_]/g, (m) => `\\${m}`);
-}
 
 export async function loadPlans(
 	parsed: ParsedQuery,
 	host: PaletteHost,
-	db: Db = defaultDb,
+	db: LoaderDb = defaultDb,
 ): Promise<readonly SearchResult[]> {
 	if (!host.userId) return [];
 	const needle = parsed.freeText.trim();
 	if (needle.length === 0) return [];
 
-	const pattern = `%${escapePattern(needle)}%`;
+	const pattern = buildIlikePattern(needle);
 	const rows = await db
 		.select({
 			id: studyPlan.id,
@@ -63,7 +48,7 @@ export async function loadPlans(
 			title: r.title,
 			subtitle: `Plan - ${r.status}`,
 			href: ROUTES.PROGRAM_PLAN(r.id),
-			rankBucket: bucketFor(needle, r.title),
+			rankBucket: bucketByMatch(needle, r.title),
 			source: 'index',
 		};
 		out.push(result);

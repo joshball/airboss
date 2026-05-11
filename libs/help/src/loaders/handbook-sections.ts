@@ -14,35 +14,21 @@
  * Limit: 30 rows. The palette renders the top N per column; loaders cap at
  * a tight ceiling so the union across loaders fits comfortably under
  * Vitest budgets and dev-mode debounce windows.
+ *
+ * Body matching is gated on `MIN_BODY_NEEDLE_LENGTH` -- ilike against
+ * `content_md` on a 1- or 2-character needle is the worst case for the
+ * planner. Code/title matches still fire on every needle length.
  */
 
 import { reference, referenceSection } from '@ab/bc-study';
 import { REFERENCE_KINDS, ROUTES } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
-import { and, eq, ilike, or } from 'drizzle-orm';
-import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
+import { and, eq, ilike, or, type SQL } from 'drizzle-orm';
 import type { ParsedQuery } from '../schema/help-registry';
-import type { PaletteHost, RankBucket, SearchResult } from '../schema/result-types';
-
-type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
+import type { PaletteHost, SearchResult } from '../schema/result-types';
+import { bodySnippet, bucketByMatch, buildIlikePattern, type LoaderDb, MIN_BODY_NEEDLE_LENGTH } from './_shared';
 
 const LOADER_LIMIT = 30;
-
-/** Convert needle-match tier into a palette `RankBucket`. */
-function bucketFor(needle: string, code: string, title: string): RankBucket {
-	if (needle.length === 0) return 4;
-	const n = needle.toLowerCase();
-	if (code.toLowerCase() === n) return 1;
-	if (code.toLowerCase().startsWith(n)) return 2;
-	if (title.toLowerCase() === n) return 1;
-	if (title.toLowerCase().startsWith(n)) return 2;
-	if (title.toLowerCase().includes(n)) return 3;
-	return 5;
-}
-
-function escapePattern(s: string): string {
-	return s.replace(/[\\%_]/g, (m) => `\\${m}`);
-}
 
 /**
  * Match a handbook-section row from a free-text needle. Empty needle returns
@@ -53,13 +39,18 @@ function escapePattern(s: string): string {
 export async function loadHandbookSections(
 	parsed: ParsedQuery,
 	host: PaletteHost,
-	db: Db = defaultDb,
+	db: LoaderDb = defaultDb,
 ): Promise<readonly SearchResult[]> {
 	void host;
 	const needle = parsed.freeText.trim();
 	if (needle.length === 0) return [];
 
-	const pattern = `%${escapePattern(needle)}%`;
+	const pattern = buildIlikePattern(needle);
+	const fieldMatches: SQL[] = [ilike(referenceSection.code, pattern), ilike(referenceSection.title, pattern)];
+	if (needle.length >= MIN_BODY_NEEDLE_LENGTH) {
+		fieldMatches.push(ilike(referenceSection.contentMd, pattern));
+	}
+
 	const rows = await db
 		.select({
 			sectionId: referenceSection.id,
@@ -72,16 +63,7 @@ export async function loadHandbookSections(
 		})
 		.from(referenceSection)
 		.innerJoin(reference, eq(reference.id, referenceSection.referenceId))
-		.where(
-			and(
-				eq(reference.kind, REFERENCE_KINDS.HANDBOOK),
-				or(
-					ilike(referenceSection.code, pattern),
-					ilike(referenceSection.title, pattern),
-					ilike(referenceSection.contentMd, pattern),
-				),
-			),
-		)
+		.where(and(eq(reference.kind, REFERENCE_KINDS.HANDBOOK), or(...fieldMatches)))
 		.orderBy(reference.documentSlug, referenceSection.code)
 		.limit(LOADER_LIMIT);
 
@@ -99,26 +81,12 @@ export async function loadHandbookSections(
 			subtitle: `${r.documentSlug.toUpperCase()} - ${r.referenceTitle}`,
 			snippet: bodySnippet(r.contentMd, needle),
 			href,
-			rankBucket: bucketFor(needle, r.code, r.title),
+			rankBucket: bucketByMatch(needle, r.code, r.title),
 			parentDocCode: r.documentSlug,
 		};
 		out.push(result);
 	}
 	return out;
-}
-
-/**
- * Trim a one-line snippet around the first occurrence of `needle` in body,
- * or the head of the body when no match. Pure -- no markdown rendering. The
- * palette is plain text, not rich.
- */
-function bodySnippet(body: string, needle: string): string {
-	if (body.length === 0) return '';
-	const idx = needle.length > 0 ? body.toLowerCase().indexOf(needle.toLowerCase()) : -1;
-	const start = idx < 0 ? 0 : Math.max(0, idx - 30);
-	const end = Math.min(body.length, start + 140);
-	const slice = body.slice(start, end).replace(/\s+/g, ' ').trim();
-	return start === 0 ? slice : `…${slice}`;
 }
 
 /**
