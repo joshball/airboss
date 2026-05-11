@@ -1,5 +1,19 @@
 /**
- * Spike 01 -- hand-coded layer-1 truth state.
+ * `frontal-xc-march` -- the Phase A spike-lift scenario.
+ *
+ * Hand-coded layer-1 truth state lifted from the spike's pre-retirement
+ * `spikes/wx-engine/src/truth/scenarios/frontal-xc-march.ts` (PR #801 -- now
+ * retired). The literal below is the exact truth state that produced the
+ * spike's 5 METARs, 5 TAFs, 3 AIRMETs, 1 FB grid, 3 PIREPs, 11 chart specs,
+ * and 10 Socratic callouts -- all mutually consistent and round-tripping
+ * cleanly through the wx-charts parsers. See
+ * `spikes/wx-engine/01-frontal-xc/spike-notes.md` for the verdict.
+ *
+ * Spike-bug fix: the spike authored motionDegTrue as 070 / 060 (leading-zero
+ * numeric literals); Bun's parser interpreted those as octal 56 / 48 even
+ * though the author's comments ('moving ENE' = ~70 deg) made decimal intent
+ * clear. TypeScript's strict mode rejects 070 outright (TS1121), so this
+ * lift uses the corrected decimal values 70 / 60.
  *
  * Scenario: winter frontal passage during a midwest XC, KSTL -> KORD,
  * March afternoon. Synoptic-scale low pressure system over the Upper
@@ -9,10 +23,14 @@
  * frontal cold sector behind the front -- KMLI is deep in it; KSPI
  * just passed; KORD will see the front in 2-4 hours.
  *
- * Locations and physics are hand-tuned to be internally consistent.
- * Layer 2/3/4 derivations read this state and emit METARs/TAFs/charts/
- * commentary that all agree -- this is the test of the killer-feature
- * hypothesis.
+ * Locations and physics are hand-tuned to be internally consistent. The
+ * Zod schema (`./truth/schema.ts`) is the gate: this literal must validate
+ * cleanly via `loadScenario('frontal-xc-march')`.
+ *
+ * See:
+ *   - `docs/vision/products/pre-flight/weather-scenario-engine/DESIGN.md`
+ *     for the truth-model schema rationale
+ *   - `spikes/wx-engine/01-frontal-xc/spike-notes.md` for the spike verdict
  */
 
 import type { TruthModel } from '../types';
@@ -45,7 +63,7 @@ export const FRONTAL_XC_MARCH: TruthModel = {
 				lon: -91,
 				lat: 44,
 				centralPressureMb: 996,
-				motionDegTrue: 070, // moving ENE
+				motionDegTrue: 70, // moving ENE
 				motionKt: 25,
 			},
 			{
@@ -54,7 +72,7 @@ export const FRONTAL_XC_MARCH: TruthModel = {
 				lon: -82,
 				lat: 32,
 				centralPressureMb: 1023,
-				motionDegTrue: 070,
+				motionDegTrue: 70,
 				motionKt: 12,
 			},
 			{
@@ -63,7 +81,7 @@ export const FRONTAL_XC_MARCH: TruthModel = {
 				lon: -109,
 				lat: 41,
 				centralPressureMb: 1028,
-				motionDegTrue: 090, // pushing east
+				motionDegTrue: 90, // pushing east
 				motionKt: 18,
 			},
 		],
@@ -106,7 +124,7 @@ export const FRONTAL_XC_MARCH: TruthModel = {
 					[-78, 44],
 				],
 				pipSide: 'N',
-				motionDegTrue: 060,
+				motionDegTrue: 60,
 				motionKt: 15,
 				intensity: 'moderate',
 			},
@@ -280,7 +298,8 @@ export const FRONTAL_XC_MARCH: TruthModel = {
 				[-90, 36],
 			],
 			altitudeBandFtMsl: { min: 6000, max: 24000 },
-			source: 'Cold-sector turbulence: cold advection behind front, tightening surface gradient, jet-exit ageostrophic flow aloft',
+			source:
+				'Cold-sector turbulence: cold advection behind front, tightening surface gradient, jet-exit ageostrophic flow aloft',
 			severity: 'moderate',
 		},
 		{

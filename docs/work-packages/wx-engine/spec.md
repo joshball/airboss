@@ -281,7 +281,7 @@ Spike 01 implements +12 hour advance for the prog chart and 1-hour walk for TAF 
 
 No DB schema changes. The library is pure code; outputs live on the filesystem under `data/wx-scenarios/<slug>/` and `data/charts/wx/wx-scenario-<slug>-<chart>/`. The cache mirror under `~/Documents/airboss-handbook-cache/wx/scenarios/<slug>/` per [ADR 018](../../decisions/018-source-artifact-storage-policy/decision.md) carries source JSON for the wx-charts `cache://` resolver.
 
-`TruthModel` is the canonical type; see [DESIGN.md "Truth model schema"](../../vision/products/pre-flight/weather-scenario-engine/DESIGN.md#truth-model-schema) and the spike's `spikes/wx-engine/src/truth/types.ts` for the full TypeScript shape.
+`TruthModel` is the canonical type; see [DESIGN.md "Truth model schema"](../../vision/products/pre-flight/weather-scenario-engine/DESIGN.md#truth-model-schema) and `libs/wx-engine/src/truth/types.ts` for the full TypeScript shape.
 
 `CommentaryCallout` per DESIGN.md "Layer 4 derivation: commentary":
 

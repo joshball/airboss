@@ -74,7 +74,7 @@ export async function writeScenarioBundle(
 Layer 1. The atmosphere as a system. Single canonical state every other layer reads.
 
 ```typescript
-// spikes/wx-engine/src/truth/types.ts
+// libs/wx-engine/src/truth/types.ts
 
 export interface TruthModel {
   /** Scenario identifier. Stable across regenerations of the same seed. */

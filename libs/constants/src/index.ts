@@ -825,3 +825,12 @@ export {
 	WX_CHART_SVG_HARD_LIMIT_BYTES,
 	WX_CHART_SVG_WARN_BYTES,
 } from './wx-charts';
+export {
+	AIRMET_FAMILIES,
+	AIRMET_FAMILY_VALUES,
+	type AirmetFamily,
+	WX_SCENARIO_LABELS,
+	WX_SCENARIO_VALUES,
+	WX_SCENARIOS,
+	type WxScenario,
+} from './wx-engine';
