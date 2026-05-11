@@ -44,7 +44,6 @@ shipped_at: '2026-05-03'
 - Pick a known IFH locator like `airboss-ref:handbooks/ifh/8083-15B/6/1` and confirm the renderer shows Section I content.
 - Pick `airboss-ref:handbooks/ifh/8083-15B/6/2` and confirm it shows Section II content (electronic flight display).
 
-## Non-goals
+## Out of scope
 
-- Errata application (3 amendment PDFs) -- separate WP under ADR 020.
-- Prompt-flow verification pass -- optional follow-up; not blocking.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).

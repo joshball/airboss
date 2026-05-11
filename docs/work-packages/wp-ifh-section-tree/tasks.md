@@ -79,7 +79,6 @@ shipped_at: '2026-05-03'
 - [x] Update `docs/platform/REFERENCES.md`: IFH row to `✅ readable, section-tree`; sequencing row 6 to `✅ shipped`.
 - [x] WP status to shipped (frontmatter `shipped_at` on spec / tasks / test-plan).
 
-## Out of scope (follow-up tracking)
+## Out of scope
 
-- 3 FAA amendment PDFs (`ifh_errata.pdf`, `ifh_addendum.pdf`, `ifh_addendum_b.pdf`) -- ADR-020 errata flow under a follow-up WP.
-- Optional LLM prompt-flow verification pass to recover deeper TOC hierarchy beyond chapter / section / subsection (the hand-extracted TOC strips printed-PDF column indentation, so the deterministic parser produces a flat L1 tree per chapter; option remains to re-run `--strategy prompt` later for verification).
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
