@@ -54,17 +54,17 @@ Sequence position 4 in [library-completeness](../library-completeness/spec.md). 
 
 ## Touch list
 
-| Layer                                                | Change |
-| ---------------------------------------------------- | ------ |
-| `libs/bc/study/src/manifest-validation.ts`           | Add `cfrManifestSchema` (kind: 'cfr'); export `CfrManifest`; add to `manifestSchema` discriminated union |
-| `libs/bc/study/src/manifest-validation.ts`           | Add `cfrSectionsFileSchema` (NOT part of the discriminator; validates sections.json) |
-| `libs/bc/study/src/seeders/cfr.ts`                   | New seed adapter; per-part loop; skips parts with no DB row |
-| `libs/bc/study/src/seeders/types.ts`                 | (no change) |
-| `scripts/db/seed-references-from-manifest.ts`        | Add `case 'cfr'`; uniformize adapter return contract to `string[]`; add `'regulations'` to `CORPUS_DIRS` and extend the walker for the `<corpus>/cfr-<title>/<edition>/` layout |
-| `regulations/cfr-14/2026-04-22/manifest.json`        | Add `"kind": "cfr"` |
-| `regulations/cfr-49/2026-04-24/manifest.json`        | Add `"kind": "cfr"` |
-| `regulations/cfr-49/2026-04-20/manifest.json`        | Add `"kind": "cfr"` (older edition; superseded but parses cleanly) |
-| `libs/sources/src/regs/derivative-writer.ts`         | Manifest-write site only: add `kind: 'cfr'` to `ManifestRecord` so re-runs always author it. Body-path-writing logic (per-section markdown, subpart, part overview) UNCHANGED. |
+| Layer                                         | Change                                                                                                                                                                          |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `libs/bc/study/src/manifest-validation.ts`    | Add `cfrManifestSchema` (kind: 'cfr'); export `CfrManifest`; add to `manifestSchema` discriminated union                                                                        |
+| `libs/bc/study/src/manifest-validation.ts`    | Add `cfrSectionsFileSchema` (NOT part of the discriminator; validates sections.json)                                                                                            |
+| `libs/bc/study/src/seeders/cfr.ts`            | New seed adapter; per-part loop; skips parts with no DB row                                                                                                                     |
+| `libs/bc/study/src/seeders/types.ts`          | (no change)                                                                                                                                                                     |
+| `scripts/db/seed-references-from-manifest.ts` | Add `case 'cfr'`; uniformize adapter return contract to `string[]`; add `'regulations'` to `CORPUS_DIRS` and extend the walker for the `<corpus>/cfr-<title>/<edition>/` layout |
+| `regulations/cfr-14/2026-04-22/manifest.json` | Add `"kind": "cfr"`                                                                                                                                                             |
+| `regulations/cfr-49/2026-04-24/manifest.json` | Add `"kind": "cfr"`                                                                                                                                                             |
+| `regulations/cfr-49/2026-04-20/manifest.json` | Add `"kind": "cfr"` (older edition; superseded but parses cleanly)                                                                                                              |
+| `libs/sources/src/regs/derivative-writer.ts`  | Manifest-write site only: add `kind: 'cfr'` to `ManifestRecord` so re-runs always author it. Body-path-writing logic (per-section markdown, subpart, part overview) UNCHANGED.  |
 
 Per-part section counts (from `sections.json`):
 
@@ -99,11 +99,7 @@ Note: the prompt's verify list mentions `14cfr1` (3 sections in the manifest), b
 
 ## Out of scope
 
-- **Search UI** inside CFR drill-down (deferred per library-completeness §3.B; flat list is the launch read path).
-- **Long-tail parts** (the ~217 CFR-14 parts with no YAML row -- Parts 33, 27, etc.). Auto-creating references for them is a separate decision.
-- **Subpart rows + paragraph/subparagraph/clause rows.** Section is the citable unit for now; finer granularity lands in a follow-up if cited-by panels demand it.
-- **Cross-corpus citation interop** (e.g. AIM ¶1-1-3 cites §91.103). Lands when reverse-citation panels expand to non-handbook corpora.
-- **Annual eCFR diff job** + edition supersession. The existing single-edition seed is enough for launch; ADR 019's annual-diff plumbing is a future operator workflow.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Pre-existing risk
 
