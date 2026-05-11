@@ -29,21 +29,21 @@ The source is the "Out" subsection of [spec.md](./spec.md) Scope. The deeper rat
 
 ## Summary
 
-| Item                                                            | Status       | Trigger to revisit                                                                                       |
-| --------------------------------------------------------------- | ------------ | -------------------------------------------------------------------------------------------------------- |
-| S2 historical calibration (real-archive sampling)               | Follow-on WP | When a real METAR / reanalysis archive ingest pipeline is needed AND v1 climatological feel is the gap   |
-| S3 replay-with-perturbation (real-day seeding + variable tweak) | Follow-on WP | After S2 ships AND scenario-overlay UX is designed                                                       |
-| Real-time weather ingest (live feed at build / read time)       | Rejected     | Never -- out of pedagogical scope; the engine's value is curation, not live data                         |
-| Multi-scenario diff/compare UI                                  | Deferred     | When user-zero (or another learner) asks to compare two scenarios side-by-side in real use               |
+| Item                                                            | Status       | Trigger to revisit                                                                                        |
+| --------------------------------------------------------------- | ------------ | --------------------------------------------------------------------------------------------------------- |
+| S2 historical calibration (real-archive sampling)               | Follow-on WP | When a real METAR / reanalysis archive ingest pipeline is needed AND v1 climatological feel is the gap    |
+| S3 replay-with-perturbation (real-day seeding + variable tweak) | Follow-on WP | After S2 ships AND scenario-overlay UX is designed                                                        |
+| Real-time weather ingest (live feed at build / read time)       | Rejected     | Never -- out of pedagogical scope; the engine's value is curation, not live data                          |
+| Multi-scenario diff/compare UI                                  | Deferred     | When user-zero (or another learner) asks to compare two scenarios side-by-side in real use                |
 | Satellite chart derivations (GOES IR / VIS / WV)                | Deferred     | When satellite-chart pedagogy is exercised AND the geostationary projection synthesis effort is justified |
-| Per-altitude turbulence/icing severity grids (FIP / CIP / GTG)  | Deferred     | When AIRMET polygon coverage is documented as insufficient for a course step                             |
-| Radar-mosaic chart derivation (synthetic NEXRAD PNG)            | Follow-on WP | When wx-charts ships a polygon-radar variant OR a synthetic-radar PNG generator is justified             |
-| LLM-generated commentary callouts                               | Rejected     | Never -- the rule-based commentary is what makes truth-binding load-bearing                              |
-| Hangar UI for scenario authoring (map-based polygon editor)     | Follow-on WP | When TS literal authoring friction is documented as blocking content velocity                            |
-| Convective SIGMET / CWA derivation                              | Deferred     | When a course step needs explicit Convective SIGMET decoding pedagogy                                    |
-| Multi-cycle TAF amendments (AMD / COR cycles)                   | Deferred     | When TAF amendment pedagogy is exercised in a course step                                                |
-| Multi-leg PIREP routing                                         | Deferred     | When PIREP pedagogy needs cross-route route-segment specificity                                          |
-| Real-terrain elevation in the truth model                       | Deferred     | When mountain-wave / orographic-effect pedagogy needs realistic terrain rather than coarse ridges        |
+| Per-altitude turbulence/icing severity grids (FIP / CIP / GTG)  | Deferred     | When AIRMET polygon coverage is documented as insufficient for a course step                              |
+| Radar-mosaic chart derivation (synthetic NEXRAD PNG)            | Follow-on WP | When wx-charts ships a polygon-radar variant OR a synthetic-radar PNG generator is justified              |
+| LLM-generated commentary callouts                               | Rejected     | Never -- the rule-based commentary is what makes truth-binding load-bearing                               |
+| Hangar UI for scenario authoring (map-based polygon editor)     | Follow-on WP | When TS literal authoring friction is documented as blocking content velocity                             |
+| Convective SIGMET / CWA derivation                              | Deferred     | When a course step needs explicit Convective SIGMET decoding pedagogy                                     |
+| Multi-cycle TAF amendments (AMD / COR cycles)                   | Deferred     | When TAF amendment pedagogy is exercised in a course step                                                 |
+| Multi-leg PIREP routing                                         | Deferred     | When PIREP pedagogy needs cross-route route-segment specificity                                           |
+| Real-terrain elevation in the truth model                       | Deferred     | When mountain-wave / orographic-effect pedagogy needs realistic terrain rather than coarse ridges         |
 
 ## S2 historical calibration (real-archive sampling)
 

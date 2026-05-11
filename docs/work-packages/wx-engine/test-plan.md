@@ -36,14 +36,14 @@ Manual acceptance tests for [spec.md](./spec.md). Prefix `WXENG-`. Scenarios are
 
 ## Per-scenario fixtures (referenced across phases)
 
-| Slug                                  | Phase | Stations | Expected products | Expected charts | Expected callouts |
-| ------------------------------------- | ----- | -------- | ----------------- | --------------- | ----------------- |
-| `frontal-xc-march`                    | A     | 5        | 5 / 5 / 3 / 1 / 3 | 17              | ~10               |
-| `summer-thunderstorms-tx`             | E     | 5        | 5 / 5 / 4 / 1 / 4 | 17              | ~12               |
-| `winter-icing-great-lakes`            | E     | 5        | 5 / 5 / 4 / 1 / 3 | 17              | ~11               |
-| `mountain-wave-rockies`               | E     | 5        | 5 / 5 / 3 / 1 / 4 | 17              | ~11               |
-| `marine-stratus-pacific-nw`           | E     | 5        | 5 / 5 / 2 / 1 / 2 | 17              | ~9                |
-| `dense-fog-radiation-central-valley`  | E     | 5        | 5 / 5 / 2 / 1 / 2 | 17              | ~9                |
+| Slug                                 | Phase | Stations | Expected products | Expected charts | Expected callouts |
+| ------------------------------------ | ----- | -------- | ----------------- | --------------- | ----------------- |
+| `frontal-xc-march`                   | A     | 5        | 5 / 5 / 3 / 1 / 3 | 17              | ~10               |
+| `summer-thunderstorms-tx`            | E     | 5        | 5 / 5 / 4 / 1 / 4 | 17              | ~12               |
+| `winter-icing-great-lakes`           | E     | 5        | 5 / 5 / 4 / 1 / 3 | 17              | ~11               |
+| `mountain-wave-rockies`              | E     | 5        | 5 / 5 / 3 / 1 / 4 | 17              | ~11               |
+| `marine-stratus-pacific-nw`          | E     | 5        | 5 / 5 / 2 / 1 / 2 | 17              | ~9                |
+| `dense-fog-radiation-central-valley` | E     | 5        | 5 / 5 / 2 / 1 / 2 | 17              | ~9                |
 
 Product columns read: METARs / TAFs / AIRMETs / FB grids / PIREPs.
 

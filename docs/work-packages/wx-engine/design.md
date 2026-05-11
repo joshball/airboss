@@ -44,14 +44,14 @@ Phasing is the load-bearing design decision. The user wants:
 
 Six phases shape that intent into shippable PRs:
 
-| Phase | Deliverable                                    | Why this grouping                                                                                                                                |
-| ----- | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| A     | Scaffold + truth + spike-lift scenario         | Substrate cannot be partially shipped. The spike-lift scenario is the regression baseline for B/C/D and the smallest viable end-to-end demo      |
-| B     | Five product derivations                       | All five lift cleanly from the spike; round-trip parse is the per-product correctness test. Parallelizable internally (one agent per product)    |
-| C     | 13 chart-spec derivations                      | Spike covers 7; the 6 new ones are mechanical against the wx-charts schemas. Parallelizable in two clusters (C-spike lift, C-new authoring)      |
-| D     | Socratic commentary + knowledge-node binding   | Lifts the spike's rule set; adds the resolver against `course/knowledge/weather/`. Sequential after B+C because callouts pin to chart slugs      |
-| E     | Five additional production scenarios           | Each scenario is an independent TS literal; perfectly parallel (one agent per scenario in different worktrees)                                    |
-| F     | CLI hardening + check-round-trip + directive   | Polish + the `bun run check` integration. The `:::scenario` directive contract is documented; the implementation lives in the consumer WP        |
+| Phase | Deliverable                                  | Why this grouping                                                                                                                             |
+| ----- | -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| A     | Scaffold + truth + spike-lift scenario       | Substrate cannot be partially shipped. The spike-lift scenario is the regression baseline for B/C/D and the smallest viable end-to-end demo   |
+| B     | Five product derivations                     | All five lift cleanly from the spike; round-trip parse is the per-product correctness test. Parallelizable internally (one agent per product) |
+| C     | 13 chart-spec derivations                    | Spike covers 7; the 6 new ones are mechanical against the wx-charts schemas. Parallelizable in two clusters (C-spike lift, C-new authoring)   |
+| D     | Socratic commentary + knowledge-node binding | Lifts the spike's rule set; adds the resolver against `course/knowledge/weather/`. Sequential after B+C because callouts pin to chart slugs   |
+| E     | Five additional production scenarios         | Each scenario is an independent TS literal; perfectly parallel (one agent per scenario in different worktrees)                                |
+| F     | CLI hardening + check-round-trip + directive | Polish + the `bun run check` integration. The `:::scenario` directive contract is documented; the implementation lives in the consumer WP     |
 
 Each phase opens its own PR titled `feat(wx-engine): <phase> -- <summary>`. Each PR includes:
 
@@ -214,22 +214,22 @@ Removing a scenario: reverse the order. The validator catches dangling chart slu
 
 For a 5-station scenario: ~17 chart artifacts.
 
-| Chart                  | Count |
-| ---------------------- | ----- |
-| surface-analysis       | 1     |
-| prog-chart             | 1     |
-| advisory-overlay       | 1     |
-| metar-plot-grid        | 1     |
-| pirep-plot-grid        | 1     |
-| winds-aloft-fb         | 1     |
-| taf-timeline           | 5     |
-| gfa                    | 1     |
-| convective-outlook     | 1     |
-| cva                    | 1     |
-| freezing-level         | 1     |
-| g-airmet-icing         | 1     |
-| g-airmet-turbulence    | 1     |
-| **Total**              | 17    |
+| Chart               | Count |
+| ------------------- | ----- |
+| surface-analysis    | 1     |
+| prog-chart          | 1     |
+| advisory-overlay    | 1     |
+| metar-plot-grid     | 1     |
+| pirep-plot-grid     | 1     |
+| winds-aloft-fb      | 1     |
+| taf-timeline        | 5     |
+| gfa                 | 1     |
+| convective-outlook  | 1     |
+| cva                 | 1     |
+| freezing-level      | 1     |
+| g-airmet-icing      | 1     |
+| g-airmet-turbulence | 1     |
+| **Total**           | 17    |
 
 Across six scenarios: ~100 chart-spec mirrors under `data/charts/wx/wx-scenario-*`. Each renders to a single SVG via `bun run charts build`. The wx-charts library's idempotency contract (re-run with unchanged spec produces zero writes) means the chart-build pass for the engine output is a no-op once the SVGs are up-to-date.
 

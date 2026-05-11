@@ -169,14 +169,14 @@ The library accepts `TruthModel` as the only inbound atmospheric state -- deriva
 
 The six scenarios cover the highest-value pedagogical archetypes for pre-flight weather decision-making. Each ships in Phase E except the spike-lift (`frontal-xc-march`) which lands in Phase A as the substrate-validation scenario. Authors writing future scenarios extend the registry; nothing else changes downstream.
 
-| Slug                                | Pedagogical archetype                                                          | Phase | Region              | Season  |
-| ----------------------------------- | ------------------------------------------------------------------------------ | ----- | ------------------- | ------- |
-| `frontal-xc-march`                  | Cold front passage during a Midwest XC; warm-sector vs post-frontal contrast   | A     | KSTL -> KORD        | Spring  |
-| `summer-thunderstorms-tx`           | Pop-up afternoon convection; CAPE / outflow boundary / cell evolution          | E     | KAUS -> KIAH        | Summer  |
-| `winter-icing-great-lakes`          | Stratus + lake-effect icing; freezing-level pedagogy + Zulu AIRMET             | E     | KCLE -> KORD        | Winter  |
-| `mountain-wave-rockies`             | Lee-side mountain wave; Tango AIRMET + PIREP turbulence pattern + jet exit     | E     | KASE -> KDEN        | Winter  |
-| `marine-stratus-pacific-nw`         | Coastal marine layer + ridge subsidence; IFR-trapped destination               | E     | KMRY -> KSFO        | Spring  |
-| `dense-fog-radiation-central-valley` | Nocturnal radiation fog with morning lift; diurnal-cycle pedagogy + LIFR -> VFR | E     | KFAT -> KSCK        | Winter  |
+| Slug                                 | Pedagogical archetype                                                           | Phase | Region       | Season |
+| ------------------------------------ | ------------------------------------------------------------------------------- | ----- | ------------ | ------ |
+| `frontal-xc-march`                   | Cold front passage during a Midwest XC; warm-sector vs post-frontal contrast    | A     | KSTL -> KORD | Spring |
+| `summer-thunderstorms-tx`            | Pop-up afternoon convection; CAPE / outflow boundary / cell evolution           | E     | KAUS -> KIAH | Summer |
+| `winter-icing-great-lakes`           | Stratus + lake-effect icing; freezing-level pedagogy + Zulu AIRMET              | E     | KCLE -> KORD | Winter |
+| `mountain-wave-rockies`              | Lee-side mountain wave; Tango AIRMET + PIREP turbulence pattern + jet exit      | E     | KASE -> KDEN | Winter |
+| `marine-stratus-pacific-nw`          | Coastal marine layer + ridge subsidence; IFR-trapped destination                | E     | KMRY -> KSFO | Spring |
+| `dense-fog-radiation-central-valley` | Nocturnal radiation fog with morning lift; diurnal-cycle pedagogy + LIFR -> VFR | E     | KFAT -> KSCK | Winter |
 
 Each scenario file is a hand-coded `TruthModel` literal (~300 lines, the spike's `frontal-xc-march.ts` is the shape). A scenario author specifies pressure systems + fronts + air-mass polygons + diurnal handle + hazard zones + station registry; the engine derives everything else. Authoring takes ~1-2 hours per scenario once the geometry primitives are mastered.
 
@@ -184,14 +184,14 @@ Slug shape: `wx-scenario-<archetype>-<region-or-detail>`. The slug doubles as th
 
 ### Phase ordering and dependencies
 
-| Phase | Deliverable                                                            | Depends on              |
-| ----- | ---------------------------------------------------------------------- | ----------------------- |
+| Phase | Deliverable                                                               | Depends on                 |
+| ----- | ------------------------------------------------------------------------- | -------------------------- |
 | A     | Library scaffold + truth model + spike-lift scenario (`frontal-xc-march`) | wx-chart-symbology-library |
-| B     | All five product derivations                                           | A                       |
-| C     | All thirteen chart-spec derivations                                    | A + B                   |
-| D     | Socratic commentary + knowledge-node binding                           | A + B + C               |
-| E     | Five additional production scenarios                                   | A + B + C + D           |
-| F     | CLI hardening + check-round-trip step + `:::scenario` directive contract | A + B + C + D + E       |
+| B     | All five product derivations                                              | A                          |
+| C     | All thirteen chart-spec derivations                                       | A + B                      |
+| D     | Socratic commentary + knowledge-node binding                              | A + B + C                  |
+| E     | Five additional production scenarios                                      | A + B + C + D              |
+| F     | CLI hardening + check-round-trip step + `:::scenario` directive contract  | A + B + C + D + E          |
 
 A blocks everything. B and C ship in parallel (different agents in different worktrees) once A lands -- products and charts read from `TruthModel` independently. D follows B+C because Socratic callouts pin to chart slugs and product fields. E parallelizes (one agent per scenario) once D lands -- each scenario is a self-contained TS literal that exercises every derivation. F runs last because the round-trip check needs every product + every scenario to compare against.
 
@@ -338,21 +338,21 @@ export type AirmetFamily = (typeof AIRMET_FAMILY_VALUES)[number];
 
 ## Validation
 
-| Field / rule                       | Rule                                                                                                                                                                                                |
-| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `TruthModel`                       | Zod-validated on scenario load. All required fields populated; polygons are valid (>= 3 points, no self-intersection); station registry has lon/lat in CONUS bounds; pressure systems carry motion  |
-| `ScenarioSeed.kind`                | One of `WX_SCENARIO_VALUES`                                                                                                                                                                          |
-| METAR round-trip                   | `parseMetar(emit(...))` returns `warnings.length === 0` for every emitted METAR                                                                                                                     |
-| TAF round-trip                     | `parseTaf(emit(...))` returns `warnings.length === 0` for every emitted TAF                                                                                                                         |
-| FB round-trip                      | `parseFbGrid(emit(...))` returns `warnings.length === 0` for the emitted bulletin                                                                                                                   |
-| PIREP round-trip                   | `parsePirep(emit(...))` returns `warnings.length === 0` for every emitted PIREP                                                                                                                     |
-| AIRMET ring closure                | First and last point of every ring match exactly                                                                                                                                                    |
-| Wind-vs-isobar consistency         | At every reporting station, METAR wind direction is within 45 degrees of the geostrophic wind implied by the local isobar gradient (geostrophic dot product > 0). Threshold relaxed within 50 nm of front |
-| TAF FM time vs front motion        | Each `FM` group's hour matches the projected front-arrival time at the station within +/- 1 hour                                                                                                    |
-| AIRMET polygon vs hazard zone      | Every `truth.hazardZones[*]` produces exactly one AIRMET ring; the ring polygon equals the hazard polygon                                                                                           |
-| Commentary knowledge-node binding  | Every `knowledgeNodeIds` entry resolves to an existing node directory under `course/knowledge/weather/`                                                                                             |
-| Chart spec validation              | Every emitted chart spec passes the wx-charts library's per-type Zod schema                                                                                                                         |
-| Bundle filesystem layout           | Output directory matches the spec's "Output layout"; cache mirror exists; chart-mirror exists                                                                                                       |
+| Field / rule                      | Rule                                                                                                                                                                                                      |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `TruthModel`                      | Zod-validated on scenario load. All required fields populated; polygons are valid (>= 3 points, no self-intersection); station registry has lon/lat in CONUS bounds; pressure systems carry motion        |
+| `ScenarioSeed.kind`               | One of `WX_SCENARIO_VALUES`                                                                                                                                                                               |
+| METAR round-trip                  | `parseMetar(emit(...))` returns `warnings.length === 0` for every emitted METAR                                                                                                                           |
+| TAF round-trip                    | `parseTaf(emit(...))` returns `warnings.length === 0` for every emitted TAF                                                                                                                               |
+| FB round-trip                     | `parseFbGrid(emit(...))` returns `warnings.length === 0` for the emitted bulletin                                                                                                                         |
+| PIREP round-trip                  | `parsePirep(emit(...))` returns `warnings.length === 0` for every emitted PIREP                                                                                                                           |
+| AIRMET ring closure               | First and last point of every ring match exactly                                                                                                                                                          |
+| Wind-vs-isobar consistency        | At every reporting station, METAR wind direction is within 45 degrees of the geostrophic wind implied by the local isobar gradient (geostrophic dot product > 0). Threshold relaxed within 50 nm of front |
+| TAF FM time vs front motion       | Each `FM` group's hour matches the projected front-arrival time at the station within +/- 1 hour                                                                                                          |
+| AIRMET polygon vs hazard zone     | Every `truth.hazardZones[*]` produces exactly one AIRMET ring; the ring polygon equals the hazard polygon                                                                                                 |
+| Commentary knowledge-node binding | Every `knowledgeNodeIds` entry resolves to an existing node directory under `course/knowledge/weather/`                                                                                                   |
+| Chart spec validation             | Every emitted chart spec passes the wx-charts library's per-type Zod schema                                                                                                                               |
+| Bundle filesystem layout          | Output directory matches the spec's "Output layout"; cache mirror exists; chart-mirror exists                                                                                                             |
 
 ## Edge cases
 
