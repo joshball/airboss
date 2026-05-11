@@ -45,6 +45,4 @@ status: done
 
 ## Out of scope
 
-- Search UI (deferred per spec).
-- Cross-edition supersession test (CFR is a single rolling edition for now).
-- Citation deep-link interop with handbooks (lands when reverse-citation panels expand to non-handbook corpora).
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
