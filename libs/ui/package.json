@@ -14,5 +14,8 @@
 		"@ab/activities": "workspace:*",
 		"@ab/constants": "workspace:*",
 		"@ab/themes": "workspace:*"
+	},
+	"devDependencies": {
+		"svelte": "^5.34.7"
 	}
 }
