@@ -15,9 +15,12 @@
 // `hangar.source` schema that owns the live state machine. Hangar surfaces
 // and the references extraction pipeline import the seeds from there.
 
-// Empty registry in Phase 1. Phase 2 populates aviation.ts + calls
-// registerReferences() at module load.
+export type { DocCodeFamily, DocCodeIntent } from './doc-code-detector';
+export { detectDocCodeIntent, lookupDocsByCode } from './doc-code-detector';
+// Both reference modules self-register at module-load via `registerReferences`.
+// Import them here so the registry is populated before any consumer reads it.
 export { AVIATION_REFERENCES } from './references/aviation';
+export { FAA_DOC_REFERENCES } from './references/faa-docs';
 export {
 	__resetRegistryForTests,
 	axisCounts,
@@ -64,6 +67,7 @@ export {
 } from './slugs';
 export { type CfrDocument, CfrParseError, type CfrSectionLocator, parseCfrXml } from './sources/cfr/parser';
 export { isSourceMeta, metaPathFor, type SourceMeta } from './sources/meta';
+export { AVIATION_SYNONYMS, expandQuery, expandToken } from './synonyms';
 export { decodeReferences, decodeSources, encodeReferences, encodeSources } from './toml-codec';
 export {
 	type ContentScan,

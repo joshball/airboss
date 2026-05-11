@@ -11,10 +11,10 @@
  *     `[[Text::]]` fuzzy-match + glossary search by term)
  *   - `byTag` -- per-axis inverted index for facet filtering
  *
- * Since Phase 1 ships no references, everything starts empty. Phase 2 will
- * call `registerReferences(AVIATION_REFERENCES)` during module bootstrap so
- * consumers see a populated registry. Phase 1 `/glossary` reads the empty
- * registry and renders an empty state.
+ * Modules under `libs/aviation/src/references/` self-register at module load
+ * by calling `registerReferences()` at their top level (see `faa-docs.ts` and
+ * `aviation.ts`). Consumers that import `@ab/aviation` get a populated
+ * registry without any explicit bootstrap.
  *
  * The registry is a module-global singleton. Tests reset via
  * `__resetRegistryForTests()` (intentionally prefixed to discourage runtime
@@ -30,6 +30,7 @@ import type {
 	ReferenceSourceType,
 } from '@ab/constants';
 import type { Reference } from './schema/reference';
+import { expandQuery } from './synonyms';
 
 // -------- storage --------
 
@@ -213,6 +214,12 @@ export interface SearchQuery {
 	/** Plain-text haystack; matches displayName + aliases + keywords. */
 	text?: string;
 	tags?: TagQuery;
+	/**
+	 * When true, expand the query through the aviation synonym map before
+	 * scoring (`wx -> weather`, `avwx -> aviation weather`, etc.). Adds a
+	 * small per-call cost; off by default to keep existing callers stable.
+	 */
+	expandSynonyms?: boolean;
 }
 
 /**
@@ -363,6 +370,10 @@ function scoreReference(ref: Reference, needle: string): SearchHit | null {
  * filter applied before scoring. When no text is supplied, every tag-filtered
  * reference is returned as a bucket-3 SearchHit carrying the displayName as
  * matched text (so UI consumers can treat the shape uniformly).
+ *
+ * When `expandSynonyms` is true, the text is expanded through the aviation
+ * synonym map (`wx -> weather`, etc.) and each variant is scored independently;
+ * the best score per reference wins.
  */
 export function search(query: SearchQuery): readonly SearchHit[] {
 	const tagFiltered = query.tags ? findByTags(query.tags) : listReferences();
@@ -378,13 +389,21 @@ export function search(query: SearchQuery): readonly SearchHit[] {
 		}));
 	}
 
-	const needle = text.toLowerCase();
-	const scored: Scored[] = [];
+	const needles = query.expandSynonyms ? expandSearchTokens(text) : [text.toLowerCase()];
+
+	const bestByRef = new Map<string, Scored>();
 	tagFiltered.forEach((ref, order) => {
-		const hit = scoreReference(ref, needle);
-		if (hit) scored.push({ hit, order });
+		let bestHit: SearchHit | null = null;
+		for (const needle of needles) {
+			const hit = scoreReference(ref, needle);
+			if (hit && (!bestHit || hit.score > bestHit.score)) {
+				bestHit = hit;
+			}
+		}
+		if (bestHit) bestByRef.set(ref.id, { hit: bestHit, order });
 	});
 
+	const scored = [...bestByRef.values()];
 	scored.sort((a, b) => {
 		if (b.hit.score !== a.hit.score) return b.hit.score - a.hit.score;
 		const nameDiff = a.hit.reference.displayName.length - b.hit.reference.displayName.length;
@@ -393,6 +412,10 @@ export function search(query: SearchQuery): readonly SearchHit[] {
 	});
 
 	return scored.map((s) => s.hit);
+}
+
+function expandSearchTokens(text: string): readonly string[] {
+	return expandQuery(text).map((s) => s.toLowerCase());
 }
 
 /** Count per axis value for facet-sidebar rendering. */
