@@ -6,5 +6,8 @@
 		".": "./src/index.ts",
 		"./*": "./src/*.ts",
 		"./package.json": "./package.json"
+	},
+	"devDependencies": {
+		"vitest": "^4.1.0"
 	}
 }

@@ -19,5 +19,9 @@
 		"@ab/ui": "workspace:*",
 		"@ab/utils": "workspace:*",
 		"shiki": "^4.0.2"
+	},
+	"devDependencies": {
+		"svelte": "^5.34.7",
+		"vitest": "^4.1.0"
 	}
 }

@@ -45,6 +45,12 @@
         "@ab/help": "workspace:*",
         "@ab/utils": "workspace:*",
       },
+      "devDependencies": {
+        "@sveltejs/adapter-node": "^5.2.12",
+        "@sveltejs/kit": "^2.21.1",
+        "@sveltejs/vite-plugin-svelte": "^5.1.0",
+        "vite": "^6.3.5",
+      },
     },
     "apps/flightbag": {
       "name": "@ab/flightbag",
@@ -59,6 +65,14 @@
         "@ab/types": "workspace:*",
         "@ab/ui": "workspace:*",
         "@ab/utils": "workspace:*",
+      },
+      "devDependencies": {
+        "@sveltejs/adapter-node": "^5.2.12",
+        "@sveltejs/kit": "^2.21.1",
+        "@sveltejs/vite-plugin-svelte": "^5.1.0",
+        "svelte": "^5.34.7",
+        "vite": "^6.3.5",
+        "vitest": "^4.1.0",
       },
     },
     "apps/hangar": {
@@ -79,6 +93,16 @@
         "@ab/utils": "workspace:*",
         "yaml": "^2.8.3",
       },
+      "devDependencies": {
+        "@sveltejs/adapter-node": "^5.2.12",
+        "@sveltejs/kit": "^2.21.1",
+        "@sveltejs/vite-plugin-svelte": "^5.1.0",
+        "@testing-library/svelte": "^5.3.1",
+        "@testing-library/user-event": "^14.6.1",
+        "svelte": "^5.34.7",
+        "vite": "^6.3.5",
+        "vitest": "^4.1.0",
+      },
     },
     "apps/sim": {
       "name": "@ab/sim",
@@ -94,7 +118,13 @@
         "zod": "^3.25.36",
       },
       "devDependencies": {
+        "@sveltejs/adapter-node": "^5.2.12",
+        "@sveltejs/kit": "^2.21.1",
+        "@sveltejs/vite-plugin-svelte": "^5.1.0",
         "@types/three": "^0.169.0",
+        "svelte": "^5.34.7",
+        "vite": "^6.3.5",
+        "vitest": "^4.1.0",
       },
     },
     "apps/study": {
@@ -120,6 +150,16 @@
         "yaml": "^2.8.3",
         "zod": "^3.25.36",
       },
+      "devDependencies": {
+        "@sveltejs/adapter-node": "^5.2.12",
+        "@sveltejs/kit": "^2.21.1",
+        "@sveltejs/vite-plugin-svelte": "^5.1.0",
+        "@testing-library/svelte": "^5.3.1",
+        "@testing-library/user-event": "^14.6.1",
+        "svelte": "^5.34.7",
+        "vite": "^6.3.5",
+        "vitest": "^4.1.0",
+      },
     },
     "libs/activities": {
       "name": "@ab/activities",
@@ -139,6 +179,9 @@
         "better-auth": "^1.5.6",
         "drizzle-orm": "^0.44.2",
       },
+      "devDependencies": {
+        "vitest": "^4.1.0",
+      },
     },
     "libs/auth": {
       "name": "@ab/auth",
@@ -150,12 +193,20 @@
         "drizzle-orm": "^0.44.2",
         "resend": "^6.9.4",
       },
+      "devDependencies": {
+        "@sveltejs/kit": "^2.21.1",
+        "vitest": "^4.1.0",
+      },
     },
     "libs/aviation": {
       "name": "@ab/aviation",
       "dependencies": {
         "@ab/constants": "workspace:*",
         "smol-toml": "^1.6.1",
+      },
+      "devDependencies": {
+        "svelte": "^5.34.7",
+        "vitest": "^4.1.0",
       },
     },
     "libs/bc/avionics": {
@@ -180,6 +231,9 @@
         "drizzle-orm": "^0.44.2",
         "zod": "^3.25.36",
       },
+      "devDependencies": {
+        "vitest": "^4.1.0",
+      },
     },
     "libs/bc/ingest-review": {
       "name": "@ab/bc-ingest-review",
@@ -192,6 +246,9 @@
         "@ab/utils": "workspace:*",
         "drizzle-orm": "^0.44.2",
       },
+      "devDependencies": {
+        "vitest": "^4.1.0",
+      },
     },
     "libs/bc/sim": {
       "name": "@ab/bc-sim",
@@ -201,6 +258,9 @@
         "@ab/db": "workspace:*",
         "@ab/utils": "workspace:*",
         "drizzle-orm": "^0.44.2",
+      },
+      "devDependencies": {
+        "vitest": "^4.1.0",
       },
     },
     "libs/bc/study": {
@@ -220,9 +280,15 @@
         "yaml": "^2.8.3",
         "zod": "^3.25.36",
       },
+      "devDependencies": {
+        "vitest": "^4.1.0",
+      },
     },
     "libs/constants": {
       "name": "@ab/constants",
+      "devDependencies": {
+        "vitest": "^4.1.0",
+      },
     },
     "libs/db": {
       "name": "@ab/db",
@@ -243,6 +309,9 @@
         "@ab/utils": "workspace:*",
         "drizzle-orm": "^0.44.2",
       },
+      "devDependencies": {
+        "vitest": "^4.1.0",
+      },
     },
     "libs/hangar-sync": {
       "name": "@ab/hangar-sync",
@@ -256,6 +325,9 @@
         "@ab/utils": "workspace:*",
         "drizzle-orm": "^0.44.2",
       },
+      "devDependencies": {
+        "vitest": "^4.1.0",
+      },
     },
     "libs/help": {
       "name": "@ab/help",
@@ -265,6 +337,10 @@
         "@ab/ui": "workspace:*",
         "@ab/utils": "workspace:*",
         "shiki": "^4.0.2",
+      },
+      "devDependencies": {
+        "svelte": "^5.34.7",
+        "vitest": "^4.1.0",
       },
     },
     "libs/library": {
@@ -286,6 +362,9 @@
         "fast-xml-parser": "^4.5.0",
         "yaml": "^2.8.3",
       },
+      "devDependencies": {
+        "vitest": "^4.1.0",
+      },
     },
     "libs/themes": {
       "name": "@ab/themes",
@@ -306,12 +385,18 @@
         "@ab/constants": "workspace:*",
         "@ab/themes": "workspace:*",
       },
+      "devDependencies": {
+        "svelte": "^5.34.7",
+      },
     },
     "libs/utils": {
       "name": "@ab/utils",
       "dependencies": {
         "@ab/constants": "workspace:*",
         "ulidx": "^2.4.1",
+      },
+      "devDependencies": {
+        "vitest": "^4.1.0",
       },
     },
     "libs/wx-charts": {
@@ -326,6 +411,9 @@
         "topojson-client": "^3.1.0",
         "yaml": "^2.8.3",
         "zod": "^3.25.36",
+      },
+      "devDependencies": {
+        "vitest": "^4.1.0",
       },
     },
   },

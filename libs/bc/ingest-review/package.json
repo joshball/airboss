@@ -25,5 +25,8 @@
 		"@ab/db": "workspace:*",
 		"@ab/utils": "workspace:*",
 		"drizzle-orm": "^0.44.2"
+	},
+	"devDependencies": {
+		"vitest": "^4.1.0"
 	}
 }
