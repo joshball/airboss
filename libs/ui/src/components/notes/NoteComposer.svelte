@@ -44,6 +44,8 @@ let {
 	titleError,
 	followUpError,
 	autofocusBody = true,
+	tagSuggestionsEndpoint = null,
+	tagSuggestions = null,
 }: {
 	mode?: 'create' | 'edit';
 	initial?: Partial<ComposerInput>;
@@ -62,6 +64,16 @@ let {
 	titleError?: string | null;
 	followUpError?: string | null;
 	autofocusBody?: boolean;
+	/**
+	 * Optional URL of an autocomplete endpoint returning `{ tags: string[] }`.
+	 * Forwarded to `<TagChipInput>`. Pass `null` to disable autocomplete.
+	 */
+	tagSuggestionsEndpoint?: string | null;
+	/**
+	 * Synchronous suggestion source. When set, autocomplete uses this list
+	 * instead of fetching the endpoint. Forwarded to `<TagChipInput>`.
+	 */
+	tagSuggestions?: string[] | null;
 } = $props();
 
 let bodyMd = $state(initial?.bodyMd ?? '');
@@ -178,7 +190,13 @@ $effect(() => {
 
 	<label class="field">
 		<span class="label">Tags</span>
-		<TagChipInput {tags} onchange={setTags} {disabled} />
+		<TagChipInput
+			{tags}
+			onchange={setTags}
+			{disabled}
+			suggestionsEndpoint={tagSuggestionsEndpoint}
+			suggestions={tagSuggestions}
+		/>
 		{#each tags as tag, i (tag)}
 			<input type="hidden" name="tags[]" value={tag} data-tag-index={i} />
 		{/each}

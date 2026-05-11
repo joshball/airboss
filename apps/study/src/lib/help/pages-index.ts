@@ -48,6 +48,7 @@ import { memoryCardIndex } from './content/memory-card';
 import { memoryDashboardIndex } from './content/memory-dashboard';
 import { memoryNewIndex } from './content/memory-new';
 import { memoryReviewIndex } from './content/memory-review';
+import { notesFollowupsIndex } from './content/notes-followups';
 import { repsIndex } from './content/reps';
 import { repsBrowseIndex } from './content/reps-browse';
 import { repsNewIndex } from './content/reps-new';
@@ -74,6 +75,7 @@ export const studyHelpIndex: readonly HelpPageIndex[] = [
 	knowledgeGraphIndex,
 	lensIndex,
 	libraryIndex,
+	notesFollowupsIndex,
 	inviteAcceptIndex,
 	keyboardShortcutsIndex,
 	conceptFsrsIndex,
@@ -136,6 +138,8 @@ export const loadStudyHelpBody: HelpBodyLoader = async (id: string): Promise<Hel
 			return (await import('./content/bodies/lens')).lensBody;
 		case 'library':
 			return (await import('./content/bodies/library')).libraryBody;
+		case 'notes-followups':
+			return (await import('./content/bodies/notes-followups')).notesFollowupsBody;
 		case 'invite-accept':
 			return (await import('./content/bodies/invite-accept')).inviteAcceptBody;
 		case 'keyboard-shortcuts':
