@@ -141,6 +141,147 @@ risk category. If yes, read the discussion text. If you can't articulate
 why the SPC drew the polygons where they did, you don't yet trust the
 forecast -- you're just reading a colored map.
 
+### Cards (spaced repetition)
+
+Cards mined from the body. The five-tier category list is the decode
+floor; the day-window cadence locks the planning horizon; the
+strategic-vs-tactical layering card connects the AC into the
+convective brief.
+
+```yaml-cards
+- front: "SPC convective outlook risk categories -- list the five tiers in order of severity."
+  back: |
+    1. General Thunderstorms (TSTM) -- ordinary convection expected.
+    2. Marginal (MRGL, 1) -- isolated severe possible.
+    3. Slight (SLGT, 2) -- scattered severe.
+    4. Enhanced (ENH, 3) -- numerous severe.
+    5. Moderate (MDT, 4) -- widespread severe likely.
+    6. High (HIGH, 5) -- widespread severe and intense.
+    The categories grade probability of severe weather within 25 miles of
+    any point AND expected intensity (hail size, wind gust speed, tornado
+    density) together.
+  cardType: basic
+  kind: recall
+  tags: [weather, convective-outlook, spc, categories, ac-00-45h, PA.I.C.K2f]
+  source_ref: |
+    AC 00-45H Convective Outlook section; body Discover.
+
+- front: "What does each Day-N SPC outlook cover, and what's the issue cadence?"
+  back: |
+    Day 1: now -> 12Z tomorrow. Issued 5 times daily (0600, 1300, 1630,
+    2000, 0100Z).
+    Day 2: 12Z tomorrow -> 12Z day after. Issued twice (0600, 1730Z).
+    Day 3: 12Z day after -> 12Z next day. Issued once (0830Z).
+    Day 4-8: single product, percent-probability map (not categories),
+    issued once at 0830Z covering a 5-day band.
+  cardType: basic
+  kind: recall
+  tags: [weather, convective-outlook, spc, cadence, ac-00-45h, PA.I.C.K2f]
+  source_ref: |
+    AC 00-45H; body Reveal cadence table.
+
+- front: "Why is the Day 4-8 outlook published as percent probabilities instead of categorical labels?"
+  back: |
+    Forecast skill is too soft that far out for clean categorical bins.
+    Percent probabilities communicate the underlying uncertainty more
+    honestly -- a 30% probability is meaningful information; calling it
+    'Slight' would imply a confidence the model doesn't have. The
+    categorical labels reappear as confidence rises in the Day 1-3
+    products.
+  cardType: basic
+  kind: recall
+  tags: [weather, convective-outlook, spc, day-4-8, PA.I.C.K2f]
+  source_ref: |
+    AC 00-45H; body Discover.
+
+- front: "Why does the SPC discussion text matter as much as the categorical map?"
+  back: |
+    The map is the rendering; the discussion is the reasoning. The text
+    explains the shortwave troughs, dryline position, instability budget,
+    and shear environment that drove the polygons. A high-confidence MDT
+    risk reads differently from a low-confidence one inside the same
+    category -- the discussion is where that distinction lives. 'The map
+    without the discussion is a guess about a guess.'
+  cardType: basic
+  kind: recall
+  tags: [weather, convective-outlook, spc, discussion, ac-00-45h, PA.I.C.K2f]
+  source_ref: |
+    AC 00-45H; body Discover and Practice.
+
+- front: "Convective outlook in the convective-brief layering: where does it sit relative to Convective SIGMET and NEXRAD?"
+  back: |
+    Strategic layer (1-8 days) above Convective SIGMET (tactical, 0-2 hours)
+    and NEXRAD (real-time, minutes). All three describe the same convection
+    at three time horizons. The convective outlook says 'this trip merits
+    extra caution starting now'; the Convective SIGMET says 'a polygon is
+    active in the next two hours'; NEXRAD says 'a cell is here right now.'
+  cardType: basic
+  kind: recall
+  tags: [weather, convective-outlook, convective-sigmet, nexrad, layering, PA.I.C.K2f, PA.I.C.K3h]
+  source_ref: |
+    Body Connect; body Discover ("strategic complement").
+
+- front: "At what convective-outlook tier does monitoring shift to active planning for a light single?"
+  back: |
+    Around SLGT (Slight, tier 2 = scattered severe). Below that (TSTM /
+    MRGL), light singles can usually plan with normal background
+    monitoring. SLGT and above means the route or destination has a
+    meaningful probability of severe convection, and the rest of the
+    convective tools (SIGMET watching, NEXRAD interrogation, divert
+    pre-planning) move from background to active. For a turboprop with
+    onboard radar, the equivalent threshold is ENH.
+  cardType: basic
+  kind: recall
+  tags: [weather, convective-outlook, planning-threshold, light-aircraft, PA.I.C.K2f]
+  source_ref: |
+    Body Discover ("at what tier do I shift...").
+
+- front: "Tuesday night planning a Saturday flight. METARs and TAFs cover only ~30 hours; GFA caps at +15. What product gives you the strategic convective picture for Saturday?"
+  back: |
+    SPC Day 4-8 Convective Outlook (AC). It uses percent-probability of
+    severe weather (rather than categories) because forecast skill is
+    soft that far out, but it does identify roughly where severe storms
+    are most likely. Read alongside the synoptic prog charts for the same
+    days to build the strategic story for the trip. The output isn't 'go'
+    or 'no-go'; it's 'this trip merits extra caution starting now.'
+  cardType: basic
+  kind: recall
+  tags: [weather, convective-outlook, day-4-8, planning-horizon, PA.I.C.K2f]
+  source_ref: |
+    Body Context.
+  rationale: |
+    Scenario card from the body's Context. Trains the planning-horizon
+    selection: which product fills the gap when METARs/TAFs/GFA can't reach.
+
+- front: "Calibration drill: how do you build a sense of when SPC is right and when SPC is wrong?"
+  back: |
+    Compare yesterday's Day 1 convective outlook to yesterday's actual
+    Convective SIGMETs. The polygons should overlap heavily (Day 1 is
+    generally skillful). When they don't, read the discussion text -- it
+    should explain the surprise. Building a sense of when SPC is right
+    and when SPC is wrong is the meta-skill behind using the product
+    well.
+  cardType: basic
+  kind: recall
+  tags: [weather, convective-outlook, spc, calibration, PA.I.C.K2f]
+  source_ref: |
+    Body Verify.
+
+- front: "Convective outlook category 'Marginal' (MRGL, 1) -- what does it mean operationally for a VFR cross-country?"
+  back: |
+    Isolated severe weather possible. The outlook is flagging that
+    *somewhere* in the polygon a severe cell may develop, but the
+    probability is low and the coverage sparse. For a VFR cross-country,
+    MRGL is 'background monitoring' -- check the SIGMETs on departure
+    morning, watch NEXRAD en route, but no need to alter the plan in
+    advance. Above MRGL (SLGT and up), the plan adjusts in advance.
+  cardType: basic
+  kind: recall
+  tags: [weather, convective-outlook, mrgl, planning, PA.I.C.K2f]
+  source_ref: |
+    AC 00-45H; body Discover and Connect.
+```
+
 ## Connect
 
 The convective outlook is the strategic layer above the Convective

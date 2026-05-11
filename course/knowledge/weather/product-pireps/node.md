@@ -176,6 +176,170 @@ A 737 reporting severe clear icing in a 3,000 ft cloud layer is a
 rebriefable event for any GA airplane on the route. This is the moment to
 re-evaluate descent / climb path.
 
+### Cards (spaced repetition)
+
+Cards mined from the body. Field-decode cards build the decode floor;
+UA vs UUA + trigger cards are the urgency rule; the aircraft-type-
+relativity card carries the central understand step.
+
+```yaml-cards
+- front: "PIREP vs forecast: what's the operational difference between a PIREP and an AIRMET/SIGMET?"
+  back: |
+    PIREP = observation, authored in flight by another pilot, describing
+    what an airframe is actually feeling at altitude right now. AIRMET /
+    SIGMET = forecast, predicting hazardous conditions over a polygon
+    valid for a window. PIREPs are the only real-time turbulence / icing /
+    cloud-base reports that match actual flight-level conditions; they
+    are the truth-up for the forecast products.
+  cardType: basic
+  kind: recall
+  tags: [weather, pirep, observation, ac-00-45h, aim-7-1-19, PA.I.C.K2a]
+  source_ref: |
+    AC 00-45H Section 5 PIREPs; AIM 7-1-19; body Problem.
+
+- front: "Decode PIREP field by field: UA /OV PXN360010 /TM 1845 /FL085 /TP C172 /TB MOD CHOP /RM CONTINUOUS"
+  back: |
+    UA = routine pilot report.
+    /OV PXN360010 = over Panoche VOR, 360 radial, 10 NM (VOR / radial /
+    distance encoding).
+    /TM 1845 = time 1845Z.
+    /FL085 = flight level 8,500 ft.
+    /TP C172 = aircraft type Cessna 172.
+    /TB MOD CHOP = moderate chop (intensity + character).
+    /RM CONTINUOUS = remarks: continuous (vs. occasional / intermittent).
+  cardType: basic
+  kind: recall
+  tags: [weather, pirep, decode, ac-00-45h, PA.I.C.K2a]
+  source_ref: |
+    AC 00-45H Section 5; body Discover decode walkthrough.
+
+- front: "Standard PIREP field codes -- match each to its meaning: /OV, /TM, /FL, /TP, /SK, /WX, /TA, /WV, /TB, /IC, /RM."
+  back: |
+    /OV = Over (position relative to a navaid or fix).
+    /TM = Time (UTC, 4 digits).
+    /FL = Flight level (3 digits, hundreds of feet MSL).
+    /TP = Aircraft type.
+    /SK = Sky cover (e.g. SCT040 OVC100).
+    /WX = Weather phenomena (RA, SN, FZRA, etc.).
+    /TA = Outside air temperature (Celsius).
+    /WV = Wind velocity (direction/speed).
+    /TB = Turbulence (intensity + character + duration).
+    /IC = Icing (intensity + type).
+    /RM = Remarks (free text).
+  cardType: basic
+  kind: recall
+  tags: [weather, pirep, decode, fields, ac-00-45h, PA.I.C.K2a]
+  source_ref: |
+    AC 00-45H Section 5; body Reveal field table.
+
+- front: "UA vs UUA -- what's the distinction and what triggers UUA?"
+  back: |
+    UA = routine pilot report (default). UUA = urgent pilot report,
+    triggering immediate dissemination. UUA triggers per AIM 7-1-19:
+    tornadoes, funnel clouds, or waterspouts; severe or extreme
+    turbulence; severe icing; hail; low-level windshear (airspeed change
+    of 10 KT or more); volcanic ash. Any one trigger makes the report
+    urgent.
+  cardType: regulation
+  kind: recall
+  tags: [weather, pirep, uua, urgent, aim-7-1-19, PA.I.C.K2a]
+  source_ref: |
+    AIM 7-1-19 Pilot Weather Reports; body Reveal.
+
+- front: "Why does aircraft type (/TP) matter for reading turbulence and icing severity in a PIREP?"
+  back: |
+    Severity is encoded relative to the reporting airframe. A 737's 'light
+    chop' is a Cherokee's 'moderate.' A Citation's 'severe icing' arrives
+    in a Cessna far before the Citation pilot would call it severe. The
+    /TP field is the calibration context for any severity claim; the
+    most-missed reading skill on PIREPs is normalising severity to your
+    own airframe instead of taking it at face.
+  cardType: basic
+  kind: recall
+  tags: [weather, pirep, severity, aircraft-type, judgment, PA.I.C.K2a]
+  source_ref: |
+    Body Discover Stage 2.
+  rationale: |
+    The body's central understand-step pitch: severity is relative to
+    aircraft, not absolute. This card forces the learner to internalise
+    the calibration.
+
+- front: "Triage a turbulence PIREP for your flight: what three properties gate relevance?"
+  back: |
+    1. Time-since-report (15 minutes is current; 90 minutes is stale --
+       thermals and convective cells don't sit still).
+    2. Aircraft-type match (C172 to your C182 is a near-direct read; C172
+       to your B737 is several severity levels different).
+    3. Position relative to your route + altitude (PIREP at 8,500 over
+       Panoche is informative for your 8,500 cruise through that area;
+       a 28,000 ft Citation PIREP isn't).
+  cardType: basic
+  kind: recall
+  tags: [weather, pirep, triage, currency, aircraft-type, PA.I.C.K2a]
+  source_ref: |
+    Body Discover Stage 3.
+
+- front: "Decode this urgent PIREP: UUA /OV ABE090020/TM 2147/FL120/TP B737/IC SEV CLR/RM TOPS 14000 LWR 11000"
+  back: |
+    UUA = urgent. Over ABE VOR, 090 radial, 20 NM east. Time 2147Z.
+    Altitude 12,000 MSL. Aircraft B737. Icing: severe clear. Remarks:
+    cloud tops 14,000, bases 11,000. A 737 reporting severe clear icing
+    in a 3,000 ft cloud layer is a rebriefable event for any GA airplane
+    on that route -- a Cessna would see the same icing arrive much
+    earlier than the 737 did. Re-evaluate descent / climb path.
+  cardType: basic
+  kind: recall
+  tags: [weather, pirep, uua, icing, scenario, PA.I.C.K2a]
+  source_ref: |
+    Body Practice decode example.
+
+- front: "Per AIM 7-1-20, when should pilots file a PIREP?"
+  back: |
+    Even when no hazardous conditions exist. The AIM encourages routine
+    filing because Flight Service ingests the report; it becomes a public
+    NWS product that feeds back into briefings, EFB displays, and ATC
+    ride-report queries. A 'UA /OV xxx /TM xxxx /FL xxx /TP xxx /SK CLR
+    /RM SMOOTH' is a valid and useful report -- the smoothness reading is
+    the same kind of data point as a turbulence reading.
+  cardType: regulation
+  kind: recall
+  tags: [weather, pirep, filing, aim-7-1-20, PA.I.C.K2a]
+  source_ref: |
+    AIM 7-1-19/7-1-20; body Reveal.
+
+- front: "Climb-out and the ride goes from glassy to jolts that pop your kneeboard off. You ask Center for ride reports. The controller comes back with a UA /OV PXN360010 /TM 1845 /FL085 /TP C172 /TB MOD CHOP. What's the synoptic story?"
+  back: |
+    Boundary-layer altitudes (8,500 ft) over hot inland terrain (California
+    Central Valley) in the afternoon = classic thermal-turbulence setup.
+    Convective mixing in unstable air over warm ground, smoothing out
+    above the convective-layer top. Operational read for a similar
+    airplane (C172 / C182): climb above the convective layer (often
+    11,500 or higher) for smooth air; the moderate chop will continue
+    until you do.
+  cardType: basic
+  kind: recall
+  tags: [weather, pirep, thermal-turbulence, scenario, PA.I.C.K2a]
+  source_ref: |
+    Body Context + Discover Stage 2.
+  rationale: |
+    Scenario card from the body's Context. Trains the synoptic-frame step
+    -- not 'what did the PIREP say' but 'what produced the report.'
+
+- front: "Calibration drill: how many PIREPs in how much time, and what filing rate?"
+  back: |
+    Decode three random PIREPs from aviationweather.gov without a key in
+    under three minutes total -- that establishes decode fluency. File one
+    PIREP yourself in the next 10 hours of flight, even if conditions are
+    benign -- that establishes contribution. Both habits compound: pilots
+    who file PIREPs read PIREPs better, because they've thought about how
+    severity claims feel from the cockpit side.
+  cardType: basic
+  kind: recall
+  tags: [weather, pirep, drill, filing, PA.I.C.K2a]
+  source_ref: |
+    Body Verify.
+```
+
 ## Connect
 
 PIREPs ground every other weather product. An AIRMET ZULU (icing) becomes
