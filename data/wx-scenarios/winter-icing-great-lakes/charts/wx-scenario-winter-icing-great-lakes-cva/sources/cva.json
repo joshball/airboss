@@ -1,0 +1,83 @@
+{
+  "targetTimestamp": "2026-01-22T15:00:00Z",
+  "source": "wx-engine -- truth-derived synthetic CVA",
+  "count": 5,
+  "_source_note": "Stations from per-station METARs; polygons lowered from truth.hazardZones.",
+  "observations": [
+    {
+      "station": {
+        "icao": "KCLE",
+        "lat": 41.41,
+        "lon": -81.85
+      },
+      "raw": "KCLE 221553Z 32020G27KT 3SM BR OVC015 OVC080 M10/M15 A2974"
+    },
+    {
+      "station": {
+        "icao": "KORD",
+        "lat": 41.97,
+        "lon": -87.91
+      },
+      "raw": "KORD 221553Z 32020KT 10SM BKN035 OVC080 M10/M15 A2989"
+    },
+    {
+      "station": {
+        "icao": "KDTW",
+        "lat": 42.22,
+        "lon": -83.35
+      },
+      "raw": "KDTW 221553Z 32020G27KT 10SM BKN035 OVC080 M10/M15 A2977"
+    },
+    {
+      "station": {
+        "icao": "KGRR",
+        "lat": 42.88,
+        "lon": -85.52
+      },
+      "raw": "KGRR 221553Z 32020KT 10SM BKN035 OVC080 M10/M15 A2983"
+    },
+    {
+      "station": {
+        "icao": "KCAK",
+        "lat": 40.92,
+        "lon": -81.44
+      },
+      "raw": "KCAK 221553Z 32020G27KT 3SM BR OVC015 OVC080 M10/M15 A2973"
+    }
+  ],
+  "polygons": [
+    {
+      "id": "HZ-lake-effect-sierra-cva",
+      "category": "IFR",
+      "label": "IFR",
+      "labelLonLat": [
+        -81.82000000000001,
+        40.98
+      ],
+      "rings": [
+        [
+          [
+            -82.5,
+            40.3
+          ],
+          [
+            -80.8,
+            40.3
+          ],
+          [
+            -80.8,
+            42
+          ],
+          [
+            -82.5,
+            42
+          ],
+          [
+            -82.5,
+            40.3
+          ]
+        ]
+      ]
+    }
+  ]
+}

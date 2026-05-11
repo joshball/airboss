@@ -1,0 +1,161 @@
+[
+  {
+    "station": "KCLE",
+    "day": 22,
+    "hour": 15,
+    "minute": 53,
+    "wind": {
+      "directionDeg": 320,
+      "speedKt": 20,
+      "gustKt": 27,
+      "variable": false,
+      "calm": false
+    },
+    "visibilitySM": 3,
+    "weather": [
+      "BR"
+    ],
+    "clouds": [
+      {
+        "cover": "OVC",
+        "heightFtAgl": 1500
+      },
+      {
+        "cover": "OVC",
+        "heightFtAgl": 8000
+      }
+    ],
+    "tempC": -10,
+    "dewpointC": -15,
+    "altimeterInHg": 29.74,
+    "cavok": false,
+    "raw": "KCLE 221553Z 32020G27KT 3SM BR OVC015 OVC080 M10/M15 A2974",
+    "warnings": []
+  },
+  {
+    "station": "KORD",
+    "day": 22,
+    "hour": 15,
+    "minute": 53,
+    "wind": {
+      "directionDeg": 320,
+      "speedKt": 20,
+      "gustKt": null,
+      "variable": false,
+      "calm": false
+    },
+    "visibilitySM": 10,
+    "weather": [],
+    "clouds": [
+      {
+        "cover": "BKN",
+        "heightFtAgl": 3500
+      },
+      {
+        "cover": "OVC",
+        "heightFtAgl": 8000
+      }
+    ],
+    "tempC": -10,
+    "dewpointC": -15,
+    "altimeterInHg": 29.89,
+    "cavok": false,
+    "raw": "KORD 221553Z 32020KT 10SM BKN035 OVC080 M10/M15 A2989",
+    "warnings": []
+  },
+  {
+    "station": "KDTW",
+    "day": 22,
+    "hour": 15,
+    "minute": 53,
+    "wind": {
+      "directionDeg": 320,
+      "speedKt": 20,
+      "gustKt": 27,
+      "variable": false,
+      "calm": false
+    },
+    "visibilitySM": 10,
+    "weather": [],
+    "clouds": [
+      {
+        "cover": "BKN",
+        "heightFtAgl": 3500
+      },
+      {
+        "cover": "OVC",
+        "heightFtAgl": 8000
+      }
+    ],
+    "tempC": -10,
+    "dewpointC": -15,
+    "altimeterInHg": 29.77,
+    "cavok": false,
+    "raw": "KDTW 221553Z 32020G27KT 10SM BKN035 OVC080 M10/M15 A2977",
+    "warnings": []
+  },
+  {
+    "station": "KGRR",
+    "day": 22,
+    "hour": 15,
+    "minute": 53,
+    "wind": {
+      "directionDeg": 320,
+      "speedKt": 20,
+      "gustKt": null,
+      "variable": false,
+      "calm": false
+    },
+    "visibilitySM": 10,
+    "weather": [],
+    "clouds": [
+      {
+        "cover": "BKN",
+        "heightFtAgl": 3500
+      },
+      {
+        "cover": "OVC",
+        "heightFtAgl": 8000
+      }
+    ],
+    "tempC": -10,
+    "dewpointC": -15,
+    "altimeterInHg": 29.83,
+    "cavok": false,
+    "raw": "KGRR 221553Z 32020KT 10SM BKN035 OVC080 M10/M15 A2983",
+    "warnings": []
+  },
+  {
+    "station": "KCAK",
+    "day": 22,
+    "hour": 15,
+    "minute": 53,
+    "wind": {
+      "directionDeg": 320,
+      "speedKt": 20,
+      "gustKt": 27,
+      "variable": false,
+      "calm": false
+    },
+    "visibilitySM": 3,
+    "weather": [
+      "BR"
+    ],
+    "clouds": [
+      {
+        "cover": "OVC",
+        "heightFtAgl": 1500
+      },
+      {
+        "cover": "OVC",
+        "heightFtAgl": 8000
+      }
+    ],
+    "tempC": -10,
+    "dewpointC": -15,
+    "altimeterInHg": 29.73,
+    "cavok": false,
+    "raw": "KCAK 221553Z 32020G27KT 3SM BR OVC015 OVC080 M10/M15 A2973",
+    "warnings": []
+  }
+]

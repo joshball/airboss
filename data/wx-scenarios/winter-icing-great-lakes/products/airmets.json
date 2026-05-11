@@ -1,0 +1,146 @@
+[
+  {
+    "id": "WAUS41-WXENGINE-HZ-lake-effect-zulu",
+    "kind": "airmet-zulu",
+    "label": "AIRMET ZULU\nModerate Icing\nSFC-80",
+    "labelLonLat": [
+      -81.82000000000001,
+      40.98
+    ],
+    "rings": [
+      [
+        [
+          -82.5,
+          40.3
+        ],
+        [
+          -80.8,
+          40.3
+        ],
+        [
+          -80.8,
+          42
+        ],
+        [
+          -82.5,
+          42
+        ],
+        [
+          -82.5,
+          40.3
+        ]
+      ]
+    ],
+    "validFrom": "2026-01-22T15:00:00Z",
+    "validTo": "2026-01-22T21:00:00.000Z",
+    "fromHazardZoneId": "HZ-lake-effect-zulu"
+  },
+  {
+    "id": "WAUS41-WXENGINE-HZ-lake-effect-sierra",
+    "kind": "airmet-sierra",
+    "label": "AIRMET SIERRA\nIFR Conditions\nSFC-15",
+    "labelLonLat": [
+      -81.82000000000001,
+      40.98
+    ],
+    "rings": [
+      [
+        [
+          -82.5,
+          40.3
+        ],
+        [
+          -80.8,
+          40.3
+        ],
+        [
+          -80.8,
+          42
+        ],
+        [
+          -82.5,
+          42
+        ],
+        [
+          -82.5,
+          40.3
+        ]
+      ]
+    ],
+    "validFrom": "2026-01-22T15:00:00Z",
+    "validTo": "2026-01-22T21:00:00.000Z",
+    "fromHazardZoneId": "HZ-lake-effect-sierra"
+  },
+  {
+    "id": "WAUS41-WXENGINE-HZ-postfrontal-tango",
+    "kind": "airmet-tango",
+    "label": "AIRMET TANGO\nModerate Turbulence\nSFC-80",
+    "labelLonLat": [
+      -86,
+      41
+    ],
+    "rings": [
+      [
+        [
+          -90,
+          39
+        ],
+        [
+          -80,
+          39
+        ],
+        [
+          -80,
+          44
+        ],
+        [
+          -90,
+          44
+        ],
+        [
+          -90,
+          39
+        ]
+      ]
+    ],
+    "validFrom": "2026-01-22T15:00:00Z",
+    "validTo": "2026-01-22T21:00:00.000Z",
+    "fromHazardZoneId": "HZ-postfrontal-tango"
+  },
+  {
+    "id": "WAUS41-WXENGINE-HZ-east-of-band-zulu",
+    "kind": "airmet-zulu",
+    "label": "AIRMET ZULU\nLight Icing\n50-120",
+    "labelLonLat": [
+      -80.28,
+      40.98
+    ],
+    "rings": [
+      [
+        [
+          -80.8,
+          40.3
+        ],
+        [
+          -79.5,
+          40.3
+        ],
+        [
+          -79.5,
+          42
+        ],
+        [
+          -80.8,
+          42
+        ],
+        [
+          -80.8,
+          40.3
+        ]
+      ]
+    ],
+    "validFrom": "2026-01-22T15:00:00Z",
+    "validTo": "2026-01-22T21:00:00.000Z",
+    "fromHazardZoneId": "HZ-east-of-band-zulu"
+  }
+]

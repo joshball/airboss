@@ -1,0 +1,111 @@
+[
+  {
+    "station": "KCAK",
+    "kind": "UUA",
+    "location": {
+      "raw": "CAK280018",
+      "station": "CAK",
+      "radialDeg": 280,
+      "distanceNm": 18
+    },
+    "timeHhmmZ": 1430,
+    "altitudeFt": 4500,
+    "aircraftType": "C172",
+    "skyCover": [
+      {
+        "cover": "OVC",
+        "baseFt": 5000,
+        "topFt": null
+      }
+    ],
+    "weather": [],
+    "temperatureC": null,
+    "wind": null,
+    "turbulence": {
+      "intensity": "LGT",
+      "altitudeBandFt": null,
+      "raw": "LGT"
+    },
+    "icing": {
+      "intensity": "LGT",
+      "type": "RIME",
+      "altitudeBandFt": {
+        "min": 1000,
+        "max": 8000
+      },
+      "raw": "LGT RIME 010-080"
+    },
+    "remarks": "ACCRETING ON LE",
+    "raw": "KCAK UUA /OV CAK280018/TM 1430/FL045/TP C172/TB LGT/SK OVC050/IC LGT RIME 010-080/RM ACCRETING ON LE",
+    "warnings": []
+  },
+  {
+    "station": "KCAK",
+    "kind": "UA",
+    "location": {
+      "raw": "CAK280018",
+      "station": "CAK",
+      "radialDeg": 280,
+      "distanceNm": 18
+    },
+    "timeHhmmZ": 1435,
+    "altitudeFt": 1500,
+    "aircraftType": "C172",
+    "skyCover": [
+      {
+        "cover": "OVC",
+        "baseFt": 800,
+        "topFt": null
+      }
+    ],
+    "weather": [
+      "BR"
+    ],
+    "temperatureC": null,
+    "wind": null,
+    "turbulence": {
+      "intensity": "LGT",
+      "altitudeBandFt": null,
+      "raw": "LGT"
+    },
+    "icing": null,
+    "remarks": "IFR BELOW LAYER",
+    "raw": "KCAK UA /OV CAK280018/TM 1435/FL015/TP C172/TB LGT/SK OVC008/WX BR/RM IFR BELOW LAYER",
+    "warnings": []
+  },
+  {
+    "station": "KGRR",
+    "kind": "UUA",
+    "location": {
+      "raw": "GRR190099",
+      "station": "GRR",
+      "radialDeg": 190,
+      "distanceNm": 99
+    },
+    "timeHhmmZ": 1440,
+    "altitudeFt": 4500,
+    "aircraftType": "B738",
+    "skyCover": [
+      {
+        "cover": "BKN",
+        "baseFt": 9000,
+        "topFt": null
+      }
+    ],
+    "weather": [],
+    "temperatureC": null,
+    "wind": null,
+    "turbulence": {
+      "intensity": "MOD",
+      "altitudeBandFt": {
+        "min": 1000,
+        "max": 8000
+      },
+      "raw": "MOD 010-080"
+    },
+    "icing": null,
+    "remarks": "CONT MOD CHOP",
+    "raw": "KGRR UUA /OV GRR190099/TM 1440/FL045/TP B738/TB MOD 010-080/SK BKN090/RM CONT MOD CHOP",
+    "warnings": []
+  }
+]
