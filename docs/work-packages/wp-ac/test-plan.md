@@ -36,5 +36,4 @@
 
 ## Out of scope
 
-- Section-level navigation within an AC (no chapter / paragraph rows yet).
-- Citation reverse-lookup for AC paragraphs.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
