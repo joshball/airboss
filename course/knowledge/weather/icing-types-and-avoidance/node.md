@@ -197,6 +197,169 @@ without ice present makes the timing real. Most icing fatalities
 are pilots who delayed the 180 because the situation was
 "developing."
 
+### Cards (spaced repetition)
+
+Cards mined from the body. Three-icing-types cards build the
+diagnostic vocabulary; temperature-band and avoidance-hierarchy cards
+build the operational decision rules; the escape-tree card is the
+in-flight muscle memory.
+
+```yaml-cards
+- front: "Three icing types -- name them by formation droplet size and flight signature."
+  back: |
+    Rime ice: small supercooled droplets freeze on contact, trapping air.
+    Granular, white, opaque. Slow accumulation in stratus / stratocumulus.
+    Easier to shed. Most common in the -10 C to -20 C band.
+    Clear ice: large supercooled droplets (or freezing rain) flow back
+    along the surface before freezing. Glassy, transparent, forms a horn
+    or ridge that radically changes wing shape. Most dangerous. Encountered
+    in cumulus, freezing rain, and the warmer end (0 C to -10 C).
+    Mixed ice: both at once. Worst of each -- hard to see + boundary-layer
+    disruption beyond the visible accumulation.
+  cardType: basic
+  kind: recall
+  tags: [weather, icing, types, phak-12, ac-91-74b, PA.I.C.K3i]
+  source_ref: |
+    AC 91-74B Flight in Icing; PHAK Ch 12; body Discover.
+
+- front: "Structural icing temperature band -- where is it widest and where is severity peak?"
+  back: |
+    Band: roughly +2 C to -20 C.
+    Peak severity: -2 C to -10 C.
+    Above +2 C, warmer air prevents accumulation. Below about -20 C, water
+    in clouds is mostly already ice crystals and won't freeze further on
+    contact. The band is approximate -- a SLD (supercooled large droplet)
+    encounter can extend severe icing colder than the standard band.
+  cardType: basic
+  kind: recall
+  tags: [weather, icing, temperature-band, ac-91-74b, PA.I.C.K3i]
+  source_ref: |
+    AC 91-74B; body Discover.
+
+- front: "Why is freezing rain a 'trap' setup -- what's the atmospheric structure that produces it and why is escape constrained?"
+  back: |
+    Freezing rain forms when a warm layer aloft (rain forms) sits over a
+    cold layer below (rain supercools as it falls). Pilot in the cold layer
+    encounters aggressive clear-ice formation. The escape problem: descending
+    out of the cold layer into the warm layer means descending toward
+    terrain. The atmospheric setup is also the setup that traps the pilot.
+  cardType: basic
+  kind: recall
+  tags: [weather, icing, freezing-rain, clear-ice, ac-91-74b, PA.I.C.K3i]
+  source_ref: |
+    AC 91-74B; body Discover.
+
+- front: "Avoidance hierarchy for icing -- the four steps in order."
+  back: |
+    1. Stay out -- if AIRMET ZULU or known icing setup overlaps the route
+       at altitude, the question shifts to 'do I have an out?'
+    2. Have an out -- a layer above, a layer below, or a heading back to
+       clear air. The out must be reachable within climb/descent capability,
+       and within below-freezing-level / above-cloud-tops constraints.
+    3. Recognize the setup early -- temperature/dew-point spread, visible
+       moisture, freezing-level position, PIREPs.
+    4. Escape immediately when ice encountered without an out -- 180 turn
+       into the air you came from (you know that air was clear five
+       minutes ago).
+  cardType: basic
+  kind: recall
+  tags: [weather, icing, avoidance, escape, ac-91-74b, PA.I.C.K3i]
+  source_ref: |
+    AC 91-74B; AIM 7-1-21; body Discover.
+
+- front: "Anti-ice vs deice vs known-icing certified -- what's the practical difference?"
+  back: |
+    Anti-ice equipment (heated leading edges, hot props) prevents ice from
+    forming on protected surfaces. Adequate for certified conditions only.
+    Deice equipment (pneumatic boots) breaks accumulated ice off. Effective
+    for rime; less effective for clear (especially when ice bridges the boot).
+    Known-icing certified means the airframe has been flight-tested and
+    approved for *some* icing for *some* duration. It does NOT mean
+    invulnerable.
+    No anti-ice / deice = airframe not certified for flight in icing; the
+    rule moves from 'manage' to 'do not enter.'
+  cardType: basic
+  kind: recall
+  tags: [weather, icing, equipment, anti-ice, deice, ac-91-74b, PA.I.C.K3i]
+  source_ref: |
+    AC 91-74B; body Reveal "Equipment caveats."
+
+- front: "Why is a PIREP the canonical truth-up for an icing forecast?"
+  back: |
+    A PIREP is what an airframe actually felt; the forecast is the
+    hypothesis. A forecast says 'moderate icing FL040-FL080'; a PIREP says
+    'trace rime FL060 KMRY, light moderate FL080 KSAC.' The PIREP is
+    ground truth and the forecast is confirmed or denied against it.
+    Absence of PIREPs does not refute the forecast -- pilots may not be
+    flying at that altitude or reporting -- but a confirming PIREP makes
+    the forecast operationally real.
+  cardType: basic
+  kind: recall
+  tags: [weather, icing, pirep, airmet-zulu, aim-7-1-21, PA.I.C.K3i]
+  source_ref: |
+    AIM 7-1-21 Icing; body Reveal.
+
+- front: "Escape decision tree for icing -- what's the first action for trace ice with freezing level above terrain vs. trace ice with above-cloud layer reachable?"
+  back: |
+    Trace ice, freezing level above terrain -> descend below freezing level.
+    Trace ice, above-cloud layer reachable -> climb above tops.
+    Light ice, neither out reliable -> 180 immediately.
+    Moderate ice -> declare emergency authority, whatever altitude / heading
+    clears the airframe.
+    Severe ice -> 180 + descent + declare. Severe ice is a known accident
+    pattern; treat it as an emergency from recognition.
+  cardType: basic
+  kind: recall
+  tags: [weather, icing, escape, emergency, ac-91-74b, PA.I.C.K3i]
+  source_ref: |
+    AC 91-74B; body Reveal escape decision table.
+
+- front: "Why do most icing fatalities involve pilots who delayed the 180?"
+  back: |
+    The icing situation feels 'developing' rather than catastrophic. The
+    airplane settles slowly, IAS bleeds off gradually, autopilot trims down
+    silently. The decision window for icing is short: 60 seconds from
+    recognition to commit. Pilots who wait for 'definitive' icing have
+    already loaded the wing past clean-flight performance. The 180 has to
+    happen on first signal, not on confirmation.
+  cardType: basic
+  kind: recall
+  tags: [weather, icing, escape, judgment, ac-91-74b, PA.I.C.K3i]
+  source_ref: |
+    AC 91-74B; body Practice ("decision needs to happen within 60 seconds").
+
+- front: "7,000 ft IFR in cloud, OAT -3 C. Five minutes later a translucent film on the leading edge; 10 minutes later airplane settles 200 fpm at cruise power, IAS bleeding off. What's happening and what's the action?"
+  back: |
+    Clear ice accumulation (translucent film in the warmer end of the
+    icing band, droplets flowing back before freezing). The wing has lost
+    lift efficiency; stall speed up, drag up, available thrust down. Action
+    on first signal: 180 turn into the air you came from -- known clear
+    five minutes ago. Do not wait to confirm severity; the airplane is
+    already a different airplane. If terrain/airspace prevents the 180,
+    declare and request descent below freezing level.
+  cardType: basic
+  kind: recall
+  tags: [weather, icing, escape, clear-ice, scenario, PA.I.C.K3i]
+  source_ref: |
+    Body Context scenario.
+  rationale: |
+    Scenario card from the body's Context. Trains the on-first-signal
+    180-turn habit the body emphasises is the survival action.
+
+- front: "Why does ice not 'release' from a non-deiced airframe in flight?"
+  back: |
+    There is no in-flight self-shedding mechanism for non-deiced airframes.
+    Ice releases only when the airframe reaches the ground or enters
+    above-freezing air. This is why 'wait for ice to come off' is not a
+    plan -- the airplane will not shed it under any maneuver short of
+    descending to warmer air. Plan the escape accordingly.
+  cardType: basic
+  kind: recall
+  tags: [weather, icing, shedding, ac-91-74b, PA.I.C.K3i]
+  source_ref: |
+    AC 91-74B; body Problem.
+```
+
 ## Connect
 
 This node is one input to the go/no-go decision. It depends on

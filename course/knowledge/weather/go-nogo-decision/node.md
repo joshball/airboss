@@ -205,6 +205,197 @@ your decision changes between today and tomorrow, identify which
 input drove the change. That input is the variable you most need
 to monitor for that route.
 
+### Cards (spaced repetition)
+
+Cards mined from the body. The three-branch framing is the recall
+core; PAVE and DECIDE are the named frameworks; the decision-moment
+sequence is the in-flight discipline; the named-driver rule is the
+test for whether the decision is actually defensible.
+
+```yaml-cards
+- front: "Three branches of a go/no-go decision (not two)?"
+  back: |
+    Go -- conditions and trends are within personal minimums; the worst-case
+    forecast is flyable; the out exists if conditions degrade.
+    No-go -- a specific hazard or trend exceeds your minimums. Name the
+    driver. ("Convective SIGMET on the middle leg" beats "weather looks bad.")
+    Delay -- the brief shows the trip becomes flyable in N hours. Wait, then
+    re-brief. The delay branch is the one most pilots underuse; it's not
+    'no-go,' it's 'not yet.'
+  cardType: basic
+  kind: recall
+  tags: [weather, go-nogo, decision, phak-2, PA.I.C.R1]
+  source_ref: |
+    PHAK Ch 2 Aeronautical Decision-Making; body Discover.
+  rationale: |
+    The body's central reframing -- two-branch thinking (go / no-go)
+    excludes the most common defensible outcome.
+
+- front: "PAVE checklist -- what does each letter ask about?"
+  back: |
+    P -- Pilot. Currency, fatigue, recent practice in this airplane and
+    this kind of weather.
+    A -- Aircraft. Performance for the density altitude, equipment for
+    the weather (anti-ice, instrument, autopilot, fuel range with reserves).
+    V (or E) -- enVironment. Weather, route, terrain, airports, daylight.
+    E -- External pressures. Wedding, meeting, passenger expectations,
+    rental clock. Most-cited contributing factor in fatal weather accidents.
+  cardType: basic
+  kind: recall
+  tags: [weather, go-nogo, pave, adm, phak-2, PA.I.C.R1]
+  source_ref: |
+    PHAK Ch 2 ADM; FAA-H-8083-2A Risk Management Handbook; body Discover.
+
+- front: "DECIDE model -- name the six steps and what makes the framework continuous."
+  back: |
+    Detect a change -> Estimate the need to react -> Choose an outcome ->
+    Identify actions -> Do -> Evaluate. The Evaluate step loops back to
+    Detect, making DECIDE continuous in flight, not just on the ground.
+    Useful for in-flight re-briefs as much as preflight planning.
+  cardType: basic
+  kind: recall
+  tags: [weather, go-nogo, decide, adm, phak-2, PA.I.C.R1]
+  source_ref: |
+    PHAK Ch 2; body Discover.
+
+- front: "Two go/no-go failure modes the body names -- 'decoded but undecided' and 'decided but uncalibrated'. What does each look like?"
+  back: |
+    Decoded but undecided: the pilot reads every METAR / TAF / AIRMET
+    correctly but can't synthesise them into a decision. Data is fluent;
+    call is paralysed. Default becomes 'go and see,' which is the decision
+    the data was supposed to prevent.
+    Decided but uncalibrated: the pilot decides from habit ('I always fly
+    this trip') without integrating the variables that distinguish today
+    from average. Default is the same flight every time, regardless of
+    brief.
+  cardType: basic
+  kind: recall
+  tags: [weather, go-nogo, failure-modes, PA.I.C.R1]
+  source_ref: |
+    Body Problem.
+
+- front: "Named-driver rule for go/no-go decisions."
+  back: |
+    Every decision should name the specific hazard or specific uncertainty
+    that drives it. 'Embedded thunderstorms in convective SIGMET on the
+    middle leg' is a driver; 'weather looks bad' is not. The named driver
+    is what makes the decision defensible to yourself when trip-pressure
+    builds, and to whoever was counting on the trip if it doesn't happen.
+  cardType: basic
+  kind: recall
+  tags: [weather, go-nogo, named-driver, judgment, PA.I.C.R1]
+  source_ref: |
+    Body Problem + Reveal "trip pressure framework."
+
+- front: "No-go conditions that should produce immediate stop without a framework cycle?"
+  back: |
+    Thunderstorms or Convective SIGMET on the route at your time.
+    Severe icing forecast or PIREP'd along the route at any usable altitude.
+    Mountain wave / severe turbulence forecast or PIREP'd in airframes
+    that aren't structurally rated for it.
+    IFR conditions for a VFR or non-instrument-rated pilot.
+    Personal minimums exceeded and not recoverable by route or altitude
+    change.
+  cardType: basic
+  kind: recall
+  tags: [weather, go-nogo, no-go, immediate-stop, PA.I.C.R1c, PA.I.C.S3]
+  source_ref: |
+    Body Reveal "no-go conditions that don't need a framework."
+
+- front: "The go/no-go is a sequence of moments, not one decision. Name the moments and what's available at each."
+  back: |
+    At the keyboard, day-of: full brief, full latitude, no money on the table.
+    At the airport, preflight: updated brief, runup observations, last latitude.
+    Run-up complete: real airplane health; weather still on the ground.
+    Climb-out: real outside air, real ride, FIS-B coming online.
+    Top-of-climb / cruise: full in-flight picture, divert option still cheap.
+    Descent / approach: decision window narrows; commit pressure rises.
+    Discipline: hold the decision lightly through every moment until the
+    sequence ends.
+  cardType: basic
+  kind: recall
+  tags: [weather, go-nogo, decision-moments, divert, PA.I.C.R1a, PA.I.C.S3]
+  source_ref: |
+    Body Reveal sequence table.
+
+- front: "Three categories of input to a go/no-go decision per the body?"
+  back: |
+    1. Hazards -- thunderstorms, icing, turbulence, IFR conditions, fog,
+       terrain. Each comes from one or more products and is either present,
+       forecast, or absent.
+    2. Trends -- forecast getting better, getting worse, or holding. Compare
+       latest METAR to most recent TAF amendment; if reality is running
+       ahead of forecast, forecast is suspect for the rest of its valid period.
+    3. Personal limits -- this airplane, this route, this pilot, this day.
+       Personal minimums are the floor.
+  cardType: basic
+  kind: recall
+  tags: [weather, go-nogo, hazards, trends, personal-minimums, PA.I.C.R1, PA.I.C.S3]
+  source_ref: |
+    Body Discover.
+
+- front: "Why is the *trend* (improving / steady / degrading) more important than the current value alone?"
+  back: |
+    A good current condition with a deteriorating trend is more dangerous
+    than a marginal current condition with an improving trend. The current
+    value is a snapshot; the trend is what the airplane will fly into. The
+    standard cross-check is latest METAR vs. most recent TAF amendment --
+    if reality is already running worse than forecast, the rest of the TAF
+    is suspect, and you're flying into the surprise side of that error.
+  cardType: basic
+  kind: recall
+  tags: [weather, go-nogo, trend, taf, metar, PA.I.C.R1, PA.I.C.S3]
+  source_ref: |
+    Body Discover "trends."
+
+- front: "Compressed working-pilot version of a go/no-go read?"
+  back: |
+    Read the brief in synoptic order (frame first, then hazards, then route,
+    then airports last). Name the worst-case along the route. Ask if the
+    flight survives the worst case with reserves. Ask what trend would
+    change the answer in the next two hours. The compressed version produces
+    a defensible decision faster than PAVE/DECIDE for repeated flights;
+    PAVE/DECIDE remain the deeper structure for novel or marginal trips.
+  cardType: basic
+  kind: recall
+  tags: [weather, go-nogo, framework, judgment, PA.I.C.R1, PA.I.C.S3]
+  source_ref: |
+    Body Discover (working-pilot compressed version).
+
+- front: "Friend asks you to fly them to a wedding three states away Saturday. METARs at destination show 4,000 broken with 6 SM light rain. GFA shows MVFR along 100 NM of route. Latest TAF amendment is six hours old and predicted better than reality. Walk the decision."
+  back: |
+    Frame the question correctly first: not 'is the weather flyable?' but
+    'is the weather flyable for me, in this airplane, on this route, today?'
+    Trend signal: reality is running worse than the TAF -- the forecast is
+    suspect. MVFR ceiling on 100 NM is the named hazard. Branches: 'delay'
+    until a fresh TAF amendment arrives is the underused option here;
+    'go' requires margin for the deteriorating trend; 'no-go' requires a
+    named driver (e.g., MVFR exceeds VFR personal minimum or no instrument
+    fallback). External pressure (the wedding) is the bias to actively
+    counter.
+  cardType: basic
+  kind: recall
+  tags: [weather, go-nogo, scenario, mvfr, trip-pressure, PA.I.C.R1, PA.I.C.S3]
+  source_ref: |
+    Body Context + Discover.
+  rationale: |
+    Scenario card from the Context. Trains the full reframing the body teaches.
+
+- front: "Reverse: a flight ended worse than briefed. How does the body recommend you re-walk the brief?"
+  back: |
+    Walk the brief again. Identify which input would have changed your call
+    if it had been weighted higher. That input is the variable the brief
+    most needs to surface for you next time. The calibration loop is brief
+    -> outcome -> retrospective brief -> updated weighting for the next
+    similar setup. The discipline is doing the retrospective walk *every*
+    time, not just after the bad outcomes.
+  cardType: basic
+  kind: recall
+  tags: [weather, go-nogo, post-flight, calibration, PA.I.C.R1, PA.I.C.S3]
+  source_ref: |
+    Body Verify.
+```
+
 ## Connect
 
 This node is the synthesis target for the weather course. Every
