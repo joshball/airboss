@@ -2,10 +2,10 @@
   "slug": "wx-scenario-frontal-xc-march-metar-plot",
   "type": "metar-plot-grid",
   "library_version": "@ab/wx-charts@0.1.0",
-  "built_at": "2026-05-10T23:27:15.877Z",
-  "content_hash": "sha256:d515fac09f823b27d0f996fc5a558f03ad367ddca16c40963fd3619c9be0b445",
+  "built_at": "2026-05-11T12:33:32.623Z",
+  "content_hash": "sha256:641edd15116130d600e0f4f54974b580daa72682f4dc0d4983635b42947fb4d3",
   "source_hashes": {
-    "observations": "b3d5274c8190767f0154b14227cc0cf623d12d97c936e13e4fd167416d740e39"
+    "observations": "d8955d92054021b7572384b5e93026ac424efb92f95142c29bf73232ec0939a0"
   },
   "layer_counts": {
     "vector-symbology": 3,
@@ -14,5 +14,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 292864
+  "svg_bytes": 292837
 }

@@ -19,4 +19,4 @@ options:
   show_h_l_markers: true
   show_hazards: true
   show_legend: true
-  source_attribution: Spike 01 wx-engine -- truth-derived synthetic forecast
+  source_attribution: wx-engine -- truth-derived synthetic forecast

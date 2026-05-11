@@ -1,6 +1,6 @@
 {
   "targetTimestamp": "2026-03-19T19:00:00Z",
-  "source": "Spike 01 wx-engine -- truth-derived synthetic METARs",
+  "source": "wx-engine -- truth-derived synthetic METARs",
   "count": 5,
   "observations": [
     {

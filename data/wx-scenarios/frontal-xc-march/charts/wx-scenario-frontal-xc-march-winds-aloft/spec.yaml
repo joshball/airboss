@@ -21,4 +21,4 @@ options:
     - 12000
     - 18000
   show_legend: true
-  source_attribution: Spike 01 wx-engine -- truth-derived synthetic
+  source_attribution: wx-engine -- truth-derived synthetic

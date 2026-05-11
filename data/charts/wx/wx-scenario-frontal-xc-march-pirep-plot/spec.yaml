@@ -1,7 +1,7 @@
 slug: wx-scenario-frontal-xc-march-pirep-plot
 type: pirep-plot-grid
 title: PIREP Plot (truth-derived)
-subtitle: 2026-03-19T19:00:00Z -- 3 truth-derived reports across midwest XC
+subtitle: 2026-03-19T19:00:00Z -- 3 truth-derived reports
 projection:
   kind: lambert
   parallels:
@@ -22,4 +22,4 @@ options:
   collision_max_iterations: 40
   show_altitude_label: true
   show_legend: true
-  source_attribution: Spike 01 wx-engine -- truth-derived synthetic
+  source_attribution: wx-engine -- truth-derived synthetic

@@ -1,0 +1,95 @@
+{
+  "targetTimestamp": "2026-03-19T19:00:00Z",
+  "source": "wx-engine -- truth-derived synthetic CVA",
+  "count": 5,
+  "_source_note": "Stations from per-station METARs; polygons lowered from truth.hazardZones.",
+  "observations": [
+    {
+      "station": {
+        "icao": "KSTL",
+        "lat": 38.75,
+        "lon": -90.37
+      },
+      "raw": "KSTL 191953Z 20014KT 5SM -RA BKN045 OVC120 17/13 A2969"
+    },
+    {
+      "station": {
+        "icao": "KCPS",
+        "lat": 38.57,
+        "lon": -90.16
+      },
+      "raw": "KCPS 191953Z 20014KT 10SM BKN045 OVC120 17/13 A2970"
+    },
+    {
+      "station": {
+        "icao": "KSPI",
+        "lat": 39.84,
+        "lon": -89.68
+      },
+      "raw": "KSPI 191953Z 32020G33KT 3SM BR -RA OVC015 OVC070 04/M03 A2963"
+    },
+    {
+      "station": {
+        "icao": "KMLI",
+        "lat": 41.45,
+        "lon": -90.51
+      },
+      "raw": "KMLI 191953Z 32020G32KT 3SM BR OVC015 OVC070 04/M03 A2956"
+    },
+    {
+      "station": {
+        "icao": "KORD",
+        "lat": 41.98,
+        "lon": -87.91
+      },
+      "raw": "KORD 191953Z 20014KT 10SM BKN045 OVC120 17/13 A2956"
+    }
+  ],
+  "polygons": [
+    {
+      "id": "HZ-postfrontal-ifr-cva",
+      "category": "IFR",
+      "label": "IFR",
+      "labelLonLat": [
+        -91.275,
+        41.2625
+      ],
+      "rings": [
+        [
+          [
+            -89.5,
+            39.8
+          ],
+          [
+            -89.2,
+            41.5
+          ],
+          [
+            -89,
+            43
+          ],
+          [
+            -92,
+            44
+          ],
+          [
+            -95,
+            43
+          ],
+          [
+            -95,
+            40
+          ],
+          [
+            -91,
+            39
+          ],
+          [
+            -89.5,
+            39.8
+          ]
+        ]
+      ]
+    }
+  ]
+}

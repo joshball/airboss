@@ -1,0 +1,17 @@
+{
+  "slug": "wx-scenario-frontal-xc-march-gfa",
+  "type": "gfa",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-11T12:34:17.158Z",
+  "content_hash": "sha256:67c612c853bd65805688298a8c0e3e4190b5f5d275d196fafbf23cbf03fc56eb",
+  "source_hashes": {
+    "polygons": "cad7f5a431c8594892f83f74d764bfed215679da93feba6bce156f18ff6ca823"
+  },
+  "layer_counts": {
+    "vector-symbology": 4,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 287605
+}

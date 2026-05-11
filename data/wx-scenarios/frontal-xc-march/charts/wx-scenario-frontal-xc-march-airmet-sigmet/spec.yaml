@@ -16,4 +16,4 @@ sources:
 options:
   show_legend: true
   show_labels: true
-  source_attribution: Spike 01 wx-engine -- truth-derived synthetic AIRMETs
+  source_attribution: wx-engine -- truth-derived synthetic AIRMETs

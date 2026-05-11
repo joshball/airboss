@@ -528,5 +528,20 @@
   ],
   "terrain": {
     "ridges": []
-  }
+  },
+  "routeStations": [
+    "KSTL",
+    "KCPS",
+    "KSPI",
+    "KMLI",
+    "KORD"
+  ],
+  "fbStations": [
+    "KSTL",
+    "KORD",
+    "KMSP",
+    "KIND",
+    "KDSM"
+  ],
+  "tafValidHours": 12
 }

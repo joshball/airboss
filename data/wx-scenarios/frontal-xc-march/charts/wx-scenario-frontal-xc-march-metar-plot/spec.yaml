@@ -1,7 +1,7 @@
 slug: wx-scenario-frontal-xc-march-metar-plot
 type: metar-plot-grid
 title: METAR Plot (truth-derived)
-subtitle: 2026-03-19T19:00:00Z -- 5 truth-derived stations across midwest XC
+subtitle: 2026-03-19T19:00:00Z -- 5 truth-derived stations
 projection:
   kind: lambert
   parallels:
@@ -24,4 +24,4 @@ options:
   show_station_model_legend: true
   show_category_legend: true
   temp_unit: F
-  source_attribution: Spike 01 wx-engine -- truth-derived synthetic
+  source_attribution: wx-engine -- truth-derived synthetic
