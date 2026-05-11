@@ -1,0 +1,83 @@
+{
+  "targetTimestamp": "2026-07-15T21:00:00Z",
+  "source": "wx-engine -- truth-derived synthetic CVA",
+  "count": 5,
+  "_source_note": "Stations from per-station METARs; polygons lowered from truth.hazardZones.",
+  "observations": [
+    {
+      "station": {
+        "icao": "KAUS",
+        "lat": 30.19,
+        "lon": -97.67
+      },
+      "raw": "KAUS 152153Z 13010KT 10SM SCT045 OVC120 35/24 A2994"
+    },
+    {
+      "station": {
+        "icao": "KIAH",
+        "lat": 29.99,
+        "lon": -95.34
+      },
+      "raw": "KIAH 152153Z 13010KT 3SM BR +TSRA OVC025 BKN015 OVC060 35/24 A2992"
+    },
+    {
+      "station": {
+        "icao": "KSAT",
+        "lat": 29.53,
+        "lon": -98.47
+      },
+      "raw": "KSAT 152153Z 13010KT 10SM SCT045 OVC120 35/24 A2994"
+    },
+    {
+      "station": {
+        "icao": "KCLL",
+        "lat": 30.59,
+        "lon": -96.36
+      },
+      "raw": "KCLL 152153Z 13010KT 3SM +TSRA SCT045 BKN015 OVC060 35/24 A2993"
+    },
+    {
+      "station": {
+        "icao": "KCRP",
+        "lat": 27.77,
+        "lon": -97.5
+      },
+      "raw": "KCRP 152153Z 15008KT 10SM FEW025 28/23 A2992"
+    }
+  ],
+  "polygons": [
+    {
+      "id": "HZ-cell-sierra-cva",
+      "category": "IFR",
+      "label": "IFR",
+      "labelLonLat": [
+        -96.58,
+        30.080000000000002
+      ],
+      "rings": [
+        [
+          [
+            -97.5,
+            29.9
+          ],
+          [
+            -95.2,
+            29.9
+          ],
+          [
+            -95.2,
+            30.35
+          ],
+          [
+            -97.5,
+            30.35
+          ],
+          [
+            -97.5,
+            29.9
+          ]
+        ]
+      ]
+    }
+  ]
+}

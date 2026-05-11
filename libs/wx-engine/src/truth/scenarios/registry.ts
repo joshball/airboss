@@ -16,6 +16,7 @@ import { WX_SCENARIOS, type WxScenario } from '@ab/constants';
 import { truthModelSchema } from '../schema';
 import type { TruthModel } from '../types';
 import { FRONTAL_XC_MARCH } from './frontal-xc-march';
+import { SUMMER_THUNDERSTORMS_TX } from './summer-thunderstorms-tx';
 
 /**
  * Per-slug lazy loaders. Each entry returns the raw scenario literal (not
@@ -26,9 +27,7 @@ import { FRONTAL_XC_MARCH } from './frontal-xc-march';
  */
 const SCENARIO_LOADERS: Record<WxScenario, () => TruthModel> = {
 	[WX_SCENARIOS.FRONTAL_XC_MARCH]: () => FRONTAL_XC_MARCH,
-	[WX_SCENARIOS.SUMMER_THUNDERSTORMS_TX]: () => {
-		throw new Error(`scenario "${WX_SCENARIOS.SUMMER_THUNDERSTORMS_TX}" not yet authored (lands in Phase E)`);
-	},
+	[WX_SCENARIOS.SUMMER_THUNDERSTORMS_TX]: () => SUMMER_THUNDERSTORMS_TX,
 	[WX_SCENARIOS.WINTER_ICING_GREAT_LAKES]: () => {
 		throw new Error(`scenario "${WX_SCENARIOS.WINTER_ICING_GREAT_LAKES}" not yet authored (lands in Phase E)`);
 	},

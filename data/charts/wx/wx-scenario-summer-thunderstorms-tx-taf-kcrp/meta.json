@@ -1,0 +1,17 @@
+{
+  "slug": "wx-scenario-summer-thunderstorms-tx-taf-kcrp",
+  "type": "taf-timeline",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-11T13:55:12.003Z",
+  "content_hash": "sha256:a17cf26b7c061c2dc1c140bb6e8e694ae25a20144f53b2e2b8cbd13932d34ad1",
+  "source_hashes": {
+    "taf": "2b029522251a4bf1b35e61ac31f8648ef11f437faaf9730e849ac0bb7974e8f6"
+  },
+  "layer_counts": {
+    "vector-symbology": 11,
+    "point-symbology": 2
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 7592
+}

@@ -109,7 +109,7 @@ function deriveGeneralPireps(truth: TruthModel): DerivedPirep[] {
 		const ovHeading = String(radial.bearingDeg).padStart(3, '0');
 		const ovDist = String(Math.max(5, Math.min(99, Math.round(radial.distanceNm)))).padStart(3, '0');
 		const stationStem = anchor.icao.slice(1);
-		const raw = `${anchor.icao} UUA /OV ${stationStem}${ovHeading}${ovDist}/TM ${tm}/FL090/TP B738/TB MOD 070-110/SK BKN040CB OVC100/WX TSRA/RM HVY PRECIP NEAR CELL`;
+		const raw = `${anchor.icao} UUA /OV ${stationStem}${ovHeading}${ovDist}/TM ${tm}/FL090/TP B738/TB MOD 070-110/SK BKN040 OVC100/WX TSRA/RM HVY PRECIP NEAR CELL`;
 		items.push(makePirep(raw, cell.lon, cell.lat));
 		offsetMin += 5;
 	}

@@ -1,0 +1,313 @@
+{
+  "validAt": "D15T21:00:00Z",
+  "issuedAt": null,
+  "basedOn": "D15T15:00:00Z",
+  "stations": [
+    {
+      "station": "AUS",
+      "rows": [
+        {
+          "altitudeFt": 3000,
+          "directionDeg": 150,
+          "speedKt": 8,
+          "temperatureC": null,
+          "raw": "1508"
+        },
+        {
+          "altitudeFt": 6000,
+          "directionDeg": 160,
+          "speedKt": 10,
+          "temperatureC": 22,
+          "raw": "1610+22"
+        },
+        {
+          "altitudeFt": 9000,
+          "directionDeg": 170,
+          "speedKt": 12,
+          "temperatureC": 14,
+          "raw": "1712+14"
+        },
+        {
+          "altitudeFt": 12000,
+          "directionDeg": 180,
+          "speedKt": 15,
+          "temperatureC": 8,
+          "raw": "1815+08"
+        },
+        {
+          "altitudeFt": 18000,
+          "directionDeg": 220,
+          "speedKt": 18,
+          "temperatureC": -8,
+          "raw": "2218-08"
+        },
+        {
+          "altitudeFt": 24000,
+          "directionDeg": 240,
+          "speedKt": 22,
+          "temperatureC": -22,
+          "raw": "2422-22"
+        },
+        {
+          "altitudeFt": 30000,
+          "directionDeg": 250,
+          "speedKt": 25,
+          "temperatureC": -38,
+          "raw": "252538"
+        },
+        {
+          "altitudeFt": 34000,
+          "directionDeg": 260,
+          "speedKt": 22,
+          "temperatureC": -47,
+          "raw": "262247"
+        }
+      ]
+    },
+    {
+      "station": "IAH",
+      "rows": [
+        {
+          "altitudeFt": 3000,
+          "directionDeg": 150,
+          "speedKt": 8,
+          "temperatureC": null,
+          "raw": "1508"
+        },
+        {
+          "altitudeFt": 6000,
+          "directionDeg": 160,
+          "speedKt": 10,
+          "temperatureC": 22,
+          "raw": "1610+22"
+        },
+        {
+          "altitudeFt": 9000,
+          "directionDeg": 170,
+          "speedKt": 12,
+          "temperatureC": 14,
+          "raw": "1712+14"
+        },
+        {
+          "altitudeFt": 12000,
+          "directionDeg": 180,
+          "speedKt": 15,
+          "temperatureC": 8,
+          "raw": "1815+08"
+        },
+        {
+          "altitudeFt": 18000,
+          "directionDeg": 220,
+          "speedKt": 18,
+          "temperatureC": -8,
+          "raw": "2218-08"
+        },
+        {
+          "altitudeFt": 24000,
+          "directionDeg": 240,
+          "speedKt": 22,
+          "temperatureC": -22,
+          "raw": "2422-22"
+        },
+        {
+          "altitudeFt": 30000,
+          "directionDeg": 250,
+          "speedKt": 25,
+          "temperatureC": -38,
+          "raw": "252538"
+        },
+        {
+          "altitudeFt": 34000,
+          "directionDeg": 260,
+          "speedKt": 22,
+          "temperatureC": -47,
+          "raw": "262247"
+        }
+      ]
+    },
+    {
+      "station": "SAT",
+      "rows": [
+        {
+          "altitudeFt": 3000,
+          "directionDeg": 150,
+          "speedKt": 8,
+          "temperatureC": null,
+          "raw": "1508"
+        },
+        {
+          "altitudeFt": 6000,
+          "directionDeg": 160,
+          "speedKt": 10,
+          "temperatureC": 22,
+          "raw": "1610+22"
+        },
+        {
+          "altitudeFt": 9000,
+          "directionDeg": 170,
+          "speedKt": 12,
+          "temperatureC": 14,
+          "raw": "1712+14"
+        },
+        {
+          "altitudeFt": 12000,
+          "directionDeg": 180,
+          "speedKt": 15,
+          "temperatureC": 8,
+          "raw": "1815+08"
+        },
+        {
+          "altitudeFt": 18000,
+          "directionDeg": 220,
+          "speedKt": 18,
+          "temperatureC": -8,
+          "raw": "2218-08"
+        },
+        {
+          "altitudeFt": 24000,
+          "directionDeg": 240,
+          "speedKt": 22,
+          "temperatureC": -22,
+          "raw": "2422-22"
+        },
+        {
+          "altitudeFt": 30000,
+          "directionDeg": 250,
+          "speedKt": 25,
+          "temperatureC": -38,
+          "raw": "252538"
+        },
+        {
+          "altitudeFt": 34000,
+          "directionDeg": 260,
+          "speedKt": 22,
+          "temperatureC": -47,
+          "raw": "262247"
+        }
+      ]
+    },
+    {
+      "station": "CLL",
+      "rows": [
+        {
+          "altitudeFt": 3000,
+          "directionDeg": 150,
+          "speedKt": 8,
+          "temperatureC": null,
+          "raw": "1508"
+        },
+        {
+          "altitudeFt": 6000,
+          "directionDeg": 160,
+          "speedKt": 10,
+          "temperatureC": 22,
+          "raw": "1610+22"
+        },
+        {
+          "altitudeFt": 9000,
+          "directionDeg": 170,
+          "speedKt": 12,
+          "temperatureC": 14,
+          "raw": "1712+14"
+        },
+        {
+          "altitudeFt": 12000,
+          "directionDeg": 180,
+          "speedKt": 15,
+          "temperatureC": 8,
+          "raw": "1815+08"
+        },
+        {
+          "altitudeFt": 18000,
+          "directionDeg": 220,
+          "speedKt": 18,
+          "temperatureC": -8,
+          "raw": "2218-08"
+        },
+        {
+          "altitudeFt": 24000,
+          "directionDeg": 240,
+          "speedKt": 22,
+          "temperatureC": -22,
+          "raw": "2422-22"
+        },
+        {
+          "altitudeFt": 30000,
+          "directionDeg": 250,
+          "speedKt": 25,
+          "temperatureC": -38,
+          "raw": "252538"
+        },
+        {
+          "altitudeFt": 34000,
+          "directionDeg": 260,
+          "speedKt": 22,
+          "temperatureC": -47,
+          "raw": "262247"
+        }
+      ]
+    },
+    {
+      "station": "CRP",
+      "rows": [
+        {
+          "altitudeFt": 3000,
+          "directionDeg": 150,
+          "speedKt": 8,
+          "temperatureC": null,
+          "raw": "1508"
+        },
+        {
+          "altitudeFt": 6000,
+          "directionDeg": 160,
+          "speedKt": 10,
+          "temperatureC": 22,
+          "raw": "1610+22"
+        },
+        {
+          "altitudeFt": 9000,
+          "directionDeg": 170,
+          "speedKt": 12,
+          "temperatureC": 14,
+          "raw": "1712+14"
+        },
+        {
+          "altitudeFt": 12000,
+          "directionDeg": 180,
+          "speedKt": 15,
+          "temperatureC": 8,
+          "raw": "1815+08"
+        },
+        {
+          "altitudeFt": 18000,
+          "directionDeg": 220,
+          "speedKt": 18,
+          "temperatureC": -8,
+          "raw": "2218-08"
+        },
+        {
+          "altitudeFt": 24000,
+          "directionDeg": 240,
+          "speedKt": 22,
+          "temperatureC": -22,
+          "raw": "2422-22"
+        },
+        {
+          "altitudeFt": 30000,
+          "directionDeg": 250,
+          "speedKt": 25,
+          "temperatureC": -38,
+          "raw": "252538"
+        },
+        {
+          "altitudeFt": 34000,
+          "directionDeg": 260,
+          "speedKt": 22,
+          "temperatureC": -47,
+          "raw": "262247"
+        }
+      ]
+    }
+  ],
+  "warnings": []
+}

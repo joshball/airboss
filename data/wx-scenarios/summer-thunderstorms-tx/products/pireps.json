@@ -1,0 +1,170 @@
+[
+  {
+    "station": "KAUS",
+    "kind": "UUA",
+    "location": {
+      "raw": "AUS110020",
+      "station": "AUS",
+      "radialDeg": 110,
+      "distanceNm": 20
+    },
+    "timeHhmmZ": 2030,
+    "altitudeFt": 9000,
+    "aircraftType": "B738",
+    "skyCover": [
+      {
+        "cover": "BKN",
+        "baseFt": 4000,
+        "topFt": null
+      },
+      {
+        "cover": "OVC",
+        "baseFt": 10000,
+        "topFt": null
+      }
+    ],
+    "weather": [
+      "TSRA"
+    ],
+    "temperatureC": null,
+    "wind": null,
+    "turbulence": {
+      "intensity": "MOD",
+      "altitudeBandFt": {
+        "min": 7000,
+        "max": 11000
+      },
+      "raw": "MOD 070-110"
+    },
+    "icing": null,
+    "remarks": "HVY PRECIP NEAR CELL",
+    "raw": "KAUS UUA /OV AUS110020/TM 2030/FL090/TP B738/TB MOD 070-110/SK BKN040 OVC100/WX TSRA/RM HVY PRECIP NEAR CELL",
+    "warnings": []
+  },
+  {
+    "station": "KCLL",
+    "kind": "UUA",
+    "location": {
+      "raw": "CLL190033",
+      "station": "CLL",
+      "radialDeg": 190,
+      "distanceNm": 33
+    },
+    "timeHhmmZ": 2035,
+    "altitudeFt": 9000,
+    "aircraftType": "B738",
+    "skyCover": [
+      {
+        "cover": "BKN",
+        "baseFt": 4000,
+        "topFt": null
+      },
+      {
+        "cover": "OVC",
+        "baseFt": 10000,
+        "topFt": null
+      }
+    ],
+    "weather": [
+      "TSRA"
+    ],
+    "temperatureC": null,
+    "wind": null,
+    "turbulence": {
+      "intensity": "MOD",
+      "altitudeBandFt": {
+        "min": 7000,
+        "max": 11000
+      },
+      "raw": "MOD 070-110"
+    },
+    "icing": null,
+    "remarks": "HVY PRECIP NEAR CELL",
+    "raw": "KCLL UUA /OV CLL190033/TM 2035/FL090/TP B738/TB MOD 070-110/SK BKN040 OVC100/WX TSRA/RM HVY PRECIP NEAR CELL",
+    "warnings": []
+  },
+  {
+    "station": "KCLL",
+    "kind": "UUA",
+    "location": {
+      "raw": "CLL160009",
+      "station": "CLL",
+      "radialDeg": 160,
+      "distanceNm": 9
+    },
+    "timeHhmmZ": 2040,
+    "altitudeFt": 9000,
+    "aircraftType": "B738",
+    "skyCover": [
+      {
+        "cover": "BKN",
+        "baseFt": 4000,
+        "topFt": null
+      },
+      {
+        "cover": "OVC",
+        "baseFt": 10000,
+        "topFt": null
+      }
+    ],
+    "weather": [
+      "TSRA"
+    ],
+    "temperatureC": null,
+    "wind": null,
+    "turbulence": {
+      "intensity": "MOD",
+      "altitudeBandFt": {
+        "min": 7000,
+        "max": 11000
+      },
+      "raw": "MOD 070-110"
+    },
+    "icing": null,
+    "remarks": "HVY PRECIP NEAR CELL",
+    "raw": "KCLL UUA /OV CLL160009/TM 2040/FL090/TP B738/TB MOD 070-110/SK BKN040 OVC100/WX TSRA/RM HVY PRECIP NEAR CELL",
+    "warnings": []
+  },
+  {
+    "station": "KIAH",
+    "kind": "UUA",
+    "location": {
+      "raw": "IAH200012",
+      "station": "IAH",
+      "radialDeg": 200,
+      "distanceNm": 12
+    },
+    "timeHhmmZ": 2045,
+    "altitudeFt": 9000,
+    "aircraftType": "B738",
+    "skyCover": [
+      {
+        "cover": "BKN",
+        "baseFt": 4000,
+        "topFt": null
+      },
+      {
+        "cover": "OVC",
+        "baseFt": 10000,
+        "topFt": null
+      }
+    ],
+    "weather": [
+      "TSRA"
+    ],
+    "temperatureC": null,
+    "wind": null,
+    "turbulence": {
+      "intensity": "MOD",
+      "altitudeBandFt": {
+        "min": 7000,
+        "max": 11000
+      },
+      "raw": "MOD 070-110"
+    },
+    "icing": null,
+    "remarks": "HVY PRECIP NEAR CELL",
+    "raw": "KIAH UUA /OV IAH200012/TM 2045/FL090/TP B738/TB MOD 070-110/SK BKN040 OVC100/WX TSRA/RM HVY PRECIP NEAR CELL",
+    "warnings": []
+  }
+]

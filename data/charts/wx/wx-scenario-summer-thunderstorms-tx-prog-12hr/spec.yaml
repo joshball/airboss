@@ -1,0 +1,22 @@
+slug: wx-scenario-summer-thunderstorms-tx-prog-12hr
+type: prog-chart
+title: 12hr Prog (truth-derived)
+subtitle: Forecast valid 2026-07-16T09:00:00.000Z -- evolved from 2026-07-15T21:00:00Z
+projection:
+  kind: lambert
+  parallels:
+    - 33
+    - 45
+  rotate:
+    - -96
+    - -39
+extent: conus
+sources:
+  forecast: cache://scenarios/summer-thunderstorms-tx/prog-12hr.json
+options:
+  isobar_interval_mb: 4
+  emphasize_every_mb: 8
+  show_h_l_markers: true
+  show_hazards: true
+  show_legend: true
+  source_attribution: wx-engine -- truth-derived synthetic forecast
