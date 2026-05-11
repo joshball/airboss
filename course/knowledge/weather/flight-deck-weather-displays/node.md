@@ -172,7 +172,7 @@ is the operational rule the NTSB makes explicit.
     the cell actually is. A "gap" 3 NM wide on the display can close
     completely before you fly through it. This is the mechanism behind the
     canonical NEXRAD-induced thunderstorm penetration accident.
-  cardType: calculation
+  cardType: basic
   kind: calculation
   tags: [weather, flight-deck-displays, nexrad, thunderstorm, latency, PA.I.C.K4]
   source_ref: |

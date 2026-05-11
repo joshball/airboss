@@ -158,7 +158,7 @@ profile to the encoded METAR group.
     A 20/15 spread says 1,000 ft AGL bases; a 20/10 spread says ~2,500 ft;
     a 20/-2 spread says clear skies / dry column. Reliable to about 500 ft
     in unstable air, 1,000 ft in stable air.
-  cardType: calculation
+  cardType: basic
   kind: calculation
   tags: [weather, clouds, lcl, dew-point-spread, ac-00-6, PA.I.C.K3c]
   source_ref: |
@@ -170,7 +170,7 @@ profile to the encoded METAR group.
     LCL_AGL ≈ 2 / 4.4 = 0.45 thousand ft ≈ 450 ft AGL.
     Expect bases to form by ~500 ft on slight surface heating. The body's
     Context scenario: small spread + sun heating = stratus by climb-out.
-  cardType: calculation
+  cardType: basic
   kind: calculation
   tags: [weather, clouds, lcl, calculation, PA.I.C.K3c]
   source_ref: |

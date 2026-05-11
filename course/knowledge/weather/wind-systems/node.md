@@ -159,7 +159,7 @@ brief.
     15 deg ~= 25% cross, 45 deg ~= 70% cross. Tailwind / headwind
     components run the other axis. The mental rule is good to within a
     couple of knots for most operational wind speeds.
-  cardType: calculation
+  cardType: basic
   kind: calculation
   tags: [weather, wind, crosswind, mental-model, faa-h-8083-28, PA.I.C.K3b]
   source_ref: |
@@ -172,7 +172,7 @@ brief.
     Headwind component = 18 * cos(30) = 18 * 0.87 = ~15.6 KT.
     9 KT crosswind from the left of Runway 30. Within most light-aircraft
     demonstrated crosswind limits.
-  cardType: calculation
+  cardType: basic
   kind: calculation
   tags: [weather, wind, crosswind, calculation, PA.I.C.K3b]
   source_ref: |

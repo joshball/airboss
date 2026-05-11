@@ -208,7 +208,7 @@ thrust / less HP).
     PA = 6,752 + (-0.18) x 1,000
     PA = 6,752 - 180 = 6,572 ft.
     Higher-than-standard pressure means PA is *lower* than field elevation.
-  cardType: calculation
+  cardType: basic
   kind: calculation
   tags: [weather, density-altitude, pressure-altitude, calculation, phak-11]
   source_ref: |
@@ -220,7 +220,7 @@ thrust / less HP).
     ISA = 15 - 2 x 6.572
     ISA = 15 - 13.1 = 1.9 deg C.
     Standard atmosphere: 15 deg C at sea level, lapse 2 deg C per 1,000 ft.
-  cardType: calculation
+  cardType: basic
   kind: calculation
   tags: [weather, density-altitude, isa, calculation, phak-11]
   source_ref: |
@@ -234,7 +234,7 @@ thrust / less HP).
     DA = PA + 120 x deviation = 6,572 + 120 x 33.6 = 6,572 + 4,032 = 10,604 ft.
     The airplane "thinks" the runway is at over 10,000 ft -- on a 4,500 ft
     runway at gross, this is a no-go without changing loading or time of day.
-  cardType: calculation
+  cardType: basic
   kind: calculation
   tags: [weather, density-altitude, calculation, go-nogo, phak-11, aim-7-5-6]
   source_ref: |
@@ -315,7 +315,7 @@ thrust / less HP).
     Deviation = 30 - 3 = 27 deg C above ISA.
     DA = 6,000 + 120 x 27 = 6,000 + 3,240 = 9,240 ft.
     The airplane thinks the runway is at ~9,200 ft. Body example.
-  cardType: calculation
+  cardType: basic
   kind: calculation
   tags: [weather, density-altitude, calculation, rule-of-thumb, phak-11]
   source_ref: |

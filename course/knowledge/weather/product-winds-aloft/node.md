@@ -161,7 +161,7 @@ altitude selection.
     Speed: 19 + 100 = 119 KT.
     Temperature: 60 is implicitly negative above 24,000 ft -> -60 C.
     Final: 230 at 119 KT, -60 C.
-  cardType: calculation
+  cardType: basic
   kind: calculation
   tags: [weather, fb, winds-aloft, decode, ac-00-45h, PA.I.C.K2e]
   source_ref: |
@@ -216,7 +216,7 @@ altitude selection.
     250 deg true at 45 KT, +5 C. Standard decoding (speed < 100 KT, below
     24,000 ft): direction = 25 (250 deg true, in tens of degrees);
     speed = 45 KT; temperature explicit-sign = +5 C.
-  cardType: calculation
+  cardType: basic
   kind: calculation
   tags: [weather, fb, winds-aloft, decode, calculation, ac-00-45h, PA.I.C.K2e]
   source_ref: |
@@ -261,7 +261,7 @@ altitude selection.
     crosswind, ~half tailwind. Tailwind component ~= 30 * cos(50) =
     ~19 KT, giving ground speed ~115 + 19 = ~134 KT. Body says ~140 KT;
     the rough mental math is in the ballpark.
-  cardType: calculation
+  cardType: basic
   kind: calculation
   tags: [weather, fb, winds-aloft, ground-speed, calculation, PA.I.C.K2e]
   source_ref: |
