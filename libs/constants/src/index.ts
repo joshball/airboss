@@ -830,7 +830,10 @@ export {
 	AIRMET_FAMILY_VALUES,
 	type AirmetFamily,
 	WX_SCENARIO_LABELS,
+	WX_SCENARIO_SUBCOMMAND_VALUES,
+	WX_SCENARIO_SUBCOMMANDS,
 	WX_SCENARIO_VALUES,
 	WX_SCENARIOS,
 	type WxScenario,
+	type WxScenarioSubcommand,
 } from './wx-engine';
