@@ -140,6 +140,167 @@ question is really "what's the planning horizon?" An outlook briefing
 for tomorrow; a standard for today's afternoon flight; an abbreviated
 to update a brief from this morning before a 1500L departure.
 
+### Cards (spaced repetition)
+
+Cards mined from the body. The briefing-types cards lock in
+horizon-to-type mapping; the eight-bucket cards train the procedural
+walk; the outputs cards anchor the bridge to go/no-go.
+
+```yaml-cards
+- front: "Standard briefing per AIM 7-1-4: when do you request one and what does it include?"
+  back: |
+    Request a standard briefing for an imminent flight (within the next 6
+    hours). Includes adverse conditions, synopsis, current conditions, en
+    route forecast, destination forecast, winds aloft, NOTAMs, and ATC
+    delays. The full eight-bucket brief.
+  cardType: basic
+  kind: recall
+  tags: [weather, briefing, briefing-types, aim-7-1-4, PA.I.C.S1]
+  source_ref: |
+    AIM 7-1-4 Preflight Briefing; body Discover.
+
+- front: "Outlook briefing per AIM 7-1-4: when do you request one, and what does it omit?"
+  back: |
+    Request an outlook briefing for a flight more than 6 hours out (next-day
+    planning is the canonical case). No current conditions -- just the
+    forecast picture. Use it to shape tomorrow's plan; follow with a
+    standard or abbreviated brief closer to launch.
+  cardType: basic
+  kind: recall
+  tags: [weather, briefing, briefing-types, aim-7-1-4, PA.I.C.S1]
+  source_ref: |
+    AIM 7-1-4; body Discover.
+
+- front: "Abbreviated briefing per AIM 7-1-4: when does it apply?"
+  back: |
+    An abbreviated briefing is an update to a previously obtained standard
+    briefing, or fills in one or two specific gaps. Faster than a full
+    standard brief; assumes prior context. Typical use: standard brief in
+    the morning, abbreviated update before a 1500L departure.
+  cardType: basic
+  kind: recall
+  tags: [weather, briefing, briefing-types, aim-7-1-4, PA.I.C.S1]
+  source_ref: |
+    AIM 7-1-4; body Discover and Practice.
+
+- front: "Name the eight buckets of a standard weather briefing in order."
+  back: |
+    1. Adverse conditions (convective outlook, AIRMETs, SIGMETs, Convective
+       SIGMETs, TFRs).
+    2. Synopsis (surface analysis -- fronts, highs, lows).
+    3. Current conditions (METARs along route + destination; PIREPs).
+    4. En route forecast (GFA scrubbed to ETA, layered on route).
+    5. Destination forecast (TAF for destination + alternate).
+    6. Winds aloft (FB at planned cruise altitude).
+    7. NOTAMs (airport, FDC, GPS).
+    8. ATC delays (Center / TRACON / TFR notes).
+    Same order on a Flight Service phone brief; walking the briefer through
+    once and the brief flows.
+  cardType: basic
+  kind: recall
+  tags: [weather, briefing, procedure, aim-7-1-4, PA.I.C.S1]
+  source_ref: |
+    AIM 7-1-4; body Discover (self-brief procedure).
+  rationale: |
+    The body's procedural anchor. Memorising the eight-bucket order is what
+    turns a glance into a brief.
+
+- front: "What does 14 CFR 91.103 require for preflight weather action on a flight not in the vicinity of the airport?"
+  back: |
+    All available information concerning that flight. For any flight not in
+    the vicinity of the airport, this includes: weather reports and forecasts,
+    fuel requirements, alternatives if the flight cannot be completed as
+    planned, and any known traffic delays. The eight-bucket brief covers
+    most of the weather + delays; fuel + alternatives come from nav planning.
+  cardType: regulation
+  kind: recall
+  tags: [weather, briefing, regulation, cfr-91, PA.I.C.S1]
+  source_ref: |
+    14 CFR 91.103 Preflight Action; body Reveal.
+
+- front: "Three written outputs a good brief produces?"
+  back: |
+    1. The route's forecast picture, in order.
+    2. A go / delay / divert / no-go plan with explicit triggers.
+    3. Personal-minimums comparison: which numbers in the brief are inside
+       or outside your written floor.
+    Output #3 is the bridge to the personal-minimums and go/no-go nodes --
+    the brief that doesn't get compared to personal mins isn't done.
+  cardType: basic
+  kind: recall
+  tags: [weather, briefing, go-nogo, personal-minimums, PA.I.C.S1]
+  source_ref: |
+    Body Reveal "three written outputs."
+
+- front: "Why is a weather brief a procedure, not a glance?"
+  back: |
+    A glance catches the headline (VFR / IFR right now). The procedure catches
+    the hazards a glance misses: forecast deterioration outside the destination
+    TAF window, an AIRMET running perpendicular to the route, a freezing level
+    that drops across a frontal boundary at the altitude that becomes IFR on
+    the back side. The pilot who runs the procedure consistently briefs
+    catches these. Procedure beats vibes.
+  cardType: basic
+  kind: recall
+  tags: [weather, briefing, judgment, PA.I.C.S1]
+  source_ref: |
+    Body Problem.
+
+- front: "Phone briefing: what's the number and what's the operational expectation?"
+  back: |
+    1-800-WX-BRIEF (or 1800wxbrief.com). Flight Service walks you through the
+    same eight buckets in the same order as the self-brief. Give the briefer
+    your route once and the brief flows -- the briefer is delivering the
+    AIM 7-1-4 structure, the pilot is consuming it.
+  cardType: basic
+  kind: recall
+  tags: [weather, briefing, flight-service, aim-7-1-4, PA.I.C.S1]
+  source_ref: |
+    AIM 7-1-4; body Discover (phone briefing).
+
+- front: "Tomorrow morning's flight. ForeFlight METAR strip and TAF show VFR all day. The CFI asks 'what's the freezing level along your route at cruise?' Why was the brief incomplete even though the products were checked?"
+  back: |
+    A METAR/TAF glance covers two of the eight buckets (current conditions
+    and destination forecast). It does not cover en route forecast (which is
+    where the freezing level comes from -- GFA/winds aloft), adverse conditions
+    (AIRMET-ZULU for icing), synopsis (front position relative to ETA), winds
+    aloft, NOTAMs, or ATC delays. The brief was incomplete because the
+    procedure wasn't run -- not because the products were unavailable.
+  cardType: basic
+  kind: recall
+  tags: [weather, briefing, freezing-level, procedure, PA.I.C.S1]
+  source_ref: |
+    Body Context scenario; AIM 7-1-4.
+  rationale: |
+    Scenario card built from the body's Context. Trains the procedural
+    discipline by showing what a glance misses.
+
+- front: "Examiner: 'It's Tuesday afternoon. You're planning a flight for Saturday morning. What briefing do you request?'"
+  back: |
+    Outlook briefing. The planning horizon (Saturday morning from Tuesday
+    afternoon) is more than 6 hours out; outlook delivers the forecast
+    picture without current conditions, appropriate for next-day or
+    multi-day-out planning. Run a standard briefing closer to launch.
+  cardType: basic
+  kind: recall
+  tags: [weather, briefing, briefing-types, aim-7-1-4, PA.I.C.S1]
+  source_ref: |
+    AIM 7-1-4; body Practice ("briefing-types element on the checkride").
+
+- front: "Why does a self-brief on aviationweather.gov + an EFB get faster with reps?"
+  back: |
+    The first time the eight-bucket procedure takes 25-30 minutes; the fifth
+    time, 12-15. The buckets become automatic -- the pilot stops navigating
+    menus and starts consuming products in order. The discipline is repetition
+    until the buckets are reflexive, which is what frees the pilot's attention
+    for *interpretation* during the brief instead of mechanics.
+  cardType: basic
+  kind: recall
+  tags: [weather, briefing, procedure, PA.I.C.S1]
+  source_ref: |
+    Body Practice ("Time it. The first time it'll take 25-30 minutes...").
+```
+
 ## Connect
 
 This node serves S1 directly: the skill is "use available aviation

@@ -143,6 +143,156 @@ freezing level. Any time the freezing level is within 4,000 ft of
 your cruise altitude in precipitation, icing is the active question
 to brief.
 
+### Cards (spaced repetition)
+
+Cards mined from the body. LCL calculation cards build the cloud-base
+estimate; cloud-family and morphology cards lock in the diagnostic
+vocabulary; the precipitation-type cards tie clouds + temperature
+profile to the encoded METAR group.
+
+```yaml-cards
+- front: "Cloud base from temperature/dew point spread -- what's the rule of thumb?"
+  back: |
+    LCL_AGL (in thousands of feet) ≈ (T - Td) / 4.4, with T and Td in
+    deg C. Memorably: each 4-5 deg C of spread is ~1,000 ft to cloud base.
+    A 20/15 spread says 1,000 ft AGL bases; a 20/10 spread says ~2,500 ft;
+    a 20/-2 spread says clear skies / dry column. Reliable to about 500 ft
+    in unstable air, 1,000 ft in stable air.
+  cardType: calculation
+  kind: calculation
+  tags: [weather, clouds, lcl, dew-point-spread, ac-00-6, PA.I.C.K3c]
+  source_ref: |
+    AC 00-6B moisture chapter; body Discover.
+
+- front: "Estimate cloud base AGL. Surface temperature 20 deg C, dew point 18 deg C."
+  back: |
+    Spread = 20 - 18 = 2 deg C.
+    LCL_AGL ≈ 2 / 4.4 = 0.45 thousand ft ≈ 450 ft AGL.
+    Expect bases to form by ~500 ft on slight surface heating. The body's
+    Context scenario: small spread + sun heating = stratus by climb-out.
+  cardType: calculation
+  kind: calculation
+  tags: [weather, clouds, lcl, calculation, PA.I.C.K3c]
+  source_ref: |
+    Body Context scenario + Discover formula.
+
+- front: "Adiabatic lapse rates: dry vs moist, and where does the transition happen?"
+  back: |
+    Dry adiabatic rate: ~3 deg C per 1,000 ft as a parcel rises before
+    saturation. Moist adiabatic rate: ~1.5-2.5 deg C per 1,000 ft after
+    saturation, depending on temperature (warmer air -> slower cooling
+    because more latent heat is released). Transition happens at the
+    LCL -- the altitude where parcel temperature equals dew point.
+  cardType: basic
+  kind: recall
+  tags: [weather, clouds, lapse-rate, adiabatic, ac-00-6, PA.I.C.K3c]
+  source_ref: |
+    AC 00-6B moisture/clouds; body Discover.
+
+- front: "Four cloud families by altitude, with examples and pilot relevance."
+  back: |
+    High (above 20,000 ft): cirrus, cirrostratus, cirrocumulus -- ice
+    crystals, non-threatening on their own.
+    Middle (6,500-20,000 ft): altostratus, altocumulus -- mixed-phase,
+    mild icing risk in altostratus, mostly visual indicator.
+    Low (below 6,500 ft): stratus, stratocumulus, nimbostratus -- liquid
+    water below freezing level, major IFR / icing source.
+    Vertical development (any altitude): cumulus, towering cumulus,
+    cumulonimbus -- convective; turbulence + icing + lightning + hail.
+  cardType: basic
+  kind: recall
+  tags: [weather, clouds, classification, phak-12, ac-00-6, PA.I.C.K3f]
+  source_ref: |
+    AC 00-6B; PHAK Ch 12; body Discover.
+
+- front: "Cloud morphology as a diagnostic for atmospheric stability -- what does each form signal?"
+  back: |
+    Stratus = stable air (smooth, layered, no vertical development).
+    Cumulus = unstable air (puffy, vertical buildup, fair-weather convection).
+    Towering cumulus = strongly unstable column.
+    Cumulonimbus = the unstable column has reached the tropopause; the
+    full thunderstorm.
+    Reading sky form gives you the parent stability state without needing
+    a sounding.
+  cardType: basic
+  kind: recall
+  tags: [weather, clouds, stability, diagnostic, ac-00-6, PA.I.C.K3a, PA.I.C.K3f]
+  source_ref: |
+    AC 00-6B; body Discover ("morphology is diagnostic").
+
+- front: "Why is freezing rain (FZRA) the most dangerous icing scenario in GA?"
+  back: |
+    FZRA is rain falling through a sub-freezing surface layer and refreezing
+    on impact. A warm layer aloft (rain forms) sits over a cold layer below
+    (refreezing). It produces supercooled large droplets (SLD) that hit the
+    airframe in flight and freeze instantly across surfaces certification
+    icing protection doesn't cover. The ATR-72 Roselawn accident made this
+    the canonical "warm-aloft / cold-below" trap.
+  cardType: basic
+  kind: recall
+  tags: [weather, precipitation, freezing-rain, icing, sld, ac-00-6, PA.I.C.K3d, PA.I.C.K3i]
+  source_ref: |
+    AC 00-6B precipitation chapter; body Reveal.
+
+- front: "Decode precipitation types from a METAR: DZ, RA, FZRA, SN, PL, GR."
+  back: |
+    DZ = drizzle (tiny droplets from low stratus / stratocumulus).
+    RA = rain (liquid drops; stratiform or convective).
+    FZRA = freezing rain (rain through sub-freezing surface layer; SLD risk).
+    SN = snow (ice crystals all the way down; surface at or below freezing).
+    PL (or IP) = ice pellets (rain that froze before reaching surface;
+       evidence of sub-freezing surface with warm aloft).
+    GR = hail (convective; hailstones cycle through updraft accreting layers).
+  cardType: basic
+  kind: recall
+  tags: [weather, precipitation, metar, ac-00-45h, PA.I.C.K3d]
+  source_ref: |
+    AC 00-6B; AC 00-45H weather phenomena; body Reveal.
+
+- front: "Precipitation intensity prefixes in a METAR weather group?"
+  back: |
+    `-` = light, no prefix = moderate, `+` = heavy. So `-RA` is light rain,
+    `RA` is moderate, `+RA` is heavy. A `+TSRA` is a heavy thunderstorm
+    with rain -- operational signal for "stay clear, expect violent IMC."
+  cardType: basic
+  kind: recall
+  tags: [weather, precipitation, metar, intensity, ac-00-45h, PA.I.C.K3d]
+  source_ref: |
+    AC 00-45H METAR weather group; body Reveal.
+
+- front: "Why does snow drop visibility faster than rain at the same nominal intensity?"
+  back: |
+    Light rain typically drops vis to 4-6 SM; light snow can already be
+    1-2 SM. Moderate rain to 2-3 SM; moderate snow under 1 SM. Heavy rain
+    under 1 SM; heavy snow near zero. Snow crystals scatter light more
+    efficiently per unit precipitation rate than liquid droplets. A snow
+    METAR demands a sharper visibility check than a same-intensity rain
+    METAR.
+  cardType: basic
+  kind: recall
+  tags: [weather, precipitation, visibility, snow, ac-00-6, PA.I.C.K3d, PA.I.C.K3l]
+  source_ref: |
+    AC 00-6B; body Reveal visibility table.
+
+- front: "A METAR shows scattered cumulus at 4,000 ft and -SHRA. What does the cloud + precipitation pair tell you about the parent stability state?"
+  back: |
+    Cumulus = unstable. Showery rain (SHRA) requires a convective lifting
+    mechanism, which requires unstable air. The pair confirms an unstable
+    layer somewhere in the column below the LCL of the cumulus. Compare to
+    `BKN015 RA` (stratus + steady rain = stable stratiform lift). Reading
+    the cloud + precipitation pair backward to the stability state is the
+    chain-test the body recommends.
+  cardType: basic
+  kind: recall
+  tags: [weather, clouds, precipitation, stability, metar, PA.I.C.K3a, PA.I.C.K3d, PA.I.C.K3f]
+  source_ref: |
+    Body Verify ("METAR -> clouds -> stability is the inverse...").
+  rationale: |
+    Scenario card that trains the reverse-direction read: from observation
+    back to atmospheric state. Tests the same understanding from the
+    opposite direction.
+```
+
 ## Connect
 
 This node is the parent of K3i (icing -- which is "freezing
