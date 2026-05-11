@@ -173,7 +173,8 @@ export const MOUNTAIN_WAVE_ROCKIES: TruthModel = {
 				[-106.5, 38],
 			],
 			altitudeBandFtMsl: { min: 0, max: 28000 },
-			source: 'Severe lee-wave turbulence column east of the Front Range -- amplified by the H-great-basin/L-lee-trough pressure gradient and the 95-kt jet axis',
+			source:
+				'Severe lee-wave turbulence column east of the Front Range -- amplified by the H-great-basin/L-lee-trough pressure gradient and the 95-kt jet axis',
 			severity: 'severe',
 		},
 		{
@@ -188,7 +189,8 @@ export const MOUNTAIN_WAVE_ROCKIES: TruthModel = {
 				[-106, 38.5],
 			],
 			altitudeBandFtMsl: { min: 5000, max: 12000 },
-			source: 'Moderate icing in the rotor cloud east of the divide -- supercooled drops trapped in the wave-driven rotor circulation',
+			source:
+				'Moderate icing in the rotor cloud east of the divide -- supercooled drops trapped in the wave-driven rotor circulation',
 			severity: 'moderate',
 		},
 		{
@@ -205,7 +207,8 @@ export const MOUNTAIN_WAVE_ROCKIES: TruthModel = {
 				[-110, 38],
 			],
 			altitudeBandFtMsl: { min: 0, max: 15000 },
-			source: 'Mountain obscuration in upwind mP air piling against the windward slopes of the Front Range -- light orographic stratus and snow showers',
+			source:
+				'Mountain obscuration in upwind mP air piling against the windward slopes of the Front Range -- light orographic stratus and snow showers',
 			severity: 'light',
 		},
 	],

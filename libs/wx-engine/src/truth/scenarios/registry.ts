@@ -15,11 +15,11 @@
 import { WX_SCENARIOS, type WxScenario } from '@ab/constants';
 import { truthModelSchema } from '../schema';
 import type { TruthModel } from '../types';
-import { FRONTAL_XC_MARCH } from './frontal-xc-march';
-import { SUMMER_THUNDERSTORMS_TX } from './summer-thunderstorms-tx';
 import { DENSE_FOG_RADIATION_CENTRAL_VALLEY } from './dense-fog-radiation-central-valley';
+import { FRONTAL_XC_MARCH } from './frontal-xc-march';
 import { MARINE_STRATUS_PACIFIC_NW } from './marine-stratus-pacific-nw';
 import { MOUNTAIN_WAVE_ROCKIES } from './mountain-wave-rockies';
+import { SUMMER_THUNDERSTORMS_TX } from './summer-thunderstorms-tx';
 import { WINTER_ICING_GREAT_LAKES } from './winter-icing-great-lakes';
 
 /**

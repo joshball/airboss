@@ -187,7 +187,8 @@ export const MARINE_STRATUS_PACIFIC_NW: TruthModel = {
 				[-123, 36.4],
 			],
 			altitudeBandFtMsl: { min: 0, max: 1500 },
-			source: 'IFR ceiling and visibility under the marine stratus deck trapped beneath the subsidence inversion over the coastal margin',
+			source:
+				'IFR ceiling and visibility under the marine stratus deck trapped beneath the subsidence inversion over the coastal margin',
 			severity: 'moderate',
 		},
 		{
@@ -204,7 +205,8 @@ export const MARINE_STRATUS_PACIFIC_NW: TruthModel = {
 				[-121.7, 36.4],
 			],
 			altitudeBandFtMsl: { min: 0, max: 4000 },
-			source: 'Mountain obscuration along the Coast Range -- marine stratus tops abut the ridge line at the upwind edge of the marine corridor',
+			source:
+				'Mountain obscuration along the Coast Range -- marine stratus tops abut the ridge line at the upwind edge of the marine corridor',
 			severity: 'moderate',
 		},
 	],

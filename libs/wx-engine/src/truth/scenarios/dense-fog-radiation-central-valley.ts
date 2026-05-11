@@ -188,7 +188,8 @@ export const DENSE_FOG_RADIATION_CENTRAL_VALLEY: TruthModel = {
 				[-121.5, 36.7],
 			],
 			altitudeBandFtMsl: { min: 0, max: 300 },
-			source: 'Dense radiation fog under the nocturnal surface inversion -- saturated boundary layer collapses to visibility under 1/2 SM until the post-noon mixing-height rise lifts the trapped layer',
+			source:
+				'Dense radiation fog under the nocturnal surface inversion -- saturated boundary layer collapses to visibility under 1/2 SM until the post-noon mixing-height rise lifts the trapped layer',
 			severity: 'severe',
 		},
 		{
@@ -206,7 +207,8 @@ export const DENSE_FOG_RADIATION_CENTRAL_VALLEY: TruthModel = {
 				[-120.9, 35.4],
 			],
 			altitudeBandFtMsl: { min: 0, max: 4000 },
-			source: 'Mountain obscuration along the Coast Range west of the Central Valley -- fog top abuts the ridge line; the upwind side stays in stratus',
+			source:
+				'Mountain obscuration along the Coast Range west of the Central Valley -- fog top abuts the ridge line; the upwind side stays in stratus',
 			severity: 'moderate',
 		},
 	],

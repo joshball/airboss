@@ -179,7 +179,8 @@ export const WINTER_ICING_GREAT_LAKES: TruthModel = {
 				[-82.5, 40.3],
 			],
 			altitudeBandFtMsl: { min: 0, max: 8000 },
-			source: 'Lake-effect band downwind of Lake Erie: cP air saturates over the still-warm lake; moderate rime in the freezing-drizzle column',
+			source:
+				'Lake-effect band downwind of Lake Erie: cP air saturates over the still-warm lake; moderate rime in the freezing-drizzle column',
 			severity: 'moderate',
 		},
 		{
@@ -195,7 +196,8 @@ export const WINTER_ICING_GREAT_LAKES: TruthModel = {
 				[-82.5, 40.3],
 			],
 			altitudeBandFtMsl: { min: 0, max: 1500 },
-			source: 'IFR ceiling and visibility in the lake-effect band -- BKN/OVC stratus with embedded freezing drizzle keeps ceilings near 500 ft AGL',
+			source:
+				'IFR ceiling and visibility in the lake-effect band -- BKN/OVC stratus with embedded freezing drizzle keeps ceilings near 500 ft AGL',
 			severity: 'moderate',
 		},
 		{
