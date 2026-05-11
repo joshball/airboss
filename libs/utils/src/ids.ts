@@ -1,4 +1,6 @@
 import {
+	ANNOTATION_ID_PREFIX,
+	CARD_DRAFT_ID_PREFIX,
 	CREDENTIAL_ID_PREFIX,
 	GOAL_ID_PREFIX,
 	NOTE_ID_PREFIX,
@@ -106,3 +108,10 @@ export const generateGoalId = (): string => createId(GOAL_ID_PREFIX);
 // Notes BC (wp-notes-primitive). One row per note; the markdown body
 // + context FKs + tags live on `study.note`.
 export const generateNoteId = (): string => createId(NOTE_ID_PREFIX);
+
+// Rich-reader annotations + card-drafts (wp-flightbag-rich-reader).
+// Annotation rows tie a passage anchor to a kind (highlight / note_anchor /
+// card_draft_anchor). Card-draft rows hold prefilled card content awaiting
+// the user's promote / discard decision in `/memory/drafts`.
+export const generateAnnotationId = (): string => createId(ANNOTATION_ID_PREFIX);
+export const generateCardDraftId = (): string => createId(CARD_DRAFT_ID_PREFIX);

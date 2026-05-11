@@ -17,6 +17,10 @@
 
 import { AUDIT_OPS, auditWrite } from '@ab/audit';
 import {
+	ANNOTATION_ANCHOR_TEXT_MAX_LENGTH,
+	ANNOTATION_CONTEXT_MAX_LENGTH,
+	ANNOTATION_KINDS,
+	ANNOTATION_OP_SUBKINDS,
 	AUDIT_TARGETS,
 	NOTE_BODY_MAX_LENGTH,
 	NOTE_EXCERPT_MAX_LENGTH,
@@ -36,12 +40,13 @@ import {
 // NOTES_SORT used by `sortColumn` / `applyCursor`.
 import { escapeLikePattern } from '@ab/db';
 import { db as defaultDb } from '@ab/db/connection';
-import { generateNoteId } from '@ab/utils';
+import type { TextAnchor } from '@ab/utils';
+import { generateAnnotationId, generateNoteId } from '@ab/utils';
 import { and, asc, desc, eq, ilike, isNotNull, isNull, lt, or, type SQL, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { z } from 'zod';
 import { encodeNotesCursor } from './notes-display';
-import { type NoteRow, note } from './schema';
+import { type NoteRow, note, type ReferenceSectionAnnotationRow, referenceSectionAnnotation } from './schema';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 
@@ -327,6 +332,113 @@ export async function createNote(userId: string, input: CreateNoteInput, db: Db 
 	);
 
 	return row;
+}
+
+/**
+ * Create a note AND its `study.reference_section_annotation` anchor row in
+ * one transaction (wp-flightbag-rich-reader Phase 5). The annotation's
+ * `kind = 'note_anchor'`; its `noteId` points back at the note.
+ *
+ * `input.referenceSectionId` is required: a note-anchor without a section
+ * has nothing to anchor to. Callers that want a freestanding note should
+ * use `createNote` directly.
+ */
+export async function createNoteWithAnchor(
+	userId: string,
+	sectionId: string,
+	anchor: TextAnchor,
+	input: CreateNoteInput,
+	db: Db = defaultDb,
+): Promise<{ note: NoteRow; annotation: ReferenceSectionAnnotationRow }> {
+	const parsedAnchor = z
+		.object({
+			text: z
+				.string()
+				.min(1, { message: 'Anchor text must not be empty.' })
+				.max(ANNOTATION_ANCHOR_TEXT_MAX_LENGTH, {
+					message: `Anchor text must be at most ${ANNOTATION_ANCHOR_TEXT_MAX_LENGTH} characters.`,
+				}),
+			start: z.number().int().nonnegative(),
+			end: z.number().int().nonnegative(),
+			prefix: z.string().max(ANNOTATION_CONTEXT_MAX_LENGTH).default(''),
+			suffix: z.string().max(ANNOTATION_CONTEXT_MAX_LENGTH).default(''),
+		})
+		.parse(anchor);
+
+	// Force the section context onto the note so the FK is consistent with
+	// the annotation row.
+	const noteInput: CreateNoteInput = { ...input, referenceSectionId: sectionId };
+	const parsed = createNoteInputSchema.parse(noteInput);
+
+	return await db.transaction(async (tx) => {
+		const noteId = generateNoteId();
+		const [noteRow] = await tx
+			.insert(note)
+			.values({
+				id: noteId,
+				userId,
+				bodyMd: parsed.bodyMd,
+				title: parsed.title,
+				quotedExcerpt: parsed.quotedExcerpt,
+				referenceId: parsed.referenceId,
+				referenceSectionId: parsed.referenceSectionId,
+				knowledgeNodeId: parsed.knowledgeNodeId,
+				courseId: parsed.courseId,
+				goalId: parsed.goalId,
+				syllabusNodeId: parsed.syllabusNodeId,
+				tags: parsed.tags,
+				followUpMd: parsed.followUpMd,
+			})
+			.returning();
+		if (!noteRow) throw new Error('createNoteWithAnchor: note insert returned no row');
+
+		await auditWrite(
+			{
+				actorId: userId,
+				op: AUDIT_OPS.CREATE,
+				targetType: AUDIT_TARGETS.NOTE,
+				targetId: noteRow.id,
+				before: null,
+				after: noteRow,
+			},
+			tx,
+		);
+
+		const annId = generateAnnotationId();
+		const [annRow] = await tx
+			.insert(referenceSectionAnnotation)
+			.values({
+				id: annId,
+				userId,
+				referenceSectionId: sectionId,
+				kind: ANNOTATION_KINDS.NOTE_ANCHOR,
+				color: null,
+				anchorText: parsedAnchor.text,
+				anchorStart: parsedAnchor.start,
+				anchorEnd: parsedAnchor.end,
+				prefixContext: parsedAnchor.prefix,
+				suffixContext: parsedAnchor.suffix,
+				noteId: noteRow.id,
+				cardDraftId: null,
+			})
+			.returning();
+		if (!annRow) throw new Error('createNoteWithAnchor: annotation insert returned no row');
+
+		await auditWrite(
+			{
+				actorId: userId,
+				op: AUDIT_OPS.CREATE,
+				targetType: AUDIT_TARGETS.ANNOTATION,
+				targetId: annRow.id,
+				before: null,
+				after: annRow,
+				metadata: { subKind: ANNOTATION_OP_SUBKINDS.NOTE_ANCHOR },
+			},
+			tx,
+		);
+
+		return { note: noteRow, annotation: annRow };
+	});
 }
 
 export async function updateNote(

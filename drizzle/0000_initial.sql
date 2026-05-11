@@ -96,6 +96,25 @@ CREATE TABLE "study"."card" (
 	CONSTRAINT "card_status_check" CHECK ("status" IN ('active', 'suspended', 'archived'))
 );
 --> statement-breakpoint
+CREATE TABLE "study"."card_draft" (
+	"id" text PRIMARY KEY NOT NULL,
+	"user_id" text NOT NULL,
+	"front" text DEFAULT '' NOT NULL,
+	"back" text DEFAULT '' NOT NULL,
+	"domain" text,
+	"card_type" text DEFAULT 'basic' NOT NULL,
+	"kind" text DEFAULT 'recall' NOT NULL,
+	"tags" text[] DEFAULT ARRAY[]::text[] NOT NULL,
+	"reference_section_id" text,
+	"knowledge_node_id" text,
+	"course_id" text,
+	"goal_id" text,
+	"promoted_to_card_id" text,
+	"promoted_at" timestamp with time zone,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE "study"."card_feedback" (
 	"id" text PRIMARY KEY NOT NULL,
 	"card_id" text NOT NULL,
@@ -415,6 +434,32 @@ CREATE TABLE "study"."reference_section" (
 	CONSTRAINT "reference_section_ordinal_check" CHECK ("ordinal" >= 0),
 	CONSTRAINT "reference_section_depth_check" CHECK ("depth" >= 0),
 	CONSTRAINT "reference_section_airboss_ref_shape_check" CHECK ("airboss_ref" ~ '^airboss-ref:')
+);
+--> statement-breakpoint
+CREATE TABLE "study"."reference_section_annotation" (
+	"id" text PRIMARY KEY NOT NULL,
+	"user_id" text NOT NULL,
+	"reference_section_id" text NOT NULL,
+	"kind" text NOT NULL,
+	"color" text,
+	"anchor_text" text NOT NULL,
+	"anchor_start" integer NOT NULL,
+	"anchor_end" integer NOT NULL,
+	"prefix_context" text DEFAULT '' NOT NULL,
+	"suffix_context" text DEFAULT '' NOT NULL,
+	"note_id" text,
+	"card_draft_id" text,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "reference_section_annotation_kind_check" CHECK ("kind" IN ('highlight', 'note_anchor', 'card_draft_anchor')),
+	CONSTRAINT "reference_section_annotation_color_check" CHECK ("color" IS NULL OR "color" IN ('yellow', 'blue', 'green', 'pink')),
+	CONSTRAINT "reference_section_annotation_highlight_color_required" CHECK (("kind" = 'highlight') = ("color" IS NOT NULL)),
+	CONSTRAINT "reference_section_annotation_note_anchor_requires_note" CHECK (("kind" = 'note_anchor') = ("note_id" IS NOT NULL)),
+	CONSTRAINT "reference_section_annotation_card_draft_anchor_requires_draft" CHECK (("kind" = 'card_draft_anchor') = ("card_draft_id" IS NOT NULL)),
+	CONSTRAINT "reference_section_annotation_anchor_text_length_check" CHECK (char_length("anchor_text") > 0 AND char_length("anchor_text") <= 1000),
+	CONSTRAINT "reference_section_annotation_prefix_context_length_check" CHECK (char_length("prefix_context") <= 256),
+	CONSTRAINT "reference_section_annotation_suffix_context_length_check" CHECK (char_length("suffix_context") <= 256),
+	CONSTRAINT "reference_section_annotation_anchor_range_check" CHECK ("anchor_start" >= 0 AND "anchor_end" >= "anchor_start")
 );
 --> statement-breakpoint
 CREATE TABLE "study"."reference_section_errata" (
@@ -993,6 +1038,10 @@ ALTER TABLE "bauth_session" ADD CONSTRAINT "bauth_session_user_id_bauth_user_id_
 ALTER TABLE "bauth_session" ADD CONSTRAINT "bauth_session_impersonated_by_bauth_user_id_fk" FOREIGN KEY ("impersonated_by") REFERENCES "public"."bauth_user"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."card" ADD CONSTRAINT "card_user_id_bauth_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."bauth_user"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE "study"."card" ADD CONSTRAINT "card_node_id_knowledge_node_id_fk" FOREIGN KEY ("node_id") REFERENCES "study"."knowledge_node"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "study"."card_draft" ADD CONSTRAINT "card_draft_user_id_bauth_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."bauth_user"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
+ALTER TABLE "study"."card_draft" ADD CONSTRAINT "card_draft_reference_section_id_reference_section_id_fk" FOREIGN KEY ("reference_section_id") REFERENCES "study"."reference_section"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "study"."card_draft" ADD CONSTRAINT "card_draft_course_id_course_id_fk" FOREIGN KEY ("course_id") REFERENCES "study"."course"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "study"."card_draft" ADD CONSTRAINT "card_draft_goal_id_goal_id_fk" FOREIGN KEY ("goal_id") REFERENCES "study"."goal"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."card_feedback" ADD CONSTRAINT "card_feedback_card_id_card_id_fk" FOREIGN KEY ("card_id") REFERENCES "study"."card"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE "study"."card_feedback" ADD CONSTRAINT "card_feedback_user_id_bauth_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."bauth_user"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE "study"."card_snooze" ADD CONSTRAINT "card_snooze_card_id_card_id_fk" FOREIGN KEY ("card_id") REFERENCES "study"."card"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
@@ -1027,6 +1076,10 @@ ALTER TABLE "study"."note" ADD CONSTRAINT "note_syllabus_node_id_syllabus_node_i
 ALTER TABLE "study"."reference_figure" ADD CONSTRAINT "reference_figure_section_id_reference_section_id_fk" FOREIGN KEY ("section_id") REFERENCES "study"."reference_section"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."reference_section" ADD CONSTRAINT "reference_section_reference_id_reference_id_fk" FOREIGN KEY ("reference_id") REFERENCES "study"."reference"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."reference_section" ADD CONSTRAINT "reference_section_parent_id_reference_section_id_fk" FOREIGN KEY ("parent_id") REFERENCES "study"."reference_section"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "study"."reference_section_annotation" ADD CONSTRAINT "reference_section_annotation_user_id_bauth_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."bauth_user"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
+ALTER TABLE "study"."reference_section_annotation" ADD CONSTRAINT "reference_section_annotation_reference_section_id_reference_section_id_fk" FOREIGN KEY ("reference_section_id") REFERENCES "study"."reference_section"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "study"."reference_section_annotation" ADD CONSTRAINT "reference_section_annotation_note_id_note_id_fk" FOREIGN KEY ("note_id") REFERENCES "study"."note"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "study"."reference_section_annotation" ADD CONSTRAINT "reference_section_annotation_card_draft_id_card_draft_id_fk" FOREIGN KEY ("card_draft_id") REFERENCES "study"."card_draft"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."reference_section_errata" ADD CONSTRAINT "reference_section_errata_section_id_reference_section_id_fk" FOREIGN KEY ("section_id") REFERENCES "study"."reference_section"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."reference_section_read_state" ADD CONSTRAINT "reference_section_read_state_user_id_bauth_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."bauth_user"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE "study"."reference_section_read_state" ADD CONSTRAINT "reference_section_read_state_reference_section_id_reference_section_id_fk" FOREIGN KEY ("reference_section_id") REFERENCES "study"."reference_section"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
@@ -1095,6 +1148,8 @@ CREATE INDEX "card_node_user_idx" ON "study"."card" USING btree ("node_id","user
 CREATE INDEX "card_front_trgm_idx" ON "study"."card" USING gin ("front" gin_trgm_ops);--> statement-breakpoint
 CREATE INDEX "card_back_trgm_idx" ON "study"."card" USING gin ("back" gin_trgm_ops);--> statement-breakpoint
 CREATE INDEX "card_user_kind_idx" ON "study"."card" USING btree ("user_id","kind");--> statement-breakpoint
+CREATE INDEX "card_draft_user_open_idx" ON "study"."card_draft" USING btree ("user_id","created_at") WHERE promoted_at IS NULL;--> statement-breakpoint
+CREATE INDEX "card_draft_user_idx" ON "study"."card_draft" USING btree ("user_id","created_at");--> statement-breakpoint
 CREATE INDEX "card_feedback_user_card_created_idx" ON "study"."card_feedback" USING btree ("user_id","card_id","created_at" desc);--> statement-breakpoint
 CREATE INDEX "card_snooze_user_card_idx" ON "study"."card_snooze" USING btree ("user_id","card_id");--> statement-breakpoint
 CREATE INDEX "card_snooze_user_reason_idx" ON "study"."card_snooze" USING btree ("user_id","reason","resolved_at");--> statement-breakpoint
@@ -1153,6 +1208,10 @@ CREATE INDEX "reference_section_tree_idx" ON "study"."reference_section" USING b
 CREATE INDEX "reference_section_depth_idx" ON "study"."reference_section" USING btree ("reference_id","depth","ordinal");--> statement-breakpoint
 CREATE INDEX "reference_section_readable_idx" ON "study"."reference_section" USING btree ("reference_id") WHERE "study"."reference_section"."content_md" <> '';--> statement-breakpoint
 CREATE INDEX "reference_section_airboss_ref_idx" ON "study"."reference_section" USING btree ("airboss_ref");--> statement-breakpoint
+CREATE INDEX "reference_section_annotation_user_section_idx" ON "study"."reference_section_annotation" USING btree ("user_id","reference_section_id");--> statement-breakpoint
+CREATE INDEX "reference_section_annotation_section_idx" ON "study"."reference_section_annotation" USING btree ("reference_section_id");--> statement-breakpoint
+CREATE INDEX "reference_section_annotation_user_kind_idx" ON "study"."reference_section_annotation" USING btree ("user_id","kind");--> statement-breakpoint
+CREATE INDEX "reference_section_annotation_user_created_idx" ON "study"."reference_section_annotation" USING btree ("user_id","created_at");--> statement-breakpoint
 CREATE UNIQUE INDEX "reference_section_errata_section_errata_idx" ON "study"."reference_section_errata" USING btree ("section_id","errata_id");--> statement-breakpoint
 CREATE INDEX "reference_section_errata_section_applied_idx" ON "study"."reference_section_errata" USING btree ("section_id","applied_at");--> statement-breakpoint
 CREATE INDEX "reference_section_read_state_user_status_idx" ON "study"."reference_section_read_state" USING btree ("user_id","status");--> statement-breakpoint

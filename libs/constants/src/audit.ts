@@ -120,6 +120,22 @@ export const AUDIT_TARGETS = {
 	 * split them without joining the row.
 	 */
 	NOTE: 'study.note',
+	/**
+	 * Per-row mutation on `study.reference_section_annotation`
+	 * (wp-flightbag-rich-reader). Highlights, note-anchors, and
+	 * card-draft-anchors all share this target type because they share the
+	 * underlying row schema. `metadata.subKind` carries the annotation
+	 * `kind` (`highlight` / `note_anchor` / `card_draft_anchor`) so a reader
+	 * can split the audit trail without joining the row.
+	 */
+	ANNOTATION: 'study.annotation',
+	/**
+	 * Per-row mutation on `study.card_draft` (wp-flightbag-rich-reader).
+	 * `targetId` is the draft id; `op` is one of create / update / delete;
+	 * `metadata.subKind` carries `promote` for the promotion event so the
+	 * audit reader can split the create/edit/promote/discard flows.
+	 */
+	CARD_DRAFT: 'study.card_draft',
 } as const;
 
 export type AuditTarget = (typeof AUDIT_TARGETS)[keyof typeof AUDIT_TARGETS];
@@ -267,6 +283,37 @@ export const NOTE_OP_SUBKINDS = {
 
 export type NoteOpSubkind = (typeof NOTE_OP_SUBKINDS)[keyof typeof NOTE_OP_SUBKINDS];
 export const NOTE_OP_SUBKIND_VALUES: readonly NoteOpSubkind[] = Object.values(NOTE_OP_SUBKINDS);
+
+/**
+ * Op-distinguishing sub-kind for `AUDIT_TARGETS.ANNOTATION` audit rows
+ * (wp-flightbag-rich-reader). The annotation `kind` (highlight / note-anchor /
+ * card-draft-anchor) lands in `metadata.subKind` so the audit reader can split
+ * highlight CRUD from note-anchor CRUD without joining the row.
+ */
+export const ANNOTATION_OP_SUBKINDS = {
+	HIGHLIGHT: 'highlight',
+	NOTE_ANCHOR: 'note_anchor',
+	CARD_DRAFT_ANCHOR: 'card_draft_anchor',
+	/** Color edited on an existing highlight. `op = update`. */
+	COLOR_CHANGE: 'color-change',
+} as const;
+
+export type AnnotationOpSubkind = (typeof ANNOTATION_OP_SUBKINDS)[keyof typeof ANNOTATION_OP_SUBKINDS];
+export const ANNOTATION_OP_SUBKIND_VALUES: readonly AnnotationOpSubkind[] = Object.values(ANNOTATION_OP_SUBKINDS);
+
+/**
+ * Op-distinguishing sub-kind for `AUDIT_TARGETS.CARD_DRAFT` audit rows
+ * (wp-flightbag-rich-reader). `promote` fires when a draft is converted into
+ * a real `study.card`; `discard` fires when the user dismisses a draft from
+ * the inbox. Plain edits use `op = update` with no subKind.
+ */
+export const CARD_DRAFT_OP_SUBKINDS = {
+	PROMOTE: 'promote',
+	DISCARD: 'discard',
+} as const;
+
+export type CardDraftOpSubkind = (typeof CARD_DRAFT_OP_SUBKINDS)[keyof typeof CARD_DRAFT_OP_SUBKINDS];
+export const CARD_DRAFT_OP_SUBKIND_VALUES: readonly CardDraftOpSubkind[] = Object.values(CARD_DRAFT_OP_SUBKINDS);
 
 /**
  * Default expiry on a freshly minted hangar invitation, in days. Matches

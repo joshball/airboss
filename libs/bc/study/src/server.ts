@@ -25,6 +25,34 @@
 // barrel because they bypass per-user actor scoping. See chunk-2 security
 // MAJOR finding in `docs/work/reviews/2026-05-01-study-bc-domain-security.md`.
 
+// Annotations BC -- highlights, note-anchors, card-draft-anchors, drafts
+// (wp-flightbag-rich-reader).
+export type {
+	CreateCardDraftInput,
+	CreateCardDraftParsed,
+	ListAnnotationsOpts,
+	ListDraftsOpts,
+	UpdateCardDraftInput,
+} from './annotations';
+export {
+	AnnotationNotFoundError,
+	CardDraftAlreadyPromotedError,
+	CardDraftNotFoundError,
+	createCardDraft,
+	createCardDraftInputSchema,
+	createHighlight,
+	deleteAnnotation,
+	discardCardDraft,
+	getCardDraft,
+	listAnnotationsForSection,
+	listAnnotationsForUser,
+	listHighlightsForSection,
+	listOpenCardDrafts,
+	promoteDraftToCard,
+	updateCardDraft,
+	updateCardDraftInputSchema,
+	updateHighlightColor,
+} from './annotations';
 // Advisories BC aggregator (one entry point for /library/advisories/* loaders).
 export type {
 	AdvisoriesBucketCard,
@@ -311,6 +339,7 @@ export {
 	clearFollowUp,
 	createNote,
 	createNoteInputSchema,
+	createNoteWithAnchor,
 	deleteNote,
 	getNote,
 	listDistinctTags,

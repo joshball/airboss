@@ -32,5 +32,10 @@ export type { ReferenceCardProps } from './ReferenceCard.svelte';
 export type { RenderedSectionFigure, RenderedSectionProps } from './RenderedSection.svelte';
 export type { SourceLinksProps } from './SourceLinks.svelte';
 export type { SubjectChipProps } from './SubjectChip.svelte';
+export {
+	plainTextFromElement,
+	plainTextFromMarkdown,
+	rangeToOffsets,
+} from './section-text';
 export type { TOCDrawerEntry, TOCDrawerProps } from './TOCDrawer.svelte';
 export type { TOCRenderEntry, TOCRenderMode, TOCRenderProps } from './TOCRender.svelte';
