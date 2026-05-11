@@ -14,6 +14,8 @@
 		"@ab/constants": "workspace:*",
 		"@ab/db": "workspace:*",
 		"@ab/hangar-jobs": "workspace:*",
-		"@ab/utils": "workspace:*"
+		"@ab/utils": "workspace:*",
+		"drizzle-orm": "^0.44.2",
+		"zod": "^3.25.36"
 	}
 }

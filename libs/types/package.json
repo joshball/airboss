@@ -1,5 +1,8 @@
 {
 	"name": "@ab/types",
 	"private": true,
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"zod": "^3.25.36"
+	}
 }
