@@ -18,6 +18,11 @@ import {
 	getPageExplainerDismissals,
 	getUserPrefs,
 	InvalidUserPrefValueError,
+	listSavedSearches,
+	NOTES_SAVED_SEARCHES_MAX,
+	NotesSavedSearchLimitError,
+	removeNotesSearch,
+	saveNotesSearch,
 	setPageExplainerDismissal,
 	setUserPref,
 	UnknownUserPrefKeyError,
@@ -257,6 +262,63 @@ describe('page-explainer dismissals', () => {
 				.from(auditLog)
 				.where(and(eq(auditLog.actorId, userId), eq(auditLog.targetType, AUDIT_TARGETS.USER_PREF)));
 			expect(rows.length).toBeGreaterThanOrEqual(1);
+		} finally {
+			await cleanup();
+		}
+	});
+});
+
+describe('saved notes searches', () => {
+	it('round-trips a saved search via list -> save -> list', async () => {
+		const { userId, cleanup } = await isolatedUser('saved-search-roundtrip');
+		try {
+			expect(await listSavedSearches(userId)).toEqual([]);
+			await saveNotesSearch(userId, 'Open follow-ups', '/notes?view=follow-ups');
+			const list = await listSavedSearches(userId);
+			expect(list.length).toBe(1);
+			expect(list[0]?.name).toBe('Open follow-ups');
+			expect(list[0]?.url).toBe('/notes?view=follow-ups');
+			expect(typeof list[0]?.createdAt).toBe('string');
+		} finally {
+			await cleanup();
+		}
+	});
+
+	it('upserts on duplicate name', async () => {
+		const { userId, cleanup } = await isolatedUser('saved-search-upsert');
+		try {
+			await saveNotesSearch(userId, 'Q', '/notes?q=stalls');
+			await saveNotesSearch(userId, 'Q', '/notes?q=spins');
+			const list = await listSavedSearches(userId);
+			expect(list.length).toBe(1);
+			expect(list[0]?.url).toBe('/notes?q=spins');
+		} finally {
+			await cleanup();
+		}
+	});
+
+	it('removeNotesSearch drops the named entry', async () => {
+		const { userId, cleanup } = await isolatedUser('saved-search-remove');
+		try {
+			await saveNotesSearch(userId, 'A', '/notes?tag=a');
+			await saveNotesSearch(userId, 'B', '/notes?tag=b');
+			await removeNotesSearch(userId, 'A');
+			const list = await listSavedSearches(userId);
+			expect(list.map((s) => s.name)).toEqual(['B']);
+		} finally {
+			await cleanup();
+		}
+	});
+
+	it('rejects new entries past NOTES_SAVED_SEARCHES_MAX', async () => {
+		const { userId, cleanup } = await isolatedUser('saved-search-cap');
+		try {
+			for (let i = 0; i < NOTES_SAVED_SEARCHES_MAX; i += 1) {
+				await saveNotesSearch(userId, `view-${i}`, `/notes?view=all&n=${i}`);
+			}
+			await expect(saveNotesSearch(userId, 'overflow', '/notes')).rejects.toBeInstanceOf(NotesSavedSearchLimitError);
+			// Updating an existing entry past the cap is allowed.
+			await expect(saveNotesSearch(userId, 'view-0', '/notes?updated=1')).resolves.toBeDefined();
 		} finally {
 			await cleanup();
 		}

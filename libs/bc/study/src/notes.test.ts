@@ -22,7 +22,7 @@ import {
 import { db } from '@ab/db/connection';
 import { generateAuthId, generateReferenceId, generateReferenceSectionId } from '@ab/utils';
 import { and, eq } from 'drizzle-orm';
-import { afterEach, beforeAll, describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 import { z } from 'zod';
 import {
 	archiveNote,
@@ -30,10 +30,12 @@ import {
 	createNote,
 	deleteNote,
 	getNote,
+	listDistinctTags,
 	listNotesForReference,
 	listNotesForSection,
 	listNotesForUser,
 	listOpenFollowUps,
+	listTagCloud,
 	markFollowUpDone,
 	NoFollowUpError,
 	NoteNotFoundError,
@@ -573,5 +575,81 @@ describe('deriveNoteTitle', () => {
 
 	it('falls back to "Untitled note" for an empty body', () => {
 		expect(deriveNoteTitle({ title: '', bodyMd: '   \n  ' })).toBe('Untitled note');
+	});
+});
+
+describe('listTagCloud', () => {
+	it('returns distinct tags with counts, ordered by count desc then name asc', async () => {
+		const { userId, cleanup } = await isolatedUser('tagcloud');
+		try {
+			await createNote(userId, { bodyMd: 'one', tags: ['stalls', 'recovery'] });
+			await createNote(userId, { bodyMd: 'two', tags: ['stalls', 'pitch'] });
+			await createNote(userId, { bodyMd: 'three', tags: ['stalls'] });
+			const cloud = await listTagCloud(userId);
+			expect(cloud.length).toBe(3);
+			// Highest count first.
+			expect(cloud[0]).toEqual({ tag: 'stalls', count: 3 });
+			// Tie at count 1: alphabetical fallback (pitch < recovery).
+			expect(cloud[1]?.tag).toBe('pitch');
+			expect(cloud[2]?.tag).toBe('recovery');
+		} finally {
+			await cleanup();
+		}
+	});
+
+	it('excludes archived notes', async () => {
+		const { userId, cleanup } = await isolatedUser('tagcloud-archived');
+		try {
+			const live = await createNote(userId, { bodyMd: 'live', tags: ['live-tag'] });
+			const archived = await createNote(userId, { bodyMd: 'archived', tags: ['archived-tag'] });
+			await archiveNote(archived.id, userId);
+			const cloud = await listTagCloud(userId);
+			const tags = cloud.map((c) => c.tag);
+			expect(tags).toContain('live-tag');
+			expect(tags).not.toContain('archived-tag');
+			void live;
+		} finally {
+			await cleanup();
+		}
+	});
+
+	it('returns an empty array when the user has no notes', async () => {
+		const { userId, cleanup } = await isolatedUser('tagcloud-empty');
+		try {
+			const cloud = await listTagCloud(userId);
+			expect(cloud).toEqual([]);
+		} finally {
+			await cleanup();
+		}
+	});
+});
+
+describe('listDistinctTags', () => {
+	it('returns distinct tags sorted alphabetically by lowercased value', async () => {
+		const { userId, cleanup } = await isolatedUser('distinct-tags');
+		try {
+			await createNote(userId, { bodyMd: 'one', tags: ['Zulu', 'alpha'] });
+			await createNote(userId, { bodyMd: 'two', tags: ['Bravo', 'alpha'] });
+			const tags = await listDistinctTags(userId);
+			// `alpha` first, then `Bravo`, then `Zulu` -- case-insensitive sort
+			// preserves original casing.
+			expect(tags).toEqual(['alpha', 'Bravo', 'Zulu']);
+		} finally {
+			await cleanup();
+		}
+	});
+
+	it('excludes archived notes', async () => {
+		const { userId, cleanup } = await isolatedUser('distinct-tags-archived');
+		try {
+			await createNote(userId, { bodyMd: 'live', tags: ['live-tag'] });
+			const archived = await createNote(userId, { bodyMd: 'arch', tags: ['hidden'] });
+			await archiveNote(archived.id, userId);
+			const tags = await listDistinctTags(userId);
+			expect(tags).toContain('live-tag');
+			expect(tags).not.toContain('hidden');
+		} finally {
+			await cleanup();
+		}
 	});
 });

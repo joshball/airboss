@@ -344,6 +344,7 @@ export type {
 	CreateNoteInput,
 	ListOpts as NotesListOpts,
 	NotesListResult,
+	NoteTagCount,
 	UpdateNoteInput,
 } from './notes';
 // Pure display helpers from a separate module so the runtime barrel stays
@@ -452,4 +453,9 @@ export type {
 	TestingView,
 	TestingViewParams,
 } from './testing';
-export type { PageExplainerDismissals, UserPrefValue } from './user-prefs';
+export type {
+	NotesSavedSearchesValue,
+	PageExplainerDismissals,
+	SavedNotesSearch,
+	UserPrefValue,
+} from './user-prefs';

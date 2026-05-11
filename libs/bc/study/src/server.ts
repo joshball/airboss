@@ -303,6 +303,7 @@ export type {
 	CreateNoteInput,
 	ListOpts as NotesListOpts,
 	NotesListResult,
+	NoteTagCount,
 	UpdateNoteInput,
 } from './notes';
 export {
@@ -312,6 +313,7 @@ export {
 	createNoteInputSchema,
 	deleteNote,
 	getNote,
+	listDistinctTags,
 	listNotesForCourse,
 	listNotesForGoal,
 	listNotesForKnowledgeNode,
@@ -320,6 +322,7 @@ export {
 	listNotesForSyllabusNode,
 	listNotesForUser,
 	listOpenFollowUps,
+	listTagCloud,
 	markFollowUpDone,
 	NoFollowUpError,
 	NoteNotFoundError,
@@ -626,12 +629,22 @@ export type {
 	TestingViewParams,
 } from './testing';
 export { getTestingView, TestingViewNotFoundError } from './testing';
-export type { PageExplainerDismissals, UserPrefValue } from './user-prefs';
+export type {
+	NotesSavedSearchesValue,
+	PageExplainerDismissals,
+	SavedNotesSearch,
+	UserPrefValue,
+} from './user-prefs';
 export {
 	getPageExplainerDismissals,
 	getUserPrefs,
 	InvalidUserPrefValueError,
 	isUserPrefKey,
+	listSavedSearches,
+	NOTES_SAVED_SEARCHES_MAX,
+	NotesSavedSearchLimitError,
+	removeNotesSearch,
+	saveNotesSearch,
 	setPageExplainerDismissal,
 	setUserPref,
 	UnknownUserPrefKeyError,

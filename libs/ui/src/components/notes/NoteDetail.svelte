@@ -42,6 +42,8 @@ let {
 	titleError,
 	followUpError,
 	formAction = '',
+	tagSuggestionsEndpoint = null,
+	tagSuggestions = null,
 }: {
 	note: NoteDetailRow;
 	context: NoteContext;
@@ -53,6 +55,10 @@ let {
 	followUpError?: string | null;
 	/** Page-relative form action, e.g. `''` for default `?/update`. */
 	formAction?: string;
+	/** Tag-autocomplete endpoint, forwarded to the inner composer. */
+	tagSuggestionsEndpoint?: string | null;
+	/** Synchronous tag suggestions, forwarded to the inner composer. */
+	tagSuggestions?: string[] | null;
 } = $props();
 
 const isArchived = $derived(note.archivedAt !== null);
@@ -88,6 +94,8 @@ const detailHref = $derived(ROUTES.NOTE_DETAIL(note.id));
 			{titleError}
 			{followUpError}
 			autofocusBody={false}
+			{tagSuggestionsEndpoint}
+			{tagSuggestions}
 		/>
 		<form method="GET" action={detailHref}>
 			<button type="submit" class="ghost-btn" data-testid="note-detail-cancel-edit">Cancel</button>

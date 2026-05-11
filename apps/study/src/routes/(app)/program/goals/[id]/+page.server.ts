@@ -1,5 +1,5 @@
 import { requireAuth } from '@ab/auth';
-import { goalCourse } from '@ab/bc-study';
+import { goalCourse, type NoteRow } from '@ab/bc-study';
 import {
 	addGoalNode,
 	addGoalSyllabus,
@@ -19,6 +19,7 @@ import {
 	listCoursesForReader,
 	listCredentials,
 	listNodesWithFacets,
+	listNotesForGoal,
 	removeGoalNode,
 	removeGoalSyllabus,
 	type SyllabusRow,
@@ -64,6 +65,12 @@ export interface GoalDetailData {
 	availableNodes: Array<{ id: string; title: string; domain: string }>;
 	courses: CourseWithLink[];
 	availableCourses: CourseRow[];
+	/**
+	 * Notes the user has captured against this goal (wp-notes-primitive
+	 * Phase 2). Soft-archived rows are excluded; the panel limit is
+	 * intentionally generous so the goal page stays a one-stop view.
+	 */
+	goalNotes: NoteRow[];
 }
 
 export const load: PageServerLoad = async (event) => {
@@ -80,7 +87,11 @@ export const load: PageServerLoad = async (event) => {
 		throw err;
 	}
 
-	const [syllabi, nodes] = await Promise.all([getGoalSyllabi(goal.id), getGoalNodes(goal.id)]);
+	const [syllabi, nodes, goalNotes] = await Promise.all([
+		getGoalSyllabi(goal.id),
+		getGoalNodes(goal.id),
+		listNotesForGoal(user.id, goal.id),
+	]);
 
 	// Build available-syllabi list -- every credential's primary syllabus,
 	// minus those already on the goal. Parallelize the per-credential reads
@@ -148,6 +159,7 @@ export const load: PageServerLoad = async (event) => {
 		availableNodes,
 		courses,
 		availableCourses,
+		goalNotes,
 	} satisfies GoalDetailData;
 };
 

@@ -1,7 +1,9 @@
 <script lang="ts">
 import type { LensLeaf, LensTreeNode } from '@ab/bc-study';
-import { COURSE_STATUS_LABELS, type CourseStatus, ROUTES } from '@ab/constants';
+import { COURSE_STATUS_LABELS, type CourseStatus, QUERY_PARAMS, ROUTES } from '@ab/constants';
+import Button from '@ab/ui/components/Button.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
+import NotesList from '@ab/ui/components/notes/NotesList.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import { renderMarkdown } from '@ab/utils';
 import CertGapsPanel from '$lib/components/CertGapsPanel.svelte';
@@ -13,6 +15,10 @@ const course = $derived(data.course);
 const lensResult = $derived(data.lensResult);
 const overlayActive = $derived(data.overlayActive);
 const stepCodeById = $derived(data.stepCodeById);
+const courseNotes = $derived(data.courseNotes);
+// `+ Note` pre-fills the course context so the standalone composer
+// opens with this course already selected.
+const newNoteHref = $derived(`${ROUTES.NOTES_NEW}?${QUERY_PARAMS.NOTE_COURSE_ID}=${encodeURIComponent(course.id)}`);
 
 const root = $derived<LensTreeNode | null>(lensResult.tree[0] ?? null);
 const sections = $derived<LensTreeNode[]>(root?.children ?? []);
@@ -140,6 +146,19 @@ function masteryStateClass(leaf: LensLeaf): string {
 	{#if overlayActive && certGaps.length > 0}
 		<CertGapsPanel gaps={certGaps} />
 	{/if}
+
+	<section class="notes-block" aria-labelledby="course-notes-h">
+		<header class="notes-head">
+			<h2 id="course-notes-h">Notes for this course ({courseNotes.length})</h2>
+			<Button href={newNoteHref} variant="primary">+ Note</Button>
+		</header>
+		<NotesList
+			notes={courseNotes}
+			showContextChips={false}
+			emptyTitle="No notes for this course yet"
+			emptyBody="Capture a thought attached to this course -- it stays here even when the syllabus changes."
+		/>
+	</section>
 </section>
 
 <style>
@@ -365,5 +384,25 @@ function masteryStateClass(leaf: LensLeaf): string {
 		font-size: var(--type-ui-caption-size);
 		color: var(--action-default-hover);
 		font-weight: 500;
+	}
+
+	.notes-block {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-md);
+	}
+
+	.notes-head {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: var(--space-md);
+		flex-wrap: wrap;
+	}
+
+	.notes-head h2 {
+		margin: 0;
+		font-size: var(--type-heading-3-size);
+		color: var(--ink-body);
 	}
 </style>

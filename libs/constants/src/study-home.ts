@@ -59,6 +59,14 @@ export const USER_PREF_KEYS = {
 	 */
 	PAGE_EXPLAINER_DISMISSED: 'study.page_explainer.dismissed',
 	/**
+	 * Saved searches for the `/notes` index. Value is a JSON object keyed
+	 * by the user-given name; each entry is `{ url, createdAt }`. Owned
+	 * by wp-notes-primitive Phase 3. The user types a name in the "Save
+	 * current view" affordance; the server persists the URL of the
+	 * currently active filter/search/view and the sidebar replays it.
+	 */
+	NOTES_SAVED_SEARCHES: 'study.notes.saved_searches',
+	/**
 	 * Reader body font family. One of `serif` / `sans` / `mono`. Drives
 	 * `--reader-body-font-family` via `<ReadableScope>`. Owned by
 	 * `wp-flightbag-reader-ux` Phase 3.
