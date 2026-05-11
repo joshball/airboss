@@ -189,6 +189,191 @@ A pilot who didn't pre-plan diverts loses time finding one in
 flight; a pilot who did pre-plan turns toward one immediately when
 a cell builds.
 
+### Cards (spaced repetition)
+
+Cards mined from the body. Three-cell-stages and six-hazards are
+the recall floor; the 20 NM rule and "never penetrate a line" are
+the operational rules; scenario cards train the decision habit.
+
+```yaml-cards
+- front: "What are the three stages of a thunderstorm cell, and what dominates each one?"
+  back: |
+    Cumulus (10-30 min): all upward motion, vertical buildup, conditionally
+    unstable layer. No precipitation yet.
+    Mature (15-30 min): updrafts and downdrafts coexist; precipitation falls;
+    lightning starts; hail forms in the upper portion. Anvil spreads. This is
+    the dangerous stage.
+    Dissipating (30-60 min): downdrafts dominate; cloud loses sharp edges and
+    rains itself out. A "dying" cell can still produce a microburst on the
+    way down; lightning continues after the cell appears spent.
+  cardType: basic
+  kind: recall
+  tags: [weather, thunderstorm, cell-stages, phak-12, ac-00-24c, PA.I.C.K3h]
+  source_ref: |
+    AC 00-24C Thunderstorms; PHAK Ch 12 Weather Theory; body Discover.
+
+- front: "Cumulus stage of a thunderstorm: dominant air motion and visible signature?"
+  back: |
+    All air motion within the cloud is upward. The cloud builds vertically.
+    Outside it looks like a vigorous towering cumulus with a flat or slightly
+    bulging top. Visible warning sign: rapid vertical growth in still surface
+    air. No precipitation has reached the ground.
+  cardType: basic
+  kind: recall
+  tags: [weather, thunderstorm, cell-stages, phak-12, ac-00-24c, PA.I.C.K3h]
+  source_ref: |
+    PHAK Ch 12; body Discover.
+
+- front: "Mature stage of a thunderstorm: what makes this the most dangerous stage?"
+  back: |
+    Updrafts and downdrafts coexist in the same cloud (the differential is
+    where airframe-loading turbulence lives). Precipitation falls; lightning
+    starts; hail (if any) forms in the upper portion and may be thrown miles
+    laterally. The cloud has reached the tropopause and spread into an anvil.
+    Most of the six aviation hazards are present simultaneously here.
+  cardType: basic
+  kind: recall
+  tags: [weather, thunderstorm, cell-stages, hazards, phak-12, ac-00-24c, PA.I.C.K3h]
+  source_ref: |
+    PHAK Ch 12; body Discover (mature stage).
+
+- front: "Why is a 'dissipating' thunderstorm cell still dangerous?"
+  back: |
+    Downdrafts dominate the dissipating stage. A dying cell can still produce
+    a microburst on its way down -- 60+ KT wind shear over a few hundred feet
+    of altitude. Lightning continues for some time after the cell visually
+    appears spent. "Dissipating" is not "safe"; the surface-level hazard
+    profile shifts toward microburst risk on approach.
+  cardType: basic
+  kind: recall
+  tags: [weather, thunderstorm, cell-stages, microburst, phak-12, ac-00-24c, PA.I.C.K3h]
+  source_ref: |
+    PHAK Ch 12; body Discover (dissipating stage).
+
+- front: "Name the six classical thunderstorm hazards."
+  back: |
+    1. Turbulence (updraft/downdraft differential, 6,000 fpm at altitudes
+       airframes are not designed for sustained vertical loading).
+    2. Hail (thrown miles laterally and well above the visible cell).
+    3. Lightning (avionics damage, blinding flash, fuel ignition risk;
+       strikes possible in clear air several miles from the visible cell).
+    4. Icing (supercooled liquid water above the freezing level inside a cell).
+    5. Downbursts / microbursts (60+ KT wind shear over a few hundred feet,
+       cause of multiple GA fatal accidents on approach and landing).
+    6. Tornadoes (most violent vertical motion the atmosphere produces;
+       embedded in supercell thunderstorms).
+  cardType: basic
+  kind: recall
+  tags: [weather, thunderstorm, hazards, ac-00-24c, aim-7-1-27, PA.I.C.K3h]
+  source_ref: |
+    AC 00-24C Thunderstorms; AIM 7-1-27.
+
+- front: "What is the standard pilot rule for lateral separation from a thunderstorm cell, and what does the number cover?"
+  back: |
+    20 nautical miles lateral separation from any cell with a visible top
+    above the freezing level (AC 00-24C). The 20 NM number is the envelope
+    that contains all six hazards with operational buffer: hail throw 5-20
+    NM, lightning 5-10 NM, microburst gust front 10-15 NM, embedded
+    turbulence 5-10 NM. It is operational shorthand for a multi-hazard
+    exclusion zone -- not a "pretty close" guideline.
+  cardType: regulation
+  kind: recall
+  tags: [weather, thunderstorm, avoidance, 20nm, ac-00-24c, aim-7-1-27, PA.I.C.K3h]
+  source_ref: |
+    AC 00-24C Thunderstorms; body Reveal + Discover hazard-distance breakdown.
+  rationale: |
+    The body emphasises this is the *only* weather phenomenon for which the
+    FAA publishes a numeric clearance. This card encodes both the rule and
+    its decomposition into per-hazard distances.
+
+- front: "Why is penetrating a squall line never safe, even if it looks gappy on radar?"
+  back: |
+    Three reasons stack: (1) embedded cells can move into the gap during your
+    transit; (2) cells generate their own outflow / inflow that bend nearby
+    cells toward the line, closing the gap; (3) lightning crosses the gap
+    whether or not radar shows precipitation. The rule is "land and wait" if
+    the chosen route closes -- a 30-minute hold on the ramp is operationally
+    cheap; a wing failure is not.
+  cardType: basic
+  kind: recall
+  tags: [weather, thunderstorm, squall-line, avoidance, ac-00-24c, aim-7-1-27, PA.I.C.K3h]
+  source_ref: |
+    AC 00-24C; body Reveal "A line is never safe to penetrate" paragraph.
+
+- front: "Three thunderstorm formations and how they differ in pilot consequence: {{c1::air-mass}} thunderstorms (isolated cells, predictable by time-of-day, generally avoidable VFR), {{c2::squall line}} (linear, often pre-frontal, may extend hundreds of miles, often embedded), {{c3::mesoscale convective complex}} (cluster organising overnight, persisting hours over a regional footprint)."
+  back: |
+    Air-mass cells let you visually deviate. Squall lines force a stop or a
+    full re-route -- you cannot penetrate. Mesoscale convective complexes
+    deny a regional area for hours; the planning answer is delay or
+    cancellation, not deviation.
+  cardType: cloze
+  kind: recall
+  tags: [weather, thunderstorm, formations, squall-line, mcc, phak-12, ac-00-24c, PA.I.C.K3h]
+  source_ref: |
+    PHAK Ch 12; AC 00-24C; body Discover (three formations).
+
+- front: "Why does onboard weather radar show 'green' echoes that can hide a yellow cell at altitude, and what does that mean for tactical use?"
+  back: |
+    Composite reflectivity averages the column -- a strong return aloft
+    (yellow / red) blended with weak return at low altitudes can show as
+    green on the display. Radar tilts and gains have to be actively managed
+    to interrogate altitude bands. Onboard radar detects precipitation, not
+    turbulence; the dangerous shear and updraft can sit in a "green" cell.
+  cardType: basic
+  kind: recall
+  tags: [weather, thunderstorm, radar, equipment-limits, ac-00-24c, aim-7-1-27, PA.I.C.K3h]
+  source_ref: |
+    AC 00-24C; AIM 7-1-27; body Reveal "Onboard radar" bullet.
+
+- front: "Why is datalink NEXRAD a strategic tool, not a tactical one?"
+  back: |
+    Datalink NEXRAD imagery can be 5-15 minutes old by the time it reaches
+    the cockpit. A cell that wasn't there at briefing might be there now;
+    a cell shown on the screen might already have moved or grown beyond
+    the depicted footprint. Use NEXRAD for the synoptic picture and the
+    next-hour route planning, not for "thread the gap right now" decisions.
+  cardType: basic
+  kind: recall
+  tags: [weather, thunderstorm, nexrad, datalink, equipment-limits, aim-7-1-27, PA.I.C.K3h]
+  source_ref: |
+    AIM 7-1-27; body Reveal "Datalink NEXRAD" bullet.
+
+- front: "TAF for your destination shows VCTS through your ETA. GFA shows isolated TS bases 4,000 ft tops FL400. Convective SIGMET flags severe TS 60 NM south of route. You're VFR, three hours out. What's the decision frame?"
+  back: |
+    The decision is not "is there a thunderstorm in the way?" -- almost every
+    summer afternoon in the southeast has one within an hour of the route.
+    The decision is: can I maintain 20 NM separation from every active and
+    developing cell along the route, allowing for cell movement, growth, and
+    embedded turbulence?
+    - Yes with margin -> fly with continuous monitoring (datalink + onboard +
+      eyes out).
+    - "Yes, barely" -> don't go. Margin you cannot articulate is margin you
+      do not have.
+    Pre-plan a divert airport every 30 NM along the route. Body Practice rule.
+  cardType: basic
+  kind: recall
+  tags: [weather, thunderstorm, go-nogo, divert, ac-00-24c, aim-7-1-27, PA.I.C.K3h]
+  source_ref: |
+    AC 00-24C; body Context scenario + Practice divert-planning rule.
+  rationale: |
+    Scenario card built from the body's Context. Trains the reframing the body
+    teaches: the question is the *separation* you can maintain, not the
+    presence of a cell.
+
+- front: "Why is no flight permitted under an overhanging anvil, even far from the visible cell core?"
+  back: |
+    Hail forms in the upper portion of a mature cell and can be thrown miles
+    laterally; it then falls from the anvil into clear air below. A pilot
+    flying under the anvil is in the hail-fall zone with no visible cell
+    above the cockpit to warn them. The rule is operational: no flight under
+    an overhanging anvil, period.
+  cardType: regulation
+  kind: recall
+  tags: [weather, thunderstorm, hail, anvil, avoidance, ac-00-24c, aim-7-1-27, PA.I.C.K3h]
+  source_ref: |
+    AC 00-24C; body Reveal "No flight under an overhanging anvil" rule.
+```
+
 ## Connect
 
 This node feeds the go/no-go decision (a Convective SIGMET on the
