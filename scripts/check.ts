@@ -493,6 +493,15 @@ const STEP_HELP: Record<string, StepHelp> = {
 		how: 'Pure stat; no parsing.',
 		links: ['libs/help/src/glossary/'],
 	},
+	'wx-scenario-round-trip': {
+		tier: 'fast',
+		scopable: false,
+		summary: 'Validate every wx scenario: round-trip parsers + cross-product consistency + knowledge-node resolution',
+		what: 'Runs `bun run wx-scenario check-round-trip --all`. Walks every scenario from WX_SCENARIO_VALUES, calls generateScenario (which throws on any METAR/TAF/FB/PIREP that re-parses with warnings), runs winds-vs-isobars + TAF FM vs front motion + AIRMET ring vs hazard polygon + AIRMET ring closure + PIREP vs hazard centroid consistency rules, and resolves every commentary callout knowledgeNodeIds against course/knowledge/weather/. NO disk writes.',
+		why: 'The load-bearing guarantee that the wx-engine cannot ship a product the wx-charts library cannot parse cleanly, that scenario literals stay internally consistent across the four derivation layers, and that commentary cannot drift away from the knowledge corpus.',
+		how: '`bun scripts/wx-scenario/check-round-trip.ts --all`. Always full-scope, mirroring the graph-validator pattern.',
+		links: ['scripts/wx-scenario.ts', 'libs/wx-engine/src/validate/', 'docs/work-packages/wx-engine/spec.md'],
+	},
 };
 
 function printChecksIndex(): void {
@@ -1334,6 +1343,26 @@ function buildStepDefs(profile: Profile, dirty: readonly string[]): StepDef[] {
 			if (files.length === 0) return { exitCode: 0, stdout: 'no files in scope', stderr: '', skipCache: true };
 			return shellRun('bun', ['tools/md-format/bin.ts', '--check', ...files]);
 		},
+	});
+
+	defs.push({
+		name: 'wx-scenario-round-trip',
+		tier: 'fast',
+		// Always-full-scope graph validator. The check runs the engine
+		// in-memory across every scenario; reruns are sub-second so we don't
+		// gate on relevance. The wx-engine surface is small enough that
+		// re-running on every commit is cheaper than the wrong-shape narrow
+		// predicate that would let a regression slip through.
+		relevantWhen: (d) =>
+			anyMatch(
+				d,
+				(f) =>
+					f.startsWith('libs/wx-engine/') ||
+					f.startsWith('scripts/wx-scenario') ||
+					f.startsWith('course/knowledge/weather/') ||
+					f.startsWith('libs/wx-charts/'),
+			),
+		fn: () => shellRun('bun', ['scripts/wx-scenario.ts', 'check-round-trip', '--all']),
 	});
 
 	// svelte-check predicates: a file change is "relevant" to app X if it's in apps/X

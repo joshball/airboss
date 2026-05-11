@@ -43,3 +43,19 @@ export const AIRMET_FAMILIES = {
 export const AIRMET_FAMILY_VALUES = Object.values(AIRMET_FAMILIES);
 
 export type AirmetFamily = (typeof AIRMET_FAMILY_VALUES)[number];
+
+/**
+ * Subcommand names for the `scripts/wx-scenario.ts` dispatcher. Mirrors
+ * `scripts/charts.ts`. Used by the dispatcher's switch + the help printer
+ * so subcommand strings never appear inline.
+ */
+export const WX_SCENARIO_SUBCOMMANDS = {
+	BUILD: 'build',
+	LIST: 'list',
+	VALIDATE: 'validate',
+	CHECK_ROUND_TRIP: 'check-round-trip',
+} as const;
+
+export const WX_SCENARIO_SUBCOMMAND_VALUES = Object.values(WX_SCENARIO_SUBCOMMANDS);
+
+export type WxScenarioSubcommand = (typeof WX_SCENARIO_SUBCOMMAND_VALUES)[number];

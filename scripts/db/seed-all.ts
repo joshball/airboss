@@ -75,11 +75,11 @@ import { type StatusLine, startStatusLine } from '../lib/status-line';
 import { migrateReferencesToStructured } from './migrate-references-to-structured';
 import { type AbbySeedCounts, seedAbby } from './seed-abby';
 import { seedCardsForUser } from './seed-cards';
+import { seedCourses } from './seed-courses';
 import { seedCredentials } from './seed-credentials';
 import { decideSeedGuard } from './seed-guard';
 import { seedReferences } from './seed-references';
 import { seedReferencesFromManifest } from './seed-references-from-manifest';
-import { seedCourses } from './seed-courses';
 import { seedSyllabi } from './seed-syllabi';
 
 type Phase =

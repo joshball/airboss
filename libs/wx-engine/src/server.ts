@@ -94,3 +94,19 @@ export { loadScenario } from './truth/scenarios/registry';
 // Truth-model schema (Zod). Validates every scenario literal on load.
 // ----------------------------------------------------------------------
 export { type TruthModelSchema, truthModelSchema } from './truth/schema';
+// ----------------------------------------------------------------------
+// Phase F: validate harness -- consistency rules + round-trip primitive.
+// Used by `scripts/wx-scenario/{validate,check-round-trip}.ts`.
+// ----------------------------------------------------------------------
+export {
+	type ConsistencyIssue,
+	type ConsistencyReport,
+	runConsistency,
+} from './validate/consistency';
+export {
+	type ProductRoundTripFailure,
+	type ProductRoundTripResult,
+	type RoundTripReport,
+	runRoundTrip,
+	summarizeRoundTrip,
+} from './validate/round-trip';
