@@ -21,6 +21,7 @@ export { loadPaletteInjected } from './loaders/all';
 export { loadCards } from './loaders/cards';
 export { loadCfrSections } from './loaders/cfr-sections';
 export { loadCourses } from './loaders/courses';
+export { handlePaletteSearch } from './loaders/endpoint';
 export { loadHandbookSections } from './loaders/handbook-sections';
 export { loadKnowledgeNodes } from './loaders/knowledge-nodes';
 export { loadPlans } from './loaders/plans';

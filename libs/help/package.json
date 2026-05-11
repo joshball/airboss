@@ -24,6 +24,7 @@
 		"@ab/db": "workspace:*",
 		"@ab/ui": "workspace:*",
 		"@ab/utils": "workspace:*",
+		"@sveltejs/kit": "*",
 		"drizzle-orm": "*",
 		"shiki": "^4.0.2"
 	},

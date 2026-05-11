@@ -72,7 +72,21 @@ const host: PaletteHost = $derived<PaletteHost>({
 let input = $state<HTMLInputElement | null>(null);
 let rawQuery = $state('');
 let debouncedQuery = $state('');
-const grouped = $derived<GroupedResults>(searchGrouped(debouncedQuery, host, injectedResults ?? []));
+
+/**
+ * DB-backed loader output fetched from the per-app `/api/palette/search`
+ * endpoint. The in-process facade composes this with the synchronous
+ * loaders so the user sees the synchronous slice immediately and the
+ * server slice merges in when the response lands. The fallback is the
+ * caller-supplied `injectedResults` prop so SSR-injected rows still work.
+ */
+let serverInjected = $state<readonly SearchResult[]>([]);
+let lastFetchedQuery = $state<string | null>(null);
+
+const mergedInjected = $derived<readonly SearchResult[]>(
+	serverInjected.length > 0 ? serverInjected : (injectedResults ?? []),
+);
+const grouped = $derived<GroupedResults>(searchGrouped(debouncedQuery, host, mergedInjected));
 
 let focusedColumn = $state<ResultColumn>('faa-resources');
 let focusedIndex = $state(0);
@@ -86,6 +100,42 @@ $effect(() => {
 		debouncedQuery = next;
 	}, HELP_SEARCH_DEBOUNCE_MS);
 	return () => window.clearTimeout(handle);
+});
+
+// Fetch DB-backed loader output every time the debounced query changes.
+// AbortController guards against an in-flight slow response landing AFTER
+// a newer query has already fired. The endpoint short-circuits empty
+// queries server-side, so calling fetch on an empty needle is cheap.
+$effect(() => {
+	const q = debouncedQuery.trim();
+	if (q.length === 0) {
+		serverInjected = [];
+		lastFetchedQuery = q;
+		return;
+	}
+	if (q === lastFetchedQuery) return;
+	const controller = new AbortController();
+	const url = '/api/palette/search';
+	(async () => {
+		try {
+			const res = await fetch(url, {
+				method: 'POST',
+				headers: { 'content-type': 'application/json' },
+				body: JSON.stringify({ q }),
+				signal: controller.signal,
+			});
+			if (!res.ok) return;
+			const data = (await res.json()) as { results?: SearchResult[] };
+			if (Array.isArray(data.results)) {
+				serverInjected = data.results;
+				lastFetchedQuery = q;
+			}
+		} catch {
+			// Network errors / aborts: leave serverInjected alone. The in-process
+			// facade still surfaces aviation refs / help pages / external tools.
+		}
+	})();
+	return () => controller.abort();
 });
 
 // Reset selection whenever the debounced query lands. Depend only on
