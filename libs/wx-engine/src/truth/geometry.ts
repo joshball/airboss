@@ -1,10 +1,11 @@
 /**
  * Geometry helpers for truth-model derivations.
  *
- * Lifted verbatim from `spikes/wx-engine/src/truth/types.ts` (the spike
- * colocates helpers with the type definitions; the production lib splits
- * helpers into this file so the runtime barrel can re-export the types
- * type-only).
+ * Lifted from the spike's pre-retirement `spikes/wx-engine/src/truth/types.ts`
+ * (the spike colocated helpers with the type definitions; the production lib
+ * splits helpers into this file so the runtime barrel can re-export the types
+ * type-only). PR #801 retired the spike src; see
+ * `spikes/wx-engine/01-frontal-xc/spike-notes.md` for the verdict.
  *
  * Every helper is pure: no I/O, no mutation. The pressure-sampling model
  * uses the same Gaussian-bump approximation the wx-charts surface-analysis

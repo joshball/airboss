@@ -6,8 +6,9 @@
  * forbidden because layer-1 would diverge from the layer-2/3/4 derivations
  * that read it.
  *
- * Lifted verbatim from the spike (`spikes/wx-engine/src/truth/types.ts`).
- * Pure function -- returns a new TruthModel; does not mutate. Translates
+ * Lifted from the spike's pre-retirement `spikes/wx-engine/src/truth/types.ts`
+ * (PR #801 -- the spike-notes.md at `spikes/wx-engine/01-frontal-xc/` carries
+ * the verdict). Pure function -- returns a new TruthModel; does not mutate. Translates
  * pressure systems, fronts, and convective cells by their motion vectors;
  * air-mass polygons + hazard zones drag with the mean front motion as a
  * cheap barotropic approximation. Production semantics match the spike

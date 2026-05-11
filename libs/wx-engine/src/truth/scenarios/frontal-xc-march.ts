@@ -1,12 +1,19 @@
 /**
  * `frontal-xc-march` -- the Phase A spike-lift scenario.
  *
- * Hand-coded layer-1 truth state lifted verbatim from
- * `spikes/wx-engine/src/truth/scenarios/frontal-xc-march.ts`. PR #801 merged
- * the spike that proved the architecture; the literal below is the exact
- * truth state that produced the spike's 5 METARs, 5 TAFs, 3 AIRMETs, 1 FB
- * grid, 3 PIREPs, 11 chart specs, and 10 Socratic callouts -- all mutually
- * consistent and round-tripping cleanly through the wx-charts parsers.
+ * Hand-coded layer-1 truth state lifted from the spike's pre-retirement
+ * `spikes/wx-engine/src/truth/scenarios/frontal-xc-march.ts` (PR #801 -- now
+ * retired). The literal below is the exact truth state that produced the
+ * spike's 5 METARs, 5 TAFs, 3 AIRMETs, 1 FB grid, 3 PIREPs, 11 chart specs,
+ * and 10 Socratic callouts -- all mutually consistent and round-tripping
+ * cleanly through the wx-charts parsers. See
+ * `spikes/wx-engine/01-frontal-xc/spike-notes.md` for the verdict.
+ *
+ * Spike-bug fix: the spike authored motionDegTrue as 070 / 060 (leading-zero
+ * numeric literals); Bun's parser interpreted those as octal 56 / 48 even
+ * though the author's comments ('moving ENE' = ~70 deg) made decimal intent
+ * clear. TypeScript's strict mode rejects 070 outright (TS1121), so this
+ * lift uses the corrected decimal values 70 / 60.
  *
  * Scenario: winter frontal passage during a midwest XC, KSTL -> KORD,
  * March afternoon. Synoptic-scale low pressure system over the Upper

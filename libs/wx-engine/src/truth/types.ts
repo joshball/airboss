@@ -7,8 +7,9 @@
  * filling the same shape from a different source -- archive sample,
  * reanalysis ingest -- without rewriting the downstream layers.
  *
- * Lifted verbatim from `spikes/wx-engine/src/truth/types.ts` (the spike
- * validated this shape end-to-end in PR #801). The production lib splits
+ * Lifted from the spike's pre-retirement `spikes/wx-engine/src/truth/types.ts`
+ * (PR #801 -- now retired; see `spikes/wx-engine/01-frontal-xc/spike-notes.md`
+ * for the spike verdict). The production lib splits
  * the spike's colocated types + helpers into separate modules:
  *
  *   - this file:          interfaces only
