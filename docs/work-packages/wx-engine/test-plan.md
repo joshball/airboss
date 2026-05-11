@@ -4,7 +4,7 @@ title: 'Test Plan: Truth-Aware Weather Scenario Engine'
 product: platform
 category: feature
 status: draft
-agent_review_status: pending
+agent_review_status: done
 human_review_status: pending
 created: 2026-05-10
 owner: agent
