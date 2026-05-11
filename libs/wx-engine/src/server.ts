@@ -18,7 +18,7 @@
  */
 
 // ----------------------------------------------------------------------
-// Engine entrypoint + bundle writer. Phase A: truth-only output.
+// Engine entrypoint + bundle writer. Phase B: products wired in.
 // ----------------------------------------------------------------------
 export {
 	generateScenario,
@@ -30,6 +30,15 @@ export {
 	type ScenarioSeed,
 	writeScenarioBundle,
 } from './engine';
+// ----------------------------------------------------------------------
+// Layer-2 product derivations. Pure functions of TruthModel + opts.
+// ----------------------------------------------------------------------
+export { deriveAirmets } from './products/airmet';
+export { deriveMetar } from './products/metar';
+export { derivePireps } from './products/pirep';
+export { deriveTaf } from './products/taf';
+export type { AirmetAdvisory, DerivedFbGrid, DerivedMetar, DerivedPirep, DerivedTaf } from './products/types';
+export { deriveFbGrid } from './products/winds-aloft';
 // ----------------------------------------------------------------------
 // Truth-state evolution. The only sanctioned way to move time forward.
 // ----------------------------------------------------------------------
