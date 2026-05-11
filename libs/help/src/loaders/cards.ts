@@ -13,7 +13,7 @@
 import { card } from '@ab/bc-study';
 import { CARD_STATUSES, ROUTES } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
-import { and, eq, ilike, ne, or } from 'drizzle-orm';
+import { and, desc, eq, ilike, ne, or } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import type { ParsedQuery } from '../schema/help-registry';
 import type { PaletteHost, RankBucket, SearchResult } from '../schema/result-types';
@@ -71,7 +71,7 @@ export async function loadCards(
 				or(ilike(card.front, pattern), ilike(card.back, pattern)),
 			),
 		)
-		.orderBy(card.updatedAt)
+		.orderBy(desc(card.updatedAt))
 		.limit(LOADER_LIMIT);
 
 	const out: SearchResult[] = [];

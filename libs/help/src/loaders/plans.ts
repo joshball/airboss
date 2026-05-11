@@ -12,7 +12,7 @@
 import { studyPlan } from '@ab/bc-study';
 import { ROUTES } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
-import { and, eq, ilike } from 'drizzle-orm';
+import { and, desc, eq, ilike } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import type { ParsedQuery } from '../schema/help-registry';
 import type { PaletteHost, RankBucket, SearchResult } from '../schema/result-types';
@@ -52,7 +52,7 @@ export async function loadPlans(
 		})
 		.from(studyPlan)
 		.where(and(eq(studyPlan.userId, host.userId), ilike(studyPlan.title, pattern)))
-		.orderBy(studyPlan.updatedAt)
+		.orderBy(desc(studyPlan.updatedAt))
 		.limit(LOADER_LIMIT);
 
 	const out: SearchResult[] = [];

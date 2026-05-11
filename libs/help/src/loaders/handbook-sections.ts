@@ -19,7 +19,7 @@
 import { reference, referenceSection } from '@ab/bc-study';
 import { REFERENCE_KINDS, ROUTES } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
-import { and, eq, ilike, or, sql } from 'drizzle-orm';
+import { and, eq, ilike, or } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import type { ParsedQuery } from '../schema/help-registry';
 import type { PaletteHost, RankBucket, SearchResult } from '../schema/result-types';
@@ -104,7 +104,6 @@ export async function loadHandbookSections(
 		};
 		out.push(result);
 	}
-	void sql; // imported for potential FTS upgrade; silence unused-import lint.
 	return out;
 }
 
