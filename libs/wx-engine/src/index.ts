@@ -20,7 +20,7 @@
  * `/server` entry point.
  *
  * Phase A populates the truth-model types, the Zod schema's inferred type,
- * and the engine API types as type-only re-exports. Phase B / C / D append
+ * and the engine API types as type-only re-exports. Phase B / C append
  * derivation-result types here.
  */
 
