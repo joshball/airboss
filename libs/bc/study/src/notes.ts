@@ -772,10 +772,15 @@ export async function listTagCloud(userId: string, db: Db = defaultDb): Promise<
  * Distinct tags for the user, used by the chip-input autocomplete.
  * Returns just the tag strings (no counts) sorted alphabetically by
  * lowercased value -- the chip input renders them as a flat list.
+ *
+ * Implementation note: we use GROUP BY rather than SELECT DISTINCT so
+ * the ORDER BY can reference an expression (`LOWER(tag)`) that isn't in
+ * the projected column list. Postgres rejects `SELECT DISTINCT col ...
+ * ORDER BY expr(col)` (SQL state 42P10) but accepts `GROUP BY col`.
  */
 export async function listDistinctTags(userId: string, db: Db = defaultDb): Promise<string[]> {
 	const result = await db.execute<{ tag: string }>(sql`
-		SELECT DISTINCT tag
+		SELECT tag
 		FROM (
 			SELECT UNNEST(tags) AS tag
 			FROM study.note
@@ -783,6 +788,7 @@ export async function listDistinctTags(userId: string, db: Db = defaultDb): Prom
 			  AND archived_at IS NULL
 		) t
 		WHERE tag <> ''
+		GROUP BY tag
 		ORDER BY LOWER(tag) ASC
 	`);
 	const rows: string[] = [];

@@ -9,6 +9,7 @@ import {
 	NODE_LIFECYCLE_LABELS,
 	NODE_MASTERY_GATE_LABELS,
 	type NodeMasteryGate,
+	QUERY_PARAMS,
 	REFERENCE_KIND_LABELS,
 	REFERENCE_KINDS,
 	type ReferenceKind,
@@ -18,6 +19,7 @@ import {
 } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import CitedByPanel, { type CitedByItem } from '@ab/ui/components/CitedByPanel.svelte';
+import NotesList from '@ab/ui/components/notes/NotesList.svelte';
 import { humanize, renderMarkdown } from '@ab/utils';
 import KnowledgeNodeBody from '$lib/components/KnowledgeNodeBody.svelte';
 import type { PageData } from './$types';
@@ -30,6 +32,10 @@ const edges = $derived(data.edges);
 const mastery = $derived(data.mastery);
 const lifecycle = $derived(data.lifecycle);
 const citedBy = $derived(data.citedBy);
+const knowledgeNotes = $derived(data.knowledgeNotes);
+// `+ Note` pre-fills the knowledge-node context so the standalone
+// composer opens with this node already selected.
+const newNoteHref = $derived(`${ROUTES.NOTES_NEW}?${QUERY_PARAMS.NOTE_KNOWLEDGE_NODE_ID}=${encodeURIComponent(node.id)}`);
 
 function citedByHref(type: CitationSourceType, id: string): string | null {
 	switch (type) {
@@ -383,6 +389,19 @@ const citedByItems = $derived<CitedByItem[]>(
 
 	<section class="section">
 		<CitedByPanel items={citedByItems} />
+	</section>
+
+	<section class="section knowledge-notes" aria-labelledby="knowledge-notes-h">
+		<header class="notes-head">
+			<h2 id="knowledge-notes-h">Notes on this topic ({knowledgeNotes.length})</h2>
+			<a class="add-note" href={newNoteHref}>+ Note</a>
+		</header>
+		<NotesList
+			notes={knowledgeNotes}
+			showContextChips={false}
+			emptyTitle="No notes on this topic yet"
+			emptyBody="Capture a thought attached to this knowledge node -- it persists across cards and reps that touch the same topic."
+		/>
 	</section>
 </section>
 
@@ -794,6 +813,41 @@ const citedByItems = $derived<CitedByItem[]>(
 		color: var(--ink-subtle);
 		font-size: var(--type-ui-caption-size);
 		font-style: italic;
+	}
+
+	.knowledge-notes {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-md);
+	}
+
+	.notes-head {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: var(--space-md);
+		flex-wrap: wrap;
+	}
+
+	.notes-head h2 {
+		margin: 0;
+		font-size: var(--type-heading-3-size);
+		color: var(--ink-body);
+	}
+
+	.add-note {
+		display: inline-flex;
+		align-items: center;
+		padding: var(--space-2xs) var(--space-md);
+		background: var(--action-default);
+		color: var(--ink-inverse);
+		border-radius: var(--radius-sm);
+		text-decoration: none;
+		font-weight: var(--font-weight-semibold);
+	}
+
+	.add-note:hover {
+		background: var(--action-default-hover);
 	}
 
 </style>

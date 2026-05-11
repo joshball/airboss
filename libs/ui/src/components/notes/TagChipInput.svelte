@@ -52,10 +52,15 @@ let {
 let draft = $state('');
 let inputEl = $state<HTMLInputElement | null>(null);
 
-let fetched = $state<string[] | null>(suggestionsProp);
+// `suggestionsProp` is captured at mount time to seed the initial cache;
+// later prop changes re-flow into `fetched` via the $derived below.
+let fetched = $state<string[] | null>(null);
 let highlightIndex = $state(-1);
 let dropdownOpen = $state(false);
 let pendingFetch = false;
+$effect(() => {
+	if (suggestionsProp !== null) fetched = suggestionsProp;
+});
 
 async function ensureFetched(): Promise<void> {
 	if (fetched !== null) return;
@@ -206,7 +211,6 @@ const showDropdown = $derived(dropdownOpen && filteredSuggestions.length > 0);
 			{disabled}
 			aria-describedby={ariaDescribedBy}
 			aria-autocomplete={suggestionsEndpoint !== null || suggestionsProp !== null ? 'list' : undefined}
-			aria-expanded={showDropdown}
 			data-testid="tag-chip-input-field"
 		/>
 		{#if showDropdown}
