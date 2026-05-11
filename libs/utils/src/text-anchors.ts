@@ -59,7 +59,8 @@ export function captureAnchor(
 	if (end < start) [start, end] = [end, start];
 
 	const rawText = plainText.slice(start, end);
-	const text = rawText.length > ANNOTATION_ANCHOR_TEXT_MAX_LENGTH ? rawText.slice(0, ANNOTATION_ANCHOR_TEXT_MAX_LENGTH) : rawText;
+	const text =
+		rawText.length > ANNOTATION_ANCHOR_TEXT_MAX_LENGTH ? rawText.slice(0, ANNOTATION_ANCHOR_TEXT_MAX_LENGTH) : rawText;
 	const cap = Math.max(0, contextChars);
 	const prefix = plainText.slice(Math.max(0, start - cap), start);
 	const suffix = plainText.slice(end, Math.min(total, end + cap));
@@ -178,8 +179,10 @@ function scoreCandidate(plainText: string, anchor: TextAnchor, candidateStart: n
 	const candidateEnd = candidateStart + len;
 	const candPrefix = plainText.slice(Math.max(0, candidateStart - contextChars), candidateStart);
 	const candSuffix = plainText.slice(candidateEnd, Math.min(total, candidateEnd + contextChars));
-	const prefixScore = anchor.prefix.length === 0 && candPrefix.length === 0 ? 0.5 : similarity(anchor.prefix, candPrefix);
-	const suffixScore = anchor.suffix.length === 0 && candSuffix.length === 0 ? 0.5 : similarity(anchor.suffix, candSuffix);
+	const prefixScore =
+		anchor.prefix.length === 0 && candPrefix.length === 0 ? 0.5 : similarity(anchor.prefix, candPrefix);
+	const suffixScore =
+		anchor.suffix.length === 0 && candSuffix.length === 0 ? 0.5 : similarity(anchor.suffix, candSuffix);
 	return (prefixScore + suffixScore) / 2;
 }
 

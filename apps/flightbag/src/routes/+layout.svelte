@@ -11,6 +11,7 @@ import {
 	type UserPrefKey,
 } from '@ab/constants';
 import HelpSearch from '@ab/help/ui/HelpSearch.svelte';
+import HighlightTokens from '@ab/library/HighlightTokens.svelte';
 import ReaderPrefsButton, { type ReadingPrefKey, type ReadingPrefValue } from '@ab/library/ReaderPrefsButton.svelte';
 import {
 	type AppearanceMode,
@@ -204,9 +205,11 @@ async function setAppearance(value: AppearancePreference) {
 	measure={readingPrefs.measure}
 	headingScale={readingPrefs.headingScale}
 >
-	<main id="main" tabindex="-1" class="page">
-		{@render children()}
-	</main>
+	<HighlightTokens>
+		<main id="main" tabindex="-1" class="page">
+			{@render children()}
+		</main>
+	</HighlightTokens>
 </ReadableScope>
 
 <style>

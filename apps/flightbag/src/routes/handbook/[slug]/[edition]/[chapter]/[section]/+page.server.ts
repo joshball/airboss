@@ -20,6 +20,7 @@ import { isParseError, parseHandbooksLocator, parseIdentifier } from '@ab/source
 import { error } from '@sveltejs/kit';
 import { loadReadSetForReference } from '../../../../../../lib/read-state';
 import { computeSiblingNav } from '../../../../../../lib/section-nav';
+import { loadSectionAnnotationContext } from '../../../../../../lib/server/section-annotations';
 import { buildSourceLinks } from '../../../../../../lib/source-links';
 import { buildTOCEntries, totalReadingMinutes } from '../../../../../../lib/toc';
 import { shortHandbookEdition } from '../../../../../reader-url';
@@ -106,6 +107,8 @@ export const load: PageServerLoad = async (event) => {
 	const userId = event.locals.user?.id ?? null;
 	const sectionReadState = userId ? await getReadState(userId, view.section.id) : null;
 
+	const annotationContext = await loadSectionAnnotationContext(userId, view.section.id);
+
 	return {
 		uri: rawUri,
 		sourceLinks,
@@ -173,5 +176,6 @@ export const load: PageServerLoad = async (event) => {
 				}
 			: null,
 		isAuthenticated: event.locals.user !== null,
+		annotationContext,
 	};
 };

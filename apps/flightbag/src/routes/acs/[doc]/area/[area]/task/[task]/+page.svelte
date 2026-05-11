@@ -5,9 +5,22 @@ import ReaderLayout from '@ab/library/ReaderLayout.svelte';
 import SourceLinks from '@ab/library/SourceLinks.svelte';
 import TOCDrawer from '@ab/library/TOCDrawer.svelte';
 import { buildAcsTocEntries, findAreaIdForTask } from '../../../../../../../lib/acs-toc';
+import RichReaderHost from '../../../../../../../lib/RichReaderHost.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
+
+const acsBodyText = $derived(
+	[
+		data.task.references ?? '',
+		data.task.objective ?? '',
+		...data.elements.knowledge.map((e) => `${e.code} ${e.title}`),
+		...data.elements.risk.map((e) => `${e.code} ${e.title}`),
+		...data.elements.skill.map((e) => `${e.code} ${e.title}`),
+	]
+		.filter(Boolean)
+		.join('\n\n'),
+);
 
 const hasElements = $derived(
 	data.elements.knowledge.length + data.elements.risk.length + data.elements.skill.length > 0,
@@ -103,6 +116,7 @@ const expandedGroupIds = $derived.by(() => {
 		</nav>
 	{/snippet}
 
+	<div data-annotatable-body data-section-id={data.task.id} class="acs-body">
 	{#if data.task.references}
 		<section class="meta-block" aria-labelledby="references-h">
 			<h2 id="references-h">References</h2>
@@ -174,7 +188,20 @@ const expandedGroupIds = $derived.by(() => {
 			{/if}
 		</section>
 	{/if}
+	</div>
 </ReaderLayout>
+
+<RichReaderHost
+	section={{
+		id: data.task.id,
+		title: data.task.title,
+		code: `Task ${data.task.code}`,
+		airbossRef: data.uri,
+	}}
+	bodyText={acsBodyText}
+	isAuthenticated={data.isAuthenticated}
+	annotationContext={data.annotationContext}
+/>
 
 <style>
 	.task-code {

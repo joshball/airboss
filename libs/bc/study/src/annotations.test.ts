@@ -20,12 +20,7 @@ import {
 	HIGHLIGHT_COLORS,
 } from '@ab/constants';
 import { db } from '@ab/db/connection';
-import {
-	captureAnchor,
-	generateAuthId,
-	generateReferenceId,
-	generateReferenceSectionId,
-} from '@ab/utils';
+import { captureAnchor, generateAuthId, generateReferenceId, generateReferenceSectionId } from '@ab/utils';
 import { and, eq } from 'drizzle-orm';
 import { beforeAll, describe, expect, it } from 'vitest';
 import {
@@ -43,14 +38,7 @@ import {
 	updateHighlightColor,
 } from './annotations';
 import { createNoteWithAnchor } from './notes';
-import {
-	card,
-	cardDraft,
-	note,
-	reference,
-	referenceSection,
-	referenceSectionAnnotation,
-} from './schema';
+import { card, cardDraft, note, reference, referenceSection, referenceSectionAnnotation } from './schema';
 
 const SAMPLE_BODY = 'The pilot in command of an aircraft is directly responsible for the safety of that flight.';
 
@@ -155,9 +143,7 @@ describe('createHighlight', () => {
 		const { userId, cleanup } = await isolatedUser('hl-color');
 		try {
 			const anchor = anchorAt(0, 3);
-			await expect(
-				createHighlight(userId, TEST_SECTION_ID, anchor, 'bogus' as never),
-			).rejects.toBeDefined();
+			await expect(createHighlight(userId, TEST_SECTION_ID, anchor, 'bogus' as never)).rejects.toBeDefined();
 		} finally {
 			await cleanup();
 		}
@@ -187,11 +173,7 @@ describe('listHighlightsForSection / listAnnotationsForSection', () => {
 			await createNoteWithAnchor(userId, TEST_SECTION_ID, anchorAt(20, 8), {
 				bodyMd: 'Why the PIC?',
 			});
-			await createCardDraft(
-				userId,
-				{ referenceSectionId: TEST_SECTION_ID, front: 'Q', back: 'A' },
-				anchorAt(40, 10),
-			);
+			await createCardDraft(userId, { referenceSectionId: TEST_SECTION_ID, front: 'Q', back: 'A' }, anchorAt(40, 10));
 			const rows = await listAnnotationsForSection(userId, TEST_SECTION_ID);
 			const kinds = rows.map((r) => r.kind).sort();
 			expect(kinds).toEqual(
@@ -207,12 +189,7 @@ describe('updateHighlightColor', () => {
 	it('updates the color and audits the change', async () => {
 		const { userId, cleanup } = await isolatedUser('hl-color-update');
 		try {
-			const row = await createHighlight(
-				userId,
-				TEST_SECTION_ID,
-				anchorAt(4, 5),
-				HIGHLIGHT_COLORS.YELLOW,
-			);
+			const row = await createHighlight(userId, TEST_SECTION_ID, anchorAt(4, 5), HIGHLIGHT_COLORS.YELLOW);
 			const after = await updateHighlightColor(row.id, userId, HIGHLIGHT_COLORS.PINK);
 			expect(after.color).toBe(HIGHLIGHT_COLORS.PINK);
 			const audits = await db
@@ -232,9 +209,7 @@ describe('updateHighlightColor', () => {
 			const { annotation } = await createNoteWithAnchor(userId, TEST_SECTION_ID, anchorAt(0, 3), {
 				bodyMd: 'thoughts',
 			});
-			await expect(
-				updateHighlightColor(annotation.id, userId, HIGHLIGHT_COLORS.BLUE),
-			).rejects.toBeDefined();
+			await expect(updateHighlightColor(annotation.id, userId, HIGHLIGHT_COLORS.BLUE)).rejects.toBeDefined();
 		} finally {
 			await cleanup();
 		}
@@ -245,17 +220,9 @@ describe('deleteAnnotation', () => {
 	it('removes the row and audits the delete', async () => {
 		const { userId, cleanup } = await isolatedUser('ann-del');
 		try {
-			const row = await createHighlight(
-				userId,
-				TEST_SECTION_ID,
-				anchorAt(4, 5),
-				HIGHLIGHT_COLORS.YELLOW,
-			);
+			const row = await createHighlight(userId, TEST_SECTION_ID, anchorAt(4, 5), HIGHLIGHT_COLORS.YELLOW);
 			await deleteAnnotation(row.id, userId);
-			const after = await db
-				.select()
-				.from(referenceSectionAnnotation)
-				.where(eq(referenceSectionAnnotation.id, row.id));
+			const after = await db.select().from(referenceSectionAnnotation).where(eq(referenceSectionAnnotation.id, row.id));
 			expect(after).toHaveLength(0);
 			await expect(deleteAnnotation(row.id, userId)).rejects.toBeInstanceOf(AnnotationNotFoundError);
 		} finally {
@@ -283,12 +250,9 @@ describe('createNoteWithAnchor', () => {
 	it('cascades the anchor row when the note is deleted', async () => {
 		const { userId, cleanup } = await isolatedUser('note-cascade');
 		try {
-			const { note: noteRow, annotation } = await createNoteWithAnchor(
-				userId,
-				TEST_SECTION_ID,
-				anchorAt(20, 8),
-				{ bodyMd: 'Will be deleted' },
-			);
+			const { note: noteRow, annotation } = await createNoteWithAnchor(userId, TEST_SECTION_ID, anchorAt(20, 8), {
+				bodyMd: 'Will be deleted',
+			});
 			await db.delete(note).where(eq(note.id, noteRow.id));
 			const after = await db
 				.select()

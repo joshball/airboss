@@ -2684,9 +2684,7 @@ export const cardDraft = studySchema.table(
 		// Hot path: "open drafts inbox for user X." Partial index over
 		// `promoted_at IS NULL` so the index pages stay tight as drafts
 		// promote.
-		userOpenIdx: index('card_draft_user_open_idx')
-			.on(t.userId, t.createdAt)
-			.where(sql`promoted_at IS NULL`),
+		userOpenIdx: index('card_draft_user_open_idx').on(t.userId, t.createdAt).where(sql`promoted_at IS NULL`),
 		userIdx: index('card_draft_user_idx').on(t.userId, t.createdAt),
 	}),
 );

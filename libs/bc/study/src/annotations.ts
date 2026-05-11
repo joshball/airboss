@@ -33,9 +33,9 @@ import {
 	CARD_DRAFTS_LIST_HARD_CAP,
 	CARD_KIND_VALUES,
 	CARD_KINDS,
-	type CardKind,
 	CARD_TYPE_VALUES,
 	CARD_TYPES,
+	type CardKind,
 	type CardType,
 	DOMAIN_VALUES,
 	type Domain,
@@ -49,12 +49,7 @@ import { and, asc, desc, eq, isNull, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { z } from 'zod';
 import { createCard } from './cards';
-import {
-	type CardDraftRow,
-	cardDraft,
-	type ReferenceSectionAnnotationRow,
-	referenceSectionAnnotation,
-} from './schema';
+import { type CardDraftRow, cardDraft, type ReferenceSectionAnnotationRow, referenceSectionAnnotation } from './schema';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 
@@ -285,10 +280,7 @@ export async function listAnnotationsForSection(
 		.select()
 		.from(referenceSectionAnnotation)
 		.where(
-			and(
-				eq(referenceSectionAnnotation.userId, userId),
-				eq(referenceSectionAnnotation.referenceSectionId, sectionId),
-			),
+			and(eq(referenceSectionAnnotation.userId, userId), eq(referenceSectionAnnotation.referenceSectionId, sectionId)),
 		)
 		.orderBy(asc(referenceSectionAnnotation.anchorStart), asc(referenceSectionAnnotation.id));
 }
@@ -335,9 +327,7 @@ export async function updateHighlightColor(
 	const [after] = await db
 		.update(referenceSectionAnnotation)
 		.set({ color: parsedColor, updatedAt: sql`now()` })
-		.where(
-			and(eq(referenceSectionAnnotation.id, annotationId), eq(referenceSectionAnnotation.userId, userId)),
-		)
+		.where(and(eq(referenceSectionAnnotation.id, annotationId), eq(referenceSectionAnnotation.userId, userId)))
 		.returning();
 	if (!after) throw new AnnotationNotFoundError(annotationId, userId);
 
@@ -361,9 +351,7 @@ export async function deleteAnnotation(annotationId: string, userId: string, db:
 
 	const result = await db
 		.delete(referenceSectionAnnotation)
-		.where(
-			and(eq(referenceSectionAnnotation.id, annotationId), eq(referenceSectionAnnotation.userId, userId)),
-		)
+		.where(and(eq(referenceSectionAnnotation.id, annotationId), eq(referenceSectionAnnotation.userId, userId)))
 		.returning({ id: referenceSectionAnnotation.id });
 	if (result.length === 0) throw new AnnotationNotFoundError(annotationId, userId);
 

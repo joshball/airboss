@@ -16,6 +16,7 @@ import { type ReferenceKind, ROUTES, readingMinutesForWords } from '@ab/constant
 import { isParseError, parseAimLocator, parseIdentifier } from '@ab/sources';
 import { error } from '@sveltejs/kit';
 import { computeSiblingNav } from '../../../../../lib/section-nav';
+import { loadSectionAnnotationContext } from '../../../../../lib/server/section-annotations';
 import { buildSourceLinks } from '../../../../../lib/source-links';
 import { buildTOCEntries, totalReadingMinutes } from '../../../../../lib/toc';
 import type { PageServerLoad } from './$types';
@@ -84,6 +85,8 @@ export const load: PageServerLoad = async (event) => {
 	const paragraphEntry = readingOrder.find((e) => e.sectionId === paragraphRow.id);
 	const sectionMinutes = paragraphEntry ? readingMinutesForWords(paragraphEntry.wordCount) : 0;
 
+	const annotationContext = await loadSectionAnnotationContext(event.locals.user?.id ?? null, paragraphRow.id);
+
 	return {
 		uri: rawUri,
 		sourceLinks,
@@ -130,5 +133,6 @@ export const load: PageServerLoad = async (event) => {
 			sectionMinutes,
 		},
 		isAuthenticated: event.locals.user !== null,
+		annotationContext,
 	};
 };

@@ -23,6 +23,7 @@ import { getReferenceByDocument, listAllSectionsForReference } from '@ab/bc-stud
 import { externalUrlForReference, REFERENCE_SECTION_LEVELS, type ReferenceKind, ROUTES } from '@ab/constants';
 import { isParseError, parseAcsLocator, parseIdentifier } from '@ab/sources';
 import { error } from '@sveltejs/kit';
+import { loadSectionAnnotationContext } from '../../../../../../../lib/server/section-annotations';
 import { buildSourceLinks } from '../../../../../../../lib/source-links';
 import type { PageServerLoad } from './$types';
 
@@ -109,7 +110,7 @@ function elementTriad(code: string): Triad | null {
 	return null;
 }
 
-export const load: PageServerLoad = async ({ params }) => {
+export const load: PageServerLoad = async ({ params, locals }) => {
 	const rawUri = `airboss-ref:acs/${params.doc}/area-${params.area}/task-${params.task}`;
 	const parsed = parseIdentifier(rawUri);
 	if (isParseError(parsed)) throw error(404, `Malformed ACS reference: ${parsed.message}`);
@@ -236,6 +237,8 @@ export const load: PageServerLoad = async ({ params }) => {
 		url: ref.url,
 	});
 
+	const annotationContext = await loadSectionAnnotationContext(locals.user?.id ?? null, taskRow.id);
+
 	return {
 		uri: rawUri,
 		sourceLinks,
@@ -270,5 +273,7 @@ export const load: PageServerLoad = async ({ params }) => {
 			next,
 		},
 		areas,
+		annotationContext,
+		isAuthenticated: locals.user !== null,
 	};
 };
