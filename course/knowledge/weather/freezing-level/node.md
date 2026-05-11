@@ -31,8 +31,11 @@ references:
     detail: Aviation Weather Services, Freezing Level chart section
     note: Format spec for the freezing-level forecast product including isotherm contour intervals.
   - source: FAA-H-8083-28
-    detail: Aviation Weather Handbook (Aviation Weather Handbook)
-    note: Modern consolidated reference for icing meteorology and the freezing-level product. Verify chapter.
+    detail: Aviation Weather Handbook, Chapter 25 -- Analysis, Sections 25.4 (Freezing Level Analysis) and 25.5 (Icing Analysis -- Current Icing Product CIP)
+    note: Modern consolidated reference for the freezing-level analysis chart and its icing-analysis companion product.
+  - source: FAA-H-8083-28
+    detail: Aviation Weather Handbook, Chapter 27 -- Forecasts, Sections 27.11 (Freezing Level Forecast Graphics) and 27.12 (Forecast Icing Product -- FIP)
+    note: Modern consolidated reference for the freezing-level forecast chart and its FIP companion forecast.
   - source: AC 91-74B
     detail: Pilot Guide, Flight in Icing Conditions
     note: Operational treatment of freezing level in icing avoidance and escape decisions.
