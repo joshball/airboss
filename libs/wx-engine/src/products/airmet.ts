@@ -81,11 +81,7 @@ function mapKindToAirmet(hazardKind: HazardKind): AirmetFamily | null {
 
 function formatLabel(kind: AirmetFamily, hz: HazardZone): string {
 	const banner =
-		kind === AIRMET_FAMILIES.SIERRA
-			? 'AIRMET SIERRA'
-			: kind === AIRMET_FAMILIES.TANGO
-				? 'AIRMET TANGO'
-				: 'AIRMET ZULU';
+		kind === AIRMET_FAMILIES.SIERRA ? 'AIRMET SIERRA' : kind === AIRMET_FAMILIES.TANGO ? 'AIRMET TANGO' : 'AIRMET ZULU';
 	const subj =
 		hz.kind === 'ifr'
 			? 'IFR Conditions'

@@ -35,8 +35,8 @@ import { deriveAirmets } from './products/airmet';
 import { deriveMetar } from './products/metar';
 import { derivePireps } from './products/pirep';
 import { deriveTaf } from './products/taf';
-import { deriveFbGrid } from './products/winds-aloft';
 import type { AirmetAdvisory, DerivedFbGrid, DerivedMetar, DerivedPirep, DerivedTaf } from './products/types';
+import { deriveFbGrid } from './products/winds-aloft';
 import { loadScenario } from './truth/scenarios/registry';
 import type { TruthModel } from './truth/types';
 
@@ -198,7 +198,11 @@ export async function writeScenarioBundle(bundle: ScenarioBundle, options: Scena
 			fs,
 			path,
 			path.resolve(productsOut, 'metars.json'),
-			JSON.stringify(products.metars.map((m) => m.parsed), null, 2),
+			JSON.stringify(
+				products.metars.map((m) => m.parsed),
+				null,
+				2,
+			),
 		);
 	}
 
@@ -209,19 +213,18 @@ export async function writeScenarioBundle(bundle: ScenarioBundle, options: Scena
 			fs,
 			path,
 			path.resolve(productsOut, 'tafs.json'),
-			JSON.stringify(products.tafs.map((t) => t.parsed), null, 2),
+			JSON.stringify(
+				products.tafs.map((t) => t.parsed),
+				null,
+				2,
+			),
 		);
 	}
 
 	if (products.fbGrid !== null) {
 		ensureDir(fs, productsOut);
 		writeFile(fs, path, path.resolve(productsOut, 'fb-bulletin.txt'), products.fbGrid.raw);
-		writeFile(
-			fs,
-			path,
-			path.resolve(productsOut, 'fb-bulletin.json'),
-			JSON.stringify(products.fbGrid.parsed, null, 2),
-		);
+		writeFile(fs, path, path.resolve(productsOut, 'fb-bulletin.json'), JSON.stringify(products.fbGrid.parsed, null, 2));
 	}
 
 	if (products.pireps.length > 0) {
@@ -231,7 +234,11 @@ export async function writeScenarioBundle(bundle: ScenarioBundle, options: Scena
 			fs,
 			path,
 			path.resolve(productsOut, 'pireps.json'),
-			JSON.stringify(products.pireps.map((p) => p.parsed), null, 2),
+			JSON.stringify(
+				products.pireps.map((p) => p.parsed),
+				null,
+				2,
+			),
 		);
 	}
 

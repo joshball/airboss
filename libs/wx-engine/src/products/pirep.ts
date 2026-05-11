@@ -72,9 +72,7 @@ export function derivePireps(truth: TruthModel): DerivedPirep[] {
 function makePirep(raw: string, lon: number, lat: number): DerivedPirep {
 	const parsed = parsePirep(raw);
 	if (parsed.warnings.length > 0) {
-		throw new Error(
-			`derivePireps: emitted PIREP re-parses with warnings: ${parsed.warnings.join('; ')}\nraw: ${raw}`,
-		);
+		throw new Error(`derivePireps: emitted PIREP re-parses with warnings: ${parsed.warnings.join('; ')}\nraw: ${raw}`);
 	}
 	return { raw, parsed, lon, lat };
 }

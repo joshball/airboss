@@ -149,7 +149,12 @@ export function deriveMetar(truth: TruthModel, stationIcao: string, observationT
 		if (cloudBaseFt !== null) cloudTokens.push(formatCloudLayer(cloudCover, cloudBaseFt));
 		for (const layer of additionalLayers) cloudTokens.push(formatCloudLayer(layer.cover, layer.baseFt));
 		// If a top is far above base and no additional layer was inserted, add a higher OVC.
-		if (cloudTopFt !== null && cloudBaseFt !== null && cloudTopFt > cloudBaseFt + 4000 && additionalLayers.length === 0) {
+		if (
+			cloudTopFt !== null &&
+			cloudBaseFt !== null &&
+			cloudTopFt > cloudBaseFt + 4000 &&
+			additionalLayers.length === 0
+		) {
 			cloudTokens.push(formatCloudLayer('OVC', Math.min(cloudTopFt, 25000)));
 		}
 	}
