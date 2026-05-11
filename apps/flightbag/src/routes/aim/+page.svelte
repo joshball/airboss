@@ -1,9 +1,5 @@
 <script lang="ts">
-import { ROUTES } from '@ab/constants';
-import Breadcrumbs from '@ab/library/Breadcrumbs.svelte';
 import ReaderEmptyState from '@ab/library/ReaderEmptyState.svelte';
-import ReaderLayout from '@ab/library/ReaderLayout.svelte';
-import SourceLinks from '@ab/library/SourceLinks.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -13,59 +9,53 @@ let { data }: { data: PageData } = $props();
 	<title>{data.reference.title} -- Flightbag</title>
 </svelte:head>
 
-<ReaderLayout>
-	{#snippet breadcrumb()}
-		<Breadcrumbs
-			segments={[
-				{ label: 'Flightbag', href: ROUTES.FLIGHTBAG_HOME },
-				{ label: data.reference.title, href: null },
-			]}
-		/>
-	{/snippet}
-
-	{#snippet sourceLinks()}
-		<SourceLinks
-			localPdfHref={data.sourceLinks.localPdfHref}
-			onlineUrl={data.sourceLinks.onlineUrl}
-			localPdfMissing={data.sourceLinks.localPdfMissing}
-		/>
-	{/snippet}
-
-	{#snippet title()}
-		{data.reference.title}
-	{/snippet}
-
-	{#snippet subtitle()}
+<header class="title-block">
+	<h1>{data.reference.title}</h1>
+	<p class="meta">
 		<span class="edition">{data.reference.edition}</span>
 		<span class="publisher">{data.reference.publisher}</span>
-	{/snippet}
+	</p>
+</header>
 
-	{#if data.chapters.length === 0}
-		<ReaderEmptyState
-			kind="no-children"
-			localPdfHref={data.sourceLinks.localPdfHref}
-			externalUrl={data.sourceLinks.onlineUrl}
-			heading="No chapters available yet."
-			note="The chapter index is empty -- the AIM source may not be ingested in this environment."
-		/>
-	{:else}
-		<section aria-label="AIM chapters">
-			<h2>Chapters</h2>
-			<ol class="chapters">
-				{#each data.chapters as chapter (chapter.id)}
-					<li>
-						<a href={chapter.href}>
-							<span class="chapter-code">Chapter {chapter.code}</span>
-							<span class="chapter-title">{chapter.title}</span>
-						</a>
-					</li>
-				{/each}
-			</ol>
-		</section>
-	{/if}
-</ReaderLayout>
+{#if data.chapters.length === 0}
+	<ReaderEmptyState
+		kind="no-children"
+		localPdfHref={data.sourceLinks.localPdfHref}
+		externalUrl={data.sourceLinks.onlineUrl}
+		heading="No chapters available yet."
+		note="The chapter index is empty -- the AIM source may not be ingested in this environment."
+	/>
+{:else}
+	<section aria-label="AIM chapters">
+		<h2>Chapters</h2>
+		<ol class="chapters">
+			{#each data.chapters as chapter (chapter.id)}
+				<li>
+					<a href={chapter.href}>
+						<span class="chapter-code">Chapter {chapter.code}</span>
+						<span class="chapter-title">{chapter.title}</span>
+					</a>
+				</li>
+			{/each}
+		</ol>
+	</section>
+{/if}
 
 <style>
+	.title-block {
+		margin-bottom: var(--space-lg);
+	}
+	.title-block h1 {
+		margin: 0 0 var(--space-2xs);
+	}
+	.meta {
+		margin: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-sm);
+		color: var(--ink-muted);
+		font-size: var(--font-size-sm);
+	}
 	.edition {
 		font-family: var(--font-family-mono);
 	}

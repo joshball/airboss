@@ -1,10 +1,10 @@
 <script lang="ts" module>
-import {
-	type ReadingDensity,
-	type ReadingFontFamily,
-	type ReadingFontScale,
-	type ReadingHeadingScale,
-	type ReadingMeasure,
+import type {
+	ReadingDensity,
+	ReadingFontFamily,
+	ReadingFontScale,
+	ReadingHeadingScale,
+	ReadingMeasure,
 } from '@ab/constants';
 
 /**
