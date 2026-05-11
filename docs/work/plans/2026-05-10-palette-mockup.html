@@ -1,0 +1,1574 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Airboss Palette -- Mockup</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<style>
+			:root {
+				--bg: #0b0e13;
+				--panel: #11151c;
+				--panel-2: #161b24;
+				--border: #232a36;
+				--border-strong: #2e3645;
+				--text: #e6ebf3;
+				--muted: #8a93a3;
+				--dim: #5d6473;
+				--accent: #ffb454; /* aviation amber */
+				--accent-soft: rgba(255, 180, 84, 0.12);
+				--accent-line: rgba(255, 180, 84, 0.32);
+				--cyan: #6cd6e0;
+				--green: #7ec27a;
+				--violet: #b69cf2;
+				--rose: #ef7d8a;
+				--shadow: 0 12px 60px rgba(0, 0, 0, 0.55);
+				--radius: 10px;
+			}
+
+			* {
+				box-sizing: border-box;
+			}
+
+			html,
+			body {
+				margin: 0;
+				padding: 0;
+				background: var(--bg);
+				color: var(--text);
+				font-family:
+					ui-sans-serif, system-ui, -apple-system, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+				font-size: 13.5px;
+				line-height: 1.45;
+			}
+
+			.page {
+				max-width: 1240px;
+				margin: 24px auto 80px;
+				padding: 0 24px;
+			}
+
+			.intro {
+				color: var(--muted);
+				margin-bottom: 14px;
+			}
+
+			.intro h1 {
+				color: var(--text);
+				font-size: 18px;
+				font-weight: 600;
+				margin: 0 0 6px;
+				letter-spacing: -0.01em;
+			}
+
+			.intro p {
+				margin: 0 0 6px;
+				max-width: 80ch;
+			}
+
+			.intro kbd {
+				background: var(--panel-2);
+				border: 1px solid var(--border);
+				border-bottom-width: 2px;
+				border-radius: 4px;
+				padding: 1px 6px;
+				font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+				font-size: 11px;
+				color: var(--text);
+			}
+
+			.scrim {
+				background: rgba(2, 4, 8, 0.65);
+				border-radius: 14px;
+				padding: 28px;
+				margin-top: 18px;
+			}
+
+			.palette {
+				background: var(--panel);
+				border: 1px solid var(--border-strong);
+				border-radius: var(--radius);
+				box-shadow: var(--shadow);
+				overflow: hidden;
+			}
+
+			/* --- input row --- */
+			.input-row {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				padding: 14px 18px;
+				border-bottom: 1px solid var(--border);
+				background: linear-gradient(180deg, #14191f, #11151c);
+			}
+
+			.input-row .caret {
+				color: var(--accent);
+				font-weight: 700;
+				font-family: ui-monospace, monospace;
+			}
+
+			.input-row input {
+				flex: 1;
+				background: transparent;
+				border: 0;
+				outline: 0;
+				color: var(--text);
+				font-size: 16px;
+				caret-color: var(--accent);
+				font-family: inherit;
+			}
+
+			.chips {
+				display: flex;
+				gap: 6px;
+			}
+
+			.chip {
+				font-size: 11px;
+				padding: 3px 8px;
+				border-radius: 4px;
+				background: var(--accent-soft);
+				color: var(--accent);
+				border: 1px solid var(--accent-line);
+				font-family: ui-monospace, monospace;
+			}
+
+			.chip.muted {
+				background: transparent;
+				color: var(--muted);
+				border-color: var(--border);
+			}
+
+			.escape {
+				color: var(--dim);
+				font-size: 11px;
+			}
+
+			/* --- hoist banner (single tier-1 hit hint) --- */
+			.hoist {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				padding: 10px 18px;
+				background: linear-gradient(90deg, rgba(255, 180, 84, 0.08), rgba(255, 180, 84, 0.02));
+				border-bottom: 1px solid var(--border);
+				color: var(--text);
+				font-size: 13px;
+			}
+
+			.hoist .label {
+				color: var(--muted);
+				font-size: 11px;
+				text-transform: uppercase;
+				letter-spacing: 0.06em;
+				margin-right: 10px;
+			}
+
+			.hoist .doc {
+				color: var(--accent);
+				font-weight: 600;
+			}
+
+			.hoist .enter {
+				color: var(--dim);
+				font-family: ui-monospace, monospace;
+				font-size: 11px;
+			}
+
+			/* --- columns --- */
+			.cols {
+				display: grid;
+				grid-template-columns: 1.3fr 1fr 0.8fr;
+				gap: 1px;
+				background: var(--border);
+			}
+
+			.col {
+				background: var(--panel);
+				padding: 14px 16px 16px;
+				min-height: 360px;
+			}
+
+			.col-foot {
+				grid-column: 1 / -1;
+				display: grid;
+				grid-template-columns: 1.3fr 1fr 0.8fr;
+				gap: 1px;
+				background: var(--border);
+				border-top: 1px solid var(--border);
+			}
+
+			.col-foot .col {
+				min-height: 0;
+				padding-bottom: 14px;
+			}
+
+			.col h3 {
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+				font-size: 10.5px;
+				font-weight: 600;
+				margin: 0 0 10px;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+			}
+
+			.col h3 .count {
+				color: var(--dim);
+				font-weight: 500;
+				letter-spacing: 0;
+				font-size: 10.5px;
+			}
+
+			/* --- result rows --- */
+			.row {
+				display: flex;
+				align-items: flex-start;
+				gap: 10px;
+				padding: 8px 8px;
+				margin: 0 -8px;
+				border-radius: 6px;
+				cursor: pointer;
+				transition: background 80ms ease;
+			}
+
+			.row:hover {
+				background: var(--panel-2);
+			}
+
+			.row.selected {
+				background: var(--accent-soft);
+				outline: 1px solid var(--accent-line);
+			}
+
+			.row .icon {
+				width: 22px;
+				height: 22px;
+				flex: 0 0 22px;
+				border-radius: 5px;
+				background: var(--panel-2);
+				border: 1px solid var(--border-strong);
+				color: var(--muted);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-family: ui-monospace, monospace;
+				font-size: 10px;
+				font-weight: 600;
+				margin-top: 1px;
+			}
+
+			.row .icon.faa {
+				color: var(--accent);
+				border-color: var(--accent-line);
+				background: var(--accent-soft);
+			}
+
+			.row .icon.kb {
+				color: var(--violet);
+				border-color: rgba(182, 156, 242, 0.35);
+				background: rgba(182, 156, 242, 0.1);
+			}
+
+			.row .icon.course {
+				color: var(--cyan);
+				border-color: rgba(108, 214, 224, 0.35);
+				background: rgba(108, 214, 224, 0.1);
+			}
+
+			.row .icon.mine {
+				color: var(--green);
+				border-color: rgba(126, 194, 122, 0.35);
+				background: rgba(126, 194, 122, 0.1);
+			}
+
+			.row .icon.web {
+				color: var(--rose);
+				border-color: rgba(239, 125, 138, 0.35);
+				background: rgba(239, 125, 138, 0.1);
+			}
+
+			.row .icon.cmd {
+				color: var(--muted);
+			}
+
+			.row .body {
+				flex: 1;
+				min-width: 0;
+			}
+
+			.row .title {
+				color: var(--text);
+				font-weight: 500;
+				font-size: 13.5px;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+
+			.row .title mark {
+				background: rgba(255, 180, 84, 0.22);
+				color: var(--accent);
+				padding: 0 1px;
+				border-radius: 2px;
+			}
+
+			.row .meta {
+				color: var(--muted);
+				font-size: 11.5px;
+				margin-top: 2px;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+
+			.row .meta .sep {
+				color: var(--dim);
+				margin: 0 6px;
+			}
+
+			.row .kbd {
+				color: var(--dim);
+				font-family: ui-monospace, monospace;
+				font-size: 11px;
+				white-space: nowrap;
+				align-self: center;
+			}
+
+			/* --- parent grouping inside FAA column --- */
+			.parent-group {
+				margin-top: 14px;
+				padding-top: 10px;
+				border-top: 1px dashed var(--border);
+			}
+
+			.parent-group:first-child {
+				margin-top: 0;
+				padding-top: 0;
+				border-top: 0;
+			}
+
+			.parent-header {
+				display: flex;
+				align-items: baseline;
+				justify-content: space-between;
+				padding: 0 8px;
+				margin-bottom: 4px;
+			}
+
+			.parent-header .name {
+				color: var(--muted);
+				font-size: 11.5px;
+				font-weight: 600;
+				letter-spacing: 0.02em;
+			}
+
+			.parent-header .badge {
+				color: var(--dim);
+				font-size: 10.5px;
+				font-family: ui-monospace, monospace;
+			}
+
+			/* --- footer status bar --- */
+			.statusbar {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				padding: 8px 16px;
+				background: var(--panel-2);
+				border-top: 1px solid var(--border);
+				color: var(--muted);
+				font-size: 11.5px;
+				font-family: ui-monospace, monospace;
+			}
+
+			.statusbar .keys {
+				display: flex;
+				gap: 14px;
+			}
+
+			.statusbar .keys span {
+				color: var(--muted);
+			}
+
+			.statusbar .keys b {
+				color: var(--text);
+				font-weight: 600;
+				margin-right: 4px;
+			}
+
+			.legend {
+				margin-top: 28px;
+				color: var(--muted);
+				font-size: 12px;
+			}
+
+			.legend h2 {
+				color: var(--text);
+				font-size: 13px;
+				font-weight: 600;
+				margin: 0 0 8px;
+				letter-spacing: 0.02em;
+			}
+
+			.legend ul {
+				margin: 0 0 14px 18px;
+				padding: 0;
+			}
+
+			.legend li {
+				margin-bottom: 4px;
+			}
+
+			.legend code {
+				background: var(--panel-2);
+				border: 1px solid var(--border);
+				border-radius: 3px;
+				padding: 1px 5px;
+				font-size: 11.5px;
+				color: var(--text);
+				font-family: ui-monospace, monospace;
+			}
+
+			/* narrow / list variant for comparison */
+			.list-variant .cols,
+			.list-variant .col-foot {
+				display: block;
+				background: var(--panel);
+			}
+
+			.list-variant .col {
+				border-bottom: 1px solid var(--border);
+				min-height: 0;
+				padding: 12px 16px 10px;
+			}
+
+			/* --- variant C: with detail pane --- */
+			.with-detail .cols {
+				grid-template-columns: 1.2fr 1fr 0.7fr 1.1fr;
+			}
+
+			.with-detail .col-foot {
+				grid-template-columns: 1.2fr 1fr 0.7fr 1.1fr;
+			}
+
+			.detail-pane {
+				background: var(--panel-2);
+				padding: 16px 18px 18px;
+				min-height: 360px;
+				border-left: 1px solid var(--border);
+			}
+
+			.detail-pane h3 {
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+				font-size: 10.5px;
+				font-weight: 600;
+				margin: 0 0 10px;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+			}
+
+			.detail-pane h3 .count {
+				color: var(--dim);
+				font-weight: 500;
+				letter-spacing: 0;
+				font-size: 10.5px;
+			}
+
+			.detail-card {
+				background: var(--panel);
+				border: 1px solid var(--border);
+				border-radius: 8px;
+				padding: 14px;
+				margin-bottom: 12px;
+			}
+
+			.detail-card .doc-code {
+				color: var(--accent);
+				font-family: ui-monospace, monospace;
+				font-size: 12px;
+				font-weight: 600;
+				margin-bottom: 4px;
+				letter-spacing: 0.01em;
+			}
+
+			.detail-card .doc-title {
+				color: var(--text);
+				font-size: 14px;
+				font-weight: 500;
+				margin-bottom: 6px;
+			}
+
+			.detail-card .doc-meta {
+				color: var(--muted);
+				font-size: 11.5px;
+				margin-bottom: 10px;
+			}
+
+			.detail-card .snippet {
+				color: var(--muted);
+				font-size: 12px;
+				line-height: 1.55;
+				padding-top: 10px;
+				border-top: 1px dashed var(--border);
+				margin-top: 4px;
+			}
+
+			.detail-card .snippet mark {
+				background: rgba(255, 180, 84, 0.22);
+				color: var(--accent);
+				padding: 0 1px;
+				border-radius: 2px;
+			}
+
+			.detail-actions {
+				display: flex;
+				gap: 6px;
+				flex-wrap: wrap;
+				margin-top: 12px;
+			}
+
+			.detail-actions .action {
+				font-size: 11.5px;
+				padding: 4px 10px;
+				border-radius: 4px;
+				background: var(--panel-2);
+				border: 1px solid var(--border-strong);
+				color: var(--text);
+				font-family: inherit;
+				cursor: pointer;
+			}
+
+			.detail-actions .action:hover {
+				border-color: var(--accent-line);
+				color: var(--accent);
+			}
+
+			.detail-actions .action .kbd {
+				color: var(--dim);
+				margin-left: 6px;
+				font-family: ui-monospace, monospace;
+				font-size: 10.5px;
+			}
+
+			/* --- doc-picker rows in detail pane --- */
+			.doc-row {
+				display: flex;
+				flex-direction: column;
+				gap: 2px;
+				padding: 8px 10px;
+				margin: 0 -10px;
+				border-radius: 6px;
+				cursor: pointer;
+				border-left: 2px solid transparent;
+			}
+
+			.doc-row:hover {
+				background: var(--panel);
+			}
+
+			.doc-row.selected {
+				background: var(--accent-soft);
+				border-left-color: var(--accent);
+			}
+
+			.doc-row .code {
+				color: var(--accent);
+				font-family: ui-monospace, monospace;
+				font-size: 11.5px;
+				font-weight: 600;
+				letter-spacing: 0.01em;
+			}
+
+			.doc-row .label {
+				color: var(--text);
+				font-size: 12.5px;
+			}
+
+			.doc-row .label mark {
+				background: rgba(255, 180, 84, 0.22);
+				color: var(--accent);
+				padding: 0 1px;
+				border-radius: 2px;
+			}
+
+			.doc-row .abbrev {
+				color: var(--dim);
+				font-size: 11px;
+				font-family: ui-monospace, monospace;
+			}
+
+			.doc-picker-hint {
+				padding: 8px 0;
+				color: var(--muted);
+				font-size: 11.5px;
+				border-bottom: 1px solid var(--border);
+				margin-bottom: 8px;
+			}
+
+			.doc-picker-hint kbd {
+				background: var(--panel);
+				border: 1px solid var(--border-strong);
+				border-radius: 3px;
+				padding: 1px 5px;
+				font-family: ui-monospace, monospace;
+				font-size: 10.5px;
+				color: var(--text);
+				margin: 0 2px;
+			}
+
+			.mode-banner {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				padding: 8px 18px;
+				background: rgba(108, 214, 224, 0.06);
+				border-bottom: 1px solid var(--border);
+				color: var(--cyan);
+				font-size: 11.5px;
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+			}
+
+			.mode-banner .dot {
+				width: 6px;
+				height: 6px;
+				border-radius: 50%;
+				background: var(--cyan);
+				box-shadow: 0 0 8px rgba(108, 214, 224, 0.55);
+			}
+
+			/* --- autocomplete dropdown under input (vscode-style) --- */
+			.input-wrap {
+				position: relative;
+			}
+
+			.autocomplete {
+				position: absolute;
+				left: 28px;
+				right: 16px;
+				top: 100%;
+				margin-top: 4px;
+				background: var(--panel-2);
+				border: 1px solid var(--border-strong);
+				border-radius: 8px;
+				box-shadow: 0 14px 38px rgba(0, 0, 0, 0.55);
+				overflow: hidden;
+				z-index: 10;
+			}
+
+			.autocomplete .ac-hint {
+				padding: 6px 12px;
+				color: var(--muted);
+				font-size: 11px;
+				border-bottom: 1px solid var(--border);
+				background: var(--panel);
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+
+			.autocomplete .ac-hint kbd {
+				background: var(--bg);
+				border: 1px solid var(--border-strong);
+				border-radius: 3px;
+				padding: 0 5px;
+				font-family: ui-monospace, monospace;
+				font-size: 10.5px;
+				color: var(--text);
+				margin: 0 2px;
+			}
+
+			.ac-item {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				padding: 7px 12px;
+				cursor: pointer;
+				border-left: 2px solid transparent;
+			}
+
+			.ac-item:hover {
+				background: var(--panel);
+			}
+
+			.ac-item.selected {
+				background: var(--accent-soft);
+				border-left-color: var(--accent);
+			}
+
+			.ac-item .ac-code {
+				color: var(--accent);
+				font-family: ui-monospace, monospace;
+				font-size: 12px;
+				font-weight: 600;
+				min-width: 130px;
+			}
+
+			.ac-item .ac-code mark {
+				background: rgba(255, 180, 84, 0.28);
+				color: var(--accent);
+				padding: 0 1px;
+				border-radius: 2px;
+			}
+
+			.ac-item .ac-title {
+				color: var(--text);
+				font-size: 12.5px;
+				flex: 1;
+			}
+
+			.ac-item .ac-abbrev {
+				color: var(--dim);
+				font-family: ui-monospace, monospace;
+				font-size: 11px;
+				min-width: 70px;
+				text-align: right;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="page">
+			<div class="intro">
+				<h1>Airboss palette -- design mockup</h1>
+				<p>
+					Two variants for the query <strong>"weather"</strong>. Open in a browser, share screenshots. This is a
+					visual draft, not a built component. Adjust spacing, colors, density before commit. Press
+					<kbd>Cmd</kbd>+<kbd>K</kbd> or <kbd>/</kbd> to open the real palette (today: help-only).
+				</p>
+			</div>
+
+			<!-- =========================================================== -->
+			<!-- Variant A: wide 4-column                                    -->
+			<!-- =========================================================== -->
+			<div class="scrim">
+				<div class="palette">
+					<div class="input-row">
+						<span class="caret">&gt;</span>
+						<input value="weather" readonly />
+						<div class="chips">
+							<span class="chip">wx == weather</span>
+							<span class="chip muted">all surfaces</span>
+						</div>
+						<span class="escape">esc to close</span>
+					</div>
+
+					<div class="hoist">
+						<div>
+							<span class="label">Best match</span>
+							<span>Open</span>
+							<span class="doc"> FAA-H-8083-28B -- Aviation Weather Handbook</span>
+						</div>
+						<span class="enter">enter ↵</span>
+					</div>
+
+					<div class="cols">
+						<!-- FAA Resources column -->
+						<div class="col">
+							<h3>
+								<span>FAA Resources</span>
+								<span class="count">8 of 23 -- show all</span>
+							</h3>
+
+							<div class="parent-group">
+								<div class="row selected">
+									<div class="icon faa">FH</div>
+									<div class="body">
+										<div class="title">Aviation <mark>Weather</mark> Handbook</div>
+										<div class="meta">
+											FAA-H-8083-28B <span class="sep">·</span> AvWX <span class="sep">·</span> 2022
+										</div>
+									</div>
+									<span class="kbd">↵</span>
+								</div>
+								<div class="row">
+									<div class="icon faa">AC</div>
+									<div class="body">
+										<div class="title">AC 00-6B -- Aviation <mark>Weather</mark></div>
+										<div class="meta">Advisory Circular <span class="sep">·</span> 2016</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="parent-group">
+								<div class="parent-header">
+									<span class="name">Pilot's Handbook of Aeronautical Knowledge</span>
+									<span class="badge">PHAK · FAA-H-8083-25C</span>
+								</div>
+								<div class="row">
+									<div class="icon faa">12</div>
+									<div class="body">
+										<div class="title">Ch 12 -- <mark>Weather</mark> Theory</div>
+										<div class="meta">PHAK <span class="sep">·</span> 38 pages</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="icon faa">13</div>
+									<div class="body">
+										<div class="title">Ch 13 -- Aviation <mark>Weather</mark> Services</div>
+										<div class="meta">PHAK <span class="sep">·</span> 22 pages</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="icon faa">11</div>
+									<div class="body">
+										<div class="title">Ch 11 -- Aircraft Performance (density altitude)</div>
+										<div class="meta">PHAK <span class="sep">·</span> body match: weather</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="parent-group">
+								<div class="parent-header">
+									<span class="name">14 CFR</span>
+									<span class="badge">Regulations</span>
+								</div>
+								<div class="row">
+									<div class="icon faa">§</div>
+									<div class="body">
+										<div class="title">§91.103 -- Preflight action</div>
+										<div class="meta">14 CFR Part 91 <span class="sep">·</span> mentions weather brief</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="icon faa">§</div>
+									<div class="body">
+										<div class="title">§91.155 -- Basic VFR <mark>weather</mark> minimums</div>
+										<div class="meta">14 CFR Part 91</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="parent-group">
+								<div class="parent-header">
+									<span class="name">Aeronautical Information Manual</span>
+									<span class="badge">AIM</span>
+								</div>
+								<div class="row">
+									<div class="icon faa">7</div>
+									<div class="body">
+										<div class="title">AIM 7-1 -- Meteorology</div>
+										<div class="meta">AIM Ch 7 <span class="sep">·</span> 18 sections</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Airboss Content column -->
+						<div class="col">
+							<h3>
+								<span>Airboss Content</span>
+								<span class="count">11 of 31 -- show all</span>
+							</h3>
+
+							<div class="parent-group">
+								<div class="parent-header">
+									<span class="name">Courses</span>
+									<span class="badge">syllabus</span>
+								</div>
+								<div class="row">
+									<div class="icon course">CR</div>
+									<div class="body">
+										<div class="title">Aviation <mark>Weather</mark> Course</div>
+										<div class="meta">course/courses/weather-comprehensive <span class="sep">·</span> 14 lessons</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="icon course">CR</div>
+									<div class="body">
+										<div class="title">PPL Syllabus -- <mark>Weather</mark> section</div>
+										<div class="meta">ppl-airplane-acs-6c <span class="sep">·</span> 6 lessons</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="parent-group">
+								<div class="parent-header">
+									<span class="name">Knowledge nodes</span>
+									<span class="badge">course/knowledge/weather</span>
+								</div>
+								<div class="row">
+									<div class="icon kb">KB</div>
+									<div class="body">
+										<div class="title">Pressure systems &amp; circulation</div>
+										<div class="meta">discovery node <span class="sep">·</span> weather <span class="sep">·</span> PPL/IR</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="icon kb">KB</div>
+									<div class="body">
+										<div class="title">Fronts &amp; air masses</div>
+										<div class="meta">discovery node <span class="sep">·</span> weather <span class="sep">·</span> PPL/IR</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="icon kb">KB</div>
+									<div class="body">
+										<div class="title">METAR / TAF decoding</div>
+										<div class="meta">discovery node <span class="sep">·</span> encoded-text family</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="parent-group">
+								<div class="parent-header">
+									<span class="name">Glossary</span>
+									<span class="badge">aviation registry</span>
+								</div>
+								<div class="row">
+									<div class="icon kb">G</div>
+									<div class="body">
+										<div class="title">METAR</div>
+										<div class="meta">term <span class="sep">·</span> aliases: routine wx report</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="icon kb">G</div>
+									<div class="body">
+										<div class="title">Density altitude</div>
+										<div class="meta">term <span class="sep">·</span> related to weather, performance</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="parent-group">
+								<div class="parent-header">
+									<span class="name">App help</span>
+									<span class="badge">how this app works</span>
+								</div>
+								<div class="row">
+									<div class="icon kb">?</div>
+									<div class="body">
+										<div class="title">WX-chart scenarios in reps</div>
+										<div class="meta">help/study/wx-charts</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- My Stuff column -->
+						<div class="col">
+							<h3>
+								<span>My Stuff</span>
+								<span class="count">user content</span>
+							</h3>
+
+							<div class="parent-group">
+								<div class="row">
+									<div class="icon mine">C</div>
+									<div class="body">
+										<div class="title">3 cards mention "weather"</div>
+										<div class="meta">2 due now <span class="sep">·</span> 1 mastered</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="icon mine">R</div>
+									<div class="body">
+										<div class="title">Reps -- <mark>weather</mark> minimums</div>
+										<div class="meta">1 rep due in plan "PPL prep"</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="icon mine">P</div>
+									<div class="body">
+										<div class="title">Plan: PPL <mark>Weather</mark> Block</div>
+										<div class="meta">active <span class="sep">·</span> 42% complete</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-foot">
+						<div class="col">
+							<h3>
+								<span>External Tools</span>
+								<span class="count">curated</span>
+							</h3>
+							<div class="row">
+								<div class="icon web">↗</div>
+								<div class="body">
+									<div class="title">aviationweather.gov</div>
+									<div class="meta">official NWS/AWC source <span class="sep">·</span> METAR/TAF/SIGMET/charts</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="icon web">↗</div>
+								<div class="body">
+									<div class="title">1800wxbrief.com</div>
+									<div class="meta">Leidos Flight Service <span class="sep">·</span> standard / abbreviated brief</div>
+								</div>
+							</div>
+						</div>
+						<div class="col">
+							<h3>
+								<span>Commands</span>
+								<span class="count">go / do</span>
+							</h3>
+							<div class="row">
+								<div class="icon cmd">→</div>
+								<div class="body">
+									<div class="title">Go: Aviation Weather Course</div>
+									<div class="meta">/study/courses/weather-comprehensive</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="icon cmd">+</div>
+								<div class="body">
+									<div class="title">New: weather rep session</div>
+									<div class="meta">apps/study <span class="sep">·</span> filter: kind=wx-chart</div>
+								</div>
+							</div>
+						</div>
+						<div class="col">
+							<h3>
+								<span>Filters available</span>
+								<span class="count">click to add</span>
+							</h3>
+							<div class="row">
+								<div class="icon">/</div>
+								<div class="body">
+									<div class="title">doc:FAA-H-8083-28</div>
+									<div class="meta">scope to one doc</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="icon">/</div>
+								<div class="body">
+									<div class="title">kind:cfr</div>
+									<div class="meta">regulations only</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="icon">/</div>
+								<div class="body">
+									<div class="title">mine</div>
+									<div class="meta">your cards / reps / plans only</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="statusbar">
+						<div class="keys">
+							<span><b>↵</b> open</span>
+							<span><b>⌘↵</b> new tab</span>
+							<span><b>↑↓</b> within column</span>
+							<span><b>⇥</b> next column</span>
+							<span><b>⌘1-5</b> jump to column</span>
+						</div>
+						<div>5 columns · 43 results · 12ms</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- =========================================================== -->
+			<!-- Variant B: narrow / list (Linear-y)                         -->
+			<!-- =========================================================== -->
+			<div class="legend">
+				<h2>Variant B -- narrow / list (Linear-style)</h2>
+				<p>Same data, single column, category dividers. This is what we'd render on a narrow window or mobile.</p>
+			</div>
+
+			<div class="scrim">
+				<div class="palette list-variant">
+					<div class="input-row">
+						<span class="caret">&gt;</span>
+						<input value="weather" readonly />
+						<div class="chips">
+							<span class="chip">wx == weather</span>
+						</div>
+						<span class="escape">esc to close</span>
+					</div>
+
+					<div class="hoist">
+						<div>
+							<span class="label">Best match</span>
+							<span>Open</span>
+							<span class="doc"> FAA-H-8083-28B -- Aviation Weather Handbook</span>
+						</div>
+						<span class="enter">enter ↵</span>
+					</div>
+
+					<div class="cols">
+						<div class="col">
+							<h3>
+								<span>FAA Resources</span>
+								<span class="count">8 of 23</span>
+							</h3>
+							<div class="row selected">
+								<div class="icon faa">FH</div>
+								<div class="body">
+									<div class="title">Aviation <mark>Weather</mark> Handbook -- FAA-H-8083-28B</div>
+									<div class="meta">AvWX <span class="sep">·</span> handbook</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="icon faa">AC</div>
+								<div class="body">
+									<div class="title">AC 00-6B -- Aviation <mark>Weather</mark></div>
+									<div class="meta">advisory circular</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="icon faa">12</div>
+								<div class="body">
+									<div class="title">PHAK Ch 12 -- <mark>Weather</mark> Theory</div>
+									<div class="meta">handbook chapter</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="icon faa">§</div>
+								<div class="body">
+									<div class="title">14 CFR §91.155 -- VFR <mark>weather</mark> minimums</div>
+									<div class="meta">regulation</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="col">
+							<h3>
+								<span>Airboss Content</span>
+								<span class="count">11 of 31</span>
+							</h3>
+							<div class="row">
+								<div class="icon course">CR</div>
+								<div class="body">
+									<div class="title">Aviation <mark>Weather</mark> Course</div>
+									<div class="meta">14 lessons</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="icon kb">KB</div>
+								<div class="body">
+									<div class="title">Pressure systems &amp; circulation</div>
+									<div class="meta">knowledge node</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="icon kb">G</div>
+								<div class="body">
+									<div class="title">METAR</div>
+									<div class="meta">glossary</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="col">
+							<h3>
+								<span>My Stuff</span>
+								<span class="count">3</span>
+							</h3>
+							<div class="row">
+								<div class="icon mine">C</div>
+								<div class="body">
+									<div class="title">3 cards mention "weather"</div>
+									<div class="meta">2 due</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="icon mine">P</div>
+								<div class="body">
+									<div class="title">Plan: PPL <mark>Weather</mark> Block</div>
+									<div class="meta">42% complete</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="statusbar">
+						<div class="keys">
+							<span><b>↵</b> open</span>
+							<span><b>↑↓</b> move</span>
+							<span><b>tab</b> next section</span>
+						</div>
+						<div>43 results · 12ms</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- =========================================================== -->
+			<!-- Variant C: wide with detail pane (Raycast-style)            -->
+			<!-- =========================================================== -->
+			<div class="legend">
+				<h2>Variant C -- wide with detail pane</h2>
+				<p>
+					Same data, plus a Raycast-style detail pane on the right showing the highlighted result. Toggle with
+					<kbd>Cmd</kbd>+<kbd>\</kbd>. Phase 1 default per Joshua's call.
+				</p>
+			</div>
+
+			<div class="scrim">
+				<div class="palette with-detail">
+					<div class="input-row">
+						<span class="caret">&gt;</span>
+						<input value="weather" readonly />
+						<div class="chips">
+							<span class="chip">wx == weather</span>
+							<span class="chip muted">study-first</span>
+						</div>
+						<span class="escape">esc to close</span>
+					</div>
+
+					<div class="hoist">
+						<div>
+							<span class="label">Best match</span>
+							<span>Open</span>
+							<span class="doc"> FAA-H-8083-28B -- Aviation Weather Handbook</span>
+						</div>
+						<span class="enter">enter ↵</span>
+					</div>
+
+					<div class="cols">
+						<div class="col">
+							<h3>
+								<span>FAA Resources</span>
+								<span class="count">8 of 23</span>
+							</h3>
+							<div class="row selected">
+								<div class="icon faa">FH</div>
+								<div class="body">
+									<div class="title">Aviation <mark>Weather</mark> Handbook</div>
+									<div class="meta">FAA-H-8083-28B <span class="sep">·</span> AvWX</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="icon faa">AC</div>
+								<div class="body">
+									<div class="title">AC 00-6B -- Aviation <mark>Weather</mark></div>
+									<div class="meta">Advisory Circular <span class="sep">·</span> 2016</div>
+								</div>
+							</div>
+							<div class="parent-group">
+								<div class="parent-header">
+									<span class="name">PHAK chapters</span>
+									<span class="badge">FAA-H-8083-25C</span>
+								</div>
+								<div class="row">
+									<div class="icon faa">12</div>
+									<div class="body">
+										<div class="title">Ch 12 -- <mark>Weather</mark> Theory</div>
+										<div class="meta">PHAK <span class="sep">·</span> 38 pages</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="icon faa">13</div>
+									<div class="body">
+										<div class="title">Ch 13 -- <mark>Weather</mark> Services</div>
+										<div class="meta">PHAK <span class="sep">·</span> 22 pages</div>
+									</div>
+								</div>
+							</div>
+							<div class="parent-group">
+								<div class="parent-header">
+									<span class="name">14 CFR</span>
+									<span class="badge">Regulations</span>
+								</div>
+								<div class="row">
+									<div class="icon faa">§</div>
+									<div class="body">
+										<div class="title">§91.155 -- VFR <mark>weather</mark> minimums</div>
+										<div class="meta">14 CFR Part 91</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="col">
+							<h3>
+								<span>Airboss Content</span>
+								<span class="count">11 of 31</span>
+							</h3>
+							<div class="row">
+								<div class="icon course">CR</div>
+								<div class="body">
+									<div class="title">Aviation <mark>Weather</mark> Course</div>
+									<div class="meta">14 lessons</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="icon kb">KB</div>
+								<div class="body">
+									<div class="title">Pressure systems</div>
+									<div class="meta">knowledge node</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="icon kb">KB</div>
+								<div class="body">
+									<div class="title">Fronts &amp; air masses</div>
+									<div class="meta">knowledge node</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="icon kb">G</div>
+								<div class="body">
+									<div class="title">METAR</div>
+									<div class="meta">glossary</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="col">
+							<h3>
+								<span>My Stuff</span>
+								<span class="count">3</span>
+							</h3>
+							<div class="row">
+								<div class="icon mine">C</div>
+								<div class="body">
+									<div class="title">3 cards</div>
+									<div class="meta">2 due now</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="icon mine">P</div>
+								<div class="body">
+									<div class="title">Plan: PPL WX</div>
+									<div class="meta">42% complete</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Detail pane -->
+						<div class="detail-pane">
+							<h3>
+								<span>Selected</span>
+								<span class="count">⌘\ to collapse</span>
+							</h3>
+							<div class="detail-card">
+								<div class="doc-code">FAA-H-8083-28B</div>
+								<div class="doc-title">Aviation Weather Handbook</div>
+								<div class="doc-meta">
+									Federal Aviation Administration · 2022 · 466 pages · also known as <strong>AvWX</strong>
+								</div>
+								<div class="snippet">
+									Comprehensive treatment of meteorology for pilots: pressure systems, fronts, air masses,
+									stability, turbulence, icing, thunderstorms, IFR <mark>weather</mark>, mountain
+									<mark>weather</mark>, tropical <mark>weather</mark>, and <mark>weather</mark>
+									products (METAR / TAF / AIRMET / SIGMET / PIREP).
+								</div>
+								<div class="detail-actions">
+									<button class="action">Open in flightbag <span class="kbd">↵</span></button>
+									<button class="action">Search inside <span class="kbd">⌘↵</span></button>
+									<button class="action">Cite <span class="kbd">⌘C</span></button>
+									<button class="action">Pin to today</button>
+								</div>
+							</div>
+							<div style="color: var(--muted); font-size: 11.5px; padding: 4px 2px">
+								Up/down to change selection. The pane updates as you move.
+							</div>
+						</div>
+					</div>
+
+					<div class="statusbar">
+						<div class="keys">
+							<span><b>↵</b> open</span>
+							<span><b>⌘↵</b> search inside</span>
+							<span><b>↑↓</b> move</span>
+							<span><b>⇥</b> next col</span>
+							<span><b>⌘\</b> toggle pane</span>
+						</div>
+						<div>3 cols + detail · 43 results · 12ms</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- =========================================================== -->
+			<!-- Variant D: doc-code autocomplete (dropdown under input)    -->
+			<!-- =========================================================== -->
+			<div class="legend">
+				<h2>Variant D -- doc-code autocomplete (dropdown)</h2>
+				<p>
+					When the query looks like a partial doc code (e.g. <code>FAA-H-8</code>, <code>8083</code>,
+					<code>AC </code>, <code>Part </code>, <code>§</code>, or a known abbrev), a
+					<strong>dropdown appears under the input</strong> (vscode-style). Up/down moves through matches;
+					<kbd>↵</kbd> opens the doc; <kbd>⌘↵</kbd> sets <code>doc:&lt;code&gt;</code> and returns the cursor
+					to the input so the user can search inside.
+				</p>
+			</div>
+
+			<div class="scrim">
+				<div class="palette with-detail" style="position: relative">
+					<div class="input-wrap">
+						<div class="input-row">
+							<span class="caret">&gt;</span>
+							<input value="FAA-H-8" readonly />
+							<div class="chips">
+								<span class="chip">doc-picker</span>
+							</div>
+							<span class="escape">esc to dismiss</span>
+						</div>
+
+						<div class="autocomplete">
+							<div class="ac-hint">
+								<span>9 FAA docs match "FAA-H-8"</span>
+								<span><kbd>↑↓</kbd> choose · <kbd>↵</kbd> open · <kbd>⌘↵</kbd> search inside</span>
+							</div>
+							<div class="ac-item">
+								<div class="ac-code">FAA-H-<mark>8</mark>083-2A</div>
+								<div class="ac-title">Risk Management Handbook</div>
+								<div class="ac-abbrev">RMH</div>
+							</div>
+							<div class="ac-item">
+								<div class="ac-code">FAA-H-<mark>8</mark>083-3C</div>
+								<div class="ac-title">Airplane Flying Handbook</div>
+								<div class="ac-abbrev">AFH</div>
+							</div>
+							<div class="ac-item">
+								<div class="ac-code">FAA-H-<mark>8</mark>083-9</div>
+								<div class="ac-title">Aviation Instructor's Handbook</div>
+								<div class="ac-abbrev">AIH</div>
+							</div>
+							<div class="ac-item">
+								<div class="ac-code">FAA-H-<mark>8</mark>083-15B</div>
+								<div class="ac-title">Instrument Flying Handbook</div>
+								<div class="ac-abbrev">IFH</div>
+							</div>
+							<div class="ac-item">
+								<div class="ac-code">FAA-H-<mark>8</mark>083-16B</div>
+								<div class="ac-title">Instrument Procedures Handbook</div>
+								<div class="ac-abbrev">IPH</div>
+							</div>
+							<div class="ac-item">
+								<div class="ac-code">FAA-H-<mark>8</mark>083-25C</div>
+								<div class="ac-title">Pilot's Handbook of Aeronautical Knowledge</div>
+								<div class="ac-abbrev">PHAK</div>
+							</div>
+							<div class="ac-item selected">
+								<div class="ac-code">FAA-H-<mark>8</mark>083-28B</div>
+								<div class="ac-title">Aviation Weather Handbook</div>
+								<div class="ac-abbrev">AvWX</div>
+							</div>
+							<div class="ac-item">
+								<div class="ac-code">FAA-H-<mark>8</mark>083-30A</div>
+								<div class="ac-title">Aviation Maintenance Technician Handbook</div>
+								<div class="ac-abbrev">AMT-Gen</div>
+							</div>
+							<div class="ac-item">
+								<div class="ac-code">FAA-H-<mark>8</mark>261-1</div>
+								<div class="ac-title">Instrument Procedures Handbook (legacy)</div>
+								<div class="ac-abbrev">IPH-old</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- The rest of the palette remains, but is visually de-emphasized while autocomplete is open -->
+					<div class="cols" style="opacity: 0.45; pointer-events: none">
+						<div class="col">
+							<h3>
+								<span>FAA Resources</span>
+								<span class="count">(filtered by autocomplete)</span>
+							</h3>
+							<div class="row">
+								<div class="icon faa">FH</div>
+								<div class="body">
+									<div class="title">Recent: Aviation Weather Handbook</div>
+									<div class="meta">FAA-H-8083-28B</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="icon faa">FH</div>
+								<div class="body">
+									<div class="title">Recent: PHAK</div>
+									<div class="meta">FAA-H-8083-25C</div>
+								</div>
+							</div>
+						</div>
+						<div class="col">
+							<h3>
+								<span>Airboss Content</span>
+								<span class="count">paused</span>
+							</h3>
+						</div>
+						<div class="col">
+							<h3>
+								<span>My Stuff</span>
+								<span class="count">paused</span>
+							</h3>
+						</div>
+						<div class="detail-pane">
+							<h3>
+								<span>Selected</span>
+								<span class="count">⌘\ collapse</span>
+							</h3>
+							<div class="detail-card">
+								<div class="doc-code">FAA-H-8083-28B</div>
+								<div class="doc-title">Aviation Weather Handbook</div>
+								<div class="doc-meta">also known as AvWX · 2022 · 466 pages</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="statusbar">
+						<div class="keys">
+							<span><b>↵</b> open doc</span>
+							<span><b>⌘↵</b> search inside</span>
+							<span><b>↑↓</b> change match</span>
+							<span><b>esc</b> dismiss dropdown</span>
+						</div>
+						<div>doc-picker mode · 9 docs match "FAA-H-8"</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="legend">
+				<h2>Key behaviors illustrated</h2>
+				<ul>
+					<li><strong>Hoist banner.</strong> Single tier-1 match -> banner -> Enter opens it directly.</li>
+					<li><strong>Synonym chip.</strong> "wx == weather" -- visible feedback that the query was expanded.</li>
+					<li>
+						<strong>Parent grouping.</strong> Inside FAA Resources, sections cluster under their parent doc with a
+						count. Avoids "20 PHAK chapters drowning out everything else."
+					</li>
+					<li>
+						<strong>Provenance in meta.</strong> Every row shows doc code / corpus / chapter so the user knows what
+						they're looking at without hover.
+					</li>
+					<li><strong>Match highlighting.</strong> Matched tokens in titles get amber highlight.</li>
+					<li>
+						<strong>Color coding by type.</strong> Amber = FAA. Violet = knowledge / glossary. Cyan = airboss
+						course. Green = user's own stuff. Rose = external. Muted = command.
+					</li>
+					<li>
+						<strong>Counts &amp; show-all.</strong> Each column header shows "N of M -- show all" linking to a
+						filtered list view. No infinite scroll inside the palette.
+					</li>
+					<li>
+						<strong>Filters footer.</strong> Suggests <code>doc:</code> / <code>kind:</code> / <code>mine</code>
+						when the result set is large.
+					</li>
+				</ul>
+				<h2>Doc-picker behavior (Variant D)</h2>
+				<ul>
+					<li>
+						<strong>Detected as doc-code:</strong> <code>FAA-H-</code>, <code>FAA-S-</code>, <code>AC </code>,
+						<code>14 CFR </code>, <code>49 CFR </code>, <code>Part </code>, <code>§</code>, bare digits like
+						<code>8083</code> or <code>61-</code>, or known abbreviations (AvWX, PHAK, AFH, IFH, IPH, RMH, AIH).
+					</li>
+					<li>
+						<strong>Right pane becomes doc list.</strong> Detail pane re-purposes as a sorted list of matching
+						FAA docs, showing code + title + abbrev. Highlighted row matches the cursor.
+					</li>
+					<li>
+						<strong>Enter opens the doc.</strong> Cmd+Enter sets <code>doc:&lt;code&gt;</code> as a filter chip
+						and returns to normal search-inside-doc mode.
+					</li>
+					<li>
+						<strong>Left side shows recents + actions + filters.</strong> So you can still keyboard-navigate
+						even while the doc list is the focus.
+					</li>
+					<li>
+						<strong>Numeric prefix sort.</strong> <code>808</code> orders 8083-2 → 8083-3 → 8083-9 → 8083-15 →
+						8083-16 → 8083-25 → 8083-28 (numeric, not alpha-string).
+					</li>
+				</ul>
+			</div>
+		</div>
+	</body>
+</html>
