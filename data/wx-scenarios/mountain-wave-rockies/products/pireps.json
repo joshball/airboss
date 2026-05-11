@@ -1,0 +1,161 @@
+[
+  {
+    "station": "KAPA",
+    "kind": "UUA",
+    "location": {
+      "raw": "APA220030",
+      "station": "APA",
+      "radialDeg": 220,
+      "distanceNm": 30
+    },
+    "timeHhmmZ": 2030,
+    "altitudeFt": 14500,
+    "aircraftType": "B738",
+    "skyCover": [
+      {
+        "cover": "BKN",
+        "baseFt": 9000,
+        "topFt": null
+      }
+    ],
+    "weather": [],
+    "temperatureC": null,
+    "wind": null,
+    "turbulence": {
+      "intensity": "SEV",
+      "altitudeBandFt": {
+        "min": 1000,
+        "max": 28000
+      },
+      "raw": "SEV 010-280"
+    },
+    "icing": null,
+    "remarks": "CONT SEV CHOP",
+    "raw": "KAPA UUA /OV APA220030/TM 2030/FL145/TP B738/TB SEV 010-280/SK BKN090/RM CONT SEV CHOP",
+    "warnings": []
+  },
+  {
+    "station": "KAPA",
+    "kind": "UUA",
+    "location": {
+      "raw": "APA220023",
+      "station": "APA",
+      "radialDeg": 220,
+      "distanceNm": 23
+    },
+    "timeHhmmZ": 2035,
+    "altitudeFt": 8500,
+    "aircraftType": "C172",
+    "skyCover": [
+      {
+        "cover": "OVC",
+        "baseFt": 5000,
+        "topFt": null
+      }
+    ],
+    "weather": [],
+    "temperatureC": null,
+    "wind": null,
+    "turbulence": {
+      "intensity": "LGT",
+      "altitudeBandFt": null,
+      "raw": "LGT"
+    },
+    "icing": {
+      "intensity": "LGT",
+      "type": "RIME",
+      "altitudeBandFt": {
+        "min": 5000,
+        "max": 12000
+      },
+      "raw": "LGT RIME 050-120"
+    },
+    "remarks": "ACCRETING ON LE",
+    "raw": "KAPA UUA /OV APA220023/TM 2035/FL085/TP C172/TB LGT/SK OVC050/IC LGT RIME 050-120/RM ACCRETING ON LE",
+    "warnings": []
+  },
+  {
+    "station": "KBJC",
+    "kind": "UUA",
+    "location": {
+      "raw": "BJC350036",
+      "station": "BJC",
+      "radialDeg": 350,
+      "distanceNm": 36
+    },
+    "timeHhmmZ": 2040,
+    "altitudeFt": 9000,
+    "aircraftType": "B738",
+    "skyCover": [
+      {
+        "cover": "BKN",
+        "baseFt": 4000,
+        "topFt": null
+      },
+      {
+        "cover": "OVC",
+        "baseFt": 10000,
+        "topFt": null
+      }
+    ],
+    "weather": [
+      "TSRA"
+    ],
+    "temperatureC": null,
+    "wind": null,
+    "turbulence": {
+      "intensity": "MOD",
+      "altitudeBandFt": {
+        "min": 7000,
+        "max": 11000
+      },
+      "raw": "MOD 070-110"
+    },
+    "icing": null,
+    "remarks": "HVY PRECIP NEAR CELL",
+    "raw": "KBJC UUA /OV BJC350036/TM 2040/FL090/TP B738/TB MOD 070-110/SK BKN040 OVC100/WX TSRA/RM HVY PRECIP NEAR CELL",
+    "warnings": []
+  },
+  {
+    "station": "KCOS",
+    "kind": "UUA",
+    "location": {
+      "raw": "COS220049",
+      "station": "COS",
+      "radialDeg": 220,
+      "distanceNm": 49
+    },
+    "timeHhmmZ": 2045,
+    "altitudeFt": 9000,
+    "aircraftType": "B738",
+    "skyCover": [
+      {
+        "cover": "BKN",
+        "baseFt": 4000,
+        "topFt": null
+      },
+      {
+        "cover": "OVC",
+        "baseFt": 10000,
+        "topFt": null
+      }
+    ],
+    "weather": [
+      "TSRA"
+    ],
+    "temperatureC": null,
+    "wind": null,
+    "turbulence": {
+      "intensity": "MOD",
+      "altitudeBandFt": {
+        "min": 7000,
+        "max": 11000
+      },
+      "raw": "MOD 070-110"
+    },
+    "icing": null,
+    "remarks": "HVY PRECIP NEAR CELL",
+    "raw": "KCOS UUA /OV COS220049/TM 2045/FL090/TP B738/TB MOD 070-110/SK BKN040 OVC100/WX TSRA/RM HVY PRECIP NEAR CELL",
+    "warnings": []
+  }
+]

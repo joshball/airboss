@@ -17,6 +17,7 @@ import { truthModelSchema } from '../schema';
 import type { TruthModel } from '../types';
 import { FRONTAL_XC_MARCH } from './frontal-xc-march';
 import { SUMMER_THUNDERSTORMS_TX } from './summer-thunderstorms-tx';
+import { MOUNTAIN_WAVE_ROCKIES } from './mountain-wave-rockies';
 import { WINTER_ICING_GREAT_LAKES } from './winter-icing-great-lakes';
 
 /**
@@ -30,9 +31,7 @@ const SCENARIO_LOADERS: Record<WxScenario, () => TruthModel> = {
 	[WX_SCENARIOS.FRONTAL_XC_MARCH]: () => FRONTAL_XC_MARCH,
 	[WX_SCENARIOS.SUMMER_THUNDERSTORMS_TX]: () => SUMMER_THUNDERSTORMS_TX,
 	[WX_SCENARIOS.WINTER_ICING_GREAT_LAKES]: () => WINTER_ICING_GREAT_LAKES,
-	[WX_SCENARIOS.MOUNTAIN_WAVE_ROCKIES]: () => {
-		throw new Error(`scenario "${WX_SCENARIOS.MOUNTAIN_WAVE_ROCKIES}" not yet authored (lands in Phase E)`);
-	},
+	[WX_SCENARIOS.MOUNTAIN_WAVE_ROCKIES]: () => MOUNTAIN_WAVE_ROCKIES,
 	[WX_SCENARIOS.MARINE_STRATUS_PACIFIC_NW]: () => {
 		throw new Error(`scenario "${WX_SCENARIOS.MARINE_STRATUS_PACIFIC_NW}" not yet authored (lands in Phase E)`);
 	},

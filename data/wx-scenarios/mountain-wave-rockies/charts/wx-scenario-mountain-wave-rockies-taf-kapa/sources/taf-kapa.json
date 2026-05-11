@@ -1,0 +1,8 @@
+{
+  "stationIcao": "KAPA",
+  "issuedAt": "2026-02-12T20:20:00.000Z",
+  "validFrom": "2026-02-12T21:00:00.000Z",
+  "validTo": "2026-02-13T09:00:00.000Z",
+  "source": "wx-engine -- truth-derived synthetic TAF",
+  "raw": "TAF KAPA 122020Z 1221/1309 27025G38KT 6SM FEW060"
+}

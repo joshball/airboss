@@ -1,0 +1,157 @@
+[
+  {
+    "station": "KASE",
+    "day": 12,
+    "hour": 21,
+    "minute": 53,
+    "wind": {
+      "directionDeg": 270,
+      "speedKt": 25,
+      "gustKt": null,
+      "variable": false,
+      "calm": false
+    },
+    "visibilitySM": 10,
+    "weather": [],
+    "clouds": [
+      {
+        "cover": "FEW",
+        "heightFtAgl": 6000
+      },
+      {
+        "cover": "OVC",
+        "heightFtAgl": 14000
+      }
+    ],
+    "tempC": 2,
+    "dewpointC": -12,
+    "altimeterInHg": 30.03,
+    "cavok": false,
+    "raw": "KASE 122153Z 27025KT 10SM FEW060 OVC140 02/M12 A3003",
+    "warnings": []
+  },
+  {
+    "station": "KDEN",
+    "day": 12,
+    "hour": 21,
+    "minute": 53,
+    "wind": {
+      "directionDeg": 270,
+      "speedKt": 25,
+      "gustKt": null,
+      "variable": false,
+      "calm": false
+    },
+    "visibilitySM": 10,
+    "weather": [],
+    "clouds": [
+      {
+        "cover": "FEW",
+        "heightFtAgl": 6000
+      },
+      {
+        "cover": "OVC",
+        "heightFtAgl": 14000
+      }
+    ],
+    "tempC": 2,
+    "dewpointC": -12,
+    "altimeterInHg": 29.99,
+    "cavok": false,
+    "raw": "KDEN 122153Z 27025KT 10SM FEW060 OVC140 02/M12 A2999",
+    "warnings": []
+  },
+  {
+    "station": "KCOS",
+    "day": 12,
+    "hour": 21,
+    "minute": 53,
+    "wind": {
+      "directionDeg": 270,
+      "speedKt": 25,
+      "gustKt": null,
+      "variable": false,
+      "calm": false
+    },
+    "visibilitySM": 10,
+    "weather": [],
+    "clouds": [
+      {
+        "cover": "FEW",
+        "heightFtAgl": 6000
+      },
+      {
+        "cover": "OVC",
+        "heightFtAgl": 14000
+      }
+    ],
+    "tempC": 2,
+    "dewpointC": -12,
+    "altimeterInHg": 29.99,
+    "cavok": false,
+    "raw": "KCOS 122153Z 27025KT 10SM FEW060 OVC140 02/M12 A2999",
+    "warnings": []
+  },
+  {
+    "station": "KBJC",
+    "day": 12,
+    "hour": 21,
+    "minute": 53,
+    "wind": {
+      "directionDeg": 270,
+      "speedKt": 25,
+      "gustKt": null,
+      "variable": false,
+      "calm": false
+    },
+    "visibilitySM": 10,
+    "weather": [],
+    "clouds": [
+      {
+        "cover": "FEW",
+        "heightFtAgl": 6000
+      },
+      {
+        "cover": "OVC",
+        "heightFtAgl": 14000
+      }
+    ],
+    "tempC": 2,
+    "dewpointC": -12,
+    "altimeterInHg": 30,
+    "cavok": false,
+    "raw": "KBJC 122153Z 27025KT 10SM FEW060 OVC140 02/M12 A3000",
+    "warnings": []
+  },
+  {
+    "station": "KAPA",
+    "day": 12,
+    "hour": 21,
+    "minute": 53,
+    "wind": {
+      "directionDeg": 270,
+      "speedKt": 25,
+      "gustKt": null,
+      "variable": false,
+      "calm": false
+    },
+    "visibilitySM": 10,
+    "weather": [],
+    "clouds": [
+      {
+        "cover": "FEW",
+        "heightFtAgl": 6000
+      },
+      {
+        "cover": "OVC",
+        "heightFtAgl": 14000
+      }
+    ],
+    "tempC": 2,
+    "dewpointC": -12,
+    "altimeterInHg": 29.99,
+    "cavok": false,
+    "raw": "KAPA 122153Z 27025KT 10SM FEW060 OVC140 02/M12 A2999",
+    "warnings": []
+  }
+]

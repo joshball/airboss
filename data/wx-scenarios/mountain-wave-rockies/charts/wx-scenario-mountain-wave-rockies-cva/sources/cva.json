@@ -1,0 +1,83 @@
+{
+  "targetTimestamp": "2026-02-12T21:00:00Z",
+  "source": "wx-engine -- truth-derived synthetic CVA",
+  "count": 5,
+  "_source_note": "Stations from per-station METARs; polygons lowered from truth.hazardZones.",
+  "observations": [
+    {
+      "station": {
+        "icao": "KASE",
+        "lat": 39.22,
+        "lon": -106.87
+      },
+      "raw": "KASE 122153Z 27025KT 10SM FEW060 OVC140 02/M12 A3003"
+    },
+    {
+      "station": {
+        "icao": "KDEN",
+        "lat": 39.86,
+        "lon": -104.67
+      },
+      "raw": "KDEN 122153Z 27025KT 10SM FEW060 OVC140 02/M12 A2999"
+    },
+    {
+      "station": {
+        "icao": "KCOS",
+        "lat": 38.81,
+        "lon": -104.7
+      },
+      "raw": "KCOS 122153Z 27025KT 10SM FEW060 OVC140 02/M12 A2999"
+    },
+    {
+      "station": {
+        "icao": "KBJC",
+        "lat": 39.91,
+        "lon": -105.12
+      },
+      "raw": "KBJC 122153Z 27025KT 10SM FEW060 OVC140 02/M12 A3000"
+    },
+    {
+      "station": {
+        "icao": "KAPA",
+        "lat": 39.57,
+        "lon": -104.85
+      },
+      "raw": "KAPA 122153Z 27025KT 10SM FEW060 OVC140 02/M12 A2999"
+    }
+  ],
+  "polygons": [
+    {
+      "id": "HZ-upwind-mtn-obscuration-cva",
+      "category": "IFR",
+      "label": "IFR",
+      "labelLonLat": [
+        -108.8,
+        39.2
+      ],
+      "rings": [
+        [
+          [
+            -110,
+            38
+          ],
+          [
+            -107,
+            38
+          ],
+          [
+            -107,
+            41
+          ],
+          [
+            -110,
+            41
+          ],
+          [
+            -110,
+            38
+          ]
+        ]
+      ]
+    }
+  ]
+}

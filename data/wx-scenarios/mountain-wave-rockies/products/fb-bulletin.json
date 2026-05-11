@@ -1,0 +1,236 @@
+{
+  "validAt": "D12T21:00:00Z",
+  "issuedAt": null,
+  "basedOn": "D12T15:00:00Z",
+  "stations": [
+    {
+      "station": "ASE",
+      "rows": [
+        {
+          "altitudeFt": 3000,
+          "directionDeg": 280,
+          "speedKt": 60,
+          "temperatureC": -22,
+          "raw": "2860-22"
+        },
+        {
+          "altitudeFt": 6000,
+          "directionDeg": 270,
+          "speedKt": 70,
+          "temperatureC": -34,
+          "raw": "2770-34"
+        },
+        {
+          "altitudeFt": 9000,
+          "directionDeg": 280,
+          "speedKt": 80,
+          "temperatureC": -46,
+          "raw": "2880-46"
+        },
+        {
+          "altitudeFt": 12000,
+          "directionDeg": 280,
+          "speedKt": 95,
+          "temperatureC": 55,
+          "raw": "289555"
+        },
+        {
+          "altitudeFt": 18000,
+          "directionDeg": 280,
+          "speedKt": 90,
+          "temperatureC": 58,
+          "raw": "289058"
+        }
+      ]
+    },
+    {
+      "station": "DEN",
+      "rows": [
+        {
+          "altitudeFt": 3000,
+          "directionDeg": 270,
+          "speedKt": 55,
+          "temperatureC": -15,
+          "raw": "2755-15"
+        },
+        {
+          "altitudeFt": 6000,
+          "directionDeg": 280,
+          "speedKt": 60,
+          "temperatureC": -22,
+          "raw": "2860-22"
+        },
+        {
+          "altitudeFt": 9000,
+          "directionDeg": 270,
+          "speedKt": 70,
+          "temperatureC": -34,
+          "raw": "2770-34"
+        },
+        {
+          "altitudeFt": 12000,
+          "directionDeg": 280,
+          "speedKt": 80,
+          "temperatureC": -46,
+          "raw": "2880-46"
+        },
+        {
+          "altitudeFt": 18000,
+          "directionDeg": 280,
+          "speedKt": 95,
+          "temperatureC": 55,
+          "raw": "289555"
+        },
+        {
+          "altitudeFt": 24000,
+          "directionDeg": 280,
+          "speedKt": 90,
+          "temperatureC": 58,
+          "raw": "289058"
+        }
+      ]
+    },
+    {
+      "station": "COS",
+      "rows": [
+        {
+          "altitudeFt": 3000,
+          "directionDeg": 270,
+          "speedKt": 55,
+          "temperatureC": -15,
+          "raw": "2755-15"
+        },
+        {
+          "altitudeFt": 6000,
+          "directionDeg": 280,
+          "speedKt": 60,
+          "temperatureC": -22,
+          "raw": "2860-22"
+        },
+        {
+          "altitudeFt": 9000,
+          "directionDeg": 270,
+          "speedKt": 70,
+          "temperatureC": -34,
+          "raw": "2770-34"
+        },
+        {
+          "altitudeFt": 12000,
+          "directionDeg": 280,
+          "speedKt": 80,
+          "temperatureC": -46,
+          "raw": "2880-46"
+        },
+        {
+          "altitudeFt": 18000,
+          "directionDeg": 280,
+          "speedKt": 95,
+          "temperatureC": 55,
+          "raw": "289555"
+        },
+        {
+          "altitudeFt": 24000,
+          "directionDeg": 280,
+          "speedKt": 90,
+          "temperatureC": 58,
+          "raw": "289058"
+        }
+      ]
+    },
+    {
+      "station": "BJC",
+      "rows": [
+        {
+          "altitudeFt": 3000,
+          "directionDeg": 270,
+          "speedKt": 55,
+          "temperatureC": -15,
+          "raw": "2755-15"
+        },
+        {
+          "altitudeFt": 6000,
+          "directionDeg": 280,
+          "speedKt": 60,
+          "temperatureC": -22,
+          "raw": "2860-22"
+        },
+        {
+          "altitudeFt": 9000,
+          "directionDeg": 270,
+          "speedKt": 70,
+          "temperatureC": -34,
+          "raw": "2770-34"
+        },
+        {
+          "altitudeFt": 12000,
+          "directionDeg": 280,
+          "speedKt": 80,
+          "temperatureC": -46,
+          "raw": "2880-46"
+        },
+        {
+          "altitudeFt": 18000,
+          "directionDeg": 280,
+          "speedKt": 95,
+          "temperatureC": 55,
+          "raw": "289555"
+        },
+        {
+          "altitudeFt": 24000,
+          "directionDeg": 280,
+          "speedKt": 90,
+          "temperatureC": 58,
+          "raw": "289058"
+        }
+      ]
+    },
+    {
+      "station": "APA",
+      "rows": [
+        {
+          "altitudeFt": 3000,
+          "directionDeg": 270,
+          "speedKt": 55,
+          "temperatureC": -15,
+          "raw": "2755-15"
+        },
+        {
+          "altitudeFt": 6000,
+          "directionDeg": 280,
+          "speedKt": 60,
+          "temperatureC": -22,
+          "raw": "2860-22"
+        },
+        {
+          "altitudeFt": 9000,
+          "directionDeg": 270,
+          "speedKt": 70,
+          "temperatureC": -34,
+          "raw": "2770-34"
+        },
+        {
+          "altitudeFt": 12000,
+          "directionDeg": 280,
+          "speedKt": 80,
+          "temperatureC": -46,
+          "raw": "2880-46"
+        },
+        {
+          "altitudeFt": 18000,
+          "directionDeg": 280,
+          "speedKt": 95,
+          "temperatureC": 55,
+          "raw": "289555"
+        },
+        {
+          "altitudeFt": 24000,
+          "directionDeg": 280,
+          "speedKt": 90,
+          "temperatureC": 58,
+          "raw": "289058"
+        }
+      ]
+    }
+  ],
+  "warnings": []
+}

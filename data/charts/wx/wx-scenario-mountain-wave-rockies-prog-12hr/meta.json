@@ -1,0 +1,19 @@
+{
+  "slug": "wx-scenario-mountain-wave-rockies-prog-12hr",
+  "type": "prog-chart",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-11T14:00:38.717Z",
+  "content_hash": "sha256:cfd36b41a273475ebb6e7f14e47938dbf608cf0e85b3923626fe9b0b4989807a",
+  "source_hashes": {
+    "forecast": "e775498572afe99cb3031ecf39a0904fa1ae543333c99f0847afe2615365d5ae"
+  },
+  "layer_counts": {
+    "raster-overlay": 3,
+    "vector-symbology": 2,
+    "point-symbology": 2,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 291103
+}
