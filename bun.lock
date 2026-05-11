@@ -348,6 +348,7 @@
         "@ab/constants": "workspace:*",
         "@ab/sources": "workspace:*",
         "@ab/ui": "workspace:*",
+        "@ab/utils": "workspace:*",
         "svelte": "^5.34.7",
       },
     },

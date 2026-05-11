@@ -72,3 +72,4 @@ export { humanize } from './strings';
 export { type DiffOp, wordDiff } from './text-diff';
 export { MS_PER_DAY, MS_PER_HOUR, MS_PER_MINUTE, MS_PER_SECOND, userStartOfDay } from './time';
 export { buildQuery } from './url';
+export { withViewTransition } from './view-transition';

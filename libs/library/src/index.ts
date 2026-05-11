@@ -20,6 +20,7 @@
  */
 
 export type { BreadcrumbSegment, BreadcrumbsProps } from './Breadcrumbs.svelte';
+export type { ChapterTileProps } from './ChapterTile.svelte';
 export type { CitationChipProps } from './CitationChip.svelte';
 export type { HeartbeatTickerProps } from './HeartbeatTicker.svelte';
 export type { ReaderEmptyStateKind, ReaderEmptyStateProps } from './ReaderEmptyState.svelte';
@@ -32,3 +33,4 @@ export type { RenderedSectionFigure, RenderedSectionProps } from './RenderedSect
 export type { SourceLinksProps } from './SourceLinks.svelte';
 export type { SubjectChipProps } from './SubjectChip.svelte';
 export type { TOCDrawerEntry, TOCDrawerProps } from './TOCDrawer.svelte';
+export type { TOCRenderEntry, TOCRenderMode, TOCRenderProps } from './TOCRender.svelte';

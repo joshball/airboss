@@ -102,6 +102,23 @@ const KNOWN_PREFIXES: ReadonlyArray<RegExp> = [
 	/^--shiki-(light|dark)(-bg)?$/,
 ];
 
+/**
+ * Balanced-parens check -- true when every `(` matches a `)` and the count
+ * never goes negative. Used by the font-family lint to accept nested
+ * `var()` chains (`var(--a, var(--b, var(--c)))`).
+ */
+function isBalancedParens(text: string): boolean {
+	let depth = 0;
+	for (const ch of text) {
+		if (ch === '(') depth += 1;
+		else if (ch === ')') {
+			depth -= 1;
+			if (depth < 0) return false;
+		}
+	}
+	return depth === 0;
+}
+
 function isKnownToken(name: string, known: Set<string>): boolean {
 	if (known.has(name)) return true;
 	for (const re of KNOWN_PREFIXES) if (re.test(name)) return true;
@@ -585,11 +602,13 @@ function scanValue(
 	}
 
 	// Font family: must be `inherit` or a var(--...) reference. A raw
-	// family name is a violation.
+	// family name is a violation. The var() may carry a nested var() as
+	// fallback (`var(--reader-body-font-family, var(--font-family-base))`)
+	// so the brace-balanced check accepts arbitrary nesting depth.
 	if (property === 'font-family') {
 		const trimmed = value.trim();
 		const isInherit = /^(inherit|initial|unset|revert)$/i.test(trimmed);
-		const isVarOnly = /^var\([^)]+\)$/i.test(trimmed);
+		const isVarOnly = trimmed.startsWith('var(') && trimmed.endsWith(')') && isBalancedParens(trimmed);
 		if (!isInherit && !isVarOnly) {
 			violations.push({
 				file,

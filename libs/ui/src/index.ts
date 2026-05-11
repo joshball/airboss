@@ -34,6 +34,11 @@ export type { FilterBarProps } from './components/FilterBar.svelte';
 export type { FilterCardProps } from './components/FilterCard.svelte';
 export type { FilterChipDef, FilterChipsProps } from './components/FilterChips.svelte';
 export type {
+	KeyboardCheatsheetProps,
+	KeyboardShortcutEntry,
+	KeyboardShortcutGroup,
+} from './components/KeyboardCheatsheet.svelte';
+export type {
 	NoteContext,
 	NoteContextChip,
 	NoteContextKind,

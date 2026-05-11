@@ -1,57 +1,91 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
-import Breadcrumbs from '@ab/library/Breadcrumbs.svelte';
 import ReaderEmptyState from '@ab/library/ReaderEmptyState.svelte';
-import ReaderLayout from '@ab/library/ReaderLayout.svelte';
-import SourceLinks from '@ab/library/SourceLinks.svelte';
 import SubjectChip from '@ab/library/SubjectChip.svelte';
+import TOCRender, { type TOCRenderEntry } from '@ab/library/TOCRender.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
+
+const readSet = $derived(new Set(data.readSectionIds));
+
+// Build the overview entries from the layout-loaded reading order. Mark
+// the resume section as `isLastRead` so its parent ChapterTile gets the
+// "Continue here" affordance.
+const overviewEntries = $derived.by<TOCRenderEntry[]>(() => {
+	const entries: TOCRenderEntry[] = [];
+	for (const entry of data.readingOrder) {
+		const href = (() => {
+			if (entry.parentId === null) {
+				return ROUTES.FLIGHTBAG_HANDBOOK_CHAPTER(data.handbook.documentSlug, data.handbook.shortEdition, entry.code);
+			}
+			const parts = entry.code.split('.');
+			if (parts.length !== 2) return null;
+			const [ch, sec] = parts;
+			if (!ch || !sec) return null;
+			return ROUTES.FLIGHTBAG_HANDBOOK_SECTION(data.handbook.documentSlug, data.handbook.shortEdition, ch, sec);
+		})();
+		entries.push({
+			sectionId: entry.sectionId,
+			code: entry.code,
+			title: entry.title,
+			depth: entry.depth,
+			href,
+			minutesToRead: Math.max(1, Math.round(entry.wordCount / 250)),
+			isActive: false,
+			isLastRead: data.resume?.sectionId === entry.sectionId,
+		});
+	}
+	return entries;
+});
+
+const hasChapters = $derived(overviewEntries.some((e) => e.depth === 0));
+
+function formatLastReadAt(isoStamp: string): string {
+	const date = new Date(isoStamp);
+	return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+}
 </script>
 
 <svelte:head>
-	<title>{data.reference.title} -- Flightbag</title>
+	<title>{data.handbook.title} -- Flightbag</title>
 </svelte:head>
 
-<ReaderLayout>
-	{#snippet breadcrumb()}
-		<Breadcrumbs
-			segments={[
-				{ label: 'Flightbag', href: ROUTES.FLIGHTBAG_HOME },
-				{ label: data.reference.title, href: null },
-			]}
-		/>
-	{/snippet}
-
-	{#snippet sourceLinks()}
-		<SourceLinks
-			localPdfHref={data.sourceLinks.localPdfHref}
-			onlineUrl={data.sourceLinks.onlineUrl}
-			localPdfMissing={data.sourceLinks.localPdfMissing}
-		/>
-	{/snippet}
-
-	{#snippet title()}
-		{data.reference.title}
-	{/snippet}
-
-	{#snippet subtitle()}
-		<span class="edition">{data.reference.edition}</span>
-		<span class="publisher">{data.reference.publisher}</span>
-	{/snippet}
-
-	{#snippet pageHeaderExtra()}
-		{#if data.reference.subjects.length > 0}
+<div class="landing">
+	<header class="title-block">
+		<h1>{data.handbook.title}</h1>
+		<p class="meta">
+			<span class="edition">{data.handbook.edition}</span>
+			<span class="publisher">{data.handbook.publisher}</span>
+		</p>
+		{#if data.handbook.subjects.length > 0}
 			<p class="subjects">
-				{#each data.reference.subjects as subject (subject)}
+				{#each data.handbook.subjects as subject (subject)}
 					<SubjectChip {subject} />
 				{/each}
 			</p>
 		{/if}
-	{/snippet}
+	</header>
 
-	{#if data.chapters.length === 0}
+	{#if data.resume}
+		<aside class="resume" aria-label="Resume reading">
+			<a href={data.resume.href}>
+				<span class="resume-eyebrow">Resume reading</span>
+				<span class="resume-target">§{data.resume.code} -- {data.resume.title}</span>
+				<span class="resume-meta">last read {formatLastReadAt(data.resume.lastReadAt)}</span>
+			</a>
+		</aside>
+	{/if}
+
+	{#if hasChapters}
+		<TOCRender
+			mode="overview"
+			entries={overviewEntries}
+			{readSet}
+			heading="Chapters"
+			summary={`${overviewEntries.filter((e) => e.depth === 0).length} chapters · ${overviewEntries.length} entries`}
+		/>
+	{:else}
 		<ReaderEmptyState
 			kind="no-children"
 			localPdfHref={data.sourceLinks.localPdfHref}
@@ -59,123 +93,77 @@ let { data }: { data: PageData } = $props();
 			heading="This handbook has no chapter rows in the catalog yet."
 			note="Read the official FAA PDF below until ingestion finishes."
 		/>
-	{:else}
-		<section aria-label="Chapters">
-			<header class="chapters-header">
-				<h2>Chapters</h2>
-				{#if data.isAuthenticated && data.readProgress.total > 0}
-					<p class="progress" aria-label="Handbook reading progress">
-						Read <strong>{data.readProgress.read}</strong> of {data.readProgress.total}
-						{data.readProgress.total === 1 ? 'section' : 'sections'}
-					</p>
-				{/if}
-			</header>
-			<ol class="chapters">
-				{#each data.chapters as chapter (chapter.id)}
-					{@const fullyRead = chapter.readProgress.total > 0 && chapter.readProgress.read === chapter.readProgress.total}
-					<li>
-						<a
-							href={chapter.href}
-							class:read={fullyRead}
-							aria-label={`Chapter ${chapter.code} ${chapter.title}${fullyRead ? ' (read)' : ''}`}
-						>
-							<span class="chapter-code">Chapter {chapter.code}</span>
-							<span class="chapter-title">{chapter.title}</span>
-							{#if data.isAuthenticated && chapter.readProgress.total > 0}
-								<span class="chapter-progress" aria-hidden="true">
-									{chapter.readProgress.read}/{chapter.readProgress.total}
-								</span>
-							{/if}
-							{#if chapter.faaPageStart}
-								<span class="chapter-pages">pp. {chapter.faaPageStart}{chapter.faaPageEnd ? `..${chapter.faaPageEnd}` : ''}</span>
-							{/if}
-						</a>
-					</li>
-				{/each}
-			</ol>
-		</section>
 	{/if}
-</ReaderLayout>
+</div>
 
 <style>
+	.landing {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-lg);
+	}
+
+	.title-block h1 {
+		margin: 0 0 var(--space-2xs);
+	}
+
+	.meta {
+		margin: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-sm);
+		color: var(--ink-muted);
+		font-size: var(--font-size-sm);
+	}
+
 	.edition {
 		font-family: var(--font-family-mono);
 	}
+
 	.subjects {
-		margin: var(--space-2xs) 0 0;
+		margin: var(--space-sm) 0 0;
 		display: flex;
 		flex-wrap: wrap;
 		gap: var(--space-2xs);
 	}
 
-	.chapters {
-		list-style: none;
+	.resume {
+		background: var(--action-default-wash);
+		border: 1px solid var(--action-default-edge, var(--action-default));
+		border-radius: var(--radius-md);
 		padding: 0;
-		margin: var(--space-sm) 0 0 0;
+	}
+
+	.resume a {
 		display: flex;
 		flex-direction: column;
-		gap: var(--space-2xs);
-	}
-	.chapters a {
-		display: flex;
-		align-items: baseline;
-		gap: var(--space-sm);
-		padding: var(--space-sm) var(--space-md);
-		border-radius: var(--radius-md);
-		border: 1px solid var(--edge-default);
-		background: var(--surface-raised);
-		color: inherit;
+		gap: var(--space-3xs);
+		padding: var(--space-md) var(--space-lg);
 		text-decoration: none;
-	}
-	.chapters a:hover,
-	.chapters a:focus-visible {
-		border-color: var(--action-default-edge);
-	}
-	.chapter-code {
-		font-family: var(--font-family-mono);
-		color: var(--ink-muted);
-		min-width: 6rem;
-	}
-	.chapter-title {
-		flex: 1;
-		font-weight: var(--font-weight-medium);
-	}
-	.chapter-pages {
-		color: var(--ink-muted);
-		font-family: var(--font-family-mono);
-		font-size: var(--font-size-sm);
+		color: inherit;
 	}
 
-	.chapters-header {
-		display: flex;
-		align-items: baseline;
-		justify-content: space-between;
-		gap: var(--space-md);
-		flex-wrap: wrap;
+	.resume a:hover,
+	.resume a:focus-visible {
+		background: var(--surface-panel);
 	}
-	.chapters-header h2 {
-		margin: 0;
-	}
-	.progress {
-		margin: 0;
-		color: var(--ink-muted);
-		font-size: var(--font-size-sm);
-	}
-	.progress strong {
-		color: var(--ink-body);
-		font-weight: var(--font-weight-bold);
-	}
-	.chapter-progress {
+
+	.resume-eyebrow {
 		font-family: var(--font-family-mono);
+		text-transform: uppercase;
+		font-size: var(--font-size-xs);
+		letter-spacing: var(--letter-spacing-wide);
+		color: var(--action-default-hover);
+	}
+
+	.resume-target {
+		font-size: var(--font-size-base);
+		font-weight: var(--font-weight-medium);
+		color: var(--ink-strong);
+	}
+
+	.resume-meta {
 		font-size: var(--font-size-sm);
 		color: var(--ink-muted);
-		min-width: 3rem;
-		text-align: right;
-	}
-	.chapters a.read {
-		border-color: var(--signal-success-edge, var(--edge-default));
-	}
-	.chapters a.read .chapter-progress {
-		color: var(--signal-success-ink, var(--ink-body));
 	}
 </style>

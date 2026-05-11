@@ -83,9 +83,13 @@ export const USER_PREF_SCHEMAS = {
 	// types per arm; refine is simpler and equally narrow.
 	'study.reading.font_scale': z
 		.number()
-		.refine((v): v is (typeof READING_FONT_SCALE_VALUES)[number] => (READING_FONT_SCALE_VALUES as readonly number[]).includes(v), {
-			message: 'font_scale must be one of READING_FONT_SCALE_VALUES',
-		}),
+		.refine(
+			(v): v is (typeof READING_FONT_SCALE_VALUES)[number] =>
+				(READING_FONT_SCALE_VALUES as readonly number[]).includes(v),
+			{
+				message: 'font_scale must be one of READING_FONT_SCALE_VALUES',
+			},
+		),
 	'study.reading.density': z.enum([READING_DENSITY_VALUES[0], ...READING_DENSITY_VALUES.slice(1)] as [
 		(typeof READING_DENSITY_VALUES)[number],
 		...(typeof READING_DENSITY_VALUES)[number][],
@@ -97,11 +101,11 @@ export const USER_PREF_SCHEMAS = {
 	'study.reading.heading_scale': z
 		.number()
 		.refine(
-			(v): v is (typeof READING_HEADING_SCALE_VALUES)[number] => (READING_HEADING_SCALE_VALUES as readonly number[]).includes(v),
+			(v): v is (typeof READING_HEADING_SCALE_VALUES)[number] =>
+				(READING_HEADING_SCALE_VALUES as readonly number[]).includes(v),
 			{ message: 'heading_scale must be one of READING_HEADING_SCALE_VALUES' },
 		),
 } satisfies Record<UserPrefKey, z.ZodType>;
-
 
 export class UnknownUserPrefKeyError extends Error {
 	constructor(public readonly key: string) {

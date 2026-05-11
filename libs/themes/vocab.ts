@@ -145,6 +145,18 @@ export const TOKENS = {
 	fontFamilyBase: '--font-family-base',
 	fontFamilySerif: '--font-family-serif',
 
+	// -------- reader-prefs (WP-FLIGHTBAG-READER-UX Phase 3) --------
+	// These are component-relative tokens emitted by `<ReadableScope>`
+	// from the user's reading-pref settings. They are *not* theme tokens
+	// (themes don't supply them); the scope wrapper sets them via inline
+	// style and reader components consume them with platform-token
+	// fallbacks. Listed here so theme-lint accepts the var() references.
+	readerBodyFontFamily: '--reader-body-font-family',
+	readerBodyFontSize: '--reader-body-font-size',
+	readerBodyLineHeight: '--reader-body-line-height',
+	readerMeasureCh: '--reader-measure-ch',
+	readerHeadingScale: '--reader-heading-scale',
+
 	// -------- scale: spacing --------
 	space4xs: '--space-4xs',
 	space3xs: '--space-3xs',

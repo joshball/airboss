@@ -8,18 +8,18 @@
  * - `up`: the parent / chapter / book home page
  * - `next`: the next section in reading order (or null at end of doc)
  *
- * Two visual variants:
+ * Three visual variants:
  * - `footer` (default): a thin underlined strip at the bottom of every page
- *   so readers can flip pages like a book. All three slots inline; missing
- *   slots leave the column empty so the strip stays balanced.
+ *   so readers can flip pages like a book.
  * - `empty`: a centered block used inside an empty-body section's
  *   `emptyFallback` snippet -- larger touch targets, clearer "this section
  *   has no content but here's where to go next" affordance.
- *
- * Both variants render the same anchor markup; only spacing/typography
- * differ. When all three nav slots are null (e.g. a one-page reference),
- * the component renders nothing -- the markup costs nothing on a doc the
- * navigator doesn't apply to.
+ * - `end-of-doc`: rendered when `nav.next === null` -- shows the prev/up
+ *   navigation alongside an end-of-document affordance (progress summary,
+ *   "Mark this chapter as read" button, "Next handbook in syllabus"
+ *   placeholder). The button + summary come from optional props the
+ *   caller supplies; without them the variant degrades to a footer-style
+ *   strip with a small "End of document" caption.
  */
 
 export interface ReaderNavLink {
@@ -37,17 +37,82 @@ export interface ReaderNavData {
 
 export interface ReaderNavProps {
 	readonly nav: ReaderNavData;
-	readonly variant?: 'footer' | 'empty';
+	readonly variant?: 'footer' | 'empty' | 'end-of-doc';
+	/**
+	 * End-of-doc summary line ("You've read 47 of 47 sections in PHAK").
+	 * Only consulted when `variant === 'end-of-doc'`.
+	 */
+	readonly endOfDocSummary?: string;
+	/**
+	 * Optional href for the "Next handbook in syllabus" line. When unset,
+	 * the placeholder is omitted (rather than rendering a dead link).
+	 */
+	readonly nextHandbookHref?: string;
+	/** Display label for the next-handbook link. */
+	readonly nextHandbookLabel?: string;
+	/**
+	 * Called when the user clicks "Mark chapter as read". When unset,
+	 * the button is omitted.
+	 */
+	readonly onMarkChapterRead?: () => void;
+	readonly markChapterReadLabel?: string;
 }
 </script>
 
 <script lang="ts">
-let { nav, variant = 'footer' }: ReaderNavProps = $props();
+let {
+	nav,
+	variant = 'footer',
+	endOfDocSummary,
+	nextHandbookHref,
+	nextHandbookLabel,
+	onMarkChapterRead,
+	markChapterReadLabel = 'Mark chapter as read',
+}: ReaderNavProps = $props();
 
 const hasAny = $derived(nav.prev !== null || nav.next !== null || nav.up !== null);
+const isEndOfDoc = $derived(variant === 'end-of-doc');
 </script>
 
-{#if hasAny}
+{#if isEndOfDoc}
+	<section class="end-of-doc" aria-label="End of document">
+		{#if endOfDocSummary}
+			<p class="end-summary">{endOfDocSummary}</p>
+		{:else}
+			<p class="end-summary muted">End of document.</p>
+		{/if}
+		<div class="end-actions">
+			{#if onMarkChapterRead}
+				<button type="button" class="mark-read" onclick={onMarkChapterRead}>{markChapterReadLabel}</button>
+			{/if}
+			{#if nextHandbookHref && nextHandbookLabel}
+				<a class="next-handbook" href={nextHandbookHref}>Next: {nextHandbookLabel} →</a>
+			{/if}
+		</div>
+		{#if hasAny}
+			<nav class="reader-nav variant-end" aria-label="Reader navigation">
+				<div class="slot slot-prev">
+					{#if nav.prev}
+						<a href={nav.prev.href} rel="prev" data-testid="reader-nav-prev">
+							<span class="hint">&larr; Previous</span>
+							<span class="link-code">{nav.prev.code}</span>
+							<span class="link-title">{nav.prev.title}</span>
+						</a>
+					{/if}
+				</div>
+				<div class="slot slot-up">
+					{#if nav.up}
+						<a href={nav.up.href} rel="up" data-testid="reader-nav-up">
+							<span class="hint">Up to</span>
+							<span class="link-title">{nav.up.title}</span>
+						</a>
+					{/if}
+				</div>
+				<div class="slot slot-next" aria-hidden="true"></div>
+			</nav>
+		{/if}
+	</section>
+{:else if hasAny}
 	<nav class="reader-nav" class:variant-empty={variant === 'empty'} aria-label="Reader navigation">
 		<div class="slot slot-prev">
 			{#if nav.prev}
@@ -170,5 +235,72 @@ const hasAny = $derived(nav.prev !== null || nav.next !== null || nav.up !== nul
 	.slot-next a {
 		align-items: flex-start;
 	}
+}
+
+.end-of-doc {
+	margin-top: var(--space-xl);
+	padding: var(--space-lg);
+	border-radius: var(--radius-md);
+	background: var(--surface-sunken);
+	border: 1px solid var(--edge-default);
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-md);
+}
+
+.end-summary {
+	margin: 0;
+	font-size: var(--font-size-base);
+	color: var(--ink-strong);
+}
+
+.end-summary.muted {
+	color: var(--ink-muted);
+	font-style: italic;
+}
+
+.end-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-sm);
+	align-items: center;
+}
+
+.mark-read {
+	background: var(--action-default);
+	color: var(--action-default-ink, var(--ink-inverse));
+	border: 1px solid var(--action-default-edge, var(--action-default));
+	padding: var(--space-xs) var(--space-md);
+	border-radius: var(--radius-sm);
+	cursor: pointer;
+	font: inherit;
+	font-size: var(--font-size-sm);
+	font-weight: var(--font-weight-medium);
+}
+
+.mark-read:hover,
+.mark-read:focus-visible {
+	background: var(--action-default-hover);
+}
+
+.next-handbook {
+	color: var(--action-default-hover);
+	text-decoration: none;
+	padding: var(--space-xs) var(--space-md);
+	border-radius: var(--radius-sm);
+	border: 1px solid var(--edge-default);
+	font-size: var(--font-size-sm);
+}
+
+.next-handbook:hover,
+.next-handbook:focus-visible {
+	background: var(--surface-panel);
+	color: var(--ink-strong);
+}
+
+.reader-nav.variant-end {
+	border-top: 1px solid var(--edge-default);
+	margin-top: 0;
+	padding-top: var(--space-sm);
 }
 </style>

@@ -183,8 +183,8 @@ async function setAppearance(value: AppearancePreference) {
 	{#snippet themePicker()}
 		<ThemePicker currentThemeId={selection.theme} onSelect={setTheme} locked={themePickerLocked} />
 	{/snippet}
-	{#if data.user}
-		{#snippet readerPrefs()}
+	{#snippet readerPrefs()}
+		{#if data.user}
 			<ReaderPrefsButton
 				fontFamily={readingPrefs.fontFamily}
 				fontScale={readingPrefs.fontScale}
@@ -193,8 +193,8 @@ async function setAppearance(value: AppearancePreference) {
 				headingScale={readingPrefs.headingScale}
 				onChange={handleReadingPrefChange}
 			/>
-		{/snippet}
-	{/if}
+		{/if}
+	{/snippet}
 </AppHeader>
 
 <ReadableScope

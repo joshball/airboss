@@ -331,8 +331,9 @@ section {
 	flex-direction: column;
 	gap: var(--space-md);
 	/* Honor the user's reader-measure preference (WP-FLIGHTBAG-READER-UX
-	 * Phase 3); fall through to the platform default when no
-	 * `<ReadableScope>` is mounted. */
+	 * Phase 3). The wrapping `<ReadableScope>` always sets this var; on
+	 * surfaces without a scope (e.g. an isolated test harness) the fallback
+	 * to the platform default keeps a sensible reading column. */
 	max-width: var(--reader-measure-ch, 72ch);
 }
 
@@ -396,9 +397,9 @@ h1 {
 .metadata > summary::after {
 	content: '▸';
 	margin-left: var(--space-2xs);
-	font-size: 0.85em;
+	font-size: var(--font-size-xs);
 	color: var(--ink-muted);
-	transition: transform 120ms ease;
+	transition: transform var(--motion-fast) ease;
 	display: inline-block;
 }
 
@@ -503,7 +504,7 @@ h1 {
 
 .body :global(code) {
 	font-family: var(--font-family-mono);
-	font-size: 0.95em;
+	font-size: var(--font-size-sm);
 }
 
 .body :global(figure.md-figure),
