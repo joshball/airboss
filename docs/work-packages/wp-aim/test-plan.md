@@ -24,6 +24,4 @@ status: done
 
 ## Out of scope
 
-- Search UI (deferred per spec).
-- Cross-edition refresh.
-- Citation deep-link interop with WP-CFR (lands when CFR ships).
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
