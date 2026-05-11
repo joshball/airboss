@@ -4,15 +4,17 @@
  * returns the concatenated row list -- ready to feed into `searchGrouped()`'s
  * `injected` argument from a SvelteKit `+server.ts` endpoint.
  *
- * Loaders run with `Promise.all` so total latency stays bounded by the
- * slowest single loader (typically `handbook-sections`'s ilike over
- * `content_md`). Any loader that throws propagates -- the endpoint should
- * decide how to degrade (the canonical pattern is `try { ... } catch { return
- * [] }` so a transient DB error doesn't blank the palette).
+ * Loaders run with `Promise.allSettled` so a single loader failure (DB blip,
+ * connection drop, query plan timeout) degrades that one loader's slice to
+ * empty rather than killing the entire fan-out. Each rejected loader is
+ * logged so the operator sees the failure server-side without forcing a 500
+ * onto the client. The endpoint wraps the whole call in another try/catch
+ * as a belt-and-braces against unexpected throw paths.
  *
  * Server-only.
  */
 
+import { createLogger } from '@ab/utils';
 import { parseQuery } from '../query-parser';
 import type { PaletteHost, SearchResult } from '../schema/result-types';
 import { loadAimSections } from './aim-sections';
@@ -24,12 +26,16 @@ import { loadKnowledgeNodes } from './knowledge-nodes';
 import { loadPlans } from './plans';
 import { loadReps } from './reps';
 
+const log = createLogger('palette');
+
+type LoaderName = 'handbook' | 'cfr' | 'aim' | 'knodes' | 'cards' | 'reps' | 'plans' | 'courses';
+
 export async function loadPaletteInjected(rawQuery: string, host: PaletteHost): Promise<readonly SearchResult[]> {
 	const parsed = parseQuery(rawQuery);
 	const freeText = parsed.freeText.trim();
 	if (freeText.length === 0 && parsed.filters.length === 0) return [];
 
-	const [handbook, cfr, aim, knodes, cards, reps, plans, courses] = await Promise.all([
+	const settled = await Promise.allSettled<readonly SearchResult[]>([
 		loadHandbookSections(parsed, host),
 		loadCfrSections(parsed, host),
 		loadAimSections(parsed, host),
@@ -40,5 +46,18 @@ export async function loadPaletteInjected(rawQuery: string, host: PaletteHost): 
 		loadCourses(parsed, host),
 	]);
 
-	return [...handbook, ...cfr, ...aim, ...knodes, ...cards, ...reps, ...plans, ...courses];
+	const names: readonly LoaderName[] = ['handbook', 'cfr', 'aim', 'knodes', 'cards', 'reps', 'plans', 'courses'];
+	const merged: SearchResult[] = [];
+	for (let i = 0; i < settled.length; i += 1) {
+		const result = settled[i];
+		if (!result) continue;
+		if (result.status === 'fulfilled') {
+			merged.push(...result.value);
+			continue;
+		}
+		const name = names[i] ?? `#${i}`;
+		const reason = result.reason instanceof Error ? result.reason : undefined;
+		log.error(`loader ${name} rejected`, { userId: host.userId, metadata: { loader: name } }, reason);
+	}
+	return merged;
 }

@@ -100,11 +100,17 @@ test.describe('command-palette smoke', () => {
 			).toEqual([]);
 
 			if (expectColumn) {
-				// At least one column has results -- the smoke can't pin which
-				// row (DB content varies); presence of any column body proves
-				// the loader chain produced output.
-				const totalRows = await page.locator(`${PALETTE_COLUMNS} button[data-result-id]`).count();
-				expect(totalRows, `expected at least 1 row for "${q}"`).toBeGreaterThan(0);
+				// Pin the column the test data declared. The locator scopes to the
+				// section[data-column] that matches; presence of at least one row
+				// inside proves the loader chain landed output in the expected
+				// column, not just somewhere on the page.
+				const targetColumnRows = await page
+					.locator(`${PALETTE_COLUMNS} section[data-column="${expectColumn}"] button[data-result-id]`)
+					.count();
+				expect(
+					targetColumnRows,
+					`expected at least 1 row in column "${expectColumn}" for "${q}"`,
+				).toBeGreaterThan(0);
 			}
 		});
 	}

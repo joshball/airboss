@@ -82,7 +82,7 @@ export async function loadHandbookSections(
 			snippet: bodySnippet(r.contentMd, needle),
 			href,
 			rankBucket: bucketByMatch(needle, r.code, r.title),
-			parentDocCode: r.documentSlug,
+			clusterKey: r.documentSlug,
 		};
 		out.push(result);
 	}

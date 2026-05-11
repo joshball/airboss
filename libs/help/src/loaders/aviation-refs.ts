@@ -91,8 +91,40 @@ function toSearchResult(hit: SearchHit): SearchResult {
 		subtitle: subtitleFor(ref),
 		href: hrefFor(ref),
 		rankBucket: rankFromScore(hit.score),
+		clusterKey: clusterKeyForRef(ref, type),
 	};
 	return result;
+}
+
+/**
+ * Derive the cluster bond key for an aviation registry row. Must agree with
+ * the chapter / section loaders, which carry `documentSlug` as the bond.
+ *
+ * Handbook family -- the sourceType slot IS the document slug (`phak`,
+ * `ifh`, `avwx`, ...). They match by construction.
+ *
+ * CFR -- the registry id shape is `doc-cfr-<title>-<part>` (e.g.
+ * `doc-cfr-14-91`); the DB documentSlug shape is `<title>cfr<part>` (e.g.
+ * `14cfr91`). Parse the registry id and re-emit in the DB shape.
+ *
+ * Everything else returns `undefined` -- clustering applies to handbook +
+ * CFR today. AIM clustering can be added when AIM child rows exist.
+ */
+function clusterKeyForRef(ref: Reference, type: SearchResultType): string | undefined {
+	if (type === 'faa.handbook') {
+		// sourceType is 'phak' / 'ifh' / 'avwx' / 'iph' / 'rmh' / 'aih' /
+		// 'hfh' / 'gfh' / 'bfh' / 'afh'. These ARE the document slugs.
+		return ref.tags.sourceType;
+	}
+	if (type === 'faa.cfr.part') {
+		// Registry id 'doc-cfr-<title>-<part>' -> DB documentSlug
+		// '<title>cfr<part>'. Defensive: bail if the id shape doesn't match
+		// the convention.
+		const match = ref.id.match(/^doc-cfr-(\d+)-(.+)$/);
+		if (!match) return undefined;
+		return `${match[1]}cfr${match[2]}`;
+	}
+	return undefined;
 }
 
 function subtitleFor(ref: Reference): string | undefined {

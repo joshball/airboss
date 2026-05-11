@@ -63,7 +63,7 @@ export async function loadAimSections(
 			snippet: bodySnippet(r.contentMd, needle),
 			href: ROUTES.LIBRARY_REGULATIONS_SECTION(AIM_KIND, r.documentSlug, r.code),
 			rankBucket: bucketByMatch(needle, r.code, r.title),
-			parentDocCode: r.documentSlug,
+			clusterKey: r.documentSlug,
 		};
 		out.push(result);
 	}

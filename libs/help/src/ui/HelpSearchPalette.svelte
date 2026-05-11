@@ -82,6 +82,14 @@ let debouncedQuery = $state('');
  */
 let serverInjected = $state<readonly SearchResult[]>([]);
 let lastFetchedQuery = $state<string | null>(null);
+/**
+ * True while the debounced query has fired but the server fetch for that
+ * query hasn't landed yet. Used by per-column loading affordances so the
+ * columns that depend on the server slice (FAA Resources, Airboss Content,
+ * My Stuff) don't flash empty between the synchronous facade running and
+ * the fetch settling.
+ */
+let pendingFetch = $state(false);
 
 const mergedInjected = $derived<readonly SearchResult[]>(
 	serverInjected.length > 0 ? serverInjected : (injectedResults ?? []),
@@ -104,28 +112,41 @@ $effect(() => {
 
 // Fetch DB-backed loader output every time the debounced query changes.
 // AbortController guards against an in-flight slow response landing AFTER
-// a newer query has already fired. The endpoint short-circuits empty
-// queries server-side, so calling fetch on an empty needle is cheap.
+// a newer query has already fired; every state write is also gated on
+// `controller.signal.aborted` so a settled-but-stale promise can't race
+// past the cleanup. Anonymous users (no `userId`) skip the fetch entirely
+// because the endpoint 401s -- the in-process facade still covers them.
 $effect(() => {
 	const q = debouncedQuery.trim();
 	if (q.length === 0) {
 		serverInjected = [];
 		lastFetchedQuery = q;
+		pendingFetch = false;
 		return;
 	}
-	if (q === lastFetchedQuery) return;
+	if (q === lastFetchedQuery) {
+		pendingFetch = false;
+		return;
+	}
+	if (!host.userId) {
+		// Anonymous: no `mine.*` rows, the endpoint rejects -- skip the round trip.
+		pendingFetch = false;
+		return;
+	}
 	const controller = new AbortController();
-	const url = '/api/palette/search';
+	pendingFetch = true;
 	(async () => {
 		try {
-			const res = await fetch(url, {
+			const res = await fetch('/api/palette/search', {
 				method: 'POST',
 				headers: { 'content-type': 'application/json' },
 				body: JSON.stringify({ q }),
 				signal: controller.signal,
 			});
+			if (controller.signal.aborted) return;
 			if (!res.ok) return;
 			const data = (await res.json()) as { results?: SearchResult[] };
+			if (controller.signal.aborted) return;
 			if (Array.isArray(data.results)) {
 				serverInjected = data.results;
 				lastFetchedQuery = q;
@@ -133,6 +154,8 @@ $effect(() => {
 		} catch {
 			// Network errors / aborts: leave serverInjected alone. The in-process
 			// facade still surfaces aviation refs / help pages / external tools.
+		} finally {
+			if (!controller.signal.aborted) pendingFetch = false;
 		}
 	})();
 	return () => controller.abort();
@@ -195,16 +218,19 @@ function handleKey(event: KeyboardEvent): void {
 		if (list.length > 0) focusedIndex = (focusedIndex - 1 + list.length) % list.length;
 		return;
 	}
-	if (event.key === ']' || (event.key === 'Tab' && !event.shiftKey)) {
+	if (event.key === ']') {
 		event.preventDefault();
 		jumpColumn(1);
 		return;
 	}
-	if (event.key === '[' || (event.key === 'Tab' && event.shiftKey)) {
+	if (event.key === '[') {
 		event.preventDefault();
 		jumpColumn(-1);
 		return;
 	}
+	// Tab is intentionally NOT intercepted -- it stays the standard
+	// "move focus across focusables" key, handled by the focus trap alone.
+	// Column jumping uses `[` / `]` (documented in the footer).
 	if (event.key === 'Enter') {
 		event.preventDefault();
 		// Banner takes precedence when present + focus is on the input (no row
@@ -242,13 +268,6 @@ function activate(result: SearchResult): void {
 
 function backdropClick(event: MouseEvent): void {
 	if (event.target === event.currentTarget) onClose();
-}
-
-function backdropKeydown(event: KeyboardEvent): void {
-	if (event.key === 'Escape') {
-		event.preventDefault();
-		onClose();
-	}
 }
 
 function removeFilter(key: string, value: string): void {
@@ -311,18 +330,44 @@ function activateRow(result: SearchResult): void {
 	activate(result);
 }
 
+/**
+ * Action verb shown on the banner. The activate() flow already discriminates
+ * external vs internal URLs; this label mirrors so a `web.tool` row reads
+ * "Open external", a future `cmd.*` row reads "Run", and everything else
+ * reads "Open".
+ */
+function bannerActionLabel(result: SearchResult): string {
+	if (result.type === 'web.tool') return 'Open external';
+	if (result.type === 'cmd.action' || result.type === 'cmd.goto') return 'Run';
+	return 'Open';
+}
+
 // Bound for the FilterChips child.
 const chipFilters = $derived<readonly ParsedFilter[]>(grouped.filters);
 const chipSynonyms = $derived<readonly SynonymRewrite[]>(grouped.synonymsApplied);
+
+/**
+ * Columns whose contents come from the server fetch. While `pendingFetch`
+ * is true (debounced query fired, server hasn't responded yet), these
+ * columns render a Loading affordance instead of "No hits" so the user
+ * doesn't see an empty flash. App Help, External Tools, and Commands are
+ * synchronous (in-process loaders / not yet wired) and never show loading.
+ */
+const SERVER_FED_COLUMNS: ReadonlySet<ResultColumn> = new Set<ResultColumn>([
+	'faa-resources',
+	'airboss-content',
+	'my-stuff',
+]);
 </script>
 
 {#if open}
-	<!-- svelte-ignore a11y_click_events_have_key_events -->
+	<!-- svelte-ignore a11y_click_events_have_key_events -- backdrop dismissal
+		is dialog-overlay convention; ESC still closes via the focus-trap on
+		any descendant. The backdrop carries no role and isn't keyboard-reachable. -->
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div
 		class="backdrop"
 		onclick={backdropClick}
-		onkeydown={backdropKeydown}
 		role="presentation"
 		data-testid="helpsearchpalette-backdrop"
 	>
@@ -342,7 +387,7 @@ const chipSynonyms = $derived<readonly SynonymRewrite[]>(grouped.synonymsApplied
 					bind:value={rawQuery}
 					onkeydown={handleKey}
 					type="search"
-					placeholder="Search (try `metar`, `Part 91`, `doc:FAA-H-8083-28 turb`, `mine`)"
+					placeholder="Search the platform..."
 					autocomplete="off"
 					spellcheck="false"
 					aria-label="Search query"
@@ -364,7 +409,7 @@ const chipSynonyms = $derived<readonly SynonymRewrite[]>(grouped.synonymsApplied
 					onclick={activateBanner}
 					data-testid="palette-banner"
 				>
-					<span class="banner-kind">Open</span>
+					<span class="banner-kind">{bannerActionLabel(grouped.bannerHit)}</span>
 					<span class="banner-title">{grouped.bannerHit.title}</span>
 					{#if grouped.bannerHit.subtitle}
 						<span class="banner-subtitle">{grouped.bannerHit.subtitle}</span>
@@ -375,11 +420,13 @@ const chipSynonyms = $derived<readonly SynonymRewrite[]>(grouped.synonymsApplied
 
 			<div class="columns" data-testid="palette-columns">
 				{#each COLUMN_ORDER as col (col)}
+					{@const loading = pendingFetch && SERVER_FED_COLUMNS.has(col)}
 					<section
 						class="column"
 						aria-labelledby="col-heading-{col}"
 						data-column={col}
 						data-active={focusedColumn === col ? 'true' : 'false'}
+						data-loading={loading ? 'true' : 'false'}
 					>
 						<header>
 							<span class="label" id="col-heading-{col}">{COLUMN_LABELS[col]}</span>
@@ -387,9 +434,7 @@ const chipSynonyms = $derived<readonly SynonymRewrite[]>(grouped.synonymsApplied
 						</header>
 						{#if grouped.columns[col].length === 0}
 							<p class="hint">
-								{col === 'commands'
-									? 'Phase 4'
-									: 'No hits'}
+								{#if col === 'commands'}Phase 4{:else if loading}Loading…{:else}No hits{/if}
 							</p>
 						{:else}
 							<ul>
@@ -430,7 +475,8 @@ const chipSynonyms = $derived<readonly SynonymRewrite[]>(grouped.synonymsApplied
 			{/if}
 
 			<footer class="shortcuts">
-				<span><kbd>Tab</kbd> / <kbd>[</kbd> <kbd>]</kbd> jump column</span>
+				<span><kbd>[</kbd> <kbd>]</kbd> jump column</span>
+				<span><kbd>Tab</kbd> move focus</span>
 				<span><kbd>Enter</kbd> open</span>
 				<span><kbd>Esc</kbd> close</span>
 			</footer>
@@ -544,6 +590,27 @@ const chipSynonyms = $derived<readonly SynonymRewrite[]>(grouped.synonymsApplied
 
 	.column[data-active='true'] header .label {
 		color: var(--ink-body);
+	}
+
+	.column[data-loading='true'] header .label {
+		animation: palette-loading-pulse var(--motion-slow) infinite;
+	}
+
+	@keyframes palette-loading-pulse {
+		0%,
+		100% {
+			opacity: 1;
+		}
+		50% {
+			opacity: 0.4;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.column[data-loading='true'] header .label {
+			animation: none;
+			opacity: 0.6;
+		}
 	}
 
 	.column header {

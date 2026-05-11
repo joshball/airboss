@@ -56,10 +56,12 @@ const OTHER_USER_ID = generateAuthId();
 // Tagged ids so cleanup can target without colliding with parallel suites.
 const REF_HANDBOOK_ID = `ref-${SUITE_TAG}-hb`;
 const REF_CFR_ID = `ref-${SUITE_TAG}-cfr`;
+const REF_CFR49_ID = `ref-${SUITE_TAG}-cfr49`;
 const REF_AIM_ID = `ref-${SUITE_TAG}-aim`;
 
 const SEC_HANDBOOK_ID = generateReferenceSectionId();
 const SEC_CFR_ID = generateReferenceSectionId();
+const SEC_CFR49_ID = generateReferenceSectionId();
 const SEC_AIM_ID = generateReferenceSectionId();
 
 const KNODE_ID = `kn-${SUITE_TAG}-zephyrlift`;
@@ -69,7 +71,9 @@ const COURSE_SLUG = `palette-zephyrcourse-${SUITE_TAG.slice(-12)}`.toLowerCase()
 const CARD_OWN_ID = generateCardId();
 const CARD_OTHER_ID = generateCardId();
 const REVIEW_OWN_ID = generateReviewId();
+const REVIEW_OTHER_ID = generateReviewId();
 const PLAN_ID = generateStudyPlanId();
+const PLAN_OTHER_ID = generateStudyPlanId();
 
 // A non-collision needle that should only match seeded rows.
 const NEEDLE = 'zephyrlift';
@@ -123,10 +127,28 @@ beforeAll(async () => {
 		{
 			id: REF_CFR_ID,
 			kind: REFERENCE_KINDS.CFR,
-			documentSlug: `palette-cfr-${SUITE_TAG.slice(-12)}`.toLowerCase(),
+			// `14cfr...` slug -- leading title prefix is parsed by the loader to
+			// pick LIBRARY_REGULATIONS_KINDS.CFR_14 and the '14 CFR §' title.
+			documentSlug: `14cfrtest${SUITE_TAG.slice(-8)}`.toLowerCase(),
 			edition: 'TEST-CFR-1',
 			title: '14 CFR Test Part',
 			publisher: 'FAA',
+			subjects: ['regulations'],
+			primaryCert: null,
+			seedOrigin: SUITE_TAG,
+			createdAt: now,
+			updatedAt: now,
+		},
+		{
+			id: REF_CFR49_ID,
+			kind: REFERENCE_KINDS.CFR,
+			// `49cfr...` slug -- exercises the Title 49 branch in the loader.
+			// Without an explicit fixture the C1 bug (hardcoded 14 CFR) stays
+			// latent.
+			documentSlug: `49cfrtest${SUITE_TAG.slice(-8)}`.toLowerCase(),
+			edition: 'TEST-CFR-1',
+			title: '49 CFR Test Part',
+			publisher: 'DOT',
 			subjects: ['regulations'],
 			primaryCert: null,
 			seedOrigin: SUITE_TAG,
@@ -181,6 +203,25 @@ beforeAll(async () => {
 			sourceLocator: '14 CFR §91.103',
 			contentMd: `Each pilot in command shall, before beginning a flight, become familiar with all available information concerning that flight. ${NEEDLE} mention.`,
 			contentHash: `hash-${SUITE_TAG}-cfr`,
+			hasFigures: false,
+			hasTables: false,
+			seedOrigin: SUITE_TAG,
+			createdAt: now,
+			updatedAt: now,
+		},
+		{
+			id: SEC_CFR49_ID,
+			referenceId: REF_CFR49_ID,
+			parentId: null,
+			level: 'section',
+			ordinal: 1,
+			depth: 0,
+			code: '175.10',
+			airbossRef: `airboss-ref:cfr/49-175/175.10`,
+			title: `Hazmat exception ${NEEDLE}`,
+			sourceLocator: '49 CFR §175.10',
+			contentMd: `Operator-specific hazmat materials carriage rules. ${NEEDLE} mention.`,
+			contentHash: `hash-${SUITE_TAG}-cfr49`,
 			hasFigures: false,
 			hasTables: false,
 			seedOrigin: SUITE_TAG,
@@ -313,55 +354,99 @@ beforeAll(async () => {
 		},
 	]);
 
-	await db.insert(review).values({
-		id: REVIEW_OWN_ID,
-		cardId: CARD_OWN_ID,
-		userId: TEST_USER_ID,
-		rating: 3,
-		confidence: null,
-		stability: 2,
-		difficulty: 5,
-		elapsedDays: 1,
-		scheduledDays: 5,
-		state: CARD_STATES.LEARNING,
-		dueAt: now,
-		reviewedAt: now,
-		answerMs: 1000,
-		reviewSessionId: null,
-		seedOrigin: SUITE_TAG,
-	});
+	await db.insert(review).values([
+		{
+			id: REVIEW_OWN_ID,
+			cardId: CARD_OWN_ID,
+			userId: TEST_USER_ID,
+			rating: 3,
+			confidence: null,
+			stability: 2,
+			difficulty: 5,
+			elapsedDays: 1,
+			scheduledDays: 5,
+			state: CARD_STATES.LEARNING,
+			dueAt: now,
+			reviewedAt: now,
+			answerMs: 1000,
+			reviewSessionId: null,
+			seedOrigin: SUITE_TAG,
+		},
+		{
+			// Other-user review on the other-user card. Both share the NEEDLE.
+			// The reps loader must scope by review.userId; this row exists so
+			// the suite fails if the user-scoping clause is dropped.
+			id: REVIEW_OTHER_ID,
+			cardId: CARD_OTHER_ID,
+			userId: OTHER_USER_ID,
+			rating: 2,
+			confidence: null,
+			stability: 2,
+			difficulty: 5,
+			elapsedDays: 1,
+			scheduledDays: 5,
+			state: CARD_STATES.LEARNING,
+			dueAt: now,
+			reviewedAt: now,
+			answerMs: 1000,
+			reviewSessionId: null,
+			seedOrigin: SUITE_TAG,
+		},
+	]);
 
-	await db.insert(studyPlan).values({
-		id: PLAN_ID,
-		userId: TEST_USER_ID,
-		title: `${NEEDLE} study plan`,
-		status: PLAN_STATUSES.ACTIVE,
-		certGoals: [],
-		focusDomains: [],
-		skipDomains: [],
-		skipNodes: [],
-		seedOrigin: SUITE_TAG,
-		createdAt: now,
-		updatedAt: now,
-	});
+	await db.insert(studyPlan).values([
+		{
+			id: PLAN_ID,
+			userId: TEST_USER_ID,
+			title: `${NEEDLE} study plan`,
+			status: PLAN_STATUSES.ACTIVE,
+			certGoals: [],
+			focusDomains: [],
+			skipDomains: [],
+			skipNodes: [],
+			seedOrigin: SUITE_TAG,
+			createdAt: now,
+			updatedAt: now,
+		},
+		{
+			// Other-user plan. Same NEEDLE. The plans loader must scope by
+			// studyPlan.userId; this row catches a regression that drops the
+			// scope.
+			id: PLAN_OTHER_ID,
+			userId: OTHER_USER_ID,
+			title: `${NEEDLE} other-user plan`,
+			status: PLAN_STATUSES.ACTIVE,
+			certGoals: [],
+			focusDomains: [],
+			skipDomains: [],
+			skipNodes: [],
+			seedOrigin: SUITE_TAG,
+			createdAt: now,
+			updatedAt: now,
+		},
+	]);
 });
 
 afterAll(async () => {
 	// Tear down in FK-safe order. Reviews, cards, plans, knowledge, sections,
 	// references, courses, users.
 	await db.delete(review).where(eq(review.id, REVIEW_OWN_ID));
+	await db.delete(review).where(eq(review.id, REVIEW_OTHER_ID));
 	await db.delete(cardState).where(eq(cardState.cardId, CARD_OWN_ID));
 	await db.delete(cardState).where(eq(cardState.cardId, CARD_OTHER_ID));
 	await db.delete(card).where(eq(card.id, CARD_OWN_ID));
 	await db.delete(card).where(eq(card.id, CARD_OTHER_ID));
 	await db.delete(studyPlan).where(eq(studyPlan.id, PLAN_ID));
+	await db.delete(studyPlan).where(eq(studyPlan.id, PLAN_OTHER_ID));
 	await db.delete(knowledgeNode).where(eq(knowledgeNode.id, KNODE_ID));
 	await db.delete(course).where(eq(course.id, COURSE_ID));
 	await db.delete(referenceSection).where(eq(referenceSection.id, SEC_HANDBOOK_ID));
 	await db.delete(referenceSection).where(eq(referenceSection.id, SEC_CFR_ID));
+	await db.delete(referenceSection).where(eq(referenceSection.id, SEC_CFR49_ID));
 	await db.delete(referenceSection).where(eq(referenceSection.id, SEC_AIM_ID));
 	await db.delete(reference).where(eq(reference.id, REF_HANDBOOK_ID));
 	await db.delete(reference).where(eq(reference.id, REF_CFR_ID));
+	await db.delete(reference).where(eq(reference.id, REF_CFR49_ID));
 	await db.delete(reference).where(eq(reference.id, REF_AIM_ID));
 	await db.delete(bauthUser).where(eq(bauthUser.id, TEST_USER_ID));
 	await db.delete(bauthUser).where(eq(bauthUser.id, OTHER_USER_ID));
@@ -373,7 +458,7 @@ describe('loadHandbookSections', () => {
 		const hit = out.find((r) => r.id === SEC_HANDBOOK_ID);
 		expect(hit).toBeDefined();
 		expect(hit?.type).toBe('faa.handbook.chapter');
-		expect(hit?.parentDocCode).toMatch(/^palette-phak-/);
+		expect(hit?.clusterKey).toMatch(/^palette-phak-/);
 		expect(hit?.title).toContain('12');
 	});
 
@@ -402,6 +487,19 @@ describe('loadCfrSections', () => {
 	it('returns empty when needle is blank', async () => {
 		const out = await loadCfrSections(parseQuery(''), HOST_AUTHED);
 		expect(out).toEqual([]);
+	});
+
+	it('discriminates Title 14 vs Title 49 via documentSlug prefix', async () => {
+		// The Title 14 fixture has documentSlug `14cfrtest<tag>` -- the loader
+		// parses the leading '14' and emits a '14 CFR §...' title. The Title 49
+		// fixture has documentSlug `49cfrtest<tag>` -- '49 CFR §...'. Both rows
+		// match the same NEEDLE; the assertion is one row per title prefix
+		// (pins the C1 fix).
+		const out = await loadCfrSections(parseQuery(NEEDLE), HOST_AUTHED);
+		const title14 = out.find((r) => r.id === SEC_CFR_ID);
+		const title49 = out.find((r) => r.id === SEC_CFR49_ID);
+		expect(title14?.title.startsWith('14 CFR')).toBe(true);
+		expect(title49?.title.startsWith('49 CFR')).toBe(true);
 	});
 });
 
@@ -462,6 +560,14 @@ describe('loadReps', () => {
 		expect(hit?.type).toBe('mine.rep');
 	});
 
+	it('never leaks another user review row', async () => {
+		// review.userId scoping is the security guard; this row catches a
+		// future "I dropped the userId clause" regression.
+		const out = await loadReps(parseQuery(NEEDLE), HOST_AUTHED);
+		const leak = out.find((r) => r.id === REVIEW_OTHER_ID);
+		expect(leak).toBeUndefined();
+	});
+
 	it('returns empty when host has no userId', async () => {
 		const out = await loadReps(parseQuery(NEEDLE), HOST_ANON);
 		expect(out).toEqual([]);
@@ -474,6 +580,13 @@ describe('loadPlans', () => {
 		const hit = out.find((r) => r.id === PLAN_ID);
 		expect(hit).toBeDefined();
 		expect(hit?.type).toBe('mine.plan');
+	});
+
+	it('never leaks another user plan row', async () => {
+		// studyPlan.userId scoping is the security guard.
+		const out = await loadPlans(parseQuery(NEEDLE), HOST_AUTHED);
+		const leak = out.find((r) => r.id === PLAN_OTHER_ID);
+		expect(leak).toBeUndefined();
 	});
 
 	it('returns empty when host has no userId', async () => {

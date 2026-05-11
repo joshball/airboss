@@ -147,8 +147,15 @@ export interface SearchResult {
 	 */
 	readonly href: string;
 	readonly rankBucket: RankBucket;
-	/** For clustering -- `faa.handbook.chapter` rows carry their handbook's id here. */
-	readonly parentDocCode?: string;
+	/**
+	 * Cluster bond key. Handbook root + chapter rows share the canonical
+	 * doc slug (`phak`, `ifh`, `avwx`, ...); CFR Part + section rows share
+	 * the slug (`14cfr91`, `49cfr175`). The cluster builder bonds children
+	 * to roots by exact equality, so both producers must agree on the
+	 * shape -- see `aviation-refs.ts` (root rows) and
+	 * `handbook-sections.ts` / `cfr-sections.ts` (child rows).
+	 */
+	readonly clusterKey?: string;
 	/** `web.tool` rows carry their tier; absent on every other type. */
 	readonly tier?: WebToolTier;
 	/** `mine.*` rows produced from recents storage carry `source: 'recents'`. */

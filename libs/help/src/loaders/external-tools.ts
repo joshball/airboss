@@ -13,6 +13,11 @@ import type { PaletteHost, RankBucket, SearchResult } from '../schema/result-typ
 export function loadExternalTools(parsed: ParsedQuery, _host: PaletteHost): readonly SearchResult[] {
 	void _host;
 	const text = parsed.freeText.trim();
+	// Empty needle returns [] -- mirrors every other loader. Without this guard,
+	// a filter-only query like `mine` would surface all seven external tools
+	// at rank 4 (the empty-needle bucket), flooding External Tools with
+	// unrelated rows the user did not query for.
+	if (text.length === 0) return [];
 	const tools = findExternalTools(text);
 	const out: SearchResult[] = [];
 	for (const tool of tools) {

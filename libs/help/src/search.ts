@@ -20,7 +20,14 @@
  * alphabetically by title.
  */
 
-import { search as aviationSearch, listReferences, type Reference, type SearchHit, type TagQuery } from '@ab/aviation';
+import {
+	search as aviationSearch,
+	expandQuery,
+	listReferences,
+	type Reference,
+	type SearchHit,
+	type TagQuery,
+} from '@ab/aviation';
 import {
 	AVIATION_TOPIC_VALUES,
 	type AviationTopic,
@@ -32,10 +39,23 @@ import {
 	type ReferenceSourceType,
 	SOURCE_TYPE_VALUES,
 } from '@ab/constants';
+import { loadAviationRefs } from './loaders/aviation-refs';
+import { loadExternalTools } from './loaders/external-tools';
+import { loadHelpPages } from './loaders/help-pages';
 import { parseQuery } from './query-parser';
 import { helpRegistry } from './registry';
 import type { ParsedFilter, ParsedQuery, SearchFilters, SearchResult, SearchResultSet } from './schema/help-registry';
-import type { SearchResultType } from './schema/result-types';
+import {
+	COLUMN_BY_TYPE,
+	COLUMN_ORDER,
+	EMPTY_GROUPED_RESULTS,
+	type GroupedResults,
+	type PaletteHost,
+	type ResultColumn,
+	type SearchResultType,
+	type SynonymRewrite,
+	type SearchResult as TypedResult,
+} from './schema/result-types';
 import { rankBucket } from './search-core';
 
 /**
@@ -79,6 +99,15 @@ function aviationResultType(ref: Reference): SearchResultType {
 
 const DEFAULT_LIMIT = 50;
 
+/**
+ * Legacy two-bucket facade. Returns `{ aviation, help }` -- the pre-Phase-2
+ * shape. New callers should use `searchGrouped()` which produces the typed
+ * `GroupedResults` (columns, banner hoist, clusters, synonyms applied,
+ * filters). Removal target: next palette WP phase that touches this file
+ * and verifies no remaining call sites.
+ *
+ * @deprecated -- use `searchGrouped()` instead.
+ */
 export function search(rawQuery: string, filters: SearchFilters = {}): SearchResultSet {
 	const parsed = parseQuery(rawQuery);
 	const library = filters.library ?? pickLibrary(parsed) ?? 'both';
@@ -288,23 +317,8 @@ export function listAviationReferences(): readonly Reference[] {
 // `searchGrouped()` is the production facade the multi-column palette UI
 // consumes. It composes loader outputs into a `GroupedResults` with column
 // buckets, a hoist banner, FAA Resources clusters, and the synonym-rewrite
-// chip story. The legacy 2-bucket `search()` is preserved one release for
-// any straggler consumer; the only known consumer is `HelpSearchPalette.svelte`
-// which is migrated in the same PR.
+// chip story.
 // =================================================================
-
-import { expandQuery } from '@ab/aviation';
-import { loadAviationRefs } from './loaders/aviation-refs';
-import { loadExternalTools } from './loaders/external-tools';
-import { loadHelpPages } from './loaders/help-pages';
-import type {
-	GroupedResults,
-	PaletteHost,
-	ResultColumn,
-	SynonymRewrite,
-	SearchResult as TypedResult,
-} from './schema/result-types';
-import { COLUMN_BY_TYPE, COLUMN_ORDER, EMPTY_GROUPED_RESULTS } from './schema/result-types';
 
 /**
  * Compose the typed multi-column palette result set.
@@ -337,11 +351,22 @@ export function searchGrouped(
 		return { ...EMPTY_GROUPED_RESULTS, filters: parsed.filters };
 	}
 
+	// Honor the `library:` filter / `mine` bare-token sugar. Picking a single
+	// library narrows the fan-out so chip-scoped queries (`mine card`) don't
+	// flood the columns with FAA + help + external rows the user just told us
+	// to ignore. `both` (and absence of any library filter) keep the full
+	// fan-out -- the default behavior.
+	const libraryScope = libraryScopeFrom(parsed);
+	const wantAviation = libraryScope === 'both' || libraryScope === 'aviation';
+	const wantHelp = libraryScope === 'both' || libraryScope === 'help';
+	const wantTools = libraryScope === 'both';
+
 	// In-process loaders. DB-backed loaders run server-side and feed via `injected`.
-	const aviation = loadAviationRefs(parsed, host);
-	const helpPages = loadHelpPages(parsed, host);
-	const tools = loadExternalTools(parsed, host);
-	const all = [...aviation, ...helpPages, ...tools, ...injected];
+	const aviation = wantAviation ? loadAviationRefs(parsed, host) : [];
+	const helpPages = wantHelp ? loadHelpPages(parsed, host) : [];
+	const tools = wantTools ? loadExternalTools(parsed, host) : [];
+	const injectedRows = filterInjectedByScope(injected, libraryScope);
+	const all = [...aviation, ...helpPages, ...tools, ...injectedRows];
 
 	// Bucket into columns.
 	const columns: Record<ResultColumn, TypedResult[]> = {
@@ -406,20 +431,21 @@ function sortTyped(rows: readonly TypedResult[]): TypedResult[] {
 function buildClusters(
 	faaRows: readonly TypedResult[],
 ): readonly { parent: TypedResult; children: readonly TypedResult[] }[] {
-	const byParent = new Map<string, TypedResult[]>();
-	const rootsById = new Map<string, TypedResult>();
+	const byClusterKey = new Map<string, TypedResult[]>();
+	const rootsByKey = new Map<string, TypedResult>();
 	for (const row of faaRows) {
+		if (!row.clusterKey) continue;
 		if (row.type === 'faa.handbook' || row.type === 'faa.cfr.part') {
-			rootsById.set(row.id, row);
-		} else if (row.parentDocCode) {
-			const bucket = byParent.get(row.parentDocCode) ?? [];
+			rootsByKey.set(row.clusterKey, row);
+		} else {
+			const bucket = byClusterKey.get(row.clusterKey) ?? [];
 			bucket.push(row);
-			byParent.set(row.parentDocCode, bucket);
+			byClusterKey.set(row.clusterKey, bucket);
 		}
 	}
 	const out: { parent: TypedResult; children: readonly TypedResult[] }[] = [];
-	for (const [parentId, children] of byParent) {
-		const parent = rootsById.get(parentId);
+	for (const [key, children] of byClusterKey) {
+		const parent = rootsByKey.get(key);
 		if (!parent) continue;
 		out.push({ parent, children: [...children].sort((a, b) => a.title.localeCompare(b.title)) });
 	}
@@ -448,4 +474,49 @@ function buildSynonymRewrites(freeText: string): SynonymRewrite[] {
 		deduped.push(rw);
 	}
 	return deduped;
+}
+
+/**
+ * Library scopes supported by the chip story. `mine` is the new value
+ * introduced for the bare-token sugar (`mine` -> `library:mine`); the other
+ * three match the legacy `library:` filter values.
+ */
+type LibraryScope = 'both' | 'aviation' | 'help' | 'mine';
+
+function libraryScopeFrom(parsed: ParsedQuery): LibraryScope {
+	for (const filter of parsed.filters) {
+		if (filter.key !== 'library' && filter.key !== 'lib') continue;
+		if (filter.values.includes('mine')) return 'mine';
+		if (filter.values.includes('both')) return 'both';
+		const hasAviation = filter.values.includes('aviation');
+		const hasHelp = filter.values.includes('help');
+		if (hasAviation && !hasHelp) return 'aviation';
+		if (hasHelp && !hasAviation) return 'help';
+		return 'both';
+	}
+	return 'both';
+}
+
+/**
+ * Drop injected rows that don't belong to the active library scope. `both`
+ * keeps everything; `mine` keeps only mine.* rows; `aviation` keeps faa.*
+ * and airboss.* content rows but drops mine.* / web.tool; `help` keeps only
+ * airboss.help rows from the injected slice (DB-backed help would be the
+ * only candidate; today no DB-backed help loader exists, so this is empty in
+ * practice).
+ */
+function filterInjectedByScope(injected: readonly TypedResult[], scope: LibraryScope): readonly TypedResult[] {
+	if (scope === 'both') return injected;
+	if (scope === 'mine') return injected.filter((row) => row.type.startsWith('mine.'));
+	if (scope === 'aviation') {
+		return injected.filter(
+			(row) =>
+				row.type.startsWith('faa.') ||
+				row.type === 'airboss.knode' ||
+				row.type === 'airboss.course' ||
+				row.type === 'airboss.glossary',
+		);
+	}
+	// help
+	return injected.filter((row) => row.type === 'airboss.help');
 }
