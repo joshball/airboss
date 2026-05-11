@@ -25,7 +25,12 @@
  * into `~/Documents/airboss-handbook-cache/wx/<source-rel-path>` per
  * ADR 018.
  *
- * Phase D widens `commentary` and appends its writer.
+ * Phase D (this commit) widens `commentary` to `CommentaryCallout[]` and
+ * calls `deriveCommentary(truth, products, charts, scenarioId)` to fill it
+ * in. The writer emits `commentary.json` + `commentary.md` and validates
+ * every knowledge-node id against `course/knowledge/weather/<dir>/` before
+ * writing -- unresolved ids fail loud so the Phase F round-trip check
+ * catches drift between commentary authoring and the knowledge corpus.
  *
  * # Browser safety
  *
@@ -40,6 +45,9 @@ import type { WxScenario } from '@ab/constants';
 import { stringify as yamlStringify } from 'yaml';
 import { type ChartProductInputs, deriveAllCharts } from './charts/derive-all';
 import type { ChartArtifact } from './charts/types';
+import { validateAllKnowledgeNodes } from './commentary/knowledge-link';
+import { deriveCommentary } from './commentary/socratic';
+import type { CommentaryCallout } from './commentary/types';
 import { deriveAirmets } from './products/airmet';
 import { deriveMetar } from './products/metar';
 import { derivePireps } from './products/pirep';
@@ -86,10 +94,11 @@ export interface ScenarioProducts {
 export type ScenarioCharts = ChartArtifact[];
 
 /**
- * Layer-4 commentary callouts. Phase A returns an empty array; Phase D
- * narrows to `CommentaryCallout[]` from `./commentary/types.ts`.
+ * Layer-4 commentary callouts. Phase D narrows this to
+ * `CommentaryCallout[]` from `./commentary/types.ts` and wires
+ * `deriveCommentary` in `generateScenario`.
  */
-export type ScenarioCommentary = never[];
+export type ScenarioCommentary = CommentaryCallout[];
 
 /**
  * Bundle returned by `generateScenario`. Truth is always populated; the
@@ -120,7 +129,8 @@ export interface ScenarioRunOptions {
 /**
  * Produce a complete ScenarioBundle for the given seed. Phase B populates
  * truth + every layer-2 product. Phase C populates layer-3 chart
- * artifacts via `deriveAllCharts`. Commentary remains empty until Phase D.
+ * artifacts via `deriveAllCharts`. Phase D populates the layer-4 Socratic
+ * commentary via `deriveCommentary`.
  */
 export function generateScenario(seed: ScenarioSeed): ScenarioBundle {
 	const slug = seed.kind as WxScenario;
@@ -138,12 +148,15 @@ export function generateScenario(seed: ScenarioSeed): ScenarioBundle {
 	// === Phase C: charts ===
 	const charts = deriveAllCharts(truth, products satisfies ChartProductInputs, truth.scenarioId);
 
+	// === Phase D: commentary ===
+	const commentary = deriveCommentary(truth, products, charts, truth.scenarioId);
+
 	return {
 		scenarioId: truth.scenarioId,
 		truth,
 		products,
 		charts,
-		commentary: [],
+		commentary,
 	};
 }
 
@@ -248,12 +261,7 @@ export async function writeScenarioBundle(bundle: ScenarioBundle, options: Scena
 	if (products.fbGrid !== null) {
 		ensureDir(fs, productsOut);
 		writeFile(fs, path, path.resolve(productsOut, 'fb-bulletin.txt'), products.fbGrid.raw);
-		writeFile(
-			fs,
-			path,
-			path.resolve(productsOut, 'fb-bulletin.json'),
-			JSON.stringify(products.fbGrid.parsed, null, 2),
-		);
+		writeFile(fs, path, path.resolve(productsOut, 'fb-bulletin.json'), JSON.stringify(products.fbGrid.parsed, null, 2));
 	}
 
 	if (products.pireps.length > 0) {
@@ -311,7 +319,69 @@ export async function writeScenarioBundle(bundle: ScenarioBundle, options: Scena
 		}
 	}
 
-	// Phase D appends commentary writer here.
+	// === Phase D: commentary ===
+	if (bundle.commentary.length > 0) {
+		// Validate every knowledge-node id against course/knowledge/weather/
+		// BEFORE writing. The validator is loud: any unresolved id throws so
+		// the round-trip check in Phase F catches drift between commentary
+		// authoring and the knowledge corpus.
+		const report = validateAllKnowledgeNodes(bundle.commentary, { repoRoot: options.repoRoot });
+		if (report.unresolved.length > 0) {
+			throw new Error(
+				`wx-engine: ${report.unresolved.length} unresolved knowledge-node id(s) in commentary for ` +
+					`scenario "${bundle.scenarioId}": ${report.unresolved.join(', ')} ` +
+					`(callouts: ${report.calloutIds.join(', ')})`,
+			);
+		}
+
+		writeFile(
+			fs,
+			path,
+			path.resolve(scenarioOut, 'commentary.json'),
+			`${JSON.stringify(bundle.commentary, null, 2)}\n`,
+		);
+		writeFile(fs, path, path.resolve(scenarioOut, 'commentary.md'), formatCommentaryMarkdown(bundle));
+	}
+}
+
+/**
+ * Format the commentary bundle as a human-readable markdown document.
+ * Lifted from the spike's `engine.ts` formatter; carries the scenario
+ * narrative as preamble and one section per callout.
+ */
+function formatCommentaryMarkdown(bundle: ScenarioBundle): string {
+	const lines: string[] = [];
+	lines.push(`# ${bundle.scenarioId} -- truth-aware commentary`);
+	lines.push('');
+	lines.push(`Truth valid at: \`${bundle.truth.validAt}\``);
+	lines.push('');
+	lines.push(bundle.truth.narrative);
+	lines.push('');
+	lines.push(`## Callouts (${bundle.commentary.length})`);
+	lines.push('');
+	for (const callout of bundle.commentary) {
+		const targetSummary =
+			callout.target.elementId !== undefined
+				? `${callout.target.kind} (${callout.target.elementId})`
+				: callout.target.kind;
+		lines.push(`### ${callout.id} -- ${targetSummary}`);
+		lines.push('');
+		if (callout.target.chartSlug !== undefined) {
+			lines.push(`Pinned to chart \`${callout.target.chartSlug}\`.`);
+			lines.push('');
+		}
+		lines.push(`**Mode:** ${callout.mode}`);
+		lines.push('');
+		lines.push(`**Question:** ${callout.question}`);
+		lines.push('');
+		lines.push(`**Observation:** ${callout.observation}`);
+		lines.push('');
+		lines.push(`**Reason:** ${callout.reason}`);
+		lines.push('');
+		lines.push(`**References:** ${callout.knowledgeNodeIds.map((id) => `\`${id}\``).join(', ')}`);
+		lines.push('');
+	}
+	return lines.join('\n');
 }
 
 function resolveCacheRoot(override: string | undefined): string {

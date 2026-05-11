@@ -14,8 +14,8 @@
  * `spikes/wx-engine/src/charts/product-charts.ts` (PR #801).
  */
 
-import type { TruthModel } from '../truth/types';
 import type { DerivedFbGrid } from '../products/types';
+import type { TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
 
 const BASE_BACK_OFFSET_HOURS = 6;

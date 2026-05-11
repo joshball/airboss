@@ -15,8 +15,8 @@
  * `spikes/wx-engine/src/charts/product-charts.ts` (PR #801 -- now retired).
  */
 
-import type { TruthModel } from '../truth/types';
 import type { DerivedMetar } from '../products/types';
+import type { TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
 
 export function deriveMetarPlotChart(truth: TruthModel, metars: DerivedMetar[], scenarioId: string): ChartArtifact {

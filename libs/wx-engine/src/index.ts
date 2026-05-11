@@ -25,6 +25,16 @@
  */
 
 // ----------------------------------------------------------------------
+// Layer-3 chart artifact shape. Pure types -- safe at any tier.
+// ----------------------------------------------------------------------
+export type { ChartArtifact, ChartArtifactSource } from './charts/types';
+// ----------------------------------------------------------------------
+// Layer-4 commentary callout shape. Pure types -- safe at any tier. Values
+// (deriveCommentary, resolveKnowledgeNodeId, validateAllKnowledgeNodes)
+// live in `./server.ts`.
+// ----------------------------------------------------------------------
+export type { CommentaryCallout, CommentaryCalloutTarget, CommentaryMode } from './commentary/types';
+// ----------------------------------------------------------------------
 // Engine API types. Values (generateScenario, writeScenarioBundle) live in
 // `./server.ts` (`@ab/wx-engine/server`).
 // ----------------------------------------------------------------------
@@ -41,10 +51,6 @@ export type {
 // deriveFbGrid, derivePireps) live in `./server.ts`.
 // ----------------------------------------------------------------------
 export type { AirmetAdvisory, DerivedFbGrid, DerivedMetar, DerivedPirep, DerivedTaf } from './products/types';
-// ----------------------------------------------------------------------
-// Layer-3 chart artifact shape. Pure types -- safe at any tier.
-// ----------------------------------------------------------------------
-export type { ChartArtifact, ChartArtifactSource } from './charts/types';
 // ----------------------------------------------------------------------
 // Zod schema (inferred type only; the schema value lives in `./server.ts`).
 // Re-exporting the schema value from this barrel is intentionally avoided

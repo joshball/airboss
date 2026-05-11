@@ -66,18 +66,17 @@ describe('Phase C -- charts-spike-parity', () => {
 		expect(unique.size).toBe(slugs.length);
 	});
 
-	it.each(EXPECTED_ORDER.map((slug, i) => [slug, i] as const))(
-		'spec for %s passes the wx-charts schema (WXENG-20)',
-		(slug, idx) => {
-			const chart = charts[idx];
-			expect(chart).toBeDefined();
-			if (chart === undefined) throw new Error(`missing chart at index ${idx}`);
-			expect(chart.slug).toBe(slug);
-			const renderer = CHART_RENDERERS[specType(chart) as keyof typeof CHART_RENDERERS];
-			expect(renderer).toBeDefined();
-			expect(() => renderer.schema.parse(chart.spec)).not.toThrow();
-		},
-	);
+	it.each(
+		EXPECTED_ORDER.map((slug, i) => [slug, i] as const),
+	)('spec for %s passes the wx-charts schema (WXENG-20)', (slug, idx) => {
+		const chart = charts[idx];
+		expect(chart).toBeDefined();
+		if (chart === undefined) throw new Error(`missing chart at index ${idx}`);
+		expect(chart.slug).toBe(slug);
+		const renderer = CHART_RENDERERS[specType(chart) as keyof typeof CHART_RENDERERS];
+		expect(renderer).toBeDefined();
+		expect(() => renderer.schema.parse(chart.spec)).not.toThrow();
+	});
 
 	it('every chart carries at least one source with a cache-relative path', () => {
 		for (const chart of charts) {

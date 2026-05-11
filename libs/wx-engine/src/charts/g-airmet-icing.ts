@@ -15,8 +15,8 @@
  */
 
 import { AIRMET_FAMILIES } from '@ab/constants';
-import type { TruthModel } from '../truth/types';
 import type { AirmetAdvisory } from '../products/types';
+import type { TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
 
 type IcingIntensity = 'icing-light' | 'icing-light-mod' | 'icing-moderate' | 'icing-severe';
