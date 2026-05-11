@@ -35,7 +35,7 @@ references:
     note: Briefing requestor's view of NWS / FSS-mediated products.
   - source: FAA-H-8083-28
     detail: Aviation Weather Handbook, Chapter 26 -- Sources of Weather Information
-    note: Post-2022 consolidated handbook -- the modern reference for data sources.
+    note: Post-2022 consolidated handbook -- the modern reference for data sources. Verify chapter -- the verified FAA-H-8083-28B ToC lists Chapter 26 as "Advisories"; data-source coverage likely lives in Chapter 2 (Aviation Weather Service Program) or Chapter 3 (Overview of Aviation Weather Information).
 
 assessable: true
 assessment_methods: [recall, scenario]

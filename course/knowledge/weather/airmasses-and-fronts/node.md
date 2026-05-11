@@ -31,7 +31,7 @@ references:
     detail: Aviation Weather, Air Masses and Fronts chapter
     note: Foundational treatment of source regions, frontal structure, and lift mechanisms.
   - source: FAA-H-8083-28
-    detail: Aviation Weather Handbook, Chapter 11 -- Air Masses, Fronts, and Other Boundaries
+    detail: Aviation Weather Handbook, Chapter 11 -- Air Masses, Fronts, and the Wave Cyclone Model
     note: Modern consolidated reference.
   - source: FAA-H-8083-25
     detail: Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory

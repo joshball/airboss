@@ -30,8 +30,8 @@ references:
     detail: Aviation Weather, Stability chapter
     note: Foundational treatment of dry vs moist adiabatic lapse and stability classes.
   - source: FAA-H-8083-28
-    detail: Aviation Weather Handbook, Chapter 5 -- Stability of the Atmosphere
-    note: Modern reference for absolute / conditional / neutral stability.
+    detail: Aviation Weather Handbook, Chapter 13 -- Atmospheric Stability
+    note: Modern reference for absolute / conditional / neutral stability (§13.3 Stability Types).
   - source: FAA-H-8083-25
     detail: Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
     note: Pilot-pitch introduction to stability and its operational consequences.
