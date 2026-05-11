@@ -1,0 +1,345 @@
+{
+  "scenarioId": "marine-stratus-pacific-nw",
+  "validAt": "2026-06-18T16:00:00Z",
+  "primaryTimeZone": "America/Los_Angeles",
+  "narrative": "Coastal marine layer trapped under a subsidence inversion behind a weak Pacific cold front. A 1024-mb high sits offshore; the post-frontal marine mP air mass blankets KMRY / KSFO / KOAK in IFR with a ceiling near 800 ft AGL. The inland mT subsiding mass keeps KSCK / KSAC clear and warm east of the Coast Range. Mountain obscuration along the Coast Range marks the upwind edge of the marine layer.",
+  "stations": {
+    "KMRY": {
+      "icao": "KMRY",
+      "lon": -121.84,
+      "lat": 36.59,
+      "elevationFt": 257,
+      "name": "Monterey Regional"
+    },
+    "KSFO": {
+      "icao": "KSFO",
+      "lon": -122.37,
+      "lat": 37.62,
+      "elevationFt": 13,
+      "name": "San Francisco International"
+    },
+    "KOAK": {
+      "icao": "KOAK",
+      "lon": -122.22,
+      "lat": 37.72,
+      "elevationFt": 9,
+      "name": "Oakland"
+    },
+    "KSCK": {
+      "icao": "KSCK",
+      "lon": -121.24,
+      "lat": 37.89,
+      "elevationFt": 33,
+      "name": "Stockton"
+    },
+    "KSAC": {
+      "icao": "KSAC",
+      "lon": -121.5,
+      "lat": 38.51,
+      "elevationFt": 24,
+      "name": "Sacramento Executive"
+    }
+  },
+  "synoptic": {
+    "pressureSystems": [
+      {
+        "id": "H-pacific",
+        "kind": "H",
+        "lon": -130,
+        "lat": 37,
+        "centralPressureMb": 1024,
+        "motionDegTrue": 0,
+        "motionKt": 0
+      },
+      {
+        "id": "L-great-basin-trough",
+        "kind": "L",
+        "lon": -116,
+        "lat": 39,
+        "centralPressureMb": 1014,
+        "motionDegTrue": 90,
+        "motionKt": 5
+      }
+    ],
+    "fronts": [
+      {
+        "id": "F-pacific-weak-cold",
+        "kind": "cold",
+        "points": [
+          [
+            -121.6,
+            39.5
+          ],
+          [
+            -121.6,
+            38
+          ],
+          [
+            -121.6,
+            36.5
+          ],
+          [
+            -121.6,
+            35
+          ]
+        ],
+        "pipSide": "E",
+        "motionDegTrue": 90,
+        "motionKt": 6,
+        "intensity": "weak"
+      }
+    ]
+  },
+  "airMasses": [
+    {
+      "id": "AM-postfrontal-marine-cP",
+      "classification": "cP",
+      "polygon": [
+        [
+          -128,
+          35
+        ],
+        [
+          -121.6,
+          35
+        ],
+        [
+          -121.6,
+          39.5
+        ],
+        [
+          -128,
+          39.5
+        ],
+        [
+          -128,
+          35
+        ]
+      ],
+      "surfaceTempC": 12,
+      "surfaceDewpointC": 11,
+      "stability": "stable",
+      "surfaceWindDirDeg": 300,
+      "surfaceWindKt": 8,
+      "meanCloudCover": "BKN",
+      "meanCloudBaseFtAgl": 800,
+      "meanCloudTopFtAgl": 1500
+    },
+    {
+      "id": "AM-inland-mT",
+      "classification": "mT",
+      "polygon": [
+        [
+          -121.6,
+          35
+        ],
+        [
+          -119,
+          35
+        ],
+        [
+          -119,
+          39.5
+        ],
+        [
+          -121.6,
+          39.5
+        ],
+        [
+          -121.6,
+          35
+        ]
+      ],
+      "surfaceTempC": 18,
+      "surfaceDewpointC": 4,
+      "stability": "stable",
+      "surfaceWindDirDeg": 30,
+      "surfaceWindKt": 6,
+      "meanCloudCover": "SKC",
+      "meanCloudBaseFtAgl": null,
+      "meanCloudTopFtAgl": null
+    }
+  ],
+  "upperLevel": {
+    "jetAxis": [
+      [
+        -128,
+        42
+      ],
+      [
+        -118,
+        41
+      ],
+      [
+        -108,
+        40
+      ]
+    ],
+    "jetMaxKt": 25,
+    "windByAltitude": [
+      {
+        "altitudeFt": 3000,
+        "meanDirDeg": 300,
+        "meanSpeedKt": 10,
+        "meanTempC": 12
+      },
+      {
+        "altitudeFt": 6000,
+        "meanDirDeg": 290,
+        "meanSpeedKt": 15,
+        "meanTempC": 6
+      },
+      {
+        "altitudeFt": 9000,
+        "meanDirDeg": 280,
+        "meanSpeedKt": 18,
+        "meanTempC": 0
+      },
+      {
+        "altitudeFt": 12000,
+        "meanDirDeg": 280,
+        "meanSpeedKt": 20,
+        "meanTempC": -6
+      },
+      {
+        "altitudeFt": 18000,
+        "meanDirDeg": 280,
+        "meanSpeedKt": 22,
+        "meanTempC": -18
+      },
+      {
+        "altitudeFt": 24000,
+        "meanDirDeg": 270,
+        "meanSpeedKt": 25,
+        "meanTempC": -32
+      },
+      {
+        "altitudeFt": 30000,
+        "meanDirDeg": 270,
+        "meanSpeedKt": 25,
+        "meanTempC": -46
+      },
+      {
+        "altitudeFt": 34000,
+        "meanDirDeg": 270,
+        "meanSpeedKt": 22,
+        "meanTempC": -52
+      }
+    ]
+  },
+  "convection": {
+    "cells": [],
+    "frontalBand": null,
+    "capeJperKgByStation": {
+      "KMRY": 0,
+      "KSFO": 0,
+      "KOAK": 0,
+      "KSCK": 100,
+      "KSAC": 100
+    }
+  },
+  "diurnal": {
+    "solarNoonUtcHour": 19,
+    "mixingHeightFtMsl": 3000,
+    "nocturnalInversion": false
+  },
+  "hazardZones": [
+    {
+      "id": "HZ-coastal-sierra-ifr",
+      "kind": "ifr",
+      "polygon": [
+        [
+          -123,
+          36.4
+        ],
+        [
+          -121.7,
+          36.4
+        ],
+        [
+          -121.7,
+          38
+        ],
+        [
+          -123,
+          38
+        ],
+        [
+          -123,
+          36.4
+        ]
+      ],
+      "altitudeBandFtMsl": {
+        "min": 0,
+        "max": 1500
+      },
+      "source": "IFR ceiling and visibility under the marine stratus deck trapped beneath the subsidence inversion over the coastal margin",
+      "severity": "moderate"
+    },
+    {
+      "id": "HZ-coast-range-obscuration",
+      "kind": "mountain-obscuration",
+      "polygon": [
+        [
+          -121.7,
+          36.4
+        ],
+        [
+          -121.5,
+          36.4
+        ],
+        [
+          -121.5,
+          38.5
+        ],
+        [
+          -121.7,
+          38.5
+        ],
+        [
+          -121.7,
+          36.4
+        ]
+      ],
+      "altitudeBandFtMsl": {
+        "min": 0,
+        "max": 4000
+      },
+      "source": "Mountain obscuration along the Coast Range -- marine stratus tops abut the ridge line at the upwind edge of the marine corridor",
+      "severity": "moderate"
+    }
+  ],
+  "terrain": {
+    "ridges": [
+      {
+        "id": "R-coast-range",
+        "polyline": [
+          [
+            -121.6,
+            35.5
+          ],
+          [
+            -121.6,
+            39
+          ]
+        ],
+        "peakElevationFt": 3400
+      }
+    ]
+  },
+  "routeStations": [
+    "KMRY",
+    "KSFO",
+    "KOAK",
+    "KSCK",
+    "KSAC"
+  ],
+  "fbStations": [
+    "KMRY",
+    "KSFO",
+    "KOAK",
+    "KSCK",
+    "KSAC"
+  ],
+  "tafValidHours": 12
+}

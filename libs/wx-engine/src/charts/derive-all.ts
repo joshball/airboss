@@ -66,16 +66,29 @@ export interface ChartProductInputs {
 }
 
 /**
- * Per-scenario route + FB station rosters. Phase B will hoist these onto
- * `TruthModel.routeStations` / `TruthModel.fbStations`; until then we
- * carry the spike scenario's roster here so Phase C is self-contained.
+ * Per-scenario route + FB station rosters. The truth model carries them on
+ * `TruthModel.routeStations` / `TruthModel.fbStations` (lifted onto the
+ * truth shape in Phase B). The Phase-C hard-coded fallback below preserves
+ * a defensive default for legacy callers that pass only a scenarioId
+ * string; production callers go through `deriveAllCharts(truth, ...)` and
+ * read from the truth literal directly.
  */
 const SCENARIO_ROUTE_STATIONS: Record<string, readonly string[]> = {
 	'frontal-xc-march': ['KSTL', 'KCPS', 'KSPI', 'KMLI', 'KORD'],
+	'summer-thunderstorms-tx': ['KAUS', 'KIAH', 'KSAT', 'KCLL', 'KCRP'],
+	'winter-icing-great-lakes': ['KCLE', 'KORD', 'KDTW', 'KGRR', 'KCAK'],
+	'mountain-wave-rockies': ['KASE', 'KDEN', 'KCOS', 'KBJC', 'KAPA'],
+	'marine-stratus-pacific-nw': ['KMRY', 'KSFO', 'KOAK', 'KSCK', 'KSAC'],
+	'dense-fog-radiation-central-valley': ['KFAT', 'KSCK', 'KMOD', 'KMER', 'KPRB'],
 };
 
 const SCENARIO_FB_STATIONS: Record<string, readonly string[]> = {
 	'frontal-xc-march': ['KSTL', 'KORD', 'KMSP', 'KIND', 'KDSM'],
+	'summer-thunderstorms-tx': ['KAUS', 'KIAH', 'KSAT', 'KCLL', 'KCRP'],
+	'winter-icing-great-lakes': ['KCLE', 'KORD', 'KDTW', 'KGRR', 'KCAK'],
+	'mountain-wave-rockies': ['KASE', 'KDEN', 'KCOS', 'KBJC', 'KAPA'],
+	'marine-stratus-pacific-nw': ['KMRY', 'KSFO', 'KOAK', 'KSCK', 'KSAC'],
+	'dense-fog-radiation-central-valley': ['KFAT', 'KSCK', 'KMOD', 'KMER', 'KPRB'],
 };
 
 export function getRouteStations(scenarioId: string): readonly string[] {
@@ -87,8 +100,10 @@ export function getFbStations(scenarioId: string): readonly string[] {
 }
 
 export function deriveAllCharts(truth: TruthModel, products: ChartProductInputs, scenarioId: string): ChartArtifact[] {
-	const routeStations = getRouteStations(scenarioId);
-	const fbStations = getFbStations(scenarioId);
+	// Truth model is authoritative when populated (Phase B+); fallback table
+	// only fires when a caller skips the truth shape (legacy/tests).
+	const routeStations = truth.routeStations.length > 0 ? truth.routeStations : getRouteStations(scenarioId);
+	const fbStations = truth.fbStations.length > 0 ? truth.fbStations : getFbStations(scenarioId);
 	const charts: ChartArtifact[] = [];
 
 	charts.push(deriveSurfaceAnalysisChart(truth, products.metars, scenarioId));

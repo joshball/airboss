@@ -1,0 +1,177 @@
+[
+  {
+    "station": "KFAT",
+    "amended": false,
+    "corrected": false,
+    "issuedAt": "2026-05-08T09:20:00.000Z",
+    "validFrom": "2026-05-08T10:00:00.000Z",
+    "validTo": "2026-05-08T22:00:00.000Z",
+    "periods": [
+      {
+        "kind": "INITIAL",
+        "start": "2026-05-08T10:00:00.000Z",
+        "end": "2026-05-08T22:00:00.000Z",
+        "probability": null,
+        "raw": "00002G03KT 3SM OVC015",
+        "wind": {
+          "directionDeg": 0,
+          "speedKt": 2,
+          "gustKt": 3,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 3,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "OVC",
+            "heightFtAgl": 1500
+          }
+        ],
+        "cavok": false
+      }
+    ],
+    "raw": "TAF KFAT 080920Z 0810/0822 00002G03KT 3SM OVC015",
+    "warnings": []
+  },
+  {
+    "station": "KSCK",
+    "amended": false,
+    "corrected": false,
+    "issuedAt": "2026-05-08T09:20:00.000Z",
+    "validFrom": "2026-05-08T10:00:00.000Z",
+    "validTo": "2026-05-08T22:00:00.000Z",
+    "periods": [
+      {
+        "kind": "INITIAL",
+        "start": "2026-05-08T10:00:00.000Z",
+        "end": "2026-05-08T22:00:00.000Z",
+        "probability": null,
+        "raw": "00002G03KT 3SM OVC015",
+        "wind": {
+          "directionDeg": 0,
+          "speedKt": 2,
+          "gustKt": 3,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 3,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "OVC",
+            "heightFtAgl": 1500
+          }
+        ],
+        "cavok": false
+      }
+    ],
+    "raw": "TAF KSCK 080920Z 0810/0822 00002G03KT 3SM OVC015",
+    "warnings": []
+  },
+  {
+    "station": "KMOD",
+    "amended": false,
+    "corrected": false,
+    "issuedAt": "2026-05-08T09:20:00.000Z",
+    "validFrom": "2026-05-08T10:00:00.000Z",
+    "validTo": "2026-05-08T22:00:00.000Z",
+    "periods": [
+      {
+        "kind": "INITIAL",
+        "start": "2026-05-08T10:00:00.000Z",
+        "end": "2026-05-08T22:00:00.000Z",
+        "probability": null,
+        "raw": "00002G03KT 3SM OVC015",
+        "wind": {
+          "directionDeg": 0,
+          "speedKt": 2,
+          "gustKt": 3,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 3,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "OVC",
+            "heightFtAgl": 1500
+          }
+        ],
+        "cavok": false
+      }
+    ],
+    "raw": "TAF KMOD 080920Z 0810/0822 00002G03KT 3SM OVC015",
+    "warnings": []
+  },
+  {
+    "station": "KMER",
+    "amended": false,
+    "corrected": false,
+    "issuedAt": "2026-05-08T09:20:00.000Z",
+    "validFrom": "2026-05-08T10:00:00.000Z",
+    "validTo": "2026-05-08T22:00:00.000Z",
+    "periods": [
+      {
+        "kind": "INITIAL",
+        "start": "2026-05-08T10:00:00.000Z",
+        "end": "2026-05-08T22:00:00.000Z",
+        "probability": null,
+        "raw": "00002G03KT 3SM OVC015",
+        "wind": {
+          "directionDeg": 0,
+          "speedKt": 2,
+          "gustKt": 3,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 3,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "OVC",
+            "heightFtAgl": 1500
+          }
+        ],
+        "cavok": false
+      }
+    ],
+    "raw": "TAF KMER 080920Z 0810/0822 00002G03KT 3SM OVC015",
+    "warnings": []
+  },
+  {
+    "station": "KPRB",
+    "amended": false,
+    "corrected": false,
+    "issuedAt": "2026-05-08T09:20:00.000Z",
+    "validFrom": "2026-05-08T10:00:00.000Z",
+    "validTo": "2026-05-08T22:00:00.000Z",
+    "periods": [
+      {
+        "kind": "INITIAL",
+        "start": "2026-05-08T10:00:00.000Z",
+        "end": "2026-05-08T22:00:00.000Z",
+        "probability": null,
+        "raw": "00002G03KT 6SM SKC",
+        "wind": {
+          "directionDeg": 0,
+          "speedKt": 2,
+          "gustKt": 3,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 6,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "SKC",
+            "heightFtAgl": null
+          }
+        ],
+        "cavok": false
+      }
+    ],
+    "raw": "TAF KPRB 080920Z 0810/0822 00002G03KT 6SM SKC",
+    "warnings": []
+  }
+]

@@ -1,0 +1,17 @@
+{
+  "slug": "wx-scenario-mountain-wave-rockies-airmet-sigmet",
+  "type": "advisory-overlay",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-11T14:00:37.892Z",
+  "content_hash": "sha256:db52a75f9b747ef0250b4d1cd0cbb2c42f8215e0c9e2a98d6918dc7f0e764745",
+  "source_hashes": {
+    "advisories": "2fcbf7353af75db5dd374e7168e9d2db2bc54358a56e7ee7225333154c6c24fa"
+  },
+  "layer_counts": {
+    "vector-symbology": 3,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 287222
+}

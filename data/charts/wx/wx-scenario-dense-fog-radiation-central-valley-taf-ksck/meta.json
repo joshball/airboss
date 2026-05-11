@@ -1,0 +1,17 @@
+{
+  "slug": "wx-scenario-dense-fog-radiation-central-valley-taf-ksck",
+  "type": "taf-timeline",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-11T14:07:06.244Z",
+  "content_hash": "sha256:5f26edaf0c6606fedc9d71b2c142a07dd4d53e094d80c07195ec42bb37ac11d3",
+  "source_hashes": {
+    "taf": "da734d3da110a79499a2b20ab5d4b883293e9db17b32ea39ac818cb2b35755c5"
+  },
+  "layer_counts": {
+    "vector-symbology": 7,
+    "point-symbology": 1
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 6106
+}

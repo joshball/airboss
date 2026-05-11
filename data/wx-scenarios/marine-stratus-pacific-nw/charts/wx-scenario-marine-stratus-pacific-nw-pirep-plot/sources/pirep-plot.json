@@ -1,0 +1,17 @@
+{
+  "targetTimestamp": "2026-06-18T16:00:00Z",
+  "source": "wx-engine -- truth-derived synthetic PIREPs",
+  "count": 2,
+  "reports": [
+    {
+      "raw": "KSFO UA /OV SFO190035/TM 1530/FL015/TP C172/TB LGT/SK OVC008/WX BR/RM IFR BELOW LAYER",
+      "lat": 37.040000000000006,
+      "lon": -122.47999999999999
+    },
+    {
+      "raw": "KMRY UA /OV MRY020040/TM 1535/FL025/TP C172/TB LGT/SK BKN030/WX FU/RM MTN OBSCURED IN STRATUS",
+      "lat": 37.24,
+      "lon": -121.62
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+[
+  {
+    "station": "KMER",
+    "kind": "UA",
+    "location": {
+      "raw": "MER270009",
+      "station": "MER",
+      "radialDeg": 270,
+      "distanceNm": 9
+    },
+    "timeHhmmZ": 930,
+    "altitudeFt": 1500,
+    "aircraftType": "C172",
+    "skyCover": [
+      {
+        "cover": "OVC",
+        "baseFt": 800,
+        "topFt": null
+      }
+    ],
+    "weather": [
+      "BR"
+    ],
+    "temperatureC": null,
+    "wind": null,
+    "turbulence": {
+      "intensity": "LGT",
+      "altitudeBandFt": null,
+      "raw": "LGT"
+    },
+    "icing": null,
+    "remarks": "IFR BELOW LAYER",
+    "raw": "KMER UA /OV MER270009/TM 0930/FL015/TP C172/TB LGT/SK OVC008/WX BR/RM IFR BELOW LAYER",
+    "warnings": []
+  },
+  {
+    "station": "KPRB",
+    "kind": "UA",
+    "location": {
+      "raw": "PRB330022",
+      "station": "PRB",
+      "radialDeg": 330,
+      "distanceNm": 22
+    },
+    "timeHhmmZ": 935,
+    "altitudeFt": 2500,
+    "aircraftType": "C172",
+    "skyCover": [
+      {
+        "cover": "BKN",
+        "baseFt": 3000,
+        "topFt": null
+      }
+    ],
+    "weather": [
+      "FU"
+    ],
+    "temperatureC": null,
+    "wind": null,
+    "turbulence": {
+      "intensity": "LGT",
+      "altitudeBandFt": null,
+      "raw": "LGT"
+    },
+    "icing": null,
+    "remarks": "MTN OBSCURED IN STRATUS",
+    "raw": "KPRB UA /OV PRB330022/TM 0935/FL025/TP C172/TB LGT/SK BKN030/WX FU/RM MTN OBSCURED IN STRATUS",
+    "warnings": []
+  }
+]

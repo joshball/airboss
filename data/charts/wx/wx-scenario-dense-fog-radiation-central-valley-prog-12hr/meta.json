@@ -1,0 +1,19 @@
+{
+  "slug": "wx-scenario-dense-fog-radiation-central-valley-prog-12hr",
+  "type": "prog-chart",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-11T14:07:05.764Z",
+  "content_hash": "sha256:78e029175b7121489c489ec95933a8ac98255428070699bb7e04e268b854e72a",
+  "source_hashes": {
+    "forecast": "851955ba0f22e314da7971feedd737b2c11f2a8bcced3ec6419597a7a0cc251c"
+  },
+  "layer_counts": {
+    "raster-overlay": 2,
+    "vector-symbology": 2,
+    "point-symbology": 2,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 289601
+}

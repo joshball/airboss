@@ -1,0 +1,8 @@
+{
+  "stationIcao": "KCLL",
+  "issuedAt": "2026-07-15T20:20:00.000Z",
+  "validFrom": "2026-07-15T21:00:00.000Z",
+  "validTo": "2026-07-16T09:00:00.000Z",
+  "source": "wx-engine -- truth-derived synthetic TAF",
+  "raw": "TAF KCLL 152020Z 1521/1609 13010KT 6SM SCT045 PROB30 1521/1523 4SM -TSRA BKN045CB"
+}

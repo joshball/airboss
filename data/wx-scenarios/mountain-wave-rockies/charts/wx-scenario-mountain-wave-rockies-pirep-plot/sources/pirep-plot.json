@@ -1,0 +1,27 @@
+{
+  "targetTimestamp": "2026-02-12T21:00:00Z",
+  "source": "wx-engine -- truth-derived synthetic PIREPs",
+  "count": 4,
+  "reports": [
+    {
+      "raw": "KAPA UUA /OV APA220030/TM 2030/FL145/TP B738/TB SEV 010-280/SK BKN090/RM CONT SEV CHOP",
+      "lat": 39.2,
+      "lon": -105.3
+    },
+    {
+      "raw": "KAPA UUA /OV APA220023/TM 2035/FL085/TP C172/TB LGT/SK OVC050/IC LGT RIME 050-120/RM ACCRETING ON LE",
+      "lat": 39.3,
+      "lon": -105.2
+    },
+    {
+      "raw": "KBJC UUA /OV BJC350036/TM 2040/FL090/TP B738/TB MOD 070-110/SK BKN040 OVC100/WX TSRA/RM HVY PRECIP NEAR CELL",
+      "lat": 40.5,
+      "lon": -105.3
+    },
+    {
+      "raw": "KCOS UUA /OV COS220049/TM 2045/FL090/TP B738/TB MOD 070-110/SK BKN040 OVC100/WX TSRA/RM HVY PRECIP NEAR CELL",
+      "lat": 38.2,
+      "lon": -105.4
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+slug: wx-scenario-mountain-wave-rockies-airmet-sigmet
+type: advisory-overlay
+title: AIRMETs (truth-derived)
+subtitle: Issued 2026-02-12T21:00:00Z -- composes with the same-time surface analysis
+projection:
+  kind: lambert
+  parallels:
+    - 33
+    - 45
+  rotate:
+    - -96
+    - -39
+extent: conus
+sources:
+  advisories: cache://scenarios/mountain-wave-rockies/airmet-overlay.json
+options:
+  show_legend: true
+  show_labels: true
+  source_attribution: wx-engine -- truth-derived synthetic AIRMETs

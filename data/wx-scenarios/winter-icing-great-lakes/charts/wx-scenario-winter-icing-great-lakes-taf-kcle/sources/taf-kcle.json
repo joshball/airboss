@@ -1,0 +1,8 @@
+{
+  "stationIcao": "KCLE",
+  "issuedAt": "2026-01-22T14:20:00.000Z",
+  "validFrom": "2026-01-22T15:00:00.000Z",
+  "validTo": "2026-01-23T03:00:00.000Z",
+  "source": "wx-engine -- truth-derived synthetic TAF",
+  "raw": "TAF KCLE 221420Z 2215/2303 32020G30KT 3SM OVC015"
+}

@@ -1,0 +1,19 @@
+slug: wx-scenario-mountain-wave-rockies-convective-outlook
+type: convective-outlook
+title: Convective Outlook (truth-derived)
+subtitle: Day 1 outlook issued 2026-02-12T21:00:00Z
+projection:
+  kind: lambert
+  parallels:
+    - 33
+    - 45
+  rotate:
+    - -96
+    - -39
+extent: conus
+sources:
+  outlook: cache://scenarios/mountain-wave-rockies/convective-outlook.json
+options:
+  show_legend: true
+  show_labels: true
+  source_attribution: wx-engine -- truth-derived synthetic SPC outlook

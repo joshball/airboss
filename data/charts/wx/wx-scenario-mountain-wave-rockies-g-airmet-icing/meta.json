@@ -1,0 +1,17 @@
+{
+  "slug": "wx-scenario-mountain-wave-rockies-g-airmet-icing",
+  "type": "icing-gairmet",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-11T14:00:38.257Z",
+  "content_hash": "sha256:f6d09464aec89fad64e7e8eaf14609fa2b110d8aeea3fb267fb0c3d572b34f65",
+  "source_hashes": {
+    "areas": "7a8c56a08557263dc0c8ff574c80cd9cb7bb82b046c2f9ed65e154077a60e72f"
+  },
+  "layer_counts": {
+    "vector-symbology": 1,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 284843
+}

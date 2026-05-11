@@ -1,0 +1,18 @@
+{
+  "slug": "wx-scenario-dense-fog-radiation-central-valley-metar-plot",
+  "type": "metar-plot-grid",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-11T14:07:05.557Z",
+  "content_hash": "sha256:0e80907bba053708366ec50b55fa61c44de7f0a58eed0119d1958e107536ab30",
+  "source_hashes": {
+    "observations": "6a0130da478df45eaf2a7df1921c363720b1672e0bf520f72b673190f93f714b"
+  },
+  "layer_counts": {
+    "vector-symbology": 5,
+    "point-symbology": 5,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 292104
+}

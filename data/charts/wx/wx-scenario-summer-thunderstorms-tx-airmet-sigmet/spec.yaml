@@ -1,0 +1,19 @@
+slug: wx-scenario-summer-thunderstorms-tx-airmet-sigmet
+type: advisory-overlay
+title: AIRMETs (truth-derived)
+subtitle: Issued 2026-07-15T21:00:00Z -- composes with the same-time surface analysis
+projection:
+  kind: lambert
+  parallels:
+    - 33
+    - 45
+  rotate:
+    - -96
+    - -39
+extent: conus
+sources:
+  advisories: cache://scenarios/summer-thunderstorms-tx/airmet-overlay.json
+options:
+  show_legend: true
+  show_labels: true
+  source_attribution: wx-engine -- truth-derived synthetic AIRMETs

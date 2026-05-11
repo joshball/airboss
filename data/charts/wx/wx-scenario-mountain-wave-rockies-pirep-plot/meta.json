@@ -1,0 +1,18 @@
+{
+  "slug": "wx-scenario-mountain-wave-rockies-pirep-plot",
+  "type": "pirep-plot-grid",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-11T14:00:38.614Z",
+  "content_hash": "sha256:6b5886b39e892473b4d0c2a91be8398573731bcac47681d49e848603a9034355",
+  "source_hashes": {
+    "reports": "3ed92591973b9ddafbcd04a8403d921ac8facefed9fa65942b8065eb71af6dc7"
+  },
+  "layer_counts": {
+    "vector-symbology": 4,
+    "point-symbology": 4,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 290318
+}

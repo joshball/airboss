@@ -1,0 +1,369 @@
+{
+  "scenarioId": "mountain-wave-rockies",
+  "validAt": "2026-02-12T21:00:00Z",
+  "primaryTimeZone": "America/Denver",
+  "narrative": "Lee-side mountain wave east of the Front Range. A 95-kt jet aloft drives strong westerly flow perpendicular to the divide; the wave column carries severe turbulence from the surface to FL280, with a rotor cloud at mid levels and mountain obscuration upwind of the Rockies. KASE sits high on the windward foothills; KDEN / KCOS / KBJC / KAPA cluster in the lee of the divide along the I-25 corridor.",
+  "stations": {
+    "KASE": {
+      "icao": "KASE",
+      "lon": -106.87,
+      "lat": 39.22,
+      "elevationFt": 7820,
+      "name": "Aspen-Pitkin County"
+    },
+    "KDEN": {
+      "icao": "KDEN",
+      "lon": -104.67,
+      "lat": 39.86,
+      "elevationFt": 5434,
+      "name": "Denver International"
+    },
+    "KCOS": {
+      "icao": "KCOS",
+      "lon": -104.7,
+      "lat": 38.81,
+      "elevationFt": 6187,
+      "name": "Colorado Springs"
+    },
+    "KBJC": {
+      "icao": "KBJC",
+      "lon": -105.12,
+      "lat": 39.91,
+      "elevationFt": 5673,
+      "name": "Rocky Mountain Metro"
+    },
+    "KAPA": {
+      "icao": "KAPA",
+      "lon": -104.85,
+      "lat": 39.57,
+      "elevationFt": 5885,
+      "name": "Centennial"
+    }
+  },
+  "synoptic": {
+    "pressureSystems": [
+      {
+        "id": "H-great-basin",
+        "kind": "H",
+        "lon": -110,
+        "lat": 41,
+        "centralPressureMb": 1024,
+        "motionDegTrue": 90,
+        "motionKt": 10
+      },
+      {
+        "id": "L-lee-trough",
+        "kind": "L",
+        "lon": -103,
+        "lat": 40,
+        "centralPressureMb": 1008,
+        "motionDegTrue": 90,
+        "motionKt": 15
+      }
+    ],
+    "fronts": []
+  },
+  "airMasses": [
+    {
+      "id": "AM-lee-cP",
+      "classification": "cP",
+      "polygon": [
+        [
+          -107,
+          37
+        ],
+        [
+          -101,
+          37
+        ],
+        [
+          -101,
+          42
+        ],
+        [
+          -107,
+          42
+        ],
+        [
+          -107,
+          37
+        ]
+      ],
+      "surfaceTempC": 2,
+      "surfaceDewpointC": -12,
+      "stability": "stable",
+      "surfaceWindDirDeg": 270,
+      "surfaceWindKt": 25,
+      "meanCloudCover": "FEW",
+      "meanCloudBaseFtAgl": 6000,
+      "meanCloudTopFtAgl": 14000
+    },
+    {
+      "id": "AM-upwind-mP",
+      "classification": "mP",
+      "polygon": [
+        [
+          -115,
+          37
+        ],
+        [
+          -107,
+          37
+        ],
+        [
+          -107,
+          42
+        ],
+        [
+          -115,
+          42
+        ],
+        [
+          -115,
+          37
+        ]
+      ],
+      "surfaceTempC": -2,
+      "surfaceDewpointC": -5,
+      "stability": "conditionally-unstable",
+      "surfaceWindDirDeg": 275,
+      "surfaceWindKt": 30,
+      "meanCloudCover": "OVC",
+      "meanCloudBaseFtAgl": 3500,
+      "meanCloudTopFtAgl": 16000
+    }
+  ],
+  "upperLevel": {
+    "jetAxis": [
+      [
+        -115,
+        39
+      ],
+      [
+        -108,
+        39.5
+      ],
+      [
+        -101,
+        40
+      ],
+      [
+        -94,
+        40.5
+      ]
+    ],
+    "jetMaxKt": 95,
+    "windByAltitude": [
+      {
+        "altitudeFt": 3000,
+        "meanDirDeg": 270,
+        "meanSpeedKt": 30,
+        "meanTempC": 0
+      },
+      {
+        "altitudeFt": 6000,
+        "meanDirDeg": 270,
+        "meanSpeedKt": 45,
+        "meanTempC": -8
+      },
+      {
+        "altitudeFt": 9000,
+        "meanDirDeg": 270,
+        "meanSpeedKt": 55,
+        "meanTempC": -15
+      },
+      {
+        "altitudeFt": 12000,
+        "meanDirDeg": 275,
+        "meanSpeedKt": 60,
+        "meanTempC": -22
+      },
+      {
+        "altitudeFt": 18000,
+        "meanDirDeg": 270,
+        "meanSpeedKt": 70,
+        "meanTempC": -34
+      },
+      {
+        "altitudeFt": 24000,
+        "meanDirDeg": 275,
+        "meanSpeedKt": 80,
+        "meanTempC": -46
+      },
+      {
+        "altitudeFt": 30000,
+        "meanDirDeg": 275,
+        "meanSpeedKt": 95,
+        "meanTempC": -55
+      },
+      {
+        "altitudeFt": 34000,
+        "meanDirDeg": 280,
+        "meanSpeedKt": 90,
+        "meanTempC": -58
+      }
+    ]
+  },
+  "convection": {
+    "cells": [
+      {
+        "id": "C-rotor-north",
+        "lon": -105.3,
+        "lat": 40.5,
+        "radiusKm": 8,
+        "peakDbz": 18
+      },
+      {
+        "id": "C-rotor-south",
+        "lon": -105.4,
+        "lat": 38.2,
+        "radiusKm": 8,
+        "peakDbz": 18
+      }
+    ],
+    "frontalBand": null,
+    "capeJperKgByStation": {
+      "KASE": 0,
+      "KDEN": 0,
+      "KCOS": 0,
+      "KBJC": 0,
+      "KAPA": 0
+    }
+  },
+  "diurnal": {
+    "solarNoonUtcHour": 19,
+    "mixingHeightFtMsl": 9000,
+    "nocturnalInversion": false
+  },
+  "hazardZones": [
+    {
+      "id": "HZ-lee-wave-tango",
+      "kind": "turbulence",
+      "polygon": [
+        [
+          -106.5,
+          38
+        ],
+        [
+          -103.5,
+          38
+        ],
+        [
+          -103.5,
+          41
+        ],
+        [
+          -106.5,
+          41
+        ],
+        [
+          -106.5,
+          38
+        ]
+      ],
+      "altitudeBandFtMsl": {
+        "min": 0,
+        "max": 28000
+      },
+      "source": "Severe lee-wave turbulence column east of the Front Range -- amplified by the H-great-basin/L-lee-trough pressure gradient and the 95-kt jet axis",
+      "severity": "severe"
+    },
+    {
+      "id": "HZ-rotor-zulu",
+      "kind": "icing",
+      "polygon": [
+        [
+          -106,
+          38.5
+        ],
+        [
+          -104,
+          38.5
+        ],
+        [
+          -104,
+          40.5
+        ],
+        [
+          -106,
+          40.5
+        ],
+        [
+          -106,
+          38.5
+        ]
+      ],
+      "altitudeBandFtMsl": {
+        "min": 5000,
+        "max": 12000
+      },
+      "source": "Moderate icing in the rotor cloud east of the divide -- supercooled drops trapped in the wave-driven rotor circulation",
+      "severity": "moderate"
+    },
+    {
+      "id": "HZ-upwind-mtn-obscuration",
+      "kind": "mountain-obscuration",
+      "polygon": [
+        [
+          -110,
+          38
+        ],
+        [
+          -107,
+          38
+        ],
+        [
+          -107,
+          41
+        ],
+        [
+          -110,
+          41
+        ],
+        [
+          -110,
+          38
+        ]
+      ],
+      "altitudeBandFtMsl": {
+        "min": 0,
+        "max": 15000
+      },
+      "source": "Mountain obscuration in upwind mP air piling against the windward slopes of the Front Range -- light orographic stratus and snow showers",
+      "severity": "light"
+    }
+  ],
+  "terrain": {
+    "ridges": [
+      {
+        "id": "R-front-range",
+        "polyline": [
+          [
+            -105.7,
+            38
+          ],
+          [
+            -105.7,
+            41
+          ]
+        ],
+        "peakElevationFt": 14000
+      }
+    ]
+  },
+  "routeStations": [
+    "KASE",
+    "KDEN",
+    "KCOS",
+    "KBJC",
+    "KAPA"
+  ],
+  "fbStations": [
+    "KASE",
+    "KDEN",
+    "KCOS",
+    "KBJC",
+    "KAPA"
+  ],
+  "tafValidHours": 12
+}

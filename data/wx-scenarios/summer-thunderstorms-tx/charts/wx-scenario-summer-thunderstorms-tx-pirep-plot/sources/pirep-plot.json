@@ -1,0 +1,27 @@
+{
+  "targetTimestamp": "2026-07-15T21:00:00Z",
+  "source": "wx-engine -- truth-derived synthetic PIREPs",
+  "count": 4,
+  "reports": [
+    {
+      "raw": "KAUS UUA /OV AUS110020/TM 2030/FL090/TP B738/TB MOD 070-110/SK BKN040 OVC100/WX TSRA/RM HVY PRECIP NEAR CELL",
+      "lat": 30.1,
+      "lon": -97.3
+    },
+    {
+      "raw": "KCLL UUA /OV CLL190033/TM 2035/FL090/TP B738/TB MOD 070-110/SK BKN040 OVC100/WX TSRA/RM HVY PRECIP NEAR CELL",
+      "lat": 30.05,
+      "lon": -96.5
+    },
+    {
+      "raw": "KCLL UUA /OV CLL160009/TM 2040/FL090/TP B738/TB MOD 070-110/SK BKN040 OVC100/WX TSRA/RM HVY PRECIP NEAR CELL",
+      "lat": 30.45,
+      "lon": -96.3
+    },
+    {
+      "raw": "KIAH UUA /OV IAH200012/TM 2045/FL090/TP B738/TB MOD 070-110/SK BKN040 OVC100/WX TSRA/RM HVY PRECIP NEAR CELL",
+      "lat": 29.8,
+      "lon": -95.4
+    }
+  ]
+}

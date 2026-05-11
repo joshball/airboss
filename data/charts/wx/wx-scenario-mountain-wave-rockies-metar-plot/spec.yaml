@@ -1,0 +1,27 @@
+slug: wx-scenario-mountain-wave-rockies-metar-plot
+type: metar-plot-grid
+title: METAR Plot (truth-derived)
+subtitle: 2026-02-12T21:00:00Z -- 5 truth-derived stations
+projection:
+  kind: lambert
+  parallels:
+    - 33
+    - 45
+  rotate:
+    - -96
+    - -39
+extent:
+  lon_min: -100
+  lat_min: 32
+  lon_max: -80
+  lat_max: 47
+sources:
+  observations: cache://scenarios/mountain-wave-rockies/metar-plot.json
+options:
+  collision_min_distance_px: 36
+  collision_max_iterations: 40
+  show_category_ring: true
+  show_station_model_legend: true
+  show_category_legend: true
+  temp_unit: F
+  source_attribution: wx-engine -- truth-derived synthetic

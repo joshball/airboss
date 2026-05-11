@@ -1,0 +1,18 @@
+{
+  "slug": "wx-scenario-marine-stratus-pacific-nw-cva",
+  "type": "cva",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-11T14:04:27.560Z",
+  "content_hash": "sha256:1ed301e5111ff55c3eaa72834b45b4305fa18bc4bd01b227f4994d9fbabff97b",
+  "source_hashes": {
+    "observations": "8f727719cb6b6ea6f2daa6e70fc4ae88b81a96550d7a67b4e1bf6832c0b4176a"
+  },
+  "layer_counts": {
+    "vector-symbology": 2,
+    "point-symbology": 5,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 287452
+}

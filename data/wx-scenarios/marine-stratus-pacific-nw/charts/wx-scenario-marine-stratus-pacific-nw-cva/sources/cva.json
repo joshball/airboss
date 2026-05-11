@@ -1,0 +1,116 @@
+{
+  "targetTimestamp": "2026-06-18T16:00:00Z",
+  "source": "wx-engine -- truth-derived synthetic CVA",
+  "count": 5,
+  "_source_note": "Stations from per-station METARs; polygons lowered from truth.hazardZones.",
+  "observations": [
+    {
+      "station": {
+        "icao": "KMRY",
+        "lat": 36.59,
+        "lon": -121.84
+      },
+      "raw": "KMRY 181653Z 30008KT 3SM BR OVC015 12/11 A3012"
+    },
+    {
+      "station": {
+        "icao": "KSFO",
+        "lat": 37.62,
+        "lon": -122.37
+      },
+      "raw": "KSFO 181653Z 30008KT 3SM BR OVC015 12/11 A3013"
+    },
+    {
+      "station": {
+        "icao": "KOAK",
+        "lat": 37.72,
+        "lon": -122.22
+      },
+      "raw": "KOAK 181653Z 30008KT 3SM BR OVC015 12/11 A3013"
+    },
+    {
+      "station": {
+        "icao": "KSCK",
+        "lat": 37.89,
+        "lon": -121.24
+      },
+      "raw": "KSCK 181653Z 03006KT 10SM SKC 18/04 A3011"
+    },
+    {
+      "station": {
+        "icao": "KSAC",
+        "lat": 38.51,
+        "lon": -121.5
+      },
+      "raw": "KSAC 181653Z 03006KT 10SM SKC 18/04 A3011"
+    }
+  ],
+  "polygons": [
+    {
+      "id": "HZ-coastal-sierra-ifr-cva",
+      "category": "IFR",
+      "label": "IFR",
+      "labelLonLat": [
+        -122.47999999999999,
+        37.040000000000006
+      ],
+      "rings": [
+        [
+          [
+            -123,
+            36.4
+          ],
+          [
+            -121.7,
+            36.4
+          ],
+          [
+            -121.7,
+            38
+          ],
+          [
+            -123,
+            38
+          ],
+          [
+            -123,
+            36.4
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "HZ-coast-range-obscuration-cva",
+      "category": "IFR",
+      "label": "IFR",
+      "labelLonLat": [
+        -121.62,
+        37.24
+      ],
+      "rings": [
+        [
+          [
+            -121.7,
+            36.4
+          ],
+          [
+            -121.5,
+            36.4
+          ],
+          [
+            -121.5,
+            38.5
+          ],
+          [
+            -121.7,
+            38.5
+          ],
+          [
+            -121.7,
+            36.4
+          ]
+        ]
+      ]
+    }
+  ]
+}

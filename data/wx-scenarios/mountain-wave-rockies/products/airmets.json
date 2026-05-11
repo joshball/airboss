@@ -1,0 +1,110 @@
+[
+  {
+    "id": "WAUS41-WXENGINE-HZ-lee-wave-tango",
+    "kind": "airmet-tango",
+    "label": "AIRMET TANGO\nSevere Turbulence\nSFC-FL280",
+    "labelLonLat": [
+      -105.3,
+      39.2
+    ],
+    "rings": [
+      [
+        [
+          -106.5,
+          38
+        ],
+        [
+          -103.5,
+          38
+        ],
+        [
+          -103.5,
+          41
+        ],
+        [
+          -106.5,
+          41
+        ],
+        [
+          -106.5,
+          38
+        ]
+      ]
+    ],
+    "validFrom": "2026-02-12T21:00:00Z",
+    "validTo": "2026-02-13T03:00:00.000Z",
+    "fromHazardZoneId": "HZ-lee-wave-tango"
+  },
+  {
+    "id": "WAUS41-WXENGINE-HZ-rotor-zulu",
+    "kind": "airmet-zulu",
+    "label": "AIRMET ZULU\nModerate Icing\n50-120",
+    "labelLonLat": [
+      -105.2,
+      39.3
+    ],
+    "rings": [
+      [
+        [
+          -106,
+          38.5
+        ],
+        [
+          -104,
+          38.5
+        ],
+        [
+          -104,
+          40.5
+        ],
+        [
+          -106,
+          40.5
+        ],
+        [
+          -106,
+          38.5
+        ]
+      ]
+    ],
+    "validFrom": "2026-02-12T21:00:00Z",
+    "validTo": "2026-02-13T03:00:00.000Z",
+    "fromHazardZoneId": "HZ-rotor-zulu"
+  },
+  {
+    "id": "WAUS41-WXENGINE-HZ-upwind-mtn-obscuration",
+    "kind": "airmet-sierra",
+    "label": "AIRMET SIERRA\nMountain Obscuration\nSFC-150",
+    "labelLonLat": [
+      -108.8,
+      39.2
+    ],
+    "rings": [
+      [
+        [
+          -110,
+          38
+        ],
+        [
+          -107,
+          38
+        ],
+        [
+          -107,
+          41
+        ],
+        [
+          -110,
+          41
+        ],
+        [
+          -110,
+          38
+        ]
+      ]
+    ],
+    "validFrom": "2026-02-12T21:00:00Z",
+    "validTo": "2026-02-13T03:00:00.000Z",
+    "fromHazardZoneId": "HZ-upwind-mtn-obscuration"
+  }
+]

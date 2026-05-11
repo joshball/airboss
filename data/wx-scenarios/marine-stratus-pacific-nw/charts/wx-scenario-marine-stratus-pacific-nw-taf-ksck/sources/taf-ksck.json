@@ -1,0 +1,8 @@
+{
+  "stationIcao": "KSCK",
+  "issuedAt": "2026-06-18T15:20:00.000Z",
+  "validFrom": "2026-06-18T16:00:00.000Z",
+  "validTo": "2026-06-19T04:00:00.000Z",
+  "source": "wx-engine -- truth-derived synthetic TAF",
+  "raw": "TAF KSCK 181520Z 1816/1904 03006KT 6SM SKC FM181900 30008G12KT 6SM BKN008"
+}

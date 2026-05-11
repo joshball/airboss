@@ -1,0 +1,177 @@
+[
+  {
+    "station": "KCLE",
+    "amended": false,
+    "corrected": false,
+    "issuedAt": "2026-04-22T14:20:00.000Z",
+    "validFrom": "2026-04-22T15:00:00.000Z",
+    "validTo": "2026-04-23T03:00:00.000Z",
+    "periods": [
+      {
+        "kind": "INITIAL",
+        "start": "2026-04-22T15:00:00.000Z",
+        "end": "2026-04-23T03:00:00.000Z",
+        "probability": null,
+        "raw": "32020G30KT 3SM OVC015",
+        "wind": {
+          "directionDeg": 320,
+          "speedKt": 20,
+          "gustKt": 30,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 3,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "OVC",
+            "heightFtAgl": 1500
+          }
+        ],
+        "cavok": false
+      }
+    ],
+    "raw": "TAF KCLE 221420Z 2215/2303 32020G30KT 3SM OVC015",
+    "warnings": []
+  },
+  {
+    "station": "KORD",
+    "amended": false,
+    "corrected": false,
+    "issuedAt": "2026-04-22T14:20:00.000Z",
+    "validFrom": "2026-04-22T15:00:00.000Z",
+    "validTo": "2026-04-23T03:00:00.000Z",
+    "periods": [
+      {
+        "kind": "INITIAL",
+        "start": "2026-04-22T15:00:00.000Z",
+        "end": "2026-04-23T03:00:00.000Z",
+        "probability": null,
+        "raw": "32020G30KT 6SM BKN035",
+        "wind": {
+          "directionDeg": 320,
+          "speedKt": 20,
+          "gustKt": 30,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 6,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "BKN",
+            "heightFtAgl": 3500
+          }
+        ],
+        "cavok": false
+      }
+    ],
+    "raw": "TAF KORD 221420Z 2215/2303 32020G30KT 6SM BKN035",
+    "warnings": []
+  },
+  {
+    "station": "KDTW",
+    "amended": false,
+    "corrected": false,
+    "issuedAt": "2026-04-22T14:20:00.000Z",
+    "validFrom": "2026-04-22T15:00:00.000Z",
+    "validTo": "2026-04-23T03:00:00.000Z",
+    "periods": [
+      {
+        "kind": "INITIAL",
+        "start": "2026-04-22T15:00:00.000Z",
+        "end": "2026-04-23T03:00:00.000Z",
+        "probability": null,
+        "raw": "32020G30KT 6SM BKN035",
+        "wind": {
+          "directionDeg": 320,
+          "speedKt": 20,
+          "gustKt": 30,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 6,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "BKN",
+            "heightFtAgl": 3500
+          }
+        ],
+        "cavok": false
+      }
+    ],
+    "raw": "TAF KDTW 221420Z 2215/2303 32020G30KT 6SM BKN035",
+    "warnings": []
+  },
+  {
+    "station": "KGRR",
+    "amended": false,
+    "corrected": false,
+    "issuedAt": "2026-04-22T14:20:00.000Z",
+    "validFrom": "2026-04-22T15:00:00.000Z",
+    "validTo": "2026-04-23T03:00:00.000Z",
+    "periods": [
+      {
+        "kind": "INITIAL",
+        "start": "2026-04-22T15:00:00.000Z",
+        "end": "2026-04-23T03:00:00.000Z",
+        "probability": null,
+        "raw": "32020G30KT 6SM BKN035",
+        "wind": {
+          "directionDeg": 320,
+          "speedKt": 20,
+          "gustKt": 30,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 6,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "BKN",
+            "heightFtAgl": 3500
+          }
+        ],
+        "cavok": false
+      }
+    ],
+    "raw": "TAF KGRR 221420Z 2215/2303 32020G30KT 6SM BKN035",
+    "warnings": []
+  },
+  {
+    "station": "KCAK",
+    "amended": false,
+    "corrected": false,
+    "issuedAt": "2026-04-22T14:20:00.000Z",
+    "validFrom": "2026-04-22T15:00:00.000Z",
+    "validTo": "2026-04-23T03:00:00.000Z",
+    "periods": [
+      {
+        "kind": "INITIAL",
+        "start": "2026-04-22T15:00:00.000Z",
+        "end": "2026-04-23T03:00:00.000Z",
+        "probability": null,
+        "raw": "32020G30KT 3SM OVC015",
+        "wind": {
+          "directionDeg": 320,
+          "speedKt": 20,
+          "gustKt": 30,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 3,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "OVC",
+            "heightFtAgl": 1500
+          }
+        ],
+        "cavok": false
+      }
+    ],
+    "raw": "TAF KCAK 221420Z 2215/2303 32020G30KT 3SM OVC015",
+    "warnings": []
+  }
+]

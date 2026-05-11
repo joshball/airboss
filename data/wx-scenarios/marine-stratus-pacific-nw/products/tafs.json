@@ -1,0 +1,223 @@
+[
+  {
+    "station": "KMRY",
+    "amended": false,
+    "corrected": false,
+    "issuedAt": "2026-04-18T15:20:00.000Z",
+    "validFrom": "2026-04-18T16:00:00.000Z",
+    "validTo": "2026-04-19T04:00:00.000Z",
+    "periods": [
+      {
+        "kind": "INITIAL",
+        "start": "2026-04-18T16:00:00.000Z",
+        "end": "2026-04-19T04:00:00.000Z",
+        "probability": null,
+        "raw": "30008G12KT 3SM OVC015",
+        "wind": {
+          "directionDeg": 300,
+          "speedKt": 8,
+          "gustKt": 12,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 3,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "OVC",
+            "heightFtAgl": 1500
+          }
+        ],
+        "cavok": false
+      }
+    ],
+    "raw": "TAF KMRY 181520Z 1816/1904 30008G12KT 3SM OVC015",
+    "warnings": []
+  },
+  {
+    "station": "KSFO",
+    "amended": false,
+    "corrected": false,
+    "issuedAt": "2026-04-18T15:20:00.000Z",
+    "validFrom": "2026-04-18T16:00:00.000Z",
+    "validTo": "2026-04-19T04:00:00.000Z",
+    "periods": [
+      {
+        "kind": "INITIAL",
+        "start": "2026-04-18T16:00:00.000Z",
+        "end": "2026-04-19T04:00:00.000Z",
+        "probability": null,
+        "raw": "30008G12KT 3SM OVC015",
+        "wind": {
+          "directionDeg": 300,
+          "speedKt": 8,
+          "gustKt": 12,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 3,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "OVC",
+            "heightFtAgl": 1500
+          }
+        ],
+        "cavok": false
+      }
+    ],
+    "raw": "TAF KSFO 181520Z 1816/1904 30008G12KT 3SM OVC015",
+    "warnings": []
+  },
+  {
+    "station": "KOAK",
+    "amended": false,
+    "corrected": false,
+    "issuedAt": "2026-04-18T15:20:00.000Z",
+    "validFrom": "2026-04-18T16:00:00.000Z",
+    "validTo": "2026-04-19T04:00:00.000Z",
+    "periods": [
+      {
+        "kind": "INITIAL",
+        "start": "2026-04-18T16:00:00.000Z",
+        "end": "2026-04-19T04:00:00.000Z",
+        "probability": null,
+        "raw": "30008G12KT 3SM OVC015",
+        "wind": {
+          "directionDeg": 300,
+          "speedKt": 8,
+          "gustKt": 12,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 3,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "OVC",
+            "heightFtAgl": 1500
+          }
+        ],
+        "cavok": false
+      }
+    ],
+    "raw": "TAF KOAK 181520Z 1816/1904 30008G12KT 3SM OVC015",
+    "warnings": []
+  },
+  {
+    "station": "KSCK",
+    "amended": false,
+    "corrected": false,
+    "issuedAt": "2026-04-18T15:20:00.000Z",
+    "validFrom": "2026-04-18T16:00:00.000Z",
+    "validTo": "2026-04-19T04:00:00.000Z",
+    "periods": [
+      {
+        "kind": "INITIAL",
+        "start": "2026-04-18T16:00:00.000Z",
+        "end": "2026-04-18T19:00:00.000Z",
+        "probability": null,
+        "raw": "03006KT 6SM SKC",
+        "wind": {
+          "directionDeg": 30,
+          "speedKt": 6,
+          "gustKt": null,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 6,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "SKC",
+            "heightFtAgl": null
+          }
+        ],
+        "cavok": false
+      },
+      {
+        "kind": "FM",
+        "start": "2026-04-18T19:00:00.000Z",
+        "end": "2026-04-19T04:00:00.000Z",
+        "probability": null,
+        "raw": "FM181900 30008G12KT 6SM BKN008",
+        "wind": {
+          "directionDeg": 300,
+          "speedKt": 8,
+          "gustKt": 12,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 6,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "BKN",
+            "heightFtAgl": 800
+          }
+        ],
+        "cavok": false
+      }
+    ],
+    "raw": "TAF KSCK 181520Z 1816/1904 03006KT 6SM SKC FM181900 30008G12KT 6SM BKN008",
+    "warnings": []
+  },
+  {
+    "station": "KSAC",
+    "amended": false,
+    "corrected": false,
+    "issuedAt": "2026-04-18T15:20:00.000Z",
+    "validFrom": "2026-04-18T16:00:00.000Z",
+    "validTo": "2026-04-19T04:00:00.000Z",
+    "periods": [
+      {
+        "kind": "INITIAL",
+        "start": "2026-04-18T16:00:00.000Z",
+        "end": "2026-04-18T17:00:00.000Z",
+        "probability": null,
+        "raw": "03006KT 6SM SKC",
+        "wind": {
+          "directionDeg": 30,
+          "speedKt": 6,
+          "gustKt": null,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 6,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "SKC",
+            "heightFtAgl": null
+          }
+        ],
+        "cavok": false
+      },
+      {
+        "kind": "FM",
+        "start": "2026-04-18T17:00:00.000Z",
+        "end": "2026-04-19T04:00:00.000Z",
+        "probability": null,
+        "raw": "FM181700 30008G12KT 6SM BKN008",
+        "wind": {
+          "directionDeg": 300,
+          "speedKt": 8,
+          "gustKt": 12,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 6,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "BKN",
+            "heightFtAgl": 800
+          }
+        ],
+        "cavok": false
+      }
+    ],
+    "raw": "TAF KSAC 181520Z 1816/1904 03006KT 6SM SKC FM181700 30008G12KT 6SM BKN008",
+    "warnings": []
+  }
+]

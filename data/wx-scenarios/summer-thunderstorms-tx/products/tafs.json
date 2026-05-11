@@ -1,0 +1,257 @@
+[
+  {
+    "station": "KAUS",
+    "amended": false,
+    "corrected": false,
+    "issuedAt": "2026-04-15T20:20:00.000Z",
+    "validFrom": "2026-04-15T21:00:00.000Z",
+    "validTo": "2026-04-16T09:00:00.000Z",
+    "periods": [
+      {
+        "kind": "INITIAL",
+        "start": "2026-04-15T21:00:00.000Z",
+        "end": "2026-04-16T09:00:00.000Z",
+        "probability": null,
+        "raw": "13010KT 6SM SCT045",
+        "wind": {
+          "directionDeg": 130,
+          "speedKt": 10,
+          "gustKt": null,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 6,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "SCT",
+            "heightFtAgl": 4500
+          }
+        ],
+        "cavok": false
+      },
+      {
+        "kind": "PROB30",
+        "start": "2026-04-15T21:00:00.000Z",
+        "end": "2026-04-15T22:00:00.000Z",
+        "probability": 30,
+        "raw": "PROB30 1521/1522 4SM -TSRA BKN045CB",
+        "wind": null,
+        "visibilitySM": 4,
+        "weather": [
+          "-TSRA"
+        ],
+        "clouds": [
+          {
+            "cover": "BKN",
+            "heightFtAgl": 4500
+          }
+        ],
+        "cavok": false
+      }
+    ],
+    "raw": "TAF KAUS 152020Z 1521/1609 13010KT 6SM SCT045 PROB30 1521/1522 4SM -TSRA BKN045CB",
+    "warnings": []
+  },
+  {
+    "station": "KIAH",
+    "amended": false,
+    "corrected": false,
+    "issuedAt": "2026-04-15T20:20:00.000Z",
+    "validFrom": "2026-04-15T21:00:00.000Z",
+    "validTo": "2026-04-16T09:00:00.000Z",
+    "periods": [
+      {
+        "kind": "INITIAL",
+        "start": "2026-04-15T21:00:00.000Z",
+        "end": "2026-04-16T09:00:00.000Z",
+        "probability": null,
+        "raw": "13010KT 3SM OVC015",
+        "wind": {
+          "directionDeg": 130,
+          "speedKt": 10,
+          "gustKt": null,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 3,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "OVC",
+            "heightFtAgl": 1500
+          }
+        ],
+        "cavok": false
+      },
+      {
+        "kind": "PROB30",
+        "start": "2026-04-15T21:00:00.000Z",
+        "end": "2026-04-16T05:00:00.000Z",
+        "probability": 30,
+        "raw": "PROB30 1521/1605 4SM -TSRA BKN045CB",
+        "wind": null,
+        "visibilitySM": 4,
+        "weather": [
+          "-TSRA"
+        ],
+        "clouds": [
+          {
+            "cover": "BKN",
+            "heightFtAgl": 4500
+          }
+        ],
+        "cavok": false
+      }
+    ],
+    "raw": "TAF KIAH 152020Z 1521/1609 13010KT 3SM OVC015 PROB30 1521/1605 4SM -TSRA BKN045CB",
+    "warnings": []
+  },
+  {
+    "station": "KSAT",
+    "amended": false,
+    "corrected": false,
+    "issuedAt": "2026-04-15T20:20:00.000Z",
+    "validFrom": "2026-04-15T21:00:00.000Z",
+    "validTo": "2026-04-16T09:00:00.000Z",
+    "periods": [
+      {
+        "kind": "INITIAL",
+        "start": "2026-04-15T21:00:00.000Z",
+        "end": "2026-04-16T09:00:00.000Z",
+        "probability": null,
+        "raw": "13010KT 6SM SCT045",
+        "wind": {
+          "directionDeg": 130,
+          "speedKt": 10,
+          "gustKt": null,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 6,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "SCT",
+            "heightFtAgl": 4500
+          }
+        ],
+        "cavok": false
+      }
+    ],
+    "raw": "TAF KSAT 152020Z 1521/1609 13010KT 6SM SCT045",
+    "warnings": []
+  },
+  {
+    "station": "KCLL",
+    "amended": false,
+    "corrected": false,
+    "issuedAt": "2026-04-15T20:20:00.000Z",
+    "validFrom": "2026-04-15T21:00:00.000Z",
+    "validTo": "2026-04-16T09:00:00.000Z",
+    "periods": [
+      {
+        "kind": "INITIAL",
+        "start": "2026-04-15T21:00:00.000Z",
+        "end": "2026-04-16T09:00:00.000Z",
+        "probability": null,
+        "raw": "13010KT 6SM SCT045",
+        "wind": {
+          "directionDeg": 130,
+          "speedKt": 10,
+          "gustKt": null,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 6,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "SCT",
+            "heightFtAgl": 4500
+          }
+        ],
+        "cavok": false
+      },
+      {
+        "kind": "PROB30",
+        "start": "2026-04-15T21:00:00.000Z",
+        "end": "2026-04-15T23:00:00.000Z",
+        "probability": 30,
+        "raw": "PROB30 1521/1523 4SM -TSRA BKN045CB",
+        "wind": null,
+        "visibilitySM": 4,
+        "weather": [
+          "-TSRA"
+        ],
+        "clouds": [
+          {
+            "cover": "BKN",
+            "heightFtAgl": 4500
+          }
+        ],
+        "cavok": false
+      }
+    ],
+    "raw": "TAF KCLL 152020Z 1521/1609 13010KT 6SM SCT045 PROB30 1521/1523 4SM -TSRA BKN045CB",
+    "warnings": []
+  },
+  {
+    "station": "KCRP",
+    "amended": false,
+    "corrected": false,
+    "issuedAt": "2026-04-15T20:20:00.000Z",
+    "validFrom": "2026-04-15T21:00:00.000Z",
+    "validTo": "2026-04-16T09:00:00.000Z",
+    "periods": [
+      {
+        "kind": "INITIAL",
+        "start": "2026-04-15T21:00:00.000Z",
+        "end": "2026-04-16T06:00:00.000Z",
+        "probability": null,
+        "raw": "15008KT 6SM FEW025",
+        "wind": {
+          "directionDeg": 150,
+          "speedKt": 8,
+          "gustKt": null,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 6,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "FEW",
+            "heightFtAgl": 2500
+          }
+        ],
+        "cavok": false
+      },
+      {
+        "kind": "FM",
+        "start": "2026-04-16T06:00:00.000Z",
+        "end": "2026-04-16T09:00:00.000Z",
+        "probability": null,
+        "raw": "FM160600 13010KT 6SM SCT045",
+        "wind": {
+          "directionDeg": 130,
+          "speedKt": 10,
+          "gustKt": null,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 6,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "SCT",
+            "heightFtAgl": 4500
+          }
+        ],
+        "cavok": false
+      }
+    ],
+    "raw": "TAF KCRP 152020Z 1521/1609 15008KT 6SM FEW025 FM160600 13010KT 6SM SCT045",
+    "warnings": []
+  }
+]

@@ -1,0 +1,17 @@
+{
+  "slug": "wx-scenario-summer-thunderstorms-tx-g-airmet-icing",
+  "type": "icing-gairmet",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-11T13:55:11.237Z",
+  "content_hash": "sha256:3ced5b77050584e068f3e0e2ec2602702d989165c95470b8441c2557b029f64f",
+  "source_hashes": {
+    "areas": "6404e916553d18aa83e4683f5426519340b172db268f656fe3739de72e776419"
+  },
+  "layer_counts": {
+    "vector-symbology": 1,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 284839
+}

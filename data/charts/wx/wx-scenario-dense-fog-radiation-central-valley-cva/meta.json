@@ -1,0 +1,18 @@
+{
+  "slug": "wx-scenario-dense-fog-radiation-central-valley-cva",
+  "type": "cva",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-11T14:07:05.036Z",
+  "content_hash": "sha256:63969816861576a000607e5cbda1d84d8a98d8981ebfd263a3b6f1435869091f",
+  "source_hashes": {
+    "observations": "e2e1dfd3bc8dcbab54c18bb2779d12b54eb10a6584fb3623fc51ab1ae6adc596"
+  },
+  "layer_counts": {
+    "vector-symbology": 2,
+    "point-symbology": 5,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 287452
+}
