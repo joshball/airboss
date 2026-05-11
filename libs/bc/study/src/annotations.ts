@@ -563,6 +563,51 @@ export async function discardCardDraft(draftId: string, userId: string, db: Db =
 }
 
 /**
+ * Stamp a draft as promoted, pointing at an already-created card. Used
+ * by the form-action path on `/memory/new?draft=<id>`: the user edits
+ * the prefill, the form action calls `createCard` with their edits, and
+ * this helper closes out the draft afterward (so the audit trail links
+ * the draft to the card without re-running createCard's inputs).
+ *
+ * Returns the updated draft row, or null when the draft was already
+ * promoted (no-op idempotent).
+ */
+export async function markDraftPromoted(
+	draftId: string,
+	userId: string,
+	cardId: string,
+	db: Db = defaultDb,
+): Promise<CardDraftRow | null> {
+	const before = await loadOwnedDraft(draftId, userId, db);
+	if (before.promotedAt !== null) return null;
+
+	const [after] = await db
+		.update(cardDraft)
+		.set({
+			promotedToCardId: cardId,
+			promotedAt: sql`now()`,
+			updatedAt: sql`now()`,
+		})
+		.where(and(eq(cardDraft.id, draftId), eq(cardDraft.userId, userId)))
+		.returning();
+	if (!after) return null;
+
+	await auditWrite(
+		{
+			actorId: userId,
+			op: AUDIT_OPS.UPDATE,
+			targetType: AUDIT_TARGETS.CARD_DRAFT,
+			targetId: after.id,
+			before,
+			after,
+			metadata: { subKind: CARD_DRAFT_OP_SUBKINDS.PROMOTE, cardId },
+		},
+		db,
+	);
+	return after;
+}
+
+/**
  * Promote a draft into a real `study.card`. Reuses the existing
  * `createCard` BC: the draft row is preserved with `promoted_to_card_id`
  * and `promoted_at` stamped so the audit trail links the two; the

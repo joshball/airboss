@@ -61,6 +61,7 @@ export {
 	listAnnotationsForUser,
 	listHighlightsForSection,
 	listOpenCardDrafts,
+	markDraftPromoted,
 	promoteDraftToCard,
 	updateCardDraft,
 	updateCardDraftInputSchema,

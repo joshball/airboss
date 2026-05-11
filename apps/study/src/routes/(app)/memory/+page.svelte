@@ -155,6 +155,7 @@ function percent(n: number, total: number): number {
 		{/snippet}
 		{#snippet actions()}
 			<Button variant="ghost" href={ROUTES.MEMORY_BROWSE}>Browse</Button>
+			<Button variant="ghost" href={ROUTES.MEMORY_DRAFTS}>Drafts</Button>
 			<Button variant="secondary" href={ROUTES.MEMORY_NEW}>New card</Button>
 			<Button variant="primary" href={ROUTES.MEMORY_REVIEW}>Start review</Button>
 		{/snippet}

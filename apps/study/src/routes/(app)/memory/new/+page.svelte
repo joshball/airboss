@@ -46,6 +46,11 @@ const seededDomain = $derived(values.domain ?? data.seed.domain ?? '');
 const seededCardType = $derived(values.cardType ?? data.seed.cardType ?? CARD_TYPES.BASIC);
 const seededKind = $derived(values.kind ?? data.seed.kind ?? CARD_KINDS.RECALL);
 const seededTags = $derived(values.tags?.join?.(', ') ?? data.seed.tags ?? '');
+// Front + back seeds come from a draft prefill (?draft=<id>) so the user
+// can edit before promoting; after a fail() the user's in-flight edits in
+// `values` win.
+const seededFront = $derived(values.front ?? data.seed.front ?? '');
+const seededBack = $derived(values.back ?? data.seed.back ?? '');
 
 // After a redirect back from a successful save, put focus on Front so the
 // user can keep typing. The `if (createdId)` read registers the dep and
@@ -112,6 +117,12 @@ function onKeydown(e: KeyboardEvent) {
 			};
 		}}
 	>
+		{#if data.draft}
+			<input type="hidden" name="draft" value={data.draft.id} />
+			<p class="draft-banner" data-testid="memory-new-draft-banner">
+				Editing a queued card draft. Save to promote; the draft is removed from the inbox.
+			</p>
+		{/if}
 		<label class="field">
 			<span class="label">Front (question)</span>
 			<textarea
@@ -121,7 +132,7 @@ function onKeydown(e: KeyboardEvent) {
 				maxlength="10000"
 				placeholder="What are the VFR weather minimums in Class C airspace below 10,000 MSL?"
 				disabled={loading}
-				value={values.front ?? ''}
+				value={seededFront}
 				bind:this={frontInput}
 				aria-invalid={fieldErrors.front ? 'true' : undefined}
 				aria-describedby={fieldErrors.front ? 'front-err' : undefined}
@@ -138,7 +149,7 @@ function onKeydown(e: KeyboardEvent) {
 				maxlength="10000"
 				placeholder="3 SM, 500 below / 1,000 above / 2,000 horizontal from clouds. 14 CFR 91.155."
 				disabled={loading}
-				value={values.back ?? ''}
+				value={seededBack}
 				aria-invalid={fieldErrors.back ? 'true' : undefined}
 				aria-describedby={fieldErrors.back ? 'back-err' : undefined}
 			></textarea>
@@ -249,6 +260,16 @@ function onKeydown(e: KeyboardEvent) {
 		padding: var(--space-sm) var(--space-md);
 		border-radius: var(--radius-md);
 		font-size: var(--type-ui-label-size);
+	}
+
+	.draft-banner {
+		margin: 0 0 var(--space-md);
+		padding: var(--space-xs) var(--space-sm);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-sm);
+		background: var(--surface-sunken);
+		color: var(--ink-muted);
+		font-size: var(--font-size-sm);
 	}
 
 	.banner a {

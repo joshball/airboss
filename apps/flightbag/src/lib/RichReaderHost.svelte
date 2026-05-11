@@ -52,6 +52,7 @@ import AnnotationLayer from '@ab/library/AnnotationLayer.svelte';
 import SelectionToolbar from '@ab/library/SelectionToolbar.svelte';
 import Toast from '@ab/ui/components/Toast.svelte';
 import {
+	createCardDraftApi,
 	createHighlightApi,
 	deleteAnnotationApi,
 	updateHighlightColorApi,
@@ -140,6 +141,46 @@ async function onRemove(id: string) {
 	}
 }
 
+async function onCardDraft(anchor: TextAnchor) {
+	if (!isAuthenticated) {
+		showToast('Sign in to queue card drafts.');
+		return;
+	}
+	const sourceCitation = `\n\n— Source: [${section.title} (${section.code})](${section.airbossRef})`;
+	try {
+		const result = await createCardDraftApi({
+			sectionId: section.id,
+			anchor,
+			front: '',
+			back: `> ${anchor.text}${sourceCitation}`,
+		});
+		if (result.annotation) {
+			annotations = [
+				...annotations,
+				{
+					id: result.annotation.id,
+					kind: 'card_draft_anchor',
+					color: null,
+					noteId: null,
+					cardDraftId: result.annotation.cardDraftId,
+					createdAt: result.annotation.createdAt,
+					anchor: {
+						text: result.annotation.anchorText,
+						start: result.annotation.anchorStart,
+						end: result.annotation.anchorEnd,
+						prefix: result.annotation.prefixContext,
+						suffix: result.annotation.suffixContext,
+					},
+				},
+			];
+		}
+		showToast('Draft queued. Open /memory/drafts to promote.');
+	} catch (err) {
+		console.error(err);
+		showToast("Couldn't queue draft. Try again?");
+	}
+}
+
 function onCopied() {
 	showToast('Copied with citation.');
 }
@@ -154,6 +195,7 @@ function onOrphans(list: readonly AnnotationLayerRecord[]) {
 		{section}
 		{bodyText}
 		{onHighlight}
+		{onCardDraft}
 		{onCopied}
 	/>
 	<AnnotationLayer

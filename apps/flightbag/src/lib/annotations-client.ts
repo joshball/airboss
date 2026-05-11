@@ -54,3 +54,29 @@ export async function deleteAnnotationApi(id: string): Promise<void> {
 	const res = await fetch(`/api/annotations/${encodeURIComponent(id)}`, { method: 'DELETE' });
 	if (!res.ok && res.status !== 204) throw new Error(`deleteAnnotation failed (${res.status})`);
 }
+
+export interface CardDraftApiInput {
+	sectionId?: string;
+	anchor?: TextAnchor;
+	front?: string;
+	back?: string;
+}
+
+export interface CardDraftApiResult {
+	draft: {
+		id: string;
+		front: string;
+		back: string;
+	};
+	annotation: AnnotationApiRow | null;
+}
+
+export async function createCardDraftApi(input: CardDraftApiInput): Promise<CardDraftApiResult> {
+	const res = await fetch('/api/card-drafts', {
+		method: 'POST',
+		headers: { 'content-type': 'application/json' },
+		body: JSON.stringify(input),
+	});
+	if (!res.ok) throw new Error(`createCardDraft failed (${res.status})`);
+	return (await res.json()) as CardDraftApiResult;
+}
