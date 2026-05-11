@@ -47,6 +47,14 @@ steps:
 
       The framing question: what air mass am I sitting in right now,
       where is it going, and what is replacing it?
+
+      The synoptic picture below is a
+      [surface analysis chart](/reference/glossary/surface-analysis-chart)
+      -- the WPC's hand-drawn map of surface pressure, fronts, and
+      station observations, the lead frame for every preflight
+      briefing. The reading skill (decoding the symbol set, interpreting
+      isobar spacing, identifying frontal glyphs) is its own node:
+      [Reading the Surface Analysis Chart](/reference/knowledge/wx-chart-type-surface-analysis).
     knowledge_node_id: wx-airmasses-and-fronts
 
   - code: s2.2
