@@ -24,7 +24,38 @@
  * derivation-result types here.
  */
 
-// Phase A re-exports land in the next commits (A.3 truth types + schema,
-// A.5 engine API types). The barrel is intentionally empty in the scaffold
-// commit so the lib structure is reviewable in isolation.
-export {};
+// ----------------------------------------------------------------------
+// Zod schema (inferred type only; the schema value lives in `./server.ts`).
+// Re-exporting the schema value from this barrel is intentionally avoided
+// so the runtime barrel stays free of value re-exports per spec.md
+// "Browser-safety contract".
+// ----------------------------------------------------------------------
+export type { TruthModelSchema } from './truth/schema';
+// ----------------------------------------------------------------------
+// Truth-model interfaces. Pure shape; safe at any tier.
+// ----------------------------------------------------------------------
+export type {
+	AirMass,
+	AirMassClassification,
+	AirMassStability,
+	CardinalSide,
+	ConvectionState,
+	ConvectiveCell,
+	DiurnalCycle,
+	Front,
+	FrontalPrecipBand,
+	FrontIntensity,
+	FrontKind,
+	HazardKind,
+	HazardSeverity,
+	HazardZone,
+	PressureSystem,
+	SkyCoverHint,
+	StationRecord,
+	StationRegistry,
+	SynopticState,
+	TerrainState,
+	TruthModel,
+	UpperLevelState,
+	WindByAltitudeRow,
+} from './truth/types';

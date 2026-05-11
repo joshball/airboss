@@ -13,12 +13,28 @@
  * ergonomic `import type { ... }` consumption.
  *
  * Phase A populates this barrel with the Zod schema, geometry helpers,
- * `advanceTruth`, the scenario registry, and the engine entrypoint (truth-
- * only output; products / charts / commentary stubbed for Phase B / C / D).
+ * `advanceTruth`, the scenario registry (A.4), and the engine entrypoint
+ * (A.5). Phase B / C / D append derivation entrypoints here.
  */
 
-// Phase A re-exports land in the next commits (A.3 truth + schema + geometry
-// + advance, A.4 scenario registry + frontal-xc-march, A.5 engine entrypoint
-// + bundle writer). The barrel is intentionally empty in the scaffold
-// commit so the lib structure is reviewable in isolation.
-export {};
+// ----------------------------------------------------------------------
+// Truth-state evolution. The only sanctioned way to move time forward.
+// ----------------------------------------------------------------------
+export { advanceTruth } from './truth/advance';
+// ----------------------------------------------------------------------
+// Geometry helpers. Pure functions over TruthModel + lon/lat points.
+// ----------------------------------------------------------------------
+export {
+	distanceKm,
+	distanceNm,
+	distanceToPolylineKm,
+	findAirMass,
+	pointInPolygon,
+	pressureGradientMbPer100km,
+	samplePressureMb,
+	sideOfFront,
+} from './truth/geometry';
+// ----------------------------------------------------------------------
+// Truth-model schema (Zod). Validates every scenario literal on load.
+// ----------------------------------------------------------------------
+export { type TruthModelSchema, truthModelSchema } from './truth/schema';
