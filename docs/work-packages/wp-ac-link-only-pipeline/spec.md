@@ -41,20 +41,20 @@ Build the download → extract → register → seed pipeline for the 12 Advisor
 
 The 12 AC cards in `course/references/advisory-circulars.yaml` that have no on-disk manifest:
 
-| Card slug | FAA number | Common name |
-|-----------|-----------|-------------|
-| ac-00-24 | AC 00-24 | Thunderstorms |
-| ac-00-45 | AC 00-45 | Aviation Weather Services |
-| ac-60-22 | AC 60-22 | Aeronautical Decision Making |
-| ac-61-27 | AC 61-27 | Instrument Flying Handbook (legacy AC superseded by FAA-H-8083-15) |
-| ac-61-67 | AC 61-67 | Stall and Spin Awareness Training |
-| ac-61-84 | AC 61-84 | Role of Preflight Preparation |
-| ac-61-134 | AC 61-134 | GA Controlled Flight Into Terrain Awareness |
-| ac-90-100 | AC 90-100 | RNAV Operations |
-| ac-91-23 | AC 91-23 | Pilot's Weight and Balance Handbook |
-| ac-91-44 | AC 91-44 | ELT Maintenance Practices |
-| ac-91-74 | AC 91-74 | Flight in Icing Conditions |
-| ac-91-75 | AC 91-75 | Attitude Indicator |
+| Card slug | FAA number | Common name                                                        |
+| --------- | ---------- | ------------------------------------------------------------------ |
+| ac-00-24  | AC 00-24   | Thunderstorms                                                      |
+| ac-00-45  | AC 00-45   | Aviation Weather Services                                          |
+| ac-60-22  | AC 60-22   | Aeronautical Decision Making                                       |
+| ac-61-27  | AC 61-27   | Instrument Flying Handbook (legacy AC superseded by FAA-H-8083-15) |
+| ac-61-67  | AC 61-67   | Stall and Spin Awareness Training                                  |
+| ac-61-84  | AC 61-84   | Role of Preflight Preparation                                      |
+| ac-61-134 | AC 61-134  | GA Controlled Flight Into Terrain Awareness                        |
+| ac-90-100 | AC 90-100  | RNAV Operations                                                    |
+| ac-91-23  | AC 91-23   | Pilot's Weight and Balance Handbook                                |
+| ac-91-44  | AC 91-44   | ELT Maintenance Practices                                          |
+| ac-91-74  | AC 91-74   | Flight in Icing Conditions                                         |
+| ac-91-75  | AC 91-75   | Attitude Indicator                                                 |
 
 ## Decisions
 
@@ -72,6 +72,7 @@ AC 61-27 was the original Instrument Flying Handbook AC; it's been superseded by
 Per the user's "no more whole-docs" direction (2026-05-03), every AC ingested in this WP should land as section-tree shape. Existing 9 ACs from #480 are whole-doc; they'll be promoted by a separate WP-AC-PROMOTE.
 
 For the 12 new ones, run the section-tree extraction during ingest. Strategies:
+
 - Embedded TOC via PyMuPDF — for ACs that have one
 - Printed TOC parse — for ACs with a visible TOC page
 - Single-page-per-section flat tree — for very short ACs (< 20 pages) where chapter-level granularity is overkill
@@ -120,8 +121,7 @@ bun run db reset --force && bun run db seed
 
 ## Out of scope
 
-- Promoting the existing 9 ACs from whole-doc to section-tree (separate WP-AC-PROMOTE)
-- Discovery of additional ACs beyond these 12 (separate WP-AC-FULL spec exists; expansion to ~50 ACs)
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Anchors
 
