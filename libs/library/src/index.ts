@@ -35,6 +35,7 @@ export {
 	useComposerState,
 } from './composer-state.svelte';
 export type { HeartbeatTickerProps } from './HeartbeatTicker.svelte';
+export type { InlineCardComposerProps } from './InlineCardComposer.svelte';
 export type { ReaderEmptyStateKind, ReaderEmptyStateProps } from './ReaderEmptyState.svelte';
 export type { ReaderLayoutProps } from './ReaderLayout.svelte';
 export type { ReaderNavData, ReaderNavLink, ReaderNavProps } from './ReaderNav.svelte';

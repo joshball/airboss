@@ -14,6 +14,7 @@
 		"./CitationChip.svelte": "./src/CitationChip.svelte",
 		"./HeartbeatTicker.svelte": "./src/HeartbeatTicker.svelte",
 		"./HighlightTokens.svelte": "./src/HighlightTokens.svelte",
+		"./InlineCardComposer.svelte": "./src/InlineCardComposer.svelte",
 		"./ReaderEmptyState.svelte": "./src/ReaderEmptyState.svelte",
 		"./ReaderLayout.svelte": "./src/ReaderLayout.svelte",
 		"./ReaderNav.svelte": "./src/ReaderNav.svelte",

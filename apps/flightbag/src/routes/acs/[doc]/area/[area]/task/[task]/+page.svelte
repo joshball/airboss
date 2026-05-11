@@ -1,12 +1,17 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
+import { useComposerState } from '@ab/library';
 import Breadcrumbs from '@ab/library/Breadcrumbs.svelte';
 import ReaderLayout from '@ab/library/ReaderLayout.svelte';
 import SourceLinks from '@ab/library/SourceLinks.svelte';
 import TOCDrawer from '@ab/library/TOCDrawer.svelte';
 import { buildAcsTocEntries, findAreaIdForTask } from '../../../../../../../lib/acs-toc';
+import RichReaderComposerPanel from '../../../../../../../lib/RichReaderComposerPanel.svelte';
 import RichReaderHost from '../../../../../../../lib/RichReaderHost.svelte';
 import type { PageData } from './$types';
+
+const composerState = useComposerState();
+const composerOpen = $derived(Boolean(composerState && composerState.kind !== null));
 
 let { data }: { data: PageData } = $props();
 
@@ -46,7 +51,7 @@ const expandedGroupIds = $derived.by(() => {
 	</title>
 </svelte:head>
 
-<ReaderLayout>
+<ReaderLayout composerOpen={composerOpen}>
 	{#snippet breadcrumb()}
 		<Breadcrumbs
 			segments={[
@@ -87,6 +92,10 @@ const expandedGroupIds = $derived.by(() => {
 			collapsibleGroups
 			defaultExpandedGroupIds={expandedGroupIds}
 		/>
+	{/snippet}
+
+	{#snippet composer()}
+		<RichReaderComposerPanel />
 	{/snippet}
 
 	{#snippet footer()}

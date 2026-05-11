@@ -48,6 +48,7 @@ export interface RichReaderHostProps {
 </script>
 
 <script lang="ts">
+import { useComposerState } from '@ab/library';
 import AnnotationLayer from '@ab/library/AnnotationLayer.svelte';
 import SelectionToolbar from '@ab/library/SelectionToolbar.svelte';
 import Toast from '@ab/ui/components/Toast.svelte';
@@ -59,6 +60,8 @@ import {
 } from './annotations-client';
 
 let { section, bodyText, isAuthenticated, annotationContext, onToast }: RichReaderHostProps = $props();
+
+const composerState = useComposerState();
 
 let annotations = $state<AnnotationLayerRecord[]>(
 	annotationContext.annotations.map((a) => ({
@@ -141,6 +144,20 @@ async function onRemove(id: string) {
 	}
 }
 
+function onCardNow(anchor: TextAnchor) {
+	if (!isAuthenticated || !composerState) {
+		showToast('Sign in to author cards.');
+		return;
+	}
+	const sourceCitation = `\n\n— Source: [${section.title} (${section.code})](${section.airbossRef})`;
+	const back = `> ${anchor.text}${sourceCitation}`;
+	composerState.openCardComposer({
+		anchor,
+		sourceSectionId: section.id,
+		prefill: { front: '', back, domain: '' },
+	});
+}
+
 async function onCardDraft(anchor: TextAnchor) {
 	if (!isAuthenticated) {
 		showToast('Sign in to queue card drafts.');
@@ -196,6 +213,7 @@ function onOrphans(list: readonly AnnotationLayerRecord[]) {
 		{bodyText}
 		{onHighlight}
 		{onCardDraft}
+		{onCardNow}
 		{onCopied}
 	/>
 	<AnnotationLayer

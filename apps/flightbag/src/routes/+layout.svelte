@@ -11,6 +11,7 @@ import {
 	type UserPrefKey,
 } from '@ab/constants';
 import HelpSearch from '@ab/help/ui/HelpSearch.svelte';
+import { provideComposerState } from '@ab/library';
 import HighlightTokens from '@ab/library/HighlightTokens.svelte';
 import ReaderPrefsButton, { type ReadingPrefKey, type ReadingPrefValue } from '@ab/library/ReaderPrefsButton.svelte';
 import {
@@ -32,6 +33,11 @@ import '$lib/help/register';
 import type { LayoutData } from './$types';
 
 let { data, children }: { data: LayoutData; children: Snippet } = $props();
+
+// Provide the rich-reader composer state at the root so the per-doc
+// layout's composer slot, the per-section RichReaderHost's toolbar, and
+// the per-section notes panel all coordinate. Contracts in @ab/library.
+provideComposerState();
 
 // Optimistic-flip pattern for reader prefs: each control updates the
 // override immediately so the UI reflows without waiting for the POST.
