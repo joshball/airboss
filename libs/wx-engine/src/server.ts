@@ -35,6 +35,10 @@ export {
 	sideOfFront,
 } from './truth/geometry';
 // ----------------------------------------------------------------------
+// Scenario registry. Lazy-loads + validates each scenario literal.
+// ----------------------------------------------------------------------
+export { loadScenario } from './truth/scenarios/registry';
+// ----------------------------------------------------------------------
 // Truth-model schema (Zod). Validates every scenario literal on load.
 // ----------------------------------------------------------------------
 export { type TruthModelSchema, truthModelSchema } from './truth/schema';
