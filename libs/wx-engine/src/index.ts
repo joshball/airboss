@@ -20,7 +20,7 @@
  * `/server` entry point.
  *
  * Phase A populates the truth-model types, the Zod schema's inferred type,
- * and the engine API types as type-only re-exports. Phase B / C / D append
+ * and the engine API types as type-only re-exports. Phase B / C append
  * derivation-result types here.
  */
 
@@ -41,6 +41,10 @@ export type {
 // deriveFbGrid, derivePireps) live in `./server.ts`.
 // ----------------------------------------------------------------------
 export type { AirmetAdvisory, DerivedFbGrid, DerivedMetar, DerivedPirep, DerivedTaf } from './products/types';
+// ----------------------------------------------------------------------
+// Layer-3 chart artifact shape. Pure types -- safe at any tier.
+// ----------------------------------------------------------------------
+export type { ChartArtifact, ChartArtifactSource } from './charts/types';
 // ----------------------------------------------------------------------
 // Zod schema (inferred type only; the schema value lives in `./server.ts`).
 // Re-exporting the schema value from this barrel is intentionally avoided

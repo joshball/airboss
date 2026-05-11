@@ -19,4 +19,4 @@ options:
   isobar_interval_mb: 4
   emphasize_every_mb: 8
   show_h_l_markers: true
-  source_attribution: Spike 01 wx-engine -- truth-derived synthetic
+  source_attribution: wx-engine -- truth-derived synthetic

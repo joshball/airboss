@@ -3,6 +3,6 @@
   "issuedAt": "2026-03-19T18:20:00.000Z",
   "validFrom": "2026-03-19T19:00:00.000Z",
   "validTo": "2026-03-20T07:00:00.000Z",
-  "source": "Spike 01 wx-engine -- truth-derived synthetic TAF",
+  "source": "wx-engine -- truth-derived synthetic TAF",
   "raw": "TAF KCPS 191820Z 1919/2007 20014KT 5SM VCSH BKN045 FM192000 32020G30KT 5SM VCSH OVC025"
 }

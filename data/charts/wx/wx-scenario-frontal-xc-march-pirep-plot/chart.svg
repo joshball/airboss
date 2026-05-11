@@ -79,7 +79,7 @@
   <rect x="0" y="0" width="1200" height="60" fill="#fafaf7" />
   <line x1="0" y1="60" x2="1200" y2="60" stroke="#d8d4c8" stroke-width="0.6" />
   <text x="24" y="26" font-size="16" font-weight="700" fill="#3d3a32" letter-spacing="1.2">PIREP PLOT (TRUTH-DERIVED)</text>
-  <text x="24" y="46" font-size="12" fill="#7a7568">2026-03-19T19:00:00Z -- 3 truth-derived reports across midwest XC</text>
+  <text x="24" y="46" font-size="12" fill="#7a7568">2026-03-19T19:00:00Z -- 3 truth-derived reports</text>
   <text x="1176" y="26" text-anchor="end" font-size="11" font-weight="600" fill="#7a7568">CONUS - Lambert Conformal 33/45</text>
   
 </g>
@@ -108,7 +108,7 @@
 <g class="chrome-footer">
   <rect x="0" y="866" width="1200" height="24" fill="#fafaf7" />
   <line x1="0" y1="866" x2="1200" y2="866" stroke="#d8d4c8" stroke-width="0.6" />
-  <text x="24" y="882" font-size="10" fill="#7a7568">Spike 01 wx-engine -- truth-derived synthetic</text>
+  <text x="24" y="882" font-size="10" fill="#7a7568">wx-engine -- truth-derived synthetic</text>
   <text x="1176" y="882" text-anchor="end" font-size="10" fill="#a09b8d">@ab/wx-charts@0.1.0</text>
 </g></g>
 </svg>

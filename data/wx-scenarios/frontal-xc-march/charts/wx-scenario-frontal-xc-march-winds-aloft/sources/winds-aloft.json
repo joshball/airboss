@@ -1,7 +1,7 @@
 {
   "validAt": "2026-03-19T19:00:00Z",
   "basedOn": "2026-03-19T13:00:00.000Z",
-  "source": "Spike 01 wx-engine -- truth-derived synthetic FB bulletin",
+  "source": "wx-engine -- truth-derived synthetic FB bulletin",
   "stations": [
     {
       "icao": "STL",
