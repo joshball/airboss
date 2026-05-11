@@ -95,17 +95,17 @@ NOT a reuse of `whole-doc` because:
 
 `libs/sources/src/ac/seed-mapping.ts` (new file) declares the explicit mapping:
 
-| Manifest                | DB document_slug | DB edition |
-| ----------------------- | ---------------- | ---------- |
-| ac/00-6/b               | ac-00-6          | AC 00-6B   |
-| ac/120-71/b             | ac-120-71        | AC 120-71B |
-| ac/25-7/d               | ac-25-7          | AC 25-7D   |
-| ac/61-65/j              | ac-61-65         | AC 61-65J  |
-| ac/61-83/j              | ac-61-83         | AC 61-83J  |
-| ac/61-98/d              | ac-61-98         | AC 61-98D  |
-| ac/90-66/c              | ac-90-66         | AC 90-66C  |
-| ac/91-21-1/d            | ac-91-21-1       | AC 91.21-1D|
-| ac/91-79/a              | ac-91-79         | AC 91-79A  |
+| Manifest     | DB document_slug | DB edition  |
+| ------------ | ---------------- | ----------- |
+| ac/00-6/b    | ac-00-6          | AC 00-6B    |
+| ac/120-71/b  | ac-120-71        | AC 120-71B  |
+| ac/25-7/d    | ac-25-7          | AC 25-7D    |
+| ac/61-65/j   | ac-61-65         | AC 61-65J   |
+| ac/61-83/j   | ac-61-83         | AC 61-83J   |
+| ac/61-98/d   | ac-61-98         | AC 61-98D   |
+| ac/90-66/c   | ac-90-66         | AC 90-66C   |
+| ac/91-21-1/d | ac-91-21-1       | AC 91.21-1D |
+| ac/91-79/a   | ac-91-79         | AC 91-79A   |
 
 Manifests not in the map -> clear seed-time error ("AC manifest at <path> has no DB mapping; add an entry to seed-mapping.ts").
 
@@ -130,9 +130,7 @@ Post-backfill: 21 AC YAML rows (and DB rows). 9 are readable; 12 stay link-only 
 
 ## Out of scope
 
-- Section-level extraction of AC PDFs (Changes, paragraphs). The `sections: []` and `changes: []` arrays stay empty until a follow-up WP.
-- Importing the 8 ACs that have no on-disk manifest. They stay link-only until their PDFs are downloaded + ingested.
-- AC paragraph citation reverse-lookup (the citation BC already has an `ac` kind; locator-level filtering happens in a separate pass).
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## References
 
