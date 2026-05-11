@@ -31,7 +31,7 @@ references:
     detail: Aviation Weather, chapters on moisture, clouds, and precipitation
     note: Foundational treatment of dew point spread, cloud classification, precipitation formation.
   - source: FAA-H-8083-28
-    detail: Aviation Weather Handbook, Chapter 6 -- Clouds; Chapter 7 -- Precipitation
+    detail: Aviation Weather Handbook, Chapter 12 -- Vertical Motion and Clouds; Chapter 14 -- Precipitation
     note: Modern consolidated reference.
   - source: FAA-H-8083-25
     detail: Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory

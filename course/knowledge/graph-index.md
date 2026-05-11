@@ -2,7 +2,7 @@
 
 # Knowledge Graph Index
 
-Total nodes: **73**
+Total nodes: **74**
 
 ## Lifecycle
 
@@ -10,7 +10,7 @@ Total nodes: **73**
 | --------- | ----- |
 | skeleton  | 0     |
 | started   | 0     |
-| complete  | 73    |
+| complete  | 74    |
 
 ## By domain
 
@@ -26,7 +26,7 @@ Total nodes: **73**
 | procedures           | 9     |
 | Regulations          | 2     |
 | Teaching Methodology | 4     |
-| Weather              | 23    |
+| Weather              | 24    |
 
 ## Nodes
 
@@ -136,6 +136,7 @@ Total nodes: **73**
 | ----------------------------------- | ------------------------------------------------- | --------- | --------------- |
 | wx-airmasses-and-fronts             | Air Masses and Fronts                             | complete  | 7/7             |
 | wx-briefing-execution               | Weather Briefing Execution                        | complete  | 7/7             |
+| wx-chart-type-surface-analysis      | Reading the Surface Analysis Chart                | complete  | 7/7             |
 | wx-clouds-and-precipitation         | Clouds, Temperature/Moisture, and Precipitation   | complete  | 7/7             |
 | wx-data-sources                     | Weather Data Sources for Flight Planning          | complete  | 7/7             |
 | wx-density-altitude                 | Density Altitude                                  | complete  | 7/7             |

@@ -31,8 +31,8 @@ references:
     detail: Aviation Weather Services, Graphical Forecasts for Aviation section
     note: Format spec for the Aviation Forecast Discussion / GFA tool layers.
   - source: FAA-H-8083-28
-    detail: Aviation Weather Handbook, Chapter 25 -- Forecasts
-    note: GFA is the post-Area-Forecast replacement; this chapter explains the migration and current format.
+    detail: Aviation Weather Handbook, Chapter 28 -- Aviation Weather Tools, Section 28.2 (Graphical Forecasts for Aviation (GFA) Tool)
+    note: GFA is the post-Area-Forecast replacement; Chapter 28 §28.2 defines the current GFA tool and its static-image suite, with the legacy FA product covered in Chapter 27 §27.5.
   - source: AIM
     detail: 7-1 -- National Weather Service Aviation Products
     note: Operational use of the GFA in preflight briefing.

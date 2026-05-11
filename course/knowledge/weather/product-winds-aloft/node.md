@@ -29,7 +29,7 @@ references:
     detail: Aviation Weather Services, Wind and Temperature Aloft Forecast section
     note: Encoding rules including the >100 KT and inverted-temperature conventions.
   - source: FAA-H-8083-28
-    detail: Aviation Weather Handbook, Chapter 25 -- Forecasts
+    detail: Aviation Weather Handbook, Chapter 27 -- Forecasts, Section 27.2 (Winds and Temperatures Aloft) and §27.2.1 (FB Wind and Temperature Aloft Forecast)
     note: How the FB is generated and what altitudes it covers for which regions.
   - source: AIM
     detail: 7-1 -- National Weather Service Aviation Products

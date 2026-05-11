@@ -35,8 +35,8 @@ references:
     detail: 7-1-6 -- Inflight Aviation Weather Advisories
     note: Operational use, valid times, the SIERRA / TANGO / ZULU AIRMET letter taxonomy.
   - source: FAA-H-8083-28
-    detail: Aviation Weather Handbook, Chapter 25 -- Forecasts
-    note: Modern consolidated reference for in-flight advisories.
+    detail: Aviation Weather Handbook, Chapter 26 -- Advisories
+    note: Modern consolidated reference for in-flight advisories (SIGMET in §26.2, AIRMET in §26.3, CWA in §26.4).
 
 assessable: true
 assessment_methods: [recall, scenario]
