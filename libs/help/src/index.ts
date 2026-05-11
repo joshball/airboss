@@ -41,7 +41,28 @@ export type {
 } from './schema/help-registry';
 export type { HelpSection } from './schema/help-section';
 export type { HelpTags } from './schema/help-tags';
-export { listAviationReferences, search } from './search';
+export {
+	PALETTE_MODE_ELIGIBLE,
+	PALETTE_MODES,
+	type PaletteMode,
+} from './schema/palette-mode';
+export {
+	COLUMN_BY_TYPE,
+	COLUMN_LABELS,
+	COLUMN_ORDER,
+	type DocCluster,
+	EMPTY_GROUPED_RESULTS,
+	type GroupedResults,
+	type PaletteHost,
+	type RankBucket,
+	type ResultColumn,
+	type ResultSource,
+	type SearchResult as TypedSearchResult,
+	type SearchResultType,
+	type SynonymRewrite,
+	type WebToolTier,
+} from './schema/result-types';
+export { listAviationReferences, search, searchGrouped } from './search';
 export { type IndexedRankInput, matchesFilters, rankBucket, rankBucketIndexed } from './search-core';
 export {
 	type HelpValidationIssue,
