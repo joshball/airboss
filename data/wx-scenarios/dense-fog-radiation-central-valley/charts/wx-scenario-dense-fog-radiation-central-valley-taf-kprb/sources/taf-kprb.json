@@ -1,0 +1,8 @@
+{
+  "stationIcao": "KPRB",
+  "issuedAt": "2026-02-08T09:20:00.000Z",
+  "validFrom": "2026-02-08T10:00:00.000Z",
+  "validTo": "2026-02-08T22:00:00.000Z",
+  "source": "wx-engine -- truth-derived synthetic TAF",
+  "raw": "TAF KPRB 080920Z 0810/0822 00002G03KT 6SM SKC"
+}

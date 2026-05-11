@@ -1,0 +1,21 @@
+slug: wx-scenario-dense-fog-radiation-central-valley-taf-kprb
+type: taf-timeline
+title: TAF Timeline -- KPRB (truth-derived)
+subtitle: 2026-02-08T09:20:00.000Z TAF -- valid 2026-02-08T10:00:00.000Z to
+  2026-02-08T22:00:00.000Z
+extent: time
+stationIcao: KPRB
+projection:
+  kind: lambert
+  parallels:
+    - 33
+    - 45
+  rotate:
+    - -96
+    - -39
+sources:
+  taf: cache://scenarios/dense-fog-radiation-central-valley/taf-kprb.json
+options:
+  axis_tick_hours: 3
+  show_legend: true
+  source_attribution: wx-engine -- truth-derived synthetic

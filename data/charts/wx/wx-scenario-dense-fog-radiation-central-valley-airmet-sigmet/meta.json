@@ -1,0 +1,17 @@
+{
+  "slug": "wx-scenario-dense-fog-radiation-central-valley-airmet-sigmet",
+  "type": "advisory-overlay",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-11T14:07:04.832Z",
+  "content_hash": "sha256:e638f352963d242eae821aeab4fa9ecab30ce7d092df284db96a5611a02b74c3",
+  "source_hashes": {
+    "advisories": "6304374db6a2d7722b965c918c2b803d0b046c06a9094264d89f470cb4f02c74"
+  },
+  "layer_counts": {
+    "vector-symbology": 2,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 285818
+}

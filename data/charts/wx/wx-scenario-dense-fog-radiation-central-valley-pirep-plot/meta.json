@@ -1,0 +1,18 @@
+{
+  "slug": "wx-scenario-dense-fog-radiation-central-valley-pirep-plot",
+  "type": "pirep-plot-grid",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-11T14:07:05.662Z",
+  "content_hash": "sha256:879dca9cdbf63a876c7112c07031d2995c32e7fe9beb4ef43c3c742653fab589",
+  "source_hashes": {
+    "reports": "15225db5ac4a4ae378074f36132b9983845fd1e938f5aea201c9eeb4c5892908"
+  },
+  "layer_counts": {
+    "vector-symbology": 0,
+    "point-symbology": 2,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 287842
+}

@@ -1,0 +1,21 @@
+slug: wx-scenario-dense-fog-radiation-central-valley-cva
+type: cva
+title: Ceiling and Visibility Analysis (truth-derived)
+subtitle: 2026-02-08T10:00:00Z -- 5 stations, 2 area polygons
+projection:
+  kind: lambert
+  parallels:
+    - 33
+    - 45
+  rotate:
+    - -96
+    - -39
+extent: conus
+sources:
+  observations: cache://scenarios/dense-fog-radiation-central-valley/cva.json
+options:
+  show_legend: true
+  show_station_labels: true
+  show_polygons: true
+  dot_radius_px: 7
+  source_attribution: wx-engine -- truth-derived synthetic

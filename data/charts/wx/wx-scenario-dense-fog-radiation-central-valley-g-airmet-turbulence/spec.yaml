@@ -1,0 +1,19 @@
+slug: wx-scenario-dense-fog-radiation-central-valley-g-airmet-turbulence
+type: turbulence-gairmet
+title: G-AIRMET Turbulence (truth-derived)
+subtitle: Issued 2026-02-08T10:00:00Z -- Tango family only
+projection:
+  kind: lambert
+  parallels:
+    - 33
+    - 45
+  rotate:
+    - -96
+    - -39
+extent: conus
+sources:
+  areas: cache://scenarios/dense-fog-radiation-central-valley/g-airmet-turbulence.json
+options:
+  show_legend: true
+  show_labels: true
+  source_attribution: wx-engine -- truth-derived synthetic G-AIRMET turbulence
