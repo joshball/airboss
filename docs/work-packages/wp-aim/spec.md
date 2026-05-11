@@ -44,17 +44,17 @@ Sequence position 3 in [library-completeness](../library-completeness/spec.md). 
 
 ## Touch list
 
-| Layer                                                      | Change                                                                                                |
-| ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `libs/bc/study/src/manifest-validation.ts`                | Add `aimManifestSchema` (discriminated union member with `kind: 'aim'`); export `AimManifest` type    |
-| `libs/bc/study/src/manifest-validation.ts`                | Extend the `manifestSchema = z.discriminatedUnion('kind', [...])` to include the new schema          |
+| Layer                                                     | Change                                                                                                          |
+| --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `libs/bc/study/src/manifest-validation.ts`                | Add `aimManifestSchema` (discriminated union member with `kind: 'aim'`); export `AimManifest` type              |
+| `libs/bc/study/src/manifest-validation.ts`                | Extend the `manifestSchema = z.discriminatedUnion('kind', [...])` to include the new schema                     |
 | `libs/bc/study/src/seeders/aim.ts`                        | New seed adapter: walks `entries[]`, builds parent/child tree by code prefix, produces `reference_section` rows |
-| `libs/bc/study/src/seeders/types.ts`                      | (No change expected; reuses existing `SeedContext` + `SeedSummary`)                                   |
-| `scripts/db/seed-references-from-manifest.ts`             | Add `case 'aim': return seedAimManifest(...)` to the dispatch switch                                  |
-| `scripts/db/seed-references-from-manifest.ts`             | Add `'aim'` to `CORPUS_DIRS` so the seeder walks `aim/` as well as `handbooks/`                       |
-| `aim/2026-04/manifest.json`                               | Backfill `subjects: ['regulations', 'procedures', 'navigation']` + `primary_cert: null`               |
-| `aim/2026-04/manifest.json`                               | Add `document_slug: 'aim'` if absent (the existing manifest may not declare one explicitly)           |
-| `course/references/handbooks-noningested.yaml` or similar | Drop any AIM placeholder row that's link-only (the pipeline now seeds the real one)                  |
+| `libs/bc/study/src/seeders/types.ts`                      | (No change expected; reuses existing `SeedContext` + `SeedSummary`)                                             |
+| `scripts/db/seed-references-from-manifest.ts`             | Add `case 'aim': return seedAimManifest(...)` to the dispatch switch                                            |
+| `scripts/db/seed-references-from-manifest.ts`             | Add `'aim'` to `CORPUS_DIRS` so the seeder walks `aim/` as well as `handbooks/`                                 |
+| `aim/2026-04/manifest.json`                               | Backfill `subjects: ['regulations', 'procedures', 'navigation']` + `primary_cert: null`                         |
+| `aim/2026-04/manifest.json`                               | Add `document_slug: 'aim'` if absent (the existing manifest may not declare one explicitly)                     |
+| `course/references/handbooks-noningested.yaml` or similar | Drop any AIM placeholder row that's link-only (the pipeline now seeds the real one)                             |
 
 ## Tree-building strategy
 
@@ -85,10 +85,7 @@ The seeder walks entries in two passes: first pass builds the depth-0 row (the A
 
 ## Out of scope
 
-- AIM **search** UI (per library-completeness spec §3, AIM is browsable; CFR is search-first because of its 7,218-section scale; AIM at 745 entries browses fine).
-- AIM **figures/tables** extraction beyond what's already in the manifest. The existing extracted markdown is the source of truth.
-- Cross-references between AIM and CFR. Lands when WP-CFR ships.
-- Cross-edition migration: the AIM publishes every 28 days. Mid-edition refresh is its own future WP.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Pre-existing risk
 
