@@ -147,6 +147,9 @@ export const load: PageServerLoad = async (event) => {
 			read: chapterReadSections,
 			total: chapterTotalSections,
 		},
+		// Layout supplies the rail TOC; the page only needs the read-set ids
+		// to highlight the section list inline.
+		readSectionIds: [...readSet],
 		isAuthenticated: event.locals.user !== null,
 	};
 };

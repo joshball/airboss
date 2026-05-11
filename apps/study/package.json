@@ -18,6 +18,7 @@
 		"@ab/constants": "workspace:*",
 		"@ab/db": "workspace:*",
 		"@ab/help": "workspace:*",
+		"@ab/library": "workspace:*",
 		"@ab/sources": "workspace:*",
 		"@ab/themes": "workspace:*",
 		"@ab/types": "workspace:*",

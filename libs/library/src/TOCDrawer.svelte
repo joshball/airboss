@@ -256,7 +256,12 @@ function entryAriaLabel(e: TOCDrawerEntry, isRead: boolean): string {
 
 <style>
 	.toc-drawer {
-		font-size: var(--font-size-sm);
+		/* Reader-pref tokens (WP-FLIGHTBAG-READER-UX Phase 3) -- the TOC
+		 * scales with body text but stays one step smaller for hierarchy.
+		 * Falls through to the platform `--font-size-sm` when no
+		 * `<ReadableScope>` is mounted. */
+		font-size: calc(var(--reader-body-font-size, var(--font-size-base)) * 0.875);
+		line-height: var(--reader-body-line-height, var(--line-height-relaxed));
 		color: var(--ink-body);
 	}
 
@@ -396,7 +401,7 @@ function entryAriaLabel(e: TOCDrawerEntry, isRead: boolean): string {
 	}
 
 	.check {
-		color: var(--ok-strong, var(--action-default));
+		color: var(--signal-success-ink, var(--action-default));
 		font-family: var(--font-family-mono);
 		font-size: var(--font-size-sm);
 		min-width: 1ch;

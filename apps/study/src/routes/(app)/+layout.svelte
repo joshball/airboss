@@ -1,7 +1,18 @@
 <script lang="ts">
-import { NAV_LABELS, ROUTES } from '@ab/constants';
+import {
+	NAV_LABELS,
+	type ReadingDensity,
+	type ReadingFontFamily,
+	type ReadingFontScale,
+	type ReadingHeadingScale,
+	type ReadingMeasure,
+	ROUTES,
+	USER_PREF_KEYS,
+	type UserPrefKey,
+} from '@ab/constants';
 import { listGlossaryEntries } from '@ab/help/glossary';
 import HelpSearch from '@ab/help/ui/HelpSearch.svelte';
+import ReaderPrefsButton, { type ReadingPrefKey, type ReadingPrefValue } from '@ab/library/ReaderPrefsButton.svelte';
 import {
 	type AppearanceMode,
 	type AppearancePreference,
@@ -16,6 +27,7 @@ import ThemePicker from '@ab/themes/picker/ThemePicker.svelte';
 import ThemeProvider from '@ab/themes/ThemeProvider.svelte';
 import AppHeader from '@ab/ui/components/AppHeader.svelte';
 import GlossaryDrawer from '@ab/ui/components/GlossaryDrawer.svelte';
+import ReadableScope from '@ab/ui/components/ReadableScope.svelte';
 import type { Snippet } from 'svelte';
 import { page } from '$app/state';
 import '$lib/help/register';
@@ -95,6 +107,61 @@ async function setTheme(value: ThemeId) {
 		// Non-fatal: cookie just won't persist. The data-theme attribute
 		// has already flipped via the $derived above, so the user sees the
 		// change immediately on this page.
+	}
+}
+
+// Reader-prefs optimistic-flip pattern -- mirrors flightbag root layout.
+// `<ReaderPrefsButton>` calls `handleReadingPrefChange`; the override
+// state flips immediately so the body re-renders without a server round
+// trip, then the POST persists.
+let fontFamilyOverride = $state<ReadingFontFamily | null>(null);
+let fontScaleOverride = $state<ReadingFontScale | null>(null);
+let densityOverride = $state<ReadingDensity | null>(null);
+let measureOverride = $state<ReadingMeasure | null>(null);
+let headingScaleOverride = $state<ReadingHeadingScale | null>(null);
+
+const readingPrefs = $derived({
+	fontFamily: fontFamilyOverride ?? data.readingPrefs.fontFamily,
+	fontScale: fontScaleOverride ?? data.readingPrefs.fontScale,
+	density: densityOverride ?? data.readingPrefs.density,
+	measure: measureOverride ?? data.readingPrefs.measure,
+	headingScale: headingScaleOverride ?? data.readingPrefs.headingScale,
+});
+
+const READING_PREF_KEY_FOR_PROP: Record<ReadingPrefKey, UserPrefKey> = {
+	fontFamily: USER_PREF_KEYS.READING_FONT_FAMILY,
+	fontScale: USER_PREF_KEYS.READING_FONT_SCALE,
+	density: USER_PREF_KEYS.READING_DENSITY,
+	measure: USER_PREF_KEYS.READING_MEASURE,
+	headingScale: USER_PREF_KEYS.READING_HEADING_SCALE,
+};
+
+async function handleReadingPrefChange(propKey: ReadingPrefKey, value: ReadingPrefValue) {
+	switch (propKey) {
+		case 'fontFamily':
+			fontFamilyOverride = value as ReadingFontFamily;
+			break;
+		case 'fontScale':
+			fontScaleOverride = value as ReadingFontScale;
+			break;
+		case 'density':
+			densityOverride = value as ReadingDensity;
+			break;
+		case 'measure':
+			measureOverride = value as ReadingMeasure;
+			break;
+		case 'headingScale':
+			headingScaleOverride = value as ReadingHeadingScale;
+			break;
+	}
+	try {
+		await fetch(ROUTES.READING_PREFS, {
+			method: 'POST',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify({ key: READING_PREF_KEY_FOR_PROP[propKey], value }),
+		});
+	} catch {
+		// Non-fatal: the in-page UI has already flipped via $state above.
 	}
 }
 
@@ -231,12 +298,30 @@ const themePickerLocked = $derived(themePref != null && selection.theme !== them
 	{#snippet themePicker()}
 		<ThemePicker currentThemeId={selection.theme} onSelect={setTheme} locked={themePickerLocked} />
 	{/snippet}
+	{#snippet readerPrefs()}
+		<ReaderPrefsButton
+			fontFamily={readingPrefs.fontFamily}
+			fontScale={readingPrefs.fontScale}
+			density={readingPrefs.density}
+			measure={readingPrefs.measure}
+			headingScale={readingPrefs.headingScale}
+			onChange={handleReadingPrefChange}
+		/>
+	{/snippet}
 </AppHeader>
 
 <ThemeProvider theme={selection.theme} appearance={selection.appearance} layout={selection.layout}>
-	<main id="main" tabindex="-1" class:full-bleed={fullBleed}>
-		{@render children()}
-	</main>
+	<ReadableScope
+		fontFamily={readingPrefs.fontFamily}
+		fontScale={readingPrefs.fontScale}
+		density={readingPrefs.density}
+		measure={readingPrefs.measure}
+		headingScale={readingPrefs.headingScale}
+	>
+		<main id="main" tabindex="-1" class:full-bleed={fullBleed}>
+			{@render children()}
+		</main>
+	</ReadableScope>
 </ThemeProvider>
 
 <style>

@@ -34,6 +34,11 @@ export type { FilterBarProps } from './components/FilterBar.svelte';
 export type { FilterCardProps } from './components/FilterCard.svelte';
 export type { FilterChipDef, FilterChipsProps } from './components/FilterChips.svelte';
 export type {
+	KeyboardCheatsheetProps,
+	KeyboardShortcutEntry,
+	KeyboardShortcutGroup,
+} from './components/KeyboardCheatsheet.svelte';
+export type {
 	NoteContext,
 	NoteContextChip,
 	NoteContextKind,
@@ -46,6 +51,7 @@ export {
 } from './components/notes/note-context-types';
 export type { PagerProps } from './components/Pager.svelte';
 export type { RadioGroupOrientation, RadioOption } from './components/RadioGroup.svelte';
+export type { ReadableScopeProps } from './components/ReadableScope.svelte';
 export type { ResultSummaryProps } from './components/ResultSummary.svelte';
 export type { ScoreCardSize } from './components/ScoreCard.svelte';
 export type { ScoreMetaItem } from './components/ScoreMeta.svelte';

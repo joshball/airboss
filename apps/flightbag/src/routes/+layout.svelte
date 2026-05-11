@@ -1,7 +1,17 @@
 <script lang="ts">
 import '@ab/themes/generated/tokens.css';
-import { ROUTES } from '@ab/constants';
+import {
+	type ReadingDensity,
+	type ReadingFontFamily,
+	type ReadingFontScale,
+	type ReadingHeadingScale,
+	type ReadingMeasure,
+	ROUTES,
+	USER_PREF_KEYS,
+	type UserPrefKey,
+} from '@ab/constants';
 import HelpSearch from '@ab/help/ui/HelpSearch.svelte';
+import ReaderPrefsButton, { type ReadingPrefKey, type ReadingPrefValue } from '@ab/library/ReaderPrefsButton.svelte';
 import {
 	type AppearanceMode,
 	type AppearancePreference,
@@ -14,12 +24,69 @@ import {
 } from '@ab/themes';
 import ThemePicker from '@ab/themes/picker/ThemePicker.svelte';
 import AppHeader from '@ab/ui/components/AppHeader.svelte';
+import ReadableScope from '@ab/ui/components/ReadableScope.svelte';
 import type { Snippet } from 'svelte';
 import { page } from '$app/state';
 import '$lib/help/register';
 import type { LayoutData } from './$types';
 
 let { data, children }: { data: LayoutData; children: Snippet } = $props();
+
+// Optimistic-flip pattern for reader prefs: each control updates the
+// override immediately so the UI reflows without waiting for the POST.
+// On the next navigation the server load re-reads the row and the
+// override collapses to the prop, matching ThemePicker / appearance.
+let fontFamilyOverride = $state<ReadingFontFamily | null>(null);
+let fontScaleOverride = $state<ReadingFontScale | null>(null);
+let densityOverride = $state<ReadingDensity | null>(null);
+let measureOverride = $state<ReadingMeasure | null>(null);
+let headingScaleOverride = $state<ReadingHeadingScale | null>(null);
+
+const readingPrefs = $derived({
+	fontFamily: fontFamilyOverride ?? data.readingPrefs.fontFamily,
+	fontScale: fontScaleOverride ?? data.readingPrefs.fontScale,
+	density: densityOverride ?? data.readingPrefs.density,
+	measure: measureOverride ?? data.readingPrefs.measure,
+	headingScale: headingScaleOverride ?? data.readingPrefs.headingScale,
+});
+
+const READING_PREF_KEY_FOR_PROP: Record<ReadingPrefKey, UserPrefKey> = {
+	fontFamily: USER_PREF_KEYS.READING_FONT_FAMILY,
+	fontScale: USER_PREF_KEYS.READING_FONT_SCALE,
+	density: USER_PREF_KEYS.READING_DENSITY,
+	measure: USER_PREF_KEYS.READING_MEASURE,
+	headingScale: USER_PREF_KEYS.READING_HEADING_SCALE,
+};
+
+async function handleReadingPrefChange(propKey: ReadingPrefKey, value: ReadingPrefValue) {
+	switch (propKey) {
+		case 'fontFamily':
+			fontFamilyOverride = value as ReadingFontFamily;
+			break;
+		case 'fontScale':
+			fontScaleOverride = value as ReadingFontScale;
+			break;
+		case 'density':
+			densityOverride = value as ReadingDensity;
+			break;
+		case 'measure':
+			measureOverride = value as ReadingMeasure;
+			break;
+		case 'headingScale':
+			headingScaleOverride = value as ReadingHeadingScale;
+			break;
+	}
+	try {
+		await fetch(ROUTES.READING_PREFS, {
+			method: 'POST',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify({ key: READING_PREF_KEY_FOR_PROP[propKey], value }),
+		});
+	} catch {
+		// Non-fatal: cookie just won't persist. The override has already
+		// flipped via $state above, so the in-page UI reflects the change.
+	}
+}
 
 // Optimistic-override pattern mirrors sim/avionics: the derived prefs flip
 // immediately on user interaction so the UI doesn't wait on the cookie
@@ -116,11 +183,31 @@ async function setAppearance(value: AppearancePreference) {
 	{#snippet themePicker()}
 		<ThemePicker currentThemeId={selection.theme} onSelect={setTheme} locked={themePickerLocked} />
 	{/snippet}
+	{#snippet readerPrefs()}
+		{#if data.user}
+			<ReaderPrefsButton
+				fontFamily={readingPrefs.fontFamily}
+				fontScale={readingPrefs.fontScale}
+				density={readingPrefs.density}
+				measure={readingPrefs.measure}
+				headingScale={readingPrefs.headingScale}
+				onChange={handleReadingPrefChange}
+			/>
+		{/if}
+	{/snippet}
 </AppHeader>
 
-<main id="main" tabindex="-1" class="page">
-	{@render children()}
-</main>
+<ReadableScope
+	fontFamily={readingPrefs.fontFamily}
+	fontScale={readingPrefs.fontScale}
+	density={readingPrefs.density}
+	measure={readingPrefs.measure}
+	headingScale={readingPrefs.headingScale}
+>
+	<main id="main" tabindex="-1" class="page">
+		{@render children()}
+	</main>
+</ReadableScope>
 
 <style>
 	.skip {

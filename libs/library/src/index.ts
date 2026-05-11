@@ -20,14 +20,17 @@
  */
 
 export type { BreadcrumbSegment, BreadcrumbsProps } from './Breadcrumbs.svelte';
+export type { ChapterTileProps } from './ChapterTile.svelte';
 export type { CitationChipProps } from './CitationChip.svelte';
 export type { HeartbeatTickerProps } from './HeartbeatTicker.svelte';
 export type { ReaderEmptyStateKind, ReaderEmptyStateProps } from './ReaderEmptyState.svelte';
 export type { ReaderLayoutProps } from './ReaderLayout.svelte';
 export type { ReaderNavData, ReaderNavLink, ReaderNavProps } from './ReaderNav.svelte';
+export type { ReaderPrefsButtonProps, ReadingPrefKey, ReadingPrefValue } from './ReaderPrefsButton.svelte';
 export type { ReadingTimeProps } from './ReadingTime.svelte';
 export type { ReferenceCardProps } from './ReferenceCard.svelte';
 export type { RenderedSectionFigure, RenderedSectionProps } from './RenderedSection.svelte';
 export type { SourceLinksProps } from './SourceLinks.svelte';
 export type { SubjectChipProps } from './SubjectChip.svelte';
 export type { TOCDrawerEntry, TOCDrawerProps } from './TOCDrawer.svelte';
+export type { TOCRenderEntry, TOCRenderMode, TOCRenderProps } from './TOCRender.svelte';

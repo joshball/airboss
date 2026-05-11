@@ -94,6 +94,15 @@ export interface AppHeaderProps {
 	 */
 	themePicker?: Snippet;
 	/**
+	 * Reader preferences trigger (WP-FLIGHTBAG-READER-UX Phase 3). Rendered
+	 * in the right cluster, before the appearance toggle, when the host
+	 * supplies it. Hosts hide it for anonymous sessions (no preference
+	 * store to write to). Snippet rather than a direct
+	 * `<ReaderPrefsButton>` import because the host owns the optimistic
+	 * state + POST round-trip, mirroring ThemePicker.
+	 */
+	readerPrefs?: Snippet;
+	/**
 	 * Optional href to a preferences page. When set, a "Preferences" link
 	 * appears in the account dropdown above Sign out. Only render when the
 	 * caller provides one -- the route doesn't exist yet on every app.
@@ -159,6 +168,7 @@ let {
 	helpSearch,
 	glossarySlot,
 	themePicker,
+	readerPrefs,
 	preferencesHref,
 	signedOut,
 	appOrigins,
@@ -318,6 +328,10 @@ function handleAppearanceClick() {
 
 		{#if flightbagHref}
 			<a class="header-link" href={flightbagHref}>{NAV_LABELS.FLIGHTBAG}</a>
+		{/if}
+
+		{#if readerPrefs}
+			<div class="reader-prefs-slot">{@render readerPrefs()}</div>
 		{/if}
 
 		{#if showAppearanceToggle && appearance !== undefined}
@@ -596,6 +610,11 @@ function handleAppearanceClick() {
 	}
 
 	.glossary-slot {
+		display: inline-flex;
+		align-items: center;
+	}
+
+	.reader-prefs-slot {
 		display: inline-flex;
 		align-items: center;
 	}
