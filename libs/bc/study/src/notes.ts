@@ -722,3 +722,78 @@ export async function searchNotes(
 }
 
 // `deriveNoteTitle` lives in `./notes-display` (browser-safe).
+
+// ---------------------------------------------------------------------------
+// Tag cloud + autocomplete (Phase 3)
+// ---------------------------------------------------------------------------
+
+/**
+ * Tag-cloud entry returned by `listTagCloud`.
+ */
+export interface NoteTagCount {
+	tag: string;
+	count: number;
+}
+
+/**
+ * Distinct tags across the user's non-archived notes, with usage counts.
+ * The render layer sorts and lays them out (size proportional to count).
+ *
+ * Implementation: a single SQL aggregation via `unnest` so the work
+ * stays in Postgres rather than streaming every row to the application
+ * tier. The partial GIN index on `tags` is geared toward "tag contains
+ * X" queries; this aggregation is a sequential scan over the user's
+ * notes regardless. Acceptable: the user note count is small (single-
+ * digit thousands at most), and the tag-cloud surface is opt-in.
+ *
+ * Returned ordering: count descending, then tag ascending for stability.
+ */
+export async function listTagCloud(userId: string, db: Db = defaultDb): Promise<NoteTagCount[]> {
+	const result = await db.execute<{ tag: string; count: number }>(sql`
+		SELECT tag, COUNT(*)::int AS count
+		FROM (
+			SELECT UNNEST(tags) AS tag
+			FROM study.note
+			WHERE user_id = ${userId}
+			  AND archived_at IS NULL
+		) t
+		WHERE tag <> ''
+		GROUP BY tag
+		ORDER BY count DESC, tag ASC
+	`);
+	const rows: NoteTagCount[] = [];
+	for (const row of result as unknown as ReadonlyArray<{ tag: string; count: number | string }>) {
+		rows.push({ tag: row.tag, count: Number(row.count) });
+	}
+	return rows;
+}
+
+/**
+ * Distinct tags for the user, used by the chip-input autocomplete.
+ * Returns just the tag strings (no counts) sorted alphabetically by
+ * lowercased value -- the chip input renders them as a flat list.
+ *
+ * Implementation note: we use GROUP BY rather than SELECT DISTINCT so
+ * the ORDER BY can reference an expression (`LOWER(tag)`) that isn't in
+ * the projected column list. Postgres rejects `SELECT DISTINCT col ...
+ * ORDER BY expr(col)` (SQL state 42P10) but accepts `GROUP BY col`.
+ */
+export async function listDistinctTags(userId: string, db: Db = defaultDb): Promise<string[]> {
+	const result = await db.execute<{ tag: string }>(sql`
+		SELECT tag
+		FROM (
+			SELECT UNNEST(tags) AS tag
+			FROM study.note
+			WHERE user_id = ${userId}
+			  AND archived_at IS NULL
+		) t
+		WHERE tag <> ''
+		GROUP BY tag
+		ORDER BY LOWER(tag) ASC
+	`);
+	const rows: string[] = [];
+	for (const row of result as unknown as ReadonlyArray<{ tag: string }>) {
+		rows.push(row.tag);
+	}
+	return rows;
+}

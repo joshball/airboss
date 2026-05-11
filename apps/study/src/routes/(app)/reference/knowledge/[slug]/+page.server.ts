@@ -1,4 +1,5 @@
 import { requireAuth } from '@ab/auth';
+import type { NoteRow } from '@ab/bc-study';
 import {
 	type CitationWithSource,
 	getCitedBy,
@@ -9,6 +10,7 @@ import {
 	type KnowledgeEdgeRowWithTarget,
 	type KnowledgeNodeRow,
 	lifecycleFromContent,
+	listNotesForKnowledgeNode,
 	listReferences,
 	type ResolvedCitation,
 	resolveCitationSources,
@@ -100,6 +102,10 @@ export const load: PageServerLoad = async (event) => {
 	const mastery = await getNodeMastery(user.id, node.id);
 	const lifecycle = lifecycleFromContent(node.contentMd);
 
+	// Notes the user has captured on this knowledge node (wp-notes-primitive
+	// Phase 2). Soft-archived rows are excluded.
+	const knowledgeNotes: NoteRow[] = await listNotesForKnowledgeNode(user.id, node.id);
+
 	// "Cited by": every content row that cites this knowledge node. Source-side
 	// resolution gives us a display label per row (card front / scenario title /
 	// node title) and an `exists` flag we render as a missing chip.
@@ -149,5 +155,6 @@ export const load: PageServerLoad = async (event) => {
 		mastery,
 		lifecycle,
 		citedBy,
+		knowledgeNotes,
 	};
 };

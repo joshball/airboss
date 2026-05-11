@@ -13,6 +13,7 @@ import {
 } from '@ab/constants';
 import Button from '@ab/ui/components/Button.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
+import NotesList from '@ab/ui/components/notes/NotesList.svelte';
 import PageExplainer from '@ab/ui/components/PageExplainer.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import Tooltip from '@ab/ui/components/Tooltip.svelte';
@@ -33,9 +34,13 @@ const availableNodes = $derived(data.availableNodes);
 const syllabusTitleById = $derived(data.syllabusTitleById);
 const courses = $derived(data.courses);
 const availableCourses = $derived(data.availableCourses);
+const goalNotes = $derived(data.goalNotes);
 const editing = $derived(page.url.searchParams.get(QUERY_PARAMS.EDIT) === '1');
 const detailHref = $derived(ROUTES.PROGRAM_GOAL(goal.id));
 const editHref = $derived(ROUTES.PROGRAM_GOAL_EDIT(goal.id));
+// `+ Note` pre-fills the goal context so the standalone composer opens
+// with this goal already selected.
+const newNoteHref = $derived(`${ROUTES.NOTES_NEW}?${QUERY_PARAMS.NOTE_GOAL_ID}=${encodeURIComponent(goal.id)}`);
 </script>
 
 <svelte:head>
@@ -293,6 +298,19 @@ const editHref = $derived(ROUTES.PROGRAM_GOAL_EDIT(goal.id));
 			</form>
 		{/if}
 	</section>
+
+	<section class="block" aria-labelledby="goal-notes-h">
+		<header class="block-head notes-head">
+			<h2 id="goal-notes-h">Notes for this goal ({goalNotes.length})</h2>
+			<Button href={newNoteHref} variant="primary">+ Note</Button>
+		</header>
+		<NotesList
+			notes={goalNotes}
+			showContextChips={false}
+			emptyTitle="No notes for this goal yet"
+			emptyBody="Capture a thought attached to this goal -- it stays here even when the syllabus changes."
+		/>
+	</section>
 </section>
 
 <style>
@@ -409,6 +427,14 @@ const editHref = $derived(ROUTES.PROGRAM_GOAL_EDIT(goal.id));
 		margin: 0;
 		font-size: var(--font-size-body);
 		font-weight: var(--font-weight-semibold);
+	}
+
+	.notes-head {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: var(--space-md);
+		flex-wrap: wrap;
 	}
 
 	.row-list {

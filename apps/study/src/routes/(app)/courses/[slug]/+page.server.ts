@@ -17,6 +17,7 @@
  */
 
 import { requireAuth } from '@ab/auth';
+import type { NoteRow } from '@ab/bc-study';
 import {
 	type CourseRow,
 	courseLens,
@@ -25,6 +26,7 @@ import {
 	getCourseStepsByCourse,
 	getPrimaryGoal,
 	type LensResult,
+	listNotesForCourse,
 	pickOverlaySyllabus,
 } from '@ab/bc-study/server';
 import { COURSE_STATUSES, COURSE_STEP_LEVELS } from '@ab/constants';
@@ -45,6 +47,11 @@ export interface CourseDetailData {
 	 * lens itself runs).
 	 */
 	stepCodeById: Record<string, string>;
+	/**
+	 * Notes the user has captured against this course (wp-notes-primitive
+	 * Phase 2). Soft-archived rows are excluded.
+	 */
+	courseNotes: NoteRow[];
 }
 
 export const load: PageServerLoad = async (event) => {
@@ -56,7 +63,7 @@ export const load: PageServerLoad = async (event) => {
 	const primaryGoal = await getPrimaryGoal(user.id);
 	const overlaySyllabusId = await pickOverlaySyllabus(primaryGoal);
 
-	const [lensResult, allSteps] = await Promise.all([
+	const [lensResult, allSteps, courseNotes] = await Promise.all([
 		overlaySyllabusId !== null && primaryGoal !== null
 			? courseWithCertOverlayLens(db, user.id, {
 					goal: primaryGoal,
@@ -67,6 +74,7 @@ export const load: PageServerLoad = async (event) => {
 					filters: { courseId: course.id },
 				}),
 		getCourseStepsByCourse(course.id),
+		listNotesForCourse(user.id, course.id),
 	]);
 
 	const stepCodeById: Record<string, string> = {};
@@ -81,5 +89,6 @@ export const load: PageServerLoad = async (event) => {
 		lensResult,
 		overlayActive: overlaySyllabusId !== null,
 		stepCodeById,
+		courseNotes,
 	} satisfies CourseDetailData;
 };

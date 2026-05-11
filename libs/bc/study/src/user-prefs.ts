@@ -64,6 +64,21 @@ export const USER_PREF_SCHEMAS = {
 	// closed key list in `USER_PREF_KEYS` does not have to grow with
 	// every new page that mounts an explainer.
 	'study.page_explainer.dismissed': z.record(z.string().min(1), z.literal(true)),
+	// Owned by wp-notes-primitive Phase 3. Value is a JSON object keyed
+	// by the user-given saved-search name. Each entry carries the URL
+	// (filter / search / view) the user wants to replay and the ISO
+	// timestamp at which it was saved. Stored as a single row (not one
+	// row per saved search) so the closed `USER_PREF_KEYS` list stays
+	// finite as the user adds saved searches. Name capped at 120 chars
+	// to keep the sidebar render tidy; URL capped at 2048 to honor the
+	// historical browser address-bar limit.
+	'study.notes.saved_searches': z.record(
+		z.string().min(1).max(120),
+		z.object({
+			url: z.string().min(1).max(2048),
+			createdAt: z.string().min(1),
+		}),
+	),
 } satisfies Record<UserPrefKey, z.ZodType>;
 
 export class UnknownUserPrefKeyError extends Error {
@@ -257,5 +272,107 @@ export async function setPageExplainerDismissal(
 		// stay in sync with every other user_pref write.
 		await setUserPref(userId, USER_PREF_KEYS.PAGE_EXPLAINER_DISMISSED, next, tx as unknown as Db);
 		return next;
+	});
+}
+
+// ---------------------------------------------------------------------------
+// Notes saved searches (wp-notes-primitive Phase 3)
+// ---------------------------------------------------------------------------
+
+/** One saved-search entry stored under `study.notes.saved_searches`. */
+export interface SavedNotesSearch {
+	name: string;
+	url: string;
+	createdAt: string;
+}
+
+/** Stored shape of `study.notes.saved_searches`: name -> { url, createdAt }. */
+export type NotesSavedSearchesValue = Record<string, { url: string; createdAt: string }>;
+
+/** Cap on the number of saved searches per user. Sidebar surface only. */
+export const NOTES_SAVED_SEARCHES_MAX = 24;
+
+/** Raised when a user tries to save a search past `NOTES_SAVED_SEARCHES_MAX`. */
+export class NotesSavedSearchLimitError extends Error {
+	constructor() {
+		super(`At most ${NOTES_SAVED_SEARCHES_MAX} saved searches per user.`);
+		this.name = 'NotesSavedSearchLimitError';
+	}
+}
+
+/**
+ * Read the current saved-search map for a user. Empty object when nothing
+ * is stored. Sorted by `createdAt` descending (newest first) for sidebar
+ * display.
+ */
+export async function listSavedSearches(userId: string, db: Db = defaultDb): Promise<SavedNotesSearch[]> {
+	const prefs = await getUserPrefs(userId, [USER_PREF_KEYS.NOTES_SAVED_SEARCHES], db);
+	const raw = prefs[USER_PREF_KEYS.NOTES_SAVED_SEARCHES];
+	if (raw === undefined || raw === null || typeof raw !== 'object' || Array.isArray(raw)) return [];
+	const out: SavedNotesSearch[] = [];
+	for (const [name, entry] of Object.entries(raw as NotesSavedSearchesValue)) {
+		if (entry === null || typeof entry !== 'object') continue;
+		const e = entry as { url?: unknown; createdAt?: unknown };
+		if (typeof e.url !== 'string' || typeof e.createdAt !== 'string') continue;
+		out.push({ name, url: e.url, createdAt: e.createdAt });
+	}
+	out.sort((a, b) => (a.createdAt > b.createdAt ? -1 : a.createdAt < b.createdAt ? 1 : 0));
+	return out;
+}
+
+/**
+ * Persist (or update) a saved search. The transaction guards against a
+ * read-modify-write race when two browser tabs save at once. Capacity
+ * is bounded by `NOTES_SAVED_SEARCHES_MAX`.
+ */
+export async function saveNotesSearch(
+	userId: string,
+	name: string,
+	url: string,
+	db: Db = defaultDb,
+): Promise<SavedNotesSearch[]> {
+	return db.transaction(async (tx) => {
+		await tx.execute(sql`
+			SELECT 1 FROM study.user_pref
+			WHERE user_id = ${userId}
+			  AND key = ${USER_PREF_KEYS.NOTES_SAVED_SEARCHES}
+			FOR UPDATE
+		`);
+		const current = await listSavedSearches(userId, tx as unknown as Db);
+		const trimmed = name.trim();
+		const isNew = !current.some((s) => s.name === trimmed);
+		if (isNew && current.length >= NOTES_SAVED_SEARCHES_MAX) {
+			throw new NotesSavedSearchLimitError();
+		}
+		const next: NotesSavedSearchesValue = {};
+		const createdAt = new Date().toISOString();
+		for (const s of current) {
+			next[s.name] = { url: s.url, createdAt: s.createdAt };
+		}
+		next[trimmed] = { url, createdAt };
+		await setUserPref(userId, USER_PREF_KEYS.NOTES_SAVED_SEARCHES, next, tx as unknown as Db);
+		return listSavedSearches(userId, tx as unknown as Db);
+	});
+}
+
+/** Drop a saved search. No-op when the name isn't stored. */
+export async function removeNotesSearch(userId: string, name: string, db: Db = defaultDb): Promise<SavedNotesSearch[]> {
+	return db.transaction(async (tx) => {
+		await tx.execute(sql`
+			SELECT 1 FROM study.user_pref
+			WHERE user_id = ${userId}
+			  AND key = ${USER_PREF_KEYS.NOTES_SAVED_SEARCHES}
+			FOR UPDATE
+		`);
+		const current = await listSavedSearches(userId, tx as unknown as Db);
+		const trimmed = name.trim();
+		if (!current.some((s) => s.name === trimmed)) return current;
+		const next: NotesSavedSearchesValue = {};
+		for (const s of current) {
+			if (s.name === trimmed) continue;
+			next[s.name] = { url: s.url, createdAt: s.createdAt };
+		}
+		await setUserPref(userId, USER_PREF_KEYS.NOTES_SAVED_SEARCHES, next, tx as unknown as Db);
+		return listSavedSearches(userId, tx as unknown as Db);
 	});
 }
