@@ -46,6 +46,12 @@ export type { AirmetAdvisory, DerivedFbGrid, DerivedMetar, DerivedPirep, Derived
 // ----------------------------------------------------------------------
 export type { ChartArtifact, ChartArtifactSource } from './charts/types';
 // ----------------------------------------------------------------------
+// Layer-4 commentary callout shape. Pure types -- safe at any tier. Values
+// (deriveCommentary, resolveKnowledgeNodeId, validateAllKnowledgeNodes)
+// live in `./server.ts`.
+// ----------------------------------------------------------------------
+export type { CommentaryCallout, CommentaryCalloutTarget, CommentaryMode } from './commentary/types';
+// ----------------------------------------------------------------------
 // Zod schema (inferred type only; the schema value lives in `./server.ts`).
 // Re-exporting the schema value from this barrel is intentionally avoided
 // so the runtime barrel stays free of value re-exports per spec.md

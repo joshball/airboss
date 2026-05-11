@@ -33,6 +33,16 @@ export {
 	writeScenarioBundle,
 } from './engine';
 // ----------------------------------------------------------------------
+// Phase D: layer-4 Socratic commentary derivation + knowledge-node resolver.
+// ----------------------------------------------------------------------
+export {
+	type KnowledgeNodeValidationReport,
+	resolveKnowledgeNodeId,
+	validateAllKnowledgeNodes,
+} from './commentary/knowledge-link';
+export { type DeriveCommentaryProducts, deriveCommentary } from './commentary/socratic';
+export type { CommentaryCallout, CommentaryCalloutTarget, CommentaryMode } from './commentary/types';
+// ----------------------------------------------------------------------
 // Phase C: layer-3 chart-spec derivations + the orchestrator.
 // ----------------------------------------------------------------------
 export { deriveAdvisoryOverlayChart } from './charts/advisory-overlay';
