@@ -112,6 +112,14 @@ export const AUDIT_TARGETS = {
 	 * the override row.
 	 */
 	HANGAR_INGEST_OVERRIDE: 'hangar.ingest_override',
+	/**
+	 * Per-row mutation on `study.note` (wp-notes-primitive).
+	 * `targetId` is the note id; `op` is one of create / update / delete;
+	 * `metadata.subKind` carries `archive` / `restore` / `mark-followup-done`
+	 * / `clear-followup` for non-trivial update flavours so the reader can
+	 * split them without joining the row.
+	 */
+	NOTE: 'study.note',
 } as const;
 
 export type AuditTarget = (typeof AUDIT_TARGETS)[keyof typeof AUDIT_TARGETS];
@@ -238,6 +246,27 @@ export type HangarInvitationOpSubkind =
 	(typeof HANGAR_INVITATION_OP_SUBKINDS)[keyof typeof HANGAR_INVITATION_OP_SUBKINDS];
 export const HANGAR_INVITATION_OP_SUBKIND_VALUES: readonly HangarInvitationOpSubkind[] =
 	Object.values(HANGAR_INVITATION_OP_SUBKINDS);
+
+/**
+ * Op-distinguishing sub-kind for `AUDIT_TARGETS.NOTE` audit rows
+ * (wp-notes-primitive). Carried in `metadata.subKind` so the audit
+ * `op` enum stays tight (`create / update / delete`) while still
+ * distinguishing the soft-archive / follow-up flows on the audit
+ * reader. `update` (no subKind) covers regular field edits.
+ */
+export const NOTE_OP_SUBKINDS = {
+	/** Soft-archive (`archived_at` set). `op = update`. */
+	ARCHIVE: 'archive',
+	/** Soft-restore (`archived_at` cleared). `op = update`. */
+	RESTORE: 'restore',
+	/** Follow-up marked done (`follow_up_done_at` set). `op = update`. */
+	MARK_FOLLOWUP_DONE: 'mark-followup-done',
+	/** Follow-up cleared (`follow_up_md` emptied + done timestamp cleared). `op = update`. */
+	CLEAR_FOLLOWUP: 'clear-followup',
+} as const;
+
+export type NoteOpSubkind = (typeof NOTE_OP_SUBKINDS)[keyof typeof NOTE_OP_SUBKINDS];
+export const NOTE_OP_SUBKIND_VALUES: readonly NoteOpSubkind[] = Object.values(NOTE_OP_SUBKINDS);
 
 /**
  * Default expiry on a freshly minted hangar invitation, in days. Matches

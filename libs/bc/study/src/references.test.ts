@@ -62,7 +62,6 @@ import {
 	resolveCitationUrl,
 	StaleWarningsTriageError,
 	setComprehended,
-	setNotes,
 	setReadStatus,
 } from './references';
 import {
@@ -822,27 +821,19 @@ describe('setComprehended', () => {
 });
 
 describe('markAsReread', () => {
-	it('resets status + comprehended but preserves notes', async () => {
-		await setNotes(TEST_USER_ID, SECTION_12_3_ID, 'my private notes');
+	it('resets status + comprehended', async () => {
 		await setReadStatus(TEST_USER_ID, SECTION_12_3_ID, HANDBOOK_READ_STATUSES.READ);
 		await setComprehended(TEST_USER_ID, SECTION_12_3_ID, true);
 
 		const row = await markAsReread(TEST_USER_ID, SECTION_12_3_ID);
 		expect(row.status).toBe(HANDBOOK_READ_STATUSES.UNREAD);
 		expect(row.comprehended).toBe(false);
-		expect(row.notesMd).toBe('my private notes');
 	});
 });
 
-describe('setNotes', () => {
-	it('upserts notes and rejects oversize input', async () => {
-		const row = await setNotes(TEST_USER_ID, SECTION_12_4_ID, 'short note');
-		expect(row.notesMd).toBe('short note');
-
-		const tooBig = 'a'.repeat(20_000);
-		await expect(setNotes(TEST_USER_ID, SECTION_12_4_ID, tooBig)).rejects.toBeInstanceOf(HandbookValidationError);
-	});
-});
+// `setNotes` retired by wp-notes-primitive: per-section notes now live on
+// `study.note` (see `notes.test.ts`). The legacy single-blob writer was
+// removed alongside the `reference_section_read_state.notes_md` column.
 
 // ---------------------------------------------------------------------------
 // getOpenWarningsForReference (WP-HANDBOOK-RE-EXTRACTION-V2 Phase 3)

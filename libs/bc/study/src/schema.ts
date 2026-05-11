@@ -56,7 +56,6 @@ import {
 	GOAL_SYLLABUS_WEIGHT_MAX,
 	GOAL_SYLLABUS_WEIGHT_MIN,
 	HANDBOOK_ERRATA_PATCH_KIND_VALUES,
-	HANDBOOK_NOTES_MAX_LENGTH,
 	HANDBOOK_READ_STATUS_VALUES,
 	HANDBOOK_READ_STATUSES,
 	KNOWLEDGE_EDGE_TYPE_VALUES,
@@ -67,6 +66,12 @@ import {
 	MIN_SESSION_LENGTH,
 	NODE_LIFECYCLE_VALUES,
 	NODE_LIFECYCLES,
+	NOTE_BODY_MAX_LENGTH,
+	NOTE_EXCERPT_MAX_LENGTH,
+	NOTE_FOLLOW_UP_MAX_LENGTH,
+	NOTE_TAG_MAX_LENGTH,
+	NOTE_TAGS_MAX,
+	NOTE_TITLE_MAX_LENGTH,
 	PHASE_OF_FLIGHT_VALUES,
 	PLAN_STATUS_VALUES,
 	PLAN_STATUSES,
@@ -1786,8 +1791,11 @@ export const referenceSectionReadState = studySchema.table(
 		openedCount: integer('opened_count').notNull().default(0),
 		/** Sum of heartbeat-windowed seconds the section was visible. */
 		totalSecondsVisible: integer('total_seconds_visible').notNull().default(0),
-		/** User's private markdown notes scoped to this section. */
-		notesMd: text('notes_md').notNull().default(''),
+		// `notes_md` removed by wp-notes-primitive: per-section single-blob
+		// notes are superseded by 1+ rows on `study.note` referencing the
+		// same `referenceSectionId`. Migration script lives at
+		// `scripts/migrations/migrate-notes-blobs.ts`; dev seed regenerates
+		// from a clean schema so no data carries the old column forward.
 		seedOrigin: text('seed_origin'),
 		...timestamps(),
 	},
@@ -1809,10 +1817,6 @@ export const referenceSectionReadState = studySchema.table(
 			sql.raw(`"total_seconds_visible" >= 0`),
 		),
 		openedCountCheck: check('reference_section_read_state_opened_count_check', sql.raw(`"opened_count" >= 0`)),
-		notesLengthCheck: check(
-			'reference_section_read_state_notes_length_check',
-			sql.raw(`char_length("notes_md") <= ${HANDBOOK_NOTES_MAX_LENGTH}`),
-		),
 	}),
 );
 
@@ -2492,3 +2496,125 @@ export const userPref = studySchema.table(
 
 export type UserPrefRow = typeof userPref.$inferSelect;
 export type NewUserPrefRow = typeof userPref.$inferInsert;
+
+// ---------------------------------------------------------------------------
+// wp-notes-primitive -- platform-wide note primitive.
+//
+// A note is a markdown thought attached to optional context (reference,
+// section, knowledge node, course, goal, syllabus node) plus free-form
+// tags. None-of-context = freestanding note. Notes survive "where did I
+// write that" because every relevant FK is captured. Follow-ups capture
+// intent without becoming a task manager. See
+// `docs/work-packages/wp-notes-primitive/spec.md`.
+//
+// `knowledge_node_id` is intentionally a free-form text column today --
+// the knowledge graph FK lands when the platform-wide `study.knowledge_node`
+// FK semantics stabilise (already RESTRICT-on-delete from `course_step`,
+// so a note row that points at a deleted node would be a problem we don't
+// want to inherit yet). The other five context columns FK with
+// `set null` so a context delete leaves the note (and its body) intact.
+// ---------------------------------------------------------------------------
+export const note = studySchema.table(
+	'note',
+	{
+		id: text('id').primaryKey(),
+		userId: text('user_id')
+			.notNull()
+			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
+
+		/** Markdown body. Required (an empty note is a bug, not a feature). */
+		bodyMd: text('body_md').notNull(),
+
+		/** Optional title. When empty, the viewer derives one from the first line. */
+		title: text('title').notNull().default(''),
+
+		/**
+		 * Quoted excerpt -- the passage the note responds to, snapshotted at
+		 * note creation. Survives source re-extraction. Empty when the note
+		 * isn't about a specific passage.
+		 */
+		quotedExcerpt: text('quoted_excerpt').notNull().default(''),
+
+		// -- Context FKs. Any combination may be set. None set = freestanding. --
+
+		referenceId: text('reference_id').references(() => reference.id, { onDelete: 'set null' }),
+		referenceSectionId: text('reference_section_id').references(() => referenceSection.id, {
+			onDelete: 'set null',
+		}),
+
+		/**
+		 * Knowledge-graph node FK. Wired when the knowledge schema lands; for
+		 * now this is a free-form text id with no FK constraint (the column
+		 * gets the FK in a follow-up when knowledge nodes ship a stable
+		 * delete contract).
+		 */
+		knowledgeNodeId: text('knowledge_node_id'),
+
+		courseId: text('course_id').references(() => course.id, { onDelete: 'set null' }),
+		goalId: text('goal_id').references(() => goal.id, { onDelete: 'set null' }),
+		syllabusNodeId: text('syllabus_node_id').references(() => syllabusNode.id, { onDelete: 'set null' }),
+
+		/** Free-form tags. */
+		tags: text('tags').array().notNull().default(sql`ARRAY[]::text[]`),
+
+		/** Optional follow-up. Empty = no follow-up. */
+		followUpMd: text('follow_up_md').notNull().default(''),
+		followUpDoneAt: timestamp('follow_up_done_at', { withTimezone: true }),
+
+		/** Soft-archive. Notes are never hard-deleted by the UI. */
+		archivedAt: timestamp('archived_at', { withTimezone: true }),
+
+		seedOrigin: text('seed_origin'),
+		...timestamps(),
+	},
+	(t) => ({
+		userIdx: index('note_user_idx').on(t.userId, t.createdAt),
+		// Per-context partial indexes -- only rows where the FK is set.
+		// Keeps the index pages small for what's almost always a sparse
+		// column on a given note.
+		refIdx: index('note_reference_idx').on(t.referenceId).where(sql`reference_id IS NOT NULL`),
+		sectionIdx: index('note_section_idx').on(t.referenceSectionId).where(sql`reference_section_id IS NOT NULL`),
+		goalIdx: index('note_goal_idx').on(t.goalId).where(sql`goal_id IS NOT NULL`),
+		courseIdx: index('note_course_idx').on(t.courseId).where(sql`course_id IS NOT NULL`),
+		knowledgeIdx: index('note_knowledge_idx').on(t.knowledgeNodeId).where(sql`knowledge_node_id IS NOT NULL`),
+		syllabusIdx: index('note_syllabus_idx').on(t.syllabusNodeId).where(sql`syllabus_node_id IS NOT NULL`),
+		// GIN over the tags array so `tags && ARRAY['x']` and `tags @> ARRAY['x']`
+		// hit an index instead of seq-scanning.
+		tagsGin: index('note_tags_gin_idx').using('gin', t.tags),
+		// Open follow-ups inbox: `where follow_up_md != '' and follow_up_done_at
+		// is null and archived_at is null`. Partial keeps the index small.
+		followUpOpenIdx: index('note_follow_up_open_idx')
+			.on(t.userId, t.createdAt)
+			.where(sql`follow_up_md != '' AND follow_up_done_at IS NULL AND archived_at IS NULL`),
+		// "All notes" default view excludes archived; partial-index that case
+		// so the hot path doesn't pay for archived rows in the index pages.
+		archivedOpenIdx: index('note_user_open_idx').on(t.userId, t.createdAt).where(sql`archived_at IS NULL`),
+		bodyLengthCheck: check('note_body_length_check', sql.raw(`char_length("body_md") <= ${NOTE_BODY_MAX_LENGTH}`)),
+		bodyNotEmptyCheck: check('note_body_not_empty_check', sql.raw(`char_length("body_md") > 0`)),
+		titleLengthCheck: check('note_title_length_check', sql.raw(`char_length("title") <= ${NOTE_TITLE_MAX_LENGTH}`)),
+		excerptLengthCheck: check(
+			'note_excerpt_length_check',
+			sql.raw(`char_length("quoted_excerpt") <= ${NOTE_EXCERPT_MAX_LENGTH}`),
+		),
+		followUpLengthCheck: check(
+			'note_follow_up_length_check',
+			sql.raw(`char_length("follow_up_md") <= ${NOTE_FOLLOW_UP_MAX_LENGTH}`),
+		),
+		tagsCountCheck: check(
+			'note_tags_count_check',
+			sql.raw(`array_length("tags", 1) IS NULL OR array_length("tags", 1) <= ${NOTE_TAGS_MAX}`),
+		),
+		// Each tag string capped to NOTE_TAG_MAX_LENGTH at the BC layer
+		// (Zod schema in notes.ts). Postgres CHECK can't use a subquery, and
+		// per-element bounded validation belongs in the BC anyway -- the DB
+		// guards array length (above) and that's enough at the schema layer.
+		// `follow_up_done_at` may only be set when there's a follow-up to mark done.
+		followUpDoneRequiresFollowUp: check(
+			'note_follow_up_done_requires_follow_up_check',
+			sql.raw(`"follow_up_done_at" IS NULL OR "follow_up_md" != ''`),
+		),
+	}),
+);
+
+export type NoteRow = typeof note.$inferSelect;
+export type NewNoteRow = typeof note.$inferInsert;

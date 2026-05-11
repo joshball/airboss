@@ -28,7 +28,6 @@ function row(referenceSectionId: string, status: ReferenceSectionReadStateRow['s
 		lastReadAt: new Date(),
 		openedCount: 1,
 		totalSecondsVisible: 60,
-		notesMd: '',
 		seedOrigin: null,
 		createdAt: new Date(),
 		updatedAt: new Date(),

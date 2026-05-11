@@ -298,6 +298,37 @@ export {
 	isLeafMastered,
 	SyllabusLeafNotFoundError,
 } from './mastery';
+// Notes BC -- platform-wide note primitive (wp-notes-primitive).
+export type {
+	CreateNoteInput,
+	ListOpts as NotesListOpts,
+	NotesListResult,
+	UpdateNoteInput,
+} from './notes';
+export {
+	archiveNote,
+	clearFollowUp,
+	createNote,
+	createNoteInputSchema,
+	deleteNote,
+	getNote,
+	listNotesForCourse,
+	listNotesForGoal,
+	listNotesForKnowledgeNode,
+	listNotesForReference,
+	listNotesForSection,
+	listNotesForSyllabusNode,
+	listNotesForUser,
+	listOpenFollowUps,
+	markFollowUpDone,
+	NoFollowUpError,
+	NoteNotFoundError,
+	restoreNote,
+	searchNotes,
+	updateNote,
+	updateNoteInputSchema,
+} from './notes';
+export { deriveNoteTitle, encodeNotesCursor } from './notes-display';
 export type { CreatePlanInput, UpdatePlanInput } from './plans';
 export {
 	activatePlan,
@@ -384,7 +415,6 @@ export {
 	resolveCitationUrl,
 	StaleWarningsTriageError,
 	setComprehended,
-	setNotes,
 	setReadStatus,
 } from './references';
 // Regulations BC aggregator (one entry point for /library/regulations/* loaders).

@@ -796,7 +796,6 @@ describe('getRegulationsView (detail)', () => {
 		// Default read-state when the user hasn't opened the section yet.
 		expect(view.readState.status).toBe(HANDBOOK_READ_STATUSES.UNREAD);
 		expect(view.readState.comprehended).toBe(false);
-		expect(view.readState.notesMd).toBe('');
 		// Exactly one citing knowledge node from the fixture.
 		const citing = view.citingNodes.find((n) => n.id === CITING_NODE_ID);
 		expect(citing).toBeDefined();

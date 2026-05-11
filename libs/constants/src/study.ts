@@ -2111,12 +2111,9 @@ export const HANDBOOK_HEARTBEAT_BUFFER = 12;
  */
 export const HANDBOOK_HEARTBEAT_MIN_DELTA_SEC = 5;
 
-/**
- * Hard cap on per-user notes per section. The BC validator + the DB
- * CHECK both reference this; the UI surfaces a friendly message when
- * the user tries to paste a wall of text.
- */
-export const HANDBOOK_NOTES_MAX_LENGTH = 16384;
+// `HANDBOOK_NOTES_MAX_LENGTH` retired by wp-notes-primitive: per-section
+// single-blob notes are superseded by `study.note` rows whose body cap
+// is `NOTE_BODY_MAX_LENGTH` (`libs/constants/src/notes.ts`).
 
 /**
  * Words-per-minute the reading-time estimate divides by.

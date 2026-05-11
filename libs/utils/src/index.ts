@@ -22,6 +22,7 @@ export {
 	generateHangarReviewStepId,
 	generateHangarSyncLogId,
 	generateKnowledgeNodeProgressId,
+	generateNoteId,
 	generateReferenceFigureId,
 	generateReferenceId,
 	generateReferenceSectionErrataId,
