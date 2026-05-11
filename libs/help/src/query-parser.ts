@@ -43,7 +43,15 @@
 
 import type { FilterKey, ParsedFilter, ParsedQuery, ParseWarning } from './schema/help-registry';
 
-const KNOWN_KEYS: readonly string[] = ['tag', 'source', 'rules', 'kind', 'surface', 'lib'];
+const KNOWN_KEYS: readonly string[] = ['tag', 'source', 'rules', 'kind', 'surface', 'lib', 'doc', 'library'];
+
+/**
+ * Bare tokens that become a synthetic facet rather than free-text. Used for
+ * one-word scope cues like `mine` -- which is sugar for `library:mine`.
+ */
+const BARE_TOKEN_FACETS: Record<string, { key: FilterKey; value: string }> = {
+	mine: { key: 'library', value: 'mine' },
+};
 
 export function parseQuery(raw: string): ParsedQuery {
 	const { tokens, warnings } = tokenize(raw);
@@ -62,9 +70,19 @@ export function parseQuery(raw: string): ParsedQuery {
 				if (!existing.includes(value)) existing.push(value);
 			}
 			filterMap.set(facet.key, existing);
-		} else {
-			freeTextPieces.push(unescapeToken(token.text));
+			continue;
 		}
+		// Bare-token sugar: `mine` -> `library:mine`. Lowercase compare against
+		// BARE_TOKEN_FACETS so `Mine` / `MINE` / `mine` all collapse.
+		const bareLower = unescapeToken(token.text).toLowerCase();
+		const bareFacet = BARE_TOKEN_FACETS[bareLower];
+		if (bareFacet) {
+			const existing = filterMap.get(bareFacet.key) ?? [];
+			if (!existing.includes(bareFacet.value)) existing.push(bareFacet.value);
+			filterMap.set(bareFacet.key, existing);
+			continue;
+		}
+		freeTextPieces.push(unescapeToken(token.text));
 	}
 
 	const filters: ParsedFilter[] = [];

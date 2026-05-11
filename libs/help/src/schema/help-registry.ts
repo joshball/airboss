@@ -91,8 +91,12 @@ export interface ParsedFilter {
 /**
  * Recognized filter facets. Unknown facets fall back to free-text rather
  * than erroring, so authors' typos do not produce empty result sets.
+ *
+ * `doc` scopes search to a specific FAA document (`doc:FAA-H-8083-28 turb`).
+ * `library:mine` (synthetic, set by the bare `mine` token) scopes results to
+ * the user's own content (cards, reps, plans).
  */
-export type FilterKey = 'tag' | 'source' | 'rules' | 'kind' | 'surface' | 'lib';
+export type FilterKey = 'tag' | 'source' | 'rules' | 'kind' | 'surface' | 'lib' | 'doc' | 'library';
 
 /** Top-level filters applied to `search(raw, filters)` from the caller. */
 export interface SearchFilters {

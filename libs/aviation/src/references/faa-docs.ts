@@ -13,6 +13,10 @@
  *
  * This file is registered at module load by the index file so the registry
  * is populated before any consumer imports it.
+ *
+ * AIM chapter/section rows live in the sibling generated file
+ * `aim-docs.ts` (split out when the AIM scanner pushes the combined
+ * output past ~5000 lines).
  */
 
 import { registerReferences } from '../registry';
