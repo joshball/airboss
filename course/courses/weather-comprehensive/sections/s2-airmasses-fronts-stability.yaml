@@ -32,6 +32,20 @@ body_md: |
 
   :::chart slug="wx-prog-chart-12hr-2024-12-23-12z"
   :::
+
+  A worked-truth example: a March cold front sweeping from KSTL east
+  through KORD, with the warm sector ahead and post-frontal cP behind.
+  Every METAR, every TAF FM group, every AIRMET polygon, every Socratic
+  prompt below is derived from the same canonical atmosphere -- so when
+  you ask "why is KSPI gusty?" or "why does KORD's TAF carry an FM at
+  21Z?" there is a real answer pinned to the truth state, not a
+  templated explanation. (The briefing-pack panel lands when the
+  course-reader's `:::scenario` directive resolver ships per
+  [CONSUMER-CONTRACT.md](../../../../docs/work-packages/wx-engine/CONSUMER-CONTRACT.md);
+  until then this directive is a no-op placeholder.)
+
+  :::scenario slug="frontal-xc-march"
+  :::
 steps:
   - code: s2.1
     ordinal: 1
