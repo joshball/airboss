@@ -151,6 +151,167 @@ is forecast wind error. If point IFR is forecast, the limit is METAR
 station coverage. Pre-naming the dominant limitation lets you
 calibrate the rest of the brief against it.
 
+### Cards (spaced repetition)
+
+Cards mined from the body. R2's three families (equipment, reports/
+forecasts, inflight resources) are the recall skeleton; the per-product
+failure modes are the diagnostic skill; the operational rules are the
+mitigation set.
+
+```yaml-cards
+- front: "Three families of weather limitation per ACS R2 -- name them and one example each."
+  back: |
+    R2a -- onboard weather equipment: e.g. onboard radar shows precipitation,
+    not turbulence; attenuates behind heavy returns.
+    R2b -- aviation weather reports and forecasts: e.g. METAR is a point
+    observation; the surrounding 5 NM may be very different.
+    R2c -- inflight weather resources: e.g. datalink NEXRAD is 10-15 min
+    stale; ATC ride reports are sparse and reporter-biased.
+  cardType: basic
+  kind: recall
+  tags: [weather, limitations, acs-r2, ac-00-63a, PA.I.C.R2]
+  source_ref: |
+    AC 00-63A; body Discover R2 framework.
+
+- front: "Onboard weather radar (Bendix-King RDR etc.): what does it show and what does it miss?"
+  back: |
+    Shows precipitation intensity along its line of sight. Misses turbulence
+    (dry hailshaft or clear-air microburst are invisible). Attenuates -- the
+    first heavy cell reflects so much energy that whatever's behind appears
+    as a low-return "shadow"; pilots have flown into the shadow expecting
+    clear air and found a second equally severe cell. It's a real-time
+    sensor but it's *not* a turbulence sensor.
+  cardType: basic
+  kind: recall
+  tags: [weather, limitations, onboard-radar, attenuation, ac-00-63a, PA.I.C.R2a]
+  source_ref: |
+    AC 00-63A; body Discover R2a.
+
+- front: "ADS-B FIS-B coverage gaps -- where does the data drop?"
+  back: |
+    FIS-B is ground-uplinked and requires line of sight to a ground station.
+    Coverage drops below ~5,000 ft AGL (line-of-sight problem) and
+    disappears in mountain shadows. The product list is correct when
+    received; "not displayed" can be either "not happening" or "no signal,"
+    which the cockpit can't always distinguish.
+  cardType: basic
+  kind: recall
+  tags: [weather, limitations, fis-b, ads-b, ac-00-63a, PA.I.C.R2c]
+  source_ref: |
+    AC 00-63A; body Discover R2a.
+
+- front: "Lightning detection (Stormscope, FIS-B lightning) -- what does it show and what does it miss?"
+  back: |
+    Shows electrical activity. Misses non-electrical phenomena -- a heavy
+    snow shower or rain shaft without lightning is invisible to the
+    Stormscope. Its real-time strength is the inverse of NEXRAD's weakness:
+    lightning maps the cell's location now (free of radar age), but says
+    nothing about precipitation in non-electrical convection.
+  cardType: basic
+  kind: recall
+  tags: [weather, limitations, stormscope, lightning, PA.I.C.R2a]
+  source_ref: |
+    Body Discover R2a.
+
+- front: "Why is a METAR a point observation and what does that imply for surrounding airspace?"
+  back: |
+    A METAR reports what's happening at the sensor location. The surrounding
+    airspace can vary widely -- especially in convective or terrain-affected
+    regimes. The METAR may report clear when scattered cells are 5 NM away,
+    or report OVC when a single hole sits over the sensor. Treat the METAR
+    as the truth at one location, not a 25-NM-radius snapshot.
+  cardType: basic
+  kind: recall
+  tags: [weather, limitations, metar, ac-00-63a, PA.I.C.R2b]
+  source_ref: |
+    AC 00-63A; body Discover R2b.
+
+- front: "TAF confidence horizon and what PROB groups encode about it."
+  back: |
+    TAFs are issued for a 5 NM radius around the airport for 24-30 hours.
+    Confidence drops sharply with horizon -- a TAF good at +3 hours is
+    much less reliable at +18. PROB30 / PROB40 groups encode the
+    forecaster's *own* uncertainty: 30-40 percent probability of the
+    listed conditions. PROB never appears above 40 percent (50 percent
+    upgrades to TEMPO).
+  cardType: basic
+  kind: recall
+  tags: [weather, limitations, taf, prob, PA.I.C.R2b]
+  source_ref: |
+    AC 00-45H TAF; body Discover R2b.
+
+- front: "AIRMET / SIGMET polygons -- what's the smoothing problem and what buffer should you assume?"
+  back: |
+    AIRMET / SIGMET areas are smoothed polygons drawn around forecast
+    hazardous conditions. Real boundaries are fuzzy and shift; expect
+    conditions inside the polygon *and at least 25 NM beyond it*. The
+    polygon is the planning shape, not a sharp edge. Treating the edge
+    as a clean boundary is one of the canonical R2b failure patterns.
+  cardType: basic
+  kind: recall
+  tags: [weather, limitations, airmet, sigmet, polygon, PA.I.C.R2b]
+  source_ref: |
+    AC 00-45H; body Discover R2b.
+
+- front: "Wind aloft forecast (FB) error in dynamic atmospheres -- how much divergence?"
+  back: |
+    FB is model output, typically 12-hour old at issue. In dynamic
+    atmospheres -- frontal passage, mountain wave, jet shifts -- actual
+    wind diverges from forecast by 30-40 KT. The smooth, calm-day forecast
+    is reliable; the messy frontal-day forecast needs in-flight verification
+    (groundspeed vs. TAS, PIREPs) and re-planning if it drifts.
+  cardType: basic
+  kind: recall
+  tags: [weather, limitations, winds-aloft, fb, PA.I.C.R2b]
+  source_ref: |
+    AC 00-45H FB; body Discover R2b.
+
+- front: "Why are ATC ride reports an unreliable substitute for PIREPs at your altitude?"
+  back: |
+    Ride reports are sparse and reporter-biased. "Smooth at 80" reported by
+    a 757 means nothing for a Cessna 150 at the same altitude -- a heavy
+    aircraft's "smooth" is a light aircraft's "light chop." Use ride reports
+    for trend signal, not absolute value, and never replace a PIREP at
+    your category with a transport ride report.
+  cardType: basic
+  kind: recall
+  tags: [weather, limitations, ride-reports, pirep, atc, PA.I.C.R2c]
+  source_ref: |
+    Body Discover R2c.
+
+- front: "Operational rule: minimum stand-off distance from a cockpit-displayed NEXRAD echo for thunderstorm avoidance, and why is it larger than the visual rule?"
+  back: |
+    20 NM from any cockpit-displayed echo (vs. 5 NM with visual or onboard-
+    radar separation). The 20 NM number explicitly accounts for NEXRAD age:
+    a cell moving at 30 KT for 12 minutes has moved 6 NM since the displayed
+    picture; 20 NM keeps the buffer even after that drift. The 5 NM rule
+    relies on a real-time sensor (eyes or onboard radar) -- not the
+    datalink picture.
+  cardType: regulation
+  kind: recall
+  tags: [weather, limitations, nexrad, thunderstorm, 20nm, PA.I.C.R2c]
+  source_ref: |
+    NTSB SA-017 In-Cockpit NEXRAD Mosaic Imagery; AC 00-63A; body Reveal.
+
+- front: "For a forecast of widely scattered afternoon convection, what's the dominant limitation to pre-name in the brief?"
+  back: |
+    NEXRAD latency in the cockpit. The forecast itself (Convective SIGMET,
+    GFA, Day-1 outlook) is reliable as a strategic input -- you know
+    convection is coming. The tactical question (which specific gap to fly
+    through right now) is what NEXRAD's 10-15 minute age can't answer.
+    Pre-naming this limitation forces the brief to include a divert
+    pre-decision and a minimum stand-off rule before the flight launches.
+  cardType: basic
+  kind: recall
+  tags: [weather, limitations, nexrad, convection, briefing, PA.I.C.R2c]
+  source_ref: |
+    Body Practice + Verify ("convection forecast over the mountains").
+  rationale: |
+    Scenario card from the body's Verify drill. The pre-naming habit is the
+    body's operational deliverable; this card forces the learner to articulate
+    it for the canonical convection case.
+```
+
 ## Connect
 
 R2 in the ACS asks specifically about these three families of
