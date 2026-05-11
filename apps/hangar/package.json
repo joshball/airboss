@@ -20,6 +20,7 @@
 		"@ab/sources": "workspace:*",
 		"@ab/themes": "workspace:*",
 		"@ab/ui": "workspace:*",
-		"@ab/utils": "workspace:*"
+		"@ab/utils": "workspace:*",
+		"yaml": "^2.8.3"
 	}
 }

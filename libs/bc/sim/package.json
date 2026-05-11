@@ -21,6 +21,7 @@
 		"@ab/auth": "workspace:*",
 		"@ab/constants": "workspace:*",
 		"@ab/db": "workspace:*",
-		"@ab/utils": "workspace:*"
+		"@ab/utils": "workspace:*",
+		"drizzle-orm": "^0.44.2"
 	}
 }
