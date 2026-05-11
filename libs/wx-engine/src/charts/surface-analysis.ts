@@ -19,8 +19,8 @@
  * shape that matches the bundle writer's expectations.
  */
 
-import type { TruthModel } from '../truth/types';
 import type { DerivedMetar } from '../products/types';
+import type { TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
 
 type SkyCover = 'CLR' | 'FEW' | 'SCT' | 'BKN' | 'OVC';

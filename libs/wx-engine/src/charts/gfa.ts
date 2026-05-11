@@ -26,8 +26,8 @@
  */
 
 import { AIRMET_FAMILIES } from '@ab/constants';
-import type { AirMass, TruthModel } from '../truth/types';
 import type { AirmetAdvisory, DerivedTaf } from '../products/types';
+import type { AirMass, TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
 
 const KM_PER_DEG_LAT = 111;

@@ -12,8 +12,8 @@
  * `spikes/wx-engine/src/charts/product-charts.ts` (PR #801).
  */
 
-import type { TruthModel } from '../truth/types';
 import type { DerivedPirep } from '../products/types';
+import type { TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
 
 export function derivePirepPlotChart(truth: TruthModel, pireps: DerivedPirep[], scenarioId: string): ChartArtifact {

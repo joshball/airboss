@@ -19,30 +19,6 @@
  */
 
 // ----------------------------------------------------------------------
-// Engine entrypoint + bundle writer. Phase B: products wired in. Phase C:
-// charts wired in.
-// ----------------------------------------------------------------------
-export {
-	generateScenario,
-	type ScenarioBundle,
-	type ScenarioCharts,
-	type ScenarioCommentary,
-	type ScenarioProducts,
-	type ScenarioRunOptions,
-	type ScenarioSeed,
-	writeScenarioBundle,
-} from './engine';
-// ----------------------------------------------------------------------
-// Phase D: layer-4 Socratic commentary derivation + knowledge-node resolver.
-// ----------------------------------------------------------------------
-export {
-	type KnowledgeNodeValidationReport,
-	resolveKnowledgeNodeId,
-	validateAllKnowledgeNodes,
-} from './commentary/knowledge-link';
-export { type DeriveCommentaryProducts, deriveCommentary } from './commentary/socratic';
-export type { CommentaryCallout, CommentaryCalloutTarget, CommentaryMode } from './commentary/types';
-// ----------------------------------------------------------------------
 // Phase C: layer-3 chart-spec derivations + the orchestrator.
 // ----------------------------------------------------------------------
 export { deriveAdvisoryOverlayChart } from './charts/advisory-overlay';
@@ -60,6 +36,30 @@ export { deriveSurfaceAnalysisChart } from './charts/surface-analysis';
 export { deriveTafTimelineChart } from './charts/taf-timeline';
 export type { ChartArtifact, ChartArtifactSource } from './charts/types';
 export { deriveWindsAloftChart } from './charts/winds-aloft';
+// ----------------------------------------------------------------------
+// Phase D: layer-4 Socratic commentary derivation + knowledge-node resolver.
+// ----------------------------------------------------------------------
+export {
+	type KnowledgeNodeValidationReport,
+	resolveKnowledgeNodeId,
+	validateAllKnowledgeNodes,
+} from './commentary/knowledge-link';
+export { type DeriveCommentaryProducts, deriveCommentary } from './commentary/socratic';
+export type { CommentaryCallout, CommentaryCalloutTarget, CommentaryMode } from './commentary/types';
+// ----------------------------------------------------------------------
+// Engine entrypoint + bundle writer. Phase B: products wired in. Phase C:
+// charts wired in.
+// ----------------------------------------------------------------------
+export {
+	generateScenario,
+	type ScenarioBundle,
+	type ScenarioCharts,
+	type ScenarioCommentary,
+	type ScenarioProducts,
+	type ScenarioRunOptions,
+	type ScenarioSeed,
+	writeScenarioBundle,
+} from './engine';
 // ----------------------------------------------------------------------
 // Layer-2 product derivations. Pure functions of TruthModel + opts.
 // ----------------------------------------------------------------------

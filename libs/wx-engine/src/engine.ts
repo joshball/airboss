@@ -261,12 +261,7 @@ export async function writeScenarioBundle(bundle: ScenarioBundle, options: Scena
 	if (products.fbGrid !== null) {
 		ensureDir(fs, productsOut);
 		writeFile(fs, path, path.resolve(productsOut, 'fb-bulletin.txt'), products.fbGrid.raw);
-		writeFile(
-			fs,
-			path,
-			path.resolve(productsOut, 'fb-bulletin.json'),
-			JSON.stringify(products.fbGrid.parsed, null, 2),
-		);
+		writeFile(fs, path, path.resolve(productsOut, 'fb-bulletin.json'), JSON.stringify(products.fbGrid.parsed, null, 2));
 	}
 
 	if (products.pireps.length > 0) {

@@ -14,8 +14,8 @@
  * `spikes/wx-engine/src/charts/product-charts.ts` (PR #801).
  */
 
-import type { TruthModel } from '../truth/types';
 import type { DerivedTaf } from '../products/types';
+import type { TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
 
 export function deriveTafTimelineChart(

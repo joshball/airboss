@@ -35,8 +35,8 @@
  * `truth.fbStations` -- a 4-line change.
  */
 
-import type { TruthModel } from '../truth/types';
 import type { AirmetAdvisory, DerivedFbGrid, DerivedMetar, DerivedPirep, DerivedTaf } from '../products/types';
+import type { TruthModel } from '../truth/types';
 import { deriveAdvisoryOverlayChart } from './advisory-overlay';
 import { deriveConvectiveOutlookChart } from './convective-outlook';
 import { deriveCvaChart } from './cva';

@@ -17,8 +17,8 @@
  * `spikes/wx-engine/src/charts/airmet-overlay.ts` (PR #801 -- now retired).
  */
 
-import type { TruthModel } from '../truth/types';
 import type { AirmetAdvisory } from '../products/types';
+import type { TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
 
 export function deriveAdvisoryOverlayChart(

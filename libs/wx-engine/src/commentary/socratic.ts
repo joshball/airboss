@@ -33,10 +33,10 @@
  *     "Layer 4 derivation: commentary"
  */
 
-import { AIRMET_FAMILIES, type AirmetFamily } from '@ab/constants';
+import { AIRMET_FAMILIES } from '@ab/constants';
 import type { ChartArtifact } from '../charts/types';
-import type { AirmetAdvisory, DerivedMetar, DerivedPirep, DerivedTaf, DerivedFbGrid } from '../products/types';
-import { distanceKm, distanceToPolylineKm, findAirMass, pointInPolygon, sideOfFront } from '../truth/geometry';
+import type { AirmetAdvisory, DerivedFbGrid, DerivedMetar, DerivedPirep, DerivedTaf } from '../products/types';
+import { distanceToPolylineKm, findAirMass, pointInPolygon, sideOfFront } from '../truth/geometry';
 import type { AirMass, ConvectiveCell, HazardZone, TruthModel } from '../truth/types';
 import type { CommentaryCallout } from './types';
 
@@ -200,7 +200,8 @@ export function deriveCommentary(
 				id: `wxc-${scenarioId}-isobar-gradient`,
 				target: { kind: 'chart-feature', chartSlug: surfaceChart.slug, elementId: 'isobar-pack' },
 				mode: 'glance',
-				question: 'Where are the isobars packed tightest on the surface analysis, and what does that tell you about wind speed?',
+				question:
+					'Where are the isobars packed tightest on the surface analysis, and what does that tell you about wind speed?',
 				observation: `Count the isobars between ${lowRef.id} (${lowRef.centralPressureMb}mb) and ${highRef.id} (${highRef.centralPressureMb}mb) -- a ${deltaMb}mb delta across the synoptic frame.`,
 				reason: `Tight isobars equal a steep pressure gradient equal strong wind. The ${deltaMb}mb spread between ${lowRef.id} and ${highRef.id} is bridged across the cold-sector envelope; isobars compress where the deepening low draws air toward its center while the high pushes air outward. Surface friction veers the wind ~30deg right of the gradient direction; that's why the post-frontal stations report NW winds rather than pure W.`,
 				knowledgeNodeIds: ['wx-wind-systems', 'wx-chart-type-surface-analysis', 'wx-product-surface-analysis-and-cva'],
@@ -219,7 +220,8 @@ export function deriveCommentary(
 	const matchedPirep = matchPirepToAirmet(products.pireps, products.airmets, truth.hazardZones);
 	if (matchedPirep !== null && pirepChart !== null) {
 		const { pirep, airmet, hz } = matchedPirep;
-		const family = airmet.kind === AIRMET_FAMILIES.SIERRA ? 'Sierra' : airmet.kind === AIRMET_FAMILIES.TANGO ? 'Tango' : 'Zulu';
+		const family =
+			airmet.kind === AIRMET_FAMILIES.SIERRA ? 'Sierra' : airmet.kind === AIRMET_FAMILIES.TANGO ? 'Tango' : 'Zulu';
 		callouts.push({
 			id: `wxc-${scenarioId}-pirep-corroboration-${pirep.parsed.station}`,
 			target: { kind: 'pirep', chartSlug: pirepChart.slug, elementId: pirep.parsed.station },
@@ -238,13 +240,15 @@ export function deriveCommentary(
 			jetAxis.length >= 2
 				? `from ${formatLonLat(jetAxis[0])} to ${formatLonLat(jetAxis[jetAxis.length - 1])}`
 				: 'across the upper-level chart';
+		const coldSectorTag = coldSector !== null ? `${coldSector.classification} cold sector` : 'cold sector';
+		const lowTag = parentLow !== null ? `${parentLow.id} (${parentLow.centralPressureMb}mb)` : 'the parent low';
 		callouts.push({
 			id: `wxc-${scenarioId}-jet-exit`,
 			target: { kind: 'fb-row', chartSlug: windsAloftChart.slug, elementId: 'jet-max-fl' },
 			mode: 'socratic',
 			question: `Where is the jet axis on the winds-aloft chart, and what does the exit region predict about turbulence at FL240+?`,
 			observation: `Jet maximum: ${truth.upperLevel.jetMaxKt} kt aloft, axis running ${axisDescription}.`,
-			reason: `The ${truth.upperLevel.jetMaxKt}-kt jet axis (${axisDescription}) feeds an exit region where ageostrophic flow descends and accelerates on the cold side -- classic clear-air turbulence. On the cold-sector side of the jet exit, the post-frontal pressure rise reinforces the descent; expect chop concentrated in the FL180-FL280 band aligned with the axis.`,
+			reason: `The ${truth.upperLevel.jetMaxKt}-kt jet axis (${axisDescription}) feeds an exit region where ageostrophic flow descends and accelerates on the cold side -- classic clear-air turbulence. On the ${coldSectorTag} side of the jet exit, the post-frontal pressure rise downstream of ${lowTag} reinforces the descent; expect chop concentrated in the FL180-FL280 band aligned with the axis.`,
 			knowledgeNodeIds: ['wx-product-winds-aloft', 'wx-turbulence-types'],
 		});
 	}
@@ -255,7 +259,8 @@ export function deriveCommentary(
 			id: `wxc-${scenarioId}-diurnal-inversion`,
 			target: { kind: 'chart-feature', chartSlug: surfaceChart.slug, elementId: 'nocturnal-inversion' },
 			mode: 'socratic',
-			question: 'How does the nocturnal inversion shape this morning\'s ceiling-and-visibility recovery -- when does the LIFR layer lift?',
+			question:
+				"How does the nocturnal inversion shape this morning's ceiling-and-visibility recovery -- when does the LIFR layer lift?",
 			observation: `Mixing height at validAt: ${truth.diurnal.mixingHeightFtMsl} ft MSL; solar noon at ${truth.diurnal.solarNoonUtcHour}Z.`,
 			reason: `The radiation-cooling cycle traps moisture beneath the inversion overnight; visibility crashes as the surface air saturates. As the sun lifts past ${truth.diurnal.solarNoonUtcHour}Z, surface heating burns the inversion off and mixing height climbs through the trapped layer. The LIFR-to-VFR transition happens when the mixing height exceeds the inversion top -- usually 2-4 hours after sunrise depending on cloud cover and wind. Plan departure for after that transition, not before.`,
 			knowledgeNodeIds: ['wx-fog-and-visibility-obstructions', 'wx-stability-and-instability'],
@@ -269,12 +274,18 @@ export function deriveCommentary(
 // Family-specific AIRMET callout authoring
 // ----------------------------------------------------------------------
 
-function airmetCallout(scenarioId: string, airmet: AirmetAdvisory, hz: HazardZone, chartSlug: string): CommentaryCallout {
+function airmetCallout(
+	scenarioId: string,
+	airmet: AirmetAdvisory,
+	hz: HazardZone,
+	chartSlug: string,
+): CommentaryCallout {
 	const minK = hz.altitudeBandFtMsl.min;
 	const maxK = hz.altitudeBandFtMsl.max ?? null;
 	const altBand = maxK === null ? `from ${minK}ft and above` : `from ${minK}ft to ${maxK}ft MSL`;
 	const severity = hz.severity;
-	const familyTag = airmet.kind === AIRMET_FAMILIES.SIERRA ? 'Sierra' : airmet.kind === AIRMET_FAMILIES.TANGO ? 'Tango' : 'Zulu';
+	const familyTag =
+		airmet.kind === AIRMET_FAMILIES.SIERRA ? 'Sierra' : airmet.kind === AIRMET_FAMILIES.TANGO ? 'Tango' : 'Zulu';
 
 	if (airmet.kind === AIRMET_FAMILIES.SIERRA) {
 		return {
@@ -408,4 +419,3 @@ function formatLonLat(pt: [number, number] | undefined): string {
 	const latHemi = pt[1] >= 0 ? 'N' : 'S';
 	return `${latAbs}${latHemi}/${lonAbs}${lonHemi}`;
 }
-
