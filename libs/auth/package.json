@@ -16,6 +16,7 @@
 	"dependencies": {
 		"@ab/constants": "workspace:*",
 		"@ab/db": "workspace:*",
-		"@ab/utils": "workspace:*"
+		"@ab/utils": "workspace:*",
+		"resend": "^6.9.4"
 	}
 }

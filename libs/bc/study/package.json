@@ -34,6 +34,7 @@
 		"@ab/db": "workspace:*",
 		"@ab/sources": "workspace:*",
 		"@ab/types": "workspace:*",
-		"@ab/utils": "workspace:*"
+		"@ab/utils": "workspace:*",
+		"ts-fsrs": "^5.3.2"
 	}
 }

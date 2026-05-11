@@ -17,6 +17,7 @@
 		"@ab/aviation": "workspace:*",
 		"@ab/constants": "workspace:*",
 		"@ab/ui": "workspace:*",
-		"@ab/utils": "workspace:*"
+		"@ab/utils": "workspace:*",
+		"shiki": "^4.0.2"
 	}
 }

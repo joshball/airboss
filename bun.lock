@@ -7,10 +7,6 @@
       "dependencies": {
         "@better-auth/drizzle-adapter": "^1.5.6",
         "better-auth": "^1.5.6",
-        "resend": "^6.9.4",
-        "shiki": "^4.0.2",
-        "ts-fsrs": "^5.3.2",
-        "ulidx": "^2.4.1",
       },
       "devDependencies": {
         "@biomejs/biome": "^2.4.7",
@@ -32,7 +28,6 @@
         "drizzle-kit": "^0.31.4",
         "drizzle-orm": "^0.44.2",
         "happy-dom": "^20.9.0",
-        "postgres": "^3.4.7",
         "svelte": "^5.34.7",
         "svelte-check": "^4.2.1",
         "typescript": "^5.9.3",
@@ -147,6 +142,7 @@
         "@ab/constants": "workspace:*",
         "@ab/db": "workspace:*",
         "@ab/utils": "workspace:*",
+        "resend": "^6.9.4",
       },
     },
     "libs/aviation": {
@@ -209,6 +205,7 @@
         "@ab/sources": "workspace:*",
         "@ab/types": "workspace:*",
         "@ab/utils": "workspace:*",
+        "ts-fsrs": "^5.3.2",
       },
     },
     "libs/constants": {
@@ -219,6 +216,7 @@
       "dependencies": {
         "@ab/constants": "workspace:*",
         "@ab/utils": "workspace:*",
+        "postgres": "^3.4.7",
       },
     },
     "libs/hangar-jobs": {
@@ -250,6 +248,7 @@
         "@ab/constants": "workspace:*",
         "@ab/ui": "workspace:*",
         "@ab/utils": "workspace:*",
+        "shiki": "^4.0.2",
       },
     },
     "libs/library": {
@@ -293,6 +292,7 @@
       "name": "@ab/utils",
       "dependencies": {
         "@ab/constants": "workspace:*",
+        "ulidx": "^2.4.1",
       },
     },
     "libs/wx-charts": {
