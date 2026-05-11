@@ -176,6 +176,14 @@ export const GLOSSARY_ENTRIES: ReadonlyArray<GlossaryEntry> = [
 		longRef: 'glossary-drawer.md',
 		related: ['explainer', 'ia'],
 	},
+	{
+		key: 'surface-analysis-chart',
+		term: 'Surface analysis chart',
+		short:
+			'Hand-drawn synoptic map of surface pressure, fronts, and station observations. Issued every 3 hours by the Weather Prediction Center.',
+		longRef: 'surface-analysis-chart.md',
+		related: ['knowledge-node'],
+	},
 ];
 
 /** Index keyed by `entry.key` for O(1) lookup. */
