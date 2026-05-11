@@ -140,6 +140,157 @@ front. If yes, build a timeline: when does the front cross the
 airport? What conditions before, during, after? Match to the table
 above.
 
+### Cards (spaced repetition)
+
+Cards mined from the body. The airmass-source-region cards build the
+character vocabulary; the per-front tables train the pre/passage/post
+sequence; scenario cards force the chart-into-story reading the body
+emphasises.
+
+```yaml-cards
+- front: "Air mass source region: Continental Polar (cP). Where does it form and what character does it bring?"
+  back: |
+    Sourced from the Canadian interior. Cold and dry. Brings clear, cold,
+    stable air with shallow visibility reductions from haze or fog. The
+    "stable + dry" pair means smooth air and limited convection -- the cP
+    airmass after a cold-front passage is the classic post-front clear
+    cool window.
+  cardType: basic
+  kind: recall
+  tags: [weather, airmasses, source-regions, phak-12, ac-00-6, PA.I.C.K3e]
+  source_ref: |
+    AC 00-6B, Air Masses and Fronts; PHAK Ch 12 Weather Theory; body Discover.
+
+- front: "Air mass source region: Maritime Tropical (mT). Where does it form and what aviation hazards follow?"
+  back: |
+    Sourced from the Gulf of Mexico / Atlantic / Pacific tropics. Warm and
+    very moist. Brings convective potential when lifted (thunderstorms when
+    a front or terrain provides the trigger), heavy precipitation, and low
+    cloud bases. The summer southeast US sits in mT for months; the
+    convective-outlook problem is the mT story.
+  cardType: basic
+  kind: recall
+  tags: [weather, airmasses, source-regions, convection, phak-12, ac-00-6, PA.I.C.K3e]
+  source_ref: |
+    AC 00-6B; PHAK Ch 12; body Discover (mT).
+
+- front: "Distinguish Continental Tropical (cT) from Maritime Tropical (mT) airmass character."
+  back: |
+    Both are warm; the difference is moisture. cT sources from northern
+    Mexico / desert SW -- hot and dry, brings clear skies, dust, severe
+    density-altitude problems but little convective precipitation. mT sources
+    from the Gulf / tropics -- warm and very moist, brings convection and
+    heavy rain when lifted. cT + cP airmass cool front in summer = relief
+    from heat without storms; mT + cP collision = the classic summer
+    squall-line set-up.
+  cardType: basic
+  kind: recall
+  tags: [weather, airmasses, source-regions, density-altitude, phak-12, ac-00-6, PA.I.C.K3e]
+  source_ref: |
+    AC 00-6B; PHAK Ch 12; body Discover (cT vs mT).
+
+- front: "Maritime Polar (mP) airmass: source region and typical cloud and precipitation signature?"
+  back: |
+    Sourced from the North Atlantic / Pacific. Cool and moist. Brings
+    stratocumulus, low ceilings, drizzle. The mP airmass is the marine-layer
+    story -- the West Coast morning low overcast and the New England coastal
+    fog are both mP in residence.
+  cardType: basic
+  kind: recall
+  tags: [weather, airmasses, source-regions, marine-layer, phak-12, ac-00-6, PA.I.C.K3e]
+  source_ref: |
+    AC 00-6B; PHAK Ch 12; body Discover (mP).
+
+- front: "Cold front: symbol, frontal slope, and weather signature?"
+  back: |
+    Blue triangles pointing in the direction of motion. Cold air pushes
+    under warm air -- steep frontal slope, vigorous lifting, often a narrow
+    band of intense weather (a squall line) along or just ahead of the front.
+    Cold-front weather is intense and brief; the front passes quickly. Behind
+    the front: cooler, drier air, often clearing within hours.
+  cardType: basic
+  kind: recall
+  tags: [weather, fronts, cold-front, phak-12, ac-00-6, PA.I.C.K3e]
+  source_ref: |
+    AC 00-6B Air Masses and Fronts; PHAK Ch 12; body Discover (cold front).
+
+- front: "Warm front: symbol, frontal slope, and weather signature?"
+  back: |
+    Red half-circles pointing in the direction of motion. Warm air overruns
+    cold air -- shallow frontal slope, gradual stratiform lift, broad band
+    of stratiform clouds and continuous precipitation ahead of the surface
+    front for hundreds of miles. Behind: warmer, more humid. Warm-front
+    weather is mild but extensive -- a long IFR approach, not a brief
+    squall.
+  cardType: basic
+  kind: recall
+  tags: [weather, fronts, warm-front, phak-12, ac-00-6, PA.I.C.K3e]
+  source_ref: |
+    AC 00-6B; PHAK Ch 12; body Discover (warm front).
+
+- front: "Cloud sequence ahead of an approaching warm front?"
+  back: |
+    Cirrus (Ci) -> Cirrostratus (Cs) -> Altostratus (As) -> Nimbostratus
+    (Ns). The thickening / lowering progression as the warm air slides up
+    the shallow frontal slope. The Ci is the earliest warning -- often a
+    day or more ahead of the surface front. By Ns you're in steady
+    precipitation under a low ceiling.
+  cardType: basic
+  kind: recall
+  tags: [weather, fronts, warm-front, clouds, phak-12, ac-00-6, PA.I.C.K3e]
+  source_ref: |
+    PHAK Ch 12; body Reveal warm-front pre/post table.
+
+- front: "Pre / passage / post of a cold front -- what does pressure, wind, and weather do at each phase?"
+  back: |
+    Pre: cumulus / TCu / CB clouds, showers and possibly thunderstorms,
+    veering and gusty wind, falling pressure.
+    Passage: CB / squall line, heavy brief precipitation, rapid wind shift,
+    pressure reaches its minimum then begins rising.
+    Post: stratocumulus then clearing, tapering showers, steady cool wind,
+    rising pressure.
+    The pressure trace is the pilot's clock: minimum at passage, rising
+    behind = the front has gone.
+  cardType: basic
+  kind: recall
+  tags: [weather, fronts, cold-front, pressure, phak-12, ac-00-6, PA.I.C.K3e]
+  source_ref: |
+    AC 00-6B; PHAK Ch 12; body Reveal cold-front table.
+
+- front: "Stationary front -- why does it matter to the synoptic picture even though it's 'stationary'?"
+  back: |
+    Alternating red and blue symbols. The airmasses on either side are
+    essentially balanced; weather sits on both sides and clears slowly. The
+    stationary front is often the seed of a developing wave cyclone -- a low
+    forms along it, and the front breaks back into a cold and warm front
+    rotating around the new low. A stationary front in the planning area
+    is "watch for a developing low," not "stable."
+  cardType: basic
+  kind: recall
+  tags: [weather, fronts, stationary-front, cyclogenesis, ac-00-6, faa-h-8083-28, PA.I.C.K3e]
+  source_ref: |
+    AC 00-6B; FAA-H-8083-28 Ch 11; body Discover (stationary front).
+
+- front: "Surface analysis shows a cold front through your destination at ETA. Why is 'cold front' alone not enough to make the go decision?"
+  back: |
+    Same chart symbol, totally different decision depending on season and
+    airmasses. A late-summer Pacific cold front produces a 30-minute squall
+    line and clears beautifully behind. A late-winter Arctic cold front
+    produces a day of low ceilings, snow showers, and blowing dust. The
+    pilot question is: what's on each side (mT or cT or cP)? What season?
+    What's the speed of the front (squall vs. drizzle)? The symbol is the
+    headline; the airmass collision is the story.
+  cardType: basic
+  kind: recall
+  tags: [weather, fronts, go-nogo, airmasses, phak-12, ac-00-6, PA.I.C.K3e]
+  source_ref: |
+    Body Context scenario.
+  rationale: |
+    Scenario card from the body's Context. Trains the reframing the body
+    teaches: the chart symbol is necessary but not sufficient -- the
+    airmass identity drives the decision.
+```
+
 ## Connect
 
 This node parents almost every weather-route decision. The clouds and

@@ -136,6 +136,164 @@ the briefed weather meet your floor at every leg, with margin for
 forecast deterioration? If yes, go. If marginal, identify the
 specific concern and the trigger that would make you turn around.
 
+### Cards (spaced repetition)
+
+Cards mined from the body. Why-minimums-exist cards lock the rationale;
+the table-shape card builds the structure; the three operating rules
+are the discipline; the scenario card walks the trip-pressure case.
+
+```yaml-cards
+- front: "Personal minimums vs. legal minimums -- what's the difference and why does it matter?"
+  back: |
+    Legal minimums are the regulatory floor for any pilot. Personal minimums
+    are the pre-committed numerical floor a specific pilot adopts to remove
+    the moment-of-decision negotiation. The mismatch is biggest where it
+    matters most: at low experience, with passenger / schedule / destination
+    pressure pushing the call toward 'go.' Legal sets the boundary the
+    aircraft can be flown across; personal sets the boundary *this* pilot
+    is willing to fly across today.
+  cardType: basic
+  kind: recall
+  tags: [weather, personal-minimums, regulation, faa-h-8083-2, PA.I.C.R1b]
+  source_ref: |
+    FAA-H-8083-2 Risk Management Handbook; body Problem.
+
+- front: "Three forcing functions that make personal minimums necessary?"
+  back: |
+    1. Skill decays. The pilot who flew 14 KT crosswinds yesterday is not
+       necessarily the pilot who can fly 14 KT crosswinds today. Currency
+       gates are personal, not just regulatory.
+    2. Stress narrows attention. With passengers, fatigue, or get-there-itis,
+       effective performance is below peak; the peak-performance minimums
+       are wrong for the moment.
+    3. Workload varies. 1,500 broken / 6 SM at an unfamiliar destination
+       with terrain on three sides is not the same workload as 1,500
+       broken / 6 SM at a familiar field.
+  cardType: basic
+  kind: recall
+  tags: [weather, personal-minimums, judgment, faa-h-8083-2, PA.I.C.R1b]
+  source_ref: |
+    FAA-H-8083-2; body Discover.
+
+- front: "Shape of a personal-minimums table per FAA P-8740-25 -- what variables and what columns?"
+  back: |
+    Rows: ceiling (day), visibility, crosswind, wind/gusts, ceiling (night),
+    visibility (night). Columns: Solo / VFR -> With passengers -> Mountainous
+    or unfamiliar. Numbers go up (more margin) as columns move right;
+    crosswind numbers go down (less tolerance). The values are illustrative
+    -- yours depend on hours, recency, aircraft, terrain. The discipline is
+    in the *existence* of a written floor, not its specific value.
+  cardType: basic
+  kind: recall
+  tags: [weather, personal-minimums, table, faa-p-8740-25, PA.I.C.R1b]
+  source_ref: |
+    FAA Pamphlet P-8740-25; body Reveal.
+
+- front: "Risk multipliers -- what factors add margin, what factors subtract?"
+  back: |
+    Add margin for: night, mountainous terrain, unfamiliar field, marginal
+    currency, fatigue, passengers, time pressure.
+    Subtract margin for: very familiar field, day, recent currency in
+    similar conditions, no schedule pressure, light load.
+    A flight that picks up two 'add margin' factors (night + passengers +
+    unfamiliar) needs floors well above the base table.
+  cardType: basic
+  kind: recall
+  tags: [weather, personal-minimums, risk-multipliers, faa-h-8083-2, PA.I.C.R1b]
+  source_ref: |
+    FAA-H-8083-2; body Reveal.
+
+- front: "Three rules of operation for personal minimums."
+  back: |
+    1. The minimums are written down and set when you are NOT under
+       decision pressure.
+    2. Once a flight starts trending below your minimums, it is over.
+       Divert, land, wait. Minimums don't move just because you're in
+       motion.
+    3. Recalibrate on a fixed cadence (annually, after every IPC, after
+       every 100 hours) -- not after every borderline trip.
+  cardType: basic
+  kind: recall
+  tags: [weather, personal-minimums, discipline, judgment, PA.I.C.R1b]
+  source_ref: |
+    Body Reveal "three rules of operation."
+
+- front: "Why must personal minimums be written down and set when NOT under decision pressure?"
+  back: |
+    Set under pressure, the number you 'choose' is whatever number makes
+    the pressure go away -- which is whatever number you can argue past in
+    the moment. Set in advance, written down, taped inside the flight bag,
+    the number is a commitment to your earlier, unpressured self. The
+    pre-commitment is what makes the floor real; the writing-down is
+    what makes the pre-commitment exist.
+  cardType: basic
+  kind: recall
+  tags: [weather, personal-minimums, pre-commitment, judgment, PA.I.C.R1b]
+  source_ref: |
+    Body Reveal rule 1.
+
+- front: "When a flight in motion starts trending below your minimums, what does the body say to do?"
+  back: |
+    Divert, land, wait. The minimums don't move because you're in motion.
+    Rule 2 of the three operating rules: 'once a flight starts trending
+    below your minimums, it is over.' The discipline is treating the
+    written number as a hard ceiling that becomes more important once
+    fatigue and trip-pressure are pressing on the cockpit, not less.
+  cardType: basic
+  kind: recall
+  tags: [weather, personal-minimums, divert, in-flight, judgment, PA.I.C.R1b]
+  source_ref: |
+    Body Reveal rule 2.
+
+- front: "200-hour PPL flying spouse and in-laws home 90 min after sunset. METAR: 1500 broken, 6 SM, wind 18G25 at 60 off the runway. All legal. What's the question to ask?"
+  back: |
+    The question isn't 'is it legal?' -- the brief already shows it is.
+    The question is whether the weather is within the floor you set when
+    you weren't being judged by your in-laws. Night ceiling, crosswind
+    component, and gust factor all interact -- multiple 'add margin' factors
+    (night, passengers, unfamiliar, gusts at 60 degrees) compound. The
+    pre-committed number is what survives the moment when the family is
+    waiting at the airplane.
+  cardType: basic
+  kind: recall
+  tags: [weather, personal-minimums, scenario, trip-pressure, PA.I.C.R1b]
+  source_ref: |
+    Body Context scenario.
+  rationale: |
+    Scenario card from the body's Context. Trains the reframing the body
+    teaches: the question is not legality, it's adherence to the written floor.
+
+- front: "How do you calibrate whether your personal minimums are defensible?"
+  back: |
+    Show your written minimums to another instructor and ask: 'are these
+    floors defensible for my experience level?' Adjust based on the answer.
+    The minimums you can defend to a peer are the minimums you can defend
+    to yourself in the moment. The peer-review step is what catches the
+    'I'd accept that for me' rationalisation that doesn't survive an
+    outsider's read of your hours and recency.
+  cardType: basic
+  kind: recall
+  tags: [weather, personal-minimums, peer-review, calibration, PA.I.C.R1b]
+  source_ref: |
+    Body Verify.
+
+- front: "How do personal minimums interact with the go/no-go decision?"
+  back: |
+    Personal minimums are the numerical floor the go/no-go framework
+    measures against -- the threshold the hazard / trend inputs are
+    compared to. The go/no-go framework names the hazard or trend; the
+    personal-minimums table says whether that hazard's level is above or
+    below your floor. Both must align: a hazard within minimums + a
+    framework decision to go = defensible; a hazard outside minimums +
+    a 'go' = the trip-pressure override the minimums were written to
+    prevent.
+  cardType: basic
+  kind: recall
+  tags: [weather, personal-minimums, go-nogo, PA.I.C.R1b, PA.I.C.S3]
+  source_ref: |
+    Body Connect.
+```
+
 ## Connect
 
 This node serves R1b. It feeds the go/no-go decision node directly

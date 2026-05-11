@@ -144,6 +144,182 @@ For frost: any time the overnight temperature was below freezing and
 the airplane was outside, inspect surfaces by hand. If you can't see
 or feel the underlying paint texture cleanly, polish or wait.
 
+### Cards (spaced repetition)
+
+Cards mined from the body. Fog-type cards lock the six mechanisms;
+the dissipation-trigger card forces the diagnostic question; the
+frost card carries the aerodynamic-not-cosmetic message; the
+phenomena table is the METAR-decoding skill.
+
+```yaml-cards
+- front: "Radiation fog: formation conditions and typical dissipation trigger."
+  back: |
+    Clear nights radiate heat to space; surface cools rapidly; the lowest
+    air layer cools to its dew point. Forms in calm, clear, humid conditions
+    in low-lying terrain. Dissipates with morning sun -- typically 1-2 hours
+    after sunrise. Recipe: low spread (<4 C) at sunset + calm + clear + low
+    terrain.
+  cardType: basic
+  kind: recall
+  tags: [weather, fog, radiation-fog, phak-12, ac-00-6, PA.I.C.K3j]
+  source_ref: |
+    AC 00-6B Fog chapter; FAA-H-8083-28 Ch 18; body Discover.
+
+- front: "Advection fog: formation conditions and why does it persist?"
+  back: |
+    Warm moist air flows over a colder surface (water -> land in summer;
+    land -> snow in spring). The advected air cools in contact with the cold
+    surface to its dew point. Persists because the source mechanism is the
+    *flow*, not the cooling of one night -- doesn't burn off until the
+    surface warms or the windflow shifts. The classic San Francisco Bay
+    summer fog.
+  cardType: basic
+  kind: recall
+  tags: [weather, fog, advection-fog, phak-12, ac-00-6, PA.I.C.K3j]
+  source_ref: |
+    AC 00-6B; FAA-H-8083-28 Ch 18; body Discover.
+
+- front: "Upslope fog: where does it form and what keeps it in place?"
+  back: |
+    Moist air forced up sloping terrain cools adiabatically to its dew
+    point. Persists as long as the upslope flow continues. Common east of
+    the Rockies when easterly low-level flow meets the rising plains. The
+    fog clears when the flow direction changes or the air mass dries out.
+  cardType: basic
+  kind: recall
+  tags: [weather, fog, upslope-fog, ac-00-6, PA.I.C.K3j]
+  source_ref: |
+    AC 00-6B; body Discover.
+
+- front: "Steam fog ('sea smoke'): formation mechanism?"
+  back: |
+    Cold air moves over warm water; rapid evaporation saturates the cold
+    layer immediately. Looks like steam rising off the water surface --
+    sometimes called sea smoke. Patchy and low. The cold side of the
+    advection problem: rather than warm-moist over cold surface, it's
+    cold-dry over warm surface, with evaporation doing the saturating.
+  cardType: basic
+  kind: recall
+  tags: [weather, fog, steam-fog, sea-smoke, ac-00-6, PA.I.C.K3j]
+  source_ref: |
+    AC 00-6B; body Discover.
+
+- front: "Precipitation-induced fog: when does it form and which front type produces it most often?"
+  back: |
+    Warm rain falls into a cold surface layer, evaporates, saturates the
+    cold layer. Common in warm-front or stationary-front rain -- the warm
+    air aloft is producing the rain, the cold air at the surface is being
+    saturated by the evaporation. The fog often appears in the same airspace
+    as low IFR ceilings, compounding the approach problem.
+  cardType: basic
+  kind: recall
+  tags: [weather, fog, precipitation-fog, warm-front, ac-00-6, PA.I.C.K3j]
+  source_ref: |
+    AC 00-6B; body Discover.
+
+- front: "Ice fog: temperature threshold and where does it occur?"
+  back: |
+    At very cold temperatures (below approximately -40 C / -40 F), water
+    vapor sublimates directly to ice crystals without passing through the
+    liquid phase. Polar / arctic phenomenon. Doesn't form in temperate
+    climates. The pilot signature is a visible white opacity at the
+    surface during extreme cold; visibility can drop to near zero.
+  cardType: basic
+  kind: recall
+  tags: [weather, fog, ice-fog, arctic, ac-00-6, PA.I.C.K3j]
+  source_ref: |
+    AC 00-6B; body Discover.
+
+- front: "Diagnostic question: what saturates the lowest air layer in a given fog -- cooling or moistening?"
+  back: |
+    Cooling-saturated: radiation, advection, upslope. The lowest layer is
+    cooled to the dew point.
+    Moistening-saturated: precipitation-induced, steam. The lowest layer
+    is saturated by added water vapor (rain evaporating in / water
+    evaporating into it) without cooling much.
+    Knowing which selects the dissipation trigger: cooling-saturated fogs
+    burn off with warming or flow change; moistening-saturated fogs persist
+    until the moisture source stops.
+  cardType: basic
+  kind: recall
+  tags: [weather, fog, diagnostic, ac-00-6, PA.I.C.K3j]
+  source_ref: |
+    Body Discover ("common diagnostic question").
+
+- front: "Why is frost on a wing a flight-control hazard, not just a cosmetic one?"
+  back: |
+    A 1/4-inch frost layer can disrupt airflow over a wing enough to
+    *increase stall speed by 5-10 KT* and *decrease climb-out lift by 30%*.
+    The hazard isn't the weight (frost is near-massless) -- it's surface
+    roughness disrupting the boundary layer. The Dryden King Air (1989),
+    the Ottawa Citation X (2003), and a long list of frost-induced tail
+    strikes make the literature unambiguous.
+  cardType: basic
+  kind: recall
+  tags: [weather, frost, aerodynamics, aim-7-5-1, PA.I.C.K3k]
+  source_ref: |
+    AIM 7-5-1 Frost; body Reveal.
+
+- front: "What is the current AIM 7-5-1 rule on takeoff with frost?"
+  back: |
+    Never attempt takeoff with frost adhering to wings, props, or control
+    surfaces. Polish smooth or remove. The earlier "thin layer of polished
+    frost" exception is gone from current guidance. The rule is binary
+    now: surfaces are smooth, or the airplane stays.
+  cardType: regulation
+  kind: recall
+  tags: [weather, frost, regulation, takeoff, aim-7-5-1, PA.I.C.K3k]
+  source_ref: |
+    AIM 7-5-1 Frost; body Reveal.
+
+- front: "Decode METAR visibility-obstruction codes: BR, FG, HZ, FU, DU, SA, BLSN, VA."
+  back: |
+    BR = mist (vis 5/8-6 SM, water droplets).
+    FG = fog (vis < 5/8 SM, water droplets).
+    HZ = haze (suspended dry particles, often pollution).
+    FU = smoke (combustion source upwind).
+    DU = widespread dust (lifted dry particulates).
+    SA = sand (airborne sand).
+    BLSN = blowing snow (wind > ~15 KT lifting fresh snow).
+    VA = volcanic ash (eruption plume).
+  cardType: basic
+  kind: recall
+  tags: [weather, metar, visibility-obstructions, ac-00-45h, PA.I.C.K3l]
+  source_ref: |
+    AC 00-45H METAR weather group; body Reveal table.
+
+- front: "Why is volcanic ash (VA) avoided by piston aircraft as well as turbine aircraft?"
+  back: |
+    Ash is glass particles suspended in the airflow. For turbines, it abrades
+    blades and can cause total flameout (KLM 867, BA 9). For piston aircraft,
+    it abrades windscreens, clogs pitot and static ports, and damages oil
+    and induction systems. FAA guidance is strict avoidance for all aircraft
+    types, not just turbine.
+  cardType: basic
+  kind: recall
+  tags: [weather, volcanic-ash, va, aim-7-5-7, PA.I.C.K3l]
+  source_ref: |
+    AIM 7-5-7 Volcanic Ash; body Reveal.
+
+- front: "Tomorrow's METAR + TAF for a Sacramento Valley airport: 12 C / 11 C at sunset, wind calm, clear skies, low terrain. Will fog form?"
+  back: |
+    Yes -- radiation fog is the predicted outcome. The diagnostic
+    four-of-four: small spread (1 C), wind calm, clear skies, low terrain.
+    Expect BR / FG at sunrise; expect 1-2 hours after sunrise for the
+    surface heating to dissipate it. The body's Context is exactly this
+    setup; the same airport stayed clear the day before because one of the
+    four conditions was different (probably wind or higher spread).
+  cardType: basic
+  kind: recall
+  tags: [weather, fog, radiation-fog, prediction, PA.I.C.K3j]
+  source_ref: |
+    Body Context + Practice diagnostic ("three of four hold").
+  rationale: |
+    Scenario card from the body's Context. The four-condition recipe is
+    the body's operational deliverable; this card forces the learner to
+    walk it.
+```
+
 ## Connect
 
 This node parents K3j (fog/mist), K3k (frost), and K3l (visibility

@@ -110,6 +110,157 @@ Pull up the **current surface analysis** on aviationweather.gov. Without reading
 
 A useful self-test: cover the METAR strip. Predict the surface wind and rough sky condition at three airports along your route from the surface analysis alone. Then uncover the METARs and check. The agreement (or disagreement) is the calibration on your reading skill.
 
+### Cards (spaced repetition)
+
+Cards mined from the body. The four-marks taxonomy is the recall floor;
+isobar interval + spacing-to-wind is the diagnostic skill; surface-flow
+rotation is the cross-check; the lag and station-model cards keep the
+reading from going stale.
+
+```yaml-cards
+- front: "Four kinds of marks on a surface analysis chart -- name them and what each one shows."
+  back: |
+    1. Pressure centers (H / L) -- letters at the middle of closed isobars,
+       engines of the synoptic flow.
+    2. Isobars -- thin black lines, contours of equal sea-level pressure,
+       drawn at fixed interval (4 mb on US analyses).
+    3. Frontal symbols -- coloured glyphs along boundaries between
+       dissimilar airmasses (cold/warm/occluded/stationary).
+    4. Station models -- small circles around the chart, miniature METARs
+       (wind barb, temp, dew point, pressure, sky cover, current weather).
+  cardType: basic
+  kind: recall
+  tags: [weather, surface-analysis, chart-reading, ac-00-45h, PA.I.C.K2b]
+  source_ref: |
+    AC 00-45H Surface Analysis Chart section; body Discover.
+
+- front: "Isobar interval on the US surface analysis, and what does spacing tell you about surface wind?"
+  back: |
+    4 mb between isobars (every other isobar drawn heavier, every 8 mb).
+    Tight packing = strong pressure gradient = strong surface wind (25+ KT
+    when crammed). Loose packing = light wind. Counting isobars across the
+    route is the quick gradient estimate.
+  cardType: basic
+  kind: recall
+  tags: [weather, surface-analysis, isobars, wind, ac-00-45h, PA.I.C.K2b]
+  source_ref: |
+    AC 00-45H; body Discover + Reveal table.
+
+- front: "Northern-hemisphere surface flow around a Low vs a High -- direction and angle?"
+  back: |
+    Around a Low: counterclockwise, angled slightly inward across the
+    isobars (friction deflects geostrophic flow by 10-30 degrees at the
+    surface).
+    Around a High: clockwise, angled slightly outward.
+    Cross-check by looking at wind barbs on station models near the
+    center; they should agree with the rotation direction. If they don't,
+    the chart is older than the obs or the chart is wrong.
+  cardType: basic
+  kind: recall
+  tags: [weather, surface-analysis, pressure-systems, wind, ac-00-6, PA.I.C.K2b]
+  source_ref: |
+    AC 00-6B Surface Analysis; body Discover.
+
+- front: "Surface analysis update cadence and what to compare against your flight time?"
+  back: |
+    Every 3 hours: 00, 03, 06, 09, 12, 15, 18, 21 Zulu. Hand-drawn by a
+    meteorologist (analyzed, not computed), so 1-3 hours of latency between
+    the data and what you see. Match the chart's issue time against the
+    time you expect to be flying -- a 12Z chart for a 21Z flight needs
+    a newer issue or the prog chart.
+  cardType: basic
+  kind: recall
+  tags: [weather, surface-analysis, cadence, latency, ac-00-45h, PA.I.C.K2b]
+  source_ref: |
+    AC 00-45H; FAA-H-8083-28 Ch 25; body Reveal.
+
+- front: "Cold-front glyph on a surface analysis: appearance, direction, and weather signature on each side?"
+  back: |
+    Blue line with triangles pointing the direction of motion. Sharp
+    boundary; expect a narrow band of intense weather along or just ahead.
+    Ahead (the side the triangles point toward): warmer, more humid air,
+    falling pressure, building cumulus, possibly squall line at the boundary.
+    Behind (the side the triangles point away from): colder, drier air,
+    rising pressure, clearing skies, gusty wind shift.
+  cardType: basic
+  kind: recall
+  tags: [weather, surface-analysis, cold-front, ac-00-45h, PA.I.C.K2b, PA.I.C.K3e]
+  source_ref: |
+    AC 00-45H; body Discover + Reveal.
+
+- front: "Decode a station model -- where do wind, temperature, dew point, pressure, sky cover, and current weather appear?"
+  back: |
+    Wind barb on the upwind side (long shaft points the way wind is coming
+    from). Temperature top-left of the circle. Dew point bottom-left.
+    Sea-level pressure top-right. Sky cover encoded inside the circle.
+    Current weather to the left of the circle. A station model is a
+    miniature METAR -- same fields, drawn instead of typed.
+  cardType: basic
+  kind: recall
+  tags: [weather, surface-analysis, station-model, metar, ac-00-45h, PA.I.C.K2b]
+  source_ref: |
+    AC 00-45H Surface Analysis Chart; body Discover.
+
+- front: "Why is the surface analysis chart 'analyzed, not computed' -- and what are the two pilot consequences?"
+  back: |
+    Hand-drawn by a human meteorologist at the Weather Prediction Center.
+    Frontal positions and pressure-center placements reflect a forecaster's
+    interpretation of an imperfect observation network. Two consequences:
+    (1) the chart has a published issue time but additional time to draw
+    and post -- the atmosphere has moved on by 1-3 hours when you see it;
+    (2) two analysts can read the same data slightly differently, so an
+    "edge" call (front position to within 100 NM) is judgment, not truth.
+  cardType: basic
+  kind: recall
+  tags: [weather, surface-analysis, latency, wpc, faa-h-8083-28, PA.I.C.K2b]
+  source_ref: |
+    FAA-H-8083-28 Ch 25 Analysis; body Reveal.
+
+- front: "Stationary front glyph on a surface analysis: how is it drawn and what does it mean for the next 24 hours?"
+  back: |
+    Alternating red half-circles and blue triangles facing opposite directions
+    along the same boundary -- the airmasses are essentially balanced. Weather
+    sits on both sides and clears slowly. A stationary front is often the seed
+    of a developing wave cyclone: a low forms along it, and the front breaks
+    back into cold + warm fronts rotating around the new low. "Stationary" in
+    the planning area means "watch for a developing low," not "stable."
+  cardType: basic
+  kind: recall
+  tags: [weather, surface-analysis, stationary-front, cyclogenesis, ac-00-45h, PA.I.C.K2b]
+  source_ref: |
+    AC 00-45H; body Reveal table.
+
+- front: "Three-drill surface-analysis reading sequence: orient, front audit, route triage. What's the goal of each?"
+  back: |
+    1. One-minute orient: find every H/L, trace one isobar around each, predict
+       rotation + speed, cross-check with nearby station-model wind barbs.
+    2. Front audit: for every frontal symbol on the chart, name the type and
+       direction of motion; for the front nearest your route, predict each
+       side's signature.
+    3. Route triage: trace your route, name the closest feature at ETA, reduce
+       the chart to one operational sentence under 15 words. If longer,
+       you're including features that don't matter.
+  cardType: basic
+  kind: recall
+  tags: [weather, surface-analysis, drill, triage, PA.I.C.K2b, PA.I.C.S2]
+  source_ref: |
+    Body Practice.
+
+- front: "Self-test for surface-analysis reading skill: how do you calibrate without an instructor?"
+  back: |
+    Cover the METAR strip. Predict surface wind direction/speed and rough
+    sky condition at three airports along your route using only the surface
+    analysis. Then uncover the METARs and check. Agreement = the reading
+    skill is calibrated; disagreement points at which decoding step broke
+    (front position, isobar gradient, station-model read). Fix the specific
+    gap and run the drill again the next briefing.
+  cardType: basic
+  kind: recall
+  tags: [weather, surface-analysis, drill, calibration, PA.I.C.K2b]
+  source_ref: |
+    Body Verify + Practice self-test.
+```
+
 ## Connect
 
 This node sits below [wx-product-surface-analysis-and-cva](../product-surface-analysis-and-cva/node.md), which covers the chart's role in the briefing workflow (paired with the CVA, the prog chart, and the rest of the family). It requires [wx-airmasses-and-fronts](../airmasses-and-fronts/node.md) -- you cannot triage frontal symbols on a chart if you don't know what each front type does to the weather. It is applied by every cross-country planning node ([plan-vfr-cross-country](../../flight-planning/vfr-cross-country/node.md)) and the [wx-go-nogo-decision](../go-nogo-decision/node.md), because the surface analysis is where the synoptic frame is built and the synoptic frame drives the decision.

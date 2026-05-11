@@ -131,6 +131,166 @@ and reports of dust devils, the air column is unstable to whatever
 height the cloud bases reach. That's enough to brief and enough to
 predict the ride at altitude.
 
+### Cards (spaced repetition)
+
+Cards mined from the body. The three-cases stability comparison is the
+recall core; ELR vs adiabatic-rate cards are the diagnostic vocabulary;
+surface-sign cards are the everyday brief; CAPE card extends to the
+sounding reader.
+
+```yaml-cards
+- front: "Dry adiabatic rate vs moist adiabatic rate -- values and what makes them differ?"
+  back: |
+    Dry adiabatic rate: ~3 deg C per 1,000 ft. The rate at which a dry
+    (unsaturated) parcel cools as it rises adiabatically.
+    Moist adiabatic rate: ~1.5 deg C per 1,000 ft. The slower rate after
+    saturation, because condensation releases latent heat that offsets
+    some of the adiabatic cooling. The difference is what makes
+    conditionally unstable air possible.
+  cardType: basic
+  kind: recall
+  tags: [weather, stability, adiabatic-lapse, ac-00-6, phak-12, PA.I.C.K3a]
+  source_ref: |
+    AC 00-6B Stability; PHAK Ch 12; body Discover.
+
+- front: "Absolutely stable atmosphere -- definition in terms of ELR vs adiabatic rates."
+  back: |
+    Environmental lapse rate (ELR) < moist adiabatic rate (~1.5 C/1000 ft).
+    A displaced parcel ends up cooler than its surroundings even after
+    condensation, so it sinks back. Air resists vertical motion. Clouds
+    that form are stratiform; precipitation is continuous; turbulence is
+    smooth.
+  cardType: basic
+  kind: recall
+  tags: [weather, stability, absolutely-stable, ac-00-6, PA.I.C.K3a]
+  source_ref: |
+    AC 00-6B; body Discover.
+
+- front: "Absolutely unstable atmosphere -- definition in terms of ELR vs adiabatic rates."
+  back: |
+    Environmental lapse rate (ELR) > dry adiabatic rate (~3 C/1000 ft).
+    A displaced parcel ends up warmer than its surroundings even before
+    condensation, so it keeps rising. Air wants to convect. Clouds are
+    cumuliform; precipitation is showery; turbulence is bumpy / strong.
+  cardType: basic
+  kind: recall
+  tags: [weather, stability, absolutely-unstable, ac-00-6, PA.I.C.K3a]
+  source_ref: |
+    AC 00-6B; body Discover.
+
+- front: "Conditional instability -- definition and why is it the 'interesting weather' case?"
+  back: |
+    Moist adiabatic rate < ELR < dry adiabatic rate. The parcel's behaviour
+    depends on whether it's saturated -- stable for dry air, unstable
+    once moisture condenses and the slower moist rate takes over. Most
+    'interesting' weather happens here: a small lifting trigger (heating,
+    frontal lift, orographic forcing) pushes a parcel past saturation,
+    after which it accelerates upward. Cumulus / TCu / CB is the visible
+    signature.
+  cardType: basic
+  kind: recall
+  tags: [weather, stability, conditional-instability, convection, ac-00-6, PA.I.C.K3a]
+  source_ref: |
+    AC 00-6B; body Discover.
+
+- front: "Operational signature of stable air: cloud type, precipitation, turbulence, visibility?"
+  back: |
+    Clouds: stratiform (layered, no vertical development).
+    Precipitation: continuous (steady drizzle / rain / snow rather than
+    showers).
+    Turbulence: smooth.
+    Visibility: reduced (haze and trapped pollutants accumulate beneath
+    the stable layer).
+  cardType: basic
+  kind: recall
+  tags: [weather, stability, signatures, phak-12, PA.I.C.K3a]
+  source_ref: |
+    PHAK Ch 12; body Reveal operational table.
+
+- front: "Operational signature of unstable air: cloud type, precipitation, turbulence, visibility?"
+  back: |
+    Clouds: cumuliform (vertical development).
+    Precipitation: showery (convective bursts rather than continuous).
+    Turbulence: bumpy / strong (convective updrafts + downdrafts).
+    Visibility: excellent (vertical mixing scrubs the haze out).
+  cardType: basic
+  kind: recall
+  tags: [weather, stability, signatures, phak-12, PA.I.C.K3a]
+  source_ref: |
+    PHAK Ch 12; body Reveal operational table.
+
+- front: "Surface signs of instability you can read from a METAR strip alone (no sounding required)?"
+  back: |
+    Large diurnal temperature swings, gusty winds, scattered cumulus
+    growing through the day, dust devils, cumulus tops well above the
+    haze inversion. The METAR strip carries enough trend signal to call
+    the stability state for the afternoon at altitudes the surface
+    convection can reach.
+  cardType: basic
+  kind: recall
+  tags: [weather, stability, metar, surface-signs, PA.I.C.K3a]
+  source_ref: |
+    Body Reveal.
+
+- front: "Surface signs of stability you can read from a METAR strip alone?"
+  back: |
+    Stratus / fog at sunrise, smooth winds, narrow temperature spread,
+    thick haze layer. The stable air column traps moisture and
+    pollutants underneath the inversion; the absence of convective
+    triggers leaves the column quiescent.
+  cardType: basic
+  kind: recall
+  tags: [weather, stability, metar, surface-signs, PA.I.C.K3a]
+  source_ref: |
+    Body Reveal.
+
+- front: "Why does an afternoon thunderstorm 'die' after sunset even when it built strongly all day?"
+  back: |
+    Radiational cooling re-stabilises the surface. The thermal updrafts
+    that fed the storm during the heated afternoon stop, and the cell's
+    energy source goes away. The stability profile shifts back toward
+    stable through the night; the storm dissipates because its inflow
+    cuts off, not because the existing energy went anywhere. By sunrise
+    the column is stable again.
+  cardType: basic
+  kind: recall
+  tags: [weather, stability, diurnal, thunderstorm, PA.I.C.K3a, PA.I.C.K3h]
+  source_ref: |
+    Body Reveal.
+
+- front: "CAPE on a Skew-T: what does it represent, and what values are operationally meaningful?"
+  back: |
+    CAPE = Convective Available Potential Energy. The integrated area
+    between the parcel ascent curve and the environment curve from the
+    LFC (level of free convection) upward, in J/kg. It represents the
+    energy available for convection if the parcel is lifted to its LFC.
+    Above ~1,000 J/kg is meaningful; above 2,500 J/kg is severe-storm
+    territory. The skill: identify LCL, LFC, and CAPE on the chart.
+  cardType: basic
+  kind: recall
+  tags: [weather, stability, cape, skew-t, sounding, PA.I.C.K3a]
+  source_ref: |
+    Body Practice.
+
+- front: "Two flights leave the same airport at the same hour, same airplane, same pilot technique. One gets a glass-smooth climb; the other (an hour later) gets pummeled in cumulus to 8,000 ft. What changed?"
+  back: |
+    Stability changed. The atmosphere stabilises overnight and destabilises
+    in the morning as the surface heats. The first flight launched into
+    a stable column with no convective triggers; the second launched
+    into a destabilising column where the same heating that built the
+    cumulus produced the bumpy ride. Reading stability is what predicts
+    which flight you're about to take.
+  cardType: basic
+  kind: recall
+  tags: [weather, stability, diurnal, scenario, PA.I.C.K3a]
+  source_ref: |
+    Body Context scenario.
+  rationale: |
+    Scenario card from the Context. Trains the body's pedagogical anchor:
+    'stability is the parameter that controls almost everything else
+    weather-related you'll experience aloft.'
+```
+
 ## Connect
 
 Stability is the parent concept under almost every other K3 leaf:

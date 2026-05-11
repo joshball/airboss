@@ -146,6 +146,157 @@ crosswind / half tailwind component -- modest help. At 18,000 the wind
 shifts and accelerates; for a turbocharged airplane the math becomes a
 serious tailwind problem.
 
+### Cards (spaced repetition)
+
+Cards mined from the body. The encoding-convention cards (>100 KT,
+implicit-negative temperature) are the decode traps the body explicitly
+flags; calculation cards walk the format; the triage card connects to
+altitude selection.
+
+```yaml-cards
+- front: "Decode an FB entry: 731960 at the 30,000 ft level."
+  back: |
+    Speed > 100 KT convention triggers: direction code 73 means add 50
+    has been applied (raw direction 73 - 50 = 23, so 230 deg true).
+    Speed: 19 + 100 = 119 KT.
+    Temperature: 60 is implicitly negative above 24,000 ft -> -60 C.
+    Final: 230 at 119 KT, -60 C.
+  cardType: calculation
+  kind: calculation
+  tags: [weather, fb, winds-aloft, decode, ac-00-45h, PA.I.C.K2e]
+  source_ref: |
+    AC 00-45H FB section; body Discover worked example.
+
+- front: "FB encoding: the >100 KT convention. What's the rule and why does it exist?"
+  back: |
+    When speed exceeds 100 KT, the encoder adds 50 to the direction code
+    and adds 100 to the speed. Direction values normally run 01-36; any
+    value 51+ signals the convention. Decode: direction - 50 = true
+    direction, speed + 100 = true speed. The convention exists because
+    the original FB was teletype-format with strict 6-character columns;
+    teletype-era constraints survived into the modern encoding.
+  cardType: basic
+  kind: recall
+  tags: [weather, fb, winds-aloft, encoding, ac-00-45h, PA.I.C.K2e]
+  source_ref: |
+    AC 00-45H; body Discover and Reveal.
+  rationale: |
+    The body explicitly flags this as a checkride trap. Cloze/recall card
+    forces the learner to articulate both the rule and the signal value.
+
+- front: "FB temperature convention above 24,000 ft -- what's omitted and what's implied?"
+  back: |
+    Above 24,000 ft (and at 24,000 ft itself in some renderings), all
+    temperatures are negative by convention -- the leading minus sign is
+    omitted. So a `60` at FL300 decodes to -60 C, not +60 C. Below
+    24,000 the sign is explicit. The convention catches pilots who
+    learned the FB on low-altitude examples and never internalised the
+    high-altitude rule.
+  cardType: basic
+  kind: recall
+  tags: [weather, fb, winds-aloft, temperature, encoding, ac-00-45h, PA.I.C.K2e]
+  source_ref: |
+    AC 00-45H; body Discover and Reveal.
+
+- front: "FB forecast altitudes for CONUS -- list the standard levels."
+  back: |
+    3,000 / 6,000 / 9,000 / 12,000 / 18,000 / 24,000 / 30,000 / 34,000 /
+    39,000 ft. Temperatures are absent at 3,000 ft (the lowest level)
+    and at the level closest to station elevation (where the lower
+    levels collapse). Issued twice daily (FB1 / FB2) with valid times
+    across 6, 12, and 24 hour blocks.
+  cardType: basic
+  kind: recall
+  tags: [weather, fb, winds-aloft, altitudes, cadence, ac-00-45h, PA.I.C.K2e]
+  source_ref: |
+    AC 00-45H; body Reveal.
+
+- front: "Decode the FB entry 2545+05 at 12,000 ft."
+  back: |
+    250 deg true at 45 KT, +5 C. Standard decoding (speed < 100 KT, below
+    24,000 ft): direction = 25 (250 deg true, in tens of degrees);
+    speed = 45 KT; temperature explicit-sign = +5 C.
+  cardType: calculation
+  kind: calculation
+  tags: [weather, fb, winds-aloft, decode, calculation, ac-00-45h, PA.I.C.K2e]
+  source_ref: |
+    AC 00-45H; body Practice.
+
+- front: "FB direction code 99 with speed 00 -- what does it mean?"
+  back: |
+    Light and variable. The 99/00 special code is used when wind speed
+    is below the threshold where direction can be reliably forecast (and
+    below the threshold where the wind matters for altitude choice).
+    Treat as ~5 KT or less; pick cruise altitude on other criteria
+    (icing, turbulence, fuel burn).
+  cardType: basic
+  kind: recall
+  tags: [weather, fb, winds-aloft, light-and-variable, ac-00-45h, PA.I.C.K2e]
+  source_ref: |
+    AC 00-45H; body Reveal.
+
+- front: "Two triage questions to ask of an FB read before picking a cruise altitude."
+  back: |
+    1. Which cruise altitude maximises ground speed (or minimises fuel
+       burn -- usually the same answer)? Compare wind component against
+       the route's true course at each altitude.
+    2. At which altitude does the temperature column put you below
+       freezing? Freezing temperature at cruise + visible moisture =
+       icing brief.
+    Other rows are confirmation.
+  cardType: basic
+  kind: recall
+  tags: [weather, fb, winds-aloft, triage, altitude-selection, PA.I.C.K2e]
+  source_ref: |
+    Body Discover triage step.
+
+- front: "KMRY -> KSAC, 220-degree course, TAS 115 KT. FB at 6,000 ft is 2730+10. Estimate the wind effect on ground speed."
+  back: |
+    Decode: 270 deg at 30 KT, +10 C.
+    Course 220, wind from 270 -> wind 50 degrees right of nose.
+    50 degrees ~= 64% headwind component, ~77% crosswind component.
+    Wait -- 270 is FROM, so the wind goes TOWARD 090. Relative to a
+    220 course, the wind blows from the right rear -- a tailwind/cross
+    combo. Use the 30-60-90 mental rule: 50 deg off the tail ~= ~half
+    crosswind, ~half tailwind. Tailwind component ~= 30 * cos(50) =
+    ~19 KT, giving ground speed ~115 + 19 = ~134 KT. Body says ~140 KT;
+    the rough mental math is in the ballpark.
+  cardType: calculation
+  kind: calculation
+  tags: [weather, fb, winds-aloft, ground-speed, calculation, PA.I.C.K2e]
+  source_ref: |
+    Body Context worked example.
+
+- front: "Why is the FB called a 'sparse approximation of a continuous field'?"
+  back: |
+    The FB is a *forecast* sampled at coarse altitudes (3K / 6K / 9K /
+    12K / 18K / 24K / ...) at specific stations. Real wind interpolates
+    between rows; real wind also varies spatially between stations. The
+    grid is a sparse snapshot of a continuous field. Operational impact:
+    use the FB for cruise-altitude selection but expect real wind to
+    diverge from forecast by 30-40 KT in dynamic atmospheres (frontal
+    passage, mountain wave, jet shifts).
+  cardType: basic
+  kind: recall
+  tags: [weather, fb, winds-aloft, limitations, ac-00-45h, PA.I.C.K2e, PA.I.C.R2b]
+  source_ref: |
+    Body Discover; equipment-and-data-limitations node.
+
+- front: "How does the FB feed the alternate-fuel decision?"
+  back: |
+    Every leg's ground speed and ETE depend on the forecast wind at the
+    planned altitude. If the headwind at altitude is strong enough to
+    push you below the legal reserve (or your personal reserve), you
+    reroute, refuel, or change altitude. The FB is one of the two
+    products that gates 'is this trip fuel-feasible?' alongside the
+    GFA winds layer.
+  cardType: basic
+  kind: recall
+  tags: [weather, fb, winds-aloft, fuel-planning, alternate, PA.I.C.K2e]
+  source_ref: |
+    Body Connect.
+```
+
 ## Connect
 
 The FB feeds the navigation log: every leg's ground speed and ETE

@@ -139,6 +139,156 @@ ETA and toggle the cig/vis layer. If the route passes through yellow
 (MVFR) or red (IFR) blocks at any forecast hour you'll be airborne, the
 GFA has just identified the hazard window.
 
+### Cards (spaced repetition)
+
+Cards mined from the body. Layer-set and color-convention cards are
+the decode floor; the front-end model card is the understand layer;
+the triage card pinpoints the dominant layer for each flight.
+
+```yaml-cards
+- front: "Layers in the GFA tool -- name the seven and one thing each shows."
+  back: |
+    Clouds: ceiling, tops, sky cover at selectable altitudes.
+    Weather: forecast precipitation type and intensity.
+    Cig/Vis: categorical CIG/VIS field (VFR / MVFR / IFR / LIFR).
+    Precip: forecast precip rate / type / intensity.
+    Icing: severity + altitude band, sourced from FIP / CIP.
+    Turbulence: severity + altitude band (sourced from GTG model).
+    Winds: surface and aloft wind / temperature fields.
+  cardType: basic
+  kind: recall
+  tags: [weather, gfa, layers, ac-00-45h, PA.I.C.K2d]
+  source_ref: |
+    AC 00-45H GFA section; body Reveal layer table.
+
+- front: "GFA categorical color conventions for cig/vis: VFR / MVFR / IFR / LIFR."
+  back: |
+    VFR = green, MVFR = blue, IFR = red, LIFR = magenta. Same color
+    convention as the standard category map. The encoding is arbitrary
+    but it repeats across every read; once your eye locks the four
+    colors, the cig/vis layer is decode-by-glance.
+  cardType: basic
+  kind: recall
+  tags: [weather, gfa, cig-vis, color-convention, PA.I.C.K2d]
+  source_ref: |
+    AC 00-45H; body Discover (color-coded layers).
+
+- front: "GFA time-slider span -- from how far in the past to how far in the future?"
+  back: |
+    14 hours of observations / analyses (past) through the current hour
+    through +15 hours of forecast. Past windows are observation-grade;
+    future windows are model-grade. The forward forecast refreshes every
+    three hours; the observation/analysis side updates hourly.
+  cardType: basic
+  kind: recall
+  tags: [weather, gfa, time-slider, ac-00-45h, PA.I.C.K2d]
+  source_ref: |
+    AC 00-45H; body Discover.
+
+- front: "What product did the GFA replace, and when?"
+  back: |
+    The textual Area Forecast (FA), in 2017. The spatial forecast picture
+    is the right form for area-scale weather questions; the FA's text-
+    paragraph rendering of the same data lost too much spatial detail.
+    The GFA tool is the modern equivalent and there is no text-only
+    counterpart in current production.
+  cardType: basic
+  kind: recall
+  tags: [weather, gfa, area-forecast, history, PA.I.C.K2d]
+  source_ref: |
+    AC 00-45H; FAA-H-8083-28 Ch 28.2; body Discover.
+
+- front: "GFA is a *front-end* over which underlying models?"
+  back: |
+    FIP / CIP for icing (Forecast Icing Product / Current Icing Product).
+    GTG for turbulence (Graphical Turbulence Guidance).
+    NDFD for cig/vis/wind/weather (National Digital Forecast Database).
+    Plus AIRMET / SIGMET overlays.
+    Reading the GFA is implicitly reading those underlying products at a
+    higher abstraction; understanding which model produced a color block
+    is what separates 'reading colors' from 'reading the GFA.'
+  cardType: basic
+  kind: recall
+  tags: [weather, gfa, fip, cip, gtg, ndfd, ac-00-45h, PA.I.C.K2d]
+  source_ref: |
+    AC 00-45H; body Reveal.
+
+- front: "GFA refresh cadence: observations / analyses vs forward forecast."
+  back: |
+    Hourly for observations and analyses (the past 14 hours of the slider).
+    Every three hours for the forward forecast (now through +15 hours).
+    The cadence mismatch matters when you scrub a long route: the future
+    side of the slider is older relative to its forecast time than the
+    past side is to its observation time.
+  cardType: basic
+  kind: recall
+  tags: [weather, gfa, cadence, refresh, ac-00-45h, PA.I.C.K2d]
+  source_ref: |
+    AC 00-45H; body Reveal.
+
+- front: "Triage rule: how do you keep a GFA brief from devolving into layer-scrolling?"
+  back: |
+    Pick the *one* layer that drives this flight (icing for a winter
+    cross-country, cig/vis for a marginal-VFR planning question, turbulence
+    for a known-rough route) and read it carefully across the time horizon
+    you'll fly. Other layers are confirmation. The GFA invites
+    layer-scrolling without depth; pre-naming the dominant layer is the
+    discipline that makes the brief converge.
+  cardType: basic
+  kind: recall
+  tags: [weather, gfa, triage, briefing, PA.I.C.K2d]
+  source_ref: |
+    Body Discover triage step.
+  rationale: |
+    The body's central triage instruction. This card forces the learner
+    to pick a dominant layer rather than scroll all seven.
+
+- front: "250 NM cross-country across a forecast frontal passage. METARs/TAFs at endpoints look fine but the route between has no terminal. Where in the brief do you look?"
+  back: |
+    GFA -- the spatial forecast field that fills the gap between point
+    products. METARs / TAFs are airport-tied; the GFA is a continuous 2D
+    field you can scrub through time. Set the time slider to your ETA
+    over the mid-route segment, toggle cig/vis + clouds + weather, and
+    read the colors along the planned path. Color discontinuities = the
+    front you're flying through.
+  cardType: basic
+  kind: recall
+  tags: [weather, gfa, route-analysis, frontal-passage, PA.I.C.K2d]
+  source_ref: |
+    Body Context scenario.
+  rationale: |
+    Scenario card from the body's Context. The mid-route gap is the GFA's
+    canonical use case.
+
+- front: "MVFR or IFR blocks appear along your planned route at the GFA forecast time you'll be airborne. What has the GFA just done?"
+  back: |
+    Identified the hazard window -- the time and place where the cig/vis
+    forecast crosses the legality boundary for VFR. The blocks tell you
+    *where* the hazard sits along the route and *when* it's forecast. The
+    next briefing step: decode the underlying NDFD model + AIRMET SIERRA
+    to understand confidence; cross-check with TAFs and PIREPs along the
+    edge of the polygon.
+  cardType: basic
+  kind: recall
+  tags: [weather, gfa, mvfr, ifr, hazard-window, PA.I.C.K2d, PA.I.C.S2]
+  source_ref: |
+    Body Practice "real 'is this route flyable?' check."
+
+- front: "Reading the GFA without understanding what feeds it produces what kind of error?"
+  back: |
+    Overconfidence. The colors are the *output*; the underlying model has
+    failure modes (FIP/CIP can underforecast SLD; GTG can miss
+    mountain-wave turbulence; NDFD smooths terrain effects). A pilot who
+    treats the GFA as ground truth misreads the picture's confidence
+    boundary. The K2g node on AIRMETs/SIGMETs and the equipment-and-data-
+    limitations node are the depth complement to the GFA's breadth.
+  cardType: basic
+  kind: recall
+  tags: [weather, gfa, limitations, judgment, PA.I.C.K2d, PA.I.C.R2b]
+  source_ref: |
+    Body Connect.
+```
+
 ## Connect
 
 GFA is the spatial integration of the underlying weather products. It

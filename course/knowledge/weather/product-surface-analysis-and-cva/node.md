@@ -139,6 +139,147 @@ front passes). Now overlay the CVA: the lows and fronts almost always
 correlate with the MVFR/IFR color shifts. The synoptic picture and the
 ceiling picture are the same story told two ways.
 
+### Cards (spaced repetition)
+
+Cards mined from the body. CVA category cards lock the VFR/MVFR/IFR/
+LIFR thresholds; cadence cards build the planning rhythm; the synoptic-
+vs-ceiling card carries the bookend pedagogy.
+
+```yaml-cards
+- front: "CVA categories -- match each to its ceiling and visibility thresholds."
+  back: |
+    VFR: ceiling > 3,000 ft AND visibility > 5 SM.
+    MVFR: ceiling 1,000-3,000 ft OR visibility 3-5 SM.
+    IFR: ceiling 500-999 ft OR visibility 1-3 SM.
+    LIFR: ceiling < 500 ft OR visibility < 1 SM.
+    The thresholds are the same as the standard flight-category map; the
+    CVA just renders them as one color per location across CONUS.
+  cardType: basic
+  kind: recall
+  tags: [weather, cva, vfr, mvfr, ifr, lifr, ac-00-45h, PA.I.C.K2b]
+  source_ref: |
+    AC 00-45H CVA section; body Reveal table.
+
+- front: "Surface Analysis Chart update cadence and authoring authority?"
+  back: |
+    Every 3 hours (00, 03, 06, 09, 12, 15, 18, 21Z) by the Weather
+    Prediction Center (WPC). The chart is hand-analyzed, not algorithmic
+    -- a human meteorologist's interpretation of the station network is
+    what you see. Two pilots reading the same data points can produce
+    slightly different analyses, and the WPC product is the canonical
+    one for flight planning.
+  cardType: basic
+  kind: recall
+  tags: [weather, surface-analysis, wpc, cadence, ac-00-45h, PA.I.C.K2b]
+  source_ref: |
+    AC 00-45H; FAA-H-8083-28 Ch 25; body Reveal.
+
+- front: "CVA update cadence vs Surface Analysis update cadence?"
+  back: |
+    CVA: hourly, on the hour, with near-real-time refresh.
+    Surface Analysis: every 3 hours.
+    The CVA is the faster product because it consumes METAR / SPECI
+    observations directly; the surface analysis takes additional time
+    because it requires the human analyst's interpretation step.
+  cardType: basic
+  kind: recall
+  tags: [weather, cva, surface-analysis, cadence, ac-00-45h, PA.I.C.K2b]
+  source_ref: |
+    AC 00-45H; body Reveal.
+
+- front: "When is the CVA the right product to reach for, and when is the Surface Analysis?"
+  back: |
+    CVA: fastest 'is the route open?' answer for VFR planning. One scan
+    along the route's color band and you know.
+    Surface Analysis: fastest 'why is the route closed?' answer for
+    instrument planning. The pressure systems, fronts, and isobar
+    spacing explain *why* the CVA shows the colors it does.
+    They're bookends: synoptic at the start of a serious brief, point
+    forecasts in the middle, CVA at the end as the integration check.
+  cardType: basic
+  kind: recall
+  tags: [weather, cva, surface-analysis, briefing-order, ac-00-45h, PA.I.C.K2b]
+  source_ref: |
+    Body Reveal + Connect.
+
+- front: "Northern-hemisphere surface wind rotation: around a Low vs around a High?"
+  back: |
+    Around a Low: counterclockwise, deflecting outward across the isobars
+    due to friction (10-30 degrees of cross-isobar angle at the surface).
+    Around a High: clockwise, deflecting outward.
+    Tracing isobars around a center and applying the rotation rule gives
+    you predicted wind direction at any station -- a cross-check against
+    the station-model wind barbs on the chart.
+  cardType: basic
+  kind: recall
+  tags: [weather, surface-analysis, pressure-systems, wind, ac-00-6, PA.I.C.K2b]
+  source_ref: |
+    AC 00-6B Wind chapter; body Practice.
+
+- front: "Two pilots brief the same KSAC->KRDD flight. One opens the METAR strip and reads field-by-field; the other opens the surface analysis and sees a cold front draped across the valley with tight isobars on the back side. Why does the second pilot finish the brief faster and with more confidence?"
+  back: |
+    Layer of abstraction. METARs are point observations -- decoding them
+    one at a time builds the picture from the inside out. The surface
+    analysis converts dozens of station reports into one synoptic image,
+    decoded in seconds. Same data, different layer; the second pilot
+    knows immediately the crosswind will be strong and gusty on the
+    back side of the front, because the isobar packing said so before
+    any single METAR was read.
+  cardType: basic
+  kind: recall
+  tags: [weather, surface-analysis, synoptic, briefing-efficiency, PA.I.C.K2b]
+  source_ref: |
+    Body Context scenario.
+  rationale: |
+    Scenario card from the body's Context. Trains the reframing: the
+    surface analysis isn't 'an extra product' -- it's a different layer
+    of abstraction that compresses the same data.
+
+- front: "Where does the Surface Analysis sit in the encoded-text family triage step?"
+  back: |
+    For a given route at a given time, which features on the chart matter?
+    An occluded front 800 NM north of the route is irrelevant; a tight
+    pressure gradient over the route's middle third is the operational
+    signal. The CVA is the triage shortcut -- it converts the whole
+    synoptic picture into a single VFR/MVFR/IFR/LIFR color along the
+    route. Same triage discipline as METAR/TAF: decode is prerequisite,
+    triage is the goal.
+  cardType: basic
+  kind: recall
+  tags: [weather, surface-analysis, cva, triage, encoded-text-family, PA.I.C.K2b]
+  source_ref: |
+    Body Discover triage step.
+
+- front: "Station model on a surface analysis chart -- what is it and what's the fast on-ramp to reading it?"
+  back: |
+    A station model is a miniature METAR: compact glyph showing wind
+    direction (barb), speed (flags / barbs), temperature (top-left),
+    dew point (bottom-left), sea-level pressure (top-right), sky cover
+    (circle fill), current weather (left of circle). A learner who can
+    read a METAR can read a station model with about ten minutes of
+    practice -- the fields are the same, the rendering is graphical.
+  cardType: basic
+  kind: recall
+  tags: [weather, surface-analysis, station-model, metar, ac-00-45h, PA.I.C.K2b]
+  source_ref: |
+    AC 00-45H; body Discover.
+
+- front: "How does the CVA correlate with the surface analysis on a typical frontal-passage day?"
+  back: |
+    The lows and fronts on the surface analysis almost always correlate
+    with the MVFR / IFR color shifts on the CVA. The synoptic picture
+    (where the energy is) and the ceiling picture (where the visibility
+    and ceiling fall below VFR) are the same story told two ways. When
+    they don't correlate, the deviation is itself information -- maybe a
+    local effect, station siting, or marine-layer pocket independent of
+    the synoptic flow.
+  cardType: basic
+  kind: recall
+  tags: [weather, surface-analysis, cva, correlation, PA.I.C.K2b]
+  source_ref: |
+    Body Practice + Verify.
+```
+
 ## Connect
 
 Surface analysis is the parent of K3e (air masses and fronts) -- it
