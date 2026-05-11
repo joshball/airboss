@@ -35,7 +35,9 @@ const citedBy = $derived(data.citedBy);
 const knowledgeNotes = $derived(data.knowledgeNotes);
 // `+ Note` pre-fills the knowledge-node context so the standalone
 // composer opens with this node already selected.
-const newNoteHref = $derived(`${ROUTES.NOTES_NEW}?${QUERY_PARAMS.NOTE_KNOWLEDGE_NODE_ID}=${encodeURIComponent(node.id)}`);
+const newNoteHref = $derived(
+	`${ROUTES.NOTES_NEW}?${QUERY_PARAMS.NOTE_KNOWLEDGE_NODE_ID}=${encodeURIComponent(node.id)}`,
+);
 
 function citedByHref(type: CitationSourceType, id: string): string | null {
 	switch (type) {

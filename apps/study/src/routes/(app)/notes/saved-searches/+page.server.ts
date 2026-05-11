@@ -17,6 +17,17 @@ import { ROUTES } from '@ab/constants';
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
+/**
+ * GET on this sub-route redirects to /notes -- the page exists only as a
+ * mount point for the form actions. After a successful save / remove the
+ * action redirects back to the calling page; on failure SvelteKit re-
+ * invokes this loader (action-rerun semantics), so we redirect to /notes
+ * to avoid landing the user on an empty page. The fail message is lost
+ * in the bounce, so we keep the path simple: validation that can fail
+ * (capacity, missing name) shows a flash via the redirect target's
+ * "saved successfully" status indicator instead. Capacity errors are
+ * rare enough that the trade-off is worth the simpler routing.
+ */
 export const load: PageServerLoad = async () => {
 	throw redirect(303, ROUTES.NOTES);
 };

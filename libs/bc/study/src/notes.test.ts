@@ -22,7 +22,7 @@ import {
 import { db } from '@ab/db/connection';
 import { generateAuthId, generateReferenceId, generateReferenceSectionId } from '@ab/utils';
 import { and, eq } from 'drizzle-orm';
-import { afterEach, beforeAll, describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 import { z } from 'zod';
 import {
 	archiveNote,
