@@ -25,6 +25,18 @@
  */
 
 // ----------------------------------------------------------------------
+// Engine API types. Values (generateScenario, writeScenarioBundle) live in
+// `./server.ts` (`@ab/wx-engine/server`).
+// ----------------------------------------------------------------------
+export type {
+	ScenarioBundle,
+	ScenarioCharts,
+	ScenarioCommentary,
+	ScenarioProducts,
+	ScenarioRunOptions,
+	ScenarioSeed,
+} from './engine';
+// ----------------------------------------------------------------------
 // Zod schema (inferred type only; the schema value lives in `./server.ts`).
 // Re-exporting the schema value from this barrel is intentionally avoided
 // so the runtime barrel stays free of value re-exports per spec.md

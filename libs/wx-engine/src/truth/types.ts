@@ -27,6 +27,8 @@ export interface TruthModel {
 	validAt: string;
 	/** Local timezone of the primary departure airport (IANA). */
 	primaryTimeZone: string;
+	/** Free-form description of the scenario shape -- copied into chart subtitles. */
+	narrative: string;
 	stations: StationRegistry;
 	synoptic: SynopticState;
 	airMasses: AirMass[];
@@ -35,8 +37,6 @@ export interface TruthModel {
 	diurnal: DiurnalCycle;
 	hazardZones: HazardZone[];
 	terrain: TerrainState;
-	/** Free-form description of the scenario shape -- copied into chart subtitles. */
-	narrative: string;
 }
 
 export interface StationRecord {

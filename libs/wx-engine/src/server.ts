@@ -18,6 +18,19 @@
  */
 
 // ----------------------------------------------------------------------
+// Engine entrypoint + bundle writer. Phase A: truth-only output.
+// ----------------------------------------------------------------------
+export {
+	generateScenario,
+	type ScenarioBundle,
+	type ScenarioCharts,
+	type ScenarioCommentary,
+	type ScenarioProducts,
+	type ScenarioRunOptions,
+	type ScenarioSeed,
+	writeScenarioBundle,
+} from './engine';
+// ----------------------------------------------------------------------
 // Truth-state evolution. The only sanctioned way to move time forward.
 // ----------------------------------------------------------------------
 export { advanceTruth } from './truth/advance';

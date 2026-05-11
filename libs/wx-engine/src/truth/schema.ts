@@ -179,6 +179,7 @@ export const truthModelSchema = z.object({
 	scenarioId: z.string().min(1),
 	validAt: z.string().min(1),
 	primaryTimeZone: z.string().min(1),
+	narrative: z.string().min(1),
 	stations: z.record(z.string().min(1), stationRecordSchema),
 	synoptic: synopticStateSchema,
 	airMasses: z.array(airMassSchema),
@@ -187,7 +188,6 @@ export const truthModelSchema = z.object({
 	diurnal: diurnalCycleSchema,
 	hazardZones: z.array(hazardZoneSchema),
 	terrain: terrainStateSchema,
-	narrative: z.string().min(1),
 });
 
 /** Inferred type from the schema. Equal-by-construction to `TruthModel`. */
