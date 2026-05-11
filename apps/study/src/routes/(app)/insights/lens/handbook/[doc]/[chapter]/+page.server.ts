@@ -9,7 +9,9 @@ import {
 	type ReferenceRow,
 	type ReferenceSectionRow,
 } from '@ab/bc-study/server';
+import { HOST_PREFIXES, siblingOrigin } from '@ab/constants';
 import { error } from '@sveltejs/kit';
+import { shortHandbookEdition } from '$lib/library-redirect';
 import type { PageServerLoad } from './$types';
 
 export interface SectionWithNodes {
@@ -21,6 +23,8 @@ export interface ChapterLensData {
 	reference: ReferenceRow;
 	chapter: ReferenceSectionRow;
 	sections: SectionWithNodes[];
+	flightbagOrigin: string;
+	flightbagEdition: string;
 }
 
 /**
@@ -90,5 +94,13 @@ export const load: PageServerLoad = async (event) => {
 		const citingNodes = parsed.section === null ? [] : (nodesBySection.get(parsed.section) ?? []);
 		return { section, citingNodes };
 	});
-	return { reference, chapter, sections: sectionsWithNodes } satisfies ChapterLensData;
+	const flightbagOrigin = siblingOrigin(event.url, HOST_PREFIXES.FLIGHTBAG);
+	const flightbagEdition = shortHandbookEdition(reference.edition);
+	return {
+		reference,
+		chapter,
+		sections: sectionsWithNodes,
+		flightbagOrigin,
+		flightbagEdition,
+	} satisfies ChapterLensData;
 };

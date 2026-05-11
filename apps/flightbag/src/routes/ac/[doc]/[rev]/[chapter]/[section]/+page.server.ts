@@ -24,7 +24,8 @@ const REV_SHAPE = /^[a-z]$/i;
 const CHAPTER_SHAPE = /^[a-z0-9]+$/i;
 const SECTION_SHAPE = /^[a-z0-9]+(?:\.[a-z0-9]+)?$/i;
 
-export const load: PageServerLoad = async ({ params }) => {
+export const load: PageServerLoad = async (event) => {
+	const { params } = event;
 	if (!DOC_SHAPE.test(params.doc)) throw error(404, 'Invalid AC doc number.');
 	if (!REV_SHAPE.test(params.rev)) throw error(404, 'Invalid AC revision letter.');
 	if (!CHAPTER_SHAPE.test(params.chapter)) throw error(404, 'Invalid AC chapter.');
@@ -116,5 +117,6 @@ export const load: PageServerLoad = async ({ params }) => {
 		readingTime: {
 			sectionMinutes,
 		},
+		isAuthenticated: event.locals.user !== null,
 	};
 };

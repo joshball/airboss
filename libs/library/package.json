@@ -8,14 +8,23 @@
 			"types": "./src/index.ts",
 			"default": "./src/index.ts"
 		},
-		"./RenderedSection.svelte": "./src/RenderedSection.svelte",
-		"./ReaderNav.svelte": "./src/ReaderNav.svelte",
+		"./Breadcrumbs.svelte": "./src/Breadcrumbs.svelte",
 		"./CitationChip.svelte": "./src/CitationChip.svelte",
-		"./SourceLinks.svelte": "./src/SourceLinks.svelte"
+		"./HeartbeatTicker.svelte": "./src/HeartbeatTicker.svelte",
+		"./ReaderEmptyState.svelte": "./src/ReaderEmptyState.svelte",
+		"./ReaderLayout.svelte": "./src/ReaderLayout.svelte",
+		"./ReaderNav.svelte": "./src/ReaderNav.svelte",
+		"./ReadingTime.svelte": "./src/ReadingTime.svelte",
+		"./ReferenceCard.svelte": "./src/ReferenceCard.svelte",
+		"./RenderedSection.svelte": "./src/RenderedSection.svelte",
+		"./SourceLinks.svelte": "./src/SourceLinks.svelte",
+		"./SubjectChip.svelte": "./src/SubjectChip.svelte",
+		"./TOCDrawer.svelte": "./src/TOCDrawer.svelte"
 	},
 	"dependencies": {
 		"@ab/constants": "workspace:*",
 		"@ab/sources": "workspace:*",
-		"@ab/ui": "workspace:*"
+		"@ab/ui": "workspace:*",
+		"svelte": "^5.34.7"
 	}
 }

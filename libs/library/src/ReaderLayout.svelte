@@ -26,6 +26,16 @@ import type { Snippet } from 'svelte';
  *
  * No snippet is required; a minimal caller (no breadcrumb, no source-links,
  * just a title and body) still gets a clean reader page.
+ *
+ * SourceLinks render in a flex row alongside the eyebrow so they sit
+ * consistently in the page-header (right-aligned where space allows). Pages
+ * MUST pass source-links via the `sourceLinks` snippet rather than rendering
+ * them as free-floating siblings outside the layout.
+ *
+ * Optional `sectionId`+`enabled` props mount a `<HeartbeatTicker>` so any
+ * reader page using `<ReaderLayout>` automatically feeds read-state when the
+ * caller passes a section id. Anonymous pages omit `enabled` (or pass `false`)
+ * to suppress the ticker.
  */
 
 export interface ReaderLayoutProps {
@@ -47,10 +57,25 @@ export interface ReaderLayoutProps {
 	readonly children?: Snippet;
 	/** Optional footer strip below the body (typically `<ReaderNav>`). */
 	readonly footer?: Snippet;
+	/**
+	 * Optional reference section id -- when set together with `heartbeatEnabled`,
+	 * mounts the shared `<HeartbeatTicker>` so this reader feeds read-state.
+	 * Pages that aren't reading a single section (catalog, doc landings) leave
+	 * this undefined.
+	 */
+	readonly sectionId?: string;
+	/**
+	 * When false (anonymous user, or section id missing), the ticker is not
+	 * mounted. Defaults to false so a forgetful caller doesn't accidentally
+	 * tick on behalf of an anonymous user.
+	 */
+	readonly heartbeatEnabled?: boolean;
 }
 </script>
 
 <script lang="ts">
+import HeartbeatTicker from './HeartbeatTicker.svelte';
+
 let {
 	tocSidebar,
 	breadcrumb,
@@ -61,16 +86,24 @@ let {
 	pageHeaderExtra,
 	children,
 	footer,
+	sectionId,
+	heartbeatEnabled = false,
 }: ReaderLayoutProps = $props();
+
+const showHeartbeat = $derived(Boolean(sectionId) && heartbeatEnabled);
 </script>
 
 <div class="reader">
 	<div class="primary">
-		{#if breadcrumb}
-			{@render breadcrumb()}
-		{/if}
-		{#if sourceLinks}
-			{@render sourceLinks()}
+		{#if breadcrumb || sourceLinks}
+			<div class="header-eyebrow">
+				{#if breadcrumb}
+					<div class="breadcrumb-slot">{@render breadcrumb()}</div>
+				{/if}
+				{#if sourceLinks}
+					<div class="source-links-slot">{@render sourceLinks()}</div>
+				{/if}
+			</div>
 		{/if}
 		{#if eyebrow || title || subtitle || pageHeaderExtra}
 			<header class="page-header">
@@ -102,6 +135,9 @@ let {
 			{@render tocSidebar()}
 		</aside>
 	{/if}
+	{#if showHeartbeat && sectionId}
+		<HeartbeatTicker {sectionId} enabled={heartbeatEnabled} />
+	{/if}
 </div>
 
 <style>
@@ -119,6 +155,30 @@ let {
 
 	.primary {
 		min-width: 0;
+	}
+
+	/*
+	 * The eyebrow row sits above the page-header. It pairs the breadcrumb (left)
+	 * with the source-links cluster (right) so a reader gets one visual rhythm
+	 * regardless of which doc-type they're in. When only one of the two is
+	 * present, it just left-aligns naturally in the row.
+	 */
+	.header-eyebrow {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-md);
+		flex-wrap: wrap;
+		margin-bottom: var(--space-sm);
+	}
+
+	.breadcrumb-slot {
+		min-width: 0;
+		flex: 1 1 auto;
+	}
+
+	.source-links-slot {
+		flex: 0 0 auto;
 	}
 
 	.page-header {

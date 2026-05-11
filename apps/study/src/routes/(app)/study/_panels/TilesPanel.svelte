@@ -26,12 +26,18 @@ interface Props {
 	 */
 	dueCardsCount: number | null;
 	newCardsCount: number;
+	/**
+	 * Cross-app origin for the flightbag. Passed in from the layout so the
+	 * Read tile points at the canonical FAA-references reader without going
+	 * through the legacy `/library` redirect.
+	 */
+	flightbagOrigin: string;
 }
 
-let { repBacklog, focusNodeId, dueCardsCount, newCardsCount }: Props = $props();
+let { repBacklog, focusNodeId, dueCardsCount, newCardsCount, flightbagOrigin }: Props = $props();
 
 const cardsHref = $derived(focusNodeId === null ? ROUTES.MEMORY_REVIEW : ROUTES.MEMORY_REVIEW_FOR_NODE(focusNodeId));
-const readHref = $derived(ROUTES.LIBRARY);
+const readHref = $derived(`${flightbagOrigin}${ROUTES.FLIGHTBAG_HOME}`);
 const scenariosHref = $derived(ROUTES.REPS);
 // Sim is a separate app; today the cross-app link convention here is the
 // site-relative `/sim` path (handled by the parent SvelteKit hooks).

@@ -23,7 +23,8 @@ import type { PageServerLoad } from './$types';
 const AIM_SLUG = 'aim';
 const NUM_SHAPE = /^\d+$/;
 
-export const load: PageServerLoad = async ({ params }) => {
+export const load: PageServerLoad = async (event) => {
+	const { params } = event;
 	if (!NUM_SHAPE.test(params.chapter)) throw error(404, 'Invalid AIM chapter.');
 	if (!NUM_SHAPE.test(params.section)) throw error(404, 'Invalid AIM section.');
 	if (!NUM_SHAPE.test(params.paragraph)) throw error(404, 'Invalid AIM paragraph.');
@@ -128,5 +129,6 @@ export const load: PageServerLoad = async ({ params }) => {
 		readingTime: {
 			sectionMinutes,
 		},
+		isAuthenticated: event.locals.user !== null,
 	};
 };

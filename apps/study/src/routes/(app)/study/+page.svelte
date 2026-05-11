@@ -87,6 +87,7 @@ const dueCardsCount = $derived<number | null>(
 			focusNodeId={data.focusNodeId}
 			dueCardsCount={dueCardsCount}
 			newCardsCount={0}
+			flightbagOrigin={data.flightbagOrigin}
 		/>
 		<MapPanel tab={data.tab} tree={data.tree} citationOrder={data.citationOrder} />
 	{/if}

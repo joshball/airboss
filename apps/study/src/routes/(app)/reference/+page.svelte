@@ -17,6 +17,10 @@ import Card from '@ab/ui/components/Card.svelte';
 import PageExplainer from '@ab/ui/components/PageExplainer.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import Tooltip from '@ab/ui/components/Tooltip.svelte';
+import { page } from '$app/state';
+
+const flightbagOrigin = $derived(page.data.flightbagOrigin ?? '');
+const libraryHref = $derived(`${flightbagOrigin}${ROUTES.FLIGHTBAG_HOME}`);
 </script>
 
 <svelte:head>
@@ -50,7 +54,7 @@ import Tooltip from '@ab/ui/components/Tooltip.svelte';
 				<p>The canonical glossary. Hover any term in the app for the short form; this page lists everything.</p>
 			</Card>
 		</a>
-		<a class="ref-card" href={ROUTES.LIBRARY}>
+		<a class="ref-card" href={libraryHref}>
 			<Card>
 				<h2>{NAV_LABELS.LIBRARY}</h2>
 				<p>The in-app FAA library -- handbook chapters, regulations, advisory circulars.</p>

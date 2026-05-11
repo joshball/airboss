@@ -39,8 +39,14 @@ function pathMatches(current: string, prefix: string): boolean {
 
 const cardsActive = $derived(active === 'cards' || pathMatches(page.url.pathname, ROUTES.MEMORY));
 const repsActive = $derived(active === 'reps' || pathMatches(page.url.pathname, ROUTES.REPS));
+// Read is now a cross-app link to the flightbag. The legacy `/library/*`
+// paths still 301 to flightbag for any stale bookmark, but the tab itself
+// points directly at the canonical reader so a click crosses subdomains
+// once instead of round-tripping through study.
 const readActive = $derived(active === 'read' || pathMatches(page.url.pathname, ROUTES.LIBRARY));
 const learnIndexActive = $derived(active === 'learn' || page.url.pathname === ROUTES.LEARN);
+const flightbagOrigin = $derived(page.data.flightbagOrigin ?? '');
+const readHref = $derived(`${flightbagOrigin}${ROUTES.FLIGHTBAG_HOME}`);
 </script>
 
 <nav class="learn-tabs" aria-label="Learn sub-sections">
@@ -53,7 +59,7 @@ const learnIndexActive = $derived(active === 'learn' || page.url.pathname === RO
 	<a href={ROUTES.REPS} aria-current={repsActive ? 'page' : undefined} data-testid="learn-tab-reps">
 		{NAV_LABELS.LEARN_REPS}
 	</a>
-	<a href={ROUTES.LIBRARY} aria-current={readActive ? 'page' : undefined} data-testid="learn-tab-read">
+	<a href={readHref} aria-current={readActive ? 'page' : undefined} data-testid="learn-tab-read">
 		{NAV_LABELS.LEARN_READ}
 	</a>
 </nav>

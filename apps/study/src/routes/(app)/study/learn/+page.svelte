@@ -20,7 +20,11 @@ import Card from '@ab/ui/components/Card.svelte';
 import PageExplainer from '@ab/ui/components/PageExplainer.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import Tooltip from '@ab/ui/components/Tooltip.svelte';
+import { page } from '$app/state';
 import LearnTabs from '$lib/components/LearnTabs.svelte';
+
+const flightbagOrigin = $derived(page.data.flightbagOrigin ?? '');
+const readHref = $derived(`${flightbagOrigin}${ROUTES.FLIGHTBAG_HOME}`);
 </script>
 
 <svelte:head>
@@ -54,7 +58,7 @@ import LearnTabs from '$lib/components/LearnTabs.svelte';
 				<p>Decision-practice scenarios. Short, self-contained, knowledge-in-motion drills.</p>
 			</Card>
 		</a>
-		<a class="learn-card" href={ROUTES.LIBRARY} data-testid="learn-card-read">
+		<a class="learn-card" href={readHref} data-testid="learn-card-read">
 			<Card>
 				<h2>{NAV_LABELS.LEARN_READ}</h2>
 				<p>The in-app FAA library. Handbooks, regulations, advisory circulars. Cited by everything else.</p>

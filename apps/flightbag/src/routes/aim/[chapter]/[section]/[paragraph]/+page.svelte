@@ -2,6 +2,7 @@
 import { ROUTES } from '@ab/constants';
 import type { BreadcrumbSegment } from '@ab/library';
 import Breadcrumbs from '@ab/library/Breadcrumbs.svelte';
+import ReaderLayout from '@ab/library/ReaderLayout.svelte';
 import ReaderNav from '@ab/library/ReaderNav.svelte';
 import RenderedSection from '@ab/library/RenderedSection.svelte';
 import SourceLinks from '@ab/library/SourceLinks.svelte';
@@ -32,63 +33,41 @@ const tocSummary = $derived(
 	<title>AIM ¶{data.paragraph.code} -- {data.paragraph.title}</title>
 </svelte:head>
 
-<div class="reader">
-	<aside class="toc-rail">
+<ReaderLayout sectionId={data.paragraph.id} heartbeatEnabled={data.isAuthenticated}>
+	{#snippet tocSidebar()}
 		<TOCDrawer
 			entries={data.toc.entries}
 			heading={data.reference.title}
 			headingHref={data.links.aimHref}
 			summary={tocSummary}
 		/>
-	</aside>
+	{/snippet}
 
-	<div class="primary">
-		<RenderedSection
-			title={`¶${data.paragraph.code} -- ${data.paragraph.title}`}
-			id={data.uri}
-			body={data.paragraph.contentMd}
-			locator={data.paragraph.sourceLocator}
-			metadata={data.paragraph.metadata}
-			readingTimeMinutes={data.readingTime.sectionMinutes}
-		>
-			{#snippet breadcrumb()}
-				<Breadcrumbs {segments} />
-				<SourceLinks
-					localPdfHref={data.sourceLinks.localPdfHref}
-					onlineUrl={data.sourceLinks.onlineUrl}
-					localPdfMissing={data.sourceLinks.localPdfMissing}
-				/>
-			{/snippet}
-			{#snippet emptyFallback()}
-				<ReaderNav nav={data.nav} variant="empty" />
-			{/snippet}
-			{#snippet footer()}
-				<ReaderNav nav={data.nav} variant="footer" />
-			{/snippet}
-		</RenderedSection>
-	</div>
-</div>
+	{#snippet breadcrumb()}
+		<Breadcrumbs {segments} />
+	{/snippet}
 
-<style>
-	.reader {
-		display: grid;
-		grid-template-columns: 18rem minmax(0, 1fr);
-		gap: var(--space-lg);
-		align-items: start;
-	}
-	.toc-rail {
-		position: sticky;
-		top: var(--space-md);
-	}
-	.primary {
-		min-width: 0;
-	}
-	@media (max-width: 60rem) {
-		.reader {
-			grid-template-columns: 1fr;
-		}
-		.toc-rail {
-			position: static;
-		}
-	}
-</style>
+	{#snippet sourceLinks()}
+		<SourceLinks
+			localPdfHref={data.sourceLinks.localPdfHref}
+			onlineUrl={data.sourceLinks.onlineUrl}
+			localPdfMissing={data.sourceLinks.localPdfMissing}
+		/>
+	{/snippet}
+
+	<RenderedSection
+		title={`¶${data.paragraph.code} -- ${data.paragraph.title}`}
+		id={data.uri}
+		body={data.paragraph.contentMd}
+		locator={data.paragraph.sourceLocator}
+		metadata={data.paragraph.metadata}
+		readingTimeMinutes={data.readingTime.sectionMinutes}
+	>
+		{#snippet emptyFallback()}
+			<ReaderNav nav={data.nav} variant="empty" />
+		{/snippet}
+		{#snippet footer()}
+			<ReaderNav nav={data.nav} variant="footer" />
+		{/snippet}
+	</RenderedSection>
+</ReaderLayout>

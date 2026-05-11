@@ -6,7 +6,6 @@ import ReaderNav from '@ab/library/ReaderNav.svelte';
 import RenderedSection from '@ab/library/RenderedSection.svelte';
 import SourceLinks from '@ab/library/SourceLinks.svelte';
 import TOCDrawer from '@ab/library/TOCDrawer.svelte';
-import HeartbeatTicker from '../../../../../../lib/HeartbeatTicker.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -45,7 +44,7 @@ function formatReadSummary(state: typeof data.readState): string | undefined {
 	<title>{data.section.title} -- {data.reference.title}</title>
 </svelte:head>
 
-<ReaderLayout>
+<ReaderLayout sectionId={data.section.id} heartbeatEnabled={data.isAuthenticated}>
 	{#snippet tocSidebar()}
 		<TOCDrawer
 			entries={data.toc.entries}
@@ -53,6 +52,18 @@ function formatReadSummary(state: typeof data.readState): string | undefined {
 			heading={data.reference.title}
 			headingHref={data.reference.handbookHref}
 			summary={tocSummary}
+		/>
+	{/snippet}
+
+	{#snippet breadcrumb()}
+		<Breadcrumbs {segments} />
+	{/snippet}
+
+	{#snippet sourceLinks()}
+		<SourceLinks
+			localPdfHref={data.sourceLinks.localPdfHref}
+			onlineUrl={data.sourceLinks.onlineUrl}
+			localPdfMissing={data.sourceLinks.localPdfMissing}
 		/>
 	{/snippet}
 
@@ -66,12 +77,6 @@ function formatReadSummary(state: typeof data.readState): string | undefined {
 		readingTimeMinutes={data.readingTime.sectionMinutes}
 	>
 		{#snippet breadcrumb()}
-			<Breadcrumbs {segments} />
-			<SourceLinks
-				localPdfHref={data.sourceLinks.localPdfHref}
-				onlineUrl={data.sourceLinks.onlineUrl}
-				localPdfMissing={data.sourceLinks.localPdfMissing}
-			/>
 			{#if readSummary}
 				<p class="read-summary">{readSummary}</p>
 			{/if}
@@ -83,12 +88,11 @@ function formatReadSummary(state: typeof data.readState): string | undefined {
 			<ReaderNav nav={data.nav} variant="footer" />
 		{/snippet}
 	</RenderedSection>
-	<HeartbeatTicker sectionId={data.section.id} enabled={data.isAuthenticated} />
 </ReaderLayout>
 
 <style>
 	.read-summary {
-		margin: var(--space-xs) 0 0;
+		margin: 0 0 var(--space-sm);
 		color: var(--ink-muted);
 		font-size: var(--font-size-sm);
 		font-style: italic;
