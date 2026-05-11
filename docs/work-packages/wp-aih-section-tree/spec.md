@@ -81,6 +81,4 @@ WP-MTN and WP-RMH ship in parallel. All three modify `handbooks-extras.yaml` and
 
 ## Out of scope
 
-- Errata application. AIH has no published errata as of 2026-05-03; the `errata: []` placeholder in the YAML covers future amendments.
-- Figure/table extraction beyond what `extract handbooks` already produces.
-- Backfilling `course/references/handbooks-noningested.yaml` -- the `aih + FAA-H-8083-9B` placeholder there points at a hypothetical revised edition that FAA has not published; leave for the noningested-yaml retire WP.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
