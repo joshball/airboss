@@ -1,5 +1,5 @@
 {
-  "slug": "wx-scenario-dense-fog-radiation-central-valley-taf-kmod",
+  "slug": "wx-scenarios/dense-fog-radiation-central-valley/taf-kmod",
   "type": "taf-timeline",
   "library_version": "@ab/wx-charts@0.1.0",
   "built_at": "2026-05-11T14:07:06.103Z",

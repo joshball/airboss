@@ -1,5 +1,5 @@
 {
-  "slug": "wx-scenario-summer-thunderstorms-tx-freezing-level",
+  "slug": "wx-scenarios/summer-thunderstorms-tx/freezing-level",
   "type": "freezing-level",
   "library_version": "@ab/wx-charts@0.1.0",
   "built_at": "2026-05-11T13:55:11.144Z",

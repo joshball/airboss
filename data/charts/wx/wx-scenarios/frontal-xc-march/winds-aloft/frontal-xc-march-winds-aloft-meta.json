@@ -1,5 +1,5 @@
 {
-  "slug": "wx-scenario-frontal-xc-march-winds-aloft",
+  "slug": "wx-scenarios/frontal-xc-march/winds-aloft",
   "type": "winds-aloft-fb",
   "library_version": "@ab/wx-charts@0.1.0",
   "built_at": "2026-05-11T12:33:54.925Z",

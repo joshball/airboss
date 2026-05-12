@@ -1,5 +1,5 @@
 {
-  "slug": "wx-scenario-mountain-wave-rockies-g-airmet-icing",
+  "slug": "wx-scenarios/mountain-wave-rockies/g-airmet-icing",
   "type": "icing-gairmet",
   "library_version": "@ab/wx-charts@0.1.0",
   "built_at": "2026-05-11T14:00:38.257Z",

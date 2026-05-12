@@ -1,5 +1,5 @@
 {
-  "slug": "wx-scenario-mountain-wave-rockies-convective-outlook",
+  "slug": "wx-scenarios/mountain-wave-rockies/convective-outlook",
   "type": "convective-outlook",
   "library_version": "@ab/wx-charts@0.1.0",
   "built_at": "2026-05-11T14:00:37.978Z",

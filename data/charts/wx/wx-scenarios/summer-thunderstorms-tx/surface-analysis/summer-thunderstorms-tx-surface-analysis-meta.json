@@ -1,5 +1,5 @@
 {
-  "slug": "wx-scenario-summer-thunderstorms-tx-surface-analysis",
+  "slug": "wx-scenarios/summer-thunderstorms-tx/surface-analysis",
   "type": "surface-analysis",
   "library_version": "@ab/wx-charts@0.1.0",
   "built_at": "2026-05-11T13:55:05.822Z",

@@ -1,5 +1,5 @@
 {
-  "slug": "wx-scenario-frontal-xc-march-convective-outlook",
+  "slug": "wx-scenarios/frontal-xc-march/convective-outlook",
   "type": "convective-outlook",
   "library_version": "@ab/wx-charts@0.1.0",
   "built_at": "2026-05-11T12:34:28.299Z",

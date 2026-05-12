@@ -1,5 +1,5 @@
 {
-  "slug": "wx-scenario-dense-fog-radiation-central-valley-gfa",
+  "slug": "wx-scenarios/dense-fog-radiation-central-valley/gfa",
   "type": "gfa",
   "library_version": "@ab/wx-charts@0.1.0",
   "built_at": "2026-05-11T14:07:05.444Z",

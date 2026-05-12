@@ -1,5 +1,5 @@
 {
-  "slug": "wx-scenario-summer-thunderstorms-tx-winds-aloft",
+  "slug": "wx-scenarios/summer-thunderstorms-tx/winds-aloft",
   "type": "winds-aloft-fb",
   "library_version": "@ab/wx-charts@0.1.0",
   "built_at": "2026-05-11T13:55:12.347Z",

@@ -1,5 +1,5 @@
 {
-  "slug": "wx-scenario-winter-icing-great-lakes-convective-outlook",
+  "slug": "wx-scenarios/winter-icing-great-lakes/convective-outlook",
   "type": "convective-outlook",
   "library_version": "@ab/wx-charts@0.1.0",
   "built_at": "2026-05-11T13:57:17.796Z",

@@ -1,5 +1,5 @@
 {
-  "slug": "wx-scenario-frontal-xc-march-pirep-plot",
+  "slug": "wx-scenarios/frontal-xc-march/pirep-plot",
   "type": "pirep-plot-grid",
   "library_version": "@ab/wx-charts@0.1.0",
   "built_at": "2026-05-11T12:33:43.779Z",

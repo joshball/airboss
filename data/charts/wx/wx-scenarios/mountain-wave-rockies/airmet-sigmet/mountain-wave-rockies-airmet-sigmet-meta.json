@@ -1,5 +1,5 @@
 {
-  "slug": "wx-scenario-mountain-wave-rockies-airmet-sigmet",
+  "slug": "wx-scenarios/mountain-wave-rockies/airmet-sigmet",
   "type": "advisory-overlay",
   "library_version": "@ab/wx-charts@0.1.0",
   "built_at": "2026-05-11T14:00:37.892Z",

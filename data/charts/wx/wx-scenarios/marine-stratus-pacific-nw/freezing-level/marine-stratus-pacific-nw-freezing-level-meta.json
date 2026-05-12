@@ -1,5 +1,5 @@
 {
-  "slug": "wx-scenario-marine-stratus-pacific-nw-freezing-level",
+  "slug": "wx-scenarios/marine-stratus-pacific-nw/freezing-level",
   "type": "freezing-level",
   "library_version": "@ab/wx-charts@0.1.0",
   "built_at": "2026-05-11T14:04:27.650Z",

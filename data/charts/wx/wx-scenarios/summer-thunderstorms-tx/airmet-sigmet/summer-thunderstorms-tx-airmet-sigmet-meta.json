@@ -1,5 +1,5 @@
 {
-  "slug": "wx-scenario-summer-thunderstorms-tx-airmet-sigmet",
+  "slug": "wx-scenarios/summer-thunderstorms-tx/airmet-sigmet",
   "type": "advisory-overlay",
   "library_version": "@ab/wx-charts@0.1.0",
   "built_at": "2026-05-11T13:55:10.841Z",

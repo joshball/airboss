@@ -1,5 +1,5 @@
 {
-  "slug": "wx-scenario-marine-stratus-pacific-nw-g-airmet-turbulence",
+  "slug": "wx-scenarios/marine-stratus-pacific-nw/g-airmet-turbulence",
   "type": "turbulence-gairmet",
   "library_version": "@ab/wx-charts@0.1.0",
   "built_at": "2026-05-11T14:04:27.830Z",
