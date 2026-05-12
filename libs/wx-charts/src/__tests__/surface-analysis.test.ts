@@ -22,6 +22,7 @@ import { renderSurfaceAnalysis, type SurfaceAnalysisSpec } from '../charts/surfa
 
 const REPO_ROOT = resolve(import.meta.dirname, '..', '..', '..', '..');
 const BASEMAP_PATH = resolve(REPO_ROOT, 'data', 'references', 'basemaps', 'us-states-10m.json');
+const CONTEXT_BASEMAP_PATH = resolve(REPO_ROOT, 'data', 'references', 'basemaps', 'north-america-context-50m.json');
 const FIXTURE_SOURCE_PATH = resolve(
 	REPO_ROOT,
 	'spikes',
@@ -114,5 +115,66 @@ describe('renderSurfaceAnalysis (Phase A end-to-end)', () => {
 				libraryVersion: '@ab/wx-charts@0.1.0-test',
 			}),
 		).rejects.toThrow();
+	});
+
+	it('renders the NORTH_AMERICA_CONTEXT layer band BELOW basemap-fill when context TopoJSON supplied (ADR 027 Option A)', async () => {
+		const basemapJson = readFileSync(BASEMAP_PATH, 'utf8');
+		const fixtureJson = readFileSync(FIXTURE_SOURCE_PATH, 'utf8');
+		const contextJson = readFileSync(CONTEXT_BASEMAP_PATH, 'utf8');
+
+		const result = await renderSurfaceAnalysis({
+			spec: SPEC,
+			sources: {
+				fronts: fixtureJson,
+				basemap: basemapJson,
+				// Test seam: pass the context TopoJSON in-memory.
+				'basemap-context': contextJson,
+			},
+			basemapPath: BASEMAP_PATH,
+			libraryVersion: '@ab/wx-charts@0.1.0-test',
+		});
+
+		// Layer must appear in the SVG.
+		expect(result.svg).toContain('<g class="layer-north-america-context"');
+
+		// Layer must contain the canonical context stroke colour from
+		// libs/wx-charts/src/basemap.ts (#bdb9ac).
+		const contextGroupMatch = result.svg.match(/<g class="layer-north-america-context"[^>]*>([\s\S]*?)<\/g>/);
+		expect(contextGroupMatch).not.toBeNull();
+		const contextGroup = contextGroupMatch?.[1] ?? '';
+		expect(contextGroup).toContain('stroke="#bdb9ac"');
+		// 2 features (Canada + Mexico) -> 2 path elements.
+		const pathCount = (contextGroup.match(/<path /g) ?? []).length;
+		expect(pathCount).toBe(2);
+
+		// Layer order: north-america-context must appear in the SVG BEFORE
+		// basemap-fill so the CONUS state polygons draw on top.
+		const contextIdx = result.svg.indexOf('<g class="layer-north-america-context"');
+		const fillIdx = result.svg.indexOf('<g class="layer-basemap-fill"');
+		expect(contextIdx).toBeGreaterThan(0);
+		expect(fillIdx).toBeGreaterThan(contextIdx);
+
+		// Meta reports the feature count.
+		expect(result.meta.layer_counts['north-america-context']).toBe(2);
+	});
+
+	it('renders an empty NORTH_AMERICA_CONTEXT layer band when context TopoJSON is omitted', async () => {
+		const basemapJson = readFileSync(BASEMAP_PATH, 'utf8');
+		const fixtureJson = readFileSync(FIXTURE_SOURCE_PATH, 'utf8');
+
+		const result = await renderSurfaceAnalysis({
+			spec: SPEC,
+			sources: { fronts: fixtureJson, basemap: basemapJson },
+			basemapPath: BASEMAP_PATH,
+			libraryVersion: '@ab/wx-charts@0.1.0-test',
+		});
+
+		// Layer group MUST still appear (the layer-band composer emits it
+		// always) but it must have no path children.
+		const contextGroupMatch = result.svg.match(/<g class="layer-north-america-context"[^>]*>([\s\S]*?)<\/g>/);
+		expect(contextGroupMatch).not.toBeNull();
+		const contextGroup = contextGroupMatch?.[1] ?? '';
+		expect(contextGroup).not.toMatch(/<path /);
+		expect(result.meta.layer_counts['north-america-context']).toBe(0);
 	});
 });
