@@ -1,0 +1,16 @@
+slug: reference-fixtures/wx-freezing-level-2024-12-23-12z
+type: freezing-level
+title: Freezing Level Forecast
+subtitle: '2024-12-23 12Z (Mon) -- height of lowest 0 degC isotherm, ft MSL'
+projection:
+  kind: lambert
+  parallels: [33, 45]
+  rotate: [-96, -39]
+extent: conus
+sources:
+  field: cache://freezing-level/2024-12-23-12z.json
+options:
+  show_legend: true
+  show_contours: true
+  contour_interval_ft: 2000
+  source_attribution: 'NCEP / NWS gridded freezing-level forecast (hand-tuned fixture, not for ops use)'

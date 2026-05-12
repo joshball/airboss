@@ -1,0 +1,15 @@
+slug: reference-fixtures/wx-convective-outlook-day1-2024-05-21
+type: convective-outlook
+title: SPC Day 1 Convective Outlook
+subtitle: '2024-05-21 (Tue) -- HIGH risk near OK/TX border, hand-traced from SPC archive'
+projection:
+  kind: lambert
+  parallels: [33, 45]
+  rotate: [-96, -39]
+extent: conus
+sources:
+  outlook: cache://spc/2024-05-21-day1.json
+options:
+  show_legend: true
+  show_labels: true
+  source_attribution: 'NWS Storm Prediction Center Day 1 Convective Outlook 2024-05-21 13Z (https://www.spc.noaa.gov/products/outlook/archive/2024/day1otlk_20240521_1300.html); hand-traced fixture, not for ops use'

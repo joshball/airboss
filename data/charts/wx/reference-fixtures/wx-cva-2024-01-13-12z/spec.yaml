@@ -1,0 +1,17 @@
+slug: reference-fixtures/wx-cva-2024-01-13-12z
+type: cva
+title: Ceiling and Visibility Analysis
+subtitle: '2024-01-13 12Z (Sat) -- per-station flight category derived from the same METAR set as the Phase C plot'
+projection:
+  kind: lambert
+  parallels: [33, 45]
+  rotate: [-96, -39]
+extent: conus
+sources:
+  observations: cache://metar/2024-01-13-12z.json
+options:
+  show_legend: true
+  show_station_labels: true
+  show_polygons: true
+  dot_radius_px: 7
+  source_attribution: 'IEM ASOS Archive (https://mesonet.agron.iastate.edu); flight category computed via AIM 7-1-6 thresholds'

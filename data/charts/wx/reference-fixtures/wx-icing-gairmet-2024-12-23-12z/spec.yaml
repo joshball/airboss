@@ -1,0 +1,15 @@
+slug: reference-fixtures/wx-icing-gairmet-2024-12-23-12z
+type: icing-gairmet
+title: G-AIRMET Icing
+subtitle: '2024-12-23 12-15Z (Mon) -- pairs with the same-date AIRMET / SIGMET surface'
+projection:
+  kind: lambert
+  parallels: [33, 45]
+  rotate: [-96, -39]
+extent: conus
+sources:
+  areas: cache://g-airmet/2024-12-23-12z-icing.json
+options:
+  show_legend: true
+  show_labels: true
+  source_attribution: 'AWC G-AIRMET icing archive (hand-traced fixture; not for ops use)'
