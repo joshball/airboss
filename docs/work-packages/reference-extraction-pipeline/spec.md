@@ -102,12 +102,7 @@ The reason this system exists. Flow:
 
 ## Out of scope
 
-- **Schema types** (`Reference`, `SourceCitation`, `VerbatimBlock`, `ReferenceTags`, `Source`). Authored in wp-reference-system-core. This WP imports and uses them.
-- **Wiki-link parser and basic scanner.** Authored in wp-reference-system-core.
-- **AIM, POH, PCG, AC, NTSB, AOPA, hand-authored parsers.** Phases 6 and 8, each its own WP. This WP establishes the extensibility contract; sibling parsers follow the same `SourceExtractor` shape.
-- **Help library (`@ab/help`) and help-content scanning.** wp-help-library.
-- **`/glossary` route and UI components.** wp-reference-system-core.
-- **Downloading source files.** Out of band. The user drops the file into `data/sources/<type>/` and updates `registry.ts`. A future WP may automate downloads.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Data model
 
