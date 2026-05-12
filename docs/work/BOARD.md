@@ -128,7 +128,7 @@ Sections sort by status; within each section WPs sort alphabetically by id.
 | [wp-notes-primitive](../work-packages/wp-notes-primitive/spec.md)                             | Spec: WP-NOTES-PRIMITIVE -- platform-wide note primitive (schema, BC, components, viewer)           | study     | feature  | pending      | pending      |
 | [wp-toc-validation-schema](../work-packages/wp-toc-validation-schema/spec.md)                 | Spec: WP-TOC-VALIDATION-SCHEMA -- TOC validation persistence shape                                  | hangar    | feature  | pending      | pending      |
 | [wx-chart-symbology-library](../work-packages/wx-chart-symbology-library/spec.md)             | Spec: Weather Chart Symbology Library                                                               | platform  | feature  | pending      | pending      |
-| [wx-engine](../work-packages/wx-engine/spec.md)                                               | Spec: Truth-Aware Weather Scenario Engine                                                           | platform  | feature  | pending      | pending      |
+| [wx-engine](../work-packages/wx-engine/spec.md)                                               | Spec: Truth-Aware Weather Scenario Engine                                                           | platform  | feature  | done         | pending      |
 | [xc-viewer-v1](../work-packages/xc-viewer-v1/spec.md)                                         | Spec: XC Viewer v1 -- Universal Pre-Flight Stage (First Slice)                                      | sim       | feature  | pending      | pending      |
 
 ## Abandoned (4)
