@@ -7,11 +7,12 @@
  * + library_version inclusion (the spec.md WXC-70 invariant).
  */
 
+import { referenceFixtureChartSlug } from '@ab/constants';
 import { describe, expect, it } from 'vitest';
 import { computeContentHash, type RawChartSpec, type ResolvedSource, sha256Hex } from './lib';
 
 const SAMPLE_SPEC: RawChartSpec = {
-	slug: 'wx-surface-analysis-2024-12-23-12z',
+	slug: referenceFixtureChartSlug('surface-analysis', '2024-12-23-12z'),
 	type: 'surface-analysis',
 	title: 'Surface Analysis',
 	subtitle: '2024-12-23 12Z',
