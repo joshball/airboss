@@ -118,9 +118,6 @@ Persona: returning CFI rebuilding PPL/IR/CPL/CFI/CFII/MEI/MEII knowledge from a 
 - After creating, the index renders the new goal in the Active group
 - A help-drawer link explains primary semantics and the difference between syllabus + ad-hoc nodes
 
-## Out of scope (future stories)
+## Out of scope
 
-- US-future-1 -- Goal templates ("PPL prep starter") -- triggered after manual compose proves friction
-- US-future-2 -- Goal collaboration / sharing -- triggered when multi-user CFI / student pairing is on the roadmap
-- US-future-3 -- Engine cutover (engine reads `getGoalNodeUnion` instead of `study_plan`) -- separate WP
-- US-future-4 -- Bulk node operations (multi-select add) -- triggered when single-add hits friction in real use
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
