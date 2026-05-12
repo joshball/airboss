@@ -53,11 +53,7 @@ Source items: `docs/work/.archive/todos/20260424-02-smi-walkthrough-feedback.md`
 
 ## Out of scope
 
-- Auto-backfill that scans existing card bodies for `14 CFR X.Y` patterns and creates citations. Reason: users authored the existing cards and can cite manually; a regex pass will produce false matches and leaves us owning the error cases. Flag as a follow-up WP if coverage data shows we need it.
-- Inline-in-body markdown citation syntax (e.g. `{cite: node-id}`). v1 uses explicit structured citations via the picker.
-- Public citation discovery surfaces (e.g. a "most-cited regulations" leaderboard). Possible follow-up; not in scope.
-- Bulk citation import/CSV.
-- Citation moderation/approval. Authors own their citations.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Product decisions the user needs to make
 
