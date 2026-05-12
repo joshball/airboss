@@ -29,6 +29,10 @@ legacy_fields:
 
 **This WP slims handbooks-extras to its minimum** and defers full retirement to a future WP that ports `body_override` to the chapter-aware path.
 
+## Out of scope
+
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md). Full retirement of the corpus is captured there as a Follow-on WP with the `body_override` port as its trigger; the slim pass shipped under PR #540.
+
 ## Why retire (rather than leave empty)
 
 Per the user's "no legacy in airboss — retire on sight" rule (memory: `feedback_no_legacy_in_airboss.md`), an empty corpus + dead emitter pipeline is exactly the kind of cruft that should be deleted. Reasons:
