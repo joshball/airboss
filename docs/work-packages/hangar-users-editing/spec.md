@@ -97,13 +97,13 @@ Three writes; one surface. Plus the audit + confirmation contract that future ad
 
 8. **Audit-emission contract for each op:**
 
-   | Op                  | `op`                  | `targetId`        | `before` snapshot                   | `after` snapshot                              | `metadata.subKind`        |
-   | ------------------- | --------------------- | ----------------- | ----------------------------------- | --------------------------------------------- | ------------------------- |
-   | Set role            | `AUDIT_OPS.UPDATE`    | target user id    | `{ role: oldRole }`                 | `{ role: newRole }`                           | `'role-assign'`           |
-   | Ban                 | `AUDIT_OPS.UPDATE`    | target user id    | `{ banned, banReason, banExpires }` | `{ banned: true, banReason, banExpires }`     | `'ban'`                   |
-   | Unban               | `AUDIT_OPS.UPDATE`    | target user id    | `{ banned: true, ... }`             | `{ banned: false, banReason: null, ... }`     | `'unban'`                 |
-   | Revoke one session  | `AUDIT_OPS.ACTION`    | target user id    | `null`                              | `null`                                        | `'session-revoke'`        |
-   | Revoke all sessions | `AUDIT_OPS.ACTION`    | target user id    | `null`                              | `null`                                        | `'session-revoke-all'`    |
+| Op                  | `op`               | `targetId`     | `before` snapshot                   | `after` snapshot                          | `metadata.subKind`     |
+| ------------------- | ------------------ | -------------- | ----------------------------------- | ----------------------------------------- | ---------------------- |
+| Set role            | `AUDIT_OPS.UPDATE` | target user id | `{ role: oldRole }`                 | `{ role: newRole }`                       | `'role-assign'`        |
+| Ban                 | `AUDIT_OPS.UPDATE` | target user id | `{ banned, banReason, banExpires }` | `{ banned: true, banReason, banExpires }` | `'ban'`                |
+| Unban               | `AUDIT_OPS.UPDATE` | target user id | `{ banned: true, ... }`             | `{ banned: false, banReason: null, ... }` | `'unban'`              |
+| Revoke one session  | `AUDIT_OPS.ACTION` | target user id | `null`                              | `null`                                    | `'session-revoke'`     |
+| Revoke all sessions | `AUDIT_OPS.ACTION` | target user id | `null`                              | `null`                                    | `'session-revoke-all'` |
 
    `metadata` always carries `requestId`, `userAgent`, the calling admin's email (denormalized for ease of reading), and op-specific extras: revoked-session-id for the single revoke; revoked count for the bulk revoke; ban reason + expiry for the ban (also in `after`, intentional duplication for query speed).
 
@@ -130,19 +130,9 @@ Three writes; one surface. Plus the audit + confirmation contract that future ad
 
 12. **Documentation updates.** `docs/products/hangar/PRD.md` Backlog row "`/users` editing (role assignment, ban/unban, session revoke)" flips from "Not started" to "shipped" + linked to this WP.
 
-## Out of Scope (explicit)
+## Out of scope
 
-- **Invite flow.** Per the PRD backlog, the invite/onboard flow is a separate WP. This WP only edits already-existing users.
-- **`removeUser` (account deletion).** Better-auth exposes it; we do not surface it. Account deletion is destructive enough to deserve its own WP with retention / GDPR considerations.
-- **`impersonateUser`.** Better-auth's impersonation is powerful (and dangerous). Punted to its own WP behind an additional gate.
-- **Editing `name`, `email`, `firstName`, `lastName`, `image`, `address`.** These are profile fields owned by the user, not by an admin. Admins shouldn't rewrite a user's name. If a name change is needed for moderation reasons, that's a separate moderation WP.
-- **Bulk operations.** No "ban 50 users" or "set-role on a multi-select." Single-target only. Bulk is a future power-user surface; for v1 single-target is enough and avoids the foot-gun.
-- **Per-app role policy.** All apps see the same `bauth_user.role`. Per-app roles (a user is `author` in study and `operator` in hangar) are a much bigger schema change.
-- **Role audit timeline UI.** The audit page already shows the actor-scoped audit list at the bottom. A target-scoped timeline ("everything that happened TO this user") is a follow-on; the audit data is captured here and the follow-on consumes it.
-- **Email notification to the banned user.** Better-auth doesn't auto-mail; we don't either. A "you have been banned" mail is a follow-on.
-- **Pagination of the sessions list.** The detail page already shows the most recent N (`USER_DETAIL_SESSION_LIMIT = 10`); revoke-all covers the long tail.
-- **An "ops dashboard" of recent admin actions.** The audit-ping page is the placeholder; a real recent-admin-actions tile is a follow-on.
-- **Two-admin / dual-control gate** ("a ban requires a second admin to approve"). Not a v1 requirement -- single-admin platform today. If/when a second admin joins, this is the natural follow-on.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Architecture overview
 
@@ -201,15 +191,15 @@ Three writes; one surface. Plus the audit + confirmation contract that future ad
 
 New file `libs/bc/hangar/src/user-writes.ts`:
 
-| Function                  | Signature                                                                                                                 |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `setUserRole`             | `(input: SetUserRoleInput, db?: Db) -> Promise<{ user: UserDirectoryRow }>`                                               |
-| `banUserAction`           | `(input: BanUserInput, db?: Db) -> Promise<{ user: UserDirectoryRow }>`                                                   |
-| `unbanUserAction`         | `(input: UnbanUserInput, db?: Db) -> Promise<{ user: UserDirectoryRow }>`                                                 |
-| `revokeUserSession`       | `(input: RevokeUserSessionInput, db?: Db) -> Promise<{ revokedSessionId: string }>`                                       |
-| `revokeAllUserSessions`   | `(input: RevokeAllUserSessionsInput, db?: Db) -> Promise<{ revokedCount: number; revokedOwn: boolean }>`                  |
-| `assertSelfTargetAllowed` | `(input: { actorId: string; targetUserId: string; op: 'set-role' \| 'ban' }) -> void` (throws `SelfTargetForbiddenError`) |
-| `assertNotLastAdmin`      | `(input: { targetUserId: string; newRole: Role; db: Db }) -> Promise<void>` (throws `LastAdminError`)                     |
+| Function                  | Signature                                                                                                |                                                       |
+| ------------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| `setUserRole`             | `(input: SetUserRoleInput, db?: Db) -> Promise<{ user: UserDirectoryRow }>`                              |                                                       |
+| `banUserAction`           | `(input: BanUserInput, db?: Db) -> Promise<{ user: UserDirectoryRow }>`                                  |                                                       |
+| `unbanUserAction`         | `(input: UnbanUserInput, db?: Db) -> Promise<{ user: UserDirectoryRow }>`                                |                                                       |
+| `revokeUserSession`       | `(input: RevokeUserSessionInput, db?: Db) -> Promise<{ revokedSessionId: string }>`                      |                                                       |
+| `revokeAllUserSessions`   | `(input: RevokeAllUserSessionsInput, db?: Db) -> Promise<{ revokedCount: number; revokedOwn: boolean }>` |                                                       |
+| `assertSelfTargetAllowed` | `(input: { actorId: string; targetUserId: string; op: 'set-role' \                                       | 'ban' }) -> void` (throws `SelfTargetForbiddenError`) |
+| `assertNotLastAdmin`      | `(input: { targetUserId: string; newRole: Role; db: Db }) -> Promise<void>` (throws `LastAdminError`)    |                                                       |
 
 Input shapes (all also validated by Zod schemas in `user-write-schemas.ts`):
 
@@ -287,29 +277,29 @@ Lives in `libs/constants/src/audit.ts` next to `AUDIT_TARGETS`.
 
 ## Routes
 
-| Route                         | Method | Purpose                                                                                                       |
-| ----------------------------- | ------ | ------------------------------------------------------------------------------------------------------------- |
-| `/users/[id]`                 | GET    | Existing read-only detail load. Unchanged.                                                                    |
-| `/users/[id]?/setRole`        | POST   | Form action. Body: `newRole`. Calls `setUserRole` BC. Audits.                                                 |
-| `/users/[id]?/ban`            | POST   | Form action. Body: `reason`, `expiresAt?`, `confirmEmail` (typed gate). Calls `banUserAction`. Audits.        |
-| `/users/[id]?/unban`          | POST   | Form action. Body: (none). Calls `unbanUserAction`. Audits.                                                   |
-| `/users/[id]?/revokeSession`  | POST   | Form action. Body: `sessionId`, `confirmEmail`. Calls `revokeUserSession`. Audits.                            |
-| `/users/[id]?/revokeAllSessions` | POST | Form action. Body: `confirmEmail`. Calls `revokeAllUserSessions`. Audits. Redirects to `/login` if self.      |
+| Route                            | Method | Purpose                                                                                                  |
+| -------------------------------- | ------ | -------------------------------------------------------------------------------------------------------- |
+| `/users/[id]`                    | GET    | Existing read-only detail load. Unchanged.                                                               |
+| `/users/[id]?/setRole`           | POST   | Form action. Body: `newRole`. Calls `setUserRole` BC. Audits.                                            |
+| `/users/[id]?/ban`               | POST   | Form action. Body: `reason`, `expiresAt?`, `confirmEmail` (typed gate). Calls `banUserAction`. Audits.   |
+| `/users/[id]?/unban`             | POST   | Form action. Body: (none). Calls `unbanUserAction`. Audits.                                              |
+| `/users/[id]?/revokeSession`     | POST   | Form action. Body: `sessionId`, `confirmEmail`. Calls `revokeUserSession`. Audits.                       |
+| `/users/[id]?/revokeAllSessions` | POST   | Form action. Body: `confirmEmail`. Calls `revokeAllUserSessions`. Audits. Redirects to `/login` if self. |
 
 The list page `/users` does not gain actions in this WP -- all editing happens on the detail page so the surface stays focused.
 
 ## Validation
 
-| Field / surface                           | Rule                                                                                                                       |
-| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `newRole` form field                      | Required. One of `ROLE_VALUES`. `fail(400)` otherwise.                                                                     |
-| `reason` form field (ban)                 | Required. Length 1..500. Trimmed. `fail(400)` otherwise.                                                                   |
-| `expiresAt` form field (ban)              | Optional ISO-8601 string. If provided, must parse to a future `Date`. `fail(400)` otherwise.                               |
-| `sessionId` form field (revoke single)    | Required. Must match an existing session for the target user. BC re-validates via `listRecentUserSessions` before revoking. |
-| `confirmEmail` form field (typed gate)    | Required for ban / revoke / revoke-all. Must equal the target user's email. `fail(400)` otherwise.                         |
-| Self-target on set-role / ban             | Hard-blocked. `fail(409, { error: 'Cannot ... yourself.' })`.                                                              |
-| Last-admin demotion                       | Hard-blocked. `fail(409, { error: 'Cannot demote the last admin.' })`.                                                     |
-| Banned target attempting to be banned again | Better-auth admin plugin handles idempotently. We still emit the audit row (the reason or expiry may have changed).      |
+| Field / surface                             | Rule                                                                                                                        |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `newRole` form field                        | Required. One of `ROLE_VALUES`. `fail(400)` otherwise.                                                                      |
+| `reason` form field (ban)                   | Required. Length 1..500. Trimmed. `fail(400)` otherwise.                                                                    |
+| `expiresAt` form field (ban)                | Optional ISO-8601 string. If provided, must parse to a future `Date`. `fail(400)` otherwise.                                |
+| `sessionId` form field (revoke single)      | Required. Must match an existing session for the target user. BC re-validates via `listRecentUserSessions` before revoking. |
+| `confirmEmail` form field (typed gate)      | Required for ban / revoke / revoke-all. Must equal the target user's email. `fail(400)` otherwise.                          |
+| Self-target on set-role / ban               | Hard-blocked. `fail(409, { error: 'Cannot ... yourself.' })`.                                                               |
+| Last-admin demotion                         | Hard-blocked. `fail(409, { error: 'Cannot demote the last admin.' })`.                                                      |
+| Banned target attempting to be banned again | Better-auth admin plugin handles idempotently. We still emit the audit row (the reason or expiry may have changed).         |
 
 ## Edge cases
 
