@@ -9,6 +9,7 @@
 
 export {
 	type CalloutVariant,
+	type DirectiveNode,
 	highlight,
 	type InlineNode,
 	MarkdownParseError,

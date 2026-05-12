@@ -1,7 +1,8 @@
 <script lang="ts">
 import { getReferenceById } from '@ab/aviation';
 import { ROUTES } from '@ab/constants';
-import type { InlineNode, MdNode } from '../markdown/ast';
+import type { Snippet } from 'svelte';
+import type { DirectiveNode, InlineNode, MdNode } from '../markdown/ast';
 import { helpRegistry } from '../registry';
 import HelpCard from './HelpCard.svelte';
 
@@ -13,9 +14,22 @@ import HelpCard from './HelpCard.svelte';
  * (Shiki) and are emitted via `{@html}`. The call site (help page loader)
  * must have awaited `parseMarkdown`, so no async work happens inside this
  * component.
+ *
+ * Directive support: when the AST contains a `directive` node
+ * (e.g. `:::chart slug="..."` / `:::scenario slug="..."`) the renderer
+ * mounts a component supplied by the caller via the `renderDirective`
+ * snippet prop. If the snippet is omitted the directive renders an inert
+ * `<div data-directive>` placeholder so the surrounding markdown still
+ * lays out. `@ab/help` does not import host-app components directly --
+ * the surface that authors directives owns the mount.
  */
 
-let { nodes }: { nodes: MdNode[] } = $props();
+interface Props {
+	nodes: MdNode[];
+	renderDirective?: Snippet<[DirectiveNode]>;
+}
+
+let { nodes, renderDirective }: Props = $props();
 
 function resolveWikilink(pageId: string): { href: string; resolved: boolean } {
 	if (pageId === '') return { href: '', resolved: false };
@@ -137,6 +151,21 @@ function resolveWikilink(pageId: string): { href: string; resolved: boolean } {
 					{@render blockNodes(node.children)}
 				{/snippet}
 			</HelpCard>
+		{:else if node.kind === 'directive'}
+			{#if renderDirective}
+				{@render renderDirective(node)}
+			{:else}
+				<div
+					class="md-directive-placeholder"
+					data-directive={node.name}
+					data-slug={node.attrs.slug ?? ''}
+					aria-label={`Unrendered ${node.name} directive`}
+				>
+					<code>:::{node.name} {Object.entries(node.attrs)
+							.map(([k, v]) => `${k}="${v}"`)
+							.join(' ')}</code>
+				</div>
+			{/if}
 		{:else if node.kind === 'figure'}
 			<figure class="md-figure">
 				<!--
@@ -393,5 +422,19 @@ function resolveWikilink(pageId: string): { href: string; resolved: boolean } {
 		border: 0;
 		border-top: 1px solid var(--edge-default);
 		margin: var(--space-lg) 0;
+	}
+
+	.md-body :global(.md-directive-placeholder) {
+		margin: var(--space-md) 0;
+		padding: var(--space-sm) var(--space-md);
+		border: 1px dashed var(--edge-default);
+		border-radius: var(--radius-md);
+		background: var(--surface-sunken);
+		color: var(--ink-muted);
+		font-size: var(--font-size-sm);
+	}
+
+	.md-body :global(.md-directive-placeholder code) {
+		font-family: var(--font-family-mono);
 	}
 </style>
