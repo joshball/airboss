@@ -52,45 +52,37 @@ Pure read consumer of `audit.audit_log`. No writes. No new schema. The only prop
 
 ## In Scope
 
-| #  | Item                                                                                                                                                                                                                          |
-| -- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1  | `/admin/audit` list route. Renders rows from `audit.audit_log` newest-first with pagination.                                                                                                                                   |
-| 2  | `/admin/audit/[id]` detail route. Renders one row in full: actor, op, target, timestamp, before (jsonb), after (jsonb), metadata (jsonb), request-id link.                                                                     |
-| 3  | Filter bar: actor (user search by name or email), target type (select from `AUDIT_TARGET_VALUES`), target id (free text), op (select from `AUDIT_OP_VALUES`), time window (preset + custom).                                  |
-| 4  | Default time window: last 24h. Presets: 1h, 24h, 7d, 30d, all. Custom: `from` and `to` ISO datetimes.                                                                                                                          |
-| 5  | All filter state lives in URL search params; deep-linkable; back/forward restores filters.                                                                                                                                     |
-| 6  | Pagination: cursor-based on `(timestamp desc, id desc)` -- default page size 50, hard cap 200. Hidden behind a "Show more" button rather than numbered pages.                                                                  |
-| 7  | ADMIN-only gate at the route layer (`requireRole(ROLES.ADMIN)` in `+page.server.ts`). Matches `/users`. Layout-level AUTHOR-or-better gate is too permissive for raw audit data.                                              |
-| 8  | New BC read: `listAuditEntries(filters, db)` in `libs/bc/hangar/src/audit-queries.ts`. Returns rows + a `nextCursor`. Existing `auditRecent` and `listRecentUserAudits` are kept; this surface needs a third, broader read.    |
-| 9  | New BC read: `getAuditEntry(id, db)` for the detail page. Returns the row joined with the actor's display name + email so the detail page doesn't need a second query.                                                         |
-| 10 | Pretty rendering of `before`, `after`, `metadata`. JSON pretty-print with copy-to-clipboard. No diff view in v1 -- the two payloads render side-by-side; visual diff is a v2 follow-up unless the open question is resolved.   |
-| 11 | "View all from this actor" / "View all on this target" links on the detail page that round-trip the filters back into the list.                                                                                                |
-| 12 | Empty state: explicit copy when no rows match (filter active) or when the table is empty (no audit history yet).                                                                                                               |
-| 13 | Help page in `apps/hangar/src/lib/help/content/audit.ts` covering filters, time window semantics, "what's an op", and the link from the detail page back to a filtered list.                                                  |
-| 14 | Vitest unit coverage for `listAuditEntries` filter composition + `getAuditEntry`.                                                                                                                                              |
-| 15 | Playwright e2e: list smoke, filter round-trip, detail page renders, ADMIN-only redirect for AUTHOR / OPERATOR / learner.                                                                                                       |
+| #   | Item                                                                                                                                                                                                                         |
+| --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | `/admin/audit` list route. Renders rows from `audit.audit_log` newest-first with pagination.                                                                                                                                 |
+| 2   | `/admin/audit/[id]` detail route. Renders one row in full: actor, op, target, timestamp, before (jsonb), after (jsonb), metadata (jsonb), request-id link.                                                                   |
+| 3   | Filter bar: actor (user search by name or email), target type (select from `AUDIT_TARGET_VALUES`), target id (free text), op (select from `AUDIT_OP_VALUES`), time window (preset + custom).                                 |
+| 4   | Default time window: last 24h. Presets: 1h, 24h, 7d, 30d, all. Custom: `from` and `to` ISO datetimes.                                                                                                                        |
+| 5   | All filter state lives in URL search params; deep-linkable; back/forward restores filters.                                                                                                                                   |
+| 6   | Pagination: cursor-based on `(timestamp desc, id desc)` -- default page size 50, hard cap 200. Hidden behind a "Show more" button rather than numbered pages.                                                                |
+| 7   | ADMIN-only gate at the route layer (`requireRole(ROLES.ADMIN)` in `+page.server.ts`). Matches `/users`. Layout-level AUTHOR-or-better gate is too permissive for raw audit data.                                             |
+| 8   | New BC read: `listAuditEntries(filters, db)` in `libs/bc/hangar/src/audit-queries.ts`. Returns rows + a `nextCursor`. Existing `auditRecent` and `listRecentUserAudits` are kept; this surface needs a third, broader read.  |
+| 9   | New BC read: `getAuditEntry(id, db)` for the detail page. Returns the row joined with the actor's display name + email so the detail page doesn't need a second query.                                                       |
+| 10  | Pretty rendering of `before`, `after`, `metadata`. JSON pretty-print with copy-to-clipboard. No diff view in v1 -- the two payloads render side-by-side; visual diff is a v2 follow-up unless the open question is resolved. |
+| 11  | "View all from this actor" / "View all on this target" links on the detail page that round-trip the filters back into the list.                                                                                              |
+| 12  | Empty state: explicit copy when no rows match (filter active) or when the table is empty (no audit history yet).                                                                                                             |
+| 13  | Help page in `apps/hangar/src/lib/help/content/audit.ts` covering filters, time window semantics, "what's an op", and the link from the detail page back to a filtered list.                                                 |
+| 14  | Vitest unit coverage for `listAuditEntries` filter composition + `getAuditEntry`.                                                                                                                                            |
+| 15  | Playwright e2e: list smoke, filter round-trip, detail page renders, ADMIN-only redirect for AUTHOR / OPERATOR / learner.                                                                                                     |
 
-## Out of Scope (explicit)
+## Out of Scope
 
-- **Writes.** No edit, delete, or backfill of audit rows. The audit trail is append-only by design (ADR 004).
-- **Retiring `/admin/audit-ping`.** That route stays as a heartbeat diagnostic until a follow-up cleanup WP. Note in spec body: this WP makes the new surface; a separate WP routes the dashboard's System -> Audit tile here, removes audit-ping, and cleans up `ROUTES.HANGAR_ADMIN_AUDIT_PING` + `AUDIT_TARGETS.HANGAR_PING` if the pattern is no longer needed.
-- **Visual diff between before / after.** v1 ships side-by-side jsonb. A real diff renderer (deep object diff, highlighted adds/removes) is deferred to v2 unless the open question pulls it in. Side-by-side jsonb is the safe minimum.
-- **Search inside jsonb payloads.** "Find every row whose `metadata.requestId` is X" requires GIN indexes and a different query path. Deferred. v1 filters are top-level columns only.
-- **CSV / JSON export.** "Download last 7d" is a recurring admin ask; it's a 30-line follow-up but adds a write-to-disk path and rate-limit concern. Deferred unless the open question pulls it in.
-- **Numbered pagination.** Cursor-based "Show more" is enough for v1. Numbered pages need a `count(*)` round-trip per page change, which is wasteful on a growing table.
-- **Cross-app federation.** This surface reads `audit.audit_log` only -- the one cross-cutting table that already aggregates every BC's writes. There's no per-app audit silo to federate.
-- **Realtime tail.** No "live follow" mode in v1. Manual reload or filter-change is the refresh path.
-- **Mobile-specific layout.** Desktop-first per the rest of hangar.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## BC reads consumed (proposed -- not added in this WP)
 
-| Function                                              | File                                       | Used on                  | Status            |
-| ----------------------------------------------------- | ------------------------------------------ | ------------------------ | ----------------- |
-| `listAuditEntries(filters, db)`                       | `libs/bc/hangar/src/audit-queries.ts` (new) | `/admin/audit` list      | New, build-phase  |
-| `getAuditEntry(id, db)`                               | `libs/bc/hangar/src/audit-queries.ts` (new) | `/admin/audit/[id]`      | New, build-phase  |
-| `searchActorIds(searchTerm, limit, db)`               | `libs/bc/hangar/src/audit-queries.ts` (new) | Filter bar -- actor lookup | New, build-phase  |
-| `auditRecent`                                         | `libs/audit/src/log.ts`                    | unchanged                | Kept              |
-| `listRecentUserAudits`                                | `libs/bc/hangar/src/users.ts`              | unchanged                | Kept              |
+| Function                                | File                                        | Used on                    | Status           |
+| --------------------------------------- | ------------------------------------------- | -------------------------- | ---------------- |
+| `listAuditEntries(filters, db)`         | `libs/bc/hangar/src/audit-queries.ts` (new) | `/admin/audit` list        | New, build-phase |
+| `getAuditEntry(id, db)`                 | `libs/bc/hangar/src/audit-queries.ts` (new) | `/admin/audit/[id]`        | New, build-phase |
+| `searchActorIds(searchTerm, limit, db)` | `libs/bc/hangar/src/audit-queries.ts` (new) | Filter bar -- actor lookup | New, build-phase |
+| `auditRecent`                           | `libs/audit/src/log.ts`                     | unchanged                  | Kept             |
+| `listRecentUserAudits`                  | `libs/bc/hangar/src/users.ts`               | unchanged                  | Kept             |
 
 `listAuditEntries` signature (proposed):
 
@@ -194,12 +186,4 @@ Implementation choices:
 
 ## Deferred (with explicit triggers)
 
-| Item                                                          | Trigger to revisit                                                                            |
-| ------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| Retire `/admin/audit-ping` + `AUDIT_TARGETS.HANGAR_PING`       | First hangar mutation surface (e.g. user-edit) that emits its own audit rows lands.           |
-| Visual diff renderer for before / after on update rows         | Admin reports side-by-side jsonb is hard to read on a real investigation.                     |
-| CSV / JSON export                                              | First incident response that needs >100 rows out of the UI.                                   |
-| Search inside `metadata` jsonb (e.g. by `requestId`)            | First investigation that needs to trace a single request across multiple BCs.                 |
-| Numbered / count-aware pagination                               | Audit volume on this page exceeds ~10 cursor pages per typical admin session.                 |
-| Index on `audit_log(timestamp desc)` alone                      | Unfiltered list query latency exceeds 200ms in production.                                    |
-| Realtime tail mode                                              | Live-debugging an in-progress incident becomes a recurring need.                              |
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
