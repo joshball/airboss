@@ -123,14 +123,7 @@ Same input box, ranker, and registry serve all three modes. Mode is selected by 
 
 ## Non-goals
 
-- Server-side FTS. Phase 2 is in-memory only; if any query needs >50ms to rank we revisit, but the corpus is small enough that the in-memory ranker should hold.
-- Cross-tenant or cross-org search. Single-user single-tenant.
-- Personalisation beyond recents (Phase 5). No collaborative filtering, no learned weights.
-- Localisation. English-only.
-- Indexing user reflection journals (`mine.note`). Scaffolded but no loader.
-- Voice / NL queries.
-- "Built-in" workflows (Alfred-style multi-step). Each result has one primary action plus Cmd+Enter / Cmd+\ modifiers.
-- Reskinning `apps/hangar`'s `/docs` admin search. That's its own search surface for authors; this palette is for end users + admins from any app.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## See also
 
