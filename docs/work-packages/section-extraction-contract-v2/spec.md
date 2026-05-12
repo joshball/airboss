@@ -285,14 +285,9 @@ v3 adds an explicit cap line right after the level definitions: **valid values f
 
 The v3 amendments were patched in place into the live emitted prompts during the run, then ch 03 / 14 / 17 were re-dispatched against v3. The chapters that succeeded on first dispatch (01, 02, 04-13, 15, 16) ran against v2 prompts; ch 03 / 14 / 17 ran against v3. The committed prompts under `tools/handbook-ingest/prompts-out/phak/FAA-H-8083-25C/out/` are the v3 versions. `meta.json` for the run still records the v2 template SHA at emit time. The JSON outputs themselves are valid v3 shape regardless of which prompt produced them; a future re-run from the v3 source-of-truth produces the same result. This is a one-time drift -- future contract changes go through a fresh re-emit before dispatch.
 
-## Out of Scope (explicit)
+## Out of scope
 
-- **Chapter-source ingestion.** Per-chapter PDF / HTML downloads. Owned by `chapter-source-ingestion` WP. This WP works on whole-PDF mode by raising the cap.
-- **TOC parser improvements.** The deterministic Python parser has its own bugs (over-flattening, 668 warnings). Surfacing them via disagreements is in scope; fixing them is not.
-- **Cache layout.** ADR 021 settled this. We don't move files.
-- **Errata.** Handled separately by `apply-errata-and-afh-mosaic` WP.
-- **DB schema.** No `handbook_section` changes. Contract output is consumed by extract-time tools, not the DB.
-- **API-driven LLM mode.** The paste flow is the only supported mode; this WP does not reintroduce a `--strategy llm` API path.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Acceptance criteria
 
@@ -330,14 +325,14 @@ These criteria are in scope for the Phase 3 PR (separate, follows this WP closur
 
 ## Risk register
 
-| Risk | Mitigation |
-| --- | --- |
-| Raising `chapter_text_max_chars` blows past LLM context | Verify against per-chapter sidecar size; cap with 20% headroom, not unbounded. |
-| Coverage assertion fails on a legitimately short chapter | Contract requires self-check + error return; not a silent fail. User re-runs that chapter manually. |
-| Disagreements field bloats the JSON | Cap at 50 entries per chapter; the contract says "summarize systematic issues, don't enumerate each line." |
-| TOC checklist threads stale data when YAML changes | Prompt-emit re-runs the TOC parser at emit time; the data in `meta.json` records its SHA. Re-emitting is fast. |
-| Per-handbook hints become hidden coupling | Hints are passed verbatim to the prompt; reviewer can read them in the prompt text without indirection. Hints are validated as opaque strings. |
-| Re-run replaces good chapters with worse v2 output | Side-by-side diff before committing. If v2 is worse on any chapter, debug before merging. The compare report from this WP run is the gate. |
+| Risk                                                                                | Mitigation                                                                                                                                                                                                  |
+| ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Raising `chapter_text_max_chars` blows past LLM context                             | Verify against per-chapter sidecar size; cap with 20% headroom, not unbounded.                                                                                                                              |
+| Coverage assertion fails on a legitimately short chapter                            | Contract requires self-check + error return; not a silent fail. User re-runs that chapter manually.                                                                                                         |
+| Disagreements field bloats the JSON                                                 | Cap at 50 entries per chapter; the contract says "summarize systematic issues, don't enumerate each line."                                                                                                  |
+| TOC checklist threads stale data when YAML changes                                  | Prompt-emit re-runs the TOC parser at emit time; the data in `meta.json` records its SHA. Re-emitting is fast.                                                                                              |
+| Per-handbook hints become hidden coupling                                           | Hints are passed verbatim to the prompt; reviewer can read them in the prompt text without indirection. Hints are validated as opaque strings.                                                              |
+| Re-run replaces good chapters with worse v2 output                                  | Side-by-side diff before committing. If v2 is worse on any chapter, debug before merging. The compare report from this WP run is the gate.                                                                  |
 | The contract change conflicts with chapter-source-ingestion's edits to `chapter.md` | Coordinate: the chapter-source WP modifies `fetch.py` / `chapter_plaintext.py`; this WP modifies template content + `prompt_emit.py` placeholders. Touch points are different functions in different files. |
 
 ## Coordination
