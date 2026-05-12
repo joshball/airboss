@@ -69,6 +69,7 @@ export const CHART_TYPE_LABELS: Record<ChartType, string> = {
 export const LAYER_BANDS = {
 	BACKGROUND: 'background',
 	GRATICULE: 'graticule',
+	NORTH_AMERICA_CONTEXT: 'north-america-context',
 	BASEMAP_FILL: 'basemap-fill',
 	BASEMAP_BORDERS: 'basemap-borders',
 	RASTER_OVERLAY: 'raster-overlay',
@@ -82,10 +83,15 @@ export const LAYER_BANDS = {
  * Canonical z-order for `composeChart()`. Earlier entries are stacked first
  * (drawn at the back); later entries layer on top. Mirrors the spec's
  * "Layer band contract" table.
+ *
+ * `north-america-context` (Canada + Mexico outlines) sits BELOW
+ * `basemap-fill` so the CONUS state polygons draw on top of the
+ * surrounding-country context. Added per ADR 027 Option A.
  */
 export const LAYER_BAND_VALUES = [
 	LAYER_BANDS.BACKGROUND,
 	LAYER_BANDS.GRATICULE,
+	LAYER_BANDS.NORTH_AMERICA_CONTEXT,
 	LAYER_BANDS.BASEMAP_FILL,
 	LAYER_BANDS.BASEMAP_BORDERS,
 	LAYER_BANDS.RASTER_OVERLAY,
