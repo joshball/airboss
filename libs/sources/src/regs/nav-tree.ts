@@ -25,7 +25,6 @@
  */
 
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
-import { writeIfChanged } from '../io/write-if-changed.ts';
 import type { RawNavTree } from './xml-walker.ts';
 
 // ---------------------------------------------------------------------------
@@ -117,10 +116,16 @@ export interface WriteCfrNavTreeInput {
  * Serialise a `RawNavTree` to `regulations/cfr-<title>/<edition>/nav-tree.yaml`.
  * Idempotent via {@link writeIfChanged}.
  */
-export function writeCfrNavTree(input: WriteCfrNavTreeInput): { wrote: boolean; path: string } {
+export async function writeCfrNavTree(input: WriteCfrNavTreeInput): Promise<{ wrote: boolean; path: string }> {
 	const editionDir = pathJoin(input.outRoot, `cfr-${input.title}`, input.editionDate);
 	const path = pathJoin(editionDir, NAV_TREE_FILENAME);
 	const yaml = stringifyYaml(toYamlShape(input.raw, input.editionDate), { lineWidth: 0 });
+	// Lazy import: `writeIfChanged` static-imports `node:fs`. Top-level
+	// import would pull `node:fs` into this module's load graph, which the
+	// runtime barrel re-exports via the pure URL builders -- crashes
+	// hydration. Lazy keeps the module browser-safe; ingest callers (the
+	// only legitimate consumers) pay the import cost at call time.
+	const { writeIfChanged } = await import('../io/write-if-changed.ts');
 	const result = writeIfChanged(path, yaml);
 	// Bust the in-memory cache so subsequent reads in the same process see
 	// the new contents.

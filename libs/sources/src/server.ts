@@ -11,6 +11,56 @@
 // `SERVER_ONLY_PACKAGE_PATTERNS` so a `.svelte` file that tries to import
 // from it fails the check.
 
+// CorpusResolver registration is a server-only side effect. Each corpus
+// `index.ts` imports `node:fs` transitively (via its `resolver.ts`), which
+// crashes hydration in the browser through Vite's externalized-node-builtin
+// stub. Importing this server barrel from `hooks.server.ts` (or any other
+// server-only entry point) is what makes the production registry usable.
+import './regs/index.ts';
+import './handbooks/index.ts';
+import './acs/index.ts';
+import './pts/index.ts';
+import './aim/index.ts';
+import './ac/index.ts';
+import './orders/index.ts';
+import './ntsb/index.ts';
+import './interp/index.ts';
+import './pohs/index.ts';
+import './sectionals/index.ts';
+import './plates/index.ts';
+import './statutes/index.ts';
+import './forms/index.ts';
+import './info/index.ts';
+import './safo/index.ts';
+import './tcds/index.ts';
+import './asrs/index.ts';
+import './ntsb-alj/index.ts';
+
+// Side-effect wiring: the runtime barrel defaults the parent-walk resolver
+// in `render/tokens.ts` to a no-op so it can load in the browser without
+// dragging `registry/query.ts` (which static-imports `node:fs`) into the
+// client bundle. Server entry points import this barrel for `initRegistry`;
+// the side effect below makes `@chapter`, `@subpart`, and `@part` token
+// substitution functional server-side via the production registry.
+import { resolveIdentifier as _resolveIdentifier } from './registry/query.ts';
+import { __setResolveStub as _setResolveStub } from './render/tokens.ts';
+
+_setResolveStub(_resolveIdentifier);
+
+// Re-export server-only registry entry points so callers can hit one barrel.
+export { initRegistry } from './registry/init.ts';
+export { getCorpusResolver } from './registry/corpus-resolver.ts';
+export { productionRegistry } from './registry/index.ts';
+export { writeCfrNavTree } from './regs/nav-tree.ts';
+
+// `batchResolve` walks the production registry via `registry/query.ts`, which
+// static-imports `node:fs`. Server-side render-loader entry point lives here
+// so the runtime barrel (`@ab/sources`) stays browser-safe. The other render
+// helpers (`extractIdentifiers`, `substituteTokens`, `toSerializable`,
+// `fromSerializable`, token registry) stay on the runtime barrel -- they're
+// pure and used by `.svelte` components directly.
+export { __batch_internal__, batchResolve } from './render/batch-resolve.ts';
+
 // Phase 9 runtime registry hydration. `bootstrap.ts` statically imports
 // `node:fs` and synthesizes `SourceEntry` + `Edition` rows from on-disk
 // derivative manifests, so it cannot evaluate in a browser bundle. Callers

@@ -122,3 +122,38 @@ If you make a barrel-shape change and `bun run check` passes, you're protected a
 ## Why the `chunk-VQMZUIKA.js` cache-buster confused the diagnosis
 
 Vite gives each optimized dep a stable content hash (`postgres.js`, `chunk-VQMZUIKA.js`). The `?v=...` query string changes per rebuild but the underlying file does not. So "the same chunk is loading despite cache clears" is technically true -- and misleading. The right diagnostic is whether the browser fetches the chunk at all, not whether the chunk's content changed.
+
+## Lessons from the 2026-05-12 Phase 3 crash (`@ab/sources` `node:fs` leak)
+
+A second crash of the same class, this time during the command-palette Phase 3 walk. The bug took 4+ wrong-fix iterations because every anti-pattern from the previous incident got repeated. Repeating them again here for emphasis -- if you find yourself doing any of these, STOP.
+
+### What happened
+
+`PaletteDetailPane.svelte` (new in Phase 3) value-imported `urlForReference` from `@ab/sources`. `@ab/sources/index.ts` (the runtime barrel) had:
+
+1. 19 side-effect imports of corpus `index.ts` files, each of which imported a `resolver.ts` that static-imported `node:fs`.
+2. A value re-export `export { ... productionRegistry } from './registry/index.ts'`, where `registry/index.ts` imports `registry/query.ts`, which also static-imports `node:fs`.
+
+Either one was enough to ship `node:fs` access into the client bundle. In Vite's dev server, accessing any property of the externalized `node:fs` stub at module-load time throws `Module "node:fs" has been externalized for browser compatibility` -- on EVERY authenticated page, because `PaletteDetailPane` is mounted via `HelpSearch` in `(app)/+layout.svelte`.
+
+The fix: move `productionRegistry`, `getCorpusResolver`, `initRegistry`, and the 19 side-effect imports OUT of the runtime barrel and INTO `@ab/sources/server`. Update `hooks.server.ts` and a handful of BC files to import from `@ab/sources/server`. Same canonical pattern as PRs #659 / #664.
+
+### What I (the dispatcher) did wrong, and the rule for next time
+
+1. **I trusted four agent self-reports in a row** -- "page hydrates fine, just a warning logged", "scanner is clean", "browser smoke passes". None of those reports were from agents that had loaded the actual page in a browser with `.env` in place. Their playwright probes hit unauthenticated routes or worktrees that crashed on auth bootstrap. **Rule: agent claims of "the browser works" are unverified until the dispatcher loads the page itself.**
+
+2. **I merged two PRs (#857 and #921) without loading the page in my own browser first.** Both shipped broken to main. **Rule: any PR that touches `libs/help/`, `libs/sources/`, a runtime barrel of a browser-bundled lib, or a `(app)/+layout.svelte` import chain requires a real-browser load before merge. Not a Playwright probe -- a real browser. The CLAUDE.md rule "Vitest passing is not browser-correct" applies to playwright smoke too if the smoke doesn't cover authenticated routes / the same layout chain as the failure.**
+
+3. **I iterated on five different "fix" hypotheses without re-measuring after each.** Removed value re-exports of `bootstrap.ts` (no effect). Removed type re-exports of `bootstrap.ts` (no effect). Cleared Vite cache (no effect). Each attempt was a guess from grep output, not a measurement. **Rule: after 2 failed candidate fixes, STOP iterating. Switch to measurement: `curl /@fs/<lib>/src/index.ts` to read the Vite-served module, walk every value-import, identify the actual leak chain. If grep-only diagnosis hasn't converged after 2 tries, grep was the wrong tool.**
+
+4. **I had `docs/agents/debug-playbooks/browser-hydration.md` (this file) bookmarked from minute one and didn't read it until forced to.** The playbook says steps 1-5 in order: reproduce in browser, diff working vs broken page, check deps metadata, inspect served module, playwright trace. I started at step "blindly edit barrel" and stayed there. **Rule: for any browser-only error, read this playbook BEFORE the first code edit. Not after attempt 3.**
+
+5. **The static guard at `scripts/check-browser-globals.ts` passed each time, and that made me complacent.** The guard catches `Buffer.allocUnsafe` patterns + `@ab/db/connection` imports + the postgres driver. It does NOT catch `import { existsSync } from 'node:fs'` in a server-only module that's transitively pulled into the browser via a runtime barrel value-re-export. The guard has a real blind spot on `node:*` patterns reached through value-re-exports of locator/registry modules. **Rule: `bun run check` passing is necessary, not sufficient. Browser load is the gate.**
+
+### The cost
+
+Two PRs (#857, #921) shipped broken. Every authenticated page in the study app threw a client-side error to the logging endpoint for the duration. Three rounds of wrong fixes (file-edits, two sub-agent dispatches), each one delivered with confidence. The fix that worked was a 7-line edit to `libs/sources/src/index.ts` + `server.ts` + 4 consumer updates, the kind of change that should have taken 15 minutes from the symptom report.
+
+### The rule, distilled
+
+**If a user reports a browser-only error and your fix attempt does not include `curl http://127.0.0.1:9600/@fs/<suspect-file>` to read what Vite is actually serving, you are guessing.** Stop. Run the dev server, fetch the served module, walk the import chain in the served output, identify the leak there. Then fix and re-fetch to confirm the chain is gone before claiming done.

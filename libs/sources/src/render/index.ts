@@ -5,6 +5,7 @@
  *
  *   extractIdentifiers(body)               -- list raw identifiers in source order, deduped
  *   batchResolve(ids, ctx)                 -- resolve to SourceEntry + chain + liveUrl + indexed + annotation
+ *                                              (server-only: exported from `@ab/sources/server`)
  *   substituteTokens(body, resolved, mode) -- emit the rendered surface for the given mode
  *
  *   registerToken(token)                   -- extend the token set
@@ -25,7 +26,12 @@ export {
 	computeAnnotation,
 	findMatchingAcks,
 } from './annotations.ts';
-export { __batch_internal__, batchResolve } from './batch-resolve.ts';
+// `batchResolve` + `__batch_internal__` moved to `@ab/sources/server` -- they
+// reach `registry/query.ts` which static-imports `node:fs`. Re-exporting them
+// here pulls the whole server-only resolution chain into the runtime barrel
+// and crashes browser hydration with the `Module "node:fs" has been
+// externalized` stub. Server callers (`+page.server.ts` load helpers, the
+// study lesson-references loader) import them from `@ab/sources/server`.
 export { extractIdentifiers } from './extract.ts';
 export { renderDefaultModeLink } from './modes/default.ts';
 export { renderPlainTextLink } from './modes/plain-text.ts';

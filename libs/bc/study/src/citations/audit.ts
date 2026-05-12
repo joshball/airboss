@@ -38,7 +38,8 @@ import {
 	EXTERNAL_REF_TARGET_DELIMITER,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
-import { ENUMERATED_CORPORA, getCorpusResolver } from '@ab/sources';
+import { ENUMERATED_CORPORA } from '@ab/sources';
+import { getCorpusResolver } from '@ab/sources/server';
 import { eq, inArray } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { card, knowledgeNode, reference, referenceSection, scenario } from '../schema';

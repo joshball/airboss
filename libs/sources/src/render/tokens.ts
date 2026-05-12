@@ -11,7 +11,15 @@
  * pin literal.
  */
 
-import { resolveIdentifier, stripPin } from '../registry/query.ts';
+// `stripPin` lives in `../registry/strip-pin.ts` (a pure helper) so this
+// module stays browser-safe. `resolveIdentifier` lives in
+// `../registry/query.ts`, which static-imports `node:fs`; we keep that out of
+// the static import graph by lazy-loading it inside `DEFAULT_RESOLVE` below.
+// The `render/index.ts` barrel re-exports `tokens.ts`, and that barrel is
+// pulled into the client bundle by `.svelte` consumers of `@ab/sources` --
+// any static import of `query.ts` here crashes hydration via Vite's
+// `node:fs`-externalized stub.
+import { stripPin } from '../registry/strip-pin.ts';
 import type { ResolvedIdentifier, SourceEntry, SourceId, Token, TokenContext, TokenName } from '../types.ts';
 
 // ---------------------------------------------------------------------------
@@ -315,24 +323,39 @@ const TOKEN_PART: Token = {
 // ---------------------------------------------------------------------------
 
 /**
- * Indirection seam: parent-walk tokens use this to look up parent entries.
- * Production wires it to `resolveIdentifier` from `registry/query.ts`. Tests
- * can override via `__setResolveStub` to short-circuit registry lookups.
+ * Indirection seam: parent-walk tokens (`@chapter`, `@subpart`, `@part`) use
+ * this to look up parent entries. The default is a no-op that returns null;
+ * production server callers MUST inject the real `resolveIdentifier` via
+ * `__setResolveStub` (typically from `@ab/sources/server`'s bootstrap path)
+ * before substitution runs. Tests also use `__setResolveStub` to short-circuit
+ * registry lookups.
+ *
+ * Why no-op default: `tokens.ts` is re-exported by `render/index.ts`, which is
+ * re-exported by the `@ab/sources` runtime barrel and pulled into the browser
+ * via `.svelte` consumers. Importing `resolveIdentifier` from
+ * `registry/query.ts` here (statically) pulls `node:fs` into the client
+ * bundle and crashes hydration with Vite's externalized-node-builtin stub.
+ * The client never substitutes `@chapter`/`@subpart`/`@part` (resolved-token
+ * rendering happens server-side; the client renders already-substituted
+ * strings via `fromSerializable`), so a no-op default is correct for client
+ * eval. Server entry points wire the real resolver via the side-effect
+ * import in `@ab/sources/server`.
  */
-const DEFAULT_RESOLVE: (id: SourceId) => SourceEntry | null = (id) => resolveIdentifier(id);
-let resolveStub: (id: SourceId) => SourceEntry | null = DEFAULT_RESOLVE;
+const NULL_RESOLVE: (id: SourceId) => SourceEntry | null = () => null;
+let resolveStub: (id: SourceId) => SourceEntry | null = NULL_RESOLVE;
 
 /**
- * Test-only seam: replace the resolver lookup. Production code MUST NOT call
- * this. The default delegates to `registry/query.ts#resolveIdentifier`.
+ * Test-only seam (also used by `@ab/sources/server` to wire the production
+ * resolver): replace the resolver lookup. Production code MUST NOT call this
+ * from `.svelte` files -- only from server entry points.
  */
 export function __setResolveStub(fn: (id: SourceId) => SourceEntry | null): void {
 	resolveStub = fn;
 }
 
-/** Reset the resolver to its default production behavior. Test-only. */
+/** Reset the resolver to the no-op default. Test-only. */
 export function __resetResolveStub(): void {
-	resolveStub = DEFAULT_RESOLVE;
+	resolveStub = NULL_RESOLVE;
 }
 
 // ---------------------------------------------------------------------------
