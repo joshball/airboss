@@ -38,14 +38,14 @@ Admin-only routes under `apps/hangar/src/routes/admin/references/`:
 
 A table of every catalogued reference. Per row:
 
-| Column | Source |
-|--------|--------|
-| Common name | `study.reference.canonical_short` + `canonical_formal` |
-| Stage badge | derived: sourced / extracted / catalogued / readable / section-tree |
-| Section count | `study.reference_section` rows |
-| Source PDF link | from manifest's `source_url` |
-| Flightbag link | `urlForReference(reference.id)` |
-| Last fetched | from manifest's `fetched_at` |
+| Column          | Source                                                              |
+| --------------- | ------------------------------------------------------------------- |
+| Common name     | `study.reference.canonical_short` + `canonical_formal`              |
+| Stage badge     | derived: sourced / extracted / catalogued / readable / section-tree |
+| Section count   | `study.reference_section` rows                                      |
+| Source PDF link | from manifest's `source_url`                                        |
+| Flightbag link  | `urlForReference(reference.id)`                                     |
+| Last fetched    | from manifest's `fetched_at`                                        |
 
 Filter UI: by corpus (handbooks, AIM, CFR, AC, ACS, etc.), by stage (readable / link-only / etc.), text search.
 
@@ -89,11 +89,11 @@ WP-HANDBOOK-RE-EXTRACTION-V2 ships the substrate this dashboard reads from. Thre
 
 ### On-disk files
 
-| File                                                                       | Owner                              | Schema (in `libs/bc/study/src/manifest-validation.ts`) |
-| -------------------------------------------------------------------------- | ---------------------------------- | ------------------------------------------------------ |
-| `<corpus>/<doc>/<edition>/manifest.json`                                   | extractor (re-emitted on each run) | `manifestSchema` (discriminated union on `kind`)       |
-| `<corpus>/<doc>/<edition>/warnings.json`                                   | extractor (re-emitted on each run) | `handbookWarningsFileSchema`                           |
-| `validation/<corpus>/<doc>/<edition>/warnings-triage.json`                 | hangar dashboard (this WP)         | `handbookWarningsTriageFileSchema`                     |
+| File                                                       | Owner                              | Schema (in `libs/bc/study/src/manifest-validation.ts`) |
+| ---------------------------------------------------------- | ---------------------------------- | ------------------------------------------------------ |
+| `<corpus>/<doc>/<edition>/manifest.json`                   | extractor (re-emitted on each run) | `manifestSchema` (discriminated union on `kind`)       |
+| `<corpus>/<doc>/<edition>/warnings.json`                   | extractor (re-emitted on each run) | `handbookWarningsFileSchema`                           |
+| `validation/<corpus>/<doc>/<edition>/warnings-triage.json` | hangar dashboard (this WP)         | `handbookWarningsTriageFileSchema`                     |
 
 `warnings.json` carries the normalized warning list with stable 16-hex `id` per row (computed from `<code>|<section_code or "">|<message[:50]>`); the id is durable across re-extractions. `warnings-triage.json` is the human-curated companion. Both paths use the same dispatch as the BC reader: `<corpus>` is `handbooks` for handbook references, `ac` for AC references.
 
@@ -146,9 +146,7 @@ All routes gated by `requireHangarRole('admin')` (existing pattern).
 
 ## Out of scope
 
-- The flightbag app itself (separate scaffold WP)
-- Cross-corpus search inside the dashboard (UI nice-to-have, deferred)
-- Bulk-action API (force-reingest-many) — single action only for v1
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Phases
 
