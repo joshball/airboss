@@ -43,22 +43,22 @@ Today the citation picker's "find a CFR section" / "find an AC chapter" tabs ret
 
 Today's `CITATION_TARGET_TYPES` (from `@ab/constants`):
 
-| Today               | Where it points       |
-| ------------------- | --------------------- |
-| `regulation_node`   | `hangar.reference`    |
-| `ac_reference`      | `hangar.reference`    |
-| `knowledge_node`    | `study.knowledge_node`|
-| `external_ref`      | URL string            |
+| Today             | Where it points        |
+| ----------------- | ---------------------- |
+| `regulation_node` | `hangar.reference`     |
+| `ac_reference`    | `hangar.reference`     |
+| `knowledge_node`  | `study.knowledge_node` |
+| `external_ref`    | URL string             |
 
 The split between `regulation_node` and `ac_reference` is a labelling artefact -- both pointed at the same table differentiated only by `tags.sourceType`. With the move to `study.reference` (where `kind` covers handbook / cfr / ac / acs / pts / aim / pcg / ntsb / poh / safo / info / other), keeping per-kind target types means the enum grows for every new corpus.
 
 We collapse to one polymorphic kind:
 
-| New                 | Where it points                             | Notes                                                    |
-| ------------------- | ------------------------------------------- | -------------------------------------------------------- |
-| `reference_section` | `study.reference_section.id`                | All corpus-backed citations -- replaces regulation_node + ac_reference and folds in handbook / aim / acs sections that the old enum couldn't represent at all. |
-| `knowledge_node`    | `study.knowledge_node.id`                   | Unchanged.                                               |
-| `external_ref`      | `<url><delim><title>` string                | Unchanged.                                               |
+| New                 | Where it points              | Notes                                                                                                                                                          |
+| ------------------- | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `reference_section` | `study.reference_section.id` | All corpus-backed citations -- replaces regulation_node + ac_reference and folds in handbook / aim / acs sections that the old enum couldn't represent at all. |
+| `knowledge_node`    | `study.knowledge_node.id`    | Unchanged.                                                                                                                                                     |
+| `external_ref`      | `<url><delim><title>` string | Unchanged.                                                                                                                                                     |
 
 Migration: existing rows with `target_type = 'regulation_node'` or `'ac_reference'` get rewritten to `target_type = 'reference_section'` with `target_id` repointed at the matching `study.reference_section.id`. In practice dev has zero such rows so the migration is a no-op SQL that runs anyway for correctness.
 
@@ -108,11 +108,11 @@ The `[CFR]` / `[Handbook]` / etc. badge is `SOURCE_TYPE_LABELS[reference.kind]` 
 
 Chip click behaviour:
 
-| Target type         | href source                                 | target attr     |
-| ------------------- | ------------------------------------------- | --------------- |
-| `reference_section` | `urlForReferenceSection(row)` (new helper)  | `_self`         |
-| `knowledge_node`    | `ROUTES.KNOWLEDGE_NODE(node.id)`            | `_self`         |
-| `external_ref`      | user-supplied URL                           | `_blank` (unchanged) |
+| Target type         | href source                                | target attr          |
+| ------------------- | ------------------------------------------ | -------------------- |
+| `reference_section` | `urlForReferenceSection(row)` (new helper) | `_self`              |
+| `knowledge_node`    | `ROUTES.KNOWLEDGE_NODE(node.id)`           | `_self`              |
+| `external_ref`      | user-supplied URL                          | `_blank` (unchanged) |
 
 `target="_blank"` stays on external refs only. Internal links open in the same tab so the user keeps their study session in browser history.
 
@@ -143,36 +143,29 @@ After the picker repoint lands and real citation rows exist, run `bun run source
 
 ## Validation
 
-| Field                              | Rule                                                                                      |
-| ---------------------------------- | ----------------------------------------------------------------------------------------- |
-| `content_citations.target_type`    | One of `'reference_section' \| 'knowledge_node' \| 'external_ref'`                        |
-| `content_citations.target_id`      | When `target_type = 'reference_section'`, must exist in `study.reference_section.id`     |
-|                                    | When `target_type = 'knowledge_node'`, must exist in `study.knowledge_node.id`           |
-|                                    | When `target_type = 'external_ref'`, `<url><delim><title>` form, URL is http(s)          |
-| `study.reference_section.airboss_ref` | NOT NULL, matches `^airboss-ref:`. Set by seeders. Existing rows backfilled in migration. |
-| Picker section search query        | Trimmed, ilike-escaped, capped at `MAX_SEARCH_LIMIT` results (existing behaviour)         |
+| Field                                 | Rule                                                                                      |                    |                 |
+| ------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------ | --------------- |
+| `content_citations.target_type`       | One of `'reference_section' \                                                             | 'knowledge_node' \ | 'external_ref'` |
+| `content_citations.target_id`         | When `target_type = 'reference_section'`, must exist in `study.reference_section.id`      |                    |                 |
+|                                       | When `target_type = 'knowledge_node'`, must exist in `study.knowledge_node.id`            |                    |                 |
+|                                       | When `target_type = 'external_ref'`, `<url><delim><title>` form, URL is http(s)           |                    |                 |
+| `study.reference_section.airboss_ref` | NOT NULL, matches `^airboss-ref:`. Set by seeders. Existing rows backfilled in migration. |                    |                 |
+| Picker section search query           | Trimmed, ilike-escaped, capped at `MAX_SEARCH_LIMIT` results (existing behaviour)         |                    |                 |
 
 ## Edge Cases
 
-| Case                                                                | Behavior                                                                            |
-| ------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `airboss_ref` parses but the locator has no flightbag route yet     | `urlForReference` returns `ROUTES.FLIGHTBAG_HOME` (existing fallback). Chip still navigates somewhere useful. |
-| Section row is hard-deleted after citation creation                 | Audit surfaces a `dead_target` finding. Chip render: `target.detail` shows "(missing)" suffix. Existing behaviour. |
-| User cites a whole-document reference (depth-0 `circular` / `document` / `publication` row) | URI points at the document landing route; chip navigates there. No special-casing.  |
-| Picker search returns zero matches                                  | Existing "no results" affordance.                                                   |
-| Citation context exceeds `CITATION_CONTEXT_MAX_LENGTH`              | Existing CitationValidationError -- unchanged.                                       |
-| Knowledge_node citation, knowledge node has no detail page yet       | Always has -- `/knowledge/{id}` is the canonical route. No edge case in practice.   |
+| Case                                                                                        | Behavior                                                                                                           |
+| ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `airboss_ref` parses but the locator has no flightbag route yet                             | `urlForReference` returns `ROUTES.FLIGHTBAG_HOME` (existing fallback). Chip still navigates somewhere useful.      |
+| Section row is hard-deleted after citation creation                                         | Audit surfaces a `dead_target` finding. Chip render: `target.detail` shows "(missing)" suffix. Existing behaviour. |
+| User cites a whole-document reference (depth-0 `circular` / `document` / `publication` row) | URI points at the document landing route; chip navigates there. No special-casing.                                 |
+| Picker search returns zero matches                                                          | Existing "no results" affordance.                                                                                  |
+| Citation context exceeds `CITATION_CONTEXT_MAX_LENGTH`                                      | Existing CitationValidationError -- unchanged.                                                                     |
+| Knowledge_node citation, knowledge node has no detail page yet                              | Always has -- `/knowledge/{id}` is the canonical route. No edge case in practice.                                  |
 
-## Out of Scope
+## Out of scope
 
-- **Tsvector / full-text search index.** Section search uses ilike for now. We add a tsvector column when corpus size demands it. Captured in [Open question 4](#open-questions).
-- **Citation audit dashboard surface.** Stays at `bun run sources audit-citations` CLI. UI exposure is a separate WP if needed.
-- **Cross-corpus citation suggestions / autocomplete.** The picker shows ilike matches; no smart suggestions, no semantic search.
-- **Bulk citation import.** Per-citation creation only.
-- **Inline citation syntax in card bodies (e.g. `[[ref:cfr-14/91/103]]`).** Authoring stays via picker.
-- **Auto-backfill of existing card bodies.** No regex pass to suggest citations from existing prose.
-- **Public citation-discovery surfaces** (leaderboards, "most-cited sections," etc.).
-- **Section-level read-status sync** between flightbag reader progress and study citations.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Open questions
 
