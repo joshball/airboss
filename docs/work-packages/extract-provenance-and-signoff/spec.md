@@ -162,12 +162,9 @@ When `--apply-errata <id>` runs:
 - It refuses to apply twice without `--force`. The AFH duplicate-application case is now structurally prevented.
 - Post-apply, the section's `provenance.errata_applied[]` list grows; signoff history records the apply event.
 
-## Out of Scope (explicit)
+## Out of scope
 
-- **Re-extracting the existing corpora.** The provenance schema can backfill from current manifests + recompute `body_sha256` per file; no re-extract needed.
-- **Auto-signoff via LLM.** The signoff workflow is human-in-the-loop. LLM-assisted spot-checking could be a follow-up WP.
-- **Signoff at sub-section / paragraph granularity.** Section is the unit; sub-section signoff is overkill until proven necessary.
-- **Cross-edition signoff inheritance.** When edition X+1 lands, signoff from X does NOT carry forward; everything starts at `auto-extracted`. This is correct (different content, different verification).
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Acceptance criteria
 
@@ -192,13 +189,13 @@ When `--apply-errata <id>` runs:
 
 ## Risk register
 
-| Risk | Mitigation |
-| --- | --- |
-| Frontmatter churn breaks downstream consumers | Schema version on every block; consumers gate on schema_version match. |
-| Per-file sidecars double the file count | They're tiny JSON; total disk impact ~10% of derivative tree. ADR 018 scale exception covers it. |
-| LLM-extracted sections mix with TOC-extracted in same handbook | `extract_strategy` field per section; no mixing within one strategy invocation. |
-| Errata sidecar (`<section>.errata.md`) interaction | Signoff state references the post-errata content; pre-errata signoff is preserved in `history[]`. |
-| Duplicate-apply detection forces operators to think | Yes -- this is the point. The AFH case shouldn't have been silent for months. |
+| Risk                                                           | Mitigation                                                                                        |
+| -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| Frontmatter churn breaks downstream consumers                  | Schema version on every block; consumers gate on schema_version match.                            |
+| Per-file sidecars double the file count                        | They're tiny JSON; total disk impact ~10% of derivative tree. ADR 018 scale exception covers it.  |
+| LLM-extracted sections mix with TOC-extracted in same handbook | `extract_strategy` field per section; no mixing within one strategy invocation.                   |
+| Errata sidecar (`<section>.errata.md`) interaction             | Signoff state references the post-errata content; pre-errata signoff is preserved in `history[]`. |
+| Duplicate-apply detection forces operators to think            | Yes -- this is the point. The AFH case shouldn't have been silent for months.                     |
 
 ## Coordination
 
@@ -216,11 +213,11 @@ This WP does NOT block:
 
 User ratified all 3 open questions to the recommended defaults. Build proceeds against the recommendations below.
 
-| Q   | Decision                          | Ratified value                                                                                                                                                            |
-| --- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| (1) | Sidecar location                  | **Co-located** with the section markdown (`02-role-of-the-faa.md` + `02-role-of-the-faa.stats.json` + `02-role-of-the-faa.signoff.json`). Humans see sidecars in context. |
-| (2) | Reader access pattern             | **Bake sidecar fields into the DB row** at seed time with a regen trigger. Per-request disk reads are slower; the seeder is the regen trigger.                            |
-| (3) | Signoff per-user                  | **Single-user (no per-user signoff).** Matches private-hosted single-admin posture. Multi-user signoff is a future concern when the platform opens up.                    |
+| Q   | Decision              | Ratified value                                                                                                                                                            |
+| --- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| (1) | Sidecar location      | **Co-located** with the section markdown (`02-role-of-the-faa.md` + `02-role-of-the-faa.stats.json` + `02-role-of-the-faa.signoff.json`). Humans see sidecars in context. |
+| (2) | Reader access pattern | **Bake sidecar fields into the DB row** at seed time with a regen trigger. Per-request disk reads are slower; the seeder is the regen trigger.                            |
+| (3) | Signoff per-user      | **Single-user (no per-user signoff).** Matches private-hosted single-admin posture. Multi-user signoff is a future concern when the platform opens up.                    |
 
 ## Open questions (history -- now ratified above)
 
