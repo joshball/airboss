@@ -46,6 +46,7 @@ Each placeholder route in `apps/flightbag/src/routes/` gets a real `+page.server
 Today: stub component renders the markdown string directly.
 
 After this WP:
+
 - Renders markdown via the existing pipeline (`@ab/ui/MarkdownRenderer` or whatever study uses)
 - Renders inline `<CitationChip>` components when content references other `airboss-ref:` URIs
 - Renders inline figures (looks up `figures/<id>.png` paths from manifest)
@@ -99,6 +100,7 @@ Before any route wiring: get one section rendering correctly. Pick PHAK §2.3 as
 ### Phase 7: Citation chips
 
 `<CitationChip>` real implementation:
+
 - Resolves `airboss-ref:` URI to display label (e.g. "PHAK §2.3")
 - Links to the matching flightbag URL via `urlForReference()`
 - Hover preview (tooltip with first paragraph of target section)
@@ -115,10 +117,7 @@ Before any route wiring: get one section rendering correctly. Pick PHAK §2.3 as
 
 ## Out of scope
 
-- Search inside flightbag (separate WP — index from manifests; ranking; query UI)
-- Auth on flightbag (still public)
-- Public web deployment (separate concern)
-- Migrating study's `/library/...` routes (separate WP per `wp-citation-chips-to-flightbag/`)
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Risks
 
