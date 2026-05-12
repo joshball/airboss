@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/frontal-xc-march/taf-kcps",
   "type": "taf-timeline",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:50:45.951Z",
-  "content_hash": "sha256:492a0f23fb4cb9b058eb6f14aa0ef5253ee21799791b02db738481b094053fab",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:37:42.556Z",
+  "content_hash": "sha256:dd4f5c031b01ae045ebf97f8ed3b23efd60b4b6f6ef9f5bc85da63e4900a2422",
   "source_hashes": {
     "taf": "c3617ab52ac81193671757b6f82da0f900dc85c60d19b1efbf9f8250eaa824b1"
   },

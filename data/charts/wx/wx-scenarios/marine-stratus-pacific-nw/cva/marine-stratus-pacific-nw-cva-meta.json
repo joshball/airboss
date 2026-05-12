@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/marine-stratus-pacific-nw/cva",
   "type": "cva",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:50:47.562Z",
-  "content_hash": "sha256:aae9eb176d21872d93bfd6eebae5ca0bdfb305ada65b7436dce0f53a099040f3",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:37:42.746Z",
+  "content_hash": "sha256:6c3ba6a6228ee8a2e8aca36ebe6440108d2dad32b5c864f420466619c2268059",
   "source_hashes": {
     "observations": "8f727719cb6b6ea6f2daa6e70fc4ae88b81a96550d7a67b4e1bf6832c0b4176a"
   },

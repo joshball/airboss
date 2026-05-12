@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/summer-thunderstorms-tx/g-airmet-turbulence",
   "type": "turbulence-gairmet",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:50:56.390Z",
-  "content_hash": "sha256:d52578cf91852255f7326bb196fb62493ea246ee4a561197f7759955830ffd6f",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:37:44.216Z",
+  "content_hash": "sha256:875648a4d88ce54a5b3dcc27c5b38c566bed9063c0d548b3f0feb804a3f3362b",
   "source_hashes": {
     "areas": "d32f85d7ed9bb9d30d7c22feb62665a4f908be2a73014bb2fa8cb3d8721371f9"
   },

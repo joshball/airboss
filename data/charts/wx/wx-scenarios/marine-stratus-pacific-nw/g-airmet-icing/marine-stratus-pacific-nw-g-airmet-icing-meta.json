@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/marine-stratus-pacific-nw/g-airmet-icing",
   "type": "icing-gairmet",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:50:48.038Z",
-  "content_hash": "sha256:b13efba89b7742f3712094faa2547b52105ff8783b06012aa18c8ff6fb513038",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:37:42.856Z",
+  "content_hash": "sha256:15b0886c1ec4ff5204f8b962872d0248a48b3485bf52b38c06c7f03b87b3bb04",
   "source_hashes": {
     "areas": "96575022928aadade5610da45baddd4723e9f4e454b67e93622354b0d3bea37e"
   },

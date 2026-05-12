@@ -111,6 +111,6 @@
   <rect x="0" y="866" width="1200" height="24" fill="#fafaf7" />
   <line x1="0" y1="866" x2="1200" y2="866" stroke="#d8d4c8" stroke-width="0.6" />
   <text x="24" y="882" font-size="10" fill="#7a7568">wx-engine -- truth-derived synthetic</text>
-  <text x="1176" y="882" text-anchor="end" font-size="10" fill="#a09b8d">@ab/wx-charts@0.2.0</text>
+  <text x="1176" y="882" text-anchor="end" font-size="10" fill="#a09b8d">@ab/wx-charts@0.3.0</text>
 </g></g>
 </svg>

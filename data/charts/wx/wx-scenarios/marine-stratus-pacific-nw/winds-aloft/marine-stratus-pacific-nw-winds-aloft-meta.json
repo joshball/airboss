@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/marine-stratus-pacific-nw/winds-aloft",
   "type": "winds-aloft-fb",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:50:50.816Z",
-  "content_hash": "sha256:f6fbc382fa8c5f8e85eb78716dbfd826b22ee0f3ee8d4c583cca397cd952db5a",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:37:43.284Z",
+  "content_hash": "sha256:b991ca728c7748754a3c006bad0082ab8bb5d3c534666bc65c28057691474c9e",
   "source_hashes": {
     "bulletin": "3380d0451c2a9343dcf58d8dca1943bfce94afac77052a97c1aaec7aa9450621"
   },

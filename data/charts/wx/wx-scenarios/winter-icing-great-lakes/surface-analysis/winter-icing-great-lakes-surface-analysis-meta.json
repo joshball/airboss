@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/winter-icing-great-lakes/surface-analysis",
   "type": "surface-analysis",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:51:02.122Z",
-  "content_hash": "sha256:d46262e024d6dd3a5ce437040aaea8709253322c9e7b7835a3ec78282375e90c",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:37:44.936Z",
+  "content_hash": "sha256:1ba75b9d5947972e4a6fd1a2967227a7b459ec17d8ed987e2855fb87aefd2678",
   "source_hashes": {
     "fronts": "da76ce20d9f5bb91a3ef3d07a7bbf565b2ed15d8a3418429633cecfa00c61119"
   },
@@ -15,5 +15,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 523630
+  "svg_bytes": 589616
 }

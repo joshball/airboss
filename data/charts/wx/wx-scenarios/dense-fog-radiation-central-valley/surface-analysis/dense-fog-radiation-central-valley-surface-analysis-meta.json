@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/dense-fog-radiation-central-valley/surface-analysis",
   "type": "surface-analysis",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:50:41.495Z",
-  "content_hash": "sha256:bba9f0c28d563cef44fa91524b729194b29a5d99ce873dd1524d6de6cbfa996e",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:37:41.951Z",
+  "content_hash": "sha256:d569341eef0e19dc4858e9893814e80bd32ac096c1ddda33b4d3507fb93352bb",
   "source_hashes": {
     "fronts": "e0facaf8250a42e19a95949c956eb1d1d89005ef98f6460bae5b4bd743cbe6a3"
   },
@@ -15,5 +15,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 502529
+  "svg_bytes": 568535
 }

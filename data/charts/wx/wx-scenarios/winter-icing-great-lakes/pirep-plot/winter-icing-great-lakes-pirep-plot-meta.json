@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/winter-icing-great-lakes/pirep-plot",
   "type": "pirep-plot-grid",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:51:01.579Z",
-  "content_hash": "sha256:4c374d2b962e13447680dae6599922dc5848f507dae2a6f384c3f4265695b458",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:37:44.818Z",
+  "content_hash": "sha256:05ef582f4bf1bc989d3d5f56e8a211b0946aaec5488a17e7c734f009767d9b48",
   "source_hashes": {
     "reports": "daad854dbfd70c28536dcf5252dbd4739d3fd2cc3ad40389161029bf405e13a9"
   },

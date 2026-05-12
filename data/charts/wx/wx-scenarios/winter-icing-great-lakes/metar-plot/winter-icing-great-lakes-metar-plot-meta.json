@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/winter-icing-great-lakes/metar-plot",
   "type": "metar-plot-grid",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:51:01.320Z",
-  "content_hash": "sha256:dcd908b0796fbe4343795cc41f688f1b569d7fe0c4d49121ab784fe75b87c125",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:37:44.779Z",
+  "content_hash": "sha256:a67cca4572bfb6ef2fc14d513125fea3f9c647dff01da66106d5076ad302ced2",
   "source_hashes": {
     "observations": "0f7afa8927c37984b7023bc3d13162d167af4d60c06651308562daffb50a3b3c"
   },

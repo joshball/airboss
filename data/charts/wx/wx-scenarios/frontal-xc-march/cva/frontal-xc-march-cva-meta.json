@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/frontal-xc-march/cva",
   "type": "cva",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:50:43.468Z",
-  "content_hash": "sha256:482abf9f828e580fd19b5343cc04263ce357ad88cacb72da09e1d00c082be9e6",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:37:42.130Z",
+  "content_hash": "sha256:fe3f8fc070f3bca93b88b63a8927c1f62dbc8d0e4f1dede60eb5de869077d725",
   "source_hashes": {
     "observations": "eb8a5a2fc26bf9f09d072c8ad56dcab6f701a1d932e3d573e38e82fbd97b450d"
   },

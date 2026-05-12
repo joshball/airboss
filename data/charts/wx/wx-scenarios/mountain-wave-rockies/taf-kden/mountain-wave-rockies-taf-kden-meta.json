@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/mountain-wave-rockies/taf-kden",
   "type": "taf-timeline",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:50:54.554Z",
-  "content_hash": "sha256:09ec96c3c5032b44d0434ddef72c63b12801e9d5c1d1a2767fff1138fe74c2ba",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:37:43.891Z",
+  "content_hash": "sha256:f09290d78ea4e02a399ac27f469a538e57f3885a1f7b10ba6dc884c6870efcce",
   "source_hashes": {
     "taf": "85c89e6fb074b0a506da509f2b4eeb321214b7ddcd806d63e413c9b30001d4c8"
   },

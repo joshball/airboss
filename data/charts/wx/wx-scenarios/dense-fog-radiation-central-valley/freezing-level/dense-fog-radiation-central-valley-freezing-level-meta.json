@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/dense-fog-radiation-central-valley/freezing-level",
   "type": "freezing-level",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:50:39.338Z",
-  "content_hash": "sha256:4a70fe8efbd3ac8cd5a6d9899716f19480b3f29fb0c32b9773e1f4aa010d4be1",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:37:41.632Z",
+  "content_hash": "sha256:520f2a3bbae1db6601e3ca4c0298c78827fb42e49326bc02784f494beb7316ed",
   "source_hashes": {
     "field": "683b0ff22b2a28c46de81ef39e4997c3bfbea849afa0074e46e2a448902bf54a"
   },
@@ -15,5 +15,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 516239
+  "svg_bytes": 582340
 }
