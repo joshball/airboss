@@ -15,6 +15,7 @@ export {
 	MarkdownParseError,
 	type MdNode,
 	parseMarkdown,
+	parseMarkdownSync,
 	SUPPORTED_LANGS,
 	type SupportedLang,
 	type TableAlign,

@@ -31,10 +31,10 @@
  * trigger that path.
  */
 
-import { readFile } from 'node:fs/promises';
+import { readdir, readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { WX_SCENARIO_VALUES, type WxScenario, wxScenarioBundleDir } from '@ab/constants';
+import { WX_SCENARIO_VALUES, type WxScenario, wxScenarioBundleDir, wxScenarioChartSlug } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
@@ -56,6 +56,10 @@ export interface ScenarioBundle {
 	truth: unknown | null;
 	commentary: unknown | null;
 	products: Record<ProductKey, unknown | null>;
+	/** Chart slugs (`wx-scenarios/<id>/<kind>`) the engine has built for this
+	 *  scenario, derived from `data/wx-scenarios/<slug>/charts/`. Empty when
+	 *  the chart tree is missing. The panel mounts each via `<CourseStepChart>`. */
+	chartSlugs: string[];
 }
 
 async function readJsonOrNull(filePath: string): Promise<unknown | null> {
@@ -64,6 +68,19 @@ async function readJsonOrNull(filePath: string): Promise<unknown | null> {
 		return JSON.parse(raw) as unknown;
 	} catch (err) {
 		if ((err as NodeJS.ErrnoException).code === 'ENOENT') return null;
+		throw err;
+	}
+}
+
+async function listChartKinds(chartsDir: string): Promise<string[]> {
+	try {
+		const entries = await readdir(chartsDir, { withFileTypes: true });
+		return entries
+			.filter((e) => e.isDirectory())
+			.map((e) => e.name)
+			.sort();
+	} catch (err) {
+		if ((err as NodeJS.ErrnoException).code === 'ENOENT') return [];
 		throw err;
 	}
 }
@@ -84,10 +101,12 @@ export const GET: RequestHandler = async ({ params, locals }) => {
 	const truthPath = resolve(dir, 'truth.json');
 	const commentaryPath = resolve(dir, 'commentary.json');
 	const productPaths = PRODUCT_FILES.map((name) => ({ name, path: resolve(dir, 'products', name) }));
+	const chartsDir = resolve(dir, 'charts');
 
-	const [truth, commentary, ...productValues] = await Promise.all([
+	const [truth, commentary, chartKinds, ...productValues] = await Promise.all([
 		readJsonOrNull(truthPath),
 		readJsonOrNull(commentaryPath),
+		listChartKinds(chartsDir),
 		...productPaths.map((p) => readJsonOrNull(p.path)),
 	]);
 
@@ -101,11 +120,14 @@ export const GET: RequestHandler = async ({ params, locals }) => {
 		PRODUCT_FILES.map((name, idx) => [name, productValues[idx] ?? null]),
 	) as Record<ProductKey, unknown | null>;
 
+	const chartSlugs = chartKinds.map((kind) => wxScenarioChartSlug(scenarioId, kind));
+
 	const bundle: ScenarioBundle = {
 		scenarioId,
 		truth,
 		commentary,
 		products,
+		chartSlugs,
 	};
 
 	return json(bundle, {

@@ -60,6 +60,12 @@ describe('GET /api/scenarios/[slug]/bundle.json', () => {
 		expect(bundle.scenarioId).toBe(FIXTURE_SLUG);
 		expect(bundle.truth).not.toBeNull();
 		expect(bundle.products).toMatchObject({ 'metars.json': expect.anything() });
+		expect(Array.isArray(bundle.chartSlugs)).toBe(true);
+		// Every emitted slug must match the wx-scenarios family shape so the
+		// <CourseStepChart slug=...> consumer accepts it without further validation.
+		for (const slug of bundle.chartSlugs) {
+			expect(slug.startsWith(`wx-scenarios/${FIXTURE_SLUG}/`)).toBe(true);
+		}
 	});
 
 	it('rejects an unknown scenario slug with 400', async () => {
