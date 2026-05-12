@@ -56,12 +56,12 @@ This keeps the change small (one TS module + tests, no Python) and the corpus st
 
 The override markdown's heading hierarchy maps directly:
 
-| Heading        | Manifest level | Code shape | Notes                                                     |
-| -------------- | -------------- | ---------- | --------------------------------------------------------- |
-| `#` (line 1)  | document title | -          | Used as `manifest.title`. One per file (validated).       |
-| `##`          | chapter        | `N`        | 1-indexed by appearance order; e.g. `1`, `2`, ..., `12`. |
-| `###`         | section        | `N.M`      | 1-indexed within parent chapter.                          |
-| `####` and below | not allowed | -        | Override has none today; reject if encountered to keep the parser strict. |
+| Heading          | Manifest level | Code shape | Notes                                                                     |
+| ---------------- | -------------- | ---------- | ------------------------------------------------------------------------- |
+| `#` (line 1)     | document title | -          | Used as `manifest.title`. One per file (validated).                       |
+| `##`             | chapter        | `N`        | 1-indexed by appearance order; e.g. `1`, `2`, ..., `12`.                  |
+| `###`            | section        | `N.M`      | 1-indexed within parent chapter.                                          |
+| `####` and below | not allowed    | -          | Override has none today; reject if encountered to keep the parser strict. |
 
 Chapter / section ordinals are derived from appearance order (1-indexed). `parent_code` for chapters is `null`; for sections it's the chapter's code (e.g. `"3"`). FAA-printed page numbers are unavailable for this 1999 pamphlet (no page numbers on the source PDF body); `faa_page_start` and `faa_page_end` are `null` (the section-tree schema explicitly allows nullable). `source_locator` is `"MTN-2003 Ch.{code}"`.
 
@@ -105,18 +105,7 @@ The pre-existing `handbooks/tips-mountain-flying/MTN-2003/tips-mountain-flying-M
 
 ## Out of scope
 
-- Other whole-doc handbooks (RMH, AIH, IFH, IPH) -- separate WPs per the research doc sequencing. This WP touches only the mtn-tips entry and only the TS ingest path.
-- Retiring the `handbooks-extras` corpus -- decision deferred to the larger handbook WPs (RMH ships first, sets the migration pattern). After all five whole-doc handbooks promote, that question can be answered with concrete data.
-- The `handbooks-extras` `--whole-doc` ingest path stays. Four other rows still depend on it; rip-and-replace is for the per-handbook promotion WPs that retire those rows.
-- Citation-resolution changes. The `handbooks` resolver already short-circuits to `manifest.body_path` for whole-doc references and falls back to `manifestSectionForLocator` for sectioned references; both paths work without modification.
-- New hangar admin UI, no new study reader UI -- the existing `/library/handbook/{slug}/{edition}/{chapter}/...` route already renders any section-tree handbook.
-
-## Non-goals
-
-- No new schema field; no new manifest discriminator.
-- No Python work.
-- No PDF re-extraction.
-- No new YAML config; no migration to `handbooks/<slug>.yaml`.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Dependencies
 
