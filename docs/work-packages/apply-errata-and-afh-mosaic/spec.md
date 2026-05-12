@@ -31,11 +31,7 @@ Implement [ADR 020](../../decisions/020-handbook-edition-and-amendment-policy.md
 
 ## Non-goals
 
-- CFR / AC / ACS / AIM amendment handling. ADR 020 is handbook-only; this WP follows.
-- Cross-edition supersession (errata applying to a no-longer-current edition).
-- Auto-apply of newly-discovered errata without human review (gated by parser-coverage criteria; see section below).
-- Retroactive learner notification ("a section you read 3 weeks ago has changed"). Future work.
-- Onboarding the other 14 handbooks for ingestion. Source-byte download for them is in scope; ingestion is not.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Data Model
 
@@ -43,20 +39,20 @@ Implement [ADR 020](../../decisions/020-handbook-edition-and-amendment-policy.md
 
 Per-section record of an applied erratum. Backs the diff UI.
 
-| Column            | Type                                | Constraints                                                |
-| ----------------- | ----------------------------------- | ---------------------------------------------------------- |
-| `id`              | `text`                              | PK; `hbe_<ULID>`                                           |
-| `section_id`      | `text`                              | FK -> `study.handbook_section.id`; ON DELETE CASCADE       |
-| `errata_id`       | `text`                              | Errata identifier (e.g., `mosaic`); matches manifest entry |
-| `source_url`      | `text`                              | NOT NULL                                                   |
-| `published_at`    | `date`                              | NOT NULL                                                   |
-| `applied_at`      | `timestamptz`                       | NOT NULL DEFAULT NOW()                                     |
-| `patch_kind`      | `text`                              | One of: `add_subsection`, `append_paragraph`, `replace_paragraph` |
-| `target_anchor`   | `text`                              | NULL allowed; e.g., `Preflight Assessment of the Aircraft` |
-| `target_page`     | `text`                              | Printed page format, e.g., `2-4`                           |
-| `original_text`   | `text`                              | NULL when `patch_kind = add_subsection`                    |
-| `replacement_text`| `text`                              | NOT NULL                                                   |
-| `created_at`      | `timestamptz`                       | NOT NULL DEFAULT NOW()                                     |
+| Column             | Type          | Constraints                                                       |
+| ------------------ | ------------- | ----------------------------------------------------------------- |
+| `id`               | `text`        | PK; `hbe_<ULID>`                                                  |
+| `section_id`       | `text`        | FK -> `study.handbook_section.id`; ON DELETE CASCADE              |
+| `errata_id`        | `text`        | Errata identifier (e.g., `mosaic`); matches manifest entry        |
+| `source_url`       | `text`        | NOT NULL                                                          |
+| `published_at`     | `date`        | NOT NULL                                                          |
+| `applied_at`       | `timestamptz` | NOT NULL DEFAULT NOW()                                            |
+| `patch_kind`       | `text`        | One of: `add_subsection`, `append_paragraph`, `replace_paragraph` |
+| `target_anchor`    | `text`        | NULL allowed; e.g., `Preflight Assessment of the Aircraft`        |
+| `target_page`      | `text`        | Printed page format, e.g., `2-4`                                  |
+| `original_text`    | `text`        | NULL when `patch_kind = add_subsection`                           |
+| `replacement_text` | `text`        | NOT NULL                                                          |
+| `created_at`       | `timestamptz` | NOT NULL DEFAULT NOW()                                            |
 
 Index: `(section_id, applied_at DESC)` for "show me the patches on this section, newest first."
 
@@ -212,44 +208,38 @@ ADR 020 line 44 currently says errata are "cumulative across the lifespan of an 
 
 ## Validation
 
-| Field                                | Rule                                                                                       |
-| ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `errata[].id`                        | Required, unique per `(doc, edition)`, kebab-case, 3-32 chars                              |
-| `errata[].source_url`                | Required, must be HTTPS, must resolve (HEAD check at download time)                        |
-| `errata[].published_at`              | Required, ISO 8601 date                                                                    |
-| `errata[].parser`                    | Required, must match a registered parser name                                              |
-| `handbook_section_errata.patch_kind` | Required, one of: `add_subsection`, `append_paragraph`, `replace_paragraph`                |
-| `handbook_section_errata.target_page`| Required, printed-page format (e.g., `2-4`); rejected if PDF page integer                  |
-| `handbook_section_errata.replacement_text` | Required, non-empty                                                                  |
-| Discovery candidate URL              | Must be HTTPS, must match at least one plugin's `discovery_link_patterns`                  |
-| Plugin registry slug                 | Must be lowercase, must match a YAML config filename                                       |
+| Field                                      | Rule                                                                        |
+| ------------------------------------------ | --------------------------------------------------------------------------- |
+| `errata[].id`                              | Required, unique per `(doc, edition)`, kebab-case, 3-32 chars               |
+| `errata[].source_url`                      | Required, must be HTTPS, must resolve (HEAD check at download time)         |
+| `errata[].published_at`                    | Required, ISO 8601 date                                                     |
+| `errata[].parser`                          | Required, must match a registered parser name                               |
+| `handbook_section_errata.patch_kind`       | Required, one of: `add_subsection`, `append_paragraph`, `replace_paragraph` |
+| `handbook_section_errata.target_page`      | Required, printed-page format (e.g., `2-4`); rejected if PDF page integer   |
+| `handbook_section_errata.replacement_text` | Required, non-empty                                                         |
+| Discovery candidate URL                    | Must be HTTPS, must match at least one plugin's `discovery_link_patterns`   |
+| Plugin registry slug                       | Must be lowercase, must match a YAML config filename                        |
 
 ## Edge cases
 
-| Case                                                            | Handling                                                                                                                              |
-| --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| Errata for a handbook we haven't onboarded                      | Discovery flags as `signal-only`; no apply path. Logged in `_pending.md`.                                                             |
-| Errata for an edition we no longer ingest (older edition)       | `--apply-errata` refuses with clear error. User must check out an older codebase or accept missing application.                       |
-| Errata supersedes a prior errata mid-edition                    | The `--reapply-errata` flow re-applies in `published_at` order. If parser logic produces different patches, last write wins (intentional). |
-| Errata PDF format the parser doesn't recognize                  | Parser raises `UnknownErrataLayoutError`. CLI exits non-zero, logs the unrecognized markers, no DB writes.                            |
-| FAA pulls an erratum URL                                        | Discovery scrape returns 404 for a known URL. Mark candidate as `withdrawn` in state file; existing applied errata remain in DB.       |
-| Discovery scrape fails (network, FAA outage)                    | Logged warning; `_last_run.json` not updated. Next trigger retries. Server startup proceeds.                                          |
-| Multiple errata patch the same section                          | One `handbook_section_errata` row per erratum; section content reflects all patches in `published_at` order.                          |
-| Section added by an erratum (entirely new subsection)           | Insert as a new `handbook_section` row plus a `handbook_section_errata` row marking it as errata-introduced.                          |
-| User runs `--apply-errata` twice without `--force`              | Second run is a no-op (manifest `applied_at` matches). With `--force`, re-applies; old `handbook_section_errata` rows deleted, new ones inserted. |
-| Reader requested for a section while errata is being applied    | Reader serves whatever is currently in the DB. Apply runs in a transaction; readers see pre-apply or post-apply state, not partial.    |
-| Discovery finds a candidate matching no plugin's patterns       | Surfaced in `_pending.md` as `unmatched` with the URL. User can either teach a plugin the new pattern or dismiss.                     |
-| `GH_TOKEN` is unset and discovery has new candidates            | GitHub issue creation skipped silently; `_pending.md` still written. Dispatcher banner still fires.                                   |
+| Case                                                         | Handling                                                                                                                                          |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Errata for a handbook we haven't onboarded                   | Discovery flags as `signal-only`; no apply path. Logged in `_pending.md`.                                                                         |
+| Errata for an edition we no longer ingest (older edition)    | `--apply-errata` refuses with clear error. User must check out an older codebase or accept missing application.                                   |
+| Errata supersedes a prior errata mid-edition                 | The `--reapply-errata` flow re-applies in `published_at` order. If parser logic produces different patches, last write wins (intentional).        |
+| Errata PDF format the parser doesn't recognize               | Parser raises `UnknownErrataLayoutError`. CLI exits non-zero, logs the unrecognized markers, no DB writes.                                        |
+| FAA pulls an erratum URL                                     | Discovery scrape returns 404 for a known URL. Mark candidate as `withdrawn` in state file; existing applied errata remain in DB.                  |
+| Discovery scrape fails (network, FAA outage)                 | Logged warning; `_last_run.json` not updated. Next trigger retries. Server startup proceeds.                                                      |
+| Multiple errata patch the same section                       | One `handbook_section_errata` row per erratum; section content reflects all patches in `published_at` order.                                      |
+| Section added by an erratum (entirely new subsection)        | Insert as a new `handbook_section` row plus a `handbook_section_errata` row marking it as errata-introduced.                                      |
+| User runs `--apply-errata` twice without `--force`           | Second run is a no-op (manifest `applied_at` matches). With `--force`, re-applies; old `handbook_section_errata` rows deleted, new ones inserted. |
+| Reader requested for a section while errata is being applied | Reader serves whatever is currently in the DB. Apply runs in a transaction; readers see pre-apply or post-apply state, not partial.               |
+| Discovery finds a candidate matching no plugin's patterns    | Surfaced in `_pending.md` as `unmatched` with the URL. User can either teach a plugin the new pattern or dismiss.                                 |
+| `GH_TOKEN` is unset and discovery has new candidates         | GitHub issue creation skipped silently; `_pending.md` still written. Dispatcher banner still fires.                                               |
 
-## Out of Scope
+## Out of scope
 
-- Auto-apply of newly-discovered errata without human review. Gated on parser coverage (≥3 distinct addendum layouts proven via unit tests + dry-run zero-diff against human-applied output). Until then, every apply requires explicit user invocation.
-- Errata for any handbook other than AFH and PHAK in v1. Discovery surfaces them; application waits until those handbooks are ingested.
-- Hangar UI for discovery and apply. The hangar app does not exist yet. CLI surfaces are designed to be wrappable later — every CLI command is structured so a future hangar route can call it via dispatcher or HTTP wrapper.
-- DRS portal scraping. Discovery report includes a manual DRS search link only.
-- Section-level "what changed since I last read this?" notification to learners. Stored data supports it; UI is future work.
-- Email notifications. Cache file + GitHub issue + dispatcher banner cover the v1 needs.
-- Cross-edition errata (errata that apply to multiple editions). FAA practice is one-erratum-per-edition; if that ever changes, revisit.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Open questions resolved during scoping
 

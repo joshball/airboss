@@ -53,6 +53,4 @@ status: unread
 
 ## Future surface (deferred)
 
-- As a learner, I want to see "X sections you have read have been amended since you read them" on my dashboard, so I can re-review them. (Not in v1; data model supports it.)
-- As a content author in the hangar, I want a UI to triage discovery candidates, apply errata, and review the resulting diff before commit, so the CLI is a fallback rather than the primary surface. (The hangar app does not yet exist; this WP's CLI is structured to be wrappable.)
-- As a learner reading an old erratum entry, I want to expand the diff to see the *full prior section* (not just the patched paragraph) for context. (Future work; storage supports the original_text but the UI currently only shows the patched paragraph.)
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
