@@ -923,6 +923,12 @@ export {
 	WX_CHART_SVG_WARN_BYTES,
 } from './wx-charts';
 export {
+	MARKDOWN_DIRECTIVE_NAMES,
+	MARKDOWN_DIRECTIVE_REQUIRED_ATTRS,
+	MARKDOWN_DIRECTIVE_VALUES,
+	type MarkdownDirectiveName,
+} from './markdown-directives';
+export {
 	chartArtifactFilename,
 	chartSlugToDir,
 	chartSpecFilename,

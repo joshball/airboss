@@ -21,11 +21,20 @@
  * is treated as a paragraph line.
  */
 
+import {
+	MARKDOWN_DIRECTIVE_REQUIRED_ATTRS,
+	MARKDOWN_DIRECTIVE_VALUES,
+	type MarkdownDirectiveName,
+	WX_CHART_SLUG_REGEX,
+	WX_SCENARIO_VALUES,
+} from '@ab/constants';
 import { CALLOUT_VARIANTS } from '../validation';
 import type { CalloutVariant, InlineNode, MdNode, TableAlign } from './ast';
 import { ESCAPABLE, parseInline } from './inline';
 
 const CALLOUT_VARIANT_SET = new Set<string>(CALLOUT_VARIANTS);
+const DIRECTIVE_NAME_SET = new Set<string>(MARKDOWN_DIRECTIVE_VALUES);
+const WX_SCENARIO_SLUG_SET = new Set<string>(WX_SCENARIO_VALUES);
 
 export class MarkdownParseError extends Error {
 	constructor(
@@ -92,15 +101,47 @@ function parseBlockRange(lines: readonly string[], start: number, end: number, b
 			continue;
 		}
 
-		// Callout directive `:::variant [title]`.
+		// Callout block (`:::variant [title]`) or component-mount directive
+		// (`:::chart slug="..."` / `:::scenario slug="..."`). Both share the
+		// `:::ident` opener; the directive name distinguishes which path runs.
 		const calloutOpen = /^:::\s*([a-z][a-z-]*)\s*(.*)$/i.exec(line);
 		if (calloutOpen && calloutOpen[1].toLowerCase() !== 'end') {
 			const variantName = calloutOpen[1].toLowerCase();
+			const remainder = calloutOpen[2];
+
+			// Component-mount directive. Parse `key="value"` attributes from the
+			// opener line, validate per-directive (required keys, slug shapes),
+			// require a `:::` close on the next non-blank line, and emit a
+			// `directive` AST node. Directives carry no inner body.
+			if (DIRECTIVE_NAME_SET.has(variantName)) {
+				const attrs = parseDirectiveAttrs(remainder, baseLineNo + i + 1);
+				validateDirective(variantName as MarkdownDirectiveName, attrs, baseLineNo + i + 1);
+				const bodyStart = i + 1;
+				let j = bodyStart;
+				while (j < end && !/^:::\s*$/.test(lines[j])) {
+					// Tolerate a single blank line between opener and close; reject
+					// any actual content (a directive body is undefined behaviour).
+					if (lines[j].trim().length !== 0) {
+						throw new MarkdownParseError(
+							`Directive ':::${variantName}' must not contain a body; close with ':::' immediately.`,
+							baseLineNo + j + 1,
+						);
+					}
+					j += 1;
+				}
+				if (j >= end) {
+					throw new MarkdownParseError(`Unclosed directive ':::${variantName}'`, baseLineNo + i + 1);
+				}
+				out.push({ kind: 'directive', name: variantName, attrs });
+				i = j + 1;
+				continue;
+			}
+
 			if (!CALLOUT_VARIANT_SET.has(variantName)) {
-				throw new MarkdownParseError(`Unknown callout variant ':::${variantName}'`, baseLineNo + i + 1);
+				throw new MarkdownParseError(`Unknown directive ':::${variantName}'`, baseLineNo + i + 1);
 			}
 			const variant = variantName as CalloutVariant;
-			const title = calloutOpen[2].trim() || undefined;
+			const title = remainder.trim() || undefined;
 			const bodyStart = i + 1;
 			let j = bodyStart;
 			while (j < end && !/^:::\s*$/.test(lines[j])) {
@@ -339,6 +380,75 @@ function parseTable(lines: readonly string[], start: number, end: number): Parse
 		node: { kind: 'table', alignments, header, rows },
 		consumed: i - start,
 	};
+}
+
+/**
+ * Parse an attribute list from a directive opener.
+ *
+ * Input is the text after `:::name`, e.g. `slug="wx-scenarios/..." foo="bar"`.
+ * Returns `{ slug: '...', foo: 'bar' }`. Whitespace around `=` is allowed.
+ * Values must be double-quoted; backslash escapes inside the quoted value
+ * are forwarded as-is (the renderer's slug regex rejects anything but
+ * `[a-z0-9-/]`, so escapes never appear in practice).
+ *
+ * Throws `MarkdownParseError` on malformed input: unquoted values, unclosed
+ * quotes, or duplicate keys.
+ */
+function parseDirectiveAttrs(rest: string, line: number): Record<string, string> {
+	const out: Record<string, string> = {};
+	const re = /([a-z][a-z0-9-]*)\s*=\s*"((?:[^"\\]|\\.)*)"/giy;
+	let pos = 0;
+	while (pos < rest.length) {
+		// Skip leading whitespace before each pair.
+		while (pos < rest.length && (rest[pos] === ' ' || rest[pos] === '\t')) pos += 1;
+		if (pos >= rest.length) break;
+		re.lastIndex = pos;
+		const m = re.exec(rest);
+		if (m === null || m.index !== pos) {
+			throw new MarkdownParseError(
+				`Directive attribute parse failure near \`${rest.slice(pos).slice(0, 32)}\` (expected key="value")`,
+				line,
+			);
+		}
+		const key = m[1].toLowerCase();
+		if (key in out) {
+			throw new MarkdownParseError(`Duplicate directive attribute '${key}'`, line);
+		}
+		out[key] = m[2];
+		pos = re.lastIndex;
+	}
+	return out;
+}
+
+/**
+ * Per-directive validation: required attribute keys + value shape.
+ *
+ * Runs after `parseDirectiveAttrs` so we know the attribute bag is at
+ * least syntactically well-formed. The slug checks here mirror the
+ * runtime helpers (`WX_CHART_SLUG_REGEX`, `WX_SCENARIO_VALUES`) so an
+ * authored typo fails at parse time, not at render.
+ */
+function validateDirective(name: MarkdownDirectiveName, attrs: Record<string, string>, line: number): void {
+	for (const required of MARKDOWN_DIRECTIVE_REQUIRED_ATTRS[name]) {
+		if (!(required in attrs) || attrs[required].length === 0) {
+			throw new MarkdownParseError(`Directive ':::${name}' is missing required attribute '${required}'`, line);
+		}
+	}
+	if (name === 'chart') {
+		const slug = attrs.slug;
+		if (!WX_CHART_SLUG_REGEX.test(slug)) {
+			throw new MarkdownParseError(
+				`Directive ':::chart' slug '${slug}' is not a valid wx-charts slug (expected wx-scenarios/<id>/<kind> or reference-fixtures/<id>)`,
+				line,
+			);
+		}
+	}
+	if (name === 'scenario') {
+		const slug = attrs.slug;
+		if (!WX_SCENARIO_SLUG_SET.has(slug)) {
+			throw new MarkdownParseError(`Directive ':::scenario' slug '${slug}' is not a registered wx scenario`, line);
+		}
+	}
 }
 
 function splitTableRow(line: string): string[] {

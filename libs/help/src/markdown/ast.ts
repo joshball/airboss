@@ -76,6 +76,23 @@ export interface HrNode {
 	kind: 'hr';
 }
 
+/**
+ * Component-mounting directive (e.g. `:::chart slug="..."` /
+ * `:::scenario slug="..."`). Unlike callouts, directives carry no nested
+ * block children -- they identify a Svelte component the renderer should
+ * mount, parameterised by the attribute bag. The set of legal `name`
+ * values is owned by `MARKDOWN_DIRECTIVE_VALUES` in `@ab/constants`.
+ *
+ * Attributes are stored as a string-keyed string map; per-directive
+ * validation (required keys, slug shapes) runs in the parser before this
+ * node is emitted, so the renderer can trust the attribute bag's shape.
+ */
+export interface DirectiveNode {
+	kind: 'directive';
+	name: string;
+	attrs: Record<string, string>;
+}
+
 export type MdNode =
 	| HeadingNode
 	| ParagraphNode
@@ -85,6 +102,7 @@ export type MdNode =
 	| CodeNode
 	| BlockquoteNode
 	| CalloutNode
+	| DirectiveNode
 	| FigureNode
 	| HrNode;
 
