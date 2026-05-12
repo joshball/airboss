@@ -62,8 +62,20 @@ export {
 	type SynonymRewrite,
 	type WebToolTier,
 } from './schema/result-types';
+export { classifyIntent, hasAnyTitlePrefixMatch, type SearchIntent, wordCount } from './intent-classifier';
 export { listAviationReferences, search, searchGrouped } from './search';
-export { type IndexedRankInput, matchesFilters, rankBucket, rankBucketIndexed } from './search-core';
+export {
+	bodyMatchTier,
+	bucketFromScore,
+	type IndexedRankInput,
+	matchesFilters,
+	rankBucket,
+	rankBucketIndexed,
+	type SearchResultInput,
+	scoreResult,
+	titleMatchTier,
+	TYPE_TIER,
+} from './search-core';
 export {
 	type HelpValidationIssue,
 	type HelpValidationOptions,
