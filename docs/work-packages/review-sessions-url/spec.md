@@ -57,10 +57,7 @@ Three URL layers, landed in order:
 
 ## Out of scope
 
-- Item 15 "Card 1 of 12" as a jump-to-card dropdown. Revisit after (a) ships; jumping around a live session changes the FSRS ordering semantics, and we need to decide separately whether jumps are allowed and whether they count as peeks.
-- Cross-user session sharing ("here's my run, try it"). (b) covers the reproducible entry point; (a) stays private.
-- Any mutation of FSRS scheduling from URL entry. The session is a traversal view, not a schedule editor.
-- Backfill of historical sessions. New sessions only.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Product decisions the user needs to make
 
