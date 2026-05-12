@@ -54,21 +54,17 @@ Without a mapping, `getRecentSimWeakness` is dead code. The whole point of gradi
 
 ### Out
 
-- A DB-resident, hangar-edited mapping table. Mapping is code-resident and reviewed via PR. Rationale in [design.md](design.md).
-- UI to author or browse the mapping (deferred until hangar exists).
-- Reverse direction (study weakness -> sim queue suggestion). That is a future product surface, not this WP.
-- Mappings to question-bank rows or scenario rows. Cards and reps both attach to nodes today ([card.nodeId](../../../libs/bc/study/src/schema.ts), [scenario.nodeId](../../../libs/bc/study/src/schema.ts)); routing through the node is the canonical path.
-- Tape-frame-level signals (e.g. "this learner busts altitude on every steep turn"). The signal granularity is the scenario's overall grade total, per [SIM_BIAS](../../../libs/constants/src/sim.ts).
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Data Model
 
 ### `SIM_SCENARIO_NODE_MAPPINGS` (constants, code-resident)
 
-| Field        | Type                                       | Notes                                                     |
-| ------------ | ------------------------------------------ | --------------------------------------------------------- |
-| Key          | `SimScenarioId`                            | One row per graded scenario.                              |
-| `nodeId`     | `string` (knowledge_node.id slug)          | Must resolve in DB at seed time.                          |
-| `weight`     | `number` in `(0, 1]`                       | Edge weight. Multiplied with `SimWeaknessSignal.weight`.  |
+| Field    | Type                              | Notes                                                    |
+| -------- | --------------------------------- | -------------------------------------------------------- |
+| Key      | `SimScenarioId`                   | One row per graded scenario.                             |
+| `nodeId` | `string` (knowledge_node.id slug) | Must resolve in DB at seed time.                         |
+| `weight` | `number` in `(0, 1]`              | Edge weight. Multiplied with `SimWeaknessSignal.weight`. |
 
 Type defined as `Record<SimScenarioId, readonly SimScenarioNodeLink[]>` so `Object.keys` exhaustiveness fails the build on a new scenario without a mapping.
 
@@ -78,13 +74,13 @@ Type defined as `Record<SimScenarioId, readonly SimScenarioNodeLink[]>` so `Obje
 
 ## Validation
 
-| Rule                                                                                              | Where it runs                  |
-| ------------------------------------------------------------------------------------------------- | ------------------------------ |
-| Every `SimScenarioId` (except `playground`, `playground_pa28`) has a mapping                      | Compile time (exhaustiveness). |
-| Each mapping has >= 1 `SimScenarioNodeLink`                                                       | Unit test in constants.        |
-| Each `weight` is in `(0, 1]`                                                                      | Unit test in constants.        |
-| Each `nodeId` resolves to a `knowledge_node.id` in DB                                             | Seed validation script.        |
-| Sum of per-scenario edge weights need not equal 1 (multi-node coverage is independent emphasis).  | Documented, not enforced.      |
+| Rule                                                                                             | Where it runs                  |
+| ------------------------------------------------------------------------------------------------ | ------------------------------ |
+| Every `SimScenarioId` (except `playground`, `playground_pa28`) has a mapping                     | Compile time (exhaustiveness). |
+| Each mapping has >= 1 `SimScenarioNodeLink`                                                      | Unit test in constants.        |
+| Each `weight` is in `(0, 1]`                                                                     | Unit test in constants.        |
+| Each `nodeId` resolves to a `knowledge_node.id` in DB                                            | Seed validation script.        |
+| Sum of per-scenario edge weights need not equal 1 (multi-node coverage is independent emphasis). | Documented, not enforced.      |
 
 ## Edge Cases
 
@@ -94,11 +90,6 @@ Type defined as `Record<SimScenarioId, readonly SimScenarioNodeLink[]>` so `Obje
 - **Knowledge node renamed or removed.** Seed validation fails. Author updates the mapping. No silent dangling.
 - **Learner has no recent sim attempts.** `getRecentSimWeakness` returns `[]`, `simWeaknessByNode` returns empty map, engine scoring contributes 0 for sim pressure. No-op path is the default.
 
-## Out of Scope (resolved, not deferred)
+## Out of scope
 
-| Surfaced consideration                              | Resolution                                                                                                                                                                                                                                                |
-| --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Hangar-authored mapping table                       | Drop until hangar exists. Code-resident is correct for today's ~15 scenarios; PR review is the workflow.                                                                                                                                                  |
-| Per-component sim signal (altitude vs heading vs stall) | Drop. The grade total is a noisy enough signal at MVP; per-component fan-out is premature. Revisit only if observed lift is too coarse in practice. Tracked as a follow-up trigger: "if the sim signal proves too blunt after >=10 active learners use it." |
-| Reverse direction (study weakness -> sim suggestions) | Drop from this WP. Belongs to a future "rehearsal queue" surface; capture as an idea in [IDEAS.md](../../platform/IDEAS.md) by the author of that future product.                                                                                          |
-| Tape-frame-level grading feedback                   | Drop. Granularity follows what the sim BC already exposes (per-scenario `gradeTotal`). Going finer requires re-architecting `SIM_BIAS`; not justified here.                                                                                               |
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
