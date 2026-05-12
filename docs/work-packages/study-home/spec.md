@@ -77,11 +77,11 @@ Server load reads:
 
 Three independent percentages, each with absolute counts:
 
-| Pill         | Source                                             | Pill on a leaf |
-| ------------ | -------------------------------------------------- | -------------- |
-| Understood   | `mastery.byEvidenceKind.recall.passing / required` | U              |
-| Memorized    | `mastery.byEvidenceKind.calculation.passing / required` | M           |
-| Practiced    | `mastery.byEvidenceKind.scenario.passing / required` (today; widens to scenario + demonstration once WP 2 lands) | P |
+| Pill       | Source                                                                                                           | Pill on a leaf |
+| ---------- | ---------------------------------------------------------------------------------------------------------------- | -------------- |
+| Understood | `mastery.byEvidenceKind.recall.passing / required`                                                               | U              |
+| Memorized  | `mastery.byEvidenceKind.calculation.passing / required`                                                          | M              |
+| Practiced  | `mastery.byEvidenceKind.scenario.passing / required` (today; widens to scenario + demonstration once WP 2 lands) | P              |
 
 No composite "mastery %". Three numbers tell three different stories, and a single number hides where the gap is.
 
@@ -99,13 +99,13 @@ Plain English, no jargon, deterministic templates -- no LLM in the loop. See des
 
 Equal weight, equal size, no pre-selected primary CTA.
 
-| Tile          | Label              | Badge                                | Target                                                                                 |
-| ------------- | ------------------ | ------------------------------------ | -------------------------------------------------------------------------------------- |
-| Read          | Open handbook      | "PHAK ch. N" (today's section if present) | `ROUTES.LIBRARY` (filtered to the focus topic when present, otherwise the index)  |
-| Cards         | Start review       | "N due / M new"                      | `ROUTES.MEMORY_REVIEW` (or `MEMORY_REVIEW_FOR_NODE(focusNodeId)` if a focus exists)    |
-| Scenarios     | Run a scenario     | "N ready"                            | `ROUTES.REPS`                                                                          |
-| Sim           | Practice in sim    | "Available"                          | sim app origin (cross-app link)                                                        |
-| Flight        | Log a flight       | "WP 2"                               | `/flight` placeholder route (real surface lands in WP 2)                               |
+| Tile      | Label           | Badge                                     | Target                                                                              |
+| --------- | --------------- | ----------------------------------------- | ----------------------------------------------------------------------------------- |
+| Read      | Open handbook   | "PHAK ch. N" (today's section if present) | `ROUTES.LIBRARY` (filtered to the focus topic when present, otherwise the index)    |
+| Cards     | Start review    | "N due / M new"                           | `ROUTES.MEMORY_REVIEW` (or `MEMORY_REVIEW_FOR_NODE(focusNodeId)` if a focus exists) |
+| Scenarios | Run a scenario  | "N ready"                                 | `ROUTES.REPS`                                                                       |
+| Sim       | Practice in sim | "Available"                               | sim app origin (cross-app link)                                                     |
+| Flight    | Log a flight    | "WP 2"                                    | `/flight` placeholder route (real surface lands in WP 2)                            |
 
 The user picks. The system **never** auto-routes from `/study` into any tile target.
 
@@ -125,11 +125,11 @@ A hierarchical view of the cert content. Three switchable projections via tab-st
 
 Status glyph mapping:
 
-| Glyph | State                                                                      |
-| ----- | -------------------------------------------------------------------------- |
-| `✓`   | All required pills `●` (mastered)                                          |
-| `⊙`   | At least one required pill is `●` or non-zero attempts                     |
-| `○`   | No attempts on any required pill                                           |
+| Glyph | State                                                  |
+| ----- | ------------------------------------------------------ |
+| `✓`   | All required pills `●` (mastered)                      |
+| `⊙`   | At least one required pill is `●` or non-zero attempts |
+| `○`   | No attempts on any required pill                       |
 
 #### Projection 2: Handbook
 
@@ -195,58 +195,50 @@ Areas are `<details><summary>` pairs. JS-free expand. The auto-expanded area use
 
 ## Validation
 
-| Field                                | Rule                                                                          |
-| ------------------------------------ | ----------------------------------------------------------------------------- |
-| `tab` query param                    | Must be `'acs' \| 'handbook' \| 'course'`. Default `'acs'`. Invalid -> redirect to `/study` (no tab param). |
-| `cert` query param (post-MVP)        | If present, must match a credential the user has access to. v1: ignored.       |
-| Citation toggle preference           | Server-side `study.user_pref` row, key `study.home.citation_order`, value `'hb' \| 'reg'`. Default `'hb'`. Invalid value rejected by Zod; falls back to default. |
-| Map tab preference                   | Server-side `study.user_pref` row, key `study.home.map_tab`, value `'acs' \| 'handbook' \| 'course'`. Default `'acs'`. Invalid -> default. |
+| Field                         | Rule                                                                              |                                                                               |                                                                             |
+| ----------------------------- | --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `tab` query param             | Must be `'acs' \                                                                  | 'handbook' \                                                                  | 'course'`. Default `'acs'`. Invalid -> redirect to `/study` (no tab param). |
+| `cert` query param (post-MVP) | If present, must match a credential the user has access to. v1: ignored.          |                                                                               |                                                                             |
+| Citation toggle preference    | Server-side `study.user_pref` row, key `study.home.citation_order`, value `'hb' \ | 'reg'`. Default `'hb'`. Invalid value rejected by Zod; falls back to default. |                                                                             |
+| Map tab preference            | Server-side `study.user_pref` row, key `study.home.map_tab`, value `'acs' \       | 'handbook' \                                                                  | 'course'`. Default `'acs'`. Invalid -> default.                             |
 
 One form action: `?/setPref` (POST, threaded through SvelteKit form actions) writes a single key/value to `study.user_pref`. No other writes.
 
 ## Edge cases
 
-| Trigger                                                                                          | What happens                                                                                                                                             |
-| ------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| User has no primary goal                                                                         | Banner "Set a primary goal" + link to `/goals/new`. Cert-agnostic page renders below: tiles still work, no progress strip, no cert map.                  |
-| Primary goal credential has no primary syllabus authored                                         | Empty-state on the map: "Syllabus not yet authored." Progress strip shows 0/0 (renders as `--%`). Today prose falls through to "you're caught up."        |
-| `getWeakAreas` returns empty                                                                     | Today prose: "You're caught up. Pick a topic from the map to dig in." Tiles render with neutral badges ("0 due", "0 ready").                              |
-| User has primary goal but it's not PPL (e.g. CFI)                                                | Page works. ACS projection uses whatever syllabus is primary. Handbook projection works. Course projection shows "no course content seeded for this cert" with a link to `course/regulations/` for the FAR nav reference. |
-| Handbook projection: no citing nodes for a given handbook                                        | The handbook row hides. If all handbooks are empty: "No knowledge nodes have citations yet." Empty-state.                                                |
-| Course projection: a lesson cites a knowledge node that's been deleted or renamed                | The lesson renders, the broken cite is omitted from the rollup, dev-mode shows a console warning.                                                         |
-| Tile target route is gone (e.g. sim app down)                                                    | The tile still renders. Click leads to a 404; no special handling at the tile level.                                                                       |
-| Map row has 200+ leaves (CFI ACS)                                                                | Per-area cap at v1: render the first 50 leaves expanded, "show all 200" affordance to expand the rest. ACS / PPL has < 50 per area so this is a CFI guard. |
-| User toggles citation order in the panel                                                         | Form-action POST writes the new value to `study.user_pref`; subsequent panels open in the new order. Optimistic UI; rollback on error.                   |
-| Mobile screen (< 700 px)                                                                         | Page renders but explicitly degrades. Pills stack vertically, tiles wrap to 2 per row, map collapses to ACS-only with a notice "Switch to desktop for full map." Desktop is the canonical experience; mobile is best-effort. |
-| Network failure on tab switch                                                                    | Standard SvelteKit error page. The page is read-only so retry is safe.                                                                                    |
+| Trigger                                                                           | What happens                                                                                                                                                                                                                 |
+| --------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| User has no primary goal                                                          | Banner "Set a primary goal" + link to `/goals/new`. Cert-agnostic page renders below: tiles still work, no progress strip, no cert map.                                                                                      |
+| Primary goal credential has no primary syllabus authored                          | Empty-state on the map: "Syllabus not yet authored." Progress strip shows 0/0 (renders as `--%`). Today prose falls through to "you're caught up."                                                                           |
+| `getWeakAreas` returns empty                                                      | Today prose: "You're caught up. Pick a topic from the map to dig in." Tiles render with neutral badges ("0 due", "0 ready").                                                                                                 |
+| User has primary goal but it's not PPL (e.g. CFI)                                 | Page works. ACS projection uses whatever syllabus is primary. Handbook projection works. Course projection shows "no course content seeded for this cert" with a link to `course/regulations/` for the FAR nav reference.    |
+| Handbook projection: no citing nodes for a given handbook                         | The handbook row hides. If all handbooks are empty: "No knowledge nodes have citations yet." Empty-state.                                                                                                                    |
+| Course projection: a lesson cites a knowledge node that's been deleted or renamed | The lesson renders, the broken cite is omitted from the rollup, dev-mode shows a console warning.                                                                                                                            |
+| Tile target route is gone (e.g. sim app down)                                     | The tile still renders. Click leads to a 404; no special handling at the tile level.                                                                                                                                         |
+| Map row has 200+ leaves (CFI ACS)                                                 | Per-area cap at v1: render the first 50 leaves expanded, "show all 200" affordance to expand the rest. ACS / PPL has < 50 per area so this is a CFI guard.                                                                   |
+| User toggles citation order in the panel                                          | Form-action POST writes the new value to `study.user_pref`; subsequent panels open in the new order. Optimistic UI; rollback on error.                                                                                       |
+| Mobile screen (< 700 px)                                                          | Page renders but explicitly degrades. Pills stack vertically, tiles wrap to 2 per row, map collapses to ACS-only with a notice "Switch to desktop for full map." Desktop is the canonical experience; mobile is best-effort. |
+| Network failure on tab switch                                                     | Standard SvelteKit error page. The page is read-only so retry is safe.                                                                                                                                                       |
 
 ## Decisions (formerly open questions, ratified 2026-05-04)
 
-| # | Question                              | Decision                                                                                                                          |
-| - | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| 1 | `/study` vs `/dashboard`              | `/study` becomes the post-login default. `/dashboard` keeps its URL; renamed "Stats" in nav. Power-user view stays alive.          |
-| 2 | Credential dropdown                   | v1 renders the user's primary-goal credential as static text in the page header, with a "(switch)" link to `/goals`. No dropdown. |
-| 3a| Course projection seed                | FAR navigation course at `course/regulations/`. Only seed in v1.                                                                  |
-| 3b| `cites:` frontmatter shape            | Heavy: explicit `knowledge_nodes`, `acs_leaves`, `handbook_sections` arrays. Author each correctly; pause and surface the ambiguous. |
-| 3c| Backfill scope                        | All 10 weeks backfilled in this WP. No `reading-only` lessons at ship.                                                            |
-| 4 | Mobile                                | Desktop-first canonical. Mobile (< 700 px) renders, explicitly degrades: stacked pills, wrapped tiles, ACS-only map with a notice. |
-| 5 | Today prose                           | Deterministic templates. No LLM in v1.                                                                                            |
-| 6 | Day-count signal                      | Add `getFirstTouchDate(userId, nodeId)` helper to `dashboard.ts`. Day-count appears in the prose.                                  |
-| 7 | Persistence                           | Server-side `study.user_pref` table. Two keys this WP: `study.home.citation_order`, `study.home.map_tab`.                          |
+| #   | Question                   | Decision                                                                                                                             |
+| --- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | `/study` vs `/dashboard`   | `/study` becomes the post-login default. `/dashboard` keeps its URL; renamed "Stats" in nav. Power-user view stays alive.            |
+| 2   | Credential dropdown        | v1 renders the user's primary-goal credential as static text in the page header, with a "(switch)" link to `/goals`. No dropdown.    |
+| 3a  | Course projection seed     | FAR navigation course at `course/regulations/`. Only seed in v1.                                                                     |
+| 3b  | `cites:` frontmatter shape | Heavy: explicit `knowledge_nodes`, `acs_leaves`, `handbook_sections` arrays. Author each correctly; pause and surface the ambiguous. |
+| 3c  | Backfill scope             | All 10 weeks backfilled in this WP. No `reading-only` lessons at ship.                                                               |
+| 4   | Mobile                     | Desktop-first canonical. Mobile (< 700 px) renders, explicitly degrades: stacked pills, wrapped tiles, ACS-only map with a notice.   |
+| 5   | Today prose                | Deterministic templates. No LLM in v1.                                                                                               |
+| 6   | Day-count signal           | Add `getFirstTouchDate(userId, nodeId)` helper to `dashboard.ts`. Day-count appears in the prose.                                    |
+| 7   | Persistence                | Server-side `study.user_pref` table. Two keys this WP: `study.home.citation_order`, `study.home.map_tab`.                            |
 
 These are no longer open. The text above (Anchors / In scope / Behavior / Validation / Edge cases) reflects each decision.
 
 ## Out of scope
 
-- **No flight log / GPS ingest / CFI feedback.** That's [WP 2: flight-evidence-and-cfi-feedback](../flight-evidence-and-cfi-feedback/spec.md). The Flight tile here is a stub linking to a placeholder route.
-- **No knowledge node body re-render** -- discovery vs. memorize render-mode toggle is [WP 3: node-render-modes](../node-render-modes/spec.md). Knowledge node detail pages render as they do today.
-- **Minimal new BC + schema.** One new table (`study.user_pref`) and three small helpers (`getFirstTouchDate`, `getUserPrefs`, `setUserPref`). Everything else is surface composition over existing BC.
-- **No content authoring.** The page works against whatever knowledge graph + syllabus content exists today; gaps are visible (empty area rollups), not papered over.
-- **No kanban board.** Decided against in conversation: kanban fights spaced rep, and the engine already orders for you. The "what's next" stream is the briefing + tiles + the map's auto-expanded area. The map itself is a status-at-a-glance view of the *content*, not a queue of cards.
-- **No multi-credential master view.** Post-MVP.
-- **No FAA logbook integration.** Logbook ingest would be its own corpus + ingest pipeline, far beyond this arc.
-- **No client-side-only state.** `study.user_pref` is the canonical store; nothing meaningful lives only in localStorage.
-- **No real-time progress updates.** Page is a snapshot at load; the user navigates, completes work, comes back, sees fresh numbers. No websocket / poll.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## What "done" looks like
 
