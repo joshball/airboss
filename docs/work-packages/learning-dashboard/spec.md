@@ -139,20 +139,20 @@ The order is the answer to `what does Joshua do with this page?` -- act (CTA, du
 
 Aggregation functions added to `libs/bc/study/src/`. Most panels reuse existing functions. New functions are dashboard-specific aggregations over existing tables -- **no new data model, no new schema changes.**
 
-| File                 | Function              | Status | Returns                                                                                 | Consumers                           |
-| -------------------- | --------------------- | ------ | --------------------------------------------------------------------------------------- | ----------------------------------- |
-| `stats.ts`           | `getDashboardStats`   | exists | `dueNow`, `reviewedToday`, `streakDays`, `stateCounts`, `domains`                       | Reviews-due panel, activity streak  |
-| `stats.ts`           | `getDomainBreakdown`  | exists | Per-domain card totals / due / mastered                                                 | Map panel (v1 fallback), weak areas |
-| `calibration.ts`     | `getCalibration`      | exists | Five-bucket data, score, per-domain gaps                                                | Calibration summary                 |
-| `scenarios.ts`       | `getRepAccuracy`      | exists | Scenario attempt counts + accuracy                                                      | Weak areas (rep signal)             |
-| `scenarios.ts`       | `getRepStats`         | exists | Attempt counts, accuracy, domain breakdown                                              | Scheduled-reps panel                |
-| `dashboard.ts` (new) | `getRepBacklog`       | new    | `{ unattempted, totalActive, byDomain }`                                                | Scheduled-reps panel                |
-| `dashboard.ts` (new) | `getWeakAreas`        | new    | Ranked list of weak domains with reasons                                                | Weak-areas panel                    |
-| `dashboard.ts` (new) | `getRecentActivity`   | new    | Per-day reviews + attempts for last N days (default 7)                                  | Activity panel                      |
+| File                 | Function              | Status | Returns                                                                                  | Consumers                           |
+| -------------------- | --------------------- | ------ | ---------------------------------------------------------------------------------------- | ----------------------------------- |
+| `stats.ts`           | `getDashboardStats`   | exists | `dueNow`, `reviewedToday`, `streakDays`, `stateCounts`, `domains`                        | Reviews-due panel, activity streak  |
+| `stats.ts`           | `getDomainBreakdown`  | exists | Per-domain card totals / due / mastered                                                  | Map panel (v1 fallback), weak areas |
+| `calibration.ts`     | `getCalibration`      | exists | Five-bucket data, score, per-domain gaps                                                 | Calibration summary                 |
+| `scenarios.ts`       | `getRepAccuracy`      | exists | Scenario attempt counts + accuracy                                                       | Weak areas (rep signal)             |
+| `scenarios.ts`       | `getRepStats`         | exists | Attempt counts, accuracy, domain breakdown                                               | Scheduled-reps panel                |
+| `dashboard.ts` (new) | `getRepBacklog`       | new    | `{ unattempted, totalActive, byDomain }`                                                 | Scheduled-reps panel                |
+| `dashboard.ts` (new) | `getWeakAreas`        | new    | Ranked list of weak domains with reasons                                                 | Weak-areas panel                    |
+| `dashboard.ts` (new) | `getRecentActivity`   | new    | Per-day reviews + attempts for last N days (default 7)                                   | Activity panel                      |
 | `dashboard.ts` (new) | `getDashboardPayload` | new    | Top-level aggregator that fans out the above in parallel, returns the full panel payload | Route load function                 |
-| future (graph BC)    | `getCertProgress`     | gated  | Per-cert node counts + mastery                                                          | Cert-progress panel                 |
-| future (graph BC)    | `getDomainCertMatrix` | gated  | Domain x cert mastery grid                                                              | Map panel                           |
-| future (plan BC)     | `getActivePlan`       | gated  | Study-plan record                                                                       | Study-plan panel                    |
+| future (graph BC)    | `getCertProgress`     | gated  | Per-cert node counts + mastery                                                           | Cert-progress panel                 |
+| future (graph BC)    | `getDomainCertMatrix` | gated  | Domain x cert mastery grid                                                               | Map panel                           |
+| future (plan BC)     | `getActivePlan`       | gated  | Study-plan record                                                                        | Study-plan panel                    |
 
 `getDashboardPayload` is the single entry point the load function calls. Internally it `Promise.all`s the panel queries so there is exactly one round-trip wait. v1 has 5 parallel queries (dashboard stats, calibration, rep backlog, weak areas, recent activity). When the graph and plan panels gate in, the fan-out grows to 7-8; still one await.
 
@@ -201,21 +201,9 @@ v1 is 5 parallel queries; existing `getDashboardStats` is already 5 parallel que
 
 Denormalized snapshot table (e.g., `study.learner_state`) is explicitly **out of scope for v1**. If perf becomes a problem, the right fix is either materialized views (Postgres-native) or a per-user snapshot row updated on write -- both are trivial to slot in behind the same BC functions because callers depend only on the function signatures.
 
-## Out of Scope
+## Out of scope
 
-- Filters (domain / cert / date range) -- v1 is a single static view.
-- Interactive charts -- activity is a static sparkline; no tooltips, no drill-down.
-- Multi-user -- strictly single user (the authenticated session).
-- Comparison over time -- `you a month ago` is beyond MVP.
-- Export (PDF / image / training log) -- post-MVP.
-- CFI-viewing-student mode -- post-MVP, requires permissions model.
-- Domain detail drill-down page (`/dashboard/domains/[domain]`) -- **lives with the knowledge-graph work package**, not here.
-- Node detail page -- same; belongs to the graph WP.
-- Customizable panel order / hidden panels -- post-MVP.
-- Mobile-first redesign -- v1 renders the full matrix on wide screens and degrades to a stack on narrow; a dedicated mobile layout is post-MVP.
-- Real-time updates (websockets, polling) -- never in v1; page reload is the refresh mechanism.
-- Denormalized snapshot table -- deferred until a panel regresses past the perf budget.
-- `Why this item` reasoning labels on weak areas -- v1 shows the reason type (accuracy / overdue) and number, not a natural-language rationale.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Open Questions
 
