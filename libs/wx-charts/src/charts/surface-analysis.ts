@@ -31,6 +31,7 @@ import { buildChrome } from '../chrome';
 import { renderGraticule } from '../graticule';
 import { composeChart, type LayerBandMap } from '../layers';
 import { type FitTarget, lambertProjection } from '../projection';
+import { buildConusClipPath, sanitizeClipId } from '../symbology/clip';
 import { renderScalarContours } from '../symbology/contours';
 import { type FrontDef, type PipSide, renderFront } from '../symbology/fronts';
 import { renderPressureCenter } from '../symbology/pressure-centers';
@@ -300,7 +301,18 @@ export async function renderSurfaceAnalysis(input: ChartRenderInput<SurfaceAnaly
 		};
 		return renderFront(def);
 	});
-	bands[LAYER_BANDS.VECTOR_SYMBOLOGY] = `${contourResult.svg}\n${frontFragments.join('\n')}`;
+	// Clip the vector-symbology band to the CONUS union polygon so
+	// contour fragments and front polylines do not bleed past the
+	// country outline into Canada / Mexico (PR follow-on to ADR 027
+	// Option A: the basemap fix anchored the cone shape; the actual
+	// "hunchback" curvature was unclipped contour output).
+	const clip = buildConusClipPath({
+		id: sanitizeClipId(`conus-clip-${input.spec.slug}`),
+		conusPolygon: basemap.conusPolygon,
+		projection,
+	});
+	bands[LAYER_BANDS.VECTOR_SYMBOLOGY] =
+		`${clip.defs}<g ${clip.clipAttr}>${contourResult.svg}\n${frontFragments.join('\n')}</g>`;
 
 	// Point symbology: pressure centers + optional sparse station model.
 	const centerFragments = opts.show_h_l_markers
