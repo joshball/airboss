@@ -5,7 +5,7 @@ subtitle: '2024-12-23 12Z -- GOES water-vapor band (synthetic Phase F fixture)'
 projection:
   kind: lambert
   parallels: [33, 45]
-  rotate: [-96, -39]
+  rotate: [-96, 0]
 extent: conus
 sources:
   wv_png: cache://satellite/goes-wv-2024-12-23-12z.png

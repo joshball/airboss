@@ -66,7 +66,7 @@ Manual acceptance tests for [spec.md](./spec.md). Prefix `WXC-`. Scenarios are g
 
 ### WXC-3: lambertProjection projects known points
 
-1. Build a Lambert projection with `parallels: [33, 45]`, `rotate: [-96, -39]`, and a CONUS-fitting extent.
+1. Build a Lambert projection with `parallels: [33, 45]`, `rotate: [-96, 0]`, and a CONUS-fitting extent.
 2. Project Houston KIAH (29.984N, -95.342W) and confirm the resulting `[x, y]` is in the expected pixel region (lower-right quadrant for a 1200x780 canvas).
 3. Project Seattle KSEA (47.450N, -122.309W) and confirm it's in the upper-left quadrant.
 4. **Expected:** both projections succeed; pixel coords are stable across runs (deterministic).

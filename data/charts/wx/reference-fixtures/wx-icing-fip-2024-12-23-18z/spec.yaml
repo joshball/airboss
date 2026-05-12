@@ -5,7 +5,7 @@ subtitle: '2024-12-23 12Z issue, valid 18Z -- Forecast Icing Product, FL090'
 projection:
   kind: lambert
   parallels: [33, 45]
-  rotate: [-96, -39]
+  rotate: [-96, 0]
 extent: conus
 sources:
   field: cache://icing/2024-12-23-18z-fip.json

@@ -5,7 +5,7 @@ subtitle: '2024-05-21 22Z (Tue) -- 22 PIREPs across CONUS (hand-traced composite
 projection:
   kind: lambert
   parallels: [33, 45]
-  rotate: [-96, -39]
+  rotate: [-96, 0]
 extent: conus
 sources:
   reports: cache://pirep/2024-05-21-22z.json

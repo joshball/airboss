@@ -5,7 +5,7 @@ subtitle: 'Issued 2024-12-23 12Z (Mon), Valid 2024-12-24 00Z -- hand-traced WPC 
 projection:
   kind: lambert
   parallels: [33, 45]
-  rotate: [-96, -39]
+  rotate: [-96, 0]
 extent: conus
 sources:
   forecast: cache://prog-chart/2024-12-23-12z-12hr.json
