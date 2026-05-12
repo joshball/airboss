@@ -138,10 +138,6 @@ Goal: rewire `mastery.ts` shims into real partition queries. After this phase, e
   - Body: scope shipped, defaults applied per Open Questions, follow-on CFI ACS-25 transcription WP referenced.
 - [x] Append final summary to `.ball-coord/to-dispatcher.md`.
 
-## Out of scope (do not start in this WP)
+## Out of scope
 
-- CFI ACS-25 transcription -- separate content WP.
-- Engine selection changes (engine prefers cards/scenarios that close evidence-kind gaps) -- separate WP.
-- Per-kind threshold tunings (`CARD_MIN`, `REP_MIN`) -- defer until data shows a need.
-- Teaching-exercise UX runtime in sessions (engine pick + UI render) -- separate WP.
-- GIN index on `scenario.assessment_methods` -- only if profiling shows the LATERAL UNNEST is a bottleneck.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
