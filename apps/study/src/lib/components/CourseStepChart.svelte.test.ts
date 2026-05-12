@@ -1,10 +1,9 @@
 /**
- * CourseStepChart placeholder behavior (course-reader-and-editor WP, Phase 8).
+ * CourseStepChart rendering behavior.
  *
- * The chart stub renders a bordered container with the slug visible in
- * dev mode, an empty wrapper in prod. Real chart rendering ships in a
- * follow-on WP; this test pins the placeholder contract so the follow-on
- * has a stable shape to swap.
+ * The component embeds a chart SVG via `/api/charts/<slug>/chart.svg`.
+ * These tests pin the rendered shape (figure + img + dev caption) without
+ * exercising the network call -- the route's own tests cover the byte path.
  */
 
 import { cleanup, render, screen } from '@testing-library/svelte';
@@ -16,17 +15,32 @@ afterEach(() => {
 });
 
 describe('CourseStepChart', () => {
-	it('renders a placeholder container with role figure', () => {
-		render(CourseStepChart, { props: { slug: 'test-chart-slug' } });
-		const figure = screen.getByLabelText('Chart placeholder');
+	it('renders a figure containing an <img> pointing at the /api/charts route', () => {
+		const slug = 'wx-scenarios/frontal-xc-march/surface-analysis';
+		render(CourseStepChart, { props: { slug } });
+		const figure = screen.getByLabelText(`Chart: ${slug}`);
 		expect(figure).toBeInTheDocument();
 		expect(figure.tagName.toLowerCase()).toBe('figure');
+
+		const img = screen.getByAltText(`Chart ${slug}`);
+		expect(img.tagName.toLowerCase()).toBe('img');
+		expect(img.getAttribute('src')).toBe(`/api/charts/${slug}/chart.svg`);
+		expect(img.getAttribute('loading')).toBe('lazy');
 	});
 
 	it('shows the slug in dev mode', () => {
-		// vitest's `dev` flag from $app/environment is true by default in tests
-		// (unless the test env overrides it), so the dev-mode caption appears.
-		render(CourseStepChart, { props: { slug: 'sfc-analysis-2026-05-09' } });
-		expect(screen.getByText(/sfc-analysis-2026-05-09/)).toBeInTheDocument();
+		// vitest's `import.meta.env.DEV` is true by default in tests, so the
+		// dev-mode caption appears beneath the chart.
+		render(CourseStepChart, { props: { slug: 'wx-scenarios/frontal-xc-march/cva' } });
+		expect(screen.getByText(/wx-scenarios\/frontal-xc-march\/cva/)).toBeInTheDocument();
+	});
+
+	it('builds the URL from the slug without manual encoding', () => {
+		// Slugs contain slashes; SvelteKit's `[...slug]` catch-all consumes them
+		// transparently on the server side. Verify we don't pre-encode.
+		const slug = 'reference-fixtures/wx-surface-analysis-2024-12-23-12z';
+		render(CourseStepChart, { props: { slug } });
+		const img = screen.getByAltText(`Chart ${slug}`);
+		expect(img.getAttribute('src')).toBe(`/api/charts/${slug}/chart.svg`);
 	});
 });
