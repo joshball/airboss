@@ -49,18 +49,18 @@ The Practiced pill **aggregates objectively** -- attempts logged, self-assessed 
 
 ## Decisions (formerly open questions, ratified 2026-05-04)
 
-| #  | Question                              | Decision                                                                                                                                                                                                |
-| -- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1  | Teacher surface location              | Under study at `/teach/...`. Not a new app; not under hangar. Promote to `apps/teach/` only when teacher features grow.                                                                                |
-| 2  | Practiced credit rule                 | **No credit rule.** Self-assessed and teacher-signed are tracked as independent counts; mastery rolls up objectively (attempts + outcomes). The teacher is the gate; we are the tracker.                |
-| 3  | GPS track production storage          | Dev-local cache for v1. Cloud-storage adapter follows when second user uploads.                                                                                                                          |
-| 4  | Maneuver kinds scope                  | ASEL + IR (~50 kinds). Covers PPL refresh + IR refresh -- the user's near-term cert goals.                                                                                                              |
-| 5  | Reorder transaction shape             | Single transaction `UPDATE ... FROM unnest(...)`. One audit row.                                                                                                                                         |
-| 6  | Roles architecture                    | New `study.account_role` join table. Roles `student` and `teacher`. Auto-grant `student` on first sign-in. Per-role metadata in jsonb. Ready for future billing / certificate-verification without schema change. |
-| 7  | Multi-teacher Course tab on `/study`  | Most-recently-active teacher's syllabus by default. Dropdown auto-appears when student has 2+ active teacher links. Stored in WP 1's `study.user_pref`.                                                  |
-| 8  | Magic-link flow shape                 | **Real account, no formal "create account" prompt.** better-auth magic-link plugin creates `bauth_user` + auto-grants `teacher` role on first click. The teacher never sees signup UI; phrases like "create your account," "set a password," "pick a username" never appear. The page reads "Welcome -- leave feedback below."        |
-| 9  | Single-flight grant vs ongoing relationship | **Opt-in.** Accepting a debrief invite grants access to **one specific flight only**. `acceptDebriefInvite` does NOT auto-create a `teacher_student_link`. Either side promotes to a durable relationship via an explicit "Make this regular" action.                                                          |
-| 10 | Default `teacher_student_link.kind`   | **`'cfi'` is the default.** Most student-initiated invites are to CFIs; this matches the most common case. The teacher can switch to `'mentor'` or `'peer'` via `setRoleMetadata` from settings; the student picks the kind via a dropdown when they click "Make this regular."                                  |
+| #   | Question                                    | Decision                                                                                                                                                                                                                                                                                                                       |
+| --- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | Teacher surface location                    | Under study at `/teach/...`. Not a new app; not under hangar. Promote to `apps/teach/` only when teacher features grow.                                                                                                                                                                                                        |
+| 2   | Practiced credit rule                       | **No credit rule.** Self-assessed and teacher-signed are tracked as independent counts; mastery rolls up objectively (attempts + outcomes). The teacher is the gate; we are the tracker.                                                                                                                                       |
+| 3   | GPS track production storage                | Dev-local cache for v1. Cloud-storage adapter follows when second user uploads.                                                                                                                                                                                                                                                |
+| 4   | Maneuver kinds scope                        | ASEL + IR (~50 kinds). Covers PPL refresh + IR refresh -- the user's near-term cert goals.                                                                                                                                                                                                                                     |
+| 5   | Reorder transaction shape                   | Single transaction `UPDATE ... FROM unnest(...)`. One audit row.                                                                                                                                                                                                                                                               |
+| 6   | Roles architecture                          | New `study.account_role` join table. Roles `student` and `teacher`. Auto-grant `student` on first sign-in. Per-role metadata in jsonb. Ready for future billing / certificate-verification without schema change.                                                                                                              |
+| 7   | Multi-teacher Course tab on `/study`        | Most-recently-active teacher's syllabus by default. Dropdown auto-appears when student has 2+ active teacher links. Stored in WP 1's `study.user_pref`.                                                                                                                                                                        |
+| 8   | Magic-link flow shape                       | **Real account, no formal "create account" prompt.** better-auth magic-link plugin creates `bauth_user` + auto-grants `teacher` role on first click. The teacher never sees signup UI; phrases like "create your account," "set a password," "pick a username" never appear. The page reads "Welcome -- leave feedback below." |
+| 9   | Single-flight grant vs ongoing relationship | **Opt-in.** Accepting a debrief invite grants access to **one specific flight only**. `acceptDebriefInvite` does NOT auto-create a `teacher_student_link`. Either side promotes to a durable relationship via an explicit "Make this regular" action.                                                                          |
+| 10  | Default `teacher_student_link.kind`         | **`'cfi'` is the default.** Most student-initiated invites are to CFIs; this matches the most common case. The teacher can switch to `'mentor'` or `'peer'` via `setRoleMetadata` from settings; the student picks the kind via a dropdown when they click "Make this regular."                                                |
 
 Two follow-on entries captured in `docs/platform/IDEAS.md`:
 
@@ -419,45 +419,45 @@ Surfaces for the promotion:
 
 ## Validation
 
-| Field                                     | Rule                                                                                                     |
-| ----------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| `account_role.role`                       | In `ACCOUNT_ROLES`.                                                                                       |
-| `account_role.metadata` (student)         | Zod: `{ studying_for: STUDENT_STUDYING_FOR_VALUES \| null }`.                                             |
-| `account_role.metadata` (teacher)         | Zod: `{ kind: TEACHER_LINK_KINDS, certificates_verified: boolean }`.                                      |
-| `flight_attempt.flight_date`              | <= today; not more than 5 years past.                                                                     |
-| `flight_attempt.aircraft_ident`           | Required; trimmed; uppercased; matches `^[A-Z0-9-]{2,10}$`.                                               |
-| `flight_attempt.total_time_minutes`       | If set: positive integer, <= 1440.                                                                        |
-| `flight_maneuver.kind`                    | In `MANEUVER_KINDS`.                                                                                      |
-| `flight_maneuver.attempts_made`           | Positive integer, <= 50.                                                                                  |
-| `flight_maneuver.actual_metric_json`      | Validates against `MANEUVER_KINDS[kind].actualSchema`.                                                    |
-| `flight_maneuver.self_assessment`         | Required, in `ASSESSMENT_VALUES`.                                                                          |
-| `flight_maneuver.teacher_assessment`      | If set, in `ASSESSMENT_VALUES`. Trio CHECK enforces all-or-nothing.                                       |
-| `flight_track` upload                     | <= 25 MB. Format in `TRACK_FORMATS`. Parser must succeed.                                                 |
-| Teacher writes (gating)                   | Caller must have an active `teacher_student_link` to the target student. (Or the matching debrief invite.) |
-| Teaching syllabus writes (gating)         | Caller must equal `syllabus.author_user_id`.                                                              |
-| `debrief_invite.invited_email`            | Lowercased; valid email format.                                                                            |
-| `debrief_invite.expires_at`               | Default `invited_at + 14 days`; configurable via constant.                                                |
+| Field                                | Rule                                                                                                       |          |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------------------- | -------- |
+| `account_role.role`                  | In `ACCOUNT_ROLES`.                                                                                        |          |
+| `account_role.metadata` (student)    | Zod: `{ studying_for: STUDENT_STUDYING_FOR_VALUES \                                                        | null }`. |
+| `account_role.metadata` (teacher)    | Zod: `{ kind: TEACHER_LINK_KINDS, certificates_verified: boolean }`.                                       |          |
+| `flight_attempt.flight_date`         | <= today; not more than 5 years past.                                                                      |          |
+| `flight_attempt.aircraft_ident`      | Required; trimmed; uppercased; matches `^[A-Z0-9-]{2,10}$`.                                                |          |
+| `flight_attempt.total_time_minutes`  | If set: positive integer, <= 1440.                                                                         |          |
+| `flight_maneuver.kind`               | In `MANEUVER_KINDS`.                                                                                       |          |
+| `flight_maneuver.attempts_made`      | Positive integer, <= 50.                                                                                   |          |
+| `flight_maneuver.actual_metric_json` | Validates against `MANEUVER_KINDS[kind].actualSchema`.                                                     |          |
+| `flight_maneuver.self_assessment`    | Required, in `ASSESSMENT_VALUES`.                                                                          |          |
+| `flight_maneuver.teacher_assessment` | If set, in `ASSESSMENT_VALUES`. Trio CHECK enforces all-or-nothing.                                        |          |
+| `flight_track` upload                | <= 25 MB. Format in `TRACK_FORMATS`. Parser must succeed.                                                  |          |
+| Teacher writes (gating)              | Caller must have an active `teacher_student_link` to the target student. (Or the matching debrief invite.) |          |
+| Teaching syllabus writes (gating)    | Caller must equal `syllabus.author_user_id`.                                                               |          |
+| `debrief_invite.invited_email`       | Lowercased; valid email format.                                                                            |          |
+| `debrief_invite.expires_at`          | Default `invited_at + 14 days`; configurable via constant.                                                 |          |
 
 ## Edge cases
 
-| Trigger                                                                                          | What happens                                                                                                                                                |
-| ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Student uploads corrupt GPS file                                                                 | Parser throws; upload rejected with clear error. No row created.                                                                                            |
-| Student edits a maneuver after teacher sign-off                                                  | Edit allowed. Teacher trio not invalidated automatically. Teacher sees a "post-signoff edit" badge with the diff; can re-sign-off if desired.                |
-| Teacher's link goes `'ended'`; student tries to view past assessments                            | Past assessments persist (durable row state). Read access for the student persists. New writes blocked by gating.                                            |
-| Student has multiple active teachers                                                             | Allowed. Each link is independent. Course projection picks most-recently-active by default; dropdown surfaces when 2+ exist (Decision 7).                    |
-| Teacher reorders lessons in a syllabus authored by a different teacher                           | `assertSyllabusAuthor` rejects. Audit captures the attempt.                                                                                                  |
-| Student deletes a flight                                                                         | Soft-delete; cascades to maneuvers via FK. Audit.                                                                                                            |
-| Maneuver kind has no `actualSchema` defined                                                      | Form renders only `student_notes` + `self_assessment`; `actual_metric_json = {}`.                                                                            |
-| Two students share a tail number                                                                 | Aircraft ident is free-form text per row; no normalization across users.                                                                                    |
-| GPS track file private to one user                                                               | `flight_track.user_id` enforces row-level ownership. Teacher can view tracks attached to their student's attempts via the link gate.                          |
-| Teacher receives a debrief invite for an account that already exists                             | Magic-link signs them into the existing account (matched by email). No duplicate accounts.                                                                  |
-| Teacher's existing account doesn't have `teacher` role                                           | `acceptDebriefInvite` auto-grants the role.                                                                                                                  |
-| Student revokes a pending debrief invite before the teacher clicks                               | `revokeDebriefInvite` sets `revoked_at`. Subsequent click on the link returns "This invite has been revoked." No account creation.                          |
-| Debrief invite expires before click                                                              | `expires_at < now()` -> "This invite has expired. Ask Joshua for a new one."                                                                                |
-| Magic link clicked twice                                                                         | First click marks `accepted_at`. Subsequent clicks: if same email/session -> redirect to `/teach/debrief/[token]` and show the existing feedback page. If different -> magic-link rejects (token consumed). |
-| Teacher hasn't filled `studying_for` (their `student` role is bare)                              | Their `/study` page works; progress strip shows "no goal" banner per WP 1.                                                                                  |
-| First-time sign-in with no `account_role` rows                                                   | Hooks layer auto-grants `student` with `studying_for: null`.                                                                                                |
+| Trigger                                                                | What happens                                                                                                                                                                                                |
+| ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Student uploads corrupt GPS file                                       | Parser throws; upload rejected with clear error. No row created.                                                                                                                                            |
+| Student edits a maneuver after teacher sign-off                        | Edit allowed. Teacher trio not invalidated automatically. Teacher sees a "post-signoff edit" badge with the diff; can re-sign-off if desired.                                                               |
+| Teacher's link goes `'ended'`; student tries to view past assessments  | Past assessments persist (durable row state). Read access for the student persists. New writes blocked by gating.                                                                                           |
+| Student has multiple active teachers                                   | Allowed. Each link is independent. Course projection picks most-recently-active by default; dropdown surfaces when 2+ exist (Decision 7).                                                                   |
+| Teacher reorders lessons in a syllabus authored by a different teacher | `assertSyllabusAuthor` rejects. Audit captures the attempt.                                                                                                                                                 |
+| Student deletes a flight                                               | Soft-delete; cascades to maneuvers via FK. Audit.                                                                                                                                                           |
+| Maneuver kind has no `actualSchema` defined                            | Form renders only `student_notes` + `self_assessment`; `actual_metric_json = {}`.                                                                                                                           |
+| Two students share a tail number                                       | Aircraft ident is free-form text per row; no normalization across users.                                                                                                                                    |
+| GPS track file private to one user                                     | `flight_track.user_id` enforces row-level ownership. Teacher can view tracks attached to their student's attempts via the link gate.                                                                        |
+| Teacher receives a debrief invite for an account that already exists   | Magic-link signs them into the existing account (matched by email). No duplicate accounts.                                                                                                                  |
+| Teacher's existing account doesn't have `teacher` role                 | `acceptDebriefInvite` auto-grants the role.                                                                                                                                                                 |
+| Student revokes a pending debrief invite before the teacher clicks     | `revokeDebriefInvite` sets `revoked_at`. Subsequent click on the link returns "This invite has been revoked." No account creation.                                                                          |
+| Debrief invite expires before click                                    | `expires_at < now()` -> "This invite has expired. Ask Joshua for a new one."                                                                                                                                |
+| Magic link clicked twice                                               | First click marks `accepted_at`. Subsequent clicks: if same email/session -> redirect to `/teach/debrief/[token]` and show the existing feedback page. If different -> magic-link rejects (token consumed). |
+| Teacher hasn't filled `studying_for` (their `student` role is bare)    | Their `/study` page works; progress strip shows "no goal" banner per WP 1.                                                                                                                                  |
+| First-time sign-in with no `account_role` rows                         | Hooks layer auto-grants `student` with `studying_for: null`.                                                                                                                                                |
 
 ## Open questions
 
@@ -465,19 +465,7 @@ None. The previously-pending Q-DEBRIEF-1/2/3 questions are decided as Decisions 
 
 ## Out of scope
 
-- **No FAA logbook integration.** Logbook ingest is a separate corpus / ingestion pipeline.
-- **No automatic maneuver detection from GPS tracks** (CloudAhoy-style auto-grading). Captured as IDEA `ADS-B / GPS auto-grading` for post-WP-2.
-- **No video / audio upload.** Tracks only.
-- **No real-time chat between teacher and student.** Notes are async.
-- **No grading rubrics beyond the three-state assessment.** A 1-5 star rubric per maneuver is post-MVP.
-- **No payment / billing.** Schema is built so a future `subscription` table can FK into `account_role` cleanly; no billing surfaces in this WP.
-- **No teacher / mentor directory.** Teachers must be invited; not browsable.
-- **No multi-author editing of one teaching syllabus.** Single-author v1.
-- **No track diff / comparison across attempts.** Each track stands alone.
-- **No checkride scheduling, endorsement signing, or 8710 generation.**
-- **No automatic role promotion** beyond `student` (auto-granted on first sign-in) and `teacher` (auto-granted on first debrief acceptance). All other role transitions are explicit.
-- **No certificate verification.** `teacher.metadata.certificates_verified` always defaults to `false`. Verification (FAA airman cert lookup, document upload, etc.) is a future WP if/when the platform monetizes around CFI legitimacy.
-- **No cloud GPS-track storage.** Dev-local cache only; cloud adapter is a follow-up WP triggered by second uploader.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## What "done" looks like
 
