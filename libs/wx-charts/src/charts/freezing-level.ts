@@ -39,6 +39,7 @@ import {
 	FREEZING_LEVEL_EMPHASIZED_LINE_STROKE,
 	FREEZING_LEVEL_LINE_STROKE,
 } from '../raster/palettes';
+import { buildConusClipPath, sanitizeClipId } from '../symbology/clip';
 import { renderFilledScalarBands, renderScalarContours } from '../symbology/contours';
 import type { ChartRenderInput, ChartRenderResult, ChartSpec } from '../types';
 
@@ -334,6 +335,18 @@ export async function renderFreezingLevel(input: ChartRenderInput<FreezingLevelS
 		`<path d="${interiorPath ?? ''}" fill="none" stroke="#bdb9ac" stroke-width="0.6" />
 <path d="${outerPath ?? ''}" fill="none" stroke="#3d3a32" stroke-width="1.2" />`;
 
+	// CONUS clip path: shared between the filled raster-overlay and
+	// vector-symbology bands so altitude bands + contour lines stay
+	// inside the country outline. (Same fix as surface-analysis -- the
+	// grid extends past lat 49 N into Canada.) Defining the <defs> twice
+	// with the same id is redundant but harmless; we attach it to the
+	// raster-overlay band and reference the id from the vector band.
+	const clip = buildConusClipPath({
+		id: sanitizeClipId(`conus-clip-${input.spec.slug}`),
+		conusPolygon: basemap.conusPolygon,
+		projection,
+	});
+
 	// Filled altitude bands as the raster overlay.
 	const filled = renderFilledScalarBands({
 		grid: altitude.grid.values,
@@ -343,7 +356,7 @@ export async function renderFreezingLevel(input: ChartRenderInput<FreezingLevelS
 		gridToLonLat: makeGridToLonLat(altitude.grid),
 		projection,
 	});
-	bands[LAYER_BANDS.RASTER_OVERLAY] = filled.svg;
+	bands[LAYER_BANDS.RASTER_OVERLAY] = `${clip.defs}<g ${clip.clipAttr}>${filled.svg}</g>`;
 
 	// Vector symbology: line contours at every contour_interval_ft step.
 	let contourCount = 0;
@@ -362,7 +375,7 @@ export async function renderFreezingLevel(input: ChartRenderInput<FreezingLevelS
 			emphasizedStrokeWidth: 1.0,
 			emphasizeEvery: opts.contour_interval_ft * 2,
 		});
-		bands[LAYER_BANDS.VECTOR_SYMBOLOGY] = contourResult.svg;
+		bands[LAYER_BANDS.VECTOR_SYMBOLOGY] = `<g ${clip.clipAttr}>${contourResult.svg}</g>`;
 		contourCount = contourResult.contourCount;
 	} else {
 		bands[LAYER_BANDS.VECTOR_SYMBOLOGY] = '';
