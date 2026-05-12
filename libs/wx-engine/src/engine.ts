@@ -41,7 +41,7 @@
  * pattern at `libs/constants/src/source-cache.ts`.
  */
 
-import { chartSlugToDir, wxScenarioBundleDir, type WxScenario } from '@ab/constants';
+import { chartSlugToDir, type WxScenario, wxScenarioBundleDir } from '@ab/constants';
 import { stringify as yamlStringify } from 'yaml';
 import { type ChartProductInputs, deriveAllCharts } from './charts/derive-all';
 import type { ChartArtifact } from './charts/types';

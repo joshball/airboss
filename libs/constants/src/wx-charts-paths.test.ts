@@ -29,27 +29,17 @@ describe('referenceFixtureChartSlug', () => {
 		// Each pair below matches an existing on-disk fixture and the
 		// corresponding wx-charts test SPEC.slug. PR 1 must NOT change any
 		// of these strings.
-		expect(referenceFixtureChartSlug('surface-analysis', '2024-12-23-12z')).toBe(
-			'wx-surface-analysis-2024-12-23-12z',
-		);
-		expect(referenceFixtureChartSlug('metar-plot-grid', '2024-01-13-12z')).toBe(
-			'wx-metar-plot-grid-2024-01-13-12z',
-		);
-		expect(referenceFixtureChartSlug('pirep-plot-grid', '2024-05-21-22z')).toBe(
-			'wx-pirep-plot-grid-2024-05-21-22z',
-		);
+		expect(referenceFixtureChartSlug('surface-analysis', '2024-12-23-12z')).toBe('wx-surface-analysis-2024-12-23-12z');
+		expect(referenceFixtureChartSlug('metar-plot-grid', '2024-01-13-12z')).toBe('wx-metar-plot-grid-2024-01-13-12z');
+		expect(referenceFixtureChartSlug('pirep-plot-grid', '2024-05-21-22z')).toBe('wx-pirep-plot-grid-2024-05-21-22z');
 		expect(referenceFixtureChartSlug('radar-mosaic', '2024-05-21-22z')).toBe('wx-radar-mosaic-2024-05-21-22z');
-		expect(referenceFixtureChartSlug('winds-aloft-fb', '2024-05-21-18z')).toBe(
-			'wx-winds-aloft-fb-2024-05-21-18z',
-		);
+		expect(referenceFixtureChartSlug('winds-aloft-fb', '2024-05-21-18z')).toBe('wx-winds-aloft-fb-2024-05-21-18z');
 	});
 
 	it('handles a frame-modified chart kind passed as a joined string', () => {
 		// prog-chart-12hr is the joined form -- caller is responsible for
 		// joining the frame into the kind segment.
-		expect(referenceFixtureChartSlug('prog-chart-12hr', '2024-12-23-12z')).toBe(
-			'wx-prog-chart-12hr-2024-12-23-12z',
-		);
+		expect(referenceFixtureChartSlug('prog-chart-12hr', '2024-12-23-12z')).toBe('wx-prog-chart-12hr-2024-12-23-12z');
 	});
 
 	it('matches the WX_CHART_SLUG_REGEX wx- prefix shape', () => {
@@ -68,15 +58,15 @@ describe('referenceFixtureChartDir', () => {
 
 describe('referenceFixtureArtifactPath', () => {
 	it('joins the fixture dir with the artifact filename', () => {
-		expect(
-			referenceFixtureArtifactPath('/repo', 'surface-analysis', '2024-12-23-12z', WX_CHART_ARTIFACTS.SPEC),
-		).toBe('/repo/data/charts/wx/wx-surface-analysis-2024-12-23-12z/spec.yaml');
-		expect(
-			referenceFixtureArtifactPath('/repo', 'surface-analysis', '2024-12-23-12z', WX_CHART_ARTIFACTS.CHART),
-		).toBe('/repo/data/charts/wx/wx-surface-analysis-2024-12-23-12z/chart.svg');
-		expect(
-			referenceFixtureArtifactPath('/repo', 'surface-analysis', '2024-12-23-12z', WX_CHART_ARTIFACTS.META),
-		).toBe('/repo/data/charts/wx/wx-surface-analysis-2024-12-23-12z/meta.json');
+		expect(referenceFixtureArtifactPath('/repo', 'surface-analysis', '2024-12-23-12z', WX_CHART_ARTIFACTS.SPEC)).toBe(
+			'/repo/data/charts/wx/wx-surface-analysis-2024-12-23-12z/spec.yaml',
+		);
+		expect(referenceFixtureArtifactPath('/repo', 'surface-analysis', '2024-12-23-12z', WX_CHART_ARTIFACTS.CHART)).toBe(
+			'/repo/data/charts/wx/wx-surface-analysis-2024-12-23-12z/chart.svg',
+		);
+		expect(referenceFixtureArtifactPath('/repo', 'surface-analysis', '2024-12-23-12z', WX_CHART_ARTIFACTS.META)).toBe(
+			'/repo/data/charts/wx/wx-surface-analysis-2024-12-23-12z/meta.json',
+		);
 	});
 });
 

@@ -945,9 +945,9 @@ export {
 	WX_CHART_ARTIFACT_VALUES,
 	WX_CHART_ARTIFACTS,
 	type WxChartArtifact,
+	type WxScenarioIdInput,
 	wxScenarioArtifactPath,
 	wxScenarioBundleDir,
 	wxScenarioChartDir,
 	wxScenarioChartSlug,
-	type WxScenarioIdInput,
 } from './wx-engine-paths';

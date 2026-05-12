@@ -99,7 +99,9 @@ describe('wxScenarioBundleDir', () => {
 		// The bundle dir holds truth.json + products/ + commentary -- distinct
 		// from the chart-artifact mirror under data/charts/wx/.
 		expect(wxScenarioBundleDir('/repo', 'frontal-xc-march')).toBe('/repo/data/wx-scenarios/frontal-xc-march');
-		expect(wxScenarioBundleDir('/repo', 'summer-thunderstorms-tx')).toBe('/repo/data/wx-scenarios/summer-thunderstorms-tx');
+		expect(wxScenarioBundleDir('/repo', 'summer-thunderstorms-tx')).toBe(
+			'/repo/data/wx-scenarios/summer-thunderstorms-tx',
+		);
 	});
 
 	it('is distinct from wxScenarioChartDir', () => {

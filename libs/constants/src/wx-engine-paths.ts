@@ -56,7 +56,9 @@ function nodePath(): NodePath {
 		| undefined;
 	const getBuiltin = proc?.getBuiltinModule;
 	if (typeof getBuiltin !== 'function') {
-		throw new Error('wx-engine-paths: node:path unavailable in this runtime (no process.getBuiltinModule). Do not call path helpers from .svelte files.');
+		throw new Error(
+			'wx-engine-paths: node:path unavailable in this runtime (no process.getBuiltinModule). Do not call path helpers from .svelte files.',
+		);
 	}
 	cachedPath = getBuiltin('node:path') as NodePath;
 	return cachedPath;
