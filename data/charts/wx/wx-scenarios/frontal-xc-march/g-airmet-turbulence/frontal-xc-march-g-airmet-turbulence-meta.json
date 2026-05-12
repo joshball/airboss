@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/frontal-xc-march/g-airmet-turbulence",
   "type": "turbulence-gairmet",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:42.280Z",
-  "content_hash": "sha256:9e8ffd74f22ab7d928959c258e1fe2863ebcdde34746258d3249ca6471308e35",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:02.068Z",
+  "content_hash": "sha256:c918510111d9ed7c472f9261d89405374af0a5af248396b863d1133d21c4aaa1",
   "source_hashes": {
     "areas": "1d5aa0ad6176b7f2bfebb093e59119a1fc473dd97a57af4911d17d08764d0381"
   },
@@ -14,5 +14,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 497770
+  "svg_bytes": 492462
 }

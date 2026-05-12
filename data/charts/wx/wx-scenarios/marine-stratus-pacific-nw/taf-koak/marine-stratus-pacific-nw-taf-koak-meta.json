@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/marine-stratus-pacific-nw/taf-koak",
   "type": "taf-timeline",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:43.219Z",
-  "content_hash": "sha256:17530aa031ccbce004abec5709b1f74ed4547eab284c0d8d4c416757a3ac47a0",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:04.175Z",
+  "content_hash": "sha256:877f8a44e767d3a8969a36d7454513d887754457e9917c078aebc47018081395",
   "source_hashes": {
     "taf": "6b01736b6025f55142b21a430d7dd4245d3f2efe2cd2038208955918cd4b66a4"
   },

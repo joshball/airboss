@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/winter-icing-great-lakes/gfa",
   "type": "gfa",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:44.742Z",
-  "content_hash": "sha256:cce5d1d9ccb6f940404446a7954e12ad3f04303dbed8c7efcbf148740ea0eb20",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:08.028Z",
+  "content_hash": "sha256:c33b3147e574744b2935d0bdc3563256a941ec5c652e4592032d0973bef17429",
   "source_hashes": {
     "polygons": "9dc440f9f9b80329221831077cee4cf32b6384367242cd9ad175f14196943573"
   },
@@ -14,5 +14,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 498451
+  "svg_bytes": 493143
 }

@@ -1,9 +1,9 @@
 {
   "slug": "reference-fixtures/wx-icing-fip-2024-12-23-18z",
   "type": "icing-fip",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:38.655Z",
-  "content_hash": "sha256:ced6362e44a6ca82679b58b10b476f820f2e760b02bf1cc3d4c99b38ebf01814",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:06:14.760Z",
+  "content_hash": "sha256:67a55e342799c2d0377198f8b8dc828ff2132b1ffeeb132c2535c9a2d3dc9334",
   "source_hashes": {
     "field": "c5a40c12557f7519470eb48c1d1af01080700495097a5a4970fbbacccac839af"
   },
@@ -15,5 +15,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 583642
+  "svg_bytes": 578981
 }

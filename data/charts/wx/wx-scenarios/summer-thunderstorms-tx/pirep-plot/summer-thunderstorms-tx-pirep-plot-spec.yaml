@@ -9,7 +9,7 @@ projection:
     - 45
   rotate:
     - -96
-    - -39
+    - 0
 extent:
   lon_min: -100
   lat_min: 32

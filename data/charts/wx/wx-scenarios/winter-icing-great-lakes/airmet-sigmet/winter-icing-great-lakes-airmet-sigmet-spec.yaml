@@ -9,7 +9,7 @@ projection:
     - 45
   rotate:
     - -96
-    - -39
+    - 0
 extent: conus
 sources:
   advisories: cache://scenarios/winter-icing-great-lakes/airmet-overlay.json

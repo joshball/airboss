@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/marine-stratus-pacific-nw/gfa",
   "type": "gfa",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:42.970Z",
-  "content_hash": "sha256:4fcbe1596625b17e27ce7f6131f16fdb496debef3bf854cdafbc94dc88e81e6c",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:03.610Z",
+  "content_hash": "sha256:233422f255c12325ff00d95b95e640308a108aec9bd55011dee7834a5fbe0857",
   "source_hashes": {
     "polygons": "7b4b7d9bd972b963f2508751aaf80566300ced7fbe1df0b8934b29b76595045b"
   },
@@ -14,5 +14,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 498489
+  "svg_bytes": 493171
 }

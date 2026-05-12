@@ -1,9 +1,9 @@
 {
   "slug": "reference-fixtures/wx-pirep-plot-grid-2024-05-21-22z",
   "type": "pirep-plot-grid",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:38.817Z",
-  "content_hash": "sha256:76a053e404f3a4037716326fc27149bc099833c08624b7a7ae3cf3e86539c65b",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:06:15.038Z",
+  "content_hash": "sha256:e6d185ca2d02f68a61b56f912cfc4c469e9e90500da0bf9ea6541362c4d94af5",
   "source_hashes": {
     "reports": "cda8805db3ae889b498407246445d8d103feb76a205ee65eb229da9860f46747"
   },
@@ -15,5 +15,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 509179
+  "svg_bytes": 503872
 }

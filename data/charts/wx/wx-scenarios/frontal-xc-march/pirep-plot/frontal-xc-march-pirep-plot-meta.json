@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/frontal-xc-march/pirep-plot",
   "type": "pirep-plot-grid",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:42.422Z",
-  "content_hash": "sha256:8ef1f6cdc715c482ae8cd9f4ece15e68043953648230dc3a60e0d46d1ecbcb86",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:02.343Z",
+  "content_hash": "sha256:026a5e33d87062df1480988d682ab52697ef523895f6aeff325c83392234351b",
   "source_hashes": {
     "reports": "bcf48516df26f8fc50a8358b5706c6e3a6f346be03a81b22b3a5de1e311a934d"
   },
@@ -15,5 +15,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 500368
+  "svg_bytes": 495060
 }

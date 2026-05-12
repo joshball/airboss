@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/mountain-wave-rockies/metar-plot",
   "type": "metar-plot-grid",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:43.724Z",
-  "content_hash": "sha256:2bd38b108584cfbe7b20efac42f5271d70478c56977baa396efedbead21ff211",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:05.230Z",
+  "content_hash": "sha256:adc6d02dacc40a56e8a19aaf7fb64915f301ae741137c67f7229de32991299d4",
   "source_hashes": {
     "observations": "cc7791bd0ceda7616dc1331a22f90c00f6a1be7614a6e0c9deb4564500bbf864"
   },
@@ -15,5 +15,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 504764
+  "svg_bytes": 499456
 }

@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/winter-icing-great-lakes/prog-12hr",
   "type": "prog-chart",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:44.875Z",
-  "content_hash": "sha256:f461e418f3a271094c2d31108fc1c4c302124b2614e2359026afe0d4c102af13",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:08.318Z",
+  "content_hash": "sha256:a19f92ad571ddcdcc68479592b146878cce93a595365ef94a9ee4f07842713ef",
   "source_hashes": {
     "forecast": "a79cd6ecaa9985ade3e8878b5659630adb95f27051fedbaf1b5d49589f9446bd"
   },
@@ -16,5 +16,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 586945
+  "svg_bytes": 582044
 }

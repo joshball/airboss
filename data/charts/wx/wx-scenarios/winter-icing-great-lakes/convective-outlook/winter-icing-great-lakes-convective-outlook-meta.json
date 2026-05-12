@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/winter-icing-great-lakes/convective-outlook",
   "type": "convective-outlook",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:44.548Z",
-  "content_hash": "sha256:195a941f564261be4fd28e4c7f8efa2d0a389dca3abf40b1c64cf5f701571048",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:07.559Z",
+  "content_hash": "sha256:48ddf40e91437b0a9eca967c655744392c8a5accbf35960ce013fec8342625bd",
   "source_hashes": {
     "outlook": "1ad93a5a7a54b9c67dd9bcd3fe8a1d785275f3a1ce737c60dd207870fd7c1492"
   },
@@ -14,5 +14,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 495699
+  "svg_bytes": 490391
 }

@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/summer-thunderstorms-tx/winds-aloft",
   "type": "winds-aloft-fb",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:44.465Z",
-  "content_hash": "sha256:3099900aeed0e8bda63d981bdaee28505789d8a853c98db8feed8c8b6c3f2cff",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:07.371Z",
+  "content_hash": "sha256:922d7515c526b4880e6777b87519e76e28f90df20dbb2cbc59c87e2b22aad7ce",
   "source_hashes": {
     "bulletin": "4870fb82b8a20a5027a0b99dd743e897e4443b04e33d00f9b40d595bb616d8d1"
   },
@@ -14,5 +14,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 505817
+  "svg_bytes": 500509
 }

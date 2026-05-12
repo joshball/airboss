@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/mountain-wave-rockies/pirep-plot",
   "type": "pirep-plot-grid",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:43.769Z",
-  "content_hash": "sha256:e2727f969379543c750817cdc88264645103f70e43d05a38d9bb6821e6a2484e",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:05.324Z",
+  "content_hash": "sha256:8a9c07cfd4de2d4ec6c3babdd8e15c3eca2f4e0b0df62b9180ae48e5904e5d2d",
   "source_hashes": {
     "reports": "3ed92591973b9ddafbcd04a8403d921ac8facefed9fa65942b8065eb71af6dc7"
   },
@@ -15,5 +15,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 502322
+  "svg_bytes": 497014
 }

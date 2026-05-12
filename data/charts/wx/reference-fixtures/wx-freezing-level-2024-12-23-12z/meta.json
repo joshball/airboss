@@ -1,9 +1,9 @@
 {
   "slug": "reference-fixtures/wx-freezing-level-2024-12-23-12z",
   "type": "freezing-level",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:38.437Z",
-  "content_hash": "sha256:23b92fcb7ec2ab8b2feafa1504d7375bd37b928c6abb4d5dd081d54ca44120d7",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:06:14.472Z",
+  "content_hash": "sha256:c871e65fe42b3796c1a025638f576c88a0a7b505e32415a3da868c8bfab43c0f",
   "source_hashes": {
     "field": "36a3ce99b72f76bfb38b243d643457504fe07029ebd0123bb87f6c165550b43c"
   },
@@ -15,5 +15,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 612655
+  "svg_bytes": 608916
 }

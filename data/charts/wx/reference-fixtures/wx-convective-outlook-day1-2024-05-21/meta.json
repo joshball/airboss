@@ -1,9 +1,9 @@
 {
   "slug": "reference-fixtures/wx-convective-outlook-day1-2024-05-21",
   "type": "convective-outlook",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:38.304Z",
-  "content_hash": "sha256:95be986587e4050beb758d5810f9f429062d340cfdd0f0512cf13bcd3748978b",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:06:14.277Z",
+  "content_hash": "sha256:eeecd77827a7b38020379dbce17998669e90011e4b66a7046abfb5748b4097c0",
   "source_hashes": {
     "outlook": "b60517b5abd98930c9d58bf852e414f5bbc4d793d5cf8ba30f9969e86b07bee5"
   },
@@ -14,5 +14,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 501527
+  "svg_bytes": 496221
 }

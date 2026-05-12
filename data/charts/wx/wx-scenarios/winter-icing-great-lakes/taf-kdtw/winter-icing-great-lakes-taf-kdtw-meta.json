@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/winter-icing-great-lakes/taf-kdtw",
   "type": "taf-timeline",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:44.943Z",
-  "content_hash": "sha256:f7162762ba6f46c50df016d5d8b8ab71570bd33fcef09b4f3bd193c222fcb143",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:08.611Z",
+  "content_hash": "sha256:25567cbb2cc10a7cae526186ce0a42b0f5a8355b7c949fac379ccb8d5cfe7c71",
   "source_hashes": {
     "taf": "d801462b51acfe1a352754f5e9a9ea234ee4a8b81dcb6d60d861e918c7afc0bb"
   },

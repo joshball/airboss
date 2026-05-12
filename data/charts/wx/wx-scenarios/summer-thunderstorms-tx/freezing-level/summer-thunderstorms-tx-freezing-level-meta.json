@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/summer-thunderstorms-tx/freezing-level",
   "type": "freezing-level",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:44.133Z",
-  "content_hash": "sha256:64fec084cc44b06406babc1866e6cc2e7439b346f0b3af1a307ea3155f79b997",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:06.324Z",
+  "content_hash": "sha256:a56fd3c0c354745f12a097cbe624d218495027ac7a1bcea28de2ffd6c9a695db",
   "source_hashes": {
     "field": "4c03f9509307b70e856b0f22a757c5faeccf503315725df8f0b2445bb0cc9350"
   },
@@ -15,5 +15,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 596130
+  "svg_bytes": 591665
 }

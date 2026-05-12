@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/summer-thunderstorms-tx/gfa",
   "type": "gfa",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:44.254Z",
-  "content_hash": "sha256:3215bdb2748b09ace876b6ddf055dc6285f3dfdee4d4b3822c3edc3ace538c19",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:06.603Z",
+  "content_hash": "sha256:b303aa925eaa84533837df85a55f8c720e115d986d521c373d93e52c12d3e1b3",
   "source_hashes": {
     "polygons": "1d4f0773909aecd9190e06e94546285199d13584033ee53d980274a62ce2bed9"
   },
@@ -14,5 +14,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 498429
+  "svg_bytes": 493121
 }

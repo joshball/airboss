@@ -1,9 +1,9 @@
 {
   "slug": "reference-fixtures/wx-radar-mosaic-2024-05-21-22z",
   "type": "radar-mosaic",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:39.436Z",
-  "content_hash": "sha256:3f1edb6867b67a947a91ae4f9b8568100fcda9a011b32c52a4ecfff64ffb74c9",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:53.414Z",
+  "content_hash": "sha256:dd863d2b24e28334566c8311bdeb32d831be725481555a640f53a23c813718d3",
   "source_hashes": {
     "radar_png": "15b652dc243af8fd193a79d947f05c6f521b929010f5ff1d510a217aa5a632bd",
     "radar_world": "3f15305322afa828e64fda5f1498301a09b14227ae06f1a23ee2f261c7ebcf9b"
@@ -13,7 +13,7 @@
     "point-symbology": 12,
     "basemap-fill": 49
   },
-  "drawn_pixels": 50496,
+  "drawn_pixels": 42459,
   "parser_warnings": [],
-  "svg_bytes": 467457
+  "svg_bytes": 464107
 }
