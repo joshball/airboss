@@ -27,55 +27,55 @@ All tables in the `study` Postgres schema namespace. IDs use `prefix_ULID` via `
 
 ### study.card
 
-| Column | Type | Constraints | Notes |
-| --- | --- | --- | --- |
-| id | text | PK | `crd_` prefix |
-| user_id | text | NOT NULL, FK identity | Owner -- the user whose deck this card is in |
-| front | text | NOT NULL | Question/prompt (markdown) |
-| back | text | NOT NULL | Answer/explanation (markdown) |
-| domain | text | NOT NULL | From `DOMAINS` constant (regulations, weather, airspace, etc.) |
-| tags | jsonb | DEFAULT '[]' | Freeform tags for filtering |
-| card_type | text | NOT NULL | From `CARD_TYPES` constant (basic, cloze, regulation, memory_item) |
-| source_type | text | NOT NULL, DEFAULT 'personal' | From `CONTENT_SOURCES` constant (personal, course, product, imported) |
-| source_ref | text | NULL | Opaque reference to origin. NULL for personal. Format: `{source}:{id}` (e.g., `firc:mod1:card-042`, `route-walkthrough:kbjc-approach`) |
-| is_editable | boolean | NOT NULL, DEFAULT true | false for course/product-provided cards |
-| status | text | NOT NULL, DEFAULT 'active' | active, suspended, archived |
-| created_at | timestamptz | NOT NULL, DEFAULT now() | |
-| updated_at | timestamptz | NOT NULL, DEFAULT now() | |
+| Column      | Type        | Constraints                  | Notes                                                                                                                                  |
+| ----------- | ----------- | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| id          | text        | PK                           | `crd_` prefix                                                                                                                          |
+| user_id     | text        | NOT NULL, FK identity        | Owner -- the user whose deck this card is in                                                                                           |
+| front       | text        | NOT NULL                     | Question/prompt (markdown)                                                                                                             |
+| back        | text        | NOT NULL                     | Answer/explanation (markdown)                                                                                                          |
+| domain      | text        | NOT NULL                     | From `DOMAINS` constant (regulations, weather, airspace, etc.)                                                                         |
+| tags        | jsonb       | DEFAULT '[]'                 | Freeform tags for filtering                                                                                                            |
+| card_type   | text        | NOT NULL                     | From `CARD_TYPES` constant (basic, cloze, regulation, memory_item)                                                                     |
+| source_type | text        | NOT NULL, DEFAULT 'personal' | From `CONTENT_SOURCES` constant (personal, course, product, imported)                                                                  |
+| source_ref  | text        | NULL                         | Opaque reference to origin. NULL for personal. Format: `{source}:{id}` (e.g., `firc:mod1:card-042`, `route-walkthrough:kbjc-approach`) |
+| is_editable | boolean     | NOT NULL, DEFAULT true       | false for course/product-provided cards                                                                                                |
+| status      | text        | NOT NULL, DEFAULT 'active'   | active, suspended, archived                                                                                                            |
+| created_at  | timestamptz | NOT NULL, DEFAULT now()      |                                                                                                                                        |
+| updated_at  | timestamptz | NOT NULL, DEFAULT now()      |                                                                                                                                        |
 
 ### study.review
 
-| Column | Type | Constraints | Notes |
-| --- | --- | --- | --- |
-| id | text | PK | `rev_` prefix |
-| card_id | text | NOT NULL, FK study.card | |
-| user_id | text | NOT NULL | Denormalized for query efficiency |
-| rating | smallint | NOT NULL | 1=again, 2=hard, 3=good, 4=easy (FSRS standard) |
-| confidence | smallint | NULL | 1-5 pre-reveal confidence (feeds calibration tracker). NULL when not prompted |
-| stability | real | NOT NULL | FSRS stability after this review |
-| difficulty | real | NOT NULL | FSRS difficulty after this review |
-| elapsed_days | real | NOT NULL | Days since last review (0 for first) |
-| scheduled_days | real | NOT NULL | Days until next review |
-| state | text | NOT NULL | new, learning, review, relearning (FSRS states) |
-| due_at | timestamptz | NOT NULL | When next review is scheduled |
-| reviewed_at | timestamptz | NOT NULL, DEFAULT now() | |
-| answer_ms | integer | NULL | Time from card reveal to rating selection |
+| Column         | Type        | Constraints             | Notes                                                                         |
+| -------------- | ----------- | ----------------------- | ----------------------------------------------------------------------------- |
+| id             | text        | PK                      | `rev_` prefix                                                                 |
+| card_id        | text        | NOT NULL, FK study.card |                                                                               |
+| user_id        | text        | NOT NULL                | Denormalized for query efficiency                                             |
+| rating         | smallint    | NOT NULL                | 1=again, 2=hard, 3=good, 4=easy (FSRS standard)                               |
+| confidence     | smallint    | NULL                    | 1-5 pre-reveal confidence (feeds calibration tracker). NULL when not prompted |
+| stability      | real        | NOT NULL                | FSRS stability after this review                                              |
+| difficulty     | real        | NOT NULL                | FSRS difficulty after this review                                             |
+| elapsed_days   | real        | NOT NULL                | Days since last review (0 for first)                                          |
+| scheduled_days | real        | NOT NULL                | Days until next review                                                        |
+| state          | text        | NOT NULL                | new, learning, review, relearning (FSRS states)                               |
+| due_at         | timestamptz | NOT NULL                | When next review is scheduled                                                 |
+| reviewed_at    | timestamptz | NOT NULL, DEFAULT now() |                                                                               |
+| answer_ms      | integer     | NULL                    | Time from card reveal to rating selection                                     |
 
 ### study.card_state
 
 Materialized current state per card per user. Avoids scanning all reviews to determine what's due.
 
-| Column | Type | Constraints | Notes |
-| --- | --- | --- | --- |
-| card_id | text | PK (composite) | FK study.card |
-| user_id | text | PK (composite) | |
-| stability | real | NOT NULL | Current FSRS stability |
-| difficulty | real | NOT NULL | Current FSRS difficulty |
-| state | text | NOT NULL | new, learning, review, relearning |
-| due_at | timestamptz | NOT NULL | When next review is due |
-| last_review_id | text | NULL, FK study.review | NULL for new cards |
-| review_count | integer | NOT NULL, DEFAULT 0 | |
-| lapse_count | integer | NOT NULL, DEFAULT 0 | Times card went from review -> relearning |
+| Column         | Type        | Constraints           | Notes                                     |
+| -------------- | ----------- | --------------------- | ----------------------------------------- |
+| card_id        | text        | PK (composite)        | FK study.card                             |
+| user_id        | text        | PK (composite)        |                                           |
+| stability      | real        | NOT NULL              | Current FSRS stability                    |
+| difficulty     | real        | NOT NULL              | Current FSRS difficulty                   |
+| state          | text        | NOT NULL              | new, learning, review, relearning         |
+| due_at         | timestamptz | NOT NULL              | When next review is due                   |
+| last_review_id | text        | NULL, FK study.review | NULL for new cards                        |
+| review_count   | integer     | NOT NULL, DEFAULT 0   |                                           |
+| lapse_count    | integer     | NOT NULL, DEFAULT 0   | Times card went from review -> relearning |
 
 ## Behavior
 
@@ -145,17 +145,17 @@ These are how a future course app checks "has this learner mastered weather?" wi
 
 ## Validation
 
-| Field | Rule |
-| --- | --- |
-| front | Required, 1-10000 chars, trimmed |
-| back | Required, 1-10000 chars, trimmed |
-| domain | Required, must be a value in `DOMAINS` constant |
-| card_type | Required, must be a value in `CARD_TYPES` constant |
-| tags | Array of strings, max 20 tags, each tag 1-100 chars |
-| rating | Required, integer 1-4 |
-| confidence | Optional, integer 1-5 |
-| source_type | Must be a value in `CONTENT_SOURCES` constant |
-| source_ref | Required when source_type is not 'personal', NULL when 'personal' |
+| Field       | Rule                                                              |
+| ----------- | ----------------------------------------------------------------- |
+| front       | Required, 1-10000 chars, trimmed                                  |
+| back        | Required, 1-10000 chars, trimmed                                  |
+| domain      | Required, must be a value in `DOMAINS` constant                   |
+| card_type   | Required, must be a value in `CARD_TYPES` constant                |
+| tags        | Array of strings, max 20 tags, each tag 1-100 chars               |
+| rating      | Required, integer 1-4                                             |
+| confidence  | Optional, integer 1-5                                             |
+| source_type | Must be a value in `CONTENT_SOURCES` constant                     |
+| source_ref  | Required when source_type is not 'personal', NULL when 'personal' |
 
 ## Edge Cases
 
@@ -168,13 +168,6 @@ These are how a future course app checks "has this learner mastered weather?" wi
 - **Source card becomes uneditable:** If a card's `source_type` changes from personal to course (via a future import/assignment flow), existing reviews are preserved. Only editability changes.
 - **Domain taxonomy extension:** New domains added to `DOMAINS` constant. Existing cards with the old domain value remain valid. No migration needed -- the constant is the canonical list but the DB column is text, not an enum.
 
-## Out of Scope
+## Out of scope
 
-- Card templates (regulation fill-in, plate quiz) -- future card_type additions
-- Image/audio attachments on cards
-- Import/export (CSV, Anki format)
-- Shared decks / community card pools
-- Auto-generation from FAR/AIM or other sources
-- Offline/PWA support
-- FSRS parameter optimization from user review data (collecting data from day one; optimization is future)
-- Integration hooks (missed rep -> card, route walkthrough -> card) -- the `source_type`/`source_ref` schema supports this, but the actual integration flows are out of scope
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
