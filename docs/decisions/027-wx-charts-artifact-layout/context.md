@@ -54,3 +54,24 @@ Two reasons:
 2. **Reversibility.** If the helper shape needs adjustment after PR 1 lands, fixing it is a one-file change. If the directory move ran first, fixing the helper would also require moving directories back.
 
 PR 1 helpers return the **current flat layout** identical to today's behavior. They're a refactor in name only -- byte-identical engine output, byte-identical test slugs. PR 3 is where the helpers change shape and the directories move in lockstep.
+
+## PR 3 landed
+
+PR 3 flipped the helpers from the flat layout to the nested two-family layout:
+
+- `referenceFixtureChartSlug(kind, date)` now returns `reference-fixtures/wx-<kind>-<date>`.
+- `wxScenarioChartSlug(scenarioId, kind)` now returns `wx-scenarios/<scenarioId>/<kind>`.
+- `wxScenarioArtifactPath(...)` resolves to the disambiguated `<scenarioId>-<kind>-<artifact>` filename inside the per-chart directory; reference fixtures keep the flat `spec.yaml` / `chart.svg` / `meta.json` filenames inside the slug-named directory.
+- `chartSpecFilename(slug)` + `chartArtifactFilename(slug, artifact)` are the per-family resolvers consumers use without case-splitting at the call site.
+- `WX_CHART_FAMILIES` is the shared literal source for the three subdirectory names (`reference-fixtures`, `wx-scenarios`, `mockups`).
+- `WX_CHART_SLUG_REGEX` is widened to accept the two new family shapes; the regex now rejects the legacy flat slugs.
+
+`scripts/charts/lib.ts:listChartSlugs` walks both production families and emits the path-shaped slug per chart; `loadSpec` resolves the per-family spec filename.
+
+The 20 reference-fixture directories moved into `data/charts/wx/reference-fixtures/` via `git mv` (filenames unchanged). The 102 wx-scenario directories moved into `data/charts/wx/wx-scenarios/<scenarioId>/<chartKind>/` and the three artifact files inside each were renamed to the disambiguated form. `bun run wx-scenario build --all` regenerated the wx-scenario specs (slug field updated) and the commentary bundles. SVG bytes are unchanged in this PR; PR 2's basemap fix is a separate regeneration on main once both PRs land.
+
+The Option A/B/C basemap exploration mockups generated 2026-05-12 were committed under `data/charts/wx/mockups/2026-05-12-conus-basemap-shape/` as design history alongside a README explaining the role of each option. Option A was selected; B and C retained as design history.
+
+Bundle-side per-chart subdirectories under `data/wx-scenarios/<id>/charts/` are now keyed by the chart-kind tail segment (not the full slug). The slug verbatim would create a doubly-nested subdirectory; the chart-kind key keeps the bundle flat-keyed under the scenario id, honoring the ADR's "bundle tree unaffected" rule.
+
+One follow-on chore for main: after PR 2 (basemap fix) merges, run `bun run wx-scenario build --all` and commit the regenerated SVGs so the wx-scenarios family carries the new basemap. Single small commit, no plumbing changes.
