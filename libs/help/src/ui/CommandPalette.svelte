@@ -1,5 +1,5 @@
 <script lang="ts">
-import { APP_SURFACES, type AppSurface, HELP_SEARCH_DEBOUNCE_MS } from '@ab/constants';
+import { APP_SURFACES, type AppSurface, HELP_SEARCH_DEBOUNCE_MS, ROUTES } from '@ab/constants';
 import { createFocusTrap, type FocusTrap } from '@ab/ui/lib/focus-trap';
 import { tick, untrack } from 'svelte';
 import { goto } from '$app/navigation';
@@ -7,7 +7,6 @@ import { page } from '$app/state';
 import type { ParsedFilter } from '../schema/help-registry';
 import { PALETTE_MODE_ELIGIBLE, type PaletteMode } from '../schema/palette-mode';
 import {
-	COLUMN_LABELS,
 	COLUMN_ORDER,
 	type GroupedResults,
 	type PaletteHost,
@@ -84,6 +83,14 @@ let viewportWide = $state(true);
 /** Autocomplete dropdown -- mounted as soon as a doc-code intent fires. */
 let docPickerOpen = $state(true);
 let docPicker = $state<DocCodeAutocomplete | null>(null);
+/**
+ * Mirror of the child component's `hasMatches()` -- bound via the
+ * `onMatchesChange` callback so we get a reactive value Svelte tracks.
+ * `bind:this` exposes methods but Svelte 5 can't auto-track method-call
+ * reads in templates; pumping the boolean up via a callback keeps
+ * `aria-expanded` honest.
+ */
+let docPickerHasMatches = $state(false);
 
 const mergedInjected = $derived<readonly SearchResult[]>(
 	serverInjected.length > 0 ? serverInjected : (injectedResults ?? []),
@@ -391,13 +398,10 @@ function bannerActionLabel(result: SearchResult): string {
 
 // Autocomplete callbacks.
 function onAutocompletePick(doc: DocEntry): void {
-	// Find the registry row's href and navigate. The Reference's id is
-	// stable; build the same URL the aviation loader would (the glossary
-	// detail route). The full URL resolution lives in `loadAviationRefs`
-	// but for the autocomplete shortcut we use the canonical glossary URL.
-	void doc;
-	// Pull the registry id from the autocomplete result; map to glossary URL.
-	void goto(`/reference/glossary/${doc.id}`);
+	// Map the registry row's id to its canonical glossary detail URL.
+	// `loadAviationRefs` uses the same `REFERENCE_GLOSSARY_ID(ref.id)`
+	// shape; this stays in sync as long as that loader does.
+	void goto(ROUTES.REFERENCE_GLOSSARY_ID(doc.id));
 	onClose();
 }
 
@@ -432,8 +436,7 @@ function onDetailOpen(result: SearchResult): void {
 }
 
 /** Hover from a column row -- move the highlight. */
-function onColumnHover(_result: SearchResult, index: number, col: ResultColumn): void {
-	void _result;
+function onColumnHover(index: number, col: ResultColumn): void {
 	focusedColumn = col;
 	focusedIndex = index;
 }
@@ -486,7 +489,7 @@ const detailPaneVisible = $derived<boolean>(detailPaneOpen && viewportWide);
 						aria-label={placeholder}
 						aria-autocomplete="list"
 						aria-controls="palette-doc-autocomplete"
-						aria-expanded={docPickerOpen && docPicker?.hasMatches() ? 'true' : 'false'}
+						aria-expanded={docPickerOpen && docPickerHasMatches ? 'true' : 'false'}
 						data-testid="commandpalette-input"
 					/>
 				</div>
@@ -498,6 +501,7 @@ const detailPaneVisible = $derived<boolean>(detailPaneOpen && viewportWide);
 					onPick={onAutocompletePick}
 					onFilter={onAutocompleteFilter}
 					onDismiss={onAutocompleteDismiss}
+					onMatchesChange={(hasMatches) => (docPickerHasMatches = hasMatches)}
 				/>
 
 				<FilterChips
@@ -535,18 +539,16 @@ const detailPaneVisible = $derived<boolean>(detailPaneOpen && viewportWide);
 							{loading}
 							{reservedHint}
 							onActivate={activate}
-							onHover={(r, i) => onColumnHover(r, i, col)}
+							onHover={(_r, i) => onColumnHover(i, col)}
 						/>
 					{/each}
 				</div>
 
 				{#if rawQuery.trim().length === 0}
 					<p class="empty-hint">
-						{COLUMN_LABELS['faa-resources']}, {COLUMN_LABELS['airboss-content']},
-						{COLUMN_LABELS['app-help']}, {COLUMN_LABELS['my-stuff']},
-						{COLUMN_LABELS['external-tools']}. Try a doc code (`FAA-H-8083-28`, `Part 91`, `AIM 7-1`),
-						an alias (`AvWX`, `PHAK`), a term (`metar`, `density altitude`), or a filter
-						(`doc:`, `kind:`, `mine`).
+						Try a doc code (<code>FAA-H-8083-28</code>, <code>Part 91</code>),
+						an alias (<code>AvWX</code>, <code>PHAK</code>),
+						or a filter (<code>doc:</code>, <code>kind:</code>, <code>mine</code>).
 					</p>
 				{/if}
 

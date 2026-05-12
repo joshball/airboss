@@ -38,6 +38,12 @@ interface Props {
 	onFilter: (doc: DocEntry) => void;
 	/** Called when the user dismisses with Esc (parent typically refocuses input). */
 	onDismiss: () => void;
+	/**
+	 * Called whenever the dropdown's match state changes. The parent input
+	 * mirrors this into a reactive boolean so `aria-expanded` stays honest
+	 * -- a `bind:this` method read isn't auto-tracked by Svelte 5.
+	 */
+	onMatchesChange?: (hasMatches: boolean) => void;
 }
 
 export interface DocEntry {
@@ -47,12 +53,18 @@ export interface DocEntry {
 	readonly abbreviation: string | null;
 }
 
-let { query, open = true, id = 'palette-doc-autocomplete', onPick, onFilter, onDismiss }: Props = $props();
-
-const intent = $derived(detectDocCodeIntent(query));
+let {
+	query,
+	open = true,
+	id = 'palette-doc-autocomplete',
+	onPick,
+	onFilter,
+	onDismiss,
+	onMatchesChange,
+}: Props = $props();
 
 /** Visible matches; empty if intent doesn't fire. */
-const matches = $derived<readonly DocEntry[]>(buildMatches(query, intent));
+const matches = $derived<readonly DocEntry[]>(buildMatches(query));
 
 let highlighted = $state(0);
 
@@ -63,8 +75,14 @@ $effect(() => {
 	highlighted = 0;
 });
 
-function buildMatches(q: string, _intent: ReturnType<typeof detectDocCodeIntent>): readonly DocEntry[] {
-	void _intent;
+// Notify the parent every time the match-set or open prop changes so the
+// combobox `aria-expanded` mirror stays honest.
+$effect(() => {
+	const visibleHasMatches = open && matches.length > 0;
+	onMatchesChange?.(visibleHasMatches);
+});
+
+function buildMatches(q: string): readonly DocEntry[] {
 	const trimmed = q.trim();
 	if (!trimmed) return [];
 	const intentOnFragment = detectDocCodeIntent(trimmed);

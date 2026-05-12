@@ -125,6 +125,13 @@ export async function lintRoots(roots: string[], repoRoot: string): Promise<Lint
 		} catch {
 			continue;
 		}
+		// Honor EXCLUDE_PATHS even when a scoped file is passed by name. The
+		// `check` script's branch / dirty profiles pass changed-file paths to
+		// theme-lint directly; without this guard, a CSS file under
+		// `libs/themes/` (the token source-of-truth) would get linted as a
+		// call site and fail on its own OKLCH literals.
+		const rel = relative(repoRoot, abs);
+		if (EXCLUDE_PATHS.some((ex) => rel.startsWith(ex))) continue;
 		if (st.isFile()) {
 			if (abs.endsWith('.svelte') || abs.endsWith('.css')) {
 				all.push(...(await lintFile(abs, repoRoot, knownTokens)));

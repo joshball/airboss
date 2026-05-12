@@ -67,6 +67,12 @@ export function airbossRefForResult(result: SearchResult): SourceId | null {
 		// chapter / section URI requires fields the palette result row
 		// doesn't surface today. Falls back to null -- the detail pane will
 		// hide "Open in flightbag" and the row's existing `href` still works.
+		//
+		// TODO(palette/phase 4-adjacent): when the handbook-sections /
+		// cfr-sections loaders carry the `airboss-ref:` URI on the result
+		// directly (a new optional field on `SearchResult`), prefer that
+		// over rebuilding from the id here. Tracks once one of those
+		// loaders pins a real reader URL.
 		return null;
 	}
 	return null;

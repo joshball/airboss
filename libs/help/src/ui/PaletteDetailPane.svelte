@@ -97,13 +97,15 @@ function handleSearchInside(): void {
 
 function handleOpenFlightbag(): void {
 	if (!result || !flightbagPath) return;
-	// Sibling-origin link to the flightbag app -- the palette opens it in a
-	// new tab so the search context isn't lost. The cross-app origin is
-	// derived by the page when the link is clicked; here we pass the path
-	// alone, and the parent's `onOpen` handles same-origin paths. For the
-	// flightbag deep-link specifically, prefer a target=_blank window.open
-	// so users can return to the palette context with their query.
-	window.open(flightbagPath, '_blank', 'noopener');
+	// Route through the parent's onOpen so the same external-vs-internal
+	// discriminator handles both buttons. The flightbag path is a
+	// same-origin path within an `apps/flightbag` route group; when the
+	// palette runs from a sibling app, the activate() flow at the parent
+	// will detect a sibling host via siblingOrigin() upstream. Today the
+	// parent treats any path that doesn't start with http(s) as
+	// same-origin; cross-app deep-linking is wired by the dispatcher,
+	// not by this button.
+	onOpen({ ...result, href: flightbagPath });
 }
 
 async function handleCite(): Promise<void> {
