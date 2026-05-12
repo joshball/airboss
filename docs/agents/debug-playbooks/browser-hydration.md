@@ -63,6 +63,14 @@ curl -s 'http://127.0.0.1:9600/@fs/<absolute-path-to>/libs/bc/study/src/index.ts
 
 The response is what the browser loads after esbuild stripping. Type-only imports (`import type`, `export type`) are gone. Runtime value imports remain. Read the resulting import graph -- the leak is one of the surviving lines.
 
+For automated walking of a whole runtime barrel, use [scripts/walk-browser-barrel.ts](../../../scripts/walk-browser-barrel.ts):
+
+```bash
+bun scripts/walk-browser-barrel.ts @ab/sources --paths
+```
+
+It curls `/@id/<pkg>`, follows every value-import edge across `/@fs/...` URLs, flags any module whose served output starts with `__vite-browser-external:node:*`, and (with `--paths`) prints the BFS path from the barrel to each leaking module. This is the exact tool that found the `render/batch-resolve.ts` and `render/tokens.ts` leaks in the 2026-05-12 Phase 3 fix after the grep-only diagnosis stalled.
+
 ### 5. Playwright + network trace as the verification
 
 If you think you've identified the leak, write a 20-line script. Login as Abby, hit the page, watch for the suspect chunk:
