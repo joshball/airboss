@@ -132,15 +132,9 @@ Extract Card / Toast / ScoreMeta / BadgeStatus into `libs/ui`. Token migration r
 
 Gated on Wave-2 spec decision per the chunk-1 INDEX.
 
-## Tier 3 — surgical majors and deferred-with-trigger items
+## Out of scope
 
-Carried forward in the per-category review files with concrete triggers:
-
-- **chunk-2 schema cleanup migration** (3 minors) — `lifecycle` notNull tightening, `references_v2_migrated` drop, `cert_goals` deprecated drop. Bundle into one Drizzle migration.
-- **chunk-2 knowledge-node updater audit column** (1 major) — tied to deferred `knowledge_node_version` work.
-- **chunk-3 carries** (21 items) — sim/avionics auth surface (5), proxy-trust validation (2), plugin-cookie churn (2), `auditColumns` placement (2), 10 operational polish items. Each has its own trigger.
-- **chunk-5 carries** (8 deferred + 17 dropped-with-rationale) — already documented in PR #568.
-- **chunk-6 carries** (10 deferred) — REPO_ROOT consolidation, 9 schema partial-index migrations + cosmetic items. Already documented in PR #565.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md). The prior "Tier 3 -- surgical majors and deferred-with-trigger items" section has moved into the per-item OUT-OF-SCOPE entries with explicit triggers.
 
 ## Tier 4 — minor + nit drift (~150)
 
