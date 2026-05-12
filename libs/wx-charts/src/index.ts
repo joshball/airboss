@@ -50,6 +50,12 @@ export {
 	loadConusBasemap,
 	loadConusBasemapFromString,
 	NON_CONUS_FIPS,
+	NORTH_AMERICA_CONTEXT_COUNTRY_IDS,
+	NORTH_AMERICA_CONTEXT_FILL,
+	NORTH_AMERICA_CONTEXT_STROKE,
+	NORTH_AMERICA_CONTEXT_STROKE_WIDTH,
+	readBasemapTopoJson,
+	renderNorthAmericaContextLayer,
 } from './basemap';
 // ----------------------------------------------------------------------
 // Type-only re-exports of server-only chart renderers + their spec types.

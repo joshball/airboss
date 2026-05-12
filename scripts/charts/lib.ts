@@ -47,6 +47,10 @@ export function defaultBasemapPath(): string {
 	return resolve(REPO_ROOT, 'data', 'references', 'basemaps', 'us-states-10m.json');
 }
 
+export function defaultContextBasemapPath(): string {
+	return resolve(REPO_ROOT, 'data', 'references', 'basemaps', 'north-america-context-50m.json');
+}
+
 export function cacheWxRoot(): string {
 	return resolve(resolveCacheRoot({ ensureExists: false }), 'wx');
 }

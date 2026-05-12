@@ -22,6 +22,7 @@ import { CHART_RENDERERS } from '@ab/wx-charts/server';
 import {
 	computeContentHash,
 	defaultBasemapPath,
+	defaultContextBasemapPath,
 	getLibraryVersion,
 	type LoadedSpec,
 	listChartSlugs,
@@ -160,6 +161,7 @@ async function buildOne(slug: string): Promise<BuildResult> {
 			spec: parsedSpec as never,
 			sources: sourcesByKey,
 			basemapPath: defaultBasemapPath(),
+			contextBasemapPath: defaultContextBasemapPath(),
 			libraryVersion,
 		});
 	} catch (err) {
