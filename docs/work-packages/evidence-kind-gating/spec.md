@@ -155,16 +155,9 @@ This WP changes the contract: a leaf's mastery requires evidence of the *kinds* 
 
 12. **YAML authoring update.** Each `course/syllabi/<slug>/areas/...yaml` element entry gains an optional `requires_teaching: true` flag. Validator: when `requires_teaching: true` is set, the leaf's `triad` must be non-null. Build pipeline writes the column on seed.
 
-## Out of Scope (explicit)
+## Out of scope
 
-- **UI rendering of the richer rollup.** Cert dashboard pages (PR #321) and goal composer pages (PR #324) currently render leaves as `mastered: boolean`. After this WP they have access to the richer state, but the page changes that surface "you have recall down but need a scenario" are a follow-on UI WP. This WP delivers the data layer.
-- **Engine selection changes.** The engine continues to pick from cards + scenarios as today. Wiring "prefer items that close evidence-kind gaps" is a follow-on engine WP.
-- **Per-card or per-scenario authoring tooling for `assessment_methods`.** The arrays already exist on the schemas; this WP consumes them, doesn't author them. Authoring tooling lives in the hangar app and surfaces in a separate WP.
-- **Changing dual-gate thresholds.** `CARD_MASTERY_RATIO_THRESHOLD = 0.8`, `REP_ACCURACY_THRESHOLD = 0.7`, `CARD_MIN = 3`, `REP_MIN = 3` stay. Per-kind tunings (e.g., "recall needs 5 cards minimum" vs "scenario needs 3") are deferred -- ship the per-kind shape first, tune later if data shows a gap.
-- **Changing FSRS scheduling weights.** The scheduler stays as-is. This WP is a read-side / rollup change, not a write-side / scheduling change.
-- **Backfill of teaching-exercise results.** Today there are zero teaching-exercise reps in the seed data; the gate returns `not_applicable` until teaching exercises ship as content. No retroactive data.
-- **A "teaching evidence" UI affordance.** Out of scope here; follow-on once teaching exercises are an authored content kind.
-- **Bloom-level gating.** The leaf's `required_bloom` already exists on `syllabus_node`. Whether the per-card / per-scenario evidence reaches the required bloom is not gated here -- that's a separate dimension and would require per-card / per-scenario bloom tagging that is also out of scope.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Architecture overview
 
