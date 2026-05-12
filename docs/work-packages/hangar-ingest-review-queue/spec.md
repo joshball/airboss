@@ -54,12 +54,7 @@ That loop is wrong-shaped for a content-authoring task. The fix lives outside th
 
 ## Non-goals
 
-- Embedded PDF viewer (pdf.js, pre-rendered page screenshots, OCR overlays). The "View page N in PDF" button is a `file://` link to the cache; that is sufficient for v1.
-- Auto-suggested resolutions beyond the existing geometric tier window (page +- 2). The plugin can return a candidate set; the user picks.
-- Bulk operations (multi-select, batch resolve). Single-issue actions only in v1.
-- Cross-corpus or full-text search across issues. The queue is filterable by corpus / source / kind / status; richer search is deferred.
-- Replacing or modifying the ingest pipelines themselves. The queue reads issues that pipelines emit; it never re-runs `figures.py` or any extractor inline.
-- Authoring brand-new figures from scratch. v1 only re-pairs / classifies what the pipeline already saw.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Scope (v1)
 
