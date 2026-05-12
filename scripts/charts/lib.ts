@@ -16,7 +16,7 @@ import { createHash } from 'node:crypto';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { resolveCacheRoot } from '@ab/constants';
+import { chartsRootDir, resolveCacheRoot } from '@ab/constants';
 import { parse as parseYaml, stringify } from 'yaml';
 
 // Resolve the repo root relative to this file. `import.meta.url` is
@@ -24,8 +24,15 @@ import { parse as parseYaml, stringify } from 'yaml';
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(HERE, '..', '..');
 
+/**
+ * Backwards-compatible shim over `chartsRootDir(REPO_ROOT)`. The layout is
+ * owned in `@ab/constants` per ADR 027; this helper stays so existing
+ * call sites in `build.ts` / `validate.ts` / `list.ts` keep their import
+ * path stable. New code should import `chartsRootDir` from `@ab/constants`
+ * directly.
+ */
 export function chartsDir(): string {
-	return resolve(REPO_ROOT, 'data', 'charts', 'wx');
+	return chartsRootDir(REPO_ROOT);
 }
 
 export function defaultBasemapPath(): string {

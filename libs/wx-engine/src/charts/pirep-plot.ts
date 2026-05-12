@@ -12,12 +12,13 @@
  * `spikes/wx-engine/src/charts/product-charts.ts` (PR #801).
  */
 
+import { wxScenarioChartSlug } from '@ab/constants';
 import type { DerivedPirep } from '../products/types';
 import type { TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
 
 export function derivePirepPlotChart(truth: TruthModel, pireps: DerivedPirep[], scenarioId: string): ChartArtifact {
-	const slug = `wx-scenario-${scenarioId}-pirep-plot`;
+	const slug = wxScenarioChartSlug(scenarioId, 'pirep-plot');
 	const cacheRelPath = `scenarios/${scenarioId}/pirep-plot.json`;
 
 	const reports = pireps.map((p) => ({

@@ -15,12 +15,13 @@
  * `spikes/wx-engine/src/charts/product-charts.ts` (PR #801 -- now retired).
  */
 
+import { wxScenarioChartSlug } from '@ab/constants';
 import type { DerivedMetar } from '../products/types';
 import type { TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
 
 export function deriveMetarPlotChart(truth: TruthModel, metars: DerivedMetar[], scenarioId: string): ChartArtifact {
-	const slug = `wx-scenario-${scenarioId}-metar-plot`;
+	const slug = wxScenarioChartSlug(scenarioId, 'metar-plot');
 	const cacheRelPath = `scenarios/${scenarioId}/metar-plot.json`;
 
 	const observations = metars.map((m) => {

@@ -14,7 +14,7 @@
  * altitude exactly (killer-feature consistency).
  */
 
-import { AIRMET_FAMILIES } from '@ab/constants';
+import { AIRMET_FAMILIES, wxScenarioChartSlug } from '@ab/constants';
 import type { AirmetAdvisory } from '../products/types';
 import type { TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
@@ -36,7 +36,7 @@ export function deriveGAirmetIcingChart(
 	airmets: AirmetAdvisory[],
 	scenarioId: string,
 ): ChartArtifact {
-	const slug = `wx-scenario-${scenarioId}-g-airmet-icing`;
+	const slug = wxScenarioChartSlug(scenarioId, 'g-airmet-icing');
 	const cacheRelPath = `scenarios/${scenarioId}/g-airmet-icing.json`;
 
 	const areas = airmets

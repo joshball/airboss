@@ -5,12 +5,12 @@
  * per intensity") + WXC-11 ("renderer is pure / no I/O").
  */
 
-import { LAYER_BAND_VALUES } from '@ab/constants';
+import { LAYER_BAND_VALUES, referenceFixtureChartSlug } from '@ab/constants';
 import { describe, expect, it } from 'vitest';
 import { type PirepPlotGridSpec, renderPirepPlotGrid } from '../charts/pirep-plot-grid';
 
 const SPEC: PirepPlotGridSpec = {
-	slug: 'wx-pirep-plot-grid-2024-05-21-22z',
+	slug: referenceFixtureChartSlug('pirep-plot-grid', '2024-05-21-22z'),
 	type: 'pirep-plot-grid',
 	title: 'PIREP Plot',
 	subtitle: '2024-05-21 22Z',

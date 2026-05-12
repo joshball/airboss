@@ -14,6 +14,7 @@
  * `spikes/wx-engine/src/charts/product-charts.ts` (PR #801).
  */
 
+import { wxScenarioChartSlug } from '@ab/constants';
 import type { DerivedFbGrid } from '../products/types';
 import type { TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
@@ -27,7 +28,7 @@ export function deriveWindsAloftChart(
 	stationIcaos: string[],
 	scenarioId: string,
 ): ChartArtifact {
-	const slug = `wx-scenario-${scenarioId}-winds-aloft`;
+	const slug = wxScenarioChartSlug(scenarioId, 'winds-aloft');
 	const cacheRelPath = `scenarios/${scenarioId}/winds-aloft.json`;
 
 	const stations = stationIcaos

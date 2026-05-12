@@ -17,6 +17,7 @@
  * `spikes/wx-engine/src/charts/airmet-overlay.ts` (PR #801 -- now retired).
  */
 
+import { wxScenarioChartSlug } from '@ab/constants';
 import type { AirmetAdvisory } from '../products/types';
 import type { TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
@@ -26,7 +27,7 @@ export function deriveAdvisoryOverlayChart(
 	airmets: AirmetAdvisory[],
 	scenarioId: string,
 ): ChartArtifact {
-	const slug = `wx-scenario-${scenarioId}-airmet-sigmet`;
+	const slug = wxScenarioChartSlug(scenarioId, 'airmet-sigmet');
 	const cacheRelPath = `scenarios/${scenarioId}/airmet-overlay.json`;
 
 	const sourceJson = {

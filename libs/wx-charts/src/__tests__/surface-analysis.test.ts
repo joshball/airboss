@@ -16,7 +16,7 @@
 
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { LAYER_BAND_VALUES } from '@ab/constants';
+import { LAYER_BAND_VALUES, referenceFixtureChartSlug } from '@ab/constants';
 import { describe, expect, it } from 'vitest';
 import { renderSurfaceAnalysis, type SurfaceAnalysisSpec } from '../charts/surface-analysis';
 
@@ -32,7 +32,7 @@ const FIXTURE_SOURCE_PATH = resolve(
 );
 
 const SPEC: SurfaceAnalysisSpec = {
-	slug: 'wx-surface-analysis-2024-12-23-12z',
+	slug: referenceFixtureChartSlug('surface-analysis', '2024-12-23-12z'),
 	type: 'surface-analysis',
 	title: 'Surface Analysis',
 	subtitle: '2024-12-23 12Z (Mon)',

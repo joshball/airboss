@@ -17,6 +17,7 @@
  * regression baseline.
  */
 
+import { wxScenarioChartSlug } from '@ab/constants';
 import { advanceTruth } from '../truth/advance';
 import type { TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
@@ -28,7 +29,7 @@ export function deriveProgChart(
 	scenarioId: string,
 	leadHours: number = DEFAULT_LEAD_HOURS,
 ): ChartArtifact {
-	const slug = `wx-scenario-${scenarioId}-prog-${leadHours}hr`;
+	const slug = wxScenarioChartSlug(scenarioId, `prog-${leadHours}hr`);
 	const cacheRelPath = `scenarios/${scenarioId}/prog-${leadHours}hr.json`;
 	const projected = advanceTruth(truth, leadHours);
 

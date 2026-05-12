@@ -923,6 +923,13 @@ export {
 	WX_CHART_SVG_WARN_BYTES,
 } from './wx-charts';
 export {
+	chartSlugToDir,
+	chartsRootDir,
+	referenceFixtureArtifactPath,
+	referenceFixtureChartDir,
+	referenceFixtureChartSlug,
+} from './wx-charts-paths';
+export {
 	AIRMET_FAMILIES,
 	AIRMET_FAMILY_VALUES,
 	type AirmetFamily,
@@ -934,3 +941,13 @@ export {
 	type WxScenario,
 	type WxScenarioSubcommand,
 } from './wx-engine';
+export {
+	WX_CHART_ARTIFACT_VALUES,
+	WX_CHART_ARTIFACTS,
+	type WxChartArtifact,
+	type WxScenarioIdInput,
+	wxScenarioArtifactPath,
+	wxScenarioBundleDir,
+	wxScenarioChartDir,
+	wxScenarioChartSlug,
+} from './wx-engine-paths';

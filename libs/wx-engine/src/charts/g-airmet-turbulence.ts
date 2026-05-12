@@ -14,7 +14,7 @@
  * constraint.
  */
 
-import { AIRMET_FAMILIES } from '@ab/constants';
+import { AIRMET_FAMILIES, wxScenarioChartSlug } from '@ab/constants';
 import type { AirmetAdvisory } from '../products/types';
 import type { TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
@@ -36,7 +36,7 @@ export function deriveGAirmetTurbulenceChart(
 	airmets: AirmetAdvisory[],
 	scenarioId: string,
 ): ChartArtifact {
-	const slug = `wx-scenario-${scenarioId}-g-airmet-turbulence`;
+	const slug = wxScenarioChartSlug(scenarioId, 'g-airmet-turbulence');
 	const cacheRelPath = `scenarios/${scenarioId}/g-airmet-turbulence.json`;
 
 	const areas = airmets
