@@ -1,18 +1,19 @@
 {
   "slug": "reference-fixtures/wx-metar-plot-grid-2024-01-13-12z",
   "type": "metar-plot-grid",
-  "library_version": "@ab/wx-charts@0.1.0",
-  "built_at": "2026-05-10T01:16:21.512Z",
-  "content_hash": "sha256:65044c191d6bbc84a9a4527ca111364e30cb76215d2c2c0b6cff14dd78699552",
+  "library_version": "@ab/wx-charts@0.2.0",
+  "built_at": "2026-05-12T13:40:25.448Z",
+  "content_hash": "sha256:65f286580d4dc5602bf7cf34c6b0916357eb442b993a8556bcba430e49b81dc4",
   "source_hashes": {
     "observations": "7877f9c1b1163457795071e97463778caa42ee9a30d365dd5fcd976108f0cb10"
   },
   "layer_counts": {
     "vector-symbology": 18,
     "point-symbology": 49,
-    "basemap-fill": 49
+    "basemap-fill": 49,
+    "north-america-context": 2
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 334710
+  "svg_bytes": 546714
 }

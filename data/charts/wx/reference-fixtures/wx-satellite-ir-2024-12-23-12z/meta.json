@@ -1,9 +1,9 @@
 {
   "slug": "reference-fixtures/wx-satellite-ir-2024-12-23-12z",
   "type": "satellite-ir",
-  "library_version": "@ab/wx-charts@0.1.0",
-  "built_at": "2026-05-10T17:54:18.170Z",
-  "content_hash": "sha256:4efd1f204aaa57dbf1dfc87bb041d6cbcafbca0f7ca3ab6b04d6d656e79dab49",
+  "library_version": "@ab/wx-charts@0.2.0",
+  "built_at": "2026-05-12T13:41:11.777Z",
+  "content_hash": "sha256:d0c1e4037717a39676411363fac3d563a2e4b51006da02182831614fdfc959f1",
   "source_hashes": {
     "ir_png": "2116b392b66ffe3aed06ef6abfbe3d3e8a9f98cc67ff151d321d4d61bf25480a",
     "ir_world": "f8b3b6876b0d2d3c7d26b1d3018f6cca57ea6a27d7045488627e9b476e6eb8e7"
@@ -13,5 +13,5 @@
   },
   "drawn_pixels": 672330,
   "parser_warnings": [],
-  "svg_bytes": 926788
+  "svg_bytes": 926832
 }

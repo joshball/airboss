@@ -1,18 +1,19 @@
 {
   "slug": "reference-fixtures/wx-icing-fip-2024-12-23-18z",
   "type": "icing-fip",
-  "library_version": "@ab/wx-charts@0.1.0",
-  "built_at": "2026-05-10T17:51:41.318Z",
-  "content_hash": "sha256:f52445e8108de9ba87dcd763415506ac9ae4e1cf8e966713db53974e1a3291e8",
+  "library_version": "@ab/wx-charts@0.2.0",
+  "built_at": "2026-05-12T13:40:02.683Z",
+  "content_hash": "sha256:ba6ddbf384b6f504a7127d94b8e94b88c8c938227bfbaf3d1da5b30a57730381",
   "source_hashes": {
     "field": "c5a40c12557f7519470eb48c1d1af01080700495097a5a4970fbbacccac839af"
   },
   "layer_counts": {
     "raster-overlay": 6,
     "vector-symbology": 3,
-    "basemap-fill": 49
+    "basemap-fill": 49,
+    "north-america-context": 2
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 305585
+  "svg_bytes": 517589
 }

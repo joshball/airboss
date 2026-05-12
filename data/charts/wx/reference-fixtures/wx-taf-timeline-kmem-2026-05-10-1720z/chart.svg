@@ -2,6 +2,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" font-family="-apple-system, system-ui, sans-serif">
 <g class="layer-background"><rect x="0" y="0" width="1200" height="720" fill="#fafaf7" /></g>
 <g class="layer-graticule"></g>
+<g class="layer-north-america-context"></g>
 <g class="layer-basemap-fill"></g>
 <g class="layer-basemap-borders"></g>
 <g class="layer-raster-overlay"></g>
@@ -161,6 +162,6 @@
   <rect x="0" y="696" width="1200" height="24" fill="#fafaf7" />
   <line x1="0" y1="696" x2="1200" y2="696" stroke="#d8d4c8" stroke-width="0.6" />
   <text x="24" y="712" font-size="10" fill="#7a7568">AWC TAF feed (https://aviationweather.gov/api/data/taf)</text>
-  <text x="1176" y="712" text-anchor="end" font-size="10" fill="#a09b8d">@ab/wx-charts@0.1.0</text>
+  <text x="1176" y="712" text-anchor="end" font-size="10" fill="#a09b8d">@ab/wx-charts@0.2.0</text>
 </g></g>
 </svg>

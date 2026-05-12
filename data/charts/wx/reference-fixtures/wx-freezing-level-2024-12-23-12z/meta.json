@@ -1,18 +1,19 @@
 {
   "slug": "reference-fixtures/wx-freezing-level-2024-12-23-12z",
   "type": "freezing-level",
-  "library_version": "@ab/wx-charts@0.1.0",
-  "built_at": "2026-05-10T17:51:52.469Z",
-  "content_hash": "sha256:d72b65f7431afefa551a38c128d6cfd0561fbb163d99c39f4f44908f3e448132",
+  "library_version": "@ab/wx-charts@0.2.0",
+  "built_at": "2026-05-12T13:39:28.381Z",
+  "content_hash": "sha256:cc26858694afdf9b8441e62f1820179b5d845947d3fd1ea7cc1119d335d7b543",
   "source_hashes": {
     "field": "36a3ce99b72f76bfb38b243d643457504fe07029ebd0123bb87f6c165550b43c"
   },
   "layer_counts": {
     "raster-overlay": 8,
     "vector-symbology": 8,
-    "basemap-fill": 49
+    "basemap-fill": 49,
+    "north-america-context": 2
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 334583
+  "svg_bytes": 546587
 }

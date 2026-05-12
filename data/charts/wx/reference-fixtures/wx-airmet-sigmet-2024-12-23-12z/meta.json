@@ -1,17 +1,18 @@
 {
   "slug": "reference-fixtures/wx-airmet-sigmet-2024-12-23-12z",
   "type": "advisory-overlay",
-  "library_version": "@ab/wx-charts@0.1.0",
-  "built_at": "2026-05-10T01:22:32.409Z",
-  "content_hash": "sha256:a4c3f2cf5b0647252a13be0f5ba1763697dffb641dceb6052619745398c18744",
+  "library_version": "@ab/wx-charts@0.2.0",
+  "built_at": "2026-05-12T13:38:53.902Z",
+  "content_hash": "sha256:07e2df1b3b82543851d32cb975ce9bbf8f0ae587540833b6ce37576523aee4f7",
   "source_hashes": {
     "advisories": "e498798b52732599e3dc7bdb2f25df15e8b285db3f15584ed783fe8b6110d627"
   },
   "layer_counts": {
     "vector-symbology": 6,
-    "basemap-fill": 49
+    "basemap-fill": 49,
+    "north-america-context": 2
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 291038
+  "svg_bytes": 503042
 }
