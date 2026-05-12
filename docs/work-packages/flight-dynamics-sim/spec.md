@@ -47,21 +47,21 @@ No tool covers this browser-native. MSFS / X-Plane / FlightGear are immersive si
 
 ## Decisions locked in
 
-| # | Decision                   | Locked                                                                                                                                      |
-| - | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1 | Aircraft scope for MVP     | **Cessna 172 only.** PA28 lands in Phase 6. Taildragger / complex / twin are post-MVP.                                                      |
-| 2 | MVP scenario set           | **8-10 scenarios** across departure stall, EFATO, vacuum failure, aft-CG slow flight, unusual attitudes (nose-hi + nose-lo), partial panel, VMC-into-IMC, pitot blockage, static blockage. |
-| 3 | Control input scope        | **Keyboard + mouse only.** Gamepad + HID yoke deferred post-MVP.                                                                            |
-| 4 | Surface                    | **Standalone `apps/sim/`** (already exists). Not a module inside `apps/study/`.                                                             |
-| 5 | FDM path                   | **JSBSim WASM port, built in-tree.** Hand-rolled TS FDM is prototype-only; ships as a temporary fallback while the port lands.              |
-| 6 | BC layout                  | **`libs/bc/sim/`** mirrors `libs/bc/study/`. Tick-loop substrate eventually moves to `libs/engine/` when FIRC migrates in.                  |
-| 7 | Scenario format            | **TypeScript modules** (same shape as existing `libs/bc/sim/src/scenarios/*.ts`) -- not JSON/YAML. Authors write typed scenario defs.        |
-| 8 | Supply chain posture       | **No npm deps for simulation logic.** JSBSim WASM built from a pinned upstream submodule + in-tree bindings. Reference ports are reference only. |
-| 9 | Replay substrate           | **Ring-buffered input + snapshot tape** written by the worker, consumed by the debrief page. Deterministic replay from `(inputs, seed, initialState)`. |
-| 10 | Fault model location       | **`libs/bc/sim/src/faults/`** -- pure `TruthState -> DisplayState` transform layer. FDM knows nothing about faults; faults know nothing about the FDM integrator. |
-| 11 | Sound architecture         | **Web Audio AudioContext** on the main thread, driven by `FdmTruthState` snapshots. Engine sound procedural (shipped Phase 0.6); discrete cues sample-based (Phase 5). |
-| 12 | Scheduler integration      | **Reuse study's spaced-rep scheduler.** Each scenario attempt emits a `RepAttempt` into `libs/bc/study/` so weak scenarios re-queue through the existing engine. |
-| 13 | Instrument rendering       | **SVG in Svelte 5, one component per gauge.** No canvas, no npm gauge lib. Already shipped for the six-pack + tach in Phase 0.5.            |
+| #   | Decision               | Locked                                                                                                                                                                                     |
+| --- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | Aircraft scope for MVP | **Cessna 172 only.** PA28 lands in Phase 6. Taildragger / complex / twin are post-MVP.                                                                                                     |
+| 2   | MVP scenario set       | **8-10 scenarios** across departure stall, EFATO, vacuum failure, aft-CG slow flight, unusual attitudes (nose-hi + nose-lo), partial panel, VMC-into-IMC, pitot blockage, static blockage. |
+| 3   | Control input scope    | **Keyboard + mouse only.** Gamepad + HID yoke deferred post-MVP.                                                                                                                           |
+| 4   | Surface                | **Standalone `apps/sim/`** (already exists). Not a module inside `apps/study/`.                                                                                                            |
+| 5   | FDM path               | **JSBSim WASM port, built in-tree.** Hand-rolled TS FDM is prototype-only; ships as a temporary fallback while the port lands.                                                             |
+| 6   | BC layout              | **`libs/bc/sim/`** mirrors `libs/bc/study/`. Tick-loop substrate eventually moves to `libs/engine/` when FIRC migrates in.                                                                 |
+| 7   | Scenario format        | **TypeScript modules** (same shape as existing `libs/bc/sim/src/scenarios/*.ts`) -- not JSON/YAML. Authors write typed scenario defs.                                                      |
+| 8   | Supply chain posture   | **No npm deps for simulation logic.** JSBSim WASM built from a pinned upstream submodule + in-tree bindings. Reference ports are reference only.                                           |
+| 9   | Replay substrate       | **Ring-buffered input + snapshot tape** written by the worker, consumed by the debrief page. Deterministic replay from `(inputs, seed, initialState)`.                                     |
+| 10  | Fault model location   | **`libs/bc/sim/src/faults/`** -- pure `TruthState -> DisplayState` transform layer. FDM knows nothing about faults; faults know nothing about the FDM integrator.                          |
+| 11  | Sound architecture     | **Web Audio AudioContext** on the main thread, driven by `FdmTruthState` snapshots. Engine sound procedural (shipped Phase 0.6); discrete cues sample-based (Phase 5).                     |
+| 12  | Scheduler integration  | **Reuse study's spaced-rep scheduler.** Each scenario attempt emits a `RepAttempt` into `libs/bc/study/` so weak scenarios re-queue through the existing engine.                           |
+| 13  | Instrument rendering   | **SVG in Svelte 5, one component per gauge.** No canvas, no npm gauge lib. Already shipped for the six-pack + tach in Phase 0.5.                                                           |
 
 ## Prior art
 
@@ -99,12 +99,12 @@ The existing protocol in [apps/sim/src/lib/worker-protocol.ts](../../../apps/sim
 
 The `ScenarioDefinition` TS type in [libs/bc/sim/src/types.ts](../../../libs/bc/sim/src/types.ts) stays. Phase 4 adds the following optional fields without breaking the three shipped scenarios:
 
-| Field           | Type                         | Required | Purpose                                                                             |
-| --------------- | ---------------------------- | -------- | ----------------------------------------------------------------------------------- |
-| `faults`        | `readonly ScenarioFault[]`   | Optional | Declares failure events (vacuum, pitot, static, alternator, gyro tumble) + triggers |
-| `idealPath`     | `IdealPathDefinition`        | Optional | Truth-state trajectory segments for debrief comparison                              |
-| `grading`       | `GradingDefinition`          | Optional | Weighted success signals beyond pass/fail (altitude hold, heading hold, stall margin) |
-| `repMetadata`   | `RepMetadata`                | Optional | Links scenario to the study rep scheduler (`domain`, `difficulty`, `tags`)          |
+| Field         | Type                       | Required | Purpose                                                                               |
+| ------------- | -------------------------- | -------- | ------------------------------------------------------------------------------------- |
+| `faults`      | `readonly ScenarioFault[]` | Optional | Declares failure events (vacuum, pitot, static, alternator, gyro tumble) + triggers   |
+| `idealPath`   | `IdealPathDefinition`      | Optional | Truth-state trajectory segments for debrief comparison                                |
+| `grading`     | `GradingDefinition`        | Optional | Weighted success signals beyond pass/fail (altitude hold, heading hold, stall margin) |
+| `repMetadata` | `RepMetadata`              | Optional | Links scenario to the study rep scheduler (`domain`, `difficulty`, `tags`)            |
 
 New types live at [libs/bc/sim/src/types.ts](../../../libs/bc/sim/src/types.ts) alongside the existing shapes. See [design.md](design.md) for full field-level specs.
 
@@ -176,11 +176,11 @@ export interface ReplayTape {
 
 Phase 4 wires each scenario outcome into the existing study BC. Minimum surface added:
 
-| Field                 | Type                | Purpose                                                                        |
-| --------------------- | ------------------- | ------------------------------------------------------------------------------ |
-| `scenarioAttempt.tape` | `ReplayTapeRef`     | Reference to the persisted replay tape (ULID; blob lives in object storage or compressed JSON row) |
-| `scenarioAttempt.grade` | `number`            | 0.0 to 1.0, from `GradingDefinition`. Feeds into scheduler re-queue logic.     |
-| `scenarioAttempt.domain` | `SimDomain`        | Mirrors `RepMetadata.domain` for weak-area aggregation.                        |
+| Field                    | Type            | Purpose                                                                                            |
+| ------------------------ | --------------- | -------------------------------------------------------------------------------------------------- |
+| `scenarioAttempt.tape`   | `ReplayTapeRef` | Reference to the persisted replay tape (ULID; blob lives in object storage or compressed JSON row) |
+| `scenarioAttempt.grade`  | `number`        | 0.0 to 1.0, from `GradingDefinition`. Feeds into scheduler re-queue logic.                         |
+| `scenarioAttempt.domain` | `SimDomain`     | Mirrors `RepMetadata.domain` for weak-area aggregation.                                            |
 
 Storage decision deferred to the Phase 4 design pass: compressed JSON column on `sim.scenario_attempt` row vs external blob. Either way the schema change lands behind Drizzle, on the `sim` namespace.
 
@@ -213,13 +213,13 @@ The existing `apps/sim/src/lib/fdm-worker.ts` is the caller. Phase 2 swaps the i
 
 **Fault taxonomy:**
 
-| Fault                | Affects                                  | Behavior                                                                          |
-| -------------------- | ---------------------------------------- | --------------------------------------------------------------------------------- |
-| Pitot block          | ASI                                      | Reads like a second altimeter above the block altitude; reads zero on descent.    |
-| Static block         | ASI + Altimeter + VSI                    | Altimeter frozen; VSI zero; ASI reverses sense (reads high on descent).           |
-| Vacuum failure       | AI + HI (directional gyro)               | Slow drift (default 1 deg/sec, configurable). Tumble optional.                    |
-| Alternator failure   | All electric (turn coord, radios, electric AI in complex; panel lights) | Battery drains on a configurable timeline. Electric instruments fail in order.    |
-| Gyro tumble          | AI + HI (if gyros)                       | AI pitches and rolls to mechanical limits; HI spins.                              |
+| Fault              | Affects                                                                 | Behavior                                                                       |
+| ------------------ | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| Pitot block        | ASI                                                                     | Reads like a second altimeter above the block altitude; reads zero on descent. |
+| Static block       | ASI + Altimeter + VSI                                                   | Altimeter frozen; VSI zero; ASI reverses sense (reads high on descent).        |
+| Vacuum failure     | AI + HI (directional gyro)                                              | Slow drift (default 1 deg/sec, configurable). Tumble optional.                 |
+| Alternator failure | All electric (turn coord, radios, electric AI in complex; panel lights) | Battery drains on a configurable timeline. Electric instruments fail in order. |
+| Gyro tumble        | AI + HI (if gyros)                                                      | AI pitches and rolls to mechanical limits; HI spins.                           |
 
 **Complete panel** (Phase 3 target):
 
@@ -259,13 +259,13 @@ The existing `apps/sim/src/lib/fdm-worker.ts` is the caller. Phase 2 swaps the i
 
 Engine sound shipped in Phase 0.6. Stall horn shipped in Phase 0.5. Phase 5 adds:
 
-| Cue                  | Trigger                                         | Source                |
-| -------------------- | ----------------------------------------------- | --------------------- |
-| Gear warning         | Gear up + throttle below 12", or gear not down + flaps > 20 | Short sample loop     |
-| Flap motor           | Flap detent change                              | Short sample (1.5 sec) |
-| Marker beacons       | Approach scenarios crossing OM/MM/IM            | Morse-code samples    |
-| Altitude alert       | Alt deviation from selected alt > 200 ft        | Short sample          |
-| AP disconnect        | AP master disengaged                            | Short sample          |
+| Cue            | Trigger                                                     | Source                 |
+| -------------- | ----------------------------------------------------------- | ---------------------- |
+| Gear warning   | Gear up + throttle below 12", or gear not down + flaps > 20 | Short sample loop      |
+| Flap motor     | Flap detent change                                          | Short sample (1.5 sec) |
+| Marker beacons | Approach scenarios crossing OM/MM/IM                        | Morse-code samples     |
+| Altitude alert | Alt deviation from selected alt > 200 ft                    | Short sample           |
+| AP disconnect  | AP master disengaged                                        | Short sample           |
 
 All cues share the existing `SIM_STORAGE_KEYS.MUTE` toggle. Each cue has a **visible caption** in the control strip for accessibility.
 
@@ -281,15 +281,15 @@ All cues share the existing `SIM_STORAGE_KEYS.MUTE` toggle. Each cue has a **vis
 
 **Remaining MVP scenarios:**
 
-| Scenario               | Teaches                                                         |
-| ---------------------- | --------------------------------------------------------------- |
-| Aft-CG slow flight     | W&B consequences, aft-stick stall behavior                      |
-| Unusual attitudes (nose-hi) | Stall-first recovery sequence                              |
+| Scenario                    | Teaches                                                     |
+| --------------------------- | ----------------------------------------------------------- |
+| Aft-CG slow flight          | W&B consequences, aft-stick stall behavior                  |
+| Unusual attitudes (nose-hi) | Stall-first recovery sequence                               |
 | Unusual attitudes (nose-lo) | Spiral-first recovery sequence                              |
-| Partial panel          | Scan on T/B + compass + ASI + altimeter; AI/HI failed           |
-| VMC-into-IMC           | 180-turn discipline, scan transition from outside to inside     |
-| Pitot blockage (climb) | ASI reads high; pitch-and-power backup                          |
-| Static blockage (descent) | Altimeter frozen, VSI zero, ASI reversed                     |
+| Partial panel               | Scan on T/B + compass + ASI + altimeter; AI/HI failed       |
+| VMC-into-IMC                | 180-turn discipline, scan transition from outside to inside |
+| Pitot blockage (climb)      | ASI reads high; pitch-and-power backup                      |
+| Static blockage (descent)   | Altimeter frozen, VSI zero, ASI reversed                    |
 
 Each scenario ships with: `steps` (if tutorial-style) OR `criteria` + `grading`, `faults` (if instrument failure is the trigger), `idealPath`, `repMetadata`. Target 8-10 total MVP scenarios including the three that seed Phase 4.
 
@@ -303,64 +303,55 @@ Performance budget: 60 fps at 1280x800; horizon adds <= 50 MB RAM and no FDM jan
 
 ## Validation
 
-| Field / input                            | Rule                                                                                                                                    |
-| ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `ScenarioDefinition.aircraft`            | Must be a member of `SIM_AIRCRAFT_IDS`. MVP allows `c172` or `pa28`.                                                                    |
-| `ScenarioFault.kind`                     | Must be in `FaultKind` enum.                                                                                                            |
-| `ScenarioFault.trigger.at` (time)        | Non-negative; less than `criteria.timeoutSeconds` when both present.                                                                    |
-| `ScenarioFault.trigger.above` (AGL)      | Non-negative; less than a sane altitude ceiling (e.g., 50,000 ft).                                                                      |
-| `ScenarioFault.trigger.stepId` (step)    | Must match an `id` in `def.steps`.                                                                                                      |
-| `GradingDefinition` weights              | Must sum to 1.0 (+/- 0.001).                                                                                                            |
-| `IdealPathDefinition.segments[].endT`    | Monotonically increasing; each <= `criteria.timeoutSeconds`.                                                                            |
-| `ReplayTape.scenarioHash`                | Computed at load. Mismatch = tape rejected with a user-facing "scenario has changed since you flew it" message.                         |
-| Worker FDM tick dt                       | `SIM_FDM_DT_SECONDS` (1/120 s). Deviations > 10% flagged in dev console.                                                                |
-| Snapshot cadence                         | `SIM_SNAPSHOT_INTERVAL_SECONDS` (1/30 s). Cockpit render loop must not depend on snapshot cadence matching display refresh.             |
-| Fault params                             | Per-kind schema: e.g., `vacuumDriftDegPerSec` in [0.1, 10]; `alternatorDecaySeconds` in [10, 600].                                       |
-| PA28 aircraft config                     | Static-trim verifies against JSBSim desktop reference within 2% airspeed and 1 degree AoA at 1G straight-and-level at Vno and Vy.       |
+| Field / input                         | Rule                                                                                                                              |
+| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `ScenarioDefinition.aircraft`         | Must be a member of `SIM_AIRCRAFT_IDS`. MVP allows `c172` or `pa28`.                                                              |
+| `ScenarioFault.kind`                  | Must be in `FaultKind` enum.                                                                                                      |
+| `ScenarioFault.trigger.at` (time)     | Non-negative; less than `criteria.timeoutSeconds` when both present.                                                              |
+| `ScenarioFault.trigger.above` (AGL)   | Non-negative; less than a sane altitude ceiling (e.g., 50,000 ft).                                                                |
+| `ScenarioFault.trigger.stepId` (step) | Must match an `id` in `def.steps`.                                                                                                |
+| `GradingDefinition` weights           | Must sum to 1.0 (+/- 0.001).                                                                                                      |
+| `IdealPathDefinition.segments[].endT` | Monotonically increasing; each <= `criteria.timeoutSeconds`.                                                                      |
+| `ReplayTape.scenarioHash`             | Computed at load. Mismatch = tape rejected with a user-facing "scenario has changed since you flew it" message.                   |
+| Worker FDM tick dt                    | `SIM_FDM_DT_SECONDS` (1/120 s). Deviations > 10% flagged in dev console.                                                          |
+| Snapshot cadence                      | `SIM_SNAPSHOT_INTERVAL_SECONDS` (1/30 s). Cockpit render loop must not depend on snapshot cadence matching display refresh.       |
+| Fault params                          | Per-kind schema: e.g., `vacuumDriftDegPerSec` in [0.1, 10]; `alternatorDecaySeconds` in [10, 600].                                |
+| PA28 aircraft config                  | Static-trim verifies against JSBSim desktop reference within 2% airspeed and 1 degree AoA at 1G straight-and-level at Vno and Vy. |
 
 ## Edge cases
 
-| Case                                                                                  | Behavior                                                                                                                                                |
-| ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| User tabs away from the cockpit for 2 minutes.                                        | Worker keeps ticking at 120 Hz. Snapshot cadence throttles to 1 Hz (visibility API). Returning un-throttles. Scenario timeout still runs on sim time.    |
-| JSBSim WASM instantiation fails (corrupt blob, missing file, OOM).                     | Cockpit renders an error card with "fall back to TS FDM" button. TS FDM stays shipped as emergency fallback. Log to dev console + toast.                |
-| Scenario definition changes after a tape was recorded.                                | Debrief rejects the tape ("scenario changed; replay unavailable"). Offer "run again" on the current definition. Old tapes remain in the user's list.    |
-| Fault fires during a step the runner hasn't reached.                                  | Fault trigger is independent of step progression; the scenario's author pins faults to triggers they trust. No special handling.                         |
-| User presses the reset key mid-scenario.                                              | Existing ResetConfirm flow. On confirm: scenario aborted, tape written as `ABORTED` outcome, rep-attempt not credited.                                  |
-| Replay tape exceeds 10 MB.                                                            | Default cap: 3-minute scenarios at 30 Hz + ~2 KB/frame = ~11 MB uncompressed. Compress the frames array (LZ-style JSON) before persist. Cap total at 5 MB post-compression; longer runs drop intermediate frames to keep the tape. |
-| Two tabs running the sim at once.                                                     | Each tab owns its own worker; no shared state. Scenario progress local to tab; on rep-attempt emission the last writer wins (acceptable for MVP).       |
-| Mobile Safari: user taps in and AudioContext refuses to start.                         | Existing gesture-to-start pattern from Phase 0.5/0.6 handles this. No new work.                                                                         |
-| `prefers-reduced-motion`.                                                             | Scrubber animations + instrument needle transitions respect the token-level reduced-motion path. Horizon scene uses `requestAnimationFrame` throttled to 30 fps when reduce-motion set. |
-| Emscripten build fails in CI on a developer platform (M-series Mac).                  | Build in Docker; checked-in WASM + hash is the source of truth. Developers do not rebuild WASM locally unless touching the port.                        |
-| User attempts scenario before the rep scheduler has a record.                         | First attempt creates the scenario in `scenarios` if missing (idempotent) and writes the first `ScenarioAttempt`. Subsequent runs update the usual path. |
-| Fault declared but unreachable (e.g., `altitude_agl_meters: 5000` on a scenario that tops out at 1000 ft). | Validator warning at scenario-registry load time. Scenario still ships; fault simply never fires.                                                     |
+| Case                                                                                                       | Behavior                                                                                                                                                                                                                           |
+| ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| User tabs away from the cockpit for 2 minutes.                                                             | Worker keeps ticking at 120 Hz. Snapshot cadence throttles to 1 Hz (visibility API). Returning un-throttles. Scenario timeout still runs on sim time.                                                                              |
+| JSBSim WASM instantiation fails (corrupt blob, missing file, OOM).                                         | Cockpit renders an error card with "fall back to TS FDM" button. TS FDM stays shipped as emergency fallback. Log to dev console + toast.                                                                                           |
+| Scenario definition changes after a tape was recorded.                                                     | Debrief rejects the tape ("scenario changed; replay unavailable"). Offer "run again" on the current definition. Old tapes remain in the user's list.                                                                               |
+| Fault fires during a step the runner hasn't reached.                                                       | Fault trigger is independent of step progression; the scenario's author pins faults to triggers they trust. No special handling.                                                                                                   |
+| User presses the reset key mid-scenario.                                                                   | Existing ResetConfirm flow. On confirm: scenario aborted, tape written as `ABORTED` outcome, rep-attempt not credited.                                                                                                             |
+| Replay tape exceeds 10 MB.                                                                                 | Default cap: 3-minute scenarios at 30 Hz + ~2 KB/frame = ~11 MB uncompressed. Compress the frames array (LZ-style JSON) before persist. Cap total at 5 MB post-compression; longer runs drop intermediate frames to keep the tape. |
+| Two tabs running the sim at once.                                                                          | Each tab owns its own worker; no shared state. Scenario progress local to tab; on rep-attempt emission the last writer wins (acceptable for MVP).                                                                                  |
+| Mobile Safari: user taps in and AudioContext refuses to start.                                             | Existing gesture-to-start pattern from Phase 0.5/0.6 handles this. No new work.                                                                                                                                                    |
+| `prefers-reduced-motion`.                                                                                  | Scrubber animations + instrument needle transitions respect the token-level reduced-motion path. Horizon scene uses `requestAnimationFrame` throttled to 30 fps when reduce-motion set.                                            |
+| Emscripten build fails in CI on a developer platform (M-series Mac).                                       | Build in Docker; checked-in WASM + hash is the source of truth. Developers do not rebuild WASM locally unless touching the port.                                                                                                   |
+| User attempts scenario before the rep scheduler has a record.                                              | First attempt creates the scenario in `scenarios` if missing (idempotent) and writes the first `ScenarioAttempt`. Subsequent runs update the usual path.                                                                           |
+| Fault declared but unreachable (e.g., `altitude_agl_meters: 5000` on a scenario that tops out at 1000 ft). | Validator warning at scenario-registry load time. Scenario still ships; fault simply never fires.                                                                                                                                  |
 
 ## Out of scope
 
-- **Weather model beyond per-scenario wind.** Turbulence, gusts, IMC visual transition, icing are all post-MVP. The wind field stays per-scenario static.
-- **Multi-engine / complex / retract / taildragger aircraft.** PA28 is as exotic as MVP gets.
-- **MSFS / X-Plane grading bridges.** Separate future product.
-- **Multiplayer / async debrief (watch someone else's tape).** Post-MVP.
-- **HID yoke, rudder pedals, throttle quadrant.** Post-MVP. Keyboard + mouse carries MVP.
-- **Real terrain / moving map / navigation database.** Scenarios carry their own world state.
-- **FAA-approved ATD status.** The sim is a training tool, not a logged-time device. No pursuit of FAA approval.
-- **Authoring UI for scenarios.** Authors edit TS modules. Hangar surface picks this up later.
-- **Post-MVP aircraft configs inside Phase 6 scope.** SR22, J3 Cub, gliders are future.
-- **Engine sound upgrade to a procedural WASM synth.** Phase 0.6's two-osc + noise synth is good enough. Antonio-R1-style procedural synth is a post-MVP optimization.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Open questions
 
 Resolved or explicitly deferred:
 
-| Question                                                                              | Resolution                                                                                                                                          |
-| ------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Scenario authoring format                                                             | TS modules. Already shipping. JSON/YAML proposed in the plan but TS gives type safety + IDE support + refactor ease. |
-| Standalone `apps/sim/` vs module in `apps/study/`                                     | Standalone. Already shipping at `sim.airboss.test:9600`. Moving into study breaks the multi-host architecture.                                       |
-| `libs/engine/` location                                                               | Create it in Phase 2 with the JSBSim worker host. FIRC migration later fills out the rest (scoring, replay), sharing `libs/engine/` with the sim.    |
-| Replay tape storage                                                                   | Compressed JSON in a `sim.scenario_attempt.replay_tape` column for MVP. External blob storage when tape sizes force it (post-MVP).                  |
-| Grade -> scheduler mapping                                                            | The existing study scheduler takes a 0.0-1.0 correctness signal. Map `grade >= 0.85` -> "Good", `0.60-0.85` -> "Okay", `< 0.60` -> "Again". Exact thresholds in [design.md](design.md). |
-| JSBSim licensing (LGPL-2.1)                                                           | Dynamic link via WASM ABI. Keep the WASM blob swappable (no static linking into our TS bundle). Document the license + source in `tools/jsbsim-port/README.md`. |
-| Port strategy: binding generator per-header vs hand-written bindings                  | Study `0x62/jsbsim-wasm`'s auto-generator from `FGFDMExec.h` as reference; write ours hand-curated for the narrow surface we need. Narrower is auditable. |
+| Question                                                             | Resolution                                                                                                                                                                              |
+| -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Scenario authoring format                                            | TS modules. Already shipping. JSON/YAML proposed in the plan but TS gives type safety + IDE support + refactor ease.                                                                    |
+| Standalone `apps/sim/` vs module in `apps/study/`                    | Standalone. Already shipping at `sim.airboss.test:9600`. Moving into study breaks the multi-host architecture.                                                                          |
+| `libs/engine/` location                                              | Create it in Phase 2 with the JSBSim worker host. FIRC migration later fills out the rest (scoring, replay), sharing `libs/engine/` with the sim.                                       |
+| Replay tape storage                                                  | Compressed JSON in a `sim.scenario_attempt.replay_tape` column for MVP. External blob storage when tape sizes force it (post-MVP).                                                      |
+| Grade -> scheduler mapping                                           | The existing study scheduler takes a 0.0-1.0 correctness signal. Map `grade >= 0.85` -> "Good", `0.60-0.85` -> "Okay", `< 0.60` -> "Again". Exact thresholds in [design.md](design.md). |
+| JSBSim licensing (LGPL-2.1)                                          | Dynamic link via WASM ABI. Keep the WASM blob swappable (no static linking into our TS bundle). Document the license + source in `tools/jsbsim-port/README.md`.                         |
+| Port strategy: binding generator per-header vs hand-written bindings | Study `0x62/jsbsim-wasm`'s auto-generator from `FGFDMExec.h` as reference; write ours hand-curated for the narrow surface we need. Narrower is auditable.                               |
 
 Genuine open questions (flag for user before Phase 2 starts, but not blocking Phase 1 sign-off):
 
