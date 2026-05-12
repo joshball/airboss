@@ -100,10 +100,7 @@ But bigger than SAFO/InFO because rulings are longer prose and section parsing i
 
 ## Out of scope
 
-- Cross-reference UI (stage 5)
-- Automated new-ruling ingestion
-- The umbrella `ntsb` card (stays as citation fallback)
-- NTSB factual accident reports (separate, larger WP — different data model)
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Anchors
 
