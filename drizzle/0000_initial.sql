@@ -98,14 +98,8 @@ CREATE TABLE "study"."card" (
 	CONSTRAINT "card_source_type_check" CHECK ("source_type" IN ('personal', 'course', 'product', 'imported')),
 	CONSTRAINT "card_status_check" CHECK ("status" IN ('active', 'suspended', 'archived')),
 	CONSTRAINT "card_question_tier_check" CHECK ("question_tier" IS NULL OR "question_tier" IN ('faa-written', 'cfi-essential', 'both')),
-	CONSTRAINT "card_source_authority_shape_check" CHECK ("source_authority" IS NULL OR (jsonb_typeof("source_authority") = 'array' AND NOT EXISTS (
-		SELECT 1 FROM jsonb_array_elements("source_authority") AS elem
-		WHERE jsonb_typeof(elem) <> 'object'
-			OR (elem->>'kind') IS NULL
-			OR (elem->>'kind') NOT IN ('cfr', 'ac', 'aim', 'phak', 'afh', 'other')
-			OR (elem->>'cite') IS NULL
-			OR length(trim(elem->>'cite')) = 0
-	)))
+	CONSTRAINT "card_source_authority_array_check" CHECK ("source_authority" IS NULL OR jsonb_typeof("source_authority") = 'array'),
+	CONSTRAINT "card_source_authority_elements_check" CHECK ("source_authority" IS NULL OR NOT ("source_authority" @? '$[*] ? (@.type() != "object" || !exists(@.kind) || @.kind.type() != "string" || !(@.kind == "cfr" || @.kind == "ac" || @.kind == "aim" || @.kind == "phak" || @.kind == "afh" || @.kind == "other") || !exists(@.cite) || @.cite.type() != "string" || !(@.cite like_regex "^.+$"))'::jsonpath))
 );
 --> statement-breakpoint
 CREATE TABLE "study"."card_draft" (

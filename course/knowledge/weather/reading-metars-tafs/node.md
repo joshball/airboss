@@ -287,12 +287,21 @@ the triage habit the body emphasises is the actual goal.
     of a SPECI is itself information: conditions just shifted at that station.
   cardType: basic
   kind: recall
-  tags: [weather, metar, decode, ac-00-45h, PA.I.C.K2a]
+  question_tier: both
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H
+    - kind: aim
+      cite: AIM 7-1
+  acs_codes: [PA.I.C.K2a]
+  tags: [weather, metar, decode]
   source_ref: |
     AC 00-45H, Aviation Weather Services, Sections 3-4 -- METAR / SPECI format.
   rationale: |
     The body calls out SPECI as "information by its presence." Pilots who decode
-    METAR vs SPECI as the same thing miss the trend signal.
+    METAR vs SPECI as the same thing miss the trend signal. Pilot tier note: the
+    FAA written tests SPECI decoding directly AND the CFI cares about the
+    operational signal (off-cycle = something changed); both apply.
 
 - front: "Decode the METAR wind group: 23015G24KT"
   back: |
@@ -401,12 +410,20 @@ the triage habit the body emphasises is the actual goal.
     to TEMPO). BECMG = gradual transition (less common in modern US TAFs).
   cardType: cloze
   kind: recall
-  tags: [weather, taf, change-groups, ac-00-45h, PA.I.C.K2c]
+  question_tier: faa-written
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Section 4
+  acs_codes: [PA.I.C.K2c]
+  tags: [weather, taf, change-groups]
   source_ref: |
     AC 00-45H Section 4 -- TAF change-group precedence.
   rationale: |
     The body explicitly distinguishes FM (replace) from TEMPO (layer) from PROB
     (probability). Cloze format because the three together form one rule.
+    Tier note: the FAA written tests change-group decoding mechanically; the
+    CFI version of this fact lives in the "what does this forecaster confidence
+    mean for my flight" framing, which is a separate card on triage.
 
 - front: "Your TAF reads BKN015 PROB30 1200/1500 TEMPO BKN006 1SM FG. What does the worst-case scenario look like and how should it drive planning?"
   back: |

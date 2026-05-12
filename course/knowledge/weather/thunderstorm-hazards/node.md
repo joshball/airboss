@@ -278,13 +278,22 @@ the operational rules; scenario cards train the decision habit.
     exclusion zone -- not a "pretty close" guideline.
   cardType: regulation
   kind: recall
-  tags: [weather, thunderstorm, avoidance, 20nm, ac-00-24c, aim-7-1-27, PA.I.C.K3h]
+  question_tier: both
+  source_authority:
+    - kind: ac
+      cite: AC 00-24C
+    - kind: aim
+      cite: AIM 7-1-27
+  acs_codes: [PA.I.C.K3h]
+  tags: [weather, thunderstorm, avoidance, 20nm]
   source_ref: |
     AC 00-24C Thunderstorms; body Reveal + Discover hazard-distance breakdown.
   rationale: |
     The body emphasises this is the *only* weather phenomenon for which the
     FAA publishes a numeric clearance. This card encodes both the rule and
-    its decomposition into per-hazard distances.
+    its decomposition into per-hazard distances. Tier=both: the FAA written
+    tests the 20 NM rule directly; CFIs care about the per-hazard breakdown
+    that justifies the number.
 
 - front: "Why is penetrating a squall line never safe, even if it looks gappy on radar?"
   back: |
@@ -369,9 +378,21 @@ the operational rules; scenario cards train the decision habit.
     an overhanging anvil, period.
   cardType: regulation
   kind: recall
-  tags: [weather, thunderstorm, hail, anvil, avoidance, ac-00-24c, aim-7-1-27, PA.I.C.K3h]
+  question_tier: cfi-essential
+  source_authority:
+    - kind: ac
+      cite: AC 00-24C
+    - kind: aim
+      cite: AIM 7-1-27
+  acs_codes: [PA.I.C.K3h]
+  tags: [weather, thunderstorm, hail, anvil, avoidance]
   source_ref: |
     AC 00-24C; body Reveal "No flight under an overhanging anvil" rule.
+  rationale: |
+    Tier=cfi-essential: the FAA written rarely tests the anvil-specific rule
+    explicitly (it folds into "thunderstorm avoidance"); CFIs reinforce it
+    because the visual cue ("no cell directly overhead, must be safe")
+    misleads pilots into the hail-fall zone.
 ```
 
 ## Connect

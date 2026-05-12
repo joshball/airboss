@@ -460,22 +460,34 @@ export const card = studySchema.table(
 			sql.raw(`"question_tier" IS NULL OR "question_tier" IN (${inList(QUESTION_TIER_VALUES)})`),
 		),
 		// card-question-tier WP. NULL allowed (no citations); when present,
-		// every element of the jsonb array must be `{kind, cite}` where kind
-		// is in SOURCE_AUTHORITY_KIND_VALUES and cite is a non-empty string.
-		// The CHECK uses jsonb_array_length + a NOT EXISTS over jsonb_array_elements
-		// to scan for any malformed element. The BC Zod schema mirrors this for
-		// authoring-time feedback; the CHECK is the storage-layer floor.
-		sourceAuthorityShapeCheck: check(
-			'card_source_authority_shape_check',
+		// `source_authority` must be a jsonb array. PostgreSQL forbids
+		// subqueries in CHECK constraints (SQLSTATE 0A000), so per-element
+		// validation uses the JSONPath `@@` predicate operator instead of a
+		// `NOT EXISTS (SELECT ... FROM jsonb_array_elements ...)` walk.
+		//
+		// Two checks compose:
+		//   (1) `card_source_authority_array_check` -- value is null OR a
+		//       jsonb array.
+		//   (2) `card_source_authority_elements_check` -- no element is
+		//       malformed. JSONPath enforces object-typed elements with a
+		//       string `kind` matching SOURCE_AUTHORITY_KIND_VALUES and a
+		//       non-empty string `cite` (`like_regex "^.+$"` since SQL/JSON
+		//       path has no `.length()` for strings).
+		//
+		// The BC Zod schema (`sourceAuthoritySchema`) mirrors the rule for
+		// typed authoring-time feedback; the CHECK is the storage-layer
+		// floor in case a future caller bypasses Zod.
+		sourceAuthorityArrayCheck: check(
+			'card_source_authority_array_check',
+			sql.raw(`"source_authority" IS NULL OR jsonb_typeof("source_authority") = 'array'`),
+		),
+		sourceAuthorityElementsCheck: check(
+			'card_source_authority_elements_check',
 			sql.raw(
-				`"source_authority" IS NULL OR (jsonb_typeof("source_authority") = 'array' AND NOT EXISTS (
-					SELECT 1 FROM jsonb_array_elements("source_authority") AS elem
-					WHERE jsonb_typeof(elem) <> 'object'
-						OR (elem->>'kind') IS NULL
-						OR (elem->>'kind') NOT IN (${inList(SOURCE_AUTHORITY_KIND_VALUES)})
-						OR (elem->>'cite') IS NULL
-						OR length(trim(elem->>'cite')) = 0
-				))`,
+				// `@?` returns true if the JSONPath matches any element. The
+				// path uses a filter `?(predicate)` that selects malformed
+				// elements; if any are matched, the CHECK fails.
+				`"source_authority" IS NULL OR NOT ("source_authority" @? '$[*] ? (@.type() != "object" || !exists(@.kind) || @.kind.type() != "string" || !(${SOURCE_AUTHORITY_KIND_VALUES.map((k) => `@.kind == "${k}"`).join(' || ')}) || !exists(@.cite) || @.cite.type() != "string" || !(@.cite like_regex "^.+$"))'::jsonpath)`,
 			),
 		),
 	}),

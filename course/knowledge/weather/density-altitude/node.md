@@ -236,12 +236,22 @@ thrust / less HP).
     runway at gross, this is a no-go without changing loading or time of day.
   cardType: basic
   kind: calculation
-  tags: [weather, density-altitude, calculation, go-nogo, phak-11, aim-7-5-6]
+  question_tier: both
+  source_authority:
+    - kind: phak
+      cite: PHAK Ch 11
+    - kind: aim
+      cite: AIM 7-5-6
+  acs_codes: [PA.I.F.K2]
+  tags: [weather, density-altitude, calculation, go-nogo]
   source_ref: |
     PHAK Ch 11; body Context (Big Bear / KL35) + Reveal worked example.
   rationale: |
     The full four-step chain in one card. The Context-to-Reveal example is the
     body's anchor scenario; this card forces the learner to walk it.
+    Tier note: FAA written tests the four-step computation; the CFI cares
+    deeply about the go/no-go application -- "the answer is over 10,000 ft, what
+    do you do" is the operational extension. Both apply.
 
 - front: "Density-altitude rule of thumb: how much DA does each degree C above ISA add?"
   back: |
@@ -251,9 +261,17 @@ thrust / less HP).
     grows above that -- use the POH chart for high-altitude / high-temperature.
   cardType: basic
   kind: recall
-  tags: [weather, density-altitude, rule-of-thumb, phak-11]
+  question_tier: cfi-essential
+  source_authority:
+    - kind: phak
+      cite: PHAK Ch 11
+  tags: [weather, density-altitude, rule-of-thumb]
   source_ref: |
     PHAK Ch 11; body Discover and Reveal sections.
+  rationale: |
+    Tier note: this is a CFI-essential mental-math heuristic that lives in the
+    runup, not on the FAA written. The written tests the formal four-step
+    chain; the CFI tests "can you compute this in your head before takeoff?"
 
 - front: "Density-altitude takeoff/landing distance heuristic: how much does each 1,000 ft of DA add to the ground roll?"
   back: |

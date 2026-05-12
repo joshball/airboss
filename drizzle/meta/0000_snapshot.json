@@ -841,9 +841,13 @@
           "name": "card_question_tier_check",
           "value": "\"question_tier\" IS NULL OR \"question_tier\" IN ('faa-written', 'cfi-essential', 'both')"
         },
-        "card_source_authority_shape_check": {
-          "name": "card_source_authority_shape_check",
-          "value": "\"source_authority\" IS NULL OR (jsonb_typeof(\"source_authority\") = 'array' AND NOT EXISTS (\n\t\t\t\t\tSELECT 1 FROM jsonb_array_elements(\"source_authority\") AS elem\n\t\t\t\t\tWHERE jsonb_typeof(elem) <> 'object'\n\t\t\t\t\t\tOR (elem->>'kind') IS NULL\n\t\t\t\t\t\tOR (elem->>'kind') NOT IN ('cfr', 'ac', 'aim', 'phak', 'afh', 'other')\n\t\t\t\t\t\tOR (elem->>'cite') IS NULL\n\t\t\t\t\t\tOR length(trim(elem->>'cite')) = 0\n\t\t\t\t))"
+        "card_source_authority_array_check": {
+          "name": "card_source_authority_array_check",
+          "value": "\"source_authority\" IS NULL OR jsonb_typeof(\"source_authority\") = 'array'"
+        },
+        "card_source_authority_elements_check": {
+          "name": "card_source_authority_elements_check",
+          "value": "\"source_authority\" IS NULL OR NOT (\"source_authority\" @? '$[*] ? (@.type() != \"object\" || !exists(@.kind) || @.kind.type() != \"string\" || !(@.kind == \"cfr\" || @.kind == \"ac\" || @.kind == \"aim\" || @.kind == \"phak\" || @.kind == \"afh\" || @.kind == \"other\") || !exists(@.cite) || @.cite.type() != \"string\" || !(@.cite like_regex \"^.+$\"))'::jsonpath)"
         }
       },
       "isRLSEnabled": false

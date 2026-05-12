@@ -108,6 +108,7 @@ Sections sort by status; within each section WPs sort alphabetically by id.
 | ID                                                                                            | Title                                                                                               | Product   | Category | Agent review | Human review |
 | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | --------- | -------- | ------------ | ------------ |
 | [adr-026-implementation](../work-packages/adr-026-implementation/spec.md)                     | Spec: ADR 026 implementation -- registry-canonical edition coherence                                | platform  | platform | pending      | pending      |
+| [card-question-tier](../work-packages/card-question-tier/spec.md)                             | Spec: Card Question-Tier + Provenance                                                               | study     | feature  | pending      | pending      |
 | [cert-dashboard](../work-packages/cert-dashboard/spec.md)                                     | Spec: Cert Dashboard                                                                                | study     | feature  | pending      | pending      |
 | [command-palette](../work-packages/command-palette/spec.md)                                   | Global search + command palette (Cmd+K / Cmd+P / Cmd+Shift+P)                                       | platform  | platform | pending      | pending      |
 | [course-reader-and-editor](../work-packages/course-reader-and-editor/spec.md)                 | Spec: Course Reader and Editor                                                                      | study     | feature  | pending      | pending      |
@@ -129,7 +130,6 @@ Sections sort by status; within each section WPs sort alphabetically by id.
 | [wp-toc-validation-schema](../work-packages/wp-toc-validation-schema/spec.md)                 | Spec: WP-TOC-VALIDATION-SCHEMA -- TOC validation persistence shape                                  | hangar    | feature  | pending      | pending      |
 | [wx-chart-symbology-library](../work-packages/wx-chart-symbology-library/spec.md)             | Spec: Weather Chart Symbology Library                                                               | platform  | feature  | pending      | pending      |
 | [wx-engine](../work-packages/wx-engine/spec.md)                                               | Spec: Truth-Aware Weather Scenario Engine                                                           | platform  | feature  | done         | pending      |
-| [xc-viewer-v1](../work-packages/xc-viewer-v1/spec.md)                                         | Spec: XC Viewer v1 -- Universal Pre-Flight Stage (First Slice)                                      | sim       | feature  | pending      | pending      |
 
 ## Abandoned (4)
 
