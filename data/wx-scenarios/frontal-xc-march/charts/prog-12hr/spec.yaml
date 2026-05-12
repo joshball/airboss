@@ -1,0 +1,22 @@
+slug: wx-scenarios/frontal-xc-march/prog-12hr
+type: prog-chart
+title: 12hr Prog (truth-derived)
+subtitle: Forecast valid 2026-03-20T07:00:00.000Z -- evolved from 2026-03-19T19:00:00Z
+projection:
+  kind: lambert
+  parallels:
+    - 33
+    - 45
+  rotate:
+    - -96
+    - -39
+extent: conus
+sources:
+  forecast: cache://scenarios/frontal-xc-march/prog-12hr.json
+options:
+  isobar_interval_mb: 4
+  emphasize_every_mb: 8
+  show_h_l_markers: true
+  show_hazards: true
+  show_legend: true
+  source_attribution: wx-engine -- truth-derived synthetic forecast

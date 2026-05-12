@@ -1,0 +1,25 @@
+slug: wx-scenarios/summer-thunderstorms-tx/pirep-plot
+type: pirep-plot-grid
+title: PIREP Plot (truth-derived)
+subtitle: 2026-07-15T21:00:00Z -- 4 truth-derived reports
+projection:
+  kind: lambert
+  parallels:
+    - 33
+    - 45
+  rotate:
+    - -96
+    - -39
+extent:
+  lon_min: -100
+  lat_min: 32
+  lon_max: -80
+  lat_max: 47
+sources:
+  reports: cache://scenarios/summer-thunderstorms-tx/pirep-plot.json
+options:
+  collision_min_distance_px: 28
+  collision_max_iterations: 40
+  show_altitude_label: true
+  show_legend: true
+  source_attribution: wx-engine -- truth-derived synthetic

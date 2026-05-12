@@ -1,0 +1,21 @@
+slug: wx-scenarios/frontal-xc-march/taf-kcps
+type: taf-timeline
+title: TAF Timeline -- KCPS (truth-derived)
+subtitle: 2026-03-19T18:20:00.000Z TAF -- valid 2026-03-19T19:00:00.000Z to
+  2026-03-20T07:00:00.000Z
+extent: time
+stationIcao: KCPS
+projection:
+  kind: lambert
+  parallels:
+    - 33
+    - 45
+  rotate:
+    - -96
+    - -39
+sources:
+  taf: cache://scenarios/frontal-xc-march/taf-kcps.json
+options:
+  axis_tick_hours: 3
+  show_legend: true
+  source_attribution: wx-engine -- truth-derived synthetic

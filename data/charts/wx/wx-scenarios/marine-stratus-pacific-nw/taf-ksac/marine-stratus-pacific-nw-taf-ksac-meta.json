@@ -1,0 +1,17 @@
+{
+  "slug": "wx-scenarios/marine-stratus-pacific-nw/taf-ksac",
+  "type": "taf-timeline",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-11T14:04:28.496Z",
+  "content_hash": "sha256:5070a8a7d329ad1dddcd2c453e6377720d2b0f1240a6285877363ccb4a784976",
+  "source_hashes": {
+    "taf": "3c76565e3741b4fbc8fcfd102eabf0a6c9aa371cd6d1d98c3213a5f24b7fe4c6"
+  },
+  "layer_counts": {
+    "vector-symbology": 10,
+    "point-symbology": 2
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 7407
+}

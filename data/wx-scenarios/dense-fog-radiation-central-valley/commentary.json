@@ -93,7 +93,7 @@
     "id": "wxc-dense-fog-radiation-central-valley-airmet-sierra-HZ-valley-floor-lifr",
     "target": {
       "kind": "airmet",
-      "chartSlug": "wx-scenario-dense-fog-radiation-central-valley-airmet-sigmet",
+      "chartSlug": "wx-scenarios/dense-fog-radiation-central-valley/airmet-sigmet",
       "elementId": "WAUS41-WXENGINE-HZ-valley-floor-lifr"
     },
     "mode": "socratic",
@@ -109,7 +109,7 @@
     "id": "wxc-dense-fog-radiation-central-valley-airmet-sierra-HZ-coast-range-obscuration",
     "target": {
       "kind": "airmet",
-      "chartSlug": "wx-scenario-dense-fog-radiation-central-valley-airmet-sigmet",
+      "chartSlug": "wx-scenarios/dense-fog-radiation-central-valley/airmet-sigmet",
       "elementId": "WAUS41-WXENGINE-HZ-coast-range-obscuration"
     },
     "mode": "socratic",
@@ -125,7 +125,7 @@
     "id": "wxc-dense-fog-radiation-central-valley-isobar-gradient",
     "target": {
       "kind": "chart-feature",
-      "chartSlug": "wx-scenario-dense-fog-radiation-central-valley-surface-analysis",
+      "chartSlug": "wx-scenarios/dense-fog-radiation-central-valley/surface-analysis",
       "elementId": "isobar-pack"
     },
     "mode": "glance",
@@ -142,7 +142,7 @@
     "id": "wxc-dense-fog-radiation-central-valley-pirep-corroboration-KMER",
     "target": {
       "kind": "pirep",
-      "chartSlug": "wx-scenario-dense-fog-radiation-central-valley-pirep-plot",
+      "chartSlug": "wx-scenarios/dense-fog-radiation-central-valley/pirep-plot",
       "elementId": "KMER"
     },
     "mode": "socratic",
@@ -158,7 +158,7 @@
     "id": "wxc-dense-fog-radiation-central-valley-diurnal-inversion",
     "target": {
       "kind": "chart-feature",
-      "chartSlug": "wx-scenario-dense-fog-radiation-central-valley-surface-analysis",
+      "chartSlug": "wx-scenarios/dense-fog-radiation-central-valley/surface-analysis",
       "elementId": "nocturnal-inversion"
     },
     "mode": "socratic",

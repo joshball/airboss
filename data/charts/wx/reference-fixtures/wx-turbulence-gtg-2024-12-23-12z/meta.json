@@ -1,0 +1,17 @@
+{
+  "slug": "reference-fixtures/wx-turbulence-gtg-2024-12-23-12z",
+  "type": "turbulence-gtg",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-10T17:29:43.836Z",
+  "content_hash": "sha256:bc881330edb3bcfc6dd9b68a3cb31d8fc0943e9c147327dc9032bbfb76c58264",
+  "source_hashes": {
+    "intensity_grid": "6b2e238e42f86d99c8c8506217c9355931acbb6000c12f47eb5627a1eb192886"
+  },
+  "layer_counts": {
+    "vector-symbology": 5,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 1471910
+}

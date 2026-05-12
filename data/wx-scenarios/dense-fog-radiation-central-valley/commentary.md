@@ -80,7 +80,7 @@ Nocturnal radiation fog over the California Central Valley. Weak ridge overhead 
 
 ### wxc-dense-fog-radiation-central-valley-airmet-sierra-HZ-valley-floor-lifr -- airmet (WAUS41-WXENGINE-HZ-valley-floor-lifr)
 
-Pinned to chart `wx-scenario-dense-fog-radiation-central-valley-airmet-sigmet`.
+Pinned to chart `wx-scenarios/dense-fog-radiation-central-valley/airmet-sigmet`.
 
 **Mode:** socratic
 
@@ -94,7 +94,7 @@ Pinned to chart `wx-scenario-dense-fog-radiation-central-valley-airmet-sigmet`.
 
 ### wxc-dense-fog-radiation-central-valley-airmet-sierra-HZ-coast-range-obscuration -- airmet (WAUS41-WXENGINE-HZ-coast-range-obscuration)
 
-Pinned to chart `wx-scenario-dense-fog-radiation-central-valley-airmet-sigmet`.
+Pinned to chart `wx-scenarios/dense-fog-radiation-central-valley/airmet-sigmet`.
 
 **Mode:** socratic
 
@@ -108,7 +108,7 @@ Pinned to chart `wx-scenario-dense-fog-radiation-central-valley-airmet-sigmet`.
 
 ### wxc-dense-fog-radiation-central-valley-isobar-gradient -- chart-feature (isobar-pack)
 
-Pinned to chart `wx-scenario-dense-fog-radiation-central-valley-surface-analysis`.
+Pinned to chart `wx-scenarios/dense-fog-radiation-central-valley/surface-analysis`.
 
 **Mode:** glance
 
@@ -122,7 +122,7 @@ Pinned to chart `wx-scenario-dense-fog-radiation-central-valley-surface-analysis
 
 ### wxc-dense-fog-radiation-central-valley-pirep-corroboration-KMER -- pirep (KMER)
 
-Pinned to chart `wx-scenario-dense-fog-radiation-central-valley-pirep-plot`.
+Pinned to chart `wx-scenarios/dense-fog-radiation-central-valley/pirep-plot`.
 
 **Mode:** socratic
 
@@ -136,7 +136,7 @@ Pinned to chart `wx-scenario-dense-fog-radiation-central-valley-pirep-plot`.
 
 ### wxc-dense-fog-radiation-central-valley-diurnal-inversion -- chart-feature (nocturnal-inversion)
 
-Pinned to chart `wx-scenario-dense-fog-radiation-central-valley-surface-analysis`.
+Pinned to chart `wx-scenarios/dense-fog-radiation-central-valley/surface-analysis`.
 
 **Mode:** socratic
 

@@ -82,18 +82,34 @@ describe('FAA_FLIGHT_CATEGORIES', () => {
 	});
 });
 
-describe('WX_CHART_SLUG_REGEX', () => {
-	it('accepts the Phase A canonical fixture slug', () => {
-		expect(WX_CHART_SLUG_REGEX.test('wx-surface-analysis-2024-12-23-12z')).toBe(true);
+describe('WX_CHART_SLUG_REGEX (ADR 027 PR 3 layout)', () => {
+	it('accepts the canonical reference-fixture slug', () => {
+		expect(WX_CHART_SLUG_REGEX.test('reference-fixtures/wx-surface-analysis-2024-12-23-12z')).toBe(true);
+		expect(WX_CHART_SLUG_REGEX.test('reference-fixtures/wx-prog-chart-12hr-2024-12-23-12z')).toBe(true);
+	});
+
+	it('accepts wx-scenarios path-shaped slugs', () => {
+		expect(WX_CHART_SLUG_REGEX.test('wx-scenarios/frontal-xc-march/surface-analysis')).toBe(true);
+		expect(WX_CHART_SLUG_REGEX.test('wx-scenarios/frontal-xc-march/taf-kstl')).toBe(true);
+		expect(WX_CHART_SLUG_REGEX.test('wx-scenarios/dense-fog-radiation-central-valley/g-airmet-icing')).toBe(true);
 	});
 
 	it('rejects uppercase and underscores', () => {
 		expect(WX_CHART_SLUG_REGEX.test('WX_SURFACE_2024')).toBe(false);
 		expect(WX_CHART_SLUG_REGEX.test('Wx-surface-analysis')).toBe(false);
+		expect(WX_CHART_SLUG_REGEX.test('wx-scenarios/Frontal/surface-analysis')).toBe(false);
 	});
 
-	it('requires the wx- prefix', () => {
+	it('rejects legacy flat slugs without a family prefix', () => {
+		expect(WX_CHART_SLUG_REGEX.test('wx-surface-analysis-2024-12-23-12z')).toBe(false);
+		expect(WX_CHART_SLUG_REGEX.test('wx-scenario-frontal-xc-march-surface-analysis')).toBe(false);
 		expect(WX_CHART_SLUG_REGEX.test('surface-analysis-2024-12-23-12z')).toBe(false);
+	});
+
+	it('rejects empty segments', () => {
+		expect(WX_CHART_SLUG_REGEX.test('wx-scenarios/frontal-xc-march/')).toBe(false);
+		expect(WX_CHART_SLUG_REGEX.test('wx-scenarios//surface-analysis')).toBe(false);
+		expect(WX_CHART_SLUG_REGEX.test('reference-fixtures/')).toBe(false);
 	});
 });
 

@@ -1,0 +1,15 @@
+slug: reference-fixtures/wx-turbulence-gairmet-2024-12-23-12z
+type: turbulence-gairmet
+title: G-AIRMET Turbulence
+subtitle: '2024-12-23 12Z (Mon) -- composes with the same-date surface analysis + AIRMET/SIGMET'
+projection:
+  kind: lambert
+  parallels: [33, 45]
+  rotate: [-96, -39]
+extent: conus
+sources:
+  areas: cache://g-airmet/2024-12-23-12z-turb.json
+options:
+  show_legend: true
+  show_labels: true
+  source_attribution: AWC G-AIRMET turbulence archive (hand-traced fixture; not for ops use)

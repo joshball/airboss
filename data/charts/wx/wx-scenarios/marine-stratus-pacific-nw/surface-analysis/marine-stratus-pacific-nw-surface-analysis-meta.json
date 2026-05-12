@@ -1,0 +1,18 @@
+{
+  "slug": "wx-scenarios/marine-stratus-pacific-nw/surface-analysis",
+  "type": "surface-analysis",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-11T14:04:28.299Z",
+  "content_hash": "sha256:64e932765fc9858c3fb82eed6c80b19ae6cd8884bf3f87ec4b25c0fc8521c1b5",
+  "source_hashes": {
+    "fronts": "9efaa1cb3ae2300ea4ac70dfc28ea5dbf6099f97302a10a9c58847b75e450e8b"
+  },
+  "layer_counts": {
+    "vector-symbology": 3,
+    "point-symbology": 7,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 292267
+}

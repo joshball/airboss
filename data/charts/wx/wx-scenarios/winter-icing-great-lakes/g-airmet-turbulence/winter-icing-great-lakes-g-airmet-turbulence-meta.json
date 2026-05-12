@@ -1,0 +1,17 @@
+{
+  "slug": "wx-scenarios/winter-icing-great-lakes/g-airmet-turbulence",
+  "type": "turbulence-gairmet",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-11T13:57:18.147Z",
+  "content_hash": "sha256:94a1e65cd35b9c38f04d494edcbc1a84769d9c57ad2661ec21108449033b502a",
+  "source_hashes": {
+    "areas": "20be7e21401ace7e72af10a762350d63629dddfd470a441dff9a06bb6b643d7e"
+  },
+  "layer_counts": {
+    "vector-symbology": 1,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 285013
+}

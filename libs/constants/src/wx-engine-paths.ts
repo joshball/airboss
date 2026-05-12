@@ -8,27 +8,33 @@
  * scenario bundle under `data/wx-scenarios/`. All wx-engine chart
  * derivations and the scenario build CLI consume from here.
  *
- * # Migration phase
+ * # Layout
  *
- * Returns the **current flat layout** (`wx-scenario-<scenario-id>-<chart-kind>`
- * on disk; bundle dir at `data/wx-scenarios/<scenario-id>/`). The ADR 027
- * follow-on PR migrates to the nested `wx-scenarios/<scenario-id>/<chart-kind>`
- * shape. Because every consumer reads through these helpers, the migration
- * is a single-file edit at that point.
+ * Returns the **nested layout** introduced by ADR 027 PR 3:
+ *
+ *   data/charts/wx/wx-scenarios/<scenario-id>/<chart-kind>/
+ *     <scenario-id>-<chart-kind>-spec.yaml
+ *     <scenario-id>-<chart-kind>-chart.svg
+ *     <scenario-id>-<chart-kind>-meta.json
+ *
+ * Slugs are path-shaped (`wx-scenarios/<scenario-id>/<chart-kind>`) so
+ * consumers see the family at a glance and the listing code walks the
+ * tree with a single family-aware traversal.
  *
  * # Browser safety
  *
  * `@ab/constants` is bundled into the browser. Pure-string helpers
- * (`wxScenarioChartSlug`) need no Node and are browser-safe. Path-building
- * helpers (`wxScenarioChartDir`, `wxScenarioArtifactPath`,
- * `wxScenarioBundleDir`) lazy-load `node:path` via
- * `process.getBuiltinModule(...)` per the canonical pattern at
+ * (`wxScenarioChartSlug`, `wxScenarioArtifactFilename`) need no Node and
+ * are browser-safe. Path-building helpers (`wxScenarioChartDir`,
+ * `wxScenarioArtifactPath`, `wxScenarioBundleDir`) lazy-load `node:path`
+ * via `process.getBuiltinModule(...)` per the canonical pattern at
  * [./source-cache.ts](./source-cache.ts). The module is annotated
  * `// @browser-globals: server-only` because callers reach for the
  * path helpers from server-side code; the bundle still loads the module
  * but never executes the function bodies on the client.
  */
 
+import { WX_CHART_FAMILIES } from './wx-charts-paths-shared';
 import type { WxScenario } from './wx-engine';
 
 /**
@@ -68,6 +74,12 @@ function nodePath(): NodePath {
  * Artifact filenames inside a chart directory. Used by both the wx-engine
  * scenario family and the wx-charts reference-fixture family. The string
  * values are the literal filenames on disk.
+ *
+ * For the wx-scenarios family these are the **suffix** portion: the
+ * actual on-disk filename is `<scenario-id>-<chart-kind>-<artifact>`
+ * (see `wxScenarioArtifactFilename`). For reference-fixtures, the values
+ * here are the literal on-disk filenames (the slug-named directory
+ * already encodes the chart kind and date).
  */
 export const WX_CHART_ARTIFACTS = {
 	SPEC: 'spec.yaml',
@@ -81,37 +93,46 @@ export type WxChartArtifact = (typeof WX_CHART_ARTIFACT_VALUES)[number];
 /**
  * Slug shape for wx-engine scenario charts.
  *
- * Returns the **current flat layout** (`wx-scenario-<scenario-id>-<chart-kind>`).
+ * Returns the **nested layout** (`wx-scenarios/<scenario-id>/<chart-kind>`).
  * The chart-kind segment is whatever the derivation function declares
  * (e.g. `'cva'`, `'surface-analysis'`, `'taf-kstl'`, `'prog-12hr'`); for
  * multi-part kinds the caller passes the already-joined string.
- *
- * ADR 027 follow-on PR migrates to the nested
- * `wx-scenarios/<scenario-id>/<chart-kind>` shape.
  */
 export function wxScenarioChartSlug(scenarioId: WxScenarioIdInput, chartKind: string): string {
-	return `wx-scenario-${scenarioId}-${chartKind}`;
+	return `${WX_CHART_FAMILIES.WX_SCENARIOS}/${scenarioId}/${chartKind}`;
+}
+
+/**
+ * Disambiguated artifact filename for a wx-engine scenario chart.
+ *
+ * Returns `<scenario-id>-<chart-kind>-<artifact>` so a stray file on disk
+ * is self-identifying. The bundle writer and the chart-build CLI both
+ * read/write artifacts via this helper.
+ */
+export function wxScenarioArtifactFilename(
+	scenarioId: WxScenarioIdInput,
+	chartKind: string,
+	artifact: WxChartArtifact,
+): string {
+	return `${scenarioId}-${chartKind}-${artifact}`;
 }
 
 /**
  * Repo-relative directory for a wx-engine scenario chart. Built on top of
  * the chart-root helper so the layout is the single source of truth.
  *
- * Returns the **current flat layout**:
- *   `<repoRoot>/data/charts/wx/wx-scenario-<scenario-id>-<chart-kind>`
+ * Returns `<repoRoot>/data/charts/wx/wx-scenarios/<scenario-id>/<chart-kind>`.
  */
 export function wxScenarioChartDir(repoRoot: string, scenarioId: WxScenarioIdInput, chartKind: string): string {
-	// Inline the chart root to avoid a cross-module dep; the literal layout
-	// is intentionally co-located with the slug shape so a future migration
-	// changes both segments in one place.
 	const p = nodePath();
-	return p.join(repoRoot, 'data', 'charts', 'wx', wxScenarioChartSlug(scenarioId, chartKind));
+	return p.join(repoRoot, 'data', 'charts', 'wx', WX_CHART_FAMILIES.WX_SCENARIOS, scenarioId, chartKind);
 }
 
 /**
  * Absolute path to an artifact inside a wx-engine scenario chart directory.
  *
  * `artifact` is one of `WX_CHART_ARTIFACTS.SPEC` / `.CHART` / `.META`.
+ * The on-disk filename is disambiguated: `<scenario-id>-<chart-kind>-<artifact>`.
  */
 export function wxScenarioArtifactPath(
 	repoRoot: string,
@@ -120,7 +141,10 @@ export function wxScenarioArtifactPath(
 	artifact: WxChartArtifact,
 ): string {
 	const p = nodePath();
-	return p.join(wxScenarioChartDir(repoRoot, scenarioId, chartKind), artifact);
+	return p.join(
+		wxScenarioChartDir(repoRoot, scenarioId, chartKind),
+		wxScenarioArtifactFilename(scenarioId, chartKind, artifact),
+	);
 }
 
 /**
@@ -130,7 +154,7 @@ export function wxScenarioArtifactPath(
  * Returns `<repoRoot>/data/wx-scenarios/<scenario-id>`. This is the bundle
  * tree (engine outputs), not the chart-artifact mirror under
  * `data/charts/wx/`. ADR 027 does not change this path; the chart-artifact
- * tree is reorganized in the follow-on PR but the bundle tree stays put.
+ * tree was reorganized in PR 3 but the bundle tree stays put.
  */
 export function wxScenarioBundleDir(repoRoot: string, scenarioId: WxScenarioIdInput): string {
 	const p = nodePath();

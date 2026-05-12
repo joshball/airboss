@@ -1,0 +1,18 @@
+{
+  "slug": "wx-scenarios/winter-icing-great-lakes/freezing-level",
+  "type": "freezing-level",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-11T13:57:17.973Z",
+  "content_hash": "sha256:3f79b793b214f2716cc367f04c3423ae2691e418a343425549ad063181499a5f",
+  "source_hashes": {
+    "field": "a7f201e0be5fa34ddffb0a133fe281c7b66e368af9ebb7d551c529143a0f3804"
+  },
+  "layer_counts": {
+    "raster-overlay": 3,
+    "vector-symbology": 3,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 305385
+}

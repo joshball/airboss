@@ -3,14 +3,14 @@
     "station": "KASE",
     "amended": false,
     "corrected": false,
-    "issuedAt": "2026-04-12T20:20:00.000Z",
-    "validFrom": "2026-04-12T21:00:00.000Z",
-    "validTo": "2026-04-13T09:00:00.000Z",
+    "issuedAt": "2026-05-12T20:20:00.000Z",
+    "validFrom": "2026-05-12T21:00:00.000Z",
+    "validTo": "2026-05-13T09:00:00.000Z",
     "periods": [
       {
         "kind": "INITIAL",
-        "start": "2026-04-12T21:00:00.000Z",
-        "end": "2026-04-13T09:00:00.000Z",
+        "start": "2026-05-12T21:00:00.000Z",
+        "end": "2026-05-13T09:00:00.000Z",
         "probability": null,
         "raw": "27025G38KT 6SM FEW060",
         "wind": {
@@ -38,14 +38,14 @@
     "station": "KDEN",
     "amended": false,
     "corrected": false,
-    "issuedAt": "2026-04-12T20:20:00.000Z",
-    "validFrom": "2026-04-12T21:00:00.000Z",
-    "validTo": "2026-04-13T09:00:00.000Z",
+    "issuedAt": "2026-05-12T20:20:00.000Z",
+    "validFrom": "2026-05-12T21:00:00.000Z",
+    "validTo": "2026-05-13T09:00:00.000Z",
     "periods": [
       {
         "kind": "INITIAL",
-        "start": "2026-04-12T21:00:00.000Z",
-        "end": "2026-04-13T09:00:00.000Z",
+        "start": "2026-05-12T21:00:00.000Z",
+        "end": "2026-05-13T09:00:00.000Z",
         "probability": null,
         "raw": "27025G38KT 6SM FEW060",
         "wind": {
@@ -73,14 +73,14 @@
     "station": "KCOS",
     "amended": false,
     "corrected": false,
-    "issuedAt": "2026-04-12T20:20:00.000Z",
-    "validFrom": "2026-04-12T21:00:00.000Z",
-    "validTo": "2026-04-13T09:00:00.000Z",
+    "issuedAt": "2026-05-12T20:20:00.000Z",
+    "validFrom": "2026-05-12T21:00:00.000Z",
+    "validTo": "2026-05-13T09:00:00.000Z",
     "periods": [
       {
         "kind": "INITIAL",
-        "start": "2026-04-12T21:00:00.000Z",
-        "end": "2026-04-13T09:00:00.000Z",
+        "start": "2026-05-12T21:00:00.000Z",
+        "end": "2026-05-13T09:00:00.000Z",
         "probability": null,
         "raw": "27025G38KT 6SM FEW060",
         "wind": {
@@ -108,14 +108,14 @@
     "station": "KBJC",
     "amended": false,
     "corrected": false,
-    "issuedAt": "2026-04-12T20:20:00.000Z",
-    "validFrom": "2026-04-12T21:00:00.000Z",
-    "validTo": "2026-04-13T09:00:00.000Z",
+    "issuedAt": "2026-05-12T20:20:00.000Z",
+    "validFrom": "2026-05-12T21:00:00.000Z",
+    "validTo": "2026-05-13T09:00:00.000Z",
     "periods": [
       {
         "kind": "INITIAL",
-        "start": "2026-04-12T21:00:00.000Z",
-        "end": "2026-04-13T09:00:00.000Z",
+        "start": "2026-05-12T21:00:00.000Z",
+        "end": "2026-05-13T09:00:00.000Z",
         "probability": null,
         "raw": "27025G38KT 6SM FEW060",
         "wind": {
@@ -143,14 +143,14 @@
     "station": "KAPA",
     "amended": false,
     "corrected": false,
-    "issuedAt": "2026-04-12T20:20:00.000Z",
-    "validFrom": "2026-04-12T21:00:00.000Z",
-    "validTo": "2026-04-13T09:00:00.000Z",
+    "issuedAt": "2026-05-12T20:20:00.000Z",
+    "validFrom": "2026-05-12T21:00:00.000Z",
+    "validTo": "2026-05-13T09:00:00.000Z",
     "periods": [
       {
         "kind": "INITIAL",
-        "start": "2026-04-12T21:00:00.000Z",
-        "end": "2026-04-13T09:00:00.000Z",
+        "start": "2026-05-12T21:00:00.000Z",
+        "end": "2026-05-13T09:00:00.000Z",
         "probability": null,
         "raw": "27025G38KT 6SM FEW060",
         "wind": {

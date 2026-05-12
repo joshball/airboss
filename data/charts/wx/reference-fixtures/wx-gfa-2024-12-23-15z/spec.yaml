@@ -1,0 +1,15 @@
+slug: reference-fixtures/wx-gfa-2024-12-23-15z
+type: gfa
+title: Graphical Forecasts for Aviation
+subtitle: '2024-12-23 15Z (Mon) -- low-altitude band (SFC-180), hand-traced AWC GFA snapshot'
+projection:
+  kind: lambert
+  parallels: [33, 45]
+  rotate: [-96, -39]
+extent: conus
+sources:
+  polygons: cache://gfa/2024-12-23-15z-sfc180.json
+options:
+  show_legend: true
+  show_labels: true
+  source_attribution: 'AWC Graphical Forecasts for Aviation (https://aviationweather.gov/gfa); hand-traced fixture, not for ops use'

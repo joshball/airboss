@@ -1,0 +1,18 @@
+{
+  "slug": "reference-fixtures/wx-pirep-plot-grid-2024-05-21-22z",
+  "type": "pirep-plot-grid",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-10T01:25:29.253Z",
+  "content_hash": "sha256:60bd6e5039c459d05f3e1ef2df060c2c6077e93ad3a301c54ed90928cb3ecf36",
+  "source_hashes": {
+    "reports": "cda8805db3ae889b498407246445d8d103feb76a205ee65eb229da9860f46747"
+  },
+  "layer_counts": {
+    "vector-symbology": 0,
+    "point-symbology": 22,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 297175
+}

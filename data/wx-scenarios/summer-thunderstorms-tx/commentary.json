@@ -33,7 +33,7 @@
     "id": "wxc-summer-thunderstorms-tx-airmet-tango-HZ-corridor-tango-low",
     "target": {
       "kind": "airmet",
-      "chartSlug": "wx-scenario-summer-thunderstorms-tx-airmet-sigmet",
+      "chartSlug": "wx-scenarios/summer-thunderstorms-tx/airmet-sigmet",
       "elementId": "WAUS41-WXENGINE-HZ-corridor-tango-low"
     },
     "mode": "socratic",
@@ -49,7 +49,7 @@
     "id": "wxc-summer-thunderstorms-tx-airmet-tango-HZ-outflow-tango",
     "target": {
       "kind": "airmet",
-      "chartSlug": "wx-scenario-summer-thunderstorms-tx-airmet-sigmet",
+      "chartSlug": "wx-scenarios/summer-thunderstorms-tx/airmet-sigmet",
       "elementId": "WAUS41-WXENGINE-HZ-outflow-tango"
     },
     "mode": "socratic",
@@ -65,7 +65,7 @@
     "id": "wxc-summer-thunderstorms-tx-airmet-zulu-HZ-anvil-zulu",
     "target": {
       "kind": "airmet",
-      "chartSlug": "wx-scenario-summer-thunderstorms-tx-airmet-sigmet",
+      "chartSlug": "wx-scenarios/summer-thunderstorms-tx/airmet-sigmet",
       "elementId": "WAUS41-WXENGINE-HZ-anvil-zulu"
     },
     "mode": "socratic",
@@ -81,7 +81,7 @@
     "id": "wxc-summer-thunderstorms-tx-airmet-sierra-HZ-cell-sierra",
     "target": {
       "kind": "airmet",
-      "chartSlug": "wx-scenario-summer-thunderstorms-tx-airmet-sigmet",
+      "chartSlug": "wx-scenarios/summer-thunderstorms-tx/airmet-sigmet",
       "elementId": "WAUS41-WXENGINE-HZ-cell-sierra"
     },
     "mode": "socratic",
@@ -97,7 +97,7 @@
     "id": "wxc-summer-thunderstorms-tx-isobar-gradient",
     "target": {
       "kind": "chart-feature",
-      "chartSlug": "wx-scenario-summer-thunderstorms-tx-surface-analysis",
+      "chartSlug": "wx-scenarios/summer-thunderstorms-tx/surface-analysis",
       "elementId": "isobar-pack"
     },
     "mode": "glance",
@@ -114,7 +114,7 @@
     "id": "wxc-summer-thunderstorms-tx-convective-cell-C-aus-east",
     "target": {
       "kind": "chart-feature",
-      "chartSlug": "wx-scenario-summer-thunderstorms-tx-prog-12hr",
+      "chartSlug": "wx-scenarios/summer-thunderstorms-tx/prog-12hr",
       "elementId": "cell-C-aus-east"
     },
     "mode": "socratic",
@@ -130,7 +130,7 @@
     "id": "wxc-summer-thunderstorms-tx-convective-cell-C-corridor-mid",
     "target": {
       "kind": "chart-feature",
-      "chartSlug": "wx-scenario-summer-thunderstorms-tx-prog-12hr",
+      "chartSlug": "wx-scenarios/summer-thunderstorms-tx/prog-12hr",
       "elementId": "cell-C-corridor-mid"
     },
     "mode": "socratic",
@@ -146,7 +146,7 @@
     "id": "wxc-summer-thunderstorms-tx-convective-cell-C-cll-near",
     "target": {
       "kind": "chart-feature",
-      "chartSlug": "wx-scenario-summer-thunderstorms-tx-prog-12hr",
+      "chartSlug": "wx-scenarios/summer-thunderstorms-tx/prog-12hr",
       "elementId": "cell-C-cll-near"
     },
     "mode": "socratic",
@@ -162,7 +162,7 @@
     "id": "wxc-summer-thunderstorms-tx-convective-cell-C-iah-south",
     "target": {
       "kind": "chart-feature",
-      "chartSlug": "wx-scenario-summer-thunderstorms-tx-prog-12hr",
+      "chartSlug": "wx-scenarios/summer-thunderstorms-tx/prog-12hr",
       "elementId": "cell-C-iah-south"
     },
     "mode": "socratic",
@@ -178,7 +178,7 @@
     "id": "wxc-summer-thunderstorms-tx-pirep-corroboration-KAUS",
     "target": {
       "kind": "pirep",
-      "chartSlug": "wx-scenario-summer-thunderstorms-tx-pirep-plot",
+      "chartSlug": "wx-scenarios/summer-thunderstorms-tx/pirep-plot",
       "elementId": "KAUS"
     },
     "mode": "socratic",

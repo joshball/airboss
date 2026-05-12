@@ -1,0 +1,19 @@
+slug: reference-fixtures/wx-metar-plot-grid-2024-01-13-12z
+type: metar-plot-grid
+title: METAR Plot
+subtitle: '2024-01-13 12Z (Sat) -- 49 ASOS hub stations from IEM archive'
+projection:
+  kind: lambert
+  parallels: [33, 45]
+  rotate: [-96, -39]
+extent: conus
+sources:
+  observations: cache://metar/2024-01-13-12z.json
+options:
+  collision_min_distance_px: 36
+  collision_max_iterations: 40
+  show_category_ring: true
+  show_station_model_legend: true
+  show_category_legend: true
+  temp_unit: F
+  source_attribution: IEM ASOS Archive (https://mesonet.agron.iastate.edu)

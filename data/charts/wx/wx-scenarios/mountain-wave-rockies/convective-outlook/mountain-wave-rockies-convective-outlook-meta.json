@@ -1,0 +1,17 @@
+{
+  "slug": "wx-scenarios/mountain-wave-rockies/convective-outlook",
+  "type": "convective-outlook",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-11T14:00:37.978Z",
+  "content_hash": "sha256:1618630493fd58f1097609afa72ff08a2ea75ec3b8c46244443f8bb1f2f21deb",
+  "source_hashes": {
+    "outlook": "d18eefc5304c27d1320bced651578d974d29ecc071a12cc7bcb588f67be8a461"
+  },
+  "layer_counts": {
+    "vector-symbology": 0,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 283695
+}

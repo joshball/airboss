@@ -1,0 +1,18 @@
+{
+  "slug": "wx-scenarios/winter-icing-great-lakes/cva",
+  "type": "cva",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-11T13:57:17.882Z",
+  "content_hash": "sha256:12b03bb5f7b85cce024c349acf65e17fbf6521260c68b1b86d9437efdf85a67d",
+  "source_hashes": {
+    "observations": "3426222b4c7252495f0120f8eb13c52891dfda3981b2410df81ba5b05eb99c45"
+  },
+  "layer_counts": {
+    "vector-symbology": 1,
+    "point-symbology": 5,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 286846
+}

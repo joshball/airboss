@@ -1,0 +1,21 @@
+slug: wx-scenarios/winter-icing-great-lakes/taf-kgrr
+type: taf-timeline
+title: TAF Timeline -- KGRR (truth-derived)
+subtitle: 2026-01-22T14:20:00.000Z TAF -- valid 2026-01-22T15:00:00.000Z to
+  2026-01-23T03:00:00.000Z
+extent: time
+stationIcao: KGRR
+projection:
+  kind: lambert
+  parallels:
+    - 33
+    - 45
+  rotate:
+    - -96
+    - -39
+sources:
+  taf: cache://scenarios/winter-icing-great-lakes/taf-kgrr.json
+options:
+  axis_tick_hours: 3
+  show_legend: true
+  source_attribution: wx-engine -- truth-derived synthetic

@@ -1,0 +1,17 @@
+{
+  "slug": "wx-scenarios/dense-fog-radiation-central-valley/winds-aloft",
+  "type": "winds-aloft-fb",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-11T14:07:06.333Z",
+  "content_hash": "sha256:431d6c664e9e8a155d0383d77e70dc722ee94214645023463821e334e6bd52cf",
+  "source_hashes": {
+    "bulletin": "281d0fbd3990e99ff5d96f198e0ee2e34fbdfde6f71d805306da33ac02c26808"
+  },
+  "layer_counts": {
+    "point-symbology": 5,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 293853
+}

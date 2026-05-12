@@ -1,0 +1,22 @@
+slug: wx-scenarios/winter-icing-great-lakes/surface-analysis
+type: surface-analysis
+title: Surface Analysis (truth-derived)
+subtitle: 2026-01-22T15:00:00Z -- Stratus and lake-effect icing over Lake Erie.
+  cP air pours over the still-warm l
+projection:
+  kind: lambert
+  parallels:
+    - 33
+    - 45
+  rotate:
+    - -96
+    - -39
+extent: conus
+sources:
+  fronts: cache://scenarios/winter-icing-great-lakes/surface-analysis.json
+options:
+  station_density: hubs
+  isobar_interval_mb: 4
+  emphasize_every_mb: 8
+  show_h_l_markers: true
+  source_attribution: wx-engine -- truth-derived synthetic

@@ -1,0 +1,17 @@
+{
+  "slug": "wx-scenarios/mountain-wave-rockies/taf-kapa",
+  "type": "taf-timeline",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-11T14:00:38.885Z",
+  "content_hash": "sha256:7717114313cb4d06db37270c80813062b077c114a1e41d5eb290d5feffcdd39d",
+  "source_hashes": {
+    "taf": "502b2cf86681e578e39baaf5a4e2d2a4261d9e7be46849cc213dbefc4f6457e9"
+  },
+  "layer_counts": {
+    "vector-symbology": 8,
+    "point-symbology": 1
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 6285
+}

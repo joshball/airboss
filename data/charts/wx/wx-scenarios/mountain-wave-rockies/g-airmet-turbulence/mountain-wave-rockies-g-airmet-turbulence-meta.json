@@ -1,0 +1,17 @@
+{
+  "slug": "wx-scenarios/mountain-wave-rockies/g-airmet-turbulence",
+  "type": "turbulence-gairmet",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-11T14:00:38.345Z",
+  "content_hash": "sha256:a6c52e485c68389cc2642d8b961493dcb90cc7bf5db7363451c16a196f0fc4e9",
+  "source_hashes": {
+    "areas": "87ec22208888549dbf46d663195aba79934e8124adb024e00d4054697502f80e"
+  },
+  "layer_counts": {
+    "vector-symbology": 1,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 285006
+}

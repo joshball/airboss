@@ -1,0 +1,20 @@
+slug: wx-scenarios/mountain-wave-rockies/freezing-level
+type: freezing-level
+title: Freezing Level Forecast (truth-derived)
+subtitle: Valid 2026-02-12T21:00:00Z -- background 0 deg C at 3000 ft MSL
+projection:
+  kind: lambert
+  parallels:
+    - 33
+    - 45
+  rotate:
+    - -96
+    - -39
+extent: conus
+sources:
+  field: cache://scenarios/mountain-wave-rockies/freezing-level.json
+options:
+  show_legend: true
+  show_contours: true
+  contour_interval_ft: 2000
+  source_attribution: wx-engine -- truth-derived synthetic

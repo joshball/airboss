@@ -72,9 +72,9 @@ describe('Phase C -- GFA derivation', () => {
 		expect(tstmCount).toBeGreaterThanOrEqual(1);
 	});
 
-	it('emits a slug of the form wx-scenario-<id>-gfa', () => {
+	it('emits a slug of the form wx-scenarios/<id>/gfa', () => {
 		const chart = deriveGfaChart(FRONTAL_XC_MARCH, products.airmets, products.tafs, FRONTAL_XC_MARCH.scenarioId);
-		expect(chart.slug).toBe('wx-scenario-frontal-xc-march-gfa');
+		expect(chart.slug).toBe('wx-scenarios/frontal-xc-march/gfa');
 	});
 });
 

@@ -1,0 +1,17 @@
+{
+  "slug": "wx-scenarios/mountain-wave-rockies/gfa",
+  "type": "gfa",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-11T14:00:38.435Z",
+  "content_hash": "sha256:3c5fd169e50b2a65bd5d68c9d844beef6fafda90eb4739475ac4898e6486659e",
+  "source_hashes": {
+    "polygons": "4c5cae60470eef6c8c583a1f8ec5dadc61f3c0461bd3d54280bb164b48d16392"
+  },
+  "layer_counts": {
+    "vector-symbology": 3,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 286675
+}

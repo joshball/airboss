@@ -242,11 +242,11 @@ describe('Phase D -- deriveCommentary (synthetic minimal scenario)', () => {
 			truth,
 			{ metars: [], tafs: [], airmets: [], fbGrid: null, pireps: [] },
 			[
-				{ slug: 'wx-scenario-synthetic-test-surface-analysis', spec: {}, sources: [] },
-				{ slug: 'wx-scenario-synthetic-test-prog-12hr', spec: {}, sources: [] },
-				{ slug: 'wx-scenario-synthetic-test-airmet-sigmet', spec: {}, sources: [] },
-				{ slug: 'wx-scenario-synthetic-test-pirep-plot', spec: {}, sources: [] },
-				{ slug: 'wx-scenario-synthetic-test-winds-aloft', spec: {}, sources: [] },
+				{ slug: 'wx-scenarios/synthetic-test/surface-analysis', spec: {}, sources: [] },
+				{ slug: 'wx-scenarios/synthetic-test/prog-12hr', spec: {}, sources: [] },
+				{ slug: 'wx-scenarios/synthetic-test/airmet-sigmet', spec: {}, sources: [] },
+				{ slug: 'wx-scenarios/synthetic-test/pirep-plot', spec: {}, sources: [] },
+				{ slug: 'wx-scenarios/synthetic-test/winds-aloft', spec: {}, sources: [] },
 			],
 			'synthetic-test',
 		);
@@ -280,13 +280,13 @@ describe('Phase D -- deriveCommentary (synthetic minimal scenario)', () => {
 		const callouts = deriveCommentary(
 			truth,
 			{ metars: [], tafs: [], airmets: [], fbGrid: null, pireps: [] },
-			[{ slug: 'wx-scenario-synthetic-test-winds-aloft', spec: {}, sources: [] }],
+			[{ slug: 'wx-scenarios/synthetic-test/winds-aloft', spec: {}, sources: [] }],
 			'synthetic-test',
 		);
 		const jet = callouts.find((c) => c.id === 'wxc-synthetic-test-jet-exit');
 		expect(jet).toBeDefined();
 		if (jet === undefined) throw new Error('jet exit callout missing');
-		expect(jet.target.chartSlug).toBe('wx-scenario-synthetic-test-winds-aloft');
+		expect(jet.target.chartSlug).toBe('wx-scenarios/synthetic-test/winds-aloft');
 		expect(jet.target.kind).toBe('fb-row');
 	});
 
@@ -301,13 +301,13 @@ describe('Phase D -- deriveCommentary (synthetic minimal scenario)', () => {
 		const callouts = deriveCommentary(
 			truth,
 			{ metars: [], tafs: [], airmets: [], fbGrid: null, pireps: [] },
-			[{ slug: 'wx-scenario-synthetic-test-surface-analysis', spec: {}, sources: [] }],
+			[{ slug: 'wx-scenarios/synthetic-test/surface-analysis', spec: {}, sources: [] }],
 			'synthetic-test',
 		);
 		const diurnal = callouts.find((c) => c.id === 'wxc-synthetic-test-diurnal-inversion');
 		expect(diurnal).toBeDefined();
 		if (diurnal === undefined) throw new Error('diurnal callout missing');
-		expect(diurnal.target.chartSlug).toBe('wx-scenario-synthetic-test-surface-analysis');
+		expect(diurnal.target.chartSlug).toBe('wx-scenarios/synthetic-test/surface-analysis');
 	});
 
 	it('every callout id is stable across runs', () => {
@@ -316,8 +316,8 @@ describe('Phase D -- deriveCommentary (synthetic minimal scenario)', () => {
 			truth,
 			{ metars: [], tafs: [], airmets: [], fbGrid: null, pireps: [] },
 			[
-				{ slug: 'wx-scenario-synthetic-test-surface-analysis', spec: {}, sources: [] },
-				{ slug: 'wx-scenario-synthetic-test-airmet-sigmet', spec: {}, sources: [] },
+				{ slug: 'wx-scenarios/synthetic-test/surface-analysis', spec: {}, sources: [] },
+				{ slug: 'wx-scenarios/synthetic-test/airmet-sigmet', spec: {}, sources: [] },
 			],
 			'synthetic-test',
 		);
@@ -325,8 +325,8 @@ describe('Phase D -- deriveCommentary (synthetic minimal scenario)', () => {
 			truth,
 			{ metars: [], tafs: [], airmets: [], fbGrid: null, pireps: [] },
 			[
-				{ slug: 'wx-scenario-synthetic-test-surface-analysis', spec: {}, sources: [] },
-				{ slug: 'wx-scenario-synthetic-test-airmet-sigmet', spec: {}, sources: [] },
+				{ slug: 'wx-scenarios/synthetic-test/surface-analysis', spec: {}, sources: [] },
+				{ slug: 'wx-scenarios/synthetic-test/airmet-sigmet', spec: {}, sources: [] },
 			],
 			'synthetic-test',
 		);

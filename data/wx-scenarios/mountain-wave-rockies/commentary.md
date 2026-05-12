@@ -8,7 +8,7 @@ Lee-side mountain wave east of the Front Range. A 95-kt jet aloft drives strong 
 
 ### wxc-mountain-wave-rockies-airmet-tango-HZ-lee-wave-tango -- airmet (WAUS41-WXENGINE-HZ-lee-wave-tango)
 
-Pinned to chart `wx-scenario-mountain-wave-rockies-airmet-sigmet`.
+Pinned to chart `wx-scenarios/mountain-wave-rockies/airmet-sigmet`.
 
 **Mode:** socratic
 
@@ -22,7 +22,7 @@ Pinned to chart `wx-scenario-mountain-wave-rockies-airmet-sigmet`.
 
 ### wxc-mountain-wave-rockies-airmet-zulu-HZ-rotor-zulu -- airmet (WAUS41-WXENGINE-HZ-rotor-zulu)
 
-Pinned to chart `wx-scenario-mountain-wave-rockies-airmet-sigmet`.
+Pinned to chart `wx-scenarios/mountain-wave-rockies/airmet-sigmet`.
 
 **Mode:** socratic
 
@@ -36,7 +36,7 @@ Pinned to chart `wx-scenario-mountain-wave-rockies-airmet-sigmet`.
 
 ### wxc-mountain-wave-rockies-airmet-sierra-HZ-upwind-mtn-obscuration -- airmet (WAUS41-WXENGINE-HZ-upwind-mtn-obscuration)
 
-Pinned to chart `wx-scenario-mountain-wave-rockies-airmet-sigmet`.
+Pinned to chart `wx-scenarios/mountain-wave-rockies/airmet-sigmet`.
 
 **Mode:** socratic
 
@@ -50,7 +50,7 @@ Pinned to chart `wx-scenario-mountain-wave-rockies-airmet-sigmet`.
 
 ### wxc-mountain-wave-rockies-isobar-gradient -- chart-feature (isobar-pack)
 
-Pinned to chart `wx-scenario-mountain-wave-rockies-surface-analysis`.
+Pinned to chart `wx-scenarios/mountain-wave-rockies/surface-analysis`.
 
 **Mode:** glance
 
@@ -64,7 +64,7 @@ Pinned to chart `wx-scenario-mountain-wave-rockies-surface-analysis`.
 
 ### wxc-mountain-wave-rockies-convective-cell-C-rotor-north -- chart-feature (cell-C-rotor-north)
 
-Pinned to chart `wx-scenario-mountain-wave-rockies-prog-12hr`.
+Pinned to chart `wx-scenarios/mountain-wave-rockies/prog-12hr`.
 
 **Mode:** socratic
 
@@ -78,7 +78,7 @@ Pinned to chart `wx-scenario-mountain-wave-rockies-prog-12hr`.
 
 ### wxc-mountain-wave-rockies-convective-cell-C-rotor-south -- chart-feature (cell-C-rotor-south)
 
-Pinned to chart `wx-scenario-mountain-wave-rockies-prog-12hr`.
+Pinned to chart `wx-scenarios/mountain-wave-rockies/prog-12hr`.
 
 **Mode:** socratic
 
@@ -92,7 +92,7 @@ Pinned to chart `wx-scenario-mountain-wave-rockies-prog-12hr`.
 
 ### wxc-mountain-wave-rockies-pirep-corroboration-KAPA -- pirep (KAPA)
 
-Pinned to chart `wx-scenario-mountain-wave-rockies-pirep-plot`.
+Pinned to chart `wx-scenarios/mountain-wave-rockies/pirep-plot`.
 
 **Mode:** socratic
 
@@ -106,7 +106,7 @@ Pinned to chart `wx-scenario-mountain-wave-rockies-pirep-plot`.
 
 ### wxc-mountain-wave-rockies-jet-exit -- fb-row (jet-max-fl)
 
-Pinned to chart `wx-scenario-mountain-wave-rockies-winds-aloft`.
+Pinned to chart `wx-scenarios/mountain-wave-rockies/winds-aloft`.
 
 **Mode:** socratic
 

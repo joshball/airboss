@@ -1,0 +1,19 @@
+slug: wx-scenarios/dense-fog-radiation-central-valley/gfa
+type: gfa
+title: Graphical Forecasts for Aviation (truth-derived)
+subtitle: Issued 2026-02-08T10:00:00Z -- SFC-180 band
+projection:
+  kind: lambert
+  parallels:
+    - 33
+    - 45
+  rotate:
+    - -96
+    - -39
+extent: conus
+sources:
+  polygons: cache://scenarios/dense-fog-radiation-central-valley/gfa.json
+options:
+  show_legend: true
+  show_labels: true
+  source_attribution: wx-engine -- truth-derived synthetic GFA

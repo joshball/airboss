@@ -1,0 +1,18 @@
+{
+  "slug": "wx-scenarios/summer-thunderstorms-tx/surface-analysis",
+  "type": "surface-analysis",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-11T13:55:05.822Z",
+  "content_hash": "sha256:abdf5d1c08576e642cc27c9bd3fbf74400b4af11ab9a275e2613c122a38f26c3",
+  "source_hashes": {
+    "fronts": "b8f03fbc35adb6de000b7141ce1d819d4e387bcd39e3aad4e4099b0e1b671122"
+  },
+  "layer_counts": {
+    "vector-symbology": 2,
+    "point-symbology": 7,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 295543
+}

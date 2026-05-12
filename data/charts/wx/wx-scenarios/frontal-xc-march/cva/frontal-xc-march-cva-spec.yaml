@@ -1,0 +1,21 @@
+slug: wx-scenarios/frontal-xc-march/cva
+type: cva
+title: Ceiling and Visibility Analysis (truth-derived)
+subtitle: 2026-03-19T19:00:00Z -- 5 stations, 1 area polygons
+projection:
+  kind: lambert
+  parallels:
+    - 33
+    - 45
+  rotate:
+    - -96
+    - -39
+extent: conus
+sources:
+  observations: cache://scenarios/frontal-xc-march/cva.json
+options:
+  show_legend: true
+  show_station_labels: true
+  show_polygons: true
+  dot_radius_px: 7
+  source_attribution: wx-engine -- truth-derived synthetic

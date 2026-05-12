@@ -1,0 +1,19 @@
+{
+  "slug": "wx-scenarios/frontal-xc-march/prog-12hr",
+  "type": "prog-chart",
+  "library_version": "@ab/wx-charts@0.1.0",
+  "built_at": "2026-05-11T12:33:10.349Z",
+  "content_hash": "sha256:d393ebc6302d71e5a52f8f1b4f60e16c83b074eb26e91b52eaca844fe5878428",
+  "source_hashes": {
+    "forecast": "d9619ea29ab91182f778b8198cc86b0ba079f8134aef84d7f21bc912eca50be5"
+  },
+  "layer_counts": {
+    "raster-overlay": 3,
+    "vector-symbology": 9,
+    "point-symbology": 3,
+    "basemap-fill": 49
+  },
+  "drawn_pixels": 0,
+  "parser_warnings": [],
+  "svg_bytes": 328278
+}

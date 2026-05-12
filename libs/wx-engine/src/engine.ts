@@ -41,7 +41,14 @@
  * pattern at `libs/constants/src/source-cache.ts`.
  */
 
-import { chartSlugToDir, type WxScenario, wxScenarioBundleDir } from '@ab/constants';
+import {
+	chartArtifactFilename,
+	chartSlugToDir,
+	WX_CHART_ARTIFACTS,
+	WX_CHART_FAMILIES,
+	type WxScenario,
+	wxScenarioBundleDir,
+} from '@ab/constants';
 import { stringify as yamlStringify } from 'yaml';
 import { type ChartProductInputs, deriveAllCharts } from './charts/derive-all';
 import type { ChartArtifact } from './charts/types';
@@ -206,10 +213,11 @@ function loadBuiltin<T>(spec: string): T {
  *   airmets.json           array of AirmetAdvisory
  *
  * Phase C writes the chart artifacts produced by `deriveAllCharts` under
- * `data/wx-scenarios/<slug>/charts/<chart-slug>/spec.yaml`,
- * `data/wx-scenarios/<slug>/charts/<chart-slug>/sources/<name>.json`,
- * mirrored into `data/charts/wx/<chart-slug>/spec.yaml` for `bun run charts
- * build`, and mirrored into the wx cache at
+ * `data/wx-scenarios/<slug>/charts/<chart-kind>/spec.yaml`,
+ * `data/wx-scenarios/<slug>/charts/<chart-kind>/sources/<name>.json`,
+ * mirrored into the chart-build root at
+ * `data/charts/wx/wx-scenarios/<scenario-id>/<chart-kind>/<scenario-id>-<chart-kind>-spec.yaml`
+ * (per ADR 027 PR 3), and mirrored into the wx cache at
  * `~/Documents/airboss-handbook-cache/wx/<source-rel-path>` per ADR 018.
  *
  * Empty product / chart / commentary arrays skip their writers; commentary
@@ -294,12 +302,21 @@ export async function writeScenarioBundle(bundle: ScenarioBundle, options: Scena
 		const cacheWxRoot = path.resolve(cacheRoot, 'wx');
 
 		for (const chart of bundle.charts) {
-			const chartDir = path.resolve(chartsOut, chart.slug);
+			// Bundle-side per-chart dir uses the chart-kind tail segment
+			// (e.g. `surface-analysis`, `taf-kstl`) so the bundle tree stays
+			// flat-keyed under the scenario id. ADR 027 PR 3 made the chart
+			// slug path-shaped (`wx-scenarios/<id>/<kind>`); using the slug
+			// verbatim would create a doubly-nested subdirectory and breaks
+			// the "bundle tree unaffected" rule from the ADR.
+			const bundleSlugDir = chartKindFromSlug(chart.slug);
+			const chartDir = path.resolve(chartsOut, bundleSlugDir);
 			const sourcesDir = path.resolve(chartDir, 'sources');
 			ensureDir(fs, sourcesDir);
 
 			const specYaml = yamlStringify(chart.spec);
-			writeFile(fs, path, path.resolve(chartDir, 'spec.yaml'), specYaml);
+			// Bundle-side spec keeps the flat filename; the disambiguated
+			// filename is a property of the mirror layout, not the bundle.
+			writeFile(fs, path, path.resolve(chartDir, WX_CHART_ARTIFACTS.SPEC), specYaml);
 
 			for (const src of chart.sources) {
 				const filename = path.basename(src.path);
@@ -314,7 +331,12 @@ export async function writeScenarioBundle(bundle: ScenarioBundle, options: Scena
 			if (mirrorIntoChartsDir) {
 				const mirrorDir = chartSlugToDir(options.repoRoot, chart.slug);
 				ensureDir(fs, mirrorDir);
-				writeFile(fs, path, path.resolve(mirrorDir, 'spec.yaml'), specYaml);
+				writeFile(
+					fs,
+					path,
+					path.resolve(mirrorDir, chartArtifactFilename(chart.slug, WX_CHART_ARTIFACTS.SPEC)),
+					specYaml,
+				);
 			}
 		}
 	}
@@ -401,4 +423,24 @@ function ensureDir(fs: NodeFs, p: string): void {
 function writeFile(fs: NodeFs, path: NodePath, p: string, content: string): void {
 	ensureDir(fs, path.dirname(p));
 	fs.writeFileSync(p, content);
+}
+
+/**
+ * Extract the chart-kind tail segment from a path-shaped chart slug
+ * (`wx-scenarios/<scenario-id>/<chart-kind>`). The bundle writer uses
+ * this segment to name the per-chart directory inside
+ * `data/wx-scenarios/<scenario-id>/charts/` so the bundle stays
+ * flat-keyed under the scenario id (the slug itself would create a
+ * doubly-nested path).
+ */
+function chartKindFromSlug(slug: string): string {
+	const prefix = `${WX_CHART_FAMILIES.WX_SCENARIOS}/`;
+	if (!slug.startsWith(prefix)) {
+		throw new Error(`chartKindFromSlug: not a wx-scenarios slug: '${slug}'`);
+	}
+	const segments = slug.slice(prefix.length).split('/');
+	if (segments.length < 2) {
+		throw new Error(`chartKindFromSlug: malformed wx-scenarios slug (need <id>/<kind>): '${slug}'`);
+	}
+	return segments.slice(1).join('/');
 }

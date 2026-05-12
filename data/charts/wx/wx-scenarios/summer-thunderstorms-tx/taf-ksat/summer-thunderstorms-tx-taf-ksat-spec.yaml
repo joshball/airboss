@@ -1,0 +1,21 @@
+slug: wx-scenarios/summer-thunderstorms-tx/taf-ksat
+type: taf-timeline
+title: TAF Timeline -- KSAT (truth-derived)
+subtitle: 2026-07-15T20:20:00.000Z TAF -- valid 2026-07-15T21:00:00.000Z to
+  2026-07-16T09:00:00.000Z
+extent: time
+stationIcao: KSAT
+projection:
+  kind: lambert
+  parallels:
+    - 33
+    - 45
+  rotate:
+    - -96
+    - -39
+sources:
+  taf: cache://scenarios/summer-thunderstorms-tx/taf-ksat.json
+options:
+  axis_tick_hours: 3
+  show_legend: true
+  source_attribution: wx-engine -- truth-derived synthetic

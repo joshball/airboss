@@ -923,11 +923,15 @@ export {
 	WX_CHART_SVG_WARN_BYTES,
 } from './wx-charts';
 export {
+	chartArtifactFilename,
 	chartSlugToDir,
+	chartSpecFilename,
 	chartsRootDir,
 	referenceFixtureArtifactPath,
 	referenceFixtureChartDir,
 	referenceFixtureChartSlug,
+	WX_CHART_FAMILIES,
+	type WxChartFamily,
 } from './wx-charts-paths';
 export {
 	AIRMET_FAMILIES,
@@ -946,6 +950,7 @@ export {
 	WX_CHART_ARTIFACTS,
 	type WxChartArtifact,
 	type WxScenarioIdInput,
+	wxScenarioArtifactFilename,
 	wxScenarioArtifactPath,
 	wxScenarioBundleDir,
 	wxScenarioChartDir,

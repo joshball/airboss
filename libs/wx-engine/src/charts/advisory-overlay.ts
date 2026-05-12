@@ -8,9 +8,9 @@
  * `renderAirmetSigmet`; the schema is `airmetSigmetSpecSchema` and the
  * spec `type` is `advisory-overlay`.
  *
- * Slug preserves the spike's recorded form (`wx-scenario-<id>-airmet-sigmet`)
- * so the existing chart-spec mirror at
- * `data/charts/wx/wx-scenario-frontal-xc-march-airmet-sigmet/` remains the
+ * Slug preserves the spike's chart-kind suffix (`airmet-sigmet`) under the
+ * ADR 027 PR 3 family path. The chart-spec mirror at
+ * `data/charts/wx/wx-scenarios/frontal-xc-march/airmet-sigmet/` is the
  * regression baseline. Future scenarios mirror the same suffix.
  *
  * Lifted from the spike's pre-retirement

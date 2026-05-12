@@ -1,0 +1,22 @@
+slug: wx-scenarios/marine-stratus-pacific-nw/surface-analysis
+type: surface-analysis
+title: Surface Analysis (truth-derived)
+subtitle: "2026-06-18T16:00:00Z -- Coastal marine layer trapped under a
+  subsidence inversion behind a weak Pacific "
+projection:
+  kind: lambert
+  parallels:
+    - 33
+    - 45
+  rotate:
+    - -96
+    - -39
+extent: conus
+sources:
+  fronts: cache://scenarios/marine-stratus-pacific-nw/surface-analysis.json
+options:
+  station_density: hubs
+  isobar_interval_mb: 4
+  emphasize_every_mb: 8
+  show_h_l_markers: true
+  source_attribution: wx-engine -- truth-derived synthetic

@@ -1,0 +1,16 @@
+slug: reference-fixtures/wx-taf-timeline-kmem-2026-05-10-1720z
+type: taf-timeline
+title: TAF Timeline -- KMEM
+subtitle: '2026-05-10 1720Z TAF -- valid 1018Z to 1124Z (issued by Memphis WFO)'
+extent: time
+sources:
+  taf: cache://taf/kmem-2026-05-10-1720z.json
+options:
+  axis_tick_hours: 3
+  show_legend: true
+  source_attribution: AWC TAF feed (https://aviationweather.gov/api/data/taf)
+stationIcao: KMEM
+projection:
+  kind: lambert
+  parallels: [33, 45]
+  rotate: [-96, -39]

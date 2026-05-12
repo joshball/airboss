@@ -13,8 +13,8 @@
  * `spikes/wx-engine/src/charts/prog-chart.ts` (PR #801). Production lift
  * defaults `leadHours` to 12 (the spike's hard-coded value) and emits
  * the canonical slug suffix `-prog-12hr` so the recorded chart-spec mirror
- * at `data/charts/wx/wx-scenario-frontal-xc-march-prog-12hr/` remains the
- * regression baseline.
+ * at `data/charts/wx/wx-scenarios/frontal-xc-march/prog-12hr/` (per ADR 027
+ * PR 3) remains the regression baseline.
  */
 
 import { wxScenarioChartSlug } from '@ab/constants';

@@ -1,0 +1,17 @@
+slug: reference-fixtures/wx-pirep-plot-grid-2024-05-21-22z
+type: pirep-plot-grid
+title: PIREP Plot
+subtitle: '2024-05-21 22Z (Tue) -- 22 PIREPs across CONUS (hand-traced composite)'
+projection:
+  kind: lambert
+  parallels: [33, 45]
+  rotate: [-96, -39]
+extent: conus
+sources:
+  reports: cache://pirep/2024-05-21-22z.json
+options:
+  collision_min_distance_px: 28
+  collision_max_iterations: 40
+  show_altitude_label: true
+  show_legend: true
+  source_attribution: NWS Aviation Weather Center PIREP feed (hand-traced composite)
