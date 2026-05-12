@@ -305,6 +305,16 @@ export {
 	type NotesSort,
 	type NotesView,
 } from './notes';
+export {
+	BODY_MATCH_TIER,
+	DEPTH_PENALTY_PER_LEVEL,
+	PHRASE_FTS_WORD_COUNT_THRESHOLD,
+	type PaletteTypeTier,
+	TITLE_MATCH_TIER,
+	TITLE_PREFIX_MIN_NEEDLE_LENGTH,
+	TOP_HITS_MAX,
+	TYPE_TIER,
+} from './palette';
 export { PORTS } from './ports';
 export {
 	CUSTOM_TILE,
