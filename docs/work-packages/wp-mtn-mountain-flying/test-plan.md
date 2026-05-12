@@ -21,4 +21,4 @@ status: in-progress
 
 ## Out of scope
 
-- E2E test for the new card. Defer until we have a stable e2e fixture for new-corpus adds; not worth one-off plumbing for a single card.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
