@@ -144,20 +144,6 @@ const isNodeSkeleton = $derived(node !== null && !hasNodeBody);
 		padding: var(--space-lg);
 	}
 
-	.prose :global(p) {
-		margin: 0 0 var(--space-md);
-		line-height: 1.55;
-		color: var(--ink-body);
-	}
-
-	.prose :global(p:last-child) {
-		margin-bottom: 0;
-	}
-
-	.prose :global(a) {
-		color: var(--action-default-hover);
-	}
-
 	.missing-node {
 		background: var(--surface-muted);
 		border: 1px dashed var(--edge-strong);

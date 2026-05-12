@@ -13,7 +13,7 @@
 
 import { WX_SCENARIOS } from '@ab/constants';
 import { cleanup, render, screen, waitFor } from '@testing-library/svelte';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import ScenarioPanel from './ScenarioPanel.svelte';
 
 afterEach(() => {
@@ -24,7 +24,10 @@ afterEach(() => {
 function stubFetchOk(bundle: unknown): void {
 	vi.stubGlobal(
 		'fetch',
-		vi.fn(async () => new Response(JSON.stringify(bundle), { status: 200, headers: { 'Content-Type': 'application/json' } })),
+		vi.fn(
+			async () =>
+				new Response(JSON.stringify(bundle), { status: 200, headers: { 'Content-Type': 'application/json' } }),
+		),
 	);
 }
 

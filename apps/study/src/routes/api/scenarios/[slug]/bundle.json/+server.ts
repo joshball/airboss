@@ -116,9 +116,10 @@ export const GET: RequestHandler = async ({ params, locals }) => {
 		throw error(404, `Scenario bundle not built: ${slug}`);
 	}
 
-	const products = Object.fromEntries(
-		PRODUCT_FILES.map((name, idx) => [name, productValues[idx] ?? null]),
-	) as Record<ProductKey, unknown | null>;
+	const products = Object.fromEntries(PRODUCT_FILES.map((name, idx) => [name, productValues[idx] ?? null])) as Record<
+		ProductKey,
+		unknown | null
+	>;
 
 	const chartSlugs = chartKinds.map((kind) => wxScenarioChartSlug(scenarioId, kind));
 

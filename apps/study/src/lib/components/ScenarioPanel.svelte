@@ -55,10 +55,7 @@ interface BundleShape {
 	chartSlugs: string[];
 }
 
-type LoadState =
-	| { kind: 'loading' }
-	| { kind: 'ready'; bundle: BundleShape }
-	| { kind: 'error'; message: string };
+type LoadState = { kind: 'loading' } | { kind: 'ready'; bundle: BundleShape } | { kind: 'error'; message: string };
 
 let state = $state<LoadState>({ kind: 'loading' });
 
@@ -210,7 +207,7 @@ function formatValidAt(iso: string, timeZone: string): string {
 		margin: var(--space-md) 0;
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
-		background: var(--surface-default);
+		background: var(--surface-panel);
 	}
 
 	.loading {
@@ -342,7 +339,7 @@ function formatValidAt(iso: string, timeZone: string): string {
 		overflow: auto;
 		font-family: var(--font-family-mono);
 		font-size: var(--font-size-xs);
-		background: var(--surface-default);
+		background: var(--surface-panel);
 		padding: var(--space-sm);
 		border-radius: var(--radius-xs);
 	}
