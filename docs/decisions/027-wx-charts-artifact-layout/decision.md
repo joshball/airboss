@@ -25,16 +25,21 @@ Today, 20 wx-charts reference fixtures and 102 wx-engine scenario charts share t
 
 The slug is the externally-visible identifier consumers use via `<CourseStepChart slug="..." />`. Path-shaped slugs (family prefix segments) make the family obvious at the call site and let the listing code walk each family with its own glob.
 
-Inside a wx-scenarios chart directory, filenames carry both segments so a stray file on disk is self-identifying:
+Inside any chart directory, filenames carry the slug tail so a stray file on disk is self-identifying. The rule is symmetric across both production families:
 
 ```text
 data/charts/wx/wx-scenarios/frontal-xc-march/surface-analysis/
   frontal-xc-march-surface-analysis-spec.yaml
   frontal-xc-march-surface-analysis-chart.svg
   frontal-xc-march-surface-analysis-meta.json
+
+data/charts/wx/reference-fixtures/wx-surface-analysis-2024-12-23-12z/
+  wx-surface-analysis-2024-12-23-12z-spec.yaml
+  wx-surface-analysis-2024-12-23-12z-chart.svg
+  wx-surface-analysis-2024-12-23-12z-meta.json
 ```
 
-Reference-fixtures keep the simpler artifact names (`spec.yaml`, `chart.svg`, `meta.json`) inside their slug-named directory because the slug already encodes the chart kind + date.
+Reference-fixtures originally landed in PR 3 with bare artifact names (`spec.yaml`, `chart.svg`, `meta.json`) because the directory already encoded the slug. The follow-on disambiguation pass renamed all 60 files (20 dirs x 3 artifacts) to apply the same rule the wx-scenarios family already used: filename-alone identifies the source slug, so accidental cross-directory copy-paste cannot silently corrupt the wrong fixture.
 
 ### Centralization rule
 

@@ -125,3 +125,11 @@ A single-character change in 33 places:
 ### Lesson
 
 Visual regressions need visual verification at every step. The four prior PRs each ran `bun run check`, each passed full Zod-schema validation, each saved the right files in the right places, and each looked like progress in the chart. None of them inverted a projected point or compared a known coordinate to the canvas pixel it landed on. A 2-line manual sanity check on any chart's projection would have caught this at PR 2.
+
+## Reference-fixture filename disambiguation (follow-on)
+
+A symmetry gap surfaced after PRs #922/#923/#924/#926 settled: wx-scenarios filenames already carried the slug tail prefix (`<scenario-id>-<chart-kind>-{spec.yaml, chart.svg, meta.json}`), but reference-fixtures still used the bare names (`spec.yaml`, `chart.svg`, `meta.json`). One stray spec.yaml file from a reference-fixture dir was not self-identifying.
+
+The follow-on PR applies the same rule to reference-fixtures: 20 directories x 3 artifacts = 60 files renamed via `git mv` to `wx-<chart-kind>-<date-zulu>-{spec.yaml, chart.svg, meta.json}`. `referenceFixtureArtifactPath` + `chartArtifactFilename` in `libs/constants/src/wx-charts-paths.ts` updated to compute the disambiguated filename; `scripts/charts/lib.ts:listChartSlugs` continues to route through the helper and picks up the change for free. `bun run charts list` enumerates 122 slugs and `bun run charts validate --all` runs green on the renamed files.
+
+Centralization-rule payoff: the disambiguation pass was a one-line helper change plus the rename batch. No grep-and-replace across the codebase.
