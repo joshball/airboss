@@ -15,22 +15,22 @@ body_md: |
   the products are noise: you can read every chart correctly and still
   miss the picture.
 
-  The current surface analysis (placeholder slug; renders against live
-  data when the wx-charts library lands the surface analysis renderer):
+  The current surface analysis -- a worked example pulled from the
+  frontal-xc-march scenario truth state:
 
-  :::chart slug="wx-surface-analysis-2024-12-23-12z"
+  :::chart slug="wx-scenarios/frontal-xc-march/surface-analysis"
   :::
 
   Read the chart with the question: where is the air going, and what
   is it carrying with it?
 
-  Now the same date, projected twelve hours forward -- the prog chart.
-  Compare the two side by side. Where has the front moved? Which way
-  did the surface low track? Did the high strengthen or weaken? The
+  Now the same scenario projected twelve hours forward -- the prog
+  chart. Compare the two side by side. Where has the front moved? Which
+  way did the surface low track? Did the high strengthen or weaken? The
   prog answers "where is this going next?" before you ever read a
   TAF:
 
-  :::chart slug="wx-prog-chart-12hr-2024-12-23-12z"
+  :::chart slug="wx-scenarios/frontal-xc-march/prog-12hr"
   :::
 
   A worked-truth example: a March cold front sweeping from KSTL east
@@ -39,10 +39,9 @@ body_md: |
   prompt below is derived from the same canonical atmosphere -- so when
   you ask "why is KSPI gusty?" or "why does KORD's TAF carry an FM at
   21Z?" there is a real answer pinned to the truth state, not a
-  templated explanation. (The briefing-pack panel lands when the
-  course-reader's `:::scenario` directive resolver ships per
-  [CONSUMER-CONTRACT.md](../../../../docs/work-packages/wx-engine/CONSUMER-CONTRACT.md);
-  until then this directive is a no-op placeholder.)
+  templated explanation. The briefing-pack panel below mounts the full
+  scenario bundle per
+  [CONSUMER-CONTRACT.md](../../../../docs/work-packages/wx-engine/CONSUMER-CONTRACT.md):
 
   :::scenario slug="frontal-xc-march"
   :::
