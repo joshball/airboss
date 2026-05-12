@@ -949,4 +949,5 @@ export {
 	wxScenarioBundleDir,
 	wxScenarioChartDir,
 	wxScenarioChartSlug,
+	type WxScenarioIdInput,
 } from './wx-engine-paths';

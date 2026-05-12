@@ -22,6 +22,7 @@
  * geometry.
  */
 
+import { wxScenarioChartSlug } from '@ab/constants';
 import type { TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
 
@@ -31,7 +32,7 @@ const ICING_HAZARD_SIGMA_DEG = 4;
 const FREEZING_LEVEL_DEFAULT_FT = 8000;
 
 export function deriveFreezingLevelChart(truth: TruthModel, scenarioId: string): ChartArtifact {
-	const slug = `wx-scenario-${scenarioId}-freezing-level`;
+	const slug = wxScenarioChartSlug(scenarioId, 'freezing-level');
 	const cacheRelPath = `scenarios/${scenarioId}/freezing-level.json`;
 
 	// 1. Compute the scenario's background freezing level via 1-D linear

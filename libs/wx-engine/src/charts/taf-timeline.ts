@@ -14,6 +14,7 @@
  * `spikes/wx-engine/src/charts/product-charts.ts` (PR #801).
  */
 
+import { wxScenarioChartSlug } from '@ab/constants';
 import type { DerivedTaf } from '../products/types';
 import type { TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
@@ -25,7 +26,7 @@ export function deriveTafTimelineChart(
 	scenarioId: string,
 ): ChartArtifact {
 	const stationLower = stationIcao.toLowerCase();
-	const slug = `wx-scenario-${scenarioId}-taf-${stationLower}`;
+	const slug = wxScenarioChartSlug(scenarioId, `taf-${stationLower}`);
 	const cacheRelPath = `scenarios/${scenarioId}/taf-${stationLower}.json`;
 
 	const sourceJson = {

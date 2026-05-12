@@ -19,13 +19,13 @@
  * METARs the truth engine already emits.
  */
 
-import { FAA_FLIGHT_CATEGORIES } from '@ab/constants';
+import { FAA_FLIGHT_CATEGORIES, wxScenarioChartSlug } from '@ab/constants';
 import type { DerivedMetar } from '../products/types';
 import type { TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
 
 export function deriveCvaChart(truth: TruthModel, metars: DerivedMetar[], scenarioId: string): ChartArtifact {
-	const slug = `wx-scenario-${scenarioId}-cva`;
+	const slug = wxScenarioChartSlug(scenarioId, 'cva');
 	const cacheRelPath = `scenarios/${scenarioId}/cva.json`;
 
 	const observations = metars.map((m) => {

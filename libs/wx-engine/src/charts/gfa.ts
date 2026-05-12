@@ -25,7 +25,7 @@
  * Polygon ids are deterministic so spec.yaml round-trips byte-stable.
  */
 
-import { AIRMET_FAMILIES } from '@ab/constants';
+import { AIRMET_FAMILIES, wxScenarioChartSlug } from '@ab/constants';
 import type { AirmetAdvisory, DerivedTaf } from '../products/types';
 import type { AirMass, TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
@@ -38,7 +38,7 @@ export function deriveGfaChart(
 	_tafs: DerivedTaf[],
 	scenarioId: string,
 ): ChartArtifact {
-	const slug = `wx-scenario-${scenarioId}-gfa`;
+	const slug = wxScenarioChartSlug(scenarioId, 'gfa');
 	const cacheRelPath = `scenarios/${scenarioId}/gfa.json`;
 
 	type GfaPolygon = {

@@ -31,6 +31,18 @@
 
 import type { WxScenario } from './wx-engine';
 
+/**
+ * Argument shape for scenario-id parameters in the helpers below.
+ *
+ * `WxScenario` is the closed enum of six production scenarios. The engine
+ * call chain carries the scenario id as a plain `string` (the truth-model
+ * literal stores it as a string, and helper functions like `getRouteStations`
+ * accept any string). Widening helper inputs to `string` keeps the engine
+ * code path single-typed; the closed enum constraint is enforced at the
+ * scenario-registration boundary, not at every chart-derivation site.
+ */
+export type WxScenarioIdInput = WxScenario | string;
+
 type NodePath = { join: (...parts: string[]) => string };
 
 let cachedPath: NodePath | null = null;
@@ -75,7 +87,7 @@ export type WxChartArtifact = (typeof WX_CHART_ARTIFACT_VALUES)[number];
  * ADR 027 follow-on PR migrates to the nested
  * `wx-scenarios/<scenario-id>/<chart-kind>` shape.
  */
-export function wxScenarioChartSlug(scenarioId: WxScenario, chartKind: string): string {
+export function wxScenarioChartSlug(scenarioId: WxScenarioIdInput, chartKind: string): string {
 	return `wx-scenario-${scenarioId}-${chartKind}`;
 }
 
@@ -86,7 +98,7 @@ export function wxScenarioChartSlug(scenarioId: WxScenario, chartKind: string): 
  * Returns the **current flat layout**:
  *   `<repoRoot>/data/charts/wx/wx-scenario-<scenario-id>-<chart-kind>`
  */
-export function wxScenarioChartDir(repoRoot: string, scenarioId: WxScenario, chartKind: string): string {
+export function wxScenarioChartDir(repoRoot: string, scenarioId: WxScenarioIdInput, chartKind: string): string {
 	// Inline the chart root to avoid a cross-module dep; the literal layout
 	// is intentionally co-located with the slug shape so a future migration
 	// changes both segments in one place.
@@ -101,7 +113,7 @@ export function wxScenarioChartDir(repoRoot: string, scenarioId: WxScenario, cha
  */
 export function wxScenarioArtifactPath(
 	repoRoot: string,
-	scenarioId: WxScenario,
+	scenarioId: WxScenarioIdInput,
 	chartKind: string,
 	artifact: WxChartArtifact,
 ): string {
@@ -118,7 +130,7 @@ export function wxScenarioArtifactPath(
  * `data/charts/wx/`. ADR 027 does not change this path; the chart-artifact
  * tree is reorganized in the follow-on PR but the bundle tree stays put.
  */
-export function wxScenarioBundleDir(repoRoot: string, scenarioId: WxScenario): string {
+export function wxScenarioBundleDir(repoRoot: string, scenarioId: WxScenarioIdInput): string {
 	const p = nodePath();
 	return p.join(repoRoot, 'data', 'wx-scenarios', scenarioId);
 }

@@ -23,6 +23,7 @@
  * Output validates against `convectiveOutlookSpecSchema`.
  */
 
+import { wxScenarioChartSlug } from '@ab/constants';
 import type { TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
 
@@ -35,7 +36,7 @@ const CAPE_BUMP_TO_MRGL = 2000;
 const CAPE_BUMP_LOOKUP_RADIUS_DEG = 3;
 
 export function deriveConvectiveOutlookChart(truth: TruthModel, scenarioId: string): ChartArtifact {
-	const slug = `wx-scenario-${scenarioId}-convective-outlook`;
+	const slug = wxScenarioChartSlug(scenarioId, 'convective-outlook');
 	const cacheRelPath = `scenarios/${scenarioId}/convective-outlook.json`;
 
 	type OutlookPolygon = {

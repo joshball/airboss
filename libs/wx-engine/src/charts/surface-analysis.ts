@@ -19,6 +19,7 @@
  * shape that matches the bundle writer's expectations.
  */
 
+import { wxScenarioChartSlug } from '@ab/constants';
 import type { DerivedMetar } from '../products/types';
 import type { TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
@@ -30,7 +31,7 @@ export function deriveSurfaceAnalysisChart(
 	metars: DerivedMetar[],
 	scenarioId: string,
 ): ChartArtifact {
-	const slug = `wx-scenario-${scenarioId}-surface-analysis`;
+	const slug = wxScenarioChartSlug(scenarioId, 'surface-analysis');
 	const cacheRelPath = `scenarios/${scenarioId}/surface-analysis.json`;
 
 	const centers = truth.synoptic.pressureSystems.map((s) => ({
