@@ -7,16 +7,16 @@ chapter and write JSON; the CLI's compare strategy reads those JSONs and
 diffs against the deterministic TOC parse.
 
 If you want the architectural rationale, see
-`docs/work-packages/section-extraction-prompt-strategy/design.md`. This
+`docs/.archive/design-docs/section-extraction-prompt-strategy/design.md`. This
 doc is the how-to for future agents.
 
 ## When to use which strategy
 
-| Strategy  | When                                                                    |
-| --------- | ----------------------------------------------------------------------- |
-| `toc`     | Default. The handbook's printed Table of Contents is reliable.          |
-| `prompt`  | TOC is unreliable / you want a second opinion. No API key needed.       |
-| `compare` | After a `prompt` run completes; diff TOC vs prompt-flow per chapter.    |
+| Strategy  | When                                                                 |
+| --------- | -------------------------------------------------------------------- |
+| `toc`     | Default. The handbook's printed Table of Contents is reliable.       |
+| `prompt`  | TOC is unreliable / you want a second opinion. No API key needed.    |
+| `compare` | After a `prompt` run completes; diff TOC vs prompt-flow per chapter. |
 
 The default in every shipped handbook is `toc`. The prompt flow is opt-in
 per run via `--strategy prompt`; the YAML is not flipped.
@@ -150,16 +150,16 @@ run is internally consistent.
 
 ## Common failure modes
 
-| Failure                                                  | What to do                                                        |
-| -------------------------------------------------------- | ----------------------------------------------------------------- |
-| Compare: PDF SHA-256 mismatch                            | Re-run `--strategy prompt`; the JSONs were produced against stale bytes. |
-| Compare: missing `_llm_section_tree.json`                | Re-paste `out/_run.md` into a fresh CC session.                   |
-| Compare: missing `_model_self_report.txt`                | Same as missing JSON; sub-agents must write both.                 |
-| Compare: malformed JSON                                  | Re-paste that chapter's prompt manually; re-run compare.          |
-| Sub-agent: sidecar SHA-256 mismatch                      | Re-run `--strategy prompt --force` to regenerate sidecars.        |
-| YAML carries `section_strategy: llm`                     | Rename to `prompt`. The CLI errors with this exact hint.          |
-| YAML carries `per_chapter_section_strategy`              | Remove the field. Per-chapter strategy mixing is no longer supported. |
-| YAML has top-level `llm:` block                          | Rename to `prompt:`. The `chapter_text_max_chars` field is unchanged. |
+| Failure                                     | What to do                                                               |
+| ------------------------------------------- | ------------------------------------------------------------------------ |
+| Compare: PDF SHA-256 mismatch               | Re-run `--strategy prompt`; the JSONs were produced against stale bytes. |
+| Compare: missing `_llm_section_tree.json`   | Re-paste `out/_run.md` into a fresh CC session.                          |
+| Compare: missing `_model_self_report.txt`   | Same as missing JSON; sub-agents must write both.                        |
+| Compare: malformed JSON                     | Re-paste that chapter's prompt manually; re-run compare.                 |
+| Sub-agent: sidecar SHA-256 mismatch         | Re-run `--strategy prompt --force` to regenerate sidecars.               |
+| YAML carries `section_strategy: llm`        | Rename to `prompt`. The CLI errors with this exact hint.                 |
+| YAML carries `per_chapter_section_strategy` | Remove the field. Per-chapter strategy mixing is no longer supported.    |
+| YAML has top-level `llm:` block             | Rename to `prompt:`. The `chapter_text_max_chars` field is unchanged.    |
 
 ## Editing templates
 

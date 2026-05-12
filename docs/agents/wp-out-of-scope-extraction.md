@@ -38,6 +38,24 @@ shipped in scope or rejected outright as part of the spec discussion (no
 revisit trigger). See spec.md for the in-scope contract.
 ```
 
+## Umbrella WPs
+
+A WP marked with `type: umbrella` in its frontmatter is a program-level
+coordination doc -- it lists the sub-packages and their order, but
+ships nothing of its own. Its OUT-OF-SCOPE.md should state that it's
+an umbrella with sub-packages listed nearby; per-item OOS lives in the
+sub-packages. The discipline targets the sub-packages individually.
+
+Sub-packages may be nested inside the umbrella directory (e.g.
+`theme-system-overhaul/01-theme-foundation/`) or live as siblings in
+`docs/work-packages/` (e.g. `whole-doc-promotion` coordinates the
+sibling `wp-*-section-tree` WPs). Either shape is recognised; the
+`type: umbrella` field is the marker, not the directory layout.
+
+The audit script (`bun run track oos-audit`) skips umbrella WPs from
+the "needs extraction" tally because per-item OOS extraction is
+performed on the sub-packages, not on the umbrella.
+
 ## Three Status values, no more
 
 Each extracted item gets exactly one of:

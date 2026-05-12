@@ -150,7 +150,7 @@ Extend handbook configs at `scripts/sources/config/handbooks/<slug>.yaml` (post-
 - [ ] Update `docs/platform/STORAGE.md` -- add chapter PDFs and AIM section files to the cache layout examples.
 - [ ] Update `docs/decisions/020-handbook-edition-and-amendment-policy.md` if cache layout examples reference handbooks.
 - [ ] Update `docs/work-packages/handbook-ingestion-and-reader/spec.md` and tasks.md if cache references need refreshing.
-- [ ] Update `docs/work-packages/section-extraction-prompt-strategy/design.md` -- chapter-PDF mode bypasses the truncation cap.
+- [ ] Update `docs/.archive/design-docs/section-extraction-prompt-strategy/design.md` -- chapter-PDF mode bypasses the truncation cap. (Archived; update only if the design doc is revived.)
 - [ ] Update `docs/work-packages/apply-errata-and-afh-mosaic/design.md` if errata flow references the cache layout.
 - [ ] Update `scripts/README.sources.md` -- new `verify-urls` and `inventory` commands; YAML config location.
 - [ ] Update `tools/handbook-ingest/README.md` -- chapter-PDF mode section.
