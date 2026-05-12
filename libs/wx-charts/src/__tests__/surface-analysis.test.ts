@@ -158,6 +158,28 @@ describe('renderSurfaceAnalysis (Phase A end-to-end)', () => {
 		expect(result.meta.layer_counts['north-america-context']).toBe(2);
 	});
 
+	it('clips the vector-symbology layer to the CONUS union polygon', async () => {
+		// PR follow-on to ADR 027 Option A: scalar-field contours (isobars)
+		// are computed over a grid that extends past lat 49N, so unclipped
+		// output produced the visible "hunchback" arc above the US-Canada
+		// border. The fix is to wrap the vector-symbology layer in an SVG
+		// clipPath keyed to the CONUS union polygon.
+		const basemapJson = readFileSync(BASEMAP_PATH, 'utf8');
+		const fixtureJson = readFileSync(FIXTURE_SOURCE_PATH, 'utf8');
+
+		const result = await renderSurfaceAnalysis({
+			spec: SPEC,
+			sources: { fronts: fixtureJson, basemap: basemapJson },
+			basemapPath: BASEMAP_PATH,
+			libraryVersion: '@ab/wx-charts@0.1.0-test',
+		});
+
+		// clipPath element exists with a chart-namespaced id.
+		expect(result.svg).toMatch(/<clipPath id="conus-clip-[A-Za-z0-9_-]+">/);
+		// The vector-symbology layer band references the clip path.
+		expect(result.svg).toMatch(/<g clip-path="url\(#conus-clip-[A-Za-z0-9_-]+\)">/);
+	});
+
 	it('renders an empty NORTH_AMERICA_CONTEXT layer band when context TopoJSON is omitted', async () => {
 		const basemapJson = readFileSync(BASEMAP_PATH, 'utf8');
 		const fixtureJson = readFileSync(FIXTURE_SOURCE_PATH, 'utf8');

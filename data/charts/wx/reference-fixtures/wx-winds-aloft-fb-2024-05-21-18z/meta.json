@@ -1,9 +1,9 @@
 {
   "slug": "reference-fixtures/wx-winds-aloft-fb-2024-05-21-18z",
   "type": "winds-aloft-fb",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:42:31.637Z",
-  "content_hash": "sha256:5c31541c591e1f2cade54021e20028d41cbd6e8e77ea9b7a4b83cae7171ed1d6",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:37:41.454Z",
+  "content_hash": "sha256:6a83e7f359d9d95971474169dde5d3d95d3b3ce0e498a2ac4564fe78a69043f7",
   "source_hashes": {
     "bulletin": "b0f3dfb25f3dc81b821b5e207ccd3cdfe4db58fbb0edc40c2f33cf868564161a"
   },

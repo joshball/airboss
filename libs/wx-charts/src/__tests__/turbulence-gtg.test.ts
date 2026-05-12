@@ -156,6 +156,18 @@ describe('renderTurbulenceGtg (Phase E end-to-end)', () => {
 		expect(a.svg).toBe(b.svg);
 	});
 
+	it('clips filled severity tiers + isopleths to the CONUS union polygon', async () => {
+		const basemapJson = readFileSync(BASEMAP_PATH, 'utf8');
+		const result = await renderTurbulenceGtg({
+			spec: SPEC,
+			sources: { intensity_grid: JSON.stringify(FIXTURE), basemap: basemapJson },
+			basemapPath: BASEMAP_PATH,
+			libraryVersion: '@ab/wx-charts@0.1.0-test',
+		});
+		expect(result.svg).toMatch(/<clipPath id="conus-clip-[A-Za-z0-9_-]+">/);
+		expect(result.svg).toMatch(/<g clip-path="url\(#conus-clip-[A-Za-z0-9_-]+\)">/);
+	});
+
 	it('rejects missing required source', async () => {
 		const basemapJson = readFileSync(BASEMAP_PATH, 'utf8');
 		await expect(

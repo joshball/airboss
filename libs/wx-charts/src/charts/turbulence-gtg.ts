@@ -37,6 +37,7 @@ import { buildChrome } from '../chrome';
 import { renderGraticule } from '../graticule';
 import { composeChart, type LayerBandMap } from '../layers';
 import { CHART_MARGIN, type FitTarget, lambertProjection, SVG_HEIGHT, SVG_WIDTH } from '../projection';
+import { buildConusClipPath, sanitizeClipId } from '../symbology/clip';
 import type { ChartRenderInput, ChartRenderResult, ChartSpec } from '../types';
 
 // ------------------------------------------------------------------
@@ -329,7 +330,14 @@ export async function renderTurbulenceGtg(input: ChartRenderInput<TurbulenceGtgS
 	// Filled severity tiers go in vector-symbology so they sit above the
 	// basemap-borders band but below any future point overlays. Re-stroke
 	// is the canonical "borders re-drawn over fill at low opacity" band.
-	bands[LAYER_BANDS.VECTOR_SYMBOLOGY] = `${tierResult.svg}\n${isoplethFragment}`;
+	// Clip both the filled tiers and the isopleths to the CONUS union
+	// polygon so contours don't bleed past the country outline.
+	const clip = buildConusClipPath({
+		id: sanitizeClipId(`conus-clip-${input.spec.slug}`),
+		conusPolygon: basemap.conusPolygon,
+		projection,
+	});
+	bands[LAYER_BANDS.VECTOR_SYMBOLOGY] = `${clip.defs}<g ${clip.clipAttr}>${tierResult.svg}\n${isoplethFragment}</g>`;
 	bands[LAYER_BANDS.BASEMAP_RE_STROKE] =
 		`<path d="${interiorPath ?? ''}" fill="none" stroke="#bdb9ac" stroke-width="0.4" stroke-opacity="0.6" />
 <path d="${outerPath ?? ''}" fill="none" stroke="#3d3a32" stroke-width="1.0" stroke-opacity="0.7" />`;

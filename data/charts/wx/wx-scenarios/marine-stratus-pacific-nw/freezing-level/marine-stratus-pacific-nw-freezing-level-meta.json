@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/marine-stratus-pacific-nw/freezing-level",
   "type": "freezing-level",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:50:47.804Z",
-  "content_hash": "sha256:307dc22a045b6c3c6204038d2836496adef2e53fa84200346b9e068a63fdbc53",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:37:42.802Z",
+  "content_hash": "sha256:5165405bae2185c27b47939cb3241be89004a6eb14b7f1ff02b9701163e8f0e0",
   "source_hashes": {
     "field": "d469d3e2e63f9e916123534ecf41e7cd687b1de5815b911a20fba910f92dcddb"
   },
@@ -15,5 +15,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 522122
+  "svg_bytes": 588196
 }

@@ -38,6 +38,7 @@ import { renderGraticule } from '../graticule';
 import { composeChart, type LayerBandMap } from '../layers';
 import { CHART_MARGIN, type FitTarget, lambertProjection, SVG_HEIGHT, SVG_WIDTH } from '../projection';
 import { CIP_PROBABILITY_BANDS, CIP_SEVERITY_TIERS } from '../raster/palettes';
+import { buildConusClipPath, sanitizeClipId } from '../symbology/clip';
 import { renderFilledScalarBands, renderScalarContours } from '../symbology/contours';
 import type { ChartRenderInput, ChartRenderResult, ChartSpec } from '../types';
 
@@ -329,6 +330,14 @@ export async function renderCipFipShared(
 		`<path d="${interiorPath ?? ''}" fill="none" stroke="#bdb9ac" stroke-width="0.6" />
 <path d="${outerPath ?? ''}" fill="none" stroke="#3d3a32" stroke-width="1.2" />`;
 
+	// CONUS clip path: shared between filled probability bands and the
+	// severity contour lines so neither bleeds past the country outline.
+	const clip = buildConusClipPath({
+		id: sanitizeClipId(`conus-clip-${input.spec.slug}`),
+		conusPolygon: basemap.conusPolygon,
+		projection,
+	});
+
 	// Filled probability bands as the raster overlay (these are vector
 	// fills synthesized from a scalar grid, so they live in the raster
 	// overlay band -- below borders re-stroke, above basemap fill).
@@ -340,7 +349,7 @@ export async function renderCipFipShared(
 		gridToLonLat: makeGridToLonLat(probability.grid),
 		projection,
 	});
-	bands[LAYER_BANDS.RASTER_OVERLAY] = filled.svg;
+	bands[LAYER_BANDS.RASTER_OVERLAY] = `${clip.defs}<g ${clip.clipAttr}>${filled.svg}</g>`;
 
 	// Vector symbology: severity contour lines (optional).
 	let contourCount = 0;
@@ -359,7 +368,7 @@ export async function renderCipFipShared(
 			emphasizedStrokeWidth: 1.4,
 			emphasizeEvery: 0,
 		});
-		bands[LAYER_BANDS.VECTOR_SYMBOLOGY] = contourResult.svg;
+		bands[LAYER_BANDS.VECTOR_SYMBOLOGY] = `<g ${clip.clipAttr}>${contourResult.svg}</g>`;
 		contourCount = contourResult.contourCount;
 	} else {
 		bands[LAYER_BANDS.VECTOR_SYMBOLOGY] = '';

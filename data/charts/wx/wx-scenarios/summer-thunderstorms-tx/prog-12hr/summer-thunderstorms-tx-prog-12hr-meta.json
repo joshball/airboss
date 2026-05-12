@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/summer-thunderstorms-tx/prog-12hr",
   "type": "prog-chart",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:50:57.722Z",
-  "content_hash": "sha256:f2a2508673d9eb5892566292eadd0fab643bb03e90ff9aad4b2ab742c669be1d",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:37:44.376Z",
+  "content_hash": "sha256:4d4789a5eed8c501670fe71c6a86bc9cb204fbeb6274279968a319538fe0e043",
   "source_hashes": {
     "forecast": "f3955bbf47ed2ae2e0aa2700cf9768da3853fabebea2988496f4e2a947fb91ed"
   },
@@ -16,5 +16,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 500838
+  "svg_bytes": 566808
 }

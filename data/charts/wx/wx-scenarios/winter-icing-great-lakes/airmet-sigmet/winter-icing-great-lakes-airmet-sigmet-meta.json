@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/winter-icing-great-lakes/airmet-sigmet",
   "type": "advisory-overlay",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:50:59.414Z",
-  "content_hash": "sha256:8d820b2fdef60c2c11461a7dad00764596bb347594ba543181c3289a29900ae4",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:37:44.506Z",
+  "content_hash": "sha256:e2ae700a04f93bd4cc2bb550887491d695ddeb5b1a1d3c8e9d1640fa971fea3b",
   "source_hashes": {
     "advisories": "a21d170e6cc10ce6451fd06d973333c105f414ee5c0e780287842e5205009a64"
   },

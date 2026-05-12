@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/frontal-xc-march/freezing-level",
   "type": "freezing-level",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:50:43.811Z",
-  "content_hash": "sha256:53556f4871fff7f0e9ea2c4ce67fc73fe2291416b147652bdb6617772055ab57",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:37:42.176Z",
+  "content_hash": "sha256:eaaf5a56104ddc07c7c21ae611305502cba269e14f2f016819ab006541fa8c91",
   "source_hashes": {
     "field": "0b1c749430369acb460b79c983bc9110d1b5fbacfc1d73d2adb94667e47d411c"
   },
@@ -15,5 +15,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 513102
+  "svg_bytes": 579149
 }

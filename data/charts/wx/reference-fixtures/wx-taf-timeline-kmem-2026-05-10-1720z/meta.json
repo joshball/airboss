@@ -1,9 +1,9 @@
 {
   "slug": "reference-fixtures/wx-taf-timeline-kmem-2026-05-10-1720z",
   "type": "taf-timeline",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:41:57.692Z",
-  "content_hash": "sha256:5a7c87bfd24aa46d37322d5a29acb1d335df6c051d2497c9d5ba8e5d92c57213",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:37:41.280Z",
+  "content_hash": "sha256:40f4f4e14838bfec07f15a4b6aeec0a15b57f09ac9434efd74dcab96413a951e",
   "source_hashes": {
     "taf": "554e41c2ce4b18aa7675de3f1e10387dfc3c1aee1b5c771bda5b5faf5f7736fe"
   },

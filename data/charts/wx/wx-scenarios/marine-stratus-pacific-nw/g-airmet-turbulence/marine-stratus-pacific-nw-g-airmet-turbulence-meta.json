@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/marine-stratus-pacific-nw/g-airmet-turbulence",
   "type": "turbulence-gairmet",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:50:48.270Z",
-  "content_hash": "sha256:385e7191ed38836f9598a85fd8cb3f20366a334a11491c8172ba19e04ce911e6",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:37:42.907Z",
+  "content_hash": "sha256:e50c4d33b998b3bd66e64a65dcff1e18cb3bc2bd7291b44352671900e0b95f86",
   "source_hashes": {
     "areas": "9ab1d3f9331e54c83a52292aa171c1b6154ad4ab13a1f936ac1539d3fa7ac3ad"
   },

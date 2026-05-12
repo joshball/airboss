@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/frontal-xc-march/gfa",
   "type": "gfa",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:50:44.656Z",
-  "content_hash": "sha256:9888def317a568401cd910ae2b00d161d5c3e751ce10a2b1710ca1626e16c7b7",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:37:42.332Z",
+  "content_hash": "sha256:aa9bd4c8009b9269bdbf312e178945ddb909c462e8482a225b71cd212e524cbd",
   "source_hashes": {
     "polygons": "cad7f5a431c8594892f83f74d764bfed215679da93feba6bce156f18ff6ca823"
   },

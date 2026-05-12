@@ -1,9 +1,9 @@
 {
   "slug": "reference-fixtures/wx-surface-analysis-2024-12-23-12z",
   "type": "surface-analysis",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:41:46.395Z",
-  "content_hash": "sha256:e3f6ca5081e76de1b319a1b7856fd25418fcc653896036aa40fe783832d3ba80",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:36:42.005Z",
+  "content_hash": "sha256:0c5cc54840e380a3c46ee2bea350aa80a536e9f26b24ea5e7e2eaf5e5b39f4fa",
   "source_hashes": {
     "fronts": "a103c490a33a6f0f49d6aeaf889a2494472185487c97691f00a0b7b5779fb81d"
   },
@@ -15,5 +15,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 563824
+  "svg_bytes": 629808
 }

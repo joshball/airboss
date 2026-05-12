@@ -22,7 +22,7 @@
  */
 
 import type { Feature, FeatureCollection, MultiLineString, MultiPolygon, Polygon } from 'geojson';
-import { feature, mesh } from 'topojson-client';
+import { feature, merge, mesh } from 'topojson-client';
 import type { GeometryCollection, Topology } from 'topojson-specification';
 
 /** FIPS state codes that are NOT in CONUS. */
@@ -58,6 +58,16 @@ export interface BasemapData {
 	 * AK/HI/PR pieces the us-atlas `nation` file otherwise carries.
 	 */
 	conusOuter: Feature<MultiLineString>;
+	/**
+	 * Closed CONUS union polygon: the topojson `merge` of every CONUS
+	 * state geometry, wrapped as a single `Feature<MultiPolygon>`. Use as
+	 * an SVG `clip-path` source so scalar-field symbology (isobars,
+	 * filled bands, severity contours) does not bleed past the country
+	 * outline into Canada / Mexico. `conusOuter` is the same shape as a
+	 * polyline (border re-stroke), but `clip-path` requires a closed
+	 * polygon; this is that closed polygon.
+	 */
+	conusPolygon: Feature<MultiPolygon>;
 	/**
 	 * Surrounding-country context outlines (Canada + Mexico). Empty when
 	 * no context TopoJSON is supplied. Drawn below the CONUS basemap fill
@@ -171,6 +181,21 @@ export function loadConusBasemapFromString(
 		properties: {},
 	};
 
+	// CONUS union polygon: topojson `merge` returns a single GeoJSON
+	// MultiPolygon whose outer ring is the union of every CONUS state
+	// polygon. Used downstream as the source for an SVG clipPath that
+	// keeps scalar-field symbology inside the country outline. NOTE:
+	// `merge` at runtime calls `objects.forEach(...)`; despite the
+	// typedef accepting `GeometryCollection`, only the geometry array
+	// satisfies that, so unwrap `.geometries` here. We cast to the
+	// array shape `merge`'s declared signature accepts.
+	const conusPolygonGeom = merge(statesTopo, conusGeometries as unknown as Parameters<typeof merge>[1]);
+	const conusPolygon: Feature<MultiPolygon> = {
+		type: 'Feature',
+		geometry: conusPolygonGeom,
+		properties: {},
+	};
+
 	let nation: Feature<Polygon | MultiPolygon> | null = null;
 	if (nationTopoJson !== null) {
 		const nationTopo = JSON.parse(nationTopoJson) as Topology;
@@ -206,7 +231,7 @@ export function loadConusBasemapFromString(
 		>;
 	}
 
-	return { states, nation, stateBordersInterior, conusOuter, northAmericaContext };
+	return { states, nation, stateBordersInterior, conusOuter, conusPolygon, northAmericaContext };
 }
 
 /**

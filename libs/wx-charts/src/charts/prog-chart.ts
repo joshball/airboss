@@ -30,6 +30,7 @@ import { renderGraticule } from '../graticule';
 import { composeChart, type LayerBandMap } from '../layers';
 import { CHART_MARGIN, type FitTarget, lambertProjection, SVG_HEIGHT, SVG_WIDTH } from '../projection';
 import { PROG_HAZARD_PALETTE, type ProgHazardKind } from '../raster/palettes';
+import { buildConusClipPath, sanitizeClipId } from '../symbology/clip';
 import { renderScalarContours } from '../symbology/contours';
 import { type FrontDef, type PipSide, renderFront } from '../symbology/fronts';
 import { type PolygonOverlay, renderPolygonOverlays } from '../symbology/polygons';
@@ -349,7 +350,16 @@ export async function renderProgChart(input: ChartRenderInput<ProgChartSpec>): P
 		};
 		return renderFront(def);
 	});
-	bands[LAYER_BANDS.VECTOR_SYMBOLOGY] = `${contourResult.svg}\n${frontFragments.join('\n')}`;
+	// Clip the vector-symbology band to the CONUS union polygon (see
+	// surface-analysis for full rationale; same fix for the SIGWX prog
+	// substrate).
+	const clip = buildConusClipPath({
+		id: sanitizeClipId(`conus-clip-${input.spec.slug}`),
+		conusPolygon: basemap.conusPolygon,
+		projection,
+	});
+	bands[LAYER_BANDS.VECTOR_SYMBOLOGY] =
+		`${clip.defs}<g ${clip.clipAttr}>${contourResult.svg}\n${frontFragments.join('\n')}</g>`;
 
 	// Point symbology: pressure centers (H / L markers).
 	const centerFragments = opts.show_h_l_markers

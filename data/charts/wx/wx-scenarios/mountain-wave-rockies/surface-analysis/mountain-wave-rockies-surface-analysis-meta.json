@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/mountain-wave-rockies/surface-analysis",
   "type": "surface-analysis",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:50:53.709Z",
-  "content_hash": "sha256:8c74aef52819e74401e30de7f456de98fec987a27c297cc8e32c73cb8519a5cc",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:37:43.872Z",
+  "content_hash": "sha256:b923ed041adf39734fda50d3a5926f3487af2bad8d433f4b596d412879821f71",
   "source_hashes": {
     "fronts": "48f997fbb37ebb5a6347ab78ef27421e21850916e6dc52a5c022fc854fe70583"
   },
@@ -15,5 +15,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 504299
+  "svg_bytes": 570279
 }

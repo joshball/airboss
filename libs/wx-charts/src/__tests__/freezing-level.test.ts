@@ -117,6 +117,22 @@ describe('renderFreezingLevel (Phase E end-to-end)', () => {
 		).rejects.toThrow(/field/);
 	});
 
+	it('clips both filled altitude bands and contour lines to the CONUS union polygon', async () => {
+		const basemapJson = readFileSync(BASEMAP_PATH, 'utf8');
+		const result = await renderFreezingLevel({
+			spec: SPEC,
+			sources: { field: JSON.stringify(FIXTURE), basemap: basemapJson },
+			basemapPath: BASEMAP_PATH,
+			libraryVersion: '@ab/wx-charts@0.1.0-test',
+		});
+		// clipPath element exists with a chart-namespaced id.
+		expect(result.svg).toMatch(/<clipPath id="conus-clip-[A-Za-z0-9_-]+">/);
+		// At least two clip-path references: raster-overlay (filled bands)
+		// + vector-symbology (contour lines).
+		const refs = result.svg.match(/<g clip-path="url\(#conus-clip-[A-Za-z0-9_-]+\)">/g) ?? [];
+		expect(refs.length).toBeGreaterThanOrEqual(2);
+	});
+
 	it('hides contour lines when show_contours is false', async () => {
 		const basemapJson = readFileSync(BASEMAP_PATH, 'utf8');
 		const result = await renderFreezingLevel({

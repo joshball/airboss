@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/summer-thunderstorms-tx/convective-outlook",
   "type": "convective-outlook",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:50:55.329Z",
-  "content_hash": "sha256:13d165b80bcb19e63af3b5660e0188482b917aaadcd67e4569c84ae7f29fb541",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:37:44.037Z",
+  "content_hash": "sha256:e4c2eeee9300ca34c17737a53f335766c6250c7bc768f916d4552a4bba22b051",
   "source_hashes": {
     "outlook": "22ef1fa2c2dfedfb6114438f8365e3b50e1b0017080f42b392303c81e3f65153"
   },

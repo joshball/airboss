@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/dense-fog-radiation-central-valley/g-airmet-icing",
   "type": "icing-gairmet",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:50:39.623Z",
-  "content_hash": "sha256:37ba3af224a702a92a4921788afd7952c52bba238e644824e872a5b81454d4b5",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:37:41.679Z",
+  "content_hash": "sha256:5a12ff4358eeabd30a5388e61085eb321051e350cf4aecd9423480be2b1e860e",
   "source_hashes": {
     "areas": "f79a94ff972182c71a8a8d2b298f2544afb3cd034d781a665f3c1e20ee435d11"
   },

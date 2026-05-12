@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/marine-stratus-pacific-nw/convective-outlook",
   "type": "convective-outlook",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:50:47.336Z",
-  "content_hash": "sha256:f7ab795cdc4a6842d95c92a8bf8f01e540be50e7e14caa7ea87a12c492165454",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:37:42.700Z",
+  "content_hash": "sha256:76553dea460641829affd7b1ebe1e880793060bda9ad30f76895ee231b86c2cb",
   "source_hashes": {
     "outlook": "84206813c77af7b9ad6a4d4f9f3150fbd72eeed375abf2fe140be902a71bc750"
   },

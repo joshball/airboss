@@ -145,6 +145,20 @@ describe('renderIcingCip (Phase E end-to-end)', () => {
 		).rejects.toThrow(/field/);
 	});
 
+	it('clips filled probability bands + severity contours to the CONUS union polygon', async () => {
+		const basemapJson = readFileSync(BASEMAP_PATH, 'utf8');
+		const result = await renderIcingCip({
+			spec: SPEC,
+			sources: { field: JSON.stringify(FIXTURE), basemap: basemapJson },
+			basemapPath: BASEMAP_PATH,
+			libraryVersion: '@ab/wx-charts@0.1.0-test',
+		});
+		expect(result.svg).toMatch(/<clipPath id="conus-clip-[A-Za-z0-9_-]+">/);
+		const refs = result.svg.match(/<g clip-path="url\(#conus-clip-[A-Za-z0-9_-]+\)">/g) ?? [];
+		// raster-overlay band + vector-symbology band -> two clip refs.
+		expect(refs.length).toBeGreaterThanOrEqual(2);
+	});
+
 	it('hides severity contours when show_severity_contours is false', async () => {
 		const basemapJson = readFileSync(BASEMAP_PATH, 'utf8');
 		const result = await renderIcingCip({

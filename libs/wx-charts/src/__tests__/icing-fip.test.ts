@@ -55,6 +55,19 @@ describe('renderIcingFip (Phase E end-to-end)', () => {
 		expect(result.meta.layer_counts['raster-overlay']).toBeGreaterThan(0);
 	});
 
+	it('clips filled probability bands + severity contours to the CONUS union polygon', async () => {
+		const basemapJson = readFileSync(BASEMAP_PATH, 'utf8');
+		const result = await renderIcingFip({
+			spec: SPEC,
+			sources: { field: JSON.stringify(FIXTURE), basemap: basemapJson },
+			basemapPath: BASEMAP_PATH,
+			libraryVersion: '@ab/wx-charts@0.1.0-test',
+		});
+		expect(result.svg).toMatch(/<clipPath id="conus-clip-[A-Za-z0-9_-]+">/);
+		const refs = result.svg.match(/<g clip-path="url\(#conus-clip-[A-Za-z0-9_-]+\)">/g) ?? [];
+		expect(refs.length).toBeGreaterThanOrEqual(2);
+	});
+
 	it('is deterministic: render twice -> same SVG bytes', async () => {
 		const basemapJson = readFileSync(BASEMAP_PATH, 'utf8');
 		const input = {

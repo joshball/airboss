@@ -1,9 +1,9 @@
 {
   "slug": "reference-fixtures/wx-cva-2024-01-13-12z",
   "type": "cva",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:39:16.791Z",
-  "content_hash": "sha256:8fbbc6510a41f47276f7729d42e66f2cb0f95111a863908aca54ac8e19260e21",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:37:38.361Z",
+  "content_hash": "sha256:1cb7e555fecc3f9df106138fa07df4e1d9e697385e58f04f0e55646f2ca27b9b",
   "source_hashes": {
     "observations": "7877f9c1b1163457795071e97463778caa42ee9a30d365dd5fcd976108f0cb10"
   },

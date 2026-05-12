@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/mountain-wave-rockies/g-airmet-icing",
   "type": "icing-gairmet",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:50:52.101Z",
-  "content_hash": "sha256:f547ae44a9c541ed246fcf106776afafc434f33bb2e6b271dc5e27773aa1651b",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:37:43.607Z",
+  "content_hash": "sha256:c22d4d66e2328179db015b17312be401ffb07dcbb4f3b14299184f5fd2010ee9",
   "source_hashes": {
     "areas": "7a8c56a08557263dc0c8ff574c80cd9cb7bb82b046c2f9ed65e154077a60e72f"
   },

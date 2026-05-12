@@ -1,9 +1,9 @@
 {
   "slug": "reference-fixtures/wx-turbulence-gtg-2024-12-23-12z",
   "type": "turbulence-gtg",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:42:20.382Z",
-  "content_hash": "sha256:d0e4eca7d8a02851ca554ae98e70793d7a43551ec225d4b6a2ed98c044ed16dd",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:37:41.404Z",
+  "content_hash": "sha256:72cd6892c0d09e940257527769282eba38d4f6698382de425750a6bfbdd6ea53",
   "source_hashes": {
     "intensity_grid": "6b2e238e42f86d99c8c8506217c9355931acbb6000c12f47eb5627a1eb192886"
   },
@@ -14,5 +14,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 1683914
+  "svg_bytes": 1749894
 }

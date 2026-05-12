@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/dense-fog-radiation-central-valley/taf-kmod",
   "type": "taf-timeline",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:50:42.076Z",
-  "content_hash": "sha256:0caafec96afdcccaa8a1558b6e3d18cb150c90ff2e67e8d6a2778dca40c7043a",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:37:41.962Z",
+  "content_hash": "sha256:b8da0e9e8bf2efcbcf708bcd01dc008320557ef795c8d4bf2291a38e1cfc805f",
   "source_hashes": {
     "taf": "04253ded2cf285828fe9c2c38e1fba2ffe7ff05b4d31ebbc4a334e351ec79fae"
   },

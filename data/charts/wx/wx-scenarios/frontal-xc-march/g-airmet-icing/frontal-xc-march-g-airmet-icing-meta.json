@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/frontal-xc-march/g-airmet-icing",
   "type": "icing-gairmet",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:50:44.109Z",
-  "content_hash": "sha256:16c353d3c2a93f60287a81271ef2105a51f67f179981547572072ee0cd4a96f6",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:37:42.225Z",
+  "content_hash": "sha256:45e7c381135742e31da9210e9b173e0769e29e3471bfe449d63dba8b13edb85d",
   "source_hashes": {
     "areas": "7519ea5e992bba0e1010927c8cca8714928d0211132c8124741b8226d3ba8628"
   },
