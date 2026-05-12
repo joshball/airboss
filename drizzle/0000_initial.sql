@@ -86,6 +86,9 @@ CREATE TABLE "study"."card" (
 	"node_id" text,
 	"is_editable" boolean DEFAULT true NOT NULL,
 	"status" text DEFAULT 'active' NOT NULL,
+	"question_tier" text,
+	"source_authority" jsonb,
+	"acs_codes" text[],
 	"seed_origin" text,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
@@ -93,7 +96,10 @@ CREATE TABLE "study"."card" (
 	CONSTRAINT "card_type_check" CHECK ("card_type" IN ('basic', 'cloze', 'regulation', 'memory_item')),
 	CONSTRAINT "card_kind_check" CHECK ("kind" IN ('recall', 'calculation')),
 	CONSTRAINT "card_source_type_check" CHECK ("source_type" IN ('personal', 'course', 'product', 'imported')),
-	CONSTRAINT "card_status_check" CHECK ("status" IN ('active', 'suspended', 'archived'))
+	CONSTRAINT "card_status_check" CHECK ("status" IN ('active', 'suspended', 'archived')),
+	CONSTRAINT "card_question_tier_check" CHECK ("question_tier" IS NULL OR "question_tier" IN ('faa-written', 'cfi-essential', 'both')),
+	CONSTRAINT "card_source_authority_array_check" CHECK ("source_authority" IS NULL OR jsonb_typeof("source_authority") = 'array'),
+	CONSTRAINT "card_source_authority_elements_check" CHECK ("source_authority" IS NULL OR NOT ("source_authority" @? '$[*] ? (@.type() != "object" || !exists(@.kind) || @.kind.type() != "string" || !(@.kind == "cfr" || @.kind == "ac" || @.kind == "aim" || @.kind == "phak" || @.kind == "afh" || @.kind == "other") || !exists(@.cite) || @.cite.type() != "string" || !(@.cite like_regex "^.+$"))'::jsonpath))
 );
 --> statement-breakpoint
 CREATE TABLE "study"."card_draft" (

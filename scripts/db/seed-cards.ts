@@ -24,40 +24,19 @@ import { readFileSync } from 'node:fs';
 import { relative } from 'node:path';
 import { bauthUser } from '@ab/auth/schema';
 import { card, createCard } from '@ab/bc-study/server';
-import {
-	CARD_KIND_VALUES,
-	CARD_KINDS,
-	CARD_TYPES,
-	type CardKind,
-	CONTENT_SOURCES,
-	DEV_DB_HOST_PATTERN,
-	DEV_DB_URL,
-	ENV_VARS,
-} from '@ab/constants';
+import { CONTENT_SOURCES, DEV_DB_HOST_PATTERN, DEV_DB_URL, ENV_VARS } from '@ab/constants';
 import { and, eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { parse as parseYaml } from 'yaml';
+// Pure parser is in its own module so unit tests can exercise it
+// without pulling in this file's bun-only Glob walk + DB-touching
+// `@ab/bc-study/server` import chain.
+import { extractCardsFromBody, type ParsedCard } from './seed-cards-parser';
 
 const REPO_ROOT = new URL('../../', import.meta.url).pathname;
 const NODE_GLOB = 'course/knowledge/**/node.md';
 const FRONTMATTER_DELIM = '---';
-const YAML_CARDS_FENCE = /^```yaml-cards\s*$/;
-const FENCE_CLOSE = /^```\s*$/;
-
-interface ParsedCard {
-	front: string;
-	back: string;
-	cardType: string;
-	/**
-	 * Knowledge-axis kind (recall vs calculation). yaml-cards authors that
-	 * leave the field unset land in `recall`; explicit `kind: calculation`
-	 * flips a card into the calculation partition for mastery aggregation
-	 * (evidence-kind-data-layer WP).
-	 */
-	kind: CardKind;
-	tags: string[];
-}
 
 interface NodeWithCards {
 	relPath: string;
@@ -73,9 +52,6 @@ export interface SeedCardsResult {
 	cardsRemoved: number;
 }
 
-const cardTypeSet = new Set<string>(Object.values(CARD_TYPES));
-const cardKindSet = new Set<string>(CARD_KIND_VALUES);
-
 function splitFrontmatter(text: string): { yaml: string; body: string } | null {
 	if (!text.startsWith(`${FRONTMATTER_DELIM}\n`)) return null;
 	const end = text.indexOf(`\n${FRONTMATTER_DELIM}`, FRONTMATTER_DELIM.length + 1);
@@ -84,60 +60,6 @@ function splitFrontmatter(text: string): { yaml: string; body: string } | null {
 	const bodyStart = end + `\n${FRONTMATTER_DELIM}`.length;
 	const body = text.slice(bodyStart).replace(/^\r?\n/, '');
 	return { yaml, body };
-}
-
-function extractCardsFromBody(body: string, relPath: string): ParsedCard[] {
-	const lines = body.split(/\r?\n/);
-	const cards: ParsedCard[] = [];
-	let i = 0;
-	while (i < lines.length) {
-		if (!YAML_CARDS_FENCE.test(lines[i])) {
-			i++;
-			continue;
-		}
-		const start = i + 1;
-		let end = start;
-		while (end < lines.length && !FENCE_CLOSE.test(lines[end])) end++;
-		const block = lines.slice(start, end).join('\n');
-		const parsed = parseYaml(block);
-		if (!Array.isArray(parsed)) {
-			throw new Error(`${relPath}: yaml-cards block did not parse to an array`);
-		}
-		for (let j = 0; j < parsed.length; j++) {
-			const entry = parsed[j];
-			if (typeof entry !== 'object' || entry === null) {
-				throw new Error(`${relPath}: yaml-cards[${j}] is not an object`);
-			}
-			const rec = entry as Record<string, unknown>;
-			if (typeof rec.front !== 'string' || rec.front.trim() === '') {
-				throw new Error(`${relPath}: yaml-cards[${j}].front is required`);
-			}
-			if (typeof rec.back !== 'string' || rec.back.trim() === '') {
-				throw new Error(`${relPath}: yaml-cards[${j}].back is required`);
-			}
-			const cardType = typeof rec.cardType === 'string' ? rec.cardType : CARD_TYPES.BASIC;
-			if (!cardTypeSet.has(cardType)) {
-				throw new Error(`${relPath}: yaml-cards[${j}].cardType '${cardType}' is not in CARD_TYPES`);
-			}
-			// yaml-cards `kind:` is optional; default to recall (the dominant
-			// knowledge axis on PPL-flavored content). Explicit `kind: calculation`
-			// flips the card into the calculation partition.
-			const rawKind = typeof rec.kind === 'string' ? rec.kind : CARD_KINDS.RECALL;
-			if (!cardKindSet.has(rawKind)) {
-				throw new Error(`${relPath}: yaml-cards[${j}].kind '${rawKind}' is not in CARD_KIND_VALUES`);
-			}
-			const kind = rawKind as CardKind;
-			const tags: string[] = [];
-			if (Array.isArray(rec.tags)) {
-				for (const tag of rec.tags) {
-					if (typeof tag === 'string' && tag.trim() !== '') tags.push(tag.trim());
-				}
-			}
-			cards.push({ front: rec.front.trim(), back: rec.back.trim(), cardType, kind, tags });
-		}
-		i = end + 1;
-	}
-	return cards;
 }
 
 function collectNodesWithCards(): NodeWithCards[] {
@@ -208,6 +130,9 @@ export async function seedCardsForUser(userEmail: string): Promise<SeedCardsResu
 						sourceRef: node.nodeId,
 						nodeId: node.nodeId,
 						isEditable: false,
+						questionTier: c.questionTier,
+						sourceAuthority: c.sourceAuthority,
+						acsCodes: c.acsCodes,
 					},
 					db,
 				);

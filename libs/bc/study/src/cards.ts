@@ -19,8 +19,10 @@ import {
 	CONTENT_SOURCES,
 	type ContentSource,
 	type Domain,
+	type QuestionTier,
 	REVIEW_BATCH_SIZE,
 	SNOOZE_REASONS,
+	type SourceAuthority,
 } from '@ab/constants';
 import { escapeLikePattern } from '@ab/db';
 import { db as defaultDb } from '@ab/db/connection';
@@ -102,6 +104,25 @@ export interface CreateCardInput {
 	 * graph and picks up node-scoped review and mastery aggregation.
 	 */
 	nodeId?: string | null;
+	/**
+	 * Audience tier (card-question-tier WP). Promotes the FAA-vs-CFI
+	 * distinction from free-form `tags[]` into a typed first-class field.
+	 * Omit / null = unclassified.
+	 */
+	questionTier?: QuestionTier | null;
+	/**
+	 * Structured citations backing this card's answer (card-question-tier
+	 * WP). Each element is `{ kind, cite }`; the kind drives badge / icon
+	 * rendering on future surfaces, the cite is the human pointer. Omit /
+	 * null = no structured citations.
+	 */
+	sourceAuthority?: SourceAuthority[] | null;
+	/**
+	 * ACS task-element codes the card maps to (card-question-tier WP).
+	 * Each element matches `ACS_CODE_PATTERN`. Omit / null = no ACS
+	 * mapping.
+	 */
+	acsCodes?: string[] | null;
 }
 
 export interface UpdateCardInput {
@@ -111,6 +132,10 @@ export interface UpdateCardInput {
 	cardType?: CardType;
 	kind?: CardKind;
 	tags?: string[];
+	/** card-question-tier WP. Pass `null` to clear, undefined to leave alone. */
+	questionTier?: QuestionTier | null;
+	sourceAuthority?: SourceAuthority[] | null;
+	acsCodes?: string[] | null;
 }
 
 export interface CardFilters {
@@ -138,6 +163,9 @@ export async function createCard(input: CreateCardInput, db: Db = defaultDb): Pr
 		sourceType: input.sourceType,
 		sourceRef: input.sourceRef,
 		isEditable: input.isEditable,
+		questionTier: input.questionTier,
+		sourceAuthority: input.sourceAuthority,
+		acsCodes: input.acsCodes,
 	});
 	const sourceType = (parsed.sourceType ?? CONTENT_SOURCES.PERSONAL) as ContentSource;
 	if (sourceType !== CONTENT_SOURCES.PERSONAL && !parsed.sourceRef) {
@@ -172,6 +200,9 @@ export async function createCard(input: CreateCardInput, db: Db = defaultDb): Pr
 				nodeId: input.nodeId ?? null,
 				isEditable: parsed.isEditable ?? sourceType === CONTENT_SOURCES.PERSONAL,
 				status: CARD_STATUSES.ACTIVE,
+				questionTier: (parsed.questionTier ?? null) as QuestionTier | null,
+				sourceAuthority: (parsed.sourceAuthority ?? null) as SourceAuthority[] | null,
+				acsCodes: parsed.acsCodes ?? null,
 				createdAt: now,
 				updatedAt: now,
 			})
@@ -235,6 +266,14 @@ export async function updateCard(
 			update.kind = kind;
 		}
 		if (parsed.tags !== undefined) update.tags = parsed.tags;
+		// card-question-tier WP. Pass-through with `null` semantics: undefined
+		// means "leave it alone," null means "explicitly clear it." The Zod
+		// `nullish()` modifier on the input schema preserves the distinction.
+		if (parsed.questionTier !== undefined) update.questionTier = (parsed.questionTier ?? null) as QuestionTier | null;
+		if (parsed.sourceAuthority !== undefined) {
+			update.sourceAuthority = (parsed.sourceAuthority ?? null) as SourceAuthority[] | null;
+		}
+		if (parsed.acsCodes !== undefined) update.acsCodes = parsed.acsCodes ?? null;
 
 		const [updated] = await tx
 			.update(card)
@@ -247,6 +286,9 @@ export async function updateCard(
 		// content changes (front/back/domain/cardType/kind/tags) -- the whitelist
 		// above already screens out status-only flips. `kind` flips reframe the
 		// question (recall vs calculation) so they count as content changes.
+		// Provenance flips (`questionTier`, `sourceAuthority`, `acsCodes`) do
+		// NOT count as content changes -- the answer text is unchanged so any
+		// active "bad question" snooze should stay active.
 		const contentChanged =
 			parsed.front !== undefined ||
 			parsed.back !== undefined ||
