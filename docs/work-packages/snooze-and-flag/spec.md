@@ -52,12 +52,12 @@ Source items: `docs/work/.archive/todos/20260424-02-smi-walkthrough-feedback.md`
 - Single `Snooze` button in the review chrome. Opens a menu with reason codes: `bad-question`, `wrong-domain`, `know-it-bored`, `remove`.
 - Per reason, the post-snooze behavior:
 
-  | Reason          | Behavior                                                                                                  |
-  | --------------- | --------------------------------------------------------------------------------------------------------- |
-  | `bad-question`  | Comment required. Card snoozes for default duration OR until author edits it. Enters author-review queue. |
-  | `wrong-domain`  | Comment required. Long snooze (60d default) or user-selectable "exclude from deck."                       |
-  | `know-it-bored` | No comment required. Three duration levels as constants.                                                  |
-  | `remove`        | Comment required. Card soft-removed from user's deck. Reversible from Browse.                             |
+| Reason          | Behavior                                                                                                  |
+| --------------- | --------------------------------------------------------------------------------------------------------- |
+| `bad-question`  | Comment required. Card snoozes for default duration OR until author edits it. Enters author-review queue. |
+| `wrong-domain`  | Comment required. Long snooze (60d default) or user-selectable "exclude from deck."                       |
+| `know-it-bored` | No comment required. Three duration levels as constants.                                                  |
+| `remove`        | Comment required. Card soft-removed from user's deck. Reversible from Browse.                             |
 
 - Three snooze-duration constants (short/medium/long) in `libs/constants/src/study.ts`. No slider.
 - Mid-session replacement policy: shrink the deck on `snooze` (the queue just gets shorter); pull a same-domain replacement on `remove`.
@@ -67,10 +67,7 @@ Source items: `docs/work/.archive/todos/20260424-02-smi-walkthrough-feedback.md`
 
 ## Out of scope
 
-- Admin-facing author-review queue UI. That lives in a future Hangar surface; reasoning: Hangar is the authoring app, not the user-facing study app, and the queue is a triage workflow not a study action. This WP lands the data and the user-side only; the admin queue is a separate WP when Hangar grows content-moderation views.
-- Taxonomy reassignment when a `wrong-domain` flag resolves. That is a Hangar concern too.
-- Community-visible feedback (public likes, public flags). All feedback is private to the user and the content author.
-- Bulk snooze/bulk remove. Single-card only in v1.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Product decisions the user needs to make
 
