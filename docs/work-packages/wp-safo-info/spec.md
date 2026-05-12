@@ -127,9 +127,7 @@ Bigger than WP-AC-V or WP-ACS-V because two distinct corpora + their downloaders
 
 ## Out of scope
 
-- Auto-discovery of new SAFOs/InFOs via FAA RSS feeds (separate WP)
-- Historical SAFOs/InFOs older than ~5 years
-- Cross-references between SAFOs and ACs (citation work, separate concern)
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Anchors
 
