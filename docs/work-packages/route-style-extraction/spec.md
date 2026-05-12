@@ -55,3 +55,7 @@ Dashboard refresh -- the primitive-extraction part (PageHeader / EmptyState / Sc
 
 - [x] Button adoption across top 5 routes (PR refactor/adopt-button-component-top-routes, 2026-04-28)
 - [ ] PageHeader / EmptyState / ScoreCard extraction (gated on dashboard refresh)
+
+## Out of scope
+
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
