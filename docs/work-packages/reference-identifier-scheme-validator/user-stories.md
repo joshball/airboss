@@ -34,7 +34,7 @@ Author-side and platform-side. The validator is platform infrastructure; the peo
 
 ### Out of scope
 
-- Auto-fixing the typo. The validator points at the problem; the author fixes it.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## US-2: Author uses the `unknown:` escape hatch during a transition
 
@@ -52,7 +52,7 @@ Author-side and platform-side. The validator is platform infrastructure; the peo
 
 ### Out of scope
 
-- Automatic rewrite of `unknown:` placeholders when the corpus lands. That tool ships in Phase 9.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## US-3: Author writes an identifier with a path-absolute form by accident
 
@@ -69,7 +69,7 @@ Author-side and platform-side. The validator is platform infrastructure; the peo
 
 ### Out of scope
 
-- Suggesting the corrected URL automatically (the message is precise enough; auto-fix is Phase 2 territory).
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## US-4: Author writes a frontmatter acknowledgment for a superseded letter
 
@@ -95,7 +95,7 @@ Author-side and platform-side. The validator is platform infrastructure; the peo
 
 ### Out of scope
 
-- The renderer's "(acknowledged supersession)" annotation. Phase 4.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## US-5: Author has two acknowledgments for the same target with different reasons
 
@@ -130,7 +130,7 @@ Author-side and platform-side. The validator is platform infrastructure; the peo
 
 ### Out of scope
 
-- The renderer's per-binding annotation. Phase 4.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## US-6: Reviewer reads a lesson PR; sees clear validation output in CI
 
@@ -149,7 +149,7 @@ Author-side and platform-side. The validator is platform infrastructure; the peo
 
 ### Out of scope
 
-- Inline annotations on the PR file diff. Possible future GitHub-app integration; not Phase 1.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## US-7: CI runs on a PR branch that's gone stale
 
@@ -167,7 +167,7 @@ Author-side and platform-side. The validator is platform infrastructure; the peo
 
 ### Out of scope
 
-- The `--fix` mode itself. Phase 2.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## US-8: Phase-2 engineer extends the validator with the real registry
 
@@ -185,8 +185,7 @@ Author-side and platform-side. The validator is platform infrastructure; the peo
 
 ### Out of scope
 
-- The `--fix` mode (also Phase 2; separate WP item).
-- Per-corpus resolvers (each ships with its own ingestion phase).
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## US-9: Author writes a bare URL in prose
 
@@ -203,7 +202,7 @@ Author-side and platform-side. The validator is platform infrastructure; the peo
 
 ### Out of scope
 
-- IDE-side surfacing of NOTICE. Future enhancement; Phase 1 prints to stdout.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## US-10: Lesson author writes lazy link text
 
@@ -219,4 +218,4 @@ Author-side and platform-side. The validator is platform infrastructure; the peo
 
 ### Out of scope
 
-- Auto-rewriting lazy text. Authors decide whether the lazy form is intentional in their context.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
