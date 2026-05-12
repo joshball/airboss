@@ -1,4 +1,4 @@
-slug: wx-scenario-mountain-wave-rockies-metar-plot
+slug: wx-scenarios/mountain-wave-rockies/metar-plot
 type: metar-plot-grid
 title: METAR Plot (truth-derived)
 subtitle: 2026-02-12T21:00:00Z -- 5 truth-derived stations
