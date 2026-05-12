@@ -14,7 +14,7 @@ const SPEC: PirepPlotGridSpec = {
 	type: 'pirep-plot-grid',
 	title: 'PIREP Plot',
 	subtitle: '2024-05-21 22Z',
-	projection: { kind: 'lambert', parallels: [33, 45], rotate: [-96, -39] },
+	projection: { kind: 'lambert', parallels: [33, 45], rotate: [-96, 0] },
 	extent: 'conus',
 	sources: { reports: 'cache://pirep/2024-05-21-22z.json' },
 };

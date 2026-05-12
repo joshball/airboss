@@ -25,7 +25,7 @@ const SPEC: GfaSpec = {
 	type: 'gfa',
 	title: 'Graphical Forecasts for Aviation',
 	subtitle: 'Test fixture',
-	projection: { kind: 'lambert', parallels: [33, 45], rotate: [-96, -39] },
+	projection: { kind: 'lambert', parallels: [33, 45], rotate: [-96, 0] },
 	extent: 'conus',
 	sources: {
 		polygons: 'cache://gfa/test.json',

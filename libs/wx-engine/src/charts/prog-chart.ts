@@ -21,6 +21,7 @@ import { wxScenarioChartSlug } from '@ab/constants';
 import { advanceTruth } from '../truth/advance';
 import type { TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
+import { CONUS_CENTRAL_MERIDIAN } from '@ab/wx-charts';
 
 const DEFAULT_LEAD_HOURS = 12;
 
@@ -81,7 +82,7 @@ export function deriveProgChart(
 		projection: {
 			kind: 'lambert' as const,
 			parallels: [33, 45] as [number, number],
-			rotate: [-96, -39] as [number, number],
+			rotate: [CONUS_CENTRAL_MERIDIAN, 0] as [number, number],
 		},
 		extent: 'conus' as const,
 		sources: {

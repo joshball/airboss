@@ -18,6 +18,7 @@ import { AIRMET_FAMILIES, wxScenarioChartSlug } from '@ab/constants';
 import type { AirmetAdvisory } from '../products/types';
 import type { TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
+import { CONUS_CENTRAL_MERIDIAN } from '@ab/wx-charts';
 
 type TurbSeverity = 'light' | 'moderate' | 'severe';
 
@@ -79,7 +80,7 @@ export function deriveGAirmetTurbulenceChart(
 		projection: {
 			kind: 'lambert' as const,
 			parallels: [33, 45] as [number, number],
-			rotate: [-96, -39] as [number, number],
+			rotate: [CONUS_CENTRAL_MERIDIAN, 0] as [number, number],
 		},
 		extent: 'conus' as const,
 		sources: {

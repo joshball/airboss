@@ -37,7 +37,7 @@ const SPEC: SurfaceAnalysisSpec = {
 	type: 'surface-analysis',
 	title: 'Surface Analysis',
 	subtitle: '2024-12-23 12Z (Mon)',
-	projection: { kind: 'lambert', parallels: [33, 45], rotate: [-96, -39] },
+	projection: { kind: 'lambert', parallels: [33, 45], rotate: [-96, 0] },
 	extent: 'conus',
 	sources: {
 		fronts: 'cache://sfc-bulletin/2024-12-23-12z.json',

@@ -26,6 +26,7 @@
 import { wxScenarioChartSlug } from '@ab/constants';
 import type { TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
+import { CONUS_CENTRAL_MERIDIAN } from '@ab/wx-charts';
 
 type OutlookTier = 'tstm' | 'mrgl' | 'slgt' | 'enh' | 'mdt' | 'high';
 
@@ -96,7 +97,7 @@ export function deriveConvectiveOutlookChart(truth: TruthModel, scenarioId: stri
 		projection: {
 			kind: 'lambert' as const,
 			parallels: [33, 45] as [number, number],
-			rotate: [-96, -39] as [number, number],
+			rotate: [CONUS_CENTRAL_MERIDIAN, 0] as [number, number],
 		},
 		extent: 'conus' as const,
 		sources: {

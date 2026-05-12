@@ -25,6 +25,7 @@
 import { wxScenarioChartSlug } from '@ab/constants';
 import type { TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
+import { CONUS_CENTRAL_MERIDIAN } from '@ab/wx-charts';
 
 const DEFAULT_TILT_HALF_RANGE_FT = 1500;
 const ICING_HAZARD_AMPLITUDE_FT = -2500;
@@ -78,7 +79,7 @@ export function deriveFreezingLevelChart(truth: TruthModel, scenarioId: string):
 		projection: {
 			kind: 'lambert' as const,
 			parallels: [33, 45] as [number, number],
-			rotate: [-96, -39] as [number, number],
+			rotate: [CONUS_CENTRAL_MERIDIAN, 0] as [number, number],
 		},
 		extent: 'conus' as const,
 		sources: {

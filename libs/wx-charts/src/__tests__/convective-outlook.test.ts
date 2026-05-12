@@ -24,7 +24,7 @@ const SPEC: ConvectiveOutlookSpec = {
 	type: 'convective-outlook',
 	title: 'SPC Day 1 Convective Outlook',
 	subtitle: 'Test fixture',
-	projection: { kind: 'lambert', parallels: [33, 45], rotate: [-96, -39] },
+	projection: { kind: 'lambert', parallels: [33, 45], rotate: [-96, 0] },
 	extent: 'conus',
 	sources: {
 		outlook: 'cache://spc/test.json',

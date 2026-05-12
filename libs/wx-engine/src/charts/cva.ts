@@ -23,6 +23,7 @@ import { FAA_FLIGHT_CATEGORIES, wxScenarioChartSlug } from '@ab/constants';
 import type { DerivedMetar } from '../products/types';
 import type { TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
+import { CONUS_CENTRAL_MERIDIAN } from '@ab/wx-charts';
 
 export function deriveCvaChart(truth: TruthModel, metars: DerivedMetar[], scenarioId: string): ChartArtifact {
 	const slug = wxScenarioChartSlug(scenarioId, 'cva');
@@ -69,7 +70,7 @@ export function deriveCvaChart(truth: TruthModel, metars: DerivedMetar[], scenar
 		projection: {
 			kind: 'lambert' as const,
 			parallels: [33, 45] as [number, number],
-			rotate: [-96, -39] as [number, number],
+			rotate: [CONUS_CENTRAL_MERIDIAN, 0] as [number, number],
 		},
 		extent: 'conus' as const,
 		sources: {

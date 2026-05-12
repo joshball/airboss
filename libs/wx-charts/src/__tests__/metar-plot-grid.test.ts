@@ -34,7 +34,7 @@ const SPEC: MetarPlotGridSpec = {
 	type: 'metar-plot-grid',
 	title: 'METAR Plot',
 	subtitle: '2024-01-13 12Z (Sat) -- 49 ASOS stations',
-	projection: { kind: 'lambert', parallels: [33, 45], rotate: [-96, -39] },
+	projection: { kind: 'lambert', parallels: [33, 45], rotate: [-96, 0] },
 	extent: 'conus',
 	sources: {
 		observations: 'cache://metar/2024-01-13-12z.json',

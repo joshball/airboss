@@ -25,7 +25,7 @@ const SPEC: AirmetSigmetSpec = {
 	type: 'advisory-overlay',
 	title: 'AIRMET / SIGMET',
 	subtitle: 'Test fixture',
-	projection: { kind: 'lambert', parallels: [33, 45], rotate: [-96, -39] },
+	projection: { kind: 'lambert', parallels: [33, 45], rotate: [-96, 0] },
 	extent: 'conus',
 	sources: {
 		advisories: 'cache://sigmet/test.json',
