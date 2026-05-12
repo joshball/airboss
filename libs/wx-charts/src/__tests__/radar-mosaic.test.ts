@@ -15,7 +15,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { resolve } from 'node:path';
-import { LAYER_BAND_VALUES } from '@ab/constants';
+import { LAYER_BAND_VALUES, referenceFixtureChartSlug } from '@ab/constants';
 import { describe, expect, it } from 'vitest';
 import { type RadarMosaicSpec, renderRadarMosaic } from '../charts/radar-mosaic';
 
@@ -26,7 +26,7 @@ const RADAR_PNG_PATH = resolve(CACHE_ROOT, 'wx', 'radar', 'n0r_202405212200.png'
 const RADAR_WLD_PATH = resolve(CACHE_ROOT, 'wx', 'radar', 'n0r_202405212200.wld');
 
 const SPEC: RadarMosaicSpec = {
-	slug: 'wx-radar-mosaic-2024-05-21-22z',
+	slug: referenceFixtureChartSlug('radar-mosaic', '2024-05-21-22z'),
 	type: 'radar-mosaic',
 	title: 'Radar Mosaic',
 	subtitle: '2024-05-21 22:00Z -- NEXRAD composite reflectivity',

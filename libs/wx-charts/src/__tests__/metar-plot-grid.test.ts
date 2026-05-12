@@ -14,7 +14,7 @@
 
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { LAYER_BAND_VALUES } from '@ab/constants';
+import { LAYER_BAND_VALUES, referenceFixtureChartSlug } from '@ab/constants';
 import { describe, expect, it } from 'vitest';
 import { type MetarPlotGridSpec, renderMetarPlotGrid } from '../charts/metar-plot-grid';
 
@@ -30,7 +30,7 @@ const FIXTURE_SOURCE_PATH = resolve(
 );
 
 const SPEC: MetarPlotGridSpec = {
-	slug: 'wx-metar-plot-grid-2024-01-13-12z',
+	slug: referenceFixtureChartSlug('metar-plot-grid', '2024-01-13-12z'),
 	type: 'metar-plot-grid',
 	title: 'METAR Plot',
 	subtitle: '2024-01-13 12Z (Sat) -- 49 ASOS stations',

@@ -6,7 +6,7 @@
 
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { LAYER_BAND_VALUES } from '@ab/constants';
+import { LAYER_BAND_VALUES, referenceFixtureChartSlug } from '@ab/constants';
 import { describe, expect, it } from 'vitest';
 import { renderWindsAloftFb, type WindsAloftFbSpec } from '../charts/winds-aloft-fb';
 
@@ -14,7 +14,7 @@ const REPO_ROOT = resolve(import.meta.dirname, '..', '..', '..', '..');
 const BASEMAP_PATH = resolve(REPO_ROOT, 'data', 'references', 'basemaps', 'us-states-10m.json');
 
 const SPEC: WindsAloftFbSpec = {
-	slug: 'wx-winds-aloft-fb-2024-05-21-18z',
+	slug: referenceFixtureChartSlug('winds-aloft-fb', '2024-05-21-18z'),
 	type: 'winds-aloft-fb',
 	title: 'Winds Aloft (FB)',
 	subtitle: '2024-05-21 18Z',
