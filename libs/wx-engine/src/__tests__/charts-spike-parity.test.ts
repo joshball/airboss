@@ -7,7 +7,8 @@
  *     ordering documented in design.md.
  *   - Each emitted spec validates against the wx-charts library's
  *     per-chart Zod schema (`CHART_RENDERERS[spec.type].schema`).
- *   - Slugs are unique and follow `wx-scenario-<scenario-id>-<chart-kind>[-<station>]`.
+ *   - Slugs are unique and follow `wx-scenarios/<scenario-id>/<chart-kind>[-<station>]`
+ *     per ADR 027 PR 3.
  *   - Every chart artifact has at least one source with a cache-relative
  *     path, and every `cache://...` URI in the spec is backed by an
  *     artifact source path so the bundle writer's cache mirror keeps the
@@ -19,23 +20,23 @@ import { type ChartArtifact, generateScenario } from '@ab/wx-engine/server';
 import { describe, expect, it } from 'vitest';
 
 const EXPECTED_ORDER = [
-	'wx-scenario-frontal-xc-march-surface-analysis',
-	'wx-scenario-frontal-xc-march-prog-12hr',
-	'wx-scenario-frontal-xc-march-airmet-sigmet',
-	'wx-scenario-frontal-xc-march-metar-plot',
-	'wx-scenario-frontal-xc-march-pirep-plot',
-	'wx-scenario-frontal-xc-march-winds-aloft',
-	'wx-scenario-frontal-xc-march-taf-kstl',
-	'wx-scenario-frontal-xc-march-taf-kcps',
-	'wx-scenario-frontal-xc-march-taf-kspi',
-	'wx-scenario-frontal-xc-march-taf-kmli',
-	'wx-scenario-frontal-xc-march-taf-kord',
-	'wx-scenario-frontal-xc-march-gfa',
-	'wx-scenario-frontal-xc-march-convective-outlook',
-	'wx-scenario-frontal-xc-march-cva',
-	'wx-scenario-frontal-xc-march-freezing-level',
-	'wx-scenario-frontal-xc-march-g-airmet-icing',
-	'wx-scenario-frontal-xc-march-g-airmet-turbulence',
+	'wx-scenarios/frontal-xc-march/surface-analysis',
+	'wx-scenarios/frontal-xc-march/prog-12hr',
+	'wx-scenarios/frontal-xc-march/airmet-sigmet',
+	'wx-scenarios/frontal-xc-march/metar-plot',
+	'wx-scenarios/frontal-xc-march/pirep-plot',
+	'wx-scenarios/frontal-xc-march/winds-aloft',
+	'wx-scenarios/frontal-xc-march/taf-kstl',
+	'wx-scenarios/frontal-xc-march/taf-kcps',
+	'wx-scenarios/frontal-xc-march/taf-kspi',
+	'wx-scenarios/frontal-xc-march/taf-kmli',
+	'wx-scenarios/frontal-xc-march/taf-kord',
+	'wx-scenarios/frontal-xc-march/gfa',
+	'wx-scenarios/frontal-xc-march/convective-outlook',
+	'wx-scenarios/frontal-xc-march/cva',
+	'wx-scenarios/frontal-xc-march/freezing-level',
+	'wx-scenarios/frontal-xc-march/g-airmet-icing',
+	'wx-scenarios/frontal-xc-march/g-airmet-turbulence',
 ] as const;
 
 interface MinSpec {
