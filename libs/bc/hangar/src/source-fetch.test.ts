@@ -15,14 +15,13 @@ import {
 	type SectionalFetchInput,
 } from './source-fetch';
 
-vi.mock('@ab/audit', () => ({
-	AUDIT_OPS: { CREATE: 'create', UPDATE: 'update', DELETE: 'delete' },
+vi.mock('@ab/audit/server', () => ({
 	auditWrite: vi.fn(async () => {}),
 }));
 
 // Bind a typed handle to the mocked auditWrite so failure-path tests can
 // assert against its calls without redeclaring the mock.
-import { auditWrite } from '@ab/audit';
+import { auditWrite } from '@ab/audit/server';
 
 const auditWriteMock = vi.mocked(auditWrite);
 

@@ -9,7 +9,8 @@
  * so the next `/sync-to-disk` job captures the change.
  */
 
-import { AUDIT_OPS, type AuditOp, auditWrite } from '@ab/audit';
+import { AUDIT_OPS, type AuditOp } from '@ab/audit';
+import { auditWrite } from '@ab/audit/server';
 import {
 	AUDIT_TARGETS,
 	type AviationTopic,

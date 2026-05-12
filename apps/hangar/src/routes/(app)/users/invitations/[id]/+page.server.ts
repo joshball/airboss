@@ -1,4 +1,4 @@
-import { auditRecent } from '@ab/audit';
+import { auditRecent } from '@ab/audit/server';
 import { inviteEmail, requireRole, sendEmail } from '@ab/auth';
 import {
 	deriveInvitationStatus,

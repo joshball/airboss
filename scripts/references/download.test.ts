@@ -16,14 +16,7 @@ vi.mock('@ab/db', () => ({
 	hangarSource: {},
 	timestamps: () => ({}),
 }));
-vi.mock('@ab/audit', () => ({
-	AUDIT_OPS: { CREATE: 'create', UPDATE: 'update', DELETE: 'delete' },
-	AUDIT_TARGETS: {
-		HANGAR_SOURCE: 'hangar.source',
-		HANGAR_SOURCE_EDITION_RESOLVED: 'hangar.source.edition-resolved',
-		HANGAR_SOURCE_EDITION_DRIFT: 'hangar.source.edition-drift',
-		HANGAR_SOURCE_THUMBNAIL_GENERATED: 'hangar.source.thumbnail-generated',
-	},
+vi.mock('@ab/audit/server', () => ({
 	auditWrite: vi.fn(async () => {}),
 }));
 

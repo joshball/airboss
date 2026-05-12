@@ -23,7 +23,8 @@
 
 import { mkdir, readdir, readFile, rename, rm, stat, writeFile } from 'node:fs/promises';
 import { basename, dirname, join, relative, resolve } from 'node:path';
-import { AUDIT_OPS, auditWrite } from '@ab/audit';
+import { AUDIT_OPS } from '@ab/audit';
+import { auditWrite } from '@ab/audit/server';
 import type { SourceEdition, SourceMedia, SourceMeta } from '@ab/aviation';
 import {
 	computeFileHash,

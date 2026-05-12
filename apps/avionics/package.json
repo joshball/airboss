@@ -15,6 +15,7 @@
 		"@ab/constants": "workspace:*",
 		"@ab/db": "workspace:*",
 		"@ab/help": "workspace:*",
+		"@ab/sources": "workspace:*",
 		"@ab/utils": "workspace:*"
 	},
 	"devDependencies": {

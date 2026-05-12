@@ -23,8 +23,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const auditWriteMock = vi.fn();
 
-vi.mock('@ab/audit', async () => {
-	const actual = await vi.importActual<typeof import('@ab/audit')>('@ab/audit');
+vi.mock('@ab/audit/server', async () => {
+	const actual = await vi.importActual<typeof import('@ab/audit/server')>('@ab/audit/server');
 	return {
 		...actual,
 		auditWrite: (input: unknown, db?: unknown) => auditWriteMock(input, db),

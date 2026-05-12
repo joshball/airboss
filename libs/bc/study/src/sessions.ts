@@ -15,7 +15,8 @@
  *   - streak computation in the user's local timezone.
  */
 
-import { AUDIT_OPS, auditWrite } from '@ab/audit';
+import { AUDIT_OPS } from '@ab/audit';
+import { auditWrite } from '@ab/audit/server';
 import {
 	AUDIT_TARGETS,
 	CARD_STATES,

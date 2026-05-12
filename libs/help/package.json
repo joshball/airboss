@@ -22,6 +22,7 @@
 		"@ab/bc-study": "workspace:*",
 		"@ab/constants": "workspace:*",
 		"@ab/db": "workspace:*",
+		"@ab/sources": "workspace:*",
 		"@ab/ui": "workspace:*",
 		"@ab/utils": "workspace:*",
 		"@sveltejs/kit": "*",

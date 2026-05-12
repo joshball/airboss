@@ -15,7 +15,8 @@
  * `pg_trgm` GIN index on `body_md` if the data demands it.
  */
 
-import { AUDIT_OPS, auditWrite } from '@ab/audit';
+import { AUDIT_OPS } from '@ab/audit';
+import { auditWrite } from '@ab/audit/server';
 import {
 	ANNOTATION_ANCHOR_TEXT_MAX_LENGTH,
 	ANNOTATION_CONTEXT_MAX_LENGTH,

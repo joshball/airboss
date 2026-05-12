@@ -16,6 +16,7 @@
 		"@ab/constants": "workspace:*",
 		"@ab/db": "workspace:*",
 		"@ab/help": "workspace:*",
+		"@ab/sources": "workspace:*",
 		"@ab/utils": "workspace:*",
 		"three": "^0.169.0",
 		"zod": "^3.25.36"

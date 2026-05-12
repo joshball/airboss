@@ -1,0 +1,94 @@
+/*
+ * Palette-scoped accent + motion tokens.
+ *
+ * Scope: the global command palette UI (Cmd+K / Cmd+P / Cmd+Shift+P) only.
+ * Each row in the palette carries a per-type accent (FAA = amber, knode/
+ * glossary = violet, course/help = cyan, mine = green, web.tool = rose,
+ * cmd = ink-muted). These five accent families don't exist in the core
+ * theme contract because they're palette-local visual cues, not part of
+ * the platform-wide design system. Living here keeps the theme registry
+ * narrow while still giving the palette a coherent color story across
+ * every airboss theme.
+ *
+ * Motion tokens (`--palette-motion-duration-*`, `--palette-motion-ease-*`)
+ * mirror the design.md cadence -- 120ms open, 80ms hover, 160ms detail
+ * pane slide -- and collapse to 0ms under `prefers-reduced-motion: reduce`.
+ *
+ * The colors are oklch so they keep their visual weight across themes. The
+ * dark variant darkens the wash + lightens the ink so a row stays legible
+ * against a dark surface.
+ *
+ * Loaded via `import './palette-tokens.css'` from the palette components.
+ */
+
+[data-palette-tokens] {
+	/* Amber -- FAA resources. */
+	--palette-accent-amber: oklch(0.73 0.153 67.2);
+	--palette-accent-amber-ink: oklch(0.18 0.032 266.6);
+	--palette-accent-amber-wash: oklch(0.927 0.105 81.4 / 0.32);
+	--palette-accent-amber-edge: oklch(0.73 0.153 67.2 / 0.55);
+
+	/* Violet -- knowledge nodes + glossary. */
+	--palette-accent-violet: oklch(0.582 0.226 296.8);
+	--palette-accent-violet-ink: oklch(0.985 0.005 285.2);
+	--palette-accent-violet-wash: oklch(0.732 0.16 296 / 0.22);
+	--palette-accent-violet-edge: oklch(0.582 0.226 296.8 / 0.55);
+
+	/* Cyan -- course + help. */
+	--palette-accent-cyan: oklch(0.6 0.118 215);
+	--palette-accent-cyan-ink: oklch(0.985 0.005 213);
+	--palette-accent-cyan-wash: oklch(0.792 0.12 215 / 0.22);
+	--palette-accent-cyan-edge: oklch(0.6 0.118 215 / 0.55);
+
+	/* Green -- my stuff. */
+	--palette-accent-green: oklch(0.6 0.143 149.6);
+	--palette-accent-green-ink: oklch(0.18 0.032 266.6);
+	--palette-accent-green-wash: oklch(0.823 0.165 149.6 / 0.24);
+	--palette-accent-green-edge: oklch(0.6 0.143 149.6 / 0.55);
+
+	/* Rose -- external tools. */
+	--palette-accent-rose: oklch(0.629 0.193 16.4);
+	--palette-accent-rose-ink: oklch(0.985 0.005 17.5);
+	--palette-accent-rose-wash: oklch(0.832 0.13 16.4 / 0.22);
+	--palette-accent-rose-edge: oklch(0.629 0.193 16.4 / 0.55);
+
+	/* Cmd column shares ink-muted -- no accent. */
+	--palette-accent-cmd: var(--ink-muted);
+	--palette-accent-cmd-ink: var(--ink-body);
+	--palette-accent-cmd-wash: var(--surface-sunken);
+	--palette-accent-cmd-edge: var(--edge-default);
+
+	/* Motion. */
+	--palette-motion-duration-xs: 80ms;
+	--palette-motion-duration-sm: 120ms;
+	--palette-motion-duration-md: 160ms;
+	--palette-motion-ease-in: cubic-bezier(0.32, 0, 0.67, 0);
+	--palette-motion-ease-out: cubic-bezier(0.33, 1, 0.68, 1);
+	--palette-motion-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/*
+ * Dark-appearance tweaks: darken washes so they don't bloom on the dark
+ * surface, brighten the accents slightly so the type tag stays legible.
+ */
+[data-palette-tokens][data-appearance='dark'],
+[data-appearance='dark'] [data-palette-tokens] {
+	--palette-accent-amber: oklch(0.837 0.164 84.4);
+	--palette-accent-amber-wash: oklch(0.473 0.125 46.2 / 0.42);
+	--palette-accent-violet: oklch(0.732 0.16 296);
+	--palette-accent-violet-wash: oklch(0.43 0.18 296.8 / 0.4);
+	--palette-accent-cyan: oklch(0.792 0.12 215);
+	--palette-accent-cyan-wash: oklch(0.4 0.13 215 / 0.4);
+	--palette-accent-green: oklch(0.823 0.165 149.6);
+	--palette-accent-green-wash: oklch(0.41 0.145 149 / 0.45);
+	--palette-accent-rose: oklch(0.832 0.13 16.4);
+	--palette-accent-rose-wash: oklch(0.45 0.16 16.4 / 0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	[data-palette-tokens] {
+		--palette-motion-duration-xs: 0ms;
+		--palette-motion-duration-sm: 0ms;
+		--palette-motion-duration-md: 0ms;
+	}
+}

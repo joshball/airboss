@@ -157,6 +157,53 @@ export const TOKENS = {
 	readerMeasureCh: '--reader-measure-ch',
 	readerHeadingScale: '--reader-heading-scale',
 
+	// -------- palette accents (WP-COMMAND-PALETTE Phase 3) --------
+	// Per-type accent families consumed by the global command palette
+	// (CommandPalette.svelte + variant prototypes). Five accent families
+	// keyed to the result taxonomy in
+	// `docs/work-packages/command-palette/spec.md`:
+	//
+	//   amber  -- faa.* (handbooks, CFR parts/sections, AIM, AC, ACS)
+	//   violet -- airboss.knode, airboss.glossary
+	//   cyan   -- airboss.course, airboss.lesson, airboss.help
+	//   green  -- mine.*
+	//   rose   -- web.tool
+	//   cmd    -- cmd.* (no accent; ink-muted slot)
+	//
+	// Defined as theme-independent palette-scoped tokens in
+	// `libs/themes/palette-tokens.css`. Listed here so theme-lint accepts the
+	// `var(--palette-...)` references in palette UI components.
+	paletteAccentAmber: '--palette-accent-amber',
+	paletteAccentAmberInk: '--palette-accent-amber-ink',
+	paletteAccentAmberWash: '--palette-accent-amber-wash',
+	paletteAccentAmberEdge: '--palette-accent-amber-edge',
+	paletteAccentViolet: '--palette-accent-violet',
+	paletteAccentVioletInk: '--palette-accent-violet-ink',
+	paletteAccentVioletWash: '--palette-accent-violet-wash',
+	paletteAccentVioletEdge: '--palette-accent-violet-edge',
+	paletteAccentCyan: '--palette-accent-cyan',
+	paletteAccentCyanInk: '--palette-accent-cyan-ink',
+	paletteAccentCyanWash: '--palette-accent-cyan-wash',
+	paletteAccentCyanEdge: '--palette-accent-cyan-edge',
+	paletteAccentGreen: '--palette-accent-green',
+	paletteAccentGreenInk: '--palette-accent-green-ink',
+	paletteAccentGreenWash: '--palette-accent-green-wash',
+	paletteAccentGreenEdge: '--palette-accent-green-edge',
+	paletteAccentRose: '--palette-accent-rose',
+	paletteAccentRoseInk: '--palette-accent-rose-ink',
+	paletteAccentRoseWash: '--palette-accent-rose-wash',
+	paletteAccentRoseEdge: '--palette-accent-rose-edge',
+	paletteAccentCmd: '--palette-accent-cmd',
+	paletteAccentCmdInk: '--palette-accent-cmd-ink',
+	paletteAccentCmdWash: '--palette-accent-cmd-wash',
+	paletteAccentCmdEdge: '--palette-accent-cmd-edge',
+	paletteMotionDurationXs: '--palette-motion-duration-xs',
+	paletteMotionDurationSm: '--palette-motion-duration-sm',
+	paletteMotionDurationMd: '--palette-motion-duration-md',
+	paletteMotionEaseIn: '--palette-motion-ease-in',
+	paletteMotionEaseOut: '--palette-motion-ease-out',
+	paletteMotionEaseInOut: '--palette-motion-ease-in-out',
+
 	// -------- highlights (WP-FLIGHTBAG-RICH-READER Phase 2) --------
 	// Per-color swatch + wash pair for the rich-reader's selection
 	// highlight overlays. The swatch is the opaque chip used in the picker;

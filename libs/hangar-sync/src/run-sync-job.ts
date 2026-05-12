@@ -19,7 +19,8 @@
  * adapter.
  */
 
-import { AUDIT_OPS, auditWrite } from '@ab/audit';
+import { AUDIT_OPS } from '@ab/audit';
+import { auditWrite } from '@ab/audit/server';
 import type { Reference, Source } from '@ab/aviation';
 import {
 	type HangarReferenceRow,

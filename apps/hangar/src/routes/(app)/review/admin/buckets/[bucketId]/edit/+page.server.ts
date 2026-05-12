@@ -9,7 +9,8 @@
  * Auth: admin-only via `requireRole(ROLES.ADMIN)`.
  */
 
-import { AUDIT_OPS, auditWrite } from '@ab/audit';
+import { AUDIT_OPS } from '@ab/audit';
+import { auditWrite } from '@ab/audit/server';
 import { requireRole } from '@ab/auth';
 import {
 	countItemsByCriteria,

@@ -6,7 +6,8 @@
  * recovery, the worker itself).
  */
 
-import { AUDIT_OPS, auditWrite } from '@ab/audit';
+import { AUDIT_OPS } from '@ab/audit';
+import { auditWrite } from '@ab/audit/server';
 import { AUDIT_TARGETS, JOB_AUDIT_REASONS, JOB_LOG_STREAMS, JOB_STATUSES, type JobKind } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import { generateHangarJobId, generateHangarJobLogId } from '@ab/utils';
