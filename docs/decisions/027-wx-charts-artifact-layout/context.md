@@ -75,3 +75,17 @@ The Option A/B/C basemap exploration mockups generated 2026-05-12 were committed
 Bundle-side per-chart subdirectories under `data/wx-scenarios/<id>/charts/` are now keyed by the chart-kind tail segment (not the full slug). The slug verbatim would create a doubly-nested subdirectory; the chart-kind key keeps the bundle flat-keyed under the scenario id, honoring the ADR's "bundle tree unaffected" rule.
 
 One follow-on chore for main: after PR 2 (basemap fix) merges, run `bun run wx-scenario build --all` and commit the regenerated SVGs so the wx-scenarios family carries the new basemap. Single small commit, no plumbing changes.
+
+## PR follow-on: vector-symbology clip to CONUS
+
+PR 2 (Option A basemap, merged 2026-05-12 in #923) anchored the country shape with Canada + Mexico outlines, but the visible "hunchback" arc above the US-Canada border on the surface-analysis chart did not fully disappear. The remaining source of the curvature was not the basemap -- it was the scalar-field contour layer. Every CONUS scalar-field renderer computes contours over the full grid extent (`lon -130..-65`, `lat 22..52`), which crosses the border. Without a clip, the contour algorithm draws fragments above lat 49N, which produced the visible cue.
+
+The corrective follow-on adds:
+
+- `BasemapData.conusPolygon: Feature<MultiPolygon>` built via `topojson-client`'s `merge` over the CONUS state geometries (the same filter set used for `conusOuter`, returned as a closed polygon instead of a polyline).
+- `libs/wx-charts/src/symbology/clip.ts` -- one helper, `buildConusClipPath({ id, conusPolygon, projection })`, that returns the `<defs><clipPath /></defs>` block + the matching `clip-path="url(#id)"` attribute string.
+- Every CONUS scalar-field renderer (`surface-analysis`, `prog-chart`, `freezing-level`, `icing-cip` / `icing-fip` via the shared body, `turbulence-gtg`) wraps its vector-symbology (and raster-overlay where applicable) layer band content in `<g clip-path="url(#id)">`, with a chart-namespaced clipPath id so multiple charts inlined onto the same page do not collide.
+- Polygon-overlay charts (`airmet-sigmet`, `convective-outlook`, `cva`, `gfa`, `g-airmet-icing`, `g-airmet-turbulence`, `icing-gairmet`) draw explicit polygons that never extended past CONUS in the first place; they are not clipped.
+- Raster bitmaps (`radar-mosaic`, `satellite-ir` / `vis` / `wv`) carry their own legitimate Canada / coastal coverage and are not clipped.
+
+`libs/wx-charts/package.json` bumps `0.2.0 -> 0.3.0` because every CONUS scalar-field chart's `content_hash` changes with the clipPath wrap. All 20 reference-fixture SVGs + 102 wx-scenario SVGs regenerate end-to-end. This closes out the basemap visual-correction work begun in PR 2.
