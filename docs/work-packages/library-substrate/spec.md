@@ -44,11 +44,7 @@ Stop pretending handbooks are special. Make the substrate corpus-agnostic so AIM
 
 ## Non-goals
 
-- **Not** seeding any new corpus. AIM / CFR / AC / ACS seed in their own follow-on WPs (§6 of the parent spec).
-- **Not** changing the library page UI. The cert/topic/regulations/handbook routes keep working byte-identically.
-- **Not** introducing new validation surfaces beyond what the manifest schemas already do.
-- **Not** touching ADR 019 (URI scheme) or `@ab/sources` corpus resolvers' citation contracts.
-- **Not** addressing the "ingested + readable" vs "umbrella + link-only" card-state distinction (smell #5; separate UX WP).
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## What changes
 
@@ -240,13 +236,9 @@ The WP closes when **all** of the following hold:
 9. New unit test in `libs/bc/study/src/seeders/` covers both manifest shapes -- section-tree and whole-doc -- and asserts row counts and content hashes match expectations.
 10. `course/references/handbooks-noningested.yaml` is **not** deleted in this WP. (Smell #1 cleanup is a follow-up.)
 
-## Out of scope (deliberately deferred)
+## Out of scope
 
-- Smell #1 cleanup: `course/references/handbooks-noningested.yaml` retirement. Trigger: after WP-SUB merges and the 6 extras seed cleanly, audit and delete in a follow-up PR. The `afh@FAA-H-8083-3B` row stays until a content audit.
-- Smell #2: corpus-module registration boilerplate consolidation.
-- Smell #3: phase-numbered reviewer IDs -> per-corpus reviewer IDs.
-- Smell #5: `/library` card-state indicator (Read · Browse · External link only).
-- Any new corpus seed (AIM, CFR, AC, ACS, mountain-flying, etc.). Each is its own WP per parent spec §6.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Risks and mitigations
 
