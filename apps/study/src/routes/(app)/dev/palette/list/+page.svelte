@@ -6,13 +6,13 @@ import {
 	type GroupedResults,
 	type PaletteHost,
 	type ResultColumn,
-	searchGrouped,
 	type TypedSearchResult as SearchResult,
+	searchGrouped,
 } from '@ab/help';
 import { accentFor } from '@ab/help/ui/palette-accent';
 import { goto } from '$app/navigation';
 import { page } from '$app/state';
-import '@ab/help/ui/palette-tokens.css';
+import '@ab/themes/palette-tokens.css';
 
 /**
  * Variant A — Linear-style sectioned list.

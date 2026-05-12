@@ -9,7 +9,8 @@
 		},
 		"./ThemeProvider.svelte": "./ThemeProvider.svelte",
 		"./picker/*": "./picker/*",
-		"./generated/*": "./generated/*"
+		"./generated/*": "./generated/*",
+		"./palette-tokens.css": "./palette-tokens.css"
 	},
 	"dependencies": {
 		"@ab/constants": "workspace:*"

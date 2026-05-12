@@ -1,8 +1,8 @@
 <script lang="ts">
 import { urlForReference } from '@ab/sources';
+import type { SearchResult } from '../schema/result-types';
 import { accentFor } from './palette-accent';
 import { airbossRefForResult, isFlightbagHref } from './palette-flightbag';
-import type { SearchResult } from '../schema/result-types';
 
 /**
  * Right-side detail pane for the command palette (Variant C, production).

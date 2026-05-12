@@ -12,6 +12,7 @@
  * Unsupported types return null and the caller hides the affordance.
  */
 
+import { ROUTES } from '@ab/constants';
 import {
 	airbossRefForAcDocument,
 	airbossRefForAcsPublication,
@@ -19,7 +20,6 @@ import {
 	airbossRefForWholeDocHandbook,
 	type SourceId,
 } from '@ab/sources';
-import { ROUTES } from '@ab/constants';
 import type { SearchResult } from '../schema/result-types';
 
 /** Registry id -> airboss-ref URI, where we can derive one. */
@@ -81,15 +81,7 @@ export function isFlightbagHref(href: string): boolean {
 	// All flightbag routes are namespaced under fixed prefixes; the
 	// cross-app sibling-origin wrapper points at the flightbag host. The
 	// path itself starts with one of these prefixes regardless of origin.
-	const FLIGHTBAG_PATH_PREFIXES = [
-		'/handbook/',
-		'/cfr/',
-		'/aim/',
-		'/ac/',
-		'/acs/',
-		'/info/',
-		'/safo/',
-	];
+	const FLIGHTBAG_PATH_PREFIXES = ['/handbook/', '/cfr/', '/aim/', '/ac/', '/acs/', '/info/', '/safo/'];
 	for (const prefix of FLIGHTBAG_PATH_PREFIXES) {
 		if (href.startsWith(prefix)) return true;
 	}

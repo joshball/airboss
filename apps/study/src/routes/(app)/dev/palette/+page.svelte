@@ -146,7 +146,7 @@
 	}
 
 	.notes h2 {
-		font-size: var(--font-size-md);
+		font-size: var(--font-size-lg);
 		margin: 0 0 var(--space-sm);
 	}
 

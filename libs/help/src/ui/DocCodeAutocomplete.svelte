@@ -1,6 +1,6 @@
 <script lang="ts">
-import { detectDocCodeIntent, lookupDocsByCode } from '@ab/aviation';
 import type { DocCodeFamily } from '@ab/aviation';
+import { detectDocCodeIntent, lookupDocsByCode } from '@ab/aviation';
 
 /**
  * VSCode-style doc-code dropdown rendered under the palette input.

@@ -5,6 +5,7 @@ import { tick, untrack } from 'svelte';
 import { goto } from '$app/navigation';
 import { page } from '$app/state';
 import type { ParsedFilter } from '../schema/help-registry';
+import { PALETTE_MODE_ELIGIBLE, type PaletteMode } from '../schema/palette-mode';
 import {
 	COLUMN_LABELS,
 	COLUMN_ORDER,
@@ -14,13 +15,12 @@ import {
 	type SearchResult,
 	type SynonymRewrite,
 } from '../schema/result-types';
-import { type PaletteMode, PALETTE_MODE_ELIGIBLE } from '../schema/palette-mode';
 import { searchGrouped } from '../search';
 import DocCodeAutocomplete, { type DocEntry } from './DocCodeAutocomplete.svelte';
 import FilterChips from './FilterChips.svelte';
 import PaletteColumn from './PaletteColumn.svelte';
 import PaletteDetailPane from './PaletteDetailPane.svelte';
-import './palette-tokens.css';
+import '@ab/themes/palette-tokens.css';
 
 /**
  * Production command palette -- the Cmd+K / `/` (search), Cmd+P (quick
@@ -478,11 +478,13 @@ const detailPaneVisible = $derived<boolean>(detailPaneOpen && viewportWide);
 						bind:this={input}
 						bind:value={rawQuery}
 						onkeydown={handleKey}
-						type="search"
+						type="text"
+						role="combobox"
 						placeholder={placeholder}
 						autocomplete="off"
 						spellcheck="false"
 						aria-label={placeholder}
+						aria-autocomplete="list"
 						aria-controls="palette-doc-autocomplete"
 						aria-expanded={docPickerOpen && docPicker?.hasMatches() ? 'true' : 'false'}
 						data-testid="commandpalette-input"
@@ -577,9 +579,10 @@ const detailPaneVisible = $derived<boolean>(detailPaneOpen && viewportWide);
 		display: flex;
 		align-items: flex-start;
 		justify-content: center;
+		/* lint-disable-token-enforcement: viewport offset positions palette in upper third, not on spacing rhythm */
 		padding-top: 4rem;
 		z-index: var(--z-command-palette);
-		animation: palette-fade-in 120ms ease-out;
+		animation: palette-fade-in var(--palette-motion-duration-sm) var(--palette-motion-ease-out);
 	}
 
 	@keyframes palette-fade-in {

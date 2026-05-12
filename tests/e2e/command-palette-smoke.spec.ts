@@ -21,8 +21,8 @@ import { expect, test } from '@playwright/test';
 import { ROUTES } from '../../libs/constants/src';
 
 const PALETTE_TRIGGER = '[data-testid="helpsearch-trigger"]';
-const PALETTE_ROOT = '[data-testid="helpsearchpalette-root"]';
-const PALETTE_INPUT = '[data-testid="helpsearchpalette-input"]';
+const PALETTE_ROOT = '[data-testid="commandpalette-root"]';
+const PALETTE_INPUT = '[data-testid="commandpalette-input"]';
 const PALETTE_COLUMNS = '[data-testid="palette-columns"]';
 
 // A tight battery: doc codes (banner hoist + clusters), needle search,

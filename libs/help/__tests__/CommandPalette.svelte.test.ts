@@ -32,13 +32,16 @@ describe('CommandPalette -- debounce contract', () => {
 });
 
 describe('CommandPalette -- open', () => {
-	it('renders dialog with role=dialog and a search input', () => {
+	it('renders dialog with role=dialog and a combobox input', () => {
 		render(CommandPalette, { open: true, onClose: vi.fn() });
 		const root = screen.getByTestId('commandpalette-root');
 		expect(root.getAttribute('role')).toBe('dialog');
 		const input = screen.getByTestId('commandpalette-input');
 		expect(input.tagName).toBe('INPUT');
-		expect(input.getAttribute('type')).toBe('search');
+		// APG combobox pattern: the input drives the DocCodeAutocomplete
+		// dropdown, so it carries role="combobox" instead of the implicit
+		// searchbox -- searchbox doesn't accept aria-expanded.
+		expect(input.getAttribute('role')).toBe('combobox');
 	});
 
 	it('initial focused column defaults to FAA Resources (the first column in the layout)', () => {
@@ -75,21 +78,14 @@ describe('CommandPalette -- open', () => {
 		expect(screen.getByTestId('commandpalette-root').getAttribute('data-mode')).toBe('command');
 	});
 
-	it('Cmd+\\ toggles the detail pane visibility', () => {
+	it('stamps a data-detail-open attribute so the layout grid can react', () => {
 		render(CommandPalette, { open: true, onClose: vi.fn() });
 		const root = screen.getByTestId('commandpalette-root');
-		// happy-dom defaults matchMedia to false, so the detail pane should
-		// start closed in unit DOM. Sending Cmd+\\ to the input flips
-		// detailPaneOpen; the rendered attribute reflects (open AND viewport).
-		const input = screen.getByTestId('commandpalette-input');
-		const before = root.getAttribute('data-detail-open');
-		input.dispatchEvent(new KeyboardEvent('keydown', { key: '\\', metaKey: true, bubbles: true }));
-		const after = root.getAttribute('data-detail-open');
-		// At least one of the two reads should be 'true' -- if the matchMedia
-		// stub reports wide, the initial open=true so after-toggle is 'false';
-		// if matchMedia is narrow, both reads stay 'false' but the attr is
-		// updated. Either way, the attribute mutation indicates the key was
-		// observed by the palette.
-		expect([before, after]).toContain('false');
+		// The exact value depends on matchMedia in happy-dom; we just pin the
+		// attribute is present + boolean-shaped so the CSS column-count rule
+		// has something to bind to. The Playwright e2e spec covers the actual
+		// toggle behaviour against a real viewport.
+		const value = root.getAttribute('data-detail-open');
+		expect(['true', 'false']).toContain(value);
 	});
 });

@@ -1,6 +1,6 @@
 <script lang="ts">
-import { accentFor } from './palette-accent';
 import { COLUMN_LABELS, type ResultColumn, type SearchResult } from '../schema/result-types';
+import { accentFor } from './palette-accent';
 
 /**
  * A single palette column. Renders a heading + a vertical list of result
@@ -105,7 +105,7 @@ function hover(result: SearchResult, index: number): void {
 	}
 
 	.column[data-loading='true'] header .label {
-		animation: palette-column-loading-pulse 1200ms infinite;
+		animation: palette-column-loading-pulse var(--motion-slow) infinite;
 	}
 
 	@keyframes palette-column-loading-pulse {
