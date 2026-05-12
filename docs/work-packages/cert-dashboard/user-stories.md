@@ -89,9 +89,6 @@ Persona: returning CFI rebuilding PPL/IR/CPL/CFI/CFII/MEI/MEII knowledge from a 
 - Hovering or tapping the metric explains the difference
 - The Area list bars render coverage and mastery as two stacked bars or two distinct bars
 
-## Out of scope (future stories)
+## Out of scope
 
-- US-future-1 -- Full prereq DAG visualisation (multi-hop graph) -- triggered when the one-hop snippet feels insufficient
-- US-future-2 -- Edition diff surface -- triggered when a real second ACS edition publishes
-- US-future-3 -- Cross-cert weakness view -- ships in [lens-ui](../lens-ui/spec.md)
-- US-future-4 -- Goal composition -- ships in [goal-composer](../goal-composer/spec.md)
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
