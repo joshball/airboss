@@ -1,17 +1,18 @@
 {
   "slug": "wx-scenarios/frontal-xc-march/winds-aloft",
   "type": "winds-aloft-fb",
-  "library_version": "@ab/wx-charts@0.1.0",
-  "built_at": "2026-05-11T12:33:54.925Z",
-  "content_hash": "sha256:495c7dfc57bb95831fee19e77b675c44d06b547e8a99e2f0d3d6e22bf69a3345",
+  "library_version": "@ab/wx-charts@0.2.0",
+  "built_at": "2026-05-12T13:50:46.855Z",
+  "content_hash": "sha256:78d77e0b3c12c1f151a3c7a18b79823f3ba5da202f80bee57e0fe601b3d17d85",
   "source_hashes": {
     "bulletin": "89e33ef5c51116adfff62a0194a042d6a367f6b27b25ee25842778c1c07ee590"
   },
   "layer_counts": {
     "point-symbology": 5,
-    "basemap-fill": 49
+    "basemap-fill": 49,
+    "north-america-context": 2
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 293813
+  "svg_bytes": 505817
 }

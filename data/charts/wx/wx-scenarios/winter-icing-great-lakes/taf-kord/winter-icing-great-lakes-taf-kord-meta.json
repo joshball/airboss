@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/winter-icing-great-lakes/taf-kord",
   "type": "taf-timeline",
-  "library_version": "@ab/wx-charts@0.1.0",
-  "built_at": "2026-05-11T13:57:18.938Z",
-  "content_hash": "sha256:33b01f04614b32085b54b12e7bdbf3a4693fe392e08e2f0523f3796f56196563",
+  "library_version": "@ab/wx-charts@0.2.0",
+  "built_at": "2026-05-12T13:51:02.992Z",
+  "content_hash": "sha256:af4b0b96c4005361589f9e4627fa358c5fdbd7d51ca5d617b6e35574194bbe5b",
   "source_hashes": {
     "taf": "74e3825287ca453df61ed32312adfe93367b316731769e2a976bd7e949c83b5c"
   },
@@ -13,5 +13,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 6288
+  "svg_bytes": 6332
 }

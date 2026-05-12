@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/summer-thunderstorms-tx/taf-kiah",
   "type": "taf-timeline",
-  "library_version": "@ab/wx-charts@0.1.0",
-  "built_at": "2026-05-11T13:55:12.088Z",
-  "content_hash": "sha256:5df083eb414615380304df529aa6905ec7690a7cb83e1883578ae7f490bfce61",
+  "library_version": "@ab/wx-charts@0.2.0",
+  "built_at": "2026-05-12T13:50:58.734Z",
+  "content_hash": "sha256:d8e125763cfb64eaaa9f75f0a92c59bb3d041fc7980c11863e83852b52ea0003",
   "source_hashes": {
     "taf": "1edc6c98c3058c53aeeb49da11ad48db5e0191baf7d501fb818cceb4b2ea9689"
   },
@@ -13,5 +13,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 7350
+  "svg_bytes": 7394
 }

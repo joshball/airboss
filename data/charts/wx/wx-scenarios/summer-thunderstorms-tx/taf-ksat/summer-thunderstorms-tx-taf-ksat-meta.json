@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/summer-thunderstorms-tx/taf-ksat",
   "type": "taf-timeline",
-  "library_version": "@ab/wx-charts@0.1.0",
-  "built_at": "2026-05-11T13:55:12.181Z",
-  "content_hash": "sha256:7eb74b8936879ae0be5e4f1f649f015fe8047d65616a4039ca31d6c7b8e73403",
+  "library_version": "@ab/wx-charts@0.2.0",
+  "built_at": "2026-05-12T13:50:58.906Z",
+  "content_hash": "sha256:d96518db214f2bee5560673019f34236c60c7f8cf3ef45d9ee46874fe6928a4e",
   "source_hashes": {
     "taf": "9ebce991a0594e673207d372f9ea2e60db145888631a91c7fb0e37961380dbab"
   },
@@ -13,5 +13,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 6282
+  "svg_bytes": 6326
 }

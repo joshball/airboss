@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/mountain-wave-rockies/taf-kase",
   "type": "taf-timeline",
-  "library_version": "@ab/wx-charts@0.1.0",
-  "built_at": "2026-05-11T14:00:38.957Z",
-  "content_hash": "sha256:b69b91eedbd4acc582da256fba32fcc38967833c150e6cd68a1d24b514840db6",
+  "library_version": "@ab/wx-charts@0.2.0",
+  "built_at": "2026-05-12T13:50:54.047Z",
+  "content_hash": "sha256:f9bc230cd9116246df66c390dead473a2ad10619c94b981ccd3f6ce605be5a86",
   "source_hashes": {
     "taf": "2d8a060565d644f5cc4c71986ba64a5f5921c34cf1b96b8ec3372e6256be1829"
   },
@@ -13,5 +13,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 6285
+  "svg_bytes": 6329
 }

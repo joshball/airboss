@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/mountain-wave-rockies/prog-12hr",
   "type": "prog-chart",
-  "library_version": "@ab/wx-charts@0.1.0",
-  "built_at": "2026-05-11T14:00:38.717Z",
-  "content_hash": "sha256:cfd36b41a273475ebb6e7f14e47938dbf608cf0e85b3923626fe9b0b4989807a",
+  "library_version": "@ab/wx-charts@0.2.0",
+  "built_at": "2026-05-12T13:50:53.450Z",
+  "content_hash": "sha256:150078019bf2cd45369f94d5357d7ca9e6b3df48e6f52fdc1c3a05669f640615",
   "source_hashes": {
     "forecast": "e775498572afe99cb3031ecf39a0904fa1ae543333c99f0847afe2615365d5ae"
   },
@@ -11,9 +11,10 @@
     "raster-overlay": 3,
     "vector-symbology": 2,
     "point-symbology": 2,
-    "basemap-fill": 49
+    "basemap-fill": 49,
+    "north-america-context": 2
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 291103
+  "svg_bytes": 503107
 }

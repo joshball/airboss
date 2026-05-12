@@ -1,11 +1,11 @@
 {
   "slug": "wx-scenarios/frontal-xc-march/taf-kspi",
   "type": "taf-timeline",
-  "library_version": "@ab/wx-charts@0.1.0",
-  "built_at": "2026-05-10T23:28:11.533Z",
-  "content_hash": "sha256:b38ef7afd3aaad03e3abde0d4d6048c81dedd0f690cd4dab008fad9376bab7dc",
+  "library_version": "@ab/wx-charts@0.2.0",
+  "built_at": "2026-05-12T13:50:46.463Z",
+  "content_hash": "sha256:848fca74c80be4d3b672a23c29064dade72da63da2cb1bb8c63a969ff04ad2a5",
   "source_hashes": {
-    "taf": "3d3d6484d8ccc9d5ee66f269521c136f31f4933b0b4aef136d5e76144798a27c"
+    "taf": "c857193a6f8d628ab19cf0d0d848d9fa81e85bcc5eb9c277325ae8d998e8f135"
   },
   "layer_counts": {
     "vector-symbology": 7,
@@ -13,5 +13,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 6120
+  "svg_bytes": 6155
 }

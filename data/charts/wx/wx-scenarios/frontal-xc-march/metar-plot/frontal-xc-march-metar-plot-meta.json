@@ -1,18 +1,19 @@
 {
   "slug": "wx-scenarios/frontal-xc-march/metar-plot",
   "type": "metar-plot-grid",
-  "library_version": "@ab/wx-charts@0.1.0",
-  "built_at": "2026-05-11T12:33:32.623Z",
-  "content_hash": "sha256:641edd15116130d600e0f4f54974b580daa72682f4dc0d4983635b42947fb4d3",
+  "library_version": "@ab/wx-charts@0.2.0",
+  "built_at": "2026-05-12T13:50:44.961Z",
+  "content_hash": "sha256:224c00db8d2adb4cedf2fdb2698ad4ee95201e4c9b744297371424aa53181cdc",
   "source_hashes": {
     "observations": "d8955d92054021b7572384b5e93026ac424efb92f95142c29bf73232ec0939a0"
   },
   "layer_counts": {
     "vector-symbology": 3,
     "point-symbology": 5,
-    "basemap-fill": 49
+    "basemap-fill": 49,
+    "north-america-context": 2
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 292837
+  "svg_bytes": 504841
 }

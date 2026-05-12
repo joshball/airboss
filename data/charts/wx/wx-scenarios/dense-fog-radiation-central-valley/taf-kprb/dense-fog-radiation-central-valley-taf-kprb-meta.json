@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/dense-fog-radiation-central-valley/taf-kprb",
   "type": "taf-timeline",
-  "library_version": "@ab/wx-charts@0.1.0",
-  "built_at": "2026-05-11T14:07:06.176Z",
-  "content_hash": "sha256:43a82e0e662c56849e2ee2664061838e0185e945ac84e86a0c62fcf5642d2644",
+  "library_version": "@ab/wx-charts@0.2.0",
+  "built_at": "2026-05-12T13:50:42.271Z",
+  "content_hash": "sha256:5082a8a71d327a485c24fe10ff921ada7053df572dddcbb1817ab8bcc0f08f94",
   "source_hashes": {
     "taf": "21f172c3cfe50a399dcb17ba7dbaf82f82e7c773b4e752431d0b00384c226c85"
   },
@@ -13,5 +13,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 6103
+  "svg_bytes": 6147
 }

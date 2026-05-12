@@ -1,18 +1,19 @@
 {
   "slug": "wx-scenarios/dense-fog-radiation-central-valley/pirep-plot",
   "type": "pirep-plot-grid",
-  "library_version": "@ab/wx-charts@0.1.0",
-  "built_at": "2026-05-11T14:07:05.662Z",
-  "content_hash": "sha256:879dca9cdbf63a876c7112c07031d2995c32e7fe9beb4ef43c3c742653fab589",
+  "library_version": "@ab/wx-charts@0.2.0",
+  "built_at": "2026-05-12T13:50:40.810Z",
+  "content_hash": "sha256:f8e2a7a5c3ed72c5bdd4af9c9b200f46ac985537b0d27e10052194c9c062540f",
   "source_hashes": {
     "reports": "15225db5ac4a4ae378074f36132b9983845fd1e938f5aea201c9eeb4c5892908"
   },
   "layer_counts": {
     "vector-symbology": 0,
     "point-symbology": 2,
-    "basemap-fill": 49
+    "basemap-fill": 49,
+    "north-america-context": 2
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 287842
+  "svg_bytes": 499846
 }
