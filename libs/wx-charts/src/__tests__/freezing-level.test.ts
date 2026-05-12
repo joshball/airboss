@@ -20,7 +20,7 @@ const SPEC: FreezingLevelSpec = {
 	type: 'freezing-level',
 	title: 'Freezing Level',
 	subtitle: 'Test fixture',
-	projection: { kind: 'lambert', parallels: [33, 45], rotate: [-96, -39] },
+	projection: { kind: 'lambert', parallels: [33, 45], rotate: [-96, 0] },
 	extent: 'conus',
 	sources: { field: 'cache://freezing-level/test.json' },
 };

@@ -1,9 +1,9 @@
 {
   "slug": "reference-fixtures/wx-gfa-2024-12-23-15z",
   "type": "gfa",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:38.494Z",
-  "content_hash": "sha256:621f165ad93b22fff3853df052541949ba0bbf8b6aa9baa59e9a9e111af7dc6e",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:06:14.563Z",
+  "content_hash": "sha256:4a648a7f493452b17c2a1e7c0c9c0bad61aa681dfe2bec1d98db218534c0369c",
   "source_hashes": {
     "polygons": "e4e2ba3fa420052f90610ce30bc0a71da5dc63548c4df1e77080ef101f94e24d"
   },
@@ -14,5 +14,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 504646
+  "svg_bytes": 499340
 }

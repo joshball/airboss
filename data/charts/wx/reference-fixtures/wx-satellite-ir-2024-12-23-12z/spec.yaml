@@ -5,7 +5,7 @@ subtitle: '2024-12-23 12Z -- GOES infrared (synthetic Phase F fixture)'
 projection:
   kind: lambert
   parallels: [33, 45]
-  rotate: [-96, -39]
+  rotate: [-96, 0]
 extent: conus
 sources:
   ir_png: cache://satellite/goes-ir-2024-12-23-12z.png

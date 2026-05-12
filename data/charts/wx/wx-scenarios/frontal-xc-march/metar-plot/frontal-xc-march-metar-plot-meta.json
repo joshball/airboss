@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/frontal-xc-march/metar-plot",
   "type": "metar-plot-grid",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:42.380Z",
-  "content_hash": "sha256:48c50aa8ee7fd7508ac0e0c577d4bfb2e053ce0ffb586378ed96ef8ef6c007ec",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:02.251Z",
+  "content_hash": "sha256:4f37879f53a00b536d81b72be8642931b122b09fa074a343c850a9c1feda7d0c",
   "source_hashes": {
     "observations": "d8955d92054021b7572384b5e93026ac424efb92f95142c29bf73232ec0939a0"
   },
@@ -15,5 +15,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 504841
+  "svg_bytes": 499533
 }

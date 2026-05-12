@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/frontal-xc-march/surface-analysis",
   "type": "surface-analysis",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:42.552Z",
-  "content_hash": "sha256:9e44ee04ce1ff935e38f2315ee6180bdf492b77c99a57e351d90aca2c79675ac",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:02.544Z",
+  "content_hash": "sha256:b01fc3a20009a00b47072e349fdad3c951a683515c48e042d4be8e852ea09645",
   "source_hashes": {
     "fronts": "f69b03c7dc88b13b58a1fb4699b2064c2ab940d8f823a222d03aadd8ced3bc5f"
   },
@@ -15,5 +15,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 608943
+  "svg_bytes": 604200
 }

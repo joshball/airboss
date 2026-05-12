@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/mountain-wave-rockies/taf-kapa",
   "type": "taf-timeline",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:43.875Z",
-  "content_hash": "sha256:933e0e3675d34036ca63d4f12e113499c87d80e56abe0afea08af63eaa12b710",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:05.586Z",
+  "content_hash": "sha256:123eda59a9b6cfcf7603ff3b3114a6f15bc8737b4625a99725b748638be001ea",
   "source_hashes": {
     "taf": "502b2cf86681e578e39baaf5a4e2d2a4261d9e7be46849cc213dbefc4f6457e9"
   },

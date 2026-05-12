@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/frontal-xc-march/prog-12hr",
   "type": "prog-chart",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:42.491Z",
-  "content_hash": "sha256:412c558c432194e636e8171e1b4735a9871f6b35b796537b730ca8be4f5ee271",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:02.444Z",
+  "content_hash": "sha256:bcab0eaf7d3bd39e71a52da625c39c2ac40e9f343b272cdc33164ce83ca417c9",
   "source_hashes": {
     "forecast": "d9619ea29ab91182f778b8198cc86b0ba079f8134aef84d7f21bc912eca50be5"
   },
@@ -16,5 +16,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 606238
+  "svg_bytes": 601589
 }

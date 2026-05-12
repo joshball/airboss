@@ -5,7 +5,7 @@ subtitle: '2024-12-23 15Z (Mon) -- low-altitude band (SFC-180), hand-traced AWC 
 projection:
   kind: lambert
   parallels: [33, 45]
-  rotate: [-96, -39]
+  rotate: [-96, 0]
 extent: conus
 sources:
   polygons: cache://gfa/2024-12-23-15z-sfc180.json

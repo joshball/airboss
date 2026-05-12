@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/frontal-xc-march/taf-kord",
   "type": "taf-timeline",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:42.560Z",
-  "content_hash": "sha256:2e122cb82c8f9b694237706cb1cbf60b73c5a0ba056d59033eb18dccf6c1da9a",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:02.737Z",
+  "content_hash": "sha256:a294fd3d51776043b28ae2c8448df6e24f4b23e65b9496183ab96e9ddc4adcd4",
   "source_hashes": {
     "taf": "8f78fbb121637e55a859a228f7aae8d78c21749065ba4ec28b3118d3279a1d37"
   },

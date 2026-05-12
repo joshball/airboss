@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/summer-thunderstorms-tx/taf-kaus",
   "type": "taf-timeline",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:44.422Z",
-  "content_hash": "sha256:72cfddd88234db5d1d272f7aece620965b12495a8c35150a66595147d46d3097",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:07.017Z",
+  "content_hash": "sha256:11d7a011b8fdc1540df2d5babee59c356eb6f0a59a26dbbc2dbb5b49d206aa50",
   "source_hashes": {
     "taf": "ca2adf655ea949f0bc33d8a1b6063857a792557b11c0398a8983f245d3819064"
   },

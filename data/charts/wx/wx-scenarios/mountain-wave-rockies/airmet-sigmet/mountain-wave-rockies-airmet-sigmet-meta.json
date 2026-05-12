@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/mountain-wave-rockies/airmet-sigmet",
   "type": "advisory-overlay",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:43.345Z",
-  "content_hash": "sha256:32f4a050afbb10bc4e4eacb06ba38f9b007ea17574545e2b006cb043a2bb292d",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:04.559Z",
+  "content_hash": "sha256:22b77277c040d78a99200cbdcdaf1a7ee1d4c8403811108ac21d09990a573d59",
   "source_hashes": {
     "advisories": "2fcbf7353af75db5dd374e7168e9d2db2bc54358a56e7ee7225333154c6c24fa"
   },
@@ -14,5 +14,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 499226
+  "svg_bytes": 493918
 }

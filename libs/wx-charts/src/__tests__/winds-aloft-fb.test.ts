@@ -18,7 +18,7 @@ const SPEC: WindsAloftFbSpec = {
 	type: 'winds-aloft-fb',
 	title: 'Winds Aloft (FB)',
 	subtitle: '2024-05-21 18Z',
-	projection: { kind: 'lambert', parallels: [33, 45], rotate: [-96, -39] },
+	projection: { kind: 'lambert', parallels: [33, 45], rotate: [-96, 0] },
 	extent: 'conus',
 	sources: { bulletin: 'cache://winds-aloft/2024-05-21-18z.json' },
 	options: {

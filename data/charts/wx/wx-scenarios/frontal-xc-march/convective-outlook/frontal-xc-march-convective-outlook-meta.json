@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/frontal-xc-march/convective-outlook",
   "type": "convective-outlook",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:42.090Z",
-  "content_hash": "sha256:0a0dd28f542b88ead07907ff4f36f4982c2e2af0b618aa58dbe5843c282b112c",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:01.725Z",
+  "content_hash": "sha256:bee2806cade56ca6d0c6e0842607c3934c3dd7f40bd216ee3c79cc50a7a82012",
   "source_hashes": {
     "outlook": "0f03765da5628346c170b53abe64dee51d5cab845a9b850990f9aca186a1ee39"
   },
@@ -14,5 +14,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 498539
+  "svg_bytes": 493231
 }

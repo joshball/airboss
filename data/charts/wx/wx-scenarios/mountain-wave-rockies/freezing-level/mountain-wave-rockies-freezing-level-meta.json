@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/mountain-wave-rockies/freezing-level",
   "type": "freezing-level",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:43.566Z",
-  "content_hash": "sha256:97dbdafb269d9781cb30d5e3657a4d6178de140a57bee4ca39e29ed2e2d308f5",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:04.846Z",
+  "content_hash": "sha256:0e79297439a56974fbbd5d7a2de5b0f97bf2284015982f60fb51d745a102363c",
   "source_hashes": {
     "field": "a862ce4dc0f31e7a11fa1801deec92f472b48dd28166de8d28a4cfbe1ac0cf8d"
   },
@@ -15,5 +15,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 579669
+  "svg_bytes": 575270
 }

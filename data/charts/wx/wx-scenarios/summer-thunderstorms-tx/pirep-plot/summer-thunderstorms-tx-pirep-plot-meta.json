@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/summer-thunderstorms-tx/pirep-plot",
   "type": "pirep-plot-grid",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:44.332Z",
-  "content_hash": "sha256:e1b3d52abc8739a2dbc00f826d2c8379e4d56004684ac3af01c8265010b62aac",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:06.788Z",
+  "content_hash": "sha256:783613fa454a20d831dced2ea4e9a71d98fec313659619c55b248c20e59ad010",
   "source_hashes": {
     "reports": "2c70ba793aa31a74ca2ab0d513bd205309c0e0bb008e49e207136d60d1d7dfcf"
   },
@@ -15,5 +15,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 502045
+  "svg_bytes": 496737
 }

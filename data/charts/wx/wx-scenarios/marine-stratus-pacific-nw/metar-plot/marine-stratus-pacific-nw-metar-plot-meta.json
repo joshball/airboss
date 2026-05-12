@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/marine-stratus-pacific-nw/metar-plot",
   "type": "metar-plot-grid",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:43.025Z",
-  "content_hash": "sha256:e66fb456599ab2c3be15bd5ccbcb68dc2cb8d6ef8453a3c0179a496dec1b53be",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:03.704Z",
+  "content_hash": "sha256:d4268a0f76a8f00ce8b3575ef59d54af215358be155c59de75b76710ef5f195f",
   "source_hashes": {
     "observations": "02ba9c545a46fdd23a8a68ec8f62e3dce38505fa570e84d1435e9b40d3334811"
   },
@@ -15,5 +15,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 504666
+  "svg_bytes": 499348
 }

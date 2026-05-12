@@ -30,7 +30,7 @@ const SPEC: RadarMosaicSpec = {
 	type: 'radar-mosaic',
 	title: 'Radar Mosaic',
 	subtitle: '2024-05-21 22:00Z -- NEXRAD composite reflectivity',
-	projection: { kind: 'lambert', parallels: [33, 45], rotate: [-96, -39] },
+	projection: { kind: 'lambert', parallels: [33, 45], rotate: [-96, 0] },
 	extent: 'conus',
 	sources: {
 		radar_png: 'cache://radar/n0r_202405212200.png',

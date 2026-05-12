@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/dense-fog-radiation-central-valley/convective-outlook",
   "type": "convective-outlook",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:41.542Z",
-  "content_hash": "sha256:cde0dfd8cd783a73644a70abafa6bea08c61df98f2c9ed10a1af9715c410e677",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:00.328Z",
+  "content_hash": "sha256:74b119d7cffc1fc5ce319698de4b82db512889c8ce018cfe3cf4d75d90b5c122",
   "source_hashes": {
     "outlook": "0fd18d271d9c05ad7dee7bcc1d2e37dcb5c652b935807aca4cec9bc8136baded"
   },
@@ -14,5 +14,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 495699
+  "svg_bytes": 490391
 }

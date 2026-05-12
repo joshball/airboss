@@ -1,9 +1,9 @@
 {
   "slug": "reference-fixtures/wx-metar-plot-grid-2024-01-13-12z",
   "type": "metar-plot-grid",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:38.762Z",
-  "content_hash": "sha256:ac3e4e17235b387a4dc679f1fd7f21198b6a3c941557d30392e789b31ab82e0e",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:06:14.947Z",
+  "content_hash": "sha256:7af22a94c657f4590b8a983892fd9c20e1a91dea6b0aaf4123a5ea861ef73aed",
   "source_hashes": {
     "observations": "7877f9c1b1163457795071e97463778caa42ee9a30d365dd5fcd976108f0cb10"
   },
@@ -15,5 +15,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 546714
+  "svg_bytes": 541411
 }

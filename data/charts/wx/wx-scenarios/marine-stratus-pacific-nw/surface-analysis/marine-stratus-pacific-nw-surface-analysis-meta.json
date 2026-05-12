@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/marine-stratus-pacific-nw/surface-analysis",
   "type": "surface-analysis",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:43.211Z",
-  "content_hash": "sha256:e504fb0a99dbe70af7c7d315daa1cba5a47fa43b64d3968570fbdad826877b6a",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:04.041Z",
+  "content_hash": "sha256:a14aed5bf861641ce0bed3d5787dddb7e210708fe1ba71293be304104ced55f2",
   "source_hashes": {
     "fronts": "9efaa1cb3ae2300ea4ac70dfc28ea5dbf6099f97302a10a9c58847b75e450e8b"
   },
@@ -15,5 +15,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 570259
+  "svg_bytes": 565663
 }

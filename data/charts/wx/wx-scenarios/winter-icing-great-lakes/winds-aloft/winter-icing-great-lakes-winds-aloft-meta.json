@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/winter-icing-great-lakes/winds-aloft",
   "type": "winds-aloft-fb",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:45.005Z",
-  "content_hash": "sha256:e9b21f6348ca7b28ae1c70cbc9db1a8e12885ec10bdf575be05955db082b1802",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:08.842Z",
+  "content_hash": "sha256:fb3ff2df3e4264c6b36914df315e6ac70621f49fd9ec4ac89cbd300693d2d934",
   "source_hashes": {
     "bulletin": "5134875188cb93e0122552567b65b875ca101c1604436c09eb8dd5b2b2f35d9b"
   },
@@ -14,5 +14,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 505802
+  "svg_bytes": 500464
 }

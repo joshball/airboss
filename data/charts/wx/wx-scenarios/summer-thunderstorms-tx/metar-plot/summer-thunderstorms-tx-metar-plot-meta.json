@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/summer-thunderstorms-tx/metar-plot",
   "type": "metar-plot-grid",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:44.292Z",
-  "content_hash": "sha256:2b818a69595df8e6a4e6117e2ce37912b6a5171dd5de989829a64925439bc197",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:06.696Z",
+  "content_hash": "sha256:cdf50b8f3888b5705c3645ef001b2b816c5df42e6a6890cac0a4ac54874284a2",
   "source_hashes": {
     "observations": "02e7ec4e16ace41decd7d0b0cc59b74083e70ac3729f6ee2ed735aafe38861e3"
   },
@@ -15,5 +15,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 504296
+  "svg_bytes": 498988
 }

@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/mountain-wave-rockies/winds-aloft",
   "type": "winds-aloft-fb",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:43.944Z",
-  "content_hash": "sha256:37d245d03af589ec8d8bc4b247661d5a99cab47d43fa5e1f38109c60400ecb6e",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:05.934Z",
+  "content_hash": "sha256:9b9dc632604270c96155411fa0aaae675cd4974ec1bbf01f1891f931cef74942",
   "source_hashes": {
     "bulletin": "e58a5fb22d17fc03e2b099f6eeeea92620b0312c2b98c847389750d459a611a5"
   },
@@ -14,5 +14,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 505832
+  "svg_bytes": 500554
 }

@@ -113,7 +113,7 @@ const SOURCE_BOUNDS = {
 const PROJECTION = {
 	kind: 'lambert' as const,
 	parallels: [33, 45] as [number, number],
-	rotate: [-96, -39] as [number, number],
+	rotate: [-96, 0] as [number, number],
 };
 
 // ----------------------------------------------------------------------

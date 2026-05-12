@@ -1,9 +1,9 @@
 {
   "slug": "reference-fixtures/wx-airmet-sigmet-2024-12-23-12z",
   "type": "advisory-overlay",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:38.245Z",
-  "content_hash": "sha256:5777350e0473762d7fa1761406830a0e0f229731caaf834be26d1b7d02a413bc",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:06:14.185Z",
+  "content_hash": "sha256:31911b4275e08a860df86f022210c61ac824eb872600d3f8597b3d0a27dc83b4",
   "source_hashes": {
     "advisories": "e498798b52732599e3dc7bdb2f25df15e8b285db3f15584ed783fe8b6110d627"
   },
@@ -14,5 +14,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 503042
+  "svg_bytes": 497736
 }

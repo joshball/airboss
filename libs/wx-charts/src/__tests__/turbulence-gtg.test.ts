@@ -28,7 +28,7 @@ const SPEC: TurbulenceGtgSpec = {
 	type: 'turbulence-gtg',
 	title: 'GTG (Graphical Turbulence Guidance)',
 	subtitle: 'Test fixture',
-	projection: { kind: 'lambert', parallels: [33, 45], rotate: [-96, -39] },
+	projection: { kind: 'lambert', parallels: [33, 45], rotate: [-96, 0] },
 	extent: 'conus',
 	sources: {
 		intensity_grid: 'cache://gtg/test.json',

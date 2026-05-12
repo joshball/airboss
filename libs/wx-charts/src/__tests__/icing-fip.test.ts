@@ -20,7 +20,7 @@ const SPEC: IcingFipSpec = {
 	type: 'icing-fip',
 	title: 'FIP Icing +6h',
 	subtitle: '6-hour forecast',
-	projection: { kind: 'lambert', parallels: [33, 45], rotate: [-96, -39] },
+	projection: { kind: 'lambert', parallels: [33, 45], rotate: [-96, 0] },
 	extent: 'conus',
 	sources: { field: 'cache://icing/test-fip.json' },
 };

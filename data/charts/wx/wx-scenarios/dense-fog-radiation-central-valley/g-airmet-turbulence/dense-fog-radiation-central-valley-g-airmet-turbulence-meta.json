@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/dense-fog-radiation-central-valley/g-airmet-turbulence",
   "type": "turbulence-gairmet",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:41.718Z",
-  "content_hash": "sha256:6da953408f83f89582fc2d18dc4d3262dbded755bea0bd94fa614ead1ad95296",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:00.694Z",
+  "content_hash": "sha256:1655005d9d426a4ce23fb7bd90ae9f4df50712e8087ec06691ae5cea4e25fe7b",
   "source_hashes": {
     "areas": "dac1ce49a9c880acb2418b291d08f130431cf25f27d82f0dd46c025e96b955aa"
   },
@@ -14,5 +14,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 495614
+  "svg_bytes": 490306
 }

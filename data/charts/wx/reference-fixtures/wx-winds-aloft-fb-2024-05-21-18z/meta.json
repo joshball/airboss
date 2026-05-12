@@ -1,9 +1,9 @@
 {
   "slug": "reference-fixtures/wx-winds-aloft-fb-2024-05-21-18z",
   "type": "winds-aloft-fb",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:41.454Z",
-  "content_hash": "sha256:6a83e7f359d9d95971474169dde5d3d95d3b3ce0e498a2ac4564fe78a69043f7",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:00.146Z",
+  "content_hash": "sha256:662ed116412be169cc21e4b2c4faeba7510c68af561497f02049ba580fe5d617",
   "source_hashes": {
     "bulletin": "b0f3dfb25f3dc81b821b5e207ccd3cdfe4db58fbb0edc40c2f33cf868564161a"
   },
@@ -14,5 +14,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 531943
+  "svg_bytes": 526673
 }

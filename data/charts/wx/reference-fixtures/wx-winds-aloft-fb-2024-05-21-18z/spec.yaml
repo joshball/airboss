@@ -5,7 +5,7 @@ subtitle: '2024-05-21 18Z (Tue) -- 19 forecast points (hand-traced composite)'
 projection:
   kind: lambert
   parallels: [33, 45]
-  rotate: [-96, -39]
+  rotate: [-96, 0]
 extent: conus
 sources:
   bulletin: cache://winds-aloft/2024-05-21-18z.json

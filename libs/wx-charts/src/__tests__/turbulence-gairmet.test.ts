@@ -28,7 +28,7 @@ const SPEC: TurbulenceGairmetSpec = {
 	type: 'turbulence-gairmet',
 	title: 'Turbulence G-AIRMET',
 	subtitle: 'Test fixture',
-	projection: { kind: 'lambert', parallels: [33, 45], rotate: [-96, -39] },
+	projection: { kind: 'lambert', parallels: [33, 45], rotate: [-96, 0] },
 	extent: 'conus',
 	sources: {
 		areas: 'cache://g-airmet/test-turb.json',

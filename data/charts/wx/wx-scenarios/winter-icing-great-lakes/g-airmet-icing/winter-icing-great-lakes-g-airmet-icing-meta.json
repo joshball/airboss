@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/winter-icing-great-lakes/g-airmet-icing",
   "type": "icing-gairmet",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:44.671Z",
-  "content_hash": "sha256:1f172a6b1839b88ad3ea01d3c6f9aa53f3fae449d3b6b7dec827f278b08523f0",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:07.842Z",
+  "content_hash": "sha256:eb6c691efab202f840d3c9a5592c19b3e775938e28e092a7d3f947077bc7b2c9",
   "source_hashes": {
     "areas": "ad92b6ef5230a2cc3e232172c8916639db383e8b7114c822c51a105ca53d0479"
   },
@@ -14,5 +14,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 497807
+  "svg_bytes": 492499
 }

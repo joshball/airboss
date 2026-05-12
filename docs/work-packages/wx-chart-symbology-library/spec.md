@@ -364,7 +364,7 @@ options:
 projection:
   kind: lambert
   parallels: [33, 45]
-  rotate: [-96, -39]
+  rotate: [-96, 0]
 extent: conus
 ```
 

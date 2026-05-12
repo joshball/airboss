@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/frontal-xc-march/airmet-sigmet",
   "type": "advisory-overlay",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:42.050Z",
-  "content_hash": "sha256:368fc0cd138707da287afd954c688504bfd1e5f1f4d9075f303fdebe2a7a34cf",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T17:55:56.503Z",
+  "content_hash": "sha256:f99bcb2810d666c29a93e8acb07d6f46114b9f366de2fdf55a23ded94a08cb0e",
   "source_hashes": {
     "advisories": "c5890abc3cb8b2f9ba9b38dbe48c3e66892a0280aa19035a94e61c9b56694581"
   },
@@ -14,5 +14,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 499032
+  "svg_bytes": 493724
 }

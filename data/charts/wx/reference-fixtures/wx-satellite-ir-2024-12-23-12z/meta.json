@@ -1,9 +1,9 @@
 {
   "slug": "reference-fixtures/wx-satellite-ir-2024-12-23-12z",
   "type": "satellite-ir",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:40.076Z",
-  "content_hash": "sha256:f1e4e7b2dc711d7b49bbf5e5d9e1916814908f0fc2f8a1cdb2e232531f3411c1",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:08:10.776Z",
+  "content_hash": "sha256:3a6425d3ae70e934aabc4e7c1edb502ba1f2df7cfe30fdb282c614dffe3dbabc",
   "source_hashes": {
     "ir_png": "2116b392b66ffe3aed06ef6abfbe3d3e8a9f98cc67ff151d321d4d61bf25480a",
     "ir_world": "f8b3b6876b0d2d3c7d26b1d3018f6cca57ea6a27d7045488627e9b476e6eb8e7"
@@ -11,7 +11,7 @@
   "layer_counts": {
     "raster-overlay": 1
   },
-  "drawn_pixels": 672330,
+  "drawn_pixels": 767631,
   "parser_warnings": [],
-  "svg_bytes": 926832
+  "svg_bytes": 1001474
 }

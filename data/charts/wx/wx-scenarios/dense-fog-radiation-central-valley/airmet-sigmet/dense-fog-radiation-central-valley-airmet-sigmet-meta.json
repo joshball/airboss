@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/dense-fog-radiation-central-valley/airmet-sigmet",
   "type": "advisory-overlay",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:41.495Z",
-  "content_hash": "sha256:6ee2e7cad7e43829fafc2d3253cf842765bd76f3a538103616f29960609c319c",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:00.236Z",
+  "content_hash": "sha256:fd6d1002c8b42658b1754b5c474cb84ddb853e67eed4a431dca186774761c46b",
   "source_hashes": {
     "advisories": "6304374db6a2d7722b965c918c2b803d0b046c06a9094264d89f470cb4f02c74"
   },
@@ -14,5 +14,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 497822
+  "svg_bytes": 492512
 }

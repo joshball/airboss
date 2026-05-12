@@ -5,7 +5,7 @@ subtitle: '2024-05-21 (Tue) -- HIGH risk near OK/TX border, hand-traced from SPC
 projection:
   kind: lambert
   parallels: [33, 45]
-  rotate: [-96, -39]
+  rotate: [-96, 0]
 extent: conus
 sources:
   outlook: cache://spc/2024-05-21-day1.json

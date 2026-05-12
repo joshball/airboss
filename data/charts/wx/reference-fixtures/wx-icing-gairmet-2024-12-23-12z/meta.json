@@ -1,9 +1,9 @@
 {
   "slug": "reference-fixtures/wx-icing-gairmet-2024-12-23-12z",
   "type": "icing-gairmet",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:38.708Z",
-  "content_hash": "sha256:31db056b31817b078ba27ad6f04d4ea4fd0429ab723dd3569356ac6e581ff7da",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:06:14.853Z",
+  "content_hash": "sha256:0f441e157e13296c9fc84fd34e9e7634255c90b2aa228e30be57dedbc112a07e",
   "source_hashes": {
     "areas": "591926cf80e952613005d4645ab3d34c6dafac079e7f372581a37810331677db"
   },
@@ -14,5 +14,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 499810
+  "svg_bytes": 494503
 }

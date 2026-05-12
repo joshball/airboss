@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/mountain-wave-rockies/taf-kbjc",
   "type": "taf-timeline",
-  "library_version": "@ab/wx-charts@0.3.0",
-  "built_at": "2026-05-12T14:37:43.880Z",
-  "content_hash": "sha256:274a57273e3b62326aa985ae988b520e2c95c215031d5b6e9006e58538c0f726",
+  "library_version": "@ab/wx-charts@0.3.1",
+  "built_at": "2026-05-12T18:07:05.713Z",
+  "content_hash": "sha256:61c5ae19f704953fc303125b074ced652354e14953910d24e57ee0bcedcadba8",
   "source_hashes": {
     "taf": "10b364bfe0dab4aa9c4a7b7bf74740a847a034c712612b4c9d734361b4bf7ced"
   },
