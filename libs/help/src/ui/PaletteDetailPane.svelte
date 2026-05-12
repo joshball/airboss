@@ -1,6 +1,5 @@
 <script lang="ts">
 import { urlForReference } from '@ab/sources';
-import type { SourceId } from '@ab/sources';
 import { accentFor } from './palette-accent';
 import { airbossRefForResult, isFlightbagHref } from './palette-flightbag';
 import type { SearchResult } from '../schema/result-types';
@@ -47,13 +46,13 @@ let copied = $state(false);
 let copyTimer = $state<number | null>(null);
 
 const accent = $derived<string>(result ? accentFor(result.type) : 'cmd');
-const refUri = $derived<string | null>(result ? airbossRefForResult(result) : null);
+const refUri = $derived(result ? airbossRefForResult(result) : null);
 const flightbagPath = $derived<string | null>(
 	(() => {
 		if (!result) return null;
 		// Prefer a built airboss-ref URI -> flightbag URL when we can.
 		if (refUri) {
-			const url = urlForReference(refUri as SourceId);
+			const url = urlForReference(refUri);
 			// urlForReference returns FLIGHTBAG_HOME as a safe fallback when
 			// the URI parses but no reader route exists yet. Treat that as
 			// "no targeted flightbag deep-link available."

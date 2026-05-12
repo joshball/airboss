@@ -17,12 +17,13 @@ import {
 	airbossRefForAcsPublication,
 	airbossRefForAimEntry,
 	airbossRefForWholeDocHandbook,
+	type SourceId,
 } from '@ab/sources';
 import { ROUTES } from '@ab/constants';
 import type { SearchResult } from '../schema/result-types';
 
 /** Registry id -> airboss-ref URI, where we can derive one. */
-export function airbossRefForResult(result: SearchResult): string | null {
+export function airbossRefForResult(result: SearchResult): SourceId | null {
 	const id = result.id;
 	if (result.type === 'faa.handbook') {
 		// Registry id shape: `doc-<sourceType>` where sourceType is the
@@ -33,14 +34,14 @@ export function airbossRefForResult(result: SearchResult): string | null {
 		// alongside, this builder can stamp the real edition slug.
 		const slug = id.replace(/^doc-/, '');
 		if (!slug) return null;
-		return airbossRefForWholeDocHandbook(slug, '');
+		return airbossRefForWholeDocHandbook(slug, '') as SourceId;
 	}
 	if (result.type === 'faa.cfr.part') {
 		const match = id.match(/^doc-cfr-(\d+)-(.+)$/);
 		if (!match) return null;
 		const [, title, part] = match;
 		if (!title || !part) return null;
-		return `airboss-ref:regs/cfr-${title}/${part}`;
+		return `airboss-ref:regs/cfr-${title}/${part}` as SourceId;
 	}
 	if (result.type === 'faa.ac') {
 		// Registry id shape: `doc-ac-<docNumber>-<rev>` (PR #817 seed).
@@ -48,18 +49,18 @@ export function airbossRefForResult(result: SearchResult): string | null {
 		if (!match) return null;
 		const [, docNumber, rev] = match;
 		if (!docNumber || !rev) return null;
-		return airbossRefForAcDocument(docNumber, rev);
+		return airbossRefForAcDocument(docNumber, rev) as SourceId;
 	}
 	if (result.type === 'faa.acs') {
 		const slug = id.replace(/^doc-/, '');
 		if (!slug) return null;
-		return airbossRefForAcsPublication(slug);
+		return airbossRefForAcsPublication(slug) as SourceId;
 	}
 	if (result.type === 'faa.aim') {
 		// Registry id shape: `doc-aim-<chapter>-<section>` (or similar).
 		const code = id.replace(/^doc-aim-/, '').replace(/-/g, '-');
 		if (!code) return null;
-		return airbossRefForAimEntry(code);
+		return airbossRefForAimEntry(code) as SourceId;
 	}
 	if (result.type === 'faa.handbook.chapter' || result.type === 'faa.cfr.sect') {
 		// Child rows from DB-backed loaders carry their own id shape; the
