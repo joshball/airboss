@@ -162,16 +162,7 @@ Same bar as WP2 + WP3. Every new component uses role tokens from [04-VOCABULARY.
 
 ## Out of scope
 
-Explicitly out. Each is a **future source type that will extend this WP's shape** without rewriting it.
-
-- **Instrument approach plates** (IAP PDFs). Same `binary-visual` kind, different locator (airport identifier + procedure name). A follow-up WP registers the first plate, pending user-zero choice of which airport's plates to seed.
-- **Airport diagrams** (AD PDFs). Same pattern as plates; single-page PDF. Trivial once plates land.
-- **NTSB CSV**. Already registered as a source (`ntsb-current`) but the CSV pipeline is not yet wired. Adds a `csv-tabular` preview path, reuses `CsvPreview.svelte` from WP3. Deferred; not part of this WP.
-- **AOPA HTML** and similar crawled-HTML sources. Different fetch shape (follow-links + normalise). Deferred.
-- **OCR on charts.** Charts are visual; extracting text from raster is out of scope forever (not just deferred). Sectional charts encode regulatory airspace through symbology, not through words; any OCR pretence would produce noise. The extraction pipeline stays skipped for `binary-visual` sources, full stop.
-- **Chart overlay / learner-facing rendering.** The rendering surface for sectionals is `spatial/` when that app exists. This WP is hangar-only; the chart only has to be visible enough in the admin UI to verify ingest worked.
-- **Georeference reuse / tiling / slippy-map.** All spatial tiling lives in `spatial/`. Hangar stores the raw archive + a thumbnail; anything else is spatial's job.
-- **Automatic edition refresh on the 56-day cycle.** The registry knows the cadence; the fetch is operator-triggered. Cron-based auto-refresh is a post-MVP decision (same as `wp-hangar-registry`).
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Architecture notes
 

@@ -107,12 +107,6 @@ End-to-end manual exercise on dev. Covered in detail in [test-plan.md](./test-pl
 - [ ] No FOUC on the detail page + files browser.
 - [ ] PR opened via `gh pr create`; not self-merged.
 
-## Deferred (surface only; not implemented here)
+## Out of scope
 
-- Instrument approach plates (new source type, same pattern)
-- Airport diagrams (new source type, same pattern)
-- NTSB CSV ingest + tabular preview
-- AOPA HTML crawl + ingest
-- Cron-based auto-refresh on 56-day cycle
-- Spatial rendering / overlay (belongs to `apps/spatial/` when it exists)
-- Automatic PR-against-main edition refresh (the fetch is operator-triggered for now)
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
