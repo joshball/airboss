@@ -40,12 +40,9 @@ Both deferrals are honest -- the integration coverage rides on the manual test p
 5. **Smoke spec.** A single hangar spec proving the infra works: sign in as admin, navigate to `/users`, verify the directory renders, sign out. Useful as the canary for any future hangar suite breakage.
 6. **Document the pattern.** Add a section to `docs/agents/best-practices.md` (or a new `docs/agents/hangar-e2e.md`) covering how to author a hangar e2e spec: where to put it, how to use the auth state, how to wait for server-rendered data, common gotchas.
 
-## Out of Scope (explicit)
+## Out of scope
 
-- **Authoring the deferred suites.** This WP gets the infrastructure to green. The audit-explorer + users-editing e2e suites land in their own follow-up PRs once the infrastructure is available.
-- **Multi-role auth fixtures.** This WP seeds one admin. Author / operator / learner fixtures for negative-path tests (the redirect-on-403 scenarios) come in a follow-on if the per-spec inline cost gets painful.
-- **Cross-app e2e tests.** Specs that walk between hangar and study (e.g. an admin promotes someone in hangar; the user logs into study and sees the new role) are a power-user pattern. Not needed for v1.
-- **CI integration.** This WP gets local + manual `bun run test:e2e` passing. CI wiring is a separate concern.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Acceptance
 
