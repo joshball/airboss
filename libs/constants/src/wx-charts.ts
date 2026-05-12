@@ -108,10 +108,17 @@ export const FAA_FLIGHT_CATEGORY_VALUES = Object.values(FAA_FLIGHT_CATEGORIES);
 export type FaaFlightCategory = (typeof FAA_FLIGHT_CATEGORY_VALUES)[number];
 
 /**
- * Slug shape: `wx-<chart-type>-<isodate>[-<frame>]`. Lowercase + hyphens,
- * starts with `wx-`, 3..82 visible chars after the prefix.
+ * Slug shape (ADR 027 PR 3): path-shaped, two families.
+ *
+ *   reference-fixtures/wx-<chart-type>-<isodate>[-<frame>]
+ *   wx-scenarios/<scenario-id>/<chart-kind>
+ *
+ * Lowercase, hyphen-and-slash separators, starts with the family prefix.
+ * Each segment must be non-empty, start + end with `[a-z0-9]`, and contain
+ * only `[a-z0-9-]`.
  */
-export const WX_CHART_SLUG_REGEX = /^wx-[a-z0-9][a-z0-9-]{1,80}[a-z0-9]$/;
+const SLUG_SEGMENT = '[a-z0-9](?:[a-z0-9-]*[a-z0-9])?';
+export const WX_CHART_SLUG_REGEX = new RegExp(`^(?:reference-fixtures|wx-scenarios)(?:/${SLUG_SEGMENT}){1,3}$`);
 
 /**
  * Output size budgets for `chart.svg`. Per spec "Edge cases" -> output SVG

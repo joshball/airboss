@@ -3,8 +3,9 @@
  *
  * The closed set of production scenario slugs (six total) and the AIRMET-
  * family discriminator the engine emits. Slugs double as scenario id
- * throughout the engine, chart-spec slug prefix (`wx-scenario-<slug>-<chart>`),
- * and cache subdirectory (`cache://scenarios/<slug>/`).
+ * throughout the engine, chart-spec slug prefix
+ * (`wx-scenarios/<slug>/<chart>` per ADR 027 PR 3), and cache subdirectory
+ * (`cache://scenarios/<slug>/`).
  *
  * See `docs/work-packages/wx-engine/spec.md` and the spike notes at
  * `spikes/wx-engine/01-frontal-xc/spike-notes.md`.

@@ -12,26 +12,41 @@
  *     reference-fixture family.
  *   - `chartSlugToDir(repoRoot, slug)` -- the inverse mapping: given any
  *     chart slug (scenario or reference-fixture), return its on-disk
- *     directory. Used by the engine bundle writer to mirror chart specs
- *     into `data/charts/wx/<slug>/` without re-encoding the layout.
+ *     directory. Path-shaped slugs map directly to the layout.
+ *   - `chartSpecFilename(slug)` / `chartArtifactFilename(slug, artifact)`
+ *     -- per-family artifact filename. Reference-fixtures keep the flat
+ *     `spec.yaml`/`chart.svg`/`meta.json` names; wx-scenarios disambiguate
+ *     with a `<scenario-id>-<chart-kind>-` prefix.
  *
- * # Migration phase
+ * # Layout
  *
- * Returns the **current flat layout** (`wx-<chart-kind>-<date-zulu>` for
- * reference fixtures; `data/charts/wx/<slug>/` for any chart). The ADR 027
- * follow-on PR migrates to nested layouts (`reference-fixtures/wx-...`,
- * `wx-scenarios/<scenario-id>/<chart-kind>`). Because every consumer reads
- * through these helpers, the migration is a one-file edit at that point.
+ * Returns the **nested layout** introduced by ADR 027 PR 3:
+ *
+ *   data/charts/wx/reference-fixtures/wx-<chart-kind>-<date-zulu>/
+ *     spec.yaml
+ *     chart.svg
+ *     meta.json
+ *
+ *   data/charts/wx/wx-scenarios/<scenario-id>/<chart-kind>/
+ *     <scenario-id>-<chart-kind>-spec.yaml
+ *     <scenario-id>-<chart-kind>-chart.svg
+ *     <scenario-id>-<chart-kind>-meta.json
+ *
+ *   data/charts/wx/mockups/<YYYY-MM-DD>-<short-name>/  (internal; not addressed via slug)
  *
  * # Browser safety
  *
  * `@ab/constants` is bundled into the browser. Pure-string helpers
- * (`referenceFixtureChartSlug`) are browser-safe. Path-building helpers
- * lazy-load `node:path` via `process.getBuiltinModule(...)` per the
- * canonical pattern at [./source-cache.ts](./source-cache.ts).
+ * (`referenceFixtureChartSlug`, `chartSpecFilename`, `chartArtifactFilename`)
+ * are browser-safe. Path-building helpers lazy-load `node:path` via
+ * `process.getBuiltinModule(...)` per the canonical pattern at
+ * [./source-cache.ts](./source-cache.ts).
  */
 
-import type { WxChartArtifact } from './wx-engine-paths';
+import { WX_CHART_FAMILIES } from './wx-charts-paths-shared';
+import { WX_CHART_ARTIFACTS, type WxChartArtifact } from './wx-engine-paths';
+
+export { WX_CHART_FAMILIES, type WxChartFamily } from './wx-charts-paths-shared';
 
 type NodePath = { join: (...parts: string[]) => string };
 
@@ -70,7 +85,7 @@ export function chartsRootDir(repoRoot: string): string {
 /**
  * Slug shape for wx-charts reference-fixture charts.
  *
- * Returns the **current flat layout** (`wx-<chart-kind>-<date-zulu>`).
+ * Returns the **nested layout** (`reference-fixtures/wx-<chart-kind>-<date-zulu>`).
  * The chart-kind segment matches the renderer name (e.g.
  * `'surface-analysis'`, `'metar-plot-grid'`, `'winds-aloft-fb'`); the
  * `dateZulu` segment is `YYYY-MM-DD-<HH>z` (lowercase `z`).
@@ -78,29 +93,26 @@ export function chartsRootDir(repoRoot: string): string {
  * For fixtures with a frame modifier in the middle (e.g.
  * `wx-prog-chart-12hr-2024-12-23-12z`), pass the joined kind as the
  * chart-kind argument (e.g. `'prog-chart-12hr'`).
- *
- * ADR 027 follow-on PR migrates to the nested
- * `reference-fixtures/wx-<chart-kind>-<date-zulu>` shape.
  */
 export function referenceFixtureChartSlug(chartKind: string, dateZulu: string): string {
-	return `wx-${chartKind}-${dateZulu}`;
+	return `${WX_CHART_FAMILIES.REFERENCE_FIXTURES}/wx-${chartKind}-${dateZulu}`;
 }
 
 /**
  * Repo-relative directory for a wx-charts reference-fixture chart.
  *
- * Returns the **current flat layout**:
- *   `<repoRoot>/data/charts/wx/wx-<chart-kind>-<date-zulu>`
+ * Returns `<repoRoot>/data/charts/wx/reference-fixtures/wx-<chart-kind>-<date-zulu>`.
  */
 export function referenceFixtureChartDir(repoRoot: string, chartKind: string, dateZulu: string): string {
 	const p = nodePath();
-	return p.join(chartsRootDir(repoRoot), referenceFixtureChartSlug(chartKind, dateZulu));
+	return p.join(chartsRootDir(repoRoot), WX_CHART_FAMILIES.REFERENCE_FIXTURES, `wx-${chartKind}-${dateZulu}`);
 }
 
 /**
  * Absolute path to an artifact inside a reference-fixture chart directory.
  *
- * `artifact` is one of the `WX_CHART_ARTIFACTS` values.
+ * `artifact` is one of the `WX_CHART_ARTIFACTS` values. Reference fixtures
+ * use the flat filename inside their slug-named directory.
  */
 export function referenceFixtureArtifactPath(
 	repoRoot: string,
@@ -116,14 +128,43 @@ export function referenceFixtureArtifactPath(
  * Inverse of the slug builders: given any chart slug (scenario or
  * reference-fixture), return its on-disk directory.
  *
- * Used by the wx-engine bundle writer to mirror chart specs into
- * `data/charts/wx/<slug>/spec.yaml` without re-encoding the layout. Today
- * the slug encodes the full directory name; ADR 027 follow-on PR splits
- * scenario slugs (path-shaped: `wx-scenarios/<id>/<kind>`) from
- * reference-fixture slugs (`reference-fixtures/wx-<kind>-<date>`) and
- * routes each into its family directory.
+ * Both families use path-shaped slugs so the slug IS the relative path
+ * under `chartsRootDir`. This helper exists so call sites are explicit
+ * about the slug -> dir mapping (and so a future layout change is again
+ * a one-line edit).
  */
 export function chartSlugToDir(repoRoot: string, slug: string): string {
 	const p = nodePath();
 	return p.join(chartsRootDir(repoRoot), slug);
+}
+
+/**
+ * Per-family spec filename. Reference fixtures keep `spec.yaml`;
+ * wx-scenarios use the disambiguated `<scenario-id>-<chart-kind>-spec.yaml`
+ * filename derived from the slug's tail segments.
+ */
+export function chartSpecFilename(slug: string): string {
+	return chartArtifactFilename(slug, WX_CHART_ARTIFACTS.SPEC);
+}
+
+/**
+ * Per-family artifact filename. Mirrors `chartSpecFilename` for the other
+ * artifact kinds (`chart.svg`, `meta.json`).
+ *
+ * For `wx-scenarios/<scenario-id>/<chart-kind>` slugs returns
+ * `<scenario-id>-<chart-kind>-<artifact>`. For
+ * `reference-fixtures/wx-<chart-kind>-<date-zulu>` slugs returns the bare
+ * artifact filename.
+ *
+ * Slugs outside the two known families fall back to the bare artifact
+ * filename; callers that hit that branch are likely mid-migration and the
+ * fallback keeps the helper total.
+ */
+export function chartArtifactFilename(slug: string, artifact: WxChartArtifact): string {
+	const prefix = `${WX_CHART_FAMILIES.WX_SCENARIOS}/`;
+	if (slug.startsWith(prefix)) {
+		const tail = slug.slice(prefix.length);
+		return `${tail.replace(/\//g, '-')}-${artifact}`;
+	}
+	return artifact;
 }
