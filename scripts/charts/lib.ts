@@ -18,9 +18,9 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
 	chartArtifactFilename,
-	chartsRootDir,
 	chartSlugToDir,
 	chartSpecFilename,
+	chartsRootDir,
 	resolveCacheRoot,
 	WX_CHART_ARTIFACTS,
 	WX_CHART_FAMILIES,
