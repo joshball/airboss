@@ -48,12 +48,12 @@ Extend the existing `HelpPage` interface in [libs/help/src/schema/help-page.ts](
 
 New file [libs/help/src/schema/external-ref.ts](../../../libs/help/src/schema/external-ref.ts):
 
-| Field    | Type                                                   | Required | Rule                                                          |
-| -------- | ------------------------------------------------------ | -------- | ------------------------------------------------------------- |
-| `title`  | `string`                                               | Required | Non-empty; display label.                                     |
-| `url`    | `string`                                               | Required | Absolute http(s) URL; no `localhost` / private IPs.           |
-| `source` | `'wikipedia' \| 'faa' \| 'paper' \| 'book' \| 'other'` | Required | Drives the source badge + styling.                            |
-| `note`   | `string`                                               | Optional | One-line context ("See §5 for rating semantics"). Plain text. |
+| Field    | Type           | Required | Rule                                                          |          |          |          |                                    |
+| -------- | -------------- | -------- | ------------------------------------------------------------- | -------- | -------- | -------- | ---------------------------------- |
+| `title`  | `string`       | Required | Non-empty; display label.                                     |          |          |          |                                    |
+| `url`    | `string`       | Required | Absolute http(s) URL; no `localhost` / private IPs.           |          |          |          |                                    |
+| `source` | `'wikipedia' \ | 'faa' \  | 'paper' \                                                     | 'book' \ | 'other'` | Required | Drives the source badge + styling. |
+| `note`   | `string`       | Optional | One-line context ("See §5 for rating semantics"). Plain text. |          |          |          |                                    |
 
 ### New `HelpKind` value
 
@@ -131,13 +131,13 @@ New [libs/ui/src/components/InfoTip.svelte](../../../libs/ui/src/components/Info
 
 Props:
 
-| Prop          | Type         | Required | Notes                                                                                           |
-| ------------- | ------------ | -------- | ----------------------------------------------------------------------------------------------- |
-| `term`        | `string`     | Required | Accessible label ("More about: Strengthen").                                                    |
-| `definition`  | `string`     | Required | 1-2 sentence plain-text definition rendered in popover.                                         |
-| `helpId`      | `string`     | Optional | If set, popover shows a "Learn more" link to `/help/<helpId>` (with optional `#<helpSection>`). |
-| `helpSection` | `string`     | Optional | Section anchor on the help page.                                                                |
-| `size`        | `'sm'\|'md'` | Optional | Default `'sm'`. Icon sizing only; popover unaffected.                                           |
+| Prop          | Type     | Required | Notes                                                                                           |                                                       |
+| ------------- | -------- | -------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| `term`        | `string` | Required | Accessible label ("More about: Strengthen").                                                    |                                                       |
+| `definition`  | `string` | Required | 1-2 sentence plain-text definition rendered in popover.                                         |                                                       |
+| `helpId`      | `string` | Optional | If set, popover shows a "Learn more" link to `/help/<helpId>` (with optional `#<helpSection>`). |                                                       |
+| `helpSection` | `string` | Optional | Section anchor on the help page.                                                                |                                                       |
+| `size`        | `'sm'\   | 'md'`    | Optional                                                                                        | Default `'sm'`. Icon sizing only; popover unaffected. |
 
 Behavior:
 
@@ -262,18 +262,18 @@ New [apps/study/src/lib/help/content/session-start.ts](../../../apps/study/src/l
 
 ## Validation
 
-| Field / input                    | Rule                                                                                           |
-| -------------------------------- | ---------------------------------------------------------------------------------------------- |
-| `HelpPage.concept`               | Boolean; if true requires `helpKind === 'concept'`.                                            |
-| `HelpPage.externalRefs[].url`    | Matches `^https?://`; hostname not in `{localhost, 127.*, ::1, 10.*, 192.168.*, 172.16-31.*}`. |
-| `HelpPage.externalRefs[].title`  | Non-empty, trimmed length 1-120.                                                               |
-| `HelpPage.externalRefs[].source` | One of `'wikipedia' \| 'faa' \| 'paper' \| 'book' \| 'other'`.                                 |
-| `HelpPage.externalRefs[].note`   | Optional, trimmed length 0-200.                                                                |
-| Callout directive variant        | One of `note \| tip \| warn \| example \| danger`. Unknown = build error.                      |
-| Markdown fenced code `lang`      | One of supported Shiki langs OR `text` (unstyled). Unknown = build warning.                    |
-| `InfoTip.term`                   | Non-empty string.                                                                              |
-| `InfoTip.helpId`                 | Optional; when present must resolve in help registry at build time (validated via new test).   |
-| `PageHelp.pageId`                | Runtime-only: when unresolved, render nothing + dev console warning.                           |
+| Field / input                    | Rule                                                                                           |         |           |           |                                 |
+| -------------------------------- | ---------------------------------------------------------------------------------------------- | ------- | --------- | --------- | ------------------------------- |
+| `HelpPage.concept`               | Boolean; if true requires `helpKind === 'concept'`.                                            |         |           |           |                                 |
+| `HelpPage.externalRefs[].url`    | Matches `^https?://`; hostname not in `{localhost, 127.*, ::1, 10.*, 192.168.*, 172.16-31.*}`. |         |           |           |                                 |
+| `HelpPage.externalRefs[].title`  | Non-empty, trimmed length 1-120.                                                               |         |           |           |                                 |
+| `HelpPage.externalRefs[].source` | One of `'wikipedia' \                                                                          | 'faa' \ | 'paper' \ | 'book' \  | 'other'`.                       |
+| `HelpPage.externalRefs[].note`   | Optional, trimmed length 0-200.                                                                |         |           |           |                                 |
+| Callout directive variant        | One of `note \                                                                                 | tip \   | warn \    | example \ | danger`. Unknown = build error. |
+| Markdown fenced code `lang`      | One of supported Shiki langs OR `text` (unstyled). Unknown = build warning.                    |         |           |           |                                 |
+| `InfoTip.term`                   | Non-empty string.                                                                              |         |           |           |                                 |
+| `InfoTip.helpId`                 | Optional; when present must resolve in help registry at build time (validated via new test).   |         |           |           |                                 |
+| `PageHelp.pageId`                | Runtime-only: when unresolved, render nothing + dev console warning.                           |         |           |           |                                 |
 
 ## Edge Cases
 
@@ -295,14 +295,4 @@ New [apps/study/src/lib/help/content/session-start.ts](../../../apps/study/src/l
 
 ## Out of Scope
 
-- **Per-page help pages beyond `memory-review` and `session-start`.** The user adds these one by one later as requests.
-- **Drawer overlay for `PageHelp`.** Phase 1 ships with navigation to `/help/<id>`. A drawer is a future enhancement.
-- **Syntax-highlighted code block theming for dark/TUI.** Shiki ships a single theme here; theme-switching is a follow-up.
-- **Full-text search within a help page.** Existing palette search covers cross-page search.
-- **Authoring tool / preview for help pages.** Authors edit TS files directly.
-- **Rep detail route `/reps/<id>`.** If the rep doesn't have a detail page today, link to `/reps/browse?scenarioId=<id>` and file a parking-lot item.
-- **Engine / BC logic changes on `/session/start`.** This is presentation only.
-- **Locked worktree audit** (`worktree-agent-a55453e3`).
-- **`concept-*` naming convention enforcement.** Convention documented, not lint-enforced.
-- **Image hosting / CDN for figures.** Figures use in-repo `static/` paths only; no external image pipeline.
-- **Analytics on InfoTip opens or PageHelp clicks.** Possible future signal; not this package.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
