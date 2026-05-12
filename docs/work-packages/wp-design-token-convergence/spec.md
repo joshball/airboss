@@ -52,14 +52,14 @@ Proposed tokens:
 
 Currently each overlay primitive picks its own scale:
 
-| Primitive             | sm     | md     | lg     |
-| --------------------- | ------ | ------ | ------ |
-| Dialog.svelte         | 24rem  | 36rem  | 54rem  |
-| Drawer.svelte         | 20rem  | 32rem  | 48rem  |
-| InfoTip.svelte        | 14rem  | 18rem  | 20rem  |
-| JumpToCardPopover     | 24rem  | 28rem  | --     |
-| SharePopover          | 28rem  | 32rem  | --     |
-| SnoozeReasonPopover   | 32rem  | 36rem  | --     |
+| Primitive           | sm    | md    | lg    |
+| ------------------- | ----- | ----- | ----- |
+| Dialog.svelte       | 24rem | 36rem | 54rem |
+| Drawer.svelte       | 20rem | 32rem | 48rem |
+| InfoTip.svelte      | 14rem | 18rem | 20rem |
+| JumpToCardPopover   | 24rem | 28rem | --    |
+| SharePopover        | 28rem | 32rem | --    |
+| SnoozeReasonPopover | 32rem | 36rem | --    |
 
 Proposed tokens (one canonical scale, components override only with
 inline justification):
@@ -99,9 +99,7 @@ export const INSTRUMENT_READOUT_FONT_SIZE = 15;
 
 ## Out of scope
 
-- Tone / color tokens (already tokenized).
-- Spacing tokens (already tokenized).
-- Typography tokens (already tokenized).
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Tasks
 
