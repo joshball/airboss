@@ -54,10 +54,7 @@ Source items: `docs/work/.archive/todos/20260424-02-smi-walkthrough-feedback.md`
 
 ## Out of scope
 
-- `Card 1 of 12` as a dropdown-to-jump. Item 15 is deferred; resume/redo behavior belongs in `review-sessions-url`, and jumping around a live session muddies the FSRS schedule. Revisit after sessions have URL identity.
-- Revisit of "Wild Guess" confidence label (item 16). User half-retracted the suggestion; leave for a later copy pass.
-- Any schema change. This is pure UI + one constants addition.
-- Snooze/flag affordances. They live in `snooze-and-flag`. This WP leaves the "Snooze" slot empty in chrome and defers the actual button.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Product decisions the user needs to make
 
