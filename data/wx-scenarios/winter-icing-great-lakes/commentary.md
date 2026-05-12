@@ -80,7 +80,7 @@ Stratus and lake-effect icing over Lake Erie. cP air pours over the still-warm l
 
 ### wxc-winter-icing-great-lakes-airmet-zulu-HZ-lake-effect-zulu -- airmet (WAUS41-WXENGINE-HZ-lake-effect-zulu)
 
-Pinned to chart `wx-scenario-winter-icing-great-lakes-airmet-sigmet`.
+Pinned to chart `wx-scenarios/winter-icing-great-lakes/airmet-sigmet`.
 
 **Mode:** socratic
 
@@ -94,7 +94,7 @@ Pinned to chart `wx-scenario-winter-icing-great-lakes-airmet-sigmet`.
 
 ### wxc-winter-icing-great-lakes-airmet-sierra-HZ-lake-effect-sierra -- airmet (WAUS41-WXENGINE-HZ-lake-effect-sierra)
 
-Pinned to chart `wx-scenario-winter-icing-great-lakes-airmet-sigmet`.
+Pinned to chart `wx-scenarios/winter-icing-great-lakes/airmet-sigmet`.
 
 **Mode:** socratic
 
@@ -108,7 +108,7 @@ Pinned to chart `wx-scenario-winter-icing-great-lakes-airmet-sigmet`.
 
 ### wxc-winter-icing-great-lakes-airmet-tango-HZ-postfrontal-tango -- airmet (WAUS41-WXENGINE-HZ-postfrontal-tango)
 
-Pinned to chart `wx-scenario-winter-icing-great-lakes-airmet-sigmet`.
+Pinned to chart `wx-scenarios/winter-icing-great-lakes/airmet-sigmet`.
 
 **Mode:** socratic
 
@@ -122,7 +122,7 @@ Pinned to chart `wx-scenario-winter-icing-great-lakes-airmet-sigmet`.
 
 ### wxc-winter-icing-great-lakes-airmet-zulu-HZ-east-of-band-zulu -- airmet (WAUS41-WXENGINE-HZ-east-of-band-zulu)
 
-Pinned to chart `wx-scenario-winter-icing-great-lakes-airmet-sigmet`.
+Pinned to chart `wx-scenarios/winter-icing-great-lakes/airmet-sigmet`.
 
 **Mode:** socratic
 
@@ -136,7 +136,7 @@ Pinned to chart `wx-scenario-winter-icing-great-lakes-airmet-sigmet`.
 
 ### wxc-winter-icing-great-lakes-isobar-gradient -- chart-feature (isobar-pack)
 
-Pinned to chart `wx-scenario-winter-icing-great-lakes-surface-analysis`.
+Pinned to chart `wx-scenarios/winter-icing-great-lakes/surface-analysis`.
 
 **Mode:** glance
 
@@ -150,7 +150,7 @@ Pinned to chart `wx-scenario-winter-icing-great-lakes-surface-analysis`.
 
 ### wxc-winter-icing-great-lakes-pirep-corroboration-KGRR -- pirep (KGRR)
 
-Pinned to chart `wx-scenario-winter-icing-great-lakes-pirep-plot`.
+Pinned to chart `wx-scenarios/winter-icing-great-lakes/pirep-plot`.
 
 **Mode:** socratic
 

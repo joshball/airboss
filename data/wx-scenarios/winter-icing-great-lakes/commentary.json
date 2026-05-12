@@ -93,7 +93,7 @@
     "id": "wxc-winter-icing-great-lakes-airmet-zulu-HZ-lake-effect-zulu",
     "target": {
       "kind": "airmet",
-      "chartSlug": "wx-scenario-winter-icing-great-lakes-airmet-sigmet",
+      "chartSlug": "wx-scenarios/winter-icing-great-lakes/airmet-sigmet",
       "elementId": "WAUS41-WXENGINE-HZ-lake-effect-zulu"
     },
     "mode": "socratic",
@@ -109,7 +109,7 @@
     "id": "wxc-winter-icing-great-lakes-airmet-sierra-HZ-lake-effect-sierra",
     "target": {
       "kind": "airmet",
-      "chartSlug": "wx-scenario-winter-icing-great-lakes-airmet-sigmet",
+      "chartSlug": "wx-scenarios/winter-icing-great-lakes/airmet-sigmet",
       "elementId": "WAUS41-WXENGINE-HZ-lake-effect-sierra"
     },
     "mode": "socratic",
@@ -125,7 +125,7 @@
     "id": "wxc-winter-icing-great-lakes-airmet-tango-HZ-postfrontal-tango",
     "target": {
       "kind": "airmet",
-      "chartSlug": "wx-scenario-winter-icing-great-lakes-airmet-sigmet",
+      "chartSlug": "wx-scenarios/winter-icing-great-lakes/airmet-sigmet",
       "elementId": "WAUS41-WXENGINE-HZ-postfrontal-tango"
     },
     "mode": "socratic",
@@ -141,7 +141,7 @@
     "id": "wxc-winter-icing-great-lakes-airmet-zulu-HZ-east-of-band-zulu",
     "target": {
       "kind": "airmet",
-      "chartSlug": "wx-scenario-winter-icing-great-lakes-airmet-sigmet",
+      "chartSlug": "wx-scenarios/winter-icing-great-lakes/airmet-sigmet",
       "elementId": "WAUS41-WXENGINE-HZ-east-of-band-zulu"
     },
     "mode": "socratic",
@@ -157,7 +157,7 @@
     "id": "wxc-winter-icing-great-lakes-isobar-gradient",
     "target": {
       "kind": "chart-feature",
-      "chartSlug": "wx-scenario-winter-icing-great-lakes-surface-analysis",
+      "chartSlug": "wx-scenarios/winter-icing-great-lakes/surface-analysis",
       "elementId": "isobar-pack"
     },
     "mode": "glance",
@@ -174,7 +174,7 @@
     "id": "wxc-winter-icing-great-lakes-pirep-corroboration-KGRR",
     "target": {
       "kind": "pirep",
-      "chartSlug": "wx-scenario-winter-icing-great-lakes-pirep-plot",
+      "chartSlug": "wx-scenarios/winter-icing-great-lakes/pirep-plot",
       "elementId": "KGRR"
     },
     "mode": "socratic",

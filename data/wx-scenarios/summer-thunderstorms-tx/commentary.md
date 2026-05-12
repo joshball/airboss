@@ -32,7 +32,7 @@ Pop-up afternoon convection along the Texas Gulf Coast. Weak surface ridge over 
 
 ### wxc-summer-thunderstorms-tx-airmet-tango-HZ-corridor-tango-low -- airmet (WAUS41-WXENGINE-HZ-corridor-tango-low)
 
-Pinned to chart `wx-scenario-summer-thunderstorms-tx-airmet-sigmet`.
+Pinned to chart `wx-scenarios/summer-thunderstorms-tx/airmet-sigmet`.
 
 **Mode:** socratic
 
@@ -46,7 +46,7 @@ Pinned to chart `wx-scenario-summer-thunderstorms-tx-airmet-sigmet`.
 
 ### wxc-summer-thunderstorms-tx-airmet-tango-HZ-outflow-tango -- airmet (WAUS41-WXENGINE-HZ-outflow-tango)
 
-Pinned to chart `wx-scenario-summer-thunderstorms-tx-airmet-sigmet`.
+Pinned to chart `wx-scenarios/summer-thunderstorms-tx/airmet-sigmet`.
 
 **Mode:** socratic
 
@@ -60,7 +60,7 @@ Pinned to chart `wx-scenario-summer-thunderstorms-tx-airmet-sigmet`.
 
 ### wxc-summer-thunderstorms-tx-airmet-zulu-HZ-anvil-zulu -- airmet (WAUS41-WXENGINE-HZ-anvil-zulu)
 
-Pinned to chart `wx-scenario-summer-thunderstorms-tx-airmet-sigmet`.
+Pinned to chart `wx-scenarios/summer-thunderstorms-tx/airmet-sigmet`.
 
 **Mode:** socratic
 
@@ -74,7 +74,7 @@ Pinned to chart `wx-scenario-summer-thunderstorms-tx-airmet-sigmet`.
 
 ### wxc-summer-thunderstorms-tx-airmet-sierra-HZ-cell-sierra -- airmet (WAUS41-WXENGINE-HZ-cell-sierra)
 
-Pinned to chart `wx-scenario-summer-thunderstorms-tx-airmet-sigmet`.
+Pinned to chart `wx-scenarios/summer-thunderstorms-tx/airmet-sigmet`.
 
 **Mode:** socratic
 
@@ -88,7 +88,7 @@ Pinned to chart `wx-scenario-summer-thunderstorms-tx-airmet-sigmet`.
 
 ### wxc-summer-thunderstorms-tx-isobar-gradient -- chart-feature (isobar-pack)
 
-Pinned to chart `wx-scenario-summer-thunderstorms-tx-surface-analysis`.
+Pinned to chart `wx-scenarios/summer-thunderstorms-tx/surface-analysis`.
 
 **Mode:** glance
 
@@ -102,7 +102,7 @@ Pinned to chart `wx-scenario-summer-thunderstorms-tx-surface-analysis`.
 
 ### wxc-summer-thunderstorms-tx-convective-cell-C-aus-east -- chart-feature (cell-C-aus-east)
 
-Pinned to chart `wx-scenario-summer-thunderstorms-tx-prog-12hr`.
+Pinned to chart `wx-scenarios/summer-thunderstorms-tx/prog-12hr`.
 
 **Mode:** socratic
 
@@ -116,7 +116,7 @@ Pinned to chart `wx-scenario-summer-thunderstorms-tx-prog-12hr`.
 
 ### wxc-summer-thunderstorms-tx-convective-cell-C-corridor-mid -- chart-feature (cell-C-corridor-mid)
 
-Pinned to chart `wx-scenario-summer-thunderstorms-tx-prog-12hr`.
+Pinned to chart `wx-scenarios/summer-thunderstorms-tx/prog-12hr`.
 
 **Mode:** socratic
 
@@ -130,7 +130,7 @@ Pinned to chart `wx-scenario-summer-thunderstorms-tx-prog-12hr`.
 
 ### wxc-summer-thunderstorms-tx-convective-cell-C-cll-near -- chart-feature (cell-C-cll-near)
 
-Pinned to chart `wx-scenario-summer-thunderstorms-tx-prog-12hr`.
+Pinned to chart `wx-scenarios/summer-thunderstorms-tx/prog-12hr`.
 
 **Mode:** socratic
 
@@ -144,7 +144,7 @@ Pinned to chart `wx-scenario-summer-thunderstorms-tx-prog-12hr`.
 
 ### wxc-summer-thunderstorms-tx-convective-cell-C-iah-south -- chart-feature (cell-C-iah-south)
 
-Pinned to chart `wx-scenario-summer-thunderstorms-tx-prog-12hr`.
+Pinned to chart `wx-scenarios/summer-thunderstorms-tx/prog-12hr`.
 
 **Mode:** socratic
 
@@ -158,7 +158,7 @@ Pinned to chart `wx-scenario-summer-thunderstorms-tx-prog-12hr`.
 
 ### wxc-summer-thunderstorms-tx-pirep-corroboration-KAUS -- pirep (KAUS)
 
-Pinned to chart `wx-scenario-summer-thunderstorms-tx-pirep-plot`.
+Pinned to chart `wx-scenarios/summer-thunderstorms-tx/pirep-plot`.
 
 **Mode:** socratic
 

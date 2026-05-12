@@ -3,7 +3,7 @@
     "id": "wxc-mountain-wave-rockies-airmet-tango-HZ-lee-wave-tango",
     "target": {
       "kind": "airmet",
-      "chartSlug": "wx-scenario-mountain-wave-rockies-airmet-sigmet",
+      "chartSlug": "wx-scenarios/mountain-wave-rockies/airmet-sigmet",
       "elementId": "WAUS41-WXENGINE-HZ-lee-wave-tango"
     },
     "mode": "socratic",
@@ -19,7 +19,7 @@
     "id": "wxc-mountain-wave-rockies-airmet-zulu-HZ-rotor-zulu",
     "target": {
       "kind": "airmet",
-      "chartSlug": "wx-scenario-mountain-wave-rockies-airmet-sigmet",
+      "chartSlug": "wx-scenarios/mountain-wave-rockies/airmet-sigmet",
       "elementId": "WAUS41-WXENGINE-HZ-rotor-zulu"
     },
     "mode": "socratic",
@@ -35,7 +35,7 @@
     "id": "wxc-mountain-wave-rockies-airmet-sierra-HZ-upwind-mtn-obscuration",
     "target": {
       "kind": "airmet",
-      "chartSlug": "wx-scenario-mountain-wave-rockies-airmet-sigmet",
+      "chartSlug": "wx-scenarios/mountain-wave-rockies/airmet-sigmet",
       "elementId": "WAUS41-WXENGINE-HZ-upwind-mtn-obscuration"
     },
     "mode": "socratic",
@@ -51,7 +51,7 @@
     "id": "wxc-mountain-wave-rockies-isobar-gradient",
     "target": {
       "kind": "chart-feature",
-      "chartSlug": "wx-scenario-mountain-wave-rockies-surface-analysis",
+      "chartSlug": "wx-scenarios/mountain-wave-rockies/surface-analysis",
       "elementId": "isobar-pack"
     },
     "mode": "glance",
@@ -68,7 +68,7 @@
     "id": "wxc-mountain-wave-rockies-convective-cell-C-rotor-north",
     "target": {
       "kind": "chart-feature",
-      "chartSlug": "wx-scenario-mountain-wave-rockies-prog-12hr",
+      "chartSlug": "wx-scenarios/mountain-wave-rockies/prog-12hr",
       "elementId": "cell-C-rotor-north"
     },
     "mode": "socratic",
@@ -84,7 +84,7 @@
     "id": "wxc-mountain-wave-rockies-convective-cell-C-rotor-south",
     "target": {
       "kind": "chart-feature",
-      "chartSlug": "wx-scenario-mountain-wave-rockies-prog-12hr",
+      "chartSlug": "wx-scenarios/mountain-wave-rockies/prog-12hr",
       "elementId": "cell-C-rotor-south"
     },
     "mode": "socratic",
@@ -100,7 +100,7 @@
     "id": "wxc-mountain-wave-rockies-pirep-corroboration-KAPA",
     "target": {
       "kind": "pirep",
-      "chartSlug": "wx-scenario-mountain-wave-rockies-pirep-plot",
+      "chartSlug": "wx-scenarios/mountain-wave-rockies/pirep-plot",
       "elementId": "KAPA"
     },
     "mode": "socratic",
@@ -116,7 +116,7 @@
     "id": "wxc-mountain-wave-rockies-jet-exit",
     "target": {
       "kind": "fb-row",
-      "chartSlug": "wx-scenario-mountain-wave-rockies-winds-aloft",
+      "chartSlug": "wx-scenarios/mountain-wave-rockies/winds-aloft",
       "elementId": "jet-max-fl"
     },
     "mode": "socratic",

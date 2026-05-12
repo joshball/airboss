@@ -1,4 +1,4 @@
-slug: wx-scenario-dense-fog-radiation-central-valley-metar-plot
+slug: wx-scenarios/dense-fog-radiation-central-valley/metar-plot
 type: metar-plot-grid
 title: METAR Plot (truth-derived)
 subtitle: 2026-02-08T10:00:00Z -- 5 truth-derived stations

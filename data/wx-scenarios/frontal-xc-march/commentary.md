@@ -68,7 +68,7 @@ Winter frontal passage during a midwest XC, KSTL -> KORD. Synoptic-scale low ove
 
 ### wxc-frontal-xc-march-airmet-sierra-HZ-postfrontal-ifr -- airmet (WAUS41-WXENGINE-HZ-postfrontal-ifr)
 
-Pinned to chart `wx-scenario-frontal-xc-march-airmet-sigmet`.
+Pinned to chart `wx-scenarios/frontal-xc-march/airmet-sigmet`.
 
 **Mode:** socratic
 
@@ -82,7 +82,7 @@ Pinned to chart `wx-scenario-frontal-xc-march-airmet-sigmet`.
 
 ### wxc-frontal-xc-march-airmet-tango-HZ-postfrontal-turb -- airmet (WAUS41-WXENGINE-HZ-postfrontal-turb)
 
-Pinned to chart `wx-scenario-frontal-xc-march-airmet-sigmet`.
+Pinned to chart `wx-scenarios/frontal-xc-march/airmet-sigmet`.
 
 **Mode:** socratic
 
@@ -96,7 +96,7 @@ Pinned to chart `wx-scenario-frontal-xc-march-airmet-sigmet`.
 
 ### wxc-frontal-xc-march-airmet-tango-HZ-prefrontal-tsra -- airmet (WAUS41-WXENGINE-HZ-prefrontal-tsra)
 
-Pinned to chart `wx-scenario-frontal-xc-march-airmet-sigmet`.
+Pinned to chart `wx-scenarios/frontal-xc-march/airmet-sigmet`.
 
 **Mode:** socratic
 
@@ -110,7 +110,7 @@ Pinned to chart `wx-scenario-frontal-xc-march-airmet-sigmet`.
 
 ### wxc-frontal-xc-march-isobar-gradient -- chart-feature (isobar-pack)
 
-Pinned to chart `wx-scenario-frontal-xc-march-surface-analysis`.
+Pinned to chart `wx-scenarios/frontal-xc-march/surface-analysis`.
 
 **Mode:** glance
 
@@ -124,7 +124,7 @@ Pinned to chart `wx-scenario-frontal-xc-march-surface-analysis`.
 
 ### wxc-frontal-xc-march-convective-cell-C-prefront-1 -- chart-feature (cell-C-prefront-1)
 
-Pinned to chart `wx-scenario-frontal-xc-march-prog-12hr`.
+Pinned to chart `wx-scenarios/frontal-xc-march/prog-12hr`.
 
 **Mode:** socratic
 
@@ -138,7 +138,7 @@ Pinned to chart `wx-scenario-frontal-xc-march-prog-12hr`.
 
 ### wxc-frontal-xc-march-convective-cell-C-prefront-2 -- chart-feature (cell-C-prefront-2)
 
-Pinned to chart `wx-scenario-frontal-xc-march-prog-12hr`.
+Pinned to chart `wx-scenarios/frontal-xc-march/prog-12hr`.
 
 **Mode:** socratic
 
@@ -152,7 +152,7 @@ Pinned to chart `wx-scenario-frontal-xc-march-prog-12hr`.
 
 ### wxc-frontal-xc-march-pirep-corroboration-KSPI -- pirep (KSPI)
 
-Pinned to chart `wx-scenario-frontal-xc-march-pirep-plot`.
+Pinned to chart `wx-scenarios/frontal-xc-march/pirep-plot`.
 
 **Mode:** socratic
 
@@ -166,7 +166,7 @@ Pinned to chart `wx-scenario-frontal-xc-march-pirep-plot`.
 
 ### wxc-frontal-xc-march-jet-exit -- fb-row (jet-max-fl)
 
-Pinned to chart `wx-scenario-frontal-xc-march-winds-aloft`.
+Pinned to chart `wx-scenarios/frontal-xc-march/winds-aloft`.
 
 **Mode:** socratic
 

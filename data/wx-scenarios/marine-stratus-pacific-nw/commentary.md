@@ -80,7 +80,7 @@ Coastal marine layer trapped under a subsidence inversion behind a weak Pacific 
 
 ### wxc-marine-stratus-pacific-nw-airmet-sierra-HZ-coastal-sierra-ifr -- airmet (WAUS41-WXENGINE-HZ-coastal-sierra-ifr)
 
-Pinned to chart `wx-scenario-marine-stratus-pacific-nw-airmet-sigmet`.
+Pinned to chart `wx-scenarios/marine-stratus-pacific-nw/airmet-sigmet`.
 
 **Mode:** socratic
 
@@ -94,7 +94,7 @@ Pinned to chart `wx-scenario-marine-stratus-pacific-nw-airmet-sigmet`.
 
 ### wxc-marine-stratus-pacific-nw-airmet-sierra-HZ-coast-range-obscuration -- airmet (WAUS41-WXENGINE-HZ-coast-range-obscuration)
 
-Pinned to chart `wx-scenario-marine-stratus-pacific-nw-airmet-sigmet`.
+Pinned to chart `wx-scenarios/marine-stratus-pacific-nw/airmet-sigmet`.
 
 **Mode:** socratic
 
@@ -108,7 +108,7 @@ Pinned to chart `wx-scenario-marine-stratus-pacific-nw-airmet-sigmet`.
 
 ### wxc-marine-stratus-pacific-nw-isobar-gradient -- chart-feature (isobar-pack)
 
-Pinned to chart `wx-scenario-marine-stratus-pacific-nw-surface-analysis`.
+Pinned to chart `wx-scenarios/marine-stratus-pacific-nw/surface-analysis`.
 
 **Mode:** glance
 
@@ -122,7 +122,7 @@ Pinned to chart `wx-scenario-marine-stratus-pacific-nw-surface-analysis`.
 
 ### wxc-marine-stratus-pacific-nw-pirep-corroboration-KSFO -- pirep (KSFO)
 
-Pinned to chart `wx-scenario-marine-stratus-pacific-nw-pirep-plot`.
+Pinned to chart `wx-scenarios/marine-stratus-pacific-nw/pirep-plot`.
 
 **Mode:** socratic
 

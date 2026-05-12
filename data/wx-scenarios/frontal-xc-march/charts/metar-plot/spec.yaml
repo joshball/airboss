@@ -1,4 +1,4 @@
-slug: wx-scenario-frontal-xc-march-metar-plot
+slug: wx-scenarios/frontal-xc-march/metar-plot
 type: metar-plot-grid
 title: METAR Plot (truth-derived)
 subtitle: 2026-03-19T19:00:00Z -- 5 truth-derived stations

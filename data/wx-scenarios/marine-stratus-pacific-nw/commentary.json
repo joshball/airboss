@@ -93,7 +93,7 @@
     "id": "wxc-marine-stratus-pacific-nw-airmet-sierra-HZ-coastal-sierra-ifr",
     "target": {
       "kind": "airmet",
-      "chartSlug": "wx-scenario-marine-stratus-pacific-nw-airmet-sigmet",
+      "chartSlug": "wx-scenarios/marine-stratus-pacific-nw/airmet-sigmet",
       "elementId": "WAUS41-WXENGINE-HZ-coastal-sierra-ifr"
     },
     "mode": "socratic",
@@ -109,7 +109,7 @@
     "id": "wxc-marine-stratus-pacific-nw-airmet-sierra-HZ-coast-range-obscuration",
     "target": {
       "kind": "airmet",
-      "chartSlug": "wx-scenario-marine-stratus-pacific-nw-airmet-sigmet",
+      "chartSlug": "wx-scenarios/marine-stratus-pacific-nw/airmet-sigmet",
       "elementId": "WAUS41-WXENGINE-HZ-coast-range-obscuration"
     },
     "mode": "socratic",
@@ -125,7 +125,7 @@
     "id": "wxc-marine-stratus-pacific-nw-isobar-gradient",
     "target": {
       "kind": "chart-feature",
-      "chartSlug": "wx-scenario-marine-stratus-pacific-nw-surface-analysis",
+      "chartSlug": "wx-scenarios/marine-stratus-pacific-nw/surface-analysis",
       "elementId": "isobar-pack"
     },
     "mode": "glance",
@@ -142,7 +142,7 @@
     "id": "wxc-marine-stratus-pacific-nw-pirep-corroboration-KSFO",
     "target": {
       "kind": "pirep",
-      "chartSlug": "wx-scenario-marine-stratus-pacific-nw-pirep-plot",
+      "chartSlug": "wx-scenarios/marine-stratus-pacific-nw/pirep-plot",
       "elementId": "KSFO"
     },
     "mode": "socratic",

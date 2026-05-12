@@ -78,7 +78,7 @@
     "id": "wxc-frontal-xc-march-airmet-sierra-HZ-postfrontal-ifr",
     "target": {
       "kind": "airmet",
-      "chartSlug": "wx-scenario-frontal-xc-march-airmet-sigmet",
+      "chartSlug": "wx-scenarios/frontal-xc-march/airmet-sigmet",
       "elementId": "WAUS41-WXENGINE-HZ-postfrontal-ifr"
     },
     "mode": "socratic",
@@ -94,7 +94,7 @@
     "id": "wxc-frontal-xc-march-airmet-tango-HZ-postfrontal-turb",
     "target": {
       "kind": "airmet",
-      "chartSlug": "wx-scenario-frontal-xc-march-airmet-sigmet",
+      "chartSlug": "wx-scenarios/frontal-xc-march/airmet-sigmet",
       "elementId": "WAUS41-WXENGINE-HZ-postfrontal-turb"
     },
     "mode": "socratic",
@@ -110,7 +110,7 @@
     "id": "wxc-frontal-xc-march-airmet-tango-HZ-prefrontal-tsra",
     "target": {
       "kind": "airmet",
-      "chartSlug": "wx-scenario-frontal-xc-march-airmet-sigmet",
+      "chartSlug": "wx-scenarios/frontal-xc-march/airmet-sigmet",
       "elementId": "WAUS41-WXENGINE-HZ-prefrontal-tsra"
     },
     "mode": "socratic",
@@ -126,7 +126,7 @@
     "id": "wxc-frontal-xc-march-isobar-gradient",
     "target": {
       "kind": "chart-feature",
-      "chartSlug": "wx-scenario-frontal-xc-march-surface-analysis",
+      "chartSlug": "wx-scenarios/frontal-xc-march/surface-analysis",
       "elementId": "isobar-pack"
     },
     "mode": "glance",
@@ -143,7 +143,7 @@
     "id": "wxc-frontal-xc-march-convective-cell-C-prefront-1",
     "target": {
       "kind": "chart-feature",
-      "chartSlug": "wx-scenario-frontal-xc-march-prog-12hr",
+      "chartSlug": "wx-scenarios/frontal-xc-march/prog-12hr",
       "elementId": "cell-C-prefront-1"
     },
     "mode": "socratic",
@@ -159,7 +159,7 @@
     "id": "wxc-frontal-xc-march-convective-cell-C-prefront-2",
     "target": {
       "kind": "chart-feature",
-      "chartSlug": "wx-scenario-frontal-xc-march-prog-12hr",
+      "chartSlug": "wx-scenarios/frontal-xc-march/prog-12hr",
       "elementId": "cell-C-prefront-2"
     },
     "mode": "socratic",
@@ -175,7 +175,7 @@
     "id": "wxc-frontal-xc-march-pirep-corroboration-KSPI",
     "target": {
       "kind": "pirep",
-      "chartSlug": "wx-scenario-frontal-xc-march-pirep-plot",
+      "chartSlug": "wx-scenarios/frontal-xc-march/pirep-plot",
       "elementId": "KSPI"
     },
     "mode": "socratic",
@@ -191,7 +191,7 @@
     "id": "wxc-frontal-xc-march-jet-exit",
     "target": {
       "kind": "fb-row",
-      "chartSlug": "wx-scenario-frontal-xc-march-winds-aloft",
+      "chartSlug": "wx-scenarios/frontal-xc-march/winds-aloft",
       "elementId": "jet-max-fl"
     },
     "mode": "socratic",

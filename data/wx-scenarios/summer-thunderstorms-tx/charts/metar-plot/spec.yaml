@@ -1,4 +1,4 @@
-slug: wx-scenario-summer-thunderstorms-tx-metar-plot
+slug: wx-scenarios/summer-thunderstorms-tx/metar-plot
 type: metar-plot-grid
 title: METAR Plot (truth-derived)
 subtitle: 2026-07-15T21:00:00Z -- 5 truth-derived stations
