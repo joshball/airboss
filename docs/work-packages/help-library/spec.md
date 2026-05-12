@@ -39,24 +39,19 @@ A shared `libs/help/` workspace that gives every airboss app the same help UX: s
 
 Seven first-pass help pages, each addressing concrete UX gaps flagged in [docs/work/reviews/2026-04-22-app-wide-ux.md](../../work/reviews/2026-04-22-app-wide-ux.md):
 
-| Page                  | Slug                  | UX-review issues addressed                                                                                                                                                                                                             |
-| --------------------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Getting started       | `getting-started`     | Login dev-accounts noise in prod (no signup path) -- help explains invite-only scope; first-time orientation so a brand-new user knows what airboss is for                                                                              |
-| Dashboard             | `dashboard`           | Dashboard h1 vs nav label naming; deep-link filter chips that aren't obvious; per-panel explanations for the 9 panels (CTA, reviews-due, scheduled-reps, calibration, weak-areas, activity, cert-progress, map, study-plan)             |
-| Memory review         | `memory-review`       | Review rating mistakes have no undo (explains rating semantics + that Again is not a failure); confidence slider skip weight (explains why the prompt appears ~50% of the time, per-card-per-day determinism)                           |
-| Decision reps session | `reps-session`        | Confidence prompt appears random (predictability explainer); keyboard shortcuts undocumented; permanent-skip fat-finger risk (how skip sets work, how to reactivate from plan detail)                                                    |
-| Calibration           | `calibration`         | Calibration page doesn't explain what calibration is once you have data; score meaning; overconfident vs underconfident patterns; what to do about a gap                                                                                 |
-| Knowledge graph       | `knowledge-graph`     | `/knowledge/[slug]/learn` has no per-phase completion tracking (explains the 7 phases + dual-gate mastery so users read the stepper correctly); discovery-first pedagogy explainer                                                       |
-| Keyboard shortcuts    | `keyboard-shortcuts`  | Cmd+Enter on new card undocumented; reps session `/` `[` `]` shortcuts undocumented; central reference for every kbd binding in the app                                                                                                  |
+| Page                  | Slug                 | UX-review issues addressed                                                                                                                                                                                                  |
+| --------------------- | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Getting started       | `getting-started`    | Login dev-accounts noise in prod (no signup path) -- help explains invite-only scope; first-time orientation so a brand-new user knows what airboss is for                                                                  |
+| Dashboard             | `dashboard`          | Dashboard h1 vs nav label naming; deep-link filter chips that aren't obvious; per-panel explanations for the 9 panels (CTA, reviews-due, scheduled-reps, calibration, weak-areas, activity, cert-progress, map, study-plan) |
+| Memory review         | `memory-review`      | Review rating mistakes have no undo (explains rating semantics + that Again is not a failure); confidence slider skip weight (explains why the prompt appears ~50% of the time, per-card-per-day determinism)               |
+| Decision reps session | `reps-session`       | Confidence prompt appears random (predictability explainer); keyboard shortcuts undocumented; permanent-skip fat-finger risk (how skip sets work, how to reactivate from plan detail)                                       |
+| Calibration           | `calibration`        | Calibration page doesn't explain what calibration is once you have data; score meaning; overconfident vs underconfident patterns; what to do about a gap                                                                    |
+| Knowledge graph       | `knowledge-graph`    | `/knowledge/[slug]/learn` has no per-phase completion tracking (explains the 7 phases + dual-gate mastery so users read the stepper correctly); discovery-first pedagogy explainer                                          |
+| Keyboard shortcuts    | `keyboard-shortcuts` | Cmd+Enter on new card undocumented; reps session `/` `[` `]` shortcuts undocumented; central reference for every kbd binding in the app                                                                                     |
 
 ## Out of scope
 
-- Authoring aviation glossary entries or the 175-term port (wp-reference-system-core)
-- Building the source registry, extractors, CFR parser (wp-reference-extraction-pipeline)
-- Implementing the wiki-link parser (wp-reference-system-core -- this WP uses `ReferenceText.svelte` from `@ab/aviation` in help-page bodies that mention references)
-- Help content for future apps (spatial, audio, avionics) -- each app gets its own content folder when it exists
-- Persisting "which help pages has this user seen?" state -- help is reference material, not a tracked flow
-- Embedded help popovers at the point of use (in-context tooltips on dashboard panels, review buttons, etc.) -- handled by wp-reference-system-core's `ReferenceTerm` component; this WP owns the standalone `/help` surface
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Data model
 
