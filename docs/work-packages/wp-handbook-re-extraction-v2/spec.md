@@ -154,14 +154,9 @@ The AIM extractor (744 entries) and the CFR section extractor are different code
 - CFR section bodies are text-only (no figures, no tables to speak of) — but the CFR extractor doesn't capture Subpart preamble paragraphs. Add them.
 - ACS publications already have section-tree but no front matter; add the practical-test-standard front matter (introduction, abbreviations, applicant references).
 
-## Out of Scope (explicit)
+## Out of scope
 
-- **OCR re-pass on the original PDFs.** We're not re-OCR'ing — we're using the existing extractor's text output and fixing the structural and table conversion layers above it.
-- **The 12 link-only ACs full ingestion.** That's WP-AC-FULL, separately scheduled.
-- **Bucket C reader UX work.** Prev/next, breadcrumbs, reading-progress UI — separate WP.
-- **Adding new corpora.** Wave 7 already shipped SAFO/InFO/CC/NTSB-ALJ; this WP only fixes what's already ingested.
-- **Errata application.** WP-APPLY-ERRATA is a separate, related WP that overlaps the chapter-aware path; we'll resolve any pipeline conflicts as they arise but neither blocks the other.
-- **Full v2 emitter port for ACs.** The 9 promoted ACs use a separate TS pipeline (`libs/sources/src/ac/ingest.ts`), not the Python handbook extractor. Phase 3 ships an AC conformance shim: `acManifestSchema` carries `warnings: []`, the AC ingest writer writes the sibling `warnings.json` (also empty), and the BC reader's corpus dispatch handles AC references uniformly. AC ingest emits zero v2 codes today; porting figure-pairing, table conversion, OCR-leak detection, empty-section policy, and front-matter capture into the AC pipeline is **WP-AC-V2** (separately scheduled).
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Phases
 
@@ -227,11 +222,11 @@ Tests: extractor unit tests against known good/bad fixtures.
 
 ## Anchors back to user-visible bugs this resolves
 
-| User report | Resolved by |
-|-------------|-------------|
-| "front matter -- preface, acknowledgments, real introduction -- missing" | Phase 1 #1 |
-| "tables render as raw HTML" | Phase 1 #2 (and Bucket A's HTML pass-through covers the interim) |
-| "strange OCR letter-shapes at bottom of IFH 2/5" | Phase 1 #3 (OCR-leak detection) |
-| "no images loading" — if root cause is figure pairing failure | Phase 1 #3 (figure-pairing improvements) |
-| "Introduction section is empty" | Phase 1 #4 (empty-section policy) |
-| "2700 warnings, no triage" | Phase 1 #5 + Phase 3 |
+| User report                                                              | Resolved by                                                      |
+| ------------------------------------------------------------------------ | ---------------------------------------------------------------- |
+| "front matter -- preface, acknowledgments, real introduction -- missing" | Phase 1 #1                                                       |
+| "tables render as raw HTML"                                              | Phase 1 #2 (and Bucket A's HTML pass-through covers the interim) |
+| "strange OCR letter-shapes at bottom of IFH 2/5"                         | Phase 1 #3 (OCR-leak detection)                                  |
+| "no images loading" — if root cause is figure pairing failure            | Phase 1 #3 (figure-pairing improvements)                         |
+| "Introduction section is empty"                                          | Phase 1 #4 (empty-section policy)                                |
+| "2700 warnings, no triage"                                               | Phase 1 #5 + Phase 3                                             |
