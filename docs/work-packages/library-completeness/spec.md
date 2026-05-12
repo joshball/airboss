@@ -149,21 +149,21 @@ Pre-launch, no production data, single-developer environment. The schema file is
 
 #### `reference` (one row per document)
 
-| Column                 | Type        | Notes |
-| ---------------------- | ----------- | ----- |
-| id                     | text PK     | `ref_ULID` |
+| Column                 | Type        | Notes                                                                                                                                                                                                                                            |
+| ---------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| id                     | text PK     | `ref_ULID`                                                                                                                                                                                                                                       |
 | kind                   | text        | Member of `REFERENCE_KINDS` (handbook, cfr, ac, acs, aim, pcg, ntsb, interp, safo, info, order, pamphlet, poh, other). **Drop the DB CHECK.** Zod-validated at ingest is the single source of truth; adding a corpus shouldn't need a migration. |
-| document_slug          | text        | `phak`, `14cfr91`, `ac-91-79b`, `aim-2026-04` |
-| edition                | text        | `FAA-H-8083-25C`, `2026-04-22`, `2024-letter-mangiamele` |
-| title                  | text        | Display title |
-| publisher              | text        | `FAA`, `NTSB`, `AOPA`, ... display metadata only |
-| subjects               | text[]      | Aviation topics (existing) |
-| primary_cert           | text NULL   | **Existing post-PR #386** (Wave 1 of library-by-cert). CHECK against `CERT_APPLICABILITY_VALUES`. NULL = cert-agnostic. WP-SUB preserves this column unchanged. |
-| section_schema         | jsonb       | `{ levels: string[], strict_sequence?: boolean }`. Per-kind level vocabulary. |
-| superseded_by_id       | text FK     | Self-ref for edition chains (existing) |
-| metadata               | jsonb       | Per-kind-typed extras. Empty for kinds that don't need them. |
-| seed_origin            | text NULL   | Dev-seed marker (existing). NULL on production rows; tagged on dev-seeded rows so reset paths can target only what they own. |
-| created_at, updated_at | timestamptz | Existing |
+| document_slug          | text        | `phak`, `14cfr91`, `ac-91-79b`, `aim-2026-04`                                                                                                                                                                                                    |
+| edition                | text        | `FAA-H-8083-25C`, `2026-04-22`, `2024-letter-mangiamele`                                                                                                                                                                                         |
+| title                  | text        | Display title                                                                                                                                                                                                                                    |
+| publisher              | text        | `FAA`, `NTSB`, `AOPA`, ... display metadata only                                                                                                                                                                                                 |
+| subjects               | text[]      | Aviation topics (existing)                                                                                                                                                                                                                       |
+| primary_cert           | text NULL   | **Existing post-PR #386** (Wave 1 of library-by-cert). CHECK against `CERT_APPLICABILITY_VALUES`. NULL = cert-agnostic. WP-SUB preserves this column unchanged.                                                                                  |
+| section_schema         | jsonb       | `{ levels: string[], strict_sequence?: boolean }`. Per-kind level vocabulary.                                                                                                                                                                    |
+| superseded_by_id       | text FK     | Self-ref for edition chains (existing)                                                                                                                                                                                                           |
+| metadata               | jsonb       | Per-kind-typed extras. Empty for kinds that don't need them.                                                                                                                                                                                     |
+| seed_origin            | text NULL   | Dev-seed marker (existing). NULL on production rows; tagged on dev-seeded rows so reset paths can target only what they own.                                                                                                                     |
+| created_at, updated_at | timestamptz | Existing                                                                                                                                                                                                                                         |
 
 #### `reference_section` (hierarchical content)
 
@@ -386,28 +386,32 @@ Not promised to anyone, surfacing as an explicit menu so the user picks rather t
 
 > **Ratify (5):** Pick which (if any) of these become follow-on WPs. Default: only Safety Briefing magazine; rest deferred.
 
+## Out of scope
+
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md). The deferred items below (§"Ratifications (2026-05-01)" and §"Recommended sequence") are extracted into OUT-OF-SCOPE.md with structured trigger / pattern / reference fields. The discussion narrative below remains intact as historical record.
+
 ## Ratifications (2026-05-01)
 
 User ran the spec walkthrough on 2026-05-01 and accepted every recommended default. The full block:
 
-| Point             | Ratified                                                                                                                                  |
-| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| **1.A**           | Substrate rename. (`library_entry` projection rejected as a workaround.)                                                                  |
-| **1.B**           | Staged rollout: WP-SUB first; corpus WPs follow opportunistically.                                                                        |
-| **2.A**           | Catalog stands as written.                                                                                                                |
+| Point             | Ratified                                                                                                                                                                                                                                                                                                                                                               |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **1.A**           | Substrate rename. (`library_entry` projection rejected as a workaround.)                                                                                                                                                                                                                                                                                               |
+| **1.B**           | Staged rollout: WP-SUB first; corpus WPs follow opportunistically.                                                                                                                                                                                                                                                                                                     |
+| **2.A**           | Catalog stands as written.                                                                                                                                                                                                                                                                                                                                             |
 | **2.B**           | Seed check run as part of PR #388 -- `bun run db seed handbooks` aborts on a ZodError because `kind: whole-doc` manifests don't match `handbookManifestSchema`. The 6 handbooks-extras are NOT seeding into `handbook_section` today. **Implication folded into WP-SUB scope** (§1 step 4: two manifest shapes from day one). WP-EX-Verify is no longer a separate WP. |
-| **2.C**           | "Other publications" stay link-only umbrella cards. Order 8260-3 noted as watch-list, no commitment.                                      |
-| **3.A**           | Part-level cards for CFR-14; title-level for CFR-49.                                                                                      |
-| **3.B**           | Search-first inside CFR drill-down. Tree available, search is the entry point.                                                            |
-| **3.C**           | AIM as one card with chapter-tree expansion.                                                                                              |
-| **4.A**           | NTSB ALJ -- own WP.                                                                                                                       |
-| **4.B**           | Chief Counsel -- own WP, sequenced first among the new corpora (highest pedagogical leverage).                                            |
-| **4.C** + **4.D** | SAFOs and InFOs -- own WPs (or one combined). **DRS-first**, with a `canonical_url_override` field on per-doc config for retrofitting a stable URL when one is found. Stops blocking on the FAA's topic-page churn. |
-| **4.E**           | FAA Order 8900.1 -- deferred. Trigger to revisit: "we ship CFI training content that benefits from Vol 5."                                |
-| **4.F**           | Tips on Mountain Flying -- early. Single-PDF, AC-style pipeline; smallest possible win.                                                   |
-| **4.G**           | AC catalog expansion -- WP, curated to ~50 ACs (not the full ~200).                                                                       |
-| **5**             | Safety Briefing magazine archive opted in as a follow-on WP. Other candidates (GA-JSC, Part 67, CAP/WINGS, plates) dropped or deferred.   |
-| **6**             | Sequence as written, with WP-EX-Verify folded into WP-SUB per the (2.B) finding.                                                          |
+| **2.C**           | "Other publications" stay link-only umbrella cards. Order 8260-3 noted as watch-list, no commitment.                                                                                                                                                                                                                                                                   |
+| **3.A**           | Part-level cards for CFR-14; title-level for CFR-49.                                                                                                                                                                                                                                                                                                                   |
+| **3.B**           | Search-first inside CFR drill-down. Tree available, search is the entry point.                                                                                                                                                                                                                                                                                         |
+| **3.C**           | AIM as one card with chapter-tree expansion.                                                                                                                                                                                                                                                                                                                           |
+| **4.A**           | NTSB ALJ -- own WP.                                                                                                                                                                                                                                                                                                                                                    |
+| **4.B**           | Chief Counsel -- own WP, sequenced first among the new corpora (highest pedagogical leverage).                                                                                                                                                                                                                                                                         |
+| **4.C** + **4.D** | SAFOs and InFOs -- own WPs (or one combined). **DRS-first**, with a `canonical_url_override` field on per-doc config for retrofitting a stable URL when one is found. Stops blocking on the FAA's topic-page churn.                                                                                                                                                    |
+| **4.E**           | FAA Order 8900.1 -- deferred. Trigger to revisit: "we ship CFI training content that benefits from Vol 5."                                                                                                                                                                                                                                                             |
+| **4.F**           | Tips on Mountain Flying -- early. Single-PDF, AC-style pipeline; smallest possible win.                                                                                                                                                                                                                                                                                |
+| **4.G**           | AC catalog expansion -- WP, curated to ~50 ACs (not the full ~200).                                                                                                                                                                                                                                                                                                    |
+| **5**             | Safety Briefing magazine archive opted in as a follow-on WP. Other candidates (GA-JSC, Part 67, CAP/WINGS, plates) dropped or deferred.                                                                                                                                                                                                                                |
+| **6**             | Sequence as written, with WP-EX-Verify folded into WP-SUB per the (2.B) finding.                                                                                                                                                                                                                                                                                       |
 
 The next document is the WP-SUB implementation plan, drafted against this ratified block.
 
@@ -440,12 +444,12 @@ These don't block the substrate WP, but they're the same flavor of problem and s
 
     **Audit 2026-05-02 (Phase G smell #1 review):** the cleanup is more involved than "delete 4 YAML rows." Slug + edition pairs do not match cleanly across the two seeders:
 
-    | YAML noningested            | handbooks-extras                  |
-    | --------------------------- | --------------------------------- |
-    | `aih` + `FAA-H-8083-9B`     | `aviation-instructor` + `8083-9`  |
-    | `ifh` + `FAA-H-8083-15B`    | `ifh` + `8083-15B`                |
-    | `iph` + `FAA-H-8083-16B`    | `iph` + `8083-16B`                |
-    | `faa-h-8083-2` + `2A`       | `risk-management` + `8083-2A`     |
+| YAML noningested         | handbooks-extras                 |
+| ------------------------ | -------------------------------- |
+| `aih` + `FAA-H-8083-9B`  | `aviation-instructor` + `8083-9` |
+| `ifh` + `FAA-H-8083-15B` | `ifh` + `8083-15B`               |
+| `iph` + `FAA-H-8083-16B` | `iph` + `8083-16B`               |
+| `faa-h-8083-2` + `2A`    | `risk-management` + `8083-2A`    |
 
     Different `(slug, edition)` pairs land as different `reference` rows. Today on main there are likely 8 rows for these 4 handbooks. The migrator at [`scripts/db/migrate-references-to-structured.ts:139-148`](../../scripts/db/migrate-references-to-structured.ts#L139-L148) hardcodes the noningested slug+edition pairs (`aih + FAA-H-8083-9B`, `iph + FAA-H-8083-16B`, etc.) for citation -> authored-row matching. Deleting noningested rows would make those lookups upsert synthetic rows -- the exact failure mode the YAML's own comment documents.
 
