@@ -95,13 +95,9 @@ In scope:
   whole-doc" → "✅ readable, section-tree" with chapter / section
   counts.
 
-Out of scope:
+## Out of scope
 
-- IPH errata flow (no FAA-published errata for FAA-H-8083-16B as of
-  2026-05-02).
-- Replacing the section-tree extraction with the prompt-flow strategy
-  (TOC strategy is sufficient given the standalone TOC PDF's depth).
-- Touching mtn-tips, AIH, RMH, IFH (running in parallel).
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Strategy summary
 
@@ -132,17 +128,17 @@ out-of-the-box. No schema change required.
 
 ## URL inventory (verified by HEAD 2026-05-03 per research doc)
 
-| Asset                | URL                                                                                                                                              |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Whole-doc PDF        | `https://www.faa.gov/.../instrument_procedures_handbook/FAA-H-8083-16B.pdf`                                                                       |
-| Chapter 1..7 PDFs    | `https://www.faa.gov/.../instrument_procedures_handbook/FAA-H-8083-16B_Chapter_<N>.pdf`                                                           |
-| Front Cover PDF      | `https://www.faa.gov/.../instrument_procedures_handbook/FAA-H-8083-16B_Front_Cover.pdf`                                                           |
-| Front Page PDF       | `https://www.faa.gov/.../instrument_procedures_handbook/FAA-H-8083-16B_Front_Page.pdf`                                                            |
-| Summary of Changes   | `https://www.faa.gov/.../instrument_procedures_handbook/FAA-H-8083-16B-3_Summary_of_Changes.pdf`                                                  |
-| TOC PDF              | `https://www.faa.gov/.../instrument_procedures_handbook/FAA-H-8083-16B_Table_of_Contents.pdf`                                                     |
-| Appendix A           | `https://www.faa.gov/.../instrument_procedures_handbook/FAA-H-8083-16B_Appendix_A.pdf`                                                            |
-| Appendix B           | `https://www.faa.gov/.../instrument_procedures_handbook/FAA-H-8083-16B_Appendix_B.pdf`                                                            |
-| Glossary             | `https://www.faa.gov/.../instrument_procedures_handbook/FAA-H-8083-16B_Glossary.pdf`                                                              |
+| Asset              | URL                                                                                              |
+| ------------------ | ------------------------------------------------------------------------------------------------ |
+| Whole-doc PDF      | `https://www.faa.gov/.../instrument_procedures_handbook/FAA-H-8083-16B.pdf`                      |
+| Chapter 1..7 PDFs  | `https://www.faa.gov/.../instrument_procedures_handbook/FAA-H-8083-16B_Chapter_<N>.pdf`          |
+| Front Cover PDF    | `https://www.faa.gov/.../instrument_procedures_handbook/FAA-H-8083-16B_Front_Cover.pdf`          |
+| Front Page PDF     | `https://www.faa.gov/.../instrument_procedures_handbook/FAA-H-8083-16B_Front_Page.pdf`           |
+| Summary of Changes | `https://www.faa.gov/.../instrument_procedures_handbook/FAA-H-8083-16B-3_Summary_of_Changes.pdf` |
+| TOC PDF            | `https://www.faa.gov/.../instrument_procedures_handbook/FAA-H-8083-16B_Table_of_Contents.pdf`    |
+| Appendix A         | `https://www.faa.gov/.../instrument_procedures_handbook/FAA-H-8083-16B_Appendix_A.pdf`           |
+| Appendix B         | `https://www.faa.gov/.../instrument_procedures_handbook/FAA-H-8083-16B_Appendix_B.pdf`           |
+| Glossary           | `https://www.faa.gov/.../instrument_procedures_handbook/FAA-H-8083-16B_Glossary.pdf`             |
 
 (Truncated `/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/`
 for table readability.)
