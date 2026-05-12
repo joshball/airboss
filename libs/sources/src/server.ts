@@ -11,6 +11,12 @@
 // `SERVER_ONLY_PACKAGE_PATTERNS` so a `.svelte` file that tries to import
 // from it fails the check.
 
+// Phase 9 runtime registry hydration. `bootstrap.ts` statically imports
+// `node:fs` and synthesizes `SourceEntry` + `Edition` rows from on-disk
+// derivative manifests, so it cannot evaluate in a browser bundle. Callers
+// (`bun run airboss-ref`, `+page.server.ts`, ingest scripts) import these
+// from the server barrel; the runtime barrel re-exports only the types.
+export { hydrateRegsFromDerivatives, PHASE_9_BOOTSTRAP_REVIEWER_ID } from './bootstrap.ts';
 // Drizzle table handles for callers that need to author their own subqueries
 // (e.g. ADR 026 BC-consumers building a `notSupersededInRegistry` predicate
 // against `study.reference`). Surfaced from the server barrel because their

@@ -70,12 +70,17 @@ export {
 	CORPUS_PREFIX_FOR_REFERENCE_KIND,
 	sourceIdForReference,
 } from './airboss-ref-builder.ts';
-export {
-	type BootstrapOptions,
-	type BootstrapReport,
-	hydrateRegsFromDerivatives,
-	PHASE_9_BOOTSTRAP_REVIEWER_ID,
-} from './bootstrap.ts';
+// `hydrateRegsFromDerivatives` + `PHASE_9_BOOTSTRAP_REVIEWER_ID` are
+// server-only -- they live in `bootstrap.ts`, which statically imports
+// `node:fs` at module load. Value re-exporting them here pulls `bootstrap.ts`
+// into every `.svelte` page that touches `@ab/sources` (e.g. via
+// `urlForReference`), which crashes hydration with Vite's
+// `Module "node:fs" has been externalized` browser stub.
+//
+// Canonical server-barrel-split pattern: value re-exports move to
+// `@ab/sources/server`; only type re-exports stay in the runtime barrel
+// (types erase at compile time, no transitive evaluation).
+export type { BootstrapOptions, BootstrapReport } from './bootstrap.ts';
 export { parseHandbooksLocator } from './handbooks/locator.ts';
 export { isParseError, parseIdentifier } from './parser.ts';
 export { ENUMERATED_CORPORA, getCorpusResolver, initRegistry, productionRegistry } from './registry/index.ts';
