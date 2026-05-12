@@ -24,12 +24,7 @@
  * the shim.
  */
 
-import {
-	BODY_MATCH_TIER,
-	DEPTH_PENALTY_PER_LEVEL,
-	TITLE_MATCH_TIER,
-	TYPE_TIER,
-} from '@ab/constants';
+import { BODY_MATCH_TIER, DEPTH_PENALTY_PER_LEVEL, TITLE_MATCH_TIER, TYPE_TIER } from '@ab/constants';
 import type { SearchIntent } from './intent-classifier';
 import type { HelpPage } from './schema/help-page';
 import type { ParsedFilter } from './schema/help-registry';

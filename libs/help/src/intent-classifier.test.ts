@@ -75,31 +75,23 @@ describe('hasAnyTitlePrefixMatch', () => {
 	});
 
 	it('returns true when a registered displayName prefix-matches', () => {
-		registerReferences([
-			makeRef({ id: 'r1', displayName: 'Aviation Weather Handbook' }),
-		]);
+		registerReferences([makeRef({ id: 'r1', displayName: 'Aviation Weather Handbook' })]);
 		expect(hasAnyTitlePrefixMatch('aviation')).toBe(true);
 		expect(hasAnyTitlePrefixMatch('AVIATION')).toBe(true);
 	});
 
 	it('returns true when an alias prefix-matches', () => {
-		registerReferences([
-			makeRef({ id: 'r1', displayName: 'Foo', aliases: ['Aviation Weather Handbook'] }),
-		]);
+		registerReferences([makeRef({ id: 'r1', displayName: 'Foo', aliases: ['Aviation Weather Handbook'] })]);
 		expect(hasAnyTitlePrefixMatch('aviation')).toBe(true);
 	});
 
 	it('returns false when no displayName or alias prefix-matches', () => {
-		registerReferences([
-			makeRef({ id: 'r1', displayName: 'Pilot Handbook' }),
-		]);
+		registerReferences([makeRef({ id: 'r1', displayName: 'Pilot Handbook' })]);
 		expect(hasAnyTitlePrefixMatch('dusk vs sunset')).toBe(false);
 	});
 
 	it('is case-insensitive', () => {
-		registerReferences([
-			makeRef({ id: 'r1', displayName: 'METAR Decoded' }),
-		]);
+		registerReferences([makeRef({ id: 'r1', displayName: 'METAR Decoded' })]);
 		expect(hasAnyTitlePrefixMatch('metar')).toBe(true);
 		expect(hasAnyTitlePrefixMatch('METAR')).toBe(true);
 	});

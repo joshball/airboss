@@ -46,9 +46,9 @@
 			<p class="badge">A/B</p>
 		</header>
 		<p>
-			Single column with category dividers (FAA Resources, Airboss Content, App Help, My Stuff,
-			External Tools, Commands). No detail pane. Each row carries the type tag + title +
-			subtitle. Closest to how Linear's Cmd+K feels.
+			Single column with category dividers (Library, Airboss Content, App Help, My Stuff, External
+			Tools, Commands). No detail pane. Each row carries the type tag + title + subtitle. Closest
+			to how Linear's Cmd+K feels.
 		</p>
 	</article>
 

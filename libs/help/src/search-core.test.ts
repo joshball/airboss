@@ -1,25 +1,18 @@
-import {
-	BODY_MATCH_TIER,
-	DEPTH_PENALTY_PER_LEVEL,
-	TITLE_MATCH_TIER,
-	TYPE_TIER,
-} from '@ab/constants';
+import { BODY_MATCH_TIER, DEPTH_PENALTY_PER_LEVEL, TITLE_MATCH_TIER, TYPE_TIER } from '@ab/constants';
 import { describe, expect, it } from 'vitest';
 import {
 	bodyMatchTier,
 	bucketFromScore,
 	rankBucket,
 	rankBucketIndexed,
-	scoreResult,
 	type SearchResultInput,
+	scoreResult,
 	titleMatchTier,
 } from './search-core';
 
 describe('rankBucket (legacy 3-bucket shim, retained for back-compat)', () => {
 	it('returns 1 on exact title match', () => {
-		expect(
-			rankBucket({ needle: 'metar', displayName: 'METAR', aliases: [], keywords: [], bodies: [] }),
-		).toBe(1);
+		expect(rankBucket({ needle: 'metar', displayName: 'METAR', aliases: [], keywords: [], bodies: [] })).toBe(1);
 	});
 
 	it('returns 2 on substring title match', () => {
@@ -47,9 +40,7 @@ describe('rankBucket (legacy 3-bucket shim, retained for back-compat)', () => {
 	});
 
 	it('returns null on no match', () => {
-		expect(
-			rankBucket({ needle: 'xyz', displayName: 'METAR', aliases: [], keywords: [], bodies: [] }),
-		).toBeNull();
+		expect(rankBucket({ needle: 'xyz', displayName: 'METAR', aliases: [], keywords: [], bodies: [] })).toBeNull();
 	});
 });
 
@@ -117,15 +108,11 @@ describe('bodyMatchTier', () => {
 	});
 
 	it('returns BODY_WHOLE_WORD when body has whole-word match', () => {
-		expect(bodyMatchTier('weather', 'Discusses weather and turbulence', [])).toBe(
-			BODY_MATCH_TIER.BODY_WHOLE_WORD,
-		);
+		expect(bodyMatchTier('weather', 'Discusses weather and turbulence', [])).toBe(BODY_MATCH_TIER.BODY_WHOLE_WORD);
 	});
 
 	it('returns BODY_SUBSTRING on infix-only body match', () => {
-		expect(bodyMatchTier('weath', 'Discusses the weather and turbulence', [])).toBe(
-			BODY_MATCH_TIER.BODY_SUBSTRING,
-		);
+		expect(bodyMatchTier('weath', 'Discusses the weather and turbulence', [])).toBe(BODY_MATCH_TIER.BODY_SUBSTRING);
 	});
 
 	it('returns NONE on no match', () => {

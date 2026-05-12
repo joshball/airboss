@@ -38,7 +38,9 @@ import {
 	REFERENCE_SOURCE_TYPES,
 	type ReferenceSourceType,
 	SOURCE_TYPE_VALUES,
+	TOP_HITS_MAX,
 } from '@ab/constants';
+import { classifyIntent, type SearchIntent } from './intent-classifier';
 import { loadAviationRefs } from './loaders/aviation-refs';
 import { loadExternalTools } from './loaders/external-tools';
 import { loadHelpPages } from './loaders/help-pages';
@@ -56,7 +58,7 @@ import {
 	type SynonymRewrite,
 	type SearchResult as TypedResult,
 } from './schema/result-types';
-import { rankBucket } from './search-core';
+import { rankBucket, scoreResult } from './search-core';
 
 /**
  * Classify a registry `Reference` into a `SearchResultType` based on its
@@ -351,6 +353,13 @@ export function searchGrouped(
 		return { ...EMPTY_GROUPED_RESULTS, filters: parsed.filters };
 	}
 
+	// Classify the search intent up front so the ranker variation +
+	// result-panel shape decision is shared with the downstream UI. The
+	// autocomplete-committed flag is not surfaced through `searchGrouped`
+	// yet (the autocomplete component lands in PR B); a `doc:` chip on
+	// `parsed.filters` is the only scoped-intent trigger today.
+	const intent = classifyIntent(parsed, false);
+
 	// Honor the `library:` filter / `mine` bare-token sugar. Picking a single
 	// library narrows the fan-out so chip-scoped queries (`mine card`) don't
 	// flood the columns with FAA + help + external rows the user just told us
@@ -366,7 +375,11 @@ export function searchGrouped(
 	const helpPages = wantHelp ? loadHelpPages(parsed, host) : [];
 	const tools = wantTools ? loadExternalTools(parsed, host) : [];
 	const injectedRows = filterInjectedByScope(injected, libraryScope);
-	const all = [...aviation, ...helpPages, ...tools, ...injectedRows];
+
+	// Score every row using the Phase 3.5 composite scorer. Loaders left
+	// the rankBucket field populated (back-compat), but downstream sorting,
+	// top-hits selection, and book-level collapse all key off the score.
+	const all = withScores([...aviation, ...helpPages, ...tools, ...injectedRows], freeText, intent);
 
 	// Bucket into columns.
 	const columns: Record<ResultColumn, TypedResult[]> = {
@@ -382,9 +395,18 @@ export function searchGrouped(
 		columns[col].push(row);
 	}
 
-	// Sort each column by rankBucket then title.
+	// Sort each column by composite score (descending) then alpha title.
 	for (const key of COLUMN_ORDER) {
 		columns[key] = sortTyped(columns[key]);
+	}
+
+	// Book-level collapse (R11) -- in I-1 / I-2, roll handbook chapters
+	// under their handbook root, CFR sections under their CFR Part. The
+	// chapters are removed from the top-level column and become
+	// `parent.children`. In I-3 phrase-FTS the leaf rows ARE the result,
+	// so we skip the collapse entirely.
+	if (intent !== 'phrase-fts') {
+		columns['faa-resources'] = collapseBooks(columns['faa-resources']);
 	}
 
 	// Banner hoist: a single tier-1 match across every column. If 0 or >1,
@@ -399,12 +421,22 @@ export function searchGrouped(
 	}
 	const bannerHit = tierOnes.length === 1 ? (tierOnes[0] ?? null) : null;
 
-	// FAA Resources clusters. A handbook root row "owns" any chapter that
+	// Library clusters. A handbook root row "owns" any chapter that
 	// shares its `clusterKey` (canonical doc slug); a CFR part owns
-	// sections whose `clusterKey` matches its slug. Children sort by title
-	// (the loader sets a stable title; an ordinal field could plug in here
-	// later).
-	const clusters = buildClusters(columns['faa-resources']);
+	// sections whose `clusterKey` matches its slug. Children sort by
+	// title. Note: clusters are computed BEFORE collapse for back-compat;
+	// the collapsed column has the same parent rows but with the children
+	// folded onto `parent.children`. UI PR migrates consumers to use
+	// `children` and drops the `clusters` field.
+	const clusters = buildClusters([
+		...aviation,
+		...injectedRows.filter((r) => COLUMN_BY_TYPE[r.type] === 'faa-resources'),
+	]);
+
+	// Top-hits strip (3.5c / R8) -- the top `TOP_HITS_MAX` rows across
+	// every column by composite score. Mixed types. Hidden in I-3 mode
+	// (phrase-FTS users want passages, not a top-hits summary).
+	const topHits = intent === 'phrase-fts' ? [] : computeTopHits(columns);
 
 	// Synonym chips: ask the aviation expander what it would rewrite the
 	// free-text to. Each non-identity rewrite becomes a removable chip.
@@ -414,6 +446,8 @@ export function searchGrouped(
 
 	return {
 		bannerHit,
+		topHits,
+		intent,
 		columns,
 		clusters,
 		synonymsApplied,
@@ -422,11 +456,114 @@ export function searchGrouped(
 	};
 }
 
+/**
+ * Annotate each typed result with its composite Phase 3.5 score (computed
+ * here, not by individual loaders). Loaders supplied `rankBucket` already;
+ * we add `score` so downstream code (sort, top-hits, collapse, UI) can
+ * key off the more precise signal. Leaves the rest of the row untouched.
+ */
+function withScores(rows: readonly TypedResult[], needle: string, intent: SearchIntent): readonly TypedResult[] {
+	if (rows.length === 0) return rows;
+	return rows.map((r) => ({
+		...r,
+		score: scoreResult(needle, r, intent),
+	}));
+}
+
+/**
+ * Sort rows by composite score (descending) when present, falling back
+ * to the legacy `rankBucket` for any row that hasn't been scored yet
+ * (defensive -- `withScores` ran on every facade-bound row, but
+ * external callers may invoke `sortTyped` on un-scored arrays).
+ */
 function sortTyped(rows: readonly TypedResult[]): TypedResult[] {
 	return [...rows].sort((a, b) => {
+		const aScore = a.score ?? null;
+		const bScore = b.score ?? null;
+		if (aScore !== null && bScore !== null && aScore !== bScore) {
+			return bScore - aScore;
+		}
 		if (a.rankBucket !== b.rankBucket) return a.rankBucket - b.rankBucket;
 		return a.title.localeCompare(b.title);
 	});
+}
+
+/**
+ * Compute the top-hits strip rows. Picks the highest-scored
+ * `TOP_HITS_MAX` rows across every column. Rows already sorted within
+ * their column; this is a global k-way merge that respects descending
+ * score order.
+ */
+function computeTopHits(columns: Record<ResultColumn, readonly TypedResult[]>): readonly TypedResult[] {
+	const all: TypedResult[] = [];
+	for (const key of COLUMN_ORDER) {
+		for (const row of columns[key]) all.push(row);
+	}
+	all.sort((a, b) => {
+		const aScore = a.score ?? 0;
+		const bScore = b.score ?? 0;
+		if (aScore !== bScore) return bScore - aScore;
+		return a.title.localeCompare(b.title);
+	});
+	return all.slice(0, TOP_HITS_MAX);
+}
+
+/**
+ * Book-level collapse (Phase 3.5 / R11). Walks the FAA Resources column,
+ * pairs handbook chapters with their handbook root by `clusterKey`, and
+ * folds the children onto `parent.children`. The chapters are removed
+ * from the top-level array. Same for CFR Part + CFR sections.
+ *
+ * When a child has no matching parent in the column (parent didn't
+ * match the query, or parent isn't in the result set), the child stays
+ * at top-level -- we never silently drop matches.
+ */
+function collapseBooks(rows: readonly TypedResult[]): TypedResult[] {
+	const PARENT_TYPES: ReadonlySet<SearchResultType> = new Set(['faa.handbook', 'faa.cfr.part', 'faa.aim']);
+	const CHILD_TYPES: ReadonlySet<SearchResultType> = new Set(['faa.handbook.chapter', 'faa.cfr.sect']);
+	const parentByKey = new Map<string, TypedResult>();
+	const out: TypedResult[] = [];
+	const childGroups = new Map<string, TypedResult[]>();
+	for (const row of rows) {
+		if (PARENT_TYPES.has(row.type) && row.clusterKey) {
+			parentByKey.set(row.clusterKey, row);
+			out.push(row);
+		} else if (CHILD_TYPES.has(row.type) && row.clusterKey) {
+			const bucket = childGroups.get(row.clusterKey) ?? [];
+			bucket.push(row);
+			childGroups.set(row.clusterKey, bucket);
+		} else {
+			out.push(row);
+		}
+	}
+	// Attach children to their parent or, if no parent matched, restore
+	// the children to the flat output (they're real matches, just orphans).
+	const collapsed: TypedResult[] = [];
+	const orphanChildren: TypedResult[] = [];
+	for (const [key, children] of childGroups) {
+		const parent = parentByKey.get(key);
+		if (parent) {
+			const idx = out.indexOf(parent);
+			if (idx >= 0) {
+				out[idx] = {
+					...parent,
+					children: [...children].sort((a, b) => (b.score ?? 0) - (a.score ?? 0) || a.title.localeCompare(b.title)),
+				};
+			}
+		} else {
+			for (const c of children) orphanChildren.push(c);
+		}
+	}
+	for (const row of out) collapsed.push(row);
+	for (const orphan of orphanChildren) collapsed.push(orphan);
+	// Re-sort the collapsed array by score descending.
+	collapsed.sort((a, b) => {
+		const aScore = a.score ?? 0;
+		const bScore = b.score ?? 0;
+		if (aScore !== bScore) return bScore - aScore;
+		return a.title.localeCompare(b.title);
+	});
+	return collapsed;
 }
 
 function buildClusters(

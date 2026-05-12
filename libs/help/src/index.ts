@@ -7,6 +7,7 @@
 //   import HelpLayout from '@ab/help/ui/HelpLayout.svelte';
 //   import HelpSearch from '@ab/help/ui/HelpSearch.svelte';
 
+export { classifyIntent, hasAnyTitlePrefixMatch, type SearchIntent, wordCount } from './intent-classifier';
 export {
 	type CalloutVariant,
 	highlight,
@@ -62,7 +63,6 @@ export {
 	type SynonymRewrite,
 	type WebToolTier,
 } from './schema/result-types';
-export { classifyIntent, hasAnyTitlePrefixMatch, type SearchIntent, wordCount } from './intent-classifier';
 export { listAviationReferences, search, searchGrouped } from './search';
 export {
 	bodyMatchTier,
@@ -73,8 +73,8 @@ export {
 	rankBucketIndexed,
 	type SearchResultInput,
 	scoreResult,
-	titleMatchTier,
 	TYPE_TIER,
+	titleMatchTier,
 } from './search-core';
 export {
 	type HelpValidationIssue,
