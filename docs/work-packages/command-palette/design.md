@@ -58,9 +58,30 @@ apps/{study,sim,hangar,flightbag}/src/
     +layout.svelte            (Phase 4 -- bind Cmd+P / Cmd+Shift+P globally)
 
 apps/study/src/routes/(app)/dev/palette/
-  wide/                       (Phase 3 -- Variant C prototype)
-  list/                       (Phase 3 -- Variant A prototype)
-  raycast/                    (Phase 3 -- Variant B prototype)
+  wide/                       (Phase 3 -- Variant C prototype; kept as reference)
+  list/                       (Phase 3 -- Variant A prototype; kept as reference)
+  raycast/                    (Phase 3 -- Variant B prototype; kept as reference)
+
+libs/autocomplete/             (Phase 3.5 -- generic input autocomplete; orthogonal to the modal)
+  src/
+    Autocomplete.svelte       (generic dropdown component)
+    types.ts                  (AutocompleteSource interface, AutocompleteEntry)
+    DocCodeSource.ts          (bundled source -- doc-code patterns)
+    TitlePrefixSource.ts      (bundled source -- title-prefix trie)
+    index.ts
+
+libs/help/src/                (Phase 3.5 additions / replacements)
+  intent-classifier.ts        (Phase 3.5 -- classifyIntent: scoped | broad | phrase-fts)
+  loaders/
+    fts-passages.ts           (Phase 3.5 -- Postgres FTS for I-3 phrase intent)
+  ui/
+    PaletteTypeNav.svelte     (Phase 3.5 -- vertical group nav with counts)
+    PaletteTopHits.svelte     (Phase 3.5 -- 3-row compact strip)
+    PaletteRow.svelte         (Phase 3.5 -- shared row template; always shows doc code)
+    PaletteScopedView.svelte  (Phase 3.5 -- I-1 doc headline + references-to panel)
+    PalettePassageView.svelte (Phase 3.5 -- I-3 passage cards with highlighted snippets)
+    DocCodeAutocomplete.svelte  (DELETED Phase 3.5 -- logic moves to autocomplete sources)
+    PaletteColumn.svelte        (DELETED Phase 3.5 -- superseded by PaletteTypeNav)
 ```
 
 ## Contracts
@@ -144,6 +165,119 @@ export interface PaletteCommandRegistry {
 }
 ```
 
+### `SearchIntent` (Phase 3.5)
+
+```ts
+export type SearchIntent = 'scoped' | 'broad' | 'phrase-fts';
+
+export function classifyIntent(
+  parsed: ParsedQuery,
+  autocompleteCommitted: boolean,
+): SearchIntent {
+  // I-1 scoped: user Tab-committed an autocomplete entry which set the doc filter
+  if (parsed.filters.some((f) => f.key === 'doc')) return 'scoped';
+
+  // I-3 phrase-FTS: quoted, OR long, OR no title-prefix match
+  if (parsedRawIsQuoted(parsed)) return 'phrase-fts';
+  if (wordCount(parsed.freeText) >= 4) return 'phrase-fts';
+  if (!hasAnyTitlePrefixMatch(parsed.freeText)) return 'phrase-fts';
+
+  // I-2 broad: default
+  return 'broad';
+}
+```
+
+### `SearchResult` (Phase 3.5 extends Phase 2)
+
+The Phase 2 `SearchResult` ships as a 5-bucket-rank shape. Phase 3.5 replaces `rankBucket` with a composite `score: number` and adds `children` for book-level collapse + `passageHighlight` for I-3:
+
+```ts
+export interface SearchResult {
+  readonly id: string;
+  readonly type: SearchResultType;
+  readonly title: string;
+  readonly docCode?: string;       // always shown on published types (R8/R14)
+  readonly subtitle?: string;
+  readonly snippet?: string;
+  readonly href: string;
+  readonly score: number;          // composite (Phase 3.5)
+  readonly children?: readonly SearchResult[];  // chapters/sections under a book (Phase 3.5)
+  readonly passageHighlight?: string;            // ts_headline output for I-3 (Phase 3.5)
+  readonly parentDocCode?: string;
+  readonly tier?: 'validated' | 'community';
+  readonly source?: 'recents' | 'index';
+  // rankBucket retained as a derived value during Phase 3.5 transition so existing
+  // call sites don't break; removed after the redesign lands.
+  readonly rankBucket?: 1 | 2 | 3 | 4 | 5;
+}
+```
+
+### Ranker constants (Phase 3.5)
+
+Live in `libs/help/src/search-core.ts` as exported `const` so they're tuneable from the ranker fixture file.
+
+```ts
+export const TYPE_TIER: Record<SearchResultType, number> = {
+  'faa.handbook': 100,
+  'faa.cfr.part': 90,
+  'faa.ac': 90,
+  'faa.aim': 85,
+  'airboss.knode': 80,
+  'airboss.course': 80,
+  'airboss.glossary': 75,
+  'faa.handbook.chapter': 50,
+  'faa.cfr.sect': 50,
+  'faa.aim.paragraph': 45,
+  'mine.card': 40,
+  'mine.rep': 40,
+  'mine.plan': 40,
+  'airboss.help': 20,
+  'web.tool': 10,
+  // commands (Phase 4)
+  'cmd.action': 30,
+  'cmd.goto': 30,
+  // ...
+} as const;
+
+export function scoreResult(needle: string, r: SearchResult, intent: SearchIntent): number {
+  // I-1 / I-2 composite per `design/mockups/search/mockup-04-ranking.md`
+  // I-3 inverts type tier, boosts body, rewards depth, adds ts_rank_cd lift
+  ...
+}
+```
+
+### `AutocompleteSource` (Phase 3.5, lives in `@ab/autocomplete`)
+
+```ts
+export interface AutocompleteSource {
+  readonly id: string;
+  // Returns matching entries (capped) or null if this source doesn't apply
+  // to the current input.
+  match(input: string): readonly AutocompleteEntry[] | null;
+}
+
+export interface AutocompleteEntry {
+  readonly id: string;
+  readonly display: string;        // primary text (e.g. "Aviation Weather Handbook")
+  readonly secondary?: string;     // secondary text (e.g. "FAA-H-8083-28")
+  readonly canonicalForm: string;  // what replaces the input on commit
+  readonly payload?: unknown;
+}
+
+export interface AutocompleteProps {
+  value: string;                   // bindable
+  sources: readonly AutocompleteSource[];
+  onCommit: (entry: AutocompleteEntry) => void;
+  placeholder?: string;
+  ariaLabel?: string;
+}
+```
+
+Bundled sources:
+
+- `DocCodeSource` -- matches doc-code patterns from `libs/aviation/src/doc-code-detector.ts`.
+- `TitlePrefixSource` -- trie-based title-prefix match (length >= 4) against `listReferences()` from `@ab/aviation`.
+
 ### Recents (Phase 5)
 
 ```ts
@@ -164,17 +298,32 @@ const STORAGE_KEY = 'palette.recents.v1';
 
 All three are bound globally at the root layout of each app. Mac uses Cmd, others use Ctrl.
 
-| Binding                        | Action                                         |
-| ------------------------------ | ---------------------------------------------- |
-| `Cmd+K` / `Ctrl+K` / `/`       | Open palette in `search` mode (default)        |
-| `Cmd+P` / `Ctrl+P`             | Open palette in `quickopen` mode               |
-| `Cmd+Shift+P` / `Ctrl+Shift+P` | Open palette in `command` mode                 |
-| `Cmd+\`                        | Toggle detail pane visibility (when open)      |
-| `Cmd+Enter`                    | Open in new tab OR set `doc:` filter chip      |
-| `Esc`                          | Close palette (or dismiss doc-picker dropdown) |
-| `↑` / `↓`                      | Move selection within column                   |
-| `Tab` / `Shift+Tab`            | Move selection across columns                  |
-| `[` / `]`                      | (Phase 2 back-compat) bucket jump              |
+### Modal bindings
+
+| Binding                          | Action                                                                                              |
+| -------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `Cmd+K` / `Ctrl+K` / `/`         | Open palette modal in `search` mode (default)                                                       |
+| `Cmd+P` / `Ctrl+P`               | Open palette modal in `quickopen` mode (Phase 5)                                                    |
+| `Cmd+Shift+P` / `Ctrl+Shift+P`   | Open palette modal in `command` mode (Phase 4)                                                      |
+| `Cmd+\`                          | Toggle detail pane visibility (when modal open)                                                     |
+| `Cmd+Enter`                      | Open in new tab OR set `doc:` filter chip on selected result                                        |
+| `Esc`                            | Close palette modal (autocomplete dropdown dismisses first if open)                                 |
+| `↑` / `↓`                        | Move selection within result column (modal); within dropdown (autocomplete) -- whichever is focused |
+| `Tab` / `Shift+Tab`              | Move focus across type nav / result column / detail pane                                            |
+| `Enter` (modal, dropdown closed) | Activate selected result                                                                            |
+
+### Autocomplete bindings (orthogonal to the modal; same component everywhere)
+
+| Binding                       | Action                                                                                                                          |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| Typing                        | Updates `value`; if any source returns matches, dropdown opens under input                                                      |
+| `↑` / `↓`                     | Move highlight in dropdown                                                                                                      |
+| `Tab`                         | Commit highlighted entry to input (replaces value with `canonicalForm`); dropdown closes; modal (if any) stays in current state |
+| `Enter` (dropdown open)       | Same as Tab                                                                                                                     |
+| `Enter` (dropdown closed)     | Hosted by the surface -- modal runs the search; inline search bar opens the modal pre-populated; etc.                           |
+| `Esc`                         | Dismiss dropdown only; input value preserved; modal (if any) stays open                                                         |
+| `Cmd+Enter` (dropdown open)   | Same as Tab, plus signals host to apply the entry as a filter chip (`doc:<code>`) and run a scoped search                       |
+| Continued typing past trigger | Dismiss dropdown automatically                                                                                                  |
 
 ## Color tokens
 
@@ -211,9 +360,13 @@ If a token doesn't yet exist in [libs/themes/](../../../libs/themes/), Phase 3 a
 
 ## Open items (resolve before phase end)
 
-| Item                                                                                   | Decide in   |
-| -------------------------------------------------------------------------------------- | ----------- |
-| Should `airboss.lesson` ship a real loader in Phase 2 or stub until lesson pages land? | Phase 2 mid |
-| Detail-pane "Cite this" action -- copy `airboss-ref:` URI or open citation picker?     | Phase 3     |
-| Per-app command boost weight -- exact multiplier vs section-first ordering?            | Phase 4     |
-| Recents decay -- LRU pop after N, or time-based decay function?                        | Phase 5     |
+| Item                                                                                                                  | Decide in                                                                 |
+| --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `airboss.lesson` real loader vs stub                                                                                  | Phase 2 -- stubbed; revisit when lesson pages exist                       |
+| Detail-pane "Cite this" -- copy `airboss-ref:` URI vs citation picker                                                 | Phase 3 -- shipped as clipboard copy                                      |
+| Per-app command boost weight                                                                                          | Phase 4                                                                   |
+| Recents decay -- LRU pop vs time-based                                                                                | Phase 5                                                                   |
+| Ranker constants -- tune the type-tier and bonus values via the fixture file once Phase 3.5 lands                     | Phase 3.5 walk                                                            |
+| `@ab/autocomplete` lib vs fold into `@ab/ui` -- decide based on whether `@ab/ui` already has a dropdown primitive     | Phase 3.5 start                                                           |
+| Phrase-FTS index strategy -- Postgres `tsvector` columns vs `websearch_to_tsquery` on raw text vs pgvector embeddings | Phase 3.5 -- start with `websearch_to_tsquery`; revisit if recall is poor |
+| Intent classifier word-count threshold (4 vs 5 words) for I-3 boundary                                                | Phase 3.5 walk -- tune via fixtures                                       |

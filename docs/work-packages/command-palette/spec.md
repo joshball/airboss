@@ -51,20 +51,21 @@ This WP delivers all four behaviours across four phases. Phase 1 already shipped
 
 ## Phases
 
-| Phase | Branch / PR | Scope                                                                  | Status             |
-| ----- | ----------- | ---------------------------------------------------------------------- | ------------------ |
-| 1     | PR #817     | FAA doc registry, synonyms, doc-code detector, regression test fixture | shipped 2026-05-10 |
-| 2     | TBD         | Result taxonomy + multi-column palette + loaders + AIM scanner         | this WP, in flight |
-| 3     | TBD         | Visual variants + detail pane + doc-code autocomplete dropdown         | this WP            |
-| 4     | TBD         | Command surfaces -- Cmd+Shift+P + per-app command registries           | this WP            |
-| 5     | TBD         | Cmd+P quick-open + recents tracker                                     | this WP            |
+| Phase | Branch / PR        | Scope                                                                                                                                                                                                                                                                                                                                                    | Status             |
+| ----- | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| 1     | #817               | FAA doc registry, synonyms, doc-code detector, regression test fixture                                                                                                                                                                                                                                                                                   | shipped 2026-05-10 |
+| 2     | #831               | Result taxonomy + multi-column palette + 11 loaders + AIM scanner + `/api/palette/search` endpoint                                                                                                                                                                                                                                                       | shipped 2026-05-11 |
+| 3     | #857 + #921 + #925 | CommandPalette + PaletteDetailPane + DocCodeAutocomplete + 3 dev variants + theme accents + `@ab/sources` barrel split                                                                                                                                                                                                                                   | shipped 2026-05-12 |
+| 3.5   | TBD                | **Ranker + layout redesign**. Three-intent search model (I-1 scoped / I-2 broad / I-3 phrase-FTS). Vertical type nav + top-hits strip + book-level collapse + inline-prefix sub-groups. Autocomplete extracted to its own lib (`@ab/autocomplete`) -- orthogonal to the search modal. Rename "FAA Resources" -> "Library". See `design/mockups/search/`. | this WP, NEXT      |
+| 4     | TBD                | Cmd+Shift+P + per-app command registries. Built on top of the Phase 3.5 shape.                                                                                                                                                                                                                                                                           | this WP            |
+| 5     | TBD                | Cmd+P quick-open + recents tracker. Built on top of the Phase 3.5 shape.                                                                                                                                                                                                                                                                                 | this WP            |
 
 Phase exit checklist (per phase):
 
 1. `bun run check branch` clean.
 2. Relevant `bun test` packages green.
 3. `/ball-review-full` run end-to-end; every finding fixed in the same PR; re-run to confirm.
-4. Walk the feature in a real browser on every affected surface.
+4. **Walk the feature in a real browser** on every affected surface, on the parent repo with `.env` loaded -- NOT a worktree. Agent self-reports of "page hydrates fine" are not sufficient gates (Phase 3 cost 3 wrong-fix PRs by relying on those). See [docs/agents/debug-playbooks/browser-hydration.md](../../agents/debug-playbooks/browser-hydration.md).
 5. PR description: what / why / manual test plan as a checklist.
 6. Squash-merge after Joshua walks and approves.
 
@@ -72,28 +73,34 @@ Phase exit checklist (per phase):
 
 Every search result carries a `type` field. The type drives column placement, detail-pane affordances, and cross-column priority. Taxonomy is locked here so adding a new content domain later is "define type, register loader, assign column" -- not "rewrite the ranker."
 
-| Type                   | Source                                               | Column          |
-| ---------------------- | ---------------------------------------------------- | --------------- |
-| `faa.handbook`         | FAA-H-* root rows in aviation registry               | FAA Resources   |
-| `faa.handbook.chapter` | `study.reference_section` where `kind=HANDBOOK`      | FAA Resources   |
-| `faa.cfr.part`         | `regulations/cfr-14/`, `cfr-49/` registry entries    | FAA Resources   |
-| `faa.cfr.sect`         | `study.reference_section` where `kind=CFR`           | FAA Resources   |
-| `faa.aim`              | `aim/2026-04/*` index (added in Phase 2)             | FAA Resources   |
-| `faa.ac`               | AC registry rows (Phase 1 seeds + future ingest)     | FAA Resources   |
-| `faa.acs`              | ACS docs in aviation registry                        | FAA Resources   |
-| `airboss.course`       | `course/courses/*/` + `course/weather/` etc.         | Airboss Content |
-| `airboss.knode`        | `study.knowledge_node`                               | Airboss Content |
-| `airboss.glossary`     | aviation registry entries that aren't FAA docs       | Airboss Content |
-| `airboss.lesson`       | study lesson pages                                   | Airboss Content |
-| `airboss.help`         | help registry (existing)                             | App Help        |
-| `mine.card`            | `study.card` for current user                        | My Stuff        |
-| `mine.rep`             | `study.review` (decision reps) for current user      | My Stuff        |
-| `mine.plan`            | `study.study_plan` for current user                  | My Stuff        |
-| `web.tool`             | `libs/aviation/src/external-tools.ts` (Phase 2 seed) | External Tools  |
-| `cmd.action`           | declarative command registry (Phase 4)               | Commands        |
-| `cmd.goto`             | route registry (Phase 4)                             | Commands        |
+The taxonomy itself ships in Phase 2 and is correct. Phase 3.5 renames the `FAA Resources` group to `Library` (per OQ2) and changes presentation (vertical type nav, top-hits strip, book-level collapse, inline-prefix sub-groups) -- but does NOT change the result type IDs themselves.
 
-`mine.note` and `airboss.lesson` are scaffolded in the type union but their loaders are stubs in Phase 2; they land when the upstream surfaces do.
+| Type                   | Source                                            | Group                                                |
+| ---------------------- | ------------------------------------------------- | ---------------------------------------------------- |
+| `faa.handbook`         | FAA-H-* root rows in aviation registry            | Library                                              |
+| `faa.handbook.chapter` | `study.reference_section` where `kind=HANDBOOK`   | Library                                              |
+| `faa.cfr.part`         | `regulations/cfr-14/`, `cfr-49/` registry entries | Library                                              |
+| `faa.cfr.sect`         | `study.reference_section` where `kind=CFR`        | Library                                              |
+| `faa.aim`              | `aim/2026-04/*` index                             | Library                                              |
+| `faa.ac`               | AC registry rows                                  | Library                                              |
+| `faa.acs`              | ACS docs in aviation registry                     | Library                                              |
+| `airboss.course`       | `course/courses/*/` + `course/weather/` etc.      | Airboss Content                                      |
+| `airboss.knode`        | `study.knowledge_node`                            | Airboss Content                                      |
+| `airboss.glossary`     | aviation registry entries that aren't FAA docs    | Airboss Content                                      |
+| `airboss.lesson`       | study lesson pages                                | Airboss Content                                      |
+| `airboss.help`         | help registry                                     | App Help (hidden by default; surfaces when filtered) |
+| `mine.card`            | `study.card` for current user                     | Mine                                                 |
+| `mine.rep`             | `study.review` (decision reps) for current user   | Mine                                                 |
+| `mine.plan`            | `study.study_plan` for current user               | Mine                                                 |
+| `web.tool`             | `libs/aviation/src/external-tools.ts`             | Tools                                                |
+| `cmd.action`           | declarative command registry (Phase 4)            | Commands                                             |
+| `cmd.goto`             | route registry (Phase 4)                          | Commands                                             |
+
+`mine.note` and `airboss.lesson` are scaffolded in the type union but their loaders remain stubs; they land when the upstream surfaces do.
+
+### Sub-group rule (Phase 3.5)
+
+When a group has natural sub-groups (CFRs: 14 CFR vs 49 CFR) AND the count is small (<= 4 distinct sub-groups), prefix the sub-group inline on each row rather than creating a nested column. Example: `14 CFR Part 91`, `49 CFR Part 175`. Same row, no nested nav. Same rule applies anywhere it fits.
 
 ## Mode contract (the Phase 4/5 contract)
 
@@ -109,17 +116,38 @@ const ELIGIBLE: Record<PaletteMode, ReadonlySet<SearchResultType>> = {
 
 Same input box, ranker, and registry serve all three modes. Mode is selected by the keybinding that opened the palette.
 
+## Three-intent search model (Phase 3.5 contract)
+
+Within `search` mode, a query has THREE distinct intents. The intent classifier picks one per query; the ranker and the result-panel shape both vary per intent.
+
+| Intent             | Triggered by                                                                                                                      | Ranker variation                                                                               | Result shape                                                                                                                       |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| **I-1 scoped**     | User Tab-committed an autocomplete entry; `doc:<code>` filter chip is set                                                         | All results filtered to the doc; sort: headline first, then citations grouped by source        | Headline doc card + "References to this doc" panel (lessons, knowledge nodes, cards citing it)                                     |
+| **I-2 broad**      | Short query (<=3 words), no operators, prefix-matches at least one known title -- OR -- user dismissed autocomplete and hit Enter | Composite: `type_tier + title_match + body_match - depth_penalty`. Whole docs outrank chapters | Top-hits strip (3 rows) + vertical type-nav + result column (one row per book/doc) + detail pane (chapters/sections clickable)     |
+| **I-3 phrase-FTS** | Long query (4+ words) OR quoted phrase OR no title-prefix match                                                                   | Inverted: section-level types boosted; depth REWARDED; Postgres `ts_rank_cd` lift              | Passage cards with highlighted snippet text. No top-hits strip; no type-nav. Each card links to the section's anchor in flightbag. |
+
+The intent classifier is implemented as a pure function `classifyIntent(parsedQuery, autocompleteCommitted: boolean): SearchIntent`. See [design.md](design.md) and [test-plan.md](test-plan.md) for the threshold table and fixtures.
+
 ## Decisions
 
-| #   | Decision                                                                                                                                                                                            | Source                 |
-| --- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| 1   | Default surface boost: launching app's results / commands first; others still appear                                                                                                                | design note Decisions  |
-| 2   | External Tools: split into Validated + Community tiers; both visible by default                                                                                                                     | design note Decisions  |
-| 3   | Detail pane on right; collapses with `Cmd+\`; hidden below ~900px                                                                                                                                   | design note Decisions  |
-| 4   | Synonyms seeded from Appendix A (~100 entries); shipped Phase 1                                                                                                                                     | PR #817                |
-| 5   | Default visual: Variant C (wide 4-column + right detail pane). Variants A/B/D live under `apps/study/src/routes/(app)/dev/palette/` for A/B until Joshua picks production default at end of Phase 3 | mockup + Phase 3 scope |
-| 6   | Empty doc-picker order: alphabetical for first session; recency-weighted is later                                                                                                                   | design note open Q #1  |
-| 7   | `REFERENCE_SOURCE_TYPES` expansion: one slot per handbook (AVWX, IPH, RMH, AIH, HFH, GFH, BFH added as discrete values)                                                                             | 2026-05-11 chat        |
+| #   | Decision                                                                                                                                                                                                                                                                                                                                                                                                                                             | Source                              |
+| --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| 1   | Default surface boost: launching app's results / commands first; others still appear                                                                                                                                                                                                                                                                                                                                                                 | design note Decisions               |
+| 2   | External Tools: split into Validated + Community tiers; both visible by default                                                                                                                                                                                                                                                                                                                                                                      | design note Decisions               |
+| 3   | Detail pane on right; collapses with `Cmd+\`; hidden below ~900px                                                                                                                                                                                                                                                                                                                                                                                    | design note Decisions               |
+| 4   | Synonyms seeded from Appendix A (~100 entries); shipped Phase 1                                                                                                                                                                                                                                                                                                                                                                                      | PR #817                             |
+| 5   | **SUPERSEDED by R8.** Phase 3 shipped Variant C as production default, but the walk showed columns side-by-side don't help when buckets are uneven and section-level results pollute the FAA Resources column. The redesign in Phase 3.5 replaces Variant C with a vertical-type-nav + top-hits-strip layout. The three dev variants stay mounted under `/dev/palette/{wide,list,raycast}` for reference.                                            | mockup + Phase 3 scope + 2026-05-12 |
+| 6   | Empty doc-picker order: alphabetical for first session; recency-weighted is later                                                                                                                                                                                                                                                                                                                                                                    | design note open Q #1               |
+| 7   | `REFERENCE_SOURCE_TYPES` expansion: one slot per handbook (AVWX, IPH, RMH, AIH, HFH, GFH, BFH added as discrete values)                                                                                                                                                                                                                                                                                                                              | 2026-05-11 chat                     |
+| 8   | **New layout (supersedes R5):** top-hits strip (3 rows, mixed types, ranker-decided) + vertical type-nav with counts (left) + result column (middle, one row per book/document) + detail pane (right, chapters/sections clickable). Sub-groups (CFR Title, AC series) prefix inline rather than creating nested columns.                                                                                                                             | 2026-05-12 walk                     |
+| 9   | **Ranker rewrite:** composite score `type_tier_weight + title_match_tier + body_match_tier - depth_penalty`. Type tiers lift handbooks/CFR-parts/ACs/AIM-chapters above their own sections; depth penalty keeps deep sections from outranking their parents. Per-intent variations (I-1 scoped / I-2 broad / I-3 phrase-FTS).                                                                                                                        | 2026-05-12 walk                     |
+| 10  | **Three-intent model.** Search has three distinct intents (I-1 scoped, I-2 broad, I-3 phrase-FTS). Autocomplete commit drives I-1. Default Enter routes to I-2 or I-3 based on query shape (word count, quoted, title-prefix match). Each intent uses a different ranker variation and result-panel shape.                                                                                                                                           | 2026-05-12 chat                     |
+| 11  | **Book-level collapse.** When a query matches a book AND its chapters, the result column shows ONE row for the book. Chapters become `result.children` and render in the detail pane as clickable sub-results. Eliminates "book + 14 chapter rows" pollution.                                                                                                                                                                                        | 2026-05-12 walk                     |
+| 12  | **Rename "FAA Resources" group label to "Library".** Type IDs (`faa.*`) stay stable; only the user-facing group label changes. Reason: not all "FAA Resources" are FAA-authored (NTSB, sectionals, industry refs).                                                                                                                                                                                                                                   | 2026-05-12 chat                     |
+| 13  | **Autocomplete is a generic input affordance, ORTHOGONAL to the search modal.** Lives in its own lib (`@ab/autocomplete` or fold into `@ab/ui`). The search modal hosts an autocomplete-wrapped input; the modal does NOT own the dropdown. Modal opens only on Enter or click. Reusable: future header search bar, /library filter, command palette, quick-open. Pluggable `AutocompleteSource` interface; doc-code + title-prefix sources bundled. | 2026-05-12 chat                     |
+| 14  | **Doc IDs always visible and prominent** on every published-resource row. Bidirectional autocomplete: typing the code OR the title surfaces the same dropdown row showing BOTH `FAA-H-8083-28` and `Aviation Weather Handbook`.                                                                                                                                                                                                                      | 2026-05-12 chat                     |
+| 15  | **Phrase-level FTS loader** (I-3). Postgres `to_tsquery` / `websearch_to_tsquery` against `study.referenceSection.body` + `study.knowledgeNode.contentMd` + `study.lesson.body`. Returns passage-shaped results with snippet highlighting.                                                                                                                                                                                                           | 2026-05-12 chat                     |
+| 16  | **Browser-load verification is mandatory before merge** for any Phase 3.5+ PR. Per CLAUDE.md and the 2026-05-12 incident: agent reports of "page hydrates fine" are unverified. The dispatcher must `bun scripts/dev.ts <app>` in the parent repo, load the affected page in a real browser, devtools clean, before merging.                                                                                                                         | 2026-05-12 incident                 |
 
 ## Non-goals
 
@@ -130,3 +158,4 @@ See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 - [tasks.md](tasks.md) -- per-phase task lists
 - [test-plan.md](test-plan.md) -- manual + automated test plan
 - [design.md](design.md) -- contracts, file layout, loader signatures
+- [`../../../design/mockups/search/`](../../../design/mockups/search/) -- Phase 3.5 redesign mockups (current-state, new-layout, autocomplete, ranking)
