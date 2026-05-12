@@ -124,11 +124,9 @@ This is a small thing that signals "this is a book, not just a reference table" 
 
 Don't build the rich-reader features (highlights, comments, Q&A authoring) in this WP -- those are in IDEAS.md and need their own WP suite. But the schema additions in #6 use a naming convention (`study.reference_section_<feature>` per-user state) that the rich-reader follows. Document that convention in [docs/platform/STORAGE.md](../../platform/STORAGE.md) so future tables compose with this one.
 
-## Out of Scope (explicit)
+## Out of scope
 
-- **Rich-reader features.** Highlights, comments, Q&A authoring, self-rated understanding, public Q&A merging -- all in IDEAS.md, separately specced.
-- **Cross-handbook reading paths.** "Finish PHAK chapter 1, then read AFH chapter 1" -- a curriculum thing, not a reading-order thing. Belongs to syllabi/lesson plans (cert-syllabus WP territory).
-- **Annotated PDF view.** We're rendering markdown derivatives, not the PDF itself. Keep the SourceLinks "open PDF" affordance for users who want the original.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Auth resolution
 
