@@ -59,14 +59,7 @@ This is also the smallest thing that lets us start writing real `airboss-ref:` r
 
 ### Out
 
-- The actual registry's TypeScript constants table (`SOURCES`, per-corpus resolvers, query API). Owned by Phase 2 (`reference-source-registry-core`).
-- Per-corpus locator-shape validation. Phase 1's parser treats the locator as opaque; per-corpus resolvers ship in their respective ingestion phases (Phase 3 CFR, Phase 6 handbooks, Phase 7 AIM, etc.). Until those land, the validator's row-1 "locator is syntactically valid for that corpus's resolver" check passes any non-empty locator.
-- The `--fix` mode that auto-stamps current `accepted` editions onto unpinned identifiers. Requires Phase 2's registry to know what "current accepted" means per corpus; ships with Phase 2.
-- The renderer + token-substitution pipeline. Phase 4.
-- The annual diff-job + lesson rewrite generator. Phase 5.
-- The `unknown:` migration tool that rewrites placeholders to real identifiers when corpora are ingested. Phase 9.
-- Citation rendering UI primitives. Phase 4.
-- IDE language server integration for NOTICE-tier findings. Out of every phase in ADR 019 §8; tracked as a follow-on if the editor signal proves valuable.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Data Model
 
@@ -76,17 +69,17 @@ All types in the `@ab/sources` package. No database tables. The registry-stub is
 
 Source of truth: ADR 019 §2.1 (`SourceEntry`), §6.1 (`Edition`, `AliasEntry`), §1.5 (severity tiers + rule list). Ported verbatim into `libs/sources/src/types.ts`.
 
-| Type            | Origin                            | Notes                                                          |
-| --------------- | --------------------------------- | -------------------------------------------------------------- |
-| `SourceId`      | ADR 019 §1.1                      | The canonical `airboss-ref:` URI string. Branded type.         |
-| `SourceEntry`   | ADR 019 §2.1                      | Static identity per entry. No `parent`, `editions`, etc.       |
-| `SourceLifecycle` | ADR 019 §2.4                    | `'draft' \| 'pending' \| 'accepted' \| 'retired' \| 'superseded'` |
-| `Edition`       | ADR 019 §6.1                      | Per-edition metadata + alias map.                              |
-| `AliasEntry`    | ADR 019 §6.1                      | `kind: 'silent' \| 'content-change' \| 'cross-section' \| 'split' \| 'merge'` |
-| `Severity`      | ADR 019 §1.5                      | `'error' \| 'warning' \| 'notice'`                            |
-| `ValidationFinding` | This package                  | `{ severity, ruleId, message, location, identifier }`         |
-| `ParsedIdentifier`  | This package                  | `{ corpus, locator, pin, raw }` after successful parse        |
-| `ParseError`        | This package                  | `{ kind, message, location }` for malformed URI strings       |
+| Type                | Origin       | Notes                                                    |                    |                   |             |               |
+| ------------------- | ------------ | -------------------------------------------------------- | ------------------ | ----------------- | ----------- | ------------- |
+| `SourceId`          | ADR 019 §1.1 | The canonical `airboss-ref:` URI string. Branded type.   |                    |                   |             |               |
+| `SourceEntry`       | ADR 019 §2.1 | Static identity per entry. No `parent`, `editions`, etc. |                    |                   |             |               |
+| `SourceLifecycle`   | ADR 019 §2.4 | `'draft' \                                               | 'pending' \        | 'accepted' \      | 'retired' \ | 'superseded'` |
+| `Edition`           | ADR 019 §6.1 | Per-edition metadata + alias map.                        |                    |                   |             |               |
+| `AliasEntry`        | ADR 019 §6.1 | `kind: 'silent' \                                        | 'content-change' \ | 'cross-section' \ | 'split' \   | 'merge'`      |
+| `Severity`          | ADR 019 §1.5 | `'error' \                                               | 'warning' \        | 'notice'`         |             |               |
+| `ValidationFinding` | This package | `{ severity, ruleId, message, location, identifier }`    |                    |                   |             |               |
+| `ParsedIdentifier`  | This package | `{ corpus, locator, pin, raw }` after successful parse   |                    |                   |             |               |
+| `ParseError`        | This package | `{ kind, message, location }` for malformed URI strings  |                    |                   |             |               |
 
 ### `RegistryReader` interface (stubbed; Phase 2 fills in)
 
@@ -140,23 +133,23 @@ Per ADR 019 §1.1 + §1.1.1.
 
 Source of truth: ADR 019 §1.5. The 15 rules evaluate in order; the validator emits **exactly one error per identifier** (the first matching rule). WARNING and NOTICE rules can fire alongside an ERROR finding (an identifier may have one ERROR plus one or more WARNING / NOTICE findings).
 
-| #  | Rule                                                                                                                          | Severity | Notes                                                                                            |
-| -- | ----------------------------------------------------------------------------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------ |
-| 0  | `corpus === 'unknown'` (magic prefix per §1.7)                                                                                | ERROR    | Carve-out evaluated before row 1 so the parse-failure message doesn't preempt the migration prompt. |
-| 1  | Identifier must parse: path-rootless, corpus enumerated in §1.2 (excluding `unknown`), locator non-empty                       | ERROR    | Per-corpus locator validation lives in the resolver; Phase 1 only checks "non-empty".            |
-| 2  | Identifier resolves to an `accepted` or `superseded` registry entry                                                           | ERROR    | Calls `registry.getEntry(id)`. Stub registry returns null until Phase 2 fills it.               |
-| 3  | Pinned edition exists in registry                                                                                             | ERROR    | Calls `registry.hasEdition(id, pin)`. Stub returns false.                                       |
-| 4  | Identifier resolves to `pending`, `draft`, or `retired`                                                                       | ERROR    | Message names the lifecycle state.                                                               |
-| 5  | Identifier uses `?at=unpinned`                                                                                                | WARNING  | Authorial opt-out per §1.3.                                                                      |
-| 6  | Pinned edition is older than current `accepted` by > 1 edition                                                                | WARNING  | Calls `registry.getEditionDistance(id, pin)`.                                                   |
-| 7  | Link text is empty (after stripping Markdown markup)                                                                          | ERROR    | Lesson-parser computes the stripped text and passes it to the rule engine.                      |
-| 8  | Bare identifier in prose (not in a Markdown link)                                                                             | NOTICE   | Lesson-parser detects bare URL-shaped occurrences.                                              |
-| 9  | Lazy link text (just the section number echoed back, no token)                                                                | NOTICE   | Lazy detection: link text matches the canonical short form pattern (e.g. `§91.103`) without a token. |
-| 10 | Renumbering alias within section, content unchanged                                                                           | (silent) | Resolver applies the alias; no finding emitted.                                                  |
-| 11 | Renumbering alias, content changed                                                                                            | WARNING  | `AliasEntry.kind === 'content-change'`.                                                          |
-| 12 | Cross-section move (a `cross-section` `AliasEntry`)                                                                           | ERROR    | Resolver does NOT walk past a `cross-section` alias; chain stops at the first such hop.          |
-| 13 | Reference to superseded entry without `acknowledgments` entry                                                                 | WARNING  | Lesson-parser passes the ack list; rule checks coverage.                                        |
-| 14 | Reason slug in acknowledgments exceeds 48 characters                                                                          | NOTICE   | Slug rules: `[a-z0-9-]`, max 64; recommended 16-32; > 48 is the soft limit.                     |
+| #   | Rule                                                                                                     | Severity | Notes                                                                                                |
+| --- | -------------------------------------------------------------------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------- |
+| 0   | `corpus === 'unknown'` (magic prefix per §1.7)                                                           | ERROR    | Carve-out evaluated before row 1 so the parse-failure message doesn't preempt the migration prompt.  |
+| 1   | Identifier must parse: path-rootless, corpus enumerated in §1.2 (excluding `unknown`), locator non-empty | ERROR    | Per-corpus locator validation lives in the resolver; Phase 1 only checks "non-empty".                |
+| 2   | Identifier resolves to an `accepted` or `superseded` registry entry                                      | ERROR    | Calls `registry.getEntry(id)`. Stub registry returns null until Phase 2 fills it.                    |
+| 3   | Pinned edition exists in registry                                                                        | ERROR    | Calls `registry.hasEdition(id, pin)`. Stub returns false.                                            |
+| 4   | Identifier resolves to `pending`, `draft`, or `retired`                                                  | ERROR    | Message names the lifecycle state.                                                                   |
+| 5   | Identifier uses `?at=unpinned`                                                                           | WARNING  | Authorial opt-out per §1.3.                                                                          |
+| 6   | Pinned edition is older than current `accepted` by > 1 edition                                           | WARNING  | Calls `registry.getEditionDistance(id, pin)`.                                                        |
+| 7   | Link text is empty (after stripping Markdown markup)                                                     | ERROR    | Lesson-parser computes the stripped text and passes it to the rule engine.                           |
+| 8   | Bare identifier in prose (not in a Markdown link)                                                        | NOTICE   | Lesson-parser detects bare URL-shaped occurrences.                                                   |
+| 9   | Lazy link text (just the section number echoed back, no token)                                           | NOTICE   | Lazy detection: link text matches the canonical short form pattern (e.g. `§91.103`) without a token. |
+| 10  | Renumbering alias within section, content unchanged                                                      | (silent) | Resolver applies the alias; no finding emitted.                                                      |
+| 11  | Renumbering alias, content changed                                                                       | WARNING  | `AliasEntry.kind === 'content-change'`.                                                              |
+| 12  | Cross-section move (a `cross-section` `AliasEntry`)                                                      | ERROR    | Resolver does NOT walk past a `cross-section` alias; chain stops at the first such hop.              |
+| 13  | Reference to superseded entry without `acknowledgments` entry                                            | WARNING  | Lesson-parser passes the ack list; rule checks coverage.                                             |
+| 14  | Reason slug in acknowledgments exceeds 48 characters                                                     | NOTICE   | Slug rules: `[a-z0-9-]`, max 64; recommended 16-32; > 48 is the soft limit.                          |
 
 Output shape per finding:
 
@@ -207,18 +200,18 @@ The validator MUST run only against `course/regulations/**` for now. Future cont
 
 The validator's own behavior is what's being validated; the checks that enforce *the validator itself* are unit tests in this package. No DB-side gates.
 
-| Concern                                                    | Where it runs              |
-| ---------------------------------------------------------- | -------------------------- |
-| Each row of §1.5 fires correctly                           | Vitest unit (`validator.test.ts`) |
-| Row 0 (`unknown:`) takes priority over row 1               | Vitest unit                |
-| Rules evaluate in order; exactly one ERROR per identifier  | Vitest unit                |
-| Path-rootless accepted; path-absolute rejected; authority-based rejected | Vitest unit (`parser.test.ts`) |
-| Whitespace trimmed                                         | Vitest unit                |
-| Frontmatter ack shape per §3.4                             | Vitest unit (`lesson-parser.test.ts`) |
-| Per-link `id` binding via Markdown reference labels        | Vitest unit                |
-| Orphan ack warnings                                         | Vitest unit                |
-| 5 edge cases per §1.5.1                                    | Vitest unit                |
-| `bun run check` exits clean on current `course/regulations/` | Manual gate (test plan)  |
+| Concern                                                                  | Where it runs                         |
+| ------------------------------------------------------------------------ | ------------------------------------- |
+| Each row of §1.5 fires correctly                                         | Vitest unit (`validator.test.ts`)     |
+| Row 0 (`unknown:`) takes priority over row 1                             | Vitest unit                           |
+| Rules evaluate in order; exactly one ERROR per identifier                | Vitest unit                           |
+| Path-rootless accepted; path-absolute rejected; authority-based rejected | Vitest unit (`parser.test.ts`)        |
+| Whitespace trimmed                                                       | Vitest unit                           |
+| Frontmatter ack shape per §3.4                                           | Vitest unit (`lesson-parser.test.ts`) |
+| Per-link `id` binding via Markdown reference labels                      | Vitest unit                           |
+| Orphan ack warnings                                                      | Vitest unit                           |
+| 5 edge cases per §1.5.1                                                  | Vitest unit                           |
+| `bun run check` exits clean on current `course/regulations/`             | Manual gate (test plan)               |
 
 ## Edge Cases
 
@@ -240,18 +233,7 @@ Additional edge cases this package handles directly:
 
 ## Out of Scope (resolved, not deferred)
 
-| Surfaced consideration                                                                                | Resolution                                                                                                                                                                                                                                                                                                                                                                                          |
-| ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Auto-stamping unpinned identifiers (`--fix` mode)                                                     | Drop from this WP. Ships with Phase 2 (`reference-source-registry-core`) which provides `getCurrentAcceptedEdition`. The validator's row 1 ERROR for unpinned identifiers is in place; the auto-fix is the only thing deferred.                                                                                                                                                                       |
-| Per-corpus locator validation                                                                         | Drop from this WP. Each corpus's WP (Phase 3 for CFR, Phase 6 for handbooks, etc.) ships its own resolver. The validator depends on `RegistryReader.getEntry` returning null for unknown locators; until corpora are populated, every locator is "unknown to the registry" and row 2 fires.                                                                                                          |
-| Renderer + token substitution                                                                         | Drop. Phase 4.                                                                                                                                                                                                                                                                                                                                                                                       |
-| `unknown:` migration tool                                                                             | Drop. Phase 9. The validator's row 0 emits ERROR with the migration message; the actual rewrite tool ships when corpora are ingested.                                                                                                                                                                                                                                                                |
-| Annual diff-job                                                                                       | Drop. Phase 5.                                                                                                                                                                                                                                                                                                                                                                                       |
-| IDE language server / NOTICE-tier surfaces                                                             | Drop. ADR 019 §1.5 specifies NOTICE is "IDE language server only"; the language server is not currently part of the platform. NOTICE findings print to the CLI for now (visible but not blocking). When/if a language server lands, NOTICE findings move there.                                                                                                                                       |
-| Multi-line / multi-link adjacency merge                                                                | Drop. Phase 4 (renderer). The validator does not normalise `§91.167-91.171`; that's a render-time concern. The validator only sees individual identifiers, each parsed and validated independently.                                                                                                                                                                                                  |
-| `?at=unpinned` ERROR-promotion CI gate                                                                | Drop from this WP (warning only today). Promote to ERROR via a CI-only flag in a future maintenance pass, after we observe `?at=unpinned` usage in practice.                                                                                                                                                                                                                                          |
-| Orphan ack ERROR-promotion (after 30-day grace)                                                       | Drop from this WP. Same pattern: warning today; the 30-day grace and ERROR promotion is a CI flag flip in the future.                                                                                                                                                                                                                                                                                |
-| Non-Markdown content scanning (Svelte component imports of `@ab/sources` constants per §3.3)          | Drop from this WP. Phase 1 covers Markdown only. When Svelte components start importing `@ab/sources` identifier constants (post-Phase 4), the lesson-parser path expansion is a one-paragraph follow-on. Captured as a Phase 4 prerequisite, not deferred indefinitely.                                                                                                                              |
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Dependencies
 
