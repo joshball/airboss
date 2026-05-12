@@ -46,14 +46,14 @@ The flow connects these with arrows that animate briefly when a connected job is
 
 Status panel below the diagram:
 
-| Metric                                | Pulled from                   |
-| ------------------------------------- | ----------------------------- |
-| Registered sources                    | `hangar.source` count         |
-| Downloaded                            | sources with `checksum` not null |
-| Verbatim blocks materialised          | count of verbatim in `*-generated.ts` |
-| TBD wiki-links                        | `references validate` output  |
-| Validation                            | latest `validate` job result  |
-| Freshness                             | oldest source `downloaded_at` |
+| Metric                       | Pulled from                           |
+| ---------------------------- | ------------------------------------- |
+| Registered sources           | `hangar.source` count                 |
+| Downloaded                   | sources with `checksum` not null      |
+| Verbatim blocks materialised | count of verbatim in `*-generated.ts` |
+| TBD wiki-links               | `references validate` output          |
+| Validation                   | latest `validate` job result          |
+| Freshness                    | oldest source `downloaded_at`         |
 
 ### `/sources/[id]` — source detail
 
@@ -139,10 +139,7 @@ Same bar as WP2. Any new component must:
 
 ## Out of scope
 
-- Chart / plate / diagram types — `wp-hangar-non-textual`
-- Cron-based automatic refresh — post-MVP
-- Cross-source bulk diff review (one source at a time is fine)
-- Analytics / dashboards
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Architecture notes
 
