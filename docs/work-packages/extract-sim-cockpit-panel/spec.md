@@ -46,12 +46,7 @@ This is a **promotion**, not a rewrite. `CockpitPanel.svelte` was authored to AD
 
 ## Non-goals
 
-- **No redesign.** The panel ships as-is. Visual changes are a downstream WP if needed.
-- **No barrel export.** Match the PFD precedent: consumers import direct component paths via `@ab/activities/cockpit-panel/CockpitPanel.svelte`. `libs/activities/src/index.ts` stays prose-only.
-- **No move of the cockpit page surround.** `ScenarioStepBanner`, `WxPanel`, `VSpeeds`, `AudioCaptions`, `CockpitNarration`, `KeybindingsHelp`, `KeyboardCheatsheet`, `ResetConfirm`, `ControlInputs` (HUD readout) stay in `apps/sim/src/lib/panels/`. They are the cockpit-page chrome, not the panel itself.
-- **No move of `ControlInput.svelte`.** The keyboard-input host is a separate concern and a separate ADR-015 follow-up (see "Future work" below).
-- **No move of `Horizon3D.svelte` or `ScenarioSurfaceNav.svelte`.** Out of scope; the horizon set has a single visual definition today and no second consumer.
-- **No engine / scoring / FDM-worker changes.** Pages still own the worker; the panel only renders the SNAPSHOT.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Scope: what moves
 
