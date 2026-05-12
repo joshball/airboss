@@ -142,8 +142,6 @@ Acceptance: each kind opens its custom view and persists outcomes. Adding an ad-
 - [ ] Visual polish: animations on bucket expand, drag ghost, walker step transitions.
 - [ ] `/ball-review-full` pass; fix everything; flip `status: ready-for-review`.
 
-## Out of phase / follow-up WPs
+## Out of scope
 
-- Multi-user assignment / mentions (-> `hangar-review-collab`, only when we go multi-user)
-- Slash command keyboard nav (-> small follow-up)
-- Notifications / in-header review badges (-> small follow-up)
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).

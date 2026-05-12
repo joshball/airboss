@@ -39,11 +39,11 @@ Currently, "what should I review next?" is answered by grepping frontmatter, ope
 
 This WP delivers three concentric surfaces that share one substrate:
 
-| Surface          | Route          | Purpose                                                                                                |
-| ---------------- | -------------- | ------------------------------------------------------------------------------------------------------ |
-| **Docs browser** | `/docs`        | Rich markdown viewer over `docs/**`. File tree, search, no DB write. Used independently of reviews.    |
-| **Review board** | `/review`      | Kanban + backlog over review items. **Buckets** aggregate items so 34 WPs is one card, not 34.         |
-| **Review view**  | `/review/[kind]/[itemId]` | Per-kind custom UI: WP-spec walker, reference-TOC spot-check, knowledge-node discovery review, etc.    |
+| Surface          | Route                     | Purpose                                                                                             |
+| ---------------- | ------------------------- | --------------------------------------------------------------------------------------------------- |
+| **Docs browser** | `/docs`                   | Rich markdown viewer over `docs/**`. File tree, search, no DB write. Used independently of reviews. |
+| **Review board** | `/review`                 | Kanban + backlog over review items. **Buckets** aggregate items so 34 WPs is one card, not 34.      |
+| **Review view**  | `/review/[kind]/[itemId]` | Per-kind custom UI: WP-spec walker, reference-TOC spot-check, knowledge-node discovery review, etc. |
 
 Plus ad-hoc tasks on the same board for "things I want to track but don't fit a review kind."
 
@@ -93,14 +93,14 @@ Two card flavors render on the board:
 
 ### Default buckets (seeded on first boot)
 
-| Bucket                                | Source                                                                       |
-| ------------------------------------- | ---------------------------------------------------------------------------- |
-| WP Specs -- unread                    | `docs/work-packages/*/spec.md` where `status: unread`                        |
-| WP Specs -- reading                   | same, `status: reading`                                                      |
-| WP Test Plans -- pending              | `docs/work-packages/*/test-plan.md` where parent spec has `review_status: pending` |
-| References -- missing TOC review      | `reference` rows with no recorded `reference_toc` review                     |
-| Knowledge nodes -- pending discovery  | `course/knowledge/**/*.md` where `discovery_review: pending`                 |
-| Ad-hoc tasks                          | All `review_item.kind = 'ad_hoc'`                                            |
+| Bucket                               | Source                                                                             |
+| ------------------------------------ | ---------------------------------------------------------------------------------- |
+| WP Specs -- unread                   | `docs/work-packages/*/spec.md` where `status: unread`                              |
+| WP Specs -- reading                  | same, `status: reading`                                                            |
+| WP Test Plans -- pending             | `docs/work-packages/*/test-plan.md` where parent spec has `review_status: pending` |
+| References -- missing TOC review     | `reference` rows with no recorded `reference_toc` review                           |
+| Knowledge nodes -- pending discovery | `course/knowledge/**/*.md` where `discovery_review: pending`                       |
+| Ad-hoc tasks                         | All `review_item.kind = 'ad_hoc'`                                                  |
 
 A "Manage buckets" admin view lets us add/edit/remove buckets later. v1 ships the seed list above, hard-coded.
 
@@ -156,10 +156,10 @@ A new review-kind is: one entry in `REVIEW_KINDS` constant, one Svelte page unde
 
 `status` and `review_status` follow the project rule already in CLAUDE.md:
 
-| Field           | Values                              | Owner | Written by         |
-| --------------- | ----------------------------------- | ----- | ------------------ |
-| `status`        | unread / reading / done             | User  | This app (and user) |
-| `review_status` | pending / done                      | Agent | This app (only with explicit user trigger) and agents in normal workflow |
+| Field           | Values                  | Owner | Written by                                                               |
+| --------------- | ----------------------- | ----- | ------------------------------------------------------------------------ |
+| `status`        | unread / reading / done | User  | This app (and user)                                                      |
+| `review_status` | pending / done          | Agent | This app (only with explicit user trigger) and agents in normal workflow |
 
 The board's drag-to-write behavior:
 
@@ -172,16 +172,16 @@ Frontmatter writes use the existing markdown frontmatter parser/serializer (or f
 
 ## Data model
 
-| Table              | Schema   | Key fields                                                                                                                                                                |
-| ------------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `board`            | `hangar` | `id`, `name`, `createdAt`                                                                                                                                                  |
-| `board_column`     | `hangar` | `id`, `boardId`, `name`, `sortOrder`                                                                                                                                       |
-| `review_kind`      | `hangar` | `id` (e.g. `wp_spec`), `label`, `defaultColumnMapping` (jsonb), `discoveryRule` (jsonb)                                                                                    |
-| `review_bucket`    | `hangar` | `id`, `boardId`, `name`, `kindId`, `filterCriteria` (jsonb), `sortOrder`                                                                                                   |
-| `review_item`      | `hangar` | `id`, `kindId`, `ref` (path or id), `title` (denormalized), `cachedStatus` (jsonb -- frontmatter snapshot), `cachedAt`, `boardId`, `columnId` (derived or set), `sortOrder`, `createdAt`, `updatedAt` |
-| `review_session`   | `hangar` | `id`, `itemId`, `userId`, `startedAt`, `finishedAt` (nullable), `outcome` (nullable -- pass/fail/abandoned), `notes` (text)                                                |
-| `review_step`      | `hangar` | `id`, `sessionId`, `stepIndex`, `stepRef` (e.g. test-plan row id), `outcome` (pass/fail/blocked), `note` (text), `updatedAt`                                               |
-| `board_task`       | `hangar` | `id`, `boardId`, `columnId`, `title`, `description`, `type`, `productArea`, `assigneeId`, `createdBy`, `sortOrder`, `createdAt`, `updatedAt` (ad-hoc tasks; mirrors airboss-firc shape; named `board_task` to avoid future "task" name collisions) |
+| Table            | Schema   | Key fields                                                                                                                                                                                                                                         |
+| ---------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `board`          | `hangar` | `id`, `name`, `createdAt`                                                                                                                                                                                                                          |
+| `board_column`   | `hangar` | `id`, `boardId`, `name`, `sortOrder`                                                                                                                                                                                                               |
+| `review_kind`    | `hangar` | `id` (e.g. `wp_spec`), `label`, `defaultColumnMapping` (jsonb), `discoveryRule` (jsonb)                                                                                                                                                            |
+| `review_bucket`  | `hangar` | `id`, `boardId`, `name`, `kindId`, `filterCriteria` (jsonb), `sortOrder`                                                                                                                                                                           |
+| `review_item`    | `hangar` | `id`, `kindId`, `ref` (path or id), `title` (denormalized), `cachedStatus` (jsonb -- frontmatter snapshot), `cachedAt`, `boardId`, `columnId` (derived or set), `sortOrder`, `createdAt`, `updatedAt`                                              |
+| `review_session` | `hangar` | `id`, `itemId`, `userId`, `startedAt`, `finishedAt` (nullable), `outcome` (nullable -- pass/fail/abandoned), `notes` (text)                                                                                                                        |
+| `review_step`    | `hangar` | `id`, `sessionId`, `stepIndex`, `stepRef` (e.g. test-plan row id), `outcome` (pass/fail/blocked), `note` (text), `updatedAt`                                                                                                                       |
+| `board_task`     | `hangar` | `id`, `boardId`, `columnId`, `title`, `description`, `type`, `productArea`, `assigneeId`, `createdBy`, `sortOrder`, `createdAt`, `updatedAt` (ad-hoc tasks; mirrors airboss-firc shape; named `board_task` to avoid future "task" name collisions) |
 
 `cachedStatus` jsonb shape: `{ frontmatterStatus: 'unread'|'reading'|'done'|null, reviewStatus: 'pending'|'done'|null, otherFields: {...} }`. The loader writes this; the board reads it without re-parsing markdown per render.
 
@@ -208,21 +208,21 @@ No manual setup.
 
 ## Routes
 
-| Route                                 | Purpose                                                            |
-| ------------------------------------- | ------------------------------------------------------------------ |
-| `/docs`                               | Docs browser root (defaults to `docs/work/NOW.md`?)                |
-| `/docs/[...path]`                     | Render a specific doc                                              |
-| `/review`                             | Board view                                                         |
-| `/review/buckets/[bucketId]`          | Bucket detail (item list)                                          |
-| `/review/items/[itemId]`              | Generic item detail (dispatches to kind-specific page)             |
-| `/review/[kind]/[itemId]`             | Kind-specific review view                                          |
-| `/review/[kind]/[itemId]/walker`      | Test-plan walker (for kinds that support it)                       |
-| `/review/tasks/new`                   | Create ad-hoc task                                                 |
-| `/review/tasks/[taskId]/edit`         | Edit ad-hoc task                                                   |
-| `/review/admin/buckets`               | Bucket management (CRUD)                                            |
-| `/review/admin/buckets/new`           | New bucket form                                                     |
-| `/review/admin/buckets/[id]/edit`     | Edit bucket form                                                    |
-| `/review/admin/loader`                | Loader status + manual refresh                                     |
+| Route                             | Purpose                                                |
+| --------------------------------- | ------------------------------------------------------ |
+| `/docs`                           | Docs browser root (defaults to `docs/work/NOW.md`?)    |
+| `/docs/[...path]`                 | Render a specific doc                                  |
+| `/review`                         | Board view                                             |
+| `/review/buckets/[bucketId]`      | Bucket detail (item list)                              |
+| `/review/items/[itemId]`          | Generic item detail (dispatches to kind-specific page) |
+| `/review/[kind]/[itemId]`         | Kind-specific review view                              |
+| `/review/[kind]/[itemId]/walker`  | Test-plan walker (for kinds that support it)           |
+| `/review/tasks/new`               | Create ad-hoc task                                     |
+| `/review/tasks/[taskId]/edit`     | Edit ad-hoc task                                       |
+| `/review/admin/buckets`           | Bucket management (CRUD)                               |
+| `/review/admin/buckets/new`       | New bucket form                                        |
+| `/review/admin/buckets/[id]/edit` | Edit bucket form                                       |
+| `/review/admin/loader`            | Loader status + manual refresh                         |
 
 All routes registered in `ROUTES` (per project rule).
 
@@ -263,12 +263,9 @@ The filter criteria editor for v1 is a **structured form** over the common shape
 
 The naive-substring path is **not** retained as a fallback; if the index is empty, search returns "Index not built -- run loader."
 
-## Out of scope (v1)
+## Out of scope
 
-- **Multi-user assignment.** Single-user app today; `assigneeId` exists in schema but UI doesn't expose multi-user picker.
-- **Notifications / reminders.** No "you have N items in Review" badge in the global header. The `/review` route surfaces counts; that's it.
-- **Bulk operations.** Mark-many-as-read happens in the board UI (drag onto column header), but no multi-select. Single-target only.
-- **Slash-command shortcuts.** "/review next" etc. are nice-to-have, deferred.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Acceptance
 
