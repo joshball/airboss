@@ -226,10 +226,27 @@ interface BarrelSpec {
 	readonly flagNodeBuiltins: boolean;
 }
 
+// Every browser-bundled lib with a runtime barrel needs to be walked here. The
+// `BROWSER_BUNDLED_LIBS` scan above catches direct `Buffer.` / `process.` /
+// static `node:*` imports inside each lib; this walk catches the harder case
+// where the barrel value-re-exports a module whose transitive imports reach
+// `@ab/db/connection`, `postgres`, or another server-only specifier. Both
+// scans should cover the same 13-lib surface.
+//
+// `flagNodeBuiltins: true` is the strict mode -- any static `node:*` import on
+// the chain is a leak (matches Biome's `noNodejsModules` policy at the source
+// level). The looser `flagNodeBuiltins: false` mode is for libs that have
+// pre-existing static `node:*` imports along server-only-marked subpaths that
+// the walk still recurses into. Vite stubs `node:*` for the client bundle so
+// those static imports survive as no-ops in the browser; only the
+// postgres-shaped leaks crash hydration. New entries should default to
+// `true`; only relax it after auditing the leak chain.
 const RUNTIME_BARRELS: readonly BarrelSpec[] = [
+	// BC libs -- the original /memory crash surface.
 	{ path: 'libs/bc/study/src/index.ts', flagNodeBuiltins: true },
 	{ path: 'libs/bc/hangar/src/index.ts', flagNodeBuiltins: true },
 	{ path: 'libs/bc/ingest-review/src/index.ts', flagNodeBuiltins: true },
+	{ path: 'libs/bc/sim/src/index.ts', flagNodeBuiltins: true },
 	// `@ab/sources` is browser-bundled via `urlForReference` / locator parser
 	// imports from `.svelte` files (palette detail pane, citation chips). The
 	// runtime barrel must not value-reach `@ab/db/connection` or `postgres`
@@ -239,6 +256,19 @@ const RUNTIME_BARRELS: readonly BarrelSpec[] = [
 	// stubs `node:*` for the client bundle and they no-op at runtime in the
 	// browser. Only flag the postgres-shaped leaks.
 	{ path: 'libs/sources/src/index.ts', flagNodeBuiltins: false },
+	// Remaining browser-bundled libs. All ship via SvelteKit's bundler into
+	// the client; any value-re-export reaching `postgres` / `@ab/db/connection`
+	// crashes hydration. `flagNodeBuiltins: true` because none of these libs
+	// have a documented `node:*`-tolerated subpath today.
+	{ path: 'libs/constants/src/index.ts', flagNodeBuiltins: true },
+	{ path: 'libs/utils/src/index.ts', flagNodeBuiltins: true },
+	{ path: 'libs/types/src/index.ts', flagNodeBuiltins: true },
+	{ path: 'libs/themes/index.ts', flagNodeBuiltins: true },
+	{ path: 'libs/ui/src/index.ts', flagNodeBuiltins: true },
+	{ path: 'libs/help/src/index.ts', flagNodeBuiltins: true },
+	{ path: 'libs/aviation/src/index.ts', flagNodeBuiltins: true },
+	{ path: 'libs/audit/src/index.ts', flagNodeBuiltins: true },
+	{ path: 'libs/activities/src/index.ts', flagNodeBuiltins: true },
 ];
 
 // Module specifiers whose runtime evaluation pulls a server-only chunk
