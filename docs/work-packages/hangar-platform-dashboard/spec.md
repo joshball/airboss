@@ -189,14 +189,14 @@ A new skill at `~/src/_me/ai/agent-skills/skills/wp-drift/` with a single entry 
 
 CLI surface:
 
-| Command                              | Behavior                                                                              |
-| ------------------------------------ | ------------------------------------------------------------------------------------- |
-| `/wp-drift`                          | Resume from checkpoint; only re-validate files whose fingerprint changed              |
-| `/wp-drift --all`                    | Force full re-scan, ignore checkpoint                                                 |
-| `/wp-drift --since=2026-05-01`       | Validate items modified since date                                                    |
-| `/wp-drift --touched-since=origin/main` | Validate items in current branch's diff vs ref                                     |
-| `/wp-drift --fix`                    | Auto-fix safe drift (default is dry-run with summary)                                  |
-| `/wp-drift --triage`                 | Print only the human-judgement-needed list                                             |
+| Command                                 | Behavior                                                                 |
+| --------------------------------------- | ------------------------------------------------------------------------ |
+| `/wp-drift`                             | Resume from checkpoint; only re-validate files whose fingerprint changed |
+| `/wp-drift --all`                       | Force full re-scan, ignore checkpoint                                    |
+| `/wp-drift --since=2026-05-01`          | Validate items modified since date                                       |
+| `/wp-drift --touched-since=origin/main` | Validate items in current branch's diff vs ref                           |
+| `/wp-drift --fix`                       | Auto-fix safe drift (default is dry-run with summary)                    |
+| `/wp-drift --triage`                    | Print only the human-judgement-needed list                               |
 
 ### Checkpoint shape
 
@@ -270,17 +270,17 @@ A single `/platform` route inside the hangar app, top-to-bottom panes. Pre-canne
 
 ### Panes
 
-| Pane                | Source                                            | Action target                                  |
-| ------------------- | ------------------------------------------------- | ---------------------------------------------- |
-| **Now bar**         | NOW.md frontmatter `in_flight` + `just_shipped`   | Click WP -> `/review/wp_spec/[id]`             |
-| **WP status board** | WP frontmatter (all 89+ rows)                     | Click row -> `/review/wp_spec/[id]`            |
-| **Roadmap**         | Each `docs/products/{app}/ROADMAP.md` `items`     | Click item -> linked WP or `/docs/...` section |
-| **ADR index**       | `docs/decisions/**/decision.md` frontmatter       | Click row -> `/docs/decisions/...`             |
-| **Ideas funnel**    | `IDEAS.md` section counts + last-reviewed         | Click section -> `/docs/platform/IDEAS.md#...` |
-| **Coverage gaps**   | Computed via `bun run wp:coverage`                | Button: "Run scan"; results render inline      |
-| **Recent activity** | `git log --oneline -50` + WP-touched detection    | Click commit -> GitHub commit URL              |
-| **Drift**           | `/wp-drift` checkpoint `drift_remaining`          | Per-row: "Auto-fix" or "Triage"                |
-| **Doc health**      | `/wp-drift` checkpoint `size_violations`          | Per-row: suggested split pattern               |
+| Pane                | Source                                          | Action target                                  |
+| ------------------- | ----------------------------------------------- | ---------------------------------------------- |
+| **Now bar**         | NOW.md frontmatter `in_flight` + `just_shipped` | Click WP -> `/review/wp_spec/[id]`             |
+| **WP status board** | WP frontmatter (all 89+ rows)                   | Click row -> `/review/wp_spec/[id]`            |
+| **Roadmap**         | Each `docs/products/{app}/ROADMAP.md` `items`   | Click item -> linked WP or `/docs/...` section |
+| **ADR index**       | `docs/decisions/**/decision.md` frontmatter     | Click row -> `/docs/decisions/...`             |
+| **Ideas funnel**    | `IDEAS.md` section counts + last-reviewed       | Click section -> `/docs/platform/IDEAS.md#...` |
+| **Coverage gaps**   | Computed via `bun run wp:coverage`              | Button: "Run scan"; results render inline      |
+| **Recent activity** | `git log --oneline -50` + WP-touched detection  | Click commit -> GitHub commit URL              |
+| **Drift**           | `/wp-drift` checkpoint `drift_remaining`        | Per-row: "Auto-fix" or "Triage"                |
+| **Doc health**      | `/wp-drift` checkpoint `size_violations`        | Per-row: suggested split pattern               |
 
 ### Roadmap pane shape
 
@@ -341,13 +341,13 @@ Hard cap: **500 lines per markdown file**. Approaching the limit (>400) flags fo
 
 ### Standard split patterns
 
-| File                                  | Trigger                       | Split pattern                                                                  |
-| ------------------------------------- | ----------------------------- | ------------------------------------------------------------------------------ |
-| `docs/work/NOW.md`                    | >500 lines or `just_shipped:` entries older than 60 days | Move old entries to `docs/work/now-archive/YYYY-MM.md`             |
-| `docs/products/{app}/ROADMAP.md`      | >500 lines or shipped items > 20 | Move shipped items to `docs/products/{app}/ROADMAP-shipped.md`              |
-| `docs/decisions/NNN-topic.md`         | >500 lines                    | Promote to directory ADR: `NNN-topic/{decision,context,sub-docs}.md`            |
-| `docs/work-packages/{name}/spec.md`   | >500 lines                    | Split into spec.md (overview + acceptance) + design.md sections; spec links to design |
-| Other                                 | >500 lines                    | Index-and-linked-sub-docs pattern; case-by-case                                |
+| File                                | Trigger                                                  | Split pattern                                                                         |
+| ----------------------------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `docs/work/NOW.md`                  | >500 lines or `just_shipped:` entries older than 60 days | Move old entries to `docs/work/now-archive/YYYY-MM.md`                                |
+| `docs/products/{app}/ROADMAP.md`    | >500 lines or shipped items > 20                         | Move shipped items to `docs/products/{app}/ROADMAP-shipped.md`                        |
+| `docs/decisions/NNN-topic.md`       | >500 lines                                               | Promote to directory ADR: `NNN-topic/{decision,context,sub-docs}.md`                  |
+| `docs/work-packages/{name}/spec.md` | >500 lines                                               | Split into spec.md (overview + acceptance) + design.md sections; spec links to design |
+| Other                               | >500 lines                                               | Index-and-linked-sub-docs pattern; case-by-case                                       |
 
 ### Enforcement
 
@@ -374,15 +374,9 @@ Add a "Doc size limits" section:
 - The `/platform` Doc health pane surfaces violators with suggested splits.
 ```
 
-## Out of scope (v1)
+## Out of scope
 
-- **Configurable layouts.** Pre-canned only.
-- **Cross-product timeline view.** Toggle stub but no implementation. Follow-up WP.
-- **Auto-running coverage scans on a schedule.** Manual button only.
-- **Auto-splitting docs.** The system flags; humans split.
-- **Cross-machine checkpoint sharing.** Per-machine; teammates re-validate from scratch.
-- **Notifications.** No "drift count" badge in the global header. The `/platform` route surfaces counts; that's it.
-- **Rich graph views.** No DAG of WP dependencies, no Gantt charts, no graph DB.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Acceptance
 

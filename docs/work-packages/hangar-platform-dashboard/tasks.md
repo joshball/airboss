@@ -116,9 +116,6 @@ Acceptance: clicking "Run scan" populates coverage gaps. Clicking "Auto-fix" on 
 - [ ] `/ball-review-full` pass; fix everything; flip status to ready-for-review.
 - [ ] Verify CLAUDE.md updates from Phase 2 are still accurate.
 
-## Out of phase / follow-up WPs
+## Out of scope
 
-- Cross-product timeline view (toggle stub becomes real implementation) -> `hangar-platform-timeline`
-- Configurable layouts -> `hangar-platform-layouts`
-- Auto-running coverage scans on a schedule -> small follow-up
-- Cross-machine checkpoint sharing -> only if we go multi-developer
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
