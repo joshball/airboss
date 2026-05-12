@@ -20,7 +20,8 @@
  * `study.card_draft` so an admin can trace per-user history.
  */
 
-import { AUDIT_OPS, auditWrite } from '@ab/audit';
+import { AUDIT_OPS } from '@ab/audit';
+import { auditWrite } from '@ab/audit/server';
 import {
 	ANNOTATION_ANCHOR_TEXT_MAX_LENGTH,
 	ANNOTATION_CONTEXT_MAX_LENGTH,

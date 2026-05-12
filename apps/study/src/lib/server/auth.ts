@@ -1,4 +1,4 @@
-import { createAuditAuthEventEmitter } from '@ab/audit';
+import { createAuditAuthEventEmitter } from '@ab/audit/server';
 import { createAuth } from '@ab/auth';
 import { ENV_VARS } from '@ab/constants';
 import { building, dev } from '$app/environment';

@@ -17,7 +17,8 @@
  * See `docs/work-packages/hangar-users-editing/spec.md`.
  */
 
-import { AUDIT_OPS, auditWrite } from '@ab/audit';
+import { AUDIT_OPS } from '@ab/audit';
+import { auditWrite } from '@ab/audit/server';
 import { bauthSession, bauthUser } from '@ab/auth';
 import { AUDIT_TARGETS, HANGAR_USER_OP_SUBKINDS, type HangarUserOpSubkind, ROLES, type Role } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';

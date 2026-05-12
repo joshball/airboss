@@ -20,7 +20,8 @@ import { db } from '@ab/db/connection';
 import { generateAuthId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { AUTH_LOGIN_FAILED_OUTCOMES, createAuditAuthEventEmitter } from './auth-events';
+import { createAuditAuthEventEmitter } from './auth-events';
+import { AUTH_LOGIN_FAILED_OUTCOMES } from './auth-events-types';
 import { AUDIT_OPS, auditLog } from './schema';
 
 const TEST_RUN_ID = `audit-auth-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;

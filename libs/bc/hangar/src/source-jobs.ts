@@ -18,7 +18,8 @@
 import { spawn } from 'node:child_process';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { AUDIT_OPS, auditWrite } from '@ab/audit';
+import { AUDIT_OPS } from '@ab/audit';
+import { auditWrite } from '@ab/audit/server';
 import {
 	AUDIT_TARGETS,
 	JOB_LOG_MAX_BYTES,

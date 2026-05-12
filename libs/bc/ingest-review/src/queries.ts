@@ -8,7 +8,7 @@
  * @browser-globals: server-only -- never imported by client .svelte
  */
 
-import { auditWrite } from '@ab/audit';
+import { auditWrite } from '@ab/audit/server';
 import {
 	AUDIT_TARGETS,
 	type Corpus,

@@ -12,7 +12,8 @@
  * survives a process restart.
  */
 
-import { AUDIT_OPS, auditWrite } from '@ab/audit';
+import { AUDIT_OPS } from '@ab/audit';
+import { auditWrite } from '@ab/audit/server';
 import { requireRole } from '@ab/auth';
 import { countDocsIndex, getLastLoaderRun, loadReviewItems, REPO_ROOT } from '@ab/bc-hangar/server';
 import { AUDIT_TARGETS, ROLES } from '@ab/constants';

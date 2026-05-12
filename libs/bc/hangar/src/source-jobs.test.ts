@@ -21,8 +21,7 @@ import {
 	truncateResultText,
 } from './source-jobs';
 
-vi.mock('@ab/audit', () => ({
-	AUDIT_OPS: { CREATE: 'create', UPDATE: 'update', DELETE: 'delete' },
+vi.mock('@ab/audit/server', () => ({
 	auditWrite: vi.fn(async () => {}),
 }));
 

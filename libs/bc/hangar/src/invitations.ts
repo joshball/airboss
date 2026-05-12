@@ -24,7 +24,8 @@
  * (a)-(j) for the spec contract.
  */
 
-import { AUDIT_OPS, auditWrite } from '@ab/audit';
+import { AUDIT_OPS } from '@ab/audit';
+import { auditWrite } from '@ab/audit/server';
 import { bauthAccount, bauthUser } from '@ab/auth';
 import {
 	AUDIT_TARGETS,

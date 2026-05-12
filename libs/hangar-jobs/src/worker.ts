@@ -28,7 +28,8 @@
  *     terminated.
  */
 
-import { AUDIT_OPS, auditWrite } from '@ab/audit';
+import { AUDIT_OPS } from '@ab/audit';
+import { auditWrite } from '@ab/audit/server';
 import { AUDIT_TARGETS, JOB_AUDIT_REASONS, JOB_LOG_STREAMS, JOB_STATUSES } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import { createLogger } from '@ab/utils';

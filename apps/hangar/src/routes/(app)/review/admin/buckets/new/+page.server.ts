@@ -12,7 +12,8 @@
  * Auth: admin-only via `requireRole(ROLES.ADMIN)`.
  */
 
-import { AUDIT_OPS, auditWrite } from '@ab/audit';
+import { AUDIT_OPS } from '@ab/audit';
+import { auditWrite } from '@ab/audit/server';
 import { requireRole } from '@ab/auth';
 import { createBucket, getOrCreateBoard } from '@ab/bc-hangar/server';
 import { AUDIT_TARGETS, ROLES, ROUTES } from '@ab/constants';
