@@ -56,10 +56,7 @@ Source items: `docs/work/.archive/todos/20260424-02-smi-walkthrough-feedback.md`
 
 ## Out of scope
 
-- The "review this card now" button. Dropped per locked decision; not replaced. Reason: single-card review outside of a real session would either bypass FSRS scheduling or require inventing a fake session. Neither is worth the payoff.
-- Authoring citations. That lives in `content-citations`. This WP only reads them once they exist.
-- Plan-to-card enrollment UI. Only the cross-reference read path is in scope, and only if the enrollment data exists by build time; otherwise the Plans row shows "Not available yet."
-- Public card comments, likes, or feedback. `/cards/<id>` is a static shareable view in v1.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Product decisions the user needs to make
 
