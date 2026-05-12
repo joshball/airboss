@@ -28,18 +28,17 @@ The first hangar mutation surface (likely [`hangar-users-editing`](../hangar-use
 
 ## In scope
 
-| #  | Item                                                                                                                            |
-| -- | ------------------------------------------------------------------------------------------------------------------------------- |
-| 1  | Delete `apps/hangar/src/routes/(app)/admin/audit-ping/`.                                                                        |
-| 2  | Delete `ROUTES.HANGAR_ADMIN_AUDIT_PING` from `libs/constants/src/routes.ts`.                                                    |
-| 3  | Decide on `AUDIT_TARGETS.HANGAR_PING`: drop entirely, OR re-purpose as `system.heartbeat` for a future cron-style health-check. |
-| 4  | Remove any inbound link / docs reference (search the repo for `audit-ping` and `HANGAR_PING`).                                  |
-| 5  | Drop the corresponding test plan section in [hangar-audit-explorer/test-plan.md] step 6.2 (regression check on the ping route). |
+| #   | Item                                                                                                                            |
+| --- | ------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Delete `apps/hangar/src/routes/(app)/admin/audit-ping/`.                                                                        |
+| 2   | Delete `ROUTES.HANGAR_ADMIN_AUDIT_PING` from `libs/constants/src/routes.ts`.                                                    |
+| 3   | Decide on `AUDIT_TARGETS.HANGAR_PING`: drop entirely, OR re-purpose as `system.heartbeat` for a future cron-style health-check. |
+| 4   | Remove any inbound link / docs reference (search the repo for `audit-ping` and `HANGAR_PING`).                                  |
+| 5   | Drop the corresponding test plan section in [hangar-audit-explorer/test-plan.md] step 6.2 (regression check on the ping route). |
 
 ## Out of scope
 
-- Replacing the ping with a real cron-based health-check. If that earns a place, it's its own WP.
-- Removing the existing `audit.audit_log` rows already authored by the ping -- they stay in the log per ADR 004 (append-only).
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Decisions to ratify
 
