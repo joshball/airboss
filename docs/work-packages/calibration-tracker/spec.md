@@ -39,13 +39,13 @@ All calibration logic is aggregation queries on existing data.
 
 A shared `libs/ui/` component used in both the card review flow and the rep session flow. Discrete 1-5 scale:
 
-| Value | Label | Meaning |
-| --- | --- | --- |
-| 1 | Wild Guess | No idea, flipping a coin |
-| 2 | Uncertain | Leaning toward an answer but not sure |
-| 3 | Maybe | Think I know but could be wrong |
-| 4 | Probably | Fairly confident |
-| 5 | Certain | Would bet on it |
+| Value | Label      | Meaning                               |
+| ----- | ---------- | ------------------------------------- |
+| 1     | Wild Guess | No idea, flipping a coin              |
+| 2     | Uncertain  | Leaning toward an answer but not sure |
+| 3     | Maybe      | Think I know but could be wrong       |
+| 4     | Probably   | Fairly confident                      |
+| 5     | Certain    | Would bet on it                       |
 
 The slider appears on ~50% of reviews/reps (deterministic hash). When it appears, it shows BEFORE the answer/options are revealed. User can skip (stores NULL).
 
@@ -102,10 +102,6 @@ No user input beyond what's already validated by the card review and rep attempt
 - **Perfect calibration:** Score = 1.0. Show a positive message. This is rare and worth celebrating.
 - **Domain with no data:** Domain doesn't appear in per-domain breakdown.
 
-## Out of Scope
+## Out of scope
 
-- Adjusting the confidence sampling rate (hardcoded ~50%)
-- Charting library (CSS-only chart initially -- bars are just styled divs with percentage widths)
-- Historical comparison ("you were more overconfident 3 months ago")
-- Calibration-based recommendations ("study more weather because you're overconfident there")
-- Calibration leaderboard / social comparison
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
