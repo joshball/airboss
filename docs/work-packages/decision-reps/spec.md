@@ -30,36 +30,36 @@ All tables in the `study` Postgres schema namespace (same as Spaced Memory Items
 
 ### study.scenario
 
-| Column | Type | Constraints | Notes |
-| --- | --- | --- | --- |
-| id | text | PK | `rep_` prefix |
-| user_id | text | NOT NULL | Author/owner |
-| title | text | NOT NULL | Short descriptive title |
-| situation | text | NOT NULL | Markdown. Sets the scene: weather, position, aircraft state, student behavior |
-| options | jsonb | NOT NULL | Array of `{ id: string, text: string, isCorrect: boolean, outcome: string, whyNot: string }` |
-| teaching_point | text | NOT NULL | Markdown. The key lesson regardless of which option was chosen |
-| domain | text | NOT NULL | From `DOMAINS` constant |
-| difficulty | text | NOT NULL | From `DIFFICULTIES` constant (beginner, intermediate, advanced) |
-| phase_of_flight | text | NULL | From `PHASES_OF_FLIGHT` constant (preflight, takeoff, cruise, approach, landing, ground) |
-| source_type | text | NOT NULL, DEFAULT 'personal' | From `CONTENT_SOURCES` constant |
-| source_ref | text | NULL | Same pattern as cards |
-| is_editable | boolean | NOT NULL, DEFAULT true | |
-| reg_references | jsonb | DEFAULT '[]' | Array of regulation references (e.g., "14 CFR 91.175(c)") |
-| status | text | NOT NULL, DEFAULT 'active' | active, suspended, archived |
-| created_at | timestamptz | NOT NULL, DEFAULT now() | |
+| Column          | Type        | Constraints                  | Notes                                                                                        |
+| --------------- | ----------- | ---------------------------- | -------------------------------------------------------------------------------------------- |
+| id              | text        | PK                           | `rep_` prefix                                                                                |
+| user_id         | text        | NOT NULL                     | Author/owner                                                                                 |
+| title           | text        | NOT NULL                     | Short descriptive title                                                                      |
+| situation       | text        | NOT NULL                     | Markdown. Sets the scene: weather, position, aircraft state, student behavior                |
+| options         | jsonb       | NOT NULL                     | Array of `{ id: string, text: string, isCorrect: boolean, outcome: string, whyNot: string }` |
+| teaching_point  | text        | NOT NULL                     | Markdown. The key lesson regardless of which option was chosen                               |
+| domain          | text        | NOT NULL                     | From `DOMAINS` constant                                                                      |
+| difficulty      | text        | NOT NULL                     | From `DIFFICULTIES` constant (beginner, intermediate, advanced)                              |
+| phase_of_flight | text        | NULL                         | From `PHASES_OF_FLIGHT` constant (preflight, takeoff, cruise, approach, landing, ground)     |
+| source_type     | text        | NOT NULL, DEFAULT 'personal' | From `CONTENT_SOURCES` constant                                                              |
+| source_ref      | text        | NULL                         | Same pattern as cards                                                                        |
+| is_editable     | boolean     | NOT NULL, DEFAULT true       |                                                                                              |
+| reg_references  | jsonb       | DEFAULT '[]'                 | Array of regulation references (e.g., "14 CFR 91.175(c)")                                    |
+| status          | text        | NOT NULL, DEFAULT 'active'   | active, suspended, archived                                                                  |
+| created_at      | timestamptz | NOT NULL, DEFAULT now()      |                                                                                              |
 
 ### study.rep_attempt
 
-| Column | Type | Constraints | Notes |
-| --- | --- | --- | --- |
-| id | text | PK | `rat_` prefix |
-| scenario_id | text | NOT NULL, FK study.scenario | |
-| user_id | text | NOT NULL | |
-| chosen_option | text | NOT NULL | The option `id` the user selected |
-| is_correct | boolean | NOT NULL | Whether the chosen option was marked `isCorrect` |
-| confidence | smallint | NULL | 1-5 pre-decision confidence (feeds calibration). NULL when not prompted |
-| answer_ms | integer | NULL | Time from scenario display to option selection |
-| attempted_at | timestamptz | NOT NULL, DEFAULT now() | |
+| Column        | Type        | Constraints                 | Notes                                                                   |
+| ------------- | ----------- | --------------------------- | ----------------------------------------------------------------------- |
+| id            | text        | PK                          | `rat_` prefix                                                           |
+| scenario_id   | text        | NOT NULL, FK study.scenario |                                                                         |
+| user_id       | text        | NOT NULL                    |                                                                         |
+| chosen_option | text        | NOT NULL                    | The option `id` the user selected                                       |
+| is_correct    | boolean     | NOT NULL                    | Whether the chosen option was marked `isCorrect`                        |
+| confidence    | smallint    | NULL                        | 1-5 pre-decision confidence (feeds calibration). NULL when not prompted |
+| answer_ms     | integer     | NULL                        | Time from scenario display to option selection                          |
+| attempted_at  | timestamptz | NOT NULL, DEFAULT now()     |                                                                         |
 
 ## Behavior
 
@@ -106,23 +106,23 @@ Same pattern as cards -- the study BC exports:
 
 ## Validation
 
-| Field | Rule |
-| --- | --- |
-| title | Required, 1-200 chars, trimmed |
-| situation | Required, 1-10000 chars, trimmed |
-| options | Required, array of 2-5 objects |
-| options[].id | Required, unique within the array, 1-50 chars |
-| options[].text | Required, 1-2000 chars |
-| options[].isCorrect | Required, boolean. Exactly 1 must be true |
-| options[].outcome | Required, 1-2000 chars |
-| options[].whyNot | Required when isCorrect is false, 1-2000 chars |
-| teaching_point | Required, 1-5000 chars, trimmed |
-| domain | Required, must be in `DOMAINS` |
-| difficulty | Required, must be in `DIFFICULTIES` |
-| phase_of_flight | Optional, must be in `PHASES_OF_FLIGHT` if provided |
-| reg_references | Array of strings, max 10, each 1-200 chars |
-| chosen_option | Required, must match an option id in the scenario |
-| confidence | Optional, integer 1-5 |
+| Field               | Rule                                                |
+| ------------------- | --------------------------------------------------- |
+| title               | Required, 1-200 chars, trimmed                      |
+| situation           | Required, 1-10000 chars, trimmed                    |
+| options             | Required, array of 2-5 objects                      |
+| options[].id        | Required, unique within the array, 1-50 chars       |
+| options[].text      | Required, 1-2000 chars                              |
+| options[].isCorrect | Required, boolean. Exactly 1 must be true           |
+| options[].outcome   | Required, 1-2000 chars                              |
+| options[].whyNot    | Required when isCorrect is false, 1-2000 chars      |
+| teaching_point      | Required, 1-5000 chars, trimmed                     |
+| domain              | Required, must be in `DOMAINS`                      |
+| difficulty          | Required, must be in `DIFFICULTIES`                 |
+| phase_of_flight     | Optional, must be in `PHASES_OF_FLIGHT` if provided |
+| reg_references      | Array of strings, max 10, each 1-200 chars          |
+| chosen_option       | Required, must match an option id in the scenario   |
+| confidence          | Optional, integer 1-5                               |
 
 ## Edge Cases
 
@@ -134,11 +134,6 @@ Same pattern as cards -- the study BC exports:
 - **Scenario deleted during session:** Skip, advance to next.
 - **Confidence declined:** User can skip. Store NULL.
 
-## Out of Scope
+## Out of scope
 
-- Adaptive difficulty (adjusting which scenarios to show based on past performance)
-- Aircraft-type variants (same scenario with different V-speeds or procedures)
-- Missed-reps-to-cards integration (converting frequently-missed scenarios into SRS cards)
-- Tick engine integration (scenarios with multi-step progression -- that's the sim app's job)
-- Scenario sharing / community pool
-- Timed mode (countdown pressure)
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
