@@ -156,9 +156,7 @@ function computeCorpusValidationSummary(corpus: string): Promise<CorpusValidatio
 
 ## Out of scope
 
-- The dashboard UI (separate WP-HANGAR-REFS)
-- TOC entry hierarchy walking (the dashboard renders the tree; this schema just persists per-entry)
-- Cross-doc validation (e.g. "verify all PHAK ch 2 entries at once" — UI feature, not schema)
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Anchors
 
