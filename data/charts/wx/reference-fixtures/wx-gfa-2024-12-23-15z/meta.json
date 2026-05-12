@@ -1,9 +1,9 @@
 {
   "slug": "reference-fixtures/wx-gfa-2024-12-23-15z",
   "type": "gfa",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:39:39.843Z",
-  "content_hash": "sha256:761a478ae05171c1e407e0be67dc65c6ffd937750cff57726301473ad2694c01",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:37:38.494Z",
+  "content_hash": "sha256:621f165ad93b22fff3853df052541949ba0bbf8b6aa9baa59e9a9e111af7dc6e",
   "source_hashes": {
     "polygons": "e4e2ba3fa420052f90610ce30bc0a71da5dc63548c4df1e77080ef101f94e24d"
   },

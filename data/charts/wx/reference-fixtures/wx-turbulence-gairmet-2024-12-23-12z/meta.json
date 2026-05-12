@@ -1,9 +1,9 @@
 {
   "slug": "reference-fixtures/wx-turbulence-gairmet-2024-12-23-12z",
   "type": "turbulence-gairmet",
-  "library_version": "@ab/wx-charts@0.2.0",
-  "built_at": "2026-05-12T13:42:09.077Z",
-  "content_hash": "sha256:cc3a217a3be0363b69302ad6f6c705c1e9fbb4c7567c00297a5cfcfd39edc96d",
+  "library_version": "@ab/wx-charts@0.3.0",
+  "built_at": "2026-05-12T14:37:41.318Z",
+  "content_hash": "sha256:f51b94eff2138c677801c40d618a519e607331c80ef26698aeb85a3a07076ba8",
   "source_hashes": {
     "areas": "8f75b7ec3c80ef765dfd513c893383d7271f7a30de5870426a1b437980572340"
   },
