@@ -88,9 +88,7 @@ REFERENCES.md, status.md, study-app docs.
 
 ## Out of scope
 
-- Building the flightbag routes (separate scaffold WP)
-- The hangar admin dashboard (separate WP)
-- New reference content
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Sequencing
 
