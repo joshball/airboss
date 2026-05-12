@@ -31,7 +31,7 @@ let pendingFetch = $state(false);
 let lastFetchedQuery = $state<string | null>(null);
 
 const host: PaletteHost = $derived<PaletteHost>({
-	surface: APP_SURFACES.STUDY,
+	surface: APP_SURFACES.DASHBOARD,
 	userId: page.data?.user?.id,
 });
 const grouped = $derived<GroupedResults>(searchGrouped(debouncedQuery, host, serverInjected));

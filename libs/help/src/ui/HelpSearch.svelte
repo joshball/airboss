@@ -1,17 +1,25 @@
 <script lang="ts">
-import HelpSearchPalette from './HelpSearchPalette.svelte';
+import type { AppSurface } from '@ab/constants';
+import CommandPalette from './CommandPalette.svelte';
 
 /**
  * Nav-integrated search affordance. Renders a visible button ("Search / ")
- * that opens the palette, and installs global key listeners for `/`
- * and `Cmd+K` that open the same palette component. Both entry points
- * lead to the same search UI -- the top-nav button teaches the feature
- * exists; Cmd+K is the power-user shortcut.
+ * that opens the production `CommandPalette`, and installs global key
+ * listeners for `/` and `Cmd+K` that open the same palette component.
+ * Both entry points lead to the same search UI -- the top-nav button
+ * teaches the feature exists; Cmd+K is the power-user shortcut.
  *
  * Global key listeners respect input-focus: pressing `/` while the user
  * is typing in a form field does NOT open the palette (lets users type
  * slashes in content).
  */
+
+interface Props {
+	/** Host surface for per-app boost. The mounting layout passes its app id. */
+	surface?: AppSurface;
+}
+
+let { surface }: Props = $props();
 
 let open = $state(false);
 
@@ -55,7 +63,7 @@ function handleWindowKey(event: KeyboardEvent): void {
 	aria-label="Open search"
 	aria-haspopup="dialog"
 	aria-expanded={open}
-	aria-controls="helpsearch-palette"
+	aria-controls="commandpalette-root"
 	data-testid="helpsearch-trigger"
 	data-state={open ? 'open' : 'closed'}
 >
@@ -64,7 +72,7 @@ function handleWindowKey(event: KeyboardEvent): void {
 	<kbd class="hint" aria-hidden="true">/</kbd>
 </button>
 
-<HelpSearchPalette {open} onClose={close} />
+<CommandPalette {open} onClose={close} {surface} />
 
 <style>
 	.trigger {
