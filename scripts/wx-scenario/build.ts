@@ -18,7 +18,7 @@
 
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { WX_SCENARIO_VALUES, type WxScenario } from '@ab/constants';
+import { WX_SCENARIO_VALUES, type WxScenario, wxScenarioBundleDir } from '@ab/constants';
 import { generateScenario, writeScenarioBundle } from '@ab/wx-engine/server';
 import { formatHumanDurationMs, REPO_ROOT, resolveScenarioSlug } from './lib';
 
@@ -55,8 +55,9 @@ async function buildOne(slug: WxScenario): Promise<BuildResult> {
 		// scenarioId, the analysis time, every truth literal, and is regenerated
 		// on every build. A byte-equal truth.json + chart count + commentary
 		// count is a tight proxy for the full bundle being unchanged.
-		const truthPath = resolve(REPO_ROOT, 'data', 'wx-scenarios', slug, 'truth.json');
-		const commentaryPath = resolve(REPO_ROOT, 'data', 'wx-scenarios', slug, 'commentary.json');
+		const bundleDir = wxScenarioBundleDir(REPO_ROOT, slug);
+		const truthPath = resolve(bundleDir, 'truth.json');
+		const commentaryPath = resolve(bundleDir, 'commentary.json');
 		const priorTruth = existsSync(truthPath) ? readFileSync(truthPath, 'utf8') : null;
 		const priorCommentary = existsSync(commentaryPath) ? readFileSync(commentaryPath, 'utf8') : null;
 

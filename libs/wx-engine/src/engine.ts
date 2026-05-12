@@ -41,7 +41,7 @@
  * pattern at `libs/constants/src/source-cache.ts`.
  */
 
-import type { WxScenario } from '@ab/constants';
+import { chartSlugToDir, wxScenarioBundleDir, type WxScenario } from '@ab/constants';
 import { stringify as yamlStringify } from 'yaml';
 import { type ChartProductInputs, deriveAllCharts } from './charts/derive-all';
 import type { ChartArtifact } from './charts/types';
@@ -219,7 +219,7 @@ export async function writeScenarioBundle(bundle: ScenarioBundle, options: Scena
 	const fs = loadBuiltin<NodeFs>('node:fs');
 	const path = loadBuiltin<NodePath>('node:path');
 
-	const scenarioOut = path.resolve(options.repoRoot, 'data', 'wx-scenarios', bundle.scenarioId);
+	const scenarioOut = wxScenarioBundleDir(options.repoRoot, bundle.scenarioId);
 	const productsOut = path.resolve(scenarioOut, 'products');
 	ensureDir(fs, scenarioOut);
 
@@ -312,7 +312,7 @@ export async function writeScenarioBundle(bundle: ScenarioBundle, options: Scena
 			}
 
 			if (mirrorIntoChartsDir) {
-				const mirrorDir = path.resolve(options.repoRoot, 'data', 'charts', 'wx', chart.slug);
+				const mirrorDir = chartSlugToDir(options.repoRoot, chart.slug);
 				ensureDir(fs, mirrorDir);
 				writeFile(fs, path, path.resolve(mirrorDir, 'spec.yaml'), specYaml);
 			}
