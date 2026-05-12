@@ -38,6 +38,4 @@ Serial commits in the order they were landed on the branch. Each task was gated 
 
 ## Deferred to later WPs
 
-- Shared nav / breadcrumbs between hangar admin sections -- lands in `wp-hangar-sources-v1` alongside the real surfaces
-- ADR on hangar's relationship to identity (role model, verified-email, invite flow) -- lands when user administration becomes concrete (ops app)
-- Playwright e2e for the login -> ping -> audit-read cycle -- lands in `wp-hangar-sources-v1` as part of the fuller test-plan
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).

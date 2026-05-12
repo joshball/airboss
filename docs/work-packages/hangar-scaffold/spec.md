@@ -41,10 +41,7 @@ Plan: [docs/work/todos/20260422-hangar-data-management-plan.md](../../work/todos
 
 ## Out of scope
 
-- Data-management surfaces (sources, references, jobs) -- landing in `wp-hangar-registry` and `wp-hangar-sources-v1`
-- Nav between admin sections -- nothing to navigate to yet
-- User administration / invite flow -- lives in ops when it lands
-- FIRC compliance UI / carrier language -- not being ported
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Architecture
 
@@ -70,9 +67,9 @@ Airboss already has the 4-role enum (`LEARNER`, `AUTHOR`, `OPERATOR`, `ADMIN`) i
 
 ## Data model changes
 
-| Table              | Change                                                                                     |
-| ------------------ | ------------------------------------------------------------------------------------------ |
-| `audit.audit_log`  | No schema change. Existing table moves from `@ab/db` to `@ab/audit`; same columns, same rows. |
+| Table             | Change                                                                                        |
+| ----------------- | --------------------------------------------------------------------------------------------- |
+| `audit.audit_log` | No schema change. Existing table moves from `@ab/db` to `@ab/audit`; same columns, same rows. |
 
 No migration needed: the table and its Drizzle definition are identical to what previously lived in `libs/db/src/audit.ts`.
 
@@ -90,8 +87,8 @@ bun run dev             # multi-spawn study + sim + hangar
 
 ## Risks
 
-| Risk                                                         | Mitigation                                                                     |
-| ------------------------------------------------------------ | ------------------------------------------------------------------------------ |
-| Shared cookie domain misconfiguration between study + hangar | Mirrors study's `forwardAuthCookies` / `rewriteSetCookieDomain` exactly        |
-| Layout guard 403ing legitimate logout attempts               | `/logout` is a POST action, never walks the layout load; guard doesn't fire   |
+| Risk                                                         | Mitigation                                                                                              |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------- |
+| Shared cookie domain misconfiguration between study + hangar | Mirrors study's `forwardAuthCookies` / `rewriteSetCookieDomain` exactly                                 |
+| Layout guard 403ing legitimate logout attempts               | `/logout` is a POST action, never walks the layout load; guard doesn't fire                             |
 | Banned-user path regression                                  | `hooks.server.ts` is copy-equivalent to study's; adding a hangar test is a WP-hangar-sources-v1 concern |
