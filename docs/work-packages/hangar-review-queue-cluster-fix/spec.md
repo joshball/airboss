@@ -40,9 +40,7 @@ The cluster has been flagged twice prior (see [docs/work/walkthroughs/20260506/0
 
 ## Non-goals
 
-- Hardening the unrelated background-job `claimNext` warning surfaced incidentally in the same log (`hangar.job` query failure during `bauth_rate_limit` insert) - different system, separate WP if it persists.
-- Migrating the form-action validation pattern across hangar (the admin/tasks `fail()` failures may resolve once Buffer is fixed; if not, isolate as a separate bug after re-run).
-- Re-shaping the docs FTS index. The query crash is investigated; a code fix lands here. Index design questions defer to a separate WP if the crash is structural.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Cluster taxonomy
 
