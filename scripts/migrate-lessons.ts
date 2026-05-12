@@ -33,7 +33,8 @@ import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { extname, join, relative } from 'node:path';
 import '@ab/sources';
 import type { SourceId } from '@ab/sources';
-import { hydrateRegsFromDerivatives, parseIdentifier, productionRegistry } from '@ab/sources';
+import { parseIdentifier, productionRegistry } from '@ab/sources';
+import { hydrateRegsFromDerivatives } from '@ab/sources/server';
 
 const DEFAULT_ROOTS = ['course/regulations'] as const;
 const MARKDOWN_EXTENSION = '.md';
