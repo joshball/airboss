@@ -37,21 +37,21 @@ All tables in the `study` Postgres schema namespace. IDs use `prefix_ULID` via `
 
 One active plan per user. Editable in place. History of plans is not tracked in v1 -- a plan is a mutable configuration, not an audit record.
 
-| Column                 | Type        | Constraints                 | Notes                                                                                  |
-| ---------------------- | ----------- | --------------------------- | -------------------------------------------------------------------------------------- |
-| id                     | text        | PK                          | `plan_` prefix                                                                         |
-| user_id                | text        | NOT NULL, FK identity       | Owner. One active plan per user, enforced by partial UNIQUE index.                     |
-| title                  | text        | NOT NULL                    | Human-readable. Default: "Default Plan"                                                |
-| status                 | text        | NOT NULL, DEFAULT 'active'  | From `PLAN_STATUSES` -- draft, active, archived                                        |
-| cert_goals             | jsonb       | NOT NULL, DEFAULT '[]'      | Array of `Cert` values from `CERTS` (PPL, IR, CPL, CFI)                                |
-| focus_domains          | jsonb       | NOT NULL, DEFAULT '[]'      | Array of domain slugs from `DOMAINS`                                                   |
-| skip_domains           | jsonb       | NOT NULL, DEFAULT '[]'      | Array of domain slugs                                                                  |
-| skip_nodes             | jsonb       | NOT NULL, DEFAULT '[]'      | Array of node IDs the user marked "skip permanently" or "skip topic"                   |
-| depth_preference       | text        | NOT NULL, DEFAULT 'working' | From `DEPTH_PREFERENCES` -- surface, working, deep                                     |
-| session_length         | smallint    | NOT NULL, DEFAULT 10        | Items per session. CHECK BETWEEN 3 AND 50                                              |
-| default_mode           | text        | NOT NULL, DEFAULT 'mixed'   | From `SESSION_MODES` -- continue, strengthen, mixed, expand                            |
-| created_at             | timestamptz | NOT NULL, DEFAULT now()     |                                                                                        |
-| updated_at             | timestamptz | NOT NULL, DEFAULT now()     |                                                                                        |
+| Column           | Type        | Constraints                 | Notes                                                                |
+| ---------------- | ----------- | --------------------------- | -------------------------------------------------------------------- |
+| id               | text        | PK                          | `plan_` prefix                                                       |
+| user_id          | text        | NOT NULL, FK identity       | Owner. One active plan per user, enforced by partial UNIQUE index.   |
+| title            | text        | NOT NULL                    | Human-readable. Default: "Default Plan"                              |
+| status           | text        | NOT NULL, DEFAULT 'active'  | From `PLAN_STATUSES` -- draft, active, archived                      |
+| cert_goals       | jsonb       | NOT NULL, DEFAULT '[]'      | Array of `Cert` values from `CERTS` (PPL, IR, CPL, CFI)              |
+| focus_domains    | jsonb       | NOT NULL, DEFAULT '[]'      | Array of domain slugs from `DOMAINS`                                 |
+| skip_domains     | jsonb       | NOT NULL, DEFAULT '[]'      | Array of domain slugs                                                |
+| skip_nodes       | jsonb       | NOT NULL, DEFAULT '[]'      | Array of node IDs the user marked "skip permanently" or "skip topic" |
+| depth_preference | text        | NOT NULL, DEFAULT 'working' | From `DEPTH_PREFERENCES` -- surface, working, deep                   |
+| session_length   | smallint    | NOT NULL, DEFAULT 10        | Items per session. CHECK BETWEEN 3 AND 50                            |
+| default_mode     | text        | NOT NULL, DEFAULT 'mixed'   | From `SESSION_MODES` -- continue, strengthen, mixed, expand          |
+| created_at       | timestamptz | NOT NULL, DEFAULT now()     |                                                                      |
+| updated_at       | timestamptz | NOT NULL, DEFAULT now()     |                                                                      |
 
 > **Depends on knowledge-graph spec.** `skip_nodes` references node IDs. The ID format (kebab-case from ADR 011 vs `prefix_ULID` for any DB-built node table) is the graph spec's call; validation in the plan layer treats them as opaque strings.
 
@@ -59,40 +59,40 @@ One active plan per user. Editable in place. History of plans is not tracked in 
 
 One row per session start. A session is complete when all presented items have attempts recorded OR the user explicitly ends it. A session may be abandoned (never completed); that shows as `completed_at IS NULL`.
 
-| Column          | Type        | Constraints                    | Notes                                                                   |
-| --------------- | ----------- | ------------------------------ | ----------------------------------------------------------------------- |
-| id              | text        | PK                             | `ses_` prefix                                                           |
-| user_id         | text        | NOT NULL, FK identity          |                                                                         |
-| plan_id         | text        | NOT NULL, FK study.study_plan  | The plan this session was generated against                             |
-| mode            | text        | NOT NULL                       | From `SESSION_MODES` -- the mode actually used (after overrides)        |
-| focus_override  | text        | NULL                           | Domain slug if user chose focused session; NULL otherwise               |
-| cert_override   | text        | NULL                           | Cert value if user narrowed cert for this session                       |
-| session_length  | smallint    | NOT NULL                       | Target item count at generation                                         |
-| items           | jsonb       | NOT NULL                       | Ordered array of `SessionItem` (see below) -- the committed batch       |
-| started_at      | timestamptz | NOT NULL, DEFAULT now()        |                                                                         |
-| completed_at    | timestamptz | NULL                           | NULL while in progress; set when user finishes or explicitly ends       |
+| Column         | Type        | Constraints                   | Notes                                                             |
+| -------------- | ----------- | ----------------------------- | ----------------------------------------------------------------- |
+| id             | text        | PK                            | `ses_` prefix                                                     |
+| user_id        | text        | NOT NULL, FK identity         |                                                                   |
+| plan_id        | text        | NOT NULL, FK study.study_plan | The plan this session was generated against                       |
+| mode           | text        | NOT NULL                      | From `SESSION_MODES` -- the mode actually used (after overrides)  |
+| focus_override | text        | NULL                          | Domain slug if user chose focused session; NULL otherwise         |
+| cert_override  | text        | NULL                          | Cert value if user narrowed cert for this session                 |
+| session_length | smallint    | NOT NULL                      | Target item count at generation                                   |
+| items          | jsonb       | NOT NULL                      | Ordered array of `SessionItem` (see below) -- the committed batch |
+| started_at     | timestamptz | NOT NULL, DEFAULT now()       |                                                                   |
+| completed_at   | timestamptz | NULL                          | NULL while in progress; set when user finishes or explicitly ends |
 
 ### study.session_item_result
 
 One row per attempted or skipped item. Links a session slot to the downstream review/attempt row it produced.
 
-| Column         | Type        | Constraints                | Notes                                                                  |
-| -------------- | ----------- | -------------------------- | ---------------------------------------------------------------------- |
-| id             | text        | PK                         | `sir_` prefix                                                          |
-| session_id     | text        | NOT NULL, FK study.session |                                                                        |
-| user_id        | text        | NOT NULL                   | Denormalized for index efficiency                                      |
-| slot_index     | smallint    | NOT NULL                   | 0-based position in the original items array                           |
-| item_kind      | text        | NOT NULL                   | From `SESSION_ITEM_KINDS` -- card, rep, node_start                     |
-| slice          | text        | NOT NULL                   | From `SESSION_SLICES` -- continue, strengthen, expand, diversify       |
-| reason_code    | text        | NOT NULL                   | From `SESSION_REASON_CODES` -- the label behind the pick               |
-| card_id        | text        | NULL, FK study.card        | Populated when item_kind='card'                                        |
-| scenario_id    | text        | NULL, FK study.scenario    | Populated when item_kind='rep'                                         |
-| node_id        | text        | NULL                       | Populated when item_kind='node_start'                                  |
-| review_id      | text        | NULL, FK study.review      | Set on successful card review                                          |
-| rep_attempt_id | text        | NULL, FK study.rep_attempt | Set on successful rep attempt                                          |
-| skip_kind      | text        | NULL                       | From `SESSION_SKIP_KINDS` -- today, topic, permanent                   |
-| presented_at   | timestamptz | NOT NULL, DEFAULT now()    |                                                                        |
-| completed_at   | timestamptz | NULL                       |                                                                        |
+| Column         | Type        | Constraints                | Notes                                                            |
+| -------------- | ----------- | -------------------------- | ---------------------------------------------------------------- |
+| id             | text        | PK                         | `sir_` prefix                                                    |
+| session_id     | text        | NOT NULL, FK study.session |                                                                  |
+| user_id        | text        | NOT NULL                   | Denormalized for index efficiency                                |
+| slot_index     | smallint    | NOT NULL                   | 0-based position in the original items array                     |
+| item_kind      | text        | NOT NULL                   | From `SESSION_ITEM_KINDS` -- card, rep, node_start               |
+| slice          | text        | NOT NULL                   | From `SESSION_SLICES` -- continue, strengthen, expand, diversify |
+| reason_code    | text        | NOT NULL                   | From `SESSION_REASON_CODES` -- the label behind the pick         |
+| card_id        | text        | NULL, FK study.card        | Populated when item_kind='card'                                  |
+| scenario_id    | text        | NULL, FK study.scenario    | Populated when item_kind='rep'                                   |
+| node_id        | text        | NULL                       | Populated when item_kind='node_start'                            |
+| review_id      | text        | NULL, FK study.review      | Set on successful card review                                    |
+| rep_attempt_id | text        | NULL, FK study.rep_attempt | Set on successful rep attempt                                    |
+| skip_kind      | text        | NULL                       | From `SESSION_SKIP_KINDS` -- today, topic, permanent             |
+| presented_at   | timestamptz | NOT NULL, DEFAULT now()    |                                                                  |
+| completed_at   | timestamptz | NULL                       |                                                                  |
 
 > **Depends on knowledge-graph spec.** `node_id` is a graph reference. Whether it's a FK to a `graph.node` table or free text depends on how the graph persists nodes. For v1 we treat it as text with application-layer validation.
 
@@ -227,11 +227,11 @@ A "focused" session is not a separate weight tuple -- it's any mode with `focus_
 
 Three distinct actions, three distinct effects.
 
-| Action          | Immediate effect                                 | Plan mutation                                                                                          | Downstream                                                                     |
-| --------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
-| Skip today      | Mark item completed with `skip_kind='today'`     | None                                                                                                   | Item excluded from this session's remaining loops; normal scheduling otherwise |
-| Skip topic      | Same, `skip_kind='topic'`                        | Add node's domain to `skip_domains` OR add node to `skip_nodes` (node-level, once cards/reps link to a node_id) | Future sessions exclude that domain/node until user reactivates                |
-| Skip permanent  | Same, `skip_kind='permanent'`                    | Add node ID to `skip_nodes`. For cards/reps not tied to a node: set card status='suspended' or scenario status='suspended' | The item never reappears. User can reactivate via browse page.                 |
+| Action         | Immediate effect                             | Plan mutation                                                                                                              | Downstream                                                                     |
+| -------------- | -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| Skip today     | Mark item completed with `skip_kind='today'` | None                                                                                                                       | Item excluded from this session's remaining loops; normal scheduling otherwise |
+| Skip topic     | Same, `skip_kind='topic'`                    | Add node's domain to `skip_domains` OR add node to `skip_nodes` (node-level, once cards/reps link to a node_id)            | Future sessions exclude that domain/node until user reactivates                |
+| Skip permanent | Same, `skip_kind='permanent'`                | Add node ID to `skip_nodes`. For cards/reps not tied to a node: set card status='suspended' or scenario status='suspended' | The item never reappears. User can reactivate via browse page.                 |
 
 For cards and reps, "skip topic" behavior depends on whether the card/rep has a `node_id`. Without `node_id`, "skip topic" adds the card/rep's `domain` to `skip_domains`. With `node_id`, it adds the node to `skip_nodes`.
 
@@ -275,23 +275,23 @@ All exports from `libs/bc/study/src/index.ts`. New files:
 
 ### Functions
 
-| File          | Function            | Signature                                                                                     |
-| ------------- | ------------------- | --------------------------------------------------------------------------------------------- |
-| `plans.ts`    | `createPlan`        | `(db, data: CreatePlanInput) -> Plan`                                                         |
-| `plans.ts`    | `updatePlan`        | `(db, planId, userId, data: UpdatePlanInput) -> Plan`                                         |
-| `plans.ts`    | `getActivePlan`     | `(db, userId) -> Plan \| null`                                                                |
-| `plans.ts`    | `archivePlan`       | `(db, planId, userId) -> void`                                                                |
-| `plans.ts`    | `addSkipNode`       | `(db, planId, userId, nodeId) -> Plan`                                                        |
-| `plans.ts`    | `addSkipDomain`     | `(db, planId, userId, domain) -> Plan`                                                        |
-| `sessions.ts` | `previewSession`    | `(db, userId, opts: { mode?, focus?, cert?, seed? }) -> SessionPreview`                       |
-| `sessions.ts` | `commitSession`     | `(db, userId, preview: SessionPreview) -> Session`                                            |
-| `sessions.ts` | `recordItemResult`  | `(db, sessionId, slotIndex, result: ItemResultInput) -> SessionItemResult`                    |
-| `sessions.ts` | `completeSession`   | `(db, sessionId, userId) -> SessionSummary`                                                   |
-| `sessions.ts` | `getSessionSummary` | `(db, sessionId, userId) -> SessionSummary`                                                   |
-| `sessions.ts` | `getStreakDays`     | `(db, userId, tz: string) -> number`                                                          |
-| `engine.ts`   | `runEngine`         | `(inputs: EngineInputs) -> SessionItem[]` (pure)                                              |
-| `engine.ts`   | `allocateSlots`     | `(weights: ModeWeights, length: number) -> Record<Slice, number>` (pure)                      |
-| `engine.ts`   | `modeWeights`       | `(mode: SessionMode) -> ModeWeights` (pure)                                                   |
+| File          | Function            | Signature                                                                  |       |
+| ------------- | ------------------- | -------------------------------------------------------------------------- | ----- |
+| `plans.ts`    | `createPlan`        | `(db, data: CreatePlanInput) -> Plan`                                      |       |
+| `plans.ts`    | `updatePlan`        | `(db, planId, userId, data: UpdatePlanInput) -> Plan`                      |       |
+| `plans.ts`    | `getActivePlan`     | `(db, userId) -> Plan \                                                    | null` |
+| `plans.ts`    | `archivePlan`       | `(db, planId, userId) -> void`                                             |       |
+| `plans.ts`    | `addSkipNode`       | `(db, planId, userId, nodeId) -> Plan`                                     |       |
+| `plans.ts`    | `addSkipDomain`     | `(db, planId, userId, domain) -> Plan`                                     |       |
+| `sessions.ts` | `previewSession`    | `(db, userId, opts: { mode?, focus?, cert?, seed? }) -> SessionPreview`    |       |
+| `sessions.ts` | `commitSession`     | `(db, userId, preview: SessionPreview) -> Session`                         |       |
+| `sessions.ts` | `recordItemResult`  | `(db, sessionId, slotIndex, result: ItemResultInput) -> SessionItemResult` |       |
+| `sessions.ts` | `completeSession`   | `(db, sessionId, userId) -> SessionSummary`                                |       |
+| `sessions.ts` | `getSessionSummary` | `(db, sessionId, userId) -> SessionSummary`                                |       |
+| `sessions.ts` | `getStreakDays`     | `(db, userId, tz: string) -> number`                                       |       |
+| `engine.ts`   | `runEngine`         | `(inputs: EngineInputs) -> SessionItem[]` (pure)                           |       |
+| `engine.ts`   | `allocateSlots`     | `(weights: ModeWeights, length: number) -> Record<Slice, number>` (pure)   |       |
+| `engine.ts`   | `modeWeights`       | `(mode: SessionMode) -> ModeWeights` (pure)                                |       |
 
 `EngineInputs` bundles the plan, effective filters, pool-query callbacks, mode, session_length, and seed. The engine never touches the DB directly.
 
@@ -317,14 +317,14 @@ New (added here):
 
 All routes go through `ROUTES` in `libs/constants/src/routes.ts`. Static routes are string constants; parameterized routes are typed functions.
 
-| Route            | Purpose                                                                              |
-| ---------------- | ------------------------------------------------------------------------------------ |
-| `/plans`         | List plans (v1 shows the single active plan; forward-compatible with multi-plan).    |
-| `/plans/new`     | First-run wizard / create new plan.                                                  |
-| `/plans/:id`     | View + edit a plan.                                                                  |
-| `/session/start` | Preview + adjust + commit. Query params: `mode`, `focus`, `cert`, `seed`.            |
-| `/sessions`      | History of past sessions (list; date, mode, items attempted, accuracy).              |
-| `/sessions/:id`  | In-progress session presentation; on completion, the summary view.                   |
+| Route            | Purpose                                                                           |
+| ---------------- | --------------------------------------------------------------------------------- |
+| `/plans`         | List plans (v1 shows the single active plan; forward-compatible with multi-plan). |
+| `/plans/new`     | First-run wizard / create new plan.                                               |
+| `/plans/:id`     | View + edit a plan.                                                               |
+| `/session/start` | Preview + adjust + commit. Query params: `mode`, `focus`, `cert`, `seed`.         |
+| `/sessions`      | History of past sessions (list; date, mode, items attempted, accuracy).           |
+| `/sessions/:id`  | In-progress session presentation; on completion, the summary view.                |
 
 Route constants to add:
 
@@ -341,23 +341,23 @@ SESSION: (id: string) => `/sessions/${id}` as const,
 
 ## Validation
 
-| Field                            | Rule                                                                                          |
-| -------------------------------- | --------------------------------------------------------------------------------------------- |
-| plan.title                       | Required, 1-200 chars, trimmed                                                                |
-| plan.cert_goals                  | Array of `Cert` values, 1-4 entries, each from `CERTS`                                        |
-| plan.focus_domains               | Array of domain slugs, 0-5 entries, each from `DOMAINS`, disjoint from skip_domains           |
-| plan.skip_domains                | Array of domain slugs, 0-14 entries, each from `DOMAINS`                                      |
-| plan.skip_nodes                  | Array of strings (node IDs), 0-200 entries, each 1-100 chars                                  |
-| plan.session_length              | Integer, 3-50                                                                                 |
-| plan.default_mode                | Required, from `SESSION_MODES`                                                                |
-| plan.depth_preference            | Required, from `DEPTH_PREFERENCES`                                                            |
-| session.mode                     | Required, from `SESSION_MODES`                                                                |
-| session.focus_override           | Optional, from `DOMAINS`                                                                      |
-| session.cert_override            | Optional, from `CERTS`                                                                        |
-| session.items                    | Non-empty array of valid `SessionItem`, length <= 50                                          |
-| session_item_result.item_kind    | From `SESSION_ITEM_KINDS`                                                                     |
-| session_item_result.slice        | From `SESSION_SLICES`                                                                         |
-| session_item_result.skip_kind    | NULL or from `SESSION_SKIP_KINDS`                                                             |
+| Field                         | Rule                                                                                |
+| ----------------------------- | ----------------------------------------------------------------------------------- |
+| plan.title                    | Required, 1-200 chars, trimmed                                                      |
+| plan.cert_goals               | Array of `Cert` values, 1-4 entries, each from `CERTS`                              |
+| plan.focus_domains            | Array of domain slugs, 0-5 entries, each from `DOMAINS`, disjoint from skip_domains |
+| plan.skip_domains             | Array of domain slugs, 0-14 entries, each from `DOMAINS`                            |
+| plan.skip_nodes               | Array of strings (node IDs), 0-200 entries, each 1-100 chars                        |
+| plan.session_length           | Integer, 3-50                                                                       |
+| plan.default_mode             | Required, from `SESSION_MODES`                                                      |
+| plan.depth_preference         | Required, from `DEPTH_PREFERENCES`                                                  |
+| session.mode                  | Required, from `SESSION_MODES`                                                      |
+| session.focus_override        | Optional, from `DOMAINS`                                                            |
+| session.cert_override         | Optional, from `CERTS`                                                              |
+| session.items                 | Non-empty array of valid `SessionItem`, length <= 50                                |
+| session_item_result.item_kind | From `SESSION_ITEM_KINDS`                                                           |
+| session_item_result.slice     | From `SESSION_SLICES`                                                               |
+| session_item_result.skip_kind | NULL or from `SESSION_SKIP_KINDS`                                                   |
 
 One-active-plan invariant is enforced by a Postgres partial UNIQUE index: `CREATE UNIQUE INDEX plan_user_active_uniq ON study.study_plan (user_id) WHERE status = 'active';`. Activating a plan must archive any other active plan for the user in the same transaction.
 
@@ -396,22 +396,9 @@ Value arrays (`CERT_VALUES`, `PLAN_STATUS_VALUES`, etc.) follow the existing pat
 - **Plan edits mid-session.** Saved plan edits do not retroactively change an in-progress session's items. The session's `items` jsonb is the authoritative batch once committed.
 - **Item's underlying card deleted mid-session.** Skip with `skip_kind` NULL and a synthesized `reason_detail='source deleted'`; surface a one-line notice in the summary.
 
-## Out of Scope for v1
+## Out of scope
 
-- Multiple active plans per user.
-- Plan sharing or templates across users.
-- ML-based weight tuning or any learned models.
-- Custom mode weight tuples exposed as user settings.
-- Cross-surface sessions (audio drill, spatial route walkthrough as session items).
-- Calendar-like projected load views.
-- Goal deadlines (BFR Sprint / IPC Sprint countdowns).
-- Natural-language focus parsing ("study holding patterns" -> engine matches).
-- Paired-session suggestions (run a card session, then suggest a rep session in the same domain).
-- Activity items (interactive visualizations as session items -- extend `SessionItem` later).
-- Mid-session replace of an already-committed item.
-- Session resume beyond 2 hours.
-- Mood-aware mode suggestions.
-- Anki-style scheduler replacement -- we schedule sessions, not individual cards; SRS scheduling stays in Memory Items.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Open Questions
 
