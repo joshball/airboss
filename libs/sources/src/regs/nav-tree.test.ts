@@ -106,13 +106,13 @@ describe('walker -> writer -> loader round-trip', () => {
 		rmSync(tmpRoot, { recursive: true, force: true });
 	});
 
-	it('walks synthetic XML, emits YAML, reloads it, and returns the right shape', () => {
+	it('walks synthetic XML, emits YAML, reloads it, and returns the right shape', async () => {
 		const tree = walkRegsXml(SYNTHETIC_XML, { title: '14' });
 		expect(tree.navTree).not.toBeNull();
 		const raw = tree.navTree;
 		if (raw === null) throw new Error('expected nav tree');
 		mkdirSync(join(tmpRoot, 'cfr-14', '2026-04-22'), { recursive: true });
-		const result = writeCfrNavTree({
+		const result = await writeCfrNavTree({
 			title: 14,
 			editionDate: '2026-04-22',
 			outRoot: tmpRoot,
@@ -134,11 +134,11 @@ describe('walker -> writer -> loader round-trip', () => {
 		expect(chapter.subchapters.map((s) => s.id).sort()).toEqual(['A', 'F']);
 	});
 
-	it('findChapterForPart returns the matched chapter / subchapter', () => {
+	it('findChapterForPart returns the matched chapter / subchapter', async () => {
 		const tree = walkRegsXml(SYNTHETIC_XML, { title: '14' });
 		if (tree.navTree === null) throw new Error('expected nav tree');
 		mkdirSync(join(tmpRoot, 'cfr-14', '2026-04-22'), { recursive: true });
-		writeCfrNavTree({ title: 14, editionDate: '2026-04-22', outRoot: tmpRoot, raw: tree.navTree });
+		await writeCfrNavTree({ title: 14, editionDate: '2026-04-22', outRoot: tmpRoot, raw: tree.navTree });
 
 		const loc91 = findChapterForPart(14, '91');
 		expect(loc91).not.toBeNull();
@@ -151,21 +151,21 @@ describe('walker -> writer -> loader round-trip', () => {
 		expect(findChapterForPart(14, '999')).toBeNull();
 	});
 
-	it('buildPartUrl uses nav-tree context when available; shortcut otherwise', () => {
+	it('buildPartUrl uses nav-tree context when available; shortcut otherwise', async () => {
 		const tree = walkRegsXml(SYNTHETIC_XML, { title: '14' });
 		if (tree.navTree === null) throw new Error('expected nav tree');
 		mkdirSync(join(tmpRoot, 'cfr-14', '2026-04-22'), { recursive: true });
-		writeCfrNavTree({ title: 14, editionDate: '2026-04-22', outRoot: tmpRoot, raw: tree.navTree });
+		await writeCfrNavTree({ title: 14, editionDate: '2026-04-22', outRoot: tmpRoot, raw: tree.navTree });
 
 		expect(buildPartUrl(14, '91')).toBe('https://www.ecfr.gov/current/title-14/chapter-I/subchapter-F/part-91');
 		expect(buildPartUrl(14, '999')).toBe('https://www.ecfr.gov/current/title-14/part-999');
 	});
 
-	it('buildSectionUrl appends section segment with chapter context', () => {
+	it('buildSectionUrl appends section segment with chapter context', async () => {
 		const tree = walkRegsXml(SYNTHETIC_XML, { title: '14' });
 		if (tree.navTree === null) throw new Error('expected nav tree');
 		mkdirSync(join(tmpRoot, 'cfr-14', '2026-04-22'), { recursive: true });
-		writeCfrNavTree({ title: 14, editionDate: '2026-04-22', outRoot: tmpRoot, raw: tree.navTree });
+		await writeCfrNavTree({ title: 14, editionDate: '2026-04-22', outRoot: tmpRoot, raw: tree.navTree });
 
 		expect(buildSectionUrl(14, '91', '91.103')).toBe(
 			'https://www.ecfr.gov/current/title-14/chapter-I/subchapter-F/part-91/section-91.103',
@@ -176,11 +176,11 @@ describe('walker -> writer -> loader round-trip', () => {
 		);
 	});
 
-	it('logUnmappedParts emits one warn listing parts without chapter mapping', () => {
+	it('logUnmappedParts emits one warn listing parts without chapter mapping', async () => {
 		const tree = walkRegsXml(SYNTHETIC_XML, { title: '14' });
 		if (tree.navTree === null) throw new Error('expected nav tree');
 		mkdirSync(join(tmpRoot, 'cfr-14', '2026-04-22'), { recursive: true });
-		writeCfrNavTree({ title: 14, editionDate: '2026-04-22', outRoot: tmpRoot, raw: tree.navTree });
+		await writeCfrNavTree({ title: 14, editionDate: '2026-04-22', outRoot: tmpRoot, raw: tree.navTree });
 
 		const messages: string[] = [];
 		logUnmappedParts(
@@ -197,13 +197,13 @@ describe('walker -> writer -> loader round-trip', () => {
 		expect(messages[0]).not.toContain('Part 91,');
 	});
 
-	it('writer is idempotent -- second run with same input does not rewrite', () => {
+	it('writer is idempotent -- second run with same input does not rewrite', async () => {
 		const tree = walkRegsXml(SYNTHETIC_XML, { title: '14' });
 		if (tree.navTree === null) throw new Error('expected nav tree');
 		mkdirSync(join(tmpRoot, 'cfr-14', '2026-04-22'), { recursive: true });
-		const first = writeCfrNavTree({ title: 14, editionDate: '2026-04-22', outRoot: tmpRoot, raw: tree.navTree });
+		const first = await writeCfrNavTree({ title: 14, editionDate: '2026-04-22', outRoot: tmpRoot, raw: tree.navTree });
 		expect(first.wrote).toBe(true);
-		const second = writeCfrNavTree({ title: 14, editionDate: '2026-04-22', outRoot: tmpRoot, raw: tree.navTree });
+		const second = await writeCfrNavTree({ title: 14, editionDate: '2026-04-22', outRoot: tmpRoot, raw: tree.navTree });
 		expect(second.wrote).toBe(false);
 	});
 });

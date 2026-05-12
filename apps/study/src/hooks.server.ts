@@ -1,6 +1,6 @@
 import { mapBetterAuthSession } from '@ab/auth';
 import { ROUTES } from '@ab/constants';
-import { initRegistry } from '@ab/sources';
+import { initRegistry } from '@ab/sources/server';
 import {
 	APPEARANCE_COOKIE,
 	injectPreHydrationScript,

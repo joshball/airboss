@@ -1,7 +1,7 @@
 import { mapBetterAuthSession } from '@ab/auth';
 import { ENV_VARS, ROUTES } from '@ab/constants';
 import { recoverOrphanedRunning, startWorker, type WorkerHandle } from '@ab/hangar-jobs';
-import { initRegistry } from '@ab/sources';
+import { initRegistry } from '@ab/sources/server';
 import {
 	APPEARANCE_COOKIE,
 	injectPreHydrationScript,

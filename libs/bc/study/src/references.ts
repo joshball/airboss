@@ -50,13 +50,8 @@ import {
 	ROUTES,
 } from '@ab/constants';
 import { client, db as defaultDb } from '@ab/db/connection';
-import {
-	getAcSeedMappingByReference,
-	getCorpusResolver,
-	isParseError,
-	parseIdentifier,
-	type SourceId,
-} from '@ab/sources';
+import { getAcSeedMappingByReference, isParseError, parseIdentifier, type SourceId } from '@ab/sources';
+import { getCorpusResolver } from '@ab/sources/server';
 import type { Citation, StructuredCitation } from '@ab/types';
 import { isHandbookCitation, isStructuredCitation } from '@ab/types';
 import { generateReferenceFigureId, generateReferenceId, generateReferenceSectionId } from '@ab/utils';

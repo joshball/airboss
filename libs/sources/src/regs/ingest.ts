@@ -184,7 +184,7 @@ export async function runIngest(args: IngestOneTitleArgs): Promise<IngestReport>
 	// the full-title walk yields a non-null nav tree; part-filtered titles
 	// (Title 49) skip this -- they have no chapter ancestor in the XML.
 	if (aggregateTree.navTree !== null) {
-		writeCfrNavTree({
+		await writeCfrNavTree({
 			// `args.title` is the string literal `'14' | '49'`; the nav-tree API
 			// keys URLs by numeric title id, so coerce up-front rather than
 			// repeating the cast at every call site.

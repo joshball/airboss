@@ -31,10 +31,10 @@
 import { execSync } from 'node:child_process';
 import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { extname, join, relative } from 'node:path';
-import '@ab/sources';
+import '@ab/sources/server';
 import type { SourceId } from '@ab/sources';
-import { parseIdentifier, productionRegistry } from '@ab/sources';
-import { hydrateRegsFromDerivatives } from '@ab/sources/server';
+import { parseIdentifier } from '@ab/sources';
+import { hydrateRegsFromDerivatives, productionRegistry } from '@ab/sources/server';
 
 const DEFAULT_ROOTS = ['course/regulations'] as const;
 const MARKDOWN_EXTENSION = '.md';

@@ -36,7 +36,8 @@ import {
 	type SyllabusStatus,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
-import { getCorpusResolver, isParseError, parseIdentifier } from '@ab/sources';
+import { isParseError, parseIdentifier } from '@ab/sources';
+import { getCorpusResolver } from '@ab/sources/server';
 import type { StructuredCitation } from '@ab/types';
 import { and, asc, eq, inArray } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';

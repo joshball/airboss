@@ -11,35 +11,14 @@
  * module is imported.
  */
 
-// Side-effect import: registers the `regs` CorpusResolver.
-import './regs/index.ts';
-// Side-effect import: registers the `handbooks` CorpusResolver.
-import './handbooks/index.ts';
-// Side-effect import: registers the `acs` CorpusResolver.
-import './acs/index.ts';
-// Side-effect import: registers the `pts` CorpusResolver.
-import './pts/index.ts';
-// Side-effect import: registers the `aim` CorpusResolver.
-import './aim/index.ts';
-// Side-effect import: registers the `ac` CorpusResolver.
-import './ac/index.ts';
-// Side-effect import: registers the `orders` CorpusResolver (Phase 10).
-import './orders/index.ts';
-// Side-effect import: registers the `ntsb` CorpusResolver (Phase 10).
-import './ntsb/index.ts';
-// Side-effect imports: register the Phase 10 next-slice irregular corpora resolvers.
-import './interp/index.ts';
-import './pohs/index.ts';
-import './sectionals/index.ts';
-import './plates/index.ts';
-import './statutes/index.ts';
-import './forms/index.ts';
-import './info/index.ts';
-import './safo/index.ts';
-import './tcds/index.ts';
-import './asrs/index.ts';
-// Side-effect import: registers the `ntsb-alj` CorpusResolver (WP-NTSB-ALJ).
-import './ntsb-alj/index.ts';
+// CorpusResolver registration is server-only -- each corpus `index.ts`
+// imports `node:fs` transitively (via its `resolver.ts`) which crashes
+// hydration in the browser via Vite's externalized-node-builtin stub.
+// The 19 side-effect imports now live in `@ab/sources/server`. Server-
+// side callers (`hooks.server.ts`'s `initRegistry` chain, `+page.server.ts`
+// route handlers, scripts) must import from `@ab/sources/server` to
+// trigger resolver registration. The runtime barrel below stays pure
+// value-pass-through (parsers, locators, types).
 
 export { parseAcLocator } from './ac/locator.ts';
 export {
@@ -70,20 +49,19 @@ export {
 	CORPUS_PREFIX_FOR_REFERENCE_KIND,
 	sourceIdForReference,
 } from './airboss-ref-builder.ts';
-// `hydrateRegsFromDerivatives` + `PHASE_9_BOOTSTRAP_REVIEWER_ID` are
-// server-only -- they live in `bootstrap.ts`, which statically imports
-// `node:fs` at module load. Value re-exporting them here pulls `bootstrap.ts`
-// into every `.svelte` page that touches `@ab/sources` (e.g. via
-// `urlForReference`), which crashes hydration with Vite's
-// `Module "node:fs" has been externalized` browser stub.
-//
-// Canonical server-barrel-split pattern: value re-exports move to
-// `@ab/sources/server`; only type re-exports stay in the runtime barrel
-// (types erase at compile time, no transitive evaluation).
-export type { BootstrapOptions, BootstrapReport } from './bootstrap.ts';
+// `bootstrap.ts` is server-only -- it statically imports `node:fs` at module
+// load. The entire module must stay out of the runtime barrel: even an
+// `export type { ... } from './bootstrap.ts'` re-export causes Vite's dev
+// server to evaluate `bootstrap.ts` on resolution, which crashes hydration
+// with the `Module "node:fs" has been externalized` browser stub. Types AND
+// values both live in `@ab/sources/server`; intra-lib callers can import
+// directly from `./bootstrap.ts`.
 export { parseHandbooksLocator } from './handbooks/locator.ts';
 export { isParseError, parseIdentifier } from './parser.ts';
-export { ENUMERATED_CORPORA, getCorpusResolver, initRegistry, productionRegistry } from './registry/index.ts';
+export { ENUMERATED_CORPORA } from './registry/corpus-resolver.ts';
+// `getCorpusResolver`, `initRegistry`, `productionRegistry` moved to
+// `@ab/sources/server` -- they reach `registry/query.ts` which static-imports
+// `node:fs`. Pulling them through the runtime barrel crashes hydration.
 export { NULL_REGISTRY } from './registry-stub.ts';
 export { parseRegsLocator } from './regs/locator.ts';
 export {
@@ -98,11 +76,15 @@ export {
 	getCfrNavTree,
 	logUnmappedParts,
 	type PartLocation,
-	writeCfrNavTree,
 } from './regs/nav-tree.ts';
+// `writeCfrNavTree` moved to `@ab/sources/server` -- it imports
+// `writeIfChanged` which static-imports `node:fs`. Ingest callers
+// (`regs/ingest.ts`, scripts) import from the server barrel.
+// `batchResolve` + `__batch_internal__` are NOT re-exported here -- they reach
+// `registry/query.ts` (which static-imports `node:fs`) and crash browser
+// hydration. They live on `@ab/sources/server`; SvelteKit `+page.server.ts`
+// loaders + `lib/server/**` import them from there.
 export {
-	__batch_internal__,
-	batchResolve,
 	computeAdjacencyGroups,
 	computeAnnotation,
 	extractIdentifiers,

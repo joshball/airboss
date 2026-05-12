@@ -21,20 +21,13 @@ import { getCorpusResolver } from './corpus-resolver.ts';
 import { getEditionsMap } from './editions.ts';
 import { getChildrenForId, getEntriesForCanonicalShort } from './index-cache.ts';
 import { getSources } from './sources.ts';
+import { stripPin } from './strip-pin.ts';
 
-// ---------------------------------------------------------------------------
-// Pin-stripping helper
-// ---------------------------------------------------------------------------
-
-/**
- * Strip `?at=...` from a `SourceId`-shaped string, leaving the canonical
- * pin-agnostic key. Keys in `SOURCES` are pin-agnostic; queries against the
- * registry must strip pins from caller input.
- */
-export function stripPin(raw: string): string {
-	const queryStart = raw.indexOf('?');
-	return queryStart === -1 ? raw : raw.slice(0, queryStart);
-}
+// `stripPin` lives in `./strip-pin.ts` -- a pure helper carved out so
+// browser-eligible callers (`render/tokens.ts`) can use it without dragging
+// `node:fs` into the client bundle. Re-exported here so existing server
+// callers keep importing it from `registry/query.ts`.
+export { stripPin };
 
 // ---------------------------------------------------------------------------
 // Static queries (ADR 019 §2.3)
