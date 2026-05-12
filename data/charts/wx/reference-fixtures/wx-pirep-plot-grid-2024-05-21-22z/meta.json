@@ -1,18 +1,19 @@
 {
   "slug": "reference-fixtures/wx-pirep-plot-grid-2024-05-21-22z",
   "type": "pirep-plot-grid",
-  "library_version": "@ab/wx-charts@0.1.0",
-  "built_at": "2026-05-10T01:25:29.253Z",
-  "content_hash": "sha256:60bd6e5039c459d05f3e1ef2df060c2c6077e93ad3a301c54ed90928cb3ecf36",
+  "library_version": "@ab/wx-charts@0.2.0",
+  "built_at": "2026-05-12T13:40:36.747Z",
+  "content_hash": "sha256:99d01a90f963f3fbc5f7cabbf3641e15ca8118294733a0582d02bf42af2aa247",
   "source_hashes": {
     "reports": "cda8805db3ae889b498407246445d8d103feb76a205ee65eb229da9860f46747"
   },
   "layer_counts": {
     "vector-symbology": 0,
     "point-symbology": 22,
-    "basemap-fill": 49
+    "basemap-fill": 49,
+    "north-america-context": 2
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 297175
+  "svg_bytes": 509179
 }

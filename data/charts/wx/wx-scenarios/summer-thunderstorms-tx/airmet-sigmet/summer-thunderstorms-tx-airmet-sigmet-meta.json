@@ -1,17 +1,18 @@
 {
   "slug": "wx-scenarios/summer-thunderstorms-tx/airmet-sigmet",
   "type": "advisory-overlay",
-  "library_version": "@ab/wx-charts@0.1.0",
-  "built_at": "2026-05-11T13:55:10.841Z",
-  "content_hash": "sha256:b29f26265bc713950b96eaca731c19a470d0c585c6a8c9c7b6832248ea96bb7b",
+  "library_version": "@ab/wx-charts@0.2.0",
+  "built_at": "2026-05-12T13:50:55.074Z",
+  "content_hash": "sha256:0d710d122aa4d7f145c1d670b0af92d077a39adca3b788a2f466a63687b7023e",
   "source_hashes": {
     "advisories": "714212db1da189a7068d12056b95ca4572a8773ab1c8b7e299575cbb2f1221e7"
   },
   "layer_counts": {
     "vector-symbology": 4,
-    "basemap-fill": 49
+    "basemap-fill": 49,
+    "north-america-context": 2
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 288033
+  "svg_bytes": 500037
 }

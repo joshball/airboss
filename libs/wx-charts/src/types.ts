@@ -62,6 +62,14 @@ export interface ChartRenderInput<TSpec extends ChartSpec = ChartSpec> {
 	 * coastline detail.
 	 */
 	nationPath?: string;
+	/**
+	 * Optional path to the Canada + Mexico context TopoJSON. Default:
+	 * `data/references/basemaps/north-america-context-50m.json`. When
+	 * supplied, the renderer fills the Lambert Conformal cone curve with
+	 * surrounding-country outlines so the CONUS shape does not read as a
+	 * "hunchback" deformity. See ADR 027 Option A.
+	 */
+	contextBasemapPath?: string;
 	/** Stamped into `meta.json.library_version` for provenance. */
 	libraryVersion: string;
 }

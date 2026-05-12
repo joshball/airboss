@@ -1,18 +1,19 @@
 {
   "slug": "wx-scenarios/marine-stratus-pacific-nw/pirep-plot",
   "type": "pirep-plot-grid",
-  "library_version": "@ab/wx-charts@0.1.0",
-  "built_at": "2026-05-11T14:04:28.112Z",
-  "content_hash": "sha256:f2ec670ebdf2c23a5b31cb68a97da54b277d489e6a114f984e38aa21eb798113",
+  "library_version": "@ab/wx-charts@0.2.0",
+  "built_at": "2026-05-12T13:50:49.136Z",
+  "content_hash": "sha256:81f6a5761f50a88419e8b4379d7310bacbce7093a65eed0c5fcf7868412b6957",
   "source_hashes": {
     "reports": "3cab4240779636331d182756e75a5d162a7e40e7aaad96af654416ede79a9c2e"
   },
   "layer_counts": {
     "vector-symbology": 2,
     "point-symbology": 2,
-    "basemap-fill": 49
+    "basemap-fill": 49,
+    "north-america-context": 2
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 288205
+  "svg_bytes": 500209
 }

@@ -57,8 +57,8 @@ describe('CHART_TYPES', () => {
 });
 
 describe('LAYER_BANDS', () => {
-	it('enumerates exactly nine bands', () => {
-		expect(LAYER_BAND_VALUES).toHaveLength(9);
+	it('enumerates exactly ten bands', () => {
+		expect(LAYER_BAND_VALUES).toHaveLength(10);
 	});
 
 	it('preserves canonical z-order: background first, chrome last', () => {
@@ -72,6 +72,14 @@ describe('LAYER_BANDS', () => {
 		const restroke = LAYER_BAND_VALUES.indexOf(LAYER_BANDS.BASEMAP_RE_STROKE);
 		expect(borders).toBeLessThan(raster);
 		expect(raster).toBeLessThan(restroke);
+	});
+
+	it('north-america-context sits BELOW basemap-fill so CONUS draws on top (ADR 027 Option A)', () => {
+		const context = LAYER_BAND_VALUES.indexOf(LAYER_BANDS.NORTH_AMERICA_CONTEXT);
+		const fill = LAYER_BAND_VALUES.indexOf(LAYER_BANDS.BASEMAP_FILL);
+		const graticule = LAYER_BAND_VALUES.indexOf(LAYER_BANDS.GRATICULE);
+		expect(context).toBeLessThan(fill);
+		expect(graticule).toBeLessThan(context);
 	});
 });
 

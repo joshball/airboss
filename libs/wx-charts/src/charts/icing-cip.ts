@@ -32,7 +32,7 @@
 import { CHART_TYPES, LAYER_BANDS } from '@ab/constants';
 import { geoPath } from 'd3-geo';
 import { z } from 'zod';
-import { loadConusBasemapFromString } from '../basemap';
+import { loadConusBasemapFromString, readBasemapTopoJson, renderNorthAmericaContextLayer } from '../basemap';
 import { buildChrome } from '../chrome';
 import { renderGraticule } from '../graticule';
 import { composeChart, type LayerBandMap } from '../layers';
@@ -157,21 +157,6 @@ interface ScalarGrid {
 function decodeSourceText(value: Uint8Array | string): string {
 	if (typeof value === 'string') return value;
 	return new TextDecoder('utf-8').decode(value);
-}
-
-type GetBuiltinModule = (spec: string) => unknown;
-type NodeFs = { promises: { readFile: (path: string, encoding: 'utf8') => Promise<string> } };
-
-async function readBasemapFile(path: string): Promise<string> {
-	const proc = (typeof process !== 'undefined' ? process : undefined) as
-		| (NodeJS.Process & { getBuiltinModule?: GetBuiltinModule })
-		| undefined;
-	const getBuiltin = proc?.getBuiltinModule;
-	if (typeof getBuiltin !== 'function') {
-		throw new Error('icing-cip: cannot read basemap file -- no process.getBuiltinModule available');
-	}
-	const fs = getBuiltin('node:fs') as NodeFs;
-	return fs.promises.readFile(path, 'utf8');
 }
 
 /**
@@ -308,9 +293,19 @@ export async function renderCipFipShared(
 	if (basemapBytes !== undefined) {
 		basemapJson = decodeSourceText(basemapBytes);
 	} else {
-		basemapJson = await readBasemapFile(input.basemapPath);
+		basemapJson = await readBasemapTopoJson('icing-cip', input.basemapPath);
 	}
-	const basemap = loadConusBasemapFromString(basemapJson);
+	// Canada + Mexico context outlines (ADR 027 Option A). Optional --
+	// tests may omit; CLI passes contextBasemapPath. When neither is
+	// supplied, the layer renders empty and the chart still composes.
+	const contextBytes = input.sources['basemap-context'];
+	let contextJson: string | null = null;
+	if (contextBytes !== undefined) {
+		contextJson = decodeSourceText(contextBytes);
+	} else if (input.contextBasemapPath !== undefined) {
+		contextJson = await readBasemapTopoJson('icing-cip', input.contextBasemapPath);
+	}
+	const basemap = loadConusBasemapFromString(basemapJson, null, contextJson);
 
 	// 4. Projection.
 	const projection = lambertProjection({
@@ -324,6 +319,7 @@ export async function renderCipFipShared(
 	const bands: LayerBandMap = {};
 	bands[LAYER_BANDS.BACKGROUND] = `<rect x="0" y="0" width="${SVG_WIDTH}" height="${SVG_HEIGHT}" fill="#fafaf7" />`;
 	bands[LAYER_BANDS.GRATICULE] = renderGraticule(projection);
+	bands[LAYER_BANDS.NORTH_AMERICA_CONTEXT] = renderNorthAmericaContextLayer(basemap, (f) => path(f));
 	bands[LAYER_BANDS.BASEMAP_FILL] = basemap.states.features
 		.map((f) => `<path d="${path(f) ?? ''}" fill="#f3f1ea" stroke="none" />`)
 		.join('\n');
@@ -395,6 +391,7 @@ export async function renderCipFipShared(
 				[LAYER_BANDS.RASTER_OVERLAY]: filled.bandCount,
 				[LAYER_BANDS.VECTOR_SYMBOLOGY]: contourCount,
 				[LAYER_BANDS.BASEMAP_FILL]: basemap.states.features.length,
+				[LAYER_BANDS.NORTH_AMERICA_CONTEXT]: basemap.northAmericaContext.features.length,
 			},
 			drawn_pixels: 0,
 			parser_warnings: parserWarnings,

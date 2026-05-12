@@ -1,9 +1,9 @@
 {
   "slug": "reference-fixtures/wx-satellite-wv-2024-12-23-12z",
   "type": "satellite-water-vapor",
-  "library_version": "@ab/wx-charts@0.1.0",
-  "built_at": "2026-05-10T17:54:45.805Z",
-  "content_hash": "sha256:6f023b970afc7827a9b26d991e6e4093ea06eb70819be6ddde70e84503fcf8f5",
+  "library_version": "@ab/wx-charts@0.2.0",
+  "built_at": "2026-05-12T13:41:35.098Z",
+  "content_hash": "sha256:f58a304efec3e202882f9dbcd092e26220f0c25d23f384611aed5ffa46d7324b",
   "source_hashes": {
     "wv_png": "7934e84eac9baf23f9c6490f40979acffce308679d6e195bb4f9ded7a22248c6",
     "wv_world": "f8b3b6876b0d2d3c7d26b1d3018f6cca57ea6a27d7045488627e9b476e6eb8e7"
@@ -13,5 +13,5 @@
   },
   "drawn_pixels": 676251,
   "parser_warnings": [],
-  "svg_bytes": 914983
+  "svg_bytes": 915027
 }

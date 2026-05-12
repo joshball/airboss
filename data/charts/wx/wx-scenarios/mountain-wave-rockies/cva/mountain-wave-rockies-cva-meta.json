@@ -1,18 +1,19 @@
 {
   "slug": "wx-scenarios/mountain-wave-rockies/cva",
   "type": "cva",
-  "library_version": "@ab/wx-charts@0.1.0",
-  "built_at": "2026-05-11T14:00:38.068Z",
-  "content_hash": "sha256:da91488096866185020655bdfdfbb1bf30a563f3324dafbcffcf0d0dd0f36e82",
+  "library_version": "@ab/wx-charts@0.2.0",
+  "built_at": "2026-05-12T13:50:51.555Z",
+  "content_hash": "sha256:2b3679733ff083e274a7e468bad5bbca5c0fb412ded28e6daf098d9299a3e090",
   "source_hashes": {
     "observations": "150cab7d684cb115165b92ff6db7a23310ad0a55aa51ae7ad05de04c9239d958"
   },
   "layer_counts": {
     "vector-symbology": 1,
     "point-symbology": 5,
-    "basemap-fill": 49
+    "basemap-fill": 49,
+    "north-america-context": 2
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 286572
+  "svg_bytes": 498576
 }

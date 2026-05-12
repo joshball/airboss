@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/marine-stratus-pacific-nw/taf-kmry",
   "type": "taf-timeline",
-  "library_version": "@ab/wx-charts@0.1.0",
-  "built_at": "2026-05-11T14:04:28.364Z",
-  "content_hash": "sha256:ecf5679ac528b5b427754525cce52e9a38c64fc59a36d4ea8b876662c17bcc09",
+  "library_version": "@ab/wx-charts@0.2.0",
+  "built_at": "2026-05-12T13:50:49.903Z",
+  "content_hash": "sha256:e75e2bc473d432dbf1f0d6d8de5893f97c9207592c4c0f4efa9c8fdfe3e8e0f8",
   "source_hashes": {
     "taf": "185f01603783c6804b9c27963e5d4bee64d3ba66914347f79b58b21c459ffda2"
   },
@@ -13,5 +13,5 @@
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 6110
+  "svg_bytes": 6154
 }

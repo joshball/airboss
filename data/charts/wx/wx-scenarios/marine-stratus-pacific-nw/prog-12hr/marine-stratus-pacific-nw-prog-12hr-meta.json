@@ -1,9 +1,9 @@
 {
   "slug": "wx-scenarios/marine-stratus-pacific-nw/prog-12hr",
   "type": "prog-chart",
-  "library_version": "@ab/wx-charts@0.1.0",
-  "built_at": "2026-05-11T14:04:28.204Z",
-  "content_hash": "sha256:727ff384a95cdf9c56a01df392fdfbc9bcc3a5631e10b7c707d02369fbe9872b",
+  "library_version": "@ab/wx-charts@0.2.0",
+  "built_at": "2026-05-12T13:50:49.406Z",
+  "content_hash": "sha256:f2ea5ff4a61a7308635ed80f4c42d87795f8f9a93e9a6ff93cad78b10860d6bf",
   "source_hashes": {
     "forecast": "88d507256d8ade2aeb5cd083e6df443902119841bbbf6faa02372f07c3586e58"
   },
@@ -11,9 +11,10 @@
     "raster-overlay": 2,
     "vector-symbology": 3,
     "point-symbology": 2,
-    "basemap-fill": 49
+    "basemap-fill": 49,
+    "north-america-context": 2
   },
   "drawn_pixels": 0,
   "parser_warnings": [],
-  "svg_bytes": 290797
+  "svg_bytes": 502801
 }
