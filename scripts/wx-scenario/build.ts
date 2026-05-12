@@ -3,7 +3,8 @@
  *
  * Generates the scenario bundle, writes it to
  * `data/wx-scenarios/<slug>/`, mirrors the chart specs into
- * `data/charts/wx/wx-scenario-<slug>-<chart>/spec.yaml`, and mirrors the
+ * `data/charts/wx/wx-scenarios/<slug>/<chart>/<slug>-<chart>-spec.yaml`
+ * (ADR 027 PR 3 nested layout), and mirrors the
  * source bytes into the wx cache subtree (per ADR 018).
  *
  * Idempotency:

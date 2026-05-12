@@ -4,7 +4,7 @@
  * Owns:
  *   - `chartsDir()`  -- repo path to the per-chart output root.
  *   - `cacheDir()`   -- resolves the wx subtree inside the dev cache root.
- *   - `loadSpec()`   -- read + parse a chart's spec.yaml.
+ *   - `loadSpec()`   -- read + parse a chart's spec.yaml (per-family filename).
  *   - `resolveSourceBytes()` -- map `cache://...` URIs and repo-relative
  *     paths to byte buffers.
  *   - `computeContentHash()` -- canonical hash of (spec.yaml + source bytes
@@ -16,7 +16,15 @@ import { createHash } from 'node:crypto';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chartsRootDir, resolveCacheRoot } from '@ab/constants';
+import {
+	chartArtifactFilename,
+	chartsRootDir,
+	chartSlugToDir,
+	chartSpecFilename,
+	resolveCacheRoot,
+	WX_CHART_ARTIFACTS,
+	WX_CHART_FAMILIES,
+} from '@ab/constants';
 import { parse as parseYaml, stringify } from 'yaml';
 
 // Resolve the repo root relative to this file. `import.meta.url` is
@@ -65,8 +73,8 @@ export interface LoadedSpec {
 }
 
 export function loadSpec(slug: string): LoadedSpec {
-	const chartDir = resolve(chartsDir(), slug);
-	const specPath = resolve(chartDir, 'spec.yaml');
+	const chartDir = chartSlugToDir(REPO_ROOT, slug);
+	const specPath = resolve(chartDir, chartSpecFilename(slug));
 	if (!existsSync(specPath)) {
 		throw new Error(`spec not found: ${specPath}`);
 	}
@@ -81,8 +89,8 @@ export function loadSpec(slug: string): LoadedSpec {
 		specYaml,
 		specObject,
 		chartDir,
-		chartSvgPath: resolve(chartDir, 'chart.svg'),
-		metaJsonPath: resolve(chartDir, 'meta.json'),
+		chartSvgPath: resolve(chartDir, chartArtifactFilename(slug, WX_CHART_ARTIFACTS.CHART)),
+		metaJsonPath: resolve(chartDir, chartArtifactFilename(slug, WX_CHART_ARTIFACTS.META)),
 	};
 }
 
@@ -173,14 +181,52 @@ export function getLibraryVersion(): string {
 	return cachedLibraryVersion;
 }
 
+/**
+ * Enumerate every chart slug present under `data/charts/wx/`, walking the
+ * two production families introduced in ADR 027 PR 3:
+ *
+ *   reference-fixtures/<lib-slug>/spec.yaml
+ *   wx-scenarios/<scenario-id>/<chart-kind>/<scenario-id>-<chart-kind>-spec.yaml
+ *
+ * The `mockups/` family is explicitly skipped: mockups are internal design
+ * exploration owned by the agent that generated them; they are not
+ * consumed by the chart-build pipeline.
+ */
 export function listChartSlugs(): string[] {
-	const dir = chartsDir();
-	if (!existsSync(dir)) return [];
-	const entries = readdirSync(dir);
-	return entries
-		.filter((name) => {
-			const sub = resolve(dir, name);
-			return statSync(sub).isDirectory() && existsSync(resolve(sub, 'spec.yaml'));
-		})
-		.sort();
+	const root = chartsDir();
+	if (!existsSync(root)) return [];
+
+	const slugs: string[] = [];
+
+	// reference-fixtures/<lib-slug>/spec.yaml (flat artifact filename)
+	const refRoot = resolve(root, WX_CHART_FAMILIES.REFERENCE_FIXTURES);
+	if (existsSync(refRoot)) {
+		for (const name of readdirSync(refRoot)) {
+			const dir = resolve(refRoot, name);
+			if (!statSync(dir).isDirectory()) continue;
+			const slug = `${WX_CHART_FAMILIES.REFERENCE_FIXTURES}/${name}`;
+			if (existsSync(resolve(dir, chartSpecFilename(slug)))) {
+				slugs.push(slug);
+			}
+		}
+	}
+
+	// wx-scenarios/<scenario-id>/<chart-kind>/<disambiguated-spec>.yaml
+	const scenariosRoot = resolve(root, WX_CHART_FAMILIES.WX_SCENARIOS);
+	if (existsSync(scenariosRoot)) {
+		for (const scenarioId of readdirSync(scenariosRoot)) {
+			const scenarioPath = resolve(scenariosRoot, scenarioId);
+			if (!statSync(scenarioPath).isDirectory()) continue;
+			for (const chartKind of readdirSync(scenarioPath)) {
+				const chartPath = resolve(scenarioPath, chartKind);
+				if (!statSync(chartPath).isDirectory()) continue;
+				const slug = `${WX_CHART_FAMILIES.WX_SCENARIOS}/${scenarioId}/${chartKind}`;
+				if (existsSync(resolve(chartPath, chartSpecFilename(slug)))) {
+					slugs.push(slug);
+				}
+			}
+		}
+	}
+
+	return slugs.sort();
 }
