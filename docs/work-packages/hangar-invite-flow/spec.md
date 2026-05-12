@@ -94,16 +94,9 @@ This is the natural follow-on to [hangar-users-editing](../hangar-users-editing/
 10. **Help pages.** `/users/invitations` gets a help entry covering the create / revoke / resend flow + the expiry semantics. `/invite/[token]` gets a thin help-page stub (the recipient may have questions about who invited them and what they're consenting to).
 11. **Docs updates.** Hangar PRD: new row for `/users/invitations` + `/users/invitations/[id]` under "Shipped" once this lands. Platform ROADMAP: invite-flow row removed from "Near-term."
 
-## Out of scope (explicit)
+## Out of scope
 
-- **Anonymous self-signup.** No public sign-up form, no link to one. Invites are admin-controlled by design.
-- **Bulk invite.** No CSV upload, no "invite N emails" surface. Single-target only for v1; bulk lands when it earns its place (specifically: when a CFI cohort needs to be onboarded).
-- **Self-service password reset on accept.** The accept route asks for the password directly. Password reset is a separate flow.
-- **Re-invite an already-accepted user.** Once `accepted_at` is set, a second invite for the same email creates a fresh row (different id, different token); the BC's unique partial index allows it because the partial WHERE clause excludes accepted/revoked rows.
-- **Invite quotas / rate limits.** A single admin manually creating one invite at a time is the operating mode. If self-service onboarding ever happens (which it won't on Joshua's "private hosted" posture), revisit.
-- **Role escalation via invite.** Invites can target any role except `admin`. To grant admin, the existing role picker on `/users/[id]` is the right path. Spec decision (e) below.
-- **Invite organizations / teams.** No multi-tenant story today. Keep flat.
-- **Better-auth organization plugin.** It carries multi-tenancy machinery we don't want. Hand-roll the table.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Ratifications (2026-05-02)
 
@@ -130,70 +123,70 @@ The user resolves each before tasks.md finalizes. **Resolved 2026-05-02; see Rat
 
 **Recommended:** 7 days. Long enough that a busy CFI gets to it on the weekend; short enough that a stale invite found in someone's inbox months later doesn't open the door.
 
-| Option   | For                                                              | Against                                                  |
-| -------- | ---------------------------------------------------------------- | -------------------------------------------------------- |
-| 7 days   | Realistic for casual recipients                                  | One round of follow-up may be needed                     |
-| 24 hours | Tight; encourages immediate action                               | Misses anyone offline for a day                          |
-| 30 days  | "Send and forget"                                                | Stale tokens lying around in inboxes are a security risk |
-| No expiry | Simplest                                                         | Same as above; never lapses without explicit revoke     |
+| Option    | For                                | Against                                                  |
+| --------- | ---------------------------------- | -------------------------------------------------------- |
+| 7 days    | Realistic for casual recipients    | One round of follow-up may be needed                     |
+| 24 hours  | Tight; encourages immediate action | Misses anyone offline for a day                          |
+| 30 days   | "Send and forget"                  | Stale tokens lying around in inboxes are a security risk |
+| No expiry | Simplest                           | Same as above; never lapses without explicit revoke      |
 
 ### (b) Token shape
 
 **Recommended:** 32 bytes from `crypto.getRandomValues`, encoded base64url (43-char URL-safe string). Standard size; lookup is a unique-index hit.
 
-| Option                        | For                          | Against                                                   |
-| ----------------------------- | ---------------------------- | --------------------------------------------------------- |
-| 32B random + base64url        | Standard, plenty of entropy  | None                                                      |
-| Signed JWT carrying `{id}`    | Stateless verification       | Token revocation requires a denylist; defeats simplicity  |
-| HMAC of `id` with server secret | Compact                    | Doesn't gain anything over the random token + DB lookup   |
+| Option                          | For                         | Against                                                  |
+| ------------------------------- | --------------------------- | -------------------------------------------------------- |
+| 32B random + base64url          | Standard, plenty of entropy | None                                                     |
+| Signed JWT carrying `{id}`      | Stateless verification      | Token revocation requires a denylist; defeats simplicity |
+| HMAC of `id` with server secret | Compact                     | Doesn't gain anything over the random token + DB lookup  |
 
 ### (c) Send-failure semantics
 
 **Recommended:** insert the row in the same transaction as the email send; if the email send returns false (or throws), roll the row back. The admin sees a clear failure and retries. No half-state.
 
-| Option                                                       | For                                              | Against                                                                        |
-| ------------------------------------------------------------ | ------------------------------------------------ | ------------------------------------------------------------------------------ |
-| Roll back on email failure (recommended)                     | No half-state; admin retries cleanly             | Email send happens inside a DB transaction; longer-than-usual transaction      |
-| Insert row first, send second; mark "send failed" on error   | Decouples DB from email transport                | Surface needs a "retry send" affordance for the failed-send case               |
-| Insert + send asynchronously (job queue)                     | Fast UI feedback                                 | Adds a job kind + a worker dependency; overkill for v1                         |
+| Option                                                     | For                                  | Against                                                                   |
+| ---------------------------------------------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| Roll back on email failure (recommended)                   | No half-state; admin retries cleanly | Email send happens inside a DB transaction; longer-than-usual transaction |
+| Insert row first, send second; mark "send failed" on error | Decouples DB from email transport    | Surface needs a "retry send" affordance for the failed-send case          |
+| Insert + send asynchronously (job queue)                   | Fast UI feedback                     | Adds a job kind + a worker dependency; overkill for v1                    |
 
 ### (d) Resend regenerates the token
 
 **Recommended:** yes. Resending invalidates the previous token and ships a fresh one. Prevents an old email and a new email from both being valid at once.
 
-| Option                              | For                                                  | Against                                                                |
-| ----------------------------------- | ---------------------------------------------------- | ---------------------------------------------------------------------- |
-| Regenerate (recommended)            | Old email's token becomes useless                    | Mild surprise if recipient already clicked the old one but not finished |
-| Keep same token                     | Recipient can use either email                       | Two valid links per invite; the older one might be in the wrong inbox  |
-| Resend without regenerating, but bump expiry | Compromise                                  | Same risk as "keep same token"                                         |
+| Option                                       | For                               | Against                                                                 |
+| -------------------------------------------- | --------------------------------- | ----------------------------------------------------------------------- |
+| Regenerate (recommended)                     | Old email's token becomes useless | Mild surprise if recipient already clicked the old one but not finished |
+| Keep same token                              | Recipient can use either email    | Two valid links per invite; the older one might be in the wrong inbox   |
+| Resend without regenerating, but bump expiry | Compromise                        | Same risk as "keep same token"                                          |
 
 ### (e) Can an invite target `admin`?
 
 **Recommended:** no. Invites can target `learner`, `author`, `operator`. To grant admin, the existing role picker on `/users/[id]` is the path -- it has the last-admin guard and the existing audit shape. This sidesteps the question of "an invite lands an admin who never had to clear the explicit promotion bar."
 
-| Option                                  | For                                                                | Against                                                                                          |
-| --------------------------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
-| Block invite -> admin (recommended)     | Forces admin grants through the existing review path               | Admin creating an admin requires a two-step (invite as operator, then promote)                   |
-| Allow with same audit shape             | Single flow                                                        | Skips the explicit promotion step; admin grants don't get the same scrutiny                      |
-| Allow with extra confirmation gate      | Catches misclicks                                                  | Slightly more code; the two-step alternative already gives that scrutiny without extra UI surface |
+| Option                              | For                                                  | Against                                                                                           |
+| ----------------------------------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| Block invite -> admin (recommended) | Forces admin grants through the existing review path | Admin creating an admin requires a two-step (invite as operator, then promote)                    |
+| Allow with same audit shape         | Single flow                                          | Skips the explicit promotion step; admin grants don't get the same scrutiny                       |
+| Allow with extra confirmation gate  | Catches misclicks                                    | Slightly more code; the two-step alternative already gives that scrutiny without extra UI surface |
 
 ### (f) Allow inviting an existing user's email
 
 **Recommended:** no. If the email already exists in `bauth_user`, the create path returns "User already exists -- use the role picker on `/users/[id]/<id>` to change their role" and links straight to the existing user.
 
-| Option                                | For                                                  | Against                                                          |
-| ------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------------------- |
-| Block + redirect (recommended)        | Avoids two paths for the same outcome (role change)  | Slight friction if the admin doesn't realize the email exists    |
-| Allow; treat as role-change-by-invite | Uniform UX                                           | Two flows reach the same end-state; confusing                    |
+| Option                                | For                                                 | Against                                                       |
+| ------------------------------------- | --------------------------------------------------- | ------------------------------------------------------------- |
+| Block + redirect (recommended)        | Avoids two paths for the same outcome (role change) | Slight friction if the admin doesn't realize the email exists |
+| Allow; treat as role-change-by-invite | Uniform UX                                          | Two flows reach the same end-state; confusing                 |
 
 ### (g) Email pre-fill on accept page is read-only
 
 **Recommended:** yes. The token binds the invite to a specific email; allowing the recipient to change it would let an attacker who intercepts the token paste their own email and become a different role. Email is read-only on the accept form.
 
-| Option                              | For                                              | Against                       |
-| ----------------------------------- | ------------------------------------------------ | ----------------------------- |
-| Read-only (recommended)             | Token + email bound; intercept attack mitigated  | None                          |
-| Editable                            | Recipient who changed email since the invite can use a different one | Opens the intercept attack    |
+| Option                  | For                                                                  | Against                    |
+| ----------------------- | -------------------------------------------------------------------- | -------------------------- |
+| Read-only (recommended) | Token + email bound; intercept attack mitigated                      | None                       |
+| Editable                | Recipient who changed email since the invite can use a different one | Opens the intercept attack |
 
 ### (h) Audit row when an invite is created
 
@@ -201,31 +194,31 @@ The user resolves each before tasks.md finalizes. **Resolved 2026-05-02; see Rat
 
 This is consistent with `hangar.user` audit rows, which use the user id as `targetId`. Invitations are their own row type.
 
-| Option                                                | For                                          | Against                                                                  |
-| ----------------------------------------------------- | -------------------------------------------- | ------------------------------------------------------------------------ |
-| `targetId = invitation.id` (recommended)              | Each invitation row is a discrete audit target | "All audit rows for this user" needs both `hangar.user` and `hangar.invitation` queries |
-| `targetId = recipient.email` (string, not id)         | Easy to filter by recipient                  | Mixes types -- other targets are ids, not strings                        |
-| `targetId = accepted_user_id` (null until accepted)   | Joins straight to the user row               | Null targetId on every pending invite breaks "view all on this target"  |
+| Option                                              | For                                            | Against                                                                                 |
+| --------------------------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `targetId = invitation.id` (recommended)            | Each invitation row is a discrete audit target | "All audit rows for this user" needs both `hangar.user` and `hangar.invitation` queries |
+| `targetId = recipient.email` (string, not id)       | Easy to filter by recipient                    | Mixes types -- other targets are ids, not strings                                       |
+| `targetId = accepted_user_id` (null until accepted) | Joins straight to the user row                 | Null targetId on every pending invite breaks "view all on this target"                  |
 
 ### (i) Public accept route's role in the study app
 
 **Recommended:** the accept route lives in study (`apps/study/src/routes/invite/[token]/+page.{server.ts,svelte}`). Reasoning: study is the learner-facing app and where the new user actually lands. The hooks layer needs an explicit allow-list entry for `/invite/[token]` since the study layout is auth-gated.
 
-| Option                                       | For                                                                  | Against                                                                       |
-| -------------------------------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| Accept on study (recommended)                | Lands directly in the surface they'll use                            | Study hooks need a narrow public-route exemption                              |
-| Accept on hangar                             | Hangar already has admin auth                                        | New users land in the operator app, then have to navigate to study           |
-| Accept on a future runway app                | Public face                                                          | Runway is deferred; this WP would block on it                                 |
+| Option                        | For                                       | Against                                                            |
+| ----------------------------- | ----------------------------------------- | ------------------------------------------------------------------ |
+| Accept on study (recommended) | Lands directly in the surface they'll use | Study hooks need a narrow public-route exemption                   |
+| Accept on hangar              | Hangar already has admin auth             | New users land in the operator app, then have to navigate to study |
+| Accept on a future runway app | Public face                               | Runway is deferred; this WP would block on it                      |
 
 ### (j) Cleanup of expired invites
 
 **Recommended:** none in v1. Expired invites stay in the table; the list filters them by default. A future cleanup WP can add a cron job that hard-deletes invites past `expires_at + 90 days` if the table grows.
 
-| Option                              | For                                                            | Against                                  |
-| ----------------------------------- | -------------------------------------------------------------- | ---------------------------------------- |
-| Leave them (recommended)            | Audit history preserved                                        | Table grows                              |
-| Hard-delete on expiry               | Table stays small                                              | Loses audit-row provenance for the invite row |
-| Soft-delete on expiry               | Same as recommended; still worth a flag for dashboard tallies | Adds a column for nothing visible        |
+| Option                   | For                                                           | Against                                       |
+| ------------------------ | ------------------------------------------------------------- | --------------------------------------------- |
+| Leave them (recommended) | Audit history preserved                                       | Table grows                                   |
+| Hard-delete on expiry    | Table stays small                                             | Loses audit-row provenance for the invite row |
+| Soft-delete on expiry    | Same as recommended; still worth a flag for dashboard tallies | Adds a column for nothing visible             |
 
 ## Acceptance
 
@@ -243,15 +236,7 @@ This is consistent with `hangar.user` audit rows, which use the user id as `targ
 
 ## Deferred (with explicit triggers)
 
-| Item                                                 | Trigger to revisit                                            |
-| ---------------------------------------------------- | ------------------------------------------------------------- |
-| Bulk invite (CSV upload, paste-list)                 | First cohort-onboarding ask (likely a CFI tester group)       |
-| Invite quotas / rate limits                          | First abuse signal -- not credible on a private-hosted single-admin platform |
-| Cron cleanup of long-expired invites                 | The `hangar.invitation` table exceeds ~10k rows               |
-| Re-invite an already-accepted user                   | A real workflow needs it; right now role picker handles this |
-| Public sign-up (without invite)                      | Joshua opens the "going public" question                      |
-| Browser-level e2e for the full flow                  | `hangar-e2e-infrastructure` lands                              |
-| Per-app invitation roles (someone is `author` in study + `operator` in hangar) | Per-app role policy lands as its own cross-cutting WP |
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## References
 
