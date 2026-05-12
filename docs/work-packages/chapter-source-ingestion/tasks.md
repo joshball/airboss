@@ -177,9 +177,6 @@ Extend handbook configs at `scripts/sources/config/handbooks/<slug>.yaml` (post-
 - [ ] Squash-merge.
 - [ ] Run `bun run sources inventory` once more on main; verify it matches the committed file.
 
-## Punted / known follow-ups
+## Out of scope
 
-- **Class C handbooks (AVWX, IFH, AMT, seaplane) -- chapter splitting.** Whole-doc only per publisher; client-side splitting deferred to a future WP if extraction quality demands it.
-- **Long-tail Class A handbooks (helicopter, glider, balloon, instructors).** v1 may ship with PHAK + AFH + IPH only; long-tail handbooks ingested in subsequent operator runs as needed. Tests must still cover the long-tail YAML configs even if cache isn't pre-populated.
-- **Edition rollover automation.** When the FAA cuts a new edition, an operator manually updates the YAML. Optional `bun run sources upcoming-edition <slug>` helper is not in scope.
-- **Chapter PDFs for AC/ACS.** ACs and ACSs are short publications without chapter splits. Whole-doc is the only mode; not a follow-up.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
