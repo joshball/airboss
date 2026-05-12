@@ -10,11 +10,11 @@
 // (`@ab/audit`) keeps only the schema constants, types, and Drizzle table
 // objects -- everything else lives here.
 
+export { createAuditAuthEventEmitter } from './auth-events';
 export {
 	AUTH_LOGIN_FAILED_OUTCOMES,
 	type AuthEventContext,
 	type AuthEventEmitter,
 	type AuthLoginFailedOutcome,
 } from './auth-events-types';
-export { createAuditAuthEventEmitter } from './auth-events';
 export { auditRecent, auditWrite, countAuditEntriesSince, InvalidAuditTargetError } from './log';
