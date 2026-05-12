@@ -43,11 +43,7 @@ Current state, observed 2026-05-04:
 
 ## Out of scope
 
-- Replacing IDEAS.md (correct shape for unevaluated ideas).
-- Replacing session todos in `docs/work/todos/` (correct shape for ephemeral session work).
-- Migrating to GitHub Issues, Linear, or any external tracker.
-- A database-backed task system. Frontmatter + git remain canonical.
-- Renaming `hangar-review-queue` (stays in flight; this WP feeds it richer data).
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Solution shape
 
@@ -260,14 +256,14 @@ Historical "just shipped" content gets backfilled into `docs/log/` entries (one 
 
 Merge or archive overlapping directories:
 
-| Current                  | Target                              | Reason                                                 |
-| ------------------------ | ----------------------------------- | ------------------------------------------------------ |
-| `docs/loose-ends/`       | `.archive/loose-ends/`              | Snapshot of one moment in time; superseded by BOARD.md |
-| `docs/walkthroughs/`     | `docs/work/walkthroughs/`           | Already a subdir there; consolidate                    |
-| `docs/features/`         | `docs/work-packages/`               | Same shape, different name; merge                      |
-| `docs/work/build-reports`| `.archive/build-reports/` (rolling) | Auto-archive > 60 days                                 |
-| `docs/work/handoffs/`    | `.archive/handoffs/` (rolling)      | Auto-archive > 60 days                                 |
-| `docs/work/reviews/`     | `.archive/reviews/` (rolling)       | Auto-archive > 60 days                                 |
+| Current                   | Target                              | Reason                                                 |
+| ------------------------- | ----------------------------------- | ------------------------------------------------------ |
+| `docs/loose-ends/`        | `.archive/loose-ends/`              | Snapshot of one moment in time; superseded by BOARD.md |
+| `docs/walkthroughs/`      | `docs/work/walkthroughs/`           | Already a subdir there; consolidate                    |
+| `docs/features/`          | `docs/work-packages/`               | Same shape, different name; merge                      |
+| `docs/work/build-reports` | `.archive/build-reports/` (rolling) | Auto-archive > 60 days                                 |
+| `docs/work/handoffs/`     | `.archive/handoffs/` (rolling)      | Auto-archive > 60 days                                 |
+| `docs/work/reviews/`      | `.archive/reviews/` (rolling)       | Auto-archive > 60 days                                 |
 
 `scripts/tracking/archive.ts` runs the rolling archive. Scheduled job, or manual.
 
@@ -290,16 +286,16 @@ This is `hangar-review-queue` shaped, but for WPs, bugs, and PRs instead of just
 
 ## Phases
 
-| Phase | Scope                                                                                         | Gate                                                       |
-| ----- | --------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
-| 1     | ADR 025 frontmatter contract + lint rule + WP loader (`libs/utils/src/wp-loader.ts`)          | User ratifies ADR                                          |
-| 2     | Backfill frontmatter on 99 existing WPs (agent batch, in waves). Reset `human_review_status: pending` on every WP without exception. Categorize each WP. | All WPs pass lint; user ratifies each wave |
-| 3     | `bun run wp` CLI dispatcher (`list`, `show`, `next`, `blocked`, `set`)                        | CLI installed; doc page in `docs/agents/best-practices.md` |
-| 4     | Generator script + first generated views (per-product ROADMAP, BOARD, SHIPPED)                | Generated files match prior hand-authored intent           |
-| 5     | Trim NOW.md + backfill `docs/log/` from `gh pr list`                                          | NOW.md < 60 lines; log has entries for last 90 days of PRs |
-| 6     | Bug tracker bootstrap + seed from agent handoff backlog                                       | All bugs from 20260504 aggregate filed in `docs/bugs/`     |
-| 7     | Doc home consolidation + rolling archive script                                               | No overlap dirs; archive script in scheduled jobs          |
-| 8     | Hand off to `wp-hangar-roadmap-view` (separate WP)                                            | This WP closes; hangar view becomes its own work           |
+| Phase | Scope                                                                                                                                                    | Gate                                                       |
+| ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| 1     | ADR 025 frontmatter contract + lint rule + WP loader (`libs/utils/src/wp-loader.ts`)                                                                     | User ratifies ADR                                          |
+| 2     | Backfill frontmatter on 99 existing WPs (agent batch, in waves). Reset `human_review_status: pending` on every WP without exception. Categorize each WP. | All WPs pass lint; user ratifies each wave                 |
+| 3     | `bun run wp` CLI dispatcher (`list`, `show`, `next`, `blocked`, `set`)                                                                                   | CLI installed; doc page in `docs/agents/best-practices.md` |
+| 4     | Generator script + first generated views (per-product ROADMAP, BOARD, SHIPPED)                                                                           | Generated files match prior hand-authored intent           |
+| 5     | Trim NOW.md + backfill `docs/log/` from `gh pr list`                                                                                                     | NOW.md < 60 lines; log has entries for last 90 days of PRs |
+| 6     | Bug tracker bootstrap + seed from agent handoff backlog                                                                                                  | All bugs from 20260504 aggregate filed in `docs/bugs/`     |
+| 7     | Doc home consolidation + rolling archive script                                                                                                          | No overlap dirs; archive script in scheduled jobs          |
+| 8     | Hand off to `wp-hangar-roadmap-view` (separate WP)                                                                                                       | This WP closes; hangar view becomes its own work           |
 
 Each phase is one PR. Phase 1 must land before any other; phases 2-7 can run in parallel after that. Phase 3 (CLI) is gated only on Phase 1, not Phase 2 - the CLI works against partial frontmatter and helps drive the Phase 2 backfill.
 
@@ -320,28 +316,22 @@ Each phase is one PR. Phase 1 must land before any other; phases 2-7 can run in 
 - **Generator output churn.** Generated files commit to git, so each generator run produces a diff. Mitigation: stable sort + idempotent output; generator runs as a pre-commit step or scheduled job, not on every save.
 - **Hangar live view scope creep.** Phase 7 is its own WP; explicitly out of scope here.
 
-## Out of scope (named follow-ons)
-
-- **wp-hangar-roadmap-view** - the in-app surface. Spawned by Phase 7.
-- **wp-frontmatter-migration-tool** - if the backfill in Phase 2 needs more than ad-hoc agent passes, formalize a migration tool. Trigger: Phase 2 stalls past wave 3.
-- **WP dependency graph visualizer** - read `depends_on` / `unblocks` and render a DAG. Trigger: someone asks for it after the board ships.
-
 ## Disposition of the 20260504 multi-agent aggregate
 
 The handoff at `docs/work/handoffs/20260504-multi-agent-cleanup-aggregate.md` is the seed corpus for several phases of this WP. It is not the deliverable; it is the input.
 
 Mapping:
 
-| Aggregate section                            | Lands in                                                      |
-| -------------------------------------------- | ------------------------------------------------------------- |
-| §1 WP-HANDBOOK-RE-EXTRACTION-V2 follow-ups   | 4 new WP dirs (Phase 2 backfill plus 4 new spec drafts)       |
-| §2 Other deferred WP work                    | Frontmatter `status: draft` on existing WP dirs               |
-| §3 Deferred design decisions                 | IDEAS.md (out of scope here) or new WPs as warranted          |
-| §4 Real bugs                                 | `docs/bugs/` files (Phase 5 seed)                             |
-| §5 Manual smoke tests                        | Stays in WP test-plan.md; every affected WP's `human_review_status` set to `pending` in Phase 2 |
-| §6 Header WP deferred-with-trigger           | Existing WPs' frontmatter; trigger captured in spec body      |
-| §7 IDEAS funnel                              | Already in IDEAS.md; no migration                             |
-| §8 Housekeeping                              | One-off cleanup tasks; not tracked long-term                  |
-| §9 Tooling quirks                            | `docs/agents/common-pitfalls.md` (or skill notes)             |
+| Aggregate section                          | Lands in                                                                                        |
+| ------------------------------------------ | ----------------------------------------------------------------------------------------------- |
+| §1 WP-HANDBOOK-RE-EXTRACTION-V2 follow-ups | 4 new WP dirs (Phase 2 backfill plus 4 new spec drafts)                                         |
+| §2 Other deferred WP work                  | Frontmatter `status: draft` on existing WP dirs                                                 |
+| §3 Deferred design decisions               | IDEAS.md (out of scope here) or new WPs as warranted                                            |
+| §4 Real bugs                               | `docs/bugs/` files (Phase 5 seed)                                                               |
+| §5 Manual smoke tests                      | Stays in WP test-plan.md; every affected WP's `human_review_status` set to `pending` in Phase 2 |
+| §6 Header WP deferred-with-trigger         | Existing WPs' frontmatter; trigger captured in spec body                                        |
+| §7 IDEAS funnel                            | Already in IDEAS.md; no migration                                                               |
+| §8 Housekeeping                            | One-off cleanup tasks; not tracked long-term                                                    |
+| §9 Tooling quirks                          | `docs/agents/common-pitfalls.md` (or skill notes)                                               |
 
 After this WP closes, the aggregate doc archives to `.archive/handoffs/20260504-multi-agent-cleanup-aggregate.md` with a note pointing at the WPs and bugs it seeded.
