@@ -10,15 +10,25 @@ import type { AppSurface } from '@ab/constants';
 import type { HelpPage } from './help-page';
 import type { HelpPageBody } from './help-page-body';
 import type { HelpPageIndex } from './help-page-index';
+import type { SearchResultType } from './result-types';
 
 /**
- * Result from cross-library search. Library + sourceType are always set so
- * the UI can label the result explicitly. There is no cross-bucket implicit
- * ranking -- results are grouped by `library` and ranked within each bucket.
+ * Help-registry-internal search hit shape.
+ *
+ * Returned only by `helpRegistry.search()` -- the help-only path. The
+ * cross-library palette facade in `../search.ts` translates these (and
+ * loader-produced rows) into the typed `SearchResult` exported from
+ * `./result-types.ts`, which is the shape that crosses the library
+ * boundary into the UI and command-registry surfaces.
+ *
+ * `type` is `airboss.help` for every row produced here (the registry only
+ * holds help pages). Carrying it explicitly avoids a remap in the loader.
  */
 export interface SearchResult {
 	/** Which library this result came from. */
 	library: 'aviation' | 'help';
+	/** Result-type discriminator -- one of the SearchResultType values. */
+	type: SearchResultType;
 	/**
 	 * Source-type subtag. For aviation: `cfr` / `aim` / `authored` / ...
 	 * For help: the `helpKind` (`concept` / `how-to` / ...).
@@ -81,8 +91,12 @@ export interface ParsedFilter {
 /**
  * Recognized filter facets. Unknown facets fall back to free-text rather
  * than erroring, so authors' typos do not produce empty result sets.
+ *
+ * `doc` scopes search to a specific FAA document (`doc:FAA-H-8083-28 turb`).
+ * `library:mine` (synthetic, set by the bare `mine` token) scopes results to
+ * the user's own content (cards, reps, plans).
  */
-export type FilterKey = 'tag' | 'source' | 'rules' | 'kind' | 'surface' | 'lib';
+export type FilterKey = 'tag' | 'source' | 'rules' | 'kind' | 'surface' | 'lib' | 'doc' | 'library';
 
 /** Top-level filters applied to `search(raw, filters)` from the caller. */
 export interface SearchFilters {

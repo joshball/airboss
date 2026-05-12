@@ -206,3 +206,39 @@ describe('parseQuery - edge whitespace + empty values', () => {
 		expect(filter(result, 'tag')).toEqual(['weather', 'ifr']);
 	});
 });
+
+describe('parseQuery -- doc and mine facets (Phase 2g)', () => {
+	it('doc:FAA-H-8083-28 registers as doc filter', () => {
+		const result = parseQuery('doc:FAA-H-8083-28 turb');
+		expect(filter(result, 'doc')).toEqual(['faa-h-8083-28']);
+		expect(result.freeText).toBe('turb');
+	});
+
+	it('doc:phak (lower-case alias) registers as doc filter', () => {
+		const result = parseQuery('doc:phak weather');
+		expect(filter(result, 'doc')).toEqual(['phak']);
+		expect(result.freeText).toBe('weather');
+	});
+
+	it('bare mine token becomes library:mine', () => {
+		const result = parseQuery('mine');
+		expect(filter(result, 'library')).toEqual(['mine']);
+		expect(result.freeText).toBe('');
+	});
+
+	it('Mine (case-insensitive) becomes library:mine', () => {
+		const result = parseQuery('Mine');
+		expect(filter(result, 'library')).toEqual(['mine']);
+	});
+
+	it('library:mine explicit form works too', () => {
+		const result = parseQuery('library:mine');
+		expect(filter(result, 'library')).toEqual(['mine']);
+	});
+
+	it('mine combined with free text', () => {
+		const result = parseQuery('mine 91.103');
+		expect(filter(result, 'library')).toEqual(['mine']);
+		expect(result.freeText).toBe('91.103');
+	});
+});

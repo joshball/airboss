@@ -259,6 +259,7 @@ function search(query: ParsedQuery): readonly SearchResult[] {
 		if (bucket === null) continue;
 		results.push({
 			library: 'help',
+			type: 'airboss.help',
 			sourceType: indexed.page.tags.helpKind,
 			id: indexed.page.id,
 			title: indexed.page.title,

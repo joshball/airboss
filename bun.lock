@@ -80,6 +80,7 @@
         "@ab/auth": "workspace:*",
         "@ab/aviation": "workspace:*",
         "@ab/bc-hangar": "workspace:*",
+        "@ab/bc-study": "workspace:*",
         "@ab/constants": "workspace:*",
         "@ab/db": "workspace:*",
         "@ab/hangar-jobs": "workspace:*",
@@ -105,9 +106,11 @@
     "apps/sim": {
       "name": "@ab/sim",
       "dependencies": {
+        "@ab/audit": "workspace:*",
         "@ab/auth": "workspace:*",
         "@ab/aviation": "workspace:*",
         "@ab/bc-sim": "workspace:*",
+        "@ab/bc-study": "workspace:*",
         "@ab/constants": "workspace:*",
         "@ab/db": "workspace:*",
         "@ab/help": "workspace:*",
@@ -332,9 +335,13 @@
       "name": "@ab/help",
       "dependencies": {
         "@ab/aviation": "workspace:*",
+        "@ab/bc-study": "workspace:*",
         "@ab/constants": "workspace:*",
+        "@ab/db": "workspace:*",
         "@ab/ui": "workspace:*",
         "@ab/utils": "workspace:*",
+        "@sveltejs/kit": "*",
+        "drizzle-orm": "*",
         "shiki": "^4.0.2",
       },
       "devDependencies": {

@@ -17,6 +17,14 @@
 
 export type { DocCodeFamily, DocCodeIntent } from './doc-code-detector';
 export { detectDocCodeIntent, lookupDocsByCode } from './doc-code-detector';
+export {
+	EXTERNAL_TOOLS,
+	type ExternalTool,
+	findExternalTools,
+	getExternalToolById,
+	type WebToolTier,
+} from './external-tools';
+export { AIM_REFERENCES } from './references/aim-docs';
 // Both reference modules self-register at module-load via `registerReferences`.
 // Import them here so the registry is populated before any consumer reads it.
 export { AVIATION_REFERENCES } from './references/aviation';

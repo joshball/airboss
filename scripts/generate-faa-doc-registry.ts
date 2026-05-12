@@ -19,12 +19,34 @@ import { dirname, join, resolve } from 'node:path';
 const REPO_ROOT = resolve(dirname(new URL(import.meta.url).pathname), '..');
 const OUTPUT_PATH = join(REPO_ROOT, 'libs/aviation/src/references/faa-docs.ts');
 
+/**
+ * Source-type values emitted by this generator. Mirrors a subset of
+ * REFERENCE_SOURCE_TYPES (kept as a literal union here rather than imported
+ * because the generator runs under bun outside the build graph; keeping the
+ * union literal is faster to read and matches the snapshot the emitter writes).
+ */
+type EmittedSourceType =
+	| 'cfr'
+	| 'aim'
+	| 'ac'
+	| 'acs'
+	| 'phak'
+	| 'afh'
+	| 'ifh'
+	| 'avwx'
+	| 'iph'
+	| 'rmh'
+	| 'aih'
+	| 'hfh'
+	| 'gfh'
+	| 'bfh';
+
 interface DocRow {
 	id: string;
 	displayName: string;
 	aliases: string[];
 	keywords: string[];
-	sourceType: 'cfr' | 'ac' | 'acs' | 'phak' | 'afh' | 'ifh' | 'aim';
+	sourceType: EmittedSourceType;
 	aviationTopic: readonly string[];
 	flightRules: 'vfr' | 'ifr' | 'both' | 'na';
 	knowledgeKind: 'reference' | 'regulation';
@@ -90,7 +112,36 @@ const HANDBOOK_ABBREVIATIONS: Record<string, string[]> = {
 	'FAA-H-8083-28B': ['AvWX'],
 	'FAA-H-8083-2A': ['RMH'],
 	'FAA-H-8083-9': ['AIH', 'IAH'],
+	'FAA-H-8083-21': ['HFH'],
+	'FAA-H-8083-1': ['GFH'],
+	'FAA-H-8083-11': ['BFH'],
 };
+
+/**
+ * Map a handbook edition code (`FAA-H-8083-NN[X]`) to its dedicated source-type
+ * slot. ONE SLOT PER HANDBOOK per the command-palette WP Decision #7. PHAK,
+ * AFH, IFH already had slots; AVWX/IPH/RMH/AIH/HFH/GFH/BFH are new in Phase 2.
+ * Unrecognised editions fall back to `phak` (the umbrella historical default).
+ */
+function handbookSourceType(edition: string): EmittedSourceType {
+	const m = edition.match(/^FAA-H-8083-(\d+)([A-Z])?$/);
+	if (!m) return 'phak';
+	const n = m[1] ?? '';
+	// -25 PHAK, -3 AFH, -15 IFH, -16 IPH, -28 AvWX, -2 RMH, -9 AIH, -21 HFH,
+	// -1 GFH, -11 BFH. Each is a discrete document family ("one slot per
+	// handbook" -- WP Decision #7).
+	if (n === '25') return 'phak';
+	if (n === '3') return 'afh';
+	if (n === '15') return 'ifh';
+	if (n === '16') return 'iph';
+	if (n === '28') return 'avwx';
+	if (n === '2') return 'rmh';
+	if (n === '9') return 'aih';
+	if (n === '21') return 'hfh';
+	if (n === '1') return 'gfh';
+	if (n === '11') return 'bfh';
+	return 'phak';
+}
 
 const TOPIC_BY_SUBJECT: Record<string, string[]> = {
 	weather: ['weather'],
@@ -164,7 +215,7 @@ function scanHandbooks(): DocRow[] {
 			}
 			keywords.add(stripPunct(manifest.title));
 
-			const sourceType = slug === 'phak' ? 'phak' : slug === 'afh' ? 'afh' : slug === 'ifh' ? 'ifh' : ('phak' as const); // fallback for handbooks without a dedicated source type
+			const sourceType: EmittedSourceType = handbookSourceType(code);
 
 			rows.push({
 				id: `doc-${stripPunct(code)}`,
@@ -294,6 +345,10 @@ function scanAcs2(): DocRow[] {
 
 // ---------- CFR scanner ----------
 
+interface CfrManifest {
+	parts?: ReadonlyArray<{ number: string; officialTitle?: string }>;
+}
+
 function scanCfr(title: 14 | 49): DocRow[] {
 	const titleRoot = join(REPO_ROOT, `regulations/cfr-${title}`);
 	if (!existsSync(titleRoot)) return [];
@@ -307,9 +362,23 @@ function scanCfr(title: 14 | 49): DocRow[] {
 	if (!snapshot) return [];
 
 	const snapshotDir = join(titleRoot, snapshot);
-	const parts = readdirSync(snapshotDir).filter((n) => statSync(join(snapshotDir, n)).isDirectory());
+	// Newer snapshot layout: a single manifest.json carries `parts` with
+	// `{ number, officialTitle }`. Older layout (pre-PR #817) used per-part
+	// subdirectories. Prefer the manifest when present.
+	const manifestPath = join(snapshotDir, 'manifest.json');
+	let parts: Array<{ number: string; title?: string }> = [];
+	if (existsSync(manifestPath)) {
+		const manifest = JSON.parse(readFileSync(manifestPath, 'utf-8')) as CfrManifest;
+		for (const p of manifest.parts ?? []) {
+			parts.push({ number: p.number, title: p.officialTitle });
+		}
+	} else {
+		parts = readdirSync(snapshotDir)
+			.filter((n) => statSync(join(snapshotDir, n)).isDirectory())
+			.map((number) => ({ number }));
+	}
 
-	return parts.map((part) => {
+	return parts.map(({ number: part, title: officialTitle }) => {
 		const aliases = new Set<string>([
 			`${title} CFR ${part}`,
 			`${title} CFR Part ${part}`,
@@ -317,29 +386,89 @@ function scanCfr(title: 14 | 49): DocRow[] {
 			`${title} CFR §${part}`,
 			part,
 		]);
+		if (officialTitle) aliases.add(officialTitle);
 		const keywords = new Set<string>();
 		for (const a of aliases) keywords.add(stripPunct(a));
 		keywords.add(stripPunct(`${title}cfr${part}`));
 		keywords.add(stripPunct(`cfr${title}${part}`));
 
+		const display = officialTitle ? `${title} CFR Part ${part} -- ${officialTitle}` : `${title} CFR Part ${part}`;
+
 		return {
 			id: `doc-cfr-${title}-${part}`,
-			displayName: `${title} CFR Part ${part}`,
+			displayName: display,
 			aliases: [...aliases].filter(Boolean).sort(),
 			keywords: [...keywords].filter(Boolean).sort(),
 			sourceType: 'cfr',
 			aviationTopic: ['regulations'],
 			flightRules: 'both',
 			knowledgeKind: 'regulation',
-			paraphrase: `Title ${title} of the Code of Federal Regulations, Part ${part}.`,
+			paraphrase: `Title ${title} of the Code of Federal Regulations, Part ${part}${officialTitle ? ` -- ${officialTitle}` : ''}.`,
 		};
 	});
 }
 
+// ---------- AIM scanner ----------
+
+interface AimManifestEntry {
+	kind: 'chapter' | 'section' | 'paragraph';
+	code: string;
+	title?: string;
+	body_path?: string;
+}
+
+interface AimManifest {
+	edition?: string;
+	title?: string;
+	entries?: readonly AimManifestEntry[];
+}
+
+/**
+ * Scan `aim/<edition>/manifest.json` and emit one `Reference` per AIM chapter
+ * and section. Paragraphs (697 of them) are skipped at the registry layer --
+ * they are too granular for top-level palette results and surface instead
+ * via the `loaders/aim-sections.ts` runtime FTS loader.
+ */
+function scanAim(): DocRow[] {
+	const aimRoot = join(REPO_ROOT, 'aim');
+	if (!existsSync(aimRoot)) return [];
+	const editions = readdirSync(aimRoot)
+		.filter((n) => /^\d{4}-\d{2}$/.test(n))
+		.sort()
+		.reverse();
+	const edition = editions[0];
+	if (!edition) return [];
+	const manifestPath = join(aimRoot, edition, 'manifest.json');
+	if (!existsSync(manifestPath)) return [];
+
+	const manifest = JSON.parse(readFileSync(manifestPath, 'utf-8')) as AimManifest;
+	const out: DocRow[] = [];
+	for (const entry of manifest.entries ?? []) {
+		if (entry.kind !== 'chapter' && entry.kind !== 'section') continue;
+		const title = entry.title ?? `AIM ${entry.code}`;
+		const aliases = new Set<string>([`AIM ${entry.code}`, `AIM-${entry.code}`, entry.code, title]);
+		const keywords = new Set<string>();
+		for (const a of aliases) keywords.add(stripPunct(a));
+		keywords.add(stripPunct(`aim${entry.code}`));
+
+		out.push({
+			id: `doc-aim-${entry.code}`,
+			displayName: `AIM ${entry.code} -- ${title}`,
+			aliases: [...aliases].filter(Boolean).sort(),
+			keywords: [...keywords].filter(Boolean).sort(),
+			sourceType: 'aim',
+			aviationTopic: ['procedures'],
+			flightRules: 'both',
+			knowledgeKind: 'reference',
+			paraphrase: `Aeronautical Information Manual (${edition}), ${entry.kind === 'chapter' ? 'Chapter' : 'Section'} ${entry.code} -- ${title}.`,
+		});
+	}
+	return out;
+}
+
 // ---------- emit ----------
 
-function emit(rows: readonly DocRow[]): string {
-	const header = `/**
+const FAA_DOCS_HEADER = `/**
  * FAA_DOC_REFERENCES -- generated by scripts/generate-faa-doc-registry.ts.
  *
  * DO NOT EDIT BY HAND. Re-generate with:
@@ -354,6 +483,10 @@ function emit(rows: readonly DocRow[]): string {
  *
  * This file is registered at module load by the index file so the registry
  * is populated before any consumer imports it.
+ *
+ * AIM chapter/section rows live in the sibling generated file
+ * \`aim-docs.ts\` (split out when the AIM scanner pushes the combined
+ * output past ~5000 lines).
  */
 
 import { registerReferences } from '../registry';
@@ -362,6 +495,25 @@ import type { Reference } from '../schema/reference';
 export const FAA_DOC_REFERENCES: readonly Reference[] = [
 `;
 
+const AIM_DOCS_HEADER = `/**
+ * AIM_REFERENCES -- generated by scripts/generate-faa-doc-registry.ts.
+ *
+ * DO NOT EDIT BY HAND. Re-generate with:
+ *   bun scripts/generate-faa-doc-registry.ts
+ *
+ * One row per AIM chapter / section from the current edition manifest.
+ * Paragraphs are NOT emitted here; the section row covers the parent and
+ * runtime FTS in \`libs/help/src/loaders/aim-sections.ts\` handles per-
+ * paragraph hits.
+ */
+
+import { registerReferences } from '../registry';
+import type { Reference } from '../schema/reference';
+
+export const AIM_REFERENCES: readonly Reference[] = [
+`;
+
+function emit(rows: readonly DocRow[], header: string, registerCallSymbol: string): string {
 	const body = rows
 		.map((row) => {
 			const aliasList = row.aliases.map((a) => JSON.stringify(a)).join(', ');
@@ -388,7 +540,7 @@ export const FAA_DOC_REFERENCES: readonly Reference[] = [
 	const footer = `
 ];
 
-registerReferences(FAA_DOC_REFERENCES);
+registerReferences(${registerCallSymbol});
 `;
 
 	return header + body + footer;
@@ -396,15 +548,9 @@ registerReferences(FAA_DOC_REFERENCES);
 
 // ---------- main ----------
 
-function main(): void {
-	const rows: DocRow[] = [];
-	rows.push(...scanHandbooks());
-	rows.push(...scanAcs());
-	rows.push(...scanAcs2());
-	rows.push(...scanCfr(14));
-	rows.push(...scanCfr(49));
+const AIM_OUTPUT_PATH = join(REPO_ROOT, 'libs/aviation/src/references/aim-docs.ts');
 
-	// Dedupe by id
+function dedupe(rows: readonly DocRow[]): DocRow[] {
 	const byId = new Map<string, DocRow>();
 	for (const row of rows) {
 		const existing = byId.get(row.id);
@@ -414,18 +560,33 @@ function main(): void {
 		}
 		byId.set(row.id, row);
 	}
-	const sorted = [...byId.values()].sort((a, b) => a.id.localeCompare(b.id));
+	return [...byId.values()].sort((a, b) => a.id.localeCompare(b.id));
+}
 
-	const out = emit(sorted);
+function main(): void {
+	const faaDocRows: DocRow[] = [];
+	faaDocRows.push(...scanHandbooks());
+	faaDocRows.push(...scanAcs());
+	faaDocRows.push(...scanAcs2());
+	faaDocRows.push(...scanCfr(14));
+	faaDocRows.push(...scanCfr(49));
+
+	const aimRows = scanAim();
+
+	const sortedFaa = dedupe(faaDocRows);
+	const sortedAim = dedupe(aimRows);
+
 	const fs = process.getBuiltinModule('node:fs') as typeof import('node:fs');
-	fs.writeFileSync(OUTPUT_PATH, out, 'utf-8');
+	fs.writeFileSync(OUTPUT_PATH, emit(sortedFaa, FAA_DOCS_HEADER, 'FAA_DOC_REFERENCES'), 'utf-8');
+	fs.writeFileSync(AIM_OUTPUT_PATH, emit(sortedAim, AIM_DOCS_HEADER, 'AIM_REFERENCES'), 'utf-8');
 
-	console.log(`Wrote ${sorted.length} FAA doc references to ${OUTPUT_PATH}`);
-	console.log(`  handbooks: ${sorted.filter((r) => /^doc-faah/.test(r.id)).length}`);
-	console.log(`  ACs:       ${sorted.filter((r) => /^doc-ac-/.test(r.id)).length}`);
-	console.log(`  ACS:       ${sorted.filter((r) => /^doc-(ppl|cpl|ir|atp|cfi)/.test(r.id)).length}`);
-	console.log(`  CFR-14:    ${sorted.filter((r) => /^doc-cfr-14-/.test(r.id)).length}`);
-	console.log(`  CFR-49:    ${sorted.filter((r) => /^doc-cfr-49-/.test(r.id)).length}`);
+	console.log(`Wrote ${sortedFaa.length} FAA doc references to ${OUTPUT_PATH}`);
+	console.log(`  handbooks: ${sortedFaa.filter((r) => /^doc-faah/.test(r.id)).length}`);
+	console.log(`  ACs:       ${sortedFaa.filter((r) => /^doc-ac-/.test(r.id)).length}`);
+	console.log(`  ACS:       ${sortedFaa.filter((r) => /^doc-(ppl|cpl|ir|atp|cfi)/.test(r.id)).length}`);
+	console.log(`  CFR-14:    ${sortedFaa.filter((r) => /^doc-cfr-14-/.test(r.id)).length}`);
+	console.log(`  CFR-49:    ${sortedFaa.filter((r) => /^doc-cfr-49-/.test(r.id)).length}`);
+	console.log(`Wrote ${sortedAim.length} AIM references to ${AIM_OUTPUT_PATH}`);
 }
 
 main();

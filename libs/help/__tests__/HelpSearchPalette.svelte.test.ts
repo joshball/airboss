@@ -37,9 +37,12 @@ describe('HelpSearchPalette -- open', () => {
 		expect(input.getAttribute('type')).toBe('search');
 	});
 
-	it('initial focused bucket is aviation', () => {
+	it('initial focused column defaults to FAA Resources (the first column in the layout)', () => {
 		render(HelpSearchPalette, { open: true, onClose: vi.fn() });
-		expect(screen.getByTestId('helpsearchpalette-root').getAttribute('data-focused-bucket')).toBe('aviation');
+		// `data-focused-bucket` was the legacy two-bucket attribute; it now
+		// carries the focused column id so existing wiring (and screenshot
+		// regressions that scan the attribute) still work.
+		expect(screen.getByTestId('helpsearchpalette-root').getAttribute('data-focused-bucket')).toBe('faa-resources');
 	});
 
 	it('Escape on the input fires onClose', () => {

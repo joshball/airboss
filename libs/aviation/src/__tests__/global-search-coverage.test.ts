@@ -13,6 +13,7 @@
  */
 
 import { describe, expect, test } from 'vitest';
+import '../references/aim-docs'; // self-registers
 import '../references/faa-docs'; // self-registers
 import { detectDocCodeIntent, lookupDocsByCode } from '../doc-code-detector';
 import { search } from '../registry';
@@ -60,6 +61,10 @@ const DOC_CODE_FIXTURES: ReadonlyArray<{ query: string; expectId: string; label?
 	// ACS
 	{ query: 'PPL ACS', expectId: 'doc-ppl-airplane-acs-6c' },
 	{ query: 'IR ACS', expectId: 'doc-ir-airplane-acs-8c' },
+	// AIM chapters and sections (Phase 2 -- AIM scanner)
+	{ query: 'AIM 7', expectId: 'doc-aim-7' },
+	{ query: 'AIM 7-1', expectId: 'doc-aim-7-1' },
+	{ query: 'AIM 1-1', expectId: 'doc-aim-1-1' },
 ];
 
 // ---------- Aviation terms that must return SOMETHING in top 3 ----------

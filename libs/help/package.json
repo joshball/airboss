@@ -7,6 +7,10 @@
 			"types": "./src/index.ts",
 			"default": "./src/index.ts"
 		},
+		"./server": {
+			"types": "./src/server.ts",
+			"default": "./src/server.ts"
+		},
 		"./glossary": {
 			"types": "./src/glossary/index.ts",
 			"default": "./src/glossary/index.ts"
@@ -15,9 +19,13 @@
 	},
 	"dependencies": {
 		"@ab/aviation": "workspace:*",
+		"@ab/bc-study": "workspace:*",
 		"@ab/constants": "workspace:*",
+		"@ab/db": "workspace:*",
 		"@ab/ui": "workspace:*",
 		"@ab/utils": "workspace:*",
+		"@sveltejs/kit": "*",
+		"drizzle-orm": "*",
 		"shiki": "^4.0.2"
 	},
 	"devDependencies": {

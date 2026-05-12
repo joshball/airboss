@@ -20,7 +20,14 @@
  * alphabetically by title.
  */
 
-import { search as aviationSearch, listReferences, type Reference, type SearchHit, type TagQuery } from '@ab/aviation';
+import {
+	search as aviationSearch,
+	expandQuery,
+	listReferences,
+	type Reference,
+	type SearchHit,
+	type TagQuery,
+} from '@ab/aviation';
 import {
 	AVIATION_TOPIC_VALUES,
 	type AviationTopic,
@@ -28,16 +35,79 @@ import {
 	type FlightRules,
 	KNOWLEDGE_KIND_VALUES,
 	type KnowledgeKind,
+	REFERENCE_SOURCE_TYPES,
 	type ReferenceSourceType,
 	SOURCE_TYPE_VALUES,
 } from '@ab/constants';
+import { loadAviationRefs } from './loaders/aviation-refs';
+import { loadExternalTools } from './loaders/external-tools';
+import { loadHelpPages } from './loaders/help-pages';
 import { parseQuery } from './query-parser';
 import { helpRegistry } from './registry';
 import type { ParsedFilter, ParsedQuery, SearchFilters, SearchResult, SearchResultSet } from './schema/help-registry';
+import {
+	COLUMN_BY_TYPE,
+	COLUMN_ORDER,
+	EMPTY_GROUPED_RESULTS,
+	type GroupedResults,
+	type PaletteHost,
+	type ResultColumn,
+	type SearchResultType,
+	type SynonymRewrite,
+	type SearchResult as TypedResult,
+} from './schema/result-types';
 import { rankBucket } from './search-core';
+
+/**
+ * Classify a registry `Reference` into a `SearchResultType` based on its
+ * source-type tag. Handbook source-types map to the handbook root (`faa.handbook`);
+ * CFR / AIM / AC / ACS / PCG map to their dedicated types. Everything else
+ * (the firc glossary entries, authored / derived / SOP rows) maps to
+ * `airboss.glossary`.
+ *
+ * Chapter rows (`faa.handbook.chapter`, `faa.cfr.sect`) come from
+ * `study.reference_section` via the DB-backed loaders in `./loaders/*`, not
+ * from the in-memory aviation registry, so they are not produced here.
+ */
+function aviationResultType(ref: Reference): SearchResultType {
+	const st = ref.tags.sourceType;
+	if (st === REFERENCE_SOURCE_TYPES.CFR) return 'faa.cfr.part';
+	if (st === REFERENCE_SOURCE_TYPES.AIM) return 'faa.aim';
+	if (st === REFERENCE_SOURCE_TYPES.AC) return 'faa.ac';
+	if (st === REFERENCE_SOURCE_TYPES.ACS) return 'faa.acs';
+	if (st === REFERENCE_SOURCE_TYPES.PCG) return 'airboss.glossary';
+	// Handbook family -- one slot per book; mapped via REFERENCE_SOURCE_TYPES.
+	if (
+		st === REFERENCE_SOURCE_TYPES.PHAK ||
+		st === REFERENCE_SOURCE_TYPES.AFH ||
+		st === REFERENCE_SOURCE_TYPES.IFH ||
+		st === REFERENCE_SOURCE_TYPES.AVWX ||
+		st === REFERENCE_SOURCE_TYPES.IPH ||
+		st === REFERENCE_SOURCE_TYPES.RMH ||
+		st === REFERENCE_SOURCE_TYPES.AIH ||
+		st === REFERENCE_SOURCE_TYPES.HFH ||
+		st === REFERENCE_SOURCE_TYPES.GFH ||
+		st === REFERENCE_SOURCE_TYPES.BFH
+	) {
+		return 'faa.handbook';
+	}
+	// Everything else (authored / derived / NTSB / GAJSC / AOPA / FAA_SAFETY /
+	// SOP / POH / sectional) is a glossary or domain row -- not a top-level
+	// FAA document. Surface in the Airboss Content column.
+	return 'airboss.glossary';
+}
 
 const DEFAULT_LIMIT = 50;
 
+/**
+ * Legacy two-bucket facade. Returns `{ aviation, help }` -- the pre-Phase-2
+ * shape. New callers should use `searchGrouped()` which produces the typed
+ * `GroupedResults` (columns, banner hoist, clusters, synonyms applied,
+ * filters). Removal target: next palette WP phase that touches this file
+ * and verifies no remaining call sites.
+ *
+ * @deprecated -- use `searchGrouped()` instead.
+ */
 export function search(rawQuery: string, filters: SearchFilters = {}): SearchResultSet {
 	const parsed = parseQuery(rawQuery);
 	const library = filters.library ?? pickLibrary(parsed) ?? 'both';
@@ -95,6 +165,7 @@ function searchAviation(parsed: ParsedQuery, limit: number): readonly SearchResu
 		if (bucket === null) continue;
 		results.push({
 			library: 'aviation',
+			type: aviationResultType(ref),
 			sourceType: ref.tags.sourceType,
 			id: ref.id,
 			title: ref.displayName,
@@ -120,6 +191,7 @@ function searchAviation(parsed: ParsedQuery, limit: number): readonly SearchResu
 	if (parsed.freeText.trim().length === 0) {
 		const tagHits: SearchResult[] = refs.slice(0, limit).map((ref) => ({
 			library: 'aviation',
+			type: aviationResultType(ref),
 			sourceType: ref.tags.sourceType,
 			id: ref.id,
 			title: ref.displayName,
@@ -237,4 +309,215 @@ function sortResults(results: SearchResult[]): SearchResult[] {
  */
 export function listAviationReferences(): readonly Reference[] {
 	return listReferences();
+}
+
+// =================================================================
+// Typed multi-column facade (Phase 2 of command-palette WP)
+//
+// `searchGrouped()` is the production facade the multi-column palette UI
+// consumes. It composes loader outputs into a `GroupedResults` with column
+// buckets, a hoist banner, FAA Resources clusters, and the synonym-rewrite
+// chip story.
+// =================================================================
+
+/**
+ * Compose the typed multi-column palette result set.
+ *
+ * Composition strategy:
+ *   1. Parse the query. Apply synonyms via `@ab/aviation`'s expander so the
+ *      rewrite list is the same one the aviation registry sees.
+ *   2. Run every loader that doesn't need a DB connection in-process. DB-
+ *      backed loaders (cards, reps, plans, knowledge nodes, handbook
+ *      sections, CFR sections, AIM sections) are invoked by the route's
+ *      `+page.server.ts` and merged via `mergeServerLoadedResults()` before
+ *      the UI renders.
+ *   3. Assign every row to its column via `COLUMN_BY_TYPE`.
+ *   4. Compute the banner hit (a single tier-1 match across all groups).
+ *   5. Compute FAA Resources clusters -- handbook chapters under their
+ *      handbook root, CFR sections under their part.
+ *
+ * The function is synchronous and pure; no I/O. Server-side loaders run
+ * outside this function and pass their typed rows back via the `injected`
+ * argument (Phase 2c wires the server hand-off).
+ */
+export function searchGrouped(
+	rawQuery: string,
+	host: PaletteHost,
+	injected: readonly TypedResult[] = [],
+): GroupedResults {
+	const parsed = parseQuery(rawQuery);
+	const freeText = parsed.freeText.trim();
+	if (freeText.length === 0 && parsed.filters.length === 0 && injected.length === 0) {
+		return { ...EMPTY_GROUPED_RESULTS, filters: parsed.filters };
+	}
+
+	// Honor the `library:` filter / `mine` bare-token sugar. Picking a single
+	// library narrows the fan-out so chip-scoped queries (`mine card`) don't
+	// flood the columns with FAA + help + external rows the user just told us
+	// to ignore. `both` (and absence of any library filter) keep the full
+	// fan-out -- the default behavior.
+	const libraryScope = libraryScopeFrom(parsed);
+	const wantAviation = libraryScope === 'both' || libraryScope === 'aviation';
+	const wantHelp = libraryScope === 'both' || libraryScope === 'help';
+	const wantTools = libraryScope === 'both';
+
+	// In-process loaders. DB-backed loaders run server-side and feed via `injected`.
+	const aviation = wantAviation ? loadAviationRefs(parsed, host) : [];
+	const helpPages = wantHelp ? loadHelpPages(parsed, host) : [];
+	const tools = wantTools ? loadExternalTools(parsed, host) : [];
+	const injectedRows = filterInjectedByScope(injected, libraryScope);
+	const all = [...aviation, ...helpPages, ...tools, ...injectedRows];
+
+	// Bucket into columns.
+	const columns: Record<ResultColumn, TypedResult[]> = {
+		'faa-resources': [],
+		'airboss-content': [],
+		'app-help': [],
+		'my-stuff': [],
+		'external-tools': [],
+		commands: [],
+	};
+	for (const row of all) {
+		const col = COLUMN_BY_TYPE[row.type];
+		columns[col].push(row);
+	}
+
+	// Sort each column by rankBucket then title.
+	for (const key of COLUMN_ORDER) {
+		columns[key] = sortTyped(columns[key]);
+	}
+
+	// Banner hoist: a single tier-1 match across every column. If 0 or >1,
+	// no banner -- ambiguous queries don't earn a guess.
+	const tierOnes: TypedResult[] = [];
+	for (const key of COLUMN_ORDER) {
+		for (const row of columns[key]) {
+			if (row.rankBucket === 1) tierOnes.push(row);
+			if (tierOnes.length > 1) break;
+		}
+		if (tierOnes.length > 1) break;
+	}
+	const bannerHit = tierOnes.length === 1 ? (tierOnes[0] ?? null) : null;
+
+	// FAA Resources clusters. A handbook root row "owns" any chapter that
+	// shares its `clusterKey` (canonical doc slug); a CFR part owns
+	// sections whose `clusterKey` matches its slug. Children sort by title
+	// (the loader sets a stable title; an ordinal field could plug in here
+	// later).
+	const clusters = buildClusters(columns['faa-resources']);
+
+	// Synonym chips: ask the aviation expander what it would rewrite the
+	// free-text to. Each non-identity rewrite becomes a removable chip.
+	const synonymsApplied: SynonymRewrite[] = buildSynonymRewrites(freeText);
+
+	const totalCount = COLUMN_ORDER.reduce((sum, key) => sum + columns[key].length, 0);
+
+	return {
+		bannerHit,
+		columns,
+		clusters,
+		synonymsApplied,
+		filters: parsed.filters,
+		totalCount,
+	};
+}
+
+function sortTyped(rows: readonly TypedResult[]): TypedResult[] {
+	return [...rows].sort((a, b) => {
+		if (a.rankBucket !== b.rankBucket) return a.rankBucket - b.rankBucket;
+		return a.title.localeCompare(b.title);
+	});
+}
+
+function buildClusters(
+	faaRows: readonly TypedResult[],
+): readonly { parent: TypedResult; children: readonly TypedResult[] }[] {
+	const byClusterKey = new Map<string, TypedResult[]>();
+	const rootsByKey = new Map<string, TypedResult>();
+	for (const row of faaRows) {
+		if (!row.clusterKey) continue;
+		if (row.type === 'faa.handbook' || row.type === 'faa.cfr.part') {
+			rootsByKey.set(row.clusterKey, row);
+		} else {
+			const bucket = byClusterKey.get(row.clusterKey) ?? [];
+			bucket.push(row);
+			byClusterKey.set(row.clusterKey, bucket);
+		}
+	}
+	const out: { parent: TypedResult; children: readonly TypedResult[] }[] = [];
+	for (const [key, children] of byClusterKey) {
+		const parent = rootsByKey.get(key);
+		if (!parent) continue;
+		out.push({ parent, children: [...children].sort((a, b) => a.title.localeCompare(b.title)) });
+	}
+	return out;
+}
+
+function buildSynonymRewrites(freeText: string): SynonymRewrite[] {
+	const lower = freeText.toLowerCase().trim();
+	if (lower.length === 0) return [];
+	const rewrites: SynonymRewrite[] = [];
+	for (const token of lower.split(/\s+/)) {
+		if (!token) continue;
+		const expanded = expandQuery(token);
+		for (const candidate of expanded) {
+			if (candidate === token) continue;
+			rewrites.push({ from: token, to: candidate });
+		}
+	}
+	// Dedupe by (from, to) pair, preserve first occurrence.
+	const seen = new Set<string>();
+	const deduped: SynonymRewrite[] = [];
+	for (const rw of rewrites) {
+		const key = `${rw.from}␟${rw.to}`;
+		if (seen.has(key)) continue;
+		seen.add(key);
+		deduped.push(rw);
+	}
+	return deduped;
+}
+
+/**
+ * Library scopes supported by the chip story. `mine` is the new value
+ * introduced for the bare-token sugar (`mine` -> `library:mine`); the other
+ * three match the legacy `library:` filter values.
+ */
+type LibraryScope = 'both' | 'aviation' | 'help' | 'mine';
+
+function libraryScopeFrom(parsed: ParsedQuery): LibraryScope {
+	for (const filter of parsed.filters) {
+		if (filter.key !== 'library' && filter.key !== 'lib') continue;
+		if (filter.values.includes('mine')) return 'mine';
+		if (filter.values.includes('both')) return 'both';
+		const hasAviation = filter.values.includes('aviation');
+		const hasHelp = filter.values.includes('help');
+		if (hasAviation && !hasHelp) return 'aviation';
+		if (hasHelp && !hasAviation) return 'help';
+		return 'both';
+	}
+	return 'both';
+}
+
+/**
+ * Drop injected rows that don't belong to the active library scope. `both`
+ * keeps everything; `mine` keeps only mine.* rows; `aviation` keeps faa.*
+ * and airboss.* content rows but drops mine.* / web.tool; `help` keeps only
+ * airboss.help rows from the injected slice (DB-backed help would be the
+ * only candidate; today no DB-backed help loader exists, so this is empty in
+ * practice).
+ */
+function filterInjectedByScope(injected: readonly TypedResult[], scope: LibraryScope): readonly TypedResult[] {
+	if (scope === 'both') return injected;
+	if (scope === 'mine') return injected.filter((row) => row.type.startsWith('mine.'));
+	if (scope === 'aviation') {
+		return injected.filter(
+			(row) =>
+				row.type.startsWith('faa.') ||
+				row.type === 'airboss.knode' ||
+				row.type === 'airboss.course' ||
+				row.type === 'airboss.glossary',
+		);
+	}
+	// help
+	return injected.filter((row) => row.type === 'airboss.help');
 }

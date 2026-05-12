@@ -48,6 +48,7 @@ const aliases = {
 	'@ab/aviation/ui/ReferenceText.svelte': resolve('./libs/aviation/src/ui/ReferenceText.svelte'),
 	'@ab/aviation/ui': resolve('./libs/aviation/src/ui'),
 	'@ab/aviation': resolve('./libs/aviation/src/index.ts'),
+	'@ab/help/server': resolve('./libs/help/src/server.ts'),
 	'@ab/help': resolve('./libs/help/src/index.ts'),
 	'@ab/activities/crosswind-component/CrosswindComponent.svelte': resolve(
 		'./libs/activities/src/crosswind-component/CrosswindComponent.svelte',

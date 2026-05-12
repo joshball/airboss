@@ -8,9 +8,11 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
+		"@ab/audit": "workspace:*",
 		"@ab/auth": "workspace:*",
 		"@ab/aviation": "workspace:*",
 		"@ab/bc-sim": "workspace:*",
+		"@ab/bc-study": "workspace:*",
 		"@ab/constants": "workspace:*",
 		"@ab/db": "workspace:*",
 		"@ab/help": "workspace:*",

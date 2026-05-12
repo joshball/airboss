@@ -1,52 +1,105 @@
 <script lang="ts">
-import { HELP_SEARCH_DEBOUNCE_MS, ROUTES } from '@ab/constants';
+import { APP_SURFACES, type AppSurface, HELP_SEARCH_DEBOUNCE_MS } from '@ab/constants';
 import { createFocusTrap, type FocusTrap } from '@ab/ui/lib/focus-trap';
 import { tick, untrack } from 'svelte';
 import { goto } from '$app/navigation';
-import type { SearchResult, SearchResultSet } from '../schema/help-registry';
-import { search } from '../search';
+import { page } from '$app/state';
+import type { ParsedFilter } from '../schema/help-registry';
+import {
+	COLUMN_LABELS,
+	COLUMN_ORDER,
+	type GroupedResults,
+	type PaletteHost,
+	type ResultColumn,
+	type SearchResult,
+	type SynonymRewrite,
+} from '../schema/result-types';
+import { searchGrouped } from '../search';
+import FilterChips from './FilterChips.svelte';
 
 /**
- * Centered command-palette overlay for cross-library search. Opened by
- * the top-nav button, by `/`, or by Cmd+K (see HelpSearch.svelte for the
- * key listeners). Closed by Escape or by clicking the backdrop.
+ * Multi-column command palette overlay.
+ *
+ * Phase 2 of the command-palette WP -- this component is the surface that
+ * binds Cmd+K / `/` (and Phase 4/5 Cmd+P / Cmd+Shift+P). It renders a typed
+ * `GroupedResults` produced by `searchGrouped()`: a banner-hoist row, FAA
+ * Resources / Airboss Content / App Help / My Stuff / External Tools
+ * columns, removable filter chips above the input, and an empty Commands
+ * column reserved for Phase 4.
  *
  * Keyboard:
- *   - Arrow up/down: move selection within the focused bucket.
- *   - `[` / `]`:     jump selection between buckets.
- *   - Enter:         navigate to the selected result.
- *   - Escape:        close.
- *
- * Results are grouped into aviation and help buckets. No cross-bucket
- * implicit ranking.
+ *   - Arrow up/down: move selection within the focused column.
+ *   - Tab / Shift+Tab + `[` / `]`: jump selection between non-empty columns.
+ *   - Enter: navigate to the selected result (or banner row when present).
+ *   - Escape: close.
  *
  * Performance:
- *   - Search runs against precomputed lowercased haystacks on each
- *     `HelpPageIndex` -- per-keystroke `String.toLowerCase` allocations
- *     are amortised at registration time.
- *   - Keystrokes debounce by `HELP_SEARCH_DEBOUNCE_MS` so a fast typist
- *     fires at most one search per debounce window instead of per char.
+ *   - Search debounces by HELP_SEARCH_DEBOUNCE_MS so a fast typist fires at
+ *     most one search per window.
+ *   - Loaders run in-process; DB-backed loaders are server-side and feed in
+ *     via the `injected` argument to `searchGrouped` (Phase 2c wires the
+ *     server hand-off; in Phase 2 the in-process loaders cover the most
+ *     used queries).
  */
 
 let {
 	open,
 	onClose,
+	surface,
+	injectedResults,
 }: {
 	open: boolean;
 	onClose: () => void;
+	/**
+	 * Host surface for per-app boost. Defaults to `global` if not provided
+	 * (used by callers that don't know which app mounted them, e.g. the
+	 * legacy HelpSearch.svelte trigger).
+	 */
+	surface?: AppSurface;
+	/**
+	 * Server-loaded rows (cards / reps / plans / knowledge nodes / handbook
+	 * sections / CFR sections / AIM sections) merged into the columns before
+	 * sorting. Empty by default.
+	 */
+	injectedResults?: readonly SearchResult[];
 } = $props();
+
+const host: PaletteHost = $derived<PaletteHost>({
+	surface: surface ?? APP_SURFACES.GLOBAL,
+	userId: page.data?.user?.id,
+});
 
 let input = $state<HTMLInputElement | null>(null);
 let rawQuery = $state('');
-/**
- * Debounced view of `rawQuery`. The search runs only when this lands;
- * the input box updates `rawQuery` on every keystroke so the field still
- * feels live.
- */
 let debouncedQuery = $state('');
-const results = $derived<SearchResultSet>(search(debouncedQuery));
-let focusedBucket = $state<'aviation' | 'help'>('aviation');
+
+/**
+ * DB-backed loader output fetched from the per-app `/api/palette/search`
+ * endpoint. The in-process facade composes this with the synchronous
+ * loaders so the user sees the synchronous slice immediately and the
+ * server slice merges in when the response lands. The fallback is the
+ * caller-supplied `injectedResults` prop so SSR-injected rows still work.
+ */
+let serverInjected = $state<readonly SearchResult[]>([]);
+let lastFetchedQuery = $state<string | null>(null);
+/**
+ * True while the debounced query has fired but the server fetch for that
+ * query hasn't landed yet. Used by per-column loading affordances so the
+ * columns that depend on the server slice (FAA Resources, Airboss Content,
+ * My Stuff) don't flash empty between the synchronous facade running and
+ * the fetch settling.
+ */
+let pendingFetch = $state(false);
+
+const mergedInjected = $derived<readonly SearchResult[]>(
+	serverInjected.length > 0 ? serverInjected : (injectedResults ?? []),
+);
+const grouped = $derived<GroupedResults>(searchGrouped(debouncedQuery, host, mergedInjected));
+
+let focusedColumn = $state<ResultColumn>('faa-resources');
 let focusedIndex = $state(0);
+
+const nonEmptyColumns = $derived<ResultColumn[]>(COLUMN_ORDER.filter((c) => grouped.columns[c].length > 0));
 
 $effect(() => {
 	const next = rawQuery;
@@ -57,19 +110,67 @@ $effect(() => {
 	return () => window.clearTimeout(handle);
 });
 
-// Reset focus whenever the debounced query lands. We depend on
-// `debouncedQuery` (not `results`) so the effect never reads state it
-// writes, which would loop.
+// Fetch DB-backed loader output every time the debounced query changes.
+// AbortController guards against an in-flight slow response landing AFTER
+// a newer query has already fired; every state write is also gated on
+// `controller.signal.aborted` so a settled-but-stale promise can't race
+// past the cleanup. Anonymous users (no `userId`) skip the fetch entirely
+// because the endpoint 401s -- the in-process facade still covers them.
+$effect(() => {
+	const q = debouncedQuery.trim();
+	if (q.length === 0) {
+		serverInjected = [];
+		lastFetchedQuery = q;
+		pendingFetch = false;
+		return;
+	}
+	if (q === lastFetchedQuery) {
+		pendingFetch = false;
+		return;
+	}
+	if (!host.userId) {
+		// Anonymous: no `mine.*` rows, the endpoint rejects -- skip the round trip.
+		pendingFetch = false;
+		return;
+	}
+	const controller = new AbortController();
+	pendingFetch = true;
+	(async () => {
+		try {
+			const res = await fetch('/api/palette/search', {
+				method: 'POST',
+				headers: { 'content-type': 'application/json' },
+				body: JSON.stringify({ q }),
+				signal: controller.signal,
+			});
+			if (controller.signal.aborted) return;
+			if (!res.ok) return;
+			const data = (await res.json()) as { results?: SearchResult[] };
+			if (controller.signal.aborted) return;
+			if (Array.isArray(data.results)) {
+				serverInjected = data.results;
+				lastFetchedQuery = q;
+			}
+		} catch {
+			// Network errors / aborts: leave serverInjected alone. The in-process
+			// facade still surfaces aviation refs / help pages / external tools.
+		} finally {
+			if (!controller.signal.aborted) pendingFetch = false;
+		}
+	})();
+	return () => controller.abort();
+});
+
+// Reset selection whenever the debounced query lands. Depend only on
+// `debouncedQuery` (not `grouped`) so the effect never reads state it writes.
 $effect(() => {
 	void debouncedQuery;
 	focusedIndex = 0;
-	focusedBucket = results.aviation.length > 0 ? 'aviation' : results.help.length > 0 ? 'help' : 'aviation';
+	const cols = untrack(() => nonEmptyColumns);
+	focusedColumn = cols[0] ?? 'faa-resources';
 });
 
 // Focus-trap lifecycle: allocated once per dialog-open, released on close.
-// Without this Tab/Shift+Tab can leak out of the role="dialog" + aria-modal
-// container into the underlying page chrome behind the scrim, breaking the
-// modal contract.
 let panelEl = $state<HTMLDivElement | null>(null);
 let trap: FocusTrap | null = null;
 let previousFocus: HTMLElement | null = null;
@@ -94,13 +195,10 @@ $effect(() => {
 });
 
 function currentList(): readonly SearchResult[] {
-	return focusedBucket === 'aviation' ? results.aviation : results.help;
+	return grouped.columns[focusedColumn] ?? [];
 }
 
 function handleKey(event: KeyboardEvent): void {
-	// Route Tab/Shift+Tab through the focus trap so focus can't leak past
-	// the dialog. The trap's Escape handler is wired via createFocusTrap
-	// below, but keep the explicit check here for the input field as well.
 	trap?.handleKeyDown(event);
 	if (event.defaultPrevented) return;
 	if (event.key === 'Escape') {
@@ -122,34 +220,49 @@ function handleKey(event: KeyboardEvent): void {
 	}
 	if (event.key === ']') {
 		event.preventDefault();
-		jumpBucket(1);
+		jumpColumn(1);
 		return;
 	}
 	if (event.key === '[') {
 		event.preventDefault();
-		jumpBucket(-1);
+		jumpColumn(-1);
 		return;
 	}
+	// Tab is intentionally NOT intercepted -- it stays the standard
+	// "move focus across focusables" key, handled by the focus trap alone.
+	// Column jumping uses `[` / `]` (documented in the footer).
 	if (event.key === 'Enter') {
 		event.preventDefault();
-		const list = currentList();
-		const result = list[focusedIndex];
+		// Banner takes precedence when present + focus is on the input (no row
+		// explicitly selected). Otherwise activate the row at (column, index).
+		if (grouped.bannerHit && focusedIndex === 0 && nonEmptyColumns[0] === focusedColumn) {
+			activate(grouped.bannerHit);
+			return;
+		}
+		const result = currentList()[focusedIndex];
 		if (result) activate(result);
 	}
 }
 
-function jumpBucket(direction: 1 | -1): void {
-	const target: 'aviation' | 'help' = focusedBucket === 'aviation' ? 'help' : 'aviation';
-	void direction; // only two buckets; direction is symbolic.
-	const list = target === 'aviation' ? results.aviation : results.help;
-	if (list.length === 0) return;
-	focusedBucket = target;
-	focusedIndex = 0;
+function jumpColumn(direction: 1 | -1): void {
+	const cols = nonEmptyColumns;
+	if (cols.length === 0) return;
+	const idx = cols.indexOf(focusedColumn);
+	const baseIdx = idx === -1 ? 0 : idx;
+	const next = cols[(baseIdx + direction + cols.length) % cols.length] ?? cols[0];
+	if (next) {
+		focusedColumn = next;
+		focusedIndex = 0;
+	}
 }
 
 function activate(result: SearchResult): void {
-	const path = result.library === 'aviation' ? ROUTES.REFERENCE_GLOSSARY_ID(result.id) : ROUTES.HELP_ID(result.id);
+	const path = result.href;
 	onClose();
+	if (path.startsWith('http://') || path.startsWith('https://')) {
+		window.open(path, '_blank', 'noopener');
+		return;
+	}
 	void goto(path);
 }
 
@@ -157,24 +270,104 @@ function backdropClick(event: MouseEvent): void {
 	if (event.target === event.currentTarget) onClose();
 }
 
-function backdropKeydown(event: KeyboardEvent): void {
-	// Allow closing the palette via Escape from anywhere in the overlay.
-	if (event.key === 'Escape') {
-		event.preventDefault();
-		onClose();
-	}
+function removeFilter(key: string, value: string): void {
+	// Naive rewrite: strip the `key:value` token (and any escaped variants)
+	// from rawQuery. The query parser is forgiving; if the user typed
+	// `tag:weather,ifr` removing just `weather` rewrites to `tag:ifr`.
+	rawQuery = rebuildQueryWithoutFilter(rawQuery, key, value);
 }
+
+function removeSynonym(from: string): void {
+	// Stripping a synonym chip removes the underlying token that triggered
+	// the rewrite. Same approach as filter removal.
+	rawQuery = stripBareToken(rawQuery, from);
+}
+
+function rebuildQueryWithoutFilter(query: string, key: string, value: string): string {
+	// Mine sugar: `library:mine` displays as a chip but the original token
+	// might have been a bare `mine`. Strip both shapes.
+	if (key === 'library' && value === 'mine') {
+		return stripBareToken(stripFacetToken(query, 'library', 'mine'), 'mine');
+	}
+	return stripFacetToken(query, key, value);
+}
+
+function stripFacetToken(query: string, key: string, value: string): string {
+	const tokens = query.split(/\s+/).filter(Boolean);
+	const filtered: string[] = [];
+	for (const token of tokens) {
+		const lower = token.toLowerCase();
+		const prefix = `${key.toLowerCase()}:`;
+		if (!lower.startsWith(prefix)) {
+			filtered.push(token);
+			continue;
+		}
+		const values = token
+			.slice(prefix.length)
+			.split(',')
+			.filter((v) => v.toLowerCase() !== value.toLowerCase());
+		if (values.length > 0) {
+			filtered.push(`${key}:${values.join(',')}`);
+		}
+	}
+	return filtered.join(' ').trim();
+}
+
+function stripBareToken(query: string, token: string): string {
+	return query
+		.split(/\s+/)
+		.filter(Boolean)
+		.filter((t) => t.toLowerCase() !== token.toLowerCase())
+		.join(' ')
+		.trim();
+}
+
+function activateBanner(): void {
+	if (grouped.bannerHit) activate(grouped.bannerHit);
+}
+
+function activateRow(result: SearchResult): void {
+	activate(result);
+}
+
+/**
+ * Action verb shown on the banner. The activate() flow already discriminates
+ * external vs internal URLs; this label mirrors so a `web.tool` row reads
+ * "Open external", a future `cmd.*` row reads "Run", and everything else
+ * reads "Open".
+ */
+function bannerActionLabel(result: SearchResult): string {
+	if (result.type === 'web.tool') return 'Open external';
+	if (result.type === 'cmd.action' || result.type === 'cmd.goto') return 'Run';
+	return 'Open';
+}
+
+// Bound for the FilterChips child.
+const chipFilters = $derived<readonly ParsedFilter[]>(grouped.filters);
+const chipSynonyms = $derived<readonly SynonymRewrite[]>(grouped.synonymsApplied);
+
+/**
+ * Columns whose contents come from the server fetch. While `pendingFetch`
+ * is true (debounced query fired, server hasn't responded yet), these
+ * columns render a Loading affordance instead of "No hits" so the user
+ * doesn't see an empty flash. App Help, External Tools, and Commands are
+ * synchronous (in-process loaders / not yet wired) and never show loading.
+ */
+const SERVER_FED_COLUMNS: ReadonlySet<ResultColumn> = new Set<ResultColumn>([
+	'faa-resources',
+	'airboss-content',
+	'my-stuff',
+]);
 </script>
 
 {#if open}
-	<!-- Backdrop receives click-outside + Escape-from-anywhere events. The
-		 palette is a dialog-role child that traps focus. -->
-	<!-- svelte-ignore a11y_click_events_have_key_events -->
+	<!-- svelte-ignore a11y_click_events_have_key_events -- backdrop dismissal
+		is dialog-overlay convention; ESC still closes via the focus-trap on
+		any descendant. The backdrop carries no role and isn't keyboard-reachable. -->
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div
 		class="backdrop"
 		onclick={backdropClick}
-		onkeydown={backdropKeydown}
 		role="presentation"
 		data-testid="helpsearchpalette-backdrop"
 	>
@@ -184,9 +377,9 @@ function backdropKeydown(event: KeyboardEvent): void {
 			class="palette"
 			role="dialog"
 			aria-modal="true"
-			aria-label="Search help and aviation references"
+			aria-label="Search palette"
 			data-testid="helpsearchpalette-root"
-			data-focused-bucket={focusedBucket}
+			data-focused-bucket={focusedColumn}
 		>
 			<div class="input-row">
 				<input
@@ -194,7 +387,7 @@ function backdropKeydown(event: KeyboardEvent): void {
 					bind:value={rawQuery}
 					onkeydown={handleKey}
 					type="search"
-					placeholder="Search (try `tag:weather rules:ifr` or `metar`)"
+					placeholder="Search the platform..."
 					autocomplete="off"
 					spellcheck="false"
 					aria-label="Search query"
@@ -202,64 +395,88 @@ function backdropKeydown(event: KeyboardEvent): void {
 				/>
 			</div>
 
-			<div class="buckets">
-				<section class="bucket" aria-label="Aviation results">
-					<header>
-						<span class="label">Aviation</span>
-						<span class="count">{results.aviation.length}</span>
-					</header>
-					{#if results.aviation.length === 0}
-						<p class="hint">No aviation hits.</p>
-					{:else}
-						<ul>
-							{#each results.aviation as result, index (result.id)}
-								<li
-									class:focused={focusedBucket === 'aviation' && focusedIndex === index}
-									aria-current={focusedBucket === 'aviation' && focusedIndex === index ? 'true' : undefined}
-								>
-									<button type="button" onclick={() => activate(result)}>
-										<span class="tag">aviation - {result.sourceType}</span>
-										<span class="title">{result.title}</span>
-										<span class="snippet">{result.snippet}</span>
-									</button>
-								</li>
-							{/each}
-						</ul>
-					{/if}
-				</section>
+			<FilterChips
+				filters={chipFilters}
+				synonymsApplied={chipSynonyms}
+				onRemoveFilter={removeFilter}
+				onRemoveSynonym={removeSynonym}
+			/>
 
-				<section class="bucket" aria-label="Help results">
-					<header>
-						<span class="label">Help</span>
-						<span class="count">{results.help.length}</span>
-					</header>
-					{#if results.help.length === 0}
-						<p class="hint">No help hits.</p>
-					{:else}
-						<ul>
-							{#each results.help as result, index (result.id)}
-								<li
-									class:focused={focusedBucket === 'help' && focusedIndex === index}
-									aria-current={focusedBucket === 'help' && focusedIndex === index ? 'true' : undefined}
-								>
-									<button type="button" onclick={() => activate(result)}>
-										<span class="tag">help - {result.sourceType}</span>
-										<span class="title">{result.title}</span>
-										<span class="snippet">{result.snippet}</span>
-									</button>
-								</li>
-							{/each}
-						</ul>
+			{#if grouped.bannerHit}
+				<button
+					type="button"
+					class="banner"
+					onclick={activateBanner}
+					data-testid="palette-banner"
+				>
+					<span class="banner-kind">{bannerActionLabel(grouped.bannerHit)}</span>
+					<span class="banner-title">{grouped.bannerHit.title}</span>
+					{#if grouped.bannerHit.subtitle}
+						<span class="banner-subtitle">{grouped.bannerHit.subtitle}</span>
 					{/if}
-				</section>
+					<span class="banner-arrow" aria-hidden="true">→</span>
+				</button>
+			{/if}
+
+			<div class="columns" data-testid="palette-columns">
+				{#each COLUMN_ORDER as col (col)}
+					{@const loading = pendingFetch && SERVER_FED_COLUMNS.has(col)}
+					<section
+						class="column"
+						aria-labelledby="col-heading-{col}"
+						data-column={col}
+						data-active={focusedColumn === col ? 'true' : 'false'}
+						data-loading={loading ? 'true' : 'false'}
+					>
+						<header>
+							<span class="label" id="col-heading-{col}">{COLUMN_LABELS[col]}</span>
+							<span class="count">{grouped.columns[col].length}</span>
+						</header>
+						{#if grouped.columns[col].length === 0}
+							<p class="hint">
+								{#if col === 'commands'}Phase 4{:else if loading}Loading…{:else}No hits{/if}
+							</p>
+						{:else}
+							<ul>
+								{#each grouped.columns[col] as result, index (result.id)}
+									<li
+										class:focused={focusedColumn === col && focusedIndex === index}
+										aria-current={focusedColumn === col && focusedIndex === index ? 'true' : undefined}
+									>
+										<button
+											type="button"
+											onclick={() => activateRow(result)}
+											data-result-id={result.id}
+											data-result-type={result.type}
+										>
+											{#if result.subtitle}
+												<span class="tag">{result.subtitle}</span>
+											{:else}
+												<span class="tag">{result.type}</span>
+											{/if}
+											<span class="title">{result.title}</span>
+											{#if result.snippet}
+												<span class="snippet">{result.snippet}</span>
+											{/if}
+										</button>
+									</li>
+								{/each}
+							</ul>
+						{/if}
+					</section>
+				{/each}
 			</div>
 
 			{#if rawQuery.trim().length === 0}
-				<p class="empty-hint">Start typing. Use `tag:`, `surface:`, `kind:`, `source:`, `rules:`, `lib:` to filter.</p>
+				<p class="empty-hint">
+					Start typing. Try a doc code (`FAA-H-8083-28`, `Part 91`, `AIM 7-1`), an alias (`AvWX`, `PHAK`), a term
+					(`metar`, `density altitude`), or a filter (`doc:`, `kind:`, `mine`).
+				</p>
 			{/if}
 
 			<footer class="shortcuts">
-				<span><kbd>[</kbd> <kbd>]</kbd> jump bucket</span>
+				<span><kbd>[</kbd> <kbd>]</kbd> jump column</span>
+				<span><kbd>Tab</kbd> move focus</span>
 				<span><kbd>Enter</kbd> open</span>
 				<span><kbd>Esc</kbd> close</span>
 			</footer>
@@ -276,13 +493,13 @@ function backdropKeydown(event: KeyboardEvent): void {
 		align-items: flex-start;
 		justify-content: center;
 		/* lint-disable-token-enforcement: viewport offset positions palette in upper third, not on spacing rhythm */
-		padding-top: 6rem;
+		padding-top: 4rem;
 		z-index: var(--z-command-palette);
 	}
 
 	.palette {
-		width: min(44rem, 92vw);
-		max-height: 72vh;
+		width: min(72rem, 96vw);
+		max-height: 84vh;
 		display: flex;
 		flex-direction: column;
 		background: var(--surface-panel);
@@ -307,32 +524,96 @@ function backdropKeydown(event: KeyboardEvent): void {
 		color: inherit;
 	}
 
-	/*
-	 * Visible keyboard focus indicator on the search field. Previously
-	 * suppressed with `outline: none` which left re-focused users with no
-	 * cue. The box-shadow doesn't reflow surrounding content the way
-	 * outline would inside the inset container.
-	 */
 	input:focus-visible {
 		outline: none;
 		box-shadow: 0 0 0 2px var(--focus-ring);
 		border-radius: var(--radius-sm);
 	}
 
-	.buckets {
+	.banner {
+		display: flex;
+		align-items: center;
+		gap: var(--space-md);
+		padding: var(--space-md) var(--space-lg);
+		border: 0;
+		border-bottom: 1px solid var(--edge-default);
+		background: var(--action-default-wash);
+		font: inherit;
+		font-size: var(--font-size-base);
+		color: inherit;
+		text-align: left;
+		cursor: pointer;
+	}
+
+	.banner:hover,
+	.banner:focus-visible {
+		background: var(--action-default);
+		color: var(--action-default-ink);
+		outline: none;
+	}
+
+	.banner-kind {
+		font-size: var(--font-size-xs);
+		text-transform: uppercase;
+		letter-spacing: var(--letter-spacing-caps);
+		color: var(--ink-muted);
+	}
+
+	.banner-title {
+		font-weight: var(--font-weight-semibold);
+	}
+
+	.banner-subtitle {
+		color: var(--ink-muted);
+		font-size: var(--font-size-sm);
+	}
+
+	.banner-arrow {
+		margin-left: auto;
+	}
+
+	.columns {
 		overflow-y: auto;
 		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: var(--space-lg);
+		grid-template-columns: repeat(6, minmax(0, 1fr));
+		gap: var(--space-md);
 		padding: var(--space-md) var(--space-lg);
 		flex: 1;
 	}
 
-	.bucket {
+	.column {
 		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2xs);
 	}
 
-	.bucket header {
+	.column[data-active='true'] header .label {
+		color: var(--ink-body);
+	}
+
+	.column[data-loading='true'] header .label {
+		animation: palette-loading-pulse var(--motion-slow) infinite;
+	}
+
+	@keyframes palette-loading-pulse {
+		0%,
+		100% {
+			opacity: 1;
+		}
+		50% {
+			opacity: 0.4;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.column[data-loading='true'] header .label {
+			animation: none;
+			opacity: 0.6;
+		}
+	}
+
+	.column header {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -343,7 +624,7 @@ function backdropKeydown(event: KeyboardEvent): void {
 		margin-bottom: var(--space-xs);
 	}
 
-	.bucket .count {
+	.column .count {
 		font-variant-numeric: tabular-nums;
 		background: var(--surface-sunken);
 		border-radius: var(--radius-pill);
@@ -351,7 +632,7 @@ function backdropKeydown(event: KeyboardEvent): void {
 		font-size: var(--font-size-xs);
 	}
 
-	.bucket ul {
+	.column ul {
 		list-style: none;
 		padding: 0;
 		margin: 0;
@@ -360,12 +641,12 @@ function backdropKeydown(event: KeyboardEvent): void {
 		gap: var(--space-2xs);
 	}
 
-	.bucket li.focused button {
+	.column li.focused button {
 		background: var(--action-default-wash);
 		border-color: var(--action-default);
 	}
 
-	.bucket button {
+	.column button {
 		display: grid;
 		grid-template-columns: 1fr;
 		gap: var(--space-3xs);
@@ -374,17 +655,17 @@ function backdropKeydown(event: KeyboardEvent): void {
 		background: var(--surface-panel);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-sm);
-		padding: var(--space-sm) var(--space-md);
+		padding: var(--space-xs) var(--space-sm);
 		cursor: pointer;
 		color: inherit;
 		font: inherit;
 	}
 
-	.bucket button:hover {
+	.column button:hover {
 		background: var(--surface-sunken);
 	}
 
-	.bucket button:focus-visible {
+	.column button:focus-visible {
 		outline: 2px solid var(--focus-ring);
 		outline-offset: 2px;
 	}
@@ -398,11 +679,14 @@ function backdropKeydown(event: KeyboardEvent): void {
 
 	.title {
 		font-weight: var(--font-weight-semibold);
-		font-size: var(--font-size-base);
+		font-size: var(--font-size-sm);
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 
 	.snippet {
-		font-size: var(--font-size-sm);
+		font-size: var(--font-size-xs);
 		color: var(--ink-muted);
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -439,8 +723,14 @@ function backdropKeydown(event: KeyboardEvent): void {
 		background: var(--surface-sunken);
 	}
 
-	@media (max-width: 640px) { /* --ab-breakpoint-md */
-		.buckets {
+	@media (max-width: 1100px) {
+		.columns {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+	}
+
+	@media (max-width: 640px) {
+		.columns {
 			grid-template-columns: 1fr;
 		}
 	}

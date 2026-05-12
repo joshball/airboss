@@ -144,8 +144,12 @@ export function matchesFilters(page: HelpPage, filters: readonly ParsedFilter[])
 			}
 			case 'source':
 			case 'rules':
-				// These facets describe aviation-only axes (sourceType,
-				// flightRules). A help page can never satisfy them.
+			case 'doc':
+			case 'library':
+				// These facets either describe aviation-only axes (sourceType,
+				// flightRules) or scope to non-help content (doc:, library:mine).
+				// A help page can never satisfy them, so an active filter of
+				// any of these shapes empties the help bucket.
 				return false;
 			default: {
 				// Should be exhaustive, but keep the guard in case a new
