@@ -7,7 +7,7 @@ parent: spec.md
 
 Phase exits only when **every box in the relevant section is checked**, both automated and manual.
 
-## Phase 2 -- automated
+## Phase 2 -- automated (SHIPPED, PR #831)
 
 | File                                                         | Asserts                                                                    |
 | ------------------------------------------------------------ | -------------------------------------------------------------------------- |
@@ -54,7 +54,7 @@ Also:
 - Empty palette + closed via Escape preserves prior page focus.
 - 5-line viewport: columns stack vertically.
 
-## Phase 3 -- automated
+## Phase 3 -- automated (SHIPPED, PRs #857 + #921 + #925)
 
 | File                                           | Asserts                                                        |
 | ---------------------------------------------- | -------------------------------------------------------------- |
@@ -70,6 +70,77 @@ Also:
 - Doc-code dropdown fires on `FAA-H-8`, `AC 00`, `Part 91`, `14 CFR`, `§91`, `AvWX`.
 - Animations smooth at 120ms / 80ms / 160ms; `prefers-reduced-motion` honored.
 - Theme switch (light / dark / high-contrast) -- all column accents legible.
+
+## Phase 3.5 -- automated
+
+| File                                              | Asserts                                                                                                                      |
+| ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `libs/help/src/intent-classifier.test.ts`         | `classifyIntent` returns `scoped` / `broad` / `phrase-fts` per the threshold table; quoted forces I-3; doc filter forces I-1 |
+| `libs/help/src/search-core.test.ts`               | `scoreResult` composite: type tier + title bonus + body bonus - depth penalty; per-intent variations                         |
+| `libs/help/src/search.test.ts`                    | `searchGrouped` returns `topHits` (3 rows), bucketed `groups`, intent-shaped panel data; book-level collapse                 |
+| `libs/help/src/loaders/fts-passages.test.ts`      | DB-backed FTS loader; `websearch_to_tsquery` + `ts_headline` snippet highlighting; intersects three source tables            |
+| `libs/help/src/__tests__/ranker-fixtures.json`    | Every query in the manual walk table has an expected top-3 set; runner asserts each fixture                                  |
+| `libs/autocomplete/src/Autocomplete.test.ts`      | Dropdown opens on source match; Tab commits; Esc dismisses; APG combobox semantics                                           |
+| `libs/autocomplete/src/DocCodeSource.test.ts`     | Each doc-code pattern fires; bidirectional code <-> title                                                                    |
+| `libs/autocomplete/src/TitlePrefixSource.test.ts` | Title-prefix >= 4 chars fires; synonym tokens (`wx`, 2 chars) do not                                                         |
+| `libs/help/src/ui/CommandPalette.test.ts`         | Hosts `<Autocomplete>`; Tab commit does NOT run search; Enter (dropdown closed) DOES run search                              |
+
+## Phase 3.5 -- manual walk
+
+Per Decision #16, dispatched in a real browser on the parent repo with `.env` loaded. Not a worktree, not a Playwright probe alone.
+
+### Intent I-2 (broad search) -- ranker correctness
+
+| Query              | Expect (top hit -- must be in top 3)                                                                |
+| ------------------ | --------------------------------------------------------------------------------------------------- |
+| `weather`          | Aviation Weather Handbook (FAA-H-8083-28) in top 3; book card collapsed (NO chapter rows in column) |
+| `Aviation Weather` | Same -- AvWX top of Top Hits                                                                        |
+| `wx`               | Same set; chip `wx -> weather` visible                                                              |
+| `FAA-H-8083-28`    | AvWX top hit; ONE row in Library group; chapters in detail pane                                     |
+| `8083-28`          | Same                                                                                                |
+| `91.103`           | 14 CFR §91.103 top hit (not Part 91)                                                                |
+| `Part 91`          | 14 CFR Part 91 row, inline-prefixed as `14 CFR Part 91`                                             |
+| `Va`               | Va glossary in Airboss Content                                                                      |
+| `density altitude` | Glossary + handbook chapters + KB nodes -- composite ranker should put glossary or KB node top      |
+| `METAR`            | Glossary + AvWX + AIM chapter; chapters NOT separate rows under AvWX                                |
+
+### Intent I-1 (scoped search via autocomplete commit)
+
+| Action                                                                         | Expect                                                                                                |
+| ------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| Type `FAA-H-808`, Tab on highlighted `FAA-H-8083-28 Aviation Weather Handbook` | Input becomes `FAA-H-8083-28`; modal stays in current state; pressing Enter runs scoped search        |
+| Type `Aviation Weath`, Tab on dropdown row                                     | Input becomes `Aviation Weather Handbook`; pressing Enter runs scoped search                          |
+| Run scoped search                                                              | Doc headline card + "References to this doc" panel (lessons / KB nodes / cards / cross-doc citations) |
+| Cmd+Enter on dropdown                                                          | Sets `doc:FAA-H-8083-28` chip; clears input; runs scoped search immediately                           |
+
+### Intent I-3 (phrase-FTS)
+
+| Query                                       | Expect                                                                                              |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `"dusk vs sunset"` (quoted)                 | Passage cards with hit-words highlighted; sections like 14 CFR §1.1 (defines "night"), AIM 4-3 etc. |
+| `something about pilot rest before night`   | Same shape (word count >= 4 forces I-3)                                                             |
+| `regs say something about cruise altitudes` | I-3; passage cards from CFR sections                                                                |
+| `VFR minimums in class B`                   | I-3; passages from 14 CFR §91.155, AIM 3-2 etc.                                                     |
+
+### Layout + interaction
+
+- [ ] Left type-nav: counts per group; click filters to that group; greyed buckets with 0 hits still visible
+- [ ] App Help bucket hidden by default; surfaces only when filtered
+- [ ] `Library` label (NOT `FAA Resources`) on the group
+- [ ] Top Hits strip: 3 rows, mixed types; hidden in I-3 mode
+- [ ] Inline-prefix: `14 CFR Part 91`, `49 CFR Part 175` -- same column, no nested CFR Title nav
+- [ ] Book-level collapse: NO query returns a book + its chapters as separate column rows; chapters live in the detail pane
+- [ ] Doc IDs prominent on every Library row
+- [ ] Autocomplete dropdown is a separate overlay below the input -- NOT inside the column display
+- [ ] Tab from dropdown does NOT run the search; only Enter (with dropdown closed) runs the search
+- [ ] Detail pane: `Cmd+\` toggles; < 900px hides; clickable sub-results (chapters/sections) for collapsed-book rows
+- [ ] All 4 apps (study, sim, hangar, flightbag) -- same palette behavior
+
+### Browser verification (per Decision #16)
+
+- [ ] `bun scripts/dev.ts study` in parent repo, env loaded
+- [ ] Devtools console clean on the affected pages (no `node:fs externalized`, no `Buffer is not defined`, no new pageerrors)
+- [ ] [tests/e2e/browser-hydration-smoke.spec.ts](../../../tests/e2e/browser-hydration-smoke.spec.ts) passes on the canonical surfaces
 
 ## Phase 4 -- automated
 

@@ -7,7 +7,9 @@ parent: spec.md
 
 One section per phase. Each line is roughly one PR-sized commit; expect more granular work inside.
 
-## Phase 2 -- result taxonomy + multi-column palette
+Phases 2 and 3 shipped (PRs #831, #857, #921, #925). Phase 3.5 is the next slice and the redesign captured in `design/mockups/search/`. Phase 4 and 5 build on top of the Phase 3.5 shape.
+
+## Phase 2 -- result taxonomy + multi-column palette (SHIPPED PR #831)
 
 ### 2a. Enum expansion (Decision #7)
 
@@ -84,7 +86,7 @@ For each loader: pure function `loadX(query, host): readonly SearchResult[]`. SS
 - [ ] `bun test` green across `libs/aviation`, `libs/help`, `libs/bc-study`.
 - [ ] `/ball-review-full` -- fix every finding in same PR; re-run.
 
-## Phase 3 -- visual variants + detail pane + doc-code autocomplete
+## Phase 3 -- visual variants + detail pane + doc-code autocomplete (SHIPPED PRs #857 + #921 + #925)
 
 ### 3a. Variant prototypes
 
@@ -134,6 +136,93 @@ For each loader: pure function `loadX(query, host): readonly SearchResult[]`. SS
 ### 3h. Gate
 
 - [ ] `bun run check branch`, `bun test`, Playwright suite, `/ball-review-full` -> fix all.
+
+## Phase 3.5 -- ranker + layout redesign (NEXT)
+
+Triggered by Joshua's walk of Phase 3 on 2026-05-12. The Phase 3 layout (3-column FAA / Airboss / App Help) buries Airboss Content behind section-level pollution, the ranker treats book hits and section body matches as peers (so the Aviation Weather Handbook doesn't surface for `weather`), and the autocomplete is entangled with the result column. Phase 3.5 fixes all of that and lands BEFORE Phase 4 so commands build on the new shape.
+
+Full mockups + ranker tables: [`design/mockups/search/`](../../../design/mockups/search/).
+
+### 3.5a. Intent classifier
+
+- [ ] `libs/help/src/intent-classifier.ts` (new). Pure function `classifyIntent(parsed: ParsedQuery, autocompleteCommitted: boolean): SearchIntent` returning `'scoped' | 'broad' | 'phrase-fts'`.
+- [ ] Thresholds: `scoped` if `doc:` chip set; `phrase-fts` if quoted OR word count >= 4 OR no title-prefix match; `broad` otherwise.
+- [ ] Sibling `.test.ts` covering each branch + edge cases.
+
+### 3.5b. Ranker rewrite
+
+- [ ] Replace `rankBucket` in [libs/help/src/search-core.ts](../../../libs/help/src/search-core.ts) with composite scorer: `type_tier_weight + title_match_tier + body_match_tier - depth_penalty`.
+- [ ] Type-tier table per [`design/mockups/search/mockup-04-ranking.md`](../../../design/mockups/search/mockup-04-ranking.md). Constants in `libs/constants/src/`.
+- [ ] Per-intent variations: I-1 filters by `doc:` chip; I-2 standard composite; I-3 inverts type-tier (section > book) + boosts body + rewards depth + adds `ts_rank_cd` lift.
+- [ ] Ranker fixtures at `libs/help/src/__tests__/ranker-fixtures.json` -- one row per query in test-plan.md with the expected top-3 set.
+
+### 3.5c. Top-hits strip
+
+- [ ] `searchGrouped` returns `topHits: SearchResult[]` (3 rows, ranker-decided, mixed types) alongside per-group buckets.
+- [ ] Hidden in I-3 phrase-FTS mode (user wants passages, not docs).
+
+### 3.5d. Book-level collapse
+
+- [ ] When a query matches a book AND its chapters in I-1 / I-2 modes, return ONE row for the book.
+- [ ] Chapters / sections / paragraphs roll up as `result.children: SearchResult[]` on the parent row.
+- [ ] Detail pane renders `result.children` as a clickable list under the parent's headline content.
+- [ ] In I-3 mode, chapters/sections/paragraphs ARE the result (no collapse).
+
+### 3.5e. Inline-prefix sub-groups
+
+- [ ] When a group has <= 4 sub-groups that share a prefix (CFR: 14 CFR / 49 CFR), prefix the row inline (`14 CFR Part 91`, `49 CFR Part 175`) instead of creating a nested column.
+- [ ] Lives in `libs/help/src/ui/PaletteRow.svelte` (new shared row template).
+
+### 3.5f. Layout rewrite
+
+- [ ] `libs/help/src/ui/CommandPalette.svelte` rewrites to top-hits strip + vertical type-nav (left, with counts) + result column (middle) + detail pane (right). See [mockup-02-new-layout.md](../../../design/mockups/search/mockup-02-new-layout.md).
+- [ ] New `PaletteTypeNav.svelte` (vertical, click-to-filter, `App Help` hidden by default).
+- [ ] New `PaletteTopHits.svelte` (3-row compact strip).
+- [ ] New `PaletteRow.svelte` (shared template, always shows doc code + title for published types).
+- [ ] Drop `PaletteColumn.svelte` (replaced by `PaletteTypeNav` + result column).
+- [ ] Narrow viewport (< 900px): type-nav collapses to horizontal chip row; detail pane collapses entirely.
+
+### 3.5g. Autocomplete extraction (R13)
+
+- [ ] New lib `libs/autocomplete/` (or fold into `@ab/ui` -- decide based on whether `@ab/ui` already has dropdowns).
+- [ ] `Autocomplete.svelte` -- generic dropdown component. Props: `value` (bindable), `sources: AutocompleteSource[]`, `onCommit`. Wraps any text input.
+- [ ] `AutocompleteSource` interface: `match(input: string): readonly AutocompleteEntry[] | null`.
+- [ ] Bundled sources: `DocCodeSource` (replaces `libs/aviation/src/doc-code-detector.ts` integration) and `TitlePrefixSource` (trie against aviation registry).
+- [ ] Refactor `CommandPalette.svelte` to host `<Autocomplete sources={[DocCodeSource, TitlePrefixSource]} ... />` around its input. Modal never opens autocomplete itself; Tab commits, Enter (dropdown closed) runs the search.
+- [ ] Delete `libs/help/src/ui/DocCodeAutocomplete.svelte` (logic moves to autocomplete sources).
+- [ ] APG combobox semantics: `aria-controls`, `aria-expanded`, `aria-activedescendant` on input; `role="listbox"` on dropdown.
+- [ ] Sibling tests for the component + each bundled source.
+
+### 3.5h. Result-shape per intent
+
+- [ ] I-1 scoped: render a doc-headline card + "References to this doc" panel (lessons / knowledge nodes / cards / cross-doc citations). New `PaletteScopedView.svelte`.
+- [ ] I-2 broad: top-hits + type-nav + result column + detail pane (3.5f layout).
+- [ ] I-3 phrase-FTS: passage cards with highlighted snippets. No top-hits; no type-nav. New `PalettePassageView.svelte`.
+
+### 3.5i. Phrase-FTS loader
+
+- [ ] `libs/help/src/loaders/fts-passages.ts` (new). Queries `study.referenceSection.body` + `study.knowledgeNode.contentMd` + `study.lesson.body` via Postgres `websearch_to_tsquery`.
+- [ ] Returns `SearchResult`s with `snippet` populated via `ts_headline` for snippet highlighting.
+- [ ] Server-side only; consumed via `/api/palette/search` endpoint already mounted in Phase 2.
+- [ ] Sibling integration test seeding fixture rows in each of the three source tables.
+
+### 3.5j. Label rename "FAA Resources" -> "Library" (R12)
+
+- [ ] Update labels in [libs/help/src/schema/result-types.ts](../../../libs/help/src/schema/result-types.ts) `COLUMN_LABELS`. Type IDs stay stable.
+- [ ] Grep app code for hardcoded "FAA Resources" strings; replace.
+
+### 3.5k. Tests + manual walk
+
+- [ ] Ranker fixtures cover the queries in [test-plan.md](test-plan.md) and the new I-3 cases (`"dusk vs sunset"`, `pilot rest before night flying`, etc.).
+- [ ] Playwright e2e: confirm I-1 / I-2 / I-3 each render the correct shape for representative queries.
+- [ ] Manual walk in a real browser (per Decision #16) across study, sim, hangar, flightbag. Every query in test-plan.md's Phase 3.5 table passes by eye + by ranker fixture.
+
+### 3.5l. Gate
+
+- [ ] `bun run check branch` clean.
+- [ ] All tests green; ranker fixtures pass.
+- [ ] `/ball-review-full` -- run end-to-end; fix every finding in same PR; re-run clean.
+- [ ] **Browser load verified by Joshua in his real env** before merge -- not by agent self-report. Per Decision #16 and the 2026-05-12 incident.
 
 ## Phase 4 -- command surfaces (Cmd+Shift+P)
 
