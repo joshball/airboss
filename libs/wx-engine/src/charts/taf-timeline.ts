@@ -7,8 +7,8 @@
  *
  * `taf-timeline` is the one chart whose spec carries a `stationIcao`
  * field (required by `tafTimelineSpecSchema`). Slug pattern is
- * `wx-scenario-<scenario-id>-taf-<station-lowercased>` so a 5-station
- * scenario emits 5 distinct timeline slugs.
+ * `wx-scenarios/<scenario-id>/taf-<station-lowercased>` so a 5-station
+ * scenario emits 5 distinct timeline slugs (per ADR 027 PR 3).
  *
  * Lifted from the spike's pre-retirement
  * `spikes/wx-engine/src/charts/product-charts.ts` (PR #801).

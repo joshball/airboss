@@ -33,7 +33,7 @@
  *     "Layer 4 derivation: commentary"
  */
 
-import { AIRMET_FAMILIES } from '@ab/constants';
+import { AIRMET_FAMILIES, wxScenarioChartSlug } from '@ab/constants';
 import type { ChartArtifact } from '../charts/types';
 import type { AirmetAdvisory, DerivedFbGrid, DerivedMetar, DerivedPirep, DerivedTaf } from '../products/types';
 import { distanceToPolylineKm, findAirMass, pointInPolygon, sideOfFront } from '../truth/geometry';
@@ -387,7 +387,7 @@ function severityRank(p: DerivedPirep): number {
 // ----------------------------------------------------------------------
 
 function chartBySuffix(charts: ChartArtifact[], scenarioId: string, suffix: string): ChartArtifact | null {
-	const want = `wx-scenario-${scenarioId}-${suffix}`;
+	const want = wxScenarioChartSlug(scenarioId, suffix);
 	return charts.find((c) => c.slug === want) ?? null;
 }
 

@@ -6,9 +6,11 @@
  * artifact carries:
  *
  *   - `slug`: the chart slug used everywhere downstream
- *     (`wx-scenario-<scenario-id>-<chart-kind>[-<station>]`). Doubles as
- *     the directory name under `data/charts/wx/` and the bundle's
- *     `charts/<slug>/` subdirectory.
+ *     (`wx-scenarios/<scenario-id>/<chart-kind>[-<station>]`, per ADR 027
+ *     PR 3). Maps to the on-disk directory under `data/charts/wx/` via
+ *     `chartSlugToDir(repoRoot, slug)`. The bundle's per-chart subdirectory
+ *     under `data/wx-scenarios/<scenario-id>/charts/` is keyed by the
+ *     trailing chart-kind segment.
  *   - `spec`: the wx-charts library's per-chart-type spec object. Each
  *     emitted spec validates against the schema registered at
  *     `CHART_RENDERERS[spec.type].schema` (see
