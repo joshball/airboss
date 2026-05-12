@@ -65,9 +65,7 @@ Mechanical work in the new lib:
 
 ## Out of scope
 
-- Sim's round-dial instruments (`apps/sim/src/lib/instruments/`, `apps/sim/src/lib/horizon/`, `apps/sim/src/lib/panels/`) stay in `apps/sim/`. They have one consumer (sim) and a different visual language (round-dial vs. tape glass). Promoting them is a separate decision with its own trigger.
-- No redesign. The components ship as-is; visual changes are a downstream WP if needed.
-- No new features. This is move-and-rewire only.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Shipped
 
