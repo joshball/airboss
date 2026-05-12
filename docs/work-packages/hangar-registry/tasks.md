@@ -96,10 +96,6 @@ Serial. Each bucket ends with `bun run check` clean + its own commit. One PR for
 - [ ] No FOUC on first paint (verify by disabling JS then reloading)
 - [ ] PR opened against main with `gh pr create`; do not self-merge
 
-## Deferred (surface only, not implemented here)
+## Out of scope
 
-- Presence indicators
-- Bulk approve/revert
-- Cron-based automatic sync
-- SSE (stay on polling until sluggish)
-- Public (non-admin) job log view
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
