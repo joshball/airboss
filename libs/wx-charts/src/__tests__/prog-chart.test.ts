@@ -161,6 +161,18 @@ describe('renderProgChart (Phase D end-to-end)', () => {
 		).rejects.toThrow(/forecast/);
 	});
 
+	it('clips the vector-symbology layer to the CONUS union polygon', async () => {
+		const basemapJson = readFileSync(BASEMAP_PATH, 'utf8');
+		const result = await renderProgChart({
+			spec: SPEC,
+			sources: { forecast: JSON.stringify(FIXTURE), basemap: basemapJson },
+			basemapPath: BASEMAP_PATH,
+			libraryVersion: '@ab/wx-charts@0.1.0-test',
+		});
+		expect(result.svg).toMatch(/<clipPath id="conus-clip-[A-Za-z0-9_-]+">/);
+		expect(result.svg).toMatch(/<g clip-path="url\(#conus-clip-[A-Za-z0-9_-]+\)">/);
+	});
+
 	it('falls back to generic right title when forecast hours absent', async () => {
 		const basemapJson = readFileSync(BASEMAP_PATH, 'utf8');
 		const fixtureNoHours = { ...FIXTURE, forecastHours: undefined, validTimeIso: undefined };
