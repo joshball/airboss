@@ -27,9 +27,30 @@
  */
 
 import { and, eq, isNull } from 'drizzle-orm';
-import { db } from '../db/client.ts';
 import { type EditionAliasEntry, type EditionRow, editions as editionsTable } from '../db/schema.ts';
 import type { Edition, SourceId } from '../types.ts';
+
+/**
+ * Lazy `db` accessor. Statically importing `db` from `'../db/client.ts'` pulls
+ * `@ab/db/connection` into the runtime barrel, which Vite then bundles into
+ * every browser page that imports `@ab/sources` (e.g. via the palette's
+ * `urlForReference`). `@ab/db/connection` calls `postgres(...)` at top-level
+ * and the `postgres` package references `Buffer` at module top-level, which
+ * crashes hydration in the browser with `ReferenceError: Buffer is not
+ * defined`. Deferring the import to the first DB call keeps `@ab/sources`
+ * browser-safe -- the resolvers' sync `getEditionsMap()` path never reaches
+ * `@ab/db/connection`, and the async DB-reading paths only run server-side
+ * (bootstrap warm, ingest writes, edition resolver), where the dynamic
+ * import works as a regular module load.
+ */
+let _db: typeof import('@ab/db/connection').db | null = null;
+async function getDb(): Promise<typeof import('@ab/db/connection').db> {
+	if (_db === null) {
+		const mod = await import('@ab/db/connection');
+		_db = mod.db;
+	}
+	return _db;
+}
 
 /**
  * The edition map. Keys are the canonical `airboss-ref:` URI string with
@@ -136,6 +157,7 @@ export async function getEditionsMapAsync(): Promise<Map<SourceId, readonly Edit
  * lex-max edition slug per corpus, which covers the renderer hot path.
  */
 export async function getCurrentEditionForSource(sourceId: SourceId): Promise<Edition | null> {
+	const db = await getDb();
 	const rows = await db
 		.select()
 		.from(editionsTable)
@@ -157,6 +179,7 @@ export async function getCurrentEditionForSource(sourceId: SourceId): Promise<Ed
  * Idempotent on no-op DB content.
  */
 export async function loadEditionsFromDb(): Promise<void> {
+	const db = await getDb();
 	const rows = await db.select().from(editionsTable);
 	const next = new Map<SourceId, Edition[]>();
 	for (const row of rows) {

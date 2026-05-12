@@ -14,11 +14,28 @@
 import { PROMOTION_STATES } from '@ab/constants';
 import { createId } from '@ab/utils';
 import { asc, eq } from 'drizzle-orm';
-import { db } from '../db/client.ts';
 import { type PromotionBatchRow, promotionBatches } from '../db/schema.ts';
 import type { Edition, SourceEntry, SourceId, SourceLifecycle } from '../types.ts';
 import { __editions_internal__ } from './editions.ts';
 import { __sources_internal__, getSources } from './sources.ts';
+
+/**
+ * Lazy `db` accessor. See the matching comment in `editions.ts` for the full
+ * rationale -- in short, statically importing from `../db/client.ts` pulls
+ * `@ab/db/connection` (and the postgres driver) into the runtime barrel,
+ * which crashes hydration in the browser via `Buffer is not defined`. Every
+ * use of `db` here is async and only fires server-side (bootstrap warm,
+ * ingest writes, audit reads), so the dynamic import is a regular module
+ * load when the function actually runs.
+ */
+let _db: typeof import('@ab/db/connection').db | null = null;
+async function getDb(): Promise<typeof import('@ab/db/connection').db> {
+	if (_db === null) {
+		const mod = await import('@ab/db/connection');
+		_db = mod.db;
+	}
+	return _db;
+}
 
 // ---------------------------------------------------------------------------
 // Promotion-batch shape (ADR 019 §2.4)
@@ -137,6 +154,7 @@ export async function recordPromotion(input: PromotionInput): Promise<PromotionR
 	};
 
 	try {
+		const db = await getDb();
 		await db.transaction(async (tx) => {
 			await tx.insert(promotionBatches).values(toRow(batch));
 		});
@@ -187,6 +205,7 @@ export async function recordDePromotion(input: DePromotionInput): Promise<Promot
 	};
 
 	try {
+		const db = await getDb();
 		await db.transaction(async (tx) => {
 			await tx.insert(promotionBatches).values(toRow(batch));
 		});
@@ -214,6 +233,7 @@ export async function recordDePromotion(input: DePromotionInput): Promise<Promot
  * therefore reflects the most-recent state per id.
  */
 export async function rebuildLifecycleOverlay(): Promise<void> {
+	const db = await getDb();
 	const rows = await db.select().from(promotionBatches).orderBy(asc(promotionBatches.promotionDate));
 	ENTRY_LIFECYCLES.clear();
 	for (const row of rows) {
@@ -357,6 +377,7 @@ export async function commitIngestBatch(input: IngestBatchInput): Promise<Ingest
  * pattern.
  */
 export async function getBatch(id: string): Promise<PromotionBatch | null> {
+	const db = await getDb();
 	const rows = await db.select().from(promotionBatches).where(eq(promotionBatches.id, id)).limit(1);
 	const row = rows[0];
 	return row === undefined ? null : rowToBatch(row);
@@ -367,6 +388,7 @@ export async function getBatch(id: string): Promise<PromotionBatch | null> {
  * audit trail.
  */
 export async function listBatches(): Promise<readonly PromotionBatch[]> {
+	const db = await getDb();
 	const rows = await db.select().from(promotionBatches).orderBy(asc(promotionBatches.promotionDate));
 	return rows.map(rowToBatch);
 }

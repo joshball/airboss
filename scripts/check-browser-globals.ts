@@ -215,11 +215,31 @@ for (const file of appsListing.split('\n')) {
 //
 // Entries are runtime barrels: client-eligible by design, and any value
 // reachable from them must be browser-safe.
-const RUNTIME_BARRELS = [
-	'libs/bc/study/src/index.ts',
-	'libs/bc/hangar/src/index.ts',
-	'libs/bc/ingest-review/src/index.ts',
-] as const;
+interface BarrelSpec {
+	readonly path: string;
+	// When false, `node:*` static imports along the transitive chain are
+	// tolerated -- Vite stubs them in the browser bundle and they do not
+	// crash hydration. The check still flags `@ab/db/connection`, `postgres`,
+	// `drizzle-orm/postgres-js`, and per-package server barrels, which DO
+	// crash (postgres' `bytes.js` evaluates `Buffer.allocUnsafe` at module
+	// top). Set to true for barrels that have no escape hatch for `node:*`.
+	readonly flagNodeBuiltins: boolean;
+}
+
+const RUNTIME_BARRELS: readonly BarrelSpec[] = [
+	{ path: 'libs/bc/study/src/index.ts', flagNodeBuiltins: true },
+	{ path: 'libs/bc/hangar/src/index.ts', flagNodeBuiltins: true },
+	{ path: 'libs/bc/ingest-review/src/index.ts', flagNodeBuiltins: true },
+	// `@ab/sources` is browser-bundled via `urlForReference` / locator parser
+	// imports from `.svelte` files (palette detail pane, citation chips). The
+	// runtime barrel must not value-reach `@ab/db/connection` or `postgres`
+	// (those crash hydration with `ReferenceError: Buffer is not defined`).
+	// Pre-existing `node:fs` / `node:path` static imports along corpus
+	// resolvers / `registry/query.ts` / `check.ts` are tolerated -- Vite
+	// stubs `node:*` for the client bundle and they no-op at runtime in the
+	// browser. Only flag the postgres-shaped leaks.
+	{ path: 'libs/sources/src/index.ts', flagNodeBuiltins: false },
+];
 
 // Module specifiers whose runtime evaluation pulls a server-only chunk
 // into the client bundle. `import type` is allowed (erases at compile
@@ -287,7 +307,7 @@ async function resolveLocal(fromFile: string, specifier: string): Promise<string
 const barrelFindings: Finding[] = [];
 const visited = new Set<string>();
 
-async function walkForLeaks(file: string, chain: readonly string[]): Promise<void> {
+async function walkForLeaks(file: string, chain: readonly string[], flagNodeBuiltins: boolean): Promise<void> {
 	const key = file;
 	if (visited.has(key)) return;
 	visited.add(key);
@@ -297,7 +317,9 @@ async function walkForLeaks(file: string, chain: readonly string[]): Promise<voi
 	for (const imp of imports) {
 		if (imp.isTypeOnly) continue;
 		// Hit on a server-only specifier => report and stop walking this branch.
-		if (SERVER_ONLY_SPECIFIERS.includes(imp.specifier) || isNodeBuiltin(imp.specifier)) {
+		const isServerOnly = SERVER_ONLY_SPECIFIERS.includes(imp.specifier);
+		const isNodeImport = isNodeBuiltin(imp.specifier);
+		if (isServerOnly || (isNodeImport && flagNodeBuiltins)) {
 			barrelFindings.push({
 				file,
 				line: 0,
@@ -307,17 +329,22 @@ async function walkForLeaks(file: string, chain: readonly string[]): Promise<voi
 			});
 			continue;
 		}
+		if (isNodeImport && !flagNodeBuiltins) {
+			// Tolerated per barrel spec -- Vite stubs `node:*` in the browser
+			// bundle so the static import survives without crashing hydration.
+			continue;
+		}
 		// Recurse into local relative imports.
 		const local = await resolveLocal(file, imp.specifier);
 		if (local !== null) {
-			await walkForLeaks(local, [...chain, file]);
+			await walkForLeaks(local, [...chain, file], flagNodeBuiltins);
 		}
 	}
 }
 
 for (const barrel of RUNTIME_BARRELS) {
 	visited.clear();
-	await walkForLeaks(barrel, []);
+	await walkForLeaks(barrel.path, [], barrel.flagNodeBuiltins);
 }
 
 if (findings.length === 0 && barrelFindings.length === 0) {
