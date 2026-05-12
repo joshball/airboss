@@ -32,7 +32,7 @@ import { CHART_TYPES, LAYER_BANDS } from '@ab/constants';
 import { contours } from 'd3-contour';
 import { geoPath } from 'd3-geo';
 import { z } from 'zod';
-import { loadConusBasemapFromString } from '../basemap';
+import { loadConusBasemapFromString, readBasemapTopoJson, renderNorthAmericaContextLayer } from '../basemap';
 import { buildChrome } from '../chrome';
 import { renderGraticule } from '../graticule';
 import { composeChart, type LayerBandMap } from '../layers';
@@ -150,21 +150,6 @@ const ALTITUDE_BAND_LABEL: Record<'low' | 'mid' | 'high', string> = {
 function decodeSourceText(value: Uint8Array | string): string {
 	if (typeof value === 'string') return value;
 	return new TextDecoder('utf-8').decode(value);
-}
-
-type GetBuiltinModule = (spec: string) => unknown;
-type NodeFs = { promises: { readFile: (path: string, encoding: 'utf8') => Promise<string> } };
-
-async function readBasemapFile(path: string): Promise<string> {
-	const proc = (typeof process !== 'undefined' ? process : undefined) as
-		| (NodeJS.Process & { getBuiltinModule?: GetBuiltinModule })
-		| undefined;
-	const getBuiltin = proc?.getBuiltinModule;
-	if (typeof getBuiltin !== 'function') {
-		throw new Error('turbulence-gtg: cannot read basemap file -- no process.getBuiltinModule available');
-	}
-	const fs = getBuiltin('node:fs') as NodeFs;
-	return fs.promises.readFile(path, 'utf8');
 }
 
 function escapeXml(value: string): string {
@@ -301,9 +286,19 @@ export async function renderTurbulenceGtg(input: ChartRenderInput<TurbulenceGtgS
 	if (basemapBytes !== undefined) {
 		basemapJson = decodeSourceText(basemapBytes);
 	} else {
-		basemapJson = await readBasemapFile(input.basemapPath);
+		basemapJson = await readBasemapTopoJson('turbulence-gtg', input.basemapPath);
 	}
-	const basemap = loadConusBasemapFromString(basemapJson);
+	// Canada + Mexico context outlines (ADR 027 Option A). Optional --
+	// tests may omit; CLI passes contextBasemapPath. When neither is
+	// supplied, the layer renders empty and the chart still composes.
+	const contextBytes = input.sources['basemap-context'];
+	let contextJson: string | null = null;
+	if (contextBytes !== undefined) {
+		contextJson = decodeSourceText(contextBytes);
+	} else if (input.contextBasemapPath !== undefined) {
+		contextJson = await readBasemapTopoJson('turbulence-gtg', input.contextBasemapPath);
+	}
+	const basemap = loadConusBasemapFromString(basemapJson, null, contextJson);
 
 	// 3. Projection.
 	const projection = lambertProjection({
@@ -321,6 +316,7 @@ export async function renderTurbulenceGtg(input: ChartRenderInput<TurbulenceGtgS
 	const bands: LayerBandMap = {};
 	bands[LAYER_BANDS.BACKGROUND] = `<rect x="0" y="0" width="${SVG_WIDTH}" height="${SVG_HEIGHT}" fill="#fafaf7" />`;
 	bands[LAYER_BANDS.GRATICULE] = renderGraticule(projection);
+	bands[LAYER_BANDS.NORTH_AMERICA_CONTEXT] = renderNorthAmericaContextLayer(basemap, (f) => path(f));
 	bands[LAYER_BANDS.BASEMAP_FILL] = basemap.states.features
 		.map((f) => `<path d="${path(f) ?? ''}" fill="#f3f1ea" stroke="none" />`)
 		.join('\n');
@@ -358,6 +354,7 @@ export async function renderTurbulenceGtg(input: ChartRenderInput<TurbulenceGtgS
 			layer_counts: {
 				[LAYER_BANDS.VECTOR_SYMBOLOGY]: tierResult.tierCount,
 				[LAYER_BANDS.BASEMAP_FILL]: basemap.states.features.length,
+				[LAYER_BANDS.NORTH_AMERICA_CONTEXT]: basemap.northAmericaContext.features.length,
 			},
 			drawn_pixels: 0,
 			parser_warnings: [],
