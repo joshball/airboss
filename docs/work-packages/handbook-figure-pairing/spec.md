@@ -37,11 +37,7 @@ This WP does NOT replace the existing pipeline. It tightens the heuristic in `fi
 
 ## Non-goals
 
-- Re-architecting the ingest pipeline. The three-tier same-page/prior-page/next-page geometric pairing in [figures.py:124-135](../../../tools/handbook-ingest/ingest/figures.py#L124-L135) is broadly correct.
-- OCR over the PDF. The orphan rate is high enough that text-based fixes cover most of it; OCR is a future option for the long tail (see [Risks](#risks)).
-- Manual override sidecar files. Considered and rejected (see [Design alternatives](#design-alternatives)).
-- Onboarding new handbooks. Pure pipeline correctness work; the ingest flow itself is unchanged.
-- Re-extraction of historical handbooks at first merge. The fix lands in the pipeline; existing handbook trees re-ingest on the next routine refresh.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Current state
 
@@ -49,14 +45,14 @@ This WP does NOT replace the existing pipeline. It tightens the heuristic in `fi
 
 | Handbook            | `caption-without-figure` | `figure-without-caption` |
 | ------------------- | ------------------------ | ------------------------ |
-| IFH                 |                      353 |                       14 |
-| Aviation Instructor |                      325 |                        0 |
-| PHAK                |                      269 |                       67 |
-| AFH                 |                      181 |                        6 |
-| IPH                 |                      128 |                       49 |
-| AvWX                |                       94 |                      149 |
-| Risk Management     |                       85 |                       62 |
-| **Total**           |                **1,435** |                  **347** |
+| IFH                 | 353                      | 14                       |
+| Aviation Instructor | 325                      | 0                        |
+| PHAK                | 269                      | 67                       |
+| AFH                 | 181                      | 6                        |
+| IPH                 | 128                      | 49                       |
+| AvWX                | 94                       | 149                      |
+| Risk Management     | 85                       | 62                       |
+| **Total**           | **1,435**                | **347**                  |
 
 Counts confirmed by `jq '[.warnings[] | select(.code == "caption-without-figure")] | length'` on each handbook's `warnings.json`.
 
