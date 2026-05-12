@@ -61,30 +61,30 @@ All tables in the `study` Postgres schema namespace. IDs use `prefix_ULID` via `
 
 Canonical graph node. One row per `course/knowledge/**/node.md` file. Created/upserted by `bun run db build`.
 
-| Column                  | Type        | Constraints                              | Notes                                                                                                                    |
-| ----------------------- | ----------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| id                      | text        | PK                                       | `kn_` prefix -- internal ULID, stable across renames of the slug                                                         |
-| slug                    | text        | NOT NULL, UNIQUE                         | Kebab-case YAML id (e.g., `airspace-vfr-weather-minimums`). Authoring-facing.                                            |
-| title                   | text        | NOT NULL                                 | Human-readable node name                                                                                                 |
-| domain                  | text        | NOT NULL, CHECK in `DOMAINS`             | Primary domain (matches `libs/constants/src/study.ts` `DOMAINS`)                                                         |
-| cross_domains           | jsonb       | NOT NULL, DEFAULT '[]'                   | Array of domain slugs also relevant                                                                                      |
-| knowledge_types         | jsonb       | NOT NULL, DEFAULT '[]'                   | Array from `KNOWLEDGE_TYPES` (factual, conceptual, procedural, judgment, perceptual, pedagogical)                        |
-| technical_depth         | text        | NOT NULL, CHECK in `TECHNICAL_DEPTHS`    | surface, working, deep                                                                                                   |
-| stability               | text        | NOT NULL, CHECK in `NODE_STABILITIES`    | stable, evolving, volatile                                                                                               |
-| relevance               | jsonb       | NOT NULL, DEFAULT '[]'                   | Array of `{ cert, bloom, priority }` objects; see validation                                                             |
-| modalities              | jsonb       | NOT NULL, DEFAULT '[]'                   | Array from `NODE_MODALITIES`                                                                                             |
-| estimated_time_minutes  | integer     | NULL, CHECK >= 0                         | Full learning experience duration (author estimate)                                                                      |
-| review_time_minutes     | integer     | NULL, CHECK >= 0                         | Refresher duration (author estimate)                                                                                     |
-| `references`            | jsonb       | NOT NULL, DEFAULT '[]'                   | Array of `{ source, detail, note }`                                                                                      |
-| assessable              | boolean     | NOT NULL, DEFAULT true                   |                                                                                                                          |
-| assessment_methods      | jsonb       | NOT NULL, DEFAULT '[]'                   | Array from `ASSESSMENT_METHODS`                                                                                          |
-| mastery_criteria        | text        | NULL                                     | Markdown -- optional per-node override of platform default                                                                |
-| content_path            | text        | NOT NULL                                 | Repo-relative path to `node.md` (e.g., `course/knowledge/airspace/vfr-weather-minimums/node.md`)                         |
-| lifecycle               | text        | NOT NULL, CHECK in `NODE_LIFECYCLES`     | skeleton, started, complete -- derived on build from content-phase presence, persisted for query convenience             |
-| content_hash            | text        | NOT NULL                                 | SHA-256 of the canonical node file (frontmatter + body). Used by the build to detect changes and avoid gratuitous writes |
-| source_build_id         | text        | NOT NULL                                 | FK `study.knowledge_build.id` -- which build wrote this row                                                              |
-| created_at              | timestamptz | NOT NULL, DEFAULT now()                  |                                                                                                                          |
-| updated_at              | timestamptz | NOT NULL, DEFAULT now()                  |                                                                                                                          |
+| Column                 | Type        | Constraints                           | Notes                                                                                                                    |
+| ---------------------- | ----------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| id                     | text        | PK                                    | `kn_` prefix -- internal ULID, stable across renames of the slug                                                         |
+| slug                   | text        | NOT NULL, UNIQUE                      | Kebab-case YAML id (e.g., `airspace-vfr-weather-minimums`). Authoring-facing.                                            |
+| title                  | text        | NOT NULL                              | Human-readable node name                                                                                                 |
+| domain                 | text        | NOT NULL, CHECK in `DOMAINS`          | Primary domain (matches `libs/constants/src/study.ts` `DOMAINS`)                                                         |
+| cross_domains          | jsonb       | NOT NULL, DEFAULT '[]'                | Array of domain slugs also relevant                                                                                      |
+| knowledge_types        | jsonb       | NOT NULL, DEFAULT '[]'                | Array from `KNOWLEDGE_TYPES` (factual, conceptual, procedural, judgment, perceptual, pedagogical)                        |
+| technical_depth        | text        | NOT NULL, CHECK in `TECHNICAL_DEPTHS` | surface, working, deep                                                                                                   |
+| stability              | text        | NOT NULL, CHECK in `NODE_STABILITIES` | stable, evolving, volatile                                                                                               |
+| relevance              | jsonb       | NOT NULL, DEFAULT '[]'                | Array of `{ cert, bloom, priority }` objects; see validation                                                             |
+| modalities             | jsonb       | NOT NULL, DEFAULT '[]'                | Array from `NODE_MODALITIES`                                                                                             |
+| estimated_time_minutes | integer     | NULL, CHECK >= 0                      | Full learning experience duration (author estimate)                                                                      |
+| review_time_minutes    | integer     | NULL, CHECK >= 0                      | Refresher duration (author estimate)                                                                                     |
+| `references`           | jsonb       | NOT NULL, DEFAULT '[]'                | Array of `{ source, detail, note }`                                                                                      |
+| assessable             | boolean     | NOT NULL, DEFAULT true                |                                                                                                                          |
+| assessment_methods     | jsonb       | NOT NULL, DEFAULT '[]'                | Array from `ASSESSMENT_METHODS`                                                                                          |
+| mastery_criteria       | text        | NULL                                  | Markdown -- optional per-node override of platform default                                                               |
+| content_path           | text        | NOT NULL                              | Repo-relative path to `node.md` (e.g., `course/knowledge/airspace/vfr-weather-minimums/node.md`)                         |
+| lifecycle              | text        | NOT NULL, CHECK in `NODE_LIFECYCLES`  | skeleton, started, complete -- derived on build from content-phase presence, persisted for query convenience             |
+| content_hash           | text        | NOT NULL                              | SHA-256 of the canonical node file (frontmatter + body). Used by the build to detect changes and avoid gratuitous writes |
+| source_build_id        | text        | NOT NULL                              | FK `study.knowledge_build.id` -- which build wrote this row                                                              |
+| created_at             | timestamptz | NOT NULL, DEFAULT now()               |                                                                                                                          |
+| updated_at             | timestamptz | NOT NULL, DEFAULT now()               |                                                                                                                          |
 
 ### study.knowledge_edge
 
@@ -117,14 +117,14 @@ Edge directionality (normalized so graph queries are uniform):
 
 Per-node content for each of the seven phases. One row per (node, phase) pair. NULL rows are authoring gaps.
 
-| Column         | Type        | Constraints                             | Notes                                              |
-| -------------- | ----------- | --------------------------------------- | -------------------------------------------------- |
-| id             | text        | PK                                      | `knp_` prefix                                      |
-| node_id        | text        | NOT NULL, FK `study.knowledge_node.id`  |                                                    |
-| phase          | text        | NOT NULL, CHECK in `CONTENT_PHASES`     | context, problem, discover, reveal, practice, connect, verify |
-| body           | text        | NULL                                    | Markdown body for the phase                        |
-| payload        | jsonb       | NOT NULL, DEFAULT '{}'                  | Structured extras (questions, activity ids, card ids, rep ids, calculation prompts) |
-| created_at     | timestamptz | NOT NULL, DEFAULT now()                 |                                                    |
+| Column     | Type        | Constraints                            | Notes                                                                               |
+| ---------- | ----------- | -------------------------------------- | ----------------------------------------------------------------------------------- |
+| id         | text        | PK                                     | `knp_` prefix                                                                       |
+| node_id    | text        | NOT NULL, FK `study.knowledge_node.id` |                                                                                     |
+| phase      | text        | NOT NULL, CHECK in `CONTENT_PHASES`    | context, problem, discover, reveal, practice, connect, verify                       |
+| body       | text        | NULL                                   | Markdown body for the phase                                                         |
+| payload    | jsonb       | NOT NULL, DEFAULT '{}'                 | Structured extras (questions, activity ids, card ids, rep ids, calculation prompts) |
+| created_at | timestamptz | NOT NULL, DEFAULT now()                |                                                                                     |
 
 Unique constraint: `(node_id, phase)`. A node is `complete` when all seven phases have a non-null `body` or non-empty `payload`.
 
@@ -132,16 +132,16 @@ Unique constraint: `(node_id, phase)`. A node is `complete` when all seven phase
 
 Audit row per `bun run db build` invocation. Supports rollback and "which build produced this state" queries.
 
-| Column          | Type        | Constraints             | Notes                                        |
-| --------------- | ----------- | ----------------------- | -------------------------------------------- |
-| id              | text        | PK                      | `knb_` prefix                                |
-| started_at      | timestamptz | NOT NULL, DEFAULT now() |                                              |
-| finished_at     | timestamptz | NULL                    | NULL during an in-flight build               |
-| status          | text        | NOT NULL                | running, success, failed                     |
-| node_count      | integer     | NOT NULL, DEFAULT 0     |                                              |
-| edge_count      | integer     | NOT NULL, DEFAULT 0     |                                              |
-| coverage        | jsonb       | NOT NULL, DEFAULT '{}'  | Summary: % phases filled, orphan nodes, etc. |
-| error           | text        | NULL                    | Validation or IO error detail                |
+| Column      | Type        | Constraints             | Notes                                        |
+| ----------- | ----------- | ----------------------- | -------------------------------------------- |
+| id          | text        | PK                      | `knb_` prefix                                |
+| started_at  | timestamptz | NOT NULL, DEFAULT now() |                                              |
+| finished_at | timestamptz | NULL                    | NULL during an in-flight build               |
+| status      | text        | NOT NULL                | running, success, failed                     |
+| node_count  | integer     | NOT NULL, DEFAULT 0     |                                              |
+| edge_count  | integer     | NOT NULL, DEFAULT 0     |                                              |
+| coverage    | jsonb       | NOT NULL, DEFAULT '{}'  | Summary: % phases filled, orphan nodes, etc. |
+| error       | text        | NULL                    | Validation or IO error detail                |
 
 ### Additive changes to existing tables
 
@@ -149,17 +149,17 @@ Backward-compatible -- all NULL means "personal content, not graph-linked", pres
 
 `study.card`:
 
-| Column          | Type | Constraints                                              | Notes                                                                                      |
-| --------------- | ---- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| node_id         | text | NULL, FK `study.knowledge_node.id` ON DELETE SET NULL    | Links card to a knowledge node. NULL = personal card. Indexed for per-node mastery queries |
-| content_phase   | text | NULL, CHECK in `CONTENT_PHASES` OR NULL                  | Which phase this card belongs to (usually `practice`). NULL when `node_id` is NULL         |
+| Column        | Type | Constraints                                           | Notes                                                                                      |
+| ------------- | ---- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| node_id       | text | NULL, FK `study.knowledge_node.id` ON DELETE SET NULL | Links card to a knowledge node. NULL = personal card. Indexed for per-node mastery queries |
+| content_phase | text | NULL, CHECK in `CONTENT_PHASES` OR NULL               | Which phase this card belongs to (usually `practice`). NULL when `node_id` is NULL         |
 
 `study.scenario`:
 
-| Column          | Type | Constraints                                              | Notes                                                                                       |
-| --------------- | ---- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| node_id         | text | NULL, FK `study.knowledge_node.id` ON DELETE SET NULL    | Links scenario to a node. NULL = personal scenario                                          |
-| content_phase   | text | NULL, CHECK in `CONTENT_PHASES` OR NULL                  | Usually `verify` (assessment scenario) or `practice` (rep). NULL when `node_id` is NULL     |
+| Column        | Type | Constraints                                           | Notes                                                                                   |
+| ------------- | ---- | ----------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| node_id       | text | NULL, FK `study.knowledge_node.id` ON DELETE SET NULL | Links scenario to a node. NULL = personal scenario                                      |
+| content_phase | text | NULL, CHECK in `CONTENT_PHASES` OR NULL               | Usually `verify` (assessment scenario) or `practice` (rep). NULL when `node_id` is NULL |
 
 No migration of existing rows. Existing personal cards/scenarios stay `node_id = NULL`.
 
@@ -241,12 +241,12 @@ Idempotent: re-running with no file changes makes no DB writes (each node hash m
 
 `bun run db build` (entry in `apps/study/package.json` forwards to `scripts/build-knowledge-index.ts`):
 
-| Flag                  | Effect                                                         |
-| --------------------- | -------------------------------------------------------------- |
-| (default)             | Validate + write to DB                                         |
-| `--dry-run`           | Validate only; print summary; no DB writes                     |
-| `--json`              | Emit build summary as JSON on stdout (for CI)                  |
-| `--fail-on-coverage`  | Exit non-zero if any node is `skeleton` (useful once scaled)   |
+| Flag                 | Effect                                                       |
+| -------------------- | ------------------------------------------------------------ |
+| (default)            | Validate + write to DB                                       |
+| `--dry-run`          | Validate only; print summary; no DB writes                   |
+| `--json`             | Emit build summary as JSON on stdout (for CI)                |
+| `--fail-on-coverage` | Exit non-zero if any node is `skeleton` (useful once scaled) |
 
 Pre-build `bun run check` hook wires `bun run db build --dry-run` into the pre-commit pipeline. The study app's server start does NOT run the build automatically -- authoring is explicit.
 
@@ -286,27 +286,27 @@ No in-app authoring UI in v1. The editor is VS Code. CLAUDE.md's "markdown-first
 
 New file `libs/bc/study/src/knowledge.ts`:
 
-| Function                       | Signature                                                                               | Notes                                                      |
-| ------------------------------ | --------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
-| `getNode`                      | `(db, slug: string) -> (KnowledgeNode & { phases: ContentPhase[] }) \| null`            | Phases returned for all seven keys; absent phases are `null` |
-| `getNodeById`                  | `(db, id: string) -> KnowledgeNode \| null`                                             | ULID variant                                               |
-| `getNodeEdges`                 | `(db, nodeId: string) -> { outgoing: EdgeRow[], incoming: EdgeRow[] }`                  | Grouped by edge_type by caller if desired                  |
-| `getPrerequisiteChain`         | `(db, nodeId: string, maxDepth?: number) -> KnowledgeNode[]`                            | Transitive closure over `requires`; default depth 5        |
-| `getNodesByDomain`             | `(db, domain: Domain, filters?: { cert?; priority?; lifecycle? }) -> KnowledgeNode[]`   | Powers browse page                                         |
-| `getNodesByCert`               | `(db, cert: Cert) -> KnowledgeNode[]`                                                   | Filters by relevance entries                               |
-| `getNodeMastery`               | `(db, userId: string, nodeId: string) -> NodeMasteryStats`                              | Dual-gate mastery. See "Mastery computation" below.        |
-| `listNodes`                    | `(db, filters?) -> KnowledgeNode[]`                                                     | Generic list with filter chain                             |
-| `getCoverageReport`            | `(db) -> { totalNodes, byLifecycle, byDomain, phaseGaps }`                              | For the auto-generated `graph-index.md`                    |
+| Function               | Signature                                                                             | Notes                                               |                                                              |
+| ---------------------- | ------------------------------------------------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------------ |
+| `getNode`              | `(db, slug: string) -> (KnowledgeNode & { phases: ContentPhase[] }) \                 | null`                                               | Phases returned for all seven keys; absent phases are `null` |
+| `getNodeById`          | `(db, id: string) -> KnowledgeNode \                                                  | null`                                               | ULID variant                                                 |
+| `getNodeEdges`         | `(db, nodeId: string) -> { outgoing: EdgeRow[], incoming: EdgeRow[] }`                | Grouped by edge_type by caller if desired           |                                                              |
+| `getPrerequisiteChain` | `(db, nodeId: string, maxDepth?: number) -> KnowledgeNode[]`                          | Transitive closure over `requires`; default depth 5 |                                                              |
+| `getNodesByDomain`     | `(db, domain: Domain, filters?: { cert?; priority?; lifecycle? }) -> KnowledgeNode[]` | Powers browse page                                  |                                                              |
+| `getNodesByCert`       | `(db, cert: Cert) -> KnowledgeNode[]`                                                 | Filters by relevance entries                        |                                                              |
+| `getNodeMastery`       | `(db, userId: string, nodeId: string) -> NodeMasteryStats`                            | Dual-gate mastery. See "Mastery computation" below. |                                                              |
+| `listNodes`            | `(db, filters?) -> KnowledgeNode[]`                                                   | Generic list with filter chain                      |                                                              |
+| `getCoverageReport`    | `(db) -> { totalNodes, byLifecycle, byDomain, phaseGaps }`                            | For the auto-generated `graph-index.md`             |                                                              |
 
 Build-script-only (not exported from `libs/bc/study/src/index.ts`):
 
-| Function          | Signature                                                              |
-| ----------------- | ---------------------------------------------------------------------- |
-| `upsertBuild`     | `(db, build: NewKnowledgeBuild) -> string`                             |
-| `finalizeBuild`   | `(db, buildId: string, summary) -> void`                               |
-| `upsertNode`      | `(db, node: ParsedNode, buildId: string) -> string`                    |
-| `replaceEdges`    | `(db, nodeId: string, edges: ParsedEdge[]) -> void`                    |
-| `upsertPhases`    | `(db, nodeId: string, phases: ParsedPhase[]) -> void`                  |
+| Function        | Signature                                             |
+| --------------- | ----------------------------------------------------- |
+| `upsertBuild`   | `(db, build: NewKnowledgeBuild) -> string`            |
+| `finalizeBuild` | `(db, buildId: string, summary) -> void`              |
+| `upsertNode`    | `(db, node: ParsedNode, buildId: string) -> string`   |
+| `replaceEdges`  | `(db, nodeId: string, edges: ParsedEdge[]) -> void`   |
+| `upsertPhases`  | `(db, nodeId: string, phases: ParsedPhase[]) -> void` |
 
 Extensions to existing files:
 
@@ -389,25 +389,25 @@ Per-node `mastery_criteria` stays a markdown note in v1 -- a human-readable cave
 
 Separate file from `study.ts` to keep the graph taxonomy distinct from the tool constants. Re-exported from `libs/constants/src/index.ts`.
 
-| Constant                   | Purpose                                                                               |
-| -------------------------- | ------------------------------------------------------------------------------------- |
-| `CERTS`                    | `{ PPL: 'PPL', IR: 'IR', CPL: 'CPL', CFI: 'CFI' }`                                    |
-| `BLOOM_LEVELS`             | `{ REMEMBER, UNDERSTAND, APPLY, ANALYZE, EVALUATE, CREATE }`                          |
-| `RELEVANCE_PRIORITIES`     | `{ CORE: 'core', SUPPORTING: 'supporting', ELECTIVE: 'elective' }`                    |
-| `KNOWLEDGE_TYPES`          | `{ FACTUAL, CONCEPTUAL, PROCEDURAL, JUDGMENT, PERCEPTUAL, PEDAGOGICAL }`              |
-| `TECHNICAL_DEPTHS`         | `{ SURFACE, WORKING, DEEP }`                                                          |
-| `NODE_STABILITIES`         | `{ STABLE, EVOLVING, VOLATILE }`                                                      |
-| `NODE_MODALITIES`          | `{ READING, CARDS, REPS, DRILL, VISUALIZATION, AUDIO, VIDEO, CALCULATION, TEACHING_EXERCISE }` |
-| `ASSESSMENT_METHODS`       | `{ RECALL, CALCULATION, SCENARIO, DEMONSTRATION, TEACHING }`                          |
-| `EDGE_TYPES`               | `{ REQUIRES, DEEPENS, APPLIES, TEACHES, RELATED }`                                    |
-| `CONTENT_PHASES`           | `{ CONTEXT, PROBLEM, DISCOVER, REVEAL, PRACTICE, CONNECT, VERIFY }`                   |
-| `CONTENT_PHASE_ORDER`      | Ordered array: `[CONTEXT, PROBLEM, DISCOVER, REVEAL, PRACTICE, CONNECT, VERIFY]`      |
-| `NODE_LIFECYCLES`          | `{ SKELETON: 'skeleton', STARTED: 'started', COMPLETE: 'complete' }`                  |
-| `NODE_ID_PREFIX`           | `'kn'`                                                                                |
-| `KNOWLEDGE_EDGE_ID_PREFIX` | `'kne'`                                                                               |
-| `KNOWLEDGE_PHASE_ID_PREFIX`| `'knp'`                                                                               |
-| `KNOWLEDGE_BUILD_ID_PREFIX`| `'knb'`                                                                               |
-| `KNOWLEDGE_MAX_PREREQ_DEPTH` | `5`                                                                                 |
+| Constant                     | Purpose                                                                                        |
+| ---------------------------- | ---------------------------------------------------------------------------------------------- |
+| `CERTS`                      | `{ PPL: 'PPL', IR: 'IR', CPL: 'CPL', CFI: 'CFI' }`                                             |
+| `BLOOM_LEVELS`               | `{ REMEMBER, UNDERSTAND, APPLY, ANALYZE, EVALUATE, CREATE }`                                   |
+| `RELEVANCE_PRIORITIES`       | `{ CORE: 'core', SUPPORTING: 'supporting', ELECTIVE: 'elective' }`                             |
+| `KNOWLEDGE_TYPES`            | `{ FACTUAL, CONCEPTUAL, PROCEDURAL, JUDGMENT, PERCEPTUAL, PEDAGOGICAL }`                       |
+| `TECHNICAL_DEPTHS`           | `{ SURFACE, WORKING, DEEP }`                                                                   |
+| `NODE_STABILITIES`           | `{ STABLE, EVOLVING, VOLATILE }`                                                               |
+| `NODE_MODALITIES`            | `{ READING, CARDS, REPS, DRILL, VISUALIZATION, AUDIO, VIDEO, CALCULATION, TEACHING_EXERCISE }` |
+| `ASSESSMENT_METHODS`         | `{ RECALL, CALCULATION, SCENARIO, DEMONSTRATION, TEACHING }`                                   |
+| `EDGE_TYPES`                 | `{ REQUIRES, DEEPENS, APPLIES, TEACHES, RELATED }`                                             |
+| `CONTENT_PHASES`             | `{ CONTEXT, PROBLEM, DISCOVER, REVEAL, PRACTICE, CONNECT, VERIFY }`                            |
+| `CONTENT_PHASE_ORDER`        | Ordered array: `[CONTEXT, PROBLEM, DISCOVER, REVEAL, PRACTICE, CONNECT, VERIFY]`               |
+| `NODE_LIFECYCLES`            | `{ SKELETON: 'skeleton', STARTED: 'started', COMPLETE: 'complete' }`                           |
+| `NODE_ID_PREFIX`             | `'kn'`                                                                                         |
+| `KNOWLEDGE_EDGE_ID_PREFIX`   | `'kne'`                                                                                        |
+| `KNOWLEDGE_PHASE_ID_PREFIX`  | `'knp'`                                                                                        |
+| `KNOWLEDGE_BUILD_ID_PREFIX`  | `'knb'`                                                                                        |
+| `KNOWLEDGE_MAX_PREREQ_DEPTH` | `5`                                                                                            |
 
 All existing `DOMAINS` in `libs/constants/src/study.ts` are reused as-is.
 
@@ -426,50 +426,33 @@ KNOWLEDGE_NODE_LEARN: (slug: string) => `/knowledge/${slug}/learn` as const,
 
 All violations aggregate into a single `KnowledgeBuildValidationError`. The build reports every failure in one pass rather than stopping on the first.
 
-| Rule                                                                       | Severity |
-| -------------------------------------------------------------------------- | -------- |
-| Every node has a non-empty `id`, `title`, `domain`                          | error    |
-| `id` (slug) matches `^[a-z][a-z0-9-]*$` and is unique across all nodes      | error    |
-| `domain` in `DOMAINS`                                                       | error    |
-| Every entry in `cross_domains` in `DOMAINS`                                 | error    |
-| Every value in `knowledge_types` in `KNOWLEDGE_TYPES`                        | error    |
-| `technical_depth` in `TECHNICAL_DEPTHS`                                     | error    |
-| `stability` in `NODE_STABILITIES`                                           | error    |
-| Every `relevance` entry has `cert` in `CERTS`, `bloom` in `BLOOM_LEVELS`, `priority` in `RELEVANCE_PRIORITIES` | error |
-| `relevance` entries unique on `(cert, bloom)` per node                      | error    |
-| All `requires` / `deepens` / `applied_by` / `taught_by` / `related` slugs resolve to an existing node | error |
-| The `requires` subgraph is a DAG -- no cycles                               | error    |
-| `modalities` entries in `NODE_MODALITIES`                                   | error    |
-| `assessment_methods` entries in `ASSESSMENT_METHODS`                        | error    |
-| `references` entries have non-empty `source`                                | error    |
-| Phase headings in `node.md` body are drawn from `CONTENT_PHASES`, each at most once | error |
-| Every referenced activity id resolves to `libs/activities/{id}/` (once activities land) | warning in v1 (no activities lib yet except optional `wind-triangle`) |
-| Every referenced card/rep id resolves to an existing DB row                  | warning  |
-| A node has at least one `relevance` entry (otherwise it's orphaned across all certs) | warning |
-| No duplicate edges `(from, to, type)`                                        | error    |
+| Rule                                                                                                           | Severity                                                              |
+| -------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| Every node has a non-empty `id`, `title`, `domain`                                                             | error                                                                 |
+| `id` (slug) matches `^[a-z][a-z0-9-]*$` and is unique across all nodes                                         | error                                                                 |
+| `domain` in `DOMAINS`                                                                                          | error                                                                 |
+| Every entry in `cross_domains` in `DOMAINS`                                                                    | error                                                                 |
+| Every value in `knowledge_types` in `KNOWLEDGE_TYPES`                                                          | error                                                                 |
+| `technical_depth` in `TECHNICAL_DEPTHS`                                                                        | error                                                                 |
+| `stability` in `NODE_STABILITIES`                                                                              | error                                                                 |
+| Every `relevance` entry has `cert` in `CERTS`, `bloom` in `BLOOM_LEVELS`, `priority` in `RELEVANCE_PRIORITIES` | error                                                                 |
+| `relevance` entries unique on `(cert, bloom)` per node                                                         | error                                                                 |
+| All `requires` / `deepens` / `applied_by` / `taught_by` / `related` slugs resolve to an existing node          | error                                                                 |
+| The `requires` subgraph is a DAG -- no cycles                                                                  | error                                                                 |
+| `modalities` entries in `NODE_MODALITIES`                                                                      | error                                                                 |
+| `assessment_methods` entries in `ASSESSMENT_METHODS`                                                           | error                                                                 |
+| `references` entries have non-empty `source`                                                                   | error                                                                 |
+| Phase headings in `node.md` body are drawn from `CONTENT_PHASES`, each at most once                            | error                                                                 |
+| Every referenced activity id resolves to `libs/activities/{id}/` (once activities land)                        | warning in v1 (no activities lib yet except optional `wind-triangle`) |
+| Every referenced card/rep id resolves to an existing DB row                                                    | warning                                                               |
+| A node has at least one `relevance` entry (otherwise it's orphaned across all certs)                           | warning                                                               |
+| No duplicate edges `(from, to, type)`                                                                          | error                                                                 |
 
 Warnings print but do not fail the build unless `--fail-on-warnings` is passed.
 
-## Out of Scope (v1)
+## Out of scope
 
-v1 is the 30-node skeleton per ADR 011. Everything below ships later.
-
-- **Scaling to 100 / 300 / 500 nodes.** v1 proves the model; content volume is a separate phase.
-- **Authoring UI.** VS Code + markdown is the authoring surface for v1. Hangar-based authoring lands when `apps/hangar/` exists.
-- **Graph-as-graph visualization.** v1 is tables grouped by domain. Force-directed / node-link layouts are a later experiment.
-- **AI-assisted node drafting.** Skeleton generation from a topic prompt is explicitly deferred.
-- **Node versioning / drift detection.** When a regulation changes, flagging stale nodes is future work. v1 timestamps nodes and records builds; it does not version them.
-- **Cross-edition reference tracking.** PHAK/AIM edition churn is handled manually in v1.
-- **Community contribution.** Single-author workflow (Joshua as user zero) in v1.
-- **Courses as views.** The course filter schema (`cert_filter`, `priority_filter`, `coverage_requirement`, `assessment_gates`) is specced in ADR 011 but ships with FIRC migration, not this feature.
-- **Session engine / study plan wiring.** That's the next work package. v1 exposes the read functions they need but doesn't implement picking.
-- **Migration of FIRC content onto nodes.** Happens during FIRC migration phase.
-- **Scale concerns (documented for awareness, not v1):**
-  - At 500 nodes, edge table grows to a few thousand rows (trivial for Postgres but warrants B-tree indexes on `from_node_id`, `to_node_id`).
-  - Graph validation (cycle detection, slug resolution) is O(N + E) per build. Remains sub-second at 500 nodes but the build needs streaming output if it crosses a few seconds.
-  - The per-build "replace all edges for touched nodes" strategy is fine at 500; at 5000+ nodes consider diffing edge sets.
-  - `getPrerequisiteChain` uses a recursive CTE capped at `KNOWLEDGE_MAX_PREREQ_DEPTH`. Deep chains will need a cache layer.
-  - Markdown parsing (frontmatter + body split) is per-file and parallelizable. Not parallelized in v1.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Open Questions
 
