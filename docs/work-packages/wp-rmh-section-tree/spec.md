@@ -122,10 +122,7 @@ source-of-truth and re-runs are stable.
 
 ## Out of scope
 
-- AIH, IFH, IPH, mtn-tips promotions (separate WPs)
-- `_override_edition` in `cli.py` carries an outdated subset of
-  `HandbookConfig` fields; not introduced or worsened by this WP
-- Errata application for RMH (none published)
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Acceptance
 
