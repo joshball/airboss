@@ -23,9 +23,9 @@
  */
 
 import { wxScenarioChartSlug } from '@ab/constants';
+import { CONUS_CENTRAL_MERIDIAN } from '@ab/wx-charts';
 import type { TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
-import { CONUS_CENTRAL_MERIDIAN } from '@ab/wx-charts';
 
 const DEFAULT_TILT_HALF_RANGE_FT = 1500;
 const ICING_HAZARD_AMPLITUDE_FT = -2500;

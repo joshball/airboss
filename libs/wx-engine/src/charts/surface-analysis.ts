@@ -20,10 +20,10 @@
  */
 
 import { wxScenarioChartSlug } from '@ab/constants';
+import { CONUS_CENTRAL_MERIDIAN } from '@ab/wx-charts';
 import type { DerivedMetar } from '../products/types';
 import type { TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
-import { CONUS_CENTRAL_MERIDIAN } from '@ab/wx-charts';
 
 type SkyCover = 'CLR' | 'FEW' | 'SCT' | 'BKN' | 'OVC';
 

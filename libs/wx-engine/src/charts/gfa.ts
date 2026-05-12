@@ -26,10 +26,10 @@
  */
 
 import { AIRMET_FAMILIES, wxScenarioChartSlug } from '@ab/constants';
+import { CONUS_CENTRAL_MERIDIAN } from '@ab/wx-charts';
 import type { AirmetAdvisory, DerivedTaf } from '../products/types';
 import type { AirMass, TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
-import { CONUS_CENTRAL_MERIDIAN } from '@ab/wx-charts';
 
 const KM_PER_DEG_LAT = 111;
 

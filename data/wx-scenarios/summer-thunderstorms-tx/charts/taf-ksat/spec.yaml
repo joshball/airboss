@@ -12,7 +12,7 @@ projection:
     - 45
   rotate:
     - -96
-    - -39
+    - 0
 sources:
   taf: cache://scenarios/summer-thunderstorms-tx/taf-ksat.json
 options:

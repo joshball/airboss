@@ -10,7 +10,7 @@ projection:
     - 45
   rotate:
     - -96
-    - -39
+    - 0
 extent: conus
 sources:
   fronts: cache://scenarios/marine-stratus-pacific-nw/surface-analysis.json

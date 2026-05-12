@@ -15,10 +15,10 @@
  */
 
 import { wxScenarioChartSlug } from '@ab/constants';
+import { CONUS_CENTRAL_MERIDIAN } from '@ab/wx-charts';
 import type { DerivedFbGrid } from '../products/types';
 import type { TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
-import { CONUS_CENTRAL_MERIDIAN } from '@ab/wx-charts';
 
 const BASE_BACK_OFFSET_HOURS = 6;
 const MS_PER_HOUR = 3_600_000;

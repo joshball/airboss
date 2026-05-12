@@ -9,7 +9,7 @@ projection:
     - 45
   rotate:
     - -96
-    - -39
+    - 0
 extent: conus
 sources:
   areas: cache://scenarios/dense-fog-radiation-central-valley/g-airmet-turbulence.json

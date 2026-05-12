@@ -18,10 +18,10 @@
  */
 
 import { wxScenarioChartSlug } from '@ab/constants';
+import { CONUS_CENTRAL_MERIDIAN } from '@ab/wx-charts';
 import type { AirmetAdvisory } from '../products/types';
 import type { TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
-import { CONUS_CENTRAL_MERIDIAN } from '@ab/wx-charts';
 
 export function deriveAdvisoryOverlayChart(
 	truth: TruthModel,

@@ -24,9 +24,9 @@
  */
 
 import { wxScenarioChartSlug } from '@ab/constants';
+import { CONUS_CENTRAL_MERIDIAN } from '@ab/wx-charts';
 import type { TruthModel } from '../truth/types';
 import type { ChartArtifact } from './types';
-import { CONUS_CENTRAL_MERIDIAN } from '@ab/wx-charts';
 
 type OutlookTier = 'tstm' | 'mrgl' | 'slgt' | 'enh' | 'mdt' | 'high';
 

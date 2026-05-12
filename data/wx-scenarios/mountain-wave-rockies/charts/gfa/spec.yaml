@@ -9,7 +9,7 @@ projection:
     - 45
   rotate:
     - -96
-    - -39
+    - 0
 extent: conus
 sources:
   polygons: cache://scenarios/mountain-wave-rockies/gfa.json
