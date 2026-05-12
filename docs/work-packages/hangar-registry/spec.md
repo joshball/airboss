@@ -112,12 +112,7 @@ Migrations under `libs/db/migrations/`. Seed reconciliation: on hangar boot, par
 
 ## Out of scope
 
-- Interactive flow diagram at `/sources` — lives in wp-hangar-sources-v1
-- Fetch / upload / extract / build / diff job kinds — the *queue* exists here; the job *runners* are in wp-hangar-sources-v1
-- Chart / plate / diagram preview rendering — wp-hangar-non-textual
-- Presence / "someone else is editing" — post-MVP
-- Cron-based automatic sync — post-MVP
-- Multi-file conflict resolution UI — out-of-band edits produce a conflict that the user resolves by editing TOML on disk; no in-UI 3-way merge
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Architecture notes
 
