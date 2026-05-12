@@ -55,6 +55,16 @@ interface WpExtractionState {
 	hasOosInTasks: boolean;
 	mostRecentCommitTs: number;
 	isShipped: boolean;
+	isUmbrella: boolean;
+}
+
+/** Umbrella WPs (`type: umbrella` in frontmatter) are program-level
+ * coordination docs. Per-item OOS extraction targets the sub-packages, not
+ * the umbrella, so the umbrella is skipped from "needs extraction" counts.
+ * See docs/agents/wp-out-of-scope-extraction.md "Umbrella WPs". */
+function isUmbrellaWp(rawFrontmatter: Record<string, unknown> | null): boolean {
+	if (rawFrontmatter === null) return false;
+	return rawFrontmatter.type === 'umbrella';
 }
 
 function gatherStates(): WpExtractionState[] {
@@ -75,6 +85,7 @@ function gatherStates(): WpExtractionState[] {
 			hasOosInTasks: fileHasOosSection(tasksPath),
 			mostRecentCommitTs: mostRecentCommitTimestamp(dir),
 			isShipped,
+			isUmbrella: isUmbrellaWp(wp.rawFrontmatter),
 		});
 	}
 	return states;
@@ -100,9 +111,13 @@ function mostRecentCommitTimestamp(dir: string): number {
 
 function commandAudit(): number {
 	const states = gatherStates();
-	const needsExtraction = states.filter((s) => !s.hasOosFile && (s.hasOosInSpec || s.hasOosInTasks));
+	// Umbrella WPs are coordination docs; per-item OOS extraction targets the
+	// sub-packages, not the umbrella. Skip them from the "needs extraction"
+	// tally so the audit measures the work that actually needs to happen.
+	const needsExtraction = states.filter((s) => !s.hasOosFile && (s.hasOosInSpec || s.hasOosInTasks) && !s.isUmbrella);
 	const haveFile = states.filter((s) => s.hasOosFile);
-	const noOosNoFile = states.filter((s) => !s.hasOosFile && !s.hasOosInSpec && !s.hasOosInTasks);
+	const noOosNoFile = states.filter((s) => !s.hasOosFile && !s.hasOosInSpec && !s.hasOosInTasks && !s.isUmbrella);
+	const umbrellas = states.filter((s) => s.isUmbrella);
 
 	console.log(bold('Out-of-scope extraction audit'));
 	console.log('');
@@ -112,6 +127,9 @@ function commandAudit(): number {
 	);
 	console.log(
 		`  ${dim(String(noOosNoFile.length).padStart(4))}  WPs with no OOS section in spec/tasks ${dim('(consider creating an empty OUT-OF-SCOPE.md)')}`,
+	);
+	console.log(
+		`  ${dim(String(umbrellas.length).padStart(4))}  umbrella WPs ${dim('(skipped; per-item OOS lives on sub-packages)')}`,
 	);
 	console.log('');
 
@@ -187,7 +205,10 @@ function parsePickFlags(argv: readonly string[]): PickFlags {
 function commandPick(argv: readonly string[]): number {
 	const flags = parsePickFlags(argv);
 	const states = gatherStates();
-	const candidates = states.filter((s) => !s.hasOosFile && (s.hasOosInSpec || s.hasOosInTasks));
+	// Skip umbrella WPs -- per-item OOS extraction targets the sub-packages.
+	const candidates = states.filter(
+		(s) => !s.hasOosFile && (s.hasOosInSpec || s.hasOosInTasks) && !s.isUmbrella,
+	);
 
 	if (candidates.length === 0) {
 		console.log(green('No WPs need extraction. The discipline is satisfied.'));

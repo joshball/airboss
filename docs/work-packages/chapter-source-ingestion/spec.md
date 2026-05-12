@@ -44,7 +44,7 @@ This is a **correctness fix**, not an optimization. The current pipeline produce
 - [ADR 021 -- Source cache flat naming](../../decisions/021-source-cache-flat-naming/decision.md). The flat-naming layout this WP extends. ADR 022 is a deliverable here.
 - [ADR 018 -- Source artifact storage policy](../../decisions/018-source-artifact-storage-policy/decision.md). The three-tier rule (cache / inline derivative / generated). Cache tier grows; derivative + generated tiers untouched.
 - [ADR 020 -- Handbook edition and amendment policy](../../decisions/020-handbook-edition-and-amendment-policy.md). Errata is 1:N per handbook. Already handled; this WP does not touch errata.
-- [docs/work-packages/section-extraction-prompt-strategy/design.md](../section-extraction-prompt-strategy/design.md). The prompt-strategy pipeline that consumes chapter plaintext; this WP changes its input source for chapter-PDF handbooks.
+- [docs/.archive/design-docs/section-extraction-prompt-strategy/design.md](../../.archive/design-docs/section-extraction-prompt-strategy/design.md). The prompt-strategy pipeline that consumes chapter plaintext; this WP changes its input source for chapter-PDF handbooks.
 - Concurrent WP `section-extraction-contract-v2` (separate agent). Edits the contract templates and `chapter_plaintext.py` truncation logic. Coordination notes in §Coordination below.
 
 ## Empirical inventory (2026-04-29)

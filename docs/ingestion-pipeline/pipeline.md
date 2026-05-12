@@ -13,13 +13,13 @@ This is a process doc. For the tools used at each step, see [tooling.md](tooling
 
 Each step has a clear input, output, and command. Each is idempotent — running it twice produces the same artifacts. Each can fail in characteristic ways that are documented per-step below.
 
-| Step | Command | Input | Output |
-| ---- | ------- | ----- | ------ |
-| 1. Discover | `bun run sources` (no args) | (none) | corpus catalogue |
-| 2. Download | `bun run sources download` | YAML configs | `~/Documents/airboss-handbook-cache/` |
-| 3. Extract | `bun run sources extract handbooks <doc>` | cached PDF | `handbooks/<slug>/<edition>/...` markdown |
-| 4. Register | `bun run sources register <corpus>` | extracted derivatives | `sources_registry.*` tables |
-| 5. Resolve & cite | (in-app via `@ab/sources`) | citation locator | rendered chunk with provenance |
+| Step              | Command                                   | Input                 | Output                                    |
+| ----------------- | ----------------------------------------- | --------------------- | ----------------------------------------- |
+| 1. Discover       | `bun run sources` (no args)               | (none)                | corpus catalogue                          |
+| 2. Download       | `bun run sources download`                | YAML configs          | `~/Documents/airboss-handbook-cache/`     |
+| 3. Extract        | `bun run sources extract handbooks <doc>` | cached PDF            | `handbooks/<slug>/<edition>/...` markdown |
+| 4. Register       | `bun run sources register <corpus>`       | extracted derivatives | `sources_registry.*` tables               |
+| 5. Resolve & cite | (in-app via `@ab/sources`)                | citation locator      | rendered chunk with provenance            |
 
 ## Step 1 — Discover
 
@@ -101,7 +101,7 @@ Driven by Python tooling at [tools/handbook-ingest/](../../tools/handbook-ingest
 - **`prompt`** — fallback for when the TOC is unreliable. Emits a self-contained prompt set; the operator pastes it into a fresh Claude Code session; sub-agents fan out one-per-chapter and write JSON. See [section-extraction-prompt-strategy.md](section-extraction-prompt-strategy.md). No API key needed — this is a manual paste-flow, not an SDK integration.
 - **`compare`** — diffs `toc` vs `prompt` results and surfaces disagreements. Used to validate one strategy against the other.
 
-**Output** (today's shape — note the rename WP at [docs/work-packages/rename-generic-content-files/](../work-packages/rename-generic-content-files/) is reconsidering this):
+**Output** (today's shape — the rename was performed in PR #490; spike artifacts archived at [docs/.archive/spikes/rename-generic-content-files/](../.archive/spikes/rename-generic-content-files/)):
 
 ```text
 handbooks/phak/FAA-H-8083-25C/
@@ -261,16 +261,16 @@ Today this means OCR-quality prose with no headings. The pending `body_override`
 
 ## Where each step's source-of-truth lives
 
-| Step | Code | ADR | Tooling |
-| ---- | ---- | --- | ------- |
-| Discover | [scripts/sources/config/](../../scripts/sources/config/) | [019](../decisions/019-reference-identifier-system/decision.md) | YAML + `loader.ts` |
-| Download | [scripts/sources/download/](../../scripts/sources/download/) | [018](../decisions/018-source-artifact-storage-policy/decision.md), [021](../decisions/021-source-cache-flat-naming/decision.md) | bun + http HEAD/GET |
-| Extract — chapter-aware | [tools/handbook-ingest/](../../tools/handbook-ingest/) | [022](../decisions/022-chapter-source-ingestion/decision.md) | Python + PyMuPDF |
-| Extract — whole-doc | [libs/sources/src/handbooks-extras/](../../libs/sources/src/handbooks-extras/) | [019 §1.2](../decisions/019-reference-identifier-system/decision.md) | TS + `pdftotext` |
-| Extract — AIM | [libs/sources/src/aim/](../../libs/sources/src/aim/) | — | TS + cheerio HTML parse |
-| Extract — CFR | [libs/sources/src/regs/](../../libs/sources/src/regs/) | — | TS + fast-xml-parser |
-| Register | [libs/sources/src/registry/](../../libs/sources/src/registry/) | [019 §2.4](../decisions/019-reference-identifier-system/decision.md) | Drizzle ORM |
-| Resolve & cite | [libs/sources/src/handbooks/resolver.ts](../../libs/sources/src/handbooks/resolver.ts) | [019](../decisions/019-reference-identifier-system/decision.md) | TS in-process |
+| Step                    | Code                                                                                   | ADR                                                                                                                              | Tooling                 |
+| ----------------------- | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| Discover                | [scripts/sources/config/](../../scripts/sources/config/)                               | [019](../decisions/019-reference-identifier-system/decision.md)                                                                  | YAML + `loader.ts`      |
+| Download                | [scripts/sources/download/](../../scripts/sources/download/)                           | [018](../decisions/018-source-artifact-storage-policy/decision.md), [021](../decisions/021-source-cache-flat-naming/decision.md) | bun + http HEAD/GET     |
+| Extract — chapter-aware | [tools/handbook-ingest/](../../tools/handbook-ingest/)                                 | [022](../decisions/022-chapter-source-ingestion/decision.md)                                                                     | Python + PyMuPDF        |
+| Extract — whole-doc     | [libs/sources/src/handbooks-extras/](../../libs/sources/src/handbooks-extras/)         | [019 §1.2](../decisions/019-reference-identifier-system/decision.md)                                                             | TS + `pdftotext`        |
+| Extract — AIM           | [libs/sources/src/aim/](../../libs/sources/src/aim/)                                   | —                                                                                                                                | TS + cheerio HTML parse |
+| Extract — CFR           | [libs/sources/src/regs/](../../libs/sources/src/regs/)                                 | —                                                                                                                                | TS + fast-xml-parser    |
+| Register                | [libs/sources/src/registry/](../../libs/sources/src/registry/)                         | [019 §2.4](../decisions/019-reference-identifier-system/decision.md)                                                             | Drizzle ORM             |
+| Resolve & cite          | [libs/sources/src/handbooks/resolver.ts](../../libs/sources/src/handbooks/resolver.ts) | [019](../decisions/019-reference-identifier-system/decision.md)                                                                  | TS in-process           |
 
 ## Onboarding a new doc — checklist
 

@@ -29,7 +29,7 @@ legacy_fields:
 - **The cert dimension is invisible.** A PPL learner cannot see "what should I read for PPL?" without scanning every group.
 - **The "in-app readable" badge is conflated with corpus presence.** `getReadableReferenceIds` (`libs/bc/study/src/handbooks.ts:501`) probes for at least one non-chapter `handbook_section` row. That probe is correct for handbook-style readers but is cosmetic, not a visibility filter; the page surfaces every active reference row regardless. The user's perception that "only PHAK + AFH show up" reflects which rows are actually seeded and tagged with topic chips, not the probe behaviour. AVWX, AIM, CFR-14, ACs, ACSes are all in the catalog (52 reference rows across 8 YAMLs in `course/references/`); they appear as cards but get scattered or buried.
 
-The 9,800-entry broad-extraction inventory (see `docs/work-packages/library-broad-extraction-survey/findings.md`) sharpens the urgency: most queryable corpora have no first-class home in today's grouping.
+The 9,800-entry broad-extraction inventory (see `docs/.archive/surveys/library-broad-extraction-survey/findings.md`) sharpens the urgency: most queryable corpora have no first-class home in today's grouping.
 
 ## Proposed taxonomy
 

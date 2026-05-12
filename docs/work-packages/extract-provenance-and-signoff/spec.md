@@ -42,7 +42,7 @@ The solution is per-section provenance + signoff state + automated drift detecti
 - ADR 020 (handbook edition + amendment policy)
 - ADR 021 (cache flat naming)
 - ADR 022 (chapter source ingestion)
-- `docs/work-packages/library-broad-extraction-survey/findings.md` -- the motivating survey
+- `docs/.archive/surveys/library-broad-extraction-survey/findings.md` -- the motivating survey (archived)
 - `docs/work-packages/section-extraction-contract-v2/RESUMING.md` -- the LLM mechanism this complements
 
 ## In Scope
