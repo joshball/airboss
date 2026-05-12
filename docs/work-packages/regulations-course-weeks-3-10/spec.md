@@ -37,16 +37,16 @@ Continuing to leave Weeks 3-10 in skeleton is a known issue. The course's value 
 
 Eight weeks of content plus two capstone orals.
 
-| Week | Slug                                  | Subject       | Treatment | Topics |
-| ---- | ------------------------------------- | ------------- | --------- | ------ |
-| 3    | week-03-part-61-cfi                   | The pilot     | Deep      | Subpart H, 61.183/187/189/193/195/197, AC 61-65 endorsements, spin endorsement, light-sport CFIs |
-| 4    | week-04-part-91-general-and-flight-rules | The flight    | Very deep | 91.3, 91.13, 91.7, 91.103, 91.105/107, 91.111/113/115, 91.119, 91.151/155/157/159, 91.167/169/171, 91.175/177/179/181/183/185, 91.211, 91.215 |
-| 5    | week-05-part-91-equipment-and-maintenance | The flight    | Very deep | Subparts C, D, E. 91.205, 91.207, 91.213, 91.225/227, 91.319 vs 91.327, 91.403/405/407/409/411/413/417, MEL/CDL, ferry permits |
-| 6    | week-06-part-91-special-ops           | The flight    | Deep      | Aerobatic 91.303, parachute 91.307, towing 91.309, formation 91.111(b), restricted/limited/experimental 91.311/313/317; subparts F-N (skim layer); whole-of-91 integration |
-| 7    | week-07-parts-141-and-135             | The operation | Cursory   | Part 141 structure + appendices, Part 119, Part 135, ops specs, pilot duty/rest, "when does it touch a freelance CFI" |
-| 8    | week-08-companion-documents           | Foundation    | Required  | AIM as expected knowledge, AC numbering + canon, Chief Counsel letters, Order 8900.1, FAA Safety Briefing |
-| 9    | week-09-enforcement                   | Foundation    | Required  | Compliance Program, ASRP/ASAP, pilot deviation process, certificate actions, NTSB Part 830 |
-| 10   | week-10-capstone                      | Integration   | Required  | Integrated oral, partner exam mechanics, capstone scenario, reflection. Plus 2 new capstone orals (`friend-flight-review`, `ppl-applies-for-ir`) in `course/regulations/orals/` |
+| Week | Slug                                      | Subject       | Treatment | Topics                                                                                                                                                                          |
+| ---- | ----------------------------------------- | ------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 3    | week-03-part-61-cfi                       | The pilot     | Deep      | Subpart H, 61.183/187/189/193/195/197, AC 61-65 endorsements, spin endorsement, light-sport CFIs                                                                                |
+| 4    | week-04-part-91-general-and-flight-rules  | The flight    | Very deep | 91.3, 91.13, 91.7, 91.103, 91.105/107, 91.111/113/115, 91.119, 91.151/155/157/159, 91.167/169/171, 91.175/177/179/181/183/185, 91.211, 91.215                                   |
+| 5    | week-05-part-91-equipment-and-maintenance | The flight    | Very deep | Subparts C, D, E. 91.205, 91.207, 91.213, 91.225/227, 91.319 vs 91.327, 91.403/405/407/409/411/413/417, MEL/CDL, ferry permits                                                  |
+| 6    | week-06-part-91-special-ops               | The flight    | Deep      | Aerobatic 91.303, parachute 91.307, towing 91.309, formation 91.111(b), restricted/limited/experimental 91.311/313/317; subparts F-N (skim layer); whole-of-91 integration      |
+| 7    | week-07-parts-141-and-135                 | The operation | Cursory   | Part 141 structure + appendices, Part 119, Part 135, ops specs, pilot duty/rest, "when does it touch a freelance CFI"                                                           |
+| 8    | week-08-companion-documents               | Foundation    | Required  | AIM as expected knowledge, AC numbering + canon, Chief Counsel letters, Order 8900.1, FAA Safety Briefing                                                                       |
+| 9    | week-09-enforcement                       | Foundation    | Required  | Compliance Program, ASRP/ASAP, pilot deviation process, certificate actions, NTSB Part 830                                                                                      |
+| 10   | week-10-capstone                          | Integration   | Required  | Integrated oral, partner exam mechanics, capstone scenario, reflection. Plus 2 new capstone orals (`friend-flight-review`, `ppl-applies-for-ir`) in `course/regulations/orals/` |
 
 Each week ships:
 
@@ -104,12 +104,9 @@ A finished WP looks like:
 - [ ] `course/regulations/orals/friend-flight-review.md` and `course/regulations/orals/ppl-applies-for-ir.md` authored at capstone difficulty matching `night-ifr-passenger.md`
 - [ ] All five WP frontmatter `status` fields flipped to `done`; `review_status` flipped to `done`
 
-## What's explicitly out of scope
+## Out of scope
 
-- **Knowledge-graph nodes.** Week 2's authored content listed proposed nodes (`reg-flight-review-61-56`, etc.) and deferred them. Same posture here. Lessons identify candidate node slugs in their frontmatter `ties_to_knowledge_nodes`; the nodes themselves are authored later as a parallel pull.
-- **Drill -> flashcard conversion.** Drills.md files exist as content; importing them into `apps/study/` is a separate engineering pull.
-- **Weeks 1 and 2.** Already shipped. Not touched by this WP.
-- **`night-ifr-passenger.md` and `gear-up-night-ifr.md`.** Already shipped. Untouched.
+See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## References
 
