@@ -10,7 +10,7 @@ would render empty. The bridge treatment surfaces the same body in a way
 that matches the pedagogical role.
 -->
 <script lang="ts">
-import { renderMarkdown } from '@ab/utils';
+import CourseStepMarkdown from './CourseStepMarkdown.svelte';
 
 interface Props {
 	bodyMd: string;
@@ -23,7 +23,7 @@ let { bodyMd }: Props = $props();
 	<header class="head">
 		<span class="eyebrow">Transition</span>
 	</header>
-	<div class="prose">{@html renderMarkdown(bodyMd)}</div>
+	<div class="prose"><CourseStepMarkdown {bodyMd} /></div>
 </section>
 
 <style>
