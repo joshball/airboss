@@ -1,10 +1,12 @@
 /**
  * Tests for the wx-charts reference-fixture path helpers + the shared
- * `chartsRootDir` (ADR 027 PR 3).
+ * `chartsRootDir` (ADR 027 PR 3, with the symmetric filename disambiguation
+ * pass applied to reference-fixtures).
  *
  * Pins the **nested layout**: reference fixtures live under
  * `data/charts/wx/reference-fixtures/wx-<chart-kind>-<date-zulu>/` with
- * flat `spec.yaml` / `chart.svg` / `meta.json` filenames inside.
+ * disambiguated `wx-<chart-kind>-<date-zulu>-{spec.yaml, chart.svg,
+ * meta.json}` filenames inside, mirroring the wx-scenarios convention.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -75,15 +77,21 @@ describe('referenceFixtureChartDir', () => {
 });
 
 describe('referenceFixtureArtifactPath', () => {
-	it('joins the fixture dir with the flat artifact filename', () => {
+	it('joins the fixture dir with the disambiguated artifact filename', () => {
 		expect(referenceFixtureArtifactPath('/repo', 'surface-analysis', '2024-12-23-12z', WX_CHART_ARTIFACTS.SPEC)).toBe(
-			'/repo/data/charts/wx/reference-fixtures/wx-surface-analysis-2024-12-23-12z/spec.yaml',
+			'/repo/data/charts/wx/reference-fixtures/wx-surface-analysis-2024-12-23-12z/wx-surface-analysis-2024-12-23-12z-spec.yaml',
 		);
 		expect(referenceFixtureArtifactPath('/repo', 'surface-analysis', '2024-12-23-12z', WX_CHART_ARTIFACTS.CHART)).toBe(
-			'/repo/data/charts/wx/reference-fixtures/wx-surface-analysis-2024-12-23-12z/chart.svg',
+			'/repo/data/charts/wx/reference-fixtures/wx-surface-analysis-2024-12-23-12z/wx-surface-analysis-2024-12-23-12z-chart.svg',
 		);
 		expect(referenceFixtureArtifactPath('/repo', 'surface-analysis', '2024-12-23-12z', WX_CHART_ARTIFACTS.META)).toBe(
-			'/repo/data/charts/wx/reference-fixtures/wx-surface-analysis-2024-12-23-12z/meta.json',
+			'/repo/data/charts/wx/reference-fixtures/wx-surface-analysis-2024-12-23-12z/wx-surface-analysis-2024-12-23-12z-meta.json',
+		);
+	});
+
+	it('handles a frame-modified chart kind in the disambiguated filename', () => {
+		expect(referenceFixtureArtifactPath('/repo', 'prog-chart-12hr', '2024-12-23-12z', WX_CHART_ARTIFACTS.SPEC)).toBe(
+			'/repo/data/charts/wx/reference-fixtures/wx-prog-chart-12hr-2024-12-23-12z/wx-prog-chart-12hr-2024-12-23-12z-spec.yaml',
 		);
 	});
 });
@@ -122,13 +130,15 @@ describe('chartSpecFilename + chartArtifactFilename', () => {
 		);
 	});
 
-	it('reference-fixture slugs keep the flat artifact filename', () => {
-		expect(chartSpecFilename('reference-fixtures/wx-surface-analysis-2024-12-23-12z')).toBe('spec.yaml');
+	it('reference-fixture slugs disambiguate by slug tail', () => {
+		expect(chartSpecFilename('reference-fixtures/wx-surface-analysis-2024-12-23-12z')).toBe(
+			'wx-surface-analysis-2024-12-23-12z-spec.yaml',
+		);
 		expect(
 			chartArtifactFilename('reference-fixtures/wx-surface-analysis-2024-12-23-12z', WX_CHART_ARTIFACTS.CHART),
-		).toBe('chart.svg');
+		).toBe('wx-surface-analysis-2024-12-23-12z-chart.svg');
 		expect(
 			chartArtifactFilename('reference-fixtures/wx-surface-analysis-2024-12-23-12z', WX_CHART_ARTIFACTS.META),
-		).toBe('meta.json');
+		).toBe('wx-surface-analysis-2024-12-23-12z-meta.json');
 	});
 });

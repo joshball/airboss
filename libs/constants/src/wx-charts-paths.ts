@@ -14,18 +14,19 @@
  *     chart slug (scenario or reference-fixture), return its on-disk
  *     directory. Path-shaped slugs map directly to the layout.
  *   - `chartSpecFilename(slug)` / `chartArtifactFilename(slug, artifact)`
- *     -- per-family artifact filename. Reference-fixtures keep the flat
- *     `spec.yaml`/`chart.svg`/`meta.json` names; wx-scenarios disambiguate
- *     with a `<scenario-id>-<chart-kind>-` prefix.
+ *     -- per-family artifact filename. Both reference-fixtures and
+ *     wx-scenarios disambiguate filenames with the slug tail prefix so a
+ *     stray file on disk is self-identifying.
  *
  * # Layout
  *
- * Returns the **nested layout** introduced by ADR 027 PR 3:
+ * Returns the **nested layout** introduced by ADR 027 PR 3, with the
+ * symmetric filename-disambiguation pass applied to reference-fixtures:
  *
  *   data/charts/wx/reference-fixtures/wx-<chart-kind>-<date-zulu>/
- *     spec.yaml
- *     chart.svg
- *     meta.json
+ *     wx-<chart-kind>-<date-zulu>-spec.yaml
+ *     wx-<chart-kind>-<date-zulu>-chart.svg
+ *     wx-<chart-kind>-<date-zulu>-meta.json
  *
  *   data/charts/wx/wx-scenarios/<scenario-id>/<chart-kind>/
  *     <scenario-id>-<chart-kind>-spec.yaml
@@ -112,7 +113,9 @@ export function referenceFixtureChartDir(repoRoot: string, chartKind: string, da
  * Absolute path to an artifact inside a reference-fixture chart directory.
  *
  * `artifact` is one of the `WX_CHART_ARTIFACTS` values. Reference fixtures
- * use the flat filename inside their slug-named directory.
+ * disambiguate filenames with the slug tail (`wx-<chart-kind>-<date-zulu>`)
+ * prefix so a stray artifact on disk is self-identifying. Mirrors the
+ * wx-scenarios convention.
  */
 export function referenceFixtureArtifactPath(
 	repoRoot: string,
@@ -121,7 +124,8 @@ export function referenceFixtureArtifactPath(
 	artifact: WxChartArtifact,
 ): string {
 	const p = nodePath();
-	return p.join(referenceFixtureChartDir(repoRoot, chartKind, dateZulu), artifact);
+	const slug = referenceFixtureChartSlug(chartKind, dateZulu);
+	return p.join(referenceFixtureChartDir(repoRoot, chartKind, dateZulu), chartArtifactFilename(slug, artifact));
 }
 
 /**
@@ -139,9 +143,9 @@ export function chartSlugToDir(repoRoot: string, slug: string): string {
 }
 
 /**
- * Per-family spec filename. Reference fixtures keep `spec.yaml`;
- * wx-scenarios use the disambiguated `<scenario-id>-<chart-kind>-spec.yaml`
- * filename derived from the slug's tail segments.
+ * Per-family spec filename. Both wx-scenarios and reference-fixtures use
+ * the disambiguated `<slug-tail>-spec.yaml` filename derived from the
+ * slug's path segments.
  */
 export function chartSpecFilename(slug: string): string {
 	return chartArtifactFilename(slug, WX_CHART_ARTIFACTS.SPEC);
@@ -153,17 +157,24 @@ export function chartSpecFilename(slug: string): string {
  *
  * For `wx-scenarios/<scenario-id>/<chart-kind>` slugs returns
  * `<scenario-id>-<chart-kind>-<artifact>`. For
- * `reference-fixtures/wx-<chart-kind>-<date-zulu>` slugs returns the bare
- * artifact filename.
+ * `reference-fixtures/wx-<chart-kind>-<date-zulu>` slugs returns
+ * `wx-<chart-kind>-<date-zulu>-<artifact>`. Both families flatten the
+ * slug tail to a `-` separated prefix so the on-disk filename uniquely
+ * identifies its source slug.
  *
  * Slugs outside the two known families fall back to the bare artifact
  * filename; callers that hit that branch are likely mid-migration and the
  * fallback keeps the helper total.
  */
 export function chartArtifactFilename(slug: string, artifact: WxChartArtifact): string {
-	const prefix = `${WX_CHART_FAMILIES.WX_SCENARIOS}/`;
-	if (slug.startsWith(prefix)) {
-		const tail = slug.slice(prefix.length);
+	const scenariosPrefix = `${WX_CHART_FAMILIES.WX_SCENARIOS}/`;
+	const referencePrefix = `${WX_CHART_FAMILIES.REFERENCE_FIXTURES}/`;
+	if (slug.startsWith(scenariosPrefix)) {
+		const tail = slug.slice(scenariosPrefix.length);
+		return `${tail.replace(/\//g, '-')}-${artifact}`;
+	}
+	if (slug.startsWith(referencePrefix)) {
+		const tail = slug.slice(referencePrefix.length);
 		return `${tail.replace(/\//g, '-')}-${artifact}`;
 	}
 	return artifact;
