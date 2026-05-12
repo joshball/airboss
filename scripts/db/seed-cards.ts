@@ -25,6 +25,8 @@ import { relative } from 'node:path';
 import { bauthUser } from '@ab/auth/schema';
 import { card, createCard } from '@ab/bc-study/server';
 import {
+	ACS_CODE_PATTERN,
+	ACS_CODES_MAX_PER_CARD,
 	CARD_KIND_VALUES,
 	CARD_KINDS,
 	CARD_TYPES,
@@ -33,6 +35,13 @@ import {
 	DEV_DB_HOST_PATTERN,
 	DEV_DB_URL,
 	ENV_VARS,
+	QUESTION_TIER_VALUES,
+	type QuestionTier,
+	SOURCE_AUTHORITY_CITE_MAX_LENGTH,
+	SOURCE_AUTHORITY_KIND_VALUES,
+	SOURCE_AUTHORITY_MAX_PER_CARD,
+	type SourceAuthority,
+	type SourceAuthorityKind,
 } from '@ab/constants';
 import { and, eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
@@ -57,6 +66,18 @@ interface ParsedCard {
 	 */
 	kind: CardKind;
 	tags: string[];
+	/**
+	 * Audience tier (card-question-tier WP). null = unclassified.
+	 */
+	questionTier: QuestionTier | null;
+	/**
+	 * Structured citations (card-question-tier WP). null = none authored.
+	 */
+	sourceAuthority: SourceAuthority[] | null;
+	/**
+	 * ACS task-element codes (card-question-tier WP). null = no ACS mapping.
+	 */
+	acsCodes: string[] | null;
 }
 
 interface NodeWithCards {
@@ -75,6 +96,103 @@ export interface SeedCardsResult {
 
 const cardTypeSet = new Set<string>(Object.values(CARD_TYPES));
 const cardKindSet = new Set<string>(CARD_KIND_VALUES);
+const questionTierSet = new Set<string>(QUESTION_TIER_VALUES);
+const sourceAuthorityKindSet = new Set<string>(SOURCE_AUTHORITY_KIND_VALUES);
+
+/**
+ * Pull the optional `question_tier:` field from a yaml-cards entry.
+ * Returns `null` when omitted; throws with a per-card path when the
+ * value is present but not in `QUESTION_TIER_VALUES`.
+ */
+function parseQuestionTier(rec: Record<string, unknown>, relPath: string, j: number): QuestionTier | null {
+	const raw = rec.question_tier;
+	if (raw === undefined || raw === null) return null;
+	if (typeof raw !== 'string' || !questionTierSet.has(raw)) {
+		throw new Error(
+			`${relPath}: yaml-cards[${j}].question_tier '${String(raw)}' is not in QUESTION_TIER_VALUES (${[...questionTierSet].join(', ')})`,
+		);
+	}
+	return raw as QuestionTier;
+}
+
+/**
+ * Pull the optional `source_authority:` array from a yaml-cards entry.
+ * Each element must be an object with `kind` (in
+ * `SOURCE_AUTHORITY_KIND_VALUES`) and a non-empty trimmed `cite` string
+ * bounded by `SOURCE_AUTHORITY_CITE_MAX_LENGTH`. Returns `null` when
+ * omitted.
+ */
+function parseSourceAuthority(rec: Record<string, unknown>, relPath: string, j: number): SourceAuthority[] | null {
+	const raw = rec.source_authority;
+	if (raw === undefined || raw === null) return null;
+	if (!Array.isArray(raw)) {
+		throw new Error(`${relPath}: yaml-cards[${j}].source_authority must be an array of {kind, cite} objects`);
+	}
+	if (raw.length > SOURCE_AUTHORITY_MAX_PER_CARD) {
+		throw new Error(
+			`${relPath}: yaml-cards[${j}].source_authority has ${raw.length} entries; maximum is ${SOURCE_AUTHORITY_MAX_PER_CARD}`,
+		);
+	}
+	const out: SourceAuthority[] = [];
+	for (let k = 0; k < raw.length; k++) {
+		const entry = raw[k];
+		if (typeof entry !== 'object' || entry === null) {
+			throw new Error(`${relPath}: yaml-cards[${j}].source_authority[${k}] must be an object`);
+		}
+		const e = entry as Record<string, unknown>;
+		const kind = e.kind;
+		const cite = e.cite;
+		if (typeof kind !== 'string' || !sourceAuthorityKindSet.has(kind)) {
+			throw new Error(
+				`${relPath}: yaml-cards[${j}].source_authority[${k}].kind '${String(kind)}' is not in SOURCE_AUTHORITY_KIND_VALUES (${[...sourceAuthorityKindSet].join(', ')})`,
+			);
+		}
+		if (typeof cite !== 'string' || cite.trim() === '') {
+			throw new Error(`${relPath}: yaml-cards[${j}].source_authority[${k}].cite must be a non-empty string`);
+		}
+		const trimmed = cite.trim();
+		if (trimmed.length > SOURCE_AUTHORITY_CITE_MAX_LENGTH) {
+			throw new Error(
+				`${relPath}: yaml-cards[${j}].source_authority[${k}].cite is ${trimmed.length} chars; maximum is ${SOURCE_AUTHORITY_CITE_MAX_LENGTH}`,
+			);
+		}
+		out.push({ kind: kind as SourceAuthorityKind, cite: trimmed });
+	}
+	return out;
+}
+
+/**
+ * Pull the optional `acs_codes:` array from a yaml-cards entry. Each
+ * element must match `ACS_CODE_PATTERN` (e.g. `PA.I.C.K2a`). Returns
+ * `null` when omitted.
+ */
+function parseAcsCodes(rec: Record<string, unknown>, relPath: string, j: number): string[] | null {
+	const raw = rec.acs_codes;
+	if (raw === undefined || raw === null) return null;
+	if (!Array.isArray(raw)) {
+		throw new Error(`${relPath}: yaml-cards[${j}].acs_codes must be an array of code strings`);
+	}
+	if (raw.length > ACS_CODES_MAX_PER_CARD) {
+		throw new Error(
+			`${relPath}: yaml-cards[${j}].acs_codes has ${raw.length} entries; maximum is ${ACS_CODES_MAX_PER_CARD}`,
+		);
+	}
+	const out: string[] = [];
+	for (let k = 0; k < raw.length; k++) {
+		const entry = raw[k];
+		if (typeof entry !== 'string') {
+			throw new Error(`${relPath}: yaml-cards[${j}].acs_codes[${k}] must be a string`);
+		}
+		const trimmed = entry.trim();
+		if (!ACS_CODE_PATTERN.test(trimmed)) {
+			throw new Error(
+				`${relPath}: yaml-cards[${j}].acs_codes[${k}] '${trimmed}' does not match ACS_CODE_PATTERN (e.g. PA.I.C.K2a)`,
+			);
+		}
+		out.push(trimmed);
+	}
+	return out;
+}
 
 function splitFrontmatter(text: string): { yaml: string; body: string } | null {
 	if (!text.startsWith(`${FRONTMATTER_DELIM}\n`)) return null;
@@ -133,7 +251,19 @@ function extractCardsFromBody(body: string, relPath: string): ParsedCard[] {
 					if (typeof tag === 'string' && tag.trim() !== '') tags.push(tag.trim());
 				}
 			}
-			cards.push({ front: rec.front.trim(), back: rec.back.trim(), cardType, kind, tags });
+			const questionTier = parseQuestionTier(rec, relPath, j);
+			const sourceAuthority = parseSourceAuthority(rec, relPath, j);
+			const acsCodes = parseAcsCodes(rec, relPath, j);
+			cards.push({
+				front: rec.front.trim(),
+				back: rec.back.trim(),
+				cardType,
+				kind,
+				tags,
+				questionTier,
+				sourceAuthority,
+				acsCodes,
+			});
 		}
 		i = end + 1;
 	}
@@ -208,6 +338,9 @@ export async function seedCardsForUser(userEmail: string): Promise<SeedCardsResu
 						sourceRef: node.nodeId,
 						nodeId: node.nodeId,
 						isEditable: false,
+						questionTier: c.questionTier,
+						sourceAuthority: c.sourceAuthority,
+						acsCodes: c.acsCodes,
 					},
 					db,
 				);

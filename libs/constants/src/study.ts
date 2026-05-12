@@ -254,6 +254,139 @@ export const CARD_KIND_LABELS: Record<CardKind, string> = {
 	[CARD_KINDS.CALCULATION]: 'Calculation',
 };
 
+/**
+ * Card audience tier (card-question-tier WP).
+ *
+ * Promotes the FAA-vs-CFI distinction from free-form tags into a typed
+ * first-class field. NULL = unclassified (default for the existing 250+
+ * cards seeded before this WP); the explicit values let learners filter
+ * the review queue to "today, drill only the FAA-written tier" or
+ * "today, drill only what my CFI flagged," and let surfaces pair an
+ * `faa-written` card with a `cfi-essential` sibling card on the same
+ * fact when both exist.
+ *
+ * The fourth conceivable value `cfi-only` is collapsed into
+ * `cfi-essential`; the FAA-coverage signal lives in the *presence or
+ * absence* of a sibling `faa-written` card on the same node, not in a
+ * negative attribute on the CFI card. See
+ * `docs/work-packages/card-question-tier/design.md` for the rationale.
+ */
+export const QUESTION_TIERS = {
+	FAA_WRITTEN: 'faa-written',
+	CFI_ESSENTIAL: 'cfi-essential',
+	BOTH: 'both',
+} as const;
+
+export type QuestionTier = (typeof QUESTION_TIERS)[keyof typeof QUESTION_TIERS];
+
+export const QUESTION_TIER_VALUES = Object.values(QUESTION_TIERS);
+
+/**
+ * Human-readable labels for question tiers. Used by future filter chips
+ * and the card detail page; defined here so every surface renders the
+ * same string for the same tier.
+ */
+export const QUESTION_TIER_LABELS: Record<QuestionTier, string> = {
+	[QUESTION_TIERS.FAA_WRITTEN]: 'FAA written test',
+	[QUESTION_TIERS.CFI_ESSENTIAL]: 'CFI essential',
+	[QUESTION_TIERS.BOTH]: 'FAA + CFI',
+};
+
+/**
+ * Source-authority kinds that back a card's answer (card-question-tier
+ * WP). Each entry on a card's `source_authority` array carries one of
+ * these `kind` values plus a free-form `cite` string. The kind enum is
+ * intentionally small and aligned with the FAA reference taxonomy:
+ *
+ * - `cfr` -- 14 CFR Parts 1, 61, 91, 121, 125, 135, 141 (federal regs)
+ * - `ac` -- FAA Advisory Circulars (AC 00-45H, AC 00-24C, ...)
+ * - `aim` -- Aeronautical Information Manual sections (AIM 7-1-27, ...)
+ * - `phak` -- Pilot's Handbook of Aeronautical Knowledge chapters
+ * - `afh` -- Airplane Flying Handbook chapters / sections
+ * - `other` -- escape hatch (POH/AFM, FAA-S-ACS-* documents, third-party)
+ *
+ * `other` exists so authoring is never blocked by a missing kind. When
+ * a recurring `other` source pattern emerges, promote it to its own kind
+ * in a follow-on PR (one-line constants change + CHECK regeneration).
+ */
+export const SOURCE_AUTHORITY_KINDS = {
+	CFR: 'cfr',
+	AC: 'ac',
+	AIM: 'aim',
+	PHAK: 'phak',
+	AFH: 'afh',
+	OTHER: 'other',
+} as const;
+
+export type SourceAuthorityKind = (typeof SOURCE_AUTHORITY_KINDS)[keyof typeof SOURCE_AUTHORITY_KINDS];
+
+export const SOURCE_AUTHORITY_KIND_VALUES = Object.values(SOURCE_AUTHORITY_KINDS);
+
+/**
+ * Human-readable labels for source-authority kinds. Used by future
+ * source-authority badge / chip surfaces on the card detail page.
+ */
+export const SOURCE_AUTHORITY_KIND_LABELS: Record<SourceAuthorityKind, string> = {
+	[SOURCE_AUTHORITY_KINDS.CFR]: 'CFR',
+	[SOURCE_AUTHORITY_KINDS.AC]: 'Advisory Circular',
+	[SOURCE_AUTHORITY_KINDS.AIM]: 'AIM',
+	[SOURCE_AUTHORITY_KINDS.PHAK]: 'PHAK',
+	[SOURCE_AUTHORITY_KINDS.AFH]: 'AFH',
+	[SOURCE_AUTHORITY_KINDS.OTHER]: 'Other',
+};
+
+/**
+ * Structured citation entry stored on `card.source_authority` (jsonb
+ * array). The shape pairs an authority kind (`cfr`, `aim`, ...) with a
+ * free-form citation string (`14 CFR 91.155`, `AIM 7-1-21`, `PHAK Ch
+ * 11`); the kind drives badge / icon rendering, the cite is the human
+ * pointer. The DB CHECK validates `kind` against
+ * `SOURCE_AUTHORITY_KIND_VALUES` and rejects empty cites; the BC Zod
+ * schema mirrors the rule with a per-field error path.
+ */
+export interface SourceAuthority {
+	kind: SourceAuthorityKind;
+	cite: string;
+}
+
+/**
+ * Maximum citations per card. Keeps `source_authority` from growing
+ * unboundedly via authoring slips; ten is more than any single card has
+ * needed in the seeded corpus.
+ */
+export const SOURCE_AUTHORITY_MAX_PER_CARD = 10;
+
+/**
+ * Maximum length for a single `source_authority.cite` string. 200
+ * characters comfortably holds the longest known citation pattern
+ * (`PHAK Ch 11, Aircraft Performance, Section 11-2`) with margin.
+ */
+export const SOURCE_AUTHORITY_CITE_MAX_LENGTH = 200;
+
+/**
+ * Maximum number of ACS task-element codes per card. Twenty is well
+ * above the typical 1-3 codes a single card maps to and prevents
+ * authoring slips from running unboundedly.
+ */
+export const ACS_CODES_MAX_PER_CARD = 20;
+
+/**
+ * Shape for an ACS task-element code (PA.I.C.K1, IR.II.A.K2c,
+ * CA.III.B.S1, ...). Components:
+ *
+ * - Two uppercase letters for the rating prefix (PA / IR / CA / AS / CFI / ...)
+ * - Roman-numeral area code (I, II, III, IV, ...)
+ * - Uppercase letter(s) for the task within the area (A, B, C, ...)
+ * - One of K (knowledge) / R (risk management) / S (skill) for the ACS triad
+ * - Numeric ordinal (1, 2, 3, ...) optionally followed by a lowercase
+ *   sub-letter (a, b, c, ...) for nested elements like PA.I.C.K2a
+ *
+ * Source for the shape: `course/syllabi/ppl-airplane-acs-6c/areas/*.yaml`
+ * `code:` fields. The pattern is asserted in the Zod validation layer
+ * and the seeder; surfaces that render codes can rely on the shape.
+ */
+export const ACS_CODE_PATTERN = /^[A-Z]{2}\.[IVX]+\.[A-Z]+\.[KRS]\d+[a-z]?$/;
+
 export const CONTENT_SOURCES = {
 	PERSONAL: 'personal',
 	COURSE: 'course',

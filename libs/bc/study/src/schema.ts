@@ -79,6 +79,8 @@ import {
 	PHASE_OF_FLIGHT_VALUES,
 	PLAN_STATUS_VALUES,
 	PLAN_STATUSES,
+	QUESTION_TIER_VALUES,
+	type QuestionTier,
 	REVIEW_SESSION_STATUS_VALUES,
 	REVIEW_SESSION_STATUSES,
 	SAVED_DECK_LABEL_MAX_LENGTH,
@@ -95,6 +97,8 @@ import {
 	type SessionSlice,
 	SNOOZE_DURATION_LEVEL_VALUES,
 	SNOOZE_REASON_VALUES,
+	SOURCE_AUTHORITY_KIND_VALUES,
+	type SourceAuthority,
 	STUDY_PRIORITY_VALUES,
 	SYLLABUS_KIND_VALUES,
 	SYLLABUS_PRIMACY,
@@ -379,6 +383,35 @@ export const card = studySchema.table(
 		nodeId: text('node_id').references(() => knowledgeNode.id, { onDelete: 'set null' }),
 		isEditable: boolean('is_editable').notNull().default(true),
 		status: text('status').notNull().default(CARD_STATUSES.ACTIVE),
+		/**
+		 * Audience tier (card-question-tier WP). Promotes the FAA-vs-CFI
+		 * distinction from free-form `tags[]` into a typed first-class field.
+		 * NULL = unclassified (default for the existing 250+ cards seeded
+		 * before this WP); the explicit values let learners filter the review
+		 * queue to "today, drill only the FAA-written tier" or "today, drill
+		 * only what my CFI flagged." See
+		 * `docs/work-packages/card-question-tier/design.md`.
+		 */
+		questionTier: text('question_tier').$type<QuestionTier>(),
+		/**
+		 * Structured citations backing the card's answer (card-question-tier
+		 * WP). Each element pairs an authority kind (`cfr`, `aim`, `phak`,
+		 * ...) with a free-form cite string (`14 CFR 91.155`, `AIM 7-1-21`,
+		 * `PHAK Ch 11`). The kind drives badge / icon rendering on future
+		 * surfaces; the cite is the human pointer. The CHECK constraint
+		 * validates `kind` against `SOURCE_AUTHORITY_KIND_VALUES` and
+		 * rejects empty cites at the storage layer; the BC Zod schema
+		 * mirrors the rule for typed feedback at the form layer.
+		 */
+		sourceAuthority: jsonb('source_authority').$type<SourceAuthority[]>(),
+		/**
+		 * ACS task-element codes the card maps to (card-question-tier WP).
+		 * Native Postgres `text[]` so array operators (`@>`, `&&`) and
+		 * future GIN indexes work naturally for "find all cards covering
+		 * PA.I.C.K2a" queries. Shape constrained by `ACS_CODE_PATTERN` in
+		 * the Zod validation layer and the seeder.
+		 */
+		acsCodes: text('acs_codes').array(),
 		/** Dev-seed marker. NULL on production rows. */
 		seedOrigin: text('seed_origin'),
 		...timestamps(),
@@ -419,6 +452,32 @@ export const card = studySchema.table(
 		cardKindCheck: check('card_kind_check', sql.raw(`"kind" IN (${inList(CARD_KIND_VALUES)})`)),
 		sourceTypeCheck: check('card_source_type_check', sql.raw(`"source_type" IN (${inList(CONTENT_SOURCE_VALUES)})`)),
 		statusCheck: check('card_status_check', sql.raw(`"status" IN (${inList(CARD_STATUS_VALUES)})`)),
+		// card-question-tier WP. NULL is allowed (legacy unclassified cards);
+		// non-null values must be in QUESTION_TIER_VALUES. Mirrors the BC Zod
+		// schema so the storage layer is the final defense.
+		questionTierCheck: check(
+			'card_question_tier_check',
+			sql.raw(`"question_tier" IS NULL OR "question_tier" IN (${inList(QUESTION_TIER_VALUES)})`),
+		),
+		// card-question-tier WP. NULL allowed (no citations); when present,
+		// every element of the jsonb array must be `{kind, cite}` where kind
+		// is in SOURCE_AUTHORITY_KIND_VALUES and cite is a non-empty string.
+		// The CHECK uses jsonb_array_length + a NOT EXISTS over jsonb_array_elements
+		// to scan for any malformed element. The BC Zod schema mirrors this for
+		// authoring-time feedback; the CHECK is the storage-layer floor.
+		sourceAuthorityShapeCheck: check(
+			'card_source_authority_shape_check',
+			sql.raw(
+				`"source_authority" IS NULL OR (jsonb_typeof("source_authority") = 'array' AND NOT EXISTS (
+					SELECT 1 FROM jsonb_array_elements("source_authority") AS elem
+					WHERE jsonb_typeof(elem) <> 'object'
+						OR (elem->>'kind') IS NULL
+						OR (elem->>'kind') NOT IN (${inList(SOURCE_AUTHORITY_KIND_VALUES)})
+						OR (elem->>'cite') IS NULL
+						OR length(trim(elem->>'cite')) = 0
+				))`,
+			),
+		),
 	}),
 );
 

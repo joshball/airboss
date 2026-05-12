@@ -6,6 +6,8 @@
  */
 
 import {
+	ACS_CODE_PATTERN,
+	ACS_CODES_MAX_PER_CARD,
 	ASSESSMENT_METHOD_VALUES,
 	CARD_KIND_VALUES,
 	CARD_TYPE_VALUES,
@@ -14,9 +16,13 @@ import {
 	DIFFICULTY_VALUES,
 	DOMAIN_VALUES,
 	PHASE_OF_FLIGHT_VALUES,
+	QUESTION_TIER_VALUES,
 	REVIEW_RATING_VALUES,
 	SCENARIO_OPTIONS_MAX,
 	SCENARIO_OPTIONS_MIN,
+	SOURCE_AUTHORITY_CITE_MAX_LENGTH,
+	SOURCE_AUTHORITY_KIND_VALUES,
+	SOURCE_AUTHORITY_MAX_PER_CARD,
 } from '@ab/constants';
 import { z } from 'zod';
 
@@ -25,11 +31,37 @@ const cardEnum = {
 	cardType: z.enum(CARD_TYPE_VALUES as [string, ...string[]]),
 	kind: z.enum(CARD_KIND_VALUES as [string, ...string[]]),
 	sourceType: z.enum(CONTENT_SOURCE_VALUES as [string, ...string[]]),
+	questionTier: z.enum(QUESTION_TIER_VALUES as [string, ...string[]]),
+	sourceAuthorityKind: z.enum(SOURCE_AUTHORITY_KIND_VALUES as [string, ...string[]]),
 };
 
 export const cardTextSchema = z.string().trim().min(1).max(10_000);
 
 export const cardTagsSchema = z.array(z.string().trim().min(1).max(100)).max(20).default([]);
+
+/**
+ * Per-element shape for `card.source_authority` (card-question-tier WP).
+ * `kind` is a closed enum (`SOURCE_AUTHORITY_KIND_VALUES`); `cite` is a
+ * trimmed, non-empty string bounded by `SOURCE_AUTHORITY_CITE_MAX_LENGTH`.
+ * The DB CHECK (`card_source_authority_shape_check`) enforces the same
+ * rule at the storage layer; this schema is the authoring-time mirror.
+ */
+export const sourceAuthorityEntrySchema = z.object({
+	kind: cardEnum.sourceAuthorityKind,
+	cite: z.string().trim().min(1).max(SOURCE_AUTHORITY_CITE_MAX_LENGTH),
+});
+
+export const sourceAuthoritySchema = z.array(sourceAuthorityEntrySchema).max(SOURCE_AUTHORITY_MAX_PER_CARD);
+
+/**
+ * ACS task-element codes array (card-question-tier WP). Each element is
+ * a single code (`PA.I.C.K2a`, `IR.II.A.K2c`, ...) matching
+ * `ACS_CODE_PATTERN`. Bounded to `ACS_CODES_MAX_PER_CARD` so authoring
+ * slips can't run unboundedly.
+ */
+export const acsCodesSchema = z
+	.array(z.string().trim().regex(ACS_CODE_PATTERN, 'ACS code must match the canonical shape (e.g. PA.I.C.K2a)'))
+	.max(ACS_CODES_MAX_PER_CARD);
 
 export const newCardSchema = z.object({
 	front: cardTextSchema,
@@ -41,6 +73,9 @@ export const newCardSchema = z.object({
 	sourceType: cardEnum.sourceType.optional(),
 	sourceRef: z.string().trim().min(1).max(500).nullish(),
 	isEditable: z.boolean().optional(),
+	questionTier: cardEnum.questionTier.nullish(),
+	sourceAuthority: sourceAuthoritySchema.nullish(),
+	acsCodes: acsCodesSchema.nullish(),
 });
 
 /**
@@ -58,6 +93,9 @@ export const updateCardSchema = z.object({
 	cardType: cardEnum.cardType.optional(),
 	kind: cardEnum.kind.optional(),
 	tags: cardTagsSchema.optional(),
+	questionTier: cardEnum.questionTier.nullish(),
+	sourceAuthority: sourceAuthoritySchema.nullish(),
+	acsCodes: acsCodesSchema.nullish(),
 });
 
 export const reviewRatingSchema = z

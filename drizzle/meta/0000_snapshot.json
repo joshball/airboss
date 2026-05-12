@@ -582,6 +582,24 @@
           "notNull": true,
           "default": "'active'"
         },
+        "question_tier": {
+          "name": "question_tier",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "source_authority": {
+          "name": "source_authority",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "acs_codes": {
+          "name": "acs_codes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        },
         "seed_origin": {
           "name": "seed_origin",
           "type": "text",
@@ -818,6 +836,14 @@
         "card_status_check": {
           "name": "card_status_check",
           "value": "\"status\" IN ('active', 'suspended', 'archived')"
+        },
+        "card_question_tier_check": {
+          "name": "card_question_tier_check",
+          "value": "\"question_tier\" IS NULL OR \"question_tier\" IN ('faa-written', 'cfi-essential', 'both')"
+        },
+        "card_source_authority_shape_check": {
+          "name": "card_source_authority_shape_check",
+          "value": "\"source_authority\" IS NULL OR (jsonb_typeof(\"source_authority\") = 'array' AND NOT EXISTS (\n\t\t\t\t\tSELECT 1 FROM jsonb_array_elements(\"source_authority\") AS elem\n\t\t\t\t\tWHERE jsonb_typeof(elem) <> 'object'\n\t\t\t\t\t\tOR (elem->>'kind') IS NULL\n\t\t\t\t\t\tOR (elem->>'kind') NOT IN ('cfr', 'ac', 'aim', 'phak', 'afh', 'other')\n\t\t\t\t\t\tOR (elem->>'cite') IS NULL\n\t\t\t\t\t\tOR length(trim(elem->>'cite')) = 0\n\t\t\t\t))"
         }
       },
       "isRLSEnabled": false
