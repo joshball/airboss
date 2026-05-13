@@ -9,8 +9,8 @@ import CommandPalette from './CommandPalette.svelte';
  * listeners that open the same palette in three modes:
  *
  *   - `/` or `Cmd+K`         -> `search` mode (default)
+ *   - `Cmd+P`                -> `quickopen` mode (Phase 5)
  *   - `Cmd+Shift+P`          -> `command` mode (Phase 4)
- *   - (`Cmd+P` -> `quickopen` ships in Phase 5)
  *
  * Both entry points lead to the same component -- the top-nav button
  * teaches the feature exists; the keyboard shortcuts are the power-user
@@ -19,8 +19,8 @@ import CommandPalette from './CommandPalette.svelte';
  * Global key listeners respect input-focus: pressing `/` while the user
  * is typing in a form field does NOT open the palette (lets users type
  * slashes in content). Cmd-modified shortcuts ignore the editable check
- * because the user's `Cmd+K` / `Cmd+Shift+P` always means the palette,
- * even from within an input.
+ * because the user's `Cmd+K` / `Cmd+P` / `Cmd+Shift+P` always means the
+ * palette, even from within an input.
  */
 
 interface Props {
@@ -70,6 +70,14 @@ function handleWindowKey(event: KeyboardEvent): void {
 	if (meta && event.shiftKey && key === 'p') {
 		event.preventDefault();
 		openInMode('command');
+		return;
+	}
+	// Cmd+P (or Ctrl+P) -- quickopen-mode palette. Hijacks the
+	// browser print shortcut intentionally; pilots will hit Cmd+P far
+	// more often to jump to a known doc/plan than to print a page.
+	if (meta && !event.shiftKey && key === 'p') {
+		event.preventDefault();
+		openInMode('quickopen');
 		return;
 	}
 	// Cmd+K -- search-mode palette.

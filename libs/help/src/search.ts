@@ -47,8 +47,10 @@ import { loadAviationRefs } from './loaders/aviation-refs';
 import { loadExternalTools } from './loaders/external-tools';
 import { loadHelpPages } from './loaders/help-pages';
 import { parseQuery } from './query-parser';
+import { recents } from './recents';
 import { helpRegistry } from './registry';
 import type { ParsedFilter, ParsedQuery, SearchFilters, SearchResult, SearchResultSet } from './schema/help-registry';
+import { PALETTE_MODE_ELIGIBLE, type PaletteMode } from './schema/palette-mode';
 import {
 	COLUMN_BY_TYPE,
 	COLUMN_ORDER,
@@ -348,9 +350,20 @@ export function searchGrouped(
 	rawQuery: string,
 	host: PaletteHost,
 	injected: readonly TypedResult[] = [],
+	mode: PaletteMode = 'search',
 ): GroupedResults {
 	const parsed = parseQuery(rawQuery);
 	const freeText = parsed.freeText.trim();
+
+	// Phase 5: quickopen mode with empty input surfaces recents in the
+	// top-hits strip. Recents are intersected with the quickopen-eligible
+	// type set so a stored `mine.card` (not eligible) never shows in the
+	// quickopen surface even if it sneaks into storage from a prior
+	// search-mode activation.
+	if (mode === 'quickopen' && freeText.length === 0 && parsed.filters.length === 0 && injected.length === 0) {
+		return buildQuickopenEmptyResult(parsed);
+	}
+
 	if (freeText.length === 0 && parsed.filters.length === 0 && injected.length === 0) {
 		return { ...EMPTY_GROUPED_RESULTS, filters: parsed.filters };
 	}
@@ -720,5 +733,41 @@ function commandToResult(cmd: PaletteCommand): TypedResult {
 		href: `cmd:${cmd.id}`,
 		rankBucket: 2,
 		depth: 0,
+	};
+}
+
+// =================================================================
+// Phase 5 -- quickopen empty-state (recents)
+// =================================================================
+
+/**
+ * Build the empty-state result for `mode: 'quickopen'`. Surfaces stored
+ * recents in the top-hits strip and an empty column set. Each recent
+ * is filtered by the quickopen eligible types (in case storage contains
+ * rows from a wider mode in a prior session). Recents that don't match
+ * the eligibility set are silently dropped here -- the user asked for
+ * "things I can quick-open," not "everything I ever opened."
+ */
+function buildQuickopenEmptyResult(parsed: ParsedQuery): GroupedResults {
+	const eligible = PALETTE_MODE_ELIGIBLE.quickopen;
+	const entries = recents.list();
+	const topHits: TypedResult[] = [];
+	for (const entry of entries) {
+		if (!eligible.has(entry.type)) continue;
+		topHits.push({
+			id: entry.resultId,
+			type: entry.type,
+			title: entry.title,
+			href: entry.href,
+			rankBucket: 2,
+			depth: 0,
+			source: 'recents',
+		});
+	}
+	return {
+		...EMPTY_GROUPED_RESULTS,
+		topHits,
+		filters: parsed.filters,
+		totalCount: topHits.length,
 	};
 }

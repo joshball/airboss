@@ -7,6 +7,7 @@ import { tick, untrack } from 'svelte';
 import { goto } from '$app/navigation';
 import { page } from '$app/state';
 import { paletteCommands } from '../commands/registry';
+import { recents } from '../recents';
 import type { ParsedFilter } from '../schema/help-registry';
 import { PALETTE_MODE_ELIGIBLE, type PaletteMode } from '../schema/palette-mode';
 import type { GroupedResults, PaletteHost, SearchResult, SynonymRewrite } from '../schema/result-types';
@@ -94,7 +95,7 @@ const mergedInjected = $derived<readonly SearchResult[]>(
 	serverInjected.length > 0 ? serverInjected : (injectedResults ?? []),
 );
 
-const groupedRaw = $derived<GroupedResults>(searchGrouped(debouncedQuery, host, mergedInjected));
+const groupedRaw = $derived<GroupedResults>(searchGrouped(debouncedQuery, host, mergedInjected, mode));
 const grouped = $derived<GroupedResults>(filterByMode(groupedRaw, mode));
 
 const intent = $derived<GroupedResults['intent']>(grouped.intent);
@@ -148,7 +149,7 @@ const placeholder = $derived<string>(placeholderFor(mode));
 
 function placeholderFor(m: PaletteMode): string {
 	if (m === 'command') return 'Command palette';
-	if (m === 'quickopen') return 'Quick open';
+	if (m === 'quickopen') return 'Quick open -- recents and jump targets';
 	return 'Search the platform...';
 }
 
@@ -429,6 +430,16 @@ function jumpFocusZone(direction: 1 | -1): void {
 function activate(result: SearchResult): void {
 	const path = result.href;
 	onClose();
+	// Phase 5: record every activation in the recents tracker so empty
+	// quickopen mode can surface them in the top-hits strip. Both
+	// commands (`cmd:*` href) and external tools (`http*` href) record;
+	// the user opened them deliberately, so they should reappear.
+	recents.record({
+		id: result.id,
+		type: result.type,
+		title: result.title,
+		href: result.href,
+	});
 	// Phase 4: command rows carry a synthetic `cmd:<id>` href. Route those
 	// through the registry rather than `goto()` so the declarative handler
 	// fires (which itself may navigate via `goto`, dispatch an API call,

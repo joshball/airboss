@@ -24,6 +24,13 @@ export {
 	type TableAlign,
 } from './markdown';
 export { parseQuery } from './query-parser';
+export {
+	type RecentEntry,
+	type RecentRecordInput,
+	recencyFactor,
+	recents,
+	type RecentsTracker,
+} from './recents';
 export { helpRegistry } from './registry';
 export {
 	EXTERNAL_REF_SOURCE_VALUES,
