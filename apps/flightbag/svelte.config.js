@@ -47,6 +47,8 @@ const config = {
 			'@ab/bc-study/*': '../../libs/bc/study/src/*',
 			'@ab/aviation': '../../libs/aviation/src/index.ts',
 			'@ab/aviation/*': '../../libs/aviation/src/*',
+			'@ab/autocomplete': '../../libs/autocomplete/src/index.ts',
+			'@ab/autocomplete/*': '../../libs/autocomplete/src/*',
 			// Deep imports the BC layer reaches for. Listed here so flightbag's
 			// svelte-check can type-check the BC module graph end-to-end.
 			'@ab/auth': '../../libs/auth/src/index.ts',

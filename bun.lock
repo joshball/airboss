@@ -202,6 +202,17 @@
         "vitest": "^4.1.0",
       },
     },
+    "libs/autocomplete": {
+      "name": "@ab/autocomplete",
+      "dependencies": {
+        "@ab/aviation": "workspace:*",
+        "@ab/constants": "workspace:*",
+      },
+      "devDependencies": {
+        "svelte": "^5.34.7",
+        "vitest": "^4.1.0",
+      },
+    },
     "libs/aviation": {
       "name": "@ab/aviation",
       "dependencies": {
@@ -415,7 +426,7 @@
     },
     "libs/wx-charts": {
       "name": "@ab/wx-charts",
-      "version": "0.1.0",
+      "version": "0.3.1",
       "dependencies": {
         "@ab/constants": "workspace:*",
         "d3-contour": "^4.0.2",
@@ -450,6 +461,8 @@
     "@ab/audit": ["@ab/audit@workspace:libs/audit"],
 
     "@ab/auth": ["@ab/auth@workspace:libs/auth"],
+
+    "@ab/autocomplete": ["@ab/autocomplete@workspace:libs/autocomplete"],
 
     "@ab/aviation": ["@ab/aviation@workspace:libs/aviation"],
 
