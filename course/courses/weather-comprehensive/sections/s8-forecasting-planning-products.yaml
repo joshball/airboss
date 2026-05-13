@@ -32,18 +32,25 @@ body_md: |
   ---
 
   Section 7 was airport-specific. This section is route-and-region.
-  GFA, surface analysis, AIRMETs, SIGMETs, winds aloft, convective
-  outlook -- each product zooms out and looks at the same atmosphere
-  from a different angle. The skill is knowing which product answers
-  which question, so you reach for the right one without having to
-  read all six.
+  [GFA](/reference/knowledge/wx-product-gfa),
+  [surface analysis](/reference/knowledge/wx-product-surface-analysis-and-cva),
+  [AIRMETs, SIGMETs](/reference/knowledge/wx-product-airmets-sigmets),
+  [winds aloft](/reference/knowledge/wx-product-winds-aloft),
+  [convective outlook](/reference/knowledge/wx-product-convective-outlook)
+  -- each product zooms out and looks at the same atmosphere from a
+  different angle. The skill is knowing which product answers which
+  question, so you reach for the right one without having to read all
+  six.
 
-  A practical heuristic: GFA for the briefing overview, surface
-  analysis for the synoptic frame, winds aloft for routing and fuel,
-  AIRMETs/SIGMETs for hazard alerts, convective outlook for thunderstorm
+  A practical heuristic: GFA for the
+  [briefing](/reference/knowledge/wx-briefing-execution) overview,
+  surface analysis for the synoptic frame, winds aloft for routing
+  and fuel, AIRMETs/SIGMETs for hazard alerts, convective outlook for
+  [thunderstorm](/reference/knowledge/wx-thunderstorm-hazards)
   probability beyond the next few hours. Each step in this section
   walks one of those products in turn.
 steps:
+
   - code: s8.1
     ordinal: 1
     title: Weather data sources for flight planning
@@ -64,11 +71,12 @@ steps:
     ordinal: 2
     title: Surface analysis and ceiling/visibility charts
     body_md: |
-      The surface analysis is the master chart -- highs, lows, fronts,
-      isobars, station observations -- and the ceiling/visibility
-      analysis (CVA) projects the same weather into the two
-      pilot-relevant numbers. Read the surface analysis to understand
-      why; read the CVA to know where it's actually flyable.
+      The surface analysis is the master chart -- highs, lows,
+      [fronts](/reference/knowledge/wx-airmasses-and-fronts), isobars,
+      station observations -- and the ceiling/visibility analysis
+      (CVA) projects the same weather into the two pilot-relevant
+      numbers. Read the surface analysis to understand why; read the
+      CVA to know where it's actually flyable.
 
       Both charts are pictures of the same data. Disagreement between
       them is a flag, not a contradiction.
@@ -87,9 +95,15 @@ steps:
     title: Graphical Forecasts for Aviation (GFA)
     body_md: |
       GFA replaced the old textual area forecast with an interactive
-      graphical product covering ceiling, visibility, wind, turbulence,
-      icing, clouds, and thunderstorms across CONUS. It's the single
-      best product for "show me the picture for the next 18 hours."
+      graphical product covering ceiling,
+      [visibility](/reference/knowledge/wx-fog-and-visibility-obstructions),
+      [wind](/reference/knowledge/wx-wind-systems),
+      [turbulence](/reference/knowledge/wx-turbulence-types),
+      [icing](/reference/knowledge/wx-icing-types-and-avoidance),
+      [clouds](/reference/knowledge/wx-clouds-and-precipitation), and
+      [thunderstorms](/reference/knowledge/wx-thunderstorm-hazards)
+      across CONUS. It's the single best product for "show me the
+      picture for the next 18 hours."
 
       The catch is the same catch with every graphical product: the
       pilot can scroll through the layers without reading any of them
@@ -123,8 +137,10 @@ steps:
       altitudes for thousands of stations. Pilot use is two-fold:
       pick the cruise altitude that gives the best
       groundspeed-versus-fuel tradeoff, and predict whether you'll
-      meet icing aloft (the temperature column tells you when the
-      freezing level intersects your cruise altitude).
+      meet [icing](/reference/knowledge/wx-icing-types-and-avoidance)
+      aloft (the temperature column tells you when the
+      [freezing level](/reference/knowledge/wx-freezing-level)
+      intersects your cruise altitude).
 
       The forecast resolution is coarse -- 3,000 / 6,000 / 9,000 /
       12,000 ft -- so interpolate when your cruise altitude isn't on
@@ -144,10 +160,13 @@ steps:
     title: AIRMETs, SIGMETs, and Convective SIGMETs
     body_md: |
       AIRMETs flag widespread weather hazardous to general aviation
-      (turbulence, icing, IFR conditions, mountain obscuration).
-      SIGMETs flag hazards to all aircraft (severe turbulence, severe
-      icing, dust storms, volcanic ash). Convective SIGMETs flag
-      thunderstorms specifically.
+      ([turbulence](/reference/knowledge/wx-turbulence-types),
+      [icing](/reference/knowledge/wx-icing-types-and-avoidance), IFR
+      conditions, mountain obscuration). SIGMETs flag hazards to all
+      aircraft (severe turbulence, severe icing, dust storms, volcanic
+      ash). Convective SIGMETs flag
+      [thunderstorms](/reference/knowledge/wx-thunderstorm-hazards)
+      specifically.
 
       The pilot habit is to read every AIRMET and SIGMET that
       intersects the route, then ask "what would my flight look like
