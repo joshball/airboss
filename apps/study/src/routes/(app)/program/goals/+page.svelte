@@ -1,5 +1,6 @@
 <script lang="ts">
 import { GOAL_STATUS_LABELS, PAGE_EXPLAINER_KEYS, ROUTES } from '@ab/constants';
+import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import Button from '@ab/ui/components/Button.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import PageExplainer from '@ab/ui/components/PageExplainer.svelte';
@@ -20,6 +21,9 @@ const totalGoals = $derived(
 
 <section class="page">
 	<PageHeader title="Goals" subtitle="What you're pursuing right now. Goals compose syllabi and ad-hoc nodes.">
+		{#snippet titleSuffix()}
+			<PageHelp pageId="goals" />
+		{/snippet}
 		{#snippet actions()}
 			<Button href={ROUTES.PROGRAM_GOALS_NEW} variant="primary">New goal</Button>
 		{/snippet}

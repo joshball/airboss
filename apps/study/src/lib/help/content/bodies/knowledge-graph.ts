@@ -77,7 +77,7 @@ Skeleton nodes are deliberately listed. They tell you what the graph *will* cove
 		{
 			id: 'discovery-first',
 			title: 'Why discovery-first',
-			body: `ADR 011 ([[discovery-first pedagogy::]]) decided that knowledge nodes lead with WHY, not WHAT. A node on VFR weather minimums does not open with "14 CFR 91.155 says." It opens with a scenario where the minimum matters, asks the learner to reason about what margin would be safe, and only then reveals the regulation.
+			body: `ADR 011's discovery-first pedagogy decided that knowledge nodes lead with WHY, not WHAT. A node on VFR weather minimums does not open with "14 CFR 91.155 says." It opens with a scenario where the minimum matters, asks the learner to reason about what margin would be safe, and only then reveals the regulation.
 
 Rationale: pilots who derived the rule from first principles apply it in edge cases; pilots who memorized the rule apply it mechanically and miss edges. The FAA has arrived at roughly the same conclusion in ACS standards and in AC 61-83K (the FIRC guidance): teach *why*, not *what*.
 

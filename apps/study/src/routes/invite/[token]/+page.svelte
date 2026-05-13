@@ -1,5 +1,6 @@
 <script lang="ts">
 import { MIN_PASSWORD_LENGTH, ROLE_LABELS, type Role } from '@ab/constants';
+import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import ThemeProvider from '@ab/themes/ThemeProvider.svelte';
 import Button from '@ab/ui/components/Button.svelte';
 import type { PageData } from './$types';
@@ -33,7 +34,10 @@ function expiryRelative(iso: string): string {
 	<div class="card">
 		<header class="hd">
 			<p class="brand">airboss</p>
-			<h1>You've been invited.</h1>
+			<div class="title-row">
+				<h1>You've been invited.</h1>
+				<PageHelp pageId="invite-accept" />
+			</div>
 		</header>
 
 		{#if data.signedInAs && data.signedInAs.email !== data.invitation.email}
@@ -129,6 +133,13 @@ function expiryRelative(iso: string): string {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-2xs);
+	}
+
+	.title-row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-sm);
 	}
 
 	.brand {

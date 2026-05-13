@@ -1,5 +1,6 @@
 <script lang="ts">
 import { ROLE_LABELS, ROLE_VALUES, ROUTES, type Role } from '@ab/constants';
+import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import Badge from '@ab/ui/components/Badge.svelte';
 import Button from '@ab/ui/components/Button.svelte';
 import ConfirmDialog from '@ab/ui/components/ConfirmDialog.svelte';
@@ -96,6 +97,7 @@ function openRevokeSession(sessionId: string) {
 			{#if data.user.banned}
 				<Badge tone="danger" size="sm">Banned</Badge>
 			{/if}
+			<PageHelp pageId="users-detail" />
 		</div>
 	</header>
 
