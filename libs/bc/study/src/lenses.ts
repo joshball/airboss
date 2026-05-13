@@ -199,6 +199,7 @@ export interface LensTreeNode {
 		| 'handbook'
 		| 'chapter'
 		| 'section'
+		| 'lesson'
 		| 'node'
 		| 'course';
 	title: string;
