@@ -206,9 +206,7 @@ function commandPick(argv: readonly string[]): number {
 	const flags = parsePickFlags(argv);
 	const states = gatherStates();
 	// Skip umbrella WPs -- per-item OOS extraction targets the sub-packages.
-	const candidates = states.filter(
-		(s) => !s.hasOosFile && (s.hasOosInSpec || s.hasOosInTasks) && !s.isUmbrella,
-	);
+	const candidates = states.filter((s) => !s.hasOosFile && (s.hasOosInSpec || s.hasOosInTasks) && !s.isUmbrella);
 
 	if (candidates.length === 0) {
 		console.log(green('No WPs need extraction. The discipline is satisfied.'));
