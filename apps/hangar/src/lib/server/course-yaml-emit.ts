@@ -25,8 +25,8 @@
  * stringify) is the simplest correct emission.
  */
 
-import { COURSE_STEP_LEVELS } from '@ab/constants';
 import type { CourseManifest, CourseSection, CourseStep, CourseTreeNode } from '@ab/bc-study';
+import { COURSE_STEP_LEVELS } from '@ab/constants';
 import { stringify } from 'yaml';
 
 export interface ManifestEmitInput {
