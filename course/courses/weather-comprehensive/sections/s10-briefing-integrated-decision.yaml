@@ -2,6 +2,31 @@ code: s10
 ordinal: 10
 title: Briefing and the integrated go/no-go decision
 body_md: |
+  **Before you start.** This section assumes you have worked through
+  s1 through s9. It is the integration step; nothing new is taught.
+  It re-meets two nodes you have already touched:
+  [briefing execution](/reference/knowledge/wx-briefing-execution) as
+  a sequence (synoptic, hazards, route, airports), and
+  [the go/no-go decision](/reference/knowledge/wx-go-nogo-decision)
+  as the integrated output of every prior section.
+
+  Terms you will see referenced but not fully taught here (all
+  already taught earlier):
+
+  - [Personal minimums](/reference/knowledge/wx-personal-minimums):
+    the yardstick from s1.2.
+  - The product chain (METAR, TAF, GFA, AIRMETs, winds aloft,
+    convective outlook): every reference here points back into s7 or
+    s8 if you need a refresher.
+  - The [worked scenarios in s11](/courses/weather-comprehensive/s11):
+    six end-to-end briefings, one per archetype. They put the s10
+    briefing sequence into practice on real synoptic states.
+
+  If a step in this section sends you back to an earlier node, that
+  is on purpose; the integration is the point.
+
+  ---
+
   Walk back to the wedding-trip scenario from s1. You now have the
   synoptic story (s2), the cloud and visibility picture (s3), the
   energy-on-airframe variables (s4), the convective and icing
