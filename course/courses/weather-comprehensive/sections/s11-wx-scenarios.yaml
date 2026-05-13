@@ -1045,3 +1045,230 @@ steps:
           and it adds the missing physics constraint (no wave
           without stability + perpendicular flow + ridge above a
           threshold height).
+
+  - code: s11.5
+    ordinal: 5
+    level: lesson
+    title: Marine stratus - Pacific Northwest
+    body_md: |
+      A summer morning along the central California coast. A 1024-mb
+      Pacific high sits offshore; a 1014-mb thermal low sits over the
+      Great Basin. The post-frontal marine mP air blankets KMRY,
+      KSFO, and KOAK in IFR with a 800-ft AGL ceiling under a
+      subsidence inversion. East of the Coast Range, the inland mT
+      mass subsides and keeps KSCK and KSAC clear and warm. Two
+      different air masses, less than forty miles apart, and the
+      Coast Range divides them. The decision in front of the pilot
+      is whether the coastal layer will burn off in time, and what
+      the divert is if it does not.
+
+      :::scenario slug="marine-stratus-pacific-nw"
+      :::
+
+      The four sub-pages walk: the intro and the inversion, a
+      chart-by-chart read of the briefing pack, a Socratic analysis
+      of the marine-layer geometry, and the instructor view into how
+      the TruthModel encodes the coastal inversion.
+    steps:
+      - code: s11.5.1
+        ordinal: 1
+        title: Intro - the marine layer
+        knowledge_node_id: wx-fog-and-visibility-obstructions
+        body_md: |
+          You are at KSCK in the Central Valley, planning a short
+          flight west to KSFO. The view at your departure airport is
+          clear sky, 18 C, 4 C dewpoint, calm wind. KSFO is fifty
+          miles away. KSFO's METAR reads OVC008, visibility 3 SM,
+          temperature 12 C, dewpoint 11 C, wind 270 at 12. Both
+          airports are inside the same weak synoptic envelope; the
+          Coast Range between them is the difference. The marine air
+          west of the range is trapped under a subsidence inversion;
+          the inland air east of the range is subsiding from above
+          the inversion and stays clear.
+
+          :::chart slug="wx-scenarios/marine-stratus-pacific-nw/surface-analysis"
+          :::
+
+          The teaser to carry into the next sub-page: KSFO's
+          temperature / dewpoint spread is 1 C. The KSCK spread is
+          14 C. They are forty miles apart. Why?
+      - code: s11.5.2
+        ordinal: 2
+        title: Reading the charts
+        knowledge_node_id: wx-product-gfa
+        body_md: |
+          The marine-stratus briefing leans on the GFA, the surface
+          analysis, and the per-station METARs to expose the air-mass
+          contrast.
+
+          ### Surface analysis (`surface-analysis`)
+
+          The Pacific high (1024 mb) anchors the subsidence offshore;
+          the Great Basin thermal low (1014 mb) drives the onshore
+          gradient that keeps the marine air pushed against the
+          Coast Range.
+
+          :::chart slug="wx-scenarios/marine-stratus-pacific-nw/surface-analysis"
+          :::
+
+          ### Graphical Forecast for Aviation (`gfa`)
+
+          The GFA shows the IFR polygon hugging the coast: KMRY,
+          KSFO, KOAK in IFR; KSCK / KSAC in VFR. The polygon's
+          eastern boundary is the Coast Range crest.
+
+          :::chart slug="wx-scenarios/marine-stratus-pacific-nw/gfa"
+          :::
+
+          ### AIRMET / SIGMET overlay (`airmet-sigmet`)
+
+          Two polygons: Sierra for the IFR pocket under the marine
+          stratus deck (0-1500 ft MSL), and a Sierra for mountain
+          obscuration along the Coast Range (0-4000 ft MSL).
+
+          :::chart slug="wx-scenarios/marine-stratus-pacific-nw/airmet-sigmet"
+          :::
+
+          ### METAR plot (`metar-plot`)
+
+          The contrast is the chart. KMRY / KSFO / KOAK report mP
+          marine signatures: T12 / Td11, OVC008, 270/12. KSCK / KSAC
+          report mT inland: T18 / Td4, clear, light wind.
+
+          :::chart slug="wx-scenarios/marine-stratus-pacific-nw/metar-plot"
+          :::
+
+          ### Freezing level (`freezing-level`)
+
+          High freezing level (summer at this latitude). No icing
+          AIRMET. The marine-stratus hazard is ceiling and
+          visibility, not ice.
+
+          :::chart slug="wx-scenarios/marine-stratus-pacific-nw/freezing-level"
+          :::
+
+          ### PIREP plot (`pirep-plot`)
+
+          A coastal pilot report confirms OVC008 and 3 SM in light
+          drizzle. Three-product agreement: GFA, Sierra polygon,
+          PIREP.
+
+          :::chart slug="wx-scenarios/marine-stratus-pacific-nw/pirep-plot"
+          :::
+      - code: s11.5.3
+        ordinal: 3
+        title: Analysis - discovery prompts
+        knowledge_node_id: wx-fog-and-visibility-obstructions
+        body_md: |
+          ### Why two different air masses forty miles apart
+
+          The Pacific high drives marine air onshore from the
+          northwest; the air is in contact with the cool ocean and
+          saturates at the surface. Above ~1500 ft MSL, descending
+          air from the subtropical high warms adiabatically and dries
+          (the subsidence inversion). The Coast Range is high enough
+          to physically block the marine layer from spilling east; on
+          the lee side the air is the subsiding mass from above the
+          inversion, warm and dry. The mass boundary is a topographic
+          one, not a frontal one.
+
+          ### The temperature / dewpoint spread
+
+          KSFO: T12 / Td11, spread 1 C. The marine air is saturated;
+          the cloud deck is the saturation surface. KSCK: T18 / Td4,
+          spread 14 C. The inland air has dried out from subsidence.
+          The spread is the most direct readout of the inversion's
+          effect.
+
+          ### Why "wait an hour" might or might not work
+
+          Marine stratus burns off as solar heating warms the
+          boundary layer above the dewpoint. The lifecycle is set by
+          inversion strength + cloud-top height + sun angle. Thin
+          marine layers (top at 1000 ft AGL) burn off by mid-morning;
+          deeper layers (top at 2000 ft AGL) may persist past noon or
+          fail to burn off at all on a foggy summer day. The 800-ft
+          AGL ceiling and 1500-ft AGL top in this scenario is a
+          marginal case; the TAF FM groups are the forecaster's call
+          on the burn-off timing.
+
+          ### AIRMET Sierra: ceiling vs visibility
+
+          The Sierra polygon covers ceiling below 1000 ft AGL or
+          visibility below 3 SM. In this scenario both fail: ceiling
+          is 800 ft AGL, visibility is 3 SM in drizzle. The polygon
+          shape follows the marine corridor; the eastern boundary is
+          the Coast Range ridgeline.
+
+          ### Mountain obscuration along the Coast Range
+
+          A second Sierra covers the Coast Range itself: marine
+          stratus tops at 1500 ft MSL abut the ridgeline at ~2500 ft
+          MSL. The cloud does not crest the ridge, but it covers the
+          windward slopes; VFR cannot navigate the ridgeline.
+
+          ### Coastal PIREP corroboration
+
+          A pilot report from inside the Sierra polygon confirms
+          OVC008 and 3 SM in drizzle. Convergent evidence: synoptic
+          truth (Pacific high, Great Basin low, Coast Range terrain),
+          AIRMET Sierra polygon, GFA polygon, PIREP.
+
+          :::chart slug="wx-scenarios/marine-stratus-pacific-nw/metar-plot"
+          :::
+      - code: s11.5.4
+        ordinal: 4
+        title: Instructor internals
+        knowledge_node_id: wx-fog-and-visibility-obstructions
+        body_md: |
+          ### Source
+
+          `libs/wx-engine/src/truth/scenarios/marine-stratus-pacific-nw.ts`.
+          Two air-mass polygons (the marine mP coastal mass and the
+          inland mT subsiding mass) with a boundary that follows the
+          Coast Range crest. The mountain obscuration hazard is
+          authored as a thin polygon along the ridgeline.
+
+          ### Three tunable parameters
+
+          - `airMasses[AM-postfrontal-marine-cP].meanCloudTopFtAgl:
+            1500`. Cloud top sets the burn-off difficulty. Drop it
+            to 1000 and the layer is forecast to dissipate by mid-
+            morning; raise it to 2500 and the layer persists all
+            day.
+          - `synoptic.pressureSystems[H-pacific].centralPressureMb:
+            1024`. The Pacific high strength controls how forcefully
+            the marine air is pushed onshore. A weaker high (1018)
+            lets the marine layer thin; a stronger high (1030)
+            pushes it deeper inland.
+          - `hazardZones[HZ-coastal-sierra-ifr].polygon`. The Sierra
+            polygon's eastern boundary follows the Coast Range
+            ridgeline. Move the polygon east and you encode a
+            scenario where the marine layer spills through a gap.
+
+          ### What produced each callout
+
+          The Sierra callouts come from the same rule that produced
+          the post-frontal-IFR callout in s11.1; the rule walks
+          every IFR hazard zone regardless of mechanism. The
+          mountain-obscuration callout uses a separate rule keyed
+          off the `mountain-obscuration` hazard kind.
+
+          ### Authored vs derived
+
+          The Coast Range terrain is implicit (the polygon boundary
+          follows it but the ridge geometry is not a first-class
+          terrain object as in s11.4). Everything downstream is
+          derived from the air-mass polygons: METARs report the
+          mass each station sits in, AIRMETs trace from the hazard
+          polygons, GFA polygons aggregate the hazard kinds, PIREPs
+          are placed inside the Sierra polygon.
+
+          ### Next iteration
+
+          Add Coast Range terrain as a first-class object so the
+          marine layer's eastern boundary derives from ridge crest +
+          marine-layer top height. That unlocks scenarios where the
+          marine layer spills inland through Coast Range gaps
+          (Salinas Valley, San Francisco Bay) without re-authoring
+          the polygon shape.
