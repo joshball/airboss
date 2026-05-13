@@ -25,7 +25,8 @@
  * stringify) is the simplest correct emission.
  */
 
-import type { CourseManifest, CourseSection, CourseStep } from '@ab/bc-study';
+import type { CourseManifest, CourseSection, CourseStep, CourseTreeNode } from '@ab/bc-study';
+import { COURSE_STEP_LEVELS } from '@ab/constants';
 import { stringify } from 'yaml';
 
 export interface ManifestEmitInput {
@@ -102,23 +103,47 @@ export function emitSection(input: SectionEmitInput): string {
  * Convert a parsed `CourseSection` (from the Zod schema) back to the
  * emit input shape. Useful when an editor save reads the existing file,
  * applies a delta, and re-emits.
+ *
+ * Hangar's editor today only authors 2-level (section -> step) content.
+ * The course YAML schema accepts arbitrary depth (lessons between section
+ * and step) as of the course-tree-arbitrary-depth WP; nested-lesson
+ * authoring through this editor lands in a follow-up phase. If a section
+ * file already contains a lesson (read off disk), the editor refuses to
+ * re-emit until lesson-aware emission ships -- throwing here is the
+ * loudest place to surface that boundary.
  */
 export function sectionToEmitInput(section: CourseSection): SectionEmitInput {
+	const stepNodes: CourseStep[] = [];
+	for (const node of section.steps) {
+		if (node.level === COURSE_STEP_LEVELS.LESSON) {
+			throw new Error(
+				`Hangar YAML emit does not yet support lesson nodes (section '${section.code}', lesson '${node.code}'). Edit the YAML file directly until the editor's nested-lesson support lands.`,
+			);
+		}
+		stepNodes.push(node);
+	}
 	return {
 		code: section.code,
 		ordinal: section.ordinal,
 		title: section.title,
 		body_md: section.body_md,
-		steps: section.steps.map(stepToEmitInput),
+		steps: stepNodes.map(stepToEmitInput),
 	};
 }
 
-export function stepToEmitInput(step: CourseStep): StepEmitInput {
+export function stepToEmitInput(step: CourseStep | CourseTreeNode): StepEmitInput {
+	if (step.level === COURSE_STEP_LEVELS.LESSON) {
+		throw new Error(
+			`Hangar YAML emit does not yet support lesson nodes (lesson '${step.code}'). Edit the YAML file directly until the editor's nested-lesson support lands.`,
+		);
+	}
 	return {
 		code: step.code,
 		ordinal: step.ordinal,
 		title: step.title,
-		body_md: step.body_md,
+		// Zod normalises `body_md` to `''` on optional input; the type widening
+		// to CourseTreeNode brings the optional back, so coalesce to '' here.
+		body_md: step.body_md ?? '',
 		// The Zod schema types `knowledge_node_id` as optional, but the seed
 		// validator rejects steps without it. Save actions must enforce that
 		// before calling here; we cast away the optionality once the field is

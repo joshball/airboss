@@ -28,7 +28,7 @@ import { error, fail } from '@sveltejs/kit';
 import { parse } from 'yaml';
 import type { PickerNode } from '$lib/components/knowledge-node-picker-types';
 import { COURSES_DIR, CourseSeedError, runCourseSeed } from '$lib/server/course-seed';
-import { emitSection } from '$lib/server/course-yaml-emit';
+import { emitSection, sectionToEmitInput } from '$lib/server/course-yaml-emit';
 import type { Actions, PageServerLoad } from './$types';
 
 export interface SectionEditorData {
@@ -105,19 +105,14 @@ async function saveSection({ intent, slug, filename, section }: SaveSectionPaylo
 	const path = resolve(sectionsDir(slug), filename);
 	const backup = existsSync(path) ? readFileSync(path, 'utf8') : null;
 	try {
-		const next = emitSection({
-			code: section.code,
-			ordinal: section.ordinal,
-			title: section.title,
-			body_md: section.body_md,
-			steps: section.steps.map((step) => ({
-				code: step.code,
-				ordinal: step.ordinal,
-				title: step.title,
-				body_md: step.body_md,
-				knowledge_node_id: step.knowledge_node_id ?? '',
-			})),
-		});
+		// `sectionToEmitInput` walks the recursive CourseTreeNode shape and
+		// today rejects any lesson interior (Phase A boundary, course-tree-
+		// arbitrary-depth WP). Hangar's editor only authors 2-level content
+		// so that branch never fires for editor-managed sections; nested
+		// lessons authored by hand on disk fall through to the underlying
+		// seed, which has its own Phase A rejection. Phase D rebuilds this
+		// editor for arbitrary depth.
+		const next = emitSection(sectionToEmitInput(section));
 		await writeFile(path, next, 'utf8');
 		await runCourseSeed(slug);
 		return { intent, success: true } as const;

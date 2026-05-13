@@ -108,6 +108,7 @@ export {
 	COURSE_STEP_LEVEL_LABELS,
 	COURSE_STEP_LEVEL_VALUES,
 	COURSE_STEP_LEVELS,
+	COURSE_TREE_MAX_DEPTH,
 	type CourseKind,
 	type CourseStatus,
 	type CourseStepLevel,

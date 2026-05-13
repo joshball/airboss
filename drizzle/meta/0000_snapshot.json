@@ -1891,11 +1891,11 @@
       "checkConstraints": {
         "course_step_level_check": {
           "name": "course_step_level_check",
-          "value": "\"level\" IN ('section', 'step')"
+          "value": "\"level\" IN ('section', 'lesson', 'step')"
         },
         "course_step_consistency_check": {
           "name": "course_step_consistency_check",
-          "value": "((\"level\" = 'section' AND \"parent_id\" IS NULL AND \"knowledge_node_id\" IS NULL AND \"is_leaf\" = false) OR (\"level\" = 'step' AND \"parent_id\" IS NOT NULL AND \"knowledge_node_id\" IS NOT NULL AND \"is_leaf\" = true))"
+          "value": "((\"level\" = 'section' AND \"parent_id\" IS NULL AND \"knowledge_node_id\" IS NULL AND \"is_leaf\" = false) OR (\"level\" = 'lesson' AND \"parent_id\" IS NOT NULL AND \"knowledge_node_id\" IS NULL AND \"is_leaf\" = false) OR (\"level\" = 'step' AND \"parent_id\" IS NOT NULL AND \"knowledge_node_id\" IS NOT NULL AND \"is_leaf\" = true))"
         },
         "course_step_ordinal_check": {
           "name": "course_step_ordinal_check",
