@@ -27,9 +27,9 @@ export { parseQuery } from './query-parser';
 export {
 	type RecentEntry,
 	type RecentRecordInput,
+	type RecentsTracker,
 	recencyFactor,
 	recents,
-	type RecentsTracker,
 } from './recents';
 export { helpRegistry } from './registry';
 export {

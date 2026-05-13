@@ -3,8 +3,8 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import {
 	__resetRecentsForTests,
 	listWithTimestamp,
-	recencyFactor,
 	type RecentRecordInput,
+	recencyFactor,
 	recents,
 	recordWithTimestamp,
 } from './recents';
