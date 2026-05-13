@@ -28,13 +28,19 @@ body_md: |
   A cloud is the visible answer to a question the atmosphere already
   asked: where did the rising air cool to its dew point? The shape of
   the cloud tells you which mechanism lifted the air, how stable the
-  layer was, and what's likely to come next.
+  A [cloud](/reference/knowledge/wx-clouds-and-precipitation) is the
+  visible answer to a question the atmosphere already asked: where did
+  the rising air cool to its dew point? The shape of the cloud tells
+  you which mechanism lifted the air, how
+  [stable](/reference/knowledge/wx-stability-and-instability) the layer
+  was, and what's likely to come next.
 
   This section connects the synoptic story (s2) to what you actually
   see out the windscreen. Cloud type, base height, and precipitation
   pattern aren't decorations -- they're a real-time diagnostic of the
-  air mass you're flying through, and (usually) the most accurate
-  forecast available because you're reading it firsthand.
+  [air mass](/reference/knowledge/wx-airmasses-and-fronts) you're
+  flying through, and (usually) the most accurate forecast available
+  because you're reading it firsthand.
 
   The framing question for both steps: what is this cloud telling me
   about the air I'm about to enter?
@@ -56,20 +62,24 @@ body_md: |
   :::chart slug="wx-satellite-vis-2024-12-23-18z"
   :::
 steps:
+
   - code: s3.1
     ordinal: 1
     title: Clouds, temperature/moisture, and precipitation
     body_md: |
       Cumulus, stratus, cirrus -- the three families and their hybrids.
-      Each shape implies a lifting mechanism and a stability profile.
-      Cumulus = unstable + convective lift. Stratus = stable +
+      Each shape implies a lifting mechanism and a
+      [stability](/reference/knowledge/wx-stability-and-instability)
+      profile. Cumulus = unstable + convective lift. Stratus = stable +
       widespread lift. Cirrus = high, ice, often the leading edge of
-      an approaching front.
+      an approaching [front](/reference/knowledge/wx-airmasses-and-fronts).
 
       Precipitation type follows from the same physics: rain from
       warm/melting precip, snow from sub-freezing crystals all the way
       down, freezing rain from a warm layer aloft over a cold layer
-      below (the most dangerous icing setup we'll meet again in s6).
+      below (the most dangerous
+      [icing](/reference/knowledge/wx-icing-types-and-avoidance) setup
+      we'll meet again in s6).
     knowledge_node_id: wx-clouds-and-precipitation
 
   - code: s3.2
