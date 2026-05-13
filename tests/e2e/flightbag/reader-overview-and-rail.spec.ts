@@ -12,7 +12,7 @@
  */
 
 import { expect, test } from '@playwright/test';
-import { ROUTES } from '../../libs/constants/src';
+import { ROUTES } from '../../../libs/constants/src';
 
 test.describe('reader overview view', () => {
 	test('handbook landing renders the overview grid', async ({ page }) => {

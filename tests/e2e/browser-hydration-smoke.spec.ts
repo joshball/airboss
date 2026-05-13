@@ -22,13 +22,12 @@ import { ROUTES } from '../../libs/constants/src';
 // shapes; the smoke catches anything the static walker misses (e.g.
 // future barrels, transitive paths through node_modules).
 
-const SMOKE_ROUTES: readonly string[] = [
-	ROUTES.MEMORY,
-	ROUTES.MEMORY_REVIEW,
-	ROUTES.LEARN,
-	ROUTES.REPS,
-	ROUTES.LIBRARY,
-];
+// /library was historically a hydration-crash site (the `postgres` driver
+// leak per PRs #656, #659, #661, #663, #664). Per ADR 023 + WP-FLIGHTBAG-
+// READER-UX Phase 2 the route is now a 301 to flightbag (a sibling origin),
+// so this study-side smoke can't navigate it -- the equivalent flightbag
+// pages are covered by flightbag/representative-pages.spec.ts.
+const SMOKE_ROUTES: readonly string[] = [ROUTES.MEMORY, ROUTES.MEMORY_REVIEW, ROUTES.LEARN, ROUTES.REPS];
 
 for (const route of SMOKE_ROUTES) {
 	test(`${route}: no postgres.js, no Buffer error`, async ({ page }) => {
