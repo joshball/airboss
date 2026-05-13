@@ -42,8 +42,11 @@ import type { RequestHandler } from './$types';
 const log = createLogger('study:scenarios');
 const HERE = dirname(fileURLToPath(import.meta.url));
 // apps/study/src/routes/api/scenarios/[slug]/bundle.json -> repo root is
-// seven levels up. Mirrors the math in api/charts/[...slug]/+server.ts.
-const REPO_ROOT = resolve(HERE, '..', '..', '..', '..', '..', '..', '..');
+// EIGHT levels up. The route file sits one directory deeper than the charts
+// route at api/charts/[...slug] because `bundle.json` is itself a directory
+// segment in the URL path (SvelteKit treats /<slug>/bundle.json as a literal
+// route, with +server.ts inside a bundle.json/ directory).
+const REPO_ROOT = resolve(HERE, '..', '..', '..', '..', '..', '..', '..', '..');
 
 const WX_SCENARIO_SLUG_SET = new Set<string>(WX_SCENARIO_VALUES);
 
