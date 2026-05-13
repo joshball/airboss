@@ -1,3 +1,21 @@
+<!--
+ARCHIVED 2026-05-13. Split into two product-specific nodes:
+
+- AIRMET depth -> course/knowledge/weather/product-airmets/node.md  (id: wx-product-airmets)
+- SIGMET depth -> course/knowledge/weather/product-sigmets/node.md  (id: wx-product-sigmets)
+
+The combined node lived here because AIRMET and SIGMET share an
+encoded-text skill ladder (decode / understand / triage) and a common
+operational framing (in-flight advisories). That pedagogy framing is
+preserved in both new nodes' preambles; per-product depth (the three
+AIRMET families, the four SIGMET hazards, Convective SIGMET triggers)
+moved to dedicated nodes with additional examples and gotchas added.
+
+This file is retained for history. Do not edit. Callsites have been
+re-routed; references to wx-product-airmets-sigmets should not appear
+in active corpus.
+-->
+
 ---
 id: wx-product-airmets-sigmets
 title: AIRMETs, SIGMETs, and Convective SIGMETs

@@ -1,3 +1,19 @@
+<!--
+ARCHIVED 2026-05-13. Split into two product-specific nodes:
+
+- METAR depth -> course/knowledge/weather/reading-metars/node.md  (id: wx-reading-metars)
+- TAF depth   -> course/knowledge/weather/reading-tafs/node.md    (id: wx-reading-tafs)
+
+The combined node lived here because METAR and TAF share an encoded-text
+skill ladder (decode / understand / triage). That pedagogy framing is
+preserved in both new nodes' preambles; product-specific examples + gotchas
+moved to the dedicated nodes with additional depth added per product.
+
+This file is retained for history. Do not edit. Callsites have been
+re-routed; references to wx-reading-metars-tafs should not appear in
+active corpus.
+-->
+
 ---
 id: wx-reading-metars-tafs
 title: Reading METARs and TAFs
