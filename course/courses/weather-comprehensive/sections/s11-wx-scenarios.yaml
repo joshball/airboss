@@ -804,3 +804,244 @@ steps:
           + lake / air temperature delta. That unlocks the same
           scenario at different lake temperatures (early vs late
           winter) without re-authoring the band polygon every time.
+
+  - code: s11.4
+    ordinal: 4
+    level: lesson
+    title: Lee-side mountain wave - Rockies
+    body_md: |
+      A winter morning east of the Front Range. A 1024-mb high sits
+      over the Great Basin; a 1008-mb lee trough sits east of the
+      divide. The pressure gradient drives strong westerly flow at
+      the surface; a 95-kt jet axis aloft locks in westerly flow
+      perpendicular to the ridgeline from 9000 ft up. Standing waves
+      east of the divide carry severe turbulence from the surface to
+      FL280; a rotor cloud parks at 5000-12000 ft MSL in the lee.
+      KASE sits high on the windward slopes; KDEN / KCOS / KBJC / KAPA
+      cluster east of the divide along the I-25 corridor, directly
+      under the wave column.
+
+      :::scenario slug="mountain-wave-rockies"
+      :::
+
+      The four sub-pages walk: the intro and the wave geometry, a
+      chart-by-chart read of the briefing pack, a Socratic analysis
+      of the wave / rotor / jet system, and the instructor view into
+      how the TruthModel parameterizes orographic flow.
+    steps:
+      - code: s11.4.1
+        ordinal: 1
+        title: Intro - the wave column
+        knowledge_node_id: wx-turbulence-types
+        body_md: |
+          You are at KAPA, southeast of Denver, planning a flight
+          west toward KASE. Looking northwest you can see a rotor
+          cloud at 8000 ft, parked stationary east of the divide.
+          The surface analysis shows no fronts within 500 miles, but
+          the winds-aloft chart reads 270 at 95 kt at FL340. Westerly
+          flow perpendicular to a 14000-ft ridgeline is the mountain-
+          wave generator: the air can't go through the ridge, so it
+          goes over it, and the standing wave propagates downwind for
+          hundreds of miles. The decision in front of you is whether
+          to fly through the wave column at all, and if so, at what
+          altitude and what airspeed.
+
+          :::chart slug="wx-scenarios/mountain-wave-rockies/surface-analysis"
+          :::
+
+          The teaser to carry into the next sub-page: the AIRMET
+          Tango polygon covers 0 to 28000 ft MSL. There is no "fly
+          high to get above it." Why does the turbulence reach
+          almost to the tropopause?
+      - code: s11.4.2
+        ordinal: 2
+        title: Reading the charts
+        knowledge_node_id: wx-product-winds-aloft
+        body_md: |
+          The mountain-wave briefing leans on the winds-aloft chart
+          and the AIRMET Tango polygon. Synoptic-scale charts look
+          deceptively clean.
+
+          ### Surface analysis (`surface-analysis`)
+
+          A pressure dipole: 1024-mb high over the Great Basin,
+          1008-mb lee trough east of the divide. The 16-mb gradient
+          drives the surface westerly flow. No fronts; the synoptic
+          map looks quiet.
+
+          :::chart slug="wx-scenarios/mountain-wave-rockies/surface-analysis"
+          :::
+
+          ### Winds aloft (`winds-aloft`)
+
+          The chart that decides the go/no-go. The 95-kt jet axis
+          runs from Nevada east through Colorado into Kansas, at
+          FL340. The 9000-ft wind is 270 at 55, the 12000-ft wind
+          is 275 at 60, the 18000-ft wind is 270 at 70. Westerly
+          flow perpendicular to the divide, accelerating with
+          height, is the textbook mountain-wave setup.
+
+          :::chart slug="wx-scenarios/mountain-wave-rockies/winds-aloft"
+          :::
+
+          ### G-AIRMET turbulence (`g-airmet-turbulence`)
+
+          One Tango polygon for the lee-wave column: 0 to 28000 ft
+          MSL, severe. The altitude range tells you climbing is
+          not an avoidance strategy.
+
+          :::chart slug="wx-scenarios/mountain-wave-rockies/g-airmet-turbulence"
+          :::
+
+          ### G-AIRMET icing (`g-airmet-icing`)
+
+          A Zulu polygon for the rotor cloud: 5000 to 12000 ft MSL,
+          moderate. Supercooled drops trapped in the rotor
+          circulation accumulate fast on airframe surfaces.
+
+          :::chart slug="wx-scenarios/mountain-wave-rockies/g-airmet-icing"
+          :::
+
+          ### AIRMET / SIGMET overlay (`airmet-sigmet`)
+
+          Three polygons stacked: the wave-column Tango (0-28000),
+          the rotor Zulu (5000-12000), and a Sierra for mountain
+          obscuration upwind in the mP air piling against the
+          Front Range.
+
+          :::chart slug="wx-scenarios/mountain-wave-rockies/airmet-sigmet"
+          :::
+
+          ### PIREP plot (`pirep-plot`)
+
+          A KASE pilot report confirms severe turbulence in the
+          wave column. Convergent with the AIRMET Tango and the
+          synoptic geometry.
+
+          :::chart slug="wx-scenarios/mountain-wave-rockies/pirep-plot"
+          :::
+      - code: s11.4.3
+        ordinal: 3
+        title: Analysis - discovery prompts
+        knowledge_node_id: wx-turbulence-types
+        body_md: |
+          ### Why the wave column reaches 28000 ft
+
+          A standing wave's vertical wavelength is set by stability
+          and wind speed. Strong winds plus a stable atmosphere give
+          a long vertical wavelength; the wave amplitude persists
+          high above the ridge. The 95-kt jet axis at FL340 anchors
+          the upper boundary of the column. Below the jet the
+          westerly flow accelerates with height in lockstep; that
+          vertical wind profile is the mountain-wave generator.
+          "Climb above the chop" works for thunderstorm anvils and
+          frontal turbulence. It does not work for a wave column
+          tied to a jet.
+
+          ### The rotor and where it lives
+
+          Downwind of the ridge, on the descending side of the lee
+          wave, the flow can detach into a stationary rotor: a
+          horizontal-axis vortex parked in the lee. The rotor is
+          visible (it has its own cloud at 5000-12000 ft MSL) and
+          carries severe shear, severe turbulence, and supercooled
+          liquid water. Cross the rotor cloud at low altitude and
+          you get the full hazard stack at once. The avoidance rule:
+          stay out of the rotor cloud, and stay out of the altitude
+          band the AIRMET Zulu covers.
+
+          ### Why the rotor traps icing
+
+          Supercooled drops in the rotor circulate without falling
+          out as precipitation. The rotor is a cycling vortex: the
+          drops re-encounter the lift cycle before they grow large
+          enough to precipitate. The result is a persistent reservoir
+          of supercooled liquid trapped in a stationary cloud
+          feature. Standard icing avoidance (stay below the freezing
+          level) does not apply: the rotor straddles the freezing
+          level by design.
+
+          ### Mountain obscuration upwind
+
+          The Sierra polygon covers the upwind side of the divide
+          where the orographic stratus and snow showers obscure the
+          ridgeline. Mountain obscuration is its own AIRMET family
+          and its own hazard: you cannot see the terrain, and the
+          terrain rises into the cloud. VFR is locked out west of
+          the ridge.
+
+          ### KASE PIREP corroboration
+
+          A KASE pilot report from the wave column reports severe
+          turbulence in the band the AIRMET Tango covers. Convergent
+          independent evidence: synoptic truth (jet axis, pressure
+          gradient, terrain), AIRMET polygon, pilot report.
+
+          ### Surface wind at KAPA
+
+          The 16-mb pressure gradient between Great Basin high and
+          lee trough drives strong westerly flow at the surface.
+          KAPA's METAR reads westerly with gusts: this is downslope
+          flow accelerated by the wave's first descending leg.
+          Surface gusts in a lee location with no front nearby are
+          the wave signature at ground level.
+
+          :::chart slug="wx-scenarios/mountain-wave-rockies/winds-aloft"
+          :::
+      - code: s11.4.4
+        ordinal: 4
+        title: Instructor internals
+        knowledge_node_id: wx-turbulence-types
+        body_md: |
+          ### Source
+
+          `libs/wx-engine/src/truth/scenarios/mountain-wave-rockies.ts`.
+          The Front Range ridge is a first-class terrain object
+          (`terrain.ridges[R-front-range]` with peakElevationFt
+          14000). The wave column and rotor are authored as hazard
+          polygons; the upper-level wind profile drives the
+          AIRMET Tango altitude bound.
+
+          ### Three tunable parameters
+
+          - `upperLevel.jetMaxKt: 95`. Drop the jet to 60 and the
+            wave amplitude weakens; the AIRMET Tango polygon
+            shrinks vertically. Raise it to 130 and the column
+            extends past FL300 and the rotor intensifies.
+          - `synoptic.pressureSystems[L-lee-trough].centralPressureMb:
+            1008` vs `H-great-basin: 1024`. The 16-mb gradient
+            drives the surface flow speed perpendicular to the
+            ridge. Narrow the gradient and the surface wind drops;
+            the wave still exists but the lower turbulence layer
+            weakens.
+          - `terrain.ridges[0].peakElevationFt: 14000`. The
+            ridgeline elevation sets the wavelength's lower bound.
+            A 10000-ft ridge with the same flow produces a smaller
+            wave.
+
+          ### What produced each callout
+
+          The wave-column Tango callout comes from a rule that looks
+          for ridge geometry + perpendicular jet axis + adjacent
+          high / low gradient. The rotor Zulu callout comes from a
+          rule that looks for a lee-wave hazard zone with icing
+          kind. Same authoring layer as s11.1 / s11.2 / s11.3;
+          different truth state surfaces different rules.
+
+          ### Authored vs derived
+
+          The ridge geometry is authored; the wave column polygon is
+          authored (the geometry of standing-wave amplitude vs ridge
+          shape is not yet a first-class derivation). The rotor
+          polygon and the upwind mountain obscuration are authored.
+          Everything downstream (METARs, AIRMETs, PIREPs, charts)
+          is derived.
+
+          ### Next iteration
+
+          Derive the wave column from ridge polyline + wind profile
+          + stability. That unlocks the same scenario at different
+          wind speeds without re-authoring the polygon every time,
+          and it adds the missing physics constraint (no wave
+          without stability + perpendicular flow + ridge above a
+          threshold height).
