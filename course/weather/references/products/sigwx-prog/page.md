@@ -19,7 +19,7 @@ authoritative_sources:
     section: 'Meteorological Service for International Air Navigation, WAFS appendix'
     note: 'International specification for World Area Forecast System products that underlies the SIGWX chart format.'
 related_knowledge_nodes:
-  - wx-product-airmets-sigmets
+  - wx-product-sigmets
 related_products:
   - prog-chart
   - surface-analysis

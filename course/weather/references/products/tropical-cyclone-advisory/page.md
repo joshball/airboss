@@ -16,7 +16,7 @@ authoritative_sources:
     section: 'Tropical Weather chapter (cyclone structure, intensity scales, advisory products)'
     note: 'Modern consolidated treatment of tropical cyclones and the advisory products that describe them.'
 related_knowledge_nodes:
-  - wx-product-airmets-sigmets
+  - wx-product-sigmets
 related_products:
   - wx-ref-sigmet
   - wx-ref-weather-tfr

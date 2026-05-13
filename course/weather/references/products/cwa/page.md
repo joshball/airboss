@@ -16,7 +16,7 @@ authoritative_sources:
     section: 'Chapter 26 (CWSU products)'
     note: 'Aviation Weather Handbook, Advisories chapter, CWSU/CWA subsection.'
 related_knowledge_nodes:
-  - wx-product-airmets-sigmets
+  - wx-product-sigmets
 related_products:
   - airmet
   - sigmet

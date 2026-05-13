@@ -16,7 +16,7 @@ authoritative_sources:
     section: 'Aviation Weather Handbook -- Aerodrome Forecasts chapter'
     note: 'Plain-English explainer; chapter number varies by handbook revision.'
 related_knowledge_nodes:
-  - wx-reading-metars-tafs
+  - wx-reading-tafs
 related_products:
   - metar
   - speci
@@ -47,16 +47,16 @@ A TAF reads as a header followed by a base forecast, followed by zero or more ch
 
 ### Header and base forecast fields
 
-| Field           | Example       | Meaning                                                                                  |
-| --------------- | ------------- | ---------------------------------------------------------------------------------------- |
-| Type            | `TAF`         | Routine TAF. Variants: `TAF AMD` (amended), `TAF COR` (corrected).                       |
-| Station         | `KORD`        | ICAO identifier of the forecast airport.                                                 |
-| Issuance time   | `121720Z`     | DDHHMMZ -- day 12, issued 17:20 Zulu. Issuance is typically ~20-40 min before valid.     |
-| Valid period    | `1218/1318`   | DDHH/DDHH -- valid day 12 18Z through day 13 18Z (24-hour TAF). 30-hour for major hubs.  |
-| Wind            | `27015G25KT`  | From 270 degrees true, 15 knots gusting 25. `VRB03KT` for variable light winds.          |
-| Visibility      | `P6SM`        | Prevailing visibility in statute miles. `P6SM` means "greater than 6 SM."                |
-| Weather         | `-SHRA`       | Light rain showers. METAR codes apply: intensity (`-`/`+`), descriptor, phenomenon.      |
-| Sky condition   | `BKN040`      | Broken clouds, base 4,000 ft AGL. Layers stack lowest to highest. `CB` flag for cumulonimbus. |
+| Field         | Example      | Meaning                                                                                       |
+| ------------- | ------------ | --------------------------------------------------------------------------------------------- |
+| Type          | `TAF`        | Routine TAF. Variants: `TAF AMD` (amended), `TAF COR` (corrected).                            |
+| Station       | `KORD`       | ICAO identifier of the forecast airport.                                                      |
+| Issuance time | `121720Z`    | DDHHMMZ -- day 12, issued 17:20 Zulu. Issuance is typically ~20-40 min before valid.          |
+| Valid period  | `1218/1318`  | DDHH/DDHH -- valid day 12 18Z through day 13 18Z (24-hour TAF). 30-hour for major hubs.       |
+| Wind          | `27015G25KT` | From 270 degrees true, 15 knots gusting 25. `VRB03KT` for variable light winds.               |
+| Visibility    | `P6SM`       | Prevailing visibility in statute miles. `P6SM` means "greater than 6 SM."                     |
+| Weather       | `-SHRA`      | Light rain showers. METAR codes apply: intensity (`-`/`+`), descriptor, phenomenon.           |
+| Sky condition | `BKN040`     | Broken clouds, base 4,000 ft AGL. Layers stack lowest to highest. `CB` flag for cumulonimbus. |
 
 A TAF does **not** include temperature, dewpoint, or altimeter setting. Those live in the METAR.
 
@@ -64,12 +64,12 @@ A TAF does **not** include temperature, dewpoint, or altimeter setting. Those li
 
 The change groups are where most TAF reading goes wrong. Four types, each with different semantics.
 
-| Group                | Example         | Meaning                                                                                             |
-| -------------------- | --------------- | --------------------------------------------------------------------------------------------------- |
-| `FM` (FroM)          | `FM131200`      | Abrupt change at a specific time (day 13, 12:00Z). Everything after `FM` replaces the prevailing forecast and becomes the new prevailing forecast until the next `FM`. |
-| `TEMPO`              | `TEMPO 1220/1224` | Temporary conditions, 50% probability, expected to last less than 1 hour at a time within the window (day 12, 20Z-24Z). Does NOT replace the prevailing forecast -- overlay on top of it. |
-| `PROB30` / `PROB40`  | `PROB30 1304/1308` | 30% or 40% probability of the listed conditions during the window. Never `PROB50` or higher -- those become `FM` or `TEMPO`. |
-| `BECMG` (BECoMinG)   | `BECMG 1216/1218` | Gradual change over a 2-hour window. Older format, less common in current US TAFs; conditions transition smoothly across the window. |
+| Group               | Example            | Meaning                                                                                                                                                                                   |
+| ------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `FM` (FroM)         | `FM131200`         | Abrupt change at a specific time (day 13, 12:00Z). Everything after `FM` replaces the prevailing forecast and becomes the new prevailing forecast until the next `FM`.                    |
+| `TEMPO`             | `TEMPO 1220/1224`  | Temporary conditions, 50% probability, expected to last less than 1 hour at a time within the window (day 12, 20Z-24Z). Does NOT replace the prevailing forecast -- overlay on top of it. |
+| `PROB30` / `PROB40` | `PROB30 1304/1308` | 30% or 40% probability of the listed conditions during the window. Never `PROB50` or higher -- those become `FM` or `TEMPO`.                                                              |
+| `BECMG` (BECoMinG)  | `BECMG 1216/1218`  | Gradual change over a 2-hour window. Older format, less common in current US TAFs; conditions transition smoothly across the window.                                                      |
 
 After a `FM` group, the new line is the prevailing forecast. A subsequent `TEMPO` or `PROB` group sits on top of that prevailing forecast, not on top of the original base. Read the TAF as a stack of timeline overlays, not as a wall of text.
 
@@ -159,6 +159,7 @@ Load-bearing fields: wind direction and gust, visibility, lowest ceiling, any `T
 
 ## Related knowledge nodes
 
-For the pedagogical (discovery-walk) treatment of reading TAFs alongside METARs, see:
+For the pedagogical (discovery-walk) treatment of TAFs (and the companion METAR node), see:
 
-- [Reading METARs and TAFs](../../../../knowledge/weather/reading-metars-tafs/node.md)
+- [Reading TAFs](../../../../knowledge/weather/reading-tafs/node.md)
+- [Reading METARs](../../../../knowledge/weather/reading-metars/node.md)

@@ -30,7 +30,7 @@ taught_by:
 related:
   - perf-weight-and-balance
   - plan-vfr-cross-country
-  - wx-reading-metars-tafs
+  - wx-reading-metars
 
 # === Content & delivery ===
 modalities: [reading, cards, calculation, visualization]
@@ -112,14 +112,14 @@ Do not read ahead. Work through these questions with a pencil first.
 
 5. **Reach for an approximation.** You will not be drawing triangles on short final. Pilots use a **clock method**: the angle between wind and runway, expressed in minutes on a clock face (15 deg ~ 15 min, 30 deg ~ 30 min, etc.), gives an approximate crosswind fraction. Try to fill this table yourself from what you have just derived:
 
-   | Angle | Exact sin | Clock fraction | Why this rounding is reasonable |
-   | ----- | --------- | -------------- | ------------------------------- |
-   |    15 |    ?      |     ?          |                                 |
-   |    30 |    ?      |     ?          |                                 |
-   |    45 |    ?      |     ?          |                                 |
-   |    60 |    ?      |     ?          |                                 |
-   |    75 |    ?      |     ?          |                                 |
-   |    90 |    ?      |     ?          |                                 |
+| Angle | Exact sin | Clock fraction | Why this rounding is reasonable |
+| ----- | --------- | -------------- | ------------------------------- |
+| 15    | ?         | ?              |                                 |
+| 30    | ?         | ?              |                                 |
+| 45    | ?         | ?              |                                 |
+| 60    | ?         | ?              |                                 |
+| 75    | ?         | ?              |                                 |
+| 90    | ?         | ?              |                                 |
 
    Only after you have filled it in should you compare with the Reveal.
 
@@ -140,13 +140,13 @@ Wind direction and runway heading must be in the same frame of reference. Tower-
 
 | Angle (deg) | sin (crosswind fraction) | cos (headwind fraction) |
 | ----------- | ------------------------ | ----------------------- |
-|          0  |                     0.00 |                    1.00 |
-|         15  |                     0.26 |                    0.97 |
-|         30  |                     0.50 |                    0.87 |
-|         45  |                     0.71 |                    0.71 |
-|         60  |                     0.87 |                    0.50 |
-|         75  |                     0.97 |                    0.26 |
-|         90  |                     1.00 |                    0.00 |
+| 0           | 0.00                     | 1.00                    |
+| 15          | 0.26                     | 0.97                    |
+| 30          | 0.50                     | 0.87                    |
+| 45          | 0.71                     | 0.71                    |
+| 60          | 0.87                     | 0.50                    |
+| 75          | 0.97                     | 0.26                    |
+| 90          | 1.00                     | 0.00                    |
 
 ### The clock method (the one you actually use in flight)
 
@@ -154,11 +154,11 @@ Convert the angle between wind and runway into a fraction-of-wind-speed using cl
 
 | Angle (deg) | Clock fraction | Crosswind % of wind speed |
 | ----------- | -------------- | ------------------------- |
-|         15  |            1/4 |                      25%  |
-|         30  |            1/2 |                      50%  |
-|         45  |            2/3 |                      67%  |
-|         60  |            7/8 |                      87%  |
-|      75-90  |            all |                    ~100%  |
+| 15          | 1/4            | 25%                       |
+| 30          | 1/2            | 50%                       |
+| 45          | 2/3            | 67%                       |
+| 60          | 7/8            | 87%                       |
+| 75-90       | all            | ~100%                     |
 
 This is a rounding of the sine table to fractions your brain can do at 500 AGL. It is exact at 30 and close at 45 (67 vs 71, slightly conservative) and 60 (87 vs 87, exact). For decision-making the small errors are on the conservative side and do not matter.
 

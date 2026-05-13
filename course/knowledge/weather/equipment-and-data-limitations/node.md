@@ -12,7 +12,8 @@ minimum_cert: private
 study_priority: critical
 requires:
   - wx-flight-deck-weather-displays
-  - wx-product-airmets-sigmets
+  - wx-product-airmets
+  - wx-product-sigmets
 deepens: []
 applied_by:
   - wx-go-nogo-decision

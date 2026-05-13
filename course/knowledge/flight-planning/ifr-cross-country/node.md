@@ -15,7 +15,8 @@ minimum_cert: instrument
 study_priority: critical
 requires:
   - airspace-classes-and-dimensions
-  - wx-reading-metars-tafs
+  - wx-reading-metars
+  - wx-reading-tafs
   - wx-icing-types-and-avoidance
   - wx-thunderstorm-hazards
   - wx-go-nogo-decision

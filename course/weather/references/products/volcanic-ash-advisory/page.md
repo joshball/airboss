@@ -22,7 +22,7 @@ authoritative_sources:
     section: '/vaa'
     note: 'Service page with current advisories, graphical overlay, and bulletin archive.'
 related_knowledge_nodes:
-  - wx-product-airmets-sigmets
+  - wx-product-sigmets
 related_products:
   - sigmet
   - convective-sigmet

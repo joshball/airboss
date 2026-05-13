@@ -16,7 +16,7 @@ authoritative_sources:
     section: 'Aviation Weather Handbook, Chapter 26 -- Inflight Aviation Weather Advisories, Convective SIGMET subsection'
     note: 'Operational treatment with sample WSTs and the reasoning behind each trigger.'
 related_knowledge_nodes:
-  - wx-product-airmets-sigmets
+  - wx-product-sigmets
   - wx-thunderstorm-hazards
 related_products:
   - sigmet
@@ -55,18 +55,18 @@ The WST is encoded text, but it describes a polygon over a map. Modern EFBs rend
 
 A convective SIGMET is a fixed-format text bulletin. Each WST in a bulletin run has a region letter (E / C / W) and a numeric designator that increments through the day.
 
-| #  | Field                | Example                          | Meaning                                                                                              |
-| -- | -------------------- | -------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| 1  | Bulletin header      | `MKCE WST 121955`                | AWC office MKC, region letter `E` (East), product WST, issuance day/time 12 at 19:55Z.               |
-| 2  | Convective SIGMET ID | `CONVECTIVE SIGMET 21E`          | 21st WST of the day in the East region.                                                              |
-| 3  | Valid time           | `VALID UNTIL 2155Z`              | 2-hour validity from issuance.                                                                       |
-| 4  | States / area        | `KS MO`                          | States covered by the polygon.                                                                       |
-| 5  | Trigger type         | `LINE`, `AREA`, `ISOL`, `EMBD TS`| `LINE` line of TS; `AREA` area of TS; `ISOL` isolated severe cell; `EMBD` embedded (IFR/IMC) TS.     |
-| 6  | Polygon              | `FROM 50WNW MCI TO 30S COU ...`  | Vertex list, lat/long or VOR-radial-distance fixes, in order.                                        |
-| 7  | Movement             | `MOV FROM 26035KT`               | Motion vector in FROM/AT format: cells moving FROM 260 AT 35 kt.                                     |
-| 8  | Tops                 | `TOPS TO FL450`                  | Echo tops in MSL hundreds of feet.                                                                   |
-| 9  | Hazard summary       | `HAIL TO 1 IN. WIND GUSTS TO 60 KT POSS.` | Plain-language description of the worst expected hazards inside the polygon.                |
-| 10 | Outlook              | `OUTLOOK VALID 2155-0155Z`       | 2-6 hour forecast block describing expected development. Non-binding -- forecast intent, not advisory.|
+| #   | Field                | Example                                   | Meaning                                                                                                |
+| --- | -------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| 1   | Bulletin header      | `MKCE WST 121955`                         | AWC office MKC, region letter `E` (East), product WST, issuance day/time 12 at 19:55Z.                 |
+| 2   | Convective SIGMET ID | `CONVECTIVE SIGMET 21E`                   | 21st WST of the day in the East region.                                                                |
+| 3   | Valid time           | `VALID UNTIL 2155Z`                       | 2-hour validity from issuance.                                                                         |
+| 4   | States / area        | `KS MO`                                   | States covered by the polygon.                                                                         |
+| 5   | Trigger type         | `LINE`, `AREA`, `ISOL`, `EMBD TS`         | `LINE` line of TS; `AREA` area of TS; `ISOL` isolated severe cell; `EMBD` embedded (IFR/IMC) TS.       |
+| 6   | Polygon              | `FROM 50WNW MCI TO 30S COU ...`           | Vertex list, lat/long or VOR-radial-distance fixes, in order.                                          |
+| 7   | Movement             | `MOV FROM 26035KT`                        | Motion vector in FROM/AT format: cells moving FROM 260 AT 35 kt.                                       |
+| 8   | Tops                 | `TOPS TO FL450`                           | Echo tops in MSL hundreds of feet.                                                                     |
+| 9   | Hazard summary       | `HAIL TO 1 IN. WIND GUSTS TO 60 KT POSS.` | Plain-language description of the worst expected hazards inside the polygon.                           |
+| 10  | Outlook              | `OUTLOOK VALID 2155-0155Z`                | 2-6 hour forecast block describing expected development. Non-binding -- forecast intent, not advisory. |
 
 The bulletin can also begin with one or more **OUTLOOK** sections that stand alone: forecasts of convective development for the next 2-6 hours, in areas not currently meeting WST criteria. These are advisory in tone, not operational ("watch this space"), and should not be read as current hazards.
 
@@ -182,5 +182,6 @@ A WST in the corridor at the wrong time is a delay-or-cancel decision. Press-on-
 
 For the pedagogical (discovery-walk) treatment of this product, see:
 
-- [AIRMETs and SIGMETs](../../../../knowledge/weather/product-airmets-sigmets/node.md) -- the product family, where the WST sits inside it, and why the trigger thresholds are what they are.
+- [SIGMETs and Convective SIGMETs](../../../../knowledge/weather/product-sigmets/node.md) -- the product family, where the WST sits inside it, and why the trigger thresholds are what they are.
+- [AIRMETs (Sierra, Tango, Zulu)](../../../../knowledge/weather/product-airmets/node.md) -- the lower-severity tier; the AIRMET vs SIGMET threshold distinction lives here.
 - [Thunderstorm hazards](../../../../knowledge/weather/thunderstorm-hazards/node.md) -- the underlying physics of what makes a convective cell dangerous to a flight, which is what the WST is encoding into a polygon.

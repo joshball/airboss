@@ -19,7 +19,7 @@ applied_by:
   - plan-ifr-cross-country
 taught_by: []
 related:
-  - wx-product-airmets-sigmets
+  - wx-product-sigmets
 
 modalities: [reading, cards]
 estimated_time_minutes: 20
@@ -67,7 +67,7 @@ strict METAR / TAF sense -- but the same three-stage skill applies:
   onboard radar, ENH.
 
 (Family pattern reference:
-[wx-reading-metars-tafs](../reading-metars-tafs/node.md).)
+[wx-reading-metars](../reading-metars/node.md).)
 
 ## Context
 

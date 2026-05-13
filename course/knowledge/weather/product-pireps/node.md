@@ -12,7 +12,8 @@ minimum_cert: private
 study_priority: critical
 requires: []
 deepens:
-  - wx-reading-metars-tafs
+  - wx-reading-metars
+  - wx-reading-tafs
 applied_by:
   - wx-go-nogo-decision
   - plan-vfr-cross-country
@@ -20,7 +21,8 @@ applied_by:
 taught_by: []
 related:
   - wx-data-sources
-  - wx-product-airmets-sigmets
+  - wx-product-airmets
+  - wx-product-sigmets
 
 modalities: [reading, cards, drill]
 estimated_time_minutes: 30
@@ -48,9 +50,8 @@ mastery_criteria: >
 # PIREPs -- Reading and Filing
 
 PIREPs are members of the encoded-text family (see
-[wx-reading-metars-tafs](../reading-metars-tafs/node.md) for the full
-treatment of the family pattern). Read them through the same
-three-stage ladder:
+[wx-reading-metars](../reading-metars/node.md) for the canonical
+family treatment). Read them through the same three-stage ladder:
 
 - **Decode** -- mechanical translation of the slash-delimited fields
   to facts.

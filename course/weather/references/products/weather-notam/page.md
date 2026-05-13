@@ -22,7 +22,7 @@ authoritative_sources:
     section: 'notams.faa.gov -- public NOTAM distribution system'
     note: 'The authoritative live source. Every weather-related NOTAM you read in an EFB or briefing pack originates here.'
 related_knowledge_nodes:
-  - wx-product-airmets-sigmets
+  - wx-product-sigmets
   - wx-fog-and-visibility-obstructions
 related_products:
   - weather-tfr
