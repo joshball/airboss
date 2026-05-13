@@ -2,6 +2,35 @@ code: s8
 ordinal: 8
 title: Forecasting and planning products
 body_md: |
+  **Before you start.** This section assumes the synoptic story from
+  s2 through s6 and the airport-specific products from s7
+  ([METAR / TAF / PIREP](/reference/knowledge/wx-reading-metars-tafs)).
+  It teaches the regional products: where briefing data comes from,
+  the surface analysis and ceiling / visibility charts, the GFA,
+  winds aloft, AIRMETs / SIGMETs, and the convective outlook. Each
+  step is one product family.
+
+  Terms you will see referenced but not fully taught here:
+
+  - [Severe-weather day worked example](/reference/knowledge/wx-thunderstorm-hazards):
+    the FB grid and the Day-1 outlook are pulled from the same
+    severe-weather data set as the s5 radar mosaic and the s7 PIREP
+    plot. Cross-reference is on purpose; the product is what is new
+    here, not the day.
+  - [G-AIRMET icing](/reference/knowledge/wx-product-airmets-sigmets):
+    the graphical sibling of the textual AIRMET-Zulu. Pairs with the
+    [CIP / FIP charts](/reference/knowledge/wx-product-airmets-sigmets)
+    you met in s6.
+  - [Water-vapor satellite](/reference/knowledge/wx-product-gfa):
+    not a primary briefing product, but useful for understanding
+    why the GFA reads the way it does. Introduced via the embedded
+    chart in s8.3.
+
+  Each product answers a different question. Reach for the right one;
+  do not try to read all six on every flight.
+
+  ---
+
   Section 7 was airport-specific. This section is route-and-region.
   GFA, surface analysis, AIRMETs, SIGMETs, winds aloft, convective
   outlook -- each product zooms out and looks at the same atmosphere
