@@ -44,7 +44,7 @@ describe('CommandPalette -- open', () => {
 		expect(input.getAttribute('role')).toBe('combobox');
 	});
 
-	it('initial focused column defaults to FAA Resources (the first column in the layout)', () => {
+	it('initial focused column defaults to Library (the first column in the layout)', () => {
 		render(CommandPalette, { open: true, onClose: vi.fn() });
 		// `data-focused-bucket` was the legacy two-bucket attribute; it now
 		// carries the focused column id so existing wiring (and screenshot

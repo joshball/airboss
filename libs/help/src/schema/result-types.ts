@@ -16,6 +16,7 @@
  */
 
 import type { AppSurface } from '@ab/constants';
+import type { SearchIntent } from '../intent-classifier';
 import type { ParsedFilter } from './help-registry';
 
 /**
@@ -80,9 +81,17 @@ export const COLUMN_BY_TYPE: Record<SearchResultType, ResultColumn> = {
 	'cmd.goto': 'commands',
 };
 
-/** Display labels for column headers. */
+/**
+ * Display labels for column headers.
+ *
+ * Phase 3.5 (WP decision R12) renames "FAA Resources" -> "Library" --
+ * not every entry in that bucket is FAA-authored (NTSB, sectionals,
+ * industry references). The column key (`faa-resources`) stays stable
+ * so existing call sites + type IDs don't churn; only the user-facing
+ * label changes.
+ */
 export const COLUMN_LABELS: Record<ResultColumn, string> = {
-	'faa-resources': 'FAA Resources',
+	'faa-resources': 'Library',
 	'airboss-content': 'Airboss Content',
 	'app-help': 'App Help',
 	'my-stuff': 'My Stuff',
@@ -146,7 +155,43 @@ export interface SearchResult {
 	 * prefix the cross-app origin when navigating across surfaces.
 	 */
 	readonly href: string;
+	/**
+	 * Phase 2 5-bucket rank verdict. Phase 3.5 derives this from the
+	 * composite score via `bucketFromScore` so existing call sites
+	 * (loaders, registry hot path) keep populating it without churn.
+	 * Removed in the UI PR once consumers move to `score` directly.
+	 */
 	readonly rankBucket: RankBucket;
+	/**
+	 * Phase 3.5 composite score (`type_tier + title + body - depth`).
+	 * Loaders are not required to populate this; the search facade
+	 * computes it as part of `searchGrouped()` before sorting / top-hits
+	 * / book-level collapse. UI consumers should treat the field as
+	 * authoritative for ranking once the facade has run.
+	 */
+	readonly score?: number;
+	/**
+	 * Canonical doc code (`FAA-H-8083-28`, `14 CFR 91`, `AC 00-6B`)
+	 * surfaced on every published reference row. Drives the EXACT_DOC_CODE
+	 * and DOC_CODE_PREFIX title-tier bonuses in the ranker (WP decisions
+	 * R8 + R14: doc IDs always visible + autocomplete bidirectional).
+	 */
+	readonly docCode?: string;
+	/**
+	 * Nesting depth used by the depth penalty (I-1 / I-2) or depth reward
+	 * (I-3). 0 for whole-document rows (handbook root, CFR Part). 1 for
+	 * chapter. 2 for section. 3 for leaf paragraph. Loaders that don't
+	 * carry this leave it undefined; the scorer defaults to 0.
+	 */
+	readonly depth?: number;
+	/**
+	 * Book-level collapse children (WP decision R11). When a handbook or
+	 * CFR Part row matches a query AND its chapters / sections also match,
+	 * the facade rolls the children up here and removes them from the
+	 * top-level column. Only set in I-1 / I-2; phrase-FTS preserves the
+	 * leaf rows (the user wants passages, not books).
+	 */
+	readonly children?: readonly SearchResult[];
 	/**
 	 * Cluster bond key. Handbook root + chapter rows share the canonical
 	 * doc slug (`phak`, `ifh`, `avwx`, ...); CFR Part + section rows share
@@ -188,13 +233,30 @@ export interface GroupedResults {
 	 * columns. `null` when 0 or >1 tier-1 matches.
 	 */
 	readonly bannerHit: SearchResult | null;
+	/**
+	 * Top-hits strip (Phase 3.5 / R8). Mixed types, sorted by composite
+	 * score descending, capped at `TOP_HITS_MAX` rows. Hidden (empty) when
+	 * `intent === 'phrase-fts'` -- the user typed a phrase, not a query,
+	 * and wants passages, not docs.
+	 */
+	readonly topHits: readonly SearchResult[];
+	/**
+	 * Classified search intent for this result set. Drives result-panel
+	 * shape choice + per-intent ranker variation. See `SearchIntent`.
+	 */
+	readonly intent: SearchIntent;
 	/** Per-column buckets. Always present (empty arrays for empty columns). */
 	readonly columns: Record<ResultColumn, readonly SearchResult[]>;
 	/**
-	 * FAA Resources cluster pairs (handbook + chapters, CFR part + sections).
+	 * Library cluster pairs (handbook + chapters, CFR part + sections).
 	 * Renderers walk this BEFORE walking `columns['faa-resources']` flat. The
 	 * flat column still carries every row so callers that don't render
 	 * clusters still see everything.
+	 *
+	 * Phase 3.5 also rolls collapsed children onto each parent row directly
+	 * via `SearchResult.children` -- the `clusters` field is the legacy
+	 * shape and the `children` field is the canonical one. The UI PR drops
+	 * `clusters` once consumers migrate.
 	 */
 	readonly clusters: readonly DocCluster[];
 	/** Synonym rewrites applied; rendered as removable chips. */
@@ -224,6 +286,8 @@ export interface PaletteHost {
  */
 export const EMPTY_GROUPED_RESULTS: GroupedResults = {
 	bannerHit: null,
+	topHits: [],
+	intent: 'broad',
 	columns: {
 		'faa-resources': [],
 		'airboss-content': [],
