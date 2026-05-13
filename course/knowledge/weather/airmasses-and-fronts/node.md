@@ -157,9 +157,17 @@ emphasises.
     cool window.
   cardType: basic
   kind: recall
-  tags: [weather, airmasses, source-regions, phak-12, ac-00-6, PA.I.C.K3e]
+  tags: [weather, airmasses, source-regions, phak-12, ac-00-6]
   source_ref: |
     AC 00-6B, Air Masses and Fronts; PHAK Ch 12 Weather Theory; body Discover.
+  acs_codes: [PA.I.C.K3e]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Air Masses and Fronts chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 11 -- Air Masses, Fronts, and the Wave Cyclone Model
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 
 - front: "Air mass source region: Maritime Tropical (mT). Where does it form and what aviation hazards follow?"
   back: |
@@ -170,9 +178,17 @@ emphasises.
     convective-outlook problem is the mT story.
   cardType: basic
   kind: recall
-  tags: [weather, airmasses, source-regions, convection, phak-12, ac-00-6, PA.I.C.K3e]
+  tags: [weather, airmasses, source-regions, convection, phak-12, ac-00-6]
   source_ref: |
     AC 00-6B; PHAK Ch 12; body Discover (mT).
+  acs_codes: [PA.I.C.K3e]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Air Masses and Fronts chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 11 -- Air Masses, Fronts, and the Wave Cyclone Model
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 
 - front: "Distinguish Continental Tropical (cT) from Maritime Tropical (mT) airmass character."
   back: |
@@ -185,9 +201,17 @@ emphasises.
     squall-line set-up.
   cardType: basic
   kind: recall
-  tags: [weather, airmasses, source-regions, density-altitude, phak-12, ac-00-6, PA.I.C.K3e]
+  tags: [weather, airmasses, source-regions, density-altitude, phak-12, ac-00-6]
   source_ref: |
     AC 00-6B; PHAK Ch 12; body Discover (cT vs mT).
+  acs_codes: [PA.I.C.K3e]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Air Masses and Fronts chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 11 -- Air Masses, Fronts, and the Wave Cyclone Model
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 
 - front: "Maritime Polar (mP) airmass: source region and typical cloud and precipitation signature?"
   back: |
@@ -197,9 +221,17 @@ emphasises.
     fog are both mP in residence.
   cardType: basic
   kind: recall
-  tags: [weather, airmasses, source-regions, marine-layer, phak-12, ac-00-6, PA.I.C.K3e]
+  tags: [weather, airmasses, source-regions, marine-layer, phak-12, ac-00-6]
   source_ref: |
     AC 00-6B; PHAK Ch 12; body Discover (mP).
+  acs_codes: [PA.I.C.K3e]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Air Masses and Fronts chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 11 -- Air Masses, Fronts, and the Wave Cyclone Model
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 
 - front: "Cold front: symbol, frontal slope, and weather signature?"
   back: |
@@ -210,9 +242,17 @@ emphasises.
     the front: cooler, drier air, often clearing within hours.
   cardType: basic
   kind: recall
-  tags: [weather, fronts, cold-front, phak-12, ac-00-6, PA.I.C.K3e]
+  tags: [weather, fronts, cold-front, phak-12, ac-00-6]
   source_ref: |
     AC 00-6B Air Masses and Fronts; PHAK Ch 12; body Discover (cold front).
+  acs_codes: [PA.I.C.K3e]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Air Masses and Fronts chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 11 -- Air Masses, Fronts, and the Wave Cyclone Model
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 
 - front: "Warm front: symbol, frontal slope, and weather signature?"
   back: |
@@ -224,9 +264,17 @@ emphasises.
     squall.
   cardType: basic
   kind: recall
-  tags: [weather, fronts, warm-front, phak-12, ac-00-6, PA.I.C.K3e]
+  tags: [weather, fronts, warm-front, phak-12, ac-00-6]
   source_ref: |
     AC 00-6B; PHAK Ch 12; body Discover (warm front).
+  acs_codes: [PA.I.C.K3e]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Air Masses and Fronts chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 11 -- Air Masses, Fronts, and the Wave Cyclone Model
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 
 - front: "Cloud sequence ahead of an approaching warm front?"
   back: |
@@ -237,9 +285,17 @@ emphasises.
     precipitation under a low ceiling.
   cardType: basic
   kind: recall
-  tags: [weather, fronts, warm-front, clouds, phak-12, ac-00-6, PA.I.C.K3e]
+  tags: [weather, fronts, warm-front, clouds, phak-12, ac-00-6]
   source_ref: |
     PHAK Ch 12; body Reveal warm-front pre/post table.
+  acs_codes: [PA.I.C.K3e]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Air Masses and Fronts chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 11 -- Air Masses, Fronts, and the Wave Cyclone Model
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 
 - front: "Pre / passage / post of a cold front -- what does pressure, wind, and weather do at each phase?"
   back: |
@@ -253,9 +309,17 @@ emphasises.
     behind = the front has gone.
   cardType: basic
   kind: recall
-  tags: [weather, fronts, cold-front, pressure, phak-12, ac-00-6, PA.I.C.K3e]
+  tags: [weather, fronts, cold-front, pressure, phak-12, ac-00-6]
   source_ref: |
     AC 00-6B; PHAK Ch 12; body Reveal cold-front table.
+  acs_codes: [PA.I.C.K3e]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Air Masses and Fronts chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 11 -- Air Masses, Fronts, and the Wave Cyclone Model
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 
 - front: "Stationary front -- why does it matter to the synoptic picture even though it's 'stationary'?"
   back: |
@@ -267,9 +331,17 @@ emphasises.
     is "watch for a developing low," not "stable."
   cardType: basic
   kind: recall
-  tags: [weather, fronts, stationary-front, cyclogenesis, ac-00-6, faa-h-8083-28, PA.I.C.K3e]
+  tags: [weather, fronts, stationary-front, cyclogenesis, ac-00-6, faa-h-8083-28]
   source_ref: |
     AC 00-6B; FAA-H-8083-28 Ch 11; body Discover (stationary front).
+  acs_codes: [PA.I.C.K3e]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Air Masses and Fronts chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 11 -- Air Masses, Fronts, and the Wave Cyclone Model
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 
 - front: "Surface analysis shows a cold front through your destination at ETA. Why is 'cold front' alone not enough to make the go decision?"
   back: |
@@ -282,13 +354,21 @@ emphasises.
     headline; the airmass collision is the story.
   cardType: basic
   kind: recall
-  tags: [weather, fronts, go-nogo, airmasses, phak-12, ac-00-6, PA.I.C.K3e]
+  tags: [weather, fronts, go-nogo, airmasses, phak-12, ac-00-6]
   source_ref: |
     Body Context scenario.
   rationale: |
     Scenario card from the body's Context. Trains the reframing the body
     teaches: the chart symbol is necessary but not sufficient -- the
     airmass identity drives the decision.
+  acs_codes: [PA.I.C.K3e]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Air Masses and Fronts chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 11 -- Air Masses, Fronts, and the Wave Cyclone Model
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 ```
 
 ## Connect

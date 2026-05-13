@@ -213,6 +213,11 @@ thrust / less HP).
   tags: [weather, density-altitude, pressure-altitude, calculation, phak-11]
   source_ref: |
     PHAK Ch 11, Aircraft Performance; body Reveal section worked example.
+  source_authority:
+    - kind: ac
+      cite: AC 61-84B Role of Preflight Preparation
+    - kind: aim
+      cite: AIM 7-5-6 -- Potential Flight Hazards (High Density Altitude)
 
 - front: "Compute ISA temperature at a pressure altitude of 6,572 ft."
   back: |
@@ -225,6 +230,11 @@ thrust / less HP).
   tags: [weather, density-altitude, isa, calculation, phak-11]
   source_ref: |
     PHAK Ch 11; body Reveal worked example.
+  source_authority:
+    - kind: ac
+      cite: AC 61-84B Role of Preflight Preparation
+    - kind: aim
+      cite: AIM 7-5-6 -- Potential Flight Hazards (High Density Altitude)
 
 - front: "Compute density altitude. PA = 6,572 ft, OAT = 96 deg F."
   back: |
@@ -284,6 +294,11 @@ thrust / less HP).
   tags: [weather, density-altitude, performance, takeoff, landing, phak-11]
   source_ref: |
     PHAK Ch 11; body Reveal "practical heuristic."
+  source_authority:
+    - kind: ac
+      cite: AC 61-84B Role of Preflight Preparation
+    - kind: aim
+      cite: AIM 7-5-6 -- Potential Flight Hazards (High Density Altitude)
 
 - front: "Naturally aspirated piston engine HP loss per 1,000 ft of density altitude?"
   back: |
@@ -297,6 +312,11 @@ thrust / less HP).
   tags: [weather, density-altitude, engine, performance, phak-11]
   source_ref: |
     PHAK Ch 11; body Discover (third effect on the airplane).
+  source_authority:
+    - kind: ac
+      cite: AC 61-84B Role of Preflight Preparation
+    - kind: aim
+      cite: AIM 7-5-6 -- Potential Flight Hazards (High Density Altitude)
 
 - front: "Why does true airspeed at takeoff increase with density altitude even though indicated airspeed stays the same?"
   back: |
@@ -311,6 +331,11 @@ thrust / less HP).
   tags: [weather, density-altitude, true-airspeed, lift, phak-11]
   source_ref: |
     PHAK Ch 11; body Discover (the wing).
+  source_authority:
+    - kind: ac
+      cite: AC 61-84B Role of Preflight Preparation
+    - kind: aim
+      cite: AIM 7-5-6 -- Potential Flight Hazards (High Density Altitude)
 
 - front: "Density altitude reduces three things about the airplane in parallel: {{c1::lift}} from the wing (needs higher TAS for same lift), {{c2::thrust}} from the propeller (less air per blade pass), and {{c3::horsepower}} from the engine (~3 percent loss per 1,000 ft DA, naturally aspirated)."
   back: |
@@ -325,6 +350,11 @@ thrust / less HP).
   tags: [weather, density-altitude, lift, thrust, engine, phak-11]
   source_ref: |
     PHAK Ch 11; body Discover ("three things stop working as advertised").
+  source_authority:
+    - kind: ac
+      cite: AC 61-84B Role of Preflight Preparation
+    - kind: aim
+      cite: AIM 7-5-6 -- Potential Flight Hazards (High Density Altitude)
 
 - front: "You're at a 6,000 ft elevation airport. OAT 30 deg C, altimeter 29.92. Estimate density altitude using the 120 ft/deg C rule."
   back: |
@@ -338,6 +368,11 @@ thrust / less HP).
   tags: [weather, density-altitude, calculation, rule-of-thumb, phak-11]
   source_ref: |
     PHAK Ch 11; body Discover worked example (6,000 ft, 30 deg C).
+  source_authority:
+    - kind: ac
+      cite: AC 61-84B Role of Preflight Preparation
+    - kind: aim
+      cite: AIM 7-5-6 -- Potential Flight Hazards (High Density Altitude)
 
 - front: "Reverse: a Cessna 182 at gross weight on a 4,500 ft runway is calculated to have over 10,000 ft of density altitude and POH says it's a no-go. Which input combinations cause this profile? Pick the ones that fit."
   back: |
@@ -359,6 +394,11 @@ thrust / less HP).
     Reverse-direction card per the spec. Forces the learner to reason from
     "the bad outcome" back to "what inputs produced it" -- the diagnosis skill
     that catches a hot-and-high vacation trip before it bites.
+  source_authority:
+    - kind: ac
+      cite: AC 61-84B Role of Preflight Preparation
+    - kind: aim
+      cite: AIM 7-5-6 -- Potential Flight Hazards (High Density Altitude)
 
 - front: "Humidity's effect on density altitude -- how much, and why is it usually ignored on POH charts?"
   back: |
@@ -373,6 +413,11 @@ thrust / less HP).
   tags: [weather, density-altitude, humidity, phak-11]
   source_ref: |
     PHAK Ch 11; body Reveal humidity paragraph.
+  source_authority:
+    - kind: ac
+      cite: AC 61-84B Role of Preflight Preparation
+    - kind: aim
+      cite: AIM 7-5-6 -- Potential Flight Hazards (High Density Altitude)
 ```
 
 ## Connect

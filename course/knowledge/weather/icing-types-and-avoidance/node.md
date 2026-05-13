@@ -218,9 +218,15 @@ in-flight muscle memory.
     disruption beyond the visible accumulation.
   cardType: basic
   kind: recall
-  tags: [weather, icing, types, phak-12, ac-91-74b, PA.I.C.K3i]
+  tags: [weather, icing, types, phak-12, ac-91-74b]
   source_ref: |
     AC 91-74B Flight in Icing; PHAK Ch 12; body Discover.
+  acs_codes: [PA.I.C.K3i]
+  source_authority:
+    - kind: ac
+      cite: AC 91-74B Pilot Guide, Flight in Icing Conditions
+    - kind: aim
+      cite: AIM 7-1-21 -- Icing
 
 - front: "Structural icing temperature band -- where is it widest and where is severity peak?"
   back: |
@@ -232,9 +238,15 @@ in-flight muscle memory.
     encounter can extend severe icing colder than the standard band.
   cardType: basic
   kind: recall
-  tags: [weather, icing, temperature-band, ac-91-74b, PA.I.C.K3i]
+  tags: [weather, icing, temperature-band, ac-91-74b]
   source_ref: |
     AC 91-74B; body Discover.
+  acs_codes: [PA.I.C.K3i]
+  source_authority:
+    - kind: ac
+      cite: AC 91-74B Pilot Guide, Flight in Icing Conditions
+    - kind: aim
+      cite: AIM 7-1-21 -- Icing
 
 - front: "Why is freezing rain a 'trap' setup -- what's the atmospheric structure that produces it and why is escape constrained?"
   back: |
@@ -245,9 +257,15 @@ in-flight muscle memory.
     terrain. The atmospheric setup is also the setup that traps the pilot.
   cardType: basic
   kind: recall
-  tags: [weather, icing, freezing-rain, clear-ice, ac-91-74b, PA.I.C.K3i]
+  tags: [weather, icing, freezing-rain, clear-ice, ac-91-74b]
   source_ref: |
     AC 91-74B; body Discover.
+  acs_codes: [PA.I.C.K3i]
+  source_authority:
+    - kind: ac
+      cite: AC 91-74B Pilot Guide, Flight in Icing Conditions
+    - kind: aim
+      cite: AIM 7-1-21 -- Icing
 
 - front: "Avoidance hierarchy for icing -- the four steps in order."
   back: |
@@ -263,9 +281,15 @@ in-flight muscle memory.
        minutes ago).
   cardType: basic
   kind: recall
-  tags: [weather, icing, avoidance, escape, ac-91-74b, PA.I.C.K3i]
+  tags: [weather, icing, avoidance, escape, ac-91-74b]
   source_ref: |
     AC 91-74B; AIM 7-1-21; body Discover.
+  acs_codes: [PA.I.C.K3i]
+  source_authority:
+    - kind: ac
+      cite: AC 91-74B Pilot Guide, Flight in Icing Conditions
+    - kind: aim
+      cite: AIM 7-1-21 -- Icing
 
 - front: "Anti-ice vs deice vs known-icing certified -- what's the practical difference?"
   back: |
@@ -280,9 +304,15 @@ in-flight muscle memory.
     rule moves from 'manage' to 'do not enter.'
   cardType: basic
   kind: recall
-  tags: [weather, icing, equipment, anti-ice, deice, ac-91-74b, PA.I.C.K3i]
+  tags: [weather, icing, equipment, anti-ice, deice, ac-91-74b]
   source_ref: |
     AC 91-74B; body Reveal "Equipment caveats."
+  acs_codes: [PA.I.C.K3i]
+  source_authority:
+    - kind: ac
+      cite: AC 91-74B Pilot Guide, Flight in Icing Conditions
+    - kind: aim
+      cite: AIM 7-1-21 -- Icing
 
 - front: "Why is a PIREP the canonical truth-up for an icing forecast?"
   back: |
@@ -295,9 +325,15 @@ in-flight muscle memory.
     the forecast operationally real.
   cardType: basic
   kind: recall
-  tags: [weather, icing, pirep, airmet-zulu, aim-7-1-21, PA.I.C.K3i]
+  tags: [weather, icing, pirep, airmet-zulu, aim-7-1-21]
   source_ref: |
     AIM 7-1-21 Icing; body Reveal.
+  acs_codes: [PA.I.C.K3i]
+  source_authority:
+    - kind: ac
+      cite: AC 91-74B Pilot Guide, Flight in Icing Conditions
+    - kind: aim
+      cite: AIM 7-1-21 -- Icing
 
 - front: "Escape decision tree for icing -- what's the first action for trace ice with freezing level above terrain vs. trace ice with above-cloud layer reachable?"
   back: |
@@ -310,9 +346,15 @@ in-flight muscle memory.
     pattern; treat it as an emergency from recognition.
   cardType: basic
   kind: recall
-  tags: [weather, icing, escape, emergency, ac-91-74b, PA.I.C.K3i]
+  tags: [weather, icing, escape, emergency, ac-91-74b]
   source_ref: |
     AC 91-74B; body Reveal escape decision table.
+  acs_codes: [PA.I.C.K3i]
+  source_authority:
+    - kind: ac
+      cite: AC 91-74B Pilot Guide, Flight in Icing Conditions
+    - kind: aim
+      cite: AIM 7-1-21 -- Icing
 
 - front: "Why do most icing fatalities involve pilots who delayed the 180?"
   back: |
@@ -324,9 +366,15 @@ in-flight muscle memory.
     happen on first signal, not on confirmation.
   cardType: basic
   kind: recall
-  tags: [weather, icing, escape, judgment, ac-91-74b, PA.I.C.K3i]
+  tags: [weather, icing, escape, judgment, ac-91-74b]
   source_ref: |
     AC 91-74B; body Practice ("decision needs to happen within 60 seconds").
+  acs_codes: [PA.I.C.K3i]
+  source_authority:
+    - kind: ac
+      cite: AC 91-74B Pilot Guide, Flight in Icing Conditions
+    - kind: aim
+      cite: AIM 7-1-21 -- Icing
 
 - front: "7,000 ft IFR in cloud, OAT -3 C. Five minutes later a translucent film on the leading edge; 10 minutes later airplane settles 200 fpm at cruise power, IAS bleeding off. What's happening and what's the action?"
   back: |
@@ -339,12 +387,18 @@ in-flight muscle memory.
     declare and request descent below freezing level.
   cardType: basic
   kind: recall
-  tags: [weather, icing, escape, clear-ice, scenario, PA.I.C.K3i]
+  tags: [weather, icing, escape, clear-ice, scenario]
   source_ref: |
     Body Context scenario.
   rationale: |
     Scenario card from the body's Context. Trains the on-first-signal
     180-turn habit the body emphasises is the survival action.
+  acs_codes: [PA.I.C.K3i]
+  source_authority:
+    - kind: ac
+      cite: AC 91-74B Pilot Guide, Flight in Icing Conditions
+    - kind: aim
+      cite: AIM 7-1-21 -- Icing
 
 - front: "Why does ice not 'release' from a non-deiced airframe in flight?"
   back: |
@@ -355,9 +409,15 @@ in-flight muscle memory.
     descending to warmer air. Plan the escape accordingly.
   cardType: basic
   kind: recall
-  tags: [weather, icing, shedding, ac-91-74b, PA.I.C.K3i]
+  tags: [weather, icing, shedding, ac-91-74b]
   source_ref: |
     AC 91-74B; body Problem.
+  acs_codes: [PA.I.C.K3i]
+  source_authority:
+    - kind: ac
+      cite: AC 91-74B Pilot Guide, Flight in Icing Conditions
+    - kind: aim
+      cite: AIM 7-1-21 -- Icing
 ```
 
 ## Connect

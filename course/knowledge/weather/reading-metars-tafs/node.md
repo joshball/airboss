@@ -310,9 +310,15 @@ the triage habit the body emphasises is the actual goal.
     no G means no gust report.
   cardType: basic
   kind: recall
-  tags: [weather, metar, decode, wind, ac-00-45h, PA.I.C.K2a]
+  tags: [weather, metar, decode, wind, ac-00-45h]
   source_ref: |
     AC 00-45H, METAR wind group; AIM 7-1.
+  acs_codes: [PA.I.C.K2a]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "Decode VRB04KT 180V230 in a METAR"
   back: |
@@ -321,10 +327,16 @@ the triage habit the body emphasises is the actual goal.
     direction is varying through more than 60 degrees -- between 180 and 230.
   cardType: basic
   kind: recall
-  tags: [weather, metar, decode, wind, ac-00-45h, PA.I.C.K2a]
+  tags: [weather, metar, decode, wind, ac-00-45h]
   source_ref: |
     AC 00-45H, METAR variable-wind reporting (VRB below 6 KT; nVm group when
     variation exceeds 60 deg).
+  acs_codes: [PA.I.C.K2a]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "What does M1/4SM mean in a METAR visibility group?"
   back: |
@@ -333,9 +345,15 @@ the triage habit the body emphasises is the actual goal.
     miles in US METARs, with fractional notation for low values.
   cardType: basic
   kind: recall
-  tags: [weather, metar, decode, visibility, ac-00-45h, PA.I.C.K2a]
+  tags: [weather, metar, decode, visibility, ac-00-45h]
   source_ref: |
     AC 00-45H, METAR visibility group; M prefix convention.
+  acs_codes: [PA.I.C.K2a]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "Decode the METAR weather group: +TSRA"
   back: |
@@ -344,9 +362,15 @@ the triage habit the body emphasises is the actual goal.
     A bare RA is moderate; -RA is light. FZRA = freezing rain (FZ descriptor).
   cardType: basic
   kind: recall
-  tags: [weather, metar, decode, weather-phenomena, ac-00-45h, PA.I.C.K2a]
+  tags: [weather, metar, decode, weather-phenomena, ac-00-45h]
   source_ref: |
     AC 00-45H, METAR present-weather group: intensity / descriptor / phenomenon.
+  acs_codes: [PA.I.C.K2a]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "What does BR mean in a METAR weather group, and what's the temperature/dew-point signal that goes with it?"
   back: |
@@ -356,12 +380,18 @@ the triage habit the body emphasises is the actual goal.
     ragged edge of fog" signal -- watch the trend.
   cardType: basic
   kind: recall
-  tags: [weather, metar, decode, fog, weather-phenomena, ac-00-45h, PA.I.C.K2a]
+  tags: [weather, metar, decode, fog, weather-phenomena, ac-00-45h]
   source_ref: |
     AC 00-45H, METAR weather phenomena (BR vs FG); body's Stage 2 example.
   rationale: |
     Triage card: pairs the decoded fact (BR) with its synoptic meaning
     (mist + small spread = pre-fog) so the learner doesn't stop at decode.
+  acs_codes: [PA.I.C.K2a]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "Decode BKN015 in a METAR sky-condition group"
   back: |
@@ -371,9 +401,15 @@ the triage habit the body emphasises is the actual goal.
     A CB or TCU suffix marks thunderstorm-related cumulus.
   cardType: basic
   kind: recall
-  tags: [weather, metar, decode, sky-condition, ac-00-45h, PA.I.C.K2a]
+  tags: [weather, metar, decode, sky-condition, ac-00-45h]
   source_ref: |
     AC 00-45H, METAR sky-condition coding.
+  acs_codes: [PA.I.C.K2a]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "Decode M03/M05 and A2992 in a METAR"
   back: |
@@ -382,9 +418,15 @@ the triage habit the body emphasises is the actual goal.
     Hg x 100). Temperature and dew point are slash-separated, in deg C.
   cardType: basic
   kind: recall
-  tags: [weather, metar, decode, temperature, altimeter, ac-00-45h, PA.I.C.K2a]
+  tags: [weather, metar, decode, temperature, altimeter, ac-00-45h]
   source_ref: |
     AC 00-45H, METAR temp/dew point and altimeter groups.
+  acs_codes: [PA.I.C.K2a]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "Read the groups of a METAR in order. What's the canonical sequence?"
   back: |
@@ -394,12 +436,18 @@ the triage habit the body emphasises is the actual goal.
     the discipline that makes decode automatic.
   cardType: basic
   kind: recall
-  tags: [weather, metar, decode, ac-00-45h, PA.I.C.K2a]
+  tags: [weather, metar, decode, ac-00-45h]
   source_ref: |
     AC 00-45H Sections 3-4; AIM 7-1.
   rationale: |
     Foundation card: the body opens Stage 1 with the fixed group order. Without
     this sequence the rest of the decode cards have nothing to anchor to.
+  acs_codes: [PA.I.C.K2a]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "TAF change groups: a {{c1::FM}} group hard-replaces the prevailing forecast; a {{c2::TEMPO}} group layers a temporary excursion onto it; {{c3::PROB30/PROB40}} indicates an unlikely-but-possible alternate."
   back: |
@@ -435,13 +483,19 @@ the triage habit the body emphasises is the actual goal.
     real" -- the forecaster is flagging it because it's plausible.
   cardType: basic
   kind: recall
-  tags: [weather, taf, change-groups, triage, go-nogo, ac-00-45h, PA.I.C.K2c]
+  tags: [weather, taf, change-groups, triage, go-nogo, ac-00-45h]
   source_ref: |
     AC 00-45H TAF format; body Stage 3 triage example.
   rationale: |
     Scenario card built directly from the Context + Stage 3 example in the
     body. Trains the "worst-case TEMPO/PROB" triage habit the Practice section
     calls out.
+  acs_codes: [PA.I.C.K2c]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "Why does a temperature/dew-point spread of 1 deg C drive the go/no-go decision more than the current visibility number?"
   back: |
@@ -454,13 +508,19 @@ the triage habit the body emphasises is the actual goal.
     near-saturation morning.
   cardType: basic
   kind: recall
-  tags: [weather, metar, triage, fog, go-nogo, ac-00-45h, PA.I.C.K2a]
+  tags: [weather, metar, triage, fog, go-nogo, ac-00-45h]
   source_ref: |
     Body Stage 3 (Triage) -- the "rate-of-change toward IFR" reasoning.
   rationale: |
     Triage card. The body's central pedagogical point is that decode is
     prerequisite, triage is the goal. This card forces the learner to articulate
     the trend logic, not just the static decode.
+  acs_codes: [PA.I.C.K2a]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 ```
 
 ## Connect

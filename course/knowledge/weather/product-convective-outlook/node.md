@@ -162,9 +162,17 @@ convective brief.
     density) together.
   cardType: basic
   kind: recall
-  tags: [weather, convective-outlook, spc, categories, ac-00-45h, PA.I.C.K2f]
+  tags: [weather, convective-outlook, spc, categories, ac-00-45h]
   source_ref: |
     AC 00-45H Convective Outlook section; body Discover.
+  acs_codes: [PA.I.C.K2f]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Convective Outlook section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Forecasts, Section 27.16.1 (Convective Outlook (AC))
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "What does each Day-N SPC outlook cover, and what's the issue cadence?"
   back: |
@@ -176,9 +184,17 @@ convective brief.
     issued once at 0830Z covering a 5-day band.
   cardType: basic
   kind: recall
-  tags: [weather, convective-outlook, spc, cadence, ac-00-45h, PA.I.C.K2f]
+  tags: [weather, convective-outlook, spc, cadence, ac-00-45h]
   source_ref: |
     AC 00-45H; body Reveal cadence table.
+  acs_codes: [PA.I.C.K2f]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Convective Outlook section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Forecasts, Section 27.16.1 (Convective Outlook (AC))
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "Why is the Day 4-8 outlook published as percent probabilities instead of categorical labels?"
   back: |
@@ -190,9 +206,17 @@ convective brief.
     products.
   cardType: basic
   kind: recall
-  tags: [weather, convective-outlook, spc, day-4-8, PA.I.C.K2f]
+  tags: [weather, convective-outlook, spc, day-4-8]
   source_ref: |
     AC 00-45H; body Discover.
+  acs_codes: [PA.I.C.K2f]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Convective Outlook section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Forecasts, Section 27.16.1 (Convective Outlook (AC))
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "Why does the SPC discussion text matter as much as the categorical map?"
   back: |
@@ -204,9 +228,17 @@ convective brief.
     without the discussion is a guess about a guess.'
   cardType: basic
   kind: recall
-  tags: [weather, convective-outlook, spc, discussion, ac-00-45h, PA.I.C.K2f]
+  tags: [weather, convective-outlook, spc, discussion, ac-00-45h]
   source_ref: |
     AC 00-45H; body Discover and Practice.
+  acs_codes: [PA.I.C.K2f]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Convective Outlook section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Forecasts, Section 27.16.1 (Convective Outlook (AC))
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "Convective outlook in the convective-brief layering: where does it sit relative to Convective SIGMET and NEXRAD?"
   back: |
@@ -217,9 +249,17 @@ convective brief.
     active in the next two hours'; NEXRAD says 'a cell is here right now.'
   cardType: basic
   kind: recall
-  tags: [weather, convective-outlook, convective-sigmet, nexrad, layering, PA.I.C.K2f, PA.I.C.K3h]
+  tags: [weather, convective-outlook, convective-sigmet, nexrad, layering]
   source_ref: |
     Body Connect; body Discover ("strategic complement").
+  acs_codes: [PA.I.C.K2f, PA.I.C.K3h]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Convective Outlook section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Forecasts, Section 27.16.1 (Convective Outlook (AC))
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "At what convective-outlook tier does monitoring shift to active planning for a light single?"
   back: |
@@ -232,9 +272,17 @@ convective brief.
     onboard radar, the equivalent threshold is ENH.
   cardType: basic
   kind: recall
-  tags: [weather, convective-outlook, planning-threshold, light-aircraft, PA.I.C.K2f]
+  tags: [weather, convective-outlook, planning-threshold, light-aircraft]
   source_ref: |
     Body Discover ("at what tier do I shift...").
+  acs_codes: [PA.I.C.K2f]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Convective Outlook section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Forecasts, Section 27.16.1 (Convective Outlook (AC))
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "Tuesday night planning a Saturday flight. METARs and TAFs cover only ~30 hours; GFA caps at +15. What product gives you the strategic convective picture for Saturday?"
   back: |
@@ -246,12 +294,20 @@ convective brief.
     or 'no-go'; it's 'this trip merits extra caution starting now.'
   cardType: basic
   kind: recall
-  tags: [weather, convective-outlook, day-4-8, planning-horizon, PA.I.C.K2f]
+  tags: [weather, convective-outlook, day-4-8, planning-horizon]
   source_ref: |
     Body Context.
   rationale: |
     Scenario card from the body's Context. Trains the planning-horizon
     selection: which product fills the gap when METARs/TAFs/GFA can't reach.
+  acs_codes: [PA.I.C.K2f]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Convective Outlook section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Forecasts, Section 27.16.1 (Convective Outlook (AC))
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "Calibration drill: how do you build a sense of when SPC is right and when SPC is wrong?"
   back: |
@@ -263,9 +319,17 @@ convective brief.
     well.
   cardType: basic
   kind: recall
-  tags: [weather, convective-outlook, spc, calibration, PA.I.C.K2f]
+  tags: [weather, convective-outlook, spc, calibration]
   source_ref: |
     Body Verify.
+  acs_codes: [PA.I.C.K2f]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Convective Outlook section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Forecasts, Section 27.16.1 (Convective Outlook (AC))
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "Convective outlook category 'Marginal' (MRGL, 1) -- what does it mean operationally for a VFR cross-country?"
   back: |
@@ -277,9 +341,17 @@ convective brief.
     advance. Above MRGL (SLGT and up), the plan adjusts in advance.
   cardType: basic
   kind: recall
-  tags: [weather, convective-outlook, mrgl, planning, PA.I.C.K2f]
+  tags: [weather, convective-outlook, mrgl, planning]
   source_ref: |
     AC 00-45H; body Discover and Connect.
+  acs_codes: [PA.I.C.K2f]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Convective Outlook section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Forecasts, Section 27.16.1 (Convective Outlook (AC))
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 ```
 
 ## Connect

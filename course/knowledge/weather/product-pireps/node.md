@@ -193,9 +193,17 @@ relativity card carries the central understand step.
     are the truth-up for the forecast products.
   cardType: basic
   kind: recall
-  tags: [weather, pirep, observation, ac-00-45h, aim-7-1-19, PA.I.C.K2a]
+  tags: [weather, pirep, observation, ac-00-45h, aim-7-1-19]
   source_ref: |
     AC 00-45H Section 5 PIREPs; AIM 7-1-19; body Problem.
+  acs_codes: [PA.I.C.K2a]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Section 5 -- PIREPs
+    - kind: aim
+      cite: AIM 7-1-19 -- Pilot Weather Reports
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 24 -- Observations, Section 24.5.1 (Pilot Weather Reports (PIREP))
 
 - front: "Decode PIREP field by field: UA /OV PXN360010 /TM 1845 /FL085 /TP C172 /TB MOD CHOP /RM CONTINUOUS"
   back: |
@@ -209,9 +217,17 @@ relativity card carries the central understand step.
     /RM CONTINUOUS = remarks: continuous (vs. occasional / intermittent).
   cardType: basic
   kind: recall
-  tags: [weather, pirep, decode, ac-00-45h, PA.I.C.K2a]
+  tags: [weather, pirep, decode, ac-00-45h]
   source_ref: |
     AC 00-45H Section 5; body Discover decode walkthrough.
+  acs_codes: [PA.I.C.K2a]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Section 5 -- PIREPs
+    - kind: aim
+      cite: AIM 7-1-19 -- Pilot Weather Reports
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 24 -- Observations, Section 24.5.1 (Pilot Weather Reports (PIREP))
 
 - front: "Standard PIREP field codes -- match each to its meaning: /OV, /TM, /FL, /TP, /SK, /WX, /TA, /WV, /TB, /IC, /RM."
   back: |
@@ -228,9 +244,17 @@ relativity card carries the central understand step.
     /RM = Remarks (free text).
   cardType: basic
   kind: recall
-  tags: [weather, pirep, decode, fields, ac-00-45h, PA.I.C.K2a]
+  tags: [weather, pirep, decode, fields, ac-00-45h]
   source_ref: |
     AC 00-45H Section 5; body Reveal field table.
+  acs_codes: [PA.I.C.K2a]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Section 5 -- PIREPs
+    - kind: aim
+      cite: AIM 7-1-19 -- Pilot Weather Reports
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 24 -- Observations, Section 24.5.1 (Pilot Weather Reports (PIREP))
 
 - front: "UA vs UUA -- what's the distinction and what triggers UUA?"
   back: |
@@ -242,9 +266,17 @@ relativity card carries the central understand step.
     urgent.
   cardType: regulation
   kind: recall
-  tags: [weather, pirep, uua, urgent, aim-7-1-19, PA.I.C.K2a]
+  tags: [weather, pirep, uua, urgent, aim-7-1-19]
   source_ref: |
     AIM 7-1-19 Pilot Weather Reports; body Reveal.
+  acs_codes: [PA.I.C.K2a]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Section 5 -- PIREPs
+    - kind: aim
+      cite: AIM 7-1-19 -- Pilot Weather Reports
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 24 -- Observations, Section 24.5.1 (Pilot Weather Reports (PIREP))
 
 - front: "Why does aircraft type (/TP) matter for reading turbulence and icing severity in a PIREP?"
   back: |
@@ -256,13 +288,21 @@ relativity card carries the central understand step.
     own airframe instead of taking it at face.
   cardType: basic
   kind: recall
-  tags: [weather, pirep, severity, aircraft-type, judgment, PA.I.C.K2a]
+  tags: [weather, pirep, severity, aircraft-type, judgment]
   source_ref: |
     Body Discover Stage 2.
   rationale: |
     The body's central understand-step pitch: severity is relative to
     aircraft, not absolute. This card forces the learner to internalise
     the calibration.
+  acs_codes: [PA.I.C.K2a]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Section 5 -- PIREPs
+    - kind: aim
+      cite: AIM 7-1-19 -- Pilot Weather Reports
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 24 -- Observations, Section 24.5.1 (Pilot Weather Reports (PIREP))
 
 - front: "Triage a turbulence PIREP for your flight: what three properties gate relevance?"
   back: |
@@ -275,9 +315,17 @@ relativity card carries the central understand step.
        a 28,000 ft Citation PIREP isn't).
   cardType: basic
   kind: recall
-  tags: [weather, pirep, triage, currency, aircraft-type, PA.I.C.K2a]
+  tags: [weather, pirep, triage, currency, aircraft-type]
   source_ref: |
     Body Discover Stage 3.
+  acs_codes: [PA.I.C.K2a]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Section 5 -- PIREPs
+    - kind: aim
+      cite: AIM 7-1-19 -- Pilot Weather Reports
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 24 -- Observations, Section 24.5.1 (Pilot Weather Reports (PIREP))
 
 - front: "Decode this urgent PIREP: UUA /OV ABE090020/TM 2147/FL120/TP B737/IC SEV CLR/RM TOPS 14000 LWR 11000"
   back: |
@@ -289,9 +337,17 @@ relativity card carries the central understand step.
     earlier than the 737 did. Re-evaluate descent / climb path.
   cardType: basic
   kind: recall
-  tags: [weather, pirep, uua, icing, scenario, PA.I.C.K2a]
+  tags: [weather, pirep, uua, icing, scenario]
   source_ref: |
     Body Practice decode example.
+  acs_codes: [PA.I.C.K2a]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Section 5 -- PIREPs
+    - kind: aim
+      cite: AIM 7-1-19 -- Pilot Weather Reports
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 24 -- Observations, Section 24.5.1 (Pilot Weather Reports (PIREP))
 
 - front: "Per AIM 7-1-20, when should pilots file a PIREP?"
   back: |
@@ -303,9 +359,17 @@ relativity card carries the central understand step.
     the same kind of data point as a turbulence reading.
   cardType: regulation
   kind: recall
-  tags: [weather, pirep, filing, aim-7-1-20, PA.I.C.K2a]
+  tags: [weather, pirep, filing, aim-7-1-20]
   source_ref: |
     AIM 7-1-19/7-1-20; body Reveal.
+  acs_codes: [PA.I.C.K2a]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Section 5 -- PIREPs
+    - kind: aim
+      cite: AIM 7-1-19 -- Pilot Weather Reports
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 24 -- Observations, Section 24.5.1 (Pilot Weather Reports (PIREP))
 
 - front: "Climb-out and the ride goes from glassy to jolts that pop your kneeboard off. You ask Center for ride reports. The controller comes back with a UA /OV PXN360010 /TM 1845 /FL085 /TP C172 /TB MOD CHOP. What's the synoptic story?"
   back: |
@@ -318,12 +382,20 @@ relativity card carries the central understand step.
     until you do.
   cardType: basic
   kind: recall
-  tags: [weather, pirep, thermal-turbulence, scenario, PA.I.C.K2a]
+  tags: [weather, pirep, thermal-turbulence, scenario]
   source_ref: |
     Body Context + Discover Stage 2.
   rationale: |
     Scenario card from the body's Context. Trains the synoptic-frame step
     -- not 'what did the PIREP say' but 'what produced the report.'
+  acs_codes: [PA.I.C.K2a]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Section 5 -- PIREPs
+    - kind: aim
+      cite: AIM 7-1-19 -- Pilot Weather Reports
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 24 -- Observations, Section 24.5.1 (Pilot Weather Reports (PIREP))
 
 - front: "Calibration drill: how many PIREPs in how much time, and what filing rate?"
   back: |
@@ -335,9 +407,17 @@ relativity card carries the central understand step.
     severity claims feel from the cockpit side.
   cardType: basic
   kind: recall
-  tags: [weather, pirep, drill, filing, PA.I.C.K2a]
+  tags: [weather, pirep, drill, filing]
   source_ref: |
     Body Verify.
+  acs_codes: [PA.I.C.K2a]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Section 5 -- PIREPs
+    - kind: aim
+      cite: AIM 7-1-19 -- Pilot Weather Reports
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 24 -- Observations, Section 24.5.1 (Pilot Weather Reports (PIREP))
 ```
 
 ## Connect

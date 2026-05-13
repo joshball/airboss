@@ -154,9 +154,15 @@ are the discipline; the scenario card walks the trip-pressure case.
     is willing to fly across today.
   cardType: basic
   kind: recall
-  tags: [weather, personal-minimums, regulation, faa-h-8083-2, PA.I.C.R1b]
+  tags: [weather, personal-minimums, regulation, faa-h-8083-2]
   source_ref: |
     FAA-H-8083-2 Risk Management Handbook; body Problem.
+  acs_codes: [PA.I.C.R1b]
+  source_authority:
+    - kind: other
+      cite: FAA-H-8083-2 Risk Management Handbook, Chapter 6 -- Single Pilot Resource Management
+    - kind: aim
+      cite: AIM 7-1-3 -- Use of Aviation Weather Products
 
 - front: "Three forcing functions that make personal minimums necessary?"
   back: |
@@ -171,9 +177,15 @@ are the discipline; the scenario card walks the trip-pressure case.
        broken / 6 SM at a familiar field.
   cardType: basic
   kind: recall
-  tags: [weather, personal-minimums, judgment, faa-h-8083-2, PA.I.C.R1b]
+  tags: [weather, personal-minimums, judgment, faa-h-8083-2]
   source_ref: |
     FAA-H-8083-2; body Discover.
+  acs_codes: [PA.I.C.R1b]
+  source_authority:
+    - kind: other
+      cite: FAA-H-8083-2 Risk Management Handbook, Chapter 6 -- Single Pilot Resource Management
+    - kind: aim
+      cite: AIM 7-1-3 -- Use of Aviation Weather Products
 
 - front: "Shape of a personal-minimums table per FAA P-8740-25 -- what variables and what columns?"
   back: |
@@ -185,9 +197,15 @@ are the discipline; the scenario card walks the trip-pressure case.
     in the *existence* of a written floor, not its specific value.
   cardType: basic
   kind: recall
-  tags: [weather, personal-minimums, table, faa-p-8740-25, PA.I.C.R1b]
+  tags: [weather, personal-minimums, table, faa-p-8740-25]
   source_ref: |
     FAA Pamphlet P-8740-25; body Reveal.
+  acs_codes: [PA.I.C.R1b]
+  source_authority:
+    - kind: other
+      cite: FAA-H-8083-2 Risk Management Handbook, Chapter 6 -- Single Pilot Resource Management
+    - kind: aim
+      cite: AIM 7-1-3 -- Use of Aviation Weather Products
 
 - front: "Risk multipliers -- what factors add margin, what factors subtract?"
   back: |
@@ -199,9 +217,15 @@ are the discipline; the scenario card walks the trip-pressure case.
     unfamiliar) needs floors well above the base table.
   cardType: basic
   kind: recall
-  tags: [weather, personal-minimums, risk-multipliers, faa-h-8083-2, PA.I.C.R1b]
+  tags: [weather, personal-minimums, risk-multipliers, faa-h-8083-2]
   source_ref: |
     FAA-H-8083-2; body Reveal.
+  acs_codes: [PA.I.C.R1b]
+  source_authority:
+    - kind: other
+      cite: FAA-H-8083-2 Risk Management Handbook, Chapter 6 -- Single Pilot Resource Management
+    - kind: aim
+      cite: AIM 7-1-3 -- Use of Aviation Weather Products
 
 - front: "Three rules of operation for personal minimums."
   back: |
@@ -214,9 +238,15 @@ are the discipline; the scenario card walks the trip-pressure case.
        every 100 hours) -- not after every borderline trip.
   cardType: basic
   kind: recall
-  tags: [weather, personal-minimums, discipline, judgment, PA.I.C.R1b]
+  tags: [weather, personal-minimums, discipline, judgment]
   source_ref: |
     Body Reveal "three rules of operation."
+  acs_codes: [PA.I.C.R1b]
+  source_authority:
+    - kind: other
+      cite: FAA-H-8083-2 Risk Management Handbook, Chapter 6 -- Single Pilot Resource Management
+    - kind: aim
+      cite: AIM 7-1-3 -- Use of Aviation Weather Products
 
 - front: "Why must personal minimums be written down and set when NOT under decision pressure?"
   back: |
@@ -228,9 +258,15 @@ are the discipline; the scenario card walks the trip-pressure case.
     what makes the pre-commitment exist.
   cardType: basic
   kind: recall
-  tags: [weather, personal-minimums, pre-commitment, judgment, PA.I.C.R1b]
+  tags: [weather, personal-minimums, pre-commitment, judgment]
   source_ref: |
     Body Reveal rule 1.
+  acs_codes: [PA.I.C.R1b]
+  source_authority:
+    - kind: other
+      cite: FAA-H-8083-2 Risk Management Handbook, Chapter 6 -- Single Pilot Resource Management
+    - kind: aim
+      cite: AIM 7-1-3 -- Use of Aviation Weather Products
 
 - front: "When a flight in motion starts trending below your minimums, what does the body say to do?"
   back: |
@@ -241,9 +277,15 @@ are the discipline; the scenario card walks the trip-pressure case.
     fatigue and trip-pressure are pressing on the cockpit, not less.
   cardType: basic
   kind: recall
-  tags: [weather, personal-minimums, divert, in-flight, judgment, PA.I.C.R1b]
+  tags: [weather, personal-minimums, divert, in-flight, judgment]
   source_ref: |
     Body Reveal rule 2.
+  acs_codes: [PA.I.C.R1b]
+  source_authority:
+    - kind: other
+      cite: FAA-H-8083-2 Risk Management Handbook, Chapter 6 -- Single Pilot Resource Management
+    - kind: aim
+      cite: AIM 7-1-3 -- Use of Aviation Weather Products
 
 - front: "200-hour PPL flying spouse and in-laws home 90 min after sunset. METAR: 1500 broken, 6 SM, wind 18G25 at 60 off the runway. All legal. What's the question to ask?"
   back: |
@@ -256,12 +298,18 @@ are the discipline; the scenario card walks the trip-pressure case.
     waiting at the airplane.
   cardType: basic
   kind: recall
-  tags: [weather, personal-minimums, scenario, trip-pressure, PA.I.C.R1b]
+  tags: [weather, personal-minimums, scenario, trip-pressure]
   source_ref: |
     Body Context scenario.
   rationale: |
     Scenario card from the body's Context. Trains the reframing the body
     teaches: the question is not legality, it's adherence to the written floor.
+  acs_codes: [PA.I.C.R1b]
+  source_authority:
+    - kind: other
+      cite: FAA-H-8083-2 Risk Management Handbook, Chapter 6 -- Single Pilot Resource Management
+    - kind: aim
+      cite: AIM 7-1-3 -- Use of Aviation Weather Products
 
 - front: "How do you calibrate whether your personal minimums are defensible?"
   back: |
@@ -273,9 +321,15 @@ are the discipline; the scenario card walks the trip-pressure case.
     outsider's read of your hours and recency.
   cardType: basic
   kind: recall
-  tags: [weather, personal-minimums, peer-review, calibration, PA.I.C.R1b]
+  tags: [weather, personal-minimums, peer-review, calibration]
   source_ref: |
     Body Verify.
+  acs_codes: [PA.I.C.R1b]
+  source_authority:
+    - kind: other
+      cite: FAA-H-8083-2 Risk Management Handbook, Chapter 6 -- Single Pilot Resource Management
+    - kind: aim
+      cite: AIM 7-1-3 -- Use of Aviation Weather Products
 
 - front: "How do personal minimums interact with the go/no-go decision?"
   back: |
@@ -289,9 +343,15 @@ are the discipline; the scenario card walks the trip-pressure case.
     prevent.
   cardType: basic
   kind: recall
-  tags: [weather, personal-minimums, go-nogo, PA.I.C.R1b, PA.I.C.S3]
+  tags: [weather, personal-minimums, go-nogo]
   source_ref: |
     Body Connect.
+  acs_codes: [PA.I.C.R1b, PA.I.C.S3]
+  source_authority:
+    - kind: other
+      cite: FAA-H-8083-2 Risk Management Handbook, Chapter 6 -- Single Pilot Resource Management
+    - kind: aim
+      cite: AIM 7-1-3 -- Use of Aviation Weather Products
 ```
 
 ## Connect

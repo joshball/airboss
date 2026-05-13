@@ -168,9 +168,21 @@ brief.
     is what turns 'is there an out?' from a guess into a read.
   cardType: basic
   kind: recall
-  tags: [weather, freezing-level, icing, ac-91-74b, PA.I.C.K3i]
+  tags: [weather, freezing-level, icing, ac-91-74b]
   source_ref: |
     AC 91-74B Flight in Icing; FAA-H-8083-28 Ch 25.4; body Problem + Discover.
+  acs_codes: [PA.I.C.K3i]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Freezing Level chart section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 25 -- Analysis, Sections 25.4 (Freezing Level Analysis) and 25.5 (Icing Analysis -- Current Icing Product CIP)
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Forecasts, Sections 27.11 (Freezing Level Forecast Graphics) and 27.12 (Forecast Icing Product -- FIP)
+    - kind: ac
+      cite: AC 91-74B Pilot Guide, Flight in Icing Conditions
+    - kind: aim
+      cite: AIM 7-1-21 -- Icing
 
 - front: "Three position questions to ask of the freezing level for icing decisions."
   back: |
@@ -184,9 +196,21 @@ brief.
        layer instead -- usually a higher target.
   cardType: basic
   kind: recall
-  tags: [weather, freezing-level, icing, escape, PA.I.C.K3i]
+  tags: [weather, freezing-level, icing, escape]
   source_ref: |
     Body Discover ("three position questions").
+  acs_codes: [PA.I.C.K3i]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Freezing Level chart section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 25 -- Analysis, Sections 25.4 (Freezing Level Analysis) and 25.5 (Icing Analysis -- Current Icing Product CIP)
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Forecasts, Sections 27.11 (Freezing Level Forecast Graphics) and 27.12 (Forecast Icing Product -- FIP)
+    - kind: ac
+      cite: AC 91-74B Pilot Guide, Flight in Icing Conditions
+    - kind: aim
+      cite: AIM 7-1-21 -- Icing
 
 - front: "Freezing-level chart format per AC 00-45H: contour interval and shaded region?"
   back: |
@@ -196,9 +220,21 @@ brief.
     hours, published as part of the graphical forecast suite.
   cardType: basic
   kind: recall
-  tags: [weather, freezing-level, chart, ac-00-45h, PA.I.C.K3i]
+  tags: [weather, freezing-level, chart, ac-00-45h]
   source_ref: |
     AC 00-45H Freezing Level chart section; body Reveal.
+  acs_codes: [PA.I.C.K3i]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Freezing Level chart section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 25 -- Analysis, Sections 25.4 (Freezing Level Analysis) and 25.5 (Icing Analysis -- Current Icing Product CIP)
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Forecasts, Sections 27.11 (Freezing Level Forecast Graphics) and 27.12 (Forecast Icing Product -- FIP)
+    - kind: ac
+      cite: AC 91-74B Pilot Guide, Flight in Icing Conditions
+    - kind: aim
+      cite: AIM 7-1-21 -- Icing
 
 - front: "Three numbers to extract from a freezing-level chart for a planned route."
   back: |
@@ -211,12 +247,24 @@ brief.
        you go.
   cardType: basic
   kind: recall
-  tags: [weather, freezing-level, route-analysis, PA.I.C.K3i]
+  tags: [weather, freezing-level, route-analysis]
   source_ref: |
     Body Reveal "the pilot read is three numbers."
   rationale: |
     The body's operational deliverable. This card forces the learner to walk
     the three-number read every brief instead of glancing at the chart.
+  acs_codes: [PA.I.C.K3i]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Freezing Level chart section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 25 -- Analysis, Sections 25.4 (Freezing Level Analysis) and 25.5 (Icing Analysis -- Current Icing Product CIP)
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Forecasts, Sections 27.11 (Freezing Level Forecast Graphics) and 27.12 (Forecast Icing Product -- FIP)
+    - kind: ac
+      cite: AC 91-74B Pilot Guide, Flight in Icing Conditions
+    - kind: aim
+      cite: AIM 7-1-21 -- Icing
 
 - front: "Structural icing temperature band -- where is it widest and where is it most severe?"
   back: |
@@ -228,9 +276,21 @@ brief.
     line in altitude terms.
   cardType: basic
   kind: recall
-  tags: [weather, freezing-level, icing, temperature-band, ac-91-74b, PA.I.C.K3i]
+  tags: [weather, freezing-level, icing, temperature-band, ac-91-74b]
   source_ref: |
     AC 91-74B; body Discover.
+  acs_codes: [PA.I.C.K3i]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Freezing Level chart section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 25 -- Analysis, Sections 25.4 (Freezing Level Analysis) and 25.5 (Icing Analysis -- Current Icing Product CIP)
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Forecasts, Sections 27.11 (Freezing Level Forecast Graphics) and 27.12 (Forecast Icing Product -- FIP)
+    - kind: ac
+      cite: AC 91-74B Pilot Guide, Flight in Icing Conditions
+    - kind: aim
+      cite: AIM 7-1-21 -- Icing
 
 - front: "Why is the FB (winds-and-temperatures-aloft) the station-by-station check for the freezing-level chart?"
   back: |
@@ -242,9 +302,21 @@ brief.
     trend across the route, the chart wins.
   cardType: basic
   kind: recall
-  tags: [weather, freezing-level, fb, winds-aloft, PA.I.C.K3i]
+  tags: [weather, freezing-level, fb, winds-aloft]
   source_ref: |
     Body Connect "When the chart and the FB disagree..."
+  acs_codes: [PA.I.C.K3i]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Freezing Level chart section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 25 -- Analysis, Sections 25.4 (Freezing Level Analysis) and 25.5 (Icing Analysis -- Current Icing Product CIP)
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Forecasts, Sections 27.11 (Freezing Level Forecast Graphics) and 27.12 (Forecast Icing Product -- FIP)
+    - kind: ac
+      cite: AC 91-74B Pilot Guide, Flight in Icing Conditions
+    - kind: aim
+      cite: AIM 7-1-21 -- Icing
 
 - front: "FB temperature at cruise altitude shows -3 C. Where does that put you in the icing-risk band?"
   back: |
@@ -255,9 +327,21 @@ brief.
     that's clear of terrain?
   cardType: basic
   kind: recall
-  tags: [weather, freezing-level, icing, fb, PA.I.C.K3i]
+  tags: [weather, freezing-level, icing, fb]
   source_ref: |
     Body Discover (-3 C example).
+  acs_codes: [PA.I.C.K3i]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Freezing Level chart section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 25 -- Analysis, Sections 25.4 (Freezing Level Analysis) and 25.5 (Icing Analysis -- Current Icing Product CIP)
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Forecasts, Sections 27.11 (Freezing Level Forecast Graphics) and 27.12 (Forecast Icing Product -- FIP)
+    - kind: ac
+      cite: AC 91-74B Pilot Guide, Flight in Icing Conditions
+    - kind: aim
+      cite: AIM 7-1-21 -- Icing
 
 - front: "A falling freezing level during the flight (front passing in front of you) -- what does it mean for your icing 'out'?"
   back: |
@@ -269,9 +353,21 @@ brief.
     freezing level than the destination's.
   cardType: basic
   kind: recall
-  tags: [weather, freezing-level, trend, icing, divert, PA.I.C.K3i]
+  tags: [weather, freezing-level, trend, icing, divert]
   source_ref: |
     Body Reveal "trend over the duration."
+  acs_codes: [PA.I.C.K3i]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Freezing Level chart section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 25 -- Analysis, Sections 25.4 (Freezing Level Analysis) and 25.5 (Icing Analysis -- Current Icing Product CIP)
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Forecasts, Sections 27.11 (Freezing Level Forecast Graphics) and 27.12 (Forecast Icing Product -- FIP)
+    - kind: ac
+      cite: AC 91-74B Pilot Guide, Flight in Icing Conditions
+    - kind: aim
+      cite: AIM 7-1-21 -- Icing
 
 - front: "Why does icing require both moisture and below-freezing temperature, and which products tell you about each?"
   back: |
@@ -283,9 +379,21 @@ brief.
     together.
   cardType: basic
   kind: recall
-  tags: [weather, freezing-level, icing, moisture, ac-91-74b, PA.I.C.K3i]
+  tags: [weather, freezing-level, icing, moisture, ac-91-74b]
   source_ref: |
     AC 91-74B; body Reveal "icing requires a cloud and below-freezing temperature."
+  acs_codes: [PA.I.C.K3i]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Freezing Level chart section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 25 -- Analysis, Sections 25.4 (Freezing Level Analysis) and 25.5 (Icing Analysis -- Current Icing Product CIP)
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Forecasts, Sections 27.11 (Freezing Level Forecast Graphics) and 27.12 (Forecast Icing Product -- FIP)
+    - kind: ac
+      cite: AC 91-74B Pilot Guide, Flight in Icing Conditions
+    - kind: aim
+      cite: AIM 7-1-21 -- Icing
 
 - front: "Winter cross-country in a non-deiced single. CIP/FIP shows moderate icing 4,000-10,000 ft. Climbing above is not an option. What does the freezing-level chart need to show to make the trip flyable?"
   back: |
@@ -297,12 +405,24 @@ brief.
     and the trip is a no-go regardless of what CIP/FIP shows.
   cardType: basic
   kind: recall
-  tags: [weather, freezing-level, icing, go-nogo, ac-91-74b, PA.I.C.K3i]
+  tags: [weather, freezing-level, icing, go-nogo, ac-91-74b]
   source_ref: |
     Body Context scenario.
   rationale: |
     Scenario card from the body's Context. The non-deiced single is the
     canonical case where the freezing level is the deciding variable.
+  acs_codes: [PA.I.C.K3i]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Freezing Level chart section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 25 -- Analysis, Sections 25.4 (Freezing Level Analysis) and 25.5 (Icing Analysis -- Current Icing Product CIP)
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Forecasts, Sections 27.11 (Freezing Level Forecast Graphics) and 27.12 (Forecast Icing Product -- FIP)
+    - kind: ac
+      cite: AC 91-74B Pilot Guide, Flight in Icing Conditions
+    - kind: aim
+      cite: AIM 7-1-21 -- Icing
 ```
 
 ## Connect

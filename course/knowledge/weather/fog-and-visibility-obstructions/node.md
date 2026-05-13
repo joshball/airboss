@@ -161,9 +161,17 @@ phenomena table is the METAR-decoding skill.
     terrain.
   cardType: basic
   kind: recall
-  tags: [weather, fog, radiation-fog, phak-12, ac-00-6, PA.I.C.K3j]
+  tags: [weather, fog, radiation-fog, phak-12, ac-00-6]
   source_ref: |
     AC 00-6B Fog chapter; FAA-H-8083-28 Ch 18; body Discover.
+  acs_codes: [PA.I.C.K3j]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Fog and Restrictions to Visibility chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 18 -- Weather and Obstructions to Visibility
+    - kind: aim
+      cite: AIM 7-5-1 -- Frost; 7-5-7 -- Volcanic Ash
 
 - front: "Advection fog: formation conditions and why does it persist?"
   back: |
@@ -175,9 +183,17 @@ phenomena table is the METAR-decoding skill.
     summer fog.
   cardType: basic
   kind: recall
-  tags: [weather, fog, advection-fog, phak-12, ac-00-6, PA.I.C.K3j]
+  tags: [weather, fog, advection-fog, phak-12, ac-00-6]
   source_ref: |
     AC 00-6B; FAA-H-8083-28 Ch 18; body Discover.
+  acs_codes: [PA.I.C.K3j]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Fog and Restrictions to Visibility chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 18 -- Weather and Obstructions to Visibility
+    - kind: aim
+      cite: AIM 7-5-1 -- Frost; 7-5-7 -- Volcanic Ash
 
 - front: "Upslope fog: where does it form and what keeps it in place?"
   back: |
@@ -187,9 +203,17 @@ phenomena table is the METAR-decoding skill.
     fog clears when the flow direction changes or the air mass dries out.
   cardType: basic
   kind: recall
-  tags: [weather, fog, upslope-fog, ac-00-6, PA.I.C.K3j]
+  tags: [weather, fog, upslope-fog, ac-00-6]
   source_ref: |
     AC 00-6B; body Discover.
+  acs_codes: [PA.I.C.K3j]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Fog and Restrictions to Visibility chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 18 -- Weather and Obstructions to Visibility
+    - kind: aim
+      cite: AIM 7-5-1 -- Frost; 7-5-7 -- Volcanic Ash
 
 - front: "Steam fog ('sea smoke'): formation mechanism?"
   back: |
@@ -200,9 +224,17 @@ phenomena table is the METAR-decoding skill.
     cold-dry over warm surface, with evaporation doing the saturating.
   cardType: basic
   kind: recall
-  tags: [weather, fog, steam-fog, sea-smoke, ac-00-6, PA.I.C.K3j]
+  tags: [weather, fog, steam-fog, sea-smoke, ac-00-6]
   source_ref: |
     AC 00-6B; body Discover.
+  acs_codes: [PA.I.C.K3j]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Fog and Restrictions to Visibility chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 18 -- Weather and Obstructions to Visibility
+    - kind: aim
+      cite: AIM 7-5-1 -- Frost; 7-5-7 -- Volcanic Ash
 
 - front: "Precipitation-induced fog: when does it form and which front type produces it most often?"
   back: |
@@ -213,9 +245,17 @@ phenomena table is the METAR-decoding skill.
     as low IFR ceilings, compounding the approach problem.
   cardType: basic
   kind: recall
-  tags: [weather, fog, precipitation-fog, warm-front, ac-00-6, PA.I.C.K3j]
+  tags: [weather, fog, precipitation-fog, warm-front, ac-00-6]
   source_ref: |
     AC 00-6B; body Discover.
+  acs_codes: [PA.I.C.K3j]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Fog and Restrictions to Visibility chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 18 -- Weather and Obstructions to Visibility
+    - kind: aim
+      cite: AIM 7-5-1 -- Frost; 7-5-7 -- Volcanic Ash
 
 - front: "Ice fog: temperature threshold and where does it occur?"
   back: |
@@ -226,9 +266,17 @@ phenomena table is the METAR-decoding skill.
     surface during extreme cold; visibility can drop to near zero.
   cardType: basic
   kind: recall
-  tags: [weather, fog, ice-fog, arctic, ac-00-6, PA.I.C.K3j]
+  tags: [weather, fog, ice-fog, arctic, ac-00-6]
   source_ref: |
     AC 00-6B; body Discover.
+  acs_codes: [PA.I.C.K3j]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Fog and Restrictions to Visibility chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 18 -- Weather and Obstructions to Visibility
+    - kind: aim
+      cite: AIM 7-5-1 -- Frost; 7-5-7 -- Volcanic Ash
 
 - front: "Diagnostic question: what saturates the lowest air layer in a given fog -- cooling or moistening?"
   back: |
@@ -242,9 +290,17 @@ phenomena table is the METAR-decoding skill.
     until the moisture source stops.
   cardType: basic
   kind: recall
-  tags: [weather, fog, diagnostic, ac-00-6, PA.I.C.K3j]
+  tags: [weather, fog, diagnostic, ac-00-6]
   source_ref: |
     Body Discover ("common diagnostic question").
+  acs_codes: [PA.I.C.K3j]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Fog and Restrictions to Visibility chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 18 -- Weather and Obstructions to Visibility
+    - kind: aim
+      cite: AIM 7-5-1 -- Frost; 7-5-7 -- Volcanic Ash
 
 - front: "Why is frost on a wing a flight-control hazard, not just a cosmetic one?"
   back: |
@@ -256,9 +312,17 @@ phenomena table is the METAR-decoding skill.
     strikes make the literature unambiguous.
   cardType: basic
   kind: recall
-  tags: [weather, frost, aerodynamics, aim-7-5-1, PA.I.C.K3k]
+  tags: [weather, frost, aerodynamics, aim-7-5-1]
   source_ref: |
     AIM 7-5-1 Frost; body Reveal.
+  acs_codes: [PA.I.C.K3k]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Fog and Restrictions to Visibility chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 18 -- Weather and Obstructions to Visibility
+    - kind: aim
+      cite: AIM 7-5-1 -- Frost; 7-5-7 -- Volcanic Ash
 
 - front: "What is the current AIM 7-5-1 rule on takeoff with frost?"
   back: |
@@ -268,9 +332,17 @@ phenomena table is the METAR-decoding skill.
     now: surfaces are smooth, or the airplane stays.
   cardType: regulation
   kind: recall
-  tags: [weather, frost, regulation, takeoff, aim-7-5-1, PA.I.C.K3k]
+  tags: [weather, frost, regulation, takeoff, aim-7-5-1]
   source_ref: |
     AIM 7-5-1 Frost; body Reveal.
+  acs_codes: [PA.I.C.K3k]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Fog and Restrictions to Visibility chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 18 -- Weather and Obstructions to Visibility
+    - kind: aim
+      cite: AIM 7-5-1 -- Frost; 7-5-7 -- Volcanic Ash
 
 - front: "Decode METAR visibility-obstruction codes: BR, FG, HZ, FU, DU, SA, BLSN, VA."
   back: |
@@ -284,9 +356,17 @@ phenomena table is the METAR-decoding skill.
     VA = volcanic ash (eruption plume).
   cardType: basic
   kind: recall
-  tags: [weather, metar, visibility-obstructions, ac-00-45h, PA.I.C.K3l]
+  tags: [weather, metar, visibility-obstructions, ac-00-45h]
   source_ref: |
     AC 00-45H METAR weather group; body Reveal table.
+  acs_codes: [PA.I.C.K3l]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Fog and Restrictions to Visibility chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 18 -- Weather and Obstructions to Visibility
+    - kind: aim
+      cite: AIM 7-5-1 -- Frost; 7-5-7 -- Volcanic Ash
 
 - front: "Why is volcanic ash (VA) avoided by piston aircraft as well as turbine aircraft?"
   back: |
@@ -297,9 +377,17 @@ phenomena table is the METAR-decoding skill.
     types, not just turbine.
   cardType: basic
   kind: recall
-  tags: [weather, volcanic-ash, va, aim-7-5-7, PA.I.C.K3l]
+  tags: [weather, volcanic-ash, va, aim-7-5-7]
   source_ref: |
     AIM 7-5-7 Volcanic Ash; body Reveal.
+  acs_codes: [PA.I.C.K3l]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Fog and Restrictions to Visibility chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 18 -- Weather and Obstructions to Visibility
+    - kind: aim
+      cite: AIM 7-5-1 -- Frost; 7-5-7 -- Volcanic Ash
 
 - front: "Tomorrow's METAR + TAF for a Sacramento Valley airport: 12 C / 11 C at sunset, wind calm, clear skies, low terrain. Will fog form?"
   back: |
@@ -311,13 +399,21 @@ phenomena table is the METAR-decoding skill.
     four conditions was different (probably wind or higher spread).
   cardType: basic
   kind: recall
-  tags: [weather, fog, radiation-fog, prediction, PA.I.C.K3j]
+  tags: [weather, fog, radiation-fog, prediction]
   source_ref: |
     Body Context + Practice diagnostic ("three of four hold").
   rationale: |
     Scenario card from the body's Context. The four-condition recipe is
     the body's operational deliverable; this card forces the learner to
     walk it.
+  acs_codes: [PA.I.C.K3j]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Fog and Restrictions to Visibility chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 18 -- Weather and Obstructions to Visibility
+    - kind: aim
+      cite: AIM 7-5-1 -- Frost; 7-5-7 -- Volcanic Ash
 ```
 
 ## Connect

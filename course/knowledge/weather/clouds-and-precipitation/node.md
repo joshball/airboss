@@ -160,9 +160,17 @@ profile to the encoded METAR group.
     in unstable air, 1,000 ft in stable air.
   cardType: basic
   kind: calculation
-  tags: [weather, clouds, lcl, dew-point-spread, ac-00-6, PA.I.C.K3c]
+  tags: [weather, clouds, lcl, dew-point-spread, ac-00-6]
   source_ref: |
     AC 00-6B moisture chapter; body Discover.
+  acs_codes: [PA.I.C.K3c]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, chapters on moisture, clouds, and precipitation
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 12 -- Vertical Motion and Clouds; Chapter 14 -- Precipitation
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 
 - front: "Estimate cloud base AGL. Surface temperature 20 deg C, dew point 18 deg C."
   back: |
@@ -172,9 +180,17 @@ profile to the encoded METAR group.
     Context scenario: small spread + sun heating = stratus by climb-out.
   cardType: basic
   kind: calculation
-  tags: [weather, clouds, lcl, calculation, PA.I.C.K3c]
+  tags: [weather, clouds, lcl, calculation]
   source_ref: |
     Body Context scenario + Discover formula.
+  acs_codes: [PA.I.C.K3c]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, chapters on moisture, clouds, and precipitation
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 12 -- Vertical Motion and Clouds; Chapter 14 -- Precipitation
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 
 - front: "Adiabatic lapse rates: dry vs moist, and where does the transition happen?"
   back: |
@@ -185,9 +201,17 @@ profile to the encoded METAR group.
     LCL -- the altitude where parcel temperature equals dew point.
   cardType: basic
   kind: recall
-  tags: [weather, clouds, lapse-rate, adiabatic, ac-00-6, PA.I.C.K3c]
+  tags: [weather, clouds, lapse-rate, adiabatic, ac-00-6]
   source_ref: |
     AC 00-6B moisture/clouds; body Discover.
+  acs_codes: [PA.I.C.K3c]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, chapters on moisture, clouds, and precipitation
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 12 -- Vertical Motion and Clouds; Chapter 14 -- Precipitation
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 
 - front: "Four cloud families by altitude, with examples and pilot relevance."
   back: |
@@ -201,9 +225,17 @@ profile to the encoded METAR group.
     cumulonimbus -- convective; turbulence + icing + lightning + hail.
   cardType: basic
   kind: recall
-  tags: [weather, clouds, classification, phak-12, ac-00-6, PA.I.C.K3f]
+  tags: [weather, clouds, classification, phak-12, ac-00-6]
   source_ref: |
     AC 00-6B; PHAK Ch 12; body Discover.
+  acs_codes: [PA.I.C.K3f]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, chapters on moisture, clouds, and precipitation
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 12 -- Vertical Motion and Clouds; Chapter 14 -- Precipitation
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 
 - front: "Cloud morphology as a diagnostic for atmospheric stability -- what does each form signal?"
   back: |
@@ -216,9 +248,17 @@ profile to the encoded METAR group.
     a sounding.
   cardType: basic
   kind: recall
-  tags: [weather, clouds, stability, diagnostic, ac-00-6, PA.I.C.K3a, PA.I.C.K3f]
+  tags: [weather, clouds, stability, diagnostic, ac-00-6]
   source_ref: |
     AC 00-6B; body Discover ("morphology is diagnostic").
+  acs_codes: [PA.I.C.K3a, PA.I.C.K3f]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, chapters on moisture, clouds, and precipitation
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 12 -- Vertical Motion and Clouds; Chapter 14 -- Precipitation
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 
 - front: "Why is freezing rain (FZRA) the most dangerous icing scenario in GA?"
   back: |
@@ -230,9 +270,17 @@ profile to the encoded METAR group.
     the canonical "warm-aloft / cold-below" trap.
   cardType: basic
   kind: recall
-  tags: [weather, precipitation, freezing-rain, icing, sld, ac-00-6, PA.I.C.K3d, PA.I.C.K3i]
+  tags: [weather, precipitation, freezing-rain, icing, sld, ac-00-6]
   source_ref: |
     AC 00-6B precipitation chapter; body Reveal.
+  acs_codes: [PA.I.C.K3d, PA.I.C.K3i]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, chapters on moisture, clouds, and precipitation
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 12 -- Vertical Motion and Clouds; Chapter 14 -- Precipitation
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 
 - front: "Decode precipitation types from a METAR: DZ, RA, FZRA, SN, PL, GR."
   back: |
@@ -245,9 +293,17 @@ profile to the encoded METAR group.
     GR = hail (convective; hailstones cycle through updraft accreting layers).
   cardType: basic
   kind: recall
-  tags: [weather, precipitation, metar, ac-00-45h, PA.I.C.K3d]
+  tags: [weather, precipitation, metar, ac-00-45h]
   source_ref: |
     AC 00-6B; AC 00-45H weather phenomena; body Reveal.
+  acs_codes: [PA.I.C.K3d]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, chapters on moisture, clouds, and precipitation
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 12 -- Vertical Motion and Clouds; Chapter 14 -- Precipitation
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 
 - front: "Precipitation intensity prefixes in a METAR weather group?"
   back: |
@@ -256,9 +312,17 @@ profile to the encoded METAR group.
     with rain -- operational signal for "stay clear, expect violent IMC."
   cardType: basic
   kind: recall
-  tags: [weather, precipitation, metar, intensity, ac-00-45h, PA.I.C.K3d]
+  tags: [weather, precipitation, metar, intensity, ac-00-45h]
   source_ref: |
     AC 00-45H METAR weather group; body Reveal.
+  acs_codes: [PA.I.C.K3d]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, chapters on moisture, clouds, and precipitation
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 12 -- Vertical Motion and Clouds; Chapter 14 -- Precipitation
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 
 - front: "Why does snow drop visibility faster than rain at the same nominal intensity?"
   back: |
@@ -270,9 +334,17 @@ profile to the encoded METAR group.
     METAR.
   cardType: basic
   kind: recall
-  tags: [weather, precipitation, visibility, snow, ac-00-6, PA.I.C.K3d, PA.I.C.K3l]
+  tags: [weather, precipitation, visibility, snow, ac-00-6]
   source_ref: |
     AC 00-6B; body Reveal visibility table.
+  acs_codes: [PA.I.C.K3d, PA.I.C.K3l]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, chapters on moisture, clouds, and precipitation
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 12 -- Vertical Motion and Clouds; Chapter 14 -- Precipitation
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 
 - front: "A METAR shows scattered cumulus at 4,000 ft and -SHRA. What does the cloud + precipitation pair tell you about the parent stability state?"
   back: |
@@ -284,13 +356,21 @@ profile to the encoded METAR group.
     chain-test the body recommends.
   cardType: basic
   kind: recall
-  tags: [weather, clouds, precipitation, stability, metar, PA.I.C.K3a, PA.I.C.K3d, PA.I.C.K3f]
+  tags: [weather, clouds, precipitation, stability, metar]
   source_ref: |
     Body Verify ("METAR -> clouds -> stability is the inverse...").
   rationale: |
     Scenario card that trains the reverse-direction read: from observation
     back to atmospheric state. Tests the same understanding from the
     opposite direction.
+  acs_codes: [PA.I.C.K3a, PA.I.C.K3d, PA.I.C.K3f]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, chapters on moisture, clouds, and precipitation
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 12 -- Vertical Motion and Clouds; Chapter 14 -- Precipitation
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 ```
 
 ## Connect

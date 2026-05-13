@@ -208,9 +208,15 @@ the operational rules; scenario cards train the decision habit.
     way down; lightning continues after the cell appears spent.
   cardType: basic
   kind: recall
-  tags: [weather, thunderstorm, cell-stages, phak-12, ac-00-24c, PA.I.C.K3h]
+  tags: [weather, thunderstorm, cell-stages, phak-12, ac-00-24c]
   source_ref: |
     AC 00-24C Thunderstorms; PHAK Ch 12 Weather Theory; body Discover.
+  acs_codes: [PA.I.C.K3h]
+  source_authority:
+    - kind: ac
+      cite: AC 00-24C Thunderstorms
+    - kind: aim
+      cite: AIM 7-1-27 -- Thunderstorms
 
 - front: "Cumulus stage of a thunderstorm: dominant air motion and visible signature?"
   back: |
@@ -220,9 +226,15 @@ the operational rules; scenario cards train the decision habit.
     air. No precipitation has reached the ground.
   cardType: basic
   kind: recall
-  tags: [weather, thunderstorm, cell-stages, phak-12, ac-00-24c, PA.I.C.K3h]
+  tags: [weather, thunderstorm, cell-stages, phak-12, ac-00-24c]
   source_ref: |
     PHAK Ch 12; body Discover.
+  acs_codes: [PA.I.C.K3h]
+  source_authority:
+    - kind: ac
+      cite: AC 00-24C Thunderstorms
+    - kind: aim
+      cite: AIM 7-1-27 -- Thunderstorms
 
 - front: "Mature stage of a thunderstorm: what makes this the most dangerous stage?"
   back: |
@@ -233,9 +245,15 @@ the operational rules; scenario cards train the decision habit.
     Most of the six aviation hazards are present simultaneously here.
   cardType: basic
   kind: recall
-  tags: [weather, thunderstorm, cell-stages, hazards, phak-12, ac-00-24c, PA.I.C.K3h]
+  tags: [weather, thunderstorm, cell-stages, hazards, phak-12, ac-00-24c]
   source_ref: |
     PHAK Ch 12; body Discover (mature stage).
+  acs_codes: [PA.I.C.K3h]
+  source_authority:
+    - kind: ac
+      cite: AC 00-24C Thunderstorms
+    - kind: aim
+      cite: AIM 7-1-27 -- Thunderstorms
 
 - front: "Why is a 'dissipating' thunderstorm cell still dangerous?"
   back: |
@@ -246,9 +264,15 @@ the operational rules; scenario cards train the decision habit.
     profile shifts toward microburst risk on approach.
   cardType: basic
   kind: recall
-  tags: [weather, thunderstorm, cell-stages, microburst, phak-12, ac-00-24c, PA.I.C.K3h]
+  tags: [weather, thunderstorm, cell-stages, microburst, phak-12, ac-00-24c]
   source_ref: |
     PHAK Ch 12; body Discover (dissipating stage).
+  acs_codes: [PA.I.C.K3h]
+  source_authority:
+    - kind: ac
+      cite: AC 00-24C Thunderstorms
+    - kind: aim
+      cite: AIM 7-1-27 -- Thunderstorms
 
 - front: "Name the six classical thunderstorm hazards."
   back: |
@@ -264,9 +288,15 @@ the operational rules; scenario cards train the decision habit.
        embedded in supercell thunderstorms).
   cardType: basic
   kind: recall
-  tags: [weather, thunderstorm, hazards, ac-00-24c, aim-7-1-27, PA.I.C.K3h]
+  tags: [weather, thunderstorm, hazards, ac-00-24c, aim-7-1-27]
   source_ref: |
     AC 00-24C Thunderstorms; AIM 7-1-27.
+  acs_codes: [PA.I.C.K3h]
+  source_authority:
+    - kind: ac
+      cite: AC 00-24C Thunderstorms
+    - kind: aim
+      cite: AIM 7-1-27 -- Thunderstorms
 
 - front: "What is the standard pilot rule for lateral separation from a thunderstorm cell, and what does the number cover?"
   back: |
@@ -305,9 +335,15 @@ the operational rules; scenario cards train the decision habit.
     cheap; a wing failure is not.
   cardType: basic
   kind: recall
-  tags: [weather, thunderstorm, squall-line, avoidance, ac-00-24c, aim-7-1-27, PA.I.C.K3h]
+  tags: [weather, thunderstorm, squall-line, avoidance, ac-00-24c, aim-7-1-27]
   source_ref: |
     AC 00-24C; body Reveal "A line is never safe to penetrate" paragraph.
+  acs_codes: [PA.I.C.K3h]
+  source_authority:
+    - kind: ac
+      cite: AC 00-24C Thunderstorms
+    - kind: aim
+      cite: AIM 7-1-27 -- Thunderstorms
 
 - front: "Three thunderstorm formations and how they differ in pilot consequence: {{c1::air-mass}} thunderstorms (isolated cells, predictable by time-of-day, generally avoidable VFR), {{c2::squall line}} (linear, often pre-frontal, may extend hundreds of miles, often embedded), {{c3::mesoscale convective complex}} (cluster organising overnight, persisting hours over a regional footprint)."
   back: |
@@ -317,9 +353,15 @@ the operational rules; scenario cards train the decision habit.
     cancellation, not deviation.
   cardType: cloze
   kind: recall
-  tags: [weather, thunderstorm, formations, squall-line, mcc, phak-12, ac-00-24c, PA.I.C.K3h]
+  tags: [weather, thunderstorm, formations, squall-line, mcc, phak-12, ac-00-24c]
   source_ref: |
     PHAK Ch 12; AC 00-24C; body Discover (three formations).
+  acs_codes: [PA.I.C.K3h]
+  source_authority:
+    - kind: ac
+      cite: AC 00-24C Thunderstorms
+    - kind: aim
+      cite: AIM 7-1-27 -- Thunderstorms
 
 - front: "Why does onboard weather radar show 'green' echoes that can hide a yellow cell at altitude, and what does that mean for tactical use?"
   back: |
@@ -330,9 +372,15 @@ the operational rules; scenario cards train the decision habit.
     turbulence; the dangerous shear and updraft can sit in a "green" cell.
   cardType: basic
   kind: recall
-  tags: [weather, thunderstorm, radar, equipment-limits, ac-00-24c, aim-7-1-27, PA.I.C.K3h]
+  tags: [weather, thunderstorm, radar, equipment-limits, ac-00-24c, aim-7-1-27]
   source_ref: |
     AC 00-24C; AIM 7-1-27; body Reveal "Onboard radar" bullet.
+  acs_codes: [PA.I.C.K3h]
+  source_authority:
+    - kind: ac
+      cite: AC 00-24C Thunderstorms
+    - kind: aim
+      cite: AIM 7-1-27 -- Thunderstorms
 
 - front: "Why is datalink NEXRAD a strategic tool, not a tactical one?"
   back: |
@@ -343,9 +391,15 @@ the operational rules; scenario cards train the decision habit.
     next-hour route planning, not for "thread the gap right now" decisions.
   cardType: basic
   kind: recall
-  tags: [weather, thunderstorm, nexrad, datalink, equipment-limits, aim-7-1-27, PA.I.C.K3h]
+  tags: [weather, thunderstorm, nexrad, datalink, equipment-limits, aim-7-1-27]
   source_ref: |
     AIM 7-1-27; body Reveal "Datalink NEXRAD" bullet.
+  acs_codes: [PA.I.C.K3h]
+  source_authority:
+    - kind: ac
+      cite: AC 00-24C Thunderstorms
+    - kind: aim
+      cite: AIM 7-1-27 -- Thunderstorms
 
 - front: "TAF for your destination shows VCTS through your ETA. GFA shows isolated TS bases 4,000 ft tops FL400. Convective SIGMET flags severe TS 60 NM south of route. You're VFR, three hours out. What's the decision frame?"
   back: |
@@ -361,13 +415,19 @@ the operational rules; scenario cards train the decision habit.
     Pre-plan a divert airport every 30 NM along the route. Body Practice rule.
   cardType: basic
   kind: recall
-  tags: [weather, thunderstorm, go-nogo, divert, ac-00-24c, aim-7-1-27, PA.I.C.K3h]
+  tags: [weather, thunderstorm, go-nogo, divert, ac-00-24c, aim-7-1-27]
   source_ref: |
     AC 00-24C; body Context scenario + Practice divert-planning rule.
   rationale: |
     Scenario card built from the body's Context. Trains the reframing the body
     teaches: the question is the *separation* you can maintain, not the
     presence of a cell.
+  acs_codes: [PA.I.C.K3h]
+  source_authority:
+    - kind: ac
+      cite: AC 00-24C Thunderstorms
+    - kind: aim
+      cite: AIM 7-1-27 -- Thunderstorms
 
 - front: "Why is no flight permitted under an overhanging anvil, even far from the visible cell core?"
   back: |

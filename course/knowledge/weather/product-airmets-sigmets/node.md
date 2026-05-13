@@ -176,9 +176,17 @@ Convective SIGMET trigger conditions are the operational stop signal.
     Valid 6 hours.
   cardType: basic
   kind: recall
-  tags: [weather, airmet, sierra, ifr, ac-00-45h, aim-7-1-6, PA.I.C.K2g]
+  tags: [weather, airmet, sierra, ifr, ac-00-45h, aim-7-1-6]
   source_ref: |
     AC 00-45H In-flight Aviation Weather Advisories; AIM 7-1-6.
+  acs_codes: [PA.I.C.K2g]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, In-flight Aviation Weather Advisories section
+    - kind: aim
+      cite: AIM 7-1-6 -- Inflight Aviation Weather Advisories
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 26 -- Advisories
 
 - front: "AIRMET TANGO -- what does it warn of?"
   back: |
@@ -187,9 +195,17 @@ Convective SIGMET trigger conditions are the operational stop signal.
     advisory for light aircraft. Valid 6 hours.
   cardType: basic
   kind: recall
-  tags: [weather, airmet, tango, turbulence, wind, ac-00-45h, aim-7-1-6, PA.I.C.K2g]
+  tags: [weather, airmet, tango, turbulence, wind, ac-00-45h, aim-7-1-6]
   source_ref: |
     AC 00-45H; AIM 7-1-6.
+  acs_codes: [PA.I.C.K2g]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, In-flight Aviation Weather Advisories section
+    - kind: aim
+      cite: AIM 7-1-6 -- Inflight Aviation Weather Advisories
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 26 -- Advisories
 
 - front: "AIRMET ZULU -- what does it warn of?"
   back: |
@@ -199,9 +215,17 @@ Convective SIGMET trigger conditions are the operational stop signal.
     freezing-level chart and PIREPs.
   cardType: basic
   kind: recall
-  tags: [weather, airmet, zulu, icing, freezing-level, ac-00-45h, aim-7-1-6, PA.I.C.K2g, PA.I.C.K3i]
+  tags: [weather, airmet, zulu, icing, freezing-level, ac-00-45h, aim-7-1-6]
   source_ref: |
     AC 00-45H; AIM 7-1-6.
+  acs_codes: [PA.I.C.K2g, PA.I.C.K3i]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, In-flight Aviation Weather Advisories section
+    - kind: aim
+      cite: AIM 7-1-6 -- Inflight Aviation Weather Advisories
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 26 -- Advisories
 
 - front: "AIRMET vs SIGMET -- what's the severity-threshold distinction?"
   back: |
@@ -214,9 +238,17 @@ Convective SIGMET trigger conditions are the operational stop signal.
     inflates a routine one.
   cardType: basic
   kind: recall
-  tags: [weather, airmet, sigmet, severity, ac-00-45h, PA.I.C.K2g]
+  tags: [weather, airmet, sigmet, severity, ac-00-45h]
   source_ref: |
     AC 00-45H; body Discover.
+  acs_codes: [PA.I.C.K2g]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, In-flight Aviation Weather Advisories section
+    - kind: aim
+      cite: AIM 7-1-6 -- Inflight Aviation Weather Advisories
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 26 -- Advisories
 
 - front: "Convective SIGMET trigger conditions?"
   back: |
@@ -228,9 +260,17 @@ Convective SIGMET trigger conditions are the operational stop signal.
     warrant.
   cardType: basic
   kind: recall
-  tags: [weather, convective-sigmet, thunderstorm, ac-00-45h, aim-7-1-6, PA.I.C.K2g, PA.I.C.K3h]
+  tags: [weather, convective-sigmet, thunderstorm, ac-00-45h, aim-7-1-6]
   source_ref: |
     AC 00-45H; AIM 7-1-6 Inflight Aviation Weather Advisories.
+  acs_codes: [PA.I.C.K2g, PA.I.C.K3h]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, In-flight Aviation Weather Advisories section
+    - kind: aim
+      cite: AIM 7-1-6 -- Inflight Aviation Weather Advisories
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 26 -- Advisories
 
 - front: "Valid times: AIRMET, SIGMET, Convective SIGMET."
   back: |
@@ -242,9 +282,17 @@ Convective SIGMET trigger conditions are the operational stop signal.
     valid time, the more tactically the product behaves.
   cardType: basic
   kind: recall
-  tags: [weather, airmet, sigmet, convective-sigmet, valid-time, ac-00-45h, PA.I.C.K2g]
+  tags: [weather, airmet, sigmet, convective-sigmet, valid-time, ac-00-45h]
   source_ref: |
     AC 00-45H; body Reveal table.
+  acs_codes: [PA.I.C.K2g]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, In-flight Aviation Weather Advisories section
+    - kind: aim
+      cite: AIM 7-1-6 -- Inflight Aviation Weather Advisories
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 26 -- Advisories
 
 - front: "Why is there no 'Convective AIRMET'?"
   back: |
@@ -255,9 +303,17 @@ Convective SIGMET trigger conditions are the operational stop signal.
     surrounding turbulence and icing may trigger AIRMET TANGO or ZULU.
   cardType: basic
   kind: recall
-  tags: [weather, airmet, convective-sigmet, ac-00-45h, PA.I.C.K2g]
+  tags: [weather, airmet, convective-sigmet, ac-00-45h]
   source_ref: |
     Body Reveal "Notable" note.
+  acs_codes: [PA.I.C.K2g]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, In-flight Aviation Weather Advisories section
+    - kind: aim
+      cite: AIM 7-1-6 -- Inflight Aviation Weather Advisories
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 26 -- Advisories
 
 - front: "Reading order during a brief for convective weather: three products in three time horizons."
   back: |
@@ -268,9 +324,17 @@ Convective SIGMET trigger conditions are the operational stop signal.
     horizon.
   cardType: basic
   kind: recall
-  tags: [weather, convection, briefing-sequence, ac-00-45h, PA.I.C.K2g]
+  tags: [weather, convection, briefing-sequence, ac-00-45h]
   source_ref: |
     Body Reveal "Reading order during a brief."
+  acs_codes: [PA.I.C.K2g]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, In-flight Aviation Weather Advisories section
+    - kind: aim
+      cite: AIM 7-1-6 -- Inflight Aviation Weather Advisories
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 26 -- Advisories
 
 - front: "Decode the Convective SIGMET 32C identifier."
   back: |
@@ -281,9 +345,17 @@ Convective SIGMET trigger conditions are the operational stop signal.
     roughly where to look for it on the map.
   cardType: basic
   kind: recall
-  tags: [weather, convective-sigmet, decode, region, ac-00-45h, PA.I.C.K2g]
+  tags: [weather, convective-sigmet, decode, region, ac-00-45h]
   source_ref: |
     AC 00-45H; body Practice ("32C: this is the 32nd...").
+  acs_codes: [PA.I.C.K2g]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, In-flight Aviation Weather Advisories section
+    - kind: aim
+      cite: AIM 7-1-6 -- Inflight Aviation Weather Advisories
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 26 -- Advisories
 
 - front: "ATC reports: 'Cessna 345, advise you of Convective SIGMET 32C, line of embedded thunderstorms 100 NM wide, tops to FL420, moving 040 at 25, hail 1 inch.' Operational read?"
   back: |
@@ -295,12 +367,20 @@ Convective SIGMET trigger conditions are the operational stop signal.
     independently disqualifies penetration; the conjunction is unambiguous.
   cardType: basic
   kind: recall
-  tags: [weather, convective-sigmet, divert, scenario, ac-00-24c, PA.I.C.K2g, PA.I.C.K3h]
+  tags: [weather, convective-sigmet, divert, scenario, ac-00-24c]
   source_ref: |
     Body Context + Practice operational read.
   rationale: |
     Scenario card from the body's Context. Trains the read 'every property
     independently disqualifies penetration' the body makes explicit.
+  acs_codes: [PA.I.C.K2g, PA.I.C.K3h]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, In-flight Aviation Weather Advisories section
+    - kind: aim
+      cite: AIM 7-1-6 -- Inflight Aviation Weather Advisories
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 26 -- Advisories
 
 - front: "AIRMETs/SIGMETs are forecast products; PIREPs are the truth-up. How does that interact in a brief?"
   back: |
@@ -312,9 +392,17 @@ Convective SIGMET trigger conditions are the operational stop signal.
     PIREPs sharpen the picture but the forecast remains the planning input.
   cardType: basic
   kind: recall
-  tags: [weather, airmet, pirep, truth-up, judgment, PA.I.C.K2g, PA.I.C.R2b]
+  tags: [weather, airmet, pirep, truth-up, judgment]
   source_ref: |
     Body Connect.
+  acs_codes: [PA.I.C.K2g, PA.I.C.R2b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, In-flight Aviation Weather Advisories section
+    - kind: aim
+      cite: AIM 7-1-6 -- Inflight Aviation Weather Advisories
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 26 -- Advisories
 ```
 
 ## Connect

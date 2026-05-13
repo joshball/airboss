@@ -155,9 +155,17 @@ classification drill scenario locks in the diagnostic step.
     AGL). Above the layer the air smooths out as friction stops mixing.
   cardType: basic
   kind: recall
-  tags: [weather, turbulence, mechanical, friction-layer, faa-h-8083-28, PA.I.C.K3g]
+  tags: [weather, turbulence, mechanical, friction-layer, faa-h-8083-28]
   source_ref: |
     FAA-H-8083-28 Ch 19.2.2; body Discover.
+  acs_codes: [PA.I.C.K3g]
+  source_authority:
+    - kind: ac
+      cite: AC 00-30C Clear Air Turbulence Avoidance
+    - kind: aim
+      cite: AIM 7-1-23 -- Turbulence; 7-3-1 to 7-3-9 -- Wake Turbulence
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 19 -- Turbulence
 
 - front: "Convective turbulence: cause, forecast cue, and avoidance."
   back: |
@@ -169,9 +177,17 @@ classification drill scenario locks in the diagnostic step.
     the convective ceiling (typically cumulus tops + 1,000 ft).
   cardType: basic
   kind: recall
-  tags: [weather, turbulence, convective, thermals, faa-h-8083-28, PA.I.C.K3g]
+  tags: [weather, turbulence, convective, thermals, faa-h-8083-28]
   source_ref: |
     FAA-H-8083-28 Ch 19.2.1; body Discover.
+  acs_codes: [PA.I.C.K3g]
+  source_authority:
+    - kind: ac
+      cite: AC 00-30C Clear Air Turbulence Avoidance
+    - kind: aim
+      cite: AIM 7-1-23 -- Turbulence; 7-3-1 to 7-3-9 -- Wake Turbulence
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 19 -- Turbulence
 
 - front: "Clear-air turbulence (CAT): cause, forecast cue, and avoidance."
   back: |
@@ -185,9 +201,17 @@ classification drill scenario locks in the diagnostic step.
     usually escapes them.
   cardType: basic
   kind: recall
-  tags: [weather, turbulence, cat, jet-stream, ac-00-30c, PA.I.C.K3g]
+  tags: [weather, turbulence, cat, jet-stream, ac-00-30c]
   source_ref: |
     AC 00-30C Clear Air Turbulence Avoidance; body Discover.
+  acs_codes: [PA.I.C.K3g]
+  source_authority:
+    - kind: ac
+      cite: AC 00-30C Clear Air Turbulence Avoidance
+    - kind: aim
+      cite: AIM 7-1-23 -- Turbulence; 7-3-1 to 7-3-9 -- Wake Turbulence
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 19 -- Turbulence
 
 - front: "Mountain-wave turbulence: cause, forecast cue, and the rotor warning."
   back: |
@@ -200,9 +224,17 @@ classification drill scenario locks in the diagnostic step.
     Never penetrate visible rotor -- the rotor is where airframes break.
   cardType: basic
   kind: recall
-  tags: [weather, turbulence, mountain-wave, rotor, lenticular, faa-h-8083-28, PA.I.C.K3g, PA.I.C.K3b]
+  tags: [weather, turbulence, mountain-wave, rotor, lenticular, faa-h-8083-28]
   source_ref: |
     FAA-H-8083-28 Ch 16 Mountain Weather; body Discover.
+  acs_codes: [PA.I.C.K3g, PA.I.C.K3b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-30C Clear Air Turbulence Avoidance
+    - kind: aim
+      cite: AIM 7-1-23 -- Turbulence; 7-3-1 to 7-3-9 -- Wake Turbulence
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 19 -- Turbulence
 
 - front: "Wake turbulence: cause, the heavy-clean-slow rule, and avoidance."
   back: |
@@ -215,9 +247,17 @@ classification drill scenario locks in the diagnostic step.
     profile. ATC spacing is for separation; wake avoidance is the pilot's.
   cardType: basic
   kind: recall
-  tags: [weather, turbulence, wake, vortices, aim-7-3, PA.I.C.K3g]
+  tags: [weather, turbulence, wake, vortices, aim-7-3]
   source_ref: |
     AIM 7-3 Wake Turbulence; body Discover.
+  acs_codes: [PA.I.C.K3g]
+  source_authority:
+    - kind: ac
+      cite: AC 00-30C Clear Air Turbulence Avoidance
+    - kind: aim
+      cite: AIM 7-1-23 -- Turbulence; 7-3-1 to 7-3-9 -- Wake Turbulence
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 19 -- Turbulence
 
 - front: "Wind-shear turbulence: where does it sit and what are the forecast cues?"
   back: |
@@ -229,9 +269,17 @@ classification drill scenario locks in the diagnostic step.
     shifts in TAFs, AIRMET TANGO for non-convective shear.
   cardType: basic
   kind: recall
-  tags: [weather, turbulence, wind-shear, microburst, ac-00-54, PA.I.C.K3g, PA.I.C.K3b]
+  tags: [weather, turbulence, wind-shear, microburst, ac-00-54]
   source_ref: |
     AC 00-54 Pilot Windshear Guide; AIM 7-1-19 Microbursts; body Discover.
+  acs_codes: [PA.I.C.K3g, PA.I.C.K3b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-30C Clear Air Turbulence Avoidance
+    - kind: aim
+      cite: AIM 7-1-23 -- Turbulence; 7-3-1 to 7-3-9 -- Wake Turbulence
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 19 -- Turbulence
 
 - front: "Turbulence intensity definitions per AIM 7-1-23 -- light vs moderate vs severe vs extreme."
   back: |
@@ -244,9 +292,17 @@ classification drill scenario locks in the diagnostic step.
     weights the report by the difference between reporter and receiver.
   cardType: regulation
   kind: recall
-  tags: [weather, turbulence, intensity, pirep, aim-7-1-23, PA.I.C.K3g]
+  tags: [weather, turbulence, intensity, pirep, aim-7-1-23]
   source_ref: |
     AIM 7-1-23 Turbulence; body Reveal table.
+  acs_codes: [PA.I.C.K3g]
+  source_authority:
+    - kind: ac
+      cite: AC 00-30C Clear Air Turbulence Avoidance
+    - kind: aim
+      cite: AIM 7-1-23 -- Turbulence; 7-3-1 to 7-3-9 -- Wake Turbulence
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 19 -- Turbulence
 
 - front: "UUA (urgent PIREP) trigger thresholds for turbulence?"
   back: |
@@ -257,9 +313,17 @@ classification drill scenario locks in the diagnostic step.
     correct type when you encounter the conditions.
   cardType: regulation
   kind: recall
-  tags: [weather, turbulence, uua, pirep, aim-7-1-19, PA.I.C.K3g]
+  tags: [weather, turbulence, uua, pirep, aim-7-1-19]
   source_ref: |
     AIM 7-1-19 Pilot Weather Reports; body Reveal.
+  acs_codes: [PA.I.C.K3g]
+  source_authority:
+    - kind: ac
+      cite: AC 00-30C Clear Air Turbulence Avoidance
+    - kind: aim
+      cite: AIM 7-1-23 -- Turbulence; 7-3-1 to 7-3-9 -- Wake Turbulence
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 19 -- Turbulence
 
 - front: "Classification drill: AIRMET TANGO + low-level winds 35 KT + rough terrain on the windward side. What's the turbulence type?"
   back: |
@@ -270,9 +334,17 @@ classification drill scenario locks in the diagnostic step.
     deviate around the rough-terrain segment.
   cardType: basic
   kind: recall
-  tags: [weather, turbulence, mechanical, classification, PA.I.C.K3g]
+  tags: [weather, turbulence, mechanical, classification]
   source_ref: |
     Body Verify drill.
+  acs_codes: [PA.I.C.K3g]
+  source_authority:
+    - kind: ac
+      cite: AC 00-30C Clear Air Turbulence Avoidance
+    - kind: aim
+      cite: AIM 7-1-23 -- Turbulence; 7-3-1 to 7-3-9 -- Wake Turbulence
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 19 -- Turbulence
 
 - front: "Classification drill: cross-ridge wind 40 KT in a stable air column with lenticular clouds visible downwind. What's the turbulence type and what's the operational constraint?"
   back: |
@@ -285,9 +357,17 @@ classification drill scenario locks in the diagnostic step.
     fail.
   cardType: basic
   kind: recall
-  tags: [weather, turbulence, mountain-wave, lenticular, classification, PA.I.C.K3g, PA.I.C.K3b]
+  tags: [weather, turbulence, mountain-wave, lenticular, classification]
   source_ref: |
     Body Verify + Discover.
+  acs_codes: [PA.I.C.K3g, PA.I.C.K3b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-30C Clear Air Turbulence Avoidance
+    - kind: aim
+      cite: AIM 7-1-23 -- Turbulence; 7-3-1 to 7-3-9 -- Wake Turbulence
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 19 -- Turbulence
 ```
 
 ## Connect

@@ -149,9 +149,17 @@ sounding reader.
     conditionally unstable air possible.
   cardType: basic
   kind: recall
-  tags: [weather, stability, adiabatic-lapse, ac-00-6, phak-12, PA.I.C.K3a]
+  tags: [weather, stability, adiabatic-lapse, ac-00-6, phak-12]
   source_ref: |
     AC 00-6B Stability; PHAK Ch 12; body Discover.
+  acs_codes: [PA.I.C.K3a]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Stability chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 13 -- Atmospheric Stability
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 
 - front: "Absolutely stable atmosphere -- definition in terms of ELR vs adiabatic rates."
   back: |
@@ -162,9 +170,17 @@ sounding reader.
     smooth.
   cardType: basic
   kind: recall
-  tags: [weather, stability, absolutely-stable, ac-00-6, PA.I.C.K3a]
+  tags: [weather, stability, absolutely-stable, ac-00-6]
   source_ref: |
     AC 00-6B; body Discover.
+  acs_codes: [PA.I.C.K3a]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Stability chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 13 -- Atmospheric Stability
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 
 - front: "Absolutely unstable atmosphere -- definition in terms of ELR vs adiabatic rates."
   back: |
@@ -174,9 +190,17 @@ sounding reader.
     cumuliform; precipitation is showery; turbulence is bumpy / strong.
   cardType: basic
   kind: recall
-  tags: [weather, stability, absolutely-unstable, ac-00-6, PA.I.C.K3a]
+  tags: [weather, stability, absolutely-unstable, ac-00-6]
   source_ref: |
     AC 00-6B; body Discover.
+  acs_codes: [PA.I.C.K3a]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Stability chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 13 -- Atmospheric Stability
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 
 - front: "Conditional instability -- definition and why is it the 'interesting weather' case?"
   back: |
@@ -189,9 +213,17 @@ sounding reader.
     signature.
   cardType: basic
   kind: recall
-  tags: [weather, stability, conditional-instability, convection, ac-00-6, PA.I.C.K3a]
+  tags: [weather, stability, conditional-instability, convection, ac-00-6]
   source_ref: |
     AC 00-6B; body Discover.
+  acs_codes: [PA.I.C.K3a]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Stability chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 13 -- Atmospheric Stability
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 
 - front: "Operational signature of stable air: cloud type, precipitation, turbulence, visibility?"
   back: |
@@ -203,9 +235,17 @@ sounding reader.
     the stable layer).
   cardType: basic
   kind: recall
-  tags: [weather, stability, signatures, phak-12, PA.I.C.K3a]
+  tags: [weather, stability, signatures, phak-12]
   source_ref: |
     PHAK Ch 12; body Reveal operational table.
+  acs_codes: [PA.I.C.K3a]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Stability chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 13 -- Atmospheric Stability
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 
 - front: "Operational signature of unstable air: cloud type, precipitation, turbulence, visibility?"
   back: |
@@ -215,9 +255,17 @@ sounding reader.
     Visibility: excellent (vertical mixing scrubs the haze out).
   cardType: basic
   kind: recall
-  tags: [weather, stability, signatures, phak-12, PA.I.C.K3a]
+  tags: [weather, stability, signatures, phak-12]
   source_ref: |
     PHAK Ch 12; body Reveal operational table.
+  acs_codes: [PA.I.C.K3a]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Stability chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 13 -- Atmospheric Stability
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 
 - front: "Surface signs of instability you can read from a METAR strip alone (no sounding required)?"
   back: |
@@ -228,9 +276,17 @@ sounding reader.
     convection can reach.
   cardType: basic
   kind: recall
-  tags: [weather, stability, metar, surface-signs, PA.I.C.K3a]
+  tags: [weather, stability, metar, surface-signs]
   source_ref: |
     Body Reveal.
+  acs_codes: [PA.I.C.K3a]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Stability chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 13 -- Atmospheric Stability
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 
 - front: "Surface signs of stability you can read from a METAR strip alone?"
   back: |
@@ -240,9 +296,17 @@ sounding reader.
     triggers leaves the column quiescent.
   cardType: basic
   kind: recall
-  tags: [weather, stability, metar, surface-signs, PA.I.C.K3a]
+  tags: [weather, stability, metar, surface-signs]
   source_ref: |
     Body Reveal.
+  acs_codes: [PA.I.C.K3a]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Stability chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 13 -- Atmospheric Stability
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 
 - front: "Why does an afternoon thunderstorm 'die' after sunset even when it built strongly all day?"
   back: |
@@ -254,9 +318,17 @@ sounding reader.
     the column is stable again.
   cardType: basic
   kind: recall
-  tags: [weather, stability, diurnal, thunderstorm, PA.I.C.K3a, PA.I.C.K3h]
+  tags: [weather, stability, diurnal, thunderstorm]
   source_ref: |
     Body Reveal.
+  acs_codes: [PA.I.C.K3a, PA.I.C.K3h]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Stability chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 13 -- Atmospheric Stability
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 
 - front: "CAPE on a Skew-T: what does it represent, and what values are operationally meaningful?"
   back: |
@@ -268,9 +340,17 @@ sounding reader.
     territory. The skill: identify LCL, LFC, and CAPE on the chart.
   cardType: basic
   kind: recall
-  tags: [weather, stability, cape, skew-t, sounding, PA.I.C.K3a]
+  tags: [weather, stability, cape, skew-t, sounding]
   source_ref: |
     Body Practice.
+  acs_codes: [PA.I.C.K3a]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Stability chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 13 -- Atmospheric Stability
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 
 - front: "Two flights leave the same airport at the same hour, same airplane, same pilot technique. One gets a glass-smooth climb; the other (an hour later) gets pummeled in cumulus to 8,000 ft. What changed?"
   back: |
@@ -282,13 +362,21 @@ sounding reader.
     which flight you're about to take.
   cardType: basic
   kind: recall
-  tags: [weather, stability, diurnal, scenario, PA.I.C.K3a]
+  tags: [weather, stability, diurnal, scenario]
   source_ref: |
     Body Context scenario.
   rationale: |
     Scenario card from the Context. Trains the body's pedagogical anchor:
     'stability is the parameter that controls almost everything else
     weather-related you'll experience aloft.'
+  acs_codes: [PA.I.C.K3a]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Stability chapter
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 13 -- Atmospheric Stability
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 ```
 
 ## Connect

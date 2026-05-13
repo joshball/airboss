@@ -159,12 +159,18 @@ is the operational rule the NTSB makes explicit.
     says less.
   cardType: basic
   kind: recall
-  tags: [weather, flight-deck-displays, nexrad, latency, ac-00-63a, PA.I.C.K4]
+  tags: [weather, flight-deck-displays, nexrad, latency, ac-00-63a]
   source_ref: |
     AC 00-63A; NTSB SA-017; body Discover.
   rationale: |
     The body's central pedagogical point. Without this card the rest of the
     K4 vocabulary has nothing to anchor to.
+  acs_codes: [PA.I.C.K4]
+  source_authority:
+    - kind: ac
+      cite: AC 00-63A Use of Cockpit Displays of Digital Weather and Aeronautical Information
+    - kind: aim
+      cite: AIM 7-1-11 -- Weather Observing Programs (FIS-B); 7-1-12 -- Datalink Weather
 
 - front: "Thunderstorm cell at 30 KT, NEXRAD age 12 minutes: how far has the cell moved since the displayed picture?"
   back: |
@@ -174,9 +180,15 @@ is the operational rule the NTSB makes explicit.
     canonical NEXRAD-induced thunderstorm penetration accident.
   cardType: basic
   kind: calculation
-  tags: [weather, flight-deck-displays, nexrad, thunderstorm, latency, PA.I.C.K4]
+  tags: [weather, flight-deck-displays, nexrad, thunderstorm, latency]
   source_ref: |
     NTSB SA-017; body Discover worked example.
+  acs_codes: [PA.I.C.K4]
+  source_authority:
+    - kind: ac
+      cite: AC 00-63A Use of Cockpit Displays of Digital Weather and Aeronautical Information
+    - kind: aim
+      cite: AIM 7-1-11 -- Weather Observing Programs (FIS-B); 7-1-12 -- Datalink Weather
 
 - front: "ADS-B FIS-B vs SiriusXM Aviation Weather: latency, coverage, and cost?"
   back: |
@@ -188,9 +200,15 @@ is the operational rule the NTSB makes explicit.
     has broader geographic coverage.
   cardType: basic
   kind: recall
-  tags: [weather, flight-deck-displays, fis-b, siriusxm, ads-b, PA.I.C.K4]
+  tags: [weather, flight-deck-displays, fis-b, siriusxm, ads-b]
   source_ref: |
     AC 00-63A; AIM 7-1-11; body Reveal table.
+  acs_codes: [PA.I.C.K4]
+  source_authority:
+    - kind: ac
+      cite: AC 00-63A Use of Cockpit Displays of Digital Weather and Aeronautical Information
+    - kind: aim
+      cite: AIM 7-1-11 -- Weather Observing Programs (FIS-B); 7-1-12 -- Datalink Weather
 
 - front: "Onboard radar (Bendix-King RDR series) -- range, what it shows, and three things it doesn't tell you."
   back: |
@@ -202,9 +220,15 @@ is the operational rule the NTSB makes explicit.
     tilt management is required to interrogate altitudes).
   cardType: basic
   kind: recall
-  tags: [weather, flight-deck-displays, onboard-radar, attenuation, PA.I.C.K4]
+  tags: [weather, flight-deck-displays, onboard-radar, attenuation]
   source_ref: |
     AC 00-63A; body Reveal.
+  acs_codes: [PA.I.C.K4]
+  source_authority:
+    - kind: ac
+      cite: AC 00-63A Use of Cockpit Displays of Digital Weather and Aeronautical Information
+    - kind: aim
+      cite: AIM 7-1-11 -- Weather Observing Programs (FIS-B); 7-1-12 -- Datalink Weather
 
 - front: "Per NTSB SA-017, what is the operational rule for NEXRAD mosaic imagery in the cockpit?"
   back: |
@@ -215,9 +239,15 @@ is the operational rule the NTSB makes explicit.
     support the shorter distance.
   cardType: regulation
   kind: recall
-  tags: [weather, flight-deck-displays, nexrad, ntsb, 20nm, PA.I.C.K4]
+  tags: [weather, flight-deck-displays, nexrad, ntsb, 20nm]
   source_ref: |
     NTSB Safety Alert SA-017 (2012) In-Cockpit NEXRAD Mosaic Imagery.
+  acs_codes: [PA.I.C.K4]
+  source_authority:
+    - kind: ac
+      cite: AC 00-63A Use of Cockpit Displays of Digital Weather and Aeronautical Information
+    - kind: aim
+      cite: AIM 7-1-11 -- Weather Observing Programs (FIS-B); 7-1-12 -- Datalink Weather
 
 - front: "Why is lightning detection (Stormscope, FIS-B lightning) the most useful tactical thunderstorm cue in the cockpit?"
   back: |
@@ -229,9 +259,15 @@ is the operational rule the NTSB makes explicit.
     it's the cockpit's best now-picture.
   cardType: basic
   kind: recall
-  tags: [weather, flight-deck-displays, stormscope, lightning, tactical, PA.I.C.K4]
+  tags: [weather, flight-deck-displays, stormscope, lightning, tactical]
   source_ref: |
     AC 00-63A; body Reveal lightning bullet.
+  acs_codes: [PA.I.C.K4]
+  source_authority:
+    - kind: ac
+      cite: AC 00-63A Use of Cockpit Displays of Digital Weather and Aeronautical Information
+    - kind: aim
+      cite: AIM 7-1-11 -- Weather Observing Programs (FIS-B); 7-1-12 -- Datalink Weather
 
 - front: "EFB cellular weather: when is it real-time and when does it stop being useful?"
   back: |
@@ -242,9 +278,15 @@ is the operational rule the NTSB makes explicit.
     ground-level briefing tool, not an in-flight data source.
   cardType: basic
   kind: recall
-  tags: [weather, flight-deck-displays, efb, cellular, PA.I.C.K4]
+  tags: [weather, flight-deck-displays, efb, cellular]
   source_ref: |
     Body Reveal table.
+  acs_codes: [PA.I.C.K4]
+  source_authority:
+    - kind: ac
+      cite: AC 00-63A Use of Cockpit Displays of Digital Weather and Aeronautical Information
+    - kind: aim
+      cite: AIM 7-1-11 -- Weather Observing Programs (FIS-B); 7-1-12 -- Datalink Weather
 
 - front: "ARINC datalink weather: coverage and what kind of products does it deliver?"
   back: |
@@ -256,9 +298,15 @@ is the operational rule the NTSB makes explicit.
     transoceanic flight.
   cardType: basic
   kind: recall
-  tags: [weather, flight-deck-displays, arinc, datalink, PA.I.C.K4]
+  tags: [weather, flight-deck-displays, arinc, datalink]
   source_ref: |
     AC 00-63A; body Reveal table.
+  acs_codes: [PA.I.C.K4]
+  source_authority:
+    - kind: ac
+      cite: AC 00-63A Use of Cockpit Displays of Digital Weather and Aeronautical Information
+    - kind: aim
+      cite: AIM 7-1-11 -- Weather Observing Programs (FIS-B); 7-1-12 -- Datalink Weather
 
 - front: "30 NM south of a building line of CB. EFB shows discrete cells with gaps; ATC then calls a Convective SIGMET for severe TS along that line. Why does the picture you flew toward fail you?"
   back: |
@@ -271,12 +319,18 @@ is the operational rule the NTSB makes explicit.
     penetration decisions, which is to say: don't penetrate.
   cardType: basic
   kind: recall
-  tags: [weather, flight-deck-displays, nexrad, convective-sigmet, PA.I.C.K4]
+  tags: [weather, flight-deck-displays, nexrad, convective-sigmet]
   source_ref: |
     Body Context scenario.
   rationale: |
     Scenario card from the body's Context. Walks the canonical "EFB-showed-clear,
     SIGMET-said-stop" accident pattern.
+  acs_codes: [PA.I.C.K4]
+  source_authority:
+    - kind: ac
+      cite: AC 00-63A Use of Cockpit Displays of Digital Weather and Aeronautical Information
+    - kind: aim
+      cite: AIM 7-1-11 -- Weather Observing Programs (FIS-B); 7-1-12 -- Datalink Weather
 
 - front: "Pre-flight EFB drill before a flight with forecast convection -- three things to pre-decide?"
   back: |
@@ -289,9 +343,15 @@ is the operational rule the NTSB makes explicit.
     cleaner than decisions made under workload at 5,000 ft.
   cardType: basic
   kind: recall
-  tags: [weather, flight-deck-displays, pre-flight, go-nogo, PA.I.C.K4, PA.I.C.R1]
+  tags: [weather, flight-deck-displays, pre-flight, go-nogo]
   source_ref: |
     Body Practice.
+  acs_codes: [PA.I.C.K4, PA.I.C.R1]
+  source_authority:
+    - kind: ac
+      cite: AC 00-63A Use of Cockpit Displays of Digital Weather and Aeronautical Information
+    - kind: aim
+      cite: AIM 7-1-11 -- Weather Observing Programs (FIS-B); 7-1-12 -- Datalink Weather
 ```
 
 ## Connect
