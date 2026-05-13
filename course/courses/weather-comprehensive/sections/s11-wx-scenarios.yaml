@@ -335,3 +335,241 @@ steps:
           twelve-step replay you can scrub through; the FM groups in
           the TAF stop being annotations and start being inputs to a
           live forecast clock.
+
+  - code: s11.2
+    ordinal: 2
+    level: lesson
+    title: Summer pop-up convection - Texas Gulf Coast
+    body_md: |
+      A July afternoon along the upper Texas coast. A weak surface
+      ridge sits over central Texas; a weak trough sits offshore. The
+      inland mT air mass carries enormous CAPE (3500 J/kg at KAUS,
+      3800 at KIAH); a stationary outflow boundary along the upper
+      coastal plain triggers four mature cells along the KAUS to KIAH
+      corridor. The decision in front of the pilot is not "is the
+      weather flyable." It is "can the cells be threaded, and if
+      not, what is the divert?"
+
+      :::scenario slug="summer-thunderstorms-tx"
+      :::
+
+      The four sub-pages walk the intro and the cell line, a
+      chart-by-chart read of the briefing pack, a Socratic analysis
+      of the convection (CAPE, outflow boundary, anvil icing), and
+      the instructor view into how the TruthModel parameterizes
+      air-mass thunderstorms.
+    steps:
+      - code: s11.2.1
+        ordinal: 1
+        title: Intro - the cell line
+        knowledge_node_id: wx-thunderstorm-hazards
+        body_md: |
+          You are at KSAT mid-afternoon planning a flight east to
+          KIAH. The surface analysis is unremarkable: a weak ridge
+          overhead, a weak trough offshore, no real fronts. The
+          surface plot says VFR everywhere within 200 miles. But the
+          convective outlook tells a different story: a stationary
+          outflow boundary along the upper coastal plain has parked
+          itself between KAUS and KIAH, and four mature cells stand
+          along it. Two carry 55-dBZ peaks. The afternoon is the
+          forecast: CAPE peaks now, the cells are mature now, and the
+          go/no-go is timing-dependent.
+
+          :::chart slug="wx-scenarios/summer-thunderstorms-tx/surface-analysis"
+          :::
+
+          The teaser to carry into the next sub-page: KSAT's wind is
+          130 at 10 on a "calm" afternoon. The surface analysis
+          shows essentially no synoptic forcing. Where is the 10-knot
+          wind coming from?
+      - code: s11.2.2
+        ordinal: 2
+        title: Reading the charts
+        knowledge_node_id: wx-product-convective-outlook
+        body_md: |
+          The briefing pack carries the same seventeen artifacts as
+          the frontal scenario. For convective afternoons the load
+          shifts to the convective products and the freezing level.
+
+          ### Surface analysis (`surface-analysis`)
+
+          The ridge / trough framework. Note how little the synoptic
+          map tells you about the cells; this is the trap of weak
+          synoptic-forcing convection.
+
+          :::chart slug="wx-scenarios/summer-thunderstorms-tx/surface-analysis"
+          :::
+
+          ### Convective outlook (`convective-outlook`)
+
+          The product that names the cells. SPC outlook polygons
+          cover the upper coastal plain corridor. This is the chart
+          that decides the go/no-go for an afternoon flight in the
+          summer.
+
+          :::chart slug="wx-scenarios/summer-thunderstorms-tx/convective-outlook"
+          :::
+
+          ### 12-hour prog (`prog-12hr`)
+
+          The cells projected forward. The cell positions on this
+          chart drive the rerouting decision; cells in the prog
+          carry the outflow boundary's track with them.
+
+          :::chart slug="wx-scenarios/summer-thunderstorms-tx/prog-12hr"
+          :::
+
+          ### Freezing level (`freezing-level`)
+
+          The freezing level is high (mid-teens) in July. The
+          AIRMET Zulu band (12000-25000 ft MSL) sits above it
+          because that is where the anvil supercooled liquid lives.
+
+          :::chart slug="wx-scenarios/summer-thunderstorms-tx/freezing-level"
+          :::
+
+          ### AIRMET / SIGMET overlay (`airmet-sigmet`)
+
+          Four hazards stacked: Tango for the convective turbulence
+          column (0-15000 ft MSL), Tango for the low-level outflow
+          mechanical turbulence (0-6000 ft MSL), Zulu for the anvil
+          icing band (12000-25000 ft MSL), Sierra for the LIFR
+          pockets directly under the cells (0-3000 ft MSL).
+
+          :::chart slug="wx-scenarios/summer-thunderstorms-tx/airmet-sigmet"
+          :::
+
+          ### PIREP plot (`pirep-plot`)
+
+          A KAUS PIREP from FL090 reports moderate chop 070-110 in
+          TSRA near a cell. Convergent with the AIRMET Tango polygon
+          and the cell-feature truth.
+
+          :::chart slug="wx-scenarios/summer-thunderstorms-tx/pirep-plot"
+          :::
+      - code: s11.2.3
+        ordinal: 3
+        title: Analysis - discovery prompts
+        knowledge_node_id: wx-thunderstorm-hazards
+        body_md: |
+          The Socratic prompts for this scenario center on convective
+          structure: where do you stay clear, how far, why those
+          numbers, and what does the freezing level do to the icing
+          band?
+
+          ### KSAT's 130/10 on a "calm" afternoon
+
+          The 1018-mb ridge and the 1010-mb offshore trough generate
+          a modest 8-mb gradient across the Gulf coast. Surface flow
+          circulates clockwise around the ridge; KSAT sits on the
+          southern flank and gets southeasterly maritime flow even
+          though the synoptic map looks quiet. The trap: pilots
+          looking at the surface analysis read "no wind" and miss
+          the gradient that is delivering moisture to the inland mT
+          mass.
+
+          ### Why 55 dBZ matters
+
+          Cells C-aus-east, C-corridor-mid, and C-iah-south all
+          carry 55-dBZ peaks. Above 50 dBZ, the cell extends to the
+          tropopause; below 50, it tops out under the anvil. The
+          AIRMET Zulu band 12000-25000 ft MSL exists because the
+          cells stack the supercooled liquid that high. Three
+          concrete hazards at the cell: updraft turbulence inside
+          the rain core, downdraft / microburst risk at the leading
+          edge, embedded lightning. Stay 36-40 km clear at flight
+          altitudes the AIRMETs cover.
+
+          ### AIRMET Sierra under the cells
+
+          A Sierra polygon for a LIFR pocket 0-3000 ft MSL is the
+          rain shaft, not a stratus deck. Heavy rain blocks
+          visibility; the polygon covers exactly the footprint where
+          the cell's precip falls heavily enough to drop visibility
+          below 3 SM. Sierra polygons normally cover broad stratus
+          decks; this one is a convective artifact, and it dies when
+          the cell dies.
+
+          ### Anvil icing: why above the freezing level
+
+          The AIRMET Zulu polygon covers 12000-25000 ft MSL. Below
+          12000 the precipitation is liquid; supercooled liquid only
+          appears where the temperature is below 0 C, and the
+          freezing level on this chart is high. Above ~-15 C
+          (about 25000 ft) most droplets glaciate; ice does not
+          accrete on the airframe once the cloud is glaciated. The
+          icing band is bounded by physics, not by an authoring
+          choice.
+
+          ### AIRMET Tango: outflow boundary vs convective column
+
+          Two Tango polygons stack in this scenario. The 0-6000 ft
+          one covers the mechanical turbulence right along the
+          stationary outflow boundary. The 0-15000 ft one covers
+          the convective column above the cells. They serve
+          different missions: the outflow Tango tells you it is
+          bumpy along the boundary even between cells; the column
+          Tango tells you the chop is continuous from surface to
+          AIRMET top inside the cell footprint.
+
+          ### KAUS PIREP corroboration
+
+          The KAUS pilot report from FL090 in TSRA confirms the
+          Tango polygon. Convergent independent evidence: synoptic
+          truth (outflow boundary, mT mass with 3500 J/kg CAPE),
+          AIRMET polygon, pilot report.
+
+          :::chart slug="wx-scenarios/summer-thunderstorms-tx/airmet-sigmet"
+          :::
+      - code: s11.2.4
+        ordinal: 4
+        title: Instructor internals
+        knowledge_node_id: wx-thunderstorm-hazards
+        body_md: |
+          ### Source
+
+          `libs/wx-engine/src/truth/scenarios/summer-thunderstorms-tx.ts`.
+          The TruthModel literal carries four convective cells with
+          named ids (C-aus-east, C-corridor-mid, C-cll-near,
+          C-iah-south), a stationary outflow boundary, and per-station
+          CAPE that drives the convective-outlook polygon shape.
+
+          ### Three tunable parameters
+
+          - `convection.capeJperKgByStation.KIAH: 3800`. CAPE at the
+            convective stations drives the cell vertical extent and
+            the AIRMET Zulu band. Drop it below 1500 and the cells
+            become showers; raise it above 4000 and the supercell
+            outlook activates.
+          - `convection.cells[0].peakDbz: 55`. The 50-dBZ cutoff
+            determines whether the cell reaches the tropopause.
+            Cells at 50+ produce the embedded-turbulence + lightning
+            + microburst hazard triad; cells at 45 do not.
+          - `diurnal.solarNoonUtcHour: 17`. The diurnal cycle drives
+            the lifecycle: cells fire mid-afternoon, peak around
+            21Z, decay after sunset. Shift the solar noon and the
+            scenario becomes a different time of day.
+
+          ### What produced each callout
+
+          The cell-feature callouts come from a rule that walks every
+          convective cell, computes its overlap with the hazard
+          polygons (geometric containment), and emits a question
+          pinned to the named cell + named polygons. Same rule set
+          as in s11.1; different truth literal gives different
+          callouts.
+
+          ### Authored vs derived
+
+          100 percent derived. The four cells are authored; everything
+          else (which AIRMETs cover them, which PIREPs corroborate,
+          which TAFs carry FM groups, what each METAR reports) falls
+          out of the truth state.
+
+          ### Next iteration
+
+          The current scenario is a static snapshot. The next iteration
+          carries cell motion vectors so the cells walk along the
+          outflow boundary, and the AIRMET polygons translate with
+          them. The KAUS PIREP becomes one moment in a moving picture
+          instead of one moment in a still photo.
