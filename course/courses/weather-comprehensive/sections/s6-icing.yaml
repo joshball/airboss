@@ -2,6 +2,34 @@ code: s6
 ordinal: 6
 title: Icing - types, avoidance, decision-making
 body_md: |
+  **Before you start.** This section assumes the
+  [cloud and precipitation picture](/reference/knowledge/wx-clouds-and-precipitation)
+  from s3 (cloud type implies droplet size and supercooled-liquid
+  potential) and the
+  [freezing-rain warning](/reference/knowledge/wx-clouds-and-precipitation)
+  flagged there (warm layer aloft over a cold layer below). It
+  teaches the icing decision: the three ice forms, how to avoid them,
+  and the freezing level as the diagnostic that says whether an out
+  exists.
+
+  Terms you will see referenced but not fully taught here:
+
+  - [CIP and FIP](/reference/knowledge/wx-product-airmets-sigmets)
+    (current and forecast icing potential): introduced here through
+    the embedded charts. The product family is taught in s8.5
+    alongside the icing G-AIRMET.
+  - [Lake-effect icing scenario s11.3](/courses/weather-comprehensive/s11.3):
+    end-to-end worked example of cP air over warm water,
+    freezing-drizzle in the column, and why the non-FIKI "climb over"
+    plan fails. Read after finishing s6.
+  - [Rotor cloud icing](/reference/knowledge/wx-icing-types-and-avoidance):
+    a special-case icing reservoir tied to mountain-wave geometry.
+    Walked in [s11.4](/courses/weather-comprehensive/s11.4).
+
+  The "out" must exist before you enter the icing, not after.
+
+  ---
+
   An iced airframe is a different airframe. Lift drops, drag rises,
   stall speed climbs, control authority degrades -- all four happen at
   once and all four accelerate as more ice accumulates. There is no
