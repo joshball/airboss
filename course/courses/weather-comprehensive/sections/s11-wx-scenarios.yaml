@@ -1272,3 +1272,241 @@ steps:
           marine layer spills inland through Coast Range gaps
           (Salinas Valley, San Francisco Bay) without re-authoring
           the polygon shape.
+
+  - code: s11.6
+    ordinal: 6
+    level: lesson
+    title: Radiation fog - California Central Valley
+    body_md: |
+      A February pre-dawn morning over the California Central Valley.
+      A 1020-mb ridge sits overhead; calm wind; clear overnight skies
+      collapsed the surface inversion. The saturated boundary layer
+      fog floods the valley floor with visibility under half a mile
+      at KFAT, KSCK, KMOD, and KMER. KPRB sits west of the Coast
+      Range and stays clear. The forecast lifecycle is set by the
+      diurnal cycle: the LIFR layer burns off in the four hours after
+      solar noon (20Z) as surface heating lifts the mixing height
+      through the inversion. The decision in front of the pilot is
+      whether to delay until the burn-off, file IFR, or scrub the
+      flight entirely.
+
+      :::scenario slug="dense-fog-radiation-central-valley"
+      :::
+
+      The four sub-pages walk: the intro and the nocturnal inversion,
+      a chart-by-chart read of the briefing pack, a Socratic analysis
+      of the radiation-fog lifecycle, and the instructor view into
+      how the TruthModel encodes the diurnal cycle.
+    steps:
+      - code: s11.6.1
+        ordinal: 1
+        title: Intro - the valley floor
+        knowledge_node_id: wx-fog-and-visibility-obstructions
+        body_md: |
+          You are at KFAT at 06:00 local on a February morning,
+          watching the runway lights disappear into fog. The METAR
+          reads 002VV (vertical visibility 200 ft), visibility 1/4 SM
+          in fog, T 4 C, Td 4 C, wind calm. The surface analysis
+          shows a benign 1020-mb ridge overhead; the synoptic charts
+          are uninteresting. The fog is local to the valley floor;
+          KPRB an hour west reports clear and 10 SM. The valley fog
+          is a boundary-layer phenomenon: the saturated air under the
+          nocturnal inversion has collapsed to visibility under half
+          a mile. The flight is grounded until the inversion breaks.
+          The question is: when, and what is the forecast confidence?
+
+          :::chart slug="wx-scenarios/dense-fog-radiation-central-valley/surface-analysis"
+          :::
+
+          The teaser to carry into the next sub-page: solar noon is
+          at 20Z. The TAF FM groups predict burn-off after that. Why
+          is the forecaster confident in a specific clock time and
+          not just "later today?"
+      - code: s11.6.2
+        ordinal: 2
+        title: Reading the charts
+        knowledge_node_id: wx-product-gfa
+        body_md: |
+          Radiation fog briefings lean on the METAR plot, the GFA,
+          and the TAF FM groups. Synoptic charts look quiet.
+
+          ### Surface analysis (`surface-analysis`)
+
+          The 1020-mb ridge overhead and the departing 1014-mb low
+          to the east. Calm winds. No fronts. The synoptic chart is
+          background; the fog is a boundary-layer feature.
+
+          :::chart slug="wx-scenarios/dense-fog-radiation-central-valley/surface-analysis"
+          :::
+
+          ### Graphical Forecast for Aviation (`gfa`)
+
+          The LIFR polygon covers the valley floor (KFAT, KSCK,
+          KMOD, KMER). KPRB west of the Coast Range is VFR. The
+          polygon shape is the valley basin.
+
+          :::chart slug="wx-scenarios/dense-fog-radiation-central-valley/gfa"
+          :::
+
+          ### AIRMET / SIGMET overlay (`airmet-sigmet`)
+
+          Two polygons: Sierra for the valley-floor LIFR layer
+          (0-300 ft MSL), and a Sierra for Coast Range mountain
+          obscuration (0-4000 ft MSL) where the fog tops abut the
+          ridgeline.
+
+          :::chart slug="wx-scenarios/dense-fog-radiation-central-valley/airmet-sigmet"
+          :::
+
+          ### METAR plot (`metar-plot`)
+
+          Every valley station reports temperature equal to dewpoint
+          (saturation). KPRB outside the basin reports T 8 / Td -1,
+          a 9 C spread. The basin / non-basin split is the chart.
+
+          :::chart slug="wx-scenarios/dense-fog-radiation-central-valley/metar-plot"
+          :::
+
+          ### TAF (one per valley station)
+
+          The FM groups in each TAF mark the forecast burn-off time.
+          The pre-dawn period reads 1/4 SM FG; the post-noon period
+          reads SCT020.
+
+          :::chart slug="wx-scenarios/dense-fog-radiation-central-valley/taf-kfat"
+          :::
+
+          ### PIREP plot (`pirep-plot`)
+
+          A valley PIREP from the previous evening confirms the
+          inversion (smooth air, visibility falling). The current
+          PIREPs are sparse: no one is flying.
+
+          :::chart slug="wx-scenarios/dense-fog-radiation-central-valley/pirep-plot"
+          :::
+      - code: s11.6.3
+        ordinal: 3
+        title: Analysis - discovery prompts
+        knowledge_node_id: wx-fog-and-visibility-obstructions
+        body_md: |
+          ### Why temperature equals dewpoint
+
+          Calm wind plus clear overnight skies lets the surface
+          radiate heat away unobstructed; the surface air cools to
+          its dewpoint and saturation occurs at ground level. The
+          valley floor is a basin: the cold dense air pools (cold
+          air sinks) and the layer deepens until the inversion top
+          caps it. Every valley station reports T equal to Td
+          because every valley station is inside the same saturated
+          pool.
+
+          ### Why KPRB stays clear
+
+          KPRB sits at higher elevation west of the Coast Range,
+          above the inversion top. Above the inversion the air is
+          subsiding warm and dry under the 1020-mb ridge. KPRB sees
+          the ridge synoptic; the valley stations see the
+          boundary-layer collapse. The same synoptic state produces
+          two completely different surface observations because the
+          terrain divides the basin from the ridge.
+
+          ### The diurnal-cycle forecast
+
+          The burn-off mechanism is solar heating of the surface.
+          Around solar noon (20Z in this scenario) the sun lifts the
+          mixing height; once the mixing height exceeds the
+          inversion top, the saturated layer entrains drier air from
+          above and the fog dissipates. The four-hour lag between
+          solar noon and forecast burn-off is the time it takes for
+          the mixing height to climb through the inversion top.
+          This is why the TAF FM groups carry specific clock times:
+          the diurnal cycle is the most reliable input to a
+          boundary-layer fog forecast.
+
+          ### LIFR vs IFR vs MVFR
+
+          The AIRMET Sierra polygon covers ceiling below 1000 ft AGL
+          or visibility below 3 SM. Inside the polygon both fail
+          (visibility 1/4 SM, ceiling 002VV). LIFR specifically
+          means visibility below 1 SM and / or ceiling below 500 ft
+          AGL. The polygon is LIFR; the Sierra family is the AIRMET
+          mechanism that wraps it.
+
+          ### Mountain obscuration
+
+          The Sierra mountain-obscuration polygon along the Coast
+          Range covers the upwind ridge faces where fog tops abut
+          the ridge line. The fog does not crest the ridge (the
+          inversion caps it), but it obscures the windward slopes.
+          Same mechanism as the marine-stratus mountain
+          obscuration in s11.5, different basin.
+
+          ### Forecast confidence and the wait
+
+          A delay until 24Z is a defensible plan: the diurnal cycle
+          is the highest-confidence forecast input we have. The
+          trap: a high-pressure system that lingers means a second
+          night of clear skies and a second morning of fog tomorrow.
+          The wait is for today's burn-off, not for the synoptic
+          state to change. If the synoptic state is stable and the
+          forecast is for clear overnight conditions again, expect
+          the same scenario at the same time tomorrow.
+
+          :::chart slug="wx-scenarios/dense-fog-radiation-central-valley/metar-plot"
+          :::
+      - code: s11.6.4
+        ordinal: 4
+        title: Instructor internals
+        knowledge_node_id: wx-fog-and-visibility-obstructions
+        body_md: |
+          ### Source
+
+          `libs/wx-engine/src/truth/scenarios/dense-fog-radiation-central-valley.ts`.
+          Two air-mass polygons (the valley-floor cP inversion mass
+          and the departing mT mass east of the Coast Range) plus
+          the diurnal block that drives the lifecycle: solar noon
+          at 20Z, mixing height at 200 ft MSL, nocturnal inversion
+          true.
+
+          ### Three tunable parameters
+
+          - `diurnal.mixingHeightFtMsl: 200`. The pre-burn-off
+            mixing height defines the trapped-layer depth. Raise
+            it to 1000 and the fog never forms; drop it to 100 and
+            the layer is shallower but more concentrated.
+          - `diurnal.nocturnalInversion: true`. The flag that
+            activates the radiation-fog rule set. Flip it to false
+            and the scenario becomes a different scenario (a
+            standard clear-and-cool valley morning).
+          - `airMasses[AM-valley-inversion-cP].surfaceTempC: 4` and
+            `surfaceDewpointC: 4`. The saturation condition. Spread
+            them apart by 2 C and the saturation fails; the fog
+            polygon disappears.
+
+          ### What produced each callout
+
+          The Sierra valley-floor callouts come from the same IFR
+          hazard-zone rule used across scenarios. The mountain
+          obscuration callout uses the same rule as s11.4 / s11.5
+          against a different basin. The diurnal-cycle callouts
+          come from a rule that walks `diurnal.solarNoonUtcHour` +
+          `diurnal.mixingHeightFtMsl` and emits the burn-off
+          forecast prompt.
+
+          ### Authored vs derived
+
+          The valley basin and the Coast Range crest are implicit
+          in the polygon shapes. The diurnal cycle is authored
+          (a TruthModel literal) but its consequences are derived:
+          the TAF FM groups, the Sierra polygon altitude bounds,
+          the mountain-obscuration top all trace from the diurnal
+          block + the air-mass parameters.
+
+          ### Next iteration
+
+          Add a time-advance operator that steps the diurnal cycle
+          forward in 30-minute increments. Once that lands, the
+          scenario yields a full-morning replay: dense fog at 06Z,
+          mixing-height rise starting at 18Z, burn-off complete by
+          24Z. Each step re-derives every product and re-issues the
+          AIRMET polygons.
