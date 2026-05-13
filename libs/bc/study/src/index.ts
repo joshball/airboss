@@ -74,6 +74,10 @@ export { runEngine } from './engine';
 export { SourceRefRequiredError, UpsertReturnedNoRowError } from './errors';
 // Display formatters (`.svelte` pages render review intervals via these).
 export { formatNextInterval, formatNextIntervalAbsolute } from './formatters';
+// `flattenLeavesDepthFirst` is a pure tree-walk helper (browser-safe). Lives
+// in `./lens-tree-walk` precisely so it can be value-exported from the
+// runtime barrel without pulling the lens's DB-touching imports.
+export { flattenLeavesDepthFirst } from './lens-tree-walk';
 // Lens projection types only -- the value implementations
 // (`acsLens`, `domainLens`, `computeMasteryRollup`, `LensError`) live in
 // `./lenses`, which transitively imports `./mastery` -> `@ab/db/connection`
