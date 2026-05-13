@@ -1,11 +1,12 @@
 /**
  * Course-aware lens implementations (course-primitive WP, Phase 4+).
  *
- * Phase 4 ships `courseLens` -- the single-course tree projection that
- * mirrors how `acsLens` walks a syllabus and `domainLens` walks the goal's
- * reachable knowledge nodes. Phase 5 layers `courseWithCertOverlayLens` and
- * `getCourseGaps` on top to cross-reference course coverage against a cert
- * syllabus.
+ * Phase 4 shipped `courseLens` as a 2-level (section -> step) projection.
+ * Phase C of course-tree-arbitrary-depth generalises the lens to walk an
+ * N-level tree (`section -> lesson -> ... -> step`) via the `buildSubtree`
+ * recursion. The 2-level case is the trivial recursion bottom: when no
+ * `lesson` rows exist every section's children are leaves and the emitted
+ * shape is byte-identical to the pre-WP output.
  *
  * The Lens contract from `./lenses` carries:
  *   - `goal: GoalRow | null` -- when null we still emit the tree shape so an
@@ -23,15 +24,16 @@
  * section); when product reaches for it the multiplier slides in here.
  *
  * See:
- *   - docs/work-packages/course-primitive/spec.md  -- Lens behavior section
- *   - docs/work-packages/course-primitive/design.md -- Lens extensions
- *   - libs/bc/study/src/lenses.ts                   -- Lens framework + acsLens/domainLens
- *   - libs/bc/study/src/courses.ts                  -- getCourseStepsByCourse
+ *   - docs/work-packages/course-primitive/spec.md           -- Lens behavior
+ *   - docs/work-packages/course-tree-arbitrary-depth/design.md -- recursive algorithm
+ *   - libs/bc/study/src/lenses.ts                           -- Lens framework + acsLens/domainLens
+ *   - libs/bc/study/src/courses.ts                          -- getCourseStepsByCourse
  */
 
 import {
 	ASSESSMENT_METHOD_VALUES,
 	type AssessmentMethod,
+	COURSE_STEP_LEVELS,
 	NODE_MASTERY_GATES,
 	SYLLABUS_NODE_LEVELS,
 } from '@ab/constants';
@@ -61,18 +63,25 @@ export interface CourseLensFilters {
 }
 
 /**
- * Course lens. Walks the course identified by `filters.courseId` and emits a
- * two-level tree:
+ * Course lens. Walks the course identified by `filters.courseId` and emits
+ * an N-level nested tree:
  *
  *     course (root LensTreeNode, level='course')
  *       section (level='section')
- *         step leaf (LensLeaf, knowledgeNodeId = course_step.knowledge_node_id)
+ *         [lesson (level='lesson')]*    interior, may nest further
+ *           step leaf (LensLeaf, knowledgeNodeId = course_step.knowledge_node_id)
+ *
+ * The shape is recursive (`buildSubtree`): a non-leaf row's children are
+ * partitioned into interior subtrees (placed on `children`) and direct leaf
+ * rows (placed on `leaves`). The 2-level shape (no `lesson` rows) is the
+ * trivial recursion bottom and produces output byte-identical to the
+ * pre-WP lens.
  *
  * Per-step mastery is computed via `getNodeEvidenceStateMap` -- the same
  * any-evidence-passes semantic the Domain lens uses for non-syllabus leaves
  * (course steps live outside the FAA triad). Each step's effective weight is
- * `goal_course.weight * 1.0`; the section + course rollups aggregate the
- * weighted leaves via `computeMasteryRollup`.
+ * `goal_course.weight * 1.0`; the per-interior + course rollups aggregate
+ * the weighted leaves via `computeMasteryRollup`.
  *
  * Empty / browse paths:
  *   - `input.goal === null` -> emit the tree (no DB-backed goal context) with
@@ -117,7 +126,8 @@ export const courseLens: Lens<CourseLensFilters> = async (db, userId, input) => 
 
 	// Resolve the course row (display title) and the full step tree. Both are
 	// scoped to the requested course id; the BC's `getCourseStepsByCourse`
-	// returns rows in tree-walk order (sections before steps, ordinal asc).
+	// returns rows in tree-walk order (sections / lessons before their
+	// children, ordinal asc).
 	const courseRows = await db.select().from(course).where(eq(course.id, courseId)).limit(1);
 	const courseRow = courseRows[0];
 	if (courseRow === undefined) {
@@ -138,24 +148,14 @@ export const courseLens: Lens<CourseLensFilters> = async (db, userId, input) => 
 		return { tree: [root], rollup: emptyRollup(), leaves: [] };
 	}
 
-	// Group rows: sections (parent_id NULL) and steps under each section.
-	const sectionRows: CourseStepRow[] = [];
-	const stepsBySection = new Map<string, CourseStepRow[]>();
-	for (const row of steps) {
-		if (row.parentId === null) {
-			sectionRows.push(row);
-		} else {
-			const list = stepsBySection.get(row.parentId) ?? [];
-			list.push(row);
-			stepsBySection.set(row.parentId, list);
-		}
-	}
-	// Sort sections by ordinal (DB query already returned in order, but the
-	// section/step partition does not preserve the cross-parent ordering).
-	sectionRows.sort((a, b) => a.ordinal - b.ordinal);
+	// Group every row by parent_id once; the recursion below reads from this
+	// map without a second sweep of the row list. Sections live under `null`;
+	// every other row lives under its parent's id.
+	const childrenByParent = groupRowsByParent(steps);
 
 	// Per-step mastery: collect every linked knowledge node id, batch the
-	// per-(user, node) evidence lookup, then decode each leaf.
+	// per-(user, node) evidence lookup, then decode each leaf inside the
+	// recursive walk.
 	const allNodeIds = steps
 		.filter((s) => s.knowledgeNodeId !== null)
 		.map((s) => s.knowledgeNodeId)
@@ -166,49 +166,23 @@ export const courseLens: Lens<CourseLensFilters> = async (db, userId, input) => 
 			: new Map<string, NodeEvidenceState>();
 
 	const allLensLeaves: LensLeaf[] = [];
-	const sectionTreeNodes: LensTreeNode[] = [];
 	const courseRollupBuckets: Array<{ mastery: LensLeafMastery; weight: number }> = [];
+	const buildLeaf = makeBuildLeaf(evidenceByNode);
 
-	for (const section of sectionRows) {
-		const childSteps = (stepsBySection.get(section.id) ?? []).slice().sort((a, b) => a.ordinal - b.ordinal);
-		const sectionLeaves: LensLeaf[] = [];
-		const sectionRollupBuckets: Array<{ mastery: LensLeafMastery; weight: number }> = [];
-
-		for (const step of childSteps) {
-			// step.knowledgeNodeId is non-null on every step row (DB CHECK
-			// `course_step_consistency_check` enforces it); narrow defensively.
-			if (step.knowledgeNodeId === null) continue;
-			const evidence = evidenceByNode.get(step.knowledgeNodeId);
-			const mastery = computeStepLeafMastery(evidence);
-			const leaf: LensLeaf = {
-				id: step.id,
-				knowledgeNodeId: step.knowledgeNodeId,
-				title: step.title,
-				requiredBloom: null,
-				mastery,
-			};
-			sectionLeaves.push(leaf);
-			sectionRollupBuckets.push({ mastery, weight: goalWeight });
-			allLensLeaves.push(leaf);
-			courseRollupBuckets.push({ mastery, weight: goalWeight });
-		}
-
-		sectionTreeNodes.push({
-			id: section.id,
-			level: 'section',
-			title: section.title,
-			rollup: computeMasteryRollup(sectionRollupBuckets),
-			children: [],
-			leaves: sectionLeaves,
-		});
-	}
+	// Recurse from every section row. The course root is built outside the
+	// recursion because it is a `course` row, not a `course_step` row, and
+	// its display title comes from the `course` table.
+	const sectionRows = childrenByParent.get(null) ?? [];
+	const topLevelSubtrees: LensTreeNode[] = sectionRows.map((row) =>
+		buildSubtree(row, childrenByParent, buildLeaf, goalWeight, allLensLeaves, courseRollupBuckets),
+	);
 
 	const root: LensTreeNode = {
 		id: courseRow.id,
 		level: 'course',
 		title: courseRow.title,
 		rollup: computeMasteryRollup(courseRollupBuckets),
-		children: sectionTreeNodes,
+		children: topLevelSubtrees,
 	};
 
 	return {
@@ -444,6 +418,164 @@ export const courseWithCertOverlayLens: Lens<CourseOverlayLensFilters> = async (
 		certGaps,
 	};
 };
+
+// ---------------------------------------------------------------------------
+// Recursive tree construction
+// ---------------------------------------------------------------------------
+
+/**
+ * Group every row from a course's step set by `parent_id`. Sections (root
+ * rows) live under the `null` key; every other row lives under its parent's
+ * id. Each per-parent list is sorted by `ordinal` so the recursive walk
+ * visits children in document order regardless of the DB read order.
+ *
+ * Returned map is owned by the caller; the lens calls this once per render
+ * and reads from it inside the recursion without re-sorting.
+ */
+function groupRowsByParent(rows: ReadonlyArray<CourseStepRow>): Map<string | null, CourseStepRow[]> {
+	const map = new Map<string | null, CourseStepRow[]>();
+	for (const row of rows) {
+		const key: string | null = row.parentId;
+		const list = map.get(key) ?? [];
+		list.push(row);
+		map.set(key, list);
+	}
+	for (const list of map.values()) {
+		list.sort((a, b) => a.ordinal - b.ordinal);
+	}
+	return map;
+}
+
+/**
+ * Build a single `LensLeaf` from a step row + the pre-batched evidence map.
+ * Curried so the recursion can call it without re-passing the shared evidence
+ * map every level.
+ */
+function makeBuildLeaf(
+	evidenceByNode: Map<string, NodeEvidenceState>,
+): (row: CourseStepRow) => LensLeaf | null {
+	return (row) => {
+		// step rows are CHECK-constrained to carry a non-null knowledge_node_id;
+		// the narrow keeps the type system honest and matches the pre-WP guard.
+		if (row.knowledgeNodeId === null) return null;
+		const evidence = evidenceByNode.get(row.knowledgeNodeId);
+		const mastery = computeStepLeafMastery(evidence);
+		return {
+			id: row.id,
+			knowledgeNodeId: row.knowledgeNodeId,
+			title: row.title,
+			requiredBloom: null,
+			mastery,
+		};
+	};
+}
+
+/**
+ * Recursive subtree builder. Given a non-leaf row (`section` or `lesson`),
+ * partitions its direct children into interior subtrees and leaf rows, then
+ * emits a `LensTreeNode` with both `children` (recursed interior subtrees)
+ * and `leaves` (direct leaf rows). The per-node rollup aggregates every leaf
+ * reachable from the subtree weighted by `goalWeight`.
+ *
+ * `allLeavesSink` and `rollupSink` are passed by reference so the recursion
+ * collects the full flat leaf list + course-wide rollup buckets in one pass
+ * without re-walking the tree.
+ *
+ * Complexity: O(N) where N is the row count for the course (each row visited
+ * exactly once). The recursion depth is bounded by `COURSE_TREE_MAX_DEPTH`
+ * (10), enforced upstream by the seed validator; JS stack headroom is ample.
+ */
+function buildSubtree(
+	row: CourseStepRow,
+	childrenByParent: Map<string | null, CourseStepRow[]>,
+	buildLeaf: (row: CourseStepRow) => LensLeaf | null,
+	goalWeight: number,
+	allLeavesSink: LensLeaf[],
+	courseRollupSink: Array<{ mastery: LensLeafMastery; weight: number }>,
+): LensTreeNode {
+	const directChildren = childrenByParent.get(row.id) ?? [];
+	const interiorSubtrees: LensTreeNode[] = [];
+	const directLeaves: LensLeaf[] = [];
+	const subtreeRollupBuckets: Array<{ mastery: LensLeafMastery; weight: number }> = [];
+
+	for (const child of directChildren) {
+		if (child.isLeaf) {
+			const leaf = buildLeaf(child);
+			if (leaf === null) continue;
+			directLeaves.push(leaf);
+			subtreeRollupBuckets.push({ mastery: leaf.mastery, weight: goalWeight });
+			allLeavesSink.push(leaf);
+			courseRollupSink.push({ mastery: leaf.mastery, weight: goalWeight });
+			continue;
+		}
+		// Recurse into the interior child. The recursion writes its own
+		// leaves through `allLeavesSink` + `courseRollupSink`; we collect a
+		// subtree-local copy here too so this level's rollup reflects every
+		// leaf under it (not just the direct ones).
+		const interior = buildSubtree(child, childrenByParent, buildLeaf, goalWeight, allLeavesSink, courseRollupSink);
+		interiorSubtrees.push(interior);
+		collectSubtreeLeavesForRollup(interior, subtreeRollupBuckets, goalWeight);
+	}
+
+	const level: LensTreeNode['level'] = row.level === COURSE_STEP_LEVELS.LESSON ? 'lesson' : 'section';
+	return {
+		id: row.id,
+		level,
+		title: row.title,
+		rollup: computeMasteryRollup(subtreeRollupBuckets),
+		children: interiorSubtrees,
+		leaves: directLeaves,
+	};
+}
+
+/**
+ * Walk a subtree and append every reachable leaf as a rollup bucket. Used by
+ * `buildSubtree` so each interior node's rollup aggregates the full subtree
+ * (not just its direct leaves). The shared `goalWeight` is applied uniformly
+ * because course leaves do not (yet) carry a per-step weight.
+ */
+function collectSubtreeLeavesForRollup(
+	node: LensTreeNode,
+	into: Array<{ mastery: LensLeafMastery; weight: number }>,
+	goalWeight: number,
+): void {
+	if (node.leaves !== undefined) {
+		for (const leaf of node.leaves) {
+			into.push({ mastery: leaf.mastery, weight: goalWeight });
+		}
+	}
+	for (const child of node.children) {
+		collectSubtreeLeavesForRollup(child, into, goalWeight);
+	}
+}
+
+/**
+ * Flatten a `LensTreeNode[]` into the document-order list of `LensLeaf` rows
+ * reachable from anywhere in the tree. Visits each node's direct leaves
+ * before recursing into its interior children, which matches the natural
+ * authoring order: a section / lesson with `body_md` framing, then its leaf
+ * steps, then deeper lesson groupings.
+ *
+ * Consumers:
+ *   - prev/next navigation on the step reader (find the current leaf's index
+ *     and pick `i-1` / `i+1`)
+ *   - cert-overlay aggregation that wants the leaf list without a second
+ *     tree walk
+ *
+ * Pure helper -- exported so renderer + load functions can call it without
+ * re-implementing the traversal.
+ */
+export function flattenLeavesDepthFirst(tree: ReadonlyArray<LensTreeNode>): LensLeaf[] {
+	const out: LensLeaf[] = [];
+	function walk(node: LensTreeNode): void {
+		if (node.leaves !== undefined) {
+			for (const leaf of node.leaves) out.push(leaf);
+		}
+		for (const child of node.children) walk(child);
+	}
+	for (const node of tree) walk(node);
+	return out;
+}
 
 // ---------------------------------------------------------------------------
 // Helpers
