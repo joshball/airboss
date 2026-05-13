@@ -181,7 +181,7 @@ $effect(() => {
 
 	.banner-error {
 		background: var(--signal-danger-wash);
-		color: var(--signal-danger-ink);
+		color: var(--signal-danger-deep-ink);
 		border-color: var(--signal-danger-edge);
 	}
 

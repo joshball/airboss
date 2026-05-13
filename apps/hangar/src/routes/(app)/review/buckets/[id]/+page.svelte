@@ -154,21 +154,21 @@ function statusPillClass(value: string | null | undefined): string {
 
 	.pill-done {
 		background: var(--signal-success-wash);
-		color: var(--signal-success-ink);
+		color: var(--signal-success-deep-ink);
 	}
 
 	.pill-progress {
 		background: var(--signal-info-wash);
-		color: var(--signal-info-ink);
+		color: var(--signal-info-deep-ink);
 	}
 
 	.pill-pending {
 		background: var(--signal-info-wash);
-		color: var(--signal-info-ink);
+		color: var(--signal-info-deep-ink);
 	}
 
 	.pill-unread {
 		background: var(--signal-warning-wash);
-		color: var(--signal-warning-ink);
+		color: var(--signal-warning-deep-ink);
 	}
 </style>

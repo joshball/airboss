@@ -298,7 +298,7 @@ function toggle() {
 	}
 
 	.check {
-		color: var(--signal-success-ink, var(--action-default));
+		color: var(--signal-success-deep-ink, var(--action-default));
 		min-width: 1ch;
 		font-family: var(--font-family-mono);
 	}

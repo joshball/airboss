@@ -281,6 +281,6 @@ function handleTriggerClick(event: MouseEvent): void {
 	}
 
 	.state.error {
-		color: var(--signal-danger-ink);
+		color: var(--signal-danger-deep-ink);
 	}
 </style>

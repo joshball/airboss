@@ -138,6 +138,14 @@ export function deriveInteractiveStates(base: string, isDark: boolean): Interact
 
 /**
  * Derive the status/feedback bundle for a signal color.
+ *
+ * `deepInk` is a same-hue shade of `base` shifted toward the opposite
+ * end of the lightness scale (darker for light themes, lighter for
+ * dark themes). The default shift is calibrated so chip text on a
+ * derived `wash` reads as the signal hue rather than a generic
+ * black-on-tint -- explicit `palette.overrides.signal.X.deepInk` pins
+ * exact values where the derived shade is too soft to hit 4.5:1
+ * against an overridden wash.
  */
 export function deriveSignalVariants(base: string, isDark: boolean): SignalStates {
 	return {
@@ -145,5 +153,6 @@ export function deriveSignalVariants(base: string, isDark: boolean): SignalState
 		wash: alpha(base, isDark ? 0.15 : 0.1),
 		edge: alpha(base, isDark ? 0.3 : 0.2),
 		ink: getContrastingTextColor(base),
+		deepInk: adjustBrightness(base, isDark ? 0.25 : -0.25),
 	};
 }

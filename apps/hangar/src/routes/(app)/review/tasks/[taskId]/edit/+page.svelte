@@ -332,7 +332,7 @@ function attemptBack(event: MouseEvent): void {
 	}
 
 	.err {
-		color: var(--signal-danger-ink);
+		color: var(--signal-danger-deep-ink);
 		font-size: var(--type-ui-caption-size);
 	}
 
@@ -376,8 +376,8 @@ function attemptBack(event: MouseEvent): void {
 	}
 
 	.action-button.danger {
-		color: var(--signal-danger-ink);
-		border-color: var(--signal-danger-ink);
+		color: var(--signal-danger-deep-ink);
+		border-color: var(--signal-danger-deep-ink);
 	}
 
 	.action-button:focus-visible {
@@ -405,7 +405,7 @@ function attemptBack(event: MouseEvent): void {
 	}
 
 	.discard-link {
-		color: var(--signal-danger-ink);
+		color: var(--signal-danger-deep-ink);
 		text-decoration: underline;
 		font-size: var(--type-ui-label-size);
 	}

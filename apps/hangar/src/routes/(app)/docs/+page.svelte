@@ -149,7 +149,7 @@ const FALLBACK_LINKS: ReadonlyArray<{ label: string; path: string; note: string 
 	}
 
 	.status-line.error {
-		color: var(--signal-danger-ink);
+		color: var(--signal-danger-deep-ink);
 	}
 
 	.fallback-links {

@@ -777,8 +777,8 @@ onMount(() => {
 
 	.toast.toast-error {
 		background: var(--signal-danger-wash);
-		color: var(--signal-danger-ink);
-		border-color: var(--signal-danger-ink);
+		color: var(--signal-danger-deep-ink);
+		border-color: var(--signal-danger-deep-ink);
 	}
 
 	.toast .dismiss {

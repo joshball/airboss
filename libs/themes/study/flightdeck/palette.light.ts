@@ -27,8 +27,12 @@ export const palette: Palette = {
 		overlay: 'oklch(1 0 89.9)', // from #ffffff
 	},
 	edge: {
-		default: 'oklch(0.929 0.013 255.5)', // from #e2e8f0
-		strong: 'oklch(0.869 0.02 252.9)', // from #cbd5e1
+		// Tightened to hit WCAG 3:1 against page + panel (advisory bar).
+		// L=0.64 to clear the slightly darker flightdeck page (L=0.968)
+		// vs. airboss/default's L=0.984; same hue family as the legacy
+		// slate edge.
+		default: 'oklch(0.64 0.013 255.5)',
+		strong: 'oklch(0.5 0.02 252.9)',
 		subtle: 'oklch(0.968 0.007 247.9)', // from #f1f5f9
 	},
 	action: {
@@ -103,25 +107,29 @@ export const palette: Palette = {
 				solid: 'oklch(0.527 0.137 150.1)', // from #15803d
 				wash: 'oklch(0.982 0.018 155.8)', // from #f0fdf4
 				edge: 'oklch(0.925 0.081 156)', // from #bbf7d0
-				ink: 'oklch(1 0 89.9)', // from #ffffff
+				ink: 'oklch(1 0 89.9)', // from #ffffff (text-on-solid)
+				deepInk: 'oklch(0.53 0.137 150.1)', // text-on-wash; clears 4.5:1 vs wash
 			},
 			warning: {
 				solid: 'oklch(0.555 0.146 49)', // from #b45309
 				wash: 'oklch(0.987 0.021 95.3)', // from #fffbeb
 				edge: 'oklch(0.924 0.115 95.7)', // from #fde68a
-				ink: 'oklch(1 0 89.9)', // from #ffffff
+				ink: 'oklch(1 0 89.9)', // from #ffffff (text-on-solid)
+				deepInk: 'oklch(0.55 0.146 49)', // text-on-wash; clears 4.5:1 vs wash
 			},
 			danger: {
 				solid: 'oklch(0.505 0.19 27.5)', // from #b91c1c
 				wash: 'oklch(0.971 0.013 17.4)', // from #fef2f2
 				edge: 'oklch(0.885 0.059 18.3)', // from #fecaca
-				ink: 'oklch(1 0 89.9)', // from #ffffff
+				ink: 'oklch(1 0 89.9)', // from #ffffff (text-on-solid)
+				deepInk: 'oklch(0.55 0.19 27.5)', // text-on-wash; clears 4.5:1 vs wash
 			},
 			info: {
 				solid: 'oklch(0.5 0.119 242.7)', // from #0369a1
 				wash: 'oklch(0.977 0.012 236.6)', // from #f0f9ff
 				edge: 'oklch(0.901 0.055 230.9)', // from #bae6fd
-				ink: 'oklch(1 0 89.9)', // from #ffffff
+				ink: 'oklch(1 0 89.9)', // from #ffffff (text-on-solid)
+				deepInk: 'oklch(0.54 0.119 242.7)', // text-on-wash; clears 4.5:1 vs wash
 			},
 		},
 		focus: {

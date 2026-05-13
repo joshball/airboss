@@ -25,7 +25,20 @@ export interface SignalStates {
 	solid: string;
 	wash: string;
 	edge: string;
+	/**
+	 * Contrasting label on the `solid` fill (the action-button-style
+	 * pattern). Typically near-black or near-white. Derived from
+	 * `solid` lightness; override when the default heuristic picks
+	 * the wrong end.
+	 */
 	ink: string;
+	/**
+	 * Contrasting label on the `wash` background -- the chip / pill /
+	 * banner-text pattern. A darker shade of the signal hue for light
+	 * appearances; a lighter shade for dark appearances. Clears 4.5:1
+	 * against `wash` so chip text remains AA-readable.
+	 */
+	deepInk: string;
 }
 
 export interface Palette {

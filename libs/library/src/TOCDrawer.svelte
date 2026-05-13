@@ -401,7 +401,7 @@ function entryAriaLabel(e: TOCDrawerEntry, isRead: boolean): string {
 	}
 
 	.check {
-		color: var(--signal-success-ink, var(--action-default));
+		color: var(--signal-success-deep-ink, var(--action-default));
 		font-family: var(--font-family-mono);
 		font-size: var(--font-size-sm);
 		min-width: 1ch;

@@ -157,7 +157,7 @@ const totalGoals = $derived(
 	}
 
 	.primary-badge {
-		color: var(--signal-warning-ink);
+		color: var(--signal-warning-deep-ink);
 		font-size: var(--font-size-body);
 	}
 

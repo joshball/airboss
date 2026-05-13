@@ -245,7 +245,7 @@ let { initial, errors, submitLabel, saving }: BucketFormProps = $props();
 	}
 
 	.err {
-		color: var(--signal-danger-ink);
+		color: var(--signal-danger-deep-ink);
 		font-size: var(--type-ui-caption-size);
 	}
 

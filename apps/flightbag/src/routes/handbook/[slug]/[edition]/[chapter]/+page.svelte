@@ -146,7 +146,7 @@ const hasSections = $derived(data.sections.length > 0);
 		flex: 1;
 	}
 	.check {
-		color: var(--signal-success-ink, var(--ink-muted));
+		color: var(--signal-success-deep-ink, var(--ink-muted));
 		font-weight: var(--font-weight-bold);
 	}
 	.sections a.read {

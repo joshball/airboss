@@ -134,4 +134,18 @@ describe('deriveSignalVariants', () => {
 		expect(deriveSignalVariants('oklch(0.9 0.15 150)', false).ink).toBe('#000000');
 		expect(deriveSignalVariants('oklch(0.3 0.15 150)', true).ink).toBe('#ffffff');
 	});
+
+	it('derives deepInk as a same-hue shift toward the opposite end of the L scale', () => {
+		// Light theme: shift L down by 0.25 along the base hue.
+		expect(deriveSignalVariants('oklch(0.7 0.15 150)', false).deepInk).toBe('oklch(0.45 0.15 150)');
+		// Dark theme: shift L up by 0.25 along the base hue.
+		expect(deriveSignalVariants('oklch(0.55 0.15 150)', true).deepInk).toBe('oklch(0.8 0.15 150)');
+	});
+
+	it('clamps deepInk lightness to [0, 1]', () => {
+		// Light theme + low-L base: floor at 0.
+		expect(deriveSignalVariants('oklch(0.1 0.15 150)', false).deepInk).toBe('oklch(0 0.15 150)');
+		// Dark theme + high-L base: ceiling at 1.
+		expect(deriveSignalVariants('oklch(0.9 0.15 150)', true).deepInk).toBe('oklch(1 0.15 150)');
+	});
 });

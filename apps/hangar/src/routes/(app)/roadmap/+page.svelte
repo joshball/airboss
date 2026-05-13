@@ -535,7 +535,7 @@ const anyFilterActive = $derived(
 
 	tr.invalid td:first-child::before {
 		content: '! ';
-		color: var(--signal-warning-ink);
+		color: var(--signal-warning-deep-ink);
 	}
 
 	td a {
@@ -561,21 +561,21 @@ const anyFilterActive = $derived(
 	.pill[data-state='done'],
 	.pill[data-state='signed-off'] {
 		background: var(--signal-success-wash);
-		color: var(--signal-success-ink);
+		color: var(--signal-success-deep-ink);
 	}
 
 	.pill[data-state='walked'] {
 		background: var(--signal-info-wash);
-		color: var(--signal-info-ink);
+		color: var(--signal-info-deep-ink);
 	}
 
 	.pill[data-state='pending'] {
 		background: var(--signal-warning-wash);
-		color: var(--signal-warning-ink);
+		color: var(--signal-warning-deep-ink);
 	}
 
 	.pill[data-state='error'] {
 		background: var(--signal-danger-wash);
-		color: var(--signal-danger-ink);
+		color: var(--signal-danger-deep-ink);
 	}
 </style>

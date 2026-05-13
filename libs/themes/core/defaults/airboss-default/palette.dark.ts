@@ -39,8 +39,13 @@ export const palette: Palette = {
 		overlay: 'oklch(0.278 0.03 256.8)', // from #1f2937
 	},
 	edge: {
-		default: 'oklch(0.372 0.039 257.3)', // from #334155
-		strong: 'oklch(0.446 0.037 257.3)', // from #475569
+		// Tightened to hit WCAG 3:1 against page + panel (advisory bar).
+		// L lifted 0.372 -> 0.51 so a 1px border reads as a clear boundary
+		// against the dark page / panel surfaces.
+		default: 'oklch(0.51 0.039 257.3)',
+		// `strong` stays lighter than `default` so the visual ladder
+		// (subtle -> default -> strong) keeps its semantic order.
+		strong: 'oklch(0.65 0.037 257.3)',
 		subtle: 'oklch(0.278 0.03 256.8)', // from #1f2937
 	},
 	action: {
@@ -115,25 +120,29 @@ export const palette: Palette = {
 				solid: 'oklch(0.8 0.182 151.7)', // from #4ade80
 				wash: 'oklch(0.259 0.043 158.7)', // from #0f2a1c
 				edge: 'oklch(0.448 0.108 151.3)', // from #166534
-				ink: 'oklch(0.18 0.032 266.6)', // from #0b1120
+				ink: 'oklch(0.18 0.032 266.6)', // from #0b1120 (text-on-solid)
+				deepInk: 'oklch(0.7 0.182 151.7)', // text-on-wash; clears 4.5:1 vs wash
 			},
 			warning: {
 				solid: 'oklch(0.837 0.164 84.4)', // from #fbbf24
 				wash: 'oklch(0.247 0.038 81.6)', // from #2a1f0a
 				edge: 'oklch(0.476 0.103 61.9)', // from #854d0e
-				ink: 'oklch(0.18 0.032 266.6)', // from #0b1120
+				ink: 'oklch(0.18 0.032 266.6)', // from #0b1120 (text-on-solid)
+				deepInk: 'oklch(0.7 0.164 84.4)', // text-on-wash; clears 4.5:1 vs wash
 			},
 			danger: {
 				solid: 'oklch(0.711 0.166 22.2)', // from #f87171
 				wash: 'oklch(0.218 0.04 20.8)', // from #2a1212
 				edge: 'oklch(0.396 0.133 25.7)', // from #7f1d1d
-				ink: 'oklch(0.18 0.032 266.6)', // from #0b1120
+				ink: 'oklch(0.18 0.032 266.6)', // from #0b1120 (text-on-solid)
+				deepInk: 'oklch(0.7 0.166 22.2)', // text-on-wash; clears 4.5:1 vs wash
 			},
 			info: {
 				solid: 'oklch(0.754 0.139 232.7)', // from #38bdf8
 				wash: 'oklch(0.251 0.042 234.6)', // from #0a2533
 				edge: 'oklch(0.443 0.1 240.8)', // from #075985
-				ink: 'oklch(0.18 0.032 266.6)', // from #0b1120
+				ink: 'oklch(0.18 0.032 266.6)', // from #0b1120 (text-on-solid)
+				deepInk: 'oklch(0.7 0.139 232.7)', // text-on-wash; clears 4.5:1 vs wash
 			},
 		},
 		focus: {

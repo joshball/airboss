@@ -170,7 +170,7 @@ void NOTE_FOLLOW_UP_MAX_LENGTH;
 		background: var(--signal-success-wash);
 		border: 1px solid var(--signal-success-edge);
 		border-radius: var(--radius-sm);
-		color: var(--signal-success-ink);
+		color: var(--signal-success-deep-ink);
 	}
 	.error {
 		margin: 0;
@@ -178,7 +178,7 @@ void NOTE_FOLLOW_UP_MAX_LENGTH;
 		background: var(--signal-danger-wash);
 		border: 1px solid var(--signal-danger-edge);
 		border-radius: var(--radius-sm);
-		color: var(--signal-danger-ink);
+		color: var(--signal-danger-deep-ink);
 	}
 	.quote {
 		display: flex;

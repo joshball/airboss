@@ -233,14 +233,14 @@ function buildFilterUrl(
 	}
 
 	.run-summary {
-		color: var(--signal-success-ink, var(--ink-body));
+		color: var(--signal-success-deep-ink, var(--ink-body));
 		background: var(--signal-success-wash, var(--surface-raised));
 		padding: var(--space-sm);
 		border-radius: var(--radius-sm);
 	}
 
 	.run-error {
-		color: var(--signal-danger-ink, var(--ink-body));
+		color: var(--signal-danger-deep-ink, var(--ink-body));
 		background: var(--signal-danger-wash, var(--surface-raised));
 		padding: var(--space-sm);
 		border-radius: var(--radius-sm);

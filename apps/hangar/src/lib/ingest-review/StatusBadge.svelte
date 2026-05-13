@@ -24,12 +24,12 @@ const { status }: Props = $props();
 
 	.badge[data-status='unresolved'] {
 		background: var(--signal-warning-wash, var(--surface-sunken));
-		color: var(--signal-warning-ink, var(--ink-body));
+		color: var(--signal-warning-deep-ink, var(--ink-body));
 	}
 
 	.badge[data-status='resolved'] {
 		background: var(--signal-success-wash, var(--surface-sunken));
-		color: var(--signal-success-ink, var(--ink-body));
+		color: var(--signal-success-deep-ink, var(--ink-body));
 	}
 
 	.badge[data-status='stale'] {

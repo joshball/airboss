@@ -652,15 +652,15 @@ const finishOptions: ReadonlyArray<{ value: SessionOutcome; tone: 'success' | 'd
 	}
 
 	.summary dd.pass {
-		color: var(--signal-success-ink);
+		color: var(--signal-success-deep-ink);
 	}
 
 	.summary dd.fail {
-		color: var(--signal-danger-ink);
+		color: var(--signal-danger-deep-ink);
 	}
 
 	.summary dd.blocked {
-		color: var(--signal-warning-ink);
+		color: var(--signal-warning-deep-ink);
 	}
 
 	.shortcuts {
@@ -750,14 +750,14 @@ const finishOptions: ReadonlyArray<{ value: SessionOutcome; tone: 'success' | 'd
 
 	.finish-option[data-tone='success'].active {
 		background: var(--signal-success-wash);
-		color: var(--signal-success-ink);
-		border-color: var(--signal-success-ink);
+		color: var(--signal-success-deep-ink);
+		border-color: var(--signal-success-deep-ink);
 	}
 
 	.finish-option[data-tone='danger'].active {
 		background: var(--signal-danger-wash);
-		color: var(--signal-danger-ink);
-		border-color: var(--signal-danger-ink);
+		color: var(--signal-danger-deep-ink);
+		border-color: var(--signal-danger-deep-ink);
 	}
 
 	.finish-option[data-tone='muted'].active {
