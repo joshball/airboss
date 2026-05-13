@@ -29,7 +29,7 @@ The pedagogical treatment of each product (Socratic discovery walk, mastery gati
 | Product            | Code  | Page                                | Status |
 | ------------------ | ----- | ----------------------------------- | ------ |
 | METAR              | METAR | [metar](metar/page.md)              | draft  |
-| Special observation| SPECI | [speci](speci/page.md)              | stub   |
+| Special observation| SPECI | [speci](speci/page.md)              | draft  |
 
 ### Terminal forecasts
 
@@ -50,10 +50,10 @@ The pedagogical treatment of each product (Socratic discovery walk, mastery gati
 | AIRMET                         | WA       | [airmet](airmet/page.md)                          | draft  |
 | SIGMET                         | WS       | [sigmet](sigmet/page.md)                          | draft  |
 | Convective SIGMET              | WST      | [convective-sigmet](convective-sigmet/page.md)    | draft  |
-| Center Weather Advisory        | CWA      | [cwa](cwa/page.md)                                | stub   |
-| Graphical AIRMET               | G-AIRMET | [g-airmet](g-airmet/page.md)                      | stub   |
-| Volcanic Ash Advisory          | VAA      | [volcanic-ash-advisory](volcanic-ash-advisory/page.md) | stub |
-| Tropical Cyclone Advisory      | TCA      | [tropical-cyclone-advisory](tropical-cyclone-advisory/page.md) | stub |
+| Center Weather Advisory        | CWA      | [cwa](cwa/page.md)                                | draft  |
+| Graphical AIRMET               | G-AIRMET | [g-airmet](g-airmet/page.md)                      | draft  |
+| Volcanic Ash Advisory          | VAA      | [volcanic-ash-advisory](volcanic-ash-advisory/page.md) | draft |
+| Tropical Cyclone Advisory      | TCA      | [tropical-cyclone-advisory](tropical-cyclone-advisory/page.md) | draft |
 
 ### Pilot reports
 
@@ -73,31 +73,31 @@ The pedagogical treatment of each product (Socratic discovery walk, mastery gati
 | ----------------------------- | ----------- | ----------------------------------------------------- | ------ |
 | Surface Analysis Chart        | (chart)     | [surface-analysis](surface-analysis/page.md)          | draft  |
 | Prog Chart                    | (chart)     | [prog-chart](prog-chart/page.md)                      | draft  |
-| Ceiling and Visibility Analysis | CVA       | [ceiling-visibility-analysis](ceiling-visibility-analysis/page.md) | stub |
-| Freezing Level Chart          | FZLVL       | [freezing-level](freezing-level/page.md)              | stub   |
-| Convective Outlook            | (SPC)       | [convective-outlook](convective-outlook/page.md)      | stub   |
-| Significant Weather Prog (High) | SIGWX     | [sigwx-prog](sigwx-prog/page.md)                      | stub   |
+| Ceiling and Visibility Analysis | CVA       | [ceiling-visibility-analysis](ceiling-visibility-analysis/page.md) | draft |
+| Freezing Level Chart          | FZLVL       | [freezing-level](freezing-level/page.md)              | draft  |
+| Convective Outlook            | (SPC)       | [convective-outlook](convective-outlook/page.md)      | draft  |
+| Significant Weather Prog (High) | SIGWX     | [sigwx-prog](sigwx-prog/page.md)                      | draft  |
 
 ### Radar and satellite
 
 | Product       | Code    | Page                              | Status |
 | ------------- | ------- | --------------------------------- | ------ |
-| Radar Mosaic  | (chart) | [radar-mosaic](radar-mosaic/page.md) | stub |
-| Satellite     | (chart) | [satellite](satellite/page.md)    | stub   |
+| Radar Mosaic  | (chart) | [radar-mosaic](radar-mosaic/page.md) | draft |
+| Satellite     | (chart) | [satellite](satellite/page.md)    | draft  |
 
 ### Icing and turbulence
 
 | Product             | Code         | Page                              | Status |
 | ------------------- | ------------ | --------------------------------- | ------ |
-| Icing Forecast      | FIP / CIP    | [icing-fip-cip](icing-fip-cip/page.md) | stub |
-| Turbulence Forecast | GTG          | [turbulence-gtg](turbulence-gtg/page.md) | stub |
+| Icing Forecast      | FIP / CIP    | [icing-fip-cip](icing-fip-cip/page.md) | draft |
+| Turbulence Forecast | GTG          | [turbulence-gtg](turbulence-gtg/page.md) | draft |
 
 ### TFRs and weather NOTAMs
 
 | Product               | Code        | Page                              | Status |
 | --------------------- | ----------- | --------------------------------- | ------ |
-| Weather-related TFR   | TFR         | [weather-tfr](weather-tfr/page.md) | stub  |
-| Weather-related NOTAM | NOTAM-D wx  | [weather-notam](weather-notam/page.md) | stub |
+| Weather-related TFR   | TFR         | [weather-tfr](weather-tfr/page.md) | draft |
+| Weather-related NOTAM | NOTAM-D wx  | [weather-notam](weather-notam/page.md) | draft |
 
 ## Authoring
 
