@@ -2,6 +2,32 @@ code: s1
 ordinal: 1
 title: Why weather matters
 body_md: |
+  **Before you start.** This section is the frame for the whole
+  course. It mentions several products and concepts you may not have
+  met yet, and that is fine: the rest of the course is how you meet
+  them. The forward references in this section's prose, with where
+  each one is taught:
+
+  - [METAR](/reference/knowledge/wx-reading-metars-tafs) (current
+    surface weather report): taught in s7.
+  - [TAF](/reference/knowledge/wx-reading-metars-tafs) (terminal
+    aerodrome forecast): taught in s7.
+  - [Frontal passage](/reference/knowledge/wx-airmasses-and-fronts):
+    taught in s2.
+  - [Area forecast / GFA](/reference/knowledge/wx-product-gfa): taught
+    in s8.
+  - [Personal minimums](/reference/knowledge/wx-personal-minimums):
+    introduced in step s1.2 below.
+  - [The go/no-go decision](/reference/knowledge/wx-go-nogo-decision):
+    introduced in step s1.1 below; revisited as the integrated
+    decision in s10.
+
+  If you have heard of these but never read one in anger, that is
+  exactly the audience this course is built for. Right now, just
+  absorb the framing.
+
+  ---
+
   A friend asks you to fly them to a wedding three states away on
   Saturday. Conditions look "fine" -- nothing in the area forecast jumps
   out, the destination is showing 4,000 broken, winds light. You know
