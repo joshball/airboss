@@ -27,12 +27,14 @@ body_md: |
   ---
 
   Three forces decide whether your airplane wants to fly today:
-  airflow over the wing (wind), the smoothness or roughness of that
-  airflow (turbulence), and the actual density of the air doing the
-  lifting (density altitude). All three live in the same family --
-  they're how the atmosphere transmits energy to the airframe -- and
-  the pilot's job is to read them as one picture rather than three
-  unrelated numbers.
+  airflow over the wing ([wind](/reference/knowledge/wx-wind-systems)),
+  the smoothness or roughness of that airflow
+  ([turbulence](/reference/knowledge/wx-turbulence-types)), and the
+  actual density of the air doing the lifting
+  ([density altitude](/reference/knowledge/wx-density-altitude)). All
+  three live in the same family -- they're how the atmosphere
+  transmits energy to the airframe -- and the pilot's job is to read
+  them as one picture rather than three unrelated numbers.
 
   This section is the runway-to-cruise reality check. A perfectly
   acceptable forecast can still produce an unflyable Saturday morning
@@ -40,21 +42,24 @@ body_md: |
   hot, and the wind is gusting at 30 degrees off centerline. Each
   step here is a single variable in that equation.
 steps:
+
   - code: s4.1
     ordinal: 1
     title: Wind systems
     body_md: |
       Wind isn't one thing. It's the daily reversal of the sea breeze,
       the diurnal mountain-valley flow, the channeling effect of a
-      pass, the rotor downstream of a ridge, the shear at the top of
-      the boundary layer. The forecast wind at 3,000 feet AGL is a
-      single point estimate of an extremely structured field.
+      pass, the [rotor](/reference/knowledge/wx-turbulence-types)
+      downstream of a ridge, the shear at the top of the boundary
+      layer. The forecast wind at 3,000 feet AGL is a single point
+      estimate of an extremely structured field.
 
       The pilot-relevant categories: surface wind (crosswind +
-      headwind component), wind aloft (planning), shear (transition
-      between layers), gust (instantaneous variability), and mountain
-      wave (the most violent of the lot, often invisible until you
-      enter it).
+      headwind component), [wind aloft](/reference/knowledge/wx-product-winds-aloft)
+      (planning), shear (transition between layers), gust
+      (instantaneous variability), and
+      [mountain wave](/reference/knowledge/wx-turbulence-types) (the
+      most violent of the lot, often invisible until you enter it).
     knowledge_node_id: wx-wind-systems
 
   - code: s4.2
@@ -65,9 +70,10 @@ steps:
       airflow. The cause matters because the avoidance strategy
       differs: thermal turbulence (climb above the convective layer or
       fly early), mechanical turbulence (give the obstacle clearance),
-      wind shear turbulence (cross the layer perpendicular and quickly),
-      wake turbulence (stay above and upwind), clear-air turbulence
-      (deviate off the jet stream).
+      [wind shear](/reference/knowledge/wx-wind-systems) turbulence
+      (cross the layer perpendicular and quickly), wake turbulence
+      (stay above and upwind), clear-air turbulence (deviate off the
+      jet stream).
 
       Severity matters too. Light is information. Moderate is a
       reroute candidate. Severe is a 180. Extreme is "you should not
@@ -75,8 +81,9 @@ steps:
       severity before you enter the air.
 
       The turbulence G-AIRMET is the graphical descendant of the
-      textual AIRMET-Tango -- six-hour forecast windows of where
-      moderate-or-greater turbulence is expected:
+      textual [AIRMET-Tango](/reference/knowledge/wx-product-airmets-sigmets)
+      -- six-hour forecast windows of where moderate-or-greater
+      turbulence is expected:
 
       :::chart slug="wx-turbulence-gairmet-2024-12-23-12z"
       :::
