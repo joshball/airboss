@@ -149,12 +149,26 @@ export interface ParsedLegacySource {
 	edition: string;
 }
 
+/** A single parsed `Chapter N -- Title` clause out of a `detail` string. */
+export interface ParsedChapter {
+	chapter: number;
+	/** Title text, or null if the clause was `Chapter N` without a title. */
+	chapterTitle: string | null;
+}
+
 /** Outcome of parsing a legacy `detail` string. */
 export interface ParsedLegacyDetail {
-	/** Chapter number if present in `detail`; null otherwise. */
+	/** Primary chapter number if present in `detail`; null otherwise. */
 	chapter: number | null;
-	/** Chapter title if `detail` had a `Chapter N -- Title` form; null otherwise. */
+	/** Primary chapter title if `detail` had a `Chapter N -- Title` form; null otherwise. */
 	chapterTitle: string | null;
+	/**
+	 * Additional chapters parsed out of the same `detail` (multi-chapter
+	 * citations like `Chapter 12 -- Vertical Motion and Clouds; Chapter 14 --
+	 * Precipitation`). Empty when only one chapter (or none) was found.
+	 * The primary chapter (the first one) is NOT duplicated here.
+	 */
+	additionalChapters: readonly ParsedChapter[];
 }
 
 /** A chapter row from a handbook manifest. */
@@ -186,6 +200,13 @@ export interface ReviewRow {
 	currentEdition: string | null;
 	/** Chapter title in the current edition for the parsed chapter number, if any. */
 	currentChapterTitle: string | null;
+	/**
+	 * Chapter titles in the current edition for each entry in
+	 * `parsedDetail.additionalChapters`, in order. `null` for any chapter not
+	 * present in the current manifest. Empty when there are no additional
+	 * chapters.
+	 */
+	additionalCurrentChapterTitles: readonly (string | null)[];
 	/** Note: blank when not authored. */
 	legacyNote: string;
 	/** Proposed structured-form YAML body (without leading `- ` prefix). */
@@ -394,25 +415,78 @@ export function parseLegacySource(source: string): ParsedLegacySource | null {
 }
 
 /**
- * Parse a legacy `detail` string. Recognised forms:
- *   "Chapter 3 -- Basic Flight Maneuvers"   -> { chapter: 3, chapterTitle: "Basic Flight Maneuvers" }
- *   "Chapter 16 -- Navigation"              -> { chapter: 16, chapterTitle: "Navigation" }
- *   "Chapter 4 -- Slow Flight, Stalls, ..." -> { chapter: 4, chapterTitle: "Slow Flight, Stalls, ..." }
- *   "Chapter on Slow Flight, Stalls, and Spins" -> { chapter: null, chapterTitle: null }
- *   "Recovery from unusual attitudes (visual)"  -> { chapter: null, chapterTitle: null }
+ * Parse a legacy `detail` string. Finds every `Chapter N -- Title` clause
+ * anywhere in the string -- the legacy AFH corpus puts the clause at the
+ * start (`Chapter 3 -- Basic Flight Maneuvers`), but the AvWx corpus and
+ * later authoring prefix the handbook name (`Aviation Weather Handbook,
+ * Chapter 11 -- Air Masses, Fronts, and the Wave Cyclone Model`). Multi-
+ * chapter citations like `Chapter 12 -- Vertical Motion and Clouds;
+ * Chapter 14 -- Precipitation` lift both chapters; the first becomes the
+ * primary, the rest land in `additionalChapters`.
+ *
+ * Title text runs until the next chapter clause or one of these terminators:
+ *  - `;` (multi-chapter separator: `... -- Title; Chapter 14 -- Title2`)
+ *  - `,` followed by `Section`/`Sections`/`§` (section qualifier separator)
+ *  - end of string
+ *
+ * Recognised forms:
+ *   "Chapter 3 -- Basic Flight Maneuvers"
+ *     -> { chapter: 3, chapterTitle: "Basic Flight Maneuvers", additionalChapters: [] }
+ *   "Aviation Weather Handbook, Chapter 11 -- Air Masses, Fronts, and the Wave Cyclone Model"
+ *     -> { chapter: 11, chapterTitle: "Air Masses, Fronts, and the Wave Cyclone Model", additionalChapters: [] }
+ *   "Aviation Weather Handbook, Chapter 12 -- Vertical Motion and Clouds; Chapter 14 -- Precipitation"
+ *     -> { chapter: 12, chapterTitle: "Vertical Motion and Clouds", additionalChapters: [{ chapter: 14, chapterTitle: "Precipitation" }] }
+ *   "Aviation Weather Handbook, Chapter 25 -- Analysis, Sections 25.4 (...) and 25.5 (...)"
+ *     -> { chapter: 25, chapterTitle: "Analysis", additionalChapters: [] }
+ *   "Recovery from unusual attitudes (visual)"
+ *     -> { chapter: null, chapterTitle: null, additionalChapters: [] }
  */
 export function parseLegacyDetail(detail: string): ParsedLegacyDetail {
-	// `Chapter N -- Title` (also `Chapter N - Title` or `Chapter N: Title`).
-	const numberedTitled = detail.match(/^Chapter\s+(\d+)\s*(?:--?|—|:)\s*(.+?)\s*$/i);
-	if (numberedTitled !== null) {
-		return { chapter: Number.parseInt(numberedTitled[1], 10), chapterTitle: numberedTitled[2].trim() };
+	// Global scan for `Chapter N` clauses anywhere in the string. Title runs
+	// from just after the dash/colon up to one of: `;`, `, Section`, `, §`,
+	// next `Chapter N`, or end-of-string. If no dash/colon follows the number,
+	// the chapter is recorded with a null title (matches the bare `Chapter N`
+	// case the previous parser handled).
+	const chapterRegex = /\bChapter\s+(\d+)\b/gi;
+	const hits: { index: number; chapter: number; afterNumber: number }[] = [];
+	let m: RegExpExecArray | null = chapterRegex.exec(detail);
+	while (m !== null) {
+		hits.push({ index: m.index, chapter: Number.parseInt(m[1], 10), afterNumber: m.index + m[0].length });
+		m = chapterRegex.exec(detail);
 	}
-	// Bare `Chapter N` (no title).
-	const numberedOnly = detail.match(/^Chapter\s+(\d+)\b/i);
-	if (numberedOnly !== null) {
-		return { chapter: Number.parseInt(numberedOnly[1], 10), chapterTitle: null };
+	if (hits.length === 0) return { chapter: null, chapterTitle: null, additionalChapters: [] };
+
+	const parses: ParsedChapter[] = [];
+	for (let i = 0; i < hits.length; i += 1) {
+		const hit = hits[i];
+		const nextHitIndex = i + 1 < hits.length ? hits[i + 1].index : detail.length;
+		// Text immediately after `Chapter N`. Strip a leading separator if it's
+		// a dash variant (`--`, `-`, em-dash) or colon.
+		const tail = detail.slice(hit.afterNumber, nextHitIndex);
+		const sep = tail.match(/^\s*(?:--|—|:|-)\s*/);
+		if (sep === null) {
+			// No title separator: bare `Chapter N` reference.
+			parses.push({ chapter: hit.chapter, chapterTitle: null });
+			continue;
+		}
+		const titleRegion = tail.slice(sep[0].length);
+		// Title terminators: `;` (multi-chapter) or `,` followed by `Section`/
+		// `Sections`/`§` (section qualifier). Take everything up to the first
+		// terminator, then trim trailing whitespace.
+		const termMatch = titleRegion.match(/[;,]\s*(?:Section[s]?\b|§)|;/i);
+		let title = termMatch === null ? titleRegion : titleRegion.slice(0, termMatch.index);
+		title = title.trim();
+		// Strip a single trailing `,` if the terminator was the section
+		// qualifier variant (the `,` is part of the title region, not the title).
+		title = title.replace(/[,;]+\s*$/, '').trim();
+		parses.push({ chapter: hit.chapter, chapterTitle: title.length > 0 ? title : null });
 	}
-	return { chapter: null, chapterTitle: null };
+	const [primary, ...rest] = parses;
+	return {
+		chapter: primary.chapter,
+		chapterTitle: primary.chapterTitle,
+		additionalChapters: rest,
+	};
 }
 
 // ---------------------------------------------------------------------------
@@ -493,9 +567,9 @@ function findChapterByCode(snapshot: ManifestSnapshot, chapter: number): Manifes
 // ---------------------------------------------------------------------------
 
 /**
- * Build the proposed structured-form YAML body for a citation. Returns the
- * body lines (joined by `\n`) WITHOUT the leading `- ` and WITHOUT the body
- * indent prefix; callers prefix each line with the legacy entry's
+ * Build the proposed structured-form YAML body for a single citation. Returns
+ * the body lines (joined by `\n`) WITHOUT the leading `- ` and WITHOUT the
+ * body indent prefix; callers prefix each line with the legacy entry's
  * `bodyIndent` (and the leading `- ` for the first line) when emitting.
  *
  * When `redirectedFrom` is non-null, the proposed YAML carries the
@@ -529,6 +603,45 @@ export function buildProposedYaml(args: {
 		lines.push(`note: ${formatYamlScalar(args.note)}`);
 	}
 	return lines.join('\n');
+}
+
+/**
+ * One item passed to `buildProposedYamlMulti`. When a legacy `detail` parses
+ * to multiple chapters (e.g. `Chapter 12 -- ...; Chapter 14 -- ...`), the
+ * migration emits one such item per chapter. The first item carries the
+ * `note` from the legacy citation; subsequent items inherit the note unless
+ * a per-item override is supplied (today: never; the schema is fixed).
+ */
+export interface ProposedItem {
+	slug: string;
+	chapter: number | null;
+	chapterTitle: string | null;
+	note: string;
+	redirectedFrom: string | null;
+}
+
+/**
+ * Build a multi-item proposed-rewrite block. Output shape mirrors what
+ * `parseExistingProposedRewrites` returns: each item starts with `- ref: ...`
+ * at column 0, continuation lines indented by two spaces, items separated by
+ * a newline. Suitable for direct emission inside the review-file's second
+ * yaml fence and for direct splicing into a source `node.md` (after the
+ * caller re-indents to the legacy entry's `itemIndent`).
+ */
+export function buildProposedYamlMulti(items: readonly ProposedItem[]): string {
+	const blocks: string[] = [];
+	for (const item of items) {
+		const inner = buildProposedYaml(item);
+		const innerLines = inner.split('\n');
+		const first = innerLines[0] ?? '';
+		const rest = innerLines.slice(1);
+		const block: string[] = [`- ${first}`];
+		for (const l of rest) {
+			block.push(`  ${l}`);
+		}
+		blocks.push(block.join('\n'));
+	}
+	return blocks.join('\n');
 }
 
 /**
@@ -608,20 +721,13 @@ export function renderReviewRow(row: ReviewRow, handEditedProposed?: string): st
 	lines.push('  Proposed rewrite:');
 	lines.push('');
 	lines.push('  ```yaml');
-	if (handEditedProposed !== undefined && handEditedProposed.trim().length > 0) {
-		// Preserve hand edits verbatim. The stored body is at column 0 (markdown
-		// indent stripped); re-add the two-space markdown wrap.
-		for (const l of handEditedProposed.split(/\r?\n/)) {
-			lines.push(l === '' ? '' : `  ${l}`);
-		}
-	} else {
-		const proposedBody = row.proposedYaml.split(/\r?\n/);
-		const firstBody = proposedBody[0] ?? '';
-		const restBody = proposedBody.slice(1);
-		lines.push(`  - ${firstBody}`);
-		for (const l of restBody) {
-			lines.push(`    ${l}`);
-		}
+	// Both script-built and hand-edited proposed bodies use the same shape:
+	// `- ref: ...` at column 0, continuation lines at two spaces. Wrap each
+	// non-empty line with the two-space markdown indent.
+	const proposedSource =
+		handEditedProposed !== undefined && handEditedProposed.trim().length > 0 ? handEditedProposed : row.proposedYaml;
+	for (const l of proposedSource.split(/\r?\n/)) {
+		lines.push(l === '' ? '' : `  ${l}`);
 	}
 	lines.push('  ```');
 	lines.push('');
@@ -631,8 +737,10 @@ export function renderReviewRow(row: ReviewRow, handEditedProposed?: string): st
 	lines.push(`  Slug: \`${slugLabel}\``);
 	lines.push(`  Legacy edition: \`${editionLabel}\``);
 	lines.push(`  Current edition: \`${currentEditionLabel}\``);
-	lines.push(`  Legacy chapter title: ${row.parsedDetail.chapterTitle ?? '_(none parsed from detail)_'}`);
-	lines.push(`  Current chapter title: ${row.currentChapterTitle ?? '_(no chapter / not found in current manifest)_'}`);
+	const legacyTitles = formatChapterTitleList(row.parsedDetail);
+	lines.push(`  Legacy chapter title: ${legacyTitles ?? '_(none parsed from detail)_'}`);
+	const currentTitles = formatCurrentChapterTitleList(row);
+	lines.push(`  Current chapter title: ${currentTitles ?? '_(no chapter / not found in current manifest)_'}`);
 	lines.push(`  Title match: **${row.titleMatch ? 'yes' : 'no'}**`);
 	if (row.notes.length > 0) {
 		lines.push('');
@@ -668,6 +776,45 @@ export function renderReviewFile(
 		body.push(checked ? rendered.replace('- [ ]', '- [x]') : rendered);
 	}
 	return `${head.join('\n')}\n${body.join('\n')}`;
+}
+
+/**
+ * Render the legacy chapter title cell of a review row. For multi-chapter
+ * citations, emits a `; `-joined list of `Ch. N -- Title` entries so the
+ * reviewer sees every chapter that was parsed. Returns null when no chapter
+ * was parsed at all.
+ */
+function formatChapterTitleList(parsed: ParsedLegacyDetail): string | null {
+	if (parsed.chapter === null) return null;
+	const entries: string[] = [];
+	const primaryTitle = parsed.chapterTitle === null ? '(no title)' : parsed.chapterTitle;
+	entries.push(`Ch. ${parsed.chapter} -- ${primaryTitle}`);
+	for (const extra of parsed.additionalChapters) {
+		const title = extra.chapterTitle === null ? '(no title)' : extra.chapterTitle;
+		entries.push(`Ch. ${extra.chapter} -- ${title}`);
+	}
+	return entries.join('; ');
+}
+
+/**
+ * Render the current-edition chapter title cell of a review row. Mirrors
+ * `formatChapterTitleList`'s shape; null entries (chapter not found in the
+ * current manifest) render as `(not in current manifest)`.
+ */
+function formatCurrentChapterTitleList(row: ReviewRow): string | null {
+	if (row.parsedDetail.chapter === null) return null;
+	if (row.currentChapterTitle === null && row.additionalCurrentChapterTitles.every((t) => t === null)) {
+		return null;
+	}
+	const entries: string[] = [];
+	const primary = row.currentChapterTitle ?? '(not in current manifest)';
+	entries.push(`Ch. ${row.parsedDetail.chapter} -- ${primary}`);
+	for (let i = 0; i < row.parsedDetail.additionalChapters.length; i += 1) {
+		const extra = row.parsedDetail.additionalChapters[i];
+		const title = row.additionalCurrentChapterTitles[i] ?? '(not in current manifest)';
+		entries.push(`Ch. ${extra.chapter} -- ${title}`);
+	}
+	return entries.join('; ');
 }
 
 export function tickKey(relPath: string, startLine: number): string {
@@ -797,6 +944,7 @@ export function buildReviewRow(
 	const notes: string[] = [];
 	let currentEdition: string | null = null;
 	let currentChapterTitle: string | null = null;
+	const additionalCurrentChapterTitles: (string | null)[] = parsedDetail.additionalChapters.map(() => null);
 	if (parsedSource === null) {
 		notes.push('source string did not match any handbook pattern; needs manual rewrite.');
 	} else {
@@ -814,23 +962,50 @@ export function buildReviewRow(
 				} else {
 					currentChapterTitle = chapter.title;
 				}
+				for (let i = 0; i < parsedDetail.additionalChapters.length; i += 1) {
+					const extra = parsedDetail.additionalChapters[i];
+					const c = findChapterByCode(manifest, extra.chapter);
+					if (c === null) {
+						notes.push(
+							`chapter ${extra.chapter} not found in current edition manifest (${manifest.edition}); the chapter may have been renumbered.`,
+						);
+					} else {
+						additionalCurrentChapterTitles[i] = c.title;
+					}
+				}
 			} else {
 				notes.push('detail does not specify a chapter number; rewrite cannot pin a chapter.');
 			}
 		}
 	}
-	const titleMatch =
-		parsedDetail.chapterTitle !== null &&
-		currentChapterTitle !== null &&
-		parsedDetail.chapterTitle.trim().toLowerCase() === currentChapterTitle.trim().toLowerCase();
-	const redirectedFrom = buildOriginalAirbossRef(parsedSource, parsedDetail.chapter);
-	const proposedYaml = buildProposedYaml({
-		slug: parsedSource?.slug ?? '<UNKNOWN-SLUG>',
+	// Title match: every parsed chapter title must match the corresponding
+	// current manifest title (case-insensitive, trimmed). When no chapter
+	// titles were parsed, titleMatch is false (nothing to confirm).
+	const titleMatch = computeTitleMatch(parsedDetail, currentChapterTitle, additionalCurrentChapterTitles);
+	// Build a multi-item proposed-rewrite block. One `- ref:` per parsed
+	// chapter; the legacy note is carried on the primary item only (multi-
+	// chapter rewrites repeat the note across items so the reviewer can
+	// hand-edit per-chapter without losing context).
+	const slug = parsedSource?.slug ?? '<UNKNOWN-SLUG>';
+	const items: ProposedItem[] = [];
+	items.push({
+		slug,
 		chapter: parsedDetail.chapter,
 		chapterTitle: currentChapterTitle ?? parsedDetail.chapterTitle,
 		note: legacy.note,
-		redirectedFrom,
+		redirectedFrom: buildOriginalAirbossRef(parsedSource, parsedDetail.chapter),
 	});
+	for (let i = 0; i < parsedDetail.additionalChapters.length; i += 1) {
+		const extra = parsedDetail.additionalChapters[i];
+		items.push({
+			slug,
+			chapter: extra.chapter,
+			chapterTitle: additionalCurrentChapterTitles[i] ?? extra.chapterTitle,
+			note: legacy.note,
+			redirectedFrom: buildOriginalAirbossRef(parsedSource, extra.chapter),
+		});
+	}
+	const proposedYaml = buildProposedYamlMulti(items);
 	return {
 		relPath: legacy.relPath,
 		startLine: legacy.startLine,
@@ -841,11 +1016,29 @@ export function buildReviewRow(
 		parsedDetail,
 		currentEdition,
 		currentChapterTitle,
+		additionalCurrentChapterTitles,
 		legacyNote: legacy.note,
 		proposedYaml,
 		titleMatch,
 		notes,
 	};
+}
+
+function computeTitleMatch(
+	parsed: ParsedLegacyDetail,
+	currentPrimary: string | null,
+	currentAdditional: readonly (string | null)[],
+): boolean {
+	const eq = (a: string | null, b: string | null): boolean => {
+		if (a === null || b === null) return false;
+		return a.trim().toLowerCase() === b.trim().toLowerCase();
+	};
+	if (parsed.chapter === null) return false;
+	if (!eq(parsed.chapterTitle, currentPrimary)) return false;
+	for (let i = 0; i < parsed.additionalChapters.length; i += 1) {
+		if (!eq(parsed.additionalChapters[i].chapterTitle, currentAdditional[i] ?? null)) return false;
+	}
+	return true;
 }
 
 // ---------------------------------------------------------------------------
@@ -855,31 +1048,14 @@ export function buildReviewRow(
 /**
  * Apply a single ticked row to its source file. Returns the new file text.
  * Replaces the line range `[startLine..endLine]` with the proposed YAML
- * indented to match the legacy entry. Idempotent at the level of "if the
- * lines already match the proposed shape, do nothing."
+ * indented to match the legacy entry. The script-built `row.proposedYaml`
+ * uses the same shape as a hand-edited block (one or more `- ref:` items at
+ * column 0, body lines at two spaces); we delegate to
+ * `applyProposedBlockToText` which re-indents to the legacy entry's
+ * `itemIndent`.
  */
 export function applyRewriteToText(text: string, row: ReviewRow): string {
-	const lines = text.split(/\r?\n/);
-	const itemIndent = row.bodyIndent.slice(0, Math.max(0, row.bodyIndent.length - 2));
-	const bodyIndent = row.bodyIndent;
-	const proposedLines = row.proposedYaml.split(/\r?\n/);
-	const replacement: string[] = [];
-	const first = proposedLines[0] ?? '';
-	replacement.push(`${itemIndent}- ${first}`);
-	for (const l of proposedLines.slice(1)) {
-		// Block-scalar continuation already starts with two spaces in our format;
-		// indent everything else with bodyIndent.
-		if (l.startsWith('  ')) {
-			replacement.push(`${bodyIndent}${l}`);
-		} else if (l === '') {
-			replacement.push('');
-		} else {
-			replacement.push(`${bodyIndent}${l}`);
-		}
-	}
-	const before = lines.slice(0, row.startLine - 1);
-	const after = lines.slice(row.endLine);
-	return [...before, ...replacement, ...after].join('\n');
+	return applyProposedBlockToText(text, row, row.proposedYaml);
 }
 
 // ---------------------------------------------------------------------------
