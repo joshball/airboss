@@ -46,10 +46,11 @@ ships nothing of its own. Its OUT-OF-SCOPE.md should state that it's
 an umbrella with sub-packages listed nearby; per-item OOS lives in the
 sub-packages. The discipline targets the sub-packages individually.
 
-Sub-packages may be nested inside the umbrella directory (e.g.
-`theme-system-overhaul/01-theme-foundation/`) or live as siblings in
-`docs/work-packages/` (e.g. `whole-doc-promotion` coordinates the
-sibling `wp-*-section-tree` WPs). Either shape is recognised; the
+Sub-packages may be nested inside the umbrella directory (e.g. the
+archived `docs/.archive/work-packages/2026-05/theme-system-overhaul/01-theme-foundation/`)
+or live as siblings in `docs/work-packages/` (e.g. the archived
+`whole-doc-promotion` umbrella coordinated the sibling
+`wp-*-section-tree` WPs). Either shape is recognised; the
 `type: umbrella` field is the marker, not the directory layout.
 
 The audit script (`bun run track oos-audit`) skips umbrella WPs from

@@ -29,7 +29,7 @@ Promote the Instrument Flying Handbook (IFH, FAA-H-8083-15B) from whole-doc to s
 
 IFH today lives in `handbooks-extras.yaml` as a Class C whole-doc-only entry. The manifest's `sections: []` means downstream consumers cannot deep-link by chapter/section. Per `docs/platform/REFERENCES.md` row 6, IFH promotion is the sixth step toward "everything readable as section-tree."
 
-Per the research at [docs/work-packages/whole-doc-promotion/research.md §IFH](../whole-doc-promotion/research.md#ifh----instrument-flying-handbook-faa-h-8083-15b):
+Per the research at [docs/.archive/work-packages/2026-05/whole-doc-promotion/research.md §IFH](../../.archive/work-packages/2026-05/whole-doc-promotion/research.md#ifh----instrument-flying-handbook-faa-h-8083-15b):
 
 - `fitz.get_toc()` returns 0 entries -- bookmark strategy unavailable.
 - No per-chapter PDFs (verified by URL probing).
@@ -39,7 +39,7 @@ Per the research at [docs/work-packages/whole-doc-promotion/research.md §IFH](.
 
 ## Strategy
 
-The user has hand-extracted the printed TOC into [docs/work-packages/whole-doc-promotion/source-tocs/ifh.md](../whole-doc-promotion/source-tocs/ifh.md). That file is the section-tree definition. Implement a new `outline_strategy: toc-file-sidecar` mode that reads the markdown TOC sidecar and emits the chapter / section / subsection tree directly. The body slicing falls back to the existing page-range slicer once chapter and section boundaries are known.
+The user has hand-extracted the printed TOC into [docs/.archive/work-packages/2026-05/whole-doc-promotion/source-tocs/ifh.md](../../.archive/work-packages/2026-05/whole-doc-promotion/source-tocs/ifh.md). That file is the section-tree definition. Implement a new `outline_strategy: toc-file-sidecar` mode that reads the markdown TOC sidecar and emits the chapter / section / subsection tree directly. The body slicing falls back to the existing page-range slicer once chapter and section boundaries are known.
 
 The prompt-flow approach (`section_strategy: prompt`) is feasible but requires a separate fresh-session paste step. The TOC-file-sidecar approach is end-to-end runnable in the worktree with the user's hand-extracted TOC as the single source of truth for structure.
 
@@ -75,8 +75,8 @@ See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 
 ## Anchors
 
-- [docs/work-packages/whole-doc-promotion/research.md](../whole-doc-promotion/research.md) -- the strategy spec.
-- [docs/work-packages/whole-doc-promotion/source-tocs/ifh.md](../whole-doc-promotion/source-tocs/ifh.md) -- the user's hand-extracted TOC.
+- [docs/.archive/work-packages/2026-05/whole-doc-promotion/research.md](../../.archive/work-packages/2026-05/whole-doc-promotion/research.md) -- the strategy spec.
+- [docs/.archive/work-packages/2026-05/whole-doc-promotion/source-tocs/ifh.md](../../.archive/work-packages/2026-05/whole-doc-promotion/source-tocs/ifh.md) -- the user's hand-extracted TOC.
 - [scripts/sources/config/handbooks/avwx.yaml](../../../scripts/sources/config/handbooks/avwx.yaml) -- Class C precedent (whole-doc only, no chapter PDFs).
 - [docs/ingestion-pipeline/section-extraction-prompt-strategy.md](../../ingestion-pipeline/section-extraction-prompt-strategy.md) -- the LLM prompt-flow contract (used for optional verification only).
 - [tools/handbook-ingest/ingest/sections_via_toc.py](../../../tools/handbook-ingest/ingest/sections_via_toc.py) -- existing TOC-page parser; extended here with a sidecar reader.

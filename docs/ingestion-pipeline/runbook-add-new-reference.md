@@ -66,6 +66,7 @@ bun run sources extract handbooks <slug> --edition <edition>
 Per-chapter `.md` files + `manifest.json` written to `handbooks/<slug>/<edition>/`.
 
 If extraction picks the wrong section boundaries:
+
 - Try `--strategy compare` to see TOC vs prompt-flow disagreements
 - Edit the YAML's `outline_strategy` field
 - Re-run
@@ -130,4 +131,4 @@ Different config file but same shape:
 - [tooling.md](tooling.md) — `pdftotext` / PyMuPDF / cli dispatcher details
 - [section-extraction-strategies.md](section-extraction-strategies.md) — TOC vs prompt vs compare
 - [docs/platform/REFERENCES.md](../platform/REFERENCES.md) — canonical list
-- [docs/work-packages/whole-doc-promotion/research.md](../work-packages/whole-doc-promotion/research.md) — per-handbook strategy precedents
+- [docs/.archive/work-packages/2026-05/whole-doc-promotion/research.md](../.archive/work-packages/2026-05/whole-doc-promotion/research.md) — per-handbook strategy precedents

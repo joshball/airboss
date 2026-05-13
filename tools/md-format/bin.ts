@@ -94,7 +94,12 @@ async function dirtyMdFiles(): Promise<string[]> {
 
 async function collectFiles(args: Args): Promise<string[]> {
 	if (args.files.length > 0) {
-		return args.files.map((f) => resolve(process.cwd(), f));
+		return args.files
+			.map((f) => resolve(process.cwd(), f))
+			.filter((abs) => {
+				const rel = relative(REPO_ROOT, abs);
+				return !SKIP_PREFIXES.some((p) => rel.startsWith(p));
+			});
 	}
 	if (args.all) {
 		const out: string[] = [];

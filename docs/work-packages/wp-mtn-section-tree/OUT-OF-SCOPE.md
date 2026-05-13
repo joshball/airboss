@@ -38,7 +38,7 @@ entry and only the TS ingest path.
 
 Why:
 Sequencing decision from
-[`docs/work-packages/whole-doc-promotion/research.md`](../whole-doc-promotion/research.md).
+[`docs/.archive/work-packages/2026-05/whole-doc-promotion/research.md`](../../.archive/work-packages/2026-05/whole-doc-promotion/research.md).
 mtn-tips is sequence position 1 -- the smallest of the five whole-doc handbooks,
 chosen to validate the override-driven section-tree pattern before tackling the
 larger handbooks. The four remaining handbooks each warrant their own WP because
@@ -62,7 +62,7 @@ path at `tools/handbook-ingest/` is the precedent instead of the
 
 References:
 
-- [whole-doc-promotion/research.md](../whole-doc-promotion/research.md) -- parent research doc with the sequencing
+- [whole-doc-promotion/research.md](../../.archive/work-packages/2026-05/whole-doc-promotion/research.md) -- parent research doc with the sequencing
 - [spec.md D2](./spec.md) -- decision keeping mtn-tips in `handbooks-extras` corpus
 - [AVWX YAML](../../../scripts/sources/config/handbooks/avwx.yaml) -- Class C section-tree precedent (PDF-driven)
 
@@ -101,7 +101,7 @@ Open a platform-level WP (not a per-handbook WP) titled
 References:
 
 - [spec.md D2](./spec.md) -- decision deferring the retirement question
-- [whole-doc-promotion/research.md](../whole-doc-promotion/research.md) -- "Cross-cutting findings" raised this
+- [whole-doc-promotion/research.md](../../.archive/work-packages/2026-05/whole-doc-promotion/research.md) -- "Cross-cutting findings" raised this
 - [handbooks-extras ingest](../../../libs/sources/src/handbooks-extras/ingest.ts)
 
 ## `handbooks-extras` `--whole-doc` ingest path

@@ -45,7 +45,7 @@ The 5 whole-doc handbooks are scheduled for promotion to section-tree shape on 2
 
 ## In-flight 2026-05-03 (parallel agent dispatch)
 
-7 background agents dispatched at 2026-05-03 ~18:50 UTC. See [docs/work-packages/whole-doc-promotion/sequence.md](../whole-doc-promotion/sequence.md) for tracking.
+7 background agents dispatched at 2026-05-03 ~18:50 UTC. See [docs/.archive/work-packages/2026-05/whole-doc-promotion/sequence.md](../../.archive/work-packages/2026-05/whole-doc-promotion/sequence.md) for tracking.
 
 | WP                            | Effect                                                                                            |
 | ----------------------------- | ------------------------------------------------------------------------------------------------- |

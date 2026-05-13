@@ -63,7 +63,7 @@ AC 25-7D (600 pages, transport-category cert) is the outlier — engineering doc
 
 ### Phase 1: Per-AC research
 
-Mirror `docs/work-packages/whole-doc-promotion/research.md` shape. For each AC:
+Mirror `docs/.archive/work-packages/2026-05/whole-doc-promotion/research.md` shape. For each AC:
 
 - Open the cached PDF
 - Run `fitz.get_toc()`
@@ -106,5 +106,5 @@ See [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md).
 ## Anchors
 
 - [PR #480 WP-AC-V](https://github.com/joshball/airboss/pull/480) — current whole-doc seeder
-- [docs/work-packages/whole-doc-promotion/research.md](../whole-doc-promotion/research.md) — handbook promotion strategy precedents
+- [docs/.archive/work-packages/2026-05/whole-doc-promotion/research.md](../../.archive/work-packages/2026-05/whole-doc-promotion/research.md) — handbook promotion strategy precedents
 - [WP-AC-LINK-ONLY](../wp-ac-link-only-pipeline/spec.md) — separate WP for the 12 missing ACs

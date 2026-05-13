@@ -35,13 +35,13 @@ Trigger that fires the follow-on:
 When the user wants section-tree drill-down on the 9 whole-doc ACs. This trigger has already fired and is being addressed by [WP-AC-PROMOTE](../wp-ac-promote-to-section-tree/spec.md).
 
 Implementation pattern when triggered:
-Mirror the handbook section-tree promotion patterns documented in [docs/work-packages/whole-doc-promotion/research.md](../whole-doc-promotion/research.md). Strategies: embedded TOC via `fitz.get_toc()`, printed TOC parse, hand-written TOC file, or flat single-section fallback for short ACs. The seeder branches on `sections.length === 0` (whole-doc behavior preserved) vs `sections.length > 0` (new section-tree behavior). See [WP-AC-PROMOTE spec.md](../wp-ac-promote-to-section-tree/spec.md) Phase 2.
+Mirror the handbook section-tree promotion patterns documented in [docs/.archive/work-packages/2026-05/whole-doc-promotion/research.md](../../.archive/work-packages/2026-05/whole-doc-promotion/research.md). Strategies: embedded TOC via `fitz.get_toc()`, printed TOC parse, hand-written TOC file, or flat single-section fallback for short ACs. The seeder branches on `sections.length === 0` (whole-doc behavior preserved) vs `sections.length > 0` (new section-tree behavior). See [WP-AC-PROMOTE spec.md](../wp-ac-promote-to-section-tree/spec.md) Phase 2.
 
 References:
 
 - [spec.md](./spec.md) -- the "Out of scope" line for section-level extraction
 - [WP-AC-PROMOTE](../wp-ac-promote-to-section-tree/spec.md) -- the follow-on WP
-- [docs/work-packages/whole-doc-promotion/research.md](../whole-doc-promotion/research.md) -- handbook precedent
+- [docs/.archive/work-packages/2026-05/whole-doc-promotion/research.md](../../.archive/work-packages/2026-05/whole-doc-promotion/research.md) -- handbook precedent
 
 ## Importing the 8 (now 12) ACs without on-disk manifests
 

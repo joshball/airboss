@@ -46,7 +46,7 @@ After this WP lands, IPH gains:
 
 ## Why
 
-Per the whole-doc-promotion research doc (`docs/work-packages/whole-doc-promotion/research.md` -- §IPH):
+Per the whole-doc-promotion research doc (`docs/.archive/work-packages/2026-05/whole-doc-promotion/research.md` -- §IPH):
 
 - IPH ships per-chapter PDFs at the publisher's index page (7 chapters,
   no zero-padding: `FAA-H-8083-16B_Chapter_<N>.pdf`).
@@ -162,7 +162,7 @@ duplicated in the whole-doc PDF and not load-bearing for derivative emission).
 
 ## References
 
-- [research.md](../whole-doc-promotion/research.md) §IPH
+- [research.md](../../.archive/work-packages/2026-05/whole-doc-promotion/research.md) §IPH
 - [ADR 022 chapter-source-ingestion](../../decisions/022-chapter-source-ingestion/decision.md)
 - [ADR 021 source cache flat naming](../../decisions/021-source-cache-flat-naming/decision.md)
 - [scripts/sources/config/handbooks/afh.yaml](../../../scripts/sources/config/handbooks/afh.yaml) -- Class A2 precedent

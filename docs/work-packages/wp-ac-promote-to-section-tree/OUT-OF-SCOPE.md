@@ -77,9 +77,9 @@ Trigger to revisit:
 When AC 25-7D earns pilot-facing course coverage that needs paragraph-level drill-down. Concretely: when a course step or knowledge node cites an AC 25-7D paragraph and the citation chip should resolve to that paragraph's section row, OR when a transport-category-focused product (ATP, type rating, dispatcher) earns its own surface that surfaces the AC's deeper structure.
 
 Implementation pattern when triggered:
-Run the embedded-TOC strategy (`fitz.get_toc()`) if the PDF has rich bookmarks; otherwise the printed-TOC parse, mirroring handbook precedents in [docs/work-packages/whole-doc-promotion/research.md](../whole-doc-promotion/research.md). The seeder (already shipped per Phase 2) supports `sections.length > 0` with no schema change -- only the per-AC manifest changes. Re-seed is idempotent on `body_sha256`.
+Run the embedded-TOC strategy (`fitz.get_toc()`) if the PDF has rich bookmarks; otherwise the printed-TOC parse, mirroring handbook precedents in [docs/.archive/work-packages/2026-05/whole-doc-promotion/research.md](../../.archive/work-packages/2026-05/whole-doc-promotion/research.md). The seeder (already shipped per Phase 2) supports `sections.length > 0` with no schema change -- only the per-AC manifest changes. Re-seed is idempotent on `body_sha256`.
 
 References:
 
 - [spec.md](./spec.md) -- Per-AC strategy, AC 25-7D outlier note
-- [docs/work-packages/whole-doc-promotion/research.md](../whole-doc-promotion/research.md) -- handbook section-tree precedents
+- [docs/.archive/work-packages/2026-05/whole-doc-promotion/research.md](../../.archive/work-packages/2026-05/whole-doc-promotion/research.md) -- handbook section-tree precedents

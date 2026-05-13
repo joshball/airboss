@@ -124,6 +124,6 @@ bun run db reset --force && bun run db seed
 
 ## Anchors
 
-- [whole-doc-promotion/sequence.md](../whole-doc-promotion/sequence.md) — the 5 promotion WPs that prerequisite this
+- [whole-doc-promotion/sequence.md](../../.archive/work-packages/2026-05/whole-doc-promotion/sequence.md) — the 5 promotion WPs that prerequisite this
 - [PR #489 body_override mechanism](https://github.com/joshball/airboss/pull/489) — only consumer of the handbooks-extras override system
 - Memory: `feedback_no_legacy_in_airboss.md`

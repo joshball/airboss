@@ -26,7 +26,7 @@ legacy_fields:
 
 Promote AIH (FAA-H-8083-9) from the whole-doc handbooks-extras path to the chapter-aware `handbooks/<slug>.yaml` pipeline. Third book in the whole-doc-promotion sweep (after mtn-tips and RMH).
 
-Source spec: [whole-doc-promotion/research.md §AIH](../whole-doc-promotion/research.md#aih----aviation-instructors-handbook-faa-h-8083-9).
+Source spec: [whole-doc-promotion/research.md §AIH](../../.archive/work-packages/2026-05/whole-doc-promotion/research.md#aih----aviation-instructors-handbook-faa-h-8083-9).
 
 ## Goal
 

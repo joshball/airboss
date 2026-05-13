@@ -8,83 +8,83 @@ Every work package that touches references, in the order they should ship. Cross
 
 ### Wave 1 — Foundation (✅ shipped)
 
-| WP | Effect | Status |
-|----|--------|--------|
-| WP-SUB | `reference_section` substrate; section-tree vs whole-doc dispatcher; `getReadableReferenceIds()` content-based | ✅ #393, #396 (2026-05-01) |
-| WP-AIM | AIM seeded as section-tree (744 entries) | ✅ pre-session |
-| WP-CFR-V | 11 CFR parts seeded as section-tree (825 sections) | ✅ #491 (2026-05-03) |
-| WP-AC-V | 9 ACs seeded as whole-doc (will be promoted) | ✅ #480 (2026-05-02) |
-| WP-ACS-V | 5 ACS publications seeded as section-tree (1,910 sections) | ✅ #501 (2026-05-03) |
-| WP-MTN (whole-doc) | Mountain Flying as whole-doc with body override | ✅ #489 (2026-05-03) |
-| AMT-G/P removal | Remove maintenance-tech handbooks from corpus | ✅ #505 (2026-05-03) |
-| References cleanup sweep | AC YAML reconciliation, dupe-row cleanup, AIM orphan delete | ✅ #518 (2026-05-03) |
+| WP                       | Effect                                                                                                         | Status                    |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| WP-SUB                   | `reference_section` substrate; section-tree vs whole-doc dispatcher; `getReadableReferenceIds()` content-based | ✅ #393, #396 (2026-05-01) |
+| WP-AIM                   | AIM seeded as section-tree (744 entries)                                                                       | ✅ pre-session             |
+| WP-CFR-V                 | 11 CFR parts seeded as section-tree (825 sections)                                                             | ✅ #491 (2026-05-03)       |
+| WP-AC-V                  | 9 ACs seeded as whole-doc (will be promoted)                                                                   | ✅ #480 (2026-05-02)       |
+| WP-ACS-V                 | 5 ACS publications seeded as section-tree (1,910 sections)                                                     | ✅ #501 (2026-05-03)       |
+| WP-MTN (whole-doc)       | Mountain Flying as whole-doc with body override                                                                | ✅ #489 (2026-05-03)       |
+| AMT-G/P removal          | Remove maintenance-tech handbooks from corpus                                                                  | ✅ #505 (2026-05-03)       |
+| References cleanup sweep | AC YAML reconciliation, dupe-row cleanup, AIM orphan delete                                                    | ✅ #518 (2026-05-03)       |
 
 ### Wave 2 — Section-tree promotions (✅ complete)
 
 All 5 promotions shipped 2026-05-03. Every whole-doc handbook is now section-tree; only mtn-tips remains in `handbooks-extras` (with section-tree shape via the body-override branch).
 
-| WP | Effect | Strategy | Status |
-|----|--------|----------|--------|
-| WP-IFH | Instrument Flying Handbook → section-tree | TOC-file parser (no embedded TOC) | ✅ #525 (2026-05-03) |
-| WP-MTN section-tree | Mountain Flying → section-tree | parse existing override markdown | ✅ #527 (2026-05-03) |
-| WP-IPH | Instrument Procedures Handbook → section-tree | Class A2 chapter PDFs + sidecar TOC PDF | ✅ #532 (2026-05-03) |
-| WP-AIH | Aviation Instructor's Handbook → section-tree | Class A2 chapter PDFs + bookmark | ✅ #536 (2026-05-03) |
-| WP-RMH | Risk Management Handbook → section-tree | bookmark extraction (rich embedded TOC) | ✅ #537 (2026-05-03) |
+| WP                  | Effect                                        | Strategy                                | Status              |
+| ------------------- | --------------------------------------------- | --------------------------------------- | ------------------- |
+| WP-IFH              | Instrument Flying Handbook → section-tree     | TOC-file parser (no embedded TOC)       | ✅ #525 (2026-05-03) |
+| WP-MTN section-tree | Mountain Flying → section-tree                | parse existing override markdown        | ✅ #527 (2026-05-03) |
+| WP-IPH              | Instrument Procedures Handbook → section-tree | Class A2 chapter PDFs + sidecar TOC PDF | ✅ #532 (2026-05-03) |
+| WP-AIH              | Aviation Instructor's Handbook → section-tree | Class A2 chapter PDFs + bookmark        | ✅ #536 (2026-05-03) |
+| WP-RMH              | Risk Management Handbook → section-tree       | bookmark extraction (rich embedded TOC) | ✅ #537 (2026-05-03) |
 
 ### Wave 3 — Flightbag scaffold (✅ shipped)
 
-| WP | Effect | Status |
-|----|--------|--------|
+| WP                 | Effect                                                                        | Status              |
+| ------------------ | ----------------------------------------------------------------------------- | ------------------- |
 | Flightbag scaffold | `apps/flightbag/`, `libs/library/`, `ROUTES.FLIGHTBAG_*`, `urlForReference()` | ✅ #524 (2026-05-03) |
 
 ### Wave 4 — Cleanup after Wave 2
 
 After all 5 promotion WPs land:
 
-| WP | Effect | Spec / Status |
-|----|--------|---------------|
+| WP               | Effect                                                           | Spec / Status                                                                                                                                                            |
+| ---------------- | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | WP-EXTRAS-RETIRE | Slim `handbooks-extras` corpus to mtn-tips only; archive WP dirs | ✅ partial-shipped 2026-05-03 ([spec](../work-packages/wp-handbooks-extras-retire/spec.md)) -- full retirement deferred until `body_override` ports to chapter-aware path |
-| WP-AC-PROMOTE | Promote the 9 existing ACs from whole-doc to section-tree | ✅ shipped 2026-05-03 ([spec](../work-packages/wp-ac-promote-to-section-tree/spec.md)) -- 997 section rows across 9 ACs |
+| WP-AC-PROMOTE    | Promote the 9 existing ACs from whole-doc to section-tree        | ✅ shipped 2026-05-03 ([spec](../work-packages/wp-ac-promote-to-section-tree/spec.md)) -- 997 section rows across 9 ACs                                                   |
 
 ### Wave 5 — Citation migration
 
 After Wave 3 lands and Wave 4 ships:
 
-| WP | Effect | Spec |
-|----|--------|------|
-| WP-CITATION-CHIPS-TO-FLIGHTBAG | Rewire study citation chips to flightbag URLs via `urlForReference()` | [spec](../work-packages/wp-citation-chips-to-flightbag/spec.md) |
-| WP-HANGAR-REFS | References admin dashboard (TOC validation, force-reingest, health checks) | [spec](../work-packages/wp-hangar-references-dashboard/spec.md) |
-| WP-TOC-VALIDATION-SCHEMA | Per-doc validation manifest shape | [spec](../work-packages/wp-toc-validation-schema/spec.md) |
+| WP                             | Effect                                                                     | Spec                                                            |
+| ------------------------------ | -------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| WP-CITATION-CHIPS-TO-FLIGHTBAG | Rewire study citation chips to flightbag URLs via `urlForReference()`      | [spec](../work-packages/wp-citation-chips-to-flightbag/spec.md) |
+| WP-HANGAR-REFS                 | References admin dashboard (TOC validation, force-reingest, health checks) | [spec](../work-packages/wp-hangar-references-dashboard/spec.md) |
+| WP-TOC-VALIDATION-SCHEMA       | Per-doc validation manifest shape                                          | [spec](../work-packages/wp-toc-validation-schema/spec.md)       |
 
 ### Wave 6 — Link-only completion (✅ shipped 2026-05-03)
 
 Both shipped as stage-1 ("Sourced") stubs: the 12 ACs + 2 ACS/PTS publications now deep-link to their FAA-hosted PDFs from library cards and citation chips. Body extraction (full pipeline) moves to WP-AC-FULL / WP-ACS-FULL under Wave 8.
 
-| WP | Effect | Status |
-|----|--------|--------|
-| WP-AC-LINK-ONLY | YAML `url:` added to the 12 link-only AC stubs; chips + library cards deep-link to the FAA Document Library PDF (was the AC index landing) | ✅ shipped ([spec](../work-packages/wp-ac-link-only-pipeline/spec.md)) |
-| WP-ACS-LINK-ONLY | CFII PTS + ACS Companion Guide stubs verified URL-equipped; status flipped from "link-only" to "link-only stub (Sourced)" | ✅ shipped ([spec](../work-packages/wp-acs-link-only-pipeline/spec.md)) |
+| WP               | Effect                                                                                                                                     | Status                                                                 |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------- |
+| WP-AC-LINK-ONLY  | YAML `url:` added to the 12 link-only AC stubs; chips + library cards deep-link to the FAA Document Library PDF (was the AC index landing) | ✅ shipped ([spec](../work-packages/wp-ac-link-only-pipeline/spec.md))  |
+| WP-ACS-LINK-ONLY | CFII PTS + ACS Companion Guide stubs verified URL-equipped; status flipped from "link-only" to "link-only stub (Sourced)"                  | ✅ shipped ([spec](../work-packages/wp-acs-link-only-pipeline/spec.md)) |
 
 ### Wave 7 — New corpora
 
 Each is independent; can run in parallel. All are larger builds (new corpus pipeline = new schema + new downloader + new extractor + new seeder).
 
-| WP | Effect | Spec |
-|----|--------|------|
+| WP                | Effect                                             | Spec                                                                                                                                                                                                                                                          |
+| ----------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | WP-SAFO + WP-INFO | SAFOs + InFOs (combined; identical pipeline shape) | ✅ shipped 2026-05-03 ([spec](../work-packages/wp-safo-info/spec.md)) — manifest-validation `kind: 'safo'`/`kind: 'info'` + shared bulletin section-tree adapter; 6 SAFOs + 4 InFOs manually curated; URIs `airboss-ref:safo/<id>` and `airboss-ref:info/<id>` |
-| WP-CC | FAA Chief Counsel legal interpretations | [spec](../work-packages/wp-cc/spec.md) |
-| WP-NTSB-ALJ | NTSB administrative law judge rulings | ✅ shipped 2026-05-03 ([spec](../work-packages/wp-ntsb-alj/spec.md)) — registry resolver + manifest-validation `kind: 'ntsb-alj'` + section-tree adapter; 3 cases manually curated |
+| WP-CC             | FAA Chief Counsel legal interpretations            | [spec](../work-packages/wp-cc/spec.md)                                                                                                                                                                                                                        |
+| WP-NTSB-ALJ       | NTSB administrative law judge rulings              | ✅ shipped 2026-05-03 ([spec](../work-packages/wp-ntsb-alj/spec.md)) — registry resolver + manifest-validation `kind: 'ntsb-alj'` + section-tree adapter; 3 cases manually curated                                                                             |
 
 ### Wave 8 — Future / deferred
 
-| WP | Trigger |
-|----|---------|
-| WP-AC-FULL | Body extraction + section-tree for the 12 Wave-6 AC stubs (and expansion 21 → ~50). Trigger: a knowledge node demands inline AC body, or the user wants AC text searchable. |
-| WP-ACS-FULL | Body extraction for CFII PTS + ACS Companion Guide. Trigger: CFII training content needs PTS body in app, OR FAA promotes CFII to ACS. |
-| WP-O8900-V5 | When CFI training content needs Vol 5 |
-| WP-SAFETY-BRIEF | Low priority |
-| Public-facing flightbag deploy | When platform goes external |
-| `study.reference` dupe-row sweep (afh-3B) | After content audit re-points knowledge nodes from 3B to 3C |
+| WP                                        | Trigger                                                                                                                                                                     |
+| ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| WP-AC-FULL                                | Body extraction + section-tree for the 12 Wave-6 AC stubs (and expansion 21 → ~50). Trigger: a knowledge node demands inline AC body, or the user wants AC text searchable. |
+| WP-ACS-FULL                               | Body extraction for CFII PTS + ACS Companion Guide. Trigger: CFII training content needs PTS body in app, OR FAA promotes CFII to ACS.                                      |
+| WP-O8900-V5                               | When CFI training content needs Vol 5                                                                                                                                       |
+| WP-SAFETY-BRIEF                           | Low priority                                                                                                                                                                |
+| Public-facing flightbag deploy            | When platform goes external                                                                                                                                                 |
+| `study.reference` dupe-row sweep (afh-3B) | After content audit re-points knowledge nodes from 3B to 3C                                                                                                                 |
 
 ## Parallelization rules
 
@@ -97,5 +97,5 @@ Each is independent; can run in parallel. All are larger builds (new corpus pipe
 
 - [REFERENCES.md](REFERENCES.md) — canonical reference list with stage badges
 - [docs/work-packages/library-completeness/status.md](../work-packages/library-completeness/status.md) — per-WP status detail
-- [docs/work-packages/whole-doc-promotion/sequence.md](../work-packages/whole-doc-promotion/sequence.md) — Wave 2 + 3 in-flight tracking
+- [docs/.archive/work-packages/2026-05/whole-doc-promotion/sequence.md](../.archive/work-packages/2026-05/whole-doc-promotion/sequence.md) — Wave 2 + 3 in-flight tracking
 - [ADR 019](../decisions/019-reference-identifier-system/decision.md) — `airboss-ref:` URI scheme
