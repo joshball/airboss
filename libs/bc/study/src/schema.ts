@@ -2428,15 +2428,19 @@ export const course = studySchema.table(
 );
 
 /**
- * One node in a course tree. Two structural levels: top-level `section`
- * rows (no parent, no knowledge_node_id) and child `step` rows (parent
- * points at a section, knowledge_node_id required). Steps are leaves;
- * sections are not.
+ * One node in a course tree. Arbitrary-depth (course-tree-arbitrary-depth
+ * WP): top-level `section` rows (no parent, no knowledge_node_id, not a
+ * leaf); interior `lesson` rows (parent points at a section or another
+ * lesson, no knowledge_node_id, not a leaf); leaf `step` rows (parent
+ * points at a section or a lesson, knowledge_node_id required, is a leaf).
+ * The 2-level shape (section -> step) is the trivial case.
  *
  * `level` / `parent_id` / `knowledge_node_id` / `is_leaf` consistency is
- * enforced by `course_step_consistency_check` (single CHECK covering both
- * legal shapes). The seed pipeline hashes the canonicalized YAML into
- * `content_hash` so an unchanged file produces zero writes.
+ * enforced by `course_step_consistency_check` (3-arm CHECK covering every
+ * legal shape). The cross-row parent-level rule (a lesson / step's parent
+ * must itself be a section or lesson) is enforced by the seed validator;
+ * CHECK can't reach across rows. The seed pipeline hashes the canonicalized
+ * YAML into `content_hash` so an unchanged file produces zero writes.
  *
  * The FK to `knowledge_node` is RESTRICT on delete: nodes are referenced
  * from cards, syllabi, and other courses; the author must explicitly
@@ -2470,12 +2474,17 @@ export const courseStep = studySchema.table(
 		// Reverse lookup: "what course steps reference this knowledge node?"
 		courseStepNodeIdx: index('course_step_node_idx').on(t.knowledgeNodeId),
 		levelCheck: check('course_step_level_check', sql.raw(`"level" IN (${inList(COURSE_STEP_LEVEL_VALUES)})`)),
-		// Combined consistency rule: section rows have no parent, no node, are
-		// not leaves; step rows have a parent, have a node, and are leaves.
+		// Combined consistency rule (3-arm, course-tree-arbitrary-depth WP):
+		//   section: root level, no parent, no node, not a leaf
+		//   lesson:  interior, has a parent, no node, not a leaf
+		//   step:    leaf, has a parent, has a node, is a leaf
+		// The parent-of-a-lesson-or-step must itself be a section or lesson;
+		// that cross-row rule lives in the seed validator (CHECK can't read
+		// other rows).
 		consistencyCheck: check(
 			'course_step_consistency_check',
 			sql.raw(
-				`(("level" = 'section' AND "parent_id" IS NULL AND "knowledge_node_id" IS NULL AND "is_leaf" = false) OR ("level" = 'step' AND "parent_id" IS NOT NULL AND "knowledge_node_id" IS NOT NULL AND "is_leaf" = true))`,
+				`(("level" = 'section' AND "parent_id" IS NULL AND "knowledge_node_id" IS NULL AND "is_leaf" = false) OR ("level" = 'lesson' AND "parent_id" IS NOT NULL AND "knowledge_node_id" IS NULL AND "is_leaf" = false) OR ("level" = 'step' AND "parent_id" IS NOT NULL AND "knowledge_node_id" IS NOT NULL AND "is_leaf" = true))`,
 			),
 		),
 		ordinalCheck: check('course_step_ordinal_check', sql.raw(`"ordinal" >= 0`)),
