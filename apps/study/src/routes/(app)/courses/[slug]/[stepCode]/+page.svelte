@@ -5,8 +5,8 @@ import CourseStepMarkdown from '$lib/components/CourseStepMarkdown.svelte';
 import EncodedTextLadderTabs from '$lib/components/EncodedTextLadderTabs.svelte';
 import KnowledgeNodeBody from '$lib/components/KnowledgeNodeBody.svelte';
 import TransitionStepBody from '$lib/components/TransitionStepBody.svelte';
-import Breadcrumbs from './Breadcrumbs.svelte';
 import type { PageData } from './$types';
+import Breadcrumbs from './Breadcrumbs.svelte';
 import PrevNext from './PrevNext.svelte';
 
 let { data }: { data: PageData } = $props();

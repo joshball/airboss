@@ -179,7 +179,7 @@ function computePrevNext(
 	if (leaves.length === 0) return { prev: null, next: null };
 
 	let positionIndex = leaves.findIndex((leaf) => leaf.id === current.id);
-	let currentIsLeaf = positionIndex !== -1;
+	const currentIsLeaf = positionIndex !== -1;
 
 	if (!currentIsLeaf) {
 		// Non-leaf: find the first leaf descendant of `current`. Build a
