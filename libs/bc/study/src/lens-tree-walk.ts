@@ -156,10 +156,7 @@ export function computePrevNextLeaves(
  *
  * Pure helper -- browser-safe.
  */
-export function aggregateCertCoverage(
-	tree: ReadonlyArray<LensTreeNode>,
-	_syllabusId: string,
-): LensTreeNode[] {
+export function aggregateCertCoverage(tree: ReadonlyArray<LensTreeNode>, _syllabusId: string): LensTreeNode[] {
 	function annotateLeaf(leaf: LensLeaf): { covered: number; total: number } {
 		// Only leaves the overlay actually decorated count toward the rollup.
 		// `sources === undefined` means the lens path (`courseLens`) ran
