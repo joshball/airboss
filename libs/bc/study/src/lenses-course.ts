@@ -290,19 +290,8 @@ export const courseWithCertOverlayLens: Lens<CourseOverlayLensFilters> = async (
 		return { tree: [root], rollup: emptyRollup(), leaves: [], certGaps: gaps };
 	}
 
-	// Group rows: sections (parent_id NULL) and steps under each section.
-	const sectionRows: CourseStepRow[] = [];
-	const stepsBySection = new Map<string, CourseStepRow[]>();
-	for (const row of steps) {
-		if (row.parentId === null) {
-			sectionRows.push(row);
-		} else {
-			const list = stepsBySection.get(row.parentId) ?? [];
-			list.push(row);
-			stepsBySection.set(row.parentId, list);
-		}
-	}
-	sectionRows.sort((a, b) => a.ordinal - b.ordinal);
+	// Group every row by parent once; the recursive walk reads from this map.
+	const childrenByParent = groupRowsByParent(steps);
 
 	// Per-step mastery. Same code path as `courseLens`.
 	const allNodeIds = steps
@@ -320,7 +309,9 @@ export const courseWithCertOverlayLens: Lens<CourseOverlayLensFilters> = async (
 	// syllabus_node.code) pair where the cert leaf is under our syllabus.
 	// When a node is reachable from multiple cert leaves we pick the lowest
 	// (ordinal, code) leaf for stable output (sorted server-side, picked
-	// client-side).
+	// client-side). Per spec, cert binding is leaf-only -- the renderer
+	// aggregates coverage upward; we do not denormalise `sources` onto
+	// interior nodes.
 	const certCodeByNode = new Map<string, string>();
 	if (allNodeIds.length > 0) {
 		const overlayRows = await db
@@ -359,54 +350,36 @@ export const courseWithCertOverlayLens: Lens<CourseOverlayLensFilters> = async (
 	}
 
 	const allLensLeaves: LensLeaf[] = [];
-	const sectionTreeNodes: LensTreeNode[] = [];
 	const courseRollupBuckets: Array<{ mastery: LensLeafMastery; weight: number }> = [];
 
-	for (const section of sectionRows) {
-		const childSteps = (stepsBySection.get(section.id) ?? []).slice().sort((a, b) => a.ordinal - b.ordinal);
-		const sectionLeaves: LensLeaf[] = [];
-		const sectionRollupBuckets: Array<{ mastery: LensLeafMastery; weight: number }> = [];
+	// Decorate each leaf with cert-overlay provenance. Cert binding is
+	// leaf-only per spec -- the renderer aggregates coverage to lessons /
+	// sections during paint.
+	const decorateWithSources = (row: CourseStepRow, leaf: LensLeaf): LensLeaf => {
+		// row.knowledgeNodeId is non-null on a leaf row (CHECK-enforced); the
+		// builder filtered the row already.
+		const nodeId = row.knowledgeNodeId;
+		const certCode = nodeId === null ? undefined : certCodeByNode.get(nodeId);
+		const sources: LensLeafSources = {
+			inCourse: true,
+			inCert: certCode !== undefined,
+			...(certCode !== undefined ? { certCode } : {}),
+		};
+		return { ...leaf, sources };
+	};
+	const buildLeaf = makeBuildLeaf(evidenceByNode, decorateWithSources);
 
-		for (const step of childSteps) {
-			if (step.knowledgeNodeId === null) continue;
-			const evidence = evidenceByNode.get(step.knowledgeNodeId);
-			const mastery = computeStepLeafMastery(evidence);
-			const certCode = certCodeByNode.get(step.knowledgeNodeId);
-			const sources: LensLeafSources = {
-				inCourse: true,
-				inCert: certCode !== undefined,
-				...(certCode !== undefined ? { certCode } : {}),
-			};
-			const leaf: LensLeaf = {
-				id: step.id,
-				knowledgeNodeId: step.knowledgeNodeId,
-				title: step.title,
-				requiredBloom: null,
-				mastery,
-				sources,
-			};
-			sectionLeaves.push(leaf);
-			sectionRollupBuckets.push({ mastery, weight: goalWeight });
-			allLensLeaves.push(leaf);
-			courseRollupBuckets.push({ mastery, weight: goalWeight });
-		}
-
-		sectionTreeNodes.push({
-			id: section.id,
-			level: 'section',
-			title: section.title,
-			rollup: computeMasteryRollup(sectionRollupBuckets),
-			children: [],
-			leaves: sectionLeaves,
-		});
-	}
+	const sectionRows = childrenByParent.get(null) ?? [];
+	const topLevelSubtrees: LensTreeNode[] = sectionRows.map((row) =>
+		buildSubtree(row, childrenByParent, buildLeaf, goalWeight, allLensLeaves, courseRollupBuckets),
+	);
 
 	const root: LensTreeNode = {
 		id: courseRow.id,
 		level: 'course',
 		title: courseRow.title,
 		rollup: computeMasteryRollup(courseRollupBuckets),
-		children: sectionTreeNodes,
+		children: topLevelSubtrees,
 	};
 
 	const certGaps: CertGap[] = await getCourseGaps(input.goal?.id ?? '', courseId, syllabusId, db);
@@ -449,10 +422,13 @@ function groupRowsByParent(rows: ReadonlyArray<CourseStepRow>): Map<string | nul
 /**
  * Build a single `LensLeaf` from a step row + the pre-batched evidence map.
  * Curried so the recursion can call it without re-passing the shared evidence
- * map every level.
+ * map every level. The optional `decorate` hook lets the overlay lens inject
+ * `sources` onto every leaf without re-implementing the build path; per spec,
+ * cert binding is leaf-only and the renderer aggregates upward.
  */
 function makeBuildLeaf(
 	evidenceByNode: Map<string, NodeEvidenceState>,
+	decorate?: (row: CourseStepRow, leaf: LensLeaf) => LensLeaf,
 ): (row: CourseStepRow) => LensLeaf | null {
 	return (row) => {
 		// step rows are CHECK-constrained to carry a non-null knowledge_node_id;
@@ -460,13 +436,14 @@ function makeBuildLeaf(
 		if (row.knowledgeNodeId === null) return null;
 		const evidence = evidenceByNode.get(row.knowledgeNodeId);
 		const mastery = computeStepLeafMastery(evidence);
-		return {
+		const base: LensLeaf = {
 			id: row.id,
 			knowledgeNodeId: row.knowledgeNodeId,
 			title: row.title,
 			requiredBloom: null,
 			mastery,
 		};
+		return decorate === undefined ? base : decorate(row, base);
 	};
 }
 
