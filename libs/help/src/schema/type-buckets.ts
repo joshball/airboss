@@ -107,10 +107,4 @@ export const HIDDEN_BY_DEFAULT_WHEN_EMPTY: ReadonlySet<TypeBucket> = new Set(['a
  * carries enough disambiguation; on for everything in Library (handbooks,
  * CFRs, AIM, AC, ACS).
  */
-export const SHOWS_DOC_CODE_ROW: ReadonlySet<TypeBucket> = new Set([
-	'handbooks',
-	'cfrs',
-	'aim',
-	'ac',
-	'acs',
-]);
+export const SHOWS_DOC_CODE_ROW: ReadonlySet<TypeBucket> = new Set(['handbooks', 'cfrs', 'aim', 'ac', 'acs']);

@@ -1,5 +1,10 @@
 <script lang="ts">
-import { HIDDEN_BY_DEFAULT_WHEN_EMPTY, type TypeBucket, TYPE_BUCKET_LABELS, TYPE_BUCKET_ORDER } from '../schema/type-buckets';
+import {
+	HIDDEN_BY_DEFAULT_WHEN_EMPTY,
+	TYPE_BUCKET_LABELS,
+	TYPE_BUCKET_ORDER,
+	type TypeBucket,
+} from '../schema/type-buckets';
 
 /**
  * Vertical type-nav (left column). One row per bucket with a count.
@@ -27,10 +32,7 @@ interface Props {
 let { counts, selected, onSelect }: Props = $props();
 
 const totalNonHidden = $derived<number>(
-	TYPE_BUCKET_ORDER.filter((b) => !HIDDEN_BY_DEFAULT_WHEN_EMPTY.has(b)).reduce(
-		(sum, b) => sum + (counts[b] ?? 0),
-		0,
-	),
+	TYPE_BUCKET_ORDER.filter((b) => !HIDDEN_BY_DEFAULT_WHEN_EMPTY.has(b)).reduce((sum, b) => sum + (counts[b] ?? 0), 0),
 );
 
 const visibleBuckets = $derived<readonly TypeBucket[]>(

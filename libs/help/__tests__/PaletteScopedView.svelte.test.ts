@@ -11,7 +11,9 @@ afterEach(() => {
 	cleanup();
 });
 
-function makeResult(overrides: Partial<SearchResult> & { id: string; type: SearchResult['type']; title: string }): SearchResult {
+function makeResult(
+	overrides: Partial<SearchResult> & { id: string; type: SearchResult['type']; title: string },
+): SearchResult {
 	return {
 		href: `/x/${overrides.id}`,
 		rankBucket: 2,
@@ -67,7 +69,7 @@ describe('PaletteScopedView', () => {
 			docCode: 'FAA-H-8083-28B',
 			onActivate: vi.fn(),
 		});
-		expect(screen.getByTestId('palette-scoped-empty')).toBeTruthy();
+		expect(screen.getByTestId('palette-scoped-empty')).toBeInTheDocument();
 	});
 
 	it('falls back to the docCode in the headline when headline result is null', () => {

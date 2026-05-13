@@ -14,6 +14,6 @@
 //   - Bundled sources: `DocCodeSource`, `TitlePrefixSource`
 
 export { default as Autocomplete } from './Autocomplete.svelte';
-export type { AutocompleteEntry, AutocompleteProps, AutocompleteSource } from './types';
 export { DOC_CODE_SOURCE_ID, DocCodeSource } from './DocCodeSource';
 export { TITLE_PREFIX_SOURCE_ID, TitlePrefixSource } from './TitlePrefixSource';
+export type { AutocompleteEntry, AutocompleteProps, AutocompleteSource } from './types';

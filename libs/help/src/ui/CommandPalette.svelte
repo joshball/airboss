@@ -1,53 +1,53 @@
 <script lang="ts">
-import { APP_SURFACES, type AppSurface, HELP_SEARCH_DEBOUNCE_MS, ROUTES } from '@ab/constants';
+import type { AutocompleteEntry, AutocompleteSource } from '@ab/autocomplete';
+import { Autocomplete, DocCodeSource, TitlePrefixSource } from '@ab/autocomplete';
+import { APP_SURFACES, type AppSurface, HELP_SEARCH_DEBOUNCE_MS } from '@ab/constants';
 import { createFocusTrap, type FocusTrap } from '@ab/ui/lib/focus-trap';
 import { tick, untrack } from 'svelte';
 import { goto } from '$app/navigation';
 import { page } from '$app/state';
 import type { ParsedFilter } from '../schema/help-registry';
 import { PALETTE_MODE_ELIGIBLE, type PaletteMode } from '../schema/palette-mode';
-import {
-	COLUMN_ORDER,
-	type GroupedResults,
-	type PaletteHost,
-	type ResultColumn,
-	type SearchResult,
-	type SynonymRewrite,
-} from '../schema/result-types';
+import type { GroupedResults, PaletteHost, SearchResult, SynonymRewrite } from '../schema/result-types';
+import { BUCKET_BY_TYPE, TYPE_BUCKET_ORDER, type TypeBucket } from '../schema/type-buckets';
 import { searchGrouped } from '../search';
-import DocCodeAutocomplete, { type DocEntry } from './DocCodeAutocomplete.svelte';
 import FilterChips from './FilterChips.svelte';
-import PaletteColumn from './PaletteColumn.svelte';
 import PaletteDetailPane from './PaletteDetailPane.svelte';
+import PalettePassageView from './PalettePassageView.svelte';
+import PaletteRow from './PaletteRow.svelte';
+import PaletteScopedView from './PaletteScopedView.svelte';
+import PaletteTopHits from './PaletteTopHits.svelte';
+import PaletteTypeNav from './PaletteTypeNav.svelte';
 import '@ab/themes/palette-tokens.css';
 
 /**
- * Production command palette -- the Cmd+K / `/` (search), Cmd+P (quick
- * open), Cmd+Shift+P (command) surface. Replaces `HelpSearchPalette` as
- * the default mount for every app's nav-integrated search affordance.
+ * Production command palette -- Phase 3.5 rewrite.
  *
- * Visual variant: C, the "wide 4-column grid + right detail pane"
- * mockup from `docs/work/plans/2026-05-10-palette-mockup.html`. The grid
- * shows up to four columns at full width and shrinks to three when the
- * detail pane is open; below ~900px the detail pane hides entirely and
- * the layout returns to a four-column grid.
+ * Layout (per `design/mockups/search/mockup-02-new-layout.md`):
  *
- * Phase 3 wires:
- *
- *   - `DocCodeAutocomplete.svelte` under the input (APG combobox).
- *   - `PaletteDetailPane.svelte` on the right (toggle via `Cmd+\`).
- *   - Per-type accent borders + chips via `palette-tokens.css`.
- *   - 120ms open fade / 80ms hover / 160ms detail-pane slide motion,
- *     all collapsing to 0ms under `prefers-reduced-motion: reduce`.
+ *   - Input row with `<Autocomplete>` wrapping the text input
+ *     (autocomplete dropdown overlays the input, NOT the result column).
+ *   - Filter chips above the input.
+ *   - I-2 broad (default): top-hits strip + vertical type-nav (left) +
+ *     result column (middle) + detail pane (right).
+ *   - I-1 scoped: `<PaletteScopedView>` replaces the top-hits + type-nav
+ *     + result column with a doc-headline card + references panel.
+ *   - I-3 phrase-FTS: `<PalettePassageView>` replaces the same surface
+ *     with passage cards.
+ *   - Narrow viewport (<900px): type-nav collapses to a horizontal chip
+ *     row; detail pane hides entirely.
  *
  * Keyboard:
- *   - Arrow up/down       move selection within the focused column
- *   - Tab / Shift+Tab     standard focus traversal (handled by trap)
- *   - `[` / `]`           jump selection between non-empty columns
- *   - `Cmd+\`             toggle detail pane
- *   - Enter               activate (banner > selected row > autocomplete pick)
- *   - Cmd+Enter           autocomplete: set `doc:` filter chip
- *   - Esc                 dismiss autocomplete OR close palette
+ *   - Autocomplete dropdown owns Up/Down/Tab/Enter/Esc while open.
+ *   - Dropdown closed: Up/Down moves within result column, [/] cycles
+ *     between top-hits / type-nav / result-column foci, Cmd+\ toggles
+ *     the detail pane, Esc closes the palette.
+ *
+ * The component is browser-safe by construction: every value-import is a
+ * pure ts/svelte module under `@ab/help`, `@ab/autocomplete`, `@ab/ui`,
+ * `@ab/constants`. No `@ab/db/connection`, no `@ab/bc-study/server`, no
+ * `@ab/sources/server`, no static `node:*`. Type-only imports from
+ * `@ab/autocomplete` are erased at compile time.
  */
 
 interface Props {
@@ -68,7 +68,9 @@ const host: PaletteHost = $derived<PaletteHost>({
 	userId: page.data?.user?.id,
 });
 
-let input = $state<HTMLInputElement | null>(null);
+let panelEl = $state<HTMLDivElement | null>(null);
+let autocompleteEl = $state<{ focus: () => void } | null>(null);
+
 let rawQuery = $state('');
 let debouncedQuery = $state('');
 
@@ -80,45 +82,59 @@ let pendingFetch = $state(false);
 let detailPaneOpen = $state(true);
 let viewportWide = $state(true);
 
-/** Autocomplete dropdown -- mounted as soon as a doc-code intent fires. */
-let docPickerOpen = $state(true);
-let docPicker = $state<DocCodeAutocomplete | null>(null);
-/**
- * Mirror of the child component's `hasMatches()` -- bound via the
- * `onMatchesChange` callback so we get a reactive value Svelte tracks.
- * `bind:this` exposes methods but Svelte 5 can't auto-track method-call
- * reads in templates; pumping the boolean up via a callback keeps
- * `aria-expanded` honest.
- */
-let docPickerHasMatches = $state(false);
-
 const mergedInjected = $derived<readonly SearchResult[]>(
 	serverInjected.length > 0 ? serverInjected : (injectedResults ?? []),
 );
 
-/**
- * Apply the mode's `ELIGIBLE` filter to the grouped output. The same
- * `searchGrouped` facade serves all three modes; the difference is which
- * result types are allowed through. This keeps the ranker, parser, and
- * loaders single-sourced.
- */
 const groupedRaw = $derived<GroupedResults>(searchGrouped(debouncedQuery, host, mergedInjected));
 const grouped = $derived<GroupedResults>(filterByMode(groupedRaw, mode));
 
-let focusedColumn = $state<ResultColumn>('faa-resources');
-let focusedIndex = $state(0);
+const intent = $derived<GroupedResults['intent']>(grouped.intent);
+const docFilterCode = $derived<string | null>(extractDocFilterCode(grouped.filters));
 
-const nonEmptyColumns = $derived<ResultColumn[]>(COLUMN_ORDER.filter((c) => grouped.columns[c].length > 0));
+/**
+ * Per-bucket counts for the type-nav. We flatten every column into a
+ * single bucket-counted map; this drives the left-side counts and the
+ * selected-bucket result list.
+ */
+const bucketCounts = $derived<Record<TypeBucket, number>>(computeBucketCounts(grouped));
+
+/** Currently-selected type bucket (drives the middle column in I-2). */
+let selectedBucket = $state<TypeBucket>('handbooks');
+
+// Keep the selected bucket in sync with the result set: pick the first
+// non-empty bucket whenever the result-set shape changes. The user can
+// still click another bucket; selectedBucket only auto-syncs on query
+// change.
+$effect(() => {
+	void debouncedQuery;
+	const counts = untrack(() => bucketCounts);
+	const fallback = pickFirstNonEmptyBucket(counts);
+	if (fallback) selectedBucket = fallback;
+});
+
+/** Rows displayed in the middle column for the currently-selected bucket. */
+const bucketRows = $derived<readonly SearchResult[]>(computeBucketRows(grouped, selectedBucket));
 
 const chipFilters = $derived<readonly ParsedFilter[]>(grouped.filters);
 const chipSynonyms = $derived<readonly SynonymRewrite[]>(grouped.synonymsApplied);
 
-/** Columns whose contents come from the server fetch. */
-const SERVER_FED_COLUMNS: ReadonlySet<ResultColumn> = new Set<ResultColumn>([
-	'faa-resources',
-	'airboss-content',
-	'my-stuff',
-]);
+/**
+ * Focus zone: where Up/Down arrow keys advance the selection. Three
+ * zones in I-2 mode -- top-hits / column / detail-pane sub-results.
+ */
+type FocusZone = 'top-hits' | 'column';
+let focusZone = $state<FocusZone>('column');
+let focusedColumnIndex = $state(0);
+let focusedTopHitIndex = $state(0);
+
+// Reset focus indices when the result set or selected bucket changes.
+$effect(() => {
+	void debouncedQuery;
+	void selectedBucket;
+	focusedColumnIndex = 0;
+	focusedTopHitIndex = 0;
+});
 
 const placeholder = $derived<string>(placeholderFor(mode));
 
@@ -130,10 +146,8 @@ function placeholderFor(m: PaletteMode): string {
 
 function filterByMode(g: GroupedResults, m: PaletteMode): GroupedResults {
 	const eligible = PALETTE_MODE_ELIGIBLE[m];
-	// search admits everything -- short-circuit.
-	if (eligible === undefined) return g;
 	if (m === 'search') return g;
-	const filtered: Record<ResultColumn, readonly SearchResult[]> = {
+	const filtered: GroupedResults['columns'] = {
 		'faa-resources': [],
 		'airboss-content': [],
 		'app-help': [],
@@ -141,12 +155,65 @@ function filterByMode(g: GroupedResults, m: PaletteMode): GroupedResults {
 		'external-tools': [],
 		commands: [],
 	};
-	for (const col of COLUMN_ORDER) {
+	for (const col of Object.keys(g.columns) as Array<keyof typeof g.columns>) {
 		filtered[col] = g.columns[col].filter((r) => eligible.has(r.type));
 	}
-	const totalCount = COLUMN_ORDER.reduce((sum, c) => sum + filtered[c].length, 0);
+	const totalCount = (Object.keys(filtered) as Array<keyof typeof filtered>).reduce(
+		(sum, c) => sum + filtered[c].length,
+		0,
+	);
 	const bannerHit = g.bannerHit && eligible.has(g.bannerHit.type) ? g.bannerHit : null;
-	return { ...g, columns: filtered, totalCount, bannerHit };
+	const topHits = g.topHits.filter((r) => eligible.has(r.type));
+	return { ...g, columns: filtered, totalCount, bannerHit, topHits };
+}
+
+function computeBucketCounts(g: GroupedResults): Record<TypeBucket, number> {
+	const counts: Record<TypeBucket, number> = {
+		handbooks: 0,
+		cfrs: 0,
+		aim: 0,
+		ac: 0,
+		acs: 0,
+		knowledge: 0,
+		courses: 0,
+		glossary: 0,
+		mine: 0,
+		tools: 0,
+		'app-help': 0,
+	};
+	for (const col of Object.values(g.columns)) {
+		for (const row of col) {
+			const bucket = BUCKET_BY_TYPE[row.type];
+			counts[bucket] = (counts[bucket] ?? 0) + 1;
+		}
+	}
+	return counts;
+}
+
+function computeBucketRows(g: GroupedResults, bucket: TypeBucket): readonly SearchResult[] {
+	const rows: SearchResult[] = [];
+	for (const col of Object.values(g.columns)) {
+		for (const row of col) {
+			if (BUCKET_BY_TYPE[row.type] === bucket) rows.push(row);
+		}
+	}
+	rows.sort((a, b) => (b.score ?? 0) - (a.score ?? 0) || a.title.localeCompare(b.title));
+	return rows;
+}
+
+function pickFirstNonEmptyBucket(counts: Record<TypeBucket, number>): TypeBucket | null {
+	for (const b of TYPE_BUCKET_ORDER) {
+		if ((counts[b] ?? 0) > 0) return b;
+	}
+	return null;
+}
+
+function extractDocFilterCode(filters: readonly ParsedFilter[]): string | null {
+	for (const f of filters) {
+		if (f.key !== 'doc') continue;
+		if (f.values.length > 0 && f.values[0]) return f.values[0];
+	}
+	return null;
 }
 
 // Debounce raw -> debounced.
@@ -203,14 +270,6 @@ $effect(() => {
 	return () => controller.abort();
 });
 
-// Reset selection when query lands.
-$effect(() => {
-	void debouncedQuery;
-	focusedIndex = 0;
-	const cols = untrack(() => nonEmptyColumns);
-	focusedColumn = cols[0] ?? 'faa-resources';
-});
-
 // Track viewport width so the detail pane hides on narrow screens.
 $effect(() => {
 	if (typeof window === 'undefined') return;
@@ -219,13 +278,11 @@ $effect(() => {
 	const onChange = (ev: MediaQueryListEvent): void => {
 		viewportWide = ev.matches;
 	};
-	// matchMedia change event - addEventListener works on every modern browser.
 	mq.addEventListener('change', onChange);
 	return () => mq.removeEventListener('change', onChange);
 });
 
 // Focus-trap lifecycle.
-let panelEl = $state<HTMLDivElement | null>(null);
 let trap: FocusTrap | null = null;
 let previousFocus: HTMLElement | null = null;
 
@@ -238,7 +295,7 @@ $effect(() => {
 		if (panelEl) {
 			trap = createFocusTrap(panelEl, { onEscape: onClose });
 		}
-		input?.focus();
+		autocompleteEl?.focus();
 	});
 	return () => {
 		trap?.release();
@@ -248,28 +305,65 @@ $effect(() => {
 	};
 });
 
-function currentList(): readonly SearchResult[] {
-	return grouped.columns[focusedColumn] ?? [];
+// Autocomplete sources for the search input. Order matters: DocCode
+// claims doc-shaped fragments first; TitlePrefix handles the title path
+// for everything else.
+const autocompleteSources: readonly AutocompleteSource[] = [DocCodeSource, TitlePrefixSource];
+
+/**
+ * Autocomplete commit (Tab / Enter on a dropdown row). The host's job is
+ * to replace the input value with the canonical form (the component
+ * already did that) and -- crucially -- NOT to run the search. The modal
+ * stays in its current state; the user can keep typing or hit Enter
+ * (dropdown closed) to actually run the search.
+ *
+ * Per WP decision R13: "Tab commits the canonical form into the input
+ * AND closes the dropdown -- modal stays open in its current state."
+ */
+function onAutocompleteCommit(_entry: AutocompleteEntry): void {
+	// Intentionally a no-op for search flow. Future hosts (e.g. quickopen
+	// at Phase 5) override this to navigate on commit.
 }
 
-/** Highlighted result for the detail pane. */
-const highlightedResult = $derived<SearchResult | null>(
-	(() => {
-		// Banner takes precedence when present and the user hasn't moved focus
-		// into a column with content -- mirrors the Enter-on-banner behavior.
-		if (grouped.bannerHit && focusedIndex === 0 && nonEmptyColumns[0] === focusedColumn) {
-			return grouped.bannerHit;
-		}
-		return currentList()[focusedIndex] ?? null;
-	})(),
-);
+/**
+ * Cmd+Enter on a dropdown row -- the meta intent. Sets a `doc:<code>`
+ * filter chip, clears the free-text part of the input, and routes the
+ * search-on-Enter (already triggered by the meta path) into I-1 scoped
+ * intent territory.
+ */
+function onAutocompleteCommitMeta(entry: AutocompleteEntry): void {
+	const code = entry.secondary ?? entry.canonicalForm;
+	if (!code) return;
+	rawQuery = `doc:${code} `;
+	void tick().then(() => autocompleteEl?.focus());
+}
+
+function onAutocompleteDismiss(): void {
+	void tick().then(() => autocompleteEl?.focus());
+}
+
+function onAutocompleteEnter(): void {
+	// Dropdown closed; the search debouncer already drove `debouncedQuery`
+	// to a fresh value, so the result panels are up-to-date. If the user
+	// hit Enter on a tier-1 banner result, activate it; otherwise activate
+	// the currently-focused row.
+	if (grouped.bannerHit) {
+		activate(grouped.bannerHit);
+		return;
+	}
+	if (focusZone === 'top-hits') {
+		const hit = grouped.topHits[focusedTopHitIndex];
+		if (hit) activate(hit);
+		return;
+	}
+	const row = bucketRows[focusedColumnIndex];
+	if (row) activate(row);
+}
 
 function handleKey(event: KeyboardEvent): void {
-	// Doc-code autocomplete owns its keys when it has matches and is open.
-	if (docPicker && docPickerOpen) {
-		const consumed = docPicker.handleKey(event);
-		if (consumed) return;
-	}
+	// Autocomplete handles its own keys when open; the component dispatches
+	// `onEnter` on the dropdown-closed Enter case. Outside of those, we
+	// own the keymap below.
 	trap?.handleKeyDown(event);
 	if (event.defaultPrevented) return;
 	if (event.key === 'Escape') {
@@ -277,54 +371,51 @@ function handleKey(event: KeyboardEvent): void {
 		onClose();
 		return;
 	}
-	if (event.key === 'ArrowDown') {
-		event.preventDefault();
-		const list = currentList();
-		if (list.length > 0) focusedIndex = (focusedIndex + 1) % list.length;
-		return;
-	}
-	if (event.key === 'ArrowUp') {
-		event.preventDefault();
-		const list = currentList();
-		if (list.length > 0) focusedIndex = (focusedIndex - 1 + list.length) % list.length;
-		return;
-	}
-	if (event.key === ']') {
-		event.preventDefault();
-		jumpColumn(1);
-		return;
-	}
-	if (event.key === '[') {
-		event.preventDefault();
-		jumpColumn(-1);
-		return;
-	}
 	if ((event.metaKey || event.ctrlKey) && event.key === '\\') {
 		event.preventDefault();
 		detailPaneOpen = !detailPaneOpen;
 		return;
 	}
-	if (event.key === 'Enter') {
+	if (event.key === 'ArrowDown') {
 		event.preventDefault();
-		if (grouped.bannerHit && focusedIndex === 0 && nonEmptyColumns[0] === focusedColumn) {
-			activate(grouped.bannerHit);
-			return;
-		}
-		const result = currentList()[focusedIndex];
-		if (result) activate(result);
+		moveFocus(1);
+		return;
+	}
+	if (event.key === 'ArrowUp') {
+		event.preventDefault();
+		moveFocus(-1);
+		return;
+	}
+	if (event.key === ']') {
+		event.preventDefault();
+		jumpFocusZone(1);
+		return;
+	}
+	if (event.key === '[') {
+		event.preventDefault();
+		jumpFocusZone(-1);
+		return;
 	}
 }
 
-function jumpColumn(direction: 1 | -1): void {
-	const cols = nonEmptyColumns;
-	if (cols.length === 0) return;
-	const idx = cols.indexOf(focusedColumn);
-	const baseIdx = idx === -1 ? 0 : idx;
-	const next = cols[(baseIdx + direction + cols.length) % cols.length] ?? cols[0];
-	if (next) {
-		focusedColumn = next;
-		focusedIndex = 0;
+function moveFocus(direction: 1 | -1): void {
+	if (focusZone === 'top-hits') {
+		const len = grouped.topHits.length;
+		if (len === 0) return;
+		focusedTopHitIndex = (focusedTopHitIndex + direction + len) % len;
+		return;
 	}
+	const len = bucketRows.length;
+	if (len === 0) return;
+	focusedColumnIndex = (focusedColumnIndex + direction + len) % len;
+}
+
+function jumpFocusZone(direction: 1 | -1): void {
+	const zones: FocusZone[] = grouped.topHits.length > 0 && intent === 'broad' ? ['top-hits', 'column'] : ['column'];
+	const idx = zones.indexOf(focusZone);
+	const base = idx === -1 ? 0 : idx;
+	const next = zones[(base + direction + zones.length) % zones.length] ?? zones[0];
+	if (next) focusZone = next;
 }
 
 function activate(result: SearchResult): void {
@@ -396,38 +487,10 @@ function bannerActionLabel(result: SearchResult): string {
 	return 'Open';
 }
 
-// Autocomplete callbacks.
-function onAutocompletePick(doc: DocEntry): void {
-	// Map the registry row's id to its canonical glossary detail URL.
-	// `loadAviationRefs` uses the same `REFERENCE_GLOSSARY_ID(ref.id)`
-	// shape; this stays in sync as long as that loader does.
-	void goto(ROUTES.REFERENCE_GLOSSARY_ID(doc.id));
-	onClose();
-}
-
-function onAutocompleteFilter(doc: DocEntry): void {
-	// Replace the input with `doc:<code>` filter chip + clear free text,
-	// then refocus so the user can type the inside-doc query.
-	rawQuery = `doc:${doc.code} `;
-	docPickerOpen = false;
-	void tick().then(() => {
-		input?.focus();
-	});
-}
-
-function onAutocompleteDismiss(): void {
-	docPickerOpen = false;
-	void tick().then(() => {
-		input?.focus();
-	});
-}
-
 /** Search-inside via the detail pane button. Sets a `doc:` chip and refocuses. */
 function onDetailSearchInside(docCode: string): void {
 	rawQuery = `doc:${docCode} `;
-	void tick().then(() => {
-		input?.focus();
-	});
+	void tick().then(() => autocompleteEl?.focus());
 }
 
 /** Open via the detail pane button. */
@@ -435,21 +498,89 @@ function onDetailOpen(result: SearchResult): void {
 	activate(result);
 }
 
-/** Hover from a column row -- move the highlight. */
-function onColumnHover(index: number, col: ResultColumn): void {
-	focusedColumn = col;
-	focusedIndex = index;
+function selectBucket(bucket: TypeBucket): void {
+	selectedBucket = bucket;
+	focusZone = 'column';
+	focusedColumnIndex = 0;
 }
 
-// Whenever the user types again, re-open the autocomplete so it has a
-// chance to surface for the new fragment.
-$effect(() => {
-	void rawQuery;
-	docPickerOpen = true;
-});
+function onTopHitHover(_r: SearchResult, index: number): void {
+	focusZone = 'top-hits';
+	focusedTopHitIndex = index;
+}
 
-// Grid template depends on viewport + pane visibility.
-const detailPaneVisible = $derived<boolean>(detailPaneOpen && viewportWide);
+function onColumnRowHover(result: SearchResult): void {
+	focusZone = 'column';
+	const idx = bucketRows.findIndex((r) => r.id === result.id);
+	if (idx >= 0) focusedColumnIndex = idx;
+}
+
+/** Highlighted result for the detail pane. */
+const highlightedResult = $derived<SearchResult | null>(
+	(() => {
+		if (grouped.bannerHit && focusZone === 'top-hits' && focusedTopHitIndex === 0 && grouped.topHits.length === 0) {
+			return grouped.bannerHit;
+		}
+		if (focusZone === 'top-hits') {
+			return grouped.topHits[focusedTopHitIndex] ?? null;
+		}
+		return bucketRows[focusedColumnIndex] ?? null;
+	})(),
+);
+
+const detailPaneVisible = $derived<boolean>(detailPaneOpen && viewportWide && intent !== 'phrase-fts');
+
+// In I-1 scoped mode, the headline row is the matching doc; if no row
+// matches the doc filter directly, we still render the chip and the
+// references panel.
+const scopedHeadline = $derived<SearchResult | null>(
+	(() => {
+		if (intent !== 'scoped') return null;
+		if (!docFilterCode) return null;
+		// Look for a row whose docCode matches the chip.
+		for (const col of Object.values(grouped.columns)) {
+			for (const row of col) {
+				if (row.docCode === docFilterCode) return row;
+			}
+		}
+		return null;
+	})(),
+);
+
+const scopedReferences = $derived<readonly SearchResult[]>(
+	(() => {
+		if (intent !== 'scoped') return [];
+		const rows: SearchResult[] = [];
+		const headlineId = scopedHeadline?.id;
+		for (const col of Object.values(grouped.columns)) {
+			for (const row of col) {
+				if (row.id === headlineId) continue;
+				rows.push(row);
+			}
+		}
+		return rows;
+	})(),
+);
+
+const passageRows = $derived<readonly SearchResult[]>(
+	(() => {
+		if (intent !== 'phrase-fts') return [];
+		const rows: SearchResult[] = [];
+		for (const col of Object.values(grouped.columns)) {
+			for (const row of col) rows.push(row);
+		}
+		rows.sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
+		return rows;
+	})(),
+);
+
+// In I-1, the user is committed to a doc; switch the auto-focus zone to
+// the references list (column zone reads from bucketRows; we keep that
+// behaviour, the scoped view's row template still routes through the
+// same activate handler).
+$effect(() => {
+	if (intent === 'scoped') focusZone = 'column';
+});
 </script>
 
 {#if open}
@@ -469,40 +600,31 @@ const detailPaneVisible = $derived<boolean>(detailPaneOpen && viewportWide);
 			role="dialog"
 			aria-modal="true"
 			aria-label={placeholder}
+			tabindex="-1"
 			data-palette-tokens
 			data-testid="commandpalette-root"
 			data-mode={mode}
+			data-intent={intent}
 			data-detail-open={detailPaneVisible ? 'true' : 'false'}
-			data-focused-bucket={focusedColumn}
+			data-focused-bucket={selectedBucket}
+			onkeydown={handleKey}
 		>
-			<div class="main">
+			<div class="header">
 				<div class="input-row">
-					<input
-						bind:this={input}
+					<Autocomplete
+						bind:this={autocompleteEl}
 						bind:value={rawQuery}
-						onkeydown={handleKey}
-						type="text"
-						role="combobox"
+						sources={autocompleteSources}
+						onCommit={onAutocompleteCommit}
+						onCommitMeta={onAutocompleteCommitMeta}
+						onDismiss={onAutocompleteDismiss}
+						onEnter={onAutocompleteEnter}
 						placeholder={placeholder}
-						autocomplete="off"
-						spellcheck="false"
-						aria-label={placeholder}
-						aria-autocomplete="list"
-						aria-controls="palette-doc-autocomplete"
-						aria-expanded={docPickerOpen && docPickerHasMatches ? 'true' : 'false'}
-						data-testid="commandpalette-input"
+						ariaLabel={placeholder}
+						inputId="commandpalette-input"
+						testId="commandpalette"
 					/>
 				</div>
-
-				<DocCodeAutocomplete
-					bind:this={docPicker}
-					query={rawQuery}
-					open={docPickerOpen}
-					onPick={onAutocompletePick}
-					onFilter={onAutocompleteFilter}
-					onDismiss={onAutocompleteDismiss}
-					onMatchesChange={(hasMatches) => (docPickerHasMatches = hasMatches)}
-				/>
 
 				<FilterChips
 					filters={chipFilters}
@@ -526,49 +648,107 @@ const detailPaneVisible = $derived<boolean>(detailPaneOpen && viewportWide);
 						<span class="banner-arrow" aria-hidden="true">→</span>
 					</button>
 				{/if}
-
-				<div class="columns" data-testid="palette-columns" data-detail-open={detailPaneVisible ? 'true' : 'false'}>
-					{#each COLUMN_ORDER as col (col)}
-						{@const loading = pendingFetch && SERVER_FED_COLUMNS.has(col)}
-						{@const reservedHint = col === 'commands' ? 'Phase 4' : undefined}
-						<PaletteColumn
-							column={col}
-							results={grouped.columns[col]}
-							focused={focusedColumn === col}
-							focusedIndex={focusedColumn === col ? focusedIndex : 0}
-							{loading}
-							{reservedHint}
-							onActivate={activate}
-							onHover={(_r, i) => onColumnHover(i, col)}
-						/>
-					{/each}
-				</div>
-
-				{#if rawQuery.trim().length === 0}
-					<p class="empty-hint">
-						Try a doc code (<code>FAA-H-8083-28</code>, <code>Part 91</code>),
-						an alias (<code>AvWX</code>, <code>PHAK</code>),
-						or a filter (<code>doc:</code>, <code>kind:</code>, <code>mine</code>).
-					</p>
-				{/if}
-
-				<footer class="shortcuts">
-					<span><kbd>[</kbd> <kbd>]</kbd> jump column</span>
-					<span><kbd>Tab</kbd> move focus</span>
-					<span><kbd>↑</kbd> <kbd>↓</kbd> select</span>
-					<span><kbd>Enter</kbd> open</span>
-					<span><kbd>⌘</kbd>+<kbd>\</kbd> detail pane</span>
-					<span><kbd>Esc</kbd> close</span>
-				</footer>
 			</div>
 
-			{#if detailPaneVisible}
-				<PaletteDetailPane
-					result={highlightedResult}
-					onOpen={onDetailOpen}
-					onSearchInside={onDetailSearchInside}
-				/>
-			{/if}
+			<div class="body" data-intent={intent}>
+				{#if intent === 'scoped'}
+					<PaletteScopedView
+						headline={scopedHeadline}
+						references={scopedReferences}
+						docCode={docFilterCode ?? ''}
+						onActivate={activate}
+						onHover={onColumnRowHover}
+					/>
+				{:else if intent === 'phrase-fts'}
+					<PalettePassageView
+						passages={passageRows}
+						focusedIndex={focusedColumnIndex}
+						onActivate={activate}
+						onHover={(_r, i) => {
+							focusZone = 'column';
+							focusedColumnIndex = i;
+						}}
+					/>
+				{:else}
+					<!-- I-2 broad mode: top-hits + type-nav + result column + detail pane. -->
+					<div class="broad">
+						{#if grouped.topHits.length > 0}
+							<PaletteTopHits
+								hits={grouped.topHits}
+								focused={focusZone === 'top-hits'}
+								focusedIndex={focusedTopHitIndex}
+								onActivate={activate}
+								onHover={onTopHitHover}
+							/>
+						{/if}
+
+						<div class="layout" data-detail-open={detailPaneVisible ? 'true' : 'false'}>
+							<PaletteTypeNav
+								counts={bucketCounts}
+								selected={selectedBucket}
+								onSelect={selectBucket}
+							/>
+
+							<section
+								class="column"
+								aria-labelledby="palette-column-heading"
+								data-testid="palette-column"
+								data-focused={focusZone === 'column' ? 'true' : 'false'}
+								data-loading={pendingFetch ? 'true' : 'false'}
+							>
+								<header>
+									<h3 id="palette-column-heading">
+										{bucketRows.length === 0 ? 'No matches' : `${bucketRows.length} matches`}
+									</h3>
+								</header>
+								{#if bucketRows.length === 0}
+									<p class="empty">
+										{#if rawQuery.trim().length === 0}
+											Try a doc code (<code>FAA-H-8083-28</code>, <code>Part 91</code>),
+											an alias (<code>AvWX</code>, <code>PHAK</code>),
+											or a filter (<code>doc:</code>, <code>kind:</code>, <code>mine</code>).
+										{:else if pendingFetch}
+											Loading…
+										{:else}
+											No results in this group.
+										{/if}
+									</p>
+								{:else}
+									<ul>
+										{#each bucketRows as row, index (row.id)}
+											<li>
+												<PaletteRow
+													result={row}
+													focused={focusZone === 'column' && index === focusedColumnIndex}
+													onActivate={activate}
+													onHover={onColumnRowHover}
+												/>
+											</li>
+										{/each}
+									</ul>
+								{/if}
+							</section>
+
+							{#if detailPaneVisible}
+								<PaletteDetailPane
+									result={highlightedResult}
+									onOpen={onDetailOpen}
+									onSearchInside={onDetailSearchInside}
+								/>
+							{/if}
+						</div>
+					</div>
+				{/if}
+			</div>
+
+			<footer class="shortcuts">
+				<span><kbd>[</kbd> <kbd>]</kbd> jump zone</span>
+				<span><kbd>↑</kbd> <kbd>↓</kbd> select</span>
+				<span><kbd>Tab</kbd> commit autocomplete</span>
+				<span><kbd>Enter</kbd> open</span>
+				<span><kbd>⌘</kbd>+<kbd>\</kbd> detail pane</span>
+				<span><kbd>Esc</kbd> close</span>
+			</footer>
 		</div>
 	</div>
 {/if}
@@ -588,25 +768,19 @@ const detailPaneVisible = $derived<boolean>(detailPaneOpen && viewportWide);
 	}
 
 	@keyframes palette-fade-in {
-		from {
-			opacity: 0;
-		}
-		to {
-			opacity: 1;
-		}
+		from { opacity: 0; }
+		to { opacity: 1; }
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.backdrop {
-			animation: none;
-		}
+		.backdrop { animation: none; }
 	}
 
 	.palette {
 		width: min(82rem, 98vw);
 		max-height: 84vh;
-		display: grid;
-		grid-template-columns: 1fr;
+		display: flex;
+		flex-direction: column;
 		background: var(--surface-panel);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
@@ -614,37 +788,14 @@ const detailPaneVisible = $derived<boolean>(detailPaneOpen && viewportWide);
 		overflow: hidden;
 	}
 
-	.palette[data-detail-open='true'] {
-		grid-template-columns: minmax(0, 1fr) 22rem;
-	}
-
-	.main {
+	.header {
 		display: flex;
 		flex-direction: column;
-		min-width: 0;
-		max-height: 84vh;
-		overflow: hidden;
+		border-bottom: 1px solid var(--edge-default);
 	}
 
 	.input-row {
 		padding: var(--space-md) var(--space-lg) var(--space-sm);
-		border-bottom: 1px solid var(--edge-default);
-	}
-
-	input {
-		width: 100%;
-		border: 0;
-		outline: none;
-		font-size: var(--font-size-base);
-		padding: var(--space-sm) 0;
-		background: transparent;
-		color: inherit;
-	}
-
-	input:focus-visible {
-		outline: none;
-		box-shadow: 0 0 0 2px var(--focus-ring);
-		border-radius: var(--radius-sm);
 	}
 
 	.banner {
@@ -653,7 +804,7 @@ const detailPaneVisible = $derived<boolean>(detailPaneOpen && viewportWide);
 		gap: var(--space-md);
 		padding: var(--space-md) var(--space-lg);
 		border: 0;
-		border-bottom: 1px solid var(--edge-default);
+		border-top: 1px solid var(--edge-default);
 		background: var(--palette-accent-amber-wash);
 		font: inherit;
 		font-size: var(--font-size-base);
@@ -677,44 +828,97 @@ const detailPaneVisible = $derived<boolean>(detailPaneOpen && viewportWide);
 		color: var(--ink-muted);
 	}
 
-	.banner-title {
-		font-weight: var(--font-weight-semibold);
+	.banner-title { font-weight: var(--font-weight-semibold); }
+	.banner-subtitle { color: var(--ink-muted); font-size: var(--font-size-sm); }
+	.banner-arrow { margin-left: auto; }
+
+	.body {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		min-height: 0;
+		overflow: hidden;
 	}
 
-	.banner-subtitle {
-		color: var(--ink-muted);
-		font-size: var(--font-size-sm);
-	}
-
-	.banner-arrow {
-		margin-left: auto;
-	}
-
-	.columns {
-		overflow-y: auto;
-		display: grid;
-		grid-template-columns: repeat(4, minmax(0, 1fr));
-		gap: var(--space-md);
-		padding: var(--space-md) var(--space-lg);
+	.broad {
+		display: flex;
+		flex-direction: column;
+		min-height: 0;
 		flex: 1;
 	}
 
-	/* Commands column reserved-empty in Phase 3 -- still part of the grid
-		visually so the detail-pane-collapsed layout has its slot ready. */
-	.columns :global([data-column='commands']) {
-		opacity: 0.85;
+	.layout {
+		display: grid;
+		grid-template-columns: 12rem minmax(0, 1fr);
+		flex: 1;
+		min-height: 0;
+		overflow: hidden;
 	}
 
-	/* When the detail pane is visible, the grid shrinks. Below 1100px we
-		drop to 3 columns regardless to keep readability. */
-	.columns[data-detail-open='true'] {
-		grid-template-columns: repeat(3, minmax(0, 1fr));
+	.layout[data-detail-open='true'] {
+		grid-template-columns: 12rem minmax(0, 1fr) 22rem;
 	}
 
-	.empty-hint {
-		margin: var(--space-sm) var(--space-lg) 0;
-		font-size: var(--font-size-sm);
+	.column {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-xs);
+		padding: var(--space-md) var(--space-lg);
+		min-width: 0;
+		overflow-y: auto;
+	}
+
+	.column[data-loading='true'] header h3 {
+		animation: palette-column-loading-pulse var(--motion-slow) infinite;
+	}
+
+	@keyframes palette-column-loading-pulse {
+		0%, 100% { opacity: 1; }
+		50% { opacity: 0.4; }
+	}
+
+	.column header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		font-size: var(--font-size-xs);
+		text-transform: uppercase;
+		letter-spacing: var(--letter-spacing-caps);
+		color: var(--ink-muted);
+		margin-bottom: var(--space-xs);
+	}
+
+	.column h3 {
+		margin: 0;
+		font-size: inherit;
+		font-weight: var(--font-weight-semibold);
+		color: var(--ink-muted);
+	}
+
+	.column ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2xs);
+	}
+
+	.column li { list-style: none; }
+
+	.column .empty {
+		margin: 0;
+		padding: var(--space-md);
 		color: var(--ink-subtle);
+		font-size: var(--font-size-sm);
+	}
+
+	code {
+		font-family: var(--font-family-mono);
+		font-size: var(--font-size-xs);
+		background: var(--surface-sunken);
+		padding: 0 var(--space-3xs);
+		border-radius: var(--radius-xs);
 	}
 
 	.shortcuts {
@@ -737,24 +941,9 @@ const detailPaneVisible = $derived<boolean>(detailPaneOpen && viewportWide);
 		background: var(--surface-sunken);
 	}
 
-	@media (max-width: 1100px) {
-		.columns {
-			grid-template-columns: repeat(3, minmax(0, 1fr));
-		}
-		.columns[data-detail-open='true'] {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-		}
-	}
-
 	@media (max-width: 900px) {
-		.palette[data-detail-open='true'] {
-			grid-template-columns: 1fr;
-		}
-	}
-
-	@media (max-width: 640px) {
-		.columns,
-		.columns[data-detail-open='true'] {
+		.layout,
+		.layout[data-detail-open='true'] {
 			grid-template-columns: 1fr;
 		}
 	}

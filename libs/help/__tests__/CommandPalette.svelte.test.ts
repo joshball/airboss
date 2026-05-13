@@ -38,18 +38,18 @@ describe('CommandPalette -- open', () => {
 		expect(root.getAttribute('role')).toBe('dialog');
 		const input = screen.getByTestId('commandpalette-input');
 		expect(input.tagName).toBe('INPUT');
-		// APG combobox pattern: the input drives the DocCodeAutocomplete
+		// APG combobox pattern: the input drives the @ab/autocomplete
 		// dropdown, so it carries role="combobox" instead of the implicit
 		// searchbox -- searchbox doesn't accept aria-expanded.
 		expect(input.getAttribute('role')).toBe('combobox');
 	});
 
-	it('initial focused column defaults to Library (the first column in the layout)', () => {
+	it('initial focused bucket defaults to Handbooks (the first bucket in the nav order)', () => {
 		render(CommandPalette, { open: true, onClose: vi.fn() });
-		// `data-focused-bucket` was the legacy two-bucket attribute; it now
-		// carries the focused column id so existing wiring (and screenshot
-		// regressions that scan the attribute) still work.
-		expect(screen.getByTestId('commandpalette-root').getAttribute('data-focused-bucket')).toBe('faa-resources');
+		// Phase 3.5 replaces the legacy 6-column taxonomy with the finer
+		// vertical type-nav buckets. `data-focused-bucket` still stamps the
+		// active bucket so screenshot regressions / e2e probes have a hook.
+		expect(screen.getByTestId('commandpalette-root').getAttribute('data-focused-bucket')).toBe('handbooks');
 	});
 
 	it('Escape on the input fires onClose', () => {

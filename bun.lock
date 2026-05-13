@@ -347,6 +347,7 @@
     "libs/help": {
       "name": "@ab/help",
       "dependencies": {
+        "@ab/autocomplete": "workspace:*",
         "@ab/aviation": "workspace:*",
         "@ab/bc-study": "workspace:*",
         "@ab/constants": "workspace:*",

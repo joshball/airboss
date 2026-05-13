@@ -14,7 +14,9 @@ afterEach(() => {
 	cleanup();
 });
 
-function makePassage(overrides: Partial<SearchResult> & { id: string; type: SearchResult['type']; title: string }): SearchResult {
+function makePassage(
+	overrides: Partial<SearchResult> & { id: string; type: SearchResult['type']; title: string },
+): SearchResult {
 	return {
 		href: `/x/${overrides.id}`,
 		rankBucket: 3,
@@ -25,7 +27,7 @@ function makePassage(overrides: Partial<SearchResult> & { id: string; type: Sear
 describe('PalettePassageView -- empty state', () => {
 	it('renders an empty-state hint when no passages', () => {
 		render(PalettePassageView, { passages: [], onActivate: vi.fn() });
-		expect(screen.getByTestId('palette-passage-empty')).toBeTruthy();
+		expect(screen.getByTestId('palette-passage-empty')).toBeInTheDocument();
 	});
 });
 

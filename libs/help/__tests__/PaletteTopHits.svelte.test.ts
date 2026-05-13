@@ -46,10 +46,7 @@ describe('PaletteTopHits', () => {
 	});
 
 	it('marks the focused row when the strip owns focus', () => {
-		const hits = [
-			makeResult('h1', 'faa.handbook', 'AvWX'),
-			makeResult('h2', 'faa.ac', 'AC 00-6'),
-		];
+		const hits = [makeResult('h1', 'faa.handbook', 'AvWX'), makeResult('h2', 'faa.ac', 'AC 00-6')];
 		render(PaletteTopHits, { hits, focused: true, focusedIndex: 1, onActivate: vi.fn() });
 		const rows = screen.getAllByTestId('palette-row');
 		expect(rows[0]?.classList.contains('focused')).toBe(false);

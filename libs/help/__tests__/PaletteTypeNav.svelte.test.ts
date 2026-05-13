@@ -51,9 +51,7 @@ describe('PaletteTypeNav', () => {
 		counts.handbooks = 3;
 		counts['app-help'] = 1;
 		render(PaletteTypeNav, { counts, selected: 'handbooks', onSelect: vi.fn() });
-		const buckets = screen
-			.getAllByTestId('palette-type-nav-button')
-			.map((b) => b.getAttribute('data-bucket'));
+		const buckets = screen.getAllByTestId('palette-type-nav-button').map((b) => b.getAttribute('data-bucket'));
 		expect(buckets).toContain('app-help');
 	});
 
@@ -63,9 +61,7 @@ describe('PaletteTypeNav', () => {
 			selected: 'app-help',
 			onSelect: vi.fn(),
 		});
-		const buckets = screen
-			.getAllByTestId('palette-type-nav-button')
-			.map((b) => b.getAttribute('data-bucket'));
+		const buckets = screen.getAllByTestId('palette-type-nav-button').map((b) => b.getAttribute('data-bucket'));
 		expect(buckets).toContain('app-help');
 	});
 
@@ -76,9 +72,7 @@ describe('PaletteTypeNav', () => {
 			onSelect: vi.fn(),
 		});
 		// totalNonHidden is 0 -> the last-resort branch fires -> app-help included.
-		const buckets = screen
-			.getAllByTestId('palette-type-nav-button')
-			.map((b) => b.getAttribute('data-bucket'));
+		const buckets = screen.getAllByTestId('palette-type-nav-button').map((b) => b.getAttribute('data-bucket'));
 		expect(buckets).toContain('app-help');
 	});
 

@@ -7,7 +7,8 @@
  * taxonomy in spec.md.
  *
  * Consumers: `CommandPalette.svelte`, `PaletteDetailPane.svelte`,
- * `PaletteColumn.svelte`, and the three Phase 3 variant prototypes. They
+ * `PaletteRow.svelte` (and via it `PaletteTopHits`, `PaletteScopedView`,
+ * `PalettePassageView`), and the three Phase 3 variant prototypes. They
  * read `accentFor(result.type)` and apply the `--palette-accent-<family>-*`
  * tokens defined in `palette-tokens.css`.
  */
