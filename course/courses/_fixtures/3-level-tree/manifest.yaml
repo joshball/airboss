@@ -1,0 +1,13 @@
+slug: three-level-tree-fixture
+kind: instructor
+title: Three-Level Tree Fixture
+status: active
+description: |
+  Fixture course used by course-tree-arbitrary-depth WP tests. One
+  section, one lesson under that section, two leaf steps under that
+  lesson. Both leaves reference real weather knowledge nodes so the
+  seed-time FK validator (Phase B) can verify the upsert path.
+
+  Do not author against this fixture from the UI. Do not add it to a
+  goal_course row outside a test. The slug is reserved for tree-shape
+  acceptance.

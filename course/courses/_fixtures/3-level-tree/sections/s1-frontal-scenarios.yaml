@@ -1,0 +1,33 @@
+code: s1
+ordinal: 1
+title: Frontal Scenarios (fixture)
+body_md: |
+  Fixture section. Holds one nested lesson with two leaf steps so the
+  course-tree-arbitrary-depth seed validator + recursive YAML schema
+  can exercise the 3-level shape. Section carries no knowledge_node_id
+  (interior); the lesson likewise; the two steps under the lesson
+  each link a real weather knowledge node.
+steps:
+  - code: s1.1
+    ordinal: 1
+    level: lesson
+    title: Scenario 1 - Cold-front passage
+    body_md: |
+      One scripted scenario. The two substeps below walk the chart
+      read and the pattern analysis. Lesson body framing lives here;
+      no knowledge node binding (interior node).
+    steps:
+      - code: s1.1.1
+        ordinal: 1
+        title: Reading the surface analysis
+        body_md: |
+          Leaf step. Linked to the surface-analysis chart-type
+          knowledge node; the seed pipeline FK-resolves on upsert.
+        knowledge_node_id: wx-chart-type-surface-analysis
+      - code: s1.1.2
+        ordinal: 2
+        title: Recognising airmass character
+        body_md: |
+          Leaf step. Linked to the airmasses-and-fronts node; the
+          seed pipeline FK-resolves on upsert.
+        knowledge_node_id: wx-airmasses-and-fronts
