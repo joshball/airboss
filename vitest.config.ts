@@ -49,6 +49,8 @@ const aliases = {
 	'@ab/aviation/ui/ReferenceText.svelte': resolve('./libs/aviation/src/ui/ReferenceText.svelte'),
 	'@ab/aviation/ui': resolve('./libs/aviation/src/ui'),
 	'@ab/aviation': resolve('./libs/aviation/src/index.ts'),
+	'@ab/autocomplete/Autocomplete.svelte': resolve('./libs/autocomplete/src/Autocomplete.svelte'),
+	'@ab/autocomplete': resolve('./libs/autocomplete/src/index.ts'),
 	'@ab/help/server': resolve('./libs/help/src/server.ts'),
 	'@ab/help/ui/MarkdownBody.svelte': resolve('./libs/help/src/ui/MarkdownBody.svelte'),
 	'@ab/help/ui': resolve('./libs/help/src/ui'),

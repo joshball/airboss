@@ -9,6 +9,7 @@
 	},
 	"dependencies": {
 		"@ab/auth": "workspace:*",
+		"@ab/autocomplete": "workspace:*",
 		"@ab/aviation": "workspace:*",
 		"@ab/bc-avionics": "workspace:*",
 		"@ab/bc-sim": "workspace:*",

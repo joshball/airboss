@@ -35,6 +35,7 @@ const BROWSER_BUNDLED_LIBS = [
 	'libs/audit',
 	'libs/sources',
 	'libs/activities',
+	'libs/autocomplete',
 	'libs/bc/study',
 	'libs/bc/sim',
 ] as const;
@@ -267,6 +268,7 @@ const RUNTIME_BARRELS: readonly BarrelSpec[] = [
 	{ path: 'libs/ui/src/index.ts', flagNodeBuiltins: true },
 	{ path: 'libs/help/src/index.ts', flagNodeBuiltins: true },
 	{ path: 'libs/aviation/src/index.ts', flagNodeBuiltins: true },
+	{ path: 'libs/autocomplete/src/index.ts', flagNodeBuiltins: true },
 	{ path: 'libs/audit/src/index.ts', flagNodeBuiltins: true },
 	{ path: 'libs/activities/src/index.ts', flagNodeBuiltins: true },
 ];

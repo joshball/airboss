@@ -34,6 +34,7 @@
       "name": "@ab/avionics",
       "dependencies": {
         "@ab/auth": "workspace:*",
+        "@ab/autocomplete": "workspace:*",
         "@ab/aviation": "workspace:*",
         "@ab/bc-avionics": "workspace:*",
         "@ab/bc-sim": "workspace:*",
@@ -53,6 +54,7 @@
     "apps/flightbag": {
       "name": "@ab/flightbag",
       "dependencies": {
+        "@ab/autocomplete": "workspace:*",
         "@ab/aviation": "workspace:*",
         "@ab/bc-study": "workspace:*",
         "@ab/constants": "workspace:*",
@@ -79,6 +81,7 @@
       "dependencies": {
         "@ab/audit": "workspace:*",
         "@ab/auth": "workspace:*",
+        "@ab/autocomplete": "workspace:*",
         "@ab/aviation": "workspace:*",
         "@ab/bc-hangar": "workspace:*",
         "@ab/bc-study": "workspace:*",
@@ -109,6 +112,7 @@
       "dependencies": {
         "@ab/audit": "workspace:*",
         "@ab/auth": "workspace:*",
+        "@ab/autocomplete": "workspace:*",
         "@ab/aviation": "workspace:*",
         "@ab/bc-sim": "workspace:*",
         "@ab/bc-study": "workspace:*",
@@ -136,6 +140,7 @@
         "@ab/activities": "workspace:*",
         "@ab/audit": "workspace:*",
         "@ab/auth": "workspace:*",
+        "@ab/autocomplete": "workspace:*",
         "@ab/aviation": "workspace:*",
         "@ab/bc-hangar": "workspace:*",
         "@ab/bc-sim": "workspace:*",
@@ -199,6 +204,17 @@
       },
       "devDependencies": {
         "@sveltejs/kit": "^2.21.1",
+        "vitest": "^4.1.0",
+      },
+    },
+    "libs/autocomplete": {
+      "name": "@ab/autocomplete",
+      "dependencies": {
+        "@ab/aviation": "workspace:*",
+        "@ab/constants": "workspace:*",
+      },
+      "devDependencies": {
+        "svelte": "^5.34.7",
         "vitest": "^4.1.0",
       },
     },
@@ -336,6 +352,7 @@
     "libs/help": {
       "name": "@ab/help",
       "dependencies": {
+        "@ab/autocomplete": "workspace:*",
         "@ab/aviation": "workspace:*",
         "@ab/bc-study": "workspace:*",
         "@ab/constants": "workspace:*",
@@ -415,7 +432,7 @@
     },
     "libs/wx-charts": {
       "name": "@ab/wx-charts",
-      "version": "0.1.0",
+      "version": "0.3.1",
       "dependencies": {
         "@ab/constants": "workspace:*",
         "d3-contour": "^4.0.2",
@@ -450,6 +467,8 @@
     "@ab/audit": ["@ab/audit@workspace:libs/audit"],
 
     "@ab/auth": ["@ab/auth@workspace:libs/auth"],
+
+    "@ab/autocomplete": ["@ab/autocomplete@workspace:libs/autocomplete"],
 
     "@ab/aviation": ["@ab/aviation@workspace:libs/aviation"],
 

@@ -10,6 +10,7 @@
 	"dependencies": {
 		"@ab/audit": "workspace:*",
 		"@ab/auth": "workspace:*",
+		"@ab/autocomplete": "workspace:*",
 		"@ab/aviation": "workspace:*",
 		"@ab/bc-hangar": "workspace:*",
 		"@ab/bc-study": "workspace:*",

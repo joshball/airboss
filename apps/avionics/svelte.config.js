@@ -52,6 +52,8 @@ const config = {
 			'@ab/activities/*': '../../libs/activities/src/*',
 			'@ab/aviation': '../../libs/aviation/src/index.ts',
 			'@ab/aviation/*': '../../libs/aviation/src/*',
+			'@ab/autocomplete': '../../libs/autocomplete/src/index.ts',
+			'@ab/autocomplete/*': '../../libs/autocomplete/src/*',
 			'@ab/help': '../../libs/help/src/index.ts',
 			'@ab/help/*': '../../libs/help/src/*',
 		},

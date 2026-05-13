@@ -50,6 +50,8 @@ const config = {
 			'@ab/ui/*': '../../libs/ui/src/*',
 			'@ab/aviation': '../../libs/aviation/src/index.ts',
 			'@ab/aviation/*': '../../libs/aviation/src/*',
+			'@ab/autocomplete': '../../libs/autocomplete/src/index.ts',
+			'@ab/autocomplete/*': '../../libs/autocomplete/src/*',
 			'@ab/hangar-jobs': '../../libs/hangar-jobs/src/index.ts',
 			'@ab/hangar-jobs/*': '../../libs/hangar-jobs/src/*',
 			'@ab/hangar-sync': '../../libs/hangar-sync/src/index.ts',

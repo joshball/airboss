@@ -193,6 +193,17 @@ export interface SearchResult {
 	 */
 	readonly children?: readonly SearchResult[];
 	/**
+	 * I-3 phrase-FTS highlighted snippet. Populated by the `fts-passages`
+	 * loader (slice 3.5i, PR C) with Postgres `ts_headline` output --
+	 * HTML-escaped text plus highlight markup (`<mark>...</mark>` by
+	 * convention). The UI renders this verbatim inside the passage card
+	 * via `{@html}`; consumers MUST NOT reflect arbitrary user input
+	 * into this field.
+	 *
+	 * Empty / undefined in I-1 / I-2 modes.
+	 */
+	readonly passageHighlight?: string;
+	/**
 	 * Cluster bond key. Handbook root + chapter rows share the canonical
 	 * doc slug (`phak`, `ifh`, `avwx`, ...); CFR Part + section rows share
 	 * the slug (`14cfr91`, `49cfr175`). The cluster builder bonds children
