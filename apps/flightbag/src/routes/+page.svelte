@@ -1,4 +1,5 @@
 <script lang="ts">
+import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import ReaderLayout from '@ab/library/ReaderLayout.svelte';
 import ReferenceCard from '@ab/library/ReferenceCard.svelte';
 import type { PageData } from './$types';
@@ -23,6 +24,7 @@ let { data }: { data: PageData } = $props();
 			paragraph, CFR section, advisory circular, or ACS task -- citations from study, sim, and other surfaces
 			resolve here.
 		</p>
+		<PageHelp pageId="library" />
 	{/snippet}
 
 	{#each data.groups as group (group.id)}

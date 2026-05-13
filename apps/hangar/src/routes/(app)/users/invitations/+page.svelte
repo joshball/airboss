@@ -1,6 +1,7 @@
 <script lang="ts">
 import { INVITABLE_ROLE_VALUES, INVITATION_STATUS, type InvitationStatus } from '@ab/bc-hangar';
 import { QUERY_PARAMS, ROLE_LABELS, ROLES, ROUTES, type Role } from '@ab/constants';
+import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import Button from '@ab/ui/components/Button.svelte';
 import ConfirmDialog from '@ab/ui/components/ConfirmDialog.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
@@ -76,6 +77,9 @@ function totalCount(counts: PageData['counts'], filter: InvitationStatus | 'all'
 
 <section class="page">
 	<PageHeader title="Invitations" subtitle="Invite a user by email; the recipient sets their own password.">
+		{#snippet titleSuffix()}
+			<PageHelp pageId="users-invitations" />
+		{/snippet}
 		{#snippet actions()}
 			<Button variant="primary" size="sm" onclick={openCreateDialog}>Invite user</Button>
 		{/snippet}
