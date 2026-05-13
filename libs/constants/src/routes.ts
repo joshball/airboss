@@ -348,6 +348,11 @@ export const ROUTES = {
 		`/reference/knowledge/${slug}/learn?${QUERY_PARAMS.STEP}=${encodeURIComponent(phase)}` as const,
 	REFERENCE_GLOSSARY: '/reference/glossary',
 	REFERENCE_GLOSSARY_ID: (id: string) => `/reference/glossary/${encodeURIComponent(id)}` as const,
+	// Aviation weather product reference pages -- one detail surface per
+	// product (METAR, TAF, AIRMET, ...) backed by the markdown corpus at
+	// `course/weather/references/products/<slug>/page.md`.
+	REFERENCE_WX_PRODUCTS: '/reference/wx/products',
+	REFERENCE_WX_PRODUCT: (slug: string) => `/reference/wx/products/${slug}` as const,
 
 	/**
 	 * @deprecated Phase 3 of `study-app-ia-cleanup` renamed `/calibration` to
@@ -995,6 +1000,7 @@ export const NAV_LABELS = {
 	REFERENCE: 'Reference',
 	REFERENCE_KNOWLEDGE: 'Knowledge',
 	REFERENCE_GLOSSARY: 'Glossary',
+	REFERENCE_WX_PRODUCTS: 'Weather products',
 	/** Placeholder for the flight-logging surface (WP 2). */
 	FLIGHT: 'Flight',
 	/**
