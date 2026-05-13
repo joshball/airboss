@@ -34,6 +34,7 @@
       "name": "@ab/avionics",
       "dependencies": {
         "@ab/auth": "workspace:*",
+        "@ab/autocomplete": "workspace:*",
         "@ab/aviation": "workspace:*",
         "@ab/bc-avionics": "workspace:*",
         "@ab/bc-sim": "workspace:*",
@@ -53,6 +54,7 @@
     "apps/flightbag": {
       "name": "@ab/flightbag",
       "dependencies": {
+        "@ab/autocomplete": "workspace:*",
         "@ab/aviation": "workspace:*",
         "@ab/bc-study": "workspace:*",
         "@ab/constants": "workspace:*",
@@ -79,6 +81,7 @@
       "dependencies": {
         "@ab/audit": "workspace:*",
         "@ab/auth": "workspace:*",
+        "@ab/autocomplete": "workspace:*",
         "@ab/aviation": "workspace:*",
         "@ab/bc-hangar": "workspace:*",
         "@ab/bc-study": "workspace:*",
@@ -109,6 +112,7 @@
       "dependencies": {
         "@ab/audit": "workspace:*",
         "@ab/auth": "workspace:*",
+        "@ab/autocomplete": "workspace:*",
         "@ab/aviation": "workspace:*",
         "@ab/bc-sim": "workspace:*",
         "@ab/bc-study": "workspace:*",
@@ -136,6 +140,7 @@
         "@ab/activities": "workspace:*",
         "@ab/audit": "workspace:*",
         "@ab/auth": "workspace:*",
+        "@ab/autocomplete": "workspace:*",
         "@ab/aviation": "workspace:*",
         "@ab/bc-hangar": "workspace:*",
         "@ab/bc-sim": "workspace:*",
