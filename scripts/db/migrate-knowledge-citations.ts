@@ -111,6 +111,15 @@ const HANDBOOK_PATTERNS: readonly HandbookPattern[] = [
 		slug: 'ifh',
 		edition: /\bFAA-H-8083-15[A-Z]?\b/i,
 	},
+	{
+		// AvWx legacy citations frequently use the bare document number
+		// (`source: FAA-H-8083-28`) on the source line, in addition to the
+		// prose forms ("AvWx", "Aviation Weather Handbook"). Match all three
+		// so the migration recognises the corpus.
+		source: /\b(?:AvWx|Aviation Weather Handbook|FAA-H-8083-28[A-Z]?)\b/i,
+		slug: 'avwx',
+		edition: /\bFAA-H-8083-28[A-Z]?\b/i,
+	},
 ];
 
 // ---------------------------------------------------------------------------
