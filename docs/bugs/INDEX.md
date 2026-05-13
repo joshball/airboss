@@ -2,7 +2,7 @@
 
 # Bugs
 
-4 open bugs of 5 total.
+4 open bugs of 6 total.
 Closed bugs (fixed / wontfix / duplicate) stay on disk for history but
 are excluded from this index.
 
