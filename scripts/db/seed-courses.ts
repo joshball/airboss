@@ -35,6 +35,7 @@ import { readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
+	type CourseLesson,
 	type CourseManifest,
 	type CourseSection,
 	type CourseStep,
@@ -54,6 +55,13 @@ import { client, db } from '@ab/db/connection';
 import { inArray } from 'drizzle-orm';
 import { parse } from 'yaml';
 import { ZodError } from 'zod';
+import {
+	CourseSeedError,
+	isLessonNode,
+	isStepNode,
+	type ParsedSection,
+	validateCourseTree,
+} from './seed-courses-validator';
 
 // ---------------------------------------------------------------------------
 // Paths + CLI flags
@@ -90,33 +98,14 @@ export interface SeedCoursesSummary {
 	stepsSkipped: number;
 }
 
-export class CourseSeedError extends Error {
-	constructor(message: string) {
-		super(message);
-		this.name = 'CourseSeedError';
-	}
-}
-
-/**
- * Phase A boundary: the recursive YAML schema accepts arbitrary depth,
- * but this seeder still iterates `section.steps` as a flat list of
- * leaves. Phase B (course-tree-arbitrary-depth WP) replaces these loops
- * with a depth-first walk that handles `level: lesson` interior nodes.
- *
- * Until Phase B ships, the seeder rejects any non-leaf child up front
- * with a clear message that points at the next phase. This keeps the
- * existing 2-level pipeline (weather-comprehensive + every other shipped
- * course today) working byte-identically while making the boundary
- * explicit for any author who tries to land a lesson row in this
- * window.
- */
-function assertLeafStep(courseSlug: string, sectionCode: string, node: CourseTreeNode): asserts node is CourseStep {
-	if (node.level === COURSE_STEP_LEVELS.LESSON) {
-		throw new CourseSeedError(
-			`course '${courseSlug}': section '${sectionCode}' contains lesson '${node.code}' but the seeder does not yet walk lesson interiors (Phase A boundary; Phase B of course-tree-arbitrary-depth WP unlocks this).`,
-		);
-	}
-}
+// `CourseSeedError`, `ParsedSection`, `isLessonNode`, `isStepNode`, and
+// `validateCourseTree` live in `./seed-courses-validator.ts` so the unit
+// test suite can import them without dragging the server-only DB barrel
+// into the test runtime. Re-exported here so external callers
+// (other scripts, the seed dispatcher) continue to see them on the
+// historical surface.
+export type { ParsedSection };
+export { CourseSeedError, validateCourseTree };
 
 export async function seedCourses(options: SeedCoursesOptions = {}): Promise<SeedCoursesSummary> {
 	const coursesDir = options.coursesDir ?? DEFAULT_COURSES_DIR;
@@ -154,11 +143,6 @@ export async function seedCourses(options: SeedCoursesOptions = {}): Promise<See
 // ---------------------------------------------------------------------------
 // Per-course seeding
 // ---------------------------------------------------------------------------
-
-interface ParsedSection {
-	readonly filename: string;
-	readonly section: CourseSection;
-}
 
 async function seedOneCourse(
 	coursesDir: string,
@@ -225,13 +209,15 @@ async function seedOneCourse(
 
 function collectYamlCodes(sections: readonly ParsedSection[]): Set<string> {
 	const codes = new Set<string>();
+	function walk(node: CourseTreeNode): void {
+		codes.add(node.code);
+		if (isLessonNode(node)) {
+			for (const child of node.steps) walk(child);
+		}
+	}
 	for (const { section } of sections) {
 		codes.add(section.code);
-		// Codes are collected before validateCourseTree fires the Phase A
-		// boundary; harvest both leaf and lesson codes so the orphan diff
-		// remains accurate. Type narrowing is not required here because
-		// CourseTreeNode (the union) always carries `code` on both arms.
-		for (const node of section.steps) codes.add(node.code);
+		for (const node of section.steps) walk(node);
 	}
 	return codes;
 }
@@ -272,58 +258,154 @@ async function seedOneSection(
 	if (!sectionRow) {
 		throw new CourseSeedError(`course '${courseSlug}': section '${section.code}' upsert returned no row`);
 	}
-	const sectionId = sectionRow.id;
 
-	for (const node of section.steps) {
-		assertLeafStep(courseSlug, section.code, node);
-		const step = node;
-		summary.stepsScanned += 1;
-		// `validateCourseTree` guarantees every step row that reaches here
-		// carries a non-empty `knowledge_node_id`. The Zod step schema types
-		// the field as optional so the friendlier seed-handler rejection can
-		// fire upstream; this guard restates the invariant for the upsert.
-		if (typeof step.knowledge_node_id !== 'string' || step.knowledge_node_id.length === 0) {
-			throw new CourseSeedError(`step '${courseSlug}.${step.code}' must carry knowledge_node_id`);
+	// Depth-first descent: upsert lessons before their children so each
+	// child can resolve `parent_id` against a row already in the DB. The
+	// validator pass upstream has already confirmed shape consistency at
+	// every depth; this loop only needs to mechanically emit the rows in
+	// parent-first order.
+	await seedTreeChildren(
+		courseId,
+		courseSlug,
+		section.code,
+		sectionRow.id,
+		section.steps,
+		existingByCode,
+		options,
+		summary,
+	);
+}
+
+async function seedTreeChildren(
+	courseId: string,
+	courseSlug: string,
+	parentCode: string,
+	parentId: string,
+	children: ReadonlyArray<CourseTreeNode>,
+	existingByCode: Map<string, Awaited<ReturnType<typeof getCourseStepsByCourse>>[number]>,
+	options: SeedCoursesOptions,
+	summary: SeedCoursesSummary,
+): Promise<void> {
+	for (const node of children) {
+		if (isLessonNode(node)) {
+			await seedOneLesson(courseId, courseSlug, parentCode, parentId, node, existingByCode, options, summary);
+		} else if (isStepNode(node)) {
+			await seedOneStep(courseId, courseSlug, parentCode, parentId, node, existingByCode, options, summary);
+		} else {
+			// `validateCourseTree` rejects unknown levels upstream; this
+			// arm is defensive in case of a Zod schema drift.
+			throw new CourseSeedError(`course '${courseSlug}': unknown node level in tree under '${parentCode}'`);
 		}
-		const knowledgeNodeId = step.knowledge_node_id;
-		const stepHash = hashStep(
-			courseSlug,
-			section.code,
-			{
-				code: step.code,
-				ordinal: step.ordinal,
-				title: step.title,
-				body_md: step.body_md ?? '',
-				knowledge_node_id: knowledgeNodeId,
-			},
-			options.seedOrigin ?? null,
-		);
-		const existingStep = existingByCode.get(step.code);
-		// Skip the write only when the hash AND the parent linkage are
-		// stable. A step that moved to a new section needs a row update so
-		// `parent_id` follows the YAML.
-		if (existingStep?.contentHash === stepHash && existingStep.parentId === sectionId) {
-			summary.stepsSkipped += 1;
-			continue;
-		}
-		const row = await upsertCourseStep(
+	}
+}
+
+async function seedOneLesson(
+	courseId: string,
+	courseSlug: string,
+	parentCode: string,
+	parentId: string,
+	lesson: CourseLesson,
+	existingByCode: Map<string, Awaited<ReturnType<typeof getCourseStepsByCourse>>[number]>,
+	options: SeedCoursesOptions,
+	summary: SeedCoursesSummary,
+): Promise<void> {
+	summary.stepsScanned += 1;
+	const lessonHash = hashLesson(courseSlug, parentCode, lesson, options.seedOrigin ?? null);
+	const existingLesson = existingByCode.get(lesson.code);
+	let lessonRow = existingLesson;
+	// Skip the write only when the hash AND the parent linkage are stable.
+	// A lesson that moved to a new parent needs a row update so `parent_id`
+	// follows the YAML.
+	if (existingLesson?.contentHash === lessonHash && existingLesson.parentId === parentId) {
+		summary.stepsSkipped += 1;
+	} else {
+		lessonRow = await upsertCourseStep(
 			{
 				courseId,
-				parentId: sectionId,
-				level: COURSE_STEP_LEVELS.STEP,
-				ordinal: step.ordinal,
-				code: step.code,
-				title: step.title,
-				bodyMd: step.body_md ?? '',
-				knowledgeNodeId,
-				contentHash: stepHash,
+				parentId,
+				level: COURSE_STEP_LEVELS.LESSON,
+				ordinal: lesson.ordinal,
+				code: lesson.code,
+				title: lesson.title,
+				bodyMd: lesson.body_md ?? '',
+				knowledgeNodeId: null,
+				contentHash: lessonHash,
 				...(options.seedOrigin ? { seedOrigin: options.seedOrigin } : {}),
 			},
 			db,
 		);
 		summary.stepsUpserted += 1;
-		existingByCode.set(step.code, row);
+		existingByCode.set(lesson.code, lessonRow);
 	}
+	if (!lessonRow) {
+		throw new CourseSeedError(`course '${courseSlug}': lesson '${lesson.code}' upsert returned no row`);
+	}
+
+	await seedTreeChildren(
+		courseId,
+		courseSlug,
+		lesson.code,
+		lessonRow.id,
+		lesson.steps,
+		existingByCode,
+		options,
+		summary,
+	);
+}
+
+async function seedOneStep(
+	courseId: string,
+	courseSlug: string,
+	parentCode: string,
+	parentId: string,
+	step: CourseStep,
+	existingByCode: Map<string, Awaited<ReturnType<typeof getCourseStepsByCourse>>[number]>,
+	options: SeedCoursesOptions,
+	summary: SeedCoursesSummary,
+): Promise<void> {
+	summary.stepsScanned += 1;
+	// `validateCourseTree` guarantees every step row that reaches here
+	// carries a non-empty `knowledge_node_id`. The Zod step schema types
+	// the field as optional so the friendlier seed-handler rejection can
+	// fire upstream; this guard restates the invariant for the upsert.
+	if (typeof step.knowledge_node_id !== 'string' || step.knowledge_node_id.length === 0) {
+		throw new CourseSeedError(`step '${courseSlug}.${step.code}' must carry knowledge_node_id`);
+	}
+	const knowledgeNodeId = step.knowledge_node_id;
+	const stepHash = hashStep(
+		courseSlug,
+		parentCode,
+		{
+			code: step.code,
+			ordinal: step.ordinal,
+			title: step.title,
+			body_md: step.body_md ?? '',
+			knowledge_node_id: knowledgeNodeId,
+		},
+		options.seedOrigin ?? null,
+	);
+	const existingStep = existingByCode.get(step.code);
+	if (existingStep?.contentHash === stepHash && existingStep.parentId === parentId) {
+		summary.stepsSkipped += 1;
+		return;
+	}
+	const row = await upsertCourseStep(
+		{
+			courseId,
+			parentId,
+			level: COURSE_STEP_LEVELS.STEP,
+			ordinal: step.ordinal,
+			code: step.code,
+			title: step.title,
+			bodyMd: step.body_md ?? '',
+			knowledgeNodeId,
+			contentHash: stepHash,
+			...(options.seedOrigin ? { seedOrigin: options.seedOrigin } : {}),
+		},
+		db,
+	);
+	summary.stepsUpserted += 1;
+	existingByCode.set(step.code, row);
 }
 
 async function upsertCourseIfChanged(
@@ -442,117 +524,25 @@ async function loadSections(dir: string, slug: string): Promise<ParsedSection[]>
 // Cross-row tree validators (the spec's "Seed validator rejections" table)
 // ---------------------------------------------------------------------------
 
-function validateCourseTree(manifest: CourseManifest, sections: readonly ParsedSection[]): void {
-	const courseSlug = manifest.slug;
-
-	// Duplicate section ordinals across the whole course.
-	const sectionOrdinals = new Set<number>();
-	for (const { section } of sections) {
-		if (sectionOrdinals.has(section.ordinal)) {
-			throw new CourseSeedError(`duplicate ordinal in course '${courseSlug}' sections`);
-		}
-		sectionOrdinals.add(section.ordinal);
-	}
-
-	// Cross-section duplicate codes (course-wide).
-	const codes = new Set<string>();
-	for (const { section } of sections) {
-		if (codes.has(section.code)) {
-			throw new CourseSeedError(`duplicate code '${section.code}' in course '${courseSlug}'`);
-		}
-		codes.add(section.code);
-		for (const node of section.steps) {
-			assertLeafStep(courseSlug, section.code, node);
-			if (codes.has(node.code)) {
-				throw new CourseSeedError(`duplicate code '${node.code}' in course '${courseSlug}'`);
-			}
-			codes.add(node.code);
-		}
-	}
-
-	for (const { section } of sections) {
-		const sectionLabel = `${courseSlug}.${section.code}`;
-		// Sections never carry `knowledge_node_id`. The Zod section schema
-		// has no `knowledge_node_id` field at all (strict object), so the
-		// only way to land here is via a section file that smuggled the
-		// key past the strict parse -- which Zod rejects up-stack with an
-		// "unrecognized key" error. Defensive check kept so the rejection
-		// message in the spec stays grep-stable.
-		if (
-			'knowledge_node_id' in section &&
-			(section as unknown as Record<string, unknown>).knowledge_node_id !== undefined
-		) {
-			throw new CourseSeedError(`section '${sectionLabel}' must not carry knowledge_node_id`);
-		}
-
-		const stepOrdinals = new Set<number>();
-		for (const node of section.steps) {
-			assertLeafStep(courseSlug, section.code, node);
-			const step = node;
-			if (stepOrdinals.has(step.ordinal)) {
-				throw new CourseSeedError(`duplicate ordinal in section '${sectionLabel}' steps`);
-			}
-			stepOrdinals.add(step.ordinal);
-
-			// Steps must carry `knowledge_node_id`. The schema requires a
-			// non-empty string, so this guard is defensive on top of Zod.
-			// Step labels follow `<course>.<step_code>` (the step code
-			// already encodes its section prefix per the WP authoring
-			// convention -- e.g. `s1.3` is the third step under section
-			// `s1`). Matches the spec's "Seed validator rejections"
-			// table format exactly so log-greps stay stable.
-			if (typeof step.knowledge_node_id !== 'string' || step.knowledge_node_id.length === 0) {
-				throw new CourseSeedError(`step '${courseSlug}.${step.code}' must carry knowledge_node_id`);
-			}
-		}
-	}
-
-	// Cycle check. The two-level tree shape guarantees no cycles in
-	// practice (sections have NULL parent_id at the schema layer; steps
-	// can only point at a section), so this is purely defensive against
-	// a future authoring shape that allows nested sections. Walk every
-	// step + ensure its declared parent is one of the seen sections.
-	const sectionCodes = new Set<string>();
-	for (const { section } of sections) sectionCodes.add(section.code);
-	const stepParentByCode = new Map<string, string>();
-	for (const { section } of sections) {
-		for (const node of section.steps) {
-			assertLeafStep(courseSlug, section.code, node);
-			stepParentByCode.set(node.code, section.code);
-		}
-	}
-	for (const [code, parent] of stepParentByCode) {
-		if (parent === code) {
-			throw new CourseSeedError(`cycle in course '${courseSlug}' tree`);
-		}
-		if (!sectionCodes.has(parent)) {
-			throw new CourseSeedError(`cycle in course '${courseSlug}' tree`);
-		}
-	}
-
-	// Section / step level consistency surfaces in two more places (sections
-	// at the `parent_id IS NULL` level and steps at the `parent_id IS NOT
-	// NULL` level). Both are baked into the upsert path; the schema CHECK
-	// (`course_step_consistency_check`) is the safety net, the messages
-	// above are the friendly version.
-}
-
 async function validateKnowledgeNodeRefs(manifest: CourseManifest, sections: readonly ParsedSection[]): Promise<void> {
-	// Every step here is guaranteed to carry `knowledge_node_id` -- the
-	// preceding `validateCourseTree` pass throws on missing values with the
-	// spec's friendlier message. The type guard below restates the
-	// invariant so the Zod-optional shape doesn't bleed into this loop.
-	// `validateCourseTree` also asserts every child is a leaf step under the
-	// Phase A boundary; we re-narrow here so this function can be called
-	// standalone without depending on caller order.
+	// `validateCourseTree` has already asserted every leaf carries a
+	// non-empty `knowledge_node_id` and every interior carries none. The
+	// recursive walks below re-collect / re-narrow defensively so this
+	// function can be called standalone without depending on caller order.
 	const referencedNodeIds = new Set<string>();
-	for (const { section } of sections) {
-		for (const node of section.steps) {
-			assertLeafStep(manifest.slug, section.code, node);
+	function collect(node: CourseTreeNode): void {
+		if (isStepNode(node)) {
 			if (typeof node.knowledge_node_id === 'string' && node.knowledge_node_id.length > 0) {
 				referencedNodeIds.add(node.knowledge_node_id);
 			}
+			return;
 		}
+		if (isLessonNode(node)) {
+			for (const child of node.steps) collect(child);
+		}
+	}
+	for (const { section } of sections) {
+		for (const node of section.steps) collect(node);
 	}
 	if (referencedNodeIds.size === 0) return;
 
@@ -560,22 +550,26 @@ async function validateKnowledgeNodeRefs(manifest: CourseManifest, sections: rea
 	const rows = await db.select({ id: knowledgeNode.id }).from(knowledgeNode).where(inArray(knowledgeNode.id, ids));
 	const known = new Set(rows.map((r) => r.id));
 
-	for (const { section } of sections) {
-		for (const node of section.steps) {
-			assertLeafStep(manifest.slug, section.code, node);
-			const step = node;
-			if (typeof step.knowledge_node_id !== 'string' || step.knowledge_node_id.length === 0) continue;
-			if (!known.has(step.knowledge_node_id)) {
+	function check(node: CourseTreeNode): void {
+		if (isStepNode(node)) {
+			if (typeof node.knowledge_node_id !== 'string' || node.knowledge_node_id.length === 0) return;
+			if (!known.has(node.knowledge_node_id)) {
 				// `<course>.<step_code>` -- the step code already encodes
-				// its section prefix (e.g. `s1.3`). Matches the spec
+				// its parent prefix (e.g. `s1.3`). Matches the spec
 				// rejection table's `'X.s1.3'` example.
-				void section;
-				const stepLabel = `${manifest.slug}.${step.code}`;
+				const stepLabel = `${manifest.slug}.${node.code}`;
 				throw new CourseSeedError(
-					`course step '${stepLabel}' references missing knowledge_node '${step.knowledge_node_id}'`,
+					`course step '${stepLabel}' references missing knowledge_node '${node.knowledge_node_id}'`,
 				);
 			}
+			return;
 		}
+		if (isLessonNode(node)) {
+			for (const child of node.steps) check(child);
+		}
+	}
+	for (const { section } of sections) {
+		for (const node of section.steps) check(node);
 	}
 }
 
@@ -596,17 +590,37 @@ function hashSection(courseSlug: string, section: CourseSection, seedOrigin: str
 	});
 }
 
+function hashLesson(courseSlug: string, parentCode: string, lesson: CourseLesson, seedOrigin: string | null): string {
+	return sha256({
+		kind: 'course-lesson',
+		course_slug: courseSlug,
+		level: COURSE_STEP_LEVELS.LESSON satisfies CourseStepLevel,
+		parent_code: parentCode,
+		code: lesson.code,
+		ordinal: lesson.ordinal,
+		title: lesson.title,
+		body_md: lesson.body_md ?? '',
+		seed_origin: seedOrigin,
+	});
+}
+
 function hashStep(
 	courseSlug: string,
-	sectionCode: string,
+	parentCode: string,
 	step: { code: string; ordinal: number; title: string; body_md: string; knowledge_node_id: string },
 	seedOrigin: string | null,
 ): string {
+	// The `section_code` field name is load-bearing for zero-diff
+	// compatibility with pre-WP 2-level content (every existing weather-
+	// comprehensive step row was hashed with this exact key). For 2-level
+	// content `parentCode === section.code`, so the hash is byte-identical.
+	// For steps nested under a lesson (post-WP shape), `parentCode` is the
+	// lesson's code, which is the correct discriminator for that row.
 	return sha256({
 		kind: 'course-step',
 		course_slug: courseSlug,
 		level: COURSE_STEP_LEVELS.STEP satisfies CourseStepLevel,
-		section_code: sectionCode,
+		section_code: parentCode,
 		code: step.code,
 		ordinal: step.ordinal,
 		title: step.title,
