@@ -2,6 +2,33 @@ code: s5
 ordinal: 5
 title: Convection - thunderstorms and severe weather
 body_md: |
+  **Before you start.** This section assumes you understand
+  [instability](/reference/knowledge/wx-stability-and-instability)
+  from s2 (a parcel that keeps rising once nudged is the thunderstorm
+  precondition) and the
+  [cumulus cloud family](/reference/knowledge/wx-clouds-and-precipitation)
+  from s3 (the visible signature of vertical motion). It teaches the
+  thunderstorm itself: the hazard set, the avoidance distance, and
+  why every secondary hazard compounds the primary one.
+
+  Terms you will see referenced but not fully taught here:
+
+  - [Convective SIGMET](/reference/knowledge/wx-product-airmets-sigmets)
+    and the
+    [Day-1 convective outlook](/reference/knowledge/wx-product-convective-outlook):
+    the products that flag this weather pre-flight. Taught in s8.5
+    and s8.6.
+  - [Microburst](/reference/knowledge/wx-thunderstorm-hazards):
+    introduced here as a hazard family; the avoidance procedures live
+    inside the node.
+  - [Summer pop-up scenario s11.2](/courses/weather-comprehensive/s11.2):
+    end-to-end worked example of air-mass thunderstorms triggered by
+    an outflow boundary. Read after finishing s5.
+
+  Treat the 20 NM rule as a personal minimum, not a guideline.
+
+  ---
+
   A thunderstorm is the atmosphere taking the lid off a stable layer
   and letting unstable air go vertical -- 30,000, 40,000, sometimes
   60,000 feet of vertical motion. Inside a mature cell are updrafts
