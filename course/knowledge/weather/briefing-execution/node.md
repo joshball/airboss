@@ -155,9 +155,19 @@ walk; the outputs cards anchor the bridge to go/no-go.
     delays. The full eight-bucket brief.
   cardType: basic
   kind: recall
-  tags: [weather, briefing, briefing-types, aim-7-1-4, PA.I.C.S1]
+  tags: [weather, briefing, briefing-types, aim-7-1-4]
   source_ref: |
     AIM 7-1-4 Preflight Briefing; body Discover.
+  acs_codes: [PA.I.C.S1]
+  source_authority:
+    - kind: aim
+      cite: AIM 7-1-4 -- Preflight Briefing
+    - kind: aim
+      cite: AIM 7-1-3 -- Use of Aviation Weather Products
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 13 -- Aviation Weather Services
+    - kind: cfr
+      cite: 14 CFR 91.103 Preflight Action
 
 - front: "Outlook briefing per AIM 7-1-4: when do you request one, and what does it omit?"
   back: |
@@ -167,9 +177,19 @@ walk; the outputs cards anchor the bridge to go/no-go.
     standard or abbreviated brief closer to launch.
   cardType: basic
   kind: recall
-  tags: [weather, briefing, briefing-types, aim-7-1-4, PA.I.C.S1]
+  tags: [weather, briefing, briefing-types, aim-7-1-4]
   source_ref: |
     AIM 7-1-4; body Discover.
+  acs_codes: [PA.I.C.S1]
+  source_authority:
+    - kind: aim
+      cite: AIM 7-1-4 -- Preflight Briefing
+    - kind: aim
+      cite: AIM 7-1-3 -- Use of Aviation Weather Products
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 13 -- Aviation Weather Services
+    - kind: cfr
+      cite: 14 CFR 91.103 Preflight Action
 
 - front: "Abbreviated briefing per AIM 7-1-4: when does it apply?"
   back: |
@@ -179,9 +199,19 @@ walk; the outputs cards anchor the bridge to go/no-go.
     the morning, abbreviated update before a 1500L departure.
   cardType: basic
   kind: recall
-  tags: [weather, briefing, briefing-types, aim-7-1-4, PA.I.C.S1]
+  tags: [weather, briefing, briefing-types, aim-7-1-4]
   source_ref: |
     AIM 7-1-4; body Discover and Practice.
+  acs_codes: [PA.I.C.S1]
+  source_authority:
+    - kind: aim
+      cite: AIM 7-1-4 -- Preflight Briefing
+    - kind: aim
+      cite: AIM 7-1-3 -- Use of Aviation Weather Products
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 13 -- Aviation Weather Services
+    - kind: cfr
+      cite: 14 CFR 91.103 Preflight Action
 
 - front: "Name the eight buckets of a standard weather briefing in order."
   back: |
@@ -198,12 +228,22 @@ walk; the outputs cards anchor the bridge to go/no-go.
     once and the brief flows.
   cardType: basic
   kind: recall
-  tags: [weather, briefing, procedure, aim-7-1-4, PA.I.C.S1]
+  tags: [weather, briefing, procedure, aim-7-1-4]
   source_ref: |
     AIM 7-1-4; body Discover (self-brief procedure).
   rationale: |
     The body's procedural anchor. Memorising the eight-bucket order is what
     turns a glance into a brief.
+  acs_codes: [PA.I.C.S1]
+  source_authority:
+    - kind: aim
+      cite: AIM 7-1-4 -- Preflight Briefing
+    - kind: aim
+      cite: AIM 7-1-3 -- Use of Aviation Weather Products
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 13 -- Aviation Weather Services
+    - kind: cfr
+      cite: 14 CFR 91.103 Preflight Action
 
 - front: "What does 14 CFR 91.103 require for preflight weather action on a flight not in the vicinity of the airport?"
   back: |
@@ -214,9 +254,19 @@ walk; the outputs cards anchor the bridge to go/no-go.
     most of the weather + delays; fuel + alternatives come from nav planning.
   cardType: regulation
   kind: recall
-  tags: [weather, briefing, regulation, cfr-91, PA.I.C.S1]
+  tags: [weather, briefing, regulation, cfr-91]
   source_ref: |
     14 CFR 91.103 Preflight Action; body Reveal.
+  acs_codes: [PA.I.C.S1]
+  source_authority:
+    - kind: aim
+      cite: AIM 7-1-4 -- Preflight Briefing
+    - kind: aim
+      cite: AIM 7-1-3 -- Use of Aviation Weather Products
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 13 -- Aviation Weather Services
+    - kind: cfr
+      cite: 14 CFR 91.103 Preflight Action
 
 - front: "Three written outputs a good brief produces?"
   back: |
@@ -228,9 +278,19 @@ walk; the outputs cards anchor the bridge to go/no-go.
     the brief that doesn't get compared to personal mins isn't done.
   cardType: basic
   kind: recall
-  tags: [weather, briefing, go-nogo, personal-minimums, PA.I.C.S1]
+  tags: [weather, briefing, go-nogo, personal-minimums]
   source_ref: |
     Body Reveal "three written outputs."
+  acs_codes: [PA.I.C.S1]
+  source_authority:
+    - kind: aim
+      cite: AIM 7-1-4 -- Preflight Briefing
+    - kind: aim
+      cite: AIM 7-1-3 -- Use of Aviation Weather Products
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 13 -- Aviation Weather Services
+    - kind: cfr
+      cite: 14 CFR 91.103 Preflight Action
 
 - front: "Why is a weather brief a procedure, not a glance?"
   back: |
@@ -242,9 +302,19 @@ walk; the outputs cards anchor the bridge to go/no-go.
     catches these. Procedure beats vibes.
   cardType: basic
   kind: recall
-  tags: [weather, briefing, judgment, PA.I.C.S1]
+  tags: [weather, briefing, judgment]
   source_ref: |
     Body Problem.
+  acs_codes: [PA.I.C.S1]
+  source_authority:
+    - kind: aim
+      cite: AIM 7-1-4 -- Preflight Briefing
+    - kind: aim
+      cite: AIM 7-1-3 -- Use of Aviation Weather Products
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 13 -- Aviation Weather Services
+    - kind: cfr
+      cite: 14 CFR 91.103 Preflight Action
 
 - front: "Phone briefing: what's the number and what's the operational expectation?"
   back: |
@@ -254,9 +324,19 @@ walk; the outputs cards anchor the bridge to go/no-go.
     AIM 7-1-4 structure, the pilot is consuming it.
   cardType: basic
   kind: recall
-  tags: [weather, briefing, flight-service, aim-7-1-4, PA.I.C.S1]
+  tags: [weather, briefing, flight-service, aim-7-1-4]
   source_ref: |
     AIM 7-1-4; body Discover (phone briefing).
+  acs_codes: [PA.I.C.S1]
+  source_authority:
+    - kind: aim
+      cite: AIM 7-1-4 -- Preflight Briefing
+    - kind: aim
+      cite: AIM 7-1-3 -- Use of Aviation Weather Products
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 13 -- Aviation Weather Services
+    - kind: cfr
+      cite: 14 CFR 91.103 Preflight Action
 
 - front: "Tomorrow morning's flight. ForeFlight METAR strip and TAF show VFR all day. The CFI asks 'what's the freezing level along your route at cruise?' Why was the brief incomplete even though the products were checked?"
   back: |
@@ -268,12 +348,22 @@ walk; the outputs cards anchor the bridge to go/no-go.
     procedure wasn't run -- not because the products were unavailable.
   cardType: basic
   kind: recall
-  tags: [weather, briefing, freezing-level, procedure, PA.I.C.S1]
+  tags: [weather, briefing, freezing-level, procedure]
   source_ref: |
     Body Context scenario; AIM 7-1-4.
   rationale: |
     Scenario card built from the body's Context. Trains the procedural
     discipline by showing what a glance misses.
+  acs_codes: [PA.I.C.S1]
+  source_authority:
+    - kind: aim
+      cite: AIM 7-1-4 -- Preflight Briefing
+    - kind: aim
+      cite: AIM 7-1-3 -- Use of Aviation Weather Products
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 13 -- Aviation Weather Services
+    - kind: cfr
+      cite: 14 CFR 91.103 Preflight Action
 
 - front: "Examiner: 'It's Tuesday afternoon. You're planning a flight for Saturday morning. What briefing do you request?'"
   back: |
@@ -283,9 +373,19 @@ walk; the outputs cards anchor the bridge to go/no-go.
     multi-day-out planning. Run a standard briefing closer to launch.
   cardType: basic
   kind: recall
-  tags: [weather, briefing, briefing-types, aim-7-1-4, PA.I.C.S1]
+  tags: [weather, briefing, briefing-types, aim-7-1-4]
   source_ref: |
     AIM 7-1-4; body Practice ("briefing-types element on the checkride").
+  acs_codes: [PA.I.C.S1]
+  source_authority:
+    - kind: aim
+      cite: AIM 7-1-4 -- Preflight Briefing
+    - kind: aim
+      cite: AIM 7-1-3 -- Use of Aviation Weather Products
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 13 -- Aviation Weather Services
+    - kind: cfr
+      cite: 14 CFR 91.103 Preflight Action
 
 - front: "Why does a self-brief on aviationweather.gov + an EFB get faster with reps?"
   back: |
@@ -296,9 +396,19 @@ walk; the outputs cards anchor the bridge to go/no-go.
     for *interpretation* during the brief instead of mechanics.
   cardType: basic
   kind: recall
-  tags: [weather, briefing, procedure, PA.I.C.S1]
+  tags: [weather, briefing, procedure]
   source_ref: |
     Body Practice ("Time it. The first time it'll take 25-30 minutes...").
+  acs_codes: [PA.I.C.S1]
+  source_authority:
+    - kind: aim
+      cite: AIM 7-1-4 -- Preflight Briefing
+    - kind: aim
+      cite: AIM 7-1-3 -- Use of Aviation Weather Products
+    - kind: phak
+      cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 13 -- Aviation Weather Services
+    - kind: cfr
+      cite: 14 CFR 91.103 Preflight Action
 ```
 
 ## Connect

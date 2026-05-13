@@ -163,9 +163,17 @@ altitude selection.
     Final: 230 at 119 KT, -60 C.
   cardType: basic
   kind: calculation
-  tags: [weather, fb, winds-aloft, decode, ac-00-45h, PA.I.C.K2e]
+  tags: [weather, fb, winds-aloft, decode, ac-00-45h]
   source_ref: |
     AC 00-45H FB section; body Discover worked example.
+  acs_codes: [PA.I.C.K2e]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Wind and Temperature Aloft Forecast section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Forecasts, Section 27.2 (Winds and Temperatures Aloft) and §27.2.1 (FB Wind and Temperature Aloft Forecast)
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "FB encoding: the >100 KT convention. What's the rule and why does it exist?"
   back: |
@@ -177,12 +185,20 @@ altitude selection.
     teletype-era constraints survived into the modern encoding.
   cardType: basic
   kind: recall
-  tags: [weather, fb, winds-aloft, encoding, ac-00-45h, PA.I.C.K2e]
+  tags: [weather, fb, winds-aloft, encoding, ac-00-45h]
   source_ref: |
     AC 00-45H; body Discover and Reveal.
   rationale: |
     The body explicitly flags this as a checkride trap. Cloze/recall card
     forces the learner to articulate both the rule and the signal value.
+  acs_codes: [PA.I.C.K2e]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Wind and Temperature Aloft Forecast section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Forecasts, Section 27.2 (Winds and Temperatures Aloft) and §27.2.1 (FB Wind and Temperature Aloft Forecast)
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "FB temperature convention above 24,000 ft -- what's omitted and what's implied?"
   back: |
@@ -194,9 +210,17 @@ altitude selection.
     high-altitude rule.
   cardType: basic
   kind: recall
-  tags: [weather, fb, winds-aloft, temperature, encoding, ac-00-45h, PA.I.C.K2e]
+  tags: [weather, fb, winds-aloft, temperature, encoding, ac-00-45h]
   source_ref: |
     AC 00-45H; body Discover and Reveal.
+  acs_codes: [PA.I.C.K2e]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Wind and Temperature Aloft Forecast section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Forecasts, Section 27.2 (Winds and Temperatures Aloft) and §27.2.1 (FB Wind and Temperature Aloft Forecast)
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "FB forecast altitudes for CONUS -- list the standard levels."
   back: |
@@ -207,9 +231,17 @@ altitude selection.
     across 6, 12, and 24 hour blocks.
   cardType: basic
   kind: recall
-  tags: [weather, fb, winds-aloft, altitudes, cadence, ac-00-45h, PA.I.C.K2e]
+  tags: [weather, fb, winds-aloft, altitudes, cadence, ac-00-45h]
   source_ref: |
     AC 00-45H; body Reveal.
+  acs_codes: [PA.I.C.K2e]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Wind and Temperature Aloft Forecast section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Forecasts, Section 27.2 (Winds and Temperatures Aloft) and §27.2.1 (FB Wind and Temperature Aloft Forecast)
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "Decode the FB entry 2545+05 at 12,000 ft."
   back: |
@@ -218,9 +250,17 @@ altitude selection.
     speed = 45 KT; temperature explicit-sign = +5 C.
   cardType: basic
   kind: calculation
-  tags: [weather, fb, winds-aloft, decode, calculation, ac-00-45h, PA.I.C.K2e]
+  tags: [weather, fb, winds-aloft, decode, calculation, ac-00-45h]
   source_ref: |
     AC 00-45H; body Practice.
+  acs_codes: [PA.I.C.K2e]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Wind and Temperature Aloft Forecast section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Forecasts, Section 27.2 (Winds and Temperatures Aloft) and §27.2.1 (FB Wind and Temperature Aloft Forecast)
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "FB direction code 99 with speed 00 -- what does it mean?"
   back: |
@@ -231,9 +271,17 @@ altitude selection.
     (icing, turbulence, fuel burn).
   cardType: basic
   kind: recall
-  tags: [weather, fb, winds-aloft, light-and-variable, ac-00-45h, PA.I.C.K2e]
+  tags: [weather, fb, winds-aloft, light-and-variable, ac-00-45h]
   source_ref: |
     AC 00-45H; body Reveal.
+  acs_codes: [PA.I.C.K2e]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Wind and Temperature Aloft Forecast section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Forecasts, Section 27.2 (Winds and Temperatures Aloft) and §27.2.1 (FB Wind and Temperature Aloft Forecast)
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "Two triage questions to ask of an FB read before picking a cruise altitude."
   back: |
@@ -246,9 +294,17 @@ altitude selection.
     Other rows are confirmation.
   cardType: basic
   kind: recall
-  tags: [weather, fb, winds-aloft, triage, altitude-selection, PA.I.C.K2e]
+  tags: [weather, fb, winds-aloft, triage, altitude-selection]
   source_ref: |
     Body Discover triage step.
+  acs_codes: [PA.I.C.K2e]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Wind and Temperature Aloft Forecast section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Forecasts, Section 27.2 (Winds and Temperatures Aloft) and §27.2.1 (FB Wind and Temperature Aloft Forecast)
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "KMRY -> KSAC, 220-degree course, TAS 115 KT. FB at 6,000 ft is 2730+10. Estimate the wind effect on ground speed."
   back: |
@@ -263,9 +319,17 @@ altitude selection.
     the rough mental math is in the ballpark.
   cardType: basic
   kind: calculation
-  tags: [weather, fb, winds-aloft, ground-speed, calculation, PA.I.C.K2e]
+  tags: [weather, fb, winds-aloft, ground-speed, calculation]
   source_ref: |
     Body Context worked example.
+  acs_codes: [PA.I.C.K2e]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Wind and Temperature Aloft Forecast section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Forecasts, Section 27.2 (Winds and Temperatures Aloft) and §27.2.1 (FB Wind and Temperature Aloft Forecast)
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "Why is the FB called a 'sparse approximation of a continuous field'?"
   back: |
@@ -278,9 +342,17 @@ altitude selection.
     passage, mountain wave, jet shifts).
   cardType: basic
   kind: recall
-  tags: [weather, fb, winds-aloft, limitations, ac-00-45h, PA.I.C.K2e, PA.I.C.R2b]
+  tags: [weather, fb, winds-aloft, limitations, ac-00-45h]
   source_ref: |
     Body Discover; equipment-and-data-limitations node.
+  acs_codes: [PA.I.C.K2e, PA.I.C.R2b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Wind and Temperature Aloft Forecast section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Forecasts, Section 27.2 (Winds and Temperatures Aloft) and §27.2.1 (FB Wind and Temperature Aloft Forecast)
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "How does the FB feed the alternate-fuel decision?"
   back: |
@@ -292,9 +364,17 @@ altitude selection.
     GFA winds layer.
   cardType: basic
   kind: recall
-  tags: [weather, fb, winds-aloft, fuel-planning, alternate, PA.I.C.K2e]
+  tags: [weather, fb, winds-aloft, fuel-planning, alternate]
   source_ref: |
     Body Connect.
+  acs_codes: [PA.I.C.K2e]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Wind and Temperature Aloft Forecast section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Forecasts, Section 27.2 (Winds and Temperatures Aloft) and §27.2.1 (FB Wind and Temperature Aloft Forecast)
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 ```
 
 ## Connect

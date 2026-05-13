@@ -161,9 +161,19 @@ brief.
     couple of knots for most operational wind speeds.
   cardType: basic
   kind: calculation
-  tags: [weather, wind, crosswind, mental-model, faa-h-8083-28, PA.I.C.K3b]
+  tags: [weather, wind, crosswind, mental-model, faa-h-8083-28]
   source_ref: |
     FAA-H-8083-28 Ch 10; body Discover.
+  acs_codes: [PA.I.C.K3b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, chapters on wind and orographic effects
+    - kind: ac
+      cite: AC 00-54 Pilot Windshear Guide
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 10 -- Wind
+    - kind: aim
+      cite: AIM 7-1-19 -- Microbursts; 7-5-2 -- Mountain Flying
 
 - front: "Compute crosswind component: wind 270 at 18 KT, runway 30 (heading 300)."
   back: |
@@ -174,9 +184,19 @@ brief.
     demonstrated crosswind limits.
   cardType: basic
   kind: calculation
-  tags: [weather, wind, crosswind, calculation, PA.I.C.K3b]
+  tags: [weather, wind, crosswind, calculation]
   source_ref: |
     FAA-H-8083-28 Ch 10; body Practice.
+  acs_codes: [PA.I.C.K3b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, chapters on wind and orographic effects
+    - kind: ac
+      cite: AC 00-54 Pilot Windshear Guide
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 10 -- Wind
+    - kind: aim
+      cite: AIM 7-1-19 -- Microbursts; 7-5-2 -- Mountain Flying
 
 - front: "Friction layer: what is it, what's its altitude band, and what does it do to surface wind direction?"
   back: |
@@ -189,9 +209,19 @@ brief.
     typically where the wind 'cleans up' and direction settles.
   cardType: basic
   kind: recall
-  tags: [weather, wind, friction-layer, ac-00-6, PA.I.C.K3b]
+  tags: [weather, wind, friction-layer, ac-00-6]
   source_ref: |
     AC 00-6B Wind chapter; FAA-H-8083-28 Ch 10; body Discover.
+  acs_codes: [PA.I.C.K3b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, chapters on wind and orographic effects
+    - kind: ac
+      cite: AC 00-54 Pilot Windshear Guide
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 10 -- Wind
+    - kind: aim
+      cite: AIM 7-1-19 -- Microbursts; 7-5-2 -- Mountain Flying
 
 - front: "Mountain-wave setup -- the three conditions that must all be present?"
   back: |
@@ -204,9 +234,19 @@ brief.
     the rotor underneath.
   cardType: basic
   kind: recall
-  tags: [weather, wind, mountain-wave, lenticular, ac-00-6, PA.I.C.K3b]
+  tags: [weather, wind, mountain-wave, lenticular, ac-00-6]
   source_ref: |
     AC 00-6B; FAA-H-8083-28 Ch 16 Mountain Weather; body Discover.
+  acs_codes: [PA.I.C.K3b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, chapters on wind and orographic effects
+    - kind: ac
+      cite: AC 00-54 Pilot Windshear Guide
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 10 -- Wind
+    - kind: aim
+      cite: AIM 7-1-19 -- Microbursts; 7-5-2 -- Mountain Flying
 
 - front: "Mountain-wave crossing rule -- altitude, angle, and altimeter caveat."
   back: |
@@ -218,9 +258,19 @@ brief.
     awareness, not just the altimeter.
   cardType: basic
   kind: recall
-  tags: [weather, wind, mountain-wave, crossing, altimeter, aim-7-5-2, PA.I.C.K3b]
+  tags: [weather, wind, mountain-wave, crossing, altimeter, aim-7-5-2]
   source_ref: |
     AIM 7-5-2 Mountain Flying; body Reveal.
+  acs_codes: [PA.I.C.K3b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, chapters on wind and orographic effects
+    - kind: ac
+      cite: AC 00-54 Pilot Windshear Guide
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 10 -- Wind
+    - kind: aim
+      cite: AIM 7-1-19 -- Microbursts; 7-5-2 -- Mountain Flying
 
 - front: "Microburst outflow boundary -- speed, duration, and avoidance rule?"
   back: |
@@ -232,9 +282,19 @@ brief.
     GA accident is a too-low base leg into an outflow boundary.
   cardType: basic
   kind: recall
-  tags: [weather, wind, microburst, windshear, ac-00-54, aim-7-1-19, PA.I.C.K3b]
+  tags: [weather, wind, microburst, windshear, ac-00-54, aim-7-1-19]
   source_ref: |
     AC 00-54 Pilot Windshear Guide; AIM 7-1-19; body Reveal.
+  acs_codes: [PA.I.C.K3b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, chapters on wind and orographic effects
+    - kind: ac
+      cite: AC 00-54 Pilot Windshear Guide
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 10 -- Wind
+    - kind: aim
+      cite: AIM 7-1-19 -- Microbursts; 7-5-2 -- Mountain Flying
 
 - front: "Low-level windshear: definition and the canonical PIREP that flags it."
   back: |
@@ -246,9 +306,19 @@ brief.
     (urgent PIREP).
   cardType: regulation
   kind: recall
-  tags: [weather, wind, windshear, pirep, uua, ac-00-54, PA.I.C.K3b]
+  tags: [weather, wind, windshear, pirep, uua, ac-00-54]
   source_ref: |
     AC 00-54; AIM 7-1-19; body Reveal.
+  acs_codes: [PA.I.C.K3b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, chapters on wind and orographic effects
+    - kind: ac
+      cite: AC 00-54 Pilot Windshear Guide
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 10 -- Wind
+    - kind: aim
+      cite: AIM 7-1-19 -- Microbursts; 7-5-2 -- Mountain Flying
 
 - front: "Tailwind on landing -- why is it limited to 10 KT in most operations?"
   back: |
@@ -260,9 +330,19 @@ brief.
     decision is reverse-runway or divert.
   cardType: basic
   kind: recall
-  tags: [weather, wind, tailwind, landing, PA.I.C.K3b]
+  tags: [weather, wind, tailwind, landing]
   source_ref: |
     Body Discover.
+  acs_codes: [PA.I.C.K3b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, chapters on wind and orographic effects
+    - kind: ac
+      cite: AC 00-54 Pilot Windshear Guide
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 10 -- Wind
+    - kind: aim
+      cite: AIM 7-1-19 -- Microbursts; 7-5-2 -- Mountain Flying
 
 - front: "Descending through 4,000 ft on the lee side of the Sierras, late afternoon, surface 20 KT westerly. Airspeed drops 15 KT, descent rate spikes 1,500 fpm. What's the diagnosis and what's the recovery?"
   back: |
@@ -276,12 +356,22 @@ brief.
     forecast cues are pre-decidable on the ground.
   cardType: basic
   kind: recall
-  tags: [weather, wind, mountain-wave, recovery, scenario, PA.I.C.K3b]
+  tags: [weather, wind, mountain-wave, recovery, scenario]
   source_ref: |
     Body Context.
   rationale: |
     Scenario card from the Context. Trains the recognition + recovery
     pair the body emphasises is the survival pattern.
+  acs_codes: [PA.I.C.K3b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, chapters on wind and orographic effects
+    - kind: ac
+      cite: AC 00-54 Pilot Windshear Guide
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 10 -- Wind
+    - kind: aim
+      cite: AIM 7-1-19 -- Microbursts; 7-5-2 -- Mountain Flying
 
 - front: "Indicators of low-level windshear across the standard product set?"
   back: |
@@ -294,9 +384,19 @@ brief.
     Synoptic: tight pressure gradient, mountain-wave setup.
   cardType: basic
   kind: recall
-  tags: [weather, wind, windshear, products, ac-00-54, PA.I.C.K3b]
+  tags: [weather, wind, windshear, products, ac-00-54]
   source_ref: |
     AC 00-54; body Reveal indicator list.
+  acs_codes: [PA.I.C.K3b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, chapters on wind and orographic effects
+    - kind: ac
+      cite: AC 00-54 Pilot Windshear Guide
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 10 -- Wind
+    - kind: aim
+      cite: AIM 7-1-19 -- Microbursts; 7-5-2 -- Mountain Flying
 ```
 
 ## Connect

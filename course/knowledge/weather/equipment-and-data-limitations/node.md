@@ -169,9 +169,17 @@ mitigation set.
     stale; ATC ride reports are sparse and reporter-biased.
   cardType: basic
   kind: recall
-  tags: [weather, limitations, acs-r2, ac-00-63a, PA.I.C.R2]
+  tags: [weather, limitations, acs-r2, ac-00-63a]
   source_ref: |
     AC 00-63A; body Discover R2 framework.
+  acs_codes: [PA.I.C.R2]
+  source_authority:
+    - kind: ac
+      cite: AC 00-63A Use of Cockpit Displays of Digital Weather and Aeronautical Information
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Limitations of Weather Forecasts
 
 - front: "Onboard weather radar (Bendix-King RDR etc.): what does it show and what does it miss?"
   back: |
@@ -183,9 +191,17 @@ mitigation set.
     sensor but it's *not* a turbulence sensor.
   cardType: basic
   kind: recall
-  tags: [weather, limitations, onboard-radar, attenuation, ac-00-63a, PA.I.C.R2a]
+  tags: [weather, limitations, onboard-radar, attenuation, ac-00-63a]
   source_ref: |
     AC 00-63A; body Discover R2a.
+  acs_codes: [PA.I.C.R2a]
+  source_authority:
+    - kind: ac
+      cite: AC 00-63A Use of Cockpit Displays of Digital Weather and Aeronautical Information
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Limitations of Weather Forecasts
 
 - front: "ADS-B FIS-B coverage gaps -- where does the data drop?"
   back: |
@@ -196,9 +212,17 @@ mitigation set.
     which the cockpit can't always distinguish.
   cardType: basic
   kind: recall
-  tags: [weather, limitations, fis-b, ads-b, ac-00-63a, PA.I.C.R2c]
+  tags: [weather, limitations, fis-b, ads-b, ac-00-63a]
   source_ref: |
     AC 00-63A; body Discover R2a.
+  acs_codes: [PA.I.C.R2c]
+  source_authority:
+    - kind: ac
+      cite: AC 00-63A Use of Cockpit Displays of Digital Weather and Aeronautical Information
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Limitations of Weather Forecasts
 
 - front: "Lightning detection (Stormscope, FIS-B lightning) -- what does it show and what does it miss?"
   back: |
@@ -209,9 +233,17 @@ mitigation set.
     nothing about precipitation in non-electrical convection.
   cardType: basic
   kind: recall
-  tags: [weather, limitations, stormscope, lightning, PA.I.C.R2a]
+  tags: [weather, limitations, stormscope, lightning]
   source_ref: |
     Body Discover R2a.
+  acs_codes: [PA.I.C.R2a]
+  source_authority:
+    - kind: ac
+      cite: AC 00-63A Use of Cockpit Displays of Digital Weather and Aeronautical Information
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Limitations of Weather Forecasts
 
 - front: "Why is a METAR a point observation and what does that imply for surrounding airspace?"
   back: |
@@ -222,9 +254,17 @@ mitigation set.
     as the truth at one location, not a 25-NM-radius snapshot.
   cardType: basic
   kind: recall
-  tags: [weather, limitations, metar, ac-00-63a, PA.I.C.R2b]
+  tags: [weather, limitations, metar, ac-00-63a]
   source_ref: |
     AC 00-63A; body Discover R2b.
+  acs_codes: [PA.I.C.R2b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-63A Use of Cockpit Displays of Digital Weather and Aeronautical Information
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Limitations of Weather Forecasts
 
 - front: "TAF confidence horizon and what PROB groups encode about it."
   back: |
@@ -236,9 +276,17 @@ mitigation set.
     upgrades to TEMPO).
   cardType: basic
   kind: recall
-  tags: [weather, limitations, taf, prob, PA.I.C.R2b]
+  tags: [weather, limitations, taf, prob]
   source_ref: |
     AC 00-45H TAF; body Discover R2b.
+  acs_codes: [PA.I.C.R2b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-63A Use of Cockpit Displays of Digital Weather and Aeronautical Information
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Limitations of Weather Forecasts
 
 - front: "AIRMET / SIGMET polygons -- what's the smoothing problem and what buffer should you assume?"
   back: |
@@ -249,9 +297,17 @@ mitigation set.
     as a clean boundary is one of the canonical R2b failure patterns.
   cardType: basic
   kind: recall
-  tags: [weather, limitations, airmet, sigmet, polygon, PA.I.C.R2b]
+  tags: [weather, limitations, airmet, sigmet, polygon]
   source_ref: |
     AC 00-45H; body Discover R2b.
+  acs_codes: [PA.I.C.R2b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-63A Use of Cockpit Displays of Digital Weather and Aeronautical Information
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Limitations of Weather Forecasts
 
 - front: "Wind aloft forecast (FB) error in dynamic atmospheres -- how much divergence?"
   back: |
@@ -262,9 +318,17 @@ mitigation set.
     (groundspeed vs. TAS, PIREPs) and re-planning if it drifts.
   cardType: basic
   kind: recall
-  tags: [weather, limitations, winds-aloft, fb, PA.I.C.R2b]
+  tags: [weather, limitations, winds-aloft, fb]
   source_ref: |
     AC 00-45H FB; body Discover R2b.
+  acs_codes: [PA.I.C.R2b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-63A Use of Cockpit Displays of Digital Weather and Aeronautical Information
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Limitations of Weather Forecasts
 
 - front: "Why are ATC ride reports an unreliable substitute for PIREPs at your altitude?"
   back: |
@@ -275,9 +339,17 @@ mitigation set.
     your category with a transport ride report.
   cardType: basic
   kind: recall
-  tags: [weather, limitations, ride-reports, pirep, atc, PA.I.C.R2c]
+  tags: [weather, limitations, ride-reports, pirep, atc]
   source_ref: |
     Body Discover R2c.
+  acs_codes: [PA.I.C.R2c]
+  source_authority:
+    - kind: ac
+      cite: AC 00-63A Use of Cockpit Displays of Digital Weather and Aeronautical Information
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Limitations of Weather Forecasts
 
 - front: "Operational rule: minimum stand-off distance from a cockpit-displayed NEXRAD echo for thunderstorm avoidance, and why is it larger than the visual rule?"
   back: |
@@ -289,9 +361,17 @@ mitigation set.
     datalink picture.
   cardType: regulation
   kind: recall
-  tags: [weather, limitations, nexrad, thunderstorm, 20nm, PA.I.C.R2c]
+  tags: [weather, limitations, nexrad, thunderstorm, 20nm]
   source_ref: |
     NTSB SA-017 In-Cockpit NEXRAD Mosaic Imagery; AC 00-63A; body Reveal.
+  acs_codes: [PA.I.C.R2c]
+  source_authority:
+    - kind: ac
+      cite: AC 00-63A Use of Cockpit Displays of Digital Weather and Aeronautical Information
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Limitations of Weather Forecasts
 
 - front: "For a forecast of widely scattered afternoon convection, what's the dominant limitation to pre-name in the brief?"
   back: |
@@ -303,13 +383,21 @@ mitigation set.
     pre-decision and a minimum stand-off rule before the flight launches.
   cardType: basic
   kind: recall
-  tags: [weather, limitations, nexrad, convection, briefing, PA.I.C.R2c]
+  tags: [weather, limitations, nexrad, convection, briefing]
   source_ref: |
     Body Practice + Verify ("convection forecast over the mountains").
   rationale: |
     Scenario card from the body's Verify drill. The pre-naming habit is the
     body's operational deliverable; this card forces the learner to articulate
     it for the canonical convection case.
+  acs_codes: [PA.I.C.R2c]
+  source_authority:
+    - kind: ac
+      cite: AC 00-63A Use of Cockpit Displays of Digital Weather and Aeronautical Information
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Limitations of Weather Forecasts
 ```
 
 ## Connect

@@ -147,9 +147,17 @@ foundation cog. Product-to-source mapping cards lock the K1 recall set.
     files flight plans. K1 wants you to name the two classes, not vendors.
   cardType: basic
   kind: recall
-  tags: [weather, data-sources, nws, flight-service, PA.I.C.K1]
+  tags: [weather, data-sources, nws, flight-service]
   source_ref: |
     AC 00-45H Aviation Weather Services; body Reveal "For the K1 element."
+  acs_codes: [PA.I.C.K1]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 26 -- Sources of Weather Information
 
 - front: "Who originates METARs, TAFs, AIRMETs, SIGMETs, Convective SIGMETs, GFA, FB, and Surface Analysis?"
   back: |
@@ -160,9 +168,17 @@ foundation cog. Product-to-source mapping cards lock the K1 recall set.
     AWC's public face.
   cardType: basic
   kind: recall
-  tags: [weather, data-sources, nws, awc, PA.I.C.K1]
+  tags: [weather, data-sources, nws, awc]
   source_ref: |
     AC 00-45H; body Reveal product-to-agency map.
+  acs_codes: [PA.I.C.K1]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 26 -- Sources of Weather Information
 
 - front: "Who originates CWAs (Center Weather Advisories)?"
   back: |
@@ -173,9 +189,17 @@ foundation cog. Product-to-source mapping cards lock the K1 recall set.
     affecting traffic in the Center's airspace right now.
   cardType: basic
   kind: recall
-  tags: [weather, data-sources, cwsu, cwa, PA.I.C.K1]
+  tags: [weather, data-sources, cwsu, cwa]
   source_ref: |
     AC 00-45H; body Reveal.
+  acs_codes: [PA.I.C.K1]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 26 -- Sources of Weather Information
 
 - front: "Who originates PIREPs, and through whom do they reach the system?"
   back: |
@@ -185,9 +209,17 @@ foundation cog. Product-to-source mapping cards lock the K1 recall set.
     become an NWS-distributed product through the normal channels.
   cardType: basic
   kind: recall
-  tags: [weather, data-sources, pirep, flight-service, PA.I.C.K1]
+  tags: [weather, data-sources, pirep, flight-service]
   source_ref: |
     AC 00-45H; body Reveal.
+  acs_codes: [PA.I.C.K1]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 26 -- Sources of Weather Information
 
 - front: "ADS-B FIS-B vs. SiriusXM Aviation Weather: cost, coverage, freshness?"
   back: |
@@ -199,9 +231,17 @@ foundation cog. Product-to-source mapping cards lock the K1 recall set.
     broader / continuous coverage and somewhat fresher products.
   cardType: basic
   kind: recall
-  tags: [weather, data-sources, fis-b, siriusxm, ads-b, PA.I.C.K1]
+  tags: [weather, data-sources, fis-b, siriusxm, ads-b]
   source_ref: |
     AC 00-45H; body Discover.
+  acs_codes: [PA.I.C.K1]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 26 -- Sources of Weather Information
 
 - front: "Flight Watch 122.0 -- what's its current status and what replaced it?"
   back: |
@@ -211,9 +251,17 @@ foundation cog. Product-to-source mapping cards lock the K1 recall set.
     frequency.
   cardType: basic
   kind: recall
-  tags: [weather, data-sources, flight-service, PA.I.C.K1]
+  tags: [weather, data-sources, flight-service]
   source_ref: |
     Body Discover.
+  acs_codes: [PA.I.C.K1]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 26 -- Sources of Weather Information
 
 - front: "EFB weather (ForeFlight, Garmin Pilot, FlyQ) -- who originates the data?"
   back: |
@@ -225,9 +273,17 @@ foundation cog. Product-to-source mapping cards lock the K1 recall set.
     not data drift.
   cardType: basic
   kind: recall
-  tags: [weather, data-sources, efb, foreflight, PA.I.C.K1]
+  tags: [weather, data-sources, efb, foreflight]
   source_ref: |
     Body Discover + Context.
+  acs_codes: [PA.I.C.K1]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 26 -- Sources of Weather Information
 
 - front: "Self-check: name the originating agency for METAR, TAF, AIRMET, SIGMET, GFA, FB, PIREP, CWA, Convective SIGMET, NEXRAD."
   back: |
@@ -239,12 +295,20 @@ foundation cog. Product-to-source mapping cards lock the K1 recall set.
     own K1.
   cardType: basic
   kind: recall
-  tags: [weather, data-sources, nws, PA.I.C.K1]
+  tags: [weather, data-sources, nws]
   source_ref: |
     Body Verify.
   rationale: |
     The body's Verify drill is the K1 floor. This card forces the learner
     to walk the full ten before declaring K1 done.
+  acs_codes: [PA.I.C.K1]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 26 -- Sources of Weather Information
 
 - front: "FAA-H-8083-28 (Aviation Weather Handbook) replaced which earlier publications, and what role does AC 00-45 still play?"
   back: |
@@ -256,9 +320,17 @@ foundation cog. Product-to-source mapping cards lock the K1 recall set.
     the exact format.
   cardType: basic
   kind: recall
-  tags: [weather, data-sources, reference, ac-00-45h, faa-h-8083-28, PA.I.C.K1]
+  tags: [weather, data-sources, reference, ac-00-45h, faa-h-8083-28]
   source_ref: |
     Body Reveal.
+  acs_codes: [PA.I.C.K1]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 26 -- Sources of Weather Information
 ```
 
 ## Connect

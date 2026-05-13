@@ -224,12 +224,16 @@ test for whether the decision is actually defensible.
     'no-go,' it's 'not yet.'
   cardType: basic
   kind: recall
-  tags: [weather, go-nogo, decision, phak-2, PA.I.C.R1]
+  tags: [weather, go-nogo, decision, phak-2]
   source_ref: |
     PHAK Ch 2 Aeronautical Decision-Making; body Discover.
   rationale: |
     The body's central reframing -- two-branch thinking (go / no-go)
     excludes the most common defensible outcome.
+  acs_codes: [PA.I.C.R1]
+  source_authority:
+    - kind: other
+      cite: FAA-H-8083-2A Risk Management Handbook
 
 - front: "PAVE checklist -- what does each letter ask about?"
   back: |
@@ -242,9 +246,13 @@ test for whether the decision is actually defensible.
     rental clock. Most-cited contributing factor in fatal weather accidents.
   cardType: basic
   kind: recall
-  tags: [weather, go-nogo, pave, adm, phak-2, PA.I.C.R1]
+  tags: [weather, go-nogo, pave, adm, phak-2]
   source_ref: |
     PHAK Ch 2 ADM; FAA-H-8083-2A Risk Management Handbook; body Discover.
+  acs_codes: [PA.I.C.R1]
+  source_authority:
+    - kind: other
+      cite: FAA-H-8083-2A Risk Management Handbook
 
 - front: "DECIDE model -- name the six steps and what makes the framework continuous."
   back: |
@@ -254,9 +262,13 @@ test for whether the decision is actually defensible.
     Useful for in-flight re-briefs as much as preflight planning.
   cardType: basic
   kind: recall
-  tags: [weather, go-nogo, decide, adm, phak-2, PA.I.C.R1]
+  tags: [weather, go-nogo, decide, adm, phak-2]
   source_ref: |
     PHAK Ch 2; body Discover.
+  acs_codes: [PA.I.C.R1]
+  source_authority:
+    - kind: other
+      cite: FAA-H-8083-2A Risk Management Handbook
 
 - front: "Two go/no-go failure modes the body names -- 'decoded but undecided' and 'decided but uncalibrated'. What does each look like?"
   back: |
@@ -270,9 +282,13 @@ test for whether the decision is actually defensible.
     brief.
   cardType: basic
   kind: recall
-  tags: [weather, go-nogo, failure-modes, PA.I.C.R1]
+  tags: [weather, go-nogo, failure-modes]
   source_ref: |
     Body Problem.
+  acs_codes: [PA.I.C.R1]
+  source_authority:
+    - kind: other
+      cite: FAA-H-8083-2A Risk Management Handbook
 
 - front: "Named-driver rule for go/no-go decisions."
   back: |
@@ -283,9 +299,13 @@ test for whether the decision is actually defensible.
     builds, and to whoever was counting on the trip if it doesn't happen.
   cardType: basic
   kind: recall
-  tags: [weather, go-nogo, named-driver, judgment, PA.I.C.R1]
+  tags: [weather, go-nogo, named-driver, judgment]
   source_ref: |
     Body Problem + Reveal "trip pressure framework."
+  acs_codes: [PA.I.C.R1]
+  source_authority:
+    - kind: other
+      cite: FAA-H-8083-2A Risk Management Handbook
 
 - front: "No-go conditions that should produce immediate stop without a framework cycle?"
   back: |
@@ -298,9 +318,13 @@ test for whether the decision is actually defensible.
     change.
   cardType: basic
   kind: recall
-  tags: [weather, go-nogo, no-go, immediate-stop, PA.I.C.R1c, PA.I.C.S3]
+  tags: [weather, go-nogo, no-go, immediate-stop]
   source_ref: |
     Body Reveal "no-go conditions that don't need a framework."
+  acs_codes: [PA.I.C.R1c, PA.I.C.S3]
+  source_authority:
+    - kind: other
+      cite: FAA-H-8083-2A Risk Management Handbook
 
 - front: "The go/no-go is a sequence of moments, not one decision. Name the moments and what's available at each."
   back: |
@@ -314,9 +338,13 @@ test for whether the decision is actually defensible.
     sequence ends.
   cardType: basic
   kind: recall
-  tags: [weather, go-nogo, decision-moments, divert, PA.I.C.R1a, PA.I.C.S3]
+  tags: [weather, go-nogo, decision-moments, divert]
   source_ref: |
     Body Reveal sequence table.
+  acs_codes: [PA.I.C.R1a, PA.I.C.S3]
+  source_authority:
+    - kind: other
+      cite: FAA-H-8083-2A Risk Management Handbook
 
 - front: "Three categories of input to a go/no-go decision per the body?"
   back: |
@@ -330,9 +358,13 @@ test for whether the decision is actually defensible.
        Personal minimums are the floor.
   cardType: basic
   kind: recall
-  tags: [weather, go-nogo, hazards, trends, personal-minimums, PA.I.C.R1, PA.I.C.S3]
+  tags: [weather, go-nogo, hazards, trends, personal-minimums]
   source_ref: |
     Body Discover.
+  acs_codes: [PA.I.C.R1, PA.I.C.S3]
+  source_authority:
+    - kind: other
+      cite: FAA-H-8083-2A Risk Management Handbook
 
 - front: "Why is the *trend* (improving / steady / degrading) more important than the current value alone?"
   back: |
@@ -344,9 +376,13 @@ test for whether the decision is actually defensible.
     is suspect, and you're flying into the surprise side of that error.
   cardType: basic
   kind: recall
-  tags: [weather, go-nogo, trend, taf, metar, PA.I.C.R1, PA.I.C.S3]
+  tags: [weather, go-nogo, trend, taf, metar]
   source_ref: |
     Body Discover "trends."
+  acs_codes: [PA.I.C.R1, PA.I.C.S3]
+  source_authority:
+    - kind: other
+      cite: FAA-H-8083-2A Risk Management Handbook
 
 - front: "Compressed working-pilot version of a go/no-go read?"
   back: |
@@ -358,9 +394,13 @@ test for whether the decision is actually defensible.
     PAVE/DECIDE remain the deeper structure for novel or marginal trips.
   cardType: basic
   kind: recall
-  tags: [weather, go-nogo, framework, judgment, PA.I.C.R1, PA.I.C.S3]
+  tags: [weather, go-nogo, framework, judgment]
   source_ref: |
     Body Discover (working-pilot compressed version).
+  acs_codes: [PA.I.C.R1, PA.I.C.S3]
+  source_authority:
+    - kind: other
+      cite: FAA-H-8083-2A Risk Management Handbook
 
 - front: "Friend asks you to fly them to a wedding three states away Saturday. METARs at destination show 4,000 broken with 6 SM light rain. GFA shows MVFR along 100 NM of route. Latest TAF amendment is six hours old and predicted better than reality. Walk the decision."
   back: |
@@ -375,11 +415,15 @@ test for whether the decision is actually defensible.
     counter.
   cardType: basic
   kind: recall
-  tags: [weather, go-nogo, scenario, mvfr, trip-pressure, PA.I.C.R1, PA.I.C.S3]
+  tags: [weather, go-nogo, scenario, mvfr, trip-pressure]
   source_ref: |
     Body Context + Discover.
   rationale: |
     Scenario card from the Context. Trains the full reframing the body teaches.
+  acs_codes: [PA.I.C.R1, PA.I.C.S3]
+  source_authority:
+    - kind: other
+      cite: FAA-H-8083-2A Risk Management Handbook
 
 - front: "Reverse: a flight ended worse than briefed. How does the body recommend you re-walk the brief?"
   back: |
@@ -391,9 +435,13 @@ test for whether the decision is actually defensible.
     time, not just after the bad outcomes.
   cardType: basic
   kind: recall
-  tags: [weather, go-nogo, post-flight, calibration, PA.I.C.R1, PA.I.C.S3]
+  tags: [weather, go-nogo, post-flight, calibration]
   source_ref: |
     Body Verify.
+  acs_codes: [PA.I.C.R1, PA.I.C.S3]
+  source_authority:
+    - kind: other
+      cite: FAA-H-8083-2A Risk Management Handbook
 ```
 
 ## Connect

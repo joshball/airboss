@@ -130,9 +130,19 @@ reading from going stale.
        (wind barb, temp, dew point, pressure, sky cover, current weather).
   cardType: basic
   kind: recall
-  tags: [weather, surface-analysis, chart-reading, ac-00-45h, PA.I.C.K2b]
+  tags: [weather, surface-analysis, chart-reading, ac-00-45h]
   source_ref: |
     AC 00-45H Surface Analysis Chart section; body Discover.
+  acs_codes: [PA.I.C.K2b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Surface Analysis Chart section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 25 -- Analysis (Surface Analysis Chart subsection)
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Surface Analysis section
 
 - front: "Isobar interval on the US surface analysis, and what does spacing tell you about surface wind?"
   back: |
@@ -142,9 +152,19 @@ reading from going stale.
     route is the quick gradient estimate.
   cardType: basic
   kind: recall
-  tags: [weather, surface-analysis, isobars, wind, ac-00-45h, PA.I.C.K2b]
+  tags: [weather, surface-analysis, isobars, wind, ac-00-45h]
   source_ref: |
     AC 00-45H; body Discover + Reveal table.
+  acs_codes: [PA.I.C.K2b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Surface Analysis Chart section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 25 -- Analysis (Surface Analysis Chart subsection)
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Surface Analysis section
 
 - front: "Northern-hemisphere surface flow around a Low vs a High -- direction and angle?"
   back: |
@@ -157,9 +177,19 @@ reading from going stale.
     the chart is older than the obs or the chart is wrong.
   cardType: basic
   kind: recall
-  tags: [weather, surface-analysis, pressure-systems, wind, ac-00-6, PA.I.C.K2b]
+  tags: [weather, surface-analysis, pressure-systems, wind, ac-00-6]
   source_ref: |
     AC 00-6B Surface Analysis; body Discover.
+  acs_codes: [PA.I.C.K2b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Surface Analysis Chart section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 25 -- Analysis (Surface Analysis Chart subsection)
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Surface Analysis section
 
 - front: "Surface analysis update cadence and what to compare against your flight time?"
   back: |
@@ -170,9 +200,19 @@ reading from going stale.
     a newer issue or the prog chart.
   cardType: basic
   kind: recall
-  tags: [weather, surface-analysis, cadence, latency, ac-00-45h, PA.I.C.K2b]
+  tags: [weather, surface-analysis, cadence, latency, ac-00-45h]
   source_ref: |
     AC 00-45H; FAA-H-8083-28 Ch 25; body Reveal.
+  acs_codes: [PA.I.C.K2b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Surface Analysis Chart section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 25 -- Analysis (Surface Analysis Chart subsection)
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Surface Analysis section
 
 - front: "Cold-front glyph on a surface analysis: appearance, direction, and weather signature on each side?"
   back: |
@@ -184,9 +224,19 @@ reading from going stale.
     rising pressure, clearing skies, gusty wind shift.
   cardType: basic
   kind: recall
-  tags: [weather, surface-analysis, cold-front, ac-00-45h, PA.I.C.K2b, PA.I.C.K3e]
+  tags: [weather, surface-analysis, cold-front, ac-00-45h]
   source_ref: |
     AC 00-45H; body Discover + Reveal.
+  acs_codes: [PA.I.C.K2b, PA.I.C.K3e]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Surface Analysis Chart section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 25 -- Analysis (Surface Analysis Chart subsection)
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Surface Analysis section
 
 - front: "Decode a station model -- where do wind, temperature, dew point, pressure, sky cover, and current weather appear?"
   back: |
@@ -197,9 +247,19 @@ reading from going stale.
     miniature METAR -- same fields, drawn instead of typed.
   cardType: basic
   kind: recall
-  tags: [weather, surface-analysis, station-model, metar, ac-00-45h, PA.I.C.K2b]
+  tags: [weather, surface-analysis, station-model, metar, ac-00-45h]
   source_ref: |
     AC 00-45H Surface Analysis Chart; body Discover.
+  acs_codes: [PA.I.C.K2b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Surface Analysis Chart section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 25 -- Analysis (Surface Analysis Chart subsection)
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Surface Analysis section
 
 - front: "Why is the surface analysis chart 'analyzed, not computed' -- and what are the two pilot consequences?"
   back: |
@@ -212,9 +272,19 @@ reading from going stale.
     "edge" call (front position to within 100 NM) is judgment, not truth.
   cardType: basic
   kind: recall
-  tags: [weather, surface-analysis, latency, wpc, faa-h-8083-28, PA.I.C.K2b]
+  tags: [weather, surface-analysis, latency, wpc, faa-h-8083-28]
   source_ref: |
     FAA-H-8083-28 Ch 25 Analysis; body Reveal.
+  acs_codes: [PA.I.C.K2b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Surface Analysis Chart section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 25 -- Analysis (Surface Analysis Chart subsection)
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Surface Analysis section
 
 - front: "Stationary front glyph on a surface analysis: how is it drawn and what does it mean for the next 24 hours?"
   back: |
@@ -226,9 +296,19 @@ reading from going stale.
     the planning area means "watch for a developing low," not "stable."
   cardType: basic
   kind: recall
-  tags: [weather, surface-analysis, stationary-front, cyclogenesis, ac-00-45h, PA.I.C.K2b]
+  tags: [weather, surface-analysis, stationary-front, cyclogenesis, ac-00-45h]
   source_ref: |
     AC 00-45H; body Reveal table.
+  acs_codes: [PA.I.C.K2b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Surface Analysis Chart section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 25 -- Analysis (Surface Analysis Chart subsection)
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Surface Analysis section
 
 - front: "Three-drill surface-analysis reading sequence: orient, front audit, route triage. What's the goal of each?"
   back: |
@@ -242,9 +322,19 @@ reading from going stale.
        you're including features that don't matter.
   cardType: basic
   kind: recall
-  tags: [weather, surface-analysis, drill, triage, PA.I.C.K2b, PA.I.C.S2]
+  tags: [weather, surface-analysis, drill, triage]
   source_ref: |
     Body Practice.
+  acs_codes: [PA.I.C.K2b, PA.I.C.S2]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Surface Analysis Chart section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 25 -- Analysis (Surface Analysis Chart subsection)
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Surface Analysis section
 
 - front: "Self-test for surface-analysis reading skill: how do you calibrate without an instructor?"
   back: |
@@ -256,9 +346,19 @@ reading from going stale.
     gap and run the drill again the next briefing.
   cardType: basic
   kind: recall
-  tags: [weather, surface-analysis, drill, calibration, PA.I.C.K2b]
+  tags: [weather, surface-analysis, drill, calibration]
   source_ref: |
     Body Verify + Practice self-test.
+  acs_codes: [PA.I.C.K2b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Surface Analysis Chart section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 25 -- Analysis (Surface Analysis Chart subsection)
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
+    - kind: ac
+      cite: AC 00-6B Aviation Weather, Surface Analysis section
 ```
 
 ## Connect

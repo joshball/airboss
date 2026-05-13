@@ -156,9 +156,17 @@ vs-ceiling card carries the bookend pedagogy.
     CVA just renders them as one color per location across CONUS.
   cardType: basic
   kind: recall
-  tags: [weather, cva, vfr, mvfr, ifr, lifr, ac-00-45h, PA.I.C.K2b]
+  tags: [weather, cva, vfr, mvfr, ifr, lifr, ac-00-45h]
   source_ref: |
     AC 00-45H CVA section; body Reveal table.
+  acs_codes: [PA.I.C.K2b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Surface Analysis Chart and CVA sections
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 25 -- Analysis
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "Surface Analysis Chart update cadence and authoring authority?"
   back: |
@@ -170,9 +178,17 @@ vs-ceiling card carries the bookend pedagogy.
     one for flight planning.
   cardType: basic
   kind: recall
-  tags: [weather, surface-analysis, wpc, cadence, ac-00-45h, PA.I.C.K2b]
+  tags: [weather, surface-analysis, wpc, cadence, ac-00-45h]
   source_ref: |
     AC 00-45H; FAA-H-8083-28 Ch 25; body Reveal.
+  acs_codes: [PA.I.C.K2b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Surface Analysis Chart and CVA sections
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 25 -- Analysis
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "CVA update cadence vs Surface Analysis update cadence?"
   back: |
@@ -183,9 +199,17 @@ vs-ceiling card carries the bookend pedagogy.
     because it requires the human analyst's interpretation step.
   cardType: basic
   kind: recall
-  tags: [weather, cva, surface-analysis, cadence, ac-00-45h, PA.I.C.K2b]
+  tags: [weather, cva, surface-analysis, cadence, ac-00-45h]
   source_ref: |
     AC 00-45H; body Reveal.
+  acs_codes: [PA.I.C.K2b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Surface Analysis Chart and CVA sections
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 25 -- Analysis
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "When is the CVA the right product to reach for, and when is the Surface Analysis?"
   back: |
@@ -198,9 +222,17 @@ vs-ceiling card carries the bookend pedagogy.
     forecasts in the middle, CVA at the end as the integration check.
   cardType: basic
   kind: recall
-  tags: [weather, cva, surface-analysis, briefing-order, ac-00-45h, PA.I.C.K2b]
+  tags: [weather, cva, surface-analysis, briefing-order, ac-00-45h]
   source_ref: |
     Body Reveal + Connect.
+  acs_codes: [PA.I.C.K2b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Surface Analysis Chart and CVA sections
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 25 -- Analysis
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "Northern-hemisphere surface wind rotation: around a Low vs around a High?"
   back: |
@@ -212,9 +244,17 @@ vs-ceiling card carries the bookend pedagogy.
     the station-model wind barbs on the chart.
   cardType: basic
   kind: recall
-  tags: [weather, surface-analysis, pressure-systems, wind, ac-00-6, PA.I.C.K2b]
+  tags: [weather, surface-analysis, pressure-systems, wind, ac-00-6]
   source_ref: |
     AC 00-6B Wind chapter; body Practice.
+  acs_codes: [PA.I.C.K2b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Surface Analysis Chart and CVA sections
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 25 -- Analysis
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "Two pilots brief the same KSAC->KRDD flight. One opens the METAR strip and reads field-by-field; the other opens the surface analysis and sees a cold front draped across the valley with tight isobars on the back side. Why does the second pilot finish the brief faster and with more confidence?"
   back: |
@@ -227,13 +267,21 @@ vs-ceiling card carries the bookend pedagogy.
     any single METAR was read.
   cardType: basic
   kind: recall
-  tags: [weather, surface-analysis, synoptic, briefing-efficiency, PA.I.C.K2b]
+  tags: [weather, surface-analysis, synoptic, briefing-efficiency]
   source_ref: |
     Body Context scenario.
   rationale: |
     Scenario card from the body's Context. Trains the reframing: the
     surface analysis isn't 'an extra product' -- it's a different layer
     of abstraction that compresses the same data.
+  acs_codes: [PA.I.C.K2b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Surface Analysis Chart and CVA sections
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 25 -- Analysis
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "Where does the Surface Analysis sit in the encoded-text family triage step?"
   back: |
@@ -246,9 +294,17 @@ vs-ceiling card carries the bookend pedagogy.
     triage is the goal.
   cardType: basic
   kind: recall
-  tags: [weather, surface-analysis, cva, triage, encoded-text-family, PA.I.C.K2b]
+  tags: [weather, surface-analysis, cva, triage, encoded-text-family]
   source_ref: |
     Body Discover triage step.
+  acs_codes: [PA.I.C.K2b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Surface Analysis Chart and CVA sections
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 25 -- Analysis
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "Station model on a surface analysis chart -- what is it and what's the fast on-ramp to reading it?"
   back: |
@@ -260,9 +316,17 @@ vs-ceiling card carries the bookend pedagogy.
     practice -- the fields are the same, the rendering is graphical.
   cardType: basic
   kind: recall
-  tags: [weather, surface-analysis, station-model, metar, ac-00-45h, PA.I.C.K2b]
+  tags: [weather, surface-analysis, station-model, metar, ac-00-45h]
   source_ref: |
     AC 00-45H; body Discover.
+  acs_codes: [PA.I.C.K2b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Surface Analysis Chart and CVA sections
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 25 -- Analysis
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "How does the CVA correlate with the surface analysis on a typical frontal-passage day?"
   back: |
@@ -275,9 +339,17 @@ vs-ceiling card carries the bookend pedagogy.
     the synoptic flow.
   cardType: basic
   kind: recall
-  tags: [weather, surface-analysis, cva, correlation, PA.I.C.K2b]
+  tags: [weather, surface-analysis, cva, correlation]
   source_ref: |
     Body Practice + Verify.
+  acs_codes: [PA.I.C.K2b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Surface Analysis Chart and CVA sections
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 25 -- Analysis
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 ```
 
 ## Connect

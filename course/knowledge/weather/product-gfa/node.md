@@ -157,9 +157,17 @@ the triage card pinpoints the dominant layer for each flight.
     Winds: surface and aloft wind / temperature fields.
   cardType: basic
   kind: recall
-  tags: [weather, gfa, layers, ac-00-45h, PA.I.C.K2d]
+  tags: [weather, gfa, layers, ac-00-45h]
   source_ref: |
     AC 00-45H GFA section; body Reveal layer table.
+  acs_codes: [PA.I.C.K2d]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Graphical Forecasts for Aviation section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 28 -- Aviation Weather Tools, Section 28.2 (Graphical Forecasts for Aviation (GFA) Tool)
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "GFA categorical color conventions for cig/vis: VFR / MVFR / IFR / LIFR."
   back: |
@@ -169,9 +177,17 @@ the triage card pinpoints the dominant layer for each flight.
     colors, the cig/vis layer is decode-by-glance.
   cardType: basic
   kind: recall
-  tags: [weather, gfa, cig-vis, color-convention, PA.I.C.K2d]
+  tags: [weather, gfa, cig-vis, color-convention]
   source_ref: |
     AC 00-45H; body Discover (color-coded layers).
+  acs_codes: [PA.I.C.K2d]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Graphical Forecasts for Aviation section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 28 -- Aviation Weather Tools, Section 28.2 (Graphical Forecasts for Aviation (GFA) Tool)
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "GFA time-slider span -- from how far in the past to how far in the future?"
   back: |
@@ -181,9 +197,17 @@ the triage card pinpoints the dominant layer for each flight.
     three hours; the observation/analysis side updates hourly.
   cardType: basic
   kind: recall
-  tags: [weather, gfa, time-slider, ac-00-45h, PA.I.C.K2d]
+  tags: [weather, gfa, time-slider, ac-00-45h]
   source_ref: |
     AC 00-45H; body Discover.
+  acs_codes: [PA.I.C.K2d]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Graphical Forecasts for Aviation section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 28 -- Aviation Weather Tools, Section 28.2 (Graphical Forecasts for Aviation (GFA) Tool)
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "What product did the GFA replace, and when?"
   back: |
@@ -194,9 +218,17 @@ the triage card pinpoints the dominant layer for each flight.
     counterpart in current production.
   cardType: basic
   kind: recall
-  tags: [weather, gfa, area-forecast, history, PA.I.C.K2d]
+  tags: [weather, gfa, area-forecast, history]
   source_ref: |
     AC 00-45H; FAA-H-8083-28 Ch 28.2; body Discover.
+  acs_codes: [PA.I.C.K2d]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Graphical Forecasts for Aviation section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 28 -- Aviation Weather Tools, Section 28.2 (Graphical Forecasts for Aviation (GFA) Tool)
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "GFA is a *front-end* over which underlying models?"
   back: |
@@ -209,9 +241,17 @@ the triage card pinpoints the dominant layer for each flight.
     is what separates 'reading colors' from 'reading the GFA.'
   cardType: basic
   kind: recall
-  tags: [weather, gfa, fip, cip, gtg, ndfd, ac-00-45h, PA.I.C.K2d]
+  tags: [weather, gfa, fip, cip, gtg, ndfd, ac-00-45h]
   source_ref: |
     AC 00-45H; body Reveal.
+  acs_codes: [PA.I.C.K2d]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Graphical Forecasts for Aviation section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 28 -- Aviation Weather Tools, Section 28.2 (Graphical Forecasts for Aviation (GFA) Tool)
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "GFA refresh cadence: observations / analyses vs forward forecast."
   back: |
@@ -222,9 +262,17 @@ the triage card pinpoints the dominant layer for each flight.
     past side is to its observation time.
   cardType: basic
   kind: recall
-  tags: [weather, gfa, cadence, refresh, ac-00-45h, PA.I.C.K2d]
+  tags: [weather, gfa, cadence, refresh, ac-00-45h]
   source_ref: |
     AC 00-45H; body Reveal.
+  acs_codes: [PA.I.C.K2d]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Graphical Forecasts for Aviation section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 28 -- Aviation Weather Tools, Section 28.2 (Graphical Forecasts for Aviation (GFA) Tool)
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "Triage rule: how do you keep a GFA brief from devolving into layer-scrolling?"
   back: |
@@ -236,12 +284,20 @@ the triage card pinpoints the dominant layer for each flight.
     discipline that makes the brief converge.
   cardType: basic
   kind: recall
-  tags: [weather, gfa, triage, briefing, PA.I.C.K2d]
+  tags: [weather, gfa, triage, briefing]
   source_ref: |
     Body Discover triage step.
   rationale: |
     The body's central triage instruction. This card forces the learner
     to pick a dominant layer rather than scroll all seven.
+  acs_codes: [PA.I.C.K2d]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Graphical Forecasts for Aviation section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 28 -- Aviation Weather Tools, Section 28.2 (Graphical Forecasts for Aviation (GFA) Tool)
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "250 NM cross-country across a forecast frontal passage. METARs/TAFs at endpoints look fine but the route between has no terminal. Where in the brief do you look?"
   back: |
@@ -253,12 +309,20 @@ the triage card pinpoints the dominant layer for each flight.
     front you're flying through.
   cardType: basic
   kind: recall
-  tags: [weather, gfa, route-analysis, frontal-passage, PA.I.C.K2d]
+  tags: [weather, gfa, route-analysis, frontal-passage]
   source_ref: |
     Body Context scenario.
   rationale: |
     Scenario card from the body's Context. The mid-route gap is the GFA's
     canonical use case.
+  acs_codes: [PA.I.C.K2d]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Graphical Forecasts for Aviation section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 28 -- Aviation Weather Tools, Section 28.2 (Graphical Forecasts for Aviation (GFA) Tool)
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "MVFR or IFR blocks appear along your planned route at the GFA forecast time you'll be airborne. What has the GFA just done?"
   back: |
@@ -270,9 +334,17 @@ the triage card pinpoints the dominant layer for each flight.
     edge of the polygon.
   cardType: basic
   kind: recall
-  tags: [weather, gfa, mvfr, ifr, hazard-window, PA.I.C.K2d, PA.I.C.S2]
+  tags: [weather, gfa, mvfr, ifr, hazard-window]
   source_ref: |
     Body Practice "real 'is this route flyable?' check."
+  acs_codes: [PA.I.C.K2d, PA.I.C.S2]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Graphical Forecasts for Aviation section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 28 -- Aviation Weather Tools, Section 28.2 (Graphical Forecasts for Aviation (GFA) Tool)
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 
 - front: "Reading the GFA without understanding what feeds it produces what kind of error?"
   back: |
@@ -284,9 +356,17 @@ the triage card pinpoints the dominant layer for each flight.
     limitations node are the depth complement to the GFA's breadth.
   cardType: basic
   kind: recall
-  tags: [weather, gfa, limitations, judgment, PA.I.C.K2d, PA.I.C.R2b]
+  tags: [weather, gfa, limitations, judgment]
   source_ref: |
     Body Connect.
+  acs_codes: [PA.I.C.K2d, PA.I.C.R2b]
+  source_authority:
+    - kind: ac
+      cite: AC 00-45H Aviation Weather Services, Graphical Forecasts for Aviation section
+    - kind: other
+      cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 28 -- Aviation Weather Tools, Section 28.2 (Graphical Forecasts for Aviation (GFA) Tool)
+    - kind: aim
+      cite: AIM 7-1 -- National Weather Service Aviation Products
 ```
 
 ## Connect
