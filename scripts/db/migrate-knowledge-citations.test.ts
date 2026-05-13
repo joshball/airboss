@@ -59,6 +59,7 @@ describe('parseLegacyDetail', () => {
 		expect(parseLegacyDetail('Chapter 3 -- Basic Flight Maneuvers')).toEqual({
 			chapter: 3,
 			chapterTitle: 'Basic Flight Maneuvers',
+			additionalChapters: [],
 		});
 	});
 
@@ -66,6 +67,7 @@ describe('parseLegacyDetail', () => {
 		expect(parseLegacyDetail('Chapter 4 -- Slow Flight, Stalls, and Spins')).toEqual({
 			chapter: 4,
 			chapterTitle: 'Slow Flight, Stalls, and Spins',
+			additionalChapters: [],
 		});
 	});
 
@@ -73,11 +75,68 @@ describe('parseLegacyDetail', () => {
 		expect(parseLegacyDetail('Recovery from unusual attitudes (visual)')).toEqual({
 			chapter: null,
 			chapterTitle: null,
+			additionalChapters: [],
 		});
 	});
 
 	it('parses `Chapter 16 -- Navigation` (multi-digit)', () => {
-		expect(parseLegacyDetail('Chapter 16 -- Navigation')).toEqual({ chapter: 16, chapterTitle: 'Navigation' });
+		expect(parseLegacyDetail('Chapter 16 -- Navigation')).toEqual({
+			chapter: 16,
+			chapterTitle: 'Navigation',
+			additionalChapters: [],
+		});
+	});
+
+	it('parses an AvWx detail with handbook-name prefix', () => {
+		expect(
+			parseLegacyDetail('Aviation Weather Handbook, Chapter 11 -- Air Masses, Fronts, and the Wave Cyclone Model'),
+		).toEqual({
+			chapter: 11,
+			chapterTitle: 'Air Masses, Fronts, and the Wave Cyclone Model',
+			additionalChapters: [],
+		});
+	});
+
+	it('parses a multi-chapter detail separated by `;`', () => {
+		expect(
+			parseLegacyDetail(
+				'Aviation Weather Handbook, Chapter 12 -- Vertical Motion and Clouds; Chapter 14 -- Precipitation',
+			),
+		).toEqual({
+			chapter: 12,
+			chapterTitle: 'Vertical Motion and Clouds',
+			additionalChapters: [{ chapter: 14, chapterTitle: 'Precipitation' }],
+		});
+	});
+
+	it('parses a detail with a `Section` qualifier without leaking the section into the title', () => {
+		expect(parseLegacyDetail('Aviation Weather Handbook, Chapter 25 -- Analysis, Sections 25.4 and 25.5')).toEqual({
+			chapter: 25,
+			chapterTitle: 'Analysis',
+			additionalChapters: [],
+		});
+	});
+
+	it('parses a detail with a `§` section qualifier', () => {
+		expect(
+			parseLegacyDetail(
+				'Aviation Weather Handbook, Chapter 27 -- Forecasts, Section 27.2 (Winds and Temperatures Aloft) and §27.2.1',
+			),
+		).toEqual({
+			chapter: 27,
+			chapterTitle: 'Forecasts',
+			additionalChapters: [],
+		});
+	});
+
+	it('parses a parenthesised-subsection detail without leaking it into the title', () => {
+		expect(
+			parseLegacyDetail('Aviation Weather Handbook, Chapter 25 -- Analysis (Surface Analysis Chart subsection)'),
+		).toEqual({
+			chapter: 25,
+			chapterTitle: 'Analysis (Surface Analysis Chart subsection)',
+			additionalChapters: [],
+		});
 	});
 });
 
