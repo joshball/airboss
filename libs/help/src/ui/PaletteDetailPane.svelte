@@ -14,7 +14,9 @@ import { airbossRefForResult, isFlightbagHref } from './palette-flightbag';
  *   2. Open (the default navigation)
  *   3. Search inside (sets `doc:<code>` chip; calls onSearchInside)
  *   4. Cite this (copies `airboss-ref:` URI to clipboard; transient toast)
- *   5. Pin to today (Phase 4-adjacent -- disabled placeholder for now)
+ *   5. Pin to today (disabled placeholder -- needs an `@ab/bc-study` pin
+ *      API that does not exist today; reintroduced when plans grow a
+ *      pin-to-today operation)
  *
  * Visibility is owned by the parent palette: this component renders
  * nothing when `result` is null. Toggling via `Cmd+\` and the narrow-
@@ -183,12 +185,20 @@ async function handleCite(): Promise<void> {
 			>
 				{copied ? 'Copied' : 'Cite this'}
 			</button>
+			<!--
+				Pin to today: stays disabled until study-side plans expose a
+				"pin a card / rep / reference to today's plan" API. The
+				command-palette WP Phase 4 confirmed no such helper exists in
+				`@ab/bc-study` today; reintroduce when `mine.plan` supports
+				the pin-to-today operation (tracked as an OUT-OF-SCOPE follow-up
+				on the command-palette WP).
+			-->
 			<button
 				type="button"
 				class="action"
 				disabled
 				data-testid="palette-detail-pin"
-				title="Available in Phase 4"
+				title="Available when plans support pin-to-today (tracked on the command-palette WP)"
 			>
 				Pin to today
 			</button>

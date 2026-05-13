@@ -7,6 +7,8 @@
 //   import HelpLayout from '@ab/help/ui/HelpLayout.svelte';
 //   import HelpSearch from '@ab/help/ui/HelpSearch.svelte';
 
+export { paletteCommands } from './commands/registry';
+export type { PaletteCommand, PaletteCommandRegistry, PaletteCommandType } from './commands/types';
 export { classifyIntent, hasAnyTitlePrefixMatch, type SearchIntent, wordCount } from './intent-classifier';
 export {
 	type CalloutVariant,

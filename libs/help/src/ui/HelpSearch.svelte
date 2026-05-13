@@ -1,33 +1,55 @@
 <script lang="ts">
-import type { AppSurface } from '@ab/constants';
+import type { AppId, AppSurface } from '@ab/constants';
+import type { PaletteMode } from '../schema/palette-mode';
 import CommandPalette from './CommandPalette.svelte';
 
 /**
  * Nav-integrated search affordance. Renders a visible button ("Search / ")
  * that opens the production `CommandPalette`, and installs global key
- * listeners for `/` and `Cmd+K` that open the same palette component.
- * Both entry points lead to the same search UI -- the top-nav button
- * teaches the feature exists; Cmd+K is the power-user shortcut.
+ * listeners that open the same palette in three modes:
+ *
+ *   - `/` or `Cmd+K`         -> `search` mode (default)
+ *   - `Cmd+Shift+P`          -> `command` mode (Phase 4)
+ *   - (`Cmd+P` -> `quickopen` ships in Phase 5)
+ *
+ * Both entry points lead to the same component -- the top-nav button
+ * teaches the feature exists; the keyboard shortcuts are the power-user
+ * surface.
  *
  * Global key listeners respect input-focus: pressing `/` while the user
  * is typing in a form field does NOT open the palette (lets users type
- * slashes in content).
+ * slashes in content). Cmd-modified shortcuts ignore the editable check
+ * because the user's `Cmd+K` / `Cmd+Shift+P` always means the palette,
+ * even from within an input.
  */
 
 interface Props {
-	/** Host surface for per-app boost. The mounting layout passes its app id. */
+	/** Page-level surface tag (drives loader scoping inside the palette). */
 	surface?: AppSurface;
+	/**
+	 * Host app id (`study`, `sim`, `hangar`, `flightbag`, `avionics`).
+	 * Drives the Phase 4 per-app command boost: this app's commands sort
+	 * above commands registered by sibling apps.
+	 */
+	app?: AppId;
 }
 
-let { surface }: Props = $props();
+let { surface, app }: Props = $props();
 
 let open = $state(false);
+let mode = $state<PaletteMode>('search');
 
 function close(): void {
 	open = false;
 }
 
+function openInMode(next: PaletteMode): void {
+	mode = next;
+	open = true;
+}
+
 function toggleFromButton(): void {
+	if (!open) mode = 'search';
 	open = !open;
 }
 
@@ -41,15 +63,27 @@ function isEditable(target: EventTarget | null): boolean {
 
 function handleWindowKey(event: KeyboardEvent): void {
 	if (event.defaultPrevented) return;
+	if (event.repeat) return;
 	const meta = event.metaKey || event.ctrlKey;
-	if (meta && event.key.toLowerCase() === 'k') {
+	const key = event.key.toLowerCase();
+	// Cmd+Shift+P (or Ctrl+Shift+P) -- command-mode palette.
+	if (meta && event.shiftKey && key === 'p') {
 		event.preventDefault();
-		open = true;
+		openInMode('command');
 		return;
 	}
+	// Cmd+K -- search-mode palette.
+	if (meta && !event.shiftKey && key === 'k') {
+		event.preventDefault();
+		openInMode('search');
+		return;
+	}
+	// `/` -- search-mode palette, but only when the user isn't typing
+	// into a form field (so authors can write slashes in content without
+	// the palette eating the keystroke).
 	if (event.key === '/' && !open && !isEditable(event.target)) {
 		event.preventDefault();
-		open = true;
+		openInMode('search');
 	}
 }
 </script>
@@ -72,7 +106,7 @@ function handleWindowKey(event: KeyboardEvent): void {
 	<kbd class="hint" aria-hidden="true">/</kbd>
 </button>
 
-<CommandPalette {open} onClose={close} {surface} />
+<CommandPalette {open} onClose={close} {surface} {app} {mode} />
 
 <style>
 	.trigger {

@@ -1,6 +1,7 @@
 <script lang="ts">
 import '@ab/themes/generated/tokens.css';
 import {
+	APP_IDS,
 	type ReadingDensity,
 	type ReadingFontFamily,
 	type ReadingFontScale,
@@ -29,6 +30,7 @@ import AppHeader from '@ab/ui/components/AppHeader.svelte';
 import ReadableScope from '@ab/ui/components/ReadableScope.svelte';
 import type { Snippet } from 'svelte';
 import { page } from '$app/state';
+import { registerFlightbagCommands, unregisterFlightbagCommands } from '$lib/palette/commands';
 import '$lib/help/register';
 import type { LayoutData } from './$types';
 
@@ -168,6 +170,13 @@ async function setAppearance(value: AppearancePreference) {
 		// Non-fatal: the cookie just won't persist this turn.
 	}
 }
+
+// Phase 4 of the command-palette WP: register the flightbag app's
+// declarative commands with the singleton `paletteCommands` registry.
+$effect(() => {
+	registerFlightbagCommands();
+	return () => unregisterFlightbagCommands();
+});
 </script>
 
 <!--
@@ -188,7 +197,7 @@ async function setAppearance(value: AppearancePreference) {
 	appOrigins={data.appOrigins}
 >
 	{#snippet helpSearch()}
-		<HelpSearch />
+		<HelpSearch app={APP_IDS.FLIGHTBAG} />
 	{/snippet}
 	{#snippet themePicker()}
 		<ThemePicker currentThemeId={selection.theme} onSelect={setTheme} locked={themePickerLocked} />

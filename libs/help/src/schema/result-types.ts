@@ -15,7 +15,7 @@
  * `libs/help/src/schema/palette-mode.ts` and is consumed by Phase 4/5 work.
  */
 
-import type { AppSurface } from '@ab/constants';
+import type { AppId, AppSurface } from '@ab/constants';
 import type { SearchIntent } from '../intent-classifier';
 import type { ParsedFilter } from './help-registry';
 
@@ -285,8 +285,20 @@ export interface GroupedResults {
  * receive this and bail out when `userId` is absent.
  */
 export interface PaletteHost {
-	/** Current app surface (`study`, `sim`, `hangar`, `flightbag`, `avionics`). */
+	/**
+	 * Page-level surface tag (from `APP_SURFACES`). Drives help-page boosting
+	 * and per-surface loader scoping. Defaults to `GLOBAL` when not on a
+	 * specific surface.
+	 */
 	readonly surface: AppSurface;
+	/**
+	 * Currently-hosting app id (`study`, `sim`, `hangar`, `flightbag`,
+	 * `avionics`). Drives the Phase 4 per-app command boost: commands
+	 * registered by `app` sort above commands from sibling apps in
+	 * `command` mode and as the commands bucket in `search` mode. Omit
+	 * when the mount is not in any app (dev tooling, tests).
+	 */
+	readonly app?: AppId;
 	/** Current user id, or `undefined` when unauthenticated. */
 	readonly userId?: string;
 }

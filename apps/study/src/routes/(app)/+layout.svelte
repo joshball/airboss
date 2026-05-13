@@ -1,5 +1,6 @@
 <script lang="ts">
 import {
+	APP_IDS,
 	NAV_LABELS,
 	type ReadingDensity,
 	type ReadingFontFamily,
@@ -31,6 +32,7 @@ import GlossaryDrawer from '@ab/ui/components/GlossaryDrawer.svelte';
 import ReadableScope from '@ab/ui/components/ReadableScope.svelte';
 import type { Snippet } from 'svelte';
 import { page } from '$app/state';
+import { registerStudyCommands, unregisterStudyCommands } from '$lib/palette/commands';
 import '$lib/help/register';
 import type { LayoutData } from './$types';
 
@@ -249,6 +251,15 @@ const themePickerLocked = $derived(themePref != null && selection.theme !== them
 // living on each section index page (e.g. `LearnTabs.svelte` for the
 // Learn section). Identity-menu state lives in `AppHeader.svelte`; the
 // global Help search lives in the right cluster of the same header.
+
+// Phase 4 of the command-palette WP: register the study app's declarative
+// commands with the singleton `paletteCommands` registry on mount and
+// unregister on teardown. The keep-alive HMR pattern in `commands.ts`
+// (unregister before register) keeps this idempotent across dev reloads.
+$effect(() => {
+	registerStudyCommands();
+	return () => unregisterStudyCommands();
+});
 </script>
 
 <!--
@@ -291,7 +302,7 @@ const themePickerLocked = $derived(themePref != null && selection.theme !== them
 		</nav>
 	{/snippet}
 	{#snippet helpSearch()}
-		<HelpSearch />
+		<HelpSearch app={APP_IDS.STUDY} />
 	{/snippet}
 	{#snippet glossarySlot()}
 		<GlossaryDrawer entries={listGlossaryEntries()} />
