@@ -52,7 +52,7 @@ After each walk: `bun run wp set <slug> human-review signed-off`, then `bun run 
 
 - **24 e2e failures flagged in NOW.md** — two root causes: Buffer hydration leak + Postgres crash on `hangar.docs_search_index`. Not investigated.
 - **`bug-palette-fts-third-source`** (filed) — Palette FTS loader missing `study.course_step.body_md` as third source. Revisit after course-tree-arbitrary-depth WP stabilises.
-- **`/library` Playwright smoke failure** — original spec file no longer exists; replaced by `tests/e2e/library-redirects.spec.ts`. Whether the smoke is still red is unverified. Re-run the suite and decide.
+- **`/library` Playwright smoke failure** — PR #951 retired the stale `library-by-cert.spec.ts` / `handbook-reader.spec.ts` / `handbook-amendment.spec.ts` specs and pins the redirect contract via `tests/e2e/library-redirects.spec.ts`. Smoke status post-PR #951 unverified; re-run the suite to confirm.
 - **Flaky test at `libs/hangar-jobs/src/worker.test.ts:273`** — race on `hangar_job_log` row visibility under parallel load. Passes in isolation.
 
 ### Minor
@@ -62,13 +62,13 @@ After each walk: `bun run wp set <slug> human-review signed-off`, then `bun run 
 
 ### Hangar references migration tool
 
-- **Knowledge citation migration script doesn't recognize AvWx (FAA-H-8083-28B)** — `scripts/db/migrate-knowledge-citations.ts` `HANDBOOK_PATTERNS` supports AFH/PHAK/AIH/IPH/IFH only. Result: 200 legacy-citation-shape warnings persist, ADR-019 graduation-to-ERROR countdown paused. **One-file fix**: add avwx entry pointing at `handbooks/avwx/FAA-H-8083-28B/manifest.json`.
+- **~~Knowledge citation migration script doesn't recognize AvWx (FAA-H-8083-28B)~~** → shipped as PR #946 (AvWx pattern in `HANDBOOK_PATTERNS`). Follow-up landed as PR #955 (parse chapter from `detail:` field so proposed rewrites pin the chapter, ADR-019). The 17-row review queue is now ready for human grind via `bun scripts/db/migrate-knowledge-citations.ts review` (see "Tooling enhancements" below).
 
 ---
 
 ## Small mechanical follow-ups
 
-- **~~5 specless legacy WP directories~~ + ~~4 abandoned WPs~~** → in flight in worktree agent (2026-05-13). 3 of 5 specless WPs already gone (cleaned in prior sessions); remaining 2 + 4 abandoned being archived together. Remove this entry when PR merges.
+- **~~5 specless legacy WP directories~~ + ~~4 abandoned WPs~~** → shipped as PR #947 (archived 2 specless + 4 abandoned to `.archive/`). Resolved.
 - **Deprecated `LIBRARY_*` route constants** — cleanup PR once verified no external callers (probably zero — greenfield). Single small PR.
 - **WP 2 reader UX follow-ups** (flagged during agent work):
   - `<TOCRender mode="rail">` uses `onclickcapture` to intercept anchor clicks — worth refactoring
@@ -82,13 +82,13 @@ After each walk: `bun run wp set <slug> human-review signed-off`, then `bun run 
 
 ### card-question-tier WP
 
-- **~~Phase 2: backfill ~245 cards~~** → in flight in worktree agent (2026-05-13). 6 of 262 currently populated; agent writes `scripts/db/backfill-card-provenance.ts` + runs it. Remove when PR merges.
+- **~~Phase 2: backfill ~245 cards~~** → shipped as PR #949 (inference-rule backfill for question_tier + source_authority + acs_codes). ~256 residue cards owed hand-classification; tool shipped as PR #954.
 - **Phase 3: UI surfaces** — filter chips, FAA-vs-CFI side-by-side panel, ACS coverage lens, source-authority badges. Each is a separate follow-on WP per surface.
-- **Hand-classification of question_tier for ~245 cards** — can't auto-infer; requires CFI judgement per card. (~245 will fall through after Phase 2.)
+- **Hand-classification of question_tier for ~256 residue cards** — tool shipped as PR #954 (`classify-card-tier` interactive CLI). Run `bun scripts/db/classify-card-tier.ts` to grind through the queue; requires CFI judgement per card.
 
-### wp-hangar-roadmap-view
+### Hangar /roadmap writebacks
 
-- **Phase 2: writebacks** — Phase 8 shipped read-only. TOML-mirror writeback pattern from `libs/hangar-sync/` is the design path; not started.
+- **Read-only /roadmap shipped as PR #700 (Phase 8 of tracking-system-overhaul).** Writebacks need a dedicated WP authored first — no `wp-hangar-roadmap-view` slug exists today. TOML-mirror writeback pattern from `libs/hangar-sync/` is the design path; not started. Promote to WP when ready (see "New WPs to author" below).
 
 ### Tracking system overhaul
 
@@ -97,13 +97,13 @@ After each walk: `bun run wp set <slug> human-review signed-off`, then `bun run 
 
 ### Command palette
 
-- **Phase 5: Cmd+P quick-open with recents** — not started.
+- **~~Phase 5: Cmd+P quick-open with recents~~** → shipped as PR #942.
 - **Phase 2 palette work re-running generator** — `bun scripts/generate-faa-doc-registry.ts` patched for code-vs-title fragmentation + length guard but never re-ran; emitted `faa-docs.ts` may not reflect patch.
-- **REFERENCE_SOURCE_TYPES enum expansion** — all handbooks tag as `'phak'` fallback; enum has only PHAK/AFH/IFH. Doesn't affect search, only facets.
-- **`expandSynonyms` flip from opt-in to default** — Phase 2 was supposed to turn this on at the palette caller; status unclear.
-- **AIM not in palette registry** — lives at `aim/` with different on-disk structure; needs its own scanner.
-- **Knowledge nodes, glossary terms, memory cards in palette** — Phase 2 taxonomy bakes them in; loaders not built.
-- **External Tools list empty** — Phase 2 was supposed to seed `libs/aviation/src/external-tools.ts` with 4 validated + 3 community; status unclear.
+- **~~REFERENCE_SOURCE_TYPES enum expansion~~** → shipped. `libs/constants/src/reference-tags.ts` now lists 24 source types (CFR, AIM, PCG, AC, ACS, PHAK, AFH, IFH, AVWX, IPH, RMH, AIH, HFH, GFH, BFH, POH, NTSB, GAJSC, AOPA, FAA_SAFETY, SOP, AUTHORED, DERIVED, SECTIONAL).
+- **~~`expandSynonyms` flip from opt-in to default~~** → shipped. `libs/help/src/loaders/aviation-refs.ts` defaults `expandSynonyms: true`.
+- **~~AIM not in palette registry~~** → shipped. `libs/help/src/loaders/aim-sections.ts` exists and is wired into `loaders/all.ts`.
+- **Knowledge nodes, glossary terms, memory cards in palette** — knowledge nodes shipped via FTS in PR #936 (`fts-passages.ts` queries `study.knowledge_node.content_md`). Glossary terms + memory cards still not loaded. Partial.
+- **~~External Tools list empty~~** → shipped. `libs/aviation/src/external-tools.ts` seeds 4 validated + 3 community (7 entries total).
 - **Doc-picker empty-fragment behavior** (`FAA-H-` with no further chars) — Phase 3 ships alpha; recency-weighted later.
 
 ---
@@ -112,8 +112,7 @@ After each walk: `bun run wp set <slug> human-review signed-off`, then `bun run 
 
 - **Personal-minimums as typed contract** — discussed Q1.4 earlier; small high-leverage WP. Makes XC viewer + scenarios personal.
 - **Calibration-as-first-class primitive** — instrument what SRS already collects (predicted vs actual confidence). Telemetry layer over existing data.
-- **OOS backlog autonomous grind** — ~40-49 WPs still need `OUT-OF-SCOPE.md` extraction (down from ~83 at session start). Run `bun run track oos-pick` in batches.
-- **Hangar `/roadmap` writebacks** (see Phase 2 above; promote to WP when ready).
+- **Hangar `/roadmap` writebacks** — promote to WP when ready (see Phase 2 section above).
 - **Mock-test mode as session-config flag** — discussed Q4; decided NOT to build standalone quiz primitive. Implement as session-config flag over existing SRS.
 
 ---
@@ -165,11 +164,10 @@ S2 historical calibration (gated: real METAR archive ingest + "too synthetic" fe
 
 ## Hygiene / process
 
-- **~~NOW.md is stale~~** → in flight in worktree agent (2026-05-13). Remove when PR merges.
 - **Multi-agent aggregate handoff** (`docs/work/handoffs/20260504-multi-agent-cleanup-aggregate.md`) — should archive to `.archive/handoffs/` once tracking-system-overhaul "closes" per its spec section 9. WP is at `agent_review_status: pending` / `human_review_status: pending` until walkthrough.
-- ~~**Browser-walk discipline**~~ → not a backlog item; already captured in memory + CLAUDE.md. Remove.
 - **`.gitignore.local`** — appears in every status; untracked. Add to global gitignore or document as intentional dev-local file.
 - **Orchestrator worktree at `/private/tmp/airboss-wx-orchestrator`** — owns main; recent sessions worked around it. Not "my" cleanup.
+- **`bun install` before chasing workspace-resolution bugs.** When seeing a cascade of "Cannot find module" errors across workspaces (svelte-check, vitest, build), run `bun install` FIRST before chasing workspace-resolution bugs. PR #953 caught the false-alarm pattern: the symptoms looked like real workspace plumbing problems but were a stale install artifact.
 
 ---
 
@@ -183,12 +181,11 @@ S2 historical calibration (gated: real METAR archive ingest + "too synthetic" fe
 
 ## Tooling enhancements
 
-- **~~Migration script: AvWx handbook support~~** → in flight in worktree agent (2026-05-13). Remove when PR merges.
 - **Knowledge build warnings (intentional, but tracked)**:
   - `legacy-citation-shape × 200` — handed back to human per ADR 019 amendment; dry-run finds 0 auto-migratable rows.
   - `unresolved-edge × 11` — 11 graph edges across 3 nodes (`vfr-weather-minimums`, `crosswind-component`, `engine-failure-after-takeoff`) point at unauthored target nodes. Each is an author/drop decision per row.
-- ~~**5 commented Skill tests**~~ → audit shows 0 matches in `apps/study/src/lib/skills/Skill.svelte.test.ts`. Resolved in PR #939 (suite green-up). Remove.
-- **Knowledge citation migration tool** broader sweep — once AvWx pattern lands, run full migration to clear the 200 warnings.
+- **Knowledge citation migration tool — review queue ready for human grind.** PR #955 (chapter parsing from `detail:` field) makes the 17-row review queue ready to walk. Run `bun scripts/db/migrate-knowledge-citations.ts review` to grind through; each row is a proposed rewrite pinning the chapter. Once cleared, broader sweep can run to clear the 200 legacy-citation-shape warnings.
+- **`classify-card-tier` interactive CLI** — shipped as PR #954. Use `bun scripts/db/classify-card-tier.ts` to hand-classify the ~256 residue cards that fell through PR #949's inference-rule backfill. Requires CFI judgement per card.
 
 ---
 
