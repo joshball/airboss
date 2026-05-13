@@ -526,12 +526,12 @@ function collectSubtreeLeavesForRollup(
 	}
 }
 
-// `flattenLeavesDepthFirst` lives in `./lens-tree-walk` so the runtime
-// barrel `@ab/bc-study` can value-export it without dragging this file's
-// DB-touching imports (`./courses` -> `@ab/db/connection`) into the
-// browser bundle. Re-exported here for callers that already pull this
-// module for the lens values.
-export { flattenLeavesDepthFirst } from './lens-tree-walk';
+// `flattenLeavesDepthFirst` + `aggregateCertCoverage` live in
+// `./lens-tree-walk` so the runtime barrel `@ab/bc-study` can value-export
+// them without dragging this file's DB-touching imports (`./courses` ->
+// `@ab/db/connection`) into the browser bundle. Re-exported here for
+// callers that already pull this module for the lens values.
+export { aggregateCertCoverage, flattenLeavesDepthFirst } from './lens-tree-walk';
 
 // ---------------------------------------------------------------------------
 // Helpers

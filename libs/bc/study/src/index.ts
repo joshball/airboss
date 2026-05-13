@@ -79,7 +79,7 @@ export type { PrevNextLeaf, PrevNextResult, PrevNextRow } from './lens-tree-walk
 // helpers (browser-safe). They live in `./lens-tree-walk` precisely so the
 // runtime barrel can value-export them without pulling the lens's
 // DB-touching imports.
-export { computePrevNextLeaves, flattenLeavesDepthFirst } from './lens-tree-walk';
+export { aggregateCertCoverage, computePrevNextLeaves, flattenLeavesDepthFirst } from './lens-tree-walk';
 // Lens projection types only -- the value implementations
 // (`acsLens`, `domainLens`, `computeMasteryRollup`, `LensError`) live in
 // `./lenses`, which transitively imports `./mastery` -> `@ab/db/connection`
@@ -89,6 +89,7 @@ export { computePrevNextLeaves, flattenLeavesDepthFirst } from './lens-tree-walk
 // defined`. Server callers import the values from `@ab/bc-study/server`.
 export type {
 	AcsLensFilters,
+	CertCoverage,
 	CertGap,
 	DomainLensFilters,
 	Lens,
