@@ -27,12 +27,17 @@
 // validate uploaded course YAML against these without dragging the
 // postgres driver into the client bundle.
 export {
+	type CourseLesson,
 	type CourseManifest,
 	type CourseSection,
 	type CourseStep,
+	type CourseTreeNode,
+	courseLessonSchema,
 	courseManifestSchema,
+	courseSectionMaxDepth,
 	courseSectionSchema,
 	courseStepSchema,
+	courseTreeNodeSchema,
 } from './course-yaml-schemas';
 // Goal-CRUD Zod schemas + their inferred input types. The BC `goals.ts`
 // write helpers parse against these inside their function bodies as a
