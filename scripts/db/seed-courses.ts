@@ -50,11 +50,18 @@ import {
 	upsertCourse,
 	upsertCourseStep,
 } from '@ab/bc-study/server';
-import { COURSE_KINDS, COURSE_STEP_LEVELS, COURSE_TREE_MAX_DEPTH, type CourseStepLevel } from '@ab/constants';
+import { COURSE_KINDS, COURSE_STEP_LEVELS, type CourseStepLevel } from '@ab/constants';
 import { client, db } from '@ab/db/connection';
 import { inArray } from 'drizzle-orm';
 import { parse } from 'yaml';
 import { ZodError } from 'zod';
+import {
+	CourseSeedError,
+	isLessonNode,
+	isStepNode,
+	type ParsedSection,
+	validateCourseTree,
+} from './seed-courses-validator';
 
 // ---------------------------------------------------------------------------
 // Paths + CLI flags
@@ -91,28 +98,14 @@ export interface SeedCoursesSummary {
 	stepsSkipped: number;
 }
 
-export class CourseSeedError extends Error {
-	constructor(message: string) {
-		super(message);
-		this.name = 'CourseSeedError';
-	}
-}
-
-/**
- * Phase B (course-tree-arbitrary-depth WP) replaced the 2-level partition
- * with a depth-first walk that handles `level: lesson` interior nodes at
- * arbitrary depth (up to {@link COURSE_TREE_MAX_DEPTH}). The validator +
- * upsert walker share the same recursion shape: leaves carry
- * `knowledge_node_id`, lessons carry `steps[]`, and parent_id chains are
- * resolved via a stack frame that descends through every interior.
- */
-function isLessonNode(node: CourseTreeNode): node is CourseLesson {
-	return node.level === COURSE_STEP_LEVELS.LESSON;
-}
-
-function isStepNode(node: CourseTreeNode): node is CourseStep {
-	return node.level === undefined || node.level === COURSE_STEP_LEVELS.STEP;
-}
+// `CourseSeedError`, `ParsedSection`, `isLessonNode`, `isStepNode`, and
+// `validateCourseTree` live in `./seed-courses-validator.ts` so the unit
+// test suite can import them without dragging the server-only DB barrel
+// into the test runtime. Re-exported here so external callers
+// (other scripts, the seed dispatcher) continue to see them on the
+// historical surface.
+export type { ParsedSection };
+export { CourseSeedError, validateCourseTree };
 
 export async function seedCourses(options: SeedCoursesOptions = {}): Promise<SeedCoursesSummary> {
 	const coursesDir = options.coursesDir ?? DEFAULT_COURSES_DIR;
@@ -150,11 +143,6 @@ export async function seedCourses(options: SeedCoursesOptions = {}): Promise<See
 // ---------------------------------------------------------------------------
 // Per-course seeding
 // ---------------------------------------------------------------------------
-
-export interface ParsedSection {
-	readonly filename: string;
-	readonly section: CourseSection;
-}
 
 async function seedOneCourse(
 	coursesDir: string,
@@ -535,170 +523,6 @@ async function loadSections(dir: string, slug: string): Promise<ParsedSection[]>
 // ---------------------------------------------------------------------------
 // Cross-row tree validators (the spec's "Seed validator rejections" table)
 // ---------------------------------------------------------------------------
-
-/**
- * Cross-row tree validator. Walks every section depth-first, descending
- * recursively through every lesson, and asserts the invariants documented
- * in the course-tree-arbitrary-depth WP spec at every depth:
- *
- *   - level / leaf / node-id consistency (section: no node; lesson: no
- *     node; step: has node)
- *   - lesson has >= 1 child (a lesson with no children is unrenderable)
- *   - step has no `steps[]` (a leaf cannot also be an interior)
- *   - every code is unique within the course (`(course_id, code)` unique)
- *   - every ordinal is unique within its parent (`(course_id, parent_id,
- *     ordinal)` unique)
- *   - tree depth <= {@link COURSE_TREE_MAX_DEPTH}
- *   - no cycles (visited-set walk; defensive even though the YAML literal
- *     is intrinsically a tree)
- *   - every non-leaf has at least one reachable leaf descendant (a subtree
- *     with no leaves contributes zero learning units)
- *
- * Every rejection message in this validator matches the spec's
- * "Seed validator rejections" table verbatim so log-greps stay stable.
- *
- * Exported for unit testing; production code reaches it via the seed
- * pipeline only.
- */
-export function validateCourseTree(manifest: CourseManifest, sections: readonly ParsedSection[]): void {
-	const courseSlug = manifest.slug;
-
-	// Duplicate section ordinals across the whole course.
-	const sectionOrdinals = new Set<number>();
-	for (const { section } of sections) {
-		if (sectionOrdinals.has(section.ordinal)) {
-			throw new CourseSeedError(`duplicate ordinal in course '${courseSlug}' sections`);
-		}
-		sectionOrdinals.add(section.ordinal);
-	}
-
-	// Course-wide unique-code set populated during the depth-first walk so
-	// duplicates collide regardless of nesting depth.
-	const codes = new Set<string>();
-
-	for (const { section } of sections) {
-		const sectionLabel = `${courseSlug}.${section.code}`;
-
-		// Sections never carry `knowledge_node_id`. The Zod section schema
-		// declares the field as optional so a section that smuggles the
-		// key past the strict parse reaches the friendlier rejection here
-		// instead of Zod's generic "Unrecognized key" wording.
-		if (
-			'knowledge_node_id' in section &&
-			(section as unknown as Record<string, unknown>).knowledge_node_id !== undefined
-		) {
-			throw new CourseSeedError(`section '${sectionLabel}' must not carry knowledge_node_id`);
-		}
-
-		if (codes.has(section.code)) {
-			throw new CourseSeedError(`duplicate code '${section.code}' in course '${courseSlug}'`);
-		}
-		codes.add(section.code);
-
-		// Walk the section's children depth-first. `visited` (parent codes
-		// up the active stack) doubles as the cycle-check substrate even
-		// though YAML literals can't express a cycle -- if a future
-		// authoring shape ever does, this trips a clean rejection instead
-		// of recursing to stack overflow.
-		const visited = new Set<string>([section.code]);
-		walkChildren(courseSlug, 'section', sectionLabel, section.steps, codes, visited, /* depth */ 2);
-	}
-}
-
-/**
- * Recursive descent helper called by {@link validateCourseTree}. Walks one
- * level of children, validating per-node invariants and recursing into
- * lessons. `depth` tracks the row's distance from the course root
- * (section = 1; a direct child of a section = 2; a step under a lesson
- * under a section = 3; etc.); the recursion stops if the cap is exceeded.
- */
-function walkChildren(
-	courseSlug: string,
-	parentKind: 'section' | 'lesson',
-	parentLabel: string,
-	children: ReadonlyArray<CourseTreeNode>,
-	codes: Set<string>,
-	visited: Set<string>,
-	depth: number,
-): void {
-	if (depth > COURSE_TREE_MAX_DEPTH) {
-		throw new CourseSeedError(`course '${courseSlug}' exceeds max tree depth of ${COURSE_TREE_MAX_DEPTH}`);
-	}
-
-	const childOrdinals = new Set<number>();
-	for (const node of children) {
-		if (codes.has(node.code)) {
-			throw new CourseSeedError(`duplicate code '${node.code}' in course '${courseSlug}'`);
-		}
-		codes.add(node.code);
-
-		if (childOrdinals.has(node.ordinal)) {
-			if (parentKind === 'section') {
-				throw new CourseSeedError(`duplicate ordinal in section '${parentLabel}' steps`);
-			}
-			throw new CourseSeedError(`duplicate ordinal in lesson '${parentLabel}' children`);
-		}
-		childOrdinals.add(node.ordinal);
-
-		if (visited.has(node.code)) {
-			throw new CourseSeedError(`cycle in course '${courseSlug}' tree`);
-		}
-
-		if (isLessonNode(node)) {
-			const lessonLabel = `${courseSlug}.${node.code}`;
-
-			// Lessons never carry `knowledge_node_id`. The Zod lesson
-			// schema does not declare the field, so a smuggled value
-			// already fails Zod's "Unrecognized key" guard upstream -- the
-			// rejection here covers the case where a future schema change
-			// adds the field as optional (mirrors the section rule).
-			if ('knowledge_node_id' in node && (node as unknown as Record<string, unknown>).knowledge_node_id !== undefined) {
-				throw new CourseSeedError(`lesson '${lessonLabel}' must not carry knowledge_node_id`);
-			}
-
-			if (node.steps.length === 0) {
-				throw new CourseSeedError(`lesson '${lessonLabel}' must have at least one child`);
-			}
-
-			visited.add(node.code);
-			walkChildren(courseSlug, 'lesson', lessonLabel, node.steps, codes, visited, depth + 1);
-			visited.delete(node.code);
-
-			// Post-walk: every non-leaf must have at least one reachable
-			// leaf descendant. `hasLeafDescendant` is cheap (it stops at
-			// the first leaf it finds) and runs after the recursion so
-			// any deeper rejections have already fired.
-			if (!hasLeafDescendant(node)) {
-				throw new CourseSeedError(`lesson '${lessonLabel}' must have at least one leaf descendant`);
-			}
-		} else if (isStepNode(node)) {
-			const stepLabel = `${courseSlug}.${node.code}`;
-
-			if (typeof node.knowledge_node_id !== 'string' || node.knowledge_node_id.length === 0) {
-				throw new CourseSeedError(`step '${stepLabel}' must carry knowledge_node_id`);
-			}
-
-			// A leaf cannot also be an interior. Zod's `courseStepSchema`
-			// has no `steps` field so a strict parse already rejects;
-			// kept as a defensive grep-stable rejection.
-			if ('steps' in node && Array.isArray((node as unknown as Record<string, unknown>).steps)) {
-				throw new CourseSeedError(`step '${stepLabel}' must not have child steps`);
-			}
-		} else {
-			throw new CourseSeedError(`course '${courseSlug}': unknown node level under '${parentLabel}'`);
-		}
-	}
-}
-
-function hasLeafDescendant(node: CourseTreeNode): boolean {
-	if (isStepNode(node)) return true;
-	if (isLessonNode(node)) {
-		for (const child of node.steps) {
-			if (hasLeafDescendant(child)) return true;
-		}
-	}
-	return false;
-}
 
 async function validateKnowledgeNodeRefs(manifest: CourseManifest, sections: readonly ParsedSection[]): Promise<void> {
 	// `validateCourseTree` has already asserted every leaf carries a
