@@ -21,7 +21,7 @@
  */
 
 import { expect, test } from '@playwright/test';
-import { ROUTES } from '../../libs/constants/src';
+import { ROUTES } from '../../../libs/constants/src';
 
 test.describe('rich-reader anonymous gating', () => {
 	test('handbook section page omits rich-reader chrome when anonymous', async ({ page }) => {

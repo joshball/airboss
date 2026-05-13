@@ -27,10 +27,11 @@
  */
 
 import { expect, test } from '@playwright/test';
-import { asc, eq, isNull } from 'drizzle-orm';
+import { asc, eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { DEV_DB_URL_E2E, REFERENCE_KINDS, ROUTES } from '../../../libs/constants/src';
+import { notSupersededInRegistry } from '../../../libs/bc/study/src/edition-predicates.ts';
 import { reference, referenceSection } from '../../../libs/bc/study/src/schema';
 
 interface SamplePage {
@@ -134,7 +135,7 @@ async function collectSamplePages(): Promise<readonly SamplePage[]> {
 				edition: reference.edition,
 			})
 			.from(reference)
-			.where(isNull(reference.supersededById));
+			.where(notSupersededInRegistry());
 
 		const samples: SamplePage[] = [];
 		for (const ref of refs) {
