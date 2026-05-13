@@ -114,3 +114,43 @@ export const TITLE_PREFIX_MIN_NEEDLE_LENGTH = 4;
  * starts at 4 words; tuneable during walk.
  */
 export const PHRASE_FTS_WORD_COUNT_THRESHOLD = 4;
+
+// =================================================================
+// Phase 5 -- Cmd+P quick-open + recents tracker
+// =================================================================
+
+/**
+ * `localStorage` key for the palette recents tracker. Versioned so a
+ * future change to `RecentEntry` shape can drop the old payload cleanly
+ * (parse failures fall back to an empty list).
+ */
+export const PALETTE_RECENTS_STORAGE_KEY = 'airboss.palette.recents.v1';
+
+/** Maximum number of recent-entry rows retained in localStorage. */
+export const PALETTE_RECENTS_MAX = 50;
+
+/** Default limit returned by `recents.list()` when no explicit cap is passed. */
+export const PALETTE_RECENTS_DEFAULT_LIMIT = 30;
+
+/**
+ * Time-bucketed recency multipliers for the recents ranker. The ranker
+ * sorts by `hits * recencyFactor(openedAt)`; entries opened recently
+ * float above older entries with the same hit count, but a much-used
+ * older entry can still outrank a single-hit recent. Buckets (in ms
+ * since epoch from `Date.now()`):
+ *
+ *  - `<24h`  -> 1.0
+ *  - `<7d`   -> 0.7
+ *  - `<30d`  -> 0.4
+ *  - older   -> 0.1
+ */
+export const PALETTE_RECENTS_DECAY = {
+	MS_PER_DAY: 24 * 60 * 60 * 1000,
+	DAY_THRESHOLD: 1,
+	WEEK_THRESHOLD: 7,
+	MONTH_THRESHOLD: 30,
+	WEIGHT_DAY: 1.0,
+	WEIGHT_WEEK: 0.7,
+	WEIGHT_MONTH: 0.4,
+	WEIGHT_OLDER: 0.1,
+} as const;

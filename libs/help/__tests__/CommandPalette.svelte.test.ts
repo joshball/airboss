@@ -70,7 +70,9 @@ describe('CommandPalette -- open', () => {
 		expect(screen.getByTestId('commandpalette-input').getAttribute('placeholder')).toBe('Command palette');
 		unmount();
 		render(CommandPalette, { open: true, onClose: vi.fn(), mode: 'quickopen' });
-		expect(screen.getByTestId('commandpalette-input').getAttribute('placeholder')).toBe('Quick open');
+		expect(screen.getByTestId('commandpalette-input').getAttribute('placeholder')).toBe(
+			'Quick open -- recents and jump targets',
+		);
 	});
 
 	it('mode attribute is stamped on the dialog root', () => {
