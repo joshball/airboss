@@ -399,7 +399,7 @@ V1 ships when:
 - `bun run check all` passes 0 errors, 0 warnings on every Phase PR
 - `drizzle/0000_initial.sql` regenerates from the new `schema.ts` and the local DB reseeds cleanly via `bun run db reseed`
 - `course/courses/weather-comprehensive/` re-seeds with zero diff: the `course_step` row set after the migration is byte-identical to the row set before (proves Option A is backwards-compatible)
-- A new 3-level fixture (`course/courses/_fixtures/3-level-tree.yaml` or equivalent) parses, seeds, and renders end-to-end through the course landing + step reader
+- A new 3-level fixture (`course/courses/_fixtures/three-level-tree-fixture.yaml` or equivalent) parses, seeds, and renders end-to-end through the course landing + step reader
 - The unblocked content PR (`feat/wx-scenarios-course-section`) re-runs the seed cleanly and renders 6 lessons * 4 substeps without changes to its YAML
 - Prev/next traverses leaves depth-first as specified; verified by Playwright e2e against the 3-level fixture
 - Cert overlay aggregation rolls leaf coverage up the lesson + section breadcrumb correctly; verified by unit test against a fixture
