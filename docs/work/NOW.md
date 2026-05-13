@@ -6,16 +6,25 @@ Single entry point for "what should I work on?" in airboss.
 
 (Human-curated; the only hand-edited part of this file.)
 
-- `wx-engine` WP shipped end-to-end (PRs #824, #825, #827, #830, #837, #839). Six production scenarios live: frontal-xc-march, summer-thunderstorms-tx, winter-icing-great-lakes, mountain-wave-rockies, marine-stratus-pacific-nw, dense-fog-radiation-central-valley. `bun run wx-scenario` CLI (build / list / validate / check-round-trip) wired into `bun run check`. `:::scenario` directive contract documented in CONSUMER-CONTRACT.md (resolver ships in course-reader-and-editor consumer WP). `agent_review_status: done` on all WP files; `human_review_status: pending` awaiting walkthrough -- when ready, run `/ball-review-full` over libs/wx-engine + scripts/wx-scenario + data/wx-scenarios per tasks.md "Final close", fix findings, then flip status.
-- `course-primitive` WP shipped (PRs #713, #721, #728, #730, #732, #734, #736, #737, #741, #742, #743; doc fixes #731, #739, #757 OOS extraction). Course is a peer primitive to Syllabus; weather-course content authoring unblocked.
-- `course-reader-and-editor` WP authored (PRs #760, #761) -- dual UI on top of course-primitive: study reader (`/courses` index + detail + step reader) and hangar editor (`/courses` index + course editor + section editor), plus Courses tab on `/program/goals/[id]`. Spec status `draft` pending walkthrough; `/ball-wp-build` dispatches happen in a separate session once human review signs off.
-- `hangar-review-queue-cluster-fix` -- 24 e2e failures triaged; canonical Buffer-not-defined hydration leak (12 specs) + Postgres crash on `hangar.docs_search_index` (3 specs) are real bugs awaiting one focused investigation, not 12 patches.
-- Walkthroughs owed on shipped surfaces: cert-dashboard (#321), lens-ui (#323), goal-composer (#324). Code merged; `human_review_status: pending` on the WPs because no test plan has been walked.
+Recently shipped:
+
+- `command-palette` -- Phases 3 -> 3.5a/3.5b/3.5c -> 4 shipped (PRs #857, #930, #933, #936, #940). Cmd+Shift+P live with intent classifier, composite ranker, per-intent panels, phrase-FTS passage search, and per-app command registries. Walkthrough owed.
+- `course-tree-arbitrary-depth` -- Phases A/B/C/D/E shipped (PRs #934, #935, #938, #943, #944). N-deep schema + recursive validators + lens helper + renderer prev/next nav + aggregate cert overlay with leaf-only study-plan selection. Walkthrough owed.
+- `wx-charts` -- ADR 027 layout migration complete (PRs #915, #922, #923, #927), CONUS hunchback root-caused (PRs #924, #926), `/api/charts` route serving SVGs (#928), `:::chart` and `:::scenario` markdown directives wired (#932). Browser-hydration leaks in `@ab/sources` runtime barrel closed (PRs #921, #925).
+- `wx-engine` -- shipped end-to-end (six production scenarios, CLI, `:::scenario` contract). Walkthrough owed; run `/ball-review-full` over libs/wx-engine + scripts/wx-scenario + data/wx-scenarios per tasks.md "Final close", fix findings, then flip status.
+
+In flight:
+
+- `course-reader-and-editor` WP authored (PRs #760, #761) -- dual UI on top of course-primitive: study reader + hangar editor + Courses tab on `/program/goals/[id]`. Spec status `draft` pending walkthrough; `/ball-wp-build` dispatches once human review signs off.
+- `hangar-review-queue-cluster-fix` -- 24 e2e failures triaged. Test suite green-up landed (#939, 558 -> 0 failures) and validator green-up landed (#941, TBD wiki-link + 5 orphan help pages). Underlying hydration leak / `hangar.docs_search_index` Postgres crash still need one focused investigation.
+
+Walkthroughs owed: cert-dashboard (#321), lens-ui (#323), goal-composer (#324), wx-engine, command-palette, course-tree-arbitrary-depth.
 
 ## Live views
 
 - [Work package board](./BOARD.md) -- every WP grouped by status (generated)
 - [Shipped log](./SHIPPED.md) -- per-PR + per-WP reverse-chrono (generated, last 90 days)
+- [Punt backlog](./PUNT-BACKLOG.md) -- deferred items + revisit triggers
 - [Bugs](../bugs/INDEX.md) -- open bugs grouped by product and severity (generated)
 - Per-product roadmaps (generated):
   - [study](../products/study/ROADMAP.md)
