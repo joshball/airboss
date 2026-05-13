@@ -1,5 +1,6 @@
 <script lang="ts">
-import { ROUTES } from '@ab/constants';
+import type { CourseStep } from '@ab/bc-study';
+import { COURSE_STEP_LEVELS, ROUTES } from '@ab/constants';
 import Button from '@ab/ui/components/Button.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
@@ -12,13 +13,23 @@ const course = $derived(data.course);
 const section = $derived(data.section);
 const pickerNodes = $derived(data.pickerNodes);
 
+// Hangar's editor today only authors 2-level (section -> step) content.
+// Phase A of course-tree-arbitrary-depth WP introduced an interior
+// `lesson` row kind in the YAML schema; the editor's nested-lesson
+// rendering lands in a follow-up phase. Until then we narrow to leaf
+// steps for display. A section file that already contains lesson rows
+// on disk falls back to a clear empty-state message ("nested authoring
+// not yet supported"); the underlying seed enforces the same boundary.
+const leafSteps = $derived(section.steps.filter((node) => node.level !== COURSE_STEP_LEVELS.LESSON) as CourseStep[]);
+const hasLessons = $derived(section.steps.length !== leafSteps.length);
+
 let editingStepCode = $state<string | null>(null);
 let showAddStep = $state(false);
 let pickerValue = $state('');
 
 function startEdit(code: string): void {
 	editingStepCode = code;
-	const step = section.steps.find((s) => s.code === code);
+	const step = leafSteps.find((s) => s.code === code);
 	pickerValue = step?.knowledge_node_id ?? '';
 }
 
@@ -120,11 +131,18 @@ function cancelEdit(): void {
 			</form>
 		{/if}
 
-		{#if section.steps.length === 0}
+		{#if hasLessons}
+			<p class="banner banner-warn" role="status">
+				This section contains lesson interiors authored on disk. The editor only supports flat
+				section -> step content today; nested-lesson editing lands in a follow-up phase of the
+				course-tree-arbitrary-depth WP. Edit the YAML file directly to change lesson rows.
+			</p>
+		{/if}
+		{#if leafSteps.length === 0}
 			<EmptyState title="No steps yet" body="Add a step to link a knowledge node into this section." />
 		{:else}
 			<ol class="step-list">
-				{#each section.steps as step (step.code)}
+				{#each leafSteps as step (step.code)}
 					<li class="step-row">
 						{#if editingStepCode === step.code}
 							<form method="POST" action="?/updateStep" class="form edit-step-form">
@@ -167,7 +185,7 @@ function cancelEdit(): void {
 									Linked node:
 									<code>{step.knowledge_node_id ?? '(missing)'}</code>
 								</div>
-								{#if step.body_md !== ''}
+								{#if step.body_md !== undefined && step.body_md !== ''}
 									<details class="step-body">
 										<summary>Body ({step.body_md.length} chars)</summary>
 										<pre>{step.body_md}</pre>

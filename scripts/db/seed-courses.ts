@@ -34,7 +34,14 @@ import { existsSync, readdirSync, statSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { type CourseManifest, type CourseSection, courseManifestSchema, courseSectionSchema } from '@ab/bc-study';
+import {
+	type CourseManifest,
+	type CourseSection,
+	type CourseStep,
+	type CourseTreeNode,
+	courseManifestSchema,
+	courseSectionSchema,
+} from '@ab/bc-study';
 import {
 	getCourseBySlug,
 	getCourseStepsByCourse,
@@ -87,6 +94,27 @@ export class CourseSeedError extends Error {
 	constructor(message: string) {
 		super(message);
 		this.name = 'CourseSeedError';
+	}
+}
+
+/**
+ * Phase A boundary: the recursive YAML schema accepts arbitrary depth,
+ * but this seeder still iterates `section.steps` as a flat list of
+ * leaves. Phase B (course-tree-arbitrary-depth WP) replaces these loops
+ * with a depth-first walk that handles `level: lesson` interior nodes.
+ *
+ * Until Phase B ships, the seeder rejects any non-leaf child up front
+ * with a clear message that points at the next phase. This keeps the
+ * existing 2-level pipeline (weather-comprehensive + every other shipped
+ * course today) working byte-identically while making the boundary
+ * explicit for any author who tries to land a lesson row in this
+ * window.
+ */
+function assertLeafStep(courseSlug: string, sectionCode: string, node: CourseTreeNode): asserts node is CourseStep {
+	if (node.level === COURSE_STEP_LEVELS.LESSON) {
+		throw new CourseSeedError(
+			`course '${courseSlug}': section '${sectionCode}' contains lesson '${node.code}' but the seeder does not yet walk lesson interiors (Phase A boundary; Phase B of course-tree-arbitrary-depth WP unlocks this).`,
+		);
 	}
 }
 
@@ -199,7 +227,11 @@ function collectYamlCodes(sections: readonly ParsedSection[]): Set<string> {
 	const codes = new Set<string>();
 	for (const { section } of sections) {
 		codes.add(section.code);
-		for (const step of section.steps) codes.add(step.code);
+		// Codes are collected before validateCourseTree fires the Phase A
+		// boundary; harvest both leaf and lesson codes so the orphan diff
+		// remains accurate. Type narrowing is not required here because
+		// CourseTreeNode (the union) always carries `code` on both arms.
+		for (const node of section.steps) codes.add(node.code);
 	}
 	return codes;
 }
@@ -242,7 +274,9 @@ async function seedOneSection(
 	}
 	const sectionId = sectionRow.id;
 
-	for (const step of section.steps) {
+	for (const node of section.steps) {
+		assertLeafStep(courseSlug, section.code, node);
+		const step = node;
 		summary.stepsScanned += 1;
 		// `validateCourseTree` guarantees every step row that reaches here
 		// carries a non-empty `knowledge_node_id`. The Zod step schema types
@@ -255,7 +289,13 @@ async function seedOneSection(
 		const stepHash = hashStep(
 			courseSlug,
 			section.code,
-			{ ...step, knowledge_node_id: knowledgeNodeId },
+			{
+				code: step.code,
+				ordinal: step.ordinal,
+				title: step.title,
+				body_md: step.body_md ?? '',
+				knowledge_node_id: knowledgeNodeId,
+			},
 			options.seedOrigin ?? null,
 		);
 		const existingStep = existingByCode.get(step.code);
@@ -274,7 +314,7 @@ async function seedOneSection(
 				ordinal: step.ordinal,
 				code: step.code,
 				title: step.title,
-				bodyMd: step.body_md,
+				bodyMd: step.body_md ?? '',
 				knowledgeNodeId,
 				contentHash: stepHash,
 				...(options.seedOrigin ? { seedOrigin: options.seedOrigin } : {}),
@@ -421,11 +461,12 @@ function validateCourseTree(manifest: CourseManifest, sections: readonly ParsedS
 			throw new CourseSeedError(`duplicate code '${section.code}' in course '${courseSlug}'`);
 		}
 		codes.add(section.code);
-		for (const step of section.steps) {
-			if (codes.has(step.code)) {
-				throw new CourseSeedError(`duplicate code '${step.code}' in course '${courseSlug}'`);
+		for (const node of section.steps) {
+			assertLeafStep(courseSlug, section.code, node);
+			if (codes.has(node.code)) {
+				throw new CourseSeedError(`duplicate code '${node.code}' in course '${courseSlug}'`);
 			}
-			codes.add(step.code);
+			codes.add(node.code);
 		}
 	}
 
@@ -445,7 +486,9 @@ function validateCourseTree(manifest: CourseManifest, sections: readonly ParsedS
 		}
 
 		const stepOrdinals = new Set<number>();
-		for (const step of section.steps) {
+		for (const node of section.steps) {
+			assertLeafStep(courseSlug, section.code, node);
+			const step = node;
 			if (stepOrdinals.has(step.ordinal)) {
 				throw new CourseSeedError(`duplicate ordinal in section '${sectionLabel}' steps`);
 			}
@@ -473,8 +516,9 @@ function validateCourseTree(manifest: CourseManifest, sections: readonly ParsedS
 	for (const { section } of sections) sectionCodes.add(section.code);
 	const stepParentByCode = new Map<string, string>();
 	for (const { section } of sections) {
-		for (const step of section.steps) {
-			stepParentByCode.set(step.code, section.code);
+		for (const node of section.steps) {
+			assertLeafStep(courseSlug, section.code, node);
+			stepParentByCode.set(node.code, section.code);
 		}
 	}
 	for (const [code, parent] of stepParentByCode) {
@@ -498,11 +542,15 @@ async function validateKnowledgeNodeRefs(manifest: CourseManifest, sections: rea
 	// preceding `validateCourseTree` pass throws on missing values with the
 	// spec's friendlier message. The type guard below restates the
 	// invariant so the Zod-optional shape doesn't bleed into this loop.
+	// `validateCourseTree` also asserts every child is a leaf step under the
+	// Phase A boundary; we re-narrow here so this function can be called
+	// standalone without depending on caller order.
 	const referencedNodeIds = new Set<string>();
 	for (const { section } of sections) {
-		for (const step of section.steps) {
-			if (typeof step.knowledge_node_id === 'string' && step.knowledge_node_id.length > 0) {
-				referencedNodeIds.add(step.knowledge_node_id);
+		for (const node of section.steps) {
+			assertLeafStep(manifest.slug, section.code, node);
+			if (typeof node.knowledge_node_id === 'string' && node.knowledge_node_id.length > 0) {
+				referencedNodeIds.add(node.knowledge_node_id);
 			}
 		}
 	}
@@ -513,7 +561,9 @@ async function validateKnowledgeNodeRefs(manifest: CourseManifest, sections: rea
 	const known = new Set(rows.map((r) => r.id));
 
 	for (const { section } of sections) {
-		for (const step of section.steps) {
+		for (const node of section.steps) {
+			assertLeafStep(manifest.slug, section.code, node);
+			const step = node;
 			if (typeof step.knowledge_node_id !== 'string' || step.knowledge_node_id.length === 0) continue;
 			if (!known.has(step.knowledge_node_id)) {
 				// `<course>.<step_code>` -- the step code already encodes
