@@ -186,6 +186,29 @@ export interface LensLeaf {
 	sources?: LensLeafSources;
 }
 
+/**
+ * Per-node cert-overlay coverage (course-tree-arbitrary-depth WP, Phase E).
+ * Decorates a {@link LensTreeNode} with the leaf rollup of cert coverage
+ * under the same syllabus the overlay lens already projected onto leaves
+ * via `LensLeaf.sources.inCert`.
+ *
+ *   - On a leaf-bearing interior (lesson / section / course), `covered` is
+ *     the count of reachable leaves with `sources.inCert === true`; `total`
+ *     is the count of reachable leaves with a non-empty `sources` flag set
+ *     (i.e. leaves the overlay lens actually decorated).
+ *   - `ratio` is `covered / total` (0..1); `0` when `total === 0` so callers
+ *     can render "no overlay" without a NaN guard.
+ *
+ * Populated by `aggregateCertCoverage` in `./lens-tree-walk`; absent on the
+ * tree shape emitted directly by lenses (the field is layered on top by the
+ * renderer / consumer when the overlay is active).
+ */
+export interface CertCoverage {
+	covered: number;
+	total: number;
+	ratio: number;
+}
+
 export interface LensTreeNode {
 	id: string;
 	level:
@@ -206,6 +229,13 @@ export interface LensTreeNode {
 	rollup: MasteryRollup;
 	children: LensTreeNode[];
 	leaves?: LensLeaf[];
+	/**
+	 * Aggregated cert-overlay coverage. Optional: populated by
+	 * {@link import('./lens-tree-walk').aggregateCertCoverage} (Phase E);
+	 * absent on the raw lens output. Leaves themselves carry the per-leaf
+	 * `sources.inCert` flag the aggregation reads.
+	 */
+	certCoverage?: CertCoverage;
 }
 
 export interface LensResult {

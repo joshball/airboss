@@ -1,5 +1,5 @@
 <script lang="ts">
-import type { LensLeaf, LensTreeNode } from '@ab/bc-study';
+import { aggregateCertCoverage, type LensLeaf, type LensTreeNode } from '@ab/bc-study';
 import { COURSE_STATUS_LABELS, type CourseStatus, QUERY_PARAMS, ROUTES } from '@ab/constants';
 import Button from '@ab/ui/components/Button.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
@@ -14,13 +14,22 @@ let { data }: { data: PageData } = $props();
 const course = $derived(data.course);
 const lensResult = $derived(data.lensResult);
 const overlayActive = $derived(data.overlayActive);
+const overlaySyllabusId = $derived(data.overlaySyllabusId);
 const stepCodeById = $derived(data.stepCodeById);
 const courseNotes = $derived(data.courseNotes);
 // `+ Note` pre-fills the course context so the standalone composer
 // opens with this course already selected.
 const newNoteHref = $derived(`${ROUTES.NOTES_NEW}?${QUERY_PARAMS.NOTE_COURSE_ID}=${encodeURIComponent(course.id)}`);
 
-const root = $derived<LensTreeNode | null>(lensResult.tree[0] ?? null);
+// Phase E: aggregate cert coverage up the tree when the overlay is active.
+// The lens decorates leaves with `sources.inCert`; this rollup surfaces
+// "Lesson covers 3 / 4 cert leaves" on every non-leaf row.
+const annotatedTree = $derived<LensTreeNode[]>(
+	overlayActive && overlaySyllabusId !== null
+		? aggregateCertCoverage(lensResult.tree, overlaySyllabusId)
+		: lensResult.tree,
+);
+const root = $derived<LensTreeNode | null>(annotatedTree[0] ?? null);
 const sections = $derived<LensTreeNode[]>(root?.children ?? []);
 const certGaps = $derived(lensResult.certGaps ?? []);
 
@@ -108,11 +117,19 @@ function headingLevel(depth: number): 2 | 3 | 4 | 5 | 6 {
 					<a class="node-link" href={ROUTES.COURSE_STEP(course.slug, codeFor(node.id))}>{node.title}</a>
 				</h6>
 			{/if}
-			{#if node.rollup.totalLeaves > 0}
-				<span class="node-rollup">
-					{node.rollup.masteredLeaves} / {node.rollup.totalLeaves} mastered
-				</span>
-			{/if}
+			<div class="node-stats">
+				{#if node.rollup.totalLeaves > 0}
+					<span class="node-rollup">
+						{node.rollup.masteredLeaves} / {node.rollup.totalLeaves} mastered
+					</span>
+				{/if}
+				{#if overlayActive && node.certCoverage !== undefined && node.certCoverage.total > 0}
+					<span class="node-cert-cov" data-testid="cert-coverage">
+						{isLesson ? 'Lesson' : 'Section'} covers
+						{node.certCoverage.covered} / {node.certCoverage.total} cert leaves
+					</span>
+				{/if}
+			</div>
 		</header>
 
 		{#if (node.leaves === undefined || node.leaves.length === 0) && node.children.length === 0}
@@ -386,9 +403,23 @@ function headingLevel(depth: number): 2 | 3 | 4 | 5 | 6 {
 		color: var(--action-default-hover);
 	}
 
+	.node-stats {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		gap: var(--space-2xs);
+		flex-shrink: 0;
+	}
+
 	.node-rollup {
 		font-size: var(--type-ui-caption-size);
 		color: var(--ink-muted);
+	}
+
+	.node-cert-cov {
+		font-size: var(--type-ui-caption-size);
+		color: var(--action-default-hover);
+		font-weight: 500;
 	}
 
 	.section-empty,

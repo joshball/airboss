@@ -16,7 +16,7 @@
  *     without a second tree walk
  */
 
-import type { LensLeaf, LensTreeNode } from './lenses';
+import type { CertCoverage, LensLeaf, LensTreeNode } from './lenses';
 
 /**
  * Flatten a `LensTreeNode[]` into the document-order list of `LensLeaf` rows
@@ -128,4 +128,76 @@ export function computePrevNextLeaves(
 		prev: prev !== null ? { id: prev.id, title: prev.title } : null,
 		next: { id: next.id, title: next.title },
 	};
+}
+
+/**
+ * Aggregate cert-overlay coverage up a `LensTreeNode[]` (Phase E).
+ *
+ * The overlay lens (`courseWithCertOverlayLens` in `./lenses-course.ts`)
+ * decorates each leaf with `sources.inCert` against ONE specific syllabus.
+ * Per the spec, "cert binding is leaf-only -- the renderer aggregates
+ * coverage upward." This helper computes that rollup.
+ *
+ * Algorithm:
+ *
+ *   - A leaf with `sources?.inCert === true` contributes `{ covered: 1, total: 1 }`.
+ *   - A leaf with `sources` set but `inCert === false` contributes `{ covered: 0, total: 1 }`.
+ *   - A leaf with `sources === undefined` (the non-overlay lens path) is
+ *     not counted -- the overlay was not computed for it.
+ *   - Every interior node carries the sum of its descendants' contributions.
+ *
+ * Output is a NEW tree (immutable input) where every `LensTreeNode` carries
+ * `certCoverage: { covered, total, ratio }`. `ratio` is `covered / total`
+ * (0 when `total === 0`).
+ *
+ * `syllabusId` is accepted for identification / future per-leaf multi-cert
+ * extension; the current implementation relies on the lens having already
+ * projected against that syllabus and decorated leaves accordingly.
+ *
+ * Pure helper -- browser-safe.
+ */
+export function aggregateCertCoverage(tree: ReadonlyArray<LensTreeNode>, _syllabusId: string): LensTreeNode[] {
+	function annotateLeaf(leaf: LensLeaf): { covered: number; total: number } {
+		// Only leaves the overlay actually decorated count toward the rollup.
+		// `sources === undefined` means the lens path (`courseLens`) ran
+		// without an overlay -- not "uncovered," but "not measured."
+		if (leaf.sources === undefined) return { covered: 0, total: 0 };
+		return {
+			covered: leaf.sources.inCert ? 1 : 0,
+			total: 1,
+		};
+	}
+
+	function annotate(node: LensTreeNode): LensTreeNode {
+		let covered = 0;
+		let total = 0;
+		// Direct leaves first (document order matches the lens's
+		// `flattenLeavesDepthFirst` traversal, but the sums are
+		// order-independent).
+		const directLeaves = node.leaves ?? [];
+		for (const leaf of directLeaves) {
+			const contribution = annotateLeaf(leaf);
+			covered += contribution.covered;
+			total += contribution.total;
+		}
+		// Recurse interior children; the annotated child carries its own
+		// `certCoverage` so we read from it directly without re-walking.
+		const annotatedChildren = node.children.map(annotate);
+		for (const child of annotatedChildren) {
+			covered += child.certCoverage?.covered ?? 0;
+			total += child.certCoverage?.total ?? 0;
+		}
+		const certCoverage: CertCoverage = {
+			covered,
+			total,
+			ratio: total === 0 ? 0 : covered / total,
+		};
+		return {
+			...node,
+			children: annotatedChildren,
+			certCoverage,
+		};
+	}
+
+	return tree.map(annotate);
 }

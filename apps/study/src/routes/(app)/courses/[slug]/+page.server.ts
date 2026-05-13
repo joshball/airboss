@@ -39,6 +39,13 @@ export interface CourseDetailData {
 	lensResult: LensResult;
 	overlayActive: boolean;
 	/**
+	 * Identifier of the cert syllabus the overlay was projected against; null
+	 * when no overlay was applied. Surfaced so the page can pass it through
+	 * to `aggregateCertCoverage` (Phase E) for the per-lesson / per-section
+	 * rollup the renderer displays.
+	 */
+	overlaySyllabusId: string | null;
+	/**
 	 * Maps `course_step.id` (`cst_<ulid>` -- the lens-emitted node / leaf id)
 	 * to the human-readable `course_step.code` (e.g. `s1.1` or `s1.1.1`).
 	 * The page uses the code for step-reader URLs so they stay grep-able and
@@ -89,6 +96,7 @@ export const load: PageServerLoad = async (event) => {
 		course,
 		lensResult,
 		overlayActive: overlaySyllabusId !== null,
+		overlaySyllabusId,
 		stepCodeById,
 		courseNotes,
 	} satisfies CourseDetailData;

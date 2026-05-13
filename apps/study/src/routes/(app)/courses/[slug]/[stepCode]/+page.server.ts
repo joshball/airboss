@@ -54,7 +54,6 @@ import {
 } from '@ab/bc-study/server';
 import {
 	COURSE_STATUSES,
-	COURSE_STEP_LEVELS,
 	type CourseStepLevel,
 	KNOWLEDGE_NODE_KINDS,
 	KNOWLEDGE_PHASE_ORDER,
@@ -194,7 +193,11 @@ export const load: PageServerLoad = async (event) => {
 
 	const step = await getCourseStepByCode(course.id, event.params.stepCode);
 	if (step === null) throw error(404, 'Step not found.');
-	const isLeaf = step.level === COURSE_STEP_LEVELS.STEP;
+	// Read `is_leaf` directly from the row (course-tree-arbitrary-depth WP,
+	// Phase E -- canonical "this is a study-able row" filter, generalises
+	// across N-level trees). `level === 'step'` is a subset and stays valid
+	// for 2-level content; the column form expresses the intent more clearly.
+	const isLeaf = step.isLeaf;
 
 	const [primaryGoal, nodeRows, allSteps] = await Promise.all([
 		getPrimaryGoal(user.id),

@@ -176,8 +176,10 @@ export async function getGoalNodes(goalId: string, db: Db = defaultDb): Promise<
  *
  *   1. `goal_syllabus -> syllabus_node (leaf) -> syllabus_node_link ->
  *      knowledge_node` (cert / school / personal syllabus paths)
- *   2. `goal_course -> course_step (level='step') -> knowledge_node` (course
- *      paths -- course-primitive WP, ADR 016 refinement 2026-05-08)
+ *   2. `goal_course -> course_step (is_leaf=true) -> knowledge_node` (course
+ *      paths -- course-primitive WP, ADR 016 refinement 2026-05-08; the
+ *      `is_leaf=true` filter generalises the pre-Phase-E `level='step'`
+ *      predicate to N-level course trees per course-tree-arbitrary-depth WP)
  *   3. `goal_node` (ad-hoc nodes pinned outside any syllabus or course)
  *
  * Aggregates weights when a node is reachable through multiple paths: the
@@ -211,7 +213,13 @@ export async function getGoalNodeUnion(
 			})
 			.from(goalCourse)
 			.innerJoin(courseStep, eq(courseStep.courseId, goalCourse.courseId))
-			.where(and(eq(goalCourse.goalId, goalId), eq(courseStep.level, 'step'))),
+			// `is_leaf = true` is the canonical "this is a study-able row"
+			// filter (course-tree-arbitrary-depth WP, Phase E). For 2-level
+			// content (where `level='step'` is the only leaf shape) this is
+			// equivalent to the pre-WP query; for N-level content it correctly
+			// excludes lesson + section interior rows that carry no
+			// knowledge_node_id.
+			.where(and(eq(goalCourse.goalId, goalId), eq(courseStep.isLeaf, true))),
 		db
 			.select({ knowledgeNodeId: goalNode.knowledgeNodeId, weight: goalNode.weight })
 			.from(goalNode)
@@ -225,7 +233,7 @@ export async function getGoalNodeUnion(
 		if (prev === undefined || w > prev) weights[row.knowledgeNodeId] = w;
 	}
 	for (const row of courseRows) {
-		// Course steps with level='step' always carry a non-null knowledge
+		// Course-step leaves (`is_leaf=true`) always carry a non-null knowledge
 		// node (enforced by `course_step_consistency_check`), but TypeScript
 		// sees the FK column as nullable. Skip defensively.
 		if (row.knowledgeNodeId === null) continue;
