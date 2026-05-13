@@ -526,33 +526,12 @@ function collectSubtreeLeavesForRollup(
 	}
 }
 
-/**
- * Flatten a `LensTreeNode[]` into the document-order list of `LensLeaf` rows
- * reachable from anywhere in the tree. Visits each node's direct leaves
- * before recursing into its interior children, which matches the natural
- * authoring order: a section / lesson with `body_md` framing, then its leaf
- * steps, then deeper lesson groupings.
- *
- * Consumers:
- *   - prev/next navigation on the step reader (find the current leaf's index
- *     and pick `i-1` / `i+1`)
- *   - cert-overlay aggregation that wants the leaf list without a second
- *     tree walk
- *
- * Pure helper -- exported so renderer + load functions can call it without
- * re-implementing the traversal.
- */
-export function flattenLeavesDepthFirst(tree: ReadonlyArray<LensTreeNode>): LensLeaf[] {
-	const out: LensLeaf[] = [];
-	function walk(node: LensTreeNode): void {
-		if (node.leaves !== undefined) {
-			for (const leaf of node.leaves) out.push(leaf);
-		}
-		for (const child of node.children) walk(child);
-	}
-	for (const node of tree) walk(node);
-	return out;
-}
+// `flattenLeavesDepthFirst` lives in `./lens-tree-walk` so the runtime
+// barrel `@ab/bc-study` can value-export it without dragging this file's
+// DB-touching imports (`./courses` -> `@ab/db/connection`) into the
+// browser bundle. Re-exported here for callers that already pull this
+// module for the lens values.
+export { flattenLeavesDepthFirst } from './lens-tree-walk';
 
 // ---------------------------------------------------------------------------
 // Helpers

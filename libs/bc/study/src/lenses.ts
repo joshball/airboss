@@ -914,3 +914,6 @@ export type { ACSTriad };
 
 export type { CourseLensFilters, CourseOverlayLensFilters } from './lenses-course';
 export { courseLens, courseWithCertOverlayLens } from './lenses-course';
+// Pure tree-walk helper lives in its own browser-safe module so the runtime
+// barrel can value-export it without pulling the lens's DB-touching imports.
+export { flattenLeavesDepthFirst } from './lens-tree-walk';

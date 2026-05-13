@@ -35,6 +35,7 @@ import {
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { getCourseGaps, upsertCourse, upsertCourseStep } from '../courses';
+import { flattenLeavesDepthFirst } from '../lens-tree-walk';
 import { courseLens, courseWithCertOverlayLens } from '../lenses-course';
 import {
 	course,
@@ -945,5 +946,414 @@ describe('courseWithCertOverlayLens -- empty input handling', () => {
 		expect(result.tree).toEqual([]);
 		expect(result.leaves).toEqual([]);
 		expect(result.certGaps).toEqual([]);
+	});
+});
+
+// ---------------------------------------------------------------------------
+// Phase C (course-tree-arbitrary-depth): recursive lens + 3-level shape
+// ---------------------------------------------------------------------------
+//
+// The Phase C lens emits a nested tree via `buildSubtree`. The 2-level case
+// stays byte-identical (covered by every test above); these cases cover the
+// new shapes:
+//
+//   T4.2 -- pure 3-level: section -> lesson -> step leaves
+//   T4.4 -- flattenLeavesDepthFirst walks leaves in document order
+//   T4.5 -- mixed depth: a section that holds both direct step leaves AND
+//           a lesson with its own step children
+//   T4.6 -- overlay lens binds LensLeafSources only on leaves (interior
+//           nodes carry no `sources` field)
+
+describe('courseLens -- 3-level shape (section -> lesson -> step)', () => {
+	it('builds a nested tree with the lesson on `children` and leaves under the lesson', async () => {
+		const { courseId, goalId } = await seedCourseWithGoal(slug('three-level-course'), 1.0);
+		const section = await upsertCourseStep({
+			courseId,
+			parentId: null,
+			level: COURSE_STEP_LEVELS.SECTION,
+			ordinal: 1,
+			code: 's1',
+			title: 'Section One',
+			bodyMd: '',
+			knowledgeNodeId: null,
+			contentHash: '3l-s1',
+			seedOrigin: SUITE_TAG,
+		});
+		const lesson = await upsertCourseStep({
+			courseId,
+			parentId: section.id,
+			level: COURSE_STEP_LEVELS.LESSON,
+			ordinal: 1,
+			code: 's1.l1',
+			title: 'Lesson One.One',
+			bodyMd: '',
+			knowledgeNodeId: null,
+			contentHash: '3l-s1.l1',
+			seedOrigin: SUITE_TAG,
+		});
+		await upsertCourseStep({
+			courseId,
+			parentId: lesson.id,
+			level: COURSE_STEP_LEVELS.STEP,
+			ordinal: 1,
+			code: 's1.l1.a',
+			title: 'Step 1.L1.A',
+			bodyMd: '',
+			knowledgeNodeId: NODE_A_ID,
+			contentHash: '3l-s1.l1.a',
+			seedOrigin: SUITE_TAG,
+		});
+		await upsertCourseStep({
+			courseId,
+			parentId: lesson.id,
+			level: COURSE_STEP_LEVELS.STEP,
+			ordinal: 2,
+			code: 's1.l1.b',
+			title: 'Step 1.L1.B',
+			bodyMd: '',
+			knowledgeNodeId: NODE_B_ID,
+			contentHash: '3l-s1.l1.b',
+			seedOrigin: SUITE_TAG,
+		});
+
+		const goalRow = await loadGoal(goalId);
+		const result = await courseLens(db, TEST_USER_ID, {
+			goal: goalRow,
+			filters: { courseId },
+		});
+
+		// Root -> Section -> Lesson -> two leaf steps.
+		expect(result.tree).toHaveLength(1);
+		const root = result.tree[0];
+		expect(root?.level).toBe('course');
+		expect(root?.children).toHaveLength(1);
+
+		const sec = root?.children[0];
+		expect(sec?.level).toBe('section');
+		expect(sec?.title).toBe('Section One');
+		// Section has the lesson on `children`, no direct leaves.
+		expect(sec?.children).toHaveLength(1);
+		expect(sec?.leaves).toEqual([]);
+
+		const les = sec?.children[0];
+		expect(les?.level).toBe('lesson');
+		expect(les?.title).toBe('Lesson One.One');
+		// Lesson has the two leaves; no further interior children.
+		expect(les?.children).toEqual([]);
+		expect(les?.leaves).toHaveLength(2);
+		expect(les?.leaves?.map((l) => l.title)).toEqual(['Step 1.L1.A', 'Step 1.L1.B']);
+		expect(les?.leaves?.map((l) => l.knowledgeNodeId)).toEqual([NODE_A_ID, NODE_B_ID]);
+
+		// Rollups aggregate every reachable leaf at every level.
+		expect(result.rollup.totalLeaves).toBe(2);
+		expect(root?.rollup.totalLeaves).toBe(2);
+		expect(sec?.rollup.totalLeaves).toBe(2);
+		expect(les?.rollup.totalLeaves).toBe(2);
+		// Top-level leaves array carries every reachable leaf in document order.
+		expect(result.leaves.map((l) => l.knowledgeNodeId)).toEqual([NODE_A_ID, NODE_B_ID]);
+	});
+});
+
+describe('courseLens -- mixed depth (section with direct steps + a lesson)', () => {
+	it('respects ordinal ordering across leaf children and lesson children of the same section', async () => {
+		const { courseId, goalId } = await seedCourseWithGoal(slug('mixed-depth-course'), 1.0);
+		const section = await upsertCourseStep({
+			courseId,
+			parentId: null,
+			level: COURSE_STEP_LEVELS.SECTION,
+			ordinal: 1,
+			code: 's1',
+			title: 'Mixed Section',
+			bodyMd: '',
+			knowledgeNodeId: null,
+			contentHash: 'mx-s1',
+			seedOrigin: SUITE_TAG,
+		});
+		// Step ordinal 1 -- a direct leaf under the section.
+		await upsertCourseStep({
+			courseId,
+			parentId: section.id,
+			level: COURSE_STEP_LEVELS.STEP,
+			ordinal: 1,
+			code: 's1.a',
+			title: 'Direct Step A',
+			bodyMd: '',
+			knowledgeNodeId: NODE_A_ID,
+			contentHash: 'mx-s1.a',
+			seedOrigin: SUITE_TAG,
+		});
+		// Lesson ordinal 2 -- interior, with its own leaf below.
+		const lesson = await upsertCourseStep({
+			courseId,
+			parentId: section.id,
+			level: COURSE_STEP_LEVELS.LESSON,
+			ordinal: 2,
+			code: 's1.l1',
+			title: 'Lesson Under Mixed',
+			bodyMd: '',
+			knowledgeNodeId: null,
+			contentHash: 'mx-s1.l1',
+			seedOrigin: SUITE_TAG,
+		});
+		await upsertCourseStep({
+			courseId,
+			parentId: lesson.id,
+			level: COURSE_STEP_LEVELS.STEP,
+			ordinal: 1,
+			code: 's1.l1.a',
+			title: 'Lesson Step',
+			bodyMd: '',
+			knowledgeNodeId: NODE_B_ID,
+			contentHash: 'mx-s1.l1.a',
+			seedOrigin: SUITE_TAG,
+		});
+
+		const goalRow = await loadGoal(goalId);
+		const result = await courseLens(db, TEST_USER_ID, {
+			goal: goalRow,
+			filters: { courseId },
+		});
+
+		const sec = result.tree[0]?.children[0];
+		// Section has one direct leaf (s1.a) and one lesson child (s1.l1).
+		expect(sec?.leaves).toHaveLength(1);
+		expect(sec?.leaves?.[0]?.knowledgeNodeId).toBe(NODE_A_ID);
+		expect(sec?.children).toHaveLength(1);
+		expect(sec?.children[0]?.level).toBe('lesson');
+		expect(sec?.children[0]?.leaves).toHaveLength(1);
+		expect(sec?.children[0]?.leaves?.[0]?.knowledgeNodeId).toBe(NODE_B_ID);
+
+		// Section rollup aggregates both leaves (direct + under the lesson).
+		expect(sec?.rollup.totalLeaves).toBe(2);
+		expect(result.rollup.totalLeaves).toBe(2);
+		expect(result.leaves).toHaveLength(2);
+	});
+});
+
+describe('flattenLeavesDepthFirst', () => {
+	it('returns leaves in document order for a 2-level tree (section -> step)', async () => {
+		// Single section with three steps. flatten should yield them in
+		// ordinal order regardless of insert order.
+		const { courseId, goalId } = await seedCourseWithGoal(slug('flatten-2l'), 1.0);
+		const section = await upsertCourseStep({
+			courseId,
+			parentId: null,
+			level: COURSE_STEP_LEVELS.SECTION,
+			ordinal: 1,
+			code: 's1',
+			title: 'Section',
+			bodyMd: '',
+			knowledgeNodeId: null,
+			contentHash: 'fl2-s1',
+			seedOrigin: SUITE_TAG,
+		});
+		// Insert in non-sorted order to exercise the ordinal sort.
+		await upsertCourseStep({
+			courseId,
+			parentId: section.id,
+			level: COURSE_STEP_LEVELS.STEP,
+			ordinal: 3,
+			code: 's1.c',
+			title: 'Step C',
+			bodyMd: '',
+			knowledgeNodeId: NODE_C_ID,
+			contentHash: 'fl2-s1.c',
+			seedOrigin: SUITE_TAG,
+		});
+		await upsertCourseStep({
+			courseId,
+			parentId: section.id,
+			level: COURSE_STEP_LEVELS.STEP,
+			ordinal: 1,
+			code: 's1.a',
+			title: 'Step A',
+			bodyMd: '',
+			knowledgeNodeId: NODE_A_ID,
+			contentHash: 'fl2-s1.a',
+			seedOrigin: SUITE_TAG,
+		});
+		await upsertCourseStep({
+			courseId,
+			parentId: section.id,
+			level: COURSE_STEP_LEVELS.STEP,
+			ordinal: 2,
+			code: 's1.b',
+			title: 'Step B',
+			bodyMd: '',
+			knowledgeNodeId: NODE_B_ID,
+			contentHash: 'fl2-s1.b',
+			seedOrigin: SUITE_TAG,
+		});
+
+		const result = await courseLens(db, TEST_USER_ID, {
+			goal: await loadGoal(goalId),
+			filters: { courseId },
+		});
+		const flat = flattenLeavesDepthFirst(result.tree);
+		expect(flat.map((l) => l.knowledgeNodeId)).toEqual([NODE_A_ID, NODE_B_ID, NODE_C_ID]);
+	});
+
+	it('returns leaves in document order for a 3-level mixed tree (direct + lesson children)', async () => {
+		// Section with one direct step (ordinal 1), one lesson (ordinal 2)
+		// whose two steps come after. Depth-first: direct leaf first, then
+		// leaves under the interior child.
+		const { courseId, goalId } = await seedCourseWithGoal(slug('flatten-3l-mixed'), 1.0);
+		const section = await upsertCourseStep({
+			courseId,
+			parentId: null,
+			level: COURSE_STEP_LEVELS.SECTION,
+			ordinal: 1,
+			code: 's1',
+			title: 'Section',
+			bodyMd: '',
+			knowledgeNodeId: null,
+			contentHash: 'fl3-s1',
+			seedOrigin: SUITE_TAG,
+		});
+		await upsertCourseStep({
+			courseId,
+			parentId: section.id,
+			level: COURSE_STEP_LEVELS.STEP,
+			ordinal: 1,
+			code: 's1.a',
+			title: 'Direct A',
+			bodyMd: '',
+			knowledgeNodeId: NODE_A_ID,
+			contentHash: 'fl3-s1.a',
+			seedOrigin: SUITE_TAG,
+		});
+		const lesson = await upsertCourseStep({
+			courseId,
+			parentId: section.id,
+			level: COURSE_STEP_LEVELS.LESSON,
+			ordinal: 2,
+			code: 's1.l1',
+			title: 'Lesson',
+			bodyMd: '',
+			knowledgeNodeId: null,
+			contentHash: 'fl3-s1.l1',
+			seedOrigin: SUITE_TAG,
+		});
+		await upsertCourseStep({
+			courseId,
+			parentId: lesson.id,
+			level: COURSE_STEP_LEVELS.STEP,
+			ordinal: 1,
+			code: 's1.l1.b',
+			title: 'Lesson B',
+			bodyMd: '',
+			knowledgeNodeId: NODE_B_ID,
+			contentHash: 'fl3-s1.l1.b',
+			seedOrigin: SUITE_TAG,
+		});
+		await upsertCourseStep({
+			courseId,
+			parentId: lesson.id,
+			level: COURSE_STEP_LEVELS.STEP,
+			ordinal: 2,
+			code: 's1.l1.c',
+			title: 'Lesson C',
+			bodyMd: '',
+			knowledgeNodeId: NODE_C_ID,
+			contentHash: 'fl3-s1.l1.c',
+			seedOrigin: SUITE_TAG,
+		});
+
+		const result = await courseLens(db, TEST_USER_ID, {
+			goal: await loadGoal(goalId),
+			filters: { courseId },
+		});
+		const flat = flattenLeavesDepthFirst(result.tree);
+		// Document order: section's direct leaf first, then the lesson's
+		// leaves in ordinal order.
+		expect(flat.map((l) => l.knowledgeNodeId)).toEqual([NODE_A_ID, NODE_B_ID, NODE_C_ID]);
+	});
+
+	it('returns an empty array for an empty tree', () => {
+		expect(flattenLeavesDepthFirst([])).toEqual([]);
+	});
+});
+
+describe('courseWithCertOverlayLens -- 3-level shape', () => {
+	it('binds LensLeafSources only on leaves; interior section / lesson nodes carry no sources', async () => {
+		// Reuse the 3-level shape from the courseLens 3-level test. Cover
+		// both NODE_A (in cert) and NODE_OUTSIDE (out of cert) so the per-
+		// leaf sources varies; the section + lesson interior nodes still
+		// MUST NOT carry a `sources` field per spec.
+		const { courseId, goalId } = await seedCourseWithGoal(slug('overlay-3l'), 1.0);
+		const section = await upsertCourseStep({
+			courseId,
+			parentId: null,
+			level: COURSE_STEP_LEVELS.SECTION,
+			ordinal: 1,
+			code: 's1',
+			title: 'Section',
+			bodyMd: '',
+			knowledgeNodeId: null,
+			contentHash: 'o3l-s1',
+			seedOrigin: SUITE_TAG,
+		});
+		const lesson = await upsertCourseStep({
+			courseId,
+			parentId: section.id,
+			level: COURSE_STEP_LEVELS.LESSON,
+			ordinal: 1,
+			code: 's1.l1',
+			title: 'Lesson',
+			bodyMd: '',
+			knowledgeNodeId: null,
+			contentHash: 'o3l-s1.l1',
+			seedOrigin: SUITE_TAG,
+		});
+		await upsertCourseStep({
+			courseId,
+			parentId: lesson.id,
+			level: COURSE_STEP_LEVELS.STEP,
+			ordinal: 1,
+			code: 's1.l1.a',
+			title: 'Leaf A (in cert)',
+			bodyMd: '',
+			knowledgeNodeId: NODE_A_ID,
+			contentHash: 'o3l-s1.l1.a',
+			seedOrigin: SUITE_TAG,
+		});
+		await upsertCourseStep({
+			courseId,
+			parentId: lesson.id,
+			level: COURSE_STEP_LEVELS.STEP,
+			ordinal: 2,
+			code: 's1.l1.out',
+			title: 'Leaf OUTSIDE',
+			bodyMd: '',
+			knowledgeNodeId: NODE_OUTSIDE_ID,
+			contentHash: 'o3l-s1.l1.out',
+			seedOrigin: SUITE_TAG,
+		});
+
+		const goalRow = await loadGoal(goalId);
+		const result = await courseWithCertOverlayLens(db, TEST_USER_ID, {
+			goal: goalRow,
+			filters: { courseId, syllabusId: SYL_ID },
+		});
+
+		// Interior nodes never carry `sources`. Probe both the section + lesson.
+		const sec = result.tree[0]?.children[0];
+		const les = sec?.children[0];
+		// `LensTreeNode` has no `sources` field; we assert that no property
+		// snuck onto the interior nodes via a structural cast.
+		expect((sec as unknown as { sources?: unknown })?.sources).toBeUndefined();
+		expect((les as unknown as { sources?: unknown })?.sources).toBeUndefined();
+
+		// Every leaf carries `sources`. The cert-resident leaf has inCert=true;
+		// the outside-cert leaf has inCert=false and no certCode.
+		expect(result.leaves).toHaveLength(2);
+		const aLeaf = result.leaves.find((l) => l.knowledgeNodeId === NODE_A_ID);
+		const outsideLeaf = result.leaves.find((l) => l.knowledgeNodeId === NODE_OUTSIDE_ID);
+		expect(aLeaf?.sources?.inCourse).toBe(true);
+		expect(aLeaf?.sources?.inCert).toBe(true);
+		expect(aLeaf?.sources?.certCode).toBe(`${SUITE_TOKEN}-V.A.K1`);
+		expect(outsideLeaf?.sources?.inCourse).toBe(true);
+		expect(outsideLeaf?.sources?.inCert).toBe(false);
+		expect(outsideLeaf?.sources?.certCode).toBeUndefined();
 	});
 });
