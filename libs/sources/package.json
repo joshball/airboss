@@ -17,11 +17,11 @@
 		"@ab/constants": "workspace:*",
 		"@ab/db": "workspace:*",
 		"@ab/utils": "workspace:*",
-		"drizzle-orm": "^0.44.2",
+		"drizzle-orm": "catalog:",
 		"fast-xml-parser": "^4.5.0",
-		"yaml": "^2.8.3"
+		"yaml": "catalog:"
 	},
 	"devDependencies": {
-		"vitest": "^4.1.0"
+		"vitest": "catalog:"
 	}
 }

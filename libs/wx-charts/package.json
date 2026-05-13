@@ -20,11 +20,11 @@
 		"d3-geo-projection": "^4.0.0",
 		"sharp": "^0.34.5",
 		"topojson-client": "^3.1.0",
-		"yaml": "^2.8.3",
-		"zod": "^3.25.36"
+		"yaml": "catalog:",
+		"zod": "catalog:"
 	},
 	"devDependencies": {
-		"vitest": "^4.1.0"
+		"vitest": "catalog:"
 	},
 	"version": "0.3.1"
 }
