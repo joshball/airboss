@@ -2,6 +2,32 @@ code: s9
 ordinal: 9
 title: In-flight weather
 body_md: |
+  **Before you start.** This section assumes the pre-flight picture
+  is in hand: the synoptic story (s2 through s6), the
+  [airport text products](/reference/knowledge/wx-reading-metars-tafs)
+  from s7, and the
+  [regional products](/reference/knowledge/wx-product-gfa) from s8.
+  It teaches what changes when those same products start updating
+  in the cockpit instead of on the ground.
+
+  Terms you will see referenced but not fully taught here:
+
+  - [ADS-B FIS-B](/reference/knowledge/wx-flight-deck-weather-displays)
+    and [XM weather](/reference/knowledge/wx-flight-deck-weather-displays):
+    the two main data services. Introduced in s9.1 below.
+  - [NEXRAD](/reference/knowledge/wx-equipment-and-data-limitations)
+    composite reflectivity: the cockpit radar mosaic and its latency
+    trap. Taught in s9.2.
+  - [EFB](/reference/knowledge/wx-flight-deck-weather-displays)
+    (electronic flight bag): the moving-map overlay layer. Not a
+    weather product itself; treat it as a viewer for the products
+    you already know.
+
+  In-flight weather tightens your decision interval; it does not
+  expand your decision authority.
+
+  ---
+
   The briefing ended at the run-up. From taxi onward you're flying
   with whatever weather picture you can build in real time -- and the
   picture is necessarily incomplete.
