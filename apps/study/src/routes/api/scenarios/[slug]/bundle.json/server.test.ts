@@ -25,8 +25,10 @@ import { GET, type ScenarioBundle } from './+server';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 // apps/study/src/routes/api/scenarios/[slug]/bundle.json -> repo root is
-// seven levels up.
-const REPO_ROOT = resolve(HERE, '..', '..', '..', '..', '..', '..', '..');
+// EIGHT levels up. Must match the math in +server.ts; if either drifts, the
+// fixture read silently misses and tests pass against the wrong directory
+// (this exact bug shipped in #932 + #948 and surfaced as a 404 in the app).
+const REPO_ROOT = resolve(HERE, '..', '..', '..', '..', '..', '..', '..', '..');
 const FIXTURE_SLUG = 'frontal-xc-march';
 const FIXTURE_TRUTH_PATH = resolve(REPO_ROOT, 'data/wx-scenarios', FIXTURE_SLUG, 'truth.json');
 
@@ -44,6 +46,16 @@ function isHttp(value: unknown, status: number): boolean {
 }
 
 describe('GET /api/scenarios/[slug]/bundle.json', () => {
+	it('REPO_ROOT resolves to the actual repo root (regression guard)', () => {
+		// If REPO_ROOT math drifts (wrong number of `..`), the fixture path
+		// silently misses and the route 404s in production. Asserting the
+		// repo root contains a known top-level directory catches the bug at
+		// test time. Originally shipped wrong in #932 + #948.
+		expect(existsSync(resolve(REPO_ROOT, 'data/wx-scenarios'))).toBe(true);
+		expect(existsSync(resolve(REPO_ROOT, 'libs/wx-engine'))).toBe(true);
+		expect(existsSync(resolve(REPO_ROOT, 'CLAUDE.md'))).toBe(true);
+	});
+
 	it('returns the full bundle for a registered scenario slug', async () => {
 		if (!existsSync(FIXTURE_TRUTH_PATH)) {
 			// Bundle artefacts not present in this checkout. Mirrors the
