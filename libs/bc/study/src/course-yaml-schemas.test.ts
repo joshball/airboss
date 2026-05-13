@@ -337,7 +337,7 @@ describe('courseSectionMaxDepth -- depth cap helper', () => {
 
 describe('courseSectionSchema -- shipped fixture round-trip', () => {
 	it('accepts the 3-level fixture YAML shape verbatim', () => {
-		// Mirrors course/courses/_fixtures/3-level-tree/sections/s1-frontal-scenarios.yaml.
+		// Mirrors course/courses/_fixtures/three-level-tree-fixture/sections/s1-frontal-scenarios.yaml.
 		// Kept in-source so the test doesn't require disk IO and works in
 		// the unit-node vitest project.
 		const parsed = courseSectionSchema.parse({

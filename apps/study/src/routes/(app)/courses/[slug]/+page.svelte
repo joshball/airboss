@@ -24,11 +24,12 @@ const root = $derived<LensTreeNode | null>(lensResult.tree[0] ?? null);
 const sections = $derived<LensTreeNode[]>(root?.children ?? []);
 const certGaps = $derived(lensResult.certGaps ?? []);
 
-function leafCode(leaf: LensLeaf): string {
-	// Lens emits leaf.id = course_step.id (cst_ULID). The reader URL uses
-	// course_step.code (e.g. `s1.1`) so the URL stays grep-able. The
-	// loader builds the lookup map.
-	return stepCodeById[leaf.id] ?? leaf.id;
+function codeFor(id: string): string {
+	// Lens emits node ids = course_step.id (cst_ULID). The reader URL uses
+	// course_step.code (e.g. `s1.1`, `s1.1.1`) so the URL stays grep-able.
+	// The loader builds the lookup map for every row (section / lesson /
+	// step) -- non-leaf rows render landing pages with the same URL shape.
+	return stepCodeById[id] ?? id;
 }
 
 function statusLabel(status: string): string {
@@ -51,11 +52,91 @@ function masteryStateClass(leaf: LensLeaf): string {
 	if (leaf.mastery.covered) return 'mastery-covered';
 	return 'mastery-unseen';
 }
+
+// Headings scale with depth: section -> h2, lesson -> h3, deeper -> h4
+// (capped at h6 by `Math.min`). Depth starts at 0 for sections.
+function headingLevel(depth: number): 2 | 3 | 4 | 5 | 6 {
+	const level = Math.min(2 + depth, 6);
+	return level as 2 | 3 | 4 | 5 | 6;
+}
 </script>
 
 <svelte:head>
 	<title>{course.title} -- Courses -- airboss</title>
 </svelte:head>
+
+{#snippet leafItem(leaf: LensLeaf)}
+	<li class="leaf">
+		<a class="leaf-link" href={ROUTES.COURSE_STEP(course.slug, codeFor(leaf.id))}>
+			<span class="leaf-title">{leaf.title}</span>
+			<span class="leaf-meta">
+				<span class={`leaf-state ${masteryStateClass(leaf)}`}>
+					{masteryStateLabel(leaf)}
+				</span>
+				{#if overlayActive && leaf.sources?.inCert && leaf.sources.certCode !== undefined}
+					<span class="leaf-cert">In {leaf.sources.certCode}</span>
+				{/if}
+			</span>
+		</a>
+	</li>
+{/snippet}
+
+{#snippet treeNode(node: LensTreeNode, depth: number)}
+	{@const isSection = node.level === 'section'}
+	{@const isLesson = node.level === 'lesson'}
+	{@const hLevel = headingLevel(depth)}
+	<li class={isSection ? 'section-card' : 'lesson-card'} data-depth={depth}>
+		<header class={isSection ? 'section-head' : 'lesson-head'}>
+			{#if hLevel === 2}
+				<h2 class="node-title">
+					<a class="node-link" href={ROUTES.COURSE_STEP(course.slug, codeFor(node.id))}>{node.title}</a>
+				</h2>
+			{:else if hLevel === 3}
+				<h3 class="node-title">
+					<a class="node-link" href={ROUTES.COURSE_STEP(course.slug, codeFor(node.id))}>{node.title}</a>
+				</h3>
+			{:else if hLevel === 4}
+				<h4 class="node-title">
+					<a class="node-link" href={ROUTES.COURSE_STEP(course.slug, codeFor(node.id))}>{node.title}</a>
+				</h4>
+			{:else if hLevel === 5}
+				<h5 class="node-title">
+					<a class="node-link" href={ROUTES.COURSE_STEP(course.slug, codeFor(node.id))}>{node.title}</a>
+				</h5>
+			{:else}
+				<h6 class="node-title">
+					<a class="node-link" href={ROUTES.COURSE_STEP(course.slug, codeFor(node.id))}>{node.title}</a>
+				</h6>
+			{/if}
+			{#if node.rollup.totalLeaves > 0}
+				<span class="node-rollup">
+					{node.rollup.masteredLeaves} / {node.rollup.totalLeaves} mastered
+				</span>
+			{/if}
+		</header>
+
+		{#if (node.leaves === undefined || node.leaves.length === 0) && node.children.length === 0}
+			<p class={isLesson ? 'lesson-empty' : 'section-empty'}>
+				{isLesson ? 'No steps in this lesson yet.' : 'No steps in this section yet.'}
+			</p>
+		{:else}
+			{#if node.leaves !== undefined && node.leaves.length > 0}
+				<ul class="leaves">
+					{#each node.leaves as leaf (leaf.id)}
+						{@render leafItem(leaf)}
+					{/each}
+				</ul>
+			{/if}
+			{#if node.children.length > 0}
+				<ol class="children">
+					{#each node.children as child (child.id)}
+						{@render treeNode(child, depth + 1)}
+					{/each}
+				</ol>
+			{/if}
+		{/if}
+	</li>
+{/snippet}
 
 <section class="page">
 	<nav aria-label="Breadcrumb">
@@ -108,37 +189,7 @@ function masteryStateClass(leaf: LensLeaf): string {
 	{:else}
 		<ol class="sections">
 			{#each sections as section (section.id)}
-				<li class="section-card">
-					<header class="section-head">
-						<h2 class="section-title">{section.title}</h2>
-						{#if section.rollup.totalLeaves > 0}
-							<span class="section-rollup">
-								{section.rollup.masteredLeaves} / {section.rollup.totalLeaves} mastered
-							</span>
-						{/if}
-					</header>
-					{#if section.leaves !== undefined && section.leaves.length > 0}
-						<ul class="leaves">
-							{#each section.leaves as leaf (leaf.id)}
-								<li class="leaf">
-									<a class="leaf-link" href={ROUTES.COURSE_STEP(course.slug, leafCode(leaf))}>
-										<span class="leaf-title">{leaf.title}</span>
-										<span class="leaf-meta">
-											<span class={`leaf-state ${masteryStateClass(leaf)}`}>
-												{masteryStateLabel(leaf)}
-											</span>
-											{#if overlayActive && leaf.sources?.inCert && leaf.sources.certCode !== undefined}
-												<span class="leaf-cert">In {leaf.sources.certCode}</span>
-											{/if}
-										</span>
-									</a>
-								</li>
-							{/each}
-						</ul>
-					{:else}
-						<p class="section-empty">No steps in this section yet.</p>
-					{/if}
-				</li>
+				{@render treeNode(section, 0)}
 			{/each}
 		</ol>
 	{/if}
@@ -294,25 +345,54 @@ function masteryStateClass(leaf: LensLeaf): string {
 		gap: var(--space-md);
 	}
 
-	.section-head {
+	.lesson-card {
+		background: var(--surface-muted);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-md);
+		padding: var(--space-md);
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-sm);
+	}
+
+	.section-head,
+	.lesson-head {
 		display: flex;
 		justify-content: space-between;
 		align-items: baseline;
 		gap: var(--space-md);
 	}
 
-	.section-title {
+	.node-title {
 		margin: 0;
-		font-size: var(--type-heading-3-size);
 		color: var(--ink-body);
 	}
 
-	.section-rollup {
+	.section-card > .section-head > .node-title {
+		font-size: var(--type-heading-3-size);
+	}
+
+	.lesson-card > .lesson-head > .node-title {
+		font-size: var(--type-heading-4-size);
+	}
+
+	.node-link {
+		color: inherit;
+		text-decoration: none;
+	}
+
+	.node-link:hover {
+		text-decoration: underline;
+		color: var(--action-default-hover);
+	}
+
+	.node-rollup {
 		font-size: var(--type-ui-caption-size);
 		color: var(--ink-muted);
 	}
 
-	.section-empty {
+	.section-empty,
+	.lesson-empty {
 		margin: 0;
 		color: var(--ink-faint);
 		font-style: italic;
@@ -327,6 +407,15 @@ function masteryStateClass(leaf: LensLeaf): string {
 		gap: var(--space-xs);
 	}
 
+	.children {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-sm);
+	}
+
 	.leaf-link {
 		display: flex;
 		justify-content: space-between;
@@ -338,6 +427,7 @@ function masteryStateClass(leaf: LensLeaf): string {
 		color: var(--ink-body);
 		text-decoration: none;
 		transition: border-color var(--motion-fast) ease;
+		background: var(--ink-inverse);
 	}
 
 	.leaf-link:hover {

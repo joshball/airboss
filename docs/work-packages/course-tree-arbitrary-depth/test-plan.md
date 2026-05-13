@@ -24,7 +24,7 @@ legacy_fields:
 
 WXENG-style numbered cases. Each case lists the layer, the input, the expected outcome, and whether it's automated (unit / e2e) or manual.
 
-The 3-level reference fixture (`course/courses/_fixtures/3-level-tree/`) lands in Phase A and is the substrate for the bulk of these cases. The existing `course/courses/weather-comprehensive/` course is the 2-level regression baseline.
+The 3-level reference fixture (`course/courses/_fixtures/three-level-tree-fixture/`) lands in Phase A and is the substrate for the bulk of these cases. The existing `course/courses/weather-comprehensive/` course is the 2-level regression baseline.
 
 ## Schema-layer cases
 
@@ -129,7 +129,7 @@ The 3-level reference fixture (`course/courses/_fixtures/3-level-tree/`) lands i
 
 ### T3.2 -- 3-level fixture seeds clean
 
-- **Input**: `course/courses/_fixtures/3-level-tree/`
+- **Input**: `course/courses/_fixtures/three-level-tree-fixture/`
 - **Expected**: rows inserted in section -> lesson -> step order; `is_leaf` set correctly; `parent_id` chain resolves
 - **Auto**: Vitest (uses test DB)
 

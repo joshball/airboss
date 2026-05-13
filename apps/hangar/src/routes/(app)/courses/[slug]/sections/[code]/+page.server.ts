@@ -23,7 +23,7 @@ import {
 	getCourseBySlug,
 	listNodesForBrowse,
 } from '@ab/bc-study/server';
-import { ROLES } from '@ab/constants';
+import { COURSE_STEP_LEVELS, ROLES } from '@ab/constants';
 import { error, fail } from '@sveltejs/kit';
 import { parse } from 'yaml';
 import type { PickerNode } from '$lib/components/knowledge-node-picker-types';
@@ -106,12 +106,12 @@ async function saveSection({ intent, slug, filename, section }: SaveSectionPaylo
 	const backup = existsSync(path) ? readFileSync(path, 'utf8') : null;
 	try {
 		// `sectionToEmitInput` walks the recursive CourseTreeNode shape and
-		// today rejects any lesson interior (Phase A boundary, course-tree-
-		// arbitrary-depth WP). Hangar's editor only authors 2-level content
-		// so that branch never fires for editor-managed sections; nested
-		// lessons authored by hand on disk fall through to the underlying
-		// seed, which has its own Phase A rejection. Phase D rebuilds this
-		// editor for arbitrary depth.
+		// round-trips both leaf steps (the editor's authoring surface) and
+		// lesson interiors (read-only in the UI today; nested-lesson editing
+		// is in the OUT-OF-SCOPE.md "Hangar editor UI" follow-up). A save
+		// that touches only leaf steps preserves the surrounding lesson
+		// structure untouched -- the editor never crashes on a section with
+		// nested content.
 		const next = emitSection(sectionToEmitInput(section));
 		await writeFile(path, next, 'utf8');
 		await runCourseSeed(slug);
@@ -208,7 +208,9 @@ export const actions: Actions = {
 
 		const found = findSectionFile(slug, code);
 		if (found === null) return fail(404, { intent: 'updateStep', error: 'Section not found.' });
-		const idx = found.section.steps.findIndex((s) => s.code === originalCode);
+		// Only match leaf steps; lessons are read-only in the hangar UI today
+		// (course-tree-arbitrary-depth WP, "Hangar editor UI" follow-up).
+		const idx = found.section.steps.findIndex((s) => s.code === originalCode && s.level !== COURSE_STEP_LEVELS.LESSON);
 		if (idx === -1) return fail(404, { intent: 'updateStep', error: 'Step not found.' });
 
 		const updatedStep: CourseStep = {
@@ -234,7 +236,14 @@ export const actions: Actions = {
 
 		const found = findSectionFile(slug, code);
 		if (found === null) return fail(404, { intent: 'deleteStep', error: 'Section not found.' });
-		const newSteps = found.section.steps.filter((s) => s.code !== stepCode);
+		// Refuse to delete a lesson interior via this action (the UI only
+		// surfaces leaf steps; a lesson code reaching here would be a YAML
+		// hand-edit). Keep lessons; drop matching leaf steps.
+		const newSteps = found.section.steps.filter((s) => {
+			const isLesson = s.level === COURSE_STEP_LEVELS.LESSON;
+			if (isLesson) return true; // never delete lesson rows via this action
+			return s.code !== stepCode;
+		});
 		if (newSteps.length === found.section.steps.length) {
 			return fail(404, { intent: 'deleteStep', error: 'Step not found.' });
 		}

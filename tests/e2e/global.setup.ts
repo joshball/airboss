@@ -69,3 +69,16 @@ setup('seed handbook errata fixtures', async () => {
 	const inserted = await seedErrataFixtures();
 	expect(inserted).toBeGreaterThanOrEqual(3);
 });
+
+// 3-level course tree fixture (course-tree-arbitrary-depth WP, Phase D).
+// The seed pipeline skips `_fixtures/` by default; this hook opts the
+// 3-level fixture into the e2e DB so the n-deep renderer + prev/next
+// spec at `tests/e2e/course-tree-n-deep.spec.ts` can drive a real
+// browser through the nested outline.
+setup('seed 3-level course fixture', async () => {
+	setup.setTimeout(90_000);
+	process.env[ENV_VARS.DATABASE_URL] = DEV_DB_URL_E2E;
+	const { seedThreeLevelFixture } = await import('./seed-3-level-fixture');
+	const result = await seedThreeLevelFixture();
+	expect(result.stepsUpserted).toBeGreaterThanOrEqual(4);
+});

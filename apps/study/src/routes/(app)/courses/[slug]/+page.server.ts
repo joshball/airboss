@@ -29,7 +29,7 @@ import {
 	listNotesForCourse,
 	pickOverlaySyllabus,
 } from '@ab/bc-study/server';
-import { COURSE_STATUSES, COURSE_STEP_LEVELS } from '@ab/constants';
+import { COURSE_STATUSES } from '@ab/constants';
 import { db } from '@ab/db/connection';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
@@ -39,12 +39,12 @@ export interface CourseDetailData {
 	lensResult: LensResult;
 	overlayActive: boolean;
 	/**
-	 * Maps `course_step.id` (`cst_<ulid>` -- the lens-emitted leaf id) to the
-	 * human-readable `course_step.code` (e.g. `s1.1`). The page uses the code
-	 * for step-reader URLs so they stay grep-able and shareable. The lens
-	 * does not carry the code -- the loader joins it on; the lookup is
-	 * cheap (one extra call to `getCourseStepsByCourse`, the same query the
-	 * lens itself runs).
+	 * Maps `course_step.id` (`cst_<ulid>` -- the lens-emitted node / leaf id)
+	 * to the human-readable `course_step.code` (e.g. `s1.1` or `s1.1.1`).
+	 * The page uses the code for step-reader URLs so they stay grep-able and
+	 * shareable. Every row (section, lesson, leaf) is included so the nested
+	 * outline can link interior nodes (lesson / section landings) and leaves
+	 * alike. The lens does not carry the code -- the loader joins it on.
 	 */
 	stepCodeById: Record<string, string>;
 	/**
@@ -77,11 +77,12 @@ export const load: PageServerLoad = async (event) => {
 		listNotesForCourse(user.id, course.id),
 	]);
 
+	// Map every row (section / lesson / step) -- the recursive renderer
+	// produces clickable links for non-leaf rows too (landing pages), so the
+	// lookup is no longer leaf-only.
 	const stepCodeById: Record<string, string> = {};
 	for (const step of allSteps) {
-		if (step.level === COURSE_STEP_LEVELS.STEP) {
-			stepCodeById[step.id] = step.code;
-		}
+		stepCodeById[step.id] = step.code;
 	}
 
 	return {
