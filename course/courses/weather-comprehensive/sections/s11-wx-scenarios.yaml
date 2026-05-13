@@ -573,3 +573,234 @@ steps:
           outflow boundary, and the AIRMET polygons translate with
           them. The KAUS PIREP becomes one moment in a moving picture
           instead of one moment in a still photo.
+
+  - code: s11.3
+    ordinal: 3
+    level: lesson
+    title: Winter lake-effect icing - Great Lakes
+    body_md: |
+      A January morning over the Great Lakes. A 1004-mb low has just
+      departed eastward; a 1028-mb Canadian high is pushing in behind.
+      cP air pours over the still-warm waters of Lake Erie; downwind
+      (south and southeast of the lake) the boundary layer saturates
+      and a freezing-precip stratus band traps KCLE and KCAK in IFR
+      with moderate rime. KORD, KDTW, and KGRR sit in clearer cP air
+      west of the band but still inside the post-frontal turbulence
+      column. The icing here is the flavor that catches non-FIKI
+      pilots: cloud-tops at 8000 ft MSL, ceilings at 500 ft AGL, and
+      freezing drizzle in the column.
+
+      :::scenario slug="winter-icing-great-lakes"
+      :::
+
+      The four sub-pages walk: the intro and the cP / lake interaction,
+      a chart-by-chart read of the briefing pack, a Socratic analysis
+      of the lake-effect icing band, and the instructor view into how
+      the TruthModel renders lake-effect physics.
+    steps:
+      - code: s11.3.1
+        ordinal: 1
+        title: Intro - cP air over warm water
+        knowledge_node_id: wx-icing-types-and-avoidance
+        body_md: |
+          You are at KGRR planning a flight east to KCLE. Outside it
+          is -10 C, dewpoint -15, wind 330 at 18, sky clear. The
+          surface analysis tells you a low has just departed east and
+          a Canadian high is pushing in behind. By the textbook the
+          flying weather is "post-frontal clear and bumpy." But Lake
+          Erie sits between you and KCLE. The lake is still warm from
+          autumn (the water is slower to cool than the land), and the
+          cP air pouring over it is going to saturate downwind. The
+          forecast shows a lake-effect band trapping KCLE and KCAK in
+          IFR with moderate rime. The decision in front of you is
+          whether to cross the band, route around it to the south, or
+          stop short.
+
+          :::chart slug="wx-scenarios/winter-icing-great-lakes/surface-analysis"
+          :::
+
+          The teaser to carry into the next sub-page: KCLE's METAR
+          shows OVC005 and freezing drizzle. The cloud tops are at
+          8000 ft MSL. Could a non-FIKI airplane climb over the band?
+      - code: s11.3.2
+        ordinal: 2
+        title: Reading the charts
+        knowledge_node_id: wx-freezing-level
+        body_md: |
+          The lake-effect briefing leans on the freezing level, the
+          icing AIRMET, and the GFA to show the trapped layer.
+
+          ### Surface analysis (`surface-analysis`)
+
+          The 1028-mb high and the departing 1004-mb low; isobars
+          packed across the lakes drive 330 at 18 cP flow over the
+          warm water.
+
+          :::chart slug="wx-scenarios/winter-icing-great-lakes/surface-analysis"
+          :::
+
+          ### Freezing level (`freezing-level`)
+
+          The freezing level is at the surface for this scenario
+          (cP air well below 0 C). That puts the entire AIRMET Zulu
+          band (0-8000 ft MSL) in the icing column; there is no
+          "warm cushion" below cloud base to shed accumulation
+          before landing.
+
+          :::chart slug="wx-scenarios/winter-icing-great-lakes/freezing-level"
+          :::
+
+          ### Graphical Forecast for Aviation (`gfa`)
+
+          The GFA shows the lake-effect band as a uniform low
+          ceiling polygon; KCLE and KCAK in IFR, KORD / KDTW / KGRR
+          west of the band in MVFR.
+
+          :::chart slug="wx-scenarios/winter-icing-great-lakes/gfa"
+          :::
+
+          ### G-AIRMET icing (`g-airmet-icing`)
+
+          Two icing polygons: HZ-lake-effect-zulu (0-8000 ft MSL)
+          for the lake-effect band rime, and HZ-east-of-band-zulu
+          (5000-12000 ft MSL) for the lighter cP cloud-deck icing
+          east of the band.
+
+          :::chart slug="wx-scenarios/winter-icing-great-lakes/g-airmet-icing"
+          :::
+
+          ### G-AIRMET turbulence (`g-airmet-turbulence`)
+
+          One Tango polygon for the post-frontal cold-advection
+          boundary layer (0-8000 ft MSL). Even outside the icing
+          band the cP boundary layer is bumpy.
+
+          :::chart slug="wx-scenarios/winter-icing-great-lakes/g-airmet-turbulence"
+          :::
+
+          ### PIREP plot (`pirep-plot`)
+
+          A pilot report from inside the lake-effect band confirms
+          moderate rime and OVC005. Three-product agreement: GFA,
+          icing AIRMET, PIREP.
+
+          :::chart slug="wx-scenarios/winter-icing-great-lakes/pirep-plot"
+          :::
+      - code: s11.3.3
+        ordinal: 3
+        title: Analysis - discovery prompts
+        knowledge_node_id: wx-icing-types-and-avoidance
+        body_md: |
+          ### Why the band exists
+
+          cP air pouring over the still-warm lake picks up moisture
+          and heat from the water; the boundary layer saturates and
+          stratus forms. Downwind of the lake (south and southeast,
+          following the cP flow vector) the band concentrates. The
+          AIRMET Zulu source field names this exactly: cP air
+          saturates over the still-warm lake; moderate rime in the
+          freezing-drizzle column.
+
+          ### Why "climb over" does not work
+
+          Cloud tops at 8000 ft MSL. A non-FIKI piston aircraft can
+          climb that high, but the ascent is through the icing
+          column. By the time you break out you have accumulated the
+          rime that was supposed to be optional. Freezing drizzle in
+          particular accretes faster than the airframe certification
+          envelope contemplates. The "climb over" option requires
+          either FIKI equipment or a freezing level above the cloud
+          tops; neither applies here.
+
+          ### Freezing drizzle vs freezing rain
+
+          The hazard source names freezing drizzle. Drizzle droplets
+          are smaller than rain droplets, so they freeze on contact
+          across more of the airframe (not just the leading edges).
+          Pneumatic boots that handle freezing rain do not always
+          shed drizzle accumulation. This is the icing flavor that
+          dispatches non-FIKI airplanes back to the ramp.
+
+          ### Two icing polygons, not one
+
+          HZ-lake-effect-zulu (0-8000 ft MSL) covers the lake-effect
+          band. HZ-east-of-band-zulu (5000-12000 ft MSL) covers a
+          lighter icing layer in the cP cloud deck east of the band.
+          They are different mechanisms: the band is convergence-fed
+          stratus over warm water; the east-of-band layer is
+          large-scale cP cloud at mid levels. Same hazard category
+          (icing), different cause, different altitude band.
+
+          ### Post-frontal Tango outside the band
+
+          HZ-postfrontal-tango (0-8000 ft MSL) covers the cold-
+          advection boundary layer west of the band. KORD / KDTW /
+          KGRR sit inside this column. Clear skies plus moderate
+          chop is the cP signature; the heuristic "clear means
+          smooth" fails in cold advection.
+
+          ### KCLE PIREP corroboration
+
+          A pilot report from inside the band confirms moderate
+          rime in cloud with OVC005. Convergent independent
+          evidence: GFA polygon, icing AIRMET polygon, pilot report
+          from inside the polygon. Treat this as confirmation, not
+          coincidence; do not cross the band.
+
+          :::chart slug="wx-scenarios/winter-icing-great-lakes/g-airmet-icing"
+          :::
+      - code: s11.3.4
+        ordinal: 4
+        title: Instructor internals
+        knowledge_node_id: wx-icing-types-and-avoidance
+        body_md: |
+          ### Source
+
+          `libs/wx-engine/src/truth/scenarios/winter-icing-great-lakes.ts`.
+          Two air-mass polygons (the cP post-frontal mass and the mT
+          pre-frontal mass that has just departed east) plus the
+          lake-effect band as a polygon shape. The lake itself is
+          not yet a first-class object in the truth model; the
+          downwind band is currently authored as a hazard polygon
+          rather than derived from a lake + flow geometric operation.
+
+          ### Three tunable parameters
+
+          - `airMasses[AM-postfrontal-cP].meanCloudTopFtAgl: 8000`.
+            The cap on the lake-effect band. Raise it to 12000 and
+            the "climb over" option becomes plausible; raise it to
+            16000 and the GFA polygon stops being IFR.
+          - `airMasses[AM-postfrontal-cP].surfaceTempC: -10`. The
+            cP source temperature drives the lake-air delta. Warmer
+            cP (closer to 0 C) reduces saturation; colder cP
+            intensifies the band.
+          - `hazardZones[HZ-lake-effect-zulu].severity: moderate`.
+            The Zulu polygon severity drives the AIRMET wording.
+            Moderate rime in the column at 100 KIAS for a piston
+            airframe is a non-FIKI ramp call.
+
+          ### What produced each callout
+
+          The icing callouts come from a rule that walks every icing
+          hazard zone and emits a question pinned to the named
+          polygon + the air-mass parameters that produced it. The
+          turbulence callout for the post-frontal column uses the
+          same rule that ran in s11.1 against a different hazard
+          shape.
+
+          ### Authored vs derived
+
+          The lake is implicit (a stand-in polygon rather than a
+          first-class lake geometry). Everything else is derived
+          from the truth literal: the METARs report the air mass
+          they sit in, the TAFs carry the FM groups for the front's
+          passage, the AIRMETs trace from the hazard polygons, and
+          the PIREPs are placed inside the polygons they corroborate.
+
+          ### Next iteration
+
+          Add lake geometry as a first-class object so the band is
+          derived (not authored) from cP flow vector + lake polygon
+          + lake / air temperature delta. That unlocks the same
+          scenario at different lake temperatures (early vs late
+          winter) without re-authoring the band polygon every time.
