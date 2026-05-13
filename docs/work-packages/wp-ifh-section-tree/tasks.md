@@ -23,7 +23,7 @@ shipped_at: '2026-05-03'
   - `whole_doc.url`, `whole_doc.filename` carried over from `handbooks-extras.yaml`
   - `outline_strategy: toc-file-sidecar`
   - `section_strategy: toc-file-sidecar`
-  - `toc_file: docs/work-packages/whole-doc-promotion/source-tocs/ifh.md`
+  - `toc_file: docs/.archive/work-packages/2026-05/whole-doc-promotion/source-tocs/ifh.md`
   - `subjects: [procedures, navigation, flight-instruments]`, `primary_cert: instrument`
   - `title_overrides:` for chapters 6 and 7 (the printed-TOC sentinels read `Chapter 6, Section I/II` so the chapter title is set explicitly to the modality-agnostic theme)
   - `errata: []`, `dismissed_errata: []` placeholders for ADR-020 follow-up

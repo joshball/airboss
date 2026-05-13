@@ -57,7 +57,7 @@ Trigger to revisit:
 When a downstream consumer needs deeper-than-3-level section structure for IFH. Concretely: when a citation chip, knowledge node, or reader UX needs to deep-link below the chapter/section/subsection (depth 2) cap that the deterministic parser produces -- and the printed TOC has the L3+ entries to support it -- run the prompt-flow as a second-opinion source of structure.
 
 Implementation pattern when triggered:
-Re-run extraction with `section_strategy: prompt` per [docs/ingestion-pipeline/section-extraction-prompt-strategy.md](../../ingestion-pipeline/section-extraction-prompt-strategy.md). The output gets compared against the existing `handbooks/ifh/FAA-H-8083-15B/manifest.json` -- net-new L3+ rows get inspected manually and folded back into the TOC sidecar at [docs/work-packages/whole-doc-promotion/source-tocs/ifh.md](../whole-doc-promotion/source-tocs/ifh.md), then re-run deterministic. The prompt-flow is the verification source, not a runtime swap.
+Re-run extraction with `section_strategy: prompt` per [docs/ingestion-pipeline/section-extraction-prompt-strategy.md](../../ingestion-pipeline/section-extraction-prompt-strategy.md). The output gets compared against the existing `handbooks/ifh/FAA-H-8083-15B/manifest.json` -- net-new L3+ rows get inspected manually and folded back into the TOC sidecar at [docs/.archive/work-packages/2026-05/whole-doc-promotion/source-tocs/ifh.md](../../.archive/work-packages/2026-05/whole-doc-promotion/source-tocs/ifh.md), then re-run deterministic. The prompt-flow is the verification source, not a runtime swap.
 
 References:
 
@@ -65,4 +65,4 @@ References:
 - [tasks.md](./tasks.md) -- "Out of scope (follow-up tracking)" item 2
 - [test-plan.md](./test-plan.md) -- "Non-goals" item 2
 - [docs/ingestion-pipeline/section-extraction-prompt-strategy.md](../../ingestion-pipeline/section-extraction-prompt-strategy.md) -- the prompt-flow contract
-- [docs/work-packages/whole-doc-promotion/source-tocs/ifh.md](../whole-doc-promotion/source-tocs/ifh.md) -- the hand-extracted TOC that's the current source of truth
+- [docs/.archive/work-packages/2026-05/whole-doc-promotion/source-tocs/ifh.md](../../.archive/work-packages/2026-05/whole-doc-promotion/source-tocs/ifh.md) -- the hand-extracted TOC that's the current source of truth

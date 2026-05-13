@@ -45,7 +45,7 @@ Promoting RMH to section-tree gives:
 
 ## Strategy
 
-Per `docs/work-packages/whole-doc-promotion/research.md` §RMH:
+Per `docs/.archive/work-packages/2026-05/whole-doc-promotion/research.md` §RMH:
 
 - PDF embedded outline: 166 entries, depths {1: 18, 2: 57, 3: 46, 4: 45}
 - L4 entries (45 of them) are inner step lists; the schema caps at depth

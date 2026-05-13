@@ -58,7 +58,7 @@ Status: Deferred
 
 What was deferred:
 Reviving the `sim-scenario-table` work package as part of this WP.
-That WP lives at `docs/work-packages/sim-scenario-table/` and was
+That WP lives at `docs/.archive/work-packages/2026-05/sim-scenario-table/` and was
 parked with its own gating trigger.
 
 Why:
@@ -69,16 +69,16 @@ work.
 
 Trigger to revisit:
 Follow the gating trigger documented inside
-`docs/work-packages/sim-scenario-table/spec.md`. Do not pull this work
+`docs/.archive/work-packages/2026-05/sim-scenario-table/spec.md`. Do not pull this work
 back in from this WP's side.
 
 Implementation pattern when triggered:
-Reopen the WP at `docs/work-packages/sim-scenario-table/` and use its
+Reopen the WP at `docs/.archive/work-packages/2026-05/sim-scenario-table/` and use its
 own spec / tasks / test-plan. This WP does not own that pattern.
 
 References:
 
-- `docs/work-packages/sim-scenario-table/`
+- `docs/.archive/work-packages/2026-05/sim-scenario-table/`
 - [spec.md](./spec.md) "Out of scope" line about deferred WPs
 
 ## New e2e coverage for product surfaces beyond the closed gaps

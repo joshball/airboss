@@ -35,7 +35,7 @@ Trigger that fires the follow-on:
 Already fired. Tracked at [WP-AC-PROMOTE](../wp-ac-promote-to-section-tree/spec.md) (Wave 4 cleanup, depends on the 5 handbook section-tree promotions landing first).
 
 Implementation pattern when triggered:
-See [WP-AC-PROMOTE spec.md](../wp-ac-promote-to-section-tree/spec.md) Phase 1-5: per-AC strategy decision (embedded TOC / printed TOC / TOC-file parser / flat fallback), seeder branching on `sections.length`, idempotent re-extraction. Mirror handbook precedents documented in [docs/work-packages/whole-doc-promotion/research.md](../whole-doc-promotion/research.md).
+See [WP-AC-PROMOTE spec.md](../wp-ac-promote-to-section-tree/spec.md) Phase 1-5: per-AC strategy decision (embedded TOC / printed TOC / TOC-file parser / flat fallback), seeder branching on `sections.length`, idempotent re-extraction. Mirror handbook precedents documented in [docs/.archive/work-packages/2026-05/whole-doc-promotion/research.md](../../.archive/work-packages/2026-05/whole-doc-promotion/research.md).
 
 References:
 

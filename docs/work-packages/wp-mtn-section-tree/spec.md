@@ -23,7 +23,7 @@ legacy_fields:
 
 # WP-MTN-section-tree -- Tips on Mountain Flying
 
-Sequence position 1 in [whole-doc-promotion/research.md](../whole-doc-promotion/research.md). The smallest of the five whole-doc handbooks gets promoted to a section-tree manifest by parsing the existing hand-curated body override (`scripts/sources/config/handbooks-extras-overrides/faa-mtn-tips.md`) into chapter / section rows. Pure markdown-to-manifest mapping: no Python, no PDF re-extraction, no LLM.
+Sequence position 1 in [whole-doc-promotion/research.md](../../.archive/work-packages/2026-05/whole-doc-promotion/research.md). The smallest of the five whole-doc handbooks gets promoted to a section-tree manifest by parsing the existing hand-curated body override (`scripts/sources/config/handbooks-extras-overrides/faa-mtn-tips.md`) into chapter / section rows. Pure markdown-to-manifest mapping: no Python, no PDF re-extraction, no LLM.
 
 ## Goal
 
@@ -137,7 +137,7 @@ After `bun run db reset --force && bun run db seed`:
 
 ## References
 
-- [research.md (whole-doc-promotion)](../whole-doc-promotion/research.md) -- this WP's parent research; mtn-tips section is the deliverable
+- [research.md (whole-doc-promotion)](../../.archive/work-packages/2026-05/whole-doc-promotion/research.md) -- this WP's parent research; mtn-tips section is the deliverable
 - [AVWX YAML](../../../scripts/sources/config/handbooks/avwx.yaml) -- Class C section-tree precedent (PDF-driven)
 - [handbooks-extras ingest](../../../libs/sources/src/handbooks-extras/ingest.ts) -- the module being extended
 - [section-tree seeder](../../../libs/bc/study/src/seeders/section-tree.ts) -- consumes the produced manifest

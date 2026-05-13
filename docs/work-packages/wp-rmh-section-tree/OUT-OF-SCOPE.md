@@ -28,7 +28,7 @@ What was postponed:
 Promoting the other four whole-doc handbooks (Aviation Instructor's Handbook, Instrument Flying Handbook, Instrument Procedures Handbook, Tips on Mountain Flying) from the `handbooks-extras` whole-doc pipeline to section-tree extraction. Each handbook ships its own authored structure and earns its own WP.
 
 Why:
-Per [spec.md](./spec.md) Out of scope line 1: each promotion is a separate WP. WP-RMH establishes the chapter-aware Python pipeline pattern (bookmark outline + `bookmark_chapter_filter` + `primary_cert` round-trip) that the follow-on promotions reuse. Bundling them into one WP would have hidden per-handbook quirks (RMH's L1 front-matter intermix, the L4-cap drop) inside a larger surface and slowed the first promotion. The sequence is laid out in [docs/work-packages/whole-doc-promotion/sequence.md](../whole-doc-promotion/sequence.md).
+Per [spec.md](./spec.md) Out of scope line 1: each promotion is a separate WP. WP-RMH establishes the chapter-aware Python pipeline pattern (bookmark outline + `bookmark_chapter_filter` + `primary_cert` round-trip) that the follow-on promotions reuse. Bundling them into one WP would have hidden per-handbook quirks (RMH's L1 front-matter intermix, the L4-cap drop) inside a larger surface and slowed the first promotion. The sequence is laid out in [docs/.archive/work-packages/2026-05/whole-doc-promotion/sequence.md](../../.archive/work-packages/2026-05/whole-doc-promotion/sequence.md).
 
 Trigger that fires each follow-on:
 Each handbook earns a dedicated WP when its turn comes in the promotion sequence. As of 2026-05-11: AIH shipped as [wp-aih-section-tree](../wp-aih-section-tree/) and IFH shipped as [wp-ifh-section-tree](../wp-ifh-section-tree/). IPH and mtn-tips remain unpromoted in `scripts/sources/config/handbooks-extras.yaml`.
@@ -46,8 +46,8 @@ Mirror the WP-RMH shape end-to-end. For each remaining handbook:
 References:
 
 - [spec.md](./spec.md) -- Out of scope line 1
-- [docs/work-packages/whole-doc-promotion/sequence.md](../whole-doc-promotion/sequence.md) -- planned promotion order
-- [docs/work-packages/whole-doc-promotion/research.md](../whole-doc-promotion/research.md) -- per-handbook structure analysis (RMH section)
+- [docs/.archive/work-packages/2026-05/whole-doc-promotion/sequence.md](../../.archive/work-packages/2026-05/whole-doc-promotion/sequence.md) -- planned promotion order
+- [docs/.archive/work-packages/2026-05/whole-doc-promotion/research.md](../../.archive/work-packages/2026-05/whole-doc-promotion/research.md) -- per-handbook structure analysis (RMH section)
 - [wp-aih-section-tree](../wp-aih-section-tree/) -- AIH follow-on (shipped)
 - [wp-ifh-section-tree](../wp-ifh-section-tree/) -- IFH follow-on (shipped)
 - `scripts/sources/config/handbooks-extras.yaml` -- remaining whole-doc entries (IPH, mtn-tips)
