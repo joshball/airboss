@@ -192,8 +192,8 @@ CREATE TABLE "study"."course_step" (
 	"seed_origin" text,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
-	CONSTRAINT "course_step_level_check" CHECK ("level" IN ('section', 'step')),
-	CONSTRAINT "course_step_consistency_check" CHECK ((("level" = 'section' AND "parent_id" IS NULL AND "knowledge_node_id" IS NULL AND "is_leaf" = false) OR ("level" = 'step' AND "parent_id" IS NOT NULL AND "knowledge_node_id" IS NOT NULL AND "is_leaf" = true))),
+	CONSTRAINT "course_step_level_check" CHECK ("level" IN ('section', 'lesson', 'step')),
+	CONSTRAINT "course_step_consistency_check" CHECK ((("level" = 'section' AND "parent_id" IS NULL AND "knowledge_node_id" IS NULL AND "is_leaf" = false) OR ("level" = 'lesson' AND "parent_id" IS NOT NULL AND "knowledge_node_id" IS NULL AND "is_leaf" = false) OR ("level" = 'step' AND "parent_id" IS NOT NULL AND "knowledge_node_id" IS NOT NULL AND "is_leaf" = true))),
 	CONSTRAINT "course_step_ordinal_check" CHECK ("ordinal" >= 0)
 );
 --> statement-breakpoint
