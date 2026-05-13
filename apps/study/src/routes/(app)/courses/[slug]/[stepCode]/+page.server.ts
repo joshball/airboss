@@ -35,7 +35,7 @@
  */
 
 import { requireAuth } from '@ab/auth';
-import { flattenLeavesDepthFirst } from '@ab/bc-study';
+import { computePrevNextLeaves, flattenLeavesDepthFirst } from '@ab/bc-study';
 import {
 	type CourseRow,
 	type CourseStepRow,
@@ -164,70 +164,26 @@ function buildBreadcrumbs(row: CourseStepRow, rowById: Map<string, CourseStepRow
 }
 
 /**
- * Compute prev/next leaf links for the current row. For leaf rows, the
- * current row's id is the lookup key; for non-leaf rows, find the first
- * leaf descendant of the subtree as the "current position" -- "next" then
- * points at that first descendant and "prev" at the leaf preceding it.
+ * Compute prev/next leaf links for the current row, mapping the lens-pure
+ * `computePrevNextLeaves` result back onto course-step `code` URLs.
  *
- * Returns `{ prev: null, next: null }` when the leaf list is empty.
+ * Returns `{ prev: null, next: null }` when the leaf list is empty or the
+ * current row is unknown to the tree.
  */
 function computePrevNext(
 	current: CourseStepRow,
 	rowById: Map<string, CourseStepRow>,
 	leaves: ReadonlyArray<LensLeaf>,
 ): { prev: PrevNextLink | null; next: PrevNextLink | null } {
-	if (leaves.length === 0) return { prev: null, next: null };
-
-	let positionIndex = leaves.findIndex((leaf) => leaf.id === current.id);
-	const currentIsLeaf = positionIndex !== -1;
-
-	if (!currentIsLeaf) {
-		// Non-leaf: find the first leaf descendant of `current`. Build a
-		// descendant-id set by walking children from the row map.
-		const descendantIds = new Set<string>();
-		const queue: string[] = [current.id];
-		const safety = rowById.size;
-		for (let visited = 0; visited < safety && queue.length > 0; visited += 1) {
-			const id = queue.shift();
-			if (id === undefined) break;
-			descendantIds.add(id);
-			for (const row of rowById.values()) {
-				if (row.parentId === id) queue.push(row.id);
-			}
-		}
-		// First leaf descendant in document order = first leaf in `leaves`
-		// whose id is in the descendant set. For "next" we use that leaf; for
-		// "prev" we use the leaf at (firstDescendantIndex - 1).
-		positionIndex = leaves.findIndex((leaf) => descendantIds.has(leaf.id));
-		if (positionIndex === -1) {
-			// Subtree contains no leaves (defensive -- seed validator rejects
-			// this, but it can happen during a partial seed mid-edit).
-			return { prev: null, next: null };
-		}
-		// For non-leaf, the "current" leaf is the first descendant; "next"
-		// IS that descendant (clicking next on a lesson landing enters the
-		// lesson's first leaf). "prev" is the leaf BEFORE the first
-		// descendant.
-		const next = leaves[positionIndex];
-		const prev = positionIndex > 0 ? leaves[positionIndex - 1] : null;
-		const nextRow = rowById.get(next.id);
-		const prevRow = prev !== null ? rowById.get(prev.id) : null;
-		return {
-			prev:
-				prevRow !== undefined && prevRow !== null ? { code: prevRow.code, title: prev?.title ?? prevRow.title } : null,
-			next: nextRow !== undefined ? { code: nextRow.code, title: next.title } : null,
-		};
-	}
-
-	// Leaf: prev/next are the adjacent leaves in document order.
-	const prevLeaf = positionIndex > 0 ? leaves[positionIndex - 1] : null;
-	const nextLeaf = positionIndex < leaves.length - 1 ? leaves[positionIndex + 1] : null;
-	const prevRow = prevLeaf !== null ? (rowById.get(prevLeaf.id) ?? null) : null;
-	const nextRow = nextLeaf !== null ? (rowById.get(nextLeaf.id) ?? null) : null;
-	return {
-		prev: prevLeaf !== null && prevRow !== null ? { code: prevRow.code, title: prevLeaf.title } : null,
-		next: nextLeaf !== null && nextRow !== null ? { code: nextRow.code, title: nextLeaf.title } : null,
+	const rows = Array.from(rowById.values()).map((row) => ({ id: row.id, parentId: row.parentId }));
+	const result = computePrevNextLeaves(current.id, rows, leaves);
+	const toLink = (leaf: { id: string; title: string } | null): PrevNextLink | null => {
+		if (leaf === null) return null;
+		const row = rowById.get(leaf.id);
+		if (row === undefined) return null;
+		return { code: row.code, title: leaf.title };
 	};
+	return { prev: toLink(result.prev), next: toLink(result.next) };
 }
 
 export const load: PageServerLoad = async (event) => {
