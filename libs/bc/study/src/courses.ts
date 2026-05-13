@@ -29,7 +29,6 @@
 import {
 	type BloomLevel,
 	COURSE_STATUSES,
-	COURSE_STEP_LEVELS,
 	type CourseKind,
 	type CourseStatus,
 	type CourseStepLevel,
@@ -309,13 +308,17 @@ export async function getCourseGaps(
 		list.push(r.knowledgeNodeId);
 	}
 
-	// Step 3: every knowledge_node covered by the course (level='step').
-	// Pulls only `knowledge_node_id` because we only need the set, not the
-	// row shape.
+	// Step 3: every knowledge_node covered by the course. The filter is
+	// `is_leaf = true` -- the canonical "this is a study-able row" predicate
+	// (course-tree-arbitrary-depth WP, Phase E). For 2-level content
+	// (`level='step'` is the only leaf shape) this is equivalent to the
+	// pre-WP query; for N-level content it correctly excludes lesson +
+	// section interiors which do not bind a knowledge node. Pulls only
+	// `knowledge_node_id` because we only need the set, not the row shape.
 	const stepRows = await db
 		.select({ knowledgeNodeId: courseStep.knowledgeNodeId })
 		.from(courseStep)
-		.where(and(eq(courseStep.courseId, courseId), eq(courseStep.level, COURSE_STEP_LEVELS.STEP)));
+		.where(and(eq(courseStep.courseId, courseId), eq(courseStep.isLeaf, true)));
 	const coveredNodes = new Set<string>();
 	for (const r of stepRows) {
 		if (r.knowledgeNodeId !== null) coveredNodes.add(r.knowledgeNodeId);
