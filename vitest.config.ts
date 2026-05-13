@@ -17,6 +17,7 @@ const aliases = {
 	'@ab/db': resolve('./libs/db/src/index.ts'),
 	'@ab/auth/schema': resolve('./libs/auth/src/schema.ts'),
 	'@ab/auth': resolve('./libs/auth/src/index.ts'),
+	'@ab/audit/server': resolve('./libs/audit/src/server.ts'),
 	'@ab/audit': resolve('./libs/audit/src/index.ts'),
 	'@ab/themes/palette-tokens.css': resolve('./libs/themes/palette-tokens.css'),
 	'@ab/themes': resolve('./libs/themes/index.ts'),

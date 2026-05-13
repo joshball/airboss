@@ -36,7 +36,7 @@ const isNodeSkeleton = $derived(node !== null && !hasNodeBody);
 	</nav>
 
 	<header class="hd">
-		<h1>{step.title}</h1>
+		<h1 data-testid="page-anchor">{step.title}</h1>
 		{#if overlayActive && certChip !== null}
 			<aside class="cert-chips" aria-label="Cert coverage">
 				<span class="cert-chip">In {certChip.code}</span>

@@ -73,6 +73,8 @@ function installCommonMocks(bc: BcMocks): void {
 	}));
 	vi.doMock('@ab/audit', () => ({
 		AUDIT_OPS: { CREATE: 'create', UPDATE: 'update', DELETE: 'delete', ACTION: 'action' },
+	}));
+	vi.doMock('@ab/audit/server', () => ({
 		auditWrite: vi.fn().mockResolvedValue({ id: 'audit_test' }),
 	}));
 	vi.doMock('@ab/bc-hangar', () => ({ ...bc }));

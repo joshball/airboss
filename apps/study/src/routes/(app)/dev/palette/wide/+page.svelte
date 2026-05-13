@@ -25,7 +25,7 @@ function back(): void {
 
 <header class="page-header">
 	<p class="back"><a href="/dev/palette">← back to variants</a></p>
-	<h1>Variant C — wide 4-column grid + detail pane</h1>
+	<h1 data-testid="page-anchor">Variant C — wide 4-column grid + detail pane</h1>
 	<p class="lede">
 		Production candidate. Type a query below; the palette appears as a modal centered in the
 		viewport. Press <kbd>Esc</kbd> to close (or click the link above to return).

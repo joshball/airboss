@@ -145,7 +145,7 @@ function onSearchInside(_docCode: string): void {
 <div class="wrap" data-palette-tokens>
 	<header class="page-header">
 		<p class="back"><a href="/dev/palette">← back to variants</a></p>
-		<h1>Variant B — narrow column + always-on detail pane</h1>
+		<h1 data-testid="page-anchor">Variant B — narrow column + always-on detail pane</h1>
 		<p class="lede">
 			Two panes, Raycast-style. {pendingFetch ? 'Loading…' : `${grouped.totalCount} results`}
 		</p>

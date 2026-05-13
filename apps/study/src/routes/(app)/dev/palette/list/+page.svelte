@@ -144,7 +144,7 @@ function handleKey(event: KeyboardEvent): void {
 <div class="wrap" data-palette-tokens>
 	<header class="page-header">
 		<p class="back"><a href="/dev/palette">← back to variants</a></p>
-		<h1>Variant A — Linear-style sectioned list</h1>
+		<h1 data-testid="page-anchor">Variant A — Linear-style sectioned list</h1>
 		<p class="lede">
 			Single column, category dividers, no detail pane. {pendingFetch ? 'Loading…' : `${grouped.totalCount} results`}
 		</p>

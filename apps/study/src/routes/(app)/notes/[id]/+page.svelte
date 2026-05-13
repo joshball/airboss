@@ -19,6 +19,7 @@ const fieldErrors = $derived<Record<string, string>>(
 </svelte:head>
 
 <section class="page">
+	<h1 class="visually-hidden" data-testid="page-anchor">{note.title.length > 0 ? note.title : 'Note'}</h1>
 	<nav class="crumb" aria-label="Breadcrumb">
 		<a href={ROUTES.NOTES}>{NAV_LABELS.NOTES}</a>
 		<span aria-hidden="true">/</span>

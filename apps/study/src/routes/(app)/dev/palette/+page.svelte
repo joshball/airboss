@@ -19,7 +19,7 @@
 </svelte:head>
 
 <header class="page-header">
-	<h1>Palette visual variants</h1>
+	<h1 data-testid="page-anchor">Palette visual variants</h1>
 	<p class="lede">
 		Phase 3 of the command-palette work package. Each link below mounts a working palette in a
 		different visual shape with the same underlying ranker and loaders, so we can compare them on
