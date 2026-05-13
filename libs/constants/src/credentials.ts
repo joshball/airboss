@@ -233,15 +233,23 @@ export const COURSE_STATUS_LABELS: Record<CourseStatus, string> = {
 /**
  * `course_step.level` values. Closed enum mirrored by a DB CHECK.
  *
- * Two-level pedagogical tree:
+ * Arbitrary-depth pedagogical tree (course-tree-arbitrary-depth WP). The
+ * 2-level shape (section -> step) is the trivial case; arbitrary depth is
+ * unlocked by inserting `lesson` rows between sections and their leaf
+ * steps. Schema CHECK enforces these row-local invariants; cross-row
+ * parent-level rules + max-depth live in the seed validator.
  *
  * - `section`: top-level grouping under a course. NULL `parent_id`, NULL
  *   `knowledge_node_id`, `is_leaf=false`.
- * - `step`: leaf under a section. NOT NULL `parent_id` (the section), NOT
- *   NULL `knowledge_node_id`, `is_leaf=true`.
+ * - `lesson`: interior node between a section and its leaves. NOT NULL
+ *   `parent_id` (a `section` or another `lesson`), NULL `knowledge_node_id`,
+ *   `is_leaf=false`. Must have >= 1 child (enforced by the seed validator).
+ * - `step`: leaf under a section or a lesson. NOT NULL `parent_id`,
+ *   NOT NULL `knowledge_node_id`, `is_leaf=true`.
  */
 export const COURSE_STEP_LEVELS = {
 	SECTION: 'section',
+	LESSON: 'lesson',
 	STEP: 'step',
 } as const;
 
@@ -251,8 +259,18 @@ export const COURSE_STEP_LEVEL_VALUES: readonly CourseStepLevel[] = Object.value
 
 export const COURSE_STEP_LEVEL_LABELS: Record<CourseStepLevel, string> = {
 	[COURSE_STEP_LEVELS.SECTION]: 'Section',
+	[COURSE_STEP_LEVELS.LESSON]: 'Lesson',
 	[COURSE_STEP_LEVELS.STEP]: 'Step',
 };
+
+/**
+ * Defensive cap on course-tree depth, measured from a section root down to
+ * the deepest leaf. The seed validator rejects authoring that exceeds this.
+ * Real pedagogy bottoms out around 4-5 levels (e.g. credential / unit /
+ * lesson / sub-lesson / step); 10 is well clear of realistic authoring while
+ * still catching runaway recursion in malformed YAML.
+ */
+export const COURSE_TREE_MAX_DEPTH = 10;
 
 /**
  * `syllabus.status` values. Closed enum.
