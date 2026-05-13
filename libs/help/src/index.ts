@@ -9,11 +9,13 @@
 
 export {
 	type CalloutVariant,
+	type DirectiveNode,
 	highlight,
 	type InlineNode,
 	MarkdownParseError,
 	type MdNode,
 	parseMarkdown,
+	parseMarkdownSync,
 	SUPPORTED_LANGS,
 	type SupportedLang,
 	type TableAlign,

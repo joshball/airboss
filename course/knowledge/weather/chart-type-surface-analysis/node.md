@@ -68,7 +68,7 @@ The chart is dense by design. The skill is knowing which marks to look at first 
 
 Look at a current surface analysis. Before you read anything, ask: what are the four kinds of marks on this chart?
 
-:::chart slug="wx-surface-analysis-2024-12-23-12z"
+:::chart slug="wx-scenarios/frontal-xc-march/surface-analysis"
 :::
 
 1. **Pressure centers** -- letters `H` and `L` at the middle of closed isobars. These are the engines of the synoptic flow. A deep low pulls air in at the surface and lifts it; a strong high pushes air out and subsides it.

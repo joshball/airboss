@@ -1,8 +1,6 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
-import { renderMarkdown } from '@ab/utils';
-import { page } from '$app/state';
-import CourseStepChart from '$lib/components/CourseStepChart.svelte';
+import CourseStepMarkdown from '$lib/components/CourseStepMarkdown.svelte';
 import EncodedTextLadderTabs from '$lib/components/EncodedTextLadderTabs.svelte';
 import KnowledgeNodeBody from '$lib/components/KnowledgeNodeBody.svelte';
 import TransitionStepBody from '$lib/components/TransitionStepBody.svelte';
@@ -22,12 +20,6 @@ const isTransition = $derived(data.isTransition);
 const hasStepFraming = $derived(step.bodyMd !== '');
 const hasNodeBody = $derived(node !== null && (node.contentMd ?? '').trim() !== '');
 const isNodeSkeleton = $derived(node !== null && !hasNodeBody);
-
-// Optional embedded chart -- the step page accepts a `?chart=<slug>` query
-// param so an author can preview a chart placeholder without authoring the
-// markdown directive yet (per OUT-OF-SCOPE.md `:::chart` markdown extension
-// parser deferral). The directive parser ships in a follow-on WP.
-const chartSlug = $derived(page.url.searchParams.get('chart'));
 </script>
 
 <svelte:head>
@@ -53,8 +45,8 @@ const chartSlug = $derived(page.url.searchParams.get('chart'));
 	</header>
 
 	{#if hasStepFraming}
-		<section class="framing prose" aria-label="Step framing">
-			{@html renderMarkdown(step.bodyMd)}
+		<section class="framing" aria-label="Step framing">
+			<CourseStepMarkdown bodyMd={step.bodyMd} />
 		</section>
 	{/if}
 
@@ -75,10 +67,6 @@ const chartSlug = $derived(page.url.searchParams.get('chart'));
 		<TransitionStepBody bodyMd={node.contentMd ?? ''} />
 	{:else}
 		<KnowledgeNodeBody {phases} ariaLabel="Step content" />
-	{/if}
-
-	{#if chartSlug !== null && chartSlug !== ''}
-		<CourseStepChart slug={chartSlug} />
 	{/if}
 </section>
 
@@ -154,20 +142,6 @@ const chartSlug = $derived(page.url.searchParams.get('chart'));
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
 		padding: var(--space-lg);
-	}
-
-	.prose :global(p) {
-		margin: 0 0 var(--space-md);
-		line-height: 1.55;
-		color: var(--ink-body);
-	}
-
-	.prose :global(p:last-child) {
-		margin-bottom: 0;
-	}
-
-	.prose :global(a) {
-		color: var(--action-default-hover);
 	}
 
 	.missing-node {

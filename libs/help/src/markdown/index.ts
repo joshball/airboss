@@ -11,8 +11,8 @@ import type { MdNode } from './ast';
 import { parseBlocks } from './block';
 import { highlight } from './highlight';
 
-export type { CalloutVariant, InlineNode, MdNode, TableAlign } from './ast';
-export { MarkdownParseError } from './block';
+export type { CalloutVariant, DirectiveNode, InlineNode, MdNode, TableAlign } from './ast';
+export { MarkdownParseError, parseBlocks as parseMarkdownSync } from './block';
 export { highlight, SUPPORTED_LANGS, type SupportedLang } from './highlight';
 
 /**

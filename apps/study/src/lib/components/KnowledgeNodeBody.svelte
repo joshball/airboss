@@ -21,7 +21,8 @@ stay in lock-step.
 -->
 <script lang="ts">
 import { KNOWLEDGE_PHASE_LABELS, type KnowledgePhase } from '@ab/constants';
-import { humanize, renderMarkdown } from '@ab/utils';
+import { humanize } from '@ab/utils';
+import CourseStepMarkdown from './CourseStepMarkdown.svelte';
 
 export interface NodeBodyPhase {
 	/** One of the seven KNOWLEDGE_PHASE values. */
@@ -41,11 +42,6 @@ let { phases, ariaLabel = 'Content phases' }: Props = $props();
 function phaseLabel(phase: string): string {
 	return (KNOWLEDGE_PHASE_LABELS as Record<KnowledgePhase, string>)[phase as KnowledgePhase] ?? humanize(phase);
 }
-
-function renderPhase(body: string | null): string {
-	if (!body) return '';
-	return renderMarkdown(body);
-}
 </script>
 
 <section class="phases" aria-label={ariaLabel}>
@@ -53,7 +49,7 @@ function renderPhase(body: string | null): string {
 		<article class="phase" aria-labelledby="phase-{p.phase}">
 			<h3 id="phase-{p.phase}" class="phase-title">{phaseLabel(p.phase)}</h3>
 			{#if p.body}
-				<div class="prose">{@html renderPhase(p.body)}</div>
+				<div class="prose"><CourseStepMarkdown bodyMd={p.body} /></div>
 			{:else}
 				<p class="gap-body">Not yet authored.</p>
 			{/if}

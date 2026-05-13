@@ -279,6 +279,12 @@ export {
 	SYNC_OUTCOMES,
 	type SyncOutcome,
 } from './jobs';
+export {
+	MARKDOWN_DIRECTIVE_NAMES,
+	MARKDOWN_DIRECTIVE_REQUIRED_ATTRS,
+	MARKDOWN_DIRECTIVE_VALUES,
+	type MarkdownDirectiveName,
+} from './markdown-directives';
 export { ALLOWED_OUTBOUND_SCHEMES, PRIVATE_IPV4_CIDRS, PRIVATE_IPV6_CIDRS } from './network';
 export {
 	NOTE_BODY_MAX_LENGTH,
