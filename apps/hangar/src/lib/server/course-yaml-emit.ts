@@ -1,7 +1,8 @@
 // @browser-globals: server-only -- never imported by client .svelte
 /**
  * Canonical YAML emission for course manifest + section files
- * (course-reader-and-editor WP, Phase 6).
+ * (course-reader-and-editor WP, Phase 6; course-tree-arbitrary-depth
+ * WP, Phase D).
  *
  * Per design.md "Hangar editor: YAML emission via a small canonical-write
  * helper": every save action re-emits the entire YAML file in canonical
@@ -12,20 +13,24 @@
  * Stable key order:
  *   - manifest.yaml: `slug`, `kind`, `title`, `status`, `description`
  *   - section.yaml:   `code`, `ordinal`, `title`, `body_md`, `steps`
- *   - step (inline):  `code`, `ordinal`, `title`, `body_md`,
+ *   - step (inline):  `code`, `ordinal`, [`level`], `title`, `body_md`,
  *                     `knowledge_node_id`
+ *   - lesson (inline): `code`, `ordinal`, `level`, `title`, `body_md`,
+ *                     `steps`
  *
  * Multi-line strings (description, body_md) emit as literal block scalars
  * (`|`) to preserve formatting + comments-in-prose. Empty strings collapse
  * to `''` so an absent description still round-trips cleanly.
  *
- * Future: when authored YAML grows real comments, swap to
- * `yaml.parseDocument` + per-field setter pattern (option 3 in design.md).
- * Today the project doesn't have authored comments; option 1 (canonical
- * stringify) is the simplest correct emission.
+ * Lesson rows (course-tree-arbitrary-depth WP) round-trip unchanged: the
+ * editor's UI is leaf-only (lessons render as a read-only banner per
+ * +page.svelte), but the save path now routes lessons through the emitter
+ * so an edit to a leaf inside a section with nested lessons does not
+ * destroy the lesson structure. A future hangar phase ships the nested
+ * editor; until then the YAML file is the unit of nested authoring.
  */
 
-import type { CourseManifest, CourseSection, CourseStep, CourseTreeNode } from '@ab/bc-study';
+import type { CourseManifest, CourseSection, CourseTreeNode } from '@ab/bc-study';
 import { COURSE_STEP_LEVELS } from '@ab/constants';
 import { stringify } from 'yaml';
 
@@ -63,21 +68,39 @@ export interface SectionEmitInput {
 	ordinal: number;
 	title: string;
 	body_md: string;
-	steps: StepEmitInput[];
+	/**
+	 * Mixed list of step (leaf) and lesson (interior) entries. Each entry
+	 * is serialised via {@link treeNodeToEmitObject} so lesson interiors
+	 * round-trip with their nested children unchanged.
+	 */
+	steps: TreeNodeEmit[];
 }
 
 export interface StepEmitInput {
 	code: string;
 	ordinal: number;
+	level?: typeof COURSE_STEP_LEVELS.STEP;
 	title: string;
 	body_md: string;
 	knowledge_node_id: string;
 }
 
+export interface LessonEmitInput {
+	code: string;
+	ordinal: number;
+	level: typeof COURSE_STEP_LEVELS.LESSON;
+	title: string;
+	body_md: string;
+	steps: TreeNodeEmit[];
+}
+
+export type TreeNodeEmit = StepEmitInput | LessonEmitInput;
+
 /**
  * Emit a section YAML file (under `sections/<file>.yaml`). Steps are
- * inline; each step's keys land in the stable order. `body_md` fields use
- * literal block scalar.
+ * inline; each entry's keys land in the stable order. `body_md` fields
+ * use literal block scalar. Lesson interiors recurse via
+ * {@link treeNodeToEmitObject} so the full N-deep tree round-trips.
  */
 export function emitSection(input: SectionEmitInput): string {
 	const ordered: Record<string, unknown> = {
@@ -85,13 +108,7 @@ export function emitSection(input: SectionEmitInput): string {
 		ordinal: input.ordinal,
 		title: input.title,
 		body_md: input.body_md,
-		steps: input.steps.map((step) => ({
-			code: step.code,
-			ordinal: step.ordinal,
-			title: step.title,
-			body_md: step.body_md,
-			knowledge_node_id: step.knowledge_node_id,
-		})),
+		steps: input.steps.map(treeNodeToEmitObject),
 	};
 	return stringify(ordered, {
 		lineWidth: 0,
@@ -100,54 +117,96 @@ export function emitSection(input: SectionEmitInput): string {
 }
 
 /**
+ * Render one tree-node entry (step OR lesson) as a stable-key-order
+ * plain object suitable for `yaml.stringify`. Lessons recurse over their
+ * own `steps[]`; steps emit the leaf shape with `knowledge_node_id`. The
+ * `level` key is omitted on steps (the default in YAML) to keep the
+ * 2-level output byte-identical to pre-WP files.
+ */
+function treeNodeToEmitObject(node: TreeNodeEmit): Record<string, unknown> {
+	if (node.level === COURSE_STEP_LEVELS.LESSON) {
+		return {
+			code: node.code,
+			ordinal: node.ordinal,
+			level: node.level,
+			title: node.title,
+			body_md: node.body_md,
+			steps: node.steps.map(treeNodeToEmitObject),
+		};
+	}
+	return {
+		code: node.code,
+		ordinal: node.ordinal,
+		title: node.title,
+		body_md: node.body_md,
+		knowledge_node_id: node.knowledge_node_id,
+	};
+}
+
+/**
  * Convert a parsed `CourseSection` (from the Zod schema) back to the
- * emit input shape. Useful when an editor save reads the existing file,
- * applies a delta, and re-emits.
+ * emit input shape. Recurses over lesson interiors so a section that
+ * already contains nested lessons on disk round-trips through the
+ * editor's save path without losing structure.
  *
- * Hangar's editor today only authors 2-level (section -> step) content.
- * The course YAML schema accepts arbitrary depth (lessons between section
- * and step) as of the course-tree-arbitrary-depth WP; nested-lesson
- * authoring through this editor lands in a follow-up phase. If a section
- * file already contains a lesson (read off disk), the editor refuses to
- * re-emit until lesson-aware emission ships -- throwing here is the
- * loudest place to surface that boundary.
+ * Hangar's editor UI today authors at the leaf-step level only (lesson
+ * authoring is in the OUT-OF-SCOPE.md "Hangar editor UI" follow-up).
+ * Leaf-level edits route through the existing form actions; the
+ * surrounding lesson interiors flow through this function unchanged.
  */
 export function sectionToEmitInput(section: CourseSection): SectionEmitInput {
-	const stepNodes: CourseStep[] = [];
-	for (const node of section.steps) {
-		if (node.level === COURSE_STEP_LEVELS.LESSON) {
-			throw new Error(
-				`Hangar YAML emit does not yet support lesson nodes (section '${section.code}', lesson '${node.code}'). Edit the YAML file directly until the editor's nested-lesson support lands.`,
-			);
-		}
-		stepNodes.push(node);
-	}
 	return {
 		code: section.code,
 		ordinal: section.ordinal,
 		title: section.title,
 		body_md: section.body_md,
-		steps: stepNodes.map(stepToEmitInput),
+		steps: section.steps.map(treeNodeFromParsed),
 	};
 }
 
-export function stepToEmitInput(step: CourseStep | CourseTreeNode): StepEmitInput {
-	if (step.level === COURSE_STEP_LEVELS.LESSON) {
-		throw new Error(
-			`Hangar YAML emit does not yet support lesson nodes (lesson '${step.code}'). Edit the YAML file directly until the editor's nested-lesson support lands.`,
-		);
+/**
+ * Convert a parsed tree-node (step or lesson) into the emit shape.
+ * Recurses on lesson children. Defensively coalesces optional fields to
+ * the DB defaults (empty `body_md`, empty `knowledge_node_id` on steps;
+ * the seed validator enforces required fields before any write).
+ */
+function treeNodeFromParsed(node: CourseTreeNode): TreeNodeEmit {
+	if (node.level === COURSE_STEP_LEVELS.LESSON) {
+		return {
+			code: node.code,
+			ordinal: node.ordinal,
+			level: COURSE_STEP_LEVELS.LESSON,
+			title: node.title,
+			body_md: node.body_md ?? '',
+			steps: node.steps.map(treeNodeFromParsed),
+		};
 	}
+	return {
+		code: node.code,
+		ordinal: node.ordinal,
+		title: node.title,
+		body_md: node.body_md ?? '',
+		knowledge_node_id: node.knowledge_node_id ?? '',
+	};
+}
+
+/**
+ * Convert a single step (from a form payload or in-memory edit) into the
+ * emit-step shape. Leaves are the only kind the hangar UI authors today;
+ * lessons round-trip via {@link treeNodeFromParsed} above.
+ */
+export function stepToEmitInput(step: {
+	code: string;
+	ordinal: number;
+	title: string;
+	body_md?: string;
+	knowledge_node_id?: string;
+}): StepEmitInput {
 	return {
 		code: step.code,
 		ordinal: step.ordinal,
 		title: step.title,
-		// Zod normalises `body_md` to `''` on optional input; the type widening
-		// to CourseTreeNode brings the optional back, so coalesce to '' here.
 		body_md: step.body_md ?? '',
-		// The Zod schema types `knowledge_node_id` as optional, but the seed
-		// validator rejects steps without it. Save actions must enforce that
-		// before calling here; we cast away the optionality once the field is
-		// confirmed present.
 		knowledge_node_id: step.knowledge_node_id ?? '',
 	};
 }

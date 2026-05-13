@@ -13,13 +13,16 @@ const course = $derived(data.course);
 const section = $derived(data.section);
 const pickerNodes = $derived(data.pickerNodes);
 
-// Hangar's editor today only authors 2-level (section -> step) content.
-// Phase A of course-tree-arbitrary-depth WP introduced an interior
-// `lesson` row kind in the YAML schema; the editor's nested-lesson
-// rendering lands in a follow-up phase. Until then we narrow to leaf
-// steps for display. A section file that already contains lesson rows
-// on disk falls back to a clear empty-state message ("nested authoring
-// not yet supported"); the underlying seed enforces the same boundary.
+// Hangar's editor today authors at the leaf-step level only. The
+// course-tree-arbitrary-depth WP's recursive YAML schema accepts any
+// depth (sections / lessons / steps); a nested-tree editor UI is
+// captured in OUT-OF-SCOPE.md "Hangar editor UI" and lands in a
+// follow-up. Until then the UI lists only direct leaf steps for
+// editing; sections that already contain lesson interiors on disk
+// surface a read-only banner so the author knows lesson content
+// exists but must be edited via the YAML file. Save actions
+// (addStep / updateStep / deleteStep) operate only on leaf steps;
+// surrounding lesson rows round-trip unchanged through the emitter.
 const leafSteps = $derived(section.steps.filter((node) => node.level !== COURSE_STEP_LEVELS.LESSON) as CourseStep[]);
 const hasLessons = $derived(section.steps.length !== leafSteps.length);
 
@@ -133,9 +136,10 @@ function cancelEdit(): void {
 
 		{#if hasLessons}
 			<p class="banner banner-warn" role="status">
-				This section contains lesson interiors authored on disk. The editor only supports flat
-				section -> step content today; nested-lesson editing lands in a follow-up phase of the
-				course-tree-arbitrary-depth WP. Edit the YAML file directly to change lesson rows.
+				This section contains lesson interiors authored on disk. The editor shows only the leaf
+				steps below; lesson rows round-trip unchanged on save. Nested-lesson editing in the UI
+				lands in a follow-up (see the work package's OUT-OF-SCOPE notes). Edit the YAML file
+				directly to change lesson rows for now.
 			</p>
 		{/if}
 		{#if leafSteps.length === 0}
@@ -264,6 +268,12 @@ function cancelEdit(): void {
 		background: var(--signal-success-wash);
 		color: var(--ink-body);
 		border-color: var(--signal-success-edge);
+	}
+
+	.banner-warn {
+		background: var(--signal-warning-wash);
+		color: var(--ink-body);
+		border-color: var(--signal-warning-edge);
 	}
 
 	.block {
