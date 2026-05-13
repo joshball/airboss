@@ -39,13 +39,12 @@ body_md: |
   prompt below is derived from the same canonical atmosphere -- so when
   you ask "why is KSPI gusty?" or "why does KORD's TAF carry an FM at
   21Z?" there is a real answer pinned to the truth state, not a
-  templated explanation. The briefing-pack panel below mounts the full
-  scenario bundle per
-  [CONSUMER-CONTRACT.md](../../../../docs/work-packages/wx-engine/CONSUMER-CONTRACT.md):
-
-  :::scenario slug="frontal-xc-march"
-  :::
+  templated explanation. The full briefing-pack walk-through lives in
+  [s11.1, frontal cold-front XC](/courses/weather-comprehensive/s11.1);
+  this section uses two charts from that scenario to illustrate the
+  air-mass and stability concepts.
 steps:
+
   - code: s2.1
     ordinal: 1
     title: Air masses and fronts
