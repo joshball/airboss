@@ -10,9 +10,9 @@
 		"@ab/db": "workspace:*",
 		"@ab/hangar-jobs": "workspace:*",
 		"@ab/utils": "workspace:*",
-		"drizzle-orm": "^0.44.2"
+		"drizzle-orm": "catalog:"
 	},
 	"devDependencies": {
-		"vitest": "^4.1.0"
+		"vitest": "catalog:"
 	}
 }

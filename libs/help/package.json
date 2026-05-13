@@ -31,7 +31,7 @@
 		"shiki": "^4.0.2"
 	},
 	"devDependencies": {
-		"svelte": "^5.34.7",
-		"vitest": "^4.1.0"
+		"svelte": "catalog:",
+		"vitest": "catalog:"
 	}
 }

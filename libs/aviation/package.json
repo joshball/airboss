@@ -15,7 +15,7 @@
 		"smol-toml": "^1.6.1"
 	},
 	"devDependencies": {
-		"svelte": "^5.34.7",
-		"vitest": "^4.1.0"
+		"svelte": "catalog:",
+		"vitest": "catalog:"
 	}
 }

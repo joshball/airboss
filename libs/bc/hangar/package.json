@@ -15,10 +15,10 @@
 		"@ab/db": "workspace:*",
 		"@ab/hangar-jobs": "workspace:*",
 		"@ab/utils": "workspace:*",
-		"drizzle-orm": "^0.44.2",
-		"zod": "^3.25.36"
+		"drizzle-orm": "catalog:",
+		"zod": "catalog:"
 	},
 	"devDependencies": {
-		"vitest": "^4.1.0"
+		"vitest": "catalog:"
 	}
 }
