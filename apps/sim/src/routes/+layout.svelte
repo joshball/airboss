@@ -1,6 +1,6 @@
 <script lang="ts">
 import '@ab/themes/generated/tokens.css';
-import { ROUTES, SIM_STORAGE_KEYS } from '@ab/constants';
+import { APP_IDS, ROUTES, SIM_STORAGE_KEYS } from '@ab/constants';
 import HelpSearch from '@ab/help/ui/HelpSearch.svelte';
 import {
 	type AppearanceMode,
@@ -17,6 +17,7 @@ import AppHeader from '@ab/ui/components/AppHeader.svelte';
 import Banner from '@ab/ui/components/Banner.svelte';
 import type { Snippet } from 'svelte';
 import { page } from '$app/state';
+import { registerSimCommands, unregisterSimCommands } from '$lib/palette/commands';
 import '$lib/help/register';
 import type { LayoutData } from './$types';
 
@@ -128,6 +129,13 @@ async function setAppearance(value: AppearancePreference) {
 		// Non-fatal: the cookie just won't persist this turn.
 	}
 }
+
+// Phase 4 of the command-palette WP: register the sim app's declarative
+// commands with the singleton `paletteCommands` registry on mount.
+$effect(() => {
+	registerSimCommands();
+	return () => unregisterSimCommands();
+});
 </script>
 
 <AppHeader
@@ -141,7 +149,7 @@ async function setAppearance(value: AppearancePreference) {
 	appOrigins={data.appOrigins}
 >
 	{#snippet helpSearch()}
-		<HelpSearch />
+		<HelpSearch app={APP_IDS.SIM} />
 	{/snippet}
 	{#snippet themePicker()}
 		<ThemePicker currentThemeId={selection.theme} onSelect={setTheme} locked={themePickerLocked} />

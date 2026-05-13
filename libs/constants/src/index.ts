@@ -463,6 +463,7 @@ export {
 export { ROLE_LABELS, ROLE_VALUES, ROLES, type Role } from './roles';
 export {
 	AIRBOSS_REPO_SLUG,
+	APP_IDS,
 	APP_NAMES,
 	type AppId,
 	NAV_LABELS,

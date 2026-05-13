@@ -40,6 +40,8 @@ import {
 	SOURCE_TYPE_VALUES,
 	TOP_HITS_MAX,
 } from '@ab/constants';
+import { paletteCommands } from './commands/registry';
+import type { PaletteCommand } from './commands/types';
 import { classifyIntent, type SearchIntent } from './intent-classifier';
 import { loadAviationRefs } from './loaders/aviation-refs';
 import { loadExternalTools } from './loaders/external-tools';
@@ -375,11 +377,18 @@ export function searchGrouped(
 	const helpPages = wantHelp ? loadHelpPages(parsed, host) : [];
 	const tools = wantTools ? loadExternalTools(parsed, host) : [];
 	const injectedRows = filterInjectedByScope(injected, libraryScope);
+	// Phase 4: declarative command registry. Commands appear in `command`
+	// mode (as the only bucket) and in `search` mode (as a lower-priority
+	// bucket). The library/mine narrowing doesn't filter commands -- they
+	// are an orthogonal surface ("things you can do") that the user can
+	// always reach. Host-app boost is applied here so the per-app priority
+	// survives even when the column is folded into the global sort.
+	const commandRows = loadCommands(parsed, host);
 
 	// Score every row using the Phase 3.5 composite scorer. Loaders left
 	// the rankBucket field populated (back-compat), but downstream sorting,
 	// top-hits selection, and book-level collapse all key off the score.
-	const all = withScores([...aviation, ...helpPages, ...tools, ...injectedRows], freeText, intent);
+	const all = withScores([...aviation, ...helpPages, ...tools, ...injectedRows, ...commandRows], freeText, intent);
 
 	// Bucket into columns.
 	const columns: Record<ResultColumn, TypedResult[]> = {
@@ -657,4 +666,59 @@ function filterInjectedByScope(injected: readonly TypedResult[], scope: LibraryS
 	}
 	// help
 	return injected.filter((row) => row.type === 'airboss.help');
+}
+
+// =================================================================
+// Phase 4 -- command loader
+// =================================================================
+
+/**
+ * Pull commands from the singleton registry, apply the host-app boost,
+ * and shape each into a `TypedResult` for the search pipeline.
+ *
+ * Commands have no `href` to navigate to in the traditional sense -- the
+ * handler is invoked instead. We surface `cmd:<id>` as the `href` so the
+ * activation site (CommandPalette.activate) can detect the prefix and
+ * route to `paletteCommands` rather than `goto()`.
+ */
+function loadCommands(parsed: ParsedQuery, host: PaletteHost): readonly TypedResult[] {
+	const hostApp = host.app;
+	if (!hostApp) {
+		// No host app => no boost basis, but commands can still surface.
+		// Sort alpha by label across all surfaces.
+		const all = paletteCommands.list();
+		const matches = filterCommands(all, parsed.freeText);
+		matches.sort((a, b) => a.label.localeCompare(b.label));
+		return matches.map(commandToResult);
+	}
+	const matches = paletteCommands.search(parsed, hostApp);
+	return matches.map(commandToResult);
+}
+
+function filterCommands(commands: readonly PaletteCommand[], freeText: string): PaletteCommand[] {
+	const needle = freeText.trim().toLowerCase();
+	if (needle.length === 0) return [...commands];
+	const out: PaletteCommand[] = [];
+	for (const cmd of commands) {
+		if (cmd.label.toLowerCase().includes(needle)) {
+			out.push(cmd);
+			continue;
+		}
+		if (cmd.keywords.some((kw) => kw.toLowerCase().includes(needle))) {
+			out.push(cmd);
+		}
+	}
+	return out;
+}
+
+function commandToResult(cmd: PaletteCommand): TypedResult {
+	return {
+		id: cmd.id,
+		type: cmd.type,
+		title: cmd.label,
+		subtitle: cmd.subtitle,
+		href: `cmd:${cmd.id}`,
+		rankBucket: 2,
+		depth: 0,
+	};
 }

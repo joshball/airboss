@@ -1,5 +1,5 @@
 <script lang="ts">
-import { ROUTES } from '@ab/constants';
+import { APP_IDS, ROUTES } from '@ab/constants';
 import HelpSearch from '@ab/help/ui/HelpSearch.svelte';
 import {
 	type AppearanceMode,
@@ -16,6 +16,7 @@ import AppHeader from '@ab/ui/components/AppHeader.svelte';
 import type { Snippet } from 'svelte';
 import { page } from '$app/state';
 import Nav from '$lib/components/Nav.svelte';
+import { registerHangarCommands, unregisterHangarCommands } from '$lib/palette/commands';
 // Module-eval side-effect: register hangar-app help pages on first import.
 // Required so `<PageHelp pageId="audit">` and the help-id validator both
 // see the same set of authored pages.
@@ -109,6 +110,13 @@ async function setAppearance(value: AppearancePreference) {
 		// Non-fatal: the cookie just doesn't persist this turn.
 	}
 }
+
+// Phase 4 of the command-palette WP: register the hangar app's
+// declarative commands with the singleton `paletteCommands` registry.
+$effect(() => {
+	registerHangarCommands();
+	return () => unregisterHangarCommands();
+});
 </script>
 
 <!--
@@ -132,7 +140,7 @@ async function setAppearance(value: AppearancePreference) {
 			<Nav />
 		{/snippet}
 		{#snippet helpSearch()}
-			<HelpSearch />
+			<HelpSearch app={APP_IDS.HANGAR} />
 		{/snippet}
 		{#snippet themePicker()}
 			<ThemePicker currentThemeId={selection.theme} onSelect={setTheme} locked={themePickerLocked} />

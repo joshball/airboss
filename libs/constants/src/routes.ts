@@ -932,6 +932,20 @@ export const APP_NAMES = {
 export type AppId = keyof typeof APP_NAMES;
 
 /**
+ * Named app-id constants. Use these instead of bare `'study'` / `'sim'` /
+ * etc. literals at call sites (`PaletteCommand.surface`, `PaletteHost.app`,
+ * the `AppHeader` `app` prop) so a rename touches one file. Mirror the keys
+ * of `APP_NAMES` for back-compat with grep + lint.
+ */
+export const APP_IDS = {
+	STUDY: 'study',
+	SIM: 'sim',
+	HANGAR: 'hangar',
+	FLIGHTBAG: 'flightbag',
+	AVIONICS: 'avionics',
+} as const satisfies Record<string, AppId>;
+
+/**
  * Labels for primary navigation links. Kept out of markup so every surface
  * renders the same text and a rename only touches one file.
  */

@@ -1,11 +1,12 @@
 <script lang="ts">
 import type { AutocompleteEntry, AutocompleteSource } from '@ab/autocomplete';
 import { Autocomplete, DocCodeSource, TitlePrefixSource } from '@ab/autocomplete';
-import { APP_SURFACES, type AppSurface, HELP_SEARCH_DEBOUNCE_MS } from '@ab/constants';
+import { APP_SURFACES, type AppId, type AppSurface, HELP_SEARCH_DEBOUNCE_MS } from '@ab/constants';
 import { createFocusTrap, type FocusTrap } from '@ab/ui/lib/focus-trap';
 import { tick, untrack } from 'svelte';
 import { goto } from '$app/navigation';
 import { page } from '$app/state';
+import { paletteCommands } from '../commands/registry';
 import type { ParsedFilter } from '../schema/help-registry';
 import { PALETTE_MODE_ELIGIBLE, type PaletteMode } from '../schema/palette-mode';
 import type { GroupedResults, PaletteHost, SearchResult, SynonymRewrite } from '../schema/result-types';
@@ -53,18 +54,25 @@ import '@ab/themes/palette-tokens.css';
 interface Props {
 	open: boolean;
 	onClose: () => void;
-	/** Host surface for per-app boost. Defaults to GLOBAL when omitted. */
+	/** Page-level surface for per-surface loader scoping. Defaults to GLOBAL when omitted. */
 	surface?: AppSurface;
+	/**
+	 * Host app id (`study`, `sim`, `hangar`, `flightbag`, `avionics`). Drives
+	 * the Phase 4 per-app command boost: the active app's commands sort
+	 * above commands from sibling apps.
+	 */
+	app?: AppId;
 	/** Mode (search / quickopen / command). Defaults to `search`. */
 	mode?: PaletteMode;
 	/** Server-injected typed rows (cards / reps / plans / sections). */
 	injectedResults?: readonly SearchResult[];
 }
 
-let { open, onClose, surface, mode = 'search', injectedResults }: Props = $props();
+let { open, onClose, surface, app, mode = 'search', injectedResults }: Props = $props();
 
 const host: PaletteHost = $derived<PaletteHost>({
 	surface: surface ?? APP_SURFACES.GLOBAL,
+	app,
 	userId: page.data?.user?.id,
 });
 
@@ -421,6 +429,16 @@ function jumpFocusZone(direction: 1 | -1): void {
 function activate(result: SearchResult): void {
 	const path = result.href;
 	onClose();
+	// Phase 4: command rows carry a synthetic `cmd:<id>` href. Route those
+	// through the registry rather than `goto()` so the declarative handler
+	// fires (which itself may navigate via `goto`, dispatch an API call,
+	// open a modal, etc).
+	if (path.startsWith('cmd:')) {
+		const id = path.slice('cmd:'.length);
+		const cmd = paletteCommands.list().find((c) => c.id === id);
+		if (cmd) void cmd.handler();
+		return;
+	}
 	if (path.startsWith('http://') || path.startsWith('https://')) {
 		window.open(path, '_blank', 'noopener');
 		return;
