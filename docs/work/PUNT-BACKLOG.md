@@ -51,8 +51,6 @@ After each walk: `bun run wp set <slug> human-review signed-off`, then `bun run 
 ### Blocking / major
 
 - **24 e2e failures flagged in NOW.md** — two root causes: Buffer hydration leak + Postgres crash on `hangar.docs_search_index`. Not investigated.
-- **fast-xml-parser dep resolution from app workspaces** — already declared at `libs/sources/package.json:21`. The bug is svelte-check's evaluation path from app workspaces, not a missing dep. Investigate workspace resolution / bun catalog setup; original description was wrong.
-- **`@ab/bc-sim/persistence` + `three` resolution from sim/avionics/flightbag** — same shape, svelte-check fails. `three` is imported at `apps/sim/src/lib/horizon/Horizon3D.svelte:52`; `@ab/bc-sim/persistence` at sim's `+page.server.ts`. Workspace resolution issue, not missing dep.
 - **`bug-palette-fts-third-source`** (filed) — Palette FTS loader missing `study.course_step.body_md` as third source. Revisit after course-tree-arbitrary-depth WP stabilises.
 - **`/library` Playwright smoke failure** — original spec file no longer exists; replaced by `tests/e2e/library-redirects.spec.ts`. Whether the smoke is still red is unverified. Re-run the suite and decide.
 - **Flaky test at `libs/hangar-jobs/src/worker.test.ts:273`** — race on `hangar_job_log` row visibility under parallel load. Passes in isolation.
