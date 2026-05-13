@@ -2,6 +2,30 @@ code: s4
 ordinal: 4
 title: Wind, turbulence, and density altitude
 body_md: |
+  **Before you start.** This section assumes the synoptic frame from
+  s2 (pressure gradients drive wind; stability decides how the air
+  layers stack) and the visible-cloud picture from s3 (cumulus tells
+  you the boundary layer is mixing). It teaches three variables the
+  airplane feels at takeoff and through cruise: the wind field, the
+  turbulence inside it, and the air density the wing has to work
+  with.
+
+  Terms you will see referenced but not fully taught here:
+
+  - [G-AIRMET](/reference/knowledge/wx-product-airmets-sigmets)
+    turbulence and GTG charts: the graphical hazard products. Read
+    them as previews; they are taught fully in s8.5.
+  - [Mountain wave](/reference/knowledge/wx-turbulence-types) as a
+    full-scenario walk: introduced here, walked end-to-end in
+    [s11.4, lee-side mountain wave](/courses/weather-comprehensive/s11.4).
+  - [Wake turbulence](/reference/knowledge/wx-turbulence-types):
+    listed in s4.2 because the category matters; the avoidance
+    procedures are an airmanship topic outside this course.
+
+  Read the three steps as one picture; the airplane does.
+
+  ---
+
   Three forces decide whether your airplane wants to fly today:
   airflow over the wing (wind), the smoothness or roughness of that
   airflow (turbulence), and the actual density of the air doing the
