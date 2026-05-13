@@ -27,6 +27,10 @@ Authoritative source documents for the weather course. Citation targets for ever
 - **AWC archives** -- historical AIRMETs, SIGMETs, prog charts
 - **NCEI Storm Events Database** -- famous wx events with timestamps for canonical-events lookup
 
+## Product reference encyclopedia
+
+- [Aviation Weather Products](products/README.md) -- a page per product (METAR, TAF, AIRMET, SIGMET, PIREP, ...) with decode, annotated examples, gotchas, triage, and citations. Cited from course sections, scenarios, and knowledge nodes.
+
 ## Course-internal references
 
 - [Three-Stage Skill Ladder](../../../docs/platform/DESIGN_PRINCIPLES.md) -- the pedagogical principle this course is built on
