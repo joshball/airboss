@@ -20,7 +20,11 @@ import { APPEARANCE_COOKIE } from '../../../libs/themes/resolve';
  * lives in the authenticated suite if/when we extend it.
  */
 
-const BASE_URL = process.env.PLAYWRIGHT_BASE_URL ?? `http://localhost:${PORTS.STUDY}`;
+// `PORTS.STUDY` is the developer's dev-mode port (9600); the playwright
+// webServer entries spawn every SvelteKit process on `PORTS.STUDY_E2E`
+// (9603). Pin at the e2e port so this spec hits the same study process
+// the rest of the suite drives (and the one playwright started).
+const BASE_URL = process.env.PLAYWRIGHT_BASE_URL ?? `http://127.0.0.1:${PORTS.STUDY_E2E}`;
 
 interface PaintSnapshot {
 	theme: string | null;

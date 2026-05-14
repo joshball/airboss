@@ -46,9 +46,13 @@ test.describe('course tree -- 3-level fixture (Phase D)', () => {
 		await page.goto(ROUTES.COURSE_STEP(THREE_LEVEL_FIXTURE_SLUG, 's1.1'));
 		// Page title is the lesson title.
 		await expect(page.getByRole('heading', { name: /Scenario 1 - Cold-front passage/i, level: 1 })).toBeVisible();
-		// Children list shows the two leaf substeps.
-		await expect(page.getByText('Reading the surface analysis')).toBeVisible();
-		await expect(page.getByText('Recognising airmass character')).toBeVisible();
+		// Children list shows the two leaf substeps. Scope to the
+		// `aria-label="Children"` section so prev/next nav links (which also
+		// carry the leaf titles) don't trip Playwright's strict-mode
+		// duplicate check.
+		const childList = page.getByRole('region', { name: 'Children' });
+		await expect(childList.getByText('Reading the surface analysis')).toBeVisible();
+		await expect(childList.getByText('Recognising airmass character')).toBeVisible();
 		// Breadcrumb chain includes the parent section.
 		await expect(page.getByRole('navigation', { name: 'Breadcrumb' })).toContainText(/Frontal Scenarios/i);
 	});

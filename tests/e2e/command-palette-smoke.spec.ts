@@ -1,14 +1,17 @@
 /**
- * Command-palette smoke (Phase 2 of the command-palette WP).
+ * Command-palette smoke.
  *
- * Opens the palette via Cmd+K, types each query from the test plan, and
- * asserts that:
+ * Opens the palette via the trigger button (or Cmd+K), types each query
+ * from the test plan, and asserts that:
  *   1. The palette dialog opens (visible + focused).
  *   2. The /api/palette/search endpoint is reachable (no 4xx / 5xx).
- *   3. The palette renders columns (the multi-column UI mounted).
+ *   3. The palette renders one of its three result views -- broad
+ *      (`palette-column`), scoped (`palette-scoped-view`), or
+ *      phrase-fts (`palette-passage-view`). Which view fires depends on
+ *      the intent classifier (`@ab/help/intent`); the smoke only asserts
+ *      "results landed somewhere visible" so it stays robust across
+ *      classifier tuning. Per-view scoping lives in the unit suite.
  *   4. No `Buffer is not defined` or other browser-only crashes fire.
- *   5. For doc-code queries (FAA-H-8083-28, Part 91), at least one row
- *      lands in the FAA Resources column.
  *
  * Why a smoke and not a full per-query suite: walking every test-plan
  * row through a real browser is sequential + slow; the per-loader unit
@@ -23,17 +26,40 @@ import { ROUTES } from '../../libs/constants/src';
 const PALETTE_TRIGGER = '[data-testid="helpsearch-trigger"]';
 const PALETTE_ROOT = '[data-testid="commandpalette-root"]';
 const PALETTE_INPUT = '[data-testid="commandpalette-input"]';
-const PALETTE_COLUMNS = '[data-testid="palette-columns"]';
+// Any of the three intent modes renders one of these regions. The smoke
+// passes when at least one is visible after the query lands.
+const PALETTE_RESULT_REGION =
+	'[data-testid="palette-column"], [data-testid="palette-scoped-view"], [data-testid="palette-passage-view"]';
 
-// A tight battery: doc codes (banner hoist + clusters), needle search,
-// the synonym chip case. The full per-query coverage lives in the
-// per-loader unit tests; this catches the cross-boundary regressions.
-const SMOKE_QUERIES: readonly { q: string; expectColumn?: string }[] = [
-	{ q: 'weather', expectColumn: 'faa-resources' },
-	{ q: 'Part 91', expectColumn: 'faa-resources' },
-	{ q: 'wx' },
-	{ q: 'metar' },
-];
+// A tight battery covering broad search, doc codes, alias, and a needle
+// search. Per-mode coverage lives in the unit suite; this catches the
+// cross-boundary regressions.
+const SMOKE_QUERIES: readonly string[] = ['weather', 'Part 91', 'wx', 'metar'];
+
+/**
+ * Open the palette deterministically. Both the Cmd+K window-keydown
+ * listener and the trigger's `onclick` are wired up by Svelte 5
+ * hydration; under parallel webServer load either entry point can race
+ * against hydration and silently no-op. Wait for `networkidle` so the
+ * JS bundle has settled, retry the click if `aria-expanded` doesn't
+ * flip, then wait for the dialog to mount.
+ */
+async function openPalette(page: import('@playwright/test').Page): Promise<void> {
+	await page.waitForLoadState('networkidle');
+	const trigger = page.locator(PALETTE_TRIGGER);
+	await trigger.waitFor({ state: 'visible' });
+	await expect
+		.poll(
+			async () => {
+				if ((await trigger.getAttribute('aria-expanded')) === 'true') return 'open';
+				await trigger.click({ force: true });
+				return await trigger.getAttribute('aria-expanded');
+			},
+			{ timeout: 5_000, intervals: [100, 250, 500] },
+		)
+		.toBe('open');
+	await page.waitForSelector(PALETTE_ROOT, { state: 'visible' });
+}
 
 test.describe('command-palette smoke', () => {
 	test.beforeEach(async ({ page }) => {
@@ -45,6 +71,9 @@ test.describe('command-palette smoke', () => {
 
 	test('palette opens via Cmd+K and accepts input', async ({ page }) => {
 		await page.goto(ROUTES.MEMORY);
+		// Wait for the page to fully hydrate before sending the keybinding;
+		// `<svelte:window onkeydown>` attaches after Svelte 5 hydration runs.
+		await page.waitForLoadState('networkidle');
 		await page.waitForSelector(PALETTE_TRIGGER, { state: 'visible' });
 
 		// Cmd+K toggle (the Mac binding; Ctrl+K on Linux/Windows is the same path).
@@ -58,38 +87,35 @@ test.describe('command-palette smoke', () => {
 		// Wait long enough for the 150ms debounce + the network fetch to land.
 		await page.waitForTimeout(800);
 
-		// Columns rendered (the multi-column UI is mounted, not the legacy 2-bucket).
-		await expect(page.locator(PALETTE_COLUMNS)).toBeVisible();
+		// One of the three result regions is visible (broad / scoped / phrase-fts).
+		await expect(page.locator(PALETTE_RESULT_REGION).first()).toBeVisible();
 	});
 
 	test('palette closes on Escape and restores prior focus', async ({ page }) => {
 		await page.goto(ROUTES.MEMORY);
-		await page.waitForSelector(PALETTE_TRIGGER, { state: 'visible' });
-
-		await page.keyboard.press('Meta+k');
-		await page.waitForSelector(PALETTE_ROOT, { state: 'visible' });
+		await openPalette(page);
 		await page.keyboard.press('Escape');
 		await expect(page.locator(PALETTE_ROOT)).not.toBeVisible();
 	});
 
-	for (const { q, expectColumn } of SMOKE_QUERIES) {
-		test(`${q}: opens, types, renders columns`, async ({ page }) => {
+	for (const q of SMOKE_QUERIES) {
+		test(`${q}: opens, types, renders results`, async ({ page }) => {
 			const apiResponses: number[] = [];
 			page.on('response', (resp) => {
 				if (resp.url().includes('/api/palette/search')) apiResponses.push(resp.status());
 			});
 
 			await page.goto(ROUTES.MEMORY);
-			await page.waitForSelector(PALETTE_TRIGGER, { state: 'visible' });
-
-			await page.keyboard.press('Meta+k');
-			await page.waitForSelector(PALETTE_ROOT, { state: 'visible' });
+			await openPalette(page);
 
 			const input = page.locator(PALETTE_INPUT);
 			await input.fill(q);
 			await page.waitForTimeout(900);
 
-			await expect(page.locator(PALETTE_COLUMNS)).toBeVisible();
+			// One of the three result regions is visible. The unit suite pins
+			// which classifier intent each query lands in; this spec only pins
+			// the cross-boundary contract "the palette renders results."
+			await expect(page.locator(PALETTE_RESULT_REGION).first()).toBeVisible();
 
 			// Endpoint reachable: every captured response is 2xx (or none, when
 			// the in-process facade alone served the query). Anything 4xx/5xx
@@ -98,20 +124,6 @@ test.describe('command-palette smoke', () => {
 				apiResponses.filter((s) => s >= 400),
 				`unexpected 4xx/5xx from /api/palette/search for query "${q}": ${apiResponses.join(', ')}`,
 			).toEqual([]);
-
-			if (expectColumn) {
-				// Pin the column the test data declared. The locator scopes to the
-				// section[data-column] that matches; presence of at least one row
-				// inside proves the loader chain landed output in the expected
-				// column, not just somewhere on the page.
-				const targetColumnRows = await page
-					.locator(`${PALETTE_COLUMNS} section[data-column="${expectColumn}"] button[data-result-id]`)
-					.count();
-				expect(
-					targetColumnRows,
-					`expected at least 1 row in column "${expectColumn}" for "${q}"`,
-				).toBeGreaterThan(0);
-			}
 		});
 	}
 });

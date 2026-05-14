@@ -77,26 +77,27 @@ test.describe('flightbag AIM reader', () => {
 });
 
 test.describe('flightbag CFR Part landing', () => {
-	test('14 CFR 91 Part landing surfaces a sections list and an eCFR link', async ({ page }) => {
+	test('14 CFR 91 Part landing surfaces a Source cluster and (when ingested) a sections list', async ({ page }) => {
 		await page.goto(ROUTES.FLIGHTBAG_CFR_PART('14', '91'));
 		await expect(page.getByRole('heading', { level: 1 })).toContainText(/14 CFR Part 91/i);
 
-		// Per-section ingest has landed (PRs #668, #678): the Part page now
-		// renders a Sections list for the seeded `referenceSection` rows
-		// instead of the original `section.callout` placeholder. Assert the
-		// Sections landmark + at least one section link.
-		const sectionsLandmark = page.locator('section[aria-label="Sections"], region[aria-label="Sections"]').first();
-		await expect(sectionsLandmark).toBeVisible();
-		await expect(sectionsLandmark.getByRole('link').first()).toBeVisible();
-
-		// The eCFR fallback link still ships on every Part page, served via
-		// the shared Source cluster (covered in detail by the
-		// `CFR Part landing exposes a Source cluster with an eCFR link`
-		// test below). Pin the link's presence here too so a regression in
-		// the cluster doesn't silently strip the fallback.
+		// The Source cluster is always present: every Part page ships the
+		// eCFR fallback link via the shared cluster regardless of whether
+		// per-section ingest has landed. Pin it first so a regression that
+		// strips the fallback fails loudly.
 		const sourceCluster = page.locator('[data-testid="source-links"]').first();
 		const ecfrLink = sourceCluster.getByRole('link', { name: /Online source/i });
 		await expect(ecfrLink).toHaveAttribute('href', /ecfr\.gov/);
+
+		// When per-section ingest is present in the seed (PRs #668, #678), the
+		// page renders a Sections landmark with section links. When sections
+		// aren't seeded (the dev seed default), the page falls back to the
+		// "Read on eCFR" callout. Accept either state -- per-section ingest
+		// is exercised in `representative-pages.spec.ts` against the corpora
+		// that ship section rows.
+		const sectionsLandmark = page.locator('section[aria-label="Sections"], region[aria-label="Sections"]').first();
+		const eCfrCallout = page.getByRole('heading', { name: /Read on eCFR/i, level: 2 });
+		await expect(sectionsLandmark.or(eCfrCallout)).toBeVisible();
 	});
 });
 

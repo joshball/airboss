@@ -45,14 +45,25 @@ test.describe('loader admin', () => {
 	});
 
 	test('Run loader now refreshes the last-run summary', async ({ page }) => {
+		// The loader form action drives a full WP/bug rescan synchronously on
+		// the server; under parallel webServer load this consistently lands
+		// in the 30-45s range, blowing past the default 30s per-test budget
+		// AND the 15s per-action click budget (the click waits for the
+		// scheduled navigation by default). Extend both so the test can
+		// wait for the action to finish.
+		test.setTimeout(120_000);
 		await page.goto(ROUTES.HANGAR_REVIEW_ADMIN_LOADER);
 		// Capture the "Ran at" timestamp before, run the loader, confirm the
-		// "Ran at" cell exists and the success status announces.
+		// "Ran at" cell exists and the success status announces. `noWaitAfter`
+		// detaches the click from its scheduled-navigation wait so the
+		// `waitForResponse` below is the single source of truth for "the
+		// action posted and the server responded" -- otherwise the click
+		// itself times out at 15s before the response arrives.
 		await Promise.all([
 			page.waitForResponse((res) => res.request().method() === 'POST' && res.url().includes('?/runLoader'), {
-				timeout: 60_000,
+				timeout: 90_000,
 			}),
-			page.getByRole('button', { name: /run loader now/i }).click(),
+			page.getByRole('button', { name: /run loader now/i }).click({ noWaitAfter: true, timeout: 90_000 }),
 		]);
 		await expect(page.getByText(/Items added/i)).toBeVisible({ timeout: 30_000 });
 	});

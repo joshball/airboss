@@ -67,5 +67,8 @@ setup('seed 3-level course fixture', async () => {
 	process.env[ENV_VARS.DATABASE_URL] = DEV_DB_URL_E2E;
 	const { seedThreeLevelFixture } = await import('./seed-3-level-fixture');
 	const result = await seedThreeLevelFixture();
-	expect(result.stepsUpserted).toBeGreaterThanOrEqual(4);
+	// Assert the rows are present, not that they were freshly upserted.
+	// `stepsUpserted` is 0 on idempotent re-runs (content_hash unchanged);
+	// `stepsSeeded` adds the skipped-but-present rows.
+	expect(result.stepsSeeded).toBeGreaterThanOrEqual(4);
 });

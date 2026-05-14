@@ -47,6 +47,11 @@ test.describe('reader overview view', () => {
 test.describe('reader keyboard shortcuts', () => {
 	test('? opens the cheatsheet overlay', async ({ page }) => {
 		await page.goto(ROUTES.FLIGHTBAG_HANDBOOK_CHAPTER('phak', '8083-25C', '12'));
+		// The reader's `<svelte:window onkeydown>` handler attaches during
+		// Svelte 5 hydration; under parallel webServer load `page.keyboard.press`
+		// can fire before the listener is wired and the keypress is silently
+		// dropped. Wait for `networkidle` so the JS bundle has settled.
+		await page.waitForLoadState('networkidle');
 		await page.keyboard.press('?');
 		const dialog = page.locator('dialog.cheatsheet');
 		await expect(dialog).toHaveAttribute('open', /.*/);
@@ -62,6 +67,7 @@ test.describe('reader keyboard shortcuts', () => {
 		// depending on the seed).
 		const chapter1Href = ROUTES.FLIGHTBAG_HANDBOOK_CHAPTER('phak', '8083-25C', '1');
 		await page.goto(chapter1Href);
+		await page.waitForLoadState('networkidle');
 		await page.keyboard.press('j');
 		// The URL should change to a different chapter / section page.
 		await expect(page).not.toHaveURL(chapter1Href);
