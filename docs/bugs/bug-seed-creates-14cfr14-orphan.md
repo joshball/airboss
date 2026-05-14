@@ -3,7 +3,7 @@ id: bug-seed-creates-14cfr14-orphan
 title: Seed pipeline creates 14cfr14 reference row that's off-corpus since PR #682
 product: platform
 severity: minor
-status: open
+status: fixed
 discovered_pr: null
 discovered_date: 2026-05-14
 fix_pr: null
