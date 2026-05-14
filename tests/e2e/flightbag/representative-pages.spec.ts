@@ -143,7 +143,15 @@ async function collectSamplePages(): Promise<readonly SamplePage[]> {
 				.select({ code: referenceSection.code })
 				.from(referenceSection)
 				.where(eq(referenceSection.referenceId, ref.id))
-				.orderBy(asc(referenceSection.depth), asc(referenceSection.ordinal));
+				// (depth, ordinal) is NOT unique within a reference -- CFR subpart
+				// wrappers (`subpart-B`, `subpart-C`) share an ordinal with the
+				// first numeric section under them. Without a deterministic
+				// tiebreaker, every Playwright worker re-runs this query and gets
+				// a different first/middle/last row, producing parameterised test
+				// names that don't match between the orchestrator and the workers
+				// ("Test not found in the worker process"). Sort by `code` last
+				// so the sample is identical across workers.
+				.orderBy(asc(referenceSection.depth), asc(referenceSection.ordinal), asc(referenceSection.code));
 
 			if (sections.length === 0) continue;
 
