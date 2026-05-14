@@ -46,11 +46,11 @@ const FLOW: ReadonlyArray<Stop> = [
 		subAnchors: ['learn-tab-reps'],
 	},
 	{ label: 'learn-reps-browse', path: ROUTES.REPS_BROWSE },
-	{
-		label: 'learn-read',
-		path: ROUTES.LIBRARY,
-		subAnchors: ['learn-tab-read'],
-	},
+	// `/library` retired in the study app per ADR 023: the reader cut over
+	// to the flightbag origin. The legacy URL is a 301 to flightbag (a
+	// sibling origin), which trips `net::ERR_INVALID_REDIRECT` in the
+	// study-baseURL sweep. The flightbag's own reader coverage lives in
+	// `tests/e2e/flightbag/`.
 	// Courses section -- instructor-authored courses index (course-primitive WP).
 	{ label: 'courses', path: ROUTES.COURSES },
 	// Program section -- Quals / Goal / Plan / Coverage (Phase 2).
