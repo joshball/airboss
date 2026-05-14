@@ -921,9 +921,11 @@ export const KNOWLEDGE_NODE_KIND_LABELS: Record<KnowledgeNodeKind, string> = {
  * the rendering hint is purely orthogonal to the node body.
  */
 export const WX_DECODE_PRODUCT_SLUGS = [
-	'wx-reading-metars-tafs',
+	'wx-reading-metars',
+	'wx-reading-tafs',
 	'wx-product-pireps',
-	'wx-product-airmets-sigmets',
+	'wx-product-airmets',
+	'wx-product-sigmets',
 ] as const;
 
 export type WxDecodeProductSlug = (typeof WX_DECODE_PRODUCT_SLUGS)[number];
