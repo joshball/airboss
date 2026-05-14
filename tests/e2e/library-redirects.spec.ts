@@ -16,7 +16,7 @@
  */
 
 import { expect, test } from '@playwright/test';
-import { asc, eq } from 'drizzle-orm';
+import { asc, desc, eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { DEV_DB_URL_E2E, REFERENCE_KINDS } from '../../libs/constants/src';
@@ -35,14 +35,22 @@ function shortHandbookEdition(edition: string): string {
 let phak: SeededHandbook | null = null;
 
 test.beforeAll(async () => {
+	// Multiple PHAK editions can coexist (`FAA-H-8083-25` + `FAA-H-8083-25C`)
+	// when a superseded older edition lives alongside the current one. The
+	// redirect handlers resolve via `getReferenceByDocument` which picks
+	// `ORDER BY edition DESC` of the non-superseded rows. Mirror that here
+	// so the expected URL matches the actual `Location:` header.
 	const sql = postgres(DEV_DB_URL_E2E);
 	const db = drizzle(sql);
 	const rows = await db
 		.select({ documentSlug: reference.documentSlug, edition: reference.edition })
 		.from(reference)
 		.where(eq(reference.kind, REFERENCE_KINDS.HANDBOOK))
-		.orderBy(asc(reference.documentSlug));
+		.orderBy(asc(reference.documentSlug), desc(reference.edition));
 	await sql.end();
+	// `rows` is sorted (slug ASC, edition DESC); for a given slug the first
+	// row is the latest edition. Pick PHAK or fall back to whatever handbook
+	// the seed produced.
 	phak = rows.find((r) => r.documentSlug === 'phak') ?? rows[0] ?? null;
 });
 
