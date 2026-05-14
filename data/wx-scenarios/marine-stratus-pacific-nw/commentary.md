@@ -16,7 +16,7 @@ Coastal marine layer trapped under a subsidence inversion behind a weak Pacific 
 
 **Reason:** The F-pacific-weak-cold front (cold, intensity weak, moving 90deg at 6 kt) has already crossed KMRY. The cP air now over the field replaces the mT sector that was there before passage: temperature drop 6C, dewpoint drop -7C, wind shift from 30deg to 300deg. Every change traces back to one event: a different air mass is now over the field.
 
-**References:** `wx-airmasses-and-fronts`, `wx-reading-metars-tafs`
+**References:** `wx-airmasses-and-fronts`, `wx-reading-metars`
 
 ### wxc-marine-stratus-pacific-nw-front-crossing-KSFO -- metar (KSFO)
 
@@ -28,7 +28,7 @@ Coastal marine layer trapped under a subsidence inversion behind a weak Pacific 
 
 **Reason:** The F-pacific-weak-cold front (cold, intensity weak, moving 90deg at 6 kt) has already crossed KSFO. The cP air now over the field replaces the mT sector that was there before passage: temperature drop 6C, dewpoint drop -7C, wind shift from 30deg to 300deg. Every change traces back to one event: a different air mass is now over the field.
 
-**References:** `wx-airmasses-and-fronts`, `wx-reading-metars-tafs`
+**References:** `wx-airmasses-and-fronts`, `wx-reading-metars`
 
 ### wxc-marine-stratus-pacific-nw-front-crossing-KOAK -- metar (KOAK)
 
@@ -40,7 +40,7 @@ Coastal marine layer trapped under a subsidence inversion behind a weak Pacific 
 
 **Reason:** The F-pacific-weak-cold front (cold, intensity weak, moving 90deg at 6 kt) has already crossed KOAK. The cP air now over the field replaces the mT sector that was there before passage: temperature drop 6C, dewpoint drop -7C, wind shift from 30deg to 300deg. Every change traces back to one event: a different air mass is now over the field.
 
-**References:** `wx-airmasses-and-fronts`, `wx-reading-metars-tafs`
+**References:** `wx-airmasses-and-fronts`, `wx-reading-metars`
 
 ### wxc-marine-stratus-pacific-nw-pre-frontal-warm-sector-KSCK -- metar (KSCK)
 
@@ -76,7 +76,7 @@ Coastal marine layer trapped under a subsidence inversion behind a weak Pacific 
 
 **Reason:** KSAC is currently 11km from the F-pacific-weak-cold front. The FM group marks the forecast time the F-pacific-weak-cold reaches the field (motion 90deg at 6kt). After the FM hour the ceiling and visibility drop, the wind veers and gusts, and you're flying through cP air -- denser, drier, colder. Arrive before the FM hour and the airport stays in mT conditions; arrive after and you're landing in the post-frontal regime.
 
-**References:** `wx-reading-metars-tafs`, `wx-airmasses-and-fronts`
+**References:** `wx-reading-tafs`, `wx-airmasses-and-fronts`
 
 ### wxc-marine-stratus-pacific-nw-airmet-sierra-HZ-coastal-sierra-ifr -- airmet (WAUS41-WXENGINE-HZ-coastal-sierra-ifr)
 
@@ -90,7 +90,7 @@ Pinned to chart `wx-scenarios/marine-stratus-pacific-nw/airmet-sigmet`.
 
 **Reason:** The HZ-coastal-sierra-ifr hazard zone is a ifr pocket bounded by the synoptic features that produced it (IFR ceiling and visibility under the marine stratus deck trapped beneath the subsidence inversion over the coastal margin). The Sierra family triggers on ceiling below 1000ft AGL or visibility below 3SM; inside this polygon those minima are forecast to fail. Three impacts: (1) VFR is locked out under the polygon; (2) the cloud deck is uniform (the same stable inversion that traps the moisture caps it horizontally); (3) the polygon shrinks or grows with the synoptic state -- track the parent feature, not just the AIRMET itself.
 
-**References:** `wx-product-airmets-sigmets`, `wx-fog-and-visibility-obstructions`
+**References:** `wx-product-airmets`, `wx-fog-and-visibility-obstructions`
 
 ### wxc-marine-stratus-pacific-nw-airmet-sierra-HZ-coast-range-obscuration -- airmet (WAUS41-WXENGINE-HZ-coast-range-obscuration)
 
@@ -104,7 +104,7 @@ Pinned to chart `wx-scenarios/marine-stratus-pacific-nw/airmet-sigmet`.
 
 **Reason:** The HZ-coast-range-obscuration hazard zone is a mountain-obscuration pocket bounded by the synoptic features that produced it (Mountain obscuration along the Coast Range -- marine stratus tops abut the ridge line at the upwind edge of the marine corridor). The Sierra family triggers on ceiling below 1000ft AGL or visibility below 3SM; inside this polygon those minima are forecast to fail. Three impacts: (1) VFR is locked out under the polygon; (2) the cloud deck is uniform (the same stable inversion that traps the moisture caps it horizontally); (3) the polygon shrinks or grows with the synoptic state -- track the parent feature, not just the AIRMET itself.
 
-**References:** `wx-product-airmets-sigmets`, `wx-fog-and-visibility-obstructions`
+**References:** `wx-product-airmets`, `wx-fog-and-visibility-obstructions`
 
 ### wxc-marine-stratus-pacific-nw-isobar-gradient -- chart-feature (isobar-pack)
 
@@ -132,4 +132,4 @@ Pinned to chart `wx-scenarios/marine-stratus-pacific-nw/pirep-plot`.
 
 **Reason:** The KSFO PIREP is inside the HZ-coastal-sierra-ifr hazard zone (severity moderate, 0-1500ft MSL). Three independent products agree: the AIRMET Sierra polygon covering HZ-coastal-sierra-ifr, the synoptic truth that produced the polygon (IFR ceiling and visibility under the marine stratus deck trapped beneath the subsidence inversion over the coastal margin), and the pilot's report from inside it. Convergent independent evidence is the gold standard pre-flight signal -- treat it as confirmation, not coincidence.
 
-**References:** `wx-product-pireps`, `wx-product-airmets-sigmets`
+**References:** `wx-product-pireps`, `wx-product-airmets`

@@ -16,7 +16,7 @@ Stratus and lake-effect icing over Lake Erie. cP air pours over the still-warm l
 
 **Reason:** The F-trailing-cold front (cold, intensity moderate, moving 130deg at 20 kt) has already crossed KCLE. The cP air now over the field replaces the mT sector that was there before passage: temperature drop 16C, dewpoint drop 19C, wind shift from 200deg to 320deg. Every change traces back to one event: a different air mass is now over the field.
 
-**References:** `wx-airmasses-and-fronts`, `wx-reading-metars-tafs`
+**References:** `wx-airmasses-and-fronts`, `wx-reading-metars`
 
 ### wxc-winter-icing-great-lakes-front-crossing-KORD -- metar (KORD)
 
@@ -28,7 +28,7 @@ Stratus and lake-effect icing over Lake Erie. cP air pours over the still-warm l
 
 **Reason:** The F-trailing-cold front (cold, intensity moderate, moving 130deg at 20 kt) has already crossed KORD. The cP air now over the field replaces the mT sector that was there before passage: temperature drop 16C, dewpoint drop 19C, wind shift from 200deg to 320deg. Every change traces back to one event: a different air mass is now over the field.
 
-**References:** `wx-airmasses-and-fronts`, `wx-reading-metars-tafs`
+**References:** `wx-airmasses-and-fronts`, `wx-reading-metars`
 
 ### wxc-winter-icing-great-lakes-front-crossing-KDTW -- metar (KDTW)
 
@@ -40,7 +40,7 @@ Stratus and lake-effect icing over Lake Erie. cP air pours over the still-warm l
 
 **Reason:** The F-trailing-cold front (cold, intensity moderate, moving 130deg at 20 kt) has already crossed KDTW. The cP air now over the field replaces the mT sector that was there before passage: temperature drop 16C, dewpoint drop 19C, wind shift from 200deg to 320deg. Every change traces back to one event: a different air mass is now over the field.
 
-**References:** `wx-airmasses-and-fronts`, `wx-reading-metars-tafs`
+**References:** `wx-airmasses-and-fronts`, `wx-reading-metars`
 
 ### wxc-winter-icing-great-lakes-front-crossing-KGRR -- metar (KGRR)
 
@@ -52,7 +52,7 @@ Stratus and lake-effect icing over Lake Erie. cP air pours over the still-warm l
 
 **Reason:** The F-trailing-cold front (cold, intensity moderate, moving 130deg at 20 kt) has already crossed KGRR. The cP air now over the field replaces the mT sector that was there before passage: temperature drop 16C, dewpoint drop 19C, wind shift from 200deg to 320deg. Every change traces back to one event: a different air mass is now over the field.
 
-**References:** `wx-airmasses-and-fronts`, `wx-reading-metars-tafs`
+**References:** `wx-airmasses-and-fronts`, `wx-reading-metars`
 
 ### wxc-winter-icing-great-lakes-front-crossing-KCAK -- metar (KCAK)
 
@@ -64,7 +64,7 @@ Stratus and lake-effect icing over Lake Erie. cP air pours over the still-warm l
 
 **Reason:** The F-trailing-cold front (cold, intensity moderate, moving 130deg at 20 kt) has already crossed KCAK. The cP air now over the field replaces the mT sector that was there before passage: temperature drop 16C, dewpoint drop 19C, wind shift from 200deg to 320deg. Every change traces back to one event: a different air mass is now over the field.
 
-**References:** `wx-airmasses-and-fronts`, `wx-reading-metars-tafs`
+**References:** `wx-airmasses-and-fronts`, `wx-reading-metars`
 
 ### wxc-winter-icing-great-lakes-post-frontal-gust-KORD -- metar (KORD)
 
@@ -90,7 +90,7 @@ Pinned to chart `wx-scenarios/winter-icing-great-lakes/airmet-sigmet`.
 
 **Reason:** Zulu polygon HZ-lake-effect-zulu encloses from 0ft to 8000ft MSL. Icing requires supercooled liquid water above the freezing level -- the band's lower bound tracks the freezing-level surface, and the upper bound caps where temperatures drop below ~-15C (most droplets glaciate). Inside the polygon, expect rime/clear icing on airframe surfaces; the AIRMET source (Lake-effect band downwind of Lake Erie: cP air saturates over the still-warm lake; moderate rime in the freezing-drizzle column) names the specific producing mechanism so the polygon's altitude bounds and severity make sense.
 
-**References:** `wx-product-airmets-sigmets`, `wx-icing-types-and-avoidance`
+**References:** `wx-product-airmets`, `wx-icing-types-and-avoidance`
 
 ### wxc-winter-icing-great-lakes-airmet-sierra-HZ-lake-effect-sierra -- airmet (WAUS41-WXENGINE-HZ-lake-effect-sierra)
 
@@ -104,7 +104,7 @@ Pinned to chart `wx-scenarios/winter-icing-great-lakes/airmet-sigmet`.
 
 **Reason:** The HZ-lake-effect-sierra hazard zone is a ifr pocket bounded by the synoptic features that produced it (IFR ceiling and visibility in the lake-effect band -- BKN/OVC stratus with embedded freezing drizzle keeps ceilings near 500 ft AGL). The Sierra family triggers on ceiling below 1000ft AGL or visibility below 3SM; inside this polygon those minima are forecast to fail. Three impacts: (1) VFR is locked out under the polygon; (2) the cloud deck is uniform (the same stable inversion that traps the moisture caps it horizontally); (3) the polygon shrinks or grows with the synoptic state -- track the parent feature, not just the AIRMET itself.
 
-**References:** `wx-product-airmets-sigmets`, `wx-fog-and-visibility-obstructions`
+**References:** `wx-product-airmets`, `wx-fog-and-visibility-obstructions`
 
 ### wxc-winter-icing-great-lakes-airmet-tango-HZ-postfrontal-tango -- airmet (WAUS41-WXENGINE-HZ-postfrontal-tango)
 
@@ -118,7 +118,7 @@ Pinned to chart `wx-scenarios/winter-icing-great-lakes/airmet-sigmet`.
 
 **Reason:** Tango polygon HZ-postfrontal-tango encloses from 0ft to 8000ft MSL. The mechanism is named in the hazard source: Low-level mechanical turbulence in the cold-advection boundary layer behind F-trailing-cold. Two physical sources stack in this band: mechanical turbulence in the cold-advection boundary layer below, and ageostrophic descent on the cold side of the jet exit aloft. Together they produce continuous chop through the polygon's altitude span; expect ride quality to degrade entering the polygon and recover above the upper bound.
 
-**References:** `wx-product-airmets-sigmets`, `wx-turbulence-types`
+**References:** `wx-product-airmets`, `wx-turbulence-types`
 
 ### wxc-winter-icing-great-lakes-airmet-zulu-HZ-east-of-band-zulu -- airmet (WAUS41-WXENGINE-HZ-east-of-band-zulu)
 
@@ -132,7 +132,7 @@ Pinned to chart `wx-scenarios/winter-icing-great-lakes/airmet-sigmet`.
 
 **Reason:** Zulu polygon HZ-east-of-band-zulu encloses from 5000ft to 12000ft MSL. Icing requires supercooled liquid water above the freezing level -- the band's lower bound tracks the freezing-level surface, and the upper bound caps where temperatures drop below ~-15C (most droplets glaciate). Inside the polygon, expect rime/clear icing on airframe surfaces; the AIRMET source (Light cloud icing east of the lake-effect band at mid levels in the cP cloud deck) names the specific producing mechanism so the polygon's altitude bounds and severity make sense.
 
-**References:** `wx-product-airmets-sigmets`, `wx-icing-types-and-avoidance`
+**References:** `wx-product-airmets`, `wx-icing-types-and-avoidance`
 
 ### wxc-winter-icing-great-lakes-isobar-gradient -- chart-feature (isobar-pack)
 
@@ -160,4 +160,4 @@ Pinned to chart `wx-scenarios/winter-icing-great-lakes/pirep-plot`.
 
 **Reason:** The KGRR PIREP is inside the HZ-postfrontal-tango hazard zone (severity moderate, 0-8000ft MSL). Three independent products agree: the AIRMET Tango polygon covering HZ-postfrontal-tango, the synoptic truth that produced the polygon (Low-level mechanical turbulence in the cold-advection boundary layer behind F-trailing-cold), and the pilot's report from inside it. Convergent independent evidence is the gold standard pre-flight signal -- treat it as confirmation, not coincidence.
 
-**References:** `wx-product-pireps`, `wx-product-airmets-sigmets`
+**References:** `wx-product-pireps`, `wx-product-airmets`

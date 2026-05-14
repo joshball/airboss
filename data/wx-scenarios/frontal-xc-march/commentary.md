@@ -16,7 +16,7 @@ Winter frontal passage during a midwest XC, KSTL -> KORD. Synoptic-scale low ove
 
 **Reason:** The F-cold-main front (cold, intensity strong, moving 110deg at 25 kt) has already crossed KSPI. The cP air now over the field replaces the mT sector that was there before passage: temperature drop 13C, dewpoint drop 16C, wind shift from 200deg to 320deg. Every change traces back to one event: a different air mass is now over the field.
 
-**References:** `wx-airmasses-and-fronts`, `wx-reading-metars-tafs`
+**References:** `wx-airmasses-and-fronts`, `wx-reading-metars`
 
 ### wxc-frontal-xc-march-front-crossing-KMLI -- metar (KMLI)
 
@@ -28,7 +28,7 @@ Winter frontal passage during a midwest XC, KSTL -> KORD. Synoptic-scale low ove
 
 **Reason:** The F-cold-main front (cold, intensity strong, moving 110deg at 25 kt) has already crossed KMLI. The cP air now over the field replaces the mT sector that was there before passage: temperature drop 13C, dewpoint drop 16C, wind shift from 200deg to 320deg. Every change traces back to one event: a different air mass is now over the field.
 
-**References:** `wx-airmasses-and-fronts`, `wx-reading-metars-tafs`
+**References:** `wx-airmasses-and-fronts`, `wx-reading-metars`
 
 ### wxc-frontal-xc-march-pre-frontal-warm-sector-KCPS -- metar (KCPS)
 
@@ -64,7 +64,7 @@ Winter frontal passage during a midwest XC, KSTL -> KORD. Synoptic-scale low ove
 
 **Reason:** KORD is currently 66km from the F-cold-main front. The FM group marks the forecast time the F-cold-main reaches the field (motion 110deg at 25kt). After the FM hour the ceiling and visibility drop, the wind veers and gusts, and you're flying through cP air -- denser, drier, colder. Arrive before the FM hour and the airport stays in mT conditions; arrive after and you're landing in the post-frontal regime.
 
-**References:** `wx-reading-metars-tafs`, `wx-airmasses-and-fronts`
+**References:** `wx-reading-tafs`, `wx-airmasses-and-fronts`
 
 ### wxc-frontal-xc-march-airmet-sierra-HZ-postfrontal-ifr -- airmet (WAUS41-WXENGINE-HZ-postfrontal-ifr)
 
@@ -78,7 +78,7 @@ Pinned to chart `wx-scenarios/frontal-xc-march/airmet-sigmet`.
 
 **Reason:** The HZ-postfrontal-ifr hazard zone is a ifr pocket bounded by the synoptic features that produced it (Post-frontal cold-sector IFR: lifted air-mass moisture trapped beneath a stable inversion). The Sierra family triggers on ceiling below 1000ft AGL or visibility below 3SM; inside this polygon those minima are forecast to fail. Three impacts: (1) VFR is locked out under the polygon; (2) the cloud deck is uniform (the same stable inversion that traps the moisture caps it horizontally); (3) the polygon shrinks or grows with the synoptic state -- track the parent feature, not just the AIRMET itself.
 
-**References:** `wx-product-airmets-sigmets`, `wx-fog-and-visibility-obstructions`
+**References:** `wx-product-airmets`, `wx-fog-and-visibility-obstructions`
 
 ### wxc-frontal-xc-march-airmet-tango-HZ-postfrontal-turb -- airmet (WAUS41-WXENGINE-HZ-postfrontal-turb)
 
@@ -92,7 +92,7 @@ Pinned to chart `wx-scenarios/frontal-xc-march/airmet-sigmet`.
 
 **Reason:** Tango polygon HZ-postfrontal-turb encloses from 6000ft to 24000ft MSL. The mechanism is named in the hazard source: Cold-sector turbulence: cold advection behind front, tightening surface gradient, jet-exit ageostrophic flow aloft. Two physical sources stack in this band: mechanical turbulence in the cold-advection boundary layer below, and ageostrophic descent on the cold side of the jet exit aloft. Together they produce continuous chop through the polygon's altitude span; expect ride quality to degrade entering the polygon and recover above the upper bound.
 
-**References:** `wx-product-airmets-sigmets`, `wx-turbulence-types`
+**References:** `wx-product-airmets`, `wx-turbulence-types`
 
 ### wxc-frontal-xc-march-airmet-tango-HZ-prefrontal-tsra -- airmet (WAUS41-WXENGINE-HZ-prefrontal-tsra)
 
@@ -106,7 +106,7 @@ Pinned to chart `wx-scenarios/frontal-xc-march/airmet-sigmet`.
 
 **Reason:** Tango polygon HZ-prefrontal-tsra encloses from 0ft to 30000ft MSL. The mechanism is named in the hazard source: Pre-frontal warm-sector convection along cold front; isolated cells with embedded turbulence. Two physical sources stack in this band: mechanical turbulence in the cold-advection boundary layer below, and ageostrophic descent on the cold side of the jet exit aloft. Together they produce continuous chop through the polygon's altitude span; expect ride quality to degrade entering the polygon and recover above the upper bound.
 
-**References:** `wx-product-airmets-sigmets`, `wx-turbulence-types`
+**References:** `wx-product-airmets`, `wx-turbulence-types`
 
 ### wxc-frontal-xc-march-isobar-gradient -- chart-feature (isobar-pack)
 
@@ -134,7 +134,7 @@ Pinned to chart `wx-scenarios/frontal-xc-march/prog-12hr`.
 
 **Reason:** Convective cell C-prefront-1 stands inside inside HZ-prefrontal-tsra. Cells in this peak-dBZ range (48 dBZ) reach the tropopause when peakDbz exceeds 50; this cell's vertical extent feeds the embedded turbulence and icing the AIRMETs cover. Three concrete hazards stack at the cell: (1) updraft turbulence inside the rain core, (2) downdraft + microburst risk at the leading edge, (3) embedded lightning. Stay 50km clear of the cell at flight altitudes the AIRMETs cover.
 
-**References:** `wx-thunderstorm-hazards`, `wx-product-airmets-sigmets`
+**References:** `wx-thunderstorm-hazards`, `wx-product-airmets`, `wx-product-sigmets`
 
 ### wxc-frontal-xc-march-convective-cell-C-prefront-2 -- chart-feature (cell-C-prefront-2)
 
@@ -148,7 +148,7 @@ Pinned to chart `wx-scenarios/frontal-xc-march/prog-12hr`.
 
 **Reason:** Convective cell C-prefront-2 stands inside inside HZ-prefrontal-tsra. Cells in this peak-dBZ range (42 dBZ) reach the tropopause when peakDbz exceeds 50; this cell's vertical extent feeds the embedded turbulence and icing the AIRMETs cover. Three concrete hazards stack at the cell: (1) updraft turbulence inside the rain core, (2) downdraft + microburst risk at the leading edge, (3) embedded lightning. Stay 40km clear of the cell at flight altitudes the AIRMETs cover.
 
-**References:** `wx-thunderstorm-hazards`, `wx-product-airmets-sigmets`
+**References:** `wx-thunderstorm-hazards`, `wx-product-airmets`, `wx-product-sigmets`
 
 ### wxc-frontal-xc-march-pirep-corroboration-KSPI -- pirep (KSPI)
 
@@ -162,7 +162,7 @@ Pinned to chart `wx-scenarios/frontal-xc-march/pirep-plot`.
 
 **Reason:** The KSPI PIREP is inside the HZ-postfrontal-ifr hazard zone (severity moderate, 0-4000ft MSL). Three independent products agree: the AIRMET Sierra polygon covering HZ-postfrontal-ifr, the synoptic truth that produced the polygon (Post-frontal cold-sector IFR: lifted air-mass moisture trapped beneath a stable inversion), and the pilot's report from inside it. Convergent independent evidence is the gold standard pre-flight signal -- treat it as confirmation, not coincidence.
 
-**References:** `wx-product-pireps`, `wx-product-airmets-sigmets`
+**References:** `wx-product-pireps`, `wx-product-airmets`
 
 ### wxc-frontal-xc-march-jet-exit -- fb-row (jet-max-fl)
 
