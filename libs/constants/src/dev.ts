@@ -43,6 +43,19 @@ export const E2E_DB_NAME = 'airboss_e2e' as const;
 export const DEV_DB_URL_E2E =
 	`postgresql://${DEV_DB.USER}:${DEV_DB.PASSWORD}@${DEV_DB.HOST}:${PORTS.DB}/${E2E_DB_NAME}` as const;
 
+/**
+ * Dedicated database name for the vitest (unit / BC integration) suite.
+ * Lives on the same local Postgres instance as the dev DB. Vitest's
+ * globalSetup drops + recreates this database and runs the seed pipeline
+ * once per `bun test` invocation so DB-touching tests never see the
+ * developer's working dataset.
+ */
+export const UNIT_DB_NAME = 'airboss_unit_test' as const;
+
+/** Connection string for the vitest test database. */
+export const DEV_DB_URL_UNIT =
+	`postgresql://${DEV_DB.USER}:${DEV_DB.PASSWORD}@${DEV_DB.HOST}:${PORTS.DB}/${UNIT_DB_NAME}` as const;
+
 /** Regex matching connection strings that point at a local dev database. */
 export const DEV_DB_HOST_PATTERN = /@(localhost|127\.0\.0\.1|airboss-db)(:|\/)/;
 
